@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.2 2005/09/29 06:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.3 2005/10/19 06:43:30 kristo Exp $
 // crm_memo.aw - Memo 
 /*
 
@@ -80,8 +80,16 @@ class crm_memo extends class_base
 
 			case "task":
 				$i = get_instance(CL_CRM_COMPANY);
-				$ol = new object_list(array("oid" => $i->get_my_tasks()));
-				$prop["options"] = array("" => "") + $ol->names();
+				$tsk = $i->get_my_tasks();
+				if (count($tsk))
+				{
+					$ol = new object_list(array("oid" => $tsk));
+					$prop["options"] = array("" => "") + $ol->names();
+				}
+				else
+				{
+					$prop["options"] = array("" => "");
+				}
 				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
 					$tmp = obj($prop["value"]);
@@ -98,6 +106,9 @@ class crm_memo extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "files":
+				$prop["obj_parent"] = $arr["obj_inst"]->id();
+				break;
 		}
 		return $retval;
 	}	

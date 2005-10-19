@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.424 2005/10/13 11:23:06 duke Exp $
+// $Id: class_base.aw,v 2.425 2005/10/19 06:43:30 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -568,6 +568,7 @@ class class_base extends aw_template
 			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
 			"show_help" => aw_ini_get("class_base.show_help"),
+			"add_txt" => $this->clid == CL_CRM_COMPANY,
 		));
 
 		// k‰es ongi .. see asi eeldab, et layoutile on grupp peale v‰‰natud ..

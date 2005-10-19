@@ -7,7 +7,7 @@ class crm_company_cust_impl extends class_base
 		$this->init();
 	}
 
-	function do_projects_table_header(&$table, $data = false)
+	function do_projects_table_header(&$table, $data = false, $skip_sel = false)
 	{
 		$table->define_field(array(
 			"name" => "project_name",
@@ -20,8 +20,14 @@ class crm_company_cust_impl extends class_base
 			$filt = array();
 			foreach($data as $row)
 			{
-				$filt["project_orderer"][] = $row["project_orderer"];
-				$filt["project_impl"][] = $row["project_impl"];
+				if (trim($row["project_orderer"]) != "")
+				{
+					$filt["project_orderer"][] = $row["project_orderer"];
+				}
+				if (trim($row["project_impl"]) != "")
+				{
+					$filt["project_impl"][] = $row["project_impl"];
+				}
 				$part = strip_tags($row["project_participants"]);
 				foreach(explode(",", $part) as $nm)
 				{
@@ -36,13 +42,13 @@ class crm_company_cust_impl extends class_base
 			"name" => "project_orderer",
 			"caption" => t("Tellija"),
 			"sortable" => 1,
-			"filter" => $filt["project_orderer"]
+			"filter" => array_unique($filt["project_orderer"])
 		));
 		$table->define_field(array(
 			"name" => "project_impl",
 			"caption" => t("Teostaja"),
 			"sortable" => 1,
-			"filter" => $filt["project_impl"]
+			"filter" => array_unique($filt["project_impl"])
 		));
 		
 		$table->define_field(array(
@@ -58,7 +64,7 @@ class crm_company_cust_impl extends class_base
 			"name" => "project_participants",
 			"caption" => t("Osalejad"),
 			"sortable" => 1,
-			"filter" => $filt["project_participants"]
+			"filter" => array_unique($filt["project_participants"])
 		));
 		
 		$table->define_field(array(
@@ -70,35 +76,35 @@ class crm_company_cust_impl extends class_base
 			"numeric" => 1
 		));
 
-		$table->define_field(array(
-			"name" => "roles",
-			"caption" => t("Rollid"),
-			"sortable" => 0,
-		));
+		if (!$skip_sel)
+		{
+			$table->define_field(array(
+				"name" => "roles",
+				"caption" => t("Rollid"),
+				"sortable" => 0,
+			));
 
-		$table->define_chooser(array(
-			"field" => "oid",
-			"name" => "sel"
-		));
+			$table->define_chooser(array(
+				"field" => "oid",
+				"name" => "sel"
+			));
+		}
 	}
 
 	function _get_my_projects($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
 		
-		/*$conns = new connection();
-		$conns_ar = $conns->find(array(
-			"from.class_id" => CL_PROJECT,
-			"to" => aw_global_get("uid_oid"),
-			"type" =>  2,
-		));
-		$conns_ol = new object_list();
-		foreach($conns_ar as $con)
-		{
-			$conns_ol->add($con["from"]);
-		}*/
 		$i = get_instance(CL_CRM_COMPANY);
-		$prj = $i->get_my_projects();
+		if (!is_array($arr["prj"]))
+		{
+			$prj = $i->get_my_projects();
+		}
+		else
+		{
+			$prj = $arr["prj"];
+		}
+
 		if (!count($prj))
 		{
 			$conns_ol = new object_list();
@@ -126,14 +132,14 @@ class crm_company_cust_impl extends class_base
 		{
 			if (is_oid($cpi = $project_obj->prop("contact_person_implementor")) && $this->can("view", $cpi))
 			{
-				$impl = html::get_change_url($cpi, array("return_url" => get_ru()), $project_obj->prop_str("contact_person_implementor"));
+				$impl = html::get_change_url($cpi, array("return_url" => get_ru()), parse_obj_name($project_obj->prop_str("contact_person_implementor")));
 			}
 			else
 			{
 				$impl = $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_IMPLEMENTOR")));
 			}
 			$data[] = array(
-				"project_name" => html::get_change_url($project_obj->id(), array("return_url" => get_ru()), $project_obj->name()),
+				"project_name" => html::get_change_url($project_obj->id(), array("return_url" => get_ru()), parse_obj_name($project_obj->name())),
 				"project_participants"	=> $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
 				"project_created" => $project_obj->created(),
 				"project_orderer" => $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_ORDERER"))),
@@ -143,7 +149,7 @@ class crm_company_cust_impl extends class_base
 			);
 		}
 	
-		$this->do_projects_table_header($table, $data);
+		$this->do_projects_table_header($table, $data, isset($arr["prj"]));
 		foreach($data as $row)
 		{
 			$table->define_data($row);
@@ -151,156 +157,11 @@ class crm_company_cust_impl extends class_base
 		return PROP_OK;
 	}
 
-	function _get_customer_toolbar($arr)
-	{
-		$tb =& $arr["prop"]["vcl_inst"];
-
-		$tb->add_menu_button(array(
-			'name'=>'add_item',
-			'tooltip'=> t('Uus')
-		));
-
-		$alias_to = $arr['obj_inst']->id();
-
-		if (!(int)$arr['request']['category'])
-		{
-			$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
-			if ($f_cat)
-			{
-				(int)$arr['request']['category'] = $f_cat->id();
-			}
-		}
-
-		if((int)$arr['request']['category'])
-		{
-			$alias_to = $arr['request']['category'];
-			$parent = (int)$arr['request']['category'];
-		}
-
-		$tb->add_menu_item(array(
-			'parent'=>'add_item',
-			'text' => t('Kategooria'),
-			'link' => $this->mk_my_orb('new',array(
-					'parent' => $arr['obj_inst']->id(),
-					'alias_to' => $alias_to,
-					'reltype' => 30, //RELTYPE_CATEGORY
-					'return_url' => urlencode(aw_global_get('REQUEST_URI'))
-				),
-				'crm_category'
-			)	
-		));
-
-		if (is_oid($arr["request"]["category"]))
-		{
-			$tb->add_menu_item(array(
-				'parent'=>'add_item',
-				'text' => t('Klient'),
-				'link' => $this->mk_my_orb('new',array(
-						'parent' => $arr['obj_inst']->id(),
-						'alias_to' => $alias_to,
-						'reltype' => 3, // crm_category.CUSTOMER,
-						'return_url' => get_ru()
-					),
-					'crm_company'
-				)
-			));
-			$tb->add_menu_item(array(
-				'parent'=>'add_item',
-				'text' => t('Klient (eraisik)'),
-				'link' => $this->mk_my_orb('new',array(
-						'parent' => $arr['obj_inst']->id(),
-						'alias_to' => $alias_to,
-						'reltype' => 3, // crm_category.CUSTOMER,
-						'return_url' => get_ru()
-					),
-					CL_CRM_PERSON
-				)
-			));
-		}
-
-		//delete button
-		$tb->add_button(array(
-			'name' => 'del',
-			'img' => 'delete.gif',
-			'tooltip' => t('Kustuta valitud'),
-			'action' => 'submit_delete_customer_relations',
-		));
-
-		$tb->add_button(array(
-			'name' => 'Search',
-			'img' => 'search.gif',
-			'tooltip' => t('Otsi'),
-			'action' => 'search_for_customers'
-		));
-		
-		if($arr['request']['customer_search'])
-		{
-			$tb->add_button(array(
-				'name' => 'Save',
-				'img' => 'save.gif',
-				'tooltip' => t('Salvesta'),
-				'action' => 'save_customer_search_results'
-			));
-		}
-
-		$tb->add_separator();
-
-		$tb->add_button(array(
-			"name" => "add_proj_impl",
-			"tooltip" => t("Lisa projekt teostajana"),
-			"action" => "add_proj_to_co_as_impl"
-		));
-
-		$tb->add_button(array(
-			"name" => "add_proj_ord",
-			"tooltip" => t("Lisa projekt tellijana"),
-			"action" => "add_proj_to_co_as_ord"
-		));
-
-		$tb->add_button(array(
-			"name" => "add_task",
-			"tooltip" => t("Lisa toimetus"),
-			"action" => "add_task_to_co"
-		));
-
-		return PROP_OK;
-	}
-
-	function _get_customer_listing_tree($arr)
-	{
-		if ($arr["request"]["customer_search"])
-		{
-			return PROP_IGNORE;
-		}
-		$tree_inst = &$arr['prop']['vcl_inst'];
-		$tree_inst->set_only_one_level_opened(1);
-
-		$node_id = 0;
-
-		// get first cat
-		$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
-
-		$i = get_instance(CL_CRM_COMPANY);
-		$i->active_node = (int)$arr['request']['category'] ? (int)$arr['request']['category'] : ($f_cat ? $f_cat->id() : 0);
-		$i->generate_tree(array(
-			'tree_inst' => &$tree_inst,
-			'obj_inst' => $arr['obj_inst'],
-			'node_id' => &$node_id,
-			'conn_type' => 'RELTYPE_CATEGORY',
-			'skip' => array(CL_CRM_COMPANY),
-			'attrib' => 'category',
-			'leafs' => false,
-			'style' => 'nodetextbuttonlike',
-		));
-
-		return PROP_OK;
-	}
-
 	function _org_table_header($tf)
 	{
 		$tf->define_field(array(
 			"name" => "name",
-			"caption" => t("Organisatsioon"),
+			"caption" => t("Kliendi nimi"),
 			"sortable" => 1,
 		));
 
@@ -351,6 +212,12 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 0,
 		));
 
+		$tf->define_field(array(
+			"name" => "client_manager",
+			"caption" => t("Kliendihaldur"),
+			"sortable" => 1,
+		));
+
 		$tf->define_chooser(array(
 			"field" => "id",
 			"name" => "check",
@@ -371,7 +238,7 @@ class crm_company_cust_impl extends class_base
 		//if category is selected
 		$organization = &$arr['obj_inst'];
 
-		if (!is_oid($arr['request']['category']))
+		/*if (!is_oid($arr['request']['category']))
 		{
 			$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
 			if ($f_cat)
@@ -383,19 +250,36 @@ class crm_company_cust_impl extends class_base
 		if($arr['request']['category']!='parent' && is_oid($arr['request']['category']))
 		{
 			$organization = new object($arr['request']['category']);
-		}
-		$orgs = $organization->connections_from(array(
-			"type" => 'RELTYPE_CUSTOMER',
-		));
+		}*/
 
-		$orglist = array();
-		foreach($orgs as $org)
-		{
-			$orglist[$org->prop("to")] = $org->prop("to");
-		}
 		if ($filter)
 		{
 			$orglist = $this->make_keys($filter);
+		}
+		else
+		{
+			if ($arr["request"]["customer_search_submit"] != "")
+			{
+				$ol = new object_list($this->_get_customer_search_filter($arr["request"]));
+				$orglist = $this->make_keys($ol->ids());
+			}
+			else
+			{
+				$u = get_instance(CL_USER);
+				$p = obj($u->get_current_person());
+				$ol = new object_list($this->_get_customer_search_filter(array("customer_search_cust_mgr" => $p->name())));
+				$orglist = $this->make_keys($ol->ids());
+				/*$i = get_instance(CL_CRM_COMPANY);
+				$orglist = $i->get_my_customers($arr["obj_inst"]);
+				if (count($orglist))
+				{
+					$ol = new object_list(array(
+						"oid" => $orglist,
+						"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+						"CL_CRM_COclient_manager" => 
+					));
+				}*/
+			}
 		}
 
 		$rs_by_co = array();
@@ -444,16 +328,6 @@ class crm_company_cust_impl extends class_base
 				$vorm = $tmp->prop('shortname');
 			};
 
-			if (is_oid($o->prop("email_id")) && $this->can("view", $o->prop("email_id")))
-			{
-				$mail_obj = new object($o->prop("email_id"));
-				$mail = html::href(array(
-					"url" => "mailto:" . $mail_obj->prop("mail"),
-					"caption" => $mail_obj->prop("mail"),
-				));
-
-			};
-
 			$roles = $this->_get_role_html(array(
 				"from_org" => $arr["request"]["id"],
 				"to_org" => $o->id(),
@@ -467,28 +341,80 @@ class crm_company_cust_impl extends class_base
 				$juht = $tmp->name();
 			}
 
+			$phone = "";
+			if ($o->class_id() == CL_CRM_COMPANY)
+			{
+				$ceo = html::href(array(
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $o->prop("firmajuht"),
+					),CL_CRM_PERSON),
+					"caption" => $juht,
+				));
+				if (is_oid($o->prop("email_id")) && $this->can("view", $o->prop("email_id")))
+				{
+					$mail_obj = new object($o->prop("email_id"));
+					$mail = html::href(array(
+						"url" => "mailto:" . $mail_obj->prop("mail"),
+						"caption" => $mail_obj->prop("mail"),
+					));
+				};
+				if (is_oid($o->prop("url_id")))
+				{
+					$url = html::href(array(
+						"url" => $o->prop_str("url_id"),
+						"caption" => $o->prop_str("url_id"),
+					));
+				}
+				$phone = $o->prop_str("phone_id");
+			}
+			else
+			{
+				$ceo = $o->name();
+				if (is_oid($o->prop("email")) && $this->can("view", $o->prop("email")))
+				{
+					$mail_obj = new object($o->prop("email"));
+					$mail = html::href(array(
+						"url" => "mailto:" . $mail_obj->prop("mail"),
+						"caption" => $mail_obj->prop("mail"),
+					));
+				};
+				if ($this->can("view", $o->prop("url")))
+				{
+					$urlo = obj($o->prop("url"));
+					$ru = $urlo->prop_str("url");
+					if (substr($ru, 0, 4) != "http")
+					{
+						$ru = "http://".$ru;
+					}
+					$url = html::href(array(
+						"url" => $ru,
+						"caption" => $urlo->prop_str("url"),
+					));
+				}
+				if ($this->can("view", $o->prop("phone")))
+				{
+					$urlo = obj($o->prop("phone"));
+					$phone = $urlo->name();
+				}
+			}
+
 			$tf->define_data(array(
 				"id" => $o->id(),
 				"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()." ".$vorm),
 				"reg_nr" => $o->prop("reg_nr"),
 				"pohitegevus" => $o->prop_str("pohitegevus"),
 				"corpform" => $vorm,
-				"address" => $o->prop_str("contact"),
-				"ceo" => html::href(array(
-					"url" => $this->mk_my_orb("change",array(
-						"id" => $o->prop("firmajuht"),
-					),CL_CRM_PERSON),
-					"caption" => $juht,
-				)),
-				"phone" => $o->prop_str("phone_id"),
-				"url" => html::href(array(
-					"url" => $o->prop_str("url_id"),
-					"caption" => $o->prop_str("url_id"),
-				)),
+				"address" => $o->class_id() == CL_CRM_COMPANY ? $o->prop_str("contact") : $o->prop_str("address"),
+				"ceo" => $ceo,
+				"phone" => $phone,
+				"url" => $url,
 				"email" => $mail,
 				'rollid' => $roles,
+				'client_manager' => html::obj_change_url($o->prop("client_manager")),
 			));
 		}
+
+		$tf->set_default_sortby("name");
 	}
 
 	function _get_role_html($arr)
@@ -523,403 +449,66 @@ class crm_company_cust_impl extends class_base
 		));
 		return $roles;
 	}
-
-	function _get_customer_search_only($arr)
-	{
-		if (!$arr["request"]["customer_search"])
-		{
-			return PROP_IGNORE;
-		}
-
-		$us = get_instance(CL_USER);
-		$users_person = obj($us->get_current_person());
-
-		$obj = $arr["obj_inst"];
-		$arr["prop"]['options'] = array(
-			'all'=> t('Otsi kogu süsteemist'),
-			'company' => sprintf(t('Otsi %s klientide hulgast'), $obj->prop('name')),
-			'person' => sprintf(t('Otsi %s klientide hulgast'), $users_person->prop('name'))
-		);
-
-		if(in_array($arr['request']['customer_search_only'],array_keys($arr["prop"]['options'])))
-		{
-			$arr["prop"]['value'] = $arr['request']['customer_search_only'];
-		}
-		else
-		{
-			list($arr["prop"]['value']) = each($arr["prop"]['options']);
-		}
-	}
-
-	function _get_customer_search_add($arr)
-	{
-		if (!$arr["request"]["customer_search"])
-		{
-			return PROP_IGNORE;
-		}
-		$filter = $this->construct_customer_search_filter($arr);
-		$this->customer_search_results = &$this->get_customer_search_results($filter);
-
-		if ($this->customer_search_results && 
-			sizeof($this->customer_search_results->ids()) || 
-			$arr['request']['no_results'])
-		{
-			return PROP_IGNORE;
-		}
-	}
-
-	/*
-		constructs the xfilter for get_customer_search_results
-	*/
-	function construct_customer_search_filter(&$arr)
-	{
-		//i'll try the search from crm_org_search.aw
-		$searchable_fields = array(
-			'customer_search_name' => 'name',
-			'customer_search_reg' => 'reg_nr',
-			'customer_search_address'=> 'address',
-			'customer_search_city' => 'linn',
-			'customer_search_county' => 'maakond',
-			'customer_search_field' => 'pohitegevus',
-			'customer_search_leader' => 'firmajuht'
-		);
-
-		$search_params = array('class_id'=>CL_CRM_COMPANY,'limit'=>100,'sort_by'=>'name');
-
-		foreach($searchable_fields as $key=>$value)
-		{
-			if($arr['request'][$key])
-			{
-				//let's clean up the item
-				$tmp_arr = explode(',',$arr['request'][$key]);
-				array_walk($tmp_arr,create_function('&$param','$param = trim($param);'));
-				array_walk($tmp_arr,create_function('&$param','$param = "%".$param."%";'));
-				$search_params[$value] = $tmp_arr;
-			}
-		}
-
-		if(!in_array($arr['request']['customer_search_only'], array('all','company','person')))
-		{
-			$search_params['customer_search_only'] = 'all';
-		}
-		else
-		{
-			$search_params['customer_search_only'] = $arr['request']['customer_search_only'];
-		}
-
-		$search_params['company_id'] = $arr['request']['id'];
-
-		if($arr['request']['no_results'])
-		{
-			$search_params['no_results'] = true;
-			return $search_params;
-		}
-		else
-		{
-			return $search_params;
-		}
-	}
-
-	/*
-		constructs a object list base on the xfilter
-	*/
-	function get_customer_search_results($xfilter)
-	{	
-		$company_id = $xfilter['company_id'];
-		unset($xfilter['company_id']);
-		if (!sizeof($xfilter))
-		{
-			return false;
-		};
-
-		if($xfilter['no_results'])
-		{
-			return false;
-		}
-
-		if (sizeof($xfilter['firmajuht']))
-		{
-			// search by ceo name? first create a list of all crm_persons
-			// that match the search criteria and after that create a list
-			// of crm_companies that have one of the results as a ceo
-			$ceo_filter = array(
-				"class_id" => CL_CRM_PERSON,
-				"limit" => 100,
-				"name" => "%" . $xfilter['firmajuht'] . "%",
-			);
-			$ceo_list = new object_list($ceo_filter);
-			if (sizeof($ceo_list->ids()) > 0)
-			{
-				$xfilter['firmajuht'] = &$filter['firmajuht'];
-			};
-		};
-
-		$addr_xfilter = array();
-		$no_results = false;
-
-		if(sizeof($xfilter['linn']))
-		{
-			$city_list = new object_list(array(
-				'class_id'=>CL_CRM_CITY,
-				'limit' => 100,
-				'name' => $xfilter['linn'],
-			));
-							
-			if(sizeof($city_list->ids()))
-			{
-				$addr_xfilter['linn'] = $city_list->ids();
-			}
-			else
-			{
-				$no_results = true;
-			}
-			unset($xfilter['linn']);
-		}
-
-		if(sizeof($xfilter['maakond']))
-		{
-			$county_list = new object_list(array(
-				'class_id' => CL_CRM_COUNTY,
-				'limit' => 100,
-				'name' => $xfilter['maakond']
-			));
-			if(sizeof($county_list->ids()))
-			{
-				$addr_xfilter['maakond'] = $county_list->ids();
-			}
-			else
-			{
-				$no_results = true;
-			}
-			unset($xfilter['maakond']);
-		}
 	
-		if(sizeof($xfilter['address']))
-		{
-			$addr_xfilter['name'] = &$xfilter['address'];
-			unset($xfilter['address']);
-		}
-
-		if (sizeof($addr_xfilter)>0)
-		{
-			$addr_xfilter['class_id'] = CL_CRM_ADDRESS;
-			$addr_xfilter['limit'] = 100;
-
-			$addr_list = new object_list($addr_xfilter);
-
-			if (sizeof($addr_list->ids()) > 0)
-			{
-				$xfilter['contact'] = $addr_list->ids();
-			}
-			else
-			{
-				$no_results=true;
-			}
-		}
-
-
-		if(sizeof($xfilter['pohitegevus']))
-		{
-			$tmp_filter['class_id'] = CL_CRM_SECTOR;
-			$tmp_filter['limit'] = 100;
-			$tmp_filter['name'] = $xfilter['pohitegevus'];
-			$tmp_list = new object_list($tmp_filter);
-			unset($xfilter['pohitegevus']);
-			if(sizeof($tmp_list->ids())>0)
-			{
-				$xfilter['pohitegevus'] = $tmp_list->ids();
-			}
-			else
-			{
-				$no_results=true;
-			}
-		}
-		
-		if($xfilter['customer_search_only']=='company')
-		{
-			//have to get the list of all the clients for this company
-			$company = new object($company_id);
-			$data = array();
-			$i = get_instance(CL_CRM_COMPANY);
-			$i->get_customers_for_company($company, &$data);
-			foreach($data as $value)
-			{
-				$xfilter['oid'][$value] = $value;	
-			}
-		}
-		else if($xfilter['customer_search_only']=='person')
-		{
-			//have to get the list of all the companys for
-			//this users person
-			$us = get_instance(CL_USER);
-			$person = obj($us->get_current_person());
-			//if the user has a person's object associated with him
-			if($person)
-			{
-				//genereerin listi persooni kõikidest firmadest
-				$person = new object($person);
-				$conns=$person->connections_from(array(
-					"type" => "RELTYPE_HANDLER",
-				));
-				foreach($conns as $conn)
-				{
-					$xfilter['oid'][$conn->prop('to')] = $conn->prop('to');
-				}
-			}
-			else
-			{
-				//@todo võix visata errori, aga peax mõtlema kuidas see error peax välja nägema
-				//
-			}
-		}
-		unset($xfilter['customer_search_only']);
-		if(!$no_results)
-		{
-			return new object_list($xfilter);
-		}
-		else
-		{
-			return new object_list(NULL);
-		}
-	}
-	
-	function _init_customer_search_res_t(&$tf)
-	{
-		$tf->define_field(array(
-			"name" => "name",
-			"caption" => t("Organisatsioon"),
-			"sortable" => 1,
-		));
-
-		$tf->define_field(array(
-			"name" => "corpform",
-			"caption" => t("Õiguslik vorm"),
-			"sortable" => 1,
-		));
-
-		$tf->define_field(array(
-			"name" => "address",
-			"caption" => t("Aadress"),
-			"sortable" => 1,
-		));
-
-		$tf->define_field(array(
-			"name" => "email",
-			"caption" => t("E-post"),
-			"sortable" => 1,
-		));
-
-		$tf->define_field(array(
-			"name" => "url",
-			"caption" => t("WWW"),
-			"sortable" => 1,
-		));
-		$tf->define_field(array(
-			"name" => "phone",
-			"caption" => t('Telefon'),
-			"sortable" => 1,
-		));
-
-		$tf->define_field(array(
-			"name" => "ceo",
-			"caption" => t("Juht"),
-			"sortable" => 1,
-		));
-
-		$tf->define_chooser(array(
-			"field" => "id",
-			"name" => "sel",
-		));
-	}
-
-	function _get_customer_search_results($arr)
-	{
-		if (!$arr["request"]["customer_search"])
-		{
-			return PROP_IGNORE;
-		}
-		if ($this->customer_search_results)
-		{
-			$results = $this->customer_search_results;
-		
-			$tf = &$arr["prop"]["vcl_inst"];
-			$this->_init_customer_search_res_t(&$tf);
-
-			$count = 0;
-			foreach($results->arr() as $o)
-			{
-				$count++;
-				// aga ülejäänud on kõik seosed!
-				$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $url = $mail = "";
-				if (is_oid($o->prop("ettevotlusvorm")) && $this->can("view", $o->prop("ettevotlusvorm")))
-				{
-					$tmp = new object($o->prop("ettevotlusvorm"));
-					$vorm = $tmp->name();
-				};
-
-				if (is_oid($o->prop("firmajuht")))
-				{
-					$juht_obj = new object($o->prop("firmajuht"));
-					$juht = $juht_obj->name();
-					$juht_id = $juht_obj->id();
-				};
-
-				if (is_oid($o->prop("url_id")) && $this->can("view", $o->prop("url_id")))
-				{
-					$url_obj = new object($o->prop("url_id"));
-					$url = $url_obj->prop("url");
-					// I dunno, sometimes people write url into the name field and expect this to work
-					if (empty($url))
-					{
-						$url = $url_obj->name();
-					};
-				};
-
-				if (is_oid($o->prop("email_id")) && $this->can("view", $o->prop("email_id")))
-				{
-					$mail_obj = new object($o->prop("email_id"));
-					$mail = html::href(array(
-						"url" => "mailto:" . $mail_obj->prop("mail"),
-						"caption" => $mail_obj->prop("mail"),
-					));
-				};
-
-				$tf->define_data(array(
-					"id" => $o->id(),
-					"name" => html::href(array(
-						"url" => $this->mk_my_orb("change",array(
-							"id" => $o->id(),
-						),$o->class_id()),
-						"caption" => $o->name(),
-					)),
-					"reg_nr" => $o->prop("reg_nr"),
-					"corpform" => $vorm,
-					"address" => $o->prop_str("contact"),
-					"ceo" => html::href(array(
-						"url" => $this->mk_my_orb("change",array(
-							"id" => $juht_id,
-						),CL_CRM_PERSON),
-						"caption" => $juht,
-					)),
-					"phone" => $o->prop_str("phone_id"),
-					"url" => html::href(array(
-						"url" => $url,
-						"caption" => $url,
-					)),
-					"email" => $mail,
-				));
-			}
-
-			if ($count == 0)
-			{
-				$tf->set_header("Otsing ei leidnud ühtegi objekti");
-			};
-		}
-	}
-
 	function _get_my_customers_toolbar($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_menu_button(array(
+			'name'=>'add_item',
+			'tooltip'=> t('Uus')
+		));
+
+		$alias_to = $arr["obj_inst"]->id();
+		$tb->add_menu_item(array(
+			'parent'=>'add_item',
+			'text' => t('Klient'),
+			'link' => $this->mk_my_orb('new',array(
+					'parent' => $arr['obj_inst']->id(),
+					'alias_to' => $alias_to,
+					'reltype' => 22, // crm_company.CUSTOMER,
+					'return_url' => get_ru()
+				),
+				'crm_company'
+			)
+		));
+		$tb->add_menu_item(array(
+			'parent'=>'add_item',
+			'text' => t('Klient (eraisik)'),
+			'link' => $this->mk_my_orb('new',array(
+					'parent' => $arr['obj_inst']->id(),
+					'alias_to' => $alias_to,
+					'reltype' => 22, // crm_company.CUSTOMER,
+					'return_url' => get_ru()
+				),
+				CL_CRM_PERSON
+			)
+		));
+		$tb->add_sub_menu(array(
+			"parent" => "add_item",
+			"name" => "add_proj",
+			"text" => t("Projekt")
+		));
+		$tb->add_menu_item(array(
+			'parent'=>'add_proj',
+			'text' => t('Tellijana'),
+			"action" => "add_proj_to_co_as_ord"
+		));
+		$tb->add_menu_item(array(
+			'parent'=>'add_proj',
+			'text' => t('Teostajana'),
+			"action" => "add_proj_to_co_as_impl"
+		));
+		$tb->add_menu_item(array(
+			'parent'=>'add_item',
+			'text' => t('Toimetus'),
+			"action" => "add_task_to_co"
+		));
+		$tb->add_menu_item(array(
+			'parent'=>'add_item',
+			'text' => t('Arve'),
+			"action" => "go_to_create_bill"
+		));
 
 		//delete button
 		$tb->add_button(array(
@@ -1016,18 +605,8 @@ class crm_company_cust_impl extends class_base
 
 	function _get_my_customers_table($arr)
 	{
-		/*$us = get_instance(CL_USER);
-		$person = obj($us->get_current_person());
-		$conns = $person->connections_from(array(
-			"type" => "RELTYPE_HANDLER",
-		));
-		$filter = array();
-		foreach($conns as $conn)
-		{
-			$filter[$conn->prop('to')] = $conn->prop('to');
-		}*/
 		$i = get_instance(CL_CRM_COMPANY);
-		$this->_get_customer($arr, $i->get_my_customers());
+		$this->_get_customer($arr);
 	}
 
 	function _get_offers_listing_toolbar($arr)
@@ -1406,7 +985,7 @@ class crm_company_cust_impl extends class_base
 
 		$tb->add_menu_item(array(
 			'parent' => 'new',
-			"text" => t("Lisa projekt teostajana"),
+			"text" => t("Projekt teostajana"),
 			'link' => html::get_new_url(
 				CL_PROJECT, 
 				$arr["obj_inst"]->id(), 
@@ -1420,7 +999,7 @@ class crm_company_cust_impl extends class_base
 
 		$tb->add_menu_item(array(
 			'parent' => 'new',
-			"text" => t("Lisa projekt tellijana"),
+			"text" => t("Projekt tellijana"),
 			'link' => html::get_new_url(
 				CL_PROJECT, 
 				$arr["obj_inst"]->id(), 
@@ -1467,7 +1046,7 @@ class crm_company_cust_impl extends class_base
 		$tb->add_menu_item(array(
 			'parent'=>'new',
 			'text' => t('Toimetus'),
-			'link' => $url
+			'action' => "add_task_to_proj"
 		));
 
 		$tb->add_button(array(
@@ -1490,6 +1069,14 @@ class crm_company_cust_impl extends class_base
 				))
 			));
 		}
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => 'delete.gif',
+			"tooltip" => t("Kustuta"),
+			"confirm" => t("Oled kindel et soovid valitud projekte kustutada?"),
+			"action" => "delete_projs"
+		));
 	}
 
 	function _get_linked_names($conns)
@@ -1701,6 +1288,80 @@ class crm_company_cust_impl extends class_base
 			"size" => 25
 		))."<a href='javascript:void(0)' onClick='document.changeform.proj_search_part.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
+	}
+
+	function _get_customer_search_cust_mgr($arr)
+	{
+		if ($arr["request"]["customer_search_submit"] == "")
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+			$v = $p->name();
+		}
+		else
+		{
+			$v = $arr["request"]["customer_search_cust_mgr"];
+		}
+		$arr["prop"]["value"] = html::textbox(array(
+			"name" => "customer_search_cust_mgr",
+			"value" => $v,
+			"size" => 25
+		))."<a href='javascript:void(0)' onClick='document.changeform.customer_search_cust_mgr.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		return PROP_OK;
+	}
+
+	function _get_customer_search_filter($r, $oids)
+	{
+		$ret = array(
+			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+		);
+
+		if ($r["customer_search_name"] != "")
+		{
+			$ret["name"] = "%".$r["customer_search_name"]."%";
+		}
+
+		if ($r["customer_search_reg"] != "")
+		{
+			$ret["reg_nr"] = "%".$r["customer_search_reg"]."%";
+		}
+
+		if ($r["customer_search_worker"] != "")
+		{
+			$ret["CL_CRM_COMPANY.RELTYPE_WORKERS.name"] = "%".$r["customer_search_worker"]."%";
+		}
+
+		if ($r["customer_search_address"] != "")
+		{
+			$ret["CL_CRM_COMPANY.contact.name"] = "%".$r["customer_search_address"]."%";
+		}
+
+		if ($r["customer_search_city"] != "")
+		{
+			$ret["CL_CRM_COMPANY.contact.linn"] = "%".$r["customer_search_city"]."%";
+		}
+
+		if ($r["customer_search_county"] != "")
+		{
+			$ret["CL_CRM_COMPANY.contact.maakond"] = "%".$r["customer_search_county"]."%";
+		}
+
+		if ($r["customer_search_ev"] != "")
+		{
+			$ret["ettevotlusvorm"] = "%".$r["customer_search_ev"]."%";
+		}
+
+		if ($r["customer_search_cust_mgr"] != "")
+		{
+			$ret[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_COMPANY.client_manager.name" => map("%%%s%%", explode(",", $r["customer_search_cust_mgr"])),
+					"CL_CRM_PERSON.client_manager.name" => map("%%%s%%", explode(",", $r["customer_search_cust_mgr"]))
+				)
+			));
+		}
+		return $ret;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.53 2005/10/13 07:49:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.54 2005/10/19 06:43:30 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -7,53 +7,46 @@
 @classinfo syslog_type=ST_PROJECT relationmgr=yes
 
 @tableinfo aw_projects index=aw_oid master_table=objects master_index=brother_of
-
 @default table=objects
+
 @default group=general2
 
-@property name type=textbox
-@caption Nimi
+	@property name type=textbox
+	@caption Nimi
 
-@property code type=textbox table=aw_projects field=aw_code
-@caption Kood
+	@property code type=textbox table=aw_projects field=aw_code
+	@caption Kood
 
-@property priority type=textbox table=aw_projects field=aw_priority size=5
-@caption Prioriteet
+	@property priority type=textbox table=aw_projects field=aw_priority size=5
+	@caption Prioriteet
 
-@property state type=select table=aw_projects field=aw_state default=1
-@caption Staatus
+	@property state type=select table=aw_projects field=aw_state default=1
+	@caption Staatus
 
-@property orderer type=relpicker reltype=RELTYPE_ORDERER automatic=1 table=objects field=meta method=serialize
-@caption Tellija
+	@property orderer type=relpicker reltype=RELTYPE_ORDERER automatic=1 table=objects field=meta method=serialize
+	@caption Tellija
 
-@property implementor type=relpicker reltype=RELTYPE_IMPLEMENTOR automatic=1 table=objects field=meta method=serialize
-@caption Teostaja
+	@property implementor type=relpicker reltype=RELTYPE_IMPLEMENTOR automatic=1 table=objects field=meta method=serialize
+	@caption Teostaja
 
-@property start type=date_select table=aw_projects field=aw_start
-@caption Algus
+	@property start type=date_select table=aw_projects field=aw_start
+	@caption Algus
 
-@property end type=date_select table=aw_projects field=aw_end
-@caption L&otilde;pp
+	@property end type=date_select table=aw_projects field=aw_end
+	@caption L&otilde;pp
 
-@property deadline type=date_select table=aw_projects field=aw_deadline
-@caption Deadline
+	@property deadline type=date_select table=aw_projects field=aw_deadline
+	@caption Deadline
 
-@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc
-@caption Loe lähemalt
+	@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc
+	@caption Loe lähemalt
 
-@property skip_subproject_events type=checkbox ch_value=1 table=aw_projects field=aw_skip_subproject_events
-@caption Ära näita alamprojektide sündmusi
-
-@layout parts type=hbox width=20%:80%
-@caption Osalejad
-
-	@property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1 table=objects field=meta method=serialize no_caption=1 parent=parts
+	@layout parts type=hbox width=20%:80%
 	@caption Osalejad
 
-	property implementor_person type=select multiple=1 table=objects field=meta method=serialize parent=parts
-	caption Teostaja isik
+		@property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1 table=objects field=meta method=serialize no_caption=1 parent=parts
+		@caption Osalejad
 
-@groupinfo info caption="Projekti info"
 @default group=info
 
 	@property contact_person_orderer type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person
@@ -74,19 +67,23 @@
 	@property prepayment type=textbox table=aw_projects field=aw_prepayment size=5
 	@caption Ettemaks
 
-	@property other_side type=textarea rows=10 cols=50 table=aw_projects field=aw_other_side 
-	@caption Vastaspool
-
 	@property description type=textarea rows=10 cols=50 table=aw_projects field=aw_description 
 	@caption Kirjeldus
 
 	@property proj_type type=classificator table=aw_projects field=aw_type store=connect reltype=RELTYPE_TYPE
 	@caption Liik
 
+	@property create_task type=checkbox ch_value=1 store=no
+	@caption Moodusta &uuml;lesanne
+
+	@property files type=text 
+	@caption Failid
+
 
 
 
 @default group=web_settings
+
 	@property project_navigator type=checkbox ch_value=1 table=aw_projects field=aw_project_navigator
 	@caption Näita projektide navigaatorit
 
@@ -96,24 +93,29 @@
 	@property doc_id type=textbox size=6 table=aw_projects field=aw_doc_id
 	@caption Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse
 
+	@property skip_subproject_events type=checkbox ch_value=1 table=aw_projects field=aw_skip_subproject_events
+	@caption Ära näita alamprojektide sündmusi
+
+
 @default group=prj_image
+
 	@property prj_image type=releditor reltype=RELTYPE_PRJ_IMAGE use_form=emb rel_id=first field=meta method=serialize
 	@caption Pilt
 
 
 @default group=event_list
 
-@property event_toolbar type=toolbar no_caption=1
-@caption Sündmuste toolbar 
+	@property event_toolbar type=toolbar no_caption=1
+	@caption Sündmuste toolbar 
 
-@property event_list type=calendar no_caption=1
-@caption Sündmused
+	@property event_list type=calendar no_caption=1
+	@caption Sündmused
 
-//@property event_list type=calendar group=event_list no_caption=1
 
 @default group=add_event
-@property add_event callback=callback_get_add_event group=add_event store=no
-@caption Lisa sündmus
+	
+	@property add_event callback=callback_get_add_event store=no
+	@caption Lisa sündmus
 
 @default group=files
 
@@ -128,7 +130,13 @@
 @default group=sides
 
 	@property sides_tb type=toolbar no_caption=1
+
 	@property sides type=table store=no no_caption=1
+
+	@property sides_st type=text subtitle=1 store=no
+	@caption Konfliktsed projektid
+
+	@property sides_conflict type=table store=no no_caption=1
 
 @default group=userdefined
 
@@ -165,6 +173,53 @@
 	@property userclassif1 type=classificator reltype=RELTYPE_CLF1 table=aw_projects field=aw_userclf1
 	@caption User-defined classificator 1
 
+@default group=team
+
+	@property team_sbtitle type=text subtitle=1 store=no
+	@caption Osalejad
+
+	@property team_tb type=toolbar no_caption=1 store=no
+
+	@property team type=table no_caption=1 store=no
+
+	@property team_s_sbtitle type=text subtitle=1 store=no
+	@caption Osalejate otsing
+
+	@property team_s_tb type=toolbar no_caption=1 store=no 
+
+	@layout team_s type=hbox width=20%:80%
+
+		@layout team_search parent=team_s type=vbox
+
+			@property team_search_co type=textbox captionside=top parent=team_search
+			@caption Firma
+
+			@property team_search_person type=textbox captionside=top parent=team_search
+			@caption Isik
+
+			@property team_search_sbt type=submit captionside=top parent=team_search no_caption=1
+			@caption Otsi
+
+		@property team_search_res type=table no_caption=1 parent=team_s
+
+@default group=goals_edit
+
+	@property goal_tb type=toolbar no_caption=1
+
+	@layout goal_vb type=hbox width="20%:80%"
+
+		@property goal_tree type=treeview parent=goal_vb no_caption=1
+
+		@property goal_table type=table parent=goal_vb no_caption=1
+
+
+@default group=goals_gantt 
+
+	@property goals_gantt type=text store=no no_caption=1
+
+
+
+@groupinfo info caption="Projekti info"
 
 @groupinfo general2 parent=general caption="Üldine"
 	@groupinfo web_settings parent=general caption="Veebiseadistused"
@@ -182,27 +237,16 @@
 @groupinfo goals caption="Verstapostid" submit=no
 
 	@groupinfo goals_edit caption="Muuda" parent=goals submit=no
-	@default group=goals_edit
-
-@property goal_tb type=toolbar no_caption=1
-
-@layout goal_vb type=hbox width="20%:80%"
-
-@property goal_tree type=treeview parent=goal_vb no_caption=1
-
-@property goal_table type=table parent=goal_vb no_caption=1
-
 	@groupinfo goals_gantt caption="Vaata" parent=goals submit=no
 
-	@default group=goals_gantt 
+@groupinfo team caption="Meeskond" submit=no
 
-	@property goals_gantt type=text store=no no_caption=1
 		
 
 @reltype SUBPROJECT clid=CL_PROJECT value=1
 @caption alamprojekt
 
-@reltype PARTICIPANT clid=CL_USER,CL_CRM_COMPANY,CL_CRM_PERSON value=2
+@reltype PARTICIPANT clid=CL_CRM_PERSON,CL_USER,CL_CRM_COMPANY value=2
 @caption osaleja
 
 @reltype PRJ_EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING,CL_PARTY,CL_COMICS
@@ -242,7 +286,7 @@
 @caption klassifikaator 1
 
 @reltype SIDE value=15 clid=CL_CRM_COMPANY,CL_CRM_PERSON
-@caption osapool
+@caption konkurent
 */
 
 class project extends class_base
@@ -271,6 +315,35 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "files":
+				$this->_get_files($arr);
+				break;
+
+			case "sides_conflict":
+				$this->_get_sides_conflict($arr);
+				break;
+
+			case "team_search_co":
+			case "team_search_person":
+				$data["value"] = $arr["request"][$data["name"]];
+				break;
+
+			case "team_search_res":
+				$this->_get_team_search_res($arr);
+				break;
+
+			case "team_tb":
+				$this->_get_team_tb($arr);
+				break;
+
+			case "team_s_tb":
+				$this->_get_team_s_tb($arr);
+				break;
+
+			case "team":
+				$this->_get_team($arr);
+				break;
+
 			case "implementor_person":
 				$i = get_instance(CL_CRM_COMPANY);
 				if ($this->can("view", $arr["obj_inst"]->prop("implementor")))
@@ -422,6 +495,17 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "files":
+				$this->_set_files($arr);
+				break;
+
+			case "create_task":
+				if ($prop["value"] == 1)
+				{
+					$this->_create_task($arr);
+				}
+				break;
+
 			case "orderer":
 			case "implementor":
 			case "implementor_person":
@@ -2064,6 +2148,8 @@ class project extends class_base
 				$args["cb_group"] = $this->emb_group;
 			};
 		};
+		$args["team_search_person"] = $arr["request"]["team_search_person"];
+		$args["team_search_co"] = $arr["request"]["team_search_co"];
 	}
 
 	function callback_mod_reforb($arr)
@@ -2748,6 +2834,7 @@ class project extends class_base
 				"height" => 400,
 				"width" => 400,
 				"quote" => "'",
+				"scrollbars" => 1,
 				"no_link" => 1,
 				//"no_return" => true
 			)),
@@ -2898,6 +2985,456 @@ class project extends class_base
 			));
 		}
 		return aw_ini_get("baseurl")."/automatweb/closewin.html";
+	}
+
+	function _init_team_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "co",
+			"caption" => t("Organisatsioon"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "roles",
+			"caption" => t("Rollid"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _get_team($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_team_t($t);
+
+		$p = get_instance(CL_CRM_PERSON);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT")) as $c)
+		{
+			$o = $c->to();
+
+			if ($o->class_id() == CL_USER)
+			{
+				$i = $o->instance();
+				$o = obj($i->get_person_for_user($o));
+			}
+
+			$co = $p->get_all_employers_for_person($o);
+			$co_s = array();
+			if (count($co))
+			{
+				foreach($co as $co_oid)
+				{
+					$co_s[] = html::obj_change_url(obj($co_oid));
+				}
+			}
+			else
+			{
+				$empl = $o->get_first_obj_by_reltype("RELTYPE_WORK");
+				if ($empl)
+				{
+					$co_s[] = html::obj_change_url($empl);
+				}
+			}
+
+			$t->define_data(array(
+				"person" => html::obj_change_url($o),
+				"co" => join(", ", $co_s),
+				"roles" => "",
+				"oid" => $o->id()
+			));
+		}
+	}
+
+	function _get_team_tb($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_participants",
+			"tooltip" => t("Kustuta"),
+		));
+	}
+
+	function _get_team_s_tb($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"action" => "add_participants",
+			"tooltip" => t("Lisa"),
+		));
+	}
+
+	function _init_team_search_res_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "co",
+			"caption" => t("Organisatsioon"),
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"name" => "res_sel",	
+			"field" => "oid"
+		));
+	}
+
+	function _get_team_search_res($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_team_search_res_t($t);
+
+		if ($arr["request"]["team_search_person"] == "" && $arr["request"]["team_search_co"] == "")
+		{
+			$ol = new object_list();
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"name" => "%".$arr["request"]["team_search_person"]."%",
+				"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$arr["request"]["team_search_co"]."%"
+			));
+		}
+
+		$clss = aw_ini_get("classes");
+
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"co" => html::obj_change_url($o->get_first_obj_by_reltype("RELTYPE_WORK")),
+				"oid" => $o->id()
+			));
+		}
+	}
+
+	/**
+		@attrib name=del_participants
+	**/
+	function del_participants($arr)
+	{
+		$o = obj($arr["id"]);
+		foreach(safe_array($arr["sel"]) as $oid)
+		{
+			$o->disconnect(array(
+				"from" => $oid,
+				"type" => "RELTYPE_PARTICIPANT"
+			));
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=add_participants
+	**/
+	function add_participants($arr)
+	{
+		$o = obj($arr["id"]);
+		foreach(safe_array($arr["res_sel"]) as $oid)
+		{
+			$o->connect(array(
+				"to" => $oid,
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+		}
+		return $arr["post_ru"];
+	}
+
+	function _get_sides_conflict($arr)
+	{
+		$sides = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SIDE")));
+		if (!$sides->count())
+		{
+			return;
+		}
+
+		// get all projects that have some of the current projects sides as participants
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"CL_PROJECT.RELTYPE_PARTICIPANT.id" => $sides->ids()
+		));
+
+		$c = new connection();
+		$t = $c->find(array(
+			"from.class_id" => CL_PROJECT,
+			"type" => "RELTYPE_PARTICIPANT",
+			"to" => $sides->ids()
+		));
+
+		$tmp = array();
+		foreach($t as $c)
+		{
+			$tmp[] = $c["from"];
+		}
+		$arr["prj"] = $tmp;
+		$i = get_instance("applications/crm/crm_company_cust_impl");
+		return $i->_get_my_projects($arr);
+	}
+
+	function _create_task($arr)
+	{
+		$o = obj();
+		$o->set_parent($arr["obj_inst"]->id());
+		$o->set_class_id(CL_TASK);
+		$o->set_prop("start1", time());
+		$o->set_prop("content", $arr["obj_inst"]->prop("description"));
+
+		$ord = $arr["obj_inst"]->prop("orderer");
+		if (is_array($ord))
+		{
+			$ord = reset($ord);
+		}
+
+		$o->set_prop("customer", $ord);
+		$o->set_prop("project", $arr["obj_inst"]->id());
+		$o->save();
+		
+		$arr["obj_inst"]->connect(array(
+			"to" => $o->id(),
+			"reltype" => "RELTYPE_PRJ_EVENT"
+		));
+
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		$p->connect(array(
+			"to" => $o->id(),
+			"reltype" => "RELTYPE_PERSON_TASK"
+		));
+
+		$cal = get_instance(CL_PLANNER);
+		$cal_id = $cal->get_calendar_for_person($p);
+		if ($this->can("view", $cal_id))
+		{
+			$cal->add_event_to_calendar(obj($cal_id), $o);
+		}
+
+		if ($this->can("view", $arr["obj_inst"]->prop("implementor")))
+		{
+			$ord = obj($arr["obj_inst"]->prop("implementor"));
+			$ord->connect(array(
+				"to" => $o->id(),
+				"reltype" => "RELTYPE_TASK"
+			));
+		}
+
+		header("Location: ".html::get_change_url($o->id(), array("return_url" => urlencode($arr["request"]["post_ru"]))));
+		die();
+	}
+
+	function _get_files($arr)
+	{
+		$objs = array();
+
+		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		{
+			$ol = new object_list($arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_PRJ_FILE"
+			)));
+			$objs = $ol->arr();
+		}
+
+		$objs[] = obj();
+
+		$types = array(
+			CL_FILE => t(""),
+			CL_CRM_MEMO => t("Memo"),
+			CL_CRM_DOCUMENT => t("CRM Dokument"),
+			CL_CRM_DEAL => t("Leping"),
+			CL_CRM_OFFER => t("Pakkumine")
+		);
+
+		$clss = aw_ini_get("classes");
+		foreach($objs as $idx => $o)
+		{
+			$this->vars(array(
+				"name" => $o->name(),
+				"idx" => $idx,
+				"types" => $this->picker($types)
+			));
+
+			if (is_oid($o->id()))
+			{
+				$ff = $o->get_first_obj_by_reltype("RELTYPE_FILE");
+				if (!$ff)
+				{
+					$ff = $o;
+				}
+				$fi = $ff->instance();
+				$fu = html::href(array(
+					"url" => $fi->get_url($ff->id(), $ff->name()),
+					"caption" => $ff->name()
+				));
+				$data[] = array(
+					"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),
+					"file" => $fu,
+					"type" => $clss[$o->class_id()]["name"],
+					"del" => html::href(array(
+						"url" => $this->mk_my_orb("del_file_rel", array(
+								"return_url" => get_ru(),
+								"fid" => $o->id(),
+								"from" => $arr["obj_inst"]->id()
+						)),
+						"caption" => t("Kustuta")
+					))
+				);
+			}
+			else
+			{
+				$data[] = array(
+					"name" => html::textbox(array(
+						"name" => "fups_d[$idx][tx_name]"
+					)),
+					"file" => html::fileupload(array(
+						"name" => "fups_".$idx
+					)),
+					"type" => html::select(array(
+						"options" => $types,
+						"name" => "fups_d[$idx][type]"
+					)),
+					"del" => ""
+				);
+			}
+		}
+
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));
+		
+		$t->define_field(array(
+			"caption" => t("Nimi"),
+			"name" => "name",
+		));
+
+		$t->define_field(array(
+			"caption" => t("Fail"),
+			"name" => "file",
+		));
+
+		$t->define_field(array(
+			"caption" => t("T&uuml;&uuml;p"),
+			"name" => "type",
+		));
+
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "del",
+		));
+
+		foreach($data as $e)
+		{
+			$t->define_data($e);
+		}
+
+		$arr["prop"]["value"] = $t->draw();
+	}
+
+	function _set_files($arr)
+	{
+		$t = obj($arr["request"]["id"]);
+		$u = get_instance(CL_USER);
+		$co = obj($u->get_current_company());
+		foreach(safe_array($_POST["fups_d"]) as $num => $entry)
+		{
+			if (is_uploaded_file($_FILES["fups_".$num]["tmp_name"]))
+			{
+				$f = get_instance("applications/crm/crm_company_docs_impl");
+				$fldo = $f->_init_docs_fld($co);
+				if (!$fldo)
+				{
+					return;
+				}
+
+				if ($entry["type"] == CL_FILE)
+				{
+					// add file
+					$f = get_instance(CL_FILE);
+					$fil = $f->add_upload_image("fups_$num", $fldo->id());
+					if (is_array($fil))
+					{
+						$t->connect(array(
+							"to" => $fil["id"],
+							"reltype" => "RELTYPE_PRJ_FILE"
+						));
+					}
+				}
+				else
+				{
+					$o = obj();
+					$o->set_class_id($entry["type"]);
+					$o->set_name($entry["tx_name"] != "" ? $entry["tx_name"] : $_FILES["fups_$num"]["name"]);
+
+			
+					$o->set_parent($fldo->id());
+					if ($entry["type"] != CL_FILE)
+					{
+						$o->set_prop("project", $t->id());
+						$o->set_prop("customer", reset($t->prop("orderer")));
+					}
+					$o->save();
+
+					// add file
+					$f = get_instance(CL_FILE);
+					$fil = $f->add_upload_image("fups_$num", $o->id());
+					if (is_array($fil))
+					{
+						$o->connect(array(
+							"to" => $fil["id"],
+							"reltype" => "RELTYPE_FILE"
+						));
+						$t->connect(array(
+							"to" => $o->id(),
+							"reltype" => "RELTYPE_PRJ_FILE"
+						));
+					}
+				}
+			}
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=del_file_rel
+		@param fid required 
+		@param from required
+		@param return_url optional 
+	**/
+	function del_file_rel($arr)
+	{
+		$f = obj($arr["fid"]);
+		$ff = $f->get_first_obj_by_reltype("RELTYPE_FILE");
+		if ($ff)
+		{
+			$ff->delete();
+		}
+		$f->delete();
+		return $arr["return_url"];
 	}
 };
 ?>

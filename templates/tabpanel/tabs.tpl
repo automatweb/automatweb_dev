@@ -43,6 +43,23 @@
   </table>
   </td>
 
+<!-- SUB: ADDITIONAL_TEXT -->
+  <td valign="right" align="center" class="tabpanelheaderstyle">
+<script language="javascript">
+
+function select_this(s){
+	var d = s.options[s.selectedIndex].value;
+	if (d != "_")
+	{
+		location.href=d;
+	}
+}
+</script>
+
+  <select name="foo" onChange='select_this(this)'>{VAR:adds}</select></span>
+  </td>
+<!-- END SUB: ADDITIONAL_TEXT -->
+
 <!-- SUB: SHOW_HELP -->
   <td valign="right" align="center" class="tabpanelheaderstyle">
 

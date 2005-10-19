@@ -181,8 +181,15 @@ class crm_company_docs_impl extends class_base
 
 		if ($arr["request"]["do_doc_search"])
 		{
-			$ot = new object_tree($this->_get_doc_search_f($arr["request"], $fld->id()));
-			$ol = $ot->to_list();
+			// get all parents to search from 
+			$parent_tree = new object_tree(array(
+				"parent" => $fld->id(),
+				"class_id" => CL_MENU
+			));
+			$parent_ol = $parent_tree->to_list();
+			$parents = $parent_ol->ids();
+			$parents[] = $fld->id();
+			$ol = new object_list($this->_get_doc_search_f($arr["request"], $parents));
 		}
 		else
 		{
@@ -213,17 +220,82 @@ class crm_company_docs_impl extends class_base
 			"class_id" => array_keys($this->adds)
 		);
 
+		$has = false;
 		if ($req["docs_s_name"] != "")
 		{
 			$res["name"] = "%".$req["docs_s_name"]."%";
+			$has = true;
 		}
 
 		if ($req["docs_s_type"] != "")
 		{
 			$res["class_id"] = $req["docs_s_type"];
+			$has = true;
 		}
 
+		if ($req["docs_s_task"] != "")
+		{
+			$res[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_MEMO.task.name" => "%".$req["docs_s_task"]."%",
+					"CL_CRM_DOCUMENT.task.name" => "%".$req["docs_s_task"]."%",
+					"CL_CRM_DEAL.task.name" => "%".$req["docs_s_task"]."%"
+				)
+			));
+			$has = true;
+		}
 
+		if ($req["docs_s_user"] != "")
+		{
+			// get all persons whose names match
+			$pers = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => "%".$req["docs_s_user"]."%"
+			));
+			// get all users for those
+			$c = new connection();
+			$user_conns = $c->find(array(
+				"from.class_id" => CL_USER,
+				"type" => "RELTYPE_PERSON",
+				"to" => $pers->ids()
+			));
+			$uids = array();
+			foreach($user_conns as $c)
+			{
+				$u = obj($c["from"]);
+				$uids[] = $u->prop("uid");
+			}
+			// filter by createdby or modifiedby by those users
+			$res[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"createdby" => $uids,
+					"modifiedby" => $uids
+				)
+			));
+			$has = true;
+		}
+
+		if ($req["docs_s_customer"] != "")
+		{
+			$res[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_MEMO.customer.name" => "%".$req["docs_s_customer"]."%",
+					"CL_CRM_DOCUMENT.customer.name" => "%".$req["docs_s_customer"]."%",
+					"CL_CRM_DEAL.customer.name" => "%".$req["docs_s_customer"]."%"
+				)
+			));
+			$has = true;
+		}
+
+		if (!$has)
+		{
+			$res["oid"] = -1;
+		}
 		return $res;
 	}
 }

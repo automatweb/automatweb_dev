@@ -196,6 +196,15 @@
             <caption>Parool</caption>
       </property>
       <property>
+            <name>client_manager</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CLIENT_MANAGER</reltype>
+            <field>client_manager</field>
+            <caption>Kliendihaldur</caption>
+      </property>
+      <property>
             <name>notes</name>
             <table>kliendibaas_isik</table>
             <group>description</group>
@@ -698,6 +707,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>kontaktisik</caption>
             </IMPORTANT_PERSON>
+            <CLIENT_MANAGER>
+                  <value>44</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kliendihaldur</caption>
+            </CLIENT_MANAGER>
       </reltypes>
 </properties>
 

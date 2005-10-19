@@ -1020,6 +1020,7 @@ class _int_object
 			case "relmanager":
 			case "relpicker": 
 			case "classificator":
+			case "popup_search":
 				if ($pd["store"] == "connect")
 				{
 					$rels = new object_list($this->connections_from(array(

@@ -90,15 +90,6 @@
             <caption>Loe lähemalt</caption>
       </property>
       <property>
-            <name>skip_subproject_events</name>
-            <table>aw_projects</table>
-            <group>general2</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aw_skip_subproject_events</field>
-            <caption>Ära näita alamprojektide sündmusi</caption>
-      </property>
-      <property>
             <name>participants</name>
             <table>objects</table>
             <group>general2</group>
@@ -164,16 +155,6 @@
             <caption>Ettemaks</caption>
       </property>
       <property>
-            <name>other_side</name>
-            <table>aw_projects</table>
-            <group>info</group>
-            <type>textarea</type>
-            <rows>10</rows>
-            <cols>50</cols>
-            <field>aw_other_side</field>
-            <caption>Vastaspool</caption>
-      </property>
-      <property>
             <name>description</name>
             <table>aw_projects</table>
             <group>info</group>
@@ -192,6 +173,24 @@
             <store>connect</store>
             <reltype>RELTYPE_TYPE</reltype>
             <caption>Liik</caption>
+      </property>
+      <property>
+            <name>create_task</name>
+            <table>objects</table>
+            <group>info</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>create_task</field>
+            <caption>Moodusta &amp;uuml;lesanne</caption>
+      </property>
+      <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>info</group>
+            <type>text</type>
+            <field>files</field>
+            <caption>Failid</caption>
       </property>
       <property>
             <name>project_navigator</name>
@@ -218,6 +217,15 @@
             <size>6</size>
             <field>aw_doc_id</field>
             <caption>Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse</caption>
+      </property>
+      <property>
+            <name>skip_subproject_events</name>
+            <table>aw_projects</table>
+            <group>web_settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_skip_subproject_events</field>
+            <caption>Ära näita alamprojektide sündmusi</caption>
       </property>
       <property>
             <name>prj_image</name>
@@ -304,6 +312,25 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>sides</field>
+      </property>
+      <property>
+            <name>sides_st</name>
+            <table>objects</table>
+            <group>sides</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>sides_st</field>
+            <caption>Konfliktsed projektid</caption>
+      </property>
+      <property>
+            <name>sides_conflict</name>
+            <table>objects</table>
+            <group>sides</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>sides_conflict</field>
       </property>
       <property>
             <name>user1</name>
@@ -398,6 +425,95 @@
             <reltype>RELTYPE_CLF1</reltype>
             <field>aw_userclf1</field>
             <caption>User-defined classificator 1</caption>
+      </property>
+      <property>
+            <name>team_sbtitle</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>team_sbtitle</field>
+            <caption>Osalejad</caption>
+      </property>
+      <property>
+            <name>team_tb</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>team_tb</field>
+      </property>
+      <property>
+            <name>team</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>team</field>
+      </property>
+      <property>
+            <name>team_s_sbtitle</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>team_s_sbtitle</field>
+            <caption>Osalejate otsing</caption>
+      </property>
+      <property>
+            <name>team_s_tb</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>team_s_tb</field>
+      </property>
+      <property>
+            <name>team_search_co</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>textbox</type>
+            <captionside>top</captionside>
+            <parent>team_search</parent>
+            <field>team_search_co</field>
+            <caption>Firma</caption>
+      </property>
+      <property>
+            <name>team_search_person</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>textbox</type>
+            <captionside>top</captionside>
+            <parent>team_search</parent>
+            <field>team_search_person</field>
+            <caption>Isik</caption>
+      </property>
+      <property>
+            <name>team_search_sbt</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>submit</type>
+            <captionside>top</captionside>
+            <parent>team_search</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>team_search_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>team_search_res</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>team_s</parent>
+            <store>no</store>
+            <field>team_search_res</field>
       </property>
       <property>
             <name>goal_tb</name>
@@ -496,6 +612,10 @@
                   <parent>goals</parent>
                   <submit>no</submit>
             </goals_gantt>
+            <team>
+                  <caption>Meeskond</caption>
+                  <submit>no</submit>
+            </team>
       </groupinfo>
       <tableinfo>
             <aw_projects>
@@ -512,9 +632,9 @@
             </SUBPROJECT>
             <PARTICIPANT>
                   <clid>
-                        <num_0>CL_USER</num_0>
-                        <num_1>CL_CRM_COMPANY</num_1>
-                        <num_2>CL_CRM_PERSON</num_2>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_USER</num_1>
+                        <num_2>CL_CRM_COMPANY</num_2>
                   </clid>
                   <value>2</value>
                   <caption>osaleja</caption>
@@ -593,7 +713,7 @@
                         <num_0>CL_CRM_COMPANY</num_0>
                         <num_1>CL_CRM_PERSON</num_1>
                   </clid>
-                  <caption>osapool</caption>
+                  <caption>konkurent</caption>
             </SIDE>
       </reltypes>
       <layout>
@@ -603,6 +723,16 @@
                   <group>general2</group>
                   <caption>Osalejad</caption>
             </parts>
+            <team_s>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>team</group>
+            </team_s>
+            <team_search>
+                  <parent>team_s</parent>
+                  <type>vbox</type>
+                  <group>team</group>
+            </team_search>
             <goal_vb>
                   <type>hbox</type>
                   <width>

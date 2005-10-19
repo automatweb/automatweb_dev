@@ -43,5 +43,29 @@
 			</function>
 		</action>
 
+		<action name="del_participants">
+			<function name="del_participants">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_participants">
+			<function name="add_participants">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="del_file_rel">
+			<function name="del_file_rel">
+				<arguments>
+					<required name="fid" />
+					<required name="from" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

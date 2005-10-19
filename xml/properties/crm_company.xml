@@ -79,7 +79,7 @@
             <group>general_sub</group>
             <type>date_select</type>
             <field>cust_contract_date</field>
-            <caption>Kliendilepingu kuup&amp;auml;ev</caption>
+            <caption>Kliendisuhte alguskuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>referal_type</name>
@@ -143,6 +143,15 @@
             <type>textbox</type>
             <field>priority</field>
             <caption>Prioriteet</caption>
+      </property>
+      <property>
+            <name>client_manager</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CLIENT_MANAGER</reltype>
+            <field>client_manager</field>
+            <caption>Kliendihaldur</caption>
       </property>
       <property>
             <name>kaubamargid</name>
@@ -446,7 +455,6 @@
             <type>relmanager</type>
             <reltype>RELTYPE_URL</reltype>
             <props>name</props>
-            <default>http://</default>
             <field>url_id</field>
             <caption>Veebiaadress</caption>
       </property>
@@ -469,6 +477,31 @@
             <props>name</props>
             <field>telefax_id</field>
             <caption>Faks</caption>
+      </property>
+      <property>
+            <name>b_acct_desc</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>b_acct_desc</field>
+            <caption>Pangaarved</caption>
+      </property>
+      <property>
+            <name>bank_account</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <reltype>RELTYPE_BANK_ACCOUNT</reltype>
+            <field>aw_bank_account</field>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>bank</num_1>
+            </props>
+            <store>no</store>
+            <caption>Pangaarve</caption>
       </property>
       <property>
             <name>personal_offers_toolbar</name>
@@ -531,33 +564,21 @@
             <field>personal_candidates_table</field>
       </property>
       <property>
-            <name>customer_toolbar</name>
+            <name>my_customers_toolbar</name>
             <table>objects</table>
-            <group>customers</group>
+            <group>relorg</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>customer_hbox_toolbar</parent>
-            <field>customer_toolbar</field>
+            <field>my_customers_toolbar</field>
             <caption>
             <![CDATA["Klientide toolbar"]]>
             </caption>
       </property>
       <property>
-            <name>customer_listing_tree</name>
-            <table>objects</table>
-            <group>customers</group>
-            <type>treeview</type>
-            <no_caption>1</no_caption>
-            <parent>vbox_customers_left</parent>
-            <store>no</store>
-            <field>customer_listing_tree</field>
-            <caption>Rühmade puu</caption>
-      </property>
-      <property>
             <name>customer_search_name</name>
             <table>objects</table>
-            <group>customers</group>
+            <group>relorg</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -569,7 +590,7 @@
       <property>
             <name>customer_search_reg</name>
             <table>objects</table>
-            <group>customers</group>
+            <group>relorg</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -579,45 +600,33 @@
             <caption>Reg nr.</caption>
       </property>
       <property>
-            <name>customer_search_leader</name>
+            <name>customer_search_worker</name>
             <table>objects</table>
-            <group>customers</group>
+            <group>relorg</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
             <parent>vbox_customers_left</parent>
             <captionside>top</captionside>
-            <field>customer_search_leader</field>
-            <caption>Firmajuht</caption>
+            <field>customer_search_worker</field>
+            <caption>T&amp;ouml;&amp;ouml;taja</caption>
       </property>
       <property>
-            <name>customer_search_field</name>
+            <name>customer_search_address</name>
             <table>objects</table>
-            <group>customers</group>
+            <group>relorg</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
             <parent>vbox_customers_left</parent>
             <captionside>top</captionside>
-            <field>customer_search_field</field>
-            <caption>Põhitegevus</caption>
-      </property>
-      <property>
-            <name>customer_search_county</name>
-            <table>objects</table>
-            <group>customers</group>
-            <type>textbox</type>
-            <size>30</size>
-            <store>no</store>
-            <parent>vbox_customers_left</parent>
-            <captionside>top</captionside>
-            <field>customer_search_county</field>
-            <caption>Maakond</caption>
+            <field>customer_search_address</field>
+            <caption>Aadress</caption>
       </property>
       <property>
             <name>customer_search_city</name>
             <table>objects</table>
-            <group>customers</group>
+            <group>relorg</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -627,33 +636,45 @@
             <caption>Linn/Vald/Alev</caption>
       </property>
       <property>
-            <name>customer_search_address</name>
+            <name>customer_search_county</name>
             <table>objects</table>
-            <group>customers</group>
+            <group>relorg</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
             <parent>vbox_customers_left</parent>
             <captionside>top</captionside>
-            <field>customer_search_address</field>
-            <caption>Tänav/Küla</caption>
+            <field>customer_search_county</field>
+            <caption>Maakond</caption>
       </property>
       <property>
-            <name>customer_search_only</name>
+            <name>customer_search_ev</name>
             <table>objects</table>
-            <group>customers</group>
-            <orient>vertical</orient>
-            <type>chooser</type>
+            <group>relorg</group>
+            <type>textbox</type>
+            <size>30</size>
             <store>no</store>
             <parent>vbox_customers_left</parent>
             <captionside>top</captionside>
-            <field>customer_search_only</field>
-            <caption>Valim</caption>
+            <field>customer_search_ev</field>
+            <caption>&amp;Otilde;iguslik vorm</caption>
+      </property>
+      <property>
+            <name>customer_search_cust_mgr</name>
+            <table>objects</table>
+            <group>relorg</group>
+            <type>text</type>
+            <size>25</size>
+            <store>no</store>
+            <parent>vbox_customers_left</parent>
+            <captionside>top</captionside>
+            <field>customer_search_cust_mgr</field>
+            <caption>Kliendihaldur</caption>
       </property>
       <property>
             <name>customer_search_submit</name>
             <table>objects</table>
-            <group>customers</group>
+            <group>relorg</group>
             <type>submit</type>
             <size>15</size>
             <store>no</store>
@@ -663,99 +684,15 @@
             <caption>Otsi</caption>
       </property>
       <property>
-            <name>customer_search_add</name>
-            <table>objects</table>
-            <group>customers</group>
-            <type>submit</type>
-            <size>15</size>
-            <store>no</store>
-            <parent>vbox_customers_left</parent>
-            <action>create_new_company</action>
-            <field>customer_search_add</field>
-            <caption>Lisa</caption>
-      </property>
-      <property>
-            <name>customer_search_results</name>
-            <table>objects</table>
-            <group>customers</group>
-            <type>table</type>
-            <store>no</store>
-            <parent>vbox_customers_right</parent>
-            <no_caption>1</no_caption>
-            <field>customer_search_results</field>
-            <caption>Otsi tulemused </caption>
-      </property>
-      <property>
-            <name>customer</name>
-            <table>objects</table>
-            <group>customers</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>vbox_customers_right</parent>
-            <field>customer</field>
-            <caption>Kliendid</caption>
-      </property>
-      <property>
-            <name>my_customers_toolbar</name>
-            <table>objects</table>
-            <group>my_customers</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <parent>my_customers_hbox_toolbar</parent>
-            <field>my_customers_toolbar</field>
-            <caption>
-            <![CDATA["Klientide toolbar"]]>
-            </caption>
-      </property>
-      <property>
             <name>my_customers_table</name>
             <table>objects</table>
-            <group>my_customers</group>
+            <group>relorg</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>my_cust_bot</parent>
             <field>my_customers_table</field>
             <caption>Kliendid</caption>
-      </property>
-      <property>
-            <name>offers_listing_toolbar</name>
-            <table>objects</table>
-            <group>offers</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <parent>offers_toolbar</parent>
-            <store>no</store>
-            <field>offers_listing_toolbar</field>
-      </property>
-      <property>
-            <name>offers_listing_tree</name>
-            <table>objects</table>
-            <group>offers</group>
-            <type>treeview</type>
-            <no_caption>1</no_caption>
-            <parent>offers_tree</parent>
-            <store>no</store>
-            <field>offers_listing_tree</field>
-      </property>
-      <property>
-            <name>offers_listing_table</name>
-            <table>objects</table>
-            <group>offers</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <parent>offers_table</parent>
-            <store>no</store>
-            <field>offers_listing_table</field>
-      </property>
-      <property>
-            <name>offers_current_org_id</name>
-            <table>objects</table>
-            <group>offers</group>
-            <type>hidden</type>
-            <store>no</store>
-            <field>offers_current_org_id</field>
       </property>
       <property>
             <name>special_offers</name>
@@ -816,10 +753,7 @@
       <property>
             <name>org_proj_tb</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>my_projects</num_1>
-            </group>
+            <group>my_projects</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -837,10 +771,7 @@
       <property>
             <name>projects_listing_tree</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>treeview</type>
             <no_caption>1</no_caption>
             <parent>projects_tree</parent>
@@ -850,10 +781,7 @@
       <property>
             <name>all_proj_search_cust</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>textbox</type>
             <store>no</store>
             <parent>all_proj_search_b</parent>
@@ -865,10 +793,7 @@
       <property>
             <name>all_proj_search_part</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>text</type>
             <size>25</size>
             <parent>all_proj_search_b</parent>
@@ -880,10 +805,7 @@
       <property>
             <name>all_proj_search_name</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>textbox</type>
             <store>no</store>
             <parent>all_proj_search_b</parent>
@@ -895,10 +817,7 @@
       <property>
             <name>all_proj_search_code</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>textbox</type>
             <store>no</store>
             <parent>all_proj_search_b</parent>
@@ -910,10 +829,7 @@
       <property>
             <name>all_proj_search_task_name</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>textbox</type>
             <store>no</store>
             <parent>all_proj_search_b</parent>
@@ -925,10 +841,7 @@
       <property>
             <name>all_proj_search_dl_from</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>date_select</type>
             <store>no</store>
             <parent>all_proj_search_b</parent>
@@ -939,10 +852,7 @@
       <property>
             <name>all_proj_search_dl_to</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>date_select</type>
             <store>no</store>
             <parent>all_proj_search_b</parent>
@@ -953,10 +863,7 @@
       <property>
             <name>all_proj_search_state</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>select</type>
             <store>no</store>
             <parent>all_proj_search_b</parent>
@@ -967,10 +874,7 @@
       <property>
             <name>all_proj_search_sbt</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>submit</type>
             <parent>all_proj_search_but_row</parent>
             <no_caption>1</no_caption>
@@ -981,10 +885,7 @@
       <property>
             <name>all_proj_search_clear</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>submit</type>
             <parent>all_proj_search_but_row</parent>
             <no_caption>1</no_caption>
@@ -995,10 +896,7 @@
       <property>
             <name>projects_listing_table</name>
             <table>objects</table>
-            <group>
-                  <num_0>org_projects</num_0>
-                  <num_1>org_projects_archive</num_1>
-            </group>
+            <group>org_projects_archive</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <parent>projects_table</parent>
@@ -1281,12 +1179,102 @@
             <field>bill_task_list</field>
       </property>
       <property>
+            <name>bills_tb</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>bills_tb</field>
+      </property>
+      <property>
+            <name>bill_s_cust</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>bills_list_s</parent>
+            <captionside>top</captionside>
+            <field>bill_s_cust</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>bill_s_bill_no</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>bills_list_s</parent>
+            <captionside>top</captionside>
+            <field>bill_s_bill_no</field>
+            <caption>Arve nr</caption>
+      </property>
+      <property>
+            <name>bill_s_from</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>bills_list_s</parent>
+            <captionside>top</captionside>
+            <field>bill_s_from</field>
+            <caption>Esitatud alates</caption>
+      </property>
+      <property>
+            <name>bill_s_to</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>bills_list_s</parent>
+            <captionside>top</captionside>
+            <field>bill_s_to</field>
+            <caption>Esitatud kuni</caption>
+      </property>
+      <property>
+            <name>bill_s_client_mgr</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>bills_list_s</parent>
+            <captionside>top</captionside>
+            <field>bill_s_client_mgr</field>
+            <caption>Kliendihaldur</caption>
+      </property>
+      <property>
+            <name>bill_s_status</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>bills_list_s</parent>
+            <captionside>top</captionside>
+            <field>bill_s_status</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>bill_s_search</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>bills_list_s</parent>
+            <captionside>top</captionside>
+            <no_caption>1</no_caption>
+            <field>bill_s_search</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
             <name>bills_list</name>
             <table>objects</table>
             <group>bills_list</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <parent>bills_list_box</parent>
             <field>bills_list</field>
       </property>
       <property>
@@ -1579,15 +1567,10 @@
                   <caption>Projektid</caption>
             </projs>
             <my_projects>
-                  <caption>Minu projektid</caption>
+                  <caption>Projektid</caption>
                   <parent>projs</parent>
                   <submit>no</submit>
             </my_projects>
-            <org_projects>
-                  <caption>Projektid</caption>
-                  <submit>no</submit>
-                  <parent>projs</parent>
-            </org_projects>
             <org_projects_archive>
                   <caption>Projektide arhiiv</caption>
                   <submit>no</submit>
@@ -1606,37 +1589,6 @@
             <relorg>
                   <caption>Kliendid</caption>
             </relorg>
-            <my_customers>
-                  <caption>Minu kliendid</caption>
-                  <parent>relorg</parent>
-                  <submit>no</submit>
-            </my_customers>
-            <customers>
-                  <caption>Kõik kliendid</caption>
-                  <parent>relorg</parent>
-                  <submit>no</submit>
-            </customers>
-            <fcustomers>
-                  <caption>Tulevased kliendid</caption>
-                  <parent>relorg</parent>
-            </fcustomers>
-            <partners>
-                  <caption>Partnerid</caption>
-                  <parent>relorg</parent>
-            </partners>
-            <fpartners>
-                  <caption>Tulevased partnerid</caption>
-                  <parent>relorg</parent>
-            </fpartners>
-            <competitors>
-                  <caption>Konkurendid</caption>
-                  <parent>relorg</parent>
-            </competitors>
-            <offers>
-                  <caption>Pakkumised</caption>
-                  <submit>no</submit>
-                  <parent>relorg</parent>
-            </offers>
             <org_images>
                   <caption>Pildid</caption>
                   <submit>yes</submit>
@@ -1823,7 +1775,7 @@
             </PROJECT>
             <CLIENT_MANAGER>
                   <value>34</value>
-                  <clid>CL_CRM_MANAGER</clid>
+                  <clid>CL_CRM_PERSON</clid>
                   <caption>Kliendihaldur</caption>
             </CLIENT_MANAGER>
             <SECTION_WEBSIDE>
@@ -1881,6 +1833,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>Organisatsiooni logo</caption>
             </ORGANISATION_LOGO>
+            <BANK_ACCOUNT>
+                  <value>46</value>
+                  <clid>CL_CRM_BANK_ACCOUNT</clid>
+                  <caption>arveldusarve</caption>
+            </BANK_ACCOUNT>
       </reltypes>
       <layout>
             <hbox_toolbar>
@@ -1940,87 +1897,40 @@
                   <parent>personal_tree_table_cand</parent>
                   <group>personal_candits</group>
             </personal_hbox_table_cand>
-            <customer_hbox_toolbar>
-                  <type>hbox</type>
-                  <group>customers</group>
-            </customer_hbox_toolbar>
-            <customers_hbox_others>
+            <my_cust_bot>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>customers</group>
-            </customers_hbox_others>
+                  <group>relorg</group>
+            </my_cust_bot>
             <vbox_customers_left>
                   <type>vbox</type>
-                  <parent>customers_hbox_others</parent>
-                  <group>customers</group>
+                  <parent>my_cust_bot</parent>
+                  <group>relorg</group>
             </vbox_customers_left>
-            <vbox_customers_right>
-                  <type>vbox</type>
-                  <parent>customers_hbox_others</parent>
-                  <group>customers</group>
-            </vbox_customers_right>
-            <my_customers_hbox_toolbar>
-                  <type>hbox</type>
-                  <group>my_customers</group>
-            </my_customers_hbox_toolbar>
-            <offers_toolbar>
-                  <type>hbox</type>
-                  <group>offers</group>
-            </offers_toolbar>
-            <offers_main>
-                  <type>hbox</type>
-                  <width>20%:80%</width>
-                  <group>offers</group>
-            </offers_main>
-            <offers_tree>
-                  <type>vbox</type>
-                  <parent>offers_main</parent>
-                  <group>offers</group>
-            </offers_tree>
-            <offers_table>
-                  <type>vbox</type>
-                  <parent>offers_main</parent>
-                  <group>offers</group>
-            </offers_table>
             <projects_main>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>
-                        <num_0>org_projects</num_0>
-                        <num_1>org_projects_archive</num_1>
-                  </group>
+                  <group>org_projects_archive</group>
             </projects_main>
             <projects_tree>
                   <type>vbox</type>
                   <parent>projects_main</parent>
-                  <group>
-                        <num_0>org_projects</num_0>
-                        <num_1>org_projects_archive</num_1>
-                  </group>
+                  <group>org_projects_archive</group>
             </projects_tree>
             <all_proj_search_b>
                   <type>vbox</type>
                   <parent>projects_tree</parent>
-                  <group>
-                        <num_0>org_projects</num_0>
-                        <num_1>org_projects_archive</num_1>
-                  </group>
+                  <group>org_projects_archive</group>
             </all_proj_search_b>
             <all_proj_search_but_row>
                   <type>hbox</type>
                   <parent>projects_tree</parent>
-                  <group>
-                        <num_0>org_projects</num_0>
-                        <num_1>org_projects_archive</num_1>
-                  </group>
+                  <group>org_projects_archive</group>
             </all_proj_search_but_row>
             <projects_table>
                   <type>vbox</type>
                   <parent>projects_main</parent>
-                  <group>
-                        <num_0>org_projects</num_0>
-                        <num_1>org_projects_archive</num_1>
-                  </group>
+                  <group>org_projects_archive</group>
             </projects_table>
             <my_proj>
                   <type>hbox</type>
@@ -2062,6 +1972,16 @@
                   <parent>docs_left</parent>
                   <group>documents</group>
             </docs_s_but_row>
+            <bills_list_box>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>bills_list</group>
+            </bills_list_box>
+            <bills_list_s>
+                  <type>vbox</type>
+                  <parent>bills_list_box</parent>
+                  <group>bills_list</group>
+            </bills_list_s>
             <my_tasks>
                   <type>hbox</type>
                   <width>20%:80%</width>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.21 2005/10/13 07:49:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.22 2005/10/19 06:43:31 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -430,7 +430,7 @@ class task extends class_base
 		{
 			case "rows":
 				$res = array();
-				foreach(safe_array($arr["request"]["rows"]) as $e)
+				foreach(safe_array($_POST["rows"]) as $e)
 				{
 					if ($e["task"] != "")
 					{
@@ -869,6 +869,78 @@ class task extends class_base
 			));
 		}
 		$t->set_sortable(false);
+	}
+
+	function get_task_bill_rows($task)
+	{
+		// check if task has rows defined that go on bill
+		// if, then ret those
+		// if not, return data for bill
+
+		$rows = array();
+		$dat = safe_array($task->meta("rows"));
+		foreach($dat as $idx => $row)
+		{
+			if ($row["on_bill"] == 1)
+			{
+				$id = $task->id()."_".$idx;
+				$rows[$id] = array(
+					"name" => $row["task"],
+					"unit" => t("tund"),
+					"price" => $task->prop("hr_price"),
+					"amt" => $row["time"],
+					"sum" => str_replace(",", ".", $row["time"]) * $task->prop("hr_price"),
+					"has_tax" => 1
+				);
+			}
+		}
+
+		if (!count($rows))
+		{
+			$rows[$task->id()] = array(
+				"name" => $task->name(),
+				"unit" => t("tund"),
+				"price" => $task->prop("hr_price"),
+				"amt" => $task->prop("num_hrs_to_cust"),
+				"sum" => str_replace(",", ".", $task->prop("num_hrs_to_cust")) * $task->prop("hr_price"),
+				"has_tax" => 1
+			);
+		}
+
+		// add other expenses rows
+		foreach(safe_array($task->meta("other_expenses")) as $idx => $oe)
+		{
+			$id = $task->id()."_oe_".$idx;
+			$rows[$id] = array(
+				"name" => $oe["exp"],
+				"unit" => "",
+				"price" => $oe["cost"],
+				"amt" => 1,
+				"sum" => $oe["cost"],
+				"has_tax" => 1
+			);
+		}
+		
+
+		return $rows;
+	}
+
+	/**
+		@attrib name=del_file_rel
+		@param fid required 
+		@param from required
+		@param return_url optional 
+	**/
+	function del_file_rel($arr)
+	{
+		$f = obj($arr["fid"]);
+		$ff = $f->get_first_obj_by_reltype("RELTYPE_FILE");
+		if ($ff)
+		{
+			$ff->delete();
+		}
+		$f->delete();
+		return $arr["return_url"];
 	}
 }
 ?>

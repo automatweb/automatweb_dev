@@ -28,9 +28,23 @@
             <name>customer</name>
             <table>aw_crm_bill</table>
             <group>general</group>
-            <type>select</type>
+            <type>popup_search</type>
             <field>aw_customer</field>
+            <reltype>RELTYPE_CUST</reltype>
+            <clid>
+                  <num_0>CL_CRM_COMPANY</num_0>
+                  <num_1>CL_CRM_PERSON</num_1>
+            </clid>
             <caption>Klient</caption>
+      </property>
+      <property>
+            <name>impl</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>aw_impl</field>
+            <reltype>RELTYPE_IMPL</reltype>
+            <caption>Teostaja</caption>
       </property>
       <property>
             <name>state</name>
@@ -59,6 +73,42 @@
             <field>bill_rows</field>
             <caption>Arveread </caption>
       </property>
+      <property>
+            <name>disc</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_discount</field>
+            <size>5</size>
+            <caption>Allahindlus (%)</caption>
+      </property>
+      <property>
+            <name>sum</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>text</type>
+            <field>aw_sum</field>
+            <size>5</size>
+            <caption>Summa</caption>
+      </property>
+      <property>
+            <name>preview</name>
+            <table>objects</table>
+            <group>preview</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>preview</field>
+      </property>
+      <property>
+            <name>task_list</name>
+            <table>objects</table>
+            <group>tasks</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>task_list</field>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_BILL</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -66,6 +116,14 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <tasks>
+                  <caption>Toimetused</caption>
+            </tasks>
+            <preview>
+                  <caption>Eelvaade</caption>
+            </preview>
+      </groupinfo>
       <tableinfo>
             <aw_crm_bill>
                   <index>aw_oid</index>
@@ -76,9 +134,25 @@
       <reltypes>
             <TASK>
                   <value>1</value>
-                  <class_id>CL_TASK</class_id>
+                  <clid>CL_TASK</clid>
                   <caption>&amp;uuml;lesanne</caption>
             </TASK>
+            <CUST>
+                  <value>2</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
+                  <caption>klient</caption>
+            </CUST>
+            <IMPL>
+                  <value>3</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
+                  <caption>teostaja</caption>
+            </IMPL>
       </reltypes>
 </properties>
 

@@ -9,5 +9,15 @@
 			</function>
 		</action>
 
+		<action name="del_file_rel">
+			<function name="del_file_rel">
+				<arguments>
+					<required name="fid" />
+					<required name="from" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

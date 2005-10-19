@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.2 2005/09/29 06:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.3 2005/10/19 06:43:30 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -11,29 +11,60 @@
 
 @default group=general
 
-@property bill_no type=textbox table=aw_crm_bill field=aw_bill_no
-@caption Number
+	@property bill_no type=textbox table=aw_crm_bill field=aw_bill_no
+	@caption Number
 
-@property bill_date type=date_select table=aw_crm_bill field=aw_date
-@caption Kuup&auml;ev
+	@property bill_date type=date_select table=aw_crm_bill field=aw_date
+	@caption Kuup&auml;ev
 
-@property bill_due_date type=date_select table=aw_crm_bill field=aw_due_date
-@caption Makset&auml;htaeg
+	@property bill_due_date type=date_select table=aw_crm_bill field=aw_due_date
+	@caption Makset&auml;htaeg
 
-@property customer type=select table=aw_crm_bill field=aw_customer
-@caption Klient
+	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON
+	@caption Klient
 
-@property state type=select table=aw_crm_bill field=aw_state
-@caption Staatus
+	@property impl type=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
+	@caption Teostaja
 
-@property notes type=textarea rows=5 cols=50 table=aw_crm_bill field=aw_notes
-@caption M&auml;rkused
+	@property state type=select table=aw_crm_bill field=aw_state
+	@caption Staatus
 
-@property bill_rows type=table store=no 
-@caption Arveread 
+	@property notes type=textarea rows=5 cols=50 table=aw_crm_bill field=aw_notes
+	@caption M&auml;rkused
 
-@reltype TASK value=1 class_id=CL_TASK
+	@property bill_rows type=table store=no 
+	@caption Arveread 
+
+	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5 
+	@caption Allahindlus (%)
+
+	@property sum type=text table=aw_crm_bill field=aw_sum size=5 
+	@caption Summa
+
+
+@default group=preview
+
+	@property preview type=text store=no no_caption=1
+
+@default group=tasks
+
+	@property task_list type=table no_caption=1 store=no
+
+
+@groupinfo tasks caption="Toimetused"
+@groupinfo preview caption="Eelvaade"
+
+
+
+@reltype TASK value=1 clid=CL_TASK
 @caption &uuml;lesanne
+
+@reltype CUST value=2 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption klient
+
+@reltype IMPL value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption teostaja
+
 */
 
 class crm_bill extends class_base
@@ -41,7 +72,7 @@ class crm_bill extends class_base
 	function crm_bill()
 	{
 		$this->init(array(
-			"tpldir" => "applications/crm/crm_bill",
+			"tpldir" => "crm/crm_bill",
 			"clid" => CL_CRM_BILL
 		));
 
@@ -58,6 +89,10 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "preview":
+				$this->_preview($arr);
+				break;
+
 			case "state":
 				$prop["options"] = $this->states;
 				break;
@@ -140,73 +175,22 @@ class crm_bill extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_bill_rows_t($t);
 
+		$sum = 0;
+
 		$inf = safe_array($arr["obj_inst"]->meta("bill_inf"));
+		$task_i = get_instance(CL_TASK);
 
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TASK")) as $c)
 		{
 			$task = $c->to();
-			$id = $task->id();
-
-			if (!isset($inf[$id]))
+			foreach($task_i->get_task_bill_rows($task) as $id => $row)
 			{
-				$inf[$id] = array(
-					"name" => $task->name(),
-					"unit" => t("tund"),
-					"price" => $task->prop("hr_price"),
-					"amt" => $task->prop("num_hrs_to_cust"),
-					"sum" => $task->prop("num_hrs_to_cust") * $task->prop("hr_price")
-				);
-			}
-
-			$t_inf = $inf[$id];
-			$t->define_data(array(
-				"name" => html::textbox(array(
-					"name" => "rows[$id][name]",
-					"value" => $t_inf["name"]
-				)),
-				"unit" => html::textbox(array(
-					"name" => "rows[$id][unit]",
-					"value" => $t_inf["unit"],
-					"size" => 10
-				)),
-				"price" => html::textbox(array(
-					"name" => "rows[$id][price]",
-					"value" => $t_inf["price"],
-					"size" => 5
-				)),
-				"amt" => html::textbox(array(
-					"name" => "rows[$id][amt]",
-					"value" => $t_inf["amt"],
-					"size" => 5
-				)),
-				"sum" => html::textbox(array(
-					"name" => "rows[$id][sum]",
-					"value" => $t_inf["sum"],
-					"size" => 5
-				)),
-				"has_tax" => html::checkbox(array(
-					"name" => "rows[$id][has_tax]",
-					"ch_value" => 1,
-					"checked" => $t_inf["has_tax"] == 1 ? true : false
-				))
-			));
-
-			// also, add all other exp rows from task
-			foreach(safe_array($task->meta("other_expenses")) as $idx => $entry)
-			{
-				$id = $task->id()."_".$idx;
 				if (!isset($inf[$id]))
 				{
-					$t_inf = array(
-						"name" => $entry["exp"],
-						"price" => $entry["cost"]
-					);
-				}
-				else
-				{
-					$t_inf = $inf[$id];
+					$inf[$id] = $row;
 				}
 
+				$t_inf = $inf[$id];
 				$t->define_data(array(
 					"name" => html::textbox(array(
 						"name" => "rows[$id][name]",
@@ -238,9 +222,239 @@ class crm_bill extends class_base
 						"checked" => $t_inf["has_tax"] == 1 ? true : false
 					))
 				));
+				$sum += $t_inf["sum"];
 			}
 		}
 		$t->set_sortable(false);
+
+		if ($arr["obj_inst"]->prop("disc") > 0)
+		{
+			$sum -= $sum * ($arr["obj_inst"]->prop("disc") / 100.0);
+		}
+		if ($arr["obj_inst"]->prop("sum") != $sum)
+		{
+			$arr["obj_inst"]->set_prop("sum", $sum);
+			$arr["obj_inst"]->save();
+		}
+	}
+
+	function get_sum($bill)
+	{
+		return $bill->prop("sum");
+	}
+
+	function _calc_sum($bill)
+	{
+		$inf = safe_array($bill->meta("bill_inf"));
+		$sum = 0;
+		foreach($inf as $row)
+		{
+			$sum+= $row["sum"];
+		}
+
+		if ($bill->prop("disc") > 0)
+		{
+			$sum -= $sum * ($bill->prop("disc") / 100.0);
+		}
+
+		return $sum;
+	}
+
+	function callback_pre_save($arr)
+	{
+		$arr["obj_inst"]->set_prop("sum", $this->_calc_sum($arr["obj_inst"]));
+	}
+
+	function _preview($arr)
+	{
+		$arr["prop"]["value"] = $this->show(array("id" => $arr["obj_inst"]->id()));
+	}
+
+	function show($arr)
+	{
+		$b = obj($arr["id"]);
+		$this->read_site_template("show.tpl");
+
+		$ord = obj();
+		if ($this->can("view", $b->prop("customer")))
+		{
+			$ord = obj($b->prop("customer"));
+			$ord_ct = $ord->prop("firmajuht");
+			if ($this->can("view", $ord_ct))
+			{
+				$ct = obj($ord_ct);
+				$ord_ct = $ct->name();
+			}
+			if ($this->can("view", $ord->prop("contact")))
+			{
+				//$ct = obj($ord->prop("contact"));
+				//$ord_addr = $ct->name()." ".$ct->prop("postiindeks");
+
+				$ct = obj($ord->prop("contact"));
+				$ap = array($ct->prop("aadress"));
+				if ($ct->prop("linn"))
+				{
+					$ap[] = $ct->prop_str("linn");
+				}
+				$aps = join(", ", $ap)."<br>";
+				$aps .= $ct->prop_str("maakond");
+				$aps .= " ".$ct->prop("postiindeks");
+				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
+			}
+		}
+		$logo = "";
+		$impl = obj();
+		if ($this->can("view", $b->prop("impl")))
+		{
+			$impl = obj($b->prop("impl"));
+
+			$ba = "";
+			foreach($impl->connections_from(array("type" => "RELTYPE_BANK_ACCOUNT")) as $c)
+			{
+				$acc = $c->to();
+				$bank = obj();
+				if ($this->can("view", $acc->prop("bank")))
+				{
+					$bank = obj($acc->prop("bank"));
+				}
+				$this->vars(array(
+					"bank_name" => $bank->name(),
+					"acct_no" => $acc->prop("acct_no"),
+					"bank_iban" => $bank->prop("iban_code")
+				));
+
+				$ba .= $this->parse("BANK_ACCOUNT");
+			}
+
+			$this->vars(array(
+				"BANK_ACCOUNT" => $ba
+			));
+			$logo_o = $impl->get_first_obj_by_reltype("RELTYPE_ORGANISATION_LOGO");
+			$logo_i = $logo_o->instance();
+			$logo = $logo_i->make_img_tag_wl($logo_o->id());
+			$logo_url = $logo_i->get_url_by_id($logo_o->id());
+
+			if ($this->can("view", $impl->prop("contact")))
+			{
+				$ct = obj($impl->prop("contact"));
+				$ap = array($ct->prop("aadress"));
+				if ($ct->prop("linn"))
+				{
+					$ap[] = $ct->prop_str("linn");
+				}
+				$aps = join(", ", $ap)."<br>";
+				$aps .= $ct->prop_str("maakond");
+				$aps .= " ".$ct->prop("postiindeks");
+				$impl_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
+			}
+
+			if ($this->can("view", $impl->prop("email_id")))
+			{
+				$mail = obj($impl->prop("email_id"));
+				$impl_mail = $mail->prop("mail");
+			}
+		}
+
+		$this->vars(array(
+			"orderer_name" => $ord->name(),
+			"orderer_addr" => $ord_addr,
+			"orderer_kmk_nr" => $ord->prop("tax_nr"),
+			"bill_no" => $b->prop("bill_no"),
+			"impl_logo" => $logo,
+			"impl_logo_url" => $logo_url,
+			"bill_date" => $b->prop("bill_date"),
+			"payment_due_days" => (int)(($b->prop("bill_due_date") - $b->prop("bill_date")) / (24*3600)),
+			"bill_due" => $b->prop("bill_due_date"),
+			"orderer_contact" => $ord_ct,
+			"comment" => $b->prop("notes"),
+			"impl_name" => $impl->name(),
+			"impl_address" => $impl_addr,
+			"impl_reg_nr" => $impl->prop("reg_nr"),
+			"impl_kmk_nr" => $impl->prop("tax_nr"),
+			"impl_phone" => $impl->prop_str("phone_id"),
+			"impl_fax" => $impl->prop_str("telefax_id"),
+			"impl_email" => $impl_mail,
+			"impl_url" => $impl->prop_str("url_id"),
+		));		
+
+		$rs = "";
+		$sum_wo_tax = 0;
+		$tax = 0;
+		$sum = 0;
+		foreach($this->get_bill_rows($b) as $row)
+		{
+			$cur_tax = 0;
+			$cur_sum = 0;
+			
+			if ($row["has_tax"] == 1)
+			{
+				// tax needs to be added
+				$cur_sum = $row["sum"];
+				$cur_tax = ($row["sum"] * 0.18);
+				$cur_pr = $row["price"];
+			}	
+			else
+			{
+				// tax does not need to be added, tax free it seems
+				$cur_sum = $row["sum"];
+				$cur_tax = 0;
+				$cur_pr = $row["price"];
+			}
+
+			$this->vars(array(
+				"unit" => $row["unit"],
+				"amt" => $row["amt"],
+				"price" => number_format($cur_pr, 2),
+				"sum" => number_format($cur_sum, 2),
+				"desc" => $row["name"]
+			));
+
+			$rs .= $this->parse("ROW");
+			$sum_wo_tax += $cur_sum;
+			$tax += $cur_tax;
+			$sum += ($cur_tax+$cur_sum);
+		}
+
+		$this->vars(array(
+			"ROW" => $rs,
+			"total_wo_tax" => number_format($sum_wo_tax, 2),
+			"tax" => number_format($tax, 2),
+			"total" => number_format($sum, 2),
+			"total_text" => locale::get_lc_number($sum)
+		));
+
+		$res =  $this->parse();
+		if (false && !$_GET["gen_print"])
+		{
+			$res = html::href(array(
+				"url" => aw_url_change_var("gen_print", 1),
+				"caption" => t("Prinditav arve")
+			)).$res;
+			return $res;
+		}
+
+		die($res);
+	}
+
+	function get_bill_rows($bill)
+	{
+		$inf = safe_array($bill->meta("bill_inf"));
+		$task_i = get_instance(CL_TASK);
+
+		foreach($bill->connections_from(array("type" => "RELTYPE_TASK")) as $c)
+		{
+			$task = $c->to();
+			foreach($task_i->get_task_bill_rows($task) as $id => $row)
+			{
+				if (!isset($inf[$id]))
+				{
+					$inf[$id] = $row;
+				}
+				
+			}
+		}
+
+		return $inf;
 	}
 }
 ?>

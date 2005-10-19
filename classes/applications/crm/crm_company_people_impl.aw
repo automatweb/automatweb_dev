@@ -304,6 +304,23 @@ class crm_company_people_impl extends class_base
 			$professions[$tmp_obj->id()] = $tmp_obj->prop('name');
 		}
 
+		if ($arr["request"]["cat"] == CRM_ALL_PERSONS_CAT)
+		{
+			// get all units and all professions from those
+			$units = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SECTION")));
+			$c = new connection();
+			$p_conns = $c->find(array(
+				"from.class_id" => CL_CRM_SECTION,
+				"from" => $units->ids(),
+				"type" => "RELTYPE_PROFESSIONS",
+			));
+			$professions = array();
+			foreach($p_conns as $p_con)
+			{
+				$professions[$p_con["to"]] = $p_con["to.name"];
+			}
+		}
+
 		//if listing from a specific unit, then the reltype is different
 		if((int)$arr['request']['unit'])
 		{

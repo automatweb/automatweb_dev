@@ -72,7 +72,7 @@ class relpicker extends  core
 		{
 			$val["post_append_text"] = " ".html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru()), t("Muuda valitud objekti"));
 		}
-		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->id()) && aw_global_get("uid") == "kix")
+		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->id()))
 		{
 			$clid = $arr["relinfo"][$reltype]["clid"];
 			$rel_val = $arr["relinfo"][$reltype]["value"];
@@ -80,7 +80,6 @@ class relpicker extends  core
 			{
 				$clid = reset($clid);
 			}
-
 			if (is_class_id($clid))
 			{
 				$val["post_append_text"] .= " / ".html::get_new_url(

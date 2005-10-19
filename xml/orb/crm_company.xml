@@ -34,13 +34,6 @@
 			</function>
 		</action>
 
-		<action name="search_for_customers">
-			<function name="search_for_customers">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="submit_new_call">
 			<function name="submit_new_call">
 				<arguments>
@@ -85,13 +78,6 @@
 
 		<action name="create_new_company">
 			<function name="create_new_company">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="save_customer_search_results">
-			<function name="save_customer_search_results">
 				<arguments>
 				</arguments>
 			</function>
@@ -209,6 +195,13 @@
 			</function>
 		</action>
 
+		<action name="add_task_to_proj">
+			<function name="add_task_to_proj">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="mark_p_as_important">
 			<function name="mark_p_as_important">
 				<arguments>
@@ -225,6 +218,27 @@
 
 		<action name="tasks_switch_to_table_view">
 			<function name="tasks_switch_to_table_view">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="go_to_create_bill">
+			<function name="go_to_create_bill">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_projs">
+			<function name="delete_projs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_bills">
+			<function name="delete_bills">
 				<arguments>
 				</arguments>
 			</function>

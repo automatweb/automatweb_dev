@@ -6,9 +6,8 @@
 				<arguments>
 					<required name="id" type="int" acl="view" />
 					<required name="pn" />
-					<required name="clid" type="int" />
+					<required name="clid" />
 					<optional name="s" />
-					<optional name="append_html" />
 				</arguments>
 			</function>
 		</action>

@@ -60,10 +60,16 @@ class popup_search extends aw_template
 		$tmp["type"] = "text";
 		if (is_object($arr["obj_inst"]))
 		{
+			$clid = array();
+			$awa = new aw_array($tmp["clid"]);
+			foreach($awa->get() as $clid_str)
+			{
+				$clid[] = constant($clid_str);
+			}
 			$url = $this->mk_my_orb("do_search", array(
 				"id" => $arr["obj_inst"]->id(),
 				"pn" => $tmp["name"],
-				"clid" => constant($tmp["clid"])
+				"clid" => $clid
 			));
 		}
 
@@ -114,7 +120,7 @@ class popup_search extends aw_template
 
 		@param id required type=int acl=view
 		@param pn required 
-		@param clid required type=int
+		@param clid required 
 		@param s optional
 
 	**/

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.120 2005/10/15 15:20:52 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.121 2005/10/19 06:43:31 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -889,6 +889,67 @@ class htmlclient extends aw_template
 					"SHOW_HELP" => $tp->parse("SHOW_HELP"),
 				));
 			};
+			if ($this->config["add_txt"])
+			{
+				$cust_url = $this->mk_my_orb('new',array(
+						'parent' => $_REQUEST["id"],
+						'alias_to' => $_REQUEST["id"],
+						'reltype' => 22, // crm_company.CUSTOMER,
+						'return_url' => get_ru()
+					),
+					'crm_company'
+				);
+				$cust_url_pri = $this->mk_my_orb('new',array(
+						'parent' => $_REQUEST["id"],
+						'alias_to' => $_REQUEST["id"],
+						'reltype' => 22, // crm_company.CUSTOMER,
+						'return_url' => get_ru()
+					),
+					CL_CRM_PERSON
+				);
+				$proj_url = html::get_new_url(
+						CL_PROJECT, 
+						$_REQUEST["id"], 
+						array(
+							"return_url" => get_ru(),
+							"connect_orderer" => $_REQUEST["id"],
+						)
+				);
+				$pl = get_instance(CL_PLANNER);
+				$this->cal_id = $pl->get_calendar_for_user(array(
+					"uid" => aw_global_get("uid"),
+				));
+				$task_url = $this->mk_my_orb('new',array(
+					'alias_to_org' => $_REQUEST["id"],
+					'reltype_org' => 13,
+					'class' => 'planner',
+					'id' => $this->cal_id,
+					'group' => 'add_event',
+					'clid' => CL_TASK,
+					'action' => 'change',
+					'title' => t("Toimetus"),
+					'parent' => $_REQUEST["id"],
+					'return_url' => get_ru()
+				));
+
+				$bill_url = aw_url_change_var("group", "bills", aw_url_change_var("proj", NULL));
+				$adds =  $this->picker("", array(
+					"" => "Lisa",
+					$cust_url => "Klient",
+					$cust_url_pri => "Klient (eraisik)",
+					$proj_url => "Projekt",
+					$task_url => "Toimetus",
+					$bill_url => "Arve"
+				));
+
+				$tp->vars(array(
+					"adds" => $adds
+				));
+				//Klient (jaguneb eraklient/organisatsioon), Projekt, Ülesanne, Arve
+				$tp->vars(array(
+					"ADDITIONAL_TEXT" => $tp->parse("ADDITIONAL_TEXT"),
+				));
+			}
 			if ($this->form_layout != "boxed")
 			{
 				// perhaps, just perhaps I should create a separate property type

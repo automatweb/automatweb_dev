@@ -16,21 +16,21 @@ class crm_company_overview_impl extends class_base
 	{
 		$args = array();
 		$args["type"] = "RELTYPE_CALL";
-		$this->do_org_actions($arr, $args);
+		$this->do_org_actions($arr, $args, CL_CRM_CALL);
 	}
 
 	function _get_org_meetings($arr)
 	{
 		$args = array();
 		$args["type"] = "RELTYPE_KOHTUMINE";
-		$this->do_org_actions($arr, $args);
+		$this->do_org_actions($arr, $args, CL_CRM_MEETING);
 	}
 	
 	function _get_org_tasks($arr)
 	{
 		$args = array();
 		$args["type"] = "RELTYPE_TASK";
-		$this->do_org_actions($arr, $args);
+		$this->do_org_actions($arr, $args, CL_TASK);
 	}
 
 	function get_overview($arr = array())
@@ -38,7 +38,7 @@ class crm_company_overview_impl extends class_base
 		return $this->overview;
 	}
 
-	function do_org_actions($arr, $args)
+	function do_org_actions($arr, $args, $clid)
 	{
 		// whee, this thing includes project and that uses properties, so we gots
 		// to do this here or something. damn, we need to do the reltype
@@ -72,35 +72,6 @@ class crm_company_overview_impl extends class_base
 		$return_url = urlencode(aw_global_get("REQUEST_URI"));
 		$planner = get_instance(CL_PLANNER);
 
-		// gather a list of events to show
-		/*$evts = array();
-
-		// XXX: optimize the hell out of it. I have the range, I should use 
-		// it.
-		foreach($conns as $conn)
-		{
-			$evts[$conn->prop("to")] = $conn->prop("to");
-		};
-
-		$relinfo = $arr["obj_inst"]->get_relinfo();
-
-		$prj = get_instance(CL_PROJECT);
-		$evts = $evts + $prj->get_events_for_participant(array(
-			"id" => $arr["obj_inst"]->id(),
-			"clid" => $relinfo[$args["type"]]["clid"],
-		));
-
-		$ol = new object_list(array(
-			"orderer" => $arr["obj_inst"]->id(),
-			"class_id" => CL_CRM_OFFER,
-		));
-		foreach ($ol->arr() as $tmp)
-		{	
-			if($tmp->id() == $tmp->brother_of())
-			{
-				$evts[$tmp->id()] = $tmp->id();
-			}
-		}*/
 		$task_ol = $this->_get_task_list($arr);
 		$evts = $this->make_keys($task_ol->ids());
 
@@ -108,10 +79,10 @@ class crm_company_overview_impl extends class_base
 		if ($arr["request"]["act_s_sbt"] != "")
 		{
 			// filter
-			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $evts));
+			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $evts, $clid));
 			$evts = $this->make_keys($ol->ids());
 		}
-			
+		
 
 		$this->overview = array();
 		classload("core/icons");
@@ -295,14 +266,14 @@ class crm_company_overview_impl extends class_base
 			if (is_oid($cust) && $this->can("view", $cust))
 			{
 				$cust_o = obj($cust);
-				$cust_str = html::get_change_url($cust, array("return_url" => get_ru()), $cust_o->name());
+				$cust_str = html::get_change_url($cust, array("return_url" => get_ru()), parse_obj_name($cust_o->name()));
 			}
 
 			$proj = $task->prop("project");
 			if (is_oid($proj) && $this->can("view", $proj))
 			{
 				$proj_o = obj($proj);
-				$proj_str = html::get_change_url($proj, array("return_url" => get_ru()), $proj_o->name());
+				$proj_str = html::get_change_url($proj, array("return_url" => get_ru()), parse_obj_name($proj_o->name()));
 			}
 
 			$col = "";
@@ -366,7 +337,8 @@ class crm_company_overview_impl extends class_base
 		}
 		$res = array(
 			"class_id" => $clid,
-			"oid" => $tasks
+			"brother_of" => new obj_predicate_prop("id")
+			//"oid" => $tasks
 		);
 
 		$clss = aw_ini_get("classes");
@@ -451,7 +423,7 @@ class crm_company_overview_impl extends class_base
 
 		if ($r["act_s_status"] > 0 && $r["act_s_status"] < 3)
 		{
-			$res["is_done"] = $r["act_s_status"] == 1 ? 0 : 8;
+			$res["flags"] = array("mask" => OBJ_IS_DONE, "flags" => $r["act_s_status"] == 1 ? 0 : OBJ_IS_DONE);
 		}
 		return $res;
 	}
@@ -554,26 +526,32 @@ class crm_company_overview_impl extends class_base
 		switch($arr["request"]["group"])
 		{
 			case "my_tasks":
+			case "overview":
 				$args["type"] = "RELTYPE_TASK";
+				$clid = CL_TASK;
 				break;
 
 			case "meetings":
 				$args["type"] = "RELTYPE_KOHTUMINE";
+				$clid = CL_CRM_MEETING;
 				break;
 
 			case "calls":
 				$args["type"] = "RELTYPE_CALL";
+				$clid = CL_CRM_CALL;
 				break;
 
 			case "ovrv_offers":
 				$args["type"] = "RELTYPE_OFFER";
+				$clid = CL_CRM_OFFER;
 				break;
 
 			default:
 				$args["type"] = array("RELTYPE_TASK", "RELTYPE_KOHUTMINE", "RELTYPE_CALL", "RELTYPE_OFFER");
+				$clid = array(CL_TASK, CL_CRM_MEETING, CL_CRM_CALL, CL_CRM_OFFER);
 				break;
 		}
-		$this->do_org_actions($arr, $args);
+		$this->do_org_actions($arr, $args, $clid);
 	}
 
 	function _get_task_list($arr)
@@ -583,6 +561,7 @@ class crm_company_overview_impl extends class_base
 		switch($arr["request"]["group"])
 		{
 			case "my_tasks":
+			case "overview":
 				$tasks = $i->get_my_tasks();
 				$clid = CL_TASK;
 				break;

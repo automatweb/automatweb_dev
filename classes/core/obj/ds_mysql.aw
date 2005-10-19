@@ -1794,12 +1794,20 @@ die(dbg::dump($ret));
 				$pp = substr($pp, 0, $_pos);
 			}
 
-			error::raise_if(!is_array($GLOBALS["properties"][$cur_clid][$pp]), array(
+			if ($pp == "id")
+			{
+				$cur_prop = array("name" => "id", "table" => "objects", "field" => "oid");
+			}
+			else
+			{
+				$cur_prop = $GLOBALS["properties"][$cur_clid][$pp];
+			}
+
+			error::raise_if(!is_array($cur_prop), array(
 				"id" => ERR_OBJ_NO_PROP,
 				"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no property %s in class %s "), $pp, $cur_clid)
 			));
 
-			$cur_prop = $GLOBALS["properties"][$cur_clid][$pp];
 
 			$table = $cur_prop["table"];
 			$field = $cur_prop["field"];
@@ -1817,39 +1825,50 @@ die(dbg::dump($ret));
 					"msg" => sprintf(t("ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"), $pp, $cur_clid)
 				));
 
-				switch ($cur_prop["type"])
+				if ($set_clid)
 				{
-					case "relpicker":
-					case "relmanager":
-					case "classificator":
-					case "popup_search":
-						$new_clid = false;
+					$new_clid = $set_clid;
+					error::raise_if(!$set_clid, array(
+						"id" => ERR_OBJ_W_TP,
+						"msg" => sprintf(t("ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"), $cur_prop["type"])
+					));
+				}
+				else
+				{
+					switch ($cur_prop["type"])
+					{
+						case "relpicker":
+						case "relmanager":
+						case "classificator":
+						case "popup_search":
+							$new_clid = false;
 
-						$relt_s = $cur_prop["reltype"];
-						$relt = $GLOBALS["relinfo"][$cur_clid][$relt_s]["value"];
+							$relt_s = $cur_prop["reltype"];
+							$relt = $GLOBALS["relinfo"][$cur_clid][$relt_s]["value"];
 
-						if (!$relt)
-						{
-							$new_clid = @constant($cur_prop["clid"]);
-						}				
+							if (!$relt)
+							{
+								$new_clid = @constant($cur_prop["clid"]);
+							}				
 
-						error::raise_if(!$relt && !$new_clid, array(
-							"id" => ERR_OBJ_NO_REL,
-							"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"), $relt_s, $cur_clid, $cur_prop["name"])
-						));
-	
-						if (!$new_clid)
-						{
-							$new_clid = $GLOBALS["relinfo"][$cur_clid][$relt_s]["clid"][0];
-						}
-						break;
-	
-					default:
-						$new_clid = $set_clid;
-						error::raise_if(!$set_clid, array(
-							"id" => ERR_OBJ_W_TP,
-							"msg" => sprintf(t("ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"), $cur_prop["type"])
-						));
+							error::raise_if(!$relt && !$new_clid, array(
+								"id" => ERR_OBJ_NO_REL,
+								"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"), $relt_s, $cur_clid, $cur_prop["name"])
+							));
+		
+							if (!$new_clid)
+							{
+								$new_clid = $GLOBALS["relinfo"][$cur_clid][$relt_s]["clid"][0];
+							}
+							break;
+		
+						default:
+							$new_clid = $set_clid;
+							error::raise_if(!$set_clid, array(
+								"id" => ERR_OBJ_W_TP,
+								"msg" => sprintf(t("ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"), $cur_prop["type"])
+							));
+					}
 				}
 			}
 

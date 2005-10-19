@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.39 2005/10/12 13:28:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.40 2005/10/19 06:43:31 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -445,7 +445,10 @@ class crm_offer extends class_base
 
 		$omgr = get_instance(CL_CRM_OFFER_MGR);
 		$mgr_o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OFFER_MGR");
-		$typicals = $omgr->get_typical_components($mgr_o);
+		if ($mgr_o)
+		{
+			$typicals = $omgr->get_typical_components($mgr_o);
+		}
 
 		if (count($typicals))
 		{
@@ -582,7 +585,10 @@ class crm_offer extends class_base
 
 		$omgr = get_instance(CL_CRM_OFFER_MGR);
 		$mgr_o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OFFER_MGR");
-		$typicals = $omgr->get_typical_components($mgr_o);
+		if ($mgr_o)
+		{
+			$typicals = $omgr->get_typical_components($mgr_o);
+		}
 
 		$clss = aw_ini_get("classes");
 
@@ -698,18 +704,19 @@ class crm_offer extends class_base
 		}
 		$implementor = "";
 		$imp_o = $o->get_first_obj_by_reltype("RELTYPE_PREFORMER");
+		$lg = "";
 		if (is_object($imp_o))
 		{
 			$implementor = $imp_o->name();
+
+			if (($lg = $imp_o->prop("logo")))
+			{
+				$lg = html::img(array(
+					"url" => $lg
+				));
+			}
 		}
 
-		$lg = "";
-		if (($lg = $imp_o->prop("logo")))
-		{
-			$lg = html::img(array(
-				"url" => $lg
-			));
-		}
 		$this->vars(array(
 			"content" => $html,
 			"name" => $o->name(),
