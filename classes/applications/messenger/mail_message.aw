@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.16 2005/10/19 18:57:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.17 2005/10/19 19:06:41 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -64,6 +64,8 @@
 	classinfo relationmgr=yes
 
 	@groupinfo general caption="Üldine" submit=no
+	@groupinfo add caption="Lisa"
+
 	@tableinfo messages index=id master_table=objects master_index=oid
 	
 	@property view_toolbar type=toolbar store=no no_caption=1 form=showmsg
@@ -75,10 +77,10 @@
 	@property msg_content type=text store=no form=showmsg no_caption=1
 	@caption Kirja sisu
 	
-	@property msg_contener_title type=textbox field=meta method=serialize table=objects
+	@property msg_contener_title type=textbox field=meta method=serialize table=objects group=add
 	@caption Konteineri pealkiri
 	
-	@property msg_contener_content type=textarea field=meta method=serialize table=objects
+	@property msg_contener_content type=textarea field=meta method=serialize table=objects group=add
 	@caption Konteineri sisu
 
 	@property msg_attachments type=text store=no form=showmsg no_caption=1
