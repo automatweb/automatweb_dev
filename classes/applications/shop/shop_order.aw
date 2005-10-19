@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.40 2005/09/01 09:46:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.41 2005/10/19 13:05:36 dragut Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -130,6 +130,24 @@ class shop_order extends class_base
 					}
 					$data["value"] .= $co->name();
 				}
+				// separator between the saved user data and the user data which comes from
+				// order object
+				$data['value'] .= "<br /><br />";
+				$user_data = $arr['obj_inst']->meta("user_data");
+				// so lets print out the orderer data
+				// XXX maybe i should but it in a table property?
+				$data['value'] .= sprintf(t("Kliendi nr: %s<br />"), $user_data['user1']);
+				$data['value'] .= sprintf(t("Eesnimi:<b> %s</b><br />"), $user_data['user4']);
+				$data['value'] .= sprintf(t("Perekonnanimi:<b> %s</b><br />"), $user_data['user2']);
+//				$data['value'] .= sprintf("S&uuml;nnip&auml;ev: %s<br />", $user_data['user4']);
+				$data['value'] .= sprintf(t("Aadress: <b>%s</b><br />"), $user_data['user5']);
+				$data['value'] .= sprintf(t("Postiindeks: <b>%s</b><br />"), $user_data['user6']);
+				$data['value'] .= sprintf(t("Linn: <b>%s</b><br />"), $user_data['user7']);
+				$data['value'] .= sprintf(t("E-mail: <b>%s</b><br />"), $user_data['user8']);
+				$data['value'] .= sprintf(t("Telefon kodus: <b>%s</b><br />"), $user_data['user17']);
+				$data['value'] .= sprintf(t("Telefon t&ouml;&ouml;l: <b>%s</b><br />"), $user_data['user18']);
+				$data['value'] .= sprintf(t("Mobiil: <b>%s</b><br />"), $user_data['user19']);
+				$data['value'] .= sprintf(t("Isikukood: <b>%s</b><br />"), $user_data['user20']);
 			
 				break;
 		};
@@ -641,11 +659,14 @@ class shop_order extends class_base
 
 		// also, if the warehouse has any e-mails, then generate html from the order and send it to those dudes
 		$emails = $this->order_warehouse->connections_from(array("type" => "RELTYPE_EMAIL"));
+		//echo "emails = ".dbg::dump($emails)." <br>";
 		$at = $this->order_center->prop("send_attach");
 
+//echo "hier <br>";
 		$html = "";
 		if (($_el = $this->order_center->prop("mail_to_seller_in_el")))
 		{
+			//echo "_el = $_el <br>";
 			$val = $ud[$_el];
 			if (is_oid($val) && $this->can("view", $val))
 			{
@@ -672,6 +693,7 @@ class shop_order extends class_base
 						"data" => $html,
 					));
 					$awm->gen_mail();
+					//echo "sent to $_to , from $mail_from_addr <br>";
 				}
 			}
 		}
@@ -750,6 +772,7 @@ class shop_order extends class_base
 					}
 					//strip_tags(str_replace("<br>", "\n",$html))
 					$awm->gen_mail();
+					//echo "sent to $eml , from $mail_from_addr <br>";
 				}
 			}
 			else
@@ -795,6 +818,7 @@ class shop_order extends class_base
 					}
 					//strip_tags(str_replace("<br>", "\n",$html))
 					$awm->gen_mail();
+					//echo "sent to ".$eml->prop("mail")." from $mail_from_addr <br>";
 				}
 			}
 		}
@@ -1044,7 +1068,6 @@ class shop_order extends class_base
 				"person_name" => $ud[$pp],
 			));
 		}
-
 		if (aw_global_get("uid") != "")
 		{
 			$vars = array();
@@ -1078,11 +1101,22 @@ class shop_order extends class_base
 		}
 
 		$awa = new aw_array($o->meta("user_data"));
+
+		$tmp_register_data_obj = obj();
+		$tmp_register_data_obj->set_class_id(CL_REGISTER_DATA);
+		$register_data_prop_info = $tmp_register_data_obj->get_property_list();
+
 		foreach($awa->get() as $ud_k => $ud_v)
 		{
 			if (is_array($ud_v) && $ud_v["year"] != "")
 			{
 				$ud_v = $ud_v["day"].".".$ud_v["month"].".".$ud_v["year"];
+			}
+			if ($register_data_prop_info[$ud_k]['type'] == "classificator" && is_oid($ud_v) && $this->can("view", $ud_v))
+			{
+				
+				$ud_v_obj = obj($ud_v);	
+				$ud_v = $ud_v_obj->name();
 			}
 			$this->vars(array(
 				"user_data_".$ud_k => $ud_v
