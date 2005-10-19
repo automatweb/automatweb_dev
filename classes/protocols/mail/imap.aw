@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.25 2005/07/06 18:04:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.26 2005/10/19 18:38:10 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -351,7 +351,7 @@ class imap extends class_base
 		#$overview = @imap_fetchstructure($this->mbox,$msgid,FT_UID);
 
 		$fq = aw_ini_get("basedir") . "/classes/protocols/mail/MIME/mimeDecode.php";
-		require "$fq";
+		require_once "$fq";
 		$params = array();
 		$params['include_bodies'] = true;
 		$params['decode_bodies']  = true;
@@ -494,7 +494,7 @@ class imap extends class_base
 		$body = imap_body($this->mbox,$arr["msgid"],FT_UID);
 
 		$fq = aw_ini_get("basedir") . "/classes/protocols/mail/MIME/mimeDecode.php";
-		require "$fq";
+		require_once "$fq";
 		$params = array();
 		$params['include_bodies'] = true;
 		$params['decode_bodies']  = true;
@@ -514,15 +514,20 @@ class imap extends class_base
 			$att_name = $part->ctype_parameters["name"];
 		};
 
-		/*$struct = imap_bodystruct($this->mbox, imap_msgno($this->mbox, $arr["msgid"]), $arr["part"]);
-		$params = $this->_decode_parameters($struct->parameters);
-		$att_name = isset($params["name"]) ? $params["name"] : "unknown";
-		$body = imap_fetchbody($this->mbox,$arr["msgid"],$arr["part"],FT_UID);
-		$decbody = $this->_decode($body,$struct->encoding);
-		*/
-		header("Content-type: ".$mime_type);
-                header("Content-Disposition: filename=$att_name");
-		die($part->body);
+		if (isset($arr["return"]))
+		{
+			return array(
+				"content-type" => $mime_type,
+				"name" => $att_name,
+				"content" => $part->body,
+			);
+		}
+		else
+		{
+			header("Content-type: ".$mime_type);
+			header("Content-Disposition: filename=$att_name");
+			die($part->body);
+		}
 	}
 
 	function store_message($arr)
