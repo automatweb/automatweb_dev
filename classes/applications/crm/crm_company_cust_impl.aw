@@ -112,6 +112,14 @@ class crm_company_cust_impl extends class_base
 		else
 		{
 			$conns_ol = new object_list(array("oid" => $prj));
+			if ($conns_ol->count())
+			{
+				$conns_ol = new object_list(array(
+					"oid" => $conns_ol->ids(),
+					"class_id" => CL_PROJECT,
+					"state" => new obj_predicate_not(PROJ_DONE)
+				));
+			}
 		}
 
 		if ($arr["request"]["do_proj_search"] && $conns_ol->count())
@@ -120,14 +128,6 @@ class crm_company_cust_impl extends class_base
 			$conns_ol = new object_list($filt);
 		}
 
-		if ($conns_ol->count())
-		{
-			$conns_ol = new object_list(array(
-				"oid" => $conns_ol->ids(),
-				"class_id" => CL_PROJECT,
-				"state" => new obj_predicate_not(PROJ_DONE)
-			));
-		}
 		foreach ($conns_ol->arr() as $project_obj)
 		{
 			if (is_oid($cpi = $project_obj->prop("contact_person_implementor")) && $this->can("view", $cpi))
@@ -1096,7 +1096,9 @@ class crm_company_cust_impl extends class_base
 	{
 		$ret = array(
 			"class_id" => CL_PROJECT,
-			"oid" => $oids
+			"lang_id" => array(),
+			"site_id" => array(),
+			//"oid" => $oids
 		);
 
 		if ($ar[$prefix."proj_search_cust"] != "")
@@ -1152,6 +1154,7 @@ class crm_company_cust_impl extends class_base
 		{
 			$ret["state"] = $ar[$prefix."proj_search_state"];
 		}
+
 		return $ret;
 	}
 
