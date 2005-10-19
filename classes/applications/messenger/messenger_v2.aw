@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.10 2005/07/05 11:54:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.11 2005/10/19 18:59:23 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -50,7 +50,7 @@ caption Identiteet
 @property msg_drafts type=relpicker reltype=RELTYPE_FOLDER
 @caption Mustandite kataloog
 
-@property num_attachments type=select field=meta method=serialize group=advanced default=1 options=1,2,3,4,5
+@property num_attachments type=select field=meta method=serialize group=advanced default=1 
 @caption Manuste arv
 
 @default group=search 
@@ -186,7 +186,6 @@ class messenger_v2 extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			/*
 			case "num_attachments":
 				$prop["options"] = array(
 					0 => 0,
@@ -197,7 +196,6 @@ class messenger_v2 extends class_base
 					5 => 5,
 				);
 				break;
-			*/
 
 			case "message_list":
 				$retval = $this->gen_message_list($arr);
@@ -578,6 +576,12 @@ class messenger_v2 extends class_base
 		$rv = $this->_connect_server(array(
 			"msgr_id" => $arr["obj_inst"]->id(),
 		));
+		
+		if ($this->connect_errors)
+		{
+			$arr["prop"]["error"] = t("Login failed, check whether server name, user and password are correct.<br>") . $this->connect_errors; 
+			return PROP_ERROR;
+		};
 
 
 		$drafts = $this->msgobj->prop("msg_drafts");
