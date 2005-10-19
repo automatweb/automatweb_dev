@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.14 2005/07/07 12:30:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.15 2005/10/19 18:39:53 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -563,11 +563,11 @@ class mail_message extends class_base
 
 
 		$pl = get_instance(CL_PLANNER);
-		$user_cal = $pl->get_calendar_for_user(array(
+		$cal_o = $pl->get_calendar_obj_for_user(array(
 			"uid" => aw_global_get("uid"),
 		));
 
-		//$user_cal = 0;
+		$user_cal = $cal_o->id();
 
 		$req = $arr["request"];
 
@@ -579,7 +579,7 @@ class mail_message extends class_base
 				"tooltip" => t("Lisa kalendrisse"),
 				"img" => "icon_cal_today.gif",
 			));
-			$ev_classes = $pl->get_event_classes();
+			$ev_classes = $pl->get_event_entry_classes($cal_o);
 
 			$clinf = aw_ini_get("classes");
 			foreach($ev_classes as $clid)
@@ -594,23 +594,9 @@ class mail_message extends class_base
 						"create_class" => $clid,
 					)),
 					//"action" => "register_event",
-				
-					// tegelikult see action võib lihtsalt kuvada
-					// teate "lisatud" .. .. kasutaja ise
-					// vaatab oma kalendrist siis, et mis värk
-					// on. uh.huh	
 				));
 			};
 		};
-
-		// nii ja huvitav, kuidas ma need URLid siis nüüd koostan, mis
-		// mingi sündmuse kalendrisse topivad?
-
-		// põmst ju üsna lihtne, ma nimelt pean leidma kasutaja kalendri,
-		// leidma selle sündmuste kataloogi, tegema sinna objekti
-		// ja optionally suunama selle sündmuse edimise vormile
-
-		// I would prefer that functionality to be in the planner class, eh?
 
 		$tb->add_separator();
 
@@ -773,8 +759,6 @@ class mail_message extends class_base
 			"msgid" => $arr["msgid"],
 		));
 
-		$clids = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL);
-
 		$tc = get_instance("applications/messenger/calendar_connector");
 		$props = $tc->get_property_group(array("form" => "connector","clfile" => "calendar_connector"));
 
@@ -782,7 +766,9 @@ class mail_message extends class_base
 		$htmlc->start_output();
 		
 		$pl = get_instance(CL_PLANNER);
-		$user_cal = $pl->get_calendar_for_user();
+		$cal_o = $pl->get_calendar_obj_for_useR();
+		$user_cal = $cal_o->id();
+		$clids = $pl->get_event_entry_classes($cal_o);
 
 		$props["title"]["value"] = $msgdata["subject"];
 		$props["start"]["value"] = time();
@@ -794,9 +780,13 @@ class mail_message extends class_base
 			"sort_by" => "name",
 			"site_id" => array(),
 		));
+
+
+		// not using names(), because I only need calendars with valid event_folders
 		foreach($cal_list->arr() as $cal)
 		{
-			if (is_oid($cal->prop("event_folder")))
+			$event_folder = $cal->prop("event_folder");
+			if (is_oid($event_folder))
 			{
 				$calendars[$cal->id()] = $cal->name();
 			};
@@ -838,41 +828,17 @@ class mail_message extends class_base
                         $htmlc->add_property($pd);
                 }
 
-		$htmlc->add_property(array(
-			"type" => "hidden",
-			"name" => "action",
-			"value" => "submit_register_event",
-		));
-		
-		$htmlc->add_property(array(
-			"type" => "hidden",
-			"name" => "class",
-			"value" => get_class($this),
+                $htmlc->finish_output(array(
+			"data" => array(
+				"action" => "submit_register_event",
+				"class" => get_class($this),
+				"mailbox" => $arr["mailbox"],
+				"msgrid" => $arr["msgrid"],
+				"msgid" => $arr["msgid"],
+			),
 		));
 
-		$htmlc->add_property(array(
-			"type" => "hidden",
-			"name" => "mailbox",
-			"value" => $arr["mailbox"],
-		));
-		
-		$htmlc->add_property(array(
-			"type" => "hidden",
-			"name" => "msgid",
-			"value" => $arr["msgid"],
-		));
-		
-		$htmlc->add_property(array(
-			"type" => "hidden",
-			"name" => "msgrid",
-			"value" => $arr["msgrid"],
-		));
-
-
-                $htmlc->finish_output();
-
-                $html = $htmlc->get_result(array(
-                ));
+                $html = $htmlc->get_result(array());
 
 		return $html;
 	}
@@ -882,11 +848,14 @@ class mail_message extends class_base
 	**/
 	function submit_register_event($arr)
 	{
-		// this is the meat
-		//print "creating the fucking event";
-
 		load_vcl("date_edit");
-
+		
+		$msgdata = $this->fetch_message(array(
+			"mailbox" => $arr["mailbox"],
+			"msgrid" => $arr["msgrid"],
+			"msgid" => $arr["msgid"],
+		));
+		
 		$main_calendar = new object($arr["main_calendar"]);
 		$event_folder = $main_calendar->prop("event_folder");
 		$evt = new object();
@@ -907,7 +876,6 @@ class mail_message extends class_base
 			};
 		};
 
-
 		if (is_array($arr["projects"]))
 		{
 			foreach($arr["projects"] as $project)
@@ -915,6 +883,47 @@ class mail_message extends class_base
 				$evt->create_brother($project);
 			}
 		};
+	
+		$msgr = get_instance(CL_MESSENGER_V2);
+		$msgr->set_opt("use_mailbox",$arr["mailbox"]);
+                $msgr->_connect_server(array(
+                        "msgr_id" => $arr["msgrid"],
+                ));
+
+		$awf = get_instance(CL_FILE);
+
+
+		//$awf = get_instance(CL_FILE);
+
+		foreach($msgdata["attachments"] as $num => $pdata)
+		{
+			// 0 is the message itself
+			if ($num == 0) continue;
+			$att = $msgr->drv_inst->fetch_part(array(
+				"msgid" => $arr["msgid"],
+				"part" => $num,
+				"return" => 1,
+			));
+
+			$fdat = array(
+				"parent" => $event_folder,
+				"file" => array(
+					"content" => $att["content"],
+					"name" => $att["name"],
+				),
+				"return" => "id",
+			);
+
+			$file_id = $awf->submit($fdat);
+
+			// create alias
+			$evt->connect(array(
+				"to" => $file_id,
+			));
+
+		};
+		
+		//print "creating the fucking event";
 
 
 		return $this->mk_my_orb("change",array(
