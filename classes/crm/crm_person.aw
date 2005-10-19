@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.88 2005/10/19 08:37:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.89 2005/10/19 09:04:00 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -429,7 +429,11 @@ class crm_person extends class_base
 							"class_id" => CL_CRM_PERSON,
 							"CL_CRM_PERSON.address.riik.name" => $rk->name()
 						));
-						$code .= "-".sprintf("%04d", $ol->count());
+						$ol2 = new object_list(array(
+							"class_id" => CL_CRM_COMPANY,
+							"CL_CRM_COMPANY.contact.riik.name" => $rk->name()
+						));
+						$code .= "-".sprintf("%04d", $ol->count() + $ol2->count());
 						$data["value"] = $code;
 					}
 				}

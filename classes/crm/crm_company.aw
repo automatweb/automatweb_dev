@@ -497,6 +497,46 @@ default group=org_objects
 		@property my_tasks type=table store=no no_caption=1 parent=my_tasks
 		@property my_tasks_cal type=calendar store=no no_caption=1 parent=my_tasks
 
+@default group=stats
+
+	@property stats_s_cust type=textbox store=no
+	@caption Klient
+
+	@roperty stats_s_cust_type type=chooser store=no
+	@caption Kliendi t&uuml;&uuml;p
+
+	@property stats_s_proj type=textbox store=no
+	@caption Projekt
+
+	@property stats_s_worker type=textbox store=no
+	@caption T&ouml;&ouml;taja
+
+	@property stats_s_from type=date_select store=no
+	@caption Alates
+
+	@property stats_s_to type=date_select store=no
+	@caption Kuni
+
+	@property stats_s_state type=select store=no
+	@caption Toimetuse staatus
+
+	@property stats_s_bill_state type=select store=no
+	@caption Arve staatus
+
+	@property stats_s_area type=select store=no
+	@caption Valdkond
+
+	@property stats_s_detailed type=checkbox ch_value=1 store=no
+	@caption N&auml;ita detailselt
+
+	@property stats_s_sbt type=submit store=no
+	@caption Otsi
+
+	@property stats_s_res type=table store=no no_caption=1
+	@caption Tulemused
+
+		
+
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
@@ -541,6 +581,8 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 	@groupinfo bills_create parent=bills caption="Loo arve" submit=no
 	@groupinfo bills_list parent=bills caption="Nimekiri" submit=no
+
+@groupinfo stats caption="Statistika" submit_method=get
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -928,7 +970,11 @@ class crm_company extends class_base
 							"class_id" => CL_CRM_COMPANY,
 							"CL_CRM_COMPANY.contact.riik.name" => $rk->name()
 						));
-						$code .= sprintf("%04d", $ol->count());
+						$ol2 = new object_list(array(
+							"class_id" => CL_CRM_PERSON,
+							"CL_CRM_PERSON.address.riik.name" => $rk->name()
+						));
+						$code .= sprintf("%04d", $ol->count() + $ol2->count());
 						$data["value"] = $code;
 					}
 				}
@@ -1276,6 +1322,28 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $bills_impl->$fn($arr);
+
+			case "stats_s_cust":
+			case "stats_s_proj":
+			case "stats_s_worker":
+			case "stats_s_from":
+			case "stats_s_to":
+			case "stats_s_detailed":
+				$data["value"] = $arr["request"][$data["name"]];
+				break;
+
+			case "stats_s_cust_type":
+			case "stats_s_res":
+			case "stats_s_state":
+			case "stats_s_bill_state":
+			case "stats_s_area":
+				static $stats_impl;
+				if (!$stats_impl)
+				{
+					$stats_impl = get_instance("applications/crm/crm_company_stats_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $stats_impl->$fn($arr);
 		};
 		return $retval;
 	}
