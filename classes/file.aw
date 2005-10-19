@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.113 2005/10/19 18:30:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.114 2005/10/19 18:37:34 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -253,12 +253,10 @@ class file extends class_base
 				if ($fc != "")
 				{
 					$pathinfo = pathinfo($file_name);
-					$mimeregistry = get_instance("core/aw_mime_types");
-
-					$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
-
 					if (empty($file_type))
 					{
+						$mimeregistry = get_instance("core/aw_mime_types");
+						$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
 						$file_type = $realtype;
 					};
 
