@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.425 2005/10/19 06:43:30 kristo Exp $
+// $Id: class_base.aw,v 2.426 2005/10/19 18:55:17 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -862,7 +862,7 @@ class class_base extends aw_template
 			"return_url" => $request["return_url"],
 		) + ( (isset($extraids) && is_array($extraids)) ? $extraids : array());
 
-		if (ifset($form_data,"no_rte") == 1)
+		if (!empty($form_data["no_rte"]))
 		{
 			$args["no_rte"] = 1;
 		};
@@ -907,7 +907,7 @@ class class_base extends aw_template
 					"new" => $this->new,
 				));
 
-				if (ifset($args,"goto"))
+				if (!empty($args["goto"]))
 				{
 					return $args["goto"];
 				};
@@ -915,6 +915,7 @@ class class_base extends aw_template
 		};
 
 		// and I need a workaround for this id_only thingie!!!
+
 
 		// rrrr, temporary hack
 		if (isset($this->id_only))
@@ -946,7 +947,7 @@ class class_base extends aw_template
 			{
 				$retval = aw_url_change_var("class",$class,$retval);
 			};
-			if ($args["return"] == "id")
+			if ($request["return"] == "id")
 			{
 				$retval = $this->id;
 			};
@@ -2448,12 +2449,6 @@ class class_base extends aw_template
 
 			$argblock["prop"] = &$val;
 
-			if ($val["type"] == "relmanager" && empty($val["_parsed"]))
-			{
-				$argblock["prop"]["clid"] = $this->relinfo[$val["reltype"]]["clid"];
-				$val["vcl_inst"]->init_rel_manager($argblock);
-			};
-
 			if ($val["type"] == "select")
 			{
 				//$val["options"] = $this->make_keys($val["options"]);
@@ -2556,6 +2551,13 @@ class class_base extends aw_template
 					};
 					continue;
 				};
+
+				if ($val["type"] == "relmanager")
+				{
+					$argblock["prop"]["clid"] = $this->relinfo[$val["reltype"]]["clid"];
+					$val["vcl_inst"]->init_rel_manager($argblock);
+				};
+
 
 				if ($this->vcl_register[$val["orig_type"]] && isset($this->vcl_has_getter[$val["orig_type"]]))
 				{
@@ -2670,9 +2672,7 @@ class class_base extends aw_template
 					$val["items"] = $tmp;
 				};
 
-				$awt->start("convert_property_${pname}");
 				$this->convert_element(&$val);
-				$awt->stop("convert_property_${pname}");
 
 				// hm, how the fuck can the name be empty anyway?
 				if (empty($name))
@@ -4600,6 +4600,7 @@ class class_base extends aw_template
 			"file" => empty($arr["clid"]) ? $arr["clfile"] : "",
 			"clid" => !empty($arr["clid"]) ? $arr["clid"] : $this->clid,
 			"filter" => $arr["filter"],
+			"system" => 1,
 		));
 
 
