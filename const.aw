@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.103 2005/10/01 09:45:22 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.104 2005/10/19 14:21:16 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -153,19 +153,6 @@ if ($pi)
 };
 
 // siin oli aw_global_set("section",$section); mida EI TOHI siin olla
-
-// support for crypted urls
-if (isset($__udat))
-{
-	$l = strlen($__udat);
-	$ret = "";
-	for ($i=0; $i < $l; $i+=2)
-	{
-		$ret.= chr(hexdec($__udat[$i].$__udat[$i+1]));
-	};
-	parse_str($ret,$AW_GET_VARS);
-	extract($AW_GET_VARS);
-}
 
 $ext = "aw"; 		          	// filename extension
 
