@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.14 2005/10/01 09:45:23 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.15 2005/10/19 15:54:17 duke Exp $
 
 lc_load("definition");
 
@@ -363,15 +363,16 @@ class acl_base extends db_connector
 	// black magic follows.
 	function can($access, $oid)
 	{
+		if (!is_oid($oid))
+		{
+			return false;
+		}
+
 		if ($GLOBALS["cfg"]["acl"]["no_check"])
 		{
 			return true;
 		}
 
-		if (!is_oid($oid))
-		{
-			return false;
-		}
 		if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 		{
 			return $GLOBALS["object_loader"]->can($access, $oid);
