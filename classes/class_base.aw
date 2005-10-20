@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.426 2005/10/19 18:55:17 duke Exp $
+// $Id: class_base.aw,v 2.427 2005/10/20 10:01:19 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2582,9 +2582,10 @@ class class_base extends aw_template
 					};
 
 					$argblock["prop"] = &$val;
-					$target_reltype = @constant($val["reltype"]);
-					$argblock["prop"]["reltype"] = $target_reltype;
+					$target_reltype = $val["reltype"];
+					$argblock["prop"]["reltype"] = $this->relinfo[$target_reltype]["value"];
 					$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
+
 					if (is_array($this->cb_values[$val["name"]]))
 					{
 						$argblock["cb_values"] = $this->cb_values[$val["name"]];
@@ -3603,8 +3604,8 @@ class class_base extends aw_template
 				$vcl_inst = new releditor();
 
 				$argblock["prop"] = $property;
-				$target_reltype = constant($property["reltype"]);
-				$argblock["prop"]["reltype"] = $target_reltype;
+				$target_reltype = $property["reltype"];
+				$argblock["prop"]["reltype"] = $this->relinfo[$target_reltype]["value"];
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
 				$res = $vcl_inst->process_releditor($argblock);
 
