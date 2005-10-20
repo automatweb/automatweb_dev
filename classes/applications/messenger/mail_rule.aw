@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.5 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.6 2005/10/20 09:27:58 duke Exp $
 // mail_rule.aw - Maili ruul 
 /*
 @classinfo syslog_type=ST_MAIL_RULE relationmgr=yes
@@ -56,9 +56,9 @@ class mail_rule extends class_base
 
 	function get_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "target_folder":
 				$tmp = array();
@@ -86,7 +86,16 @@ class mail_rule extends class_base
 				{
 					$tmp[$key] = $fld["name"];
 				};
-				$data["options"] = $tmp;
+				$prop["options"] = $tmp;
+				break;
+
+			case "on_server":
+				$ftp = get_instance(CL_FTP_LOGIN);
+				if (!$ftp->is_available())
+				{
+					$prop["error"] = t("FTP extension is required for this feature");
+					$retval = PROP_ERROR;
+				}
 				break;
 
 		};
@@ -146,7 +155,6 @@ class mail_rule extends class_base
 				"obj_inst" => $arr["obj_inst"],
 			));
 
-
 			if (!empty($msgr_id))
 			{
 				$msgr_obj = new object($msgr_id);
@@ -192,9 +200,10 @@ class mail_rule extends class_base
 						$new_rule_file = $fdat . $rule;
 					};
 				};
-					
+
 				$t->put_file($rulefilename,$new_rule_file);
 			};
+
 		};
 
 
