@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.11 2005/09/14 17:57:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.12 2005/10/20 09:23:06 dragut Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -270,12 +270,16 @@ class ml_member extends class_base
 				$added = true;
 			}
 		}
-		if ($added && $list_obj->prop("confirm_subscribe") != "" && $list_obj->prop("confirm_subscribe_msg") != "")
+
+		$confirm_subscribe = $list_obj->prop("confirm_subscribe");
+		$confirm_subscribe_msg = $list_obj->prop("confirm_subscribe_msg");
+
+		if ($added && $confirm_subscribe > 0 && $confirm_subscribe_msg > 0)
 		{
 			// now generate and send the bloody message
 			$msg = get_instance(CL_MESSAGE);
 			$msg->process_and_deliver(array(
-				"id" => $list_obj->prop("confirm_subscribe_msg"),
+				"id" => $confirm_subscribe_msg,
 				"to" => $objname,
 				"replacements" => array(
 					"#list#" => parse_obj_name($list_obj->name()),
