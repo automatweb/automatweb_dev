@@ -1539,11 +1539,8 @@ die(dbg::dump($ret));
 		$this->quote($metadata);
 		$this->quote(&$objdata);
 
-		$objdata["createdby"] = aw_global_get("uid");		
-		$objdata["created"] = time();		
-
-		$objdata["modifiedby"] = aw_global_get("uid");		
-		$objdata["modified"] = time();		
+		$objdata["createdby"] = $objdata["modifiedby"] = aw_global_get("uid");		
+		$objdata["created"] = $objdata["modified"] = time();		
 
 		$objdata["lang_id"] = aw_global_get("lang_id");		
 		$objdata["site_id"] = aw_ini_get("site_id");		
