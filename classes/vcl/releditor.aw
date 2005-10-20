@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.64 2005/10/19 16:13:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.65 2005/10/20 10:04:13 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -504,6 +504,11 @@ class releditor extends core
 					if ($_pd["type"] == "datetime_select")
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
+					}
+					if ($_pd["type"] == "relpicker" && is_oid($prop["value"]))
+					{
+						$_tmp = new object($prop["value"]);
+						$prop["value"] = $_tmp->name();
 					}
 					else
 					if ($_pd["type"] == "select" && is_array($prop["options"]))
