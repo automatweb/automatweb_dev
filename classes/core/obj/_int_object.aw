@@ -484,16 +484,30 @@ class _int_object
 			$i = $cnt - $param["max_len"];
 		}
 
+		$skip = is_oid($param["start_at"]) ? true : false;
 		$ret = array();
 		for(; $i < $cnt; $i++)
 		{
 			if (is_object($pt[$i]))
 			{
+				if (is_oid($param["start_at"]) && $pt[$i]->id() == $param["start_at"])
+				{
+					$skip = false;
+				}
+				if ($skip)
+				{
+					continue;
+				}
+
+				if (!empty($param["path_only"]) && $pt[$i]->id() == $this->obj["oid"])
+				{
+					continue;
+				}
 				$ret[] = $pt[$i]->name();
 			}
 		}
 		$tmp = join(" / ", $ret);
-		if ($tmp == "")
+		if ($tmp == "" && empty($param["path_only"]))
 		{
 			$tmp = $this->name();
 		}
@@ -1069,6 +1083,10 @@ class _int_object
 					$val = join(", ", $vals);
 				}
 				break;
+		}
+		if ($val === "0" || $val === 0)
+		{
+			$val = "";
 		}
 		return $val;
 	}
