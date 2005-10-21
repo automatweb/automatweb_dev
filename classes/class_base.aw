@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.427 2005/10/20 10:01:19 duke Exp $
+// $Id: class_base.aw,v 2.428 2005/10/21 22:22:28 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3509,7 +3509,7 @@ class class_base extends aw_template
 			// that your set_property returns PROP_OK for stuff
 			// that you want to save
 			$setter = "_set_" . $name;
-			if ( ($this->classinfo['prop_cb'] == 1) && in_array($setter,$class_methods))
+			if ( isset($this->classinfo['prop_cb']) && ($this->classinfo['prop_cb'] == 1) && in_array($setter,$class_methods))
 			{
 				$status = $this->inst->$setter($argblock);
 			}
@@ -3530,7 +3530,7 @@ class class_base extends aw_template
 
 			};
 
-			if ($status == PROP_OK && "int" == $property["datatype"])
+			if ($status == PROP_OK && !empty($property["datatype"]) && "int" == $property["datatype"])
 			{
 				$val = $property["value"];
 				$val = str_replace(",",".",$val);
@@ -3622,7 +3622,7 @@ class class_base extends aw_template
 			// the current behaviour is to call set_property and not ever
 			// call process_vcl_property if set_property returns false
 
-			if ($this->vcl_register[$property["type"]])
+			if (isset($this->vcl_register[$property["type"]]))
 			{
 				$reginst = $this->vcl_register[$property["type"]];
 				$ot = get_instance($reginst);
@@ -3642,7 +3642,7 @@ class class_base extends aw_template
 				};
 			};
 
-			if ($property["store"] == "no")
+			if (isset($property["store"]) && $property["store"] == "no")
 			{
 				continue;
 			};
@@ -3684,7 +3684,7 @@ class class_base extends aw_template
 				$property["value"] = $this->make_keys($rawdata[$name]);
 			};
 
-			if ($property["method"] == "bitmask")
+			if (isset($property["method"]) && $property["method"] == "bitmask")
 			{
 				// shift to the left, shift to the right
 				// pop, push, pop, push
@@ -3711,7 +3711,7 @@ class class_base extends aw_template
 			}
 			else
 			{
-				if ($property["method"] == "bitmask")
+				if (isset($property["method"]) && $property["method"] == "bitmask")
 				{
 					$val = ($property["ch_value"] == $property["value"]) ? $property["ch_value"] : 0;
 					if ($this->obj_inst->is_property($name))
@@ -3771,7 +3771,7 @@ class class_base extends aw_template
 		};
 
 		// this is here to solve the line break problems with RTE
-		if (is_array($args["cb_nobreaks"]))
+		if (isset($args["cb_nobreaks"]) && is_array($args["cb_nobreaks"]))
 		{
 			$this->obj_inst->set_meta("cb_nobreaks",$args["cb_nobreaks"]);
 		}
@@ -3779,7 +3779,7 @@ class class_base extends aw_template
 		// there is a bug somewhere which causes certain objects to get a
 		// status of 0, until I figure it out, the first part of this if clause
 		// deals with it -- duke
-		if ($this->obj_inst->prop("status") == 0 || $this->classinfo["no_status"] == 1)
+		if ($this->obj_inst->prop("status") == 0 || !empty($this->classinfo["no_status"]))
 		{
 			$this->obj_inst->set_status(STAT_ACTIVE);
 		};
