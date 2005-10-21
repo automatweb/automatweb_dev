@@ -80,6 +80,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 ------ Yldine - Lisainfo grupp----------
 @default group=add_info
 
+	@property classif1 type=classificator store=connect reltype=RELTYPE_METAMGR
+	@caption Asutuse omadused
+	
 	@property userta1 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 	@caption User-defined TA 1
 
@@ -264,6 +267,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 ---------- ERIPAKKUMISED ---------
 @default group=special_offers
+
 	@property special_offers type=releditor reltype=RELTYPE_SPECIAL_OFFERS field=meta method=serialize mode=manager props=name,comment,ord,status,valid_from,valid_to table_fields=name,ord table_edit_fields=ord table=objects direct_links=1
 	@caption Eripakkumised
 ---------- END ERIPAKKUMISED ---------
@@ -750,6 +754,13 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @reltype CONTENT_DOCS_FOLDER value=48 clid=CL_DOCUMENT
 @caption uudiste kataloog
+
+@reltype METAMGR value=49 clid=CL_METAMGR
+@caption Muutujate haldur
+
+@reltype FIELD value=50 clid=CL_CRM_FIELD_ACCOMMODATION
+@caption Valdkond
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
