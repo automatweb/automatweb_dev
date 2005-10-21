@@ -41,7 +41,7 @@ class popup_search extends aw_template
 		}
 		else if ($style == 'relpicker')
 		{
-			if (!isset($arr['property']['reltype']) || !isset($arr['relinfo'][$arr['property']['reltype']]))
+			if (!isset($arr['property']['reltype']) || !isset($arr['relinfo'][$arr['property']['reltype']]) || !is_oid($arr['obj_inst']->id()))
 			{
 				return PROP_IGNORE;
 			}
@@ -122,7 +122,11 @@ class popup_search extends aw_template
 		@param pn required 
 		@param clid required 
 		@param s optional
+		@param append_html optional
 
+		@comment
+			clid - not filtered by, if clid == 0
+			append_html - additional html, inserted to tmpl {VAR:append}
 	**/
 	function do_search($arr)
 	{
@@ -173,6 +177,7 @@ class popup_search extends aw_template
 				"id" => $arr["id"],
 				"pn" => $arr["pn"],
 				"clid" => $arr["clid"],
+				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
 				"orb_class" => "popup_search",
 				"reforb" => 0
 			)
@@ -220,9 +225,11 @@ class popup_search extends aw_template
 		));
 		$t->set_default_sortby("name");
 
-		$filter = array(
-			"class_id" => $arr["clid"],
-		);
+		$filter = array();
+		if ($arr['clid'] > 0)
+		{
+			$filter['class_id'] = $arr['clid'];
+		}	
 
 		$awa = new aw_array($arr["s"]);
 		foreach($awa->get() as $k => $v)
@@ -279,8 +286,10 @@ class popup_search extends aw_template
 			"reforb" => $this->mk_reforb("final_submit", array(
 				"id" => $arr["id"],
 				"pn" => $arr["pn"],
-				"clid" => $arr["clid"]
-			))
+				"clid" => $arr["clid"],
+				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
+			)),
+			"append" => ifset($arr,"append_html"),
 		));
 
 		return $this->parse();
@@ -333,7 +342,8 @@ class popup_search extends aw_template
 		post_message_with_param(MSG_POPUP_SEARCH_CHANGE, $o->class_id(), array(
 			"oid" => $o->id(),
 			"prop" => $arr["pn"],
-			"options" => $this->make_keys($arr["sel"])
+			"options" => $this->make_keys($arr["sel"]),
+			"arr" => $arr,
 		));
 
 		die("
