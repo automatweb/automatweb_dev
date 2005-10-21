@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.62 2005/10/19 11:35:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.63 2005/10/21 10:49:33 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -29,7 +29,6 @@ class aw_table extends aw_template
 		));
 		$this->up_arr = sprintf("<img src='%s' border='0' />",$this->imgurl . "/up.gif");
 		$this->dn_arr = sprintf("<img src='%s' border='0' />",$this->imgurl . "/down.gif");
-
 		// prefix - kasutame sessioonimuutujate registreerimisel
 		$this->prefix = isset($data["prefix"]) ? $data["prefix"] : "";
 		// table cell background color

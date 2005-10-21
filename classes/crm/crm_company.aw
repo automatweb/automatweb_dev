@@ -1007,7 +1007,7 @@ class crm_company extends class_base
 				}
 				break;
 
-			case "code":
+			/*case "code":
 				if ($data["value"] == "" && is_oid($ct = $arr["obj_inst"]->prop("contact")) && $this->can("view", $ct))
 				{
 					$ct = obj($ct);
@@ -1029,7 +1029,7 @@ class crm_company extends class_base
 						$data["value"] = $code;
 					}
 				}
-				break;
+				break;*/
 
 			/* new code allows selection from all connected sectors
 			case "pohitegevus":
@@ -3254,6 +3254,36 @@ class crm_company extends class_base
 		}
 		$ol = new object_list(array("oid" => $res));
 		return $ol->names();
+	}
+
+	function _gen_company_code($co)
+	{
+		if ($co->prop("code") == "" && is_oid($ct = $co->prop("contact")) && $this->can("view", $ct))
+		{
+			$ct = obj($ct);
+			$rk = $ct->prop("riik");
+			if (is_oid($rk) && $this->can("view", $rk))
+			{
+				$rk = obj($rk);
+				$code = substr(trim($rk->ord()), 0, 1);
+				// get number of companies that have this country as an address
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_COMPANY,
+					"CL_CRM_COMPANY.contact.riik.name" => $rk->name()
+				));
+				$ol2 = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"CL_CRM_PERSON.address.riik.name" => $rk->name()
+				));
+				$code .= sprintf("%04d", $ol->count() + $ol2->count());
+				$co->set_prop("code", $code);
+			}
+		}
+	}
+
+	function callback_pre_save($arr)
+	{
+		$this->_gen_company_code($arr["obj_inst"]);
 	}
 }
 ?>
