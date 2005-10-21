@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.5 2005/05/05 14:18:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.6 2005/10/21 22:02:34 duke Exp $
 // flyer.aw - Flaier 
 /*
 
@@ -158,30 +158,31 @@ class flyer extends class_base
 				}
 				else
 				{
-					if (is_uploaded_file($_FILES["file{$x}"]["tmp_name"]))
+					if (isset($_FILES["file{$x}"]["tmp_name"]))
 					{
-						$_fi = get_instance(CL_FILE);
-						$fl = $_fi->_put_fs(array(
-							"type" => $_FILES["file{$x}"]["type"],
-							"content" => $this->get_file(array("file" => $_FILES["file{$x}"]["tmp_name"])),
-						));
-						$prop["value"] = $fl;
+						$src_file = $_FILES["file{$x}"]["type"];
+						$ftype = $_FILES["file{$x}"]["type"];
 					}
-					// XXX: this is not the correct way to detect this
-					elseif (!empty($prop["value"]["type"]))
+					else
+					if (isset($prop["value"]["tmp_name"]))
+					{
+						$src_file = $prop["value"]["tmp_name"];
+						$ftype = $prop["value"]["type"];
+					};
+
+					if (is_uploaded_file($src_file))
 					{
 						$_fi = get_instance(CL_FILE);
-						$fl = $_fi->_put_fs(array(
-							"type" => !empty($prop["value"]["type"]) ? $prop["value"]["type"] : "image/jpg",
-							"content" => $prop["value"]["contents"],
+						$final_name = $_fi->generate_file_path(array(
+							"type" => $ftype,
 						));
+						move_uploaded_file($src_file,$final_name);
+						$prop["value"] = $final_name;
+
 						if ($arr["obj_inst"]->name() == "")
 						{
 							$arr["obj_inst"]->set_name($prop["value"]["name"]);
 						}
-
-						$prop["value"] = $fl;
-						$set = true;
 					}
 					else
 					{
