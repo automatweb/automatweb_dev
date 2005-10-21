@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.114 2005/10/19 18:37:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.115 2005/10/21 21:06:45 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -211,18 +211,12 @@ class file extends class_base
 					$file = $data["value"]["tmp_name"];
 					$file_type = $data["value"]["type"];
 					$file_name = $data["value"]["name"];
-					$fc = "";
-					if (!empty($data["value"]["content"]))
-					{
-						$fc = $data["value"]["content"];
-					};
 				}
 				else
 				{
 					$file = $_FILES["file"]["tmp_name"];
 					$file_name = $_FILES["file"]["name"];
 					$file_type = $_FILES["file"]["type"];
-
 				};
 
 				if (is_uploaded_file($file))
@@ -236,22 +230,7 @@ class file extends class_base
 						}
 					}
 
-					// fail sisse
-					$fc = $this->get_file(array(
-						"file" => $file,
-					));
-
-					if ($fc === false)
-					{
-						$nn = aw_ini_get("site_basedir")."/files/".gen_uniq_id();
-						move_uploaded_file($file, $nn);
-						$fc = $this->get_file(array("file" => $nn));
-						unlink($nn);
-					}
-				}
-			
-				if ($fc != "")
-				{
+					
 					$pathinfo = pathinfo($file_name);
 					if (empty($file_type))
 					{
@@ -259,18 +238,16 @@ class file extends class_base
 						$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
 						$file_type = $realtype;
 					};
-
-					// stick the file in the filesystem
-					$fs = $this->_put_fs(array(
+					
+					$final_name = $this->generate_file_path(array(
 						"type" => $file_type,
-						"content" => $fc,
 					));
-
-					$data["value"] = $fs;
+						
+					move_uploaded_file($file, $final_name);
+					$data["value"] = $final_name;
 					$arr["obj_inst"]->set_name($file_name);
 					$arr["obj_inst"]->set_prop("type", $file_type);
 					$this->file_type = $file_type;
-					//$this->file_name = $file_name;
 				}
 				else
 				{
@@ -435,11 +412,21 @@ class file extends class_base
 	////
 	// !Salvestab faili failisysteemi. For internal use, s.t. kutsutakse välja save_file seest
 	// returns the name of the file that the data was saved in
-	function _put_fs($args = array())
+	function _put_fs($arr)
+	{
+		$file = $this->generate_file_path($arr);
+		$this->put_file(array(
+			"file" => $file,
+			"content" => $arr["content"],
+		));
+		return $file;
+	}
+
+	function generate_file_path($arr)
 	{
 		$site_basedir = $this->cfg["site_basedir"];
 		// find the extension for the file
-		list($major,$minor) = explode("/",$args["type"]);
+		list($major,$minor) = explode("/",$arr["type"]);
 		if ($minor == "pjpeg" || $minor == "jpeg")
 		{
 			$minor = "jpg";
@@ -454,10 +441,6 @@ class file extends class_base
 		}
 
 		$file = $site_basedir . "/files/" . $prefix . "/" . "$filename.$minor";
-		$this->put_file(array(
-			"file" => $file,
-			"content" => $args["content"],
-		));
 		return $file;
 	}
 

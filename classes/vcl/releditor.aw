@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.66 2005/10/21 20:44:29 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.67 2005/10/21 21:07:24 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -811,6 +811,7 @@ class releditor extends core
 				{
 					if (!is_array($emb[$item["name"]]))
 					{
+						// ot, aga miks need 2 caset siin on?
 						$name = $item["name"];
 						$_fileinf = $_FILES[$elname];
 						$filename = $_fileinf["name"][$name];
@@ -822,18 +823,16 @@ class releditor extends core
 						}
 						else
 						{
-							$contents = $this->get_file(array(
-								"file" => $tmpname,
-							));
 							$emb[$name] = array(
 								"tmp_name" => $tmpname,
 								"type" => $filetype,
 								"name" => $filename,
-								"contents" => $contents,
 							);
 							$el_count++;
 						};
 					}
+					/*
+					// ok, wtf is that code supposed to do?
 					else
 					{
 						$tmpname = $emb[$item["name"]]["tmp_name"];	
@@ -846,6 +845,7 @@ class releditor extends core
 							$el_count++;
 						};
 					};
+					*/
 				}
 				else
 				{

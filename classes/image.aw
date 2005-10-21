@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.145 2005/10/07 07:14:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.146 2005/10/21 21:06:45 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -771,93 +771,47 @@ class image extends class_base
 
 
 			case "file":
-				$set = false;
-				// see on siis, kui tuleb vormist
-				if (is_uploaded_file($_FILES["file"]["tmp_name"]))
+			case "file2":
+				$src_file = $ftype = "";
+				if (!empty($prop["value"]["tmp_name"]))
+				{
+					// this happens if for example releditor is used
+					$src_file = $prop["value"]["tmp_name"];
+					$ftype = $prop["value"]["type"];
+					// I'm not quite sure how the type can be empty, but the code was here before,
+					// so it must be needed
+					if (empty($ftype))
+					{
+						$ftype = "image/jpg";
+					};
+				};
+
+				if (is_uploaded_file($_FILES[$prop["name"]]["tmp_name"]))
+				{
+					// this happens if file is uploaded from the image class directly
+					$src_file = $_FILES[$prop["name"]]["tmp_name"];
+					$ftype = $_FILES[$prop["name"]]["type"];
+				};
+
+				// if a file was found, then move it to wherever it should be located
+				if (is_uploaded_file($src_file))
 				{
 					$_fi = get_instance(CL_FILE);
-
-					$ct = $this->get_file(array("file" => $_FILES["file"]["tmp_name"]));
-					if ($ct === false)
-					{
-						$nn = aw_ini_get("site_basedir")."/files/".gen_uniq_id();
-						move_uploaded_file($_FILES["file"]["tmp_name"], $nn);
-						$ct = $this->get_file(array("file" => $nn));
-						unlink($nn);
-					}
-
-					$fl = $_fi->_put_fs(array(
-						"type" => $_FILES["file"]["type"],
-						"content" => $ct,
+					$final_name = $_fi->generate_file_path(array(
+						"type" => $ftype,
 					));
-					$prop["value"] = $fl;
-					$set = true;
+				
+					move_uploaded_file($src_file, $final_name);
+					$prop["value"] = $final_name;
 					if ($arr["obj_inst"]->name() == "")
 					{
-						$arr["obj_inst"]->set_name($_FILES["file"]["name"]);
+						$arr["obj_inst"]->set_name($_FILES[$prop["name"]]["name"]);
 					}
-
-				}
-				// XXX: this is not the correct way to detect this
-				elseif (!empty($prop["value"]["type"]))
-				{
-					$_fi = get_instance(CL_FILE);
-					$fl = $_fi->_put_fs(array(
-						"type" => !empty($prop["value"]["type"]) ? $prop["value"]["type"] : "image/jpg",
-						// this I think has something to do with copy&paste of objects
-						"content" => $prop["value"]["contents"],
-					));
-					if ($arr["obj_inst"]->name() == "")
-					{
-						$arr["obj_inst"]->set_name($prop["value"]["name"]);
-					}
-
-					$prop["value"] = $fl;
-					$set = true;
 				}
 				else
 				{
 					$retval = PROP_IGNORE;
 				};
-				break;
-
-			case "file2":
-				if ($arr["request"]["file2_del"] == 1)
-				{
-					$prop['value'] = '';
-				}
-				else
-				{
-					if (is_uploaded_file($_FILES["file2"]["tmp_name"]))
-					{
-						$_fi = get_instance(CL_FILE);
-						$fl = $_fi->_put_fs(array(
-							"type" => $_FILES["file2"]["type"],
-							"content" => $this->get_file(array("file" => $_FILES["file2"]["tmp_name"])),
-						));
-						$prop["value"] = $fl;
-					}
-					// XXX: this is not the correct way to detect this
-					elseif (!empty($prop["value"]["type"]))
-					{
-						$_fi = get_instance(CL_FILE);
-						$fl = $_fi->_put_fs(array(
-							"type" => !empty($prop["value"]["type"]) ? $prop["value"]["type"] : "image/jpg",
-							"content" => $prop["value"]["contents"],
-						));
-						if ($arr["obj_inst"]->name() == "")
-						{
-							$arr["obj_inst"]->set_name($prop["value"]["name"]);
-						}
-
-						$prop["value"] = $fl;
-						$set = true;
-					}
-					else
-					{
-						$retval = PROP_IGNORE;
-					};
-				}
 				break;
 
 			case "file2_del":
