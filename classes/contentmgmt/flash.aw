@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.3 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.4 2005/10/21 21:56:34 duke Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -61,17 +61,16 @@ class flash extends class_base
 
 	function set_property($arr)
 	{
-		$data = &$arr["prop"];
-		$request = &$arr["request"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		if ($data["name"] == "file")
+		if ($prop["name"] == "file")
 		{
 			$fdata = $_FILES["file"];
 			if ($fdata["type"] == "application/x-shockwave-flash" && is_uploaded_file($fdata["tmp_name"]))
 			{
-				// SLURP!
-				$fc = $this->get_file(array(
-					"file" => $fdata["tmp_name"],
+				$awf = get_instance(CL_FILE);
+				$final_name = $awf->generate_file_path(array(
+					"type" => $fdata["type"],
 				));
 
 				$imgdata = getimagesize($fdata["tmp_name"]);
@@ -79,14 +78,9 @@ class flash extends class_base
 				{
 					$this->real_width = $imgdata[0];
 					$this->real_height = $imgdata[1];
-					// stick the file in the filesystem
-					$awf = get_instance(CL_FILE);
-					$fs = $awf->_put_fs(array(
-						"type" => $fdata["type"],
-						"content" => $fc,
-					));
+					move_uploaded_file($fdata["tmp_name"],$final_name);
+					$prop["value"] = $final_name;
 
-					$data["value"] = $fs;
 					if (!$arr["obj_inst"]->prop("name"))
 					{
 						$arr["obj_inst"]->set_prop("name",$fdata["name"]);
