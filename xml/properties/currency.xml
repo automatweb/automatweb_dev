@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>ord</name>
+            <group>general</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>jrk</field>
+            <size>5</size>
+            <caption>J&amp;auml;rjekord</caption>
+      </property>
+      <property>
             <name>comment</name>
             <group>general</group>
             <type>textbox</type>

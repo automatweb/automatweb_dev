@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.2 2005/04/21 08:54:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.3 2005/10/21 09:21:14 kristo Exp $
 // currency.aw - Currency management
 
 /*
@@ -7,6 +7,9 @@
 @classinfo syslog_type=ST_CURRENCY no_status=1 
 
 @default group=general
+
+@property ord type=textbox table=objects field=jrk size=5
+@caption J&auml;rjekord
 
 @property comment type=textbox table=objects field=comment 
 @caption Kurss saksa marga suhtes

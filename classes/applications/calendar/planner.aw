@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.98 2005/10/19 16:38:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.99 2005/10/21 09:21:12 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1097,7 +1097,7 @@ class planner extends class_base
 
 				foreach($xprops as $key => $val)
 				{
-					if(($key == "emb_end" || $key == "emb_start1") && $obj->prop("minute_step") > 1)
+					if(($key == "emb_end" || $key == "emb_start1" || $key == "emb_deadline") && $obj->prop("minute_step") > 1)
 					{
 						$val["minute_step"] = $obj->prop("minute_step");
 					}

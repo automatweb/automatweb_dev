@@ -38,6 +38,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 	@property cust_contract_date type=date_select table=kliendibaas_firma 
 	@caption Kliendisuhte alguskuup&auml;ev
 
+	@property cust_contract_creator type=select table=kliendibaas_firma 
+	@caption Kliendisuhte looja
+
 	@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE
 	@caption Sissetuleku meetod
 
@@ -163,6 +166,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 	@property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma
 	@caption Vaikimisi aadress
 
+	@property currency type=relpicker reltype=RELTYPE_CURRENCY table=kliendibaas_firma field=aw_currency
+	@caption Valuuta
+
 	@property phone_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_PHONE props=name
 	@caption Telefon
 
@@ -178,7 +184,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 	@property b_acct_desc type=text subtitle=1 store=no
 	@caption Pangaarved
 
-	@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,bank
+	@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,acct_no,bank table_fields=name,acct_no,bank
 	@caption Pangaarve
 
 @default group=personal_offers
@@ -379,7 +385,7 @@ default group=org_objects
 	@property report_list type=table store=no no_caption=1
 	@caption P&auml;eva raportid
 
-@default group=documents
+@default group=documents_all
 
 	@property docs_tb type=toolbar no_caption=1
 
@@ -417,6 +423,27 @@ default group=org_objects
 
 		@property docs_tbl type=table store=no no_caption=1 parent=docs_lt
 
+@default group=documents_news
+
+	@property docs_news_tb type=toolbar no_caption=1
+
+	@layout docs_news_lt type=hbox width=20%:80%
+
+		@layout docs_news_left type=vbox parent=docs_news_lt 
+	
+			@property dn_s_name type=textbox size=30 store=no captionside=top parent=docs_news_left
+			@caption Nimi
+
+			@property dn_s_lead type=textbox size=30 store=no captionside=top parent=docs_news_left
+			@caption Lead
+
+			@property dn_s_content type=textbox size=30 store=no captionside=top parent=docs_news_left
+			@caption Sisu
+
+			@property dn_s_sbt type=submit size=30 store=no captionside=top parent=docs_news_left no_caption=1
+			@caption Otsi
+
+		@property dn_res type=table no_caption=1 store=no parent=docs_news_lt
 
 @default group=bills_create
 
@@ -556,11 +583,11 @@ default group=org_objects
 @groupinfo contacts caption="Kontaktid"
 @groupinfo overview caption="Tegevused" 
 
+	@groupinfo all_actions caption="Kõik" parent=overview submit=no
 	@groupinfo my_tasks caption="Toimetused" parent=overview submit=no
 	@groupinfo meetings caption="Kohtumised" parent=overview submit=no
 	@groupinfo calls caption="Kõned" parent=overview submit=no
 	@groupinfo ovrv_offers caption="Pakkumised" parent=overview submit=no
-	@groupinfo all_actions caption="Kõik" parent=overview submit=no
 
 @groupinfo projs caption="Projektid"
 	@groupinfo my_projects caption="Projektid" parent=projs submit=no
@@ -579,6 +606,8 @@ groupinfo org_objects_main caption="Objektid" submit=no
 @groupinfo org_images caption="Pildid" submit=yes
 
 @groupinfo documents caption="Dokumendid" submit=no
+	@groupinfo documents_all caption="Dokumendid" submit=no parent=documents
+	@groupinfo documents_news caption="Uudised" submit=no parent=documents submit_method=get
 
 @groupinfo bills caption="Arved" submit=no
 
@@ -715,6 +744,12 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @reltype BANK_ACCOUNT value=46 clid=CL_CRM_BANK_ACCOUNT
 @caption arveldusarve
+
+@reltype CURRENCY value=47 clid=CL_CURRENCY
+@caption valuuta
+
+@reltype CONTENT_DOCS_FOLDER value=48 clid=CL_DOCUMENT
+@caption uudiste kataloog
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
@@ -940,6 +975,19 @@ class crm_company extends class_base
 		switch($data['name'])
 		{
 			/// GENERAL TAB
+			case "cust_contract_creator":
+				$this->_get_cust_contract_creator($arr);
+				break;
+
+			case "currency":
+				// get all currencies, sorted by order
+				$ol = new object_list(array(
+					"class_id" => CL_CURRENCY,
+					"sort_by" => "objects.jrk"
+				));
+				$data["options"] = $ol->names();
+				break;
+
 			case "bank_account":
 				$data["direct_links"] = 1;
 				break;
@@ -1262,6 +1310,8 @@ class crm_company extends class_base
 			case "docs_tree":
 			case "docs_tbl":
 			case 'docs_s_type':
+			case "docs_news_tb":
+			case "dn_res":
 				static $docs_impl;
 				if (!$docs_impl)
 				{
@@ -1286,6 +1336,12 @@ class crm_company extends class_base
 				{
 					$data['value'] = $arr['request'][$data["name"]];
 				}
+				break;
+
+			case "dn_s_name":
+			case "dn_s_lead":
+			case "dn_s_content":
+				$data["value"] = $arr["request"][$data["name"]];
 				break;
 
 			case "bill_s_cust":
@@ -3040,7 +3096,7 @@ class crm_company extends class_base
 			'action' => 'change',
 			'title' => t("Toimetus"),
 			'parent' => $arr["id"],
-			'return_url' => urlencode($arr["get_ru"])
+			'return_url' => urlencode($arr["post_ru"])
 		));
 		
 	}
@@ -3166,6 +3222,38 @@ class crm_company extends class_base
 			$ol->delete();
 		}
 		return $arr["post_ru"];
+	}
+
+	function _get_cust_contract_creator($arr)
+	{
+		// list of all persons in my company
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+
+		$w = array();
+		$this->get_all_workers_for_company(obj($co), $w);
+
+		if (count($w))
+		{
+			$ol = new object_list(array("oid" => $w));
+			$arr["prop"]["options"] = array("" => "--vali--") + $ol->names();
+		}
+		else
+		{
+			$arr["prop"]["options"] = array();
+		}
+	}
+
+	function get_employee_picker($co)
+	{
+		$res = array();
+		$this->get_all_workers_for_company($co, $res);
+		if (!count($res))
+		{
+			return array();
+		}
+		$ol = new object_list(array("oid" => $res));
+		return $ol->names();
 	}
 }
 ?>

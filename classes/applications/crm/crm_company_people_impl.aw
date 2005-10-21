@@ -465,7 +465,7 @@ class crm_company_people_impl extends class_base
 				"name" => $person->prop('name'),
 				"cal" => $cal,
 				"id" => $person->id(),
-				"phone" => $pdat["phone"],
+				"phone" => $pdat["phone"] != "" ? $pdat["phone"] : $arr["obj_inst"]->prop_str("phone_id"),
 				"rank" => $pdat["rank"],
 				'section' => $section,
 				"email" => html::href(array(

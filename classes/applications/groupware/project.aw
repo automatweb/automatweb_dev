@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.56 2005/10/19 09:43:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.57 2005/10/21 09:21:13 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -225,7 +225,7 @@
 	@groupinfo web_settings parent=general caption="Veebiseadistused"
 	@groupinfo prj_image parent=general caption="Pilt"
 	@groupinfo participants parent=general caption="Osalejad"
-	@groupinfo sides parent=general caption="Vastaspooled" submit=no
+	@groupinfo sides parent=general caption="Konfliktianal&uuml;&uuml;s" submit=no
 
 @groupinfo event_list caption="Sündmused" submit=no
 @groupinfo add_event caption="Muuda sündmust"
@@ -3283,6 +3283,28 @@ class project extends class_base
 			CL_CRM_DEAL => t("Leping"),
 			CL_CRM_OFFER => t("Pakkumine")
 		);
+		$impl = $arr["obj_inst"]->prop("implementor");
+		if (is_array($impl))
+		{
+			$impl = reset($impl);
+		}
+		if ($this->can("view", $impl))
+		{
+			$f = get_instance("applications/crm/crm_company_docs_impl");
+			$fldo = $f->_init_docs_fld(obj($impl));
+			$ot = new object_tree(array(
+				"parent" => $fldo->id(),
+				"class_id" => CL_MENU
+			));
+			$folders = array($fldo->id() => $fldo->name());
+			$this->_req_level = 0;
+			$this->_req_get_folders($ot, $folders, $fldo->id());
+		}
+		else
+		{
+			$fldo = obj();
+			$folders = array();
+		}
 
 		$clss = aw_ini_get("classes");
 		foreach($objs as $idx => $o)
@@ -3316,6 +3338,10 @@ class project extends class_base
 								"from" => $arr["obj_inst"]->id()
 						)),
 						"caption" => t("Kustuta")
+					)),
+					"folder" => $o->path_str(array(
+						"start_at" => $fldo->id(),
+						"path_only" => true
 					))
 				);
 			}
@@ -3332,7 +3358,11 @@ class project extends class_base
 						"options" => $types,
 						"name" => "fups_d[$idx][type]"
 					)),
-					"del" => ""
+					"del" => "",
+					"folder" => html::select(array(
+						"name" => "fups_d[$idx][folder]",
+						"options" => $folders
+					))
 				);
 			}
 		}
@@ -3355,6 +3385,11 @@ class project extends class_base
 		$t->define_field(array(
 			"caption" => t("T&uuml;&uuml;p"),
 			"name" => "type",
+		));
+
+		$t->define_field(array(
+			"caption" => t("Kataloog"),
+			"name" => "folder",
 		));
 
 		$t->define_field(array(
@@ -3381,6 +3416,10 @@ class project extends class_base
 			{
 				$f = get_instance("applications/crm/crm_company_docs_impl");
 				$fldo = $f->_init_docs_fld($co);
+				if ($this->can("add", $entry["folder"]))
+				{
+					$fldo = obj($entry["folder"]);
+				}
 				if (!$fldo)
 				{
 					return;
@@ -3450,6 +3489,18 @@ class project extends class_base
 		}
 		$f->delete();
 		return $arr["return_url"];
+	}
+
+	function _req_get_folders($ot, &$folders, $parent)
+	{
+		$this->_req_level++;
+		$objs = $ot->level($parent);
+		foreach($objs as $o)
+		{
+			$folders[$o->id()] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_req_level).$o->name();
+			$this->_req_get_folders($ot, $folders, $o->id());
+		}
+		$this->_req_level--;
 	}
 };
 ?>

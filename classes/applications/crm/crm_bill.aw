@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.3 2005/10/19 06:43:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.4 2005/10/21 09:21:12 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -126,7 +126,14 @@ class crm_bill extends class_base
 		switch($prop["name"])
 		{
 			case "bill_rows":
-				$arr["obj_inst"]->set_meta("bill_inf", $arr["request"]["rows"]);
+				$inf = array();
+				foreach(safe_array($arr["request"]["rows"]) as $idx => $e)
+				{
+					list($d,$m,$y) = explode("/", $e["date"]);
+					$e["date"] = mktime(0,0,0, $m, $d, $y);
+					$inf[$idx] = $e;
+				}	
+				$arr["obj_inst"]->set_meta("bill_inf", $inf);
 				break;
 		}
 		return $retval;
@@ -142,6 +149,11 @@ class crm_bill extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimetus"),
+		));
+
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
 		));
 
 		$t->define_field(array(
@@ -195,6 +207,11 @@ class crm_bill extends class_base
 					"name" => html::textbox(array(
 						"name" => "rows[$id][name]",
 						"value" => $t_inf["name"]
+					)),
+					"date" => html::textbox(array(
+						"name" => "rows[$id][date]",
+						"value" => date("d/m/y", $t_inf["date"]),
+						"size" => 10
 					)),
 					"unit" => html::textbox(array(
 						"name" => "rows[$id][unit]",
@@ -357,6 +374,7 @@ class crm_bill extends class_base
 
 		$this->vars(array(
 			"orderer_name" => $ord->name(),
+			"ord_currency_name" => $ord->prop_str("currency"),
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
 			"bill_no" => $b->prop("bill_no"),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.23 2005/10/19 14:15:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.24 2005/10/21 09:21:13 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -195,6 +195,7 @@ class task extends class_base
 					$o = obj($oid);
 					$opts[$oid] = $o->name();
 				}
+				asort($opts);
 				$data["options"] = array("" => t("--Vali--")) + $opts;	
 				$data["value"] = $p;
 				break;
@@ -354,16 +355,35 @@ class task extends class_base
 			}
 
 			case "project":
-				$i = get_instance(CL_CRM_COMPANY);
-				$prj = $i->get_my_projects();
-				if (!count($prj))
+				if ($this->can("view",$arr["request"]["alias_to_org"]))
 				{
-					$ol = new object_list();
+					$ol = new object_list(array(
+						"class_id" => CL_PROJECT,
+						"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["request"]["alias_to_org"],
+					));
+				}
+				else
+				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_PROJECT,
+						"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["obj_inst"]->prop("customer"),
+					));
 				}
 				else
 				{
-					$ol = new object_list(array("oid" => $prj));
+					$i = get_instance(CL_CRM_COMPANY);
+					$prj = $i->get_my_projects();
+					if (!count($prj))
+					{
+						$ol = new object_list();
+					}
+					else
+					{
+						$ol = new object_list(array("oid" => $prj));
+					}
 				}
+
 				$data["options"] = array("" => "") + $ol->names();
 
 				if ($arr["request"]["set_proj"])
@@ -401,6 +421,11 @@ class task extends class_base
 					$tmp = obj($data["value"]);
 					$data["options"][$tmp->id()] = $tmp->name();
 				}
+
+				if (is_object($arr["obj_inst"]))
+				{
+					$arr["obj_inst"]->set_prop("customer", $data["value"]);
+				}
 				break;
 
 			case "other_expenses":
@@ -434,6 +459,8 @@ class task extends class_base
 				{
 					if ($e["task"] != "")
 					{
+						list($d,$m,$y) = explode("/", $e["date"]);
+						$e["date"] = mktime(0,0,0, $m, $d, $y);
 						$res[] = $e;
 					}
 				}
@@ -631,6 +658,26 @@ class task extends class_base
 			CL_CRM_OFFER => t("Pakkumine")
 		);
 
+		$u = get_instance(CL_USER);
+		$impl = $u->get_current_company();
+		if ($this->can("view", $impl))
+		{
+			$f = get_instance("applications/crm/crm_company_docs_impl");
+			$fldo = $f->_init_docs_fld(obj($impl));
+			$ot = new object_tree(array(
+				"parent" => $fldo->id(),
+				"class_id" => CL_MENU
+			));
+			$folders = array($fldo->id() => $fldo->name());
+			$this->_req_level = 0;
+			$this->_req_get_folders($ot, $folders, $fldo->id());
+		}
+		else
+		{
+			$fldo = obj();
+			$folders = array();
+		}
+
 		$clss = aw_ini_get("classes");
 		foreach($objs as $idx => $o)
 		{
@@ -662,6 +709,10 @@ class task extends class_base
 								"fid" => $o->id(),
 						)),
 						"caption" => t("Kustuta")
+					)),
+					"folder" => $o->path_str(array(
+						"start_at" => $fldo->id(),
+						"path_only" => true
 					))
 				);
 			}
@@ -678,7 +729,11 @@ class task extends class_base
 						"options" => $types,
 						"name" => "fups_d[$idx][type]"
 					)),
-					"del" => ""
+					"del" => "",
+					"folder" => html::select(array(
+						"name" => "fups_d[$idx][folder]",
+						"options" => $folders
+					))
 				);
 			}
 		}
@@ -701,6 +756,11 @@ class task extends class_base
 		$t->define_field(array(
 			"caption" => t("T&uuml;&uuml;p"),
 			"name" => "type",
+		));
+
+		$t->define_field(array(
+			"caption" => t("Kataloog"),
+			"name" => "folder",
 		));
 
 		$t->define_field(array(
@@ -727,6 +787,10 @@ class task extends class_base
 			{
 				$f = get_instance("applications/crm/crm_company_docs_impl");
 				$fldo = $f->_init_docs_fld($co);
+				if ($this->can("add", $entry["folder"]))
+				{
+					$fldo = obj($entry["folder"]);
+				}
 				if (!$fldo)
 				{
 					return;
@@ -786,6 +850,12 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "task",
 			"caption" => t("Tegevus"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
 			"align" => "center"
 		));
 
@@ -854,6 +924,11 @@ class task extends class_base
 					"name" => "rows[$idx][task]",
 					"value" => $row["task"]
 				)),
+				"date" => html::textbox(array(
+					"name" => "rows[$idx][date]",
+					"value" => date("d/m/y",($row["date"] > 100 ? $row["date"] : $arr["obj_inst"]->prop("start1"))),
+					"size" => 10
+				)),
 				"impl" => html::select(array(
 					"name" => "rows[$idx][impl]",
 					"options" => $impls,
@@ -909,8 +984,9 @@ class task extends class_base
 				$rows[$id] = array(
 					"name" => $row["task"],
 					"unit" => t("tund"),
+					"date" => $row["date"],
 					"price" => $task->prop("hr_price"),
-					"amt" => $row["time"],
+					"amt" => $row["time_to_cust"],
 					"sum" => str_replace(",", ".", $row["time"]) * $task->prop("hr_price"),
 					"has_tax" => 1
 				);
@@ -923,6 +999,7 @@ class task extends class_base
 				"name" => $task->name(),
 				"unit" => t("tund"),
 				"price" => $task->prop("hr_price"),
+				"date" => $task->prop("start1"),
 				"amt" => $task->prop("num_hrs_to_cust"),
 				"sum" => str_replace(",", ".", $task->prop("num_hrs_to_cust")) * $task->prop("hr_price"),
 				"has_tax" => 1
@@ -963,6 +1040,18 @@ class task extends class_base
 		}
 		$f->delete();
 		return $arr["return_url"];
+	}
+
+	function _req_get_folders($ot, &$folders, $parent)
+	{
+		$this->_req_level++;
+		$objs = $ot->level($parent);
+		foreach($objs as $o)
+		{
+			$folders[$o->id()] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_req_level).$o->name();
+			$this->_req_get_folders($ot, $folders, $o->id());
+		}
+		$this->_req_level--;
 	}
 }
 ?>

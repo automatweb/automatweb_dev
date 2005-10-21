@@ -82,6 +82,14 @@
             <caption>Kliendisuhte alguskuup&amp;auml;ev</caption>
       </property>
       <property>
+            <name>cust_contract_creator</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>select</type>
+            <field>cust_contract_creator</field>
+            <caption>Kliendisuhte looja</caption>
+      </property>
+      <property>
             <name>referal_type</name>
             <table>objects</table>
             <group>general_sub</group>
@@ -439,6 +447,15 @@
             <caption>Vaikimisi aadress</caption>
       </property>
       <property>
+            <name>currency</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CURRENCY</reltype>
+            <field>aw_currency</field>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
             <name>phone_id</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
@@ -498,8 +515,14 @@
             <field>aw_bank_account</field>
             <props>
                   <num_0>name</num_0>
-                  <num_1>bank</num_1>
+                  <num_1>acct_no</num_1>
+                  <num_2>bank</num_2>
             </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>acct_no</num_1>
+                  <num_2>bank</num_2>
+            </table_fields>
             <store>no</store>
             <caption>Pangaarve</caption>
       </property>
@@ -1044,7 +1067,7 @@
       <property>
             <name>docs_tb</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -1053,7 +1076,7 @@
       <property>
             <name>docs_tree</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>treeview</type>
             <parent>docs_left</parent>
             <no_caption>1</no_caption>
@@ -1063,7 +1086,7 @@
       <property>
             <name>docs_s_name</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -1075,7 +1098,7 @@
       <property>
             <name>docs_s_type</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>select</type>
             <store>no</store>
             <captionside>top</captionside>
@@ -1086,7 +1109,7 @@
       <property>
             <name>docs_s_task</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -1098,7 +1121,7 @@
       <property>
             <name>docs_s_user</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -1110,7 +1133,7 @@
       <property>
             <name>docs_s_customer</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
@@ -1122,7 +1145,7 @@
       <property>
             <name>docs_s_sbt</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>submit</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1133,7 +1156,7 @@
       <property>
             <name>docs_s_clear</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>submit</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1144,12 +1167,80 @@
       <property>
             <name>docs_tbl</name>
             <table>objects</table>
-            <group>documents</group>
+            <group>documents_all</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>docs_lt</parent>
             <field>docs_tbl</field>
+      </property>
+      <property>
+            <name>docs_news_tb</name>
+            <table>objects</table>
+            <group>documents_news</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>docs_news_tb</field>
+      </property>
+      <property>
+            <name>dn_s_name</name>
+            <table>objects</table>
+            <group>documents_news</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_news_left</parent>
+            <field>dn_s_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>dn_s_lead</name>
+            <table>objects</table>
+            <group>documents_news</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_news_left</parent>
+            <field>dn_s_lead</field>
+            <caption>Lead</caption>
+      </property>
+      <property>
+            <name>dn_s_content</name>
+            <table>objects</table>
+            <group>documents_news</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_news_left</parent>
+            <field>dn_s_content</field>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>dn_s_sbt</name>
+            <table>objects</table>
+            <group>documents_news</group>
+            <type>submit</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_news_left</parent>
+            <no_caption>1</no_caption>
+            <field>dn_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>dn_res</name>
+            <table>objects</table>
+            <group>documents_news</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>docs_news_lt</parent>
+            <field>dn_res</field>
       </property>
       <property>
             <name>bill_tb</name>
@@ -1648,6 +1739,11 @@
             <overview>
                   <caption>Tegevused</caption>
             </overview>
+            <all_actions>
+                  <caption>Kõik</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </all_actions>
             <my_tasks>
                   <caption>Toimetused</caption>
                   <parent>overview</parent>
@@ -1668,11 +1764,6 @@
                   <parent>overview</parent>
                   <submit>no</submit>
             </ovrv_offers>
-            <all_actions>
-                  <caption>Kõik</caption>
-                  <parent>overview</parent>
-                  <submit>no</submit>
-            </all_actions>
             <projs>
                   <caption>Projektid</caption>
             </projs>
@@ -1707,6 +1798,17 @@
                   <caption>Dokumendid</caption>
                   <submit>no</submit>
             </documents>
+            <documents_all>
+                  <caption>Dokumendid</caption>
+                  <submit>no</submit>
+                  <parent>documents</parent>
+            </documents_all>
+            <documents_news>
+                  <caption>Uudised</caption>
+                  <submit>no</submit>
+                  <parent>documents</parent>
+                  <submit_method>get</submit_method>
+            </documents_news>
             <bills>
                   <caption>Arved</caption>
                   <submit>no</submit>
@@ -1952,6 +2054,16 @@
                   <clid>CL_CRM_BANK_ACCOUNT</clid>
                   <caption>arveldusarve</caption>
             </BANK_ACCOUNT>
+            <CURRENCY>
+                  <value>47</value>
+                  <clid>CL_CURRENCY</clid>
+                  <caption>valuuta</caption>
+            </CURRENCY>
+            <CONTENT_DOCS_FOLDER>
+                  <value>48</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>uudiste kataloog</caption>
+            </CONTENT_DOCS_FOLDER>
       </reltypes>
       <layout>
             <hbox_toolbar>
@@ -2069,23 +2181,33 @@
             <docs_lt>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>documents</group>
+                  <group>documents_all</group>
             </docs_lt>
             <docs_left>
                   <type>vbox</type>
                   <parent>docs_lt</parent>
-                  <group>documents</group>
+                  <group>documents_all</group>
             </docs_left>
             <docs_search>
                   <type>vbox</type>
                   <parent>docs_left</parent>
-                  <group>documents</group>
+                  <group>documents_all</group>
             </docs_search>
             <docs_s_but_row>
                   <type>hbox</type>
                   <parent>docs_left</parent>
-                  <group>documents</group>
+                  <group>documents_all</group>
             </docs_s_but_row>
+            <docs_news_lt>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>documents_news</group>
+            </docs_news_lt>
+            <docs_news_left>
+                  <type>vbox</type>
+                  <parent>docs_news_lt</parent>
+                  <group>documents_news</group>
+            </docs_news_left>
             <bills_list_box>
                   <type>hbox</type>
                   <width>20%:80%</width>

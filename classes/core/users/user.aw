@@ -1497,6 +1497,36 @@ class user extends class_base
 		}
 	}
 
+	function get_company_for_person($person)
+	{
+		obj_set_opt("no_cache", 1);
+		$p_o = obj($person);
+		$org_c = reset($p_o->connections_from(array(
+			"type" => "RELTYPE_WORK",
+		)));
+		obj_set_opt("no_cache", 0);
+		if (!$org_c)
+		{
+			$uo = obj(aw_global_get("uid_oid"));
+			// create new person next to user
+			$p = obj();
+			$p->set_class_id(CL_CRM_COMPANY);
+			$p->set_parent($p_o->parent());
+			$p->set_name("CO ".$uo->prop("real_name")." ".aw_global_get("uid"));
+			aw_disable_acl();
+			$p->save();
+			aw_restore_acl();
+			// now, connect user to person
+			$p_o->connect(array(
+				"to" => $p->id(),
+				"reltype" => "RELTYPE_WORK" // from crm_person
+			));
+			return $p->id();
+		}
+
+		return $org_c->prop("to");
+	}
+
 	/** returns the CL_CRM_COMPANY that is connected to the current logged in user
 	**/ 
 	function get_current_company()
@@ -1504,35 +1534,7 @@ class user extends class_base
 		$person = $this->get_current_person();
 		if ($person)
 		{
-			obj_set_opt("no_cache", 1);
-			$p_o = obj($person);
-			$org_c = reset($p_o->connections_from(array(
-				"type" => "RELTYPE_WORK",
-			)));
-			obj_set_opt("no_cache", 0);
-
-			if (!$org_c)
-			{
-				$uo = obj(aw_global_get("uid_oid"));
-
-				// create new person next to user
-				$p = obj();
-				$p->set_class_id(CL_CRM_COMPANY);
-				$p->set_parent($p_o->parent());
-				$p->set_name("CO ".$uo->prop("real_name")." ".aw_global_get("uid"));
-				aw_disable_acl();
-				$p->save();
-				aw_restore_acl();
-				// now, connect user to person
-				$p_o->connect(array(
-					"to" => $p->id(),
-					"reltype" => "RELTYPE_WORK" // from crm_person
-				));
-				return $p->id();
-			}
-
-			return $org_c->prop("to");
-		
+			return $this->get_company_for_person($person);
 		}
 		return false;
 	}

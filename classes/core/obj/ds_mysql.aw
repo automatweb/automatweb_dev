@@ -1602,12 +1602,16 @@ die(dbg::dump($ret));
 		{
 			// if the first part is a class id and there are only two parts then it is not a join
 			// then it is a specification on what class's property to search from 
+			// UNLESS the second part begins with RELTYPE
 			if (count($filt) == 2)
 			{
-				// so just return the table and field for that class
-				$prop = $GLOBALS["properties"][$clid][$filt[1]];
-				$this->used_tables[$prop["table"]] = $prop["table"];
-				return array($prop["table"], $prop["field"]);	
+				if (substr($filt[1], 0, 7) != "RELTYPE")
+				{
+					// so just return the table and field for that class
+					$prop = $GLOBALS["properties"][$clid][$filt[1]];
+					$this->used_tables[$prop["table"]] = $prop["table"];
+					return array($prop["table"], $prop["field"]);	
+				}
 			}
 		}
 
@@ -1656,6 +1660,11 @@ die(dbg::dump($ret));
 				$str .= " objects_".$join["to_class"]."_".$join["reltype"].".oid ";
 				$prev_clid = $join["to_class"];
 				$this->joins[] = $str;
+
+				$ret = array(
+					"aliases_".$join["from_class"]."_".$join["reltype"],
+					"target",
+				);
 			}
 			else	// via prop
 			{

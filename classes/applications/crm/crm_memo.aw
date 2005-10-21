@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.3 2005/10/19 06:43:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.4 2005/10/21 09:21:13 kristo Exp $
 // crm_memo.aw - Memo 
 /*
 
@@ -21,6 +21,12 @@
 
 	@property customer type=popup_search clid=CL_CRM_COMPANY table=aw_crm_memo field=aw_customer
 	@caption Klient
+
+	@property creator type=relpicker reltype=RELTYPE_CREATOR table=aw_crm_memo field=aw_creator
+	@caption Koostaja
+
+	@property reader type=relpicker reltype=RELTYPE_READER table=aw_crm_memo field=aw_reader
+	@caption Lugeja
 
 	@property reg_date type=date_select table=aw_crm_memo field=aw_reg_date
 	@caption Reg kuup&auml;ev
@@ -56,6 +62,22 @@ class crm_memo extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "creator":
+			case "reader":
+				$u = get_instance("users");
+				$ui = get_instance(CL_USER);
+				$ps = obj($ui->get_person_for_user(obj($u->get_oid_for_uid($arr["obj_inst"]->createdby()))));
+				$co = obj($ui->get_company_for_person($ps));
+
+				$c = get_instance(CL_CRM_COMPANY);
+				$prop["options"] = $c->get_employee_picker($co);
+	
+				if ($prop["value"] == "")
+				{
+					$prop["value"] = $ps->id();
+				}
+				break;
+
 			case "project":
 				$i = get_instance(CL_CRM_COMPANY);
 				$ol = new object_list(array("oid" => $i->get_my_projects()));

@@ -28,6 +28,24 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>creator</name>
+            <table>aw_crm_document</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CREATOR</reltype>
+            <field>aw_creator</field>
+            <caption>Koostaja</caption>
+      </property>
+      <property>
+            <name>reader</name>
+            <table>aw_crm_document</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_READER</reltype>
+            <field>aw_reader</field>
+            <caption>Lugeja</caption>
+      </property>
+      <property>
             <name>state</name>
             <table>aw_crm_document</table>
             <group>general</group>

@@ -37,6 +37,26 @@ class crm_company_docs_impl extends class_base
 		return $fldo;
 	}
 
+	function _init_content_docs_fld($o)
+	{
+		$fldo = $o->get_first_obj_by_reltype("RELTYPE_CONTENT_DOCS_FOLDER");
+		if (!$fldo)
+		{
+			$fldo = obj();
+			$fldo->set_parent($o->id());
+			$fldo->set_class_id(CL_MENU);
+			$fldo->set_name($o->name().t(" uudised"));
+			$fldo->save();
+
+			$o->connect(array(
+				"to" => $fldo->id(),
+				"reltype" => "RELTYPE_CONTENT_DOCS_FOLDER"
+			));
+		}
+
+		return $fldo;
+	}
+
 	function _get_docs_tb($arr)
 	{
 		$fld = $this->_init_docs_fld($arr["obj_inst"]);
@@ -297,6 +317,141 @@ class crm_company_docs_impl extends class_base
 			$res["oid"] = -1;
 		}
 		return $res;
+	}
+
+	function _get_docs_news_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$fldo = $this->_init_content_docs_fld($arr["obj_inst"]);
+
+		$tb->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Lisa dokument'),
+			'url' => html::get_new_url(CL_DOCUMENT, $fldo->id(), array("return_url" => get_ru())),
+		));
+		
+	}
+
+	function _init_dn_res_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "lead",
+			"caption" => t("Lead"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Looja"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Loodud"),
+			"sortable" => 1,
+			"align" => "center",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => t("Muutja"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"sortable" => 1,
+			"align" => "center",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"sortable" => 1,
+			"align" => "center",
+		));
+	}
+
+	function _get_dn_res($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_dn_res_t($t);
+
+		$ol = $this->_get_news($this->_init_content_docs_fld($arr["obj_inst"]), $arr["request"]);
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::href(array(
+					"url" => obj_link($o->id()),//$this->mk_my_orb("view", array("id" => $o->id(), "return_url" => get_ru()), CL_DOCUMENT),
+					"caption" => parse_obj_name($o->name())
+				)),
+				"lead" => nl2br($o->prop("lead")),
+				"createdby" => $o->createdby(),
+				"created" => $o->created(),
+				"modifiedby" => $o->modifiedby(),
+				"modified" => $o->modified(),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $o->id(), "return_url" => get_ru()), CL_DOCUMENT),
+					"caption" => t("Muuda")
+				))
+			));
+		}
+	}
+
+	function _get_news($parent, $r)
+	{
+		if ($r["dn_s_sbt"] == "")
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_DOCUMENT,
+				"created" => new obj_predicate_compare(OBJ_COMP_GREATER, time()- (7*24*3600)),
+				"parent" => $parent->id()
+			));
+		}
+		else
+		{
+			$filt = array(
+				"class_id" => CL_DOCUMENT,
+				"parent" => $parent->id()
+			);
+
+			if ($r["dn_s_name"] != "")
+			{
+				$filt["name"] = "%".$r["dn_s_name"]."%";
+			}
+
+			if ($r["dn_s_lead"] != "")
+			{
+				$filt["lead"] = "%".$r["dn_s_lead"]."%";
+			}
+
+			if ($r["dn_s_content"] != "")
+			{
+				$filt["content"] = "%".$r["dn_s_content"]."%";
+			}
+
+			$ol = new object_list($filt);
+		}
+		return $ol;
 	}
 }
 ?>
