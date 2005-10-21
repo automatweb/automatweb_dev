@@ -57,6 +57,16 @@
             <caption>Tegevusalade toolbar</caption>
       </property>
       <property>
+            <name>sector_tree</name>
+            <table>objects</table>
+            <group>tegevusalad</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <caption>Tegevusalade puu</caption>
+      </property>
+      <property>
             <name>sector_manager</name>
             <table>objects</table>
             <group>tegevusalad</group>

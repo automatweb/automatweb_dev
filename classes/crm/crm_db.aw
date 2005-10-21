@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.19 2005/09/14 17:57:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.20 2005/10/21 22:12:20 ekke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -34,6 +34,9 @@
 
 	@property tegtoolbar type=toolbar store=no no_caption=1	
 	@caption Tegevusalade toolbar
+	
+	@property sector_tree type=treeview store=no
+	@caption Tegevusalade puu
 	
 	@property sector_manager type=callback callback=callback_sector_manager
 	@caption Tegevusalade kataloog
@@ -183,7 +186,82 @@ class crm_db extends class_base
 			case 'active_selection':
 				$retval=PROP_IGNORE;
 				break;
+			
+			
+			case 'sector_tree':
+				$tree  = &$data["vcl_inst"];
 				
+				$menu_tree = new object_tree(array(
+					"parent" => $args["obj_inst"]->prop("dir_tegevusala"),
+					"class_id" => CL_CRM_SECTOR,
+				));
+				$sectors_list = $menu_tree->to_list();
+				foreach ($sectors_list->list as $oid => $sect)
+				{
+					// sort by code
+				//	$kood	= $sect->prop('kood');
+				//	$id	= is_numeric($kood) ? $kood : $sect->id();
+				//	$parent	= is_numeric($kood) && $kood > 9 ? substr($kood, 0, strlen($kood)-1) : 0;
+					// sort by parent 
+					$id = $sect->id();
+					$parent = isset($sectors_list->list[$sect->parent()]) ? $sect->parent() : 0 ;
+
+					$tree->add_item($parent,array(
+						"id" => $id,
+						"name" => $sect->name(),
+						"url" => aw_url_change_var("teg_oid",$sect->id()),
+					));
+				}
+				$tree->set_selected_item(ifset($args['request'], 'teg_oid'));
+				
+			/* XXX: DEL kui pole vaja sortida hierarhias
+				$cur_keys	= array_keys($menu_tree->tree);
+				$cur_vals	= array_values($menu_tree->tree);
+				$cur_parent = null;
+				
+				$stack_keys = $stack_vals = $stack_parents = array ();
+
+				
+				while (is_array($cur_keys) && count($cur_keys))
+				{
+					$this_key	= array_shift($cur_keys);
+					$this_val	= array_shift($cur_vals);
+					if (is_array($this_val))
+					{
+						array_push($stack_keys, $cur_keys);
+						array_push($stack_vals, $cur_vals);
+						array_push($stack_parents, $cur_parent === null ? 0 : $cur_parent);
+						$cur_keys = array_keys($this_val);
+						$cur_vals	= array_values($this_val);
+						$cur_parent	=	$cur_parent === null ? 0 : $this_key;
+					} else {
+						
+					}
+					
+					
+					if (!count($cur_keys))
+					{
+						if (count($stack_keys))
+						{
+							$cur_keys = array_pop($stack_keys);
+							$cur_vals	= array_pop($stack_vals);
+							$cur_parent = array_pop($stack_parents);
+						}
+					}
+				}
+//				*/
+				/*
+        for ($item = $menu_list->begin(); !$menu_list->end(); $item = $menu_list->next())
+        {
+        	$tree->add_item(0,array(
+          	"id" => $item->id(),
+            "name" => $item->name(),
+            "url" => aw_url_change_var("folder_id",$item->id()),
+					));
+				};
+				*/
+				
+			break;
 
 		
 			case 'orgtoolbar':
@@ -436,7 +514,7 @@ class crm_db extends class_base
 					'id' => $obj->id(),
 					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 				), CL_CRM_COMPANY),
-				'caption' => $obj->prop("name"),
+				'caption' => strlen($obj->prop("name")) ? $obj->prop("name") : t("(nimetu)") ,
 			)),
 			'check' => $check,
 			'reg_nr' => $obj->prop('reg_nr'),
@@ -640,10 +718,10 @@ class crm_db extends class_base
 		// but how do I implement it in there?
 
 
-		$all_letters = $this->db_fetch_array('select substring(name,1,1) as letter from objects 
+		$all_letters = $this->db_fetch_array('select UCASE(substring(name,1,1)) as letter from objects 
 		where class_id='.CL_CRM_COMPANY.' and status<>0 and parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).' 
-		group by substring(name,1,1)
-		order by substring(name,1,1)
+		group by letter
+		order by letter
 		limit 50
 		'
 		);
@@ -987,9 +1065,23 @@ class crm_db extends class_base
 			$crm_db = $args["obj_inst"];
 
 			$parents[CL_CRM_SECTOR] = $crm_db->prop('dir_tegevusala') == "" ? $crm_db->prop("dir_default") : $crm_db->prop("dir_tegevusala");
+
+			if (isset($args['request']['teg_oid']) && is_oid($args['request']['teg_oid']))
+			{
+				$parents[CL_CRM_SECTOR] = $args['request']['teg_oid'];
+			}
+			$parents[CL_CRM_COMPANY] = $crm_db->prop("dir_firma") == "" ? $crm_db->prop("dir_default") : $crm_db->prop("dir_firma");
 			
 			$alist = array(
-				array('clid' => CL_CRM_SECTOR),
+				array(
+					'clid'			=> CL_CRM_SECTOR,
+					),
+				array(
+					'clid'			=> CL_CRM_COMPANY,
+					'alias_to'	=> $args['request']['teg_oid'],
+					'reltype'		=> 5, // RELTYPE_TEGEVUSALAD
+					'disabled'	=> empty($args['request']['teg_oid']) ? t("Tegevusala valimata") : false,
+					),
 			);
 
 			$toolbar->add_menu_button(array(
@@ -1004,24 +1096,41 @@ class crm_db extends class_base
 			{
 				foreach($alist as $key => $val)
 				{
+					$val['disabled'] = $parents[$val['clid']] ? $val['disabled'] : t('Kaust määramata');
 					$classinf = $clss[$val["clid"]];
-					if (!$parents[$val['clid']])
+					if ($val['disabled'])
 					{
 						$toolbar->add_menu_item(array(
 							"parent" => "add_item",
-							'title' => t('Kaust määramata'),
+							'title' => $val['disabled'],
 							'text' => sprintf(t('Lisa %s'),$classinf["name"]),
 							'disabled' => true,
-						));
+						));					
 					}
-					else
+					else if ($val['clid'] == CL_CRM_COMPANY)
+					{
+						$toolbar->add_menu_item(array(
+							"parent" => "add_item",
+							'link' => $this->mk_my_orb('create_new_company',array(
+								'sector'			=> $args['request']['teg_oid'],
+								'category'		=> $parents[$val['clid']],
+								'create_users'	=> 1,
+								'return_url'	=> urlencode(aw_global_get('REQUEST_URI')),
+							), CL_CRM_COMPANY),
+							'text' => sprintf(t('Lisa %s'),$classinf['name']),
+						));
+					} 
+					else // Add section
 					{
 						$toolbar->add_menu_item(array(
 							"parent" => "add_item",
 							'link' => $this->mk_my_orb('new',array(
-								'class' => basename($classinf["file"]),
-								'parent' => $parents[$val['clid']],
+								'class' 	=> basename($classinf["file"]),
+								'reltype'	=> array_key_exists('reltype', $val) ? $val['reltype'] : "",
+								'alias_to'	=> array_key_exists('alias_to', $val) ? $val['alias_to'] : "",
+								'parent'	=> $parents[$val['clid']],
 								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+								
 							)),
 							'text' => sprintf(t('Lisa %s'),$classinf['name']),
 						));
@@ -1046,59 +1155,60 @@ class crm_db extends class_base
 			}
 
 		
-                };
 
-		$conns = $args["obj_inst"]->connections_from(array(
-			"class" => CL_CRM_SELECTION,
-			"sort_by" => "to.name",
-		));
 
-		$ops = array();
+			$conns = $args["obj_inst"]->connections_from(array(
+				"class" => CL_CRM_SELECTION,
+				"sort_by" => "to.name",
+			));
 
-		foreach($conns as $conn)
-		{
-			$ops[$conn->prop("to")] = $conn->prop("to.name");
+			$ops = array();
+
+			foreach($conns as $conn)
+			{
+				$ops[$conn->prop("to")] = $conn->prop("to.name");
+			};
+
+			$REQUEST_URI = aw_global_get("REQUEST_URI");
+
+			$ops[0] = t('- lisa uude valimisse -');
+			$str .= html::select(array(
+				'name' => 'add_to_selection',
+				'options' => $ops,
+				'selected' => $selected,
+			));
+
+			$toolbar->add_separator(array(
+				"side" => "right",
+			));
+
+			$toolbar->add_cdata($str,"right");
+
+			$parent = $args["obj_inst"]->parent();
+
+			$toolbar->add_button(array(
+				"name" => 'go_add',
+				"tooltip" => t("Lisa valitud valimisse"),
+				"url" => "javascript:void(0);",
+				"img" => "import.gif",
+				"side" => "right",
+				'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
+			));
+
+			$str = "";
+			$toolbar->add_button(array(
+				"name" => 'change_it',
+				"tooltip" => t('Muuda valimit'),
+				"url" => "javascript:void(0);",
+				"img" => "edit.gif",
+				"side" => "right",
+				'onClick' => "JavaScript: if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array('group' => 'contents'),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
+			));
+
+			$str .= html::hidden(array('name' => 'new_selection_name'));
+			$str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/selection/go_add_to_selection.script'));
+			$toolbar->add_cdata($str);
 		};
-
-		$REQUEST_URI = aw_global_get("REQUEST_URI");
-
-		$ops[0] = t('- lisa uude valimisse -');
-		$str .= html::select(array(
-			'name' => 'add_to_selection',
-			'options' => $ops,
-			'selected' => $selected,
-		));
-
-		$toolbar->add_separator(array(
-			"side" => "right",
-		));
-
-		$toolbar->add_cdata($str,"right");
-
-		$parent = $args["obj_inst"]->parent();
-
-		$toolbar->add_button(array(
-			"name" => 'go_add',
-			"tooltip" => t("Lisa valitud valimisse"),
-			"url" => "javascript:void(0);",
-			"img" => "import.gif",
-			"side" => "right",
-			'onClick' => "go_manage_selection(document.changeform.add_to_selection.value,'".$REQUEST_URI."','add_to_selection','".$parent."');return true;",
-		));
-
-		$str = "";
-		$toolbar->add_button(array(
-			"name" => 'change_it',
-			"tooltip" => t('Muuda valimit'),
-			"url" => "javascript:void(0);",
-			"img" => "edit.gif",
-			"side" => "right",
-'onClick' => "JavaScript: if (document.changeform.add_to_selection.value < 1){return false}; url='".$this->mk_my_orb('change',array('group' => 'contents'),'crm_selection')."&id=' + document.changeform.add_to_selection.value; window.open(url);",
-		));
-
-		$str .= html::hidden(array('name' => 'new_selection_name'));
-		$str .= $this->get_file(array("file" => $this->cfg['tpldir'].'/selection/go_add_to_selection.script'));
-		$toolbar->add_cdata($str);
 	}
 
 	/**  
@@ -1173,5 +1283,6 @@ class crm_db extends class_base
 			$args["search_form1"] = $arr["request"]["search_form1"];
 		};
 	}
+		
 };
 ?>
