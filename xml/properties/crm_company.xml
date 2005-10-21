@@ -204,6 +204,26 @@
             <caption>P&amp;otilde;hitegevus / Tegevusalad</caption>
       </property>
       <property>
+            <name>field_manager</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <reltype>RELTYPE_FIELD</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>class_name</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>class_name</num_1>
+            </table_fields>
+            <direct_links>1</direct_links>
+            <store>no</store>
+            <field>field_manager</field>
+            <caption>Valdkonnad</caption>
+      </property>
+      <property>
             <name>userta1</name>
             <table>objects</table>
             <group>add_info</group>
@@ -2064,6 +2084,21 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>uudiste kataloog</caption>
             </CONTENT_DOCS_FOLDER>
+            <METAMGR>
+                  <value>49</value>
+                  <clid>CL_METAMGR</clid>
+                  <caption>Muutujate haldur</caption>
+            </METAMGR>
+            <FIELD>
+                  <value>50</value>
+                  <clid>
+                        <num_0>CL_CRM_FIELD_ACCOMMODATION</num_0>
+                        <num_1>CL_CRM_FIELD_FOOD</num_1>
+                        <num_2>CL_CRM_FIELD_ENTERTAINMENT</num_2>
+                        <num_3>CL_CRM_FIELD_CONFERENCE_ROOM</num_3>
+                  </clid>
+                  <caption>Valdkond</caption>
+            </FIELD>
       </reltypes>
       <layout>
             <hbox_toolbar>
