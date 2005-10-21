@@ -590,10 +590,17 @@ function get_instance($class,$args = array(), $errors = true)
 			{
 				return false;
 			}
-			error::raise(array(
-				"id" => ERR_CLASS,
-				"msg" => t("the requested class $class does not exist !"),
-			));
+			if (class_exists('error'))
+			{
+				error::raise(array(
+					"id" => ERR_CLASS,
+					"msg" => t("the requested class $class does not exist !"),
+				));
+			}
+			else
+			{
+				print("Class $class does not exist. Also, class 'error' not loaded.");
+			}
 		}
 		error_reporting(E_PARSE | E_ERROR);
 		require_once($classdir."/".str_replace(".","", $class).".".$ext);
