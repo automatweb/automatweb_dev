@@ -655,13 +655,15 @@ function get_instance($class,$args = array(), $errors = true)
 
 function load_class_translations($class)
 {
-	if (($adm_ui_lc = ifset($GLOBALS["cfg"],"user_interface","default_language")) != "")
+	if (empty($GLOBALS["cfg"]["user_interface"]["default_language"]))
 	{
-		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
-		if (file_exists($trans_fn))
-		{
-			require_once($trans_fn);
-		}
+		return;
+	}
+	$adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"];
+	$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
+	if (file_exists($trans_fn))
+	{
+		require_once($trans_fn);
 	}
 }
 
@@ -842,15 +844,17 @@ function exit_function($name,$ret = "")
 
 function __init_aw_session_track()
 {
-	if (($tmp = ifset($_SESSION,"aw_session_track","aw","do_redir")) != "")
+	if (!empty($_SESSION["aw_session_track"]["aw"]["do_redir"]))
 	{
+		$tmp = $_SESSION["aw_session_track"]["aw"]["do_redir"];
 		$_SESSION["aw_session_track"]["aw"]["do_redir"] = "";
 		header("Location: ".$tmp);
 		die();
 	}
 
-	if (($tmp = ifset($_SESSION,"aw_session_track","aw","do_message")) != "")
+	if (!empty($_SESSION["aw_session_track"]["aw"]["do_message"]))
 	{
+		$tmp = $_SESSION["aw_session_track"]["aw"]["do_message"];
 		$_SESSION["aw_session_track"]["aw"]["do_message"] = "";
 		echo "<script language=\"javascript\">alert(\"".$tmp."\");</script>";
 	}
@@ -858,8 +862,8 @@ function __init_aw_session_track()
 	// add session tracking options
 	$_SESSION["aw_session_track"] = array(
 		"server" => array(
-			"ip" => ifset($_SERVER,"REMOTE_ADDR"),
-			"referer" => ifset($_SERVER,"HTTP_REFERER"),
+			"ip" => isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : null,
+			"referer" => isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : null,
 			"ru" => $GLOBALS["REQUEST_URI"],
 			"site" => $GLOBALS["HTTP_HOST"],
 		),

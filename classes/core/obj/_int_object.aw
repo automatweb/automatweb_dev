@@ -35,7 +35,7 @@ class _int_object
 
 	function load($param)
 	{
-		if (ifset($GLOBALS,"TRACE_OBJ"))
+		if (!empty($GLOBALS["TRACE_OBJ"]))
 		{
 			echo "load object $param from <br>".dbg::short_backtrace()." <br>";
 		}
@@ -1372,7 +1372,7 @@ class _int_object
 
 		// now that we know the class id, change the object instance out from beneath us, if it is set so in the ini file
 		$cld = $GLOBALS["cfg"]["__default"]["classes"][$this->obj["class_id"]];
-		if (ifset($cld,"object_override") != "")
+		if (!empty($cld["object_override"]))
 		{
 			$i = get_instance($cld["object_override"]);
 			// copy props
@@ -1408,10 +1408,13 @@ class _int_object
 		}
 
 		// then get the properties
-		$file = ifset($GLOBALS["cfg"]["classes"],$cl_id,"file");
 		if ($cl_id == 29)
 		{
 			$file = "doc";
+		}
+		else
+		{
+			$file = empty($GLOBALS["cfg"]["classes"][$cl_id]["file"]) ? null : $GLOBALS["cfg"]["classes"][$cl_id]["file"];
 		}
 		list(
 				$GLOBALS["properties"][$cl_id], 

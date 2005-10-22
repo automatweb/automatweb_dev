@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.203 2005/10/19 14:15:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.204 2005/10/22 10:43:35 ekke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -875,7 +875,7 @@ if (!defined("DEFS"))
 			$GLOBALS["__aw_cache"] = array();
 			return false;
 		}
-		return ifset($GLOBALS["__aw_cache"],$cache);
+		return isset($GLOBALS["__aw_cache"][$cache]) ? $GLOBALS["__aw_cache"][$cache] : false;
 	}
 
 	////

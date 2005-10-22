@@ -176,7 +176,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function _get_cache($fn, $oid, $cfn = "objcache")
 	{
-		if (ifset($GLOBALS["__obj_sys_opts"],"no_cache") == 1)
+		if (!empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
 		{
 			return false;
 		}

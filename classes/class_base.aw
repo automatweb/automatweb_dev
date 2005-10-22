@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.428 2005/10/21 22:22:28 duke Exp $
+// $Id: class_base.aw,v 2.429 2005/10/22 10:43:35 ekke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -137,7 +137,7 @@ class class_base extends aw_template
 			"classificator" => 1,
 		);
 
-		if (!isset($this->clid) && ifset($arg, "clid"))
+		if (!isset($this->clid) && !empty($arg["clid"]))
 		{
 			$this->clid = $arg["clid"];
 		}
@@ -856,7 +856,7 @@ class class_base extends aw_template
 		$args = array(
 			"id" => $this->id,
 			"group" => $group,
-			"return" => ifset($args, "return"),
+			"return" => isset($args["return"]) ? $args["return"] : null,
 			"period" => aw_global_get("period"),
 			"alias_to" => $request["alias_to"],
 			"return_url" => $request["return_url"],
@@ -931,7 +931,7 @@ class class_base extends aw_template
 				//$args["_alias"] = get_class($this);
 				$use_orb = false;
 			};
-			if (ifset($request,"XUL"))
+			if (!empty($request["XUL"]))
 			{
 				$args["XUL"] = 1;
 			};
