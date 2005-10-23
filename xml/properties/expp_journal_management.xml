@@ -40,6 +40,15 @@
             <caption>Raami toon</caption>
       </property>
       <property>
+            <name>text_color</name>
+            <table>objects</table>
+            <group>design</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teksti v&amp;auml;rv</caption>
+      </property>
+      <property>
             <name>main_color</name>
             <table>objects</table>
             <group>design</group>
@@ -150,9 +159,8 @@
                   <num_1>ord</num_1>
                   <num_2>type</num_2>
                   <num_3>comment</num_3>
-                  <num_4>file_url</num_4>
-                  <num_5>newwindow</num_5>
-                  <num_6>status</num_6>
+                  <num_4>newwindow</num_4>
+                  <num_5>status</num_5>
             </props>
             <table_fields>
                   <num_0>name</num_0>
@@ -178,7 +186,7 @@
                   <num_3>docid</num_3>
                   <num_4>hits</num_4>
                   <num_5>alt</num_5>
-                  <num_6>newwindowd</num_6>
+                  <num_6>newwindow</num_6>
             </props>
             <table_fields>
                   <num_0>name</num_0>

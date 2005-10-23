@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.11 2005/10/18 09:48:53 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.12 2005/10/23 23:12:41 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -31,6 +31,9 @@
 
 		@property frame_color type=textbox field=meta method=serialize
 		@caption Raami toon
+
+		@property text_color type=textbox field=meta method=serialize
+		@caption Teksti v&auml;rv
 
 		@property main_color type=textbox field=meta method=serialize
 		@caption P&otilde;hitoon
@@ -71,13 +74,13 @@
 	@groupinfo general_files caption="Failid" parent=publications
 	@default group=general_files
 	
-	        @property general_files type=releditor reltype=RELTYPE_GENERAL_FILE field=meta method=serialize mode=manager props=file,ord,type,comment,file_url,newwindow,status table_fields=name,ord table_edit_fields=ord
+	        @property general_files type=releditor reltype=RELTYPE_GENERAL_FILE field=meta method=serialize mode=manager props=file,ord,type,comment,newwindow,status table_fields=name,ord table_edit_fields=ord
         	@caption Failid
 
 	@groupinfo general_links caption="Lingid" parent=publications
 	@default group=general_links
 
-		@property general_links type=releditor reltype=RELTYPE_GENERAL_LINK field=meta method=serialize mode=manager props=name,url,ord,docid,hits,alt,newwindowd table_fields=name,ord table_edit_fields=ord parent=self
+		@property general_links type=releditor reltype=RELTYPE_GENERAL_LINK field=meta method=serialize mode=manager props=name,url,ord,docid,hits,alt,newwindow table_fields=name,ord table_edit_fields=ord parent=self
 		@caption Lingid
 
         @groupinfo general_documents caption="Dokumendid" parent=publications
