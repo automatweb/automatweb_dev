@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.27 2005/10/05 09:25:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.28 2005/10/23 18:44:51 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -102,10 +102,10 @@ class site_cache extends aw_template
 		$cp = $this->get_cache_params($arr);
 		
 		$cache = get_instance("cache");
-		$tmp = $cache->get(aw_global_get("section"), $cp);
+		$tmp = $cache->get(aw_global_get("raw_section"), $cp);
 		if ($GLOBALS["INTENSE_CACHE"] == 1)
 		{
-			echo "look for pagecache ".aw_global_get("section")." cp = ".dbg::dump($cp)." <br>";
+			echo "look for pagecache ".aw_global_get("raw_section")." cp = ".dbg::dump($cp)." <br>";
 		}
 		return $tmp;
 	}
@@ -130,7 +130,7 @@ class site_cache extends aw_template
 		$cp = $this->get_cache_params($arr);
 		
 		$cache = get_instance("cache");
-		$cache->set(aw_global_get("section"), $cp, $content);
+		$cache->set(aw_global_get("raw_section"), $cp, $content);
 	}
 
 	////

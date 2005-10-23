@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.351 2005/10/07 07:04:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.352 2005/10/23 18:44:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -292,12 +292,21 @@ class menuedit extends aw_template
 	function request_startup()
 	{
 		$section = aw_global_get("section");
-		aw_global_set("raw_section", $section);
+		if (is_numeric(str_replace("_", "", str_replace(":", "", $section))) || empty($section))
+		{ 
+			aw_global_set("raw_section", $section);
 	
-		if (strpos($section, ":") !== false)
-		{	
-			$section = (int)$section;
+			if (strpos($section, ":") !== false)
+			{	
+				$section = (int)$section;
+			}
 		}
+		else
+		{
+			aw_global_set("raw_section", aw_ini_get("frontpage"));
+			$section = aw_ini_get("frontpage");
+		}
+
 		$realsect = $this->check_section($section);
 		$set_lang_id = false;
 		if ($this->can("view",$realsect))
