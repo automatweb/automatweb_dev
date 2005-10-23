@@ -6,7 +6,7 @@ if (empty($_COOKIE["nocache"]) && aw_ini_get("config.use_squid"))
 	header("Cache-Control: must-revalidate, max-age=".$ma);
 	header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");
 };
-
+ini_set("session.save_handler", "files");
 session_name("automatweb");
 session_start();
 
