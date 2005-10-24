@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.64 2005/10/22 10:43:35 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.65 2005/10/24 11:22:24 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -10,7 +10,8 @@ class aw_table extends aw_template
 	// tbgcolor - default cell background color
 	var $scripts;
 	var $id = 'table_0';
-	var $filter_name = "aw_table_filters";
+	var $filter_name = "awTblFlt";
+	var $name = "awTable0";
 
 	function aw_table($data = array())
 	{
@@ -33,7 +34,6 @@ class aw_table extends aw_template
 		$this->prefix = isset($data["prefix"]) ? $data["prefix"] : "";
 		// table cell background color
 		$this->tbgcolor = isset($data["tbgcolor"]) ? $data["tbgcolor"] : "";
-		$this->filter_name = $this->prefix . $this->filter_name;
 
 		$this->header_attribs = array();
 
@@ -65,36 +65,6 @@ class aw_table extends aw_template
 		$this->use_chooser = false;
 		// if true and chooser is used, checking chooser checkboxes changes the style of the row as well
 		$this->chooser_hilight = true;
-
-		### maintain all selected filters
-
-		$saved_filters = aw_global_get ($this->filter_name . "_saved");
-		$this->selected_filters = $saved_filters ? aw_unserialize ($saved_filters) : array ();
-
-		### set/clear new selected filters
-		$request = aw_global_get ("request");
-
-		if ($selected_filter = $request[$this->filter_name])
-		{
-			list ($filter_key, $filter_selection, $filter_txtvalue) = explode (",", $selected_filter);
-
-			if ($filter_selection)
-			{
-				$this->selected_filters[$filter_key] = array(
-					'filter_selection' => $filter_selection,
-					'filter_txtvalue' => $filter_txtvalue,
-				);
-			}
-			else
-			{
-				unset ($this->selected_filters[$filter_key]);
-			}
-		}
-
-		if (sizeof($this->selected_filters) > 0)
-		{
-			aw_session_set ($this->filter_name . "_saved", aw_serialize ($this->selected_filters));
-		}
 	}
 
 	function set_sortable($arg)
@@ -123,11 +93,11 @@ class aw_table extends aw_template
 		foreach ($this->selected_filters as $filter_key => $filter_array)
 		{
 			extract ($filter_array);
-			$filter_name = $this->filter_index[$filter_key];
-			$type = $this->filters[$filter_name]["type"];
+			$field_name = $this->filter_index[$filter_key];
+			$type = $this->filters[$field_name]["type"];
 
 			// if exists value filtervalue-[rowname] use that for filtering (good for linked values etc)
-			$value = $row[ (isset($row['filtervalue-'.$filter_name]) ? 'filtervalue-' : '') . $filter_name];
+			$value = $row[ (isset($row['filtervalue-'.$field_name]) ? 'filtervalue-' : '') . $field_name];
 
 			if (!empty($filter_txtvalue) && stristr($value, $filter_txtvalue) === false)
 			{
@@ -1333,8 +1303,46 @@ class aw_table extends aw_template
 		}; // end of switch
 	}
 
+	var $filters_updated = false;
+
 	function define_field($args = array())
 	{
+		if (!$this->filters_updated)
+		{
+			$this->filter_name = $this->name . "Flt";
+
+			### maintain all selected filters
+			$saved_filters = aw_global_get ($this->filter_name . "Saved");
+			$this->selected_filters = $saved_filters ? aw_unserialize ($saved_filters) : array ();
+
+			### set/clear new selected filters
+			$request = aw_global_get ("request");
+
+			if ($selected_filter = $request[$this->filter_name])
+			{
+				list ($filter_key, $filter_selection, $filter_txtvalue) = explode (",", $selected_filter);
+
+				if ($filter_selection)
+				{
+					$this->selected_filters[$filter_key] = array(
+						'filter_selection' => $filter_selection,
+						'filter_txtvalue' => $filter_txtvalue,
+					);
+				}
+				else
+				{
+					unset ($this->selected_filters[$filter_key]);
+				}
+			}
+
+			if (sizeof ($this->selected_filters) > 0)
+			{
+				aw_session_set ($this->filter_name . "Saved", aw_serialize ($this->selected_filters));
+			}
+
+			$this->filters_updated = true;
+		}
+
 		$this->rowdefs[] = $args;
 		if (isset($args["numeric"]))
 		{
@@ -1360,6 +1368,7 @@ class aw_table extends aw_template
 
 	function remove_field($name)
 	{
+		unset ($this->filters[$name]);
 		$tmp = $this->rowdefs;
 		foreach($tmp as $k => $v)
 		{
@@ -1768,7 +1777,7 @@ class aw_table extends aw_template
 			}
 
 			$style = false;
-			if (!empty($v["sortable"]))
+			if (ifset($v,"sortable"))
 			{
 				if (isset($this->sortby[$v["name"]]))
 				{
@@ -1786,7 +1795,7 @@ class aw_table extends aw_template
 			$style = isset($this->col_styles[$v["name"]][$style_key]) ? $this->col_styles[$v["name"]][$style_key] : "";
 			if (!$style)
 			{
-				$style = (!empty($v["sortable"]) ? (isset($this->sortby[$v["name"]]) ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
+				$style = (ifset($v,"sortable") ? (isset($this->sortby[$v["name"]]) ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
 			}
 
 			$sh_cnt = $this->sh_counts_by_parent[$v["name"]];
@@ -1804,7 +1813,7 @@ class aw_table extends aw_template
 			));
 
 			// if the column is sortable, turn it into a link
-			if (!empty($v["sortable"]))
+			if (ifset($v,"sortable"))
 			{
 				// by default (the column is not sorted) don't show any arrows
 				$sufix = "";
