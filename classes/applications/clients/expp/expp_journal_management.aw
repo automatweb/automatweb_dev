@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.14 2005/10/24 09:05:14 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.15 2005/10/24 10:45:38 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -59,11 +59,11 @@
 		@property cover_image type=releditor use_form=emb reltype=RELTYPE_COVER_IMAGE rel_id=first field=meta method=serialize
 		@caption Esikaane pilt
 
-	@groupinfo publications_list caption="V&auml;ljaanded" parent=publications
+	@groupinfo publications_list caption="Alamv&auml;ljaanded" parent=publications
 	@default group=publications_list
 
-		@property publications_table type=releditor reltype=RELTYPE_PUBLICATION field=meta method=serialize mode=manager props=name
-		@caption V&auml;ljaanded
+		@property publications_table type=releditor reltype=RELTYPE_PUBLICATION field=meta method=serialize mode=manager props=name,description_from_reggy,description
+		@caption Alamv&auml;ljaanded
 
 	@groupinfo general_images caption="Pildid" parent=publications
 	@default group=general_images
@@ -172,6 +172,9 @@
 
 @reltype GENERAL_DOCUMENT value=14 clid=CL_DOCUMENT
 @caption Dokument
+
+@reltype LINK_TO_MANAGEMENT_OBJECT value=15 clid=CL_EXTLINK
+@caption Link haldusobjektile
 
 */
 

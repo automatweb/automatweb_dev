@@ -113,9 +113,13 @@
             <field>meta</field>
             <method>serialize</method>
             <mode>manager</mode>
-            <props>name</props>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>description_from_reggy</num_1>
+                  <num_2>description</num_2>
+            </props>
             <store>no</store>
-            <caption>V&amp;auml;ljaanded</caption>
+            <caption>Alamv&amp;auml;ljaanded</caption>
       </property>
       <property>
             <name>general_images</name>
@@ -300,7 +304,7 @@
                   <parent>publications</parent>
             </publications_general_info>
             <publications_list>
-                  <caption>V&amp;auml;ljaanded</caption>
+                  <caption>Alamv&amp;auml;ljaanded</caption>
                   <parent>publications</parent>
             </publications_list>
             <general_images>
@@ -409,6 +413,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument</caption>
             </GENERAL_DOCUMENT>
+            <LINK_TO_MANAGEMENT_OBJECT>
+                  <value>15</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>Link haldusobjektile</caption>
+            </LINK_TO_MANAGEMENT_OBJECT>
       </reltypes>
 </properties>
 
