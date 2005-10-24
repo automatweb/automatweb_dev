@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.89 2005/09/08 14:31:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.90 2005/10/24 12:12:37 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -2125,6 +2125,8 @@ class forum_v2 extends class_base
 		{
 			$text = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?php'.'\$2'.'?'.'>'),true)",$text);
 		};
+
+		$text = create_links($text);
 		$text = preg_replace("/\r([^<])/m","<br />\n\$1",$text);
 		//$text = nl2br($text);
 		return $text;
