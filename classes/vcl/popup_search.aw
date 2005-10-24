@@ -41,17 +41,16 @@ class popup_search extends aw_template
 		}
 		else if ($style == 'relpicker')
 		{
-			if (!isset($arr['property']['reltype']) || !isset($arr['relinfo'][$arr['property']['reltype']]) || !is_oid($arr['obj_inst']->id()))
+			if (is_object($arr["obj_inst"]) && isset($arr['property']['reltype']) && isset($arr['relinfo'][$arr['property']['reltype']])  && is_oid($arr['obj_inst']->id()))
 			{
-				return PROP_IGNORE;
-			}
-			$reltype = $arr['property']['reltype'];
-			$conn = $arr['obj_inst']->connections_from(array(
-					"type" => $reltype
-			));
-			foreach($conn as $c)
-			{
-				$options[$c->prop("to")] = $c->prop("to.name");
+				$reltype = $arr['property']['reltype'];
+				$conn = $arr['obj_inst']->connections_from(array(
+						"type" => $reltype
+				));
+				foreach($conn as $c)
+				{
+					$options[$c->prop("to")] = $c->prop("to.name");
+				}
 			}
 		}
 
@@ -102,6 +101,27 @@ class popup_search extends aw_template
 			{
 				$tmp["value"] .= " / ";
 				$tmp["value"] .= html::get_change_url($_id, array("return_url" => get_ru()), t("Muuda valitud objekti"));
+			}
+
+			// add new
+			if ($arr['property']['reltype'])
+			{
+				$clss = aw_ini_get("classes");
+				$clid = new aw_array($arr["relinfo"][$arr['property']['reltype']]["clid"]);
+				$rel_val = $arr["relinfo"][$arr['property']['reltype']]["value"];
+				foreach($clid->get() as $cl)
+				{
+					$tmp["value"] .= " / ".html::get_new_url(
+						$cl, 
+						$arr["obj_inst"]->id(), 
+						array(
+							"alias_to" => $arr["obj_inst"]->id(), 
+							"reltype" => $rel_val,
+							"return_url" => get_ru()
+						), 
+						sprintf(t("Lisa uus %s"), $clss[$cl]["name"])
+					);
+				}
 			}
 		}
 

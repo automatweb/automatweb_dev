@@ -229,7 +229,7 @@ class crm_company_bills_impl extends class_base
 		));
 	}
 
-	function _init_bills_list_t(&$t)
+	function _init_bills_list_t(&$t, $r)
 	{
 		$t->define_field(array(
 			"name" => "bill_no",
@@ -237,6 +237,15 @@ class crm_company_bills_impl extends class_base
 			"sortable" => 1,
 			"numeric" => 1
 		));
+		if ($r["group"] == "bills_monthly")
+		{
+			$t->define_field(array(
+				"name" => "create_new",
+				"caption" => t("Loo uus"),
+				"sortable" => 1,
+				"numeric" => 1
+			));
+		}
 		$t->define_field(array(
 			"name" => "bill_date",
 			"caption" => t("Kuup&auml;ev"),
@@ -270,11 +279,15 @@ class crm_company_bills_impl extends class_base
 			"sortable" => 1,
 			"numeric" => 1
 		));
-		$t->define_field(array(
-			"name" => "state",
-			"caption" => t("Staatus"),
-			"sortable" => 1
-		));
+
+		if ($r["group"] != "bills_monthly")
+		{
+			$t->define_field(array(
+				"name" => "state",
+				"caption" => t("Staatus"),
+				"sortable" => 1
+			));
+		}
 		$t->define_field(array(
 			"name" => "print",
 			"caption" => t("Tr&uuml;ki"),
@@ -289,37 +302,40 @@ class crm_company_bills_impl extends class_base
 	function _get_bills_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_bills_list_t($t);
-		
-		if ($arr["request"]["bill_s_search"] == "")
-		{
-			// init default search opts
-			$u = get_instance(CL_USER);
-			$p = obj($u->get_current_person());
-			$arr["request"]["bill_s_client_mgr"] = $p->name();
-			$arr["request"]["bill_s_from"]["day"] = date("d");
-			$arr["request"]["bill_s_from"]["month"] = date("m");
-			$arr["request"]["bill_s_from"]["year"] = date("Y")-1;
+		$this->_init_bills_list_t($t, $arr["request"]);
 
-			$arr["request"]["bill_s_to"]["day"] = date("d");
-			$arr["request"]["bill_s_to"]["month"] = date("m");
-			$arr["request"]["bill_s_to"]["year"] = date("Y");
-
-			$arr["request"]["bill_s_status"] = "0";
-		}
-		list($f1, $f2) = $this->_get_bill_search_filt($arr["request"], $arr["obj_inst"]->id());
-		$bills = new object_list($f1);
-		$bills2 = new object_list($f2);
-		$bills->add($bills2->ids());
-/*		}
-		else
+		if ($arr["request"]["group"] == "bills_monthly")
 		{
 			$bills = new object_list(array(
 				"class_id" => CL_CRM_BILL,
 				"parent" => $arr["obj_inst"]->id(),
-				"state" => 0
-			));	
-		}*/
+				"monthly_bill" => 1
+			));
+		}
+		else
+		{
+			if ($arr["request"]["bill_s_search"] == "")
+			{
+				// init default search opts
+				$u = get_instance(CL_USER);
+				$p = obj($u->get_current_person());
+				$arr["request"]["bill_s_client_mgr"] = $p->name();
+				$arr["request"]["bill_s_from"]["day"] = date("d");
+				$arr["request"]["bill_s_from"]["month"] = date("m");
+				$arr["request"]["bill_s_from"]["year"] = date("Y")-1;
+
+				$arr["request"]["bill_s_to"]["day"] = date("d");
+				$arr["request"]["bill_s_to"]["month"] = date("m");
+				$arr["request"]["bill_s_to"]["year"] = date("Y");
+
+				$arr["request"]["bill_s_status"] = "0";
+			}
+			list($f1, $f2) = $this->_get_bill_search_filt($arr["request"], $arr["obj_inst"]->id());
+			$bills = new object_list($f1);
+			$bills2 = new object_list($f2);
+			$bills->add($bills2->ids());
+		}
+
 		$bill_i = get_instance(CL_CRM_BILL);
 		foreach($bills->arr() as $bill)
 		{
@@ -334,6 +350,14 @@ class crm_company_bills_impl extends class_base
 			$cursum = $bill_i->get_sum($bill);
 			$t->define_data(array(
 				"bill_no" => html::get_change_url($bill->id(), array("return_url" => get_ru()), parse_obj_name($bill->prop("bill_no"))),
+				"create_new" => html::href(array(
+					"url" => $this->mk_my_orb("create_new_monthly_bill", array(
+						"id" => $bill->id(), 
+						"co" => $arr["obj_inst"]->id(),
+						"post_ru" => get_ru()
+						), CL_CRM_COMPANY),
+					"caption" => t("Loo uus")
+				)),
 				"bill_date" => $bill->prop("bill_date"),
 				"bill_due_date" => $bill->prop("bill_due_date"),
 				"customer" => $cust,
@@ -457,6 +481,24 @@ class crm_company_bills_impl extends class_base
 			'img' => 'save.gif',
 			'tooltip' => t('Salvesta'),
 			'action' => 'save_bill_list',
+		));
+		$tb->add_button(array(
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta valitud arved'),
+			"confirm" => t("Oled kindel et soovid valitud arved kustutada?"),
+			'action' => 'delete_bills',
+		));
+	}
+
+	function _get_bills_mon_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			'name' => 'save',
+			'img' => 'save.gif',
+			'tooltip' => t('Salvesta'),
+			'action' => 'create_new_monthly_bill',
 		));
 		$tb->add_button(array(
 			'name' => 'del',

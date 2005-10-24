@@ -321,6 +321,9 @@ default group=org_objects
 			@property all_proj_search_code type=textbox store=no parent=all_proj_search_b size=30 captionside=top
 			@caption Projekti kood
 
+			@property all_proj_search_contact_person type=textbox store=no parent=all_proj_search_b size=30 captionside=top
+			@caption Projekti kontaktisik
+
 			@property all_proj_search_task_name type=textbox store=no parent=all_proj_search_b size=30 captionside=top
 			@caption &Uuml;lesande nimi
 
@@ -364,6 +367,9 @@ default group=org_objects
 
 			@property proj_search_code type=textbox store=no parent=my_proj_search_b size=30 captionside=top
 			@caption Projekti kood
+
+			@property proj_search_contact_person type=textbox store=no parent=my_proj_search_b size=30 captionside=top
+			@caption Projekti kontaktisik
 
 			@property proj_search_task_name type=textbox store=no parent=my_proj_search_b size=30 captionside=top
 			@caption &Uuml;lesande nimi
@@ -459,6 +465,10 @@ default group=org_objects
 	@property bill_proj_list type=table store=no no_caption=1
 	@property bill_task_list type=table store=no no_caption=1
 
+@default group=bills_monthly
+
+	@property bills_mon_tb type=toolbar no_caption=1 store=no
+
 @default group=bills_list
 
 	@property bills_tb type=toolbar no_caption=1 store=no
@@ -491,7 +501,8 @@ default group=org_objects
 			@property bill_s_search type=submit store=no parent=bills_list_s captionside=top no_caption=1
 			@caption Otsi
 
-		@property bills_list type=table store=no no_caption=1 parent=bills_list_box
+		@property bills_list type=table store=no no_caption=1 parent=bills_list_box group=bills_list,bills_monthly
+
 
 @default group=my_tasks,meetings,calls,ovrv_offers,all_actions
 
@@ -620,6 +631,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 	@groupinfo bills_create parent=bills caption="Loo arve" submit=no
 	@groupinfo bills_list parent=bills caption="Nimekiri" submit=no
+	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no
 
 @groupinfo stats caption="Statistika" submit_method=get
 
@@ -1008,13 +1020,7 @@ class crm_company extends class_base
 
 			case "client_manager":
 				$u = get_instance(CL_USER);
-				$ws = array();
-				$this->get_all_workers_for_company(obj($u->get_current_company()), $ws);
-				if (count($ws))
-				{
-					$ol = new object_list(array("oid" => $ws));
-					$data["options"] = array("" => t("--vali--")) + $ol->names();
-				}
+				$data["options"] = $this->get_employee_picker(obj($u->get_current_company()), true);
 				if (!$data["value"])
 				{
 					$data["value"] = $u->get_current_person();
@@ -1171,6 +1177,7 @@ class crm_company extends class_base
 			case "proj_search_cust":
 			case "proj_search_name":
 			case "proj_search_code":
+			case "proj_search_contact_person":
 			case "proj_search_task_name":
 				if ($arr["request"]["do_proj_search"])
 				{
@@ -1201,6 +1208,7 @@ class crm_company extends class_base
 			case "all_proj_search_cust":
 			case "all_proj_search_name":
 			case "all_proj_search_code":
+			case "all_proj_search_contact_person":
 			case "all_proj_search_task_name":
 			case "all_proj_search_sbt":
 			case "all_proj_search_clear":
@@ -1386,6 +1394,7 @@ class crm_company extends class_base
 			case 'bill_tb':
 			case 'bills_list':
 			case 'bills_tb':
+			case 'bills_mon_tb':
 			case "bill_s_client_mgr":
 			case "bill_s_status":
 				static $bills_impl;
@@ -2123,6 +2132,7 @@ class crm_company extends class_base
 			$arr["args"]["proj_search_part"] = $arr["request"]["proj_search_part"];
 			$arr["args"]["proj_search_name"] = $arr["request"]["proj_search_name"];
 			$arr["args"]["proj_search_code"] = $arr["request"]["proj_search_code"];
+			$arr["args"]["proj_search_contact_person"] = $arr["request"]["proj_search_contact_person"];
 			$arr["args"]["proj_search_task_name"] = $arr["request"]["proj_search_task_name"];
 			$arr["args"]["proj_search_dl_from"] = $arr["request"]["proj_search_dl_from"];
 			$arr["args"]["proj_search_dl_to"] = $arr["request"]["proj_search_dl_to"];
@@ -2137,6 +2147,7 @@ class crm_company extends class_base
 			$arr["args"]["all_proj_search_part"] = $arr["request"]["all_proj_search_part"];
 			$arr["args"]["all_proj_search_name"] = $arr["request"]["all_proj_search_name"];
 			$arr["args"]["all_proj_search_code"] = $arr["request"]["all_proj_search_code"];
+			$arr["args"]["all_proj_search_contact_person"] = $arr["request"]["all_proj_search_contact_person"];
 			$arr["args"]["all_proj_search_task_name"] = $arr["request"]["all_proj_search_task_name"];
 			$arr["args"]["all_proj_search_dl_from"] = $arr["request"]["all_proj_search_dl_from"];
 			$arr["args"]["all_proj_search_dl_to"] = $arr["request"]["all_proj_search_dl_to"];
@@ -2638,13 +2649,7 @@ class crm_company extends class_base
 
 	function _get_firmajuht($arr)
 	{
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_WORKERS",
-		));
-		foreach($conns as $conn)
-		{
-			$arr["prop"]["options"][$conn->prop("to")] = $conn->prop("to.name");
-		};
+		$arr["prop"]["options"] = $this->get_employee_picker($arr["obj_inst"]);
 	}
 
 	function navtoolbar(&$args)
@@ -3020,13 +3025,24 @@ class crm_company extends class_base
 		$bill->set_prop("bill_no", $bill->id());
 		$bill->set_name(sprintf(t("Arve nr %s"), $bill->id()));
 
-		$proj = obj($arr["proj"]);
-		$cust = $proj->get_first_obj_by_reltype("RELTYPE_ORDERER");
+		if (is_oid($arr["proj"]))
+		{
+			$proj = obj($arr["proj"]);
+			$cust = $proj->get_first_obj_by_reltype("RELTYPE_ORDERER");
+			$bill->set_prop("impl", reset($proj->prop("implementor")));
+		}
+		else
+		if (is_oid($arr["cust"]))
+		{
+			$cust = obj($arr["cust"]);
+			$u = get_instance(CL_USER);
+			$bill->set_prop("impl", $u->get_current_company());
+		}
+
 		if ($cust)
 		{
 			$bill->set_prop("customer", $cust->id());
 		}
-		$bill->set_prop("impl", reset($proj->prop("implementor")));
 
 		$bill->save();
 
@@ -3245,31 +3261,26 @@ class crm_company extends class_base
 		// list of all persons in my company
 		$u = get_instance(CL_USER);
 		$co = $u->get_current_company();
+		$arr["prop"]["options"] = $this->get_employee_picker(obj($co), true);
+	}
 
-		$w = array();
-		$this->get_all_workers_for_company(obj($co), $w);
-
-		if (count($w))
+	function get_employee_picker($co, $add_empty = false)
+	{
+		if ($add_empty)
 		{
-			$ol = new object_list(array("oid" => $w));
-			$arr["prop"]["options"] = array("" => "--vali--") + $ol->names();
+			$res = array("" => t("--vali--"));
 		}
 		else
 		{
-			$arr["prop"]["options"] = array();
+			$res = array();
 		}
-	}
-
-	function get_employee_picker($co)
-	{
-		$res = array();
 		$this->get_all_workers_for_company($co, $res);
 		if (!count($res))
 		{
-			return array();
+			return $res;
 		}
-		$ol = new object_list(array("oid" => $res));
-		return $ol->names();
+		$ol = new object_list(array("oid" => $res, "sort_by" => "objects.name"));
+		return ($add_empty ? array("" => t("--vali--")) : array()) +  $ol->names();
 	}
 
 	function _gen_company_code($co)
@@ -3333,6 +3344,65 @@ class crm_company extends class_base
 			$ol->delete();
 		}
 		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=create_new_monthly_bill
+
+		@param id required type=int acl=view
+		@param co required type=int acl=view
+		@param post_ru optional
+	**/
+	function create_new_monthly_bill($arr)
+	{
+		if (!empty($arr["id"]) && empty($arr["sel"]))
+		{
+			$arr["sel"] = array($arr["id"]);
+		}
+
+		foreach(safe_array($arr["sel"]) as $bill_id)
+		{
+			$b = obj($bill_id);
+
+			/// copy
+			$n = obj();
+			$n->set_class_id(CL_CRM_BILL);
+			$n->set_parent($b->parent());
+			$n->save();
+			$n->set_name(sprintf(t("Arve nr %s"), $n->id()));
+			$n->set_prop("bill_no", $n->id());
+			$n->set_prop("bill_date", $b->prop("bill_date"));
+			$n->set_prop("bill_due_date_days", $b->prop("bill_due_date_days"));
+			$n->set_prop("bill_due_date", $b->prop("bill_due_date"));
+			$n->set_prop("customer", $b->prop("customer"));
+			$n->set_prop("impl", $b->prop("impl"));
+			$n->set_prop("notes", $b->prop("notes"));
+			$n->set_prop("disc", $b->prop("disc"));
+			$n->set_prop("sum", $b->prop("sum"));
+			$n->save();
+
+			// connections
+			foreach($b->connections_from() as $con)
+			{
+				$n->connect(array(
+					"to" => $con->prop("to"),
+					"reltype" => $con->prop("reltype")
+				));
+			}
+		}
+
+		if (count(safe_array($arr["sel"])) == 1)
+		{
+			return html::get_change_url($n->id(), array("return_url" => urlencode($arr["post_ru"])));
+		}
+		else
+		{
+			return $this->mk_my_orb("change", array(
+				"id" => $arr["id"], 
+				"group" => "bills_list",
+				"return_url" => urlencode($arr["post_ru"])
+			));
+		}
 	}
 }
 ?>

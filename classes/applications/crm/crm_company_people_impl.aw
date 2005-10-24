@@ -250,6 +250,7 @@ class crm_company_people_impl extends class_base
 			'field'=>'id',
 			"chgbgcolor" => "cutcopied",
 		));
+		$t->set_default_sortby("name");
 	}
 
 	function _get_human_resources($arr)

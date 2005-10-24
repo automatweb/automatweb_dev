@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.5 2005/10/24 07:04:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.6 2005/10/24 13:50:14 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -17,8 +17,14 @@
 	@property bill_date type=date_select table=aw_crm_bill field=aw_date
 	@caption Kuup&auml;ev
 
+	@property bill_due_date_days type=textbox table=aw_crm_bill field=aw_due_date_days size=5
+	@caption Makset&auml;htaeg (p&auml;evi)
+
 	@property bill_due_date type=date_select table=aw_crm_bill field=aw_due_date
-	@caption Makset&auml;htaeg
+	@caption Tasumise kuup&auml;ev
+
+	@property bill_recieved type=date_select table=aw_crm_bill field=aw_recieved
+	@caption Laekumist&auml;htaeg
 
 	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON
 	@caption Klient
@@ -31,6 +37,9 @@
 
 	@property notes type=textarea rows=5 cols=50 table=aw_crm_bill field=aw_notes
 	@caption M&auml;rkused
+
+	@property monthly_bill type=checkbox ch_value=1 table=aw_crm_bill field=aw_monthly_bill
+	@caption Kuuarve
 
 	@property bill_rows type=table store=no 
 	@caption Arveread 
@@ -89,6 +98,10 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bill_due_date":
+				$prop["value"] = $arr["obj_inst"]->prop("bill_date") + (24*3600*$arr["obj_inst"]->prop("bill_due_date_days"));
+				break;
+
 			case "preview":
 				$this->_preview($arr);
 				break;
@@ -114,6 +127,7 @@ class crm_bill extends class_base
 						$prop["options"][$prop["value"]] = $tmp->name();
 					}
 				}
+				asort($prop["options"]);
 				break;
 		};
 		return $retval;
@@ -131,6 +145,7 @@ class crm_bill extends class_base
 				{
 					list($d,$m,$y) = explode("/", $e["date"]);
 					$e["date"] = mktime(0,0,0, $m, $d, $y);
+					$e["sum"] = $e["price"] * $e["amt"];
 					$inf[$idx] = $e;
 				}	
 				$arr["obj_inst"]->set_meta("bill_inf", $inf);
@@ -282,6 +297,7 @@ class crm_bill extends class_base
 	function callback_pre_save($arr)
 	{
 		$arr["obj_inst"]->set_prop("sum", $this->_calc_sum($arr["obj_inst"]));
+		$arr["obj_inst"]->set_prop("bill_due_date", $arr["obj_inst"]->prop("bill_date") + (24*3600*$arr["obj_inst"]->prop("bill_due_date_days")));
 	}
 
 	function _preview($arr)
@@ -391,8 +407,8 @@ class crm_bill extends class_base
 			"impl_logo" => $logo,
 			"impl_logo_url" => $logo_url,
 			"bill_date" => $b->prop("bill_date"),
-			"payment_due_days" => (int)(($b->prop("bill_due_date") - $b->prop("bill_date")) / (24*3600)),
-			"bill_due" => $b->prop("bill_due_date"),
+			"payment_due_days" => $b->prop("bill_due_date_days"),
+			"bill_due" => date("d.m.Y", $b->prop("bill_due_date")),
 			"orderer_contact" => $ord_ct,
 			"comment" => $b->prop("notes"),
 			"impl_name" => $impl->name(),
@@ -448,7 +464,7 @@ class crm_bill extends class_base
 			"total_wo_tax" => number_format($sum_wo_tax, 2),
 			"tax" => number_format($tax, 2),
 			"total" => number_format($sum, 2),
-			"total_text" => locale::get_lc_number($sum)
+			"total_text" => locale::get_lc_money_text($sum)
 		));
 
 		$res =  $this->parse();

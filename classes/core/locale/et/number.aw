@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/et/number.aw,v 1.3 2005/04/21 08:48:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/et/number.aw,v 1.4 2005/10/24 13:50:14 kristo Exp $
 // et.aw - Estonian localization
 class number
 {
@@ -60,6 +60,24 @@ class number
 		else
 		{
 			return "ENOCLUE";
+		}
+		return $res;
+	}
+
+	function get_lc_money_text($number)
+	{
+		// exploide by . or ,
+		if (strpos($number, ",") !== false)
+		{
+			$number = str_replace(",", ".", $number);
+		}
+
+		list($eek, $cent) = explode(".", $number);
+
+		$res = $this->get_lc_number($eek)." krooni";
+		if ($cent > 0)
+		{
+			$res .= " ja ".$this->get_lc_number($cent)." senti";
 		}
 		return $res;
 	}

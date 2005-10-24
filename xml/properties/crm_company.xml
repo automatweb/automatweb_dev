@@ -870,6 +870,18 @@
             <caption>Projekti kood</caption>
       </property>
       <property>
+            <name>all_proj_search_contact_person</name>
+            <table>objects</table>
+            <group>org_projects_archive</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>all_proj_search_contact_person</field>
+            <caption>Projekti kontaktisik</caption>
+      </property>
+      <property>
             <name>all_proj_search_task_name</name>
             <table>objects</table>
             <group>org_projects_archive</group>
@@ -993,6 +1005,18 @@
             <captionside>top</captionside>
             <field>proj_search_code</field>
             <caption>Projekti kood</caption>
+      </property>
+      <property>
+            <name>proj_search_contact_person</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>my_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>proj_search_contact_person</field>
+            <caption>Projekti kontaktisik</caption>
       </property>
       <property>
             <name>proj_search_task_name</name>
@@ -1290,6 +1314,15 @@
             <field>bill_task_list</field>
       </property>
       <property>
+            <name>bills_mon_tb</name>
+            <table>objects</table>
+            <group>bills_monthly</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>bills_mon_tb</field>
+      </property>
+      <property>
             <name>bills_tb</name>
             <table>objects</table>
             <group>bills_list</group>
@@ -1381,7 +1414,10 @@
       <property>
             <name>bills_list</name>
             <table>objects</table>
-            <group>bills_list</group>
+            <group>
+                  <num_0>bills_list</num_0>
+                  <num_1>bills_monthly</num_1>
+            </group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1843,6 +1879,11 @@
                   <caption>Nimekiri</caption>
                   <submit>no</submit>
             </bills_list>
+            <bills_monthly>
+                  <parent>bills</parent>
+                  <caption>Kuuarved</caption>
+                  <submit>no</submit>
+            </bills_monthly>
             <stats>
                   <caption>Statistika</caption>
                   <submit_method>get</submit_method>

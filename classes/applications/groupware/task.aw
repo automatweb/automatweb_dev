@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.25 2005/10/24 07:04:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.26 2005/10/24 13:50:14 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -8,13 +8,13 @@
 @default table=objects
 @default group=general
 
-@property customer type=popup_search table=planner field=customer clid=CL_CRM_COMPANY
+@property customer type=popup_search table=planner field=customer clid=CL_CRM_COMPANY style=relpicker reltype=RELTYPE_CUSTOMER
 @caption Klient
 
 @property code type=text size=5 table=planner field=code
 @caption Kood
 
-@property project type=popup_search table=planner field=project clid=CL_PROJECT
+@property project type=popup_search table=planner field=project clid=CL_PROJECT style=relpicker reltype=RELTYPE_PROJECT
 @caption Projekt
 
 
@@ -148,6 +148,11 @@ caption Osalejad
 @reltype FILE value=2 clid=CL_FILE
 @caption fail
 
+@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption klient
+
+@reltype PROJECT value=4 clid=CL_PROJECT
+@caption projekt
 */
 
 class task extends class_base
@@ -166,6 +171,20 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "name":
+				if (is_object($arr["obj_inst"]) && $data["value"] == "")
+				{
+					$data["value"] = $this->_get_default_name($arr["obj_inst"]);
+				}
+				break;
+
+			case "deadline":
+				if (!is_object($arr["obj_inst"]) || $arr["new"])
+				{
+					$data["value"] = time();
+				}
+				break;
+
 			case "rows_tb":
 				$this->_rows_tb($arr);
 				break;
@@ -175,7 +194,6 @@ class task extends class_base
 				break;
 
 			case "participants":
-				$opts = array();
 				$p = array();
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
@@ -185,23 +203,10 @@ class task extends class_base
 					foreach($conns as $conn)
 					{
 						$obj = $conn->from();
-						$opts[$obj->id()] = $obj->name();
 						$p[$obj->id()] = $obj->id();
 					}
 				}
-				// also add all workers for my company
-				$u = get_instance(CL_USER);
-				$co = $u->get_current_company();
-				$w = array();
-				$i = get_instance(CL_CRM_COMPANY);
-				$i->get_all_workers_for_company(obj($co), &$w);
-				foreach($w as $oid)
-				{
-					$o = obj($oid);
-					$opts[$oid] = $o->name();
-				}
-				asort($opts);
-				$data["options"] = array("" => t("--Vali--")) + $opts;	
+				$data["options"] = $this->_get_possible_participants($arr["obj_inst"]);
 				$data["value"] = $p;
 				break;
 
@@ -245,6 +250,14 @@ class task extends class_base
 				if ($data["value"] != "")
 				{
 					$data["value"] = html::get_change_url($data["value"], array("return_url" => get_ru()), $data["value"]);
+				}
+				else
+				if (is_object($arr["obj_inst"]))
+				{
+					$data["value"] = html::href(array(
+						"url" => $this->mk_my_orb("create_bill_from_task", array("id" => $arr["obj_inst"]->id(),"post_ru" => get_ru())),
+						"caption" => t("Loo uus arve")
+					));
 				}
 				else
 				{
@@ -391,6 +404,14 @@ class task extends class_base
 
 				$data["options"] = array("" => "") + $ol->names();
 
+				if (is_object($arr["obj_inst"]))
+				{
+					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+					{
+						$data["options"][$c->prop("to")] = $c->prop("to.name");
+					}
+				}
+
 				if ($arr["request"]["set_proj"])
 				{
 					$data["value"] = $arr["request"]["set_proj"];
@@ -401,6 +422,8 @@ class task extends class_base
 					$tmp = obj($data["value"]);
 					$data["options"][$tmp->id()] = $tmp->name();
 				}
+
+				asort($data["options"]);
 				break;
 
 			case "customer":
@@ -418,7 +441,14 @@ class task extends class_base
 				if ($arr["request"]["alias_to_org"])
 				{
 					$data["value"] = $arr["request"]["alias_to_org"];
-					//$arr["obj_inst"]->set_prop($customer, $data["value"]);
+				}
+
+				if (is_object($arr["obj_inst"]))
+				{
+					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+					{
+						$data["options"][$c->prop("to")] = $c->prop("to.name");
+					}
 				}
 
 				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
@@ -427,6 +457,7 @@ class task extends class_base
 					$data["options"][$tmp->id()] = $tmp->name();
 				}
 
+				asort($data["options"]);
 				if (is_object($arr["obj_inst"]))
 				{
 					$arr["obj_inst"]->set_prop("customer", $data["value"]);
@@ -470,6 +501,13 @@ class task extends class_base
 						{
 							$e["time_to_cust"] = $e["time_real"];
 						}
+						foreach(safe_array($e["impl"]) as $i)
+						{
+							if ($this->can("view", $i))
+							{
+								$this->add_participant($arr["obj_inst"], obj($i));
+							}
+						}
 						$res[] = $e;
 					}
 				}
@@ -486,20 +524,9 @@ class task extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$pl = get_instance(CL_PLANNER);
 				foreach(safe_array($prop["value"]) as $person)
 				{
-					$p = obj($person);
-					$p->connect(array(
-						"to" => $arr["obj_inst"]->id(),
-						"reltype" => "RELTYPE_PERSON_TASK"
-					));
-
-					// also add to their calendar
-					if (($cal = $pl->get_calendar_for_person($p)))
-					{
-						$pl->add_event_to_calendar(obj($cal), $arr["obj_inst"]);
-					}
+					$this->add_participant($arr["obj_inst"], obj($person));
 				}
 				break;
 
@@ -557,6 +584,14 @@ class task extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function callback_pre_save($arr)
+	{
+		if ($arr["obj_inst"]->name() == "")
+		{
+			$arr["obj_inst"]->set_name($this->_get_default_name($arr["obj_inst"]));
+		}
 	}
 
 	function callback_post_save($arr)
@@ -894,13 +929,13 @@ class task extends class_base
 
 		$t->define_field(array(
 			"name" => "done",
-			"caption" => t("Tehtud"),
+			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"done\")'>Tehtud</a>"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "on_bill",
-			"caption" => t("Arvele"),
+			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>Arvele</a>"),
 			"align" => "center"
 		));
 
@@ -916,12 +951,7 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_rows_t($t);
 
-		$impls = array();
-		foreach($arr['obj_inst']->connections_to(array('type' => array(10, 8))) as $c)
-		{
-			$o = $c->from();
-			$impls[$o->id()] = $o->name();
-		}
+		$impls = $this->_get_possible_participants($arr["obj_inst"]);
 
 
 		$dat = safe_array($arr["obj_inst"]->meta("rows"));
@@ -929,7 +959,7 @@ class task extends class_base
 		foreach($dat as $idx => $row)
 		{
 			$t->define_data(array(
-				"task" => html::textarea(array(
+				"task" => "<a name='row_".$row["date"]."'/>".html::textarea(array(
 					"name" => "rows[$idx][task]",
 					"value" => $row["task"],
 					"rows" => 5,
@@ -938,12 +968,13 @@ class task extends class_base
 				"date" => html::textbox(array(
 					"name" => "rows[$idx][date]",
 					"value" => date("d/m/y",($row["date"] > 100 ? $row["date"] : $arr["obj_inst"]->prop("start1"))),
-					"size" => 10
+					"size" => 7
 				)),
 				"impl" => html::select(array(
 					"name" => "rows[$idx][impl]",
 					"options" => $impls,
-					"value" => $row["impl"]
+					"value" => $row["impl"],
+					"multiple" => 1
 				)),
 				"time_guess" => html::textbox(array(
 					"name" => "rows[$idx][time_guess]",
@@ -1092,6 +1123,7 @@ class task extends class_base
 		return $i->create_bill(array(
 			"id" => $co,
 			"proj" => $task->prop("project"),
+			"cust" => $task->prop("customer"),
 			"sel" => array($task->id() => $task->id()),
 			"post_ru" => $arr["post_ru"]
 		));
@@ -1126,6 +1158,74 @@ class task extends class_base
 		$o->save();
 
 		return $arr["post_ru"];
+	}
+
+	function _get_default_name($o)
+	{	
+		$n = $o->prop_str("project");
+		if ($n == "")
+		{
+			$n = $o->prop_str("customer");
+			if ($n == "")
+			{
+				$uid = $o->createdby();
+				if ($uid != "")
+				{	
+					$u = get_instance("users");
+					$u_o = obj($u->get_oid_for_uid($uid));
+
+					$u = get_instance(CL_USER);
+					$p = $u->get_person_for_user($u_o);
+					$n = sprintf(t("%s toimetus"), $p->name());
+				}
+			}
+		}
+		return $n;
+	}
+
+	function _get_possible_participants($o)
+	{
+		$opts = array();
+		if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
+		{
+			$conns = $arr['obj_inst']->connections_to(array(
+				'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
+			));
+			foreach($conns as $conn)
+			{
+				$obj = $conn->from();
+				$opts[$obj->id()] = $obj->name();
+			}
+		}
+		// also add all workers for my company
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		$w = array();
+		$i = get_instance(CL_CRM_COMPANY);
+		$i->get_all_workers_for_company(obj($co), &$w);
+		foreach($w as $oid)
+		{
+			$o = obj($oid);
+			$opts[$oid] = $o->name();
+		}
+		asort($opts);
+
+		return array("" => t("--vali--")) + $opts;
+	}
+
+	function add_participant($task, $person)
+	{
+		$pl = get_instance(CL_PLANNER);
+		$person->connect(array(
+			"to" => $task->id(),
+			"reltype" => "RELTYPE_PERSON_TASK"
+		));
+
+		// also add to their calendar
+		if (($cal = $pl->get_calendar_for_person($person)))
+		{
+			$pl->add_event_to_calendar(obj($cal), $task);
+		}
 	}
 }
 ?>

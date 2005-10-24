@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.5 2005/10/24 07:04:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.6 2005/10/24 13:50:14 kristo Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
@@ -109,6 +109,7 @@ class crm_document extends class_base
 					$tmp = obj($prop["value"]);
 					$prop["options"][$tmp->id()] = $tmp->name();
 				}
+				asort($prop["options"]);
 				break;
 
 			case "customer":
@@ -128,6 +129,7 @@ class crm_document extends class_base
 					$tmp = obj($prop["value"]);
 					$prop["options"][$tmp->id()] = $tmp->name();
 				}
+				asort($prop["options"]);
 				break;
 
 			case "task":
@@ -147,6 +149,7 @@ class crm_document extends class_base
 					$tmp = obj($prop["value"]);
 					$prop["options"][$tmp->id()] = $tmp->name();
 				}
+				asort($prop["options"]);
 				break;
 		};
 		return $retval;

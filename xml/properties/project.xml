@@ -127,22 +127,6 @@
             <caption>Teostaja kontaktisik</caption>
       </property>
       <property>
-            <name>contact_phone</name>
-            <table>aw_projects</table>
-            <group>info</group>
-            <type>textbox</type>
-            <field>aw_contact_phone</field>
-            <caption>Telefon</caption>
-      </property>
-      <property>
-            <name>contact_email</name>
-            <table>aw_projects</table>
-            <group>info</group>
-            <type>textbox</type>
-            <field>aw_contact_email</field>
-            <caption>E-post</caption>
-      </property>
-      <property>
             <name>hrs_guess</name>
             <table>aw_projects</table>
             <group>info</group>

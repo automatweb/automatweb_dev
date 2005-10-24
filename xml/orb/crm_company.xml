@@ -262,5 +262,15 @@
 			</function>
 		</action>
 
+		<action name="create_new_monthly_bill">
+			<function name="create_new_monthly_bill">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="co" type="int" acl="view" />
+					<optional name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

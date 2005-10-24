@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.8 2005/10/21 09:21:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.9 2005/10/24 13:50:14 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -64,13 +64,21 @@ class crm_deal extends class_base
 			case "reader":
 				$u = get_instance("users");
 				$ui = get_instance(CL_USER);
-				$ps = obj($ui->get_person_for_user(obj($u->get_oid_for_uid($arr["obj_inst"]->createdby()))));
-				$co = obj($ui->get_company_for_person($ps));
+				$c_uid = $arr["obj_inst"]->createdby();
+				if ($c_uid != "")
+				{
+					$ps = obj($ui->get_person_for_user(obj($u->get_oid_for_uid($c_uid))));
+					$co = obj($ui->get_company_for_person($ps));
+				}
+				else
+				{
+					$co = obj($ui->get_current_company());
+				}
 
 				$c = get_instance(CL_CRM_COMPANY);
 				$prop["options"] = $c->get_employee_picker($co);
 	
-				if ($prop["value"] == "")
+				if ($prop["value"] == "" && $ps)
 				{
 					$prop["value"] = $ps->id();
 				}
@@ -93,6 +101,7 @@ class crm_deal extends class_base
 					$tmp = obj($prop["value"]);
 					$prop["options"][$tmp->id()] = $tmp->name();
 				}
+				asort($prop["options"]);
 				break;
 
 			case "customer":
@@ -112,6 +121,7 @@ class crm_deal extends class_base
 					$tmp = obj($prop["value"]);
 					$prop["options"][$tmp->id()] = $tmp->name();
 				}
+				asort($prop["options"]);
 				break;
 
 			case "task":
@@ -131,6 +141,7 @@ class crm_deal extends class_base
 					$tmp = obj($prop["value"]);
 					$prop["options"][$tmp->id()] = $tmp->name();
 				}
+				asort($prop["options"]);
 				break;
 		};
 		return $retval;

@@ -1155,6 +1155,11 @@ class crm_company_cust_impl extends class_base
 			$ret["state"] = $ar[$prefix."proj_search_state"];
 		}
 
+		if ($ar[$prefix."proj_search_contact_person"])
+		{
+			$ret["CL_PROJECT.contact_person_implementor.name"] = "%".$ar[$prefix."proj_search_contact_person"]."%";
+		}
+
 		return $ret;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.58 2005/10/24 07:04:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.59 2005/10/24 13:50:14 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -54,12 +54,6 @@
 
 	@property contact_person_implementor type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person_impl
 	@caption Teostaja kontaktisik
-
-	@property contact_phone type=textbox table=aw_projects field=aw_contact_phone
-	@caption Telefon
-
-	@property contact_email type=textbox table=aw_projects field=aw_contact_email
-	@caption E-post
 
 	@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5
 	@caption  Prognoositav tundide arv
@@ -373,6 +367,7 @@ class project extends class_base
 				{
 					$this->_proc_cp(obj($ord), $data);
 				}
+				asort($data["options"]);
 				break;
 
 			case "contact_person_implementor":
@@ -385,6 +380,7 @@ class project extends class_base
 				{
 					$this->_proc_cp(obj($ord), $data);
 				}
+				asort($data["options"]);
 				break;
 
 			case "orderer":
@@ -418,6 +414,7 @@ class project extends class_base
 					$tmp = obj($data["value"]);
 					$data["options"][$tmp->id()] = $tmp->name();
 				}
+				asort($data["options"]);
 				break;
 
 			case "implementor":
@@ -434,6 +431,7 @@ class project extends class_base
 					$tmp = obj($data["value"]);
 					$data["options"][$tmp->id()] = $tmp->name();
 				}
+				asort($data["options"]);
 				break;
 
 			case "participants":
@@ -455,6 +453,7 @@ class project extends class_base
 					$sel[$pt->prop("to")] = $pt->prop("to");
 				}
 				$data["options"] = array("" => t("--Vali--")) + $ol->names();
+				asort($data["options"]);
 				$data["value"] = $sel;
 				break;
 
@@ -508,7 +507,7 @@ class project extends class_base
 			case "create_task":
 				if ($prop["value"] == 1)
 				{
-					$this->_create_task($arr);
+					$this->do_create_task = 1;
 				}
 				break;
 
@@ -668,19 +667,43 @@ class project extends class_base
 
 			$link = $this->mk_my_orb("change",array("id" => $id,"return_url" => $req),$clid);
 
-			$t->add_item(array(
-				"item_start" => $start,
-				"item_end" => $end,
-				"data" => array(
-					"name" => $o->prop("name"),
-					"modifiedby" => $o->modifiedby(),
-					"modified" => $o->modified(),
-					"created" => $o->created(),
-					"createdby" => $o->createdby(),
-					"icon" => icons::get_icon_url($o),
-					"link" => $link,
-				),
-			));
+			$rows = safe_array($o->meta("rows"));
+			if (!count($rows))
+			{
+				$t->add_item(array(
+					"item_start" => $start,
+					"item_end" => $end,
+					"data" => array(
+						"name" => $o->prop("name"),
+						"modifiedby" => $o->modifiedby(),
+						"modified" => $o->modified(),
+						"created" => $o->created(),
+						"createdby" => $o->createdby(),
+						"icon" => icons::get_icon_url($o),
+						"link" => $link,
+					),
+				));
+			}
+			else
+			{
+				foreach($rows as $row)
+				{
+					$link = $this->mk_my_orb("change",array("group" => "rows", "id" => $id,"return_url" => $req),$clid)."#row_".$row["date"];
+					$t->add_item(array(
+						"item_start" => $row["date"],
+						"item_end" => $row["date"]+ 100,
+						"data" => array(
+							"name" => substr($row["task"], 0, 30),
+							"modifiedby" => $o->modifiedby(),
+							"modified" => $o->modified(),
+							"created" => $o->created(),
+							"createdby" => $o->createdby(),
+							"icon" => icons::get_icon_url($o),
+							"link" => $link,
+						),
+					));
+				}
+			}			
 
 			if ($start > $range["overview_start"])
 			{
@@ -2682,8 +2705,6 @@ class project extends class_base
 				"to" => $arr["request"]["connect_impl"],
 				"reltype" => "RELTYPE_PARTICIPANT"
 			));
-
-			$add_mem = true;
 		}
 		if (is_oid($arr["request"]["connect_orderer"]) && $this->can("view", $arr["request"]["connect_orderer"]))
 		{
@@ -2696,16 +2717,20 @@ class project extends class_base
 				"to" => $arr["request"]["connect_orderer"],
 				"reltype" => "RELTYPE_PARTICIPANT"
 			));
-			$add_mem = true;
 		}
 
-		if ($add_mem)
+		if ($this->do_create_task == 1)
+		{
+			$this->_create_task($arr);
+		}
+
+		/*if ($add_mem)
 		{
 			$arr["obj_inst"]->connect(array(
 				"to" => aw_global_get("uid_oid"),
 				"reltype" => "RELTYPE_PARTICIPANT"
 			));
-		}
+		}*/
 	}
 
 	function _mk_tbl()
@@ -3064,6 +3089,7 @@ class project extends class_base
 				"oid" => $o->id()
 			));
 		}
+		$t->set_default_sortby("person");
 	}
 
 	function _get_team_tb($arr)
