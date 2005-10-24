@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.20 2005/10/21 22:12:20 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.21 2005/10/24 16:16:39 ekke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -475,7 +475,10 @@ class crm_db extends class_base
 		{
 			// _virmade tabel, eh?
 			$obj = $conn->from();
-			$this->_add_org_to_table(&$tf,$obj);
+			if ($obj->class_id() == CL_CRM_COMPANY)
+			{
+				$this->_add_org_to_table(&$tf,$obj);
+			}
 		};
 
 				
@@ -1074,13 +1077,13 @@ class crm_db extends class_base
 			
 			$alist = array(
 				array(
-					'clid'			=> CL_CRM_SECTOR,
+					'clid' => CL_CRM_SECTOR,
 					),
 				array(
-					'clid'			=> CL_CRM_COMPANY,
-					'alias_to'	=> $args['request']['teg_oid'],
-					'reltype'		=> 5, // RELTYPE_TEGEVUSALAD
-					'disabled'	=> empty($args['request']['teg_oid']) ? t("Tegevusala valimata") : false,
+					'clid'=> CL_CRM_COMPANY,
+					'alias_to' => $args['request']['teg_oid'],
+					'reltype' => 5, // RELTYPE_TEGEVUSALAD
+					'disabled' => empty($args['request']['teg_oid']) ? t("Tegevusala valimata") : false,
 					),
 			);
 
@@ -1137,6 +1140,15 @@ class crm_db extends class_base
 					}
 				};
 			};
+			$toolbar->add_separator();
+	
+			$toolbar->add_button(array(
+				"name" => "delete",
+				"tooltip" => t("Kustuta"),
+				"action" => "delete_organizations",
+				"confirm" => t("Kustutada valitud organisatsioonid?"),
+				"img" => "delete.gif",
+			));
 		
 			$pl = get_instance(CL_PLANNER);
 			$cal_id = $pl->get_calendar_for_user(array(
