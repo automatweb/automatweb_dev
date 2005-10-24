@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.121 2005/10/19 06:43:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.122 2005/10/24 16:19:53 ekke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1184,6 +1184,10 @@ class htmlclient extends aw_template
 
 			case "href":
 				$retval = html::href($arr);
+				break;
+			case "hidden":	
+				// hidden elements end up in the orb_vars
+				$this->orb_vars[$item["name"]] = $item["value"];
 				break;
 
 			default:
