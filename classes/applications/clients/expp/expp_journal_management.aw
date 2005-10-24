@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.12 2005/10/23 23:12:41 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.13 2005/10/24 09:02:36 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -195,6 +195,12 @@ class expp_journal_management extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "text-color":
+				if (empty($prop['value']))
+				{
+					$prop['value'] = "#000000";
+				}
+				break;
 			case "template":
 				$prop['options'] = array(
 					"default_template" => t("Kasutan etteantud p&otilde;hja"),
