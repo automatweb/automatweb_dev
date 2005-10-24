@@ -10,6 +10,16 @@
             <caption>Riigi nimetus</caption>
       </property>
       <property>
+            <name>area_code</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>20</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Suunakood</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>

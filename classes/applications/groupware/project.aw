@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.57 2005/10/21 09:21:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.58 2005/10/24 07:04:23 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -70,7 +70,7 @@
 	@property description type=textarea rows=10 cols=50 table=aw_projects field=aw_description 
 	@caption Kirjeldus
 
-	@property proj_type type=classificator table=aw_projects field=aw_type store=connect reltype=RELTYPE_TYPE
+	@property proj_type type=classificator table=aw_projects field=aw_type store=connect reltype=RELTYPE_TYPE multiple=1
 	@caption Liik
 
 	@property create_task type=checkbox ch_value=1 store=no
@@ -361,15 +361,6 @@ class project extends class_base
 
 			case "sides":
 				$this->_sides($arr);
-				break;
-
-			case "code":
-				// call site based code gen
-				$si = __get_site_instance();
-				if (method_exists($si, "project_gen_code"))
-				{
-					$data["value"] = $si->project_gen_code($arr);
-				}
 				break;
 
 			case "contact_person_orderer":
@@ -3226,6 +3217,7 @@ class project extends class_base
 			$ord = reset($ord);
 		}
 
+		$o->set_name($arr["obj_inst"]->name());
 		$o->set_prop("customer", $ord);
 		$o->set_prop("project", $arr["obj_inst"]->id());
 		$o->save();
@@ -3501,6 +3493,19 @@ class project extends class_base
 			$this->_req_get_folders($ot, $folders, $o->id());
 		}
 		$this->_req_level--;
+	}
+
+	function callback_pre_save($arr)
+	{
+		if ($arr["obj_inst"]->prop("code") == "")
+		{
+			// call site based code gen
+			$si = __get_site_instance();
+			if (method_exists($si, "project_gen_code"))
+			{
+				$arr["obj_inst"]->set_prop("code", $si->project_gen_code($arr));
+			}
+		}
 	}
 };
 ?>

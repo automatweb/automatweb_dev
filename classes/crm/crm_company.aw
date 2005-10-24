@@ -2835,6 +2835,8 @@ class crm_company extends class_base
 
 	/**
 		@attrib name=mark_tasks_done
+		@param sel optional
+		@param post_ru required
 	**/
 	function mark_tasks_done($arr)
 	{
@@ -3298,6 +3300,39 @@ class crm_company extends class_base
 	function callback_pre_save($arr)
 	{
 		$this->_gen_company_code($arr["obj_inst"]);
+	}
+
+	/**
+		@attrib name=save_bill_list
+	**/
+	function save_bill_list($arr)
+	{
+		foreach(safe_array($arr["bill_states"]) as $bill_id => $state)
+		{
+			$bill = obj($bill_id);
+			if ($bill->prop("state") != $state)
+			{
+				$bill->set_prop("state", $state);
+				$bill->save();
+			}
+		}
+
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=delete_tasks
+		@param sel optional
+		@param post_ru required
+	**/
+	function delete_tasks($arr)
+	{
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			$ol = new object_list(array("oid" => $arr["sel"]));
+			$ol->delete();
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

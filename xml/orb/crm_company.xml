@@ -156,6 +156,8 @@
 		<action name="mark_tasks_done">
 			<function name="mark_tasks_done">
 				<arguments>
+					<optional name="sel" />
+					<required name="post_ru" />
 				</arguments>
 			</function>
 		</action>
@@ -240,6 +242,22 @@
 		<action name="delete_bills">
 			<function name="delete_bills">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_bill_list">
+			<function name="save_bill_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_tasks">
+			<function name="delete_tasks">
+				<arguments>
+					<optional name="sel" />
+					<required name="post_ru" />
 				</arguments>
 			</function>
 		</action>

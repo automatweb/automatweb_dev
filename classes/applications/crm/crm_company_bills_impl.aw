@@ -337,7 +337,11 @@ class crm_company_bills_impl extends class_base
 				"bill_date" => $bill->prop("bill_date"),
 				"bill_due_date" => $bill->prop("bill_due_date"),
 				"customer" => $cust,
-				"state" => $bill_i->states[$bill->prop("state")],
+				"state" => html::select(array(
+					"options" => $bill_i->states,
+					"selected" => $bill->prop("state"),
+					"name" => "bill_states[".$bill->id()."]"
+				)),
 				"sum" => number_format($cursum, 2),
 				"client_manager" => $cm,
 				"oid" => $bill->id(),
@@ -448,6 +452,12 @@ class crm_company_bills_impl extends class_base
 	function _get_bills_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			'name' => 'save',
+			'img' => 'save.gif',
+			'tooltip' => t('Salvesta'),
+			'action' => 'save_bill_list',
+		));
 		$tb->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',

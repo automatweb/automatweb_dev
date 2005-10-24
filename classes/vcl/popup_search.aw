@@ -198,6 +198,11 @@ class popup_search extends aw_template
 		));
 
 		$t->define_field(array(
+			"name" => "select_this",
+			"caption" => t("Vali"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
 			"name" => "oid",
 			"caption" => t("OID"),
 			"sortable" => 1,
@@ -207,6 +212,13 @@ class popup_search extends aw_template
 			"sortable" => 1,
 			"caption" => t("Nimi")
 		));
+
+		$t->define_field(array(
+			"name" => "parent",
+			"sortable" => 1,
+			"caption" => t("Asukoht")
+		));
+
 		$t->define_field(array(
 			"name" => "modifiedby",
 			"sortable" => 1,
@@ -267,14 +279,20 @@ class popup_search extends aw_template
 					"oid" => $o->id(),
 					"name" => html::href(array(
 						"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
-						"caption" => $o->path_str()
+						"caption" => $o->name(),
 					)),
+					"parent" => $o->path_str(array("max_len" => 3)),
 					"modifiedby" => $o->modifiedby(),
 					"modified" => $o->modified(),
 					"sel" => html::checkbox(array(
 						"name" => "sel[]",
 						"value" => $o->id(),
 						"checked" => isset($checked[$o->id()]) ? $checked[$o->id()] : 0,
+					)),
+					"select_this" => html::href(array(
+						"url" => "javascript:void(0)",
+						"caption" => t("Vali see"),
+						"onClick" => "window.opener.document.changeform.".$arr["pn"].".options[0]=new Option(".$o->id().",".$o->id().");window.opener.document.changeform.".$arr["pn"].".selectedIndex=0;window.opener.document.changeform.submit();window.close()"
 					))
 				));
 			}

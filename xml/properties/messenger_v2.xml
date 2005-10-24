@@ -106,13 +106,6 @@
             <method>serialize</method>
             <type>select</type>
             <default>1</default>
-            <options>
-                  <num_0>1</num_0>
-                  <num_1>2</num_1>
-                  <num_2>3</num_2>
-                  <num_3>4</num_3>
-                  <num_4>5</num_4>
-            </options>
             <caption>Manuste arv</caption>
       </property>
       <property>

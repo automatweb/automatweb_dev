@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.4 2005/10/21 09:21:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.5 2005/10/24 07:04:23 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -204,9 +204,11 @@ class crm_bill extends class_base
 
 				$t_inf = $inf[$id];
 				$t->define_data(array(
-					"name" => html::textbox(array(
+					"name" => html::textarea(array(
 						"name" => "rows[$id][name]",
-						"value" => $t_inf["name"]
+						"value" => $t_inf["name"],
+						"rows" => 5,
+						"cols" => 50
 					)),
 					"date" => html::textbox(array(
 						"name" => "rows[$id][date]",
@@ -351,6 +353,8 @@ class crm_bill extends class_base
 			$logo = $logo_i->make_img_tag_wl($logo_o->id());
 			$logo_url = $logo_i->get_url_by_id($logo_o->id());
 
+			$impl_phone = $impl->prop_str("phone_id");
+
 			if ($this->can("view", $impl->prop("contact")))
 			{
 				$ct = obj($impl->prop("contact"));
@@ -363,6 +367,11 @@ class crm_bill extends class_base
 				$aps .= $ct->prop_str("maakond");
 				$aps .= " ".$ct->prop("postiindeks");
 				$impl_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
+				if ($this->can("view", $ct->prop("riik")))
+				{
+					$riik = obj($ct->prop("riik"));
+					$impl_phone = $riik->prop("area_code")." ".$impl_phone;
+				}
 			}
 
 			if ($this->can("view", $impl->prop("email_id")))
@@ -370,6 +379,7 @@ class crm_bill extends class_base
 				$mail = obj($impl->prop("email_id"));
 				$impl_mail = $mail->prop("mail");
 			}
+
 		}
 
 		$this->vars(array(
@@ -389,7 +399,7 @@ class crm_bill extends class_base
 			"impl_address" => $impl_addr,
 			"impl_reg_nr" => $impl->prop("reg_nr"),
 			"impl_kmk_nr" => $impl->prop("tax_nr"),
-			"impl_phone" => $impl->prop_str("phone_id"),
+			"impl_phone" => $impl_phone,
 			"impl_fax" => $impl->prop_str("telefax_id"),
 			"impl_email" => $impl_mail,
 			"impl_url" => $impl->prop_str("url_id"),

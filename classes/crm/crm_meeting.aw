@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.33 2005/07/13 17:44:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.34 2005/10/24 07:04:23 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -8,6 +8,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @default table=objects
 @default group=general
+
+@property customer type=popup_search table=planner field=customer clid=CL_CRM_COMPANY
+@caption Klient
+
+@property project type=popup_search table=planner field=project clid=CL_PROJECT
+@caption Projekt
 
 @property info_on_object type=text store=no
 @caption Osalejad
@@ -68,6 +74,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property content type=textarea cols=60 rows=30 table=documents
 @caption Sisu
+
+@property participants type=select multiple=1 table=objects field=meta method=serialize
+@caption Osalejad
 
 @property summary type=textarea cols=60 rows=30 table=planner field=description
 @caption Kokkuvõte
@@ -148,6 +157,109 @@ class crm_meeting extends class_base
 		$data = &$arr['prop'];
 		switch($data['name'])
 		{
+			case "project":
+				if ($this->can("view",$arr["request"]["alias_to_org"]))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_PROJECT,
+						"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["request"]["alias_to_org"],
+					));
+				}
+				else
+				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_PROJECT,
+						"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["obj_inst"]->prop("customer"),
+					));
+				}
+				else
+				{
+					$i = get_instance(CL_CRM_COMPANY);
+					$prj = $i->get_my_projects();
+					if (!count($prj))
+					{
+						$ol = new object_list();
+					}
+					else
+					{
+						$ol = new object_list(array("oid" => $prj));
+					}
+				}
+
+				$data["options"] = array("" => "") + $ol->names();
+
+				if ($arr["request"]["set_proj"])
+				{
+					$data["value"] = $arr["request"]["set_proj"];
+				}
+
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
+				}
+				break;
+
+			case "customer":
+				$i = get_instance(CL_CRM_COMPANY);
+				$cst = $i->get_my_customers();
+				if (!count($cst))
+				{
+					$data["options"] = array("" => "");
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $cst));
+					$data["options"] = array("" => "") + $ol->names();
+				}
+				if ($arr["request"]["alias_to_org"])
+				{
+					$data["value"] = $arr["request"]["alias_to_org"];
+				}
+
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
+				}
+
+				if (is_object($arr["obj_inst"]))
+				{
+					$arr["obj_inst"]->set_prop("customer", $data["value"]);
+				}
+				break;
+
+			case "participants":
+				$opts = array();
+				$p = array();
+				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
+				{
+					$conns = $arr['obj_inst']->connections_to(array(
+						'type' => array( 8),//CRM_PERSON.RELTYPE_PERSON_MEETING==10
+					));
+					foreach($conns as $conn)
+					{
+						$obj = $conn->from();
+						$opts[$obj->id()] = $obj->name();
+						$p[$obj->id()] = $obj->id();
+					}
+				}
+				// also add all workers for my company
+				$u = get_instance(CL_USER);
+				$co = $u->get_current_company();
+				$w = array();
+				$i = get_instance(CL_CRM_COMPANY);
+				$i->get_all_workers_for_company(obj($co), &$w);
+				foreach($w as $oid)
+				{
+					$o = obj($oid);
+					$opts[$oid] = $o->name();
+				}
+				asort($opts);
+				$data["options"] = array("" => t("--Vali--")) + $opts;	
+				$data["value"] = $p;
+				break;
 		
          case 'info_on_object':
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
@@ -290,6 +402,41 @@ class crm_meeting extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "project":
+				$data["value"] = $_POST["project"];
+				// add to proj
+				if (is_oid($data["value"]) && $this->can("view", $data["value"]))
+				{
+					$this->add_to_proj = $data["value"];
+				}
+				break;
+
+			case "customer":
+				$data["value"] = $_POST["customer"];
+				break;
+
+			case "participants":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
+				$pl = get_instance(CL_PLANNER);
+				foreach(safe_array($data["value"]) as $person)
+				{
+					$p = obj($person);
+					$p->connect(array(
+						"to" => $arr["obj_inst"]->id(),
+						"reltype" => "RELTYPE_PERSON_MEETING"
+					));
+
+					// also add to their calendar
+					if (($cal = $pl->get_calendar_for_person($p)))
+					{
+						$pl->add_event_to_calendar(obj($cal), $arr["obj_inst"]);
+					}
+				}
+				break;
+
 			case "other_selector":
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_other_selector($arr);
@@ -323,6 +470,10 @@ class crm_meeting extends class_base
 				'reltype' => 'RELTYPE_PERSON_MEETING',
 				'to' => $arr['obj_inst'],
 			));
+		}
+		if ($this->add_to_proj)
+		{
+			$arr["obj_inst"]->create_brother($this->add_to_proj);
 		}
 	}
 		

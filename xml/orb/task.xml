@@ -19,5 +19,32 @@
 			</function>
 		</action>
 
+		<action name="create_bill_from_task">
+			<function name="create_bill_from_task">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="start_task_timer">
+			<function name="start_task_timer">
+				<arguments>
+					<required name="id" type="int" acl="edit" />
+					<required name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="stop_task_timer">
+			<function name="stop_task_timer">
+				<arguments>
+					<required name="id" type="int" acl="edit" />
+					<required name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

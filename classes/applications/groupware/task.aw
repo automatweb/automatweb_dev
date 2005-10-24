@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.24 2005/10/21 09:21:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.25 2005/10/24 07:04:23 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -127,6 +127,7 @@ caption Osalejad
 
 @default group=rows
 
+	@property rows_tb type=toolbar store=no no_caption=1
 	@property rows type=table store=no no_caption=1
 
 @groupinfo rows caption=Read 
@@ -165,6 +166,10 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "rows_tb":
+				$this->_rows_tb($arr);
+				break;
+
 			case "rows":
 				$this->_rows($arr);
 				break;
@@ -461,6 +466,10 @@ class task extends class_base
 					{
 						list($d,$m,$y) = explode("/", $e["date"]);
 						$e["date"] = mktime(0,0,0, $m, $d, $y);
+						if ($e["time_to_cust"] == "")
+						{
+							$e["time_to_cust"] = $e["time_real"];
+						}
 						$res[] = $e;
 					}
 				}
@@ -895,11 +904,11 @@ class task extends class_base
 			"align" => "center"
 		));
 
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "com",
 			"caption" => t("Kommentaar"),
 			"align" => "center"
-		));
+		));*/
 	}
 
 	function _rows($arr)
@@ -920,9 +929,11 @@ class task extends class_base
 		foreach($dat as $idx => $row)
 		{
 			$t->define_data(array(
-				"task" => html::textbox(array(
+				"task" => html::textarea(array(
 					"name" => "rows[$idx][task]",
-					"value" => $row["task"]
+					"value" => $row["task"],
+					"rows" => 5,
+					"cols" => 50
 				)),
 				"date" => html::textbox(array(
 					"name" => "rows[$idx][date]",
@@ -959,10 +970,10 @@ class task extends class_base
 					"value" => 1,
 					"checked" => $row["on_bill"]
 				)),
-				"com" => html::textbox(array(
+				/*"com" => html::textbox(array(
 					"name" => "rows[$idx][com]",
 					"value" => $row["com"],
-				)),
+				)),*/
 			));
 		}
 		$t->set_sortable(false);
@@ -1052,6 +1063,69 @@ class task extends class_base
 			$this->_req_get_folders($ot, $folders, $o->id());
 		}
 		$this->_req_level--;
+	}
+
+	function _rows_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			'name' => 'create_bill',
+			'img' => 'save.gif',
+			'tooltip' => t('Loo arve'),
+			'action' => 'create_bill_from_task',
+		));
+	}
+
+	/**
+		@attrib name=create_bill_from_task
+		@param id required type=int acl=view
+		@param post_ru required
+	**/
+	function create_bill_from_task($arr)
+	{
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+
+		$task = obj($arr["id"]);
+
+		$i = get_instance(CL_CRM_COMPANY);
+		return $i->create_bill(array(
+			"id" => $co,
+			"proj" => $task->prop("project"),
+			"sel" => array($task->id() => $task->id()),
+			"post_ru" => $arr["post_ru"]
+		));
+	}
+
+	/**
+		@attrib name=start_task_timer
+		@param id required type=int acl=edit
+		@param post_ru required
+	**/
+	function start_task_timer($arr)
+	{
+		$o = obj($arr["id"]);
+		$o->set_meta("stopper_state", "started");
+		$o->set_meta("stopper_start", time());
+		$o->save();
+
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=stop_task_timer
+		@param id required type=int acl=edit
+		@param post_ru required
+	**/
+	function stop_task_timer($arr)
+	{
+		$o = obj($arr["id"]);
+		$o->set_meta("stopper_total", $o->meta("stopper_total") + (time() - $o->meta("stopper_start")));
+		$o->set_meta("stopper_state", "");
+		$o->set_meta("stopper_start", 0);
+		$o->save();
+
+		return $arr["post_ru"];
 	}
 }
 ?>

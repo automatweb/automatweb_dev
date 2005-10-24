@@ -178,6 +178,7 @@
             <field>aw_type</field>
             <store>connect</store>
             <reltype>RELTYPE_TYPE</reltype>
+            <multiple>1</multiple>
             <caption>Liik</caption>
       </property>
       <property>

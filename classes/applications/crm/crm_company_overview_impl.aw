@@ -156,7 +156,7 @@ class crm_company_overview_impl extends class_base
 		$prop["value"] = $rv;
 	}
 
-	function _init_my_tasks_t(&$t, $data = false)
+	function _init_my_tasks_t(&$t, $data = false, $r = array())
 	{
 		if (is_array($data))
 		{
@@ -184,12 +184,29 @@ class crm_company_overview_impl extends class_base
 		));
 
 		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "menu",
+			"align" => "center",
+//			"chgbgcolor" => "col",
+		));
+
+		$t->define_field(array(
 			"caption" => t("Pealkiri"),
 			"name" => "name",
 			"align" => "center",
 //			"chgbgcolor" => "col",
 			"sortable" => 1
 		));
+
+		if ($r["group"] == "meetings")
+		{
+			$t->define_field(array(
+				"caption" => t("Toimumisaeg"),
+				"name" => "when",
+				"align" => "center",
+	//			"chgbgcolor" => "col",
+			));
+		}
 
 		$t->define_field(array(
 			"caption" => t("Klient"),
@@ -209,16 +226,19 @@ class crm_company_overview_impl extends class_base
 			"filter" => array_unique($filt["proj_name"])
 		));
 
-		$t->define_field(array(
-			"caption" => t("T&auml;htaeg"),
-			"name" => "deadline",
-			"align" => "center",
-			"sortable" => 1,
-			"numeric" => 1,
-			"type" => "time",
-			"chgbgcolor" => "col",
-			"format" => "d.m.Y H:i"
-		));
+		if ($r["group"] != "meetings")
+		{
+			$t->define_field(array(
+				"caption" => t("T&auml;htaeg"),
+				"name" => "deadline",
+				"align" => "center",
+				"sortable" => 1,
+				"numeric" => 1,
+				"type" => "time",
+				"chgbgcolor" => "col",
+				"format" => "d.m.Y H:i"
+			));
+		}
 
 		$t->define_field(array(
 			"caption" => t("Prioriteet"),
@@ -256,6 +276,7 @@ class crm_company_overview_impl extends class_base
 		classload("core/icons");
 
 		$ol = $this->_get_task_list($arr);
+		$pm = get_instance("vcl/popup_menu");
 
 		$table_data = array();
 		foreach($ol->ids() as $task_id)
@@ -298,6 +319,54 @@ class crm_company_overview_impl extends class_base
 				$ns[] = html::get_change_url($part->id(), array("return_url" => get_ru()), $part->name());
 			}
 
+			$t_id = $task->id();
+			$pm->begin_menu("task_".$t_id);
+			$pm->add_item(array(
+				"text" => t("Kustuta"), 
+				"link" => $this->mk_my_orb("delete_tasks", array(
+					"sel" => array($t_id => $t_id),
+					"post_ru" => get_ru()
+				), CL_CRM_COMPANY)
+			));
+			$pm->add_item(array(
+				"text" => t("M&auml;rgi tehtuks"), 
+				"link" => $this->mk_my_orb("mark_tasks_done", array(
+					"sel" => array($t_id => $t_id),
+					"post_ru" => get_ru()
+				), CL_CRM_COMPANY)
+			));
+			$pm->add_item(array(
+				"text" => t("Koosta arve"), 
+				"link" => $this->mk_my_orb("create_bill_from_task", array(
+					"id" => $t_id,
+					"post_ru" => get_ru()
+				), CL_TASK)
+			));
+			if ($task->meta("stopper_state") != "started")
+			{
+				$pm->add_item(array(
+					"text" => t("K&auml;ivita stopper"), 
+					"link" => $this->mk_my_orb("start_task_timer", array(
+						"id" => $t_id,
+						"post_ru" => get_ru()
+					), CL_TASK)
+				));
+			}
+			else
+			{
+				$elapsed = (time() - $task->meta("stopper_start")) + $task->meta("stopper_total");
+				$hrs = (int)($elapsed / 3600);
+				$mins = (int)(($elapsed - ($hrs * 3600)) / 60);
+				$elapsed = sprintf("%02d:%02d", $hrs, $mins); 
+				$pm->add_item(array(
+					"text" => sprintf(t("Peata stopper (%s)"), $elapsed), 
+					"link" => $this->mk_my_orb("stop_task_timer", array(
+						"id" => $t_id,
+						"post_ru" => get_ru()
+					), CL_TASK)
+				));
+			}
+			
 			$table_data[] = array(
 				"icon" => html::img(array("url" => icons::get_icon_url($task))),
 				"customer" => $cust_str,
@@ -307,12 +376,14 @@ class crm_company_overview_impl extends class_base
 				"oid" => $task->id(),
 				"priority" => $task->prop("priority"),
 				"col" => $col,
-				"parts" => join(", ", $ns)
+				"parts" => join(", ", $ns),
+				"menu" => $pm->get_menu(),
+				"when" => date("d.m.Y H:i", $task->prop("start1"))." - ".date("d.m.Y H:i",$task->prop("end"))
 			);
 		}
 
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_my_tasks_t($t, $table_data);
+		$this->_init_my_tasks_t($t, $table_data, $arr["request"]);
 
 		foreach($table_data as $row)
 		{
@@ -467,11 +538,33 @@ class crm_company_overview_impl extends class_base
 			));
 		}
 
+		$tb->add_menu_item(array(
+			'parent' => 'add_item',
+			"text" => t("P&auml;eva raport"),
+			'link' => html::get_new_url(
+				CL_CRM_DAY_REPORT, 
+				$arr["obj_inst"]->id(), 
+				array(
+					"alias_to" => $arr["obj_inst"]->id(),
+					"reltype" => 39,
+					"return_url" => get_ru()
+				)
+			),
+		));
+
 		$tb->add_button(array(
 			'name' => 'mark_as_done',
 			'img' => 'save.gif',
 			'tooltip' => t('M&auml;rgi tehtuks'),
 			'action' => 'mark_tasks_done',
+		));
+
+		$tb->add_button(array(
+			'name' => 'delete_tasks',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta toimetused'),
+			"confirm" => t("Oled kindel et soovid valitud toimetusi kustutada?"),
+			'action' => 'delete_tasks',
 		));
 
 		$tb->add_separator();
@@ -561,7 +654,6 @@ class crm_company_overview_impl extends class_base
 		switch($arr["request"]["group"])
 		{
 			case "my_tasks":
-			case "overview":
 				$tasks = $i->get_my_tasks();
 				$clid = CL_TASK;
 				break;
@@ -586,7 +678,6 @@ class crm_company_overview_impl extends class_base
 				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
 				break;
 		}
-
 		if ($arr["request"]["act_s_sbt"] != "")
 		{
 			// filter

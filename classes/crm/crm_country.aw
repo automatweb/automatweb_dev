@@ -8,6 +8,9 @@
 	@property name type=textbox size=20
 	@caption Riigi nimetus
 
+	@property area_code type=textbox size=20 field=meta method=serialize
+	@caption Suunakood
+
 	@property comment type=textarea field=comment
 	@caption Kommentaar
 
