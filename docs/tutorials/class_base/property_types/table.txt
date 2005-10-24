@@ -190,28 +190,27 @@ $t->define_data(array(
 #/php#
 
 <b>Paging</b>
-If you have lots of data to present (more than 100 rows) then it's impractical to put them all on one page. Fortunetaly the table class has a built-in paging methods
-(for example, you can have 4 pages with 25 rows on each, or whatever combination suits you)
+If you have lots of data to present (more than 100 rows) then it's impractical to put them all on one page. Fortunetaly the table class has a built-in paging methods (for example, you can have 4 pages with 25 rows on each, or whatever combination suits you)
 
-For paging to work you need to know how many rows of data you have in total and how many of those. You want on one page.
+For paging to work you need to know how many rows You want on one page.
 
 The following code should be placed _after_ field definitions and _before_ defining data.
 #php#
-$t->d_row_cnt = 100; // total rows
 $perpage = 25; // rows on a single page
-$t->draw_lb_pageselector(array(
- "records_per_page" => $perpage
+$type = "lb"; // pageselector type (see below for available types)
+$t->define_pageselector (array (
+ "records_per_page" => $perpage,
+ "type" = $type,
 ));
 #/php#
 This will put a listbox with 4 items in it above your table and by default the first page will be active. Selecting any other page from the listbox will display that page. And again, you do not need to write any additional code for this to work.
 
 There are 3 types of pageselectors defined currently:
-<em>draw_lb_pageselector</em> - draws a listbox with pages
-<em>draw_text_pageselector</em> - textual links for each page. Clicking loads the correspondending page.
-<em>draw_button_pageselector</em> - buttons for each page. Clicking on the button loads the correspondending page.
+<em>lb</em> - draws a listbox with pages
+<em>text</em> - textual links for each page. Clicking loads the correspondending page.
+<em>buttons</em> - buttons for each page. Clicking on the button loads the correspondending page.
 
 <b>Selectors</b>
-
 Sometimes you need to let the user pick rows from a table by putting a checkbox on each line. Table class has a method to make this easy - put the following code after defining data for the table.
 
 #php#
