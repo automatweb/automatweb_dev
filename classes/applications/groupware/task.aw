@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.26 2005/10/24 13:50:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.27 2005/10/24 13:57:41 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1175,7 +1175,7 @@ class task extends class_base
 					$u_o = obj($u->get_oid_for_uid($uid));
 
 					$u = get_instance(CL_USER);
-					$p = $u->get_person_for_user($u_o);
+					$p = obj($u->get_person_for_user($u_o));
 					$n = sprintf(t("%s toimetus"), $p->name());
 				}
 			}
