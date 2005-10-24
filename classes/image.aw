@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.146 2005/10/21 21:06:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.147 2005/10/24 10:55:52 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -773,6 +773,7 @@ class image extends class_base
 			case "file":
 			case "file2":
 				$src_file = $ftype = "";
+				$oldfile = $arr["obj_inst"]->prop($prop["name"]);
 				if (!empty($prop["value"]["tmp_name"]))
 				{
 					// this happens if for example releditor is used
@@ -802,6 +803,11 @@ class image extends class_base
 					));
 				
 					move_uploaded_file($src_file, $final_name);
+					// get rid of the old file
+					if (file_exists($oldfile))
+					{
+						@unlink($oldfile);
+					}
 					$prop["value"] = $final_name;
 					if ($arr["obj_inst"]->name() == "")
 					{
@@ -817,6 +823,11 @@ class image extends class_base
 			case "file2_del":
 				if ($prop["value"] == 1)
 				{
+					$oldfile = $arr["obj_inst"]->prop("file2");
+					if (file_exists($oldfile))
+					{
+						@unlink($oldfile);
+					};
 					$arr["obj_inst"]->set_prop("file2","");
 				};
 				break;
