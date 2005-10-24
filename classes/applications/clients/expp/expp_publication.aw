@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_publication.aw,v 1.1 2005/09/27 15:34:55 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_publication.aw,v 1.2 2005/10/24 10:27:48 dragut Exp $
 // expp_publication.aw - V&auml;ljaanne 
 /*
 
@@ -7,6 +7,12 @@
 
 @default table=objects
 @default group=general
+
+@property description_from_reggy type=textarea field=meta method=serialize
+@caption Kirjeldus Reggy-st
+
+@property description type=textarea field=meta method=serialize
+@caption Kirjeldus
 
 */
 
