@@ -1447,6 +1447,20 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "openhours":
+				if (empty($arr['prop']['id']) && is_oid($arr['obj_inst']->id()))
+				{
+					// create new openhours obj as child
+					$oh = new object(array(
+						'parent' => $arr['obj_inst']->id(),
+						'class_id' => CL_OPENHOURS,
+						'name' => $arr['obj_inst']->name().' avatud',
+						'status' => STAT_ACTIVE,
+					));
+					$oh->save();
+					$arr['prop']['id'] = $oh->id();
+				}
+			break;
 			case "name":
 				if ($data["value"] == "")
 				{
@@ -1947,7 +1961,7 @@ class crm_company extends class_base
 	}
 
 	/**
-		@attrib name=create_new_company
+		@attrib name=create_new_company all_args="1"
 	**/
 	function create_new_company($arr)
 	{
@@ -1975,6 +1989,20 @@ class crm_company extends class_base
 		{
 			//the company GETS A REGISTRATION NuMbEr
 			$new_company->set_prop('reg_nr',trim($arr['customer_search_reg']));
+		}
+		
+		if(!empty($arr['sector']) && is_oid($arr['sector']) && $this->can("view", $arr['sector']))
+		{
+			$sect = obj($arr['sector']);
+			if ($sect->class_id() == CL_CRM_SECTOR)
+			{
+				// the company GETS A SECTOR! AIN'T THIS FUN?
+				$new_company->connect(array(
+					'to' => $arr['sector'],
+					'type' => 'RELTYPE_TEGEVUSALAD'
+				));
+				$new_company->set_prop('pohitegevus', $arr['sector']);
+			}
 		}
 
 		//won't create the address object and connection unless some fields from the
@@ -3404,5 +3432,43 @@ class crm_company extends class_base
 			));
 		}
 	}
+
+
+	// Finds first matching CRM_FIELD object and it's properties
+	//  oid - oid of CRM_COMPANY
+	//  type - FIELD type (suffix of class_id) - ec ACCOMMODATION for CL_CRM_FIELD_ACCOMMODATION
+	function find_crm_field_obj($arr)
+	{
+		$c = obj($arr['oid']);
+		if (!is_object($c) || $c->class_id() != CL_CRM_COMPANY || empty($arr['type'])) 
+		{
+			return;
+		}
+		$type = constant('CL_CRM_FIELD_'.strtoupper($arr['type']));
+		if (!is_numeric($type))
+		{
+			return;
+		}
+		
+		// Get first object reltype RELTYPE_FIELD of class CL_CRM_FIELD_ACCOMMODATION
+		$conns = $c->connections_from(array(
+			'type' => 'RELTYPE_FIELD',
+		));
+		$found = false;
+		foreach ($conns as $con)
+		{
+			$o = $con->to();
+			if ($o->class_id() == $type)
+			{
+				$found = true;
+				break;
+			}
+		}
+		if ($found)
+		{
+			return $o;
+		}
+	}				
+	
 }
 ?>
