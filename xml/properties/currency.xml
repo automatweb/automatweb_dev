@@ -17,6 +17,24 @@
             <field>comment</field>
             <caption>Kurss saksa marga suhtes</caption>
       </property>
+      <property>
+            <name>unit_name</name>
+            <group>general</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Raha&amp;uuml;hiku nimetus</caption>
+      </property>
+      <property>
+            <name>small_unit_name</name>
+            <group>general</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Peenraha&amp;uuml;hiku nimetus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CURRENCY</syslog_type>
             <no_status>1</no_status>

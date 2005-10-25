@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.59 2005/10/24 13:50:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.60 2005/10/25 12:22:04 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -404,7 +404,8 @@ class project extends class_base
 							"CL_CRM_PERSON.client_manager" => $me,
 							"CL_CRM_COMPANY.client_manager" => $me
 						)
-					))
+					)),
+					"brother_of" => new obj_predicate_prop("id")
 				));
 
 

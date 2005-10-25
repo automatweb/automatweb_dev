@@ -1346,17 +1346,32 @@ class crm_company_cust_impl extends class_base
 
 		if ($r["customer_search_city"] != "")
 		{
-			$ret["CL_CRM_COMPANY.contact.linn"] = "%".$r["customer_search_city"]."%";
+			$ret["CL_CRM_COMPANY.contact.linn.name"] = "%".$r["customer_search_city"]."%";
 		}
 
 		if ($r["customer_search_county"] != "")
 		{
-			$ret["CL_CRM_COMPANY.contact.maakond"] = "%".$r["customer_search_county"]."%";
+			$ret["CL_CRM_COMPANY.contact.maakond.name"] = "%".$r["customer_search_county"]."%";
 		}
 
 		if ($r["customer_search_ev"] != "")
 		{
-			$ret["ettevotlusvorm"] = "%".$r["customer_search_ev"]."%";
+			$ret["CL_CRM_COMPANY.ettevotlusvorm.name"] = "%".$r["customer_search_ev"]."%";
+		}
+
+		if (empty($r["customer_search_is_co"]["is_co"]) && empty($r["customer_search_is_co"]["is_person"]))
+		{
+			$ret["oid"] = -1;
+		}
+		else
+		if (empty($r["customer_search_is_co"]["is_co"]) && !empty($r["customer_search_is_co"]["is_person"]))
+		{
+			$ret["class_id"] = CL_CRM_PERSON;
+		}
+		else
+		if (!empty($r["customer_search_is_co"]["is_co"]) && empty($r["customer_search_is_co"]["is_person"]))
+		{
+			$ret["class_id"] = CL_CRM_COMPANY;
 		}
 
 		if ($r["customer_search_cust_mgr"] != "")
@@ -1370,6 +1385,22 @@ class crm_company_cust_impl extends class_base
 			));
 		}
 		return $ret;
+	}
+
+	function _get_customer_search_is_co($arr)
+	{
+		$arr["prop"]["options"] = array(
+			"is_co" => t("Organisatsioon"),
+			"is_person" => t("Eraisik")
+		);
+		if (empty($arr["request"]["customer_search_submit"]))
+		{
+			$arr["prop"]["value"] = array("is_co" => "is_co", "is_person" => "is_person");
+		}
+		else
+		{
+			$arr["prop"]["value"] = $arr["request"][$arr["prop"]["name"]];
+		}
 	}
 }
 ?>

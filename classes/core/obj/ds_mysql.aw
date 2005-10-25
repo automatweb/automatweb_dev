@@ -1734,6 +1734,7 @@ die(dbg::dump($ret));
 				}
 
 				$new_t = $GLOBALS["tableinfo"][$join["to_class"]];
+
 				if (is_array($new_t))
 				{
 					$tbl = $tbl_r = reset(array_keys($new_t));
@@ -1745,6 +1746,18 @@ die(dbg::dump($ret));
 						$this->joins[] = $str;
 						$done_ot_js[$tbl_r] = 1;
 						$prev_t = $tbl;
+					}
+
+					// now, if the next join is via rel, we are gonna need the objects table here as well, so add that
+					if ($this->join_data[$pos+1]["via"] == "rel")
+					{
+						$o_field = "oid";
+						$o_tbl = "objects_".$join["to_class"];
+						if (!isset($done_ot_js[$o_tbl]))
+						{
+							$str = " LEFT JOIN objects $o_tbl ON ".$o_tbl.".".$o_field." = ".$tbl.".".$field;
+							$this->joins[] = $str;
+						}
 					}
 				}
 			}

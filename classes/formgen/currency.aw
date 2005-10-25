@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.3 2005/10/21 09:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.4 2005/10/25 12:22:04 kristo Exp $
 // currency.aw - Currency management
 
 /*
@@ -13,6 +13,12 @@
 
 @property comment type=textbox table=objects field=comment 
 @caption Kurss saksa marga suhtes
+
+@property unit_name type=textbox table=objects field=meta method=serialize
+@caption Raha&uuml;hiku nimetus
+
+@property small_unit_name type=textbox table=objects field=meta method=serialize
+@caption Peenraha&uuml;hiku nimetus
 
 */
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.122 2005/10/24 16:19:53 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.123 2005/10/25 12:22:04 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -931,6 +931,42 @@ class htmlclient extends aw_template
 					'parent' => $_REQUEST["id"],
 					'return_url' => get_ru()
 				));
+				$call_url = $this->mk_my_orb('new',array(
+					'alias_to_org' => $_REQUEST["id"],
+					'reltype_org' => 12,
+					'class' => 'planner',
+					'id' => $this->cal_id,
+					'group' => 'add_event',
+					'clid' => CL_CRM_CALL,
+					'action' => 'change',
+					'title' => t("K&otilde;ne"),
+					'parent' => $_REQUEST["id"],
+					'return_url' => get_ru()
+				));
+				$meeting_url = $this->mk_my_orb('new',array(
+					'alias_to_org' => $_REQUEST["id"],
+					'reltype_org' => 11,
+					'class' => 'planner',
+					'id' => $this->cal_id,
+					'group' => 'add_event',
+					'clid' => CL_CRM_MEETING,
+					'action' => 'change',
+					'title' => t("Kohtumine"),
+					'parent' => $_REQUEST["id"],
+					'return_url' => get_ru()
+				));
+				$offer_url = $this->mk_my_orb('new',array(
+					'alias_to_org' => $_REQUEST["id"],
+					'reltype_org' => 9,
+					'class' => 'planner',
+					'id' => $this->cal_id,
+					'group' => 'add_event',
+					'clid' => CL_CRM_OFFER,
+					'action' => 'change',
+					'title' => t("Pakkumine"),
+					'parent' => $_REQUEST["id"],
+					'return_url' => get_ru()
+				));
 
 				$bill_url = aw_url_change_var("group", "bills", aw_url_change_var("proj", NULL));
 				$adds =  $this->picker("", array(
@@ -939,7 +975,11 @@ class htmlclient extends aw_template
 					$cust_url_pri => "Klient (eraisik)",
 					$proj_url => "Projekt",
 					$task_url => "Toimetus",
-					$bill_url => "Arve"
+					$bill_url => "Arve",
+					$call_url => "K&otilde;ne",
+					$meeting_url => "Kohtumine",
+					$offer_url => "Pakkumine",
+					aw_ini_get("baseurl")."/orb.aw?class=users&action=logout" => "Logi v&auml;lja"
 				));
 
 				$tp->vars(array(

@@ -411,9 +411,15 @@ class crm_company_overview_impl extends class_base
 			"brother_of" => new obj_predicate_prop("id")
 			//"oid" => $tasks
 		);
-
 		$clss = aw_ini_get("classes");
-		$def = $clss[$clid]["def"];
+		if (is_array($clid))
+		{
+			$def = CL_TASK;
+		}
+		else
+		{
+			$def = $clss[$clid]["def"];
+		}
 	
 		if ($r["act_s_cust"] != "")
 		{

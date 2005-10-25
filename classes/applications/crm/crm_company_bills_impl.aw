@@ -108,7 +108,7 @@ class crm_company_bills_impl extends class_base
 			$po = obj($p);
 
 			$t->define_data(array(
-				"name" => html::get_change_url($p, array("return_url" => get_ru()), $po->name()),
+				"name" => html::obj_change_url($po),
 				"open" => html::href(array(
 					"url" => aw_url_change_var("proj", $p),
 					"caption" => t("Loo arve")

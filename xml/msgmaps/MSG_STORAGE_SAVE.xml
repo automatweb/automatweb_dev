@@ -35,53 +35,58 @@
       <param>CL_RECURRENCE</param>
 </num_6>
 <num_7>
-      <class>crm/crm_user_creator</class>
-      <func>on_save_person</func>
-      <param>CL_CRM_PERSON</param>
+      <class>crm/crm_company</class>
+      <func>on_save_address</func>
+      <param>CL_CRM_ADDRESS</param>
 </num_7>
 <num_8>
       <class>crm/crm_user_creator</class>
-      <func>on_save_co</func>
-      <param>CL_CRM_COMPANY</param>
+      <func>on_save_person</func>
+      <param>CL_CRM_PERSON</param>
 </num_8>
 <num_9>
-      <class>core/users/user</class>
-      <func>on_save_user</func>
-      <param>CL_USER</param>
+      <class>crm/crm_user_creator</class>
+      <func>on_save_co</func>
+      <param>CL_CRM_COMPANY</param>
 </num_9>
 <num_10>
       <class>core/users/user</class>
-      <func>on_save_addr</func>
-      <param>CL_ML_MEMBER</param>
+      <func>on_save_user</func>
+      <param>CL_USER</param>
 </num_10>
 <num_11>
+      <class>core/users/user</class>
+      <func>on_save_addr</func>
+      <param>CL_ML_MEMBER</param>
+</num_11>
+<num_12>
       <class>core/users/group</class>
       <func>on_save_grp</func>
       <param>CL_GROUP</param>
-</num_11>
-<num_12>
+</num_12>
+<num_13>
       <class>core/obj_inherit_props_conf</class>
       <func>on_save_conf</func>
       <param>CL_OBJ_INHERIT_PROPS_CONF</param>
-</num_12>
-<num_13>
+</num_13>
+<num_14>
       <class>applications/personnel_management/personnel_management_cv</class>
       <func>on_cv_save</func>
       <param>CL_PERSONNEL_MANAGEMENT_CV</param>
-</num_13>
-<num_14>
+</num_14>
+<num_15>
       <class>applications/personnel_management/personnel_management_job_offer</class>
       <func>on_job_save</func>
       <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
-</num_14>
-<num_15>
+</num_15>
+<num_16>
       <class>doc</class>
       <func>on_save_document</func>
       <param>CL_DOCUMENT</param>
-</num_15>
-<num_16>
+</num_16>
+<num_17>
       <class>mrp/mrp_case</class>
       <func>on_save_case</func>
       <param>CL_MRP_CASE</param>
-</num_16>
+</num_17>
 </xml>

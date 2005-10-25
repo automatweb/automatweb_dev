@@ -3,6 +3,7 @@
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_org)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_CRM_ADDRESS, on_save_address)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY no_status=1 r2=yes
@@ -255,6 +256,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 			@property customer_search_ev type=textbox size=30 store=no parent=vbox_customers_left captionside=top
 			@caption &Otilde;iguslik vorm
 
+			@property customer_search_is_co type=chooser  store=no parent=vbox_customers_left multiple=1 no_caption=1
+			@caption Organisatsioon 
+
 			@property customer_search_cust_mgr type=text size=25 store=no parent=vbox_customers_left captionside=top
 			@caption Kliendihaldur
 
@@ -417,7 +421,7 @@ default group=org_objects
 				@caption Liik
 
 				@property docs_s_task type=textbox size=30 store=no captionside=top parent=docs_search
-				@caption Juhtum
+				@caption Toimetus
 
 				@property docs_s_user type=textbox size=30 store=no captionside=top parent=docs_search
 				@caption Tegija
@@ -1100,6 +1104,7 @@ class crm_company extends class_base
 			/// CUSTOMER tab
 			case "my_projects":
 			case "customer_search_cust_mgr":
+			case "customer_search_is_co":
 			case "my_customers_toolbar":
 			case "my_customers_listing_tree":
 			case "my_customers_table":
@@ -2152,6 +2157,7 @@ class crm_company extends class_base
 			$arr['args']['customer_search_city'] = urlencode($arr['request']['customer_search_city']);
 			$arr['args']['customer_search_county'] = urlencode($arr['request']['customer_search_county']);
 			$arr['args']['customer_search_submit'] = $arr['request']['customer_search_submit'];
+			$arr['args']['customer_search_is_co'] = $arr['request']['customer_search_is_co'];
 		}
 
 		if ($arr["request"]["proj_search_sbt"])
@@ -3308,7 +3314,20 @@ class crm_company extends class_base
 			return $res;
 		}
 		$ol = new object_list(array("oid" => $res, "sort_by" => "objects.name"));
-		return ($add_empty ? array("" => t("--vali--")) : array()) +  $ol->names();
+		$res = ($add_empty ? array("" => t("--vali--")) : array()) +  $ol->names();
+		uasort($res, array(&$this, "__person_name_sorter"));
+		return $res;
+	}
+
+	function __person_name_sorter($a, $b)
+	{
+		list($a_fn, $a_ln) = explode(" ", $a);
+		list($b_fn, $b_ln) = explode(" ", $b);
+		if ($a_ln == $b_ln)
+		{
+			return strcmp($a_fn, $b_fn);
+		}
+		return strcmp($a_ln, $b_ln);
 	}
 
 	function _gen_company_code($co)
@@ -3430,6 +3449,22 @@ class crm_company extends class_base
 				"group" => "bills_list",
 				"return_url" => urlencode($arr["post_ru"])
 			));
+		}
+	}
+
+	// handler for address save message
+	function on_save_address($arr)
+	{
+		// get all companies with empty codes that have this country
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"contact" => $arr["oid"],
+			"code" => ''
+		));
+		foreach($ol->arr() as $o)
+		{
+			$i = $o->instance();
+			$i->_gen_company_code($o);
 		}
 	}
 

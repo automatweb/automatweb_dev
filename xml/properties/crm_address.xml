@@ -26,7 +26,7 @@
             <size>5</size>
             <maxlength>5</maxlength>
             <field>postiindeks</field>
-            <caption>Postiindex</caption>
+            <caption>Postiindeks</caption>
       </property>
       <property>
             <name>linn</name>

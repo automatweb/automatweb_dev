@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.6 2005/10/24 13:50:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.7 2005/10/25 12:22:04 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -311,6 +311,7 @@ class crm_bill extends class_base
 		$this->read_site_template("show.tpl");
 
 		$ord = obj();
+		$ord_cur = obj();
 		if ($this->can("view", $b->prop("customer")))
 		{
 			$ord = obj($b->prop("customer"));
@@ -335,6 +336,11 @@ class crm_bill extends class_base
 				$aps .= $ct->prop_str("maakond");
 				$aps .= " ".$ct->prop("postiindeks");
 				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
+			}
+
+			if ($this->can("view", $ord->prop("currency")))
+			{
+				$ord_cur = obj($ord->prop("currency"));
 			}
 		}
 		$logo = "";
@@ -464,7 +470,7 @@ class crm_bill extends class_base
 			"total_wo_tax" => number_format($sum_wo_tax, 2),
 			"tax" => number_format($tax, 2),
 			"total" => number_format($sum, 2),
-			"total_text" => locale::get_lc_money_text($sum)
+			"total_text" => locale::get_lc_money_text($sum, $ord_cur)
 		));
 
 		$res =  $this->parse();

@@ -260,7 +260,10 @@ class crm_company_docs_impl extends class_base
 				"conditions" => array(
 					"CL_CRM_MEMO.task.name" => "%".$req["docs_s_task"]."%",
 					"CL_CRM_DOCUMENT.task.name" => "%".$req["docs_s_task"]."%",
-					"CL_CRM_DEAL.task.name" => "%".$req["docs_s_task"]."%"
+					"CL_CRM_DEAL.task.name" => "%".$req["docs_s_task"]."%",
+					"CL_CRM_MEMO.task.content" => "%".$req["docs_s_task"]."%",
+					"CL_CRM_DOCUMENT.task.content" => "%".$req["docs_s_task"]."%",
+					"CL_CRM_DEAL.task.content" => "%".$req["docs_s_task"]."%",
 				)
 			));
 			$has = true;

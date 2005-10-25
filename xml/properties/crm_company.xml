@@ -703,6 +703,18 @@
             <caption>&amp;Otilde;iguslik vorm</caption>
       </property>
       <property>
+            <name>customer_search_is_co</name>
+            <table>objects</table>
+            <group>relorg</group>
+            <type>chooser</type>
+            <store>no</store>
+            <parent>vbox_customers_left</parent>
+            <multiple>1</multiple>
+            <no_caption>1</no_caption>
+            <field>customer_search_is_co</field>
+            <caption>Organisatsioon </caption>
+      </property>
+      <property>
             <name>customer_search_cust_mgr</name>
             <table>objects</table>
             <group>relorg</group>
@@ -1160,7 +1172,7 @@
             <captionside>top</captionside>
             <parent>docs_search</parent>
             <field>docs_s_task</field>
-            <caption>Juhtum</caption>
+            <caption>Toimetus</caption>
       </property>
       <property>
             <name>docs_s_user</name>

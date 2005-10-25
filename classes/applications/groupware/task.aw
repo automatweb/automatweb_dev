@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.27 2005/10/24 13:57:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.28 2005/10/25 12:22:04 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -586,6 +586,11 @@ class task extends class_base
 		return $retval;
 	}
 
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
+
 	function callback_pre_save($arr)
 	{
 		if ($arr["obj_inst"]->name() == "")
@@ -1099,12 +1104,21 @@ class task extends class_base
 	function _rows_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_button(array(
+		$b = array(
 			'name' => 'create_bill',
 			'img' => 'save.gif',
 			'tooltip' => t('Loo arve'),
-			'action' => 'create_bill_from_task',
-		));
+		);
+
+		if ($arr["obj_inst"]->prop("bill_no") != "")
+		{
+			$b["url"] = html::get_change_url($arr["obj_inst"]->prop("bill_no"), array("return_url" => get_ru()));
+		}
+		else
+		{
+			$b['action'] = 'create_bill_from_task';
+		}
+		$tb->add_button($b);
 	}
 
 	/**

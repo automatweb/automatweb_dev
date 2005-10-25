@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.205 2005/10/24 13:50:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.206 2005/10/25 12:22:03 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1393,7 +1393,7 @@ if (!defined("DEFS"))
 			};
 		}
 
-		function get_lc_money_text($number)
+		function get_lc_money_text($number, $currency)
 		{
 			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/number", array(), false);
 			if(!is_object($this->lc_date_inst))
@@ -1402,7 +1402,7 @@ if (!defined("DEFS"))
 			};
 			if (method_exists($this->lc_date_inst,"get_lc_money_text"))
 			{
-				return $this->lc_date_inst->get_lc_money_text($number);
+				return $this->lc_date_inst->get_lc_money_text($number, $currency);
 			}
 			else
 			{

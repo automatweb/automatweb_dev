@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.35 2005/10/24 13:50:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.36 2005/10/25 12:22:04 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -259,9 +259,11 @@ class crm_meeting extends class_base
 					$o = obj($oid);
 					$opts[$oid] = $o->name();
 				}
-				asort($opts);
+
+				$i = get_instance(CL_CRM_COMPANY);
+				uasort($opts, array(&$i, "__person_name_sorter"));
+
 				$data["options"] = array("" => t("--Vali--")) + $opts;	
-				asort($data["options"]);
 				$data["value"] = $p;
 				break;
 		
