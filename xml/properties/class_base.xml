@@ -57,6 +57,7 @@
                   <caption>&amp;Uuml;ldine</caption>
                   <default>1</default>
                   <icon>edit</icon>
+                  <focus>name</focus>
             </general>
       </groupinfo>
       <forminfo>
