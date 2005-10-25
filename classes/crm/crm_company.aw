@@ -1049,7 +1049,7 @@ class crm_company extends class_base
 							"class_id" => CL_CRM_PERSON,
 							"CL_CRM_PERSON.address.riik.name" => $rk->name()
 						));
-						$code .= sprintf("%04d", $ol->count() + $ol2->count());
+						$code .= "-".sprintf("%04d", $ol->count() + $ol2->count());
 						$data["value"] = $code;
 					}
 				}
@@ -2918,10 +2918,15 @@ class crm_company extends class_base
 			$conns_ol = new object_list(array(
 				"oid" => $conns_ol->ids(),
 				"class_id" => CL_PROJECT,
-				"state" => new obj_predicate_not(PROJ_DONE)
+				"state" => new obj_predicate_not(PROJ_DONE),
+				"lang_id" => array()
 			));
 		}
-
+		/*$conns_ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"lang_id" => array(),
+			"site_id" => array()
+		));*/
 		return $conns_ol->ids();
 	}
 

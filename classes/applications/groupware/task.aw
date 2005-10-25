@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.28 2005/10/25 12:22:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.29 2005/10/25 12:52:31 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1034,7 +1034,7 @@ class task extends class_base
 					"date" => $row["date"],
 					"price" => $task->prop("hr_price"),
 					"amt" => $row["time_to_cust"],
-					"sum" => str_replace(",", ".", $row["time"]) * $task->prop("hr_price"),
+					"sum" => str_replace(",", ".", $row["time_to_cust"]) * $task->prop("hr_price"),
 					"has_tax" => 1
 				);
 			}

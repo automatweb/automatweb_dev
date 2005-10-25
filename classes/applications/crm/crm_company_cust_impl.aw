@@ -104,7 +104,7 @@ class crm_company_cust_impl extends class_base
 		{
 			$prj = $arr["prj"];
 		}
-
+		
 		if (!count($prj))
 		{
 			$conns_ol = new object_list();
@@ -117,12 +117,13 @@ class crm_company_cust_impl extends class_base
 				$conns_ol = new object_list(array(
 					"oid" => $conns_ol->ids(),
 					"class_id" => CL_PROJECT,
-					"state" => new obj_predicate_not(PROJ_DONE)
+					"state" => new obj_predicate_not(PROJ_DONE),
+					"lang_id" => array()
 				));
 			}
 		}
-
-		if ($arr["request"]["do_proj_search"] && $conns_ol->count())
+		
+		if ($arr["request"]["do_proj_search"] /*&& $conns_ol->count() */)
 		{
 			$filt = $this->_get_my_proj_search_filt($arr["request"], $conns_ol->ids());
 			$conns_ol = new object_list($filt);
