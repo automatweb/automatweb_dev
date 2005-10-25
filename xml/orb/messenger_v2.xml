@@ -52,5 +52,35 @@
 			</function>
 		</action>
 
+		<action name="get_mailbox_js">
+			<function name="get_mailbox_js">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_comm">
+			<function name="get_comm">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="v3">
+			<function name="v3">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="imap" all_args="1">
+			<function name="imap">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

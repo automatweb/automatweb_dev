@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.11 2005/10/19 18:59:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.12 2005/10/25 21:39:45 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -124,7 +124,7 @@ class messenger_v2 extends class_base
 	function messenger_v2()
 	{
 		$this->init(array(
-			"tpldir" => "messenger_v2",
+			"tpldir" => "applications/messenger",
 			"clid" => CL_MESSENGER_V2
 		));
 		$this->connected = false;
@@ -645,22 +645,6 @@ class messenger_v2 extends class_base
 		return $this->show(array("id" => $alias["target"]));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		extract($arr);
-		$ob = new object($id);
-
-		$this->read_template("show.tpl");
-
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-
-		return $this->parse();
-	}
-
 	function schedule_filtering($arr)
 	{
 		if ($arr["prop"]["value"] > 0)
@@ -1089,6 +1073,84 @@ class messenger_v2 extends class_base
 			};
 
 		};
+	}
+
+	/**
+		@attrib name=get_mailbox_js
+		@param id required
+	**/
+	function get_mailbox_js($arr)
+	{
+		$this->read_template("mailbox.js");
+		$msgobj = new object($arr["id"]);
+		$this->vars(array(
+			"server" => $this->mk_my_orb("imap",array("id" => $msgobj->id())),
+			"message" => $this->mk_my_orb("change",array(
+				"msgrid" => $msgobj->id(),
+				"form" => "showmsg",
+				"cb_part" => 1,
+			),"mail_message") . "&",
+		));
+		die($this->parse());
+	}
+
+	/**
+		@attrib name=get_comm
+	**/
+	function get_comm()
+	{
+		$this->read_template("subetha_sensomatic.js");
+		die($this->parse());
+
+	}
+
+	/**
+		@attrib name=v3
+		@param id required
+	**/
+	function v3($arr)
+	{
+		// vata see asi peab mul nüüd väljastama selle serverivärgi
+		$msgobj = new object($arr["id"]);
+		$this->read_template("ui.tpl");
+		$this->vars(array(
+			"u1" => $this->mk_my_orb("get_comm",array()),
+			"u2" => $this->mk_my_orb("get_mailbox_js",array("id" => $msgobj->id())),
+		));
+		die($this->parse());
+	}
+
+	/**
+		@attrib name=imap all_args=1
+	**/
+	function imap($arr)
+	{
+		$msgobj = new object($arr["id"]);
+		$conns = $msgobj->connections_from(array("type" => "RELTYPE_MAIL_SOURCE"));
+
+
+		// right now it only deals with a single server.
+		list(,$_sdat) = each($conns);
+		//$_sdat =$conns[0];
+		if (empty($_sdat))
+		{
+			print "IMAP sissepääs on konfigureerimata";
+			return false;
+		};
+		$obj = $_sdat->to();
+		$server = $obj->prop("server");
+		$port = $obj->prop("port");
+		$user = $obj->prop("user");
+		$password = $obj->prop("password");
+
+
+		//  cert validating could probably be made an option later on
+		$mask = (1 == $obj->prop("use_ssl")) ? "{%s:%d/ssl/novalidate-cert}" : "{%s:%d}";
+
+		$server = sprintf($mask,$server,$port);
+		include("imap.php");
+		die();
+
 	}
 
 }

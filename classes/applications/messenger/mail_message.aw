@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.17 2005/10/19 19:06:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.18 2005/10/25 21:39:45 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -110,19 +110,28 @@ class mail_message extends class_base
 	function fetch_message($arr)
 	{
 		$msgr = get_instance(CL_MESSENGER_V2);
-		$msgr->set_opt("use_mailbox",$arr["mailbox"]);
+		if (!is_numeric($arr["msgid"]))
+		{
+			list($mailbox,$msgid) = explode("*",$arr["msgid"]);
+		}
+		else 
+		{
+			$msgid = $arr["msgid"];
+			$mailbox = $arr["mailbox"];
+		};
+		$msgr->set_opt("use_mailbox",$mailbox);
 		$msgr->_connect_server(array(
 			"msgr_id" => $arr["msgrid"],
 		));
                 
 		$rv = $msgr->drv_inst->fetch_message(array(
-			"msgid" => $arr["msgid"],
+			"msgid" => $msgid,
 		));
 
 		if ($rv && isset($arr["fullheaders"]))
 		{
 			$rv["fullheaders"] = $msgr->drv_inst->fetch_headers(array(
-				"msgid" => $arr["msgid"],
+				"msgid" => $msgid,
 			));
 		};
 
