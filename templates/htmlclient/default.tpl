@@ -132,6 +132,7 @@
 <!-- SUB: SHOW_CHANGEFORM2 -->
 {VAR:reforb}
 <script type="text/javascript">
+{VAR:scripts}
 function submit_changeform(action)
 {
 	changed = 0;
