@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.79 2005/09/12 08:11:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.80 2005/10/25 09:42:58 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -866,7 +866,7 @@ class event_search extends class_base
 		{
 			$search["parent"] = $parx2 = array();
 			$search["sort_by"] = "planner.start";
-			$search["class_id"] = array(CL_STAGING,CL_CALENDAR_EVENT, CL_CRM_MEETING);
+			$search["class_id"] = array(CL_STAGING,CL_CALENDAR_EVENT, CL_CRM_MEETING, CL_TASK);
 			$par1 = array();
 			$par2 = array();
 			if($search_p1 || $search_p2)
@@ -1016,7 +1016,7 @@ class event_search extends class_base
 					{
 						$ol = new object_list(array(
 							"oid" => $ids,
-							"class_id" => array(CL_STAGING,CL_CRM_MEETING, CL_CALENDAR_EVENT),
+							"class_id" => array(CL_STAGING,CL_CRM_MEETING, CL_CALENDAR_EVENT, CL_TASK),
 							"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
 							"sort_by" => "planner.start",
 							"lang_id" => array(),
