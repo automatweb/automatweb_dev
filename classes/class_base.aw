@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.429 2005/10/22 10:43:35 ekke Exp $
+// $Id: class_base.aw,v 2.430 2005/10/25 13:15:07 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -35,7 +35,7 @@
 	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 trans=1 // OBJ_IS_TRANSLATED
 	@caption Tõlge kinnitatud
 
-	@groupinfo general caption=&Uuml;ldine default=1 icon=edit
+	@groupinfo general caption=&Uuml;ldine default=1 icon=edit focus=name
 
 	@forminfo add onload=init_storage_object
 	@forminfo edit onload=load_storage_object
@@ -104,6 +104,7 @@ class class_base extends aw_template
 		$this->default_group = "general";
 		$this->features = array();
 
+		// surely there is a better way to implement vcl register?
 		$this->vcl_register = array(
 			"classificator" => "cfg/classificator",
 			"comments" => "vcl/comments",
@@ -157,9 +158,6 @@ class class_base extends aw_template
 
 	}
 
-	// vormid. Kuidas ma siis vorme defineerin? Asi läheb liiga keeruliseks, kui ma
-	// üritan kõiki neid asju klassi päises kirjeldada.
-
 	function load_storage_object($arr)
 	{
 		$this->id = $arr["id"];
@@ -183,13 +181,9 @@ class class_base extends aw_template
 		@param return_url optional
 		@param reltype optional type=int
 
-
-		@returns
-
+		@returns data formatted by the currently used output client. For example a HTML form if htmlclient is used
 
 		@comment
-		id _always_ refers to the objects table. Always. If you want to load
-		any other data, then you'll need to use other field name
 
 	**/
 	function new_change($args)
@@ -207,10 +201,12 @@ class class_base extends aw_template
 		@param alias_to optional
 		@param return_url optional
 
-		@returns
+		@returns data formatted by the currently used output client. For example a HTML form if htmlclient is used
 
 
 		@comment
+		id _always_ refers to the objects table. Always. If you want to load
+		any other data, then you'll need to use other field name
 
 	**/
 	function change($args = array())
@@ -221,7 +217,6 @@ class class_base extends aw_template
 
 		$awt->start("cb-change");
 		$this->init_class_base();
-
 
 		$cb_values = aw_global_get("cb_values");
 
@@ -432,10 +427,14 @@ class class_base extends aw_template
 			};
 		};
 
-
-		$lm = $this->classinfo(array("name" => "fixed_toolbar"));
+		// the whole freaking fixed toolbar trickery was implemented
+		// only because IE does not support positon: fixed like other
+		// modern browsers do. Once it does, this whole crap with
+		// frames can be taken out again
 
 		// turn off submit button, if the toolbar is being shown
+
+		$lm = $this->classinfo(array("name" => "fixed_toolbar"));
 		if (!empty($lm))
 		{
 			$gdata["submit"] = "no";
@@ -446,7 +445,8 @@ class class_base extends aw_template
 			$this->no_rte = 1;
 		};
 
-		// and, if we are in that other layout mode, then we should probably remap all
+		// and, if we are in fixed toolbar layout mode, then we should
+		// probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?
 		if (!empty($lm) && empty($args["cb_part"]))
 		{
@@ -457,7 +457,6 @@ class class_base extends aw_template
 				$new_uri .= "&no_rte=1";
 			};
 
-
 			$properties["iframe_container"] = array(
 				"type" => "iframe",
 				"src" => $new_uri,
@@ -466,9 +465,9 @@ class class_base extends aw_template
 
 			$this->layout_mode = "fixed_toolbar";
 
-			// show only the elements and not the frame (because it contains some design
+			// show only the elements and not the frame
+			// (because it contains some design
 			// elements and "<form>" tag that I really do not need
-
 			// this really could use some generic solution!
 			$this->raw_output = 1;
 
@@ -592,6 +591,7 @@ class class_base extends aw_template
 			$cli->set_layout($tmp);
 		};
 
+		// cb_parts is again used by fixed_toolbar mode
 		if ($args["cb_part"] == 1)
 		{
 			// tabs and YAH are in the upper frame, so we don't show them below
@@ -602,7 +602,6 @@ class class_base extends aw_template
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
-
 		// and the only user of that is the crm_company class. Would be _really_ nice
 		// to beg rid of all that shit
 		$this->inst->relinfo = $this->relinfo;
@@ -690,6 +689,8 @@ class class_base extends aw_template
 			$argblock["reltype"] = $this->reltype;
 		}
 
+		// class_base should not rely on storage, because this seriosly
+		// limits it's functionality!
 		if (is_oid($this->request["object_type"]) && $this->can("view",$this->request["object_type"]))
 		{
 			$ot_obj = new object($this->request["object_type"]);
@@ -757,6 +758,9 @@ class class_base extends aw_template
 			// hm, dat is weird!
 			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
 			"data" => $argblock,
+			// focus contains the name of the property that
+			// should be focused by the output client
+			"focus" => $gdata["focus"],
 			"help" => "Siin tuleb üldine info selle tabi (grupi) kohta, aga seda pole veel kirjutatud. Proovi klikkida omaduste esitähtedel.",
 		));
 
