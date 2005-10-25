@@ -1,0 +1,71 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>subclass</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>subclass</field>
+            <caption>Tüüp</caption>
+      </property>
+      <property>
+            <name>parent</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>parent</field>
+            <comment>Haldusüksus, millesse käesolev haldusüksus kuulub</comment>
+            <caption>Kõrgem haldusüksus</caption>
+      </property>
+      <property>
+            <name>parent_show</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kõrgem haldusüksus</caption>
+      </property>
+      <property>
+            <name>parent_select</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PARENT_ADMINISTRATIVE_UNIT</reltype>
+            <clid>
+                  <num_0>CL_COUNTRY_ADMINISTRATIVE_UNIT</num_0>
+                  <num_1>CL_COUNTRY_CITY</num_1>
+                  <num_2>CL_COUNTRY_CITYDISTRICT</num_2>
+            </clid>
+            <store>no</store>
+            <field>parent_select</field>
+            <comment>Haldusüksus, millesse käesolev haldusüksus kuulub</comment>
+            <caption>Vali kõrgem haldusüksus</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_COUNTRY_CITYDISTRICT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <reltypes>
+            <PARENT_ADMINISTRATIVE_UNIT>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_COUNTRY_ADMINISTRATIVE_UNIT</num_0>
+                        <num_1>CL_COUNTRY_CITY</num_1>
+                        <num_2>CL_COUNTRY_CITYDISTRICT</num_2>
+                  </clid>
+                  <caption>Kõrgem haldusüksus</caption>
+            </PARENT_ADMINISTRATIVE_UNIT>
+      </reltypes>
+</properties>
+

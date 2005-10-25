@@ -1,0 +1,81 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>country</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COUNTRY</reltype>
+            <clid>CL_COUNTRY</clid>
+            <automatic>1</automatic>
+            <comment>Riik, mille haldusjaotuse struktuuri määratakse.</comment>
+            <caption>Riik</caption>
+      </property>
+      <property>
+            <name>administrative_structure</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_administrative_structure</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_ADMINISTRATIVE_UNIT_TYPE</reltype>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>parent_unit</num_1>
+                  <num_2>unit_type</num_2>
+                  <num_3>jrk</num_3>
+            </props>
+            <table_fields>
+                  <num_0>jrk</num_0>
+                  <num_1>name</num_1>
+                  <num_2>parent_unit_show</num_2>
+            </table_fields>
+            <editonly>1</editonly>
+            <store>no</store>
+            <caption>Haldusjaotuse struktuur</caption>
+      </property>
+      <property>
+            <name>administrative_structure_data</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_administrative_structure</group>
+            <type>hidden</type>
+      </property>
+      <classinfo>
+            <syslog_type>ST_COUNTRY_ADMINISTRATIVE_STRUCTURE</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <grp_administrative_structure>
+                  <caption>Haldusjaotuse struktuur</caption>
+            </grp_administrative_structure>
+      </groupinfo>
+      <reltypes>
+            <ADMINISTRATIVE_UNIT_TYPE>
+                  <value>1</value>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+                  <caption>Haldusjaotis</caption>
+            </ADMINISTRATIVE_UNIT_TYPE>
+            <SELECTABLE_UNIT>
+                  <value>3</value>
+                  <clid>
+                        <num_0>CL_COUNTRY_ADMINISTRATIVE_UNIT</num_0>
+                        <num_1>CL_COUNTRY_CITY</num_1>
+                        <num_2>CL_COUNTRY_CITYDISTRICT</num_2>
+                  </clid>
+                  <caption>Valitav haldusüksus</caption>
+            </SELECTABLE_UNIT>
+            <COUNTRY>
+                  <value>2</value>
+                  <clid>CL_COUNTRY</clid>
+                  <caption>Riik</caption>
+            </COUNTRY>
+      </reltypes>
+</properties>
+

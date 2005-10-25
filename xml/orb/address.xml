@@ -1,0 +1,29 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="address" folder="common/address" extends="class_base">
+		<action name="location_autocomplete" all_args="1">
+			<function name="location_autocomplete">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_address_array" all_args="1">
+			<function name="get_address_array">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_envelope_address" all_args="1">
+			<function name="get_envelope_address">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
