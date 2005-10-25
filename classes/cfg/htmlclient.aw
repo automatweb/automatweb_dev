@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.123 2005/10/25 12:22:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.124 2005/10/25 13:14:21 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -608,11 +608,8 @@ class htmlclient extends aw_template
 			$res .= $this->error;
 		};
 
-		// ach! vahi raiska .. siit see jama ju sisse tuleb!
 		$vars = array();
-
 		$this->layout_by_parent = array();
-
 		$this->lp_chain = array();
 
 		foreach($this->layoutinfo as $key => $val)
@@ -672,7 +669,7 @@ class htmlclient extends aw_template
 			"type" => "vbox",
 		);
 
-                $xxx = $this->parse_layouts("_main");
+		$xxx = $this->parse_layouts("_main");
 
 		$property_help = "";
 		if (sizeof($this->proplist) > 0)
@@ -694,6 +691,7 @@ class htmlclient extends aw_template
 
 				$property_help .= $this->parse("PROPERTY_HELP");
 				$item["html"] = $this->create_element($item);
+
 
 				if(isset($this->tplmode) && $this->tplmode == "groups")
 				{
@@ -764,14 +762,23 @@ class htmlclient extends aw_template
 				$data["cb_nobreaks[${rte}]"] = 1;
 			};
 
+
 			$submit_handler = $txt;
 		}
-		
-	
+
+		$scripts = "";
+
+		if (!empty($arr["focus"]))
+		{
+			$scripts .= "document.changeform['" . $arr["focus"] ."'].focus();\n";
+		}
+
 		$fn = basename($_SERVER["SCRIPT_FILENAME"],".aw");
 		$data["ret_to_orb"] = $fn == "orb" ? 1 : 0;
 	
 		// let's hope that nobody uses that vbox and hbox spagetti with grouptemplates -- ahz
+		// groupboxes where implemented for rateme .. the code is not exactly elegant .. can I kill it?
+		// please-please-please?
 		if(isset($this->tplmode) && $this->tplmode == "groups")
 		{
 			$vars = $vars + array(
@@ -794,6 +801,7 @@ class htmlclient extends aw_template
 			};
 			$this->vars(array(
 				"submit_handler" => $submit_handler,
+				"scripts" => $scripts,
 				"method" => !empty($method) ? $method : "POST",
 				"content" => $res,
 				"reforb" => $this->mk_reforb($action,$data,$orb_class),
