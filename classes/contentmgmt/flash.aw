@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.5 2005/10/24 21:02:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.6 2005/10/26 06:34:33 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -8,7 +8,10 @@
 	@default method=serialize
 
 	@property file type=fileupload field=meta
-        @caption Vali fail
+    @caption Vali fail
+
+	@property file_url type=textbox field=meta method=serialize
+    @caption Sisesta faili aadress
 
 	@property width type=textbox size=4 field=meta
 	@caption Laius
@@ -206,9 +209,18 @@ class flash extends class_base
 
 		$this->read_template('show.tpl');
 
+		if ($ob->prop("file_url") != "")
+		{
+			$url = $ob->prop("file_url");
+		}
+		else
+		{
+			$url = $this->get_url($ob->prop("file"));
+		}
+
 		$this->vars(array(
 			"id" => $ob->prop("name"),
-			"url" => $this->get_url($ob->prop("file")),
+			"url" => $url,
 			"width" => $ob->prop("width"),
 			"height" => $ob->prop("height"),
 		));
