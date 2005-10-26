@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.6 2005/05/02 10:31:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.7 2005/10/26 16:01:49 ahti Exp $
 // party.aw - Pidu 
 /*
 
-@classinfo syslog_type=ST_PARTY relationmgr=yes no_comment=1 no_status=1 r2=yea
+@classinfo syslog_type=ST_PARTY relationmgr=yes no_status=1 r2=yea
 
 @default table=objects
 @default group=general
