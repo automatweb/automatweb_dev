@@ -486,6 +486,16 @@
             <caption>Telefon</caption>
       </property>
       <property>
+            <name>telefax_id</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>relmanager</type>
+            <reltype>RELTYPE_TELEFAX</reltype>
+            <props>name</props>
+            <field>telefax_id</field>
+            <caption>Faks</caption>
+      </property>
+      <property>
             <name>url_id</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
@@ -504,16 +514,6 @@
             <props>mail</props>
             <field>email_id</field>
             <caption>E-posti aadressid</caption>
-      </property>
-      <property>
-            <name>telefax_id</name>
-            <table>kliendibaas_firma</table>
-            <group>cedit</group>
-            <type>relmanager</type>
-            <reltype>RELTYPE_TELEFAX</reltype>
-            <props>name</props>
-            <field>telefax_id</field>
-            <caption>Faks</caption>
       </property>
       <property>
             <name>b_acct_desc</name>

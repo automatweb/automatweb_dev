@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.89 2005/10/19 09:04:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.90 2005/10/26 14:05:20 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -36,6 +36,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 @property ext_id type=textbox table=objects field=subclass
 @caption Sidussüsteemi ID
+
+@property is_customer type=checkbox ch_value=1 table=kliendibaas_isik field=aw_is_customer
+@caption Lisa kliendina
 
 @property code type=textbox table=kliendibaas_isik
 @caption Kood

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.5 2005/10/24 13:50:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.6 2005/10/26 14:05:19 kristo Exp $
 // crm_memo.aw - Memo 
 /*
 
@@ -22,10 +22,10 @@
 	@property customer type=popup_search clid=CL_CRM_COMPANY table=aw_crm_memo field=aw_customer
 	@caption Klient
 
-	@property creator type=relpicker reltype=RELTYPE_CREATOR table=aw_crm_memo field=aw_creator
+	@property creator type=popup_search style=relpicker reltype=RELTYPE_CREATOR table=aw_crm_memo field=aw_creator
 	@caption Koostaja
 
-	@property reader type=relpicker reltype=RELTYPE_READER table=aw_crm_memo field=aw_reader
+	@property reader type=popup_search style=relpicker reltype=RELTYPE_READER table=aw_crm_memo field=aw_reader
 	@caption Lugeja
 
 	@property reg_date type=date_select table=aw_crm_memo field=aw_reg_date
@@ -43,6 +43,12 @@
 
 @reltype FILE value=1 clid=CL_FILE
 @caption fail
+
+@reltype CREATOR value=2 clid=CL_CRM_PERSON
+@caption looja
+
+@reltype READER value=3 clid=CL_CRM_PERSON
+@caption lugeja
 
 */
 

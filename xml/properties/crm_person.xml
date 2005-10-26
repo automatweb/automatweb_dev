@@ -70,6 +70,15 @@
             <caption>Sidussüsteemi ID</caption>
       </property>
       <property>
+            <name>is_customer</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_is_customer</field>
+            <caption>Lisa kliendina</caption>
+      </property>
+      <property>
             <name>code</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>

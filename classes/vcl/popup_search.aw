@@ -57,6 +57,17 @@ class popup_search extends aw_template
 		$tmp = $arr["property"];
 
 		$tmp["type"] = "text";
+		if (!$tmp["clid"] && $tmp["reltype"])
+		{
+			$clss = aw_ini_get("classes");
+			$clid = new aw_array($arr["relinfo"][$reltype]["clid"]);
+			$tmp["clid"] = array();
+			foreach($clid->get() as $clid)
+			{
+				$tmp["clid"][] = $clss[$clid]["def"];
+			}
+		}
+
 		if (is_object($arr["obj_inst"]))
 		{
 			$clid = array();

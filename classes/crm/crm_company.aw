@@ -179,14 +179,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 	@property phone_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_PHONE props=name
 	@caption Telefon
 
+	@property telefax_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name
+	@caption Faks
+
 	@property url_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_URL props=name 
 	@caption Veebiaadress
 
 	@property email_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_EMAIL props=mail
 	@caption E-posti aadressid
-
-	@property telefax_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name
-	@caption Faks
 
 	@property b_acct_desc type=text subtitle=1 store=no
 	@caption Pangaarved
@@ -1025,7 +1025,7 @@ class crm_company extends class_base
 			case "client_manager":
 				$u = get_instance(CL_USER);
 				$data["options"] = $this->get_employee_picker(obj($u->get_current_company()), true);
-				if (!$data["value"])
+				if ($arr["new"])
 				{
 					$data["value"] = $u->get_current_person();
 				}
@@ -1963,6 +1963,7 @@ class crm_company extends class_base
 		$arr['cat'] = $this->cat;
 		$arr['proj'] = $_GET["proj"];
 		$arr["post_ru"] = post_ru();
+		$arr["tf"] = $_GET["tf"];
 	}
 
 	/**
@@ -3509,6 +3510,36 @@ class crm_company extends class_base
 			return $o;
 		}
 	}				
-	
+
+	/**
+		@attrib name=cut_docs
+	**/
+	function cut_docs($arr)
+	{
+		$_SESSION["crm_cut_docs"] = safe_array($arr["sel"]);
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=submit_paste_docs
+	**/
+	function submit_paste_docs($arr)
+	{
+		$fld = $arr["tf"];
+		if (!$fld)
+		{
+			$i = get_instance("applications/crm/crm_company_docs_impl");
+			$fld = $i->_init_docs_fld(obj($arr["id"]));
+			$fld = $fld->id();
+		}
+		foreach(safe_array($_SESSION["crm_cut_docs"]) as $did)
+		{
+			$o = obj($did);
+			$o->set_parent($fld);
+			$o->save();
+		}
+		unset($_SESSION["crm_cut_docs"]);
+		return $arr["post_ru"];
+	}
 }
 ?>

@@ -31,7 +31,8 @@
             <name>creator</name>
             <table>aw_crm_memo</table>
             <group>general</group>
-            <type>relpicker</type>
+            <type>popup_search</type>
+            <style>relpicker</style>
             <reltype>RELTYPE_CREATOR</reltype>
             <field>aw_creator</field>
             <caption>Koostaja</caption>
@@ -40,7 +41,8 @@
             <name>reader</name>
             <table>aw_crm_memo</table>
             <group>general</group>
-            <type>relpicker</type>
+            <type>popup_search</type>
+            <style>relpicker</style>
             <reltype>RELTYPE_READER</reltype>
             <field>aw_reader</field>
             <caption>Lugeja</caption>
@@ -109,6 +111,16 @@
                   <clid>CL_FILE</clid>
                   <caption>fail</caption>
             </FILE>
+            <CREATOR>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>looja</caption>
+            </CREATOR>
+            <READER>
+                  <value>3</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>lugeja</caption>
+            </READER>
       </reltypes>
 </properties>
 

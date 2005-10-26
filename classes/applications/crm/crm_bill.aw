@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.7 2005/10/25 12:22:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.8 2005/10/26 14:05:19 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -24,12 +24,12 @@
 	@caption Tasumise kuup&auml;ev
 
 	@property bill_recieved type=date_select table=aw_crm_bill field=aw_recieved
-	@caption Laekumist&auml;htaeg
+	@caption Laekumiskuup&auml;ev
 
 	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON
 	@caption Klient
 
-	@property impl type=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
+	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
 	@caption Teostaja
 
 	@property state type=select table=aw_crm_bill field=aw_state
@@ -98,8 +98,18 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "impl":
+				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMPL")));
+				$prop["options"] = $ol->names();
+				$u = get_instance(CL_USER);
+				$co = obj($u->get_current_company());
+				$prop["options"][$co->id()] = $co->name();
+				asort($prop["options"]);
+				$prop["options"] = array("" => t("--vali--")) + $prop["options"];
+				break;
+
 			case "bill_due_date":
-				$prop["value"] = $arr["obj_inst"]->prop("bill_date") + (24*3600*$arr["obj_inst"]->prop("bill_due_date_days"));
+				$prop["value"] = $arr["obj_inst"]->prop("bill_date") + (24*3600*($arr["obj_inst"]->prop("bill_due_date_days")+1));
 				break;
 
 			case "preview":
@@ -145,7 +155,7 @@ class crm_bill extends class_base
 				{
 					list($d,$m,$y) = explode("/", $e["date"]);
 					$e["date"] = mktime(0,0,0, $m, $d, $y);
-					$e["sum"] = $e["price"] * $e["amt"];
+					$e["sum"] = $this->num($e["price"]) * $this->num($e["amt"]);
 					$inf[$idx] = $e;
 				}	
 				$arr["obj_inst"]->set_meta("bill_inf", $inf);
@@ -153,6 +163,11 @@ class crm_bill extends class_base
 		}
 		return $retval;
 	}	
+
+	function num($a)
+	{
+		return str_replace(",", ".", $a);
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -297,7 +312,7 @@ class crm_bill extends class_base
 	function callback_pre_save($arr)
 	{
 		$arr["obj_inst"]->set_prop("sum", $this->_calc_sum($arr["obj_inst"]));
-		$arr["obj_inst"]->set_prop("bill_due_date", $arr["obj_inst"]->prop("bill_date") + (24*3600*$arr["obj_inst"]->prop("bill_due_date_days")));
+		$arr["obj_inst"]->set_prop("bill_due_date", $arr["obj_inst"]->prop("bill_date") + (24*3600*($arr["obj_inst"]->prop("bill_due_date_days")+1)));
 	}
 
 	function _preview($arr)
@@ -371,9 +386,12 @@ class crm_bill extends class_base
 				"BANK_ACCOUNT" => $ba
 			));
 			$logo_o = $impl->get_first_obj_by_reltype("RELTYPE_ORGANISATION_LOGO");
-			$logo_i = $logo_o->instance();
-			$logo = $logo_i->make_img_tag_wl($logo_o->id());
-			$logo_url = $logo_i->get_url_by_id($logo_o->id());
+			if ($logo_o)
+			{
+				$logo_i = $logo_o->instance();
+				$logo = $logo_i->make_img_tag_wl($logo_o->id());
+				$logo_url = $logo_i->get_url_by_id($logo_o->id());
+			}
 
 			$impl_phone = $impl->prop_str("phone_id");
 
@@ -441,14 +459,14 @@ class crm_bill extends class_base
 				// tax needs to be added
 				$cur_sum = $row["sum"];
 				$cur_tax = ($row["sum"] * 0.18);
-				$cur_pr = $row["price"];
+				$cur_pr = $this->num($row["price"]);
 			}	
 			else
 			{
 				// tax does not need to be added, tax free it seems
 				$cur_sum = $row["sum"];
 				$cur_tax = 0;
-				$cur_pr = $row["price"];
+				$cur_pr = $this->num($row["price"]);
 			}
 
 			$this->vars(array(
@@ -483,6 +501,10 @@ class crm_bill extends class_base
 			return $res;
 		}
 
+		if ($_GET["openprintdialog"] == 1)
+		{
+			$res .= "<script language='javascript'>window.print();</script>";
+		}
 		die($res);
 	}
 

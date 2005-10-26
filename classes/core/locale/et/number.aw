@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/et/number.aw,v 1.5 2005/10/25 12:22:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/et/number.aw,v 1.6 2005/10/26 14:05:20 kristo Exp $
 // et.aw - Estonian localization
 class number
 {
@@ -67,13 +67,12 @@ class number
 	function get_lc_money_text($number, $currency)
 	{
 		// exploide by . or ,
-		if (strpos($number, ",") !== false)
+		/*if (strpos($number, ",") !== false)
 		{
 			$number = str_replace(",", ".", $number);
-		}
+		}*/
 
-		list($eek, $cent) = explode(".", $number);
-
+		list($eek, $cent) = explode(".", number_format($number, 2, ".", ""));
 		if (!is_oid($currency->id()))
 		{
 			$currency->set_prop("unit_name", "krooni");

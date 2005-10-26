@@ -132,6 +132,16 @@
                   <clid>CL_FILE</clid>
                   <caption>fail</caption>
             </FILE>
+            <CREATOR>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>looja</caption>
+            </CREATOR>
+            <READER>
+                  <value>3</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>lugeja</caption>
+            </READER>
       </reltypes>
 </properties>
 

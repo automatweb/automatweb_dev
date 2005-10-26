@@ -284,6 +284,7 @@ class crm_company_overview_impl extends class_base
 			$task = obj($task_id);
 
 			$cust = $task->prop("customer");
+			$cust_str = "";
 			if (is_oid($cust) && $this->can("view", $cust))
 			{
 				$cust_o = obj($cust);
@@ -291,6 +292,7 @@ class crm_company_overview_impl extends class_base
 			}
 
 			$proj = $task->prop("project");
+			$proj_str = "";
 			if (is_oid($proj) && $this->can("view", $proj))
 			{
 				$proj_o = obj($proj);
@@ -299,12 +301,12 @@ class crm_company_overview_impl extends class_base
 
 			$col = "";
 			$dl = $task->prop("deadline");
-			if (time() > $dl)
+			if ($dl > 100 && time() > $dl)
 			{
 				$col = "#ff0000";
 			}
 			else
-			if (date("d.m.Y") == date("d.m.Y", $dl)) // today
+			if ($dl > 100 && date("d.m.Y") == date("d.m.Y", $dl)) // today
 			{
 				$col = "#f3f27e";
 			}
@@ -387,7 +389,10 @@ class crm_company_overview_impl extends class_base
 
 		foreach($table_data as $row)
 		{
-			$t->define_data($row);
+			if ($row["deadline"] > 100)
+			{
+				$t->define_data($row);
+			}
 		}
 		$t->set_default_sortby("deadline");
 		$t->set_default_sorder("asc");
@@ -398,6 +403,14 @@ class crm_company_overview_impl extends class_base
 		));
 
 		$t->set_sortable(false);
+		foreach($table_data as $row)
+		{
+			if ($row["deadline"] < 100)
+			{
+				$t->define_data($row);
+			}
+		}
+
 	}
 
 	function _get_tasks_search_filt($r, $tasks, $clid)

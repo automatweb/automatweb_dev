@@ -370,7 +370,7 @@ class crm_company_bills_impl extends class_base
 				"client_manager" => $cm,
 				"oid" => $bill->id(),
 				"print" => html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $bill->id(), "group" => "preview"), CL_CRM_BILL),
+					"url" => $this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $bill->id(), "group" => "preview"), CL_CRM_BILL),
 					"caption" => t("Tr&uuml;ki"),
 					"target" => "_blank"
 				))

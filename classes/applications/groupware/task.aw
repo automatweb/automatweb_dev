@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.29 2005/10/25 12:52:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.30 2005/10/26 14:05:19 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -956,10 +956,15 @@ class task extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_rows_t($t);
 
-		$impls = $this->_get_possible_participants($arr["obj_inst"]);
+		$impls = $this->_get_possible_participants($arr["obj_inst"], true, $arr["obj_inst"]->prop("participants"));
 
+		$u = get_instance(CL_USER);
+		$def_impl = $u->get_current_person();
+		$def_impl = array($def_impl => $def_impl);
 
 		$dat = safe_array($arr["obj_inst"]->meta("rows"));
+		$dat[] = array();
+		$dat[] = array();
 		$dat[] = array();
 		foreach($dat as $idx => $row)
 		{
@@ -978,7 +983,7 @@ class task extends class_base
 				"impl" => html::select(array(
 					"name" => "rows[$idx][impl]",
 					"options" => $impls,
-					"value" => $row["impl"],
+					"value" => (is_array($row["impl"]) && count($row["impl"])) ? $row["impl"] : $def_impl,
 					"multiple" => 1
 				)),
 				"time_guess" => html::textbox(array(
@@ -1197,7 +1202,7 @@ class task extends class_base
 		return $n;
 	}
 
-	function _get_possible_participants($o)
+	function _get_possible_participants($o, $proj_only = false, $sel = array())
 	{
 		$opts = array();
 		if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
@@ -1219,10 +1224,32 @@ class task extends class_base
 		$i->get_all_workers_for_company(obj($co), &$w);
 		foreach($w as $oid)
 		{
-			$o = obj($oid);
-			$opts[$oid] = $o->name();
+			$t = obj($oid);
+			$opts[$oid] = $t->name();
 		}
 		asort($opts);
+
+		if ($proj_only)
+		{
+			// filter by project participants
+			if ($this->can("view", $o->prop("project")))
+			{
+				$p = obj($o->prop("project"));
+				$p_p = array();
+				foreach($p->connections_from(array("type" => "RELTYPE_PARTICIPANT")) as $c)
+				{
+					$p_p[$c->prop("to")] = $c->prop("to");
+				}
+
+				foreach($opts as $k => $v)
+				{
+					if (!isset($p_p[$k]) && !isset($sel[$k]))
+					{
+						unset($opts[$k]);
+					}
+				}
+			}
+		}
 
 		return array("" => t("--vali--")) + $opts;
 	}

@@ -1362,17 +1362,28 @@ class crm_company_cust_impl extends class_base
 
 		if (empty($r["customer_search_is_co"]["is_co"]) && empty($r["customer_search_is_co"]["is_person"]))
 		{
-			$ret["oid"] = -1;
+			//$ret["oid"] = -1;
 		}
 		else
 		if (empty($r["customer_search_is_co"]["is_co"]) && !empty($r["customer_search_is_co"]["is_person"]))
 		{
 			$ret["class_id"] = CL_CRM_PERSON;
+			$ret["is_customer"] = 1;
 		}
 		else
 		if (!empty($r["customer_search_is_co"]["is_co"]) && empty($r["customer_search_is_co"]["is_person"]))
 		{
 			$ret["class_id"] = CL_CRM_COMPANY;
+		}
+		else
+		{
+			$ret[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_PERSON.is_customer" => 1,
+					"CL_CRM_COMPANY.reg_nr" => "%" // this is here to match all companies, otherwise we'd just get persons
+				)
+			));
 		}
 
 		if ($r["customer_search_cust_mgr"] != "")
@@ -1385,6 +1396,7 @@ class crm_company_cust_impl extends class_base
 				)
 			));
 		}
+
 		return $ret;
 	}
 

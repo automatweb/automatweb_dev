@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.6 2005/10/24 13:50:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.7 2005/10/26 14:05:19 kristo Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
@@ -51,6 +51,11 @@
 @reltype FILE value=1 clid=CL_FILE
 @caption fail
 
+@reltype CREATOR value=2 clid=CL_CRM_PERSON
+@caption looja
+
+@reltype READER value=3 clid=CL_CRM_PERSON
+@caption lugeja
 */
 
 class crm_document extends class_base
