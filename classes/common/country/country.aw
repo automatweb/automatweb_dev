@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country.aw,v 1.2 2005/10/26 14:58:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country.aw,v 1.3 2005/10/26 15:37:36 voldemar Exp $
 // country.aw - Riik v2
 /*
 
@@ -26,7 +26,7 @@
 */
 
 ### address system settings
-
+define ("NEWLINE", "<br />");
 
 class country extends class_base
 {
@@ -123,19 +123,21 @@ class country extends class_base
 		{
 			if ($admin_unit_type->class_id () != CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE)
 			{
+/* dbg */ if ($_GET["address_dbg"] == 1) { $tmp = $admin_unit_type->class_id (); echo "adminunittype class wrong [{$tmp}]".NEWLINE; }
 				return false;
 			}
 
-			$class_id = $admin_unit_type->prop ("type");
+			$class_id = $admin_unit_type->prop ("unit_type");
 			$subclass = $admin_unit_type->id ();
 		}
-		elseif ($type === "street")
+		elseif ((string) $arr["type"] == "street")
 		{
 			$class_id = CL_ADDRESS_STREET;
-			$subclass = NULL;
+			$subclass = 0;
 		}
 		else
 		{
+/* dbg */ if ($_GET["address_dbg"] == 1) { echo "adminunittype undefined [{$arr["type"]}]".NEWLINE; }
 			return false;
 		}
 
@@ -148,6 +150,7 @@ class country extends class_base
 
 		if ($o === false)
 		{
+/* dbg */ if ($_GET["address_dbg"] == 1) { echo "existing unit search fail".NEWLINE; }
 			return false;
 		}
 		elseif (!isset ($o))
@@ -158,6 +161,7 @@ class country extends class_base
 			$o->set_subclass ($subclass);
 			$o->set_name ($name);
 			$o->save ();
+/* dbg */ if ($_GET["address_dbg"] == 1) { echo "added object [{$name}] under [{$parent}] with subclass [{$subclass}]".NEWLINE; }
 		}
 
 		if ($return_object)
@@ -166,7 +170,6 @@ class country extends class_base
 		}
 		else
 		{
-			$o = $list->begin ();
 			return $o->id ();
 		}
 	}
@@ -184,10 +187,11 @@ class country extends class_base
 		$name = trim ($arr["name"]);
 		$parent = is_object ($arr["parent"]) ? $arr["parent"]->id () : $arr["parent"];
 		$return_object = (boolean) $arr["return_object"];
-		$class_id = $arr["type"];
+		$class_id = (int) $arr["type"];
 
 		if (empty ($name) or !in_array ($class_id, $this->admin_unit_type_classes))
 		{
+/* dbg */ if ($_GET["address_dbg"] == 1) { echo "name [{$name}] empty or type [{$class_id}] wrong".NEWLINE; }
 			return false;
 		}
 
@@ -206,6 +210,7 @@ class country extends class_base
 		}
 		elseif ($list->count () > 1)
 		{ ### structure contains duplicates
+/* dbg */ if ($_GET["address_dbg"] == 1) { echo "duplicates found for name [{$name}] under parent [{$parent}]".NEWLINE; }
 			### move everything from under redundant admin units unto one, selected randomly (?)
 			$o = $list->begin ();
 			$list->remove ($o->id ());
@@ -228,6 +233,7 @@ class country extends class_base
 		}
 		else
 		{
+/* dbg */ if ($_GET["address_dbg"] == 1) { echo "no objects found for name [{$name}]".NEWLINE; }
 			return;
 		}
 
@@ -237,7 +243,6 @@ class country extends class_base
 		}
 		else
 		{
-			$o = $list->begin ();
 			return $o->id ();
 		}
 	}
