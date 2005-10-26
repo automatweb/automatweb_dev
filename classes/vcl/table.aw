@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.65 2005/10/24 11:22:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.66 2005/10/26 12:55:28 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
+
 class aw_table extends aw_template
 {
 	////
@@ -94,10 +95,9 @@ class aw_table extends aw_template
 		{
 			extract ($filter_array);
 			$field_name = $this->filter_index[$filter_key];
-			$type = $this->filters[$field_name]["type"];
 
 			// if exists value filtervalue-[rowname] use that for filtering (good for linked values etc)
-			$value = $row[ (isset($row['filtervalue-'.$field_name]) ? 'filtervalue-' : '') . $field_name];
+			$value = $row[(isset($row['filtervalue-'.$field_name]) ? 'filtervalue-' : '') . $field_name];
 
 			if (!empty($filter_txtvalue) && stristr($value, $filter_txtvalue) === false)
 			{
@@ -1335,11 +1335,7 @@ class aw_table extends aw_template
 				}
 			}
 
-			if (sizeof ($this->selected_filters) > 0)
-			{
-				aw_session_set ($this->filter_name . "Saved", aw_serialize ($this->selected_filters));
-			}
-
+			aw_session_set ($this->filter_name . "Saved", aw_serialize ($this->selected_filters));
 			$this->filters_updated = true;
 		}
 
@@ -1363,6 +1359,25 @@ class aw_table extends aw_template
 				"active" => false,
 			);
 			$this->filter_index[$filter_key] = $args["name"];
+
+			if (is_array ($args["filter_options"]))
+			{
+				if (!empty ($args["filter_options"]["selected"]))
+				{
+					$defaults_selected = aw_global_get ($this->filter_name . "DefaultsSelected");
+
+					if (!$defaults_selected)
+					{
+						$selected = $args["filter_options"]["selected"];
+						$this->selected_filters[$filter_key] = array(
+							'filter_selection' => (int) reset (array_keys ($filter, $selected)),
+							'filter_txtvalue' => $selected,
+						);
+						aw_session_set ($this->filter_name . "Saved", aw_serialize ($this->selected_filters));
+						aw_session_set ($this->filter_name . "DefaultsSelected", 1);
+					}
+				}
+			}
 		}
 	}
 
