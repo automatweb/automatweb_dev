@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure.aw,v 1.1 2005/10/23 17:17:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure.aw,v 1.2 2005/10/26 14:58:54 voldemar Exp $
 // country_administrative_structure.aw - Riigi haldusjaotus
 /*
 
@@ -194,7 +194,7 @@ class country_administrative_structure extends class_base
 		uasort ($units, array ($this, "sort_by_ord"));
 		return $units;
 	}
-	/* END public methods */
+/* END public methods */
 
 	function sort_by_ord ($a, $b)
 	{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_citydistrict.aw,v 1.1 2005/10/23 17:17:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_citydistrict.aw,v 1.2 2005/10/26 14:58:54 voldemar Exp $
 // country_citydistrict.aw - Linnaosa
 /*
 
@@ -72,6 +72,9 @@ class country_citydistrict extends country_administrative_unit
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
+/**
+	@attrib name=show
+**/
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_city.aw,v 1.1 2005/10/23 17:17:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_city.aw,v 1.2 2005/10/26 14:58:54 voldemar Exp $
 // country_city.aw - Linn
 /*
 
@@ -15,7 +15,6 @@
 
 ### address system settings
 define ("ADMINISTRATIVE_CFG_TYPE_UNIT", 1);
-
 
 class country_city extends country_administrative_unit
 {
@@ -72,6 +71,9 @@ class country_city extends country_administrative_unit
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
+/**
+	@attrib name=show
+**/
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);

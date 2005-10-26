@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country.aw,v 1.1 2005/10/23 17:17:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country.aw,v 1.2 2005/10/26 14:58:54 voldemar Exp $
 // country.aw - Riik v2
 /*
 
@@ -30,6 +30,13 @@
 
 class country extends class_base
 {
+	var $admin_unit_type_classes = array (
+		CL_COUNTRY_ADMINISTRATIVE_UNIT,
+		CL_COUNTRY_CITYDISTRICT,
+		CL_COUNTRY_CITY,
+		CL_ADDRESS_STREET,
+	);
+
 	function country()
 	{
 		$this->init(array(
@@ -89,6 +96,152 @@ class country extends class_base
 		));
 		return $this->parse();
 	}
+
+/* public methods */
+
+/**
+    @attrib name=add_adminunit
+	@param name required
+	@param parent required
+	@param type required
+	@param return_object optional
+	@returns Created unit object/oid (depending on whether return_object is true or false). If existing unit with name was found that will be returned.
+	@comment type is object or oid of object from class CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE or "street" in case a street is to be added
+**/
+	function add_adminunit ($arr)
+	{
+		if (is_object ($arr["type"]))
+		{
+			$admin_unit_type =& $arr["type"];
+		}
+		elseif ($this->can ("view", $arr["type"]))
+		{
+			$admin_unit_type = obj ($arr["type"]);
+		}
+
+		if (is_object ($admin_unit_type))
+		{
+			if ($admin_unit_type->class_id () != CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE)
+			{
+				return false;
+			}
+
+			$class_id = $admin_unit_type->prop ("type");
+			$subclass = $admin_unit_type->id ();
+		}
+		elseif ($type === "street")
+		{
+			$class_id = CL_ADDRESS_STREET;
+			$subclass = NULL;
+		}
+		else
+		{
+			return false;
+		}
+
+		$name = trim ($arr["name"]);
+		$parent = is_object ($arr["parent"]) ? $arr["parent"]->id () : $arr["parent"];
+		$return_object = (boolean) $arr["return_object"];
+		$arr["return_object"] = 1;
+		$arr["type"] = $class_id;
+		$o = $this->get_adminunit_by_name ($arr);
+
+		if ($o === false)
+		{
+			return false;
+		}
+		elseif (!isset ($o))
+		{ ### add new
+			$o =& new object ();
+			$o->set_class_id ($class_id);
+			$o->set_parent ($parent);
+			$o->set_subclass ($subclass);
+			$o->set_name ($name);
+			$o->save ();
+		}
+
+		if ($return_object)
+		{
+			return $o;
+		}
+		else
+		{
+			$o = $list->begin ();
+			return $o->id ();
+		}
+	}
+
+/**
+    @attrib name=get_adminunit_by_name
+	@param name required
+	@param parent required
+	@param type required
+	@param return_object optional
+	@returns Unit object/oid (depending on whether return_object is true or false) corresponding to name.
+**/
+	function get_adminunit_by_name ($arr)
+	{
+		$name = trim ($arr["name"]);
+		$parent = is_object ($arr["parent"]) ? $arr["parent"]->id () : $arr["parent"];
+		$return_object = (boolean) $arr["return_object"];
+		$class_id = $arr["type"];
+
+		if (empty ($name) or !in_array ($class_id, $this->admin_unit_type_classes))
+		{
+			return false;
+		}
+
+		### search for existing
+		$list = new object_list (array (
+			"class_id" => $class_id,
+			"parent" => $parent,
+			"name" => array ($name),
+			"site_id" => array (),
+			"lang_id" => array (),
+		));
+
+		if ($list->count () == 1)
+		{
+			$o = $list->begin ();
+		}
+		elseif ($list->count () > 1)
+		{ ### structure contains duplicates
+			### move everything from under redundant admin units unto one, selected randomly (?)
+			$o = $list->begin ();
+			$list->remove ($o->id ());
+			$redundant_unit = $list->begin ();
+
+			while (is_object ($redundant_unit))
+			{
+				$child_list = new object_list (array (
+					"parent" => $redundant_unit->id (),
+					"site_id" => array (),
+					"lang_id" => array (),
+				));
+				$child_list->set_parent ($o->id ());
+				$child_list->save ();
+				$redundant_unit = $list->next ();
+			}
+
+			### delete redundant admin units
+			$list->delete ();
+		}
+		else
+		{
+			return;
+		}
+
+		if ($return_object)
+		{
+			return $o;
+		}
+		else
+		{
+			$o = $list->begin ();
+			return $o->id ();
+		}
+	}
+/* END public methods */
 }
 
 ?>
