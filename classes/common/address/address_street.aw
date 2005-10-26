@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address_street.aw,v 1.1 2005/10/23 17:18:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address_street.aw,v 1.2 2005/10/26 14:57:41 voldemar Exp $
 // address_street.aw - Tänav
 /*
 
@@ -14,7 +14,6 @@
 
 ### address system settings
 define ("ADMINISTRATIVE_CFG_TYPE_UNIT", 1);
-
 
 class address_street extends class_base
 {

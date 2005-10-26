@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.1 2005/10/23 17:18:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.2 2005/10/26 14:57:41 voldemar Exp $
 // address.aw - Aadress v2
 /*
 
@@ -609,7 +609,7 @@ class address extends class_base
 
 	function update_address_array ($arr)
 	{
-		if (!is_oid ($arr["id"]) or !$this->can ("view", $arr["id"]))
+		if (!$this->can ("view", $arr["id"]))
 		{
 			return false;
 		}
@@ -645,6 +645,7 @@ class address extends class_base
 
 		$this_object->set_prop ("address_array", $address_array);
 		$this_object->save ();
+		return true;
 	}
 
 /**
@@ -658,7 +659,9 @@ class address extends class_base
 			//!!! use address array from property if adm str etc not changed, otherwise build array from current values
 			//!!! teha nii et viimane rida oleks: T2nav majanr-krtnr
 			//!!! ymbrikuaadressi formaati peaks saama riigi v. haldusjaotuse juurest dfn-da
-		return implode ("\n", $this_object->prop ("address_array"));
+		$address_text = array_reverse ($this_object->prop ("address_array"));
+		$address_text = implode (", ", $address_text);
+		return implode ("\n", $address_text);
 	}
 }
 
