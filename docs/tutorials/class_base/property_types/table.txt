@@ -90,6 +90,9 @@ Each field tag defines a single row. Rows will be laid out in the order they app
 
 <em>filter</em> - column values the table can be filtered by. array of values ("All" filter is added automatically). Works with non-splitted columns only. Filters must be defined before defining data.
 
+<em>filter_options</em> - array of filter options:
+<code>selected</code> - filter value selected by default.
+
 The other and really the recommended way of defining rows is from the code:
 
 #php#
