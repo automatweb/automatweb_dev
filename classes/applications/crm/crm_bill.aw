@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.8 2005/10/26 14:05:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.9 2005/10/26 20:02:11 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -34,6 +34,9 @@
 
 	@property state type=select table=aw_crm_bill field=aw_state
 	@caption Staatus
+
+	@property currency type=text store=no
+	@caption Valuuta
 
 	@property notes type=textarea rows=5 cols=50 table=aw_crm_bill field=aw_notes
 	@caption M&auml;rkused
@@ -98,6 +101,20 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "currency":
+				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
+				{
+					$ord = obj($arr["obj_inst"]->prop("customer"));
+					if ($this->can("view", $ord->prop("currency")))
+					{
+						$ord_cur = obj($ord->prop("currency"));
+						$prop["value"] = $ord_cur->name();
+						return PROP_OK;
+					}
+				}
+				return PROP_IGNORE;
+				break;
+
 			case "impl":
 				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMPL")));
 				$prop["options"] = $ol->names();

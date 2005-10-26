@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.7 2005/10/26 14:05:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.8 2005/10/26 20:02:11 kristo Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
@@ -87,6 +87,7 @@ class crm_document extends class_base
 				else
 				{
 					$co = obj($ui->get_current_company());
+					$ps = obj($ui->get_current_person());
 				}
 
 				$c = get_instance(CL_CRM_COMPANY);

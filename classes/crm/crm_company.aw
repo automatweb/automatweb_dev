@@ -618,7 +618,7 @@ default group=org_objects
 	@groupinfo my_reports caption="Minu raportid" submit=no parent=projs
 	@groupinfo all_reports caption="K&otilde;ik raportid" submit=no parent=projs
 
-@groupinfo relorg caption="Kliendid"
+@groupinfo relorg caption="Kliendid" focus=customer_search_name
 
 groupinfo org_objects_main caption="Objektid" submit=no
 

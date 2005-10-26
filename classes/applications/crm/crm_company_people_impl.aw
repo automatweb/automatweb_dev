@@ -197,10 +197,11 @@ class crm_company_people_impl extends class_base
 
 	function callb_human_name($arr)
 	{
+		list($ln, $fn) = explode(" ", $arr["name"]);
 		return html::get_change_url(
 			$arr["id"],
 			array("return_url" => get_ru()),
-			parse_obj_name($arr["name"])
+			parse_obj_name($fn." ".$ln)
 		);
 	}
 
@@ -462,8 +463,9 @@ class crm_company_people_impl extends class_base
 				));
 			}
 
+			list($fn, $ln) = explode(" ", $person->prop('name'));
 			$tdata = array(
-				"name" => $person->prop('name'),
+				"name" => $ln." ".$fn,
 				"cal" => $cal,
 				"id" => $person->id(),
 				"phone" => $pdat["phone"] != "" ? $pdat["phone"] : $arr["obj_inst"]->prop_str("phone_id"),

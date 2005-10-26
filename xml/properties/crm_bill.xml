@@ -73,6 +73,15 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>currency</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>currency</field>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
             <name>notes</name>
             <table>aw_crm_bill</table>
             <group>general</group>

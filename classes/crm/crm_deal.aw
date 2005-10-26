@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.9 2005/10/24 13:50:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.10 2005/10/26 20:02:11 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -73,6 +73,7 @@ class crm_deal extends class_base
 				else
 				{
 					$co = obj($ui->get_current_company());
+					$ps = obj($ui->get_current_person());
 				}
 
 				$c = get_instance(CL_CRM_COMPANY);
