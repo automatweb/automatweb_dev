@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.106 2005/10/07 17:05:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.107 2005/10/26 20:29:28 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1007,7 +1007,7 @@ class admin_menus extends aw_template
 
 		$per_page = 100;
 		$ft_page = $GLOBALS["ft_page"];
-		//$lim = ($ft_page * $per_page).",".$per_page;
+		$lim = "LIMIT ".($ft_page * $per_page).",".$per_page;
 
 		$where = "objects.parent = '$parent' AND
 				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id IN(".CL_PERIOD .",".CL_USER.",".CL_GROUP.",".CL_MSGBOARD_TOPIC.",".CL_LANGUAGE."))
@@ -1050,7 +1050,7 @@ class admin_menus extends aw_template
 			));
 		}
 
-		$q = "SELECT objects.* $query";
+		$q = "SELECT objects.* $query $lim";
 		$this->db_query($q);
 
 		// perhaps this should even be in the config file?
