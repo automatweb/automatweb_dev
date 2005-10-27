@@ -68,6 +68,10 @@ class site_list extends class_base
 			'format' => "d.m.Y / H:i"
 		));
 		$t->define_field(array(
+			"name" => "sync",
+			"caption" => t("Sünkroniseeri andmebaas"),
+		));
+		$t->define_field(array(
 			'name' => 'change',
 			'caption' => t('Muuda'),
 		));
@@ -93,6 +97,11 @@ class site_list extends class_base
 			$row["change"] = html::href(array(
 				'url' => $this->mk_my_orb("change_site", array("id" => $row["id"])),
 				'caption' => "Muuda"
+			));
+			$row["sync"] = html::href(array(
+				"target" => "_blank",
+				'url' => $row['url']."orb.aw?class=sys&action=dbsync",
+				'caption' => t("Sünkroniseeri"),
 			));
 			if ($row["site_used"])
 			{
