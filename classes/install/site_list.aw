@@ -90,6 +90,7 @@ class site_list extends class_base
 		");
 		while ($row = $this->db_next())
 		{
+			$x = $row["url"];
 			$row['url'] = html::href(array(
 				'url' => $row['url'],
 				'caption' => $row['url']
@@ -100,7 +101,7 @@ class site_list extends class_base
 			));
 			$row["sync"] = html::href(array(
 				"target" => "_blank",
-				'url' => $row['url']."orb.aw?class=sys&action=dbsync",
+				'url' => $x."orb.aw?class=sys&action=dbsync",
 				'caption' => t("Sünkroniseeri"),
 			));
 			if ($row["site_used"])
