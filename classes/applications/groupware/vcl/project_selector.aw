@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.9 2005/10/12 13:28:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.10 2005/10/28 11:16:44 ahti Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -20,7 +20,6 @@ class project_selector extends core
 		{
 			$xlist[$o->parent()] = 1;
 		};
-
 		$all_props = array();
 		$prop = $arr["prop"];
 
@@ -107,13 +106,12 @@ class project_selector extends core
 						"caption" => 
 							"<font color='$color'>" . $item->name() . "</font>",
 					)),
-					"ch_value" => $xlist[$item_id],
+					"ch_value" => isset($xlist[$item_id]) ? $xlist[$item_id] : 0,
 					"value" => 1,
 				);
 			};
 
 		}
-
 		return $all_props;
 	}
 
