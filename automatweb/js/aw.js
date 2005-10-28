@@ -156,6 +156,11 @@ function aw_date_edit_show_cal(elname)
 	cur_cal_el = elname;
 
 	var cal16 = new CalendarPopup();
+	cal16.setMonthNames("Jaanuar","Veebruar","M&auml;rts","Aprill","Mai","Juuni","Juuli","August","September","Oktoober","November","Detsember");
+	cal16.setMonthAbbreviations("Jan","Veb","Mar","Apr","Mai","Jun","Jul","Aug","Sept","Okt","Nov","Dets");
+	cal16.setDayHeaders("E","T","K","N","R","L","P");
+	cal16.setWeekStartDay(1); // week is Monday - Sunday
+	cal16.setTodayText("T&auml;na");
 
 	var y_obj = aw_get_el(elname+"[year]");
 	var m_obj = aw_get_el(elname+"[month]");
