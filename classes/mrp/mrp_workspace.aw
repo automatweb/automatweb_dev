@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.142 2005/10/07 17:43:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.143 2005/10/29 11:41:51 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2566,11 +2566,11 @@ if ($_GET['show_thread_data'] == 1)
 		$start_nav[] = html::href (array (
 			"caption" => t("<<"),
 			"title" => t("5 tagasi"),
-			"url" => aw_url_change_var ("mrp_chart_start", ($start - 5*$period_length)),
+			"url" => aw_url_change_var ("mrp_chart_start", ($this->get_time_days_away (5*$columns, $start, -1))),
 		));
 		$start_nav[] = html::href (array (
 			"caption" => t("Eelmine"),
-			"url" => aw_url_change_var ("mrp_chart_start", ($start - $period_length)),
+			"url" => aw_url_change_var ("mrp_chart_start", ($this->get_time_days_away ($columns, $start, -1))),
 		));
 		$start_nav[] = html::href (array (
 			"caption" => t("Täna"),
@@ -2578,12 +2578,12 @@ if ($_GET['show_thread_data'] == 1)
 		));
 		$start_nav[] = html::href (array (
 			"caption" => t("Järgmine"),
-			"url" => aw_url_change_var ("mrp_chart_start", ($start + $period_length + 1)),
+			"url" => aw_url_change_var ("mrp_chart_start", ($this->get_time_days_away ($columns, $start))),
 		));
 		$start_nav[] = html::href (array (
 			"caption" => t(">>"),
 			"title" => t("5 edasi"),
-			"url" => aw_url_change_var ("mrp_chart_start", ($start + 5*$period_length)),
+			"url" => aw_url_change_var ("mrp_chart_start", ($this->get_time_days_away (5*$columns, $start))),
 		));
 
 		$navigation = sprintf(t('&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s'), implode (" ", $start_nav) ,implode (" ", $length_nav));
@@ -2721,6 +2721,40 @@ if ($_GET['show_thread_data'] == 1)
 		return $ret;
 	}
 
+    // @attrib name=get_time_days_away
+	// @param days required type=int
+	// @param direction optional type=int
+	// @param time optional
+	// @returns UNIX timestamp for time of day start $days away from day start of $time
+	// @comment DST safe if cumulated error doesn't exceed 12h. If $direction is negative, time is computed for days back otherwise days to.
+	function get_time_days_away ($days, $time = false, $direction = 1)
+	{
+		if (false === $time)
+		{
+			$time = time ();
+		}
+
+		$time_daystart = mktime (0, 0, 0, date ("m", $time), date ("d", $time), date("Y", $time));
+		$day_start = ($direction < 0) ? ($time_daystart - $days*86400) : ($time_daystart + $days*86400);
+		$nodst_hour = (int) date ("H", $day_start);
+
+		if ($nodst_hour)
+		{
+			if ($nodst_hour < 13)
+			{
+				$dst_error = $nodst_hour;
+				$day_start = $day_start - $dst_error*3600;
+			}
+			else
+			{
+				$dst_error = 24 - $nodst_hour;
+				$day_start = $day_start + $dst_error*3600;
+			}
+		}
+
+		return $day_start;
+	}
+
 	function get_week_start ($time = false) //!!! somewhat dst safe (safe if error doesn't exceed 12h)
 	{
 		if (!$time)
@@ -2733,11 +2767,7 @@ if ($_GET['show_thread_data'] == 1)
 		$week_start = $time - ($wday * 86400 + $date["hours"] * 3600 + $date["minutes"] * 60 + $date["seconds"]);
 		$nodst_hour = (int) date ("H", $week_start);
 
-		if ($nodst_hour === 0)
-		{
-			$week_start = $week_start;
-		}
-		else
+		if ($nodst_hour)
 		{
 			if ($nodst_hour < 13)
 			{
