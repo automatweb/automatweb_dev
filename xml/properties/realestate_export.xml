@@ -1,0 +1,67 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>realestate_manager</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OWNER</reltype>
+            <clid>CL_REALESTATE_MANAGER</clid>
+            <automatic>1</automatic>
+            <comment>Kinnisvarahalduskeskkond, mille objekte soovitakse eksportida</comment>
+            <caption>Kinnisvarahalduskeskkond</caption>
+      </property>
+      <property>
+            <name>city24export_xsl</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>City24 ekspordi xsl faili url</caption>
+      </property>
+      <property>
+            <name>last_city24export</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <datatype>int</datatype>
+            <caption>Viimase ekspordi staatus City24</caption>
+      </property>
+      <property>
+            <name>last_city24export_time</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Viimane eksport City24</caption>
+      </property>
+      <property>
+            <name>last_city24export_error</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Viimasel ekspordil esinenud vead</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_REALESTATE_EXPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <reltypes>
+            <OWNER>
+                  <clid>CL_REALESTATE_MANAGER</clid>
+                  <value>1</value>
+                  <caption>Kinnisvaraobjektide halduskeskkond</caption>
+            </OWNER>
+      </reltypes>
+</properties>
+

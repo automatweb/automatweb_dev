@@ -1,0 +1,94 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>realestate_mgr</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OWNER</reltype>
+            <clid>CL_REALESTATE_MANAGER</clid>
+            <automatic>1</automatic>
+            <comment>Kinnisvarahalduskeskkond mille objektide hulka soovitakse importida</comment>
+            <caption>Kinnisvarahalduskeskkond</caption>
+      </property>
+      <property>
+            <name>country</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COUNTRY</reltype>
+            <clid>CL_COUNTRY</clid>
+            <automatic>1</automatic>
+            <caption>Riik</caption>
+      </property>
+      <property>
+            <name>import_url</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <comment>URL millelt objektid imporditakse</comment>
+            <caption>URL</caption>
+      </property>
+      <property>
+            <name>company</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COMPANY</reltype>
+            <clid>CL_CRM_COMPANY</clid>
+            <editonly>1</editonly>
+            <comment>Organisatsioon mille alla objektid imporditakse</comment>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>city24_import</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <editonly>1</editonly>
+            <comment>URL millele päringut tehes imporditakse objektid City24 süsteemist AW'i</comment>
+            <caption>City24 Importimine</caption>
+      </property>
+      <property>
+            <name>last_city24import</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <classinfo>
+            <syslog_type>ST_REALESTATE_IMPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <reltypes>
+            <OWNER>
+                  <clid>CL_REALESTATE_MANAGER</clid>
+                  <value>1</value>
+                  <caption>Kinnisvaraobjektide halduskeskkond</caption>
+            </OWNER>
+            <COUNTRY>
+                  <clid>CL_COUNTRY</clid>
+                  <value>2</value>
+                  <caption>Riik</caption>
+            </COUNTRY>
+            <COMPANY>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <value>3</value>
+                  <caption>Organisatsioon</caption>
+            </COMPANY>
+      </reltypes>
+</properties>
+
