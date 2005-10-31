@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.9 2005/10/14 13:11:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.10 2005/10/31 15:50:18 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -32,7 +32,7 @@ class toolbar extends aw_template
 
 	function add_menu_button($arr)
 	{
-		if (!$this->menu_inited)
+		if (empty($this->menu_inited))
 		{
 			$this->_init_menu();
 		};
@@ -54,7 +54,7 @@ class toolbar extends aw_template
 	{
 		global $mc_counter;
 		$mc_counter++;
-		if ($arr["onClick"])
+		if (!empty($arr["onClick"]))
 		{
 			$arr["onClick"] = " onClick=\"". $arr["onClick"] . "\"";
 		};
@@ -178,7 +178,7 @@ class toolbar extends aw_template
 	// 		This allows us to have multiple toolbars on a page
 	function get_toolbar($args = array())
 	{
-		if ($this->menu_inited)
+		if (!empty($this->menu_inited))
 		{
 			$this->build_menus();
 		};
@@ -212,7 +212,7 @@ class toolbar extends aw_template
 						$val["tooltip"] = "";
 					};
 
-					$disabled = $val["disabled"] ? "_disabled" : "";
+					$disabled = !empty($val["disabled"]) ? "_disabled" : "";
 
 					$this->vars($val);
 					$tpl = $val["type"] . $disabled;
