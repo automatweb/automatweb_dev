@@ -270,16 +270,6 @@ class crm_company_cust_impl extends class_base
 				$p = obj($u->get_current_person());
 				$ol = new object_list($this->_get_customer_search_filter(array("customer_search_cust_mgr" => $p->name())));
 				$orglist = $this->make_keys($ol->ids());
-				/*$i = get_instance(CL_CRM_COMPANY);
-				$orglist = $i->get_my_customers($arr["obj_inst"]);
-				if (count($orglist))
-				{
-					$ol = new object_list(array(
-						"oid" => $orglist,
-						"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-						"CL_CRM_COclient_manager" => 
-					));
-				}*/
 			}
 		}
 
@@ -1360,11 +1350,6 @@ class crm_company_cust_impl extends class_base
 			$ret["CL_CRM_COMPANY.ettevotlusvorm.name"] = "%".$r["customer_search_ev"]."%";
 		}
 
-		if (empty($r["customer_search_is_co"]["is_co"]) && empty($r["customer_search_is_co"]["is_person"]))
-		{
-			//$ret["oid"] = -1;
-		}
-		else
 		if (empty($r["customer_search_is_co"]["is_co"]) && !empty($r["customer_search_is_co"]["is_person"]))
 		{
 			$ret["class_id"] = CL_CRM_PERSON;

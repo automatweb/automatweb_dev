@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.30 2005/10/26 14:05:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.31 2005/10/31 10:59:37 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -968,6 +968,9 @@ class task extends class_base
 		$dat[] = array();
 		foreach($dat as $idx => $row)
 		{
+			$date_sel = "<A HREF='#'  onClick=\"var cal=new CalendarPopup();cal.select(aw_get_el('rows[$idx][date]'),'anchor".$idx."','dd/MM/yy'); return false;\"
+						   NAME='anchor".$idx."' ID='anchor".$idx."'>vali</A>";
+
 			$t->define_data(array(
 				"task" => "<a name='row_".$row["date"]."'/>".html::textarea(array(
 					"name" => "rows[$idx][task]",
@@ -979,7 +982,7 @@ class task extends class_base
 					"name" => "rows[$idx][date]",
 					"value" => date("d/m/y",($row["date"] > 100 ? $row["date"] : $arr["obj_inst"]->prop("start1"))),
 					"size" => 7
-				)),
+				)).$date_sel,
 				"impl" => html::select(array(
 					"name" => "rows[$idx][impl]",
 					"options" => $impls,
