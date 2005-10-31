@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.78 2005/10/03 10:36:03 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.79 2005/10/31 11:54:09 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -526,10 +526,16 @@ class mrp_resource extends class_base
 		}
 	}
 
-	function create_job_list_table ($arr)
+	function _init_job_list_table(&$table)
 	{
-		$this_object =& $arr["obj_inst"];
-		$table =& $arr["prop"]["vcl_inst"];
+
+		/*|| 
+			Ava | Staatus | 
+		    Projekti nr. | Klient | 
+			Projekti nimetus | Trükitud (ehk algus ehk esimese töö töösse minek) [dd-kuu-yyyy] | 
+			Tähtaeg [dd-kuu-yyyy] | 
+			Trükiarv: | 
+			Tükiarv Notes: ||*/
 
 		$table->define_field(array(
 			"name" => "modify",
@@ -543,26 +549,70 @@ class mrp_resource extends class_base
 			"align" => "center"
 		));
 		$table->define_field(array(
-			"name" => "starttime",
-			"caption" => t("Alustamisaeg"),
-			"sortable" => 1,
-			"align" => "center",
-			"type" => "time",
-			"format" => MRP_DATE_FORMAT,
-			"numeric" => 1,
-		));
-		$table->define_field(array(
-			"name" => "project",
-			"caption" => t("Projekt-Töö nr."),
+			"name" => "proj_nr",
+			"caption" => t("Projekti nr."),
 			"sortable" => 1,
 			"align" => "center"
 		));
+
 		$table->define_field(array(
 			"name" => "client",
 			"caption" => t("Klient"),
 			"sortable" => 1,
 			"align" => "center"
 		));
+
+		$table->define_field(array(
+			"name" => "proj_com",
+			"caption" => t("Projekti nimetus"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$table->define_field(array(
+			"name" => "starttime",
+			"caption" => t("Tr&uuml;kitud"),
+			"sortable" => 1,
+			"align" => "center",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d-m-Y"
+		));
+
+		$table->define_field(array(
+			"name" => "deadline",
+			"caption" => t("T&auml;htaeg"),
+			"sortable" => 1,
+			"align" => "center",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d-m-Y"
+		));
+
+		$table->define_field(array(
+			"name" => "trykiarv",
+			"caption" => t("Tr&uuml;kiarv"),
+			"sortable" => 1,
+			"align" => "center",
+			"numeric" => 1,
+		));
+
+
+		$table->define_field(array(
+			"name" => "trykiarv_notes",
+			"caption" => t("Tr&uuml;kiarv Notes"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+	}
+
+	function create_job_list_table ($arr)
+	{
+		$this_object =& $arr["obj_inst"];
+		$table =& $arr["prop"]["vcl_inst"];
+		$this->_init_job_list_table($table);
+
+	
 
 		$table->set_default_sortby ("starttime");
 		$table->set_default_sorder ("asc");
@@ -624,9 +674,14 @@ class mrp_resource extends class_base
 							"url" => $change_url,
 							)),
 						"project" => $project,
+						"proj_nr" => $p->name(),
+						"proj_com" => $p->comment(),
 						"state" => $state,
 						"starttime" => $job->prop ("starttime"),
-						"client" => $client
+						"client" => $client,
+						"deadline" => $p->prop("due_date"),
+						"trykiarv" => $p->prop("trykiarv"),
+						"trykiarv_notes" => $p->prop("trykiarv_notes"),
 					));
 				}
 			}
