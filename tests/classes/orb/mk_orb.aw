@@ -39,6 +39,14 @@ class mk_orb_test extends PHPUnit_TestCase
 		$this->assertContains("class=menu",$url);
 	}
 	
+	function test_directory_stripped()
+	{
+		// orb does not allow slashes in class names for security reasons and mk_my_orb
+		// always creates "flat" links (without the directory described in classes.ini)
+		$url = $this->c->mk_my_orb("change",array("id" => 3),CL_ACL);
+		$this->assertContains("class=acl_class",$url);
+	}
+	
 	function test_numeric_clid()
 	{
 		$url = $this->c->mk_my_orb("change",array("id" => 3),CL_MENU);
