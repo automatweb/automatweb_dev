@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.67 2005/10/21 21:07:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.68 2005/10/31 11:11:48 ahti Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -807,6 +807,10 @@ class releditor extends core
 			// process it
 			if (!empty($use_form) || in_array($item["name"],$proplist))
 			{
+				if(aw_global_get("uid") == "struktuur")
+				{
+					arr("jee");
+				}
 				if ($item["type"] == "fileupload")
 				{
 					if (!is_array($emb[$item["name"]]))
@@ -833,9 +837,12 @@ class releditor extends core
 					}
 					/*
 					// ok, wtf is that code supposed to do?
+					// - that code is supposed to upload the picture when it's added through another
+					// - class = meaning, DO NOT TOUCH THIS OK? -- ahz 
+					*/
 					else
 					{
-						$tmpname = $emb[$item["name"]]["tmp_name"];	
+						$tmpname = $emb[$item["name"]]["tmp_name"];
 						if (is_uploaded_file($tmpname))
 						{
 							$emb[$item["name"]]["contents"] = $this->get_file(array(
@@ -845,7 +852,7 @@ class releditor extends core
 							$el_count++;
 						};
 					};
-					*/
+					
 				}
 				else
 				{
