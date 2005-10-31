@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.143 2005/10/29 11:41:51 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.144 2005/10/31 13:51:36 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3445,13 +3445,19 @@ if ($_GET['show_thread_data'] == 1)
 			"sortable" => 1
 		));
 
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "tm_end",
 			"caption" => t("L&otilde;pp"),
 			"type" => "time",
 			"align" => "center",
 			"format" => "d.m.Y H:i",
 			"numeric" => 1,
+			"chgbgcolor" => "bgcol",
+		));*/
+		$t->define_field(array(
+			"name" => "proj_comment",
+                        "caption" => t("Projekti nimi"),
+			"align" => "center",
 			"chgbgcolor" => "bgcol",
 		));
 
@@ -3743,6 +3749,15 @@ if ($_GET['show_thread_data'] == 1)
 			}
 
 			$project_str = $proj->name();
+			$proj_com = $proj->comment();
+			if ($this->can("edit", $proj->id()))
+			{
+				$proj_com = html::get_change_url(
+					$proj->id(),
+					array("return_url" => get_ru()),
+					$proj->comment()
+				);
+			}
 
 			$comment = $job->comment();
 			if (strlen($comment) > 20)
@@ -3770,6 +3785,7 @@ if ($_GET['show_thread_data'] == 1)
 				"project" => $project_str,
 				"project_id" => $proj->id(),
 				"proj_pri" => $proj->prop("project_priority"),
+				"proj_comment" => $proj_com,
 				"customer" => $custo,
 				"status" => $state,
 				"bgcol" => $bgcol,
@@ -3970,7 +3986,15 @@ if ($_GET['show_thread_data'] == 1)
 		}
 //!!!
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).name"] = "%";
-		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = "%";
+		if (true ||aw_global_get("uid") == "kix" )
+		{
+			//$GLOBALS["DUKE"] = 1;
+			$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = new obj_predicate_not(1);
+		}
+		else
+		{
+			$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = "%";//new obj_predicate_not('__fake');//"%";
+		}
 		if ($arr["proj_states"])
 		{
 			$filt["CL_MRP_JOB.project(CL_MRP_CASE).state"] = $arr["states"];
@@ -4477,8 +4501,14 @@ if ($_GET['show_thread_data'] == 1)
 			$results = new object_list($filt);
 		}
 
+		$csn = array();
 		foreach($results->arr() as $cust)
 		{
+			if (isset($csn[$cust->name()]))
+			{
+				continue;
+			}
+			$csn[$cust->name()] = 1;
 			$t->define_data(array(
 				"name" => html::get_change_url($cust->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $cust->name()),
 				"address" => $cust->prop_str("contact"),
