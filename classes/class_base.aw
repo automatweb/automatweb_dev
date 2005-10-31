@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.431 2005/10/31 18:36:30 duke Exp $
+// $Id: class_base.aw,v 2.432 2005/10/31 20:53:22 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1136,7 +1136,9 @@ class class_base extends aw_template
 		};
 		if (empty($has_properties))
 		{
-			die(sprintf("this class (%s/%d) does not have any defined properties ",$orb_class, $this->clid));
+			error::raise(array(
+				"msg" => sprintf("this class (%s/%d) does not have any defined properties ",$orb_class, $this->clid),
+			));
 		};
 
 		$clid = $this->clid;
@@ -1151,12 +1153,6 @@ class class_base extends aw_template
 		if ($clid == 7)
 		{
 			$clfile = "doc";
-		};
-
-		// classes with no CLID use class_base too
-		if (empty($clfile) && !$has_properties)
-		{
-			die("coult not identify object " . $this->clfile);
 		};
 
 		if (empty($clfile))
