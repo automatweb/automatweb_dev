@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.127 2005/10/31 11:27:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.128 2005/10/31 11:58:32 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1178,7 +1178,7 @@ class mrp_schedule extends class_base
 			$reserved_end = ($reserved_time + $length);
 			$i = $reserved_time_range;
 
-			while ($this->range_ends[$selected_resource_tag][$i] < $reserved_end)
+			while (isset ($this->range_ends[$selected_resource_tag][$i]) and $this->range_ends[$selected_resource_tag][$i] < $reserved_end)
 			{
 				$this->range_ends[$selected_resource_tag][$i] = $reserved_end;
 				$i++;
