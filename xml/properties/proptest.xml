@@ -34,6 +34,22 @@
             <field>img2</field>
             <caption>Image 2</caption>
       </property>
+      <property>
+            <name>get_property_prop_ignore</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>get_property_prop_ignore</field>
+            <caption>This should be blocked by get_property</caption>
+      </property>
+      <property>
+            <name>get_property_prop_error</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>get_property_prop_error</field>
+            <caption>This should be flagged as error by get_property</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROPTEST</syslog_type>
             <relationmgr>yes</relationmgr>
