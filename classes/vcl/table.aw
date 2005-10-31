@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.66 2005/10/26 12:55:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.67 2005/10/31 16:49:38 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -606,6 +606,7 @@ class aw_table extends aw_template
 
 
 		// moodustame välimise raami alguse
+		/*
 		if (is_array($this->frameattribs))
 		{
 			$tmp = $this->frameattribs;
@@ -623,6 +624,7 @@ class aw_table extends aw_template
 			}
 			$tbl .= $this->opentag($tattr);
 		};
+		*/
 
 		// moodustame tabeli alguse
 		if (is_array($this->tableattribs))
@@ -966,10 +968,12 @@ class aw_table extends aw_template
 		}
 
 		// raam kinni
+		/*
 		if (is_array($this->frameattribs))
 		{
 			$tbl .= "</td></tr></table>\n";
 		};
+		*/
 
 		// tagastame selle käki
 		return $tbl;
