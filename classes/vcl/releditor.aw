@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.68 2005/10/31 11:11:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.69 2005/10/31 11:19:39 ahti Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -807,10 +807,6 @@ class releditor extends core
 			// process it
 			if (!empty($use_form) || in_array($item["name"],$proplist))
 			{
-				if(aw_global_get("uid") == "struktuur")
-				{
-					arr("jee");
-				}
 				if ($item["type"] == "fileupload")
 				{
 					if (!is_array($emb[$item["name"]]))
