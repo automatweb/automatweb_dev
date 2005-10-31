@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.72 2005/10/13 12:26:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.73 2005/10/31 15:50:06 duke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -401,7 +401,7 @@ class aw_template extends core
 			}
 	   		$this->vars[$object] .= $src;
 		}
-		if ($this->debug_mode == 1 && $_GET["TPL"] == 2 && $object == "MAIN")
+		if ($this->debug_mode == 1 && isset($_GET["TPL"]) && $_GET["TPL"] == 2 && $object == "MAIN")
 		{
 			print "Available variables for: " . $this->template_filename;
 			print "<pre>";
@@ -415,7 +415,7 @@ class aw_template extends core
 	// !$arr - template content, array of lines of text
 	function read_tpl($arr)
 	{
-		if ($this->debug_mode != 0 && $_GET["TPL"] == 1)
+		if ($this->debug_mode != 0 && isset($_GET["TPL"]) && $_GET["TPL"] == 1)
 		{
 			print "using " . $this->template_filename . "<br />";
 		};
