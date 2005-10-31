@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.11 2005/04/21 08:39:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.12 2005/10/31 12:21:48 duke Exp $
 // klass taimerite jaoks
 class aw_timer 
 {
@@ -31,9 +31,9 @@ class aw_timer
 	function start($name) 
 	{
 		// kui sellenimeline taimer on olemas
-		if ($this->is_defined($name)) 
+		if (isset($this->timers[$name]))
 		{
-			if ($this->is_running($name)) 
+			if ($this->timers[$name]["running"])
 			{
 				// kui taimer juba käib, siis me ei tee midagi
 				return true;
@@ -59,17 +59,15 @@ class aw_timer
 
 	function stop($name) 
 	{
-		if ($this->is_defined($name)) 
+		if (empty($this->timers[$name]))
 		{
-			if ($this->is_running($name)) 
-			{
-				$this->timers[$name]["elapsed"] += ($this->get_time() - $this->timers[$name]["started"]);
-				$this->timers[$name]["running"] = 0;
-			} 
-			else 
-			{
-				return false;
-			};
+			return false;
+		};
+
+		if ($this->timers[$name]["running"]) 
+		{
+			$this->timers[$name]["elapsed"] += ($this->get_time() - $this->timers[$name]["started"]);
+			$this->timers[$name]["running"] = 0;
 		} 
 		else 
 		{
@@ -79,18 +77,16 @@ class aw_timer
 
 	function elapsed($name)
 	{
-		if ($this->is_defined($name)) 
+		if (empty($this->timers[$name]))
 		{
-			if ($this->is_running($name)) 
-			{
-				$this->timers[$name]["elapsed"] += ($this->get_time() - $this->timers[$name]["started"]);
-				$this->timers[$name]["running"] = 0;
-				return ($this->get_time() - $this->timers[$name]["started"]);
-			} 
-			else 
-			{
-				return false;
-			};
+			return false;
+		}
+
+		if ($this->timers[$name]["running"]) 
+		{
+			$this->timers[$name]["elapsed"] += ($this->get_time() - $this->timers[$name]["started"]);
+			$this->timers[$name]["running"] = 0;
+			return ($this->get_time() - $this->timers[$name]["started"]);
 		} 
 		else 
 		{
@@ -100,16 +96,13 @@ class aw_timer
 
 	function get($name)
 	{
-		if ($this->is_defined($name)) 
+		if (empty($this->timers[$name]))
 		{
-			if ($this->is_running($name)) 
-			{
-				return ($this->get_time() - $this->timers[$name]["started"]);
-			} 
-			else 
-			{
-				return false;
-			};
+			return false;
+		};
+		if ($this->timers[$name]["running"]) 
+		{
+			return ($this->get_time() - $this->timers[$name]["started"]);
 		} 
 		else 
 		{
@@ -168,12 +161,6 @@ class aw_timer
 	function is_running($name) 
 	{
 		return ($this->timers[$name]["running"] == 1);
-	}
-		
-	// kas taimer on defineeritud?
-	function is_defined($name) 
-	{
-		return isset($this->timers[$name]) ? ($this->timers[$name]) : false;
 	}
 }
 ?>
