@@ -235,7 +235,8 @@ function init_config($arr)
 		$GLOBALS["cfg"]["__default"]["site_basedir"] = $site_basedir;
 
 		// now, baseurl
-		$baseurl = isset($GLOBALS["HTTP_SERVER_VARS"]["HTTP_HOST"]) ? "http://".$GLOBALS["HTTP_SERVER_VARS"]["HTTP_HOST"] : "";
+		// XXX: what about https urls though?
+		$baseurl = isset($_SERVER["HTTP_HOST"]) ? "http://".$_SERVER["HTTP_HOST"] : "";
 		$GLOBALS["cfg"]["__default"]["baseurl"] = $baseurl;
 		foreach($ini_files as $k => $file)
 		{
@@ -265,17 +266,23 @@ function init_config($arr)
 
 	// siin ei saa veel aw_global_get'i kasutada, kuna defsi pole veel laetud
 	$GLOBALS["cfg"]["__default"]["site_tpldir"] = $GLOBALS["cfg"]["__default"]["tpldir"];
-	global $PHP_SELF;
-	if (strpos($PHP_SELF,"automatweb")) 
+	if (strpos($_SERVER["PHP_SELF"],"automatweb")) 
 	{
 		// keemia. Kui oleme saidi adminnis sees, siis votame templated siit
 		$GLOBALS["cfg"]["__default"]["tpldir"] = aw_ini_get("basedir") . "/templates";
-	} 
+		// lots of places in code need to know whether we are in admin interface
+		// and use different approaches for that .. let's do it here instead
+		$GLOBALS["cfg"]["__default"]["in_admin"] = 1;
+	}
+	else
+	{
+		$GLOBALS["cfg"]["__default"]["in_admin"] = 0;
+	}
 	// kui saidi "sees", siis votame templated tolle saidi juurest, ehk siis ei puutu miskit
 
 	// only load those definitions if fastcall is not set. This shouldnt break anything
 	// and should save us a little memory. -- duke
-	if (!isset($GLOBALS["fastcall"]))
+	if (!isset($_GET["fastcall"]))
 	{
 		// I don't know how the fuck it happens, but somethis these things are not arrays
 		// check it and bail out if so. Not a solution, but still kind of better than
@@ -566,7 +573,7 @@ function get_instance($class,$args = array(), $errors = true)
 		}
 	}
 
-	if (not(is_object($instance)))
+	if (!is_object($instance))
 	{
 		if ($site)
 		{
@@ -864,8 +871,8 @@ function __init_aw_session_track()
 		"server" => array(
 			"ip" => isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : null,
 			"referer" => isset($_SERVER["HTTP_REFERER"]) ? $_SERVER["HTTP_REFERER"] : null,
-			"ru" => $GLOBALS["REQUEST_URI"],
-			"site" => $GLOBALS["HTTP_HOST"],
+			"ru" => $_SERVER["REQUEST_URI"],
+			"site" => $_SERVER["HTTP_HOST"],
 		),
 		"aw" => array(
 			"site_id" => aw_ini_get("site_id"),
@@ -928,30 +935,26 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 	$content.= "url = ".$GLOBALS["cfg"]["__default"]["baseurl"].$GLOBALS["__aw_globals"]["REQUEST_URI"]."\n-----------------------\n";
 	$content.= "is_rpc_call = $is_rpc_call\n";
 	$content.= "rpc_call_type = $rpc_call_type\n";
-	global $HTTP_COOKIE_VARS;
-	foreach($HTTP_COOKIE_VARS as $k => $v)
+	foreach($_COOKIE as $k => $v)
 	{
-		$content.="HTTP_COOKIE_VARS[$k] = $v \n";
+		$content.="_COOKIE[$k] = $v \n";
 	}
-	global $HTTP_GET_VARS;
-	foreach($HTTP_GET_VARS as $k => $v)
+	foreach($_GET as $k => $v)
 	{
-		$content.="HTTP_GET_VARS[$k] = $v \n";
+		$content.="_GET[$k] = $v \n";
 	}
-	global $HTTP_POST_VARS;
-	foreach($HTTP_POST_VARS as $k => $v)
+	foreach($_POST as $k => $v)
 	{
-		$content.="HTTP_POST_VARS[$k] = $v \n";
+		$content.="_POST[$k] = $v \n";
 	}
-	global $HTTP_SERVER_VARS;
-	foreach($HTTP_SERVER_VARS as $k => $v)
+	foreach($_SERVER as $k => $v)
 	{
 		// we will not send out the password or the session key
 		if ( ($k == "PHP_AUTH_PW") || ($k == "automatweb") )
 		{
 			continue;
 		};
-		$content.="HTTP_SERVER_VARS[$k] = $v \n";
+		$content.="_SERVER[$k] = $v \n";
 	}
 
 		// also attach backtrace
