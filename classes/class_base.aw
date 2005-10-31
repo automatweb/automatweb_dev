@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.430 2005/10/25 13:15:07 duke Exp $
+// $Id: class_base.aw,v 2.431 2005/10/31 18:36:30 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -523,6 +523,12 @@ class class_base extends aw_template
 				$o_arr["embedded"] = true;
 			}
 
+			if ($args["cbcli"] == "debugclient")
+			{
+				$this->output_client = "debugclient";
+				$cbcli = "debugclient";
+			}
+
 			$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 			if (!empty($lm))
 			{
@@ -567,7 +573,6 @@ class class_base extends aw_template
 			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
 			"show_help" => aw_ini_get("class_base.show_help"),
-			"add_txt" => $this->clid == CL_CRM_COMPANY,
 		));
 
 		// käes ongi .. see asi eeldab, et layoutile on grupp peale väänatud ..
@@ -674,7 +679,7 @@ class class_base extends aw_template
 			"id" => $this->id,
 			// this should refer to the active group
 			"group" => isset($this->request["group"]) ? $this->request["group"] : $this->use_group,
-			"orb_class" => $orb_class,
+			"orb_class" => basename($orb_class),
 			"parent" => $this->parent,
 			"section" => aw_global_get("section"),
 			"period" => isset($this->request["period"]) ? $this->request["period"] : "",
@@ -1372,6 +1377,7 @@ class class_base extends aw_template
 					{
 						$active = false;
 					};
+
 					$this->cli->add_tab(array(
 						"id" => $tabinfo["id"],
 						"level" => $val["level"],
@@ -1381,14 +1387,6 @@ class class_base extends aw_template
 						"active" => $active,
 						"tabgroup" => $val["tabgroup"],
 					));
-
-					if ($this->output_client == "xulclient")
-					{
-						$this->cli->add_tab(array(
-							"id" => $tabinfo["id"],
-							"caption" => $tabinfo["caption"],
-						));
-					};
 				};
 			};
 
