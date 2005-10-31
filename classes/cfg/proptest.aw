@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/proptest.aw,v 1.1 2005/10/17 18:58:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/proptest.aw,v 1.2 2005/10/31 20:54:32 duke Exp $
 // proptest.aw - Property Test File, for unit tests
 // Feel free to add new things and write new tests, but if you change any existing ones, then make sure
 // that you update any relevant tests as well
@@ -18,6 +18,12 @@
 
 @property img2 type=releditor reltype=RELTYPE_IMAGE props=file,comment
 @caption Image 2
+
+@property get_property_prop_ignore type=textbox 
+@caption This should be blocked by get_property
+
+@property get_property_prop_error type=textbox 
+@caption This should be flagged as error by get_property
 
 @reltype MENU value=1 clid=CL_MENU
 @caption Link to menu
@@ -38,11 +44,49 @@
 
 class proptest extends class_base
 {
+	var $on_load_args;
+	var $pre_edit_called = false;
+	var $on_load_called = false;
+	var $mod_reforb_called = false;
 	function proptest()
 	{
 		$this->init(array(
 			"clid" => CL_PROPTEST
 		));
+	}
+
+	function callback_on_load($arr)
+	{
+		$this->on_load_called = true;
+	}
+
+	function callback_pre_edit($arr)
+	{
+		$this->pre_edit_called = true;
+	}
+
+	function get_property($arr)
+	{
+		$retval = PROP_OK;
+		$prop = &$arr["prop"];
+		switch($prop["name"])
+		{
+			case "get_property_prop_ignore":
+				$retval = PROP_IGNORE;
+				break;	
+
+			case "get_property_prop_error":
+				$prop["error"] = "error!";
+				$retval = PROP_ERROR;
+				break;
+		};
+		return $retval;
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$this->mod_reforb_called = true;
+		$arr["added_by_mod_reforb"] = "works";
 	}
 
 }
