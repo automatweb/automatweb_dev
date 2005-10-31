@@ -237,9 +237,12 @@ class date_edit
 			}; // end switch
 		}; // end while
 
-		$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."'>";
-		$retval .= "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/class_126.gif' border='0'></a> | ";	
-		$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");'>X</a>";
+		if (is_admin())
+		{
+			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."'>";
+			$retval .= "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/class_126.gif' border='0'></a> | ";	
+			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");'>X</a>";
+		}
 
 		return $retval;
 	} // end gen_edit_form
