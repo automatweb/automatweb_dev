@@ -1337,32 +1337,5 @@ class core extends acl_base
 		return $obj->name();
 	}
 	
-	////
-	// !generates a simple one-level menu from the given data structure - the active item is determined by orb action
-	function do_menu($items)
-	{
-		global $action;
-		$im = "";
-		foreach($items as $iid => $idata)
-		{
-			$this->vars(array(
-				"url"	=> $idata["url"],
-				"text" => $idata["name"]
-			));
-			if ($action == $iid)
-			{
-				$im.=$this->parse("SEL_ITEM");
-			}
-			else
-			{
-				$im.=$this->parse("ITEM");
-			}
-		}
-		$this->vars(array(
-			"ITEM" => $im,
-			"SEL_ITEM" => ""
-		));
-		return $this->parse();
-	}
 };
 ?>

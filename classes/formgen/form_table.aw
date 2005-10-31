@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.78 2005/04/05 13:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.79 2005/10/31 11:57:02 duke Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1912,9 +1912,9 @@ class form_table extends form_base
 
 	function do_menu()
 	{
-		$tpl = get_instance("aw_template");
-		$tpl->tpl_init("forms");
-		$tpl->read_template("fg_table_menu.tpl");
+		//$tpl = get_instance("aw_template");
+		$this->tpl_init("forms");
+		$this->read_template("fg_table_menu.tpl");
 
 		$items["change"] = array("name" => "Tulbad", "url" => $this->mk_my_orb("change", array("id" => $this->table_id), "",false,true));
 
@@ -1937,7 +1937,7 @@ class form_table extends form_base
 		}
 
 		$this->vars(array(
-			"menu" => $tpl->do_menu($items)
+			"menu" => $this->do_tpl_menu($items)
 		));
 	}
 
@@ -3561,6 +3561,34 @@ class form_table extends form_base
 		}
 
 		return $css;
+	}
+	
+	////
+	// !generates a simple one-level menu from the given data structure - the active item is determined by orb action
+	function do_tpl_menu($items)
+	{
+		global $action;
+		$im = "";
+		foreach($items as $iid => $idata)
+		{
+			$this->vars(array(
+				"url"	=> $idata["url"],
+				"text" => $idata["name"]
+			));
+			if ($action == $iid)
+			{
+				$im.=$this->parse("SEL_ITEM");
+			}
+			else
+			{
+				$im.=$this->parse("ITEM");
+			}
+		}
+		$this->vars(array(
+			"ITEM" => $im,
+			"SEL_ITEM" => ""
+		));
+		return $this->parse();
 	}
 }
 ?>
