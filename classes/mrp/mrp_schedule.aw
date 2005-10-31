@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.126 2005/10/10 11:29:45 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.127 2005/10/31 11:27:13 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1174,12 +1174,14 @@ class mrp_schedule extends class_base
 			### sort changed range by starttimes
 			ksort ($this->reserved_times[$selected_resource_tag][$reserved_time_range], SORT_NUMERIC);
 
-			### update max. reach of selected timerange.
-			$tmp = ($reserved_time + $length);
+			### update max. reach of selected and sequent timeranges (job may reach over next range(s)).
+			$reserved_end = ($reserved_time + $length);
+			$i = $reserved_time_range;
 
-			if ($tmp > $this->range_ends[$selected_resource_tag][$reserved_time_range])
+			while ($this->range_ends[$selected_resource_tag][$i] < $reserved_end)
 			{
-				$this->range_ends[$selected_resource_tag][$reserved_time_range] = $tmp;
+				$this->range_ends[$selected_resource_tag][$i] = $reserved_end;
+				$i++;
 			}
 
 			### convert back to real time
