@@ -876,7 +876,7 @@ class site_list extends class_base
 	function get_local_list()
 	{
 		$last_full_upd = $this->get_cval("site_list::local_list_update");
-		if (($last_full_upd + 10*3600) > time())
+		if (($last_full_upd + 10*3600) < time())
 		{
 			$this->_do_update_list_cache();
 			$this->set_cval("site_list::local_list_update", time());
