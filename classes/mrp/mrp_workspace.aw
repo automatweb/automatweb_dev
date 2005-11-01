@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.144 2005/10/31 13:51:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.145 2005/11/01 11:10:59 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -995,10 +995,16 @@ class mrp_workspace extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$prop["value"]  = "<span style='padding: 5px; background: ".$this->pj_colors["done"]."'>".t("Valmis")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("V&otilde;ib alustada")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada/t&ouml;&ouml;s")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["resource_in_use"]."'>".t("Eeldust&ouml;&ouml; tehtud")."</span>&nbsp;&nbsp;";
+			
+				$prop["value"] = "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr><td>";	
+				$prop["value"]  .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["done"]."'>".t("Valmis")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("V&otilde;ib alustada")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada/t&ouml;&ouml;s")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["resource_in_use"]."'>".t("Eeldust&ouml;&ouml; tehtud")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "</td><td align=right>";
+				$prop["value"] .= "<span style='font-size: 11px;'>Projekt: <input size=6 type=text name=do_pv_proj_s>";
+				$prop["value"] .= "<a href='javascript:void(0)' onClick='changed=0;document.changeform.submit()'>Otsi</a></span>";
+				$prop["value"] .= "</td></tr></table>";
 				break;
 
 			case "sp_name":
@@ -1225,6 +1231,7 @@ class mrp_workspace extends class_base
 				}
 			}
 		}
+		$_SESSION["mrp"]["do_pv_proj_s"] = $arr["request"]["do_pv_proj_s"];
 	}
 
 	function callback_pre_save ($arr)
@@ -3559,7 +3566,6 @@ if ($_GET['show_thread_data'] == 1)
 			case "grp_printer_startable":
 			case "grp_printer_notstartable":
 				$default_sortby = "mrp_schedule_826.starttime";
-				//$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
@@ -3611,6 +3617,36 @@ if ($_GET['show_thread_data'] == 1)
 			$sby .= " ".$arr["request"]["sort_order"];
 		}
 		classload("date_calc");
+
+		// now, if the session contans [mrp][do_pv_proj_s] then we must get a list of all the jobs in the current view
+		// then iterate them until we find a job with the requested project 
+		// and then figure out the page number and finally, redirect the user to that page. 
+		// this sort of sucks, but I can't figure out how to do the count in sql..
+		if ($_SESSION["mrp"]["do_pv_proj_s"] != "")
+		{
+			$find_proj = $_SESSION["mrp"]["do_pv_proj_s"];
+			unset($_SESSION["mrp"]["do_pv_proj_s"]);
+			$jobs = $this->get_next_jobs_for_resources(array(
+                                "resources" => $res,
+                          //      "limit" => $limit,
+                                "states" => $states,
+                                "sort_by" => $sby,
+                                "proj_states" => $proj_states
+                        ));
+			$count = 0;
+			foreach($jobs as $job)
+			{
+				$count++;
+				$proj = obj($job->prop("project"));
+				if ($proj->name() == $find_proj)
+				{
+					$page = floor($count / $per_page);
+					header("Location: ".aw_url_change_var("printer_job_page", $page));
+					die();
+				}
+			}	
+		}
+
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
 			"limit" => $limit,
@@ -3986,15 +4022,8 @@ if ($_GET['show_thread_data'] == 1)
 		}
 //!!!
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).name"] = "%";
-		if (true ||aw_global_get("uid") == "kix" )
-		{
-			//$GLOBALS["DUKE"] = 1;
-			$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = new obj_predicate_not(1);
-		}
-		else
-		{
-			$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = "%";//new obj_predicate_not('__fake');//"%";
-		}
+		// this also does or is null, cause the customer can be null
+		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = new obj_predicate_not(1);
 		if ($arr["proj_states"])
 		{
 			$filt["CL_MRP_JOB.project(CL_MRP_CASE).state"] = $arr["states"];
