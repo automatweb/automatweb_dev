@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.145 2005/10/16 15:12:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.146 2005/11/01 11:51:15 kristo Exp $
 
 /*
 
@@ -1998,6 +1998,13 @@ arr($l_dat);
 		{
 			$this->vars(array(
 				"logged" => $this->parse("logged")
+			));
+		}
+
+		if ($this->active_doc)
+		{
+			$this->vars(array(
+				"HAS_ACTIVE_DOC" => $this->parse("HAS_ACTIVE_DOC")
 			));
 		}
 	}
