@@ -583,8 +583,8 @@ function MM_swapImage() { //v3.0
   <tr>
     <td><table width="770" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td class="footer">K&otilde;ik &otilde;igused kaitstud 2003.    </td>
-        <td align="right" class="footer">Aadress: P&auml;rnu mnt. 154, 11317 Tallinn &middot; Tel: 0 655 8334 &middot; E-mail: <a href="5675">info@struktuur.ee </a></td>
+        <td class="footer">K&otilde;ik &otilde;igused kaitstud 2005.    </td>
+        <td align="right" class="footer">Aadress: P&auml;rnu mnt. 154, 11317 Tallinn &middot; Tel: 655 8334 &middot; E-mail: <a href="5675">info@struktuur.ee </a></td>
 
       </tr>
     </table></td>
@@ -606,11 +606,11 @@ function MM_swapImage() { //v3.0
                             <td align="left" valign="top" width="123"><input type="text" name="uid" size="7" class="input-rkool"></td>
                           </tr>
                           <tr> 
-                            <td align="left" valign="top" width="123">Password:</td>
+                            <td align="left" valign="top" width="123">Parool:</td>
                             <td align="left" valign="top" width="123"><input type="password" name="password" size="7" class="input-rkool"></td>
                           </tr>
                           <tr> 
-                            <td colspan=2 align="left" valign="top" width="123"><input type="submit" name="Submit" value="Login" class="submit"></td>
+                            <td colspan=2 align="left" valign="top" width="123"><input type="submit" name="Submit" value="Logi sisse" class="submit"></td>
                           </tr>
                         </table>
                       </td>
