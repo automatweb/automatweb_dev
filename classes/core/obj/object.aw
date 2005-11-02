@@ -457,11 +457,6 @@ class object
 	{
 		
 	}
-
-	function &get_internal_object()
-	{
-		return $GLOBALS["objects"][$this->oid];
-	}
 }
 
 function &obj($param = NULL)
