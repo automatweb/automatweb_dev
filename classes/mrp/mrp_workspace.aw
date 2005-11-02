@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.146 2005/11/02 12:34:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.147 2005/11/02 12:36:08 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3803,7 +3803,7 @@ if ($_GET['show_thread_data'] == 1)
 				$proj_com = html::get_change_url(
 					$proj->id(),
 					array("return_url" => get_ru()),
-					$proj->comment()
+					parse_obj_name($proj->comment())
 				);
 			}
 
