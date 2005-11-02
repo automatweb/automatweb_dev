@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.91 2005/10/05 12:53:47 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.92 2005/11/02 12:34:17 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1824,7 +1824,7 @@ class mrp_case extends class_base
 			"caption" => t("Millal"),
 			"type" => "time",
 			"align" => "center",
-			"format" => "d.m.Y H:i",
+			"format" => "d.m.Y H:i:s",
 			"numeric" => 1,
 			"sortable" => 1
 		));

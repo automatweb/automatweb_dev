@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.145 2005/11/01 11:10:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.146 2005/11/02 12:34:18 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1035,7 +1035,8 @@ class mrp_workspace extends class_base
 				$prop["options"] = array(
 					MRP_STATUS_DONE => t("Tehtud"),
 					MRP_STATUS_ABORTED => t("Katkestatud"),
-					MRP_STATUS_PLANNED => t("Avatud")
+					MRP_STATUS_PLANNED => t("Avatud"),
+					MRP_STATUS_ARCHIVED => t('Arhiveeritud')
 				);
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
@@ -2853,7 +2854,7 @@ if ($_GET['show_thread_data'] == 1)
 		$arr['unit'] = $_GET["unit"];
 		$arr['category'] = $_GET["category"];
 
-		if ($_GET["group"] != "grp_search_proj" && $_GET["group"] != "grp_search_cust")
+		if ($_GET["group"] != "grp_search" && $_GET["group"] != "grp_search_proj" && $_GET["group"] != "grp_search_cust")
 		{
 			$arr['return_url'] = urlencode(aw_global_get('REQUEST_URI'));
 		}
@@ -3564,11 +3565,17 @@ if ($_GET['show_thread_data'] == 1)
 				break;
 
 			case "grp_printer_startable":
-			case "grp_printer_notstartable":
 				$default_sortby = "mrp_schedule_826.starttime";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
+				break;
+
+			case "grp_printer_notstartable":
+                                $default_sortby = "mrp_schedule_826.starttime";
+                                $states = array(MRP_STATUS_PLANNED,MRP_STATUS_PAUSED);
+                                $proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
+                                $limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
 				break;
 		}
 
@@ -3714,6 +3721,11 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				// dark green
 				$bgcol = $this->pj_colors["done"];
+			}
+			else
+			if ($job->prop("state") == MRP_STATUS_INPROGRESS)
+			{
+				$bgcol = $this->pj_colors["can_not_start"];
 			}
 			else
 			if ($mrp_job->can_start(array("job" => $job->id())))
@@ -4517,15 +4529,15 @@ if ($_GET['show_thread_data'] == 1)
 			);
 			if ($arr["request"]["cs_firmajuht"] != "")
 			{
-				$filt["CL_CRM_COMPANY.firmajuht.name"] = "%".$arr["request"]["cs_firmajuht"]."%";
+				$filt["CL_CRM_COMPANY.firmajuht(CL_CRM_PERSON).name"] = "%".$arr["request"]["cs_firmajuht"]."%";
 			}
 			if ($arr["request"]["cs_contact"] != "")
 			{
-				$filt["CL_CRM_COMPANY.contact.name"] = "%".$arr["request"]["cs_contact"]."%";
+				$filt["CL_CRM_COMPANY.firmajuht(CL_CRM_PERSON).name"] = "%".$arr["request"]["cs_contact"]."%";
 			}
 			if ($arr["request"]["cs_phone"] != "")
 			{
-				$filt["CL_CRM_COMPANY.phone.name"] = "%".$arr["request"]["cs_phone"]."%";
+				$filt["CL_CRM_COMPANY.phone_id(CL_CRM_PHONE).name"] = "%".$arr["request"]["cs_phone"]."%";
 			}
 			$results = new object_list($filt);
 		}
