@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.147 2005/11/02 12:36:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.148 2005/11/02 13:20:28 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1004,6 +1004,20 @@ class mrp_workspace extends class_base
 				$prop["value"] .= "</td><td align=right>";
 				$prop["value"] .= "<span style='font-size: 11px;'>Projekt: <input size=6 type=text name=do_pv_proj_s>";
 				$prop["value"] .= "<a href='javascript:void(0)' onClick='changed=0;document.changeform.submit()'>Otsi</a></span>";
+				$prop["value"] .= "</td><td align=right>";
+				$prop["value"] .= "<span style='font-size: 11px;'>Vali ressurss: <select name=pj_use_resource>";
+				$resids = $this->get_cur_printer_resources(array(
+					"ws" => $arr["obj_inst"],
+					"ign_glob" => true
+				));
+				$res_ol = new object_list();
+				if (count($resids))
+				{
+					$res_ol = new object_list(array("oid" => $resids));
+				}
+				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),array("" => "") + $res_ol->names());
+				$prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
+				
 				$prop["value"] .= "</td></tr></table>";
 				break;
 
@@ -1106,6 +1120,10 @@ class mrp_workspace extends class_base
 
 		switch ($prop["name"])
 		{
+			case "printer_legend":
+				$_SESSION["mrp_operator_use_resource"] = $arr["request"]["pj_use_resource"];
+				break;
+
 			case "projects_list":
 				$retval = $this->save_custom_form_data ($arr);
 				$applicable_lists = array (
