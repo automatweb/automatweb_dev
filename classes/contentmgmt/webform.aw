@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.76 2005/06/29 13:29:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.77 2005/11/02 17:40:14 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1217,6 +1217,8 @@ class webform extends class_base
 						"options" => $capt_opts,
 						"selected" => $property["wf_capt_ord"],
 					)),
+					"nextto" => (int)$property["nextto"] ? "checked" : "",
+					"space" => $property["space"],
 				));
 				if($prpdata["type"] == "classificator")
 				{
@@ -1707,7 +1709,8 @@ class webform extends class_base
 		
 		$dummy = new object();
 		$dummy->set_class_id($ftype);
-
+		
+		$rd->cfgform_id = $cfgform->id();
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
 			"obj_inst" => $dummy,
