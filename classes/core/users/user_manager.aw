@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.2 2005/10/14 15:03:25 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.3 2005/11/02 09:06:04 kristo Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -138,6 +138,10 @@ class user_manager extends class_base
 				$this->do_groups_tree($prop['vcl_inst'], $parent, 0);
 			break;
 			case 'default_loginmenu':
+				if ($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
 				// create list from selected folder's 2nd level children
 				$root = $arr['obj_inst']->get_first_obj_by_reltype('RELTYPE_LOGIN_ROOT');
 				if (is_object($root))
