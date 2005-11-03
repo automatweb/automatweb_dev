@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.65 2005/10/17 18:34:36 duke Exp $
+// $Id: cfgutils.aw,v 1.66 2005/11/03 13:15:16 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -522,6 +522,9 @@ class cfgutils extends aw_template
 		{
 			foreach($objprops as $name => $objprop)
 			{
+				// if a property belongs to multiple groups and one of them is not 
+				// defined then add the group, value of the group attribute becomes
+				// the caption
 				if (is_array($objprop["group"]))
 				{
 					foreach($objprop["group"] as $_group)
@@ -533,6 +536,8 @@ class cfgutils extends aw_template
 
 					};
 				}
+				// if a property belongs to a non-existent group, then add the group,
+				// value of the group attribute becomes
 				else
 				{
 					if (empty($this->groupinfo[$objprop["group"]]))
@@ -541,6 +546,7 @@ class cfgutils extends aw_template
 					};
 				};
 
+				// Allow overriding of properties defined in class_base
 				if (isset($coreprops[$name]))
 				{
 					unset($coreprops[$name]);
@@ -595,6 +601,11 @@ class cfgutils extends aw_template
 	function get_forminfo()
 	{
 		return isset($this->propdef["forminfo"]) ? $this->propdef["forminfo"] : array();
+	}
+	
+	function get_tableinfo()
+	{
+		return isset($this->propdef["tableinfo"]) ? $this->propdef["tableinfo"] : array();
 	}
 
 	function get_groupinfo()
