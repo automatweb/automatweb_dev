@@ -58,13 +58,23 @@
             <caption>P&amp;otilde;hitoon</caption>
       </property>
       <property>
-            <name>template</name>
+            <name>choose_design</name>
             <table>objects</table>
             <group>design</group>
             <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>Kujundusp&amp;otilde;hi</caption>
+      </property>
+      <property>
+            <name>custom_design_document</name>
+            <table>objects</table>
+            <group>design</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_GENERAL_DOCUMENT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>doku</caption>
       </property>
       <property>
             <name>publications_name</name>
@@ -413,11 +423,6 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument</caption>
             </GENERAL_DOCUMENT>
-            <LINK_TO_MANAGEMENT_OBJECT>
-                  <value>15</value>
-                  <clid>CL_EXTLINK</clid>
-                  <caption>Link haldusobjektile</caption>
-            </LINK_TO_MANAGEMENT_OBJECT>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.15 2005/10/24 10:45:38 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.16 2005/11/03 13:32:47 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -38,8 +38,11 @@
 		@property main_color type=textbox field=meta method=serialize
 		@caption P&otilde;hitoon
 		
-		@property template type=chooser field=meta method=serialize
+		@property choose_design type=chooser field=meta method=serialize
 		@caption Kujundusp&otilde;hi
+
+		@property custom_design_document type=relpicker reltype=RELTYPE_GENERAL_DOCUMENT field=meta method=serialize
+		@caption Dokument
 
 @groupinfo publications caption="V&auml;ljaanded"
 @default group=publications
@@ -173,9 +176,6 @@
 @reltype GENERAL_DOCUMENT value=14 clid=CL_DOCUMENT
 @caption Dokument
 
-@reltype LINK_TO_MANAGEMENT_OBJECT value=15 clid=CL_EXTLINK
-@caption Link haldusobjektile
-
 */
 
 class expp_journal_management extends class_base
@@ -204,11 +204,38 @@ class expp_journal_management extends class_base
 					$prop['value'] = "#000000";
 				}
 				break;
-			case "template":
+			case "choose_design":
 				$prop['options'] = array(
-					"default_template" => t("Kasutan etteantud p&otilde;hja"),
-					"user_template" => t("Soovin ise kujundada"),
+					"default_design" => t("Kasutan etteantud p&otilde;hja"),
+					"custom_design" => t("Soovin ise kujundada"),
 				);
+				break;
+			case "custom_design_document":
+				$choose_design = $arr['obj_inst']->prop("choose_design");
+				if ($choose_design == "default_design" || empty($choose_design))
+				{
+					$retval = PROP_IGNORE;
+				}
+				else
+				{
+					// have to check if there is any documents connected:
+					$connections_to_general_documents = $arr['obj_inst']->connections_from(array(
+						"type" => "RELTYPE_GENERAL_DOCUMENT",	
+					));
+					if (count($connections_to_general_documents) <= 0)
+					{
+						$new_document = new object();
+						$new_document->set_class_id(CL_DOCUMENT);
+						$new_document->set_parent($arr['obj_inst']->id());
+						$new_document->set_name("default");
+						$new_document->save();
+						$arr['obj_inst']->connect(array(
+							"to" => $new_document,
+							"type" => "RELTYPE_GENERAL_DOCUMENT",
+						));
+						$prop['options'][$new_document->id()] = $new_document->name();
+					}
+				}
 				break;
 			case "publications_name":
 			case "publications_description":
