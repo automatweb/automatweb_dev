@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_publication.aw,v 1.2 2005/10/24 10:27:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_publication.aw,v 1.3 2005/11/03 16:21:21 dragut Exp $
 // expp_publication.aw - V&auml;ljaanne 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property code type=textbox field=comment
+@caption Kood
 
 @property description_from_reggy type=textarea field=meta method=serialize
 @caption Kirjeldus Reggy-st
@@ -36,7 +39,9 @@ class expp_publication extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case "code":
+				$prop['type'] = "text";
+				break;
 		};
 		return $retval;
 	}

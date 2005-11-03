@@ -127,8 +127,9 @@
             <mode>manager</mode>
             <props>
                   <num_0>name</num_0>
-                  <num_1>description_from_reggy</num_1>
-                  <num_2>description</num_2>
+                  <num_1>code</num_1>
+                  <num_2>description_from_reggy</num_2>
+                  <num_3>description</num_3>
             </props>
             <store>no</store>
             <caption>Alamv&amp;auml;ljaanded</caption>
