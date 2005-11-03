@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.12 2005/03/14 17:27:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.13 2005/11/03 13:25:30 duke Exp $
 
 /*
 	@default table=objects
@@ -388,7 +388,7 @@ class cal_event extends class_base
 			$this->read_template("edit_repeater.tpl");
 			// if it is a predefined cycle, then we load it
 			$tmp = obj($id);
-			if (is_number($cycle))
+			if (is_numeric($cycle))
 			{
 				$meta = $tmp->meta("repeaters" . $cycle);
 			}
