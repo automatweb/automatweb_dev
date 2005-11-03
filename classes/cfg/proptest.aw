@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/proptest.aw,v 1.2 2005/10/31 20:54:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/proptest.aw,v 1.3 2005/11/03 13:16:20 duke Exp $
 // proptest.aw - Property Test File, for unit tests
 // Feel free to add new things and write new tests, but if you change any existing ones, then make sure
 // that you update any relevant tests as well
@@ -19,6 +19,9 @@
 @property img2 type=releditor reltype=RELTYPE_IMAGE props=file,comment
 @caption Image 2
 
+@property cb type=callback callback=do_callback
+@caption Callback element
+
 @property get_property_prop_ignore type=textbox 
 @caption This should be blocked by get_property
 
@@ -37,6 +40,12 @@
 @groupinfo parentgroup1 caption="Parent Group 1"
 @groupinfo childgroup1 caption="Child Group 1" parent=parentgroup1 submit=no
 @groupinfo childgroup2 caption="Child Group 2" parent=parentgroup1 submit_method=get
+
+@groupinfo empty_group caption="No properties, should be hidden"
+@groupinfo hidden_by_mod_tab caption="Hidden by callback_mod_tab"
+
+@property dummy type=text group=hidden_by_mod_tab
+@caption A property on a hidden tab
 
 @tableinfo proptest index=aw_id master_table=objects master_index=brother_of
 
@@ -81,6 +90,37 @@ class proptest extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function do_callback($arr)
+	{
+		$ret = array();
+		$name = $arr["prop"]["name"];
+
+		$nm = $name . "[1]";
+		$ret[$nm] = array(
+			"name" => $nm,
+			"type" => "text",
+			"caption" => t("CB1"),
+			"group" => $arr["prop"]["group"],
+		);
+		$nm = $name . "[2]";
+		$ret[$nm] = array(
+			"name" => $nm,
+			"type" => "text",
+			"caption" => t("CB2"),
+			"group" => $arr["prop"]["group"],
+		);
+
+		return $ret;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "hidden_by_mod_tab")
+		{
+			return false;
+		};
 	}
 
 	function callback_mod_reforb($arr)
