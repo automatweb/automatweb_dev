@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.3 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.4 2005/11/03 13:24:49 duke Exp $
 
 /*
 	@classinfo syslog_type=ST_DB_SERVER_EXPLORER relationmgr=yes no_status=1 no_comment=1
@@ -203,7 +203,7 @@ class db_server_explorer extends class_base
 				'name' => $fname,
 				'caption' => $fname,
 				'sortable' => 1,
-				'numeric' => (is_number($tbldat[$fields_tbl][$fname]))
+				'numeric' => (is_numeric($tbldat[$fields_tbl][$fname]))
 			));
 		}
 

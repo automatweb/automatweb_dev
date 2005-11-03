@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.3 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.4 2005/11/03 13:24:49 duke Exp $
 /*
 
 	@default table=objects
@@ -86,7 +86,7 @@ class db_sql_query extends class_base
 						'name' => $rn,
 						'caption' => $rn,
 						'sortable' => 1,
-						'numeric' => is_number($rv)	// this will probably fail most of the time, but I see no other way
+						'numeric' => is_numeric($rv)	// this will probably fail most of the time, but I see no other way
 					));
 				}
 				$rows_defined = true;

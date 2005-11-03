@@ -314,7 +314,7 @@ class export_lite extends aw_template
 		{
 			$nmodified = trim($mt[1]);
 			//echo "preg match for time  = $modified <br>";
-			if (!is_number($nmodified) && $nmodified != "")
+			if (!is_numeric($nmodified) && $nmodified != "")
 			{
 				list($d,$m,$y) = explode("/", $nmodified);
 	
@@ -526,7 +526,7 @@ class export_lite extends aw_template
 			$js = "";
 			foreach($HG as $k => $v)
 			{
-				if ($k == "section" && !is_number($v))
+				if ($k == "section" && !is_numeric($v))
 				{
 					// we must turn the section into a number always. 
 					$v = $this->mned->check_section($v,false);
@@ -926,7 +926,7 @@ class export_lite extends aw_template
 		$js = "";
 		foreach($HG as $k => $v)
 		{
-			if ($k == "section" && !is_number($v))
+			if ($k == "section" && !is_numeric($v))
 			{
 				// we must turn the section into a number always. 
 				$v = $this->mned->check_section($v,false);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.19 2005/03/20 16:46:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.20 2005/11/03 13:29:29 duke Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -70,7 +70,7 @@ class form_cell extends form_base
 			{
 				// awkwardly enough, the styles are saved here too under the name "style" and "style_class" - so 
 				// we check if it is a number so we won't try to create elements from styles
-				if (is_number($k))	
+				if (is_numeric($k))	
 				{
 					$this->mk_element($tp, &$v);
 				}

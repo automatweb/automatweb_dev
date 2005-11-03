@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.353 2005/10/24 21:05:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.354 2005/11/03 13:23:58 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -226,7 +226,7 @@ class menuedit extends aw_template
 		global $artid,$sid,$mlxuid;
 		if ($artid)	// tyyp tuli meilist, vaja kirja panna
 		{
-			if (is_number($artid))
+			if (is_numeric($artid))
 			{
 				$sid = (int)$sid;
 

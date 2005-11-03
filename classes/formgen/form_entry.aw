@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.9 2005/03/24 10:01:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry.aw,v 1.10 2005/11/03 13:29:29 duke Exp $
 
 // basically this is an interface class :)
 // it provides a form_entry manipulating interface to menueditor via orb. 
@@ -113,7 +113,7 @@ class form_entry extends aw_template
 		{
 			// numbrilisi key-sid ei kopeeri
 			// rec pannakse db_next-s sisse. kas seda üldse kusagil kasutatakse ka?
-			if ( (!is_number($key1)) && ($key1 != "rec") )
+			if ( (!is_numeric($key1)) && ($key1 != "rec") )
 			{
 				$keys[] = $key1;
 				$this->quote($value1);

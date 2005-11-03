@@ -46,7 +46,7 @@ class form_db_base extends aw_template
 	function add_element_cols($fid,$el)
 	{
 		$this->save_handle();
-		if (is_number($el))
+		if (is_numeric($el))
 		{
 			// we must update the form_$fid_entries table
 			// sigh. would be really nice if we could have elements of another type - integer for example

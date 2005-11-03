@@ -98,11 +98,11 @@ class ipaddress extends class_base
 		$a1_is_string_complete = true;
 		foreach($a1e as $pt)
 		{
-			if (!(is_number($pt) || $pt == "*"))
+			if (!(is_numeric($pt) || $pt == "*"))
 			{
 				$a1_is_num = false;
 			}
-			if (!is_number($pt))
+			if (!is_numeric($pt))
 			{
 				$a1_is_num_complete = false;
 			}
@@ -117,11 +117,11 @@ class ipaddress extends class_base
 		$a2_is_num_complete = true;
 		foreach($a2e as $pt)
 		{
-			if (!(is_number($pt) || $pt == "*"))
+			if (!(is_numeric($pt) || $pt == "*"))
 			{
 				$a2_is_num = false;
 			}
-			if (!is_number($pt))
+			if (!is_numeric($pt))
 			{
 				$a2_is_num_complete = false;
 			}

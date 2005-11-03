@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.11 2005/10/07 13:58:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.12 2005/11/03 13:26:53 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -770,7 +770,7 @@ class orb extends aw_template
 					$vartype = $orb_defs[$class][$action]["types"][$key];
 					if ($vartype == "int")
 					{
-						if (!is_number($params[$key]))
+						if (!is_numeric($params[$key]))
 						{
 							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),true,$this->silent);
 						};

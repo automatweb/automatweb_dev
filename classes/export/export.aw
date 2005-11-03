@@ -850,7 +850,7 @@ class export extends aw_template
 			$js = "";
 			foreach($HG as $k => $v)
 			{
-				if ($k == "section" && !is_number($v))
+				if ($k == "section" && !is_numeric($v))
 				{
 					// we must turn the section into a number always. 
 					$mned = get_instance("menuedit");
@@ -1114,7 +1114,7 @@ class export extends aw_template
 			$secid = $mt[1];
 			if ($secid != "")
 			{
-				if (!is_number($secid))
+				if (!is_numeric($secid))
 				{
 					// secid is alias, resolve it to numeric 
 					$mned = get_instance("menuedit");
@@ -1289,13 +1289,13 @@ class export extends aw_template
 		$secid = $mt[1];
 		if ($secid != "")
 		{
-			if (!is_number($secid))
+			if (!is_numeric($secid))
 			{
 				$mned = get_instance("menuedit");
 				$secid = $mned->check_section($secid, false);
 			}
 
-			if (is_number($secid))
+			if (is_numeric($secid))
 			{
 				do {
 					$seco = new object($secid);
@@ -1562,7 +1562,7 @@ class export extends aw_template
 		$js = "";
 		foreach($HG as $k => $v)
 		{
-			if ($k == "section" && !is_number($v))
+			if ($k == "section" && !is_numeric($v))
 			{
 				// we must turn the section into a number always. 
 				$mned = get_instance("menuedit");

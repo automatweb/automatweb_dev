@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.33 2005/07/25 13:11:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.34 2005/11/03 13:26:18 duke Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -289,7 +289,7 @@ class poll extends class_base
 			$id = $poll_id;
 			$def = true;
 		}
-		if (!is_number($id))
+		if (!is_numeric($id))
 		{
 			return "";
 		}

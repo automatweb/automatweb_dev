@@ -58,7 +58,7 @@ class site_logger extends core
 		global $artid,$sid,$mlxuid;
 		if ($artid)	// tyyp tuli meilist, vaja kirja panna
 		{
-			if (is_number($artid))
+			if (is_numeric($artid))
 			{
 				$sid = (int)$sid;
 				$ml_msg = $this->db_fetch_row("SELECT * FROM ml_mails WHERE id = '$sid'");

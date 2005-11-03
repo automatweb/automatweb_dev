@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.124 2005/09/14 17:57:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.125 2005/11/03 13:29:29 duke Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -4299,7 +4299,7 @@ class form extends form_base
 				{
 					foreach($bf->arr["elements"][$row][$col] as $elid => $elval)
 					{
-						if (is_number($elid))
+						if (is_numeric($elid))
 						{
 							// replicate this element into this form!!
 							$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = $elid", "parent");
