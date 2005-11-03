@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.433 2005/11/03 15:20:51 duke Exp $
+// $Id: class_base.aw,v 2.434 2005/11/03 17:57:42 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3986,6 +3986,7 @@ class class_base extends aw_template
 	function view($arr = array())
 	{
 		$arr["view"] = 1;
+		error::view_check($arr["id"]);
 		return $this->change($arr);
 	}
 
