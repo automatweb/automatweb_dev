@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.206 2005/10/25 12:22:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.207 2005/11/03 13:31:29 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -325,23 +325,6 @@ if (!defined("DEFS"))
 	};
 
 	////
-	// !replaces the number with the corresponding string, 
-	// if number < 11, otherwise returns the number. the strings are localized
-	function verbalize_number($number)
-	{
-		$strings = array("0",LC_D1,LC_D2,LC_D3,LC_D4,LC_D5,LC_D6,LC_D7,LC_D8,LC_D9,LC_D10);
-		if ( ($number > 10) || ($number < 0))
-		{
-			$ret = $number;
-		} 
-		else 
-		{
-			$ret = $strings[$number];
-		};
-		return $ret;
-	}
-
-	////
 	// !tagastab lokaliseeritud kuunime numbri järgi
 	function get_lc_month($id)
 	{
@@ -438,13 +421,6 @@ if (!defined("DEFS"))
 			return false;
 		}
 		return true;
-	}
-
-	////
-	// !Kas argument on integer?
-	function is_number($parm)
-	{
-		return is_numeric($parm);
 	}
 
 	////
