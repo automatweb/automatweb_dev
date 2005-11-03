@@ -197,8 +197,36 @@
 			</function>
 		</action>
 
+		<action name="add_meeting_to_co">
+			<function name="add_meeting_to_co">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_offer_to_co">
+			<function name="add_offer_to_co">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="add_task_to_proj">
 			<function name="add_task_to_proj">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_meeting_to_proj">
+			<function name="add_meeting_to_proj">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_offer_to_proj">
+			<function name="add_offer_to_proj">
 				<arguments>
 				</arguments>
 			</function>

@@ -79,7 +79,8 @@ class popup_search extends aw_template
 			$url = $this->mk_my_orb("do_search", array(
 				"id" => $arr["obj_inst"]->id(),
 				"pn" => $tmp["name"],
-				"clid" => $clid
+				"clid" => $clid,
+				"multiple" => $arr["property"]["multiple"]
 			));
 		}
 
@@ -88,17 +89,20 @@ class popup_search extends aw_template
 			$options = $tmp["options"];
 		}
 
-		$sel = $arr["property"]["value"];
-		if ($arr["property"]["value"] == "")
+		if (is_object($arr["obj_inst"]))
 		{
-			$sel = is_object($arr["obj_inst"]) ? $arr["obj_inst"]->prop($arr["property"]["name"]) : "";
+			$sel =  $arr["obj_inst"]->prop($arr["property"]["name"]);
+		}
+		else
+		{
+			$sel = $arr["property"]["value"];
 		}
 		
-
 		$tmp["value"] = html::select(array(
 			"name" => $arr["property"]["name"],
 			"options" => array("" => "--Vali--") + $options,
-			"selected" => $sel
+			"selected" => $sel,
+			"multiple" => $arr["property"]["multiple"]
 		));
 
 		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
@@ -143,6 +147,7 @@ class popup_search extends aw_template
 
 	function process_vcl_property($arr)
 	{
+		//$arr["obj_inst"]->set_prop($arr["prop"]["name"], $arr["prop"]["value"]);
 	}
 
 	/**
@@ -151,6 +156,7 @@ class popup_search extends aw_template
 
 		@param id required type=int acl=view
 		@param pn required 
+		@param multiple optional
 		@param clid required 
 		@param s optional
 		@param append_html optional
@@ -207,6 +213,7 @@ class popup_search extends aw_template
 			"data" => array(
 				"id" => $arr["id"],
 				"pn" => $arr["pn"],
+				"multiple" => $arr["multiple"],
 				"clid" => $arr["clid"],
 				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
 				"orb_class" => "popup_search",
@@ -304,6 +311,11 @@ class popup_search extends aw_template
 			$filter["site_id"] = array();
 			$ol = new object_list($filter);
 
+			$elname = $arr["pn"];
+			if ($arr["multiple"] == 1)
+			{
+				$elname .= "[]";
+			}
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
 				$t->define_data(array(
@@ -318,12 +330,12 @@ class popup_search extends aw_template
 					"sel" => html::checkbox(array(
 						"name" => "sel[]",
 						"value" => $o->id(),
-						"checked" => isset($checked[$o->id()]) ? $checked[$o->id()] : 0,
+						"checked" => 0 //isset($checked[$o->id()]) ? $checked[$o->id()] : 0,
 					)),
 					"select_this" => html::href(array(
 						"url" => "javascript:void(0)",
 						"caption" => t("Vali see"),
-						"onClick" => "window.opener.document.changeform.".$arr["pn"].".options[0]=new Option(".$o->id().",".$o->id().");window.opener.document.changeform.".$arr["pn"].".selectedIndex=0;window.opener.document.changeform.submit();window.close()"
+						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);el.selectedIndex=0;el.options[0].value=\"".$o->id()."\";window.opener.document.changeform.submit();window.close()"
 					))
 				));
 			}
@@ -335,6 +347,7 @@ class popup_search extends aw_template
 			"reforb" => $this->mk_reforb("final_submit", array(
 				"id" => $arr["id"],
 				"pn" => $arr["pn"],
+				"multiple" => $arr["multiple"],
 				"clid" => $arr["clid"],
 				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
 			)),
@@ -370,7 +383,6 @@ class popup_search extends aw_template
 			{
 				$c->delete();
 			}
-
 			if (isset($arr['sel']) && is_array($arr['sel']))
 			{
 				foreach($arr['sel'] as $i => $id)
@@ -379,7 +391,7 @@ class popup_search extends aw_template
 					{
 						$object = obj($id);
 						$o->connect(array(
-							"to" => $object,
+							"to" => $object->id(),
 							"reltype" => $reltype,
 						));
 					}
@@ -394,10 +406,50 @@ class popup_search extends aw_template
 			"options" => $this->make_keys($arr["sel"]),
 			"arr" => $arr,
 		));
+		if ($arr["multiple"] == 1)
+		{
+			$str = "
+				<html><body><script language='javascript'>
+function aw_get_el(name,form)
+{
+    if (!form)
+	{
+        form = document.changeform;
+	}
+    for(i = 0; i < form.elements.length; i++)
+	{
+        el = form.elements[i];
+        if (el.name.indexOf(name) != -1)
+		{
+			return el;
+		}
+	}
+}
 
-		die("
-			<html><body><script language='javascript'>window.opener.location.reload();window.close();</script></body></html>
-		");
+					el = aw_get_el('".$arr["pn"]."[]', window.opener.document.changeform);
+					el.selectedIndex = 0;
+			";
+			foreach(safe_array($arr["sel"]) as $idx => $val)
+			{
+				$str .= "el.options[".$idx."].value = \"$val\";el.options[".$idx."].selected = 1;";
+			}
+			$str .= "window.opener.document.changeform.submit();
+					window.close()
+				</script></body></html>
+			";
+			die($str);
+		}
+		else
+		{
+			die("
+				<html><body><script language='javascript'>
+					window.opener.document.changeform.".$arr["pn"].".selectedIndex=0;
+					window.opener.document.changeform.".$arr["pn"].".options[0].value=\"".$arr["sel"][0]."\";
+					window.opener.document.changeform.submit();
+					window.close()
+				</script></body></html>
+			");
+		}
 	}
 
 	/** sets the options for the given objects given popup search property

@@ -32,11 +32,15 @@ function aw_popup_scroll(file,name,width,height)
 	_aw_popup(file,name,0,0,0,0,1,1,width,height);
 };
 
-function aw_get_el(name)
+function aw_get_el(name,form)
 {
-    for(i = 0; i < document.changeform.elements.length; i++)
+    if (!form)
 	{
-        el = document.changeform.elements[i];
+        form = document.changeform;
+	}
+    for(i = 0; i < form.elements.length; i++)
+	{
+        el = form.elements[i];
         if (el.name.indexOf(name) != -1)
 		{
 			return el;

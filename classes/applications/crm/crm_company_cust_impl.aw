@@ -57,8 +57,20 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 			"type" => "time",
 			"numeric" => 1,
-			"format" => "d.m.Y H:i"
+			"format" => "d.m.Y"
 		));
+		
+		if ($_GET["group"] == "org_projects_archive")
+		{
+			$table->define_field(array(
+				"name" => "project_end",
+				"caption" => t("L&otilde;pp"),
+				"sortable" => 1,
+				"type" => "time",
+				"numeric" => 1,
+				"format" => "d.m.Y"
+			));
+		}
 		
 		$table->define_field(array(
 			"name" => "project_participants",
@@ -146,6 +158,7 @@ class crm_company_cust_impl extends class_base
 				"project_orderer" => $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_ORDERER"))),
 				"project_impl" => $impl,
 				"project_deadline" => $project_obj->prop("deadline"),
+				"project_end" => $project_obj->prop("end"),
 				"oid" => $project_obj->id()
 			);
 		}
@@ -482,13 +495,13 @@ class crm_company_cust_impl extends class_base
 		));
 		$tb->add_menu_item(array(
 			'parent'=>'add_proj',
-			'text' => t('Tellijana'),
-			"action" => "add_proj_to_co_as_ord"
+			'text' => t('Teostajana'),
+			"action" => "add_proj_to_co_as_impl"
 		));
 		$tb->add_menu_item(array(
 			'parent'=>'add_proj',
-			'text' => t('Teostajana'),
-			"action" => "add_proj_to_co_as_impl"
+			'text' => t('Tellijana'),
+			"action" => "add_proj_to_co_as_ord"
 		));
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
@@ -955,6 +968,7 @@ class crm_company_cust_impl extends class_base
 				"project_orderer" => $this->_get_linked_names($project->connections_from(array("type" => "RELTYPE_ORDERER"))),
 				"project_impl" => $this->_get_linked_names($project->connections_from(array("type" => "RELTYPE_IMPLEMENTOR"))),
 				"project_deadline" => $project->prop("deadline"),
+				"project_end" => $project->prop("end"),
 				"oid" => $project->id()
 			));
 		}
@@ -1139,6 +1153,25 @@ class crm_company_cust_impl extends class_base
 		if ($ar[$prefix."proj_search_dl_to"] > 1)
 		{
 			$ret["deadline"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $ar[$prefix."proj_search_dl_to"]);
+		}
+
+
+		$ar[$prefix."proj_search_end_from"] = date_edit::get_timestamp($ar[$prefix."proj_search_end_from"]);
+		$ar[$prefix."proj_search_end_to"] = date_edit::get_timestamp($ar[$prefix."proj_search_end_to"]);
+
+		if ($ar[$prefix."proj_search_end_from"] > 1 && $ar[$prefix."proj_search_end_to"])
+		{
+			$ret["end"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $ar[$prefix."proj_search_end_from"], $ar[$prefix."proj_search_end_to"]);
+		}
+		else
+		if ($ar[$prefix."proj_search_end_from"] > 1)
+		{
+			$ret["end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $ar[$prefix."proj_search_end_from"]);
+		}
+		else
+		if ($ar[$prefix."proj_search_end_to"] > 1)
+		{
+			$ret["end"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $ar[$prefix."proj_search_end_to"]);
 		}
 
 		if ($ar[$prefix."proj_search_state"])

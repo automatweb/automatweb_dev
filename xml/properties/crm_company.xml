@@ -928,6 +928,28 @@
             <caption>T&amp;auml;htaeg kuni</caption>
       </property>
       <property>
+            <name>all_proj_search_end_from</name>
+            <table>objects</table>
+            <group>org_projects_archive</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <captionside>top</captionside>
+            <field>all_proj_search_end_from</field>
+            <caption>L&amp;otilde;pp alates</caption>
+      </property>
+      <property>
+            <name>all_proj_search_end_to</name>
+            <table>objects</table>
+            <group>org_projects_archive</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <captionside>top</captionside>
+            <field>all_proj_search_end_to</field>
+            <caption>L&amp;otilde;pp kuni</caption>
+      </property>
+      <property>
             <name>all_proj_search_state</name>
             <table>objects</table>
             <group>org_projects_archive</group>

@@ -49,6 +49,12 @@
 
 function select_this(s){
 	var d = s.options[s.selectedIndex].value;
+	if (d.indexOf('http') == -1 && d != "_")
+	{
+		eval(d);
+		return true;
+	}
+
 	if (d != "_")
 	{
 		location.href=d;

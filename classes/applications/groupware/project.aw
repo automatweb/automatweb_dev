@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.60 2005/10/25 12:22:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.61 2005/11/03 18:02:00 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -23,7 +23,7 @@
 	@property state type=select table=aw_projects field=aw_state default=1
 	@caption Staatus
 
-	@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize
+	@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize multiple=1 store=connect style=relpicker
 	@caption Tellija
 
 	@property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize

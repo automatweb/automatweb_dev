@@ -1113,7 +1113,6 @@ class _int_object
 			))
 		{
 			$_rt = $GLOBALS["relinfo"][$this->obj["class_id"]][$propi["reltype"]]["value"];
-
 			if ($propi["multiple"] == 1 || is_array($val))
 			{
 				// get all old connections

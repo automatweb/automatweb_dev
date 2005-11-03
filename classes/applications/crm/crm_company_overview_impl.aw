@@ -119,6 +119,8 @@ class crm_company_overview_impl extends class_base
 			{
 				$t->add_item(array(
 					"timestamp" => $item->prop("start1"),
+					"item_start" => ($item->class_id() == CL_CRM_MEETING ? $item->prop("start1") : NULL),
+					"item_end" => ($item->class_id() == CL_CRM_MEETING ? $item->prop("end") : NULL),
 					"data" => array(
 						"name" => $item->name(),
 						"link" => $link,

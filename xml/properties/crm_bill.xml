@@ -73,15 +73,6 @@
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>currency</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>currency</field>
-            <caption>Valuuta</caption>
-      </property>
-      <property>
             <name>notes</name>
             <table>aw_crm_bill</table>
             <group>general</group>
@@ -99,6 +90,26 @@
             <ch_value>1</ch_value>
             <field>aw_monthly_bill</field>
             <caption>Kuuarve</caption>
+      </property>
+      <property>
+            <name>currency</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>currency</field>
+            <caption>Valuuta</caption>
+      </property>
+      <property>
+            <name>language</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <automatic>1</automatic>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <caption>Keel</caption>
       </property>
       <property>
             <name>bill_rows</name>
@@ -189,6 +200,11 @@
                   </clid>
                   <caption>teostaja</caption>
             </IMPL>
+            <LANGUAGE>
+                  <value>4</value>
+                  <clid>CL_LANGUAGE</clid>
+                  <caption>keel</caption>
+            </LANGUAGE>
       </reltypes>
 </properties>
 

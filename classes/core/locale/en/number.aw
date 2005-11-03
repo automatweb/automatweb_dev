@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/en/number.aw,v 1.4 2005/04/21 08:48:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/en/number.aw,v 1.5 2005/11/03 18:02:01 kristo Exp $
 // en.aw - english localization
 class number
 {
@@ -98,6 +98,33 @@ class number
 
 		return $res;
 
+	}
+
+	function get_lc_money_text($number, $currency)
+	{
+		// exploide by . or ,
+		/*if (strpos($number, ",") !== false)
+		{
+			$number = str_replace(",", ".", $number);
+		}*/
+
+		list($eek, $cent) = explode(".", number_format($number, 2, ".", ""));
+		if (!is_oid($currency->id()))
+		{
+			if (!is_class_id($currency->class_id()))
+			{
+				$currency->set_class_id(CL_CURRENCY);
+			}
+			$currency->set_prop("unit_name", "euros");
+			$currency->set_prop("small_unit_name", "cents");
+		}
+
+		$res = $this->get_lc_number($eek)." ".$currency->prop("unit_name");
+		if ($cent > 0)
+		{
+			$res .= " and ".$this->get_lc_number($cent)." ".$currency->prop("small_unit_name");
+		}
+		return $res;
 	}
 };
 ?>

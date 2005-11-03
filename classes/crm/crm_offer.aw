@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.40 2005/10/19 06:43:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.41 2005/11/03 18:02:01 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -162,15 +162,24 @@ class crm_offer extends class_base
 		switch($prop["name"])
 		{
 			case "preformer":
-				if ($arr["new"])
+				if (($arr["new"] || $_GET["group"] == "add_event") && !$prop["value"])
 				{
-					if ($arr["request"]["alias_to"])
+					$val = $arr["request"]["alias_to"];
+					if (!$val)
 					{
-						$o = obj($arr["request"]["alias_to"]);
+						$u = get_instance(CL_USER);
+						$val = $u->get_current_company();
+					}
+
+					if ($this->can("view", $val))
+					{
+						$o = obj($val);
 						$prop["options"] = array("" => t("--Vali--"), $o->id() => $o->name());
 						$prop["value"] = $o->id();
 					}
+	
 				}
+				
 				break;
 
 			case "start1":
@@ -209,7 +218,7 @@ class crm_offer extends class_base
 				
 				
 						
-				if($arr["new"] == 1)
+				if($arr["request"]["alias_to_org"])
 				{
 					$prop["value"] = $arr["request"]["alias_to_org"];
 				}
@@ -218,7 +227,6 @@ class crm_offer extends class_base
 				{
 					$prop["value"] = $arr["obj_inst"]->prop("orderer");
 				}
-
 				if (!isset($options[$prop["value"]]))
 				{
 					$tmp = obj($prop["value"]);

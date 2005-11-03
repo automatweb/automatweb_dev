@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.125 2005/10/26 14:05:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.126 2005/11/03 18:02:00 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -921,9 +921,14 @@ class htmlclient extends aw_template
 						$_REQUEST["id"], 
 						array(
 							"return_url" => get_ru(),
-							"connect_orderer" => $_REQUEST["id"],
+							"connect_impl" => $_REQUEST["id"],
 						)
 				);
+				if ($_GET["group"] == "relorg")
+				{
+					$proj_url = 'submit_changeform("add_proj_to_co_as_impl");';
+				}
+
 				$pl = get_instance(CL_PLANNER);
 				$this->cal_id = $pl->get_calendar_for_user(array(
 					"uid" => aw_global_get("uid"),
@@ -940,6 +945,15 @@ class htmlclient extends aw_template
 					'parent' => $_REQUEST["id"],
 					'return_url' => get_ru()
 				));
+				if ($_GET["group"] == "projs" || $_GET["group"] == "my_projects")
+				{
+					$task_url = "submit_changeform(\"add_task_to_proj\");";
+				}
+				else
+				if ($_GET["group"] == "relorg")
+				{
+					$task_url = "submit_changeform(\"add_task_to_co\");";
+				}
 				$call_url = $this->mk_my_orb('new',array(
 					'alias_to_org' => $_REQUEST["id"],
 					'reltype_org' => 12,
@@ -964,6 +978,15 @@ class htmlclient extends aw_template
 					'parent' => $_REQUEST["id"],
 					'return_url' => get_ru()
 				));
+				if ($_GET["group"] == "projs" || $_GET["group"] == "my_projects")
+				{
+					$meeting_url = "submit_changeform(\"add_meeting_to_proj\");";
+				}
+				else
+				if ($_GET["group"] == "relorg")
+				{
+					$meeting_url = "submit_changeform(\"add_meeting_to_co\");";
+				}
 				$offer_url = $this->mk_my_orb('new',array(
 					'alias_to_org' => $_REQUEST["id"],
 					'reltype_org' => 9,
@@ -976,8 +999,17 @@ class htmlclient extends aw_template
 					'parent' => $_REQUEST["id"],
 					'return_url' => get_ru()
 				));
+				if ($_GET["group"] == "projs" || $_GET["group"] == "my_projects")
+				{
+					$offer_url = "submit_changeform(\"add_offer_to_proj\");";
+				}
+				else
+				if ($_GET["group"] == "relorg")
+				{
+					$offer_url = "submit_changeform(\"add_offer_to_co\");";
+				}
 
-				$bill_url = aw_url_change_var("group", "bills", aw_url_change_var("proj", NULL));
+				$bill_url = aw_ini_get("baseurl").aw_url_change_var("group", "bills", aw_url_change_var("proj", NULL));
 				$adds =  $this->picker("", array(
 					"" => "Lisa",
 					$cust_url => "Klient",

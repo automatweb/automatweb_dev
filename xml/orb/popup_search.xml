@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="id" type="int" acl="view" />
 					<required name="pn" />
+					<optional name="multiple" />
 					<required name="clid" />
 					<optional name="s" />
 					<optional name="append_html" />

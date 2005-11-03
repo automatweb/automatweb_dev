@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.31 2005/10/31 10:59:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.32 2005/11/03 18:02:00 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -381,7 +381,7 @@ class task extends class_base
 					));
 				}
 				else
-				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
+				if (is_object($arr["obj_inst"]) && $this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
 					$ol = new object_list(array(
 						"class_id" => CL_PROJECT,

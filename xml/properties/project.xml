@@ -46,6 +46,9 @@
             <reltype>RELTYPE_ORDERER</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <style>relpicker</style>
             <caption>Tellija</caption>
       </property>
       <property>

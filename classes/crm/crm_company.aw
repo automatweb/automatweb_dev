@@ -337,6 +337,12 @@ default group=org_objects
 			@property all_proj_search_dl_to type=date_select store=no parent=all_proj_search_b  captionside=top
 			@caption T&auml;htaeg kuni
 
+			@property all_proj_search_end_from type=date_select store=no parent=all_proj_search_b  captionside=top
+			@caption L&otilde;pp alates
+
+			@property all_proj_search_end_to type=date_select store=no parent=all_proj_search_b  captionside=top
+			@caption L&otilde;pp kuni
+
 			@property all_proj_search_state type=select store=no parent=all_proj_search_b  captionside=top
 			@caption Staatus
 
@@ -1196,6 +1202,8 @@ class crm_company extends class_base
 
 			case "all_proj_search_dl_from":
 			case "all_proj_search_dl_to":
+			case "all_proj_search_end_from":
+			case "all_proj_search_end_to":
 				if (!$arr["request"]["search_all_proj"])
 				{
 					return PROP_IGNORE;
@@ -2186,6 +2194,8 @@ class crm_company extends class_base
 			$arr["args"]["all_proj_search_task_name"] = $arr["request"]["all_proj_search_task_name"];
 			$arr["args"]["all_proj_search_dl_from"] = $arr["request"]["all_proj_search_dl_from"];
 			$arr["args"]["all_proj_search_dl_to"] = $arr["request"]["all_proj_search_dl_to"];
+			$arr["args"]["all_proj_search_end_from"] = $arr["request"]["all_proj_search_end_from"];
+			$arr["args"]["all_proj_search_end_to"] = $arr["request"]["all_proj_search_end_to"];
 			$arr["args"]["all_proj_search_state"] = $arr["request"]["all_proj_search_state"];
 			$arr["args"]["search_all_proj"] = 1;
 		}	
@@ -3174,6 +3184,56 @@ class crm_company extends class_base
 	}
 
 	/**
+		@attrib name=add_meeting_to_co
+	**/
+	function add_meeting_to_co($arr)
+	{
+		$pl = get_instance(CL_PLANNER);
+		$this->cal_id = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
+
+		return $this->mk_my_orb('new',array(
+			'alias_to_org' => reset($arr["check"]),
+			'reltype_org' => 13,
+			'class' => 'planner',
+			'id' => $this->cal_id,
+			'group' => 'add_event',
+			'clid' => CL_CRM_MEETING,
+			'action' => 'change',
+			'title' => t("Kohtumine"),
+			'parent' => $arr["id"],
+			'return_url' => urlencode($arr["post_ru"])
+		));
+		
+	}
+
+	/**
+		@attrib name=add_offer_to_co
+	**/
+	function add_offer_to_co($arr)
+	{
+		$pl = get_instance(CL_PLANNER);
+		$this->cal_id = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
+
+		return $this->mk_my_orb('new',array(
+			'alias_to_org' => reset($arr["check"]),
+			'reltype_org' => 13,
+			'class' => 'planner',
+			'id' => $this->cal_id,
+			'group' => 'add_event',
+			'clid' => CL_CRM_OFFER,
+			'action' => 'change',
+			'title' => t("Pakkumine"),
+			'parent' => $arr["id"],
+			'return_url' => urlencode($arr["post_ru"])
+		));
+		
+	}
+
+	/**
 		@attrib name=add_task_to_proj
 	**/
 	function add_task_to_proj($arr)
@@ -3195,6 +3255,64 @@ class crm_company extends class_base
 			'clid' => CL_TASK,
 			'action' => 'change',
 			'title' => t("Toimetus"),
+			'parent' => $arr["id"],
+			'return_url' => urlencode($arr["post_ru"]),
+			"set_proj" => $proj
+		));
+		
+	}
+
+	/**
+		@attrib name=add_meeting_to_proj
+	**/
+	function add_meeting_to_proj($arr)
+	{
+		$pl = get_instance(CL_PLANNER);
+		$this->cal_id = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
+
+		$proj = reset($arr["sel"]);
+		$o = obj($proj);
+
+		return $this->mk_my_orb('new',array(
+			'alias_to_org' => $o->prop("orderer"),
+			'reltype_org' => 13,
+			'class' => 'planner',
+			'id' => $this->cal_id,
+			'group' => 'add_event',
+			'clid' => CL_CRM_MEETING,
+			'action' => 'change',
+			'title' => t("Kohtumine"),
+			'parent' => $arr["id"],
+			'return_url' => urlencode($arr["post_ru"]),
+			"set_proj" => $proj
+		));
+		
+	}
+
+	/**
+		@attrib name=add_offer_to_proj
+	**/
+	function add_offer_to_proj($arr)
+	{
+		$pl = get_instance(CL_PLANNER);
+		$this->cal_id = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
+
+		$proj = reset($arr["sel"]);
+		$o = obj($proj);
+
+		return $this->mk_my_orb('new',array(
+			'alias_to_org' => $o->prop("orderer"),
+			'reltype_org' => 13,
+			'class' => 'planner',
+			'id' => $this->cal_id,
+			'group' => 'add_event',
+			'clid' => CL_CRM_OFFER,
+			'action' => 'change',
+			'title' => t("Pakkumine"),
 			'parent' => $arr["id"],
 			'return_url' => urlencode($arr["post_ru"]),
 			"set_proj" => $proj

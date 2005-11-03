@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/et/number.aw,v 1.6 2005/10/26 14:05:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/et/number.aw,v 1.7 2005/11/03 18:02:01 kristo Exp $
 // et.aw - Estonian localization
 class number
 {
@@ -75,6 +75,10 @@ class number
 		list($eek, $cent) = explode(".", number_format($number, 2, ".", ""));
 		if (!is_oid($currency->id()))
 		{
+			if (!is_class_id($currency->class_id()))
+			{
+				$currency->set_class_id(CL_CURRENCY);
+			}
 			$currency->set_prop("unit_name", "krooni");
 			$currency->set_prop("small_unit_name", "senti");
 		}

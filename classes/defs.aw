@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.207 2005/11/03 13:31:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.208 2005/11/03 18:02:00 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1369,16 +1369,21 @@ if (!defined("DEFS"))
 			};
 		}
 
-		function get_lc_money_text($number, $currency)
+		function get_lc_money_text($number, $currency, $lc = NULL)
 		{
-			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/number", array(), false);
-			if(!is_object($this->lc_date_inst))
+			if (!$lc)
 			{
-				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en")  . "/number");
+				$lc = aw_global_get("LC");
+			}
+
+			$this->lc_date_inst[$lc] = @get_instance("core/locale/".$lc."/number", array(), false);
+			if(!is_object($this->lc_date_inst[$lc]))
+			{
+				$this->lc_date_inst[$lc] = get_instance("core/locale/" .$lc. "/number");
 			};
-			if (method_exists($this->lc_date_inst,"get_lc_money_text"))
+			if (method_exists($this->lc_date_inst[$lc],"get_lc_money_text"))
 			{
-				return $this->lc_date_inst->get_lc_money_text($number, $currency);
+				return $this->lc_date_inst[$lc]->get_lc_money_text($number, $currency);
 			}
 			else
 			{
