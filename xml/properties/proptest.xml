@@ -35,6 +35,15 @@
             <caption>Image 2</caption>
       </property>
       <property>
+            <name>cb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>callback</type>
+            <callback>do_callback</callback>
+            <field>cb</field>
+            <caption>Callback element</caption>
+      </property>
+      <property>
             <name>get_property_prop_ignore</name>
             <table>objects</table>
             <group>general</group>
@@ -49,6 +58,14 @@
             <type>textbox</type>
             <field>get_property_prop_error</field>
             <caption>This should be flagged as error by get_property</caption>
+      </property>
+      <property>
+            <name>dummy</name>
+            <table>objects</table>
+            <group>hidden_by_mod_tab</group>
+            <type>text</type>
+            <field>dummy</field>
+            <caption>A property on a hidden tab</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PROPTEST</syslog_type>
@@ -71,6 +88,12 @@
                   <parent>parentgroup1</parent>
                   <submit_method>get</submit_method>
             </childgroup2>
+            <empty_group>
+                  <caption>No properties, should be hidden</caption>
+            </empty_group>
+            <hidden_by_mod_tab>
+                  <caption>Hidden by callback_mod_tab</caption>
+            </hidden_by_mod_tab>
       </groupinfo>
       <tableinfo>
             <proptest>
