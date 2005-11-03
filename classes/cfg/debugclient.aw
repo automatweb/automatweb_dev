@@ -44,8 +44,10 @@ class debugclient extends aw_template
 			"data" => $arr["data"],
 		);
 		$this->focus_el = $arr["focus"];
+		/*
 		print "Finishing output:\n";
 		print_r($arr);
+		*/
 		/*
 		print_r($this->proplist);
 		*/
