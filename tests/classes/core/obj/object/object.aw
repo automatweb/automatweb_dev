@@ -1,10 +1,10 @@
 <?php
 
-class object_test extends PHPUnit_TestCase
+class object_test extends UnitTestCase
 {
 	function object_test($name)
 	{
-		 $this->PHPUnit_TestCase($name);
+		 $this->UnitTestCase($name);
 	}
 
 	function setUp()
@@ -32,7 +32,7 @@ class object_test extends PHPUnit_TestCase
 	{
 		// get random object
 		$o = new object($this->obj_id);
-		$this->assertEquals($o->id(),$this->obj_id);
+		$this->assertEqual($o->id(),$this->obj_id);
 	}
 
 	function test_construct_alias()
@@ -44,7 +44,7 @@ class object_test extends PHPUnit_TestCase
 			if ($this->db->can("view", $row["oid"]))
 			{
 				$o = new object($row["alias"]);
-				$this->assertEquals($row["oid"],$o->id());
+				$this->assertEqual($row["oid"],$o->id());
 				return;
 			}
 		}
@@ -56,7 +56,7 @@ class object_test extends PHPUnit_TestCase
 		// get random object
 		$o = new object($this->obj_id);
 		$o2 = new object($o);
-		$this->assertEquals($o->id(),$o2->id());
+		$this->assertEqual($o->id(),$o2->id());
 	}
 
 	function test_construct_fail_del()
@@ -82,7 +82,7 @@ class object_test extends PHPUnit_TestCase
 		aw_restore_acl();
 
 		$nv = $this->db->db_fetch_field("SELECT comment FROM objects WHERE oid = ".$this->obj_id, "comment");
-		$this->assertEquals($nc, $nv);
+		$this->assertEqual($nc, $nv);
 	}
 
 	function test_save_fail()
@@ -100,7 +100,7 @@ class object_test extends PHPUnit_TestCase
 		aw_disable_acl();
 		$nid = $o->save_new();
 		$no = obj($nid);
-		$this->assertEquals($nm, $no->name());
+		$this->assertEqual($nm, $no->name());
 		$no->delete(true);
 		aw_restore_acl();
 	}
@@ -113,13 +113,13 @@ class object_test extends PHPUnit_TestCase
 		$this->assertTrue($o->get_implicit_save());
 		aw_disable_acl();
 		$o->set_name($oldn+1);
-		$this->assertEquals($oldn+1, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
+		$this->assertEqual($oldn+1, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
 		$o->set_implicit_save(false);
 		$this->assertFalse($o->get_implicit_save());
 		$o->set_name($oldn);
 		$this->assertFalse($oldn == $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
 		$o->save();
-		$this->assertEquals($oldn, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
+		$this->assertEqual($oldn, $this->db->db_fetch_field("SELECT name FROM objects WHERE oid = ".$o->id(), "name"));
 		aw_restore_acl();
 	}
 
@@ -127,7 +127,7 @@ class object_test extends PHPUnit_TestCase
 	{
 		$o = obj($this->obj_id);
 		$ar = $o->arr();
-		$this->assertEquals($ar["name"], $o->name());
+		$this->assertEqual($ar["name"], $o->name());
 	}
 
 	function _get_temp_o()
@@ -150,14 +150,14 @@ class object_test extends PHPUnit_TestCase
 		aw_disable_acl();
 		$ret = $o->delete();
 		aw_restore_acl();
-		$this->assertEquals($id, $ret);
+		$this->assertEqual($id, $ret);
 
 		// verify that we do not find it in ol
 		$ol = new object_list(array("oid" => $id));
-		$this->assertEquals(0, $ol->count());
+		$this->assertEqual(0, $ol->count());
 
 		// and that status = 0
-		$this->assertEquals(0, $this->db->db_fetch_field("SELECT status FROM objects WHERE oid = $id", "status"));
+		$this->assertEqual(0, $this->db->db_fetch_field("SELECT status FROM objects WHERE oid = $id", "status"));
 	}
 
 	function test_delete_final()
@@ -167,15 +167,15 @@ class object_test extends PHPUnit_TestCase
 		aw_disable_acl();
 		$ret = $o->delete(true);
 		aw_restore_acl();
-		$this->assertEquals($id, $ret);
+		$this->assertEqual($id, $ret);
 
 		// verify that we do not find it in ol
 		$ol = new object_list(array("oid" => $id));
-		$this->assertEquals(0, $ol->count());
+		$this->assertEqual(0, $ol->count());
 
 		// and that no such line exists
-		$this->assertEquals(0, $this->db->db_fetch_field("SELECT count(*) as cnt FROM objects WHERE oid = $id", "cnt"));
-		$this->assertEquals(0, $this->db->db_fetch_field("SELECT count(*) as cnt FROM menu WHERE id = $id", "cnt"));
+		$this->assertEqual(0, $this->db->db_fetch_field("SELECT count(*) as cnt FROM objects WHERE oid = $id", "cnt"));
+		$this->assertEqual(0, $this->db->db_fetch_field("SELECT count(*) as cnt FROM menu WHERE id = $id", "cnt"));
 	}
 
 	function test_connect_id()
@@ -187,7 +187,7 @@ class object_test extends PHPUnit_TestCase
 			"to" => aw_ini_get("site_rootmenu")
 		));
 
-		$this->assertEquals(aw_ini_get("site_rootmenu"), $this->db->db_fetch_field("SELECT target FROM aliases WHERE source = ".$o->id(), "target"));
+		$this->assertEqual(aw_ini_get("site_rootmenu"), $this->db->db_fetch_field("SELECT target FROM aliases WHERE source = ".$o->id(), "target"));
 		$o->delete(true);
 		aw_restore_acl();
 	}
@@ -202,7 +202,7 @@ class object_test extends PHPUnit_TestCase
 			"to" => $rm
 		));
 
-		$this->assertEquals($rm->id(), $this->db->db_fetch_field("SELECT target FROM aliases WHERE source = ".$o->id(), "target"));
+		$this->assertEqual($rm->id(), $this->db->db_fetch_field("SELECT target FROM aliases WHERE source = ".$o->id(), "target"));
 		$o->delete(true);
 		aw_restore_acl();
 	}
@@ -217,10 +217,10 @@ class object_test extends PHPUnit_TestCase
 			"to" => $ol
 		));
 
-		$this->assertEquals($ol->count(), $this->db->db_fetch_field("SELECT count(*) as cnt FROM aliases WHERE source = ".$o->id(), "cnt"));
+		$this->assertEqual($ol->count(), $this->db->db_fetch_field("SELECT count(*) as cnt FROM aliases WHERE source = ".$o->id(), "cnt"));
 		foreach($ol->ids() as $id)
 		{
-			$this->assertEquals($id, $this->db->db_fetch_field("SELECT target FROM aliases WHERE target = $id and source = ".$o->id(), "target"));
+			$this->assertEqual($id, $this->db->db_fetch_field("SELECT target FROM aliases WHERE target = $id and source = ".$o->id(), "target"));
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -237,7 +237,7 @@ class object_test extends PHPUnit_TestCase
 			"type" => "RELTYPE_SEEALSO"
 		));
 
-		$this->assertEquals(5, $this->db->db_fetch_field("SELECT reltype FROM aliases WHERE source = ".$o->id(), "reltype"));
+		$this->assertEqual(5, $this->db->db_fetch_field("SELECT reltype FROM aliases WHERE source = ".$o->id(), "reltype"));
 		$o->delete(true);
 		aw_restore_acl();
 	}
@@ -257,7 +257,7 @@ class object_test extends PHPUnit_TestCase
 			"from" => $rm
 		));
 
-		$this->assertEquals(0, $this->db->db_fetch_field("SELECT count(*) as cnt FROM aliases WHERE source = ".$o->id(), "cnt"));
+		$this->assertEqual(0, $this->db->db_fetch_field("SELECT count(*) as cnt FROM aliases WHERE source = ".$o->id(), "cnt"));
 		$o->delete(true);
 		aw_restore_acl();
 	}
@@ -274,11 +274,11 @@ class object_test extends PHPUnit_TestCase
 		));
 
 		$cf = $o->connections_from();
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $rm->id());
+			$this->assertEqual($r->prop("to"), $rm->id());
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -298,11 +298,11 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->connections_from(array(
 			"type" => "RELTYPE_SEEALSO"
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $rm->id());
+			$this->assertEqual($r->prop("to"), $rm->id());
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -322,11 +322,11 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->connections_from(array(
 			"class" => CL_MENU
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $rm->id());
+			$this->assertEqual($r->prop("to"), $rm->id());
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -346,11 +346,11 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->connections_from(array(
 			"to" => $rm
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $rm->id());
+			$this->assertEqual($r->prop("to"), $rm->id());
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -370,11 +370,11 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->connections_from(array(
 			"idx" => 1
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $rm->id());
+			$this->assertEqual($r->prop("to"), $rm->id());
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -394,11 +394,11 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->connections_from(array(
 			"to.name" => $rm->name()
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $rm->id());
+			$this->assertEqual($r->prop("to"), $rm->id());
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -423,11 +423,11 @@ class object_test extends PHPUnit_TestCase
 			"to.name" => $rm->name(),
 			"to.created" => $rm->created()
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $rm->id());
+			$this->assertEqual($r->prop("to"), $rm->id());
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -453,11 +453,11 @@ class object_test extends PHPUnit_TestCase
 		));
 
 		$cf = $o->connections_to();
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $o->id());
+			$this->assertEqual($r->prop("to"), $o->id());
 		}
 		$rm->disconnect(array("from" => $o));
 		$o->delete(true);
@@ -479,11 +479,11 @@ class object_test extends PHPUnit_TestCase
 			"type" => "RELTYPE_SEEALSO",
 			"from.class_id" => CL_MENU
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $o->id());
+			$this->assertEqual($r->prop("to"), $o->id());
 		}
 		$rm->disconnect(array("from" => $o));
 		$o->delete(true);
@@ -504,11 +504,11 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->connections_to(array(
 			"class" => CL_MENU
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $o->id());
+			$this->assertEqual($r->prop("to"), $o->id());
 		}
 		$rm->disconnect(array("from" => $o));
 		$o->delete(true);
@@ -529,11 +529,11 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->connections_to(array(
 			"from" => $rm
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $o->id());
+			$this->assertEqual($r->prop("to"), $o->id());
 		}
 		$rm->disconnect(array("from" => $o));
 		$o->delete(true);
@@ -554,11 +554,11 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->connections_to(array(
 			"idx" => 1
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $o->id());
+			$this->assertEqual($r->prop("to"), $o->id());
 		}
 		$rm->disconnect(array("from" => $o));
 		$o->delete(true);
@@ -579,11 +579,11 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->connections_to(array(
 			"from.name" => $rm->name()
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("to"), $o->id());
+			$this->assertEqual($r->prop("to"), $o->id());
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -609,11 +609,11 @@ class object_test extends PHPUnit_TestCase
 			"from.created" => $rm->created(),
 			"from.class_id" => CL_MENU
 		));
-		$this->assertEquals(1, count($cf));
+		$this->assertEqual(1, count($cf));
 		if (count($cf))
 		{
 			$r = reset($cf);
-			$this->assertEquals($r->prop("from"), $rm->id());
+			$this->assertEqual($r->prop("from"), $rm->id());
 		}
 		$o->delete(true);
 		aw_restore_acl();
@@ -639,8 +639,8 @@ class object_test extends PHPUnit_TestCase
 		));
 
 		$cf = $o->get_first_conn_by_reltype("RELTYPE_SEEALSO");
-		$this->assertEquals("connection", get_class($cf));
-		$this->assertEquals($cf->prop("to"), $rm->id());
+		$this->assertEqual("connection", get_class($cf));
+		$this->assertEqual($cf->prop("to"), $rm->id());
 		$o->delete(true);
 		aw_restore_acl();
 	}
@@ -670,8 +670,8 @@ class object_test extends PHPUnit_TestCase
 		));
 
 		$cf = $o->get_first_obj_by_reltype("RELTYPE_SEEALSO");
-		$this->assertEquals("object", get_class($cf));
-		$this->assertEquals($cf->id(), $rm->id());
+		$this->assertEqual("object", get_class($cf));
+		$this->assertEqual($cf->id(), $rm->id());
 		$o->delete(true);
 		aw_restore_acl();
 	}
@@ -732,8 +732,8 @@ class object_test extends PHPUnit_TestCase
 	{
 		$o = obj(aw_ini_get("site_rootmenu"));
 		$pt = $o->path();
-		$this->assertEquals(count($pt), 1);
-		$this->assertEquals($pt[0]->id(), aw_ini_get("site_rootmenu"));
+		$this->assertEqual(count($pt), 1);
+		$this->assertEqual($pt[0]->id(), aw_ini_get("site_rootmenu"));
 	}
 
 	function test_path_str_err_obj()
@@ -756,7 +756,7 @@ class object_test extends PHPUnit_TestCase
 	{
 		$o = obj(aw_ini_get("site_rootmenu"));
 		$str = $o->path_str();
-		$this->assertEquals($str, $o->name());
+		$this->assertEqual($str, $o->name());
 	}
 }
 ?>

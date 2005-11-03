@@ -1,10 +1,10 @@
 <?php
 
-class connection_test extends PHPUnit_TestCase
+class connection_test extends UnitTestCase
 {
 	function connection_test($name)
 	{
-		 $this->PHPUnit_TestCase($name);
+		 $this->UnitTestCase($name);
 	}
 
 	function setUp()

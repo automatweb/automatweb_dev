@@ -3,87 +3,104 @@
 // there is no point in doing the same work over and over again in setUp
 
 // any ideas on how do it this in OO Style? TestDecorator?
-$cb = get_instance("cfg/proptest");
-$cb->change(array(
-	"id" => 1,
-	"cbcli" => "debugclient",
-));
 // tests output of proptest class
-class proptest_test extends PHPUnit_TestCase
+class proptest_test extends UnitTestCase
 {
 	var $cb;
-	function proptest_test($name)
+	function proptest_test()
 	{
-		$this->PHPUnit_TestCase($name);
-
+		$this->UnitTestCase("Classbase testid");
+		$this->cb = get_instance("cfg/proptest");
+		$this->cb->change(array(
+			"id" => 1,
+			"cbcli" => "debugclient",
+		));
 	}
 
 	function setUp()
 	{
 		$this->testclass = "proptest";
 		$this->id = 1;
-		global $cb;
-		$this->cb = &$cb;
 	}
 
 	function test_reforb_classname()
 	{
 		// class should be the same that was requested
-		$this->assertEquals($this->testclass,$this->cb->cli->formdata["class"]);
+		$this->assertEqual($this->testclass,$this->cb->cli->formdata["class"]);
 	}
 	
 	function test_reforb_action()
 	{
-		$this->assertEquals("submit",$this->cb->cli->formdata["action"]);
+		$this->assertEqual("submit",$this->cb->cli->formdata["action"]);
 	}
 	
 	function test_reforb_group()
 	{
-		$this->assertEquals("general",$this->cb->cli->formdata["group"]);
+		$this->assertEqual("general",$this->cb->cli->formdata["group"]);
 	}
 	
 	function test_reforb_id()
 	{
-		$this->assertEquals($this->id,$this->cb->cli->formdata["id"]);
+		$this->assertEqual($this->id,$this->cb->cli->formdata["id"]);
 	}
 	
-	function test_tab_general_exists()
+	function test_tab_general()
 	{
-		$this->assertType("array",$this->cb->cli->tabs["general"]);
+		$general = $this->cb->cli->tabs["general"];
+		$this->assertIsA($general,"array","General tab does note exist");
+		$this->assertEqual(true,$general["active"],"General tab is not active");
+		$this->assertEqual(1,$general["level"],"General tab is not on first level");
+		$this->assertTrue(empty($general["parent"]),"General tab has a parent, but shouldn't");
+		$this->assertFalse(empty($general["caption"]),"General tab has no caption");
 	}
 	
-	function test_tab_general_active()
+	function test_tab_empty()
 	{
-		$this->assertEquals(true,$this->cb->cli->tabs["general"]["active"]);
+		$gr = $this->cb->cli->tabs["empty_group"];
+		$this->assertNull($this->cb->cli->tabs["empty_group"]);
+	}
+	
+	function test_callback_mod_tab_hide()
+	{
+		$this->assertNull($this->cb->cli->tabs["hidden_by_mod_tab"],"hidden_my_mod_tab should not reach output client, because it was explicitly hidden in callback_mod_tab");
 	}
 	
 	function test_list_aliases()
 	{
-		$this->assertType("array",$this->cb->cli->tabs["list_aliases"]);
+		$this->assertIsA($this->cb->cli->tabs["list_aliases"],"array");
 	}
 
 	function test_focus_el()
 	{
-		$this->assertEquals("name",$this->cb->cli->focus_el);
+		$this->assertEqual("name",$this->cb->cli->focus_el);
 	}
 	
 	function test_submit_method()
 	{
-		$this->assertEquals("POST",$this->cb->cli->formdata["method"]);
+		$this->assertEqual("POST",$this->cb->cli->formdata["method"]);
 	}
 
 	function test_prop_ignore()
 	{
-		$this->assertFalse(is_array($this->cb->cli->proplist["get_property_prop_ignore"]),"get_property_prop_ignore should not reach output client.");
-
-
+		$this->assertNull($this->cb->cli->proplist["get_property_prop_ignore"],
+						"get_property_prop_ignore should not reach output client.");
 	}
 	
 	function test_prop_error()
 	{
-		$this->assertTrue(is_array($this->cb->cli->proplist["get_property_prop_error"]));
-		$this->assertEquals("text",$this->cb->cli->proplist["get_property_prop_error"]["type"]);
-		$this->assertTrue(isset($this->cb->cli->proplist["get_property_prop_error"]["error"]));
+		$err = $this->cb->cli->proplist["get_property_prop_error"];
+		$this->assertIsA($err,"array");
+		$this->assertEqual("text",$err["type"]);
+		$this->assertNotNull($err["error"]);
+	}
+
+	function test_prop_calback()
+	{
+		$props = &$this->cb->cli->proplist;
+		$this->assertIsA($props["cb[1]"],"array","One of the properties defined in callback is not there");
+		$this->assertIsA($props["cb[2]"],"array","One of the properties defined in callback is not there");
+		$this->assertNull($props["cb"],"Property with type=callback should have been replaced with properties generated in the correspondening method");
+
 	}
 	
 	function test_callback_on_load()
@@ -100,7 +117,7 @@ class proptest_test extends PHPUnit_TestCase
 	function test_callback_mod_reforb()
 	{
 		$this->assertTrue($this->cb->inst->mod_reforb_called);
-		$this->assertEquals("works",$this->cb->cli->formdata["data"]["added_by_mod_reforb"]);
+		$this->assertEqual("works",$this->cb->cli->formdata["data"]["added_by_mod_reforb"]);
 		
 	}
 

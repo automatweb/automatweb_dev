@@ -1,9 +1,8 @@
 <?php
-
 if ($argc < 2)
 {
 	die(
-		"Usage: php run_tests.aw /path/to/site/aw.ini [folder folder folder to run tests in]\n\n");
+		"Usage:\n\tphp ${argv[0]} /path/to/site/aw.ini [folder folder folder to run tests in]\n\n");
 }
 
 $basedir = realpath("..");
@@ -12,7 +11,10 @@ init_config(array("ini_files" => array("$basedir/aw.ini", $argv[1])));
 classload("defs");
 classload("aw_template","timer");
 classload("core/obj/object", "core/error");
-require_once 'PHPUnit.php';
+
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
+
 $awt = new aw_timer;
 
 
@@ -32,14 +34,15 @@ for($i = 2; $i < $argc; $i++)
 	$files = array();
 	$p->_get_class_list($files, $path);
 
+	$suite = &new GroupTest("All tests");
 	foreach($files as $filename)
 	{
-		require_once($filename);
-	
-		$suite  = new PHPUnit_TestSuite(basename($filename,".aw")."_test");
-		$result = PHPUnit::run($suite);
-		echo $result -> toString();
+		//$suite = &new GroupTest(basename($filename,".aw")."_test");
+		$suite->addTestFile($filename);
+		//$suite->run(new TextReporter());
+		//$suite->run(new TextReporter());
 	}
+	$suite->run(new TextReporter());
 }
 echo "\n";
 
