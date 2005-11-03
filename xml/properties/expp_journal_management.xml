@@ -74,22 +74,24 @@
             <reltype>RELTYPE_GENERAL_DOCUMENT</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>doku</caption>
+            <caption>Dokument</caption>
       </property>
       <property>
             <name>publications_name</name>
             <table>objects</table>
             <group>publications_general_info</group>
-            <type>text</type>
-            <field>publications_name</field>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>V&amp;auml;ljaande nimi</caption>
       </property>
       <property>
             <name>publications_description</name>
             <table>objects</table>
             <group>publications_general_info</group>
-            <type>text</type>
-            <field>publications_description</field>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>V&amp;auml;ljaande kirjeldus</caption>
       </property>
       <property>

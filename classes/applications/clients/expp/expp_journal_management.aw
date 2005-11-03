@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.16 2005/11/03 13:32:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.17 2005/11/03 16:05:35 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -50,10 +50,10 @@
 	@groupinfo publications_general_info caption="V&auml;ljaannete &uuml;ldinfo" parent=publications
 	@default group=publications_general_info
 
-		@property publications_name type=text 
+		@property publications_name type=textbox field=meta method=serialize 
 		@caption V&auml;ljaande nimi
 
-		@property publications_description type=text
+		@property publications_description type=textbox field=meta method=serialize
 		@caption V&auml;ljaande kirjeldus
 
 		@property order_composition_information type=textarea field=meta method=serialize
@@ -239,7 +239,8 @@ class expp_journal_management extends class_base
 				break;
 			case "publications_name":
 			case "publications_description":
-				$prop['value'] = t("V&auml;&auml;rtus tuleb Reggy-st, ei ole v&otilde;imalik muuta");
+				$prop['type'] = "text";
+			//	$prop['value'] = t("V&auml;&auml;rtus tuleb Reggy-st, ei ole v&otilde;imalik muuta");
 				break;
 			case "stats":
 				$prop['value'] = t("Siia tuleb statistika");
@@ -417,7 +418,7 @@ class expp_journal_management extends class_base
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $document_id,
 						"return_url" => get_ru(),
-						), CL_DOCUMENT),
+						), "doc"),
 					"caption" => t("Muuda"),
 				)),
 				"select" => html::checkbox(array(
