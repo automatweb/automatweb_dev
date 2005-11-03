@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.432 2005/10/31 20:53:22 duke Exp $
+// $Id: class_base.aw,v 2.433 2005/11/03 15:20:51 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -103,6 +103,7 @@ class class_base extends aw_template
 		};
 		$this->default_group = "general";
 		$this->features = array();
+		$this->cfg_debug = false;
 
 		// surely there is a better way to implement vcl register?
 		$this->vcl_register = array(
@@ -1092,6 +1093,11 @@ class class_base extends aw_template
 		$_ct = $GLOBALS["cfg"]["__default"]["classes"];
 		// only classes which have defined properties
 		// can use class_base
+
+		if (aw_ini_get("debug_mode") == 1 && !empty($_REQUEST["CFG_DEBUG"]))
+		{
+			$this->cfg_debug = true;
+		};
 
 		// create an instance of the class servicing the object ($this->inst)
 		// set $this->clid and $this->clfile
@@ -2490,6 +2496,11 @@ class class_base extends aw_template
 
 			$val["_parsed"] = 1;
 
+			if ($this->cfg_debug && $status != PROP_OK)
+			{
+				print "status is " . $status . " for " . $val["name"] . "<br>";
+			}
+
 			if ($status === PROP_IGNORE)
 			{
 				// do nothing
@@ -3169,7 +3180,6 @@ class class_base extends aw_template
 			return $res;
 		};
 
-		global $CFG_DEBUG;
 		foreach($props as $key => $tmp)
 		{
 			// skiping text controllers.. you can't save anything with them, aight? -- ahz
@@ -3210,7 +3220,7 @@ class class_base extends aw_template
 					$props[$key]["value"] = $val;
 					// $controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst
 					// $controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst
-					if ($CFG_DEBUG)
+					if ($this->cfg_debug)
 					{
 						print "validating " . $prpdata["name"] . " against controller $controller_id<br>";
 					};
@@ -3227,7 +3237,7 @@ class class_base extends aw_template
 					*/
 					if ($controller_ret != PROP_OK)
 					{
-						if ($CFG_DEBUG)
+						if ($this->cfg_debug)
 						{
 							print "validation failed!<br>";
 						};
@@ -4103,8 +4113,7 @@ class class_base extends aw_template
 				"id" => $arr["cfgform_id"],
 			));
 
-			global $CFG_DEBUG;
-			if ($CFG_DEBUG)
+			if ($this->cfg_debug)
 			{
 				print "loading from " . $arr["cfgform_id"] . "<br>";
 			};
@@ -4117,7 +4126,6 @@ class class_base extends aw_template
 			// no config form? alright, load the default one then!
 			if ($arr["clid"] == CL_DOCUMENT )
 			{
-				global $CFG_DEBUG;
 				$def_cfgform = aw_ini_get("document.default_cfgform");
 				if (is_oid($def_cfgform) && $this->can("view",$def_cfgform))
 				{
@@ -4125,14 +4133,14 @@ class class_base extends aw_template
 						"id" => $def_cfgform,
 					));
 
-					if ($CFG_DEBUG)
+					if ($this->cfg_debug)
 					{
 						print "loading cfgform $def_cfgform specified by document.default_cfgform";
 					};
 				}
 				else
 				{
-					if ($CFG_DEBUG)
+					if ($this->cfg_debug)
 					{
 						print "loading the most basic document template";
 					};
@@ -4180,8 +4188,7 @@ class class_base extends aw_template
 						"id" => $found_form,
 					));
 
-					global $CFG_DEBUG;
-					if ($CFG_DEBUG)
+					if ($this->cfg_debug)
 					{
 						print "loading cfgform " . $found_form;
 						print "<br>";
