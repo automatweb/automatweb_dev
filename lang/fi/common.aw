@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/fi/common.aw,v 1.2 2005/05/20 08:19:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/fi/common.aw,v 1.3 2005/11/03 13:33:18 duke Exp $
 // kuude nimed
 define("LC_M1","tammikuu");
 define("LC_M2","helmikuu");
@@ -27,18 +27,6 @@ define("LC_SUNDAY","P&uuml;hap&auml;ev");
 
 define("LC_YES","jah");
 define("LC_NO","ei");
-
-// arvud
-define("LC_D1","üks");
-define("LC_D2","kaks");
-define("LC_D3","kolm");
-define("LC_D4","neli");
-define("LC_D5","viis");
-define("LC_D6","kuus");
-define("LC_D7","seitse");
-define("LC_D8","kaheksa");
-define("LC_D9","üheksa");
-define("LC_D10","kümme");
 
 define("MN_MENUEDIT","Menüüeditor");
 define("MN_DOCLIST","Dokumentide nimekiri");

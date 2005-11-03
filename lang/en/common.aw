@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/en/common.aw,v 1.9 2005/05/16 06:56:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/en/common.aw,v 1.10 2005/11/03 13:33:18 duke Exp $
 // kuude nimed
 define("LC_M1","January");
 define("LC_M2","February");
@@ -27,18 +27,6 @@ define("LC_SUNDAY","Sunday");
 
 define("LC_YES","yes");
 define("LC_NO","no");
-
-// arvud
-define("LC_D1","one");
-define("LC_D2","two");
-define("LC_D3","three");
-define("LC_D4","four");
-define("LC_D5","five");
-define("LC_D6","six");
-define("LC_D7","seven");
-define("LC_D8","eight");
-define("LC_D9","nine");
-define("LC_D10","ten");
 
 define("MN_MENUEDIT","Menuedit");
 define("MN_DOCLIST","List of documents");
