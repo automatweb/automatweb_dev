@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.1 2005/10/17 10:32:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -29,13 +29,25 @@ class expp_va extends class_base {
 		$this->ch = get_instance("cache");
 
 		lc_site_load( "expp", $this );
+		$GLOBALS['expp_show_footer'] = 1;
 	}
 
 	function show($arr) {
+		$_SESSION['expp_kampaania'] = '';
 		$retHTML = '';
 		if( empty( $this->cp->pids )) {
 			return $retHTML;
 		}
+		$_kampaania = $this->cp->nextPid();
+		if( $_kampaania == 'kampaania' ) {
+			$retHTML = $this->showKampaania();
+			if ( !empty( $retHTML )) {
+				return $retHTML;
+			}
+			header( "Location: ".aw_ini_get("baseurl")."/tellimine/" );
+			exit;
+		}
+
 		$this->cp->pidpos = 1;
 		$retHTML =& $this->showTyypList();
 		if ( !empty( $retHTML )) return $retHTML;
@@ -62,10 +74,10 @@ class expp_va extends class_base {
 		$_tyyp = $this->cp->nextPid();
 		if( empty( $_tyyp )) return $retHTML;
 		if( is_number( $_tyyp )) {
-			$sql = "SELECT id,nimi FROM expp_tyybid WHERE id = '{$_tyyp}'";
+			$sql = "SELECT id,nimi FROM expp_tyybid WHERE id = '{$_tyyp}' ORDER by sort ASC";
 		} else {
 			$_tyyp = addslashes( urldecode( $_tyyp ));
-			$sql = "SELECT id,nimi FROM expp_tyybid WHERE nimi = '{$_tyyp}'";
+			$sql = "SELECT id,nimi FROM expp_tyybid WHERE nimi = '{$_tyyp}'  ORDER by sort ASC";
 		}
 		$row = $this->db_fetch_row($sql);
 		if (!is_array($row)) {
@@ -93,6 +105,8 @@ class expp_va extends class_base {
 		if ( !empty( $retHTML )) return $retHTML;
 		$this->cp->pidpos = $_tmp;
 
+		$this->cp->log( get_class($this), "show" );
+
 		$_cache_name = urlencode( $this->lang.'_va_tyyplist_'.$_tyyp_nimi );
 		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
@@ -109,18 +123,24 @@ class expp_va extends class_base {
 				." v.toote_nimetus, l.liik, tr2.nimetus as lang_toode"
 				." FROM expp_valjaanne v, expp_liigid l, expp_va_liik vl"
 				." LEFT JOIN expp_translate tr2 ON tr2.pindeks = v.pindeks AND tr2.tyyp = 'toode' AND tr2.lang = '{$this->lang}'"
+				." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
 				." WHERE v.toote_tyyp = '{$_tyyp_id}'"
+				." AND h.pindeks is not null"
 				." AND l.tyyp_id = '{$_tyyp_id}'"
 				." AND vl.toote_nimetus = v.toote_nimetus"
-				." AND vl.liik_id = l.id";
+				." AND vl.liik_id = l.id"
+				." ORDER BY l.sort ASC, v.toote_nimetus ASC";
 		} else {
 			$sql = "SELECT DISTINCT"
 				." v.toote_nimetus, l.liik"
 				." FROM expp_valjaanne v, expp_liigid l, expp_va_liik vl"
+				." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
 				." WHERE v.toote_tyyp = '{$_tyyp_id}'"
+				." AND h.pindeks is not null"
 				." AND l.tyyp_id = '{$_tyyp_id}'"
 				." AND vl.toote_nimetus = v.toote_nimetus"
-				." AND vl.liik_id = l.id";
+				." AND vl.liik_id = l.id"
+				." ORDER BY l.sort ASC, v.toote_nimetus ASC";
 		}
 		$this->db_query($sql);
 		while ($row = $this->db_next()) {
@@ -200,11 +220,24 @@ class expp_va extends class_base {
 		if( empty( $_liik )) return $retHTML;
 
 		if( is_number( $_liik )) {
-			$sql = "SELECT id,tyyp_id,liik FROM expp_liigid WHERE id = '{$_liik}'";
+		$sql = "SELECT DISTINCT l.id, l.liik, l.tyyp_id FROM expp_liigid l"
+			." LEFT JOIN expp_va_liik vl ON vl.liik_id = l.id"
+			." left join expp_valjaanne v ON v.toote_nimetus = vl.toote_nimetus"
+			." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
+			." WHERE vl.liik_id is not null and v.toote_nimetus is not null and h.pindeks is not null and"
+			." l.esilehel = 1 AND l.id = '{$_liik}' ORDER BY l.sort ASC, l.id";
+//			$sql = "SELECT id,tyyp_id,liik FROM expp_liigid WHERE id = '{$_liik}' ORDER BY sort asc";
 		} else {
 			$_liik = addslashes(urldecode( $_liik ));
-			$sql = "SELECT id,tyyp_id,liik FROM expp_liigid WHERE liik = '{$_liik}'";
+//			$sql = "SELECT id,tyyp_id,liik FROM expp_liigid WHERE liik = '{$_liik}' ORDER BY sort asc";
+			$sql = "SELECT DISTINCT l.id, l.liik, l.tyyp_id FROM expp_liigid l"
+				." LEFT JOIN expp_va_liik vl ON vl.liik_id = l.id"
+				." left join expp_valjaanne v ON v.toote_nimetus = vl.toote_nimetus"
+				." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
+				." WHERE vl.liik_id is not null and v.toote_nimetus is not null and h.pindeks is not null and"
+				." l.esilehel = 1 AND l.liik = '{$_liik}' ORDER BY l.sort ASC, l.id";
 		}
+
 		$row = $this->db_fetch_row($sql);
 		if (!is_array($row)) {
 			return $retHTML;
@@ -228,6 +261,8 @@ class expp_va extends class_base {
 		if ( !empty( $retHTML )) return $retHTML;
 		$this->cp->pidpos = $_tmp;
 
+		$this->cp->log( get_class($this), "show" );
+
 		$_cache_name = urlencode( $this->lang.'_va_liiklist_'.$_liik_nimi );
 		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
@@ -246,16 +281,21 @@ class expp_va extends class_base {
 				." v.toote_nimetus, tr2.nimetus as lang_toode"
 				." FROM expp_valjaanne v, expp_va_liik vl"
 				." LEFT JOIN expp_translate tr2 ON tr2.pindeks = v.pindeks AND tr2.tyyp = 'toode' AND tr2.lang = '{$this->lang}'"
+				." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
 				." WHERE vl.liik_id = '{$_liik_id}'"
-				." AND vl.toote_nimetus = v.toote_nimetus";
+				." AND h.pindeks is not null"
+				." AND vl.toote_nimetus = v.toote_nimetus"
+				." ORDER BY v.toote_nimetus ASC";
 		} else {
 			$sql = "SELECT DISTINCT"
 				." v.toote_nimetus"
 				." FROM expp_valjaanne v, expp_va_liik vl"
+				." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
 				." WHERE vl.liik_id = '{$_liik_id}'"
-				." AND vl.toote_nimetus = v.toote_nimetus";
+				." AND h.pindeks is not null"
+				." AND vl.toote_nimetus = v.toote_nimetus"
+				." ORDER BY v.toote_nimetus ASC";
 		}
-
 		$this->db_query($sql);
 		$_row_count = max( $this->num_rows(), 1);
 		$colspan = min( $_row_count, aw_ini_get('colspan.liik') );
@@ -323,15 +363,21 @@ class expp_va extends class_base {
 		$_aid = addslashes( $__aid );
 		$_vanne = array();
 		if( $this->lang != 'et' ) {
-			$sql = "SELECT v.pindeks, v.valjaande_nimetus, v.kampaania, v.veebi_kirjeldus, tr1.nimetus as lang_va, tr2.nimetus as lang_toode"
+			$sql = "SELECT distinct v.pindeks, v.valjaande_nimetus, v.veebi_kirjeldus, tr1.nimetus as lang_va, tr2.nimetus as lang_toode"
 					." FROM expp_valjaanne v"
 					." LEFT JOIN expp_translate tr1 ON tr1.pindeks = v.pindeks AND tr1.tyyp = 'va' AND tr1.lang = '{$this->lang}'"
 					." LEFT JOIN expp_translate tr2 ON tr2.pindeks = v.pindeks AND tr2.tyyp = 'toode' AND tr2.lang = '{$this->lang}'"
-					." WHERE v.toote_nimetus='{$_aid}'";
+					." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
+					." WHERE v.toote_nimetus='{$_aid}'"
+					." and h.pindeks is not null"
+					." ORDER BY v.valjaande_nimetus ASC";
 		} else {
-			$sql = "SELECT v.pindeks, v.valjaande_nimetus, v.kampaania, v.veebi_kirjeldus"
+			$sql = "SELECT distinct v.pindeks, v.valjaande_nimetus, v.veebi_kirjeldus"
 					." FROM expp_valjaanne v"
-					." WHERE v.toote_nimetus='{$_aid}'";
+					." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
+					." WHERE v.toote_nimetus='{$_aid}'"
+					." and h.pindeks is not null"
+					." ORDER BY v.valjaande_nimetus ASC";
 		}
 		$this->db_query( $sql );
 		if( $this->num_rows() == 0 ) return $retHTML;
@@ -350,15 +396,18 @@ class expp_va extends class_base {
 				'text' => $_laid
 			));
 
+		$this->cp->log( get_class($this), "show", '', '', $__aid );
+
 		$_cache_name = urlencode( $this->lang.'_va_valjaanne_'.$__aid );
 		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
 			return $retHTML;
 		}
 
-		$sql = "SELECT v.pindeks, h.id, h.hinna_tyyp, h.kestus, h.baashind, h.juurdekasv, h.hinna_liik"
+		$sql = "SELECT v.pindeks, h.id, h.hinna_tyyp, h.kestus, h.baashind, h.juurdekasv, h.hinna_liik, h.hinna_kirjeldus"
 			." FROM expp_valjaanne v, expp_hind h"
 			." WHERE v.pindeks = h.pindeks"
+			." AND h.lubatud = 'jah'"
 			." AND v.toote_nimetus='{$_aid}'"
 			." AND (h.algus+0 = 0 OR h.algus <= now())"
 			." AND (h.lopp+0 = 0 OR h.lopp >= now())"
@@ -386,13 +435,16 @@ class expp_va extends class_base {
 		$_vad			= array();
 		$_reklaam	= '';
 		while ( $row = $this->db_next()) {
-			$_temp_liik = $row["pindeks"].'_'.str_replace( array('OKHIND','TAVAHIND', '_'), '', $row["hinna_liik"] );
+			$_kamp = str_replace( array('OKHIND','TAVAHIND', '_'), '', $row["hinna_liik"] );
+			$_temp_liik = $row["pindeks"].'_'.$_kamp;
 
 			$row['baashind']  = sprintf( "%1.0f", $row['baashind'] );
 			if( !isset( $_vad[$_temp_liik]))	{
 				$_vad[$_temp_liik] = array();
 				$_vad[$_temp_liik]["ht"] = 0;
 				$_vad[$_temp_liik]["pindeks"] = $row["pindeks"];
+				$_vad[$_temp_liik]["kamp"] = (empty( $_kamp )?'':'KAMP');
+				$_vad[$_temp_liik]["hinna_kirjeldus"] = stripslashes( $row["hinna_kirjeldus"] );
 			}
 			$_vad[$_temp_liik]["ht"] += $row["hinna_tyyp"];
 //			$_vad[$_temp_liik]["kampaania"] = $row["kampaania"];
@@ -401,12 +453,10 @@ class expp_va extends class_base {
 						$_text = 'kuu';
 						$_textn = 'kuud';
 					break;
-				case 1:
+				case 3:
 						$_text = ' numbri hind';
 						$_textn = ' numbri hind';
 					break;
-				case 3:
-						
 				default:
 					echo $row["hinna_tyyp"];
 					continue 2;
@@ -454,9 +504,14 @@ class expp_va extends class_base {
 		$_cell = '';
 		foreach( $_vad as $__pindeks => $val ) {
 			$_pindeks = $val['pindeks'];
+			$_kamp = $val['kamp'];
+/*
 			if( empty( $_reklaam )) {
-				$_reklaam = stripslashes( $_vanne[$_pindeks]["veebi_kirjeldus"] );
+//				$_reklaam = stripslashes( $_vanne[$_pindeks]["veebi_kirjeldus"] );
+//				$_reklaam = stripslashes( $_vanne[$_pindeks]["kampaania"] );
+				$_reklaam = stripslashes( $_vanne[$_pindeks]['veebi_kirjeldus'] );
 			}
+*/
 			$_url = urlencode( $_vanne[$_pindeks]['valjaande_nimetus'] );
 			$_title = ( isset( $_vanne[$_pindeks]['lang_va'] ) && !empty( $_vanne[$_pindeks]['lang_va'] ) ? $_vanne[$_pindeks]['lang_va'] : $_vanne[$_pindeks]['valjaande_nimetus'] );
 			$_price1 = '';
@@ -468,35 +523,43 @@ class expp_va extends class_base {
 					$this->vars(array(
 						'hinna_text' => ( $_kuu == 0? ($_count > 13 ? substr( $val1['head'], 0, 2 ) : $val1['head'] ) : ( $_count > 13 ? $_kuu.substr( $val1['head'], 0, 1 ) : $_kuu.$val1['head'] ))
 					));
-					$_price1 .= $this->parse( 'PRICE1' );
+					$_price1 .= $this->parse( $_kamp.'PRICE1' );
 
 					$this->vars(array(
 						'hinna_link' => $myURL.$_url.'?pikkus='.$val1['id'],
 						'hinna_sum' => $val1['h'],
 					));
-					$_price2 .= $this->parse( 'PRICE2' );
+					$_price2 .= $this->parse( $_kamp.'PRICE2' );
 				}
+			}
+			$_kirjeldus = stripslashes( $_vanne[$_pindeks]['veebi_kirjeldus'] );
+			if( isset( $val['hinna_kirjeldus'] )) {
+				if( !empty( $_kirjeldus )) {
+					$_kirjeldus .= '<br />';
+				}
+				$_kirjeldus .= stripslashes( $val['hinna_kirjeldus'] );
 			}
 
 			$this->vars(array(
 				'nimi' => $_title,
-				'kirjeldus' => $_vanne[$_pindeks]['kampaania'],
-				'PRICE1' => $_price1,
-				'PRICE2' => $_price2
+//				'kirjeldus' => $_vanne[$_pindeks]['kampaania'],
+				'kirjeldus' => $_kirjeldus,
+				$_kamp.'PRICE1' => $_price1,
+				$_kamp.'PRICE2' => $_price2
 			));
-			$_cell .= $this->parse('CELL');
+			$_cell .= $this->parse($_kamp.'CELL');
 		}
 
 ////
 // reklaamikast
-
+/*
 		if( !empty( $_reklaam )) {
 			$this->vars(array(
 				'text' => $_reklaam
 			));
 			$_reklaam = $this->parse('REKLAAM');
 		}
-
+*/
 ////
 // ??? mida teha kirjeldustega?
 		$_desc = '';
@@ -561,6 +624,8 @@ class expp_va extends class_base {
 		$cy = get_instance( CL_EXPP_JAH );
 		$myURL = $cy->getURL();
 
+		$this->cp->log( get_class($this), "show" );
+
 		$_cache_name = urlencode( $this->lang.'_va_liigid' );
 		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
@@ -573,7 +638,12 @@ class expp_va extends class_base {
 		$retTyyp = '';
 		$lastTyyp = '';
 		$isCount = 0;
-		$sql = "SELECT l.id, l.liik, t.nimi as tyyp FROM expp_liigid l, expp_tyybid t WHERE l.tyyp_id = t.id AND l.esilehel = 1 ORDER BY t.sort ASC, t.id, l.sort ASC, l.id";
+		$sql = "SELECT DISTINCT l.id, l.liik, t.nimi as tyyp FROM expp_liigid l, expp_tyybid t"
+			." LEFT JOIN expp_va_liik vl ON vl.liik_id = l.id"
+			." left join expp_valjaanne v ON v.toote_nimetus = vl.toote_nimetus"
+			." left join expp_hind h ON h.pindeks = v.pindeks AND h.hinna_liik in ('TAVAHIND', 'AVALIK_TAVAHIND', 'OKHIND', 'AVALIK_OKHIND' ) AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now()) AND h.lubatud = 'jah'"
+			." WHERE vl.liik_id is not null and v.toote_nimetus is not null and h.pindeks is not null and"
+			." l.tyyp_id = t.id AND l.esilehel = 1 ORDER BY t.sort ASC, t.id, l.sort ASC, l.id";
 		$this->db_query( $sql );
 		while ($row = $this->db_next()) {
 			if( $lastTyyp != $row['tyyp'] ) {
@@ -628,6 +698,194 @@ class expp_va extends class_base {
 		));
 
 		$retHTML = $this->parse();
+		$this->ch->file_set( $_cache_name, $retHTML );
+		return $retHTML;
+	}
+
+	function showKampaania() {
+		global $lc_expp;
+
+		$retHTML = '';
+		$_kampaania = addslashes( $this->cp->nextPid());
+		if( empty( $_kampaania )) return $retHTML;
+
+		if( $this->lang != 'et' ) {
+			$sql = "SELECT distinct v.pindeks, v.valjaande_nimetus, v.veebi_kirjeldus, v.toote_nimetus, tr1.nimetus as lang_va, tr2.nimetus as lang_toode"
+					." FROM expp_hind h, expp_valjaanne v"
+					." LEFT JOIN expp_translate tr1 ON tr1.pindeks = v.pindeks AND tr1.tyyp = 'va' AND tr1.lang = '{$this->lang}'"
+					." LEFT JOIN expp_translate tr2 ON tr2.pindeks = v.pindeks AND tr2.tyyp = 'toode' AND tr2.lang = '{$this->lang}'"
+					." WHERE h.kampaania = '{$_kampaania}'"
+					." and h.pindeks = v.pindeks"
+					." AND h.hinna_liik in ('SALAJANE_TAVAHIND', 'SALAJANE_OKHIND')"
+					." AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now())"
+					." AND h.lubatud = 'jah'"
+					." ORDER BY v.valjaande_nimetus ASC";
+		} else {
+			$sql = "SELECT distinct v.pindeks, v.valjaande_nimetus, v.veebi_kirjeldus, v.toote_nimetus"
+					." FROM expp_hind h, expp_valjaanne v"
+					." WHERE h.kampaania = '{$_kampaania}'"
+					." and h.pindeks = v.pindeks"
+					." AND h.hinna_liik in ('SALAJANE_TAVAHIND', 'SALAJANE_OKHIND')"
+					." AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now())"
+					." AND h.lubatud = 'jah'"
+					." ORDER BY v.valjaande_nimetus ASC";
+		}
+		$_vanne = array();
+		$this->db_query( $sql );
+		if( $this->num_rows() == 0 ) return $retHTML;
+		$_SESSION['expp_kampaania'] = $_kampaania;
+		while ( $row = $this->db_next()) {
+			$_vanne[$row['pindeks']] = $row;
+		}
+		$_laid = reset( $_vanne );
+		$_aid = $_laid['toote_nimetus'];
+		$__aid = stripslashes( $_aid );
+		if( $this->lang != 'et' ) {
+			$_laid = ( isset( $_laid['lang_toode'] ) && !empty( $_laid['lang_toode'] ) ? $_laid['lang_toode'] : $__aid );
+		} else {
+			$_laid = $__aid;
+		}
+		$_ch_logo = str_replace( '%', '#', urlencode( $__aid ));
+
+		$cl = get_instance( CL_EXPP_SITE_LOGO );
+		$cl2 = get_instance( CL_EXPP_SITE_CONTENT );
+		$cl->register( $_ch_logo );
+		$cl2->register( $_ch_logo );
+
+		$myURL = $this->cp->addYah( array(
+				'link' => urlencode( $__aid ),
+				'text' => $_laid
+			));
+
+		$this->cp->log( get_class($this), "show_{$_kampaania}", '', '', $__aid );
+
+		$_cache_name = urlencode( $this->lang.'_va_valjaanne_'.$_kampaania );
+		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+		if( !empty( $retHTML )) {
+			return $retHTML;
+		}
+
+		$sql = "SELECT v.pindeks, h.id, h.hinna_tyyp, h.kestus, h.baashind, h.juurdekasv, h.hinna_liik, h.hinna_kirjeldus"
+			." FROM expp_valjaanne v, expp_hind h"
+			." WHERE h.kampaania = '{$_kampaania}'"
+			." and h.pindeks = v.pindeks"
+			." AND h.hinna_liik in ('SALAJANE_TAVAHIND', 'SALAJANE_OKHIND')"
+			." AND (h.algus+0 = 0 OR h.algus <= now()) AND (h.lopp+0 = 0 OR h.lopp >= now())"
+			." AND h.lubatud = 'jah'"
+			." AND v.toote_nimetus='{$_aid}'"
+			." ORDER BY v.valjaande_nimetus ASC, h.hinna_liik ASC, h.kestus ASC";
+		$this->db_query( $sql );
+		if( $this->num_rows() == 0 ) return $retHTML;
+
+		$myURL = aw_ini_get("tell_dir").'telli/';
+		$this->read_template("expp_va.tpl");
+		$_vad			= array();
+		$_reklaam	= '';
+		while ( $row = $this->db_next()) {
+			$_kamp = str_replace( array('OKHIND','TAVAHIND', '_'), '', $row["hinna_liik"] );
+			$_temp_liik = $row["pindeks"].'_'.$_kamp;
+
+			$row['baashind']  = sprintf( "%1.0f", $row['baashind'] );
+			if( !isset( $_vad[$_temp_liik]))	{
+				$_vad[$_temp_liik] = array();
+				$_vad[$_temp_liik]["ht"] = 0;
+				$_vad[$_temp_liik]["pindeks"] = $row["pindeks"];
+				$_vad[$_temp_liik]["kamp"] = (empty( $_kamp )?'':'KAMP');
+				$_vad[$_temp_liik]["hinna_kirjeldus"] = stripslashes( $row["hinna_kirjeldus"] );
+			}
+			$_vad[$_temp_liik]["ht"] += $row["hinna_tyyp"];
+			switch( $row["hinna_tyyp"] ) {
+				case 0:
+						$_text = 'kuu';
+						$_textn = 'kuud';
+					break;
+				case 3:
+						$_text = ' numbri hind';
+						$_textn = ' numbri hind';
+					break;
+				default:
+					echo $row["hinna_tyyp"];
+					continue 2;
+			}
+			switch( $row["hinna_liik"] ) {
+				case 'OKHIND':
+				case 'AVALIK_OKHIND':
+				case 'SALAJANE_OKHIND':
+					$_vad[$_temp_liik]['hinnad'][0] = array(
+							'h' => $row["baashind"],
+							'id' => $row["id"],
+							'head' => 'otsekorraldus'
+						);
+					break;
+				case 'TAVAHIND':
+				case 'AVALIK_TAVAHIND':
+				case 'SALAJANE_TAVAHIND':
+				default:
+					$_vad[$_temp_liik]['hinnad'][$row["kestus"]] = array(
+							'h' => $row["baashind"],
+							'id' => $row["id"],
+							'head' => ( $row["kestus"] == 1 ? $_text : $_textn )
+						);
+			}
+		}
+		$_cell = '';
+		foreach( $_vad as $__pindeks => $val ) {
+			$_pindeks = $val['pindeks'];
+			$_kamp = $val['kamp'];
+
+			$_url = urlencode( $_vanne[$_pindeks]['valjaande_nimetus'] );
+			$_title = ( isset( $_vanne[$_pindeks]['lang_va'] ) && !empty( $_vanne[$_pindeks]['lang_va'] ) ? $_vanne[$_pindeks]['lang_va'] : $_vanne[$_pindeks]['valjaande_nimetus'] );
+			$_price1 = '';
+			$_price2 = '';
+			if( !empty( $val['hinnad'] )) {
+				ksort( $val['hinnad'] );
+				$_count = count( $val['hinnad'] );
+				foreach( $val['hinnad'] as $_kuu => $val1 ) {
+					$this->vars(array(
+						'hinna_text' => ( $_kuu == 0? ($_count > 13 ? substr( $val1['head'], 0, 2 ) : $val1['head'] ) : ( $_count > 13 ? $_kuu.substr( $val1['head'], 0, 1 ) : $_kuu.$val1['head'] ))
+					));
+					$_price1 .= $this->parse( $_kamp.'PRICE1' );
+
+					$this->vars(array(
+						'hinna_link' => $myURL.$_url.'?pikkus='.$val1['id'], // .'&kampaania='.urlencode( $_kampaania ),
+						'hinna_sum' => $val1['h'],
+					));
+					$_price2 .= $this->parse( $_kamp.'PRICE2' );
+				}
+			}
+			$_kirjeldus = stripslashes( $_vanne[$_pindeks]['veebi_kirjeldus'] );
+			if( isset( $val['hinna_kirjeldus'] )) {
+				if( !empty( $_kirjeldus )) {
+					$_kirjeldus .= '<br />';
+				}
+				$_kirjeldus .= stripslashes( $val['hinna_kirjeldus'] );
+			}
+
+			$this->vars(array(
+				'nimi' => $_title,
+				'kirjeldus' => $_kirjeldus,
+				$_kamp.'PRICE1' => $_price1,
+				$_kamp.'PRICE2' => $_price2
+			));
+			$_cell .= $this->parse($_kamp.'CELL');
+		}
+		$_desc = '';
+////
+// lõpuks viimane jupats
+
+		$this->vars(array(
+			'colspan' => $_colspan,
+			'toode' => $_GET['id'],
+			'REKLAAM' => $_reklaam,
+			'CELL' => $_cell,
+			'DESC' => $_desc,
+		));
+		$preview = $this->parse();
+		if( empty( $preview )) return $preview;
+
+		$_preview = '';
+
+		$retHTML = ( empty( $_preview )? $preview : $_preview );
 		$this->ch->file_set( $_cache_name, $retHTML );
 		return $retHTML;
 	}

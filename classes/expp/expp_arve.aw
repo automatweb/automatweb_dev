@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_arve.aw,v 1.1 2005/10/17 10:32:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_arve.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
 // expp_arve.aw - Expp arve 
 /*
 
@@ -20,6 +20,7 @@ class expp_arve extends class_base {
 		'maja'		=> 'maja',
 		'korter'		=> 'korter',
 		'telefon'	=> 'telefon',
+		'mobiil'		=> 'mobiil',
 		'faks'		=> 'fax',
 		'indeks'		=> 'indeks',
 		'aadress'	=> 'aadress',
@@ -97,6 +98,9 @@ class expp_arve extends class_base {
 			header( "Location: ".aw_ini_get("baseurl")."/tellimine/korv/" );
 			exit;
 		}
+
+		$this->cp->log( get_class($this), "show" );
+
 		$_out_rows = array();
 		$_sum_rows = array();
 		while ($row = $this->db_next()) {
@@ -168,6 +172,7 @@ class expp_arve extends class_base {
 		$content.=stripslashes( $row["eesnimi"]." ".$row["perenimi"])."<br>\n";
 		if ( !empty( $row["email"] ))	$content.="e-post: ".stripslashes( $row["email"])."<br>\n";
 		if ( !empty( $row["telefon"] ))	$content.="tel: ".stripslashes( $row["telefon"])."<br>\n";
+		if ( !empty( $row["mobiil"] ))	$content.="mobiil: ".stripslashes( $row["mobiil"])."<br>\n";
 		if ( !empty( $row["faks"] ))	$content.="faks: ".stripslashes( $row["faks"])."<br>\n";
 		$content.="<br>";
 		if ( !empty( $row["tanav"] ))	$content.=stripslashes( $row["tanav"]);
@@ -187,7 +192,6 @@ class expp_arve extends class_base {
 
 	function getNextArve() {
 		$this->save_handle();
-//		return true;
 //		$sql	= "LOCK TABLES expp_arvenr WRITE";
 //		$this->db_query($sql);
 		$sql	= "UPDATE expp_arvenr SET arvenr=arvenr+1 WHERE id=1";
@@ -198,6 +202,27 @@ class expp_arve extends class_base {
 //		$this->db_query($sql);
 		$retVal = sprintf("%08s",$arow["arvenr"]);
 		$this->restore_handle();
+
+		$this->cp->log( get_class($this), "uusArve", $retVal );
+
+		return $retVal;
+	}
+
+	function getNextTell() {
+		$this->save_handle();
+//		$sql	= "LOCK TABLES expp_tellnr WRITE";
+//		$this->db_query($sql);
+		$sql	= "UPDATE expp_tellnr SET tellnr=tellnr+1 WHERE id=1";
+		$this->db_query($sql);
+		$sql	= "SELECT tellnr FROM expp_tellnr WHERE id=1";
+		$arow = $this->db_fetch_row( $sql );
+//		$sql	= "UNLOCK TABLES expp_tellnr";
+//		$this->db_query($sql);
+		$retVal = sprintf("%08s",$arow["tellnr"]);
+		$this->restore_handle();
+
+		$this->cp->log( get_class($this), "uusTellimus", $retVal );
+
 		return $retVal;
 	}
 
@@ -226,12 +251,17 @@ class expp_arve extends class_base {
 	}
 
 	function parsePost() {
+
+		$this->cp->log( get_class($this), "salvestaArve" );
+
+		$sqls = array();
 		$sql = "SELECT * FROM expp_tellija WHERE session='".session_id()."' AND staatus='tellija' ORDER BY time DESC LIMIT 1";
 		$_tellija = $this->db_fetch_row( $sql );
 		if( $this->num_rows() < 1 ) {
 			header( "Location: ".aw_ini_get("baseurl")."/tellimine/tellija/" );
 			exit;
 		}
+		$_SESSION['tellnr'] = $this->getNextTell();
 		if ( $_tellija['tyyp'] == "firma" ) {
 			$_tellija['nimi'] = $_tellija["firmanimi"];
 			$_tellija['enimi'] = $_tellija["eesnimi"]." ".$_tellija["perenimi"];
@@ -267,9 +297,10 @@ class expp_arve extends class_base {
 			." kanal='WEB',"
 			." tyyp='U'";
 		$sql = "SELECT k.*"
-			.", t.toimetus"
+			.", t.toimtunnus"
 			.", h.baashind"
 			.", h.hkkood"
+			.", h.kampaania"
 		." FROM expp_korv k ,expp_valjaanne t, expp_hind h"
 		." WHERE k.session='".session_id()."' AND k.pindeks=t.pindeks AND k.pikkus=h.id"
 		." AND k.leping = 'ok'"
@@ -293,7 +324,7 @@ class expp_arve extends class_base {
 				$lisarida	= "";
 			}
 
-			$sql = "INSERT INTO expp_arved SET $sql1, tellkpv='".date("d.m.Y")."',"
+			$sqls[] = "INSERT INTO expp_arved SET $sql1, tellkpv='".date("d.m.Y")."',"
 				." arvenr='{$_arve}',"
 				." vaindeks='".$row["pindeks"]."',"
 				." algus='".date("d.m.Y",$algus)."',"
@@ -301,20 +332,23 @@ class expp_arve extends class_base {
 				." lisarida='{$lisarida}',"
 				." eksempla='".$row["eksemplar"]."',"
 				." rhkkood='".$row["hkkood"]."',"
+				." kampaania='".$row['kampaania']."',"
 				." maksumus='".($row["baashind"]*(int)$row["eksemplar"]*(int)$row["kogus"])."',"
 				." leping='".$row["leping"]."',"
 				." trykiarve='0',"
 				." trykiokpakkumine='0',"
 				." viitenumber='{$_viitenr}',"
-				." session='".session_id()."',"
+				." session='".session_id().'-'.$_SESSION['tellnr']."',"
 				." time=NOW()";
-			$this->db_query($sql);
+//			$this->db_query($sql);
 //			$my_ok += @mysql_affected_rows( $dbh );
 		}
 // ----------------------------------------
 //							arvega asjad
 		$sql = "SELECT k.*"
 			.", t.toimetus"
+			.", t.toimtunnus"
+			.", t.valjaanne"
 			.", h.baashind"
 			.", h.kestus"
 			.", h.hinna_tyyp"
@@ -325,16 +359,17 @@ class expp_arve extends class_base {
 		." ORDER BY k.leping DESC, t.valjaande_nimetus ASC";
 
 		$this->db_query($sql);
-		if( $this->num_rows() > 0 ) {
+		$_nr = $this->num_rows();
+		if( $_nr > 0 ) {
 			$_arve = $this->getNextArve();
 
-			if ( $this->num_rows() > 1 ) {
+			if ( $_nr > 1 ) {
 				$_viitenr = "10599{$_arve}";
-				$_viitenr.= leia_731( $_viitenr );
+				$_viitenr.= $this->leia_731( $_viitenr );
 			}
 
 			while ($row = $this->db_next()) {
-				if ( $this->num_rows() == 1 ) {
+				if ( $_nr == 1 ) {
 					$_viitenr = "105".$row["toimtunnus"].$_arve;
 					$_viitenr.= $this->leia_731( $_viitenr );
 				}
@@ -384,7 +419,22 @@ class expp_arve extends class_base {
 				} else if ( $row["algus"] == "CONT" ) {
 					$algus		= mktime( 0,0,0,date("m"),date("d"),date("Y"));
 					$lopp		= mktime( 0,0,0,date("m")+$my_m,date("d")+$my_d-1,date("Y")+$my_y);
-					$lisarida	= "Kehtiva tellimuse l&otilde;<br><b>$kestus</b> $lisarida";
+					$lisarida	= "Kehtiva tellimuse l&otilde;pust<br><b>$kestus</b> $lisarida";
+				} else if ( $row["hinna_tyyp"] != 3 ) {
+					$algus		= mktime(0,0,0,(int)substr( $row["algus"],4,2),1,(int)substr( $row["algus"],0,4));
+					$lopp		= mktime(0,0,0,(int)substr( $row["algus"],4,2)+$my_m,$my_d,(int)substr( $row["algus"],0,4)+$my_y);
+					$lisarida	= "";
+				} else {	// Eesti ekspress jpt.
+
+					$algus		= mktime(0,0,0,(int)substr( $row["algus"],4,2),1,(int)substr( $row["algus"],0,4));
+					$sql = "select UNIX_TIMESTAMP( ilmumiskpv ) as kuup from expp_ilmumisgraafik where valjaanne = '".$row['valjaanne']."' AND ilmumiskpv >= '".date('Y-m-d', $algus)."' ORDER BY ilmumiskpv ASC LIMIT ".($row["kogus"]-1).",1";
+					$this->save_handle();
+					$row1 =& $this->db_fetch_row( $sql );
+					$lopp = $row1['kuup'];
+					$this->restore_handle();
+					$lisarida	= "<b>".$row["kogus"]."</b> $lisarida";
+				}
+/*
 				} else if ( $row["pindeks"] != "69830" ) {
 					$algus		= mktime(0,0,0,(int)substr( $row["algus"],4,2),1,(int)substr( $row["algus"],0,4));
 					$lopp		= mktime(0,0,0,(int)substr( $row["algus"],4,2)+$my_m,$my_d,(int)substr( $row["algus"],0,4)+$my_y);
@@ -397,7 +447,8 @@ class expp_arve extends class_base {
 					$lopp		= mktime(0,0,0,(int)substr( $row["algus"],4,2)+$my_m,$my_d+$ajut-6,(int)substr( $row["algus"],0,4)+$my_y);
 					$lisarida	= "";
 				}
-				$sql = "INSERT INTO expp_arved SET {$sql1}, tellkpv='".date("d.m.Y")."',"
+*/
+				$sqls[] = "INSERT INTO expp_arved SET {$sql1}, tellkpv='".date("d.m.Y")."',"
 					." arvenr='{$_arve}',"
 					." vaindeks='".$row["pindeks"]."',"
 					." algus='".date("d.m.Y",$algus)."',"
@@ -410,13 +461,16 @@ class expp_arve extends class_base {
 					." trykiarve='0',"
 					." trykiokpakkumine='0',"
 					." viitenumber='{$_viitenr}',"
-					." session='".session_id()."',"
+					." session='".session_id().'-'.$_SESSION['tellnr']."',"
 					." time=NOW()";
-				$this->db_query($sql);
+//				$this->db_query($sql);
 //				$my_ok += @mysql_affected_rows( $dbh );
 			}
 		}
-		
+		$sqls[] = "UPDATE expp_korv SET session='".session_id().'-'.$_SESSION['tellnr']."' WHERE session='".session_id()."'";
+		foreach( $sqls as $sql ) {
+			$this->db_query($sql);
+		}
 /*
 if ( $my_ok == 0 ) {
 	$pid = korv;

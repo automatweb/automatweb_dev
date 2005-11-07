@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_isik.aw,v 1.1 2005/10/17 10:32:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_isik.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
 // expp_isik.aw - Expp isik 
 /*
 
@@ -84,9 +84,17 @@ var $telliitems =	array (
 		"error1"=> "LC_EXPP_ERR_TELEFON2",
 		"error2"=> "LC_EXPP_ERR_TELEFON3",
 	),
+	"mobiil"	=>  array(
+		"ok_era"	=> 0,
+		"ok_ari"	=> 0,
+		"mysql" => "mobiil",
+		"error"	=> "LC_EXPP_ERR_MOBIIL1",
+		"error1"=> "LC_EXPP_ERR_MOBIIL2",
+		"error2"=> "LC_EXPP_ERR_MOBIIL3",
+	),
 	"faks"		=>  array(
 		"ok_era"	=> 0,
-		"ok_ari"	=> 1,
+		"ok_ari"	=> 0,
 		"mysql" => "faks",
 		"error"	=> "LC_EXPP_ERR_FAKS1",
 		"error1"=> "LC_EXPP_ERR_FAKS2",
@@ -100,19 +108,19 @@ var $telliitems =	array (
 	),
 	"maja"		=>  array(
 		"ok_era"	=> 0,
-		"ok_ari"	=> 1,
+		"ok_ari"	=> 0,
 		"mysql" => "maja",
 		"error"	=> "LC_EXPP_ERR_MAJA",
 	),
 	"korter"	=>  array(
 		"ok_era"	=> 0,
-		"ok_ari"	=> 1,
+		"ok_ari"	=> 0,
 		"mysql" => "korter",
 		"error"	=> "LC_EXPP_ERR_KORTER",
 	),
 	"indeks"	=>  array(
 		"ok_era"	=> 0,
-		"ok_ari"	=> 1,
+		"ok_ari"	=> 0,
 		"mysql" => "indeks",
 		"error"	=> "LC_EXPP_ERR_INDEKS",
 	),
@@ -144,6 +152,7 @@ var $telliitems =	array (
 		$this->cy = get_instance( CL_EXPP_JAH );
 		$this->cp = get_instance( CL_EXPP_PARSE );
 		lc_site_load( "expp", $this );
+		$GLOBALS['expp_show_footer'] = 1;
 	}
 
 	function show($arr) {
@@ -167,6 +176,8 @@ var $telliitems =	array (
 		if ( $_tellija != 'tellija' ) {
 			$this->telliitems["toimetus"]["ok_era"] = 0;
 			$this->telliitems["toimetus"]["ok_ari"] = 0;
+			$this->telliitems["isikukood"]["ok_era"] = 0;
+			$this->telliitems["isikukood"]["ok_ari"] = 0;
 		}
 		if( isset( $GLOBALS['HTTP_POST_VARS']['tagasi'] ) || isset( $GLOBALS['HTTP_POST_VARS']['tagasi_y'] )) {
 			$this->returnPost();
@@ -176,6 +187,9 @@ var $telliitems =	array (
 		} else {
 			$this->getDBRows( $_tellija );
 		}
+
+		$this->cp->log( get_class($this), "form".ucfirst($_tellija) );
+
 		$this->read_template("expp_isik.tpl");
 
 
@@ -197,7 +211,7 @@ var $telliitems =	array (
 		$this->post_arr['MAAKOND_SEL'] = html::select(array(
 			'name' => 'maakond',
 			'options' => $this->maakonnad,
-			'selected' => $this->post_arr['maakond'],
+			'selected' => htmlentities( $this->post_arr['maakond'] ),
 			'class' => 'formElement',
 		));
 		if( $_tellija == 'tellija' ) {
@@ -305,6 +319,8 @@ var $telliitems =	array (
 		$sql = "UPDATE expp_tellija SET ".implode( ',', $sqls ).", time=NOW() WHERE session='".session_id()."' AND staatus='{$_aid}'";
 		$this->db_query( $sql );		
 
+		$this->cp->log( get_class($this), "save".ucfirst($_aid), $this->post_arr['toimetus'], $this->post_arr['tyyp'] );
+
 		if( $_aid == 'tellija' && $this->post_arr['toimetus'] == 'sama' || $_aid == 'saaja' ) {
 			header( "Location: ".aw_ini_get("baseurl")."/tellimine/arve/" );
 		} else if( $_aid == 'tellija' ) {
@@ -317,6 +333,7 @@ var $telliitems =	array (
 
 	function specialChecks() {
 		global $lc_expp;
+// ---[ telefon ]--------------------------
 		if ( isset( $this->post_arr['telefon'] ) && !empty( $this->post_arr['telefon'] )) {
 			$telefon1 = $this->post_arr['telefon'];
 			if( $this->check_tel( &$telefon1 )) {
@@ -329,7 +346,20 @@ var $telliitems =	array (
 				$this->post_arr['telefon'] = $telefon1;
 			}
 		}
-// ----------------------------------------
+// ---[ mobiil ]---------------------------
+		if ( isset( $this->post_arr['mobiil'] ) && !empty( $this->post_arr['mobiil'] )) {
+			$mobiil1 = $this->post_arr['mobiil'];
+			if( $this->check_tel( &$mobiil1 )) {
+				$this->post_errors[] = $lc_expp[$this->telliitems['mobiil']['error1']];
+			} else {
+				$mobiil1 = $this->format_tel( $mobiil1 );
+			}
+			if( strcmp( $this->post_arr['mobiil'], $mobiil1 ) != 0 ) {
+				$this->post_errors[] = $lc_expp[$this->telliitems['mobiil']['error2']];
+				$this->post_arr['mobiil'] = $mobiil1;
+			}
+		}
+// ---[ faks ]-----------------------------
 		if ( isset( $this->post_arr['faks'] ) && !empty( $this->post_arr['faks'] )) {
 			$faks1 = $this->post_arr['faks'];
 			if( $this->check_tel( &$faks1 )) {
@@ -342,7 +372,7 @@ var $telliitems =	array (
 				$this->post_arr['faks'] = $faks1;
 			}
 		}
-// ----------------------------------------
+// ---[ e-post ]---------------------------
 		if ( isset( $this->post_arr['epost'] ) && !empty( $this->post_arr['epost'] )) {
 			$epost1 = $this->post_arr['epost'];
 			if( $this->check_email( &$epost1 )) {
@@ -353,7 +383,7 @@ var $telliitems =	array (
 				$this->post_arr['epost'] = $epost1;
 			}
 		}	
-// ----------------------------------------
+// ---[ isikukood ]------------------------
 		if ( isset( $this->post_arr['isikukood'] ) && $this->post_arr['tyyp'] == "eraisik" && $this->IsikuKoodVigane( $this->post_arr['isikukood'] )) {
 			$this->post_errors[] = $lc_expp[$this->telliitems['isikukood']['error1']];
 		}

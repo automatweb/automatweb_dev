@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_korv.aw,v 1.1 2005/10/17 10:32:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_korv.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
 // expp_korv.aw - Expp tootekorv 
 /*
 
@@ -23,6 +23,7 @@ class expp_korv extends class_base {
 		$this->cy = get_instance( CL_EXPP_JAH );
 		$this->cp = get_instance( CL_EXPP_PARSE );
 		lc_site_load( "expp", $this );
+		$GLOBALS['expp_show_footer'] = 1;
 	}
 
 	function show($arr) {
@@ -33,6 +34,8 @@ class expp_korv extends class_base {
 		if( isset( $GLOBALS['HTTP_POST_VARS']['edasi'] ) || isset( $GLOBALS['HTTP_POST_VARS']['edasi_y'] )) {
 			$this->parsePost();
 		}
+		$_SESSION['expp_kampaania'] = '';
+
 		$_kid = intval( $this->cp->getVal('kustuta'));
 		if( $_kid > 0 ) {
 			$this->kustuta( $_kid );
@@ -42,6 +45,9 @@ class expp_korv extends class_base {
 				'link' => 'korv',
 				'text' => $lc_expp['LC_EXPP_TITLE'],
 			));
+
+		$this->cp->log( get_class($this), "show" );
+
 		$this->read_template("expp_korv.tpl");
 
 		$sql = "SELECT k.id"
@@ -54,8 +60,8 @@ class expp_korv extends class_base {
 			.", h.hinna_tyyp"
 			.", h.baashind"
 			.", h.juurdekasv"
-		." FROM expp_korv k ,expp_valjaanne t, expp_hind h"
-		." WHERE k.session='".session_id()."' AND k.pindeks=t.pindeks AND k.pikkus=h.id"
+		." FROM expp_korv k ,expp_valjaanne t left join expp_hind h on k.pikkus=h.id AND h.pindeks=k.pindeks"
+		." WHERE k.session='".session_id()."' AND k.pindeks=t.pindeks"
 		." ORDER BY k.leping DESC, t.valjaande_nimetus ASC";
 		$this->db_query($sql);
 		if( $this->num_rows() == 0 ) {
@@ -134,8 +140,15 @@ class expp_korv extends class_base {
 	}
 	
 	function kustuta( $id ) {
+		$sql = "select v.pindeks, v.toimetus, v.valjaande_nimetus from expp_valjaanne v, expp_korv k where k.id = '$id' AND k.session='".session_id()."' AND v.pindeks = k.pindeks";
+		$row = $this->db_fetch_row($sql);
+		$this->cp->log( get_class($this), "kustuta_korvist", $row['pindeks'], $row['toimetus'], $row['valjaande_nimetus'] );
+
 		$sql = "DELETE FROM expp_korv WHERE id = '$id' AND session='".session_id()."'";
 		$this->db_query($sql);
+
+		header( "Location: ".aw_ini_get("baseurl")."/tellimine/korv/" );
+		exit;
 	}
 
 	function returnPost() {

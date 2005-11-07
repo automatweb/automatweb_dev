@@ -1,6 +1,6 @@
 <?php
 /*===========================================================================*/
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_import.aw,v 1.1 2005/10/17 10:32:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_import.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
 // expp_import.aw - Expp import 
 /*
 
@@ -50,6 +50,9 @@ class expp_import extends class_base
 	var $hind_table = 'expp_hind';
 	var $hind_temp;
 
+	var $lva_table = 'expp_va_liik';
+	var $lva_temp;
+	
 	var $conv_table = array(
 		'valjaanne',
 		'toimetus',
@@ -60,6 +63,7 @@ class expp_import extends class_base
 		'toimetus',
 		'hinna_liik',
 		'veebi_kirjeldus',
+		'valjaande_kirjeldus',
 	);
 
 	var $va_trans_sql = '';
@@ -70,8 +74,9 @@ class expp_import extends class_base
 		'toote_nimetus' => 'toote_nimetus',
 		'ajaleht' => 'toote_tyyp',
 		'toimetus' => 'toimetus',
-		'kampaania' => 'kampaania',
-		'veebi_kirjeldus' => 'veebi_kirjeldus'
+		'toimtunnus' => 'toimtunnus',
+	//	'kampaania' => 'kampaania',
+		'valjaande_kirjeldus' => 'veebi_kirjeldus',
 	//	'tyyp' => 'hinna_tyyp'
 	);
 
@@ -87,22 +92,34 @@ class expp_import extends class_base
 		'pindeks'		=> 'pindeks',
 		'hkkood'       => 'hkkood',
 		'hinna_liik'	=> 'hinna_liik',
-		'hinna_tyyp'	=> 'hinna_tyyp',
+		'tyyp'			=> 'hinna_tyyp',
 		'algus'			=> 'algus',
 		'lopp'			=> 'lopp',	
+		'hinna_kirjeldus' => 'hinna_kirjeldus',
+		'kampaania'		=> 'kampaania',
 		'kestus'			=> 'kestus',
 		'baashind'		=> 'baashind',
 		'juurdekasv'	=> 'juurdekasv',
 	);
 
 	var $ok_tyybid = array(
-				'OKHIND',
-				'AVALIK_OKHIND',
-				'SALAJANE_OKHIND',
+		'OKHIND'				=> 'OKHIND',
+		'AVALIK_OKHIND'	=>	'AVALIK_OKHIND',
+		'SALAJANE_OKHIND'	=> 'SALAJANE_OKHIND',
 	);
 
+	var $tel_tyybid = array(
+				'TAVAHIND'				=> 'TAVAHIND',
+				'AVALIK_TAVAHIND'		=>	'AVALIK_TAVAHIND',
+				'SALAJANE_TAVAHIND'	=> 'SALAJANE_TAVAHIND',
+	);
+	
+	var $all_tyybid = array();
+	var $lang;
 /*===========================================================================*/
 	function expp_import() {
+		$this->lang = aw_global_get("admin_lang_lc");
+
 		$sl = get_instance(CL_AUTH_SERVER_LOCAL);
 		list($success, $msg) = $sl->check_auth(NULL, array(
 			"uid" => $_SERVER['PHP_AUTH_USER'],
@@ -126,6 +143,7 @@ class expp_import extends class_base
 		$this->va_trans_sql = implode( ' , ', $this->va_trans_table );
 		$this->ilm_trans_sql = implode( ' , ', $this->ilm_trans_table );
 		$this->hind_trans_sql = implode( ' , ', $this->hind_trans_table );
+		$this->all_tyybid = ($this->tel_tyybid + $this->ok_tyybid);
 	}
 /*===========================================================================*/
 //////
@@ -236,6 +254,7 @@ class expp_import extends class_base
 		$d = dir( $upload_dir );
 		while (($File = $d->read()) !== false ) {
 			if ( strpos( $File, '.' ) === 0 ) continue;
+			$this->sendFile( $File );
 			// get extension
 			$ext = substr( $File, strrpos( $File, '.' ) + 1 );
 			if( in_array( $ext, $allowed_extensions ) === false ) {
@@ -391,9 +410,10 @@ class expp_import extends class_base
 			$liigid = array( $liigid );
 		}
 // arr( $liigid );
-		$sqh = "replace into expp_va_liik values ( '%s' , '%s' )";
+		$sqh = "replace into {$this->lva_temp} values ( '%s' , '%s' )";
 		foreach( $liigid as $key=>$val ) {
-			$val = ucfirst( strtolower( $this->convert_unicode( $val )));
+//			$val = ucfirst( strtolower( $this->convert_unicode( $val )));
+			$val = $this->convert_unicode( $val );
 			$sql = "select id from expp_liigid where liik = '$val' and tyyp_id = '{$tyyp}'";
 // arr( $sql );
 			$row =& $this->db_fetch_row( $sql );
@@ -414,22 +434,15 @@ class expp_import extends class_base
 	function parse_hinnad( $temp_arr ) {
 		$this->va_temp = $this->create_temp_table( $this->va_table );
 		$this->hind_temp = $this->create_temp_table( $this->hind_table );
+		$this->lva_temp = $this->create_temp_table( $this->lva_table );
 
 		$sql1 = "replace {$this->va_temp} ( {$this->va_trans_sql} ) values ( '";
 
 		foreach( $temp_arr as $key=>$val ) {
-/*
-			switch( $val['hinna_liik'] ) {
-				case 'OKHIND':
-				case 'AVALIK_OKHIND':
-					$val['hinna_liik'] = 'OKHIND';
-					break;
-
-				case 'TAVAHIND':
-				case 'AVALIK_TAVAHIND':
-					$val['hinna_liik'] = 'TAVAHIND';
+			if( !in_array( $val['hinna_liik'], $this->all_tyybid )) {
+				echo "Vigane hinna liik! => ".$val['hinna_liik']."<br>\n";
+				continue;
 			}
-*/
 			$val['toote_nimetus'] = $val['toode']['nimetus'];
 			if( is_array( $val['toote_nimetus'] )) {
 				echo "Vigane nimetus! => ".$this->convert_unicode( implode( '; ', $val['toote_nimetus'] ))."<br>\n";
@@ -468,20 +481,48 @@ class expp_import extends class_base
 			$sql_tags[] = $row['pindeks'];
 		}
 		$str1 = implode( "','", $sql_tags );
+
+		$sql_tags = array();
+		$sql = "select distinct toote_nimetus from {$this->lva_temp}";
+// arr( $sql );
+		$this->db_query( $sql );
+		while( $row = $this->db_next()) {
+			$sql_tags[] = $row['toote_nimetus'];
+		}
+		$str2 = implode( "','", $sql_tags );
 		
 		$sql_tags = array();
+//		$sql_tags[] = "FLUSH TABLES {$this->va_temp}, {$this->lva_temp}, {$this->hind_temp}, {$this->va_table}, {$this->lva_table}, {$this->hind_table}";
+		$sql_tags[] = "DELETE FROM {$this->lva_table} WHERE toote_nimetus in ( '{$str2}' )";
 		$sql_tags[] = "DELETE FROM ".$this->va_table." WHERE pindeks in ( '{$str1}' )";
+		$sql_tags[] = "UPDATE ".$this->hind_table." SET lubatud = 'ei', changetime=now() WHERE pindeks in ( '{$str1}' )";
+// and changetime < ( DATE_SUB(now(),INTERVAL 30 MINUTE)+0 )";
+//		$sql_tags[] = "DELETE FROM ".$this->hind_table." WHERE pindeks in ( '{$str1}' )";
+
+//		$sql_tags[] = "FLUSH TABLES {$this->va_temp}, {$this->lva_temp}, {$this->hind_temp}, {$this->va_table}, {$this->lva_table}, {$this->hind_table}";
+		
+		$sql_tags[] = "REPLACE {$this->lva_table} SELECT * FROM {$this->lva_temp}";
 		$sql_tags[] = "REPLACE ".$this->va_table." SELECT * FROM ".$this->va_temp;
-		$sql_tags[] = "DELETE FROM ".$this->hind_table." WHERE pindeks in ( '{$str1}' )";
-		$sql_tags[] = "INSERT INTO ".$this->hind_table." ( {$this->hind_trans_sql} ) SELECT {$this->hind_trans_sql} FROM ".$this->hind_temp;
+// impordi ajal korvis olnud asjad kaduma ei läheks
+		$sql_tags[] = "DELETE FROM ".$this->hind_table." WHERE lubatud = 'ei' AND changetime < ( DATE_SUB(now(),INTERVAL 1 DAY)+0 )";
+//		$sql_tags[] = "FLUSH TABLES {$this->hind_temp}, {$this->hind_table}";
+		$sql_tags[] = "REPLACE INTO ".$this->hind_table." ( {$this->hind_trans_sql},lubatud ) SELECT {$this->hind_trans_sql},'jah' FROM ".$this->hind_temp;
+
+//		$sql_tags[] = "FLUSH TABLES {$this->va_temp}, {$this->lva_temp}, {$this->hind_temp}, {$this->va_table}, {$this->lva_table}, {$this->hind_table}";
+
 		$sql_tags[] = "DROP TABLE IF EXISTS ".$this->va_temp;
 		$sql_tags[] = "DROP TABLE IF EXISTS ".$this->hind_temp;
+		$sql_tags[] = "DROP TABLE IF EXISTS ".$this->lva_temp;
+
 		if( !empty( $sql_tags )) {
 			foreach( $sql_tags as $sql ) {
-// // arr( $sql );
+// arr( $sql );
 				$this->db_query( $sql );
 			}
 		}
+		$ch = get_instance("cache");
+		$ch->full_flush();
+//		$ch->file_invalidate_regex("(.*)_va_(.*)");
 	}
 /*===========================================================================*/
 	function parse_graafik( $temp_arr ) {
@@ -626,9 +667,6 @@ class expp_import extends class_base
 			"can_delete" => 1,
 			"can_view" => 1
 		));
-/*
-	
-*/
 		
 // 7. Õigus tüüpi seos Väljaannete haldusobjekti ning vastava Väljaande Kasutajagrupi vahel kõigi õigustega
 
@@ -646,9 +684,18 @@ class expp_import extends class_base
 // http://andrus.dev.struktuur.ee/automatweb/orb.aw?class=expp_publication&action=change&id=998&parent=765
 // Selle objekti comment välja võiks panna publikatsiooni unikaalse ID, mis Reggyst tuleb, mille aluse vältida topeltobjektide loomist ja seoste säilimist.
 		$tooteObjekt	= $this->createPub( $toode, $toodeKaust->id(), $pindeks);
+// ma saan aru et siin peaks seostatama toode tooteHalduse juurde
+// sel juhul on see yhendus natuke valetpidi tehtud
+/*
 		$tooteObjekt->connect(array(
 			"to" => $tooteHaldus->id(),
 			"reltype" => "RELTYPE_PUBLICATION"
+		));
+*/
+// õige peaks olema:
+		$tooteHaldus->connect(array(
+			"to" => $tooteObjekt->id(),
+			"type" => "RELTYPE_PUBLICATION"
 		));
 
 /*
@@ -672,6 +719,8 @@ class expp_import extends class_base
 				'hinna_tyyp'	=> $arr_in['tyyp'],
 				'algus'			=> $arr_in['algus'],
 				'lopp'			=> $arr_in['lopp'],
+				'hinna_kirjeldus' => $arr_in['veebi_kirjeldus'],
+				'kampaania'		=> $arr_in['kampaania'],
 		);
 		$row1 = $arr_in['hinnagraafikud']['hinnagraafik'];
 		$row2 = array();
@@ -725,7 +774,7 @@ class expp_import extends class_base
 				"use_md5_passwords" => true,
 				"join_grp" => $group,
 			));
-//			arr( "User > $name > new > $parent" );
+			arr( "User > $name > new > $parent" );
 			$us->set_name( $name );
 			$us->set_parent( $parent );
 			$us->save();
@@ -747,7 +796,7 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-//			arr( "UserGroup > $name > new > $parent" );
+			arr( "UserGroup > $name > new > $parent" );
 			$ug = obj();
 			$ug->set_class_id( CL_GROUP );
 			$ug->set_parent( $parent );
@@ -773,7 +822,7 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-//			arr( "Company > $name > new > $parent" );
+			arr( "Company > $name > new > $parent" );
 			$co = obj();
 			$co->set_class_id(CL_CRM_COMPANY);
 			$co->set_parent( $parent );
@@ -799,7 +848,7 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-//			arr( "Section > $name > new > $parent" );
+			arr( "Section > $name > new > $parent" );
 			$se = obj();
 			$se->set_class_id( CL_CRM_SECTION );
 			$se->set_parent( $parent );
@@ -827,7 +876,7 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-//			arr( "Menu > $name > new > $parent" );
+			arr( "Menu > $name > new > $parent" );
 			$se = obj();
 			$se->set_class_id( CL_CRM_SECTION );
 			$se->set_parent( $parent );
@@ -854,11 +903,14 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-//			arr( "CRM > $name > new > $parent" );
+			arr( "CRM > $name > new > $parent" );
 			$se = obj();
 			$se->set_class_id( CL_EXPP_JOURNAL_MANAGEMENT );
 			$se->set_parent( $parent );
 			$se->set_name( $name );
+			// väljaande nimetus peaks siis olema ka see $name
+			// nagu ma aru saan, nii et paneb selle ka siis:
+			$se->set_prop( "publications_name", $name );
 			$se->save();
 		}
 		else
@@ -886,11 +938,13 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-//			arr( "Pub > $name > new > $parent" );
+			arr( "Pub > $name > new > $parent" );
 			$se = obj();
 			$se->set_class_id( CL_EXPP_PUBLICATION );
 			$se->set_parent( $parent );
-			$se->set_prop( "comment", $pindeks );
+		//	$se->set_prop( "comment", $pindeks );
+		// kommentaari sättimiseks on objektil meetod set_comment()
+			$se->set_comment($pindex);
 			$se->set_name( $name );
 			$se->save();
 		} else {
@@ -904,5 +958,56 @@ class expp_import extends class_base
 		return $se;
 	}
 /*===========================================================================*/
+	function log( $class, $action = '', $pindeks = '', $toimetus = '', $va = '' ) {
+		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
+		if (!inet::is_ip($ip)) {
+			$ip = aw_global_get("REMOTE_ADDR");
+		}
+		$sql = "INSERT DELAYED INTO expp_log SET"
+			."  ip = '{$ip}'"
+			.", lang = '{$this->lang}'"
+			.", action = '".addslashes($action)."'"
+			.", class = '".addslashes($class)."'"
+			.", url = '".addslashes($GLOBALS['REQUEST_URI'])."'"
+			.", pindeks = '".addslashes($pindeks)."'"
+			.", toimetus = '".addslashes($toimetus)."'"
+			.", valjaanne = '".addslashes($va)."'"
+			.", sid = '".session_id()."'"
+			.", time = now()";
+		$this->save_handle();
+		$this->db_query($sql);
+		$this->restore_handle();
+	}
+/*===========================================================================*/
+	function sendFile( $File ) {
+		$this->log( get_class($this), "import", '', '', $File );
+		$i = get_instance("protocols/mail/aw_mail");
+
+		$upload_dir =  $this->cfg["site_basedir"].'/upload/';
+		$attachment = fread($fp = fopen( $upload_dir.$File, 'r'), filesize($upload_dir.$File));
+		fclose($fp);
+
+		// lisame teksti kujul sisu ja saaja/saatja
+		$i->create_message(array(		
+			"froma" => "tellimine@tellimine.ee",
+			"fromn" => "Faili import", 
+			"subject" => "expp import",
+			"to" => "andrus@hv.ee",
+			"body" => "tuli selline fail",
+		));
+		// lisame html sisu
+		//	$i->htmlbodyattach(array("data" => preg_replace("/<script(.*)>(.*)<\/script>/imsU", "", $app)));
+
+		// liasme faili attachi
+		$i->fattach(array(
+			"content" => $attachment,
+			"filename" => $File,
+			"contenttype" => "application/octet-stream",
+			"name" => $File
+		));
+
+		// saadame meili teele
+		$i->gen_mail();
+	}
 }
 ?>

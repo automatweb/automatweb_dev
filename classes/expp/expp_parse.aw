@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_parse.aw,v 1.1 2005/10/17 10:32:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_parse.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
 // expp_parse.aw - Expp URL parser 
 /*
 
@@ -15,10 +15,13 @@ class expp_parse extends class_base {
 	var $pids = array();
 	var $pidpos = 1;
 	var $cy;
+	var $lang;
 
 	function expp_parse() {
 
 		global $lc_expp;
+
+		$this->lang = aw_global_get("admin_lang_lc");
 
 		$this->init(array(
 			"tpldir" => "expp",
@@ -127,6 +130,27 @@ class expp_parse extends class_base {
 
 	function getVal( $name ) {
 		return ($GLOBALS['HTTP_POST_VARS'][$name]?$GLOBALS['HTTP_POST_VARS'][$name]:($GLOBALS['HTTP_GET_VARS'][$name]?$GLOBALS['HTTP_GET_VARS'][$name]:''));
+	}
+
+	function log( $class, $action = '', $pindeks = '', $toimetus = '', $va = '' ) {
+		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
+		if (!inet::is_ip($ip)) {
+			$ip = aw_global_get("REMOTE_ADDR");
+		}
+		$sql = "INSERT DELAYED INTO expp_log SET"
+			."  ip = '{$ip}'"
+			.", lang = '{$this->lang}'"
+			.", action = '".addslashes($action)."'"
+			.", class = '".addslashes($class)."'"
+			.", url = '".addslashes($GLOBALS['REQUEST_URI'])."'"
+			.", pindeks = '".addslashes($pindeks)."'"
+			.", toimetus = '".addslashes($toimetus)."'"
+			.", valjaanne = '".addslashes($va)."'"
+			.", sid = '".session_id()."'"
+			.", time = now()";
+		$this->save_handle();
+		$this->db_query($sql);
+		$this->restore_handle();
 	}
 }
 ?>
