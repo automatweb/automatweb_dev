@@ -1140,7 +1140,7 @@ class crm_company_cust_impl extends class_base
 		$ar[$prefix."proj_search_dl_from"] = date_edit::get_timestamp($ar[$prefix."proj_search_dl_from"]);
 		$ar[$prefix."proj_search_dl_to"] = date_edit::get_timestamp($ar[$prefix."proj_search_dl_to"]);
 
-		if ($ar[$prefix."proj_search_dl_from"] > 1 && $ar[$prefix."proj_search_dl_to"])
+		if ($ar[$prefix."proj_search_dl_from"] > 1 && $ar[$prefix."proj_search_dl_to"] > 1)
 		{
 			$ret["deadline"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $ar[$prefix."proj_search_dl_from"], $ar[$prefix."proj_search_dl_to"]);
 		}
@@ -1159,7 +1159,7 @@ class crm_company_cust_impl extends class_base
 		$ar[$prefix."proj_search_end_from"] = date_edit::get_timestamp($ar[$prefix."proj_search_end_from"]);
 		$ar[$prefix."proj_search_end_to"] = date_edit::get_timestamp($ar[$prefix."proj_search_end_to"]);
 
-		if ($ar[$prefix."proj_search_end_from"] > 1 && $ar[$prefix."proj_search_end_to"])
+		if ($ar[$prefix."proj_search_end_from"] > 1 && $ar[$prefix."proj_search_end_to"] > 1)
 		{
 			$ret["end"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $ar[$prefix."proj_search_end_from"], $ar[$prefix."proj_search_end_to"]);
 		}
