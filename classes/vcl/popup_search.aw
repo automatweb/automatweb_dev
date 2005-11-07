@@ -98,7 +98,7 @@ class popup_search extends aw_template
 			}
 		}
 		else
-		if (!$this->can("view", $sel))
+		if (!$this->can("view", $sel) && is_object($arr["obj_inst"]))
 		{
 			$sel =  $arr["obj_inst"]->prop($arr["property"]["name"]);
 		}

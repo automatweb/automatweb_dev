@@ -22,11 +22,11 @@ class crm_company_cust_impl extends class_base
 			{
 				if (trim($row["project_orderer"]) != "")
 				{
-					$filt["project_orderer"][] = $row["project_orderer"];
+					$filt["project_orderer"][] = strip_tags($row["project_orderer"]);
 				}
 				if (trim($row["project_impl"]) != "")
 				{
-					$filt["project_impl"][] = $row["project_impl"];
+					$filt["project_impl"][] = strip_tags($row["project_impl"]);
 				}
 				$part = strip_tags($row["project_participants"]);
 				foreach(explode(",", $part) as $nm)
@@ -265,7 +265,7 @@ class crm_company_cust_impl extends class_base
 		{
 			$organization = new object($arr['request']['category']);
 		}*/
-
+		
 		if ($filter)
 		{
 			$orglist = $this->make_keys($filter);
@@ -1183,7 +1183,6 @@ class crm_company_cust_impl extends class_base
 		{
 			$ret["CL_PROJECT.contact_person_implementor.name"] = "%".$ar[$prefix."proj_search_contact_person"]."%";
 		}
-
 		return $ret;
 	}
 
