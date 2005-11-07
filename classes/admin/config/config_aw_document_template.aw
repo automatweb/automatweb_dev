@@ -1,9 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.8 2005/04/21 08:39:14 kristo Exp $
-// config_aw_document_template.aw - Dokumendi Template 
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.9 2005/11/07 16:32:23 ahti Exp $
+// config_aw_document_template.aw - Dokumendi Template
 /*
 
 @classinfo syslog_type=ST_CONFIG_AW_DOCUMENT_TEMPLATE no_status=1
+
+@groupinfo grp_source caption="L&auml;htekood"
+
 
 @default table=objects
 @default group=general
@@ -16,10 +19,13 @@
 @property filename type=textbox table=template field=filename
 @caption Template fail
 
-@property t_id type=hidden table=template field=id 
+@property t_id type=hidden table=template field=id
 @property t_name type=hidden table=template field=name
 @property t_site_id type=hidden table=template field=site_id datatype=int
 
+@default group=grp_source
+	@property source_html type=textarea rows=50 cols=74 table=objects field=meta method=serialize
+	@caption L&auml;htekood
 
 */
 
@@ -29,7 +35,7 @@ class config_aw_document_template extends class_base
 	{
 		$this->init(array(
 			"tpldir" => "admin/config/config_aw_document_template",
-			"clid" => CL_CONFIG_AW_DOCUMENT_TEMPLATE
+			"clid" => CL_CONFIG_AW_DOCUMENT_TEMPLATE,
 		));
 	}
 
@@ -41,7 +47,7 @@ class config_aw_document_template extends class_base
 		{
 			case "type":
 				$data["options"] = array(
-					"1" => t("Lead"), 
+					"1" => t("Lead"),
 					"2" => t("Vaatamine")
 				);
 				break;
@@ -65,7 +71,7 @@ class config_aw_document_template extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_post_save($arr)
 	{
