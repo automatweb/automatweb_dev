@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.90 2005/10/24 12:12:37 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.91 2005/11/07 07:46:13 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1624,6 +1624,20 @@ class forum_v2 extends class_base
 		$arr["obj_inst"]->set_meta("exclude_subs",$arr["request"]["exclude_subs"]);
 	}
 
+        function request_execute($o)
+        {
+                return $this->parse_alias(array(
+			"id" => $o->id(),
+			"req_args" => array(
+				"action" => $_REQUEST["change"],
+				"group" => $_REQUEST["group"],
+			),
+			"alias" => array(
+				"target" => $o->id(),
+			),
+		));
+        }
+	
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
