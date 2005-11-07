@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.61 2005/11/03 18:02:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.62 2005/11/07 10:00:47 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -384,14 +384,17 @@ class project extends class_base
 				break;
 
 			case "orderer":
-				if ($arr["new"])
+				if ($this->can("view", $arr["request"]["connect_orderer"]))
 				{
-					$data["value"] = $arr["request"]["connect_orderer"];
+					$data["value"] = array(
+						$arr["request"]["connect_orderer"] =>
+							$arr["request"]["connect_orderer"]
+					);
 				}
-				if (is_array($data["value"]))
+				/*if (is_array($data["value"]))
 				{
 					$data["value"] = reset($data["value"]);
-				}
+				}*/
 
 				// get values
 				$u = get_instance(CL_USER);
@@ -436,11 +439,10 @@ class project extends class_base
 				break;
 
 			case "participants":
-				if ($arr["new"])
+				if (!$arr["new"])
 				{
-					return PROP_IGNORE;
+					$cur_pts = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
 				}
-				$cur_pts = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
 				$people = array();
 				$u = get_instance(CL_USER);
 				$co = $u->get_current_company();
