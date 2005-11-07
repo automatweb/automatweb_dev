@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.10 2005/11/03 18:02:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.11 2005/11/07 13:21:21 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -409,7 +409,7 @@ class crm_bill extends class_base
 				$this->vars(array(
 					"bank_name" => $bank->name(),
 					"acct_no" => $acc->prop("acct_no"),
-					"bank_iban" => $bank->prop("iban_code")
+					"bank_iban" => $acc->prop("iban_code")
 				));
 
 				$ba .= $this->parse("BANK_ACCOUNT");

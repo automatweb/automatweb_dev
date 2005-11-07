@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank_account.aw,v 1.1 2005/10/19 06:44:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank_account.aw,v 1.2 2005/11/07 13:21:21 kristo Exp $
 // crm_bank_account.aw - CRM Pangakonto 
 /*
 
@@ -12,6 +12,9 @@
 
 	@property acct_no type=textbox table=aw_crm_bank_account field=aw_acct_no
 	@caption Arve number
+
+	@property iban_code type=textbox table=objects field=meta method=serialize
+	@caption IBAN kood
 
 	@property bank type=relpicker reltype=RELTYPE_BANK automatic=1 table=aw_crm_bank_account field=aw_bank
 	@caption Pank

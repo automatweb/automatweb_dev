@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank.aw,v 1.1 2005/10/19 06:44:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank.aw,v 1.2 2005/11/07 13:21:21 kristo Exp $
 // crm_bank.aw - CRM Pank 
 /*
 
@@ -8,9 +8,6 @@
 
 @default table=aw_crm_bank
 @default group=general
-
-	@property iban_code type=textbox field=aw_iban_code
-	@caption IBAN kood
 
 	@property address type=relpicker reltype=RELTYPE_ADDRESS field=aw_address
 	@caption Aadress

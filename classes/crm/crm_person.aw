@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.90 2005/10/26 14:05:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.91 2005/11/07 13:21:22 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -89,6 +89,9 @@ caption Msn/yahoo/aol/icq
 
 	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_isik field=client_manager
 	@caption Kliendihaldur
+
+	@property is_important type=checkbox ch_value=1 store=no
+	@caption Oluline
 
 //@property profession type=select store=no edit_only=1
 //@caption Ametinimetus
@@ -418,6 +421,15 @@ class crm_person extends class_base
 	
 		switch($data["name"])
 		{
+			case "is_important":
+				$u = get_instance(CL_USER);
+				$p = obj($u->get_current_person());
+				if ($p->is_connected_to(array("to" => $arr["obj_inst"]->id(), "type" => "RELTYPE_IMPORTANT_PERSON")))
+				{
+					$data["value"] = 1;
+				}
+				break;
+
 			case "code":
 				if ($data["value"] == "" && is_oid($ct = $arr["obj_inst"]->prop("address")) && $this->can("view", $ct))
 				{
@@ -1759,7 +1771,29 @@ class crm_person extends class_base
 		}
 		return  $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), CL_CRM_PERSON); 
 	}
-	
+
+	function callback_post_save($arr)
+	{
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		if ($arr["request"]["is_important"] == 1)
+		{
+			$p->connect(array(
+				"to" => $arr["obj_inst"]->id(), 
+				"type" => "RELTYPE_IMPORTANT_PERSON"
+			));
+		}
+		else
+		{
+			if ($p->is_connected_to(array("to" => $arr["obj_inst"]->id(), "type" => "RELTYPE_IMPORTANT_PERSON")))
+			{
+				$p->disconnect(array(
+					"from" => $arr["obj_inst"]->id(), 
+				));
+			}
+		}
+	}	
+
 	function callback_pre_save($arr)
 	{	
 		if(is_array($arr["request"]["speaking"]))

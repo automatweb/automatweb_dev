@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.62 2005/11/07 10:00:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.63 2005/11/07 13:21:22 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -435,6 +435,11 @@ class project extends class_base
 					$tmp = obj($data["value"]);
 					$data["options"][$tmp->id()] = $tmp->name();
 				}
+
+				$u = get_instance(CL_USER);
+				$co = obj($u->get_current_company());
+				$data["options"][$co->id()] = $co->name();
+
 				asort($data["options"]);
 				break;
 

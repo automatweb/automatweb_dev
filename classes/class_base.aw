@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.434 2005/11/03 17:57:42 kristo Exp $
+// $Id: class_base.aw,v 2.435 2005/11/07 13:21:20 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -574,6 +574,7 @@ class class_base extends aw_template
 			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
 			"show_help" => aw_ini_get("class_base.show_help"),
+			"add_txt" => aw_ini_get("site_id") == 288
 		));
 
 		// k‰es ongi .. see asi eeldab, et layoutile on grupp peale v‰‰natud ..

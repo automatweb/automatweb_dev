@@ -222,6 +222,16 @@
             <caption>Kliendihaldur</caption>
       </property>
       <property>
+            <name>is_important</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>is_important</field>
+            <caption>Oluline</caption>
+      </property>
+      <property>
             <name>notes</name>
             <table>kliendibaas_isik</table>
             <group>description</group>

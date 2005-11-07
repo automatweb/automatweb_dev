@@ -1,14 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>iban_code</name>
-            <table>aw_crm_bank</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>aw_iban_code</field>
-            <caption>IBAN kood</caption>
-      </property>
-      <property>
             <name>address</name>
             <table>aw_crm_bank</table>
             <group>general</group>
