@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.148 2005/11/02 13:20:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.149 2005/11/07 10:43:13 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1078,7 +1078,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs_next_link":
-				if ($arr["request"]["pj_job"] || $arr["request"]["group"] == "grp_printer_notstartable")
+				if ($arr["request"]["pj_job"] || $arr["request"]["group"] == "grp_printer_notstartable" || $arr["request"]["group"] == "grp_printer_startable")
 				{
 					return PROP_IGNORE;
 				}
@@ -1089,7 +1089,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs_prev_link":
-				if ($arr["request"]["pj_job"] || $arr["request"]["group"] == "grp_printer_notstartable")
+				if ($arr["request"]["pj_job"] || $arr["request"]["group"] == "grp_printer_notstartable" || $arr["request"]["group"] == "grp_printer_startable")
 				{
 					return PROP_IGNORE;
 				}
