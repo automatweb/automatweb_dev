@@ -89,14 +89,20 @@ class popup_search extends aw_template
 			$options = $tmp["options"];
 		}
 
-		if (is_object($arr["obj_inst"]))
+		$sel = $arr["property"]["value"];
+		if ($arr["property"]["multiple"] == 1)
+		{
+			if (!(is_array($sel) && count($sel)) && is_object($arr["obj_inst"]))
+			{
+				$sel =  $arr["obj_inst"]->prop($arr["property"]["name"]);
+			}
+		}
+		else
+		if (!$this->can("view", $sel))
 		{
 			$sel =  $arr["obj_inst"]->prop($arr["property"]["name"]);
 		}
-		else
-		{
-			$sel = $arr["property"]["value"];
-		}
+
 		
 		$tmp["value"] = html::select(array(
 			"name" => $arr["property"]["name"],
@@ -139,7 +145,6 @@ class popup_search extends aw_template
 				}
 			}
 		}
-
 		return array(
 			$arr["property"]["name"] => $tmp,
 		);
