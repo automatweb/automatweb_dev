@@ -570,6 +570,14 @@
             <method>serialize</method>
       </property>
       <property>
+            <name>year_built</name>
+            <table>objects</table>
+            <group>grp_detailed</group>
+            <type>select</type>
+            <field>year_built</field>
+            <caption>Ehitusaasta</caption>
+      </property>
+      <property>
             <name>legal_status</name>
             <table>realestate_property</table>
             <group>grp_detailed</group>
@@ -578,129 +586,33 @@
             <caption>Omandivorm</caption>
       </property>
       <property>
-            <name>property_area</name>
-            <table>objects</table>
+            <name>total_floor_area</name>
+            <table>realestate_property</table>
             <group>grp_detailed</group>
             <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Krundi suurus</caption>
+            <field>total_floor_area</field>
+            <caption>Üldpind</caption>
       </property>
       <property>
-            <name>transaction_broker_fee</name>
+            <name>has_alarm_installed</name>
             <table>objects</table>
             <group>grp_detailed</group>
-            <type>textbox</type>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <no_caption>1</no_caption>
-            <parent>box1</parent>
+            <caption>Signalisatsioon</caption>
       </property>
       <property>
-            <name>transaction_broker_fee_type</name>
-            <table>objects</table>
-            <group>grp_detailed</group>
-            <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <no_caption>1</no_caption>
-            <parent>box1</parent>
-      </property>
-      <property>
-            <name>estate_price_sqmeter</name>
-            <table>objects</table>
-            <group>grp_detailed</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Krundi ruutmeetri hind</caption>
-      </property>
-      <property>
-            <name>estate_price_total</name>
-            <table>objects</table>
-            <group>grp_detailed</group>
-            <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Krundi hind kokku</caption>
-      </property>
-      <property>
-            <name>distance_from_tallinn</name>
-            <table>objects</table>
-            <group>grp_detailed</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kaugus Tallinnast (km)</caption>
-      </property>
-      <property>
-            <name>land_use</name>
+            <name>condition</name>
             <table>realestate_property</table>
             <group>grp_detailed</group>
             <type>classificator</type>
-            <field>land_use</field>
-            <caption>Sihtotstarve</caption>
-      </property>
-      <property>
-            <name>land_use_2</name>
-            <table>realestate_property</table>
-            <group>grp_detailed</group>
-            <type>classificator</type>
-            <field>land_use_2</field>
-            <caption>Sihtotstarve veel</caption>
-      </property>
-      <property>
-            <name>is_changeable</name>
-            <table>objects</table>
-            <group>grp_detailed</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Otstarbe muutmine võimalik</caption>
-      </property>
-      <property>
-            <name>has_electricity</name>
-            <table>objects</table>
-            <group>grp_detailed</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Elekter</caption>
-      </property>
-      <property>
-            <name>has_sewerage</name>
-            <table>objects</table>
-            <group>grp_detailed</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kanalisatsioon</caption>
-      </property>
-      <property>
-            <name>has_water</name>
-            <table>objects</table>
-            <group>grp_detailed</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Vesi</caption>
-      </property>
-      <property>
-            <name>has_zoning_ordinance</name>
-            <table>objects</table>
-            <group>grp_detailed</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Detailplaneering</caption>
+            <field>condition</field>
+            <caption>Valmidus</caption>
       </property>
       <classinfo>
-            <syslog_type>ST_REALESTATE_LAND</syslog_type>
+            <syslog_type>ST_REALESTATE_GARAGE</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <trans>1</trans>
@@ -767,12 +679,5 @@
                   <caption>Pilt</caption>
             </REALESTATE_PICTURE>
       </reltypes>
-      <layout>
-            <box1>
-                  <type>vbox</type>
-                  <group>grp_detailed</group>
-                  <caption>Vahendustasu</caption>
-            </box1>
-      </layout>
 </properties>
 

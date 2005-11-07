@@ -26,16 +26,6 @@
             <caption>Riik</caption>
       </property>
       <property>
-            <name>import_url</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <comment>URL millelt objektid imporditakse</comment>
-            <caption>URL</caption>
-      </property>
-      <property>
             <name>company</name>
             <table>objects</table>
             <group>general</group>
@@ -49,9 +39,75 @@
             <caption>Organisatsioon</caption>
       </property>
       <property>
+            <name>city24_county</name>
+            <table>objects</table>
+            <group>grp_city24</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADMIN_UNIT_TYPE</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <comment>Haldusjaotis aadressisüsteemis, mis vastab maakonnale</comment>
+            <caption>Maakond haldusjaotuses</caption>
+      </property>
+      <property>
+            <name>city24_city</name>
+            <table>objects</table>
+            <group>grp_city24</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADMIN_UNIT_TYPE</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <caption>Linn haldusjaotuses</caption>
+      </property>
+      <property>
+            <name>city24_citypart</name>
+            <table>objects</table>
+            <group>grp_city24</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADMIN_UNIT_TYPE</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <caption>Linnaosa haldusjaotuses</caption>
+      </property>
+      <property>
+            <name>city24_parish</name>
+            <table>objects</table>
+            <group>grp_city24</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADMIN_UNIT_TYPE</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <caption>Vald haldusjaotuses</caption>
+      </property>
+      <property>
+            <name>city24_settlement</name>
+            <table>objects</table>
+            <group>grp_city24</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADMIN_UNIT_TYPE</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <caption>Asula haldusjaotuses</caption>
+      </property>
+      <property>
+            <name>city24_import_url</name>
+            <table>objects</table>
+            <group>grp_city24</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <comment>URL millelt objektid imporditakse</comment>
+            <caption>URL</caption>
+      </property>
+      <property>
             <name>city24_import</name>
             <table>objects</table>
-            <group>general</group>
+            <group>grp_city24</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
@@ -62,7 +118,7 @@
       <property>
             <name>last_city24import</name>
             <table>objects</table>
-            <group>general</group>
+            <group>grp_city24</group>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
@@ -73,6 +129,11 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <grp_city24>
+                  <caption>City24</caption>
+            </grp_city24>
+      </groupinfo>
       <reltypes>
             <OWNER>
                   <clid>CL_REALESTATE_MANAGER</clid>
@@ -89,6 +150,11 @@
                   <value>3</value>
                   <caption>Organisatsioon</caption>
             </COMPANY>
+            <ADMIN_UNIT_TYPE>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+                  <value>4</value>
+                  <caption>Haldusjaotis</caption>
+            </ADMIN_UNIT_TYPE>
       </reltypes>
 </properties>
 

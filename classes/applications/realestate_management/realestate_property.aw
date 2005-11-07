@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.1 2005/10/31 17:13:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_PROPERTY, on_create)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 @classinfo syslog_type=ST_REALESTATE_PROPERTY relationmgr=yes no_status=1 trans=1
 
@@ -38,7 +39,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_PROPERTY, on_create)
 
 	@property title1 type=text store=no subtitle=1
 	@caption Objekti aadress
-		@property address_connection type=releditor reltype=RELTYPE_REALESTATE_ADDRESS rel_id=first editonly=1 props=country,location_country,location,postal_code,street_address,po_box,apartment
+		@property address_connection type=releditor reltype=RELTYPE_REALESTATE_ADDRESS rel_id=first editonly=1 props=location_country,location,postal_code,street_address,po_box,apartment
 		@caption Aadress
 
 		@property address_text type=hidden table=realestate_property
@@ -325,6 +326,7 @@ class realestate_property extends class_base
 		if (is_oid ($arr["request"]["id"]))
 		{
 			$this_object = obj ($arr["request"]["id"]);
+			$this->address = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_ADDRESS");
 
 			if ($this->can ("view", $this_object->prop ("realestate_manager")))
 			{
@@ -391,9 +393,6 @@ class realestate_property extends class_base
 				break;
 
 			### ...
-			case "address_connection":
-				break;
-
 			case "realestate_agent1":
 				$cl_user = get_instance(CL_USER);
 				$company = $cl_user->get_current_company ();
@@ -459,25 +458,25 @@ class realestate_property extends class_base
 
 			### map
 			case "map_create":
-				$cl_address = get_instance (CL_ADDRESS);
-				$address_parsed = array ();
-				$address = $this_object->get_first_obj_by_reltype("RELTYPE_REALESTATE_ADDRESS");
-				$address_data = $cl_address->get_address_array (array ("id" => $address->id ()));
-				array_pop ($address_data);
-				array_pop ($address_data);
-				unset ($address_data[t("Linnaosa")]);
+				$address_array = $this->address->prop ("address_array");
+				$address_1 = $address_array[$this->manager->prop ("address_equivalent_1")];//maakond
+				$address_2 = $address_array[$this->manager->prop ("address_equivalent_2")];//linn
+				$address_4 = $address_array[$this->manager->prop ("address_equivalent_4")];//vald
+				$street = $address_array[ADDRESS_STREET_TYPE];
 
-				if ($address->prop ("street_address"))
+				if ($address_2)
 				{
-					array_unshift ($address_data, $address->prop ("street_address"));
+					$address_parsed[] = urlencode ($address_2);
+				}
+				else
+				{
+					$address_parsed[] = urlencode ($address_1);
+					$address_parsed[] = urlencode ($address_4);
 				}
 
-				$address_data = array_reverse ($address_data);
+				$address_parsed[] = urlencode ($street);
+				$address_parsed[] = urlencode ($address->prop ("street_address"));
 
-				foreach ($address_data as $value)
-				{
-					$address_parsed[] = urlencode ($value);
-				}
 
 				$address_parsed = implode ("+", $address_parsed);
 				$save_url = urlencode ($this->mk_my_orb ("save_map_data", array (
@@ -590,20 +589,14 @@ class realestate_property extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function callback_pre_save ($arr)
-	{
-	}
-
 	function callback_post_save ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
 
 		### set object name by address
 		$address = $this_object->get_first_obj_by_reltype("RELTYPE_REALESTATE_ADDRESS");
-		$cl_address = get_instance (CL_ADDRESS);
-		$address_text = $cl_address->get_address_array (array ("id" => $address->id ()));
-		array_pop ($address_text);
-		$address_text = array_reverse ($address_text);
+		$address_text = $address->prop ("address_array");
+		unset ($address_text[ADDRESS_COUNTRY_TYPE]);
 		$address_text = implode (", ", $address_text);
 		$name = $address_text . " " . $address->prop ("street_address") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
 		$this_object->set_name ($name);
@@ -643,6 +636,8 @@ class realestate_property extends class_base
 				$client->save ();
 			}
 		}
+
+		$this->manager->set_cache_dirty (true);
 	}
 /* END classbase methods */
 
@@ -977,42 +972,34 @@ class realestate_property extends class_base
 				$manager = obj ($this_object->prop ("realestate_manager"));
 
 				### get country
-				if (is_oid ($manager->prop ("default_country")))
+				if (is_oid ($manager->prop ("administrative_structure")))
 				{
-					$country = obj ($manager->prop ("default_country"));
-
 					### set address' country to default country from manager
-					$address->set_parent ($country->id ());
-					$address->set_prop ("country", $country->id ());
+					$address->set_parent ($manager->prop ("administrative_structure"));
+					$address->set_prop ("administrative_structure", $manager->prop ("administrative_structure"));
 					$address->save ();
-					$address->connect (array (
-						"to" => $country,
-						"reltype" => "RELTYPE_COUNTRY",
+
+					### connect property to address
+					$this_object->connect (array (
+						"to" => $address,
+						"reltype" => "RELTYPE_REALESTATE_ADDRESS",
 					));
+
+					$this_object->create_brother ($address->id ());
 				}
 				else
 				{
-					$address->set_parent ($manager->id ());
-					$address->save ();
 					error::raise(array(
-						"msg" => t("Uue kinnisvaraobjekti loomisel vaikimisi riik defineerimata. Tekitati objekt, millle aadressil puudub haldusjaotus."),
+						"msg" => t("Uue kinnisvaraobjekti loomisel vaikimisi riik defineerimata. Tekitati objekt, millel puudub aadress."),
 						"fatal" => false,
 						"show" => true,
 					));
 				}
-
-				### connect property to address
-				$this_object->connect (array (
-					"to" => $address,
-					"reltype" => "RELTYPE_REALESTATE_ADDRESS",
-				));
-
-				$this_object->create_brother ($address->id ());
 			}
 			else
 			{
 				error::raise(array(
-					"msg" => t("Uue kinnisvaraobjekti loomisel realestate_manager defineerimata. Tekitati orbobjekt."),
+					"msg" => t("Uue kinnisvaraobjekti loomisel kinnsvarahalduskeskkond defineerimata. Tekitati orbobjekt."),
 					"fatal" => true,
 					"show" => true,
 				));
@@ -1021,7 +1008,7 @@ class realestate_property extends class_base
 		else
 		{
 			error::raise(array(
-				"msg" => t("Uue kinnisvaraobjekti loomisel ei antud argumendina kaasa loodud obj. oid-d."),
+				"msg" => t("Uue kinnisvaraobjekti loomisel ei antud argumendina kaasa loodud obj. id-d."),
 				"fatal" => true,
 				"show" => true,
 			));
@@ -1563,8 +1550,8 @@ REALESTATE_NF_SEP);
 			$parent = $address;
 			$adminunits = array ();
 
-			while (($parent->class_id () != CL_COUNTRY) and is_oid ($parent->parent ()) and $this->can ("view", $parent->parent ()))
-			{
+			while (($parent->class_id () != CL_COUNTRY_ADMINISTRATIVE_STRUCTURE) and is_oid ($parent->parent ()) and $this->can ("view", $parent->parent ()))
+			{////!!!!! update
 				$parent = obj ($parent->parent ());
 
 				switch ($parent->class_id ())
@@ -1587,7 +1574,7 @@ REALESTATE_NF_SEP);
 						break;
 				}
 			}
-
+//!!! END update
 			$adminunits = array_reverse ($adminunits, false);
 			$address_street_address = $address->prop ("street_address");
 			$address_apartment = $address->prop ("apartment");
@@ -1982,6 +1969,42 @@ REALESTATE_NF_SEP);
 		echo sprintf ("<br /><center>%s</center>", t("Salvestatud"));
 		echo "<script type='text/javascript'>opener.location.reload(); setTimeout('window.close()',1000);</script>";
 		exit;
+	}
+
+	function on_delete ($arr)
+	{
+		$this_object = obj ($arr["oid"]);
+
+		### delete connected objects not needed elsewhere
+		$applicable_reltypes = array (
+			"RELTYPE_REALESTATE_PICTURE",
+			"RELTYPE_REALESTATE_ADDRESS",
+		);
+		$connections = $project->connections_from (array ("type" => $applicable_reltypes));
+
+		foreach ($connections as $connection)
+		{
+			$o = $connection->to ();
+
+			if ($this->can("delete", $o->id()))
+			{
+				$o->delete ();
+			}
+			else
+			{
+				error::raise(array(
+					"msg" => sprintf (t("Kustutatava kinnisvaraobjekti [%s] kaasobjekti ei lubata kasutajal kustutada. Viga õiguste seadetes. Jääb orbobjekt, mille id on %s"), $arr["oid"], $o->id ()),
+					"fatal" => false,
+					"show" => false,
+				));
+			}
+		}
+
+		if (is_oid ($this_object->prop ("realestate_manager")))
+		{
+			$manager = obj ($this_object->prop ("realestate_manager"));
+			$manager->set_cache_dirty (true);
+		}
 	}
 }
 

@@ -87,13 +87,12 @@
             <rel_id>first</rel_id>
             <editonly>1</editonly>
             <props>
-                  <num_0>country</num_0>
-                  <num_1>location_country</num_1>
-                  <num_2>location</num_2>
-                  <num_3>postal_code</num_3>
-                  <num_4>street_address</num_4>
-                  <num_5>po_box</num_5>
-                  <num_6>apartment</num_6>
+                  <num_0>location_country</num_0>
+                  <num_1>location</num_1>
+                  <num_2>postal_code</num_2>
+                  <num_3>street_address</num_3>
+                  <num_4>po_box</num_4>
+                  <num_5>apartment</num_5>
             </props>
             <store>no</store>
             <field>address_connection</field>

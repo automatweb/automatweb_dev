@@ -1,9 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.1 2005/10/31 17:13:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
 @classinfo syslog_type=ST_REALESTATE_IMPORT relationmgr=yes no_comment=1 no_status=1
+
+@groupinfo grp_city24 caption="City24"
 
 @default table=objects
 @default group=general
@@ -16,19 +18,38 @@
 	@property country type=relpicker reltype=RELTYPE_COUNTRY clid=CL_COUNTRY automatic=1
 	@caption Riik
 
-	@property import_url type=textbox
-	@comment URL millelt objektid imporditakse
-	@caption URL
-
 	@property company type=relpicker reltype=RELTYPE_COMPANY clid=CL_CRM_COMPANY editonly=1
 	@comment Organisatsioon mille alla objektid imporditakse
 	@caption Organisatsioon
+
+
+@default group=grp_city24
+	@property city24_county type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@comment Haldusjaotis aadressisüsteemis, mis vastab maakonnale
+	@caption Maakond haldusjaotuses
+
+	@property city24_city type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@caption Linn haldusjaotuses
+
+	@property city24_citypart type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@caption Linnaosa haldusjaotuses
+
+	@property city24_parish type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@caption Vald haldusjaotuses
+
+	@property city24_settlement type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@caption Asula haldusjaotuses
+
+	@property city24_import_url type=textbox
+	@comment URL millelt objektid imporditakse
+	@caption URL
 
 	@property city24_import type=text editonly=1
 	@comment URL millele päringut tehes imporditakse objektid City24 süsteemist AW'i
 	@caption City24 Importimine
 
 	@property last_city24import type=hidden
+
 
 // --------------- RELATION TYPES ---------------------
 
@@ -40,6 +61,9 @@
 
 @reltype COMPANY clid=CL_CRM_COMPANY value=3
 @caption Organisatsioon
+
+@reltype ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=4
+@caption Haldusjaotis
 
 */
 
@@ -183,17 +207,7 @@ class realestate_import extends class_base
 			$manager = obj ($this_object->prop ("realestate_mgr"));
 		}
 
-		if (!is_oid ($this_object->prop ("country")))
-		{
-			echo t("Viga: riik defineerimata.") . REALESTATE_NEWLINE;
-			return REALESTATE_IMPORT_ERR2;
-		}
-		else
-		{
-			$country = obj ($this_object->prop ("country"));
-		}
-
-		$import_url = $this_object->prop ("import_url");
+		$import_url = $this_object->prop ("city24_import_url");
 		// $import_url = "http://erivaldused:erivaldused@maakler.city24.ee/broker/city24broker/xml?lang=EST&search_count=10000";
 		// $import_url = "/www/dev/voldemar/test.xml";
 		// $fp = fopen ($import_url, "r");
@@ -204,8 +218,6 @@ class realestate_import extends class_base
 
 		$cl_realestate_mgr = get_instance (CL_REALESTATE_MANAGER);
 		$cl_classificator = get_instance(CL_CLASSIFICATOR);
-		$cl_address = get_instance (CL_ADDRESS);
-		$cl_administrative_structure = get_instance (CL_COUNTRY_ADMINISTRATIVE_STRUCTURE);
 
 		//!!!vaja?
 		if ($this->changed_visible_to)
@@ -231,7 +243,7 @@ class realestate_import extends class_base
 			$special_statuses = $options->names();
 			$this->changed_special_statuses = false;
 		}
-		//!!!
+		//!!! END vaja?
 
 		### variables
 		$this->property_data = NULL;
@@ -249,50 +261,12 @@ class realestate_import extends class_base
 		$this->changed_roof_types = true;
 		$this->changed_land_uses = true;
 
-		#### address
-		$administrative_structure = $country->get_first_obj_by_reltype("RELTYPE_ADMINISTRATIVE_STRUCTURE");
-
-		if (!is_object ($administrative_structure))
-		{
-			echo t("Valitud riigiobjektil pole määratud haldusjaotust või puuduvad kasutajal sellele õigused.") . REALESTATE_NEWLINE;
-			return REALESTATE_IMPORT_ERR3;
-		}
-
-		$unit_types =& $cl_administrative_structure->get_structure (array(
-			"id" => $administrative_structure->id(),
-		));
-
-		##### admin unit type objects
-		$maakond_unit_type = reset ($unit_types);
-
-		foreach ($unit_types as $unit_type)
-		{
-			if ($unit_type->prop ("parent_unit") == $maakond_unit_type->id ())
-			{
-				if ($unit_type->prop ("unit_type") == CL_COUNTRY_ADMINISTRATIVE_UNIT)
-				{
-					$vald_unit_type = $unit_type;
-				}
-
-				if ($unit_type->prop ("unit_type") == CL_COUNTRY_CITY)
-				{
-					$linn_unit_type = $unit_type;
-				}
-			}
-
-			if ($unit_type->prop ("unit_type") == CL_COUNTRY_CITYDISTRICT)
-			{
-				$linnaosa_unit_type = $unit_type;
-			}
-		}
-
-		foreach ($unit_types as $unit_type)
-		{
-			if ($unit_type->prop ("parent_unit") == $vald_unit_type->id ())
-			{
-				$asula_unit_type = $unit_type;
-			}
-		}
+		#### admin unit type objects
+		$maakond_unit_type = obj ($this_object->prop ("city24_county"));
+		$vald_unit_type = obj ($this_object->prop ("city24_parish"));
+		$linn_unit_type = obj ($this_object->prop ("city24_city"));
+		$linnaosa_unit_type = obj ($this_object->prop ("city24_citypart"));
+		$asula_unit_type = obj ($this_object->prop ("city24_settlement"));
 
 		#### organisatsiooni t88tajad
 		$company = obj ($arr["company"]);
@@ -569,7 +543,7 @@ class realestate_import extends class_base
 				{
 					if (1 != $arr["quiet"])
 					{
-						echo sprintf (t("Viga importides objekti city24 id-ga %s. Maakleri nimele ei vastanud süsteemis ühkti kasutajat."), $city24_id) . REALESTATE_NEWLINE;
+						echo sprintf (t("Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud süsteemis ühkti kasutajat."), $city24_id, $agent_data) . REALESTATE_NEWLINE;
 					}
 
 					$property_status = REALESTATE_IMPORT_ERR5;
@@ -693,102 +667,46 @@ class realestate_import extends class_base
 				$korteri_nr = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["ASUKOHT_KORTERINR"]));
 				$kohanimi = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["KOHANIMI"]));
 
-				$lowest_unit_oid = $country->id ();
-
-				if (!empty ($maakond))
-				{
-					##### maakond
-					$maakond_oid = $cl_administrative_structure->add_adminunit (array (
-						"id" => $administrative_structure->id (),
-						"name" => $maakond,
-						"parent" => $country->id (),
-						"type" => $maakond_unit_type,
-					));
-					$lowest_unit_oid = is_oid ($maakond_oid) ? $maakond_oid : $lowest_unit_oid;
-
-					if (!empty ($linn) and is_oid ($maakond_oid))
-					{
-						##### linn
-						$linn_oid = $cl_administrative_structure->add_adminunit (array (
-							"id" => $administrative_structure->id (),
-							"name" => $linn,
-							"parent" => $maakond_oid,
-							"type" => $linn_unit_type,
-						));
-						$lowest_unit_oid = is_oid ($linn_oid) ? $linn_oid : $lowest_unit_oid;
-
-						if (!empty ($linnaosa) and is_oid ($linn_oid))
-						{
-							##### linnaosa
-							$linnaosa_oid = $cl_administrative_structure->add_adminunit (array (
-								"id" => $administrative_structure->id (),
-								"name" => $linnaosa,
-								"parent" => $linn_oid,
-								"type" => $linnaosa_unit_type,
-							));
-							$lowest_unit_oid = is_oid ($linnaosa_oid) ? $linnaosa_oid : $lowest_unit_oid;
-						}
-					}
-					elseif (!empty ($vald) and is_oid ($maakond_oid))
-					{
-						##### vald
-						$vald_oid = $cl_administrative_structure->add_adminunit (array (
-							"id" => $administrative_structure->id (),
-							"name" => $vald,
-							"parent" => $maakond_oid,
-							"type" => $vald_unit_type,
-						));
-						$lowest_unit_oid = is_oid ($vald_oid) ? $vald_oid : $lowest_unit_oid;
-
-						if (is_oid ($vald_oid) and !empty ($asula))
-						{
-							##### asula
-							$asula_oid = $cl_administrative_structure->add_adminunit (array (
-								"id" => $administrative_structure->id (),
-								"name" => $asula,
-								"parent" => $vald_oid,
-								"type" => $asula_unit_type,
-							));
-							$lowest_unit_oid = is_oid ($asula_oid) ? $asula_oid : $lowest_unit_oid;
-						}
-					}
-				}
-
-				##### t2nav
-				if (!empty ($t2nav))
-				{
-					$t2nav_oid = $cl_administrative_structure->add_adminunit (array (
-						"id" => $administrative_structure->id (),
-						"name" => $t2nav,
-						"parent" => $lowest_unit_oid,
-						"type" => "street",
-					));
-					$lowest_unit_oid = is_oid ($t2nav_oid) ? $t2nav_oid : $lowest_unit_oid;
-				}
-
 				##### set address
-				$address->set_parent ($lowest_unit_oid);
+				$address->set_prop ("unit_name", array (
+					"type" => $maakond_unit_type,
+					"name" => $maakond,
+				));
+
+				$address->set_prop ("unit_name", array (
+					"type" => $vald_unit_type,
+					"name" => $vald,
+					));
+
+				$address->set_prop ("unit_name", array (
+					"type" => $linn_unit_type,
+							"name" => $linn,
+						));
+
+				$address->set_prop ("unit_name", array (
+					"type" => $linnaosa_unit_type,
+								"name" => $linnaosa,
+							));
+
+				$address->set_prop ("unit_name", array (
+					"type" => $asula_unit_type,
+								"name" => $asula,
+							));
+
+				$address->set_prop ("unit_name", array (
+					"type" => "street",
+						"name" => $t2nav,
+					));
+
 				$address->set_prop ("street_address", $maja_nr);
 				$address->set_prop ("apartment", $korteri_nr);
 				$address->save ();
 
-				$address_update_status = $cl_address->update_address_array (array ("id" => $address->id ()));
-				$address_text = $cl_address->get_address_array (array ("id" => $address->id ()));
-				array_pop ($address_text);
-				$address_text = array_reverse ($address_text);
+				$address_text = $address->prop ("address_array");
+				unset ($address_text[ADDRESS_COUNTRY_TYPE]);
 				$address_text = implode (", ", $address_text);
 				$name = $address_text . " " . $address->prop ("street_address") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
-				$property->set_name ($name);
-
-				if (!$address_update_status)
-				{
-					$property_status = REALESTATE_IMPORT_ERR11;
-
-					if (1 != $arr["quiet"])
-					{
-						echo sprintf (t("Importides objekti city24 id-ga %s ilmnes: viga aadressi uuendamisel. AW oid: %s."), $city24_id, $property->id ()) . REALESTATE_NEWLINE;
-					}
-				}
+				$property->set_name ($name);//!!! nime panemine yhte funktsiooni!
 
 				#### transaction_type
 				if ($this->changed_transaction_types)
@@ -1525,6 +1443,7 @@ class realestate_import extends class_base
 					}
 
 					$this->end_property_import = false;
+					flush ();
 				}
 
 				if (("ROW" === $data["tag"]) and ("open" === $data["type"]))

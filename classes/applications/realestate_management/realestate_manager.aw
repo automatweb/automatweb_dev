@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.1 2005/10/31 17:13:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -167,9 +167,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@property almightyuser type=textbox
 	@caption "Kõik lubatud" kasutaja uid
 
-	@property default_country type=relpicker reltype=RELTYPE_REALESTATEMGR_COUNTRY clid=CL_COUNTRY automatic=1
-	@comment Riik, milles süsteemis hallatavad kinnisvaraobjektid asuvad
-	@caption Riik
+	@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1
+	@comment Riigi haldusjaotus, milles süsteemis hallatavad kinnisvaraobjektid asuvad
+	@caption Haldusjaotus
 
 	@property houses_folder type=relpicker reltype=RELTYPE_REALESTATEMGR_FOLDER clid=CL_MENU
 	@caption Majade kaust
@@ -259,6 +259,25 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@property available_variables_names type=text store=no
 	@caption Template'ites kasutada olevad muutujad
 
+	@property title5 type=text store=no subtitle=1
+	@caption Aadressid
+		@property address_equivalent_1 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_1 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@comment Haldusjaotis aadressisüsteemis, mis vastab maakonnale
+		@caption Maakond haldusjaotuses
+
+		@property address_equivalent_2 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_2 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@caption Linn haldusjaotuses
+
+		@property address_equivalent_3 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_3 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@caption Linnaosa haldusjaotuses
+
+		@property address_equivalent_4 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_4 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@caption Vald haldusjaotuses
+
+		@property address_equivalent_5 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_5 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@caption Asula haldusjaotuses
+
+
 
 
 
@@ -270,8 +289,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 @reltype REALESTATEMGR_USER_GROUP value=2 clid=CL_GROUP
 @caption Kasutajagrupp
 
-@reltype REALESTATEMGR_COUNTRY value=3 clid=CL_COUNTRY
-@caption Riik
+@reltype ADMINISTRATIVE_STRUCTURE value=3 clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE
+@caption Haldusjaotuse struktuur
 
 @reltype REALESTATEMGR_VARMGR value=4 clid=CL_METAMGR
 @caption Klassifikaatorite haldur
@@ -293,6 +312,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 
 @reltype CLIENT_SELECTION clid=CL_REALESTATE_CLIENT_SELECTION value=12
 @caption Klientide valim
+
+@reltype RELTYPE_ADDRESS_EQUIVALENT_1 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=13
+@caption Haldusjaotuse vaste 1
+
+@reltype RELTYPE_ADDRESS_EQUIVALENT_2 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=14
+@caption Haldusjaotuse vaste 2
+
+@reltype RELTYPE_ADDRESS_EQUIVALENT_3 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=15
+@caption Haldusjaotuse vaste 3
+
+@reltype RELTYPE_ADDRESS_EQUIVALENT_4 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=16
+@caption Haldusjaotuse vaste 4
+
+@reltype RELTYPE_ADDRESS_EQUIVALENT_5 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=17
+@caption Haldusjaotuse vaste 5
 
 
 */
@@ -336,6 +370,12 @@ class realestate_manager extends class_base
 		aw_session_set ("realsestate_usr_mgr_company", $arr["request"]["company"]);
 		$this->cl_users = get_instance("users");
 		$this->cl_classificator = get_instance(CL_CLASSIFICATOR);
+		$this->administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+
+		if (!is_object ($this->administrative_structure))
+		{
+			echo t("Haldusjaotus määramata!");
+		}
 
 		if (
 			// ($arr["request"]["action"] == "submit") and
@@ -433,6 +473,25 @@ class realestate_manager extends class_base
 					link_open - objekti veebis avamise url <br />
 					class_name - kasutajale arusaadav klassi nimi <br />
 				");
+				break;
+
+			case "address_equivalent_1":
+			case "address_equivalent_2":
+			case "address_equivalent_3":
+			case "address_equivalent_4":
+			case "address_equivalent_5":
+				if (!is_object ($this->administrative_structure))
+				{
+					return PROP_IGNORE;
+				}
+				else
+				{
+					$unit_types = new object_list ($this->administrative_structure->connections_from (array (
+						"type" => "RELTYPE_ADMINISTRATIVE_UNIT_TYPE",
+						"class_id" => CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE,
+					)));
+					$prop["options"] = $unit_types->names ();
+				}
 				break;
 
 			### clients tab
@@ -688,19 +747,14 @@ class realestate_manager extends class_base
 						$country = obj ($this_object->prop("default_country"));
 					}
 
-					### get administrative structure for selected country
-					$administrative_structure = $country->get_first_obj_by_reltype("RELTYPE_ADMINISTRATIVE_STRUCTURE");
-
-					if (!is_object ($administrative_structure))
+					### get administrative structure
+					if (!is_object ($this->administrative_structure))
 					{
 						$prop["error"] .= t("Valitud riigiobjektil pole määratud haldusjaotust või puuduvad kasutajal sellele õigused. ");
 						$retval = PROP_ERROR;
 					}
 
-					$cl_administrative_structure = get_instance (CL_COUNTRY_ADMINISTRATIVE_STRUCTURE);
-					$unit_types =& $cl_administrative_structure->get_structure (array(
-						"id" => $administrative_structure->id(),
-					));
+					$unit_types =& $this->administrative_structure->prop ("structure_array");
 
 					### get admin unit types for selected country
 					foreach ($unit_types as $unit_type)
@@ -1088,7 +1142,7 @@ class realestate_manager extends class_base
 
 	function callback_pre_save ($arr)
 	{
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 
 		if (is_object ($this->usr_mgr_profession_group))
 		{
@@ -1523,7 +1577,7 @@ class realestate_manager extends class_base
 
 	function _properties_list ($arr)
 	{
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 		$table =& $arr["prop"]["vcl_inst"];
 		$table_name = str_replace ("grp_realestate_properties_", "", $arr["request"]["group"]);
 		$table->name = ("grp_realestate_properties" != $table_name) ? $table_name : "all";
@@ -1780,18 +1834,13 @@ class realestate_manager extends class_base
 
 			if (is_object ($address))
 			{
-				$cl_address = get_instance(CL_ADDRESS);
-				$address_array = $cl_address->get_address_array (array (
-					"id" => $address->id (),
-				));
-
-				array_pop ($address_array);
-				$address_1 = array_pop ($address_array);
-				$address_2 = $address_array["Linn"];
-				$address_3 = $address_array["Vald"];
-				$address_4 = $address_array["Linnaosa"];
+				$address_array = $address->prop ("address_array");
+				$address_1 = $address_array[$this_object->prop ("address_equivalent_1")];//maakond
+				$address_2 = $address_array[$this_object->prop ("address_equivalent_2")];//linn
+				$address_4 = $address_array[$this_object->prop ("address_equivalent_3")];//linnaosa
+				$address_3 = $address_array[$this_object->prop ("address_equivalent_4")];//vald
 				$apartment = $address->prop ("apartment") ? "-" . $address->prop ("apartment") : "";
-				$address = $address_array["Tänav"] . " " . $address->prop ("street_address") . $apartment;
+				$address = $address_array[ADDRESS_STREET_TYPE] . " " . $address->prop ("street_address") . $apartment;
 			}
 
 			### get actions menu
@@ -1957,7 +2006,7 @@ class realestate_manager extends class_base
 	{
 		$table =& $arr["prop"]["vcl_inst"];
 		$prop =& $arr["prop"];
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 
 		// if ("all" == $table->name or "search" == $table->name)
 		// {
@@ -1992,39 +2041,28 @@ class realestate_manager extends class_base
 		$agent = obj ($oid);
 
 		### address filter
-		$country = obj ($this_object->prop ("default_country"));
-		$administrative_structure = $country->get_first_obj_by_reltype("RELTYPE_ADMINISTRATIVE_STRUCTURE");
-
-		if (!is_object ($administrative_structure))
+		if (!is_object ($this->administrative_structure))
 		{
-			//!!! throw user err
-			$prop["error"] = t("Haldusjaotuse struktuur riigi jaoks defineerimata.");
-			return PROP_ERROR;
+			return;
 		}
 
-		$cl_administrative_structure = get_instance (CL_COUNTRY_ADMINISTRATIVE_STRUCTURE);
-		$unit_types =& $cl_administrative_structure->get_structure (array(
-			"id" => $administrative_structure->id(),
+		$list =& $this->administrative_structure->prop (array (
+			"prop" => "units_by_type",
+			"type" => $this_object->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
 		));
-		$top_unit = reset ($unit_types);
-		$list = new object_list (array (
-			"class_id" => CL_COUNTRY_ADMINISTRATIVE_UNIT,
-			"subclass" => $top_unit->id (),
-			"parent" => $country->id (),
-		));
-		$address_filter1 = $list->names ();
+		$address_filter1 = is_object ($list) ? $list->names () : array (); ### maakond
 
-		$list = new object_list (array (
-			"class_id" => CL_COUNTRY_CITY,
-			"parent" => $list->ids (),
+		$list =& $this->administrative_structure->prop (array (
+			"prop" => "units_by_type",
+			"type" => $this_object->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
 		));
-		$address_filter2 = $list->names ();
+		$address_filter2 = is_object ($list) ? $list->names () : array ();### linn
 
-		$list = new object_list (array (
-			"class_id" => CL_COUNTRY_CITYDISTRICT,
-			"parent" => $list->ids (),
+		$list =& $this->administrative_structure->prop (array (
+			"prop" => "units_by_type",
+			"type" => $this_object->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
 		));
-		$address_filter4 = $list->names ();
+		$address_filter3 = is_object ($list) ? $list->names () : array ();### linnaosa
 
 		### table definition
 		$table->define_field(array(
@@ -2045,7 +2083,7 @@ class realestate_manager extends class_base
 			"name" => "address_4",
 			"caption" => t("Linnaosa"),
 			"sortable" => 1,
-			"filter" => $address_filter4,
+			"filter" => $address_filter3,
 		));
 
 		$table->define_field(array(
@@ -3386,7 +3424,6 @@ class realestate_manager extends class_base
 			{
 				if ($this->can("delete", $o->id()))
 				{
-					$this->delete_connected_objects (array ("obj_inst" => $o));
 					$o->delete ();
 				}
 			}
@@ -3394,7 +3431,6 @@ class realestate_manager extends class_base
 		elseif ($this->can("delete", $arr["property_id"]))
 		{
 			$o = obj ($arr["property_id"]);
-			$this->delete_connected_objects (array ("obj_inst" => $o));
 			$o->delete ();
 		}
 
@@ -3405,50 +3441,6 @@ class realestate_manager extends class_base
 		));
 		// echo $return_url;
 		return $return_url;
-	}
-
-	function delete_connected_objects ($arr)
-	{
-		$property =& $arr["obj_inst"];
-		$realestate_classes = array (
-			CL_REALESTATE_HOUSE,
-			CL_REALESTATE_ROWHOUSE,
-			CL_REALESTATE_COTTAGE,
-			CL_REALESTATE_HOUSEPART,
-			CL_REALESTATE_APARTMENT,
-			CL_REALESTATE_COMMERCIAL,
-			CL_REALESTATE_GARAGE,
-			CL_REALESTATE_LAND,
-		);
-
-		if (in_array ($property->class_id (), $realestate_classes))
-		{
-			$types = array (
-				"RELTYPE_REALESTATE_ADDRESS",
-				"RELTYPE_REALESTATE_PICTURE",
-			);
-
-			foreach ($types as $type)
-			{
-				foreach ($property->connections_from(array("type" => $type)) as $c)
-				{
-					$o = $c->to();
-
-					if ($this->can("delete", $o->id()))
-					{
-						$o->delete ();
-					}
-					else
-					{
-						error::raise(array(
-							"msg" => sprintf (t("Kustutatava kinnisvaraobjekti kaasobjekti ei lubata kasutajal kustutada. Viga õiguste seadetes. Jääb orbobjekt, mille id on %s"), $o->id ()),
-							"fatal" => false,
-							"show" => false,
-						));
-					}
-				}
-			}
-		}
 	}
 
 /**

@@ -639,17 +639,17 @@
             </caption>
       </property>
       <property>
-            <name>default_country</name>
+            <name>administrative_structure</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>grp_settings</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_REALESTATEMGR_COUNTRY</reltype>
-            <clid>CL_COUNTRY</clid>
+            <reltype>RELTYPE_ADMINISTRATIVE_STRUCTURE</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
             <automatic>1</automatic>
-            <comment>Riik, milles süsteemis hallatavad kinnisvaraobjektid asuvad</comment>
-            <caption>Riik</caption>
+            <comment>Riigi haldusjaotus, milles süsteemis hallatavad kinnisvaraobjektid asuvad</comment>
+            <caption>Haldusjaotus</caption>
       </property>
       <property>
             <name>houses_folder</name>
@@ -924,6 +924,73 @@
             <store>no</store>
             <caption>Template'ites kasutada olevad muutujad</caption>
       </property>
+      <property>
+            <name>title5</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Aadressid</caption>
+      </property>
+      <property>
+            <name>address_equivalent_1</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS_EQUIVALENT_1</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <comment>Haldusjaotis aadressisüsteemis, mis vastab maakonnale</comment>
+            <caption>Maakond haldusjaotuses</caption>
+      </property>
+      <property>
+            <name>address_equivalent_2</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS_EQUIVALENT_2</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <caption>Linn haldusjaotuses</caption>
+      </property>
+      <property>
+            <name>address_equivalent_3</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS_EQUIVALENT_3</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <caption>Linnaosa haldusjaotuses</caption>
+      </property>
+      <property>
+            <name>address_equivalent_4</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS_EQUIVALENT_4</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <caption>Vald haldusjaotuses</caption>
+      </property>
+      <property>
+            <name>address_equivalent_5</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS_EQUIVALENT_5</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+            <caption>Asula haldusjaotuses</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_REALESTATE_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -1011,11 +1078,11 @@
                   <clid>CL_GROUP</clid>
                   <caption>Kasutajagrupp</caption>
             </REALESTATEMGR_USER_GROUP>
-            <REALESTATEMGR_COUNTRY>
+            <ADMINISTRATIVE_STRUCTURE>
                   <value>3</value>
-                  <clid>CL_COUNTRY</clid>
-                  <caption>Riik</caption>
-            </REALESTATEMGR_COUNTRY>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
+                  <caption>Haldusjaotuse struktuur</caption>
+            </ADMINISTRATIVE_STRUCTURE>
             <REALESTATEMGR_VARMGR>
                   <value>4</value>
                   <clid>CL_METAMGR</clid>
@@ -1051,6 +1118,31 @@
                   <value>12</value>
                   <caption>Klientide valim</caption>
             </CLIENT_SELECTION>
+            <RELTYPE_ADDRESS_EQUIVALENT_1>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+                  <value>13</value>
+                  <caption>Haldusjaotuse vaste 1</caption>
+            </RELTYPE_ADDRESS_EQUIVALENT_1>
+            <RELTYPE_ADDRESS_EQUIVALENT_2>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+                  <value>14</value>
+                  <caption>Haldusjaotuse vaste 2</caption>
+            </RELTYPE_ADDRESS_EQUIVALENT_2>
+            <RELTYPE_ADDRESS_EQUIVALENT_3>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+                  <value>15</value>
+                  <caption>Haldusjaotuse vaste 3</caption>
+            </RELTYPE_ADDRESS_EQUIVALENT_3>
+            <RELTYPE_ADDRESS_EQUIVALENT_4>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+                  <value>16</value>
+                  <caption>Haldusjaotuse vaste 4</caption>
+            </RELTYPE_ADDRESS_EQUIVALENT_4>
+            <RELTYPE_ADDRESS_EQUIVALENT_5>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE</clid>
+                  <value>17</value>
+                  <caption>Haldusjaotuse vaste 5</caption>
+            </RELTYPE_ADDRESS_EQUIVALENT_5>
       </reltypes>
       <layout>
             <vsplitbox>

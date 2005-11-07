@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.1 2005/10/31 17:13:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -165,6 +165,7 @@ class realestate_search extends class_base
 			if (is_oid ($this_object->prop ("realestate_mgr")) and $this->can ("view", $this_object->prop ("realestate_mgr")))
 			{
 				$this->realestate_mgr = obj ($this_object->prop ("realestate_mgr"));
+				$this->administrative_structure = $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
 			}
 		}
 
@@ -237,59 +238,31 @@ class realestate_search extends class_base
 				break;
 
 			case "searchparam_address1":
-				$list = new object_list (array (
-					"class_id" => CL_COUNTRY_ADMINISTRATIVE_UNIT,
-					"parent" => $this_object->prop ("searchparam_country"),
-					"site_id" => array(),
-					"lang_id" => array(),
+				$list =& $this->administrative_structure->prop (array (
+					"prop" => "units_by_type",
+					"type" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
 				));
-				// $prop["options"] = array ("" => "") + $list->names();
-				$prop["options"] = $list->names();
+				$options = is_object ($list) ? $list->names () : array (); ### maakond
+				$prop["options"] = $options;
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["a1"];
 				break;
 
 			case "searchparam_address2":
-				$tree = new object_tree (array (
-					"parent" => $this_object->prop ("searchparam_country"),
-					"site_id" => array(),
-					"lang_id" => array(),
+				$list =& $this->administrative_structure->prop (array (
+					"prop" => "units_by_type",
+					"type" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
 				));
-				$list = $tree->to_list ();
-				$list = $list->arr ();
-				$options = array ();
-
-				foreach ($list as $o)
-				{
-					if ($o->class_id () == CL_COUNTRY_CITY)
-					{
-						$options[$o->id ()] = $o->name ();
-					}
-				}
-				// $prop["options"] = array ("" => "") + $list->names();
-				// $prop["options"] = $list->names();
+				$options = is_object ($list) ? $list->names () : array (); ### linn
 				$prop["options"] = $options;
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["a2"];
 				break;
 
 			case "searchparam_address3":
-				$tree = new object_tree (array (
-					"parent" => $this_object->prop ("searchparam_country"),
-					"site_id" => array(),
-					"lang_id" => array(),
+				$list =& $this->administrative_structure->prop (array (
+					"prop" => "units_by_type",
+					"type" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
 				));
-				$list = $tree->to_list ();
-				$list = $list->arr ();
-				$options = array ();
-
-				foreach ($list as $o)
-				{
-					if ($o->class_id () == CL_COUNTRY_CITYDISTRICT)
-					{
-						$options[$o->id ()] = $o->name ();
-					}
-				}
-				// $prop["options"] = array("" => "") + $list->names();
-				// $prop["options"] = $list->names();
+				$options = is_object ($list) ? $list->names () : array (); ### linnaosa
 				$prop["options"] = $options;
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["a3"];
 				break;
@@ -741,6 +714,8 @@ class realestate_search extends class_base
 			echo t("Kinnisvarahalduskeskkond otsinguobjektil defineerimata.");
 		}
 
+		$administrative_structure = $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+
 		### class_id
 		$this->options_ci = array (
 			REALESTATE_SEARCH_ALL => "",
@@ -765,13 +740,12 @@ class realestate_search extends class_base
 		natcasesort ($this->options_tt);
 
 		### address1
-		$list = new object_list (array (
-			"class_id" => CL_COUNTRY_ADMINISTRATIVE_UNIT,
-			"parent" => $this_object->prop ("searchparam_country"),
-			"site_id" => array(),
-			"lang_id" => array(),
+		$list =& $administrative_structure->prop (array (
+			"prop" => "units_by_type",
+			"type" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
 		));
-		$this->options_a1 = array(REALESTATE_SEARCH_ALL => "") + $list->names();
+		$options = is_object ($list) ? $list->names () : array (); // maakond
+		$this->options_a1 = array(REALESTATE_SEARCH_ALL => "") + $options;
 		natcasesort ($this->options_a1);
 
 		### to save time, get only a minimal set of options for elementary web search
@@ -781,25 +755,21 @@ class realestate_search extends class_base
 		}
 
 		### address2
-		$ids = $list->ids ();
-		$list = new object_list (array (
-			"class_id" => CL_COUNTRY_CITY,
-			"parent" => $ids,
-			"site_id" => array(),
-			"lang_id" => array(),
+		$list =& $administrative_structure->prop (array (
+			"prop" => "units_by_type",
+			"type" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
 		));
-		$this->options_a2 = array(REALESTATE_SEARCH_ALL => "") + $list->names();
+		$options = is_object ($list) ? $list->names () : array (); // linn
+		$this->options_a2 = array(REALESTATE_SEARCH_ALL => "") + $options;
 		natcasesort ($this->options_a2);
 
 		### address3
-		$ids = $list->ids ();
-		$list = new object_list (array (
-			"class_id" => CL_COUNTRY_CITYDISTRICT,
-			"parent" => $ids,
-			"site_id" => array(),
-			"lang_id" => array(),
+		$list =& $administrative_structure->prop (array (
+			"prop" => "units_by_type",
+			"type" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
 		));
-		$this->options_a3 = array(REALESTATE_SEARCH_ALL => "") + $list->names();
+		$options = is_object ($list) ? $list->names () : array (); // linnaosa
+		$this->options_a3 = array(REALESTATE_SEARCH_ALL => "") + $options;
 		natcasesort ($this->options_a3);
 
 		### condition

@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_garage.aw,v 1.1 2005/10/31 17:13:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_garage.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
 // realestate_garage.aw - Garaaz
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_GARAGE, on_create)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 @classinfo syslog_type=ST_REALESTATE_GARAGE relationmgr=yes no_comment=1 no_status=1 trans=1
 @extends applications/realestate_management/realestate_property
