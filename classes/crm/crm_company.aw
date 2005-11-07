@@ -2967,6 +2967,19 @@ class crm_company extends class_base
 				$ret[] = $c->prop("to");
 			}
 		}
+
+		// add all customers to whom I am cust mgr
+		$u = get_instance(CL_USER);
+		$p = $u->get_current_person();
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"client_manager" => $p
+		));
+		foreach($ol->ids() as $_id)
+		{
+			$ret[] = $_id;
+		}
+
 		$ret = array_unique($ret);
 		return $ret;
 	}
