@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.336 2005/10/17 17:03:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.337 2005/11/07 07:56:49 dragut Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1657,6 +1657,7 @@ class document extends aw_template
 		@param id required type=int acl="edit;view"
 		@param section optional
 		@param period optional
+		@param return_url optional
 		
 		@returns
 		
