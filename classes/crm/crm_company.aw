@@ -3602,6 +3602,9 @@ class crm_company extends class_base
 		{
 			$i = $o->instance();
 			$i->_gen_company_code($o);
+			aw_disable_acl();
+			$o->save();
+			aw_restore_acl();
 		}
 	}
 
