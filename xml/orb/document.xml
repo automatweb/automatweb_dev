@@ -27,6 +27,7 @@
 					<required name="id" type="int" acl="edit;view" />
 					<optional name="section" />
 					<optional name="period" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>
