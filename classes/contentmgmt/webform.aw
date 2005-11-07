@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.77 2005/11/02 17:40:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.78 2005/11/07 07:45:01 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1502,6 +1502,13 @@ class webform extends class_base
 		return  $retval;
 	}
 	
+	function request_execute($o)
+	{
+		return $this->show(array(
+			"id" => $o->id(),
+		));
+	}
+	
 	function parse_alias($arr)
 	{
 		$id = $arr["alias"]["target"];
@@ -1940,7 +1947,6 @@ class webform extends class_base
 			$o->set_meta("object_type", $object_type->id());
 			//$o->save();
 			$cls = get_instance(CL_CLASSIFICATOR);
-
 			$relprops = $this->get_properties_by_type(array(
 				"clid" => CL_REGISTER_DATA,
 				"type" => array("classificator","releditor"),
@@ -2037,14 +2043,12 @@ class webform extends class_base
 			$o->set_name(trim($name));
 			$o->set_prop("register_id", $register->id());
 			$o->save();
-
 			foreach($obj_inst->connections_from(array("type" => "RELTYPE_AFTER_SAVE_CONTROLLER")) as $c)
 			{
 				$controller_obj = $c->to();
 				$controller_i = $controller_obj->instance();
 				$controller_i->check_property($controller_obj->id(), $o->id(), $o->properties(), $arr, $o->properties(), $o);
 			}
-
 			$emxs = $obj_inst->connections_from(array(
 				"type" => "RELTYPE_EMAIL",
 			));
