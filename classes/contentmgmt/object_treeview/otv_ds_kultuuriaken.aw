@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.4 2005/06/02 11:12:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.5 2005/11/07 11:00:37 dragut Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
@@ -8,56 +8,53 @@
 @default table=objects
 @default group=general
 
-----------------------------------------------------------------
-@property event_form type=relpicker reltype=RELTYPE_EVENT_FORM field=meta method=serialize
-@caption S&uuml;ndmuse vorm
-@comment Kultuuriakna s&uuml;ndmuse lisamise/muutmise vorm
+	@property event_form type=relpicker reltype=RELTYPE_EVENT_FORM field=meta method=serialize
+	@caption S&uuml;ndmuse vorm
+	@comment Kultuuriakna s&uuml;ndmuse lisamise/muutmise vorm
 
-@property xml_file_url type=textbox size=50 field=meta method=serialize
-@caption XML faili url
-@comment Veebiaadress, kust XML v&auml;ljundi saab
+	@property xml_file_url type=textbox size=50 field=meta method=serialize
+	@caption XML faili url
+	@comment Veebiaadress, kust XML v&auml;ljundi saab
 
-@property last_import_text type=text store=no
-@caption Viimane import
-@comment Viimase impordi toimumise aeg
+	@property last_import_text type=text store=no
+	@caption Viimane import
+	@comment Viimase impordi toimumise aeg
 
-@property next_import_text type=text store=no
-@caption J&auml;rgmine import
-@comment J&auml;rgmise impordi toimumise aeg
+	@property next_import_text type=text store=no
+	@caption J&auml;rgmine import
+	@comment J&auml;rgmise impordi toimumise aeg
 
-@property import_events type=text store=no
-@caption Impordi s&uuml;ndmused
-@comment Link s&uuml;ndmuste importimiseks
-----------------------------------------------------------------
+	@property import_events type=text store=no
+	@caption Impordi s&uuml;ndmused
+	@comment Link s&uuml;ndmuste importimiseks
+
 @groupinfo config caption="Seaded"
 @default group=config
 
-@property config_table type=table store=no caption=no
-@caption Seaded
+	@property config_table type=table store=no caption=no
+	@caption Seaded
 
-----------------------------------------------------------------
 @groupinfo xml_view caption="Vaade XML"
 @default group=xml_view
 
-@property xml_config type=table store=no
-@caption XML vaate seaded 
+	@property xml_config type=table store=no
+	@caption XML vaate seaded 
 
-----------------------------------------------------------------
 @groupinfo recurrence_config caption="Automaatne import"
 @default group=recurrence_config
 
-@property recurrence type=relpicker reltype=RELTYPE_RECURRENCE field=meta method=serialize
-@caption Kordus
+	@property recurrence type=relpicker reltype=RELTYPE_RECURRENCE field=meta method=serialize
+	@caption Kordus
 
-@property auto_import_user type=textbox field=meta method=serialize
-@caption Kasutaja
-@comment Kasutajanimi, kelle &otilde;igustes automaatne import teostatakse
+	@property auto_import_user type=textbox field=meta method=serialize
+	@caption Kasutaja
+	@comment Kasutajanimi, kelle &otilde;igustes automaatne import teostatakse
 
-@property auto_import_passwd type=password field=meta method=serialize
-@caption Parool
-@comment Kasutaja parool, kelle &otilde;igustes automaatne import teostatakse
+	@property auto_import_passwd type=password field=meta method=serialize
+	@caption Parool
+	@comment Kasutaja parool, kelle &otilde;igustes automaatne import teostatakse
 
-----------------------------------------------------------------
+
 @reltype EVENT_FORM value=1 clid=CL_CFGFORM
 @caption S&uuml;ndmuse vorm
 
@@ -108,12 +105,6 @@ class otv_ds_kultuuriaken extends class_base
 				$prop['value'] = (empty($last_import)) ? "0" : date("d-M-y / H:i", $last_import);
 				break;
 			case "next_import_text":
-		//		$next_import = $arr['obj_inst']->meta("next_import");
-		//		$recurrence_inst = get_instance(CL_RECURRENCE);
-
-		//		$next_import = $recurrence_inst->get_next_event(array(
-		//			"id" => $arr['obj_inst']->prop("recurrence"),
-		//		));
 				$next_import = $this->activate_next_auto_import(array(
 					"object" => $arr['obj_inst'],
 				));
@@ -145,13 +136,15 @@ class otv_ds_kultuuriaken extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			// save data from configuration table
 			case "config_table":
 				if (!empty($arr['request']['config_conf']))
 				{
 					$arr['obj_inst']->set_meta("config_conf", $arr['request']['config_conf']);
 				}	
 				break;
-
+			
+			// save data from xml configuration table
 			case "xml_config":
 				if (!empty($arr['request']['xml_conf']))
 				{
@@ -254,57 +247,44 @@ class otv_ds_kultuuriaken extends class_base
 			}
 			$options[$value['name']] = $value['caption'];
 		}
+
 		// getting and modifying the xml data to get all <event> element children
 		// i think i have to make an array with all those elements which are present under 
 		// event element, cause it surely is silly to load all the xml data file and only 
  		// to get those element names
+		// -- so it seems i created the class-wide xml fields array -dragut
+		
 		// a really good thing would be, if there is somekind of xml schema or dtd defined, 
 		// so i have to load only the schema/dtd file to acquire the data structure
 
-//// --> so commenting out that part where i get the field names from the data file
-//		$xml_content = $this->load_xml_content(array(
-//			"id" => $arr['obj_inst']->id(),
-//			"owner" => 0,
-//			"start" =>0, 
-//		));
+	/*
+		//// so commenting out that part where i get the field names from the data file
+		$xml_content = $this->load_xml_content(array(
+			"id" => $arr['obj_inst']->id(),
+			"owner" => 0,
+			"start" =>0, 
+		));
 		
-//		$index_arr = $xml_content[1];
-//		unset($index_arr['events'], $index_arr['event']);
-//		$index_arr = array_keys($index_arr);
+		$index_arr = $xml_content[1];
+		unset($index_arr['events'], $index_arr['event']);
+		$index_arr = array_keys($index_arr);
+	*/
 
-		// acquire saved data
+		// get saved xml configuration data
 		$saved_xml_conf = $arr['obj_inst']->meta("xml_conf");
 		
-		// lets put the data into table
+		// and lets put the data into table:
 		foreach($this->xml_fields as $value)
 		{
 
 			switch ($value)
 			{
-			//	case "date":
-			//		$form_field = "start1";
-			//		break;
-			//	case "date_end":
-			//		$form_field = "end";
-			//		break;
 				case "begin":
 					$form_field = "date + hhmm";
 					break;
-			//	case "type":
-			//		$form_field = "tüüp somehow ???";
-			//		break;
 				case "importance":
 					$form_field = "jrk";
 					break;
-			//	case "name":
-			//		$form_field = "name";
-			//		break;
-//				case "place":
-//					$form_field = $value." + place id";
-//					break;
-			//	case "description":
-			//		$form_field = "comment";
-			//		break;
 				default:
 					$form_field = html::select(array(
 						"name" => "xml_conf[".$value."]",
@@ -326,7 +306,8 @@ class otv_ds_kultuuriaken extends class_base
 	// - start (optional) last modified timestamp / last import timestamp
 	function load_xml_content($arr)
 	{
-		if (!is_oid($arr['id']))
+	//	if (!is_oid($arr['id']))
+		if (!$this->can("view", $arr['id'])) // a better check --dragut
 		{
 			return false;
 		}
@@ -337,8 +318,8 @@ class otv_ds_kultuuriaken extends class_base
 			return false;
 		}
 
-		// if i will have some better idea to compose the url params, then
-		// it should be implmented here
+		// if there is a better way to compose the url params, then
+		// it should be implmented here:
 		$url_params = (!empty($arr['owner'])) ? "?owner=".$arr['owner']."&" : "?";
 		$url_params = (!empty($arr['start'])) ? $url_params."start=".$arr['start'] : $url_params; 
 
@@ -348,8 +329,9 @@ class otv_ds_kultuuriaken extends class_base
 			$xml_file_content .= fread($f, 4096);
 		}
 		fclose($f);
-		// waiting the day when i can use file_get_contents()
-//		$xml_file_content = file_get_contents($xml_file_url.$url_params);
+
+	// waiting the day when i can use file_get_contents()
+	//	$xml_file_content = file_get_contents($xml_file_url.$url_params);
 		return parse_xml_def(array(
 			"xml" => $xml_file_content,
 		));
@@ -361,10 +343,23 @@ class otv_ds_kultuuriaken extends class_base
 	**/
 	function import_events($arr)
 	{
+		if (!$this->can("view", $arr['id']))
+		{
+			error::raise(array(
+				"msg" => t("You don't have view access to import object!"),
+			));
+		}
+
 		$o = obj($arr['id']);
 		$event_form_id = $o->prop("event_form");
-		$event_form_obj = obj($event_form_id);
+		if (!$this->can("view", $event_form_id))
+		{
+			error::raise(array(
+				"msg" => t("You don't have view access to event form object!"),
+			));
+		}
 
+		$event_form_obj = obj($event_form_id);
 		$saved_config_conf = $o->meta("config_conf");
 		$saved_xml_conf = $o->meta("xml_conf");
 
@@ -407,7 +402,7 @@ class otv_ds_kultuuriaken extends class_base
 				{
 					$tmp_start_date = 0;
 					$event_data = array();
-							}
+				}
 				if ($value['tag'] != "events" && $value['tag'] != "event" && $value['type'] == "complete")
 				{
 					switch($value['tag'])
@@ -461,7 +456,7 @@ class otv_ds_kultuuriaken extends class_base
 				}
 			}
 		}
-echo " <br>..:: IMPORT LÕPPEND ::..<br>";
+echo " <br>..:: IMPORT LÕPPENUD ::..<br>";
 		$o->set_meta("last_import", time());
 
 // ok, here should go this part where next import will be put in scheduler
