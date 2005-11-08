@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.151 2005/09/21 12:47:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.152 2005/11/08 10:49:26 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1026,12 +1026,14 @@ class users extends users_user
 					$lang_id = aw_global_get("lang_id");
 					if (is_array($ar2) && $ar2[$lang_id])
 					{
-						foreach(safe_array($ar2[$lang_id]) as $k => $v)
+						$awa = new aw_array($ar2[$lang_id]);
+						foreach($awa->get() as $k => $v)
 						{
-							$admr[$k] = $v;
+							$admr[] = $v;
 						}
 					}
 					obj_set_opt("no_auto_translation", 0);
+					$admr = array_unique($admr);
 				}
 				if (count($admr))
 				{
