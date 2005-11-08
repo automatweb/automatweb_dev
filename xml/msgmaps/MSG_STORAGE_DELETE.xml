@@ -1,33 +1,78 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>contentmgmt/site_search/site_search_content_grp</class>
-      <func>on_delete_menu</func>
-      <param>CL_DOCUMENT</param>
+      <class>applications/realestate_management/realestate_apartment</class>
+      <func>on_delete</func>
+      <param>CL_REALESTATE_PROPERTY</param>
 </num_0>
 <num_1>
+      <class>applications/realestate_management/realestate_commercial</class>
+      <func>on_delete</func>
+      <param>CL_REALESTATE_PROPERTY</param>
+</num_1>
+<num_2>
+      <class>applications/realestate_management/realestate_cottage</class>
+      <func>on_delete</func>
+      <param>CL_REALESTATE_PROPERTY</param>
+</num_2>
+<num_3>
+      <class>applications/realestate_management/realestate_garage</class>
+      <func>on_delete</func>
+      <param>CL_REALESTATE_PROPERTY</param>
+</num_3>
+<num_4>
+      <class>applications/realestate_management/realestate_house</class>
+      <func>on_delete</func>
+      <param>CL_REALESTATE_PROPERTY</param>
+</num_4>
+<num_5>
+      <class>applications/realestate_management/realestate_housepart</class>
+      <func>on_delete</func>
+      <param>CL_REALESTATE_PROPERTY</param>
+</num_5>
+<num_6>
+      <class>applications/realestate_management/realestate_land</class>
+      <func>on_delete</func>
+      <param>CL_REALESTATE_PROPERTY</param>
+</num_6>
+<num_7>
+      <class>applications/realestate_management/realestate_property</class>
+      <func>on_delete</func>
+      <param>CL_REALESTATE_PROPERTY</param>
+</num_7>
+<num_8>
+      <class>applications/realestate_management/realestate_rowhouse</class>
+      <func>on_delete</func>
+      <param>CL_REALESTATE_PROPERTY</param>
+</num_8>
+<num_9>
       <class>contentmgmt/promo</class>
       <func>on_delete_document</func>
       <param>CL_DOCUMENT</param>
-</num_1>
-<num_2>
-      <class>core/users/user</class>
-      <func>on_delete_user</func>
-      <param>CL_USER</param>
-</num_2>
-<num_3>
+</num_9>
+<num_10>
+      <class>contentmgmt/site_search/site_search_content_grp</class>
+      <func>on_delete_menu</func>
+      <param>CL_DOCUMENT</param>
+</num_10>
+<num_11>
       <class>core/users/group</class>
       <func>on_delete_grp</func>
       <param>CL_GROUP</param>
-</num_3>
-<num_4>
+</num_11>
+<num_12>
+      <class>core/users/user</class>
+      <func>on_delete_user</func>
+      <param>CL_USER</param>
+</num_12>
+<num_13>
       <class>mrp/mrp_case</class>
       <func>on_delete_case</func>
       <param>CL_MRP_CASE</param>
-</num_4>
-<num_5>
+</num_13>
+<num_14>
       <class>mrp/mrp_job</class>
       <func>on_delete_job</func>
       <param>CL_MRP_JOB</param>
-</num_5>
+</num_14>
 </xml>

@@ -1,28 +1,28 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>contentmgmt/reminder</class>
-      <func>on_rdisconnect_to</func>
-      <param>CL_DOCUMENT</param>
+      <class>applications/personnel_management/personnel_management_job_offer</class>
+      <func>on_disconnect_section_from_job</func>
+      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
 </num_0>
 <num_1>
-      <class>contentmgmt/timing</class>
-      <func>on_tdisconnect_to</func>
+      <class>contentmgmt/reminder</class>
+      <func>on_rdisconnect_to</func>
       <param>CL_DOCUMENT</param>
 </num_1>
 <num_2>
       <class>contentmgmt/timing</class>
       <func>on_tdisconnect_to</func>
-      <param>CL_MENU</param>
+      <param>CL_DOCUMENT</param>
 </num_2>
 <num_3>
+      <class>contentmgmt/timing</class>
+      <func>on_tdisconnect_to</func>
+      <param>CL_MENU</param>
+</num_3>
+<num_4>
       <class>core/users/group</class>
       <func>on_remove_alias_for_group</func>
       <param>CL_GROUP</param>
-</num_3>
-<num_4>
-      <class>applications/personnel_management/personnel_management_job_offer</class>
-      <func>on_disconnect_section_from_job</func>
-      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
 </num_4>
 </xml>

@@ -39,10 +39,26 @@
             <field>site_id</field>
             <datatype>int</datatype>
       </property>
+      <property>
+            <name>source_html</name>
+            <table>objects</table>
+            <group>grp_source</group>
+            <type>textarea</type>
+            <rows>50</rows>
+            <cols>74</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>L&amp;auml;htekood</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CONFIG_AW_DOCUMENT_TEMPLATE</syslog_type>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <grp_source>
+                  <caption>L&amp;auml;htekood</caption>
+            </grp_source>
+      </groupinfo>
       <tableinfo>
             <template>
                   <index>obj_id</index>
