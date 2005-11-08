@@ -1674,9 +1674,10 @@ class _int_object
 
 		if ($add && !aw_global_get("__is_install"))
 		{
-			if ($GLOBALS["object_loader"]->ds->can("view", $rootmenu))
+			$rm = reset($rootmenu);
+			if ($GLOBALS["object_loader"]->ds->can("view", $rm))
 			{
-				$ret[] = obj($rootmenu);
+				$ret[] = obj($rm);
 			}
 		}
 
