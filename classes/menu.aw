@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.139 2005/09/06 11:14:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.140 2005/11/08 11:22:20 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1122,10 +1122,15 @@ class menu extends class_base
 				if ($data["value"] != "")
 				{
 					$filt = array(
-						"parent" => $arr["obj_inst"]->parent(),
 						"class_id" => CL_MENU,
 						"alias" => $data["value"],
+						"site_id" => array(),
+						"lang_id" => array()
 					);
+					if (aw_ini_get("menuedit.recursive_aliases") == 1)
+					{
+						$filt["parent"] = $arr["obj_inst"]->parent();
+					}
 					if (is_oid($arr["obj_inst"]->id()))
 					{
 						$filt["oid"] = new obj_predicate_not($arr["obj_inst"]->id());
