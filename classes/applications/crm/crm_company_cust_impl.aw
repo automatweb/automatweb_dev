@@ -913,7 +913,7 @@ class crm_company_cust_impl extends class_base
 			$filt = $this->_get_my_proj_search_filt($arr["request"], $ol->ids(), "all_");
 			$ol = new object_list($filt);
 		}
-
+		else
 		if ($ol->count())
 		{
 			$ol = new object_list(array(
