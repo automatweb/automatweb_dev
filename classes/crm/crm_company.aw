@@ -2310,6 +2310,30 @@ class crm_company extends class_base
 	//goes through all the relations and builds a set of id into $data
 	function get_customers_for_company($obj, $data, $category = false)
 	{
+		if (!$category)
+		{
+			$impl = array();
+			$this->get_all_workers_for_company($obj, &$impl);  
+			$impl[] = $obj->id();
+			// also, add all orderers from projects where the company is implementor
+			$ol = new object_list(array(
+				"class_id" => CL_PROJECT,
+				"CL_PROJECT.RELTYPE_IMPLEMENTOR" => $impl,
+				"lang_id" => array(),
+				"site_id" => array() 
+			));
+			foreach($ol->arr() as $o)
+			{
+				foreach((array)$o->prop("orderer") as $ord)
+				{
+					if ($ord)
+					{
+						$data[$ord] = $ord;
+					}
+				}
+			}
+		}
+
 		$conns = $obj->connections_from(array(
 			"type" => "RELTYPE_CUSTOMER",
 		));
