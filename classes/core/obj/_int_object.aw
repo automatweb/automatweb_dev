@@ -1628,16 +1628,16 @@ class _int_object
 
 		if (is_admin())
 		{
-			$rootmenu = cfg_get_admin_rootmenu2();
+			$rootmenu = (array)$GLOBALS["cfg"]["__default"]["admin_rootmenu2"];
 			$add = false;
 		}
 		else
 		{
-			$rootmenu = $GLOBALS["cfg"]["__default"]["rootmenu"];
+			$rootmenu = array($GLOBALS["cfg"]["__default"]["rootmenu"]);
 			$add = true;
 		}
 
-		while ($parent && $parent != $rootmenu)
+		while ($parent && !in_array($parent, $rootmenu))
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent))
 			{
