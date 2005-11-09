@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.107 2005/10/26 20:29:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.108 2005/11/09 14:27:25 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1005,6 +1005,11 @@ class admin_menus extends aw_template
 		// by the way, mk_my_orb is pretty expensive and all those calls to it
 		// here take up to 10% of the time used to create the page -- duke
 
+		if ($_GET["sortby"] != "")
+		{
+			$sby = " ORDER BY ".$_GET["sortby"]." ".$_GET["sort_order"];
+		}
+
 		$per_page = 100;
 		$ft_page = $GLOBALS["ft_page"];
 		$lim = "LIMIT ".($ft_page * $per_page).",".$per_page;
@@ -1018,7 +1023,7 @@ class admin_menus extends aw_template
 		$query = "FROM objects
 				LEFT JOIN menu m ON m.id = objects.oid
 			WHERE
-				$where";
+				$where $sby";
 
 /*		$filter = array(
 			"parent" => $parent,
