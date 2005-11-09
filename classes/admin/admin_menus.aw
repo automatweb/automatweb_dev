@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.108 2005/11/09 14:27:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.109 2005/11/09 18:19:20 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1007,7 +1007,14 @@ class admin_menus extends aw_template
 
 		if ($_GET["sortby"] != "")
 		{
-			$sby = " ORDER BY ".$_GET["sortby"]." ".$_GET["sort_order"];
+			if ($_GET["sortby"] == "hidden_jrk")
+			{
+				$sby = " ORDER BY jrk ".$_GET["sort_order"];
+			}
+			else
+			{
+				$sby = " ORDER BY ".$_GET["sortby"]." ".$_GET["sort_order"];
+			}
 		}
 
 		$per_page = 100;
