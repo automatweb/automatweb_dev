@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.38 2005/11/09 12:36:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.39 2005/11/09 12:36:53 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -582,7 +582,7 @@ class object_import extends class_base
 	**/
 	function do_check_import($arr = array())
 	{	
-		if (false &&date("H") > 8 && date("H") < 19)
+		if (date("H") > 8 && date("H") < 19)
 		{
 			echo "not during the day! <br>";
 			$sc = get_instance("scheduler");
