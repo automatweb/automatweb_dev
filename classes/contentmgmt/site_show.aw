@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.146 2005/11/01 11:51:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.147 2005/11/09 13:24:40 kristo Exp $
 
 /*
 
@@ -1863,6 +1863,16 @@ arr($l_dat);
 			"current_period" => aw_global_get("current_period"),
 			"cur_section" => aw_global_get("section")
 		));
+
+		if ($this->is_parent_tpl("logged", "IS_NOT_FRONTPAGE"))
+		{
+			if (aw_global_get("uid") != "")
+			{
+				$this->vars(array(
+					"logged" => $this->parse("logged")
+				));
+			}
+		}
 
 		$this->vars(array(
 			"IS_FRONTPAGE" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE") : ""),
