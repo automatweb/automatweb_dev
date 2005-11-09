@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.63 2005/11/07 13:21:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.64 2005/11/09 07:55:47 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -413,10 +413,13 @@ class project extends class_base
 
 
 				$data["options"] = array("" => "--vali--") + $ol->names();
-				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				foreach((array)$data["value"] as $_id)
 				{
-					$tmp = obj($data["value"]);
-					$data["options"][$tmp->id()] = $tmp->name();
+					if (!isset($data["options"][$_id]) && $this->can("view", $_id))
+					{
+						$tmp = obj($_id);
+						$data["options"][$tmp->id()] = $tmp->name();
+					}
 				}
 				asort($data["options"]);
 				break;
