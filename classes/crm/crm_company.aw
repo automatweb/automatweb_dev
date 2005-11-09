@@ -1199,12 +1199,25 @@ class crm_company extends class_base
 			case "all_proj_search_state":
 				$proj_i = get_instance(CL_PROJECT);
 				$data["options"] = array("" => "") + $proj_i->states;
+				if ($arr["request"]["search_all_proj"])
+				{
+					return PROP_IGNORE;
+				}
+				if (!$arr['request'][$data["name"]])
+				{
+					$data["value"] = PROJ_DONE;
+				}
+				else
+				{
+					$data["value"] = $arr['request'][$data["name"]];
+				}
+				break;
 
 			case "all_proj_search_dl_from":
 			case "all_proj_search_dl_to":
 			case "all_proj_search_end_from":
 			case "all_proj_search_end_to":
-				if (!$arr["request"]["search_all_proj"])
+				if ($arr["request"]["search_all_proj"])
 				{
 					return PROP_IGNORE;
 				}
@@ -1225,7 +1238,7 @@ class crm_company extends class_base
 			case "all_proj_search_task_name":
 			case "all_proj_search_sbt":
 			case "all_proj_search_clear":
-				if ($arr["request"]["search_all_proj"])
+				if (!$arr["request"]["search_all_proj"])
 				{
 					$data["value"] = $arr["request"][$data["name"]];
 				}
@@ -2197,7 +2210,8 @@ class crm_company extends class_base
 			$arr["args"]["all_proj_search_end_from"] = $arr["request"]["all_proj_search_end_from"];
 			$arr["args"]["all_proj_search_end_to"] = $arr["request"]["all_proj_search_end_to"];
 			$arr["args"]["all_proj_search_state"] = $arr["request"]["all_proj_search_state"];
-			$arr["args"]["search_all_proj"] = 1;
+			$arr["args"]["search_all_proj"] = 0;
+			$arr["args"]["aps_sbt"] = 1;
 		}	
 
 		if ($arr["request"]["docs_s_sbt"])

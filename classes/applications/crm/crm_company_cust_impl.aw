@@ -843,7 +843,7 @@ class crm_company_cust_impl extends class_base
 
 	function _get_projects_listing_tree($arr)
 	{
-		if ($arr["request"]["search_all_proj"])
+		if (!$arr["request"]["search_all_proj"])
 		{
 			return PROP_IGNORE;
 		}
@@ -856,7 +856,7 @@ class crm_company_cust_impl extends class_base
 		
 		$this->do_projects_table_header(&$table);
 		
-		if (!$arr["request"]["search_all_proj"])
+		if ($arr["request"]["search_all_proj"])
 		{
 			$project_conns = new connection();
 		
@@ -908,8 +908,15 @@ class crm_company_cust_impl extends class_base
 		$ol = new object_list(array(
 			"oid" => $tmp_ids,
 		));
-		if ($arr["request"]["search_all_proj"] && $ol->count())
+		if (!$arr["request"]["search_all_proj"] && $ol->count())
 		{
+			if (!$arr["request"]["aps_sbt"])
+			{
+				$u = get_instance(CL_USER);
+				$p = obj($u->get_current_person());
+				$arr["request"]["all_proj_search_part"] = $p->name();
+				$arr["request"]["all_proj_search_state"] = PROJ_DONE;
+			}
 			$filt = $this->_get_my_proj_search_filt($arr["request"], $ol->ids(), "all_");
 			$ol = new object_list($filt);
 		}
@@ -961,7 +968,7 @@ class crm_company_cust_impl extends class_base
 			));
 
 			$table->define_data(array(
-				"project_name" => html::get_change_url($project->id(), array("return_url" => get_ru()), $project->name()),
+				"project_name" => html::obj_change_url($project),
 				"project_participants"	=> $this->_get_linked_names($project->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
 				"project_created" => $project->created(),
 				"roles" => $roles,
@@ -972,6 +979,8 @@ class crm_company_cust_impl extends class_base
 				"oid" => $project->id()
 			));
 		}
+		$table->set_default_sortby("project_end");
+		$table->set_default_sorder("desc");
 	}
 
 	function _get_offers_current_org_id($arr)
@@ -1278,7 +1287,7 @@ class crm_company_cust_impl extends class_base
 
 	function _get_all_proj_search_part($arr)
 	{
-		if (!$arr["request"]["search_all_proj"])
+		if ($arr["request"]["search_all_proj"])
 		{
 			return PROP_IGNORE;
 		}
