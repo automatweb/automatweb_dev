@@ -538,7 +538,6 @@ die(dbg::dump($ret));
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote($metadata);
 		$this->quote(&$objdata);
-		
 		// insert default new acl to object table here
 		$acld_fld = $acld_val = "";
 		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "")

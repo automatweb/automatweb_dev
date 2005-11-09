@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.41 2005/11/07 07:55:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.42 2005/11/09 12:36:21 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -335,6 +335,10 @@ class cache extends core
 	// [counter_preg_match] => 26608
 	function file_invalidate_regex($regex)
 	{
+		if (aw_global_get("no_cache_flush") == 1)
+		{
+			return;
+		}
 		$this->__fir_cnt = 0;
 		$this->cache_files = aw_cache_get_array("cache_files");
 		global $awt;
@@ -460,6 +464,10 @@ class cache extends core
 	**/
 	function full_flush()
 	{
+		if (aw_global_get("no_cache_flush") == 1)
+		{
+			return;
+		}
 		$this->cache_files = array();
 		$this->cache_files2 = array();
 		$this->_get_cache_files(aw_ini_get("cache.page_cache"));

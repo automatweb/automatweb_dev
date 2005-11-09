@@ -1485,6 +1485,7 @@ class _int_object
 				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
 				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]]
 			));
+
 			if (!$this->obj["brother_of"])
 			{
 				$this->obj["brother_of"] = $this->obj["oid"];
@@ -1503,6 +1504,7 @@ class _int_object
 				"ot_modified" => $this->ot_modified,
 				"props_modified" => $this->props_modified
 			));
+
 			$this->ot_modified = array("modified" => 1);
 			$this->props_modified = array();
 		}

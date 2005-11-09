@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.37 2005/06/28 14:55:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.38 2005/11/09 12:36:21 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -582,7 +582,7 @@ class object_import extends class_base
 	**/
 	function do_check_import($arr = array())
 	{	
-		if (date("H") > 8)
+		if (false &&date("H") > 8 && date("H") < 19)
 		{
 			echo "not during the day! <br>";
 			$sc = get_instance("scheduler");
@@ -632,6 +632,10 @@ class object_import extends class_base
 		{
 			set_time_limit(0);
 			ignore_user_abort(true);
+			aw_global_set("no_cache_flush", 1);
+			obj_set_opt("no_cache", 1);
+			ini_set("memory_limit", "500M");
+			aw_ini_set("cache", "use_html_cache", 0); /// set this so we won't do a cache flush on every object save - and we're gonna do lots of saves here
 			$sc = get_instance("scheduler");
 			$sc->add(array(
 				"event" => $this->mk_my_orb("do_check_import"),
@@ -697,13 +701,11 @@ class object_import extends class_base
 				{
 					$o->set_prop("unique_id", array($o->prop("unique_id") => $o->prop("unique_id")));
 				}
-
 				if (is_array($o->prop("unique_id")) && count($o->prop("unique_id")) > 0)
 				{
 					$key = "";
 
 					$key = $this->_get_un_key_for_obj($o, $p2c, $line, $userval, $properties, $class_id);
-				
 					$t_oid = $existing_objects[$key];
 
 					if (is_oid($t_oid) && $this->can("view", $t_oid))
@@ -753,7 +755,6 @@ class object_import extends class_base
 							$line[$idx] = $ex_i->do_replace($iexp, $line[$idx]);
 						}
 					}
-
 					// now, if the property is of type classificator, then we need to make a list of all options
 					// search that and then select the correct one
 					if ($properties[$pn]["type"] == "classificator")
@@ -792,7 +793,6 @@ class object_import extends class_base
 				{
 					$dat->set_parent($line["parent"]);
 				}
-
 				// now, if we have separate folder settings, then move to correct place.
 				if (($fldfld = $o->prop("folder_field")))
 				{	
@@ -806,7 +806,6 @@ class object_import extends class_base
 						}
 					}
 				}
-
 				// also uservals
 				if (is_array($userval))
 				{
@@ -818,26 +817,30 @@ class object_import extends class_base
 						}
 					}
 				}
-
+				//obj_set_opt("no_cache", 1);
+				//$GLOBALS["INTENSE_DUKE"] = 1;
+				//$GLOBALS["O_T"] = 1;
 				$dat->save();
+				//obj_set_opt("no_cache", 1);
+				//$GLOBALS["INTENSE_DUKE"] = 1;
 				echo sprintf(t("importisin objekti %s (%s) kataloogi %s <br>\n"), $dat->name(),$dat->id(),$dat->parent());
 				flush();
-
 				if (($line_n % 10) == 1)
 				{
 					$o->set_meta("import_last_time", time());
 					$o->set_meta("import_row_count", $line_n);
 					$o->save();
 				}
-
 				if (($line_n % ($row_count / 10)) == 1)
 				{
 					$this->_add_log($o, sprintf(t("Imporditud %s objekti"), $line_n));
 				}
 			}
-
+			aw_ini_set("cache", "use_html_cache", 1);
 			$this->_add_log($o, $this->_delete_objects($o, $properties, $tableinfo, $data_rows, $p2c, $userval, $class_id));
-
+			$c = get_instance("cache");
+			aw_global_set("no_cache_flush", 0);
+			$c->full_flush();
 			$this->do_mark_finish_import($o);
 			echo t("Valmis! <br>\n");
 			echo "<script language=javascript>setTimeout(\"window.location='".$this->mk_my_orb("change", array("id" => $o->id()))."'\", 5000);</script>";
