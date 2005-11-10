@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.2 2005/10/26 14:57:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.3 2005/11/10 19:22:39 ahti Exp $
 // address.aw - Aadress v2
 /*
 
@@ -33,6 +33,9 @@
 
 	@property po_box type=textbox
 	@caption Postkast
+
+	@property unit_name type=textbox
+	@caption Üksus
 
 
 // --------------- RELATION TYPES ---------------------
@@ -321,7 +324,6 @@ class address extends class_base
 	function callback_location ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
-
 		### get administrative structure for country of address
 		if (!($country = $this_object->get_first_obj_by_reltype("RELTYPE_COUNTRY")))
 		{

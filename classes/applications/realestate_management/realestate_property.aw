@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.3 2005/11/10 19:22:40 ahti Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -475,7 +475,7 @@ class realestate_property extends class_base
 				}
 
 				$address_parsed[] = urlencode ($street);
-				$address_parsed[] = urlencode ($address->prop ("street_address"));
+				$address_parsed[] = urlencode ($this->address->prop ("street_address"));
 
 
 				$address_parsed = implode ("+", $address_parsed);
@@ -976,7 +976,7 @@ class realestate_property extends class_base
 				{
 					### set address' country to default country from manager
 					$address->set_parent ($manager->prop ("administrative_structure"));
-					$address->set_prop ("administrative_structure", $manager->prop ("administrative_structure"));
+					$address->set_prop ("administrative_structure_oid", $manager->prop ("administrative_structure"));
 					$address->save ();
 
 					### connect property to address

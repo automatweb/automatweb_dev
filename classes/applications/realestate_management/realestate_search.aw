@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.3 2005/11/10 19:22:40 ahti Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -164,8 +164,7 @@ class realestate_search extends class_base
 		{
 			if (is_oid ($this_object->prop ("realestate_mgr")) and $this->can ("view", $this_object->prop ("realestate_mgr")))
 			{
-				$this->realestate_mgr = obj ($this_object->prop ("realestate_mgr"));
-				$this->administrative_structure = $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+				$this->realestate_mgr = obj($this_object->prop ("realestate_mgr"));
 			}
 		}
 
@@ -173,6 +172,10 @@ class realestate_search extends class_base
 		{
 			$prop["error"] = t("Kinnisvarahalduskeskkond määramata");
 			return PROP_FATAL_ERROR;
+		}
+		if($prop["group"] == "grp_search")
+		{
+			$this->administrative_structure = $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
 		}
 
 		switch($prop["name"])

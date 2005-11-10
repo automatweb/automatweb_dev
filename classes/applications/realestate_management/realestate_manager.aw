@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.3 2005/11/10 19:22:40 ahti Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -1800,7 +1800,6 @@ class realestate_manager extends class_base
 				$tmpagent = obj ($property->prop ("realestate_agent1"));
 				$agent = html::get_change_url ($tmpagent->id (), array("return_url" => $return_url, "group" => "grp_main"), $tmpagent->name ());
 			}
-
 			if (is_oid ($property->prop ("realestate_agent2")) and $this->can ("view", $property->prop ("realestate_agent2")))
 			{
 				$tmpagent = obj ($property->prop ("realestate_agent2"));
@@ -2036,9 +2035,22 @@ class realestate_manager extends class_base
 
 		natcasesort ($agents_filter);
 
-		$cl_user = get_instance(CL_USER);
-		$oid = $cl_user->get_current_person ();
-		$agent = obj ($oid);
+		if($_GET["allFlt"])
+		{
+			$an = urldecode($_GET["allFlt"]);
+			$agent_name = substr($an, strrpos($an, ",") + 1, strlen($an));
+			if(strpos("Kõik", $agent_name) !== false)
+			{
+				$agent_name = null;
+			}
+		}
+		else
+		{
+			$cl_user = get_instance(CL_USER);
+			$oid = $cl_user->get_current_person ();
+			$agent = obj ($oid);
+			$agent_name = $agent->name ();
+		}
 
 		### address filter
 		if (!is_object ($this->administrative_structure))
@@ -2143,7 +2155,7 @@ class realestate_manager extends class_base
 			"filter" => $agents_filter,
 			"filter_options" => array (
 				"match" => "substring",
-				"selected" => $agent->name (),
+				"selected" => $agent_name,
 			),
 			"sortable" => 1,
 		));

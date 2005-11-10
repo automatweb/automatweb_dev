@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.3 2005/11/10 19:22:40 ahti Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -676,33 +676,34 @@ class realestate_import extends class_base
 				$address->set_prop ("unit_name", array (
 					"type" => $vald_unit_type,
 					"name" => $vald,
-					));
+				));
 
 				$address->set_prop ("unit_name", array (
 					"type" => $linn_unit_type,
-							"name" => $linn,
-						));
+					"name" => $linn,
+				));
 
 				$address->set_prop ("unit_name", array (
 					"type" => $linnaosa_unit_type,
-								"name" => $linnaosa,
-							));
+					"name" => $linnaosa,
+				));
 
 				$address->set_prop ("unit_name", array (
 					"type" => $asula_unit_type,
-								"name" => $asula,
-							));
+					"name" => $asula,
+				));
 
 				$address->set_prop ("unit_name", array (
 					"type" => "street",
-						"name" => $t2nav,
+					"name" => $t2nav,
 					));
-
 				$address->set_prop ("street_address", $maja_nr);
 				$address->set_prop ("apartment", $korteri_nr);
 				$address->save ();
 
-				$address_text = $address->prop ("address_array");
+				$address_text = array_filter(array($maakond, $vald, $linn, $linnaosa, $asula, $t2nav));
+				// whatta hell this is supposed to be, is a big mystery to me -- ahz
+				//$address_text = $address->prop ("address_array");
 				unset ($address_text[ADDRESS_COUNTRY_TYPE]);
 				$address_text = implode (", ", $address_text);
 				$name = $address_text . " " . $address->prop ("street_address") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
