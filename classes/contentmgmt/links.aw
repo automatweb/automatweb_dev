@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.8 2005/09/29 08:07:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.9 2005/11/10 22:20:44 kristo Exp $
 
 /*
 
@@ -141,12 +141,15 @@ class links extends class_base
 				"format" => "d.m.Y / H:i",
 				"sortable" => 1
 			));
-
 			$sres = new object_list(array(
 				"class_id" => CL_DOCUMENT,
 				"name" => "%".$s_name."%",
 				"content" => "%".$s_content."%"
 			));
+			$sres->add(new object_list(array(
+				"class_id" => CL_MENU,
+				"name" => "%".$s_name."%"
+			)));
 			for($o =& $sres->begin(); !$sres->end(); $o =& $sres->next())
 			{
 				if (aw_ini_get("menuedit.long_section_url"))
