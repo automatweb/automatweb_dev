@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.39 2005/11/09 12:36:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.40 2005/11/10 06:08:11 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -635,6 +635,14 @@ class object_import extends class_base
 			aw_global_set("no_cache_flush", 1);
 			obj_set_opt("no_cache", 1);
 			ini_set("memory_limit", "500M");
+			if (aw_ini_get("object_import.uid") && aw_global_get("uid") == "")
+			{
+				$u = get_instance("users");
+				$u->login(array(
+					"uid" => aw_ini_get("object_import.uid"),
+					"password" => aw_ini_get("object_import.password")
+				));
+			}
 			aw_ini_set("cache", "use_html_cache", 0); /// set this so we won't do a cache flush on every object save - and we're gonna do lots of saves here
 			$sc = get_instance("scheduler");
 			$sc->add(array(
