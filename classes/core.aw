@@ -1,12 +1,12 @@
 <?php
 // core.aw - Core functions
 
-// if a function can either return all properties for something or just a name, then use 
+// if a function can either return all properties for something or just a name, then use
 // $return parameter and give it one of these defined values, so that it will be consistent
 define("ARR_NAME",1);
 define("ARR_ALL",2);
 
-// document template types 
+// document template types
 define("TPLTYPE_TPL",0);
 define("TPLTYPE_FORM",1);
 
@@ -18,7 +18,7 @@ define("STAT_ACTIVE", 2);
 classload("core/obj/acl_base");
 class core extends acl_base
 {
-	var $errmsg;		
+	var $errmsg;
 
 	////
 	// !fetch the value for config key $ckey
@@ -32,17 +32,17 @@ class core extends acl_base
 	// !set config key $ckey to value $val
 	function set_cval($ckey,$val)
 	{
-	  $ret = $this->db_fetch_row("SELECT content FROM config WHERE ckey = '$ckey'");
-	  if (!is_array($ret))
-	  {
+		$ret = $this->db_fetch_row("SELECT content FROM config WHERE ckey = '$ckey'");
+		if (!is_array($ret))
+		{
 			// create key if it does not exist
 			$this->db_query("INSERT INTO config(ckey, content, modified, modified_by) VALUES('$ckey','$val',".time().",'".aw_global_get("uid")."')");
-	  }
-	  else
-	  {
+		}
+		else
+		{
 			$this->db_query("UPDATE config SET content = '$val', modified = '".time()."', modified_by = '".aw_global_get("uid")."' WHERE ckey = '$ckey' ");
-	  }
-	  return $val;
+		}
+		return $val;
 	}
 
 	////
@@ -51,7 +51,7 @@ class core extends acl_base
 	{
 		$this->$key = $val;
 	}
-	
+
 	////
 	// !Setter for object
 	function get_opt($key)
@@ -60,7 +60,7 @@ class core extends acl_base
 	}
 
 	////
-	// !write to syslog. 
+	// !write to syslog.
 	// params:
 	// type - int, defined in syslog.types, log entry type (class name/pageview)
 	// action - int, defined in syslog.actions, log entry action (add obj, change obj)
@@ -186,7 +186,7 @@ class core extends acl_base
 			$this->db_query($q);
 		}
 	}
-		
+
 	////
 	// !returns true if object $oid 's cahe dirty flag is set
 	function cache_dirty($oid, $fname = "")
@@ -292,7 +292,7 @@ class core extends acl_base
 			{
 				$this->parsers->$class = get_instance($class);
 			};
-		
+
 			$block = array(
 				"reg" => $reg,
 				"class" => $class,
@@ -310,8 +310,8 @@ class core extends acl_base
 			);
 		};
 		$this->parsers->reglist[] = $block;
-		
-	
+
+
 		// tagastab äsja registreeritud parseriobjekti ID nimekirjas
 		return sizeof($this->parsers->reglist) - 1;
 	}
@@ -326,7 +326,7 @@ class core extends acl_base
 	// function(string) - funktsiooni nimi
 	function register_sub_parser($args = array())
 	{
-		extract($args);	
+		extract($args);
 		if (!isset($this->parsers->$class) || !is_object($this->parsers->$class))
 		{
 			$this->parsers->$class = get_instance($class);
@@ -417,7 +417,7 @@ class core extends acl_base
 							);
 
 							$repl = $this->parsers->$cls->$fun($params);
-							
+
 							if (is_array($repl))
 							{
 								$replacement = $repl["replacement"];
@@ -432,10 +432,10 @@ class core extends acl_base
 							{
 								$this->blocks = $this->blocks + $this->parsers->$cls->blocks;
 							};
-						
+
 							if ($inplace)
 							{
-								$this->vars(array($inplace => $replacement));	
+								$this->vars(array($inplace => $replacement));
 								$inplace = false;
 								$text = preg_replace($parser["reg"],"",$text,1);
 							}
@@ -454,15 +454,15 @@ class core extends acl_base
 
 	////
 	// !lisab objektile yhe vaatamise
-	function add_hit($oid) 
+	function add_hit($oid)
 	{
-		if ($oid) 
+		if ($oid)
 		{
 			$this->db_query("UPDATE hits SET hits=hits+1 WHERE oid = $oid");
 		};
 	}
 
-	//// 
+	////
 	// !Veateade
 	// $msg - teate tekst
 	// $fatal - katkestada töö?
@@ -471,7 +471,7 @@ class core extends acl_base
 	{
 		if(aw_ini_get('raise_error.no_email'))
 		{
-			$send_mail = false;	
+			$send_mail = false;
 		}
 
 		$GLOBALS["aw_is_error"] = 1;
@@ -499,7 +499,7 @@ class core extends acl_base
 
 
 		//XXX die($msg) was here
-		
+
 		// meilime veateate listi ka
 		$subj = "Viga saidil ".$this->cfg["baseurl"];
 
@@ -517,29 +517,25 @@ class core extends acl_base
 		$content.= "url = ".$this->cfg["baseurl"].aw_global_get("REQUEST_URI")."\n-----------------------\n";
 		$content.= "is_rpc_call = $is_rpc_call\n";
 		$content.= "rpc_call_type = $rpc_call_type\n";
-		global $HTTP_COOKIE_VARS;
 		$content .= "\n\nCookie vars\n";
-		foreach($HTTP_COOKIE_VARS as $k => $v)
+		foreach($_COOKIE as $k => $v)
 		{
 			$content.="$k = $v \n";
 		}
-		global $HTTP_GET_VARS;
 		$content .= "\n\nGet vars\n";
-		foreach($HTTP_GET_VARS as $k => $v)
+		foreach($_GET as $k => $v)
 		{
 			$content.="$k = $v \n";
 		}
-		global $HTTP_POST_VARS;
 		$content .= "\n\nPost vars\n";
-		foreach($HTTP_POST_VARS as $k => $v)
+		foreach($_POST as $k => $v)
 		{
 			$content.="$k = $v \n";
 		}
 		$keys = array("DOCUMENT_ROOT","HTTP_ACCEPT_LANGUAGE","HTTP_HOST","HTTP_REFERER","HTTP_USER_AGENT","REMOTE_ADDR",
 			"SCRIPT_FILENAME","SCRIPT_URI","SCRIPT_URL","REQUEST_METHOD","QUERY_STRING");
-		global $HTTP_SERVER_VARS;
 		$content.="\n\nHelpful server vars:\n\n";
-		foreach($HTTP_SERVER_VARS as $k => $v)
+		foreach($_SERVER as $k => $v)
 		{
 		//	if (in_array($k,$keys))
 			{
@@ -619,7 +615,7 @@ class core extends acl_base
 		if ($_SERVER["REDIRECT_REQUEST_METHOD"] == "PROPFIND")
 		{
 			$send_mail = false;
-		}		
+		}
 
 		// if error type is class not defined and get and post are empty, the orb.aw url was requested probably, no need ot send error
 		if ($err_type == 30 && count($_GET) == 0 && count($_POST) == 0)
@@ -633,13 +629,15 @@ class core extends acl_base
 		}
 
 		if ($send_mail)
-		{		
+		{
 			send_mail("vead@struktuur.ee", $subj, $content,$head);
 		}
 
 		// here we replicate the error to the site that logs all errors (usually aw.struktuur.ee)
 		// we replicate by POST request, cause this thing can be too long for a GET request
-		global $class,$action;
+
+		$class = $_REQUEST["class"];
+		$action = $_REQUEST["action"];
 
 		//XXX: watchout, on eau the following if block had a "false &&" part in it
 		//i just deleted that, but for further testing i'm writing this comment
@@ -693,7 +691,6 @@ class core extends acl_base
 				{
 					$u = $co->get_simple_config("error_redirect");
 				}
-//				$uid_arr = array("kix", "duke", "sven", "root", "ahti", "dragut");
 				$seu = aw_ini_get("core.show_error_users");
 				if ($seu == "")
 				{
@@ -738,13 +735,17 @@ class core extends acl_base
 	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&",$honor_r_orb = true)
 	{
 		// resolve to name
+
+		// kui on numeric, siis ma saan class_lut-ist teada tema nime
 		if (is_numeric($cl_name))
 		{
+			$fx = array_search($cl_name,$GLOBALS["cfg"]["class_lut"]);
 			if (isset($GLOBALS["cfg"]["__default"]["classes"][$cl_name]))
 			{
 				$cl_name = $GLOBALS["cfg"]["__default"]["classes"][$cl_name]["file"];
 			}
 		};
+
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
 		// tracked_vars comes from orb->process_request
@@ -768,7 +769,6 @@ class core extends acl_base
 
 		// figure out the request method once.
 		static $r_use_orb;
-		static $in_admin;
 		if (!isset($r_use_orb))
 		{
 			$r_use_orb = basename($_SERVER["SCRIPT_NAME"],".aw") == "orb";
@@ -779,12 +779,9 @@ class core extends acl_base
 			$r_use_orb = false;
 		}
 
-		if (!isset($in_admin))
-		{
-			$in_admin = stristr($_SERVER["REQUEST_URI"],"/automatweb") != false;
-		}
+		$in_admin = $GLOBALS["cfg"]["__default"]["in_admin"];
 
-		// this could probably use some more optimizing
+		// XXX: admin_folders sets use_empty directly, but shouldn't.
 		if (empty($this->use_empty))
 		{
 			$this->use_empty = false;
@@ -834,7 +831,7 @@ class core extends acl_base
 		{
 			$this->orb_values["reforb"] = 1;
 		};
-		
+
 		$this->use_empty = true;
 
 		// flatten is not the correct term!
@@ -868,7 +865,7 @@ class core extends acl_base
 
 				// 0 will get included now, "" will not. reforb sets use_empty so
 				// that gets everything
-				if ((isset($value) && ($value !== "")) || $this->use_empty)	
+				if ((isset($value) && ($value !== "")) || $this->use_empty)
 				//{
 					$this->orb_values[empty($prefix) ? $name : $prefix."[".$name."]"] = $value;
 				//};
@@ -932,7 +929,7 @@ class core extends acl_base
 					"caption" => strip_tags($name),
 				)) . " / " . $path;
 			};
-		}			
+		}
 
 		$GLOBALS["site_title"] = $path.$text;
 		// find the bit after / in text
@@ -1025,7 +1022,7 @@ class core extends acl_base
 		// Directory Handle
 		$files = array();
 		if ($DH = @opendir($dir)) {
-			while (false !== ($file = readdir($DH))) { 
+			while (false !== ($file = readdir($DH))) {
 				$fn = $dir . "/" . $file;
 				if (is_file($fn))
 				{
@@ -1072,8 +1069,8 @@ class core extends acl_base
 	}
 
 	////
-	// !serializemise funktsioonid. 
-	// need on siin sellex et kui objekt ei implemendi serializemist, siis errorit ei tulex. 
+	// !serializemise funktsioonid.
+	// need on siin sellex et kui objekt ei implemendi serializemist, siis errorit ei tulex.
 	function _serialize($arr)
 	{
 		return false;
@@ -1134,7 +1131,7 @@ class core extends acl_base
 		{
 			$arr["raw"] = $str;
 		};
-		
+
 		$s = isset($arr["raw"]) ? $arr["raw"] : unserialize($str);
 
 		if (!is_array($s))
@@ -1161,7 +1158,7 @@ class core extends acl_base
 		$t = get_instance($fl);
 		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period, "raw" => $arr["raw"]));
 	}
-	
+
 	////
 	// !this should be called from the constructor of each class
 	function init($args = false)
@@ -1198,7 +1195,7 @@ class core extends acl_base
 		{
 			$admin_lang_lc = $lang_id;
 		};
-			
+
 		if (!$admin_lang_lc)
 		{
 			$admin_lang_lc = "et";
@@ -1218,7 +1215,7 @@ class core extends acl_base
 	{
 		$this->tt[$o->id()] = $o->path_str();
 	}
-	
+
 	////
 	// !teeb objektide nimekirja ja tagastab selle arrays, sobiv picker() funxioonile ette andmisex
 	// ignore_langmenus = kui sait on mitme keelne ja on const.aw sees on $lang_menus = true kribatud
@@ -1236,8 +1233,6 @@ class core extends acl_base
 		{
 			$rootobj = cfg_get_admin_rootmenu2();
 		}
-
-		global $awt;
 
 		$ot = new object_tree(array(
 			"class_id" => CL_MENU,
@@ -1305,7 +1300,7 @@ class core extends acl_base
 		{
 			$arr["class"] = get_class($this);
 		}
-	
+
 		$ob = get_instance("core/orb/orb");
 		return $ob->do_method_call($arr);
 	}
@@ -1325,7 +1320,7 @@ class core extends acl_base
 		}
 		return $ret;
 	}
-	
+
 	function parse_alias($args)
 	{
 		extract($args);
@@ -1344,6 +1339,6 @@ class core extends acl_base
 		$obj = obj($args['id']);
 		return $obj->name();
 	}
-	
+
 };
 ?>
