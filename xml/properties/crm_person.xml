@@ -489,6 +489,56 @@
             <field>add_edu_editor</field>
       </property>
       <property>
+            <name>udef_ta1</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <field>udef_ta1</field>
+            <caption>Kasutajadefineeritud TA1</caption>
+      </property>
+      <property>
+            <name>udef_ta2</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <field>udef_ta2</field>
+            <caption>Kasutajadefineeritud TA2</caption>
+      </property>
+      <property>
+            <name>udef_ta3</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <field>udef_ta3</field>
+            <caption>Kasutajadefineeritud TA3</caption>
+      </property>
+      <property>
+            <name>udef_ta4</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <field>udef_ta4</field>
+            <caption>Kasutajadefineeritud TA4</caption>
+      </property>
+      <property>
+            <name>udef_ta5</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <field>udef_ta5</field>
+            <caption>Kasutajadefineeritud TA5</caption>
+      </property>
+      <property>
             <name>templates</name>
             <table>objects</table>
             <group>forms</group>
@@ -547,6 +597,9 @@
             <cv>
                   <caption>Elulugu</caption>
             </cv>
+            <data>
+                  <caption>Andmed</caption>
+            </data>
             <education>
                   <caption>Hariduskäik</caption>
                   <parent>cv</parent>

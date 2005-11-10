@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.91 2005/11/07 13:21:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.92 2005/11/10 07:29:12 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -202,6 +202,23 @@ property cv_view_tb type=toolbar no_caption=1 store=no wrapchildren=1 group=cv_v
 property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 
+@default group=data
+
+@property udef_ta1 type=textarea rows=5 cols=50
+@caption Kasutajadefineeritud TA1
+
+@property udef_ta2 type=textarea rows=5 cols=50
+@caption Kasutajadefineeritud TA2
+
+@property udef_ta3 type=textarea rows=5 cols=50
+@caption Kasutajadefineeritud TA3
+
+@property udef_ta4 type=textarea rows=5 cols=50
+@caption Kasutajadefineeritud TA4
+
+@property udef_ta5 type=textarea rows=5 cols=50
+@caption Kasutajadefineeritud TA5
+
 
 ----------------------------------------------
 @groupinfo general2 caption="Üldine" parent=general
@@ -215,6 +232,7 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 @groupinfo tasks caption="Toimetused" parent=overview submit=no
 @groupinfo forms caption=Väljundid
 @groupinfo cv caption="Elulugu"
+@groupinfo data caption="Andmed"
 
 @groupinfo education caption="Hariduskäik" parent=cv
 @groupinfo add_edu caption="Täienduskoolitus" parent=cv
