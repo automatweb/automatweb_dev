@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.32 2005/10/04 10:23:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.33 2005/11/10 08:39:26 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -100,12 +100,11 @@ class mysql
 			}
 		};
 		$this->qID = @mysql_query($qtext, $this->dbh);
-		if (!$this->qID)
+		$e_cnt = 0;
+		while (!$this->qID && $this->_proc_error($qtext, mysql_error($this->dbh)) && $e_cnt < 200)
 		{
-			if ($this->_proc_error($qtext))
-			{
-				$this->qID = @mysql_query($qtext, $this->dbh);
-			}
+			$this->qID = @mysql_query($qtext, $this->dbh);
+			$e_cnt++;
 		}
 
 		$this->log_query($qtext);
@@ -743,13 +742,39 @@ class mysql
 		return DB_TABLE_TYPE_TABLE;
 	}
 
-	function _proc_error($q)
+	function _proc_error($q, $errstr)
 	{
-		/*if (strpos($q, "aw_projects") !== false)
+		if (strpos($errstr, "Unknown column") !== false)
 		{
-			$p = get_instance(CL_PROJECT);
-			$p->_mk_tbl();
-		}*/
+			preg_match("/Unknown column '(.*)\.(.*)'/imsU" , $errstr, $mt);
+
+			if ($this->db_proc_error_last_fn == $mt[2])
+			{
+				return false; // if we get the same error as last time, the upgrader did not create the correct field, so error out
+			}
+			$this->db_proc_error_last_fn = $mt[2];
+			// find the table from property list. oh this is gonna be slooooooow
+			$clss = aw_ini_get("classes");
+			foreach($clss as $clid => $inf)
+			{
+				$o = obj();
+				$o->set_class_id($clid);
+				$ti = $o->get_tableinfo();
+				foreach($ti as $tn => $td)
+				{
+					if ($mt[1] == $tn)
+					{
+						// got our class
+						$i = $o->instance();
+						if (method_exists($i, "do_db_upgrade"))
+						{
+							return $i->do_db_upgrade($tn, $mt[2], $q, $errstr);
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 };
 ?>

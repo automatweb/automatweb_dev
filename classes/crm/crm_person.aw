@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.92 2005/11/10 07:29:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.93 2005/11/10 08:39:25 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2311,6 +2311,24 @@ class crm_person extends class_base
 		// but this is going to be extraordinarily slow
 
 
+	}
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		switch($field)
+		{
+			case "udef_ta1":
+			case "udef_ta2":
+			case "udef_ta3":
+			case "udef_ta4":
+			case "udef_ta5":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "text"
+				));
+				return true;
+		}
+		return false;
 	}
 }
 ?>
