@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.18 2005/08/24 11:31:14 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.19 2005/11/10 14:07:54 dragut Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -205,7 +205,7 @@ class staging extends class_base
 				"name" => $prefix . "[newx][" . $i . "]",
 				"caption" => sprintf(t("Tee sündmus %s"), $i),
 				"group" => $arr["prop"]["group"],
-				"value" => 1,
+				"ch_value" => 1,
 			);
 		};
 		return $rv;
