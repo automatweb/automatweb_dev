@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.34 2005/11/03 13:26:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.35 2005/11/10 14:16:01 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -103,7 +103,6 @@ class poll extends class_base
 				$apid = $this->db_fetch_field("SELECT oid FROM objects WHERE class_id = ".CL_POLL." AND status = 2 ","oid");
 			}
 		}
-	
 		if (!$this->can("view", $apid))
 		{
 			return false;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.25 2005/10/06 15:52:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.26 2005/11/10 14:16:01 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -407,7 +407,6 @@ class otv_ds_postipoiss extends class_base
 		extract($arr);
 		list($oid, $ppid) = explode(":", $id);
 		$ppid = basename($ppid);
-
 		$o = obj($oid);
 
 		$fp = $o->prop("xml_fld")."/".$ppid.".xml";
@@ -415,7 +414,6 @@ class otv_ds_postipoiss extends class_base
 			"file" => $fp
 		));
 		$fd = aw_unserialize($fc);
-		
 		$this->read_template("show.tpl");
 
 		$this->vars($fd);

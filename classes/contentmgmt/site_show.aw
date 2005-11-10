@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.147 2005/11/09 13:24:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.148 2005/11/10 14:16:01 kristo Exp $
 
 /*
 
@@ -1472,7 +1472,6 @@ class site_show extends class_base
 			"all_data" => true
 		));
 		$l = "";
-arr($l_dat);
 		foreach($ldat as $lc => $ld)
 		{
 			$name = $ld["name"];

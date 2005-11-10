@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.12 2005/10/20 09:23:06 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.13 2005/11/10 14:16:01 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -139,6 +139,7 @@ class ml_member extends class_base
 			"mail" => $email,
 			"parent" => $folder,
 		));
+
 		$rv = $ol->count() > 0 ? $ol->begin() : false;
 		return $rv;
 	}

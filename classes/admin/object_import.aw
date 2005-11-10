@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.40 2005/11/10 06:08:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.41 2005/11/10 14:16:01 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -1011,11 +1011,19 @@ class object_import extends class_base
 				$parents[$c->prop("to")] = $c->prop("to");
 			}
 			// XXX: this is the place that creates the huge (2M) query
-			$ol = new object_list(array(
+			/*$ol = new object_list(array(
 				"oid" => $this->make_keys(array_values($uniq)),
 				"parent" => $parents
 			));
-			$uniq = $ol->ids();
+			$uniq = $ol->ids();*/
+			$objstr = join(",", array_values($uniq));
+			$parents = join(",", $parents);
+			$this->db_query("SELECT oid FROM objects WHERE status > 0 AND oid IN($objstr) AND parent IN ($parents)");
+			$uniq = array();
+			while ($row = $this->db_next())
+			{
+				$uniq[] = $row["oid"];
+			}
 		}
 
 		// check if the number is less than max allowed
@@ -1028,6 +1036,10 @@ class object_import extends class_base
 		// kill the bastards
 		foreach($uniq as $oid)
 		{
+			if (!$this->can("view", $oid))
+			{
+				continue;
+			}
 			echo sprintf(t("delete object %s <br>\n"), $oid);
 			flush();
 			$o = obj($oid);

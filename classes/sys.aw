@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.59 2005/11/07 16:22:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.60 2005/11/10 14:16:00 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -724,10 +724,10 @@ class sys extends aw_template
 			foreach($sites as $site => $cnt)
 			{
 				echo "site ".$sid2url[$site]." got $cnt pageviews and took a total of ".$times[$site]." seconds, average pv is ".($times[$site] / $cnt)." promo display took ".$promo_time[$site]." avg = ".($promo_time[$site] / $promo_time_cnt[$site])." <Br>";
-				if (++$num > 30)
+				/*if (++$num > 30)
 				{
 					break;
-				}
+				}*/
 			}
 			echo "<br>total number of sites touched: ".count($sites)."<br>top urls: <br>";
 			$num = 0;

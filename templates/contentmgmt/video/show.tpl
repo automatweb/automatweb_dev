@@ -1,4 +1,4 @@
-<table border="0" cellpadding="0" cellspacing="0" width="1">
+<table border="0" cellpadding="0" cellspacing="0" width="200">
 	<tr>
 		<td>{VAR:image}</td>
 	</tr>

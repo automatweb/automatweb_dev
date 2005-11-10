@@ -151,6 +151,10 @@ class core extends acl_base
 	// !Margib koik saidi objektid dirtyks
 	function flush_cache($oid = NULL)
 	{
+		if (aw_global_get("no_cache_flush") == 1)
+		{
+		return;
+		}
 		if (!aw_ini_get("cache.use_html_cache"))
 		{
 			return;
@@ -220,6 +224,10 @@ class core extends acl_base
 	function clear_cache($oid, $fname = "")
 	{
 		if (!aw_ini_get("cache.use_html_cache"))
+		{
+			return;
+		}
+		if (!is_oid($oid))
 		{
 			return;
 		}
