@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.17 2005/07/01 09:09:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.18 2005/11/10 14:24:29 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -16,6 +16,9 @@
 
 @property rows type=textbox size=5 field=meta method=serialize
 @caption Ridu
+
+@property comments type=checkbox field=flags method=bitmask ch_value=1
+@caption Pildid kommenteeritavad
 
 @property style type=relpicker reltype=RELTYPE_STYLE field=meta method=serialize
 @caption Piltide stiil
@@ -164,11 +167,11 @@ class mini_gallery extends class_base
 						),
 						"tpls" => $tplar,
 						"use_style" => $use_style,
+						"force_comments" => $ob->prop("comments"),
 					);
 					$tmp = $ii->parse_alias($args);
 					$this->vars(array(
-						"imgcontent" => $tmp["replacement"]
-
+						"imgcontent" => $tmp["replacement"],
 					));
 					$img = $images->next();
 					$imgc ++;
@@ -226,6 +229,8 @@ class mini_gallery extends class_base
 		$fi = get_instance(CL_FILE);
 		foreach($files as $file)
 		{
+			echo "leidsin faili $file <br>\n";
+			flush();
 			$fp = $tn."/".$file;
 
 			$img = obj();
@@ -246,7 +251,8 @@ class mini_gallery extends class_base
 
 			@unlink($fp);
 		}
-
+		echo "valmis<br>\n";
+		flush();
 		@rmdir($tn);
 	}
 
