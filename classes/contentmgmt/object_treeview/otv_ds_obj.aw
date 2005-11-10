@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.40 2005/07/26 10:23:29 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.41 2005/11/10 21:31:12 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -469,11 +469,24 @@ class otv_ds_obj extends class_base
 			$con = $ob->connections_from(array(
 				"type" => "RELTYPE_FOLDER"
 			));
+			$inc_subs = safe_array($ob->meta("include_submenus"));
 
 			$parent = array();
 			foreach($con as $c)
 			{
 				$parent[$c->prop("to")] = $c->prop("to");
+				if ($inc_subs[$c->prop("to")])
+				{
+					$ot = new object_tree(array(
+						"parent" => $c->prop("to"),
+						"lang_id" => array(),
+						"site_id" => array()
+					));
+					foreach($ot->ids() as $p_id)
+					{
+						$parent[$p_id] = $p_id;
+					}
+				}
 			}
 
 		}
