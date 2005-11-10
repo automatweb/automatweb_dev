@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.5 2005/11/07 11:00:37 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.6 2005/11/10 06:55:29 dragut Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
@@ -21,8 +21,11 @@
 	@comment Viimase impordi toimumise aeg
 
 	@property next_import_text type=text store=no
-	@caption J&auml;rgmine import
-	@comment J&auml;rgmise impordi toimumise aeg
+	@caption J&auml;rgmine automaatne import
+	@comment J&auml;rgmise automaatse impordi toimumise aeg
+
+	@property import_events_all type=checkbox ch_value=1 field=meta mehtod=serialize
+	@caption Impordi k&otilde;iik s&uuml;ndmused
 
 	@property import_events type=text store=no
 	@caption Impordi s&uuml;ndmused
@@ -111,12 +114,17 @@ class otv_ds_kultuuriaken extends class_base
 				$prop['value'] = (empty($next_import)) ? "0" : date("d-M-y / H:i", $next_import);
 				break;
 			case "import_events":
+				$message = t("Alates viimasest impordist");
+				if ($arr['obj_inst']->prop("import_events_all"))
+				{
+					$message = t("K&otilde;ik s&uuml;ndmused");
+				}	
 				$prop['value'] = html::href(array(
-					"caption" => t("Impordi s&uuml;ndmused"),
+					"caption" => sprintf(t("Impordi s&uuml;ndmused (%s)"), $message),
 					"url" => $this->mk_my_orb("import_events", array(
 							"id" => $arr['obj_inst']->id(),
 						)),
-					"title" => t("Impordi Kultuuriakna s&uuml;ndmused"),
+					"title" => sprintf(t("Impordi Kultuuriakna s&uuml;ndmused (%s)"), $message),
 				));
 				break;
 			case "config_table":
@@ -306,8 +314,7 @@ class otv_ds_kultuuriaken extends class_base
 	// - start (optional) last modified timestamp / last import timestamp
 	function load_xml_content($arr)
 	{
-	//	if (!is_oid($arr['id']))
-		if (!$this->can("view", $arr['id'])) // a better check --dragut
+		if (!is_oid($arr['id']))
 		{
 			return false;
 		}
@@ -322,14 +329,16 @@ class otv_ds_kultuuriaken extends class_base
 		// it should be implmented here:
 		$url_params = (!empty($arr['owner'])) ? "?owner=".$arr['owner']."&" : "?";
 		$url_params = (!empty($arr['start'])) ? $url_params."start=".$arr['start'] : $url_params; 
-
 		$f = fopen($xml_file_url.$url_params, "r");
+		if ($f === false)
+		{
+			return false;
+		}
 		while (!feof($f))
 		{
 			$xml_file_content .= fread($f, 4096);
 		}
 		fclose($f);
-
 	// waiting the day when i can use file_get_contents()
 	//	$xml_file_content = file_get_contents($xml_file_url.$url_params);
 		return parse_xml_def(array(
@@ -343,6 +352,9 @@ class otv_ds_kultuuriaken extends class_base
 	**/
 	function import_events($arr)
 	{
+		// seems it may take a loong time to execute:
+	//	set_time_limit(0);
+
 		if (!$this->can("view", $arr['id']))
 		{
 			error::raise(array(
@@ -351,41 +363,68 @@ class otv_ds_kultuuriaken extends class_base
 		}
 
 		$o = obj($arr['id']);
+
 		$event_form_id = $o->prop("event_form");
 		if (!$this->can("view", $event_form_id))
 		{
 			error::raise(array(
-				"msg" => t("You don't have view access to event form object!"),
+				"msg" => t("You don't have view access to eventform object!"),
 			));
 		}
 
 		$event_form_obj = obj($event_form_id);
+
+		$class_id = $event_form_obj->prop("subclass");
+
 		$saved_config_conf = $o->meta("config_conf");
 		$saved_xml_conf = $o->meta("xml_conf");
 
 		$conns_to_parents = $o->connections_from(array(
 			"type" => "RELTYPE_PARENT",
 		));
-
+		
+		// checking if i have to import all objects or from the last import
 		$last_import = $o->meta("last_import");
+		if ($o->prop("import_events_all"))
+		{
+			$last_import = "";
+		}
 
 		foreach ($conns_to_parents as $conn_to_parent)
 		{
 			$conn_id = $conn_to_parent->id();
 			$parent_id = $conn_to_parent->prop("to");
-
-			echo "<strong>".$conn_to_parent->prop('to.name')."</strong>";
-
-			$xml_content = $this->load_xml_content(array(
+			
+			$load_xml_content_params = array(
 				"id" => $arr['id'],
 				"owner" => $saved_config_conf[$conn_id]['xml_field_content'],
-		//		"start" => $last_import,
-			));
+				"start" => $last_import,
+			);
+			
+			if (empty($last_import))
+			{
+				unset($load_xml_params['start']);
+			}
+			
+			$xml_content = $this->load_xml_content($load_xml_content_params);
+
+			// so, it is possible, that we don't have anything from load_xml_content method
+			// in this case it returns false
+			if ($xml_content === false)
+			{
+				echo "<strong>Could not get XML data!</strong><br><br>";
+				return $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id());
+			}
+
 			$ol = new object_list(array(
 				"parent" => $parent_id,
-				"class_id" => CL_CRM_MEETING,
+			//	"class_id" => CL_CRM_MEETING,
+				"class_id" => $class_id,
 			));
-			echo " ---- olemasolevat s&uuml;ndmusi <strong>".$ol->count()."</strong><br>";
+			echo "parent: <strong>".$conn_to_parent->prop('to.name')."</strong> [".$ol->count()."]<br>";
+			flush();
+
+			// creating an array of existing objects:
 			$imported_events = array();
 			if ($ol->count() != 0)
 			{
@@ -394,7 +433,6 @@ class otv_ds_kultuuriaken extends class_base
 					$imported_events[$obj->prop($saved_xml_conf['id'])] = $obj->id();
 				}
 			}
-	
 			// loop through all the xml data
 			foreach ($xml_content[0] as $value)
 			{
@@ -434,14 +472,19 @@ class otv_ds_kultuuriaken extends class_base
 					{
 						$event_obj = new object;
 						$event_obj->set_parent($parent_id);
-						$event_obj->set_class_id(CL_CRM_MEETING);
+					//	$event_obj->set_class_id(CL_CRM_MEETING);
+						$event_obj->set_class_id($class_id);
 						echo "<strong>[ new ] </strong>";
+						flush();
 					}
 					else
 					{
 						$event_obj = new object($imported_events[$event_data[$saved_xml_conf['id']]]);
 						echo "[ --- ] ";
+						flush();
 					}
+
+					// setting the objects properties
 					// seems that there are no ord/jrk property
 					$event_obj->set_ord($event_data['jrk']);
 					unset($event_data['jrk']);
@@ -452,19 +495,22 @@ class otv_ds_kultuuriaken extends class_base
 						
 					}
 					$event_obj->save();
-					echo "--> ".$event_data['name']." [saved]<br>";
+					echo " ".$event_data['name']." [ saved ]<br>";
+					flush();
 				}
 			}
 		}
-echo " <br>..:: IMPORT LÕPPENUD ::..<br>";
+
+		echo " <br>..:: IMPORT LÕPPENUD ::..<br>";
+		flush();
 		$o->set_meta("last_import", time());
 
-// ok, here should go this part where next import will be put in scheduler
-// the time of next automatic import comes from recurrence object
+		// ok, here should go this part where next import will be put in scheduler
+		// the time of next automatic import comes from recurrence object
 		$this->activate_next_auto_import(array(
 			"object" => $o,
 		));
-//		$o->set_meta("next_import", $next);
+	//	$o->set_meta("next_import", $next);
 		$o->save();
 		return $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id());
 	}

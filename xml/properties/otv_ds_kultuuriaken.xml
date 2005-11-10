@@ -39,8 +39,18 @@
             <type>text</type>
             <store>no</store>
             <field>next_import_text</field>
-            <caption>J&amp;auml;rgmine import</caption>
-            <comment>J&amp;auml;rgmise impordi toimumise aeg</comment>
+            <caption>J&amp;auml;rgmine automaatne import</caption>
+            <comment>J&amp;auml;rgmise automaatse impordi toimumise aeg</comment>
+      </property>
+      <property>
+            <name>import_events_all</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <mehtod>serialize</mehtod>
+            <caption>Impordi k&amp;otilde;iik s&amp;uuml;ndmused</caption>
       </property>
       <property>
             <name>import_events</name>
