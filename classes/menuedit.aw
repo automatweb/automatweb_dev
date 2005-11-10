@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.354 2005/11/03 13:23:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.355 2005/11/10 20:29:33 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -14,13 +14,13 @@ class menuedit extends aw_template
 		lc_load("definition");
 	}
 
-	////   
-	// !simpel menyy lisamise funktsioon. laienda kui soovid. Mina kasutan seda saidi seest   
-	// uue folderi lisamiseks kodukataloogi alla   
+	////
+	// !simpel menyy lisamise funktsioon. laienda kui soovid. Mina kasutan seda saidi seest
+	// uue folderi lisamiseks kodukataloogi alla
 	// no_flush
 	function add_new_menu($args = array())
-	{   
-		// ja eeldame, et meil on v?emalt parent ja name olemas.   
+	{
+		// ja eeldame, et meil on v?emalt parent ja name olemas.
 		$o = obj();
 		$o->set_name($args["name"]);
 		$o->set_parent($args["parent"]);
@@ -33,13 +33,13 @@ class menuedit extends aw_template
 		$o->set_prop("link", $args["link"]);
 		$newoid = $o->save();
 
-		if (!$args['no_flush'])   
-		{   
+		if (!$args['no_flush'])
+		{
 			$this->invalidate_menu_cache();
 		}
 
-		return $newoid;   
-	} 
+		return $newoid;
+	}
 
 	// parameetrid:
 	// section - millist naidata?
@@ -77,9 +77,8 @@ class menuedit extends aw_template
 		$meta = $obj->meta();
 		$params["section"] = $section;
 
-		global $format;
 		$act_per_id = aw_global_get("act_per_id");
-		if ($format == "rss")
+		if (isset($_GET["format"]) && $_GET["format"] == "rss")
 		{
 			$rss = get_instance("output/xml/rss");
 			$rss->gen_rss_feed(array("period" => $act_per_id,"parent" => $section));
@@ -93,9 +92,8 @@ class menuedit extends aw_template
 		$cp[] = aw_global_get("lang_id");
 
 		// here we sould add all the variables that are in the url to the cache parameter list
-		global $HTTP_GET_VARS;
 
-		foreach($HTTP_GET_VARS as $var => $val)
+		foreach($_GET as $var => $val)
 		{
 			// just to make sure that each user does not get it's own copy
 			if ($var != "automatweb" && $var != "set_lang_id")
@@ -183,7 +181,7 @@ class menuedit extends aw_template
 		{
 			$aa.="AND (objects.lang_id=".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT.")";
 		}
-		$q = "SELECT objects.oid as oid, 
+		$q = "SELECT objects.oid as oid,
 				objects.parent as parent,
 				objects.comment as comment,
 				objects.name as name,
@@ -213,7 +211,7 @@ class menuedit extends aw_template
 				menu.icon_id as icon_id,
 				menu.admin_feature as admin_feature,
 				menu.periodic as mperiodic
-			FROM objects 
+			FROM objects
 				LEFT JOIN menu ON menu.id = objects.oid
 				WHERE (objects.class_id = ".CL_MENU." OR objects.class_id = ".CL_BROTHER.")  AND $where $aa
 				ORDER BY objects.parent, jrk,objects.created";
@@ -223,12 +221,12 @@ class menuedit extends aw_template
 
 	function do_syslog_core($log,$section)
 	{
-		global $artid,$sid,$mlxuid;
-		if ($artid)	// tyyp tuli meilist, vaja kirja panna
+		if (isset($_GET["artid"]) && isset($_GET["sid"]))	// tyyp tuli meilist, vaja kirja panna
 		{
+			$artid = $_GET["artid"];
 			if (is_numeric($artid))
 			{
-				$sid = (int)$sid;
+				$sid = (int)$_GET["sid"];
 
 				$ml_msg = obj($sid);
 
@@ -244,8 +242,9 @@ class menuedit extends aw_template
 			}
 		}
 		else
-		if ($mlxuid)
+		if ($isset($_GET["mlxuid"]))
 		{
+			$mlxuid = $_GET["mlxuid"];
 			$this->db_query("SELECT ml_users.*,objects.name as name FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE id = $mlxuid");
 			if (($ml_user = $this->db_next()))
 			{
@@ -255,11 +254,6 @@ class menuedit extends aw_template
 		else
 		if ($this->cfg["log_pageviews"] == 1)
 		{
-			global $XX3;
-			if ($XX3)
-			{
-				print "hua";
-			};
 			$this->_log(ST_MENUEDIT, SA_PAGEVIEW, $log, $section);
 		}
 	}
@@ -293,11 +287,11 @@ class menuedit extends aw_template
 	{
 		$section = aw_global_get("section");
 		//if (is_numeric(str_replace("_", "", str_replace(":", "", $section))) || empty($section))
-		//{ 
+		//{
 			aw_global_set("raw_section", $section);
-	
+
 			if (strpos($section, ":") !== false)
-			{	
+			{
 				$section = (int)$section;
 			}
 		//}
@@ -378,7 +372,7 @@ class menuedit extends aw_template
 			// cut the minus sign
 			$section = substr($section,0,-1);
 		};
-		
+
 		// cut the / from the end
 		// so that http://site/alias and http://site/alias/ both work
 		if (substr($section,-1) == "/")
@@ -405,7 +399,7 @@ class menuedit extends aw_template
 			$c->show_favicon(array());
 		}
 
-	
+
 		// sektsioon ei olnud numbriline
 		if (!is_oid($section))
 		{
@@ -414,12 +408,12 @@ class menuedit extends aw_template
 				// first I have to check whether the alias contains /-s and if so, split
 				// the url into pieces
 				$sections = explode("/",$section);
-	
+
 				// if it contains a single $section, it is now located in $sections[0]
-			
+
 				$candidates = array();
 				$last = array_pop($sections);
-						
+
 				// well, I think I have a better idea .. I'll start from the last item
 				// calculate all possible aliases and then select one
 				$flt = array(
@@ -493,12 +487,12 @@ class menuedit extends aw_template
 
 			// nope. mingi skriptitatikas? voi cal6
 			// inside joked ruulivad exole duke ;)
-			// nendele kes aru ei saanud - cal6 ehk siis kalle volkov - ehk siis okia tyyp 
-			// oli esimene kes aw seest kala leidis - kui urli panna miski oid, mida polnud, siis asi hangus - see oli siis kui 
-			// www.struktuur.ee esimest korda v2lja tuli. 
+			// nendele kes aru ei saanud - cal6 ehk siis kalle volkov - ehk siis okia tyyp
+			// oli esimene kes aw seest kala leidis - kui urli panna miski oid, mida polnud, siis asi hangus - see oli siis kui
+			// www.struktuur.ee esimest korda v2lja tuli.
 			// niiet nyyd te siis teate ;)
 			// - terryf
-			if (!$obj) 
+			if (!$obj)
 			{
 				if ($show_errors)
 				{
@@ -508,16 +502,16 @@ class menuedit extends aw_template
 				{
 					return false;
 				}
-			} 
-			else 
+			}
+			else
 			{
 				$section = $obj->id();
 			};
-		} 
-		else 
+		}
+		else
 		{
 			// mingi kontroll, et kui sektsioon ei eksisteeri, siis n?tame esilehte
-			if (!(($section > 0) && is_oid($section) && $this->can("view", $section))) 
+			if (!(($section > 0) && is_oid($section) && $this->can("view", $section)))
 			{
 				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section), $section);
 				if ($show_errors)
@@ -558,7 +552,7 @@ class menuedit extends aw_template
 		{
 			$section = aw_ini_get("frontpage");
 		}
-	
+
 		if (!headers_sent())
 		{
 			header("X-AW-Section: ".$section);
@@ -566,8 +560,8 @@ class menuedit extends aw_template
 
 		if (aw_ini_get("config.object_translation"))
 		{
-			// check the lang_id of the section object. 
-			// if it is different from the current language, then that means 
+			// check the lang_id of the section object.
+			// if it is different from the current language, then that means
 			// that the object exists, but in another language.
 			// in that case, redirect the user to no trans page
 			$o = obj($section);
