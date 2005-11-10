@@ -513,7 +513,7 @@ class core extends acl_base
 		$content.= "PHP_SELF = ".aw_global_get("PHP_SELF")."\n";
 		$content.= "lang_id = ".aw_global_get("lang_id")."\n";
 		$content.= "uid = ".aw_global_get("uid")."\n";
-		$content.= "section = ".$GLOBALS["section"]."\n";
+		$content.= "section = ".$_REQUEST["section"]."\n";
 		$content.= "url = ".$this->cfg["baseurl"].aw_global_get("REQUEST_URI")."\n-----------------------\n";
 		$content.= "is_rpc_call = $is_rpc_call\n";
 		$content.= "rpc_call_type = $rpc_call_type\n";
@@ -564,14 +564,14 @@ class core extends acl_base
 		};
 
 
-		if ($err_type == 30 && strpos($HTTP_SERVER_VARS["HTTP_USER_AGENT"], "Microsoft-WebDAV-MiniRedir") !== false)
+		if ($err_type == 30 && strpos($_SERVER["HTTP_USER_AGENT"], "Microsoft-WebDAV-MiniRedir") !== false)
 		{
 			$send_mail = false;
 		}
 
 		if ($err_type == 30)
 		{
-			if (count($HTTP_GET_VARS) < 1 && count($HTTP_POST_VARS) < 1)
+			if (count($_GET) < 1 && count($_POST) < 1)
 			{
 				$send_mail = false;
 			}
@@ -588,12 +588,12 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
-		if ($err_type == 31 && substr($GLOBALS["class"], -3) == "...")
+		if ($err_type == 31 && substr($_REQUEST["class"], -3) == "...")
 		{
 			$send_mail = false;
 		}
 
-		if ($err_type == 31 && strpos($GLOBALS["class"], "@") !== false)
+		if ($err_type == 31 && strpos($_REQUEST["class"], "@") !== false)
 		{
 			$send_mail = false;
 		}
