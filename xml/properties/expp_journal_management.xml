@@ -10,6 +10,15 @@
             <caption>Kood</caption>
       </property>
       <property>
+            <name>organisation_logo</name>
+            <table>objects</table>
+            <group>general_info</group>
+            <type>text</type>
+            <field>organisation_logo</field>
+            <caption>Organisatsiooni logo</caption>
+            <comment>Organisatsiooni logo, saab muuta organisatsiooni juures</comment>
+      </property>
+      <property>
             <name>organisation_link</name>
             <table>objects</table>
             <group>general_info</group>
@@ -117,6 +126,16 @@
             <caption>Esikaane pilt</caption>
       </property>
       <property>
+            <name>publications_homepage</name>
+            <table>objects</table>
+            <group>publications_general_info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PUBLICATION_HOMEPAGE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>V&amp;auml;ljaandja koduleht</caption>
+      </property>
+      <property>
             <name>publications_table</name>
             <table>objects</table>
             <group>publications_list</group>
@@ -161,6 +180,7 @@
             </table_fields>
             <table_edit_fields>ord</table_edit_fields>
             <store>no</store>
+            <caption>Pildid</caption>
       </property>
       <property>
             <name>general_files</name>
@@ -426,6 +446,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument</caption>
             </GENERAL_DOCUMENT>
+            <PUBLICATION_HOMEPAGE>
+                  <value>14</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>V&amp;auml;ljaandja koduleht</caption>
+            </PUBLICATION_HOMEPAGE>
       </reltypes>
 </properties>
 

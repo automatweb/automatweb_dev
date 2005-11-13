@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.19 2005/11/04 02:53:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.20 2005/11/13 17:43:15 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -17,8 +17,9 @@
 	@groupinfo general_info caption="&Uuml;ldandmed" parent=organisation_general_information
 	@default group=general_info
 
-		property organisation type=releditor reltype=RELTYPE_ORGANISATION rel_id=first field=meta method=serialize props=name,contact,code,phone_id,url_id,email_id,telefax_id,logo
-		caption Organisatsioon
+		@property organisation_logo type=text
+		@caption Organisatsiooni logo
+		@comment Organisatsiooni logo, saab muuta organisatsiooni juures
 
 		@property organisation_link type=text
 		@caption Organisatsioon
@@ -62,6 +63,9 @@
 		@property cover_image type=releditor use_form=emb reltype=RELTYPE_COVER_IMAGE rel_id=first field=meta method=serialize
 		@caption Esikaane pilt
 
+		@property publications_homepage type=relpicker reltype=RELTYPE_PUBLICATION_HOMEPAGE field=meta method=serialize
+		@caption V&auml;ljaandja koduleht
+
 	@groupinfo publications_list caption="Alamv&auml;ljaanded" parent=publications
 	@default group=publications_list
 
@@ -72,7 +76,7 @@
 	@default group=general_images
 
 		@property general_images type=releditor reltype=RELTYPE_GENERAL_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,dimensions,comment,author,alt,link,file_show table_fields=name,ord table_edit_fields=ord
-		$caption Pildid
+		@caption Pildid
 
 	@groupinfo general_files caption="Failid" parent=publications
 	@default group=general_files
@@ -89,9 +93,6 @@
         @groupinfo general_documents caption="Dokumendid" parent=publications
         @default group=general_documents
 
-                property general_documents type=releditor reltype=RELTYPE_GENERAL_DOCUMENT field=meta method=serialize mode=manager props=title,ucheck1,content table_fields=name,ucheck1 table_edit_fields=ucheck1
-                caption Dokumendid
-
 		@property general_documents_toolbar type=toolbar no_caption=1
 		@caption Dokumentide t&ouml;&ouml;riistariba
 
@@ -101,9 +102,6 @@
 	@groupinfo general_polls caption="Kiirk&uuml;sitlused" parent=publications
 	@default group=general_polls
 
-		property general_polls type=releditor reltype=RELTYPE_GENERAL_POLL field=meta method=serialize mode=manager props=name,question,answers,status
-		caption Kiirk&uuml;sitlused
-
 		@property general_polls_toolbar type=toolbar no_caption=1
 		@caption Kiirk&uuml;sitluste t&ouml;&ouml;riistariba
 
@@ -112,9 +110,6 @@
 
 	@groupinfo general_webforms caption="Veebivormid" parent=publications
 	@default group=general_webforms
-
-		property general_webform type=releditor reltype=RELTYPE_GENERAL_WEBFORM field=meta method=serialize mode=manager props=name,status
-		caption Veebivorm
 
 		@property general_webforms_toolbar type=toolbar no_caption=1
 		@caption Veebivormide t&ouml;&ouml;riistariba
@@ -175,6 +170,9 @@
 
 @reltype GENERAL_DOCUMENT value=14 clid=CL_DOCUMENT
 @caption Dokument
+
+@reltype PUBLICATION_HOMEPAGE value=14 clid=CL_EXTLINK
+@caption V&auml;ljaandja koduleht
 
 */
 
@@ -315,7 +313,7 @@ class expp_journal_management extends class_base
 		{
 			$organisation_object_id = $organisation_object->id();
 		}
-		if (is_oid($organisation_object_id) && $this->can("view", $organisation_object_id))
+		if ($this->can("view", $organisation_object_id))
 		{
 			$arr['prop']['value'] = html::href(array(
 				"url" => $this->mk_my_orb("change", array(
