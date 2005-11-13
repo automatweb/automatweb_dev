@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.20 2005/11/13 17:43:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.21 2005/11/13 17:59:08 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -171,7 +171,7 @@
 @reltype GENERAL_DOCUMENT value=14 clid=CL_DOCUMENT
 @caption Dokument
 
-@reltype PUBLICATION_HOMEPAGE value=14 clid=CL_EXTLINK
+@reltype PUBLICATION_HOMEPAGE value=15 clid=CL_EXTLINK
 @caption V&auml;ljaandja koduleht
 
 */
