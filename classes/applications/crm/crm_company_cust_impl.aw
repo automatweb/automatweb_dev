@@ -22,11 +22,17 @@ class crm_company_cust_impl extends class_base
 			{
 				if (trim($row["project_orderer"]) != "")
 				{
-					$filt["project_orderer"][] = strip_tags($row["project_orderer"]);
+					foreach(explode(",", strip_tags($row["project_orderer"])) as $ord_pt)
+					{
+						$filt["project_orderer"][] = trim($ord_pt);
+					}
 				}
 				if (trim($row["project_impl"]) != "")
 				{
-					$filt["project_impl"][] = strip_tags($row["project_impl"]);
+					foreach(explode(",", strip_tags($row["project_impl"])) as $ord_pt)
+					{
+						$filt["project_impl"][] = trim($ord_pt);
+					}
 				}
 				$part = strip_tags($row["project_participants"]);
 				foreach(explode(",", $part) as $nm)
