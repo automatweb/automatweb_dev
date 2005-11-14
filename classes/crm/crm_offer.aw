@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.41 2005/11/03 18:02:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.42 2005/11/14 21:38:08 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -227,7 +227,7 @@ class crm_offer extends class_base
 				{
 					$prop["value"] = $arr["obj_inst"]->prop("orderer");
 				}
-				if (!isset($options[$prop["value"]]))
+				if (!isset($options[$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
 					$tmp = obj($prop["value"]);
 					$options[$tmp->id()] = $tmp->name();
