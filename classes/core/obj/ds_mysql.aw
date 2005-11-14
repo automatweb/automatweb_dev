@@ -1708,9 +1708,14 @@ die(dbg::dump($ret));
 					{
 						$prev_t = $join["table"]."_".$prev_clid."_".$prev_filt;
 					}
+					$__fld = $GLOBALS["properties"][$join["from_class"]][$join["prop"]]["field"];
+					if ($join["prop"] == "class_id")
+					{
+						$__fld = "class_id";
+					}
 					$ret = array(
 						$prev_t,
-						$GLOBALS["properties"][$join["from_class"]][$join["prop"]]["field"],
+						$__fld,
 					);
 					continue;
 				}
@@ -1815,6 +1820,11 @@ die(dbg::dump($ret));
 			if ($pp == "id")
 			{
 				$cur_prop = array("name" => "id", "table" => "objects", "field" => "oid");
+			}
+			else
+			if ($pp == "class_id")
+			{
+				$cur_prop = array("name" => "id", "table" => "objects", "field" => "class_id");
 			}
 			else
 			{
