@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.64 2005/11/09 07:55:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.65 2005/11/14 21:41:47 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -460,6 +460,10 @@ class project extends class_base
 				$sel = array();
 				foreach($cur_pts as $pt)
 				{
+					if ($pt->prop("to.class_id") == CL_USER)
+					{
+						continue;
+					}
 					$ol->add($pt->prop("to"));
 					$sel[$pt->prop("to")] = $pt->prop("to");
 				}
