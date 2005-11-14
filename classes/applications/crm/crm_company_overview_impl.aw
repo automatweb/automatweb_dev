@@ -595,7 +595,7 @@ class crm_company_overview_impl extends class_base
 			$tb->add_button(array(
 				'name' => 'tasks_switch_to_cal',
 				'img' => 'icon_cal_today.gif',
-				'tooltip' => t('Kelendrivaade'),
+				'tooltip' => t('Kalendrivaade'),
 				'action' => 'tasks_switch_to_cal_view',
 			));
 		}
