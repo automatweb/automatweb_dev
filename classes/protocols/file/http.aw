@@ -91,7 +91,7 @@ class http
 		}
 
 		// what if remote host uses a different "ext"?
-		$op = "HEAD /orb.".$this->cfg["ext"]."?class=remote_login&action=getcookie&fastcall=1 HTTP/1.0\r\n";
+		$op = "HEAD /orb.".$this->cfg["ext"]."?class=remote_login&action=getcookie HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n\r\n";
 
 		if (!$silent)
