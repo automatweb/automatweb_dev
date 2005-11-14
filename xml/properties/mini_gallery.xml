@@ -32,6 +32,16 @@
             <caption>Ridu</caption>
       </property>
       <property>
+            <name>comments</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <field>flags</field>
+            <method>bitmask</method>
+            <ch_value>1</ch_value>
+            <caption>Pildid kommenteeritavad</caption>
+      </property>
+      <property>
             <name>style</name>
             <table>objects</table>
             <group>general</group>
