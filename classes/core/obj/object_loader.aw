@@ -1,5 +1,4 @@
 <?php
-
 /*
 
 this message will get called whenever an object is saved and given the class_id as the message type parameter
@@ -247,7 +246,6 @@ class _int_object_loader extends core
 		{
 			$ob = $GLOBALS["objects"][$oid];
 		}
-
 		if (!isset($ob) || !is_object($ob) || 
 			($ob->obj_sys_flags["no_auto_translation"] != $GLOBALS["__obj_sys_opts"]["no_auto_translation"]))
 		{
@@ -294,7 +292,6 @@ class _int_object_loader extends core
 			// relocate the object in the global list
 			$GLOBALS["objects"][$t_oid] = $GLOBALS["objects"][$oid];
 			$GLOBALS["objects"][$oid] =& $GLOBALS["objects"][$t_oid];
-
 			post_message_with_param(MSG_STORAGE_NEW, $GLOBALS["objects"][$t_oid]->class_id(), array(
 				"oid" => $t_oid
 			));
@@ -346,7 +343,6 @@ class _int_object_loader extends core
 
 		// copy the object to the new place
 		$GLOBALS["objects"][$t_oid] = $t_o;
-
 		$this->cache->file_set("objlastmod", time());
 		$this->cache->file_invalidate("menuedit-menu_cache-lang-".aw_global_get("lang_id")."-site_id-".aw_ini_get("site_id")."-period-".aw_global_get("act_per_id"));
 

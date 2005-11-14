@@ -625,9 +625,11 @@ class _int_object
 		}
 
 		$this->_int_set_of_value("class_id", $param);
+
 		// since the class id has changed, we gots to load new properties for the new class type
 		$this->_int_load_properties();
 		$this->_int_do_implicit_save();
+
 		return $prev;
 	}
 
@@ -1379,6 +1381,7 @@ class _int_object
 			$i->implicit_save = $this->implicit_save;
 			$i->props_loaded = $this->props_loaded;
 			$i->obj_sys_flags = $this->obj_sys_flags;
+			$i->obj_sys_flags = $GLOBALS["__obj_sys_opts"];
 			$GLOBALS["objects"][$oid] = $i;
 			$GLOBALS["objects"][$this->obj["oid"]] = $i;
 		}

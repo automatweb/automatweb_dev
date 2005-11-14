@@ -192,7 +192,25 @@ class object
 
 	function set_class_id($param)
 	{
-		return $GLOBALS["objects"][$this->oid]->set_class_id($param);
+		$rv = $GLOBALS["objects"][$this->oid]->set_class_id($param);
+		// we might need to change $this, if an object override is present for the new class id
+		// we can't do this in _int_object, because if a new object is created, then _int_object actually
+		// does not know it's own id, strangely enough
+		$cld = $GLOBALS["cfg"]["__default"]["classes"][$param];
+		if (!empty($cld["object_override"]))
+		{
+			if (get_class($GLOBALS["objects"][$this->oid]) != basename($cld["object_override"]))
+			{
+				$i = get_instance($cld["object_override"]);
+				$i->obj = $GLOBALS["objects"][$this->oid]->obj;
+				$i->implicit_save = $GLOBALS["objects"][$this->oid]->implicit_save;
+				$i->props_loaded = $GLOBALS["objects"][$this->oid]->props_loaded;
+				$i->obj_sys_flags = $GLOBALS["objects"][$this->oid]->obj_sys_flags;
+				$GLOBALS["objects"][$this->oid] = $i;
+			}
+		}
+
+		return $rv;
 	}
 
 	function status()
