@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.149 2005/11/07 10:43:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.150 2005/11/14 12:13:59 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1013,9 +1013,9 @@ class mrp_workspace extends class_base
 				$res_ol = new object_list();
 				if (count($resids))
 				{
-					$res_ol = new object_list(array("oid" => $resids));
+					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
 				}
-				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),array("" => "") + $res_ol->names());
+				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),$res_ol->names());
 				$prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
 				
 				$prop["value"] .= "</td></tr></table>";
@@ -1069,7 +1069,7 @@ class mrp_workspace extends class_base
 					$ol = new object_list();
 				}
 
-				$prop["options"] = array("" => "") + $ol->names();
+				$prop["options"] = /*array("" => "") +*/ $ol->names();
 				$prop["value"] = aw_global_get("mrp_operator_use_resource");
 				break;
 
@@ -3480,12 +3480,6 @@ if ($_GET['show_thread_data'] == 1)
 			"numeric" => 1,
 			"chgbgcolor" => "bgcol",
 		));*/
-		$t->define_field(array(
-			"name" => "proj_comment",
-                        "caption" => t("Projekti nimi"),
-			"align" => "center",
-			"chgbgcolor" => "bgcol",
-		));
 
 		$t->define_field(array(
 			"name" => "status",
@@ -3512,6 +3506,13 @@ if ($_GET['show_thread_data'] == 1)
 			"align" => "center",
 			"chgbgcolor" => "bgcol",
 			"sortable" => 1
+		));
+
+		$t->define_field(array(
+                        "name" => "proj_comment",
+                        "caption" => t("Projekti nimi"),
+                        "align" => "center",
+                        "chgbgcolor" => "bgcol",
 		));
 
 		$t->define_field(array(
@@ -3671,7 +3672,6 @@ if ($_GET['show_thread_data'] == 1)
 				}
 			}	
 		}
-
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
 			"limit" => $limit,
@@ -3764,7 +3764,7 @@ if ($_GET['show_thread_data'] == 1)
 			}
 			}
 
-			if ($arr["request"]["group"] == "grp_printer_startable" && $bgcol != $this->pj_colors["can_start"])
+			if ($arr["request"]["group"] == "grp_printer_startable" && $bgcol == $this->pj_colors["can_not_start"])
 			{
 				continue;
 			}
@@ -3858,9 +3858,8 @@ if ($_GET['show_thread_data'] == 1)
 				"job_comment" => $comment
 			));
 		}
-
-		//$t->set_default_sortby($default_sortby);
-		//$t->sort_by();
+		$t->set_default_sortby("tm");
+		$t->sort_by();
 		$t->set_sortable(false);
 	}
 
