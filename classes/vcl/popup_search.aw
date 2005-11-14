@@ -191,18 +191,18 @@ class popup_search extends aw_template
 			"caption" => t("Nimi")
 		));
 
-		$htmlc->add_property(array(
+		/*$htmlc->add_property(array(
 			"name" => "s[comment]",
 			"type" => "textbox",
 			"value" => $arr["s"]["comment"],
 			"caption" => t("Kommentaar")
-		));
+		));*/
 
 		$htmlc->add_property(array(
 			"name" => "s[oid]",
 			"type" => "textbox",
 			"value" => $arr["s"]["oid"],
-			"caption" => t("OID")
+			"caption" => t("Objekti id")
 		));
 
 		$htmlc->add_property(array(
@@ -241,10 +241,10 @@ class popup_search extends aw_template
 		));
 
 		$t->define_field(array(
-			"name" => "select_this",
-			"caption" => t("Vali"),
-			"sortable" => 1,
+			"name" => "icon",
+			"caption" => t("")
 		));
+
 		$t->define_field(array(
 			"name" => "oid",
 			"caption" => t("OID"),
@@ -275,8 +275,12 @@ class popup_search extends aw_template
 			"type" => "time"
 		));
 		$t->define_field(array(
+			"name" => "select_this",
+			"caption" => t("Vali"),
+		));
+		$t->define_field(array(
 			"name" => "sel",
-			"caption" => t("Vali")
+			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\"sel\")'>Vali</a>")
 		));
 		$t->set_default_sortby("name");
 
@@ -321,6 +325,7 @@ class popup_search extends aw_template
 			{
 				$elname .= "[]";
 			}
+			classload("core/icons");
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
 				$t->define_data(array(
@@ -341,7 +346,8 @@ class popup_search extends aw_template
 						"url" => "javascript:void(0)",
 						"caption" => t("Vali see"),
 						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);el.selectedIndex=0;el.options[0].value=\"".$o->id()."\";window.opener.document.changeform.submit();window.close()"
-					))
+					)),
+					"icon" => html::img(array("url" => icons::get_icon_url($o->class_id())))
 				));
 			}
 		}
