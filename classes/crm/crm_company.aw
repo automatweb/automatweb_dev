@@ -226,7 +226,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 
 /////start of my_customers
-@default group=relorg
+@default group=relorg_s
 
 	@property my_customers_toolbar type=toolbar no_caption=1 store=no 
 	@caption "Klientide toolbar"
@@ -268,6 +268,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 		@property my_customers_table type=table store=no no_caption=1 parent=my_cust_bot
 		@caption Kliendid
 
+
+@default group=relorg_t
+
+	@property customer_toolbar type=toolbar no_caption=1 store=no 
+	@caption "Klientide toolbar"
+
+	@layout relorg_t_l type=hbox group=relorg_t width=20%:80%
+
+		@property customer_listing_tree type=treeview no_caption=1 parent=relorg_t_l
+		@caption Rühmade puu
+
+		@property customer_t type=table store=no no_caption=1 parent=relorg_t_l
+		@caption Kliendid
+	
 
 /////end of my_customers
 
@@ -557,7 +571,7 @@ default group=org_objects
 	@property stats_s_cust type=textbox store=no
 	@caption Klient
 
-	@roperty stats_s_cust_type type=chooser store=no
+	@property stats_s_cust_type type=chooser store=no
 	@caption Kliendi t&uuml;&uuml;p
 
 	@property stats_s_proj type=textbox store=no
@@ -625,6 +639,8 @@ default group=org_objects
 	@groupinfo all_reports caption="K&otilde;ik raportid" submit=no parent=projs
 
 @groupinfo relorg caption="Kliendid" focus=customer_search_name
+	@groupinfo relorg_s caption="Otsing" focus=customer_search_name parent=relorg submit=no
+	@groupinfo relorg_t caption="Puuvaade" parent=relorg submit=no
 
 groupinfo org_objects_main caption="Objektid" submit=no
 
@@ -1125,6 +1141,10 @@ class crm_company extends class_base
 			case "report_list":
 			case "all_proj_search_part":
 			case "proj_search_part":
+			case "customer_toolbar":
+			case "customer_listing_tree":
+			case "customer":
+			case "customer_t":
 				static $cust_impl;
 				if (!$cust_impl)
 				{
