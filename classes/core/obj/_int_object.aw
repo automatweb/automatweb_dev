@@ -196,10 +196,16 @@ class _int_object
 		foreach($oids as $oid)
 		{
 			$c = new connection();
-			$conn_id = $c->find(array(
+			$finder = array(
 				"from" => $this->obj["oid"],
+				"from.class_id" => $this->obj["class_id"],
 				"to" => $oid,
-			));
+			);
+			if (!empty($param["type"]))
+			{
+				$finder["type"] = $param["type"];
+			}
+			$conn_id = $c->find($finder);
 			if (count($conn_id) < 1)
 			{
 				if($param["errors"] === false)
@@ -1105,7 +1111,6 @@ class _int_object
 
 		$prev = $this->_int_get_prop($key);
 		$this->_int_set_prop($key, $val);
-
 		// if this is a relpicker property, create the relation as well
 		$propi = $GLOBALS["properties"][$this->obj["class_id"]][$key];
 		if (($propi["type"] == "relpicker" || 
@@ -1125,7 +1130,7 @@ class _int_object
 					{
 						if (!in_array($c->prop("to"), $val))
 						{
-							$this->disconnect(array("from" => $c->prop("to")));
+							$this->disconnect(array("from" => $c->prop("to"), "type" => $_rt));
 						}
 					}
 				}
@@ -1186,7 +1191,6 @@ class _int_object
 				}
 			}
 		}
-
 		$this->_int_do_implicit_save();
 		return $prev;
 	}
