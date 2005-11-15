@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.152 2005/11/08 10:49:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.153 2005/11/15 14:39:12 ahti Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1329,7 +1329,7 @@ class users extends users_user
 
 	/** logout
 		
-		@attrib name=logout params=name default="0" nologin="1" is_public="1" caption="Logi v&amp;auml;lja"
+		@attrib name=logout params=name default="0" nologin="1" is_public="1" caption="Logi v&auml;lja"
 		
 		@returns
 		
