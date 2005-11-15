@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.109 2005/10/12 04:13:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.110 2005/11/15 14:35:48 ahti Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -102,7 +102,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @caption N&auml;ita pealkirja
 
 @property no_search type=checkbox ch_value=1 trans=1
-@caption J&auml;ta otsingust välja
+@caption J&auml;ta otsingust v&auml;lja
 
 @property cite type=textarea cols=60 rows=10 trans=1
 @caption Tsitaat
@@ -827,7 +827,7 @@ class doc extends class_base
 
 	/** Shows the pic1 element. Well, I think I could use a generic solution for displaying different 
 		
-		@attrib name=show_pic1 params=name caption="Näita pilti" default="0"
+		@attrib name=show_pic1 params=name caption="N&auml;ita pilti" default="0"
 		
 		@param id required
 		
