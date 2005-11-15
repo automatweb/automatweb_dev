@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.66 2005/11/03 13:15:16 duke Exp $
+// $Id: cfgutils.aw,v 1.67 2005/11/15 14:41:06 ahti Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -260,6 +260,38 @@ class cfgutils extends aw_template
 		{
 			$groupinfo = $propdef["groupinfo"];
 		};
+
+		foreach($properties as $k => $d)
+		{
+			if (!isset($d["caption"]))
+			{
+				continue;
+			}
+			$properties[$k]["caption"] = html_entity_decode($d["caption"]);
+			if(isset($d["help"]))
+			{
+				$properties[$k]["comment"] = html_entity_decode($d["comment"]);
+			}
+			if(isset($d["help"]))
+			{
+				$properties[$k]["help"] = html_entity_decode($d["help"]);
+			}
+		}
+		foreach($groupinfo as $k => $d)
+		{
+			$groupinfo[$k]["caption"] = html_entity_decode($d["caption"]);
+		}
+
+		if (is_array($relinfo))
+		{
+			foreach($relinfo as $k => $dat)
+			{
+				if (isset($dat[0]["caption"]))
+				{
+					$relinfo[$k][0]["caption"]["text"] = html_entity_decode($dat[0]["caption"]);
+				}		
+			}
+		}
 
 		// translate
 		if (!$system)

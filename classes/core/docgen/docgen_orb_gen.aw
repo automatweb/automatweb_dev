@@ -3,7 +3,7 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_orb_gen.aw,v 1.6 2005/03/20 14:51:54 kristo Exp $
+	@cvs $Id: docgen_orb_gen.aw,v 1.7 2005/11/15 14:41:06 ahti Exp $
 
 	@comment 
 	generates orb defs, based on information from docgen_analyzer
@@ -55,7 +55,9 @@ class docgen_orb_gen extends class_base
 
 				if (isset($attr["caption"]) && $attr["caption"] != "")
 				{
-					$x_a["caption"] = str_replace("&", "&amp;", $attr["caption"]);
+					// php5 compliance
+					$x_a["caption"] = htmlentities($attr["caption"]);
+					//$x_a["caption"] = str_replace("&", "&amp;", $attr["caption"]);
 				}
 
 				// make parameters
@@ -194,7 +196,9 @@ class docgen_orb_gen extends class_base
 
 				if (isset($attr["caption"]) && $attr["caption"] != "")
 				{
-					$x_a[] = "caption=\"".str_replace("&", "&amp;", $attr["caption"])."\"";
+					// php5 compliance
+					$x_a[] = "caption=\"".htmlentities($attr["caption"])."\"";
+					//$x_a[] = "caption=\"".str_replace("&", "&amp;", $attr["caption"])."\"";
 				}
 
 				$xml .= " ".join(" ", $x_a).">\n";

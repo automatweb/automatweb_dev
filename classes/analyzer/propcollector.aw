@@ -374,19 +374,19 @@ class propcollector extends aw_template
 		switch($this->last_element)
 		{
 			case "property":
-				$this->properties[$this->name]["caption"] = $caption;
+				$this->properties[$this->name]["caption"] = htmlentities($caption);
 				break;
 
 			case "relation":
-				$this->reltypes[$this->name]["caption"] = $caption;
+				$this->reltypes[$this->name]["caption"] = htmlentities($caption);
 				break;
 
 			case "column":
-				$this->classdef["column"][$this->name]["caption"] = $caption;
+				$this->classdef["column"][$this->name]["caption"] = htmlentities($caption);
 				break;
 
 			case "layout":
-				$this->layout[$this->name]["caption"] = $caption;
+				$this->layout[$this->name]["caption"] = htmlentities($caption);
 				break;
 
 		};
@@ -396,7 +396,7 @@ class propcollector extends aw_template
 	{
 		if ($this->last_element == "property")
 		{
-			$this->properties[$this->name]["comment"] = $comment;
+			$this->properties[$this->name]["comment"] = htmlentities($comment);
 		};
 	}
 
