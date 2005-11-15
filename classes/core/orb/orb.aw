@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.12 2005/11/03 13:26:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.13 2005/11/15 08:51:58 ahti Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -586,7 +586,8 @@ class orb extends aw_template
 		{
 			$extname = $ret[$class]["_extends"][0];
 			$tmp = $this->load_xml_orb_def($extname);
-			$ret[$class] = array_merge($tmp[$extname],$ret[$class]);
+			$ret[$class] = array_merge(safe_array($tmp[$extname]),safe_array($ret[$class]));
+			
 			//$ret = array_merge($tmp[$extname],$ret);
 		};
 
