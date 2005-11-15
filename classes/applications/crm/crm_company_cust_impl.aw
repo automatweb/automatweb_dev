@@ -185,11 +185,11 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 		));
 
-		$tf->define_field(array(
+		/*$tf->define_field(array(
 			"name" => "pohitegevus",
 			"caption" => t("Põhitegevus"),
 			"sortable" => 1,
-		));
+		));*/
 
 		/*$tf->define_field(array(
 			"name" => "corpform",
@@ -205,7 +205,7 @@ class crm_company_cust_impl extends class_base
 
 		$tf->define_field(array(
 			"name" => "email",
-			"caption" => t("E-post"),
+			"caption" => t("Kontakt"),
 			"sortable" => 1,
 		));
 
@@ -215,10 +215,10 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 		));
 
-		$tf->define_field(array(
+		/*$tf->define_field(array(
 			"name" => "phone",
 			"caption" => t('Telefon'),
-		));
+		));*/
 
 		$tf->define_field(array(
 			"name" => "ceo",
@@ -360,10 +360,11 @@ class crm_company_cust_impl extends class_base
 					),CL_CRM_PERSON),
 					"caption" => $juht,
 				));
+				$mail = "";
 				if (is_oid($o->prop("email_id")) && $this->can("view", $o->prop("email_id")))
 				{
 					$mail_obj = new object($o->prop("email_id"));
-					$mail = html::href(array(
+					$mail .= html::href(array(
 						"url" => "mailto:" . $mail_obj->prop("mail"),
 						"caption" => $mail_obj->prop("mail"),
 					));
@@ -375,15 +376,16 @@ class crm_company_cust_impl extends class_base
 						"caption" => $o->prop_str("url_id"),
 					));
 				}
-				$phone = $o->prop_str("phone_id");
+				$mail = $o->prop_str("phone_id")." ".$mail;
 			}
 			else
 			{
 				$ceo = $o->name();
+				$mail = "";
 				if (is_oid($o->prop("email")) && $this->can("view", $o->prop("email")))
 				{
 					$mail_obj = new object($o->prop("email"));
-					$mail = html::href(array(
+					$mail .= html::href(array(
 						"url" => "mailto:" . $mail_obj->prop("mail"),
 						"caption" => $mail_obj->prop("mail"),
 					));
@@ -404,7 +406,7 @@ class crm_company_cust_impl extends class_base
 				if ($this->can("view", $o->prop("phone")))
 				{
 					$urlo = obj($o->prop("phone"));
-					$phone = $urlo->name();
+					$mail = $urlo->name()." ".$mail;
 				}
 			}
 

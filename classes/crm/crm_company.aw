@@ -1452,6 +1452,26 @@ class crm_company extends class_base
 				return $bills_impl->$fn($arr);
 
 			case "stats_s_from":
+				if ($arr["request"][$data["name"]]["year"] > 1)
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				else
+				{
+					// default to moonday this week
+					$day = date("w");
+					if ($day == 0)
+					{
+						$day = 6;
+					}
+					else
+					{
+						$day--;
+					}
+					$data["value"] = mktime(0,0,0, date("m"), date("d")-$day, date("Y"));
+				}
+				break;
+
 			case "stats_s_to":
 				if ($arr["request"][$data["name"]]["year"] > 1)
 				{
@@ -1459,7 +1479,16 @@ class crm_company extends class_base
 				}
 				else
 				{
-					$data["value"] = -1;
+					$day = date("w");
+					if ($day == 0)
+					{
+						$day = 6;
+					}	
+					else
+					{
+						$day--;
+					}
+					$data["value"] = mktime(0,0,0, date("m"), date("d")+(7-$day), date("Y"));
 				}
 				break;
 
