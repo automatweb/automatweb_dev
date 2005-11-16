@@ -5,14 +5,13 @@
             <table>objects</table>
             <group>general</group>
             <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>comment</field>
             <caption>Kood</caption>
       </property>
       <property>
             <name>organisation_logo</name>
             <table>objects</table>
-            <group>general_info</group>
+            <group>organisation_general_information</group>
             <type>text</type>
             <field>organisation_logo</field>
             <caption>Organisatsiooni logo</caption>
@@ -21,69 +20,10 @@
       <property>
             <name>organisation_link</name>
             <table>objects</table>
-            <group>general_info</group>
+            <group>organisation_general_information</group>
             <type>text</type>
             <field>organisation_link</field>
             <caption>Organisatsioon</caption>
-      </property>
-      <property>
-            <name>design_image</name>
-            <table>objects</table>
-            <group>design</group>
-            <type>releditor</type>
-            <use_form>emb</use_form>
-            <reltype>RELTYPE_DESIGN_IMAGE</reltype>
-            <rel_id>first</rel_id>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>no</store>
-            <caption>Pilt</caption>
-      </property>
-      <property>
-            <name>frame_color</name>
-            <table>objects</table>
-            <group>design</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Raami toon</caption>
-      </property>
-      <property>
-            <name>text_color</name>
-            <table>objects</table>
-            <group>design</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Teksti v&amp;auml;rv</caption>
-      </property>
-      <property>
-            <name>main_color</name>
-            <table>objects</table>
-            <group>design</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>P&amp;otilde;hitoon</caption>
-      </property>
-      <property>
-            <name>choose_design</name>
-            <table>objects</table>
-            <group>design</group>
-            <type>chooser</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kujundusp&amp;otilde;hi</caption>
-      </property>
-      <property>
-            <name>custom_design_document</name>
-            <table>objects</table>
-            <group>design</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_GENERAL_DOCUMENT</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Dokument</caption>
       </property>
       <property>
             <name>publications_name</name>
@@ -104,6 +44,16 @@
             <caption>V&amp;auml;ljaande kirjeldus</caption>
       </property>
       <property>
+            <name>publications_homepage</name>
+            <table>objects</table>
+            <group>publications_general_info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PUBLICATION_HOMEPAGE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>V&amp;auml;ljaande koduleht</caption>
+      </property>
+      <property>
             <name>order_composition_information</name>
             <table>objects</table>
             <group>publications_general_info</group>
@@ -111,6 +61,19 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Tellimuse vormistamise informatsioon</caption>
+      </property>
+      <property>
+            <name>design_image</name>
+            <table>objects</table>
+            <group>publications_general_info</group>
+            <type>releditor</type>
+            <use_form>emb</use_form>
+            <reltype>RELTYPE_DESIGN_IMAGE</reltype>
+            <rel_id>first</rel_id>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <caption>Logo</caption>
       </property>
       <property>
             <name>cover_image</name>
@@ -126,14 +89,50 @@
             <caption>Esikaane pilt</caption>
       </property>
       <property>
-            <name>publications_homepage</name>
+            <name>frame_color</name>
+            <table>objects</table>
+            <group>publications_general_info</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Raami toon</caption>
+      </property>
+      <property>
+            <name>text_color</name>
+            <table>objects</table>
+            <group>publications_general_info</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teksti v&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>main_color</name>
+            <table>objects</table>
+            <group>publications_general_info</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>P&amp;otilde;hitoon</caption>
+      </property>
+      <property>
+            <name>choose_design</name>
+            <table>objects</table>
+            <group>publications_general_info</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kujundusp&amp;otilde;hi</caption>
+      </property>
+      <property>
+            <name>custom_design_document</name>
             <table>objects</table>
             <group>publications_general_info</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_PUBLICATION_HOMEPAGE</reltype>
+            <reltype>RELTYPE_GENERAL_DOCUMENT</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>V&amp;auml;ljaandja koduleht</caption>
+            <caption>Dokument</caption>
       </property>
       <property>
             <name>publications_table</name>
@@ -321,14 +320,6 @@
             <organisation_general_information>
                   <caption>Ettev&amp;otilde;tte &amp;uuml;ldandmed</caption>
             </organisation_general_information>
-            <general_info>
-                  <caption>&amp;Uuml;ldandmed</caption>
-                  <parent>organisation_general_information</parent>
-            </general_info>
-            <design>
-                  <caption>Kujundus</caption>
-                  <parent>organisation_general_information</parent>
-            </design>
             <publications>
                   <caption>V&amp;auml;ljaanded</caption>
             </publications>

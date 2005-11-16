@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.21 2005/11/13 17:59:08 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.22 2005/11/16 12:00:01 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -8,27 +8,51 @@
 @default table=objects
 @default group=general
 
-	@property code type=textbox field=meta method=serialize
+	@property code type=textbox field=comment
 	@caption Kood
 
 @groupinfo organisation_general_information caption="Ettev&otilde;tte &uuml;ldandmed"
 @default group=organisation_general_information
 
-	@groupinfo general_info caption="&Uuml;ldandmed" parent=organisation_general_information
-	@default group=general_info
+	@property organisation_logo type=text
+	@caption Organisatsiooni logo
+	@comment Organisatsiooni logo, saab muuta organisatsiooni juures
 
-		@property organisation_logo type=text
-		@caption Organisatsiooni logo
-		@comment Organisatsiooni logo, saab muuta organisatsiooni juures
+	@property organisation_link type=text
+	@caption Organisatsioon
 
-		@property organisation_link type=text
-		@caption Organisatsioon
 
-	@groupinfo design caption="Kujundus" parent=organisation_general_information
-	@default group=design
+	groupinfo general_info caption="&Uuml;ldandmed" parent=organisation_general_information
+	default group=general_info
+
+
+	groupinfo design caption="Kujundus" parent=organisation_general_information
+	default group=design
+
+
+@groupinfo publications caption="V&auml;ljaanded"
+@default group=publications
+
+	@groupinfo publications_general_info caption="V&auml;ljaannete &uuml;ldinfo" parent=publications
+	@default group=publications_general_info
+
+		@property publications_name type=textbox field=meta method=serialize 
+		@caption V&auml;ljaande nimi
+
+		@property publications_description type=textbox field=meta method=serialize
+		@caption V&auml;ljaande kirjeldus
+
+		@property publications_homepage type=relpicker reltype=RELTYPE_PUBLICATION_HOMEPAGE field=meta method=serialize
+		@caption V&auml;ljaande koduleht
+
+		@property order_composition_information type=textarea field=meta method=serialize
+		@caption Tellimuse vormistamise informatsioon
 
 		@property design_image type=releditor use_form=emb reltype=RELTYPE_DESIGN_IMAGE rel_id=first field=meta method=serialize
-		@caption Pilt
+		@caption Logo
+
+		@property cover_image type=releditor use_form=emb reltype=RELTYPE_COVER_IMAGE rel_id=first field=meta method=serialize
+		@caption Esikaane pilt
 
 		@property frame_color type=textbox field=meta method=serialize
 		@caption Raami toon
@@ -44,27 +68,6 @@
 
 		@property custom_design_document type=relpicker reltype=RELTYPE_GENERAL_DOCUMENT field=meta method=serialize
 		@caption Dokument
-
-@groupinfo publications caption="V&auml;ljaanded"
-@default group=publications
-
-	@groupinfo publications_general_info caption="V&auml;ljaannete &uuml;ldinfo" parent=publications
-	@default group=publications_general_info
-
-		@property publications_name type=textbox field=meta method=serialize 
-		@caption V&auml;ljaande nimi
-
-		@property publications_description type=textbox field=meta method=serialize
-		@caption V&auml;ljaande kirjeldus
-
-		@property order_composition_information type=textarea field=meta method=serialize
-		@caption Tellimuse vormistamise informatsioon
-
-		@property cover_image type=releditor use_form=emb reltype=RELTYPE_COVER_IMAGE rel_id=first field=meta method=serialize
-		@caption Esikaane pilt
-
-		@property publications_homepage type=relpicker reltype=RELTYPE_PUBLICATION_HOMEPAGE field=meta method=serialize
-		@caption V&auml;ljaandja koduleht
 
 	@groupinfo publications_list caption="Alamv&auml;ljaanded" parent=publications
 	@default group=publications_list
@@ -264,6 +267,7 @@ class expp_journal_management extends class_base
 			case "general_documents":
 			case "general_polls":
 			case "general_webform":
+			case "publications_homepage":
 				$prop['obj_parent'] = $arr['obj_inst']->id();
 				break;	
 
@@ -305,6 +309,86 @@ class expp_journal_management extends class_base
 		));
 		return $this->parse();
 	}
+/*
+// i use it to make any kind of conversions or some other custom stuff, can be deleted once the expp system
+// is up and running
+	function _get_code($arr)
+	{
+
+		if ($_GET['dragut'])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_EXPP_JOURNAL_MANAGEMENT,
+			));
+			$counter=0;
+			foreach ($ol->arr() as $o)
+			{
+			//	$name = $o->name();
+			//	$counter++;
+
+			//	$name_code = urlencode($name);
+			//	$name_code = $name;
+			//	$name_code = str_replace(" ", "+", $name_code);
+
+			//	$name = mb_strtolower($name, "iso-8859-15");
+			//	$name = str_replace("ä", "a", $name);
+			//	$name = str_replace("ö", "o", $name);
+			//	$name = str_replace("õ", "o", $name);
+			//	$name = str_replace("ü", "u", $name);
+			//	$name = str_replace("Ä", "A", $name);
+			//	$name = str_replace("Ö", "O", $name);
+			//	$name = str_replace("Õ", "O", $name);
+			//	$name = str_replace("Ü", "U", $name);
+
+			//	$name = str_replace(" ", "", $name);
+			//	$link = "http://www.".$name.".ee";
+			//	echo $counter." - ".$name." -- ".$link." (".htmlentities($name_code).")<br>";
+
+			//// to set the code field
+			//	$o->set_prop("code", $name_code);
+			
+			//	$link_obj = new object();
+			//	$link_obj->set_parent($o->id());
+			//	$link_obj->set_name($o->name());
+			//	$link_obj->set_class_id(CL_EXTLINK);
+			//	$link_obj->set_prop("url", $link);
+			//	$link_obj->set_prop("alt", $o->name());
+			//	$link_obj->set_prop("newwindow", 1);
+			//	$link_obj->save();
+
+			//	$o->connect(array(
+			//		"type" => "RELTYPE_PUBLICATION_HOMEPAGE",
+			//		"to" => $link_obj,
+			//	));
+
+			//	$link_obj = $o->get_first_obj_by_reltype("RELTYPE_PUBLICATION_HOMEPAGE");
+			//	echo $link_obj->id()."<br>";
+			//	$o->set_prop("publications_homepage", $link_obj->id());
+
+			//	$o->save();
+
+			}
+			arr($ol->count());
+		}
+
+	}
+*/
+
+	function _get_organisation_logo($arr)
+	{
+		
+		$organisation_logo_id = $arr['obj_inst']->meta("organisation_logo_id");
+		if (!empty($organisation_logo_id))
+		{
+			$image_inst = get_instance(CL_IMAGE);
+			$arr['prop']['value'] = $image_inst->make_img_tag_wl($organisation_logo_id);
+
+		}
+		else
+		{
+			$arr['prop']['value'] = t("Organisatsiooni juurde ei ole logo m&auml;&auml;ratud");
+		}
+	}
 
 	function _get_organisation_link($arr)
 	{
@@ -322,6 +406,24 @@ class expp_journal_management extends class_base
 				), CL_CRM_COMPANY),
 				"caption" => t("Muuda organisatsiooni andmeid"),
 			));
+
+//// this one doesn't work in some reason :/
+//			$organisation_logo = $organisation_object->get_first_obj_by_reltype("RELTYPE_ORGANISATION_LOGO");
+//			var_dump($organisation_logo);
+
+			$organisation_logo_connections = $organisation_object->connections_from(array(
+				"type" => 45 // crm_company.logo (organisation's logo)
+			));
+			
+			if (!empty($organisation_logo_connections))
+			{
+				// get the first connection:
+				$organisation_logo_connection  = reset($organisation_logo_connections);
+				$organisation_logo_id = $organisation_logo_connection->prop("to");
+
+				$arr['obj_inst']->set_meta("organisation_logo_id", $organisation_logo_id);
+				$arr['obj_inst']->save();
+			}
 		}
 		else
 		{
