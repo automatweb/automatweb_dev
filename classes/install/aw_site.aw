@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.44 2005/06/28 14:41:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.45 2005/11/16 13:23:52 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -339,6 +339,7 @@ class aw_site extends class_base
 		{
 			set_time_limit(0);
 			obj_set_opt("no_cache", 1);
+			aw_global_set("no_cache_flush", 1);
 			// clear objects list
 			$GLOBALS["objects"] = array();
 			$site = $this->get_site_def($id);
