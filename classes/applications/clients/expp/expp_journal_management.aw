@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.22 2005/11/16 12:00:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.23 2005/11/16 13:01:01 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -314,66 +314,13 @@ class expp_journal_management extends class_base
 // is up and running
 	function _get_code($arr)
 	{
-
 		if ($_GET['dragut'])
 		{
-			$ol = new object_list(array(
-				"class_id" => CL_EXPP_JOURNAL_MANAGEMENT,
-			));
-			$counter=0;
-			foreach ($ol->arr() as $o)
-			{
-			//	$name = $o->name();
-			//	$counter++;
-
-			//	$name_code = urlencode($name);
-			//	$name_code = $name;
-			//	$name_code = str_replace(" ", "+", $name_code);
-
-			//	$name = mb_strtolower($name, "iso-8859-15");
-			//	$name = str_replace("ä", "a", $name);
-			//	$name = str_replace("ö", "o", $name);
-			//	$name = str_replace("õ", "o", $name);
-			//	$name = str_replace("ü", "u", $name);
-			//	$name = str_replace("Ä", "A", $name);
-			//	$name = str_replace("Ö", "O", $name);
-			//	$name = str_replace("Õ", "O", $name);
-			//	$name = str_replace("Ü", "U", $name);
-
-			//	$name = str_replace(" ", "", $name);
-			//	$link = "http://www.".$name.".ee";
-			//	echo $counter." - ".$name." -- ".$link." (".htmlentities($name_code).")<br>";
-
-			//// to set the code field
-			//	$o->set_prop("code", $name_code);
-			
-			//	$link_obj = new object();
-			//	$link_obj->set_parent($o->id());
-			//	$link_obj->set_name($o->name());
-			//	$link_obj->set_class_id(CL_EXTLINK);
-			//	$link_obj->set_prop("url", $link);
-			//	$link_obj->set_prop("alt", $o->name());
-			//	$link_obj->set_prop("newwindow", 1);
-			//	$link_obj->save();
-
-			//	$o->connect(array(
-			//		"type" => "RELTYPE_PUBLICATION_HOMEPAGE",
-			//		"to" => $link_obj,
-			//	));
-
-			//	$link_obj = $o->get_first_obj_by_reltype("RELTYPE_PUBLICATION_HOMEPAGE");
-			//	echo $link_obj->id()."<br>";
-			//	$o->set_prop("publications_homepage", $link_obj->id());
-
-			//	$o->save();
-
-			}
-			arr($ol->count());
+			$arr['prop']['value'] = str_replace("%", "#", urlencode($arr['obj_inst']->name()));
 		}
-
 	}
-*/
 
+*/
 	function _get_organisation_logo($arr)
 	{
 		
