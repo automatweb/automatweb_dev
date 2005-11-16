@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.100 2005/10/31 10:59:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.101 2005/11/16 13:20:17 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1896,6 +1896,12 @@ class planner extends class_base
 	{
 		// right, this thing only takes tasks from the calendar's own folder
 		// but should take events from all folders
+		enter_function("gen-tasklist-1");
+		if (aw_global_get("uid") == "duke")
+		{
+			print "parent = ";
+			var_dump($this->calendar_inst->prop("event_folder"));
+		};
 		$tasklist = new object_list(array(
 			"class_id" => CL_TASK,
 			"parent" => $this->calendar_inst->prop("event_folder"),
@@ -1906,12 +1912,14 @@ class planner extends class_base
 			),
 			"site_id" => array(),
 		));
+		exit_function("gen-tasklist-1");
 
 		if (0 == $tasklist->count())
 		{
 			return array();
 		};
 
+		enter_function("gen-tasklist-2");
 		$tasklist = new object_list(array(
 			new object_list_filter(array(
 				"logic" => "AND",
@@ -1932,9 +1940,11 @@ class planner extends class_base
 			"site_id" => array(),
 
 		));
+		exit_function("gen-tasklist-2");
 
 		$rv = array();
 
+		enter_function("gen-tasklist-3");
 		foreach($tasklist->names() as $task => $name)
 		{
 			$rv[] = array(
@@ -1945,6 +1955,7 @@ class planner extends class_base
 				)),
 			);
 		};
+		exit_function("gen-tasklist-3");
 		return $rv;
 	}
 
@@ -2716,24 +2727,24 @@ class planner extends class_base
 			{
 				// connect the person to the event.. it seems that's it?
 				$o = obj($part);
-				if (!$o->is_connected_to(array("to" => $part)))
+
+				$event_obj = obj($arr["event_id"]);
+				switch($event_obj->class_id())
 				{
-					$event_obj = obj($arr["event_id"]);
-					switch($event_obj->class_id())
-					{
-						case CL_TASK:
-							$rt = "RELTYPE_PERSON_TASK";
-							break;
+					case CL_TASK:
+						$rt = "RELTYPE_PERSON_TASK";
+						break;
+					case CL_CRM_CALL:
+						$rt = "RELTYPE_PERSON_CALL";
+						break;
+					default:
+					case CL_CRM_MEETING:
+						$rt = "RELTYPE_PERSON_MEETING";
+						break;
+				}
 
-						case CL_CRM_CALL:
-							$rt = "RELTYPE_PERSON_CALL";
-							break;
-
-						default:
-						case CL_CRM_MEETING:
-							$rt = "RELTYPE_PERSON_MEETING";
-							break;
-					}
+				if (!$o->is_connected_to(array("to" => $part, "type" => $rt)))
+				{
 					$o->connect(array(
 						"to" => $arr["event_id"],
 						"reltype" => $rt,
