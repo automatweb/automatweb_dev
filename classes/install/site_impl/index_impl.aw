@@ -9,7 +9,6 @@ else
 	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
 }
 
-
 enter_function("index_impl::after_init");
 // get an instance if the site class
 $si =&__get_site_instance();
