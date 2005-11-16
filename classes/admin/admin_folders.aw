@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.50 2005/07/14 10:32:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.51 2005/11/16 10:46:44 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -97,6 +97,30 @@ class admin_folders extends aw_template
 		exit_function("admin_folders::db_listall");
 	}
 
+	function fetch_one($id)
+	{
+		$q = "SELECT objects.oid as oid, 
+				objects.parent as parent,
+				objects.comment as comment,
+				objects.name as name,
+				objects.status as status,
+				objects.jrk as jrk,
+				objects.alias as alias,
+				objects.class_id as class_id,
+				objects.brother_of as brother_of,
+				objects.periodic as periodic,
+				objects.metadata as metadata,
+				menu.type as mtype,
+				menu.link as link,
+				menu.icon_id as icon_id,
+				menu.admin_feature as admin_feature
+			FROM objects 
+				LEFT JOIN menu ON menu.id = objects.oid
+			WHERE
+				objects.oid = '$id'";
+		return $this->db_fetch_row($q);
+	}
+
 	function gen_folders($period)
 	{
 		enter_function("admin_folders::gen_folders");
@@ -140,6 +164,16 @@ class admin_folders extends aw_template
 		{
 			if (is_array($rn) && count($rn) > 1)
 			{
+				foreach($rn as $rn_id)
+				{
+					$row = $this->fetch_one($rn_id);
+					if ($this->resolve_item(&$row))
+					{
+						$row["id"] = $row["oid"];
+						
+						$this->tree->add_item(0, $row);
+					}
+				}
 				$tmp = $rn;
 				$rn = array_shift($tmp);
 				$this->db_listall($tmp);
@@ -148,7 +182,7 @@ class admin_folders extends aw_template
 					$row["id"] = $row["oid"];
 					if ($this->resolve_item(&$row))
 					{
-						$this->tree->add_item($rn, $row);
+						$this->tree->add_item($row["parent"], $row);
 					}
 				}
 			}
@@ -297,7 +331,7 @@ class admin_folders extends aw_template
 		};
 
 		$awt->start("tree-gen");
-		$res = $this->tree->finalize_tree(array("rootnode" => $rn));
+		$res = $this->tree->finalize_tree(array("rootnode" => empty($this->use_parent) && $set_by_p ? 0 : $rn));
 		$awt->stop("tree-gen");
 		
 		if (!empty($this->use_parent))
