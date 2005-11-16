@@ -3611,8 +3611,11 @@ class crm_company extends class_base
 	{
 		if (is_array($arr["sel"]) && count($arr["sel"]))
 		{
-			$ol = new object_list(array("oid" => $arr["sel"]));
-			$ol->delete();
+			foreach($arr["sel"] as $id)
+			{
+				$o = obj($id);
+				$o->delete();
+			}
 		}
 		return $arr["post_ru"];
 	}
