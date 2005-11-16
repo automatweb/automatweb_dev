@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.148 2005/11/10 14:16:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.149 2005/11/16 13:22:02 kristo Exp $
 
 /*
 
@@ -2466,7 +2466,14 @@ class site_show extends class_base
 
 	function _init_path_vars(&$arr)
 	{
-		$this->section_obj = obj(aw_global_get("section"));
+		if ($this->can("view",aw_global_get("section")))
+		{
+			$this->section_obj = obj(aw_global_get("section"));
+		}
+		else
+		{
+			$this->section_obj = new object();
+		};
 
 		$clss = aw_ini_get("classes");
 
