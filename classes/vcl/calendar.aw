@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.72 2005/08/25 19:27:31 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.73 2005/11/16 13:38:55 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -346,6 +346,8 @@ class vcalendar extends aw_template
 		
 		$this->event_counter = 0;
 
+		enter_function("draw_calendar_content");
+
 		if (!empty($arr["text"]))
 		{
 			$content = $arr["text"];
@@ -386,6 +388,8 @@ class vcalendar extends aw_template
 					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
 			};
 		};
+		exit_function("draw_calendar_content");
+		//$awt->stop("load-properties");
 		
 		classload("date_calc");
 		$m = date("m",$this->range["timestamp"]);
