@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_logo.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_logo.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
 // expp_site_logo.aw - Expp site_logo 
 /*
 
@@ -37,17 +37,28 @@ class expp_site_logo extends class_base {
 				"class_id" => CL_EXPP_JOURNAL_MANAGEMENT,
 				"code" => $GLOBALS['expp_logo'],
 			));
+			
 			if ($ol->count() > 0)
 			{
 				$o = $ol->begin();
 				$image_obj = $o->get_first_obj_by_reltype("RELTYPE_DESIGN_IMAGE");
 				if (empty($image_obj))
 				{
+					// organisations_logo_id should be accessible directly from
+					// management objects metadata
+					$organisation_logo_id = $o->meta("organisation_logo_id");
+					if ($this->can("view", $organisation_logo_id))
+					{
+						$image_obj = new object($organisation_logo_id);
+					}
+				
+				/*
 					$org_obj = $o->get_first_obj_by_reltype("RELTYPE_ORGANISATION");
 					if (!empty($org_obj))
 					{
 						$image_obj = $org_obj->get_first_obj_by_reltype("RELTYPE_LOGO_IMAGE");
 					}
+				*/
 				}
 				if (!empty($image_obj))
 				{

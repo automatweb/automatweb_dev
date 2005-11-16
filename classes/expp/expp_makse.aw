@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
 // expp_makse.aw - Expp makse 
 /*
 
@@ -16,27 +16,42 @@ class expp_makse extends class_base {
 
 var $lingid = array(
 	'hansapank' => array(
-		'url'		=> "javascript:oppwin('my_link&pank=hansapank');",
+		'url'		=> "javascript:oppwin('/tellimine/makse/ok/hansapank');",
+//		'url2'	=> "https://www.hanza.net/cgi-bin/hanza/redirect.jsp?targetPage=hanza.pank.contracts.dd",
+		'url2'	=> "javascript:oppwin('https://www.hanza.net/');",
+		'pank'	=> '767',
 		'text'	=> "LC_EXPP_HANSAPANK",
 	),
 	'yhispank'	=> array(
-		'url'		=> "javascript:oppwin('my_link&pank=yhispank');",
+		'url'		=> "javascript:oppwin('/tellimine/makse/ok/yhispank');",
+//		'url2'	=> "http://www.eyp.ee/static/https_www.eyp.ee/index.html",
+		'url2'	=> "javascript:oppwin('http://www.seb.ee/static/https_www.seb.ee/index.html');",
+		'pank'	=> '401',
 		'text'	=> "LC_EXPP_YHISPANK",
 	),
 	'sampopank'	=> array(
-		'url'		=> "javascript:oppwin('my_link&pank=sampopank');",
+		'url'		=> "javascript:oppwin('/tellimine/makse/ok/sampopank');",
+//		'url2'	=> "https://www.sampo.ee/cgi-bin/login",
+		'url2'	=> "javascript:oppwin('https://www.sampo.ee/cgi-bin/login?lang=est');",
+		'pank'	=> '720',
 		'text'	=> "LC_EXPP_SAMPOPANK",
 	),
 	'krediidipank'	=> array(
-		'url'		=> "javascript:oppwin('my_link&pank=krediidipank');",
+		'url'		=> "javascript:oppwin('/tellimine/makse/ok/krediidipank');",
+//		'url2'	=> "https://i-pank.krediidipank.ee/teller/uusotsekorraldus",
+		'url2'	=> "javascript:oppwin('https://i-pank.krediidipank.ee/');",
+		'pank'	=> '742',
 		'text'	=> "LC_EXPP_KREDIIDIPANK",
 	),
 	'nordeapank'	=> array(
-		'url'		=> "javascript:oppwin('my_link&pank=nordeapank');",
+		'url'		=> "javascript:oppwin('/tellimine/makse/ok/nordeapank');",
+		'url2'	=> "javascript:oppwin('https://www.arved.ee/epay/arch_login.jsp?PARTNER=MERP&GROUP=EIS&SERVICE=EIS');",
+		'pank'	=> '780',
 		'text'	=> "LC_EXPP_NORDEAPANK",
 	),
 	'postiga'	=> array(
-		'url'		=> "javascript:oppwin('my_link&pank=post');",
+		'url'		=> "javascript:oppwin('/tellimine/makse/ok/post');",
+		'url2'	=> "/tellimine/makse/tanudok/",
 		'text'	=> "LC_EXPP_POSTIGA",
 	),
 );
@@ -50,6 +65,8 @@ var $pangad = array(
 	"kontor"			=> "m&auml;rgin &uuml;les arve andmed ja tasun nende alusel pangakontoris",
 	"kodu"			=> "tellin arve postiga ja tasun selle alusel",
 );
+	var $burl = "";
+
 	function expp_makse() {
 		$this->init(array(
 			"tpldir" => "expp",
@@ -58,6 +75,7 @@ var $pangad = array(
 		$this->cy = get_instance( CL_EXPP_JAH );
 		$this->cp = get_instance( CL_EXPP_PARSE );
 		lc_site_load( "expp", $this );
+		$this->burl = str_replace( "http://", "https://", aw_ini_get("baseurl"));
 	}
 
 	function show($arr) {
@@ -91,8 +109,17 @@ var $pangad = array(
 			case "krediidipank":
 				$retHTML = &$this->maksaKrediidipank();
 				break;
+			case "tanudok":
+				$sql = "UPDATE expp_arved SET trykiokpakkumine='1' WHERE session='".session_id().'-'.$_SESSION['tellnr']."' AND leping='ok'";
+				$this->db_query( $sql );
 			case "tanudarve":
 				$retHTML = &$this->maksaArve();
+				break;
+			case "tanud":
+				$retHTML = &$this->maksaTanud();
+				break;
+			case "ok":
+				$retHTML = &$this->maksaOK();
 				break;
 		}
 		if( !empty( $retHTML )) {
@@ -128,7 +155,7 @@ var $pangad = array(
 			}
 			foreach( $this->lingid as $key => $val ) {
 				$this->vars(array(
-					'url'		=> $val['url'],
+					'url'		=> $val['url2'],
 //					'target'
 					'text'	=> $lc_expp[$val['text']],
 				));
@@ -246,6 +273,8 @@ var $pangad = array(
 			case "kontor":
 				$pid		= "tanudarve";
 				break;
+			default:
+				$pid		= "tanud";
 		}
 //		$this->cp->log( get_class($this), "go-".$pid );
 
@@ -288,15 +317,15 @@ var $pangad = array(
 		$VK_message.= sprintf("%03d",strlen($VK_REF)).$VK_REF;
 		$VK_message.= sprintf("%03d",strlen($VK_MSG)).$VK_MSG;
 		$VK_signature = "";
-		$fp = fopen( "/home/la01/4065469/andrus.dev.struktuur.ee/pank/expp.key.key", "r");
+		$fp = fopen( $this->cfg["site_basedir"]."/pank/expp.key.key", "r");
 		$priv_key = fread($fp, 2048);
 		fclose($fp);
 		$pkeyid = openssl_get_privatekey($priv_key);
 		openssl_sign( $VK_message, $VK_signature, $pkeyid);
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode( $VK_signature);
-		$VK_RETURN	= "http://www.tellimine.ee/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-		$VK_CANCEL	= "http://www.tellimine.ee/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+		$VK_RETURN	= $this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
+		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 		$VK_LANG = "EST";
 
 		$this->read_template("expp_pank.tpl");
@@ -352,15 +381,15 @@ var $pangad = array(
 		$VK_message.= sprintf("%03d",strlen($VK_REF)).$VK_REF;
 		$VK_message.= sprintf("%03d",strlen($VK_MSG)).$VK_MSG;
 		$VK_signature = "";
-		$fp = fopen( "/home/la01/4065469/andrus.dev.struktuur.ee/pank/expp.key.key", "r");
+		$fp = fopen( $this->cfg["site_basedir"]."/pank/expp.key.key", "r");
 		$priv_key = fread($fp, 2048);
 		fclose($fp);
 		$pkeyid = openssl_get_privatekey($priv_key);
 		openssl_sign( $VK_message, $VK_signature, $pkeyid);
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode( $VK_signature);
-		$VK_RETURN	= "http://www.tellimine.ee/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-		$VK_CANCEL	= "http://www.tellimine.ee/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+		$VK_RETURN	= $this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
+		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 		$VK_LANG = "EST";
 
 		$this->read_template("expp_pank.tpl");
@@ -416,15 +445,15 @@ var $pangad = array(
 		$VK_message.= sprintf("%03d",strlen($VK_REF)).$VK_REF;
 		$VK_message.= sprintf("%03d",strlen($VK_MSG)).$VK_MSG;
 		$VK_signature = "";
-		$fp = fopen( "/home/la01/4065469/andrus.dev.struktuur.ee/pank/expp.key.key", "r");
+		$fp = fopen( $this->cfg["site_basedir"]."/pank/expp.key.key", "r");
 		$priv_key = fread($fp, 2048);
 		fclose($fp);
 		$pkeyid = openssl_get_privatekey($priv_key);
 		openssl_sign( $VK_message, $VK_signature, $pkeyid);
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode( $VK_signature);
-		$VK_RETURN	= "http://www.tellimine.ee/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-		$VK_CANCEL	= "http://www.tellimine.ee/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+		$VK_RETURN	= $this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
+		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 		$VK_LANG = "EST";
 
 		$this->read_template("expp_pank.tpl");
@@ -473,9 +502,9 @@ var $pangad = array(
 		$SOLOPMT_REF			= $row["viitenumber"];  // 8.    Payment Reference Number   SOLOPMT_REF    Standard reference number  AN 20    M 
 		$SOLOPMT_DATE			= 'EXPRESS';         // 9.    Payment Due Date  SOLOPMT_DATE   "EXPRESS" or "DD.MM.YYYY"  AN 10    M 
 		$SOLOPMT_MSG			= "Ajakirjade tellimus. Arve nr. ".$row["arvenr"];  // 10.   Payment Message   SOLOPMT_MSG    Service user's message  AN 234   O 
-		$SOLOPMT_RETURN		= "http://www.tellimine.ee/tellimine/makse/tanud/"; // 11.   Return Address    SOLOPMT_RETURN    Return address following payment    AN 60    M 
-		$SOLOPMT_CANCEL		= "http://www.tellimine.ee/tellimine/makse/"; // 12.   Cancel Address    SOLOPMT_CANCEL    Return address if payment is cancelled    AN 60    M 
-		$SOLOPMT_REJECT      = "http://www.tellimine.ee/tellimine/makse/"; // 13.   Reject Address    SOLOPMT_REJECT    Return address for rejected payment    AN 60    M 
+		$SOLOPMT_RETURN		= $this->burl."/tellimine/makse/tanud/"; // 11.   Return Address    SOLOPMT_RETURN    Return address following payment    AN 60    M 
+		$SOLOPMT_CANCEL		= $this->burl."/tellimine/makse/"; // 12.   Cancel Address    SOLOPMT_CANCEL    Return address if payment is cancelled    AN 60    M 
+		$SOLOPMT_REJECT      = $this->burl."/tellimine/makse/"; // 13.   Reject Address    SOLOPMT_REJECT    Return address for rejected payment    AN 60    M 
 		      // 14.   Solo Button OR Solo Symbol    SOLOPMT_ BUTTON SOLOPMT_IMAGE    Constant    Constant    O 
 		      // $SOLOPMT_ BUTTON SOLOPMT_IMAGE   Constant    Constant    O 
 		$SOLOPMT_MAC      = '';             // 15.   Payment MAC    SOLOPMT_MAC    MAC   AN 32    O 
@@ -550,15 +579,15 @@ var $pangad = array(
 		$VK_message.= sprintf("%03d",strlen($VK_REF)).$VK_REF;
 		$VK_message.= sprintf("%03d",strlen($VK_MSG)).$VK_MSG;
 		$VK_signature = "";
-		$fp = fopen( "/home/la01/4065469/andrus.dev.struktuur.ee/pank/expp.key.key", "r");
+		$fp = fopen( $this->cfg["site_basedir"]."/pank/expp.key.key", "r");
 		$priv_key = fread($fp, 2048);
 		fclose($fp);
 		$pkeyid = openssl_get_privatekey($priv_key);
 		openssl_sign( $VK_message, $VK_signature, $pkeyid);
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode( $VK_signature);
-		$VK_RETURN	= "http://www.tellimine.ee/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-		$VK_CANCEL	= "http://www.tellimine.ee/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+		$VK_RETURN	= $this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
+		$VK_CANCEL	= $this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 		$VK_LANG = "EST";
 
 		$this->read_template("expp_pank.tpl");
@@ -592,6 +621,11 @@ var $pangad = array(
 				." WHERE session='".session_id().'-'.$_SESSION['tellnr']."' AND leping='tel'";
 		$row = $this->db_fetch_row($sql);
 		$_trykiarve = $row['trykiarve'];
+
+		$sql = "SELECT MAX( trykiokpakkumine ) as trykiok FROM expp_arved"
+				." WHERE session='".session_id().'-'.$_SESSION['tellnr']."' AND leping='ok'";
+		$row = $this->db_fetch_row($sql);
+		$_trykiok = $row['trykiok'];
 
 		$sql = "SELECT a.arvenr, a.viitenumber, a.maksumus, a.algus, a.lisarida, t.toote_nimetus, t.valjaande_nimetus"
 			." FROM expp_arved a LEFT JOIN expp_valjaanne t ON a.vaindeks=t.pindeks"
@@ -702,9 +736,16 @@ var $pangad = array(
 			$_trykiarve = '';
 		}
 
+		if( $_trykiok > 0 ) {
+			$_trykiok = $this->parse( 'TRYKIOK' );
+		} else {
+			$_trykiok = '';
+		}
+
 		$this->vars(array(
 			'url'				=> aw_ini_get("baseurl")."/tellimine/",
 			'TRYKIARVE'		=> $_trykiarve,
+			'TRYKIOK'		=> $_trykiok,
 			'ACTION'			=> $myURL,
 			'OTSEKORRALDUS'=> $_okleping,
 			'TAVALEPING'	=> $_teleping,
@@ -713,5 +754,34 @@ var $pangad = array(
 		return $retHTML;
 
 	}
+	function maksaTanud() {
+		global $lc_expp;
+
+		$this->read_template("expp_tanud.tpl");
+		$_aid = $this->cp->getPid( 2 );
+		$myURL = $this->cp->addYah( array(
+				'link' => 'tanud',
+				'text' => $lc_expp['LC_EXPP_TITLE_TANUD'],
+			));
+
+		$this->vars(array(
+			'url'				=> aw_ini_get("baseurl")."/tellimine/"
+		));
+		$retHTML .= $this->parse();
+		return $retHTML;
+	}
+
+/*
+	function maksaOK() {
+		$retHTML = '';
+		$_ok = $this->cp->getPid( 3 );
+		$_cell = $this->lingid[$_ok];
+		if( is_array( $_cell ) && !empty( $_cell )) {
+			header( "Location :".$_cell['url2'] );
+			exit;
+		}
+		return $retHTML;
+	}
+*/
 }
 ?>

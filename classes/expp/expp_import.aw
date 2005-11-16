@@ -1,6 +1,6 @@
 <?php
 /*===========================================================================*/
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_import.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_import.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
 // expp_import.aw - Expp import 
 /*
 
@@ -8,30 +8,7 @@
 
 @default table=objects
 @default group=general
-
-ALTER TABLE `expp_valjaanne` CHANGE `toote_tyyp` `toote_tyyp` CHAR( 10 ) NOT NULL 
-ALTER TABLE `expp_liigid` CHANGE `tyyp_id` `tyyp_id` CHAR( 10 ) NOT NULL 
-DROP TABLE IF EXISTS `expp_tyybid`;
-CREATE TABLE IF NOT EXISTS `expp_tyybid` (
-  `id` varchar(10) NOT NULL default '',
-  `sort` tinyint(1) unsigned NOT NULL default '0',
-  `nimi` varchar(10) NOT NULL default '',
-  PRIMARY KEY  (`id`),
-  KEY `sort` (`sort`),
-  KEY `nimi` (`nimi`)
-) TYPE=MyISAM;
-
--- 
--- Tabeli andmete salvestamine `expp_tyybid`
--- 
-
-INSERT INTO `expp_tyybid` (`id`, `sort`, `nimi`) VALUES ('AJAKIRI', 2, 'Ajakirjad');
-INSERT INTO `expp_tyybid` (`id`, `sort`, `nimi`) VALUES ('AJALEHT', 1, 'Ajalehed');
-INSERT INTO `expp_tyybid` (`id`, `sort`, `nimi`) VALUES ('RAAMAT', 3, 'Raamatud');
-
 */
-/*===========================================================================*/
-
 /*===========================================================================*/
 class expp_import extends class_base
 {
@@ -201,8 +178,9 @@ class expp_import extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		$P = $GLOBALS["HTTP_POST_VARS"];
+/*
 		if( isset( $P['Salvesta'] ) && !empty( $P['Salvesta'] )) {
+*/
 			if(  $this->postX() === true ) {
 /*
 				$this->read_template("expp_import_ok.tpl");
@@ -212,6 +190,13 @@ class expp_import extends class_base
 */
 				echo 'OK';
 				exit;
+			}
+/*
+		}
+*/
+		if( isset( $this->errorMsg ) && !empty( $this->errorMsg )) {
+			foreach( $this->errorMsg as $_err ) {
+				echo $_err."<br />\n";
 			}
 		}
 		$this->read_template("expp_import_show.tpl");
@@ -229,12 +214,13 @@ class expp_import extends class_base
 
 		$allowed_extensions = array( 'xml' );
 		$packed_extensions = array( 'zip' );
-
 		$P = $GLOBALS['HTTP_POST_VARS'];
+		$F = $GLOBALS['HTTP_POST_FILES'];
+/*
 		if( !isset( $P['Salvesta'] ) || empty( $P['Salvesta'] )) {
 			return false;
 		} 
-		$F 	= $GLOBALS['HTTP_POST_FILES'];
+*/
 		$File	= $F['tootefail']['name'];
 		$Tmp	= $F['tootefail']['tmp_name'];
 		if( !is_uploaded_file($Tmp)) {
@@ -254,23 +240,22 @@ class expp_import extends class_base
 		$d = dir( $upload_dir );
 		while (($File = $d->read()) !== false ) {
 			if ( strpos( $File, '.' ) === 0 ) continue;
-			$this->sendFile( $File );
-			// get extension
-			$ext = substr( $File, strrpos( $File, '.' ) + 1 );
-			if( in_array( $ext, $allowed_extensions ) === false ) {
-				$this->errorMsg[] = 'Ei ole õige faili tüüp -> '.$File;
-			} else {
-				$this->getFile( $upload_dir.$File );
-			
-//			( $upload_dir.$File );
-// print_r( $C->fileparse( $upload_dir.$File ));
-//		$C = new xml2Array;
-//		print_r( $C->parse( $Cc->openFile( $upload_dir.$File )));
-				if( empty( $this->fileCont )) {
-					return false;
+			if( filesize( $upload_dir.$File ) > 0 ) {
+				$this->sendFile( $File );
+				// get extension
+				$ext = substr( $File, strrpos( $File, '.' ) + 1 );
+				if( in_array( $ext, $allowed_extensions ) === false ) {
+					$this->errorMsg[] = 'Ei ole õige faili tüüp -> '.$File;
+				} else {
+					$this->getFile( $upload_dir.$File );
+					if( empty( $this->fileCont )) {
+						return false;
+					}
+					$this->do_import();
+					$this->save_data();
 				}
-				$this->do_import();
-				$this->save_data();
+			} else {
+				$this->errorMsg[] = 'T&uuml;hi fail -> '.$File;
 			}
 			unlink( $upload_dir.$File );
 		}
@@ -401,32 +386,24 @@ class expp_import extends class_base
 	}
 /*===========================================================================*/
 	function parse_liigid( $pindeks, $liigid, $tyyp ) {
-//		$sql = "delete from expp_va_liik where pindeks = '$pindeks'";
-//		$this->db_query( $sql );
 		if( empty( $liigid )) {
 			return;
 		}
 		if( !is_array( $liigid )) {
 			$liigid = array( $liigid );
 		}
-// arr( $liigid );
 		$sqh = "replace into {$this->lva_temp} values ( '%s' , '%s' )";
 		foreach( $liigid as $key=>$val ) {
-//			$val = ucfirst( strtolower( $this->convert_unicode( $val )));
 			$val = $this->convert_unicode( $val );
 			$sql = "select id from expp_liigid where liik = '$val' and tyyp_id = '{$tyyp}'";
-// arr( $sql );
 			$row =& $this->db_fetch_row( $sql );
 			$id = $row['id'];
 			if( empty( $id )) {
 				$sql = "insert into expp_liigid set liik = '$val', tyyp_id = '{$tyyp}' , esilehel='1'";
-// arr( $sql );
 				$this->db_query( $sql );
 				$id = $this->db_last_insert_id();
 			}
-// arr( $pindeks );
 			$sql = sprintf( $sqh, $pindeks, $id );
-// arr( $sql );
 			$this->db_query( $sql );
 		}
 	}
@@ -466,7 +443,6 @@ class expp_import extends class_base
 			}
 			if( !empty( $ins_arr )) {
 				$sql = $sql1.implode( "','", $ins_arr )."' )";
-// arr( $sql );
 				$this->db_query( $sql );
 			}
 			$this->parse_hind( $val );
@@ -475,7 +451,6 @@ class expp_import extends class_base
 // merge temp & orig
 		$sql_tags = array();
 		$sql = "SELECT DISTINCT pindeks FROM ".$this->va_temp." ORDER BY pindeks";
-// arr( $sql );
 		$this->db_query( $sql );
 		while( $row = $this->db_next()) {
 			$sql_tags[] = $row['pindeks'];
@@ -484,45 +459,31 @@ class expp_import extends class_base
 
 		$sql_tags = array();
 		$sql = "select distinct toote_nimetus from {$this->lva_temp}";
-// arr( $sql );
 		$this->db_query( $sql );
 		while( $row = $this->db_next()) {
 			$sql_tags[] = $row['toote_nimetus'];
 		}
 		$str2 = implode( "','", $sql_tags );
-		
 		$sql_tags = array();
-//		$sql_tags[] = "FLUSH TABLES {$this->va_temp}, {$this->lva_temp}, {$this->hind_temp}, {$this->va_table}, {$this->lva_table}, {$this->hind_table}";
 		$sql_tags[] = "DELETE FROM {$this->lva_table} WHERE toote_nimetus in ( '{$str2}' )";
 		$sql_tags[] = "DELETE FROM ".$this->va_table." WHERE pindeks in ( '{$str1}' )";
 		$sql_tags[] = "UPDATE ".$this->hind_table." SET lubatud = 'ei', changetime=now() WHERE pindeks in ( '{$str1}' )";
-// and changetime < ( DATE_SUB(now(),INTERVAL 30 MINUTE)+0 )";
-//		$sql_tags[] = "DELETE FROM ".$this->hind_table." WHERE pindeks in ( '{$str1}' )";
-
-//		$sql_tags[] = "FLUSH TABLES {$this->va_temp}, {$this->lva_temp}, {$this->hind_temp}, {$this->va_table}, {$this->lva_table}, {$this->hind_table}";
-		
 		$sql_tags[] = "REPLACE {$this->lva_table} SELECT * FROM {$this->lva_temp}";
 		$sql_tags[] = "REPLACE ".$this->va_table." SELECT * FROM ".$this->va_temp;
 // impordi ajal korvis olnud asjad kaduma ei läheks
 		$sql_tags[] = "DELETE FROM ".$this->hind_table." WHERE lubatud = 'ei' AND changetime < ( DATE_SUB(now(),INTERVAL 1 DAY)+0 )";
-//		$sql_tags[] = "FLUSH TABLES {$this->hind_temp}, {$this->hind_table}";
 		$sql_tags[] = "REPLACE INTO ".$this->hind_table." ( {$this->hind_trans_sql},lubatud ) SELECT {$this->hind_trans_sql},'jah' FROM ".$this->hind_temp;
-
-//		$sql_tags[] = "FLUSH TABLES {$this->va_temp}, {$this->lva_temp}, {$this->hind_temp}, {$this->va_table}, {$this->lva_table}, {$this->hind_table}";
-
 		$sql_tags[] = "DROP TABLE IF EXISTS ".$this->va_temp;
 		$sql_tags[] = "DROP TABLE IF EXISTS ".$this->hind_temp;
 		$sql_tags[] = "DROP TABLE IF EXISTS ".$this->lva_temp;
 
 		if( !empty( $sql_tags )) {
 			foreach( $sql_tags as $sql ) {
-// arr( $sql );
 				$this->db_query( $sql );
 			}
 		}
 		$ch = get_instance("cache");
 		$ch->full_flush();
-//		$ch->file_invalidate_regex("(.*)_va_(.*)");
 	}
 /*===========================================================================*/
 	function parse_graafik( $temp_arr ) {
@@ -540,7 +501,6 @@ class expp_import extends class_base
 			}
 			if( !empty( $sql_tags )) {
 				$sql = $sql1.implode( ',', $sql_tags );
-// arr( $sql );
 				$this->db_query( $sql );
 			}
 	 	}
@@ -548,7 +508,6 @@ class expp_import extends class_base
 		$sql_tags = array();
 		$sql1 = "DELETE FROM ".$this->ilm_table." WHERE valjaanne = '%s' AND ilmumiskpv BETWEEN '%s' and '%s'";
 		$sql = "select valjaanne, min( ilmumiskpv ) as vahim, max( ilmumiskpv ) as suurim from ".$this->ilm_temp." group by valjaanne";
-// arr( $sql );
 		$this->db_query( $sql );
 		while( $row =& $this->db_next()) {
 			$sql_tags[] = sprintf( $sql1, $row['valjaanne'], $row['vahim'], $row['suurim'] );
@@ -557,7 +516,6 @@ class expp_import extends class_base
 		$sql_tags[] = "DROP TABLE IF EXISTS ".$this->ilm_temp;
 		if( !empty( $sql_tags )) {
 			foreach( $sql_tags as $sql ) {
-// arr( $sql );
 				$this->db_query( $sql );
 			}
 		}
@@ -565,17 +523,14 @@ class expp_import extends class_base
 /*===========================================================================*/
 	function create_temp_table( $table ) {
 		$sql = "SHOW CREATE TABLE $table";
-// arr( $sql );
 		$row =& $this->db_fetch_row( $sql );
 		$dt = $row["Create Table"];
 		preg_match("/CREATE TABLE `(\w*)` \(/",$dt,$m);
 		$tablename = $m[1];
 		$tempname = "temp_" . $table;
 		$sql = "DROP TABLE IF EXISTS $tempname";
-// arr( $sql );
 		$this->db_query( $sql );
 		$sql = preg_replace("/(CREATE TABLE `)(\w*)(` \()/","\\1temp_\\2\\3",$dt);
-// arr( $sql );
 		$this->db_query( $sql );
 		return $tempname;
 	}
@@ -684,18 +639,16 @@ class expp_import extends class_base
 // http://andrus.dev.struktuur.ee/automatweb/orb.aw?class=expp_publication&action=change&id=998&parent=765
 // Selle objekti comment välja võiks panna publikatsiooni unikaalse ID, mis Reggyst tuleb, mille aluse vältida topeltobjektide loomist ja seoste säilimist.
 		$tooteObjekt	= $this->createPub( $toode, $toodeKaust->id(), $pindeks);
-// ma saan aru et siin peaks seostatama toode tooteHalduse juurde
-// sel juhul on see yhendus natuke valetpidi tehtud
-/*
-		$tooteObjekt->connect(array(
-			"to" => $tooteHaldus->id(),
-			"reltype" => "RELTYPE_PUBLICATION"
-		));
-*/
-// õige peaks olema:
+
 		$tooteHaldus->connect(array(
 			"to" => $tooteObjekt->id(),
 			"type" => "RELTYPE_PUBLICATION"
+		));
+
+// 9. Toote Grupile määratakse rootmenüüks tooteHalduse objekt:
+		$toodeGrupp->connect(array(
+			"to" => $tooteHaldus->id(),
+			"type" => "RELTYPE_ADMIN_ROOT",
 		));
 
 /*
@@ -752,7 +705,6 @@ class expp_import extends class_base
 				'juurdekasv'=> $val['juurdekasv']
 			);
 			$sql = $sql1.implode( "','", $sql3)."' )";
-// arr( $sql );
 			$this->db_query( $sql );
 		}
 	}
@@ -774,16 +726,13 @@ class expp_import extends class_base
 				"use_md5_passwords" => true,
 				"join_grp" => $group,
 			));
-			arr( "User > $name > new > $parent" );
+//			arr( "User > $name > new > $parent" );
 			$us->set_name( $name );
 			$us->set_parent( $parent );
 			$us->save();
 		} else {
 //			arr( "User > $name > old" );
 			$us = $co_ol->begin();
-//			$us->set_name( $name );
-//			$us->set_parent( $parent );
-//			$us->save();
 		}
 		return $us;
 	}
@@ -796,7 +745,7 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-			arr( "UserGroup > $name > new > $parent" );
+//			arr( "UserGroup > $name > new > $parent" );
 			$ug = obj();
 			$ug->set_class_id( CL_GROUP );
 			$ug->set_parent( $parent );
@@ -806,10 +755,6 @@ class expp_import extends class_base
 		} else {
 //			arr( "UserGroup > $name > old" );
 			$ug = $co_ol->begin();
-//			$ug->set_parent( $parent );
-//			$ug->set_name( $name );
-//			$ug->set_prop( "name", $name );
-//			$ug->save();
 		}
 		return $ug;
 	}
@@ -822,7 +767,7 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-			arr( "Company > $name > new > $parent" );
+//			arr( "Company > $name > new > $parent" );
 			$co = obj();
 			$co->set_class_id(CL_CRM_COMPANY);
 			$co->set_parent( $parent );
@@ -832,10 +777,6 @@ class expp_import extends class_base
 		} else {
 //			arr( "Company > $name > old" );
 			$co = $co_ol->begin();
-//			$co->set_parent( $parent );
-//			$co->set_name( $name );
-//			$co->set_prop( 'reg_nr', $name );
-//			$co->save();
 		}
 		return $co;
 	}
@@ -848,7 +789,7 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-			arr( "Section > $name > new > $parent" );
+//			arr( "Section > $name > new > $parent" );
 			$se = obj();
 			$se->set_class_id( CL_CRM_SECTION );
 			$se->set_parent( $parent );
@@ -860,10 +801,6 @@ class expp_import extends class_base
 		{
 //			arr( "Section > $name > old" );
 			$se = $co_ol->begin();
-//			$se->set_parent( $parent );
-//			$se->set_name( $name );
-//			$se->set_prop( "ext_id", $ext );
-//			$se->save();
 		}
 		return $se;
 	}
@@ -876,7 +813,7 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-			arr( "Menu > $name > new > $parent" );
+//			arr( "Menu > $name > new > $parent" );
 			$se = obj();
 			$se->set_class_id( CL_CRM_SECTION );
 			$se->set_parent( $parent );
@@ -887,10 +824,6 @@ class expp_import extends class_base
 		{
 //			arr( "Menu > $name > old" );
 			$se = $co_ol->begin();
-//			$se->set_parent( $parent );
-//			$se->set_name( $name );
-//			$se->set_prop( "ext_id", $ext );
-//			$se->save();
 		}
 		return $se;
 	}
@@ -903,11 +836,17 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-			arr( "CRM > $name > new > $parent" );
+//			arr( "CRM > $name > new > $parent" );
 			$se = obj();
 			$se->set_class_id( CL_EXPP_JOURNAL_MANAGEMENT );
 			$se->set_parent( $parent );
 			$se->set_name( $name );
+			
+			// kood peab olema urlencode()-detud ja % asendatakse
+			// #-dega
+			$code = str_replace( "%", "#", urlencode( $name ) );
+			$se->set_prop( "code", $code );
+			
 			// väljaande nimetus peaks siis olema ka see $name
 			// nagu ma aru saan, nii et paneb selle ka siis:
 			$se->set_prop( "publications_name", $name );
@@ -917,10 +856,6 @@ class expp_import extends class_base
 		{
 //			arr( "CRM > $name > old" );
 			$se = $co_ol->begin();
-//			$se->set_parent( $parent );
-//			$se->set_name( $name );
-//			$se->set_prop( "ext_id", $ext );
-//			$se->save();
 		}
 		return $se;
 	}
@@ -938,7 +873,7 @@ class expp_import extends class_base
 			"site_id" => array(),
 		));
 		if ($co_ol->count() == 0) {
-			arr( "Pub > $name > new > $parent" );
+//			arr( "Pub > $name > new > $parent" );
 			$se = obj();
 			$se->set_class_id( CL_EXPP_PUBLICATION );
 			$se->set_parent( $parent );
@@ -950,10 +885,6 @@ class expp_import extends class_base
 		} else {
 //			arr( "Pub > $name > old" );
 			$se = $co_ol->begin();
-//			$se->set_parent( $parent );
-//			$se->set_name( $name );
-//			$se->set_prop( "ext_id", $ext );
-//			$se->save();
 		}
 		return $se;
 	}

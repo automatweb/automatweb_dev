@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jupp.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jupp.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
 // expp_jupp.aw - Expp Jupp 
 /*
 
@@ -130,7 +130,7 @@ class expp_jupp extends class_base
 			$sql="UPDATE expp_arved SET staatus='saadetud' WHERE staatus='saatmisel'";
 			$this->db_query( $sql );
 			if ( $my_write ) {
-				$text = "NB! Ära seda tellimust Reggy-sse saada - kasuta ainult testimiseks.\n\n----------------------\n\nKorras!\n\nExporditi fail nimega $fname\n\nwww.tellimine.ee exporter\nPalun ära vasta sellele kirjale!!!\n";
+				$text = "Korras!\n\nExporditi fail nimega $fname\n\nwww.tellimine.ee exporter\nPalun ära vasta sellele kirjale!!!\n";
 
 				$i->create_message(array(		
 					"froma" => 'tellimine@tellimine.ee',
@@ -167,8 +167,8 @@ class expp_jupp extends class_base
 			$i->create_message(array(		
 				"froma" => 'tellimine@tellimine.ee',
 				"fromn" => 'www.tellimine.ee', 
-				"subject" => 'NB! see on test : '.$piiraeg,
-				"to" => "andrus@rae.ee,kerstis@expresspost.ee",
+				"subject" => 'veebitellimus : '.$piiraeg,
+				"to" => "andrus@rae.ee,veebitellimus@expresspost.ee",
 				"body" => "pole andmeid",
 			));
 		}

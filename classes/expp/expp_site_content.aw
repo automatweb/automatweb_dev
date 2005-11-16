@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.2 2005/11/07 08:37:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
 // expp_site_content.aw - expp_site_content (nimi) 
 /*
 
@@ -29,6 +29,7 @@ class expp_site_content extends class_base
 	var $webform_object = "";
 	var $forum_object = "";
 	var $custom_design_document_object = "";
+	var $publication_homepage_link_object = "";
 	
 	function expp_site_content()
 	{
@@ -120,7 +121,13 @@ class expp_site_content extends class_base
 					}
 
 					$this->forum_object = $o->get_first_obj_by_reltype("RELTYPE_GENERAL_FORUM");
-	
+//					$this->publication_homepage_link_object = $o->get_first_obj_by_reltype("RELTYPE_PUBLICATION_HOMEPAGE");
+					$publications_homepage_oid = $o->prop("publications_homepage");
+					if ($this->can("view", $publications_homepage_oid))
+					{
+						$this->publication_homepage_link_object = new object($publications_homepage_oid);
+					}
+					
 					// i need the publications group:
 					// i think i can take all permissions type connections from the management
 					// object ...
@@ -141,12 +148,23 @@ class expp_site_content extends class_base
 
 	function on_get_subtemplate_content($arr) {
 		$this->show();
+	
+	/*
 		if (empty($this->image_tag) && empty($this->document_content) && empty($this->connections_to_links))
 		{
 			return;
 		}
-
+	*/
 		$this->read_template("main.tpl");
+
+		/* if this variable gets its value as true, then show the expp gray table */
+		/* at this moment (13.11.2005), it should get true, when it is needed to show:
+			- link to webform
+			- link to forum
+			- links
+			- poll
+		*/
+		$show_links_table = false;
 
 		if (!empty($this->custom_design_document_object))
 		{
@@ -244,6 +262,7 @@ class expp_site_content extends class_base
 					"GENERAL_LINK" => $lingid
 				));
 				$lingid = $this->parse("GENERAL_LINKS");
+				$show_links_table = true;
 			}
 	
 			/* FAILIDE PARSIMINE */
@@ -280,11 +299,11 @@ class expp_site_content extends class_base
 				if ($this->can("view", $poll_id))
 				{
 					$general_poll = $poll_inst->gen_user_html($poll_id);
+					$show_links_table = true;
 				}
 			}
 			/* LINK HALDUSOBJEKTILE */
 			/* peab olema nähtav ainult adminnidele ja vastava haldusobjekti toimetajate grupile */
-			/* ?kuidas teha see adminnidele nähtavaks ehk kuidas ma tean adminnide grupi id-d? */
 			$link_to_management = "";
 			
 			// logged in users group ids:
@@ -307,29 +326,71 @@ class expp_site_content extends class_base
 			/* LINK FOORUMILE */
 			if (!empty($this->forum_object))
 			{
-				$link_to_forum_name = $this->forum_object->name();
-				$link_to_forum_url = aw_ini_get("baseurl")."/section=".$this->forum_object->id()."&tel_tpl=1";
+				$this->vars(array(
+					"link_to_forum_name" => $this->forum_object->name(),
+					"link_to_forum_url" => aw_ini_get("baseurl")."/section=".$this->forum_object->id()."&tel_tpl=1",
+
+				));
+				$link_to_forum = $this->parse("LINK_TO_FORUM");
+				$show_links_table = true;
 			}
 			
 			/* LINK VEEBIVORMILE */
 			if (!empty($this->webform_object))
 			{
-				$link_to_webform_name = $this->webform_object->name();
-				$link_to_webform_url = aw_ini_get("baseurl")."/section=".$this->webform_object->id()."&tel_tpl=1";
+	//			$link_to_webform_name = $this->webform_object->name();
+	//			$link_to_webform_url = aw_ini_get("baseurl")."/section=".$this->webform_object->id()."&tel_tpl=1";
+				$this->vars(array(
+					"link_to_webform_name" => $this->webform_object->name(),
+					"link_to_webform_url" => aw_ini_get("baseurl")."/section=".$this->webform_object->id()."&tel_tpl=1",
+				));
+				$link_to_webform = $this->parse("LINK_TO_WEBFORM");
+				$show_links_table = true;
+
 			}
+
+			/* LINK VÄLJAANDE KODULEHELE */
+			if (!empty($this->publication_homepage_link_object))
+			{
+				$target = "";
+				if ($this->publication_homepage_link_object->prop("newwindow") > 0)
+				{
+					$target = "_blank";
+				}
+				
+				$this->vars(array(
+					"LINK_TO_PUBLICATION_HOMEPAGE_NAME" => $this->publication_homepage_link_object->name(),
+					"LINK_TO_PUBLICATION_HOMEPAGE_URL" => $this->publication_homepage_link_object->prop("url"),
+					"LINK_TO_PUBLICATION_HOMEPAGE_TARGET" => $target,
+				));
+				$link_to_publication_homepage = $this->parse("LINK_TO_PUBLICATION_HOMEPAGE");
+			}
+			
+			/* show links table (look the comment near $show_links_table first declaration */
+			if ($show_links_table === true)
+			{
+				$this->vars(array(
+					"GENERAL_POLL" => $general_poll,
+					"GENERAL_LINKS" => $lingid,
+					"LINK_TO_FORUM" => $link_to_forum,
+					"LINK_TO_WEBFORM" => $link_to_webform,
+				));
+				$links_table = $this->parse("LINKS_TABLE");
+			}
+			
 			$this->vars(array(
 				"DOC_IMAGE" => $this->image_tag,
-				"GENERAL_LINKS" => $lingid,
+			//	"GENERAL_LINKS" => $lingid,
 				"GENERAL_DOCUMENTS" => $dokumendid,
 				"GENERAL_DOCUMENTS_AS_LINKS" => $dokumendid_lingina,
 				"GENERAL_IMAGES" => $pildid,
 				"GENERAL_FILES" => $failid,
-				"GENERAL_POLL" => $general_poll,
-				"LINK_TO_FORUM_URL" => $link_to_forum_url,
-				"LINK_TO_FORUM_NAME" => $link_to_forum_name,
-				"LINK_TO_WEBFORM_URL" => $link_to_webform_url,
-				"LINK_TO_WEBFORM_NAME" => $link_to_webform_name,
+			//	"GENERAL_POLL" => $general_poll,
+			//	"LINK_TO_FORUM" => $link_to_forum,
+			//	"LINK_TO_WEBFORM" => $link_to_webform,
+				"LINKS_TABLE" => $links_table,
 				"LINK_TO_MANAGEMENT" => $link_to_management,
+				"LINK_TO_PUBLICATION_HOMEPAGE" => $link_to_publication_homepage,
 			));
 			
 			$this->vars(array(
