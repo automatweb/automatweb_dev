@@ -84,6 +84,15 @@
             <type>textbox</type>
             <caption>Postkast</caption>
       </property>
+      <property>
+            <name>unit_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_address</group>
+            <type>textbox</type>
+            <caption>Üksus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_ADDRESS</syslog_type>
             <relationmgr>yes</relationmgr>

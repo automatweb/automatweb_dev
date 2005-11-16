@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.33 2005/11/14 13:53:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.34 2005/11/16 13:45:59 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -30,7 +30,7 @@
 @property end type=datetime_select table=planner 
 @caption L&otilde;peb
 
-@property deadline type=datetime_select table=objects field=meta method=serialize
+@property deadline type=datetime_select table=planner field=deadline 
 @caption T&auml;htaeg
 
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize

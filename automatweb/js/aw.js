@@ -175,6 +175,7 @@ function aw_date_edit_show_cal(elname)
 		var y = y_obj.value;
 	}
 	else
+    if (y_obj.options)
 	{
 		var y = y_obj.options[y_obj.selectedIndex].value;
 	}
@@ -184,6 +185,7 @@ function aw_date_edit_show_cal(elname)
 		var m = m_obj.value;
 	}
 	else
+    if (m_obj.options)
 	{
 		var m = m_obj.options[m_obj.selectedIndex].value;
 	}
@@ -193,6 +195,7 @@ function aw_date_edit_show_cal(elname)
 		var d = d_obj.value;
 	}
 	else
+    if (d_obj.options)
 	{
 		var d = d_obj.options[d_obj.selectedIndex].value;
 	}
@@ -201,7 +204,7 @@ function aw_date_edit_show_cal(elname)
 	{ 
 		d=1; 
 	}
-	if (y=="---" || m=="---") 
+	if (y=="---" || m=="---" || y == undefined || m == undefined) 
 	{ 
 		dt = null; 
 	}
@@ -215,6 +218,10 @@ function aw_date_edit_show_cal(elname)
 
 function aw_set_lb_val(el, val)
 {
+    if (!el.options)
+	{
+	    return;
+	}
 	for(i = 0;  i < el.options.length; i++)
 	{
 		if (el.options[i].value == val)

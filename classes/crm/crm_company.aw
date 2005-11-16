@@ -327,38 +327,44 @@ default group=org_objects
 
 			@layout all_proj_search_b type=vbox parent=projects_tree
 
-			@property all_proj_search_cust type=textbox store=no parent=all_proj_search_b size=30 captionside=top
-			@caption Klient
+				@layout all_proj_search_b_top type=vbox parent=all_proj_search_b
 
-			@property all_proj_search_part type=text size=25 parent=all_proj_search_b store=no captionside=top
-			@caption Osaleja
+					@property all_proj_search_cust type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
+					@caption Klient
 
-			@property all_proj_search_name type=textbox store=no parent=all_proj_search_b size=30 captionside=top
-			@caption Projekti nimi
+					@property all_proj_search_part type=text size=28 parent=all_proj_search_b_top store=no captionside=top
+					@caption Osaleja
 
-			@property all_proj_search_code type=textbox store=no parent=all_proj_search_b size=30 captionside=top
-			@caption Projekti kood
+					@property all_proj_search_name type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
+					@caption Projekti nimi
 
-			@property all_proj_search_contact_person type=textbox store=no parent=all_proj_search_b size=30 captionside=top
-			@caption Projekti kontaktisik
+					@property all_proj_search_code type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
+					@caption Projekti kood
 
-			@property all_proj_search_task_name type=textbox store=no parent=all_proj_search_b size=30 captionside=top
-			@caption &Uuml;lesande nimi
+					@property all_proj_search_contact_person type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
+					@caption Projekti kontaktisik
 
-			@property all_proj_search_dl_from type=date_select store=no parent=all_proj_search_b  captionside=top
-			@caption T&auml;htaeg alates
+					@property all_proj_search_task_name type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
+					@caption &Uuml;lesande nimi
 
-			@property all_proj_search_dl_to type=date_select store=no parent=all_proj_search_b  captionside=top
-			@caption T&auml;htaeg kuni
+				@layout all_proj_search_b_dl type=vbox parent=all_proj_search_b
 
-			@property all_proj_search_end_from type=date_select store=no parent=all_proj_search_b  captionside=top
-			@caption L&otilde;pp alates
+					@property all_proj_search_dl_from type=date_select store=no parent=all_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@caption T&auml;htaeg alates
 
-			@property all_proj_search_end_to type=date_select store=no parent=all_proj_search_b  captionside=top
-			@caption L&otilde;pp kuni
+					@property all_proj_search_dl_to type=date_select store=no parent=all_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@caption T&auml;htaeg kuni
 
-			@property all_proj_search_state type=select store=no parent=all_proj_search_b  captionside=top
-			@caption Staatus
+				@layout all_proj_search_b_end type=vbox parent=all_proj_search_b
+
+					@property all_proj_search_end_from type=date_select store=no parent=all_proj_search_b_end  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@caption L&otilde;pp alates
+
+					@property all_proj_search_end_to type=date_select store=no parent=all_proj_search_b_end  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@caption L&otilde;pp kuni
+
+					@property all_proj_search_state type=select store=no parent=all_proj_search_b  captionside=top
+					@caption Staatus
 
 			@layout all_proj_search_but_row type=hbox parent=projects_tree 
 
@@ -380,29 +386,33 @@ default group=org_objects
 
 			@layout my_proj_search_b type=vbox parent=my_proj_search
 
-			@property proj_search_cust type=textbox store=no parent=my_proj_search_b size=30 captionside=top
-			@caption Klient
+				@layout my_proj_search_b_top type=vbox parent=my_proj_search_b
 
-			@property proj_search_part type=text size=25 parent=my_proj_search_b store=no captionside=top
-			@caption Osaleja
+					@property proj_search_cust type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@caption Klient
 
-			@property proj_search_name type=textbox store=no parent=my_proj_search_b size=30 captionside=top
-			@caption Projekti nimi
+					@property proj_search_part type=text size=28 parent=my_proj_search_b_top store=no captionside=top
+					@caption Osaleja
 
-			@property proj_search_code type=textbox store=no parent=my_proj_search_b size=30 captionside=top
-			@caption Projekti kood
+					@property proj_search_name type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@caption Projekti nimi
 
-			@property proj_search_contact_person type=textbox store=no parent=my_proj_search_b size=30 captionside=top
-			@caption Projekti kontaktisik
+					@property proj_search_code type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@caption Projekti kood
 
-			@property proj_search_task_name type=textbox store=no parent=my_proj_search_b size=30 captionside=top
-			@caption &Uuml;lesande nimi
+					@property proj_search_contact_person type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@caption Projekti kontaktisik
 
-			@property proj_search_dl_from type=date_select store=no parent=my_proj_search_b  captionside=top
-			@caption T&auml;htaeg alates
+					@property proj_search_task_name type=textbox store=no parent=my_proj_search_b_top size=33 captionside=top
+					@caption &Uuml;lesande nimi
 
-			@property proj_search_dl_to type=date_select store=no parent=my_proj_search_b  captionside=top
-			@caption T&auml;htaeg kuni
+				@layout my_proj_search_b_dl type=vbox parent=my_proj_search_b
+
+					@property proj_search_dl_from type=date_select store=no parent=my_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@caption T&auml;htaeg alates
+
+					@property proj_search_dl_to type=date_select store=no parent=my_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@caption T&auml;htaeg kuni
 
 			@property proj_search_state type=select store=no parent=my_proj_search_b  captionside=top
 			@caption Staatus
@@ -536,26 +546,30 @@ default group=org_objects
 
 		@layout all_act_search type=vbox parent=my_tasks
 
-			@property act_s_cust type=textbox size=30 parent=all_act_search store=no captionside=top
+			@layout act_s_dl_layout_top type=vbox parent=all_act_search
+
+			@property act_s_cust type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Klient
 
-			@property act_s_part type=text size=25 parent=all_act_search store=no captionside=top
+			@property act_s_part type=text size=30 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Osaleja
 
-			@property act_s_task_name type=textbox size=30 parent=all_act_search store=no captionside=top
+			@property act_s_task_name type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Toimetuse nimi
 
-			@property act_s_code type=textbox size=30 parent=all_act_search store=no captionside=top
+			@property act_s_code type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Toimetuse kood
 
-			@property act_s_proj_name type=textbox size=30 parent=all_act_search store=no captionside=top
+			@property act_s_proj_name type=textbox size=33 parent=all_act_search store=no captionside=top
 			@caption Projekti nimi
 
-			@property act_s_dl_from type=date_select store=no parent=all_act_search captionside=top
-			@caption T&auml;htaeg alates
+			@layout act_s_dl_layout type=vbox parent=all_act_search
 
-			@property act_s_dl_to type=date_select store=no parent=all_act_search  captionside=top
-			@caption T&auml;htaeg kuni
+				@property act_s_dl_from type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox 
+				@caption T&auml;htaeg alates
+
+				@property act_s_dl_to type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox 
+				@caption T&auml;htaeg kuni
 
 			@property act_s_status type=select parent=all_act_search store=no captionside=top
 			@caption Staatus

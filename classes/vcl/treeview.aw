@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.49 2005/09/15 12:42:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.50 2005/11/16 13:45:59 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -294,6 +294,15 @@ class treeview extends class_base
 		}
 
 		$this->open_nodes = array();
+	}
+
+	function set_branch_func($fc)
+	{
+		$this->get_branch_func = $fc;
+		if (($this->tree_type == TREE_DHTML or $this->tree_type == TREE_DHTML_WITH_CHECKBOXES or $this->tree_type == TREE_DHTML_WITH_BUTTONS) && !empty($this->get_branch_func))
+		{
+			$this->features[LOAD_ON_DEMAND] = 1;
+		}
 	}
 
 	function has_feature($feature)

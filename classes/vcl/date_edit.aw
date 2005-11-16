@@ -139,6 +139,10 @@ class date_edit
 					break;
 
 				case "year_textbox":
+					if ($year == -1)
+					{
+						$year = "";
+					}
 					$retval .= sprintf("<input type='text' name='%s[year]' size='4' maxlength='4' value='$year' $disabled $textsize>\n",$this->varname);
 					break;
 
@@ -180,6 +184,10 @@ class date_edit
 					break;
 
 				case "month_textbox":
+					if ($month == -1)
+					{
+						$month = "";
+					}
 					$retval .= sprintf("<input type='text' name='%s[month]' size='2' maxlength='2' value='$month' $disabled $textsize>\n",$this->varname);
 					break;
 
@@ -197,6 +205,10 @@ class date_edit
 					break;
 
 				case "day_textbox":
+					if ($day == -1)
+					{
+						$day = "";
+					}
 					$retval .= sprintf("<input type='text' name='%s[day]' size='2' maxlength='2' value='$day' $disabled $textsize>\n",$this->varname);
 					break;
 
@@ -240,8 +252,8 @@ class date_edit
 		if (is_admin())
 		{
 			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_show_cal(\"".$this->varname."\");' id='".$this->varname."' name='".$this->varname."'>";
-			$retval .= "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/class_126.gif' border='0'></a> | ";	
-			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");'>X</a>";
+			$retval .= "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/class_126.gif' border='0'></a> ";	
+			$retval .= "<a href='javascript:void(0)' onClick='aw_date_edit_clear(\"".$this->varname."\");'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		}
 
 		return $retval;

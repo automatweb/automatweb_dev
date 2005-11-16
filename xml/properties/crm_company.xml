@@ -55,7 +55,7 @@
             <automatic>1</automatic>
             <reltype>RELTYPE_ETTEVOTLUSVORM</reltype>
             <field>ettevotlusvorm</field>
-            <caption>Õiguslik vorm</caption>
+            <caption>&amp;Otilde;iguslik vorm</caption>
       </property>
       <property>
             <name>code</name>
@@ -79,7 +79,7 @@
             <group>general_sub</group>
             <type>date_select</type>
             <field>cust_contract_date</field>
-            <caption>Kliendisuhte alguskuup&amp;auml;ev</caption>
+            <caption>Kliendisuhte alguskuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>cust_contract_creator</name>
@@ -169,7 +169,7 @@
             <cols>65</cols>
             <rows>3</rows>
             <field>kaubamargid</field>
-            <caption>Kaubamärgid</caption>
+            <caption>Kaubam&amp;auml;rgid</caption>
       </property>
       <property>
             <name>tegevuse_kirjeldus</name>
@@ -201,7 +201,7 @@
             <style>relpicker</style>
             <reltype>RELTYPE_TEGEVUSALAD</reltype>
             <field>pohitegevus</field>
-            <caption>P&amp;otilde;hitegevus / Tegevusalad</caption>
+            <caption>P&amp;amp;otilde;hitegevus / Tegevusalad</caption>
       </property>
       <property>
             <name>field_manager</name>
@@ -297,9 +297,7 @@
             <store>no</store>
             <parent>hbox_toolbar</parent>
             <field>contact_toolbar</field>
-            <caption>
-            <![CDATA["The Green Button"]]>
-            </caption>
+            <caption>&amp;quot;The Green Button&amp;quot;</caption>
       </property>
       <property>
             <name>unit_listing_tree</name>
@@ -614,9 +612,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>my_customers_toolbar</field>
-            <caption>
-            <![CDATA["Klientide toolbar"]]>
-            </caption>
+            <caption>&amp;quot;Klientide toolbar&amp;quot;</caption>
       </property>
       <property>
             <name>customer_search_name</name>
@@ -652,7 +648,7 @@
             <parent>vbox_customers_left</parent>
             <captionside>top</captionside>
             <field>customer_search_worker</field>
-            <caption>T&amp;ouml;&amp;ouml;taja</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
       </property>
       <property>
             <name>customer_search_address</name>
@@ -700,7 +696,7 @@
             <parent>vbox_customers_left</parent>
             <captionside>top</captionside>
             <field>customer_search_ev</field>
-            <caption>&amp;Otilde;iguslik vorm</caption>
+            <caption>&amp;amp;Otilde;iguslik vorm</caption>
       </property>
       <property>
             <name>customer_search_is_co</name>
@@ -757,9 +753,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>customer_toolbar</field>
-            <caption>
-            <![CDATA["Klientide toolbar"]]>
-            </caption>
+            <caption>&amp;quot;Klientide toolbar&amp;quot;</caption>
       </property>
       <property>
             <name>customer_listing_tree</name>
@@ -770,7 +764,7 @@
             <parent>relorg_t_l</parent>
             <store>no</store>
             <field>customer_listing_tree</field>
-            <caption>Rühmade puu</caption>
+            <caption>R&amp;uuml;hmade puu</caption>
       </property>
       <property>
             <name>customer_t</name>
@@ -873,8 +867,8 @@
             <group>org_projects_archive</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>all_proj_search_b</parent>
-            <size>30</size>
+            <parent>all_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>all_proj_search_cust</field>
             <caption>Klient</caption>
@@ -884,8 +878,8 @@
             <table>objects</table>
             <group>org_projects_archive</group>
             <type>text</type>
-            <size>25</size>
-            <parent>all_proj_search_b</parent>
+            <size>28</size>
+            <parent>all_proj_search_b_top</parent>
             <store>no</store>
             <captionside>top</captionside>
             <field>all_proj_search_part</field>
@@ -897,8 +891,8 @@
             <group>org_projects_archive</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>all_proj_search_b</parent>
-            <size>30</size>
+            <parent>all_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>all_proj_search_name</field>
             <caption>Projekti nimi</caption>
@@ -909,8 +903,8 @@
             <group>org_projects_archive</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>all_proj_search_b</parent>
-            <size>30</size>
+            <parent>all_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>all_proj_search_code</field>
             <caption>Projekti kood</caption>
@@ -921,8 +915,8 @@
             <group>org_projects_archive</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>all_proj_search_b</parent>
-            <size>30</size>
+            <parent>all_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>all_proj_search_contact_person</field>
             <caption>Projekti kontaktisik</caption>
@@ -933,11 +927,11 @@
             <group>org_projects_archive</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>all_proj_search_b</parent>
-            <size>30</size>
+            <parent>all_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>all_proj_search_task_name</field>
-            <caption>&amp;Uuml;lesande nimi</caption>
+            <caption>&amp;amp;Uuml;lesande nimi</caption>
       </property>
       <property>
             <name>all_proj_search_dl_from</name>
@@ -945,10 +939,15 @@
             <group>org_projects_archive</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>all_proj_search_b</parent>
+            <parent>all_proj_search_b_dl</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>all_proj_search_dl_from</field>
-            <caption>T&amp;auml;htaeg alates</caption>
+            <caption>T&amp;amp;auml;htaeg alates</caption>
       </property>
       <property>
             <name>all_proj_search_dl_to</name>
@@ -956,10 +955,15 @@
             <group>org_projects_archive</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>all_proj_search_b</parent>
+            <parent>all_proj_search_b_dl</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>all_proj_search_dl_to</field>
-            <caption>T&amp;auml;htaeg kuni</caption>
+            <caption>T&amp;amp;auml;htaeg kuni</caption>
       </property>
       <property>
             <name>all_proj_search_end_from</name>
@@ -967,10 +971,15 @@
             <group>org_projects_archive</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>all_proj_search_b</parent>
+            <parent>all_proj_search_b_end</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>all_proj_search_end_from</field>
-            <caption>L&amp;otilde;pp alates</caption>
+            <caption>L&amp;amp;otilde;pp alates</caption>
       </property>
       <property>
             <name>all_proj_search_end_to</name>
@@ -978,10 +987,15 @@
             <group>org_projects_archive</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>all_proj_search_b</parent>
+            <parent>all_proj_search_b_end</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>all_proj_search_end_to</field>
-            <caption>L&amp;otilde;pp kuni</caption>
+            <caption>L&amp;amp;otilde;pp kuni</caption>
       </property>
       <property>
             <name>all_proj_search_state</name>
@@ -1014,7 +1028,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>all_proj_search_clear</field>
-            <caption>T&amp;uuml;hista otsing</caption>
+            <caption>T&amp;amp;uuml;hista otsing</caption>
       </property>
       <property>
             <name>projects_listing_table</name>
@@ -1032,8 +1046,8 @@
             <group>my_projects</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>my_proj_search_b</parent>
-            <size>30</size>
+            <parent>my_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>proj_search_cust</field>
             <caption>Klient</caption>
@@ -1043,8 +1057,8 @@
             <table>objects</table>
             <group>my_projects</group>
             <type>text</type>
-            <size>25</size>
-            <parent>my_proj_search_b</parent>
+            <size>28</size>
+            <parent>my_proj_search_b_top</parent>
             <store>no</store>
             <captionside>top</captionside>
             <field>proj_search_part</field>
@@ -1056,8 +1070,8 @@
             <group>my_projects</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>my_proj_search_b</parent>
-            <size>30</size>
+            <parent>my_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>proj_search_name</field>
             <caption>Projekti nimi</caption>
@@ -1068,8 +1082,8 @@
             <group>my_projects</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>my_proj_search_b</parent>
-            <size>30</size>
+            <parent>my_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>proj_search_code</field>
             <caption>Projekti kood</caption>
@@ -1080,8 +1094,8 @@
             <group>my_projects</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>my_proj_search_b</parent>
-            <size>30</size>
+            <parent>my_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>proj_search_contact_person</field>
             <caption>Projekti kontaktisik</caption>
@@ -1092,11 +1106,11 @@
             <group>my_projects</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>my_proj_search_b</parent>
-            <size>30</size>
+            <parent>my_proj_search_b_top</parent>
+            <size>33</size>
             <captionside>top</captionside>
             <field>proj_search_task_name</field>
-            <caption>&amp;Uuml;lesande nimi</caption>
+            <caption>&amp;amp;Uuml;lesande nimi</caption>
       </property>
       <property>
             <name>proj_search_dl_from</name>
@@ -1104,10 +1118,15 @@
             <group>my_projects</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>my_proj_search_b</parent>
+            <parent>my_proj_search_b_dl</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>proj_search_dl_from</field>
-            <caption>T&amp;auml;htaeg alates</caption>
+            <caption>T&amp;amp;auml;htaeg alates</caption>
       </property>
       <property>
             <name>proj_search_dl_to</name>
@@ -1115,10 +1134,15 @@
             <group>my_projects</group>
             <type>date_select</type>
             <store>no</store>
-            <parent>my_proj_search_b</parent>
+            <parent>my_proj_search_b_dl</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>proj_search_dl_to</field>
-            <caption>T&amp;auml;htaeg kuni</caption>
+            <caption>T&amp;amp;auml;htaeg kuni</caption>
       </property>
       <property>
             <name>proj_search_state</name>
@@ -1151,7 +1175,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>proj_search_clear</field>
-            <caption>T&amp;uuml;hista otsing</caption>
+            <caption>T&amp;amp;uuml;hista otsing</caption>
       </property>
       <property>
             <name>my_projects</name>
@@ -1174,7 +1198,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>report_list</field>
-            <caption>P&amp;auml;eva raportid</caption>
+            <caption>P&amp;amp;auml;eva raportid</caption>
       </property>
       <property>
             <name>docs_tb</name>
@@ -1274,7 +1298,7 @@
             <no_caption>1</no_caption>
             <parent>docs_s_but_row</parent>
             <field>docs_s_clear</field>
-            <caption>T&amp;uuml;hista otsing</caption>
+            <caption>T&amp;amp;uuml;hista otsing</caption>
       </property>
       <property>
             <name>docs_tbl</name>
@@ -1518,8 +1542,8 @@
                   <num_4>all_actions</num_4>
             </group>
             <type>textbox</type>
-            <size>30</size>
-            <parent>all_act_search</parent>
+            <size>33</size>
+            <parent>act_s_dl_layout_top</parent>
             <store>no</store>
             <captionside>top</captionside>
             <field>act_s_cust</field>
@@ -1536,8 +1560,8 @@
                   <num_4>all_actions</num_4>
             </group>
             <type>text</type>
-            <size>25</size>
-            <parent>all_act_search</parent>
+            <size>30</size>
+            <parent>act_s_dl_layout_top</parent>
             <store>no</store>
             <captionside>top</captionside>
             <field>act_s_part</field>
@@ -1554,8 +1578,8 @@
                   <num_4>all_actions</num_4>
             </group>
             <type>textbox</type>
-            <size>30</size>
-            <parent>all_act_search</parent>
+            <size>33</size>
+            <parent>act_s_dl_layout_top</parent>
             <store>no</store>
             <captionside>top</captionside>
             <field>act_s_task_name</field>
@@ -1572,8 +1596,8 @@
                   <num_4>all_actions</num_4>
             </group>
             <type>textbox</type>
-            <size>30</size>
-            <parent>all_act_search</parent>
+            <size>33</size>
+            <parent>act_s_dl_layout_top</parent>
             <store>no</store>
             <captionside>top</captionside>
             <field>act_s_code</field>
@@ -1590,7 +1614,7 @@
                   <num_4>all_actions</num_4>
             </group>
             <type>textbox</type>
-            <size>30</size>
+            <size>33</size>
             <parent>all_act_search</parent>
             <store>no</store>
             <captionside>top</captionside>
@@ -1609,10 +1633,15 @@
             </group>
             <type>date_select</type>
             <store>no</store>
-            <parent>all_act_search</parent>
+            <parent>act_s_dl_layout</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>act_s_dl_from</field>
-            <caption>T&amp;auml;htaeg alates</caption>
+            <caption>T&amp;amp;auml;htaeg alates</caption>
       </property>
       <property>
             <name>act_s_dl_to</name>
@@ -1626,10 +1655,15 @@
             </group>
             <type>date_select</type>
             <store>no</store>
-            <parent>all_act_search</parent>
+            <parent>act_s_dl_layout</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>act_s_dl_to</field>
-            <caption>T&amp;auml;htaeg kuni</caption>
+            <caption>T&amp;amp;auml;htaeg kuni</caption>
       </property>
       <property>
             <name>act_s_status</name>
@@ -1713,7 +1747,7 @@
             <type>chooser</type>
             <store>no</store>
             <field>stats_s_cust_type</field>
-            <caption>Kliendi t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Kliendi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>stats_s_proj</name>
@@ -1731,7 +1765,7 @@
             <type>textbox</type>
             <store>no</store>
             <field>stats_s_worker</field>
-            <caption>T&amp;ouml;&amp;ouml;taja</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
       </property>
       <property>
             <name>stats_s_from</name>
@@ -1989,7 +2023,7 @@
             <ETTEVOTLUSVORM>
                   <value>1</value>
                   <clid>CL_CRM_CORPFORM</clid>
-                  <caption>Õiguslik vorm</caption>
+                  <caption>&amp;Otilde;iguslik vorm</caption>
             </ETTEVOTLUSVORM>
             <ADDRESS>
                   <value>3</value>
@@ -2009,12 +2043,12 @@
             <CHILD_ORG>
                   <value>7</value>
                   <clid>CL_CRM_COMPANY</clid>
-                  <caption>Tütar-organisatsioonid</caption>
+                  <caption>T&amp;uuml;tar-organisatsioonid</caption>
             </CHILD_ORG>
             <WORKERS>
                   <value>8</value>
                   <clid>CL_CRM_PERSON</clid>
-                  <caption>Töötajad</caption>
+                  <caption>T&amp;ouml;&amp;ouml;tajad</caption>
             </WORKERS>
             <OFFER>
                   <value>9</value>
@@ -2034,7 +2068,7 @@
             <CALL>
                   <value>12</value>
                   <clid>CL_CRM_CALL</clid>
-                  <caption>Kõne</caption>
+                  <caption>K&amp;otilde;ne</caption>
             </CALL>
             <TASK>
                   <value>13</value>
@@ -2064,17 +2098,17 @@
             <JOBS>
                   <value>19</value>
                   <clid>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</clid>
-                  <caption>T&amp;ouml;&amp;ouml;pakkumine</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkumine</caption>
             </JOBS>
             <TOOPAKKUJA>
                   <value>20</value>
                   <clid>CL_CRM_COMPANY</clid>
-                  <caption>Tööpakkuja</caption>
+                  <caption>T&amp;ouml;&amp;ouml;pakkuja</caption>
             </TOOPAKKUJA>
             <TOOTSIJA>
                   <value>21</value>
                   <clid>CL_CRM_PERSON</clid>
-                  <caption>Tööotsija</caption>
+                  <caption>T&amp;ouml;&amp;ouml;otsija</caption>
             </TOOTSIJA>
             <CUSTOMER>
                   <value>22</value>
@@ -2112,12 +2146,12 @@
             <SECTION>
                   <value>28</value>
                   <clid>CL_CRM_SECTION</clid>
-                  <caption>Üksus</caption>
+                  <caption>&amp;Uuml;ksus</caption>
             </SECTION>
             <PROFESSIONS>
                   <value>29</value>
                   <clid>CL_CRM_PROFESSION</clid>
-                  <caption>Võimalikud ametid</caption>
+                  <caption>V&amp;otilde;imalikud ametid</caption>
             </PROFESSIONS>
             <CATEGORY>
                   <value>30</value>
@@ -2132,7 +2166,7 @@
             <SELLER>
                   <value>32</value>
                   <clid>CL_CRM_PERSON</clid>
-                  <caption>Persoon, kes müüs</caption>
+                  <caption>Persoon, kes m&amp;uuml;&amp;uuml;s</caption>
             </SELLER>
             <PROJECT>
                   <value>33</value>
@@ -2147,7 +2181,7 @@
             <SECTION_WEBSIDE>
                   <value>35</value>
                   <clid>CL_CRM_MANAGER</clid>
-                  <caption>Üksus veebis</caption>
+                  <caption>&amp;Uuml;ksus veebis</caption>
             </SECTION_WEBSIDE>
             <GROUP>
                   <value>36</value>
@@ -2167,7 +2201,7 @@
             <DAY_REPORT>
                   <value>39</value>
                   <clid>CL_CRM_DAY_REPORT</clid>
-                  <caption>p&amp;auml;eva raport</caption>
+                  <caption>p&amp;amp;auml;eva raport</caption>
             </DAY_REPORT>
             <DOCS_FOLDER>
                   <value>40</value>
@@ -2318,6 +2352,21 @@
                   <parent>projects_tree</parent>
                   <group>org_projects_archive</group>
             </all_proj_search_b>
+            <all_proj_search_b_top>
+                  <type>vbox</type>
+                  <parent>all_proj_search_b</parent>
+                  <group>org_projects_archive</group>
+            </all_proj_search_b_top>
+            <all_proj_search_b_dl>
+                  <type>vbox</type>
+                  <parent>all_proj_search_b</parent>
+                  <group>org_projects_archive</group>
+            </all_proj_search_b_dl>
+            <all_proj_search_b_end>
+                  <type>vbox</type>
+                  <parent>all_proj_search_b</parent>
+                  <group>org_projects_archive</group>
+            </all_proj_search_b_end>
             <all_proj_search_but_row>
                   <type>hbox</type>
                   <parent>projects_tree</parent>
@@ -2343,6 +2392,16 @@
                   <parent>my_proj_search</parent>
                   <group>my_projects</group>
             </my_proj_search_b>
+            <my_proj_search_b_top>
+                  <type>vbox</type>
+                  <parent>my_proj_search_b</parent>
+                  <group>my_projects</group>
+            </my_proj_search_b_top>
+            <my_proj_search_b_dl>
+                  <type>vbox</type>
+                  <parent>my_proj_search_b</parent>
+                  <group>my_projects</group>
+            </my_proj_search_b_dl>
             <my_proj_search_but_row>
                   <type>hbox</type>
                   <parent>my_proj_search</parent>
@@ -2410,6 +2469,28 @@
                         <num_4>all_actions</num_4>
                   </group>
             </all_act_search>
+            <act_s_dl_layout_top>
+                  <type>vbox</type>
+                  <parent>all_act_search</parent>
+                  <group>
+                        <num_0>my_tasks</num_0>
+                        <num_1>meetings</num_1>
+                        <num_2>calls</num_2>
+                        <num_3>ovrv_offers</num_3>
+                        <num_4>all_actions</num_4>
+                  </group>
+            </act_s_dl_layout_top>
+            <act_s_dl_layout>
+                  <type>vbox</type>
+                  <parent>all_act_search</parent>
+                  <group>
+                        <num_0>my_tasks</num_0>
+                        <num_1>meetings</num_1>
+                        <num_2>calls</num_2>
+                        <num_3>ovrv_offers</num_3>
+                        <num_4>all_actions</num_4>
+                  </group>
+            </act_s_dl_layout>
       </layout>
 </properties>
 

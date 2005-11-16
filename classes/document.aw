@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.337 2005/11/07 07:56:49 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.338 2005/11/16 13:45:58 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3216,6 +3216,31 @@ class document extends aw_template
 			$text = preg_replace("/" . $find . "/ismU",$val,$text);
 		};
 		return $text;
+	}
+
+	function do_db_upgrade($table, $field, $q, $err)
+	{
+		if ($table == "planner" && $field == "deadline")
+		{
+			// create column and copy values from tasks
+			$this->db_add_col($table, array(
+				"name" => $field,
+				"type" => "int"
+			));
+			$ol = new object_list(array(
+				"class_id" => CL_TASK,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			foreach($ol->arr() as $o)
+			{
+				$o->set_prop("deadline", $o->meta("deadline"));
+				aw_disable_acl();
+				$o->save();
+				aw_restore_acl();
+			}
+		}
+		return false;
 	}
 };
 ?>

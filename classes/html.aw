@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.86 2005/11/10 18:34:58 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.87 2005/11/16 13:45:58 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -467,7 +467,20 @@ class html extends aw_template
 	{
 		load_vcl("date_edit");
 		$selector = new date_edit($args["name"]);
-		$selector->configure(array("day" => 1, "month" => 1, "year" => 1));
+
+		if (!empty($args["format"]) && is_array($args["format"]) && count($args["format"]))
+		{
+			$a = array();
+			foreach($args["format"] as $fldn)
+			{
+				$a[$fldn] = 1;
+			}
+			$selector->configure($a);
+		}
+		else
+		{
+			$selector->configure(array("day" => 1, "month" => 1, "year" => 1));
+		}
 		if(!empty($args["mon_for"]))
 		{
 			$selector->set("mon_for", $args["mon_for"]);

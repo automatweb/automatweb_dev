@@ -68,11 +68,10 @@
       </property>
       <property>
             <name>deadline</name>
-            <table>objects</table>
+            <table>planner</table>
             <group>general</group>
             <type>datetime_select</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>deadline</field>
             <caption>T&amp;auml;htaeg</caption>
       </property>
       <property>

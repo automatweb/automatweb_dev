@@ -18,6 +18,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/ajax.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/autosuggest.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/CalendarPopup.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/popup_menu.js"></script>
 
 
 <script type="text/javascript">

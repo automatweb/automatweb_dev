@@ -68,30 +68,81 @@ class relpicker extends  core
 			}
 		}
 		$val["type"] = ($val["display"] == "radio") ? "chooser" : "select";
+
+		if ($val["type"] == "select" && is_object($this->obj))
+		{
+			$clid = (array)$arr["relinfo"][$reltype]["clid"];
+			$url = $this->mk_my_orb("do_search", array(
+				"id" => $arr["obj_inst"]->id(),
+				"pn" => $arr["property"]["name"],
+				"clid" => $clid,
+				"multiple" => $arr["property"]["multiple"]
+			), "popup_search");
+	
+			$val["post_append_text"] .= " ".html::href(array(
+				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+				"title" => t("Muuda")
+			));
+		}
+
 		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->prop($val["name"])))
 		{
-			$val["post_append_text"] = " ".html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru()), t("Muuda valitud objekti"));
+			$val["post_append_text"] .= " ".html::href(array(
+				"url" => html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru())),
+				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
+				"title" => t("Muuda")
+			));
 		}
 		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->id()))
 		{
-			$clid = $arr["relinfo"][$reltype]["clid"];
+			$clid = (array)$arr["relinfo"][$reltype]["clid"];
 			$rel_val = $arr["relinfo"][$reltype]["value"];
-			if (is_array($clid))
+
+			$clss = aw_ini_get("classes");
+
+			if (count($clid) > 1)
 			{
-				$clid = reset($clid);
+				$pm = get_instance("vcl/popup_menu");
+				$pm->begin_menu($arr["property"]["name"]."_relp_pop");
+				foreach($clid as $_clid)
+				{
+					$pm->add_item(array(
+						"text" => $clss[$_clid]["name"],
+						"link" => html::get_new_url(
+							$_clid, 
+							$this->obj->id(), 
+							array(
+								"alias_to" => $this->obj->id(), 
+								"reltype" => $rel_val,
+								"return_url" => get_ru()
+							)
+						)
+					));
+				}
+				$val["post_append_text"] .= " ".$pm->get_menu(array(
+					"icon" => "new.gif",
+					"alt" => t("Lisa")
+				));
 			}
-			if (is_class_id($clid))
+			else
 			{
-				$val["post_append_text"] .= " / ".html::get_new_url(
-					$clid, 
-					$this->obj->id(), 
-					array(
-						"alias_to" => $this->obj->id(), 
-						"reltype" => $rel_val,
-						"return_url" => get_ru()
-					), 
-					t("Lisa uus objekt")
-				);
+				foreach($clid as $_clid)
+				{
+					$val["post_append_text"] .= " ".html::href(array(
+						"url" => html::get_new_url(
+							$_clid, 
+							$this->obj->id(), 
+							array(
+								"alias_to" => $this->obj->id(), 
+								"reltype" => $rel_val,
+								"return_url" => get_ru()
+							) 
+						),
+						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/new.gif' border=0>",
+						"title" => sprintf(t("Lisa uus %s"), $clss[$_clid]["name"])
+					));
+				}
 			}
 		}
 		return array($val["name"] => $val);

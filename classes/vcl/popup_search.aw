@@ -115,13 +115,19 @@ class popup_search extends aw_template
 		{
 			$tmp["value"] .= html::href(array(
 				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
-				"caption" => t("Otsi")
+				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+				"title" => t("Otsi")
 			));
 
 			if ($this->can("view", ($_id = $arr["obj_inst"]->prop($arr["property"]["name"]))))
 			{
-				$tmp["value"] .= " / ";
-				$tmp["value"] .= html::get_change_url($_id, array("return_url" => get_ru()), t("Muuda valitud objekti"));
+				$tmp["value"] .= " ";
+				$tmp["value"] .= html::href(array(
+					"url" => html::get_change_url($_id, array("return_url" => get_ru())),
+					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif' border=0>",
+					"title" => t("Muuda")
+				));
+
 			}
 
 			// add new
@@ -130,18 +136,48 @@ class popup_search extends aw_template
 				$clss = aw_ini_get("classes");
 				$clid = new aw_array($arr["relinfo"][$arr['property']['reltype']]["clid"]);
 				$rel_val = $arr["relinfo"][$arr['property']['reltype']]["value"];
-				foreach($clid->get() as $cl)
+				if ($clid->count() > 1)
 				{
-					$tmp["value"] .= " / ".html::get_new_url(
-						$cl, 
-						$arr["obj_inst"]->id(), 
-						array(
-							"alias_to" => $arr["obj_inst"]->id(), 
-							"reltype" => $rel_val,
-							"return_url" => get_ru()
-						), 
-						sprintf(t("Lisa uus %s"), $clss[$cl]["name"])
-					);
+					$pm = get_instance("vcl/popup_menu");
+					$pm->begin_menu($arr["property"]["name"]."_relp_pop");
+					foreach($clid->get() as $_clid)
+					{
+						$pm->add_item(array(
+							"text" => $clss[$_clid]["name"],
+							"link" => html::get_new_url(
+								$_clid, 
+								$arr["obj_inst"]->id(), 
+								array(
+									"alias_to" => $arr["obj_inst"]->id(), 
+									"reltype" => $rel_val,
+									"return_url" => get_ru()
+								)
+							)
+						));
+					}
+					$tmp["value"] .= " ".$pm->get_menu(array(
+						"icon" => "new.gif",
+						"alt" => t("Lisa")
+					));
+				}
+				else
+				{
+					foreach($clid->get() as $cl)
+					{
+						$tmp["value"] .= " ".html::href(array(
+							"url" => html::get_new_url(
+								$cl, 
+								$arr["obj_inst"]->id(), 
+								array(
+									"alias_to" => $arr["obj_inst"]->id(), 
+									"reltype" => $rel_val,
+									"return_url" => get_ru()
+								)
+							),
+							"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/new.gif' border=0>",
+							"title" => sprintf(t("Lisa uus %s"), $clss[$cl]["name"])
+						));
+					}
 				}
 			}
 		}

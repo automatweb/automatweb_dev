@@ -25,9 +25,23 @@ class popup_menu extends aw_template
 		$this->items[] = $arr;
 	}
 
-	function get_menu()
+	/**
+		@comment
+			$param:
+				icon - icon image name
+	**/
+	function get_menu($param = NULL)
 	{
 		$this->read_template("js_popup_menu.tpl");
+
+		if (!isset($param["icon"]))
+		{
+			$icon = "/automatweb/images/blue/obj_settings.gif";
+		}
+		else
+		{
+			$icon = "/automatweb/images/icons/".$param["icon"];
+		}
 
 		$is = "";
 		foreach($this->items as $item)
@@ -37,7 +51,8 @@ class popup_menu extends aw_template
 		$this->vars(array(
 			"MENU_ITEM" => $is,
 			"menu_id" => $this->menu_id,
-			"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif"
+			"menu_icon" => $this->cfg["baseurl"].$icon,
+			"alt" => $param["alt"]
 		));
 
 		return $this->parse();
