@@ -106,7 +106,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @reltype ACL value=3 clid=CL_ACL
 @caption acl
 
-@reltype ADMIN_ROOT value=4 clid=CL_MENU
+@reltype ADMIN_ROOT value=4 
 @caption rootmen&uuml;&uuml;
 
 @reltype ADD_TREE value=5 clid=CL_ADD_TREE_CONF
