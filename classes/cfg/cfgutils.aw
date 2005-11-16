@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.67 2005/11/15 14:41:06 ahti Exp $
+// $Id: cfgutils.aw,v 1.68 2005/11/16 13:21:35 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -496,6 +496,7 @@ class cfgutils extends aw_template
 
 	function load_properties($args = array())
 	{
+		enter_function("load-properties");
 		extract($args);
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
 		$clinf = aw_ini_get("classes");
@@ -588,6 +589,7 @@ class cfgutils extends aw_template
 		};
 
 		$rv = array_merge($coreprops,$objprops);
+		exit_function("load-properties");
 		return $rv;
 	}
 
