@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.355 2005/11/10 20:29:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.356 2005/11/16 13:19:11 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -362,7 +362,6 @@ class menuedit extends aw_template
 			aw_ini_set("","frontpage",$frontpage);
 			$this->cfg["frontpage"] = $frontpage;
 		}
-
 		// kui sektsiooni viimane m?k on "-", paneme selle objekti sees psti
 		// raw flagi
 
