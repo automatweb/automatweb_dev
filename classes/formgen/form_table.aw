@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.79 2005/10/31 11:57:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.80 2005/11/18 11:59:29 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -399,7 +399,7 @@ class form_table extends form_base
 					return;
 				}
 			}
-
+			
 			$dat["ev_text"] = $cc["is_type_text"];
 			if (is_array($cc["els"]) && !$cc["not_active"])
 			{
@@ -410,7 +410,7 @@ class form_table extends form_base
 				$noshowstr = array();
 				foreach($cc["els"] as $elid)
 				{
-					if ($dat["ev_".$elid] != "")
+					if ($dat["ev_".$elid] != "" || true)
 					{
 						if ($cc["el_show"][$elid] == 1)
 						{
@@ -607,7 +607,6 @@ class form_table extends form_base
 		}
 
 		aw_global_set("fg_element_sums", $cursums);
-
 		$this->t->define_data($dat);
 		exit_function("form_table::row_data", array());
 	}
@@ -867,7 +866,6 @@ class form_table extends form_base
 			// draw top delete button
 			$tbl .= $this->draw_button("delete");
 		}
-
 		$tbl.=$this->t->draw(array(
 			"rgroupby" => $r_g,
 			"rgroupdat" => $rgroupdat,
@@ -878,7 +876,6 @@ class form_table extends form_base
 			"act_page" => $GLOBALS["ft_page"],
 			"no_titlebar" => $this->table["no_titlebar"]
 		));
-
 		if ($this->table["buttons"]["save"]["pos"]["down"])
 		{
 			// draw top button
