@@ -4,6 +4,7 @@
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disconnect_person_from_org)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_CRM_ADDRESS, on_save_address)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_ADDRESS, on_save_address)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY no_status=1 r2=yes
@@ -1249,6 +1250,10 @@ class crm_company extends class_base
 
 			case "all_proj_search_dl_from":
 			case "all_proj_search_dl_to":
+				if ($arr["request"]["group"] == "org_projects_archive")
+				{
+					return PROP_IGNORE;
+				}
 			case "all_proj_search_end_from":
 			case "all_proj_search_end_to":
 				if ($arr["request"]["search_all_proj"])

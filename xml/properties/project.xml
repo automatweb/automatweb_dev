@@ -79,7 +79,7 @@
             <group>general2</group>
             <type>date_select</type>
             <field>aw_end</field>
-            <caption>L&amp;otilde;pp</caption>
+            <caption>L&amp;amp;otilde;pp</caption>
       </property>
       <property>
             <name>deadline</name>
@@ -96,7 +96,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_PRJ_DOCUMENT</reltype>
             <field>aw_doc</field>
-            <caption>Loe lähemalt</caption>
+            <caption>Loe l&amp;auml;hemalt</caption>
       </property>
       <property>
             <name>participants</name>
@@ -176,7 +176,7 @@
             <ch_value>1</ch_value>
             <store>no</store>
             <field>create_task</field>
-            <caption>Moodusta &amp;uuml;lesanne</caption>
+            <caption>Moodusta &amp;amp;uuml;lesanne</caption>
       </property>
       <property>
             <name>files</name>
@@ -193,7 +193,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_project_navigator</field>
-            <caption>Näita projektide navigaatorit</caption>
+            <caption>N&amp;auml;ita projektide navigaatorit</caption>
       </property>
       <property>
             <name>use_template</name>
@@ -201,7 +201,7 @@
             <group>web_settings</group>
             <type>select</type>
             <field>aw_use_template</field>
-            <caption>Välimus</caption>
+            <caption>V&amp;auml;limus</caption>
       </property>
       <property>
             <name>doc_id</name>
@@ -210,7 +210,7 @@
             <type>textbox</type>
             <size>6</size>
             <field>aw_doc_id</field>
-            <caption>Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse</caption>
+            <caption>Dokumendi ID, milles asub kalendri vaade, milles s&amp;uuml;ndmusi kuvatakse</caption>
       </property>
       <property>
             <name>skip_subproject_events</name>
@@ -219,7 +219,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_skip_subproject_events</field>
-            <caption>Ära näita alamprojektide sündmusi</caption>
+            <caption>&amp;Auml;ra n&amp;auml;ita alamprojektide s&amp;uuml;ndmusi</caption>
       </property>
       <property>
             <name>prj_image</name>
@@ -242,7 +242,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>event_toolbar</field>
-            <caption>Sündmuste toolbar </caption>
+            <caption>S&amp;uuml;ndmuste toolbar </caption>
       </property>
       <property>
             <name>event_list</name>
@@ -252,7 +252,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>event_list</field>
-            <caption>Sündmused</caption>
+            <caption>S&amp;uuml;ndmused</caption>
       </property>
       <property>
             <name>add_event</name>
@@ -261,7 +261,7 @@
             <callback>callback_get_add_event</callback>
             <store>no</store>
             <field>add_event</field>
-            <caption>Lisa sündmus</caption>
+            <caption>Lisa s&amp;uuml;ndmus</caption>
       </property>
       <property>
             <name>file_editor</name>
@@ -287,7 +287,7 @@
             <store>no</store>
             <props>name</props>
             <field>trans</field>
-            <caption>Tõlkimine</caption>
+            <caption>T&amp;otilde;lkimine</caption>
       </property>
       <property>
             <name>sides_tb</name>
@@ -421,16 +421,6 @@
             <caption>User-defined classificator 1</caption>
       </property>
       <property>
-            <name>team_sbtitle</name>
-            <table>objects</table>
-            <group>team</group>
-            <type>text</type>
-            <subtitle>1</subtitle>
-            <store>no</store>
-            <field>team_sbtitle</field>
-            <caption>Osalejad</caption>
-      </property>
-      <property>
             <name>team_tb</name>
             <table>objects</table>
             <group>team</group>
@@ -447,25 +437,6 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>team</field>
-      </property>
-      <property>
-            <name>team_s_sbtitle</name>
-            <table>objects</table>
-            <group>team</group>
-            <type>text</type>
-            <subtitle>1</subtitle>
-            <store>no</store>
-            <field>team_s_sbtitle</field>
-            <caption>Osalejate otsing</caption>
-      </property>
-      <property>
-            <name>team_s_tb</name>
-            <table>objects</table>
-            <group>team</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>team_s_tb</field>
       </property>
       <property>
             <name>team_search_co</name>
@@ -505,7 +476,6 @@
             <group>team</group>
             <type>table</type>
             <no_caption>1</no_caption>
-            <parent>team_s</parent>
             <store>no</store>
             <field>team_search_res</field>
       </property>
@@ -644,7 +614,7 @@
                         <num_5>CL_PARTY</num_5>
                         <num_6>CL_COMICS</num_6>
                   </clid>
-                  <caption>Sündmus</caption>
+                  <caption>S&amp;uuml;ndmus</caption>
             </PRJ_EVENT>
             <PRJ_FILE>
                   <value>4</value>
@@ -654,7 +624,7 @@
             <TAX_CHAIN>
                   <value>5</value>
                   <clid>CL_TAX_CHAIN</clid>
-                  <caption>Maksu pärg</caption>
+                  <caption>Maksu p&amp;auml;rg</caption>
             </TAX_CHAIN>
             <PRJ_CFGFORM>
                   <value>6</value>
@@ -692,7 +662,7 @@
             <TYPE>
                   <value>12</value>
                   <clid>CL_META</clid>
-                  <caption>t&amp;uuml;&amp;uuml;p</caption>
+                  <caption>t&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </TYPE>
             <CONTACT_PERSON>
                   <value>13</value>
@@ -721,13 +691,12 @@
                   <caption>Osalejad</caption>
             </parts>
             <team_s>
-                  <type>hbox</type>
-                  <width>20%:80%</width>
+                  <type>vbox</type>
                   <group>team</group>
             </team_s>
             <team_search>
                   <parent>team_s</parent>
-                  <type>vbox</type>
+                  <type>hbox</type>
                   <group>team</group>
             </team_search>
             <goal_vb>

@@ -64,7 +64,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>L&amp;otilde;peb</caption>
+            <caption>L&amp;amp;otilde;peb</caption>
       </property>
       <property>
             <name>deadline</name>
@@ -72,7 +72,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>deadline</field>
-            <caption>T&amp;auml;htaeg</caption>
+            <caption>T&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>whole_day</name>
@@ -82,7 +82,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kestab terve päeva</caption>
+            <caption>Kestab terve p&amp;auml;eva</caption>
       </property>
       <property>
             <name>send_bill</name>
@@ -210,9 +210,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>
-            <![CDATA["Toolbar"]]>
-            </caption>
+            <caption>&amp;quot;Toolbar&amp;quot;</caption>
       </property>
       <property>
             <name>recurrence</name>

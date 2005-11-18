@@ -1,24 +1,24 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>applications/personnel_management/personnel_management_job_offer</class>
-      <func>on_disconnect_job_from_section</func>
-      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
+      <class>contentmgmt/reminder</class>
+      <func>on_rdisconnect_from</func>
+      <param>CL_DOCUMENT</param>
 </num_0>
 <num_1>
+      <class>contentmgmt/timing</class>
+      <func>on_tdisconnect_from</func>
+      <param>CL_DOCUMENT</param>
+</num_1>
+<num_2>
+      <class>contentmgmt/timing</class>
+      <func>on_tdisconnect_from</func>
+      <param>CL_MENU</param>
+</num_2>
+<num_3>
       <class>crm/crm_company</class>
       <func>on_disconnect_person_from_org</func>
       <param>CL_CRM_PERSON</param>
-</num_1>
-<num_2>
-      <class>crm/crm_person</class>
-      <func>on_disconnect_org_from_person</func>
-      <param>CL_CRM_COMPANY</param>
-</num_2>
-<num_3>
-      <class>crm/crm_person</class>
-      <func>on_disconnect_section_from_person</func>
-      <param>CL_CRM_SECTION</param>
 </num_3>
 <num_4>
       <class>crm/crm_section</class>
@@ -31,19 +31,19 @@
       <param>CL_CRM_PERSON</param>
 </num_5>
 <num_6>
-      <class>contentmgmt/reminder</class>
-      <func>on_rdisconnect_from</func>
-      <param>CL_DOCUMENT</param>
+      <class>crm/crm_person</class>
+      <func>on_disconnect_org_from_person</func>
+      <param>CL_CRM_COMPANY</param>
 </num_6>
 <num_7>
-      <class>contentmgmt/timing</class>
-      <func>on_tdisconnect_from</func>
-      <param>CL_DOCUMENT</param>
+      <class>crm/crm_person</class>
+      <func>on_disconnect_section_from_person</func>
+      <param>CL_CRM_SECTION</param>
 </num_7>
 <num_8>
-      <class>contentmgmt/timing</class>
-      <func>on_tdisconnect_from</func>
-      <param>CL_MENU</param>
+      <class>core/users/user</class>
+      <func>on_delete_alias</func>
+      <param>CL_USER</param>
 </num_8>
 <num_9>
       <class>core/users/group</class>
@@ -51,8 +51,8 @@
       <param>CL_GROUP</param>
 </num_9>
 <num_10>
-      <class>core/users/user</class>
-      <func>on_delete_alias</func>
-      <param>CL_USER</param>
+      <class>applications/personnel_management/personnel_management_job_offer</class>
+      <func>on_disconnect_job_from_section</func>
+      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
 </num_10>
 </xml>

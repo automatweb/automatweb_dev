@@ -94,7 +94,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Vali sait, millelt v&amp;otilde;tta css ja pildid</caption>
+            <caption>Vali sait, millelt v&amp;amp;otilde;tta css ja pildid</caption>
       </property>
       <property>
             <name>gen_site</name>
@@ -114,7 +114,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Uuenda saidi m&amp;auml;&amp;auml;rangud!</caption>
+            <caption>Uuenda saidi m&amp;amp;auml;&amp;amp;auml;rangud!</caption>
       </property>
       <property>
             <name>ch_warnings</name>

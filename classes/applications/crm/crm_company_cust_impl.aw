@@ -15,6 +15,15 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 		));
 
+		if ($_GET["group"] == "org_projects_archive")
+		{
+			$table->define_field(array(
+				"name" => "project_code",
+				"caption" => t("Kood"),
+				"sortable" => 1,
+			));
+		}
+
 		if (is_array($data))
 		{
 			$filt = array();
@@ -159,6 +168,7 @@ class crm_company_cust_impl extends class_base
 			}
 			$data[] = array(
 				"project_name" => html::get_change_url($project_obj->id(), array("return_url" => get_ru()), parse_obj_name($project_obj->name())),
+				"project_code" => $project_obj->prop("code"),
 				"project_participants"	=> $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
 				"project_created" => $project_obj->created(),
 				"project_orderer" => $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_ORDERER"))),
@@ -362,16 +372,25 @@ class crm_company_cust_impl extends class_base
 			'text' => t('Tellijana'),
 			"action" => "add_proj_to_co_as_ord"
 		));
-		$tb->add_menu_item(array(
+		/*$tb->add_menu_item(array(
 			'parent'=>'add_item',
 			'text' => t('Toimetus'),
 			"action" => "add_task_to_co"
-		));
+		));*/
+
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
 			'text' => t('Arve'),
 			"action" => "go_to_create_bill"
 		));
+
+		$tb->add_button(array(
+			'name' => 'add_task_to_co',
+			'img' => 'class_244.gif',
+			'tooltip' => t('Toimetus'),
+			'action' => 'add_task_to_co',
+		));
+		$tb->add_separator();
 
 		//delete button
 		$tb->add_button(array(
@@ -831,6 +850,7 @@ class crm_company_cust_impl extends class_base
 
 			$table->define_data(array(
 				"project_name" => html::obj_change_url($project),
+				"project_code" => $project->prop("code"),
 				"project_participants"	=> $this->_get_linked_names($project->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
 				"project_created" => $project->created(),
 				"roles" => $roles,
@@ -919,11 +939,20 @@ class crm_company_cust_impl extends class_base
 			'return_url' => get_ru()
 		));
 
-		$tb->add_menu_item(array(
+		/*$tb->add_menu_item(array(
 			'parent'=>'new',
 			'text' => t('Toimetus'),
 			'action' => "add_task_to_proj"
+		));*/
+
+		$tb->add_button(array(
+			"name" => "add_task_to_proj",
+			"img" => 'class_244.gif',
+			"tooltip" => t("Lisa toimetus"),
+			"action" => "add_task_to_proj"
 		));
+
+		$tb->add_separator();
 
 		$tb->add_button(array(
 			"name" => "mark_done",

@@ -391,7 +391,7 @@ class crm_company_overview_impl extends class_base
 
 		foreach($table_data as $row)
 		{
-			if ($row["deadline"] > 100)
+			if ($row["deadline"] > 100 || ($_GET["sortby"] != "" && $_GET["sortby"] != "deadline"))
 			{
 				$t->define_data($row);
 			}
@@ -405,14 +405,16 @@ class crm_company_overview_impl extends class_base
 		));
 
 		$t->set_sortable(false);
-		foreach($table_data as $row)
+		if (!($_GET["sortby"] != "" && $_GET["sortby"] != "deadline"))
 		{
-			if ($row["deadline"] < 100)
+			foreach($table_data as $row)
 			{
-				$t->define_data($row);
+				if ($row["deadline"] < 100)
+				{
+					$t->define_data($row);
+				}
 			}
 		}
-
 	}
 
 	function _get_tasks_search_filt($r, $tasks, $clid)

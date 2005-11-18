@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.34 2005/11/16 13:45:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.35 2005/11/18 14:00:48 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -524,10 +524,46 @@ class task extends class_base
 				{
 					return PROP_IGNORE;
 				}
+
+				$p = array();
+				$conns = $arr['obj_inst']->connections_to(array(
+					'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
+				));
+				foreach($conns as $conn)
+				{
+					$obj = $conn->from();
+					$p[$obj->id()] = $obj->id();
+				}
+
 				foreach(safe_array($prop["value"]) as $person)
 				{
 					$this->add_participant($arr["obj_inst"], obj($person));
 				}
+
+				foreach($p as $k)
+				{
+					if ($k != "")
+					{
+						if (!in_array($k, $prop["value"]))
+						{
+							$po = obj($k);
+							if ($po->is_connected_to(array("to" => $arr["obj_inst"]->id())))
+							{
+								$po->disconnect(array("from" => $arr["obj_inst"]->id()));
+							}
+						}
+					}
+				}
+				if ($prop["value"] == "")
+				{
+					$u = get_instance(CL_USER);
+					$po = obj($u->get_current_person());
+					$po->connect(array(
+						"to" => $arr["obj_inst"]->id(),
+						"reltype" => 10
+					));
+				}
+
 				break;
 
 			case "code":

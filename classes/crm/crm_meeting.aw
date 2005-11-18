@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.38 2005/10/28 19:14:51 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.39 2005/11/18 14:00:49 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -176,6 +176,7 @@ class crm_meeting extends class_base
 							"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["obj_inst"]->prop("customer"),
 						));
 					}
+					$nms = $ol->names();
 				}
 				else
 				{
@@ -193,6 +194,14 @@ class crm_meeting extends class_base
 				}
 
 				$data["options"] = array("" => "") + $nms;
+
+				if (is_object($arr["obj_inst"]))
+				{
+					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+					{
+						$data["options"][$c->prop("to")] = $c->prop("to.name");
+					}
+				}
 
 				if ($arr["request"]["set_proj"])
 				{

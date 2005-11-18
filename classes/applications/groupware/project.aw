@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.65 2005/11/14 21:41:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.66 2005/11/18 14:00:48 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -169,21 +169,13 @@
 
 @default group=team
 
-	@property team_sbtitle type=text subtitle=1 store=no
-	@caption Osalejad
-
 	@property team_tb type=toolbar no_caption=1 store=no
 
 	@property team type=table no_caption=1 store=no
 
-	@property team_s_sbtitle type=text subtitle=1 store=no
-	@caption Osalejate otsing
+	@layout team_s type=vbox 
 
-	@property team_s_tb type=toolbar no_caption=1 store=no 
-
-	@layout team_s type=hbox width=20%:80%
-
-		@layout team_search parent=team_s type=vbox
+		@layout team_search parent=team_s type=hbox
 
 			@property team_search_co type=textbox captionside=top parent=team_search
 			@caption Firma
@@ -194,7 +186,7 @@
 			@property team_search_sbt type=submit captionside=top parent=team_search no_caption=1
 			@caption Otsi
 
-		@property team_search_res type=table no_caption=1 parent=team_s
+	@property team_search_res type=table no_caption=1 
 
 @default group=goals_edit
 
@@ -328,10 +320,6 @@ class project extends class_base
 
 			case "team_tb":
 				$this->_get_team_tb($arr);
-				break;
-
-			case "team_s_tb":
-				$this->_get_team_s_tb($arr);
 				break;
 
 			case "team":
@@ -3037,7 +3025,7 @@ class project extends class_base
 	{
 		$t->define_field(array(
 			"name" => "person",
-			"caption" => t("Isik"),
+			"caption" => t("Nimi"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -3045,6 +3033,27 @@ class project extends class_base
 		$t->define_field(array(
 			"name" => "co",
 			"caption" => t("Organisatsioon"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "rank",
+			"caption" => t("Ametinimetus"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "mail",
+			"caption" => t("E-post"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -3112,22 +3121,17 @@ class project extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 
 		$t->add_button(array(
-			"name" => "delete",
-			"img" => "delete.gif",
-			"action" => "del_participants",
-			"tooltip" => t("Kustuta"),
-		));
-	}
-
-	function _get_team_s_tb($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-
-		$t->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
 			"action" => "add_participants",
 			"tooltip" => t("Lisa"),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_participants",
+			"tooltip" => t("Kustuta"),
 		));
 	}
 
@@ -3136,13 +3140,39 @@ class project extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
-			"align" => "center"
+			"align" => "center",
+			"width" => "16%"
 		));
 
 		$t->define_field(array(
 			"name" => "co",
 			"caption" => t("Organisatsioon"),
-			"align" => "center"
+			"align" => "center",
+			"width" => "16%"
+		));
+
+		$t->define_field(array(
+			"name" => "rank",
+			"caption" => t("Ametinimetus"),
+			"align" => "center",
+			"sortable" => 1,
+			"width" => "16%"
+		));
+
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"align" => "center",
+			"sortable" => 1,
+			"width" => "16%"
+		));
+
+		$t->define_field(array(
+			"name" => "mail",
+			"caption" => t("E-post"),
+			"align" => "center",
+			"sortable" => 1,
+			"width" => "16%"
 		));
 
 		$t->define_chooser(array(
