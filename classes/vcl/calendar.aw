@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.73 2005/11/16 13:38:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.74 2005/11/18 12:24:38 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -497,6 +497,7 @@ class vcalendar extends aw_template
 			$link = aw_url_change_var("viewtype",$type);
 			$this->vars(array(
 				"link" => aw_url_change_var("viewtype",$type),
+				"today_url" => aw_url_change_var(array("viewtype" => "day", "date" => date("d-m-Y"))),
 				"text" => $name,
 			));
 			if($type == "today")
