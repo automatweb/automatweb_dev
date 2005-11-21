@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.68 2005/11/16 13:21:35 kristo Exp $
+// $Id: cfgutils.aw,v 1.69 2005/11/21 14:41:33 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -54,6 +54,10 @@ class cfgutils extends aw_template
 			$fname = basename($cldat[$args['clid']]["file"]);
 		};
 
+		if ($fname == "document")
+		{
+			return true;
+		}
 		$retval = false;
 		if ($fname)
 		{
