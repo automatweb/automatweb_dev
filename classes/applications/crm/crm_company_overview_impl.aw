@@ -500,19 +500,24 @@ class crm_company_overview_impl extends class_base
 		$r["act_s_dl_from"] = date_edit::get_timestamp($r["act_s_dl_from"]);
 		$r["act_s_dl_to"] = date_edit::get_timestamp($r["act_s_dl_to"]);
 
+		$dl = "deadline";
+		if ($clid == CL_CRM_OFFER || $clid == CL_CRM_MEETING || $clid == CL_CRM_CALL )
+		{
+			$dl = "start1";
+		}
 		if ($r["act_s_dl_from"] > 1 && $r["act_s_dl_to"] > 1)
 		{
-			$res["deadline"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["act_s_dl_from"], $r["act_s_dl_to"]);
+			$res[$dl] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["act_s_dl_from"], $r["act_s_dl_to"]);
 		}
 		else
 		if ($r["act_s_dl_from"] > 1)
 		{
-			$res["deadline"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["act_s_dl_from"]);
+			$res[$dl] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["act_s_dl_from"]);
 		}
 		else
 		if ($r["act_s_dl_to"] > 1)
 		{
-			$res["deadline"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["act_s_dl_to"]);
+			$res[$dl] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["act_s_dl_to"]);
 		}
 
 		if ($r["act_s_status"] > 0 && $r["act_s_status"] < 3)
