@@ -1,12 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_unit.aw,v 1.1 2005/10/23 17:17:15 voldemar Exp $
-// country_administrative_unit.aw - Haldusüksus
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_unit.aw,v 1.2 2005/11/21 09:04:13 voldemar Exp $
+// country_administrative_unit.aw - Halduspiirkond
 /*
 
 @classinfo syslog_type=ST_COUNTRY_ADMINISTRATIVE_UNIT relationmgr=yes no_comment=1 no_status=1
 
 @default table=objects
 @default group=general
+	@property administrative_structure type=hidden
+
 	@property name type=textbox
 	@caption Nimi
 
@@ -14,25 +16,32 @@
 	@caption Tüüp
 
 	@property parent type=text
-	@comment Haldusüksus, millesse käesolev haldusüksus kuulub
-	@caption Kõrgem haldusüksus
+	@comment Halduspiirkond, millesse käesolev halduspiirkond kuulub
+	@caption Kõrgem halduspiirkond
 
 	@property parent_show type=text field=meta method=serialize
-	@caption Kõrgem haldusüksus
+	@caption Kõrgem halduspiirkond
 
 	@property parent_select type=relpicker reltype=RELTYPE_PARENT_ADMINISTRATIVE_UNIT clid=CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT store=no
-	@comment Haldusüksus, millesse käesolev haldusüksus kuulub
-	@caption Vali kõrgem haldusüksus
+	@comment Halduspiirkond, millesse käesolev halduspiirkond kuulub
+	@caption Vali kõrgem halduspiirkond
 
 // --------------- RELATION TYPES ---------------------
 
 @reltype PARENT_ADMINISTRATIVE_UNIT value=1 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT
-@caption Kõrgem haldusüksus
+@caption Kõrgem halduspiirkond
 
 */
 
 ### address system settings
-
+if (!defined ("ADDRESS_SYSTEM"))
+{
+	define ("ADDRESS_SYSTEM", 1);
+	define ("NEWLINE", "<br />");
+	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
+	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
+	define ("ADDRESS_DBG_FLAG", "address_dbg");
+}
 
 class country_administrative_unit extends class_base
 {

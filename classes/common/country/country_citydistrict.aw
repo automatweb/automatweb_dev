@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_citydistrict.aw,v 1.2 2005/10/26 14:58:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_citydistrict.aw,v 1.3 2005/11/21 09:04:13 voldemar Exp $
 // country_citydistrict.aw - Linnaosa
 /*
 
@@ -8,14 +8,22 @@
 
 @default table=objects
 @default group=general
+	@property administrative_structure_oid type=hidden
+
 	@property subclass type=text
 	@caption Tüüp
 
 */
 
 ### address system settings
-define ("ADMINISTRATIVE_CFG_TYPE_UNIT", 1);
-
+if (!defined ("ADDRESS_SYSTEM"))
+{
+	define ("ADDRESS_SYSTEM", 1);
+	define ("NEWLINE", "<br />");
+	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
+	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
+	define ("ADDRESS_DBG_FLAG", "address_dbg");
+}
 
 class country_citydistrict extends country_administrative_unit
 {
