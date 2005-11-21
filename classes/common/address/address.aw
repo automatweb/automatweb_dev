@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.3 2005/11/10 19:22:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.4 2005/11/21 09:14:56 voldemar Exp $
 // address.aw - Aadress v2
 /*
 
@@ -12,11 +12,11 @@
 @default field=meta
 @default method=serialize
 @default group=general
-	@property country type=relpicker reltype=RELTYPE_COUNTRY clid=CL_COUNTRY automatic=1
-	@caption Riik
+	@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1
+	@caption Riik/haldusjaotus
 
-	@property address_array type=hidden
-	@property administrative_structure_oid type=hidden
+	@property address_data type=hidden
+	@property country type=hidden
 
 @default group=grp_address
 	@property location_country type=hidden store=no
@@ -34,23 +34,34 @@
 	@property po_box type=textbox
 	@caption Postkast
 
-	@property unit_name type=textbox
-	@caption Üksus
-
 
 // --------------- RELATION TYPES ---------------------
 
-@reltype COUNTRY value=1 clid=CL_COUNTRY
-@caption Riik
+@reltype ADMINISTRATIVE_STRUCTURE value=1 clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE
+@caption Haldusjaotus
 
 */
 
 ### address system settings
-
+if (!defined ("ADDRESS_SYSTEM"))
+{
+	define ("ADDRESS_SYSTEM", 1);
+	define ("NEWLINE", "<br />");
+	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
+	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
+	define ("ADDRESS_DBG_FLAG", "address_dbg");
+}
 
 class address extends class_base
 {
-	function address()
+	var $address_classes = array (
+		CL_COUNTRY_ADMINISTRATIVE_UNIT,
+		CL_COUNTRY_CITY,
+		CL_COUNTRY_CITYDISTRICT,
+		CL_ADDRESS_STREET,
+	);
+
+	function address($arr = array ())
 	{
 		$this->init(array(
 			"tpldir" => "common/address",
@@ -58,43 +69,37 @@ class address extends class_base
 		));
 	}
 
+/* classbase methods */
+	function callback_on_load ($arr)
+	{
+		if (is_oid ($arr["request"]["id"]) and !$arr["new"])
+		{
+			$this_object = obj ($arr["request"]["id"]);
+			$this->administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+		}
+	}
+
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		$this_object =& $arr["obj_inst"];
-
-		switch ($prop["group"])
-		{
-			case "grp_address":
-				### check that country is defined
-				if (!$this_object->get_first_obj_by_reltype ("RELTYPE_COUNTRY"))
-				{
-					$retval = PROP_FATAL_ERROR;
-					$prop["error"] = t("Riik valimata");
-				}
-				break;
-		}
+		$this_object = $arr["obj_inst"];
 
 		switch($prop["name"])
 		{
 			case "location_country":
-				$prop["value"] = $this_object->prop ("country");
-				break;
-		}
+				if (!is_object ($this->administrative_structure))
+				{
+					$this->administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
 
-		return $retval;
-	}
+					if (!is_object ($this->administrative_structure))
+					{
+						$retval = PROP_FATAL_ERROR;
+						$prop["error"] = t("Haldusjaotus määramata.");
+					}
 
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		$this_object =& $arr["obj_inst"];
-
-		switch($prop["name"])
-		{
-			case "location":
+					$prop["value"] = $this->administrative_structure->prop ("country");
+				}
 				break;
 		}
 
@@ -108,200 +113,37 @@ class address extends class_base
 
 	function callback_pre_save ($arr)
 	{
-		$this_object =& $arr["obj_inst"];
-
-		if (!$arr["new"] and array_key_exists ("location_street", $arr["request"]))
+		if (!$arr["new"] and array_key_exists ("location_street", $arr["request"]))//!!! milleks street?
 		{
-			if ($country = $this_object->get_first_obj_by_reltype("RELTYPE_COUNTRY"))
-			{ ### get administrative structure
-				if ($this->can ("view", $this_object->prop ("administrative_structure_oid")))
+			$this_object = $arr["obj_inst"];
+			$structure =& $this->administrative_structure->prop ("structure_array");
+
+			### set address location by unit
+			foreach ($structure as $key => $division)
+			{
+				if (is_object ($division))
 				{
-					$administrative_structure = obj ($this_object->prop ("administrative_structure_oid"));
+					$selected_unit_id = $arr["request"]["location_" . $division->id ()];
 				}
 				else
 				{
-					$administrative_structure = $country->get_first_obj_by_reltype("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+					$selected_unit_id = $arr["request"]["location_" . $division];
 				}
 
-				if (!is_object ($administrative_structure))
+				if (is_oid ($selected_unit_id))
 				{
-					//!!! throw user err
-					echo t("Haldusjaotuse struktuur riigi jaoks defineerimata.");
+					$this_object->set_prop ("unit_by_id", array (
+						"division" => $division,
+						"id" => $selected_unit_id,
+					));
 				}
-
-				$cl_administrative_structure = get_instance (CL_COUNTRY_ADMINISTRATIVE_STRUCTURE);
-				$unit_types =& $cl_administrative_structure->get_structure (array(
-					"id" => $administrative_structure->id(),
-				));
-				$parents[$country->id ()] = $country;
-
-				### Add street to the end of unit_types array. Relieves from extra processing of street data.
-				$unit_types[] = "street";
-
-				### if no units were defined by user, address will have country for its parent (error shown if so)
-				$saved_unit = $country;
-
-				foreach ($unit_types as $key => $unit_type)
+				elseif (strlen ($selected_unit_id) > 1)
 				{
-					if (is_object ($unit_type))
-					{
-						$selected_unit_id = $arr["request"]["location_" . $unit_type->id ()];
-					}
-					else
-					{
-						$selected_unit_id = $arr["request"]["location_" . $unit_type];
-					}
-
-					if ($unit_type == "street")
-					{ ### lowest defined unit in structure hierarchy, save street as address' parent
-						if (is_oid ($selected_unit_id))
-						{
-							$saved_unit = obj ($selected_unit_id);
-						}
-						elseif (strlen ($selected_unit_id) > 1)
-						{
-							### check if object exists with exact same name
-							$parent = $saved_unit;
-							$list = new object_list (array (
-								"class_id" => CL_ADDRESS_STREET,
-								"parent" => $parent->id (),
-								"name" => "%" . $selected_unit_id,
-							));
-							$existing_unit = NULL;
-
-							// $existing = $this->db_fetch_field("
-								// SELECT
-									// count(objects.oid) AS count
-								// FROM
-									// objects
-								// WHERE
-									// objects.parent = " . $parent->id () . " AND
-									// objects.class_id = " . CL_ADDRESS_STREET . " AND
-									// objects.name LIKE '" . $selected_unit_id . "' AND
-									// objects.status > 0
-							// ", "count");
-
-							if (1 == $list->count ())
-							{
-								$existing_unit = $list->begin();
-							}
-							else
-							{
-								$list = $list->arr ();
-
-								foreach ($list as $unit)
-								{
-									if (strtolower ($unit->name ()) == strtolower ($selected_unit_id))
-									{
-										$existing_unit = $list->begin();
-									}
-								}
-							}
-
-							if (is_object ($existing_unit))
-							{
-								$saved_unit = $existing_unit;
-							}
-							else
-							{ ### save new street
-								$saved_unit = obj ();
-								$saved_unit->set_class_id (CL_ADDRESS_STREET);
-								$saved_unit->set_parent ($parent->id ());
-								$saved_unit->set_name ($selected_unit_id);
-								$saved_unit->save ();
-							}
-						}
-
-						break;
-					}
-
-					if (is_oid ($selected_unit_id))
-					{
-						$saved_unit = obj ($selected_unit_id);
-					}
-					elseif (strlen ($selected_unit_id) > 1)
-					{
-						if (!array_key_exists ($unit_type->prop ("parent_unit"), $parents))
-						{
-							echo t("Kõrgem haldusüksus määramata.");
-							break;
-						}
-
-						$parent = $parents[$unit_type->prop ("parent_unit")];
-
-						### check if object exists with exactly same name
-						$list = new object_list (array (
-							"class_id" => $unit_type->prop ("unit_type"),
-							"parent" => $parent->id (),
-							"name" => "%" . $selected_unit_id,
-							"subclass" => $unit_type->id (),
-						));
-						$existing_unit = NULL;
-
-						// $existing = $this->db_fetch_field("
-							// SELECT
-								// count(objects.oid) AS count
-							// FROM
-								// objects
-							// WHERE
-								// objects.parent = " . $parent->id () . " AND
-								// objects.class_id = " . $unit_type->prop ("unit_type") . " AND
-								// objects.subclass = " . $unit_type->id () . " AND
-								// objects.name LIKE '" . $selected_unit_id . "' AND
-								// objects.status > 0
-						// ", "count");
-
-						if (1 == $list->count ())
-						{
-							$existing_unit = $list->begin();
-						}
-						else
-						{
-							$list = $list->arr ();
-
-							foreach ($list as $unit)
-							{
-								if (strtolower ($unit->name ()) == strtolower ($selected_unit_id))
-								{
-									$existing_unit = $list->begin();
-								}
-							}
-						}
-
-						if (is_object ($existing_unit))
-						{
-							$saved_unit = $existing_unit;
-						}
-						else
-						{ ### save new unit
-							$saved_unit = obj ();
-							$saved_unit->set_class_id ($unit_type->prop ("unit_type"));
-							$saved_unit->set_parent ($parent->id ());
-							$saved_unit->set_name ($selected_unit_id);
-							$saved_unit->set_subclass ($unit_type->id ());
-							$saved_unit->save();
-						}
-					}
-					else
-					{
-						### user selection for this unit type was empty
-					}
-
-					$parents[$unit_type->id ()] = $saved_unit;
+					$this_object->set_prop ("unit_name", array (
+						"division" => $division,
+						"name" => $selected_unit_id,
+					));
 				}
-
-				### Lowest defined unit in structure hierarchy passed, save last defined as address' parent
-				$this_object->set_parent ($saved_unit->id ());
-				$this_object->set_prop ("administrative_structure_oid", $administrative_structure->id ());
-
-				### update address array
-				$this->update_address_array (array ("id" => $this_object->id ()));
-			}
-			else
-			{
-				//!!! user error
-				echo t("Riik valimata.");
-				return false;
 			}
 		}
 	}
@@ -313,14 +155,16 @@ class address extends class_base
 
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
+		$this_object = obj ($arr["id"]);
 		$this->read_template("show.tpl");
 		$this->vars(array(
-			"name" => $ob->prop("name"),
+			"name" => $this_object->prop("name"),
 		));
 		return $this->parse();
 	}
+/* END classbase methods */
 
+/* public methods */
 	function callback_location ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
@@ -344,7 +188,7 @@ class address extends class_base
 			}
 			else
 			{ ### structure object has probably been deleted
-				echo t("Admin struktuur m22ramata");//!!! siin midagi...
+				echo t("Haldusjaotus m22ramata");//!!! siin midagi...
 			}
 		}
 
@@ -356,7 +200,7 @@ class address extends class_base
 		if (!is_object ($administrative_structure))
 		{
 			//!!! throw user err
-			t("Haldusjaotuse struktuur riigi jaoks defineerimata.");
+			t("Haldusjaotus riigi jaoks defineerimata.");
 			return PROP_FATAL_ERROR;
 		}
 
@@ -458,49 +302,31 @@ class address extends class_base
 	{
 		$this_object = obj ($arr["id"]);
 
-		### get administrative structure for country of address
-		$country = $this_object->get_first_obj_by_reltype("RELTYPE_COUNTRY");
-		$administrative_structure = is_oid ($this_object->prop ("administrative_structure_oid"))
-				?
-			obj ($this_object->prop ("administrative_structure_oid"))
-				:
-			$country->get_first_obj_by_reltype("RELTYPE_ADMINISTRATIVE_STRUCTURE");
-
-		if (!is_object ($administrative_structure))
-		{
-			error::raise(array(
-				"msg" => t("Autocomplete'i valikute jaoks riigile administratiivjaotuse struktuur määramata"),
-				"fatal" => true,
-				"show" => false,
-			));
-			exit;
-		}
-
-		$cl_administrative_structure = get_instance (CL_COUNTRY_ADMINISTRATIVE_STRUCTURE);
-		$unit_types =& $cl_administrative_structure->get_structure (array(
-			"id" => $administrative_structure->id(),
-		));
+		### get administrative structure
+		$this->administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+		$divisions =& $this->administrative_structure->prop ("structure_array");
 
 		### get parameters passed from autocomplete
 		$parameters = $this->get_autocomplete_parameters ($arr);
 
-		### get $parent according to unit type
-		if (array_key_exists ("street", $parameters))
+		### get $parent according to division
+		if (array_key_exists (ADDRESS_STREET_TYPE, $parameters))
 		{
-			$unit_types_reversed = array_reverse ($unit_types, true);
+			$divisions_reversed = array_reverse ($divisions, true);
 
-			foreach ($unit_types_reversed as $unit_type)
+			foreach ($divisions_reversed as $division)
 			{
-				if (is_oid ($parameters[$unit_type->id ()]))
+				if (is_oid ($parameters[$division->id ()]))
 				{
-					$parent = (int) $parameters[$unit_type->id ()];
+					$parent = (int) $parameters[$division->id ()];
 					break;
 				}
 			}
 		}
-		elseif (array_key_exists ("country", $parameters))
+		elseif (array_key_exists (ADDRESS_COUNTRY_TYPE, $parameters) and is_oid ($parameters[ADDRESS_COUNTRY_TYPE]))
 		{
-			$parent = (int) $parameters["country"];
+			$ac_country = obj ($parameters[ADDRESS_COUNTRY_TYPE]);
+			$parent = $ac_country->prop ("administrative_structure");
 		}
 		elseif (is_oid (reset ($parameters)))
 		{
@@ -519,11 +345,11 @@ class address extends class_base
 
 		if (is_oid ($requester_id) and $this->can ("view", $requester_id))
 		{
-			$requesting_unit_type = obj ($requester_id);
-			$class_id = (int) $requesting_unit_type->prop ("unit_type");
-			$subclass = $requesting_unit_type->id ();
+			$requesting_division = obj ($requester_id);
+			$class_id = (int) $requesting_division->prop ("division");
+			$subclass = $requesting_division->id ();
 		}
-		elseif ($requester_id == "street")
+		elseif ($requester_id == ADDRESS_STREET_TYPE)
 		{
 			$class_id = CL_ADDRESS_STREET;
 		}
@@ -562,6 +388,7 @@ class address extends class_base
 		echo $autocomplete_options;
 		exit;
 	}
+/* END public methods */
 
 	function get_autocomplete_parameters ($arr)
 	{
@@ -576,19 +403,19 @@ class address extends class_base
 
 			if (preg_match ("/location_(\d{1,11}|street|country)/S", $name, $matches))
 			{
-				$unit_type_id = $matches[1];
+				$division_id = $matches[1];
 
-				if ($unit_type_id == "street")
+				if ($division_id == ADDRESS_STREET_TYPE)
 				{
-					$parameters["street"] = urldecode ($value);
+					$parameters[ADDRESS_STREET_TYPE] = urldecode ($value);
 				}
-				elseif ($unit_type_id == "country")
+				elseif ($division_id == ADDRESS_COUNTRY_TYPE)
 				{
-					$parameters["country"] = urldecode ($value);
+					$parameters[ADDRESS_COUNTRY_TYPE] = urldecode ($value);
 				}
 				else
 				{
-					$parameters[$unit_type_id] = urldecode ($value);
+					$parameters[$division_id] = urldecode ($value);
 				}
 			}
 		}
@@ -596,74 +423,88 @@ class address extends class_base
 		return $parameters;
 	}
 
-/**
-    @attrib name=get_address_array all_args=1
-	@param id required type=int
-	@returns Associative array: administrative_unit_type name => array ("name" => administrative_unit name, "id" => administrative_unit oid)
-**/
-	function get_address_array ($arr)
+	function callback_location2 ($arr)
 	{
-		$this_object = obj ($arr["id"]);
-		// $this->update_address_array ($arr);//!!! pole m6tet iga kysimisega teha, seda tuleb teha salvestamisel ja muutuste tegemisel
-		$address_array = $this_object->prop ("address_array");
-		return $address_array;
-	}
+		$this_object = $arr["obj_inst"];
+		$administrative_structure = $this_object->prop ("administrative_structure");
+		$divisions =& $administrative_structure->prop ("structure_array");
 
-	function update_address_array ($arr)
-	{
-		if (!$this->can ("view", $arr["id"]))
+		### get autocomplete parameters parent hierarchy for each division
+		$autocomplete_params = array ();
+		$autocomplete_params[ADDRESS_STREET_TYPE][] = "location_street";
+
+		foreach ($divisions as $division_id => $division)
 		{
-			return false;
+			$parent = obj (
+				$division->prop ("parent_division")
+			);
+
+			if ($parent->class_id() == CL_COUNTRY_ADMINISTRATIVE_DIVISION)
+			{
+				$autocomplete_params[$division->id ()][] = "location_" . $parent->id ();
+			}
+			elseif ($parent->class_id() == CL_COUNTRY_ADMINISTRATIVE_STRUCTURE)
+			{
+				$autocomplete_params[$division->id ()][] = "location_country";
+			}
+
+			### add all divisions to potential parent divisions for street
+			$autocomplete_params[ADDRESS_STREET_TYPE][] = "location_" . $division->id ();
 		}
 
-		$this_object = obj ($arr["id"]);
-		$current =$this_object;
-		$address_array = array ();
-		$address_classes = array (
-			CL_COUNTRY_ADMINISTRATIVE_UNIT,
-			CL_COUNTRY_CITY,
-			CL_COUNTRY_CITYDISTRICT,
+		### get address hierarchy for displaying currently chosen values of address fields
+		$parent = obj ($this_object->parent ());
+		$current_values = array ();
+
+		while (is_object ($parent) and in_array ($parent->class_id (), $this->address_classes))
+		{
+			$subclass = (CL_ADDRESS_STREET == $parent->class_id ())
+					?
+				$parent->class_id ()
+					:
+				$parent->subclass ();
+
+			$current_values[$subclass]["name"] = $parent->name ();
+			$current_values[$subclass]["value"] = $parent->id ();
+			$parent = obj (
+				$parent->parent ()
+			);
+		}
+
+		### define callback properties
+		$prop = array ();
+		$params = array (
+			"id" => $this_object->id (),
 		);
+		$autocomplete_source = $this->mk_my_orb ("location_autocomplete", $params, CL_ADDRESS, false, true);
+		$orb = parse_url ($autocomplete_source);
+		$autocomplete_source = $orb["path"] . "?" . $orb["query"];
 
-		do
+		foreach ($divisions as $division_id => $division)
 		{
-			$current = obj ($current->parent ());
-
-			if ($current->class_id () == CL_COUNTRY)
-			{
-				$address_array[t("Riik")] = $current->name ();
-			}
-			elseif ($current->class_id () == CL_ADDRESS_STREET)
-			{
-				$address_array[t("Tänav")] = $current->name ();
-			}
-			elseif (in_array ($current->class_id (), $address_classes))
-			{
-				$unit_type = obj ($current->subclass ());
-				$address_array[$unit_type->name ()] = $current->name ();
-			}
+			$prop["location_" . $division->id ()] = array(
+				"autocomplete_source" => $autocomplete_source,
+				"autocomplete_params" => $autocomplete_params[$division->id ()],
+				"option_is_tuple" => true,
+				"type" => "textbox",
+				"name" => "location_" . $division->id (),
+				"caption" => $division->name (),
+				"value" => $current_values[$division->id ()]["value"],
+				"content" => $current_values[$division->id ()]["name"],
+			);
 		}
-		while ($current->class_id () != CL_COUNTRY);
 
-		$this_object->set_prop ("address_array", $address_array);
-		$this_object->save ();
-		return true;
-	}
-
-/**
-    @attrib name=get_envelope_address all_args=1
-	@param id required type=int
-	@returns String address for printing on envelopes etc.
-**/
-	function get_envelope_address ($arr)
-	{
-		$this_object = obj ($arr["id"]);
-			//!!! use address array from property if adm str etc not changed, otherwise build array from current values
-			//!!! teha nii et viimane rida oleks: T2nav majanr-krtnr
-			//!!! ymbrikuaadressi formaati peaks saama riigi v. haldusjaotuse juurest dfn-da
-		$address_text = array_reverse ($this_object->prop ("address_array"));
-		$address_text = implode (", ", $address_text);
-		return implode ("\n", $address_text);
+		$prop["location_street"] = array(
+			"autocomplete_source" => $autocomplete_source,
+			"autocomplete_params" => $autocomplete_params[ADDRESS_STREET_TYPE],
+			"option_is_tuple" => true,
+			"type" => "textbox",
+			"name" => "location_street",
+			"caption" => t("Tänav"),
+			"value" => $current_values[CL_ADDRESS_STREET]["value"],
+			"content" => $current_values[CL_ADDRESS_STREET]["name"],
+		);
+		return $prop;
 	}
 }
 

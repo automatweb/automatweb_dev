@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address_street.aw,v 1.2 2005/10/26 14:57:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address_street.aw,v 1.3 2005/11/21 09:14:56 voldemar Exp $
 // address_street.aw - Tänav
 /*
 
@@ -9,11 +9,19 @@
 @default field=meta
 @default method=serialize
 @default group=general
+	@property administrative_structure_oid type=hidden
 
 */
 
 ### address system settings
-define ("ADMINISTRATIVE_CFG_TYPE_UNIT", 1);
+if (!defined ("ADDRESS_SYSTEM"))
+{
+	define ("ADDRESS_SYSTEM", 1);
+	define ("NEWLINE", "<br />");
+	define ("ADDRESS_STREET_TYPE", "street"); # used in many places. also in autocomplete javascript -- caution when changing.
+	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
+	define ("ADDRESS_DBG_FLAG", "address_dbg");
+}
 
 class address_street extends class_base
 {
