@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.186 2005/07/05 09:43:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.187 2005/11/21 13:28:39 ahti Exp $
 
 class aliasmgr extends aw_template
 {
@@ -1053,9 +1053,14 @@ class aliasmgr extends aw_template
 
 		foreach($this->reltypes as $k => $v)
 		{
+			$v = html_entity_decode($v);
+			$this->reltypes[$k] = $v;
 			$dval = true;
 			$single_select = "capt_new_object";
 			$sele = NULL;
+
+
+
 			if ($k == 0)
 			{
 				$choice =  &$choices;
@@ -1092,18 +1097,19 @@ class aliasmgr extends aw_template
 
 			$history = array();
 			$dvals = '';
-
+			$v = str_replace("&auml;","ä",$vals);
+			$v = str_replace("&Auml;","Ä",$v);
+			$v = str_replace("&uuml;","ü",$v);
+			$v = str_replace("&Üuml;","Ü",$v);
+			$v = str_replace("&otilde;","õ",$v);
+			$v = str_replace("&Otilde;","Õ",$v);
+			$v = str_replace("&ouml;","ö",$v);
+			$vals = str_replace("&Ouml;","Ö",$v);
 			if ($dval)
 			{
 				$dvals = ',"Objekti tüüp","capt_new_object"';
 				$comp = (isset($this->rel_type_classes[$k]) && is_array($this->rel_type_classes[$k])) ? $this->rel_type_classes[$k] : $choice;
 			}
-
-			$vals = str_replace("&auml;","ä",$vals);
-			$vals = str_replace("&uuml;","ü",$vals);
-			$vals = str_replace("&otilde;","õ",$vals);
-			$vals = str_replace("&Otilde;","Õ",$vals);
-
 
 			$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
 			$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.($sele ? $sele : $single_select).'");'."\n";
