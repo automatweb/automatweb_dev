@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.35 2005/11/18 14:00:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.36 2005/11/21 12:22:22 ahti Exp $
 // task.aw - TODO item
 /*
 
@@ -404,7 +404,7 @@ class task extends class_base
 
 				$data["options"] = array("" => "") + $ol->names();
 
-				if (is_object($arr["obj_inst"]))
+				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 				{
 					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
 					{
@@ -443,7 +443,7 @@ class task extends class_base
 					$data["value"] = $arr["request"]["alias_to_org"];
 				}
 
-				if (is_object($arr["obj_inst"]))
+				if (is_object($arr["obj_inst"]) && !$arr["new"])
 				{
 					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 					{
@@ -458,7 +458,7 @@ class task extends class_base
 				}
 
 				asort($data["options"]);
-				if (is_object($arr["obj_inst"]))
+				if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->class_id() == CL_TASK)
 				{
 					$arr["obj_inst"]->set_prop("customer", $data["value"]);
 				}
