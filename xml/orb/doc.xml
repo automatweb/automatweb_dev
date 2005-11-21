@@ -9,7 +9,7 @@
 			</function>
 		</action>
 
-		<action name="show_pic1" caption="Näita pilti">
+		<action name="show_pic1" caption="N&amp;auml;ita pilti">
 			<function name="show_pic1">
 				<arguments>
 					<required name="id" />

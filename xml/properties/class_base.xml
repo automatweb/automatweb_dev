@@ -39,7 +39,7 @@
             <field>flags</field>
             <method>bitmask</method>
             <ch_value>2</ch_value>
-            <caption>Vajab tõlget</caption>
+            <caption>Vajab t&amp;otilde;lget</caption>
       </property>
       <property>
             <name>is_translated</name>
@@ -50,7 +50,7 @@
             <method>bitmask</method>
             <ch_value>4</ch_value>
             <trans>1</trans>
-            <caption>Tõlge kinnitatud</caption>
+            <caption>T&amp;otilde;lge kinnitatud</caption>
       </property>
       <groupinfo>
             <general>

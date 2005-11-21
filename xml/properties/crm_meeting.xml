@@ -51,7 +51,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>Lõpeb</caption>
+            <caption>L&amp;otilde;peb</caption>
       </property>
       <property>
             <name>whole_day</name>
@@ -61,7 +61,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kestab terve päeva</caption>
+            <caption>Kestab terve p&amp;auml;eva</caption>
       </property>
       <property>
             <name>udefch1</name>
@@ -232,7 +232,7 @@
             <cols>60</cols>
             <rows>30</rows>
             <field>description</field>
-            <caption>Kokkuvõte</caption>
+            <caption>Kokkuv&amp;otilde;te</caption>
       </property>
       <property>
             <name>aliasmgr</name>

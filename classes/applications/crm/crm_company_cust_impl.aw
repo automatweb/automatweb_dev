@@ -537,12 +537,14 @@ class crm_company_cust_impl extends class_base
 		}
 
 		$tree = &$arr["prop"]["vcl_inst"];
-		$node_id = 0;
+		$node_id = (int)$arr["node_id"];
+
 		$i = get_instance(CL_CRM_COMPANY);
 		$i->active_node = (int)$arr['request']['category'];
+		$i->tree_uses_oid = true;
 		$i->generate_tree(array(
 			'tree_inst' => &$tree,
-			'obj_inst' => $arr['obj_inst'],
+			'obj_inst' => $arr["node_id"] > 0 ? obj($arr["node_id"]) : $arr['obj_inst'],
 			'node_id' => &$node_id,
 			'conn_type' => 'RELTYPE_CATEGORY',
 			'attrib' => 'category',
@@ -550,14 +552,23 @@ class crm_company_cust_impl extends class_base
 			'style' => 'nodetextbuttonlike',
 			'parent2chmap' => $parents
 		));
-		
-		$node_id++;
+		$tree->set_branch_func($this->mk_my_orb("get_offers_tree_branch",array("co_id" => $arr["obj_inst"]->id()))."&fetch_branch=");
+		$tree->tree_type = TREE_DHTML;
+		if ($arr["node_id"] && $arr["node_id"] != -1)
+		{
+			die($tree->finalize_tree(array("rootnode" => $arr["node_id"])));
+		}
+		$node_id = -1;
 		$tree->add_item(0, array(
 			'id' => $node_id,
 			'name' => t('Kõik organisatsioonid'),
 			'url' => '',
 		));
-		
+	
+		if ($arr["node_id"] == -1)
+		{
+			$tree->items = array();
+		}
 		$all_org_parent = $node_id;
 		
 		$data = array();
@@ -579,8 +590,13 @@ class crm_company_cust_impl extends class_base
 			));
 		}
 		
-		$tree->set_branch_func($this->mk_my_orb("get_offers_tree_branch",array("co_id" => $arr["obj_inst"]->id())));
+		$tree->set_branch_func($this->mk_my_orb("get_offers_tree_branch",array("co_id" => $arr["obj_inst"]->id()))."&fetch_branch=");
 		$tree->tree_type = TREE_DHTML;
+		if ($arr["node_id"] == -1)
+		{
+			die($tree->finalize_tree(array("rootnode" => $arr["node_id"])));
+		}
+
 		$tree->has_root = true;
 	}
 
@@ -1643,6 +1659,21 @@ class crm_company_cust_impl extends class_base
 			}
 		}
 		return $cnt;
+	}
+	
+	/**
+		@attrib name=get_offers_tree_branch all_args=1
+	**/
+	function get_offers_tree_branch($arr)
+	{
+		$tr = get_instance("vcl/treeview");
+		$this->_get_offers_listing_tree(array(
+			"prop" => array(
+				"vcl_inst" => &$tr,
+			),
+			"obj_inst" => obj($arr["co_id"]),
+			"node_id" => $arr["fetch_branch"]
+		));
 	}
 }
 ?>

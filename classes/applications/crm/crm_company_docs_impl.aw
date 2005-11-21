@@ -134,6 +134,26 @@ class crm_company_docs_impl extends class_base
 			"var" => "tf",
 			"icon" => icons::get_icon_url(CL_MENU)
 		));
+
+		// if there is a server folder object attached, then get the rest of the folders from that
+		$sf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
+		if ($sf)
+		{
+			$s = $sf->instance();
+			$fld = $s->get_folders($sf);
+
+			$t =& $arr["prop"]["vcl_inst"];
+			$t->add_item(0, array(
+				"id" => $sf->id(),
+				"name" => $sf->name(),
+				"url" => aw_url_change_var("files_from_fld", "/")
+			));
+			foreach($fld as $item)
+			{
+				$item["url"] = aw_url_change_var("files_from_fld", $item["id"]);
+				$t->add_item($item["parent"] === 0 ? $sf->id() : $item["parent"], $item);
+			}
+		}
 	}
 
 	function _init_docs_tbl(&$t)
@@ -145,12 +165,15 @@ class crm_company_docs_impl extends class_base
 			"sortable" => 1
 		));
 
-		$t->define_field(array(
-			"caption" => t("T&uuml;&uuml;p"),
-			"name" => "class_id",
-			"align" => "center",
-			"sortable" => 1
-		));
+		if ($_GET["files_from_fld"] == "")
+		{
+			$t->define_field(array(
+				"caption" => t("T&uuml;&uuml;p"),
+				"name" => "class_id",
+				"align" => "center",
+				"sortable" => 1
+			));
+		}
 
 		$t->define_field(array(
 			"caption" => t("Looja"),
@@ -169,12 +192,15 @@ class crm_company_docs_impl extends class_base
 			"format" => "d.m.Y H:i"
 		));
 
-		$t->define_field(array(
-			"caption" => t("Muutja"),
-			"name" => "modifiedby",
-			"align" => "center",
-			"sortable" => 1
-		));
+		if ($_GET["files_from_fld"] == "")
+		{
+			$t->define_field(array(
+				"caption" => t("Muutja"),
+				"name" => "modifiedby",
+				"align" => "center",
+				"sortable" => 1
+			));
+		}
 
 		$t->define_field(array(
 			"caption" => t("Muudetud"),
@@ -194,10 +220,27 @@ class crm_company_docs_impl extends class_base
 
 	function _get_docs_tbl($arr)
 	{
-		$fld = $this->_init_docs_fld($arr["obj_inst"]);
-
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_docs_tbl($t);
+		if ($_GET["files_from_fld"] != "")
+		{
+			$sf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
+			$i = $sf->instance();
+			$ob = $i->get_objects($sf, NULL, $_GET["files_from_fld"]);
+			foreach($ob as $nm => $dat)
+			{
+				$t->define_data(array(
+					"name" => html::href(array("url" => $dat["url"], "caption" => $dat["name"])),
+					"created" => $dat["add_date"],
+					"modified" => $dat["mod_date"],
+					"createdby" => $dat["adder"]
+				));
+			}
+			return;
+		}
+
+		$fld = $this->_init_docs_fld($arr["obj_inst"]);
+
 
 		if ($arr["request"]["do_doc_search"])
 		{

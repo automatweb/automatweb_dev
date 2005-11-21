@@ -2263,6 +2263,11 @@
                   </clid>
                   <caption>Valdkond</caption>
             </FIELD>
+            <SERVER_FILES>
+                  <value>51</value>
+                  <clid>CL_SERVER_FOLDER</clid>
+                  <caption>failide kataloog serveris</caption>
+            </SERVER_FILES>
       </reltypes>
       <layout>
             <hbox_toolbar>

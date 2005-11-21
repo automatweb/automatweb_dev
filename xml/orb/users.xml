@@ -112,7 +112,7 @@
 			</function>
 		</action>
 
-		<action name="logout" nologin="1" is_public="1" caption="Logi v&amp;amp;auml;lja">
+		<action name="logout" nologin="1" is_public="1" caption="Logi v&amp;auml;lja">
 			<function name="orb_logout">
 				<arguments>
 				</arguments>

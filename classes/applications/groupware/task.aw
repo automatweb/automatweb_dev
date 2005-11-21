@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.36 2005/11/21 12:22:22 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.37 2005/11/21 15:52:06 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -690,6 +690,8 @@ class task extends class_base
 		$this->_init_other_exp_t($t);
 		
 		$dat = safe_array($arr["obj_inst"]->meta("other_expenses"));
+		$dat[] = array();
+		$dat[] = array();
 		$dat[] = array();
 
 		$nr = 1;

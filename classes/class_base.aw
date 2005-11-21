@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.435 2005/11/07 13:21:20 kristo Exp $
+// $Id: class_base.aw,v 2.436 2005/11/21 15:52:05 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3807,7 +3807,6 @@ class class_base extends aw_template
 
 				// XXX: reltype in the url is numeric, it probably should not be
 				$reltype = $rawdata["reltype"] ? $rawdata["reltype"] : $reltype;
-
 				$_to->connect(array(
 					"to" => $this->obj_inst->id(),
 					"reltype" => $reltype,
@@ -3819,10 +3818,9 @@ class class_base extends aw_template
 				// XXX: this invokes load_defaults, which in turn overwrites variables
 				// in $this instance. This might lead to some nasty bugs
 				$bt = $this->get_properties_by_type(array(
-					"type" => array("relpicker","relmanager"),
+					"type" => array("relpicker","relmanager", "popup_search"),
 					"clid" => $_to->class_id(),
 				));
-
 				dbg::p5($bt);
 
 				$symname = "";
@@ -3838,14 +3836,13 @@ class class_base extends aw_template
 						};
 					};
 				};
-
 				dbg::p5("symname = $symname");
 
 				// figure out which property to check
 				foreach($bt as $item_key => $item)
 				{
 					// double check just in case
-					if (!empty($symname) && ($item["type"] == "relpicker" || $item["type"] == "relmanager") && ($item["reltype"] == $symname))
+					if (!empty($symname) && ($item["type"] == "popup_search" || $item["type"] == "relpicker" || $item["type"] == "relmanager") && ($item["reltype"] == $symname))
 					{
 						$target_prop = $item_key;
 					};
@@ -3866,7 +3863,7 @@ class class_base extends aw_template
 				};
 
 				// this is after the new connection has been made
-				if ($conn_count == 1)
+				if ($target_prop != "" && ($conn_count == 1 || !$bt[$target_prop]["multiple"] ))
 				{
 					$_to->set_prop($target_prop,$this->obj_inst->id());
 					$_to->save();

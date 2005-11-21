@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.66 2005/11/18 14:00:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.67 2005/11/21 15:52:06 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -70,8 +70,6 @@
 	@property create_task type=checkbox ch_value=1 store=no
 	@caption Moodusta &uuml;lesanne
 
-	@property files type=text 
-	@caption Failid
 
 
 
@@ -113,8 +111,11 @@
 
 @default group=files
 
-	@property file_editor type=releditor reltype=RELTYPE_PRJ_FILE mode=manager props=filename,file,comment
+	@property files type=text 
 	@caption Failid
+
+	property file_editor type=releditor reltype=RELTYPE_PRJ_FILE mode=manager props=filename,file,comment
+	caption Failid
 
 @default group=trans
 
@@ -3027,6 +3028,7 @@ class project extends class_base
 			"name" => "person",
 			"caption" => t("Nimi"),
 			"align" => "center",
+			"width" => "16%",
 			"sortable" => 1
 		));
 
@@ -3034,6 +3036,7 @@ class project extends class_base
 			"name" => "co",
 			"caption" => t("Organisatsioon"),
 			"align" => "center",
+			"width" => "16%",
 			"sortable" => 1
 		));
 
@@ -3041,6 +3044,7 @@ class project extends class_base
 			"name" => "rank",
 			"caption" => t("Ametinimetus"),
 			"align" => "center",
+			"width" => "16%",
 			"sortable" => 1
 		));
 
@@ -3048,6 +3052,7 @@ class project extends class_base
 			"name" => "phone",
 			"caption" => t("Telefon"),
 			"align" => "center",
+			"width" => "16%",
 			"sortable" => 1
 		));
 
@@ -3055,6 +3060,7 @@ class project extends class_base
 			"name" => "mail",
 			"caption" => t("E-post"),
 			"align" => "center",
+			"width" => "16%",
 			"sortable" => 1
 		));
 
@@ -3062,6 +3068,7 @@ class project extends class_base
 			"name" => "roles",
 			"caption" => t("Rollid"),
 			"align" => "center",
+			"width" => "16%",
 			"sortable" => 1
 		));
 
@@ -3106,9 +3113,16 @@ class project extends class_base
 				}
 			}
 
+			if ($o->class_id() == CL_CRM_COMPANY)
+			{
+				continue;
+			}
 			$t->define_data(array(
 				"person" => html::obj_change_url($o),
 				"co" => join(", ", $co_s),
+				"rank" => html::obj_change_url($o->prop("rank")),
+				"phone" => $o->prop_str("phone"),
+				"mail" => $o->prop_str("email"),
 				"roles" => "",
 				"oid" => $o->id()
 			));
@@ -3205,6 +3219,9 @@ class project extends class_base
 		{
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
+				"rank" => html::obj_change_url($o->prop("rank")),
+				"phone" => $o->prop_str("phone"),
+				"mail" => $o->prop_str("email"),
 				"co" => html::obj_change_url($o->get_first_obj_by_reltype("RELTYPE_WORK")),
 				"oid" => $o->id()
 			));
@@ -3337,6 +3354,8 @@ class project extends class_base
 			$objs = $ol->arr();
 		}
 
+		$objs[] = obj();
+		$objs[] = obj();
 		$objs[] = obj();
 
 		$types = array(

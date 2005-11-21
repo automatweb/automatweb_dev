@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.6 2005/08/17 10:34:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.7 2005/11/21 15:52:06 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -242,6 +242,7 @@ class server_folder extends class_base
 
 	function get_folders($ob, $tree_type = NULL)
 	{
+		classload("image");
 		$list = array();
 		$fld = $ob->prop("folder");
 		$this->_recur_dir_list($fld, $list);
@@ -331,6 +332,8 @@ class server_folder extends class_base
 				$fn = $dir . "/" . $file;
 				if (is_file($fn))
 				{
+					$udata = posix_getpwuid(fileowner($fn));
+					$adder = $udata["name"];
 					$file_p = str_replace($ob->prop("folder"), "", $fn);
 					$fid = $ob->id().":".$file_p;
 					$list[$file_p] = array(
@@ -339,6 +342,8 @@ class server_folder extends class_base
 						"file_size" => filesize($fn),
 						"add_date" => filemtime($fn),
 						"mod_date" => filemtime($fn),
+						"adder" =>	$adder,
+						"modder" => $adder,
 						"icon" => image::make_img_tag(icons::get_icon_url(CL_FILE, $fn)),
 						"jrk" => $num++,
 						"url" => $this->mk_my_orb("show_file", array("fid" => $fid)),

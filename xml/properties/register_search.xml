@@ -28,7 +28,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>T&amp;uuml;hi otsing n&amp;auml;itab k&amp;otilde;iki</caption>
+            <caption>T&amp;amp;uuml;hi otsing n&amp;amp;auml;itab k&amp;amp;otilde;iki</caption>
       </property>
       <property>
             <name>show_only_act</name>
@@ -38,7 +38,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita ainult aktiivseid objekte</caption>
+            <caption>N&amp;amp;auml;ita ainult aktiivseid objekte</caption>
       </property>
       <property>
             <name>show_all_right_away</name>
@@ -48,7 +48,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Otsingus n&amp;auml;idatakse ilma otsimata k&amp;otilde;iki</caption>
+            <caption>Otsingus n&amp;amp;auml;idatakse ilma otsimata k&amp;amp;otilde;iki</caption>
       </property>
       <property>
             <name>notfound_text</name>
@@ -59,7 +59,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>40</cols>
-            <caption>Mida n&amp;auml;idatakse kui midagi ei leita (%s on otsing)</caption>
+            <caption>Mida n&amp;amp;auml;idatakse kui midagi ei leita (%s on otsing)</caption>
       </property>
       <property>
             <name>show_date</name>
@@ -69,7 +69,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Tulemuste all on kuup&amp;auml;ev</caption>
+            <caption>Tulemuste all on kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>results_from_all_langs</name>
@@ -79,7 +79,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Tulemused k&amp;otilde;ikidest keeltest</caption>
+            <caption>Tulemused k&amp;amp;otilde;ikidest keeltest</caption>
       </property>
       <property>
             <name>sform_frm</name>

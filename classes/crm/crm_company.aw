@@ -817,6 +817,9 @@ groupinfo org_objects_main caption="Objektid" submit=no
 @reltype FIELD value=50 clid=CL_CRM_FIELD_ACCOMMODATION,CL_CRM_FIELD_FOOD,CL_CRM_FIELD_ENTERTAINMENT,CL_CRM_FIELD_CONFERENCE_ROOM
 @caption Valdkond
 
+@reltype SERVER_FILES value=51 clid=CL_SERVER_FOLDER
+@caption failide kataloog serveris
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
@@ -921,7 +924,7 @@ class crm_company extends class_base
 			$name = $conn->prop('to.name');
 			if($style)
 			{
-				$name = '<span class="'.$style.'">'.$name.'</span>';
+				$name = '<span class=&quot;'.$style.'&quot;>'.$name.'</span>';
 			}
 			if($conn->prop('to')==$this->active_node)
 			{
@@ -930,8 +933,16 @@ class crm_company extends class_base
 			$tmp_obj = $conn->to();
 			
 			//use the plural unless plural is empty -- this is just for reltype_section
+			if ($this->tree_uses_oid)
+			{
+				$node_id = $conn->prop("to");
+			}
+			else
+			{
+				++$node_id;
+			}
 			$tree_node_info = array(
-				'id'=>++$node_id,
+				'id'=>$node_id,
 				'name'=>$name,
 				'url'=>aw_url_change_var(array(
 					$attrib=>$conn->prop('to'),
@@ -939,7 +950,7 @@ class crm_company extends class_base
 					'org_id' => '',
 				)),
 				'oid' => $conn->prop('to'),
-				"class_id" => $conn->prop("to.class_id")
+				"class_id" => $conn->prop("to.class_id"),
 			);
 			//i know, i know, this function is getting really bloated
 			//i just don't know yet, how to refactor it nicely, until then

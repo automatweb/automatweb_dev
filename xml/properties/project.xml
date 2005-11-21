@@ -179,14 +179,6 @@
             <caption>Moodusta &amp;amp;uuml;lesanne</caption>
       </property>
       <property>
-            <name>files</name>
-            <table>objects</table>
-            <group>info</group>
-            <type>text</type>
-            <field>files</field>
-            <caption>Failid</caption>
-      </property>
-      <property>
             <name>project_navigator</name>
             <table>aw_projects</table>
             <group>web_settings</group>
@@ -264,19 +256,11 @@
             <caption>Lisa s&amp;uuml;ndmus</caption>
       </property>
       <property>
-            <name>file_editor</name>
+            <name>files</name>
             <table>objects</table>
             <group>files</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_PRJ_FILE</reltype>
-            <mode>manager</mode>
-            <props>
-                  <num_0>filename</num_0>
-                  <num_1>file</num_1>
-                  <num_2>comment</num_2>
-            </props>
-            <store>no</store>
-            <field>file_editor</field>
+            <type>text</type>
+            <field>files</field>
             <caption>Failid</caption>
       </property>
       <property>
