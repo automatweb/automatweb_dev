@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.9 2005/03/23 11:45:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.10 2005/11/21 15:17:34 ahti Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see kõik pole
@@ -20,9 +20,11 @@
 @property manager type=text no_caption=1 store=no wrapchildren=1
 @caption Manager
 
-@property treeview type=text parent=manager store=no
+@layout mlist type=hbox group=manager width=20%:80%
 
-@property metalist type=table parent=manager store=no
+	@property treeview type=text store=no parent=mlist no_caption=1
+
+	@property metalist type=table store=no parent=mlist no_caption=1
 
 @property mupload type=fileupload store=no group=import
 @caption Vali muutujatega fail

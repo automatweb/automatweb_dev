@@ -26,8 +26,9 @@
             <table>objects</table>
             <group>manager</group>
             <type>text</type>
-            <parent>manager</parent>
             <store>no</store>
+            <parent>mlist</parent>
+            <no_caption>1</no_caption>
             <field>treeview</field>
       </property>
       <property>
@@ -35,8 +36,9 @@
             <table>objects</table>
             <group>manager</group>
             <type>table</type>
-            <parent>manager</parent>
             <store>no</store>
+            <parent>mlist</parent>
+            <no_caption>1</no_caption>
             <field>metalist</field>
       </property>
       <property>
@@ -70,5 +72,12 @@
                   <caption>Import</caption>
             </import>
       </groupinfo>
+      <layout>
+            <mlist>
+                  <type>hbox</type>
+                  <group>manager</group>
+                  <width>20%:80%</width>
+            </mlist>
+      </layout>
 </properties>
 
