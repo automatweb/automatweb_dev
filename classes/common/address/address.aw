@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.4 2005/11/21 09:14:56 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.5 2005/11/22 08:15:15 voldemar Exp $
 // address.aw - Aadress v2
 /*
 
@@ -165,133 +165,6 @@ class address extends class_base
 /* END classbase methods */
 
 /* public methods */
-	function callback_location ($arr)
-	{
-		$this_object =& $arr["obj_inst"];
-		### get administrative structure for country of address
-		if (!($country = $this_object->get_first_obj_by_reltype("RELTYPE_COUNTRY")))
-		{
-			error::raise(array(
-				"msg" => t("Aadressi riik defineerimata."),
-				"fatal" => true,
-				"show" => true,
-			));
-		}
-
-		$administrative_structure = NULL;
-
-		if (is_oid ($this_object->prop ("administrative_structure_oid")))
-		{ ### address has once been saved according to an admin. structure
-			if ($this->can ("view", $this_object->prop ("administrative_structure_oid")))
-			{ ### structure object still exists
-				$administrative_structure = obj ($this_object->prop ("administrative_structure_oid"));
-			}
-			else
-			{ ### structure object has probably been deleted
-				echo t("Haldusjaotus m22ramata");//!!! siin midagi...
-			}
-		}
-
-		if (empty ($administrative_structure))
-		{
-			$administrative_structure = $country->get_first_obj_by_reltype("RELTYPE_ADMINISTRATIVE_STRUCTURE");
-		}
-
-		if (!is_object ($administrative_structure))
-		{
-			//!!! throw user err
-			t("Haldusjaotus riigi jaoks defineerimata.");
-			return PROP_FATAL_ERROR;
-		}
-
-		$cl_administrative_structure = get_instance (CL_COUNTRY_ADMINISTRATIVE_STRUCTURE);
-		$unit_types =& $cl_administrative_structure->get_structure (array(
-			"id" => $administrative_structure->id(),
-		));
-
-		### get autocomplete parameters parent hierarchy for each unit type
-		$autocomplete_params = array ();
-		$autocomplete_params["street"][] = "location_street";
-
-		foreach ($unit_types as $unit_type_id => $unit_type)
-		{
-			$parent = obj (
-				$unit_type->prop ("parent_unit")
-			);
-
-			if ($parent->class_id() == CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE)
-			{
-				$autocomplete_params[$unit_type->id ()][] = "location_" . $parent->id ();
-			}
-			elseif ($parent->class_id() == CL_COUNTRY)
-			{
-				$autocomplete_params[$unit_type->id ()][] = "location_country";
-			}
-
-			### add all unit types to potential parent unit types for street
-			$autocomplete_params["street"][] = "location_" . $unit_type->id ();
-		}
-
-		### get address hierarchy for displaying currently chosen values of address fields
-		$parent = obj ($this_object->parent ());
-		$current_values = array ();
-		$address_classes = array (
-			CL_ADDRESS_STREET,
-			CL_COUNTRY_ADMINISTRATIVE_UNIT,
-			CL_COUNTRY_CITY,
-			CL_COUNTRY_CITYDISTRICT,
-		);
-
-		while (is_object ($parent) and in_array ($parent->class_id (), $address_classes))
-		{
-			$subclass = ($parent->class_id () == CL_ADDRESS_STREET)
-					?
-				$parent->class_id ()
-					:
-				$parent->subclass ();
-
-			$current_values[$subclass]["name"] = $parent->name ();
-			$current_values[$subclass]["value"] = $parent->id ();
-			$parent = obj (
-				$parent->parent ()
-			);
-		}
-
-		### define callback properties
-		$prop = array ();
-		$params = array (
-			"id" => $this_object->id (),
-		);
-		$autocomplete_source = $this->mk_my_orb ("location_autocomplete", $params, CL_ADDRESS, false, true);
-		$orb = parse_url ($autocomplete_source);
-		$autocomplete_source = $orb["path"] . "?" . $orb["query"];
-
-		foreach ($unit_types as $unit_type_id => $unit_type)
-		{
-			$prop["location_" . $unit_type->id ()] = array(
-				"autocomplete_source" => $autocomplete_source,
-				"autocomplete_params" => $autocomplete_params[$unit_type->id ()],
-				"option_is_tuple" => true,
-				"type" => "textbox",
-				"name" => "location_" . $unit_type->id (),
-				"caption" => $unit_type->name (),
-				"value" => $current_values[$unit_type->id ()]["value"],
-				"content" => $current_values[$unit_type->id ()]["name"],
-			);
-		}
-
-		$prop["location_street"] = array(
-			"autocomplete_source" => $autocomplete_source,
-			"autocomplete_params" => $autocomplete_params["street"],
-			"option_is_tuple" => true,
-			"type" => "textbox",
-			"name" => "location_street",
-			"caption" => t("Tänav"),
-			"value" => $current_values[CL_ADDRESS_STREET]["value"],
-			"content" => $current_values[CL_ADDRESS_STREET]["name"],
-		);
-		return $prop;
-	}
 
 /**
     @attrib name=location_autocomplete all_args=1
@@ -390,40 +263,7 @@ class address extends class_base
 	}
 /* END public methods */
 
-	function get_autocomplete_parameters ($arr)
-	{
-		$parameters = array ();
-
-		foreach ($arr as $name => $value)
-		{
-			if (is_array ($value))
-			{
-				$parameters = $this->get_autocomplete_parameters ($value) + $parameters;
-			}
-
-			if (preg_match ("/location_(\d{1,11}|street|country)/S", $name, $matches))
-			{
-				$division_id = $matches[1];
-
-				if ($division_id == ADDRESS_STREET_TYPE)
-				{
-					$parameters[ADDRESS_STREET_TYPE] = urldecode ($value);
-				}
-				elseif ($division_id == ADDRESS_COUNTRY_TYPE)
-				{
-					$parameters[ADDRESS_COUNTRY_TYPE] = urldecode ($value);
-				}
-				else
-				{
-					$parameters[$division_id] = urldecode ($value);
-				}
-			}
-		}
-
-		return $parameters;
-	}
-
-	function callback_location2 ($arr)
+	function callback_location ($arr)
 	{
 		$this_object = $arr["obj_inst"];
 		$administrative_structure = $this_object->prop ("administrative_structure");
@@ -505,6 +345,39 @@ class address extends class_base
 			"content" => $current_values[CL_ADDRESS_STREET]["name"],
 		);
 		return $prop;
+	}
+
+	function get_autocomplete_parameters ($arr)
+	{
+		$parameters = array ();
+
+		foreach ($arr as $name => $value)
+		{
+			if (is_array ($value))
+			{
+				$parameters = $this->get_autocomplete_parameters ($value) + $parameters;
+			}
+
+			if (preg_match ("/location_(\d{1,11}|street|country)/S", $name, $matches))
+			{
+				$division_id = $matches[1];
+
+				if ($division_id == ADDRESS_STREET_TYPE)
+				{
+					$parameters[ADDRESS_STREET_TYPE] = urldecode ($value);
+				}
+				elseif ($division_id == ADDRESS_COUNTRY_TYPE)
+				{
+					$parameters[ADDRESS_COUNTRY_TYPE] = urldecode ($value);
+				}
+				else
+				{
+					$parameters[$division_id] = urldecode ($value);
+				}
+			}
+		}
+
+		return $parameters;
 	}
 }
 
