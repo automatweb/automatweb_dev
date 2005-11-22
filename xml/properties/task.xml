@@ -91,7 +91,6 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>send_bill</field>
-            <default>1</default>
             <caption>Saata arve</caption>
       </property>
       <property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.37 2005/11/21 15:52:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.38 2005/11/22 09:45:38 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -36,7 +36,7 @@
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
 @caption Kestab terve päeva
 
-@property send_bill type=checkbox ch_value=1 table=planner field=send_bill default=1
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
 @caption Saata arve
 
 @property priority type=textbox size=5 table=planner field=priority

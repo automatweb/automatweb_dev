@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kataloog serveris kust failid v&amp;otilde;tta</caption>
+            <caption>Kataloog serveris kust failid v&amp;amp;otilde;tta</caption>
       </property>
       <property>
             <name>chf_view_file</name>
