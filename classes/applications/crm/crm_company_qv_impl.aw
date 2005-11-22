@@ -4,7 +4,7 @@ class crm_company_qv_impl extends class_base
 {
 	function crm_company_qv_impl()
 	{
-		$this->init();
+		$this->init("crm");
 	}
 
 	function _init_qv_t(&$t)
@@ -172,6 +172,40 @@ class crm_company_qv_impl extends class_base
 			"field" => "grp_num"
 		));
 		$t->set_sortable(false);
+	}
+
+	function _get_qv_cust_inf($arr)
+	{
+		$this->read_template("qv.tpl");
+
+		$o = $arr["obj_inst"];
+
+		$contact_person = $o->prop("firmajuht");
+		if ($this->can("view", $contact_person))
+		{
+			$_cp = obj($contact_person);
+			$cp = $_cp->name().", ".$_cp->prop_str("phone").", ".$_cp->prop_str("email");
+		}
+
+		$this->vars(array(
+			"name" => $o->name()." ".$o->prop_str("ettevotlusvorm"),
+			"code" => $o->prop("code"),
+			"reg_code" => $o->prop("reg_nr"),
+			"kmk_nr" => $o->prop("tax_nr"),
+			"desc" => $o->prop("tegevuse_kirjeldus"),
+			"trademarks" => $o->prop("kaubamargid"),
+			"cust_contract_date" => date("d.m.Y", $o->prop("cust_contract_date")),
+			"cust_contract_creator" => html::obj_change_url($o->prop("cust_contract_creator")),
+			"referal_type" => $o->prop_str("referal_type"),
+			"client_manager" => $o->prop_str("client_manager"),
+			"address" => $o->prop_str("contact"),
+			"phone" => $o->prop_str("phone_id"),
+			"fax" => $o->prop_str("telefax_id"),
+			"email" => $o->prop_str("email_id"),
+			"web" => $o->prop_str("url_id"),
+			"contact_p" => $cp
+		));
+		return $arr["prop"]["value"] = $this->parse();
 	}
 }
 

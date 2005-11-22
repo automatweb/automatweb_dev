@@ -625,6 +625,7 @@ default group=org_objects
 
 @default group=quick_view
 
+	@property qv_cust_inf type=text store=no no_caption=1
 	@property qv_t type=table store=no no_caption=1
 
 -------------------------------------------------
@@ -1549,6 +1550,7 @@ class crm_company extends class_base
 				return $stats_impl->$fn($arr);
 
 			case "qv_t":
+			case "qv_cust_inf":
 				static $qv_impl;
 				if (!$qv_impl)
 				{

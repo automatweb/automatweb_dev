@@ -1851,6 +1851,15 @@
             <caption>Tulemused</caption>
       </property>
       <property>
+            <name>qv_cust_inf</name>
+            <table>objects</table>
+            <group>quick_view</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>qv_cust_inf</field>
+      </property>
+      <property>
             <name>qv_t</name>
             <table>objects</table>
             <group>quick_view</group>
