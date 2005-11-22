@@ -61,6 +61,7 @@ class crm_company_qv_impl extends class_base
 			"state" => "%",
 			"limit" => 5
 		));
+		$pi = get_instance(CL_PROJECT);
 		foreach($ol->arr() as $o)
 		{
 			$parts = array();
@@ -89,7 +90,8 @@ class crm_company_qv_impl extends class_base
 				"hrs" => number_format($hrs, 2),
 				"sum" => number_format($sum, 2),
 				"grp_desc" => t("<b>Projektid (5 värskemat)</b>"),
-				"grp_num" => 1
+				"grp_num" => 1,
+				"state" => $pi->states[$o->prop("state")]
 			));
 		}
 		
@@ -122,7 +124,8 @@ class crm_company_qv_impl extends class_base
 				"hrs" => number_format($hrs, 2),
 				"sum" => number_format($sum, 2),
 				"grp_desc" => t("<b>Tegevused (10 värskemat)</b>"),
-				"grp_num" => 2
+				"grp_num" => 2,
+				"state" => $o->prop("is_done") == 1 ? t("Tehtud") : t("T&ouml;&ouml;s")
 			));
 		}
 
@@ -158,7 +161,8 @@ class crm_company_qv_impl extends class_base
 				"hrs" => number_format($hrs, 2),
 				"sum" => number_format($sum, 2),
 				"grp_desc" => t("<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>"),
-				"grp_num" => 3
+				"grp_num" => 3,
+				"state" => $bi->states[$o->prop("state")]
 			));
 		}
 		
