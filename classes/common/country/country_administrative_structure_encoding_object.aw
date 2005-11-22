@@ -63,7 +63,7 @@ class country_administrative_structure_encoding_object extends _int_object
 		}
 	}
 
-    // @attrib name=as_add_adminunit
+    // @attrib name=as_get_unit_encoding
 	// @param unit required
 	// @returns Encoded value for unit.
 	function as_get_unit_encoding ($arr)
@@ -79,11 +79,13 @@ class country_administrative_structure_encoding_object extends _int_object
 		}
 		else
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructureencoding::as_get_unit_encoding: unit not defined [{$arr["unit"]}]".NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "adminstructureencoding::as_get_unit_encoding: unit not defined or not visible [{$arr["unit"]}]".NEWLINE; }
 			return false;
 		}
 
-		$encoded_value = $unit->meta ("admin_structure_enc-" . $this_object->id () . "-value1");
+		$encoded_value = $unit->meta (
+			"admin_structure_enc-" . $this->obj["oid"] . "-value1"
+		);
 		return $encoded_value;
 	}
 }

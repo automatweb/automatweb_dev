@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure_encoding.aw,v 1.2 2005/11/21 09:04:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure_encoding.aw,v 1.3 2005/11/22 10:07:19 voldemar Exp $
 // country_administrative_structure_encoding.aw - Haldusjaotuse kodeering
 /*
 
@@ -63,8 +63,8 @@ class country_administrative_structure_encoding extends class_base
 				{
 					$manager = obj ($this_object->prop("realestate_mgr"));
 					$list = new object_list ($administrative_structure->connections_from(array(
-						"type" => "RELTYPE_ADMINISTRATIVE_UNIT_TYPE",
-						"class_id" => CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE,
+						"type" => "RELTYPE_ADMINISTRATIVE_DIVISION",
+						"class_id" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
 					)));
 					$var = $this->division_selection_var;
 					$options = $list->names ();

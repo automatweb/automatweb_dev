@@ -362,27 +362,21 @@ class address_object extends _int_object
 		### get&validate encoding
 		if (is_object ($arr["encoding"]))
 		{
-			$division = $arr["encoding"];
-
-			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING)
-			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: encoding [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
-				return false;
-			}
+			$encoding = $arr["encoding"];
 		}
 		elseif (is_oid ($arr["encoding"]))
 		{
-			$division = obj ($arr["encoding"]);
-
-			if ($division->class_id () != CL_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING)
-			{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: encoding [%s] of wrong class [%s]", $division->id (), $division->class_id ()).NEWLINE; }
-				return false;
-			}
+			$encoding = obj ($arr["encoding"]);
 		}
 		else
 		{
 /* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::as_get_unit_encoded: encoding object not defined".NEWLINE; }
+			return false;
+		}
+
+		if ($encoding->class_id () != CL_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING)
+		{
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_get_unit_encoded: encoding [%s] of wrong class [%s]", $encoding->id (), $encoding->class_id ()).NEWLINE; }
 			return false;
 		}
 
