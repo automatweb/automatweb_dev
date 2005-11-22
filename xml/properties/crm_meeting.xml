@@ -215,6 +215,14 @@
             <caption>Sisu</caption>
       </property>
       <property>
+            <name>bill_no</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>text</type>
+            <field>bill_no</field>
+            <caption>Arve number</caption>
+      </property>
+      <property>
             <name>participants</name>
             <table>objects</table>
             <group>general</group>
