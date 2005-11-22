@@ -1,8 +1,8 @@
 <table border=0>
 	<tr>
-		<td class='awmenuedittabletext'>Kliendi üldandmed</td>
+		<td class='awmenuedittabletext'><b>Kliendi üldandmed</b></td>
 		<td class='awmenuedittabletext'>&nbsp;</td>
-		<td class='awmenuedittabletext'>Kliendisuhe</td>
+		<td class='awmenuedittabletext'><b>Kliendisuhe</b></td>
 		<td class='awmenuedittabletext'>&nbsp;</td>
 	</tr>
 	<tr>
@@ -42,9 +42,9 @@
 		<td colspan="4">&nbsp;</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>Kontaktandmed</td>
+		<td class='awmenuedittabletext'><b>Kontaktandmed</b></td>
 		<td class='awmenuedittabletext'>&nbsp;</td>
-		<td class='awmenuedittabletext'>Kontaktisikud</td>
+		<td class='awmenuedittabletext'><B>Kontaktisikud</b></td>
 		<td class='awmenuedittabletext'>&nbsp;</td>
 	</tr>
 	<tr>

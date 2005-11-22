@@ -180,11 +180,28 @@ class crm_company_qv_impl extends class_base
 
 		$o = $arr["obj_inst"];
 
-		$contact_person = $o->prop("firmajuht");
-		if ($this->can("view", $contact_person))
+		$u = get_instance(CL_USER);
+		$cur_p = obj($u->get_current_person());
+		$conns = $cur_p->connections_from(array(
+			"type" => "RELTYPE_IMPORTANT_PERSON",
+		));
+
+		$i = get_instance(CL_CRM_COMPANY);
+		$all_persons = array();
+		$i->get_all_workers_for_company($arr["obj_inst"], $all_persons);
+
+		// leave only conns that point to people in this company
+		foreach($conns as $idx => $c)
 		{
-			$_cp = obj($contact_person);
-			$cp = $_cp->name().", ".$_cp->prop_str("phone").", ".$_cp->prop_str("email");
+			if (!isset($all_persons[$c->prop("to")]))
+			{
+				unset($conns[$idx]);
+			}
+		}
+		foreach($conns as $c)
+		{
+			$_cp = $c->to();
+			$cp .= $_cp->name().", ".$_cp->prop_str("phone").", ".$_cp->prop_str("email")."<br>";
 		}
 
 		$_ev = $o->prop("ettevotlusvorm");
