@@ -622,7 +622,10 @@ default group=org_objects
 	@property stats_s_res type=table store=no no_caption=1
 	@caption Tulemused
 
-		
+
+@default group=quick_view
+
+	@property qv_t type=table store=no no_caption=1
 
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
@@ -675,6 +678,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no
 
 @groupinfo stats caption="Statistika" submit_method=get
+@groupinfo quick_view caption="Vaata"  submit=no
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -1543,6 +1547,15 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $stats_impl->$fn($arr);
+
+			case "qv_t":
+				static $qv_impl;
+				if (!$qv_impl)
+				{
+					$qv_impl = get_instance("applications/crm/crm_company_qv_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $qv_impl->$fn($arr);
 		};
 		return $retval;
 	}

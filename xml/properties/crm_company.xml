@@ -1850,6 +1850,15 @@
             <field>stats_s_res</field>
             <caption>Tulemused</caption>
       </property>
+      <property>
+            <name>qv_t</name>
+            <table>objects</table>
+            <group>quick_view</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>qv_t</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
@@ -2011,6 +2020,10 @@
                   <caption>Statistika</caption>
                   <submit_method>get</submit_method>
             </stats>
+            <quick_view>
+                  <caption>Vaata</caption>
+                  <submit>no</submit>
+            </quick_view>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
