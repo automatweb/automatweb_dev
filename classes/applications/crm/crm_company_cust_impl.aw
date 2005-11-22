@@ -805,7 +805,7 @@ class crm_company_cust_impl extends class_base
 		$ol = new object_list(array(
 			"oid" => $tmp_ids,
 		));
-		if ($arr["request"]["search_all_proj"] && $ol->count())
+		if (!$arr["request"]["search_all_proj"] && $ol->count())
 		{
 			if (!$arr["request"]["aps_sbt"])
 			{
