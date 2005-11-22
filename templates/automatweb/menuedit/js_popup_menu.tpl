@@ -1,4 +1,4 @@
-<span class="menuBar" style="width:80%; height:15px;text-align: center;
+<span class="menuBar" style="height:15px;text-align: center;
 border:0px;background-color: transparent ;
 "><a class="menuButton" href="" 
 style="border:0px;"
