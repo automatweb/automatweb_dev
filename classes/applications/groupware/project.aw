@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.67 2005/11/21 15:52:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.68 2005/11/22 07:19:30 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -455,6 +455,11 @@ class project extends class_base
 					}
 					$ol->add($pt->prop("to"));
 					$sel[$pt->prop("to")] = $pt->prop("to");
+				}
+
+				if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
+				{
+					$sel = $u->get_current_person();
 				}
 				$data["options"] = array("" => t("--Vali--")) + $ol->names();
 				asort($data["options"]);
@@ -2799,21 +2804,6 @@ class project extends class_base
 				$ol = new object_list(array("oid" => $wl));
 				$res = array("" => t("--Vali--")) + $ol->names();
 			}
-
-			$data["post_append_text"] .= " / ".html::href(array(
-				"url" => $this->mk_my_orb(
-					"create_new_person", 
-					array(
-						"parent" => $ord->id(),
-						"alias_to" => $ord->id(),
-						"reltype" => 8,
-						"return_url" => get_ru(),
-						"id" => $ord->id()
-					),
-					CL_CRM_COMPANY
-				),
-				"caption" => t("Lisa uus isik")
-			));
 		}
 		$data["options"] = $res;
 	}
