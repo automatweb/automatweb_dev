@@ -1,27 +1,5 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="country" folder="common/country" extends="class_base">
-		<action name="add_adminunit">
-			<function name="add_adminunit">
-				<arguments>
-					<required name="name" />
-					<required name="parent" />
-					<required name="type" />
-					<optional name="return_object" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_adminunit_by_name">
-			<function name="get_adminunit_by_name">
-				<arguments>
-					<required name="name" />
-					<required name="parent" />
-					<required name="type" />
-					<optional name="return_object" />
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

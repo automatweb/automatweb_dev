@@ -1,5 +1,13 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>administrative_structure_oid</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>hidden</type>
+      </property>
       <classinfo>
             <syslog_type>ST_ADDRESS_STREET</syslog_type>
             <relationmgr>yes</relationmgr>

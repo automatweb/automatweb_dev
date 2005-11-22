@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>administrative_structure</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>administrative_structure</field>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>general</group>
@@ -22,8 +29,8 @@
             <group>general</group>
             <type>text</type>
             <field>parent</field>
-            <comment>Haldusüksus, millesse käesolev haldusüksus kuulub</comment>
-            <caption>Kõrgem haldusüksus</caption>
+            <comment>Halduspiirkond, millesse käesolev halduspiirkond kuulub</comment>
+            <caption>Kõrgem halduspiirkond</caption>
       </property>
       <property>
             <name>parent_show</name>
@@ -32,7 +39,7 @@
             <type>text</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kõrgem haldusüksus</caption>
+            <caption>Kõrgem halduspiirkond</caption>
       </property>
       <property>
             <name>parent_select</name>
@@ -47,8 +54,15 @@
             </clid>
             <store>no</store>
             <field>parent_select</field>
-            <comment>Haldusüksus, millesse käesolev haldusüksus kuulub</comment>
-            <caption>Vali kõrgem haldusüksus</caption>
+            <comment>Halduspiirkond, millesse käesolev halduspiirkond kuulub</comment>
+            <caption>Vali kõrgem halduspiirkond</caption>
+      </property>
+      <property>
+            <name>administrative_structure_oid</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>administrative_structure_oid</field>
       </property>
       <classinfo>
             <syslog_type>ST_COUNTRY_CITYDISTRICT</syslog_type>
@@ -64,7 +78,7 @@
                         <num_1>CL_COUNTRY_CITY</num_1>
                         <num_2>CL_COUNTRY_CITYDISTRICT</num_2>
                   </clid>
-                  <caption>Kõrgem haldusüksus</caption>
+                  <caption>Kõrgem halduspiirkond</caption>
             </PARENT_ADMINISTRATIVE_UNIT>
       </reltypes>
 </properties>

@@ -3,4 +3,3 @@
 	<class name="country_administrative_division" folder="common/country" extends="class_base">
 	</class>
 </orb>
-		

@@ -9,7 +9,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ADMINISTRATIVE_STRUCTURE</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
-            <caption>Haldusjaotuse struktuur</caption>
+            <caption>Haldusjaotus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_COUNTRY</syslog_type>
@@ -26,7 +26,7 @@
             <ADMINISTRATIVE_STRUCTURE>
                   <value>1</value>
                   <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
-                  <caption>Haldusjaotuse struktuur</caption>
+                  <caption>Haldusjaotus</caption>
             </ADMINISTRATIVE_STRUCTURE>
       </reltypes>
 </properties>

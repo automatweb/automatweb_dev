@@ -1,11 +1,79 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>administrative_structure</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <comment>Haldusüksuse tüüp</comment>
+            <caption>Tüüp</caption>
+      </property>
+      <property>
+            <name>parent_division_show</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kõrgem haldusüksus</caption>
+      </property>
+      <property>
+            <name>parent_division</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PARENT_ADMINISTRATIVE_UNIT</reltype>
+            <clid>
+                  <num_0>CL_COUNTRY</num_0>
+                  <num_1>CL_COUNTRY_ADMINISTRATIVE_DIVISION</num_1>
+                  <num_2>CL_COUNTRY_ADMINISTRATIVE_UNIT</num_2>
+                  <num_3>CL_COUNTRY_CITY</num_3>
+                  <num_4>CL_COUNTRY_CITYDISTRICT</num_4>
+            </clid>
+            <automatic>1</automatic>
+            <field>meta</field>
+            <method>serialize</method>
+            <comment>Haldusüksus, millesse käesolev haldusüksus kuulub</comment>
+            <caption>Kõrgem haldusüksus</caption>
+      </property>
+      <property>
+            <name>jrk</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <field>jrk</field>
+            <comment>Positiivne täisarv (vahemikus 1 kuni 1000000)</comment>
+            <caption>Järjekord</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_COUNTRY_ADMINISTRATIVE_DIVISION</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
-            <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <PARENT_ADMINISTRATIVE_UNIT>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_COUNTRY_ADMINISTRATIVE_DIVISION</num_0>
+                        <num_1>CL_COUNTRY_ADMINISTRATIVE_UNIT</num_1>
+                        <num_2>CL_COUNTRY_CITY</num_2>
+                        <num_3>CL_COUNTRY_CITYDISTRICT</num_3>
+                        <num_4>CL_COUNTRY</num_4>
+                  </clid>
+                  <caption>Kõrgem haldusüksus</caption>
+            </PARENT_ADMINISTRATIVE_UNIT>
+      </reltypes>
 </properties>
 

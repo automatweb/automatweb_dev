@@ -1,19 +1,19 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>country</name>
+            <name>administrative_structure</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_COUNTRY</reltype>
-            <clid>CL_COUNTRY</clid>
+            <reltype>RELTYPE_ADMINISTRATIVE_STRUCTURE</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
             <automatic>1</automatic>
-            <caption>Riik</caption>
+            <caption>Riik/haldusjaotus</caption>
       </property>
       <property>
-            <name>address_array</name>
+            <name>address_data</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -21,7 +21,7 @@
             <type>hidden</type>
       </property>
       <property>
-            <name>administrative_structure_oid</name>
+            <name>country</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -105,11 +105,11 @@
             </grp_address>
       </groupinfo>
       <reltypes>
-            <COUNTRY>
+            <ADMINISTRATIVE_STRUCTURE>
                   <value>1</value>
-                  <clid>CL_COUNTRY</clid>
-                  <caption>Riik</caption>
-            </COUNTRY>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
+                  <caption>Haldusjaotus</caption>
+            </ADMINISTRATIVE_STRUCTURE>
       </reltypes>
 </properties>
 
