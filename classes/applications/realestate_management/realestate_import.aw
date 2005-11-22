@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.3 2005/11/10 19:22:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.4 2005/11/22 16:50:49 voldemar Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -15,8 +15,8 @@
 	@comment Kinnisvarahalduskeskkond mille objektide hulka soovitakse importida
 	@caption Kinnisvarahalduskeskkond
 
-	@property country type=relpicker reltype=RELTYPE_COUNTRY clid=CL_COUNTRY automatic=1
-	@caption Riik
+	@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1
+	@caption Riik/haldusjaotus
 
 	@property company type=relpicker reltype=RELTYPE_COMPANY clid=CL_CRM_COMPANY editonly=1
 	@comment Organisatsioon mille alla objektid imporditakse
@@ -24,20 +24,20 @@
 
 
 @default group=grp_city24
-	@property city24_county type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@property city24_county type=relpicker reltype=RELTYPE_ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 	@comment Haldusjaotis aadressisüsteemis, mis vastab maakonnale
 	@caption Maakond haldusjaotuses
 
-	@property city24_city type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@property city24_city type=relpicker reltype=RELTYPE_ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 	@caption Linn haldusjaotuses
 
-	@property city24_citypart type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@property city24_citypart type=relpicker reltype=RELTYPE_ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 	@caption Linnaosa haldusjaotuses
 
-	@property city24_parish type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@property city24_parish type=relpicker reltype=RELTYPE_ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 	@caption Vald haldusjaotuses
 
-	@property city24_settlement type=relpicker reltype=RELTYPE_ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+	@property city24_settlement type=relpicker reltype=RELTYPE_ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 	@caption Asula haldusjaotuses
 
 	@property city24_import_url type=textbox
@@ -56,13 +56,13 @@
 @reltype OWNER clid=CL_REALESTATE_MANAGER value=1
 @caption Kinnisvaraobjektide halduskeskkond
 
-@reltype COUNTRY clid=CL_COUNTRY value=2
-@caption Riik
+@reltype ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE value=2
+@caption Haldusjaotus
 
 @reltype COMPANY clid=CL_CRM_COMPANY value=3
 @caption Organisatsioon
 
-@reltype ADMIN_UNIT_TYPE clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=4
+@reltype ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION value=4
 @caption Haldusjaotis
 
 */
@@ -107,6 +107,28 @@ class realestate_import extends class_base
 
 		switch($prop["name"])
 		{
+			case "city24_county":
+			case "city24_city":
+			case "city24_citypart":
+			case "city24_parish":
+			case "city24_settlement":
+				$administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+
+				if (is_object ($administrative_structure))
+				{
+					$manager = obj ($this_object->prop("realestate_mgr"));
+					$list = new object_list ($administrative_structure->connections_from(array(
+						"type" => "RELTYPE_ADMINISTRATIVE_DIVISION",
+						"class_id" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
+					)));
+					$prop["options"] = $list->names ();
+				}
+				else
+				{
+					$prop["error"] = t("Haldusjaotus valimata");
+				}
+				break;
+
 			case "city24_import":
 				$url = $this->mk_my_orb ("city24import", array (
 					"id" => $this_object->id(),
@@ -212,12 +234,12 @@ class realestate_import extends class_base
 		// $import_url = "/www/dev/voldemar/test.xml";
 		// $fp = fopen ($import_url, "r");
 		$xml = file_get_contents ($import_url);
-		$parser = xml_parser_create();
+		$parser = xml_parser_create(REALESTATE_IMPORT_CHARSET_FROM);
 		xml_parse_into_struct($parser, $xml, $xml_data, $xml_index);
-		xml_parser_free($parser);
 
 		$cl_realestate_mgr = get_instance (CL_REALESTATE_MANAGER);
 		$cl_classificator = get_instance(CL_CLASSIFICATOR);
+		$cl_file = get_instance(CL_FILE);
 
 		//!!!vaja?
 		if ($this->changed_visible_to)
@@ -261,12 +283,12 @@ class realestate_import extends class_base
 		$this->changed_roof_types = true;
 		$this->changed_land_uses = true;
 
-		#### admin unit type objects
-		$maakond_unit_type = obj ($this_object->prop ("city24_county"));
-		$vald_unit_type = obj ($this_object->prop ("city24_parish"));
-		$linn_unit_type = obj ($this_object->prop ("city24_city"));
-		$linnaosa_unit_type = obj ($this_object->prop ("city24_citypart"));
-		$asula_unit_type = obj ($this_object->prop ("city24_settlement"));
+		#### admin division objects
+		$maakond_division = obj ($this_object->prop ("city24_county"));
+		$vald_division = obj ($this_object->prop ("city24_parish"));
+		$linn_division = obj ($this_object->prop ("city24_city"));
+		$linnaosa_division = obj ($this_object->prop ("city24_citypart"));
+		$asula_division = obj ($this_object->prop ("city24_settlement"));
 
 		#### organisatsiooni t88tajad
 		$company = obj ($arr["company"]);
@@ -365,6 +387,7 @@ class realestate_import extends class_base
 				if (is_object ($property))
 				{
 					if (1 != $arr["quiet"]) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE; flush(); }
+					unset ($property);
 				}
 				else
 				{
@@ -382,6 +405,7 @@ class realestate_import extends class_base
 			if (("ROW" === $data["tag"]) and ("open" === $data["type"]))
 			{
 				### start property import
+				unset ($this->property_data);
 				$this->property_data = array ();
 				$this->property_data["PILT"] = array ();
 			}
@@ -656,7 +680,6 @@ class realestate_import extends class_base
 					continue;
 				}
 
-
 				$maakond = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["MAAKOND"]));
 				$linn = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["LINN"]));
 				$linnaosa = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["LINNAOSA"]));
@@ -669,41 +692,40 @@ class realestate_import extends class_base
 
 				##### set address
 				$address->set_prop ("unit_name", array (
-					"type" => $maakond_unit_type,
+					"division" => $maakond_division,
 					"name" => $maakond,
 				));
 
 				$address->set_prop ("unit_name", array (
-					"type" => $vald_unit_type,
+					"division" => $vald_division,
 					"name" => $vald,
-				));
+					));
 
 				$address->set_prop ("unit_name", array (
-					"type" => $linn_unit_type,
+					"division" => $linn_division,
 					"name" => $linn,
 				));
 
 				$address->set_prop ("unit_name", array (
-					"type" => $linnaosa_unit_type,
+					"division" => $linnaosa_division,
 					"name" => $linnaosa,
 				));
 
 				$address->set_prop ("unit_name", array (
-					"type" => $asula_unit_type,
+					"division" => $asula_division,
 					"name" => $asula,
 				));
 
 				$address->set_prop ("unit_name", array (
-					"type" => "street",
+					"division" => "street",
 					"name" => $t2nav,
-					));
+				));
+
 				$address->set_prop ("street_address", $maja_nr);
 				$address->set_prop ("apartment", $korteri_nr);
 				$address->save ();
 
-				$address_text = array_filter(array($maakond, $vald, $linn, $linnaosa, $asula, $t2nav));
-				// whatta hell this is supposed to be, is a big mystery to me -- ahz
-				//$address_text = $address->prop ("address_array");
+				$address_text = $address->prop ("address_array");
 				unset ($address_text[ADDRESS_COUNTRY_TYPE]);
 				$address_text = implode (", ", $address_text);
 				$name = $address_text . " " . $address->prop ("street_address") . ($address->prop ("apartment") ? "-" . $address->prop ("apartment") : "");
@@ -942,7 +964,6 @@ class realestate_import extends class_base
 					if (!in_array ($picture_id, $existing_pictures))
 					{
 						$image_url = "http://www.city24.ee/MEDIA/PICTURE/PICTURE_{$picture_id}.jpeg";
-						$cl_file = get_instance(CL_FILE);
 						$imagedata = file_get_contents ($image_url);
 						$file = $cl_file->_put_fs(array(
 							"type" => "image/jpeg",
@@ -962,6 +983,9 @@ class realestate_import extends class_base
 							"to" => $picture,
 							"reltype" => "RELTYPE_REALESTATE_PICTURE",
 						));
+
+						unset ($imagedata);
+						unset ($picture);
 					}
 				}
 
@@ -1420,9 +1444,7 @@ class realestate_import extends class_base
 
 			$import_url = str_replace ("tmpvariable39903", "lang", aw_url_change_var ("tmpvariable39903", $lang_name, $tmp_import_url));
 			$xml = file_get_contents ($import_url);
-			$parser = xml_parser_create();
-			xml_parse_into_struct($parser, $xml, $xml_data, $xml_index);
-			xml_parser_free($parser);
+			xml_parse_into_struct ($parser, $xml, $xml_data, $xml_index);
 			$this->end_property_import = false;
 
 			foreach ($xml_data as $key => $data)
@@ -1563,6 +1585,7 @@ class realestate_import extends class_base
 		}
 
 		if (1 != $arr["quiet"]) { echo t("Import tehtud.") . REALESTATE_NEWLINE; }
+		xml_parser_free ($parser);
 		$manager->set_cache_dirty (true);
 		return $status;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.3 2005/11/10 19:22:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.4 2005/11/22 16:50:49 voldemar Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -976,7 +976,7 @@ class realestate_property extends class_base
 				{
 					### set address' country to default country from manager
 					$address->set_parent ($manager->prop ("administrative_structure"));
-					$address->set_prop ("administrative_structure_oid", $manager->prop ("administrative_structure"));
+					$address->set_prop ("administrative_structure", $manager->prop ("administrative_structure"));
 					$address->save ();
 
 					### connect property to address
@@ -1438,6 +1438,7 @@ class realestate_property extends class_base
 	// attrib name=export_xml
 	// param id required type=int
 	// param no_declaration optional
+	// param address_encoding optional
 	function export_xml ($arr)
 	{
 		$this->export_errors = "";
@@ -1453,6 +1454,7 @@ class realestate_property extends class_base
 
 		$properties = $this->get_property_data (array (
 			"id" => $arr["id"],
+			"address_encoding" => $arr["address_encoding"],
 		));
 
 		if (empty ($properties))
@@ -1505,6 +1507,7 @@ class realestate_property extends class_base
 
 	// attrib name=get_property_data
 	// param id required type=int
+	// param address_encoding optional
 	function get_property_data ($arr)
 	{
 		$this_object = obj ($arr["id"]);
@@ -1547,74 +1550,114 @@ REALESTATE_NF_SEP);
 
 		if (is_object ($address))
 		{
-			$parent = $address;
-			$adminunits = array ();
-
-			while (($parent->class_id () != CL_COUNTRY_ADMINISTRATIVE_STRUCTURE) and is_oid ($parent->parent ()) and $this->can ("view", $parent->parent ()))
-			{////!!!!! update
-				$parent = obj ($parent->parent ());
-
-				switch ($parent->class_id ())
-				{
-					case CL_COUNTRY_CITYDISTRICT:
-						$address_citydistrict = $parent->name ();
-						break;
-					case CL_COUNTRY_CITY:
-						$address_city = $parent->name ();
-						break;
-					case CL_ADDRESS_STREET:
-						$address_street = $parent->name ();
-						break;
-					case CL_COUNTRY_ADMINISTRATIVE_UNIT:
-						$unit = obj ($parent->subclass ());
-						$adminunits[] = array (
-							"name" => $unit->name (),
-							"value" => $parent->name (),
-						);
-						break;
-				}
+			if ($this->can ("view", $arr["address_encoding"]))
+			{
+				$encoding = obj ($arr["address_encoding"]);
 			}
-//!!! END update
-			$adminunits = array_reverse ($adminunits, false);
+			else
+			{
+				$encoding = false;
+			}
+
+			$manager = obj ($this_object->prop ("realestate_manager"));
+			$division1 = obj ($manager->prop ("address_equivalent_1"));
+			$division2 = obj ($manager->prop ("address_equivalent_2"));
+			$division3 = obj ($manager->prop ("address_equivalent_3"));
+			$division4 = obj ($manager->prop ("address_equivalent_4"));
+			$division5 = obj ($manager->prop ("address_equivalent_5"));
+
+			$address1_str = $address_array[$division1->id ()];
+			$param = array (
+				"prop" => "unit_encoded",
+				"division" => $division1,
+				"encoding" => $encoding,
+			);
+			$address1_alt = $encoding ? $address->prop ($param) : $address1_str;
+
+			$address2_str = $address_array[$division2->id ()];
+			$param = array (
+				"prop" => "unit_encoded",
+				"division" => $division2,
+				"encoding" => $encoding,
+			);
+			$address2_alt = $encoding ? $address->prop ($param) : $address2_str;
+
+			$address3_str = $address_array[$division3->id ()];
+			$param = array (
+				"prop" => "unit_encoded",
+				"division" => $division3,
+				"encoding" => $encoding,
+			);
+			$address3_alt = $encoding ? $address->prop ($param) : $address3_str;
+
+			$address4_str = $address_array[$division4->id ()];
+			$param = array (
+				"prop" => "unit_encoded",
+				"division" => $division4,
+				"encoding" => $encoding,
+			);
+			$address4_alt = $encoding ? $address->prop ($param) : $address4_str;
+
+			$address5_str = $address_array[$division5->id ()];
+			$param = array (
+				"prop" => "unit_encoded",
+				"division" => $division5,
+				"encoding" => $encoding,
+			);
+			$address5_alt = $encoding ? $address->prop ($param) : $address5_str;
+
 			$address_street_address = $address->prop ("street_address");
 			$address_apartment = $address->prop ("apartment");
 		}
-		else
-		{
-			$adminunits = array_fill (0, 10, array ());
-		}
 
-		foreach ($adminunits as $key => $adminunit)
-		{
-			$prop_name = "address_adminunit{$key}";
-			$properties[$prop_name] = array (
-				"name" => $prop_name,
-				"type" => "text",
-				"caption" => $adminunit["name"],
-				"value" => $adminunit["value"],
-				"strvalue" => $adminunit["value"],
-				"altvalue" => $adminunit["value"],
-			);
-		}
-
-		$prop_name = "address_city";
+		$prop_name = "address_adminunit1";
 		$properties[$prop_name] = array (
 			"name" => $prop_name,
 			"type" => "text",
-			"caption" => t("Linn"),
-			"value" => $address_city,
-			"strvalue" => $address_city,
-			"altvalue" => $address_city,
+			"caption" => $division1->name (),
+			"value" => $address1_str,
+			"strvalue" => $address1_str,
+			"altvalue" => $address1_alt,
 		);
 
-		$prop_name = "address_citydistrict";
+		$prop_name = "address_adminunit2";
 		$properties[$prop_name] = array (
 			"name" => $prop_name,
 			"type" => "text",
-			"caption" => t("Linnaosa"),
-			"value" => $address_citydistrict,
-			"strvalue" => $address_citydistrict,
-			"altvalue" => $address_citydistrict,
+			"caption" => $division2->name (),
+			"value" => $address2_str,
+			"strvalue" => $address2_str,
+			"altvalue" => $address2_alt,
+		);
+
+		$prop_name = "address_adminunit3";
+		$properties[$prop_name] = array (
+			"name" => $prop_name,
+			"type" => "text",
+			"caption" => $division3->name (),
+			"value" => $address3_str,
+			"strvalue" => $address3_str,
+			"altvalue" => $address3_alt,
+		);
+
+		$prop_name = "address_adminunit4";
+		$properties[$prop_name] = array (
+			"name" => $prop_name,
+			"type" => "text",
+			"caption" => $division4->name (),
+			"value" => $address4_str,
+			"strvalue" => $address4_str,
+			"altvalue" => $address4_alt,
+		);
+
+		$prop_name = "address_adminunit5";
+		$properties[$prop_name] = array (
+			"name" => $prop_name,
+			"type" => "text",
+			"caption" => $division5->name (),
+			"value" => $address5_str,
+			"strvalue" => $address5_str,
+			"altvalue" => $address5_alt,
 		);
 
 		$prop_name = "address_street";

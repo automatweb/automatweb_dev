@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.3 2005/11/10 19:22:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.4 2005/11/22 16:50:49 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -108,7 +108,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@property title1 type=text store=no subtitle=1 parent=tbox
 	@caption Ametile antud õigused objektitüüpide järgi
 
-	@property user_mgr_typerights type=table store=no no_caption=1 parent=tbox
+	@property user_mgr_division_rights type=table store=no no_caption=1 parent=tbox
 
 	@property title12 type=text store=no subtitle=1 parent=tbox
 	@caption &Otilde;igused objekti aadressi järgi
@@ -117,11 +117,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@comment Riik, mille kohta õigusi määratakse.
 	@caption Riik
 
-	@property rights_adminunit_type type=select parent=tbox store=no
+	@property rights_admindivision type=select parent=tbox store=no
 	@comment Aadressitase, mille kohta õigusi määratakse. Aadressitaseme muutmisel jäävad teiste aadressitasemete seaded samaks! Et neid muuta tuleb valida uuesti sama aadressitase.
 	@caption Aadressitase
 
-	@property rights_adminunit_type_current type=hidden store=no
+	@property rights_admindivision_current type=hidden store=no
 
 	@property rights_adminunit type=select parent=tbox multiple=1 size=8 store=no
 	@caption Lubatud piirkonnad
@@ -166,10 +166,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 @default group=grp_settings
 	@property almightyuser type=textbox
 	@caption "Kõik lubatud" kasutaja uid
-
-	@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1
-	@comment Riigi haldusjaotus, milles süsteemis hallatavad kinnisvaraobjektid asuvad
-	@caption Haldusjaotus
 
 	@property houses_folder type=relpicker reltype=RELTYPE_REALESTATEMGR_FOLDER clid=CL_MENU
 	@caption Majade kaust
@@ -261,20 +257,24 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 
 	@property title5 type=text store=no subtitle=1
 	@caption Aadressid
-		@property address_equivalent_1 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_1 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1
+		@comment Riigi haldusjaotus, milles süsteemis hallatavad kinnisvaraobjektid asuvad
+		@caption Haldusjaotus
+
+		@property address_equivalent_1 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_1 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 		@comment Haldusjaotis aadressisüsteemis, mis vastab maakonnale
 		@caption Maakond haldusjaotuses
 
-		@property address_equivalent_2 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_2 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@property address_equivalent_2 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_2 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 		@caption Linn haldusjaotuses
 
-		@property address_equivalent_3 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_3 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@property address_equivalent_3 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_3 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 		@caption Linnaosa haldusjaotuses
 
-		@property address_equivalent_4 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_4 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@property address_equivalent_4 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_4 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 		@caption Vald haldusjaotuses
 
-		@property address_equivalent_5 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_5 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE
+		@property address_equivalent_5 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_5 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 		@caption Asula haldusjaotuses
 
 
@@ -313,19 +313,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 @reltype CLIENT_SELECTION clid=CL_REALESTATE_CLIENT_SELECTION value=12
 @caption Klientide valim
 
-@reltype RELTYPE_ADDRESS_EQUIVALENT_1 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=13
+@reltype RELTYPE_ADDRESS_EQUIVALENT_1 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION value=13
 @caption Haldusjaotuse vaste 1
 
-@reltype RELTYPE_ADDRESS_EQUIVALENT_2 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=14
+@reltype RELTYPE_ADDRESS_EQUIVALENT_2 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION value=14
 @caption Haldusjaotuse vaste 2
 
-@reltype RELTYPE_ADDRESS_EQUIVALENT_3 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=15
+@reltype RELTYPE_ADDRESS_EQUIVALENT_3 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION value=15
 @caption Haldusjaotuse vaste 3
 
-@reltype RELTYPE_ADDRESS_EQUIVALENT_4 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=16
+@reltype RELTYPE_ADDRESS_EQUIVALENT_4 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION value=16
 @caption Haldusjaotuse vaste 4
 
-@reltype RELTYPE_ADDRESS_EQUIVALENT_5 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE value=17
+@reltype RELTYPE_ADDRESS_EQUIVALENT_5 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION value=17
 @caption Haldusjaotuse vaste 5
 
 
@@ -486,11 +486,11 @@ class realestate_manager extends class_base
 				}
 				else
 				{
-					$unit_types = new object_list ($this->administrative_structure->connections_from (array (
-						"type" => "RELTYPE_ADMINISTRATIVE_UNIT_TYPE",
-						"class_id" => CL_COUNTRY_ADMINISTRATIVE_UNIT_TYPE,
+					$divisions = new object_list ($this->administrative_structure->connections_from (array (
+						"type" => "RELTYPE_ADMINISTRATIVE_DIVISION",
+						"class_id" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
 					)));
-					$prop["options"] = $unit_types->names ();
+					$prop["options"] = $divisions->names ();
 				}
 				break;
 
@@ -600,8 +600,8 @@ class realestate_manager extends class_base
 				$this->_user_mgr_tree($arr);
 				break;
 
-			case "user_mgr_typerights":
-				$retval = $this->_user_mgr_typerights ($arr);
+			case "user_mgr_division_rights":
+				$retval = $this->_user_mgr_division_rights ($arr);
 				break;
 
 			case "title1":
@@ -706,8 +706,8 @@ class realestate_manager extends class_base
 				}
 				break;
 
-			case "rights_adminunit_type_current":
-			case "rights_adminunit_type":
+			case "rights_admindivision_current":
+			case "rights_admindivision":
 				### proceed only if a profession is selected
 				if (!is_oid ($arr["request"]["cat"]))
 				{
@@ -754,26 +754,26 @@ class realestate_manager extends class_base
 						$retval = PROP_ERROR;
 					}
 
-					$unit_types =& $this->administrative_structure->prop ("structure_array");
+					$divisions =& $this->administrative_structure->prop ("structure_array");
 
-					### get admin unit types for selected country
-					foreach ($unit_types as $unit_type)
+					### get admin divisions for selected country
+					foreach ($divisions as $division)
 					{
-						if ($unit_type->id () == aw_global_get ("realestate_usr_mgr_rights_adminunit_type"))
+						if ($division->id () == aw_global_get ("realestate_usr_mgr_rights_admindivision"))
 						{
-							$prop["value"] = $unit_type->id ();
+							$prop["value"] = $division->id ();
 						}
 
-						$options[$unit_type->id ()] = $unit_type->name ();
+						$options[$division->id ()] = $division->name ();
 					}
 
-					### options for unit type select
-					if ($prop["name"] == "rights_adminunit_type")
+					### options for division select
+					if ($prop["name"] == "rights_admindivision")
 					{
 						$prop["options"] = $options;
 					}
 
-					### get value for hidden unit type prop
+					### get value for hidden division prop
 					if (!is_oid ($prop["value"]))
 					{
 						foreach ($options as $key => $value)
@@ -799,14 +799,14 @@ class realestate_manager extends class_base
 					return PROP_IGNORE;
 				}
 
-				### get selected admin unit type
-				if (!is_oid (aw_global_get ("realestate_usr_mgr_rights_adminunit_type")))
+				### get selected admin division
+				if (!is_oid (aw_global_get ("realestate_usr_mgr_rights_admindivision")))
 				{
 					return PROP_IGNORE;
 				}
 				else
 				{
-					$admin_unit_type = obj (aw_global_get ("realestate_usr_mgr_rights_adminunit_type"));
+					$admin_division = obj (aw_global_get ("realestate_usr_mgr_rights_admindivision"));
 				}
 
 				if ($retval == PROP_OK)
@@ -850,8 +850,8 @@ class realestate_manager extends class_base
 
 					### get options
 					$list = new object_list (array (
-						"class_id" => $admin_unit_type->prop ("unit_type"),
-						"subclass" => $admin_unit_type->id (),
+						"class_id" => $admin_division->prop ("type"),
+						"subclass" => $admin_division->id (),
 					));
 					$prop["options"] = $list->names ();
 				}
@@ -990,7 +990,7 @@ class realestate_manager extends class_base
 				}
 				break;
 
-			case "rights_adminunit_type":
+			case "rights_admindivision":
 			case "rights_country":
 				aw_session_set ("realestate_usr_mgr_" . $prop["name"], $prop["value"]);
 				return PROP_IGNORE;
@@ -1045,7 +1045,7 @@ class realestate_manager extends class_base
 								$acl_current_settings["can_admin"] or
 								$acl_current_settings["can_delete"] or
 								$acl_current_settings["can_view"]
-								) and ($connected_unit->subclass () == $arr["request"]["rights_adminunit_type_current"]))
+								) and ($connected_unit->subclass () == $arr["request"]["rights_admindivision_current"]))
 							{
 								if (!in_array ($connected_unit->id (), $prop["value"]))
 								{
@@ -1146,7 +1146,7 @@ class realestate_manager extends class_base
 
 		if (is_object ($this->usr_mgr_profession_group))
 		{
-			$typerights_properties = array (
+			$division_rights_properties = array (
 				"can_houses",
 				"can_rowhouses",
 				"can_cottages",
@@ -1157,7 +1157,7 @@ class realestate_manager extends class_base
 				"can_land_estates",
 			);
 
-			foreach ($typerights_properties as $property)
+			foreach ($division_rights_properties as $property)
 			{
 				$folder_name = substr ($property, 4) . "_folder";
 
@@ -1432,7 +1432,7 @@ class realestate_manager extends class_base
 		unset ($trees);
 	}
 
-	function _init_user_mgr_typerights (&$t)
+	function _init_user_mgr_division_rights (&$t)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -1464,12 +1464,12 @@ class realestate_manager extends class_base
 		));
 	}
 
-	function _user_mgr_typerights ($arr)
+	function _user_mgr_division_rights ($arr)
 	{
 		$retval = PROP_OK;
 		$this_object =& $arr["obj_inst"];
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_user_mgr_typerights ($t);
+		$this->_init_user_mgr_division_rights ($t);
 
 		if (!is_oid ($arr["request"]["cat"]))
 		{
@@ -1800,6 +1800,7 @@ class realestate_manager extends class_base
 				$tmpagent = obj ($property->prop ("realestate_agent1"));
 				$agent = html::get_change_url ($tmpagent->id (), array("return_url" => $return_url, "group" => "grp_main"), $tmpagent->name ());
 			}
+
 			if (is_oid ($property->prop ("realestate_agent2")) and $this->can ("view", $property->prop ("realestate_agent2")))
 			{
 				$tmpagent = obj ($property->prop ("realestate_agent2"));
@@ -2030,27 +2031,14 @@ class realestate_manager extends class_base
 				"type" => "RELTYPE_WORKERS",
 				"class_id" => CL_CRM_PERSON,
 			)));
-			$agents_filter = $employees->names ();
+			$agents_filter += $employees->names ();
 		}
 
 		natcasesort ($agents_filter);
 
-		if($_GET["allFlt"])
-		{
-			$an = urldecode($_GET["allFlt"]);
-			$agent_name = substr($an, strrpos($an, ",") + 1, strlen($an));
-			if(strpos("Kõik", $agent_name) !== false)
-			{
-				$agent_name = null;
-			}
-		}
-		else
-		{
-			$cl_user = get_instance(CL_USER);
-			$oid = $cl_user->get_current_person ();
-			$agent = obj ($oid);
-			$agent_name = $agent->name ();
-		}
+		$cl_user = get_instance(CL_USER);
+		$oid = $cl_user->get_current_person ();
+		$agent = obj ($oid);
 
 		### address filter
 		if (!is_object ($this->administrative_structure))
@@ -2059,20 +2047,20 @@ class realestate_manager extends class_base
 		}
 
 		$list =& $this->administrative_structure->prop (array (
-			"prop" => "units_by_type",
-			"type" => $this_object->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
+			"prop" => "units_by_division",
+			"division" => $this_object->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
 		));
 		$address_filter1 = is_object ($list) ? $list->names () : array (); ### maakond
 
 		$list =& $this->administrative_structure->prop (array (
-			"prop" => "units_by_type",
-			"type" => $this_object->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
+			"prop" => "units_by_division",
+			"division" => $this_object->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
 		));
 		$address_filter2 = is_object ($list) ? $list->names () : array ();### linn
 
 		$list =& $this->administrative_structure->prop (array (
-			"prop" => "units_by_type",
-			"type" => $this_object->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
+			"prop" => "units_by_division",
+			"division" => $this_object->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
 		));
 		$address_filter3 = is_object ($list) ? $list->names () : array ();### linnaosa
 
@@ -2155,7 +2143,7 @@ class realestate_manager extends class_base
 			"filter" => $agents_filter,
 			"filter_options" => array (
 				"match" => "substring",
-				"selected" => $agent_name,
+				"selected" => $agent->name (),
 			),
 			"sortable" => 1,
 		));

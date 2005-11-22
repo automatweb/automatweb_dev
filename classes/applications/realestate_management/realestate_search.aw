@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.3 2005/11/10 19:22:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.4 2005/11/22 16:50:49 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -164,7 +164,8 @@ class realestate_search extends class_base
 		{
 			if (is_oid ($this_object->prop ("realestate_mgr")) and $this->can ("view", $this_object->prop ("realestate_mgr")))
 			{
-				$this->realestate_mgr = obj($this_object->prop ("realestate_mgr"));
+				$this->realestate_mgr = obj ($this_object->prop ("realestate_mgr"));
+				$this->administrative_structure = $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
 			}
 		}
 
@@ -172,10 +173,6 @@ class realestate_search extends class_base
 		{
 			$prop["error"] = t("Kinnisvarahalduskeskkond määramata");
 			return PROP_FATAL_ERROR;
-		}
-		if($prop["group"] == "grp_search")
-		{
-			$this->administrative_structure = $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
 		}
 
 		switch($prop["name"])
@@ -242,8 +239,8 @@ class realestate_search extends class_base
 
 			case "searchparam_address1":
 				$list =& $this->administrative_structure->prop (array (
-					"prop" => "units_by_type",
-					"type" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
+					"prop" => "units_by_division",
+					"division" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
 				));
 				$options = is_object ($list) ? $list->names () : array (); ### maakond
 				$prop["options"] = $options;
@@ -252,8 +249,8 @@ class realestate_search extends class_base
 
 			case "searchparam_address2":
 				$list =& $this->administrative_structure->prop (array (
-					"prop" => "units_by_type",
-					"type" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
+					"prop" => "units_by_division",
+					"division" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
 				));
 				$options = is_object ($list) ? $list->names () : array (); ### linn
 				$prop["options"] = $options;
@@ -262,8 +259,8 @@ class realestate_search extends class_base
 
 			case "searchparam_address3":
 				$list =& $this->administrative_structure->prop (array (
-					"prop" => "units_by_type",
-					"type" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
+					"prop" => "units_by_division",
+					"division" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
 				));
 				$options = is_object ($list) ? $list->names () : array (); ### linnaosa
 				$prop["options"] = $options;
@@ -744,8 +741,8 @@ class realestate_search extends class_base
 
 		### address1
 		$list =& $administrative_structure->prop (array (
-			"prop" => "units_by_type",
-			"type" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
+			"prop" => "units_by_division",
+			"division" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
 		));
 		$options = is_object ($list) ? $list->names () : array (); // maakond
 		$this->options_a1 = array(REALESTATE_SEARCH_ALL => "") + $options;
@@ -759,8 +756,8 @@ class realestate_search extends class_base
 
 		### address2
 		$list =& $administrative_structure->prop (array (
-			"prop" => "units_by_type",
-			"type" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
+			"prop" => "units_by_division",
+			"division" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
 		));
 		$options = is_object ($list) ? $list->names () : array (); // linn
 		$this->options_a2 = array(REALESTATE_SEARCH_ALL => "") + $options;
@@ -768,8 +765,8 @@ class realestate_search extends class_base
 
 		### address3
 		$list =& $administrative_structure->prop (array (
-			"prop" => "units_by_type",
-			"type" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
+			"prop" => "units_by_division",
+			"division" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
 		));
 		$options = is_object ($list) ? $list->names () : array (); // linnaosa
 		$this->options_a3 = array(REALESTATE_SEARCH_ALL => "") + $options;
@@ -1012,7 +1009,6 @@ class realestate_search extends class_base
 
 	function &search ($arr)
 	{
-
 		$this_object = is_oid ($arr["id"]) ? obj ($arr["id"]) : NULL;
 
 		if (is_object ($this_object) and $this_object->prop ("save_search"))

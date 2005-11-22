@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_export.aw,v 1.1 2005/10/31 17:13:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_export.aw,v 1.2 2005/11/22 16:50:49 voldemar Exp $
 // realestate_export.aw - Kinnisvaraobjektide eksport
 /*
 
@@ -16,6 +16,9 @@
 	@property city24export_xsl type=textbox
 	@caption City24 ekspordi xsl faili url
 
+	@property city24export_encoding type=relpicker reltype=RELTYPE_ENCODING clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING automatic=1
+	@caption Koodid aadresside City24 ekspordi jaoks
+
 	@property last_city24export type=text datatype=int
 	@caption Viimase ekspordi staatus City24
 
@@ -29,6 +32,9 @@
 
 @reltype OWNER clid=CL_REALESTATE_MANAGER value=1
 @caption Kinnisvaraobjektide halduskeskkond
+
+@reltype ENCODING clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING value=2
+@caption Aadresside vastavuskoodid
 
 */
 
@@ -153,7 +159,11 @@ class realestate_export extends class_base
 		foreach ($objects as $o)
 		{
 			$cl_realestate = $o->instance ();
-			$o_xml = $cl_realestate->export_xml (array ("id" => $o->id (), "no_declaration" => true));
+			$o_xml = $cl_realestate->export_xml (array (
+				"id" => $o->id (),
+				"no_declaration" => true,
+				"address_encoding" => $this_object->prop ("city24export_encoding"),
+			));
 
 			if (empty ($cl_realestate->export_errors))
 			{

@@ -23,6 +23,18 @@
             <caption>City24 ekspordi xsl faili url</caption>
       </property>
       <property>
+            <name>city24export_encoding</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ENCODING</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING</clid>
+            <automatic>1</automatic>
+            <caption>Koodid aadresside City24 ekspordi jaoks</caption>
+      </property>
+      <property>
             <name>last_city24export</name>
             <table>objects</table>
             <group>general</group>
@@ -62,6 +74,11 @@
                   <value>1</value>
                   <caption>Kinnisvaraobjektide halduskeskkond</caption>
             </OWNER>
+            <ENCODING>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE_ENCODING</clid>
+                  <value>2</value>
+                  <caption>Aadresside vastavuskoodid</caption>
+            </ENCODING>
       </reltypes>
 </properties>
 
