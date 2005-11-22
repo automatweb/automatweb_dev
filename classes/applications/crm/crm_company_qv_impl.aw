@@ -62,6 +62,7 @@ class crm_company_qv_impl extends class_base
 			"limit" => 5
 		));
 		$pi = get_instance(CL_PROJECT);
+		$t_i = get_instance(CL_TASK);
 		foreach($ol->arr() as $o)
 		{
 			$parts = array();
@@ -80,8 +81,11 @@ class crm_company_qv_impl extends class_base
 			));
 			foreach($t_ol->arr() as $task)
 			{
-				$sum += str_replace(",", ".",$task->prop("num_hrs_to_cust")) * str_replace(",", ".",$task->prop("hr_price"));
-				$hrs += str_replace(",", ".",$task->prop("num_hrs_to_cust"));
+				foreach($t_i->get_task_bill_rows($task) as $row)
+				{
+					$sum += $row["sum"];
+					$hrs += $row["amt"];
+				}
 			}
 			$t->define_data(array(
 				"date" => date("d.m.Y", $o->prop("start"))." - ".date("d.m.Y", $o->prop("end")),
@@ -115,8 +119,11 @@ class crm_company_qv_impl extends class_base
 			}
 			$sum = 0;
 			$hrs = 0;
-			$sum += str_replace(",", ".",$o->prop("num_hrs_to_cust")) * str_replace(",", ".",$o->prop("hr_price"));
-			$hrs += str_replace(",", ".",$o->prop("num_hrs_to_cust"));
+			foreach($t_i->get_task_bill_rows($o) as $row)
+			{
+				$sum += $row["sum"];
+				$hrs += $row["amt"];
+			}
 			$t->define_data(array(
 				"date" => date("d.m.Y", $o->prop("start1"))." - ".date("d.m.Y", $o->prop("end")),
 				"name" => html::obj_change_url($o),
@@ -156,7 +163,7 @@ class crm_company_qv_impl extends class_base
 			}
 			$t->define_data(array(
 				"date" => date("d.m.Y", $o->prop("bill_date")),
-				"name" => html::obj_change_url($o),
+				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), $o->name()),
 				"parts" => "",
 				"hrs" => number_format($hrs, 2),
 				"sum" => number_format($sum, 2),
