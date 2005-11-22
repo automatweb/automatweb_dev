@@ -248,6 +248,11 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 		));
 
+		$tf->define_field(array(
+			"name" => "pop",
+			"caption" => t("")
+		));
+
 		$tf->define_chooser(array(
 			"field" => "id",
 			"name" => "check",
@@ -1582,6 +1587,17 @@ class crm_company_cust_impl extends class_base
 				}
 			}
 
+			$pm = get_instance("vcl/popup_menu");
+			$pm->begin_menu("org".$o->id());
+			$pm->add_item(array(
+				"text" => t("Vaata"),
+				"link" => $this->mk_my_orb("change", array("id" => $o->id(), "return_url" => get_ru(), "group" => "cust_view"), CL_CRM_COMPANY)
+			));
+			$pm->add_item(array(
+				"text" => t("Muuda"),
+				"link" => html::obj_change_url($o)
+			));
+
 			$tf->define_data(array(
 				"id" => $o->id(),
 				"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()." ".$vorm),
@@ -1595,6 +1611,7 @@ class crm_company_cust_impl extends class_base
 				"email" => $mail,
 				'rollid' => $roles,
 				'client_manager' => html::obj_change_url($o->prop("client_manager")),
+				"pop" => $pm->get_menu()
 			));
 		}
 
