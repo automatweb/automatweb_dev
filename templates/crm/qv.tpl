@@ -6,7 +6,7 @@
 		<td class='awmenuedittabletext'>&nbsp;</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>Nimetus ja õiguslik vorm</td>
+		<td class='awmenuedittabletext'>Nimetus</td>
 		<td class='awmenuedittabletext'>{VAR:name}</td>
 		<td class='awmenuedittabletext'>Alguskuup&auml;ev;</td>
 		<td class='awmenuedittabletext'>{VAR:cust_contract_date}</td>
