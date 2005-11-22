@@ -810,7 +810,7 @@ class crm_company_cust_impl extends class_base
 		$ol = new object_list(array(
 			"oid" => $tmp_ids,
 		));
-		if (!$arr["request"]["search_all_proj"] && $ol->count())
+		if ($arr["request"]["search_all_proj"] && $ol->count())
 		{
 			if (!$arr["request"]["aps_sbt"])
 			{
@@ -1595,7 +1595,7 @@ class crm_company_cust_impl extends class_base
 			));
 			$pm->add_item(array(
 				"text" => t("Muuda"),
-				"link" => html::obj_change_url($o)
+				"link" => html::get_change_url($o->id(), array("return_url" => get_ru()))
 			));
 
 			$tf->define_data(array(
