@@ -187,8 +187,14 @@ class crm_company_qv_impl extends class_base
 			$cp = $_cp->name().", ".$_cp->prop_str("phone").", ".$_cp->prop_str("email");
 		}
 
+		$_ev = $o->prop("ettevotlusvorm");
+		if ($this->can("view", $_ev))
+		{
+			$ev = obj($_ev);
+			$ev = $ev->prop("shortname");
+		}
 		$this->vars(array(
-			"name" => $o->name()." ".$o->prop_str("ettevotlusvorm"),
+			"name" => $o->name()." ".$ev,
 			"code" => $o->prop("code"),
 			"reg_code" => $o->prop("reg_nr"),
 			"kmk_nr" => $o->prop("tax_nr"),

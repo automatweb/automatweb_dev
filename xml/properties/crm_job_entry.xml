@@ -11,6 +11,15 @@
             <caption>Kliendi andmed</caption>
       </property>
       <property>
+            <name>sel_cust</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Vali olemasolev klient</caption>
+      </property>
+      <property>
             <name>cust_n</name>
             <table>objects</table>
             <group>general</group>
@@ -52,7 +61,7 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>select</type>
             <caption>Maakond</caption>
       </property>
       <property>
@@ -136,7 +145,9 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
             <caption>Kirjeldus</caption>
       </property>
       <property>

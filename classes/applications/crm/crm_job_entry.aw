@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.1 2005/11/22 09:45:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.2 2005/11/22 10:52:43 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -13,6 +13,9 @@
 @property cust_d type=text subtitle=1
 @caption Kliendi andmed
 
+@property sel_cust type=select
+@caption Vali olemasolev klient
+
 @property cust_n type=textbox 
 @caption Nimetus
 
@@ -25,7 +28,7 @@
 @property addr_linn type=textbox 
 @caption Linn
 
-@property maakond type=textbox 
+@property maakond type=select
 @caption Maakond
 
 @property riik type=textbox default=Eesti
@@ -53,7 +56,7 @@
 @property proj_name type=textbox
 @caption  Nimetus
 
-@property proj_desc type=textbox
+@property proj_desc type=textarea rows=10 cols=50
 @caption Kirjeldus
 
 @property proj_parts type=select multiple=1
@@ -96,9 +99,29 @@ class crm_job_entry extends class_base
 			case "name":
 				return PROP_IGNORE;
 
+			case "sel_cust":
+				$i = get_instance(CL_CRM_COMPANY);
+				$my_c = $i->get_my_customers();
+				if (!count($my_c))
+				{
+					return PROP_IGNORE;
+				}
+				$ol = new object_list(array("oid" => $my_c));
+				$prop["options"] = array("" => t("--Vali--")) + $ol->names();
+				break;
+
 			case "ettevotlusvorm":
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_CORPFORM,
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$prop["options"] = array("" => t("--Vali--")) + $ol->names();
+				break;
+
+			case "maakond":
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_COUNTY,
 					"lang_id" => array(),
 					"site_id" => array()
 				));
@@ -144,59 +167,89 @@ class crm_job_entry extends class_base
 	function callback_pre_save($arr)
 	{
 		// create cust
-		$c = obj();
-		$c->set_class_id(CL_CRM_COMPANY);
-		$c->set_parent($arr["request"]["parent"]);
-		$c->set_name($arr["request"]["cust_n"]);
-		$c->set_prop("ettevotlusvorm", $arr["request"]["ettevotlusvorm"]);
-		$c->save();
-
-		// create address
-		$addr = obj();
-		$addr->set_class_id(CL_CRM_ADDRESS);
-		$addr->set_parent($c->id());
-		$addr->set_prop("aadress", $arr["request"]["addr"]);
-		$addr->save();
-		$this->set_by_n($addr, "linn", $arr["request"]["addr_linn"], CL_CRM_CITY, $addr->id());
-		$this->set_by_n($addr, "maakond", $arr["request"]["maakond"], CL_CRM_COUNTY, $addr->id());
-		$this->set_by_n($addr, "riik", $arr["request"]["riik"], CL_CRM_COUNTRY, $addr->id());
-		$name = array();	
-		$form = $arr["request"];
-		$name[] = $form['addr'];
-		$name[] = $form['addr_linn'];
-		$name[] = $form['maakond'];
-		$addr->set_name(join(",  ", $name));
-		$addr->save();
-				
-		// kontaktisik
-		$pers = obj();
-		$pers->set_class_id(CL_CRM_PERSON);
-		$pers->set_parent($c->id());
-		$pers->set_name($arr["request"]["ct_fn"]." ".$arr["request"]["ct_ln"]);
-		$pers->set_prop("firstname", $arr["request"]["ct_fn"]);
-		$pers->set_prop("lastname", $arr["request"]["ct_ln"]);
-		$this->set_by_n($pers, "phone", $arr["request"]["ct_phone"], CL_CRM_PHONE, $addr->id());
-		$this->set_by_n($pers, "email", $arr["request"]["ct_email"], CL_ML_MEMBER, $addr->id());
-		$pers->save();
-
-		$c->set_prop("contact", $addr->id());
-		$c->save();
-
-		// add person as employee
-		$pers->set_prop("work_contact", $c->id());
-		$pers->save();
-		$c->connect(array(
-			"to" => $pers->id(),
-			"type" => "RELTYPE_WORKERS"
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"name" => $arr["request"]["cust_n"]
 		));
 
-		// add as important person for me
-		$u = get_instance(CL_USER);
-		$cur_p = obj($u->get_current_person());
-		$cur_p->connect(array(
-			"to" => $pers->id(),
-			"type" => "RELTYPE_IMPORTANT_PERSON"
-		));
+		if ($this->can("view", $arr["request"]["sel_cust"]))
+		{
+			$c = obj($arr["request"]["sel_cust"]);
+		}
+		else
+		if ($ol->count())
+		{
+			$c = $ol->begin();
+		}
+		else
+		{
+			$c = obj();
+			$c->set_class_id(CL_CRM_COMPANY);
+			$c->set_parent($arr["request"]["parent"]);
+			$c->set_name($arr["request"]["cust_n"]);
+			$c->set_prop("ettevotlusvorm", $arr["request"]["ettevotlusvorm"]);
+			$c->save();
+
+			// create address
+			$addr = obj();
+			$addr->set_class_id(CL_CRM_ADDRESS);
+			$addr->set_parent($c->id());
+			$addr->set_prop("aadress", $arr["request"]["addr"]);
+			$addr->save();
+			$this->set_by_n($addr, "linn", $arr["request"]["addr_linn"], CL_CRM_CITY, $addr->id());
+			$addr->set_prop("maakond", $arr["request"]["maakond"]);
+			$this->set_by_n($addr, "riik", $arr["request"]["riik"], CL_CRM_COUNTRY, $addr->id());
+			$name = array();	
+			$form = $arr["request"];
+			$name[] = $form['addr'];
+			$name[] = $form['addr_linn'];
+			$name[] = $form['maakond'];
+			$addr->set_name(join(",  ", $name));
+			$addr->save();
+
+			$c->set_prop("contact", $addr->id());
+			$c_i = $c->instance();
+			$c_i->_gen_company_code($c);
+			$c->save();
+		}
+
+
+
+		// check if such a person already exists in that co
+		$c_i = $c->instance();
+		$emp_p = array_flip($c_i->get_employee_picker($c));
+		if (!isset($emp_p[$arr["request"]["ct_fn"]." ".$arr["request"]["ct_ln"]]))
+		{
+			// kontaktisik
+			$pers = obj();
+			$pers->set_class_id(CL_CRM_PERSON);
+			$pers->set_parent($c->id());
+			$pers->set_name($arr["request"]["ct_fn"]." ".$arr["request"]["ct_ln"]);
+			$pers->set_prop("firstname", $arr["request"]["ct_fn"]);
+			$pers->set_prop("lastname", $arr["request"]["ct_ln"]);
+			$this->set_by_n($pers, "phone", $arr["request"]["ct_phone"], CL_CRM_PHONE, $c->id());
+			$this->set_by_n($pers, "email", $arr["request"]["ct_email"], CL_ML_MEMBER, $c->id());
+			$pers->save();
+
+			// add person as employee
+			$pers->set_prop("work_contact", $c->id());
+			$pers->save();
+			$c->connect(array(
+				"to" => $pers->id(),
+				"type" => "RELTYPE_WORKERS"
+			));
+
+			// add as important person for me
+			$u = get_instance(CL_USER);
+			$cur_p = obj($u->get_current_person());
+			$cur_p->connect(array(
+				"to" => $pers->id(),
+				"type" => "RELTYPE_IMPORTANT_PERSON"
+			));
+		}
+
 
 		// create proj
 		$p = obj();
@@ -207,11 +260,21 @@ class crm_job_entry extends class_base
 		$p->set_prop("description", $arr["request"]["proj_desc"]);
 		$p->set_prop("participants", $arr["request"]["proj_parts"]);
 		$p->save();
+		$si = __get_site_instance();
+		if (method_exists($si, "project_gen_code"))
+		{
+			$p->set_prop("code", $si->project_gen_code(array(
+				"prop" => array("value" => ""),
+				"obj_inst" => $p,
+			)));
+			$p->save();
+		}
 
 		// create task
 		$t = obj();
 		$t->set_class_id($arr["request"]["task_type"]);
 		$t->set_parent($p->id());
+		$t->set_name($arr["request"]["proj_name"]);
 		$t->set_prop("start1", date_edit::get_timestamp($arr["request"]["task_start"]));
 		$t->set_prop("end", date_edit::get_timestamp($arr["request"]["task_end"]));
 		$t->set_prop("content", $arr["request"]["task_content"]);
@@ -227,7 +290,57 @@ class crm_job_entry extends class_base
 		}
 		$t->save();
 
-		header("Location: ".html::get_change_url($t->id()));
+		switch($t->class_id())
+		{
+			case CL_TASK:
+				foreach((array)$arr["request"]["proj_parts"] as $part)
+				{
+					if (!$this->can("view", $part))
+					{
+						continue;
+					}
+					$_pers = obj($part);
+					$_pers->connect(array(
+						"to" => $t->id(),
+						"type" => "RELTYPE_PERSON_TASK"
+					));
+				}
+				header("Location: ".html::get_change_url($t->id(), array("group" => "rows", "return_url" => urlencode($arr["request"]["return_url"]))));
+				die();
+				break;
+
+			case CL_CRM_CALL:
+				foreach((array)$arr["request"]["proj_parts"] as $part)
+				{
+					if (!$this->can("view", $part))
+					{
+						continue;
+					}
+					$_pers = obj($part);
+					$_pers->connect(array(
+						"to" => $t->id(),
+						"type" => "RELTYPE_PERSON_CALL"
+					));
+				}
+				break;
+
+			case CL_CRM_CALL:
+				foreach((array)$arr["request"]["proj_parts"] as $part)
+				{
+					if (!$this->can("view", $part))
+					{
+						continue;
+					}
+					$_pers = obj($part);
+					$_pers->connect(array(
+						"to" => $t->id(),
+						"type" => "RELTYPE_PERSON_MEETING"
+					));
+				}
+				break;
+		}
+
+		header("Location: ".html::get_change_url($t->id(), array("return_url" => urlencode($arr["request"]["return_url"]))));
 		die();
 	}
 
