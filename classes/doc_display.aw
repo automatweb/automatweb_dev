@@ -112,6 +112,10 @@ class doc_display extends aw_template
 		$this->_do_charset($doc);
 		$this->_do_checkboxes($doc);
 
+		$this->vars(array(
+			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : ""),
+		));
+
 		$str = $this->parse();
 		return $str;
 	}
