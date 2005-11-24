@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.78 2005/11/07 07:45:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.79 2005/11/24 16:41:24 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1187,7 +1187,7 @@ class webform extends class_base
 			$sc = "";
 			foreach($proplist as $property)
 			{
-				$clf1 = $clf2 = $clf3 = $clf4 = "";
+				$clf1 = $clf2 = $clf3 = $clf4 = $clf5 = "";
 				$cnt++;
 				$prpdata = $this->cfgform_i->all_props[$property["name"]];
 				if (!$prpdata)
@@ -1335,11 +1335,29 @@ class webform extends class_base
 					));
 					$clf4 = $this->parse("CLF4");
 				}
+				if($prpdata["type"] == "textbox" || $prpdata["type"] == "textarea")
+				{
+					//arr($prpdata);
+					$height = "";
+					if($prpdata["type"] == "textarea")
+					{
+						$this->vars(array(
+							"ht" => $property["height"],
+						));
+						$height = $this->parse("HEIGHT");
+					}
+					$this->vars(array(
+						"wt" => $property["width"],
+						"HEIGHT" => $height,
+					));
+					$clf5 = $this->parse("CLF5");
+				}
 				$this->vars(array(
 					"CLF1" => $clf1,
 					"CLF2" => $clf2,
 					"CLF3" => $clf3,
 					"CLF4" => $clf4,
+					"CLF5" => $clf5,
 				));
 				$sc .= $this->parse("property");
 			}
@@ -1473,7 +1491,7 @@ class webform extends class_base
 				"multiple" => 1,
 				"size" => 3,
 				"value" => $controllers[$prop["name"]],
-				"options" => $this->all_rels,
+				"options" => array("" => t("-- Vali --")) + $this->all_rels,
 			);
 		}
 		return  $retval;
@@ -1496,7 +1514,7 @@ class webform extends class_base
 				"multiple" => 1,
 				"size" => 3,
 				"value" => $controllers[$prop["name"]],
-				"options" => $this->all_rels,
+				"options" => array("" => t("-- Vali --")) + $this->all_rels,
 			);
 		}
 		return  $retval;
@@ -1626,9 +1644,32 @@ class webform extends class_base
 		$all_props = safe_array($cfgform->meta("cfg_proplist"));
 		$ret = $errs2 = $errs1 = $sbz = array();
 		$no_sbt = true;
+		$nms = array();
 		$chk_prps = array("default" => "defaultx", "year_from" => "year_from", "year_to" => "year_to", "mon_for" => "mon_for");
 		foreach($els as $pn => $pd)
 		{
+			if($pd["type"] == "releditor")
+			{
+				$nms[$pn] = $pd["caption"];
+			}
+			if(($pd["type"] == "textbox" || $pd["type"] == "textarea"))
+			{
+				if(!empty($all_props[$pn]["width"]))
+				{
+					if($pd["type"] == "textbox")
+					{
+						$pd["size"] = $all_props[$pn]["width"];
+					}
+					else
+					{
+						$pd["cols"] = $all_props[$pn]["width"];
+					}
+				}
+				if(!empty($all_props[$pn]["height"]) && $pd["type"] == "textarea")
+				{
+					$pd["rows"] = $all_props[$pn]["height"];
+				}
+			}
 			$pd["value"] = $values[$pn];
 			if($pd["type"] == "submit")
 			{
@@ -1718,6 +1759,7 @@ class webform extends class_base
 		$dummy->set_class_id($ftype);
 		
 		$rd->cfgform_id = $cfgform->id();
+		$rd->load_defaults();
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
 			"obj_inst" => $dummy,
@@ -1742,8 +1784,25 @@ class webform extends class_base
 		$id = $arr["obj_inst"]->id();
 		$aliasmgr = get_instance("aliasmgr");
 		$tmp = $els;
+
 		foreach($tmp as $key => $val)
 		{
+			if($val["type"] == "fileupload")
+			{
+				foreach($nms as $iv => $nm)
+				{
+					if(strpos($key, $iv) !== false)
+					{
+						$els[$key]["caption"] = $nm;
+						break;
+					}
+				}
+			}
+			if(strpos($key, "_filename") !== false)
+			{
+				unset($els[$key]);
+				continue;
+			}
 			$aliasmgr->parse_oo_aliases($id, &$els[$key]["caption"]);
 			if($val["type"] == "text")
 			{
@@ -1785,12 +1844,10 @@ class webform extends class_base
 			// way to do it without messing up htmlclient
 			if($val["type"] == "button")
 			{
-				$val["no_caption"] = 1;
-				$val["value"] = $val["caption"];
-				unset($val["caption"]);
 				$val["onclick"] = "document.changeform.subaction.value='print';submit_changeform();";
 				$val["class"] = "sbtbutton";
-				$_tmp3 = $val;
+				$val["parent"] = "submitx";
+				$tmpx[$key] = $val;
 				unset($els[$key]);
 			}
 			if(in_array($clf_type[$key], $this->n_props))
@@ -1802,12 +1859,14 @@ class webform extends class_base
 				$val["class"] = $val["style"]["prop"];
 				if($all_props[$key]["type"] == "submit")
 				{
-					$_tmp = $val;
+					$val["parent"] = "submitx";
+					$tmpx[$key] = $val;
 					unset($els[$key]);
 				}
 				elseif($all_props[$key]["type"] == "reset")
 				{
-					$_tmp2 = $val;
+					$val["parent"] = "submitx";
+					$tmpx[$key] = $val;
 					unset($els[$key]);
 				}
 			}
@@ -1854,25 +1913,18 @@ class webform extends class_base
 				}
 			}
 		}
-		$tmp = array();
-		if($_tmp || $_tmp2 || $_tmp3)
-		{
-			$tmp["submit"] = array(
-				"items" => array(
-					"usersubmit1" => $_tmp,
-					"userreset1" => $_tmp2,
-					"userprint1" => $_tmp3,
-				),
-				"type" => "text",
-				"layout" => true,
-			);
-		}
-		$els = $els + $tmp;
+		$layout = array(
+			"submitx" => array(
+				"type" => "hbox",
+			),
+		);
+		$els = $els + $tmpx;
 		classload("cfg/htmlclient");
 		$htmlc = new htmlclient(array(
 			"template" => "real_webform.tpl",
 			"styles" => safe_array($arr["obj_inst"]->meta("m_styles")),
 		));
+		$htmlc->set_layout($layout);
 		$htmlc->start_output();
 
 		foreach($els as $pn => $pd)

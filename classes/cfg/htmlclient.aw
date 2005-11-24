@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.127 2005/11/22 09:45:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.128 2005/11/24 16:41:24 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -31,17 +31,7 @@ class htmlclient extends aw_template
 		{
 			$this->set_layout_mode($arr["layout_mode"]);
 		};
-		$this->tplmode = "";
 		$this->form_layout = "";
-		if($arr["tplmode"] == "groups")
-		{
-			$this->tplmode = "groups";
-			$this->sub_tpl = new aw_template();
-			$this->sub_tpl->tpl_init($arr["tpldir"]);
-			$this->sub_tpl->read_template("group_".$arr["group"].".tpl");
-			$this->prop_style = 0;
-			$this->use_template = "grouptpl_default.tpl";
-		}
 		if (!empty($arr["template"]))
 		{
 			// apparently some places try to specify a template without an extension,
@@ -161,18 +151,9 @@ class htmlclient extends aw_template
 		{
 			$handler = "index";
 		};
-		if($this->tplmode == "groups")
-		{
-			$this->sub_tpl->vars(array(
-				"handler" => $handler,
-			));
-		}
-		else
-		{
-			$this->vars(array(
-				"handler" => $handler,
-			));
-		}
+		$this->vars(array(
+			"handler" => $handler,
+		));
 		$this->orb_vars = array();
 		$this->submit_done = false;
 		$this->proplist = array();
@@ -272,7 +253,7 @@ class htmlclient extends aw_template
 	function show_error()
 	{
 		$this->vars(array(
-			"error_text" => "Viga sisendandmetes",
+			"error_text" => t("Viga sisendandmetes"),
 			"webform_error" => $this->style["error"] ? "st".$this->style["error"] : "",
 		));
 		$this->error = $this->parse("ERROR");
@@ -295,8 +276,8 @@ class htmlclient extends aw_template
 		{
 			$args["type"] = "chooser";
 			$args["options"] = array(
-				STAT_ACTIVE => "Jah",
-				STAT_NOTACTIVE => "Ei",
+				STAT_ACTIVE => t("Jah"),
+				STAT_NOTACTIVE => t("Ei"),
 			);
 		};
 
@@ -304,10 +285,11 @@ class htmlclient extends aw_template
 		{
 			$args["value"] = $args["vcl_inst"]->get_html();
 		}
-		if($args["type"] == "reset")
+		if($args["type"] == "reset" || $args["type"] == "button")
 		{
-			$args["no_caption"] = 1;
+			//$args["no_caption"] = 1;
 			$args["value"] = $args["caption"];
+			//$args["caption"] = "&nbsp;";
 			unset($args["caption"]);
 		}
 		if ($args["type"] == "s_status")
@@ -321,9 +303,9 @@ class htmlclient extends aw_template
 			// hm, do we need STAT_ANY? or should I just fix the search
 			// do not use dumb value like 3 -- duke
 			$args["options"] = array(
-				3 => "K&otilde;ik",
-				STAT_ACTIVE => "Aktiivne",
-				STAT_NOTACTIVE => "Deaktiivne",
+				3 => t("K&otilde;ik"),
+				STAT_ACTIVE => t("Aktiivne"),
+				STAT_NOTACTIVE => t("Deaktiivne"),
 			);
 		};
 
@@ -357,7 +339,7 @@ class htmlclient extends aw_template
 				$colorpicker_script_done = 1;
 			};
 
-			$tx = "<a href=\"javascript:colorpicker('$args[name]')\">Vali</a>";
+			$tx = "<a href=\"javascript:colorpicker('$args[name]')\">".t("Vali")."</a>";
 	
 			$val .= html::text(array("value" => $script . $tx));
 			$args["value"] = $val;
@@ -412,31 +394,22 @@ class htmlclient extends aw_template
 				"webform_caption" => !empty($args["style"]["caption"]) ? "st".$args["style"]["caption"] : "",
 				"webform_element" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
-		if(isset($this->tplmode) && $this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		$add = "";
+		if(!empty($args["capt_ord"]))
 		{
-			//echo "jee";
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($args["name"]);
+			$add = strtoupper("_".$args["capt_ord"]);
+		}
+		// I wanda mis kammi ma selle tmp-iga tegin
+		// different layout mode eh? well, it sucks!
+		if (isset($this->tmp) && is_object($this->tmp))
+		{
+			$this->tmp->vars($tpl_vars);
+			$rv = $this->tmp->parse("LINE".$add);
 		}
 		else
 		{
-			$add = "";
-			if(!empty($args["capt_ord"]))
-			{
-				$add = strtoupper("_".$args["capt_ord"]);
-			}
-			// I wanda mis kammi ma selle tmp-iga tegin
-			// different layout mode eh? well, it sucks!
-			if (isset($this->tmp) && is_object($this->tmp))
-			{
-				$this->tmp->vars($tpl_vars);
-				$rv = $this->tmp->parse("LINE".$add);
-			}
-			else
-			{
-				$this->vars($tpl_vars);
-				$rv = $this->parse("LINE".$add);
-			}
+			$this->vars($tpl_vars);
+			$rv = $this->parse("LINE".$add);
 		}
 		return $rv;
 	}
@@ -457,21 +430,8 @@ class htmlclient extends aw_template
 		{
 			 $name .= strtoupper("_".$arr["capt_ord"]);
 		}
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($arr["name"]))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($arr["name"]);
-		}
-		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($name);
-		}
-		else
-		{
-			$this->vars($tpl_vars);
-			$rv = $this->parse($name);
-		}
+		$this->vars($tpl_vars);
+		$rv = $this->parse($name);
 		return $rv;
 	}
 
@@ -485,21 +445,8 @@ class htmlclient extends aw_template
 		// SUBITEM - element first, caption right next to it
 		// SUBITEM2 - caption first, element right next to it
 		$tpl = $args["type"] == "checkbox" ? "SUBITEM" : "SUBITEM2";
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($args["name"]);
-		}
-		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($tpl))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($tpl);
-		}
-		else
-		{
-			$this->vars($tpl_vars);
-			$rv = $this->parse($tpl);
-		}
+		$this->vars($tpl_vars);
+		$rv = $this->parse($tpl);
 		return $rv;
 	}
 
@@ -510,21 +457,8 @@ class htmlclient extends aw_template
 			"caption" => $args["caption"],
 			"webform_header" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($args["name"]);
-		}
-		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($name);
-		}
-		else
-		{
-			$this->vars($tpl_vars);
-			$rv = $this->parse($name);
-		}
+		$this->vars($tpl_vars);
+		$rv = $this->parse($name);
 		return $rv;
 	}
 	
@@ -535,21 +469,8 @@ class htmlclient extends aw_template
 			"value" => !empty($args["value"]) ? $args["value"] : $args["caption"],
 			"webform_subtitle" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($args["name"]);
-		}
-		elseif($this->tplmode == "groups" && $this->sub_tpl->is_template($name))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($name);
-		}
-		else
-		{
-			$this->vars($tpl_vars);
-			$rv = $this->parse($name);
-		}
+		$this->vars($tpl_vars);
+		$rv = $this->parse($name);
 		return $rv;
 	}
 	
@@ -561,17 +482,8 @@ class htmlclient extends aw_template
 			"value" => $this->draw_element($args),
 			"webform_content" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
-		if(isset($this->tplmode) && $this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
-		{
-			$this->sub_tpl->vars($tpl_vars);
-			$rv = $this->sub_tpl->parse($args["name"]);
-		}
-		
-		else
-		{
-			$this->vars($tpl_vars);
-			$rv = $this->parse("CONTENT");
-		}
+		$this->vars($tpl_vars);
+		$rv = $this->parse("CONTENT");
 		return $rv;
 	}
 	
@@ -618,7 +530,6 @@ class htmlclient extends aw_template
 			$lparent = isset($val["parent"]) ? $val["parent"] : "_main";
 			$val["name"] = $key;
 			$this->layout_by_parent[$lparent][$key] = $val;
-
 			$this->lp_chain[$key] = $lparent;
 			// mul on iga layoudi kohta vaja teada tema kõige esimest layouti
 		};
@@ -640,7 +551,6 @@ class htmlclient extends aw_template
 				};
 			};
 		};
-		
 		if ($this->submit_done || $this->view_mode == 1)
 		{
 		
@@ -652,17 +562,9 @@ class htmlclient extends aw_template
 			$tpl_vars = array(
 				"sbt_caption" => $sbt_caption != "" ? $sbt_caption : t("Salvesta"),
 			);
-			if($this->tplmode == "groups" && $this->sub_tpl->is_template($var_name))
-			{
-				$this->sub_tpl->vars($tpl_vars);
-				$sbt = $this->sub_tpl->parse($var_name);
-			}
-			else
-			{
-				// I need to figure out whether I have a relation manager
-				$this->vars($tpl_vars);
-				$sbt = $this->parse($var_name);
-			}
+			// I need to figure out whether I have a relation manager
+			$this->vars($tpl_vars);
+			$sbt = $this->parse($var_name);
 			
 		};
 
@@ -692,55 +594,22 @@ class htmlclient extends aw_template
 
 				$property_help .= $this->parse("PROPERTY_HELP");
 				$item["html"] = $this->create_element($item);
-
-
-				if(isset($this->tplmode) && $this->tplmode == "groups")
+				if (!empty($item["error"]))
 				{
-					if (!empty($item["error"]))
-					{
-						$var_name = "PROP_ERR_MSG";
-						$tpl_vars = array(
-							"err_msg" => $item["error"],
-						);
-						if($this->sub_tpl->is_template($var_name))
-						{
-							$this->sub_tpl->vars($tpl_vars);
-							$vars[$ki] .= $this->sub_tpl->parse($var_name);
-						}
-						else
-						{
-							$this->vars($tpl_vars);
-							$vars[$ki] .= $this->parse($var_name);
-						}
-					};
-					if (!empty($sbt) && $item["type"] == "aliasmgr")
-					{
-						$vars[$ki] .= $sbt;
-						unset($sbt);
-					};
-					// noh, aga ega siin ei ole midagi erilist .. kui ma satun gridi otsa,
-					// siis ma asendan selle gridi lihtsalt tema leiaudiga
-					$vars[$ki] .= $item["html"];
-				}
-				else
-				{
-					if (!empty($item["error"]))
-					{
-						$this->vars(array(
-							"err_msg" => $item["error"],
-						));
-						$res .= $this->parse("PROP_ERR_MSG");
-					};
+					$this->vars(array(
+						"err_msg" => $item["error"],
+					));
+					$res .= $this->parse("PROP_ERR_MSG");
+				};
 
-					// this is what I was talking about before ...
-					// move submit button _before_ the aliasmgr
-					if (!empty($sbt) && $item["type"] == "aliasmgr")
-					{
-						$res .= $sbt;
-						unset($sbt);
-					};
-					$res .= $item["html"];
-				}
+				// this is what I was talking about before ...
+				// move submit button _before_ the aliasmgr
+				if (!empty($sbt) && $item["type"] == "aliasmgr")
+				{
+					$res .= $sbt;
+					unset($sbt);
+				};
+				$res .= $item["html"];
 			};
 		};
 
@@ -780,40 +649,26 @@ class htmlclient extends aw_template
 		// let's hope that nobody uses that vbox and hbox spagetti with grouptemplates -- ahz
 		// groupboxes where implemented for rateme .. the code is not exactly elegant .. can I kill it?
 		// please-please-please?
-		if(isset($this->tplmode) && $this->tplmode == "groups")
+		if (empty($method))
 		{
-			$vars = $vars + array(
-				"submit_handler" => $submit_handler,
-				"method" => !empty($method) ? $method : "POST",
-				"reforb" => $this->mk_reforb($action,$data,$orb_class),
-				"SUBMIT" => $sbt,
-			);
-			$this->sub_tpl->vars($vars);
-		}
-		else
+			$method = "POST";
+		};
+		if ("POST" != $method)
 		{
-			if (empty($method))
-			{
-				$method = "POST";
-			};
-			if ("POST" != $method)
-			{
-				$data["no_reforb"] = 1;
-			};
-			$this->vars(array(
-				"submit_handler" => $submit_handler,
-				"scripts" => $scripts,
-				"method" => !empty($method) ? $method : "POST",
-				"content" => $res,
-				"reforb" => $this->mk_reforb($action,$data,$orb_class),
-				"form_handler" => !empty($form_handler) ? $form_handler : "orb.aw",
-				"SUBMIT" => isset($sbt) ? $sbt : "",
-				"help" => $arr["help"],
-				"PROPERTY_HELP" => $property_help,
-				//"form_handler" => isset($form_handler) ? "orb.aw" : $form_handler,
-			));
-
-		}
+			$data["no_reforb"] = 1;
+		};
+		$this->vars(array(
+			"submit_handler" => $submit_handler,
+			"scripts" => $scripts,
+			"method" => !empty($method) ? $method : "POST",
+			"content" => $res,
+			"reforb" => $this->mk_reforb($action,$data,$orb_class),
+			"form_handler" => !empty($form_handler) ? $form_handler : "orb.aw",
+			"SUBMIT" => isset($sbt) ? $sbt : "",
+			"help" => $arr["help"],
+			"PROPERTY_HELP" => $property_help,
+			//"form_handler" => isset($form_handler) ? "orb.aw" : $form_handler,
+		));
 		
 		if ($no_insert_reforb)
 		{
@@ -865,14 +720,7 @@ class htmlclient extends aw_template
 		
 			if (empty($arr["content"]))
 			{
-				if(isset($this->tplmode) && $this->tplmode == "groups")
-				{
-					$rv = $this->sub_tpl->parse();
-				}
-				else
-				{
-					$rv = $this->parse();
-				}
+				$rv = $this->parse();
 			}
 			else
 			{
@@ -1083,12 +931,6 @@ class htmlclient extends aw_template
 		
 		if ($this->form_layout == "boxed")
 		{
-			if($this->tplmode == "groups")
-			{
-				// now, when we have misleaded the htmlclient, we must safely
-				// lead him back to the right template directory -- ahz
-				$this->tpl_init("htmlclient");
-			}
 			$this->read_template("boxed.tpl");
 			$this->vars(array(
 				"top_content" => $this->additional_content["top"],
@@ -1345,7 +1187,6 @@ class htmlclient extends aw_template
 	{
 		$layout_items = array();
 		$sub_layouts = array();
-
 		foreach($this->layout_by_parent[$layout_name] as $lkey => $lval)
 		{
 			$html = $this->parse_layouts($lkey);
