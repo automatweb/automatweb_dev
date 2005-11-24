@@ -104,18 +104,61 @@
 <!-- END SUB: SUBMIT_RIGHT -->
 
 <!-- SUB: SUBITEM -->
-	<span style="color: red">{VAR:err_msg}</span>
-        {VAR:element}
-        {VAR:caption}
-	&nbsp;
+<span style="padding-left: {VAR:space}px;">
+	{VAR:element}
+	{VAR:caption}
+</span>
 <!-- END SUB: SUBITEM -->
 
 <!-- SUB: SUBITEM2 -->
-	<span style="color: red">{VAR:err_msg}</span>
-        {VAR:caption}
-        {VAR:element}
-	&nbsp;
+<span style="padding-left: {VAR:space}px;">
+	{VAR:caption}
+	{VAR:element}
+</span>
 <!-- END SUB: SUBITEM2 -->
+
+<!-- SUB: GRIDITEM -->
+	<div  class="{VAR:webform_caption}">{VAR:caption} {VAR:element}</div>
+<!-- END SUB: GRIDITEM -->
+
+<!-- SUB: GRIDITEM -->
+	<div class="{VAR:webform_caption}">
+	<!-- SUB: CAPTION_TOP -->
+	{VAR:caption}<br/>
+	<!-- END SUB: CAPTION_TOP -->
+	<!-- SUB: CAPTION_LEFT -->
+	{VAR:caption}
+	<!-- END SUB: CAPTION -->
+	{VAR:element}</div>
+<!-- END SUB: GRIDITEM -->
+
+<!-- SUB: GRIDITEM_NO_CAPTION -->
+	<div  class="{VAR:webform_caption}">{VAR:element}</div>
+<!-- END SUB: GRIDITEM_NO_CAPTION -->
+
+<!-- SUB: GRID_HBOX -->
+<!-- hbox -->
+<table border="0" cellspacing="0" cellpadding="0" width='100%'>
+<tr>
+<!-- SUB: GRID_HBOX_ITEM -->
+<td valign='top' {VAR:item_width} style="padding-left: 5px;">
+{VAR:item}
+</td>
+<!-- END SUB: GRID_HBOX_ITEM -->
+</tr>
+</table>
+<!-- END SUB: GRID_HBOX -->
+
+<!-- SUB: GRID_VBOX -->
+<!-- vbox -->
+<table border="0" cellspacing="0" cellpadding="0" width="100%">
+<!-- SUB: GRID_VBOX_ITEM -->
+<tr>
+<td valign="top">{VAR:item}</td>
+</tr>
+<!-- END SUB: GRID_VBOX_ITEM -->
+</table>
+<!-- END SUB: GRID_VBOX -->
 
 {VAR:reforb}
 <script type="text/javascript">
