@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.79 2005/11/24 16:41:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.80 2005/11/25 07:50:53 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -65,22 +65,6 @@
 @property props type=callback callback=callback_props no_caption=1
 @caption Omadused
 ------------- end: props -------------
-
-
-------------- special -------------
-//@groupinfo special caption="Spetsiaal" submit=no
-//@default group=special
-
-//@property form_groups type=checkbox ch_value=1
-//@caption Kasuta vormi gruppe
-
-//@property availtoolbar type=toolbar no_caption=1
-//@caption Toolbar
-
-//@property props type=callback callback=callback_props no_caption=1
-//@caption Omadused
-------------- end: special -------------
-
 
 ------------- styles -------------
 @groupinfo styles caption="Stiilid"
@@ -1918,6 +1902,31 @@ class webform extends class_base
 				"type" => "hbox",
 			),
 		);
+		$null = array();
+		$x = 0;
+		foreach($els as $v => $el)
+		{
+			if($x == 0)
+			{
+				$last = $v;
+				$x++;
+			}
+			if($el["nextto"] == 1 && !empty($last))
+			{
+				if($els[$last]["nextto"] == 1 && $last != $v)
+				{
+					$z = $last;
+					$last = $els[$last]["pr"];
+				}
+				$layout[$last."box"] = array(
+					"type" => "hbox",
+				);
+				$els[$last]["parent"] = $last."box";
+				$els[$v]["parent"] = $last."box";
+			}
+			$els[$v]["pr"] = $last;
+			$last = $v;
+		}
 		$els = $els + $tmpx;
 		classload("cfg/htmlclient");
 		$htmlc = new htmlclient(array(

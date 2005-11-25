@@ -18,7 +18,7 @@
             <field>meta</field>
             <type>select</type>
             <newonly>1</newonly>
-            <caption>Vormi t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Vormi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>form_type_value</name>
@@ -28,7 +28,7 @@
             <field>meta</field>
             <type>text</type>
             <editonly>1</editonly>
-            <caption>Vormi t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Vormi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>def_name</name>
@@ -57,7 +57,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>3</size>
-            <caption>Millised sisestatud v&amp;auml;&amp;auml;rtused pannakse nimeks</caption>
+            <caption>Millised sisestatud v&amp;amp;auml;&amp;amp;auml;rtused pannakse nimeks</caption>
       </property>
       <property>
             <name>redirect</name>
@@ -66,7 +66,7 @@
             <method>serialize</method>
             <field>meta</field>
             <type>textbox</type>
-            <caption>Kuhu suunata peale t&amp;auml;tmist</caption>
+            <caption>Kuhu suunata peale t&amp;amp;auml;tmist</caption>
       </property>
       <property>
             <name>error_location</name>
@@ -350,7 +350,7 @@
             <VIEWCONTROLLER>
                   <value>4</value>
                   <clid>CL_CFG_VIEW_CONTROLLER</clid>
-                  <caption>N&amp;auml;tamise kontroller</caption>
+                  <caption>N&amp;amp;auml;tamise kontroller</caption>
             </VIEWCONTROLLER>
             <EMAIL>
                   <value>5</value>
@@ -360,7 +360,7 @@
             <OBJECT_TYPE>
                   <value>6</value>
                   <clid>CL_OBJECT_TYPE</clid>
-                  <caption>Objekti t&amp;uuml;&amp;uuml;p</caption>
+                  <caption>Objekti t&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </OBJECT_TYPE>
             <REGISTER>
                   <value>7</value>
@@ -390,17 +390,17 @@
             <CAL_REG_FORM>
                   <value>12</value>
                   <clid>CL_CALENDAR_REGISTRATION_FORM</clid>
-                  <caption>S&amp;uuml;ndmuse vorm</caption>
+                  <caption>S&amp;amp;uuml;ndmuse vorm</caption>
             </CAL_REG_FORM>
             <CAL_REG_FORM_CONF>
                   <value>13</value>
                   <clid>CL_CALENDAR_REGISTRATION_FORM_CONF</clid>
-                  <caption>S&amp;uuml;ndmuse vormi konf</caption>
+                  <caption>S&amp;amp;uuml;ndmuse vormi konf</caption>
             </CAL_REG_FORM_CONF>
             <AFTER_SAVE_CONTROLLER>
                   <value>14</value>
                   <clid>CL_CFGCONTROLLER</clid>
-                  <caption>p&amp;auml;rast salvestamist kontroller</caption>
+                  <caption>p&amp;amp;auml;rast salvestamist kontroller</caption>
             </AFTER_SAVE_CONTROLLER>
       </reltypes>
 </properties>

@@ -128,7 +128,7 @@
 	<!-- END SUB: CAPTION_TOP -->
 	<!-- SUB: CAPTION_LEFT -->
 	{VAR:caption}
-	<!-- END SUB: CAPTION -->
+	<!-- END SUB: CAPTION_LEFT -->
 	{VAR:element}</div>
 <!-- END SUB: GRIDITEM -->
 
