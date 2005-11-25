@@ -90,6 +90,9 @@ class doc_display extends aw_template
 			"NOT_LAST_IN_LIST" => $nll
 		));
 
+		$this->vars(array(
+			"logged" => (aw_global_get("uid") != "" ? $this->parse("logged") : ""),
+		));
 
 		$ps = "";
 		if (( ($doc->prop("show_print")) && (!$_GET["print"]) && $arr["leadonly"] != 1))
