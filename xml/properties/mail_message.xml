@@ -31,7 +31,8 @@
             <name>mfrom</name>
             <group>general</group>
             <table>messages</table>
-            <type>select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAIL_ADDRESS</reltype>
             <field>mfrom</field>
             <caption>Kellelt</caption>
       </property>
@@ -237,6 +238,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Manus</caption>
             </ATTACHMENT>
+            <MAIL_ADDRESS>
+                  <value>2</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>Meiliaadress</caption>
+            </MAIL_ADDRESS>
       </reltypes>
       <forminfo>
             <showmsg>

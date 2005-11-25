@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.19 2005/11/25 08:55:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.20 2005/11/25 10:43:21 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -16,7 +16,7 @@
 	@property mfrom_name type=hidden table=objects field=meta method=serialize
 	@caption Kellelt nimi
 	
-	@property mfrom type=select 
+	@property mfrom type=relpicker reltype=RELTYPE_MAIL_ADDRESS
 	@caption Kellelt
 	
 	@property mto type=textbox size=80
@@ -89,6 +89,9 @@
 
 	@reltype ATTACHMENT value=1 clid=CL_FILE
 	@caption Manus
+
+	@reltype MAIL_ADDRESS value=2 clid=CL_ML_MEMBER
+	@caption Meiliaadress
 
 */
 
@@ -247,8 +250,14 @@ class mail_message extends class_base
 
 		if ($msgobj->prop("html_mail") == 1)
 		{
+			$from = $msgobj->prop("mfrom");
+			if(is_oid($from) && $this->can("view", $from))
+			{
+				$adr = obj($from);
+				$address = $adr->prop("mail");
+			}
 			$this->awm->create_message(array(
-				"froma" => $msgobj->prop("mfrom"),
+				"froma" => $address,
 				"subject" => $msgobj->name(),
 				"to" => $msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
@@ -261,8 +270,14 @@ class mail_message extends class_base
 		}
 		else
 		{
+			$from = $msgobj->prop("mfrom");
+			if(is_oid($from) && $this->can("view", $from))
+			{
+				$adr = obj($from);
+				$address = $adr->prop("mail");
+			}
 			$this->awm->create_message(array(
-				"froma" => $msgobj->prop("mfrom"),
+				"froma" => $address,
 				"subject" => $msgobj->name(),
 				"to" => $msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
@@ -498,9 +513,14 @@ class mail_message extends class_base
 		}
 		
 		$awm = get_instance("protocols/mail/aw_mail");
-
+		$from = $row["mfrom"];
+		if(is_oid($row["mfrom"]) && $this->can("view", $row["mfrom"]))
+		{
+			$adr = obj($row["mfrom"]);
+			$address = $adr->prop("mail");
+		}
 		$awm->create_message(array(
-			"froma" => $row["mfrom"],
+			"froma" => $address,
 			"subject" => $row["name"],
 			"to" => $args["to"],
 			"body" => $message,
@@ -658,9 +678,13 @@ class mail_message extends class_base
 		$this->db_query($q);
 		$row = $this->db_next();
 		$awm = get_instance("protocols/mail/aw_mail");
-
+		if(is_oid($row["mfrom"]) && $this->can("view", $row["mfrom"]))
+		{
+			$adr = obj($row["mfrom"]);
+			$address = $adr->prop("mail");
+		}
 		$awm->create_message(array(
-			"froma" => $row["mfrom"],
+			"froma" => $address,
 			"subject" => $row["name"],
 			"to" => $row["mto"],
 			"body" => $row["message"],
