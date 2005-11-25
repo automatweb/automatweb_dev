@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.23 2005/11/16 13:01:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.24 2005/11/25 12:27:14 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -21,15 +21,6 @@
 	@property organisation_link type=text
 	@caption Organisatsioon
 
-
-	groupinfo general_info caption="&Uuml;ldandmed" parent=organisation_general_information
-	default group=general_info
-
-
-	groupinfo design caption="Kujundus" parent=organisation_general_information
-	default group=design
-
-
 @groupinfo publications caption="V&auml;ljaanded"
 @default group=publications
 
@@ -44,6 +35,9 @@
 
 		@property publications_homepage type=relpicker reltype=RELTYPE_PUBLICATION_HOMEPAGE field=meta method=serialize
 		@caption V&auml;ljaande koduleht
+
+		@property ordering_terms type=relpicker reltype=RELTYPE_ORDERING_TERMS field=meta method=serialize
+		@caption Tellimistingimused
 
 		@property order_composition_information type=textarea field=meta method=serialize
 		@caption Tellimuse vormistamise informatsioon
@@ -177,6 +171,8 @@
 @reltype PUBLICATION_HOMEPAGE value=15 clid=CL_EXTLINK
 @caption V&auml;ljaandja koduleht
 
+@reltype ORDERING_TERMS value=16 clid=CL_DOCUMENT
+@caption Tellimistingimused
 */
 
 class expp_journal_management extends class_base
@@ -228,7 +224,7 @@ class expp_journal_management extends class_base
 						$new_document = new object();
 						$new_document->set_class_id(CL_DOCUMENT);
 						$new_document->set_parent($arr['obj_inst']->id());
-						$new_document->set_name("default");
+						$new_document->set_name($arr['obj_inst']->name()." kujundus");
 						$new_document->save();
 						$arr['obj_inst']->connect(array(
 							"to" => $new_document,

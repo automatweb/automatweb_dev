@@ -54,6 +54,16 @@
             <caption>V&amp;amp;auml;ljaande koduleht</caption>
       </property>
       <property>
+            <name>ordering_terms</name>
+            <table>objects</table>
+            <group>publications_general_info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDERING_TERMS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tellimistingimused</caption>
+      </property>
+      <property>
             <name>order_composition_information</name>
             <table>objects</table>
             <group>publications_general_info</group>
@@ -442,6 +452,11 @@
                   <clid>CL_EXTLINK</clid>
                   <caption>V&amp;amp;auml;ljaandja koduleht</caption>
             </PUBLICATION_HOMEPAGE>
+            <ORDERING_TERMS>
+                  <value>16</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Tellimistingimused</caption>
+            </ORDERING_TERMS>
       </reltypes>
 </properties>
 
