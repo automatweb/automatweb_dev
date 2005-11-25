@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.67 2005/06/10 15:28:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.68 2005/11/25 12:33:18 dragut Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -122,7 +122,7 @@
 
 	
 	@reltype VIEWCONTROLLER value=5 clid=CL_CFG_VIEW_CONTROLLER
-	@caption N&auml;tamise kontroller
+	@caption N&auml;itamise kontroller
 	
 	@reltype OUTPUT value=4 clid=CL_CFGFORM
 	@caption Väljund
@@ -649,14 +649,12 @@ class cfgform extends class_base
 	function callback_pre_save($arr)
 	{
 		$obj_inst = &$arr["obj_inst"];
-
 		// if we are unzerializing the object, then we need to set the 
 		// subclass as well.
 		if (isset($arr["request"]["subclass"]))
 		{
 			$obj_inst->set_prop("subclass",$arr["request"]["subclass"]);
 		};
-
 		if (isset($this->cfg_proplist) && is_array($this->cfg_proplist))
 		{
 			$tmp = array();
