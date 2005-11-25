@@ -255,7 +255,7 @@
             <method>serialize</method>
             <year_from>1930</year_from>
             <default>-1</default>
-            <caption>Kuup&amp;auml;ev 1</caption>
+            <caption>Kuup&amp;amp;auml;ev 1</caption>
       </property>
       <property>
             <name>udef_date2</name>
@@ -266,7 +266,7 @@
             <method>serialize</method>
             <year_from>1930</year_from>
             <default>-1</default>
-            <caption>Kuup&amp;auml;ev 2</caption>
+            <caption>Kuup&amp;amp;auml;ev 2</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST_MEMBER</syslog_type>

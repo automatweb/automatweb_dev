@@ -44,7 +44,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <field>s_class_id</field>
-            <caption>Objektit&amp;uuml;&amp;uuml;p</caption>
+            <caption>Objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>s_oid</name>

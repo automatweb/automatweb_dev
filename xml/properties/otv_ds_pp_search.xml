@@ -29,7 +29,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;Auml;ra n&amp;auml;ita otsi nuppu</caption>
+            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita otsi nuppu</caption>
       </property>
       <property>
             <name>no_search_form</name>
@@ -39,7 +39,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;Auml;ra n&amp;auml;ita otsingu vormi (otsing ainult urli kaudu)</caption>
+            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita otsingu vormi (otsing ainult urli kaudu)</caption>
       </property>
       <property>
             <name>stbl_t</name>

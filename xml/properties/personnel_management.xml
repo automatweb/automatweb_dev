@@ -168,7 +168,7 @@
             <size>3</size>
             <store>no</store>
             <field>max_active_cv</field>
-            <caption>CV maksimaalselt aktiivne(päevades)</caption>
+            <caption>CV maksimaalselt aktiivne(p&amp;auml;evades)</caption>
       </property>
       <property>
             <name>max_active_cv_def</name>
@@ -178,7 +178,7 @@
             <size>3</size>
             <store>no</store>
             <field>max_active_cv_def</field>
-            <caption>CV maksimaalselt aktiivne(päevades)</caption>
+            <caption>CV maksimaalselt aktiivne(p&amp;auml;evades)</caption>
       </property>
       <property>
             <name>max_active_job</name>
@@ -188,7 +188,7 @@
             <size>3</size>
             <store>no</store>
             <field>max_active_job</field>
-            <caption>Tööpakkumine maksimaalselt aktiivne(päevades) </caption>
+            <caption>T&amp;ouml;&amp;ouml;pakkumine maksimaalselt aktiivne(p&amp;auml;evades) </caption>
       </property>
       <property>
             <name>education_types</name>
@@ -216,7 +216,7 @@
             <type>select</type>
             <store>no</store>
             <field>additional_edu</field>
-            <caption>Täienduskoolituse vorm</caption>
+            <caption>T&amp;auml;ienduskoolituse vorm</caption>
       </property>
       <property>
             <name>orgs</name>
@@ -256,7 +256,7 @@
             <method>serialize</method>
             <field>meta</field>
             <reltype>RELTYPE_MENU</reltype>
-            <caption>Tööpakkumiste kaust</caption>
+            <caption>T&amp;ouml;&amp;ouml;pakkumiste kaust</caption>
       </property>
       <property>
             <name>tegevusvaldkonnad</name>
@@ -276,7 +276,7 @@
             <reltype>RELTYPE_JOIN_OBJ</reltype>
             <method>serialize</method>
             <field>meta</field>
-            <caption>T&amp;ouml;&amp;ouml;taja liitumisvorm</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;taja liitumisvorm</caption>
       </property>
       <property>
             <name>join_obj_offerer</name>
@@ -286,7 +286,7 @@
             <reltype>RELTYPE_JOIN_OBJ</reltype>
             <method>serialize</method>
             <field>meta</field>
-            <caption>T&amp;ouml;&amp;ouml;pakkuja liitumisvorm</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkuja liitumisvorm</caption>
       </property>
       <property>
             <name>locations</name>

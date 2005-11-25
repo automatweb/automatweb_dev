@@ -26,7 +26,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>SSL &amp;Uuml;hendus</caption>
+            <caption>SSL &amp;amp;Uuml;hendus</caption>
       </property>
       <property>
             <name>ad_domain</name>
@@ -90,7 +90,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_GROUP</reltype>
-            <caption>Grupp, kuhu pannakse kasutajad, keda kohalikus s&amp;uuml;steemis pole</caption>
+            <caption>Grupp, kuhu pannakse kasutajad, keda kohalikus s&amp;amp;uuml;steemis pole</caption>
       </property>
       <property>
             <name>auto_create_user</name>
@@ -100,7 +100,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas lastakse sisse logida kasutajatel, keda kohalikus s&amp;uuml;steemis pole</caption>
+            <caption>Kas lastakse sisse logida kasutajatel, keda kohalikus s&amp;amp;uuml;steemis pole</caption>
       </property>
       <property>
             <name>break_chain</name>
@@ -120,7 +120,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;Auml;ra salvesta AW'sse kasutaja parooli</caption>
+            <caption>&amp;amp;Auml;ra salvesta AW'sse kasutaja parooli</caption>
       </property>
       <classinfo>
             <syslog_type>ST_AUTH_SERVER_LDAP</syslog_type>

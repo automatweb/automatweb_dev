@@ -47,7 +47,7 @@
                   <num_2>objsearch</num_2>
             </group>
             <type>select</type>
-            <caption>Tüüp</caption>
+            <caption>T&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>s_oid</name>

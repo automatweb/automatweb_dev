@@ -56,7 +56,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_PARENT</reltype>
-            <caption>&amp;Uuml;lemtulp</caption>
+            <caption>&amp;amp;Uuml;lemtulp</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TABLE_COLUMN</syslog_type>
@@ -66,7 +66,7 @@
             <PARENT>
                   <value>1</value>
                   <clid>CL_PROPERTY_TABLE_COLUMN</clid>
-                  <caption>&amp;uuml;lemtulp</caption>
+                  <caption>&amp;amp;uuml;lemtulp</caption>
             </PARENT>
       </reltypes>
 </properties>

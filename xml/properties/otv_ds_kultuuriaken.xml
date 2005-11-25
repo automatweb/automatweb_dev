@@ -8,8 +8,8 @@
             <reltype>RELTYPE_EVENT_FORM</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>S&amp;uuml;ndmuse vorm</caption>
-            <comment>Kultuuriakna s&amp;uuml;ndmuse lisamise/muutmise vorm</comment>
+            <caption>S&amp;amp;uuml;ndmuse vorm</caption>
+            <comment>Kultuuriakna s&amp;amp;uuml;ndmuse lisamise/muutmise vorm</comment>
       </property>
       <property>
             <name>xml_file_url</name>
@@ -20,7 +20,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>XML faili url</caption>
-            <comment>Veebiaadress, kust XML v&amp;auml;ljundi saab</comment>
+            <comment>Veebiaadress, kust XML v&amp;amp;auml;ljundi saab</comment>
       </property>
       <property>
             <name>last_import_text</name>
@@ -39,8 +39,8 @@
             <type>text</type>
             <store>no</store>
             <field>next_import_text</field>
-            <caption>J&amp;auml;rgmine automaatne import</caption>
-            <comment>J&amp;auml;rgmise automaatse impordi toimumise aeg</comment>
+            <caption>J&amp;amp;auml;rgmine automaatne import</caption>
+            <comment>J&amp;amp;auml;rgmise automaatse impordi toimumise aeg</comment>
       </property>
       <property>
             <name>import_events_all</name>
@@ -50,7 +50,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <mehtod>serialize</mehtod>
-            <caption>Impordi k&amp;otilde;iik s&amp;uuml;ndmused</caption>
+            <caption>Impordi k&amp;amp;otilde;iik s&amp;amp;uuml;ndmused</caption>
       </property>
       <property>
             <name>import_events</name>
@@ -59,8 +59,8 @@
             <type>text</type>
             <store>no</store>
             <field>import_events</field>
-            <caption>Impordi s&amp;uuml;ndmused</caption>
-            <comment>Link s&amp;uuml;ndmuste importimiseks</comment>
+            <caption>Impordi s&amp;amp;uuml;ndmused</caption>
+            <comment>Link s&amp;amp;uuml;ndmuste importimiseks</comment>
       </property>
       <property>
             <name>config_table</name>
@@ -98,7 +98,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kasutaja</caption>
-            <comment>Kasutajanimi, kelle &amp;otilde;igustes automaatne import teostatakse</comment>
+            <comment>Kasutajanimi, kelle &amp;amp;otilde;igustes automaatne import teostatakse</comment>
       </property>
       <property>
             <name>auto_import_passwd</name>
@@ -108,7 +108,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Parool</caption>
-            <comment>Kasutaja parool, kelle &amp;otilde;igustes automaatne import teostatakse</comment>
+            <comment>Kasutaja parool, kelle &amp;amp;otilde;igustes automaatne import teostatakse</comment>
       </property>
       <classinfo>
             <syslog_type>ST_OTV_DS_KULTUURIAKEN</syslog_type>
@@ -131,7 +131,7 @@
             <EVENT_FORM>
                   <value>1</value>
                   <clid>CL_CFGFORM</clid>
-                  <caption>S&amp;uuml;ndmuse vorm</caption>
+                  <caption>S&amp;amp;uuml;ndmuse vorm</caption>
             </EVENT_FORM>
             <PARENT>
                   <value>2</value>

@@ -14,7 +14,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>Lõpeb</caption>
+            <caption>L&amp;otilde;peb</caption>
       </property>
       <property>
             <name>info_on_object</name>
@@ -42,9 +42,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>task_toolbar</field>
-            <caption>
-            <![CDATA["Toolbar"]]>
-            </caption>
+            <caption>&amp;quot;Toolbar&amp;quot;</caption>
       </property>
       <property>
             <name>participant</name>

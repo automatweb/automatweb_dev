@@ -7,7 +7,7 @@
             <type>text</type>
             <datatype>int</datatype>
             <field>account_type</field>
-            <caption>Konto tüüp</caption>
+            <caption>Konto t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>account_balance</name>
@@ -25,7 +25,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>account_transactions_incoming</field>
-            <caption>Ülekanded</caption>
+            <caption>&amp;Uuml;lekanded</caption>
       </property>
       <property>
             <name>account_balance_outgoing</name>
@@ -43,7 +43,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>account_transactions_outgoing</field>
-            <caption>Ülekanded</caption>
+            <caption>&amp;Uuml;lekanded</caption>
       </property>
       <property>
             <name>other_account_balance_incoming</name>
@@ -62,7 +62,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>other_account_transactions_incoming</field>
-            <caption>Ülekanded</caption>
+            <caption>&amp;Uuml;lekanded</caption>
       </property>
       <property>
             <name>other_account_balance_outgoing</name>
@@ -81,7 +81,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>other_account_transactions_outgoing</field>
-            <caption>Ülekanded</caption>
+            <caption>&amp;Uuml;lekanded</caption>
       </property>
       <classinfo>
             <syslog_type>ST_ACCOUNT</syslog_type>
@@ -128,7 +128,7 @@
             <TAX_CHAIN>
                   <value>1</value>
                   <clid>CL_TAX_CHAIN</clid>
-                  <caption>Maksu pärg</caption>
+                  <caption>Maksu p&amp;auml;rg</caption>
             </TAX_CHAIN>
       </reltypes>
 </properties>

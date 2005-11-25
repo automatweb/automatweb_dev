@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_EVENT</reltype>
-            <caption>S&amp;uuml;ndmus millele registreeruda</caption>
+            <caption>S&amp;amp;uuml;ndmus millele registreeruda</caption>
       </property>
       <property>
             <name>form</name>
@@ -47,7 +47,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Kuva dokumendis s&amp;uuml;ndmuse sisu</caption>
+            <caption>Kuva dokumendis s&amp;amp;uuml;ndmuse sisu</caption>
       </property>
       <property>
             <name>link_caption</name>
@@ -65,7 +65,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kuhu suunata peale t&amp;auml;itmist</caption>
+            <caption>Kuhu suunata peale t&amp;amp;auml;itmist</caption>
       </property>
       <property>
             <name>entry_check</name>
@@ -164,7 +164,7 @@
                         <num_1>CL_TASK</num_1>
                         <num_2>CL_CRM_CALL</num_2>
                   </clid>
-                  <caption>S&amp;uuml;ndmus</caption>
+                  <caption>S&amp;amp;uuml;ndmus</caption>
             </EVENT>
             <REG_ENTRY>
                   <value>3</value>
@@ -179,7 +179,7 @@
             <WEBFORM>
                   <value>5</value>
                   <clid>CL_WEBFORM</clid>
-                  <caption>Sündmuse vorm</caption>
+                  <caption>S&amp;uuml;ndmuse vorm</caption>
             </WEBFORM>
       </reltypes>
 </properties>

@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>K&amp;otilde;ik serverid</caption>
+            <caption>K&amp;amp;otilde;ik serverid</caption>
       </property>
       <property>
             <name>servers</name>
@@ -21,7 +21,7 @@
             <automatic>1</automatic>
             <multiple>1</multiple>
             <size>5</size>
-            <caption>Serverid, millest baase n&amp;auml;idatakse</caption>
+            <caption>Serverid, millest baase n&amp;amp;auml;idatakse</caption>
       </property>
       <property>
             <name>all_databases</name>
@@ -31,7 +31,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>K&amp;otilde;ik andmebaasid</caption>
+            <caption>K&amp;amp;otilde;ik andmebaasid</caption>
       </property>
       <property>
             <name>databases</name>
@@ -44,7 +44,7 @@
             <automatic>1</automatic>
             <multiple>1</multiple>
             <size>10</size>
-            <caption>Andmebaasid, mida n&amp;auml;idatakse</caption>
+            <caption>Andmebaasid, mida n&amp;amp;auml;idatakse</caption>
       </property>
       <classinfo>
             <syslog_type>ST_DB_SERVER_EXPLORER_CONF</syslog_type>

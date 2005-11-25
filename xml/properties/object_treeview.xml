@@ -27,7 +27,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita katalooge</caption>
+            <caption>N&amp;amp;auml;ita katalooge</caption>
       </property>
       <property>
             <name>show_add</name>
@@ -37,7 +37,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita toolbari</caption>
+            <caption>N&amp;amp;auml;ita toolbari</caption>
       </property>
       <property>
             <name>tree_type</name>
@@ -47,7 +47,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <default>1</default>
-            <caption>Puu n&amp;auml;itamise meetod</caption>
+            <caption>Puu n&amp;amp;auml;itamise meetod</caption>
       </property>
       <property>
             <name>groupfolder_acl</name>
@@ -57,7 +57,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;Otilde;igused piiratud grupi kataloogide j&amp;auml;rgi</caption>
+            <caption>&amp;amp;Otilde;igused piiratud grupi kataloogide j&amp;amp;auml;rgi</caption>
       </property>
       <property>
             <name>show_notact</name>
@@ -67,7 +67,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita mitteaktiivseid objekte</caption>
+            <caption>N&amp;amp;auml;ita mitteaktiivseid objekte</caption>
       </property>
       <property>
             <name>sort_by</name>
@@ -116,7 +116,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Pealkirja taustav&amp;auml;rv</caption>
+            <caption>Pealkirja taustav&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>even_bgcolor</name>
@@ -125,7 +125,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Paaris rea taustav&amp;auml;rv</caption>
+            <caption>Paaris rea taustav&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>odd_bgcolor</name>
@@ -134,7 +134,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Paaritu rea taustav&amp;auml;rv</caption>
+            <caption>Paaritu rea taustav&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>header_css</name>
@@ -196,7 +196,7 @@
             <ADD_TYPE>
                   <value>2</value>
                   <clid>CL_OBJECT_TYPE</clid>
-                  <caption>lisatav objektit&amp;uuml;&amp;uuml;p</caption>
+                  <caption>lisatav objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </ADD_TYPE>
             <ALL_ACSS_GRP>
                   <value>3</value>

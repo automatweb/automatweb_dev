@@ -40,7 +40,7 @@
             <type>textbox</type>
             <size>4</size>
             <maxlength>4</maxlength>
-            <caption>Kõrgus</caption>
+            <caption>K&amp;otilde;rgus</caption>
       </property>
       <property>
             <name>scrollbars</name>
@@ -60,7 +60,7 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Ainult &amp;uuml;he korra sessiooni jooksul</caption>
+            <caption>Ainult &amp;amp;uuml;he korra sessiooni jooksul</caption>
       </property>
       <property>
             <name>menus</name>
@@ -70,7 +70,7 @@
             <group>general</group>
             <type>text</type>
             <callback>callback_get_menus</callback>
-            <caption>Menüüd</caption>
+            <caption>Men&amp;uuml;&amp;uuml;d</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>

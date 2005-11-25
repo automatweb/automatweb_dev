@@ -6,7 +6,7 @@
             <group>general</group>
             <type>select</type>
             <field>subclass</field>
-            <caption>Objektitüüp</caption>
+            <caption>Objektit&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>use_cfgform</name>

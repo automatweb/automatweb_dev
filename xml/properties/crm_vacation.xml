@@ -14,7 +14,7 @@
             <table>planner</table>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>Lõpeb</caption>
+            <caption>L&amp;otilde;peb</caption>
       </property>
       <property>
             <name>person_ref</name>
@@ -31,7 +31,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kestvus päevades</caption>
+            <caption>Kestvus p&amp;auml;evades</caption>
       </property>
       <property>
             <name>type</name>
@@ -42,7 +42,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_VACATION_TYPE</reltype>
             <automatic>1</automatic>
-            <caption>Puhkuse tüüp</caption>
+            <caption>Puhkuse t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_VACATION</syslog_type>
@@ -64,7 +64,7 @@
             <VACATION_TYPE>
                   <value>1</value>
                   <clid>CL_META</clid>
-                  <caption>Puhkuse tüüp</caption>
+                  <caption>Puhkuse t&amp;uuml;&amp;uuml;p</caption>
             </VACATION_TYPE>
       </reltypes>
 </properties>

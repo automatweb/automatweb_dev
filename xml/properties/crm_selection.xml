@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Näitamise template</caption>
+            <caption>N&amp;auml;itamise template</caption>
       </property>
       <property>
             <name>forms</name>

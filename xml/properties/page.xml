@@ -17,7 +17,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Tausta värv</caption>
+            <caption>Tausta v&amp;auml;rv</caption>
       </property>
       <property>
             <name>margin</name>

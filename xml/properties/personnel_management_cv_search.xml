@@ -40,7 +40,7 @@
             <multiple>1</multiple>
             <mode>checkboxes</mode>
             <field>s_cv_liik</field>
-            <caption>T&amp;ouml;&amp;ouml; liik</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; liik</caption>
       </property>
       <property>
             <name>s_cv_asukoht</name>
@@ -64,7 +64,7 @@
             <orient>vertical</orient>
             <mode>checkboxes</mode>
             <field>s_cv_koormus</field>
-            <caption>T&amp;ouml;&amp;ouml; koormus</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; koormus</caption>
       </property>
       <property>
             <name>cv_search_button</name>

@@ -152,7 +152,7 @@
             <method>serialize</method>
             <group>grp_search_proj</group>
             <type>datetime_select</type>
-            <caption>T&amp;auml;htaeg</caption>
+            <caption>T&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>sp_customer</name>
@@ -359,7 +359,7 @@
             <group>grp_schedule</group>
             <type>date_select</type>
             <store>no</store>
-            <caption>N&amp;auml;idatava perioodi algus</caption>
+            <caption>N&amp;amp;auml;idatava perioodi algus</caption>
       </property>
       <property>
             <name>chart_submit</name>
@@ -369,7 +369,7 @@
             <group>grp_schedule</group>
             <type>submit</type>
             <store>no</store>
-            <caption>N&amp;auml;ita</caption>
+            <caption>N&amp;amp;auml;ita</caption>
       </property>
       <property>
             <name>user_list_toolbar</name>
@@ -488,7 +488,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MRP_FOLDER</reltype>
             <clid>CL_MENU</clid>
-            <caption>Tööde kaust</caption>
+            <caption>T&amp;ouml;&amp;ouml;de kaust</caption>
       </property>
       <property>
             <name>workspace_configmanager</name>
@@ -518,7 +518,7 @@
             <method>serialize</method>
             <group>grp_settings_def</group>
             <type>textbox</type>
-            <caption>Operaatori vaates t&amp;ouml;id lehel</caption>
+            <caption>Operaatori vaates t&amp;amp;ouml;id lehel</caption>
       </property>
       <property>
             <name>max_subcontractor_timediff</name>
@@ -528,7 +528,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>1</default>
-            <comment>Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettejõudmise piires.</comment>
+            <comment>Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettej&amp;otilde;udmise piires.</comment>
             <caption>Allhanke suurim ajanihe (h)</caption>
       </property>
       <property>
@@ -550,7 +550,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.5</default>
-            <caption>Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise suurenemise suunas</caption>
+            <caption>&amp;Uuml;le t&amp;auml;htaja olevate projektide t&amp;auml;htsuse t&amp;otilde;us t&amp;auml;htaja &amp;uuml;letamise suurenemise suunas</caption>
       </property>
       <property>
             <name>parameter_due_date_overdue_intercept</name>
@@ -560,7 +560,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>10</default>
-            <caption>Just tähtaja ületanud projekti tähtsus</caption>
+            <caption>Just t&amp;auml;htaja &amp;uuml;letanud projekti t&amp;auml;htsus</caption>
       </property>
       <property>
             <name>parameter_due_date_decay</name>
@@ -570,7 +570,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.05</default>
-            <caption>Projekti tähtsuse langus tähtaja kaugenemise suunas</caption>
+            <caption>Projekti t&amp;auml;htsuse langus t&amp;auml;htaja kaugenemise suunas</caption>
       </property>
       <property>
             <name>parameter_due_date_intercept</name>
@@ -580,7 +580,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.1</default>
-            <caption>Planeerimise hetkega võrdse tähtajaga projekti tähtsus</caption>
+            <caption>Planeerimise hetkega v&amp;otilde;rdse t&amp;auml;htajaga projekti t&amp;auml;htsus</caption>
       </property>
       <property>
             <name>parameter_priority_slope</name>
@@ -590,7 +590,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>0.8</default>
-            <caption>Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga</caption>
+            <caption>Kliendi ja projektiprioriteedi suhtelise v&amp;auml;&amp;auml;rtuse t&amp;otilde;us vrd. t&amp;auml;htajaga</caption>
       </property>
       <property>
             <name>separator</name>
@@ -620,7 +620,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>300</default>
-            <caption>Ajavahemik planeerimise alguse hetkest milles algavaid t&amp;ouml;id ei planeerita (s)</caption>
+            <caption>Ajavahemik planeerimise alguse hetkest milles algavaid t&amp;amp;ouml;id ei planeerita (s)</caption>
       </property>
       <property>
             <name>parameter_schedule_start</name>
@@ -640,8 +640,8 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>1</default>
-            <comment>Positiivne reaalarv või 0 kui algusaega ei taheta parima valimisel arvestada. Kasutatakse mitut paralleelset tööd võimaldavate ressursside juures tööle kalendrist parima koha valikul. Koha kaal arvutatakse valemiga: (AlgusajaKaal X ParalleelharuVabaAjaAlgus + PikkuseKaal X ParalleelharuVabaAjaPikkus)/2</comment>
-            <caption>Töö algusaja kaal</caption>
+            <comment>Positiivne reaalarv v&amp;otilde;i 0 kui algusaega ei taheta parima valimisel arvestada. Kasutatakse mitut paralleelset t&amp;ouml;&amp;ouml;d v&amp;otilde;imaldavate ressursside juures t&amp;ouml;&amp;ouml;le kalendrist parima koha valikul. Koha kaal arvutatakse valemiga: (AlgusajaKaal X ParalleelharuVabaAjaAlgus + PikkuseKaal X ParalleelharuVabaAjaPikkus)/2</comment>
+            <caption>T&amp;ouml;&amp;ouml; algusaja kaal</caption>
       </property>
       <property>
             <name>parameter_length_priority</name>
@@ -651,8 +651,8 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>1</default>
-            <comment>Vt. töö algusaja kaalu selgitust.</comment>
-            <caption>Töö pikkuse kaal</caption>
+            <comment>Vt. t&amp;ouml;&amp;ouml; algusaja kaalu selgitust.</comment>
+            <caption>T&amp;ouml;&amp;ouml; pikkuse kaal</caption>
       </property>
       <property>
             <name>parameter_timescale</name>
@@ -670,7 +670,7 @@
             <method>serialize</method>
             <group>grp_settings_def</group>
             <type>select</type>
-            <caption>Skaala ajaühik</caption>
+            <caption>Skaala aja&amp;uuml;hik</caption>
       </property>
       <property>
             <name>printer_legend</name>
@@ -846,7 +846,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>T&amp;ouml;&amp;ouml; andmed</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; andmed</caption>
       </property>
       <property>
             <name>pj_starttime</name>
@@ -897,7 +897,7 @@
             </group>
             <type>datetime_select</type>
             <store>no</store>
-            <caption>Arvatav jätkamisaeg</caption>
+            <caption>Arvatav j&amp;auml;tkamisaeg</caption>
       </property>
       <property>
             <name>pj_remaining_length</name>
@@ -914,7 +914,7 @@
             </group>
             <type>textbox</type>
             <store>no</store>
-            <caption>Arvatav lõpetamiseks kuluv aeg (h)</caption>
+            <caption>Arvatav l&amp;otilde;petamiseks kuluv aeg (h)</caption>
       </property>
       <property>
             <name>pj_submit</name>
@@ -968,7 +968,7 @@
             <type>text</type>
             <store>no</store>
             <parent>resource_hbox</parent>
-            <caption>T&amp;ouml;&amp;ouml; kommentaar</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; kommentaar</caption>
       </property>
       <property>
             <name>pj_state</name>
@@ -1071,7 +1071,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Sisu v&amp;auml;rvid</caption>
+            <caption>Sisu v&amp;amp;auml;rvid</caption>
       </property>
       <property>
             <name>pjp_sisu_varvid_notes</name>
@@ -1088,7 +1088,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Sisu v&amp;auml;rvid Notes</caption>
+            <caption>Sisu v&amp;amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>pjp_sisu_lakk_muu</name>
@@ -1122,7 +1122,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Kaane v&amp;auml;rvid</caption>
+            <caption>Kaane v&amp;amp;auml;rvid</caption>
       </property>
       <property>
             <name>pjp_kaane_varvid_notes</name>
@@ -1139,7 +1139,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Kaane v&amp;auml;rvid Notes</caption>
+            <caption>Kaane v&amp;amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>pjp_kaane_lakk_muu</name>
@@ -1207,7 +1207,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Tr&amp;uuml;kiarv</caption>
+            <caption>Tr&amp;amp;uuml;kiarv</caption>
       </property>
       <property>
             <name>pjp_trykise_ehitus</name>
@@ -1224,7 +1224,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Tr&amp;uuml;kise ehitus</caption>
+            <caption>Tr&amp;amp;uuml;kise ehitus</caption>
       </property>
       <property>
             <name>pjp_kromaliin</name>
@@ -1275,7 +1275,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>N&amp;auml;idis</caption>
+            <caption>N&amp;amp;auml;idis</caption>
       </property>
       <property>
             <name>pjp_title_case_wf</name>
@@ -1293,7 +1293,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>Projekti t&amp;ouml;&amp;ouml;voog</caption>
+            <caption>Projekti t&amp;amp;ouml;&amp;amp;ouml;voog</caption>
       </property>
       <property>
             <name>pjp_case_wf</name>

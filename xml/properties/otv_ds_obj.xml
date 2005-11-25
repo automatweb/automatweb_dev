@@ -8,7 +8,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>N&amp;auml;ita mitteaktiivseid objekte</caption>
+            <caption>N&amp;amp;auml;ita mitteaktiivseid objekte</caption>
       </property>
       <property>
             <name>show_notact_folder</name>
@@ -18,7 +18,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>N&amp;auml;ita mitteaktiivseid katalooge</caption>
+            <caption>N&amp;amp;auml;ita mitteaktiivseid katalooge</caption>
       </property>
       <property>
             <name>show_notact_noclick</name>
@@ -48,7 +48,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Objektid k&amp;otilde;ikidest saitidest</caption>
+            <caption>Objektid k&amp;amp;otilde;ikidest saitidest</caption>
       </property>
       <property>
             <name>sort_by</name>
@@ -77,7 +77,7 @@
             <reltype>RELTYPE_SHOW_CFGFORM</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Objekti vaatamine l&amp;auml;bi seadete vormi</caption>
+            <caption>Objekti vaatamine l&amp;amp;auml;bi seadete vormi</caption>
       </property>
       <property>
             <name>folders</name>
@@ -99,7 +99,7 @@
             <automatic>1</automatic>
             <reltype>RELTYPE_SHOW_TYPE</reltype>
             <field>view_ots</field>
-            <caption>N&amp;auml;idatavad objektit&amp;uuml;&amp;uuml;bid</caption>
+            <caption>N&amp;amp;auml;idatavad objektit&amp;amp;uuml;&amp;amp;uuml;bid</caption>
       </property>
       <property>
             <name>add_ots</name>
@@ -110,7 +110,7 @@
             <automatic>1</automatic>
             <reltype>RELTYPE_ADD_TYPE</reltype>
             <field>add_ots</field>
-            <caption>Lisatavad objektit&amp;uuml;&amp;uuml;bid</caption>
+            <caption>Lisatavad objektit&amp;amp;uuml;&amp;amp;uuml;bid</caption>
       </property>
       <classinfo>
             <syslog_type>ST_OTV_DS_OBJ</syslog_type>
@@ -135,17 +135,17 @@
             <ADD_TYPE>
                   <value>2</value>
                   <clid>CL_OBJECT_TYPE</clid>
-                  <caption>lisatav objektit&amp;uuml;&amp;uuml;p</caption>
+                  <caption>lisatav objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </ADD_TYPE>
             <SHOW_TYPE>
                   <value>3</value>
                   <clid>CL_OBJECT_TYPE</clid>
-                  <caption>n&amp;auml;idatav objektit&amp;uuml;&amp;uuml;p</caption>
+                  <caption>n&amp;amp;auml;idatav objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </SHOW_TYPE>
             <SHOW_CFGFORM>
                   <value>4</value>
                   <clid>CL_CFGFORM</clid>
-                  <caption>v&amp;auml;ljundi seadete vorm</caption>
+                  <caption>v&amp;amp;auml;ljundi seadete vorm</caption>
             </SHOW_CFGFORM>
             <META>
                   <value>6</value>

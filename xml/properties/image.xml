@@ -29,7 +29,7 @@
             <type>text</type>
             <store>no</store>
             <field>dimensions</field>
-            <caption>Mõõtmed</caption>
+            <caption>M&amp;otilde;&amp;otilde;tmed</caption>
       </property>
       <property>
             <name>comment</name>
@@ -91,7 +91,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>&amp;Auml;ra n&amp;auml;ita print-vaates</caption>
+            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita print-vaates</caption>
       </property>
       <property>
             <name>ord</name>
@@ -100,7 +100,7 @@
             <size>3</size>
             <table>objects</table>
             <field>jrk</field>
-            <caption>J&amp;auml;rjekord</caption>
+            <caption>J&amp;amp;auml;rjekord</caption>
       </property>
       <property>
             <name>file2</name>
@@ -138,7 +138,7 @@
             <method>serialize</method>
             <size>6</size>
             <store>no</store>
-            <caption>Uus k&amp;otilde;rgus</caption>
+            <caption>Uus k&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>do_resize</name>
@@ -155,7 +155,7 @@
             <type>text</type>
             <store>no</store>
             <field>dimensions_big</field>
-            <caption>Mõõtmed</caption>
+            <caption>M&amp;otilde;&amp;otilde;tmed</caption>
       </property>
       <property>
             <name>new_w_big</name>
@@ -175,7 +175,7 @@
             <method>serialize</method>
             <size>6</size>
             <store>no</store>
-            <caption>Uus k&amp;otilde;rgus (suur)</caption>
+            <caption>Uus k&amp;amp;otilde;rgus (suur)</caption>
       </property>
       <property>
             <name>resize_warn</name>

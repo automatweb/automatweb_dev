@@ -7,7 +7,7 @@
             <type>text</type>
             <store>no</store>
             <field>changes_desc</field>
-            <caption>Muudetavad &amp;otilde;igused</caption>
+            <caption>Muudetavad &amp;amp;otilde;igused</caption>
       </property>
       <property>
             <name>changes</name>
@@ -17,7 +17,7 @@
             <callback>get_changeables</callback>
             <store>no</store>
             <field>changes</field>
-            <caption>Muudetavad &amp;otilde;igused</caption>
+            <caption>Muudetavad &amp;amp;otilde;igused</caption>
       </property>
       <property>
             <name>acls</name>

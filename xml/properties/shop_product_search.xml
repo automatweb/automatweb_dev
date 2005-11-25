@@ -68,7 +68,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CONTROLLER</reltype>
-            <caption>Tulemuste andmete n&amp;auml;itamise kontroller</caption>
+            <caption>Tulemuste andmete n&amp;amp;auml;itamise kontroller</caption>
       </property>
       <property>
             <name>search_form</name>

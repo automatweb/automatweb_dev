@@ -89,7 +89,7 @@
             <group>general</group>
             <form>rate</form>
             <type>text</type>
-            <caption>Lisa sõber</caption>
+            <caption>Lisa s&amp;otilde;ber</caption>
       </property>
       <property>
             <name>add_ignored_link</name>

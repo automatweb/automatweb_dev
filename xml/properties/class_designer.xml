@@ -67,7 +67,7 @@
             <type>hidden</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Olemasoleva klassi p&amp;otilde;hjal</caption>
+            <caption>Olemasoleva klassi p&amp;amp;otilde;hjal</caption>
       </property>
       <property>
             <name>from_existing_class_file</name>
@@ -85,7 +85,7 @@
             <type>text</type>
             <field>class_id</field>
             <caption>CLID</caption>
-            <comment>Kui klass on registreeritud, siis näitab klassile määratud ID-d</comment>
+            <comment>Kui klass on registreeritud, siis n&amp;auml;itab klassile m&amp;auml;&amp;auml;ratud ID-d</comment>
       </property>
       <property>
             <name>object_name</name>
@@ -95,7 +95,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Objekti nime omadus</caption>
-            <comment>Siit valitud vormi väljast võetakse objektile nimi</comment>
+            <comment>Siit valitud vormi v&amp;auml;ljast v&amp;otilde;etakse objektile nimi</comment>
       </property>
       <property>
             <name>can_add</name>
@@ -105,7 +105,7 @@
             <ch_value>1</ch_value>
             <field>can_add</field>
             <caption>Saab lisada</caption>
-            <comment>Kui see märgistada, siis saab klassi lisada rohelise nupu menüü kaudu</comment>
+            <comment>Kui see m&amp;auml;rgistada, siis saab klassi lisada rohelise nupu men&amp;uuml;&amp;uuml; kaudu</comment>
       </property>
       <property>
             <name>class_folder</name>
@@ -113,8 +113,8 @@
             <group>settings</group>
             <type>select</type>
             <field>class_folder</field>
-            <caption>Asukoht lisamismenüüs</caption>
-            <comment>Läheb arvesse ainult siis, kui klassi 'saab lisada'</comment>
+            <caption>Asukoht lisamismen&amp;uuml;&amp;uuml;s</caption>
+            <comment>L&amp;auml;heb arvesse ainult siis, kui klassi 'saab lisada'</comment>
       </property>
       <property>
             <name>relationmgr</name>
@@ -147,7 +147,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Aktiivsust muuta ei saa</caption>
-            <comment>Kui see märgistada, siis ei saa klassi aktiivsust muuta, ta on alati aktiivne</comment>
+            <comment>Kui see m&amp;auml;rgistada, siis ei saa klassi aktiivsust muuta, ta on alati aktiivne</comment>
       </property>
       <property>
             <name>classdef</name>
@@ -225,7 +225,7 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Väliste seoste toolbar</caption>
+            <caption>V&amp;auml;liste seoste toolbar</caption>
       </property>
       <property>
             <name>planner_tree</name>
@@ -290,7 +290,7 @@
             <no_caption>1</no_caption>
             <parent>phbox2</parent>
             <store>no</store>
-            <caption>Väliste seoste tabel</caption>
+            <caption>V&amp;auml;liste seoste tabel</caption>
       </property>
       <property>
             <name>designer_toolbar</name>

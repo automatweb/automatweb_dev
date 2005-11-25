@@ -6,7 +6,7 @@
             <field>subclass</field>
             <group>general</group>
             <type>select</type>
-            <caption>Andmete tüüp</caption>
+            <caption>Andmete t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>type</name>
@@ -15,7 +15,7 @@
             <group>general</group>
             <method>serialize</method>
             <type>select</type>
-            <caption>Source tüüp</caption>
+            <caption>Source t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>fullpath</name>

@@ -66,7 +66,7 @@
             <table>mrp_case</table>
             <type>datetime_select</type>
             <field>due_date</field>
-            <caption>Valmimistähtaeg</caption>
+            <caption>Valmimist&amp;auml;htaeg</caption>
       </property>
       <property>
             <name>project_priority</name>
@@ -130,7 +130,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Prioriteedihinnang müügimehelt</caption>
+            <caption>Prioriteedihinnang m&amp;uuml;&amp;uuml;gimehelt</caption>
       </property>
       <property>
             <name>format</name>
@@ -166,7 +166,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Sisu v&amp;auml;rvid</caption>
+            <caption>Sisu v&amp;amp;auml;rvid</caption>
       </property>
       <property>
             <name>sisu_varvid_notes</name>
@@ -175,7 +175,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Sisu v&amp;auml;rvid Notes</caption>
+            <caption>Sisu v&amp;amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>sisu_lakk_muu</name>
@@ -193,7 +193,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kaane v&amp;auml;rvid</caption>
+            <caption>Kaane v&amp;amp;auml;rvid</caption>
       </property>
       <property>
             <name>kaane_varvid_notes</name>
@@ -202,7 +202,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kaane v&amp;auml;rvid Notes</caption>
+            <caption>Kaane v&amp;amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>kaane_lakk_muu</name>
@@ -238,7 +238,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Tr&amp;uuml;kiarv</caption>
+            <caption>Tr&amp;amp;uuml;kiarv</caption>
       </property>
       <property>
             <name>trykise_ehitus</name>
@@ -247,7 +247,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Tr&amp;uuml;kise ehitus</caption>
+            <caption>Tr&amp;amp;uuml;kise ehitus</caption>
       </property>
       <property>
             <name>kromaliin</name>
@@ -274,7 +274,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>N&amp;auml;idis</caption>
+            <caption>N&amp;amp;auml;idis</caption>
       </property>
       <property>
             <name>plaate</name>
@@ -310,7 +310,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>M&amp;auml;rkused</caption>
+            <caption>M&amp;amp;auml;rkused</caption>
       </property>
       <property>
             <name>allahindlus</name>
@@ -337,7 +337,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
-            <caption>M&amp;uuml;&amp;uuml;gi hind</caption>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi hind</caption>
       </property>
       <property>
             <name>user_comments</name>
@@ -346,7 +346,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>comments</type>
-            <caption>Kommentaarid juhtumi ja tööde kohta</caption>
+            <caption>Kommentaarid juhtumi ja t&amp;ouml;&amp;ouml;de kohta</caption>
       </property>
       <property>
             <name>resource_tree</name>
@@ -456,7 +456,7 @@
             <MRP_MANAGER>
                   <value>1</value>
                   <clid>CL_USER</clid>
-                  <caption>Müügimees/Projektijuht</caption>
+                  <caption>M&amp;uuml;&amp;uuml;gimees/Projektijuht</caption>
             </MRP_MANAGER>
             <MRP_CUSTOMER>
                   <value>2</value>
@@ -466,7 +466,7 @@
             <MRP_PROJECT_JOB>
                   <value>3</value>
                   <clid>CL_MRP_JOB</clid>
-                  <caption>Töö</caption>
+                  <caption>T&amp;ouml;&amp;ouml;</caption>
             </MRP_PROJECT_JOB>
             <MRP_USED_RESOURCE>
                   <value>4</value>

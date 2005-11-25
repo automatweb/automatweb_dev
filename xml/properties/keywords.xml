@@ -6,7 +6,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>keyword</field>
-            <caption>Märksõna</caption>
+            <caption>M&amp;auml;rks&amp;otilde;na</caption>
       </property>
       <classinfo>
             <syslog_type>ST_KEYWORDS</syslog_type>

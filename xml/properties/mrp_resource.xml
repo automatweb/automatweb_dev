@@ -32,7 +32,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Tööd</caption>
+            <caption>T&amp;ouml;&amp;ouml;d</caption>
       </property>
       <property>
             <name>job_list</name>
@@ -44,7 +44,7 @@
             <store>no</store>
             <editonly>1</editonly>
             <no_caption>1</no_caption>
-            <caption>Tööleht</caption>
+            <caption>T&amp;ouml;&amp;ouml;leht</caption>
       </property>
       <property>
             <name>out_of_service</name>
@@ -73,7 +73,7 @@
             <method>serialize</method>
             <group>grp_resource_settings</group>
             <type>select</type>
-            <caption>Tüüp</caption>
+            <caption>T&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>thread_data</name>
@@ -83,8 +83,8 @@
             <group>grp_resource_settings</group>
             <type>textbox</type>
             <default>1</default>
-            <comment>Positiivne täisarv</comment>
-            <caption>Samaaegseid töid enim</caption>
+            <comment>Positiivne t&amp;auml;isarv</comment>
+            <caption>Samaaegseid t&amp;ouml;id enim</caption>
       </property>
       <property>
             <name>default_pre_buffer</name>
@@ -102,7 +102,7 @@
             <method>serialize</method>
             <group>grp_resource_settings</group>
             <type>textbox</type>
-            <caption>Vaikimisi järelpuhveraeg (h)</caption>
+            <caption>Vaikimisi j&amp;auml;relpuhveraeg (h)</caption>
       </property>
       <property>
             <name>global_buffer</name>
@@ -112,7 +112,7 @@
             <group>grp_resource_settings</group>
             <type>textbox</type>
             <default>14400</default>
-            <caption>Päeva üldpuhver (h)</caption>
+            <caption>P&amp;auml;eva &amp;uuml;ldpuhver (h)</caption>
       </property>
       <property>
             <name>work_hrs_recur</name>
@@ -138,7 +138,7 @@
                   <num_4>length</num_4>
             </table_fields>
             <store>no</store>
-            <caption>T&amp;ouml;&amp;ouml;ajad</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;ajad</caption>
       </property>
       <property>
             <name>unavailable_recur</name>
@@ -180,7 +180,7 @@
             <group>grp_resource_unavailable_una</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Ei t&amp;ouml;&amp;ouml;ta n&amp;auml;dalavahetustel</caption>
+            <caption>Ei t&amp;amp;ouml;&amp;amp;ouml;ta n&amp;amp;auml;dalavahetustel</caption>
       </property>
       <property>
             <name>unavailable_dates</name>
@@ -191,10 +191,8 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <comment>Formaat: alguskuupäev.kuu, tund:minut - lõppkuupäev.kuu, tund:minut; alguskuupäev.kuu, ...</comment>
-            <caption>
-            <![CDATA[Kinnised päevad (Formaat: <span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /><span style="white-space: nowrap;">p.k, h:m - p.k, h:m;</span><br /> ...)]]>
-            </caption>
+            <comment>Formaat: alguskuup&amp;auml;ev.kuu, tund:minut - l&amp;otilde;ppkuup&amp;auml;ev.kuu, tund:minut; alguskuup&amp;auml;ev.kuu, ...</comment>
+            <caption>Kinnised p&amp;auml;evad (Formaat: &amp;lt;span style=&amp;quot;white-space: nowrap;&amp;quot;&amp;gt;p.k, h:m - p.k, h:m;&amp;lt;/span&amp;gt;&amp;lt;br /&amp;gt;&amp;lt;span style=&amp;quot;white-space: nowrap;&amp;quot;&amp;gt;p.k, h:m - p.k, h:m;&amp;lt;/span&amp;gt;&amp;lt;br /&amp;gt; ...)</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_RESOURCE</syslog_type>
@@ -247,7 +245,7 @@
             <RECUR_WRK>
                   <value>5</value>
                   <clid>CL_RECURRENCE</clid>
-                  <caption>T&amp;ouml;&amp;ouml;aja kordus</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;aja kordus</caption>
             </RECUR_WRK>
       </reltypes>
 </properties>

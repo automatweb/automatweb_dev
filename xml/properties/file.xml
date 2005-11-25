@@ -41,7 +41,7 @@
             <type>textbox</type>
             <size>3</size>
             <field>jrk</field>
-            <caption>J&amp;auml;rjekord</caption>
+            <caption>J&amp;amp;auml;rjekord</caption>
       </property>
       <property>
             <name>comment</name>
@@ -67,7 +67,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>showal</field>
-            <caption>Näita kohe</caption>
+            <caption>N&amp;auml;ita kohe</caption>
       </property>
       <property>
             <name>newwindow</name>
@@ -86,7 +86,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Näita saidi raamis</caption>
+            <caption>N&amp;auml;ita saidi raamis</caption>
       </property>
       <property>
             <name>j_time</name>
@@ -95,7 +95,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Jõustumise kuupäev</caption>
+            <caption>J&amp;otilde;ustumise kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>act_date</name>
@@ -104,7 +104,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Avaldamise kuupäev</caption>
+            <caption>Avaldamise kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>udef1</name>
@@ -150,7 +150,7 @@
             <KEYWORD>
                   <value>2</value>
                   <clid>CL_KEYWORD</clid>
-                  <caption>Märksõna</caption>
+                  <caption>M&amp;auml;rks&amp;otilde;na</caption>
             </KEYWORD>
       </reltypes>
 </properties>

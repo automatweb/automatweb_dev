@@ -18,7 +18,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_OBJECT_TYPE</reltype>
-            <caption>Imporditava objekti t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Imporditava objekti t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>unique_id</name>
@@ -37,7 +37,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Tulp, mille j&amp;auml;rgi jagatakse kataloogidesse</caption>
+            <caption>Tulp, mille j&amp;amp;auml;rgi jagatakse kataloogidesse</caption>
       </property>
       <property>
             <name>folder_is_parent</name>
@@ -97,7 +97,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <caption>J&amp;auml;rgmine automaatne import</caption>
+            <caption>J&amp;amp;auml;rgmine automaatne import</caption>
       </property>
       <property>
             <name>last_import_log</name>

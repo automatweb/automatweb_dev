@@ -48,7 +48,7 @@
             <method>serialize</method>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>XML ja DB v&amp;auml;ljade vahelised seosed</caption>
+            <caption>XML ja DB v&amp;amp;auml;ljade vahelised seosed</caption>
       </property>
       <property>
             <name>additional_info_table</name>

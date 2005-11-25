@@ -35,7 +35,7 @@
             <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>N&amp;auml;ita kausta all</caption>
+            <caption>N&amp;amp;auml;ita kausta all</caption>
       </property>
       <property>
             <name>no_folder_links</name>
@@ -45,7 +45,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>&amp;Auml;ra lingi kaustu</caption>
+            <caption>&amp;amp;Auml;ra lingi kaustu</caption>
       </property>
       <property>
             <name>only_act</name>
@@ -55,7 +55,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>N&amp;auml;ita ainult aktiivseid kaustu</caption>
+            <caption>N&amp;amp;auml;ita ainult aktiivseid kaustu</caption>
       </property>
       <property>
             <name>link_only_act</name>

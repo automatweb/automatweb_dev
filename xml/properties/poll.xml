@@ -32,7 +32,7 @@
             <type>textbox</type>
             <store>no</store>
             <field>question</field>
-            <caption>K&amp;uuml;simus</caption>
+            <caption>K&amp;amp;uuml;simus</caption>
       </property>
       <property>
             <name>answers</name>
@@ -60,7 +60,7 @@
             <callback>callback_get_translate</callback>
             <store>no</store>
             <field>translate</field>
-            <caption>T&amp;otilde;lgi</caption>
+            <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <classinfo>
             <trans>1</trans>

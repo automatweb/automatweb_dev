@@ -24,7 +24,7 @@
             <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Eesmärk</caption>
+            <caption>Eesm&amp;auml;rk</caption>
       </property>
       <property>
             <name>entity_actor</name>

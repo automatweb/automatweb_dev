@@ -84,7 +84,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>checkbox</type>
-            <caption>Pesemisv&amp;otilde;imalus toas</caption>
+            <caption>Pesemisv&amp;amp;otilde;imalus toas</caption>
       </property>
       <property>
             <name>has_tv</name>
@@ -201,7 +201,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>checkbox</type>
-            <caption>Garaa&amp;#158;</caption>
+            <caption>Garaa&amp;amp;#158;</caption>
       </property>
       <property>
             <name>has_seminar_rooms</name>
@@ -210,7 +210,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>checkbox</type>
-            <caption>Seminari- ja/või konverentsiruumid</caption>
+            <caption>Seminari- ja/v&amp;otilde;i konverentsiruumid</caption>
       </property>
       <property>
             <name>has_extra_beds</name>
@@ -219,7 +219,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Lisavoodi võimalus</caption>
+            <caption>Lisavoodi v&amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_baby_beds</name>
@@ -228,7 +228,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Beebivoodi võimalus</caption>
+            <caption>Beebivoodi v&amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_cur_xch</name>
@@ -255,7 +255,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Interneti kasutamise võimalus</caption>
+            <caption>Interneti kasutamise v&amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_safety_boxes</name>
@@ -273,7 +273,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>&amp;#154;eif</caption>
+            <caption>&amp;amp;#154;eif</caption>
       </property>
       <property>
             <name>has_sauna</name>
@@ -309,7 +309,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Pesu pesemisvõimalus</caption>
+            <caption>Pesu pesemisv&amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_services_carrental</name>
@@ -355,7 +355,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>L&amp;otilde;kkeplats/grill</caption>
+            <caption>L&amp;amp;otilde;kkeplats/grill</caption>
       </property>
       <property>
             <name>has_camping_tent</name>
@@ -364,7 +364,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Telkimisvõimalus</caption>
+            <caption>Telkimisv&amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_camping_trailer</name>
@@ -373,7 +373,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Haagissuvilaga peatumise võimalus</caption>
+            <caption>Haagissuvilaga peatumise v&amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_camping_caravan</name>
@@ -391,7 +391,7 @@
             <method>serialize</method>
             <group>services</group>
             <type>checkbox</type>
-            <caption>Telkide laenutamise võimalus</caption>
+            <caption>Telkide laenutamise v&amp;otilde;imalus</caption>
       </property>
       <property>
             <name>food_breakfast_included</name>
@@ -400,7 +400,7 @@
             <method>serialize</method>
             <group>catering</group>
             <type>checkbox</type>
-            <caption>Hommikus&amp;ouml;&amp;ouml;k hinna sees</caption>
+            <caption>Hommikus&amp;amp;ouml;&amp;amp;ouml;k hinna sees</caption>
       </property>
       <property>
             <name>food_breakfast_canorder</name>
@@ -409,7 +409,7 @@
             <method>serialize</method>
             <group>catering</group>
             <type>checkbox</type>
-            <caption>Hommikus&amp;ouml;&amp;ouml;k tellimisel</caption>
+            <caption>Hommikus&amp;amp;ouml;&amp;amp;ouml;k tellimisel</caption>
       </property>
       <property>
             <name>food_restaurant</name>
@@ -445,7 +445,7 @@
             <method>serialize</method>
             <group>catering</group>
             <type>checkbox</type>
-            <caption>Toidu valmistamise võimalus</caption>
+            <caption>Toidu valmistamise v&amp;otilde;imalus</caption>
       </property>
       <property>
             <name>has_playground</name>
@@ -454,7 +454,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Laste mänguväljak</caption>
+            <caption>Laste m&amp;auml;nguv&amp;auml;ljak</caption>
       </property>
       <property>
             <name>has_sporting_ground</name>
@@ -463,7 +463,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Spordiväljak</caption>
+            <caption>Spordiv&amp;auml;ljak</caption>
       </property>
       <property>
             <name>has_tennis</name>
@@ -472,7 +472,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Tenniseväljak</caption>
+            <caption>Tennisev&amp;auml;ljak</caption>
       </property>
       <property>
             <name>has_ballgames</name>
@@ -481,7 +481,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Pallimängud</caption>
+            <caption>Pallim&amp;auml;ngud</caption>
       </property>
       <property>
             <name>has_horseriding</name>
@@ -508,7 +508,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Veesõiduki laenutus</caption>
+            <caption>Vees&amp;otilde;iduki laenutus</caption>
       </property>
       <property>
             <name>has_swimming_out</name>
@@ -517,7 +517,7 @@
             <method>serialize</method>
             <group>active_vacation</group>
             <type>checkbox</type>
-            <caption>Ujumisvõimalus (välitingimustes)</caption>
+            <caption>Ujumisv&amp;otilde;imalus (v&amp;auml;litingimustes)</caption>
       </property>
       <property>
             <name>has_fishing</name>

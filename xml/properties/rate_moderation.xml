@@ -7,7 +7,7 @@
             <method>serialize</method>
             <field>meta</field>
             <type>text</type>
-            <caption>Kui mitme sekundi pärast modereerimismärge aegub</caption>
+            <caption>Kui mitme sekundi p&amp;auml;rast modereerimism&amp;auml;rge aegub</caption>
       </property>
       <property>
             <name>commune</name>

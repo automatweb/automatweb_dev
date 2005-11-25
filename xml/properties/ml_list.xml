@@ -41,7 +41,7 @@
             <group>general</group>
             <type>select</type>
             <rel>1</rel>
-            <caption>Vormi tüüp</caption>
+            <caption>Vormi t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>redir_obj</name>
@@ -190,7 +190,7 @@
             <type>date_select</type>
             <store>no</store>
             <default>-1</default>
-            <caption>Alates kuupäevast</caption>
+            <caption>Alates kuup&amp;auml;evast</caption>
       </property>
       <property>
             <name>exp_sbt</name>
@@ -378,7 +378,7 @@
             <group>export_to_file</group>
             <type>textbox</type>
             <size>5</size>
-            <caption>Mitu korda p&amp;auml;evas eksport teha</caption>
+            <caption>Mitu korda p&amp;amp;auml;evas eksport teha</caption>
       </property>
       <property>
             <name>expf_next_time</name>
@@ -388,7 +388,7 @@
             <group>export_to_file</group>
             <type>text</type>
             <store>no</store>
-            <caption>Millal j&amp;auml;rgmine eksport toimub</caption>
+            <caption>Millal j&amp;amp;auml;rgmine eksport toimub</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST</syslog_type>
@@ -461,7 +461,7 @@
             <REDIR_OBJECT>
                   <value>2</value>
                   <clid>CL_DOCUMENT</clid>
-                  <caption>ümbersuunamine</caption>
+                  <caption>&amp;uuml;mbersuunamine</caption>
             </REDIR_OBJECT>
             <ADM_MESSAGE>
                   <value>3</value>

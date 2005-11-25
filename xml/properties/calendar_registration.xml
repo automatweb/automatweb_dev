@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>S&amp;uuml;ndmuse kommentaari</caption>
+            <caption>S&amp;amp;uuml;ndmuse kommentaari</caption>
       </property>
       <property>
             <name>mail_from_addr</name>

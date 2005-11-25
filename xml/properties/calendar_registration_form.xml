@@ -25,7 +25,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Ettev&amp;otilde;tte nimi</caption>
+            <caption>Ettev&amp;amp;otilde;tte nimi</caption>
       </property>
       <property>
             <name>address</name>
@@ -2996,12 +2996,12 @@
                         <num_1>CL_TASK</num_1>
                         <num_2>CL_CRM_CALL</num_2>
                   </clid>
-                  <caption>s&amp;uuml;ndmus</caption>
+                  <caption>s&amp;amp;uuml;ndmus</caption>
             </EVENT>
             <OT>
                   <value>2</value>
                   <clid>CL_OBJECT_TYPE</clid>
-                  <caption>registreerumisvormi t&amp;uuml;&amp;uuml;p</caption>
+                  <caption>registreerumisvormi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </OT>
             <DATA>
                   <value>3</value>

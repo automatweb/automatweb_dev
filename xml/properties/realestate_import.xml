@@ -47,7 +47,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ADMIN_DIVISION</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
-            <comment>Haldusjaotis aadressisüsteemis, mis vastab maakonnale</comment>
+            <comment>Haldusjaotis aadressis&amp;uuml;steemis, mis vastab maakonnale</comment>
             <caption>Maakond haldusjaotuses</caption>
       </property>
       <property>
@@ -112,7 +112,7 @@
             <method>serialize</method>
             <type>text</type>
             <editonly>1</editonly>
-            <comment>URL millele päringut tehes imporditakse objektid City24 süsteemist AW'i</comment>
+            <comment>URL millele p&amp;auml;ringut tehes imporditakse objektid City24 s&amp;uuml;steemist AW'i</comment>
             <caption>City24 Importimine</caption>
       </property>
       <property>

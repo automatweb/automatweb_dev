@@ -6,7 +6,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>jrk</field>
-            <caption>Järjekord</caption>
+            <caption>J&amp;auml;rjekord</caption>
       </property>
       <property>
             <name>tax_type</name>
@@ -15,7 +15,7 @@
             <type>chooser</type>
             <datatype>int</datatype>
             <field>tax_type</field>
-            <caption>Maksu tüüp</caption>
+            <caption>Maksu t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>tax_percentage</name>
@@ -31,7 +31,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>tax_amount</field>
-            <caption>Tüüparv</caption>
+            <caption>T&amp;uuml;&amp;uuml;parv</caption>
       </property>
       <classinfo>
             <syslog_type>ST_TAX</syslog_type>

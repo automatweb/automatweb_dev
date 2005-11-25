@@ -18,7 +18,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas n&amp;auml;idata men&amp;uuml;&amp;uuml;sid, mille all pole dokumente</caption>
+            <caption>Kas n&amp;amp;auml;idata men&amp;amp;uuml;&amp;amp;uuml;sid, mille all pole dokumente</caption>
       </property>
       <classinfo>
             <syslog_type>ST_YAH_LINE</syslog_type>

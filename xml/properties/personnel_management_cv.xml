@@ -250,7 +250,7 @@
             <store>no</store>
             <subtitle>1</subtitle>
             <field>jobs_wanted_label</field>
-            <caption>Lisa uus töösoov</caption>
+            <caption>Lisa uus t&amp;ouml;&amp;ouml;soov</caption>
       </property>
       <property>
             <name>education_tb</name>
@@ -345,7 +345,7 @@
             <group>driving_licenses</group>
             <type>select</type>
             <field>driving_since</field>
-            <caption>Juhistaa¾ alates aastast</caption>
+            <caption>Juhistaa&amp;frac34; alates aastast</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_CV</syslog_type>
@@ -441,7 +441,7 @@
             <JOBWANTED>
                   <value>10</value>
                   <clid>CL_PERSONNEL_MANAGEMENT_JOB_WANTED</clid>
-                  <caption>Töösoov</caption>
+                  <caption>T&amp;ouml;&amp;ouml;soov</caption>
             </JOBWANTED>
       </reltypes>
 </properties>

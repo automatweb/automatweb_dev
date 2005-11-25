@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Mis objektit&amp;uuml;&amp;uuml;bile skaala kehtib</caption>
+            <caption>Mis objektit&amp;amp;uuml;&amp;amp;uuml;bile skaala kehtib</caption>
       </property>
       <property>
             <name>rate_folders</name>
@@ -78,9 +78,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <multiple>1</multiple>
-            <caption>
-            <![CDATA[Lisa "ei hinda" valik]]>
-            </caption>
+            <caption>Lisa &amp;quot;ei hinda&amp;quot; valik</caption>
       </property>
       <classinfo>
             <syslog_type>ST_RATE_SCALE</syslog_type>

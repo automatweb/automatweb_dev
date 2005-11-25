@@ -28,7 +28,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <store>no</store>
-            <caption>Käivita skript</caption>
+            <caption>K&amp;auml;ivita skript</caption>
       </property>
       <classinfo>
             <syslog_type>ST_AW_SCRIPT</syslog_type>

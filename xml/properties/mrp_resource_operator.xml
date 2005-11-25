@@ -25,7 +25,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_UNIT</reltype>
             <field>unit</field>
-            <caption>&amp;Uuml;ksus</caption>
+            <caption>&amp;amp;Uuml;ksus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MRP_RESOURCE_OPERATOR</syslog_type>

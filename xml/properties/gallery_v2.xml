@@ -18,7 +18,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Uuenda layout (kustutab k&amp;otilde;ik pildid!)</caption>
+            <caption>Uuenda layout (kustutab k&amp;amp;otilde;ik pildid!)</caption>
       </property>
       <property>
             <name>num_pages</name>
@@ -197,7 +197,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Importimisel kirjuta olemasolevad pildid &amp;uuml;le</caption>
+            <caption>Importimisel kirjuta olemasolevad pildid &amp;amp;uuml;le</caption>
       </property>
       <property>
             <name>import_add_pages</name>
@@ -207,7 +207,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Importimisel lisa vajadusel lehek&amp;uuml;lgi</caption>
+            <caption>Importimisel lisa vajadusel lehek&amp;amp;uuml;lgi</caption>
       </property>
       <property>
             <name>do_import</name>

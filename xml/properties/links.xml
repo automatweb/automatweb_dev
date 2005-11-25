@@ -76,7 +76,7 @@
             <size>3</size>
             <table>objects</table>
             <field>jrk</field>
-            <caption>J&amp;auml;rjekord</caption>
+            <caption>J&amp;amp;auml;rjekord</caption>
       </property>
       <property>
             <name>use_javascript</name>
@@ -107,7 +107,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Uue akna k&amp;otilde;rgus</caption>
+            <caption>Uue akna k&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>js_attributes</name>
@@ -146,7 +146,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Men&amp;uuml;&amp;uuml;d</caption>
+            <caption>Men&amp;amp;uuml;&amp;amp;uuml;d</caption>
       </property>
       <property>
             <name>newwinscroll</name>

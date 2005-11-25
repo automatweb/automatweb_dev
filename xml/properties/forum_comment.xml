@@ -31,7 +31,7 @@
             <type>checkbox</type>
             <store>no</store>
             <field>remember</field>
-            <caption>Jäta nimi ja e-post meelde</caption>
+            <caption>J&amp;auml;ta nimi ja e-post meelde</caption>
       </property>
       <property>
             <name>commtext</name>

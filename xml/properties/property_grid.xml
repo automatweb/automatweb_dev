@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
-            <caption>Gridi tüüp</caption>
+            <caption>Gridi t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_GRID</syslog_type>

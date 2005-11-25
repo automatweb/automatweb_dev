@@ -67,7 +67,7 @@
             <cols>30</cols>
             <field>meta</field>
             <method>serialize</method>
-            <caption>T&amp;otilde;lkimata sisu teade</caption>
+            <caption>T&amp;amp;otilde;lkimata sisu teade</caption>
       </property>
       <property>
             <name>lang_img</name>
@@ -105,7 +105,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Ajutine AW-v&amp;auml;line aadress sisse logimata kasutajatele</caption>
+            <caption>Ajutine AW-v&amp;amp;auml;line aadress sisse logimata kasutajatele</caption>
       </property>
       <property>
             <name>langs</name>

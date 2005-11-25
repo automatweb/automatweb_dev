@@ -51,7 +51,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>workbench</field>
-            <caption>Tõlkimine</caption>
+            <caption>T&amp;otilde;lkimine</caption>
       </property>
       <classinfo>
             <syslog_type>ST_TRANSLATION</syslog_type>

@@ -20,7 +20,7 @@
             <type>textbox</type>
             <size>2</size>
             <datatype>int</datatype>
-            <caption>Kõrgus</caption>
+            <caption>K&amp;otilde;rgus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TEXTAREA</syslog_type>

@@ -29,7 +29,7 @@
             <reltype>RELTYPE_CONTROLLER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasuta toodete n&amp;auml;itamiseks kontrollerit</caption>
+            <caption>Kasuta toodete n&amp;amp;auml;itamiseks kontrollerit</caption>
       </property>
       <property>
             <name>prods</name>

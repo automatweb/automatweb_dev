@@ -40,7 +40,7 @@
             <type>checkbox</type>
             <rel>1</rel>
             <ch_value>1</ch_value>
-            <caption>Kas n&amp;auml;idata nime</caption>
+            <caption>Kas n&amp;amp;auml;idata nime</caption>
       </property>
       <classinfo>
             <syslog_type>ST_MENU_AREA</syslog_type>

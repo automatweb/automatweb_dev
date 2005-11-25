@@ -9,7 +9,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>15</size>
-            <caption>Vali grupid, kellele pullouti näidatakse</caption>
+            <caption>Vali grupid, kellele pullouti n&amp;auml;idatakse</caption>
       </property>
       <property>
             <name>docs</name>
@@ -19,7 +19,7 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_DOCUMENT</reltype>
-            <caption>Vali dokument, mida näidata</caption>
+            <caption>Vali dokument, mida n&amp;auml;idata</caption>
       </property>
       <property>
             <name>align</name>
@@ -67,7 +67,7 @@
             <DOCUMENT>
                   <value>1</value>
                   <clid>CL_DOCUMENT</clid>
-                  <caption>n&amp;auml;idatav dokument</caption>
+                  <caption>n&amp;amp;auml;idatav dokument</caption>
             </DOCUMENT>
       </reltypes>
 </properties>

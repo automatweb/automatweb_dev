@@ -14,7 +14,7 @@
             <group>general</group>
             <type>hidden</type>
             <field>aw_type_id</field>
-            <caption>Toote t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Toote t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>price</name>
@@ -728,7 +728,7 @@
             <KW>
                   <value>11</value>
                   <clid>CL_KEYWORD</clid>
-                  <caption>v&amp;otilde;tmes&amp;otilde;na</caption>
+                  <caption>v&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
             </KW>
             <VARUSERM6>
                   <value>12</value>

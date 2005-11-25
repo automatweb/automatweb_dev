@@ -14,7 +14,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_date</field>
-            <caption>Kuup&amp;auml;ev</caption>
+            <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>bill_due_date_days</name>
@@ -23,7 +23,7 @@
             <type>textbox</type>
             <field>aw_due_date_days</field>
             <size>5</size>
-            <caption>Makset&amp;auml;htaeg (p&amp;auml;evi)</caption>
+            <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
       </property>
       <property>
             <name>bill_due_date</name>
@@ -31,7 +31,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_due_date</field>
-            <caption>Tasumise kuup&amp;auml;ev</caption>
+            <caption>Tasumise kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>bill_recieved</name>
@@ -39,7 +39,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_recieved</field>
-            <caption>Laekumiskuup&amp;auml;ev</caption>
+            <caption>Laekumiskuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>customer</name>
@@ -80,7 +80,7 @@
             <rows>5</rows>
             <cols>50</cols>
             <field>aw_notes</field>
-            <caption>M&amp;auml;rkused</caption>
+            <caption>M&amp;amp;auml;rkused</caption>
       </property>
       <property>
             <name>monthly_bill</name>
@@ -182,7 +182,7 @@
             <TASK>
                   <value>1</value>
                   <clid>CL_TASK</clid>
-                  <caption>&amp;uuml;lesanne</caption>
+                  <caption>&amp;amp;uuml;lesanne</caption>
             </TASK>
             <CUST>
                   <value>2</value>

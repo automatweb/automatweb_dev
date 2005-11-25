@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CHAIN</reltype>
-            <caption>Vali p&amp;auml;rg</caption>
+            <caption>Vali p&amp;amp;auml;rg</caption>
       </property>
       <property>
             <name>role</name>
@@ -59,7 +59,7 @@
             <CHAIN>
                   <value>1</value>
                   <clid>CL_OBJECT_CHAIN</clid>
-                  <caption>pärg</caption>
+                  <caption>p&amp;auml;rg</caption>
             </CHAIN>
             <ROLE>
                   <value>2</value>

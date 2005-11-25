@@ -37,7 +37,7 @@
                         <num_0>CL_SHOP_PRODUCT</num_0>
                         <num_1>CL_SHOP_PACKET</num_1>
                   </clid>
-                  <caption>v&amp;auml;lja l&amp;auml;inud toode</caption>
+                  <caption>v&amp;amp;auml;lja l&amp;amp;auml;inud toode</caption>
             </PRODUCT>
             <ORDER>
                   <value>2</value>

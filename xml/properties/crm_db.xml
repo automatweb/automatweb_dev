@@ -94,7 +94,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ISIK_CAT</reltype>
-            <caption>Vaikimisi töötajate kaust</caption>
+            <caption>Vaikimisi t&amp;ouml;&amp;ouml;tajate kaust</caption>
       </property>
       <property>
             <name>dir_address</name>
@@ -114,7 +114,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ETTEVOTLUSVORM_CAT</reltype>
-            <caption>Vaikimisi õiguslike vormide kaust</caption>
+            <caption>Vaikimisi &amp;otilde;iguslike vormide kaust</caption>
       </property>
       <property>
             <name>dir_linn</name>
@@ -164,7 +164,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_GENERAL_CAT</reltype>
-            <caption>Vaikimisi kaust, kui mõni eelnevatest pole määratud, siis kasutatakse seda</caption>
+            <caption>Vaikimisi kaust, kui m&amp;otilde;ni eelnevatest pole m&amp;auml;&amp;auml;ratud, siis kasutatakse seda</caption>
       </property>
       <property>
             <name>flimit</name>
@@ -173,7 +173,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Kirjeid ühel lehel</caption>
+            <caption>Kirjeid &amp;uuml;hel lehel</caption>
       </property>
       <property>
             <name>active_selection</name>
@@ -223,7 +223,7 @@
             <ISIK_CAT>
                   <value>3</value>
                   <clid>CL_MENU</clid>
-                  <caption>Töötajate kaust</caption>
+                  <caption>T&amp;ouml;&amp;ouml;tajate kaust</caption>
             </ISIK_CAT>
             <ADDRESS_CAT>
                   <value>4</value>
@@ -258,7 +258,7 @@
             <GENERAL_CAT>
                   <value>10</value>
                   <clid>CL_MENU</clid>
-                  <caption>Üldkaust</caption>
+                  <caption>&amp;Uuml;ldkaust</caption>
             </GENERAL_CAT>
             <CALENDAR>
                   <value>11</value>
@@ -268,7 +268,7 @@
             <ETTEVOTLUSVORM_CAT>
                   <value>12</value>
                   <clid>CL_MENU</clid>
-                  <caption>Õiguslike vormide kaust</caption>
+                  <caption>&amp;Otilde;iguslike vormide kaust</caption>
             </ETTEVOTLUSVORM_CAT>
             <FORMS>
                   <value>13</value>

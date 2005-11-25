@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ROOTMENU</reltype>
-            <caption>Tegijate juurmenüü</caption>
+            <caption>Tegijate juurmen&amp;uuml;&amp;uuml;</caption>
       </property>
       <property>
             <name>action_rootmenu</name>
@@ -18,7 +18,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ROOTMENU</reltype>
-            <caption>Tegevuste juurmenüü</caption>
+            <caption>Tegevuste juurmen&amp;uuml;&amp;uuml;</caption>
       </property>
       <property>
             <name>entity_rootmenu</name>
@@ -28,7 +28,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ROOTMENU</reltype>
-            <caption>Juhtumite juurmenüü</caption>
+            <caption>Juhtumite juurmen&amp;uuml;&amp;uuml;</caption>
       </property>
       <property>
             <name>entity_instance_rootmenu</name>
@@ -38,7 +38,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ROOTMENU</reltype>
-            <caption>Juhtumite sisestuste juurmenüü</caption>
+            <caption>Juhtumite sisestuste juurmen&amp;uuml;&amp;uuml;</caption>
       </property>
       <property>
             <name>process_rootmenu</name>
@@ -48,7 +48,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ROOTMENU</reltype>
-            <caption>Protsesside juurmenüü</caption>
+            <caption>Protsesside juurmen&amp;uuml;&amp;uuml;</caption>
       </property>
       <classinfo>
             <syslog_type>ST_WORKFLOW_CONFIG</syslog_type>
@@ -76,7 +76,7 @@
             <ROOTMENU>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>juurmenüü</caption>
+                  <caption>juurmen&amp;uuml;&amp;uuml;</caption>
             </ROOTMENU>
       </reltypes>
 </properties>

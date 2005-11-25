@@ -156,7 +156,7 @@
             <type>textarea</type>
             <rows>3</rows>
             <cols>40</cols>
-            <caption>L&amp;otilde;pmatus vaatega lehed</caption>
+            <caption>L&amp;amp;otilde;pmatus vaatega lehed</caption>
       </property>
       <property>
             <name>foldpri</name>
@@ -167,7 +167,7 @@
             <type>textarea</type>
             <rows>20</rows>
             <cols>20</cols>
-            <caption>T&amp;auml;htede prioriteedid</caption>
+            <caption>T&amp;amp;auml;htede prioriteedid</caption>
       </property>
       <property>
             <name>sideways_pages</name>
@@ -207,7 +207,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>L&amp;otilde;pmatute pildiga lehehed</caption>
+            <caption>L&amp;amp;otilde;pmatute pildiga lehehed</caption>
       </property>
       <property>
             <name>force_10_view</name>
@@ -245,7 +245,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>R&amp;otilde;ivad</caption>
+            <caption>R&amp;amp;otilde;ivad</caption>
       </property>
       <property>
             <name>jm_lasting</name>
@@ -267,7 +267,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>M&amp;ouml;&amp;ouml;bel</caption>
+            <caption>M&amp;amp;ouml;&amp;amp;ouml;bel</caption>
       </property>
       <property>
             <name>del_prods</name>

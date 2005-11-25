@@ -64,7 +64,7 @@
             <default>-1</default>
             <store>no</store>
             <field>person_birthday</field>
-            <caption>Sünnipäev</caption>
+            <caption>S&amp;uuml;nnip&amp;auml;ev</caption>
       </property>
       <property>
             <name>order_completed</name>

@@ -72,7 +72,7 @@
             <type>select</type>
             <group>advanced_settings</group>
             <field>type</field>
-            <caption>Menüü tüüp</caption>
+            <caption>Men&amp;uuml;&amp;uuml; t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>objtbl_conf</name>
@@ -112,7 +112,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>&amp;Auml;ra n&amp;auml;ita ekspordis</caption>
+            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita ekspordis</caption>
       </property>
       <property>
             <name>export</name>
@@ -170,7 +170,7 @@
             <type>textbox</type>
             <group>show_sub</group>
             <field>link</field>
-            <caption>Menüü link</caption>
+            <caption>Men&amp;uuml;&amp;uuml; link</caption>
       </property>
       <property>
             <name>show_restrictions</name>
@@ -180,7 +180,7 @@
             <multiple>1</multiple>
             <group>show_sub</group>
             <field>show_restrictions</field>
-            <caption>Näitamine</caption>
+            <caption>N&amp;auml;itamine</caption>
       </property>
       <property>
             <name>frontpage</name>
@@ -218,7 +218,7 @@
             <ch_value>1</ch_value>
             <group>show_sub</group>
             <field>hide_noact</field>
-            <caption>Peida ära, kui selle kausta all aktiivseid dokumente ei ole</caption>
+            <caption>Peida &amp;auml;ra, kui selle kausta all aktiivseid dokumente ei ole</caption>
       </property>
       <property>
             <name>no_menus</name>
@@ -227,7 +227,7 @@
             <group>show_sub</group>
             <ch_value>1</ch_value>
             <field>no_menus</field>
-            <caption>Ilma menüüdeta</caption>
+            <caption>Ilma men&amp;uuml;&amp;uuml;deta</caption>
       </property>
       <property>
             <name>panes</name>
@@ -285,7 +285,7 @@
             <method>serialize</method>
             <group>doc_show</group>
             <ch_value>1</ch_value>
-            <caption>Näita ainult leadi</caption>
+            <caption>N&amp;auml;ita ainult leadi</caption>
       </property>
       <property>
             <name>sort_by_name</name>
@@ -295,7 +295,7 @@
             <method>serialize</method>
             <group>doc_show</group>
             <ch_value>1</ch_value>
-            <caption>Sorteeri nime järgi</caption>
+            <caption>Sorteeri nime j&amp;auml;rgi</caption>
       </property>
       <property>
             <name>sorter</name>
@@ -304,7 +304,7 @@
             <group>doc_ord</group>
             <store>no</store>
             <field>sorter</field>
-            <caption>Dokumentide järjestamine</caption>
+            <caption>Dokumentide j&amp;auml;rjestamine</caption>
       </property>
       <property>
             <name>ip</name>
@@ -322,7 +322,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>look_sub</group>
-            <caption>Menüü värv</caption>
+            <caption>Men&amp;uuml;&amp;uuml; v&amp;auml;rv</caption>
       </property>
       <property>
             <name>color2</name>
@@ -331,7 +331,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>look_sub</group>
-            <caption>Menüü värv 2</caption>
+            <caption>Men&amp;uuml;&amp;uuml; v&amp;auml;rv 2</caption>
       </property>
       <property>
             <name>icon</name>
@@ -376,7 +376,7 @@
             <type>select</type>
             <group>templates</group>
             <field>tpl_view</field>
-            <caption>Template dokumendi näitamiseks (pikk)</caption>
+            <caption>Template dokumendi n&amp;auml;itamiseks (pikk)</caption>
       </property>
       <property>
             <name>tpl_lead</name>
@@ -384,7 +384,7 @@
             <type>select</type>
             <group>templates</group>
             <field>tpl_lead</field>
-            <caption>Template dokumendi näitamiseks (lühike)</caption>
+            <caption>Template dokumendi n&amp;auml;itamiseks (l&amp;uuml;hike)</caption>
       </property>
       <property>
             <name>show_layout</name>
@@ -394,7 +394,7 @@
             <group>templates</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasuta n&amp;auml;itamiseks layouti</caption>
+            <caption>Kasuta n&amp;amp;auml;itamiseks layouti</caption>
       </property>
       <property>
             <name>images_from_menu</name>
@@ -404,7 +404,7 @@
             <group>presentation</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>V&amp;otilde;ta pildid men&amp;uuml;&amp;uuml; alt</caption>
+            <caption>V&amp;amp;otilde;ta pildid men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
       </property>
       <property>
             <name>img_timing</name>
@@ -434,7 +434,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>presentation</group>
-            <caption>Aktiivse menüü pilt</caption>
+            <caption>Aktiivse men&amp;uuml;&amp;uuml; pilt</caption>
       </property>
       <property>
             <name>menu_images</name>
@@ -444,7 +444,7 @@
             <method>serialize</method>
             <group>presentation</group>
             <store>no</store>
-            <caption>Menüü pildid</caption>
+            <caption>Men&amp;uuml;&amp;uuml; pildid</caption>
       </property>
       <property>
             <name>submenus_from_obj</name>
@@ -454,7 +454,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>menus_sub</group>
-            <caption>Alammen&amp;uuml;&amp;uuml;d objektist</caption>
+            <caption>Alammen&amp;amp;uuml;&amp;amp;uuml;d objektist</caption>
       </property>
       <property>
             <name>aip_filename</name>
@@ -483,7 +483,7 @@
             <group>menus_sub</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>V&amp;otilde;ta alammen&amp;uuml;&amp;uuml;d men&amp;uuml;&amp;uuml; alt</caption>
+            <caption>V&amp;amp;otilde;ta alammen&amp;amp;uuml;&amp;amp;uuml;d men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
       </property>
       <property>
             <name>show_object_tree</name>
@@ -493,7 +493,7 @@
             <group>menus_sub</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kasuta alammen&amp;uuml;&amp;uuml;de n&amp;auml;itamiseks objektide nimekirja</caption>
+            <caption>Kasuta alammen&amp;amp;uuml;&amp;amp;uuml;de n&amp;amp;auml;itamiseks objektide nimekirja</caption>
       </property>
       <property>
             <name>has_ctx</name>
@@ -503,7 +503,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>advanced_ctx</group>
-            <caption>Kuva alamkaustu kontekstip&amp;otilde;hiselt</caption>
+            <caption>Kuva alamkaustu kontekstip&amp;amp;otilde;hiselt</caption>
       </property>
       <property>
             <name>default_ctx</name>
@@ -555,10 +555,8 @@
             <group>relations</group>
             <store>no</store>
             <field>seealso</field>
-            <caption>
-            <![CDATA[Menüüd, mille all see menüü on "vaata lisaks" menüü]]>
-            </caption>
-            <comment>Nende menüüde lisamine ja eemaldamine käib läbi seostehalduri</comment>
+            <caption>Men&amp;uuml;&amp;uuml;d, mille all see men&amp;uuml;&amp;uuml; on &amp;quot;vaata lisaks&amp;quot; men&amp;uuml;&amp;uuml;</caption>
+            <comment>Nende men&amp;uuml;&amp;uuml;de lisamine ja eemaldamine k&amp;auml;ib l&amp;auml;bi seostehalduri</comment>
       </property>
       <property>
             <name>seealso_order</name>
@@ -568,7 +566,7 @@
             <size>3</size>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Järjekorranumber (vaata lisaks)</caption>
+            <caption>J&amp;auml;rjekorranumber (vaata lisaks)</caption>
       </property>
       <property>
             <name>sections</name>
@@ -586,7 +584,7 @@
             <store>no</store>
             <group>docs_from</group>
             <field>sss</field>
-            <caption>Menüüd, mille alt viimased dokumendid võetakse</caption>
+            <caption>Men&amp;uuml;&amp;uuml;d, mille alt viimased dokumendid v&amp;otilde;etakse</caption>
       </property>
       <property>
             <name>seealso_docs_t</name>
@@ -617,7 +615,7 @@
             <method>serialize</method>
             <group>periods</group>
             <reltype>RELTYPE_PERIOD</reltype>
-            <caption>Perioodid, mille alt dokumendid võetakse</caption>
+            <caption>Perioodid, mille alt dokumendid v&amp;otilde;etakse</caption>
       </property>
       <property>
             <name>all_pers</name>
@@ -627,7 +625,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>periods</group>
-            <caption>K&amp;otilde;ikide perioodide alt</caption>
+            <caption>K&amp;amp;otilde;ikide perioodide alt</caption>
       </property>
       <property>
             <name>docs_per_period</name>
@@ -647,7 +645,7 @@
             <group>periods</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Näita perioode</caption>
+            <caption>N&amp;auml;ita perioode</caption>
       </property>
       <property>
             <name>show_period_count</name>
@@ -668,7 +666,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>keywords</group>
-            <caption>AW Märksõnad</caption>
+            <caption>AW M&amp;auml;rks&amp;otilde;nad</caption>
       </property>
       <property>
             <name>keywords</name>
@@ -794,22 +792,22 @@
             <PICTURES_MENU>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>võta pildid menüült</caption>
+                  <caption>v&amp;otilde;ta pildid men&amp;uuml;&amp;uuml;lt</caption>
             </PICTURES_MENU>
             <SHOW_SUBFOLDERS_MENU>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>võta alamkasutad menüült</caption>
+                  <caption>v&amp;otilde;ta alamkasutad men&amp;uuml;&amp;uuml;lt</caption>
             </SHOW_SUBFOLDERS_MENU>
             <SHOW_AS_CALENDAR>
                   <value>3</value>
                   <clid>CL_PLANNER</clid>
-                  <caption>võta objekte kalendrist</caption>
+                  <caption>v&amp;otilde;ta objekte kalendrist</caption>
             </SHOW_AS_CALENDAR>
             <SHOW_AS_LAYOUT>
                   <value>4</value>
                   <clid>CL_LAYOUT</clid>
-                  <caption>kasuta saidi näitamisel layouti</caption>
+                  <caption>kasuta saidi n&amp;auml;itamisel layouti</caption>
             </SHOW_AS_LAYOUT>
             <SEEALSO>
                   <value>5</value>
@@ -819,7 +817,7 @@
             <IP>
                   <value>6</value>
                   <clid>CL_IPADDRESS</clid>
-                  <caption>IP aadress ligipääsu piiramiseks</caption>
+                  <caption>IP aadress ligip&amp;auml;&amp;auml;su piiramiseks</caption>
             </IP>
             <ACL_GROUP>
                   <value>7</value>
@@ -837,12 +835,12 @@
             <DOCS_FROM_MENU>
                   <value>9</value>
                   <clid>CL_MENU</clid>
-                  <caption>v&amp;otilde;ta dokumente men&amp;uuml;&amp;uuml; alt</caption>
+                  <caption>v&amp;amp;otilde;ta dokumente men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
             </DOCS_FROM_MENU>
             <PERIOD>
                   <value>10</value>
                   <clid>CL_PERIOD</clid>
-                  <caption>v&amp;otilde;ta dokumente perioodi alt</caption>
+                  <caption>v&amp;amp;otilde;ta dokumente perioodi alt</caption>
             </PERIOD>
             <OBJ_TABLE_CONF>
                   <value>11</value>
@@ -872,7 +870,7 @@
                         <num_2>CL_OBJECT_TREEVIEW_V2</num_2>
                         <num_3>CL_ABSTRACT_DATASOURCE</num_3>
                   </clid>
-                  <caption>alammen&amp;uuml;&amp;uuml;d objektist</caption>
+                  <caption>alammen&amp;amp;uuml;&amp;amp;uuml;d objektist</caption>
             </SUBMENUS>
             <CONTENT_FROM>
                   <value>17</value>

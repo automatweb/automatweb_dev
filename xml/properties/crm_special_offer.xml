@@ -33,7 +33,7 @@
             <type>datetime_select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kehtivuse lõpp</caption>
+            <caption>Kehtivuse l&amp;otilde;pp</caption>
       </property>
       <property>
             <name>images</name>

@@ -22,7 +22,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>unit</field>
-            <caption>Ühik</caption>
+            <caption>&amp;Uuml;hik</caption>
       </property>
       <property>
             <name>price</name>

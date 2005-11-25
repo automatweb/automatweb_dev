@@ -23,7 +23,7 @@
             <form>monster</form>
             <type>textbox</type>
             <field>new_value</field>
-            <caption>Uue cookie v‰‰rtus</caption>
+            <caption>Uue cookie v&amp;auml;&amp;auml;rtus</caption>
       </property>
       <forminfo>
             <monster>

@@ -14,7 +14,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>aw_end</field>
-            <caption>L&amp;otilde;pp</caption>
+            <caption>L&amp;amp;otilde;pp</caption>
       </property>
       <property>
             <name>content</name>

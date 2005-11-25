@@ -16,7 +16,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>textbox</type>
-            <caption>L&amp;uuml;hend</caption>
+            <caption>L&amp;amp;uuml;hend</caption>
       </property>
       <property>
             <name>meta_ctr</name>
@@ -89,7 +89,7 @@
             <group>indexer</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Indekseerija k&amp;auml;ib pidevalt</caption>
+            <caption>Indekseerija k&amp;amp;auml;ib pidevalt</caption>
       </property>
       <property>
             <name>rc_txt</name>
@@ -99,7 +99,7 @@
             <group>indexer</group>
             <type>text</type>
             <subtitle>1</subtitle>
-            <caption>Kordus indekseerija k&amp;auml;ivitamiseks</caption>
+            <caption>Kordus indekseerija k&amp;amp;auml;ivitamiseks</caption>
       </property>
       <property>
             <name>recur_edit</name>

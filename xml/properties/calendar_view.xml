@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Välimus</caption>
+            <caption>V&amp;auml;limus</caption>
       </property>
       <property>
             <name>num_next_events</name>
@@ -17,7 +17,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Mitu j&amp;auml;rgmist</caption>
+            <caption>Mitu j&amp;amp;auml;rgmist</caption>
       </property>
       <property>
             <name>default_view</name>
@@ -46,7 +46,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Näita ainult sündmustega päevi</caption>
+            <caption>N&amp;auml;ita ainult s&amp;uuml;ndmustega p&amp;auml;evi</caption>
       </property>
       <property>
             <name>show_event_content</name>
@@ -56,7 +56,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Näita kalendrivaates kohe sündmuse sisu</caption>
+            <caption>N&amp;auml;ita kalendrivaates kohe s&amp;uuml;ndmuse sisu</caption>
       </property>
       <property>
             <name>show_event_days</name>
@@ -66,7 +66,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Näita sündmust kõikidel päevadel</caption>
+            <caption>N&amp;auml;ita s&amp;uuml;ndmust k&amp;otilde;ikidel p&amp;auml;evadel</caption>
       </property>
       <property>
             <name>actives_only</name>
@@ -76,7 +76,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Näita ainult aktiivseid sündmusi</caption>
+            <caption>N&amp;auml;ita ainult aktiivseid s&amp;uuml;ndmusi</caption>
       </property>
       <property>
             <name>fix_links</name>
@@ -86,9 +86,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>
-            <![CDATA["Eelmine"-"Järgmine" lingid viivad sündmusega päevale]]>
-            </caption>
+            <caption>&amp;quot;Eelmine&amp;quot;-&amp;quot;J&amp;auml;rgmine&amp;quot; lingid viivad s&amp;uuml;ndmusega p&amp;auml;evale</caption>
       </property>
       <property>
             <name>minical_day_with_events</name>
@@ -98,7 +96,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Sündmustega päev</caption>
+            <caption>S&amp;uuml;ndmustega p&amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_day_without_events</name>
@@ -108,7 +106,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Ilma sündmusteta päev</caption>
+            <caption>Ilma s&amp;uuml;ndmusteta p&amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_day_today</name>
@@ -118,7 +116,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Tänane päev</caption>
+            <caption>T&amp;auml;nane p&amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_day_active</name>
@@ -128,7 +126,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Aktiivne päev</caption>
+            <caption>Aktiivne p&amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_day_deactive</name>
@@ -138,7 +136,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Deaktiivne päev</caption>
+            <caption>Deaktiivne p&amp;auml;ev</caption>
       </property>
       <property>
             <name>minical_title</name>
@@ -220,7 +218,7 @@
             <type>calendar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Sündmused</caption>
+            <caption>S&amp;uuml;ndmused</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CALENDAR_VIEW</syslog_type>
@@ -247,7 +245,7 @@
                         <num_1>CL_DOCUMENT_ARCHIVE</num_1>
                         <num_2>CL_PROJECT</num_2>
                   </clid>
-                  <caption>Võta sündmusi</caption>
+                  <caption>V&amp;otilde;ta s&amp;uuml;ndmusi</caption>
             </EVENT_SOURCE>
             <OUTPUT>
                   <value>2</value>
@@ -255,7 +253,7 @@
                         <num_0>CL_RELATION</num_0>
                         <num_1>CL_DOCUMENT</num_1>
                   </clid>
-                  <caption>väljund</caption>
+                  <caption>v&amp;auml;ljund</caption>
             </OUTPUT>
             <STYLE>
                   <value>3</value>

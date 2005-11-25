@@ -10,7 +10,7 @@
             <reltype>RELTYPE_COUNTRY</reltype>
             <clid>CL_COUNTRY</clid>
             <automatic>1</automatic>
-            <comment>Riik, mille haldusjaotuse struktuuri määratakse.</comment>
+            <comment>Riik, mille haldusjaotuse struktuuri m&amp;auml;&amp;auml;ratakse.</comment>
             <caption>Riik</caption>
       </property>
       <property>
@@ -71,7 +71,7 @@
             <ADMINISTRATIVE_DIVISION>
                   <value>1</value>
                   <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
-                  <caption>Haldusüksus</caption>
+                  <caption>Haldus&amp;uuml;ksus</caption>
             </ADMINISTRATIVE_DIVISION>
             <COUNTRY>
                   <value>2</value>

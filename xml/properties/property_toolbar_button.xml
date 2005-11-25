@@ -7,7 +7,7 @@
             <type>textbox</type>
             <size>5</size>
             <field>jrk</field>
-            <caption>J&amp;auml;rjekord</caption>
+            <caption>J&amp;amp;auml;rjekord</caption>
       </property>
       <property>
             <name>b_type</name>
@@ -16,7 +16,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Nupu t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Nupu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>but_action</name>

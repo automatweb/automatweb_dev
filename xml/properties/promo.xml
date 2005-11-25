@@ -49,7 +49,7 @@
             <method>serialize</method>
             <trans>1</trans>
             <group>general_sub</group>
-            <caption>Kasti tüüp</caption>
+            <caption>Kasti t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>link</name>
@@ -77,7 +77,7 @@
             <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
-            <caption>Grupid, kellele kasti näidata</caption>
+            <caption>Grupid, kellele kasti n&amp;auml;idata</caption>
       </property>
       <property>
             <name>no_title</name>
@@ -97,7 +97,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>show_sub</group>
-            <caption>N&amp;auml;ita mitteaktiivseid dokumente tekstina</caption>
+            <caption>N&amp;amp;auml;ita mitteaktiivseid dokumente tekstina</caption>
       </property>
       <property>
             <name>auto_period</name>
@@ -117,7 +117,7 @@
             <method>serialize</method>
             <table>objects</table>
             <field>meta</field>
-            <caption>Näita igal pool</caption>
+            <caption>N&amp;auml;ita igal pool</caption>
       </property>
       <property>
             <name>not_in_search</name>
@@ -127,7 +127,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>container_locations</group>
-            <caption>&amp;Auml;ra n&amp;auml;ita otsingu tulemuste lehel</caption>
+            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita otsingu tulemuste lehel</caption>
       </property>
       <property>
             <name>trans_all_langs</name>
@@ -137,7 +137,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>container_locations</group>
-            <caption>Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes</caption>
+            <caption>Sisu n&amp;amp;auml;idatakse k&amp;amp;otilde;ikides keeltes</caption>
       </property>
       <property>
             <name>content_all_langs</name>
@@ -147,7 +147,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>container_locations</group>
-            <caption>Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes</caption>
+            <caption>Sisu n&amp;amp;auml;idatakse k&amp;amp;otilde;ikides keeltes</caption>
       </property>
       <property>
             <name>section</name>
@@ -156,7 +156,7 @@
             <method>serialize</method>
             <store>no</store>
             <field>section</field>
-            <caption>Vali men&amp;uuml;&amp;uuml;d, mille all kasti n&amp;auml;idata</caption>
+            <caption>Vali men&amp;amp;uuml;&amp;amp;uuml;d, mille all kasti n&amp;amp;auml;idata</caption>
       </property>
       <property>
             <name>section_noshow</name>
@@ -165,7 +165,7 @@
             <method>serialize</method>
             <store>no</store>
             <field>section_noshow</field>
-            <caption>Vali men&amp;uuml;&amp;uuml;d, mille all kasti EI n&amp;auml;idata</caption>
+            <caption>Vali men&amp;amp;uuml;&amp;amp;uuml;d, mille all kasti EI n&amp;amp;auml;idata</caption>
       </property>
       <property>
             <name>sort_by</name>
@@ -174,7 +174,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>doc_ord</group>
-            <caption>Dokumente j&amp;auml;rjestatakse</caption>
+            <caption>Dokumente j&amp;amp;auml;rjestatakse</caption>
       </property>
       <property>
             <name>sort_ord</name>
@@ -200,7 +200,7 @@
             <table>menu</table>
             <group>templates</group>
             <field>tpl_lead</field>
-            <caption>Template näitamiseks</caption>
+            <caption>Template n&amp;auml;itamiseks</caption>
       </property>
       <property>
             <name>use_fld_tpl</name>
@@ -228,7 +228,7 @@
             <method>serialize</method>
             <store>no</store>
             <field>last_menus</field>
-            <caption>Vali menüüd, mille alt viimaseid dokumente võetakse</caption>
+            <caption>Vali men&amp;uuml;&amp;uuml;d, mille alt viimaseid dokumente v&amp;otilde;etakse</caption>
       </property>
       <property>
             <name>ndocs</name>
@@ -247,7 +247,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Mitu algusest &amp;auml;ra j&amp;auml;tta</caption>
+            <caption>Mitu algusest &amp;amp;auml;ra j&amp;amp;auml;tta</caption>
       </property>
       <property>
             <name>is_dyn</name>
@@ -314,12 +314,12 @@
             <ASSIGNED_MENU>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>näita menüü juures</caption>
+                  <caption>n&amp;auml;ita men&amp;uuml;&amp;uuml; juures</caption>
             </ASSIGNED_MENU>
             <DOC_SOURCE>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>võta dokumente selle menüü alt</caption>
+                  <caption>v&amp;otilde;ta dokumente selle men&amp;uuml;&amp;uuml; alt</caption>
             </DOC_SOURCE>
             <IMAGE>
                   <value>3</value>
@@ -329,7 +329,7 @@
             <NO_SHOW_MENU>
                   <value>4</value>
                   <clid>CL_MENU</clid>
-                  <caption>&amp;auml;ra näita menüü juures</caption>
+                  <caption>&amp;amp;auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures</caption>
             </NO_SHOW_MENU>
       </reltypes>
 </properties>

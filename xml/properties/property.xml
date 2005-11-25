@@ -16,7 +16,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>ext_ref</field>
-            <caption>Väline seos</caption>
+            <caption>V&amp;auml;line seos</caption>
       </property>
       <property>
             <name>property_type</name>
@@ -24,7 +24,7 @@
             <group>general</group>
             <type>select</type>
             <field>property_type</field>
-            <caption>Omaduse tüüp</caption>
+            <caption>Omaduse t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PROPERTY</syslog_type>

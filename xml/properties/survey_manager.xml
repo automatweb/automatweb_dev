@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SURVEY_FOLDER</reltype>
-            <caption>Millisesse kataloogi täidetud ankeedid salvestada?</caption>
+            <caption>Millisesse kataloogi t&amp;auml;idetud ankeedid salvestada?</caption>
       </property>
       <property>
             <name>use_cfgform</name>
@@ -28,7 +28,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_REDIRECT_TO</reltype>
-            <caption>Kuhu ümber suunata</caption>
+            <caption>Kuhu &amp;uuml;mber suunata</caption>
       </property>
       <property>
             <name>users_only</name>
@@ -38,7 +38,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Täita saavad ainult registreeritud kasutajad</caption>
+            <caption>T&amp;auml;ita saavad ainult registreeritud kasutajad</caption>
       </property>
       <property>
             <name>survey_name</name>
@@ -71,7 +71,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Täidetud ankeedid</caption>
+            <caption>T&amp;auml;idetud ankeedid</caption>
       </property>
       <property>
             <name>search_form</name>
@@ -133,7 +133,7 @@
             <REDIRECT_TO>
                   <value>3</value>
                   <clid>CL_DOCUMENT</clid>
-                  <caption>Kuhu peale täitmist suunata</caption>
+                  <caption>Kuhu peale t&amp;auml;itmist suunata</caption>
             </REDIRECT_TO>
       </reltypes>
 </properties>

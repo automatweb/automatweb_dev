@@ -8,7 +8,7 @@
             <store>no</store>
             <editonly>1</editonly>
             <field>showlink</field>
-            <caption>Näita</caption>
+            <caption>N&amp;auml;ita</caption>
       </property>
       <property>
             <name>tpldata</name>

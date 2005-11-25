@@ -68,7 +68,7 @@
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-            <caption>Minimaalne otsingus&amp;otilde;na pikkus</caption>
+            <caption>Minimaalne otsingus&amp;amp;otilde;na pikkus</caption>
       </property>
       <property>
             <name>max_s_len</name>
@@ -78,7 +78,7 @@
             <group>general</group>
             <type>textbox</type>
             <size>5</size>
-            <caption>Maksimaalne otsingus&amp;otilde;na pikkus</caption>
+            <caption>Maksimaalne otsingus&amp;amp;otilde;na pikkus</caption>
       </property>
       <property>
             <name>do_keyword_search</name>
@@ -88,7 +88,7 @@
             <group>keywords</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Otsing märksõnadest</caption>
+            <caption>Otsing m&amp;auml;rks&amp;otilde;nadest</caption>
       </property>
       <property>
             <name>keyword_search_classes</name>
@@ -116,7 +116,7 @@
             <method>serialize</method>
             <group>searchgroups</group>
             <type>select</type>
-            <caption>Vaikimisi otsingu t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Vaikimisi otsingu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>grpcfg</name>

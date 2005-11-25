@@ -10,7 +10,7 @@
             <multiple>1</multiple>
             <size>15</size>
             <trans>1</trans>
-            <caption>Menüüd</caption>
+            <caption>Men&amp;uuml;&amp;uuml;d</caption>
       </property>
       <property>
             <name>children_only</name>
@@ -21,7 +21,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <trans>1</trans>
-            <caption>Ainult alammenüüd</caption>
+            <caption>Ainult alammen&amp;uuml;&amp;uuml;d</caption>
       </property>
       <property>
             <name>template</name>
@@ -51,7 +51,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <caption>&amp;Auml;ra n&amp;auml;ita mitteklikitavaid men&amp;uuml;&amp;uuml;sid</caption>
+            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita mitteklikitavaid men&amp;amp;uuml;&amp;amp;uuml;sid</caption>
       </property>
       <classinfo>
             <trans>1</trans>

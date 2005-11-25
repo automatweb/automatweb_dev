@@ -9,7 +9,7 @@
             <type>chooser</type>
             <orient>vertical</orient>
             <default>1</default>
-            <caption>Kuupäeva formaat</caption>
+            <caption>Kuup&amp;auml;eva formaat</caption>
       </property>
       <property>
             <name>contents</name>
@@ -34,7 +34,7 @@
             <SOURCE>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>Võta dokumente</caption>
+                  <caption>V&amp;otilde;ta dokumente</caption>
             </SOURCE>
       </reltypes>
 </properties>

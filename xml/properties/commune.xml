@@ -55,7 +55,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Kõik minu profiilid</caption>
+            <caption>K&amp;otilde;ik minu profiilid</caption>
       </property>
       <property>
             <name>my_images</name>
@@ -111,7 +111,7 @@
             <type>text</type>
             <subtitle>1</subtitle>
             <store>no</store>
-            <caption>Muuda kasutajate sirvimise sätteid</caption>
+            <caption>Muuda kasutajate sirvimise s&amp;auml;tteid</caption>
       </property>
       <property>
             <name>browsing_conditions</name>
@@ -132,7 +132,7 @@
             <type>text</type>
             <subtitle>1</subtitle>
             <store>no</store>
-            <caption>Muuda kuvamise sätteid</caption>
+            <caption>Muuda kuvamise s&amp;auml;tteid</caption>
       </property>
       <property>
             <name>view_conditions</name>
@@ -153,7 +153,7 @@
             <type>text</type>
             <subtitle>1</subtitle>
             <store>no</store>
-            <caption>Muuda teadete saamise/saatmise sätteid</caption>
+            <caption>Muuda teadete saamise/saatmise s&amp;auml;tteid</caption>
       </property>
       <property>
             <name>message_conditions</name>
@@ -174,7 +174,7 @@
             <type>text</type>
             <subtitle>1</subtitle>
             <store>no</store>
-            <caption>Sõbralist</caption>
+            <caption>S&amp;otilde;bralist</caption>
       </property>
       <property>
             <name>friend_list_toolbar</name>
@@ -185,7 +185,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Sõprade haldus</caption>
+            <caption>S&amp;otilde;prade haldus</caption>
       </property>
       <property>
             <name>friend_list</name>
@@ -196,7 +196,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Sõbralist</caption>
+            <caption>S&amp;otilde;bralist</caption>
       </property>
       <property>
             <name>head5</name>
@@ -349,7 +349,7 @@
             <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Sõbrad</caption>
+            <caption>S&amp;otilde;brad</caption>
       </property>
       <property>
             <name>address_book_toolbar</name>
@@ -392,7 +392,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Sõbragruppide toolbar</caption>
+            <caption>S&amp;otilde;bragruppide toolbar</caption>
       </property>
       <property>
             <name>friend_groups</name>
@@ -403,7 +403,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Sõbragrupid</caption>
+            <caption>S&amp;otilde;bragrupid</caption>
       </property>
       <property>
             <name>search_n_add</name>
@@ -426,7 +426,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Vaheta profiili sõprade jaoks</caption>
+            <caption>Vaheta profiili s&amp;otilde;prade jaoks</caption>
       </property>
       <property>
             <name>friend_details</name>
@@ -459,7 +459,7 @@
             <callback>callback_rate</callback>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Hindamine või vaatamine</caption>
+            <caption>Hindamine v&amp;otilde;i vaatamine</caption>
       </property>
       <property>
             <name>top_men</name>
@@ -647,7 +647,7 @@
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Üldstatistika</caption>
+            <caption>&amp;Uuml;ldstatistika</caption>
       </property>
       <property>
             <name>join_form</name>
@@ -670,7 +670,7 @@
             <type>text</type>
             <store>no</store>
             <no_captioN>1</no_captioN>
-            <caption>Unustasid salasõna?</caption>
+            <caption>Unustasid salas&amp;otilde;na?</caption>
       </property>
       <property>
             <name>join_obj</name>

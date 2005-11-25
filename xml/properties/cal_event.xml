@@ -14,7 +14,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>end</field>
-            <caption>Lõpeb</caption>
+            <caption>L&amp;otilde;peb</caption>
       </property>
       <property>
             <name>repeater_obj</name>

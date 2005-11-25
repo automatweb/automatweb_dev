@@ -18,7 +18,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_EVENT_SHOW</reltype>
-            <caption>N&amp;auml;itamise vorm</caption>
+            <caption>N&amp;amp;auml;itamise vorm</caption>
       </property>
       <property>
             <name>show_type</name>
@@ -27,7 +27,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>N&amp;auml;ta vaikimisi s&amp;uuml;ndmusi</caption>
+            <caption>N&amp;amp;auml;ta vaikimisi s&amp;amp;uuml;ndmusi</caption>
       </property>
       <property>
             <name>navigator_range</name>
@@ -48,7 +48,7 @@
             <type>chooser</type>
             <multiple>1</multiple>
             <orient>vertical</orient>
-            <caption>Vabateksti v&amp;auml;jad</caption>
+            <caption>Vabateksti v&amp;amp;auml;jad</caption>
       </property>
       <property>
             <name>ftsearch_fields2</name>
@@ -59,7 +59,7 @@
             <type>chooser</type>
             <multiple>1</multiple>
             <orient>vertical</orient>
-            <caption>Vabateksti v&amp;auml;jad 2</caption>
+            <caption>Vabateksti v&amp;amp;auml;jad 2</caption>
       </property>
       <property>
             <name>ftform</name>
@@ -101,7 +101,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>N&amp;auml;dala navigaatori stiil</caption>
+            <caption>N&amp;amp;auml;dala navigaatori stiil</caption>
       </property>
       <property>
             <name>sform_table_style</name>
@@ -155,7 +155,7 @@
             <EVENT_CFGFORM>
                   <value>1</value>
                   <clid>CL_CFGFORM</clid>
-                  <caption>S&amp;uuml;ndmuse vorm</caption>
+                  <caption>S&amp;amp;uuml;ndmuse vorm</caption>
             </EVENT_CFGFORM>
             <EVENT_SOURCE>
                   <value>3</value>
@@ -164,12 +164,12 @@
                         <num_1>CL_PLANNER</num_1>
                         <num_2>CL_PROJECT</num_2>
                   </clid>
-                  <caption>S&amp;uuml;ndmuste allikas</caption>
+                  <caption>S&amp;amp;uuml;ndmuste allikas</caption>
             </EVENT_SOURCE>
             <EVENT_SHOW>
                   <value>4</value>
                   <clid>CL_CFGFORM</clid>
-                  <caption>N&amp;auml;itamise vorm</caption>
+                  <caption>N&amp;amp;auml;itamise vorm</caption>
             </EVENT_SHOW>
             <STYLE>
                   <value>5</value>

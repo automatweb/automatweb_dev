@@ -145,7 +145,7 @@
             <type>password</type>
             <store>no</store>
             <field>passwd</field>
-            <caption>Salasõna</caption>
+            <caption>Salas&amp;otilde;na</caption>
       </property>
       <property>
             <name>passwd_again</name>
@@ -154,7 +154,7 @@
             <type>password</type>
             <store>no</store>
             <field>passwd_again</field>
-            <caption>Salasõna uuesti</caption>
+            <caption>Salas&amp;otilde;na uuesti</caption>
       </property>
       <property>
             <name>password</name>
@@ -431,7 +431,7 @@
             <ACCESS_FROM_IP>
                   <value>8</value>
                   <clid>CL_IPADDRESS</clid>
-                  <caption>ligip&amp;auml;&amp;auml;su aadress</caption>
+                  <caption>ligip&amp;amp;auml;&amp;amp;auml;su aadress</caption>
             </ACCESS_FROM_IP>
             <JOIN_SITE>
                   <value>9</value>

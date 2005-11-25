@@ -18,8 +18,8 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Vaikimisi loginmen&amp;uuml;&amp;uuml; uutel gruppidel</caption>
-            <comment>Seos Loginmen&amp;uuml;&amp;uuml;de juurkaust peab olema loodud</comment>
+            <caption>Vaikimisi loginmen&amp;amp;uuml;&amp;amp;uuml; uutel gruppidel</caption>
+            <comment>Seos Loginmen&amp;amp;uuml;&amp;amp;uuml;de juurkaust peab olema loodud</comment>
       </property>
       <property>
             <name>users_tb</name>
@@ -122,12 +122,12 @@
             <LOGIN_ROOT>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>Loginmen&amp;uuml;&amp;uuml;de juurkaust</caption>
+                  <caption>Loginmen&amp;amp;uuml;&amp;amp;uuml;de juurkaust</caption>
             </LOGIN_ROOT>
             <LOGIN_CONF>
                   <value>3</value>
                   <clid>CL_CONFIG_LOGIN_MENUS</clid>
-                  <caption>Loginmen&amp;uuml;&amp;uuml; seadete objekt </caption>
+                  <caption>Loginmen&amp;amp;uuml;&amp;amp;uuml; seadete objekt </caption>
             </LOGIN_CONF>
       </reltypes>
       <layout>

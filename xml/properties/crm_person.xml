@@ -21,7 +21,7 @@
             <reltype>RELTYPE_FRIEND_GROUPS</reltype>
             <store>no</store>
             <field>friend_groups</field>
-            <caption>Sõbragrupid</caption>
+            <caption>S&amp;otilde;bragrupid</caption>
       </property>
       <property>
             <name>name</name>
@@ -67,7 +67,7 @@
             <group>general2</group>
             <type>textbox</type>
             <field>subclass</field>
-            <caption>Sidussüsteemi ID</caption>
+            <caption>Siduss&amp;uuml;steemi ID</caption>
       </property>
       <property>
             <name>is_customer</name>
@@ -110,7 +110,7 @@
             <size>10</size>
             <maxlength>20</maxlength>
             <field>nickname</field>
-            <caption>Hüüdnimi</caption>
+            <caption>H&amp;uuml;&amp;uuml;dnimi</caption>
       </property>
       <property>
             <name>birthday</name>
@@ -121,7 +121,7 @@
             <year_to>2010</year_to>
             <default>-1</default>
             <field>birthday</field>
-            <caption>Sünnipäev</caption>
+            <caption>S&amp;uuml;nnip&amp;auml;ev</caption>
       </property>
       <property>
             <name>education</name>
@@ -362,7 +362,7 @@
             <viewtype>relative</viewtype>
             <store>no</store>
             <field>org_calls</field>
-            <caption>Kõned</caption>
+            <caption>K&amp;otilde;ned</caption>
       </property>
       <property>
             <name>org_meetings</name>
@@ -545,7 +545,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Väljund</caption>
+            <caption>V&amp;auml;ljund</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -653,7 +653,7 @@
             <WORK>
                   <value>6</value>
                   <clid>CL_CRM_COMPANY</clid>
-                  <caption>töökoht</caption>
+                  <caption>t&amp;ouml;&amp;ouml;koht</caption>
             </WORK>
             <RANK>
                   <value>7</value>
@@ -668,7 +668,7 @@
             <PERSON_CALL>
                   <value>9</value>
                   <clid>CL_CRM_CALL</clid>
-                  <caption>kõne</caption>
+                  <caption>k&amp;otilde;ne</caption>
             </PERSON_CALL>
             <PERSON_TASK>
                   <value>10</value>
@@ -703,7 +703,7 @@
             <SECTION>
                   <value>21</value>
                   <clid>CL_CRM_SECTION</clid>
-                  <caption>Üksus</caption>
+                  <caption>&amp;Uuml;ksus</caption>
             </SECTION>
             <HANDLER>
                   <value>22</value>
@@ -722,7 +722,7 @@
             <PREVIOUS_JOB>
                   <value>26</value>
                   <clid>CL_CRM_PERSON_PREVIOUS_JOB</clid>
-                  <caption>Töökogemus</caption>
+                  <caption>T&amp;ouml;&amp;ouml;kogemus</caption>
             </PREVIOUS_JOB>
             <LANGUAGE_SKILL>
                   <value>27</value>
@@ -745,7 +745,7 @@
             <FRIEND>
                   <value>35</value>
                   <clid>CL_CRM_PERSON</clid>
-                  <caption>Sõber</caption>
+                  <caption>S&amp;otilde;ber</caption>
             </FRIEND>
             <FAVOURITE>
                   <value>36</value>
@@ -755,7 +755,7 @@
             <MATCH>
                   <value>37</value>
                   <clid>CL_CRM_PERSON</clid>
-                  <caption>Väljavalitu</caption>
+                  <caption>V&amp;auml;ljavalitu</caption>
             </MATCH>
             <BLOCKED>
                   <value>38</value>
@@ -770,7 +770,7 @@
             <FRIEND_GROUPS>
                   <value>40</value>
                   <clid>CL_META</clid>
-                  <caption>Sõbragrupid</caption>
+                  <caption>S&amp;otilde;bragrupid</caption>
             </FRIEND_GROUPS>
             <VACATION>
                   <value>41</value>
@@ -780,7 +780,7 @@
             <CONTRACT_STOP>
                   <value>42</value>
                   <clid>CL_CRM_CONTRACT_STOP</clid>
-                  <caption>Töölepingu peatamine</caption>
+                  <caption>T&amp;ouml;&amp;ouml;lepingu peatamine</caption>
             </CONTRACT_STOP>
             <IMPORTANT_PERSON>
                   <value>43</value>

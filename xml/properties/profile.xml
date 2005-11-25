@@ -75,7 +75,7 @@
             <cols>50</cols>
             <rows>10</rows>
             <field>user_blob2</field>
-            <caption>Lisainfo sõpradele</caption>
+            <caption>Lisainfo s&amp;otilde;pradele</caption>
       </property>
       <property>
             <name>user_check1</name>
@@ -115,7 +115,7 @@
             <reltype>RELTYPE_PRF_EYES_COLOR</reltype>
             <orient>vertical</orient>
             <field>eyes_color</field>
-            <caption>Silmade värv</caption>
+            <caption>Silmade v&amp;auml;rv</caption>
       </property>
       <property>
             <name>hair_color</name>
@@ -125,7 +125,7 @@
             <reltype>RELTYPE_PRF_HAIR_COLOR</reltype>
             <orient>vertical</orient>
             <field>hair_color</field>
-            <caption>Juuksevärv</caption>
+            <caption>Juuksev&amp;auml;rv</caption>
       </property>
       <property>
             <name>hair_type</name>
@@ -135,7 +135,7 @@
             <reltype>RELTYPE_PRF_HAIR_TYPE</reltype>
             <orient>vertical</orient>
             <field>hair_type</field>
-            <caption>Juuste tüüp</caption>
+            <caption>Juuste t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>body_type</name>
@@ -145,7 +145,7 @@
             <reltype>RELTYPE_PRF_BODY_TYPE</reltype>
             <orient>vertical</orient>
             <field>body_type</field>
-            <caption>Keha tüüp</caption>
+            <caption>Keha t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>user_text5</name>
@@ -274,22 +274,22 @@
             <PRF_EYES_COLOR>
                   <value>2</value>
                   <clid>CL_META</clid>
-                  <caption>Silmade värv</caption>
+                  <caption>Silmade v&amp;auml;rv</caption>
             </PRF_EYES_COLOR>
             <PRF_HAIR_COLOR>
                   <value>3</value>
                   <clid>CL_META</clid>
-                  <caption>Juuksevärv</caption>
+                  <caption>Juuksev&amp;auml;rv</caption>
             </PRF_HAIR_COLOR>
             <PRF_HAIR_TYPE>
                   <value>4</value>
                   <clid>CL_META</clid>
-                  <caption>Juuksetüüp</caption>
+                  <caption>Juukset&amp;uuml;&amp;uuml;p</caption>
             </PRF_HAIR_TYPE>
             <PRF_BODY_TYPE>
                   <value>5</value>
                   <clid>CL_META</clid>
-                  <caption>Keha tüüp</caption>
+                  <caption>Keha t&amp;uuml;&amp;uuml;p</caption>
             </PRF_BODY_TYPE>
             <PRF_SEX_ORIENT>
                   <value>6</value>

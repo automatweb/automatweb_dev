@@ -6,7 +6,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_date</field>
-            <caption>Kuup&amp;auml;ev</caption>
+            <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>reporter</name>
@@ -33,7 +33,7 @@
             <type>textbox</type>
             <size>5</size>
             <field>aw_num_hrs</field>
-            <caption>T&amp;ouml;&amp;ouml;tundide arv</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tundide arv</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_DAY_REPORT</syslog_type>

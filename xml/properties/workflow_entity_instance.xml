@@ -6,7 +6,7 @@
             <type>textbox</type>
             <field>aw_entity_type_id</field>
             <table>aw_wf_entities</table>
-            <caption>Juhtumi t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Juhtumi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>state</name>

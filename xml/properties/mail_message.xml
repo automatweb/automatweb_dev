@@ -167,7 +167,7 @@
             <form>showmsg</form>
             <no_caption>1</no_caption>
             <field>msg_headers</field>
-            <caption>Kirja päised</caption>
+            <caption>Kirja p&amp;auml;ised</caption>
       </property>
       <property>
             <name>msg_content</name>

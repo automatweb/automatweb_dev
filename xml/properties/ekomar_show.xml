@@ -8,7 +8,7 @@
             <reltype>RELTYPE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kuhu suunata kui ei leitud &amp;uuml;htegi tulemust</caption>
+            <caption>Kuhu suunata kui ei leitud &amp;amp;uuml;htegi tulemust</caption>
       </property>
       <classinfo>
             <syslog_type>ST_EKOMAR</syslog_type>

@@ -45,7 +45,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Asukohta m&amp;auml;&amp;auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)</caption>
+            <caption>Asukohta m&amp;amp;auml;&amp;amp;auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)</caption>
       </property>
       <property>
             <name>field_tags</name>
@@ -54,7 +54,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Sisuv&amp;auml;lju m&amp;auml;&amp;auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)</caption>
+            <caption>Sisuv&amp;amp;auml;lju m&amp;amp;auml;&amp;amp;auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)</caption>
       </property>
       <property>
             <name>end_tag</name>
@@ -63,7 +63,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>dokumenti l&amp;otilde;petav tag</caption>
+            <caption>dokumenti l&amp;amp;otilde;petav tag</caption>
       </property>
       <property>
             <name>content_transform</name>

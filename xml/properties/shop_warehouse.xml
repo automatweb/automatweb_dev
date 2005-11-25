@@ -122,7 +122,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>storage_export</field>
-            <caption>V&amp;auml;ljaminekud</caption>
+            <caption>V&amp;amp;auml;ljaminekud</caption>
       </property>
       <property>
             <name>order_unconfirmed_toolbar</name>
@@ -233,7 +233,7 @@
             <type>chooser</type>
             <store>no</store>
             <field>osearch_from</field>
-            <caption>Otsi staatuse järgi</caption>
+            <caption>Otsi staatuse j&amp;auml;rgi</caption>
       </property>
       <property>
             <name>osearch_odates</name>
@@ -479,7 +479,7 @@
             <STORAGE_EXPORT>
                   <value>4</value>
                   <clid>CL_SHOP_WAREHOUSE_EXPORT</clid>
-                  <caption>lao v&amp;auml;jaminek</caption>
+                  <caption>lao v&amp;amp;auml;jaminek</caption>
             </STORAGE_EXPORT>
             <ORDER>
                   <value>5</value>

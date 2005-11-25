@@ -90,7 +90,7 @@
             <callback>get_row_heights</callback>
             <group>settings</group>
             <store>no</store>
-            <caption>Ridade k&amp;otilde;rgused</caption>
+            <caption>Ridade k&amp;amp;otilde;rgused</caption>
       </property>
       <property>
             <name>grid_aliases</name>
@@ -137,7 +137,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <group>import</group>
-            <caption>Kas eemaldame t&amp;uuml;hjad read l&amp;otilde;pust</caption>
+            <caption>Kas eemaldame t&amp;amp;uuml;hjad read l&amp;amp;otilde;pust</caption>
       </property>
       <property>
             <name>import_sep</name>
@@ -147,7 +147,7 @@
             <type>textbox</type>
             <size>1</size>
             <group>import</group>
-            <caption>Mis m&amp;auml;rgiga on tulbad eraldatud?</caption>
+            <caption>Mis m&amp;amp;auml;rgiga on tulbad eraldatud?</caption>
       </property>
       <property>
             <name>show_in_folders</name>
@@ -159,7 +159,7 @@
             <multiple>1</multiple>
             <rel>1</rel>
             <group>general</group>
-            <caption>Millistes kataloogides n&amp;auml;idatakse</caption>
+            <caption>Millistes kataloogides n&amp;amp;auml;idatakse</caption>
       </property>
       <property>
             <name>header</name>
@@ -170,7 +170,7 @@
             <rows>10</rows>
             <cols>50</cols>
             <group>hfoot</group>
-            <caption>P&amp;auml;is</caption>
+            <caption>P&amp;amp;auml;is</caption>
       </property>
       <property>
             <name>footer</name>
@@ -220,7 +220,7 @@
             <SHOW_FOLDER>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>näita selles kataloogis</caption>
+                  <caption>n&amp;auml;ita selles kataloogis</caption>
             </SHOW_FOLDER>
       </reltypes>
 </properties>

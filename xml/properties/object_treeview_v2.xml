@@ -54,7 +54,7 @@
             <type>select</type>
             <newonly>1</newonly>
             <store>no</store>
-            <caption>Uue andmeallika t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Uue andmeallika t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>copy_ds</name>
@@ -112,7 +112,7 @@
             <store>no</store>
             <subtitle>1</subtitle>
             <newonly>1</newonly>
-            <caption>P&amp;auml;ri omadused objektinimekirjast</caption>
+            <caption>P&amp;amp;auml;ri omadused objektinimekirjast</caption>
       </property>
       <property>
             <name>sel_inherit_from</name>
@@ -123,7 +123,7 @@
             <type>select</type>
             <newonly>1</newonly>
             <store>no</store>
-            <caption>Vali p&amp;auml;ritav objektinimekiri</caption>
+            <caption>Vali p&amp;amp;auml;ritav objektinimekiri</caption>
       </property>
       <property>
             <name>inherit_view_props_from</name>
@@ -132,7 +132,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>P&amp;auml;ri n&amp;auml;itamise omadused objektist</caption>
+            <caption>P&amp;amp;auml;ri n&amp;amp;auml;itamise omadused objektist</caption>
       </property>
       <property>
             <name>show_folders</name>
@@ -142,7 +142,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita katalooge</caption>
+            <caption>N&amp;amp;auml;ita katalooge</caption>
       </property>
       <property>
             <name>show_add</name>
@@ -152,7 +152,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita t&amp;ouml;&amp;ouml;riistariba</caption>
+            <caption>N&amp;amp;auml;ita t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
       </property>
       <property>
             <name>show_link_new_win</name>
@@ -171,7 +171,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Millises v&amp;auml;ljas vaata linki n&amp;auml;idata</caption>
+            <caption>Millises v&amp;amp;auml;ljas vaata linki n&amp;amp;auml;idata</caption>
       </property>
       <property>
             <name>url_field</name>
@@ -180,7 +180,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Millises v&amp;auml;ljas lingi url</caption>
+            <caption>Millises v&amp;amp;auml;ljas lingi url</caption>
       </property>
       <property>
             <name>hide_content_table_by_default</name>
@@ -190,7 +190,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Vaikimisi &amp;auml;ra n&amp;auml;ita sisu tabelit</caption>
+            <caption>Vaikimisi &amp;amp;auml;ra n&amp;amp;auml;ita sisu tabelit</caption>
       </property>
       <property>
             <name>tree_type</name>
@@ -200,7 +200,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <default>TREE_DHTML</default>
-            <caption>Puu n&amp;auml;itamise meetod</caption>
+            <caption>Puu n&amp;amp;auml;itamise meetod</caption>
       </property>
       <property>
             <name>folders_table_column_count</name>
@@ -210,7 +210,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Mitu tulpa n&amp;auml;idata kaustade tabelis</caption>
+            <caption>Mitu tulpa n&amp;amp;auml;idata kaustade tabelis</caption>
       </property>
       <property>
             <name>per_page</name>
@@ -231,7 +231,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <caption>N&amp;auml;ita peidetud tulpasid?</caption>
+            <caption>N&amp;amp;auml;ita peidetud tulpasid?</caption>
       </property>
       <property>
             <name>sortbl</name>
@@ -260,7 +260,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Kaustade j&amp;auml;rgi grupeeritav v&amp;auml;li</caption>
+            <caption>Kaustade j&amp;amp;auml;rgi grupeeritav v&amp;amp;auml;li</caption>
       </property>
       <property>
             <name>group_in_table</name>
@@ -269,7 +269,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Millise v&amp;auml;lja j&amp;auml;rgi tabel grupeerida</caption>
+            <caption>Millise v&amp;amp;auml;lja j&amp;amp;auml;rgi tabel grupeerida</caption>
       </property>
       <property>
             <name>filter_by_char_field</name>
@@ -278,7 +278,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Millise v&amp;auml;lja v&amp;auml;&amp;auml;rtuse esit&amp;auml;he j&amp;auml;rgi filtreeritakse</caption>
+            <caption>Millise v&amp;amp;auml;lja v&amp;amp;auml;&amp;amp;auml;rtuse esit&amp;amp;auml;he j&amp;amp;auml;rgi filtreeritakse</caption>
       </property>
       <property>
             <name>filter_by_char_order</name>
@@ -297,7 +297,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>T&amp;auml;hestiku kuvamisel kasutada v&amp;auml;iket&amp;auml;hti </caption>
+            <caption>T&amp;amp;auml;hestiku kuvamisel kasutada v&amp;amp;auml;iket&amp;amp;auml;hti </caption>
       </property>
       <property>
             <name>add_table_anchor_to_url</name>
@@ -307,8 +307,8 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Lisa #table URL-i l&amp;otilde;ppu</caption>
-            <comment>Lisab #table kataloogide URL-i l&amp;otilde;ppu</comment>
+            <caption>Lisa #table URL-i l&amp;amp;otilde;ppu</caption>
+            <comment>Lisab #table kataloogide URL-i l&amp;amp;otilde;ppu</comment>
       </property>
       <property>
             <name>sproc_params</name>
@@ -326,7 +326,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Pealkirja taustav&amp;auml;rv</caption>
+            <caption>Pealkirja taustav&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>even_bgcolor</name>
@@ -335,7 +335,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Paaris rea taustav&amp;auml;rv</caption>
+            <caption>Paaris rea taustav&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>even_css_text</name>
@@ -353,7 +353,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Paaritu rea taustav&amp;auml;rv</caption>
+            <caption>Paaritu rea taustav&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>odd_css_text</name>
@@ -371,7 +371,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Grupeeriva rea taustav&amp;auml;rv</caption>
+            <caption>Grupeeriva rea taustav&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>table_css</name>
@@ -433,7 +433,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kasutatav p&amp;auml;rimiseks</caption>
+            <caption>Kasutatav p&amp;amp;auml;rimiseks</caption>
       </property>
       <property>
             <name>search_show</name>
@@ -443,7 +443,7 @@
             <method>serialize</method>
             <type>callback</type>
             <callback>search_gen_els</callback>
-            <caption>Tabeli v&amp;auml;ljad</caption>
+            <caption>Tabeli v&amp;amp;auml;ljad</caption>
       </property>
       <property>
             <name>search_res</name>
@@ -517,7 +517,7 @@
             <VIEW_CONTROLLER>
                   <value>5</value>
                   <clid>CL_CFG_VIEW_CONTROLLER</clid>
-                  <caption>N&amp;auml;itamise kontroller</caption>
+                  <caption>N&amp;amp;auml;itamise kontroller</caption>
             </VIEW_CONTROLLER>
       </reltypes>
 </properties>

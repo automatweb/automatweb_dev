@@ -27,7 +27,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>main_toolbar</field>
-            <caption>Suurepärane toolbar</caption>
+            <caption>Suurep&amp;auml;rane toolbar</caption>
       </property>
       <property>
             <name>main_treeview</name>

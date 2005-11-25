@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Näitamise põhi (template)</caption>
+            <caption>N&amp;auml;itamise p&amp;otilde;hi (template)</caption>
       </property>
       <property>
             <name>result_format</name>
@@ -16,7 +16,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Otsingutulemuste näitamise formaat</caption>
+            <caption>Otsingutulemuste n&amp;auml;itamise formaat</caption>
       </property>
       <property>
             <name>searchform_select_size</name>
@@ -26,7 +26,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <datatype>int</datatype>
-            <comment>[0] - võimalus valida parameetrile vaid üks väärtus, [1 - ...] - võimalus valida mitu.</comment>
+            <comment>[0] - v&amp;otilde;imalus valida parameetrile vaid &amp;uuml;ks v&amp;auml;&amp;auml;rtus, [1 - ...] - v&amp;otilde;imalus valida mitu.</comment>
             <caption>Otsinguvormi valikuelementide suurus</caption>
       </property>
       <property>
@@ -84,7 +84,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>3</size>
-            <caption>Tehingu tüüp</caption>
+            <caption>Tehingu t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>search_transaction_price_min</name>
@@ -117,7 +117,7 @@
             <type>textbox</type>
             <parent>box2</parent>
             <size>10</size>
-            <caption>Üldpind min</caption>
+            <caption>&amp;Uuml;ldpind min</caption>
       </property>
       <property>
             <name>search_total_floor_area_max</name>
@@ -128,7 +128,7 @@
             <type>textbox</type>
             <parent>box2</parent>
             <size>10</size>
-            <caption>Üldpind max</caption>
+            <caption>&amp;Uuml;ldpind max</caption>
       </property>
       <property>
             <name>search_number_of_rooms</name>
@@ -189,7 +189,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Alates kuupäevast</caption>
+            <caption>Alates kuup&amp;auml;evast</caption>
       </property>
       <property>
             <name>search_usage_purpose</name>
@@ -200,7 +200,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>5</size>
-            <caption>Äripinna tüüp</caption>
+            <caption>&amp;Auml;ripinna t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>search_agent</name>
@@ -229,7 +229,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
-            <caption>Näita ainult pildiga kuulutusi</caption>
+            <caption>N&amp;auml;ita ainult pildiga kuulutusi</caption>
       </property>
       <property>
             <name>search_button</name>
@@ -297,7 +297,7 @@
             <box2>
                   <type>hbox</type>
                   <group>grp_search</group>
-                  <caption>Üldpinna vahemik</caption>
+                  <caption>&amp;Uuml;ldpinna vahemik</caption>
             </box2>
       </layout>
 </properties>

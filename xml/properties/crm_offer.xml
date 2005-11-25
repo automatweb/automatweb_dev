@@ -24,7 +24,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_PREFORMER</reltype>
             <field>preformer</field>
-            <caption>Täitja</caption>
+            <caption>T&amp;auml;itja</caption>
       </property>
       <property>
             <name>salesman</name>
@@ -78,7 +78,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>L&amp;otilde;pp</caption>
+            <caption>L&amp;amp;otilde;pp</caption>
       </property>
       <property>
             <name>is_done</name>
@@ -221,7 +221,7 @@
             <PREFORMER>
                   <value>3</value>
                   <clid>CL_CRM_COMPANY</clid>
-                  <caption>Täitja</caption>
+                  <caption>T&amp;auml;itja</caption>
             </PREFORMER>
             <SALESMAN>
                   <value>4</value>

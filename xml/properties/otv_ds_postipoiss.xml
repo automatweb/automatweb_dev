@@ -44,7 +44,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>db_to_xml_connections</field>
-            <caption>Andmebaasi tabeli ja XML faili v&amp;auml;ljade seosed</caption>
+            <caption>Andmebaasi tabeli ja XML faili v&amp;amp;auml;ljade seosed</caption>
       </property>
       <property>
             <name>ct</name>

@@ -22,7 +22,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>product_color</field>
-            <caption>Värvus</caption>
+            <caption>V&amp;auml;rvus</caption>
       </property>
       <property>
             <name>product_size</name>
@@ -54,7 +54,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>product_page</field>
-            <caption>Lehekülg</caption>
+            <caption>Lehek&amp;uuml;lg</caption>
       </property>
       <property>
             <name>product_image</name>

@@ -20,7 +20,7 @@
             <type>text</type>
             <store>no</store>
             <field>dimensions1</field>
-            <caption>Mõõtmed</caption>
+            <caption>M&amp;otilde;&amp;otilde;tmed</caption>
       </property>
       <property>
             <name>file2</name>
@@ -43,7 +43,7 @@
             <type>text</type>
             <store>no</store>
             <field>dimensions2</field>
-            <caption>Mõõtmed</caption>
+            <caption>M&amp;otilde;&amp;otilde;tmed</caption>
       </property>
       <property>
             <name>file3</name>
@@ -57,7 +57,7 @@
                   <num_1>edit</num_1>
                   <num_2>emb</num_2>
             </form>
-            <caption>Flaieri teine külg</caption>
+            <caption>Flaieri teine k&amp;uuml;lg</caption>
       </property>
       <property>
             <name>dimensions3</name>
@@ -66,7 +66,7 @@
             <type>text</type>
             <store>no</store>
             <field>dimensions3</field>
-            <caption>Mõõtmed</caption>
+            <caption>M&amp;otilde;&amp;otilde;tmed</caption>
       </property>
       <property>
             <name>file3_del</name>
@@ -76,7 +76,7 @@
             <ch_value>1</ch_value>
             <store>no</store>
             <field>file3_del</field>
-            <caption>Kustuta teine külg</caption>
+            <caption>Kustuta teine k&amp;uuml;lg</caption>
       </property>
       <classinfo>
             <syslog_type>ST_FLYER</syslog_type>

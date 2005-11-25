@@ -18,7 +18,7 @@
             <callback>callback_get_syntb</callback>
             <store>no</store>
             <field>syntb</field>
-            <caption>S&amp;uuml;non&amp;uuml;mise sisestamine</caption>
+            <caption>S&amp;amp;uuml;non&amp;amp;uuml;mise sisestamine</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CB_SEARCH_SYNONYMS</syslog_type>

@@ -36,7 +36,7 @@
             <type>textbox</type>
             <size>4</size>
             <field>meta</field>
-            <caption>Kõrgus</caption>
+            <caption>K&amp;otilde;rgus</caption>
       </property>
       <property>
             <name>preview</name>

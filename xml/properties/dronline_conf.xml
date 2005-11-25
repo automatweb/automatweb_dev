@@ -113,7 +113,7 @@
             <group>types</group>
             <type>callback</type>
             <callback>get_filter_types</callback>
-            <caption>T&amp;uuml;&amp;uuml;bid</caption>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;bid</caption>
       </property>
       <property>
             <name>filter_actions</name>
@@ -175,7 +175,7 @@
             <type>objpicker</type>
             <clid>CL_MENU</clid>
             <multiple>1</multiple>
-            <caption>N&amp;auml;idatavate aadresside kataloogid</caption>
+            <caption>N&amp;amp;auml;idatavate aadresside kataloogid</caption>
       </property>
       <property>
             <name>ip_allow_folders_subs</name>
@@ -185,7 +185,7 @@
             <group>ipfilter</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas n&amp;auml;idata ka alamkataloogid</caption>
+            <caption>Kas n&amp;amp;auml;idata ka alamkataloogid</caption>
       </property>
       <groupinfo>
             <types>

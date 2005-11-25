@@ -26,8 +26,8 @@
             <type>datetime_select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Esimese objekti muutmise kuup&amp;auml;ev</caption>
-            <comment>&amp;Auml;ra ekspordi objekte, mis on viimati muudetud varem kui (Kuup&amp;auml;ev)</comment>
+            <caption>Esimese objekti muutmise kuup&amp;amp;auml;ev</caption>
+            <comment>&amp;amp;Auml;ra ekspordi objekte, mis on viimati muudetud varem kui (Kuup&amp;amp;auml;ev)</comment>
       </property>
       <property>
             <name>last_changed_obj_count</name>
@@ -118,7 +118,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>FTP kataloog</caption>
-            <comment>Kataloog, kuhu üle FTP fail salvestatakse (koos failinimega)</comment>
+            <comment>Kataloog, kuhu &amp;uuml;le FTP fail salvestatakse (koos failinimega)</comment>
       </property>
       <property>
             <name>parents_table</name>
@@ -127,7 +127,7 @@
             <type>table</type>
             <store>no</store>
             <field>parents_table</field>
-            <caption>Kaustad, mille alt objekte v&amp;otilde;etakse</caption>
+            <caption>Kaustad, mille alt objekte v&amp;amp;otilde;etakse</caption>
       </property>
       <property>
             <name>xml_struct_table</name>
@@ -137,7 +137,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>xml_struct_table</field>
-            <caption>Seadete vormi v&amp;auml;ljad</caption>
+            <caption>Seadete vormi v&amp;amp;auml;ljad</caption>
       </property>
       <classinfo>
             <syslog_type>ST_XML_EXPORT</syslog_type>

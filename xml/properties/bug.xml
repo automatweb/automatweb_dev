@@ -6,7 +6,7 @@
             <type>textbox</type>
             <table>objects</table>
             <field>name</field>
-            <caption>Lühikirjeldus</caption>
+            <caption>L&amp;uuml;hikirjeldus</caption>
       </property>
       <property>
             <name>bug_content</name>
@@ -40,7 +40,7 @@
             <table>aw_bugs</table>
             <type>select</type>
             <field>bug_severity</field>
-            <caption>T&amp;ouml;sidus</caption>
+            <caption>T&amp;amp;ouml;sidus</caption>
       </property>
       <property>
             <name>bug_class</name>
@@ -106,7 +106,7 @@
             <MONITOR>
                   <value>1</value>
                   <clid>CL_CRM_PERSON</clid>
-                  <caption>Jälgija</caption>
+                  <caption>J&amp;auml;lgija</caption>
             </MONITOR>
       </reltypes>
 </properties>

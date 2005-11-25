@@ -40,7 +40,7 @@
             <type>textbox</type>
             <size>4</size>
             <maxlength>4</maxlength>
-            <caption>Kõrgus</caption>
+            <caption>K&amp;otilde;rgus</caption>
       </property>
       <property>
             <name>frameborder</name>
@@ -51,7 +51,7 @@
             <type>checkbox</type>
             <default>1</default>
             <ch_value>1</ch_value>
-            <caption>Ümbritseda raamiga</caption>
+            <caption>&amp;Uuml;mbritseda raamiga</caption>
       </property>
       <property>
             <name>scrolling</name>

@@ -32,7 +32,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>V&amp;auml;ljaande nimi</caption>
+            <caption>V&amp;amp;auml;ljaande nimi</caption>
       </property>
       <property>
             <name>publications_description</name>
@@ -41,7 +41,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>V&amp;auml;ljaande kirjeldus</caption>
+            <caption>V&amp;amp;auml;ljaande kirjeldus</caption>
       </property>
       <property>
             <name>publications_homepage</name>
@@ -51,7 +51,7 @@
             <reltype>RELTYPE_PUBLICATION_HOMEPAGE</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>V&amp;auml;ljaande koduleht</caption>
+            <caption>V&amp;amp;auml;ljaande koduleht</caption>
       </property>
       <property>
             <name>order_composition_information</name>
@@ -104,7 +104,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Teksti v&amp;auml;rv</caption>
+            <caption>Teksti v&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>main_color</name>
@@ -113,7 +113,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>P&amp;otilde;hitoon</caption>
+            <caption>P&amp;amp;otilde;hitoon</caption>
       </property>
       <property>
             <name>choose_design</name>
@@ -122,7 +122,7 @@
             <type>chooser</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kujundusp&amp;otilde;hi</caption>
+            <caption>Kujundusp&amp;amp;otilde;hi</caption>
       </property>
       <property>
             <name>custom_design_document</name>
@@ -150,7 +150,7 @@
                   <num_3>description</num_3>
             </props>
             <store>no</store>
-            <caption>Alamv&amp;auml;ljaanded</caption>
+            <caption>Alamv&amp;amp;auml;ljaanded</caption>
       </property>
       <property>
             <name>general_images</name>
@@ -241,7 +241,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>general_documents_toolbar</field>
-            <caption>Dokumentide t&amp;ouml;&amp;ouml;riistariba</caption>
+            <caption>Dokumentide t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
       </property>
       <property>
             <name>general_documents_table</name>
@@ -261,7 +261,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>general_polls_toolbar</field>
-            <caption>Kiirk&amp;uuml;sitluste t&amp;ouml;&amp;ouml;riistariba</caption>
+            <caption>Kiirk&amp;amp;uuml;sitluste t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
       </property>
       <property>
             <name>general_polls_table</name>
@@ -271,7 +271,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>general_polls_table</field>
-            <caption>Kiirk&amp;uumlsitlused</caption>
+            <caption>Kiirk&amp;amp;uumlsitlused</caption>
       </property>
       <property>
             <name>general_webforms_toolbar</name>
@@ -281,7 +281,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>general_webforms_toolbar</field>
-            <caption>Veebivormide t&amp;ouml;&amp;ouml;riistariba</caption>
+            <caption>Veebivormide t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
       </property>
       <property>
             <name>general_webforms_table</name>
@@ -382,7 +382,7 @@
             <CRM_SECTION>
                   <value>4</value>
                   <clid>CL_CRM_SECTION</clid>
-                  <caption>&amp;Uuml;ksus/Toode</caption>
+                  <caption>&amp;amp;Uuml;ksus/Toode</caption>
             </CRM_SECTION>
             <PUBLICATION>
                   <value>5</value>
@@ -390,47 +390,47 @@
                         <num_0>CL_EXPP_PUBLICATION</num_0>
                         <num_1>CL_CRM_SECTION</num_1>
                   </clid>
-                  <caption>V&amp;auml;ljaanne</caption>
+                  <caption>V&amp;amp;auml;ljaanne</caption>
             </PUBLICATION>
             <PUBLICATION_IMAGE>
                   <value>6</value>
                   <clid>CL_IMAGE</clid>
-                  <caption>V&amp;auml;ljaande pilt</caption>
+                  <caption>V&amp;amp;auml;ljaande pilt</caption>
             </PUBLICATION_IMAGE>
             <GENERAL_MINI_GALLERY>
                   <value>7</value>
                   <clid>CL_MINI_GALLERY</clid>
-                  <caption>&amp;Uuml;ldine minigalerii</caption>
+                  <caption>&amp;amp;Uuml;ldine minigalerii</caption>
             </GENERAL_MINI_GALLERY>
             <GENERAL_FILE>
                   <value>8</value>
                   <clid>CL_FILE</clid>
-                  <caption>&amp;Uuml;ldine fail</caption>
+                  <caption>&amp;amp;Uuml;ldine fail</caption>
             </GENERAL_FILE>
             <GENERAL_LINK>
                   <value>9</value>
                   <clid>CL_EXTLINK</clid>
-                  <caption>&amp;Uuml;ldine link</caption>
+                  <caption>&amp;amp;Uuml;ldine link</caption>
             </GENERAL_LINK>
             <GENERAL_IMAGE>
                   <value>10</value>
                   <clid>CL_IMAGE</clid>
-                  <caption>&amp;Uuml;ldine pilt </caption>
+                  <caption>&amp;amp;Uuml;ldine pilt </caption>
             </GENERAL_IMAGE>
             <GENERAL_FORUM>
                   <value>11</value>
                   <clid>CL_FORUM_V2</clid>
-                  <caption>&amp;Uuml;ldine foorum</caption>
+                  <caption>&amp;amp;Uuml;ldine foorum</caption>
             </GENERAL_FORUM>
             <GENERAL_WEBFORM>
                   <value>12</value>
                   <clid>CL_WEBFORM</clid>
-                  <caption>&amp;Uuml;ldine veebivorm</caption>
+                  <caption>&amp;amp;Uuml;ldine veebivorm</caption>
             </GENERAL_WEBFORM>
             <GENERAL_POLL>
                   <value>13</value>
                   <clid>CL_POLL</clid>
-                  <caption>&amp;Uuml;ldine kiirk&amp;uuml;sitlus</caption>
+                  <caption>&amp;amp;Uuml;ldine kiirk&amp;amp;uuml;sitlus</caption>
             </GENERAL_POLL>
             <GENERAL_DOCUMENT>
                   <value>14</value>
@@ -440,7 +440,7 @@
             <PUBLICATION_HOMEPAGE>
                   <value>15</value>
                   <clid>CL_EXTLINK</clid>
-                  <caption>V&amp;auml;ljaandja koduleht</caption>
+                  <caption>V&amp;amp;auml;ljaandja koduleht</caption>
             </PUBLICATION_HOMEPAGE>
       </reltypes>
 </properties>

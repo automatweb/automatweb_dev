@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Üksus</caption>
+            <caption>&amp;Uuml;ksus</caption>
       </property>
       <property>
             <name>show_sub_sections</name>
@@ -17,7 +17,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Võta alamüksustest</caption>
+            <caption>V&amp;otilde;ta alam&amp;uuml;ksustest</caption>
       </property>
       <property>
             <name>cols</name>
@@ -48,7 +48,7 @@
             <type>text</type>
             <store>1</store>
             <subtitle>1</subtitle>
-            <caption>Milliseid alljärgnevaid omadusi näidata? </caption>
+            <caption>Milliseid allj&amp;auml;rgnevaid omadusi n&amp;auml;idata? </caption>
       </property>
       <property>
             <name>show_name</name>
@@ -121,7 +121,7 @@
             <SECTION>
                   <value>1</value>
                   <clid>CL_CRM_SECTION</clid>
-                  <caption>&amp;uuml;ksus</caption>
+                  <caption>&amp;amp;uuml;ksus</caption>
             </SECTION>
             <ORG>
                   <value>2</value>

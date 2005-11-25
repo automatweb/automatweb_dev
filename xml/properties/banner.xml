@@ -86,7 +86,7 @@
             <type>table</type>
             <store>no</store>
             <field>probability_tbl</field>
-            <caption>N&amp;auml;itamise t&amp;otilde;en&amp;auml;osus</caption>
+            <caption>N&amp;amp;auml;itamise t&amp;amp;otilde;en&amp;amp;auml;osus</caption>
       </property>
       <property>
             <name>probability</name>
@@ -103,7 +103,7 @@
             <type>textbox</type>
             <size>3</size>
             <field>max_views</field>
-            <caption>Mitu korda bannerit maksimaalselt n&amp;auml;idata</caption>
+            <caption>Mitu korda bannerit maksimaalselt n&amp;amp;auml;idata</caption>
       </property>
       <property>
             <name>max_clicks</name>

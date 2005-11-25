@@ -28,7 +28,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kuhu ümbersuunata peale andmete salvestamist</caption>
+            <caption>Kuhu &amp;uuml;mbersuunata peale andmete salvestamist</caption>
       </property>
       <property>
             <name>data_rootmenu</name>
@@ -47,7 +47,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Andmete puu struktuuri v&amp;auml;li</caption>
+            <caption>Andmete puu struktuuri v&amp;amp;auml;li</caption>
       </property>
       <property>
             <name>search_o</name>
@@ -67,7 +67,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kui pole valitud, n&amp;auml;ita k&amp;otilde;iki sisestusi</caption>
+            <caption>Kui pole valitud, n&amp;amp;auml;ita k&amp;amp;otilde;iki sisestusi</caption>
       </property>
       <property>
             <name>per_page</name>
@@ -86,7 +86,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Kirje lisamisel pane seadete vormi nimi v&amp;auml;lja</caption>
+            <caption>Kirje lisamisel pane seadete vormi nimi v&amp;amp;auml;lja</caption>
       </property>
       <property>
             <name>data_tb</name>

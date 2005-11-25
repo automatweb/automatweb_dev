@@ -77,7 +77,7 @@
             <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kui pilt on k&amp;otilde;rgem kui laiem</caption>
+            <caption>Kui pilt on k&amp;amp;otilde;rgem kui laiem</caption>
       </property>
       <property>
             <name>v_tn_subimage</name>
@@ -87,7 +87,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas v&amp;auml;ike pilt on kadreeritud</caption>
+            <caption>Kas v&amp;amp;auml;ike pilt on kadreeritud</caption>
       </property>
       <property>
             <name>v_tn_subimage_left</name>
@@ -107,7 +107,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Mitu pikslit &amp;uuml;levalt kaader algab</caption>
+            <caption>Mitu pikslit &amp;amp;uuml;levalt kaader algab</caption>
       </property>
       <property>
             <name>v_tn_subimage_width</name>
@@ -127,7 +127,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Kaadri k&amp;otilde;rgus</caption>
+            <caption>Kaadri k&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>v_tn_width</name>
@@ -137,7 +137,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>V&amp;auml;ikese pildi laius</caption>
+            <caption>V&amp;amp;auml;ikese pildi laius</caption>
       </property>
       <property>
             <name>v_tn_height</name>
@@ -147,7 +147,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>V&amp;auml;ikese pildi k&amp;otilde;rgus</caption>
+            <caption>V&amp;amp;auml;ikese pildi k&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>v_width</name>
@@ -167,7 +167,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Suure pildi k&amp;otilde;rgus</caption>
+            <caption>Suure pildi k&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>img_horiz</name>
@@ -175,7 +175,7 @@
             <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kui pilt on laiem kui k&amp;otilde;rgem </caption>
+            <caption>Kui pilt on laiem kui k&amp;amp;otilde;rgem </caption>
       </property>
       <property>
             <name>h_tn_subimage</name>
@@ -185,7 +185,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas v&amp;auml;ike pilt on kadreeritud</caption>
+            <caption>Kas v&amp;amp;auml;ike pilt on kadreeritud</caption>
       </property>
       <property>
             <name>h_tn_subimage_left</name>
@@ -205,7 +205,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Mitu pikslit &amp;uuml;levalt kaader algab</caption>
+            <caption>Mitu pikslit &amp;amp;uuml;levalt kaader algab</caption>
       </property>
       <property>
             <name>h_tn_subimage_width</name>
@@ -225,7 +225,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Kaadri k&amp;otilde;rgus</caption>
+            <caption>Kaadri k&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>h_tn_width</name>
@@ -235,7 +235,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>V&amp;auml;ikese pildi laius</caption>
+            <caption>V&amp;amp;auml;ikese pildi laius</caption>
       </property>
       <property>
             <name>h_tn_height</name>
@@ -245,7 +245,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>V&amp;auml;ikese pildi k&amp;otilde;rgus</caption>
+            <caption>V&amp;amp;auml;ikese pildi k&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>h_width</name>
@@ -265,7 +265,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Suure pildi k&amp;otilde;rgus</caption>
+            <caption>Suure pildi k&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>insert_logo</name>
@@ -324,7 +324,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Lisapildi l&amp;auml;bipaistvus, 0-100 (0 -0 t&amp;auml;iesti l&amp;auml;bipaistev)</caption>
+            <caption>Lisapildi l&amp;amp;auml;bipaistvus, 0-100 (0 -0 t&amp;amp;auml;iesti l&amp;amp;auml;bipaistev)</caption>
       </property>
       <property>
             <name>logo_text</name>
@@ -343,7 +343,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas v&amp;auml;ikesele pildile kleepida lisapilt</caption>
+            <caption>Kas v&amp;amp;auml;ikesele pildile kleepida lisapilt</caption>
       </property>
       <property>
             <name>tn_logo_img</name>
@@ -392,7 +392,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Lisapildi l&amp;auml;bipaistvus, 1-100 (1-t&amp;auml;iesti l&amp;auml;bipaistev)</caption>
+            <caption>Lisapildi l&amp;amp;auml;bipaistvus, 1-100 (1-t&amp;amp;auml;iesti l&amp;amp;auml;bipaistev)</caption>
       </property>
       <property>
             <name>tn_logo_text</name>

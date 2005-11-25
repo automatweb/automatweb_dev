@@ -15,7 +15,7 @@
             <form>stat</form>
             <type>textbox</type>
             <field>reg</field>
-            <caption>Äriregistrikood</caption>
+            <caption>&amp;Auml;riregistrikood</caption>
       </property>
       <property>
             <name>password</name>

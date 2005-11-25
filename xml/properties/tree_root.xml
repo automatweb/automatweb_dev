@@ -8,7 +8,7 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_ROOT</reltype>
-            <caption>Rootmenüü</caption>
+            <caption>Rootmen&amp;uuml;&amp;uuml;</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -18,7 +18,7 @@
             <ROOT>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>juurmenüü</caption>
+                  <caption>juurmen&amp;uuml;&amp;uuml;</caption>
             </ROOT>
       </reltypes>
 </properties>

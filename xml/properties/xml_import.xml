@@ -27,7 +27,7 @@
             <editonly>1</editonly>
             <store>no</store>
             <field>run_import</field>
-            <caption>Käivita import</caption>
+            <caption>K&amp;auml;ivita import</caption>
       </property>
       <classinfo>
             <no_status>1</no_status>

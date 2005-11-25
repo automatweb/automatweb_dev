@@ -41,7 +41,7 @@
             <store>connect</store>
             <reltype>RELTYPE_LIIK</reltype>
             <field>meta</field>
-            <caption>T&amp;ouml;&amp;ouml; liik</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; liik</caption>
       </property>
       <property>
             <name>asukoht</name>
@@ -55,7 +55,7 @@
             <store>connect</store>
             <field>meta</field>
             <method>serialize</method>
-            <caption>T&amp;ouml;&amp;ouml;tamise piirkond</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;tamise piirkond</caption>
       </property>
       <property>
             <name>koormus</name>
@@ -68,7 +68,7 @@
             <reltype>RELTYPE_KOORMUS</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>T&amp;ouml;&amp;ouml; koormus</caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml; koormus</caption>
       </property>
       <property>
             <name>lisainfo</name>
@@ -76,7 +76,7 @@
             <group>general</group>
             <type>textarea</type>
             <field>lisainfo</field>
-            <caption>Lisainfo soovitava t&amp;ouml;&amp;ouml; kohta</caption>
+            <caption>Lisainfo soovitava t&amp;amp;ouml;&amp;amp;ouml; kohta</caption>
       </property>
       <property>
             <name>sbutton</name>

@@ -46,7 +46,7 @@
             <EVENT>
                   <value>1</value>
                   <clid>CL_CRM_MEETING</clid>
-                  <caption>t&amp;ouml;&amp;ouml;</caption>
+                  <caption>t&amp;amp;ouml;&amp;amp;ouml;</caption>
             </EVENT>
       </reltypes>
 </properties>

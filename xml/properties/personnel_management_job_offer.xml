@@ -15,7 +15,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>deadline</field>
-            <caption>Konkursi tähtaeg</caption>
+            <caption>Konkursi t&amp;auml;htaeg</caption>
       </property>
       <property>
             <name>beginning</name>
@@ -41,7 +41,7 @@
             <SECTION>
                   <value>9</value>
                   <clid>CL_CRM_SECTION</clid>
-                  <caption>Üksus</caption>
+                  <caption>&amp;Uuml;ksus</caption>
             </SECTION>
       </reltypes>
 </properties>

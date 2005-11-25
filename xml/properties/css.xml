@@ -43,9 +43,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>
-            <![CDATA[<i>Italic</i>]]>
-            </caption>
+            <caption>&amp;lt;i&amp;gt;Italic&amp;lt;/i&amp;gt;</caption>
       </property>
       <property>
             <name>bold</name>
@@ -55,9 +53,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>
-            <![CDATA[<b>Bold</b>]]>
-            </caption>
+            <caption>&amp;lt;b&amp;gt;Bold&amp;lt;/b&amp;gt;</caption>
       </property>
       <property>
             <name>underline</name>
@@ -67,9 +63,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>
-            <![CDATA[<u>Underline</u>]]>
-            </caption>
+            <caption>&amp;lt;u&amp;gt;Underline&amp;lt;/u&amp;gt;</caption>
       </property>
       <property>
             <name>size</name>
@@ -88,7 +82,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Teksti v&amp;auml;rv</caption>
+            <caption>Teksti v&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>bgcolor</name>
@@ -97,7 +91,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>Tausta v&amp;auml;rv</caption>
+            <caption>Tausta v&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>lineheight</name>
@@ -107,7 +101,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Joone k&amp;otilde;rgus </caption>
+            <caption>Joone k&amp;amp;otilde;rgus </caption>
       </property>
       <property>
             <name>border</name>
@@ -117,7 +111,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>&amp;Auml;&amp;auml;rejoone j&amp;auml;medus</caption>
+            <caption>&amp;amp;Auml;&amp;amp;auml;rejoone j&amp;amp;auml;medus</caption>
       </property>
       <property>
             <name>bordercolor</name>
@@ -126,7 +120,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>colorpicker</type>
-            <caption>&amp;Auml;&amp;auml;rejoone v&amp;auml;rv</caption>
+            <caption>&amp;amp;Auml;&amp;amp;auml;rejoone v&amp;amp;auml;rv</caption>
       </property>
       <property>
             <name>align</name>
@@ -164,7 +158,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>K&amp;otilde;rgus</caption>
+            <caption>K&amp;amp;otilde;rgus</caption>
       </property>
       <property>
             <name>padding</name>
@@ -338,7 +332,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CSS</reltype>
-            <caption>P&amp;auml;ise stiil</caption>
+            <caption>P&amp;amp;auml;ise stiil</caption>
       </property>
       <property>
             <name>footer_style</name>

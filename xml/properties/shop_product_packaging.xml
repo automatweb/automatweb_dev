@@ -7,7 +7,7 @@
             <type>textbox</type>
             <size>5</size>
             <field>jrk</field>
-            <caption>J&amp;auml;rjekord</caption>
+            <caption>J&amp;amp;auml;rjekord</caption>
       </property>
       <property>
             <name>price</name>

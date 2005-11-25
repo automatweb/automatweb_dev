@@ -17,7 +17,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <orient>vertical</orient>
-            <caption>Tüüp</caption>
+            <caption>T&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>limittype</name>
@@ -27,7 +27,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <orient>vertical</orient>
-            <caption>Milliseid uudiseid näidata?</caption>
+            <caption>Milliseid uudiseid n&amp;auml;idata?</caption>
       </property>
       <property>
             <name>count</name>
@@ -47,7 +47,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>2</size>
-            <caption>Mitme viimase päeva omad</caption>
+            <caption>Mitme viimase p&amp;auml;eva omad</caption>
       </property>
       <property>
             <name>parse_embed</name>
@@ -58,7 +58,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <caption>Näita ka lisatud objekte</caption>
+            <caption>N&amp;auml;ita ka lisatud objekte</caption>
       </property>
       <property>
             <name>folders</name>

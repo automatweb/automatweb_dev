@@ -25,7 +25,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>chooser</type>
-            <caption>Ostukorvi tüüp</caption>
+            <caption>Ostukorvi t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>multi_items</name>
@@ -35,7 +35,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Ostukorvis võib olla mitu sama ID-ga toodet</caption>
+            <caption>Ostukorvis v&amp;otilde;ib olla mitu sama ID-ga toodet</caption>
       </property>
       <property>
             <name>show_unconfirmed</name>
@@ -45,7 +45,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi</caption>
+            <caption>N&amp;auml;ita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi</caption>
       </property>
       <property>
             <name>no_change_button</name>
@@ -55,9 +55,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>
-            <![CDATA[Ära kuva tellimiskeskkonnas toote kõrvale "Muuda" nuppu]]>
-            </caption>
+            <caption>&amp;Auml;ra kuva tellimiskeskkonnas toote k&amp;otilde;rvale &amp;quot;Muuda&amp;quot; nuppu</caption>
       </property>
       <property>
             <name>only_prods</name>
@@ -133,7 +131,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;itamiseks kasuta kontrollerit</caption>
+            <caption>N&amp;amp;auml;itamiseks kasuta kontrollerit</caption>
       </property>
       <property>
             <name>mail_to_client</name>
@@ -181,7 +179,7 @@
             <type>textarea</type>
             <rows>10</rows>
             <cols>80</cols>
-            <caption>Meili sisu (kui t&amp;uuml;hi, siis templatest)</caption>
+            <caption>Meili sisu (kui t&amp;amp;uuml;hi, siis templatest)</caption>
       </property>
       <property>
             <name>mail_to_seller_in_el</name>
@@ -228,7 +226,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>J&amp;auml;relmaksu min. summa</caption>
+            <caption>J&amp;amp;auml;relmaksu min. summa</caption>
       </property>
       <property>
             <name>rent_prop</name>
@@ -246,7 +244,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>v&amp;auml;&amp;auml;rtus j&amp;auml;relmaksuks</caption>
+            <caption>v&amp;amp;auml;&amp;amp;auml;rtus j&amp;amp;auml;relmaksuks</caption>
       </property>
       <property>
             <name>no_show_cart_contents</name>
@@ -256,7 +254,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>&amp;Auml;ra n&amp;auml;ita korvi kinnitusvaadet</caption>
+            <caption>&amp;amp;Auml;ra n&amp;amp;auml;ita korvi kinnitusvaadet</caption>
       </property>
       <property>
             <name>controller</name>
@@ -266,7 +264,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_CONTROLLER</reltype>
-            <caption>Vaikimisi n&amp;auml;itamise kontroller</caption>
+            <caption>Vaikimisi n&amp;amp;auml;itamise kontroller</caption>
       </property>
       <property>
             <name>controller_tbl</name>
@@ -384,7 +382,7 @@
             <CONTROLLER>
                   <value>6</value>
                   <clid>CL_FORM_CONTROLLER</clid>
-                  <caption>n&amp;auml;itamise kontroller</caption>
+                  <caption>n&amp;amp;auml;itamise kontroller</caption>
             </CONTROLLER>
             <ORDER_NAME_CTR>
                   <value>7</value>

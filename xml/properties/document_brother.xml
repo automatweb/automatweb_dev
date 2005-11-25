@@ -93,7 +93,7 @@
             <size>60</size>
             <trans>1</trans>
             <field>keywords</field>
-            <caption>Võtmesõnad</caption>
+            <caption>V&amp;otilde;tmes&amp;otilde;nad</caption>
       </property>
       <property>
             <name>names</name>
@@ -167,7 +167,7 @@
             <ch_value>1</ch_value>
             <default>1</default>
             <field>showlead</field>
-            <caption>Näita leadi</caption>
+            <caption>N&amp;auml;ita leadi</caption>
       </property>
       <property>
             <name>show_modified</name>
@@ -176,7 +176,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>show_modified</field>
-            <caption>Näita muutmise kuupäeva</caption>
+            <caption>N&amp;auml;ita muutmise kuup&amp;auml;eva</caption>
       </property>
       <property>
             <name>no_right_pane</name>
@@ -213,7 +213,7 @@
             <ch_value>1</ch_value>
             <store>no</store>
             <field>clear_styles</field>
-            <caption>Tühista stiilid</caption>
+            <caption>T&amp;uuml;hista stiilid</caption>
       </property>
       <property>
             <name>link_keywords</name>
@@ -223,7 +223,7 @@
             <ch_value>1</ch_value>
             <store>no</store>
             <field>link_keywords</field>
-            <caption>Lingi võtmesõnad</caption>
+            <caption>Lingi v&amp;otilde;tmes&amp;otilde;nad</caption>
       </property>
       <property>
             <name>esilehel</name>
@@ -291,7 +291,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>show_title</field>
-            <caption>Näita pealkirja</caption>
+            <caption>N&amp;auml;ita pealkirja</caption>
       </property>
       <property>
             <name>no_search</name>
@@ -300,7 +300,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>no_search</field>
-            <caption>Jäta otsingust välja</caption>
+            <caption>J&amp;auml;ta otsingust v&amp;auml;lja</caption>
       </property>
       <property>
             <name>cite</name>
@@ -319,7 +319,7 @@
             <type>textbox</type>
             <size>20</size>
             <field>tm</field>
-            <caption>Kuupäev</caption>
+            <caption>Kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>show_print</name>
@@ -470,7 +470,7 @@
             <store>no</store>
             <callback>callback_gen_link_calendars</callback>
             <field>link_calendars</field>
-            <caption>Vali kalendrid, millesse see sündmus veel salvestatakse.</caption>
+            <caption>Vali kalendrid, millesse see s&amp;uuml;ndmus veel salvestatakse.</caption>
       </property>
       <property>
             <name>calendar_relation</name>
@@ -479,7 +479,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Põhikalender</caption>
+            <caption>P&amp;otilde;hikalender</caption>
       </property>
       <property>
             <name>gen_static</name>
@@ -498,7 +498,7 @@
             <ch_value>1</ch_value>
             <trans>1</trans>
             <field>no_last</field>
-            <caption>Ära arvesta muutmist</caption>
+            <caption>&amp;Auml;ra arvesta muutmist</caption>
       </property>
       <property>
             <name>show_last_changed</name>

@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Esimese men&amp;uuml;&amp;uuml; stiil</caption>
+            <caption>Esimese men&amp;amp;uuml;&amp;amp;uuml; stiil</caption>
       </property>
       <property>
             <name>item_style</name>
@@ -18,7 +18,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Men&amp;uuml;&amp;uuml; stiil</caption>
+            <caption>Men&amp;amp;uuml;&amp;amp;uuml; stiil</caption>
       </property>
       <property>
             <name>last_item_style</name>
@@ -28,7 +28,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Viimase men&amp;uuml;&amp;uuml; stiil</caption>
+            <caption>Viimase men&amp;amp;uuml;&amp;amp;uuml; stiil</caption>
       </property>
       <property>
             <name>sel_item_style</name>
@@ -38,7 +38,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Valitud men&amp;uuml;&amp;uuml; stiil</caption>
+            <caption>Valitud men&amp;amp;uuml;&amp;amp;uuml; stiil</caption>
       </property>
       <property>
             <name>first_sel_item_style</name>
@@ -48,7 +48,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Valitud esimese men&amp;uuml;&amp;uuml; stiil</caption>
+            <caption>Valitud esimese men&amp;amp;uuml;&amp;amp;uuml; stiil</caption>
       </property>
       <property>
             <name>last_sel_item_style</name>
@@ -58,7 +58,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Valitud viimase men&amp;uuml;&amp;uuml; stiil</caption>
+            <caption>Valitud viimase men&amp;amp;uuml;&amp;amp;uuml; stiil</caption>
       </property>
       <property>
             <name>separator</name>
@@ -78,7 +78,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kas j&amp;auml;rgmise taseme men&amp;uuml&amp;uuml;d on selle taseme men&amp;uuml;&amp;uuml;de vahel</caption>
+            <caption>Kas j&amp;amp;auml;rgmise taseme men&amp;amp;uuml&amp;amp;uuml;d on selle taseme men&amp;amp;uuml;&amp;amp;uuml;de vahel</caption>
       </property>
       <property>
             <name>has_sub_menus_sep</name>
@@ -87,7 +87,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>J&amp;auml;rgmise taseme men&amp;uuml;&amp;uuml;de eraldaja</caption>
+            <caption>J&amp;amp;auml;rgmise taseme men&amp;amp;uuml;&amp;amp;uuml;de eraldaja</caption>
       </property>
       <property>
             <name>pre_image</name>
@@ -97,7 +97,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_IMAGE</reltype>
-            <caption>Men&amp;uuml;&amp;uuml; pilt</caption>
+            <caption>Men&amp;amp;uuml;&amp;amp;uuml; pilt</caption>
       </property>
       <property>
             <name>show_comment</name>
@@ -107,7 +107,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita kommentaari</caption>
+            <caption>N&amp;amp;auml;ita kommentaari</caption>
       </property>
       <property>
             <name>comment_sep</name>

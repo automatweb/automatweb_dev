@@ -30,7 +30,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>Lahtise osa lisatasu kaldp&amp;ouml;&amp;ouml;rdavanemise korral </caption>
+            <caption>Lahtise osa lisatasu kaldp&amp;amp;ouml;&amp;amp;ouml;rdavanemise korral </caption>
       </property>
       <property>
             <name>glass_sqm_add_price_for3layer</name>
@@ -50,7 +50,7 @@
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <caption>Ruutmeetri hind ühelt poolt värvitud aknale </caption>
+            <caption>Ruutmeetri hind &amp;uuml;helt poolt v&amp;auml;rvitud aknale </caption>
       </property>
       <property>
             <name>two_side_painted_sqm_price</name>
@@ -60,7 +60,7 @@
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <caption>Ruutmeetri hind m&amp;otilde;lemalt poolt v&amp;auml;rvitud aknale</caption>
+            <caption>Ruutmeetri hind m&amp;amp;otilde;lemalt poolt v&amp;amp;auml;rvitud aknale</caption>
       </property>
       <property>
             <name>pr_add_twopart</name>
@@ -182,7 +182,7 @@
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <caption>Veepleki hinnatabel (meetrihind, täpselt akna laius). </caption>
+            <caption>Veepleki hinnatabel (meetrihind, t&amp;auml;pselt akna laius). </caption>
       </property>
       <property>
             <name>install_price_per_sqm</name>
@@ -276,7 +276,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
-            <caption>T&amp;auml;isklaasist</caption>
+            <caption>T&amp;amp;auml;isklaasist</caption>
       </property>
       <property>
             <name>door_closed_shield</name>

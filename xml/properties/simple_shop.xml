@@ -48,7 +48,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kui kasutaja on sisse loginud, võta isikuandmed objektidest</caption>
+            <caption>Kui kasutaja on sisse loginud, v&amp;otilde;ta isikuandmed objektidest</caption>
       </property>
       <property>
             <name>folder</name>

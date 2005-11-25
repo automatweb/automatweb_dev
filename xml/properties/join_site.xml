@@ -7,7 +7,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>P&amp;auml;rast liitumist mine aadressile</caption>
+            <caption>P&amp;amp;auml;rast liitumist mine aadressile</caption>
       </property>
       <property>
             <name>obj_folder</name>
@@ -46,7 +46,7 @@
             <type>table</type>
             <store>no</store>
             <field>join_properties</field>
-            <caption>Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad</caption>
+            <caption>Liitumisel k&amp;amp;uuml;sitavad v&amp;amp;auml;ljad</caption>
       </property>
       <property>
             <name>join_sep_pages</name>
@@ -74,7 +74,7 @@
             <type>table</type>
             <store>no</store>
             <field>join_properties_pages</field>
-            <caption>Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad</caption>
+            <caption>Liitumisel k&amp;amp;uuml;sitavad v&amp;amp;auml;ljad</caption>
       </property>
       <property>
             <name>join_properties_page_titles</name>
@@ -157,7 +157,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Liitumine n&amp;otilde;uab kinnitust</caption>
+            <caption>Liitumine n&amp;amp;otilde;uab kinnitust</caption>
       </property>
       <property>
             <name>confirm_mail_legend</name>
@@ -213,7 +213,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kuhu suunata p&amp;auml;rast liitumist</caption>
+            <caption>Kuhu suunata p&amp;amp;auml;rast liitumist</caption>
       </property>
       <property>
             <name>jm_texts</name>

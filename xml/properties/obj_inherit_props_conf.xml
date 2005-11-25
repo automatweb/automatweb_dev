@@ -121,7 +121,7 @@
             <INHERIT_FROM>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>p&amp;auml;ritav objekt</caption>
+                  <caption>p&amp;amp;auml;ritav objekt</caption>
             </INHERIT_FROM>
             <INHERIT_TO>
                   <value>2</value>

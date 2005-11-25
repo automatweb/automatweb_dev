@@ -19,7 +19,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Otsingu v&amp;auml;ljad</caption>
+            <caption>Otsingu v&amp;amp;auml;ljad</caption>
       </property>
       <property>
             <name>search_tbl_fields</name>
@@ -30,7 +30,7 @@
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <caption>Tabeli v&amp;auml;ljad</caption>
+            <caption>Tabeli v&amp;amp;auml;ljad</caption>
       </property>
       <property>
             <name>search_show</name>
@@ -40,7 +40,7 @@
             <method>serialize</method>
             <type>callback</type>
             <callback>search_gen_els</callback>
-            <caption>Tabeli v&amp;auml;ljad</caption>
+            <caption>Tabeli v&amp;amp;auml;ljad</caption>
       </property>
       <property>
             <name>search_res</name>

@@ -40,7 +40,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_TOPIC_FOLDER</reltype>
             <caption>Teemade kaust</caption>
-            <comment>Sellest kaustast võetakse foorumi teemad</comment>
+            <comment>Sellest kaustast v&amp;otilde;etakse foorumi teemad</comment>
       </property>
       <property>
             <name>address_folder</name>
@@ -51,9 +51,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_FOLDER</reltype>
             <caption>Listiliikmete kaust</caption>
-            <comment>
-            <![CDATA[Sellesse kausta paigutatakse "listi liikmete" objektid]]>
-            </comment>
+            <comment>Sellesse kausta paigutatakse &amp;quot;listi liikmete&amp;quot; objektid</comment>
       </property>
       <property>
             <name>images_folder</name>
@@ -64,7 +62,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_IMAGES_FOLDER</reltype>
             <caption>Piltide kaust</caption>
-            <comment>Kui piltide kaust on valitud, siis foorumisse pandud piltide objektid salvestatakse selle kausta alla, muidu pannakse selle objekti alla, mille külge pilt pannakse</comment>
+            <comment>Kui piltide kaust on valitud, siis foorumisse pandud piltide objektid salvestatakse selle kausta alla, muidu pannakse selle objekti alla, mille k&amp;uuml;lge pilt pannakse</comment>
       </property>
       <property>
             <name>faq_folder</name>
@@ -113,7 +111,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Maili subject</caption>
-            <comment>Kui määramata, siis foorumi topic</comment>
+            <comment>Kui m&amp;auml;&amp;auml;ramata, siis foorumi topic</comment>
       </property>
       <property>
             <name>show_logged</name>
@@ -134,7 +132,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>Üldine</caption>
+            <caption>&amp;Uuml;ldine</caption>
       </property>
       <property>
             <name>style_donor</name>
@@ -407,7 +405,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;idata teema lisamise vormis pildi &amp;uuml;leslaadimise v&amp;auml;lja?</caption>
+            <caption>N&amp;amp;auml;idata teema lisamise vormis pildi &amp;amp;uuml;leslaadimise v&amp;amp;auml;lja?</caption>
       </property>
       <property>
             <name>comments_on_page</name>
@@ -425,7 +423,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Teemade sügavus</caption>
+            <caption>Teemade s&amp;uuml;gavus</caption>
       </property>
       <property>
             <name>topic_selector</name>

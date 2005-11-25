@@ -7,7 +7,7 @@
             <type>chooser</type>
             <method>serialize</method>
             <field>meta</field>
-            <caption>Sisendi tüüp</caption>
+            <caption>Sisendi t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>from_folder</name>
@@ -16,7 +16,7 @@
             <type>textbox</type>
             <method>serialize</method>
             <field>meta</field>
-            <caption>Süsteemi kaust</caption>
+            <caption>S&amp;uuml;steemi kaust</caption>
       </property>
       <property>
             <name>from_folder_aw</name>
@@ -74,7 +74,7 @@
             <action>do_resize</action>
             <store>no</store>
             <field>do_resize</field>
-            <caption>Töötle</caption>
+            <caption>T&amp;ouml;&amp;ouml;tle</caption>
       </property>
       <classinfo>
             <syslog_type>ST_IMAGE_RESIZER</syslog_type>

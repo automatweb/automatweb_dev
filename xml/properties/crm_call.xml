@@ -33,7 +33,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>Lõpp</caption>
+            <caption>L&amp;otilde;pp</caption>
       </property>
       <property>
             <name>content</name>
@@ -64,9 +64,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>
-            <![CDATA["Toolbar"]]>
-            </caption>
+            <caption>&amp;quot;Toolbar&amp;quot;</caption>
       </property>
       <property>
             <name>recurrence</name>

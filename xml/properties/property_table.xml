@@ -16,7 +16,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>select</type>
-            <caption>Seose t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Seose t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>design_table</name>

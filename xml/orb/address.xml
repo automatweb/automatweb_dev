@@ -9,21 +9,5 @@
 			</function>
 		</action>
 
-		<action name="get_address_array" all_args="1">
-			<function name="get_address_array">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="get_envelope_address" all_args="1">
-			<function name="get_envelope_address">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

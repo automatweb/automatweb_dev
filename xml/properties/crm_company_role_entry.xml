@@ -43,7 +43,7 @@
             <reltype>RELTYPE_UNIT</reltype>
             <table>aw_crm_company_roles</table>
             <field>aw_unit</field>
-            <caption>&amp;Uuml;ksus</caption>
+            <caption>&amp;amp;Uuml;ksus</caption>
       </property>
       <property>
             <name>project</name>
@@ -52,7 +52,7 @@
             <reltype>RELTYPE_PROJECT</reltype>
             <table>aw_crm_company_roles</table>
             <field>aw_project</field>
-            <caption>&amp;Uuml;ksus</caption>
+            <caption>&amp;amp;Uuml;ksus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_COMPANY_ROLE_ENTRY</syslog_type>
@@ -84,12 +84,12 @@
             <UNIT>
                   <value>4</value>
                   <clid>CL_CRM_SECTION</clid>
-                  <caption>&amp;uuml;ksus</caption>
+                  <caption>&amp;amp;uuml;ksus</caption>
             </UNIT>
             <PROJECT>
                   <value>5</value>
                   <clid>CL_PROJECT</clid>
-                  <caption>&amp;uuml;ksus</caption>
+                  <caption>&amp;amp;uuml;ksus</caption>
             </PROJECT>
       </reltypes>
 </properties>

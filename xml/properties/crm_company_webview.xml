@@ -62,7 +62,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>J&amp;auml;rjestamisprintsiip 1</caption>
+            <caption>J&amp;amp;auml;rjestamisprintsiip 1</caption>
       </property>
       <property>
             <name>ord2</name>
@@ -71,7 +71,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>J&amp;auml;rjestamisprintsiip 2</caption>
+            <caption>J&amp;amp;auml;rjestamisprintsiip 2</caption>
       </property>
       <property>
             <name>ord3</name>
@@ -80,7 +80,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>J&amp;auml;rjestamisprintsiip 2</caption>
+            <caption>J&amp;amp;auml;rjestamisprintsiip 2</caption>
       </property>
       <property>
             <name>clickable</name>

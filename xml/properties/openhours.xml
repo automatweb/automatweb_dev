@@ -13,9 +13,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Avamisajad</caption>
-            <comment>
-            <![CDATA[Rea kustutamiseks vali molemale paevale "Valimata"]]>
-            </comment>
+            <comment>Rea kustutamiseks vali molemale paevale &amp;quot;Valimata&amp;quot;</comment>
       </property>
       <classinfo>
             <syslog_type>ST_OPENHOURS</syslog_type>

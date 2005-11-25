@@ -27,7 +27,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Eraldaja ühe tulba elementide vahel</caption>
+            <caption>Eraldaja &amp;uuml;he tulba elementide vahel</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>

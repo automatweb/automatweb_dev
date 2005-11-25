@@ -30,7 +30,7 @@
             <type>textarea</type>
             <cols>60</cols>
             <rows>10</rows>
-            <caption>Õnnestunud uploadi kviteeriv tekst</caption>
+            <caption>&amp;Otilde;nnestunud uploadi kviteeriv tekst</caption>
       </property>
       <classinfo>
             <syslog_type>ST_STAT_REPORT</syslog_type>

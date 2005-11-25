@@ -7,7 +7,7 @@
             <type>textbox</type>
             <field>shortname</field>
             <size>10</size>
-            <caption>Lühend</caption>
+            <caption>L&amp;uuml;hend</caption>
       </property>
       <property>
             <name>comment</name>

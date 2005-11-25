@@ -51,7 +51,7 @@
             <multiple>1</multiple>
             <size>10</size>
             <field>class_id</field>
-            <caption>Tüüp</caption>
+            <caption>T&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>oid</name>

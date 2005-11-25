@@ -25,7 +25,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Objektit&amp;uuml;&amp;uuml;p</caption>
+            <caption>Objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>next_connection</name>
@@ -53,7 +53,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita ka v&amp;auml;lju, mis ei ole seadete vormis</caption>
+            <caption>N&amp;amp;auml;ita ka v&amp;amp;auml;lju, mis ei ole seadete vormis</caption>
       </property>
       <property>
             <name>choose_fields</name>
@@ -126,7 +126,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita salvesta nuppu</caption>
+            <caption>N&amp;amp;auml;ita salvesta nuppu</caption>
       </property>
       <property>
             <name>submit_button_text</name>
@@ -175,7 +175,7 @@
             <SYN>
                   <value>1</value>
                   <clid>CL_CB_SEARCH_SYNONYMS</clid>
-                  <caption>s&amp;uuml;non&amp;uuml;mid</caption>
+                  <caption>s&amp;amp;uuml;non&amp;amp;uuml;mid</caption>
             </SYN>
             <PARENT>
                   <value>2</value>
@@ -205,7 +205,7 @@
             <ADDITIONAL_OBJECT_TYPE>
                   <value>7</value>
                   <clid>CL_OBJECT_TYPE</clid>
-                  <caption>lisaks leitav objektit&amp;uuml;&amp;uuml;p</caption>
+                  <caption>lisaks leitav objektit&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </ADDITIONAL_OBJECT_TYPE>
       </reltypes>
 </properties>

@@ -17,7 +17,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>J&amp;auml;rjestatakse</caption>
+            <caption>J&amp;amp;auml;rjestatakse</caption>
       </property>
       <property>
             <name>objects_from</name>

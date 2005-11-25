@@ -41,7 +41,7 @@
             <form>connector</form>
             <type>select</type>
             <field>main_calendar</field>
-            <caption>Põhikalender</caption>
+            <caption>P&amp;otilde;hikalender</caption>
       </property>
       <property>
             <name>calendars</name>
@@ -70,7 +70,7 @@
             <type>submit</type>
             <store>no</store>
             <field>sbt</field>
-            <caption>Loo sündmus</caption>
+            <caption>Loo s&amp;uuml;ndmus</caption>
       </property>
       <forminfo>
             <connector>

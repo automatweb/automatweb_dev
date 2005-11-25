@@ -51,7 +51,7 @@
             <method>serialize</method>
             <field>meta</field>
             <type>date_select</type>
-            <caption>Saatmise kuupäev</caption>
+            <caption>Saatmise kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>image</name>
@@ -84,7 +84,7 @@
             <method>serialize</method>
             <field>meta</field>
             <type>text</type>
-            <caption>Kood kaardi nägemiseks</caption>
+            <caption>Kood kaardi n&amp;auml;gemiseks</caption>
       </property>
       <property>
             <name>spy</name>

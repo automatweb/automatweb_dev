@@ -39,7 +39,7 @@
             <type>objpicker</type>
             <clid>CL_CRM_CORPFORM</clid>
             <field>ettevotlusvorm</field>
-            <caption>Ettevõtlusvorm</caption>
+            <caption>Ettev&amp;otilde;tlusvorm</caption>
       </property>
       <property>
             <name>city</name>

@@ -6,7 +6,7 @@
             <group>general</group>
             <field>subclass</field>
             <type>textbox</type>
-            <caption>Sidussüsteemi ID</caption>
+            <caption>Siduss&amp;uuml;steemi ID</caption>
       </property>
       <property>
             <name>hr_price</name>
@@ -37,7 +37,7 @@
                   <num_1>name_in_plural</num_1>
             </props>
             <field>trans</field>
-            <caption>Tõlkimine</caption>
+            <caption>T&amp;otilde;lkimine</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_PROFESSION</syslog_type>

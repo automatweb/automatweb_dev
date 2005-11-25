@@ -71,7 +71,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Töötajate XML fail</caption>
+            <caption>T&amp;ouml;&amp;ouml;tajate XML fail</caption>
       </property>
       <property>
             <name>xml_structure_file</name>
@@ -80,7 +80,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Struktuuriüksuste XML fail</caption>
+            <caption>Struktuuri&amp;uuml;ksuste XML fail</caption>
       </property>
       <property>
             <name>xml_image_folder</name>

@@ -35,7 +35,7 @@
             <reltype>RELTYPE_PERSON</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>M&amp;uuml;&amp;uuml;ja esindaja</caption>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;ja esindaja</caption>
       </property>
       <property>
             <name>seller_company</name>
@@ -45,7 +45,7 @@
             <reltype>RELTYPE_ORG</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>M&amp;uuml;&amp;uuml;ja</caption>
+            <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
       </property>
       <property>
             <name>oc</name>
@@ -131,7 +131,7 @@
             <EXPORT>
                   <value>2</value>
                   <clid>CL_SHOP_WAREHOUSE_EXPORT</clid>
-                  <caption>lao v&amp;auml;ljaminek</caption>
+                  <caption>lao v&amp;amp;auml;ljaminek</caption>
             </EXPORT>
             <PERSON>
                   <value>3</value>

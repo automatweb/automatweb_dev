@@ -14,7 +14,7 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>Lõpp</caption>
+            <caption>L&amp;otilde;pp</caption>
       </property>
       <property>
             <name>image</name>
@@ -46,7 +46,7 @@
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Võta esineja objektist ürituse</caption>
+            <caption>V&amp;otilde;ta esineja objektist &amp;uuml;rituse</caption>
       </property>
       <property>
             <name>relman</name>

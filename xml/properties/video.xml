@@ -58,7 +58,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Kuup&amp;auml;ev</caption>
+            <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>src_rp</name>
@@ -86,7 +86,7 @@
             <method>serialize</method>
             <type>translator</type>
             <props>name</props>
-            <caption>T&amp;otilde;ge</caption>
+            <caption>T&amp;amp;otilde;ge</caption>
       </property>
       <classinfo>
             <syslog_type>ST_VIDEO</syslog_type>

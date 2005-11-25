@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kirja maksimaalne suurus (märkides)</caption>
+            <caption>Kirja maksimaalne suurus (m&amp;auml;rkides)</caption>
       </property>
       <property>
             <name>newmessage</name>
@@ -67,7 +67,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Välja saadetud kirjad</caption>
+            <caption>V&amp;auml;lja saadetud kirjad</caption>
       </property>
       <property>
             <name>archive_toolbar</name>

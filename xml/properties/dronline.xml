@@ -55,7 +55,7 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Salvesta p&amp;auml;ring log objektiks</caption>
+            <caption>Salvesta p&amp;amp;auml;ring log objektiks</caption>
       </property>
       <property>
             <name>save_as_obj_name</name>
@@ -84,7 +84,7 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Lukusta p&amp;auml;ringu tegemine</caption>
+            <caption>Lukusta p&amp;amp;auml;ringu tegemine</caption>
       </property>
       <property>
             <name>bg_queries</name>
@@ -94,7 +94,7 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Cache p&amp;auml;ringud taustal</caption>
+            <caption>Cache p&amp;amp;auml;ringud taustal</caption>
       </property>
       <property>
             <name>rerun_queries_at</name>
@@ -114,7 +114,7 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Uuenda p&amp;auml;ringute&amp;nbsp;cache kohe</caption>
+            <caption>Uuenda p&amp;amp;auml;ringute&amp;amp;nbsp;cache kohe</caption>
       </property>
       <property>
             <name>bg_query_status</name>
@@ -123,7 +123,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>text</type>
-            <caption>Tausta p&amp;auml;ringute staatus</caption>
+            <caption>Tausta p&amp;amp;auml;ringute staatus</caption>
       </property>
       <property>
             <name>bg_query_created</name>
