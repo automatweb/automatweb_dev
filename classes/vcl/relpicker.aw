@@ -82,7 +82,7 @@ class relpicker extends  core
 			$val["post_append_text"] .= " ".html::href(array(
 				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
 				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
-				"title" => t("Muuda")
+				"title" => t("Otsi")
 			));
 		}
 
