@@ -499,9 +499,22 @@ class core extends acl_base
 
 
 		//XXX die($msg) was here
-
+		$consts = get_defined_constants();
+		$v = "";
+		foreach($consts as $c => $d)
+		{
+			if(!(strpos($c, "ERR_") !== false))
+			{
+				continue;
+			}
+			if($d == $err_type)
+			{
+				$v = "$c: ";
+				break;
+			}
+		}
 		// meilime veateate listi ka
-		$subj = "Viga saidil ".$this->cfg["baseurl"];
+		$subj = $v."Viga saidil ".$this->cfg["baseurl"];
 
 		if (!$is_rpc_call && !headers_sent())
 		{
