@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.18 2005/10/25 21:39:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.19 2005/11/25 08:55:49 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
-	@classinfo no_comment=1 no_status=1 syslog_type=ST_MAIL_MESSAGE
+	@classinfo no_comment=1 no_status=1 syslog_type=ST_MAIL_MESSAGE relationmgr=yes
 	@default group=general
 	@default table=messages
 
@@ -60,8 +60,6 @@
 
 	@property cb_part type=hidden store=no form=all
 	@caption Cb part
-
-	classinfo relationmgr=yes
 
 	@groupinfo general caption="Üldine" submit=no
 	@groupinfo add caption="Lisa"
