@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jupp.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jupp.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
 // expp_jupp.aw - Expp Jupp 
 /*
 
@@ -135,8 +135,8 @@ class expp_jupp extends class_base
 				$i->create_message(array(		
 					"froma" => 'tellimine@tellimine.ee',
 					"fromn" => 'www.tellimine.ee', 
-					"subject" => 'NB! see on test : '.$piiraeg,
-					"to" => "andrus@rae.ee,kerstis@expresspost.ee",
+					"subject" => 'veebitellimus : '.$piiraeg,
+					"to" => "andrus@rae.ee,veebitellimus@expresspost.ee",
 					"body" => $text,
 				));
 

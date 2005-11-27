@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
 // expp_makse.aw - Expp makse 
 /*
 
@@ -16,38 +16,39 @@ class expp_makse extends class_base {
 
 var $lingid = array(
 	'hansapank' => array(
-		'url'		=> "javascript:oppwin('/tellimine/makse/ok/hansapank');",
-//		'url2'	=> "https://www.hanza.net/cgi-bin/hanza/redirect.jsp?targetPage=hanza.pank.contracts.dd",
-		'url2'	=> "javascript:oppwin('https://www.hanza.net/');",
+		'url'		=> "javascript:oppwin('/tellimine/makse/okhansa');",
+		'url2'	=> "javascript:oppwin('/tellimine/makse/okhansa');",
 		'pank'	=> '767',
 		'text'	=> "LC_EXPP_HANSAPANK",
+		'okurl'	=> "https://www.hanza.net/cgi-bin/hanzanet",
 	),
 	'yhispank'	=> array(
-		'url'		=> "javascript:oppwin('/tellimine/makse/ok/yhispank');",
-//		'url2'	=> "http://www.eyp.ee/static/https_www.eyp.ee/index.html",
-		'url2'	=> "javascript:oppwin('http://www.seb.ee/static/https_www.seb.ee/index.html');",
+		'url'		=> "javascript:oppwin('/tellimine/makse/okseb');",
+		'url2'	=> "javascript:oppwin('/tellimine/makse/okseb');",
 		'pank'	=> '401',
 		'text'	=> "LC_EXPP_YHISPANK",
+		'okurl'	=> "http://www.seb.ee/static/https_www.seb.ee/index.html",
 	),
 	'sampopank'	=> array(
 		'url'		=> "javascript:oppwin('/tellimine/makse/ok/sampopank');",
-//		'url2'	=> "https://www.sampo.ee/cgi-bin/login",
-		'url2'	=> "javascript:oppwin('https://www.sampo.ee/cgi-bin/login?lang=est');",
+		'url2'	=> "javascript:oppwin('/tellimine/makse/oksampo');",
 		'pank'	=> '720',
 		'text'	=> "LC_EXPP_SAMPOPANK",
+		'okurl'	=> "https://www.sampo.ee/cgi-bin/login?lang=est",
 	),
 	'krediidipank'	=> array(
 		'url'		=> "javascript:oppwin('/tellimine/makse/ok/krediidipank');",
-//		'url2'	=> "https://i-pank.krediidipank.ee/teller/uusotsekorraldus",
-		'url2'	=> "javascript:oppwin('https://i-pank.krediidipank.ee/');",
+		'url2'	=> "javascript:oppwin('/tellimine/makse/okkrediidi');",
 		'pank'	=> '742',
 		'text'	=> "LC_EXPP_KREDIIDIPANK",
+		'okurl'	=> "https://i-pank.krediidipank.ee/",
 	),
 	'nordeapank'	=> array(
 		'url'		=> "javascript:oppwin('/tellimine/makse/ok/nordeapank');",
-		'url2'	=> "javascript:oppwin('https://www.arved.ee/epay/arch_login.jsp?PARTNER=MERP&GROUP=EIS&SERVICE=EIS');",
+		'url2'	=> "javascript:oppwin('/tellimine/makse/oknordea');",
 		'pank'	=> '780',
 		'text'	=> "LC_EXPP_NORDEAPANK",
+		'okurl'	=> "https://www.arved.ee/epay/arch_login.jsp?PARTNER=MERP&GROUP=EIS&SERVICE=EIS",
 	),
 	'postiga'	=> array(
 		'url'		=> "javascript:oppwin('/tellimine/makse/ok/post');",
@@ -100,6 +101,9 @@ var $pangad = array(
 			case "hansapank":
 				$retHTML = &$this->maksaHansapank();
 				break;
+			case "okhansa":
+				$retHTML = &$this->okHansapank();
+				break;
 			case "sampopank":
 				$retHTML = &$this->maksaSampo();
 				break;
@@ -117,6 +121,18 @@ var $pangad = array(
 				break;
 			case "tanud":
 				$retHTML = &$this->maksaTanud();
+				break;
+			case "okseb":
+				$retHTML = &$this->okPank( 'yhispank' );
+				break;
+			case "oksampo":
+				$retHTML = &$this->okPank( 'sampopank' );
+				break;
+			case "oknordea":
+				$retHTML = &$this->okPank( 'nordeapank' );
+				break;
+			case "okkrediidi":
+				$retHTML = &$this->okPank( 'krediidipank' );
 				break;
 			case "ok":
 				$retHTML = &$this->maksaOK();
@@ -771,6 +787,42 @@ var $pangad = array(
 		return $retHTML;
 	}
 
+	function okHansapank() {
+		global $lc_expp;
+		$ref = $GLOBALS['HTTP_GET_VARS']['ref'];
+//		if ( $ref ) {
+			$this->updatePank( 'ok', $ref, $this->lingid['hansapank']['pank'] );
+//		}
+		
+
+		$this->read_template("expp_ok_hansa.tpl");
+
+		$this->vars(array(
+			'REF_NO'	=> $ref,
+			'image'	=> "/img/hansapank.gif",
+			'alt'		=> $lc_expp['LC_EXPP_ALT_HP'],
+			'pank'	=> $lc_expp['LC_EXPP_PANK_HP'],
+			'link'	=> $this->lingid['hansapank']['okurl'],
+		));
+		return $this->parse();
+	}
+
+	function okPank( $pank ){
+		$url = $this->lingid[$pank]['okurl'];
+		if( empty( $url )) {
+			$url = 'http://www.tellimine.ee/tellimine/';
+		} else {
+			$this->updatePank( 'ok', '', $this->lingid[$pank]['pank'] );
+		}
+		header( "Location: {$url}" );
+		exit;
+	}
+
+	function updatePank( $lep, $ref, $pank ) {
+		$sql = "UPDATE expp_arved SET pank='{$pank}'"
+				." WHERE session='".session_id().'-'.$_SESSION['tellnr']."' AND leping='{$lep}'";
+		$this->db_query( $sql );
+	}
 /*
 	function maksaOK() {
 		$retHTML = '';

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_tyybid.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_tyybid.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
 // expp_tyybid.aw - Expp tyybid 
 /*
 

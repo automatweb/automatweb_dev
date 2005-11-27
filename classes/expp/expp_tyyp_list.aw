@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_tyyp_list.aw,v 1.1 2005/10/17 10:32:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_tyyp_list.aw,v 1.2 2005/11/27 13:02:44 dragut Exp $
 // expp_tyyp_list.aw - Expp tyybi list 
 /*
 
@@ -77,7 +77,7 @@ class expp_tyyp_list extends class_base
 		$this->read_template("expp_tyyp_list.tpl");
 
 		$_tyyp = $arr[0];
-		if( is_number( $_tyyp )) {
+		if( is_numeric( $_tyyp )) {
 			$sql = "SELECT id,nimi FROM expp_tyybid WHERE id = '{$_tyyp}'";
 		} else {
 			$_tyyp = addslashes( urldecode( $_tyyp ));

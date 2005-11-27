@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_liik_list.aw,v 1.1 2005/10/17 10:32:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_liik_list.aw,v 1.2 2005/11/27 13:02:44 dragut Exp $
 // expp_liik_list.aw - Expp liigi list 
 /*
 
@@ -79,7 +79,7 @@ class expp_liik_list extends class_base
 		$this->read_template("expp_liik_list.tpl");
 
 		$_liik = $arr[0];
-		if( is_number( $_liik )) {
+		if( is_numeric( $_liik )) {
 			$sql = "SELECT id,tyyp_id,liik FROM expp_liigid WHERE id = '{$_liik}'";
 		} else {
 			$_liik = addslashes(urldecode( $_liik ));

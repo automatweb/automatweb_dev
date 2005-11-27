@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_arve.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_arve.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
 // expp_arve.aw - Expp arve 
 /*
 
@@ -349,6 +349,7 @@ class expp_arve extends class_base {
 			.", t.toimetus"
 			.", t.toimtunnus"
 			.", t.valjaanne"
+			.", h.kampaania"
 			.", h.baashind"
 			.", h.kestus"
 			.", h.hinna_tyyp"
@@ -456,6 +457,7 @@ class expp_arve extends class_base {
 					." lisarida='".addslashes($lisarida)."',"
 					." eksempla='".$row["eksemplar"]."',"
 					." rhkkood='".$row["hkkood"]."',"
+					." kampaania='".$row['kampaania']."',"
 					." maksumus='".($row["baashind"]*(int)$row["eksemplar"]*(int)$row["kogus"])."',"
 					." leping='".$row["leping"]."',"
 					." trykiarve='0',"
@@ -471,6 +473,7 @@ class expp_arve extends class_base {
 		foreach( $sqls as $sql ) {
 			$this->db_query($sql);
 		}
+		$this->sendEmail();
 /*
 if ( $my_ok == 0 ) {
 	$pid = korv;
@@ -486,6 +489,180 @@ $query = "UPDATE korv SET session='".date("Ymd - ").session_id()."' WHERE sessio
 
 		header( "Location: ".aw_ini_get("baseurl")."/tellimine/makse/" );
 		exit;
+	}
+	function sendEmail() {
+		global $lc_expp;
+
+		$retEmail = '';
+
+		$sql = "SELECT * FROM expp_tellija WHERE session='".session_id()."' AND staatus='tellija' ORDER BY time DESC LIMIT 1";
+		$row = $this->db_fetch_row( $sql );
+		$to_email = $row['email'];
+		if( $this->num_rows() < 1  || empty( $to_email)) {
+			return;
+		}
+		$this->read_template("expp_arve_email.tpl");
+
+		$_kood	= ($row['tyyp']=="firma")?"Registri nr. <b>".$row["isikukood"]."</b>":"Isikukood <b>".$row["isikukood"]."</b>";
+		$_isik1	= $this->getIsik( $row );
+		$this->vars( array(
+			'PEALKIRI' => 'Tellija andmed:',
+			'SISU' => $_isik1,
+		));
+		$_isik = $this->parse( 'ISIK' );
+		
+		if( $row['toimetus'] != 'sama' ) {
+			$sql = "SELECT * FROM expp_tellija WHERE session='".session_id()."' AND staatus='saaja' ORDER BY time DESC LIMIT 1";
+			$row = $this->db_fetch_row( $sql );
+			if( $this->num_rows() < 1 ) {
+				return;
+			}
+			$_isik1 = $this->getIsik( $row );
+		}
+		$this->vars( array(
+			'PEALKIRI' => 'Saaja andmed:',
+			'SISU' => $_isik1,
+		));
+		$_isik .= $this->parse( 'ISIK' );
+
+		$sql = "SELECT a.arvenr, a.viitenumber, a.maksumus, a.algus, a.lisarida, t.toote_nimetus, t.valjaande_nimetus"
+			." FROM expp_arved a LEFT JOIN expp_valjaanne t ON a.vaindeks=t.pindeks"
+			." WHERE session='".session_id().'-'.$_SESSION['tellnr']."' AND leping='ok'";
+		$this->db_query( $sql );
+		$_ok_count = $this->num_rows();
+		if( $_ok_count > 0 ) {
+			$_okline = '';
+			$_oklink	= '';
+			$_hansacase = '';
+			while( $row = $this->db_next()) {
+				$this->vars(array(
+					'OKLEPINGUNR'	=> $row["arvenr"],
+					'OKVIITENR'		=> $row["viitenumber"],
+					'TOODE'			=> stripslashes($row["valjaande_nimetus"]),
+					'LEPING'			=> ($row["algus"]==date("d.m.Y")?"<b>".$row["lisarida"]."</b>":"alates <b>".$row["algus"]."</b>"),
+					'HIND'			=> $row["maksumus"],
+				));
+				$_okline .= $this->parse( 'OKLINE' );
+			}	//	while
+			if( $_ok_count > 1 ) {
+				$_hansacase = $this->parse( 'HANSACASE' );
+			}
+			foreach( $this->lingid as $key => $val ) {
+				$this->vars(array(
+					'url'		=> $val['url2'],
+//					'target'
+					'text'	=> $lc_expp[$val['text']],
+				));
+				$_oklink .= $this->parse( 'OKLINK' );
+			}
+			$this->vars(array(
+				'HANSACASE'	=> $_hansacase,
+				'OKLINE'		=> $_okline,
+				'OKLINK'		=> $_oklink,
+			));
+			$_okleping .= $this->parse( 'OTSEKORRALDUS' );
+		}
+		$sql = "SELECT a.arvenr, a.viitenumber, a.maksumus, a.algus, a.lopp, a.lisarida, t.toote_nimetus, t.valjaande_nimetus"
+			." FROM expp_arved a LEFT JOIN expp_valjaanne t ON a.vaindeks=t.pindeks"
+			." WHERE session='".session_id().'-'.$_SESSION['tellnr']."' AND leping='tel'";
+		$this->db_query( $sql );
+		$_tel_count = $this->num_rows();
+		if( $_tel_count > 0 ) {
+			$_summa = 0;
+			$_teline = '';
+			$_tellep = '';
+			$_old_arve = '';
+			$_old_viide = '';
+			while( $row = $this->db_next()) {
+				if( $_old_arve != $row['arvenr'] ) {
+					if( !empty( $_teline )) {
+						$this->vars(array(
+							'TELLINE' => $_teline,
+							'SUMMA'	 => $_summa,
+						));
+						$_tellep .= $this->parse( 'TELLEP' );
+					}
+					$this->vars(array(
+						'LEPINGUNR'	=> $row['arvenr'],
+						'VIITENR'	=> $row["viitenumber"],
+					));
+					$_old_arve	= $row['arvenr'];
+					$_teline 	= '';
+					$_summa		= 0;
+				}
+				$_summa	+= $row['maksumus'];
+				$this->vars(array(
+					'TOODE'	=> stripslashes($row["valjaande_nimetus"]),
+					'LEPING'	=> ( $row["algus"]==date("d.m.Y")?$row["lisarida"]:"<b>".$row["algus"]."</b> - <b>".$row["lopp"]."</b>"),
+					'HIND'	=> $row["maksumus"],
+				));
+				$_teline .= $this->parse( 'TELLINE' );
+			}
+			if( !empty( $_teline )) {
+				$this->vars(array(
+					'TELLINE' => $_teline,
+					'SUMMA'	 => $_summa,
+				));
+				$_tellep .= $this->parse( 'TELLEP' );
+			}
+			$_pangad = html::select(array(
+						'name' => 'maksan',
+						'options' => $this->pangad,
+						'selected' => '',
+						'class' => 'formElement',
+					));
+			$this->vars(array(
+				'TELLEP' => $_tellep,
+				'makse_meetod' =>	$_pangad,
+			));
+			$_teleping = $this->parse( 'TAVALEPING' );
+		}
+		if( $_tel_count < 1 && $_ok_count < 1 ) {
+			return;
+		}
+
+		$_aid = $this->cp->getPid( 2 );
+		$myURL = $this->cp->addYah( array(
+				'link' => 'makse',
+				'text' => $lc_expp['LC_EXPP_TITLE_MAKSMINE'],
+			));
+
+//		$this->read_template("expp_maksevalik.tpl");
+		$this->vars(array(
+			'ACTION'			=> $myURL,
+			'OTSEKORRALDUS'=> $_okleping,
+			'TAVALEPING'	=> $_teleping,
+			'ISIK' => $_isik,
+		));
+		$retHTML .= $this->parse();
+
+		$i = get_instance("protocols/mail/aw_mail");
+		$i->create_message(array(		
+			"froma" => 'tellimine@tellimine.ee',
+			"fromn" => 'www.tellimine.ee', 
+			"subject" => 'Uus tellimus www.tellimine.ee',
+			"to" => "{$to_email}",
+			"body" => 'Tere,
+
+Täname tellimuse eest!
+Teie tellimus jõudis AS Express Post klienditeenindusse.
+Tellimus jõustub Teie poolt valitud kuupäeval või hiljemalt 10 päeva jooksul peale makse laekumist või otsekorralduse lepingu sõlmimist.
+
+Lugupidamisega,
+AS Express Post 
+
+tellimine@expresspost.ee
+www.tellimine.ee
+6662535
+
+AS Express Posti klienditeenindus on avatud E-R 8.00-20.00 L 8.00-13.00',
+		));
+
+// lisame html sisu
+		$i->htmlbodyattach( array("data" => $retHTML ));
+
+		// saadame meili teele
+		$i->gen_mail();
 	}
 }
 ?>

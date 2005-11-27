@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_parse.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_parse.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
 // expp_parse.aw - Expp URL parser 
 /*
 
@@ -75,6 +75,13 @@ class expp_parse extends class_base {
 
 	**/
 	function show($arr) {
+		if (aw_global_get("uid") == "" && aw_global_get("lang_id") != 1)
+		{
+			$l = get_instance("languages");
+			$l->set_active(1, true);
+			header("Location: ".$_SERVER["REQUEST_URI"]);
+			die();
+		}
 		$retHTML = '';
 		if( empty( $this->pids ) ) {
 			return $retHTML;
@@ -98,6 +105,12 @@ class expp_parse extends class_base {
 				$cl = get_instance( CL_EXPP_ARVE );
 				$retHTML = $cl->show();
 				break;
+/*
+			case 'email' :
+				$cl = get_instance( CL_EXPP_ARVE );
+				$retHTML = $cl->show( array( 'email' => 'kala' ));
+				break;
+*/
 			case 'tellija' :
 			case 'saaja' :
 				$cl = get_instance( CL_EXPP_ISIK );

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jah.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jah.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
 // expp_jah.aw - Expp JAH 
 /*
 
@@ -14,6 +14,9 @@ class expp_jah extends class_base {
 	
 	var $yahLinks = '';
 	var $yahEnd = '';
+	var $yahTingimused = '';
+	var $tingimusedURL = 0;
+	var $tingmusedText = '';
 
 	function expp_jah() {
 		$this->init(array(
@@ -36,6 +39,7 @@ class expp_jah extends class_base {
 		$this->read_template("main.tpl");
 		for( $i = 0; $i < $count; $i++ ) {
 			$last_link .= '/'.$GLOBALS['jahX'][$i]['link'];
+			if ( $i == 0 ) continue;
 			$this->vars( array(
 					'link' => $last_link,
 					'text' => $GLOBALS['jahX'][$i]['text'],
@@ -48,6 +52,14 @@ class expp_jah extends class_base {
 				'text' => $GLOBALS['jahX'][$count]['text'],
 			));
 		$this->yahEnd = $this->parse( 'JAH_LINK_END' );
+		
+		if ( $this->tingimusedURL > 0 && !empty( $this->tingmusedText )) {
+			$this->vars( array(
+					'link' => $this->tingimusedURL,
+					'text' => $this->tingmusedText,
+				));
+			$this->yahTingimused = $this->parse( 'JAH_TINGIMUSED' );
+		}
 	}
 
 	function on_get_subtemplate_content($arr) {
@@ -55,6 +67,7 @@ class expp_jah extends class_base {
 		$arr["inst"]->vars(array(
 			"JAH_LINK" => $this->yahLinks,
 			"JAH_LINK_END" => $this->yahEnd,
+			"JAH_TINGIMUSED" => $this->yahTingimused,
 		));
 	}
 	

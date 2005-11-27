@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
 // expp_site_content.aw - expp_site_content (nimi) 
 /*
 
@@ -17,7 +17,9 @@ class expp_site_content extends class_base
 	var $main_color = "";
 	var $text_color = "";
 	var $frame_color = "";
-//	var $document_content = "";
+	var $order_composition_information = "";
+	var $ordering_terms_document = "";
+//	var $document_content_id = 0;
 
 	var $connections_to_documents = array();
 	var $connections_to_links = array();
@@ -139,6 +141,8 @@ class expp_site_content extends class_base
 					$this->main_color = $o->prop("main_color");
 					$this->text_color = $o->prop("text_color");
 					$this->frame_color = $o->prop("frame_color");
+					$this->order_composition_information = $o->prop("order_composition_information");
+					$this->ordering_terms_document_id = $o->prop("ordering_terms");
 				}
 			}
 			
@@ -315,6 +319,7 @@ class expp_site_content extends class_base
 					$this->vars(array(
 						"LINK_TO_MANAGEMENT_URL" => $this->mk_my_orb("change", array(
 							"id" => $connection_to_group->prop("from"),
+							"group" => "publications",
 						), CL_EXPP_JOURNAL_MANAGEMENT, true, true),
 						"LINK_TO_MANAGEMENT_NAME" => t("Andmete muutmine"),
 					));
@@ -391,17 +396,37 @@ class expp_site_content extends class_base
 				"LINKS_TABLE" => $links_table,
 				"LINK_TO_MANAGEMENT" => $link_to_management,
 				"LINK_TO_PUBLICATION_HOMEPAGE" => $link_to_publication_homepage,
+				"ORDER_COMPOSITION_INFORMATION" => $this->order_composition_information,
+				"ORDERING_TERMS_DOC_ID" => $this->ordering_terms_document_id,
 			));
-			
 			$this->vars(array(
 				"DEFAULT_DESIGN" => $this->parse("DEFAULT_DESIGN"),
 			));
+		}
+		// lets load the LANG vars too:
+		lc_site_load("menuedit", $this);
+
+		// XXX - i think that it would be a good idea to check at the beginning, if $GLOBALS['expp_site']
+		// variable is set or not, because if it isn't then i don't have to parse those subs --dragut
+		if (!empty($GLOBALS['expp_site']))
+		{
+			if ($this->ordering_terms_document_id)
+			{
+				$doc_ordering_terms_link = $this->parse( "DOC_ORDERING_TERMS_LINK" );
+			}
+			else
+			{
+				$doc_ordering_terms_link = $this->parse( "DOC_NO_ORDERING_TERMS_LINK" );
+			}
 		}
 		$arr["inst"]->vars(array(
 			"VAIKE_DOC" => $this->parse("VAIKE_DOC"),
 			"DOC_FRAME_COLOR" => $this->frame_color,
 			"DOC_MAIN_COLOR" => $this->main_color,
 			"DOC_TEXT_COLOR" => $this->text_color,
+			"DOC_COMPOSITION_INFORMATION" => ( $this->order_composition_information ? $this->parse( "DOC_COMPOSITION_INFORMATION" ) : '' ),
+//			"DOC_ORDERING_TERMS_LINK" => ( $this->ordering_terms_document_id ? $this->parse( "DOC_ORDERING_TERMS_LINK" ) : $this->parse( "DOC_NO_ORDERING_TERMS_LINK" ) ),
+			"DOC_ORDERING_TERMS_LINK" => $doc_ordering_terms_link,
 		));
 	}
 	

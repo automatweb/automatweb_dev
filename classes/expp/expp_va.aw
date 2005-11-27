@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.3 2005/11/16 12:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -73,7 +73,7 @@ class expp_va extends class_base {
 		$retHTML = '';
 		$_tyyp = $this->cp->nextPid();
 		if( empty( $_tyyp )) return $retHTML;
-		if( is_number( $_tyyp )) {
+		if( is_numeric( $_tyyp )) {
 			$sql = "SELECT id,nimi FROM expp_tyybid WHERE id = '{$_tyyp}' ORDER by sort ASC";
 		} else {
 			$_tyyp = addslashes( urldecode( $_tyyp ));
@@ -178,6 +178,7 @@ class expp_va extends class_base {
 					$_laid = $val1['toote_nimetus'];
 				}
 				$this->vars(array(
+					'VAHE' => ($key1 == 0 ? '' : $this->parse( 'VAHE' )),
 					'url' => $myURL.urlencode( $val1['toote_nimetus'] ),
 					'text' => $_laid,
 				));
@@ -219,7 +220,7 @@ class expp_va extends class_base {
 		$_liik = $this->cp->nextPid();
 		if( empty( $_liik )) return $retHTML;
 
-		if( is_number( $_liik )) {
+		if( is_numeric( $_liik )) {
 		$sql = "SELECT DISTINCT l.id, l.liik, l.tyyp_id FROM expp_liigid l"
 			." LEFT JOIN expp_va_liik vl ON vl.liik_id = l.id"
 			." left join expp_valjaanne v ON v.toote_nimetus = vl.toote_nimetus"
@@ -501,7 +502,7 @@ class expp_va extends class_base {
 */
 			}
 		}
-		$_cell = '';
+		$_cell = array();
 		foreach( $_vad as $__pindeks => $val ) {
 			$_pindeks = $val['pindeks'];
 			$_kamp = $val['kamp'];
@@ -547,7 +548,7 @@ class expp_va extends class_base {
 				$_kamp.'PRICE1' => $_price1,
 				$_kamp.'PRICE2' => $_price2
 			));
-			$_cell .= $this->parse($_kamp.'CELL');
+			$_cell[(empty($_kamp)?1:0)] .= $this->parse($_kamp.'CELL');
 		}
 
 ////
@@ -570,14 +571,14 @@ class expp_va extends class_base {
 			'colspan' => $_colspan,
 			'toode' => $_GET['id'],
 			'REKLAAM' => $_reklaam,
-			'CELL' => $_cell,
+			'CELL' => $_cell[0].$_cell[1],
 			'DESC' => $_desc,
 		));
 		$preview = $this->parse();
 		if( empty( $preview )) return $preview;
 
 		$_preview = '';
-/*
+/**/
 		$cl = new object_list(array(
 			"class_id" => CL_DOCUMENT,
 			"name" => urlencode( $__aid ).".site",
@@ -609,7 +610,7 @@ class expp_va extends class_base {
 				$this->ch->file_invalidate( $_ch_logo );
 			}
 		}
-*/
+/**/
 		$retHTML = ( empty( $_preview )? $preview : $_preview );
 		$this->ch->file_set( $_cache_name, $retHTML );
 		return $retHTML;
