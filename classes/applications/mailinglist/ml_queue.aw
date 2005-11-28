@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.19 2005/10/04 10:42:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.20 2005/11/28 08:01:20 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -748,7 +748,13 @@ flush();
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = $this->replace_tags($message, $data);
 		$subject = $this->replace_tags($arr["msg"]["subject"], $data);
-		$mailfrom = $this->replace_tags($arr["msg"]["mfrom"], $data);
+		$from = $arr["msg"]["mfrom"];
+		if(is_oid($from) && $this->can("view", $from))
+		{
+			$adr = obj($from);
+			$address = $adr->prop("mail");
+		}
+		$mailfrom = $this->replace_tags($address, $data);
 		$mailfrom = trim($mailfrom);
 		$subject = trim($subject);
 		$mailfrom = $arr["msg"]["meta"]["mfrom_name"] . " <" . $mailfrom . ">";
