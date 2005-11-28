@@ -1055,7 +1055,7 @@ class crm_company_cust_impl extends class_base
 
 		if ($ar[$prefix."proj_search_task_name"] != "")
 		{
-			$ret["CL_PROJECT.RELTYPE_TASK.name"] = "%".$ar[$prefix."proj_search_task_name"]."%";
+			$ret["CL_PROJECT.RELTYPE_PRJ_EVENT.name"] = "%".$ar[$prefix."proj_search_task_name"]."%";
 		}
 
 		$ar[$prefix."proj_search_dl_from"] = date_edit::get_timestamp($ar[$prefix."proj_search_dl_from"]);
