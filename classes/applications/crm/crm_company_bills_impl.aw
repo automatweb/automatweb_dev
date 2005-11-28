@@ -566,7 +566,8 @@ class crm_company_bills_impl extends class_base
 				{
 					$cust = obj($b->prop("customer"));
 					$cust_code = $cust->prop("code");
-					$cm = $cust->prop_str("client_manager");
+					list($cm) = explode(" ", $cust->prop_str("client_manager"));
+					$cm = mb_strtoupper($cm);
 				}
 				$ri[] = $cust_code;
 				$ri[] = $b->prop_str("customer");
