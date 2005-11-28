@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.80 2005/11/28 08:54:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.81 2005/11/28 13:20:43 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -762,8 +762,8 @@ class mrp_resource extends class_base
 			}
 		}
 		$list = new object_list(array(
-			"class_id" => CL_TASK,
-			"CL_TASK.RELTYPE_RESOURCE" => $this_object->id()
+			"class_id" => array(CL_CRM_MEETING, CL_TASK),
+			"CL_TASK.RELTYPE_RESOURCE" => $this_object->id(),
 		));
 		foreach($list->arr() as $task)
 		{

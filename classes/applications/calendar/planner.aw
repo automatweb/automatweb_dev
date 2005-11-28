@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.101 2005/11/16 13:20:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.102 2005/11/28 13:20:42 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1176,8 +1176,6 @@ class planner extends class_base
 		{
 			$this->event_id = $t->submit($emb);
 		}
-		// register event_id in global scope also -- ahz
-		aw_global_set("event_id", $this->event_id);
 		
 		if (!empty($emb["id"]))
 		{
@@ -3103,7 +3101,56 @@ class planner extends class_base
 		{
 			return false;
 		}
-		$event->create_brother($evf);
+		$bid = $event->create_brother($evf);
+	}
+
+	function post_submit_event($event)
+	{
+		$gl = aw_global_get('org_action',aw_global_get('REQUEST_URI'));
+		if ($gl == "")
+		{
+			return;
+		}
+		preg_match('/add_to_cal=(\w*|\d*)&/', $gl, $o);
+		if ($this->can("view", $o[1]))
+		{
+			$this->add_event_to_calendar(obj($o[1]), $event);
+		}
+
+		preg_match('/alias_to_org=(\w*|\d*)&/', $gl, $o);
+		preg_match('/reltype_org=(\w*|\d*)&/', $gl, $r);
+		preg_match('/alias_to_org_arr=(.*)$/', $gl, $s);
+		$r[1] = str_replace("&", "", $r[1]);
+		$o[1] = str_replace("&", "", $o[1]);
+		if (is_numeric($o[1]) && is_numeric($r[1]))
+		{
+			$org_obj = new object($o[1]);
+			$org_obj->connect(array(
+				"to" => $event->id(),
+				"reltype" => $r[1],
+			));
+			aw_session_del('org_action');
+			if(strlen($s[1]))
+			{
+				$aliases = unserialize(urldecode($s[1]));
+				foreach($aliases as $key=>$value)
+				{
+					$tmp_o = new object($value);
+					$tmp_o->connect(array(
+						'to' => $event->id(),
+						'reltype' => $r[1],
+					));
+				}
+			}
+			post_message_with_param(
+				MSG_EVENT_ADD,
+				$org_obj->class_id(),
+				array(
+					"source_id" => $org_obj->id(),
+					"event_id" => $event->id(),
+				)
+			);
+		}
 	}
 };
 ?>

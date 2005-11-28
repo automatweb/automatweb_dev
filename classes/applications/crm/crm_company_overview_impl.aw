@@ -549,15 +549,12 @@ class crm_company_overview_impl extends class_base
 			$url = $this->mk_my_orb('new',array(
 				'alias_to_org' => $arr['obj_inst']->id(),
 				'reltype_org' => $relt,
-				'class' => 'planner',
-				'id' => $this->cal_id,
-				'group' => 'add_event',
+				'add_to_cal' => $this->cal_id,
 				'clid' => $clid,
-				'action' => 'change',
 				'title' => $clss[$clid]["name"],
 				'parent' => $arr["obj_inst"]->id(),
 				'return_url' => get_ru()
-			));
+			), $clid);
 
 			$tb->add_menu_item(array(
 				'parent'=>'add_item',

@@ -335,8 +335,13 @@ class crm_company_bills_impl extends class_base
 			$bills2 = new object_list($f2);
 			$bills->add($bills2->ids());
 		}
-
 		$bill_i = get_instance(CL_CRM_BILL);
+
+		if ($arr["request"]["export_hr"] == 1)
+		{
+			$this->_do_export_hr($bills, $arr);
+		}
+
 		foreach($bills->arr() as $bill)
 		{
 			$cust = "";
@@ -497,6 +502,20 @@ class crm_company_bills_impl extends class_base
 			"confirm" => t("Oled kindel et soovid valitud arved kustutada?"),
 			'action' => 'delete_bills',
 		));
+
+		$tb->add_separator();
+
+		$tb->add_menu_button(array(
+			'name'=>'export',
+			'tooltip'=> t('Ekspordi'),
+			"img" => "export.gif"
+		));
+		
+		$tb->add_menu_item(array(
+			'parent'=>'export',
+			'text' => t("Hansa raama"),
+			'link' => aw_url_change_var("export_hr", 1)
+		));
 	}
 
 	function _get_bills_mon_tb($arr)
@@ -527,6 +546,52 @@ class crm_company_bills_impl extends class_base
 			"action" => "create_bill"
 		));
 		
+	}
+
+	function _do_export_hr($bills, $arr)
+	{
+		$ct = array();
+		$i = get_instance(CL_CRM_BILL);
+		foreach($bills->arr() as $b)
+		{
+			$rows = $i->get_bill_rows($b);
+			foreach($rows as $row)
+			{
+				$ri = array();
+				$ri[] = $b->id();
+				$ri[] = date("d.m.Y", $b->prop("bill_date"));
+				$cust_code = "";
+				$cm = "";
+				if ($this->can("view", $b->prop("customer")))
+				{
+					$cust = obj($b->prop("customer"));
+					$cust_code = $cust->prop("code");
+					$cm = $cust->prop_str("client_manager");
+				}
+				$ri[] = $cust_code;
+				$ri[] = $b->prop_str("customer");
+				$ri[] = (int)$row["has_tax"];
+				$ri[] = ""; // - teenuse kood (1-8, ETTEM, VIIVIS), artikli (toote) mingi userdefined väli
+				$ri[] = $row["amt"];
+				$ri[] = $row["name"];
+				$ri[] = $row["price"];
+				$ri[] = $row["sum"];
+				$ri[] = ""; // - konto (artikli ehk toote juurest)
+
+				$ri[] = $cm; // - müügimees (kliendihalduri eesnimi suurte tähtedega)
+				$ri[] = $b->prop_str("currency") == "EUR" ? str_replace(",", ".", $row["sum"]) * 15.64664 : $row["sum"];
+				$ri[] = $b->prop_str("currency") == "EUR" ? 6 : 1;
+				$ri[] = $b->prop_str("currency");
+				$ri[] = 1;
+				$ri[] = 15.64664;
+
+				$ct[] = join("\t", $ri);
+			}
+		}
+
+		header("Content-type: text/plain");
+		header('Content-Disposition: attachment; filename="arved.txt"');
+		die(join("\n", $ct));
 	}
 }
 ?>

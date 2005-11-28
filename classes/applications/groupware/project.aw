@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.68 2005/11/22 07:19:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.69 2005/11/28 13:20:43 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -1661,16 +1661,12 @@ class project extends class_base
 									$url = $this->mk_my_orb('new',array(
 										'alias_to_org' => $arr["obj_inst"]->prop("orderer"),
 										'reltype_org' => 13,
-										'class' => 'planner',
-										'id' => $this->cal_id,
-										'group' => 'add_event',
-										'clid' => CL_TASK,
-										'action' => 'change',
+										'add_to_cal' => $this->cal_id,
 										'title' => t("Toimetus"),
 										'parent' => $arr["id"],
 										'return_url' => get_ru(),
 										"set_proj" => $arr["obj_inst"]->id()
-									));	
+									),CL_TASK);	
 									$tb->add_menu_item(array(
 										"name" => "x_" . $prj_id . "_" . $form_id."_".$add_clid,
 										"parent" => $prj_id,
@@ -1740,16 +1736,12 @@ class project extends class_base
 						$url = $this->mk_my_orb('new',array(
 							'alias_to_org' => $ao,
 							'reltype_org' => 13,
-							'class' => 'planner',
-							'id' => $this->cal_id,
-							'group' => 'add_event',
-							'clid' => CL_TASK,
-							'action' => 'change',
+							'add_to_cal' => $this->cal_id,
 							'title' => t("Toimetus"),
 							'parent' => $arr["id"],
 							'return_url' => get_ru(),
 							"set_proj" => $arr["obj_inst"]->id()
-						));	
+						), CL_TASK);	
 						$tb->add_menu_item(array(
 							"name" => "x_" . $o->id()."_".$add_clid,
 							"parent" => "subprj",

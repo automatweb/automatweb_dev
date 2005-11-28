@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.42 2005/11/14 21:38:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.43 2005/11/28 13:20:43 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -380,6 +380,9 @@ class crm_offer extends class_base
 				}
 			}
 		}
+
+		$pl = get_instance(CL_PLANNER);
+		$pl->post_submit_event($arr["obj_inst"]);
 	}
 	
 	function do_offer_history(&$arr)
@@ -890,6 +893,12 @@ class crm_offer extends class_base
 		unlink($fn_in);
 		unlink($fn_out);
 		die();
+	}
+
+	function new_change($arr)
+	{
+		aw_session_set('org_action',aw_global_get('REQUEST_URI'));
+		return parent::new_change($arr);
 	}
 }
 ?>

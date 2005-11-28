@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.42 2005/11/28 09:16:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.43 2005/11/28 13:20:43 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -129,12 +129,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property search_contact_results type=table store=no group=participants no_caption=1
 @caption Tulemuste tabel
 
+@default group=resources
+
+	@property sel_resources type=table no_caption=1
+
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
 @groupinfo others caption=Teised
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
 @groupinfo participants caption=Osalejad submit=no
+@groupinfo resources caption="Ressursid" 
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
@@ -142,6 +147,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
 
+@reltype RESOURCE value=5 clid=CL_MRP_RESOURCE
+@caption ressurss
 */
 
 class crm_meeting extends class_base
@@ -160,6 +167,11 @@ class crm_meeting extends class_base
 		$data = &$arr['prop'];
 		switch($data['name'])
 		{
+			case "sel_resources":
+				$t = get_instance(CL_TASK);
+				$t->_get_sel_resources($arr);
+				break;
+
 			case "project":
 				$nms = array();
 				if ($this->can("view",$arr["request"]["alias_to_org"]))
@@ -202,7 +214,7 @@ class crm_meeting extends class_base
 
 				$data["options"] = array("" => "") + $nms;
 
-				if (is_object($arr["obj_inst"]))
+				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 				{
 					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
 					{
@@ -256,8 +268,7 @@ class crm_meeting extends class_base
 				}
 
 				asort($data["options"]);
-
-				if (is_object($arr["obj_inst"]))
+				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 				{
 					$arr["obj_inst"]->set_prop("customer", $data["value"]);
 				}
@@ -446,6 +457,11 @@ class crm_meeting extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "sel_resources":
+				$t = get_instance(CL_TASK);
+				$t->_set_resources($arr);
+				break;
+
 			case "project":
 				$data["value"] = $_POST["project"];
 				// add to proj
@@ -519,6 +535,9 @@ class crm_meeting extends class_base
 		{
 			$arr["obj_inst"]->create_brother($this->add_to_proj);
 		}
+		
+		$pl = get_instance(CL_PLANNER);
+		$pl->post_submit_event($arr["obj_inst"]);
 	}
 		
 
@@ -655,6 +674,12 @@ class crm_meeting extends class_base
 		));
 	
 		return $html;
+	}
+
+	function new_change($arr)
+	{
+		aw_session_set('org_action',aw_global_get('REQUEST_URI'));
+		return parent::new_change($arr);
 	}
 }
 ?>

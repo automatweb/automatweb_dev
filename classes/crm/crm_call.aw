@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.26 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.27 2005/11/28 13:20:43 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -266,8 +266,8 @@ class crm_call extends class_base
 			));
 		}
 
-
-
+		$pl = get_instance(CL_PLANNER);
+		$pl->post_submit_event($arr["obj_inst"]);
 	}
 
 
@@ -277,5 +277,10 @@ class crm_call extends class_base
 		return $elib->participant_selector($arr);
 	}
 
+	function new_change($arr)
+	{
+		aw_session_set('org_action',aw_global_get('REQUEST_URI'));
+		return parent::new_change($arr);
+	}
 };
 ?>

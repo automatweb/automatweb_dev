@@ -1887,15 +1887,13 @@ class crm_company extends class_base
 
 		$fake_alias = current($arr['check']);
 
-		$url = $this->mk_my_orb('change',array(
-			'id'=>$cal_id,
-			'group'=>'add_event',
+		$url = $this->mk_my_orb('new',array(
+			'add_to_cal' => $cal_id,
 			'alias_to_org'=>$fake_alias,
 			'reltype_org'=> $arr['reltype'],
-			'clid'=> $arr['clid'],
 			'alias_to_org_arr'=>urlencode(serialize($arr['check'])),
-			//'person_id'=>$person,
-		),'planner');
+			"parent" => $arr["id"]
+		),$arr['clid']);
 		header('Location: '.$url);	
 		die();
 	}
@@ -3355,15 +3353,11 @@ class crm_company extends class_base
 		return $this->mk_my_orb('new',array(
 			'alias_to_org' => reset($arr["check"]),
 			'reltype_org' => 13,
-			'class' => 'planner',
-			'id' => $this->cal_id,
-			'group' => 'add_event',
-			'clid' => CL_TASK,
-			'action' => 'change',
+			'add_to_cal' => $this->cal_id,
 			'title' => t("Toimetus"),
 			'parent' => $arr["id"],
 			'return_url' => urlencode($arr["post_ru"])
-		));
+		), CL_TASK);
 		
 	}
 
@@ -3433,16 +3427,12 @@ class crm_company extends class_base
 		return $this->mk_my_orb('new',array(
 			'alias_to_org' => $o->prop("orderer"),
 			'reltype_org' => 13,
-			'class' => 'planner',
-			'id' => $this->cal_id,
-			'group' => 'add_event',
-			'clid' => CL_TASK,
-			'action' => 'change',
+			'add_to_cal' => $this->cal_id,
 			'title' => t("Toimetus"),
 			'parent' => $arr["id"],
 			'return_url' => urlencode($arr["post_ru"]),
 			"set_proj" => $proj
-		));
+		), CL_TASK);
 		
 	}
 

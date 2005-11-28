@@ -403,6 +403,16 @@
             <no_caption>1</no_caption>
             <caption>Tulemuste tabel</caption>
       </property>
+      <property>
+            <name>sel_resources</name>
+            <table>objects</table>
+            <group>resources</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_MEETING</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -428,6 +438,9 @@
                   <caption>Osalejad</caption>
                   <submit>no</submit>
             </participants>
+            <resources>
+                  <caption>Ressursid</caption>
+            </resources>
       </groupinfo>
       <tableinfo>
             <documents>
@@ -447,6 +460,11 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECURRENCE>
+            <RESOURCE>
+                  <value>5</value>
+                  <clid>CL_MRP_RESOURCE</clid>
+                  <caption>ressurss</caption>
+            </RESOURCE>
       </reltypes>
 </properties>
 

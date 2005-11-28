@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.39 2005/11/28 08:54:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.40 2005/11/28 13:20:43 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -687,6 +687,9 @@ class task extends class_base
 		{
 			$arr["obj_inst"]->create_brother($this->add_to_proj);
 		}
+
+		$pl = get_instance(CL_PLANNER);
+		$pl->post_submit_event($arr["obj_inst"]);
 	}
 	
 	function request_execute($obj)
@@ -1410,6 +1413,12 @@ class task extends class_base
 				));
 			}
 		}
+	}
+
+	function new_change($arr)
+	{
+		aw_session_set('org_action',aw_global_get('REQUEST_URI'));
+		return parent::new_change($arr);
 	}
 }
 ?>
