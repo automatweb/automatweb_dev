@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.38 2005/11/22 09:45:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.39 2005/11/28 08:54:14 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -130,6 +130,10 @@ caption Osalejad
 	@property rows_tb type=toolbar store=no no_caption=1
 	@property rows type=table store=no no_caption=1
 
+@default group=resources
+
+	@property sel_resources type=table no_caption=1
+
 @groupinfo rows caption=Read 
 @groupinfo recurrence caption=Kordumine submit=no
 @groupinfo calendars caption=Kalendrid
@@ -139,6 +143,7 @@ caption Osalejad
 @groupinfo reminders caption=Meeldetuletused
 @groupinfo participants caption=Osalejad submit=no
 @groupinfo other_exp caption="Muud kulud" 
+@groupinfo resources caption="Ressursid" 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -153,6 +158,9 @@ caption Osalejad
 
 @reltype PROJECT value=4 clid=CL_PROJECT
 @caption projekt
+
+@reltype RESOURCE value=5 clid=CL_MRP_RESOURCE
+@caption ressurss
 */
 
 class task extends class_base
@@ -171,6 +179,10 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "sel_resources":
+				$this->_get_sel_resources($arr);
+				break;
+
 			case "name":
 				if (is_object($arr["obj_inst"]) && $data["value"] == "")
 				{
@@ -195,6 +207,15 @@ class task extends class_base
 
 			case "participants":
 				$p = array();
+				if ($this->can("view", $arr["request"]["alias_to_org"]))
+				{
+					$ao = obj($arr["request"]["alias_to_org"]);
+					if ($ao->class_id() == CL_CRM_PERSON)
+					{
+						$p[$ao->id()] = $ao->id();
+					}
+				}
+
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
 					$conns = $arr['obj_inst']->connections_to(array(
@@ -438,9 +459,18 @@ class task extends class_base
 					$ol = new object_list(array("oid" => $cst));
 					$data["options"] = array("" => "") + $ol->names();
 				}
-				if ($arr["request"]["alias_to_org"])
+				if ($this->can("view", $arr["request"]["alias_to_org"]))
 				{
-					$data["value"] = $arr["request"]["alias_to_org"];
+					$ao = obj($arr["request"]["alias_to_org"]);
+					if ($ao->class_id() == CL_CRM_PERSON)
+					{
+						$u = get_instance(CL_USER);
+						$data["value"] = $u->get_company_for_person($ao->id());
+					}
+					else
+					{
+						$data["value"] = $arr["request"]["alias_to_org"];
+					}
 				}
 
 				if (is_object($arr["obj_inst"]) && !$arr["new"])
@@ -489,6 +519,10 @@ class task extends class_base
 		
 		switch($prop["name"])
 		{
+			case "sel_resources":
+				$this->_set_resources($arr);
+				break;
+
 			case "rows":
 				$res = array();
 				foreach(safe_array($_POST["rows"]) as $e)
@@ -1307,6 +1341,74 @@ class task extends class_base
 		if (($cal = $pl->get_calendar_for_person($person)))
 		{
 			$pl->add_event_to_calendar(obj($cal), $task);
+		}
+	}
+
+	function _init_sel_res_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sel",
+			"caption" => t("Vali"),
+			"align" => "center"
+		));
+	}
+
+	function _get_sel_resources($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_sel_res_t($t);
+
+		// get resources from my company
+		$co = get_instance(CL_CRM_COMPANY);
+		$res = $co->get_my_resources();
+
+		$sel_res = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RESOURCE")));
+		$sel_ids = array_flip($sel_res->ids());
+		foreach($res->arr() as $r)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($r),
+				"sel" => html::checkbox(array(
+					"name" => "sel[".$r->id()."]",
+					"value" => 1,
+					"checked" => isset($sel_ids[$r->id()]) ? true : false
+				))
+			));
+		}
+	}
+
+	function _set_resources($arr)
+	{
+		$sel_res = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RESOURCE")));
+		$sel_ids = array_flip($sel_res->ids());
+
+		$sbt = safe_array($arr["request"]["sel"]);
+		foreach($sbt as $_id => $one)
+		{
+			if (!isset($sel_ids[$_id]))
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $_id,
+					"type" => "RELTYPE_RESOURCE"
+				));
+			}
+		}
+
+		foreach($sel_ids as $_id => $b)
+		{
+			if (!isset($sbt[$_id]))
+			{
+				$arr["obj_inst"]->disconnect(array(
+					"from" => $_id
+				));
+			}
 		}
 	}
 }

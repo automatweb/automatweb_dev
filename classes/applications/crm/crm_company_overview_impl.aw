@@ -619,7 +619,7 @@ class crm_company_overview_impl extends class_base
 
 	function _get_act_s_part($arr)
 	{
-		if ($arr["request"]["act_s_sbt"] == "")
+		if ($arr["request"]["act_s_sbt"] == "" && $arr["request"]["act_s_is_is"] != 1)
 		{
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
@@ -706,7 +706,7 @@ class crm_company_overview_impl extends class_base
 				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
 				break;
 		}
-		if ($arr["request"]["act_s_sbt"] != "")
+		if ($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1)
 		{
 			// filter
 			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $tasks, $clid));

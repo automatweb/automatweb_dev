@@ -504,6 +504,10 @@ default group=org_objects
 
 	@property bills_mon_tb type=toolbar no_caption=1 store=no
 
+@default group=bills_search
+
+	@property bs_tb type=toolbar no_caption=1
+
 @default group=bills_list
 
 	@property bills_tb type=toolbar no_caption=1 store=no
@@ -515,29 +519,31 @@ default group=org_objects
 			otsing Kliendi, arve nr,  esitamise ajavahemiku, 
 			kliendihalduri, koostamisel/makstud/maksmata järgi
 
-			@property bill_s_cust type=textbox size=30 store=no parent=bills_list_s captionside=top
+
+			@property bill_s_cust type=textbox size=30 store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Klient
 
-			@property bill_s_bill_no type=textbox size=30 store=no parent=bills_list_s captionside=top
+			@property bill_s_bill_no type=textbox size=30 store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Arve nr
 
-			@property bill_s_from type=date_select store=no parent=bills_list_s captionside=top
+			@property bill_s_from type=date_select store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Esitatud alates
 
-			@property bill_s_to type=date_select store=no parent=bills_list_s captionside=top
+			@property bill_s_to type=date_select store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Esitatud kuni
 
-			@property bill_s_client_mgr type=text store=no parent=bills_list_s captionside=top
+			@property bill_s_client_mgr type=text store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Kliendihaldur
 
-			@property bill_s_status type=select store=no parent=bills_list_s captionside=top
+			@property bill_s_status type=select store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Staatus
 
-			@property bill_s_search type=submit store=no parent=bills_list_s captionside=top no_caption=1
+			@property bill_s_search type=submit store=no parent=bills_list_s captionside=top no_caption=1 group=bills_list
 			@caption Otsi
 
 		@property bills_list type=table store=no no_caption=1 parent=bills_list_box group=bills_list,bills_monthly
 
+	
 
 @default group=my_tasks,meetings,calls,ovrv_offers,all_actions
 
@@ -549,10 +555,10 @@ default group=org_objects
 
 			@layout act_s_dl_layout_top type=vbox parent=all_act_search
 
-			@property act_s_cust type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
+			@property act_s_cust type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Klient
 
-			@property act_s_part type=text size=30 parent=act_s_dl_layout_top store=no captionside=top
+			@property act_s_part type=text size=30 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Osaleja
 
 			@property act_s_task_name type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
@@ -561,24 +567,24 @@ default group=org_objects
 			@property act_s_code type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Toimetuse kood
 
-			@property act_s_proj_name type=textbox size=33 parent=all_act_search store=no captionside=top
+			@property act_s_proj_name type=textbox size=33 parent=all_act_search store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Projekti nimi
 
 			@layout act_s_dl_layout type=vbox parent=all_act_search
 
-				@property act_s_dl_from type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox 
+				@property act_s_dl_from type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 				@caption T&auml;htaeg alates
 
-				@property act_s_dl_to type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox 
+				@property act_s_dl_to type=date_select store=no parent=act_s_dl_layout captionside=top format=day_textbox,month_textbox,year_textbox group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 				@caption T&auml;htaeg kuni
 
 			@property act_s_status type=select parent=all_act_search store=no captionside=top
 			@caption Staatus
 
-			@property act_s_sbt type=submit  parent=all_act_search no_caption=1 
+			@property act_s_sbt type=submit  parent=all_act_search no_caption=1 group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Otsi
 
-		@property my_tasks type=table store=no no_caption=1 parent=my_tasks
+		@property my_tasks type=table store=no no_caption=1 parent=my_tasks group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 		@property my_tasks_cal type=calendar store=no no_caption=1 parent=my_tasks
 
 @default group=stats
@@ -628,6 +634,17 @@ default group=org_objects
 	@property qv_cust_inf type=text store=no no_caption=1
 	@property qv_t type=table store=no no_caption=1
 
+@default group=resources
+
+	@property res_tb type=toolbar no_caption=1
+
+	@layout res_lt type=hbox width=20%:80%
+
+		@property res_tree type=treeview no_caption=1 parent=res_lt
+
+		@property res_tbl type=table no_caption=1 parent=res_lt
+
+
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
@@ -635,7 +652,7 @@ default group=org_objects
 @groupinfo add_info caption="Lisainfo" parent=general
 @groupinfo user_settings caption="Kasutajate seaded" parent=general
 @groupinfo special_offers caption="Eripakkumised" submit=no parent=general
-@groupinfo people caption="Inimesed"
+@groupinfo people caption="T&ouml;&ouml;tajad"
 
 	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no
 	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no
@@ -677,9 +694,11 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	@groupinfo bills_create parent=bills caption="Loo arve" submit=no
 	@groupinfo bills_list parent=bills caption="Nimekiri" submit=no
 	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no
+	@groupinfo bills_search parent=bills caption="Otsi toimetusi" submit=no
 
 @groupinfo stats caption="Statistika" submit_method=get
 @groupinfo quick_view caption="Vaata"  submit=no
+@groupinfo resources caption="Ressursid"  submit=no
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -824,6 +843,12 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @reltype SERVER_FILES value=51 clid=CL_SERVER_FOLDER
 @caption failide kataloog serveris
+
+@reltype RESOURCES_FOLDER value=52 clid=CL_MENU
+@caption ressursside kataloog
+
+@reltype RESOURCE_MGR value=53 clid=CL_MRP_WORKSPACE
+@caption ressursihalduskeskkond
 
 */
 /*
@@ -1478,6 +1503,7 @@ class crm_company extends class_base
 			case 'bills_mon_tb':
 			case "bill_s_client_mgr":
 			case "bill_s_status":
+			case "bs_tb":
 				static $bills_impl;
 				if (!$bills_impl)
 				{
@@ -1558,6 +1584,19 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $qv_impl->$fn($arr);
+
+			// RESOURCES tab
+			case "res_tb":
+			case "res_tree":
+			case "res_tbl":
+				static $res_impl;
+				if (!$res_impl)
+				{
+					$res_impl = get_instance("applications/crm/crm_company_res_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $res_impl->$fn($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -2320,7 +2359,7 @@ class crm_company extends class_base
 			$arr["args"]["do_doc_search"] = 1;
 		}	
 
-		if ($arr["request"]["act_s_sbt"])
+		if ($arr["request"]["act_s_sbt"] || $arr["request"]["group"] == "bills_search")
 		{
 			$arr["args"]["act_s_cust"] = $arr["request"]["act_s_cust"];
 			$arr["args"]["act_s_part"] = $arr["request"]["act_s_part"];
@@ -2331,8 +2370,8 @@ class crm_company extends class_base
 			$arr["args"]["act_s_dl_to"] = $arr["request"]["act_s_dl_to"];
 			$arr["args"]["act_s_status"] = $arr["request"]["act_s_status"];
 			$arr["args"]["act_s_sbt"] = $arr["request"]["act_s_sbt"];
+			$arr["args"]["act_s_is_is"] = 1;
 		}	
-
 		if ($arr["request"]["bill_s_search"] != "")
 		{
 			$arr["args"]["bill_s_cust"] = $arr["request"]["bill_s_cust"];
@@ -3809,6 +3848,64 @@ class crm_company extends class_base
 		}
 		unset($_SESSION["crm_cut_docs"]);
 		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=res_delete
+	**/
+	function res_delete($arr)
+	{
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			$ol = new object_list(array("oid" => $arr["sel"]));
+			$ol->delete();
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=res_paste
+	**/
+	function res_paste($arr)
+	{
+		if (is_array($_SESSION["co_res_cut"]) && count($_SESSION["co_res_cut"]))
+		{
+			$ol = new object_list(array("oid" => $_SESSION["co_res_cut"]));
+			$ol->set_parent($arr["tf"]);
+		}
+		$_SESSION["co_res_cut"] = false;
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=res_cut
+	**/
+	function res_cut($arr)
+	{
+		$_SESSION["co_res_cut"] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+
+	function get_my_resources()
+	{
+		$i = get_instance("applications/crm/crm_company_res_impl");
+		$u = get_instance(CL_USER);
+
+		$ot = new object_tree(array(
+			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+			"parent" => $i->_get_res_parent(obj($u->get_current_company()))
+		));
+		$ol = $ot->to_list();
+		$ret = new object_list();
+
+		foreach($ol->arr() as $o)
+		{
+			if ($o->class_id() == CL_MRP_RESOURCE)
+			{
+				$ret->add($o);
+			}
+		}
+		return $ret;
 	}
 }
 ?>

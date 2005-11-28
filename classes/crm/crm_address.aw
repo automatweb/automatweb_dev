@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.14 2005/10/25 12:22:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.15 2005/11/28 08:54:14 kristo Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -175,5 +175,74 @@ class crm_address extends class_base
 		return $rv;
 	}
 
+	function callback_on_load($arr)
+	{
+		if ($arr["request"]["action"] == "new")
+		{
+			$o = obj();
+			$o->set_parent($arr["request"]["parent"]);
+			$o->set_class_id(CL_CRM_ADDRESS);
+			$o->save();
+			
+			if ($this->can("view", $arr["request"]["alias_to"]))
+			{
+				$at = obj($arr["request"]["alias_to"]);
+				$reltype = $arr["request"]["reltype"];
+
+				$bt = $this->get_properties_by_type(array(
+					"type" => array("relpicker","relmanager", "popup_search"),
+					"clid" => $at->class_id(),
+				));
+
+				$symname = "";
+				// figure out symbolic name for numeric reltype
+				foreach($this->relinfo as $key => $val)
+				{
+					if (substr($key,0,7) == "RELTYPE")
+					{
+						if ($reltype == $val["value"])
+						{
+							$symname = $key;
+						};
+					};
+				};
+
+				// figure out which property to check
+				foreach($bt as $item_key => $item)
+				{
+					// double check just in case
+					if (!empty($symname) && ($item["type"] == "popup_search" || $item["type"] == "relpicker" || $item["type"] == "relmanager") && ($item["reltype"] == $symname))
+					{
+						$target_prop = $item_key;
+					};
+				};
+
+
+				// now check, whether that property has a value. If not,
+				// set it to point to the newly created connection
+				if (!empty($symname) && !empty($target_prop))
+				{
+					$conns = $at->connections_from(array(
+						"type" => $symname,
+					));
+					$conn_count = sizeof($conns);
+				};
+
+				// this is after the new connection has been made
+				if ($target_prop != "" && ($conn_count == 1 || !$bt[$target_prop]["multiple"] ))
+				{
+					$at->set_prop($target_prop,$o->id());
+					$at->save();
+				}
+				
+				$at->connect(array(
+					"to" => $o->id(),
+					"type" => $arr["request"]["reltype"]
+				));
+			}
+			header("Location: ".html::get_change_url($o->id(), array("return_url" => urlencode($arr["request"]["return_url"]))));
+			die();
+		}
+	}
 };
 ?>

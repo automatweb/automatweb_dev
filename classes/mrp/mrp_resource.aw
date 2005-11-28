@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.79 2005/10/31 11:54:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.80 2005/11/28 08:54:15 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -760,6 +760,20 @@ class mrp_resource extends class_base
 					));
 				}
 			}
+		}
+		$list = new object_list(array(
+			"class_id" => CL_TASK,
+			"CL_TASK.RELTYPE_RESOURCE" => $this_object->id()
+		));
+		foreach($list->arr() as $task)
+		{
+			$calendar->add_item (array (
+				"timestamp" => $task->prop("start1"),
+				"data" => array(
+					"name" => $task->name(),
+					"link" => html::get_change_url($task->id(), array("return_url" => get_ru())),
+				),
+			));
 		}
 
 		return $calendar->get_html ();

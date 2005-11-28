@@ -388,6 +388,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>sel_resources</name>
+            <table>objects</table>
+            <group>resources</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -424,6 +434,9 @@
             <other_exp>
                   <caption>Muud kulud</caption>
             </other_exp>
+            <resources>
+                  <caption>Ressursid</caption>
+            </resources>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -456,6 +469,11 @@
                   <clid>CL_PROJECT</clid>
                   <caption>projekt</caption>
             </PROJECT>
+            <RESOURCE>
+                  <value>5</value>
+                  <clid>CL_MRP_RESOURCE</clid>
+                  <caption>ressurss</caption>
+            </RESOURCE>
       </reltypes>
       <layout>
             <num_hrs>

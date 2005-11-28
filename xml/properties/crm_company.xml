@@ -1415,6 +1415,15 @@
             <field>bills_mon_tb</field>
       </property>
       <property>
+            <name>bs_tb</name>
+            <table>objects</table>
+            <group>bills_search</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>bs_tb</field>
+      </property>
+      <property>
             <name>bills_tb</name>
             <table>objects</table>
             <group>bills_list</group>
@@ -1540,6 +1549,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>bills_search</num_5>
             </group>
             <type>textbox</type>
             <size>33</size>
@@ -1558,6 +1568,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>bills_search</num_5>
             </group>
             <type>text</type>
             <size>30</size>
@@ -1612,6 +1623,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>bills_search</num_5>
             </group>
             <type>textbox</type>
             <size>33</size>
@@ -1630,6 +1642,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>bills_search</num_5>
             </group>
             <type>date_select</type>
             <store>no</store>
@@ -1652,6 +1665,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>bills_search</num_5>
             </group>
             <type>date_select</type>
             <store>no</store>
@@ -1691,6 +1705,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>bills_search</num_5>
             </group>
             <type>submit</type>
             <parent>all_act_search</parent>
@@ -1708,6 +1723,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>bills_search</num_5>
             </group>
             <type>table</type>
             <store>no</store>
@@ -1868,6 +1884,35 @@
             <no_caption>1</no_caption>
             <field>qv_t</field>
       </property>
+      <property>
+            <name>res_tb</name>
+            <table>objects</table>
+            <group>resources</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>res_tb</field>
+      </property>
+      <property>
+            <name>res_tree</name>
+            <table>objects</table>
+            <group>resources</group>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>res_lt</parent>
+            <store>no</store>
+            <field>res_tree</field>
+      </property>
+      <property>
+            <name>res_tbl</name>
+            <table>objects</table>
+            <group>resources</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>res_lt</parent>
+            <store>no</store>
+            <field>res_tbl</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
@@ -1901,7 +1946,7 @@
                   <parent>general</parent>
             </special_offers>
             <people>
-                  <caption>Inimesed</caption>
+                  <caption>T&amp;ouml;&amp;ouml;tajad</caption>
             </people>
             <contacts2>
                   <caption>Inimesed puuvaates</caption>
@@ -2025,6 +2070,11 @@
                   <caption>Kuuarved</caption>
                   <submit>no</submit>
             </bills_monthly>
+            <bills_search>
+                  <parent>bills</parent>
+                  <caption>Otsi toimetusi</caption>
+                  <submit>no</submit>
+            </bills_search>
             <stats>
                   <caption>Statistika</caption>
                   <submit_method>get</submit_method>
@@ -2033,6 +2083,10 @@
                   <caption>Vaata</caption>
                   <submit>no</submit>
             </quick_view>
+            <resources>
+                  <caption>Ressursid</caption>
+                  <submit>no</submit>
+            </resources>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -2290,6 +2344,16 @@
                   <clid>CL_SERVER_FOLDER</clid>
                   <caption>failide kataloog serveris</caption>
             </SERVER_FILES>
+            <RESOURCES_FOLDER>
+                  <value>52</value>
+                  <clid>CL_MENU</clid>
+                  <caption>ressursside kataloog</caption>
+            </RESOURCES_FOLDER>
+            <RESOURCE_MGR>
+                  <value>53</value>
+                  <clid>CL_MRP_WORKSPACE</clid>
+                  <caption>ressursihalduskeskkond</caption>
+            </RESOURCE_MGR>
       </reltypes>
       <layout>
             <hbox_toolbar>
@@ -2518,6 +2582,11 @@
                         <num_4>all_actions</num_4>
                   </group>
             </act_s_dl_layout>
+            <res_lt>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>resources</group>
+            </res_lt>
       </layout>
 </properties>
 

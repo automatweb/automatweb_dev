@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.40 2005/11/22 07:58:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.41 2005/11/28 08:54:15 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -231,9 +231,18 @@ class crm_meeting extends class_base
 					$ol = new object_list(array("oid" => $cst));
 					$data["options"] = array("" => "") + $ol->names();
 				}
-				if ($arr["request"]["alias_to_org"])
+				if ($this->can("view", $arr["request"]["alias_to_org"]))
 				{
-					$data["value"] = $arr["request"]["alias_to_org"];
+					$ao = obj($arr["request"]["alias_to_org"]);
+					if ($ao->class_id() == CL_CRM_PERSON)
+					{
+						$u = get_instance(CL_USER);
+						$data["value"] = $u->get_company_for_person($ao->id());
+					}
+					else
+					{
+						$data["value"] = $arr["request"]["alias_to_org"];
+					}
 				}
 
 				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
@@ -253,6 +262,14 @@ class crm_meeting extends class_base
 			case "participants":
 				$opts = array();
 				$p = array();
+				if ($this->can("view", $arr["request"]["alias_to_org"]))
+				{
+					$ao = obj($arr["request"]["alias_to_org"]);
+					if ($ao->class_id() == CL_CRM_PERSON)
+					{
+						$p[$ao->id()] = $ao->id();
+					}
+				}
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
 					$conns = $arr['obj_inst']->connections_to(array(

@@ -314,5 +314,26 @@
 			</function>
 		</action>
 
+		<action name="res_delete">
+			<function name="res_delete">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="res_paste">
+			<function name="res_paste">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="res_cut">
+			<function name="res_cut">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

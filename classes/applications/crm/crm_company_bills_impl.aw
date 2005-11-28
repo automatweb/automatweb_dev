@@ -347,6 +347,18 @@ class crm_company_bills_impl extends class_base
 				$cust = html::get_change_url($tmp->id(), array("return_url" => get_ru()), $tmp->name());
 				$cm = html::obj_change_url($tmp->prop("client_manager"));
 			}
+			if ($arr["request"]["group"] == "bills_search")
+			{
+				$state = $bill_i->states[$bill->prop("state")];
+			}	
+			else
+			{
+				$state = html::select(array(
+					"options" => $bill_i->states,
+					"selected" => $bill->prop("state"),
+					"name" => "bill_states[".$bill->id()."]"
+				));
+			}
 			$cursum = $bill_i->get_sum($bill);
 			$t->define_data(array(
 				"bill_no" => html::get_change_url($bill->id(), array("return_url" => get_ru()), parse_obj_name($bill->prop("bill_no"))),
@@ -361,11 +373,7 @@ class crm_company_bills_impl extends class_base
 				"bill_date" => $bill->prop("bill_date"),
 				"bill_due_date" => $bill->prop("bill_due_date"),
 				"customer" => $cust,
-				"state" => html::select(array(
-					"options" => $bill_i->states,
-					"selected" => $bill->prop("state"),
-					"name" => "bill_states[".$bill->id()."]"
-				)),
+				"state" => $state,
 				"sum" => number_format($cursum, 2),
 				"client_manager" => $cm,
 				"oid" => $bill->id(),
@@ -507,6 +515,18 @@ class crm_company_bills_impl extends class_base
 			"confirm" => t("Oled kindel et soovid valitud arved kustutada?"),
 			'action' => 'delete_bills',
 		));
+	}
+
+	function _get_bs_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "create_bill",
+			"tooltip" => t("Loo arve"),
+			"img" => "save.gif",
+			"action" => "create_bill"
+		));
+		
 	}
 }
 ?>
