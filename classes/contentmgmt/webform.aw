@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.80 2005/11/25 07:50:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.81 2005/11/28 13:04:34 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1927,7 +1927,7 @@ class webform extends class_base
 			$els[$v]["pr"] = $last;
 			$last = $v;
 		}
-		$els = $els + $tmpx;
+		$els = (array)$els + (array)$tmpx;
 		classload("cfg/htmlclient");
 		$htmlc = new htmlclient(array(
 			"template" => "real_webform.tpl",
