@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.16 2005/09/22 06:19:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.17 2005/11/30 13:32:46 kristo Exp $
 
 /*
 
@@ -289,8 +289,8 @@ class banner extends class_base
 			WHERE 
 				banners.id IN ($bbs) 
 				AND objects.status = 2 
-				AND (clicks <= max_clicks OR (max_clicks is null OR max_clicks = 0)) 
-				AND (views <= max_views OR (max_views is null OR max_views = 0)) 
+				AND (clicks <= max_clicks OR (max_clicks is null OR max_clicks = 0) OR clicks is null) 
+				AND (views <= max_views OR (max_views is null OR max_views = 0) or views is null) 
 			ORDER BY RAND()
 		";
 		$this->db_query($q);
@@ -301,7 +301,6 @@ class banner extends class_base
 			$baids[$cnt++] = $row;
 			$sum += $row["pb"];
 		}
-
 		if ($cnt > 0)
 		{
 			srand ((double) microtime() * 10000000);
@@ -435,7 +434,6 @@ class banner extends class_base
 	function proc_banner($arr)
 	{
 		extract($arr);
-
 		if ($html)
 		{
 			// tagastame baasi kirjutatud htmli banneri naitamisex.
