@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.69 2005/11/21 14:41:33 kristo Exp $
+// $Id: cfgutils.aw,v 1.70 2005/12/01 20:22:10 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -296,9 +296,8 @@ class cfgutils extends aw_template
 				}		
 			}
 		}
-
 		// translate
-		if (!$system)
+		if (true || !$system)
 		{
 			foreach($properties as $k => $d)
 			{
@@ -308,10 +307,16 @@ class cfgutils extends aw_template
 				}
 				$t_str = "Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption";
 				$tmp = t2($t_str);
-				//echo "reans $t_str = $tmp <br>";
 				if ($tmp !== NULL)
 				{
 					$properties[$k]["caption"]["text"] = $tmp;
+				}
+
+				$t_str = "Omaduse ".$d["caption"]." (".$d["name"].") caption";
+				$tmp = t2($t_str);
+				if ($tmp !== NULL)
+				{
+					$properties[$k]["caption"] = $tmp;
 				}
 
 				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") kommentaar");
@@ -320,10 +325,22 @@ class cfgutils extends aw_template
 					$properties[$k]["comment"]["text"] = $tmp;
 				}
 
+				$tmp = t2("Omaduse ".$d["caption"]." (".$d["name"].") kommentaar");
+				if ($tmp !== NULL)
+				{
+					$properties[$k]["comment"] = $tmp;
+				}
+
 				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") help");
 				if ($tmp !== NULL)
 				{
 					$properties[$k]["help"]["text"] = $tmp;
+				}
+
+				$tmp = t2("Omaduse ".$d["caption"]." (".$d["name"].") help");
+				if ($tmp !== NULL)
+				{
+					$properties[$k]["help"] = $tmp;
 				}
 			}
 
@@ -356,8 +373,6 @@ class cfgutils extends aw_template
 			};
 		};
 
-
-		
 		$this->classinfo = $classinfo;
 		$tmp = array();
 
