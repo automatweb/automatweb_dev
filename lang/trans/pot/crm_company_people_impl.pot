@@ -1,0 +1,144 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_company_people_impl.aw:19 classes/applications/crm/crm_company_people_impl.aw:669
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:31
+msgid "Töötaja"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:45 classes/applications/crm/crm_company_people_impl.aw:239 classes/applications/crm/crm_company_people_impl.aw:511 classes/applications/crm/crm_company_people_impl.aw:601
+msgid "Üksus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:58 classes/applications/crm/crm_company_people_impl.aw:245 classes/applications/crm/crm_company_people_impl.aw:516 classes/applications/crm/crm_company_people_impl.aw:606
+msgid "Ametinimetus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:73
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:81
+msgid "Tee kõne"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:89
+msgid "Uus kohtumine"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:97
+msgid "Uus toimetus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:106
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:112
+msgid "Isikuid"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:118
+msgid "Ametinimetusi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:127
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:137
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:144
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:153
+msgid "Kleebi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:163
+msgid "Oluliseks"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:187
+msgid "K&otilde;ik t&ouml;&ouml;tajad"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:212
+msgid ""
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:218 classes/applications/crm/crm_company_people_impl.aw:494 classes/applications/crm/crm_company_people_impl.aw:584
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:227 classes/applications/crm/crm_company_people_impl.aw:501 classes/applications/crm/crm_company_people_impl.aw:591
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:233 classes/applications/crm/crm_company_people_impl.aw:506 classes/applications/crm/crm_company_people_impl.aw:596
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:675 classes/applications/crm/crm_company_people_impl.aw:835
+msgid "Kustuta valitud tööpakkumised"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:677
+msgid "Kas oled kindel et soovid valitud tööpakkumised kustudada?"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:693
+msgid "Tööpakkumine"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:730 classes/applications/crm/crm_company_people_impl.aw:874
+msgid "Osakond"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:736
+msgid "Ametinimi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:742
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:748
+msgid "Kehtiv alates"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:759
+msgid "Kehtiv kuni"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:771
+msgid "X"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:808
+msgid "Määramata"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:862
+msgid "Kandideerija nimi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_people_impl.aw:868
+msgid "Ametikoht"
+msgstr ""
+

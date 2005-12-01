@@ -1,0 +1,96 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_company_bills_impl.aw:13 classes/applications/crm/crm_company_bills_impl.aw:114 classes/applications/crm/crm_company_bills_impl.aw:544
+msgid "Loo arve"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:20
+msgid "Projekt"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:27 classes/applications/crm/crm_company_bills_impl.aw:267
+msgid "Klient"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:34 classes/applications/crm/crm_company_bills_impl.aw:146 classes/applications/crm/crm_company_bills_impl.aw:278
+msgid "Summa"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:125
+msgid "Juhtumi nimi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:132
+msgid "Tunde"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:139
+msgid "Tunni hind"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:227
+msgid "Koosta arve"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:236
+msgid "Number"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:244 classes/applications/crm/crm_company_bills_impl.aw:376
+msgid "Loo uus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:251
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:259
+msgid "Makset&auml;htaeg"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:272
+msgid "Kliendihaldur"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:287
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:293 classes/applications/crm/crm_company_bills_impl.aw:387
+msgid "Tr&uuml;ki"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:401
+msgid "<b>Summa</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:495 classes/applications/crm/crm_company_bills_impl.aw:527
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:501 classes/applications/crm/crm_company_bills_impl.aw:533
+msgid "Kustuta valitud arved"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:502 classes/applications/crm/crm_company_bills_impl.aw:534
+msgid "Oled kindel et soovid valitud arved kustutada?"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:510
+msgid "Ekspordi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:516
+msgid "Hansa raama"
+msgstr ""
+
