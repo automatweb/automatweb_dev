@@ -1841,6 +1841,13 @@ class site_template_compiler extends aw_template
 		$dat = current($this->list_name_stack);
 		$parent_is_from_obj_name = $dat["parent_is_from_obj_name"];
 
+		$ret .= $this->_gi()."if (\$this->can(\"view\", \$parent_obj->prop(\"submenus_from_menu\")))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$parent_obj = obj(\$parent_obj->prop(\"submenus_from_menu\"));\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
 		$ret .= $this->_gi()."if (\$parent_obj->prop(\"submenus_from_obj\") || ".$parent_is_from_obj_name."[\$parent_obj->id()])\n";
 
 		return $ret;
