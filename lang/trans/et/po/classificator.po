@@ -10,33 +10,49 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/cfg/classificator.aw:class_203_help
+#: classes/cfg/classificator.aw:class_203_help
 msgid "Klassi Klassifikaator help"
 msgstr ""
 
 # classes/cfg/classificator.aw:prop_folders
+#: classes/cfg/classificator.aw:prop_folders
 msgid "Omaduse Kus kehtib (folders) caption"
 msgstr ""
 
 # classes/cfg/classificator.aw:prop_folders_comment
+#: classes/cfg/classificator.aw:prop_folders_comment
 msgid "Omaduse Kus kehtib (folders) kommentaar"
 msgstr ""
 
 # classes/cfg/classificator.aw:prop_folders_help
+#: classes/cfg/classificator.aw:prop_folders_help
 msgid "Omaduse Kus kehtib (folders) help"
 msgstr ""
 
 # classes/cfg/classificator.aw:prop_clids
+#: classes/cfg/classificator.aw:prop_clids
 msgid "Omaduse Klassid millele kehtib (clids) caption"
 msgstr ""
 
 # classes/cfg/classificator.aw:prop_clids_comment
+#: classes/cfg/classificator.aw:prop_clids_comment
 msgid "Omaduse Klassid millele kehtib (clids) kommentaar"
 msgstr ""
 
 # classes/cfg/classificator.aw:prop_clids_help
+#: classes/cfg/classificator.aw:prop_clids_help
 msgid "Omaduse Klassid millele kehtib (clids) help"
 msgstr ""
 
+#: classes/cfg/classificator.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/cfg/classificator.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 # classes/cfg/classificator.aw:rel_RELTYPE_FOLDER
+#: classes/cfg/classificator.aw:rel_RELTYPE_FOLDER
 msgid "Seose hallatav kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""

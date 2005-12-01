@@ -26,6 +26,14 @@ msgstr ""
 msgid "Omaduse Staatus (q_status) help"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_queue.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_queue.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_queue.aw:group_
 msgid "Grupi  () pealkiri"
 msgstr ""
@@ -34,7 +42,7 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:550
+#: classes/applications/mailinglist/ml_queue.aw:553
 msgid "done\n<br>"
 msgstr ""
 

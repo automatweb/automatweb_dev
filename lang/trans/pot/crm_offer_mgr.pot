@@ -50,6 +50,14 @@ msgstr ""
 msgid "Omaduse Pakkumised (offers_list) help"
 msgstr ""
 
+#: classes/crm/crm_offer_mgr.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer_mgr.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/crm/crm_offer_mgr.aw:group_offers
 msgid "Grupi Pakkumised (offers) pealkiri"
 msgstr ""
@@ -67,7 +75,7 @@ msgid "Seose ladu (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
 #: classes/crm/crm_offer_mgr.aw:rel_RELTYPE_TYPICAL_COMPONENT
-msgid "Seose t&uuml;piline komponent (RELTYPE_TYPICAL_COMPONENT) tekst"
+msgid "Seose t&amp;uuml;piline komponent (RELTYPE_TYPICAL_COMPONENT) tekst"
 msgstr ""
 
 #: classes/crm/crm_offer_mgr.aw:93

@@ -9,15 +9,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/applications/class_designer/class_visualizer.aw:26
+#: classes/applications/class_designer/class_visualizer.aw:27
 msgid "I'm so depessed"
 msgstr "I'm so depessed"
 
-#: classes/applications/class_designer/class_visualizer.aw:230
-msgid "this will not work"
-msgstr "this will not work"
-
-#: classes/applications/class_designer/class_visualizer.aw:264
-#: classes/applications/class_designer/class_visualizer.aw:383
+#: classes/applications/class_designer/class_visualizer.aw:279
 msgid "Seostehaldur"
 msgstr "Connection manager"
+
+#~ msgid "this will not work"
+#~ msgstr "this will not work"

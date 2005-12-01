@@ -11,182 +11,249 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/file.aw:class_41_help
+#: classes/file.aw:class_41_help
 msgid "Klassi Fail help"
 msgstr ""
 
-# classes/file.aw:prop_needs_translation
+#: classes/file.aw:prop_needs_translation
 msgid "Omaduse Vajab tlget (needs_translation) caption"
 msgstr ""
 
-# classes/file.aw:prop_needs_translation_comment
+#: classes/file.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tlget (needs_translation) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_needs_translation_help
+#: classes/file.aw:prop_needs_translation_help
 msgid "Omaduse Vajab tlget (needs_translation) help"
 msgstr ""
 
-# classes/file.aw:prop_is_translated
+#: classes/file.aw:prop_is_translated
 msgid "Omaduse Tlge kinnitatud (is_translated) caption"
 msgstr ""
 
-# classes/file.aw:prop_is_translated_comment
+#: classes/file.aw:prop_is_translated_comment
 msgid "Omaduse Tlge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_is_translated_help
+#: classes/file.aw:prop_is_translated_help
 msgid "Omaduse Tlge kinnitatud (is_translated) help"
 msgstr ""
 
 # classes/file.aw:prop_filename
+#: classes/file.aw:prop_filename
 msgid "Omaduse Faili nimi (filename) caption"
 msgstr ""
 
 # classes/file.aw:prop_filename_comment
+#: classes/file.aw:prop_filename_comment
 msgid "Omaduse Faili nimi (filename) kommentaar"
 msgstr "kuvatakse automaatselt peale faili lisamist."
 
 # classes/file.aw:prop_filename_help
+#: classes/file.aw:prop_filename_help
 msgid "Omaduse Faili nimi (filename) help"
 msgstr "kuvatakse automaatselt peale faili lisamist."
 
 # classes/file.aw:prop_file
+#: classes/file.aw:prop_file
 msgid "Omaduse Vali fail (file) caption"
 msgstr ""
 
 # classes/file.aw:prop_file_comment
+#: classes/file.aw:prop_file_comment
 msgid "Omaduse Vali fail (file) kommentaar"
 msgstr "võimaldab valida faili arvutist."
 
 # classes/file.aw:prop_file_help
+#: classes/file.aw:prop_file_help
 msgid "Omaduse Vali fail (file) help"
 msgstr "võimaldab valida faili arvutist."
 
 # classes/file.aw:prop_type
+#: classes/file.aw:prop_type
 msgid "Omaduse  (type) caption"
 msgstr ""
 
 # classes/file.aw:prop_type_comment
+#: classes/file.aw:prop_type_comment
 msgid "Omaduse  (type) kommentaar"
 msgstr ""
 
 # classes/file.aw:prop_type_help
+#: classes/file.aw:prop_type_help
 msgid "Omaduse  (type) help"
 msgstr ""
 
+#: classes/file.aw:prop_ord
+msgid "Omaduse J&auml;rjekord (ord) caption"
+msgstr ""
+
+#: classes/file.aw:prop_ord_comment
+msgid "Omaduse J&auml;rjekord (ord) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_ord_help
+msgid "Omaduse J&auml;rjekord (ord) help"
+msgstr ""
+
 # classes/file.aw:prop_comment
+#: classes/file.aw:prop_comment
 msgid "Omaduse Faili allkiri (comment) caption"
 msgstr ""
 
 # classes/file.aw:prop_comment_comment
+#: classes/file.aw:prop_comment_comment
 msgid "Omaduse Faili allkiri (comment) kommentaar"
 msgstr "lingi nimi, millel klikkimine faili avab."
 
 # classes/file.aw:prop_comment_help
+#: classes/file.aw:prop_comment_help
 msgid "Omaduse Faili allkiri (comment) help"
 msgstr "lingi nimi, millel klikkimine faili avab."
 
 # classes/file.aw:prop_file_url
+#: classes/file.aw:prop_file_url
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) caption"
 msgstr ""
 
 # classes/file.aw:prop_file_url_comment
+#: classes/file.aw:prop_file_url_comment
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) kommentaar"
 msgstr ""
 "Interneti aadress, kust fail võetakse. Kui on tehtud valik ka „Vali fail“ "
 "lahtris, siis URLina viitamine ei toimi."
 
 # classes/file.aw:prop_file_url_help
+#: classes/file.aw:prop_file_url_help
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) help"
 msgstr ""
 "Interneti aadress, kust fail võetakse. Kui on tehtud valik ka „Vali fail“ "
 "lahtris, siis URLina viitamine ei toimi."
 
-# classes/file.aw:prop_showal
+#: classes/file.aw:prop_showal
 msgid "Omaduse Nita kohe (showal) caption"
 msgstr ""
 
-# classes/file.aw:prop_showal_comment
+#: classes/file.aw:prop_showal_comment
 msgid "Omaduse Nita kohe (showal) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_showal_help
+#: classes/file.aw:prop_showal_help
 msgid "Omaduse Nita kohe (showal) help"
 msgstr ""
 
 # classes/file.aw:prop_newwindow
+#: classes/file.aw:prop_newwindow
 msgid "Omaduse Uues aknas (newwindow) caption"
 msgstr ""
 
 # classes/file.aw:prop_newwindow_comment
+#: classes/file.aw:prop_newwindow_comment
 msgid "Omaduse Uues aknas (newwindow) kommentaar"
 msgstr "faili uues aknas."
 
 # classes/file.aw:prop_newwindow_help
+#: classes/file.aw:prop_newwindow_help
 msgid "Omaduse Uues aknas (newwindow) help"
 msgstr "faili uues aknas."
 
-# classes/file.aw:prop_show_framed
+#: classes/file.aw:prop_show_framed
 msgid "Omaduse Nita saidi raamis (show_framed) caption"
 msgstr ""
 
-# classes/file.aw:prop_show_framed_comment
+#: classes/file.aw:prop_show_framed_comment
 msgid "Omaduse Nita saidi raamis (show_framed) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_show_framed_help
+#: classes/file.aw:prop_show_framed_help
 msgid "Omaduse Nita saidi raamis (show_framed) help"
 msgstr ""
 
-# classes/file.aw:prop_j_time
+#: classes/file.aw:prop_j_time
 msgid "Omaduse Justumise kuupev (j_time) caption"
 msgstr ""
 
-# classes/file.aw:prop_j_time_comment
+#: classes/file.aw:prop_j_time_comment
 msgid "Omaduse Justumise kuupev (j_time) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_j_time_help
+#: classes/file.aw:prop_j_time_help
 msgid "Omaduse Justumise kuupev (j_time) help"
 msgstr ""
 
-# classes/file.aw:prop_act_date
+#: classes/file.aw:prop_act_date
 msgid "Omaduse Avaldamise kuupev (act_date) caption"
 msgstr ""
 
-# classes/file.aw:prop_act_date_comment
+#: classes/file.aw:prop_act_date_comment
 msgid "Omaduse Avaldamise kuupev (act_date) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_act_date_help
+#: classes/file.aw:prop_act_date_help
 msgid "Omaduse Avaldamise kuupev (act_date) help"
 msgstr ""
 
+#: classes/file.aw:prop_udef1
+msgid "Omaduse User-defined 1 (udef1) caption"
+msgstr ""
+
+#: classes/file.aw:prop_udef1_comment
+msgid "Omaduse User-defined 1 (udef1) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_udef1_help
+msgid "Omaduse User-defined 1 (udef1) help"
+msgstr ""
+
+#: classes/file.aw:prop_udef2
+msgid "Omaduse User-defined 2 (udef2) caption"
+msgstr ""
+
+#: classes/file.aw:prop_udef2_comment
+msgid "Omaduse User-defined 2 (udef2) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_udef2_help
+msgid "Omaduse User-defined 2 (udef2) help"
+msgstr ""
+
+#: classes/file.aw:group_general
+msgid "Grupi ldine (general) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_general_help
+msgid "Grupi ldine (general) help"
+msgstr ""
+
 # classes/file.aw:group_settings
+#: classes/file.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr ""
 
 # classes/file.aw:group_settings_help
+#: classes/file.aw:group_settings_help
 msgid "Grupi Seadistused (settings) help"
 msgstr ""
 
 # classes/file.aw:group_dates
+#: classes/file.aw:group_dates
 msgid "Grupi Ajad (dates) pealkiri"
 msgstr ""
 
 # classes/file.aw:group_dates_help
+#: classes/file.aw:group_dates_help
 msgid "Grupi Ajad (dates) help"
 msgstr ""
 
-# classes/file.aw:rel_RELTYPE_KEYWORD
-msgid "Seose Mrksna (RELTYPE_KEYWORD) tekst"
+#: classes/file.aw:rel_RELTYPE_KEYWORD
+msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:106
+#: classes/file.aw:115
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:963
+#: classes/file.aw:955
 msgid "Need either id or parent"
 msgstr ""
 

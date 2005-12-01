@@ -710,6 +710,30 @@ msgstr ""
 msgid "Omaduse User-defined var (multiple) 8 (uservarm8) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_uservarm9
+msgid "Omaduse User-defined var (multiple) 9 (uservarm9) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm9_comment
+msgid "Omaduse User-defined var (multiple) 9 (uservarm9) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm9_help
+msgid "Omaduse User-defined var (multiple) 9 (uservarm9) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm10
+msgid "Omaduse User-defined var (multiple) 10 (uservarm10) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm10_comment
+msgid "Omaduse User-defined var (multiple) 10 (uservarm10) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_uservarm10_help
+msgid "Omaduse User-defined var (multiple) 10 (uservarm10) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:prop_packaging
 msgid "Omaduse Pakendid (packaging) caption"
 msgstr ""
@@ -768,6 +792,14 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_lnk_help
 msgid "Omaduse Lingid (lnk) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_data
@@ -859,7 +891,7 @@ msgid "Seose link (RELTYPE_LNK) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_KW
-msgid "Seose v&otilde;tmes&otilde;na (RELTYPE_KW) tekst"
+msgid "Seose v&amp;otilde;tmes&amp;otilde;na (RELTYPE_KW) tekst"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM6
@@ -878,7 +910,15 @@ msgstr ""
 msgid "Seose hinnakujundus (RELTYPE_PRICE_SETTINGS) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:490
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM9
+msgid "Seose kasutajadefineeritud muutuja 9 (RELTYPE_VARUSERM9) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM10
+msgid "Seose kasutajadefineeritud muutuja 10 (RELTYPE_VARUSERM10) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:503
 msgid "shop_product::draw(): no layout set!"
 msgstr ""
 

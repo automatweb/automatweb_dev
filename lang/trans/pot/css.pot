@@ -470,6 +470,14 @@ msgstr ""
 msgid "Omaduse Eelvaade (pre) help"
 msgstr ""
 
+#: classes/contentmgmt/css.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/css.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/css.aw:group_table
 msgid "Grupi Tabel (table) pealkiri"
 msgstr ""

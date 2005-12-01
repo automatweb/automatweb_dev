@@ -9,10 +9,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/table.aw:115
-msgid "no such table %s (tables.class->load_table)!"
-msgstr "no such table %s (tables.class->load_table)!"
+#: classes/vcl/table.aw:2035
+msgid "K&otilde;ik"
+msgstr ""
 
-#: classes/table.aw:2472
-msgid "table->import: No file uploaded!"
-msgstr "table->import: No file uploaded!"
+#~ msgid "no such table %s (tables.class->load_table)!"
+#~ msgstr "no such table %s (tables.class->load_table)!"
+
+#~ msgid "table->import: No file uploaded!"
+#~ msgstr "table->import: No file uploaded!"

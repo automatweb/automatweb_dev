@@ -10,15 +10,15 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/orb/orb.aw:709
+#: classes/core/orb/orb.aw:738
 msgid "Could not load request handler for request method '%s'"
 msgstr ""
 
-#: classes/core/orb/orb.aw:856
+#: classes/core/orb/orb.aw:885
 msgid "orb::handle_rpc_call - Could not load request handler for request method '%s'"
 msgstr ""
 
-#: classes/core/orb/orb.aw:1070
+#: classes/core/orb/orb.aw:1099
 msgid "orb::check_class_access(%s): no permissions to access the class! (denied by %s)"
 msgstr ""
 

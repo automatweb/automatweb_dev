@@ -122,6 +122,14 @@ msgstr ""
 msgid "Omaduse Projektid (project_selector) help"
 msgstr ""
 
+#: classes/applications/calendar/party.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/party.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/calendar/party.aw:group_artists
 msgid "Grupi Esinejad (artists) pealkiri"
 msgstr ""

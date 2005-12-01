@@ -74,30 +74,6 @@ msgstr ""
 msgid "Omaduse Mõõtmed (dimensions) help"
 msgstr ""
 
-#: classes/image.aw:prop_file2
-msgid "Omaduse Suur pilt (file2) caption"
-msgstr ""
-
-#: classes/image.aw:prop_file2_comment
-msgid "Omaduse Suur pilt (file2) kommentaar"
-msgstr ""
-
-#: classes/image.aw:prop_file2_help
-msgid "Omaduse Suur pilt (file2) help"
-msgstr ""
-
-#: classes/image.aw:prop_file2_del
-msgid "Omaduse Kustuta suur pilt (file2_del) caption"
-msgstr ""
-
-#: classes/image.aw:prop_file2_del_comment
-msgid "Omaduse Kustuta suur pilt (file2_del) kommentaar"
-msgstr ""
-
-#: classes/image.aw:prop_file2_del_help
-msgid "Omaduse Kustuta suur pilt (file2_del) help"
-msgstr ""
-
 #: classes/image.aw:prop_comment
 msgid "Omaduse Pildi allkiri (comment) caption"
 msgstr ""
@@ -146,6 +122,18 @@ msgstr ""
 msgid "Omaduse Link (link) help"
 msgstr ""
 
+#: classes/image.aw:prop_show_conditions
+msgid "Omaduse Tingimused (show_conditions) caption"
+msgstr ""
+
+#: classes/image.aw:prop_show_conditions_comment
+msgid "Omaduse Tingimused (show_conditions) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_show_conditions_help
+msgid "Omaduse Tingimused (show_conditions) help"
+msgstr ""
+
 #: classes/image.aw:prop_newwindow
 msgid "Omaduse Uues aknas (newwindow) caption"
 msgstr ""
@@ -170,6 +158,42 @@ msgstr ""
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) help"
 msgstr ""
 
+#: classes/image.aw:prop_ord
+msgid "Omaduse J&auml;rjekord (ord) caption"
+msgstr ""
+
+#: classes/image.aw:prop_ord_comment
+msgid "Omaduse J&auml;rjekord (ord) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_ord_help
+msgid "Omaduse J&auml;rjekord (ord) help"
+msgstr ""
+
+#: classes/image.aw:prop_file2
+msgid "Omaduse Suur pilt (file2) caption"
+msgstr ""
+
+#: classes/image.aw:prop_file2_comment
+msgid "Omaduse Suur pilt (file2) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_file2_help
+msgid "Omaduse Suur pilt (file2) help"
+msgstr ""
+
+#: classes/image.aw:prop_file2_del
+msgid "Omaduse Kustuta suur pilt (file2_del) caption"
+msgstr ""
+
+#: classes/image.aw:prop_file2_del_comment
+msgid "Omaduse Kustuta suur pilt (file2_del) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_file2_del_help
+msgid "Omaduse Kustuta suur pilt (file2_del) help"
+msgstr ""
+
 #: classes/image.aw:prop_new_w
 msgid "Omaduse Uus laius (new_w) caption"
 msgstr ""
@@ -192,6 +216,18 @@ msgstr ""
 
 #: classes/image.aw:prop_new_h_help
 msgid "Omaduse Uus k&otilde;rgus (new_h) help"
+msgstr ""
+
+#: classes/image.aw:prop_do_resize
+msgid "Omaduse  (do_resize) caption"
+msgstr ""
+
+#: classes/image.aw:prop_do_resize_comment
+msgid "Omaduse  (do_resize) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_do_resize_help
+msgid "Omaduse  (do_resize) help"
 msgstr ""
 
 #: classes/image.aw:prop_dimensions_big
@@ -230,30 +266,6 @@ msgstr ""
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) help"
 msgstr ""
 
-#: classes/image.aw:prop_do_resize
-msgid "Omaduse  (do_resize) caption"
-msgstr ""
-
-#: classes/image.aw:prop_do_resize_comment
-msgid "Omaduse  (do_resize) kommentaar"
-msgstr ""
-
-#: classes/image.aw:prop_do_resize_help
-msgid "Omaduse  (do_resize) help"
-msgstr ""
-
-#: classes/image.aw:prop_ord
-msgid "Omaduse J&auml;rjekord (ord) caption"
-msgstr ""
-
-#: classes/image.aw:prop_ord_comment
-msgid "Omaduse J&auml;rjekord (ord) kommentaar"
-msgstr ""
-
-#: classes/image.aw:prop_ord_help
-msgid "Omaduse J&auml;rjekord (ord) help"
-msgstr ""
-
 #: classes/image.aw:prop_resize_warn
 msgid "Omaduse Info (resize_warn) caption"
 msgstr ""
@@ -266,12 +278,20 @@ msgstr ""
 msgid "Omaduse Info (resize_warn) help"
 msgstr ""
 
-#: classes/image.aw:group_settings
-msgid "Grupi Seaded (settings) pealkiri"
+#: classes/image.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
-#: classes/image.aw:group_settings_help
-msgid "Grupi Seaded (settings) help"
+#: classes/image.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/image.aw:group_show
+msgid "Grupi Näitamine (show) pealkiri"
+msgstr ""
+
+#: classes/image.aw:group_show_help
+msgid "Grupi Näitamine (show) help"
 msgstr ""
 
 #: classes/image.aw:group_img2
@@ -302,7 +322,7 @@ msgstr ""
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
 msgstr ""
 
-#: classes/image.aw:646
+#: classes/image.aw:676
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
 

@@ -10,90 +10,116 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/shop/shop_order_cart.aw:class_319_help
+#: classes/applications/shop/shop_order_cart.aw:class_319_help
 msgid "Klassi Poe ostukorv help"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_prod_layout
+#: classes/applications/shop/shop_order_cart.aw:prop_prod_layout
 msgid "Omaduse Kujundus, mida korvis kasutatakse (prod_layout) caption"
 msgstr "Layout to use in cart"
 
 # classes/applications/shop/shop_order_cart.aw:prop_prod_layout_comment
+#: classes/applications/shop/shop_order_cart.aw:prop_prod_layout_comment
 msgid "Omaduse Kujundus, mida korvis kasutatakse (prod_layout) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_prod_layout_help
+#: classes/applications/shop/shop_order_cart.aw:prop_prod_layout_help
 msgid "Omaduse Kujundus, mida korvis kasutatakse (prod_layout) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_postal_price
+#: classes/applications/shop/shop_order_cart.aw:prop_postal_price
 msgid "Omaduse Postikulu (liidetakse korvi hinnale) (postal_price) caption"
 msgstr "Postage fee"
 
 # classes/applications/shop/shop_order_cart.aw:prop_postal_price_comment
+#: classes/applications/shop/shop_order_cart.aw:prop_postal_price_comment
 msgid "Omaduse Postikulu (liidetakse korvi hinnale) (postal_price) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_postal_price_help
+#: classes/applications/shop/shop_order_cart.aw:prop_postal_price_help
 msgid "Omaduse Postikulu (liidetakse korvi hinnale) (postal_price) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_email_subj
+#: classes/applications/shop/shop_order_cart.aw:prop_email_subj
 msgid "Omaduse Tellimuse e-maili subjekt (email_subj) caption"
 msgstr "Order e-mail subject"
 
 # classes/applications/shop/shop_order_cart.aw:prop_email_subj_comment
+#: classes/applications/shop/shop_order_cart.aw:prop_email_subj_comment
 msgid "Omaduse Tellimuse e-maili subjekt (email_subj) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_email_subj_help
+#: classes/applications/shop/shop_order_cart.aw:prop_email_subj_help
 msgid "Omaduse Tellimuse e-maili subjekt (email_subj) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_update_handler
+#: classes/applications/shop/shop_order_cart.aw:prop_update_handler
 msgid "Omaduse Korvi uuendamise kontroller (update_handler) caption"
 msgstr "Basket update controller"
 
 # classes/applications/shop/shop_order_cart.aw:prop_update_handler_comment
+#: classes/applications/shop/shop_order_cart.aw:prop_update_handler_comment
 msgid "Omaduse Korvi uuendamise kontroller (update_handler) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_update_handler_help
+#: classes/applications/shop/shop_order_cart.aw:prop_update_handler_help
 msgid "Omaduse Korvi uuendamise kontroller (update_handler) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_finish_handler
+#: classes/applications/shop/shop_order_cart.aw:prop_finish_handler
 msgid "Omaduse Tellimise kontroller (finish_handler) caption"
 msgstr "Order controller"
 
 # classes/applications/shop/shop_order_cart.aw:prop_finish_handler_comment
+#: classes/applications/shop/shop_order_cart.aw:prop_finish_handler_comment
 msgid "Omaduse Tellimise kontroller (finish_handler) kommentaar"
 msgstr ""
 
 # classes/applications/shop/shop_order_cart.aw:prop_finish_handler_help
+#: classes/applications/shop/shop_order_cart.aw:prop_finish_handler_help
 msgid "Omaduse Tellimise kontroller (finish_handler) help"
 msgstr ""
 
+#: classes/applications/shop/shop_order_cart.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 # classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_PROD_LAYOUT
+#: classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_PROD_LAYOUT
 msgid "Seose toote kujundus (RELTYPE_PROD_LAYOUT) tekst"
 msgstr "product layout"
 
 # classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_CONTROLLER
+#: classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_CONTROLLER
 msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr "controller"
 
-#: classes/applications/shop/shop_order_cart.aw:149
-#: classes/applications/shop/shop_order_cart.aw:911
-#: classes/applications/shop/shop_order_cart.aw:1149
+#: classes/applications/shop/shop_order_cart.aw:156
+#: classes/applications/shop/shop_order_cart.aw:928
+#: classes/applications/shop/shop_order_cart.aw:1184
 msgid "shop_order_cart::show(): no product layout set for cart (%s) "
 msgstr "shop_order_cart::show(): no product layout set for cart (%s) "
 
-#: classes/applications/shop/shop_order_cart.aw:362
+#: classes/applications/shop/shop_order_cart.aw:369
 msgid "%s peab tellima %s kaupa, hetkel kokku %s!"
 msgstr ""
 "For product %s, you must order an amount that is divisble by %s, currently "
 "you ordered %s"
 
-#: classes/applications/shop/shop_order_cart.aw:700
+#: classes/applications/shop/shop_order_cart.aw:716
 msgid ""
 "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 msgstr ""

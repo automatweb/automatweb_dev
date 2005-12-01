@@ -10,185 +10,258 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:class_890_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:class_890_help
 msgid "Klassi Import Kultuuriaknast help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_event_form
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_event_form
 msgid "Omaduse S&uuml;ndmuse vorm (event_form) caption"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_event_form_comment
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_event_form_comment
 msgid "Omaduse S&uuml;ndmuse vorm (event_form) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_event_form_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_event_form_help
 msgid "Omaduse S&uuml;ndmuse vorm (event_form) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_file_url
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_file_url
 msgid "Omaduse XML faili url (xml_file_url) caption"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_file_url_comment
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_file_url_comment
 msgid "Omaduse XML faili url (xml_file_url) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_file_url_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_file_url_help
 msgid "Omaduse XML faili url (xml_file_url) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_last_import_text
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_last_import_text
 msgid "Omaduse Viimane import (last_import_text) caption"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_last_import_text_comment
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_last_import_text_comment
 msgid "Omaduse Viimane import (last_import_text) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_last_import_text_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_last_import_text_help
 msgid "Omaduse Viimane import (last_import_text) help"
 msgstr ""
 
-# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text
-msgid "Omaduse J&auml;rgmine import (next_import_text) caption"
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text
+msgid "Omaduse J&auml;rgmine automaatne import (next_import_text) caption"
 msgstr ""
 
-# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text_comment
-msgid "Omaduse J&auml;rgmine import (next_import_text) kommentaar"
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text_comment
+msgid "Omaduse J&auml;rgmine automaatne import (next_import_text) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text_help
-msgid "Omaduse J&auml;rgmine import (next_import_text) help"
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text_help
+msgid "Omaduse J&auml;rgmine automaatne import (next_import_text) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_all
+msgid "Omaduse Impordi k&otilde;iik s&uuml;ndmused (import_events_all) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_all_comment
+msgid ""
+"Omaduse Impordi k&otilde;iik s&uuml;ndmused (import_events_all) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_all_help
+msgid "Omaduse Impordi k&otilde;iik s&uuml;ndmused (import_events_all) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events
 msgid "Omaduse Impordi s&uuml;ndmused (import_events) caption"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_comment
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_comment
 msgid "Omaduse Impordi s&uuml;ndmused (import_events) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_help
 msgid "Omaduse Impordi s&uuml;ndmused (import_events) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_config_table
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_config_table
 msgid "Omaduse Seaded (config_table) caption"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_config_table_comment
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_config_table_comment
 msgid "Omaduse Seaded (config_table) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_config_table_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_config_table_help
 msgid "Omaduse Seaded (config_table) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config
 msgid "Omaduse XML vaate seaded  (xml_config) caption"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config_comment
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config_comment
 msgid "Omaduse XML vaate seaded  (xml_config) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_xml_config_help
 msgid "Omaduse XML vaate seaded  (xml_config) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_recurrence
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_recurrence
 msgid "Omaduse Kordus (recurrence) caption"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_recurrence_comment
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_recurrence_comment
 msgid "Omaduse Kordus (recurrence) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_recurrence_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_recurrence_help
 msgid "Omaduse Kordus (recurrence) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_user
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_user
 msgid "Omaduse Kasutaja (auto_import_user) caption"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_user_comment
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_user_comment
 msgid "Omaduse Kasutaja (auto_import_user) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_user_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_user_help
 msgid "Omaduse Kasutaja (auto_import_user) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_passwd
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_passwd
 msgid "Omaduse Parool (auto_import_passwd) caption"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_passwd_comment
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_passwd_comment
 msgid "Omaduse Parool (auto_import_passwd) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_passwd_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_auto_import_passwd_help
 msgid "Omaduse Parool (auto_import_passwd) help"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_config
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_config
 msgid "Grupi Seaded (config) pealkiri"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_config_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_config_help
 msgid "Grupi Seaded (config) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_xml_view
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_xml_view
 msgid "Grupi Vaade XML (xml_view) pealkiri"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_xml_view_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_xml_view_help
 msgid "Grupi Vaade XML (xml_view) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_recurrence_config
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_recurrence_config
 msgid "Grupi Automaatne import (recurrence_config) pealkiri"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_recurrence_config_help
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_recurrence_config_help
 msgid "Grupi Automaatne import (recurrence_config) help"
 msgstr ""
 
-# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_EVENT_FORM
-msgid "Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_EVENT_FORM
+msgid "Seose S&amp;uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_PARENT
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_PARENT
 msgid "Seose Parent (RELTYPE_PARENT) tekst"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_RECURRENCE
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:124
-msgid "Impordi s&uuml;ndmused"
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:117
+msgid "Alates viimasest impordist"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:128
-msgid "Impordi Kultuuriakna s&uuml;ndmused"
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:120
+msgid "K&otilde;ik s&uuml;ndmused"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:197
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:123
+msgid "Impordi s&uuml;ndmused (%s)"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:127
+msgid "Impordi Kultuuriakna s&uuml;ndmused (%s)"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:198
 msgid "Parent"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:202
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:203
 msgid "XML v&auml;lja sisu"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:229
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:230
 msgid "XML v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:233
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:234
 msgid "Vormi v&auml;li"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:361
+msgid "You don't have view access to import object!"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:371
+msgid "You don't have view access to eventform object!"
 msgstr ""

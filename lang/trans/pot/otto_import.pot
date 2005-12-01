@@ -362,6 +362,14 @@ msgstr ""
 msgid "Omaduse Soorita parandus (do_fixes) help"
 msgstr ""
 
+#: classes/applications/shop/otto/otto_import.aw:group_general
+msgid "Grupi ‹ldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:group_general_help
+msgid "Grupi ‹ldine (general) help"
+msgstr ""
+
 #: classes/applications/shop/otto/otto_import.aw:group_imgs
 msgid "Grupi Pildid (imgs) pealkiri"
 msgstr ""
@@ -395,11 +403,11 @@ msgid "Grupi Kataloogid (folders) help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:group_folderspri
-msgid "Grupi Kataloogide m&auml;&auml;rangud (folderspri) pealkiri"
+msgid "Grupi Kataloogide m‰‰rangud (folderspri) pealkiri"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:group_folderspri_help
-msgid "Grupi Kataloogide m&auml;&auml;rangud (folderspri) help"
+msgid "Grupi Kataloogide m‰‰rangud (folderspri) help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:group_foldersnames
@@ -419,11 +427,11 @@ msgid "Grupi Vaated (views) help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:group_jm
-msgid "Grupi J&auml;relmaks (jm) pealkiri"
+msgid "Grupi J‰relmaks (jm) pealkiri"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:group_jm_help
-msgid "Grupi J&auml;relmaks (jm) help"
+msgid "Grupi J‰relmaks (jm) help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:group_delete
@@ -446,19 +454,19 @@ msgstr ""
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:508
+#: classes/applications/shop/otto/otto_import.aw:573
 msgid "otto_import::images(): could not fetch html for url %s!"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1380
+#: classes/applications/shop/otto/otto_import.aw:1460
 msgid "all done! <br>"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1812
+#: classes/applications/shop/otto/otto_import.aw:1892
 msgid "Lehed komaga eraldatult"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1818
+#: classes/applications/shop/otto/otto_import.aw:1898
 msgid "AW Kataloogi ID"
 msgstr ""
 

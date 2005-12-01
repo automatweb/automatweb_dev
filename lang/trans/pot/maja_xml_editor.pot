@@ -266,6 +266,14 @@ msgstr ""
 msgid "Omaduse Andmebaasi tabel (db_table_05) help"
 msgstr ""
 
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/xml_editor/maja_xml_editor.aw:group_db_saving_settings
 msgid "Grupi Baasi salvestamise seaded (db_saving_settings) pealkiri"
 msgstr ""
@@ -334,19 +342,59 @@ msgstr ""
 msgid "Seose Andmebaasitabeli sisu objekt (RELTYPE_DB_TABLE_CONTENTS) tekst"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:376
+#: classes/applications/xml_editor/maja_xml_editor.aw:384
 msgid "---"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:380
+#: classes/applications/xml_editor/maja_xml_editor.aw:388
 msgid "Ei Salvestata"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:713
+#: classes/applications/xml_editor/maja_xml_editor.aw:452
+msgid "Korteri nr."
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:453
+msgid "Alternatiivne korteri nr."
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:454
+msgid "Korruse nr."
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:455
+msgid "Korruse nimi"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:456
+msgid "Alternatiivne staatus"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:457
+msgid "Panipaik"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:458
+msgid "Terrass"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:459
+msgid "R&otilde;du"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:460
+msgid "Korteriomand"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:461
+msgid "Parklakoht"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:727
 msgid "Couldn't open the file (%s) to write"
 msgstr ""
 
-#: classes/applications/xml_editor/maja_xml_editor.aw:719
+#: classes/applications/xml_editor/maja_xml_editor.aw:733
 msgid "Cannot write to this file: %s"
 msgstr ""
 

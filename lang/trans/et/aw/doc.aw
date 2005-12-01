@@ -25,8 +25,6 @@ $GLOBALS["TRANS"]["Omaduse Cache otsingu jaoks (dcache) kommentaar"] = "kui märk
 $GLOBALS["TRANS"]["Omaduse Cache otsingu jaoks (dcache) help"] = "kui märkeruut on valitud, siis jäetaks dokumendi sisu veebilehe üldotsingu jaoks jaoks mällu";
 $GLOBALS["TRANS"]["Omaduse N&auml;ita pealkirja (show_title) kommentaar"] = "reguleerib, kas dokumendi pealkirja näidatakse veebilehel või mitte";
 $GLOBALS["TRANS"]["Omaduse N&auml;ita pealkirja (show_title) help"] = "reguleerib, kas dokumendi pealkirja näidatakse veebilehel või mitte";
-$GLOBALS["TRANS"]["Omaduse J&auml;ta otsingust välja (no_search) kommentaar"] = "võimaldab välistadab antud dokumendi otsingust";
-$GLOBALS["TRANS"]["Omaduse J&auml;ta otsingust välja (no_search) help"] = "võimaldab välistadab antud dokumendi otsingust";
 $GLOBALS["TRANS"]["Omaduse Kuup&auml;ev (tm) kommentaar"] = "võimalus määrata dokumendi veebilehel kuvatavat kuupäeva oma äranägemise järgi.";
 $GLOBALS["TRANS"]["Omaduse Kuup&auml;ev (tm) help"] = "võimalus määrata dokumendi veebilehel kuvatavat kuupäeva oma äranägemise järgi.";
 ?>

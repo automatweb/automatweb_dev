@@ -194,6 +194,14 @@ msgstr ""
 msgid "Omaduse Kuni (end) help"
 msgstr ""
 
+#: classes/applications/calendar/recurrence.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/calendar/recurrence.aw:group_test
 msgid "Grupi Test (test) pealkiri"
 msgstr ""

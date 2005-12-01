@@ -10,264 +10,336 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/persona_import/persona_import.aw:class_875_help
+#: classes/applications/persona_import/persona_import.aw:class_875_help
 msgid "Klassi Persona import help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_last_import
+#: classes/applications/persona_import/persona_import.aw:prop_last_import
 msgid "Omaduse Viimane import toimus (last_import) caption"
 msgstr "Last import took place at"
 
 # classes/applications/persona_import/persona_import.aw:prop_last_import_comment
+#: classes/applications/persona_import/persona_import.aw:prop_last_import_comment
 msgid "Omaduse Viimane import toimus (last_import) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_last_import_help
+#: classes/applications/persona_import/persona_import.aw:prop_last_import_help
 msgid "Omaduse Viimane import toimus (last_import) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_invk
+#: classes/applications/persona_import/persona_import.aw:prop_invk
 msgid "Omaduse Import (invk) caption"
 msgstr "Import"
 
 # classes/applications/persona_import/persona_import.aw:prop_invk_comment
+#: classes/applications/persona_import/persona_import.aw:prop_invk_comment
 msgid "Omaduse Import (invk) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_invk_help
+#: classes/applications/persona_import/persona_import.aw:prop_invk_help
 msgid "Omaduse Import (invk) help"
 msgstr ""
 
+#: classes/applications/persona_import/persona_import.aw:prop_show_xml
+msgid "Omaduse XML (show_xml) caption"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:prop_show_xml_comment
+msgid "Omaduse XML (show_xml) kommentaar"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:prop_show_xml_help
+msgid "Omaduse XML (show_xml) help"
+msgstr ""
+
 # classes/applications/persona_import/persona_import.aw:prop_ftp_settings
+#: classes/applications/persona_import/persona_import.aw:prop_ftp_settings
 msgid "Omaduse FTP seaded (ftp_settings) caption"
 msgstr "FTP Settings"
 
 # classes/applications/persona_import/persona_import.aw:prop_ftp_settings_comment
+#: classes/applications/persona_import/persona_import.aw:prop_ftp_settings_comment
 msgid "Omaduse FTP seaded (ftp_settings) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_ftp_settings_help
+#: classes/applications/persona_import/persona_import.aw:prop_ftp_settings_help
 msgid "Omaduse FTP seaded (ftp_settings) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_folder
+#: classes/applications/persona_import/persona_import.aw:prop_xml_folder
 msgid "Omaduse XML faili asukoht serveris (xml_folder) caption"
 msgstr "XML file location in server"
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_folder_comment
+#: classes/applications/persona_import/persona_import.aw:prop_xml_folder_comment
 msgid "Omaduse XML faili asukoht serveris (xml_folder) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_folder_help
+#: classes/applications/persona_import/persona_import.aw:prop_xml_folder_help
 msgid "Omaduse XML faili asukoht serveris (xml_folder) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_filename
+#: classes/applications/persona_import/persona_import.aw:prop_xml_filename
 msgid "Omaduse XML faili nimi (xml_filename) caption"
 msgstr "XML file name"
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_filename_comment
+#: classes/applications/persona_import/persona_import.aw:prop_xml_filename_comment
 msgid "Omaduse XML faili nimi (xml_filename) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_filename_help
+#: classes/applications/persona_import/persona_import.aw:prop_xml_filename_help
 msgid "Omaduse XML faili nimi (xml_filename) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_personnel_file
+#: classes/applications/persona_import/persona_import.aw:prop_xml_personnel_file
 msgid "Omaduse Töötajate XML fail (xml_personnel_file) caption"
 msgstr "Employee XML file"
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_personnel_file_comment
+#: classes/applications/persona_import/persona_import.aw:prop_xml_personnel_file_comment
 msgid "Omaduse Töötajate XML fail (xml_personnel_file) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_personnel_file_help
+#: classes/applications/persona_import/persona_import.aw:prop_xml_personnel_file_help
 msgid "Omaduse Töötajate XML fail (xml_personnel_file) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_structure_file
+#: classes/applications/persona_import/persona_import.aw:prop_xml_structure_file
 msgid "Omaduse Struktuuriüksuste XML fail (xml_structure_file) caption"
 msgstr "Structure XML file"
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_structure_file_comment
+#: classes/applications/persona_import/persona_import.aw:prop_xml_structure_file_comment
 msgid "Omaduse Struktuuriüksuste XML fail (xml_structure_file) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_structure_file_help
+#: classes/applications/persona_import/persona_import.aw:prop_xml_structure_file_help
 msgid "Omaduse Struktuuriüksuste XML fail (xml_structure_file) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_image_folder
+#: classes/applications/persona_import/persona_import.aw:prop_xml_image_folder
 msgid ""
 "Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) caption"
 msgstr "Images folder (if separate)"
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_image_folder_comment
+#: classes/applications/persona_import/persona_import.aw:prop_xml_image_folder_comment
 msgid ""
 "Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_image_folder_help
+#: classes/applications/persona_import/persona_import.aw:prop_xml_image_folder_help
 msgid "Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_aw_image_folder
+#: classes/applications/persona_import/persona_import.aw:prop_aw_image_folder
 msgid "Omaduse Pildiobjektide kataloog (aw_image_folder) caption"
 msgstr "AW folder for image objects"
 
 # classes/applications/persona_import/persona_import.aw:prop_aw_image_folder_comment
+#: classes/applications/persona_import/persona_import.aw:prop_aw_image_folder_comment
 msgid "Omaduse Pildiobjektide kataloog (aw_image_folder) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_aw_image_folder_help
+#: classes/applications/persona_import/persona_import.aw:prop_aw_image_folder_help
 msgid "Omaduse Pildiobjektide kataloog (aw_image_folder) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_crm_db_id
+#: classes/applications/persona_import/persona_import.aw:prop_crm_db_id
 msgid "Omaduse Kasutatav kliendibaas (crm_db_id) caption"
 msgstr "Client database to use"
 
 # classes/applications/persona_import/persona_import.aw:prop_crm_db_id_comment
+#: classes/applications/persona_import/persona_import.aw:prop_crm_db_id_comment
 msgid "Omaduse Kasutatav kliendibaas (crm_db_id) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_crm_db_id_help
+#: classes/applications/persona_import/persona_import.aw:prop_crm_db_id_help
 msgid "Omaduse Kasutatav kliendibaas (crm_db_id) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_recur_edit
+#: classes/applications/persona_import/persona_import.aw:prop_recur_edit
 msgid "Omaduse Automaatse impordi seadistamine (recur_edit) caption"
 msgstr "Automatic import settings"
 
 # classes/applications/persona_import/persona_import.aw:prop_recur_edit_comment
+#: classes/applications/persona_import/persona_import.aw:prop_recur_edit_comment
 msgid "Omaduse Automaatse impordi seadistamine (recur_edit) kommentaar"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:prop_recur_edit_help
+#: classes/applications/persona_import/persona_import.aw:prop_recur_edit_help
 msgid "Omaduse Automaatse impordi seadistamine (recur_edit) help"
 msgstr ""
 
+#: classes/applications/persona_import/persona_import.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 # classes/applications/persona_import/persona_import.aw:group_settings
+#: classes/applications/persona_import/persona_import.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
 msgstr "Settings"
 
 # classes/applications/persona_import/persona_import.aw:group_settings_help
+#: classes/applications/persona_import/persona_import.aw:group_settings_help
 msgid "Grupi Seaded (settings) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:group_autoimport
+#: classes/applications/persona_import/persona_import.aw:group_autoimport
 msgid "Grupi Automaatne import (autoimport) pealkiri"
 msgstr "Automatic import"
 
 # classes/applications/persona_import/persona_import.aw:group_autoimport_help
+#: classes/applications/persona_import/persona_import.aw:group_autoimport_help
 msgid "Grupi Automaatne import (autoimport) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:rel_RELTYPE_CRM_DB
+#: classes/applications/persona_import/persona_import.aw:rel_RELTYPE_CRM_DB
 msgid "Seose kliendibaas (RELTYPE_CRM_DB) tekst"
 msgstr "client database"
 
 # classes/applications/persona_import/persona_import.aw:rel_RELTYPE_DATA_SERVER
+#: classes/applications/persona_import/persona_import.aw:rel_RELTYPE_DATA_SERVER
 msgid "Seose FTP kasutaja (RELTYPE_DATA_SERVER) tekst"
 msgstr "FTP user"
 
 # classes/applications/persona_import/persona_import.aw:rel_RELTYPE_FOLDER
+#: classes/applications/persona_import/persona_import.aw:rel_RELTYPE_FOLDER
 msgid "Seose Kaust (RELTYPE_FOLDER) tekst"
 msgstr "folder"
 
 # classes/applications/persona_import/persona_import.aw:rel_RELTYPE_LOGFILE
+#: classes/applications/persona_import/persona_import.aw:rel_RELTYPE_LOGFILE
 msgid "Seose Logifail (RELTYPE_LOGFILE) tekst"
 msgstr "log file"
 
 # classes/applications/persona_import/persona_import.aw:rel_RELTYPE_RECURRENCE
+#: classes/applications/persona_import/persona_import.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr "recurrence"
 
-#: classes/applications/persona_import/persona_import.aw:92
+#: classes/applications/persona_import/persona_import.aw:96
+msgid "Näita XMLi"
+msgstr ""
+
+#: classes/applications/persona_import/persona_import.aw:103
 msgid "Käivita import"
 msgstr "Run import"
 
-#: classes/applications/persona_import/persona_import.aw:114
+#: classes/applications/persona_import/persona_import.aw:127
 msgid "Jätka poolikut importi"
 msgstr "Continue unfinished import"
 
-#: classes/applications/persona_import/persona_import.aw:120
+#: classes/applications/persona_import/persona_import.aw:133
 msgid "Impordi pildid"
 msgstr "Import images"
 
-#: classes/applications/persona_import/persona_import.aw:150
-#: classes/applications/persona_import/persona_import.aw:187
-#: classes/applications/persona_import/persona_import.aw:1134
+#: classes/applications/persona_import/persona_import.aw:163
+#: classes/applications/persona_import/persona_import.aw:222
+#: classes/applications/persona_import/persona_import.aw:1232
 msgid "You forgot to enter server data"
 msgstr "You forgot to enter server data"
 
-#: classes/applications/persona_import/persona_import.aw:193
+#: classes/applications/persona_import/persona_import.aw:228
 msgid "Nii ei saa ju rallit sõita!"
 msgstr "Ya cant drive the rally like this!"
 
-#: classes/applications/persona_import/persona_import.aw:203
+#: classes/applications/persona_import/persona_import.aw:238
 msgid "Isikute kataloog valimata"
 msgstr "Person folder not selected"
 
-#: classes/applications/persona_import/persona_import.aw:209
+#: classes/applications/persona_import/persona_import.aw:244
 msgid "Aadresside kataloog valimata"
 msgstr "Address folder not selected"
 
-#: classes/applications/persona_import/persona_import.aw:215
+#: classes/applications/persona_import/persona_import.aw:250
 msgid "Default kataloog valimata"
 msgstr "Default folder not selected"
 
-#: classes/applications/persona_import/persona_import.aw:224
+#: classes/applications/persona_import/persona_import.aw:259
 msgid "Kliendibaasil puudub muutujate haldur"
 msgstr "Client database has no configuration manager"
 
-#: classes/applications/persona_import/persona_import.aw:298
+#: classes/applications/persona_import/persona_import.aw:308
 msgid "Getting source data<br>"
 msgstr "Getting source data<br>"
 
-#: classes/applications/persona_import/persona_import.aw:313
+#: classes/applications/persona_import/persona_import.aw:322
 msgid "Not enough data to process<bR>"
 msgstr "Not enough data to process<bR>"
 
-#: classes/applications/persona_import/persona_import.aw:324
+#: classes/applications/persona_import/persona_import.aw:335
 msgid "got data<br>"
 msgstr "got data<br>"
 
-#: classes/applications/persona_import/persona_import.aw:339
+#: classes/applications/persona_import/persona_import.aw:350
 msgid "parse finished, processing starts<br>"
 msgstr "parse finished, processing starts<br>"
 
-#: classes/applications/persona_import/persona_import.aw:535
+#: classes/applications/persona_import/persona_import.aw:553
 msgid "creating yksused objects<br>"
 msgstr "creating section objects<Br>"
 
-#: classes/applications/persona_import/persona_import.aw:585
+#: classes/applications/persona_import/persona_import.aw:604
 msgid "created new section<br>"
 msgstr "created new section<br>"
 
-#: classes/applications/persona_import/persona_import.aw:598
+#: classes/applications/persona_import/persona_import.aw:617
 msgid "updating existing section"
 msgstr "updating existing section"
 
-#: classes/applications/persona_import/persona_import.aw:648
+#: classes/applications/persona_import/persona_import.aw:668
 msgid "<h1>sections</h1>"
 msgstr "<h1>sections</h1>"
 
-#: classes/applications/persona_import/persona_import.aw:650
+#: classes/applications/persona_import/persona_import.aw:670
 msgid "<h1>sections done</h1>"
 msgstr "<h1>sections done</h1>"
 
-#: classes/applications/persona_import/persona_import.aw:660
+#: classes/applications/persona_import/persona_import.aw:683
 msgid "creating person objects<br>"
 msgstr "creating person objects<br>"
 
-#: classes/applications/persona_import/persona_import.aw:683
+#: classes/applications/persona_import/persona_import.aw:711
 msgid "<br>creating new person object<br>"
 msgstr "<br>creating new person object<br>"
 
-#: classes/applications/persona_import/persona_import.aw:689
+#: classes/applications/persona_import/persona_import.aw:717
 msgid "updating existing person object"
 msgstr "updating existing person object"
+
+#: classes/applications/persona_import/persona_import.aw:732
+#: classes/applications/persona_import/persona_import.aw:859
+msgid "Vaata"
+msgstr ""
 
 #~ msgid "creating person)objects<br>"
 #~ msgstr "creating person)objects<br>"

@@ -12,7 +12,6 @@ $GLOBALS["TRANS"]["Omaduse Tellitud tooted (items) caption"] = "Ordered products
 $GLOBALS["TRANS"]["Omaduse Summa (sum) caption"] = "Sum";
 $GLOBALS["TRANS"]["Grupi Tellimuse sisu (items) pealkiri"] = "Order content";
 $GLOBALS["TRANS"]["Seose tellimuse toode (RELTYPE_PRODUCT) tekst"] = "order product";
-$GLOBALS["TRANS"]["Seose lao v&auml;ljaminek (RELTYPE_EXPORT) tekst"] = "warehouse export";
 $GLOBALS["TRANS"]["Seose tellija esindaja (RELTYPE_PERSON) tekst"] = "orderer prepresentative";
 $GLOBALS["TRANS"]["Seose tellija organisatsioon (RELTYPE_ORG) tekst"] = "orderer company";
 $GLOBALS["TRANS"]["Seose ladu (RELTYPE_WAREHOUSE) tekst"] = "warehouse";

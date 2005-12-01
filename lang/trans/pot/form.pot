@@ -10,31 +10,31 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/formgen/form.aw:2291
+#: classes/formgen/form.aw:2281
 msgid "Sessioonist lugemise formi pole valitud v&auml;ljundile %s "
 msgstr ""
 
-#: classes/formgen/form.aw:3065
+#: classes/formgen/form.aw:3055
 msgid "No table selected for showing search results for form %s!"
 msgstr ""
 
-#: classes/formgen/form.aw:3414
+#: classes/formgen/form.aw:3404
 msgid "form->search(%s): no forms selected as search targets!"
 msgstr ""
 
-#: classes/formgen/form.aw:3602
+#: classes/formgen/form.aw:3592
 msgid "No forms selected as search targets!"
 msgstr ""
 
-#: classes/formgen/form.aw:3808
+#: classes/formgen/form.aw:3798
 msgid "No table selected for showing data!"
 msgstr ""
 
-#: classes/formgen/form.aw:3856
+#: classes/formgen/form.aw:3846
 msgid "Tulemuste kuvamise tabelis pole yhtegi elementi!"
 msgstr ""
 
-#: classes/formgen/form.aw:4763
+#: classes/formgen/form.aw:4753
 msgid "form->metainfo(): weird error!"
 msgstr ""
 

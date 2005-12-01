@@ -10,19 +10,19 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/msg/msg_dispatch.aw:22 classes/core/msg/msg_dispatch.aw:50
+#: classes/core/msg/msg_dispatch.aw:22 classes/core/msg/msg_dispatch.aw:51
 msgid "msg_dispatch::post_message - no message posted!"
 msgstr ""
 
-#: classes/core/msg/msg_dispatch.aw:33 classes/core/msg/msg_dispatch.aw:72
+#: classes/core/msg/msg_dispatch.aw:34 classes/core/msg/msg_dispatch.aw:73
 msgid "msg_dispatch::post_message - no handler function (%s) in class (%s) for message %s!"
 msgstr ""
 
-#: classes/core/msg/msg_dispatch.aw:55
+#: classes/core/msg/msg_dispatch.aw:56
 msgid "msg_dispatch::post_message - no parameter for message posted!"
 msgstr ""
 
-#: classes/core/msg/msg_dispatch.aw:87
+#: classes/core/msg/msg_dispatch.aw:88
 msgid "msg_dispatch::post_message - no such message (%s) defined!"
 msgstr ""
 

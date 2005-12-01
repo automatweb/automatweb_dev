@@ -50,8 +50,16 @@ msgstr ""
 msgid "Omaduse Otsi ka mitteaktiivsetest dokumentidest (seach_notactive) help"
 msgstr ""
 
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
-msgid "Seose Otsingu lähtekoht (RELTYPE_SEARCH_LOCATION) tekst"
+msgid "Seose Otsingu l&auml;htekoht (RELTYPE_SEARCH_LOCATION) tekst"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:90

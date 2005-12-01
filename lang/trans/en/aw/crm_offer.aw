@@ -21,7 +21,6 @@ $GLOBALS["TRANS"]["Grupi Ajalugu (history) pealkiri"] = "History";
 $GLOBALS["TRANS"]["Grupi Pakkumine (offer) pealkiri"] = "Offer";
 $GLOBALS["TRANS"]["Seose Kordus (RELTYPE_RECURRENCE) tekst"] = "recurrence";
 $GLOBALS["TRANS"]["Seose Tellija (RELTYPE_ORDERER) tekst"] = "Ordeer";
-$GLOBALS["TRANS"]["Seose Täitja (RELTYPE_PREFORMER) tekst"] = "Performer";
 $GLOBALS["TRANS"]["Seose Pakkumise koostaja (RELTYPE_SALESMAN) tekst"] = "Offer creator";
 $GLOBALS["TRANS"]["Seose Toode (RELTYPE_PRODUCT) tekst"] = "Product";
 $GLOBALS["TRANS"]["Seose Pakkumiste haldus (RELTYPE_OFFER_MGR) tekst"] = "Offer manager";

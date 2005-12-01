@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Sidussüsteemi ID (ext_id) help"
 msgstr ""
 
+#: classes/crm/crm_profession.aw:prop_hr_price
+msgid "Omaduse Tunnihind (hr_price) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_hr_price_comment
+msgid "Omaduse Tunnihind (hr_price) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_hr_price_help
+msgid "Omaduse Tunnihind (hr_price) help"
+msgstr ""
+
 #: classes/crm/crm_profession.aw:prop_name_in_plural
 msgid "Omaduse Nimi mitmuses (name_in_plural) caption"
 msgstr ""
@@ -48,6 +60,14 @@ msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_trans_help
 msgid "Omaduse Tõlkimine (trans) help"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:group_trans

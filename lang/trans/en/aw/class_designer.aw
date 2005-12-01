@@ -15,7 +15,6 @@ $GLOBALS["TRANS"]["Omaduse Seosed (relations_mgr) caption"] = "Connections";
 $GLOBALS["TRANS"]["Grupi Seaded (settings) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Grupi Seosed (relations) pealkiri"] = "Connections";
 $GLOBALS["TRANS"]["Grupi Disainer (designer) pealkiri"] = "Designer";
-$GLOBALS["TRANS"]["Grupi Klassi definitsioon (classdef) pealkiri"] = "Class definition";
 $GLOBALS["TRANS"]["Seose seos (RELTYPE_RELATION) tekst"] = "connection";
 $GLOBALS["TRANS"]["Eelvaade"] = "Preview";
 $GLOBALS["TRANS"]["Väljundkataloog ei ole kirjutatav!"] = "Output folder is not writeable";

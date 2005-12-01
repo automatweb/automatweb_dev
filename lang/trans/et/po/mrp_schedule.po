@@ -10,51 +10,146 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/mrp/mrp_schedule.aw:class_827_help
+#: classes/mrp/mrp_schedule.aw:class_827_help
 msgid "Klassi Ressursiplaneerija help"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:270
-msgid "Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!"
+#: classes/mrp/mrp_schedule.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:282
-msgid "Planeerimisluku käivitamine ebaõnnestus!"
+#: classes/mrp/mrp_schedule.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:293
+#: classes/mrp/mrp_schedule.aw:255
+msgid ""
+"Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata või "
+"puuduvad õigused selle vaatamiseks."
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:267
+msgid "Planeerimisluku käivitamine ebaõnnestus! Planeerimist ei toimunud."
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:277 classes/mrp/mrp_schedule.aw:285
+#: classes/mrp/mrp_schedule.aw:309 classes/mrp/mrp_schedule.aw:319
+#: classes/mrp/mrp_schedule.aw:726 classes/mrp/mrp_schedule.aw:736
+msgid "error@%s"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:279
 msgid "Planeerimisluku lukustamiseta kustutamine ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:300
+#: classes/mrp/mrp_schedule.aw:287
 msgid "Planeerimiseks lukustamine ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:319
+#: classes/mrp/mrp_schedule.aw:291
+msgid "Planeerimiseks lukustamine ebaõnnestus! Planeerimist ei toimunud."
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:311
 msgid "Planeerimisluku avamine ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:328
+#: classes/mrp/mrp_schedule.aw:321
 msgid "Planeerimisluku kustutamine ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:677
+#: classes/mrp/mrp_schedule.aw:528
+msgid ""
+"Viga tegemisel oleva töö (id: %s) planeerimisel: sobivat algusaega ei "
+"leitud, tööd ei planeeritud."
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:573
+msgid "Planeerimine"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:679
+msgid ""
+"Viga töö (id: %s) planeerimisel: sobivat algusaega ei leitud, tööd ei "
+"planeeritud."
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:728
 msgid "Planeerimisluku avamine peale planeerimist ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:686
+#: classes/mrp/mrp_schedule.aw:738
 msgid "Planeerimisluku kustutamine peale planeerimist ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:874
-msgid "Viga planeeritud aegade salvestamisel. "
+#: classes/mrp/mrp_schedule.aw:906
+msgid "error@%s. proj: %s"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:1002
-msgid "Sobivat aega ei leidunud tervest kalendrist! resource-tag: ["
+#: classes/mrp/mrp_schedule.aw:908 classes/mrp/mrp_schedule.aw:912
+msgid "Viga planeeritud aegade salvestamisel. Projekti id (%s) pole oid."
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:1356
+#: classes/mrp/mrp_schedule.aw:935
+msgid "Viga projektide planeeritud aegade salvestamisel. "
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:987
+msgid "error@%s."
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:989 classes/mrp/mrp_schedule.aw:993
+msgid ""
+"Viga planeeritud aegade salvestamisel. Töö id (%s) pole oid. (starttime: %s, "
+"planned_len: %s, state: %s)"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1015
+msgid "error@%s. db error: %s<br>"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1017
+msgid "Viga tööde planeeritud aegade salvestamisel. "
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1158
+msgid "Sobivat aega ei leidunud tervest kalendrist! resource-tag: %s, job: %s"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1162
+msgid "Leitud algusajale on juba t88 reserveeritud! resource-tag: %s, job: %s"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1309
+msgid "error@%s. res: %s, job: %s<br>"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1311
+msgid ""
+"Unavailable times covered by reserved exceeded reasonable limit (%s). "
+"Resource %s, job %s"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1569
+msgid "error@%s. job: %s<br>"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1571
+msgid "Timerange search exceeded reasonable limit (%s) of cycles. Job %s"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1635
+msgid "error@%s. res: %s, job %s<br>"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1637 classes/mrp/mrp_schedule.aw:1641
 msgid ""
 "Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või "
-"ettenägematu seadistus ressursi tööaegades."
+"ettenägematu seadistus ressursi tööaegades. Töö id: %s"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1946
+msgid ""
+"Search for unavailable times for range exceeded reasonable limit (%s) of "
+"cycles. Resource %s"
 msgstr ""

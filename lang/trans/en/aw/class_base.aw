@@ -5,6 +5,7 @@ $GLOBALS["TRANS"]["Omaduse Kommentaar (comment) caption"] = "Comment";
 $GLOBALS["TRANS"]["Omaduse Aktiivne (status) caption"] = "Status";
 $GLOBALS["TRANS"]["Omaduse Vajab tõlget (needs_translation) caption"] = "Needs translation";
 $GLOBALS["TRANS"]["Omaduse Tõlge kinnitatud (is_translated) caption"] = "Translation confirmed";
+$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Rohkem infot"] = "More info";
 $GLOBALS["TRANS"]["Peida ära"] = "Hide";
 $GLOBALS["TRANS"]["Abiinfo"] = "Help";

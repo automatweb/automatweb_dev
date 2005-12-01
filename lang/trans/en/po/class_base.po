@@ -10,125 +10,142 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/class_base.aw:class__help
+#: classes/class_base.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
 # classes/class_base.aw:prop_name
+#: classes/class_base.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr "Name"
 
 # classes/class_base.aw:prop_name_comment
+#: classes/class_base.aw:prop_name_comment
 msgid "Omaduse Nimi (name) kommentaar"
 msgstr "Object name"
 
 # classes/class_base.aw:prop_name_help
+#: classes/class_base.aw:prop_name_help
 msgid "Omaduse Nimi (name) help"
 msgstr ""
 
 # classes/class_base.aw:prop_comment
+#: classes/class_base.aw:prop_comment
 msgid "Omaduse Kommentaar (comment) caption"
 msgstr "Comment"
 
 # classes/class_base.aw:prop_comment_comment
+#: classes/class_base.aw:prop_comment_comment
 msgid "Omaduse Kommentaar (comment) kommentaar"
 msgstr ""
 
 # classes/class_base.aw:prop_comment_help
+#: classes/class_base.aw:prop_comment_help
 msgid "Omaduse Kommentaar (comment) help"
 msgstr ""
 
 # classes/class_base.aw:prop_status
+#: classes/class_base.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
 msgstr "Status"
 
 # classes/class_base.aw:prop_status_comment
+#: classes/class_base.aw:prop_status_comment
 msgid "Omaduse Aktiivne (status) kommentaar"
 msgstr ""
 
 # classes/class_base.aw:prop_status_help
+#: classes/class_base.aw:prop_status_help
 msgid "Omaduse Aktiivne (status) help"
 msgstr ""
 
 # classes/class_base.aw:prop_needs_translation
+#: classes/class_base.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr "Needs translation"
 
 # classes/class_base.aw:prop_needs_translation_comment
+#: classes/class_base.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
 msgstr ""
 
 # classes/class_base.aw:prop_needs_translation_help
+#: classes/class_base.aw:prop_needs_translation_help
 msgid "Omaduse Vajab tõlget (needs_translation) help"
 msgstr ""
 
 # classes/class_base.aw:prop_is_translated
+#: classes/class_base.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
 msgstr "Translation confirmed"
 
 # classes/class_base.aw:prop_is_translated_comment
+#: classes/class_base.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
 # classes/class_base.aw:prop_is_translated_help
+#: classes/class_base.aw:prop_is_translated_help
 msgid "Omaduse Tõlge kinnitatud (is_translated) help"
 msgstr ""
 
 # classes/class_base.aw:group_general
-msgid "Grupi &Uuml;ldine (general) pealkiri"
+#: classes/class_base.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr "General"
+
+#: classes/class_base.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
-# classes/class_base.aw:group_general_help
-msgid "Grupi &Uuml;ldine (general) help"
-msgstr ""
-
-#: classes/class_base.aw:554
+#: classes/class_base.aw:571
 msgid "Rohkem infot"
 msgstr "More info"
 
-#: classes/class_base.aw:555
+#: classes/class_base.aw:572
+msgid "Tõlgi"
+msgstr ""
+
+#: classes/class_base.aw:573
 msgid "Peida ära"
 msgstr "Hide"
 
-#: classes/class_base.aw:556
+#: classes/class_base.aw:574
 msgid "Abiinfo"
 msgstr "Help"
 
-#: classes/class_base.aw:600
+#: classes/class_base.aw:619
 msgid "tab panel"
 msgstr "tab panel"
 
-#: classes/class_base.aw:1186
+#: classes/class_base.aw:1215
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/class_base.aw:1194
+#: classes/class_base.aw:1223
 msgid "Uus"
 msgstr "New"
 
-#: classes/class_base.aw:1221
+#: classes/class_base.aw:1250
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1413 classes/class_base.aw:4532
-#: classes/class_base.aw:4543
+#: classes/class_base.aw:1439 classes/class_base.aw:4623
+#: classes/class_base.aw:4634
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:3126
+#: classes/class_base.aw:3199
 msgid "See väli ei tohi olla tühi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3135
+#: classes/class_base.aw:3208
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:4431
+#: classes/class_base.aw:4520
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
-
-# classes/class_base.aw:group_general
-#~ msgid "Grupi Üldine (general) pealkiri"
-#~ msgstr "General"
 
 #~ msgid "rohkem infot"
 #~ msgstr "more"

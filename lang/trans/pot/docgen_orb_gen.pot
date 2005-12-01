@@ -14,3 +14,31 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
+#: classes/core/docgen/docgen_orb_gen.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_orb_gen.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_orb_gen.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/core/docgen/docgen_orb_gen.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/core/docgen/docgen_orb_gen.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_orb_gen.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/core/docgen/docgen_orb_gen.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+

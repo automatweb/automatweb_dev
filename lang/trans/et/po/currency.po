@@ -10,17 +10,65 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/formgen/currency.aw:class_67_help
+#: classes/formgen/currency.aw:class_67_help
 msgid "Klassi Valuutakurss help"
 msgstr ""
 
+#: classes/formgen/currency.aw:prop_ord
+msgid "Omaduse J&auml;rjekord (ord) caption"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_ord_comment
+msgid "Omaduse J&auml;rjekord (ord) kommentaar"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_ord_help
+msgid "Omaduse J&auml;rjekord (ord) help"
+msgstr ""
+
 # classes/formgen/currency.aw:prop_comment
+#: classes/formgen/currency.aw:prop_comment
 msgid "Omaduse Kurss saksa marga suhtes (comment) caption"
 msgstr ""
 
 # classes/formgen/currency.aw:prop_comment_comment
+#: classes/formgen/currency.aw:prop_comment_comment
 msgid "Omaduse Kurss saksa marga suhtes (comment) kommentaar"
 msgstr ""
 
 # classes/formgen/currency.aw:prop_comment_help
+#: classes/formgen/currency.aw:prop_comment_help
 msgid "Omaduse Kurss saksa marga suhtes (comment) help"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_unit_name
+msgid "Omaduse Raha&uuml;hiku nimetus (unit_name) caption"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_unit_name_comment
+msgid "Omaduse Raha&uuml;hiku nimetus (unit_name) kommentaar"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_unit_name_help
+msgid "Omaduse Raha&uuml;hiku nimetus (unit_name) help"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_small_unit_name
+msgid "Omaduse Peenraha&uuml;hiku nimetus (small_unit_name) caption"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_small_unit_name_comment
+msgid "Omaduse Peenraha&uuml;hiku nimetus (small_unit_name) kommentaar"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_small_unit_name_help
+msgid "Omaduse Peenraha&uuml;hiku nimetus (small_unit_name) help"
+msgstr ""
+
+#: classes/formgen/currency.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/formgen/currency.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""

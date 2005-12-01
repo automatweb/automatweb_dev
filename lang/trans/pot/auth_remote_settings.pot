@@ -50,6 +50,14 @@ msgstr ""
 msgid "Omaduse  (activity) help"
 msgstr ""
 
+#: classes/core/users/auth/auth_remote_settings.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/core/users/auth/auth_remote_settings.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/core/users/auth/auth_remote_settings.aw:group_sel_sites
 msgid "Grupi Vali saidid (sel_sites) pealkiri"
 msgstr ""
@@ -98,7 +106,7 @@ msgstr ""
 msgid "Kasutaja, kellena teise saidi kasutajad ligi saavad"
 msgstr ""
 
-#: classes/core/users/auth/auth_remote_settings.aw:310
+#: classes/core/users/auth/auth_remote_settings.aw:309
 msgid "Antud link ei võimalda abikeskkonda siseneda, palun kontakteeruge <a href='mailto:support@automatweb.com'>administraatoriga</a> "
 msgstr ""
 

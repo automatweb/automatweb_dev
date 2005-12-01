@@ -10,41 +10,71 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/crm/crm_country.aw:class_134_help
+#: classes/crm/crm_country.aw:class_134_help
 msgid "Klassi Riik help"
 msgstr ""
 
 # classes/crm/crm_country.aw:prop_name
+#: classes/crm/crm_country.aw:prop_name
 msgid "Omaduse Riigi nimetus (name) caption"
 msgstr ""
 
 # classes/crm/crm_country.aw:prop_name_comment
+#: classes/crm/crm_country.aw:prop_name_comment
 msgid "Omaduse Riigi nimetus (name) kommentaar"
 msgstr ""
 
 # classes/crm/crm_country.aw:prop_name_help
+#: classes/crm/crm_country.aw:prop_name_help
 msgid "Omaduse Riigi nimetus (name) help"
 msgstr ""
 
+#: classes/crm/crm_country.aw:prop_area_code
+msgid "Omaduse Suunakood (area_code) caption"
+msgstr ""
+
+#: classes/crm/crm_country.aw:prop_area_code_comment
+msgid "Omaduse Suunakood (area_code) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_country.aw:prop_area_code_help
+msgid "Omaduse Suunakood (area_code) help"
+msgstr ""
+
 # classes/crm/crm_country.aw:prop_name_en
+#: classes/crm/crm_country.aw:prop_name_en
 msgid "Omaduse Nimetus inglise keeles (name_en) caption"
 msgstr "Name in english"
 
 # classes/crm/crm_country.aw:prop_name_en_comment
+#: classes/crm/crm_country.aw:prop_name_en_comment
 msgid "Omaduse Nimetus inglise keeles (name_en) kommentaar"
 msgstr ""
 
 # classes/crm/crm_country.aw:prop_name_en_help
+#: classes/crm/crm_country.aw:prop_name_en_help
 msgid "Omaduse Nimetus inglise keeles (name_en) help"
 msgstr ""
 
 # classes/crm/crm_country.aw:prop_name_native
+#: classes/crm/crm_country.aw:prop_name_native
 msgid "Omaduse Nimetus kohalikus keeles (name_native) caption"
 msgstr "Name in local language"
 
 # classes/crm/crm_country.aw:prop_name_native_comment
+#: classes/crm/crm_country.aw:prop_name_native_comment
 msgid "Omaduse Nimetus kohalikus keeles (name_native) kommentaar"
 msgstr ""
 
 # classes/crm/crm_country.aw:prop_name_native_help
+#: classes/crm/crm_country.aw:prop_name_native_help
 msgid "Omaduse Nimetus kohalikus keeles (name_native) help"
+msgstr ""
+
+#: classes/crm/crm_country.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_country.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""

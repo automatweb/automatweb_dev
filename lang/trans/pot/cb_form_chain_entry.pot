@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Kinnitatud (confirmed) help"
 msgstr ""
 
+#: classes/applications/cb_form_chain/cb_form_chain_entry.aw:prop_cb_form_id
+msgid "Omaduse Vormiahela id (cb_form_id) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain_entry.aw:prop_cb_form_id_comment
+msgid "Omaduse Vormiahela id (cb_form_id) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain_entry.aw:prop_cb_form_id_help
+msgid "Omaduse Vormiahela id (cb_form_id) help"
+msgstr ""
+
 #: classes/applications/cb_form_chain/cb_form_chain_entry.aw:prop_data
 msgid "Omaduse  (data) caption"
 msgstr ""
@@ -38,6 +50,14 @@ msgstr ""
 msgid "Omaduse  (data) help"
 msgstr ""
 
+#: classes/applications/cb_form_chain/cb_form_chain_entry.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain_entry.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/cb_form_chain/cb_form_chain_entry.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
 msgstr ""
@@ -48,5 +68,9 @@ msgstr ""
 
 #: classes/applications/cb_form_chain/cb_form_chain_entry.aw:rel_RELTYPE_ENTRY
 msgid "Seose andmed (RELTYPE_ENTRY) tekst"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain_entry.aw:124 classes/applications/cb_form_chain/cb_form_chain_entry.aw:131
+msgid ""
 msgstr ""
 

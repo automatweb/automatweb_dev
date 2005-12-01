@@ -218,6 +218,14 @@ msgstr ""
 msgid "Omaduse  (offer) help"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/crm/crm_offer.aw:group_content
 msgid "Grupi Sisu (content) pealkiri"
 msgstr ""
@@ -283,7 +291,7 @@ msgid "Seose Tellija (RELTYPE_ORDERER) tekst"
 msgstr ""
 
 #: classes/crm/crm_offer.aw:rel_RELTYPE_PREFORMER
-msgid "Seose Täitja (RELTYPE_PREFORMER) tekst"
+msgid "Seose T&auml;itja (RELTYPE_PREFORMER) tekst"
 msgstr ""
 
 #: classes/crm/crm_offer.aw:rel_RELTYPE_SALESMAN
@@ -342,63 +350,67 @@ msgstr ""
 msgid "Projekt"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:363
+#: classes/crm/crm_offer.aw:177
+msgid "--Vali--"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:393
 msgid "Algstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:369
+#: classes/crm/crm_offer.aw:399
 msgid "Lõppstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:375
+#: classes/crm/crm_offer.aw:405
 msgid "Muutuse aeg"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:381
+#: classes/crm/crm_offer.aw:411
 msgid "Muutja"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:413
+#: classes/crm/crm_offer.aw:443
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:436
+#: classes/crm/crm_offer.aw:469
 msgid "T&uuml;&uuml;pkomponendid"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:458
+#: classes/crm/crm_offer.aw:491
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:465
+#: classes/crm/crm_offer.aw:498
 msgid "Kustuta valitud osad"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:466
+#: classes/crm/crm_offer.aw:499
 msgid "Oled kindel et soovid valitud osad kustutada?"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:524
+#: classes/crm/crm_offer.aw:557
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:532
+#: classes/crm/crm_offer.aw:565
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:538
+#: classes/crm/crm_offer.aw:571
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:544
+#: classes/crm/crm_offer.aw:577
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:584
+#: classes/crm/crm_offer.aw:620
 msgid "Eemalda t&uuml;&uuml;pkomonentide nimekirjast"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:595
+#: classes/crm/crm_offer.aw:631
 msgid "Tee t&uuml;&uuml;pkomponendiks"
 msgstr ""
 

@@ -9,11 +9,9 @@ $GLOBALS["TRANS"]["Omaduse Mitu klikki maksimaalselt (max_clicks) caption"] = "M
 $GLOBALS["TRANS"]["Omaduse Klikke (clicks) caption"] = "Clicks";
 $GLOBALS["TRANS"]["Omaduse Vaatamisi (views) caption"] = "Views";
 $GLOBALS["TRANS"]["Omaduse Click-through ratio (click_through) caption"] = "Click-through ratio";
-$GLOBALS["TRANS"]["Grupi N&auml;itamine (display) pealkiri"] = "Display";
 $GLOBALS["TRANS"]["Grupi Statistika (stats) pealkiri"] = "Statistics";
 $GLOBALS["TRANS"]["Seose banneri asukoht (RELTYPE_LOCATION) tekst"] = "banner location";
 $GLOBALS["TRANS"]["Seose banneri sisu (RELTYPE_BANNER_FILE) tekst"] = "banner content";
 $GLOBALS["TRANS"]["Banner"] = "Banner";
-$GLOBALS["TRANS"]["N&auml;itamise t&otilde;en&auml;osuse %"] = "Display probability %";
 $GLOBALS["TRANS"]["No banner location id given"] = "No banner location id given";
 ?>

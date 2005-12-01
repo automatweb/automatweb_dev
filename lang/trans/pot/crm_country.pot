@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Riigi nimetus (name) help"
 msgstr ""
 
+#: classes/crm/crm_country.aw:prop_area_code
+msgid "Omaduse Suunakood (area_code) caption"
+msgstr ""
+
+#: classes/crm/crm_country.aw:prop_area_code_comment
+msgid "Omaduse Suunakood (area_code) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_country.aw:prop_area_code_help
+msgid "Omaduse Suunakood (area_code) help"
+msgstr ""
+
 #: classes/crm/crm_country.aw:prop_name_en
 msgid "Omaduse Nimetus inglise keeles (name_en) caption"
 msgstr ""
@@ -48,5 +60,13 @@ msgstr ""
 
 #: classes/crm/crm_country.aw:prop_name_native_help
 msgid "Omaduse Nimetus kohalikus keeles (name_native) help"
+msgstr ""
+
+#: classes/crm/crm_country.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_country.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 

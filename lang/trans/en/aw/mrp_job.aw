@@ -1,11 +1,11 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Plaanitud töösseminekuaeg (starttime) caption"] = "Planned start time";
+$GLOBALS["TRANS"]["Omaduse Planeeritud kestus (h) (planned_length) caption"] = "Planned length (h)";
 $GLOBALS["TRANS"]["Omaduse Alustatud (started) caption"] = "Started";
 $GLOBALS["TRANS"]["Omaduse Lõpetatud (finished) caption"] = "Finished";
 $GLOBALS["TRANS"]["Omaduse Ressurss (resource) caption"] = "Resource";
 $GLOBALS["TRANS"]["Omaduse Projekt (project) caption"] = "Project";
 $GLOBALS["TRANS"]["Omaduse Töö jrk. nr. (exec_order) caption"] = "Job order nr";
-$GLOBALS["TRANS"]["Omaduse Plaanitud töösseminekuaeg (starttime) caption"] = "Planned start time";
-$GLOBALS["TRANS"]["Omaduse Planeeritud kestus (h) (planned_length) caption"] = "Planned length (h)";
 $GLOBALS["TRANS"]["Omaduse Staatus (state) caption"] = "Status";
 $GLOBALS["TRANS"]["Omaduse Töö pikkus (h) (length) caption"] = "Job length (h)";
 $GLOBALS["TRANS"]["Omaduse Eelpuhveraeg (h) (pre_buffer) caption"] = "Pre-buffer (h)";
@@ -15,7 +15,6 @@ $GLOBALS["TRANS"]["Omaduse Eeldustööd (prerequisites) caption"] = "Prerequisite 
 $GLOBALS["TRANS"]["Omaduse Soovitav algusaeg (advised_starttime) caption"] = "Advised start time";
 $GLOBALS["TRANS"]["Grupi Andmed (data) pealkiri"] = "Data";
 $GLOBALS["TRANS"]["Grupi Töövoog (workflow) pealkiri"] = "Workflow";
-$GLOBALS["TRANS"]["Seose Tööks kasutatav ressurss (RELTYPE_MRP_RESOURCE) tekst"] = "Resource used for job";
 $GLOBALS["TRANS"]["Seose Projekt (RELTYPE_MRP_PROJECT) tekst"] = "Project";
 $GLOBALS["TRANS"]["Uus"] = "New";
 $GLOBALS["TRANS"]["Planeeritud"] = "Planned";

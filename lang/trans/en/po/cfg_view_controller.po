@@ -10,29 +10,44 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/cfg/cfg_view_controller.aw:class_865_help
+#: classes/cfg/cfg_view_controller.aw:class_865_help
 msgid "Klassi N&auml;itamise kontroller help"
 msgstr ""
 
 # classes/cfg/cfg_view_controller.aw:prop_help
+#: classes/cfg/cfg_view_controller.aw:prop_help
 msgid "Omaduse  (help) caption"
 msgstr ""
 
 # classes/cfg/cfg_view_controller.aw:prop_help_comment
+#: classes/cfg/cfg_view_controller.aw:prop_help_comment
 msgid "Omaduse  (help) kommentaar"
 msgstr ""
 
 # classes/cfg/cfg_view_controller.aw:prop_help_help
+#: classes/cfg/cfg_view_controller.aw:prop_help_help
 msgid "Omaduse  (help) help"
 msgstr ""
 
 # classes/cfg/cfg_view_controller.aw:prop_formula
+#: classes/cfg/cfg_view_controller.aw:prop_formula
 msgid "Omaduse Valem (formula) caption"
 msgstr "Expression"
 
 # classes/cfg/cfg_view_controller.aw:prop_formula_comment
+#: classes/cfg/cfg_view_controller.aw:prop_formula_comment
 msgid "Omaduse Valem (formula) kommentaar"
 msgstr ""
 
 # classes/cfg/cfg_view_controller.aw:prop_formula_help
+#: classes/cfg/cfg_view_controller.aw:prop_formula_help
 msgid "Omaduse Valem (formula) help"
+msgstr ""
+
+#: classes/cfg/cfg_view_controller.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfg_view_controller.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""

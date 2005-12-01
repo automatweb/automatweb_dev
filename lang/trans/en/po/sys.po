@@ -9,42 +9,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/sys.aw:139
+#: classes/sys.aw:138
 msgid "Failed opening connection to server %s"
 msgstr "Failed opening connection to server %s"
 
-#: classes/sys.aw:149
+#: classes/sys.aw:148
 msgid "Write error"
 msgstr "Write error"
 
-#: classes/sys.aw:505
+#: classes/sys.aw:507
 msgid "L&otilde;i saidi andmebaasi tabelid"
 msgstr "Created site database tables"
 
-#: classes/sys.aw:561
+#: classes/sys.aw:563
 msgid "all done! "
 msgstr "all done! "
 
-#: classes/sys.aw:606
+#: classes/sys.aw:609
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/sys.aw:610
+#: classes/sys.aw:613
 msgid "Klass"
 msgstr "Class"
 
-#: classes/sys.aw:614
+#: classes/sys.aw:617
 msgid "Muutja"
 msgstr "Modifiedby"
 
-#: classes/sys.aw:618
+#: classes/sys.aw:621
 msgid "Muutmise aeg"
 msgstr "Modified"
 
-#: classes/sys.aw:784
+#: classes/sys.aw:790
 msgid "all done!! database seems to be relatively ok!"
 msgstr "all done!! database seems to be relatively ok!"
 
-#: classes/sys.aw:844
+#: classes/sys.aw:850
 msgid "All done"
 msgstr "All done"

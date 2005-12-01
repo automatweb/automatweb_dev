@@ -10,113 +10,161 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/bug_o_matic_3000/bug.aw:class_868_help
+#: classes/applications/bug_o_matic_3000/bug.aw:class_868_help
 msgid "Klassi Bugi help"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_status
-msgid "Omaduse Staatus (status) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_name
+msgid "Omaduse Lühikirjeldus (name) caption"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_status_comment
-msgid "Omaduse Staatus (status) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_name_comment
+msgid "Omaduse Lühikirjeldus (name) kommentaar"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_status_help
-msgid "Omaduse Staatus (status) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_name_help
+msgid "Omaduse Lühikirjeldus (name) help"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_priority
-msgid "Omaduse Prioriteet (priority) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_content
+msgid "Omaduse Sisu (bug_content) caption"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_priority_comment
-msgid "Omaduse Prioriteet (priority) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_content_comment
+msgid "Omaduse Sisu (bug_content) kommentaar"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_priority_help
-msgid "Omaduse Prioriteet (priority) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_content_help
+msgid "Omaduse Sisu (bug_content) help"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_severity
-msgid "Omaduse T&ouml;sidus (severity) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_status
+msgid "Omaduse Staatus (bug_status) caption"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_severity_comment
-msgid "Omaduse T&ouml;sidus (severity) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_status_comment
+msgid "Omaduse Staatus (bug_status) kommentaar"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_severity_help
-msgid "Omaduse T&ouml;sidus (severity) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_status_help
+msgid "Omaduse Staatus (bug_status) help"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_reporter_browser
-msgid "Omaduse Brauser (reporter_browser) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_priority
+msgid "Omaduse Prioriteet (bug_priority) caption"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_reporter_browser_comment
-msgid "Omaduse Brauser (reporter_browser) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_priority_comment
+msgid "Omaduse Prioriteet (bug_priority) kommentaar"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_reporter_browser_help
-msgid "Omaduse Brauser (reporter_browser) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_priority_help
+msgid "Omaduse Prioriteet (bug_priority) help"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_reporter_os
-msgid "Omaduse OS (reporter_os) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_severity
+msgid "Omaduse T&ouml;sidus (bug_severity) caption"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_reporter_os_comment
-msgid "Omaduse OS (reporter_os) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_severity_comment
+msgid "Omaduse T&ouml;sidus (bug_severity) kommentaar"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_reporter_os_help
-msgid "Omaduse OS (reporter_os) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_severity_help
+msgid "Omaduse T&ouml;sidus (bug_severity) help"
 msgstr ""
 
 # classes/applications/bug_o_matic_3000/bug.aw:prop_bug_class
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_class
 msgid "Omaduse Klass (bug_class) caption"
 msgstr ""
 
 # classes/applications/bug_o_matic_3000/bug.aw:prop_bug_class_comment
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_class_comment
 msgid "Omaduse Klass (bug_class) kommentaar"
 msgstr ""
 
 # classes/applications/bug_o_matic_3000/bug.aw:prop_bug_class_help
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_class_help
 msgid "Omaduse Klass (bug_class) help"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_component
-msgid "Omaduse Komponent (component) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_component
+msgid "Omaduse Komponent (bug_component) caption"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_component_comment
-msgid "Omaduse Komponent (component) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_component_comment
+msgid "Omaduse Komponent (bug_component) kommentaar"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_component_help
-msgid "Omaduse Komponent (component) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_component_help
+msgid "Omaduse Komponent (bug_component) help"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_url
-msgid "Omaduse URL (url) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_url
+msgid "Omaduse URL (bug_url) caption"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_url_comment
-msgid "Omaduse URL (url) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_url_comment
+msgid "Omaduse URL (bug_url) kommentaar"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_url_help
-msgid "Omaduse URL (url) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_url_help
+msgid "Omaduse URL (bug_url) help"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_content
-msgid "Omaduse Sisu (content) caption"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_mail
+msgid "Omaduse Bugmail CC (bug_mail) caption"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_content_comment
-msgid "Omaduse Sisu (content) kommentaar"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_mail_comment
+msgid "Omaduse Bugmail CC (bug_mail) kommentaar"
 msgstr ""
 
-# classes/applications/bug_o_matic_3000/bug.aw:prop_content_help
-msgid "Omaduse Sisu (content) help"
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_mail_help
+msgid "Omaduse Bugmail CC (bug_mail) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_comms
+msgid "Omaduse Kommentaarid (comms) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_comms_comment
+msgid "Omaduse Kommentaarid (comms) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_comms_help
+msgid "Omaduse Kommentaarid (comms) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_MONITOR
+msgid "Seose J&auml;lgija (RELTYPE_MONITOR) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:136
+msgid "Bug"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:137
+msgid "Summary"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:138
+msgid "URL"
 msgstr ""

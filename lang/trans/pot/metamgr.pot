@@ -86,6 +86,14 @@ msgstr ""
 msgid "Omaduse Metainfo (meta) help"
 msgstr ""
 
+#: classes/meta/metamgr.aw:group_general
+msgid "Grupi ‹ldine (general) pealkiri"
+msgstr ""
+
+#: classes/meta/metamgr.aw:group_general_help
+msgid "Grupi ‹ldine (general) help"
+msgstr ""
+
 #: classes/meta/metamgr.aw:group_manager
 msgid "Grupi Muutujad (manager) pealkiri"
 msgstr ""
@@ -102,35 +110,35 @@ msgstr ""
 msgid "Grupi Import (import) help"
 msgstr ""
 
-#: classes/meta/metamgr.aw:140
+#: classes/meta/metamgr.aw:142
 msgid "ID"
 msgstr ""
 
-#: classes/meta/metamgr.aw:145
+#: classes/meta/metamgr.aw:147
 msgid "Nimi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:152
+#: classes/meta/metamgr.aw:154
 msgid "V‰‰rtus"
 msgstr ""
 
-#: classes/meta/metamgr.aw:159
+#: classes/meta/metamgr.aw:161
 msgid "Jrk"
 msgstr ""
 
-#: classes/meta/metamgr.aw:315
+#: classes/meta/metamgr.aw:317
 msgid "Salvesta"
 msgstr ""
 
-#: classes/meta/metamgr.aw:323
+#: classes/meta/metamgr.aw:325
 msgid "Liiguta valitud omadused gruppi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:378
+#: classes/meta/metamgr.aw:380
 msgid "Kustuta valitud muutujad"
 msgstr ""
 
-#: classes/meta/metamgr.aw:379
+#: classes/meta/metamgr.aw:381
 msgid "Kustuta valitud muutujad?"
 msgstr ""
 

@@ -50,3 +50,11 @@ msgstr ""
 msgid "Omaduse Parool (password) help"
 msgstr ""
 
+#: classes/protocols/file/ftp.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/protocols/file/ftp.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+

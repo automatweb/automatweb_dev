@@ -10,29 +10,44 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/awmyadmin/db_sql_query.aw:class_154_help
+#: classes/applications/awmyadmin/db_sql_query.aw:class_154_help
 msgid "Klassi SQL P&auml;ring help"
 msgstr ""
 
 # classes/applications/awmyadmin/db_sql_query.aw:prop_db_base
+#: classes/applications/awmyadmin/db_sql_query.aw:prop_db_base
 msgid "Omaduse Andmebaas (db_base) caption"
 msgstr ""
 
 # classes/applications/awmyadmin/db_sql_query.aw:prop_db_base_comment
+#: classes/applications/awmyadmin/db_sql_query.aw:prop_db_base_comment
 msgid "Omaduse Andmebaas (db_base) kommentaar"
 msgstr ""
 
 # classes/applications/awmyadmin/db_sql_query.aw:prop_db_base_help
+#: classes/applications/awmyadmin/db_sql_query.aw:prop_db_base_help
 msgid "Omaduse Andmebaas (db_base) help"
 msgstr ""
 
 # classes/applications/awmyadmin/db_sql_query.aw:prop_sql
+#: classes/applications/awmyadmin/db_sql_query.aw:prop_sql
 msgid "Omaduse SQL (sql) caption"
 msgstr ""
 
 # classes/applications/awmyadmin/db_sql_query.aw:prop_sql_comment
+#: classes/applications/awmyadmin/db_sql_query.aw:prop_sql_comment
 msgid "Omaduse SQL (sql) kommentaar"
 msgstr ""
 
 # classes/applications/awmyadmin/db_sql_query.aw:prop_sql_help
+#: classes/applications/awmyadmin/db_sql_query.aw:prop_sql_help
 msgid "Omaduse SQL (sql) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_sql_query.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_sql_query.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""

@@ -38,6 +38,14 @@ msgstr ""
 msgid "Omaduse Aktiivsus (activity) help"
 msgstr ""
 
+#: classes/core/users/auth/auth_config.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/core/users/auth/auth_config.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/core/users/auth/auth_config.aw:group_servers
 msgid "Grupi Autentimine (servers) pealkiri"
 msgstr ""

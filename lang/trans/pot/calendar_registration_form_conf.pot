@@ -194,6 +194,14 @@ msgstr ""
 msgid "Omaduse Maili sisu (mail_content) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_registration_form_conf.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_registration_form_conf.aw:group_emails
 msgid "Grupi E-mailid (emails) pealkiri"
 msgstr ""
@@ -203,7 +211,7 @@ msgid "Grupi E-mailid (emails) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:rel_RELTYPE_EVENT
-msgid "Seose S&uuml;ndmus (RELTYPE_EVENT) tekst"
+msgid "Seose S&amp;uuml;ndmus (RELTYPE_EVENT) tekst"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:rel_RELTYPE_REG_ENTRY
@@ -215,7 +223,7 @@ msgid "Seose Isikute kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:rel_RELTYPE_WEBFORM
-msgid "Seose Sündmuse vorm (RELTYPE_WEBFORM) tekst"
+msgid "Seose S&uuml;ndmuse vorm (RELTYPE_WEBFORM) tekst"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:143
@@ -241,7 +249,7 @@ msgstr ""
 msgid "calendar_registration_form::show(%s): event and object type must be related!"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:599
+#: classes/applications/calendar/calendar_registration_form_conf.aw:615
 msgid "calendar_registration_form::show_data(%s): event and object type must be related!"
 msgstr ""
 

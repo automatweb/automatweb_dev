@@ -411,15 +411,15 @@ msgid "Omaduse N&auml;ita pealkirja (show_title) help"
 msgstr ""
 
 #: classes/doc.aw:prop_no_search
-msgid "Omaduse J&auml;ta otsingust välja (no_search) caption"
+msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) caption"
 msgstr ""
 
 #: classes/doc.aw:prop_no_search_comment
-msgid "Omaduse J&auml;ta otsingust välja (no_search) kommentaar"
+msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) kommentaar"
 msgstr ""
 
 #: classes/doc.aw:prop_no_search_help
-msgid "Omaduse J&auml;ta otsingust välja (no_search) help"
+msgid "Omaduse J&auml;ta otsingust v&auml;lja (no_search) help"
 msgstr ""
 
 #: classes/doc.aw:prop_cite
@@ -804,6 +804,14 @@ msgstr ""
 
 #: classes/doc.aw:prop_show_in_iframe_help
 msgid "Omaduse Kasuta siseraami (show_in_iframe) help"
+msgstr ""
+
+#: classes/doc.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/doc.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/doc.aw:group_calendar

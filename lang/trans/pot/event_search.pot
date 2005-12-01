@@ -170,6 +170,14 @@ msgstr ""
 msgid "Omaduse Tulemuste tabel (result_table) help"
 msgstr ""
 
+#: classes/applications/calendar/event_search.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/event_search.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/calendar/event_search.aw:group_ftsearch
 msgid "Grupi Otsinguvorm (ftsearch) pealkiri"
 msgstr ""
@@ -203,15 +211,15 @@ msgid "Grupi Tulemuste seadistamine (ftresults) help"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_CFGFORM
-msgid "Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_CFGFORM) tekst"
+msgid "Seose S&amp;uuml;ndmuse vorm (RELTYPE_EVENT_CFGFORM) tekst"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_SOURCE
-msgid "Seose S&uuml;ndmuste allikas (RELTYPE_EVENT_SOURCE) tekst"
+msgid "Seose S&amp;uuml;ndmuste allikas (RELTYPE_EVENT_SOURCE) tekst"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_SHOW
-msgid "Seose N&auml;itamise vorm (RELTYPE_EVENT_SHOW) tekst"
+msgid "Seose N&amp;auml;itamise vorm (RELTYPE_EVENT_SHOW) tekst"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_STYLE
@@ -338,11 +346,11 @@ msgstr ""
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:770 classes/applications/calendar/event_search.aw:776 classes/applications/calendar/event_search.aw:777 classes/applications/calendar/event_search.aw:792 classes/applications/calendar/event_search.aw:798
+#: classes/applications/calendar/event_search.aw:825 classes/applications/calendar/event_search.aw:831 classes/applications/calendar/event_search.aw:832 classes/applications/calendar/event_search.aw:848 classes/applications/calendar/event_search.aw:854
 msgid "kõik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:805
+#: classes/applications/calendar/event_search.aw:861
 msgid "Otsi"
 msgstr ""
 

@@ -122,6 +122,14 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (translate) help"
 msgstr ""
 
+#: classes/contentmgmt/poll.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/poll.aw:group_clicks
 msgid "Grupi Klikke (clicks) pealkiri"
 msgstr ""
@@ -147,11 +155,11 @@ msgid "Grupi Vastajad (clicks_detail) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_translate
-msgid "Grupi T&otilde;lgi (translate) pealkiri"
+msgid "Grupi Tõlgi (translate) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_translate_help
-msgid "Grupi T&otilde;lgi (translate) help"
+msgid "Grupi Tõlgi (translate) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_activity
@@ -162,43 +170,43 @@ msgstr ""
 msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:484
+#: classes/contentmgmt/poll.aw:486
 msgid "UID"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:491
+#: classes/contentmgmt/poll.aw:493
 msgid "IP"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:498
+#: classes/contentmgmt/poll.aw:500
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:508 classes/contentmgmt/poll.aw:538
+#: classes/contentmgmt/poll.aw:510 classes/contentmgmt/poll.aw:540
 msgid "Vastus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:545
+#: classes/contentmgmt/poll.aw:547
 msgid "Klikke"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:554
+#: classes/contentmgmt/poll.aw:556
 msgid "Protsent"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:563 classes/contentmgmt/poll.aw:817
+#: classes/contentmgmt/poll.aw:565 classes/contentmgmt/poll.aw:819
 msgid ""
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:641 classes/contentmgmt/poll.aw:653
+#: classes/contentmgmt/poll.aw:643 classes/contentmgmt/poll.aw:655
 msgid "Vastus nr %s"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:825
+#: classes/contentmgmt/poll.aw:827
 msgid "K&uuml;simus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:835
+#: classes/contentmgmt/poll.aw:837
 msgid "Vastus nr %s "
 msgstr ""
 

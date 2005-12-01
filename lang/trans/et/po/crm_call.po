@@ -10,270 +10,345 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/crm/crm_call.aw:class_223_help
+#: classes/crm/crm_call.aw:class_223_help
 msgid "Klassi K&otilde;ne help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_info_on_object
+#: classes/crm/crm_call.aw:prop_info_on_object
 msgid "Omaduse Osalejad (info_on_object) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_info_on_object_comment
+#: classes/crm/crm_call.aw:prop_info_on_object_comment
 msgid "Omaduse Osalejad (info_on_object) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_info_on_object_help
+#: classes/crm/crm_call.aw:prop_info_on_object_help
 msgid "Omaduse Osalejad (info_on_object) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_is_done
+#: classes/crm/crm_call.aw:prop_is_done
 msgid "Omaduse Tehtud (is_done) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_is_done_comment
+#: classes/crm/crm_call.aw:prop_is_done_comment
 msgid "Omaduse Tehtud (is_done) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_is_done_help
+#: classes/crm/crm_call.aw:prop_is_done_help
 msgid "Omaduse Tehtud (is_done) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_start1
+#: classes/crm/crm_call.aw:prop_start1
 msgid "Omaduse Algus (start1) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_start1_comment
+#: classes/crm/crm_call.aw:prop_start1_comment
 msgid "Omaduse Algus (start1) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_start1_help
+#: classes/crm/crm_call.aw:prop_start1_help
 msgid "Omaduse Algus (start1) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_end
+#: classes/crm/crm_call.aw:prop_end
 msgid "Omaduse Lõpp (end) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_end_comment
+#: classes/crm/crm_call.aw:prop_end_comment
 msgid "Omaduse Lõpp (end) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_end_help
+#: classes/crm/crm_call.aw:prop_end_help
 msgid "Omaduse Lõpp (end) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_content
+#: classes/crm/crm_call.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_content_comment
+#: classes/crm/crm_call.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_content_help
+#: classes/crm/crm_call.aw:prop_content_help
 msgid "Omaduse Sisu (content) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_aliasmgr
+#: classes/crm/crm_call.aw:prop_aliasmgr
 msgid "Omaduse Aliastehaldur (aliasmgr) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_aliasmgr_comment
+#: classes/crm/crm_call.aw:prop_aliasmgr_comment
 msgid "Omaduse Aliastehaldur (aliasmgr) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_aliasmgr_help
+#: classes/crm/crm_call.aw:prop_aliasmgr_help
 msgid "Omaduse Aliastehaldur (aliasmgr) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_task_toolbar
+#: classes/crm/crm_call.aw:prop_task_toolbar
 msgid "Omaduse \"Toolbar\" (task_toolbar) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_task_toolbar_comment
+#: classes/crm/crm_call.aw:prop_task_toolbar_comment
 msgid "Omaduse \"Toolbar\" (task_toolbar) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_task_toolbar_help
+#: classes/crm/crm_call.aw:prop_task_toolbar_help
 msgid "Omaduse \"Toolbar\" (task_toolbar) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_recurrence
+#: classes/crm/crm_call.aw:prop_recurrence
 msgid "Omaduse Kordused (recurrence) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_recurrence_comment
+#: classes/crm/crm_call.aw:prop_recurrence_comment
 msgid "Omaduse Kordused (recurrence) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_recurrence_help
+#: classes/crm/crm_call.aw:prop_recurrence_help
 msgid "Omaduse Kordused (recurrence) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_calendar_selector
+#: classes/crm/crm_call.aw:prop_calendar_selector
 msgid "Omaduse Kalendrid (calendar_selector) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_calendar_selector_comment
+#: classes/crm/crm_call.aw:prop_calendar_selector_comment
 msgid "Omaduse Kalendrid (calendar_selector) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_calendar_selector_help
+#: classes/crm/crm_call.aw:prop_calendar_selector_help
 msgid "Omaduse Kalendrid (calendar_selector) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_project_selector
+#: classes/crm/crm_call.aw:prop_project_selector
 msgid "Omaduse Projektid (project_selector) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_project_selector_comment
+#: classes/crm/crm_call.aw:prop_project_selector_comment
 msgid "Omaduse Projektid (project_selector) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_project_selector_help
+#: classes/crm/crm_call.aw:prop_project_selector_help
 msgid "Omaduse Projektid (project_selector) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_comment_list
+#: classes/crm/crm_call.aw:prop_comment_list
 msgid "Omaduse Kommentaarid (comment_list) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_comment_list_comment
+#: classes/crm/crm_call.aw:prop_comment_list_comment
 msgid "Omaduse Kommentaarid (comment_list) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_comment_list_help
+#: classes/crm/crm_call.aw:prop_comment_list_help
 msgid "Omaduse Kommentaarid (comment_list) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_participant
+#: classes/crm/crm_call.aw:prop_participant
 msgid "Omaduse Osalejad (participant) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_participant_comment
+#: classes/crm/crm_call.aw:prop_participant_comment
 msgid "Omaduse Osalejad (participant) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_participant_help
+#: classes/crm/crm_call.aw:prop_participant_help
 msgid "Omaduse Osalejad (participant) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_company
+#: classes/crm/crm_call.aw:prop_search_contact_company
 msgid "Omaduse Organisatsioon (search_contact_company) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_company_comment
+#: classes/crm/crm_call.aw:prop_search_contact_company_comment
 msgid "Omaduse Organisatsioon (search_contact_company) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_company_help
+#: classes/crm/crm_call.aw:prop_search_contact_company_help
 msgid "Omaduse Organisatsioon (search_contact_company) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_firstname
+#: classes/crm/crm_call.aw:prop_search_contact_firstname
 msgid "Omaduse Eesnimi (search_contact_firstname) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_firstname_comment
+#: classes/crm/crm_call.aw:prop_search_contact_firstname_comment
 msgid "Omaduse Eesnimi (search_contact_firstname) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_firstname_help
+#: classes/crm/crm_call.aw:prop_search_contact_firstname_help
 msgid "Omaduse Eesnimi (search_contact_firstname) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_lastname
+#: classes/crm/crm_call.aw:prop_search_contact_lastname
 msgid "Omaduse Perenimi (search_contact_lastname) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_lastname_comment
+#: classes/crm/crm_call.aw:prop_search_contact_lastname_comment
 msgid "Omaduse Perenimi (search_contact_lastname) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_lastname_help
+#: classes/crm/crm_call.aw:prop_search_contact_lastname_help
 msgid "Omaduse Perenimi (search_contact_lastname) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_code
+#: classes/crm/crm_call.aw:prop_search_contact_code
 msgid "Omaduse Isikukood (search_contact_code) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_code_comment
+#: classes/crm/crm_call.aw:prop_search_contact_code_comment
 msgid "Omaduse Isikukood (search_contact_code) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_code_help
+#: classes/crm/crm_call.aw:prop_search_contact_code_help
 msgid "Omaduse Isikukood (search_contact_code) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_button
+#: classes/crm/crm_call.aw:prop_search_contact_button
 msgid "Omaduse Otsi (search_contact_button) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_button_comment
+#: classes/crm/crm_call.aw:prop_search_contact_button_comment
 msgid "Omaduse Otsi (search_contact_button) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_button_help
+#: classes/crm/crm_call.aw:prop_search_contact_button_help
 msgid "Omaduse Otsi (search_contact_button) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_results
+#: classes/crm/crm_call.aw:prop_search_contact_results
 msgid "Omaduse Tulemuste tabel (search_contact_results) caption"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_results_comment
+#: classes/crm/crm_call.aw:prop_search_contact_results_comment
 msgid "Omaduse Tulemuste tabel (search_contact_results) kommentaar"
 msgstr ""
 
 # classes/crm/crm_call.aw:prop_search_contact_results_help
+#: classes/crm/crm_call.aw:prop_search_contact_results_help
 msgid "Omaduse Tulemuste tabel (search_contact_results) help"
 msgstr ""
 
+#: classes/crm/crm_call.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_call.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 # classes/crm/crm_call.aw:group_recurrence
+#: classes/crm/crm_call.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
 msgstr ""
 
 # classes/crm/crm_call.aw:group_recurrence_help
+#: classes/crm/crm_call.aw:group_recurrence_help
 msgid "Grupi Kordumine (recurrence) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:group_calendars
+#: classes/crm/crm_call.aw:group_calendars
 msgid "Grupi Kalendrid (calendars) pealkiri"
 msgstr ""
 
 # classes/crm/crm_call.aw:group_calendars_help
+#: classes/crm/crm_call.aw:group_calendars_help
 msgid "Grupi Kalendrid (calendars) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:group_projects
+#: classes/crm/crm_call.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
 msgstr ""
 
 # classes/crm/crm_call.aw:group_projects_help
+#: classes/crm/crm_call.aw:group_projects_help
 msgid "Grupi Projektid (projects) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:group_comments
+#: classes/crm/crm_call.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
 msgstr ""
 
 # classes/crm/crm_call.aw:group_comments_help
+#: classes/crm/crm_call.aw:group_comments_help
 msgid "Grupi Kommentaarid (comments) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:group_participants
+#: classes/crm/crm_call.aw:group_participants
 msgid "Grupi Osalejad (participants) pealkiri"
 msgstr ""
 
 # classes/crm/crm_call.aw:group_participants_help
+#: classes/crm/crm_call.aw:group_participants_help
 msgid "Grupi Osalejad (participants) help"
 msgstr ""
 
 # classes/crm/crm_call.aw:rel_RELTYPE_RECURRENCE
+#: classes/crm/crm_call.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
 # classes/crm/crm_call.aw:rel_RELTYPE_CALLER
+#: classes/crm/crm_call.aw:rel_RELTYPE_CALLER
 msgid "Seose Helistaja (RELTYPE_CALLER) tekst"
 msgstr ""
 

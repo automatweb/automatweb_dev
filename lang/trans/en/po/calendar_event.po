@@ -10,425 +10,551 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/calendar/calendar_event.aw:class_819_help
+#: classes/applications/calendar/calendar_event.aw:class_819_help
 msgid "Klassi Kalendri sündmus help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_start1
+#: classes/applications/calendar/calendar_event.aw:prop_start1
 msgid "Omaduse Algab (start1) caption"
 msgstr "Starts"
 
 # classes/applications/calendar/calendar_event.aw:prop_start1_comment
+#: classes/applications/calendar/calendar_event.aw:prop_start1_comment
 msgid "Omaduse Algab (start1) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_start1_help
+#: classes/applications/calendar/calendar_event.aw:prop_start1_help
 msgid "Omaduse Algab (start1) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_end
+#: classes/applications/calendar/calendar_event.aw:prop_end
 msgid "Omaduse Lõpeb (end) caption"
 msgstr "Ends"
 
 # classes/applications/calendar/calendar_event.aw:prop_end_comment
+#: classes/applications/calendar/calendar_event.aw:prop_end_comment
 msgid "Omaduse Lõpeb (end) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_end_help
+#: classes/applications/calendar/calendar_event.aw:prop_end_help
 msgid "Omaduse Lõpeb (end) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_project_selector
+#: classes/applications/calendar/calendar_event.aw:prop_project_selector
 msgid "Omaduse Projektid (project_selector) caption"
 msgstr "Projects"
 
 # classes/applications/calendar/calendar_event.aw:prop_project_selector_comment
+#: classes/applications/calendar/calendar_event.aw:prop_project_selector_comment
 msgid "Omaduse Projektid (project_selector) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_project_selector_help
+#: classes/applications/calendar/calendar_event.aw:prop_project_selector_help
 msgid "Omaduse Projektid (project_selector) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_project_selector2
+#: classes/applications/calendar/calendar_event.aw:prop_project_selector2
 msgid "Omaduse Projektid 2 (project_selector2) caption"
 msgstr "Projects 2"
 
 # classes/applications/calendar/calendar_event.aw:prop_project_selector2_comment
+#: classes/applications/calendar/calendar_event.aw:prop_project_selector2_comment
 msgid "Omaduse Projektid 2 (project_selector2) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_project_selector2_help
+#: classes/applications/calendar/calendar_event.aw:prop_project_selector2_help
 msgid "Omaduse Projektid 2 (project_selector2) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox1
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox1
 msgid "Omaduse  (utextbox1) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox1_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox1_comment
 msgid "Omaduse  (utextbox1) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox1_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox1_help
 msgid "Omaduse  (utextbox1) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox2
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox2
 msgid "Omaduse  (utextbox2) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox2_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox2_comment
 msgid "Omaduse  (utextbox2) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox2_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox2_help
 msgid "Omaduse  (utextbox2) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox3
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox3
 msgid "Omaduse  (utextbox3) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox3_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox3_comment
 msgid "Omaduse  (utextbox3) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox3_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox3_help
 msgid "Omaduse  (utextbox3) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox4
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox4
 msgid "Omaduse  (utextbox4) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox4_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox4_comment
 msgid "Omaduse  (utextbox4) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox4_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox4_help
 msgid "Omaduse  (utextbox4) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox5
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox5
 msgid "Omaduse  (utextbox5) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox5_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox5_comment
 msgid "Omaduse  (utextbox5) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox5_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox5_help
 msgid "Omaduse  (utextbox5) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox6
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox6
 msgid "Omaduse  (utextbox6) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox6_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox6_comment
 msgid "Omaduse  (utextbox6) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox6_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox6_help
 msgid "Omaduse  (utextbox6) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox7
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox7
 msgid "Omaduse  (utextbox7) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox7_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox7_comment
 msgid "Omaduse  (utextbox7) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox7_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox7_help
 msgid "Omaduse  (utextbox7) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox8
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox8
 msgid "Omaduse  (utextbox8) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox8_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox8_comment
 msgid "Omaduse  (utextbox8) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox8_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox8_help
 msgid "Omaduse  (utextbox8) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox9
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox9
 msgid "Omaduse  (utextbox9) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox9_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox9_comment
 msgid "Omaduse  (utextbox9) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox9_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox9_help
 msgid "Omaduse  (utextbox9) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox10
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox10
 msgid "Omaduse  (utextbox10) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox10_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox10_comment
 msgid "Omaduse  (utextbox10) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextbox10_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextbox10_help
 msgid "Omaduse  (utextbox10) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea1
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea1
 msgid "Omaduse  (utextarea1) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea1_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea1_comment
 msgid "Omaduse  (utextarea1) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea1_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea1_help
 msgid "Omaduse  (utextarea1) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea2
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea2
 msgid "Omaduse  (utextarea2) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea2_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea2_comment
 msgid "Omaduse  (utextarea2) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea2_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea2_help
 msgid "Omaduse  (utextarea2) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea3
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea3
 msgid "Omaduse  (utextarea3) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea3_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea3_comment
 msgid "Omaduse  (utextarea3) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea3_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea3_help
 msgid "Omaduse  (utextarea3) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea4
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea4
 msgid "Omaduse  (utextarea4) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea4_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea4_comment
 msgid "Omaduse  (utextarea4) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea4_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea4_help
 msgid "Omaduse  (utextarea4) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea5
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea5
 msgid "Omaduse  (utextarea5) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea5_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea5_comment
 msgid "Omaduse  (utextarea5) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextarea5_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextarea5_help
 msgid "Omaduse  (utextarea5) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar1
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar1
 msgid "Omaduse  (utextvar1) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar1_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar1_comment
 msgid "Omaduse  (utextvar1) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar1_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar1_help
 msgid "Omaduse  (utextvar1) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar2
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar2
 msgid "Omaduse  (utextvar2) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar2_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar2_comment
 msgid "Omaduse  (utextvar2) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar2_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar2_help
 msgid "Omaduse  (utextvar2) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar3
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar3
 msgid "Omaduse  (utextvar3) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar3_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar3_comment
 msgid "Omaduse  (utextvar3) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar3_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar3_help
 msgid "Omaduse  (utextvar3) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar4
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar4
 msgid "Omaduse  (utextvar4) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar4_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar4_comment
 msgid "Omaduse  (utextvar4) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar4_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar4_help
 msgid "Omaduse  (utextvar4) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar5
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar5
 msgid "Omaduse  (utextvar5) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar5_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar5_comment
 msgid "Omaduse  (utextvar5) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar5_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar5_help
 msgid "Omaduse  (utextvar5) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar6
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar6
 msgid "Omaduse  (utextvar6) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar6_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar6_comment
 msgid "Omaduse  (utextvar6) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar6_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar6_help
 msgid "Omaduse  (utextvar6) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar7
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar7
 msgid "Omaduse  (utextvar7) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar7_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar7_comment
 msgid "Omaduse  (utextvar7) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar7_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar7_help
 msgid "Omaduse  (utextvar7) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar8
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar8
 msgid "Omaduse  (utextvar8) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar8_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar8_comment
 msgid "Omaduse  (utextvar8) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar8_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar8_help
 msgid "Omaduse  (utextvar8) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar9
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar9
 msgid "Omaduse  (utextvar9) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar9_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar9_comment
 msgid "Omaduse  (utextvar9) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar9_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar9_help
 msgid "Omaduse  (utextvar9) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar10
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar10
 msgid "Omaduse  (utextvar10) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar10_comment
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar10_comment
 msgid "Omaduse  (utextvar10) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_utextvar10_help
+#: classes/applications/calendar/calendar_event.aw:prop_utextvar10_help
 msgid "Omaduse  (utextvar10) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:prop_aliasmgr
+msgid "Omaduse Aliastehaldur (aliasmgr) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_aliasmgr_comment
+msgid "Omaduse Aliastehaldur (aliasmgr) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_aliasmgr_help
+msgid "Omaduse Aliastehaldur (aliasmgr) help"
+msgstr ""
+
 # classes/applications/calendar/calendar_event.aw:prop_uimage1
+#: classes/applications/calendar/calendar_event.aw:prop_uimage1
 msgid "Omaduse  (uimage1) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_uimage1_comment
+#: classes/applications/calendar/calendar_event.aw:prop_uimage1_comment
 msgid "Omaduse  (uimage1) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_uimage1_help
+#: classes/applications/calendar/calendar_event.aw:prop_uimage1_help
 msgid "Omaduse  (uimage1) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_seealso
+#: classes/applications/calendar/calendar_event.aw:prop_seealso
 msgid "Omaduse  (seealso) caption"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_seealso_comment
+#: classes/applications/calendar/calendar_event.aw:prop_seealso_comment
 msgid "Omaduse  (seealso) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_seealso_help
+#: classes/applications/calendar/calendar_event.aw:prop_seealso_help
 msgid "Omaduse  (seealso) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_recurrence
+#: classes/applications/calendar/calendar_event.aw:prop_recurrence
 msgid "Omaduse Kordused (recurrence) caption"
 msgstr "Recurrences"
 
 # classes/applications/calendar/calendar_event.aw:prop_recurrence_comment
+#: classes/applications/calendar/calendar_event.aw:prop_recurrence_comment
 msgid "Omaduse Kordused (recurrence) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:prop_recurrence_help
+#: classes/applications/calendar/calendar_event.aw:prop_recurrence_help
 msgid "Omaduse Kordused (recurrence) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 # classes/applications/calendar/calendar_event.aw:group_projects
+#: classes/applications/calendar/calendar_event.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
 msgstr "Projects"
 
 # classes/applications/calendar/calendar_event.aw:group_projects_help
+#: classes/applications/calendar/calendar_event.aw:group_projects_help
 msgid "Grupi Projektid (projects) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:group_recurrence
+#: classes/applications/calendar/calendar_event.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
 msgstr "Reccurence"
 
 # classes/applications/calendar/calendar_event.aw:group_recurrence_help
+#: classes/applications/calendar/calendar_event.aw:group_recurrence_help
 msgid "Grupi Kordumine (recurrence) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:group_projects22
+#: classes/applications/calendar/calendar_event.aw:group_projects22
 msgid "Grupi projects22 (projects22) pealkiri"
 msgstr "projects22"
 
 # classes/applications/calendar/calendar_event.aw:group_projects22_help
+#: classes/applications/calendar/calendar_event.aw:group_projects22_help
 msgid "Grupi projects22 (projects22) help"
 msgstr ""
 
 # classes/applications/calendar/calendar_event.aw:rel_RELTYPE_PICTURE
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_PICTURE
 msgid "Seose Pilt (RELTYPE_PICTURE) tekst"
 msgstr "Image"
 
 # classes/applications/calendar/calendar_event.aw:rel_RELTYPE_SEEALSO
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_SEEALSO
 msgid "Seose Vaata lisaks (RELTYPE_SEEALSO) tekst"
 msgstr "See also"
 
 # classes/applications/calendar/calendar_event.aw:rel_RELTYPE_RECURRENCE
+#: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr "Recurrence"

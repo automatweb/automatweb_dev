@@ -10,53 +10,78 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/messenger/mail_rule.aw:class_230_help
+#: classes/applications/messenger/mail_rule.aw:class_230_help
 msgid "Klassi Maili reegel help"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_rule_from
+#: classes/applications/messenger/mail_rule.aw:prop_rule_from
 msgid "Omaduse From (rule_from) caption"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_rule_from_comment
+#: classes/applications/messenger/mail_rule.aw:prop_rule_from_comment
 msgid "Omaduse From (rule_from) kommentaar"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_rule_from_help
+#: classes/applications/messenger/mail_rule.aw:prop_rule_from_help
 msgid "Omaduse From (rule_from) help"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_rule_subject
+#: classes/applications/messenger/mail_rule.aw:prop_rule_subject
 msgid "Omaduse Subject (rule_subject) caption"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_rule_subject_comment
+#: classes/applications/messenger/mail_rule.aw:prop_rule_subject_comment
 msgid "Omaduse Subject (rule_subject) kommentaar"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_rule_subject_help
+#: classes/applications/messenger/mail_rule.aw:prop_rule_subject_help
 msgid "Omaduse Subject (rule_subject) help"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_target_folder
+#: classes/applications/messenger/mail_rule.aw:prop_target_folder
 msgid "Omaduse Liiguta folderisse (target_folder) caption"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_target_folder_comment
+#: classes/applications/messenger/mail_rule.aw:prop_target_folder_comment
 msgid "Omaduse Liiguta folderisse (target_folder) kommentaar"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_target_folder_help
+#: classes/applications/messenger/mail_rule.aw:prop_target_folder_help
 msgid "Omaduse Liiguta folderisse (target_folder) help"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_on_server
+#: classes/applications/messenger/mail_rule.aw:prop_on_server
 msgid "Omaduse Salvesta serverisse (on_server) caption"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_on_server_comment
+#: classes/applications/messenger/mail_rule.aw:prop_on_server_comment
 msgid "Omaduse Salvesta serverisse (on_server) kommentaar"
 msgstr ""
 
 # classes/applications/messenger/mail_rule.aw:prop_on_server_help
+#: classes/applications/messenger/mail_rule.aw:prop_on_server_help
 msgid "Omaduse Salvesta serverisse (on_server) help"
+msgstr ""
+
+#: classes/applications/messenger/mail_rule.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/messenger/mail_rule.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/applications/messenger/mail_rule.aw:96
+msgid "FTP extension is required for this feature"
 msgstr ""

@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Vali fail (file) help"
 msgstr ""
 
+#: classes/contentmgmt/flash.aw:prop_file_url
+msgid "Omaduse Sisesta faili aadress (file_url) caption"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:prop_file_url_comment
+msgid "Omaduse Sisesta faili aadress (file_url) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:prop_file_url_help
+msgid "Omaduse Sisesta faili aadress (file_url) help"
+msgstr ""
+
 #: classes/contentmgmt/flash.aw:prop_width
 msgid "Omaduse Laius (width) caption"
 msgstr ""
@@ -60,5 +72,13 @@ msgstr ""
 
 #: classes/contentmgmt/flash.aw:prop_preview_help
 msgid "Omaduse Eelvaade (preview) help"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 

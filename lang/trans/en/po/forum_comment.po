@@ -10,77 +10,108 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/contentmgmt/forum/forum_comment.aw:class_208_help
+#: classes/contentmgmt/forum/forum_comment.aw:class_208_help
 msgid "Klassi Kommentaar help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_name
+#: classes/contentmgmt/forum/forum_comment.aw:prop_name
 msgid "Omaduse Pealkiri (name) caption"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_name_comment
+#: classes/contentmgmt/forum/forum_comment.aw:prop_name_comment
 msgid "Omaduse Pealkiri (name) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_name_help
+#: classes/contentmgmt/forum/forum_comment.aw:prop_name_help
 msgid "Omaduse Pealkiri (name) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_uname
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uname
 msgid "Omaduse Nimi (uname) caption"
 msgstr "Name"
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_uname_comment
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uname_comment
 msgid "Omaduse Nimi (uname) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_uname_help
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uname_help
 msgid "Omaduse Nimi (uname) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_uemail
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uemail
 msgid "Omaduse E-post (uemail) caption"
 msgstr "E-mail"
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_uemail_comment
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uemail_comment
 msgid "Omaduse E-post (uemail) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_uemail_help
+#: classes/contentmgmt/forum/forum_comment.aw:prop_uemail_help
 msgid "Omaduse E-post (uemail) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_remember
+#: classes/contentmgmt/forum/forum_comment.aw:prop_remember
 msgid "Omaduse Jäta nimi ja e-post meelde (remember) caption"
 msgstr "Remember name and e-mail"
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_remember_comment
+#: classes/contentmgmt/forum/forum_comment.aw:prop_remember_comment
 msgid "Omaduse Jäta nimi ja e-post meelde (remember) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_remember_help
+#: classes/contentmgmt/forum/forum_comment.aw:prop_remember_help
 msgid "Omaduse Jäta nimi ja e-post meelde (remember) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_commtext
+#: classes/contentmgmt/forum/forum_comment.aw:prop_commtext
 msgid "Omaduse Kommentaar (commtext) caption"
 msgstr "Comment"
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_commtext_comment
+#: classes/contentmgmt/forum/forum_comment.aw:prop_commtext_comment
 msgid "Omaduse Kommentaar (commtext) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_commtext_help
+#: classes/contentmgmt/forum/forum_comment.aw:prop_commtext_help
 msgid "Omaduse Kommentaar (commtext) help"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_ip
+#: classes/contentmgmt/forum/forum_comment.aw:prop_ip
 msgid "Omaduse IP (ip) caption"
 msgstr "IP"
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_ip_comment
+#: classes/contentmgmt/forum/forum_comment.aw:prop_ip_comment
 msgid "Omaduse IP (ip) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/forum/forum_comment.aw:prop_ip_help
+#: classes/contentmgmt/forum/forum_comment.aw:prop_ip_help
 msgid "Omaduse IP (ip) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:rel_RELTYPE_FORUM_IMAGE
+msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
 msgstr ""

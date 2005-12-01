@@ -10,94 +10,82 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/contentmgmt/server_folder.aw:class_278_help
+#: classes/contentmgmt/server_folder.aw:class_278_help
 msgid "Klassi Serveri Kataloog help"
 msgstr ""
 
 # classes/contentmgmt/server_folder.aw:prop_folder
+#: classes/contentmgmt/server_folder.aw:prop_folder
 msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) caption"
 msgstr "Server folder"
 
 # classes/contentmgmt/server_folder.aw:prop_folder_comment
+#: classes/contentmgmt/server_folder.aw:prop_folder_comment
 msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/server_folder.aw:prop_folder_help
+#: classes/contentmgmt/server_folder.aw:prop_folder_help
 msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) help"
 msgstr ""
 
-# classes/contentmgmt/server_folder.aw:prop_chf_view_file
-msgid "Omaduse  (chf_view_file) caption"
+#: classes/contentmgmt/server_folder.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
-# classes/contentmgmt/server_folder.aw:prop_chf_view_file_comment
-msgid "Omaduse  (chf_view_file) kommentaar"
+#: classes/contentmgmt/server_folder.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
-# classes/contentmgmt/server_folder.aw:prop_chf_view_file_help
-msgid "Omaduse  (chf_view_file) help"
+#: classes/contentmgmt/server_folder.aw:72
+msgid ""
+"server_folder::show_file(%s): the fid parameter does not contain a valid "
+"object id!"
+msgstr ""
+"server_folder::show_file(%s): the fid parameter does not contain a valid "
+"object id!"
+
+#: classes/contentmgmt/server_folder.aw:98
+msgid ""
+"server_folder::del_file(%s): the fid parameter does not contain a valid "
+"object id!"
+msgstr ""
+"server_folder::del_file(%s): the fid parameter does not contain a valid "
+"object id!"
+
+#: classes/contentmgmt/server_folder.aw:126
+#: classes/contentmgmt/server_folder.aw:149
+msgid ""
+"server_folder::change_file(%s): the fid parameter does not contain a valid "
+"object id!"
+msgstr ""
+"server_folder::change_file(%s): the fid parameter does not contain a valid "
+"object id!"
+
+#: classes/contentmgmt/server_folder.aw:226
+msgid ""
+"server_folder::submit_addfile(%s): the id parameter does not contain a valid "
+"object id!"
+msgstr ""
+"server_folder::submit_addfile(%s): the id parameter does not contain a valid "
+"object id!"
+
+#: classes/contentmgmt/server_folder.aw:304
+msgid "Nimi"
 msgstr ""
 
-# classes/contentmgmt/server_folder.aw:prop_chf_file
-msgid "Omaduse  (chf_file) caption"
+#: classes/contentmgmt/server_folder.aw:305
+msgid "Faili suurus"
 msgstr ""
 
-# classes/contentmgmt/server_folder.aw:prop_chf_file_comment
-msgid "Omaduse  (chf_file) kommentaar"
+#: classes/contentmgmt/server_folder.aw:306
+msgid "Loomise kuup&auml;ev"
 msgstr ""
 
-# classes/contentmgmt/server_folder.aw:prop_chf_file_help
-msgid "Omaduse  (chf_file) help"
-msgstr ""
-
-# classes/contentmgmt/server_folder.aw:prop_addf_file
-msgid "Omaduse  (addf_file) caption"
-msgstr ""
-
-# classes/contentmgmt/server_folder.aw:prop_addf_file_comment
-msgid "Omaduse  (addf_file) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/server_folder.aw:prop_addf_file_help
-msgid "Omaduse  (addf_file) help"
+#: classes/contentmgmt/server_folder.aw:307
+msgid "Muutmise kuup&auml;ev"
 msgstr ""
 
 # classes/contentmgmt/server_folder.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr " "
-
-# classes/contentmgmt/server_folder.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-
-#: classes/contentmgmt/server_folder.aw:71
-msgid ""
-"server_folder::show_file(%s): the fid parameter does not contain a valid "
-"object id!"
-msgstr ""
-"server_folder::show_file(%s): the fid parameter does not contain a valid "
-"object id!"
-
-#: classes/contentmgmt/server_folder.aw:97
-msgid ""
-"server_folder::del_file(%s): the fid parameter does not contain a valid "
-"object id!"
-msgstr ""
-"server_folder::del_file(%s): the fid parameter does not contain a valid "
-"object id!"
-
-#: classes/contentmgmt/server_folder.aw:125
-#: classes/contentmgmt/server_folder.aw:148
-msgid ""
-"server_folder::change_file(%s): the fid parameter does not contain a valid "
-"object id!"
-msgstr ""
-"server_folder::change_file(%s): the fid parameter does not contain a valid "
-"object id!"
-
-#: classes/contentmgmt/server_folder.aw:225
-msgid ""
-"server_folder::submit_addfile(%s): the id parameter does not contain a valid "
-"object id!"
-msgstr ""
-"server_folder::submit_addfile(%s): the id parameter does not contain a valid "
-"object id!"
+#~ msgid "Grupi  () pealkiri"
+#~ msgstr " "

@@ -10,13 +10,22 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/vcl/gantt_chart.aw:class_869_help
+#: classes/vcl/gantt_chart.aw:class_869_help
 msgid "Klassi Gantti diagramm help"
 msgstr ""
 
-#: classes/vcl/gantt_chart.aw:219
+#: classes/vcl/gantt_chart.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/vcl/gantt_chart.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/vcl/gantt_chart.aw:221
 msgid "Näita"
 msgstr "Show"
 
-#: classes/vcl/gantt_chart.aw:219
+#: classes/vcl/gantt_chart.aw:221
 msgid "Peida"
 msgstr "Hide"

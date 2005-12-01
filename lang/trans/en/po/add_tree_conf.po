@@ -10,19 +10,32 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/admin/add_tree_conf.aw:class_118_help
+#: classes/admin/add_tree_conf.aw:class_118_help
 msgid "Klassi Lisamise puu seaded help"
 msgstr ""
 
 # classes/admin/add_tree_conf.aw:prop_sel
+#: classes/admin/add_tree_conf.aw:prop_sel
 msgid "Omaduse  (sel) caption"
 msgstr ""
 
 # classes/admin/add_tree_conf.aw:prop_sel_comment
+#: classes/admin/add_tree_conf.aw:prop_sel_comment
 msgid "Omaduse  (sel) kommentaar"
 msgstr ""
 
 # classes/admin/add_tree_conf.aw:prop_sel_help
+#: classes/admin/add_tree_conf.aw:prop_sel_help
 msgid "Omaduse  (sel) help"
+msgstr ""
+
+# classes/admin/add_tree_conf.aw:group_general
+#: classes/admin/add_tree_conf.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr "General"
+
+#: classes/admin/add_tree_conf.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/admin/add_tree_conf.aw:68
@@ -40,7 +53,3 @@ msgstr "Usable"
 #: classes/admin/add_tree_conf.aw:86
 msgid "Aliasena lisatav"
 msgstr "Can be used as alias"
-
-# classes/admin/add_tree_conf.aw:group_general
-#~ msgid "Grupi Üldine (general) pealkiri"
-#~ msgstr "General"

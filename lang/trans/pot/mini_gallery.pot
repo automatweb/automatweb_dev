@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Ridu (rows) help"
 msgstr ""
 
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_comments
+msgid "Omaduse Pildid kommenteeritavad (comments) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_comments_comment
+msgid "Omaduse Pildid kommenteeritavad (comments) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_comments_help
+msgid "Omaduse Pildid kommenteeritavad (comments) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_style
 msgid "Omaduse Piltide stiil (style) caption"
 msgstr ""
@@ -74,6 +86,14 @@ msgstr ""
 msgid "Omaduse Uploadi ZIP fail (zip_file) help"
 msgstr ""
 
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/mini_gallery.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
@@ -90,15 +110,15 @@ msgstr ""
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:202
+#: classes/contentmgmt/gallery/mini_gallery.aw:205
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:308
+#: classes/contentmgmt/gallery/mini_gallery.aw:314
 msgid "Galerii "
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:308
+#: classes/contentmgmt/gallery/mini_gallery.aw:314
 msgid " pildid"
 msgstr ""
 

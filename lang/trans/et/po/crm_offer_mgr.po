@@ -10,63 +10,85 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/crm/crm_offer_mgr.aw:class_903_help
+#: classes/crm/crm_offer_mgr.aw:class_903_help
 msgid "Klassi Pakkumiste haldus help"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_toolbar
+#: classes/crm/crm_offer_mgr.aw:prop_offers_toolbar
 msgid "Omaduse  (offers_toolbar) caption"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_toolbar_comment
+#: classes/crm/crm_offer_mgr.aw:prop_offers_toolbar_comment
 msgid "Omaduse  (offers_toolbar) kommentaar"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_toolbar_help
+#: classes/crm/crm_offer_mgr.aw:prop_offers_toolbar_help
 msgid "Omaduse  (offers_toolbar) help"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_tree
+#: classes/crm/crm_offer_mgr.aw:prop_offers_tree
 msgid "Omaduse Puu (offers_tree) caption"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_tree_comment
+#: classes/crm/crm_offer_mgr.aw:prop_offers_tree_comment
 msgid "Omaduse Puu (offers_tree) kommentaar"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_tree_help
+#: classes/crm/crm_offer_mgr.aw:prop_offers_tree_help
 msgid "Omaduse Puu (offers_tree) help"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_list
+#: classes/crm/crm_offer_mgr.aw:prop_offers_list
 msgid "Omaduse Pakkumised (offers_list) caption"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_list_comment
+#: classes/crm/crm_offer_mgr.aw:prop_offers_list_comment
 msgid "Omaduse Pakkumised (offers_list) kommentaar"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_list_help
+#: classes/crm/crm_offer_mgr.aw:prop_offers_list_help
 msgid "Omaduse Pakkumised (offers_list) help"
 msgstr ""
 
+#: classes/crm/crm_offer_mgr.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer_mgr.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 # classes/crm/crm_offer_mgr.aw:group_offers
+#: classes/crm/crm_offer_mgr.aw:group_offers
 msgid "Grupi Pakkumised (offers) pealkiri"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:group_offers_help
+#: classes/crm/crm_offer_mgr.aw:group_offers_help
 msgid "Grupi Pakkumised (offers) help"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:rel_RELTYPE_MGR_CO
+#: classes/crm/crm_offer_mgr.aw:rel_RELTYPE_MGR_CO
 msgid "Seose haldaja (RELTYPE_MGR_CO) tekst"
 msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:rel_RELTYPE_WAREHOUSE
+#: classes/crm/crm_offer_mgr.aw:rel_RELTYPE_WAREHOUSE
 msgid "Seose ladu (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
-# classes/crm/crm_offer_mgr.aw:rel_RELTYPE_TYPICAL_COMPONENT
-msgid "Seose t&uuml;piline komponent (RELTYPE_TYPICAL_COMPONENT) tekst"
+#: classes/crm/crm_offer_mgr.aw:rel_RELTYPE_TYPICAL_COMPONENT
+msgid "Seose t&amp;uuml;piline komponent (RELTYPE_TYPICAL_COMPONENT) tekst"
 msgstr ""
 
 #: classes/crm/crm_offer_mgr.aw:93

@@ -14,6 +14,30 @@ msgstr ""
 msgid "Klassi Kohtumine help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_project
+msgid "Omaduse Projekt (project) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_project_comment
+msgid "Omaduse Projekt (project) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_project_help
+msgid "Omaduse Projekt (project) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_info_on_object
 msgid "Omaduse Osalejad (info_on_object) caption"
 msgstr ""
@@ -254,6 +278,30 @@ msgstr ""
 msgid "Omaduse Sisu (content) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_bill_no
+msgid "Omaduse Arve number (bill_no) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_bill_no_comment
+msgid "Omaduse Arve number (bill_no) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_bill_no_help
+msgid "Omaduse Arve number (bill_no) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_participants
+msgid "Omaduse Osalejad (participants) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_participants_comment
+msgid "Omaduse Osalejad (participants) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_participants_help
+msgid "Omaduse Osalejad (participants) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_summary
 msgid "Omaduse Kokkuvõte (summary) caption"
 msgstr ""
@@ -434,6 +482,26 @@ msgstr ""
 msgid "Omaduse Tulemuste tabel (search_contact_results) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_sel_resources
+msgid "Omaduse  (sel_resources) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_sel_resources_comment
+msgid "Omaduse  (sel_resources) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_sel_resources_help
+msgid "Omaduse  (sel_resources) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
 msgstr ""
@@ -482,23 +550,39 @@ msgstr ""
 msgid "Grupi Osalejad (participants) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:group_resources
+msgid "Grupi Ressursid (resources) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:group_resources_help
+msgid "Grupi Ressursid (resources) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:227
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_RESOURCE
+msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:315
+msgid "--Vali--"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:394
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:229
+#: classes/crm/crm_meeting.aw:396
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:237
+#: classes/crm/crm_meeting.aw:404
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:246
+#: classes/crm/crm_meeting.aw:413
 msgid "Salvesta"
 msgstr ""
 

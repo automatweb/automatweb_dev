@@ -10,93 +10,133 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:class_318_help
+#: classes/contentmgmt/gallery/mini_gallery.aw:class_318_help
 msgid "Klassi Minigalerii help"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_folder
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_folder
 msgid "Omaduse Piltide kataloog (folder) caption"
 msgstr "Image folder"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_folder_comment
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_folder_comment
 msgid "Omaduse Piltide kataloog (folder) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_folder_help
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_folder_help
 msgid "Omaduse Piltide kataloog (folder) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_cols
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols
 msgid "Omaduse Tulpi (cols) caption"
 msgstr "Solumns"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_comment
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_comment
 msgid "Omaduse Tulpi (cols) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_help
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_help
 msgid "Omaduse Tulpi (cols) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_rows
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows
 msgid "Omaduse Ridu (rows) caption"
 msgstr "Rows"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_comment
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_comment
 msgid "Omaduse Ridu (rows) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_help
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_help
 msgid "Omaduse Ridu (rows) help"
 msgstr ""
 
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_comments
+msgid "Omaduse Pildid kommenteeritavad (comments) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_comments_comment
+msgid "Omaduse Pildid kommenteeritavad (comments) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_comments_help
+msgid "Omaduse Pildid kommenteeritavad (comments) help"
+msgstr ""
+
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_style
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_style
 msgid "Omaduse Piltide stiil (style) caption"
 msgstr "Image style"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_style_comment
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_style_comment
 msgid "Omaduse Piltide stiil (style) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_style_help
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_style_help
 msgid "Omaduse Piltide stiil (style) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file
 msgid "Omaduse Uploadi ZIP fail (zip_file) caption"
 msgstr "Upload ZIP file"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_comment
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_comment
 msgid "Omaduse Uploadi ZIP fail (zip_file) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_help
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_help
 msgid "Omaduse Uploadi ZIP fail (zip_file) help"
 msgstr ""
 
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 # classes/contentmgmt/gallery/mini_gallery.aw:group_import
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr "Import"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:group_import_help
+#: classes/contentmgmt/gallery/mini_gallery.aw:group_import_help
 msgid "Grupi Import (import) help"
 msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
+#: classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
 msgid "Seose Piltide kataloog (RELTYPE_IMG_FOLDER) tekst"
 msgstr "image folder"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_STYLE
+#: classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_STYLE
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr "style"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:202
+#: classes/contentmgmt/gallery/mini_gallery.aw:205
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr "No add access to the selected image folder"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:308
+#: classes/contentmgmt/gallery/mini_gallery.aw:314
 msgid "Galerii "
 msgstr "Gallery"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:308
+#: classes/contentmgmt/gallery/mini_gallery.aw:314
 msgid " pildid"
 msgstr " images"

@@ -9,43 +9,67 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/releditor.aw:56 classes/vcl/releditor.aw:66
-#: classes/vcl/releditor.aw:105
+#: classes/vcl/releditor.aw:47
+msgid "Klassi ID"
+msgstr ""
+
+#: classes/vcl/releditor.aw:48
+msgid "Klass"
+msgstr ""
+
+#: classes/vcl/releditor.aw:65 classes/vcl/releditor.aw:75
+#: classes/vcl/releditor.aw:114
 msgid " "
 msgstr " "
 
-#: classes/vcl/releditor.aw:57
+#: classes/vcl/releditor.aw:66
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr "Error in the definition of %s (properties not defined!)"
 
-#: classes/vcl/releditor.aw:67
+#: classes/vcl/releditor.aw:76
 msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 msgstr "Error in the definition of %s (connection type undefined!)"
 
-#: classes/vcl/releditor.aw:106
+#: classes/vcl/releditor.aw:115
 msgid "Seda seost ei saa redigeerida!"
 msgstr "This connection can not be edited"
 
-#: classes/vcl/releditor.aw:369
+#: classes/vcl/releditor.aw:391 classes/vcl/releditor.aw:410
 msgid "Uus"
 msgstr "New"
 
-#: classes/vcl/releditor.aw:373
+#: classes/vcl/releditor.aw:399
+msgid "Uus "
+msgstr ""
+
+#: classes/vcl/releditor.aw:400
+msgid "Lisa %s"
+msgstr ""
+
+#: classes/vcl/releditor.aw:415
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/vcl/releditor.aw:389
+#: classes/vcl/releditor.aw:418
+msgid "Kustutada valitud seosed?"
+msgstr ""
+
+#: classes/vcl/releditor.aw:435
 msgid "Klooni valitud objektid"
 msgstr "Clone selected objects"
 
-#: classes/vcl/releditor.aw:455 classes/vcl/releditor.aw:574
+#: classes/vcl/releditor.aw:504 classes/vcl/releditor.aw:686
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/releditor.aw:536 classes/vcl/releditor.aw:561
+#: classes/vcl/releditor.aw:626
+msgid "Vali üks"
+msgstr ""
+
+#: classes/vcl/releditor.aw:635 classes/vcl/releditor.aw:673
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/releditor.aw:566
+#: classes/vcl/releditor.aw:678
 msgid "Nimi"
 msgstr "Name"

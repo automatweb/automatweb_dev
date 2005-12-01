@@ -13,13 +13,13 @@ $GLOBALS["TRANS"]["Omaduse Organisatsiooni nime element andmete vormis (data_for
 $GLOBALS["TRANS"]["Omaduse Allahindluse element andmete vormis (data_form_discount) caption"] = "Discount element in data form";
 $GLOBALS["TRANS"]["Omaduse Ainult aktiivsed tooted (only_active_items) caption"] = "Only active products";
 $GLOBALS["TRANS"]["Omaduse N&auml;itamiseks kasuta kontrollerit (use_controller) caption"] = "Display via controller";
-$GLOBALS["TRANS"]["Omaduse Toodete grupeerimine meilis (mail_group_by) caption"] = "In email, group products by";
-$GLOBALS["TRANS"]["Omaduse Lisa meili manusega tellimus (send_attach) caption"] = "Add order to e-mail as attachment";
 $GLOBALS["TRANS"]["Omaduse Saada tellijale e-mail (mail_to_client) caption"] = "Send mail to orderer";
 $GLOBALS["TRANS"]["Omaduse E-maili element, kuhu saata tellimus (mail_to_el) caption"] = "E-mail element, where to send order";
 $GLOBALS["TRANS"]["Omaduse Meili From aadress (mail_from_addr) caption"] = "E-mail from address";
 $GLOBALS["TRANS"]["Omaduse Meili From nimi (mail_from_name) caption"] = "E-mail from name";
 $GLOBALS["TRANS"]["Omaduse Meili sisu (kui t&uuml;hi, siis templatest) (mail_cust_content) caption"] = "E-mail content";
+$GLOBALS["TRANS"]["Omaduse Toodete grupeerimine meilis (mail_group_by) caption"] = "In email, group products by";
+$GLOBALS["TRANS"]["Omaduse Lisa meili manusega tellimus (send_attach) caption"] = "Add order to e-mail as attachment";
 $GLOBALS["TRANS"]["Omaduse J&auml;relmaksu min. summa (rent_min_amt) caption"] = "Rent minimum amount";
 $GLOBALS["TRANS"]["Omaduse Elemendi (rent_prop) caption"] = "Element";
 $GLOBALS["TRANS"]["Omaduse v&auml;&auml;rtus j&auml;relmaksuks (rent_prop_val) caption"] = "value for rent";
@@ -31,7 +31,6 @@ $GLOBALS["TRANS"]["Omaduse Vali millised elemendid tellimuse andmete vormis vast
 $GLOBALS["TRANS"]["Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele (orgfieldmap) caption"] = "Select elements that match company data fields in data form";
 $GLOBALS["TRANS"]["Grupi Meiliseaded (mail_settings) pealkiri"] = "E-mail settings";
 $GLOBALS["TRANS"]["Grupi Makseviisid (payment) pealkiri"] = "Payment types";
-$GLOBALS["TRANS"]["Grupi N&auml;itamine (appear) pealkiri"] = "Display settings";
 $GLOBALS["TRANS"]["Grupi Isukuandmete kaart (psfieldmap) pealkiri"] = "Person field map";
 $GLOBALS["TRANS"]["Grupi Firma andmete kaart (orgfieldmap) pealkiri"] = "Company field map";
 $GLOBALS["TRANS"]["Seose ladu (RELTYPE_WAREHOUSE) tekst"] = "warehouse";
@@ -39,7 +38,6 @@ $GLOBALS["TRANS"]["Seose toodete tabeli kujundus (RELTYPE_TABLE_LAYOUT) tekst"] 
 $GLOBALS["TRANS"]["Seose toote kujundus (RELTYPE_ITEM_LAYOUT) tekst"] = "product layout";
 $GLOBALS["TRANS"]["Seose ostukorv (RELTYPE_CART) tekst"] = "cart";
 $GLOBALS["TRANS"]["Seose vorm tellija andmete jaoks (RELTYPE_ORDER_FORM) tekst"] = "form for orderer data";
-$GLOBALS["TRANS"]["Seose n&auml;itamise kontroller (RELTYPE_CONTROLLER) tekst"] = "display controller";
 $GLOBALS["TRANS"]["Sessionipõhine"] = "Per session";
 $GLOBALS["TRANS"]["Kasutajapõhine"] = "Per user";
 $GLOBALS["TRANS"]["Kataloog"] = "Folder";

@@ -74,6 +74,14 @@ msgstr ""
 msgid "Omaduse  (contents) help"
 msgstr ""
 
+#: classes/crm/crm_selection.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_selection.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/crm/crm_selection.aw:group_contents
 msgid "Grupi Objektid (contents) pealkiri"
 msgstr ""
@@ -122,35 +130,35 @@ msgstr ""
 msgid "Objektide liigutamine valimisse "
 msgstr ""
 
-#: classes/crm/crm_selection.aw:461
+#: classes/crm/crm_selection.aw:442
 msgid "Liiguta"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:469
+#: classes/crm/crm_selection.aw:450
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:475
+#: classes/crm/crm_selection.aw:456
 msgid "aktiveeri"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:484
+#: classes/crm/crm_selection.aw:465
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:491
+#: classes/crm/crm_selection.aw:472
 msgid "Kustuta valitud objektid valimist"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:492
+#: classes/crm/crm_selection.aw:473
 msgid "Kustutada valitud objektid sellest valimist?"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:577
+#: classes/crm/crm_selection.aw:558
 msgid "templiit määramata"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:617
+#: classes/crm/crm_selection.aw:598
 msgid " valim tühi, või objekte pole aktiivseks tehtud"
 msgstr ""
 

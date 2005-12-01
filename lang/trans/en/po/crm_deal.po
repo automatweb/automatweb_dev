@@ -9,6 +9,122 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# classes/crm/crm_deal.aw:class_222_help
-msgid "Klassi Tehing help"
+#: classes/crm/crm_deal.aw:class_222_help
+msgid "Klassi Leping help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_project
+msgid "Omaduse Projekt (project) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_project_comment
+msgid "Omaduse Projekt (project) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_project_help
+msgid "Omaduse Projekt (project) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_task
+msgid "Omaduse &Uuml;lesanne (task) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_task_comment
+msgid "Omaduse &Uuml;lesanne (task) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_task_help
+msgid "Omaduse &Uuml;lesanne (task) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_creator
+msgid "Omaduse Koostaja (creator) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_creator_comment
+msgid "Omaduse Koostaja (creator) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_creator_help
+msgid "Omaduse Koostaja (creator) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_reader
+msgid "Omaduse Lugeja (reader) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_reader_comment
+msgid "Omaduse Lugeja (reader) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_reader_help
+msgid "Omaduse Lugeja (reader) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_reg_date
+msgid "Omaduse Reg kuup&auml;ev (reg_date) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_reg_date_comment
+msgid "Omaduse Reg kuup&auml;ev (reg_date) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_reg_date_help
+msgid "Omaduse Reg kuup&auml;ev (reg_date) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_comment
+msgid "Omaduse Kirjeldus (comment) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_comment_comment
+msgid "Omaduse Kirjeldus (comment) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_comment_help
+msgid "Omaduse Kirjeldus (comment) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_files
+msgid "Omaduse Failid (files) caption"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_files_comment
+msgid "Omaduse Failid (files) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:prop_files_help
+msgid "Omaduse Failid (files) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:group_files
+msgid "Grupi Failid (files) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:group_files_help
+msgid "Grupi Failid (files) help"
+msgstr ""
+
+#: classes/crm/crm_deal.aw:rel_RELTYPE_FILE
+msgid "Seose fail (RELTYPE_FILE) tekst"
 msgstr ""

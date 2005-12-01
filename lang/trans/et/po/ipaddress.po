@@ -10,26 +10,32 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/syslog/ipaddress.aw:class_168_help
+#: classes/syslog/ipaddress.aw:class_168_help
 msgid "Klassi IP Aadress help"
 msgstr ""
 
 # classes/syslog/ipaddress.aw:prop_addr
+#: classes/syslog/ipaddress.aw:prop_addr
 msgid "Omaduse IP Aadress (addr) caption"
 msgstr ""
 
 # classes/syslog/ipaddress.aw:prop_addr_comment
+#: classes/syslog/ipaddress.aw:prop_addr_comment
 msgid "Omaduse IP Aadress (addr) kommentaar"
 msgstr ""
 
 # classes/syslog/ipaddress.aw:prop_addr_help
+#: classes/syslog/ipaddress.aw:prop_addr_help
 msgid "Omaduse IP Aadress (addr) help"
 msgstr ""
 
 # classes/syslog/ipaddress.aw:group_general
+#: classes/syslog/ipaddress.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 # classes/syslog/ipaddress.aw:group_general_help
+#: classes/syslog/ipaddress.aw:group_general_help
 msgid "Grupi Üldine (general) help"
 msgstr ""
 

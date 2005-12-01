@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Mitu viimati muudeetud objekti exportida (last_changed_obj_count) help"
 msgstr ""
 
+#: classes/export/xml_export.aw:prop_remove_aliases
+msgid "Omaduse Eemalda aliased (remove_aliases) caption"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_remove_aliases_comment
+msgid "Omaduse Eemalda aliased (remove_aliases) kommentaar"
+msgstr ""
+
+#: classes/export/xml_export.aw:prop_remove_aliases_help
+msgid "Omaduse Eemalda aliased (remove_aliases) help"
+msgstr ""
+
 #: classes/export/xml_export.aw:prop_local_file
 msgid "Omaduse Fail salvestatakse kohalikku serverisse (local_file) caption"
 msgstr ""
@@ -170,6 +182,14 @@ msgstr ""
 msgid "Omaduse Seadete vormi v&auml;ljad (xml_struct_table) help"
 msgstr ""
 
+#: classes/export/xml_export.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/export/xml_export.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/export/xml_export.aw:group_config
 msgid "Grupi Seaded (config) pealkiri"
 msgstr ""
@@ -206,47 +226,55 @@ msgstr ""
 msgid "Seose Kaust (RELTYPE_PARENT) tekst"
 msgstr ""
 
-#: classes/export/xml_export.aw:104
+#: classes/export/xml_export.aw:105
 msgid "Teosta eksport"
 msgstr ""
 
-#: classes/export/xml_export.aw:109
+#: classes/export/xml_export.aw:110
 msgid "Ekspordi AW objektid"
 msgstr ""
 
-#: classes/export/xml_export.aw:209
+#: classes/export/xml_export.aw:128
+msgid "Faili/kausta ei saa kirjutada"
+msgstr ""
+
+#: classes/export/xml_export.aw:166
+msgid "Faili ei saa kirjutada"
+msgstr ""
+
+#: classes/export/xml_export.aw:312
 msgid "Kaust"
 msgstr ""
 
-#: classes/export/xml_export.aw:213
+#: classes/export/xml_export.aw:316
 msgid "Kaasaarvatud alamkaustad"
 msgstr ""
 
-#: classes/export/xml_export.aw:243
+#: classes/export/xml_export.aw:346
 msgid "Vali"
 msgstr ""
 
-#: classes/export/xml_export.aw:247
+#: classes/export/xml_export.aw:350
 msgid "Seadete vormi v&auml;li"
 msgstr ""
 
-#: classes/export/xml_export.aw:252
+#: classes/export/xml_export.aw:355
 msgid "jrk"
 msgstr ""
 
-#: classes/export/xml_export.aw:260
+#: classes/export/xml_export.aw:363
 msgid "XML v&auml;lja nimetus"
 msgstr ""
 
-#: classes/export/xml_export.aw:265
+#: classes/export/xml_export.aw:368
 msgid "XML v&auml;lja sisu"
 msgstr ""
 
-#: classes/export/xml_export.aw:270
+#: classes/export/xml_export.aw:373
 msgid "Parameetrid"
 msgstr ""
 
-#: classes/export/xml_export.aw:275
+#: classes/export/xml_export.aw:378
 msgid "CDATA"
 msgstr ""
 

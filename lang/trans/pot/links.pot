@@ -110,6 +110,18 @@ msgstr ""
 msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) help"
 msgstr ""
 
+#: classes/contentmgmt/links.aw:prop_ord
+msgid "Omaduse J&auml;rjekord (ord) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_ord_comment
+msgid "Omaduse J&auml;rjekord (ord) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_ord_help
+msgid "Omaduse J&auml;rjekord (ord) help"
+msgstr ""
+
 #: classes/contentmgmt/links.aw:prop_use_javascript
 msgid "Omaduse Kasuta javascripti (use_javascript) caption"
 msgstr ""
@@ -144,6 +156,18 @@ msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_newwinheight_help
 msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_js_attributes
+msgid "Omaduse Atribuudid (js_attributes) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_js_attributes_comment
+msgid "Omaduse Atribuudid (js_attributes) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_js_attributes_help
+msgid "Omaduse Atribuudid (js_attributes) help"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_newwintoolbar
@@ -242,6 +266,14 @@ msgstr ""
 msgid "Omaduse Pilt aktiivne kuni (link_image_active_until) help"
 msgstr ""
 
+#: classes/contentmgmt/links.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/links.aw:group_Javascript
 msgid "Grupi Javascript (Javascript) pealkiri"
 msgstr ""
@@ -258,23 +290,31 @@ msgstr ""
 msgid "Grupi Pilt (Pilt) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:121 classes/contentmgmt/links.aw:166
+#: classes/contentmgmt/links.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:120 classes/contentmgmt/links.aw:168
 msgid "Vali see"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:125
+#: classes/contentmgmt/links.aw:124
 msgid "Nimetus"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:130
+#: classes/contentmgmt/links.aw:129
 msgid "Asukoht"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:135
+#: classes/contentmgmt/links.aw:134
 msgid "Looja"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:140
+#: classes/contentmgmt/links.aw:139
 msgid "Viimati muudetud"
 msgstr ""
 

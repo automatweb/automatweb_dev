@@ -10,31 +10,63 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/popup_search.aw:48 classes/vcl/popup_search.aw:109
+#: classes/vcl/popup_search.aw:119 classes/vcl/popup_search.aw:248
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:88 classes/vcl/popup_search.aw:146
+#: classes/vcl/popup_search.aw:128
+msgid "Muuda"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:160
+msgid "Lisa"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:178
+msgid "Lisa uus %s"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:227 classes/vcl/popup_search.aw:292
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:95
+#: classes/vcl/popup_search.aw:234
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:102 classes/vcl/popup_search.aw:140
+#: classes/vcl/popup_search.aw:241
+msgid "Objekti id"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:281
+msgid ""
+msgstr ""
+
+#: classes/vcl/popup_search.aw:286
 msgid "OID"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:151
+#: classes/vcl/popup_search.aw:298
+msgid "Asukoht"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:304
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:155
+#: classes/vcl/popup_search.aw:308
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:162
+#: classes/vcl/popup_search.aw:315
 msgid "Vali"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:319
+msgid "<a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\\"sel\\")'>Vali</a>"
+msgstr ""
+
+#: classes/vcl/popup_search.aw:383
+msgid "Vali see"
 msgstr ""
 

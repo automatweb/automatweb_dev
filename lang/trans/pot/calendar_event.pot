@@ -362,6 +362,18 @@ msgstr ""
 msgid "Omaduse  (utextvar10) help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:prop_aliasmgr
+msgid "Omaduse Aliastehaldur (aliasmgr) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_aliasmgr_comment
+msgid "Omaduse Aliastehaldur (aliasmgr) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_aliasmgr_help
+msgid "Omaduse Aliastehaldur (aliasmgr) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_event.aw:prop_uimage1
 msgid "Omaduse  (uimage1) caption"
 msgstr ""
@@ -396,6 +408,14 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_recurrence_help
 msgid "Omaduse Kordused (recurrence) help"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:group_projects

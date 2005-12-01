@@ -10,43 +10,61 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/calendar/cal_event.aw:class_53_help
+#: classes/calendar/cal_event.aw:class_53_help
 msgid "Klassi Kalendri event help"
 msgstr ""
 
 # classes/calendar/cal_event.aw:prop_start
+#: classes/calendar/cal_event.aw:prop_start
 msgid "Omaduse Algab (start) caption"
 msgstr ""
 
 # classes/calendar/cal_event.aw:prop_start_comment
+#: classes/calendar/cal_event.aw:prop_start_comment
 msgid "Omaduse Algab (start) kommentaar"
 msgstr ""
 
 # classes/calendar/cal_event.aw:prop_start_help
+#: classes/calendar/cal_event.aw:prop_start_help
 msgid "Omaduse Algab (start) help"
 msgstr ""
 
 # classes/calendar/cal_event.aw:prop_end
+#: classes/calendar/cal_event.aw:prop_end
 msgid "Omaduse Lõpeb (end) caption"
 msgstr ""
 
 # classes/calendar/cal_event.aw:prop_end_comment
+#: classes/calendar/cal_event.aw:prop_end_comment
 msgid "Omaduse Lõpeb (end) kommentaar"
 msgstr ""
 
 # classes/calendar/cal_event.aw:prop_end_help
+#: classes/calendar/cal_event.aw:prop_end_help
 msgid "Omaduse Lõpeb (end) help"
 msgstr ""
 
 # classes/calendar/cal_event.aw:prop_repeater_obj
+#: classes/calendar/cal_event.aw:prop_repeater_obj
 msgid "Omaduse Korduste kontroller (repeater_obj) caption"
 msgstr ""
 
 # classes/calendar/cal_event.aw:prop_repeater_obj_comment
+#: classes/calendar/cal_event.aw:prop_repeater_obj_comment
 msgid "Omaduse Korduste kontroller (repeater_obj) kommentaar"
 msgstr ""
 
 # classes/calendar/cal_event.aw:prop_repeater_obj_help
+#: classes/calendar/cal_event.aw:prop_repeater_obj_help
 msgid "Omaduse Korduste kontroller (repeater_obj) help"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/calendar/cal_event.aw:42

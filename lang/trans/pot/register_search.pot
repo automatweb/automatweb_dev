@@ -98,6 +98,18 @@ msgstr ""
 msgid "Omaduse Tulemuste all on kuup&auml;ev (show_date) help"
 msgstr ""
 
+#: classes/applications/register/register_search.aw:prop_results_from_all_langs
+msgid "Omaduse Tulemused k&otilde;ikidest keeltest (results_from_all_langs) caption"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:prop_results_from_all_langs_comment
+msgid "Omaduse Tulemused k&otilde;ikidest keeltest (results_from_all_langs) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:prop_results_from_all_langs_help
+msgid "Omaduse Tulemused k&otilde;ikidest keeltest (results_from_all_langs) help"
+msgstr ""
+
 #: classes/applications/register/register_search.aw:prop_sform_frm
 msgid "Omaduse  (sform_frm) caption"
 msgstr ""
@@ -158,6 +170,14 @@ msgstr ""
 msgid "Omaduse  (search_res) help"
 msgstr ""
 
+#: classes/applications/register/register_search.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/register/register_search.aw:group_mkfrm
 msgid "Grupi Koosta otsinguvorm (mkfrm) pealkiri"
 msgstr ""
@@ -190,67 +210,67 @@ msgstr ""
 msgid "Seose kaust millest otsida (RELTYPE_SEARCH_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:134 classes/applications/register/register_search.aw:229
+#: classes/applications/register/register_search.aw:137 classes/applications/register/register_search.aw:232
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:141 classes/applications/register/register_search.aw:236
+#: classes/applications/register/register_search.aw:144 classes/applications/register/register_search.aw:239
 msgid "Element"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:147
+#: classes/applications/register/register_search.aw:150
 msgid "Otsitav"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:153
+#: classes/applications/register/register_search.aw:156
 msgid "Numbrite vahemiku otsing"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:159
+#: classes/applications/register/register_search.aw:162
 msgid "Valik olemasolevatest"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:165
+#: classes/applications/register/register_search.aw:168
 msgid "Elemendi tekst"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:182
+#: classes/applications/register/register_search.aw:185
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:242
+#: classes/applications/register/register_search.aw:245
 msgid "Tabelis"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:248
+#: classes/applications/register/register_search.aw:251
 msgid "Sorditav"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:254
+#: classes/applications/register/register_search.aw:257
 msgid "Vaikimisi sort"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:260
+#: classes/applications/register/register_search.aw:263
 msgid "Vaata tulp"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:266
+#: classes/applications/register/register_search.aw:269
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:809
+#: classes/applications/register/register_search.aw:821
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:823
+#: classes/applications/register/register_search.aw:835
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:834
+#: classes/applications/register/register_search.aw:846
 msgid "Kustutada objekt?"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:835
+#: classes/applications/register/register_search.aw:847
 msgid "Kustuta"
 msgstr ""
 

@@ -14,11 +14,39 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/core/docgen/docgen_analyzer.aw:542
+#: classes/core/docgen/docgen_analyzer.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_analyzer.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_analyzer.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/core/docgen/docgen_analyzer.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/core/docgen/docgen_analyzer.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_analyzer.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/core/docgen/docgen_analyzer.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+
+#: classes/core/docgen/docgen_analyzer.aw:552
 msgid "error: do_parse_parameters failed for string %s <br>\n"
 msgstr ""
 
-#: classes/core/docgen/docgen_analyzer.aw:1026
+#: classes/core/docgen/docgen_analyzer.aw:1036
 msgid "horrible parse error!"
 msgstr ""
 

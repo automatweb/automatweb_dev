@@ -62,6 +62,14 @@ msgstr ""
 msgid "Omaduse Vaikimisi objekt (default_object) help"
 msgstr ""
 
+#: classes/admin/object_type.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/admin/object_type.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/admin/object_type.aw:group_settings
 msgid "Grupi Klassi konfiguratsioon (settings) pealkiri"
 msgstr ""
@@ -86,35 +94,39 @@ msgstr ""
 msgid "Seose Muutuja (RELTYPE_META_ELEMENTS) tekst"
 msgstr ""
 
-#: classes/admin/object_type.aw:181
+#: classes/admin/object_type.aw:183
 msgid "-vali-"
 msgstr ""
 
-#: classes/admin/object_type.aw:182
+#: classes/admin/object_type.aw:184
 msgid "multiple select"
 msgstr ""
 
-#: classes/admin/object_type.aw:183
+#: classes/admin/object_type.aw:185
 msgid "select"
 msgstr ""
 
-#: classes/admin/object_type.aw:184
+#: classes/admin/object_type.aw:186
 msgid "checkboxid"
 msgstr ""
 
-#: classes/admin/object_type.aw:185
+#: classes/admin/object_type.aw:187
 msgid "radiobuttons"
 msgstr ""
 
-#: classes/admin/object_type.aw:201
+#: classes/admin/object_type.aw:203
 msgid "Oks"
 msgstr ""
 
-#: classes/admin/object_type.aw:209
+#: classes/admin/object_type.aw:211
 msgid "Tüüp"
 msgstr ""
 
-#: classes/admin/object_type.aw:231
+#: classes/admin/object_type.aw:228
+msgid "Vaikimisi välimus"
+msgstr ""
+
+#: classes/admin/object_type.aw:278
 msgid "K&otilde;ik"
 msgstr ""
 

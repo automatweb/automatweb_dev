@@ -254,6 +254,14 @@ msgstr ""
 msgid "Omaduse Pildid (images) help"
 msgstr ""
 
+#: classes/applications/shop/shop_packet.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_packet.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/shop/shop_packet.aw:group_packet
 msgid "Grupi Paketi sisu (packet) pealkiri"
 msgstr ""

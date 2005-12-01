@@ -230,6 +230,14 @@ msgstr ""
 msgid "Omaduse Tulemuste tabel (search_contact_results) help"
 msgstr ""
 
+#: classes/crm/crm_call.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_call.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/crm/crm_call.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
 msgstr ""

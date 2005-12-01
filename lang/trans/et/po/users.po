@@ -9,26 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/users.aw:308
+#: classes/users.aw:225
 msgid "Parool on edukalt vahetatud"
 msgstr ""
 
-#: classes/users.aw:1068
+#: classes/users.aw:775
 msgid "Vigane kasutajanimi"
 msgstr ""
 
-#: classes/users.aw:1080
+#: classes/users.aw:787
 msgid "Sellist kasutajat pole registreeritud"
 msgstr ""
 
-#: classes/users.aw:1094
+#: classes/users.aw:799
 msgid "Sellist võtit pole väljastatud"
 msgstr ""
 
-#: classes/users.aw:1109
+#: classes/users.aw:811
 msgid "See võti on juba aegunud"
 msgstr ""
 
-#: classes/users.aw:1109
+#: classes/users.aw:811
 msgid "Telli uusi v&otilde;ti"
 msgstr ""

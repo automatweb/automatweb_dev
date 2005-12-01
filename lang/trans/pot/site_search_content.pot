@@ -14,30 +14,6 @@ msgstr ""
 msgid "Klassi Saidi sisu otsing help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search
-msgid "Omaduse Otsing märksõnadest (do_keyword_search) caption"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_comment
-msgid "Omaduse Otsing märksõnadest (do_keyword_search) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_help
-msgid "Omaduse Otsing märksõnadest (do_keyword_search) help"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes
-msgid "Omaduse Klassid (keyword_search_classes) caption"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_comment
-msgid "Omaduse Klassid (keyword_search_classes) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_help
-msgid "Omaduse Klassid (keyword_search_classes) help"
-msgstr ""
-
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_search_static
 msgid "Omaduse Otsing staatilisse koopiasse (search_static) caption"
 msgstr ""
@@ -86,28 +62,88 @@ msgstr ""
 msgid "Omaduse Mitu tulemust lehel (per_page) help"
 msgstr ""
 
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_show_admin_if
+msgid "Omaduse Veebis keeruline otsimisliides (show_admin_if) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_show_admin_if_comment
+msgid "Omaduse Veebis keeruline otsimisliides (show_admin_if) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_show_admin_if_help
+msgid "Omaduse Veebis keeruline otsimisliides (show_admin_if) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_max_num_results
+msgid "Omaduse Maksimaalne tulemuste arv (max_num_results) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_max_num_results_comment
+msgid "Omaduse Maksimaalne tulemuste arv (max_num_results) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_max_num_results_help
+msgid "Omaduse Maksimaalne tulemuste arv (max_num_results) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_min_s_len
+msgid "Omaduse Minimaalne otsingus&otilde;na pikkus (min_s_len) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_min_s_len_comment
+msgid "Omaduse Minimaalne otsingus&otilde;na pikkus (min_s_len) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_min_s_len_help
+msgid "Omaduse Minimaalne otsingus&otilde;na pikkus (min_s_len) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_max_s_len
+msgid "Omaduse Maksimaalne otsingus&otilde;na pikkus (max_s_len) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_max_s_len_comment
+msgid "Omaduse Maksimaalne otsingus&otilde;na pikkus (max_s_len) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_max_s_len_help
+msgid "Omaduse Maksimaalne otsingus&otilde;na pikkus (max_s_len) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search
+msgid "Omaduse Otsing märksõnadest (do_keyword_search) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_comment
+msgid "Omaduse Otsing märksõnadest (do_keyword_search) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_help
+msgid "Omaduse Otsing märksõnadest (do_keyword_search) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes
+msgid "Omaduse Klassid (keyword_search_classes) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_comment
+msgid "Omaduse Klassid (keyword_search_classes) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_help
+msgid "Omaduse Klassid (keyword_search_classes) help"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_default_order
-msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) caption"
+msgid "Omaduse Vaikimisi sorteeritakse (default_order) caption"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_default_order_comment
-msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) kommentaar"
+msgid "Omaduse Vaikimisi sorteeritakse (default_order) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_default_order_help
-msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) help"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg
-msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) caption"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_comment
-msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_help
-msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) help"
+msgid "Omaduse Vaikimisi sorteeritakse (default_order) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt
@@ -120,6 +156,18 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt_help
 msgid "Omaduse Vaikimisi otsingu t&uuml;&uuml;p (default_search_opt) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg
+msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_comment
+msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_help
+msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:prop_reledit
@@ -158,6 +206,118 @@ msgstr ""
 msgid "Omaduse Aktiivsus (activity) help"
 msgstr ""
 
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_str
+msgid "Omaduse Pealkiri/Sisu (str) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_str_comment
+msgid "Omaduse Pealkiri/Sisu (str) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_str_help
+msgid "Omaduse Pealkiri/Sisu (str) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_s_opt
+msgid "Omaduse Leia  (s_opt) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_s_opt_comment
+msgid "Omaduse Leia  (s_opt) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_s_opt_help
+msgid "Omaduse Leia  (s_opt) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_s_limit
+msgid "Omaduse Mitu tulemust maksimaalselt (s_limit) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_s_limit_comment
+msgid "Omaduse Mitu tulemust maksimaalselt (s_limit) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_s_limit_help
+msgid "Omaduse Mitu tulemust maksimaalselt (s_limit) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_search
+msgid "Omaduse Otsi (search) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_comment
+msgid "Omaduse Otsi (search) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_help
+msgid "Omaduse Otsi (search) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_results
+msgid "Omaduse Tulemused (results) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_results_comment
+msgid "Omaduse Tulemused (results) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_results_help
+msgid "Omaduse Tulemused (results) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_c_srch_els
+msgid "Omaduse Komplekotsingu elemendid (c_srch_els) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_c_srch_els_comment
+msgid "Omaduse Komplekotsingu elemendid (c_srch_els) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_c_srch_els_help
+msgid "Omaduse Komplekotsingu elemendid (c_srch_els) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_c_search
+msgid "Omaduse Otsi (c_search) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_c_search_comment
+msgid "Omaduse Otsi (c_search) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_c_search_help
+msgid "Omaduse Otsi (c_search) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_c_results
+msgid "Omaduse Tulemused (c_results) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_c_results_comment
+msgid "Omaduse Tulemused (c_results) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:prop_c_results_help
+msgid "Omaduse Tulemused (c_results) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_activity
+msgid "Grupi Aktiivsus (activity) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_activity_help
+msgid "Grupi Aktiivsus (activity) help"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content.aw:group_static
 msgid "Grupi Staatiline otsing (static) pealkiri"
 msgstr ""
@@ -174,20 +334,36 @@ msgstr ""
 msgid "Grupi Märksõnade järgi otsing (keywords) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:group_activity
-msgid "Grupi Aktiivsus (activity) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:group_activity_help
-msgid "Grupi Aktiivsus (activity) help"
-msgstr ""
-
 #: classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups
 msgid "Grupi Otsingu grupid (searchgroups) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups_help
 msgid "Grupi Otsingu grupid (searchgroups) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_search
+msgid "Grupi Otsi (search) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_search_help
+msgid "Grupi Otsi (search) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_search_simple
+msgid "Grupi Lihtne otsing (search_simple) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_search_simple_help
+msgid "Grupi Lihtne otsing (search_simple) help"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_search_complex
+msgid "Grupi Detailotsing (search_complex) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_search_complex_help
+msgid "Grupi Detailotsing (search_complex) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_REPEATER
@@ -198,75 +374,131 @@ msgstr ""
 msgid "Seose otsingu grupp (RELTYPE_SEARCH_GRP) tekst"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:93
-msgid "&uuml;ksk&otilde;ik milline s&otilde;nadest"
+#: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_CPLX_EL_CTR
+msgid "Seose kompleksotsingu elementide kontroller (RELTYPE_CPLX_EL_CTR) tekst"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:94
-msgid "koos k&otilde;igi s&otilde;nadega"
+#: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_CPLX_RES_CTR
+msgid "Seose kompleksotsingu tulemuste kontroller (RELTYPE_CPLX_RES_CTR) tekst"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:95
+#: classes/contentmgmt/site_search/site_search_content.aw:159
+msgid "&uuml;ksk&otilde;ik milline s&otilde;nadest (v&otilde;i)"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:160
+msgid "koos k&otilde;igi s&otilde;nadega (ja)"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:161
 msgid "t&auml;pne fraas"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:99
+#: classes/contentmgmt/site_search/site_search_content.aw:162
+msgid "s&otilde;naosa"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:166
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:114
+#: classes/contentmgmt/site_search/site_search_content.aw:181
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:115 classes/contentmgmt/site_search/site_search_content.aw:198
+#: classes/contentmgmt/site_search/site_search_content.aw:182 classes/contentmgmt/site_search/site_search_content.aw:355
 msgid "Pealkirja j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:116 classes/contentmgmt/site_search/site_search_content.aw:199
+#: classes/contentmgmt/site_search/site_search_content.aw:183 classes/contentmgmt/site_search/site_search_content.aw:356
 msgid "Sisu j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:123
+#: classes/contentmgmt/site_search/site_search_content.aw:184 classes/contentmgmt/site_search/site_search_content.aw:357
+msgid "T&auml;psuse j&auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:192
 msgid "uuenda staatiline koopia"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:145
-msgid "&Uuml;ksk&otilde;ik milline s&otilde;na"
+#: classes/contentmgmt/site_search/site_search_content.aw:269
+msgid "K&otilde;ikjalt"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:146
-msgid "K&otilde;ik s&otilde;nad"
+#: classes/contentmgmt/site_search/site_search_content.aw:286
+msgid "Otsingus&otilde;na pikkus peab olema v&auml;hemalt %s t&auml;hem&auml;rki!"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:147
-msgid "Fraas"
+#: classes/contentmgmt/site_search/site_search_content.aw:292
+msgid "Otsingus&otilde;na peab olema l&uuml;hem kui %s t&auml;hem&auml;rki!"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:164
+#: classes/contentmgmt/site_search/site_search_content.aw:316
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:321
 msgid "Vaikimisi"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:170
+#: classes/contentmgmt/site_search/site_search_content.aw:327
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:175
-msgid "Vaikimisi järjestus"
+#: classes/contentmgmt/site_search/site_search_content.aw:332
+msgid "Vaikimisi sorteeritakse"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:180
+#: classes/contentmgmt/site_search/site_search_content.aw:337 classes/contentmgmt/site_search/site_search_content.aw:1839
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:195
+#: classes/contentmgmt/site_search/site_search_content.aw:352
 msgid "--vali--"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:196
+#: classes/contentmgmt/site_search/site_search_content.aw:353
 msgid "Kuupäeva järgi (uuem enne)"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:197
+#: classes/contentmgmt/site_search/site_search_content.aw:354
 msgid "Kuupäeva järgi (vanem enne)"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:1819 classes/contentmgmt/site_search/site_search_content.aw:1825
+msgid ""
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:1831
+msgid "Mitu korda sisaldab"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:1846
+msgid "Muudetud"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:1856
+msgid "Sisu"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:1999
+msgid "t&auml;psuse"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:2000
+msgid "kuup&auml;eva alusel"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:2001
+msgid "pealkirja alusel"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:2292
+msgid "Lihtne otsing"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:2297
+msgid "Detailotsing"
 msgstr ""
 

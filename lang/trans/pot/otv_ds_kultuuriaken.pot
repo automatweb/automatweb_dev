@@ -51,15 +51,27 @@ msgid "Omaduse Viimane import (last_import_text) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text
-msgid "Omaduse J&auml;rgmine import (next_import_text) caption"
+msgid "Omaduse J&auml;rgmine automaatne import (next_import_text) caption"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text_comment
-msgid "Omaduse J&auml;rgmine import (next_import_text) kommentaar"
+msgid "Omaduse J&auml;rgmine automaatne import (next_import_text) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_next_import_text_help
-msgid "Omaduse J&auml;rgmine import (next_import_text) help"
+msgid "Omaduse J&auml;rgmine automaatne import (next_import_text) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_all
+msgid "Omaduse Impordi k&otilde;iik s&uuml;ndmused (import_events_all) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_all_comment
+msgid "Omaduse Impordi k&otilde;iik s&uuml;ndmused (import_events_all) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events_all_help
+msgid "Omaduse Impordi k&otilde;iik s&uuml;ndmused (import_events_all) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_import_events
@@ -134,6 +146,14 @@ msgstr ""
 msgid "Omaduse Parool (auto_import_passwd) help"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_config
 msgid "Grupi Seaded (config) pealkiri"
 msgstr ""
@@ -159,7 +179,7 @@ msgid "Grupi Automaatne import (recurrence_config) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_EVENT_FORM
-msgid "Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"
+msgid "Seose S&amp;uuml;ndmuse vorm (RELTYPE_EVENT_FORM) tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:rel_RELTYPE_PARENT
@@ -170,27 +190,43 @@ msgstr ""
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:124
-msgid "Impordi s&uuml;ndmused"
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:117
+msgid "Alates viimasest impordist"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:128
-msgid "Impordi Kultuuriakna s&uuml;ndmused"
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:120
+msgid "K&otilde;ik s&uuml;ndmused"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:197
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:123
+msgid "Impordi s&uuml;ndmused (%s)"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:127
+msgid "Impordi Kultuuriakna s&uuml;ndmused (%s)"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:198
 msgid "Parent"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:202
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:203
 msgid "XML v&auml;lja sisu"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:229
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:230
 msgid "XML v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:233
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:234
 msgid "Vormi v&auml;li"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:361
+msgid "You don't have view access to import object!"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:371
+msgid "You don't have view access to eventform object!"
 msgstr ""
 

@@ -50,6 +50,14 @@ msgstr ""
 msgid "Omaduse Korduste kontroller (repeater_obj) help"
 msgstr ""
 
+#: classes/calendar/cal_event.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/calendar/cal_event.aw:42
 msgid "korduste kontroller"
 msgstr ""

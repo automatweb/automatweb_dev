@@ -11,7 +11,6 @@ $GLOBALS["TRANS"]["Omaduse Jõustumise kuupäev (j_time) caption"] = "Activation d
 $GLOBALS["TRANS"]["Omaduse Avaldamise kuupäev (act_date) caption"] = "Publication date";
 $GLOBALS["TRANS"]["Grupi Seadistused (settings) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Grupi Ajad (dates) pealkiri"] = "Times";
-$GLOBALS["TRANS"]["Seose Märksõna (RELTYPE_KEYWORD) tekst"] = "Keyword";
 $GLOBALS["TRANS"]["fail puudub"] = "file missing";
 $GLOBALS["TRANS"]["Need either id or parent"] = "Need either id or parent";
 ?>

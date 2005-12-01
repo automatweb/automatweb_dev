@@ -86,3 +86,15 @@ msgstr ""
 msgid "Omaduse IP (ip) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_comment.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_comment.aw:rel_RELTYPE_FORUM_IMAGE
+msgid "Seose Pilt (RELTYPE_FORUM_IMAGE) tekst"
+msgstr ""
+

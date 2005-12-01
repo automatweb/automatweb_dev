@@ -74,11 +74,39 @@ msgstr ""
 msgid "Omaduse  (t_site_id) help"
 msgstr ""
 
-#: classes/admin/config/config_aw_document_template.aw:44
+#: classes/admin/config/config_aw_document_template.aw:prop_source_html
+msgid "Omaduse L&auml;htekood (source_html) caption"
+msgstr ""
+
+#: classes/admin/config/config_aw_document_template.aw:prop_source_html_comment
+msgid "Omaduse L&auml;htekood (source_html) kommentaar"
+msgstr ""
+
+#: classes/admin/config/config_aw_document_template.aw:prop_source_html_help
+msgid "Omaduse L&auml;htekood (source_html) help"
+msgstr ""
+
+#: classes/admin/config/config_aw_document_template.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/admin/config/config_aw_document_template.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/admin/config/config_aw_document_template.aw:group_grp_source
+msgid "Grupi Lähtekood (grp_source) pealkiri"
+msgstr ""
+
+#: classes/admin/config/config_aw_document_template.aw:group_grp_source_help
+msgid "Grupi Lähtekood (grp_source) help"
+msgstr ""
+
+#: classes/admin/config/config_aw_document_template.aw:50
 msgid "Lead"
 msgstr ""
 
-#: classes/admin/config/config_aw_document_template.aw:45
+#: classes/admin/config/config_aw_document_template.aw:51
 msgid "Vaatamine"
 msgstr ""
 

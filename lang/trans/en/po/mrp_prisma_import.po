@@ -10,7 +10,16 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/mrp/mrp_prisma_import.aw:class_878_help
+#: classes/mrp/mrp_prisma_import.aw:class_878_help
 msgid "Klassi Prisma import help"
+msgstr ""
+
+#: classes/mrp/mrp_prisma_import.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_prisma_import.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/mrp/mrp_prisma_import.aw:104

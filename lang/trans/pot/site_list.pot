@@ -14,19 +14,19 @@ msgstr ""
 msgid "AW Saitide list"
 msgstr ""
 
-#: classes/install/site_list.aw:33 classes/install/site_list.aw:221 classes/install/site_list.aw:510
+#: classes/install/site_list.aw:33 classes/install/site_list.aw:231 classes/install/site_list.aw:520
 msgid "ID"
 msgstr ""
 
-#: classes/install/site_list.aw:39 classes/install/site_list.aw:228 classes/install/site_list.aw:517
+#: classes/install/site_list.aw:39 classes/install/site_list.aw:238 classes/install/site_list.aw:527
 msgid "Nimi"
 msgstr ""
 
-#: classes/install/site_list.aw:44 classes/install/site_list.aw:525
+#: classes/install/site_list.aw:44 classes/install/site_list.aw:535
 msgid "URL"
 msgstr ""
 
-#: classes/install/site_list.aw:49 classes/install/site_list.aw:154 classes/install/site_list.aw:533
+#: classes/install/site_list.aw:49 classes/install/site_list.aw:164 classes/install/site_list.aw:543
 msgid "Server"
 msgstr ""
 
@@ -42,71 +42,79 @@ msgstr ""
 msgid "Viimane uuendus"
 msgstr ""
 
-#: classes/install/site_list.aw:72 classes/install/site_list.aw:240 classes/install/site_list.aw:248
+#: classes/install/site_list.aw:72
+msgid "Sünkroniseeri andmebaas"
+msgstr ""
+
+#: classes/install/site_list.aw:76 classes/install/site_list.aw:250 classes/install/site_list.aw:258
 msgid "Muuda"
 msgstr ""
 
-#: classes/install/site_list.aw:107
+#: classes/install/site_list.aw:105
+msgid "Sünkroniseeri"
+msgstr ""
+
+#: classes/install/site_list.aw:117
 msgid "Jah"
 msgstr ""
 
-#: classes/install/site_list.aw:107
+#: classes/install/site_list.aw:117
 msgid "Ei"
 msgstr ""
 
-#: classes/install/site_list.aw:118
+#: classes/install/site_list.aw:128
 msgid "Kokku %s saiti<br />\n"
 msgstr ""
 
-#: classes/install/site_list.aw:119
+#: classes/install/site_list.aw:129
 msgid "Kasutusel %s saiti <br />\n"
 msgstr ""
 
-#: classes/install/site_list.aw:120
+#: classes/install/site_list.aw:130
 msgid "Serverite kaupa: <br />\n"
 msgstr ""
 
-#: classes/install/site_list.aw:122
+#: classes/install/site_list.aw:132
 msgid "Koodiversioonide kaupa: <br />\n"
 msgstr ""
 
-#: classes/install/site_list.aw:159 classes/install/site_list.aw:189
+#: classes/install/site_list.aw:169 classes/install/site_list.aw:199
 msgid "Mitu"
 msgstr ""
 
-#: classes/install/site_list.aw:184
+#: classes/install/site_list.aw:194
 msgid "Koodiversioon"
 msgstr ""
 
-#: classes/install/site_list.aw:213 classes/install/site_list.aw:613
+#: classes/install/site_list.aw:223 classes/install/site_list.aw:623
 msgid "AW Serverite list"
 msgstr ""
 
-#: classes/install/site_list.aw:234
+#: classes/install/site_list.aw:244
 msgid "IP aadress"
 msgstr ""
 
-#: classes/install/site_list.aw:541
+#: classes/install/site_list.aw:551
 msgid "Used?"
 msgstr ""
 
-#: classes/install/site_list.aw:549
+#: classes/install/site_list.aw:559
 msgid "Code branch"
 msgstr ""
 
-#: classes/install/site_list.aw:556
+#: classes/install/site_list.aw:566
 msgid "Basedir"
 msgstr ""
 
-#: classes/install/site_list.aw:563
+#: classes/install/site_list.aw:573
 msgid "Updater"
 msgstr ""
 
-#: classes/install/site_list.aw:570
+#: classes/install/site_list.aw:580
 msgid "Last update"
 msgstr ""
 
-#: classes/install/site_list.aw:614
+#: classes/install/site_list.aw:624
 msgid " / Muuda serverit "
 msgstr ""
 

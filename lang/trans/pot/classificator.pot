@@ -38,6 +38,14 @@ msgstr ""
 msgid "Omaduse Klassid millele kehtib (clids) help"
 msgstr ""
 
+#: classes/cfg/classificator.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/cfg/classificator.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/cfg/classificator.aw:rel_RELTYPE_FOLDER
 msgid "Seose hallatav kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""

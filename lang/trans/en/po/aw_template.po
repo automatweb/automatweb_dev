@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:47 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,16 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/aw_template.aw:191
+#: classes/aw_template.aw:192
 msgid "Template '%s/%s' not found"
 msgstr "Template '%s/%s' not found"
 
-#: classes/aw_template.aw:222 classes/aw_template.aw:247
+#: classes/aw_template.aw:223 classes/aw_template.aw:248
 msgid "Template '%s' not found"
 msgstr "Template '%s' not found"
 
-#: classes/aw_template.aw:277
+#: classes/aw_template.aw:278
 msgid "Template '%s' not found in admin or site folder"
 msgstr "Template '%s' not found in admin or site folder"
-

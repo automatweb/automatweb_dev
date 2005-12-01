@@ -17,13 +17,10 @@ $GLOBALS["TRANS"]["Omaduse Mis m&auml;rgiga on tulbad eraldatud? (import_sep) ca
 $GLOBALS["TRANS"]["Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) caption"] = "Show in folders";
 $GLOBALS["TRANS"]["Omaduse P&auml;is (header) caption"] = "Header";
 $GLOBALS["TRANS"]["Omaduse Jalus (footer) caption"] = "Footer";
-$GLOBALS["TRANS"]["Grupi M&auml;&auml;rangud (settings) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Grupi Tabel (layout) pealkiri"] = "Table";
 $GLOBALS["TRANS"]["Grupi Stiilid (styles) pealkiri"] = "Styles";
 $GLOBALS["TRANS"]["Grupi Tabeli sisu (aliases) pealkiri"] = "Table contents";
-$GLOBALS["TRANS"]["Grupi P&auml;is ja jalus (hfoot) pealkiri"] = "Header and footer";
 $GLOBALS["TRANS"]["Grupi Import (import) pealkiri"] = "Import";
 $GLOBALS["TRANS"]["Grupi Eelvaade (preview) pealkiri"] = "Preview";
 $GLOBALS["TRANS"]["Seose celli stiilide kataloog (RELTYPE_CELLSTYLE_FOLDER) tekst"] = "cell style folder";
-$GLOBALS["TRANS"]["Seose näita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"] = "display in this folder";
 ?>

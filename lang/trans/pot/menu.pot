@@ -62,112 +62,40 @@ msgstr ""
 msgid "Omaduse Jrk (jrk) help"
 msgstr ""
 
-#: classes/menu.aw:prop_target
-msgid "Omaduse Uues aknas (target) caption"
+#: classes/menu.aw:prop_pmethod_properties
+msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_target_comment
-msgid "Omaduse Uues aknas (target) kommentaar"
+#: classes/menu.aw:prop_pmethod_properties_comment
+msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_target_help
-msgid "Omaduse Uues aknas (target) help"
+#: classes/menu.aw:prop_pmethod_properties_help
+msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) help"
 msgstr ""
 
-#: classes/menu.aw:prop_users_only
-msgid "Omaduse Ainult sisselogitud kasutajatele (users_only) caption"
+#: classes/menu.aw:prop_admin_feature
+msgid "Omaduse Vali programm (admin_feature) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_users_only_comment
-msgid "Omaduse Ainult sisselogitud kasutajatele (users_only) kommentaar"
+#: classes/menu.aw:prop_admin_feature_comment
+msgid "Omaduse Vali programm (admin_feature) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_users_only_help
-msgid "Omaduse Ainult sisselogitud kasutajatele (users_only) help"
+#: classes/menu.aw:prop_admin_feature_help
+msgid "Omaduse Vali programm (admin_feature) help"
 msgstr ""
 
-#: classes/menu.aw:prop_color
-msgid "Omaduse Men&uuml;&uuml; v&auml;rv (color) caption"
+#: classes/menu.aw:prop_type
+msgid "Omaduse Menüü tüüp (type) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_color_comment
-msgid "Omaduse Men&uuml;&uuml; v&auml;rv (color) kommentaar"
+#: classes/menu.aw:prop_type_comment
+msgid "Omaduse Menüü tüüp (type) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_color_help
-msgid "Omaduse Men&uuml;&uuml; v&auml;rv (color) help"
-msgstr ""
-
-#: classes/menu.aw:prop_color2
-msgid "Omaduse Menüü värv 2 (color2) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_color2_comment
-msgid "Omaduse Menüü värv 2 (color2) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_color2_help
-msgid "Omaduse Menüü värv 2 (color2) help"
-msgstr ""
-
-#: classes/menu.aw:prop_icon
-msgid "Omaduse Ikoon (icon) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_icon_comment
-msgid "Omaduse Ikoon (icon) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_icon_help
-msgid "Omaduse Ikoon (icon) help"
-msgstr ""
-
-#: classes/menu.aw:prop_sel_icon
-msgid "Omaduse Vali ikoon (sel_icon) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_sel_icon_comment
-msgid "Omaduse Vali ikoon (sel_icon) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_sel_icon_help
-msgid "Omaduse Vali ikoon (sel_icon) help"
-msgstr ""
-
-#: classes/menu.aw:prop_sort_by_name
-msgid "Omaduse Sorteeri nime järgi (sort_by_name) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_sort_by_name_comment
-msgid "Omaduse Sorteeri nime järgi (sort_by_name) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_sort_by_name_help
-msgid "Omaduse Sorteeri nime järgi (sort_by_name) help"
-msgstr ""
-
-#: classes/menu.aw:prop_aip_filename
-msgid "Omaduse Failinimi (aip_filename) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_aip_filename_comment
-msgid "Omaduse Failinimi (aip_filename) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_aip_filename_help
-msgid "Omaduse Failinimi (aip_filename) help"
-msgstr ""
-
-#: classes/menu.aw:prop_periodic
-msgid "Omaduse Perioodiline (periodic) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_periodic_comment
-msgid "Omaduse Perioodiline (periodic) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_periodic_help
-msgid "Omaduse Perioodiline (periodic) help"
+#: classes/menu.aw:prop_type_help
+msgid "Omaduse Menüü tüüp (type) help"
 msgstr ""
 
 #: classes/menu.aw:prop_objtbl_conf
@@ -206,6 +134,222 @@ msgstr ""
 msgid "Omaduse Konfiguratsioonivorm (cfgmanager) help"
 msgstr ""
 
+#: classes/menu.aw:prop_no_export
+msgid "Omaduse &Auml;ra n&auml;ita ekspordis (no_export) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_no_export_comment
+msgid "Omaduse &Auml;ra n&auml;ita ekspordis (no_export) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_no_export_help
+msgid "Omaduse &Auml;ra n&auml;ita ekspordis (no_export) help"
+msgstr ""
+
+#: classes/menu.aw:prop_export
+msgid "Omaduse Eksport (export) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_export_comment
+msgid "Omaduse Eksport (export) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_export_help
+msgid "Omaduse Eksport (export) help"
+msgstr ""
+
+#: classes/menu.aw:prop_users_only
+msgid "Omaduse Ainult sisselogitud kasutajatele (users_only) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_users_only_comment
+msgid "Omaduse Ainult sisselogitud kasutajatele (users_only) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_users_only_help
+msgid "Omaduse Ainult sisselogitud kasutajatele (users_only) help"
+msgstr ""
+
+#: classes/menu.aw:prop_link_behaviour
+msgid "Omaduse Lingi iseloom (link_behaviour) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_link_behaviour_comment
+msgid "Omaduse Lingi iseloom (link_behaviour) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_link_behaviour_help
+msgid "Omaduse Lingi iseloom (link_behaviour) help"
+msgstr ""
+
+#: classes/menu.aw:prop_target
+msgid "Omaduse Uues aknas (target) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_target_comment
+msgid "Omaduse Uues aknas (target) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_target_help
+msgid "Omaduse Uues aknas (target) help"
+msgstr ""
+
+#: classes/menu.aw:prop_clickable
+msgid "Omaduse Klikitav (clickable) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_clickable_comment
+msgid "Omaduse Klikitav (clickable) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_clickable_help
+msgid "Omaduse Klikitav (clickable) help"
+msgstr ""
+
+#: classes/menu.aw:prop_link
+msgid "Omaduse Menüü link (link) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_link_comment
+msgid "Omaduse Menüü link (link) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_link_help
+msgid "Omaduse Menüü link (link) help"
+msgstr ""
+
+#: classes/menu.aw:prop_show_restrictions
+msgid "Omaduse Näitamine (show_restrictions) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_show_restrictions_comment
+msgid "Omaduse Näitamine (show_restrictions) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_show_restrictions_help
+msgid "Omaduse Näitamine (show_restrictions) help"
+msgstr ""
+
+#: classes/menu.aw:prop_frontpage
+msgid "Omaduse Esilehel (frontpage) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_frontpage_comment
+msgid "Omaduse Esilehel (frontpage) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_frontpage_help
+msgid "Omaduse Esilehel (frontpage) help"
+msgstr ""
+
+#: classes/menu.aw:prop_mid
+msgid "Omaduse Paremal (mid) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_mid_comment
+msgid "Omaduse Paremal (mid) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_mid_help
+msgid "Omaduse Paremal (mid) help"
+msgstr ""
+
+#: classes/menu.aw:prop_show_conditions
+msgid "Omaduse Tingimused (show_conditions) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_show_conditions_comment
+msgid "Omaduse Tingimused (show_conditions) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_show_conditions_help
+msgid "Omaduse Tingimused (show_conditions) help"
+msgstr ""
+
+#: classes/menu.aw:prop_hide_noact
+msgid "Omaduse Peida ära, kui selle kausta all aktiivseid dokumente ei ole (hide_noact) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_hide_noact_comment
+msgid "Omaduse Peida ära, kui selle kausta all aktiivseid dokumente ei ole (hide_noact) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_hide_noact_help
+msgid "Omaduse Peida ära, kui selle kausta all aktiivseid dokumente ei ole (hide_noact) help"
+msgstr ""
+
+#: classes/menu.aw:prop_no_menus
+msgid "Omaduse Ilma menüüdeta (no_menus) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_no_menus_comment
+msgid "Omaduse Ilma menüüdeta (no_menus) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_no_menus_help
+msgid "Omaduse Ilma menüüdeta (no_menus) help"
+msgstr ""
+
+#: classes/menu.aw:prop_panes
+msgid "Omaduse Paanid (panes) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_panes_comment
+msgid "Omaduse Paanid (panes) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_panes_help
+msgid "Omaduse Paanid (panes) help"
+msgstr ""
+
+#: classes/menu.aw:prop_left_pane
+msgid "Omaduse Vasak paan (left_pane) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_left_pane_comment
+msgid "Omaduse Vasak paan (left_pane) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_left_pane_help
+msgid "Omaduse Vasak paan (left_pane) help"
+msgstr ""
+
+#: classes/menu.aw:prop_right_pane
+msgid "Omaduse Parem paan (right_pane) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_right_pane_comment
+msgid "Omaduse Parem paan (right_pane) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_right_pane_help
+msgid "Omaduse Parem paan (right_pane) help"
+msgstr ""
+
+#: classes/menu.aw:prop_width
+msgid "Omaduse Laius (width) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_width_comment
+msgid "Omaduse Laius (width) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_width_help
+msgid "Omaduse Laius (width) help"
+msgstr ""
+
+#: classes/menu.aw:prop_ndocs
+msgid "Omaduse Mitu viimast dokumenti (ndocs) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_ndocs_comment
+msgid "Omaduse Mitu viimast dokumenti (ndocs) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_ndocs_help
+msgid "Omaduse Mitu viimast dokumenti (ndocs) help"
+msgstr ""
+
 #: classes/menu.aw:prop_show_lead
 msgid "Omaduse Näita ainult leadi (show_lead) caption"
 msgstr ""
@@ -216,6 +360,102 @@ msgstr ""
 
 #: classes/menu.aw:prop_show_lead_help
 msgid "Omaduse Näita ainult leadi (show_lead) help"
+msgstr ""
+
+#: classes/menu.aw:prop_sort_by_name
+msgid "Omaduse Sorteeri nime järgi (sort_by_name) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_sort_by_name_comment
+msgid "Omaduse Sorteeri nime järgi (sort_by_name) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_sort_by_name_help
+msgid "Omaduse Sorteeri nime järgi (sort_by_name) help"
+msgstr ""
+
+#: classes/menu.aw:prop_sorter
+msgid "Omaduse Dokumentide järjestamine (sorter) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_sorter_comment
+msgid "Omaduse Dokumentide järjestamine (sorter) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_sorter_help
+msgid "Omaduse Dokumentide järjestamine (sorter) help"
+msgstr ""
+
+#: classes/menu.aw:prop_ip
+msgid "Omaduse  (ip) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_ip_comment
+msgid "Omaduse  (ip) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_ip_help
+msgid "Omaduse  (ip) help"
+msgstr ""
+
+#: classes/menu.aw:prop_color
+msgid "Omaduse Menüü värv (color) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_color_comment
+msgid "Omaduse Menüü värv (color) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_color_help
+msgid "Omaduse Menüü värv (color) help"
+msgstr ""
+
+#: classes/menu.aw:prop_color2
+msgid "Omaduse Menüü värv 2 (color2) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_color2_comment
+msgid "Omaduse Menüü värv 2 (color2) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_color2_help
+msgid "Omaduse Menüü värv 2 (color2) help"
+msgstr ""
+
+#: classes/menu.aw:prop_icon
+msgid "Omaduse Ikoon (icon) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_icon_comment
+msgid "Omaduse Ikoon (icon) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_icon_help
+msgid "Omaduse Ikoon (icon) help"
+msgstr ""
+
+#: classes/menu.aw:prop_sel_icon
+msgid "Omaduse Vali ikoon (sel_icon) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_sel_icon_comment
+msgid "Omaduse Vali ikoon (sel_icon) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_sel_icon_help
+msgid "Omaduse Vali ikoon (sel_icon) help"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_dir
+msgid "Omaduse Template set (tpl_dir) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_dir_comment
+msgid "Omaduse Template set (tpl_dir) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_dir_help
+msgid "Omaduse Template set (tpl_dir) help"
 msgstr ""
 
 #: classes/menu.aw:prop_show_lead_template
@@ -230,64 +470,40 @@ msgstr ""
 msgid "Omaduse Leadi template (show_lead_template) help"
 msgstr ""
 
-#: classes/menu.aw:prop_get_content_from
-msgid "Omaduse Sisu objektist (get_content_from) caption"
+#: classes/menu.aw:prop_tpl_view
+msgid "Omaduse Template dokumendi näitamiseks (pikk) (tpl_view) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_get_content_from_comment
-msgid "Omaduse Sisu objektist (get_content_from) kommentaar"
+#: classes/menu.aw:prop_tpl_view_comment
+msgid "Omaduse Template dokumendi näitamiseks (pikk) (tpl_view) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_get_content_from_help
-msgid "Omaduse Sisu objektist (get_content_from) help"
+#: classes/menu.aw:prop_tpl_view_help
+msgid "Omaduse Template dokumendi näitamiseks (pikk) (tpl_view) help"
 msgstr ""
 
-#: classes/menu.aw:prop_grkeywords
-msgid "Omaduse AW Märksõnad (grkeywords) caption"
+#: classes/menu.aw:prop_tpl_lead
+msgid "Omaduse Template dokumendi näitamiseks (lühike) (tpl_lead) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_grkeywords_comment
-msgid "Omaduse AW Märksõnad (grkeywords) kommentaar"
+#: classes/menu.aw:prop_tpl_lead_comment
+msgid "Omaduse Template dokumendi näitamiseks (lühike) (tpl_lead) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_grkeywords_help
-msgid "Omaduse AW Märksõnad (grkeywords) help"
+#: classes/menu.aw:prop_tpl_lead_help
+msgid "Omaduse Template dokumendi näitamiseks (lühike) (tpl_lead) help"
 msgstr ""
 
-#: classes/menu.aw:prop_keywords
-msgid "Omaduse META keywords (keywords) caption"
+#: classes/menu.aw:prop_show_layout
+msgid "Omaduse Kasuta n&auml;itamiseks layouti (show_layout) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_keywords_comment
-msgid "Omaduse META keywords (keywords) kommentaar"
+#: classes/menu.aw:prop_show_layout_comment
+msgid "Omaduse Kasuta n&auml;itamiseks layouti (show_layout) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_keywords_help
-msgid "Omaduse META keywords (keywords) help"
-msgstr ""
-
-#: classes/menu.aw:prop_description
-msgid "Omaduse META description (description) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_description_comment
-msgid "Omaduse META description (description) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_description_help
-msgid "Omaduse META description (description) help"
-msgstr ""
-
-#: classes/menu.aw:prop_sections
-msgid "Omaduse Vennad (sections) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_sections_comment
-msgid "Omaduse Vennad (sections) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_sections_help
-msgid "Omaduse Vennad (sections) help"
+#: classes/menu.aw:prop_show_layout_help
+msgid "Omaduse Kasuta n&auml;itamiseks layouti (show_layout) help"
 msgstr ""
 
 #: classes/menu.aw:prop_images_from_menu
@@ -350,52 +566,100 @@ msgstr ""
 msgid "Omaduse Menüü pildid (menu_images) help"
 msgstr ""
 
-#: classes/menu.aw:prop_sss
-msgid "Omaduse Menüüd, mille alt viimased dokumendid võetakse (sss) caption"
+#: classes/menu.aw:prop_submenus_from_obj
+msgid "Omaduse Alammen&uuml;&uuml;d objektist (submenus_from_obj) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_sss_comment
-msgid "Omaduse Menüüd, mille alt viimased dokumendid võetakse (sss) kommentaar"
+#: classes/menu.aw:prop_submenus_from_obj_comment
+msgid "Omaduse Alammen&uuml;&uuml;d objektist (submenus_from_obj) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_sss_help
-msgid "Omaduse Menüüd, mille alt viimased dokumendid võetakse (sss) help"
+#: classes/menu.aw:prop_submenus_from_obj_help
+msgid "Omaduse Alammen&uuml;&uuml;d objektist (submenus_from_obj) help"
 msgstr ""
 
-#: classes/menu.aw:prop_pers
-msgid "Omaduse Perioodid, mille alt dokumendid võetakse (pers) caption"
+#: classes/menu.aw:prop_aip_filename
+msgid "Omaduse Failinimi (aip_filename) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_pers_comment
-msgid "Omaduse Perioodid, mille alt dokumendid võetakse (pers) kommentaar"
+#: classes/menu.aw:prop_aip_filename_comment
+msgid "Omaduse Failinimi (aip_filename) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_pers_help
-msgid "Omaduse Perioodid, mille alt dokumendid võetakse (pers) help"
+#: classes/menu.aw:prop_aip_filename_help
+msgid "Omaduse Failinimi (aip_filename) help"
 msgstr ""
 
-#: classes/menu.aw:prop_all_pers
-msgid "Omaduse K&otilde;ikide perioodide alt (all_pers) caption"
+#: classes/menu.aw:prop_get_content_from
+msgid "Omaduse Sisu objektist (get_content_from) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_all_pers_comment
-msgid "Omaduse K&otilde;ikide perioodide alt (all_pers) kommentaar"
+#: classes/menu.aw:prop_get_content_from_comment
+msgid "Omaduse Sisu objektist (get_content_from) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_all_pers_help
-msgid "Omaduse K&otilde;ikide perioodide alt (all_pers) help"
+#: classes/menu.aw:prop_get_content_from_help
+msgid "Omaduse Sisu objektist (get_content_from) help"
 msgstr ""
 
-#: classes/menu.aw:prop_docs_per_period
-msgid "Omaduse Dokumente perioodist (docs_per_period) caption"
+#: classes/menu.aw:prop_submenus_from_menu
+msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_docs_per_period_comment
-msgid "Omaduse Dokumente perioodist (docs_per_period) kommentaar"
+#: classes/menu.aw:prop_submenus_from_menu_comment
+msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_docs_per_period_help
-msgid "Omaduse Dokumente perioodist (docs_per_period) help"
+#: classes/menu.aw:prop_submenus_from_menu_help
+msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) help"
+msgstr ""
+
+#: classes/menu.aw:prop_show_object_tree
+msgid "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja (show_object_tree) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_show_object_tree_comment
+msgid "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja (show_object_tree) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_show_object_tree_help
+msgid "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja (show_object_tree) help"
+msgstr ""
+
+#: classes/menu.aw:prop_has_ctx
+msgid "Omaduse Kuva alamkaustu kontekstip&otilde;hiselt (has_ctx) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_has_ctx_comment
+msgid "Omaduse Kuva alamkaustu kontekstip&otilde;hiselt (has_ctx) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_has_ctx_help
+msgid "Omaduse Kuva alamkaustu kontekstip&otilde;hiselt (has_ctx) help"
+msgstr ""
+
+#: classes/menu.aw:prop_default_ctx
+msgid "Omaduse Default kontekst (default_ctx) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_default_ctx_comment
+msgid "Omaduse Default kontekst (default_ctx) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_default_ctx_help
+msgid "Omaduse Default kontekst (default_ctx) help"
+msgstr ""
+
+#: classes/menu.aw:prop_ctx
+msgid "Omaduse Kontekstid (ctx) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_ctx_comment
+msgid "Omaduse Kontekstid (ctx) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_ctx_help
+msgid "Omaduse Kontekstid (ctx) help"
 msgstr ""
 
 #: classes/menu.aw:prop_sa_manager
@@ -434,256 +698,88 @@ msgstr ""
 msgid "Omaduse Järjekorranumber (vaata lisaks) (seealso_order) help"
 msgstr ""
 
-#: classes/menu.aw:prop_link
-msgid "Omaduse Menüü link (link) caption"
+#: classes/menu.aw:prop_sections
+msgid "Omaduse Vennad (sections) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_link_comment
-msgid "Omaduse Menüü link (link) kommentaar"
+#: classes/menu.aw:prop_sections_comment
+msgid "Omaduse Vennad (sections) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_link_help
-msgid "Omaduse Menüü link (link) help"
+#: classes/menu.aw:prop_sections_help
+msgid "Omaduse Vennad (sections) help"
 msgstr ""
 
-#: classes/menu.aw:prop_type
-msgid "Omaduse Menüü tüüp (type) caption"
+#: classes/menu.aw:prop_sss
+msgid "Omaduse Menüüd, mille alt viimased dokumendid võetakse (sss) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_type_comment
-msgid "Omaduse Menüü tüüp (type) kommentaar"
+#: classes/menu.aw:prop_sss_comment
+msgid "Omaduse Menüüd, mille alt viimased dokumendid võetakse (sss) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_type_help
-msgid "Omaduse Menüü tüüp (type) help"
+#: classes/menu.aw:prop_sss_help
+msgid "Omaduse Menüüd, mille alt viimased dokumendid võetakse (sss) help"
 msgstr ""
 
-#: classes/menu.aw:prop_admin_feature
-msgid "Omaduse Vali programm (admin_feature) caption"
+#: classes/menu.aw:prop_seealso_docs_t
+msgid "Omaduse Vaatalisaks dokumendid (seealso_docs_t) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_admin_feature_comment
-msgid "Omaduse Vali programm (admin_feature) kommentaar"
+#: classes/menu.aw:prop_seealso_docs_t_comment
+msgid "Omaduse Vaatalisaks dokumendid (seealso_docs_t) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_admin_feature_help
-msgid "Omaduse Vali programm (admin_feature) help"
+#: classes/menu.aw:prop_seealso_docs_t_help
+msgid "Omaduse Vaatalisaks dokumendid (seealso_docs_t) help"
 msgstr ""
 
-#: classes/menu.aw:prop_pmethod_properties
-msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) caption"
+#: classes/menu.aw:prop_periodic
+msgid "Omaduse Perioodiline (periodic) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_pmethod_properties_comment
-msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) kommentaar"
+#: classes/menu.aw:prop_periodic_comment
+msgid "Omaduse Perioodiline (periodic) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_pmethod_properties_help
-msgid "Omaduse Avaliku meetodi seaded (pmethod_properties) help"
+#: classes/menu.aw:prop_periodic_help
+msgid "Omaduse Perioodiline (periodic) help"
 msgstr ""
 
-#: classes/menu.aw:prop_clickable
-msgid "Omaduse Klikitav (clickable) caption"
+#: classes/menu.aw:prop_pers
+msgid "Omaduse Perioodid, mille alt dokumendid võetakse (pers) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_clickable_comment
-msgid "Omaduse Klikitav (clickable) kommentaar"
+#: classes/menu.aw:prop_pers_comment
+msgid "Omaduse Perioodid, mille alt dokumendid võetakse (pers) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_clickable_help
-msgid "Omaduse Klikitav (clickable) help"
+#: classes/menu.aw:prop_pers_help
+msgid "Omaduse Perioodid, mille alt dokumendid võetakse (pers) help"
 msgstr ""
 
-#: classes/menu.aw:prop_no_export
-msgid "Omaduse &Auml;ra n&auml;ita ekspordis (no_export) caption"
+#: classes/menu.aw:prop_all_pers
+msgid "Omaduse K&otilde;ikide perioodide alt (all_pers) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_no_export_comment
-msgid "Omaduse &Auml;ra n&auml;ita ekspordis (no_export) kommentaar"
+#: classes/menu.aw:prop_all_pers_comment
+msgid "Omaduse K&otilde;ikide perioodide alt (all_pers) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_no_export_help
-msgid "Omaduse &Auml;ra n&auml;ita ekspordis (no_export) help"
+#: classes/menu.aw:prop_all_pers_help
+msgid "Omaduse K&otilde;ikide perioodide alt (all_pers) help"
 msgstr ""
 
-#: classes/menu.aw:prop_no_menus
-msgid "Omaduse Ilma menüüdeta (no_menus) caption"
+#: classes/menu.aw:prop_docs_per_period
+msgid "Omaduse Dokumente perioodist (docs_per_period) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_no_menus_comment
-msgid "Omaduse Ilma menüüdeta (no_menus) kommentaar"
+#: classes/menu.aw:prop_docs_per_period_comment
+msgid "Omaduse Dokumente perioodist (docs_per_period) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_no_menus_help
-msgid "Omaduse Ilma menüüdeta (no_menus) help"
-msgstr ""
-
-#: classes/menu.aw:prop_mid
-msgid "Omaduse Paremal (mid) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_mid_comment
-msgid "Omaduse Paremal (mid) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_mid_help
-msgid "Omaduse Paremal (mid) help"
-msgstr ""
-
-#: classes/menu.aw:prop_width
-msgid "Omaduse Laius (width) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_width_comment
-msgid "Omaduse Laius (width) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_width_help
-msgid "Omaduse Laius (width) help"
-msgstr ""
-
-#: classes/menu.aw:prop_submenus_from_obj
-msgid "Omaduse Alammen&uuml;&uuml;d objektist (submenus_from_obj) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_submenus_from_obj_comment
-msgid "Omaduse Alammen&uuml;&uuml;d objektist (submenus_from_obj) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_submenus_from_obj_help
-msgid "Omaduse Alammen&uuml;&uuml;d objektist (submenus_from_obj) help"
-msgstr ""
-
-#: classes/menu.aw:prop_submenus_from_menu
-msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_submenus_from_menu_comment
-msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_submenus_from_menu_help
-msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) help"
-msgstr ""
-
-#: classes/menu.aw:prop_show_layout
-msgid "Omaduse Kasuta n&auml;itamiseks layouti (show_layout) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_show_layout_comment
-msgid "Omaduse Kasuta n&auml;itamiseks layouti (show_layout) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_show_layout_help
-msgid "Omaduse Kasuta n&auml;itamiseks layouti (show_layout) help"
-msgstr ""
-
-#: classes/menu.aw:prop_show_object_tree
-msgid "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja (show_object_tree) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_show_object_tree_comment
-msgid "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja (show_object_tree) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_show_object_tree_help
-msgid "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja (show_object_tree) help"
-msgstr ""
-
-#: classes/menu.aw:prop_panes
-msgid "Omaduse Paanid (panes) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_panes_comment
-msgid "Omaduse Paanid (panes) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_panes_help
-msgid "Omaduse Paanid (panes) help"
-msgstr ""
-
-#: classes/menu.aw:prop_left_pane
-msgid "Omaduse Vasak paan (left_pane) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_left_pane_comment
-msgid "Omaduse Vasak paan (left_pane) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_left_pane_help
-msgid "Omaduse Vasak paan (left_pane) help"
-msgstr ""
-
-#: classes/menu.aw:prop_right_pane
-msgid "Omaduse Parem paan (right_pane) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_right_pane_comment
-msgid "Omaduse Parem paan (right_pane) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_right_pane_help
-msgid "Omaduse Parem paan (right_pane) help"
-msgstr ""
-
-#: classes/menu.aw:prop_tpl_dir
-msgid "Omaduse Template set  (tpl_dir) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_tpl_dir_comment
-msgid "Omaduse Template set  (tpl_dir) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_tpl_dir_help
-msgid "Omaduse Template set  (tpl_dir) help"
-msgstr ""
-
-#: classes/menu.aw:prop_tpl_view
-msgid "Omaduse Template dokumendi näitamiseks (pikk) (tpl_view) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_tpl_view_comment
-msgid "Omaduse Template dokumendi näitamiseks (pikk) (tpl_view) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_tpl_view_help
-msgid "Omaduse Template dokumendi näitamiseks (pikk) (tpl_view) help"
-msgstr ""
-
-#: classes/menu.aw:prop_tpl_lead
-msgid "Omaduse Template dokumendi näitamiseks (lühike) (tpl_lead) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_tpl_lead_comment
-msgid "Omaduse Template dokumendi näitamiseks (lühike) (tpl_lead) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_tpl_lead_help
-msgid "Omaduse Template dokumendi näitamiseks (lühike) (tpl_lead) help"
-msgstr ""
-
-#: classes/menu.aw:prop_hide_noact
-msgid "Omaduse Peida ära, kui dokumente pole (hide_noact) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_hide_noact_comment
-msgid "Omaduse Peida ära, kui dokumente pole (hide_noact) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_hide_noact_help
-msgid "Omaduse Peida ära, kui dokumente pole (hide_noact) help"
-msgstr ""
-
-#: classes/menu.aw:prop_ndocs
-msgid "Omaduse Mitu viimast dokumenti (ndocs) caption"
-msgstr ""
-
-#: classes/menu.aw:prop_ndocs_comment
-msgid "Omaduse Mitu viimast dokumenti (ndocs) kommentaar"
-msgstr ""
-
-#: classes/menu.aw:prop_ndocs_help
-msgid "Omaduse Mitu viimast dokumenti (ndocs) help"
+#: classes/menu.aw:prop_docs_per_period_help
+msgid "Omaduse Dokumente perioodist (docs_per_period) help"
 msgstr ""
 
 #: classes/menu.aw:prop_show_periods
@@ -710,104 +806,168 @@ msgstr ""
 msgid "Omaduse Mitu viimast perioodi (show_period_count) help"
 msgstr ""
 
-#: classes/menu.aw:prop_export
-msgid "Omaduse Eksport (export) caption"
+#: classes/menu.aw:prop_grkeywords
+msgid "Omaduse AW Märksõnad (grkeywords) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_export_comment
-msgid "Omaduse Eksport (export) kommentaar"
+#: classes/menu.aw:prop_grkeywords_comment
+msgid "Omaduse AW Märksõnad (grkeywords) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_export_help
-msgid "Omaduse Eksport (export) help"
+#: classes/menu.aw:prop_grkeywords_help
+msgid "Omaduse AW Märksõnad (grkeywords) help"
 msgstr ""
 
-#: classes/menu.aw:prop_sorter
-msgid "Omaduse Dokumentide järjestamine (sorter) caption"
+#: classes/menu.aw:prop_keywords
+msgid "Omaduse META keywords (keywords) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_sorter_comment
-msgid "Omaduse Dokumentide järjestamine (sorter) kommentaar"
+#: classes/menu.aw:prop_keywords_comment
+msgid "Omaduse META keywords (keywords) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_sorter_help
-msgid "Omaduse Dokumentide järjestamine (sorter) help"
+#: classes/menu.aw:prop_keywords_help
+msgid "Omaduse META keywords (keywords) help"
 msgstr ""
 
-#: classes/menu.aw:prop_ip
-msgid "Omaduse  (ip) caption"
+#: classes/menu.aw:prop_description
+msgid "Omaduse META description (description) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_ip_comment
-msgid "Omaduse  (ip) kommentaar"
+#: classes/menu.aw:prop_description_comment
+msgid "Omaduse META description (description) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_ip_help
-msgid "Omaduse  (ip) help"
+#: classes/menu.aw:prop_description_help
+msgid "Omaduse META description (description) help"
 msgstr ""
 
-#: classes/menu.aw:prop_frontpage
-msgid "Omaduse Esilehel (frontpage) caption"
+#: classes/menu.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:prop_frontpage_comment
-msgid "Omaduse Esilehel (frontpage) kommentaar"
+#: classes/menu.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
-#: classes/menu.aw:prop_frontpage_help
-msgid "Omaduse Esilehel (frontpage) help"
+#: classes/menu.aw:group_general_sub
+msgid "Grupi Üldine (general_sub) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:prop_seealso_docs_t
-msgid "Omaduse Vaatalisaks dokumendid (seealso_docs_t) caption"
+#: classes/menu.aw:group_general_sub_help
+msgid "Grupi Üldine (general_sub) help"
 msgstr ""
 
-#: classes/menu.aw:prop_seealso_docs_t_comment
-msgid "Omaduse Vaatalisaks dokumendid (seealso_docs_t) kommentaar"
+#: classes/menu.aw:group_advanced_settings
+msgid "Grupi Süvaseaded (advanced_settings) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:prop_seealso_docs_t_help
-msgid "Omaduse Vaatalisaks dokumendid (seealso_docs_t) help"
+#: classes/menu.aw:group_advanced_settings_help
+msgid "Grupi Süvaseaded (advanced_settings) help"
 msgstr ""
 
-#: classes/menu.aw:prop_has_ctx
-msgid "Omaduse Kuva alamkaustu kontekstip&otilde;hiselt (has_ctx) caption"
+#: classes/menu.aw:group_import_export
+msgid "Grupi Eksport (import_export) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:prop_has_ctx_comment
-msgid "Omaduse Kuva alamkaustu kontekstip&otilde;hiselt (has_ctx) kommentaar"
+#: classes/menu.aw:group_import_export_help
+msgid "Grupi Eksport (import_export) help"
 msgstr ""
 
-#: classes/menu.aw:prop_has_ctx_help
-msgid "Omaduse Kuva alamkaustu kontekstip&otilde;hiselt (has_ctx) help"
+#: classes/menu.aw:group_users
+msgid "Grupi Kasutajad (users) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:prop_ctx
-msgid "Omaduse Kontekstid (ctx) caption"
+#: classes/menu.aw:group_users_help
+msgid "Grupi Kasutajad (users) help"
 msgstr ""
 
-#: classes/menu.aw:prop_ctx_comment
-msgid "Omaduse Kontekstid (ctx) kommentaar"
+#: classes/menu.aw:group_show
+msgid "Grupi Näitamine (show) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:prop_ctx_help
-msgid "Omaduse Kontekstid (ctx) help"
+#: classes/menu.aw:group_show_help
+msgid "Grupi Näitamine (show) help"
 msgstr ""
 
-#: classes/menu.aw:group_advanced_p
-msgid "Grupi Spetsiaal (advanced_p) pealkiri"
+#: classes/menu.aw:group_show_sub
+msgid "Grupi Näitamine (show_sub) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:group_advanced_p_help
-msgid "Grupi Spetsiaal (advanced_p) help"
+#: classes/menu.aw:group_show_sub_help
+msgid "Grupi Näitamine (show_sub) help"
 msgstr ""
 
-#: classes/menu.aw:group_advanced
-msgid "Grupi Spetsiaal (advanced) pealkiri"
+#: classes/menu.aw:group_doc_show
+msgid "Grupi Dokumentide kuvamine (doc_show) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:group_advanced_help
-msgid "Grupi Spetsiaal (advanced) help"
+#: classes/menu.aw:group_doc_show_help
+msgid "Grupi Dokumentide kuvamine (doc_show) help"
+msgstr ""
+
+#: classes/menu.aw:group_doc_ord
+msgid "Grupi Dokumentide järjestamine (doc_ord) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_doc_ord_help
+msgid "Grupi Dokumentide järjestamine (doc_ord) help"
+msgstr ""
+
+#: classes/menu.aw:group_ip
+msgid "Grupi IP piirangud (ip) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_ip_help
+msgid "Grupi IP piirangud (ip) help"
+msgstr ""
+
+#: classes/menu.aw:group_look
+msgid "Grupi Välimus (look) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_look_help
+msgid "Grupi Välimus (look) help"
+msgstr ""
+
+#: classes/menu.aw:group_look_sub
+msgid "Grupi Välimus (look_sub) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_look_sub_help
+msgid "Grupi Välimus (look_sub) help"
+msgstr ""
+
+#: classes/menu.aw:group_templates
+msgid "Grupi Kujunduspõhjad (templates) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_templates_help
+msgid "Grupi Kujunduspõhjad (templates) help"
+msgstr ""
+
+#: classes/menu.aw:group_presentation
+msgid "Grupi Pildid (presentation) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_presentation_help
+msgid "Grupi Pildid (presentation) help"
+msgstr ""
+
+#: classes/menu.aw:group_menus
+msgid "Grupi Sisu seaded (menus) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_menus_help
+msgid "Grupi Sisu seaded (menus) help"
+msgstr ""
+
+#: classes/menu.aw:group_menus_sub
+msgid "Grupi Sisu seaded (menus_sub) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_menus_sub_help
+msgid "Grupi Sisu seaded (menus_sub) help"
 msgstr ""
 
 #: classes/menu.aw:group_advanced_ctx
@@ -816,22 +976,6 @@ msgstr ""
 
 #: classes/menu.aw:group_advanced_ctx_help
 msgid "Grupi Kontekst (advanced_ctx) help"
-msgstr ""
-
-#: classes/menu.aw:group_keywords
-msgid "Grupi Võtmesõnad (keywords) pealkiri"
-msgstr ""
-
-#: classes/menu.aw:group_keywords_help
-msgid "Grupi Võtmesõnad (keywords) help"
-msgstr ""
-
-#: classes/menu.aw:group_menus
-msgid "Grupi Kaustad (menus) pealkiri"
-msgstr ""
-
-#: classes/menu.aw:group_menus_help
-msgid "Grupi Kaustad (menus) help"
 msgstr ""
 
 #: classes/menu.aw:group_relations
@@ -866,52 +1010,36 @@ msgstr ""
 msgid "Grupi Vaata lisaks dokumendid (seealso_docs) help"
 msgstr ""
 
-#: classes/menu.aw:group_presentation
-msgid "Grupi Pildid (presentation) pealkiri"
+#: classes/menu.aw:group_periods
+msgid "Grupi Perioodid (periods) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:group_presentation_help
-msgid "Grupi Pildid (presentation) help"
+#: classes/menu.aw:group_periods_help
+msgid "Grupi Perioodid (periods) help"
 msgstr ""
 
-#: classes/menu.aw:group_show
-msgid "Grupi Näitamine (show) pealkiri"
+#: classes/menu.aw:group_keywords
+msgid "Grupi Võtmesõnad (keywords) pealkiri"
 msgstr ""
 
-#: classes/menu.aw:group_show_help
-msgid "Grupi Näitamine (show) help"
-msgstr ""
-
-#: classes/menu.aw:group_import_export
-msgid "Grupi Eksport (import_export) pealkiri"
-msgstr ""
-
-#: classes/menu.aw:group_import_export_help
-msgid "Grupi Eksport (import_export) help"
-msgstr ""
-
-#: classes/menu.aw:group_ip
-msgid "Grupi IP Aadressid (ip) pealkiri"
-msgstr ""
-
-#: classes/menu.aw:group_ip_help
-msgid "Grupi IP Aadressid (ip) help"
+#: classes/menu.aw:group_keywords_help
+msgid "Grupi Võtmesõnad (keywords) help"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_PICTURES_MENU
-msgid "Seose võta pildid menüült (RELTYPE_PICTURES_MENU) tekst"
+msgid "Seose v&otilde;ta pildid men&uuml;&uuml;lt (RELTYPE_PICTURES_MENU) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SHOW_SUBFOLDERS_MENU
-msgid "Seose võta alamkasutad menüült (RELTYPE_SHOW_SUBFOLDERS_MENU) tekst"
+msgid "Seose v&otilde;ta alamkasutad men&uuml;&uuml;lt (RELTYPE_SHOW_SUBFOLDERS_MENU) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SHOW_AS_CALENDAR
-msgid "Seose võta objekte kalendrist (RELTYPE_SHOW_AS_CALENDAR) tekst"
+msgid "Seose v&otilde;ta objekte kalendrist (RELTYPE_SHOW_AS_CALENDAR) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SHOW_AS_LAYOUT
-msgid "Seose kasuta saidi näitamisel layouti (RELTYPE_SHOW_AS_LAYOUT) tekst"
+msgid "Seose kasuta saidi n&auml;itamisel layouti (RELTYPE_SHOW_AS_LAYOUT) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SEEALSO
@@ -919,7 +1047,7 @@ msgid "Seose vaata lisaks (RELTYPE_SEEALSO) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_IP
-msgid "Seose IP aadress ligipääsu piiramiseks (RELTYPE_IP) tekst"
+msgid "Seose IP aadress ligip&auml;&auml;su piiramiseks (RELTYPE_IP) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_ACL_GROUP
@@ -931,11 +1059,11 @@ msgid "Seose objektide nimekiri (RELTYPE_OBJ_TREE) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_DOCS_FROM_MENU
-msgid "Seose v&otilde;ta dokumente men&uuml;&uuml; alt (RELTYPE_DOCS_FROM_MENU) tekst"
+msgid "Seose v&amp;otilde;ta dokumente men&amp;uuml;&amp;uuml; alt (RELTYPE_DOCS_FROM_MENU) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_PERIOD
-msgid "Seose v&otilde;ta dokumente perioodi alt (RELTYPE_PERIOD) tekst"
+msgid "Seose v&amp;otilde;ta dokumente perioodi alt (RELTYPE_PERIOD) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_OBJ_TABLE_CONF
@@ -955,7 +1083,7 @@ msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_SUBMENUS
-msgid "Seose alammen&uuml;&uuml;d objektist (RELTYPE_SUBMENUS) tekst"
+msgid "Seose alammen&amp;uuml;&amp;uuml;d objektist (RELTYPE_SUBMENUS) tekst"
 msgstr ""
 
 #: classes/menu.aw:rel_RELTYPE_CONTENT_FROM
@@ -978,183 +1106,187 @@ msgstr ""
 msgid "Seose Kontekst (RELTYPE_CTX) tekst"
 msgstr ""
 
-#: classes/menu.aw:373
+#: classes/menu.aw:426
 msgid "Vasak"
 msgstr ""
 
-#: classes/menu.aw:374
+#: classes/menu.aw:427
 msgid "Parem"
 msgstr ""
 
-#: classes/menu.aw:397
+#: classes/menu.aw:497
 msgid "kasuta parenti valikut"
 msgstr ""
 
-#: classes/menu.aw:433
+#: classes/menu.aw:533
 msgid "(no icon set)"
 msgstr ""
 
-#: classes/menu.aw:463
+#: classes/menu.aw:563
 msgid "Väli"
 msgstr ""
 
-#: classes/menu.aw:467
+#: classes/menu.aw:567
 msgid "Järjekord"
 msgstr ""
 
-#: classes/menu.aw:472 classes/menu.aw:525
+#: classes/menu.aw:572 classes/menu.aw:625
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:473 classes/menu.aw:526
+#: classes/menu.aw:573 classes/menu.aw:626
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:474 classes/menu.aw:527
+#: classes/menu.aw:574 classes/menu.aw:627
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:475 classes/menu.aw:528
+#: classes/menu.aw:575 classes/menu.aw:628
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:476 classes/menu.aw:529
+#: classes/menu.aw:576 classes/menu.aw:629
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:477
+#: classes/menu.aw:577
 msgid "Nime j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:481 classes/menu.aw:535
+#: classes/menu.aw:581 classes/menu.aw:635
 msgid "Suurem (uuem) enne"
 msgstr ""
 
-#: classes/menu.aw:482 classes/menu.aw:536
+#: classes/menu.aw:582 classes/menu.aw:636
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/menu.aw:544
+#: classes/menu.aw:644
 msgid "OID"
 msgstr ""
 
-#: classes/menu.aw:551 classes/menu.aw:1218 classes/menu.aw:1270
+#: classes/menu.aw:651 classes/menu.aw:1404 classes/menu.aw:1456
 msgid "Nimi"
 msgstr ""
 
-#: classes/menu.aw:571
+#: classes/menu.aw:671
 msgid "IP Nimi"
 msgstr ""
 
-#: classes/menu.aw:577
+#: classes/menu.aw:677
 msgid "IP Aadress"
 msgstr ""
 
-#: classes/menu.aw:583
+#: classes/menu.aw:683
 msgid "Lubatud"
 msgstr ""
 
-#: classes/menu.aw:589
+#: classes/menu.aw:689
 msgid "Keelatud"
 msgstr ""
 
-#: classes/menu.aw:652
+#: classes/menu.aw:771
 msgid "Vali pilt.."
 msgstr ""
 
-#: classes/menu.aw:671
+#: classes/menu.aw:790
 msgid "Muuda"
 msgstr ""
 
-#: classes/menu.aw:705
+#: classes/menu.aw:827
 msgid "Pildi number"
 msgstr ""
 
-#: classes/menu.aw:711
+#: classes/menu.aw:833
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/menu.aw:717
+#: classes/menu.aw:839
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/menu.aw:723
+#: classes/menu.aw:845
 msgid "Vali Pilt"
 msgstr ""
 
-#: classes/menu.aw:729
+#: classes/menu.aw:851
+msgid "Uploadi Pilt"
+msgstr ""
+
+#: classes/menu.aw:857
 msgid "Kustuta"
 msgstr ""
 
-#: classes/menu.aw:744
+#: classes/menu.aw:872
 msgid "Vali menüüd"
 msgstr ""
 
-#: classes/menu.aw:754
+#: classes/menu.aw:882
 msgid "Märgi kõik menüüd aktiivseks"
 msgstr ""
 
-#: classes/menu.aw:761
+#: classes/menu.aw:889
 msgid "Ekspordi ikoonid"
 msgstr ""
 
-#: classes/menu.aw:766
+#: classes/menu.aw:894
 msgid "Ekspordi"
 msgstr ""
 
-#: classes/menu.aw:785
+#: classes/menu.aw:913
 msgid "Vali meetod"
 msgstr ""
 
-#: classes/menu.aw:798
+#: classes/menu.aw:926
 msgid "Vali meetodiga seotud objekt"
 msgstr ""
 
-#: classes/menu.aw:808
+#: classes/menu.aw:936
 msgid "Vali meetodiga seotud grupp"
 msgstr ""
 
-#: classes/menu.aw:817
+#: classes/menu.aw:945
 msgid "Meetod viitab adminni"
 msgstr ""
 
-#: classes/menu.aw:825
+#: classes/menu.aw:953
 msgid "Meetodi väljundi kuvamisel näidatakse menüüsid"
 msgstr ""
 
-#: classes/menu.aw:972
+#: classes/menu.aw:1141
 msgid "Selline alias on juba olemas!"
 msgstr ""
 
-#: classes/menu.aw:1005
+#: classes/menu.aw:1174
 msgid "-- vali --"
 msgstr ""
 
-#: classes/menu.aw:1076 classes/menu.aw:1096
+#: classes/menu.aw:1262 classes/menu.aw:1282
 msgid "--vali--"
 msgstr ""
 
-#: classes/menu.aw:1210 classes/menu.aw:1262
+#: classes/menu.aw:1396 classes/menu.aw:1448
 msgid "ID"
 msgstr ""
 
-#: classes/menu.aw:1223
+#: classes/menu.aw:1409
 msgid "kustuta"
 msgstr ""
 
-#: classes/menu.aw:1275
+#: classes/menu.aw:1461
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/menu.aw:1423
+#: classes/menu.aw:1609
 msgid "Dokument"
 msgstr ""
 
-#: classes/menu.aw:1430
+#: classes/menu.aw:1616
 msgid "ka alammen&uuml;&uuml;de juures"
 msgstr ""
 
-#: classes/menu.aw:1436
+#: classes/menu.aw:1622
 msgid "Vali asukoht"
 msgstr ""
 

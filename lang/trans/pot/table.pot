@@ -10,11 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/table.aw:115
-msgid "no such table %s (tables.class->load_table)!"
-msgstr ""
-
-#: classes/table.aw:2472
-msgid "table->import: No file uploaded!"
+#: classes/vcl/table.aw:2035
+msgid "K&otilde;ik"
 msgstr ""
 

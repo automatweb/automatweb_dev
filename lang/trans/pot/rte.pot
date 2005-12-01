@@ -14,6 +14,14 @@ msgstr ""
 msgid "Klassi Rich Text Editor help"
 msgstr ""
 
+#: classes/vcl/rte.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/vcl/rte.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/vcl/rte.aw:85
 msgid "Bold"
 msgstr ""

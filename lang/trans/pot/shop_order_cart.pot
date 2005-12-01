@@ -74,6 +74,14 @@ msgstr ""
 msgid "Omaduse Tellimise kontroller (finish_handler) help"
 msgstr ""
 
+#: classes/applications/shop/shop_order_cart.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_cart.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_PROD_LAYOUT
 msgid "Seose toote kujundus (RELTYPE_PROD_LAYOUT) tekst"
 msgstr ""
@@ -82,15 +90,15 @@ msgstr ""
 msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:149 classes/applications/shop/shop_order_cart.aw:911 classes/applications/shop/shop_order_cart.aw:1149
+#: classes/applications/shop/shop_order_cart.aw:156 classes/applications/shop/shop_order_cart.aw:928 classes/applications/shop/shop_order_cart.aw:1184
 msgid "shop_order_cart::show(): no product layout set for cart (%s) "
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:362
+#: classes/applications/shop/shop_order_cart.aw:369
 msgid "%s peab tellima %s kaupa, hetkel kokku %s!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:700
+#: classes/applications/shop/shop_order_cart.aw:716
 msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 msgstr ""
 

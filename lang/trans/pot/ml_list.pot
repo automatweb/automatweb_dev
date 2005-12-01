@@ -458,6 +458,14 @@ msgstr ""
 msgid "Omaduse Millal j&auml;rgmine eksport toimub (expf_next_time) help"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:group_membership
 msgid "Grupi Liikmed (membership) pealkiri"
 msgstr ""
@@ -559,7 +567,7 @@ msgid "Seose Listi liikmete allikas (RELTYPE_MEMBER_PARENT) tekst"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:rel_RELTYPE_REDIR_OBJECT
-msgid "Seose ümbersuunamine (RELTYPE_REDIR_OBJECT) tekst"
+msgid "Seose &uuml;mbersuunamine (RELTYPE_REDIR_OBJECT) tekst"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:rel_RELTYPE_ADM_MESSAGE

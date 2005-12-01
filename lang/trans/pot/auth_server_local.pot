@@ -14,6 +14,14 @@ msgstr ""
 msgid "Klassi Autentimsserver Kohalik help"
 msgstr ""
 
+#: classes/core/users/auth/auth_server_local.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/core/users/auth/auth_server_local.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/core/users/auth/auth_server_local.aw:109
 msgid "Sellelt aadressilt (%s) pole ligip&auml;&auml;s lubatud!"
 msgstr ""

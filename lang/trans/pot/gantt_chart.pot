@@ -14,11 +14,19 @@ msgstr ""
 msgid "Klassi Gantti diagramm help"
 msgstr ""
 
-#: classes/vcl/gantt_chart.aw:219
+#: classes/vcl/gantt_chart.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/vcl/gantt_chart.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/vcl/gantt_chart.aw:221
 msgid "Näita"
 msgstr ""
 
-#: classes/vcl/gantt_chart.aw:219
+#: classes/vcl/gantt_chart.aw:221
 msgid "Peida"
 msgstr ""
 

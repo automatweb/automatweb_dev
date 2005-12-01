@@ -14,6 +14,30 @@ msgstr ""
 msgid "Klassi Banner help"
 msgstr ""
 
+#: classes/applications/banner/banner.aw:prop_general_toolbar
+msgid "Omaduse  (general_toolbar) caption"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_general_toolbar_comment
+msgid "Omaduse  (general_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_general_toolbar_help
+msgid "Omaduse  (general_toolbar) help"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_comment
+msgid "Omaduse Kommentaar  (comment) caption"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_comment_comment
+msgid "Omaduse Kommentaar  (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_comment_help
+msgid "Omaduse Kommentaar  (comment) help"
+msgstr ""
+
 #: classes/applications/banner/banner.aw:prop_url
 msgid "Omaduse URL, kuhu klikkimisel suunatakse (url) caption"
 msgstr ""
@@ -48,6 +72,18 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_banner_file_2_help
 msgid "Omaduse Banneri sisu lisaks (banner_file_2) help"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_banner_new_win
+msgid "Omaduse Link avaneb uues aknas (banner_new_win) caption"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_banner_new_win_comment
+msgid "Omaduse Link avaneb uues aknas (banner_new_win) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_banner_new_win_help
+msgid "Omaduse Link avaneb uues aknas (banner_new_win) help"
 msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_html
@@ -146,12 +182,20 @@ msgstr ""
 msgid "Omaduse Click-through ratio (click_through) help"
 msgstr ""
 
+#: classes/applications/banner/banner.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/banner/banner.aw:group_display
-msgid "Grupi N&auml;itamine (display) pealkiri"
+msgid "Grupi Näitamine (display) pealkiri"
 msgstr ""
 
 #: classes/applications/banner/banner.aw:group_display_help
-msgid "Grupi N&auml;itamine (display) help"
+msgid "Grupi Näitamine (display) help"
 msgstr ""
 
 #: classes/applications/banner/banner.aw:group_stats
@@ -170,15 +214,19 @@ msgstr ""
 msgid "Seose banneri sisu (RELTYPE_BANNER_FILE) tekst"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:127
+#: classes/applications/banner/banner.aw:149
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:196
 msgid "Banner"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:133
-msgid "N&auml;itamise t&otilde;en&auml;osuse %"
+#: classes/applications/banner/banner.aw:202
+msgid "N&auml;itamise t&otilde;en&auml;osus"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:362
+#: classes/applications/banner/banner.aw:444
 msgid "No banner location id given"
 msgstr ""
 

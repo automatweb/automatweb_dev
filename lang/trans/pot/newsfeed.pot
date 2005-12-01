@@ -74,6 +74,18 @@ msgstr ""
 msgid "Omaduse Mitme viimase päeva omad (days) help"
 msgstr ""
 
+#: classes/contentmgmt/newsfeed.aw:prop_parse_embed
+msgid "Omaduse Näita ka lisatud objekte (parse_embed) caption"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_parse_embed_comment
+msgid "Omaduse Näita ka lisatud objekte (parse_embed) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_parse_embed_help
+msgid "Omaduse Näita ka lisatud objekte (parse_embed) help"
+msgstr ""
+
 #: classes/contentmgmt/newsfeed.aw:prop_folders
 msgid "Omaduse Kaustade seaded (folders) caption"
 msgstr ""
@@ -84,6 +96,14 @@ msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_folders_help
 msgid "Omaduse Kaustade seaded (folders) help"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:group_folders
@@ -98,23 +118,23 @@ msgstr ""
 msgid "Seose Materjalide kaust (RELTYPE_FEED_SOURCE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:61
+#: classes/contentmgmt/newsfeed.aw:64
 msgid "RSS 2.0"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:62
+#: classes/contentmgmt/newsfeed.aw:65
 msgid "Atom (implementeerimata)"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:87
+#: classes/contentmgmt/newsfeed.aw:90
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:91
+#: classes/contentmgmt/newsfeed.aw:94
 msgid "Name"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:95
+#: classes/contentmgmt/newsfeed.aw:98
 msgid "Võta alamkaustadest ka"
 msgstr ""
 

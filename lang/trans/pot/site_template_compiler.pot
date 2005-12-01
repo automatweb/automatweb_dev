@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/contentmgmt/site_template_compiler.aw:864
+#: classes/contentmgmt/site_template_compiler.aw:919
 msgid "show_site::generate_code(): could not find generator for op %s (%s) op = %s"
 msgstr ""
 

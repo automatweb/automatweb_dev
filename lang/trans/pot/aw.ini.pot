@@ -59,7 +59,7 @@ msgid "Klassi Konteiner (22) nimi"
 msgstr ""
 
 #: aw.ini:class_28
-msgid "Klassi Graafik (vana) (28) nimi"
+msgid "Klassi Graafik (28) nimi"
 msgstr ""
 
 #: aw.ini:class_29
@@ -394,10 +394,6 @@ msgstr ""
 msgid "Klassi Polli vastus (166) nimi"
 msgstr ""
 
-#: aw.ini:class_167
-msgid "Klassi Graafik (167) nimi"
-msgstr ""
-
 #: aw.ini:class_168
 msgid "Klassi IP Aadress (168) nimi"
 msgstr ""
@@ -583,7 +579,7 @@ msgid "Klassi Dokumentide import (221) nimi"
 msgstr ""
 
 #: aw.ini:class_222
-msgid "Klassi Tehing (222) nimi"
+msgid "Klassi Leping (222) nimi"
 msgstr ""
 
 #: aw.ini:class_223
@@ -1506,10 +1502,6 @@ msgstr ""
 msgid "Klassi Äripind (947) nimi"
 msgstr ""
 
-#: aw.ini:class_955
-msgid "Klassi Autentimisserver OpenLDAP (955) nimi"
-msgstr ""
-
 #: aw.ini:class_948
 msgid "Klassi Aadress v2 (948) nimi"
 msgstr ""
@@ -1519,7 +1511,11 @@ msgid "Klassi Riik v2 (949) nimi"
 msgstr ""
 
 #: aw.ini:class_953
-msgid "Klassi Haldusüksus v2 (953) nimi"
+msgid "Klassi Halduspiirkond v2 (953) nimi"
+msgstr ""
+
+#: aw.ini:class_955
+msgid "Klassi Autentimisserver OpenLDAP (955) nimi"
 msgstr ""
 
 #: aw.ini:class_958
@@ -1538,10 +1534,6 @@ msgstr ""
 msgid "Klassi Riigi haldusjaotus v2 (961) nimi"
 msgstr ""
 
-#: aw.ini:class_964
-msgid "Klassi Haldusjaotis (964) nimi"
-msgstr ""
-
 #: aw.ini:class_963
 msgid "Klassi Vormiahel (963) nimi"
 msgstr ""
@@ -1558,8 +1550,236 @@ msgstr ""
 msgid "Klassi Akna hinnakujundus (967) nimi"
 msgstr ""
 
+#: aw.ini:class_973
+msgid "Klassi Expresspost test (973) nimi"
+msgstr ""
+
 #: aw.ini:class_975
 msgid "Klassi Otsingu html indekseerija (975) nimi"
+msgstr ""
+
+#: aw.ini:class_976
+msgid "Klassi Otsingu failis&uuml;steemi indekseerija (976) nimi"
+msgstr ""
+
+#: aw.ini:class_978
+msgid "Klassi Suvila (978) nimi"
+msgstr ""
+
+#: aw.ini:class_979
+msgid "Klassi Majaosa (979) nimi"
+msgstr ""
+
+#: aw.ini:class_980
+msgid "Klassi Tabeli filter (980) nimi"
+msgstr ""
+
+#: aw.ini:class_981
+msgid "Klassi Kinnisvaraobjektide otsing (981) nimi"
+msgstr ""
+
+#: aw.ini:class_982
+msgid "Klassi Kinnisvaraobjektide Import (982) nimi"
+msgstr ""
+
+#: aw.ini:class_983
+msgid "Klassi Expp Jupp (983) nimi"
+msgstr ""
+
+#: aw.ini:class_984
+msgid "Klassi Expp tyybid (984) nimi"
+msgstr ""
+
+#: aw.ini:class_985
+msgid "Klassi Expp liigid (985) nimi"
+msgstr ""
+
+#: aw.ini:class_986
+msgid "Klassi Expp short basket (986) nimi"
+msgstr ""
+
+#: aw.ini:class_987
+msgid "Klassi Expp liigi list (987) nimi"
+msgstr ""
+
+#: aw.ini:class_988
+msgid "Klassi Expp tyybi list (988) nimi"
+msgstr ""
+
+#: aw.ini:class_989
+msgid "Klassi Expp väljaanne (989) nimi"
+msgstr ""
+
+#: aw.ini:class_990
+msgid "Klassi Expp tellimise periood (990) nimi"
+msgstr ""
+
+#: aw.ini:class_991
+msgid "Klassi Expp tootekorv (991) nimi"
+msgstr ""
+
+#: aw.ini:class_992
+msgid "Klassi Ridaelamu (992) nimi"
+msgstr ""
+
+#: aw.ini:class_993
+msgid "Klassi Kuhu minna (993) nimi"
+msgstr ""
+
+#: aw.ini:class_994
+msgid "Klassi Organisatsiooni eripakkumine (994) nimi"
+msgstr ""
+
+#: aw.ini:class_995
+msgid "Klassi Organisatsiooni eripakkumiste haldus (995) nimi"
+msgstr ""
+
+#: aw.ini:class_996
+msgid "Klassi E-kaardi haldur (996) nimi"
+msgstr ""
+
+#: aw.ini:class_997
+msgid "Klassi E-kaart (997) nimi"
+msgstr ""
+
+#: aw.ini:class_998
+msgid "Klassi Saidi stiilid (998) nimi"
+msgstr ""
+
+#: aw.ini:class_999
+msgid "Klassi Zanr (999) nimi"
+msgstr ""
+
+#: aw.ini:class_1000
+msgid "Klassi Koht (1000) nimi"
+msgstr ""
+
+#: aw.ini:class_1002
+msgid "Klassi Kinnisvaraobjektide eksport (1002) nimi"
+msgstr ""
+
+#: aw.ini:class_1003
+msgid "Klassi Kasutajate haldus (1003) nimi"
+msgstr ""
+
+#: aw.ini:class_1004
+msgid "Klassi Expp URL parser (1004) nimi"
+msgstr ""
+
+#: aw.ini:class_1005
+msgid "Klassi Expp import (1005) nimi"
+msgstr ""
+
+#: aw.ini:class_1006
+msgid "Klassi P&auml;eva raport (1006) nimi"
+msgstr ""
+
+#: aw.ini:class_1007
+msgid "Klassi CRM Dokument (1007) nimi"
+msgstr ""
+
+#: aw.ini:class_1008
+msgid "Klassi Memo (1008) nimi"
+msgstr ""
+
+#: aw.ini:class_1009
+msgid "Klassi Arve (1009) nimi"
+msgstr ""
+
+#: aw.ini:class_1010
+msgid "Klassi V&auml;ljaannete haldus (1010) nimi"
+msgstr ""
+
+#: aw.ini:class_1011
+msgid "Klassi V&auml;ljaanne (1011) nimi"
+msgstr ""
+
+#: aw.ini:class_1012
+msgid "Klassi Tüübilist (1012) nimi"
+msgstr ""
+
+#: aw.ini:class_1013
+msgid "Klassi Organisatsioonid veebis (1013) nimi"
+msgstr ""
+
+#: aw.ini:class_1014
+msgid "Klassi Avamisajad (1014) nimi"
+msgstr ""
+
+#: aw.ini:class_1015
+msgid "Klassi Expp JAH (1015) nimi"
+msgstr ""
+
+#: aw.ini:class_1016
+msgid "Klassi Expp telli (1016) nimi"
+msgstr ""
+
+#: aw.ini:class_1017
+msgid "Klassi Expp isik (1017) nimi"
+msgstr ""
+
+#: aw.ini:class_1018
+msgid "Klassi Expp arve (1018) nimi"
+msgstr ""
+
+#: aw.ini:class_1020
+msgid "Klassi Expp site_logo (1020) nimi"
+msgstr ""
+
+#: aw.ini:class_1021
+msgid "Klassi expp_site_content (nimi) (1021) nimi"
+msgstr ""
+
+#: aw.ini:class_1022
+msgid "Klassi Expp makse (1022) nimi"
+msgstr ""
+
+#: aw.ini:class_1023
+msgid "Klassi CRM Pank (1023) nimi"
+msgstr ""
+
+#: aw.ini:class_1024
+msgid "Klassi CRM Pangakonto (1024) nimi"
+msgstr ""
+
+#: aw.ini:class_1025
+msgid "Klassi Majutusettev&otilde;te (valdkond) (1025) nimi"
+msgstr ""
+
+#: aw.ini:class_1026
+msgid "Klassi Klientide valim (1026) nimi"
+msgstr ""
+
+#: aw.ini:class_1027
+msgid "Klassi Property Test (1027) nimi"
+msgstr ""
+
+#: aw.ini:class_1028
+msgid "Klassi Kliendi andmed (1028) nimi"
+msgstr ""
+
+#: aw.ini:class_1029
+msgid "Klassi Meelelahutusettev&otilde;te (valdkond) (1029) nimi"
+msgstr ""
+
+#: aw.ini:class_1030
+msgid "Klassi Toitlustus (valdkond) (1030) nimi"
+msgstr ""
+
+#: aw.ini:class_1031
+msgid "Klassi Konverentsiruum (valdkond) (1031) nimi"
+msgstr ""
+
+#: aw.ini:class_1033
+msgid "Klassi Haldusjaotuse kodeering (1033) nimi"
+msgstr ""
+
+#: aw.ini:class_1034
+msgid "Klassi Haldusüksus v2 (1034) nimi"
+msgstr ""
+
+#: aw.ini:class_1035
+msgid "Klassi T88 kirje (1035) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29

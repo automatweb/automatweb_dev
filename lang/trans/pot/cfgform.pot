@@ -314,6 +314,14 @@ msgstr ""
 msgid "Omaduse  (trans_tbl_grps) help"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_groupdata
 msgid "Grupi Grupid (groupdata) pealkiri"
 msgstr ""
@@ -387,11 +395,11 @@ msgid "Grupi Vormi seaded (system) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_translate
-msgid "Grupi T&otilde;lgi (translate) pealkiri"
+msgid "Grupi Tõlgi (translate) pealkiri"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_translate_help
-msgid "Grupi T&otilde;lgi (translate) help"
+msgid "Grupi Tõlgi (translate) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_lang_1
@@ -503,18 +511,18 @@ msgid "Seose Salvestamise kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:rel_RELTYPE_VIEWCONTROLLER
-msgid "Seose N&auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
+msgid "Seose N&amp;auml;itamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:rel_RELTYPE_OUTPUT
-msgid "Seose Väljund (RELTYPE_OUTPUT) tekst"
+msgid "Seose V&auml;ljund (RELTYPE_OUTPUT) tekst"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:298
 msgid "Omadus"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:302 classes/cfg/cfgform.aw:845
+#: classes/cfg/cfgform.aw:302 classes/cfg/cfgform.aw:843
 msgid "Tüüp"
 msgstr ""
 
@@ -526,7 +534,7 @@ msgstr ""
 msgid "Süsteemi default"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:407 classes/cfg/cfgform.aw:840
+#: classes/cfg/cfgform.aw:407 classes/cfg/cfgform.aw:838
 msgid "Nimi"
 msgstr ""
 
@@ -542,95 +550,95 @@ msgstr ""
 msgid "this is not a valid config form - class_id not specified"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:850 classes/cfg/cfgform.aw:1418
+#: classes/cfg/cfgform.aw:848 classes/cfg/cfgform.aw:1416
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:893 classes/cfg/cfgform.aw:972 classes/cfg/cfgform.aw:1423
+#: classes/cfg/cfgform.aw:891 classes/cfg/cfgform.aw:970 classes/cfg/cfgform.aw:1421
 msgid "Salvesta"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:900
+#: classes/cfg/cfgform.aw:898
 msgid "Kustuta valitud omadused"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:907
+#: classes/cfg/cfgform.aw:905
 msgid "<small>Liiguta omadused gruppi:</small>"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:918
+#: classes/cfg/cfgform.aw:916
 msgid "Ühtegi gruppi pole veel!"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:928
+#: classes/cfg/cfgform.aw:926
 msgid "Liiguta"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:935
+#: classes/cfg/cfgform.aw:933
 msgid "<small>Lisa grupp:</small>"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:943
+#: classes/cfg/cfgform.aw:941
 msgid "Lisa grupp"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1132
+#: classes/cfg/cfgform.aw:1130
 msgid "vaikestiil"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1133
+#: classes/cfg/cfgform.aw:1131
 msgid "pealkiri yleval, sisu all"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1142
+#: classes/cfg/cfgform.aw:1140
 msgid "gdata"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1154
+#: classes/cfg/cfgform.aw:1152
 msgid "ab"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1416
+#: classes/cfg/cfgform.aw:1414
 msgid "T&ouml;&ouml;riistariba"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1417
+#: classes/cfg/cfgform.aw:1415
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1419
+#: classes/cfg/cfgform.aw:1417
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1420
+#: classes/cfg/cfgform.aw:1418
 msgid "Sissejuhatus"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1421
+#: classes/cfg/cfgform.aw:1419
 msgid "Sisu"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1422
+#: classes/cfg/cfgform.aw:1420
 msgid "Toimetamata"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1424
+#: classes/cfg/cfgform.aw:1422
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1427
+#: classes/cfg/cfgform.aw:1425
 msgid "N&auml;ita pealkirja"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1428
+#: classes/cfg/cfgform.aw:1426
 msgid "N&auml;ita sissejuhatust"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1429
+#: classes/cfg/cfgform.aw:1427
 msgid "N&auml;ita prindi nuppu"
 msgstr ""
 
-#: classes/cfg/cfgform.aw:1430
+#: classes/cfg/cfgform.aw:1428
 msgid "Pealkiri klikitav"
 msgstr ""
 

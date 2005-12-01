@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Tänav/Küla (aadress) caption"] = "Street/Village";
-$GLOBALS["TRANS"]["Omaduse Postinindex (postiindeks) caption"] = "Pstal index";
 $GLOBALS["TRANS"]["Omaduse Linn/Vald/Alev (linn) caption"] = "City/State/Village";
 $GLOBALS["TRANS"]["Omaduse Maakond (maakond) caption"] = "County";
 $GLOBALS["TRANS"]["Omaduse Riik (riik) caption"] = "State";

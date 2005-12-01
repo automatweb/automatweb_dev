@@ -10,176 +10,269 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/banner/banner.aw:class_54_help
+#: classes/applications/banner/banner.aw:class_54_help
 msgid "Klassi Banner help"
 msgstr ""
 
+#: classes/applications/banner/banner.aw:prop_general_toolbar
+msgid "Omaduse  (general_toolbar) caption"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_general_toolbar_comment
+msgid "Omaduse  (general_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_general_toolbar_help
+msgid "Omaduse  (general_toolbar) help"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_comment
+msgid "Omaduse Kommentaar  (comment) caption"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_comment_comment
+msgid "Omaduse Kommentaar  (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_comment_help
+msgid "Omaduse Kommentaar  (comment) help"
+msgstr ""
+
 # classes/applications/banner/banner.aw:prop_url
+#: classes/applications/banner/banner.aw:prop_url
 msgid "Omaduse URL, kuhu klikkimisel suunatakse (url) caption"
 msgstr "URL To redirect to when clicked"
 
 # classes/applications/banner/banner.aw:prop_url_comment
+#: classes/applications/banner/banner.aw:prop_url_comment
 msgid "Omaduse URL, kuhu klikkimisel suunatakse (url) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_url_help
+#: classes/applications/banner/banner.aw:prop_url_help
 msgid "Omaduse URL, kuhu klikkimisel suunatakse (url) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_banner_file
+#: classes/applications/banner/banner.aw:prop_banner_file
 msgid "Omaduse Banneri sisu (banner_file) caption"
 msgstr "Banner content"
 
 # classes/applications/banner/banner.aw:prop_banner_file_comment
+#: classes/applications/banner/banner.aw:prop_banner_file_comment
 msgid "Omaduse Banneri sisu (banner_file) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_banner_file_help
+#: classes/applications/banner/banner.aw:prop_banner_file_help
 msgid "Omaduse Banneri sisu (banner_file) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_banner_file_2
+#: classes/applications/banner/banner.aw:prop_banner_file_2
 msgid "Omaduse Banneri sisu lisaks (banner_file_2) caption"
 msgstr "Additional banner content"
 
 # classes/applications/banner/banner.aw:prop_banner_file_2_comment
+#: classes/applications/banner/banner.aw:prop_banner_file_2_comment
 msgid "Omaduse Banneri sisu lisaks (banner_file_2) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_banner_file_2_help
+#: classes/applications/banner/banner.aw:prop_banner_file_2_help
 msgid "Omaduse Banneri sisu lisaks (banner_file_2) help"
 msgstr ""
 
+#: classes/applications/banner/banner.aw:prop_banner_new_win
+msgid "Omaduse Link avaneb uues aknas (banner_new_win) caption"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_banner_new_win_comment
+msgid "Omaduse Link avaneb uues aknas (banner_new_win) kommentaar"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:prop_banner_new_win_help
+msgid "Omaduse Link avaneb uues aknas (banner_new_win) help"
+msgstr ""
+
 # classes/applications/banner/banner.aw:prop_html
+#: classes/applications/banner/banner.aw:prop_html
 msgid "Omaduse Banneri html (html) caption"
 msgstr "Banner html"
 
 # classes/applications/banner/banner.aw:prop_html_comment
+#: classes/applications/banner/banner.aw:prop_html_comment
 msgid "Omaduse Banneri html (html) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_html_help
+#: classes/applications/banner/banner.aw:prop_html_help
 msgid "Omaduse Banneri html (html) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_probability_tbl
+#: classes/applications/banner/banner.aw:prop_probability_tbl
 msgid "Omaduse N&auml;itamise t&otilde;en&auml;osus (probability_tbl) caption"
 msgstr "Display probability"
 
 # classes/applications/banner/banner.aw:prop_probability_tbl_comment
+#: classes/applications/banner/banner.aw:prop_probability_tbl_comment
 msgid ""
 "Omaduse N&auml;itamise t&otilde;en&auml;osus (probability_tbl) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_probability_tbl_help
+#: classes/applications/banner/banner.aw:prop_probability_tbl_help
 msgid "Omaduse N&auml;itamise t&otilde;en&auml;osus (probability_tbl) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_probability
+#: classes/applications/banner/banner.aw:prop_probability
 msgid "Omaduse  (probability) caption"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_probability_comment
+#: classes/applications/banner/banner.aw:prop_probability_comment
 msgid "Omaduse  (probability) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_probability_help
+#: classes/applications/banner/banner.aw:prop_probability_help
 msgid "Omaduse  (probability) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_max_views
+#: classes/applications/banner/banner.aw:prop_max_views
 msgid ""
 "Omaduse Mitu korda bannerit maksimaalselt n&auml;idata (max_views) caption"
 msgstr "Maximum number of banner views"
 
 # classes/applications/banner/banner.aw:prop_max_views_comment
+#: classes/applications/banner/banner.aw:prop_max_views_comment
 msgid ""
 "Omaduse Mitu korda bannerit maksimaalselt n&auml;idata (max_views) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_max_views_help
+#: classes/applications/banner/banner.aw:prop_max_views_help
 msgid "Omaduse Mitu korda bannerit maksimaalselt n&auml;idata (max_views) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_max_clicks
+#: classes/applications/banner/banner.aw:prop_max_clicks
 msgid "Omaduse Mitu klikki maksimaalselt (max_clicks) caption"
 msgstr "Maximum number of banner clicks"
 
 # classes/applications/banner/banner.aw:prop_max_clicks_comment
+#: classes/applications/banner/banner.aw:prop_max_clicks_comment
 msgid "Omaduse Mitu klikki maksimaalselt (max_clicks) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_max_clicks_help
+#: classes/applications/banner/banner.aw:prop_max_clicks_help
 msgid "Omaduse Mitu klikki maksimaalselt (max_clicks) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_clicks
+#: classes/applications/banner/banner.aw:prop_clicks
 msgid "Omaduse Klikke (clicks) caption"
 msgstr "Clicks"
 
 # classes/applications/banner/banner.aw:prop_clicks_comment
+#: classes/applications/banner/banner.aw:prop_clicks_comment
 msgid "Omaduse Klikke (clicks) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_clicks_help
+#: classes/applications/banner/banner.aw:prop_clicks_help
 msgid "Omaduse Klikke (clicks) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_views
+#: classes/applications/banner/banner.aw:prop_views
 msgid "Omaduse Vaatamisi (views) caption"
 msgstr "Views"
 
 # classes/applications/banner/banner.aw:prop_views_comment
+#: classes/applications/banner/banner.aw:prop_views_comment
 msgid "Omaduse Vaatamisi (views) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_views_help
+#: classes/applications/banner/banner.aw:prop_views_help
 msgid "Omaduse Vaatamisi (views) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_click_through
+#: classes/applications/banner/banner.aw:prop_click_through
 msgid "Omaduse Click-through ratio (click_through) caption"
 msgstr "Click-through ratio"
 
 # classes/applications/banner/banner.aw:prop_click_through_comment
+#: classes/applications/banner/banner.aw:prop_click_through_comment
 msgid "Omaduse Click-through ratio (click_through) kommentaar"
 msgstr ""
 
 # classes/applications/banner/banner.aw:prop_click_through_help
+#: classes/applications/banner/banner.aw:prop_click_through_help
 msgid "Omaduse Click-through ratio (click_through) help"
 msgstr ""
 
-# classes/applications/banner/banner.aw:group_display
-msgid "Grupi N&auml;itamine (display) pealkiri"
-msgstr "Display"
+#: classes/applications/banner/banner.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
 
-# classes/applications/banner/banner.aw:group_display_help
-msgid "Grupi N&auml;itamine (display) help"
+#: classes/applications/banner/banner.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:group_display
+msgid "Grupi Näitamine (display) pealkiri"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:group_display_help
+msgid "Grupi Näitamine (display) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:group_stats
+#: classes/applications/banner/banner.aw:group_stats
 msgid "Grupi Statistika (stats) pealkiri"
 msgstr "Statistics"
 
 # classes/applications/banner/banner.aw:group_stats_help
+#: classes/applications/banner/banner.aw:group_stats_help
 msgid "Grupi Statistika (stats) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:rel_RELTYPE_LOCATION
+#: classes/applications/banner/banner.aw:rel_RELTYPE_LOCATION
 msgid "Seose banneri asukoht (RELTYPE_LOCATION) tekst"
 msgstr "banner location"
 
 # classes/applications/banner/banner.aw:rel_RELTYPE_BANNER_FILE
+#: classes/applications/banner/banner.aw:rel_RELTYPE_BANNER_FILE
 msgid "Seose banneri sisu (RELTYPE_BANNER_FILE) tekst"
 msgstr "banner content"
 
-#: classes/applications/banner/banner.aw:127
+#: classes/applications/banner/banner.aw:149
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/banner/banner.aw:196
 msgid "Banner"
 msgstr "Banner"
 
-#: classes/applications/banner/banner.aw:133
-msgid "N&auml;itamise t&otilde;en&auml;osuse %"
-msgstr "Display probability %"
+#: classes/applications/banner/banner.aw:202
+msgid "N&auml;itamise t&otilde;en&auml;osus"
+msgstr ""
 
-#: classes/applications/banner/banner.aw:362
+#: classes/applications/banner/banner.aw:444
 msgid "No banner location id given"
 msgstr "No banner location id given"
+
+# classes/applications/banner/banner.aw:group_display
+#~ msgid "Grupi N&auml;itamine (display) pealkiri"
+#~ msgstr "Display"
+
+#~ msgid "N&auml;itamise t&otilde;en&auml;osuse %"
+#~ msgstr "Display probability %"

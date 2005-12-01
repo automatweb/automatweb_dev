@@ -9,122 +9,122 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/admin/admin_menus.aw:242
+#: classes/admin/admin_menus.aw:243
 msgid "Ava"
 msgstr "Open"
 
-#: classes/admin/admin_menus.aw:252 classes/admin/admin_menus.aw:1385
+#: classes/admin/admin_menus.aw:253 classes/admin/admin_menus.aw:1432
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/admin/admin_menus.aw:260 classes/admin/admin_menus.aw:1354
+#: classes/admin/admin_menus.aw:261 classes/admin/admin_menus.aw:1401
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/admin/admin_menus.aw:269 classes/admin/admin_menus.aw:1361
+#: classes/admin/admin_menus.aw:270 classes/admin/admin_menus.aw:1408
 msgid "Kopeeri"
 msgstr "Copy"
 
-#: classes/admin/admin_menus.aw:277
+#: classes/admin/admin_menus.aw:278
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/admin/admin_menus.aw:281 classes/admin/admin_menus.aw:1378
+#: classes/admin/admin_menus.aw:282 classes/admin/admin_menus.aw:1425
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/admin/admin_menus.aw:519
+#: classes/admin/admin_menus.aw:534
 msgid "Vali kuidas objekte kopeerida"
 msgstr "Select object copying method"
 
-#: classes/admin/admin_menus.aw:708
+#: classes/admin/admin_menus.aw:730
 msgid "Menyyde importimisel tekkis viga real %s "
 msgstr "Error on line %s in the menu import file"
 
-#: classes/admin/admin_menus.aw:725
+#: classes/admin/admin_menus.aw:747
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s "
 msgstr "Could not find parent menu on line %s of the menu import file"
 
-#: classes/admin/admin_menus.aw:1168
+#: classes/admin/admin_menus.aw:1203
 msgid "Link"
 msgstr "Link"
 
-#: classes/admin/admin_menus.aw:1183
+#: classes/admin/admin_menus.aw:1218
 msgid "Mitteaktiivne"
 msgstr "Not active"
 
-#: classes/admin/admin_menus.aw:1183 classes/admin/admin_menus.aw:1623
+#: classes/admin/admin_menus.aw:1218 classes/admin/admin_menus.aw:1666
 msgid "Aktiivne"
 msgstr "Active"
 
-#: classes/admin/admin_menus.aw:1288
+#: classes/admin/admin_menus.aw:1324
 msgid "Uus"
 msgstr "New"
 
-#: classes/admin/admin_menus.aw:1330
+#: classes/admin/admin_menus.aw:1384
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/admin/admin_menus.aw:1338
+#: classes/admin/admin_menus.aw:1392
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/admin/admin_menus.aw:1344
-msgid "Eelvaade"
-msgstr "Preview"
-
-#: classes/admin/admin_menus.aw:1370
+#: classes/admin/admin_menus.aw:1417
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/admin/admin_menus.aw:1393
+#: classes/admin/admin_menus.aw:1440
 msgid "Uuenda"
 msgstr "Refresh"
 
-#: classes/admin/admin_menus.aw:1400
+#: classes/admin/admin_menus.aw:1447
 msgid "Impordi"
 msgstr "Import"
 
-#: classes/admin/admin_menus.aw:1406
+#: classes/admin/admin_menus.aw:1453
 msgid "Suured ikoonid"
 msgstr "Big icons"
 
-#: classes/admin/admin_menus.aw:1407
+#: classes/admin/admin_menus.aw:1454
 msgid "Väiksed ikoonid"
 msgstr "Small icons"
 
-#: classes/admin/admin_menus.aw:1408
+#: classes/admin/admin_menus.aw:1455
 msgid "Detailne vaade"
 msgstr "Detail view"
 
-#: classes/admin/admin_menus.aw:1531
+#: classes/admin/admin_menus.aw:1460
+msgid "Eelvaade"
+msgstr "Preview"
+
+#: classes/admin/admin_menus.aw:1574
 msgid "Valitud pole &uuml;htegi objekti!"
 msgstr "No objects selected!"
 
-#: classes/admin/admin_menus.aw:1608
+#: classes/admin/admin_menus.aw:1651
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/admin/admin_menus.aw:1617
+#: classes/admin/admin_menus.aw:1660
 msgid "Jrk"
 msgstr "Ord"
 
-#: classes/admin/admin_menus.aw:1632
+#: classes/admin/admin_menus.aw:1675
 msgid "Muutja"
 msgstr "Modifiedby"
 
-#: classes/admin/admin_menus.aw:1642
+#: classes/admin/admin_menus.aw:1685
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/admin/admin_menus.aw:1655
+#: classes/admin/admin_menus.aw:1698
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/admin/admin_menus.aw:1665
+#: classes/admin/admin_menus.aw:1708
 msgid "Tegevus"
 msgstr "Action"
 
-#: classes/admin/admin_menus.aw:1674
+#: classes/admin/admin_menus.aw:1717
 msgid "<a href='javascript:selall()'>Vali</a>"
 msgstr "<a href='javascript:selall()'>Select&nbsp;all</a>"

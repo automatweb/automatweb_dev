@@ -230,12 +230,20 @@ msgstr ""
 msgid "Omaduse Jalus (footer) help"
 msgstr ""
 
+#: classes/contentmgmt/layout.aw:group_general
+msgid "Grupi ‹ldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/layout.aw:group_general_help
+msgid "Grupi ‹ldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/layout.aw:group_settings
-msgid "Grupi M&auml;&auml;rangud (settings) pealkiri"
+msgid "Grupi M‰‰rangud (settings) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_settings_help
-msgid "Grupi M&auml;&auml;rangud (settings) help"
+msgid "Grupi M‰‰rangud (settings) help"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_layout
@@ -263,11 +271,11 @@ msgid "Grupi Tabeli sisu (aliases) help"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_hfoot
-msgid "Grupi P&auml;is ja jalus (hfoot) pealkiri"
+msgid "Grupi P‰is ja jalus (hfoot) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_hfoot_help
-msgid "Grupi P&auml;is ja jalus (hfoot) help"
+msgid "Grupi P‰is ja jalus (hfoot) help"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_import
@@ -291,6 +299,6 @@ msgid "Seose celli stiilide kataloog (RELTYPE_CELLSTYLE_FOLDER) tekst"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:rel_RELTYPE_SHOW_FOLDER
-msgid "Seose n‰ita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
+msgid "Seose n&auml;ita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
 msgstr ""
 

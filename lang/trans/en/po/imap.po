@@ -10,85 +10,114 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/protocols/mail/imap.aw:class_229_help
+#: classes/protocols/mail/imap.aw:class_229_help
 msgid "Klassi IMAP sissep&auml;&auml;s help"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_server
+#: classes/protocols/mail/imap.aw:prop_server
 msgid "Omaduse Server (server) caption"
 msgstr "Server"
 
 # classes/protocols/mail/imap.aw:prop_server_comment
+#: classes/protocols/mail/imap.aw:prop_server_comment
 msgid "Omaduse Server (server) kommentaar"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_server_help
+#: classes/protocols/mail/imap.aw:prop_server_help
 msgid "Omaduse Server (server) help"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_port
+#: classes/protocols/mail/imap.aw:prop_port
 msgid "Omaduse Port (port) caption"
 msgstr "Port"
 
 # classes/protocols/mail/imap.aw:prop_port_comment
+#: classes/protocols/mail/imap.aw:prop_port_comment
 msgid "Omaduse Port (port) kommentaar"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_port_help
+#: classes/protocols/mail/imap.aw:prop_port_help
 msgid "Omaduse Port (port) help"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_user
+#: classes/protocols/mail/imap.aw:prop_user
 msgid "Omaduse Kasutaja (user) caption"
 msgstr "Username"
 
 # classes/protocols/mail/imap.aw:prop_user_comment
+#: classes/protocols/mail/imap.aw:prop_user_comment
 msgid "Omaduse Kasutaja (user) kommentaar"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_user_help
+#: classes/protocols/mail/imap.aw:prop_user_help
 msgid "Omaduse Kasutaja (user) help"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_password
+#: classes/protocols/mail/imap.aw:prop_password
 msgid "Omaduse Parool (password) caption"
 msgstr "Password"
 
 # classes/protocols/mail/imap.aw:prop_password_comment
+#: classes/protocols/mail/imap.aw:prop_password_comment
 msgid "Omaduse Parool (password) kommentaar"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_password_help
+#: classes/protocols/mail/imap.aw:prop_password_help
 msgid "Omaduse Parool (password) help"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_use_ssl
+#: classes/protocols/mail/imap.aw:prop_use_ssl
 msgid "Omaduse Kasuta SSL-i (use_ssl) caption"
 msgstr "Use SSL"
 
 # classes/protocols/mail/imap.aw:prop_use_ssl_comment
+#: classes/protocols/mail/imap.aw:prop_use_ssl_comment
 msgid "Omaduse Kasuta SSL-i (use_ssl) kommentaar"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_use_ssl_help
+#: classes/protocols/mail/imap.aw:prop_use_ssl_help
 msgid "Omaduse Kasuta SSL-i (use_ssl) help"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_test
+#: classes/protocols/mail/imap.aw:prop_test
 msgid "Omaduse Testi tulemused (test) caption"
 msgstr "Test results"
 
 # classes/protocols/mail/imap.aw:prop_test_comment
+#: classes/protocols/mail/imap.aw:prop_test_comment
 msgid "Omaduse Testi tulemused (test) kommentaar"
 msgstr ""
 
 # classes/protocols/mail/imap.aw:prop_test_help
+#: classes/protocols/mail/imap.aw:prop_test_help
 msgid "Omaduse Testi tulemused (test) help"
 msgstr ""
 
+#: classes/protocols/mail/imap.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/protocols/mail/imap.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 # classes/protocols/mail/imap.aw:group_test
+#: classes/protocols/mail/imap.aw:group_test
 msgid "Grupi Testi (test) pealkiri"
 msgstr "Test"
 
 # classes/protocols/mail/imap.aw:group_test_help
+#: classes/protocols/mail/imap.aw:group_test_help
 msgid "Grupi Testi (test) help"
 msgstr ""

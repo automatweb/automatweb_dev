@@ -10,6 +10,6 @@ $GLOBALS["TRANS"]["ds_mysql::_req_do_pcp(): no relation from class %s named %s"]
 $GLOBALS["TRANS"]["ds_mysql::_req_do_pcp(): no property %s in class %s "] = "ds_mysql::_req_do_pcp(): no property %s in class %s ";
 $GLOBALS["TRANS"]["ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise"] = "ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise";
 $GLOBALS["TRANS"]["ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"] = "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)";
-$GLOBALS["TRANS"]["ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"] = "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s";
 $GLOBALS["TRANS"]["ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"] = "ds_mysql::_req_do_pcp(): incorrect prop type! (%s)";
+$GLOBALS["TRANS"]["ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"] = "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s";
 ?>

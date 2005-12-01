@@ -74,6 +74,54 @@ msgstr ""
 msgid "Omaduse Kirjeldus (utextarea1) help"
 msgstr ""
 
+#: classes/applications/calendar/staging.aw:prop_place
+msgid "Omaduse Vali toimumispaik (place) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_place_comment
+msgid "Omaduse Vali toimumispaik (place) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_place_help
+msgid "Omaduse Vali toimumispaik (place) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_new_place
+msgid "Omaduse Uus toimumispaik (new_place) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_new_place_comment
+msgid "Omaduse Uus toimumispaik (new_place) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_new_place_help
+msgid "Omaduse Uus toimumispaik (new_place) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_price
+msgid "Omaduse Hind (price) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_price_comment
+msgid "Omaduse Hind (price) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_price_help
+msgid "Omaduse Hind (price) help"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_aliasmanager
+msgid "Omaduse Seostehaldur (aliasmanager) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_aliasmanager_comment
+msgid "Omaduse Seostehaldur (aliasmanager) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_aliasmanager_help
+msgid "Omaduse Seostehaldur (aliasmanager) help"
+msgstr ""
+
 #: classes/applications/calendar/staging.aw:prop_project_selector
 msgid "Omaduse Projektid (project_selector) caption"
 msgstr ""
@@ -110,6 +158,14 @@ msgstr ""
 msgid "Omaduse Ajad (times) help"
 msgstr ""
 
+#: classes/applications/calendar/staging.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/calendar/staging.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
 msgstr ""
@@ -119,11 +175,11 @@ msgid "Grupi Projektid (projects) help"
 msgstr ""
 
 #: classes/applications/calendar/staging.aw:group_trans
-msgid "Grupi T&otilde;lkimine (trans) pealkiri"
+msgid "Grupi Tõlkimine (trans) pealkiri"
 msgstr ""
 
 #: classes/applications/calendar/staging.aw:group_trans_help
-msgid "Grupi T&otilde;lkimine (trans) help"
+msgid "Grupi Tõlkimine (trans) help"
 msgstr ""
 
 #: classes/applications/calendar/staging.aw:group_times
@@ -142,35 +198,39 @@ msgstr ""
 msgid "Seose Koopia (RELTYPE_COPY) tekst"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:112
+#: classes/applications/calendar/staging.aw:rel_RELTYPE_DOCUMENT
+msgid "Seose Dokument (RELTYPE_DOCUMENT) tekst"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:141
 msgid "Aktiivne objekt"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:122
+#: classes/applications/calendar/staging.aw:151
 msgid "Originaalobjekti ID"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:129
+#: classes/applications/calendar/staging.aw:158
 msgid "Originaalobjekt"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:137
+#: classes/applications/calendar/staging.aw:166
 msgid "Koopia"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:140
+#: classes/applications/calendar/staging.aw:169
 msgid " (Aktiivne)"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:158
+#: classes/applications/calendar/staging.aw:187
 msgid "Uued"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:167
+#: classes/applications/calendar/staging.aw:196
 msgid "Uus %s"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:177
+#: classes/applications/calendar/staging.aw:206
 msgid "Tee sündmus %s"
 msgstr ""
 

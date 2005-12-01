@@ -122,12 +122,20 @@ msgstr ""
 msgid "Omaduse T&otilde;ge (trans) help"
 msgstr ""
 
+#: classes/contentmgmt/video.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/video.aw:group_trans
-msgid "Grupi T&otilde;lkimine (trans) pealkiri"
+msgid "Grupi Tõlkimine (trans) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/video.aw:group_trans_help
-msgid "Grupi T&otilde;lkimine (trans) help"
+msgid "Grupi Tõlkimine (trans) help"
 msgstr ""
 
 #: classes/contentmgmt/video.aw:rel_RELTYPE_IMAGE

@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Olemasoleva klassi p&otilde;hjal (from_existing_class) help"
 msgstr ""
 
+#: classes/applications/class_designer/class_designer.aw:prop_from_existing_class_file
+msgid "Omaduse Olemasoleva klassi fail (from_existing_class_file) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_from_existing_class_file_comment
+msgid "Omaduse Olemasoleva klassi fail (from_existing_class_file) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_from_existing_class_file_help
+msgid "Omaduse Olemasoleva klassi fail (from_existing_class_file) help"
+msgstr ""
+
 #: classes/applications/class_designer/class_designer.aw:prop_reg_class_id
 msgid "Omaduse CLID (reg_class_id) caption"
 msgstr ""
@@ -156,6 +168,30 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_classdef_help
 msgid "Omaduse Klassi definitsioon (classdef) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_create_sql
+msgid "Omaduse SQL definitsioon (create_sql) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_create_sql_comment
+msgid "Omaduse SQL definitsioon (create_sql) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_create_sql_help
+msgid "Omaduse SQL definitsioon (create_sql) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_alter_sql
+msgid "Omaduse SQL definitsioon (alter_sql) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_alter_sql_comment
+msgid "Omaduse SQL definitsioon (alter_sql) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_alter_sql_help
+msgid "Omaduse SQL definitsioon (alter_sql) help"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_planner_toolbar
@@ -398,6 +434,14 @@ msgstr ""
 msgid "Omaduse temp (temp2) help"
 msgstr ""
 
+#: classes/applications/class_designer/class_designer.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/class_designer/class_designer.aw:group_general_sub
 msgid "Grupi Üldine (general_sub) pealkiri"
 msgstr ""
@@ -494,12 +538,36 @@ msgstr ""
 msgid "Grupi Andmed (data) help"
 msgstr ""
 
+#: classes/applications/class_designer/class_designer.aw:group_defs
+msgid "Grupi Definitsioonid (defs) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:group_defs_help
+msgid "Grupi Definitsioonid (defs) help"
+msgstr ""
+
 #: classes/applications/class_designer/class_designer.aw:group_classdef
-msgid "Grupi Klassi definitsioon (classdef) pealkiri"
+msgid "Grupi Klassi kirjeldus (classdef) pealkiri"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:group_classdef_help
-msgid "Grupi Klassi definitsioon (classdef) help"
+msgid "Grupi Klassi kirjeldus (classdef) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:group_create_sql
+msgid "Grupi Create SQL (create_sql) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:group_create_sql_help
+msgid "Grupi Create SQL (create_sql) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:group_alter_sql
+msgid "Grupi Alter SQL (alter_sql) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:group_alter_sql_help
+msgid "Grupi Alter SQL (alter_sql) help"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:rel_RELTYPE_RELATION
@@ -510,103 +578,107 @@ msgstr ""
 msgid "Seose Eelvaade (RELTYPE_CL_REVIEW) tekst"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:310 classes/applications/class_designer/class_designer.aw:317 classes/applications/class_designer/class_designer.aw:407 classes/applications/class_designer/class_designer.aw:411
+#: classes/applications/class_designer/class_designer.aw:338
+msgid "SQL table is up to date"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:361 classes/applications/class_designer/class_designer.aw:368 classes/applications/class_designer/class_designer.aw:458 classes/applications/class_designer/class_designer.aw:462
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:352
+#: classes/applications/class_designer/class_designer.aw:403
 msgid "Väljundkataloog ei ole kirjutatav!"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:568
+#: classes/applications/class_designer/class_designer.aw:619
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:580
+#: classes/applications/class_designer/class_designer.aw:631
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:591
+#: classes/applications/class_designer/class_designer.aw:642
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:612
+#: classes/applications/class_designer/class_designer.aw:663
 msgid "tab"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:623
+#: classes/applications/class_designer/class_designer.aw:674
 msgid "vbox"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:635
+#: classes/applications/class_designer/class_designer.aw:686
 msgid "hbox"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:738
+#: classes/applications/class_designer/class_designer.aw:789
 msgid "Save"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:748
+#: classes/applications/class_designer/class_designer.aw:799
 msgid "Cut"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:758
+#: classes/applications/class_designer/class_designer.aw:809
 msgid "Paste"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:767
+#: classes/applications/class_designer/class_designer.aw:818
 msgid "Delete"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:770
+#: classes/applications/class_designer/class_designer.aw:821
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:780
+#: classes/applications/class_designer/class_designer.aw:831
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:786 classes/applications/class_designer/class_designer.aw:1480 classes/applications/class_designer/class_designer.aw:1505 classes/applications/class_designer/class_designer.aw:1559 classes/applications/class_designer/class_designer.aw:1643
+#: classes/applications/class_designer/class_designer.aw:837 classes/applications/class_designer/class_designer.aw:1833 classes/applications/class_designer/class_designer.aw:1858 classes/applications/class_designer/class_designer.aw:1912 classes/applications/class_designer/class_designer.aw:1996
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:791 classes/applications/class_designer/class_designer.aw:1563 classes/applications/class_designer/class_designer.aw:1647
+#: classes/applications/class_designer/class_designer.aw:842 classes/applications/class_designer/class_designer.aw:1916 classes/applications/class_designer/class_designer.aw:2000
 msgid "Tüüp"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:796 classes/applications/class_designer/class_designer.aw:852 classes/applications/class_designer/class_designer.aw:1578 classes/applications/class_designer/class_designer.aw:1622
+#: classes/applications/class_designer/class_designer.aw:847 classes/applications/class_designer/class_designer.aw:903 classes/applications/class_designer/class_designer.aw:1931 classes/applications/class_designer/class_designer.aw:1975
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:884
+#: classes/applications/class_designer/class_designer.aw:935
 msgid "Grupp "
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:916
+#: classes/applications/class_designer/class_designer.aw:967
 msgid "vbox "
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1526 classes/applications/class_designer/class_designer.aw:1537 classes/applications/class_designer/class_designer.aw:1548
+#: classes/applications/class_designer/class_designer.aw:1879 classes/applications/class_designer/class_designer.aw:1890 classes/applications/class_designer/class_designer.aw:1901
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1568
+#: classes/applications/class_designer/class_designer.aw:1921
 msgid "Sisemine seos"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1573
+#: classes/applications/class_designer/class_designer.aw:1926
 msgid "Väline seos"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1590
+#: classes/applications/class_designer/class_designer.aw:1943
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1635
+#: classes/applications/class_designer/class_designer.aw:1988
 msgid "ID"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:1639
+#: classes/applications/class_designer/class_designer.aw:1992
 msgid "Parent"
 msgstr ""
 

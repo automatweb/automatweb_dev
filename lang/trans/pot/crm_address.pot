@@ -27,15 +27,15 @@ msgid "Omaduse Tänav/Küla (aadress) help"
 msgstr ""
 
 #: classes/crm/crm_address.aw:prop_postiindeks
-msgid "Omaduse Postinindex (postiindeks) caption"
+msgid "Omaduse Postiindeks (postiindeks) caption"
 msgstr ""
 
 #: classes/crm/crm_address.aw:prop_postiindeks_comment
-msgid "Omaduse Postinindex (postiindeks) kommentaar"
+msgid "Omaduse Postiindeks (postiindeks) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_address.aw:prop_postiindeks_help
-msgid "Omaduse Postinindex (postiindeks) help"
+msgid "Omaduse Postiindeks (postiindeks) help"
 msgstr ""
 
 #: classes/crm/crm_address.aw:prop_linn
@@ -72,6 +72,14 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_riik_help
 msgid "Omaduse Riik (riik) help"
+msgstr ""
+
+#: classes/crm/crm_address.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_address.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/crm/crm_address.aw:group_settings

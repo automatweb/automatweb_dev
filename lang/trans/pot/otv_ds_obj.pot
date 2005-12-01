@@ -146,6 +146,14 @@ msgstr ""
 msgid "Omaduse Lisatavad objektit&uuml;&uuml;bid (add_ots) help"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
 msgstr ""
@@ -155,11 +163,11 @@ msgid "Grupi Kataloogid (folders) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_types
-msgid "Grupi Objektit&uuml;&uuml;bid (types) pealkiri"
+msgid "Grupi Objektitüübid (types) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_types_help
-msgid "Grupi Objektit&uuml;&uuml;bid (types) help"
+msgid "Grupi Objektitüübid (types) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_FOLDER
@@ -167,15 +175,15 @@ msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_ADD_TYPE
-msgid "Seose lisatav objektit&uuml;&uuml;p (RELTYPE_ADD_TYPE) tekst"
+msgid "Seose lisatav objektit&amp;uuml;&amp;uuml;p (RELTYPE_ADD_TYPE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_SHOW_TYPE
-msgid "Seose n&auml;idatav objektit&uuml;&uuml;p (RELTYPE_SHOW_TYPE) tekst"
+msgid "Seose n&amp;auml;idatav objektit&amp;uuml;&amp;uuml;p (RELTYPE_SHOW_TYPE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_SHOW_CFGFORM
-msgid "Seose v&auml;ljundi seadete vorm (RELTYPE_SHOW_CFGFORM) tekst"
+msgid "Seose v&amp;auml;ljundi seadete vorm (RELTYPE_SHOW_CFGFORM) tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_META
@@ -210,7 +218,7 @@ msgstr ""
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:427
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:428
 msgid "J&auml;rjekord"
 msgstr ""
 

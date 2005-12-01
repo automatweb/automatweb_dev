@@ -9,9 +9,6 @@ $GLOBALS["TRANS"]["Omaduse Objekti vaatamine l&auml;bi seadete vormi (show_via_c
 $GLOBALS["TRANS"]["Omaduse Kataloogid (folders) caption"] = "Folders";
 $GLOBALS["TRANS"]["Grupi Kataloogid (folders) pealkiri"] = "Folders";
 $GLOBALS["TRANS"]["Seose kataloog (RELTYPE_FOLDER) tekst"] = "folder";
-$GLOBALS["TRANS"]["Seose lisatav objektit&uuml;&uuml;p (RELTYPE_ADD_TYPE) tekst"] = "addable object type";
-$GLOBALS["TRANS"]["Seose n&auml;idatav objektit&uuml;&uuml;p (RELTYPE_SHOW_TYPE) tekst"] = "displayed object type";
-$GLOBALS["TRANS"]["Seose v&auml;ljundi seadete vorm (RELTYPE_SHOW_CFGFORM) tekst"] = "display config form";
 $GLOBALS["TRANS"]["Seose Muutuja (RELTYPE_META) tekst"] = "Variable";
 $GLOBALS["TRANS"]["Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"] = "data transformer";
 $GLOBALS["TRANS"]["Objekti muutmise kuup&auml;eva j&auml;rgi"] = "By object modified date";

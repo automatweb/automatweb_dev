@@ -10,125 +10,156 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/meta/metamgr.aw:class_279_help
+#: classes/meta/metamgr.aw:class_279_help
 msgid "Klassi Muutujate haldus help"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_mgrtoolbar
+#: classes/meta/metamgr.aw:prop_mgrtoolbar
 msgid "Omaduse Toolbar (mgrtoolbar) caption"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_mgrtoolbar_comment
+#: classes/meta/metamgr.aw:prop_mgrtoolbar_comment
 msgid "Omaduse Toolbar (mgrtoolbar) kommentaar"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_mgrtoolbar_help
+#: classes/meta/metamgr.aw:prop_mgrtoolbar_help
 msgid "Omaduse Toolbar (mgrtoolbar) help"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_manager
+#: classes/meta/metamgr.aw:prop_manager
 msgid "Omaduse Manager (manager) caption"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_manager_comment
+#: classes/meta/metamgr.aw:prop_manager_comment
 msgid "Omaduse Manager (manager) kommentaar"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_manager_help
+#: classes/meta/metamgr.aw:prop_manager_help
 msgid "Omaduse Manager (manager) help"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_treeview
+#: classes/meta/metamgr.aw:prop_treeview
 msgid "Omaduse  (treeview) caption"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_treeview_comment
+#: classes/meta/metamgr.aw:prop_treeview_comment
 msgid "Omaduse  (treeview) kommentaar"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_treeview_help
+#: classes/meta/metamgr.aw:prop_treeview_help
 msgid "Omaduse  (treeview) help"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_metalist
+#: classes/meta/metamgr.aw:prop_metalist
 msgid "Omaduse  (metalist) caption"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_metalist_comment
+#: classes/meta/metamgr.aw:prop_metalist_comment
 msgid "Omaduse  (metalist) kommentaar"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_metalist_help
+#: classes/meta/metamgr.aw:prop_metalist_help
 msgid "Omaduse  (metalist) help"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_mupload
+#: classes/meta/metamgr.aw:prop_mupload
 msgid "Omaduse Vali muutujatega fail (mupload) caption"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_mupload_comment
+#: classes/meta/metamgr.aw:prop_mupload_comment
 msgid "Omaduse Vali muutujatega fail (mupload) kommentaar"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_mupload_help
+#: classes/meta/metamgr.aw:prop_mupload_help
 msgid "Omaduse Vali muutujatega fail (mupload) help"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_meta
+#: classes/meta/metamgr.aw:prop_meta
 msgid "Omaduse Metainfo (meta) caption"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_meta_comment
+#: classes/meta/metamgr.aw:prop_meta_comment
 msgid "Omaduse Metainfo (meta) kommentaar"
 msgstr ""
 
 # classes/meta/metamgr.aw:prop_meta_help
+#: classes/meta/metamgr.aw:prop_meta_help
 msgid "Omaduse Metainfo (meta) help"
 msgstr ""
 
+#: classes/meta/metamgr.aw:group_general
+msgid "Grupi ‹ldine (general) pealkiri"
+msgstr ""
+
+#: classes/meta/metamgr.aw:group_general_help
+msgid "Grupi ‹ldine (general) help"
+msgstr ""
+
 # classes/meta/metamgr.aw:group_manager
+#: classes/meta/metamgr.aw:group_manager
 msgid "Grupi Muutujad (manager) pealkiri"
 msgstr ""
 
 # classes/meta/metamgr.aw:group_manager_help
+#: classes/meta/metamgr.aw:group_manager_help
 msgid "Grupi Muutujad (manager) help"
 msgstr ""
 
 # classes/meta/metamgr.aw:group_import
+#: classes/meta/metamgr.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
 
 # classes/meta/metamgr.aw:group_import_help
+#: classes/meta/metamgr.aw:group_import_help
 msgid "Grupi Import (import) help"
 msgstr ""
 
-#: classes/meta/metamgr.aw:140
+#: classes/meta/metamgr.aw:142
 msgid "ID"
 msgstr ""
 
-#: classes/meta/metamgr.aw:145
+#: classes/meta/metamgr.aw:147
 msgid "Nimi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:152
+#: classes/meta/metamgr.aw:154
 msgid "V‰‰rtus"
 msgstr ""
 
-#: classes/meta/metamgr.aw:159
+#: classes/meta/metamgr.aw:161
 msgid "Jrk"
 msgstr ""
 
-#: classes/meta/metamgr.aw:315
+#: classes/meta/metamgr.aw:317
 msgid "Salvesta"
 msgstr ""
 
-#: classes/meta/metamgr.aw:323
+#: classes/meta/metamgr.aw:325
 msgid "Liiguta valitud omadused gruppi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:378
+#: classes/meta/metamgr.aw:380
 msgid "Kustuta valitud muutujad"
 msgstr ""
 
-#: classes/meta/metamgr.aw:379
+#: classes/meta/metamgr.aw:381
 msgid "Kustuta valitud muutujad?"
 msgstr ""

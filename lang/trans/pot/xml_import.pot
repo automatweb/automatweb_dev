@@ -50,6 +50,14 @@ msgstr ""
 msgid "Omaduse Käivita import (run_import) help"
 msgstr ""
 
+#: classes/applications/clients/ut/xml_import/xml_import.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/clients/ut/xml_import/xml_import.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/clients/ut/xml_import/xml_import.aw:52
 msgid "Käivita import"
 msgstr ""
