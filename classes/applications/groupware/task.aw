@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.40 2005/11/28 13:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.41 2005/12/01 11:47:33 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -17,6 +17,7 @@
 @property project type=popup_search table=planner field=project clid=CL_PROJECT style=relpicker reltype=RELTYPE_PROJECT
 @caption Projekt
 
+@property ppa type=hidden store=no no_caption=1
 
 @property info_on_object type=text store=no
 @caption Osalejad
@@ -187,6 +188,24 @@ class task extends class_base
 				if (is_object($arr["obj_inst"]) && $data["value"] == "")
 				{
 					$data["value"] = $this->_get_default_name($arr["obj_inst"]);
+				}
+				if ($arr["new"])
+				{
+					$data["post_append_text"] = " <a href='#' onClick='document.changeform.ppa.value=1;document.changeform.submit();'>Stopper</a>";
+				}
+				else
+				{
+					$url = $this->mk_my_orb("stopper_pop", array(
+						"id" => $arr["obj_inst"]->id(),
+						"s_action" => "start",
+						"type" => t("Toimetus"),
+						"name" => urlencode($data["value"])
+					));
+					$data["post_append_text"] = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>Stopper</a>";
+					if ($arr["request"]["stop_pop"] == 1)
+					{
+						$data["post_append_text"] .= "<script language='javascript'>aw_popup_scroll(\"$url\",\"aw_timers\",320,400)</script>";
+					}
 				}
 				break;
 
@@ -661,6 +680,11 @@ class task extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["stop_pop"] = $arr["request"]["ppa"];
+	}
+
 	function callback_pre_save($arr)
 	{
 		if ($arr["obj_inst"]->name() == "")
@@ -1046,6 +1070,15 @@ class task extends class_base
 			$date_sel = "<A HREF='#'  onClick=\"var cal=new CalendarPopup();cal.select(aw_get_el('rows[$idx][date]'),'anchor".$idx."','dd/MM/yy'); return false;\"
 						   NAME='anchor".$idx."' ID='anchor".$idx."'>vali</A>";
 
+			$is = (is_array($row["impl"]) && count($row["impl"])) ? $row["impl"] : $def_impl;
+			foreach(safe_array($is) as $is_id)
+			{
+				if (!isset($impls[$is_id]))
+				{
+					$iso = obj($is_id);
+					$impls[$is_id] = $iso->name();
+				}
+			}
 			$t->define_data(array(
 				"task" => "<a name='row_".$row["date"]."'/>".html::textarea(array(
 					"name" => "rows[$idx][task]",
@@ -1061,7 +1094,7 @@ class task extends class_base
 				"impl" => html::select(array(
 					"name" => "rows[$idx][impl]",
 					"options" => $impls,
-					"value" => (is_array($row["impl"]) && count($row["impl"])) ? $row["impl"] : $def_impl,
+					"value" => $is,
 					"multiple" => 1
 				)),
 				"time_guess" => html::textbox(array(
@@ -1419,6 +1452,177 @@ class task extends class_base
 	{
 		aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 		return parent::new_change($arr);
+	}
+
+	/**
+		@attrib name=stopper_pop
+		@param id optional
+		@param s_action optional
+		@param type optional
+		@param name optional
+		@param desc optional
+	**/
+	function stopper_pop($arr)
+	{
+		$this->read_template("stopper_pop.tpl");
+		$this->_proc_stop_act($arr);
+
+		$s = "";
+		$num = 0;
+		if (count(safe_array($_SESSION["crm_stoppers"])) < 1)
+		{
+			header("Location: ".aw_ini_get("baseurl")."/automatweb/closewin_no_r.html");
+			die();
+		}
+		foreach(safe_array($_SESSION["crm_stoppers"]) as $_id => $stopper)
+		{
+			if ($stopper["state"] == "running")
+			{
+				$el = (time() - $stopper["start"]) + $stopper["base"];
+			}
+			else
+			{
+				$el = $stopper["base"];
+			}
+			$elapsed_hr = (int)($el / 3600);
+			$elapsed_min = (int)(($el - $elapsed_hr * 3600) / 60);
+			$elapsed_sec = (int)($el - ($elapsed_hr * 3600 + $elapsed_min * 60));
+			$this->vars(array(
+				"task_type" => $stopper["type"],
+				"task_name" => $stopper["name"],
+				"time" => date("d.m.Y H:i:s", $stopper["start"]),
+				"elapsed" => sprintf("%02d:%02d:%02d",$elapsed_hr,$elapsed_min, $elapsed_sec),
+				"number" => $num++,
+				"start" => $stopper["start"],
+				"el_hr" => $elapsed_hr,
+				"el_min" => $elapsed_min,
+				"el_sec" => $elapsed_sec,
+				"pause_url" => $this->mk_my_orb("stopper_pop", array(
+					"id" => $_id,
+					"s_action" => "pause"
+				)),
+				"start_url" => $this->mk_my_orb("stopper_pop", array(
+					"id" => $_id,
+					"s_action" => "start"
+				)),
+				"stop_url" => $this->mk_my_orb("stopper_pop", array(
+					"id" => $_id,
+					"s_action" => "stop"
+				)),
+				"del_url" => $this->mk_my_orb("stopper_pop", array(
+					"id" => $_id,
+					"s_action" => "del"
+				)),
+			));
+
+			if ($stopper["state"] == "running")
+			{
+				$this->vars(array(
+					"PAUSE" => $this->parse("PAUSE"),
+					"RUNNER" => $this->parse("RUNNER"),
+					"PAUSER" => "",
+					"START" => ""
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"PAUSE" => "",
+					"START" => $this->parse("START"),
+					"RUNNER" => "",
+					"PAUSER" => $this->parse("PAUSER"),
+				));
+			}
+
+			$s .= $this->parse("STOPPER");
+		}
+
+		$this->vars(array(
+			"STOPPER" => $s
+		));
+
+		return $this->parse();
+	}
+
+	function _proc_stop_act($arr)
+	{
+		if ($arr["s_action"] == "del")
+		{
+			unset($_SESSION["crm_stoppers"][$arr["id"]]);
+		}
+		else
+		if ($arr["s_action"] == "pause")
+		{
+			$elapsed = time() - $_SESSION["crm_stoppers"][$arr["id"]]["start"];
+			$_SESSION["crm_stoppers"][$arr["id"]]["base"] += $elapsed;
+			$_SESSION["crm_stoppers"][$arr["id"]]["state"] = "paused";
+		}
+		else
+		if ($arr["s_action"] == "stop")
+		{
+			// stop timer and write row to task
+			$stopper = $_SESSION["crm_stoppers"][$arr["id"]];
+			$u = get_instance(CL_USER);
+			$cp = obj($u->get_current_person());
+			$elapsed = (time() - $stopper["start"]) + $stopper["base"];
+			$el_hr = (int)($elapsed / 3600);
+			$el_min = (int)(($elapsed - $el_hr * 3600) / 60);
+			if ($el_min < 15)
+			{
+				$el_hr += 0.25;
+			}
+			else
+			if ($el_min < 30)
+			{
+				$el_hr += 0.5;
+			}
+			else
+			if ($el_min < 45)
+			{
+				$el_hr += 0.75;
+			}
+			$o = obj($arr["id"]);
+			$r = $o->meta("rows");
+			$r[] = array(
+				"date" => $stopper["start"],
+				"impl" => array($cp->id() => $cp->id()),
+				"time_real" => $el_hr,
+				"task" => $arr["desc"]
+			);
+			$o->set_meta("rows", $r);
+			$o->save();
+			unset($_SESSION["crm_stoppers"][$arr["id"]]);
+		}
+		else
+		if ($arr["s_action"] == "start")
+		{
+			// pause all running timers
+			foreach((array)$_SESSION["crm_stoppers"] as $k => $stopper)
+			{
+				if ($stopper["state"] == "running" && $k != $arr["id"])
+				{
+					$elapsed = time() - $stopper["start"];
+					$_SESSION["crm_stoppers"][$k]["base"] += $elapsed;
+					$_SESSION["crm_stoppers"][$k]["state"] = "paused";
+				}
+			}
+
+			$k = $arr["id"];
+			if ($_SESSION["crm_stoppers"][$k]["state"] != "running")
+			{
+				$_SESSION["crm_stoppers"][$k]["start"] = time();
+			}
+
+			if (isset($arr["type"]))
+			{
+				$_SESSION["crm_stoppers"][$k]["type"] = $arr["type"];
+			}
+			if (isset($arr["name"]))
+			{
+				$_SESSION["crm_stoppers"][$k]["name"] = $arr["name"];
+			}
+			$_SESSION["crm_stoppers"][$k]["state"] = "running";
+		}
 	}
 }
 ?>

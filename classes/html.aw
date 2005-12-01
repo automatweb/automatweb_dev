@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.87 2005/11/16 13:45:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.88 2005/12/01 11:47:32 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -143,7 +143,7 @@ class html extends aw_template
 		}
 		else
 		{
-			return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" $onkeypress $disabled $textsize />\n";
+			return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" $onkeypress $disabled $textsize />$post_append_text\n";
 		}
 	}
 

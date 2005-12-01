@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.147 2005/10/24 10:55:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.148 2005/12/01 11:47:33 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1058,8 +1058,8 @@ class image extends class_base
 
 	function get_url_by_id($id)
 	{
-		$imd = $this->get_image_by_id($id);
-		$url = $this->get_url($imd["file"]);
+		$o = obj($id);
+		$url = $this->get_url($o->prop("file"));
 		return $this->check_url($url);
 	}
 

@@ -319,6 +319,8 @@ class user extends class_base
 	{
 		$prop =& $arr["prop"];
 		load_vcl("date_edit");
+		obj_set_opt("no_cache", 1);
+		$GLOBALS["DUKE"] = 1;
 		switch($prop['name'])
 		{
 			case "uid_entry":

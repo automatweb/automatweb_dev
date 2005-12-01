@@ -46,5 +46,17 @@
 			</function>
 		</action>
 
+		<action name="stopper_pop">
+			<function name="stopper_pop">
+				<arguments>
+					<optional name="id" />
+					<optional name="s_action" />
+					<optional name="type" />
+					<optional name="name" />
+					<optional name="desc" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

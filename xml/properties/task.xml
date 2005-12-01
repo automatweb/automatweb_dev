@@ -32,6 +32,15 @@
             <caption>Projekt</caption>
       </property>
       <property>
+            <name>ppa</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>ppa</field>
+      </property>
+      <property>
             <name>info_on_object</name>
             <table>objects</table>
             <group>general</group>

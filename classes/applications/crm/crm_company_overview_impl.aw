@@ -348,12 +348,17 @@ class crm_company_overview_impl extends class_base
 			));
 			if ($task->meta("stopper_state") != "started")
 			{
+				$url = $this->mk_my_orb("stopper_pop", array(
+					"id" => $t_id,
+					"s_action" => "start",
+					"type" => t("Toimetus"),
+					"name" => urlencode($task->name())
+				),CL_TASK);
+
 				$pm->add_item(array(
 					"text" => t("K&auml;ivita stopper"), 
-					"link" => $this->mk_my_orb("start_task_timer", array(
-						"id" => $t_id,
-						"post_ru" => get_ru()
-					), CL_TASK)
+					"link" => "#", 
+					"oncl" => "onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'"
 				));
 			}
 			else

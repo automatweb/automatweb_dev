@@ -46,7 +46,7 @@ class popup_menu extends aw_template
 		$is = "";
 		foreach($this->items as $item)
 		{
-			$is .= "<a class=\"menuItem\" href=\"".$item["link"]."\">".$item["text"]."</a>";
+			$is .= "<a class=\"menuItem\" $item[oncl] href=\"".$item["link"]."\">".$item["text"]."</a>";
 		}
 		$this->vars(array(
 			"MENU_ITEM" => $is,
