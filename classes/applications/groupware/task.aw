@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.41 2005/12/01 11:47:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.42 2005/12/01 12:47:51 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -194,6 +194,7 @@ class task extends class_base
 					$data["post_append_text"] = " <a href='#' onClick='document.changeform.ppa.value=1;document.changeform.submit();'>Stopper</a>";
 				}
 				else
+				if (is_object($arr["obj_inst"]))
 				{
 					$url = $this->mk_my_orb("stopper_pop", array(
 						"id" => $arr["obj_inst"]->id(),
