@@ -639,8 +639,15 @@ function PopupWindow_showPopup(anchorname) {
 					this.x = screen.availWidth - this.width;
 					}
 				}
+
 			var avoidAboutBlank = window.opera || ( document.layers && !navigator.mimeTypes['*'] ) || navigator.vendor == 'KDE' || ( document.childNodes && !document.all && !navigator.taintEnabled );
-			this.popupWindow = window.open(avoidAboutBlank?"":"about:blank","window_"+anchorname,this.windowProperties+",width="+this.width+",height="+this.height+",screenX="+this.x+",left="+this.x+",screenY="+this.y+",top="+this.y+"");
+
+			tmpan = new String(anchorname);
+			tmpan = tmpan.replace(/\[/g, "_");
+			tmpan = tmpan.replace(/\]/g, "_");
+			wname = "window_"+tmpan;
+			this.popupWindow = window.open(avoidAboutBlank?"":"about:blank",wname,this.windowProperties+",width="+this.width+",height="+this.height+",screenX="+this.x+",left="+this.x+",screenY="+this.y+",top="+this.y+"");
+
 			}
 		this.refresh();
 		}
