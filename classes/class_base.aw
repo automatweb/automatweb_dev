@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.436 2005/11/21 15:52:05 kristo Exp $
+// $Id: class_base.aw,v 2.437 2005/12/02 05:50:27 ahti Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1383,6 +1383,7 @@ class class_base extends aw_template
 
 					$this->cli->add_tab(array(
 						"id" => $tabinfo["id"],
+						"encoding" => $val["encoding"],
 						"level" => $val["level"],
 						"parent" => isset($val["parent"]) ? $val["parent"] : false,
 						"link" => $tabinfo["link"],

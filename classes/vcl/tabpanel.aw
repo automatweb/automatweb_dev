@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.14 2005/04/21 08:54:57 kristo Exp $
+// $Id: tabpanel.aw,v 1.15 2005/12/02 05:50:27 ahti Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -29,6 +29,10 @@ class tabpanel extends aw_template
 		if (isset($args["active"]) && $args["active"])
 		{
 			$subtpl = "sel_tab";
+			if(!empty($args["encoding"]))
+			{
+				aw_global_set("output_charset", $args["encoding"]);
+			}
 		}
 		else
 		{
