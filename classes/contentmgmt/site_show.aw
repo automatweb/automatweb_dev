@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.149 2005/11/16 13:22:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.150 2005/12/05 12:15:41 kristo Exp $
 
 /*
 
@@ -1692,6 +1692,10 @@ class site_show extends class_base
 		}
 
 		$this->path_ids = $path_bak;
+
+		$this->do_seealso_items();
+
+
 		if ($filename !== NULL)
 		{
 			return $this->parse();
@@ -2565,6 +2569,46 @@ class site_show extends class_base
 		$cname = $this->cache_compile_template($tpl_dir, $tpl_fn, $mdefs, true);
 		$tmp = $this->do_draw_menus(array(), $cname, $tpl_dir, $tpl_fn);
 		return $tmp;
+	}
+
+	function do_seealso_items()
+	{
+		foreach(aw_ini_get("menuedit.menu_defs") as $id => $name)
+		{
+			$tmp = array();
+			$subtpl = "MENU_${name}_SEEALSO_ITEM";
+
+			$o = obj($id);
+			foreach($o->connections_to(array("type" => 5, "to.lang_id" => aw_global_get("lang_id"))) as $c)
+			{
+				$samenu = $c->to();
+				if ($samenu->status() != STAT_ACTIVE)
+				{
+					continue;
+				}
+
+				$link = $this->make_menu_link($samenu);
+				$ord = (int)$samenu->meta("seealso_order");
+
+				// the jrk number is in $samenu["meta"]["seealso_order"]
+
+				if (!($samenu->meta("users_only") == 1 && aw_global_get("uid") == ""))
+				{
+					$this->vars(array(
+						"target" => $samenu->prop("target") ? "target=\"_blank\"" : "",
+						"link" => $link,
+						"text" => str_replace("&nbsp;", " ", $samenu->name()),
+					));
+					$tmp[$ord] .= $this->parse($subtpl);
+				}
+			}
+
+			// make sure, they are in correct order
+			ksort($tmp);
+			$this->vars(array(
+				$subtpl => join("",$tmp),
+			));
+		}
 	}
 }
 ?>
