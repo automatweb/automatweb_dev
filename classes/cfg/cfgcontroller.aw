@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.7 2005/03/28 08:17:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.8 2005/12/05 11:45:17 kristo Exp $
 // cfgcontroller.aw - Kontroller(Classbase) 
 /*
 
@@ -62,6 +62,10 @@ class cfgcontroller extends class_base
 		// $controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst
 		//extract($arr);
 		$retval = PROP_OK;
+		if (!is_oid($controller_oid))
+		{
+			return;
+		}
 		$controller_inst = &obj($controller_oid);
 		eval($controller_inst->prop("formula"));
 		return $retval;
