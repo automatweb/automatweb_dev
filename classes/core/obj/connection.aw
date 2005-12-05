@@ -53,6 +53,7 @@ class connection
 					"id" => ERR_CONNECTION,
 					"msg" => sprintf(t("connection::constructior(%s): parameter must be numeric or array!"), $id)
 				));
+				return;
 			}
 
 			$this->load($id);
@@ -72,6 +73,7 @@ class connection
 				"id" => ERR_CONNECTION,
 				"msg" => t("connection::load(): parameter must be either array (connection data) or integer (connection id)!")
 			));
+			return;
 		}
 		else
 		{
@@ -91,6 +93,7 @@ class connection
 				"id" => ERR_PARAM,
 				"msg" => t("connection::find(): parameter must be an array of filter parameters!")
 			));
+			return;
 		}
 
 		if (isset($param["type"]))
@@ -132,6 +135,7 @@ class connection
 				"id" => ERR_ARG,
 				"msg" => sprintf(t("connection::change(%s): parameter must be an array!"), $param)
 			));
+			return;
 		}
 
 		if (!is_array($this->conn))
@@ -155,6 +159,7 @@ class connection
 				"id" => ERR_CONNECTION,
 				"msg" => t("connection::delete(): no current connection to delete!")
 			));
+			return;
 		}
 
 		// now, check acl - both ends must be visible for the connection to be deleted
@@ -164,6 +169,7 @@ class connection
 				"id" => ERR_ACL,
 				"msg" => sprintf(t("connection::delete(): no view access for this connection (%s)!"), $this->conn["id"])
 			));
+			return;
 		}
 
 		post_message(
@@ -215,6 +221,7 @@ class connection
 				"id" => ERR_CONNECTION,
 				"msg" => t("connection::to(): no current connection!")
 			));
+			return;
 		}
 		return obj($this->conn["to"]);
 	}
@@ -227,6 +234,7 @@ class connection
 				"id" => ERR_CONNECTION,
 				"msg" => t("connection::to(): no current connection!")
 			));
+			return;
 		}
 		return obj($this->conn["from"]);
 	}
@@ -249,6 +257,7 @@ class connection
 				"id" => ERR_CONNECTION,
 				"msg" => sprintf(t("connection::load(%s): no connection with id $id!"), $id)
 			));
+			return;
 		}
 		
 		// now, check acl - both ends must be visible for the connection to be shown
@@ -258,6 +267,7 @@ class connection
 				"id" => ERR_ACL,
 				"msg" => sprintf(t("connection::load(%s): no view access for this connection!"), $id)
 			));
+			return;
 		}	
 	}
 
@@ -269,6 +279,7 @@ class connection
 				"id" => ERR_CONNECTION,
 				"msg" => t("connection::save(): connection must have both ends defined!")
 			));
+			return;
 		}
 
 		global $awt;
@@ -280,6 +291,7 @@ class connection
 				"id" => ERR_ACL,
 				"msg" => sprintf(t("connection::load(%s): no view access for this connection!"), $id)
 			));
+			return;
 		}
 
 		// check if this is a new connection

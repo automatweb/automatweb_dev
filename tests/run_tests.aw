@@ -29,10 +29,17 @@ for($i = 2; $i < $argc; $i++)
 
 	echo "running tests in ".$argv[$i]."... \n\n";
 
-	// get files from folder
-	$p = get_instance("core/docgen/parser");
-	$files = array();
-	$p->_get_class_list($files, $path);
+	if (is_file($path))
+	{
+		$files[] = $path;
+	}
+	else
+	{
+		// get files from folder
+		$p = get_instance("core/docgen/parser");
+		$files = array();
+		$p->_get_class_list($files, $path);
+	}
 
 	$suite = &new GroupTest("All tests");
 	foreach($files as $filename)

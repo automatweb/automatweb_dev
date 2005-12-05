@@ -133,6 +133,7 @@ class _int_object_loader extends core
 					"id" => ERR_NO_ALIAS,
 					"msg" => sprintf(t("object_loader::param_to_oid(%s): no object with alias $param!"), $param)
 				));
+				return;
 			}
 			return $oid;
 		}
@@ -150,6 +151,7 @@ class _int_object_loader extends core
 			"id" => ERR_PARAM,
 			"msg" => t("object_loader::param_to_oid(): parameter must be either: oid , string (alias) or object instance!")
 		));
+		return;
 	}
 
 	// returns array of oids in param
@@ -169,6 +171,7 @@ class _int_object_loader extends core
 					"id" => ERR_NO_ALIAS,
 					"msg" => sprintf(t("no object with alias %s!"), $param)
 				));
+				return;
 			}
 			return array($oid);
 		}
@@ -214,6 +217,7 @@ class _int_object_loader extends core
 			"id" => ERR_PARAM,
 			"msg" => t("parameter must be either: oid , string (alias), object instance or object list instance!")
 		));
+		return;
 	}
 
 
@@ -240,6 +244,7 @@ class _int_object_loader extends core
 				"id" => ERR_PARAM,
 				"msg" => sprintf(t("object_loader::load(%s): parameter is not object id!"), $oid)
 			));
+			return;
 		}
 
 		if (isset($GLOBALS["objects"][$oid]))
@@ -257,6 +262,7 @@ class _int_object_loader extends core
 					"id" => ERR_PARAM,
 					"msg" => sprintf(t("object_loader::load(%s): no such object!"), $oid)
 				));
+				return;
 			}
 			else
 			{
@@ -284,6 +290,7 @@ class _int_object_loader extends core
 				"id" => ERR_OBJECT,
 				"msg" => sprintf(t("object_loader::save(%s): no object with oid $oid exists in the global list"), $oid)
 			));
+			return;
 		}
 
 		$t_oid = $GLOBALS["objects"][$oid]->save();
@@ -334,6 +341,7 @@ class _int_object_loader extends core
 				"id" => ERR_OBJECT,
 				"msg" => sprintf(t("object_loader::save_new(%s): no object with oid %s exists in the global list"), $oid, $oid)
 			));
+			return;
 		}
 
 		// right. here we need to make a copy BEFORE calling save_new, because
@@ -405,10 +413,14 @@ class _int_object_loader extends core
 			$ds =& $ds->contained;
 		}
 
-		error::raise_if(!is_object($ds), array(
-			"id" => ERR_NO_DS,
-			"msg" => sprintf(t("object_loader::switch_db_connection(%s): could nto find root connection!"), $new_conn)
-		));
+		if (!is_object($ds))
+		{
+			error::raise(array(
+				"id" => ERR_NO_DS,
+				"msg" => sprintf(t("object_loader::switch_db_connection(%s): could nto find root connection!"), $new_conn)
+			));
+			return;
+		}
 
 		$old = $ds->dc[$ds->default_cid];
 		$ds->dc[$ds->default_cid] = $new_conn;

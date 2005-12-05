@@ -758,5 +758,30 @@ class object_test extends UnitTestCase
 		$str = $o->path_str();
 		$this->assertEqual($str, $o->name());
 	}
+
+	function test_path_str_err_static()
+	{
+		__disable_err();
+		object::path_str();
+		$this->assertTrue(__is_err());
+	}
+
+	function test_path_str_err_cycle()
+	{
+		//__disable_err();
+		aw_disable_acl();
+		$o1 = $this->_get_temp_o();
+		$o2 = $this->_get_temp_o();
+		$o2->set_parent($o1->id());
+		$o3 = $this->_get_temp_o();
+		$o3->set_parent($o2->id());
+		$o1->set_parent($o3->id());
+		$o1->save();
+		$o2->save();
+		$o3->save();
+
+		
+		$this->assertTrue(__is_err());
+	}
 }
 ?>
