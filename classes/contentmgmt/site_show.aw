@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.150 2005/12/05 12:15:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.151 2005/12/05 12:31:47 kristo Exp $
 
 /*
 
@@ -2573,41 +2573,51 @@ class site_show extends class_base
 
 	function do_seealso_items()
 	{
-		foreach(aw_ini_get("menuedit.menu_defs") as $id => $name)
+		foreach(aw_ini_get("menuedit.menu_defs") as $id => $_name)
 		{
-			$tmp = array();
-			$subtpl = "MENU_${name}_SEEALSO_ITEM";
-
-			$o = obj($id);
-			foreach($o->connections_to(array("type" => 5, "to.lang_id" => aw_global_get("lang_id"))) as $c)
+			if (!$this->can("view", $id))
 			{
-				$samenu = $c->to();
-				if ($samenu->status() != STAT_ACTIVE)
+				continue;
+			}
+			foreach(explode(",", $_name) as $name)
+			{
+				$tmp = array();
+				$subtpl = "MENU_${name}_SEEALSO_ITEM";
+				if (!$this->is_template($subtpl))
 				{
 					continue;
 				}
-
-				$link = $this->make_menu_link($samenu);
-				$ord = (int)$samenu->meta("seealso_order");
-
-				// the jrk number is in $samenu["meta"]["seealso_order"]
-
-				if (!($samenu->meta("users_only") == 1 && aw_global_get("uid") == ""))
+				$o = obj($id);
+				foreach($o->connections_to(array("type" => 5, "to.lang_id" => aw_global_get("lang_id"))) as $c)
 				{
-					$this->vars(array(
-						"target" => $samenu->prop("target") ? "target=\"_blank\"" : "",
-						"link" => $link,
-						"text" => str_replace("&nbsp;", " ", $samenu->name()),
-					));
-					$tmp[$ord] .= $this->parse($subtpl);
-				}
-			}
+					$samenu = $c->from();
+					if ($samenu->status() != STAT_ACTIVE || $samenu->lang_id() != aw_global_get("lang_id"))
+					{
+						continue;
+					}
 
-			// make sure, they are in correct order
-			ksort($tmp);
-			$this->vars(array(
-				$subtpl => join("",$tmp),
-			));
+					$link = $this->make_menu_link($samenu);
+					$ord = (int)$samenu->meta("seealso_order");
+
+					// the jrk number is in $samenu["meta"]["seealso_order"]
+
+					if (!($samenu->meta("users_only") == 1 && aw_global_get("uid") == ""))
+					{
+						$this->vars(array(
+							"target" => $samenu->prop("target") ? "target=\"_blank\"" : "",
+							"link" => $link,
+							"text" => str_replace("&nbsp;", " ", $samenu->name()),
+						));
+						$tmp[$ord] .= $this->parse($subtpl);
+					}
+				}
+
+				// make sure, they are in correct order
+				ksort($tmp);
+				$this->vars(array(
+					$subtpl => join("",$tmp),
+				));
+			}
 		}
 	}
 }

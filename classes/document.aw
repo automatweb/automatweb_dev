@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.338 2005/11/16 13:45:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.339 2005/12/05 12:31:47 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1422,7 +1422,15 @@ class document extends aw_template
 		// keeleseosed
 		if ($this->is_template("LANG_BRO"))
 		{
-			$lab = unserialize($doc["lang_brothers"]);
+			$lab = array();
+			foreach($doc_o->connections_from(array("type" => "RELTYPE_LANG_REL")) as $c)
+			{
+				$lab[$c->prop("to.lang_id")] = $c->prop("to");
+			}
+			if (!count($lab))
+			{
+				$lab = unserialize($doc["lang_brothers"]);
+			}
 			$langs = "";
 			$l = get_instance("languages");
 			$larr = $l->listall();

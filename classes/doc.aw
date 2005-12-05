@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.111 2005/12/05 11:07:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.112 2005/12/05 12:31:47 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 @classinfo trans=1 no_comment=1 relationmgr=yes syslog_type=ST_DOCUMENT
 
@@ -212,6 +213,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @reltype REMINDER value=21 clid=CL_REMINDER
 @caption Meeldetuletus
+
+@reltype LANG_REL value=22 clid=CL_DOCUMENT
+@caption Keeleseos
 
 */
 
@@ -1051,6 +1055,22 @@ class doc extends class_base
 			flush();
 		};
 
+	}
+
+	function on_add_doc_rel($arr)
+	{
+		if ($arr["connection"]->prop("reltype") != 22)
+		{
+			return;
+		}
+
+		// create reverse conn
+		$other = $arr["connection"]->to();
+		
+		$other->connect(array(
+			"to" => $arr["connection"]->prop("from"),
+			"type" => "RELTYPE_LANG_REL"
+		));
 	}
 };
 ?>

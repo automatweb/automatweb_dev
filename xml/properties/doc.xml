@@ -700,6 +700,11 @@
                   <clid>CL_REMINDER</clid>
                   <caption>Meeldetuletus</caption>
             </REMINDER>
+            <LANG_REL>
+                  <value>22</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Keeleseos</caption>
+            </LANG_REL>
       </reltypes>
 </properties>
 
