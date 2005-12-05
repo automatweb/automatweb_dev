@@ -65,7 +65,7 @@ class form_controller extends form_base
 	function submit($arr)
 	{
 		extract($arr);
-		$this->dequote(&$eq);
+		//$this->dequote(&$eq);
 		if ($id)
 		{
 			// update
@@ -281,17 +281,17 @@ class form_controller extends form_base
 		dbg::p2("controller id $id: evaling $eq <br />");
 		if (aw_ini_get("site_id") == 139)
 		{
-			@eval($eq);
+			eval($eq);
 		}
 		else
 		{
-			@eval($eq);
+			eval($eq);
 		}
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br />");
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
-			@eval($eq);
+			eval($eq);
 		}
 		if ($_COOKIE["profile_controllers"] == "1")
 		{
@@ -338,14 +338,14 @@ class form_controller extends form_base
 		}
 		else
 		{
-			@eval($eq);
+			eval($eq);
 		}
 
 		dbg::p2("evaled $id, res: ".dbg::dump($res)." <br /><br />");
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
-			@eval($eq);
+			eval($eq);
 		}
 		if ($_COOKIE["profile_controllers"] == "1")
 		{
