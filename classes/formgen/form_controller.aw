@@ -334,7 +334,7 @@ class form_controller extends form_base
 
 		if (aw_ini_get("site_id") == 139)
 		{
-			eval($eq);
+			@eval($eq);
 		}
 		else
 		{
