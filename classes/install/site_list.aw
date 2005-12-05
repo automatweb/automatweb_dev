@@ -822,7 +822,7 @@ class site_list extends class_base
 
 	function _do_update_list_cache()
 	{
-		if (aw_ini_get("site_id") == 33)
+		if (aw_ini_get("site_id") == 33 || aw_ini_get("server.no_remote_conn"))
 		{
 			return; // never ever update register.aw.com site list :)
 		}

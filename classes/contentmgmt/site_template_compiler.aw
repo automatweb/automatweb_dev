@@ -135,11 +135,14 @@ class site_template_compiler extends aw_template
 				$mdefs = $mdefs[aw_global_get("lang_id")];
 			}
 		}
-
 		foreach($tpls as $tpl)
 		{
 			$parts = explode("_", $tpl);
 			$area = $parts[1];
+			if ($parts[2] == "SEEALSO")
+			{
+				continue;
+			}
 			$level = substr($parts[2], 1);
 
 			if (!$this->_mf_srch($area, $mdefs))

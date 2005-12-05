@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.110 2005/11/15 14:35:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.111 2005/12/05 11:07:29 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -625,7 +625,6 @@ class doc extends class_base
 
 			$toolbar->add_separator();
 		};
-
 	}
 
 	/**  
