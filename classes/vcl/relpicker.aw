@@ -11,7 +11,7 @@ class relpicker extends  core
 		$prop = &$arr["property"];
 		$this->obj = $arr["obj_inst"];
 		$val = &$arr["property"];
-		$options = array("0" => "--vali--");
+		$options = array("0" => t("--vali--"));
 		$reltype = $prop["reltype"];
 		// generate option list
 		if (is_array($prop["options"]))
