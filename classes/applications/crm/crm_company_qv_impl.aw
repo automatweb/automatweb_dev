@@ -93,6 +93,7 @@ class crm_company_qv_impl extends class_base
 			{
 				$parts[] = html::obj_change_url($_p);
 			}
+			
 			$sum = 0;
 			$hrs = 0;
 			// get all tasks for that project and calc sum and hrs
@@ -111,9 +112,9 @@ class crm_company_qv_impl extends class_base
 				}
 			}
 			$t->define_data(array(
-				"date" => date("d.m.Y", $o->prop("start"))." - ".date("d.m.Y", $o->prop("end")),
+				"date" => date("d.m.Y", $o->prop("start")).($o->prop("end") > 100 ? " - ".date("d.m.Y", $o->prop("end")) : ""),
 				"name" => html::obj_change_url($o),
-				"parts" => join(", ", $parts),
+				"parts" => join(", ",array_unique($parts)),
 				"hrs" => number_format($hrs, 2),
 				"sum" => number_format($sum, 2),
 				"grp_desc" => $pd,
@@ -257,7 +258,7 @@ class crm_company_qv_impl extends class_base
 				$hrs += str_replace(",", ".",$row["amt"]);
 			}
 			$t->define_data(array(
-				"date" => date("d.m.Y", $o->prop("bill_date")),
+				"date" => $o->prop("bill_date") > 100 ? date("d.m.Y", $o->prop("bill_date")) : "",
 				"name" => html::get_change_url($o->id(), array("return_url" => get_ru(), "group" => "preview"), $o->name()),
 				"parts" => "",
 				"hrs" => number_format($hrs, 2),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/et/number.aw,v 1.7 2005/11/03 18:02:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/et/number.aw,v 1.8 2005/12/06 18:25:14 kristo Exp $
 // et.aw - Estonian localization
 class number
 {
@@ -87,6 +87,10 @@ class number
 		if ($cent > 0)
 		{
 			$res .= " ja ".$this->get_lc_number($cent)." ".$currency->prop("small_unit_name");
+		}
+		else
+		{
+			$res .= " ja 00 ".$currency->prop("small_unit_name");
 		}
 		return $res;
 	}
