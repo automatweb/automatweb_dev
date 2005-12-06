@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.24 2005/03/18 13:43:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.25 2005/12/06 09:58:42 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -144,6 +144,7 @@ class livelink_import extends class_base
 	function _close_logfile($id)
 	{
 		$t = get_instance(CL_FILE);
+		aw_disable_acl();
 		$file_id = $t->create_file_from_string(array(
 			"parent" => $this->log_file_parent,
 			"id" => $this->log_file_id,
@@ -158,6 +159,7 @@ class livelink_import extends class_base
 				"reltype" => "RELTYPE_LOGFILE",
 			));
 		};
+		aw_restore_acl();
 		//print "closing logfile<br>";
 	}
 
@@ -188,6 +190,10 @@ class livelink_import extends class_base
 	**/
 	function invoke($args = array())
 	{
+		$this->put_file(array(
+			"file" => "/export/aw/automatweb/new/files/livelink_import_".date("d.m.Y H:i:s").".invoked",
+			"content" => aw_global_get("uid")
+		));
 		$this->_open_logfile(array(
 			"id" => $args["id"],
 		));
@@ -242,7 +248,7 @@ class livelink_import extends class_base
 
 	function import_livelink_structure($args = array())
 	{
-		set_time_limit(0);
+		set_time_limit(14400);
 		$this->tmpdir = aw_ini_get("server.tmpdir");
 		$this->outdir = $args["outdir"];
 		$this->rootnode = $args["rootnode"];
@@ -279,6 +285,7 @@ class livelink_import extends class_base
                 xml_set_object($xml_parser,&$this);
                 xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
                 $xml_data = join("",file($outf));
+		//die("<pre>".htmlentities(join("",file($outf))));
                 $xml_data = str_replace("\r","",$xml_data);
 
                 if (!xml_parse($xml_parser,$xml_data))
@@ -291,7 +298,6 @@ class livelink_import extends class_base
                 {
                         $this->fetch_node($node_id);
                 };
-
 		if (sizeof($this->file_id_list) > 0)
 		{
 			$flist = join(",",$this->file_id_list);
@@ -356,7 +362,7 @@ class livelink_import extends class_base
 				$this->db_query($q);
 			}
 			else
-			if ($modified > $old["modified"])
+			//if ($modified > $old["modified"])
 			{
 				# update existing one
 				$this->log_progress("renewing $name");
@@ -382,12 +388,13 @@ class livelink_import extends class_base
 				$this->log_progress($q);
 				$this->db_query($q);
 			}
+			/*
 			else
 			{
 				//print "not touching $name, since it has not been modified\n";
 			};
+			*/
                 }
-
 		if ($name == "llnode" && isset($attribs["objtype"]) && ($attribs["objtype"] > 0 || $attribs["objtype"] != 136))
 		{
 			// only retrieve the docs, if the parent has been modified
@@ -419,7 +426,7 @@ class livelink_import extends class_base
 		{
 			$http_auth_str = $this->http_username . ":" . $this->http_password . "@";
 		};
-		$cmdline = "wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1";
+		$cmdline = "wget --no-check-certificate -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' --no-check-certificate 2>&1";
 		$this->log_progress("executing $cmdline");
 		passthru($cmdline,$retval);
 		//var_dump($retval);
@@ -444,7 +451,7 @@ class livelink_import extends class_base
 		{
 			$http_auth_str = $this->http_username . ":" . $this->http_password . "@";
 		};
-		$cmdline = "wget -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${node_id}&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
+		$cmdline = "wget --no-check-certificate -O $outfile 'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://${http_auth_str}dok.ut.ee/livelink/livelink?func=ll&objId=${node_id}&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
 		$this->log_progress("executing $cmdline");
 		passthru($cmdline);
 		// check whether opening succeeded?
@@ -490,6 +497,7 @@ class livelink_import extends class_base
 		# parse the structure
 		if ($this->filename)
 		{
+			$this->_existing_files[] = $this->filename;
 			#$name = $this->name;
 			$name = $this->desc;
 			$realname = preg_replace("/^\d+?\.\s/","",$name);
