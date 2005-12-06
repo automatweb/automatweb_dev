@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.18 2005/06/14 20:05:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.19 2005/12/06 09:43:36 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -40,10 +40,25 @@
 	@caption Otsingu tulemused
 
 	@property s_res type=table no_caption=1
-	
+
+@default group=recycle_settings
+
+	@property delete_grps type=relpicker reltype=RELTYPE_DEL_GRP automatic=1 multiple=1 store=connect
+	@caption Grupid, kes saavad kustutada
+
+	@property admin_grps type=relpicker reltype=RELTYPE_ADM_GRP automatic=1 multiple=1 store=connect
+	@caption Grupid, kes saavad m&auml;&auml;ranguid muuta
+
 @groupinfo recycle submit=no caption="Prügikast"
 @groupinfo recycle_list submit=no caption="Nimekiri" parent=recycle
 @groupinfo recycle_search caption="Otsing" parent=recycle submit_method=get
+@groupinfo recycle_settings caption="M&auml;&auml;rangud" 
+
+@reltype DEL_GRP value=1 clid=CL_GROUP
+@caption Kustutaja grupp
+
+@reltype ADM_GRP value=2 clid=CL_GROUP
+@caption Admin grupp
 
 */
 class recycle_bin extends class_base
@@ -60,6 +75,31 @@ class recycle_bin extends class_base
 		if($arr["id"] == "general")
 		{
 			return false;
+		}
+
+		if ($arr["new"] && $arr["id"] == "recycle_settings")
+		{
+			return false;
+		}
+
+		if (!$arr["new"] && $arr["id"] == "recycle_settings")
+		{
+			$o = $arr["obj_inst"];
+			$admg = array();
+			foreach($o->connections_from(array("type" => "RELTYPE_ADM_GRP")) as $c)
+			{
+				$admg[$c->prop("to")] = $c->prop("to");
+			}
+			$curgrps = aw_global_get("gidlist_oid");
+			$rv = is_array($admg) && count($admg) ? false : true;
+			foreach($curgrps as $grp)
+			{
+				if (isset($admg[$grp]))
+				{
+					$rv = true;
+				}
+			}
+			return $rv;
 		}
 	}
 	
@@ -260,21 +300,40 @@ class recycle_bin extends class_base
     		"url" => aw_url_change_var(array()),
     	));
 
-    	$tb->add_button(array(
-    		"name" => "delete",
-    		"img" => "delete.gif",
-    		"tooltip" => t("Kustuta"),
-    		"action" => "final_delete",
-			"confirm" => t("Kas olete 100% kindel et soovite valitud objekte l&otilde;plikult kustutada?")
-    	));
+		$o = $arr["obj_inst"];
+		$admg = array();
+		foreach($o->connections_from(array("type" => "RELTYPE_DEL_GRP")) as $c)
+		{
+			$admg[$c->prop("to")] = $c->prop("to");
+		}
+		$curgrps = aw_global_get("gidlist_oid");
+		$rv = is_array($admg) && count($admg) ? false : true;
+		foreach($curgrps as $grp)
+		{
+			if (isset($admg[$grp]))
+			{
+				$rv = true;
+			}
+		}
 
-    	$tb->add_button(array(
-    		"name" => "clear_all",
-    		"img" => "del_all.gif",
-    		"tooltip" => t("T&uuml;hjenda"),
-    		"action" => "clear_all",
-			"confirm" => t("Ettevaatust! Objektid kustutatakse j&auml;&auml;davalt!")
-    	));
+		if ($rv)
+		{
+			$tb->add_button(array(
+				"name" => "delete",
+				"img" => "delete.gif",
+				"tooltip" => t("Kustuta"),
+				"action" => "final_delete",
+				"confirm" => t("Kas olete 100% kindel et soovite valitud objekte l&otilde;plikult kustutada?")
+			));
+
+			$tb->add_button(array(
+				"name" => "clear_all",
+				"img" => "del_all.gif",
+				"tooltip" => t("T&uuml;hjenda"),
+				"action" => "clear_all",
+				"confirm" => t("Ettevaatust! Objektid kustutatakse j&auml;&auml;davalt!")
+			));
+		}
 	}
 
 	/**

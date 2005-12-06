@@ -105,6 +105,30 @@
             <store>no</store>
             <field>s_res</field>
       </property>
+      <property>
+            <name>delete_grps</name>
+            <table>objects</table>
+            <group>recycle_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DEL_GRP</reltype>
+            <automatic>1</automatic>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>delete_grps</field>
+            <caption>Grupid, kes saavad kustutada</caption>
+      </property>
+      <property>
+            <name>admin_grps</name>
+            <table>objects</table>
+            <group>recycle_settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADM_GRP</reltype>
+            <automatic>1</automatic>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>admin_grps</field>
+            <caption>Grupid, kes saavad m&amp;amp;auml;&amp;amp;auml;ranguid muuta</caption>
+      </property>
       <classinfo>
             <no_yah>1</no_yah>
             <syslog_type>ST_RECYCLE_BIN</syslog_type>
@@ -124,6 +148,21 @@
                   <parent>recycle</parent>
                   <submit_method>get</submit_method>
             </recycle_search>
+            <recycle_settings>
+                  <caption>M&amp;auml;&amp;auml;rangud</caption>
+            </recycle_settings>
       </groupinfo>
+      <reltypes>
+            <DEL_GRP>
+                  <value>1</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Kustutaja grupp</caption>
+            </DEL_GRP>
+            <ADM_GRP>
+                  <value>2</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Admin grupp</caption>
+            </ADM_GRP>
+      </reltypes>
 </properties>
 
