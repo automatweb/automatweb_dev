@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.88 2005/12/01 11:47:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.89 2005/12/06 18:20:35 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -300,8 +300,11 @@ class html extends aw_template
 		{
 			$capt = '<span style="font-size: ' . $textsize . ';">' . $capt . '</span>';
 		}
-
-		$rv = "<input type='checkbox' id='$name' name='$name' value='$value' $checked $disabled /> $capt\n";
+		if (isset($onclick))
+		{
+			$onc = "onClick='$onclick'";
+		}
+		$rv = "<input type='checkbox' id='$name' name='$name' value='$value' $onc $checked $disabled /> $capt\n";
 		return $rv;
 	}
 
@@ -524,7 +527,9 @@ class html extends aw_template
 			$name = $args["name"];
 		}
 
-		return $selector->gen_edit_form($name, $val, $year_from, $year_to, true);
+		$res = $selector->gen_edit_form($name, $val, $year_from, $year_to, true);
+		$res .= $args["post_append_text"];
+		return $res;
 	}
 
 	function img($args = array())
@@ -637,6 +642,16 @@ class html extends aw_template
 
 	function obj_change_url($o)
 	{
+		if (is_array($o))
+		{
+			$res = array();
+			foreach($o as $id)
+			{
+				$res[] = html::obj_change_url($id);
+			}
+			return join(", ", $res);
+		}
+
 		if (!is_object($o))
 		{
 			if ($this->can("view", $o))

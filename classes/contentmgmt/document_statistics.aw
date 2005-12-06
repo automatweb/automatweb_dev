@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.18 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.19 2005/12/06 18:20:36 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -352,7 +352,7 @@ class document_statistics extends class_base
 			$rtm = time();
 		}
 
-		classload("date_calc");
+		classload("core/date/date_calc");
 		global $awt;
 		if ($timespan == "week")
 		{

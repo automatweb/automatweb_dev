@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_resource.aw,v 1.4 2005/03/14 17:27:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_resource.aw,v 1.5 2005/12/06 18:20:37 kristo Exp $
 // workflow_resource.aw - Ressurss 
 /*
 
@@ -196,7 +196,7 @@ class workflow_resource extends class_base
 			$ts_e = time() + 3600 + $arr["length"];
 		}
 		
-		classload("date_calc");
+		classload("core/date/date_calc");
 		do { 
 			// check if there are any events in $ts_s - $ts_e
 			$has_events = false;

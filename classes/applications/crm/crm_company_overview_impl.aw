@@ -160,7 +160,7 @@ class crm_company_overview_impl extends class_base
 
 	function _init_my_tasks_t(&$t, $data = false, $r = array())
 	{
-		if (is_array($data))
+		if (is_array($data) && $r["act_s_print_view"] != 1)
 		{
 			$filt = array();
 			foreach($data as $row)
@@ -185,12 +185,15 @@ class crm_company_overview_impl extends class_base
 			"width" => 1
 		));
 
-		$t->define_field(array(
-			"caption" => t(""),
-			"name" => "menu",
-			"align" => "center",
-//			"chgbgcolor" => "col",
-		));
+		if ($r["act_s_print_view"] != 1)
+		{
+			$t->define_field(array(
+				"caption" => t(""),
+				"name" => "menu",
+				"align" => "center",
+	//			"chgbgcolor" => "col",
+			));
+		}
 
 		$t->define_field(array(
 			"caption" => t("Pealkiri"),
@@ -261,11 +264,14 @@ class crm_company_overview_impl extends class_base
 			"filter" => array_unique($filt["parts"])
 		));
 
-		$t->define_chooser(array(
-//			"chgbgcolor" => "col",
-			"field" => "oid",
-			"name" => "sel"
-		));
+		if ($r["act_s_print_view"] != 1)
+		{
+			$t->define_chooser(array(
+		//			"chgbgcolor" => "col",
+				"field" => "oid",
+				"name" => "sel"
+			));
+		}
 	}
 
 	function _get_my_tasks($arr)
@@ -419,6 +425,11 @@ class crm_company_overview_impl extends class_base
 					$t->define_data($row);
 				}
 			}
+		}
+
+		if ($arr["request"]["act_s_print_view"] == 1)
+		{
+			die($t->draw());
 		}
 	}
 

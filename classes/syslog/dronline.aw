@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.38 2005/03/23 11:45:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline.aw,v 1.39 2005/12/06 18:20:37 kristo Exp $
 
 /*
 
@@ -78,7 +78,7 @@ class dronline extends class_base
 {
 	function dronline()
 	{
-		classload("date_calc");
+		classload("core/date/date_calc");
 		$this->init(array(
 			'tpldir' => 'syslog/dronline',
 			'clid' => CL_DRONLINE,

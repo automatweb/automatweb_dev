@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="config" folder="" extends="db_config">
+	<class name="config" folder="" extends="aw_template">
 		<action name="join_mail">
 			<function name="join_mail">
 				<arguments>

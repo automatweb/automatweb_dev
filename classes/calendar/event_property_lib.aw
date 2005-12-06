@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.24 2005/10/04 10:42:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.25 2005/12/06 18:20:36 kristo Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -63,7 +63,7 @@ class event_property_lib extends aw_template
 
 		$tm = mktime(0,0,0,$m,$d,$y);
 
-		classload("date_calc");
+		classload("core/date/date_calc");
 
 		$range = get_date_range(array(
 			"time" => $tm,

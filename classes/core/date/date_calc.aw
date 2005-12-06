@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.21 2005/06/02 10:10:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.1 2005/12/06 18:20:36 kristo Exp $
 
 ////
 // !get_date_range

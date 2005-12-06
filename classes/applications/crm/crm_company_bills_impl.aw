@@ -304,36 +304,38 @@ class crm_company_bills_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_bills_list_t($t, $arr["request"]);
 
+		$d = get_instance("applications/crm/crm_data");
 		if ($arr["request"]["group"] == "bills_monthly")
 		{
-			$bills = new object_list(array(
-				"class_id" => CL_CRM_BILL,
-				"parent" => $arr["obj_inst"]->id(),
-				"monthly_bill" => 1
-			));
+			$bills = $d->get_bills_by_co($arr["obj_inst"], array("monthly" => 1));
 		}
 		else
 		{
+			$filt = array();
 			if ($arr["request"]["bill_s_search"] == "")
 			{
 				// init default search opts
 				$u = get_instance(CL_USER);
 				$p = obj($u->get_current_person());
-				$arr["request"]["bill_s_client_mgr"] = $p->name();
-				$arr["request"]["bill_s_from"]["day"] = date("d");
-				$arr["request"]["bill_s_from"]["month"] = date("m");
-				$arr["request"]["bill_s_from"]["year"] = date("Y")-1;
-
-				$arr["request"]["bill_s_to"]["day"] = date("d");
-				$arr["request"]["bill_s_to"]["month"] = date("m");
-				$arr["request"]["bill_s_to"]["year"] = date("Y");
-
-				$arr["request"]["bill_s_status"] = "0";
+				$filt["client_mgr"] = $p->name();
+				$filt["bill_date_range"] = array(
+					"from" => mktime(0,0,0, date("m"), date("d"), date("Y")-1),
+					"to" => time()
+				);
+				$filt["state"] = "0";
 			}
-			list($f1, $f2) = $this->_get_bill_search_filt($arr["request"], $arr["obj_inst"]->id());
-			$bills = new object_list($f1);
-			$bills2 = new object_list($f2);
-			$bills->add($bills2->ids());
+			else
+			{
+				$filt["customer"] = "%".$arr["request"]["bill_s_cust"]."%";
+				$filt["bill_no"] = "%".$arr["request"]["bill_s_bill_no"]."%";
+				$filt["bill_date_range"] = array(
+					"from" => date_edit::get_timestamp($arr["request"]["bill_s_from"]),
+					"to" => date_edit::get_timestamp($arr["request"]["bill_s_to"])
+				);
+				$filt["client_mgr"] = "%".$arr["request"]["bill_s_client_mgr"]."%";
+				$filt["state"] = $arr["request"]["bill_s_status"];
+			}
+			$bills = $d->get_bills_by_co($arr["obj_inst"], $filt);
 		}
 		$bill_i = get_instance(CL_CRM_BILL);
 
@@ -434,56 +436,6 @@ class crm_company_bills_impl extends class_base
 		{
 			$arr["prop"]["value"] = $arr["request"]["bill_s_status"];
 		}
-	}
-
-	function _get_bill_search_filt($r, $p)
-	{
-		$ret = array(
-			"class_id" => CL_CRM_BILL,
-			"parent" => $p
-		);
-
-		if ($r["bill_s_bill_no"] != "")
-		{
-			$ret["bill_no"] = "%".$r["bill_s_bill_no"]."%";
-		}
-
-		$r["bill_s_from"] = date_edit::get_timestamp($r["bill_s_from"]);
-		$r["bill_s_to"] = date_edit::get_timestamp($r["bill_s_to"]);
-
-		if ($r["bill_s_from"] > 100 && $r["bill_s_to"] > 100)
-		{
-			$ret["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["bill_s_from"], $r["bill_s_to"]);
-		}
-		else
-		if ($r["bill_s_from"] > 100)
-		{
-			$ret["bill_date"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["bill_s_from"]);
-		}
-		else
-		if ($r["bill_s_to"] > 100)
-		{
-			$ret["bill_date"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["bill_s_to"]);
-		}
-
-		if ($r["bill_s_status"] > -1)
-		{
-			$ret["CL_CRM_BILL.state"] = $r["bill_s_status"];
-		}
-
-		$ret2 = $ret;
-		if ($r["bill_s_client_mgr"] != "")
-		{
-			$ret["CL_CRM_BILL.customer(CL_CRM_COMPANY).client_manager.name"] = map("%%%s%%", explode(",", $r["bill_s_client_mgr"]));
-			$ret2["CL_CRM_BILL.customer(CL_CRM_PERSON).client_manager.name"] = map("%%%s%%", explode(",", $r["bill_s_client_mgr"]));
-		}
-
-		if ($r["bill_s_cust"] != "")
-		{
-			$ret["CL_CRM_BILL.customer(CL_CRM_COMPANY).name"] = "%".$r["bill_s_cust"]."%";
-			$ret2["CL_CRM_BILL.customer(CL_CRM_PERSON).name"] = "%".$r["bill_s_cust"]."%";
-		}
-		return array($ret, $ret2);
 	}
 
 	function _get_bills_tb($arr)

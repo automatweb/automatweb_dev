@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.150 2005/11/14 12:13:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.151 2005/12/06 18:20:37 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3642,7 +3642,7 @@ if ($_GET['show_thread_data'] == 1)
 		{
 			$sby .= " ".$arr["request"]["sort_order"];
 		}
-		classload("date_calc");
+		classload("core/date/date_calc");
 
 		// now, if the session contans [mrp][do_pv_proj_s] then we must get a list of all the jobs in the current view
 		// then iterate them until we find a job with the requested project 

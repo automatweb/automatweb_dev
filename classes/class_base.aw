@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.437 2005/12/02 05:50:27 ahti Exp $
+// $Id: class_base.aw,v 2.438 2005/12/06 18:20:35 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -997,6 +997,18 @@ class class_base extends aw_template
 
 		$retval = "";
 		$cgid = false;
+
+		// check if the classs has a callback_get_cfgform method
+		if (method_exists($this, "callback_get_cfgform"))
+		{
+			$cfid = $this->callback_get_cfgform(array(
+				"obj_inst" => $args["obj_inst"],
+			));
+			if ($this->can("view", $cfid))
+			{
+				return $cfid;
+			}
+		}
 
 		// 1. if there is a cfgform specified in the url, then we will use that
 		if (!empty($args["args"]["cfgform"]))

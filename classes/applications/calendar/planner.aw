@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.102 2005/11/28 13:20:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.103 2005/12/06 18:20:35 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -593,7 +593,7 @@ class planner extends class_base
 		$event_ids = array();
 		$folders = $this->get_event_folders(array("id" => $obj->id()));
 
-		classload("date_calc");
+		classload("core/date/date_calc");
 		if (empty($arr["start"]))
 		{
 			$di = get_date_range(array(
@@ -844,7 +844,7 @@ class planner extends class_base
 		extract($args);
 
 		classload("core/icons");
-		classload("date_calc");
+		classload("core/date/date_calc");
 
 		$prj = get_instance(CL_PROJECT);
 		$di = get_date_range(array(

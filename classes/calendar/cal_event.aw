@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.13 2005/11/03 13:25:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.14 2005/12/06 18:20:36 kristo Exp $
 
 /*
 	@default table=objects
@@ -888,7 +888,7 @@ class cal_event extends class_base
 
 		$this->rep_end = $rep_end;
 
-		classload("date_calc");
+		classload("core/date/date_calc");
 		$timebase = mktime(0,0,0,1,1,2001);
 		$ddiff = get_day_diff($timebase,$repstart);
 		$this->gdaynum = $ddiff + 1;

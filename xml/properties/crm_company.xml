@@ -1697,6 +1697,25 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>act_s_print_view</name>
+            <table>objects</table>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
+            </group>
+            <type>checkbox</type>
+            <parent>all_act_search</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <ch_value>1</ch_value>
+            <no_caption>1</no_caption>
+            <field>act_s_print_view</field>
+            <caption>Printvaade</caption>
+      </property>
+      <property>
             <name>act_s_sbt</name>
             <table>objects</table>
             <group>
@@ -1784,6 +1803,16 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
       </property>
       <property>
+            <name>stats_s_worker_sel</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <store>no</store>
+            <field>stats_s_worker_sel</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
+      </property>
+      <property>
             <name>stats_s_from</name>
             <table>objects</table>
             <group>stats</group>
@@ -1800,6 +1829,15 @@
             <store>no</store>
             <field>stats_s_to</field>
             <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>stats_s_time_sel</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <store>no</store>
+            <field>stats_s_time_sel</field>
+            <caption>Ajavahemik</caption>
       </property>
       <property>
             <name>stats_s_state</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.81 2005/11/28 13:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.82 2005/12/06 18:20:37 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -721,6 +721,7 @@ class mrp_resource extends class_base
 			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $start, $end),
 		));
 
+		$this->cal_items = array();
 		if ($list->count () > 0)
 		{
 			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
@@ -758,6 +759,7 @@ class mrp_resource extends class_base
 							"link" => html::get_change_url($job->id(), array("return_url" => get_ru()))   /*$this->mk_my_orb ("change",array ("id" => $job->id ()), "mrp_job")*/,
 						),
 					));
+					$this->cal_items[$timestamp] = html::get_change_url($job->id(), array("return_url" => get_ru()));
 				}
 			}
 		}
@@ -774,6 +776,7 @@ class mrp_resource extends class_base
 					"link" => html::get_change_url($task->id(), array("return_url" => get_ru())),
 				),
 			));
+			$this->cal_items[$task->prop("start1")] = html::get_change_url($task->id(), array("return_url" => get_ru()));
 		}
 
 		return $calendar->get_html ();
@@ -781,14 +784,15 @@ class mrp_resource extends class_base
 
 	function get_overview ($arr = array())
 	{
-		$start = time() - (24*3600*60);
+		/*$start = time() - (24*3600*60);
 		$end = time() + (24*3600*60);
 
 		for($i = $start; $i < $end; $i += (24*3600))
 		{
 			$ret[$i] = aw_url_change_var("viewtype", "week", aw_url_change_var("date", date("d", $i)."-".date("m", $i)."-".date("Y", $i)));
-		}
-		return $ret;
+		}*/
+
+		return $this->cal_items;
 	}
 
 	function get_unavailable_periods ($resource, $start, $end)

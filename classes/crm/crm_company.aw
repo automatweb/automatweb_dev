@@ -581,6 +581,9 @@ default group=org_objects
 			@property act_s_status type=select parent=all_act_search store=no captionside=top
 			@caption Staatus
 
+			@property act_s_print_view type=checkbox parent=all_act_search store=no captionside=top ch_value=1 no_caption=1
+			@caption Printvaade
+
 			@property act_s_sbt type=submit  parent=all_act_search no_caption=1 group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Otsi
 
@@ -601,11 +604,17 @@ default group=org_objects
 	@property stats_s_worker type=textbox store=no
 	@caption T&ouml;&ouml;taja
 
+	@property stats_s_worker_sel type=select multiple=1 store=no
+	@caption T&ouml;&ouml;taja
+
 	@property stats_s_from type=date_select store=no
 	@caption Alates
 
 	@property stats_s_to type=date_select store=no
 	@caption Kuni
+
+	@property stats_s_time_sel type=select store=no
+	@caption Ajavahemik
 
 	@property stats_s_state type=select store=no
 	@caption Toimetuse staatus
@@ -1381,6 +1390,10 @@ class crm_company extends class_base
 				$data['value'] = $arr['request'][$data["name"]];
 				break;
 
+			case "act_s_print_view":
+				$data['value'] = $arr['request'][$data["name"]];
+				$data["onclick"] = "document.changeform.target=\"_blank\"";
+				break;
 
 			// PEOPLE TAB
 			case "contact_toolbar":
@@ -1512,27 +1525,6 @@ class crm_company extends class_base
 				$fn = "_get_".$data["name"];
 				return $bills_impl->$fn($arr);
 
-			case "stats_s_from":
-				if ($arr["request"][$data["name"]]["year"] > 1)
-				{
-					$data["value"] = $arr["request"][$data["name"]];
-				}
-				else
-				{
-					// default to moonday this week
-					$day = date("w");
-					if ($day == 0)
-					{
-						$day = 6;
-					}
-					else
-					{
-						$day--;
-					}
-					$data["value"] = mktime(0,0,0, date("m"), date("d")-$day, date("Y"));
-				}
-				break;
-
 			case "stats_s_to":
 				if ($arr["request"][$data["name"]]["year"] > 1)
 				{
@@ -1561,12 +1553,15 @@ class crm_company extends class_base
 				$data["value"] = $arr["request"][$data["name"]];
 				break;
 
+			case "stats_s_from":
 			case "stats_s_cust_type":
 			case "stats_s_res":
 			case "stats_s_state":
 			case "stats_s_res_type":
 			case "stats_s_bill_state":
 			case "stats_s_area":
+			case "stats_s_worker_sel":
+			case "stats_s_time_sel":
 				static $stats_impl;
 				if (!$stats_impl)
 				{
@@ -2367,6 +2362,7 @@ class crm_company extends class_base
 			$arr["args"]["act_s_dl_from"] = $arr["request"]["act_s_dl_from"];
 			$arr["args"]["act_s_dl_to"] = $arr["request"]["act_s_dl_to"];
 			$arr["args"]["act_s_status"] = $arr["request"]["act_s_status"];
+			$arr["args"]["act_s_print_view"] = $arr["request"]["act_s_print_view"];
 			$arr["args"]["act_s_sbt"] = $arr["request"]["act_s_sbt"];
 			$arr["args"]["act_s_is_is"] = 1;
 		}	
@@ -3896,6 +3892,28 @@ class crm_company extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	function callback_get_cfgform($arr)
+	{
+		// if this is the current users employer, do nothing
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		if ($co == $arr["obj_inst"]->id())
+		{
+			return false;
+		}
+
+		// find the crm settings object for the current user
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_SETTINGS,
+			"CL_CRM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid")
+		));
+		if ($ol->count())
+		{
+			$s = $ol->begin();
+			return $s->prop("cfgform");
+		}
 	}
 }
 ?>

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.71 2005/09/21 12:47:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.72 2005/12/06 18:20:35 kristo Exp $
 
-class db_config extends aw_template 
+class config extends aw_template
 {
-	function db_config() 
+	function config() 
 	{
 		$this->init("automatweb/config");
 		$this->sub_merge = 1;
@@ -17,7 +17,8 @@ class db_config extends aw_template
 		if ($ret == false)
 		{
 			// no such key, so create it
-			$this->create_config($ckey,$value);
+			$this->quote($value);
+			$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".aw_global_get("uid")."')");
 		}
 		else
 		{
@@ -33,21 +34,6 @@ class db_config extends aw_template
 	{
 		$q = "SELECT content FROM config WHERE ckey = '$ckey'";
 		return $this->db_fetch_field($q,"content");
-	}
-
-	function create_config($ckey,$value)
-	{
-		$this->quote($value);
-		$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".aw_global_get("uid")."')");
-	}
-};
-
-// urk. orb requires class name to be == file name
-class config extends db_config
-{
-	function config()
-	{
-		$this->db_config();
 	}
 
 	/**  

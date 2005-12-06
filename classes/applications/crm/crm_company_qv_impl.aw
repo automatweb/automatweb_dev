@@ -10,6 +10,12 @@ class crm_company_qv_impl extends class_base
 	function _init_qv_t(&$t)
 	{
 		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t(""),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Kuup&auml;ev"),
 			"align" => "center"
@@ -52,15 +58,32 @@ class crm_company_qv_impl extends class_base
 		$this->_init_qv_t($t);
 
 		// projs
-		$ol = new object_list(array(
-			"class_id" => CL_PROJECT,
-			"orderer" => $arr["obj_inst"]->id(),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"sort_by" => "aw_deadline desc",
-			"state" => "%",
-			"limit" => 5
-		));
+		if (isset($arr["proj"]))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_PROJECT,
+				"orderer" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "aw_deadline desc",
+				"state" => "%",
+				"oid" => $arr["proj"]
+			));
+			$pd = t("<b>Projektid</b>");
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_PROJECT,
+				"orderer" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "aw_deadline desc",
+				"state" => "%",
+				"limit" => 5
+			));
+			$pd = t("<b>Projektid (5 värskemat)</b>");
+		}
 		$pi = get_instance(CL_PROJECT);
 		$t_i = get_instance(CL_TASK);
 		foreach($ol->arr() as $o)
@@ -93,7 +116,7 @@ class crm_company_qv_impl extends class_base
 				"parts" => join(", ", $parts),
 				"hrs" => number_format($hrs, 2),
 				"sum" => number_format($sum, 2),
-				"grp_desc" => t("<b>Projektid (5 värskemat)</b>"),
+				"grp_desc" => $pd,
 				"grp_num" => 1,
 				"state" => $pi->states[$o->prop("state")]
 			));
@@ -101,15 +124,63 @@ class crm_company_qv_impl extends class_base
 		
 
 		// tasks
-		$ol = new object_list(array(
-			"class_id" => CL_TASK,
-			"customer" => $arr["obj_inst"]->id(),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"sort_by" => "deadline desc",
-			"deadline" => "%",
-			"limit" => 10
-		));
+		if (isset($arr["tasks"]))
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_TASK,
+				"customer" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "deadline desc",
+				"deadline" => "%",
+				"oid" => $arr["tasks"]->ids()
+			));
+
+			// also add call/meeting/offer by range
+			$filt = array(
+				"class_id" => array(CL_CRM_MEETING, CL_CRM_CALL, CL_CRM_OFFER),
+				"customer" => $arr["obj_inst"]->id(),
+				"brother_of" => new obj_predicate_prop("id")
+			);
+
+			$r = array();
+			$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
+			$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
+
+			if ($r["stats_s_from"] > 1 && $r["stats_s_to"])
+			{
+				$filt["start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"]);
+			}
+			else
+			if ($r["stats_s_from"] > 1)
+			{
+				$filt["start1"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["stats_s_from"]);
+			}
+			else
+			if ($r["stats_s_to"] > 1)
+			{
+				$filt["start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["stats_s_to"]);
+			}
+
+			$ol2 = new object_list($filt);
+			$ol->add($ol2);
+
+			$grpd = t("<b>Tegevused</b>");
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_TASK,
+				"customer" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "deadline desc",
+				"deadline" => "%",
+				"limit" => 10
+			));
+			$grpd = t("<b>Tegevused (10 värskemat)</b>");
+		}
+		classload("core/icons");
 		foreach($ol->arr() as $o)
 		{
 			$parts = array();
@@ -124,28 +195,52 @@ class crm_company_qv_impl extends class_base
 				$sum += $row["sum"];
 				$hrs += $row["amt"];
 			}
+			$end = "";
+			if ($o->prop("end") > $o->prop("start1"))
+			{
+				$end = " - ".date("d.m.Y", $o->prop("end"));
+			}
 			$t->define_data(array(
-				"date" => date("d.m.Y", $o->prop("start1"))." - ".date("d.m.Y", $o->prop("end")),
+				"icon" => icons::get_icon($o),
+				"date" => date("d.m.Y", $o->prop("start1")).$end,
 				"name" => html::obj_change_url($o),
 				"parts" => join(", ", $parts),
 				"hrs" => number_format($hrs, 2),
 				"sum" => number_format($sum, 2),
-				"grp_desc" => t("<b>Tegevused (10 värskemat)</b>"),
+				"grp_desc" => $grpd,
 				"grp_num" => 2,
 				"state" => $o->prop("is_done") == 1 ? t("Tehtud") : t("T&ouml;&ouml;s")
 			));
 		}
 
 		// bills
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_BILL,
-			"customer" => $arr["obj_inst"]->id(),
-			"lang_id" => array(),
-			"site_id" => array(),
-			"sort_by" => "aw_due_date desc",
-			"bill_no" => "%",
-			"limit" => 10
-		));
+		if (isset($arr["tasks"]))
+		{
+			$f = array(
+				"class_id" => CL_CRM_BILL,
+				"customer" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "aw_crm_bill.aw_due_date desc",
+				"bill_no" => "%",
+				"CL_CRM_BILL.RELTYPE_TASK" => $ol->ids() // only from the task list for this co
+			);
+			$ol = new object_list($f);
+			$bd = t("<span style='font-size: 0px;'>y</span><b>Arved</b>");
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_BILL,
+				"customer" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"sort_by" => "aw_crm_bill.aw_due_date desc",
+				"bill_no" => "%",
+				"limit" => 10
+			));
+			$bd = t("<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>");
+		}
 		foreach($ol->arr() as $o)
 		{
 			$parts = array();
@@ -167,7 +262,7 @@ class crm_company_qv_impl extends class_base
 				"parts" => "",
 				"hrs" => number_format($hrs, 2),
 				"sum" => number_format($sum, 2),
-				"grp_desc" => t("<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>"),
+				"grp_desc" => $bd,
 				"grp_num" => 3,
 				"state" => $bi->states[$o->prop("state")]
 			));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.20 2005/07/27 14:34:29 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.21 2005/12/06 18:20:37 kristo Exp $
 // mrp_prisma_import.aw - Prisma import
 /*
 
@@ -357,7 +357,7 @@ class mrp_prisma_import extends class_base
 
 	function _imp_proj($db, $co)
 	{
-		classload("date_calc");
+		classload("core/date/date_calc");
 		// get db
 		$proj = array();
 		$db->db_query("
@@ -562,7 +562,7 @@ class mrp_prisma_import extends class_base
 			$dat["TellimuseTähtaeg"] = -1;
 		}
 
-		classload("date_calc");
+		classload("core/date/date_calc");
 		// if date is at 00:00 hrs, make it 16:00 hrs
 		if ((get_day_start($dat["TööAlgus"]) - $dat["TööAlgus"]) < 120)
 		{

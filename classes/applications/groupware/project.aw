@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.69 2005/11/28 13:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.70 2005/12/06 18:20:35 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -2278,7 +2278,7 @@ class project extends class_base
 			"start_from" => $start_from
 		));
 
-		classload("date_calc");
+		classload("core/date/date_calc");
 		$dt = aw_global_get("date");
 		if (empty($dt))
 		{
