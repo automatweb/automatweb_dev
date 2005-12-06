@@ -16,73 +16,73 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_overview_impl.aw:196
 msgid "Pealkiri"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:206
 msgid "Toimumisaeg"
-msgstr ""
+msgstr "Time"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:214
 msgid "Klient"
-msgstr ""
+msgstr "Customer"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:223
 msgid "Projekt"
-msgstr ""
+msgstr "Project"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:234
 msgid "T&auml;htaeg"
-msgstr ""
+msgstr "Due date"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:246
 msgid "Prioriteet"
-msgstr ""
+msgstr "Priority"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:256
 msgid "Osalejad"
-msgstr ""
+msgstr "Participants"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:329
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:336 classes/applications/crm/crm_company_overview_impl.aw:583
 msgid "M&auml;rgi tehtuks"
-msgstr ""
+msgstr "Mark as done"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:343
 msgid "Koosta arve"
-msgstr ""
+msgstr "Create invoice"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:352
 msgid "K&auml;ivita stopper"
-msgstr ""
+msgstr "Run timer"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:366
 msgid "Peata stopper (%s)"
-msgstr ""
+msgstr "Stop timer (%s)"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:536
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:568
 msgid "P&auml;eva raport"
-msgstr ""
+msgstr "Daily report"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:590
 msgid "Kustuta toimetused"
-msgstr ""
+msgstr "Delete tasks"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:591
 msgid "Oled kindel et soovid valitud toimetusi kustutada?"
-msgstr ""
+msgstr "Are You sure You want to delete selected tasks?"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:602
 msgid "Kalendrivaade"
-msgstr ""
+msgstr "Calendar view"
 
 #: classes/applications/crm/crm_company_overview_impl.aw:611
 msgid "Tabelivaade"
-msgstr ""
+msgstr "Table view"
 

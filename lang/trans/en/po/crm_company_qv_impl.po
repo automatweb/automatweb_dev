@@ -2,55 +2,55 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 19:51+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
+"Language-Team: \n"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:14
 msgid "Kuup&auml;ev"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:20
 msgid "Nimetus"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:26
 msgid "Osalejad"
-msgstr ""
+msgstr "Participants"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:32
 msgid "Staatus"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:38
 msgid "Tunde"
-msgstr ""
+msgstr "Hours"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:44
 msgid "Summa"
-msgstr ""
+msgstr "Sum"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:96
 msgid "<b>Projektid (5 värskemat)</b>"
-msgstr ""
+msgstr "<b>Projects (5 latest)</b>"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:133
 msgid "<b>Tegevused (10 värskemat)</b>"
-msgstr ""
+msgstr "<b>Actions (10 latest)</b>"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:135
 msgid "Tehtud"
-msgstr ""
+msgstr "Done"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:135
 msgid "T&ouml;&ouml;s"
-msgstr ""
+msgstr "In progress"
 
 #: classes/applications/crm/crm_company_qv_impl.aw:170
 msgid "<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>"
-msgstr ""
+msgstr "<b>Invoices (10 latest)</b>"
 

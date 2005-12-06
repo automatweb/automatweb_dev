@@ -2,13 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 21:58+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
+"Language-Team: \n"
 
 #: classes/applications/crm/crm_document.aw:class_1007_help
 msgid "Klassi CRM Dokument help"
@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_project
 msgid "Omaduse Projekt (project) caption"
-msgstr ""
+msgstr "Project"
 
 #: classes/applications/crm/crm_document.aw:prop_project_comment
 msgid "Omaduse Projekt (project) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_task
 msgid "Omaduse &Uuml;lesanne (task) caption"
-msgstr ""
+msgstr "Task"
 
 #: classes/applications/crm/crm_document.aw:prop_task_comment
 msgid "Omaduse &Uuml;lesanne (task) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
-msgstr ""
+msgstr "Customer"
 
 #: classes/applications/crm/crm_document.aw:prop_customer_comment
 msgid "Omaduse Klient (customer) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_creator
 msgid "Omaduse Koostaja (creator) caption"
-msgstr ""
+msgstr "Created by"
 
 #: classes/applications/crm/crm_document.aw:prop_creator_comment
 msgid "Omaduse Koostaja (creator) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_reader
 msgid "Omaduse Lugeja (reader) caption"
-msgstr ""
+msgstr "Reader"
 
 #: classes/applications/crm/crm_document.aw:prop_reader_comment
 msgid "Omaduse Lugeja (reader) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_state
 msgid "Omaduse Staatus (state) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/crm/crm_document.aw:prop_state_comment
 msgid "Omaduse Staatus (state) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_reg_date
 msgid "Omaduse Reg kuup&auml;ev (reg_date) caption"
-msgstr ""
+msgstr "Registration date"
 
 #: classes/applications/crm/crm_document.aw:prop_reg_date_comment
 msgid "Omaduse Reg kuup&auml;ev (reg_date) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_make_date
 msgid "Omaduse Koostamise kuup&auml;ev (make_date) caption"
-msgstr ""
+msgstr "Creation date"
 
 #: classes/applications/crm/crm_document.aw:prop_make_date_comment
 msgid "Omaduse Koostamise kuup&auml;ev (make_date) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_reg_nr
 msgid "Omaduse Registreerimisnumber (reg_nr) caption"
-msgstr ""
+msgstr "Registration no"
 
 #: classes/applications/crm/crm_document.aw:prop_reg_nr_comment
 msgid "Omaduse Registreerimisnumber (reg_nr) kommentaar"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_comment
 msgid "Omaduse Kirjeldus (comment) caption"
-msgstr ""
+msgstr "Description"
 
 #: classes/applications/crm/crm_document.aw:prop_comment_comment
 msgid "Omaduse Kirjeldus (comment) kommentaar"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:prop_files
 msgid "Omaduse Failid (files) caption"
-msgstr ""
+msgstr "Files"
 
 #: classes/applications/crm/crm_document.aw:prop_files_comment
 msgid "Omaduse Failid (files) kommentaar"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/applications/crm/crm_document.aw:group_general_help
 msgid "Grupi Üldine (general) help"

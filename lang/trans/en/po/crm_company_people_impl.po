@@ -12,71 +12,71 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_people_impl.aw:19 classes/applications/crm/crm_company_people_impl.aw:669
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/crm/crm_company_people_impl.aw:31
 msgid "Töötaja"
-msgstr ""
+msgstr "Employee"
 
 #: classes/applications/crm/crm_company_people_impl.aw:45 classes/applications/crm/crm_company_people_impl.aw:239 classes/applications/crm/crm_company_people_impl.aw:511 classes/applications/crm/crm_company_people_impl.aw:601
 msgid "Üksus"
-msgstr ""
+msgstr "Section"
 
 #: classes/applications/crm/crm_company_people_impl.aw:58 classes/applications/crm/crm_company_people_impl.aw:245 classes/applications/crm/crm_company_people_impl.aw:516 classes/applications/crm/crm_company_people_impl.aw:606
 msgid "Ametinimetus"
-msgstr ""
+msgstr "Occupation"
 
 #: classes/applications/crm/crm_company_people_impl.aw:73
 msgid "Kustuta valitud"
-msgstr ""
+msgstr "Delete selected"
 
 #: classes/applications/crm/crm_company_people_impl.aw:81
 msgid "Tee kõne"
-msgstr ""
+msgstr "Make a call"
 
 #: classes/applications/crm/crm_company_people_impl.aw:89
 msgid "Uus kohtumine"
-msgstr ""
+msgstr "New meeting"
 
 #: classes/applications/crm/crm_company_people_impl.aw:97
 msgid "Uus toimetus"
-msgstr ""
+msgstr "New task"
 
 #: classes/applications/crm/crm_company_people_impl.aw:106
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/crm/crm_company_people_impl.aw:112
 msgid "Isikuid"
-msgstr ""
+msgstr "Persons"
 
 #: classes/applications/crm/crm_company_people_impl.aw:118
 msgid "Ametinimetusi"
-msgstr ""
+msgstr "Occupations"
 
 #: classes/applications/crm/crm_company_people_impl.aw:127
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/crm/crm_company_people_impl.aw:137
 msgid "L&otilde;ika"
-msgstr ""
+msgstr "Cut"
 
 #: classes/applications/crm/crm_company_people_impl.aw:144
 msgid "Kopeeri"
-msgstr ""
+msgstr "Copy"
 
 #: classes/applications/crm/crm_company_people_impl.aw:153
 msgid "Kleebi"
-msgstr ""
+msgstr "Paste"
 
 #: classes/applications/crm/crm_company_people_impl.aw:163
 msgid "Oluliseks"
-msgstr ""
+msgstr "Mark as important"
 
 #: classes/applications/crm/crm_company_people_impl.aw:187
 msgid "K&otilde;ik t&ouml;&ouml;tajad"
-msgstr ""
+msgstr "All employees"
 
 #: classes/applications/crm/crm_company_people_impl.aw:212
 msgid ""
@@ -84,61 +84,61 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_people_impl.aw:218 classes/applications/crm/crm_company_people_impl.aw:494 classes/applications/crm/crm_company_people_impl.aw:584
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/crm/crm_company_people_impl.aw:227 classes/applications/crm/crm_company_people_impl.aw:501 classes/applications/crm/crm_company_people_impl.aw:591
 msgid "Telefon"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/crm/crm_company_people_impl.aw:233 classes/applications/crm/crm_company_people_impl.aw:506 classes/applications/crm/crm_company_people_impl.aw:596
 msgid "E-post"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/crm/crm_company_people_impl.aw:675 classes/applications/crm/crm_company_people_impl.aw:835
 msgid "Kustuta valitud tööpakkumised"
-msgstr ""
+msgstr "Delete selected job offers"
 
 #: classes/applications/crm/crm_company_people_impl.aw:677
 msgid "Kas oled kindel et soovid valitud tööpakkumised kustudada?"
-msgstr ""
+msgstr "Are You sure You want to delete selected job offers?"
 
 #: classes/applications/crm/crm_company_people_impl.aw:693
 msgid "Tööpakkumine"
-msgstr ""
+msgstr "Job offer"
 
 #: classes/applications/crm/crm_company_people_impl.aw:730 classes/applications/crm/crm_company_people_impl.aw:874
 msgid "Osakond"
-msgstr ""
+msgstr "Section"
 
 #: classes/applications/crm/crm_company_people_impl.aw:736
 msgid "Ametinimi"
-msgstr ""
+msgstr "Occupation"
 
 #: classes/applications/crm/crm_company_people_impl.aw:742
 msgid "Kommentaar"
-msgstr ""
+msgstr "Comment"
 
 #: classes/applications/crm/crm_company_people_impl.aw:748
 msgid "Kehtiv alates"
-msgstr ""
+msgstr "Valid from"
 
 #: classes/applications/crm/crm_company_people_impl.aw:759
 msgid "Kehtiv kuni"
-msgstr ""
+msgstr "Valid till"
 
 #: classes/applications/crm/crm_company_people_impl.aw:771
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: classes/applications/crm/crm_company_people_impl.aw:808
 msgid "Määramata"
-msgstr ""
+msgstr "Undetermined"
 
 #: classes/applications/crm/crm_company_people_impl.aw:862
 msgid "Kandideerija nimi"
-msgstr ""
+msgstr "Candidates name"
 
 #: classes/applications/crm/crm_company_people_impl.aw:868
 msgid "Ametikoht"
-msgstr ""
+msgstr "Occupation"
 

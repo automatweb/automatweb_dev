@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/vcl/relpicker.aw:14
+msgid "--vali--"
+msgstr ""
+
 #: classes/vcl/relpicker.aw:85
 msgid "Otsi"
 msgstr ""

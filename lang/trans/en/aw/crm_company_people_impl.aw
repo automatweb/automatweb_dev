@@ -1,0 +1,34 @@
+<?php
+$GLOBALS["TRANS"]["Uus"] = "New";
+$GLOBALS["TRANS"]["Töötaja"] = "Employee";
+$GLOBALS["TRANS"]["Üksus"] = "Section";
+$GLOBALS["TRANS"]["Ametinimetus"] = "Occupation";
+$GLOBALS["TRANS"]["Kustuta valitud"] = "Delete selected";
+$GLOBALS["TRANS"]["Tee kõne"] = "Make a call";
+$GLOBALS["TRANS"]["Uus kohtumine"] = "New meeting";
+$GLOBALS["TRANS"]["Uus toimetus"] = "New task";
+$GLOBALS["TRANS"]["Otsi"] = "Search";
+$GLOBALS["TRANS"]["Isikuid"] = "Persons";
+$GLOBALS["TRANS"]["Ametinimetusi"] = "Occupations";
+$GLOBALS["TRANS"]["Salvesta"] = "Save";
+$GLOBALS["TRANS"]["L&otilde;ika"] = "Cut";
+$GLOBALS["TRANS"]["Kopeeri"] = "Copy";
+$GLOBALS["TRANS"]["Kleebi"] = "Paste";
+$GLOBALS["TRANS"]["Oluliseks"] = "Mark as important";
+$GLOBALS["TRANS"]["K&otilde;ik t&ouml;&ouml;tajad"] = "All employees";
+$GLOBALS["TRANS"]["Nimi"] = "Name";
+$GLOBALS["TRANS"]["Telefon"] = "Phone";
+$GLOBALS["TRANS"]["E-post"] = "E-mail";
+$GLOBALS["TRANS"]["Kustuta valitud tööpakkumised"] = "Delete selected job offers";
+$GLOBALS["TRANS"]["Kas oled kindel et soovid valitud tööpakkumised kustudada?"] = "Are You sure You want to delete selected job offers?";
+$GLOBALS["TRANS"]["Tööpakkumine"] = "Job offer";
+$GLOBALS["TRANS"]["Osakond"] = "Section";
+$GLOBALS["TRANS"]["Ametinimi"] = "Occupation";
+$GLOBALS["TRANS"]["Kommentaar"] = "Comment";
+$GLOBALS["TRANS"]["Kehtiv alates"] = "Valid from";
+$GLOBALS["TRANS"]["Kehtiv kuni"] = "Valid till";
+$GLOBALS["TRANS"]["X"] = "X";
+$GLOBALS["TRANS"]["Määramata"] = "Undetermined";
+$GLOBALS["TRANS"]["Kandideerija nimi"] = "Candidates name";
+$GLOBALS["TRANS"]["Ametikoht"] = "Occupation";
+?>

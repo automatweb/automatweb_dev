@@ -3,6 +3,7 @@ $GLOBALS["TRANS"]["Omaduse Vajab tõlget (needs_translation) caption"] = "Needs t
 $GLOBALS["TRANS"]["Omaduse Tõlge kinnitatud (is_translated) caption"] = "Translation confirmed";
 $GLOBALS["TRANS"]["Omaduse Faili nimi (filename) caption"] = "File name";
 $GLOBALS["TRANS"]["Omaduse Vali fail (file) caption"] = "Select file";
+$GLOBALS["TRANS"]["Omaduse J&auml;rjekord (ord) caption"] = "Order";
 $GLOBALS["TRANS"]["Omaduse Url, kust saadakse faili sisu (file_url) caption"] = "Url to get file content from";
 $GLOBALS["TRANS"]["Omaduse Näita kohe (showal) caption"] = "Display immediately";
 $GLOBALS["TRANS"]["Omaduse Uues aknas (newwindow) caption"] = "New window";

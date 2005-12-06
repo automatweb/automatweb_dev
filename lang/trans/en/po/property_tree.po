@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-06 12:43+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/applications/class_designer/property_tree.aw:class_892_help
 msgid "Klassi Puu help"
@@ -15,7 +16,7 @@ msgstr ""
 
 # classes/applications/class_designer/property_tree.aw:prop_data_from
 msgid "Omaduse Andmed (data_from) caption"
-msgstr ""
+msgstr "Data"
 
 # classes/applications/class_designer/property_tree.aw:prop_data_from_comment
 msgid "Omaduse Andmed (data_from) kommentaar"
@@ -27,7 +28,7 @@ msgstr ""
 
 # classes/applications/class_designer/property_tree.aw:prop_ct_rels_levels
 msgid "Omaduse Mitu taset puus (ct_rels_levels) caption"
-msgstr ""
+msgstr "How many levels?"
 
 # classes/applications/class_designer/property_tree.aw:prop_ct_rels_levels_comment
 msgid "Omaduse Mitu taset puus (ct_rels_levels) kommentaar"
@@ -87,7 +88,7 @@ msgstr ""
 
 # classes/applications/class_designer/property_tree.aw:prop_ct_clids
 msgid "Omaduse Objektit&uuml;&uuml;bid, mida puus kuvada (ct_clids) caption"
-msgstr ""
+msgstr "Object types to show in tree"
 
 # classes/applications/class_designer/property_tree.aw:prop_ct_clids_comment
 msgid "Omaduse Objektit&uuml;&uuml;bid, mida puus kuvada (ct_clids) kommentaar"
@@ -99,7 +100,7 @@ msgstr ""
 
 # classes/applications/class_designer/property_tree.aw:prop_ct_rel
 msgid "Omaduse Sisuobjektide seose t&uuml;&uuml;p (ct_rel) caption"
-msgstr ""
+msgstr "Relation type of content elements"
 
 # classes/applications/class_designer/property_tree.aw:prop_ct_rel_comment
 msgid "Omaduse Sisuobjektide seose t&uuml;&uuml;p (ct_rel) kommentaar"
@@ -111,7 +112,7 @@ msgstr ""
 
 # classes/applications/class_designer/property_tree.aw:group_content_user
 msgid "Grupi Sisu (content_user) pealkiri"
-msgstr ""
+msgstr "Content"
 
 # classes/applications/class_designer/property_tree.aw:group_content_user_help
 msgid "Grupi Sisu (content_user) help"
@@ -119,7 +120,7 @@ msgstr ""
 
 # classes/applications/class_designer/property_tree.aw:group_content_objs
 msgid "Grupi Sisu (content_objs) pealkiri"
-msgstr ""
+msgstr "Content"
 
 # classes/applications/class_designer/property_tree.aw:group_content_objs_help
 msgid "Grupi Sisu (content_objs) help"
@@ -127,23 +128,23 @@ msgstr ""
 
 # classes/applications/class_designer/property_tree.aw:group_content_rels
 msgid "Grupi Sisu (content_rels) pealkiri"
-msgstr ""
+msgstr "Content"
 
 # classes/applications/class_designer/property_tree.aw:group_content_rels_help
 msgid "Grupi Sisu (content_rels) help"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/class_designer/property_tree.aw:60
 msgid "Kasutaja poolt sisestatud"
-msgstr ""
+msgstr "Deleted by user"
 
 #: classes/applications/class_designer/property_tree.aw:61
 msgid "Objektid objektis&uuml;steemist"
-msgstr ""
+msgstr "Objects from object system"
 
 #: classes/applications/class_designer/property_tree.aw:62
 msgid "Seostatud"
-msgstr ""
+msgstr "Related"
 
 #: classes/applications/class_designer/property_tree.aw:143
 msgid "Lisa uus oks"
@@ -171,16 +172,13 @@ msgstr "Change"
 
 #: classes/applications/class_designer/property_tree.aw:427
 msgid "Tase"
-msgstr ""
+msgstr "Level"
 
 #: classes/applications/class_designer/property_tree.aw:433
 msgid "Seos(ed)"
-msgstr ""
+msgstr "Realtion(s)"
 
 #: classes/applications/class_designer/property_tree.aw:519
 msgid "Tase %s"
-msgstr ""
+msgstr "Level %s"
 
-# classes/applications/class_designer/property_tree.aw:group_content
-#~ msgid "Grupi Sisu (content) pealkiri"
-#~ msgstr "Content"

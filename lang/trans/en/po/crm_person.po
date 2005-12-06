@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 22:14+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/crm/crm_person.aw:class_145_help
 #: classes/crm/crm_person.aw:class_145_help
@@ -106,7 +107,7 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_is_customer
 msgid "Omaduse Lisa kliendina (is_customer) caption"
-msgstr ""
+msgstr "Add as a customer"
 
 #: classes/crm/crm_person.aw:prop_is_customer_comment
 msgid "Omaduse Lisa kliendina (is_customer) kommentaar"
@@ -118,7 +119,7 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_code
 msgid "Omaduse Kood (code) caption"
-msgstr ""
+msgstr "Code"
 
 #: classes/crm/crm_person.aw:prop_code_comment
 msgid "Omaduse Kood (code) kommentaar"
@@ -325,7 +326,7 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_client_manager
 msgid "Omaduse Kliendihaldur (client_manager) caption"
-msgstr ""
+msgstr "Client manager"
 
 #: classes/crm/crm_person.aw:prop_client_manager_comment
 msgid "Omaduse Kliendihaldur (client_manager) kommentaar"
@@ -337,7 +338,7 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_is_important
 msgid "Omaduse Oluline (is_important) caption"
-msgstr ""
+msgstr "Important contact"
 
 #: classes/crm/crm_person.aw:prop_is_important_comment
 msgid "Omaduse Oluline (is_important) kommentaar"
@@ -784,7 +785,7 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/crm/crm_person.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -902,7 +903,7 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
-msgstr ""
+msgstr "Data"
 
 #: classes/crm/crm_person.aw:group_data_help
 msgid "Grupi Andmed (data) help"
@@ -1103,7 +1104,8 @@ msgstr ""
 msgid "Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"
 msgstr ""
 
-#: classes/crm/crm_person.aw:483 classes/crm/crm_person.aw:509
+#: classes/crm/crm_person.aw:483
+#: classes/crm/crm_person.aw:509
 #: classes/crm/crm_person.aw:553
 msgid "--vali--"
 msgstr "--select--"
@@ -1152,16 +1154,19 @@ msgstr "woman"
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/crm/crm_person.aw:785 classes/crm/crm_person.aw:839
+#: classes/crm/crm_person.aw:785
+#: classes/crm/crm_person.aw:839
 #: classes/crm/crm_person.aw:1603
 msgid "Uus"
 msgstr "New"
 
-#: classes/crm/crm_person.aw:798 classes/crm/crm_person.aw:855
+#: classes/crm/crm_person.aw:798
+#: classes/crm/crm_person.aw:855
 msgid "Kalender määramata"
 msgstr "Calendar not set"
 
-#: classes/crm/crm_person.aw:799 classes/crm/crm_person.aw:816
+#: classes/crm/crm_person.aw:799
+#: classes/crm/crm_person.aw:816
 #: classes/crm/crm_person.aw:856
 msgid "Lisa %s"
 msgstr "Add %s"
@@ -1178,7 +1183,8 @@ msgstr "User calendar"
 msgid "Kustuta valitud tööpakkumised"
 msgstr "Delete selected job offers"
 
-#: classes/crm/crm_person.aw:1615 classes/crm/crm_person.aw:1719
+#: classes/crm/crm_person.aw:1615
+#: classes/crm/crm_person.aw:1719
 msgid "Salvesta"
 msgstr "Save"
 
@@ -1218,7 +1224,8 @@ msgstr "Add new work experience"
 msgid "Kustuta töökogemused"
 msgstr "Delete work experience"
 
-#: classes/crm/crm_person.aw:1705 classes/crm/crm_person.aw:1867
+#: classes/crm/crm_person.aw:1705
+#: classes/crm/crm_person.aw:1867
 msgid "Oled kindel, et kustutada?"
 msgstr "Are you sure you want to delete?"
 
@@ -1234,11 +1241,13 @@ msgstr "Organisation"
 msgid "Ametikoht"
 msgstr "Position"
 
-#: classes/crm/crm_person.aw:1742 classes/crm/crm_person.aw:1924
+#: classes/crm/crm_person.aw:1742
+#: classes/crm/crm_person.aw:1924
 msgid "Alates"
 msgstr "From"
 
-#: classes/crm/crm_person.aw:1748 classes/crm/crm_person.aw:1934
+#: classes/crm/crm_person.aw:1748
+#: classes/crm/crm_person.aw:1934
 msgid "Kuni"
 msgstr "Until"
 
@@ -1254,15 +1263,18 @@ msgstr "Delete education"
 msgid "Põhiharidus"
 msgstr "Main education"
 
-#: classes/crm/crm_person.aw:1883 classes/crm/crm_person.aw:1996
+#: classes/crm/crm_person.aw:1883
+#: classes/crm/crm_person.aw:1996
 msgid "Keskharidus"
 msgstr "Middle education"
 
-#: classes/crm/crm_person.aw:1893 classes/crm/crm_person.aw:2017
+#: classes/crm/crm_person.aw:1893
+#: classes/crm/crm_person.aw:2017
 msgid "Kõrgharidus"
 msgstr "Higher education"
 
-#: classes/crm/crm_person.aw:1903 classes/crm/crm_person.aw:2038
+#: classes/crm/crm_person.aw:1903
+#: classes/crm/crm_person.aw:2038
 msgid "Kutseharidus"
 msgstr "Vocational education"
 
@@ -1298,34 +1310,3 @@ msgstr "Understanding"
 msgid "Mitu aastat kogemusi"
 msgstr "How many years of experience"
 
-# classes/crm/crm_person.aw:rel_RELTYPE_WORK
-#~ msgid "Seose töökoht (RELTYPE_WORK) tekst"
-#~ msgstr "work"
-
-# classes/crm/crm_person.aw:rel_RELTYPE_PERSON_CALL
-#~ msgid "Seose kõne (RELTYPE_PERSON_CALL) tekst"
-#~ msgstr "call"
-
-# classes/crm/crm_person.aw:rel_RELTYPE_SECTION
-#~ msgid "Seose Üksus (RELTYPE_SECTION) tekst"
-#~ msgstr "Section"
-
-# classes/crm/crm_person.aw:rel_RELTYPE_PREVIOUS_JOB
-#~ msgid "Seose Töökogemus (RELTYPE_PREVIOUS_JOB) tekst"
-#~ msgstr "Previous job"
-
-# classes/crm/crm_person.aw:rel_RELTYPE_FRIEND
-#~ msgid "Seose Sõber (RELTYPE_FRIEND) tekst"
-#~ msgstr "Friend"
-
-# classes/crm/crm_person.aw:rel_RELTYPE_MATCH
-#~ msgid "Seose Väljavalitu (RELTYPE_MATCH) tekst"
-#~ msgstr "Match"
-
-# classes/crm/crm_person.aw:rel_RELTYPE_FRIEND_GROUPS
-#~ msgid "Seose Sõbragrupid (RELTYPE_FRIEND_GROUPS) tekst"
-#~ msgstr "Friend groups"
-
-# classes/crm/crm_person.aw:rel_RELTYPE_CONTRACT_STOP
-#~ msgid "Seose Töölepingu peatamine (RELTYPE_CONTRACT_STOP) tekst"
-#~ msgstr "Contract stop"

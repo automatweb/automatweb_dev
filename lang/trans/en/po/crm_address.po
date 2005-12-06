@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 19:14+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/crm/crm_address.aw:class_146_help
 #: classes/crm/crm_address.aw:class_146_help
@@ -31,7 +32,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_postiindeks
 msgid "Omaduse Postiindeks (postiindeks) caption"
-msgstr ""
+msgstr "Postal code"
 
 #: classes/crm/crm_address.aw:prop_postiindeks_comment
 msgid "Omaduse Postiindeks (postiindeks) kommentaar"
@@ -88,7 +89,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/crm/crm_address.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -128,6 +129,3 @@ msgstr "belongs to"
 msgid "tel:"
 msgstr "phone:"
 
-# classes/crm/crm_address.aw:prop_postiindeks
-#~ msgid "Omaduse Postinindex (postiindeks) caption"
-#~ msgstr "Pstal index"

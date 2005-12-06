@@ -2,13 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 22:08+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
+"Language-Team: \n"
 
 #: classes/applications/crm/crm_job_entry.aw:class_1035_help
 msgid "Klassi T88 kirje help"
@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_cust_d
 msgid "Omaduse Kliendi andmed (cust_d) caption"
-msgstr ""
+msgstr "Customer data"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_cust_d_comment
 msgid "Omaduse Kliendi andmed (cust_d) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_sel_cust
 msgid "Omaduse Vali olemasolev klient (sel_cust) caption"
-msgstr ""
+msgstr "Select customer"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_sel_cust_comment
 msgid "Omaduse Vali olemasolev klient (sel_cust) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_cust_n
 msgid "Omaduse Nimetus (cust_n) caption"
-msgstr ""
+msgstr "Customer name"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_cust_n_comment
 msgid "Omaduse Nimetus (cust_n) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ettevotlusvorm
 msgid "Omaduse &Otilde;iguslik vorm (ettevotlusvorm) caption"
-msgstr ""
+msgstr "Legal form"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ettevotlusvorm_comment
 msgid "Omaduse &Otilde;iguslik vorm (ettevotlusvorm) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_addr
 msgid "Omaduse Aadress (addr) caption"
-msgstr ""
+msgstr "Address"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_addr_comment
 msgid "Omaduse Aadress (addr) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_addr_linn
 msgid "Omaduse Linn (addr_linn) caption"
-msgstr ""
+msgstr "City"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_addr_linn_comment
 msgid "Omaduse Linn (addr_linn) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_maakond
 msgid "Omaduse Maakond (maakond) caption"
-msgstr ""
+msgstr "County"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_maakond_comment
 msgid "Omaduse Maakond (maakond) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_riik
 msgid "Omaduse Riik  (riik) caption"
-msgstr ""
+msgstr "Country"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_riik_comment
 msgid "Omaduse Riik  (riik) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_cont_d
 msgid "Omaduse Kontaktisiku andmed (cont_d) caption"
-msgstr ""
+msgstr "Contact person"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_cont_d_comment
 msgid "Omaduse Kontaktisiku andmed (cont_d) kommentaar"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ct_fn
 msgid "Omaduse Eesnimi (ct_fn) caption"
-msgstr ""
+msgstr "First name"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ct_fn_comment
 msgid "Omaduse Eesnimi (ct_fn) kommentaar"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ct_ln
 msgid "Omaduse Perenimi (ct_ln) caption"
-msgstr ""
+msgstr "Surname"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ct_ln_comment
 msgid "Omaduse Perenimi (ct_ln) kommentaar"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ct_phone
 msgid "Omaduse Telefon (ct_phone) caption"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ct_phone_comment
 msgid "Omaduse Telefon (ct_phone) kommentaar"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ct_email
 msgid "Omaduse E-post (ct_email) caption"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_ct_email_comment
 msgid "Omaduse E-post (ct_email) kommentaar"
@@ -172,7 +172,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_proj_header
 msgid "Omaduse Projekti andmed (proj_header) caption"
-msgstr ""
+msgstr "Project data"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_proj_header_comment
 msgid "Omaduse Projekti andmed (proj_header) kommentaar"
@@ -184,7 +184,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_proj_name
 msgid "Omaduse  Nimetus (proj_name) caption"
-msgstr ""
+msgstr "Name of the project"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_proj_name_comment
 msgid "Omaduse  Nimetus (proj_name) kommentaar"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_proj_desc
 msgid "Omaduse Kirjeldus (proj_desc) caption"
-msgstr ""
+msgstr "Description"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_proj_desc_comment
 msgid "Omaduse Kirjeldus (proj_desc) kommentaar"
@@ -208,7 +208,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_proj_parts
 msgid "Omaduse Osalejad (proj_parts) caption"
-msgstr ""
+msgstr "Participants"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_proj_parts_comment
 msgid "Omaduse Osalejad (proj_parts) kommentaar"
@@ -220,7 +220,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_desc
 msgid "Omaduse Tegevuse andmed (task_desc) caption"
-msgstr ""
+msgstr "Description of action"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_desc_comment
 msgid "Omaduse Tegevuse andmed (task_desc) kommentaar"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_type
 msgid "Omaduse Liik (task_type) caption"
-msgstr ""
+msgstr "Action type"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_type_comment
 msgid "Omaduse Liik (task_type) kommentaar"
@@ -244,7 +244,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_start
 msgid "Omaduse Algus (task_start) caption"
-msgstr ""
+msgstr "Start"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_start_comment
 msgid "Omaduse Algus (task_start) kommentaar"
@@ -256,7 +256,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_end
 msgid "Omaduse L&otilde;pp (task_end) caption"
-msgstr ""
+msgstr "End"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_end_comment
 msgid "Omaduse L&otilde;pp (task_end) kommentaar"
@@ -268,7 +268,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_content
 msgid "Omaduse Sisu (task_content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/crm/crm_job_entry.aw:prop_task_content_comment
 msgid "Omaduse Sisu (task_content) kommentaar"
@@ -280,13 +280,15 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/applications/crm/crm_job_entry.aw:group_general_help
 msgid "Grupi Üldine (general) help"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:110 classes/applications/crm/crm_job_entry.aw:119 classes/applications/crm/crm_job_entry.aw:128
+#: classes/applications/crm/crm_job_entry.aw:110
+#: classes/applications/crm/crm_job_entry.aw:119
+#: classes/applications/crm/crm_job_entry.aw:128
 msgid "--Vali--"
-msgstr ""
+msgstr "--Select--"
 

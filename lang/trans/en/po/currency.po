@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-06 12:54+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/formgen/currency.aw:class_67_help
 #: classes/formgen/currency.aw:class_67_help
@@ -16,7 +17,7 @@ msgstr ""
 
 #: classes/formgen/currency.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/formgen/currency.aw:prop_ord_comment
 msgid "Omaduse J&auml;rjekord (ord) kommentaar"
@@ -43,7 +44,7 @@ msgstr ""
 
 #: classes/formgen/currency.aw:prop_unit_name
 msgid "Omaduse Raha&uuml;hiku nimetus (unit_name) caption"
-msgstr ""
+msgstr "Name of Currency"
 
 #: classes/formgen/currency.aw:prop_unit_name_comment
 msgid "Omaduse Raha&uuml;hiku nimetus (unit_name) kommentaar"
@@ -55,7 +56,7 @@ msgstr ""
 
 #: classes/formgen/currency.aw:prop_small_unit_name
 msgid "Omaduse Peenraha&uuml;hiku nimetus (small_unit_name) caption"
-msgstr ""
+msgstr "Name of small currency"
 
 #: classes/formgen/currency.aw:prop_small_unit_name_comment
 msgid "Omaduse Peenraha&uuml;hiku nimetus (small_unit_name) kommentaar"
@@ -67,8 +68,9 @@ msgstr ""
 
 #: classes/formgen/currency.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/formgen/currency.aw:group_general_help
 msgid "Grupi Üldine (general) help"
 msgstr ""
+

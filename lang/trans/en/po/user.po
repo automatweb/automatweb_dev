@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Thu, 31 Mar 2005 14:12:56 +0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-06 12:38+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/core/users/user.aw:prop_uid
 msgid "Omaduse Kasutajanimi (uid) caption"
@@ -215,7 +216,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_password
 msgid "Omaduse  (password) caption"
-msgstr ""
+msgstr "Password"
 
 # classes/core/users/user.aw:prop_password_comment
 msgid "Omaduse  (password) kommentaar"
@@ -527,8 +528,7 @@ msgstr "Generate password"
 
 #: classes/core/users/user.aw:342
 msgid "Selline kasutaja on juba olemas!"
-msgstr "User with that uid already exists!:w
-"
+msgstr "User with that uid already exists!:"
 
 #: classes/core/users/user.aw:347
 msgid "Selline kasutajanimi pole lubatud!"
@@ -578,7 +578,8 @@ msgstr "Modified by"
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/core/users/user.aw:673 classes/core/users/user.aw:1164
+#: classes/core/users/user.aw:673
+#: classes/core/users/user.aw:1164
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
@@ -639,14 +640,10 @@ msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr "Object's parent object (%s) is deleted. No access!"
 
 #: classes/core/users/user.aw:1641
-msgid ""
-"Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, "
-"kehtib default.<br>N&auml;gemis&otilde;inus ainult."
+msgid "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult."
 msgstr "Object has no acl set, default applies. View access only."
 
 #: classes/core/users/user.aw:1677
-msgid ""
-"Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;"
-"rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele "
-"m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
+msgid "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
 msgstr "Info on object's acl:<br><br>Access is set by access-relation between object %s and group %s<br><br>ACL set for that relation are: %s"
+

@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-06 12:47+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/applications/class_designer/property.aw:class_930_help
 msgid "Klassi Omadus help"
@@ -15,7 +16,7 @@ msgstr ""
 
 # classes/applications/class_designer/property.aw:prop_int_ref
 msgid "Omaduse Sisemine seos (int_ref) caption"
-msgstr ""
+msgstr "Inner relation"
 
 # classes/applications/class_designer/property.aw:prop_int_ref_comment
 msgid "Omaduse Sisemine seos (int_ref) kommentaar"
@@ -27,7 +28,7 @@ msgstr ""
 
 # classes/applications/class_designer/property.aw:prop_ext_ref
 msgid "Omaduse Väline seos (ext_ref) caption"
-msgstr ""
+msgstr "Extern relation"
 
 # classes/applications/class_designer/property.aw:prop_ext_ref_comment
 msgid "Omaduse Väline seos (ext_ref) kommentaar"
@@ -39,7 +40,7 @@ msgstr ""
 
 # classes/applications/class_designer/property.aw:prop_property_type
 msgid "Omaduse Omaduse tüüp (property_type) caption"
-msgstr ""
+msgstr "Property type"
 
 # classes/applications/class_designer/property.aw:prop_property_type_comment
 msgid "Omaduse Omaduse tüüp (property_type) kommentaar"
@@ -57,10 +58,3 @@ msgstr ""
 msgid "--vali--"
 msgstr "--select--"
 
-# classes/cfg/property.aw:prop_test
-#~ msgid "Omaduse Test (test) caption"
-#~ msgstr "Test"
-
-# classes/cfg/property.aw:group_
-#~ msgid "Grupi  () pealkiri"
-#~ msgstr " "

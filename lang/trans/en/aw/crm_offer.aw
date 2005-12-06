@@ -35,6 +35,7 @@ $GLOBALS["TRANS"]["Maksetingimused"] = "Payment terms";
 $GLOBALS["TRANS"]["Toodete nimekiri"] = "Products list";
 $GLOBALS["TRANS"]["V&otilde;rdlustabel"] = "Compare table";
 $GLOBALS["TRANS"]["Projekt"] = "Project";
+$GLOBALS["TRANS"]["--Vali--"] = "--Select--";
 $GLOBALS["TRANS"]["Algstaatus"] = "Starting status";
 $GLOBALS["TRANS"]["Lõppstaatus"] = "Final status";
 $GLOBALS["TRANS"]["Muutuse aeg"] = "Change time";

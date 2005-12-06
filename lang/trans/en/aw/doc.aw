@@ -29,6 +29,7 @@ $GLOBALS["TRANS"]["Omaduse Esilehel tulbas (frontpage_left) caption"] = "In fron
 $GLOBALS["TRANS"]["Omaduse Cache otsingu jaoks (dcache) caption"] = "Cache for search";
 $GLOBALS["TRANS"]["Omaduse Cache otsingu jaoks (salvestub) (dcache_save) caption"] = "Cache for search (saved)";
 $GLOBALS["TRANS"]["Omaduse N&auml;ita pealkirja (show_title) caption"] = "Show title";
+$GLOBALS["TRANS"]["Omaduse J&auml;ta otsingust v&auml;lja (no_search) caption"] = "Exclude from search results";
 $GLOBALS["TRANS"]["Omaduse Tsitaat (cite) caption"] = "Quote";
 $GLOBALS["TRANS"]["Omaduse Kuup&auml;ev (tm) caption"] = "Date";
 $GLOBALS["TRANS"]["Omaduse 'Prindi' nupp (show_print) caption"] = "'Print' button";

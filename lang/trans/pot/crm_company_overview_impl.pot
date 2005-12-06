@@ -46,7 +46,7 @@ msgstr ""
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:336 classes/applications/crm/crm_company_overview_impl.aw:583
+#: classes/applications/crm/crm_company_overview_impl.aw:336 classes/applications/crm/crm_company_overview_impl.aw:588
 msgid "M&auml;rgi tehtuks"
 msgstr ""
 
@@ -54,35 +54,39 @@ msgstr ""
 msgid "Koosta arve"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:352
+#: classes/applications/crm/crm_company_overview_impl.aw:354
+msgid "Toimetus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_overview_impl.aw:359
 msgid "K&auml;ivita stopper"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:366
+#: classes/applications/crm/crm_company_overview_impl.aw:371
 msgid "Peata stopper (%s)"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:536
+#: classes/applications/crm/crm_company_overview_impl.aw:541
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:568
+#: classes/applications/crm/crm_company_overview_impl.aw:573
 msgid "P&auml;eva raport"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:590
+#: classes/applications/crm/crm_company_overview_impl.aw:595
 msgid "Kustuta toimetused"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:591
+#: classes/applications/crm/crm_company_overview_impl.aw:596
 msgid "Oled kindel et soovid valitud toimetusi kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:602
+#: classes/applications/crm/crm_company_overview_impl.aw:607
 msgid "Kalendrivaade"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:611
+#: classes/applications/crm/crm_company_overview_impl.aw:616
 msgid "Tabelivaade"
 msgstr ""
 

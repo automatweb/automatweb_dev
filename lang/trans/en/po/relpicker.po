@@ -2,27 +2,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-06 13:12+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/vcl/relpicker.aw:14
+msgid "--vali--"
+msgstr "--select--"
 
 #: classes/vcl/relpicker.aw:85
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/vcl/relpicker.aw:94
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/vcl/relpicker.aw:125
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/vcl/relpicker.aw:143
 msgid "Lisa uus %s"
-msgstr ""
-
+msgstr "Add new %s"

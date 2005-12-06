@@ -9,6 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/vcl/relpicker.aw:14
+msgid "--vali--"
+msgstr ""
 
 #: classes/vcl/relpicker.aw:85
 msgid "Otsi"
@@ -25,4 +28,3 @@ msgstr ""
 #: classes/vcl/relpicker.aw:143
 msgid "Lisa uus %s"
 msgstr ""
-

@@ -2,95 +2,104 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 19:24+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_company_bills_impl.aw:13 classes/applications/crm/crm_company_bills_impl.aw:114 classes/applications/crm/crm_company_bills_impl.aw:544
+#: classes/applications/crm/crm_company_bills_impl.aw:13
+#: classes/applications/crm/crm_company_bills_impl.aw:114
+#: classes/applications/crm/crm_company_bills_impl.aw:544
 msgid "Loo arve"
-msgstr ""
+msgstr "Create invoice"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:20
 msgid "Projekt"
-msgstr ""
+msgstr "Project"
 
-#: classes/applications/crm/crm_company_bills_impl.aw:27 classes/applications/crm/crm_company_bills_impl.aw:267
+#: classes/applications/crm/crm_company_bills_impl.aw:27
+#: classes/applications/crm/crm_company_bills_impl.aw:267
 msgid "Klient"
-msgstr ""
+msgstr "Customer"
 
-#: classes/applications/crm/crm_company_bills_impl.aw:34 classes/applications/crm/crm_company_bills_impl.aw:146 classes/applications/crm/crm_company_bills_impl.aw:278
+#: classes/applications/crm/crm_company_bills_impl.aw:34
+#: classes/applications/crm/crm_company_bills_impl.aw:146
+#: classes/applications/crm/crm_company_bills_impl.aw:278
 msgid "Summa"
-msgstr ""
+msgstr "Sum"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:125
 msgid "Juhtumi nimi"
-msgstr ""
+msgstr "Case name"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:132
 msgid "Tunde"
-msgstr ""
+msgstr "Hours"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:139
 msgid "Tunni hind"
-msgstr ""
+msgstr "Price per hour"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:227
 msgid "Koosta arve"
-msgstr ""
+msgstr "Create invoice"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:236
 msgid "Number"
-msgstr ""
+msgstr "No"
 
-#: classes/applications/crm/crm_company_bills_impl.aw:244 classes/applications/crm/crm_company_bills_impl.aw:376
+#: classes/applications/crm/crm_company_bills_impl.aw:244
+#: classes/applications/crm/crm_company_bills_impl.aw:376
 msgid "Loo uus"
-msgstr ""
+msgstr "Create new"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:251
 msgid "Kuup&auml;ev"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:259
 msgid "Makset&auml;htaeg"
-msgstr ""
+msgstr "Due date"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:272
 msgid "Kliendihaldur"
-msgstr ""
+msgstr "Client manager"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:287
 msgid "Staatus"
-msgstr ""
+msgstr "Status"
 
-#: classes/applications/crm/crm_company_bills_impl.aw:293 classes/applications/crm/crm_company_bills_impl.aw:387
+#: classes/applications/crm/crm_company_bills_impl.aw:293
+#: classes/applications/crm/crm_company_bills_impl.aw:387
 msgid "Tr&uuml;ki"
-msgstr ""
+msgstr "Print"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:401
 msgid "<b>Summa</b>"
-msgstr ""
+msgstr "<b>Sum</b>"
 
-#: classes/applications/crm/crm_company_bills_impl.aw:495 classes/applications/crm/crm_company_bills_impl.aw:527
+#: classes/applications/crm/crm_company_bills_impl.aw:495
+#: classes/applications/crm/crm_company_bills_impl.aw:527
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
-#: classes/applications/crm/crm_company_bills_impl.aw:501 classes/applications/crm/crm_company_bills_impl.aw:533
+#: classes/applications/crm/crm_company_bills_impl.aw:501
+#: classes/applications/crm/crm_company_bills_impl.aw:533
 msgid "Kustuta valitud arved"
-msgstr ""
+msgstr "Delete selected invoices"
 
-#: classes/applications/crm/crm_company_bills_impl.aw:502 classes/applications/crm/crm_company_bills_impl.aw:534
+#: classes/applications/crm/crm_company_bills_impl.aw:502
+#: classes/applications/crm/crm_company_bills_impl.aw:534
 msgid "Oled kindel et soovid valitud arved kustutada?"
-msgstr ""
+msgstr "Are You sure You want to delete selected invoices?"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:510
 msgid "Ekspordi"
-msgstr ""
+msgstr "Export"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:516
 msgid "Hansa raama"
-msgstr ""
-
+msgstr "Hansa Raama"

@@ -2,13 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 19:21+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
+"Language-Team: \n"
 
 #: classes/applications/crm/crm_bill.aw:class_1009_help
 msgid "Klassi Arve help"
@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_no
 msgid "Omaduse Number (bill_no) caption"
-msgstr ""
+msgstr "Invoice no"
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_no_comment
 msgid "Omaduse Number (bill_no) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_date
 msgid "Omaduse Kuup&auml;ev (bill_date) caption"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_date_comment
 msgid "Omaduse Kuup&auml;ev (bill_date) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_due_date_days
 msgid "Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) caption"
-msgstr ""
+msgstr "Due days"
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_due_date_days_comment
 msgid "Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_due_date
 msgid "Omaduse Tasumise kuup&auml;ev (bill_due_date) caption"
-msgstr ""
+msgstr "Due date"
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_due_date_comment
 msgid "Omaduse Tasumise kuup&auml;ev (bill_due_date) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_recieved
 msgid "Omaduse Laekumiskuup&auml;ev (bill_recieved) caption"
-msgstr ""
+msgstr "Date of payment"
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_recieved_comment
 msgid "Omaduse Laekumiskuup&auml;ev (bill_recieved) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
-msgstr ""
+msgstr "Customer"
 
 #: classes/applications/crm/crm_bill.aw:prop_customer_comment
 msgid "Omaduse Klient (customer) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_impl
 msgid "Omaduse Teostaja (impl) caption"
-msgstr ""
+msgstr "Implementor"
 
 #: classes/applications/crm/crm_bill.aw:prop_impl_comment
 msgid "Omaduse Teostaja (impl) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_state
 msgid "Omaduse Staatus (state) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/crm/crm_bill.aw:prop_state_comment
 msgid "Omaduse Staatus (state) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_notes
 msgid "Omaduse M&auml;rkused (notes) caption"
-msgstr ""
+msgstr "Notes"
 
 #: classes/applications/crm/crm_bill.aw:prop_notes_comment
 msgid "Omaduse M&auml;rkused (notes) kommentaar"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_monthly_bill
 msgid "Omaduse Kuuarve (monthly_bill) caption"
-msgstr ""
+msgstr "Monthly Invoice"
 
 #: classes/applications/crm/crm_bill.aw:prop_monthly_bill_comment
 msgid "Omaduse Kuuarve (monthly_bill) kommentaar"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_currency
 msgid "Omaduse Valuuta (currency) caption"
-msgstr ""
+msgstr "Currency"
 
 #: classes/applications/crm/crm_bill.aw:prop_currency_comment
 msgid "Omaduse Valuuta (currency) kommentaar"
@@ -148,7 +148,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_language
 msgid "Omaduse Keel (language) caption"
-msgstr ""
+msgstr "Language"
 
 #: classes/applications/crm/crm_bill.aw:prop_language_comment
 msgid "Omaduse Keel (language) kommentaar"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_rows
 msgid "Omaduse Arveread  (bill_rows) caption"
-msgstr ""
+msgstr "Invoice rows"
 
 #: classes/applications/crm/crm_bill.aw:prop_bill_rows_comment
 msgid "Omaduse Arveread  (bill_rows) kommentaar"
@@ -172,7 +172,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_disc
 msgid "Omaduse Allahindlus (%) (disc) caption"
-msgstr ""
+msgstr "Discount (%)"
 
 #: classes/applications/crm/crm_bill.aw:prop_disc_comment
 msgid "Omaduse Allahindlus (%) (disc) kommentaar"
@@ -184,7 +184,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_sum
 msgid "Omaduse Summa (sum) caption"
-msgstr ""
+msgstr "Sum"
 
 #: classes/applications/crm/crm_bill.aw:prop_sum_comment
 msgid "Omaduse Summa (sum) kommentaar"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_preview
 msgid "Omaduse  (preview) caption"
-msgstr ""
+msgstr "Preview"
 
 #: classes/applications/crm/crm_bill.aw:prop_preview_comment
 msgid "Omaduse  (preview) kommentaar"
@@ -208,7 +208,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:prop_task_list
 msgid "Omaduse  (task_list) caption"
-msgstr ""
+msgstr "Task list"
 
 #: classes/applications/crm/crm_bill.aw:prop_task_list_comment
 msgid "Omaduse  (task_list) kommentaar"
@@ -220,7 +220,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/applications/crm/crm_bill.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -228,15 +228,15 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:group_tasks
 msgid "Grupi Toimetused (tasks) pealkiri"
-msgstr ""
+msgstr "Tasks"
 
 #: classes/applications/crm/crm_bill.aw:group_tasks_help
 msgid "Grupi Toimetused (tasks) help"
-msgstr ""
+msgstr "Tasks"
 
 #: classes/applications/crm/crm_bill.aw:group_preview
 msgid "Grupi Eelvaade (preview) pealkiri"
-msgstr ""
+msgstr "Preview"
 
 #: classes/applications/crm/crm_bill.aw:group_preview_help
 msgid "Grupi Eelvaade (preview) help"
@@ -260,15 +260,15 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:98
 msgid "Koostamisel"
-msgstr ""
+msgstr "Not sent"
 
 #: classes/applications/crm/crm_bill.aw:99
 msgid "Saadetud"
-msgstr ""
+msgstr "Sent"
 
 #: classes/applications/crm/crm_bill.aw:100
 msgid "Makstud"
-msgstr ""
+msgstr "Payment recieved"
 
 #: classes/applications/crm/crm_bill.aw:131
 msgid "--vali--"
@@ -276,33 +276,33 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill.aw:200
 msgid "Nimetus"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/crm/crm_bill.aw:205
 msgid "Kuup&auml;ev"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/crm/crm_bill.aw:210
 msgid "&Uuml;hik"
-msgstr ""
+msgstr "Unit"
 
 #: classes/applications/crm/crm_bill.aw:215
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/crm/crm_bill.aw:220
 msgid "Kogus"
-msgstr ""
+msgstr "Quantity"
 
 #: classes/applications/crm/crm_bill.aw:225
 msgid "Summa"
-msgstr ""
+msgstr "Sum"
 
 #: classes/applications/crm/crm_bill.aw:230
 msgid "Lisandub k&auml;ibemaks?"
-msgstr ""
+msgstr "Add VAT"
 
 #: classes/applications/crm/crm_bill.aw:532
 msgid "Prinditav arve"
-msgstr ""
+msgstr "Printable version"
 

@@ -16,6 +16,7 @@ $GLOBALS["TRANS"]["Omaduse Aktiivne alates (act_from) caption"] = "Active since"
 $GLOBALS["TRANS"]["Omaduse Aktiivne kuni (act_to) caption"] = "Active until";
 $GLOBALS["TRANS"]["Omaduse Salasõna (passwd) caption"] = "Password";
 $GLOBALS["TRANS"]["Omaduse Salasõna uuesti (passwd_again) caption"] = "Password again";
+$GLOBALS["TRANS"]["Omaduse  (password) caption"] = "Password";
 $GLOBALS["TRANS"]["Omaduse Genereeri parool (gen_pwd) caption"] = "Generate random password";
 $GLOBALS["TRANS"]["Omaduse Genereeritud parool (genpwd) caption"] = "Generated password";
 $GLOBALS["TRANS"]["Omaduse Saada tervitusmeil (resend_welcome) caption"] = "Send welcome e-mail";

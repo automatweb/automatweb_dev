@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 20:10+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/crm/crm_db.aw:class_130_help
 #: classes/crm/crm_db.aw:class_130_help
@@ -91,7 +92,7 @@ msgstr ""
 
 #: classes/crm/crm_db.aw:prop_sector_tree
 msgid "Omaduse Tegevusalade puu (sector_tree) caption"
-msgstr ""
+msgstr "Sector tree"
 
 #: classes/crm/crm_db.aw:prop_sector_tree_comment
 msgid "Omaduse Tegevusalade puu (sector_tree) kommentaar"
@@ -168,8 +169,7 @@ msgstr "Default legal form folder"
 
 # classes/crm/crm_db.aw:prop_dir_ettevotlusvorm_comment
 #: classes/crm/crm_db.aw:prop_dir_ettevotlusvorm_comment
-msgid ""
-"Omaduse Vaikimisi ıiguslike vormide kaust (dir_ettevotlusvorm) kommentaar"
+msgid "Omaduse Vaikimisi ıiguslike vormide kaust (dir_ettevotlusvorm) kommentaar"
 msgstr ""
 
 # classes/crm/crm_db.aw:prop_dir_ettevotlusvorm_help
@@ -239,24 +239,17 @@ msgstr ""
 
 # classes/crm/crm_db.aw:prop_dir_default
 #: classes/crm/crm_db.aw:prop_dir_default
-msgid ""
-"Omaduse Vaikimisi kaust, kui mıni eelnevatest pole m‰‰ratud, siis "
-"kasutatakse seda (dir_default) caption"
-msgstr ""
-"Default folder - if some of the previous are not set, this will be used"
+msgid "Omaduse Vaikimisi kaust, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda (dir_default) caption"
+msgstr "Default folder - if some of the previous are not set, this will be used"
 
 # classes/crm/crm_db.aw:prop_dir_default_comment
 #: classes/crm/crm_db.aw:prop_dir_default_comment
-msgid ""
-"Omaduse Vaikimisi kaust, kui mıni eelnevatest pole m‰‰ratud, siis "
-"kasutatakse seda (dir_default) kommentaar"
+msgid "Omaduse Vaikimisi kaust, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda (dir_default) kommentaar"
 msgstr ""
 
 # classes/crm/crm_db.aw:prop_dir_default_help
 #: classes/crm/crm_db.aw:prop_dir_default_help
-msgid ""
-"Omaduse Vaikimisi kaust, kui mıni eelnevatest pole m‰‰ratud, siis "
-"kasutatakse seda (dir_default) help"
+msgid "Omaduse Vaikimisi kaust, kui mıni eelnevatest pole m‰‰ratud, siis kasutatakse seda (dir_default) help"
 msgstr ""
 
 # classes/crm/crm_db.aw:prop_flimit
@@ -478,17 +471,22 @@ msgstr "Organisation leader"
 msgid "Uus"
 msgstr "New"
 
-#: classes/crm/crm_db.aw:897 classes/crm/crm_db.aw:1102
+#: classes/crm/crm_db.aw:897
+#: classes/crm/crm_db.aw:1102
 msgid "Kaust m‰‰ramata"
 msgstr "Folder not set"
 
-#: classes/crm/crm_db.aw:898 classes/crm/crm_db.aw:911
-#: classes/crm/crm_db.aw:1038 classes/crm/crm_db.aw:1109
-#: classes/crm/crm_db.aw:1123 classes/crm/crm_db.aw:1138
+#: classes/crm/crm_db.aw:898
+#: classes/crm/crm_db.aw:911
+#: classes/crm/crm_db.aw:1038
+#: classes/crm/crm_db.aw:1109
+#: classes/crm/crm_db.aw:1123
+#: classes/crm/crm_db.aw:1138
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/crm/crm_db.aw:926 classes/crm/crm_db.aw:1162
+#: classes/crm/crm_db.aw:926
+#: classes/crm/crm_db.aw:1162
 msgid "Kasutaja kalender"
 msgstr "User calendar"
 
@@ -496,11 +494,13 @@ msgstr "User calendar"
 msgid "Ava valim"
 msgstr "Open selection"
 
-#: classes/crm/crm_db.aw:946 classes/crm/crm_db.aw:1147
+#: classes/crm/crm_db.aw:946
+#: classes/crm/crm_db.aw:1147
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/crm/crm_db.aw:948 classes/crm/crm_db.aw:1149
+#: classes/crm/crm_db.aw:948
+#: classes/crm/crm_db.aw:1149
 msgid "Kustutada valitud organisatsioonid?"
 msgstr "Delete selected organisations"
 
@@ -508,7 +508,8 @@ msgstr "Delete selected organisations"
 msgid "-- vali valim --"
 msgstr "-- select selection --"
 
-#: classes/crm/crm_db.aw:982 classes/crm/crm_db.aw:1203
+#: classes/crm/crm_db.aw:982
+#: classes/crm/crm_db.aw:1203
 msgid "Lisa valitud valimisse"
 msgstr "Add to selected selection"
 
@@ -526,7 +527,7 @@ msgstr "%s folder not set"
 
 #: classes/crm/crm_db.aw:1086
 msgid "Tegevusala valimata"
-msgstr ""
+msgstr "Sector not selected"
 
 #: classes/crm/crm_db.aw:1092
 msgid "Lisa"
@@ -540,19 +541,3 @@ msgstr "- add to new selection -"
 msgid "Muuda valimit"
 msgstr "Change selection"
 
-# classes/crm/crm_db.aw:prop_default_kliendibaas
-#~ msgid ""
-#~ "Omaduse See on kasutaja default kliendibaas (default_kliendibaas) caption"
-#~ msgstr "This is the user's default client database"
-
-# classes/crm/crm_db.aw:rel_RELTYPE_ISIK_CAT
-#~ msgid "Seose Tˆˆtajate kaust (RELTYPE_ISIK_CAT) tekst"
-#~ msgstr "Employee folder"
-
-# classes/crm/crm_db.aw:rel_RELTYPE_GENERAL_CAT
-#~ msgid "Seose ‹ldkaust (RELTYPE_GENERAL_CAT) tekst"
-#~ msgstr "General folder"
-
-# classes/crm/crm_db.aw:rel_RELTYPE_ETTEVOTLUSVORM_CAT
-#~ msgid "Seose ’iguslike vormide kaust (RELTYPE_ETTEVOTLUSVORM_CAT) tekst"
-#~ msgstr "Legal form folder"

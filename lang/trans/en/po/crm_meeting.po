@@ -2,8 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 22:10+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -16,7 +17,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
-msgstr ""
+msgstr "Customer"
 
 #: classes/crm/crm_meeting.aw:prop_customer_comment
 msgid "Omaduse Klient (customer) kommentaar"
@@ -28,7 +29,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_project
 msgid "Omaduse Projekt (project) caption"
-msgstr ""
+msgstr "Project"
 
 #: classes/crm/crm_meeting.aw:prop_project_comment
 msgid "Omaduse Projekt (project) kommentaar"
@@ -340,7 +341,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_bill_no
 msgid "Omaduse Arve number (bill_no) caption"
-msgstr ""
+msgstr "Invoice no"
 
 #: classes/crm/crm_meeting.aw:prop_bill_no_comment
 msgid "Omaduse Arve number (bill_no) kommentaar"
@@ -352,7 +353,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_participants
 msgid "Omaduse Osalejad (participants) caption"
-msgstr ""
+msgstr "Participants"
 
 #: classes/crm/crm_meeting.aw:prop_participants_comment
 msgid "Omaduse Osalejad (participants) kommentaar"
@@ -601,7 +602,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/crm/crm_meeting.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -669,7 +670,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:group_resources
 msgid "Grupi Ressursid (resources) pealkiri"
-msgstr ""
+msgstr "Resources"
 
 #: classes/crm/crm_meeting.aw:group_resources_help
 msgid "Grupi Ressursid (resources) help"
@@ -686,7 +687,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:315
 msgid "--Vali--"
-msgstr ""
+msgstr "--Select--"
 
 #: classes/crm/crm_meeting.aw:394
 msgid "Kustuta valitud"
@@ -703,7 +704,3 @@ msgstr "Search"
 #: classes/crm/crm_meeting.aw:413
 msgid "Salvesta"
 msgstr "Save"
-
-# classes/crm/crm_meeting.aw:prop_task_toolbar
-#~ msgid "Omaduse \"Toolbar\" (task_toolbar) caption"
-#~ msgstr "Toolbar"

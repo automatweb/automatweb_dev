@@ -10,49 +10,47 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/core/proxy_classes/class_list.aw:class_331_help
+#: classes/core/proxy_classes/class_list.aw:class_331_help
 msgid "Klassi Klasside nimekiri help"
 msgstr ""
 
-#: classes/core/class_list.aw:117
-msgid "id"
-msgstr "id"
+#: classes/core/proxy_classes/class_list.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
 
-#: classes/core/class_list.aw:123
-msgid "def"
-msgstr "def"
+#: classes/core/proxy_classes/class_list.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
 
-#: classes/core/class_list.aw:128
-msgid "name"
-msgstr "name"
+#~ msgid "id"
+#~ msgstr "id"
 
-#: classes/core/class_list.aw:133
-msgid "file"
-msgstr "file"
+#~ msgid "def"
+#~ msgstr "def"
 
-#: classes/core/class_list.aw:138
-msgid "can_add"
-msgstr "can_add"
+#~ msgid "name"
+#~ msgstr "name"
 
-#: classes/core/class_list.aw:143
-msgid "parents"
-msgstr "parents"
+#~ msgid "file"
+#~ msgstr "file"
 
-#: classes/core/class_list.aw:148
-msgid "alias"
-msgstr "alias"
+#~ msgid "can_add"
+#~ msgstr "can_add"
 
-#: classes/core/class_list.aw:153
-msgid "alias_class"
-msgstr "alias_class"
+#~ msgid "parents"
+#~ msgstr "parents"
 
-#: classes/core/class_list.aw:158
-msgid "old_alias"
-msgstr "old_alias"
+#~ msgid "alias"
+#~ msgstr "alias"
 
-#: classes/core/class_list.aw:163
-msgid "is_remoted"
-msgstr "is_remoted"
+#~ msgid "alias_class"
+#~ msgstr "alias_class"
 
-#: classes/core/class_list.aw:168
-msgid "subtpl_handler"
-msgstr "subtpl_handler"
+#~ msgid "old_alias"
+#~ msgstr "old_alias"
+
+#~ msgid "is_remoted"
+#~ msgstr "is_remoted"
+
+#~ msgid "subtpl_handler"
+#~ msgstr "subtpl_handler"

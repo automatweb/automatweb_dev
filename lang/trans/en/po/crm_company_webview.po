@@ -2,13 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2005-12-04 20:06+0200\n"
+"Last-Translator: Erki <erki@struktuur.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
+"Language-Team: \n"
 
 #: classes/applications/crm/crm_company_webview.aw:class_1013_help
 msgid "Klassi Organisatsioonid veebis help"
@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:prop_crm_db
 msgid "Omaduse Andmebaas, mille organisatsioone kuvatakse (crm_db) caption"
-msgstr ""
+msgstr "Database with organisations"
 
 #: classes/applications/crm/crm_company_webview.aw:prop_crm_db_comment
 msgid "Omaduse Andmebaas, mille organisatsioone kuvatakse (crm_db) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:prop_limit_sector
 msgid "Omaduse Tegevusala piirang (limit_sector) caption"
-msgstr ""
+msgstr "Sector limit"
 
 #: classes/applications/crm/crm_company_webview.aw:prop_limit_sector_comment
 msgid "Omaduse Tegevusala piirang (limit_sector) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:prop_limit_city
 msgid "Omaduse Linna piirang (limit_city) caption"
-msgstr ""
+msgstr "City limit"
 
 #: classes/applications/crm/crm_company_webview.aw:prop_limit_city_comment
 msgid "Omaduse Linna piirang (limit_city) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:prop_limit_county
 msgid "Omaduse Maakonna piirang (limit_county) caption"
-msgstr ""
+msgstr "County limit"
 
 #: classes/applications/crm/crm_company_webview.aw:prop_limit_county_comment
 msgid "Omaduse Maakonna piirang (limit_county) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:prop_template
 msgid "Omaduse Template (template) caption"
-msgstr ""
+msgstr "Template"
 
 #: classes/applications/crm/crm_company_webview.aw:prop_template_comment
 msgid "Omaduse Template (template) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:prop_ord1
 msgid "Omaduse J&auml;rjestamisprintsiip 1 (ord1) caption"
-msgstr ""
+msgstr "Order by 1"
 
 #: classes/applications/crm/crm_company_webview.aw:prop_ord1_comment
 msgid "Omaduse J&auml;rjestamisprintsiip 1 (ord1) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:prop_ord2
 msgid "Omaduse J&auml;rjestamisprintsiip 2 (ord2) caption"
-msgstr ""
+msgstr "Order by 2"
 
 #: classes/applications/crm/crm_company_webview.aw:prop_ord2_comment
 msgid "Omaduse J&auml;rjestamisprintsiip 2 (ord2) kommentaar"
@@ -100,7 +100,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:prop_ord3
 msgid "Omaduse J&auml;rjestamisprintsiip 2 (ord3) caption"
-msgstr ""
+msgstr "Order by 3"
 
 #: classes/applications/crm/crm_company_webview.aw:prop_ord3_comment
 msgid "Omaduse J&auml;rjestamisprintsiip 2 (ord3) kommentaar"
@@ -112,7 +112,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:prop_clickable
 msgid "Omaduse Organistatsioonide nimed on klikitavad (clickable) caption"
-msgstr ""
+msgstr "Organisations are clickable"
 
 #: classes/applications/crm/crm_company_webview.aw:prop_clickable_comment
 msgid "Omaduse Organistatsioonide nimed on klikitavad (clickable) kommentaar"
@@ -124,7 +124,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/applications/crm/crm_company_webview.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -148,121 +148,126 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_webview.aw:85
 msgid "V&auml;listav"
-msgstr ""
+msgstr "Exclude"
 
 #: classes/applications/crm/crm_company_webview.aw:94
 msgid "Vaikimisi"
-msgstr ""
+msgstr "Default"
 
 #: classes/applications/crm/crm_company_webview.aw:105
 msgid "J&auml;rjekorranr"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/crm/crm_company_webview.aw:106
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/crm/crm_company_webview.aw:107
 msgid "Maakond"
-msgstr ""
+msgstr "County"
 
 #: classes/applications/crm/crm_company_webview.aw:108
 msgid "Linn"
-msgstr ""
+msgstr "City"
 
-#: classes/applications/crm/crm_company_webview.aw:223 classes/applications/crm/crm_company_webview.aw:561
+#: classes/applications/crm/crm_company_webview.aw:223
+#: classes/applications/crm/crm_company_webview.aw:561
 msgid "Aadress"
-msgstr ""
+msgstr "Address"
 
-#: classes/applications/crm/crm_company_webview.aw:224 classes/applications/crm/crm_company_webview.aw:562
+#: classes/applications/crm/crm_company_webview.aw:224
+#: classes/applications/crm/crm_company_webview.aw:562
 msgid "Tel"
-msgstr ""
+msgstr "Phone"
 
-#: classes/applications/crm/crm_company_webview.aw:225 classes/applications/crm/crm_company_webview.aw:563
+#: classes/applications/crm/crm_company_webview.aw:225
+#: classes/applications/crm/crm_company_webview.aw:563
 msgid "Faks"
-msgstr ""
+msgstr "Fax"
 
-#: classes/applications/crm/crm_company_webview.aw:226 classes/applications/crm/crm_company_webview.aw:564
+#: classes/applications/crm/crm_company_webview.aw:226
+#: classes/applications/crm/crm_company_webview.aw:564
 msgid "Avatud"
-msgstr ""
+msgstr "Open hours"
 
-#: classes/applications/crm/crm_company_webview.aw:227 classes/applications/crm/crm_company_webview.aw:565
+#: classes/applications/crm/crm_company_webview.aw:227
+#: classes/applications/crm/crm_company_webview.aw:565
 msgid "E-post"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/crm/crm_company_webview.aw:228
 msgid "Tegevusalad"
-msgstr ""
+msgstr "Sectors"
 
 #: classes/applications/crm/crm_company_webview.aw:229
 msgid "Asutatud"
-msgstr ""
+msgstr "Founded"
 
 #: classes/applications/crm/crm_company_webview.aw:230
 msgid "Eripakkumised"
-msgstr ""
+msgstr "Special offers"
 
 #: classes/applications/crm/crm_company_webview.aw:231
 msgid "Lisav&otilde;imalused"
-msgstr ""
+msgstr "Extras"
 
 #: classes/applications/crm/crm_company_webview.aw:232
 msgid "Kohti"
-msgstr ""
+msgstr "Places"
 
 #: classes/applications/crm/crm_company_webview.aw:233
 msgid "Toad"
-msgstr ""
+msgstr "Rooms"
 
 #: classes/applications/crm/crm_company_webview.aw:234
 msgid "Hinnad"
-msgstr ""
+msgstr "Prices"
 
 #: classes/applications/crm/crm_company_webview.aw:235
 msgid "T&uuml;&uuml;p"
-msgstr ""
+msgstr "Type"
 
 #: classes/applications/crm/crm_company_webview.aw:373
 msgid "Hotell"
-msgstr ""
+msgstr "Hotel"
 
 #: classes/applications/crm/crm_company_webview.aw:374
 msgid "Motell"
-msgstr ""
+msgstr "Motel"
 
 #: classes/applications/crm/crm_company_webview.aw:375
 msgid "K&uuml;lalistemaja"
-msgstr ""
+msgstr "Guest house"
 
 #: classes/applications/crm/crm_company_webview.aw:376
 msgid "Hostel"
-msgstr ""
+msgstr "Hostel"
 
 #: classes/applications/crm/crm_company_webview.aw:377
 msgid "Puhkek&uuml;la ja -laager"
-msgstr ""
+msgstr "Camp"
 
 #: classes/applications/crm/crm_company_webview.aw:378
 msgid "Puhkemaja"
-msgstr ""
+msgstr "Resthouse"
 
 #: classes/applications/crm/crm_company_webview.aw:379
 msgid "K&uuml;laliskorter"
-msgstr ""
+msgstr "Guest apartment"
 
 #: classes/applications/crm/crm_company_webview.aw:380
 msgid "Kodumajutus"
-msgstr ""
+msgstr "Home accomaodation"
 
 #: classes/applications/crm/crm_company_webview.aw:482
 msgid "H&auml;&auml;leta"
-msgstr ""
+msgstr "Vote"
 
 #: classes/applications/crm/crm_company_webview.aw:566
 msgid "Koduleht"
-msgstr ""
+msgstr "Homepage"
 
 #: classes/applications/crm/crm_company_webview.aw:663
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
