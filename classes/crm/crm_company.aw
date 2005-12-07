@@ -592,21 +592,25 @@ default group=org_objects
 
 @default group=stats
 
-	@property stats_s_cust type=textbox store=no
-	@caption Klient
+	@layout stats_s_cust_l type=hbox
+		@caption Klient
 
-	@property stats_s_cust_type type=chooser store=no
-	@caption Kliendi t&uuml;&uuml;p
+	 	@property stats_s_cust type=textbox store=no parent=stats_s_cust_l captionside=top
+		@caption Nimi
 
-	@property stats_s_proj type=textbox store=no
-	@caption Projekt
+		@property stats_s_cust_type type=chooser store=no parent=stats_s_cust_l captionside=top
+		@caption Kliendi t&uuml;&uuml;p
 
-	@property stats_s_worker type=textbox store=no
-	@caption T&ouml;&ouml;taja
+		@property stats_s_proj type=textbox store=no parent=stats_s_cust_l  captionside=top
+		@caption Projekt
 
-	@property stats_s_worker_sel type=select multiple=1 store=no
-	@caption T&ouml;&ouml;taja
+	@layout stats_s_wrk_l type=hbox
+	@caption Töötaja
 
+		@property stats_s_worker_sel type=select multiple=1 store=no no_caption=1 parent=stats_s_wrk_l
+		@property stats_s_worker type=textbox store=no no_caption=1 parent=stats_s_wrk_l
+
+	
 	@property stats_s_from type=date_select store=no
 	@caption Alates
 

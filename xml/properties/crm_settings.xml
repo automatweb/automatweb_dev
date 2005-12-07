@@ -17,13 +17,6 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
-      <tableinfo>
-            <aw_crm_settings>
-                  <index>aw_oid</index>
-                  <maeter_table>objects</maeter_table>
-                  <master_index>brother_of</master_index>
-            </aw_crm_settings>
-      </tableinfo>
       <reltypes>
             <USER>
                   <value>1</value>
