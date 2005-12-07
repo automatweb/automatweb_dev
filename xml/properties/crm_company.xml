@@ -1772,10 +1772,8 @@
             <group>stats</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>stats_s_cust_l</parent>
-            <captionside>top</captionside>
             <field>stats_s_cust</field>
-            <caption>Nimi</caption>
+            <caption>Klient</caption>
       </property>
       <property>
             <name>stats_s_cust_type</name>
@@ -1783,8 +1781,6 @@
             <group>stats</group>
             <type>chooser</type>
             <store>no</store>
-            <parent>stats_s_cust_l</parent>
-            <captionside>top</captionside>
             <field>stats_s_cust_type</field>
             <caption>Kliendi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
@@ -1794,10 +1790,17 @@
             <group>stats</group>
             <type>textbox</type>
             <store>no</store>
-            <parent>stats_s_cust_l</parent>
-            <captionside>top</captionside>
             <field>stats_s_proj</field>
             <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>stats_s_worker</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>stats_s_worker</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
       </property>
       <property>
             <name>stats_s_worker_sel</name>
@@ -1806,19 +1809,8 @@
             <type>select</type>
             <multiple>1</multiple>
             <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>stats_s_wrk_l</parent>
             <field>stats_s_worker_sel</field>
-      </property>
-      <property>
-            <name>stats_s_worker</name>
-            <table>objects</table>
-            <group>stats</group>
-            <type>textbox</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>stats_s_wrk_l</parent>
-            <field>stats_s_worker</field>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;taja</caption>
       </property>
       <property>
             <name>stats_s_from</name>
@@ -2628,16 +2620,6 @@
                         <num_4>all_actions</num_4>
                   </group>
             </act_s_dl_layout>
-            <stats_s_cust_l>
-                  <type>hbox</type>
-                  <group>stats</group>
-                  <caption>Klient</caption>
-            </stats_s_cust_l>
-            <stats_s_wrk_l>
-                  <type>hbox</type>
-                  <group>stats</group>
-                  <caption>T&amp;ouml;&amp;ouml;taja</caption>
-            </stats_s_wrk_l>
             <res_lt>
                   <type>hbox</type>
                   <width>20%:80%</width>
