@@ -1,11 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.4 2005/11/22 16:50:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.5 2005/12/07 16:58:12 voldemar Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
 @classinfo syslog_type=ST_REALESTATE_IMPORT relationmgr=yes no_comment=1 no_status=1
 
 @groupinfo grp_city24 caption="City24"
+@groupinfo grp_city24_general caption="Seaded" parent=grp_city24
+@groupinfo grp_city24_log caption="Logid" parent=grp_city24
 
 @default table=objects
 @default group=general
@@ -23,7 +25,7 @@
 	@caption Organisatsioon
 
 
-@default group=grp_city24
+@default group=grp_city24_general
 	@property city24_county type=relpicker reltype=RELTYPE_ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
 	@comment Haldusjaotis aadressisüsteemis, mis vastab maakonnale
 	@caption Maakond haldusjaotuses
@@ -48,7 +50,10 @@
 	@comment URL millele päringut tehes imporditakse objektid City24 süsteemist AW'i
 	@caption City24 Importimine
 
+@default group=grp_city24_log
 	@property last_city24import type=hidden
+	@property city24_log type=hidden
+	@property city24_log_table type=callback callback=callback_city24_log no_caption=1 store=no
 
 
 // --------------- RELATION TYPES ---------------------
@@ -67,6 +72,8 @@
 
 */
 
+ini_set ("max_execution_time", "3600");
+
 define ("REALESTATE_IMPORT_OK", 0);
 
 define ("REALESTATE_IMPORT_ERR1", 1);
@@ -82,6 +89,7 @@ define ("REALESTATE_IMPORT_ERR10", 10);
 define ("REALESTATE_IMPORT_ERR11", 11);
 define ("REALESTATE_IMPORT_ERR61", 12);
 define ("REALESTATE_IMPORT_ERR62", 13);
+define ("REALESTATE_IMPORT_ERR63", 18);
 define ("REALESTATE_IMPORT_ERR12", 14);
 define ("REALESTATE_IMPORT_ERR13", 15);
 define ("REALESTATE_IMPORT_ERR14", 16);
@@ -178,6 +186,39 @@ class realestate_import extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	function callback_city24_log ($arr)
+	{
+		$this_object = $arr["obj_inst"];
+		$prop = array ();
+		$log = (array) $this_object->prop ("city24_log");
+
+		if (is_oid ($this_object->prop("realestate_mgr")))
+		{
+			$manager = obj ($this_object->prop("realestate_mgr"));
+		}
+		else
+		{
+			$prop["default"]["error"] = t("Kinnisvarahalduskeskkond defineerimata");
+			return $prop;
+		}
+
+		$date_format = $manager->prop ("default_date_format");
+
+		foreach ($log as $date => $entry)
+		{
+			$entry = implode ('<hr size=1>', $entry);
+			$name = "log_{$date}";
+			$prop[$name] = array(
+				"type" => "text",
+				"name" => $name,
+				"caption" => t("Logi - ") . date ($date_format, $date),
+				"value" => $entry,
+			);
+		}
+
+		return $prop;
+	}
+
 /**
 	@attrib name=city24import nologin=1
 	@param id required type=int
@@ -190,7 +231,8 @@ class realestate_import extends class_base
 **/
 	function city24_import ($arr)
 	{
-		obj_set_opt("no_cache", 1);
+		aw_global_set ("no_cache_flush", 1);
+		obj_set_opt ("no_cache", 1);
 		$status = REALESTATE_IMPORT_OK;
 
 		if (1 != $arr["quiet"]) { echo t("Import CITY24 xml allikast:") . REALESTATE_NEWLINE; }
@@ -217,7 +259,6 @@ class realestate_import extends class_base
 		$this_object = obj ($arr["id"]);
 		$last_import = $this_object->prop ("last_city24import");
 		$this_object->set_prop ("last_city24import", $import_time);
-		$this_object->save ();
 
 		if (!is_oid ($this_object->prop ("realestate_mgr")))
 		{
@@ -292,12 +333,17 @@ class realestate_import extends class_base
 
 		#### organisatsiooni t88tajad
 		$company = obj ($arr["company"]);
-		$cl_user = get_instance(CL_USER);
-		$employees = new object_list($company->connections_from(array(
+		$cl_user = get_instance (CL_USER);
+		$employees = new object_list ($company->connections_from (array (
 			"type" => "RELTYPE_WORKERS",
 			"class_id" => CL_CRM_PERSON,
 		)));
 		$employees = $employees->names ();
+		$realestate_agent_data = array ();
+
+		### initialize log
+		$import_log = array ();
+		$status_messages = array ();
 
 		### indices
 		#### property types
@@ -397,9 +443,13 @@ class realestate_import extends class_base
 				if ($property_status)
 				{
 					$status = REALESTATE_IMPORT_ERR9;
+					$import_log[$property->id ()]["status"] = $property_status;
+					$import_log[$property->id ()]["messages"] = $status_messages;
 				}
 
+				$status_messages = array ();
 				$this->end_property_import = false;
+				flush ();
 			}
 
 			if (("ROW" === $data["tag"]) and ("open" === $data["type"]))
@@ -526,8 +576,6 @@ class realestate_import extends class_base
 				$property_status = REALESTATE_IMPORT_OK;
 				$property = NULL;
 				$new_property = true;
-				$agent = NULL;
-				$section = NULL;
 				$this->end_property_import = true;
 				$city24_id = (int) $this->property_data["ID"];
 
@@ -541,107 +589,141 @@ class realestate_import extends class_base
 				### get agent
 				if (!$new_property)
 				{
-					$agent = $property->get_first_obj_by_reltype("RELTYPE_REALESTATE_AGENT");
+					$agent_oid = $property->prop ("realestate_agent1");
 				}
 
-				if ($new_property or !is_object ($agent))
+				if ($new_property or !is_oid ($agent_oid))
 				{
-					$agent_data = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["MAAKLER_NIMI"]));
+					$agent_data = iconv (REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["MAAKLER_NIMI"]));
 
 					foreach ($employees as $employee_oid => $employee_name)
 					{
-						if ($agent_data === $employee_name)
+						if ($agent_data == ((string) $employee_name))
 						{
-							$agent = obj ($employee_oid);
+							$agent_oid = $employee_oid;
 							break;
 						}
 					}
 				}
 
-				### get section by agent name
-				if (is_object ($agent))
+				if (!is_oid ($agent_oid))
 				{
-					$section = $agent->get_first_obj_by_reltype ("RELTYPE_SECTION");
-				}
-				else
-				{
+					$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud süsteemis ühkti kasutajat."), $city24_id, $agent_data) . REALESTATE_NEWLINE;;
+
 					if (1 != $arr["quiet"])
 					{
-						echo sprintf (t("Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud süsteemis ühkti kasutajat."), $city24_id, $agent_data) . REALESTATE_NEWLINE;
+						echo end ($status_messages);
 					}
 
 					$property_status = REALESTATE_IMPORT_ERR5;
 					continue;
 				}
 
-				if (is_object ($section))
+				### load agent data
+				if (!isset ($realestate_agent_data[$agent_oid]))
 				{
-					$section = $section->id ();
-				}
-				else
-				{
-					if (1 != $arr["quiet"])
+					$agent = obj ($agent_oid);
+					$realestate_agent_data[$agent_oid]["object"] = $agent;
+
+					### get section
+					$section = $agent->get_first_obj_by_reltype ("RELTYPE_SECTION");
+
+					if (is_object ($section))
 					{
-						echo sprintf (t("Importides objekti city24 id-ga %s ilmnes: maakleril puudub üksus."), $city24_id) . REALESTATE_NEWLINE;
-					}
-
-					$property_status = REALESTATE_IMPORT_ERR6;
-					$section = NULL;
-				}
-
-				### switch to property owner user
-				$connection = new connection();
-				$connections = $connection->find(array(
-					"to" => $agent->id(),
-					"from.class_id" => CL_USER,
-					"type" => "RELTYPE_PERSON",
-				));
-
-				if (count ($connections))
-				{
-					$connection = reset ($connections);
-
-					if (is_oid ($connection["from"]))
-					{
-						$cl_users = get_instance("users");
-						$agent_uid = $cl_users->get_uid_for_oid ($connection["from"]);
-						aw_switch_user (array ("uid" => $agent_uid));
-/* dbg */ if (1 == $_GET["re_import_dbg"]){ echo "kasutaja vahetatud maakleri kasutajaks: [{$agent_uid}]"; }
+						$section = $section->id ();
 					}
 					else
 					{
+						$status_messages[] = sprintf (t("Importides objekti city24 id-ga %s ilmnes: maakleril puudub üksus."), $city24_id) . REALESTATE_NEWLINE;
+
 						if (1 != $arr["quiet"])
 						{
-							echo sprintf (t("Viga importides objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot võib jääda salvestamata."), $city24_id) . REALESTATE_NEWLINE;
+							echo end ($status_messages);
 						}
 
-						$property_status = REALESTATE_IMPORT_ERR61;
-						continue;
+						$property_status = REALESTATE_IMPORT_ERR6;
+						$section = NULL;
 					}
+
+					$realestate_agent_data[$agent_oid]["section_oid"] = $section;
+
+					### get agent uid
+					$connection = new connection();
+					$connections = $connection->find(array(
+						"to" => $agent->id(),
+						"from.class_id" => CL_USER,
+						"type" => "RELTYPE_PERSON",
+					));
+
+					if (count ($connections))
+					{
+						$connection = reset ($connections);
+
+						if (is_oid ($connection["from"]))
+						{
+							$cl_users = get_instance("users");
+							$agent_uid = $cl_users->get_uid_for_oid ($connection["from"]);
+						}
+						else
+						{
+							$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot jääb salvestamata."), $city24_id) . REALESTATE_NEWLINE;
+
+							if (1 != $arr["quiet"])
+							{
+								echo end ($status_messages);
+							}
+
+							$property_status = REALESTATE_IMPORT_ERR61;
+							$agent_uid = false;
+						}
+					}
+					else
+					{
+						$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot jääb salvestamata."), $city24_id) . REALESTATE_NEWLINE;
+
+						if (1 != $arr["quiet"])
+						{
+							echo end ($status_messages);
+						}
+
+						$property_status = REALESTATE_IMPORT_ERR62;
+						$agent_uid = false;
+					}
+
+					$realestate_agent_data[$agent_oid]["agent_uid"] = $agent_uid;
+				}
+
+
+				### switch to property owner user
+				if ($realestate_agent_data[$agent_oid]["agent_uid"])
+				{
+					aw_switch_user (array ("uid" => $realestate_agent_data[$agent_oid]["agent_uid"]));
+/* dbg */ if (1 == $_GET["re_import_dbg"]){ echo "kasutaja vahetatud maakleri kasutajaks: [{$realestate_agent_data[$agent_oid]["agent_uid"]}]"; }
 				}
 				else
 				{
+					$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s: maakler puudub."), $city24_id) . REALESTATE_NEWLINE;
+
 					if (1 != $arr["quiet"])
 					{
-						echo sprintf (t("Viga importides objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot võib jääda salvestamata."), $city24_id) . REALESTATE_NEWLINE;
+						echo end ($status_messages);
 					}
 
-					$property_status = REALESTATE_IMPORT_ERR62;
+					$property_status = REALESTATE_IMPORT_ERR63;
 					continue;
 				}
-
 
 				if ($new_property)
 				{
 					### create new property object in aw
-					$oid = $cl_realestate_mgr->add_property (array ("manager" => $manager->id (), "type" => $this->property_type, "section" => $section));
+					$oid = $cl_realestate_mgr->add_property (array ("manager" => $manager->id (), "type" => $this->property_type, "section" => $realestate_agent_data[$agent_oid]["section_oid"]));
 
 					if (is_oid ($oid))
 					{
 						$property = obj ($oid);
-						$property->set_prop ("realestate_agent1", $agent->id ());
+						$property->set_prop ("realestate_agent1", $agent_oid);
 						$property->connect (array (
-							"to" => $agent,
+							"to" => $realestate_agent_data[$agent_oid]["object"],
 							"reltype" => "RELTYPE_REALESTATE_AGENT",
 						));
 
@@ -652,9 +734,11 @@ class realestate_import extends class_base
 					}
 					else
 					{
+						$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Objekti loomine ei tagastanud aw objekti id-d."), $city24_id) . REALESTATE_NEWLINE;
+
 						if (1 != $arr["quiet"])
 						{
-							echo sprintf (t("Viga importides objekti city24 id-ga %s. Objekti loomine ei tagastanud aw objekti id-d."), $city24_id) . REALESTATE_NEWLINE;
+							echo end ($status_messages);
 						}
 
 						$property_status = REALESTATE_IMPORT_ERR7;
@@ -671,9 +755,11 @@ class realestate_import extends class_base
 
 				if (!is_object ($address))
 				{
+					$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Objekt (oid: %s) loodi ilma aadressita."), $city24_id, $property->id ()) . REALESTATE_NEWLINE;
+
 					if (1 != $arr["quiet"])
 					{
-						echo sprintf (t("Viga importides objekti city24 id-ga %s. Objekt (oid: %s) loodi ilma aadressita."), $city24_id, $property->id ()) . REALESTATE_NEWLINE;
+						echo end ($status_messages);
 					}
 
 					$property_status = REALESTATE_IMPORT_ERR8;
@@ -802,8 +888,8 @@ class realestate_import extends class_base
 				{
 					$duplicate_client = false;
 
-					$seller_firstname = strtok ($this->property_data["MYYJA_NIMI"], " ");
-					$seller_lastname = strtok (" ");
+					$seller_firstname = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, strtok ($this->property_data["MYYJA_NIMI"], " "));
+					$seller_lastname = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, strtok (" "));
 
 					##### search for existing client by name
 					$list = new object_list (array (
@@ -819,26 +905,36 @@ class realestate_import extends class_base
 
 						if ($list->count () > 1)
 						{
-							if (1 != $arr["quiet"])
+							$property_status = REALESTATE_IMPORT_ERR10;
+							$list = $list->arr ();
+
+							foreach ($list as $o)
 							{
-								$list = $list->arr ();
-
-								foreach ($list as $o)
-								{
-									$clients[] = html::href(array(
-										"url" => $this->mk_my_orb ("change", array (
-											"id" => $o->id(),
-										), "crm_person"),
-										"target" => "_blank",
-										"caption" => $o->id (),
-									));
-								}
-
- 								$clients = implode (" ", $clients);
-								echo sprintf (t("Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui üks. Ei tea millist valida. AW oid: %s. Leitud kliendid: %s"), $city24_id, $property->id (), $clients) . REALESTATE_NEWLINE;
+								$client_edit_url = html::href(array(
+									"url" => $this->mk_my_orb ("change", array (
+										"id" => $o->id(),
+									), "crm_person"),
+									"target" => "_blank",
+									"caption" => $o->id (),
+								));
+								$client_connect_url = html::href(array(
+									"url" => $this->mk_my_orb ("set_client", array (
+										"property" => $property->id (),
+										"client" => $o->id(),
+										"client_type" => "seller",
+									)),
+									"caption" => t("Vali see klient"),
+								));
+								$clients[] = REALESTATE_NEWLINE . $client_edit_url . " " . $client_connect_url;
 							}
 
-							$property_status = REALESTATE_IMPORT_ERR10;
+							$clients = implode (" ", $clients);
+							$status_messages[] = sprintf (t("Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui üks. Ei tea millist valida. AW oid: %s. Leitud kliendid: <blockquote>%s</blockquote>"), $city24_id, $property->id (), $clients) . REALESTATE_NEWLINE;
+
+							if (1 != $arr["quiet"])
+							{
+								echo end ($status_messages);
+							}
 						}
 					}
 					else
@@ -1427,25 +1523,19 @@ class realestate_import extends class_base
 		}
 
 		$additional_languages = array (
-			"ENG",
-			"RUS",
-			"FIN",
-		);
-
-		$lang_codes = array (
 			"ENG" => "en",
 			"RUS" => "ru",
 			"FIN" => "fi",
 		);
 
-		foreach ($additional_languages as $lang_name)
+		foreach ($additional_languages as $lang_name => $lang_code)
 		{
 			$tmp_import_url = str_replace ("lang", "tmpvariable39903", $import_url);
-
 			$import_url = str_replace ("tmpvariable39903", "lang", aw_url_change_var ("tmpvariable39903", $lang_name, $tmp_import_url));
 			$xml = file_get_contents ($import_url);
 			xml_parse_into_struct ($parser, $xml, $xml_data, $xml_index);
 			$this->end_property_import = false;
+			$status_messages = array ();
 
 			foreach ($xml_data as $key => $data)
 			{
@@ -1453,18 +1543,27 @@ class realestate_import extends class_base
 				{ ### finish last processed property import
 					if (is_object ($property))
 					{
-						if (1 != $arr["quiet"]) { echo sprintf (t("Lisainfo (%s) objektile city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $lang_name, $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE; }
+						if (1 != $arr["quiet"])
+						{
+							echo sprintf (t("Lisainfo (%s) objektile city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $lang_name, $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE;
+						}
 					}
 					else
 					{
-						if (1 != $arr["quiet"]) { echo sprintf (t("Viga objekti city24 id-ga %s lisainfo (%s) impordil. Veastaatus: %s"), $this->property_data["ID"], $lang_name, $property_status) . REALESTATE_NEWLINE; }
+						if (1 != $arr["quiet"])
+						{
+							echo sprintf (t("Viga objekti city24 id-ga %s lisainfo (%s) impordil. Veastaatus: %s"), $this->property_data["ID"], $lang_name, $property_status) . REALESTATE_NEWLINE;
+						}
 					}
 
 					if ($property_status)
 					{
 						$status = REALESTATE_IMPORT_ERR9;
+						$import_log[$property->id ()]["status"] = $property_status;
+						$import_log[$property->id ()]["messages"] = $status_messages;
 					}
 
+					$status_messages = array ();
 					$this->end_property_import = false;
 					flush ();
 				}
@@ -1502,59 +1601,107 @@ class realestate_import extends class_base
 
 					if (!is_object ($property))
 					{
+						$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: vastavat aw objekti ei leitud."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+
 						if (1 != $arr["quiet"])
 						{
-							echo sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: vastavat aw objekti ei leitud."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+							echo end ($status_messages);
 						}
 
 						$property_status = REALESTATE_IMPORT_ERR15;
 						continue;
 					}
 
-					### switch to property owner user
-					$agent = $property->get_first_obj_by_reltype("RELTYPE_REALESTATE_AGENT");
-					$connection = new connection();
-					$connections = $connection->find(array(
-						"to" => $agent->id(),
-						"from.class_id" => CL_USER,
-						"type" => "RELTYPE_PERSON",
-					));
 
-					if (count ($connections))
+					### agent ...
+					$agent_oid = $property->prop ("realestate_agent1");
+
+					if (!is_oid ($agent_oid))
 					{
-						$connection = reset ($connections);
+						$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s. Objektil puudub maakler."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
 
-						if (is_oid ($connection["from"]))
-						{
-							$cl_users = get_instance("users");
-							$agent_uid = $cl_users->get_uid_for_oid ($connection["from"]);
-							aw_switch_user (array ("uid" => $agent_uid));
-						}
-						else
-						{
-							if (1 != $arr["quiet"])
-							{
-								echo sprintf (t("Viga importides lisainfot (%s) objektile city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot võib jääda salvestamata."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
-							}
-
-							$property_status = REALESTATE_IMPORT_ERR12;
-							continue;
-						}
-					}
-					else
-					{
 						if (1 != $arr["quiet"])
 						{
-							echo sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot võib jääda salvestamata."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+							echo end ($status_messages);
 						}
 
-						$property_status = REALESTATE_IMPORT_ERR13;
+						$property_status = REALESTATE_IMPORT_ERR5;
 						continue;
 					}
 
+					### load agent data
+					if (!isset ($realestate_agent_data[$agent_oid]))
+					{
+						$agent = obj ($agent_oid);
+
+						### get agent uid
+						$connection = new connection();
+						$connections = $connection->find(array(
+							"to" => $agent->id(),
+							"from.class_id" => CL_USER,
+							"type" => "RELTYPE_PERSON",
+						));
+
+						if (count ($connections))
+						{
+							$connection = reset ($connections);
+
+							if (is_oid ($connection["from"]))
+							{
+								$cl_users = get_instance("users");
+								$agent_uid = $cl_users->get_uid_for_oid ($connection["from"]);
+							}
+							else
+							{
+								$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot jääb salvestamata."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+
+								if (1 != $arr["quiet"])
+								{
+									echo end ($status_messages);
+								}
+
+								$property_status = REALESTATE_IMPORT_ERR61;
+								$agent_uid = false;
+							}
+						}
+						else
+						{
+							$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot jääb salvestamata."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+
+							if (1 != $arr["quiet"])
+							{
+								echo end ($status_messages);
+							}
+
+							$property_status = REALESTATE_IMPORT_ERR62;
+							$agent_uid = false;
+						}
+
+						$realestate_agent_data[$agent_oid]["agent_uid"] = $agent_uid;
+					}
+
+					### switch to property owner user
+					if ($realestate_agent_data[$agent_oid]["agent_uid"])
+					{
+						aw_switch_user (array ("uid" => $realestate_agent_data[$agent_oid]["agent_uid"]));
+/* dbg */ if (1 == $_GET["re_import_dbg"]){ echo "kasutaja vahetatud maakleri kasutajaks: [{$realestate_agent_data[$agent_oid]["agent_uid"]}]"; }
+					}
+					else
+					{
+						$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s: maakler puudub."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+
+						if (1 != $arr["quiet"])
+						{
+							echo end ($status_messages);
+						}
+
+						$property_status = REALESTATE_IMPORT_ERR63;
+						continue;
+					}
+
+
 					### set property values
 					#### additional_info
-					$lang_code = $lang_codes[$lang_name];
 					$list = new object_list(array(
 						"class_id" => CL_LANGUAGE,
 						"lang_acceptlang" => $lang_code,
@@ -1571,9 +1718,11 @@ class realestate_import extends class_base
 					}
 					else
 					{
+						$status_messages[] = sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s ilmnes: keeleobjekti ei leitud."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+
 						if (1 != $arr["quiet"])
 						{
-							echo sprintf (t("Viga importides lisainfot (%s) objekti city24 id-ga %s ilmnes: keeleobjekti ei leitud."), $lang_name, $city24_id) . REALESTATE_NEWLINE;
+							echo end ($status_messages);
 						}
 
 						$property_status = REALESTATE_IMPORT_ERR14;
@@ -1584,9 +1733,29 @@ class realestate_import extends class_base
 			}
 		}
 
-		if (1 != $arr["quiet"]) { echo t("Import tehtud.") . REALESTATE_NEWLINE; }
+		### save log
+		$logs = (array) $this_object->prop ("city24_log");
+		$logs[$import_time] = $import_log;
+		krsort ($logs);
+
+		if (count ($logs) > 10)
+		{
+			array_pop ($logs);
+		}
+
+		$this_object->set_prop ("city24_log", $logs);
+
+		### fin.
+		$this_object->save ();
 		xml_parser_free ($parser);
-		$manager->set_cache_dirty (true);
+		$cl_cache = get_instance ("cache");
+		$cl_cache->full_flush ();
+
+		if (1 != $arr["quiet"])
+		{
+			echo t("Import tehtud.");
+		}
+
 		return $status;
 	}
 
@@ -1619,6 +1788,63 @@ class realestate_import extends class_base
 			echo sprintf (t("Viga: muutuja %s klassil id-ga %s defineerimata."), $name, $clid) . REALESTATE_NEWLINE;
 			return false;
 		}
+	}
+
+/**
+	@attrib name=set_client
+	@param property required
+	@param client required
+	@param client_type required
+**/
+	function set_client ($arr)
+	{
+		if (is_oid ($arr["property"]))
+		{
+			$property = obj ($arr["property"]);
+		}
+		elseif (is_object ($arr["property"]))
+		{
+			$property = $arr["property"];
+		}
+		else
+		{
+			return false;
+		}
+
+		if (is_oid ($arr["client"]))
+		{
+			$client = obj ($arr["client"]);
+		}
+		elseif (is_object ($arr["client"]))
+		{
+			$client = $arr["client"];
+		}
+		else
+		{
+			return false;
+		}
+
+		switch ($arr["client_type"])
+		{
+			case "seller":
+				$reltype = "RELTYPE_REALESTATE_SELLER";
+				break;
+
+			case "buyer":
+				$reltype = "RELTYPE_REALESTATE_BUYER";
+				break;
+
+			default:
+				return false;
+		}
+
+		$property->connect (array (
+			"to" => $client,
+			"reltype" => $reltype,
+		));
+		$property->set_prop ($arr["client_type"], $client->id ());
+		$property->save ();
+		return true;
 	}
 }
 ?>

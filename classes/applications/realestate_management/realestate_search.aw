@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.4 2005/11/22 16:50:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.5 2005/12/07 16:58:12 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -99,6 +99,10 @@
 	@property formelements type=chooser multiple=1 orient=vertical
 	@caption Otsinguparameetrid
 
+	@property agent_sections type=select multiple=1 size=5
+	@comment Osakonnad, mille maaklereid otsinguparameetri väärtuse valikus näidatakse
+	@caption Maaklerite osakonnad
+
 
 // --------------- RELATION TYPES ---------------------
 
@@ -112,6 +116,7 @@
 
 
 define ("REALESTATE_SEARCH_ALL", "ALL");
+define ("NEWLINE", "<br />\n");
 
 class realestate_search extends class_base
 {
@@ -138,11 +143,16 @@ class realestate_search extends class_base
 	{
 		if (is_oid ($arr["request"]["id"]))
 		{
-			$this_object = obj($arr["request"]["id"]);
+			$this_object = obj ($arr["request"]["id"]);
 
-			if (is_oid ($this_object->prop ("realestate_mgr")) and $this->can ("view", $this_object->prop ("realestate_mgr")))
+			if ($this->can ("view", $this_object->prop ("realestate_mgr")))
 			{
-				$this->realestate_mgr = obj ($this_object->prop ("realestate_mgr"));
+				$this->manager = obj ($this_object->prop ("realestate_mgr"));
+			}
+
+			if (is_object ($this->manager))
+			{
+				$this->administrative_structure = $this->manager->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
 			}
 		}
 
@@ -155,23 +165,15 @@ class realestate_search extends class_base
 		$retval = PROP_OK;
 		$this_object =& $arr["obj_inst"];
 
-		if (!is_object ($this->classificator))
-		{
-			$this->classificator = get_instance(CL_CLASSIFICATOR);
-		}
-
-		if (!is_object ($this->realestate_mgr))
-		{
-			if (is_oid ($this_object->prop ("realestate_mgr")) and $this->can ("view", $this_object->prop ("realestate_mgr")))
-			{
-				$this->realestate_mgr = obj ($this_object->prop ("realestate_mgr"));
-				$this->administrative_structure = $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
-			}
-		}
-
-		if ($prop["group"] == "grp_search" and !is_object ($this->realestate_mgr))
+		if ($prop["group"] == "grp_search" and !is_object ($this->manager))
 		{
 			$prop["error"] = t("Kinnisvarahalduskeskkond määramata");
+			return PROP_FATAL_ERROR;
+		}
+
+		if ($prop["group"] == "grp_search" and !is_object ($this->administrative_structure))
+		{
+			$prop["error"] = t("Haldusjaotus määramata");
 			return PROP_FATAL_ERROR;
 		}
 
@@ -240,7 +242,7 @@ class realestate_search extends class_base
 			case "searchparam_address1":
 				$list =& $this->administrative_structure->prop (array (
 					"prop" => "units_by_division",
-					"division" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
+					"division" => $this->manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
 				));
 				$options = is_object ($list) ? $list->names () : array (); ### maakond
 				$prop["options"] = $options;
@@ -250,7 +252,7 @@ class realestate_search extends class_base
 			case "searchparam_address2":
 				$list =& $this->administrative_structure->prop (array (
 					"prop" => "units_by_division",
-					"division" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
+					"division" => $this->manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
 				));
 				$options = is_object ($list) ? $list->names () : array (); ### linn
 				$prop["options"] = $options;
@@ -260,7 +262,7 @@ class realestate_search extends class_base
 			case "searchparam_address3":
 				$list =& $this->administrative_structure->prop (array (
 					"prop" => "units_by_division",
-					"division" => $this->realestate_mgr->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
+					"division" => $this->manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
 				));
 				$options = is_object ($list) ? $list->names () : array (); ### linnaosa
 				$prop["options"] = $options;
@@ -294,17 +296,30 @@ class realestate_search extends class_base
 				break;
 
 			case "search_agent":
-				$cl_user = get_instance(CL_USER);
-				$company = $cl_user->get_current_company ();
+				$sections = $this_object->prop ("agent_sections");
 
-				if (is_object ($company))
+				if (is_array ($sections))
 				{
-					$employees = new object_list($company->connections_from(array(
-						"type" => "RELTYPE_WORKERS",
-						"class_id" => CL_CRM_PERSON,
-					)));
-					$prop["options"] = $employees->names ();
+					$options = array ();
+					aw_switch_user (array ("uid" => $this->manager->prop ("almightyuser")));
+
+					foreach ($sections as $section_oid)
+					{
+						if (is_oid ($section_oid))
+						{
+							$section = obj ($section_oid);
+							$employees = new object_list ($section->connections_from(array(
+								"type" => "RELTYPE_WORKERS",
+								"class_id" => CL_CRM_PERSON,
+							)));
+							$options += $employees->names ();
+						}
+					}
+
+					natcasesort ($options);
+					$prop["options"] = $options;
 					$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["agent"];
+					aw_restore_user ();
 				}
 				break;
 
@@ -343,6 +358,27 @@ class realestate_search extends class_base
 					{
 						$options[$name] = $property_data["caption"];
 					}
+				}
+
+				$prop["options"] = $options;
+				break;
+
+			case "agent_sections":
+				$options = array ();
+				$list = new object_list ($this->manager->connections_from(array(
+					"type" => "RELTYPE_REALESTATEMGR_USER",
+					"class_id" => CL_CRM_COMPANY,
+				)));
+				$companies = $list->arr ();
+
+				foreach ($companies as $company)
+				{
+					$list = new object_list (array (
+						"parent" => $company->id (),
+						"class_id" => CL_CRM_SECTION,
+						"site_id" => array (),
+					));
+					$options += $list->names ();
 				}
 
 				$prop["options"] = $options;
@@ -392,9 +428,19 @@ class realestate_search extends class_base
 			return $this->show_property ($arr);
 		}
 
+		enter_function("re_search::show - search");
 		$this_object = obj ($arr["id"]);
 		$formelements = $this_object->prop ("formelements");
-		$realestate_manager = obj ($this_object->prop ("realestate_mgr"));
+
+		if (is_oid ($this_object->prop ("realestate_mgr")))
+		{
+			$realestate_manager = obj ($this_object->prop ("realestate_mgr"));
+		}
+		else
+		{
+			echo t("Kinnisvarahalduskeskkond määramata.") . NEWLINE;
+			return false;
+		}
 
 		### options
 		$this->get_options ($arr);
@@ -555,21 +601,21 @@ class realestate_search extends class_base
 			"options" => $this->options_up,
 			"value" => $search["up"],
 		)) : "";
-		// $form_agent = in_array ("search_agent", $formelements) ?
-		// html::select(array(
-			// "name" => "realestate_agent",
-			// "multiple" => $select_size,
-			// "size" => $select_size,
-			// "options" => $this->options_agent,
-			// "value" => $search["agent"],
-		// )) : "";
 		$form_agent = in_array ("search_agent", $formelements) ?
-		html::textbox(array(
+		html::select(array(
 			"name" => "realestate_agent",
+			"multiple" => $select_size,
+			"size" => $select_size,
+			"options" => $this->options_agent,
 			"value" => $search["agent"],
-			"size" => "16",
-			// "textsize" => "11px",
 		)) : "";
+		// $form_agent = in_array ("search_agent", $formelements) ?
+		// html::textbox(array(
+			// "name" => "realestate_agent",
+			// "value" => $search["agent"],
+			// "size" => "16",
+			// "textsize" => "11px",
+		// )) : "";
 		$form_imf = in_array ("search_is_middle_floor", $formelements) ?
 		html::checkbox(array(
 			"name" => "realestate_imf",
@@ -586,7 +632,7 @@ class realestate_search extends class_base
 		if ( ($_GET["realestate_srch"] == 1) and $this->can ("view", $this_object->prop ("realestate_mgr")) )
 		{ ### search
 			$args = array (
-				"manager" => obj ($this_object->prop ("realestate_mgr")),
+				"manager" => $realestate_manager,
 				"search" => $search,
 			);
 			$list =& $this->search ($args);
@@ -595,7 +641,7 @@ class realestate_search extends class_base
 		{
 			$args = array (
 				"id" => $this_object->id (),
-				"manager" => obj ($this_object->prop ("realestate_mgr")),
+				"manager" => $realestate_manager,
 			);
 			$list =& $this->search ($args);
 		}
@@ -604,16 +650,26 @@ class realestate_search extends class_base
 			$list = array ();
 		}
 
+		exit_function("re_search::show - search");
+
 		if (count ($list))
 		{ ### result
-			classload("vcl/table");
-			$table = new vcl_table();
-			$classes = aw_ini_get("classes");
+			classload ("vcl/table");
+			$table = new vcl_table ();
+			$classes = aw_ini_get ("classes");
 
 			switch ($this_object->prop ("result_format"))
 			{
 				case "format1":
-					$template = obj ($realestate_manager->prop ("template_obj_search_result"));
+					if (is_oid ($realestate_manager->prop ("template_obj_search_result")))
+					{
+						$template = obj ($realestate_manager->prop ("template_obj_search_result"));
+					}
+					else
+					{
+						return;
+					}
+
 					$tpl_source = $template->prop ("source_html");
 					$table->set_layout("realestate_searchresult");
 					$table->define_field(array(
@@ -625,11 +681,22 @@ class realestate_search extends class_base
 						"records_per_page" => 25,
 					));
 
+					foreach ($this->realestate_classes as $cls_id)
+					{
+						$cl_instance_var = "cl_property_" . $cls_id;
+
+						if (!is_object ($this->$cl_instance_var))
+						{
+							$this->$cl_instance_var = get_instance ($cls_id);
+							$this->$cl_instance_var->classes = $classes;
+						}
+					}
+
 					foreach ($list as $property)
 					{
-						$cl_property = get_instance($property->class_id ());
-						$object_html = $cl_property->view (array (
-							"id" => $property->id (),
+						$cl_instance_var = "cl_property_" . $property->class_id ();
+						$object_html = $this->$cl_instance_var->view (array (
+							"this" => $property,
 							"view_type" => "short",
 						));
 
@@ -711,10 +778,17 @@ class realestate_search extends class_base
 		}
 		else
 		{
-			echo t("Kinnisvarahalduskeskkond otsinguobjektil defineerimata.");
+			echo t("Kinnisvarahalduskeskkond otsinguobjektil defineerimata.") . NEWLINE;
+			return false;
 		}
 
 		$administrative_structure = $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+
+		if (!is_object ($administrative_structure))
+		{
+			echo t("Kinnisvarahalduskeskkonnas haldusjaotus defineerimata.") . NEWLINE;
+			return false;
+		}
 
 		### class_id
 		$this->options_ci = array (
@@ -790,58 +864,32 @@ class realestate_search extends class_base
 		$this->options_up = array(REALESTATE_SEARCH_ALL => "") + $options_up->names();
 		natcasesort ($this->options_up);
 
-		if ($arr["get_agent_options"])
+		### agent
+		$sections = $this_object->prop ("agent_sections");
+		$options = array ();
+
+		if (is_array ($sections))
 		{
-			### agent
-			$cl_user = get_instance(CL_USER);
-			$company = $cl_user->get_current_company ();
-			$list = new object_list($realestate_manager->connections_from(array(
-				"type" => "RELTYPE_REALESTATEMGR_USER",
-				"class_id" => CL_CRM_COMPANY,
-			)));
-			$companies = $list->arr ();
-			$this->options_agent = array(REALESTATE_SEARCH_ALL => "");
-			$options = array ();
+			aw_switch_user (array ("uid" => $realestate_manager->prop ("almightyuser")));
 
-			if (is_object ($company) and array_key_exists ($company->id (), $companies))
+			foreach ($sections as $section_oid)
 			{
-				$employees = new object_list($company->connections_from(array(
-					"type" => "RELTYPE_WORKERS",
-					"class_id" => CL_CRM_PERSON,
-				)));
-				$employees = $employees->arr ();
-
-				foreach ($employees as $employee)
+				if (is_oid ($section_oid))
 				{
-					if ($this->agent_has_realestate_properties ($employee))
-					{
-						$options[$employee->id ()] = $employee->name ();
-					}
-				}
-			}
-			else
-			{ ### get agents for all companies in this realestatemgr
-				foreach ($companies as $company)
-				{
-					$employees = new object_list($company->connections_from(array(
+					$section = obj ($section_oid);
+					$employees = new object_list ($section->connections_from(array(
 						"type" => "RELTYPE_WORKERS",
 						"class_id" => CL_CRM_PERSON,
 					)));
-					$employees = $employees->arr ();
-
-					foreach ($employees as $employee)
-					{
-						if ($this->agent_has_realestate_properties ($employee))
-						{
-							$options[$employee->id ()] = $employee->name ();
-						}
-					}
+					$options = array(REALESTATE_SEARCH_ALL => "") + $employees->names ();
 				}
 			}
 
-			natcasesort ($options);
-			$this->options_agent += $options;
+			aw_restore_user ();
 		}
+
+		natcasesort ($options);
+		$this->options_agent = $options;
 	}
 
 	function agent_has_realestate_properties ($agent)
@@ -1009,7 +1057,14 @@ class realestate_search extends class_base
 
 	function &search ($arr)
 	{
-		$this_object = is_oid ($arr["id"]) ? obj ($arr["id"]) : NULL;
+		enter_function ("re_search::search");
+
+		if (!is_oid ($arr["id"]))
+		{
+			return false;
+		}
+
+		$this_object = obj ($arr["id"]);
 
 		if (is_object ($this_object) and $this_object->prop ("save_search"))
 		{
@@ -1115,18 +1170,24 @@ class realestate_search extends class_base
 			}
 		}
 
-		if (is_string ($search_agent) and !empty ($search_agent))
+		if (!empty ($search_agent))
 		{
-			$agents_list = new object_list (array (
-				"class_id" => CL_CRM_PERSON,
-				"name" => "%" . $search_agent . "%",
-				"site_id" => array (),
-				"lang_id" => array (),
+			// $agents_list = new object_list (array (
+				// "class_id" => CL_CRM_PERSON,
+				// "name" => "%" . $search_agent . "%",
+				// "site_id" => array (),
+				// "lang_id" => array (),
+			// ));
+			// $search_agent = $agents_list->ids ();
+			$agent_constraint = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array (
+					"realestate_agent1" => (int) $search_agent,
+					"realestate_agent2" => (int) $search_agent,
+				)
 			));
-			$search_agent = $agents_list->ids ();
 		}
 
-		$result_list = array ();
 
 		### compose transaction_price constraint
 		if ($search_tpmin and $search_tpmax)
@@ -1164,6 +1225,26 @@ class realestate_search extends class_base
 			$tfa_constraint = NULL;
 		}
 
+		### compose address constraint
+		if (count ($search_a1) or count ($search_a2) or count ($search_a3))
+		{
+			$search_admin_units = array_merge ($search_a1, $search_a2, $search_a3);
+			$address_constraint = new object_list_filter (array (
+				"logic" => "OR",
+				"conditions" => array (
+					"CL_REALESTATE_APARTMENT.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					"CL_REALESTATE_COMMERCIAL.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					"CL_REALESTATE_COTTAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					"CL_REALESTATE_GARAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					"CL_REALESTATE_HOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					"CL_REALESTATE_HOUSEPART.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					"CL_REALESTATE_LAND.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					"CL_REALESTATE_PROPERTY.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					"CL_REALESTATE_ROWHOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+				)
+			));
+		}
+
 		$args = array (
 			"class_id" => $search_ci,
 			"parent" => $parents,
@@ -1172,13 +1253,8 @@ class realestate_search extends class_base
 			"created" => new obj_predicate_compare (OBJ_COMP_GREATER, $search_fd),
 			"site_id" => array(),
 			"lang_id" => array(),
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"realestate_agent1" => $search_agent,
-					"realestate_agent2" => $search_agent,
-				)
-			)),
+			$address_constraint,
+			$agent_constraint,
 
 			### class specific
 			"total_floor_area" => $tfa_constraint,
@@ -1188,474 +1264,43 @@ class realestate_search extends class_base
 			"usage_purpose" => $search_up,
 		);
 
-		$list_cl = new object_list ($args);
-		$result_list = $result_list + $list_cl->arr ();
-		$list_keys = array_keys ($result_list);
-		$list_addresses = array ();
+		$result_list = new object_list ($args);
+		$result_list = $result_list->arr ();
 
 // /* dbg */ if ($_GET["researchdbg"]==1){ arr ($args); }
 /* dbg */ if ($_GET["researchdbg"]==1){ arr (count($result_list)); }
 
 		### search for objects under admin units, if units specified, intersect results with objectlist found
-		aw_switch_user (array ("uid" => $manager->prop ("almightyuser")));
+		// aw_switch_user (array ("uid" => $manager->prop ("almightyuser")));
 
-		if (count ($search_a1))
-		{
-			$list_a = array ();
+		// if (count ($search_a1) or count ($search_a2) or count ($search_a3))
+		// {
+			// $search_admin_units = array_merge ($search_a1, $search_a2, $search_a3);
 
-			foreach ($search_a1 as $parent)
-			{
-				$tree = new object_tree (array (
-					"parent" => $parent,
-					"site_id" => array(),
-					"lang_id" => array(),
-				));
-				$list = $tree->to_list ();
-				$list = $list->arr ();
+			// foreach ($result_list as $oid => $property)
+			// {
+				// $address = $property->get_first_obj_by_reltype ("RELTYPE_REALESTATE_ADDRESS");
 
-				foreach ($list as $o)
-				{
-					if ($o->class_id () != CL_ADDRESS)
-					{
-						unset ($list[$o->id ()]);
-					}
-				}
+				// if (is_object ($address))
+				// {
+					// $address_ids = $address->prop ("address_ids");
 
-				$list_a = $list_a + $list;
-			}
+					// if (array_intersect ($search_admin_units, $address_ids) != $search_admin_units)
+					// {
+						// unset ($result_list[$oid]);
+					// }
+				// }
+				// else
+				// {
+					// unset ($result_list[$oid]);
+				// }
+			// }
+		// }
 
-			$list_a = array_keys ($list_a);
-			$list_addresses = $list_addresses + $list_a;
-		}
-
-		if (count ($search_a2))
-		{
-			$list_a = array ();
-
-			foreach ($search_a2 as $parent)
-			{
-				$tree = new object_tree (array (
-					"parent" => $parent,
-					"site_id" => array(),
-					"lang_id" => array(),
-				));
-				$list = $tree->to_list ();
-				$list = $list->arr ();
-
-				foreach ($list as $o)
-				{
-					if ($o->class_id () != CL_ADDRESS)
-					{
-						unset ($list[$o->id ()]);
-					}
-				}
-
-				$list_a = $list_a + $list;
-			}
-
-			$list_a = array_keys ($list_a);
-			$list_addresses = $list_addresses + $list_a;
-		}
-
-		if (count ($search_a3))
-		{
-			$list_a = array ();
-
-			foreach ($search_a3 as $parent)
-			{
-				$tree = new object_tree (array (
-					"parent" => $parent,
-					"site_id" => array(),
-					"lang_id" => array(),
-				));
-				$list = $tree->to_list ();
-				$list = $list->arr ();
-
-				foreach ($list as $o)
-				{
-					if ($o->class_id () != CL_ADDRESS)
-					{
-						unset ($list[$o->id ()]);
-					}
-				}
-
-				$list_a = $list_a + $list;
-			}
-
-			$list_a = array_keys ($list_a);
-			$list_addresses = $list_addresses + $list_a;
-		}
-
-		if (count ($search_a1) or count ($search_a2) or count ($search_a3))
-		{
-			foreach ($result_list as $oid => $property)
-			{
-				$address = $property->get_first_obj_by_reltype ("RELTYPE_REALESTATE_ADDRESS");//!!! v6ibolla oleks kiirem venna parenti j2rgi aadress saada
-
-				if (is_object ($address))
-				{
-					if (!in_array ($address->id (), $list_addresses))
-					{
-						unset ($result_list[$oid]);
-					}
-				}
-				else
-				{
-					unset ($result_list[$oid]);
-				}
-			}
-		}
-
-		aw_restore_user ();
+		// aw_restore_user ();
 
 /* dbg */ if ($_GET["researchdbg"]==1){ arr (count($result_list)); }
-		return $result_list;
-	}
-
-	function &search_old ($arr)
-	{
-		$this_object = is_oid ($arr["id"]) ? obj ($arr["id"]) : NULL;
-
-		if (is_object ($this_object) and $this_object->prop ("save_search"))
-		{
-			$search_ci = $this_object->prop ("search_class_id");
-			$search_tpmin = $this_object->prop ("search_transaction_price_min");
-			$search_tpmax = $this_object->prop ("search_transaction_price_max");
-			$search_tfamin = $this_object->prop ("search_total_floor_area_min");
-			$search_tfamax = $this_object->prop ("search_total_floor_area_max");
-			$search_fd = $this_object->prop ("searchparam_fromdate");
-			$search_nor = $this_object->prop ("search_number_of_rooms");
-			$search_tt = $this_object->prop ("search_transaction_type");
-			$search_c = $this_object->prop ("search_condition");
-			$search_agent = $this_object->prop ("search_agent");
-			$search_a1 = $this_object->prop ("searchparam_address1");
-			$search_a2 = $this_object->prop ("searchparam_address2");
-			$search_a3 = $this_object->prop ("searchparam_address3");
-			$search_at = $this_object->prop ("search_address_text");
-			$search_owp = $this_object->prop ("searchparam_onlywithpictures");
-			$search_imf = $this_object->prop ("search_is_middle_floor");
-		}
-		else
-		{
-			$search_ci = $arr["search"]["ci"];
-			$search_tpmin = $arr["search"]["tpmin"];
-			$search_tpmax = $arr["search"]["tpmax"];
-			$search_tfamin = $arr["search"]["tfamin"];
-			$search_tfamax = $arr["search"]["tfamax"];
-			$search_fd = $arr["search"]["fd"];
-			$search_nor = $arr["search"]["nor"];
-			$search_tt = $arr["search"]["tt"];
-			$search_c = $arr["search"]["c"];
-			$search_up = $arr["search"]["up"];
-			$search_agent = $arr["search"]["agent"];
-			$search_a1 = $arr["search"]["a1"];
-			$search_a2 = $arr["search"]["a2"];
-			$search_a3 = $arr["search"]["a3"];
-			$search_at = $arr["search"]["at"];
-			$search_owp = $arr["search"]["owp"];
-			$search_imf = $arr["search"]["imf"];
-		}
-
-		$list = array ();
-		$manager =& $arr["manager"];
-		$parents = array ();
-
-		if (!count ($search_ci))
-		{
-			$search_ci = $this->realestate_classes;
-		}
-
-		foreach ($search_ci as $clid)
-		{
-			switch ($clid)
-			{
-				case CL_REALESTATE_HOUSE:
-					if (is_oid ($manager->prop ("houses_folder")))
-					{
-						$parents[] = $manager->prop ("houses_folder");
-					}
-					break;
-				case CL_REALESTATE_ROWHOUSE:
-					if (is_oid ($manager->prop ("rowhouses_folder")))
-					{
-						$parents[] = $manager->prop ("rowhouses_folder");
-					}
-					break;
-				case CL_REALESTATE_COTTAGE:
-					if (is_oid ($manager->prop ("cottages_folder")))
-					{
-						$parents[] = $manager->prop ("cottages_folder");
-					}
-					break;
-				case CL_REALESTATE_HOUSEPART:
-					if (is_oid ($manager->prop ("houseparts_folder")))
-					{
-						$parents[] = $manager->prop ("houseparts_folder");
-					}
-					break;
-				case CL_REALESTATE_COMMERCIAL:
-					if (is_oid ($manager->prop ("commercial_properties_folder")))
-					{
-						$parents[] = $manager->prop ("commercial_properties_folder");
-					}
-					break;
-				case CL_REALESTATE_GARAGE:
-					if (is_oid ($manager->prop ("garages_folder")))
-					{
-						$parents[] = $manager->prop ("garages_folder");
-					}
-					break;
-				case CL_REALESTATE_LAND:
-					if (is_oid ($manager->prop ("land_estates_folder")))
-					{
-						$parents[] = $manager->prop ("land_estates_folder");
-					}
-					break;
-				case CL_REALESTATE_APARTMENT:
-					if (is_oid ($manager->prop ("apartments_folder")))
-					{
-						$parents[] = $manager->prop ("apartments_folder");
-					}
-					break;
-			}
-		}
-
-		if (is_string ($search_agent) and !empty ($search_agent))
-		{
-			$agents_list = new object_list (array (
-				"class_id" => CL_CRM_PERSON,
-				"name" => "%" . $search_agent . "%",
-				"site_id" => array (),
-				"lang_id" => array (),
-			));
-			$search_agent = $agents_list->ids ();
-		}
-
-		$result_list = array ();
-		$common_args = array (
-			"parent" => $parents,
-			"transaction_type" => $search_tt,
-			"created" => new obj_predicate_compare (OBJ_COMP_GREATER, $search_fd),
-			"site_id" => array(),
-			"lang_id" => array(),
-			new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"realestate_agent1" => $search_agent,
-					"realestate_agent2" => $search_agent,
-				)
-			)),
-		);
-
-		### add transaction_price constraint
-		if ($search_tpmin and $search_tpmax)
-		{
-			$common_args["transaction_price"] = new obj_predicate_compare (OBJ_COMP_BETWEEN, $search_tpmin, $search_tpmax);
-		}
-		elseif ($search_tpmin)
-		{
-			$common_args["transaction_price"] = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $search_tpmin);
-		}
-		elseif ($search_tpmax)
-		{
-			$common_args["transaction_price"] = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $search_tpmax);
-		}
-
-		### compose total_floor_area constraint
-		if ($search_tfamin and $search_tfamax)
-		{
-			$tfa_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $search_tpmin, $search_tpmax);
-		}
-		elseif ($search_tfamin)
-		{
-			$tfa_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $search_tpmin);
-		}
-		elseif ($search_tfamax)
-		{
-			$tfa_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $search_tpmax);
-		}
-		else
-		{
-			$tfa_constraint = NULL;
-		}
-
-		foreach ($search_ci as $class_id)
-		{
-			switch ($class_id)
-			{
-				case CL_REALESTATE_HOUSE://944
-				case CL_REALESTATE_ROWHOUSE:
-				case CL_REALESTATE_COTTAGE://978
-				case CL_REALESTATE_HOUSEPART://979
-					$args = array_merge ($common_args, array (
-						"class_id" => $class_id,
-						"number_of_rooms" => $search_nor,
-						"condition" => $search_c,
-					));
-
-					if (isset ($tfa_constraint))
-					{
-						$args["total_floor_area"] = $tfa_constraint;
-					}
-					break;
-				case CL_REALESTATE_APARTMENT://943
-					$args = array_merge ($common_args, array (
-						"class_id" => $class_id,
-						"number_of_rooms" => $search_nor,
-						"is_middle_floor" => $search_imf,
-						"condition" => $search_c,
-					));
-
-					if (isset ($tfa_constraint))
-					{
-						$args["total_floor_area"] = $tfa_constraint;
-					}
-					break;
-				case CL_REALESTATE_COMMERCIAL://947
-					$args = array_merge ($common_args, array (
-						"class_id" => $class_id,
-						"number_of_rooms" => $search_nor,
-						"usage_purpose" => $search_up,
-						"condition" => $search_c,
-					));
-
-					if (isset ($tfa_constraint))
-					{
-						$args["total_floor_area"] = $tfa_constraint;
-					}
-					break;
-				case CL_REALESTATE_GARAGE://946
-					$args = array_merge ($common_args, array (
-						"class_id" => $class_id,
-						"condition" => $search_c,
-						"total_floor_area" => $tfa_constraint,
-					));
-					break;
-				case CL_REALESTATE_LAND://945
-					$args = array_merge ($common_args, array (
-						"class_id" => $class_id,
-					));
-					break;
-			}
-
-			$list_cl = new object_list ($args);
-			$result_list = $result_list + $list_cl->arr ();
-/* dbg */ if ($_GET["researchdbg"]==1){ arr ($args); }
-		}
-
-		$list_keys = array_keys ($result_list);
-		$list_addresses = array ();
-
-		### search for objects under admin units, if units specified, intersect results with objectlist found
-		if (count ($search_a1))
-		{
-			$list_a = array ();
-
-			foreach ($search_a1 as $parent)
-			{
-				$tree = new object_tree (array (
-					"parent" => $parent,
-					"site_id" => array(),
-					"lang_id" => array(),
-				));
-				$list = $tree->to_list ();
-				$list = $list->arr ();
-
-				foreach ($list as $o)
-				{
-					if ($o->class_id () != CL_ADDRESS)
-					{
-						unset ($list[$o->id ()]);
-					}
-				}
-
-				$list_a = $list_a + $list;
-			}
-
-			$list_a = array_keys ($list_a);
-			$list_addresses = $list_addresses + $list_a;
-			// $list_keys = array_intersect ($list_keys, $list_a);
-		}
-
-		if (count ($search_a2))
-		{
-			$list_a = array ();
-
-			foreach ($search_a2 as $parent)
-			{
-				$tree = new object_tree (array (
-					"parent" => $parent,
-					"site_id" => array(),
-					"lang_id" => array(),
-				));
-				$list = $tree->to_list ();
-				$list = $list->arr ();
-
-				foreach ($list as $o)
-				{
-					if ($o->class_id () != CL_ADDRESS)
-					{
-						unset ($list[$o->id ()]);
-					}
-				}
-
-				$list_a = $list_a + $list;
-			}
-
-			$list_a = array_keys ($list_a);
-			$list_addresses = $list_addresses + $list_a;
-			// $list_keys = array_intersect ($list_keys, $list_a);
-		}
-
-		if (count ($search_a3))
-		{
-			$list_a = array ();
-
-			foreach ($search_a3 as $parent)
-			{
-				$tree = new object_tree (array (
-					"parent" => $parent,
-					"site_id" => array(),
-					"lang_id" => array(),
-				));
-				$list = $tree->to_list ();
-				$list = $list->arr ();
-
-				foreach ($list as $o)
-				{
-					if ($o->class_id () != CL_ADDRESS)
-					{
-						unset ($list[$o->id ()]);
-					}
-				}
-
-				$list_a = $list_a + $list;
-			}
-
-			$list_a = array_keys ($list_a);
-			$list_addresses = $list_addresses + $list_a;
-			// $list_keys = array_intersect ($list_keys, $list_a);
-		}
-
-		if (count ($search_a1) or count ($search_a2) or count ($search_a3))
-		{
-			foreach ($result_list as $oid => $property)
-			{
-				$address = $property->get_first_obj_by_reltype ("RELTYPE_REALESTATE_ADDRESS");//!!! v6ibolla oleks kiirem venna parenti j2rgi aadress saada
-
-				if (is_object ($address))
-				{
-					if (!in_array ($address->id (), $list_addresses))
-					{
-						unset ($result_list[$oid]);
-					}
-				}
-				else
-				{
-					unset ($result_list[$oid]);
-				}
-			}
-		}
+		exit_function ("re_search::search");
 
 		return $result_list;
 	}
@@ -1742,9 +1387,20 @@ class realestate_search extends class_base
 
 	function show_property ($arr)
 	{
+		if (!is_oid ($_GET["realestate_show_property"]))
+		{
+			return false;
+		}
+
 		$property = obj ($_GET["realestate_show_property"]);
-		$cl_property = get_instance ($property->class_id ());
-		return $cl_property->request_execute ($property);
+		$cl_instance_var = "cl_property_" . $property->class_id ();
+
+		if (!is_object ($this->$cl_instance_var))
+		{
+			$this->$cl_instance_var = get_instance ($property->class_id ());
+		}
+
+		return $this->$cl_instance_var->request_execute ($property);
 	}
 }
 ?>

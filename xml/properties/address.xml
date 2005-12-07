@@ -101,6 +101,11 @@
                   <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
                   <caption>Haldusjaotus</caption>
             </ADMINISTRATIVE_STRUCTURE>
+            <ADMINISTRATIVE_UNIT>
+                  <value>2</value>
+                  <clid>clid</clid>
+                  <caption>Halduspiirkond</caption>
+            </ADMINISTRATIVE_UNIT>
       </reltypes>
 </properties>
 

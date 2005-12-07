@@ -58,9 +58,16 @@ class address_object extends _int_object
 				case "address_array":
 					return $this->as_get_array ();
 
+				case "address_ids":
+					return $this->as_get_id_array ();
+
 				case "administrative_structure":
 					$this->as_load_structure ();
 					return $this->as_administrative_structure;
+
+				case "country":
+					$this->as_load_country ();
+					return $this->as_country;
 
 				default:
 					return parent::prop ($param);
@@ -84,6 +91,11 @@ class address_object extends _int_object
 			case "country":
 				return $this->as_set_country ($param);
 
+			case "unit_encoded":
+			case "address_array":
+			case "address_ids":
+				return;
+
 			default:
 				return parent::set_prop ($name, $param);
 		}
@@ -106,7 +118,6 @@ class address_object extends _int_object
 	}
 
     // @attrib name=as_get_array
-	// @param this required
 	// @returns Associative array: administrative_division_oid => administrative_unit name
 	function as_get_array ()
 	{
@@ -124,6 +135,30 @@ class address_object extends _int_object
 			foreach ($this->as_address_data as $unit_data)
 			{
 				$address_array[$unit_data["division"]] = $unit_data["name"];
+			}
+		}
+
+		return $address_array;
+	}
+
+    // @attrib name=as_get_id_array
+	// @returns Associative array: administrative_division_oid => administrative_unit oid
+	function as_get_id_array ()
+	{
+		$this->as_load_data ();
+
+		### make address array
+		$address_array = array ();
+
+		if (!empty ($this->as_address_data))
+		{
+			$this->as_load_structure ();
+			$this->as_load_country ();
+			$address_array[ADDRESS_COUNTRY_TYPE] = $this->as_country->id ();
+
+			foreach ($this->as_address_data as $unit_data)
+			{
+				$address_array[$unit_data["division"]] = $unit_data["id"];
 			}
 		}
 
@@ -164,13 +199,28 @@ class address_object extends _int_object
 		elseif (is_oid ($arr["id"]))
 		{
 			$unit = obj ($arr["id"]);
-			$division = obj ($unit->subclass ());
+
+			if ($unit->class_id () == CL_ADDRESS_STREET)
+			{
+				$division = ADDRESS_STREET_TYPE;
+			}
+			elseif (in_array ($unit->class_id (), $this->as_unit_classes))
+			{
+				$division = obj ($unit->subclass ());
+			}
+			else
+			{
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: unit of wrong class [%s]. id: [%s]", $unit->class_id (), $arr["id"]).NEWLINE; }
+				return false;
+			}
 		}
 		else
 		{
 /* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo "address::set_by_id: division object not found. id: [{$arr["id"]}]".NEWLINE; }
 			return false;
 		}
+
+		$this->as_load_structure ();
 
 		### check if all specified unit is in the same admin structure as others
 		if ($this->as_administrative_structure->id () != $division->prop ("administrative_structure"))
@@ -502,7 +552,8 @@ class address_object extends _int_object
 			if ($division_of_parent != $parent_division)
 			{
 /* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::as_save: division of parent [%s] wrong. doesn't match parent division [%s]", $division_of_parent, $parent_division) . NEWLINE; }
-				return false;
+				// return false;
+				continue; // more fault tolerance. Sets units in parental relation to the one encountered first. Units of wrong parental relation ignored.
 			}
 
 			### set location on this level
@@ -541,6 +592,10 @@ class address_object extends _int_object
 					"class" => $new_parent->class_id (),
 				);
 				$parent = $new_parent;
+				$this->connect (array (
+					"to" => $new_parent,
+					"reltype" => "RELTYPE_ADMINISTRATIVE_UNIT",
+				));
 			}
 			else
 			{

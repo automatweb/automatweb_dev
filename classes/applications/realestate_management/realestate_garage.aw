@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_garage.aw,v 1.2 2005/11/07 16:49:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_garage.aw,v 1.3 2005/12/07 16:58:12 voldemar Exp $
 // realestate_garage.aw - Garaaz
 /*
 
@@ -152,7 +152,7 @@ class realestate_garage extends realestate_property
 	}
 
 /**
-	@attrib name=print
+	@attrib name=print nologin=1
 	@param id required type=int
 	@param contact_type required
 	@param show_pictures optional

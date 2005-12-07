@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.5 2005/11/22 08:15:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.6 2005/12/07 16:58:36 voldemar Exp $
 // address.aw - Aadress v2
 /*
 
@@ -39,6 +39,9 @@
 
 @reltype ADMINISTRATIVE_STRUCTURE value=1 clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE
 @caption Haldusjaotus
+
+@reltype ADMINISTRATIVE_UNIT value=2 clid=clid=CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT,CL_COUNTRY
+@caption Halduspiirkond
 
 */
 

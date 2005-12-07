@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.4 2005/11/22 16:50:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.5 2005/12/07 16:58:12 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -75,10 +75,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 		@property proplist_filter_closedbefore type=date_select store=no
 		@caption tehingu sõlmimise aeg enne
 
-	@property title3 type=text store=no subtitle=1
-	@caption &nbsp;
 		@property proplist_filter_transaction_closed type=checkbox ch_value=1 store=no
-		@caption Kuva ainult sõlmitud tehinguga objekte
+		@caption tehing sõlmitud
 
 		@property button1 type=submit store=no
 		@caption Otsi
@@ -101,7 +99,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 
 @default group=grp_users_mgr
 	@layout lbox type=vbox parent=vsplitbox
-	// @property user_mgr_toolbar type=toolbar store=no no_caption=1
 	@property user_mgr_tree type=treeview store=no no_caption=1 parent=lbox
 	@layout tbox type=vbox parent=vsplitbox
 
@@ -113,9 +110,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@property title12 type=text store=no subtitle=1 parent=tbox
 	@caption &Otilde;igused objekti aadressi järgi
 
-	@property rights_country type=relpicker reltype=RELTYPE_REALESTATEMGR_COUNTRY clid=CL_COUNTRY automatic=1 parent=tbox store=no
-	@comment Riik, mille kohta õigusi määratakse.
-	@caption Riik
+	@property rights_administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1 parent=tbox store=no
+	@comment Haldusjaotus, mille kohta õigusi määratakse.
+	@caption Haldusjaotus
 
 	@property rights_admindivision type=select parent=tbox store=no
 	@comment Aadressitase, mille kohta õigusi määratakse. Aadressitaseme muutmisel jäävad teiste aadressitasemete seaded samaks! Et neid muuta tuleb valida uuesti sama aadressitase.
@@ -149,8 +146,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 		@property clientlist_filter_appreciationtype type=chooser multiple=1 store=no
 		@caption tänukirja tüüp
 
+		@property clientlist_filter_agent type=select multiple=1 store=no size=3
+		@caption maakler
+
 		@property button3 type=submit store=no
 		@caption Otsi
+
+		@property realestate_client_selection_name type=hidden store=no no_caption=1
 
 @default group=grp_client_selections
 	@property client_selections_toolbar type=toolbar store=no no_caption=1
@@ -190,12 +192,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 
 	@property land_estates_folder type=relpicker reltype=RELTYPE_REALESTATEMGR_FOLDER clid=CL_MENU
 	@caption Maade kaust
-
-	// @property companies_folder type=relpicker reltype=RELTYPE_REALESTATEMGR_FOLDER clid=CL_MENU
-	// @caption Kinnisvaraettev&otilde;tete kaust
-
-	// @property brokers_folder type=relpicker reltype=RELTYPE_REALESTATEMGR_FOLDER clid=CL_MENU
-	// @caption Maaklerfirmade kaust
 
 	@property clients_folder type=relpicker reltype=RELTYPE_REALESTATEMGR_FOLDER clid=CL_MENU
 	@caption Klientide kaust
@@ -261,20 +257,20 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 		@comment Riigi haldusjaotus, milles süsteemis hallatavad kinnisvaraobjektid asuvad
 		@caption Haldusjaotus
 
-		@property address_equivalent_1 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_1 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
+		@property address_equivalent_1 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_1 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION editonly=1
 		@comment Haldusjaotis aadressisüsteemis, mis vastab maakonnale
 		@caption Maakond haldusjaotuses
 
-		@property address_equivalent_2 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_2 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
+		@property address_equivalent_2 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_2 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION editonly=1
 		@caption Linn haldusjaotuses
 
-		@property address_equivalent_3 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_3 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
+		@property address_equivalent_3 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_3 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION editonly=1
 		@caption Linnaosa haldusjaotuses
 
-		@property address_equivalent_4 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_4 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
+		@property address_equivalent_4 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_4 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION editonly=1
 		@caption Vald haldusjaotuses
 
-		@property address_equivalent_5 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_5 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
+		@property address_equivalent_5 type=relpicker reltype=RELTYPE_ADDRESS_EQUIVALENT_5 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION editonly=1
 		@caption Asula haldusjaotuses
 
 
@@ -346,6 +342,17 @@ class realestate_manager extends class_base
 			"tpldir" => "applications/realestate_management/realestate_manager",
 			"clid" => CL_REALESTATE_MANAGER
 		));
+
+		$this->usrmgr_property_type_data = array (
+			"can_houses" => t("Majad"),
+			"can_rowhouses" => t("Ridaelamud"),
+			"can_cottages" => t("Suvilad"),
+			"can_houseparts" => t("Majaosad"),
+			"can_apartments" => t("Korterid"),
+			"can_commercial_properties" => t("Äripinnad"),
+			"can_garages" => t("Garaazid"),
+			"can_land_estates" => t("Maatükid"),
+		);
 	}
 
 	function callback_on_load ($arr)
@@ -363,6 +370,13 @@ class realestate_manager extends class_base
 			{
 				$this->cfgmanager = $this_object->prop ("realestatemgr_cfgmgr");
 			}
+
+			$this->administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+
+			if (!is_object ($this->administrative_structure))
+			{
+				echo t("Haldusjaotus määramata või puudub juurdepääs!");
+			}
 		}
 
 		aw_session_set ("realsestate_usr_mgr_cat", $arr["request"]["cat"]);
@@ -370,12 +384,6 @@ class realestate_manager extends class_base
 		aw_session_set ("realsestate_usr_mgr_company", $arr["request"]["company"]);
 		$this->cl_users = get_instance("users");
 		$this->cl_classificator = get_instance(CL_CLASSIFICATOR);
-		$this->administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
-
-		if (!is_object ($this->administrative_structure))
-		{
-			echo t("Haldusjaotus määramata!");
-		}
 
 		if (
 			// ($arr["request"]["action"] == "submit") and
@@ -395,6 +403,11 @@ class realestate_manager extends class_base
 		if (($arr["request"]["group"] == "grp_realestate_properties_search") and is_array ($arr["request"]["realestate_search"]))
 		{
 			$this->realestate_search = $arr["request"]["realestate_search"];
+		}
+
+		if (is_oid ($arr["request"]["re_client_selection"]))
+		{ ### load saved client selection
+			$this->re_client_selection =  obj ($arr["request"]["re_client_selection"]);
 		}
 	}
 
@@ -422,7 +435,7 @@ class realestate_manager extends class_base
 			}
 		}
 
-		if ( (!$this->send_customer_mail and $arr["id"] == "grp_clients_mailer") or ($this->send_customer_mail and $arr["id"] != "grp_clients_mailer") )
+		if ( (!$this->send_client_mail and $arr["id"] == "grp_clients_mailer") or ($this->send_client_mail and $arr["id"] != "grp_clients_mailer") )
 		{
 			return false;
 		}
@@ -462,6 +475,12 @@ class realestate_manager extends class_base
 
 		switch($prop["name"])
 		{
+			### mailer tab
+			case "mail_from":
+			case "mail_subject":
+			case "mail_body":
+			case "mail_body":
+
 			case "available_variables_names":
 				$prop["value"] = t("
 					Kõik klassi propertyd kujul <i>property_name</i> ning nende nimed kujul <i>property_name_caption</i>.  <br />
@@ -480,17 +499,17 @@ class realestate_manager extends class_base
 			case "address_equivalent_3":
 			case "address_equivalent_4":
 			case "address_equivalent_5":
-				if (!is_object ($this->administrative_structure))
-				{
-					return PROP_IGNORE;
-				}
-				else
+				if (is_object ($this->administrative_structure))
 				{
 					$divisions = new object_list ($this->administrative_structure->connections_from (array (
 						"type" => "RELTYPE_ADMINISTRATIVE_DIVISION",
 						"class_id" => CL_COUNTRY_ADMINISTRATIVE_DIVISION,
 					)));
 					$prop["options"] = $divisions->names ();
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
 				}
 				break;
 
@@ -515,14 +534,31 @@ class realestate_manager extends class_base
 				);
 				list ($options, $name, $use_type) = $this->cl_classificator->get_choices($prop_args);
 				$prop["options"] = $options->names();
-				$prop["value"] = aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : "";
+				$prop["value"] = (is_object ($this->re_client_selection) and $this->re_client_selection->meta ("realestate_" . $prop["name"])) ? $this->re_client_selection->meta ("realestate_" . $prop["name"]) : (aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : "");
+				break;
+
+			case "clientlist_filter_agent":
+				$agents_filter = array ();
+				$connections = $this_object->connections_from(array(
+					"type" => "RELTYPE_REALESTATEMGR_USER",
+					"class_id" => CL_CRM_COMPANY,
+				));
+
+				foreach ($connections as $connection)
+				{
+					$company = $connection->to ();
+					$employees = new object_list($company->connections_from(array(
+						"type" => "RELTYPE_WORKERS",
+						"class_id" => CL_CRM_PERSON,
+					)));
+					$agents_filter = $agents_filter + $employees->names ();
+				}
+
+				$prop["options"] = $agents_filter;
+				$prop["value"] = (is_object ($this->re_client_selection) and $this->re_client_selection->meta ("realestate_" . $prop["name"])) ? $this->re_client_selection->meta ("realestate_" . $prop["name"]) : (aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : "");
 				break;
 
 			### properties tab
-			case "property_searches":
-				$this->_property_searches ($arr);
-				break;
-
 			case "property_search":
 				break;
 
@@ -535,6 +571,9 @@ class realestate_manager extends class_base
 				break;
 
 			case "clientlist_filter_appreciationafter":
+				$prop["value"] = (is_object ($this->re_client_selection) and $this->re_client_selection->meta ("realestate_" . $prop["name"])) ? $this->re_client_selection->meta ("realestate_" . $prop["name"]) : (aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : -1);
+				break;
+
 			case "proplist_filter_modifiedafter":
 			case "proplist_filter_createdafter":
 			case "proplist_filter_closedafter":
@@ -542,17 +581,23 @@ class realestate_manager extends class_base
 				break;
 
 			case "clientlist_filter_appreciationbefore":
+				$prop["value"] = (is_object ($this->re_client_selection) and $this->re_client_selection->meta ("realestate_" . $prop["name"])) ? $this->re_client_selection->meta ("realestate_" . $prop["name"]) : (aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : (time () + 86400));
+				break;
+
 			case "proplist_filter_modifiedbefore":
 			case "proplist_filter_createdbefore":
 			case "proplist_filter_closedbefore":
 				$prop["value"] = aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : (time () + 86400);
 				break;
 
-			case "clientlist_filter_name":
-			case "clientlist_filter_address":
 			case "proplist_filter_pricemin":
 			case "proplist_filter_pricemax":
 				$prop["value"] = aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : "";
+				break;
+
+			case "clientlist_filter_name":
+			case "clientlist_filter_address":
+				$prop["value"] = (is_object ($this->re_client_selection) and $this->re_client_selection->meta ("realestate_" . $prop["name"])) ? $this->re_client_selection->meta ("realestate_" . $prop["name"]) : (aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : "");
 				break;
 
 			case "proplist_filter_legal_status":
@@ -592,10 +637,6 @@ class realestate_manager extends class_base
 				$this->_user_list($arr);
 				break;
 
-			case "user_mgr_toolbar":
-				$this->_user_mgr_toolbar($arr);
-				break;
-
 			case "user_mgr_tree":
 				$this->_user_mgr_tree($arr);
 				break;
@@ -611,58 +652,7 @@ class realestate_manager extends class_base
 				}
 				break;
 
-			case "can_houses":
-			case "can_rowhouses":
-			case "can_cottages":
-			case "can_houseparts":
-			case "can_apartments":
-			case "can_commercial_properties":
-			case "can_garages":
-			case "can_land_estates":
-				if (!is_oid ($arr["request"]["cat"]))
-				{
-					return PROP_IGNORE;
-				}
-
-				if (!is_object ($this->usr_mgr_profession_group))
-				{
-					// $prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
-					// $retval = PROP_ERROR;
-					return PROP_IGNORE;
-				}
-
-				$folder_name = substr ($prop["name"], 4);
-
-				if (!is_oid ($this_object->prop ($folder_name . "_folder")))
-				{
-					$prop["error"] .= sprintf (t("Seda tüüpi kinnisvaraobjektide kataloog määramata. "));
-					$retval = PROP_ERROR;
-				}
-
-				if ($retval == PROP_OK)
-				{
-					// $folder = obj ($this_object->prop ($folder_name . "_folder"));
-					$gid = $this->cl_users->get_gid_for_oid ($this->usr_mgr_profession_group->id ());
-					$acl_current_settings = $this->get_acl_for_oid_gid ($this_object->prop ($folder_name . "_folder"), $gid);
-
-					$prop["value"] = array (
-						"can_view" => $acl_current_settings["can_view"],
-						"can_add" => $acl_current_settings["can_add"],
-						"can_edit" => $acl_current_settings["can_edit"],
-						// "can_admin" => $acl_current_settings["can_admin"],
-						"can_delete" => $acl_current_settings["can_delete"],
-					);
-					$prop["options"] = array(
-						"can_view" => t("Vaatamine"),
-						"can_add" => t("Lisamine"),
-						"can_edit" => t("Muutmine"),
-						// "can_admin" => t("Õiguste muutmine"),
-						"can_delete" => t("Kustutamine"),
-					);
-				}
-				break;
-
-			case "rights_country":
+			case "rights_administrative_structure":
 				### proceed only if a profession is selected
 				if (!is_oid ($arr["request"]["cat"]))
 				{
@@ -671,39 +661,12 @@ class realestate_manager extends class_base
 
 				if (!is_object ($this->usr_mgr_profession_group))
 				{
-					// $prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
-					// $retval = PROP_ERROR;
-					return PROP_IGNORE;
-				}
-
-				### see if default country is available
-				if (!is_oid ($this_object->prop("default_country")))
-				{
-					$prop["error"] .= t("Vaikimisi kasutatav riik seadetes määramata. ");
-					$retval = PROP_ERROR;
+					$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+					return PROP_ERROR;
 					// return PROP_IGNORE;
 				}
 
-				if (!$this->can ("view", $this_object->prop("default_country")))
-				{
-					$prop["error"] .= t("Valitud vaikimisi kasutatava riigiobjekti vaatamiseks puudub kasutajal õigus. ");
-					$retval = PROP_ERROR;
-				}
-
-				if ($retval == PROP_OK)
-				{
-					### get country
-					if (is_oid (aw_global_get ("realestate_usr_mgr_rights_country")) and $this->can ("view", aw_global_get ("realestate_usr_mgr_rights_country")))
-					{
-						$country_id = aw_global_get ("realestate_usr_mgr_rights_country");
-					}
-					else
-					{
-						$country_id = $this_object->prop("default_country");
-					}
-
-					$prop["value"] = array ($country_id => $country_id);
-				}
+				$prop["value"] = $this->administrative_structure->id ();
 				break;
 
 			case "rights_admindivision_current":
@@ -716,47 +679,16 @@ class realestate_manager extends class_base
 
 				if (!is_object ($this->usr_mgr_profession_group))
 				{
-					// $prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
-					// $retval = PROP_ERROR;
-					return PROP_IGNORE;
-				}
-
-				### see if default country is available
-				if (!is_oid ($this_object->prop("default_country")))
-				{
-					$prop["error"] .= t("Vaikimisi kasutatav riik seadetes määramata. ");
-					$retval = PROP_ERROR;
+					$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+					return PROP_ERROR;
 					// return PROP_IGNORE;
-				}
-
-				if (!$this->can ("view", $this_object->prop("default_country")))
-				{
-					$prop["error"] .= t("Valitud vaikimisi kasutatava riigiobjekti vaatamiseks puudub kasutajal õigus. ");
-					$retval = PROP_ERROR;
 				}
 
 				if ($retval == PROP_OK)
 				{
-					### get country
-					if (is_oid (aw_global_get ("realestate_usr_mgr_rights_country")) and $this->can ("view", aw_global_get ("realestate_usr_mgr_rights_country")))
-					{
-						$country = obj (aw_global_get ("realestate_usr_mgr_rights_country"));
-					}
-					else
-					{
-						$country = obj ($this_object->prop("default_country"));
-					}
-
-					### get administrative structure
-					if (!is_object ($this->administrative_structure))
-					{
-						$prop["error"] .= t("Valitud riigiobjektil pole määratud haldusjaotust või puuduvad kasutajal sellele õigused. ");
-						$retval = PROP_ERROR;
-					}
-
 					$divisions =& $this->administrative_structure->prop ("structure_array");
 
-					### get admin divisions for selected country
+					### get admin divisions for selected administrative_structure
 					foreach ($divisions as $division)
 					{
 						if ($division->id () == aw_global_get ("realestate_usr_mgr_rights_admindivision"))
@@ -794,9 +726,9 @@ class realestate_manager extends class_base
 
 				if (!is_object ($this->usr_mgr_profession_group))
 				{
-					// $prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
-					// $retval = PROP_ERROR;
-					return PROP_IGNORE;
+					$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+					return PROP_ERROR;
+					// return PROP_IGNORE;
 				}
 
 				### get selected admin division
@@ -938,70 +870,17 @@ class realestate_manager extends class_base
 				break;
 
 			### users tab
-			case "can_houses":
-			case "can_rowhouses":
-			case "can_cottages":
-			case "can_houseparts":
-			case "can_apartments":
-			case "can_commercial_properties":
-			case "can_garages":
-			case "can_land_estates":
-				$folder_name = substr ($prop["name"], 4);
-
-				### connect current profession usergroup to realestateproperties folder with reltype_acl
-				if (!is_object ($this->usr_mgr_profession_group))
-				{
-					// $prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
-					// $retval = PROP_ERROR;
-					return PROP_IGNORE;
-				}
-
-				if (!is_oid ($this_object->prop ($folder_name . "_folder")))
-				{
-					$prop["error"] .= sprintf (t("Seda tüüpi kinnisvaraobjektide kataloog määramata. "));
-					$retval = PROP_ERROR;
-				}
-
-				if (!$this->can ("admin", $this_object->prop ($folder_name . "_folder")))
-				{
-					$prop["error"] .= sprintf (t("Kasutajal puudub luba selle kinnisvaraobjekti tüübi õigusi määrata. "));
-					// $retval = PROP_ERROR;
-					return PROP_ERROR;
-				}
-
-				if ($retval == PROP_OK)
-				{
-					$can_add = (int) (boolean) $prop["value"]["can_add"];
-					$can_edit = (int) (boolean) $prop["value"]["can_edit"];
-					// $can_admin = (int) (boolean) $prop["value"]["can_admin"];
-					$can_admin = 0;
-					$can_delete = (int) (boolean) $prop["value"]["can_delete"];
-					$can_view = (int) (boolean) $prop["value"]["can_view"];
-
-					$folder = obj ($this_object->prop ($folder_name . "_folder"));
-					$retval = $folder->acl_set ($this->usr_mgr_profession_group, array(
-						"can_add" => $can_add,
-						"can_edit" => $can_edit,
-						"can_admin" => $can_admin,
-						"can_delete" => $can_delete,
-						"can_view" => $can_view,
-					));
-					$folder->save ();
-				}
-				break;
-
 			case "rights_admindivision":
-			case "rights_country":
+			case "rights_administrative_structure":
 				aw_session_set ("realestate_usr_mgr_" . $prop["name"], $prop["value"]);
 				return PROP_IGNORE;
-				break;
 
 			case "rights_adminunit":
 				if (!is_object ($this->usr_mgr_profession_group))
 				{
-					// $prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
-					// $retval = PROP_ERROR;
-					return PROP_IGNORE;
+					$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+					return PROP_ERROR;
+					// return PROP_IGNORE;
 				}
 
 				if ($retval == PROP_OK)
@@ -1146,20 +1025,9 @@ class realestate_manager extends class_base
 
 		if (is_object ($this->usr_mgr_profession_group))
 		{
-			$division_rights_properties = array (
-				"can_houses",
-				"can_rowhouses",
-				"can_cottages",
-				"can_houseparts",
-				"can_apartments",
-				"can_commercial_properties",
-				"can_garages",
-				"can_land_estates",
-			);
-
-			foreach ($division_rights_properties as $property)
+			foreach ($this->usrmgr_property_type_data as $property_type => $caption)
 			{
-				$folder_name = substr ($property, 4) . "_folder";
+				$folder_name = substr ($property_type, 4) . "_folder";
 
 				if (!is_oid ($this_object->prop ($folder_name)))
 				{
@@ -1174,12 +1042,12 @@ class realestate_manager extends class_base
 				}
 
 				### connect current profession usergroup to realestateproperties folder with reltype_acl
-				$can_add = (int) (boolean) $arr["request"][$property . "_add"];
-				$can_edit = (int) (boolean) $arr["request"][$property . "_edit"];
+				$can_add = (int) (boolean) $arr["request"]["re_usermgr_addrights"][$property_type];
+				$can_edit = (int) (boolean) $arr["request"]["re_usermgr_editrights"][$property_type];
 				// $can_admin = (int) (boolean) $arr["request"][$property . "_admin"];
 				$can_admin = 0;
-				$can_delete = (int) (boolean) $arr["request"][$property . "_delete"];
-				$can_view = (int) (boolean) $arr["request"][$property . "_view"];
+				$can_delete = (int) (boolean) $arr["request"]["re_usermgr_deleterights"][$property_type];
+				$can_view = (int) (boolean) $arr["request"]["re_usermgr_viewrights"][$property_type];
 
 				$folder = obj ($this_object->prop ($folder_name));
 				$retval = $folder->acl_set ($this->usr_mgr_profession_group, array(
@@ -1353,17 +1221,6 @@ class realestate_manager extends class_base
 		}
 	}
 
-	function _user_mgr_toolbar($arr)//not used
-	{
-		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->add_button(array(
-			"name" => "save",
-			"img" => "save.gif",
-			"caption" => t("Salvesta"),
-			"action" => "submit_user_mgr_save"
-		));
-	}
-
 	function _user_mgr_tree($arr)
 	{
 		$this_object = $arr["obj_inst"];
@@ -1441,25 +1298,33 @@ class realestate_manager extends class_base
 
 		$t->define_field(array(
 			"name" => "view",
-			"caption" => t("Vaatamine"),
+			"caption" => t("<a href='javascript:selall(\"re_usermgr_viewrights\")'>Vaatamine</a>"),
+			// "caption" => t("Vaatamine"),
+			"tooltip" => t("Vali kõik/kaota valik"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "add",
-			"caption" => t("Lisamine"),
+			"caption" => t("<a href='javascript:selall(\"re_usermgr_addrights\")'>Lisamine</a>"),
+			// "caption" => t("Lisamine"),
+			"tooltip" => t("Vali kõik/kaota valik"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "edit",
-			"caption" => t("Muutmine"),
+			"caption" => t("<a href='javascript:selall(\"re_usermgr_editrights\")'>Muutmine</a>"),
+			// "caption" => t("Muutmine"),
+			"tooltip" => t("Vali kõik/kaota valik"),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "delete",
-			"caption" => t("Kustutamine"),
+			"caption" => t("<a href='javascript:selall(\"re_usermgr_deleterights\")'>Kustutamine</a>"),
+			// "caption" => t("Kustutamine"),
+			"tooltip" => t("Vali kõik/kaota valik"),
 			"align" => "center"
 		));
 	}
@@ -1478,25 +1343,14 @@ class realestate_manager extends class_base
 
 		if (!is_object ($this->usr_mgr_profession_group))
 		{
-			// $prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
-			// $retval = PROP_ERROR;
-			return PROP_IGNORE;
+			$prop["error"] .= sprintf (t("Kasutajagrupp ametile määramata. "));
+			return PROP_ERROR;
+			// return PROP_IGNORE;
 		}
 
-		$data = array (
-			"can_houses" => t("Majad"),
-			"can_rowhouses" => t("Ridaelamud"),
-			"can_cottages" => t("Suvilad"),
-			"can_houseparts" => t("Majaosad"),
-			"can_apartments" => t("Korterid"),
-			"can_commercial_properties" => t("Äripinnad"),
-			"can_garages" => t("Garaazid"),
-			"can_land_estates" => t("Maatükid"),
-		);
-
-		foreach ($data as $property => $caption)
+		foreach ($this->usrmgr_property_type_data as $property_type => $caption)
 		{
-			$folder_name = substr ($property, 4);
+			$folder_name = substr ($property_type, 4);
 
 			if (is_oid ($this_object->prop ($folder_name . "_folder")))
 			{
@@ -1513,22 +1367,22 @@ class realestate_manager extends class_base
 				$t->define_data(array(
 					"name" => $caption,
 					"view" => html::checkbox(array(
-						"name" => $property . "_view",
+						"name" => "re_usermgr_viewrights[" . $property_type . "]",
 						"value" => 1,
 						"checked" => $can_view,
 					)),
 					"add" => html::checkbox(array(
-						"name" => $property . "_add",
+						"name" => "re_usermgr_addrights[" . $property_type . "]",
 						"value" => 1,
 						"checked" => $can_add,
 					)),
 					"edit" => html::checkbox(array(
-						"name" => $property . "_edit",
+						"name" => "re_usermgr_editrights[" . $property_type . "]",
 						"value" => 1,
 						"checked" => $can_edit,
 					)),
 					"delete" => html::checkbox(array(
-						"name" => $property . "_delete",
+						"name" => "re_usermgr_deleterights[" . $property_type . "]",
 						"value" => 1,
 						"checked" => $can_delete,
 					)),
@@ -1705,10 +1559,33 @@ class realestate_manager extends class_base
 		$sum_tfa = NULL;
 		$sum_tp = NULL;
 
-		### actions menu script
+		$applicable_tables = array (
+			"houses",
+			"houseparts",
+			"cottages",
+			"rowhouses",
+			"apartments",
+		);
+
+		### frequently used human readable strings
+		$str_yes = t("Jah");
+		$str_no = t("Ei");
+		$str_change = t("Muuda");
+		$str_confirm_archive = t("Arhiveerida objekt?");
+		$str_archive = t("Arhiveeri");
+		$str_confirm_delete = t("Kustutada objekt?");
+		$str_delete = t("Kustuta");
+
+		### actions menu init
 		$actions_menu_script = '<script src="http://voldemar.dev.struktuur.ee/automatweb/js/popup_menu.js" type="text/javascript">
 </script>';
 		echo $actions_menu_script;
+		$actions_menu_icon = $this->cfg["baseurl"] . "/automatweb/images/blue/obj_settings.gif";
+		$tpl = "js_popup_menu.tpl";
+		$tmp = $this->template_dir;
+		$this->template_dir = $this->cfg["basedir"] . "/templates/automatweb/menuedit";
+		$this->set_parse_method("eval");
+		$this->read_template($tpl);
 
 		foreach ($properties as $property)
 		{
@@ -1792,39 +1669,82 @@ class realestate_manager extends class_base
 				continue;
 			}
 
-			$agent = "...";
+			### compose agent name
+			#### agent1
+			$agent1_oid = $property->prop ("realestate_agent1");
 
-			### compose $agent contents
-			if ($this->can ("view", $property->prop ("realestate_agent1")))
+			if (!isset ($this->realestate_agent_data[$agent1_oid]["change_link"]))
 			{
-				$tmpagent = obj ($property->prop ("realestate_agent1"));
-				$agent = html::get_change_url ($tmpagent->id (), array("return_url" => $return_url, "group" => "grp_main"), $tmpagent->name ());
+				if ($this->can ("view", $agent1_oid))
+				{
+					$agent = obj ($agent1_oid);
+					$this->realestate_agent_data[$agent1_oid]["change_link"] = html::get_change_url ($agent->id (), array("return_url" => $return_url, "group" => "grp_main"), $agent->name ());
+				}
+				else
+				{
+					$this->realestate_agent_data[$agent1_oid]["change_link"] = "";
+				}
 			}
 
-			if (is_oid ($property->prop ("realestate_agent2")) and $this->can ("view", $property->prop ("realestate_agent2")))
+			#### agent2
+			$agent2_oid = $property->prop ("realestate_agent2");
+
+			if (!isset ($this->realestate_agent_data[$agent2_oid]["change_link"]))
 			{
-				$tmpagent = obj ($property->prop ("realestate_agent2"));
-				$agent .= ", " . html::get_change_url ($tmpagent->id (), array("return_url" => $return_url, "group" => "grp_main"), $tmpagent->name ());
+				if ($this->can ("view", $agent2_oid))
+				{
+					$agent = obj ($agent2_oid);
+					$this->realestate_agent_data[$agent2_oid]["change_link"] = html::get_change_url ($agent->id (), array("return_url" => $return_url, "group" => "grp_main"), $agent->name ());
+				}
+				else
+				{
+					$this->realestate_agent_data[$agent_oid]["change_link"] = "";
+				}
 			}
+
+			if (!empty ($this->realestate_agent_data[$agent1_oid]["change_link"]))
+			{
+				$agent_name = $this->realestate_agent_data[$agent1_oid]["change_link"];
+
+				if (!empty ($this->realestate_agent_data[$agent2_oid]["change_link"]))
+				{
+					$agent_name .= ", " . $this->realestate_agent_data[$agent2_oid]["change_link"];
+				}
+			}
+			elseif (!empty ($this->realestate_agent_data[$agent2_oid]["change_link"]))
+			{
+				$agent_name = $this->realestate_agent_data[$agent2_oid]["change_link"];
+			}
+			else
+			{
+				$agent_name = "...";
+			}
+
 
 			### get owner company and unit
-			$owner_company = "...";
+			$owner_company_section_oid = $property->meta ("owner_company_section");
 
-			if (is_oid ($property->meta ("owner_company_section")) and $this->can ("view", $property->meta ("owner_company_section")))
+			if (!isset ($this->realestate_company_data[$owner_company_section_oid]["name"]))
 			{
-				$company_section = obj ($property->meta ("owner_company_section"));
-				$parent = $company_section;
+				$this->realestate_company_data[$owner_company_section_oid]["name"] = "...";
 
-				do
+				if ($this->can ("view", $owner_company_section_oid))
 				{
-					$parent = obj ($parent->parent ());
-				}
-				while (is_oid ($parent->parent ()) and (CL_CRM_COMPANY != $parent->class_id ()) and (CL_CRM_SECTION == $parent->class_id ()));
+					$company_section = obj ($owner_company_section_oid);
+					$parent = $company_section;
 
-				if (is_object ($parent))
-				{
-					$company = $parent;
-					$owner_company = $company->name () . "//" . $company_section->name ();//!!! miks pole alamyksused yksuste all vaid on company all??
+					do
+					{
+						$parent = obj ($parent->parent ());
+					}
+					while (is_oid ($parent->parent ()) and (CL_CRM_COMPANY != $parent->class_id ()) and (CL_CRM_SECTION == $parent->class_id ()));
+
+					if (is_object ($parent))
+					{
+						$company = $parent;
+						$owner_company_name = $company->name () . "//" . $company_section->name ();
+						$this->realestate_company_data[$owner_company_section_oid]["name"] = $owner_company_name;
+					}
 				}
 			}
 
@@ -1843,15 +1763,10 @@ class realestate_manager extends class_base
 				$address = $address_array[ADDRESS_STREET_TYPE] . " " . $address->prop ("street_address") . $apartment;
 			}
 
-			### get actions menu
+			### actions menu
 			$actions_menu = "";
-			$tpl = "js_popup_menu.tpl";
-			$tmp = $this->template_dir;
-			$this->template_dir = $this->cfg["basedir"] . "/templates/automatweb/menuedit";
-			$this->set_parse_method("eval");
-			$this->read_template($tpl);
 
-			### get actions
+			#### get actions
 			$class = $classes[$property->class_id ()]["file"];
 			$class = explode ("/", $class);
 			$class = array_pop ($class);
@@ -1865,7 +1780,7 @@ class realestate_manager extends class_base
 				), $class);
 				$this->vars(array(
 					"link" => $url,
-					"text" => t("Muuda")
+					"text" => $str_change,
 				));
 				$actions_menu .= $this->parse("MENU_ITEM");
 			}
@@ -1879,10 +1794,10 @@ class realestate_manager extends class_base
 					"group" => $arr["request"]["group"],
 					"subgroup" => $arr["request"]["subgroup"],
 				), "realestate_manager", true, true);
-				$url = "javascript:if(confirm('".t("Arhiveerida objekt?")."')){window.location='$url';};";
+				$url = "javascript:if(confirm('". $str_confirm_archive ."')){window.location='$url';};";
 				$this->vars(array(
 					"link" => $url,
-					"text" => t("Arhiveeri")
+					"text" => $str_archive,
 				));
 				$actions_menu .= $this->parse("MENU_ITEM");
 			}
@@ -1896,10 +1811,10 @@ class realestate_manager extends class_base
 					"group" => $arr["request"]["group"],
 					"subgroup" => $arr["request"]["subgroup"],
 				), "realestate_manager", true, true);
-				$url = "javascript:if(confirm('".t("Kustutada objekt?")."')){window.location='$url';};";
+				$url = "javascript:if(confirm('". $str_confirm_delete ."')){window.location='$url';};";
 				$this->vars(array(
 					"link" => $url,
-					"text" => t("Kustuta")
+					"text" => $str_delete,
 				));
 				$actions_menu .= $this->parse("MENU_ITEM");
 			}
@@ -1913,14 +1828,13 @@ class realestate_manager extends class_base
 				$is_visible_disabled = true;
 			}
 
-			### parse actions menu
+			#### parse actions menu
 			$this->vars(array(
 				"menu_id" => "js_pop_" . $property->id (),
-				"menu_icon" => $this->cfg["baseurl"] . "/automatweb/images/blue/obj_settings.gif",
+				"menu_icon" => $actions_menu_icon,
 				"MENU_ITEM" => $actions_menu,
 			));
 			$actions_menu = $this->parse();
-			$this->template_dir = $tmp;
 
 
 			$class_name = $classes[$property->class_id ()]["name"];
@@ -1936,17 +1850,15 @@ class realestate_manager extends class_base
 					"checked" => $property->prop ("is_visible"),
 					"disabled" => $is_visible_disabled,
 				)),
-				"archived" => ($property->prop ("is_archived") ? t("Jah") : t("Ei")),
+				"archived" => ($property->prop ("is_archived") ? $str_yes : $str_no),
 				"state" => $property->status (),
 				"oid" => $property->id (),
 				"transaction_type" => $property->prop_str ("transaction_type"),
 				"created" => $property->created (),
 				"modified" => $property->modified (),
-				"agent" => $agent,
-				"owner_company" => $owner_company,
-				"actions" => $actions_menu .
-				// html::get_change_url ($property->id (), array("return_url" => $return_url, "group" => "grp_main"), "Muuda") .
-				html::hidden (array(
+				"agent" => $agent_name,
+				"owner_company" => $this->realestate_company_data[$owner_company_section_oid]["name"],
+				"actions" => $actions_menu . html::hidden (array(
 					"name" => "realestatemgr_property_id[" . $property->id () . "]",
 					"value" => $property->id (),
 				)),
@@ -1955,16 +1867,8 @@ class realestate_manager extends class_base
 			if ($table->name == "apartments")
 			{
 				$data["floor"] = $property->prop ("floor");
-				$data["is_middle_floor"] = ($property->prop ("is_middle_floor")) ? t("Jah") : t("Ei");
+				$data["is_middle_floor"] = ($property->prop ("is_middle_floor")) ? $str_yes : $str_no;
 			}
-
-			$applicable_tables = array (
-				"houses",
-				"houseparts",
-				"cottages",
-				"rowhouses",
-				"apartments",
-			);
 
 			if (in_array ($table->name, $applicable_tables))
 			{
@@ -1981,6 +1885,8 @@ class realestate_manager extends class_base
 				$sum_tp += $property->prop ("transaction_price");
 			}
 		}
+
+		$this->template_dir = $tmp;
 
 		### statistics
 		$prefix = sprintf ("<b>%s</b><br />", t("Kokku:"));
@@ -2036,7 +1942,7 @@ class realestate_manager extends class_base
 
 		natcasesort ($agents_filter);
 
-		$cl_user = get_instance(CL_USER);
+		$cl_user = get_instance (CL_USER);
 		$oid = $cl_user->get_current_person ();
 		$agent = obj ($oid);
 
@@ -2478,34 +2384,16 @@ class realestate_manager extends class_base
 		));
 	}
 
-	function _property_searches ($arr)
-	{
-		$this_object = $arr["obj_inst"];
-		$table =& $arr["prop"]["vcl_inst"];
-
-		$table->define_field(array(
-			"name" => "search_link",
-			// "caption" => t("Otsing"),
-			"align" => "left",
-		));
-
-		foreach ($this_object->connections_from (array ("type" => "RELTYPE_PROPERTY_SEARCH")) as $connection)
-		{
-			$search_link = html::get_change_url(
-				$connection->prop ("to.oid"),
-				array("return_url" => urlencode (aw_global_get("REQUEST_URI"))),
-				$connection->prop ("to.name")
-			);
-
-			$table->define_data(array(
-				"search_link" => $search_link,
-			));
-		}
-	}
-
 	function save_realestate_properties ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
+		$vla = (count ($arr["request"]["realestatemgr_property_id"]) > 9) ? true : false;
+
+		if ($vla)
+		{
+			aw_global_set ("no_cache_flush", 1);
+			obj_set_opt ("no_cache", 1);
+		}
 
 		foreach (safe_array ($arr["request"]["realestatemgr_property_id"]) as $oid)
 		{
@@ -2530,6 +2418,16 @@ class realestate_manager extends class_base
 				}
 			}
 		}
+
+		if ($vla)
+		{
+			if (!is_object ($this->cl_cache))
+			{
+				$this->cl_cache = get_instance ("cache");
+			}
+
+			$this->cl_cache->full_flush ();
+		}
 	}
 
 	function _clients_toolbar ($arr)
@@ -2538,16 +2436,9 @@ class realestate_manager extends class_base
 		$toolbar =& $arr["prop"]["vcl_inst"];
 		$return_url = urlencode(aw_global_get('REQUEST_URI'));
 
-		$toolbar->add_button(array(
-			"name" => "mail",
-			"action" => "send_customer_mail",
-			"img" => "mail_send.gif",
-			"tooltip" => t("Saada valitud klientidele e-kiri"),
-		));
-
 		if ($arr["prop"]["name"] == "clients_toolbar")
 		{
-			$url = $this->mk_my_orb("client_seletion_save_form", array(
+			$url = $this->mk_my_orb("client_selection_save_form", array(
 				"id" => $this_object->id(),
 			));
 			$toolbar->add_button(array(
@@ -2561,20 +2452,31 @@ class realestate_manager extends class_base
 		if ($arr["prop"]["name"] == "client_selections_toolbar")
 		{
 			$toolbar->add_button(array(
+				"name" => "mail",
+				"action" => "send_client_mail",
+				"img" => "mail_send.gif",
+				"tooltip" => t("Saada valimi(te) klientidele e-kiri"),
+			));
+			$toolbar->add_button(array(
 				"name" => "delete",
 				"action" => "delete",
 				"img" => "delete.gif",
-				"tooltip" => t("Kustuta valitud kliendivalimid"),
+				"tooltip" => t("Kustuta valitud kliendivalim(id)"),
 			));
 		}
 	}
 
 	function _clients_list ($arr)
 	{
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 		$table =& $arr["prop"]["vcl_inst"];
 		$table->name = "clients_list";
 		$this->_init_clients_list ($arr);
+
+		if (!is_object  ($this->cl_user))
+		{
+			$this->cl_user = get_instance (CL_USER);
+		}
 
 		### properties menu script
 		$actions_menu_script = '<script src="http://voldemar.dev.struktuur.ee/automatweb/js/popup_menu.js" type="text/javascript">
@@ -2587,15 +2489,36 @@ class realestate_manager extends class_base
 		$filter_name = aw_global_get ("realestate_clientlist_filter_name") ? aw_global_get ("realestate_clientlist_filter_name") : NULL;
 		$filter_address = aw_global_get ("realestate_clientlist_filter_address") ? aw_global_get ("realestate_clientlist_filter_address") : NULL;
 		$filter_appreciation_type = aw_global_get ("realestate_clientlist_filter_appreciationtype");
+		$filter_agent = aw_global_get ("realestate_clientlist_filter_agent");
 
-		$list = new object_list (array (
-			"class_id" => CL_CRM_PERSON,
-			"parent" => array ($this_object->prop ("clients_folder")),
-		));
-		$clients = is_array ($list) ? $list : $list->arr ();
+		if (is_oid ($arr["request"]["re_client_selection"]))
+		{ ### load saved client selection
+			$client_selection =  obj ($arr["request"]["re_client_selection"]);
+
+			if (!is_object ($this->cl_client_selection))
+			{
+				$this->cl_client_selection = get_instance (CL_REALESTATE_CLIENT_SELECTION);
+			}
+
+			$list =& $this->cl_client_selection->get_clients (array (
+				"this" => $client_selection,
+			));
+			$client_query = false;
+		}
+		else
+		{
+			$client_query = true;
+			$list = new object_list (array (
+				"class_id" => CL_CRM_PERSON,
+				"parent" => array ($this_object->prop ("clients_folder")),
+			));
+		}
+
+		$clients = $list->arr ();
 
 		foreach ($clients as $client)
 		{
+			### get appreciation note data
 			$connections = $client->connections_to ();
 			$properties = array ();
 			$realestate_classes = array (
@@ -2633,103 +2556,38 @@ class realestate_manager extends class_base
 				}
 			}
 
-			### filter by client name
-			if (isset ($filter_name))
-			{
-				$filter_name = trim ($filter_name);
-
-				if ($filter_name)
-				{
-					$search = explode (" ", strtolower ($filter_name));
-					$found = 0;
-					$words = 0;
-
-					foreach ($search as $word)
-					{
-						$word = trim ($word);
-
-						if ($word)
-						{
-							$words++;
-							$pos = strpos (strtolower ($client->name ()), trim ($word));
-
-							if ($pos !== false)
-							{
-								$found++;
-							}
-						}
-					}
-
-					if ($words != $found)
-					{
-						continue;
-					}
-				}
-			}
-
-			### filter by client's address
-			if (isset ($filter_address))
-			{
-				$filter_address = trim ($filter_address);
-
-				if ($filter_address)
-				{
-					$search = explode (" ", strtolower ($filter_address));
-					$found = 0;
-					$words = 0;
-
-					foreach ($search as $word)
-					{
-						$word = trim ($word);
-
-						if ($word)
-						{
-							$words++;
-							$pos = strpos (strtolower ($client->prop ("comment")), trim ($word));
-
-							if ($pos !== false)
-							{
-								$found++;
-							}
-						}
-					}
-
-					if ($words != $found)
-					{
-						continue;
-					}
-				}
-			}
-
-			### filter by appreciation note sent
-			if ($last_appreciation_sent < $filter_appreciation_after)
-			{
-				continue;
-			}
-
-			if ($last_appreciation_sent > $filter_appreciation_before)
-			{
-				continue;
-			}
-
-			### filter by appreciation note type
-			if (is_array ($filter_appreciation_type) and !in_array ($last_appreciation_type_oid, $filter_appreciation_type))
-			{
-				continue;
-			}
-
 			### get agent
-			$cl_user = get_instance (CL_USER);
-			$uid = $client->createdby ();
-			$oid = $this->cl_users->get_oid_for_uid ($uid);
+			$agent_uid = $client->createdby ();
 
 			if ($this_object->prop ("almightyuser"))
 			{
-				aw_switch_user (array ("uid" => $this_object->prop ("almightyuser")));
-				$user = obj ($oid);
-				$agent_oid = $cl_user->get_person_for_user ($user);
-				$agent = obj ($agent_oid);
-				aw_restore_user ();
+				if (!isset ($this->realestate_agent_data[$agent_uid]))
+				{
+					aw_switch_user (array ("uid" => $this_object->prop ("almightyuser")));
+					$oid = $this->cl_users->get_oid_for_uid ($agent_uid);
+					$user = obj ($oid);
+					$agent_oid = $this->cl_user->get_person_for_user ($user);
+					$agent = obj ($agent_oid);
+					aw_restore_user ();
+
+					$this->realestate_agent_data[$agent_uid]["object"] = $agent;
+					$this->realestate_agent_data[$agent_uid]["oid"] = $agent->id ();
+
+					if ($this->can ("edit", $agent_oid))
+					{
+						$agent_name = html::get_change_url ($agent->id (), array("return_url" => get_ru (), "group" => "grp_main"), $agent->name ());
+					}
+					elseif ($this->can ("view", $agent_oid))
+					{
+						$agent_name = $agent->name ();
+					}
+					else
+					{
+						$agent_name = "...";
+					}
+
+					$this->realestate_agent_data[$agent_uid]["name"] = $agent_name;
+				}
 			}
 			else
 			{
@@ -2737,17 +2595,99 @@ class realestate_manager extends class_base
 				return;
 			}
 
-			if ($this->can ("edit", $agent_oid))
+			### filter for submitted query
+			if ($client_query)
 			{
-				$agent_name = html::get_change_url ($agent->id (), array("return_url" => get_ru (), "group" => "grp_main"), $agent->name ());
-			}
-			elseif ($this->can ("view", $agent_oid))
-			{
-				$agent_name = $agent->name ();
-			}
-			else
-			{
-				$agent_name = "...";
+				### filter by client name
+				if (isset ($filter_name))
+				{
+					$filter_name = trim ($filter_name);
+
+					if ($filter_name)
+					{
+						$search = explode (" ", strtolower ($filter_name));
+						$found = 0;
+						$words = 0;
+
+						foreach ($search as $word)
+						{
+							$word = trim ($word);
+
+							if ($word)
+							{
+								$words++;
+								$pos = strpos (strtolower ($client->name ()), trim ($word));
+
+								if ($pos !== false)
+								{
+									$found++;
+								}
+							}
+						}
+
+						if ($words != $found)
+						{
+							continue;
+						}
+					}
+				}
+
+				### filter by client's address
+				if (isset ($filter_address))
+				{
+					$filter_address = trim ($filter_address);
+
+					if ($filter_address)
+					{
+						$search = explode (" ", strtolower ($filter_address));
+						$found = 0;
+						$words = 0;
+
+						foreach ($search as $word)
+						{
+							$word = trim ($word);
+
+							if ($word)
+							{
+								$words++;
+								$pos = strpos (strtolower ($client->prop ("comment")), trim ($word));
+
+								if ($pos !== false)
+								{
+									$found++;
+								}
+							}
+						}
+
+						if ($words != $found)
+						{
+							continue;
+						}
+					}
+				}
+
+				### filter by appreciation note sent
+				if (0 < $last_appreciation_sent and $last_appreciation_sent < $filter_appreciation_after)
+				{
+					continue;
+				}
+
+				if ($last_appreciation_sent > $filter_appreciation_before)
+				{
+					continue;
+				}
+
+				### filter by appreciation note type
+				if (is_array ($filter_appreciation_type) and !in_array ($last_appreciation_type_oid, $filter_appreciation_type))
+				{
+					continue;
+				}
+
+				### filter by agent
+				if (is_array ($filter_agent) and !in_array ($this->realestate_agent_data[$agent_uid]["oid"], $filter_agent))
+				{
+					continue;
+				}
 			}
 
 			### get email & phone
@@ -2769,7 +2709,6 @@ class realestate_manager extends class_base
 				$tpl = "js_popup_menu.tpl";
 				$tmp = $this->template_dir;
 				$this->template_dir = $this->cfg["basedir"] . "/templates/automatweb/menuedit";
-				// $this->set_parse_method ("eval");
 				$this->read_template ($tpl);
 
 				#### get properties/menu items
@@ -2821,7 +2760,7 @@ class realestate_manager extends class_base
 				"address" => $client->prop ("comment"),
 				"appreciation_note_date" => $last_appreciation_sent,
 				"appreciation_note_type" => $last_appreciation_type,
-				"agent" => $agent_name,
+				"agent" => $this->realestate_agent_data[$agent_uid]["name"],
 				"properties" => $properties_menu,
 			);
 
@@ -2842,23 +2781,6 @@ class realestate_manager extends class_base
 		);
 		list ($options, $name, $use_type) = $this->cl_classificator->get_choices($prop_args);
 		$appreciation_note_type_filter = $options->names();
-
-		### agents filter
-		$agents_filter = array ();
-		$connections = $this_object->connections_from(array(
-			"type" => "RELTYPE_REALESTATEMGR_USER",
-			"class_id" => CL_CRM_COMPANY,
-		));
-
-		foreach ($connections as $connection)
-		{
-			$company = $connection->to ();
-			$employees = new object_list($company->connections_from(array(
-				"type" => "RELTYPE_WORKERS",
-				"class_id" => CL_CRM_PERSON,
-			)));
-			$agents_filter = $agents_filter + $employees->names ();
-		}
 
 		### table definition
 		$table->define_field(array(
@@ -2902,10 +2824,11 @@ class realestate_manager extends class_base
 		$table->define_field(array(
 			"name" => "agent",
 			"caption" => t("Maakler"),
-			"filter" => $agents_filter,
-			"filter_options" => array (
-				"match" => "substring",
-			),
+			"sortable" => 1,
+			// "filter" => $agents_filter,
+			// "filter_options" => array (
+				// "match" => "substring",
+			// ),
 		));
 		$table->define_chooser(array(
 			"name" => "selection",
@@ -2939,12 +2862,21 @@ class realestate_manager extends class_base
 
 		foreach ($selections as $selection)
 		{
+			$selection_load_url = $this->mk_my_orb("change", array(
+				"id" => $this_object->id (),
+				"group" => "grp_client_list",
+				"re_client_selection" => $selection->id (),
+			));//!!! panna siia otsingu argumendid vms ka kuidagi, et valimi moodustamise parameetrid ilmuks otsinguvormi
+			$name = html::href(array(
+				"url" => $selection_load_url,
+				"caption" => $selection->name (),
+			));
+
 			$data = array (
-				"name" => $selection->name (),
+				"name" => $name,
 				"createdby" => $selection->createdby (),
 				"created" => $selection->created (),
 				"modified" => $selection->modified (),
-				// "agent" => $selection->meta ("realestate_clientlist_filter_agent"),
 				"oid" => $selection->id (),
 			);
 			$table->define_data ($data);
@@ -3078,99 +3010,6 @@ class realestate_manager extends class_base
 				}
 			}
 		}
-	}
-
-	/** save users permission data
-		@attrib name=submit_user_mgr_save
-	**/
-	function submit_user_mgr_save($arr)//not used
-	{
-		$arr["return_url"] = urldecode($arr["return_url"]);
-
-		if (!is_oid($arr["unit"]) || !$this->can("view", $arr["unit"]))
-		{
-			return $arr["return_url"];
-		}
-
-		$unit = obj($arr["unit"]);
-
-		// get all professions for selected unit
-		$professions = new object_list($unit->connections_from(array(
-			"type" => "RELTYPE_PROFESSION"
-		)));
-		$professions = $professions->arr ();
-
-		// create new rels for new ones
-		// modify existing ones
-		foreach(safe_array($professions) as $profession)
-		{
-			if (!isset($existing_rels[$prof]))
-			{
-				// create new
-				$rel = obj();
-				$rel->set_class_id(CL_MRP_RESOURCE_OPERATOR);
-				$rel->set_parent($arr["id"]);
-				$prof_o = obj($prof);
-				$res_o = obj($res);
-				$rel->set_name("ametinimetus ".$prof_o->name()." => ressurss ".$res_o->name());
-				$rel->set_prop("profession", $prof);
-				$rel->set_prop("resource", $res);
-				$rel->set_prop("unit", $arr["unit"]);
-				$rel->save();
-			}
-			elseif ($existing_rels[$prof]["res"] != $res)
-			{
-				// change cur
-				$rel = $existing_rels[$prof]["rel"];
-				$rel->set_prop("resource", $res);
-				$rel->save();
-			}
-
-			unset($existing_rels[$prof]);
-		}
-
-		// delete deleted ones
-		foreach($existing_rels as $prof => $rel)
-		{
-			if (empty($prof2res[$prof]))
-			{
-				$rel["rel"]->delete();
-			}
-		}
-
-		$o = obj($arr["id"]);
-		$oldal = safe_array($o->meta("umgr_all_resources"));
-		foreach(safe_array($arr["old_all_resources"]) as $k => $v)
-		{
-			if ($arr["all_resources"] != $v)
-			{
-				$oldal[$k] = $arr["all_resources"][$k];
-			}
-		}
-
-		foreach(safe_array($arr["all_resources"]) as $k => $v)
-		{
-				if ($arr["all_resources"] != $arr["old_all_resources"])
-				{
-						$oldal[$k] = $arr["all_resources"][$k];
-				}
-		}
-
-		$o->set_meta("umgr_all_resources", $oldal);
-
-		$oldal = safe_array($o->meta("umgr_dept_resources"));
-		foreach(safe_array($arr["old_dept_resources"]) as $k => $v)
-		{
-			if ($arr["dept_resources"] != $v)
-			{
-				$oldal[$k] = $arr["dept_resources"][$v];
-			}
-		}
-		$o->set_meta("umgr_dept_resources", $oldal);
-		$o->save();
-
-		// cleverly return
-		return $arr["return_url"];
 	}
 
 	/** handler for person list delete. forwards to crm_company
@@ -3496,15 +3335,19 @@ class realestate_manager extends class_base
 	function save_client_selection ($arr)
 	{
 		$this_object = obj ($arr["id"]);
+		$name = $arr["realestate_client_selection_name"];
+
+		### create selection object
 		$client_selection = obj ();
 		$client_selection->set_class_id (CL_REALESTATE_CLIENT_SELECTION);
 		$client_selection->set_parent ($this_object->id ());
 		$client_selection->set_meta ("realestate_clientlist_filter_appreciationafter", aw_global_get ("realestate_clientlist_filter_appreciationafter"));
 		$client_selection->set_meta ("realestate_clientlist_filter_appreciationbefore", aw_global_get ("realestate_clientlist_filter_appreciationbefore"));
 		$client_selection->set_meta ("realestate_clientlist_filter_address", aw_global_get ("realestate_clientlist_filter_address"));
-		$client_selection->set_meta ("realestate_clientlist_filter_agent", aw_global_get ("realestate_clientlist_filter_agent"));//!!! tblfiltrist v6tta
+		$client_selection->set_meta ("realestate_clientlist_filter_agent", aw_global_get ("realestate_clientlist_filter_agent"));
 		$client_selection->set_meta ("realestate_clientlist_filter_appreciationtype", aw_global_get ("realestate_clientlist_filter_appreciationtype"));
 		$client_selection->set_meta ("realestate_clientlist_filter_name", aw_global_get ("realestate_clientlist_filter_name"));
+		$client_selection->set_prop ("client_ids", $arr["selection"]);
 		$client_selection->set_name ($arr["realestate_client_selection_name"]);
 		$client_selection->save ();
 		$this_object->connect (array (
@@ -3512,57 +3355,49 @@ class realestate_manager extends class_base
 			"reltype" => "RELTYPE_CLIENT_SELECTION",
 		));
 
-		$return_url = $this->mk_my_orb("client_seletion_save_form", array(
+		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"saved" => 1,
+			"group" => $arr["group"],
+			"subgroup" => $arr["subgroup"],
 		));
 		return $return_url;
 	}
 
 /**
-    @attrib name=client_seletion_save_form
+    @attrib name=client_selection_save_form
 	@param id required type=int
 	@param saved optional type=int
 **/
-	function client_seletion_save_form ($arr)
+	function client_selection_save_form ($arr)
 	{
-		$tpl = "client_seletion_save_form.tpl";
+		$tpl = "client_selection_save_form.tpl";
 		$this->set_parse_method ("eval");
 		$this->read_template ($tpl);
 
-		if ($arr["saved"])
-		{
-			echo sprintf ("<br /><center>%s</center>", t("Salvestatud"));
-			echo "<script type='text/javascript'>setTimeout('window.close()',1000);</script>";
-			exit;
-		}
-		else
-		{
-			$prop = html::textbox (array (
-				"name" => "realestate_client_selection_name",
-			));
-			$this->vars(array(
-				"caption" => t("Valimi nimi"),
-				"element" => $prop,
-			));
-			$name_prop = $this->parse("LINE");
+		$prop = html::textbox (array (
+			"name" => "realestate_client_selection_name",
+		));
+		$this->vars(array(
+			"caption" => t("Valimi nimi"),
+			"element" => $prop,
+		));
+		$name_prop = $this->parse("LINE");
 
-			$this->vars(array(
-				"value" => t("Salvestatava valimi andmed"),
-			));
-			$subtitle = $this->parse("SUB_TITLE");
+		$this->vars(array(
+			"value" => t("Salvestatava valimi andmed"),
+		));
+		$subtitle = $this->parse("SUB_TITLE");
 
-			$this->vars(array(
-				"form" => $subtitle . $name_prop,
-				"button_name" => t("Salvesta"),
-				"reforb" => $this->mk_reforb("save_client_selection", array(
-					"id" => $arr["id"],
-					"exit" => 1,
-				)),
-			));
-		}
+		$this->vars(array(
+			"form" => $subtitle . $name_prop,
+			"button_name" => t("Salvesta"),
+			"reforb" => $this->mk_reforb("save_client_selection", array(
+				"id" => $arr["id"],
+				"exit" => 1,
+			)),
+		));
 
-		return $this->parse();
+		return $this->parse ();
 	}
 /*} END PUBLIC METHODS */
 }

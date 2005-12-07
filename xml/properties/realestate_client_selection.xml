@@ -1,5 +1,13 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>client_ids</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
       <classinfo>
             <syslog_type>ST_REALESTATE_CLIENT_SELECTION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +15,12 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <MAILINGLIST>
+                  <value>1</value>
+                  <clid>CL_ML_LIST</clid>
+                  <caption>Valimi meililist</caption>
+            </MAILINGLIST>
+      </reltypes>
 </properties>
 

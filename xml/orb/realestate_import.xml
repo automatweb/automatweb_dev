@@ -15,5 +15,15 @@
 			</function>
 		</action>
 
+		<action name="set_client">
+			<function name="set_client">
+				<arguments>
+					<required name="property" />
+					<required name="client" />
+					<required name="client_type" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

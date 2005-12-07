@@ -1,13 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="realestate_manager" folder="applications/realestate_management" extends="class_base">
-		<action name="submit_user_mgr_save">
-			<function name="submit_user_mgr_save">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="submit_delete_relations">
 			<function name="submit_delete_relations">
 				<arguments>
@@ -91,8 +84,8 @@
 			</function>
 		</action>
 
-		<action name="client_seletion_save_form">
-			<function name="client_seletion_save_form">
+		<action name="client_selection_save_form">
+			<function name="client_selection_save_form">
 				<arguments>
 					<required name="id" type="int" />
 					<optional name="saved" type="int" />

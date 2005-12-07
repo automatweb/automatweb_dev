@@ -274,27 +274,6 @@
             <caption>tehingu s&amp;otilde;lmimise aeg enne</caption>
       </property>
       <property>
-            <name>title3</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>grp_realestate_properties_houses</num_0>
-                  <num_1>grp_realestate_properties_rowhouses</num_1>
-                  <num_2>grp_realestate_properties_cottages</num_2>
-                  <num_3>grp_realestate_properties_houseparts</num_3>
-                  <num_4>grp_realestate_properties_apartments</num_4>
-                  <num_5>grp_realestate_properties_commercial_properties</num_5>
-                  <num_6>grp_realestate_properties_garages</num_6>
-                  <num_7>grp_realestate_properties_land_estates</num_7>
-                  <num_8>grp_realestate_properties_all</num_8>
-            </group>
-            <type>text</type>
-            <store>no</store>
-            <subtitle>1</subtitle>
-            <caption>&amp;amp;nbsp;</caption>
-      </property>
-      <property>
             <name>proplist_filter_transaction_closed</name>
             <table>objects</table>
             <field>meta</field>
@@ -313,7 +292,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
-            <caption>Kuva ainult s&amp;otilde;lmitud tehinguga objekte</caption>
+            <caption>tehing s&amp;otilde;lmitud</caption>
       </property>
       <property>
             <name>button1</name>
@@ -467,19 +446,19 @@
             <caption>&amp;amp;Otilde;igused objekti aadressi j&amp;auml;rgi</caption>
       </property>
       <property>
-            <name>rights_country</name>
+            <name>rights_administrative_structure</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>grp_users_mgr</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_REALESTATEMGR_COUNTRY</reltype>
-            <clid>CL_COUNTRY</clid>
+            <reltype>RELTYPE_ADMINISTRATIVE_STRUCTURE</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
             <automatic>1</automatic>
             <parent>tbox</parent>
             <store>no</store>
-            <comment>Riik, mille kohta &amp;otilde;igusi m&amp;auml;&amp;auml;ratakse.</comment>
-            <caption>Riik</caption>
+            <comment>Haldusjaotus, mille kohta &amp;otilde;igusi m&amp;auml;&amp;auml;ratakse.</comment>
+            <caption>Haldusjaotus</caption>
       </property>
       <property>
             <name>rights_admindivision</name>
@@ -598,6 +577,18 @@
             <caption>t&amp;auml;nukirja t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
+            <name>clientlist_filter_agent</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_client_list</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <store>no</store>
+            <size>3</size>
+            <caption>maakler</caption>
+      </property>
+      <property>
             <name>button3</name>
             <table>objects</table>
             <field>meta</field>
@@ -606,6 +597,16 @@
             <type>submit</type>
             <store>no</store>
             <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>realestate_client_selection_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_client_list</group>
+            <type>hidden</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>client_selections_toolbar</name>
@@ -940,6 +941,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_1</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
+            <editonly>1</editonly>
             <comment>Haldusjaotis aadressis&amp;uuml;steemis, mis vastab maakonnale</comment>
             <caption>Maakond haldusjaotuses</caption>
       </property>
@@ -952,6 +954,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_2</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
+            <editonly>1</editonly>
             <caption>Linn haldusjaotuses</caption>
       </property>
       <property>
@@ -963,6 +966,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_3</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
+            <editonly>1</editonly>
             <caption>Linnaosa haldusjaotuses</caption>
       </property>
       <property>
@@ -974,6 +978,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_4</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
+            <editonly>1</editonly>
             <caption>Vald haldusjaotuses</caption>
       </property>
       <property>
@@ -985,6 +990,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_5</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
+            <editonly>1</editonly>
             <caption>Asula haldusjaotuses</caption>
       </property>
       <classinfo>

@@ -262,6 +262,18 @@
             <orient>vertical</orient>
             <caption>Otsinguparameetrid</caption>
       </property>
+      <property>
+            <name>agent_sections</name>
+            <table>objects</table>
+            <group>grp_formdesign</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>5</size>
+            <comment>Osakonnad, mille maaklereid otsinguparameetri v&amp;auml;&amp;auml;rtuse valikus n&amp;auml;idatakse</comment>
+            <caption>Maaklerite osakonnad</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_REALESTATE_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>

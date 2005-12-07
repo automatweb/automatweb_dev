@@ -9,7 +9,7 @@
 			</function>
 		</action>
 
-		<action name="print">
+		<action name="print" nologin="1">
 			<function name="print_view">
 				<arguments>
 					<required name="id" type="int" />

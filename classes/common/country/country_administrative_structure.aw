@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure.aw,v 1.3 2005/11/21 09:04:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_structure.aw,v 1.4 2005/12/07 16:58:50 voldemar Exp $
 // country_administrative_structure.aw - Riigi haldusjaotus
 /*
 
@@ -68,20 +68,24 @@ class country_administrative_structure extends class_base
 
 			### prepare unit parent selection list for unit releditor
 			$country = $this_object->get_first_obj_by_reltype("RELTYPE_COUNTRY");
-			$units = array ();
-			$units[$country->id ()] = $country->name ();
 
-			foreach ($this_object->connections_from (array ("type" => "RELTYPE_ADMINISTRATIVE_DIVISION")) as $connection)
+			if (is_object ($country))
 			{
-				$unit = $connection->to ();
+				$units = array ();
+				$units[$country->id ()] = $country->name ();
 
-				if ($arr["request"]["administrative_structure"] != $unit->id ())
+				foreach ($this_object->connections_from (array ("type" => "RELTYPE_ADMINISTRATIVE_DIVISION")) as $connection)
 				{
-					$units[$unit->id ()] = $unit->name ();
-				}
-			}
+					$unit = $connection->to ();
 
-			aw_global_set ("address_system_parent_select_units", $units);
+					if ($arr["request"]["administrative_structure"] != $unit->id ())
+					{
+						$units[$unit->id ()] = $unit->name ();
+					}
+				}
+
+				aw_global_set ("address_system_parent_select_units", $units);
+			}
 		}
 	}
 

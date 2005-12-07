@@ -332,7 +332,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATE_AGENT</reltype>
             <clid>CL_CRM_PERSON</clid>
-            <automatic>1</automatic>
             <field>realestate_agent1</field>
             <caption>Maakler 1</caption>
       </property>
@@ -343,7 +342,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATE_AGENT2</reltype>
             <clid>CL_CRM_PERSON</clid>
-            <automatic>1</automatic>
             <field>realestate_agent2</field>
             <caption>Maakler 2</caption>
       </property>
@@ -514,7 +512,7 @@
             <type>text</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Ikooni url</caption>
+            <caption>V&amp;auml;ike pilt</caption>
       </property>
       <property>
             <name>map_create</name>

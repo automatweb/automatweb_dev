@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.4 2005/11/22 16:50:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.5 2005/12/07 16:58:12 voldemar Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -104,10 +104,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 	@property title4 type=text store=no subtitle=1
 	@caption Lisaandmed
-		@property realestate_agent1 type=relpicker reltype=RELTYPE_REALESTATE_AGENT clid=CL_CRM_PERSON automatic=1 table=realestate_property
+		@property realestate_agent1 type=relpicker reltype=RELTYPE_REALESTATE_AGENT clid=CL_CRM_PERSON table=realestate_property
 		@caption Maakler 1
 
-		@property realestate_agent2 type=relpicker reltype=RELTYPE_REALESTATE_AGENT2 clid=CL_CRM_PERSON automatic=1 table=realestate_property
+		@property realestate_agent2 type=relpicker reltype=RELTYPE_REALESTATE_AGENT2 clid=CL_CRM_PERSON table=realestate_property
 		@caption Maakler 2
 
 		@property weeks_valid_for type=chooser default=12 field=meta method=serialize
@@ -162,7 +162,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@caption Pildid
 
 	@property picture_icon type=text field=meta method=serialize
-	@caption Ikooni url
+	@caption Väike pilt
 
 @default group=grp_map
 	@property map_create type=text store=no
@@ -283,7 +283,7 @@ define ("REALESTATE_NF_SEP", " ");
 
 class realestate_property extends class_base
 {
-	var $float_types = array (
+	var $re_float_types = array (
 		"transaction_price",
 		"transaction_price2",
 		"transaction_down_payment",
@@ -307,7 +307,7 @@ class realestate_property extends class_base
 		"kitchen_area",
 	);
 
-	var $propnames_starting_with_acronym = array (
+	var $re_propnames_starting_with_acronym = array (
 		"has_separate_wc",
 	);
 
@@ -330,7 +330,7 @@ class realestate_property extends class_base
 
 			if ($this->can ("view", $this_object->prop ("realestate_manager")))
 			{
-				$this->manager = obj ($this_object->prop ("realestate_manager"));
+				$this->re_manager = obj ($this_object->prop ("realestate_manager"));
 			}
 			else
 			{
@@ -372,7 +372,7 @@ class realestate_property extends class_base
 			case "seller_search":
 				$customer_search_url = $this->mk_my_orb ("customer_search", array (
 					"id" => $this_object->id(),
-					"manager" => $this->manager->id(),
+					"manager" => $this->re_manager->id(),
 					"return_url" => get_ru (),
 					"client_type" => "SELLER",
 				));
@@ -384,7 +384,7 @@ class realestate_property extends class_base
 			case "buyer_search":
 				$customer_search_url = $this->mk_my_orb ("customer_search", array (
 					"id" => $this_object->id(),
-					"manager" => $this->manager->id(),
+					"manager" => $this->re_manager->id(),
 					"return_url" => get_ru (),
 					"client_type" => "BUYER",
 				));
@@ -394,34 +394,47 @@ class realestate_property extends class_base
 
 			### ...
 			case "realestate_agent1":
-				$cl_user = get_instance(CL_USER);
-				$company = $cl_user->get_current_company ();
-
-				if (is_object ($company))
+				if (!is_object ($this->cl_user))
 				{
-					$employees = new object_list($company->connections_from(array(
+					$this->cl_user = get_instance(CL_USER);
+				}
+
+				if (!is_object ($this->company))
+				{
+					$this->company = $this->cl_user->get_current_company ();
+				}
+
+				if (is_object ($this->company))
+				{
+					$employees = new object_list($this->company->connections_from(array(
 						"type" => "RELTYPE_WORKERS",
 						"class_id" => CL_CRM_PERSON,
 					)));
-					$prop["options"] = $employees->names ();
+					$prop["options"] = array (0 => t("--vali--")) + $employees->names ();
 				}
 
-				$current_person_oid = $cl_user->get_current_person ();
-				$prop["value"] = is_oid (reset($prop["value"])) ? $prop["value"] : array ($current_person_oid => $current_person_oid);
+				$current_person_oid = $this->cl_user->get_current_person ();
+				$prop["value"] = is_oid ($prop["value"]) ? $prop["value"] : $current_person_oid;
 				break;
 
 			case "realestate_agent2":
-				$cl_user = get_instance(CL_USER);
-				$company = $cl_user->get_current_company ();
+				$agents = array ();
+				$connections = $this->re_manager->connections_from(array(
+					"type" => "RELTYPE_REALESTATEMGR_USER",
+					"class_id" => CL_CRM_COMPANY,
+				));
 
-				if (is_object ($company))
+				foreach ($connections as $connection)
 				{
+					$company = $connection->to ();
 					$employees = new object_list($company->connections_from(array(
 						"type" => "RELTYPE_WORKERS",
 						"class_id" => CL_CRM_PERSON,
 					)));
-					$prop["options"] = $employees->names ();
+					$agents = $agents + $employees->names ();
 				}
+
+				$prop["options"] = array (0 => t("--vali--")) + $agents;
 				break;
 
 			### additional info
@@ -459,9 +472,9 @@ class realestate_property extends class_base
 			### map
 			case "map_create":
 				$address_array = $this->address->prop ("address_array");
-				$address_1 = $address_array[$this->manager->prop ("address_equivalent_1")];//maakond
-				$address_2 = $address_array[$this->manager->prop ("address_equivalent_2")];//linn
-				$address_4 = $address_array[$this->manager->prop ("address_equivalent_4")];//vald
+				$address_1 = $address_array[$this->re_manager->prop ("address_equivalent_1")];//maakond
+				$address_2 = $address_array[$this->re_manager->prop ("address_equivalent_2")];//linn
+				$address_4 = $address_array[$this->re_manager->prop ("address_equivalent_4")];//vald
 				$street = $address_array[ADDRESS_STREET_TYPE];
 
 				if ($address_2)
@@ -489,7 +502,7 @@ class realestate_property extends class_base
 					"address_parsed" => $address_parsed,
 					"save_url" => $save_url,
 				);
-				$tpl_source = $this->manager->prop ("map_server_url");
+				$tpl_source = $this->re_manager->prop ("map_server_url");
 				$this->use_template ($tpl_source);
 				$this->vars ($data);
 				$url = $this->parse();
@@ -519,6 +532,12 @@ class realestate_property extends class_base
 
 			case "map_show":
 				$prop["value"] = "";
+				break;
+
+			case "picture_icon":
+				$prop["value"] = html::img (array (
+					"url" => $prop["value"],
+				));
 				break;
 		}
 
@@ -610,12 +629,41 @@ class realestate_property extends class_base
 		{
 			### parse pid
 			$pid_data = $this->parse_pid_et ($arr["pid"]);
+			$modified = false;
 
 			if (is_array ($pid_data))
 			{
 				list ($birthday, $gender) = $pid_data;
 				$client->set_prop ("gender", $gender);
 				$client->set_prop ("birthday", $birthday);
+				$modified = true;
+			}
+
+			### move client to clients folder
+			if ($client->parent () != $this->re_manager->prop ("clients_folder"))
+			{
+				$client->set_parent ($this->re_manager->prop ("clients_folder"));
+				$modified = true;
+			}
+
+			### emails&phones
+			$connections = $this_object->connections_from (array (
+				"type" => array ("RELTYPE_EMAIL", "RELTYPE_PHONE"),
+				"class_id" => array (CL_ML_MEMBER, CL_CRM_PHONE),
+			));
+
+			foreach ($connections as $connection)
+			{
+				if ($connection->prop ("to.parent") != $this->re_manager->prop ("clients_folder"))
+				{
+					$o = $connection->to ();
+					$o->set_parent ($this->re_manager->prop ("clients_folder"));
+					$o->save ();
+				}
+			}
+
+			if ($modified)
+			{
 				$client->save ();
 			}
 		}
@@ -633,11 +681,12 @@ class realestate_property extends class_base
 				list ($birthday, $gender) = $pid_data;
 				$client->set_prop ("gender", $gender);
 				$client->set_prop ("birthday", $birthday);
+				$client->set_parent ($this->re_manager->prop ("clients_folder"));
 				$client->save ();
 			}
 		}
 
-		$this->manager->set_cache_dirty (true);
+		$this->re_manager->set_cache_dirty (true);
 	}
 /* END classbase methods */
 
@@ -893,25 +942,25 @@ class realestate_property extends class_base
 			"return_url" => $return_url,
 			"id" => $this_object->id (),
 			"contact_type" => "broker",
-			"show_pictures" => true,
+			"show_pictures" => 1,
 		), $class);
 		$print_url_broker_nopics = $this->mk_my_orb("print", array(
 			"return_url" => $return_url,
 			"id" => $this_object->id (),
 			"contact_type" => "broker",
-			"show_pictures" => false,
+			"show_pictures" => 0,
 		), $class);
 		$print_url_seller_pics = $this->mk_my_orb("print", array(
 			"return_url" => $return_url,
 			"id" => $this_object->id (),
 			"contact_type" => "seller",
-			"show_pictures" => true,
+			"show_pictures" => 1,
 		), $class);
 		$print_url_seller_nopics = $this->mk_my_orb("print", array(
 			"return_url" => $return_url,
 			"id" => $this_object->id (),
 			"contact_type" => "seller",
-			"show_pictures" => false,
+			"show_pictures" => 0,
 		), $class);
 
 		### buttons
@@ -1018,47 +1067,38 @@ class realestate_property extends class_base
 	function request_execute ($this_object)
 	{
 		return $this->view (array (
-			"id" => $this_object->id (),
+			"this" => $this_object,
 			"view_type" => "detailed",
 		));
 	}
 
 	// attrib name=view
-	// param id required type=int
+	// param this required
 	// param view_type required
 	// param return_url optional
 	function view ($arr)
 	{
-		$this_object = obj ($arr["id"]);
+		if (is_object ($arr["this"]))
+		{
+			$this_object = $arr["this"];
+		}
+		elseif (is_oid ($arr["this"]))
+		{
+			$this_object = obj ($arr["this"]);
+		}
+		else
+		{
+			return false;
+		}
+
 		$view_type = $arr["view_type"];
 
-		// if ($this->can ("view", $this_object->prop ("realestate_manager")))
-		// {
-			// $realestate_manager = obj ($this_object->prop ("realestate_manager"));
-		// }
-		// else
-		// {
-			// error::raise (array (
-				// "msg" => sprintf (t("Kinnisvaraobjektil halduskeskkond defineerimata või puudub juurdepääsuõigus (oid: %s)."), $arr["id"]),
-				// "fatal" => true,
-				// "show" => true,
-			// ));
-		// }
+		if (!is_array ($this->classes))
+		{
+			$this->classes = aw_ini_get ("classes");
+		}
 
-		// if ($this->can ("view", $realestate_manager->prop ("template_{$view_type}")))
-		// {
-			// $template = obj ($realestate_manager->prop ("template_{$view_type}"));
-		// }
-		// else
-		// {
-			// return t("Template defineerimata või puudub juurdepääsuõigus");
-		// }
-
-		$properties = $this->get_property_data (array (
-			"id" => $this_object->id (),
-		));
-		$classes = aw_ini_get("classes");
-		$class_name = $classes[$this_object->class_id ()]["name"];
+		$class_name = $this->classes[$this_object->class_id ()]["name"];
 		$data = array ();
 		$data["link_return_url"] = $arr["return_url"];
 		// $data["link_open"] = obj_link ($this_object->id ());
@@ -1068,19 +1108,33 @@ class realestate_property extends class_base
 		switch ($view_type)
 		{
 			case "detailed":
-				$class_file = $classes[$this_object->class_id ()]["file"];
+				$class_file = $this->classes[$this_object->class_id ()]["file"];
 				$class_file = explode ("/", $class_file);
 				$class_file = array_pop ($class_file);
 				$class = str_replace ("realestate_", "", $class_file);
 				$tpl = "propview_detailed_" . $class . ".tpl";
+				$properties = $this->get_property_data (array (
+					"this" => $this_object,
+				));
 				break;
 
 			case "short":
 				$tpl = "propview_short.tpl";
+				$properties = $this->get_property_data (array (
+					"this" => $this_object,
+					"no_picture_data" => true,
+					"no_client_data" => true,
+					"no_extended_agent_data" => true,
+				));
 				break;
 
 			case "pictures":
 				$tpl = "propview_pictures.tpl";
+				$properties = $this->get_property_data (array (
+					"this" => $this_object,
+					"no_client_data" => true,
+					"no_extended_agent_data" => true,
+				));
 				break;
 
 			default:
@@ -1096,14 +1150,19 @@ class realestate_property extends class_base
 			{
 				### properties that go under tplvar "extras"
 				$prop_caption = $prop_data["caption"];
-				$first_char = in_array ($name, $this->propnames_starting_with_acronym) ? $prop_caption{0} : strtolower ($prop_caption{0});
+				$first_char = in_array ($name, $this->re_propnames_starting_with_acronym) ? $prop_caption{0} : strtolower ($prop_caption{0});
 				$extras[] = $first_char . substr ($prop_caption, 1);
 			}
 		}
 
 		$tmp = $this->template_dir;
 		$this->template_dir = $this->cfg["basedir"] . "/templates/applications/realestate_management/realestate_property";
-		$this->read_template ($tpl);
+
+		if ($this->re_template_loaded != $tpl)
+		{
+			$this->read_template ($tpl);
+			$this->re_template_loaded = $tpl;
+		}
 
 		$i = 1;
 
@@ -1129,7 +1188,7 @@ class realestate_property extends class_base
 		$query1 = "?realestate_agent={$agent_name}&realestate_srch=1";
 		$data["show_agent_properties_url"] = aw_ini_get ("baseurl") . $url_data["path"] . $query1;
 
-		$class = $classes[$this_object->class_id ()]["file"];
+		$class = $this->classes[$this_object->class_id ()]["file"];
 		$class = explode ("/", $class);
 		$class = array_pop ($class);
 		$data["open_pictureview_url"] = $this->mk_my_orb ("pictures_view", array (
@@ -1138,7 +1197,7 @@ class realestate_property extends class_base
 		$data["open_printview_url"] = $this->mk_my_orb ("print", array (
 			"id" => $this_object->id (),
 			"contact_type" => "broker",
-			"show_pictures" => false,
+			"show_pictures" => 0,
 			"return_url" => urlencode (aw_global_get ("REQUEST_URI")),
 		), $class);
 
@@ -1162,7 +1221,7 @@ class realestate_property extends class_base
 	function pictures_view ($arr)
 	{
 		return $this->view (array (
-			"id" => $arr["id"],
+			"this" => $arr["id"],
 			"view_type" => "pictures",
 		));
 	}
@@ -1197,7 +1256,7 @@ class realestate_property extends class_base
 		}
 
 		$properties = $this->get_property_data (array (
-			"id" => $this_object->id (),
+			"this" => $this_object,
 		));
 
 		$classes = aw_ini_get("classes");
@@ -1208,10 +1267,10 @@ class realestate_property extends class_base
 
 		$tmp = $this->template_dir;
 		$this->template_dir = $this->cfg["basedir"] . "/templates/applications/realestate_management/realestate_property";
-		$this->read_template("printview_{$class}.tpl");
+		$this->read_template ("printview_{$class}.tpl");
 
 		$data = array ();
-		$cl_image = get_instance(CL_IMAGE);
+		$cl_image = get_instance (CL_IMAGE);
 
 		### process data
 		#### contact information
@@ -1231,7 +1290,6 @@ class realestate_property extends class_base
 
 		if (is_object ($contact_person))
 		{
-			$cl_image = get_instance(CL_IMAGE);
 			$contact_data = array ();
 			$contact_data[] = $contact_person->name ();
 
@@ -1271,7 +1329,6 @@ class realestate_property extends class_base
 
 		if (is_object ($contact_person2))
 		{
-			$cl_image = get_instance(CL_IMAGE);
 			$contact_data = array ();
 			$contact_data[] = $contact_person2->name ();
 
@@ -1330,15 +1387,6 @@ class realestate_property extends class_base
 			if (is_object ($parent))
 			{
 				$company = $parent;
-				// $company_logos = new object_list($realestate_manager->connections_from(array(
-					// "type" => "RELTYPE_COMPANY_LOGO",
-					// "class_id" => CL_IMAGE,
-					// "name" => $company->name (),
-				// )));
-				// $company_logo = obj ($realestate_manager->prop ("company_logo"));
-				// $data["company_logo_url"] = $cl_image->get_url_by_id ($company_logo->id ());
-				// $data["company_logo_alt"] = $company_logo->prop ("alt");
-
 				$data["company_logo_url"] = $company->prop ("logo");
 				$data["company_logo_alt"] = $company->name ();
 			}
@@ -1349,11 +1397,11 @@ class realestate_property extends class_base
 		$data["class_name"] = $classes[$this_object->class_id ()]["name"];
 
 		#### pictures
-		$contact_data["pictures"] = "";
+		$data["pictures"] = "";
 
 		if ($show_pictures)
 		{
-			$pictures = new object_list($realestate_manager->connections_from(array(
+			$pictures = new object_list($this_object->connections_from (array (
 				"type" => "RELTYPE_REALESTATE_PICTURE",
 				"class_id" => CL_IMAGE,
 			)));
@@ -1365,7 +1413,7 @@ class realestate_property extends class_base
 					"picture_url" => $cl_image->get_url_by_id ($picture->id ()),
 				);
 				$this->vars ($vars);
-				$contact_data["pictures"] .= $this->parse ("pictures");
+				$data["pictures"] .= $this->parse ("pictures");
 			}
 		}
 
@@ -1375,7 +1423,7 @@ class realestate_property extends class_base
 		$cl_cfgu = get_instance("cfg/cfgutils");
 		// $properties = $cl_cfgu->load_properties(array ("clid" => $this_object->class_id ()));
 		$properties = $this->get_property_data (array (
-			"id" => $this_object->id (),
+			"this" => $this_object,
 		));
 
 		$class = $classes[$this_object->class_id ()]["file"];
@@ -1400,7 +1448,7 @@ class realestate_property extends class_base
 				if($properties[$prop_name]["type"] == "checkbox" and !empty ($prop_caption) and !empty ($properties[$prop_name]["value"]))
 				{
 					### properties that go under tplvar "extras"
-					$first_char = in_array ($prop_name, $this->propnames_starting_with_acronym) ? $prop_caption{0} : strtolower ($prop_caption{0});
+					$first_char = in_array ($prop_name, $this->re_propnames_starting_with_acronym) ? $prop_caption{0} : strtolower ($prop_caption{0});
 					$extras[] = $first_char . substr ($prop_caption, 1);
 				}
 				else
@@ -1453,7 +1501,7 @@ class realestate_property extends class_base
 		}
 
 		$properties = $this->get_property_data (array (
-			"id" => $arr["id"],
+			"this" => $arr["id"],
 			"address_encoding" => $arr["address_encoding"],
 		));
 
@@ -1506,37 +1554,66 @@ class realestate_property extends class_base
 	}
 
 	// attrib name=get_property_data
-	// param id required type=int
+	// param this required
 	// param address_encoding optional
+	// param no_picture_data optional
+	// param no_client_data optional
+	// param no_extended_agent_data optional
 	function get_property_data ($arr)
 	{
-		$this_object = obj ($arr["id"]);
-		$cl_image = get_instance(CL_IMAGE);
-		$cl_cfgu = get_instance("cfg/cfgutils");
-		$properties = $cl_cfgu->load_properties(array ("clid" => $this_object->class_id ()));
+		enter_function("re_property::get_property_data");
+
+		if (is_object ($arr["this"]))
+		{
+			$this_object = $arr["this"];
+		}
+		elseif (is_oid ($arr["this"]))
+		{
+			$this_object = obj ($arr["this"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		if (!is_object ($this->cl_image))
+		{
+			$this->cl_image = get_instance(CL_IMAGE);
+		}
+
+		if (!is_object ($this->cl_cfgu))
+		{
+			$this->cl_cfgu = get_instance("cfg/cfgutils");
+		}
+
+		if (!is_array ($this->class_properties))
+		{
+			$this->class_properties = $this->cl_cfgu->load_properties(array ("clid" => $this_object->class_id ()));
+		}
+
+		$properties = $this->class_properties;
+
+		enter_function("re_property::get_property_data - std props");
 
 		### add local properties
 		foreach ($properties as $name => $data)
 		{
-			$altvalue = "";
+			$value = $this_object->prop ($name);
+			$altvalue = $value;
 
-			if ($data["type"] == "classificator" and is_oid ($this_object->prop ($name)))
+			if ($data["type"] == "classificator" and is_oid ($value))
 			{
-				aw_disable_acl();
-				$meta = obj ($this_object->prop ($name));
+				$meta = obj ($value);
 				$altvalue = $meta->comment ();
-				aw_restore_acl();
 			}
 
-			$properties[$name]["value"] = $this_object->prop ($name);
-			// $properties[$name]["strvalue"] = $this_object->prop_str ($name);
+			$properties[$name]["value"] = $value;
 			$properties[$name]["altvalue"] = $altvalue;
 			$properties[$name]["caption"] = $data["caption"];
 
-			// if (is_float ($this_object->prop ($name)))
-			if (in_array ($name, $this->float_types))
+			if (in_array ($name, $this->re_float_types))
 			{
-				$properties[$name]["strvalue"] = number_format ($this_object->prop ($name), REALESTATE_NF_DEC, REALESTATE_NF_POINT,
+				$properties[$name]["strvalue"] = number_format ($value, REALESTATE_NF_DEC, REALESTATE_NF_POINT,
 REALESTATE_NF_SEP);
 			}
 			else
@@ -1545,66 +1622,120 @@ REALESTATE_NF_SEP);
 			}
 		}
 
+		exit_function("re_property::get_property_data - std props");
+		enter_function("re_property::get_property_data - address");
+
 		### add address properties
 		$address = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_ADDRESS");
 
 		if (is_object ($address))
 		{
-			if ($this->can ("view", $arr["address_encoding"]))
+			if (!is_object ($this->re_manager))
 			{
-				$encoding = obj ($arr["address_encoding"]);
-			}
-			else
-			{
-				$encoding = false;
+				$this->re_manager = obj ($this_object->prop ("realestate_manager"));
 			}
 
-			$manager = obj ($this_object->prop ("realestate_manager"));
-			$division1 = obj ($manager->prop ("address_equivalent_1"));
-			$division2 = obj ($manager->prop ("address_equivalent_2"));
-			$division3 = obj ($manager->prop ("address_equivalent_3"));
-			$division4 = obj ($manager->prop ("address_equivalent_4"));
-			$division5 = obj ($manager->prop ("address_equivalent_5"));
+			if (!is_object ($this->admin_division1))
+			{
+				if (!is_oid ($this->re_manager->prop ("address_equivalent_1")))
+				{
+					exit (t("Haldusjaotuse vaste 1 kinnisvarahalduskeskkonnas defineerimata"));
+				}
 
-			$address1_str = $address_array[$division1->id ()];
+				$this->admin_division1 = obj ($this->re_manager->prop ("address_equivalent_1"));
+			}
+
+			if (!is_object ($this->admin_division2))
+			{
+				if (!is_oid ($this->re_manager->prop ("address_equivalent_2")))
+				{
+					exit (t("Haldusjaotuse vaste 2 kinnisvarahalduskeskkonnas defineerimata"));
+				}
+
+				$this->admin_division2 = obj ($this->re_manager->prop ("address_equivalent_2"));
+			}
+
+			if (!is_object ($this->admin_division3))
+			{
+				if (!is_oid ($this->re_manager->prop ("address_equivalent_3")))
+				{
+					exit (t("Haldusjaotuse vaste 3 kinnisvarahalduskeskkonnas defineerimata"));
+				}
+
+				$this->admin_division3 = obj ($this->re_manager->prop ("address_equivalent_3"));
+			}
+
+			if (!is_object ($this->admin_division4))
+			{
+				if (!is_oid ($this->re_manager->prop ("address_equivalent_4")))
+				{
+					exit (t("Haldusjaotuse vaste 4 kinnisvarahalduskeskkonnas defineerimata"));
+				}
+
+				$this->admin_division4 = obj ($this->re_manager->prop ("address_equivalent_4"));
+			}
+
+			if (!is_object ($this->admin_division5))
+			{
+				if (!is_oid ($this->re_manager->prop ("address_equivalent_5")))
+				{
+					exit (t("Haldusjaotuse vaste 5 kinnisvarahalduskeskkonnas defineerimata"));
+				}
+
+				$this->admin_division5 = obj ($this->re_manager->prop ("address_equivalent_5"));
+			}
+
+			if ( !is_object ($this->address_encoding) or ($this->address_encoding->id () != $arr["address_encoding"]) )
+			{
+				if ($this->can ("view", $arr["address_encoding"]))
+				{
+					$this->address_encoding = obj ($arr["address_encoding"]);
+				}
+				else
+				{
+					$this->address_encoding = false;
+				}
+			}
+
+			$address1_str = $address_array[$this->admin_division1->id ()];
 			$param = array (
 				"prop" => "unit_encoded",
-				"division" => $division1,
-				"encoding" => $encoding,
+				"division" => $this->admin_division1,
+				"encoding" => $this->address_encoding,
 			);
-			$address1_alt = $encoding ? $address->prop ($param) : $address1_str;
+			$address1_alt = $this->address_encoding ? $address->prop ($param) : $address1_str;
 
-			$address2_str = $address_array[$division2->id ()];
+			$address2_str = $address_array[$this->admin_division2->id ()];
 			$param = array (
 				"prop" => "unit_encoded",
-				"division" => $division2,
-				"encoding" => $encoding,
+				"division" => $this->admin_division2,
+				"encoding" => $this->address_encoding,
 			);
-			$address2_alt = $encoding ? $address->prop ($param) : $address2_str;
+			$address2_alt = $this->address_encoding ? $address->prop ($param) : $address2_str;
 
-			$address3_str = $address_array[$division3->id ()];
+			$address3_str = $address_array[$this->admin_division3->id ()];
 			$param = array (
 				"prop" => "unit_encoded",
-				"division" => $division3,
-				"encoding" => $encoding,
+				"division" => $this->admin_division3,
+				"encoding" => $this->address_encoding,
 			);
-			$address3_alt = $encoding ? $address->prop ($param) : $address3_str;
+			$address3_alt = $this->address_encoding ? $address->prop ($param) : $address3_str;
 
-			$address4_str = $address_array[$division4->id ()];
+			$address4_str = $address_array[$this->admin_division4->id ()];
 			$param = array (
 				"prop" => "unit_encoded",
-				"division" => $division4,
-				"encoding" => $encoding,
+				"division" => $this->admin_division4,
+				"encoding" => $this->address_encoding,
 			);
-			$address4_alt = $encoding ? $address->prop ($param) : $address4_str;
+			$address4_alt = $this->address_encoding ? $address->prop ($param) : $address4_str;
 
-			$address5_str = $address_array[$division5->id ()];
+			$address5_str = $address_array[$this->admin_division5->id ()];
 			$param = array (
 				"prop" => "unit_encoded",
-				"division" => $division5,
-				"encoding" => $encoding,
+				"division" => $this->admin_division5,
+				"encoding" => $this->address_encoding,
 			);
-			$address5_alt = $encoding ? $address->prop ($param) : $address5_str;
+			$address5_alt = $this->address_encoding ? $address->prop ($param) : $address5_str;
 
 			$address_street_address = $address->prop ("street_address");
 			$address_apartment = $address->prop ("apartment");
@@ -1614,7 +1745,7 @@ REALESTATE_NF_SEP);
 		$properties[$prop_name] = array (
 			"name" => $prop_name,
 			"type" => "text",
-			"caption" => $division1->name (),
+			"caption" => $this->admin_division1->name (),
 			"value" => $address1_str,
 			"strvalue" => $address1_str,
 			"altvalue" => $address1_alt,
@@ -1624,7 +1755,7 @@ REALESTATE_NF_SEP);
 		$properties[$prop_name] = array (
 			"name" => $prop_name,
 			"type" => "text",
-			"caption" => $division2->name (),
+			"caption" => $this->admin_division2->name (),
 			"value" => $address2_str,
 			"strvalue" => $address2_str,
 			"altvalue" => $address2_alt,
@@ -1634,7 +1765,7 @@ REALESTATE_NF_SEP);
 		$properties[$prop_name] = array (
 			"name" => $prop_name,
 			"type" => "text",
-			"caption" => $division3->name (),
+			"caption" => $this->admin_division3->name (),
 			"value" => $address3_str,
 			"strvalue" => $address3_str,
 			"altvalue" => $address3_alt,
@@ -1644,7 +1775,7 @@ REALESTATE_NF_SEP);
 		$properties[$prop_name] = array (
 			"name" => $prop_name,
 			"type" => "text",
-			"caption" => $division4->name (),
+			"caption" => $this->admin_division4->name (),
 			"value" => $address4_str,
 			"strvalue" => $address4_str,
 			"altvalue" => $address4_alt,
@@ -1654,7 +1785,7 @@ REALESTATE_NF_SEP);
 		$properties[$prop_name] = array (
 			"name" => $prop_name,
 			"type" => "text",
-			"caption" => $division5->name (),
+			"caption" => $this->admin_division5->name (),
 			"value" => $address5_str,
 			"strvalue" => $address5_str,
 			"altvalue" => $address5_alt,
@@ -1690,273 +1821,272 @@ REALESTATE_NF_SEP);
 			"altvalue" => $address_apartment,
 		);
 
+		exit_function("re_property::get_property_data - address");
+		enter_function("re_property::get_property_data - agent");
+
 		### add agent properties
-		$agent = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_AGENT");
+		$agent1_oid = $this_object->prop ("realestate_agent1");
 
-		if (is_object ($agent))
+		if (!is_object ($this->realestate_agents_data[$agent1_oid]["object"]) and $this->can ("view", $agent1_oid))
 		{
-			$agent_phones = array ();
+			$param = array (
+				"no_extended_data" => $arr["no_extended_agent_data"],
+			);
+			$this->load_agent_data ($agent1_oid, $param);
+		}
 
-			foreach($agent->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+		if (is_object ($this->realestate_agents_data[$agent1_oid]["object"]))
+		{
+			if (!$arr["no_extended_agent_data"])
 			{
-				$agent_phones[] = $connection->prop ("to.name");
-			}
-
-			$agent_phones = implode (", ", $agent_phones);
-
-			$agent_email = $agent->get_first_obj_by_reltype ("RELTYPE_EMAIL");
-			$agent_email =  is_object ($agent_email) ? $agent_email->prop ("mail") : "";
-
-			$agent_picture = $agent->get_first_obj_by_reltype ("RELTYPE_PICTURE");
-
-			if (is_object ($agent_picture))
-			{
-				$agent_picture_url = $cl_image->get_url_by_id ($agent_picture->id ());
-			}
-			else
-			{
-				$agent_picture_url = "";
+				$name = "agent_picture_url";
+				$value = $this->realestate_agents_data[$agent1_oid]["picture_url"];
+				$properties[$name] = array (
+					"name" => $name,
+					"type" => "text",
+					"caption" => t("Maakleri pilt"),
+					"value" => $value,
+					"strvalue" => $value,
+					"altvalue" => $value,
+				);
 			}
 
 			$name = "agent_name";
+			$value = $this->realestate_agents_data[$agent1_oid]["name"];
 			$properties[$name] = array (
 				"name" => $name,
 				"type" => "text",
 				"caption" => t("Maakler"),
-				"value" => $agent->name (),
-				"strvalue" => $agent->name (),
-				"altvalue" => $agent->name (),
+				"value" => $value,
+				"strvalue" => $value,
+				"altvalue" => $value,
 			);
 
 			$name = "agent_email";
+			$value = $this->realestate_agents_data[$agent1_oid]["email"];
 			$properties[$name] = array (
 				"name" => $name,
 				"type" => "text",
 				"caption" => t("Maakleri e-mail"),
-				"value" => $agent_email,
-				"strvalue" => $agent_email,
-				"altvalue" => $agent_email,
+				"value" => $value,
+				"strvalue" => $value,
+				"altvalue" => $value,
 			);
 
 			$name = "agent_phone";
+			$value = $this->realestate_agents_data[$agent1_oid]["phones_str"];
 			$properties[$name] = array (
 				"name" => $name,
 				"type" => "text",
 				"caption" => t("Maakleri telefon"),
-				"value" => $agent_phones,
-				"strvalue" => $agent_phones,
-				"altvalue" => $agent_phones,
-			);
-
-			$name = "agent_picture_url";
-			$properties[$name] = array (
-				"name" => $name,
-				"type" => "text",
-				"caption" => t("Maakleri pilt"),
-				"value" => $agent_picture_url,
-				"strvalue" => $agent_picture_url,
-				"altvalue" => $agent_picture_url,
+				"value" => $value,
+				"strvalue" => $value,
+				"altvalue" => $value,
 			);
 		}
 
-		### add agent2 properties
-		$agent = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_AGENT2");
-
-		if (is_object ($agent))
+		if (!$arr["no_extended_agent_data"])
 		{
-			$agent_phones = array ();
+			### add agent2 properties
+			$agent2_oid = $this_object->prop ("realestate_agent2");
 
-			foreach($agent->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+			if (!is_object ($this->realestate_agents_data[$agent2_oid]["object"]) and $this->can ("view", $agent2_oid))
 			{
-				$agent_phones[] = $connection->prop ("to.name");
+				$param = array (
+					"no_extended_data" => $arr["no_extended_agent_data"],
+				);
+				$this->load_agent_data ($agent2_oid, $param);
 			}
 
-			$agent_phones = implode (", ", $agent_phones);
-
-			$agent_email = $agent->get_first_obj_by_reltype ("RELTYPE_EMAIL");
-			$agent_email =  is_object ($agent_email) ? $agent_email->prop ("mail") : "";
-
-			$agent_picture = $agent->get_first_obj_by_reltype ("RELTYPE_PICTURE");
-
-			if (is_object ($agent_picture))
+			if (is_object ($this->realestate_agents_data[$agent2_oid]["object"]))
 			{
-				$agent_picture_url = $cl_image->get_url_by_id ($agent_picture->id ());
+				if (!$arr["no_extended_agent_data"])
+				{
+					$name = "agent2_picture_url";
+					$value = $this->realestate_agents_data[$agent2_oid]["picture_url"];
+					$properties[$name] = array (
+						"name" => $name,
+						"type" => "text",
+						"caption" => t("Maakleri pilt"),
+						"value" => $value,
+						"strvalue" => $value,
+						"altvalue" => $value,
+					);
+				}
+
+				$name = "agent2_name";
+				$value = $this->realestate_agents_data[$agent2_oid]["name"];
+				$properties[$name] = array (
+					"name" => $name,
+					"type" => "text",
+					"caption" => t("Maakler"),
+					"value" => $value,
+					"strvalue" => $value,
+					"altvalue" => $value,
+				);
+
+				$name = "agent2_email";
+				$value = $this->realestate_agents_data[$agent2_oid]["email"];
+				$properties[$name] = array (
+					"name" => $name,
+					"type" => "text",
+					"caption" => t("Maakleri e-mail"),
+					"value" => $value,
+					"strvalue" => $value,
+					"altvalue" => $value,
+				);
+
+				$name = "agent2_phone";
+				$value = $this->realestate_agents_data[$agent2_oid]["phones_str"];
+				$properties[$name] = array (
+					"name" => $name,
+					"type" => "text",
+					"caption" => t("Maakleri telefon"),
+					"value" => $value,
+					"strvalue" => $value,
+					"altvalue" => $value,
+				);
 			}
-			else
-			{
-				$agent_picture_url = "";
-			}
-
-			$name = "agent2_name";
-			$properties[$name] = array (
-				"name" => $name,
-				"type" => "text",
-				"caption" => t("Maakler"),
-				"value" => $agent->name (),
-				"strvalue" => $agent->name (),
-				"altvalue" => $agent->name (),
-			);
-
-			$name = "agent2_email";
-			$properties[$name] = array (
-				"name" => $name,
-				"type" => "text",
-				"caption" => t("Maakleri e-mail"),
-				"value" => $agent_email,
-				"strvalue" => $agent_email,
-				"altvalue" => $agent_email,
-			);
-
-			$name = "agent2_phone";
-			$properties[$name] = array (
-				"name" => $name,
-				"type" => "text",
-				"caption" => t("Maakleri telefon"),
-				"value" => $agent_phones,
-				"strvalue" => $agent_phones,
-				"altvalue" => $agent_phones,
-			);
-
-			$name = "agent2_picture_url";
-			$properties[$name] = array (
-				"name" => $name,
-				"type" => "text",
-				"caption" => t("Maakleri pilt"),
-				"value" => $agent_picture_url,
-				"strvalue" => $agent_picture_url,
-				"altvalue" => $agent_picture_url,
-			);
 		}
 
-		### add seller properties
-		$seller = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_SELLER");
+		exit_function("re_property::get_property_data - agent");
 
-		if (is_object ($seller))
+		if (!$arr["no_client_data"])
 		{
-			$seller_phones = array ();
+			### add seller properties
+			$seller = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_SELLER");
 
-			foreach($seller->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+			if (is_object ($seller))
 			{
-				$seller_phones[] = $connection->prop ("to.name");
+				$seller_phones = array ();
+
+				foreach($seller->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+				{
+					$seller_phones[] = $connection->prop ("to.name");
+				}
+
+				$seller_phones = implode (", ", $seller_phones);
+
+				$seller_email = $seller->get_first_obj_by_reltype ("RELTYPE_EMAIL");
+				$seller_email =  is_object ($seller_email) ? $seller_email->prop ("mail") : "";
+				$seller_name = $seller->name ();
 			}
 
-			$seller_phones = implode (", ", $seller_phones);
+			$name = "seller_name";
+			$properties[$name] = array (
+				"name" => $name,
+				"type" => "text",
+				"caption" => t("Müüja"),
+				"value" => $seller_name,
+				"altvalue" => $seller_name,
+				"strvalue" => $seller_name,
+			);
 
-			$seller_email = $seller->get_first_obj_by_reltype ("RELTYPE_EMAIL");
-			$seller_email =  is_object ($seller_email) ? $seller_email->prop ("mail") : "";
-			$seller_name = $seller->name ();
-		}
+			$name = "seller_email";
+			$properties[$name] = array (
+				"name" => $name,
+				"type" => "text",
+				"caption" => t("Müüja e-mail"),
+				"value" => $seller_email,
+				"strvalue" => $seller_email,
+				"altvalue" => $seller_email,
+			);
 
-		$name = "seller_name";
-		$properties[$name] = array (
-			"name" => $name,
-			"type" => "text",
-			"caption" => t("Müüja"),
-			"value" => $seller_name,
-			"altvalue" => $seller_name,
-			"strvalue" => $seller_name,
-		);
+			$name = "seller_phone";
+			$properties[$name] = array (
+				"name" => $name,
+				"type" => "text",
+				"caption" => t("Müüja telefon"),
+				"value" => $seller_phones,
+				"altvalue" => $seller_phones,
+				"strvalue" => $seller_phones,
+			);
 
-		$name = "seller_email";
-		$properties[$name] = array (
-			"name" => $name,
-			"type" => "text",
-			"caption" => t("Müüja e-mail"),
-			"value" => $seller_email,
-			"strvalue" => $seller_email,
-			"altvalue" => $seller_email,
-		);
+			### add buyer properties
+			$buyer = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_BUYER");
 
-		$name = "seller_phone";
-		$properties[$name] = array (
-			"name" => $name,
-			"type" => "text",
-			"caption" => t("Müüja telefon"),
-			"value" => $seller_phones,
-			"altvalue" => $seller_phones,
-			"strvalue" => $seller_phones,
-		);
-
-		### add buyer properties
-		$buyer = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_BUYER");
-
-		if (is_object ($buyer))
-		{
-			$buyer_phones = array ();
-
-			foreach($buyer->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+			if (is_object ($buyer))
 			{
-				$buyer_phones[] = $connection->prop ("to.name");
+				$buyer_phones = array ();
+
+				foreach($buyer->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+				{
+					$buyer_phones[] = $connection->prop ("to.name");
+				}
+
+				$buyer_phones = implode (", ", $buyer_phones);
+
+				$buyer_email = $buyer->get_first_obj_by_reltype ("RELTYPE_EMAIL");
+				$buyer_email =  is_object ($buyer_email) ? $buyer_email->prop ("mail") : "";
+				$buyer_name = $buyer->name ();
 			}
 
-			$buyer_phones = implode (", ", $buyer_phones);
+			$name = "buyer_name";
+			$properties[$name] = array (
+				"name" => $name,
+				"type" => "text",
+				"caption" => t("Ostja"),
+				"value" => $buyer_name,
+				"strvalue" => $buyer_name,
+				"altvalue" => $buyer_name,
+			);
 
-			$buyer_email = $buyer->get_first_obj_by_reltype ("RELTYPE_EMAIL");
-			$buyer_email =  is_object ($buyer_email) ? $buyer_email->prop ("mail") : "";
-			$buyer_name = $buyer->name ();
+			$name = "buyer_email";
+			$properties[$name] = array (
+				"name" => $name,
+				"type" => "text",
+				"caption" => t("Ostja e-mail"),
+				"value" => $buyer_email,
+				"strvalue" => $buyer_email,
+				"altvalue" => $buyer_email,
+			);
+
+			$name = "buyer_phone";
+			$properties[$name] = array (
+				"name" => $name,
+				"type" => "text",
+				"caption" => t("Ostja telefon"),
+				"value" => $buyer_phones,
+				"strvalue" => $buyer_phones,
+				"altvalue" => $buyer_phones,
+			);
 		}
 
-		$name = "buyer_name";
-		$properties[$name] = array (
-			"name" => $name,
-			"type" => "text",
-			"caption" => t("Ostja"),
-			"value" => $buyer_name,
-			"strvalue" => $buyer_name,
-			"altvalue" => $buyer_name,
-		);
-
-		$name = "buyer_email";
-		$properties[$name] = array (
-			"name" => $name,
-			"type" => "text",
-			"caption" => t("Ostja e-mail"),
-			"value" => $buyer_email,
-			"strvalue" => $buyer_email,
-			"altvalue" => $buyer_email,
-		);
-
-		$name = "buyer_phone";
-		$properties[$name] = array (
-			"name" => $name,
-			"type" => "text",
-			"caption" => t("Ostja telefon"),
-			"value" => $buyer_phones,
-			"strvalue" => $buyer_phones,
-			"altvalue" => $buyer_phones,
-		);
-
-		### add pictures properties
-		$pictures = new object_list($this_object->connections_from(array(
-			"type" => "RELTYPE_REALESTATE_PICTURE",
-			"class_id" => CL_IMAGE,
-		)));
-		$pictures = $pictures->arr ();
-		$i = 1;
-
-		foreach ($pictures as $picture)
+		if (!$arr["no_picture_data"])
 		{
-			$name = "picture" . $i . "_url";
-			$properties[$name] = array (
-				"name" => $name,
-				"type" => "releditor",
-				"value" => $cl_image->get_url_by_id ($picture->id ()),
-				"strvalue" => $cl_image->get_url_by_id ($picture->id ()),
-				"altvalue" => $cl_image->get_url_by_id ($picture->id ()),
-			);
+			### add pictures properties
+			$pictures = new object_list($this_object->connections_from(array(
+				"type" => "RELTYPE_REALESTATE_PICTURE",
+				"class_id" => CL_IMAGE,
+			)));
+			$pictures = $pictures->arr ();
+			$i = 1;
 
-			$name = "picture" . $i . "_city24_id";
-			$properties[$name] = array (
-				"name" => $name,
-				"type" => "hidden",
-				"value" => $picture->meta ("picture_city24_id"),
-				"strvalue" => $picture->meta ("picture_city24_id"),
-				"altvalue" => $picture->meta ("picture_city24_id"),
-			);
+			foreach ($pictures as $picture)
+			{
+				$name = "picture" . $i . "_url";
+				$properties[$name] = array (
+					"name" => $name,
+					"type" => "releditor",
+					"value" => $this->cl_image->get_url_by_id ($picture->id ()),
+					"strvalue" => $this->cl_image->get_url_by_id ($picture->id ()),
+					"altvalue" => $this->cl_image->get_url_by_id ($picture->id ()),
+				);
 
-			$i++;
+				$name = "picture" . $i . "_city24_id";
+				$properties[$name] = array (
+					"name" => $name,
+					"type" => "hidden",
+					"value" => $picture->meta ("picture_city24_id"),
+					"strvalue" => $picture->meta ("picture_city24_id"),
+					"altvalue" => $picture->meta ("picture_city24_id"),
+				);
+
+				$i++;
+			}
 		}
 
+		exit_function("re_property::get_property_data");
 		return $properties;
 	}
 
@@ -2047,6 +2177,46 @@ REALESTATE_NF_SEP);
 		{
 			$manager = obj ($this_object->prop ("realestate_manager"));
 			$manager->set_cache_dirty (true);
+		}
+	}
+
+	function load_agent_data ($agent_oid, $param = array ())
+	{
+		$no_extended_data = $param["no_extended_data"];
+		$agent = obj ($agent_oid);
+		$this->realestate_agents_data[$agent_oid]["object"] = $agent;
+		$this->realestate_agents_data[$agent_oid]["name"] = $agent->name ();
+
+		### agent phones
+		$agent_phones = array ();
+
+		foreach($agent->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+		{
+			$agent_phones[] = $connection->prop ("to.name");
+		}
+
+		$this->realestate_agents_data[$agent_oid]["phones_str"] = implode (", ", $agent_phones);
+
+		### agent email
+		$agent_email = $agent->get_first_obj_by_reltype ("RELTYPE_EMAIL");
+		$agent_email =  is_object ($agent_email) ? $agent_email->prop ("mail") : "";
+		$this->realestate_agents_data[$agent_oid]["email"] = $agent_email;
+
+		### picture
+		if (!$no_extended_data)
+		{
+			$agent_picture = $agent->get_first_obj_by_reltype ("RELTYPE_PICTURE");
+
+			if (is_object ($agent_picture))
+			{
+				$agent_picture_url = $this->cl_image->get_url_by_id ($agent_picture->id ());
+			}
+			else
+			{
+				$agent_picture_url = "";
+			}
+
+			$this->realestate_agents_data[$agent_oid]["picture_url"] = $agent_picture_url;
 		}
 	}
 }
