@@ -3912,7 +3912,7 @@ class crm_company extends class_base
 		if ($ol->count())
 		{
 			$s = $ol->begin();
-			return $s->prop("cfgform");
+			return $s->prop("s_cfgform");
 		}
 	}
 }

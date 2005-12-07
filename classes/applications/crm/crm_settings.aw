@@ -1,16 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.1 2005/12/06 18:20:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.2 2005/12/07 11:11:31 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded 
 /*
 
 @classinfo syslog_type=ST_CRM_SETTINGS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@tableinfo aw_crm_settings index=aw_oid maeter_table=objects master_index=brother_of
 
 @default table=objects
 
 
 @default group=general
 
-	@property cfgform type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize
+	@property s_cfgform type=relpicker reltype=RELTYPE_CFGFORM table=objects field=meta method=serialize
 	@caption Kliendi seadete vorm 
 
 @reltype USER value=1 clid=CL_USER
