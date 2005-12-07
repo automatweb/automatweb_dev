@@ -1,3 +1,4 @@
+<link rel="Stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css" type="text/css">
 <table border=0>
 	<tr>
 		<td class='awmenuedittabletext'><b>Kliendi üldandmed</b></td>

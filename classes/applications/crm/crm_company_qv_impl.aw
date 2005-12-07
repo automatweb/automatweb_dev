@@ -210,7 +210,8 @@ class crm_company_qv_impl extends class_base
 				"sum" => number_format($sum, 2),
 				"grp_desc" => $grpd,
 				"grp_num" => 2,
-				"state" => $o->prop("is_done") == 1 ? t("Tehtud") : t("T&ouml;&ouml;s")
+				"state" => $o->prop("is_done") == 1 ? t("Tehtud") : t("T&ouml;&ouml;s"),
+				"sb" => $o->prop("start1")
 			));
 		}
 
@@ -272,7 +273,7 @@ class crm_company_qv_impl extends class_base
 		$t->sort_by(array(
 			"rgroupby" => array("grp_num" => "grp_desc"),
 			"sorder" => "asc",
-			"field" => "grp_num"
+			"field" => array("sb", "grp_num")
 		));
 		$t->set_sortable(false);
 	}
