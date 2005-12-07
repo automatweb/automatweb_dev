@@ -148,6 +148,15 @@
             <field>preview</field>
       </property>
       <property>
+            <name>preview_add</name>
+            <table>objects</table>
+            <group>preview_add</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>preview_add</field>
+      </property>
+      <property>
             <name>task_list</name>
             <table>objects</table>
             <group>tasks</group>
@@ -170,6 +179,9 @@
             <preview>
                   <caption>Eelvaade</caption>
             </preview>
+            <preview_add>
+                  <caption>Arve Lisa</caption>
+            </preview_add>
       </groupinfo>
       <tableinfo>
             <aw_crm_bill>

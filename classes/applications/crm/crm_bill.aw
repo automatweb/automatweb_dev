@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.13 2005/11/15 11:13:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.14 2005/12/07 12:19:03 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -61,6 +61,10 @@
 
 	@property preview type=text store=no no_caption=1
 
+@default group=preview_add
+
+	@property preview_add type=text store=no no_caption=1
+
 @default group=tasks
 
 	@property task_list type=table no_caption=1 store=no
@@ -68,6 +72,7 @@
 
 @groupinfo tasks caption="Toimetused"
 @groupinfo preview caption="Eelvaade"
+@groupinfo preview_add caption="Arve Lisa"
 
 
 
@@ -133,6 +138,10 @@ class crm_bill extends class_base
 
 			case "preview":
 				$this->_preview($arr);
+				break;
+
+			case "preview_add":
+				$this->_preview_add($arr);
 				break;
 
 			case "state":
@@ -342,6 +351,11 @@ class crm_bill extends class_base
 		$arr["prop"]["value"] = $this->show(array("id" => $arr["obj_inst"]->id()));
 	}
 
+	function _preview_add($arr)
+	{
+		$arr["prop"]["value"] = $this->show_add(array("id" => $arr["obj_inst"]->id()));
+	}
+
 	function show($arr)
 	{
 		$b = obj($arr["id"]);
@@ -478,12 +492,58 @@ class crm_bill extends class_base
 			"impl_url" => $impl->prop_str("url_id"),
 		));		
 
+
 		$rs = "";
 		$sum_wo_tax = 0;
 		$tax = 0;
 		$sum = 0;
 		foreach($this->get_bill_rows($b) as $row)
 		{
+			if ($row["is_oe"])
+			{
+				continue;
+			}
+			$cur_tax = 0;
+			$cur_sum = 0;
+			
+			if ($row["has_tax"] == 1)
+			{
+				// tax needs to be added
+				$cur_sum = $row["sum"];
+				$cur_tax = ($row["sum"] * 0.18);
+				$cur_pr = $this->num($row["price"]);
+			}	
+			else
+			{
+				// tax does not need to be added, tax free it seems
+				$cur_sum = $row["sum"];
+				$cur_tax = 0;
+				$cur_pr = $this->num($row["price"]);
+			}
+
+			$sum_wo_tax += $cur_sum;
+			$tax += $cur_tax;
+			$sum += ($cur_tax+$cur_sum);
+			$unit = $row["unit"];
+			$tot_amt += $row["amt"];
+			$tot_cur_sum += $cur_sum;
+		}
+		$this->vars(array(
+			"unit" => $unit,
+			"amt" => $tot_amt,
+			"price" => (int)($tot_cur_sum / $tot_amt),
+			"sum" => number_format($tot_cur_sum, 2),
+			"desc" => $b->prop("notes"),
+			"date" => "" 
+		));
+		$rs .= $this->parse("ROW");
+
+		foreach($this->get_bill_rows($b) as $row)
+		{
+			if (!$row["is_oe"])
+			{
+				continue;
+			}
 			$cur_tax = 0;
 			$cur_sum = 0;
 			
@@ -560,6 +620,252 @@ class crm_bill extends class_base
 		}
 
 		return $inf;
+	}
+
+	function show_add($arr)
+	{
+		$b = obj($arr["id"]);
+
+		$tpl = "show_add";
+		$lc = "et";
+		if ($this->can("view", $b->prop("language")))
+		{
+			$lo = obj($b->prop("language"));
+			$lc = $lo->prop("lang_acceptlang");
+			$tpl .= "_".$lc;
+		}
+
+		$this->read_site_template($tpl.".tpl");
+
+		$ord = obj();
+		$ord_cur = obj();
+		if ($this->can("view", $b->prop("customer")))
+		{
+			$ord = obj($b->prop("customer"));
+			$_ord_ct = $ord->prop("firmajuht");
+			$ord_ct = "";
+			if ($this->can("view", $_ord_ct))
+			{
+				$ct = obj($_ord_ct);
+				$ord_ct = $ct->name();
+			}
+			if ($this->can("view", $ord->prop("contact")))
+			{
+				//$ct = obj($ord->prop("contact"));
+				//$ord_addr = $ct->name()." ".$ct->prop("postiindeks");
+
+				$ct = obj($ord->prop("contact"));
+				$ap = array($ct->prop("aadress"));
+				if ($ct->prop("linn"))
+				{
+					$ap[] = $ct->prop_str("linn");
+				}
+				$aps = join(", ", $ap)."<br>";
+				$aps .= $ct->prop_str("maakond");
+				$aps .= " ".$ct->prop("postiindeks");
+				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
+			}
+
+			if ($this->can("view", $ord->prop("currency")))
+			{
+				$ord_cur = obj($ord->prop("currency"));
+			}
+		}
+		$logo = "";
+		$impl = obj();
+		if ($this->can("view", $b->prop("impl")))
+		{
+			$impl = obj($b->prop("impl"));
+
+			$ba = "";
+			foreach($impl->connections_from(array("type" => "RELTYPE_BANK_ACCOUNT")) as $c)
+			{
+				$acc = $c->to();
+				$bank = obj();
+				if ($this->can("view", $acc->prop("bank")))
+				{
+					$bank = obj($acc->prop("bank"));
+				}
+				$this->vars(array(
+					"bank_name" => $bank->name(),
+					"acct_no" => $acc->prop("acct_no"),
+					"bank_iban" => $acc->prop("iban_code")
+				));
+
+				$ba .= $this->parse("BANK_ACCOUNT");
+			}
+
+			$this->vars(array(
+				"BANK_ACCOUNT" => $ba
+			));
+			$logo_o = $impl->get_first_obj_by_reltype("RELTYPE_ORGANISATION_LOGO");
+			if ($logo_o)
+			{
+				$logo_i = $logo_o->instance();
+				$logo = $logo_i->make_img_tag_wl($logo_o->id());
+				$logo_url = $logo_i->get_url_by_id($logo_o->id());
+			}
+
+			$impl_phone = $impl->prop_str("phone_id");
+
+			if ($this->can("view", $impl->prop("contact")))
+			{
+				$ct = obj($impl->prop("contact"));
+				$ap = array($ct->prop("aadress"));
+				if ($ct->prop("linn"))
+				{
+					$ap[] = $ct->prop_str("linn");
+				}
+				$aps = join(", ", $ap)."<br>";
+				$aps .= $ct->prop_str("maakond");
+				$aps .= " ".$ct->prop("postiindeks");
+				$impl_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
+				if ($this->can("view", $ct->prop("riik")))
+				{
+					$riik = obj($ct->prop("riik"));
+					$impl_phone = $riik->prop("area_code")." ".$impl_phone;
+				}
+			}
+
+			if ($this->can("view", $impl->prop("email_id")))
+			{
+				$mail = obj($impl->prop("email_id"));
+				$impl_mail = $mail->prop("mail");
+			}
+
+		}
+
+		$this->vars(array(
+			"orderer_name" => $ord->name(),
+			"ord_currency_name" => $ord->prop_str("currency"),
+			"orderer_addr" => $ord_addr,
+			"orderer_kmk_nr" => $ord->prop("tax_nr"),
+			"bill_no" => $b->prop("bill_no"),
+			"impl_logo" => $logo,
+			"impl_logo_url" => $logo_url,
+			"bill_date" => $b->prop("bill_date"),
+			"payment_due_days" => $b->prop("bill_due_date_days"),
+			"bill_due" => date("d.m.Y", $b->prop("bill_due_date")),
+			"orderer_contact" => $ord_ct,
+			"comment" => $b->prop("notes"),
+			"impl_name" => $impl->name(),
+			"impl_address" => $impl_addr,
+			"impl_reg_nr" => $impl->prop("reg_nr"),
+			"impl_kmk_nr" => $impl->prop("tax_nr"),
+			"impl_phone" => $impl_phone,
+			"impl_fax" => $impl->prop_str("telefax_id"),
+			"impl_email" => $impl_mail,
+			"impl_url" => $impl->prop_str("url_id"),
+		));		
+
+
+		$rs = "";
+		$sum_wo_tax = 0;
+		$tax = 0;
+		$sum = 0;
+		foreach($this->get_bill_rows($b) as $row)
+		{
+			if ($row["is_oe"])
+			{
+				continue;
+			}
+			$cur_tax = 0;
+			$cur_sum = 0;
+			
+			if ($row["has_tax"] == 1)
+			{
+				// tax needs to be added
+				$cur_sum = $row["sum"];
+				$cur_tax = ($row["sum"] * 0.18);
+				$cur_pr = $this->num($row["price"]);
+			}	
+			else
+			{
+				// tax does not need to be added, tax free it seems
+				$cur_sum = $row["sum"];
+				$cur_tax = 0;
+				$cur_pr = $this->num($row["price"]);
+			}
+
+			$this->vars(array(
+				"unit" => $row["unit"],
+				"amt" => $row["amt"],
+				"price" => number_format($row["price"], 2),
+				"sum" => number_format($cur_sum, 2),
+				"desc" => $row["name"],
+				"date" => date("d.m.Y", $row["date"]) 
+			));
+			$rs .= $this->parse("ROW");
+
+			$sum_wo_tax += $cur_sum;
+			$tax += $cur_tax;
+			$sum += ($cur_tax+$cur_sum);
+			$unit = $row["unit"];
+			$tot_amt += $row["amt"];
+			$tot_cur_sum += $cur_sum;
+		}
+
+		foreach($this->get_bill_rows($b) as $row)
+		{
+			if (!$row["is_oe"])
+			{
+				continue;
+			}
+			$cur_tax = 0;
+			$cur_sum = 0;
+			
+			if ($row["has_tax"] == 1)
+			{
+				// tax needs to be added
+				$cur_sum = $row["sum"];
+				$cur_tax = ($row["sum"] * 0.18);
+				$cur_pr = $this->num($row["price"]);
+			}	
+			else
+			{
+				// tax does not need to be added, tax free it seems
+				$cur_sum = $row["sum"];
+				$cur_tax = 0;
+				$cur_pr = $this->num($row["price"]);
+			}
+			$this->vars(array(
+				"unit" => $row["unit"],
+				"amt" => $row["amt"],
+				"price" => number_format($cur_pr, 2),
+				"sum" => number_format($cur_sum, 2),
+				"desc" => $row["name"],
+				"date" => $row["date"] > 100 ? date("d.m.Y", $row["date"]) : "" 
+			));
+
+			$rs .= $this->parse("ROW");
+			$sum_wo_tax += $cur_sum;
+			$tax += $cur_tax;
+			$sum += ($cur_tax+$cur_sum);
+		}
+
+		$this->vars(array(
+			"ROW" => $rs,
+			"total_wo_tax" => number_format($sum_wo_tax, 2),
+			"tax" => number_format($tax, 2),
+			"total" => number_format($sum, 2),
+			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc)
+		));
+
+		$res =  $this->parse();
+		if (false && !$_GET["gen_print"])
+		{
+			$res = html::href(array(
+				"url" => aw_url_change_var("gen_print", 1),
+				"caption" => t("Prinditav arve")
+			)).$res;
+			return $res;
+		}
+
+		if ($_GET["openprintdialog"] == 1)
+		{
+			$res .= "<script language='javascript'>window.print();</script>";
+		}
+		die($res);
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.42 2005/12/01 12:47:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.43 2005/12/07 12:19:03 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1180,7 +1180,8 @@ class task extends class_base
 				"price" => $oe["cost"],
 				"amt" => 1,
 				"sum" => $oe["cost"],
-				"has_tax" => 1
+				"has_tax" => 1,
+				"is_oe" => true
 			);
 		}
 		
