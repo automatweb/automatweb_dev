@@ -1551,6 +1551,7 @@ class crm_company extends class_base
 			case "stats_s_only_billable":
 			case "stats_s_detailed":
 				$data["value"] = $arr["request"][$data["name"]];
+				aw_global_set("changeform_target",  "_blank");
 				break;
 
 			case "stats_s_from":

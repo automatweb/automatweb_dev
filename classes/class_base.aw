@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.438 2005/12/06 18:20:35 kristo Exp $
+// $Id: class_base.aw,v 2.439 2005/12/07 11:48:09 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -539,6 +539,10 @@ class class_base extends aw_template
 				};
 			};
 
+			if ($this->changeform_target)
+			{
+					$cli->set_form_target($this->changeform_target);
+			}
 			if ($o_arr["no_form"])
 			{
 				$cli->set_opt("no_form",1);
@@ -757,6 +761,10 @@ class class_base extends aw_template
 		{
 			$argblock["no_reforb"] = 1;
 		};
+		if (aw_global_get("changeform_target") != "")
+		{
+			$cli->set_form_target(aw_global_get("changeform_target"));
+		}
 
 		$awt->start("final-bit");
 		$cli->finish_output(array(
