@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.439 2005/12/07 11:48:09 kristo Exp $
+// $Id: class_base.aw,v 2.440 2005/12/08 09:56:01 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1669,7 +1669,6 @@ class class_base extends aw_template
 			// load a list of properties and groups in the config form
 			$proplist = $this->cfgform["meta"]["cfg_proplist"];
 			$grplist = $this->cfgform["meta"]["cfg_groups"];
-
 		}
 
 		$cfgu = get_instance("cfg/cfgutils");

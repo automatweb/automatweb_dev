@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.68 2005/11/25 12:33:18 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.69 2005/12/08 09:56:01 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1570,6 +1570,11 @@ class cfgform extends class_base
 		$ret = $o->meta("cfg_proplist");
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("translations");
+
+		// okay, here, if there is no translation for the requested language, then 
+		// read the captions from the translations file.
+
+		$read_from_trans = true;
 		if (isset($trans[$lc]) && is_array($trans[$lc]) && count($trans[$lc]))
 		{
 			$tc = $trans[$lc];
@@ -1578,7 +1583,21 @@ class cfgform extends class_base
 				if ($tc[$pn] != "")
 				{
 					$ret[$pn]["caption"] = $tc[$pn];
+					$read_from_trans = false;
 				}
+			}
+		}
+
+		if ($read_from_trans)
+		{
+			// get all props from class
+			$tmp = obj();
+			$tmp->set_class_id($o->subclass());
+			foreach($tmp->get_property_list() as $pn => $pd)
+			{
+				// trick here is, that we do not need to redo the t() calls, because the translations are already loaded
+				// so we just copy the captions
+				$ret[$pn]["caption"] = $pd["caption"];
 			}
 		}
 		return $ret;
