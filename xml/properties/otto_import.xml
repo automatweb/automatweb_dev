@@ -186,10 +186,9 @@
             <group>foldersnames</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textarea</type>
-            <rows>20</rows>
-            <cols>30</cols>
-            <caption>Kaustade nimed impordi jaoks (id=nimi,id=nimi)</caption>
+            <type>table</type>
+            <store>no</store>
+            <caption>Kaustade nimed impordi jaoks</caption>
       </property>
       <property>
             <name>force_7_view</name>
@@ -235,6 +234,16 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Ilma detailvaate lisapiltideta lehed</caption>
+      </property>
+      <property>
+            <name>force_7_view_for_trends</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>7 pildiga trendide lehed</caption>
+            <comment>Ainult BonPrix. lk koodide asemel kaustade id-d, mille all 7st vaadet n&amp;auml;idata</comment>
       </property>
       <property>
             <name>jm_clothes</name>
