@@ -1040,7 +1040,7 @@ class _int_object
 		$clid = $this->obj["class_id"];
 		$classes = aw_ini_get("classes");
 		$inf = $GLOBALS["object_loader"]->load_properties(array(
-			"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
+			"file" => ($clid == CL_DOCUMENT ? "doc" : basename($classes[$clid]["file"])),
 			"clid" => $clid
 		
 		));
