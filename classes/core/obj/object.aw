@@ -388,6 +388,11 @@ class object
 		return $GLOBALS["objects"][$this->oid]->get_property_list();
 	}
 
+	function get_group_list()
+	{
+		return $GLOBALS["objects"][$this->oid]->get_group_list();
+	}
+
 	function get_relinfo()
 	{
 		return $GLOBALS["objects"][$this->oid]->get_relinfo();

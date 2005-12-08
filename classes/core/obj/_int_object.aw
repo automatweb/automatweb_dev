@@ -1035,6 +1035,18 @@ class _int_object
 		return $GLOBALS["properties"][$this->obj["class_id"]];
 	}
 
+	function get_group_list()
+	{
+		$clid = $this->obj["class_id"];
+		$classes = aw_ini_get("classes");
+		$inf = $GLOBALS["object_loader"]->load_properties(array(
+			"file" => ($clid == CL_DOCUMENT ? "doc" : $classes[$clid]["file"]),
+			"clid" => $clid
+		
+		));
+		return $inf[4];
+	}
+
 	function get_relinfo()
 	{
 		return $GLOBALS["relinfo"][$this->obj["class_id"]];

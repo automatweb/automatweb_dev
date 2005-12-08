@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.69 2005/12/08 09:56:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.70 2005/12/08 10:08:18 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1609,6 +1609,7 @@ class cfgform extends class_base
 		$ret = $o->meta("cfg_groups");
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("grp_translations");
+		$read_from_trans = true;
 		if (isset($trans[$lc]) && is_array($trans[$lc]) && count($trans[$lc]))
 		{
 			$tc = $trans[$lc];
@@ -1617,7 +1618,20 @@ class cfgform extends class_base
 				if ($tc[$pn] != "")
 				{
 					$ret[$pn]["caption"] = $tc[$pn];
+					$read_from_trans = false;
 				}
+			}
+		}
+
+		if ($read_from_trans)
+		{
+			$tmp = obj();
+			$tmp->set_class_id($o->subclass());
+			foreach($tmp->get_group_list() as $gn => $gd)
+			{
+				// trick here is, that we do not need to redo the t() calls, because the translations are already loaded
+				// so we just copy the captions
+				$ret[$gn]["caption"] = $gd["caption"];
 			}
 		}
 		return $ret;
