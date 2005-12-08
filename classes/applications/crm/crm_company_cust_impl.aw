@@ -1591,7 +1591,7 @@ class crm_company_cust_impl extends class_base
 			$pm->begin_menu("org".$o->id());
 			$pm->add_item(array(
 				"text" => t("Vaata"),
-				"link" => $this->mk_my_orb("change", array("id" => $o->id(), "return_url" => get_ru(), "group" => "cust_view"), CL_CRM_COMPANY)
+				"link" => $this->mk_my_orb("change", array("id" => $o->id(), "return_url" => get_ru(), "group" => "quick_view"), CL_CRM_COMPANY)
 			));
 			$pm->add_item(array(
 				"text" => t("Muuda"),
