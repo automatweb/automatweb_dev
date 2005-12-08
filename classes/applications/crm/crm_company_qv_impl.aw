@@ -282,6 +282,8 @@ class crm_company_qv_impl extends class_base
 	{
 		$this->read_template("qv.tpl");
 
+		$this->_insert_gen_vars();
+
 		$o = $arr["obj_inst"];
 
 		$u = get_instance(CL_USER);
@@ -333,6 +335,31 @@ class crm_company_qv_impl extends class_base
 			"contact_p" => $cp
 		));
 		return $arr["prop"]["value"] = $this->parse();
+	}
+
+	function _insert_gen_vars()
+	{
+		$this->vars(array(
+			"cust_gen_data" => t("Kliendi &uuml;ldandmed"),
+			"cust_name" => t("Nimetus"),
+			"start_date" => t("Alguskuup&auml;ev"),
+			"code_str" => t("Kood"),
+			"creat_str" => t("Suhte looja"),
+			"reg_code_str" => t("Registrikood"),
+			"crel_str" => t("Kliendisuhe"),
+			"ref_str" => t("Sissetuleku meetod"),
+			"kmk_str" => t("KMK nr"),
+			"cm_str" => t("Kliendihaldur"),
+			"desc_str" => t("Tegevuse kirjeldus"),
+			"trm_str" => t("Kaubam&auml;rgid"),
+			"cd_str" => t("Kontaktandmed"),
+			"cp_str" => t("Kontaktisikud"),
+			"adr_str" => t("Aadress"),
+			"ph_str" => t("Telefon"),
+			"fx_str" => t("Faks"),
+			"em_str" => t("E-post"),
+			"w_str" => t("WWW")
+		));
 	}
 }
 
