@@ -7,6 +7,7 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <form>showmsg</form>
             <field>edit_toolbar</field>
             <caption>Kirja redigeerimise toolbar</caption>
       </property>
@@ -33,6 +34,7 @@
             <table>messages</table>
             <type>relpicker</type>
             <reltype>RELTYPE_MAIL_ADDRESS</reltype>
+            <no_sel>1</no_sel>
             <field>mfrom</field>
             <caption>Kellelt</caption>
       </property>
@@ -147,17 +149,6 @@
             <form>all</form>
             <field>cb_part</field>
             <caption>Cb part</caption>
-      </property>
-      <property>
-            <name>view_toolbar</name>
-            <group>general</group>
-            <table>messages</table>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <form>showmsg</form>
-            <field>view_toolbar</field>
-            <caption>Kirja vaatamise toolbar</caption>
       </property>
       <property>
             <name>msg_headers</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.20 2005/11/25 10:43:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.21 2005/12/08 16:53:14 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -7,7 +7,7 @@
 	@default group=general
 	@default table=messages
 
-	@property edit_toolbar type=toolbar store=no no_caption=1
+	@property edit_toolbar type=toolbar store=no no_caption=1 form=showmsg
 	@caption Kirja redigeerimise toolbar
 
 	@property uidl type=hidden
@@ -16,7 +16,7 @@
 	@property mfrom_name type=hidden table=objects field=meta method=serialize
 	@caption Kellelt nimi
 	
-	@property mfrom type=relpicker reltype=RELTYPE_MAIL_ADDRESS
+	@property mfrom type=relpicker reltype=RELTYPE_MAIL_ADDRESS no_sel=1
 	@caption Kellelt
 	
 	@property mto type=textbox size=80
@@ -66,8 +66,8 @@
 
 	@tableinfo messages index=id master_table=objects master_index=oid
 	
-	@property view_toolbar type=toolbar store=no no_caption=1 form=showmsg
-	@caption Kirja vaatamise toolbar
+	/@property view_toolbar type=toolbar store=no no_caption=1 form=showmsg
+	/@caption Kirja vaatamise toolbar
 
 	@property msg_headers type=text store=no form=showmsg no_caption=1
 	@caption Kirja päised
@@ -247,17 +247,25 @@ class mail_message extends class_base
 			Header("Location: $url");
 			die();
 		};
-
+		$from = $msgobj->prop("mfrom");
+		if(is_oid($from) && $this->can("view", $from))
+		{
+			$adr = obj($from);
+			$address = $adr->prop("mail");
+			if($adr->class_id() == CL_ML_MEMBER)
+			{
+				$name = $adr->prop("name");
+			}
+			else
+			{
+				$name = $adr->name();
+			}
+		}
 		if ($msgobj->prop("html_mail") == 1)
 		{
-			$from = $msgobj->prop("mfrom");
-			if(is_oid($from) && $this->can("view", $from))
-			{
-				$adr = obj($from);
-				$address = $adr->prop("mail");
-			}
 			$this->awm->create_message(array(
 				"froma" => $address,
+				"fromn" => $name,
 				"subject" => $msgobj->name(),
 				"to" => $msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
@@ -270,14 +278,9 @@ class mail_message extends class_base
 		}
 		else
 		{
-			$from = $msgobj->prop("mfrom");
-			if(is_oid($from) && $this->can("view", $from))
-			{
-				$adr = obj($from);
-				$address = $adr->prop("mail");
-			}
 			$this->awm->create_message(array(
 				"froma" => $address,
+				"fromn" => $name,
 				"subject" => $msgobj->name(),
 				"to" => $msgobj->prop("mto"),
 				"cc" => $msgobj->prop("cc"),
@@ -320,12 +323,23 @@ class mail_message extends class_base
 
 	function get_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
+			case "edit_toolbar":
+				if($arr["request"]["form"] == "showmsg")
+				{
+					$this->view_toolbar($arr);
+				}
+				else
+				{
+					$this->edit_toolbar($prop);
+				}
+				break;
+
 			case "view_toolbar":
-				$this->view_toolbar(&$arr);
+				$this->view_toolbar($arr);
 			break;
 			
 			case "msg_headers":
@@ -386,11 +400,11 @@ class mail_message extends class_base
 				$this->vars(array(
 					"header_line" => $rv,
 				));
-				$data["value"] = $this->parse();
+				$prop["value"] = $this->parse();
 				break;
 
 			case "msg_content":
-				$data["value"] = nl2br(create_links(htmlspecialchars($this->msgdata["content"])));
+				$prop["value"] = nl2br(create_links(htmlspecialchars($this->msgdata["content"])));
 				break;
 
 			case "msg_attachments":
@@ -417,7 +431,7 @@ class mail_message extends class_base
 					$this->vars(array(
 						"att_line" => $rv,
 					));
-					$data["value"] = $this->parse();
+					$prop["value"] = $this->parse();
 				};
 				break;
 
@@ -440,15 +454,15 @@ class mail_message extends class_base
 
 					if (sizeof($opts) > 0)
 					{
-						$data["type"] = "select";
-						$data["options"] = $opts;
-						$data["size"] = 1;
+						$prop["type"] = "select";
+						$prop["options"] = $opts;
+						$prop["size"] = 1;
 					}
 				}
 				else
 				{
-					$data["type"] == "textbox";
-					//$data["value"] = $this->msgdata["to"];
+					$prop["type"] == "textbox";
+					//$prop["value"] = $this->msgdata["to"];
 				};
 
 				break;
@@ -458,21 +472,21 @@ class mail_message extends class_base
 				break;
 
 			case "edit_toolbar":
-				$this->edit_toolbar(&$data);
+				$this->edit_toolbar(&$prop);
 				break;
 
 			case "msgrid":
 			case "msgid":
 			case "mailbox":
 			case "cb_part":
-				$data["value"] = $arr["request"][$data["name"]];
+				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 
 			case "attachments":
 				$msgr = get_instance(CL_MESSENGER_V2);
 				$opts = array();
 				$msgrobj = new object($arr["request"]["msgrid"]);
-				$data["new_items"] = $msgrobj->prop("num_attachments");
+				$prop["new_items"] = $msgrobj->prop("num_attachments");
 
 				break;
 
@@ -723,10 +737,9 @@ class mail_message extends class_base
 			));
 			foreach($opts as $key => $item)
 			{
-				$rv["options"][$key] = htmlspecialchars($item);
+				$rv["options"][$key] = $item;
 			};
 		};
-		return array($rv);
 	}
 	
 	/** Can be used to download message parts 
@@ -1009,18 +1022,8 @@ class mail_message extends class_base
 		// field, I'll resolve the numeric 
 		$msgr = get_instance(CL_MESSENGER_V2);
 		$msgr->_connect_server(array(
-                        "msgr_id" => $arr["msgrid"],
-                ));
-
-		if (is_numeric($arr["mfrom"]) && isset($arr["msgrid"]))
-		{
-			$identities = $msgr->_get_identity_list(array(
-				"id" => $arr["msgrid"],	
-			));
-			$arr["mfrom"] = $identities[$arr["mfrom"]];
-		};
-
-
+			"msgr_id" => $arr["msgrid"],
+		));
 		// this is the place where I need to resolve the from address
 		$msgid = $this->submit($arr);
 

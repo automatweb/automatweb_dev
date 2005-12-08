@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_identity.aw,v 1.2 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_identity.aw,v 1.3 2005/12/08 16:53:14 ahti Exp $
 // messenger_identity.aw - Messengeri identiteet 
 /*
 
@@ -10,7 +10,7 @@
 @default field=meta
 @default method=serialize
 
-@property email type=textbox 
+@property mail type=textbox 
 @caption E-post
 
 @property reply_to type=textbox

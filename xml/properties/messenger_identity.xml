@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>email</name>
+            <name>mail</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>

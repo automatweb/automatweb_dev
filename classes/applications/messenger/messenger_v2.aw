@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.12 2005/10/25 21:39:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.13 2005/12/08 16:53:14 ahti Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -20,7 +20,7 @@
 property identity type=relpicker reltype=RELTYPE_MAIL_IDENTITY
 caption Identiteet
 
-@property fromname type=textbox 
+@property fromname type=relpicker reltype=RELTYPE_FROMNAME
 @caption Kellelt
 
 @property config type=relpicker reltype=RELTYPE_MAIL_CONFIG
@@ -116,6 +116,9 @@ comment Minutites
 
 @reltype MESSENGER_OWNERSHIP value=7 clid=CL_USER
 @caption Omanik
+
+@reltype FROMNAME value=8 clid=CL_ML_MEMBER
+@caption Saatja
                         
 */
 
@@ -381,7 +384,7 @@ class messenger_v2 extends class_base
 
 		if ($t->d_row_cnt > $perpage)
 		{
-			$pageselector = $t->draw_button_pageselector(array(
+			$pageselector = $t->draw_text_pageselector(array(
 				"records_per_page" => $perpage
 			));
 		};
@@ -967,15 +970,21 @@ class messenger_v2 extends class_base
 	function _get_identity_list($arr)
 	{
 		$msgrobj = new object($arr["id"]);
-		$rv = array($msgrobj->prop("fromname"));
+		$rv = array();
+		$frm = $msgrobj->prop("fromname");
+		if(is_oid($frm) && $this->can("view", $frm))
+		{
+			$frm = obj($frm);
+			$rv[$frm] = $frm->prop("mail");
+		}
 		$conns = $msgrobj->connections_from(array(
 			"type" => "RELTYPE_MAIL_IDENTITY",
-		));
+		));	
 		foreach($conns as $conn)
 		{
 			$obj = new object($conn->to());
-			$rv[$obj->id()] = $obj->prop("name") . " <" . $obj->prop("email") . ">";
-		};
+			$rv[$obj->id()] = htmlspecialchars($obj->prop("name")." <".$obj->prop("mail").">");
+		}
 		return $rv;
 	}
 

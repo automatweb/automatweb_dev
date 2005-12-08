@@ -22,7 +22,8 @@
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FROMNAME</reltype>
             <caption>Kellelt</caption>
       </property>
       <property>
@@ -298,6 +299,11 @@
                   <clid>CL_USER</clid>
                   <caption>Omanik</caption>
             </MESSENGER_OWNERSHIP>
+            <FROMNAME>
+                  <value>8</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>Saatja</caption>
+            </FROMNAME>
       </reltypes>
       <layout>
             <message_view>
