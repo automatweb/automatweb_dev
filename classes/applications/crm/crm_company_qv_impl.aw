@@ -57,8 +57,13 @@ class crm_company_qv_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_qv_t($t);
 
+		$this->hrs_total = 0;
+		$this->hrs_on_bill = 0;
+		$this->sum = 0;
+		$this->bills_sum = 0;
+
 		// projs
-		if (isset($arr["proj"]))
+		if (!empty($arr["proj"]))
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_PROJECT,
@@ -191,10 +196,12 @@ class crm_company_qv_impl extends class_base
 			}
 			$sum = 0;
 			$hrs = 0;
-			foreach($t_i->get_task_bill_rows($o) as $row)
+			foreach($t_i->get_task_bill_rows($o, false) as $row)
 			{
-				$sum += $row["sum"];
+				$sum += str_replace(",", "",$row["sum"]);
 				$hrs += $row["amt"];
+				$this->hrs_total += $row["amt"];
+				$this->sum += $row["sum"];
 			}
 			$end = "";
 			if ($o->prop("end") > $o->prop("start1"))
@@ -268,6 +275,8 @@ class crm_company_qv_impl extends class_base
 				"grp_num" => 3,
 				"state" => $bi->states[$o->prop("state")]
 			));
+			$this->bills_sum += str_replace(",", "", $sum);
+			$this->hrs_on_bill += $hrs;
 		}
 		
 		$t->sort_by(array(
@@ -316,6 +325,17 @@ class crm_company_qv_impl extends class_base
 			$ev = obj($_ev);
 			$ev = $ev->prop("shortname");
 		}
+
+		$this->_get_qv_t(array(
+			"prop" => array(
+				"vcl_inst" => new vcl_table(),
+				
+			),
+			"proj" => $arr["proj"],
+			"obj_inst" => $arr["obj_inst"],
+			"tasks" => $arr["tasks"],
+			"request" => $arr["request"]
+		));
 		$this->vars(array(
 			"name" => $o->name()." ".$ev,
 			"code" => $o->prop("code"),
@@ -332,7 +352,11 @@ class crm_company_qv_impl extends class_base
 			"fax" => $o->prop_str("telefax_id"),
 			"email" => $o->prop_str("email_id"),
 			"web" => $o->prop_str("url_id"),
-			"contact_p" => $cp
+			"contact_p" => $cp,
+			"bills_in_sum" => number_format($this->bills_sum, 2),
+			"done_sum" => number_format($this->sum, 2),
+			"hrs_on_bill" => $this->hrs_on_bill,
+			"total_work_hrs" => $this->hrs_total
 		));
 		return $arr["prop"]["value"] = $this->parse();
 	}
@@ -358,7 +382,13 @@ class crm_company_qv_impl extends class_base
 			"ph_str" => t("Telefon"),
 			"fx_str" => t("Faks"),
 			"em_str" => t("E-post"),
-			"w_str" => t("WWW")
+			"w_str" => t("WWW"),
+			"inc_str" => t("Tulud"),
+			"ts_str" => t("Ajavahemikul"),
+			"twh_str" => t("T&ouml;&ouml;tunde kokku"),
+			"hob_str" => t("Arvele l&auml;inud t&ouml;&ouml;tunde"),
+			"d_str" => t("Tehtud t&ouml;id summas"),
+			"pb_str" => t("Esitatud arveid summas")
 		));
 	}
 }
