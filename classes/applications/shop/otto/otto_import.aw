@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.32 2005/08/30 10:00:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.33 2005/12/08 11:08:39 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -75,8 +75,8 @@
 
 @groupinfo foldersnames caption="Kaustade nimed" parent=foldersa
 
-	@property foldernames type=textarea rows=20 cols=30 table=objects field=meta method=serialize group=foldersnames
-	@caption Kaustade nimed impordi jaoks (id=nimi,id=nimi)
+	@property foldernames type=table store=no group=foldersnames
+	@caption Kaustade nimed impordi jaoks
 
 @groupinfo views caption="Vaated"
 
@@ -94,6 +94,10 @@
 
 @property force_no_side_view type=textbox table=objects field=meta method=serialize group=views
 @caption Ilma detailvaate lisapiltideta lehed
+
+@property force_7_view_for_trends type=textbox table=objects field=meta method=serialize group=views
+@caption 7 pildiga trendide lehed
+@comment Ainult BonPrix. lk koodide asemel kaustade id-d, mille all 7st vaadet n&auml;idata
 
 @groupinfo jm caption="J&auml;relmaks"
 
@@ -154,6 +158,10 @@ class otto_import extends class_base
 				}\n";
 				$prop["value"] .= "</script>\n";
 				break;
+
+			case "foldernames":
+				$this->_foldernames($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -203,9 +211,85 @@ class otto_import extends class_base
 					$this->_do_del_prods(explode(",", $prop["value"]));
 				}
 				break;
+
+			case "foldernames":
+				$dat = $arr["request"]["dat"];
+				$inf = array();
+				foreach(safe_array($dat) as $cnt => $entry)
+				{
+					if (trim($entry["cat"]) != "" && trim($entry["fld"]) != "")
+					{
+						foreach(explode(",", $entry["fld"]) as $r_fld)
+						{
+							$inf[] = $r_fld."=".$entry["cat"];
+						}
+					}
+				}
+				$val = join(",", $inf);
+				$arr["obj_inst"]->set_meta("foldernames", $val);
+				break;
 		}
 		return $retval;
 	}	
+
+	function _init_fn_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "cat_name",
+			"caption" => t("Kategooria nimi"),
+		));
+
+		$t->define_field(array(
+			"name" => "fld_name",
+			"caption" => t("AW Kataloogi ID"),
+		));
+	}
+	function _foldernames($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_fn_t($t);
+
+		$val = $arr["obj_inst"]->meta("foldernames");
+		$inf = explode(",", $val);
+		$dat = array();
+		foreach($inf as $pair)
+		{
+			list($k, $v) = explode("=", $pair);
+			$dat[trim($k)] = trim($v);
+		}
+
+		$cnt = 1;
+		foreach($dat as $aw_fld => $name)
+		{
+			$t->define_data(array(
+				"cat_name" => html::textbox(array(
+					"name" => "dat[$cnt][cat]",
+					"value" => $name
+				)),
+				"fld_name" => html::textbox(array(
+					"name" => "dat[$cnt][fld]",
+					"value" => $aw_fld
+				)),
+			));
+			$cnt++;
+		}
+
+		for($i = 0; $i<10; $i++)
+		{
+			$t->define_data(array(
+				"cat_name" => html::textbox(array(
+					"name" => "dat[$cnt][cat]",
+					"value" => ""
+				)),
+				"fld_name" => html::textbox(array(
+					"name" => "dat[$cnt][fld]",
+					"value" => ""
+				)),
+			));
+			$cnt++;
+		}
+		$t->set_sortable(false);
+	}
 
 	function callback_pre_save($arr)
 	{
@@ -218,9 +302,16 @@ class otto_import extends class_base
 		
 		if ($arr["obj_inst"]->prop("do_i"))
 		{
+			echo "START IMPORT<br>";
 			if ($arr["obj_inst"]->prop("do_pict_i"))
 			{
+				echo "[ Tee piltide import ]<br>\n";
 				$this->doing_pict_i = true;
+			}
+			if ($arr['obj_inst']->prop("restart_pict_i"))
+			{
+				echo "[ Piltide import algusest ]<br>\n";
+				$this->restart_pictures_import = true;
 			}
 			$arr["obj_inst"]->set_prop("do_i", 0);
 			$arr["obj_inst"]->set_prop("do_pict_i", 0);
@@ -239,7 +330,7 @@ class otto_import extends class_base
 	{
 		$this->added_images = array();
 		set_time_limit(0);
-
+		echo "-----------[ start of picture import function ]------------------<br>";
 		if (is_object($arr))
 		{
 			$data = array();
@@ -322,15 +413,18 @@ class otto_import extends class_base
 			{
 				$data[] = $row["code"];
 			}
+			$skip_to = "";
 			echo "fixing not found codes:".join(", ",$data)." <br><br>";
 		}
-		//$data = array("392232");
+
+		//$data = array("");
 		$total = count($data);
 		$cur_cnt = -1;
 		$start_time = time();
-		//$data = array("887978");
+		//$data = array("2671881");
 		foreach ($data as $pcode) 
 		{
+			$pcode = str_replace(" ", "", $pcode);
 			if ($pcode == "")
 			{
 				continue;
@@ -363,53 +457,175 @@ class otto_import extends class_base
 
 			echo "process pcode $pcode (".($total - $cur_cnt)." to go, estimated time remaining $rem_hr hr, $rem_min min) <br>\n";
 			flush();
-
-			if (aw_ini_get("site_id") == 276)
+			
+			// if site is bonprix:
+			if (aw_ini_get("site_id") == 276 || aw_ini_get("site_id") == 277)
 			{
-				$url = "http://www.bonprix-shop.de/mall/cgi-bin/bonprix.bp.suche?pWkorbid=100825289114822289&pKanal=0&pAnfrage=".$pcode;
-				$html = $this->file_get_contents($url);
-				if (strpos($html, "Leider konnten wir") === false)
-				{
-					// found prod, read images
-					preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var1\/(.*).jpg/imsU", $html, $mt);
-					$first_im = $mt[1]."_var1";
-					$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
-					if (!$imnr)
-					{
-						echo "insert new image $first_im <br>\n";
-						flush();
-						$q = ("
-							INSERT INTO 
-								otto_prod_img(pcode, nr,imnr, server_id) 
-								values('$pcode','1','$first_im', 6)
-						");
-						//echo "q = $q <br>";
-						$this->db_query($q);
-						$this->added_images[] = $first_im;
-					}
+				/**
+					BONPRIX-i piltide import!
 
-					// get other images
-					list($r_i) = explode("_", $first_im);
-					preg_match_all("/http:\/\/image01\.otto\.de\/bonprixbilder\/varianten\/variante_klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER);
-					$otherim = $mt[1];
-					foreach($otherim as $nr)
+				**/
+	
+				$url = "http://www.bonprix.pl/katalog.php?ss=".$pcode;
+				$html = $this->file_get_contents($url);
+
+				if (strpos($html, "Niestety, ale nie ma") === false)
+				{
+					echo "[ BONPRIX POOLA ]<br>";
+					echo "-- Leidsin toote <trong>[ $pcode ]</strong><br />";
+					preg_match_all("/images\/all\/(\d+)\/(.*).jpg/", $html, $mt, PREG_PATTERN_ORDER);
+					$num = 0;
+					foreach($mt[2] as $idx => $nr)
 					{
-						$im = $r_i."_".$nr;
-						$nr = $nr{strlen($nr)-1};
-						$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "pcode");
+						$im = $mt[1][$idx]."/".$nr;
+						$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$num' AND pcode = '$pcode'", "pcode");
 						if (!$imnr)
 						{
-							echo "insert new image $im <br>\n";
+							echo "-- insert new image $im <br>\n";
 							flush();
+
 							$q = ("
 								INSERT INTO 
 									otto_prod_img(pcode, nr,imnr, server_id) 
-									values('$pcode','$nr','$im', 6)
+									values('$pcode','$num','$im', 7)
 							");
 							//echo "q = $q <br>";
 							$this->db_query($q);
 							$this->added_images[] = $im;
 						}
+						$num++;
+					}
+				}
+				else
+				{
+					// poola saidilt toodet ei leitud, nii et otsime siis saksa saidilt:
+					$url = "http://www.bonprix-shop.de/bp/search.htm?id=188035177146052928-0&nv=0%7C0%7C1&sc=0&pAnfrage=".$pcode;
+					$html = $this->file_get_contents($url);
+
+					if (strpos($html, "Leider konnten wir") === false)
+					{
+						echo "[ BONPRIX SAKSA ]<br>";
+						echo "-- Leidsin toote <strong>[ $pcode ]</strong> <br />";
+						// found prod, read images
+						if (preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var1\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var1";
+						}
+						else
+						if (preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var2\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var2";
+						}
+						else // paistab et saksa saidilt on http: pildi urli eest ära võetud
+						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var1\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var1";
+						}
+						else // paistab et saksa saidil on http: pildi urlilt eest ära võetud
+						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var2\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var2";
+						}
+						else 
+						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var3\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var3";
+						}
+						else 
+						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var4\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var4";
+						}
+						else
+						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var1\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var1";
+						}
+						else
+						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var2\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var2";
+						}
+						else
+						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var3\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var3";
+						}
+						else
+						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var4\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var4";
+						}
+						else
+						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var5\/(.*).jpg/imsU", $html, $mt))
+						{
+							$first_im = $mt[1]."_var5";
+						}
+						else
+						{
+							echo "<span style='color:red'>&Uuml;heltki aadressilt pilte ei leitud !!!</span><br />";
+							flush();
+						}
+	
+						echo "---- Kontrollin baasist pilti [ $first_im ] <br>\n";
+						flush();
+						$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
+						echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
+						flush();
+						if (!$imnr && $first_im)
+						{	
+							echo "";
+							echo "------ insert new image [ $first_im ]<br>\n";
+							flush();
+	
+							$nr = $first_im{strlen($first_im)-1};
+							$q = ("
+								INSERT INTO 
+									otto_prod_img(pcode, nr,imnr, server_id) 
+									values('$pcode','$nr','$first_im', 6)
+							");
+							//echo "q = $q <br>";
+							$this->db_query($q);
+							$this->added_images[] = $first_im;
+						}
+	
+						// get other images
+						list($r_i) = explode("_", $first_im);
+						echo "---- Otsin teisi pilte: <br>";
+						if (!preg_match_all("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER))
+						{
+							preg_match_all("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER);
+						}
+						$otherim = $mt[1];
+						foreach($otherim as $nr)
+						{
+							$im = $r_i."_".$nr;
+							$nr = $nr{strlen($nr)-1};
+							echo "---- Kontrollin baasist pilti [ $im ] <br>\n";
+							flush();
+							$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "pcode");
+							echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
+							flush();
+							if (!$imnr)
+							{
+								echo "------ insert new image [ $im ]<br>\n";
+								flush();
+								$q = ("
+									INSERT INTO 
+										otto_prod_img(pcode, nr,imnr, server_id) 
+										values('$pcode','$nr','$im', 6)
+								");
+								//echo "q = $q <br>";
+								$this->db_query($q);
+								$this->added_images[] = $im;
+							}
+						}
+
+					}
+					else
+					{
+						// kui ka saksa saidilt pilti ei leitud:
+						echo "<span style='color:red'>Tundub et toodet ei leitud ei Saksa ega Poola saidilt!</span>";
 					}
 				}
 			}
@@ -420,17 +636,18 @@ class otto_import extends class_base
 
 			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewSearch-SearchStart;sid=mDuGagg9T0iHakspt6yqShOR_0e4OZ2Xs5qs8J39FNYYHvjet0FaQJmF?ls=0&Orengelet.sortPipelet.sortResultSetSize=15&SearchDetail=one&stype=N&Query_Text=".$pcode;
 
-		echo "url = $url <br>";
+//		echo "url = $url <br>";
 			$html = $this->file_get_contents($url);
 
 			// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
 			if (strpos($html,"Leider konnten wir im gesamten OTTO") !== false)
 			{ 
 				// read from baur.de
+				echo "can't find an product for <b>$pcode</b> from otto.de, so searching from baur.de<br>\n";
 				$this->read_img_from_baur($pcode);
 			}
 			else
-			if (!preg_match("/pool\/formatd\/(\d+).jpg/imsU",$html, $mt))
+			if (true /*!preg_match("/pool\/formatd\/(\d+).jpg/imsU",$html, $mt)*/)
 			{
 				echo "for product $pcode multiple images! <br>\n";
 				flush();
@@ -446,22 +663,23 @@ class otto_import extends class_base
 				}
 
 				$urld = array();
-				//die(dbg::dump($mt));
+				//echo (dbg::dump($mt));
 				foreach($mt[1] as $url)
 				{
 					$url = $url."&SearchDetail=one&stype=N&Orengelet.sortPipelet.sortResultSetSize=15&Orengelet.SimCategorize4OttoMsPipelet.Similarity_Parameter=&Orengelet.sortPipelet.sortCursorPosition=0&Query_Text=".$pcode;
 
 					$urld[$url] = $url;
 				}
-
+//die(dbg::dump($urld));
 				foreach($urld as $url)
 				{
-					//echo "url = $url <br>";
+					echo "url = $url <br>";
 					$html = $this->file_get_contents($url);
-
+//echo "got html $html <br>";
 					preg_match_all("/Javascript:setImage\('(.*)\.jpg', '(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER);
 					$f_imnr = NULL;
-
+//echo "mt = ".dbg::dump($mt)." \n";
+//flush();
 					// ach! if only single image then no js!!!
 					if (count($mt[1]) == 0)
 					{
@@ -490,11 +708,14 @@ class otto_import extends class_base
 						foreach($mt[1] as $idx => $img)
 						{
 							$imnr = basename($img, ".jpg");
-							$t_imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'", "pcode");
+							$q = "SELECT pcode FROM otto_prod_img WHERE imnr = '$imnr' AND nr = '".$mt[2][$idx]."' AND pcode = '$pcode'";
+//echo "q = $q <br>";
+							$t_imnr = $this->db_fetch_field($q, "pcode");
 							if (!$f_imnr)
 							{
 								$f_imnr = $t_imnr.".jpg";
 							}
+//echo dbg::dump($t_imnr);
 							if (!$t_imnr)
 							{
 								echo "insert new image $imnr <br>\n";
@@ -512,7 +733,7 @@ class otto_import extends class_base
 					}
 
 					// check for rundumanshiftph
-					if (strpos($html, "rundum_eb") !== false)
+					if (strpos($html, "rundum") !== false)
 					{
 						preg_match_all("/javascript:OpenPopUpZoom\('690','540','(.*)'\+selectedImage\);/imsU", $html, $mt);
 						// get the rundum image number from the popup :(
@@ -520,7 +741,7 @@ class otto_import extends class_base
 
 						// save rundum
 						// get rundum imnr from html
-						preg_match("/http:\/\/image01\.otto\.de:80\/pool\/OttoDe\/de_DE\/images\/format360\/(.*)\.swf/imsU", $r_html, $mt);
+						preg_match("/http:\/\/image01\.otto\.de:80\/pool\/format360\/(.*)\.swf/imsU", $r_html, $mt);
 						echo "set flash to true <br>";
 						$this->db_query("UPDATE otto_prod_img SET has_flash = '$mt[1]' WHERE pcode = '$pcode' AND nr = 1");
 					}
@@ -535,7 +756,7 @@ class otto_import extends class_base
 
 				$add = 0;
 				// check if we got the main img
-				if (preg_match("/pool\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt))
+				if (preg_match("/pool\/formatd\/(\d+)\.jpg/imsU", $html, $mt))
 				{
 					$add = 1;
 					$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
@@ -546,7 +767,7 @@ class otto_import extends class_base
 				}
 
 				// also, other images, detect them via the jump_img('nr') js func
-				preg_match_all("/jump_img\('(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER);
+				preg_match_all("/Javascript:setImage\('(.*)\.jpg', '(\d+)'\)/imsU", $html, $mt, PREG_PATTERN_ORDER);
 				$nrs = $mt[1];
 				foreach($nrs as $nr)
 				{
@@ -600,6 +821,8 @@ class otto_import extends class_base
 		}
 
 		echo "all done! <br>\n";
+		echo "-----------[ end of picture import function ]------------------<br>";
+
 		//die();
 	}
 
@@ -643,14 +866,21 @@ class otto_import extends class_base
 	function update_csv_db($o)
 	{
 		set_time_limit(0);
-		if ($o->prop("restart_pict_i"))
+		echo "- START UPDATE CSV DB -<br>";
+//		if ($o->prop("restart_pict_i"))
+		if ($this->restart_pictures_import)
 		{
+			echo "Restarting pictures import ";
 			@unlink($this->cfg["site_basedir"]."/files/status.txt");
+			echo "[ ok ]<br>\n";
 		}
-		if ($o->prop("do_pict_i"))
+//		if ($o->prop("do_pict_i"))
+		if ($this->doing_pict_i)
 		{
+			echo "Starting pictures import ... <br>\n";
 			$this->pictimp($o);
 			$doing_pict_imp = 1;
+			echo "Pictures import is done<br>\n";
 		}
 
 		$fldnames_t = explode(",", trim($o->prop("foldersnames")));
@@ -666,12 +896,13 @@ class otto_import extends class_base
 		$imp_stat_file = aw_ini_get("site_basedir")."/files/impstatus.txt";
 		if ($o->prop("restart_prod_i"))
 		{
+			echo "- product import restarted<br>";
 			@unlink($imp_stat_file);
 		}
 
 		if (file_exists($imp_stat_file))
 		{
-			$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/files/status.txt"));
+			//$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/files/status.txt"));
 			echo "restarting from product $skip_to <br>";
 		}
 
@@ -681,12 +912,15 @@ class otto_import extends class_base
 		//$this->db_query("DELETE FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get("lang_id"));
 
 		echo "from url ".$o->prop("folder_url")." read: <br>";
+		echo "-------------------------------------------------------------<br>";
 
 		$fext = ($o->prop("file_ext") != "" ? $o->prop("file_ext") : "xls");
 
 		$first = true;
 
 		$log = array();
+
+		echo "<b>[!!]</b> start reading data from csv files <b>[!!]</b><br>\n";
 
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
 		{
@@ -700,6 +934,7 @@ class otto_import extends class_base
 			{
 				continue;
 			}
+			echo "[ reading from the first file ]<br>\n";
 			echo "from url ".$fld_url." read: <br>";
 			list(, $cur_pg) = explode(".", $fname);
 			$cur_pg = substr($cur_pg,1);
@@ -708,7 +943,6 @@ class otto_import extends class_base
 				$cur_pg = (int)$cur_pg;
 			}
 			$cur_pg = trim($cur_pg);
-
 			$first = true;
 			$num = 0;
 
@@ -748,18 +982,30 @@ class otto_import extends class_base
 				$this->quote(&$row);
 				$row = $this->char_replacement($row);
 				$row[2] = $this->conv($row[2]);
-				$extrafld = trim($row[3]);
-				$desc = $this->conv(trim($row[4]." ".$row[5]." ".$row[6]." ".$row[7]." ".$row[8]." ".$row[9]." ".$row[10]." ".$row[11]." ".$row[12]." ".$row[13]." ".$row[14]." ".$row[15]." ".$row[16]." ".$row[17]." ".$row[18]." ".$row[19]." ".$row[20]." ".$row[21]." ".$row[22]." ".$row[23]." ".$row[24]." ".$row[25]." ".$row[26]." ".$row[27]." ".$row[28]." ".$row[29]." ".$row[30]." ".$row[31]." ".$row[32]." ".$row[33]." ".$row[34]." ".$row[35]." ".$row[36]." ".$row[37]." ".$row[38]." ".$row[39]." ".$row[40]." ".$row[41]." ".$row[42]));
+				if (true || aw_ini_get("site_id") == 276 || aw_ini_get("site_id") == 277)
+				{
+					$extrafld = trim($row[3]);
+					$desc = $this->conv(trim($row[4]." ".$row[5]." ".$row[6]." ".$row[7]." ".$row[8]." ".$row[9]." ".$row[10]." ".$row[11]." ".$row[12]." ".$row[13]." ".$row[14]." ".$row[15]." ".$row[16]." ".$row[17]." ".$row[18]." ".$row[19]." ".$row[20]." ".$row[21]." ".$row[22]." ".$row[23]." ".$row[24]." ".$row[25]." ".$row[26]." ".$row[27]." ".$row[28]." ".$row[29]." ".$row[30]." ".$row[31]." ".$row[32]." ".$row[33]." ".$row[34]." ".$row[35]." ".$row[36]." ".$row[37]." ".$row[38]." ".$row[39]." ".$row[40]." ".$row[41]." ".$row[42]));
+				}
+				else
+				{
+					//$extrafld = trim($row[3]);
+					$desc = $this->conv(trim($row[3]." ".$row[5]." ".$row[6]." ".$row[7]." ".$row[8]." ".$row[9]." ".$row[10]." ".$row[11]." ".$row[12]." ".$row[13]." ".$row[14]." ".$row[15]." ".$row[16]." ".$row[17]." ".$row[18]." ".$row[19]." ".$row[20]." ".$row[21]." ".$row[22]." ".$row[23]." ".$row[24]." ".$row[25]." ".$row[26]." ".$row[27]." ".$row[28]." ".$row[29]." ".$row[30]." ".$row[31]." ".$row[32]." ".$row[33]." ".$row[34]." ".$row[35]." ".$row[36]." ".$row[37]." ".$row[38]." ".$row[39]." ".$row[40]." ".$row[41]." ".$row[42]));
+				}
 				$this->db_query("
 					INSERT INTO otto_imp_t_prod(pg,nr,title,c,extrafld)
 					VALUES('$cur_pg','$row[1]','$row[2]','$desc','$extrafld')
 				");
+
 				if ($row[2] == "")
 				{
 					echo "ERROR ON LINE $num title ".$row[2]." <br>";
 					$log[] = "VIGA real $num failis $fld_url nimi: ".$row[2];
 				}
 				$num++;
+
+				echo "-- Lisasin toote numbriga [".$row[1]."], leht: [".$cur_pg."], extrafld/kategooria: [".$extrafld."],  nimi: [".$row[2]."]<br>\n";
+
 			}
 
 			if ($tmpf)
@@ -767,7 +1013,7 @@ class otto_import extends class_base
 				@unlink($tmpf);
 			}
 
-			echo ".. got $num titles <br>";
+			echo "[ ...got $num titles from file $fld_url] <br><br>";
 			$log[] = "lugesin failist $fld_url $num toodet";
 		}
 
@@ -777,13 +1023,13 @@ class otto_import extends class_base
 			{
 				continue;
 			}
-
 			$fld_url = $o->prop("base_url")."/".trim($fname)."-2.".$fext;
 			if (!$this->is_csv($fld_url))
 			{
 				continue;
 			}
-			echo "from url ".$fld_url." read: <br>";
+			echo "[ reading from the second file ]<br>\n";
+			echo "from url ".$fld_url." read: <br>\n";
 			list(, $cur_pg) = explode(".", $fname);
 			$cur_pg = substr($cur_pg,1);
 			if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
@@ -850,6 +1096,8 @@ class otto_import extends class_base
 					echo "ERROR ON LINE $num code ".$row[4]." <br>";
 					$log[] = "VIGA real $num failis $fld_url kood: $row[4]";
 				}
+
+				echo "-- Lisasin koodi numbriga $row[1], leht: [$cur_pg], suurus: [$row[2]], v2rv: [$color], kood: [$row[4]], t2iskood: [$full_code], set_f_img: [$set_f_img]<br>\n";
 			}
 
 			if ($tmpf)
@@ -857,7 +1105,7 @@ class otto_import extends class_base
 				@unlink($tmpf);
 			}
 
-			echo ".. got $num codes <br>\n";
+			echo "[... got $num codes from file $fld_url] <br><br>\n";
 			$log[] = "lugesin failist $fld_url $num koodi";
 			flush();
 		}
@@ -874,6 +1122,7 @@ class otto_import extends class_base
 			{
 				continue;
 			}
+			echo "[ reading from the third file ]<br>\n";
 			echo "from url ".$fld_url." read: <br>";
 			list(, $cur_pg) = explode(".", $fname);
 			$cur_pg = substr($cur_pg,1);
@@ -948,29 +1197,38 @@ class otto_import extends class_base
 					}
 				}
 				$num++;
+
+				echo "-- Lisasin hinna numbriga [$row[1]], leht: [$cur_pg], tyyp: [$row[2]], suurus: [$row[3]], yhik: [$row[4]], hind: [$row[5]]<br>\n";
 			}
 
 			if ($tmpf)
 			{
 				@unlink($tmpf);
 			}
-			echo ".. got $num prices <br>\n";
+			echo "[... got $num prices from file $fld_url ] <br>\n";
 			$log[] = "lugesin failist $fld_url $num hinda";
 			flush();
 		}
+		
+		echo "<br><b>[!!]</b>  end reading data from the csv files <b>[!!]</b><br><br>\n";
 
 		$this->db_query("SELECT * FROM otto_imp_t_codes");
+		echo "[Select all codes from otto_imp_t_codes db table]<br>\n";
+		$tmp_counter = 0;
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
 			$this->db_query("UPDATE otto_prod_img SET p_pg = '$row[pg]', p_nr = '$row[nr]' WHERE pcode = '$row[code]'");
+			echo "-- Update otto_prod_img table: set p_pg: $row[pg], p_nr: $row[nr] where pcode: $row[code]<br>\n";
 			$this->restore_handle();
+			$tmp_counter++;
 		}
+		echo "[ Uuendati $tmp_counter rida ]<br>\n";
 
 		echo "wrote temp db <br>\n";
 		flush();
 
-		echo "rewrite first images <br>\n";
+		echo "rewrite first images (if set_f_img is set in second csv file)<br>\n";
 		$this->db_query("SELECT * FROM otto_imp_t_codes WHERE set_f_img != ''");
 		while ($row = $this->db_next())
 		{
@@ -979,7 +1237,7 @@ class otto_import extends class_base
 			$this->restore_handle();
 		}
 
-		echo "make existing prod lut <br>\n";
+		echo "[ make existing products lut ] <br>\n";
 		flush();
 		/*$exist = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT,
@@ -993,7 +1251,8 @@ class otto_import extends class_base
 			$pl[$t->prop("user20")] = $t->id();
 			$pl_full[$t->prop("user20")][$t->id()] = $t;
 		}*/
-		
+
+		echo "[ get products count ... ";
 		$total = $this->db_fetch_field("
 			SELECT  
 				count(*) as cnt
@@ -1001,8 +1260,7 @@ class otto_import extends class_base
 				otto_imp_t_prod p
 				LEFT JOIN otto_imp_t_codes c ON (c.pg = p.pg AND c.nr = p.nr)
 		", "cnt");
-
-
+		echo "got: $total products (otto_imp_t_prod left join otto_imp_t_codes on pg and nr) ]<br>\n";
 
 		// structure is this:
 		// packet - contains all prods that share the same page number and the same image
@@ -1013,7 +1271,7 @@ class otto_import extends class_base
 		// then all the packagings for them
 		// then finally we group by the image number and create packages based on that
 
-		// no, go over all the damn prods and create the correct data from them
+		// now, go over all the damn prods and create the correct data from them
 		$query = "
 			SELECT  
 				p.pg as pg,
@@ -1030,11 +1288,12 @@ class otto_import extends class_base
 				LEFT JOIN otto_imp_t_codes c ON (c.pg = p.pg AND c.nr = p.nr)
 		";
 		$this->db_query($query);
+		echo "<br><br>[!!] Looping through all the products [!!]<br>\n";
 		$start_time = time();
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			//echo "import package 
+			echo "-- [ import package ] <br>\n";
 			if ($skip_to && $row["code"] != $skip_to)
 			{
 				$total--;
@@ -1046,6 +1305,7 @@ class otto_import extends class_base
 			}
 			
 			$orig_pcode = $row["code"];
+			echo "---- original product code: pcode=$orig_pcode<br>\n";
 			$orig_row = $row;
 
 			$elapsed_time = time() - $start_time;
@@ -1061,19 +1321,20 @@ class otto_import extends class_base
 			$rem_hr = (int)($time_remaining / 3600);
 			$rem_min = (int)(($time_remaining - ($rem_hr * 3600)) / 60);
 
-			echo "import prod $row[title] ($row[code]) , ".($total - $items_done)." items to go , estimated time remaining: $rem_hr hrs, $rem_min minutes <br>\n";
+			echo "---- import product $row[title] (kood: $row[code]) , ".($total - $items_done)." items to go , estimated time remaining: $rem_hr hrs, $rem_min minutes <br>\n";
 			flush();
 			// check if it exists
-			$prod_id = $this->_get_id_by_code($row["code"]);
 
-			echo "checking if $prod_id is oid<br>\n";
+			$prod_id = $this->_get_id_by_code($row["code"], $row["s_type"]);
+
+			echo "---- checking if prod_id: [$prod_id] is oid<br>\n";
 			flush();
 			$new = true;
-			if (is_oid($prod_id))
+			if ($this->can("view", $prod_id))
 			{
-				echo "oid = ".$prod_id." <br>";
+				echo "------ prod_id is oid [".$prod_id."] <br>";
 				$dat = obj($prod_id);
-				echo "found existing ".$dat->id()."   ".$row['code']."<br>\n";
+				echo "------ found existing product object [oid:".$dat->id().", kood:".$row['code']."]<br>\n";
 				flush();
 				$new = false;
 			}
@@ -1085,7 +1346,7 @@ class otto_import extends class_base
 				$dat->set_prop("user20", $row["code"]);
 				$dat->save();
 
-				echo "created new ".$dat->id()."  ".$row['code']." <br>\n";
+				echo "------ created new product object: id:".$dat->id()."  kood: ".$row['code']." <br>\n";
 				flush();
 			}
 
@@ -1093,7 +1354,7 @@ class otto_import extends class_base
 			$try_fld = $this->db_fetch_field("SELECT fld FROM otto_imp_t_p2p WHERE pg = '$row[pg]' and lang_id = ".aw_global_get("lang_id"), "fld");
 			if ($try_fld)
 			{
-				echo "found parent for prod as $try_fld <br>\n";
+				echo "------ found parent for prod as $try_fld <br>\n";
 				flush();
 				$dat->set_parent($try_fld);
 			}
@@ -1108,13 +1369,14 @@ class otto_import extends class_base
 			$dat->set_prop("user17", $row["color"]);
 			$dat->set_prop("user18", $row["pg"]);
 			$dat->set_prop("user11", $row["extrafld"]);
-
 			if (!$new)
 			{
+				echo "---- if not new object: <br>\n";
 				$_ids = $this->_get_ids_by_code($row["code"]);
+				echo "---- getting ids by code [$row[code]]<br>\n";
 				foreach($_ids as $tmp_dat)
 				{	
-					echo "also set ".$tmp_dat->id()." to page $row[pg] <br>";
+					echo "------ also set ".$tmp_dat->id()." to page $row[pg] <br>";
 					if ($tmp_dat->prop("user18") != $row["pg"])
 					{
 						$tmp_dat->set_prop("user18", $row["pg"]);
@@ -1156,7 +1418,8 @@ class otto_import extends class_base
 			$typestr = join(",", map("'%s'", $typestr_a));
 
 			// now, for each price, create packaging objects
-			echo "q = "."SELECT * FROM otto_imp_t_prices WHERE pg = '$row[pg]' AND nr = '$row[nr]' AND type IN ($typestr) <br>";
+			echo "---- [Iga hinna jaoks tekita packaging objekt]<br>\n";
+			echo "---- q = "."SELECT * FROM otto_imp_t_prices WHERE pg = '$row[pg]' AND nr = '$row[nr]' AND type IN ($typestr) <br>";
 			$this->db_query("SELECT * FROM otto_imp_t_prices WHERE pg = '$row[pg]' AND nr = '$row[nr]' AND type IN ($typestr) ");
 			$rows = array();
 			while ($row = $this->db_next())
@@ -1217,11 +1480,11 @@ class otto_import extends class_base
 					if (is_oid($pkgs[$row["price"]][$row["size"]]))
 					{
 						$pk = obj($pkgs[$row["price"]][$row["size"]]);
-						echo "for prod ".$dat->name()." got (".$pk->id().") packaging ".$row["price"]." for type ".$orig_row["s_type"]." <bR>";
+						echo "------ for prod ".$dat->name()." got (".$pk->id().") packaging ".$row["price"]." for type ".$orig_row["s_type"]." <bR>";
 					}
 					else
 					{
-						echo "for prod ".$dat->name()." got NEW packaging ".$row["price"]." for type ".$orig_row["s_type"]." <bR>";
+						echo "------ for prod ".$dat->name()." got NEW packaging ".$row["price"]." for type ".$orig_row["s_type"]." <bR>";
 						$pk = obj();
 						$pk->set_class_id(CL_SHOP_PRODUCT_PACKAGING	);
 						$pk->set_parent($dat->id());
@@ -1278,7 +1541,7 @@ class otto_import extends class_base
 			$items_done++;
 		}
 
-		echo "hear hear. prods done. <br>\n";
+		echo "[!!] hear hear. prods done. Imporditi $items_done toodet [!!] <br>\n";
 
 		$log[] = "importisin $items_done toodet";
 
@@ -1288,7 +1551,7 @@ class otto_import extends class_base
 		flush();
 		// to make packages, group by image number and for all images where cnt > 1 create a package for all those prods
 
-		echo "make existing packet lut <br>\n";
+		echo "<br><br>[!!] make existing packet lut [!!]<br>\n";
 		flush();
 		$pktl = array();
 		/*$exist = new object_list(array(
@@ -1481,7 +1744,7 @@ class otto_import extends class_base
 		Tekst saidil (skrolli alla): http://otto-latvia.struktuur.ee/134393
 		kooditabel: http://www.science.co.il/Language/Character-Code.asp?s=1257
 		*/
-		if (aw_global_get("lang_id") == 6)
+		if (aw_global_get("lang_id") == 6 || aw_global_get("lang_id") == 7)
 		{
 			/* uus */
 			$needle = array();
@@ -1493,7 +1756,7 @@ class otto_import extends class_base
 			chr(165), //238
 			chr(236), //234
 			chr(191), //242
-			chr(199), //226
+			//chr(199), //226
 			chr(148), //199
 			chr(239), //231
 			chr(134), //239
@@ -1518,7 +1781,15 @@ class otto_import extends class_base
 			chr(185), //207
 			chr(225), //208
 			chr(186), //239
-			chr(158) //236
+			chr(158), //236
+			chr(202),
+			chr(200), // "
+			chr(199),  // "
+			chr(161), // &deg;
+			chr(181), // 205
+			chr(227), //34
+			chr(234), //&#382;
+			chr(139), //&#269;
 			);
 
 			
@@ -1532,7 +1803,7 @@ class otto_import extends class_base
 			chr(238),
 			chr(234),
 			chr(242),
-			chr(226),
+			//chr(226),
 			chr(199),
 			chr(231),
 			chr(239),
@@ -1557,12 +1828,21 @@ class otto_import extends class_base
 			chr(207),
 			chr(208),
 			chr(239),
-			chr(234)
+			chr(234),
+			"",
+			"&quot;",
+			"&quot;",
+			"&deg;",
+			chr(205),
+			chr(34),
+			"&#382;",
+			"&#269;",
 			);
 		}
 		else
 		{
    $needle = array(
+			chr(158),	// &#381;
 			chr(213),	// ylakoma;
 			chr(235),	// zhee;
 			chr(159),	// &uuml;
@@ -1577,15 +1857,20 @@ class otto_import extends class_base
 			chr(210),
 			chr(211),
 			chr(175),
+			chr(236), //&#382;
+			chr(227), //34
+			chr(225), //&#352;
+			chr(149), //z
 
 		);
 		$haystack = array(
+			"&#381;",
 			chr(180),	// ylakoma;
 			chr(158),// zhee;
 			chr(252),// &uuml;
 			chr(220),	// &Uuml;
 			chr(246),// &ouml;
-			chr(154), // shaa
+			chr(185), // shaa-enne oli 154
 			chr(228),// &auml;
 			chr(213),// &Otilde;
 			chr(245),	// &otilde;
@@ -1594,6 +1879,10 @@ class otto_import extends class_base
 			chr(34),
 			chr(34),
 			chr(216),
+			"&#382;",
+			chr(34),
+			"&#352;",
+			"z",
 		);
 		}
 
@@ -1661,7 +1950,6 @@ class otto_import extends class_base
 			$vars["add_to_cart"] = array();
 			$vars["add_to_cart"][$arr["add_to_cart"]] = $arr["add_to_cart_count"];
 		}
-
 		$i = get_instance(CL_SHOP_ORDER_CART);
 		$i->submit_add_cart($vars);
 
@@ -1957,17 +2245,22 @@ class otto_import extends class_base
 
 	function read_img_from_baur($pcode)
 	{
+		$pcode = str_replace(" ", "", $pcode);
 		$url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/BaurDe/de_DE/-/EUR/BV_ParametricSearch-Progress;sid=9wziDKL5zmzox-N_94eyWWD0hj6lQBejDB2TPuW1?ls=0&_PipelineID=search_pipe_bbms&_QueryClass=MallSearch.V1&Servicelet.indexRetrieverPipelet.threshold=0.7&Orengelet.sortPipelet.sortResultSetSize=10&Query_Text=".$pcode."&Kategorie_Text=&x=23&y=13";
 
 		$fc = $this->file_get_contents($url);
-		if (strpos($fc, "leider keine Artikel gefunden") !== false)
+//		if (strpos($fc, "leider keine Artikel gefunden") !== false)
+		if (strpos($fc, "search/topcontent/noresult_slogan.gif") !== false)
 		{
+			echo "can't find a product for <b>$pcode</b> from baur.de, so searching from schwab<br>\n";
 			return $this->read_img_from_schwab($pcode);
+			
 		}
 
-		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+//		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+		preg_match_all("/ProductRef=(\d.*)\"/ims", $fc, $mt, PREG_PATTERN_ORDER);
 		$pcs = array_unique($mt[1]);
-
+arr($mt);
 		foreach($pcs as $n_pc)
 		{
 			$url2 = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/BaurDe/de_DE/-/EUR/BV_DisplayProductInformation-ProductRef;sid=vawch68xzhk1fe62PgtM0m08zJ5byxprRr3IpZL-?ls=0&ProductRef=".$n_pc."&SearchBack=true&SearchDetail=true";
@@ -2046,6 +2339,7 @@ class otto_import extends class_base
 
 		if (strpos($fc, "Wir konnten leider keine Ergebnisse") !== false)
 		{
+			echo "can't find a product for <b>$pcode</b> from schwab.de, so searching from albamoda<br>\n";
 			return $this->read_img_from_albamoda($pcode);
 		}
 
@@ -2121,6 +2415,7 @@ class otto_import extends class_base
 		$fc = $this->file_get_contents($url);
 		if (strpos($fc, "Es wurden leider keine Artikel") !== false)
 		{
+			echo "can't find a product for <b>$pcode</b> from albamoda.de, so searching from heine<br>\n";
 			return $this->read_img_from_heine($pcode);
 		}
 
@@ -2161,6 +2456,8 @@ class otto_import extends class_base
 
 	function read_img_from_heine($pcode)
 	{
+		// no spaces in product code ! --dragut
+		$pcode = str_replace(" ", "", $pcode);
 		$url = "http://www.neu.heine.de/is-bin/INTERSHOP.enfinity/WFS/HeineDe/de_DE/-/EUR/SH_ParametricSearch-Progress;sid=YtPBfo9Zn47Dfs1V6VzvXpT13mqu32H0mc0eO27a?ls=&ArtikelID_Text=".$pcode."&y=9&x=11";
 		$fc = $this->file_get_contents($url);
 
@@ -2186,7 +2483,12 @@ class otto_import extends class_base
 			$fc2 = $this->file_get_contents($prod_url);
 			
 
-			preg_match("/http:\/\/image01\.otto\.de:80\/pool\/HeineDe\/de_DE\/images\/format_hv_ds_a\/(\d+).jpg/imsU", $fc2, $mt);
+			if (!preg_match("/http:\/\/image01\.otto\.de:80\/pool\/HeineDe\/de_DE\/images\/format_hv_ds_a\/(\d+).jpg/imsU", $fc2, $mt))
+			{
+				// i'm not really sure that it works, so i have to look over it
+				// maybe this one works, but there are some other image urls which are not listed here
+				preg_match("/http:\/\/image01.otto.de\/pool\/images\/format_hv_ds_a\/(\d+).jpg/imsU", $fc2, $mt);
+			}
 			$first_im = $mt[1];
 
 			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
@@ -2268,16 +2570,20 @@ class otto_import extends class_base
 		echo "valmis! <br>";
 	}
 
-	function _get_id_by_code($code)
+	function _get_id_by_code($code, $s_type = NULL)
 	{
-		$id = $this->db_fetch_field("SELECT aw_oid FROM aw_shop_products LEFT JOIN objects ON objects.oid = aw_shop_products.aw_oid = objects.oid WHERE user20 = '$code' AND objects.status > 0 AND objects.lang_id = ".aw_global_get("lang_id"), "aw_oid");
+		if ($s_type != "")
+		{
+			$ad_sql = " AND user17 LIKE '%($s_type)%' ";
+		}
+		$id = $this->db_fetch_field("SELECT aw_oid FROM aw_shop_products LEFT JOIN objects ON objects.oid = aw_shop_products.aw_oid  WHERE user20 = '$code' $ad_sql AND objects.status > 0 AND objects.lang_id = ".aw_global_get("lang_id"), "aw_oid");
 		return $id;
 	}
 
 	function _get_ids_by_code($code)
 	{
 		$ret = array();
-		$this->db_query("SELECT aw_oid FROM aw_shop_products LEFT JOIN objects ON objects.oid = aw_shop_products.aw_oid = objects.oid WHERE user20 = '$code' AND objects.status > 0 AND objects.lang_id = ".aw_global_get("lang_id"));
+		$this->db_query("SELECT aw_oid FROM aw_shop_products LEFT JOIN objects ON objects.oid = aw_shop_products.aw_oid  WHERE user20 = '$code' AND objects.status > 0 AND objects.lang_id = ".aw_global_get("lang_id"));
 		while ($row = $this->db_next())
 		{
 			$ret[] = obj($row["aw_oid"]);
