@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.441 2005/12/08 16:53:14 ahti Exp $
+// $Id: class_base.aw,v 2.442 2005/12/09 10:48:47 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3234,7 +3234,7 @@ class class_base extends aw_template
 						"obj_inst" => &$this->obj_inst,
 					));
 					*/
-					if ($controller_ret != PROP_OK)
+					if ($controller_ret != PROP_OK && is_oid($controller_id))
 					{
 						if ($this->cfg_debug)
 						{
