@@ -67,7 +67,11 @@ class planner_model extends core
 		// otherwise just id-s - suitable for feeding to object_list
 		$cal_obj = new object($arr["id"]);
 		$folders = array();
-		
+	
+		if (!is_oid($arr["id"]))
+		{
+			return $folders;
+		}	
 		$evt_folder = $cal_obj->prop("event_folder");
 		if (is_oid($evt_folder))
 		{
@@ -178,10 +182,6 @@ class planner_model extends core
 	// id - calendar object
 	function get_event_list($arr)
 	{
-		if (!is_oid($arr["id"]))
-		{
-			return;
-		}
 		$obj = new object($arr["id"]);
 		$event_ids = array();
 		$folders = $this->get_event_folders(array("id" => $obj->id()));
