@@ -178,8 +178,11 @@ class planner_model extends core
 	// id - calendar object
 	function get_event_list($arr)
 	{
+		if (!is_oid($arr["id"]))
+		{
+			return;
+		}
 		$obj = new object($arr["id"]);
-
 		$event_ids = array();
 		$folders = $this->get_event_folders(array("id" => $obj->id()));
 
