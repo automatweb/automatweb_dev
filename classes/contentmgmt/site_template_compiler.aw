@@ -398,7 +398,7 @@ class site_template_compiler extends aw_template
 				// WHATTA FUCK IS THIS SUPPOSED TO BE????
 				// all the pages that have a glitch in their template,
 				// are more than a bit fucked up "thanks" to this -- ahz
-				//$this->compile_template_level($area, $adat, $level, $ldat);
+				$this->compile_template_level($area, $adat, $level, $ldat);
 			}
 		}
 	}
@@ -410,7 +410,7 @@ class site_template_compiler extends aw_template
 			return;
 		}
 		
-		if ($this->_a_comp[$area][$level] == 1)
+		/*if ($this->_a_comp[$area][$level] == 1)
 		{
 			error::raise(array(
 				"id" => "ERR_TPL",
@@ -418,7 +418,7 @@ class site_template_compiler extends aw_template
 			));
 		}
 		$this->_a_comp[$area][$level] = 1;
-		
+		*/
 		$this->req_level ++;
 
 		$end_block = false;
