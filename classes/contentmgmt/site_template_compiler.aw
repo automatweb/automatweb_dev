@@ -395,8 +395,10 @@ class site_template_compiler extends aw_template
 				{
 					continue;
 				}
-
-				$this->compile_template_level($area, $adat, $level, $ldat);
+				// WHATTA FUCK IS THIS SUPPOSED TO BE????
+				// all the pages that have a glitch in their template,
+				// are more than a bit fucked up "thanks" to this -- ahz
+				//$this->compile_template_level($area, $adat, $level, $ldat);
 			}
 		}
 	}

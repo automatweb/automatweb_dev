@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.104 2005/12/09 09:57:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.105 2005/12/09 16:44:37 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -593,7 +593,7 @@ class planner extends class_base
 		{
 			$m = get_instance("applications/calendar/planner_model");
 		}
-		$ret = $m->get_event_list($id);
+		$ret = $m->get_event_list($arr);
 		$this->recur_info = $m->recur_info;
 		return $ret;
 	}
