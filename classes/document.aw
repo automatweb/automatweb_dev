@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.339 2005/12/05 12:31:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.340 2005/12/09 09:57:45 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2905,11 +2905,11 @@ class document extends aw_template
 	function do_plugins($doc_o)
 	{
 		// now I need to gather information about the different templates
-		$awdoc = get_instance("doc");
-		$plugins = $awdoc->parse_long_template(array(
-			"inst" => $this,
-		));
-
+		$plugins = $this->get_subtemplates_regex("plugin\.(\w*)");
+		if (!count($plugins))
+		{
+			return;
+		}
 		$m_pl = $doc_o->meta("plugins");
 
 		$plg_arg = array();
@@ -3013,17 +3013,16 @@ class document extends aw_template
 	function register_sub_parser($args = array())
 	{
 		extract($args);	
-		if (!isset($this->parsers->$class) || !is_object($this->parsers->$class))
+		/*if (!isset($this->parsers->$class) || !is_object($this->parsers->$class))
 		{
 			$this->parsers->$class = get_instance($class);
-		};
+		};*/
 
 		$block = array(
 			"idx" => isset($idx) ? $idx : 0,
 			"match" => isset($match) ? $match : 0,
 			"class" => $class,
 			"function" => $function,
-			"reset" => isset($reset) ? $reset : "",
 			"templates" => isset($templates) ? $templates : array(),
 		);
 
@@ -3044,25 +3043,9 @@ class document extends aw_template
 		$meta = $o->meta();
 
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
-		// esimese tsükliga kutsume parserite reset funktioonud välja. If any.
 		if (!is_array($this->parsers->reglist))
 		{
 			return;
-		}
-		foreach($this->parsers->reglist as $pkey => $parser)
-		{
-			if (sizeof($parser["parserchain"] > 0))
-			{
-				foreach($parser["parserchain"] as $skey => $sval)
-				{
-					$cls = $sval["class"];
-					$res = $sval["reset"];
-					if ($sval["reset"])
-					{
-						$this->parsers->$cls->$res();
-					};
-				};
-			};
 		}
 
 		foreach($this->parsers->reglist as $pkey => $parser)
@@ -3102,6 +3085,10 @@ class document extends aw_template
 								"meta" => $meta,
 							);
 
+							if (!$this->parsers->$cls)
+							{
+								$this->parsers->$cls = get_instance($cls);
+							}
 							$repl = $this->parsers->$cls->$fun($params);
 							
 							if (is_array($repl))

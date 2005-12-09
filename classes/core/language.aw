@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.17 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.18 2005/12/09 09:57:46 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -70,8 +70,6 @@ class language extends class_base
 			"clid" => CL_LANGUAGE
 		));
 
-		$this->adm = get_instance("admin/admin_languages");
-
 		// check if we need to upgrade
 		//$tbl = $this->db_get_table("languages");
 		/*if (!isset($tbl["fields"]["oid"]))
@@ -96,7 +94,8 @@ class language extends class_base
 				break;
 
 			case "lang_site_id":
-				$prop["options"] = $this->adm->_get_sl();
+				$adm = get_instance("admin/admin_languages");
+				$prop["options"] = $adm->_get_sl();
 				$prop["value"] = $this->make_keys(explode(",",$prop["value"]));
 				break;
 

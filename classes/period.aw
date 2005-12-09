@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.31 2005/10/16 15:22:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.32 2005/12/09 09:57:45 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -370,7 +370,6 @@ class period extends class_base
 		{
 			$pr = aw_unserialize($cc);
 			aw_cache_set("per_by_id", $id, $pr);
-			dbg::p1("period::get cache hit level 2");
 			return $pr;
 		}
 		// and finally, the db
@@ -380,7 +379,10 @@ class period extends class_base
 		$pr = $this->db_fetch_row();
 		$pr["data"] = aw_unserialize($pr["metadata"]);
 
-		$str = aw_serialize($pr);
+		$pr_tmp = $pr;
+		unset($pr_tmp["metadata"]);
+		unset($pr_tmp["acldata"]);
+		$str = aw_serialize($pr_tmp);
 		$this->cache->file_set($this->cf_name.$id, $str);
 		aw_cache_set("per_by_id", $id, $pr);
 		return $pr;

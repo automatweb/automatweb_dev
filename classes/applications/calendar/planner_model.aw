@@ -1,0 +1,391 @@
+<?php
+
+class planner_model extends core
+{
+	function planner_model()
+	{
+		$this->init();
+	}
+
+	function get_event_sources($id)
+	{
+		$obj = new object($id);
+		$sources = array();
+		$sources = $this->make_keys($this->get_event_folders(array("id" => $id)));
+		if ($obj->prop("my_projects") == 1)
+		{
+			$project = aw_global_get("project");
+			// this is wrong, I need to figure out the users this calendar belongs to
+			$owners = $obj->connections_from(array(
+				"type" => "RELTYPE_CALENDAR_OWNERSHIP",
+			));
+			// ignore projects, if there are no users connected to this calendar
+			if (sizeof($owners) == 0)
+			{
+				$pr = aw_global_get("project");
+				if(is_oid($pr))
+				{
+					$sources = array($pr => $pr);
+				}
+			}
+			else
+			{
+				$user_ids = array();
+				foreach($owners as $owner)
+				{
+					$user_ids[] = $owner->prop("to");
+				}
+				$prj = get_instance(CL_PROJECT);
+				$tmp = $prj->get_event_folders(array(
+					"user_ids" => $user_ids,
+					"project_id" => aw_global_get("project"),
+					"type" => "my_projects",
+				));
+				if (!is_array($tmp))
+				{
+					$tmp = array($tmp => $tmp);
+				}
+				if (aw_global_get("project"))
+				{
+					$sources = $tmp;
+				}
+				else
+				{
+					$sources = $sources + $tmp;
+				}
+			}
+		}
+		return $sources;
+	}
+
+	/** returns a list of folders for a specified calendar, this is more efficient that returning a list of events
+	
+	**/
+	function get_event_folders($arr)
+	{
+		// if given names argument, then return a list of id => name pairs,
+		// otherwise just id-s - suitable for feeding to object_list
+		$cal_obj = new object($arr["id"]);
+		$folders = array();
+		
+		$evt_folder = $cal_obj->prop("event_folder");
+		if (is_oid($evt_folder))
+		{
+			$folders[$evt_folder] = $cal_obj->name();
+		};
+
+		// get others as well
+		$folderlist = $cal_obj->connections_from(array(
+			"type" => "RELTYPE_EVENT_SOURCE",
+		));
+
+		foreach($folderlist as $conn)
+		{
+			$_tmp = $conn->to();
+			$clid = $_tmp->class_id();
+			if ($clid == CL_PLANNER)
+			{
+				$evt_folder = $_tmp->prop("event_folder");
+				if (is_oid($evt_folder))
+				{
+					$folders[$evt_folder] = $_tmp->name();
+				};
+			};
+			if ($clid == CL_PROJECT)
+			{
+				$folders[$_tmp->id()] = $_tmp->name();
+			};
+		};
+		return isset($arr["names"]) ? $folders : array_keys($folders);
+	}
+
+	// this is called from calendar "properties"
+	function _init_event_source($args = array())
+	{
+		extract($args);
+
+		classload("core/icons");
+		classload("core/date/date_calc");
+
+		$di = get_date_range(array(
+			"date" => isset($date) ? $date : date("d-m-Y"),
+			"type" => $type,
+		));
+	
+		$start = $di["start"];
+		$end = $di["end"];
+
+
+		$obj = new object($id);
+		$this->id = $id;
+		
+		global $awt;
+		$awt->start("get-event-list");
+		$events = $this->get_event_list($args);
+		$awt->stop("get-event-list");
+		$reflist = array();
+		$rv = array();
+		$awt->start("calendar-full-event-list");
+		// that eidlist thingie is no good! I might have events out of my range which I still need to include
+		// I need folders! Folders! I'm telling you! Folders! Those I can probably include in my query!
+		foreach($events as $event)
+		{
+			// fuck me. plenty of places expect different data from me .. until I'm
+			// sure that nothing breaks, I can't remove this
+			$awt->start("get-edit-link");
+			$of = new object($event["id"]);
+			$row = $event + $of->properties();
+			$awt->stop("get-edit-link");
+			$rec = array();
+			$gx = date("dmY",$event["start"]);
+			$row["link"] = $this->get_event_edit_link(array(
+				"cal_id" => $this->id,
+				"event_id" => $event["id"],
+			));
+	
+			$eo = $of;
+			if ($row["status"] == 0)
+			{
+				continue;
+			};
+			$awt->start("hmm");
+			if ($row["brother_of"] != $row["oid"])
+			{
+				$real_obj = $of->get_original();
+				$eo = $real_obj;
+				$row["name"] = $real_obj->name();
+				$row["comment"] = $real_obj->comment();
+				$row["status"] = $real_obj->status();
+				$row["flags"] = $real_obj->flags();
+			};
+
+			$row["event_icon_url"] = icons::get_icon_url($eo);
+			$rv[$gx][$row["brother_of"]] = $row;
+			if ($args["flatlist"])
+			{
+				$reflist[] = &$rv[$gx][$row["brother_of"]];
+			};
+
+			$awt->stop("hmm");
+		};
+		$awt->stop("calendar-full-event-list");
+		return isset($args["flatlist"]) ? $reflist : $rv;
+	}
+
+	////
+	// !Returns an array of event id, start and end times in requested range
+	// required arguments
+	// id - calendar object
+	function get_event_list($arr)
+	{
+		$obj = new object($arr["id"]);
+
+		$event_ids = array();
+		$folders = $this->get_event_folders(array("id" => $obj->id()));
+
+		classload("core/date/date_calc");
+		if (empty($arr["start"]))
+		{
+			$di = get_date_range(array(
+				"date" => isset($arr["date"]) ? $arr["date"] : date("d-m-Y"),
+				"type" => $arr["type"],
+				"fullweeks" => 1,
+			));
+
+			$_start = $di["start"];
+			$_end = $di["end"];
+		}
+		else
+		{
+			$_start = $arr["start"];
+			$_end = $arr["end"];
+		};
+		// also include events from any projects that are connected to this calender
+		// if the user wants so
+
+		enter_function("get_event_list::my_projects");
+		// "my_projects" is misleading, what it actually does is that it includes
+		// events from projects that the owner of the current calendar participiates in
+		if ($obj->prop("my_projects") == 1)
+		{
+			$project = aw_global_get("project");
+			// this is wrong, I need to figure out the users this calendar belongs to
+			$owners = $obj->connections_from(array(
+				"type" => "RELTYPE_CALENDAR_OWNERSHIP",
+			));
+
+			// ignore projects, if there are no users connected to this calendar
+			if (sizeof($owners) == 0)
+			{
+				$pr = aw_global_get("project");
+				if(is_oid($pr))
+				{
+					$folders = array($pr);
+				}
+			}
+			else
+			{
+
+				$user_ids = array();
+
+				foreach($owners as $owner)
+				{
+					$user_ids[] = $owner->prop("to");
+				};
+
+				$prj = get_instance(CL_PROJECT);
+				$tmp = $prj->get_event_folders(array(
+					"user_ids" => $user_ids,
+					"project_id" => aw_global_get("project"),
+					"type" => "my_projects",
+				));
+
+				if (!is_array($tmp))
+				{
+					$tmp = array($tmp);
+				};
+
+				if (aw_global_get("project"))
+				{
+					$folders = $tmp;
+				}
+				else
+				{
+					$folders = $folders + $tmp;
+				};
+			};
+		};
+		exit_function("get_event_list::my_projects");
+		
+		
+		$rv = array();
+		$eidstr = $parstr = "";
+		
+		if (sizeof($folders) == 0)
+		{
+			return array();
+		};
+
+		$parprefix = " AND ";
+		$parstr = "objects.parent IN (" . join(",",$folders) . ")";
+
+		// that is the basic query
+		// I need to add different things to it
+		$old_query = 1;
+		if ($old_query)
+		{
+			$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
+				FROM planner
+				LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
+				WHERE ".$this->db_fn("planner.start")." >= '${_start}' AND
+				(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL) AND ". $this->db_fn("objects.status")." ";
+		}
+		else
+		{
+			$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
+			FROM planner
+			LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
+			WHERE (".$this->db_fn("planner.end")." >= '${_start}' OR ".$this->db_fn("planner.end")." IS NULL OR ".$this->db_fn("planner.end")." = 0) AND
+			(".$this->db_fn("planner.start")." <= '${_end}' ) AND
+			".$this->db_fn("objects.status")." ";
+		};
+
+		// see on 1 case.
+
+		// and I have a second one too
+			
+		if(is_array($arr["status"]))
+		{
+			$q .= "IN (".implode(",", $arr["status"]).")";
+		}
+		else
+		{
+		 	$q .= "!= 0";
+		}
+
+		// lyhidalt. planneri tabelis peaks kirjas olema. No, but it can't be there 
+		// I need to connect that god damn recurrence table into this fucking place.
+
+		// if events from a project were requested, then include events
+		// from that projects only - id's are in event_ids array()
+		
+		//if ($project)
+		//{
+		//	$q .= $eidstr;
+		//}
+		// include events from all folders and all projects
+		//else
+		//{
+			if ($parstr)
+			{
+				$q .= $parprefix . "(" . $parstr . $eidstr . ")";
+			};
+		//}
+
+		if($arr["group_by"])
+		{
+			$q .= "GROUP BY ".$this->db_fn("planner.start");
+		}
+
+		// now, I need another clue string .. perhaps even in that big fat ass query?
+
+		enter_function("get_event_list::query");
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$rv[$row["brother_of"]] = array(
+				"id" => $row["id"],
+				"start" => $row["start"],
+				"end" => $row["end"],
+			);
+		};
+		exit_function("get_event_list::query");
+
+		$fldstr = join(",",$folders);
+
+		enter_function("get_event_list::recur");
+		if (aw_ini_get("calendar.recurrence_enabled") == 1)
+		{
+			// now collect recurrence data
+			$q = "SELECT planner.id,planner.start,planner.end,recurrence.recur_start,recurrence.recur_end FROM planner,aliases,recurrence,objects
+				WHERE planner.id = objects.brother_of AND objects.parent IN ($fldstr) AND recurrence.recur_end >= ${_start} AND recurrence.recur_start <= ${_end}
+					AND planner.id = aliases.source AND objects.status != 0 AND aliases.target = recurrence.recur_id
+					AND aliases.type = " . CL_RECURRENCE;
+			//print $q;
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				// now, I have to include that information in my result set as well, otherwise
+				// the events outside my current scope will not show up even it they recur
+				// in the range I'm viewing at the moment
+				$evt_id = $row["id"];
+				if (empty($rv[$evt_id]))
+				{
+					$rv[$evt_id] = array(
+						"id" => $evt_id,
+						"start" => $row["start"],
+						"end" => $row["end"],
+					);
+				};
+				$this->recur_info[$row["id"]][] = $row["recur_start"];
+			};
+		};
+		exit_function("get_event_list::recur");
+		return $rv;
+	}
+
+	// !Returns a link for editing an event
+	// cal_id - calendar id
+	// event_id - id of an event
+	function get_event_edit_link($arr)
+	{
+		return $this->mk_my_orb("change",array(
+			"id" => $arr["cal_id"],
+			"group" => "add_event",
+			"event_id" => $arr["event_id"],
+			"return_url" => $arr["return_url"],
+		), "planner");
+
+	}
+}
+?>

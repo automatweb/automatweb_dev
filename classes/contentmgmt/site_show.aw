@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.151 2005/12/05 12:31:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.152 2005/12/09 09:57:45 kristo Exp $
 
 /*
 
@@ -145,12 +145,9 @@ class site_show extends class_base
 			"site_title" => strip_tags($this->site_title),
 			"printlink" => $printlink
 		));
-		
-		// leat each class handle it's own variable import
-		post_message("MSG_ON_SITE_SHOW_IMPORT_VARS", array(
-			"inst" => &$this,
-			"params" => $arr
-		)); 
+
+		$p = get_instance("period");
+		$p->on_site_show_import_vars(array("inst" => &$this));
 	}
 	
 	function _get_sel_section($sect)

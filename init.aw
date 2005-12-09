@@ -377,6 +377,7 @@ function lc_init()
 		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/aw.ini.aw";
 		if (file_exists($trans_fn))
 		{
+			incl_f($trans_fn);
 			require_once($trans_fn);
 			foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 			{
@@ -433,7 +434,9 @@ function lc_load($file)
 	{
 		$admin_lang_lc = "et";
 	}
-	@include_once($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $admin_lang_lc . "/$file.".$GLOBALS["cfg"]["__default"]["ext"]);
+	$fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $admin_lang_lc . "/$file.".$GLOBALS["cfg"]["__default"]["ext"];
+	incl_f($fn);
+	@include_once($fn);
 //	exit_function("__global::lc_load");
 }
 
@@ -447,7 +450,8 @@ function lc_site_load($file,&$obj)
 		$LC = "et";
 	}
 	$fname = $GLOBALS["cfg"]["__default"]["site_basedir"]."/lang/".$LC."/$file.".$GLOBALS["cfg"]["__default"]["ext"];
-	@include_once($GLOBALS["cfg"]["__default"]["site_basedir"]."/lang/" . $LC . "/$file.".$GLOBALS["cfg"]["__default"]["ext"]);
+	incl_f($fname);
+	@include_once($fname);
 	if ($obj)
 	{
 		// kui objekt anti kaasa, siis loeme tema template sisse muutuja $lc_$file 
@@ -470,6 +474,7 @@ function aw_classload($args)
 		// let's not allow including ../../../etc/passwd :)
 		$lib = str_replace(".","", $lib);
 		$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
+		incl_f($lib);
 		include_once($lib);
 	};
 //	exit_function("__global::classload");
@@ -513,11 +518,13 @@ function classload($args)
 //echo "classload: tf = $trans_fn <br>";
 					if (file_exists($trans_fn))
 					{
+						incl_f($trans_fn);
 						require_once($trans_fn);
 					}
 				}
 			}
 		}
+		incl_f($lib);
 		include_once($lib);
 	};
 //	exit_function("__global::classload");
@@ -568,6 +575,7 @@ function get_instance($class,$args = array(), $errors = true)
 		{
 			$proxy_file = $GLOBALS["cfg"]["__default"]["basedir"]."/classes/core/proxy_classes/".$lib.".aw";
 			$proxy_class = "__aw_proxy_".$lib;
+			incl_f($proxy_file);
 			include_once($proxy_file);
 			return new $proxy_class($rs);
 		}
@@ -610,7 +618,9 @@ function get_instance($class,$args = array(), $errors = true)
 			}
 		}
 		error_reporting(E_PARSE | E_ERROR);
-		require_once($classdir."/".str_replace(".","", $class).".".$ext);
+		$_fn = $classdir."/".str_replace(".","", $class).".".$ext;
+		incl_f($_fn);
+		require_once($_fn);
 
 		// also load translations
 		if (isset($GLOBALS["cfg"]["user_interface"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
@@ -619,6 +629,7 @@ function get_instance($class,$args = array(), $errors = true)
 //echo "get_instance: tf = $trans_fn <br>";
 			if (file_exists($trans_fn))
 			{
+				incl_f($trans_fn);
 				require_once($trans_fn);
 			}
 		}
@@ -670,6 +681,7 @@ function load_class_translations($class)
 	$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
 	if (file_exists($trans_fn))
 	{
+		incl_f($trans_fn);
 		require_once($trans_fn);
 	}
 }
@@ -695,10 +707,13 @@ function load_vcl($lib)
 		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib).".aw";
 		if (file_exists($trans_fn))
 		{
+			incl_f($trans_fn);
 			require_once($trans_fn);
 		}
 	}
-	include_once($GLOBALS["cfg"]["__default"]["classdir"]."/vcl/$lib.".$GLOBALS["cfg"]["__default"]["ext"]);
+	$fn = $GLOBALS["cfg"]["__default"]["classdir"]."/vcl/$lib.".$GLOBALS["cfg"]["__default"]["ext"];
+	incl_f($fn);
+	include_once($fn);
 }
 
 
@@ -1058,6 +1073,56 @@ function t2($s)
 {
 	return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : NULL;
 }
+
+function incl_f($lib)
+{
+	return;
+	static $f;
+	if ($f[$lib] == 1)
+	{
+		return;
+	}
+	$f[$lib] = 1;
+	echo "$lib <br>";
+	//echo shbt()." <Br>";
+}
+
+		function shbt()
+		{
+			$msg = "";
+			if (function_exists("debug_backtrace"))
+			{
+				$bt = debug_backtrace();
+				for ($i = count($bt); $i >= 0; $i--)
+				{
+					if ($bt[$i+1]["class"] != "")
+					{
+						$fnm = $bt[$i+1]["class"]."::".$bt[$i+1]["function"];
+					}
+					else
+					if ($bt[$i+1]["function"] != "")
+					{
+						if ($bt[$i+1]["function"] != "include")
+						{
+							$fnm = $bt[$i+1]["function"];
+						}
+						else
+						{
+							$fnm = "";
+						}
+					}
+					else
+					{
+						$fnm = "";
+					}
+
+					$msg .= $fnm.":".$bt[$i]["line"]."->";
+				}
+			}
+
+			return $msg;
+		}
+
 
 //error_reporting(E_ALL ^ E_NOTICE);
 //set_error_handler("__aw_error_handler");

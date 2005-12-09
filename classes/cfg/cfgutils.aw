@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.70 2005/12/01 20:22:10 kristo Exp $
+// $Id: cfgutils.aw,v 1.71 2005/12/09 09:57:45 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -577,26 +577,20 @@ class cfgutils extends aw_template
 				// if a property belongs to multiple groups and one of them is not 
 				// defined then add the group, value of the group attribute becomes
 				// the caption
-				if (is_array($objprop["group"]))
+				if (empty($this->groupinfo[$objprop["group"]]))
 				{
-					foreach($objprop["group"] as $_group)
+					$this->groupinfo[$objprop["group"]] = array("caption" => $objprop["group"]);
+				}
+				else
+				{
+					foreach((array)$objprop["group"] as $_group)
 					{
 						if (empty($this->groupinfo[$_group]))
 						{
 							$this->groupinfo[$_group] = array("caption" => $_group);
-						};
-
-					};
+						}
+					}
 				}
-				// if a property belongs to a non-existent group, then add the group,
-				// value of the group attribute becomes
-				else
-				{
-					if (empty($this->groupinfo[$objprop["group"]]))
-					{
-						$this->groupinfo[$objprop["group"]] = array("caption" => $objprop["group"]);
-					};
-				};
 
 				// Allow overriding of properties defined in class_base
 				if (isset($coreprops[$name]))

@@ -1,8 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.153 2005/11/15 14:39:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.154 2005/12/09 09:57:45 kristo Exp $
 // users.aw - User Management
 
-load_vcl("table","date_edit");
 if (!headers_sent())
 {
 	session_register("add_state");
@@ -10,7 +9,6 @@ if (!headers_sent())
 define("PER_PAGE", 20);
 
 classload("users_user");
-load_vcl('date_edit');
 class users extends users_user
 {
 	function users()

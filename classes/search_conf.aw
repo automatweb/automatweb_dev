@@ -104,27 +104,12 @@ class search_conf extends aw_template
 
 	function get_search_list(&$default)
 	{
-		$grps = $this->get_groups();
-		$ret = array();
-		foreach($grps as $grpid => $gdata)
+		static $m;
+		if (!$m)
 		{
-			if (aw_global_get("uid") != "" || $gdata["users_only"] != 1)
-			{
-				if (is_array($gdata["menus"]))
-				{
-					foreach($gdata["menus"] as $mn1 => $mn2)
-					{
-						if ($mn1 == $default)
-						{
-							$def = $grpid;
-						}
-					}
-				};
-				$ret[$grpid] = $gdata["name"];
-			}
+			$m = get_instance("old_search_model");
 		}
-		$default = $def;
-		return $ret;
+		return $m->get_search_list(&$default);
 	}
 
 	/** shows the search form 
@@ -1070,36 +1055,12 @@ class search_conf extends aw_template
 
 	function get_groups($no_strip = false)
 	{
-		$cache = get_instance("cache");
-		$cs = $cache->file_get("search_groups-".$this->cfg["site_id"]);
-		if ($cs)
+		static $m;
+		if (!$m)
 		{
-			$ret = aw_unserialize($cs);
+			$m = get_instance("old_search_model");
 		}
-		else
-		{
-			$dat = $this->get_cval("search_grps");
-			$ret = aw_unserialize($dat);
-			$cache->file_set("search_groups-".$this->cfg["site_id"],aw_serialize($ret));
-		};
-
-		if ($no_strip)
-		{
-			$r = $ret;
-		}
-		else
-		{
-			$r = $ret[$this->cfg["site_id"]][aw_global_get("lang_id")];
-		}
-
-		if (!is_array($r))
-		{
-			return array();
-		}
-		else
-		{
-			return $r;
-		}
+		return $m->get_groups($no_strip);
 	}
 
 	/**  

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.40 2005/07/21 10:51:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.41 2005/12/09 09:57:45 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -527,7 +527,7 @@ class calendar_view extends class_base
 		switch($clid)
 		{
 			case CL_PLANNER:
-				$pl = get_instance(CL_PLANNER);
+				$pl = get_instance("applications/calendar/planner_model");
 				$events = $pl->_init_event_source(array(
 					"id" => $o->id(),
 					"type" => $range["viewtype"],
@@ -607,7 +607,7 @@ class calendar_view extends class_base
 		switch($o->class_id())
 		{
 			case CL_PLANNER:
-				$pl = get_instance(CL_PLANNER);
+				$pl = get_instance("applications/calendar/planner_model");
 				$sources = $pl->get_event_sources($o->id());
 				break;
 
@@ -953,13 +953,17 @@ class calendar_view extends class_base
 		// day viewd peab saama kuidagi grupeerida
 
 		$props = $this->obj_inst->properties();
-		$stylex = get_instance(CL_STYLE);
 		foreach($style_props as $style_prop)
 		{
 			$prop_value = $props[$style_prop];
 			if (0 != $prop_value)
 			{
 				active_page_data::add_site_css_style($prop_value);
+				static $stylex;
+				if (!$stylex)
+				{
+					$stylex = get_instance(CL_STYLE);
+				}
 				$style[$style_prop] = $stylex->get_style_name($prop_value);
 			};
 		}
