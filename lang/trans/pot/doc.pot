@@ -854,23 +854,27 @@ msgstr ""
 msgid "Seose Meeldetuletus (RELTYPE_REMINDER) tekst"
 msgstr ""
 
-#: classes/doc.aw:317
+#: classes/doc.aw:rel_RELTYPE_LANG_REL
+msgid "Seose Keeleseos (RELTYPE_LANG_REL) tekst"
+msgstr ""
+
+#: classes/doc.aw:321
 msgid "puudub"
 msgstr ""
 
-#: classes/doc.aw:610
+#: classes/doc.aw:614
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:620
+#: classes/doc.aw:624
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/doc.aw:783
+#: classes/doc.aw:786
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/doc.aw:796
+#: classes/doc.aw:799
 msgid "Dokument (vend)"
 msgstr ""
 

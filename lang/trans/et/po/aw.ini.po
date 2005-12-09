@@ -2137,7 +2137,7 @@ msgid "Klassi Property Test (1027) nimi"
 msgstr ""
 
 #: aw.ini:class_1028
-msgid "Klassi Kliendi andmed (1028) nimi"
+msgid "Klassi Kliendisuhe (1028) nimi"
 msgstr ""
 
 #: aw.ini:class_1029
@@ -2162,6 +2162,10 @@ msgstr ""
 
 #: aw.ini:class_1035
 msgid "Klassi T88 kirje (1035) nimi"
+msgstr ""
+
+#: aw.ini:class_1036
+msgid "Klassi Kliendibaasi seaded (1036) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29

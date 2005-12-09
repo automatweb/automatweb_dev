@@ -10,41 +10,64 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/awmyadmin/db_table_admin.aw:class_152_help
+#: classes/applications/awmyadmin/db_table_admin.aw:class_152_help
 msgid "Klassi Andmebaasitabeli muutmine help"
 msgstr ""
 
 # classes/applications/awmyadmin/db_table_admin.aw:prop_db_base
+#: classes/applications/awmyadmin/db_table_admin.aw:prop_db_base
 msgid "Omaduse Vali andmebaas (db_base) caption"
 msgstr ""
 
 # classes/applications/awmyadmin/db_table_admin.aw:prop_db_base_comment
+#: classes/applications/awmyadmin/db_table_admin.aw:prop_db_base_comment
 msgid "Omaduse Vali andmebaas (db_base) kommentaar"
 msgstr ""
 
 # classes/applications/awmyadmin/db_table_admin.aw:prop_db_base_help
+#: classes/applications/awmyadmin/db_table_admin.aw:prop_db_base_help
 msgid "Omaduse Vali andmebaas (db_base) help"
 msgstr ""
 
 # classes/applications/awmyadmin/db_table_admin.aw:prop_db_table
+#: classes/applications/awmyadmin/db_table_admin.aw:prop_db_table
 msgid "Omaduse Vali tabel (db_table) caption"
 msgstr ""
 
 # classes/applications/awmyadmin/db_table_admin.aw:prop_db_table_comment
+#: classes/applications/awmyadmin/db_table_admin.aw:prop_db_table_comment
 msgid "Omaduse Vali tabel (db_table) kommentaar"
 msgstr ""
 
 # classes/applications/awmyadmin/db_table_admin.aw:prop_db_table_help
+#: classes/applications/awmyadmin/db_table_admin.aw:prop_db_table_help
 msgid "Omaduse Vali tabel (db_table) help"
 msgstr ""
 
 # classes/applications/awmyadmin/db_table_admin.aw:prop_adminlink
+#: classes/applications/awmyadmin/db_table_admin.aw:prop_adminlink
 msgid "Omaduse  (adminlink) caption"
 msgstr ""
 
 # classes/applications/awmyadmin/db_table_admin.aw:prop_adminlink_comment
+#: classes/applications/awmyadmin/db_table_admin.aw:prop_adminlink_comment
 msgid "Omaduse  (adminlink) kommentaar"
 msgstr ""
 
 # classes/applications/awmyadmin/db_table_admin.aw:prop_adminlink_help
+#: classes/applications/awmyadmin/db_table_admin.aw:prop_adminlink_help
 msgid "Omaduse  (adminlink) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_table_admin.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_table_admin.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_table_admin.aw:131
+#: classes/applications/awmyadmin/db_table_admin.aw:395
+msgid "Salvesta"
 msgstr ""

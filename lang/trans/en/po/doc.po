@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-06 12:52+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 # classes/doc.aw:class__help
 #: classes/doc.aw:class__help
@@ -1061,23 +1061,26 @@ msgstr "Time"
 msgid "Seose Meeldetuletus (RELTYPE_REMINDER) tekst"
 msgstr "Reminder"
 
-#: classes/doc.aw:317
+#: classes/doc.aw:rel_RELTYPE_LANG_REL
+msgid "Seose Keeleseos (RELTYPE_LANG_REL) tekst"
+msgstr ""
+
+#: classes/doc.aw:321
 msgid "puudub"
 msgstr "missing"
 
-#: classes/doc.aw:610
+#: classes/doc.aw:614
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/doc.aw:620
+#: classes/doc.aw:624
 msgid "Eelvaade"
 msgstr "Preview"
 
-#: classes/doc.aw:783
+#: classes/doc.aw:786
 msgid "Dokument 2.0"
 msgstr "Document 2.0"
 
-#: classes/doc.aw:796
+#: classes/doc.aw:799
 msgid "Dokument (vend)"
 msgstr "Document (brother)"
-

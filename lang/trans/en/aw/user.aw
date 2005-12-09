@@ -2,10 +2,7 @@
 $GLOBALS["TRANS"]["Omaduse Kasutajanimi (uid) caption"] = "Username";
 $GLOBALS["TRANS"]["Omaduse Kasutajanimi (uid_entry) caption"] = "Username";
 $GLOBALS["TRANS"]["Omaduse Sisselogimisi (logins) caption"] = "Logins";
-$GLOBALS["TRANS"]["Omaduse Sisselogitud (online) caption"] = "Is online";
-$GLOBALS["TRANS"]["Omaduse Viimane tegevus (lastaction) caption"] = "Time of last action";
 $GLOBALS["TRANS"]["Omaduse Blokeeritud (blocked) caption"] = "Blocked";
-$GLOBALS["TRANS"]["Omaduse Nimi (name) caption"] = "Name";
 $GLOBALS["TRANS"]["Omaduse E-mail (email) caption"] = "E-mail address";
 $GLOBALS["TRANS"]["Omaduse Loodud (created) caption"] = "Created";
 $GLOBALS["TRANS"]["Omaduse Looja (createdby) caption"] = "Created by";
@@ -27,7 +24,6 @@ $GLOBALS["TRANS"]["Omaduse Statistika (stat) caption"] = "Statistics";
 $GLOBALS["TRANS"]["Omaduse Millised on kasutaja (aclwizard_q) caption"] = "What are user";
 $GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Parool (chpwd) pealkiri"] = "Password";
-$GLOBALS["TRANS"]["Grupi Objektid ja &Otilde;igused (objects) pealkiri"] = "Objects and rights";
 $GLOBALS["TRANS"]["Grupi Enda tehtud (objects_own) pealkiri"] = "Created by me";
 $GLOBALS["TRANS"]["Grupi Teiste tehtud (objects_other) pealkiri"] = "Created by others";
 $GLOBALS["TRANS"]["Grupi Grupid (groups) pealkiri"] = "Groups";
@@ -68,6 +64,5 @@ $GLOBALS["TRANS"]["users::add_user(%s): no uid specified"] = "users::add_user(%s
 $GLOBALS["TRANS"]["Objekt on kustutatud. Pole &otilde;igusi!"] = "Object has been deleted, permission denied!";
 $GLOBALS["TRANS"]["Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"] = "Object does not exist and never has, permission denied!";
 $GLOBALS["TRANS"]["Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"] = "Object's parent object (%s) is deleted. No access!";
-$GLOBALS["TRANS"]["Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult."] = "Object has no acl set, default applies. View access only.";
 $GLOBALS["TRANS"]["Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"] = "Info on object's acl:<br><br>Access is set by access-relation between object %s and group %s<br><br>ACL set for that relation are: %s";
 ?>

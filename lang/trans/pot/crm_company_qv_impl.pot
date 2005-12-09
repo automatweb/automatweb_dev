@@ -11,46 +11,158 @@ msgstr ""
 
 
 #: classes/applications/crm/crm_company_qv_impl.aw:14
-msgid "Kuup&auml;ev"
+msgid ""
 msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:20
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:26 classes/applications/crm/crm_company_qv_impl.aw:391
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:26
+#: classes/applications/crm/crm_company_qv_impl.aw:32
 msgid "Osalejad"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:32
+#: classes/applications/crm/crm_company_qv_impl.aw:38
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:38
+#: classes/applications/crm/crm_company_qv_impl.aw:44
 msgid "Tunde"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:44
+#: classes/applications/crm/crm_company_qv_impl.aw:50
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:96
+#: classes/applications/crm/crm_company_qv_impl.aw:77
+msgid "<b>Projektid</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:90
 msgid "<b>Projektid (5 värskemat)</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:133
+#: classes/applications/crm/crm_company_qv_impl.aw:174
+msgid "<b>Tegevused</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:187
 msgid "<b>Tegevused (10 värskemat)</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:135
+#: classes/applications/crm/crm_company_qv_impl.aw:220
 msgid "Tehtud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:135
+#: classes/applications/crm/crm_company_qv_impl.aw:220
 msgid "T&ouml;&ouml;s"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:170
+#: classes/applications/crm/crm_company_qv_impl.aw:238
+msgid "<span style='font-size: 0px;'>y</span><b>Arved</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:251
 msgid "<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:390
+msgid "Kliendi &uuml;ldandmed"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:392
+msgid "Alguskuup&auml;ev"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:393
+msgid "Kood"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:394
+msgid "Suhte looja"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:395
+msgid "Registrikood"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:396
+msgid "Kliendisuhe"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:397
+msgid "Sissetuleku meetod"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:398
+msgid "KMK nr"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:399
+msgid "Kliendihaldur"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:400
+msgid "Tegevuse kirjeldus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:401
+msgid "Kaubam&auml;rgid"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:402
+msgid "Kontaktandmed"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:403
+msgid "Kontaktisikud"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:404
+msgid "Aadress"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:405
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:406
+msgid "Faks"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:407
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:408
+msgid "WWW"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:409
+msgid "Tulud"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:410
+msgid "Ajavahemikul"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:411
+msgid "T&ouml;&ouml;tunde kokku"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:412
+msgid "Arvele l&auml;inud t&ouml;&ouml;tunde"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:413
+msgid "Tehtud t&ouml;id summas"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:414
+msgid "Esitatud arveid summas"
 msgstr ""
 

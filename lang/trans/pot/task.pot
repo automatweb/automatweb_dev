@@ -602,6 +602,10 @@ msgstr ""
 msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
 msgstr ""
 
+#: classes/applications/groupware/task.aw:194 classes/applications/groupware/task.aw:205
+msgid "Stopper"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:202
 msgid "Toimetus"
 msgstr ""
@@ -622,7 +626,7 @@ msgstr ""
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:741 classes/applications/groupware/task.aw:896 classes/applications/groupware/task.aw:1388
+#: classes/applications/groupware/task.aw:741 classes/applications/groupware/task.aw:896 classes/applications/groupware/task.aw:1392
 msgid "Nimi"
 msgstr ""
 
@@ -702,23 +706,27 @@ msgstr ""
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1150 classes/applications/groupware/task.aw:1164
+#: classes/applications/groupware/task.aw:1072
+msgid "vali"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:1150 classes/applications/groupware/task.aw:1165
 msgid "tund"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1227
+#: classes/applications/groupware/task.aw:1231
 msgid "Loo arve"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1310
+#: classes/applications/groupware/task.aw:1314
 msgid "%s toimetus"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1366
+#: classes/applications/groupware/task.aw:1370
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/groupware/task.aw:1395
+#: classes/applications/groupware/task.aw:1399
 msgid "Vali"
 msgstr ""
 

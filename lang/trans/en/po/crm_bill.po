@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 19:21+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 #: classes/applications/crm/crm_bill.aw:class_1009_help
 msgid "Klassi Arve help"
@@ -206,6 +206,18 @@ msgstr ""
 msgid "Omaduse  (preview) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill.aw:prop_preview_add
+msgid "Omaduse  (preview_add) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_preview_add_comment
+msgid "Omaduse  (preview_add) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_preview_add_help
+msgid "Omaduse  (preview_add) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill.aw:prop_task_list
 msgid "Omaduse  (task_list) caption"
 msgstr "Task list"
@@ -242,6 +254,14 @@ msgstr "Preview"
 msgid "Grupi Eelvaade (preview) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill.aw:group_preview_add
+msgid "Grupi Arve Lisa (preview_add) pealkiri"
+msgstr "Appendix"
+
+#: classes/applications/crm/crm_bill.aw:group_preview_add_help
+msgid "Grupi Arve Lisa (preview_add) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill.aw:rel_RELTYPE_TASK
 msgid "Seose &amp;uuml;lesanne (RELTYPE_TASK) tekst"
 msgstr ""
@@ -258,51 +278,51 @@ msgstr ""
 msgid "Seose keel (RELTYPE_LANGUAGE) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:98
+#: classes/applications/crm/crm_bill.aw:103
 msgid "Koostamisel"
 msgstr "Not sent"
 
-#: classes/applications/crm/crm_bill.aw:99
+#: classes/applications/crm/crm_bill.aw:104
 msgid "Saadetud"
 msgstr "Sent"
 
-#: classes/applications/crm/crm_bill.aw:100
+#: classes/applications/crm/crm_bill.aw:105
 msgid "Makstud"
 msgstr "Payment recieved"
 
-#: classes/applications/crm/crm_bill.aw:131
+#: classes/applications/crm/crm_bill.aw:136
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:200
+#: classes/applications/crm/crm_bill.aw:209
 msgid "Nimetus"
 msgstr "Name"
 
-#: classes/applications/crm/crm_bill.aw:205
+#: classes/applications/crm/crm_bill.aw:214
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/applications/crm/crm_bill.aw:210
+#: classes/applications/crm/crm_bill.aw:219
 msgid "&Uuml;hik"
 msgstr "Unit"
 
-#: classes/applications/crm/crm_bill.aw:215
+#: classes/applications/crm/crm_bill.aw:224
 msgid "Hind"
 msgstr "Price"
 
-#: classes/applications/crm/crm_bill.aw:220
+#: classes/applications/crm/crm_bill.aw:229
 msgid "Kogus"
 msgstr "Quantity"
 
-#: classes/applications/crm/crm_bill.aw:225
+#: classes/applications/crm/crm_bill.aw:234
 msgid "Summa"
 msgstr "Sum"
 
-#: classes/applications/crm/crm_bill.aw:230
+#: classes/applications/crm/crm_bill.aw:239
 msgid "Lisandub k&auml;ibemaks?"
 msgstr "Add VAT"
 
-#: classes/applications/crm/crm_bill.aw:532
+#: classes/applications/crm/crm_bill.aw:592
+#: classes/applications/crm/crm_bill.aw:859
 msgid "Prinditav arve"
 msgstr "Printable version"
-

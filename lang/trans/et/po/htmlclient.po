@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/cfg/htmlclient.aw:256
 msgid "Viga sisendandmetes"
 msgstr ""
@@ -38,23 +37,50 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:563
+#: classes/cfg/htmlclient.aw:423 classes/cfg/htmlclient.aw:563
 msgid "Salvesta"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:792
+#: classes/cfg/htmlclient.aw:792 classes/cfg/htmlclient.aw:869
 msgid "Toimetus"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:813
+#: classes/cfg/htmlclient.aw:813 classes/cfg/htmlclient.aw:871
 msgid "K&otilde;ne"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:825
+#: classes/cfg/htmlclient.aw:825 classes/cfg/htmlclient.aw:872
 msgid "Kohtumine"
 msgstr ""
 
-#: classes/cfg/htmlclient.aw:846
+#: classes/cfg/htmlclient.aw:846 classes/cfg/htmlclient.aw:873
 msgid "Pakkumine"
 msgstr ""
 
+#: classes/cfg/htmlclient.aw:864
+msgid "Lisa"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:865
+msgid "Uus t&ouml;&ouml;"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:866
+msgid "Klient"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:867
+msgid "Klient (eraisik)"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:868
+msgid "Projekt"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:870
+msgid "Arve"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:874
+msgid "Logi v&auml;lja"
+msgstr ""

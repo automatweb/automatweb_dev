@@ -86,11 +86,11 @@ msgstr ""
 msgid ""
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:331 classes/applications/crm/crm_company_cust_impl.aw:505 classes/applications/crm/crm_company_cust_impl.aw:900 classes/applications/crm/crm_company_cust_impl.aw:1363
+#: classes/applications/crm/crm_company_cust_impl.aw:331 classes/applications/crm/crm_company_cust_impl.aw:505 classes/applications/crm/crm_company_cust_impl.aw:900 classes/applications/crm/crm_company_cust_impl.aw:1366
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:337 classes/applications/crm/crm_company_cust_impl.aw:1393
+#: classes/applications/crm/crm_company_cust_impl.aw:337 classes/applications/crm/crm_company_cust_impl.aw:1396
 msgid "Klient"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr ""
 msgid "Arve"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:404 classes/applications/crm/crm_company_cust_impl.aw:1409
+#: classes/applications/crm/crm_company_cust_impl.aw:404 classes/applications/crm/crm_company_cust_impl.aw:1412
 msgid "Kustuta valitud"
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 msgid "Kas oled kindel, et soovid valitud pakkumise(d) kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:528 classes/applications/crm/crm_company_cust_impl.aw:1002
+#: classes/applications/crm/crm_company_cust_impl.aw:528 classes/applications/crm/crm_company_cust_impl.aw:1002 classes/applications/crm/crm_company_cust_impl.aw:1217 classes/applications/crm/crm_company_cust_impl.aw:1238 classes/applications/crm/crm_company_cust_impl.aw:1259
 msgid "Kustuta"
 msgstr ""
 
@@ -138,7 +138,7 @@ msgstr ""
 msgid "Kõik organisatsioonid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:616 classes/applications/crm/crm_company_cust_impl.aw:1344
+#: classes/applications/crm/crm_company_cust_impl.aw:616 classes/applications/crm/crm_company_cust_impl.aw:1347
 msgid "Organisatsioon"
 msgstr ""
 
@@ -218,27 +218,27 @@ msgstr ""
 msgid "Esitaja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1345
+#: classes/applications/crm/crm_company_cust_impl.aw:1348
 msgid "Eraisik"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1378
+#: classes/applications/crm/crm_company_cust_impl.aw:1381
 msgid "Kategooria"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1418
+#: classes/applications/crm/crm_company_cust_impl.aw:1421
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1427
+#: classes/applications/crm/crm_company_cust_impl.aw:1430
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1593
+#: classes/applications/crm/crm_company_cust_impl.aw:1596
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/crm/crm_company_cust_impl.aw:1597
+#: classes/applications/crm/crm_company_cust_impl.aw:1600
 msgid "Muuda"
 msgstr ""
 

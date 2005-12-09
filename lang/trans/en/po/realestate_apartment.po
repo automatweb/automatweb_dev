@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_apartment.aw:class_943_help
 msgid "Klassi Korter help"
 msgstr ""
@@ -483,15 +482,19 @@ msgid "Omaduse N&auml;ita firma kodulehel (show_on_webpage) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_show_house_number_on_web
-msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
+msgid ""
+"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_show_house_number_on_web_comment
-msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) kommentaar"
+msgid ""
+"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_show_house_number_on_web_help
-msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
+msgid ""
+"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_special_homepage
@@ -507,15 +510,19 @@ msgid "Omaduse Objekti koduleht (special_homepage) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_special_status
-msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) caption"
+msgid ""
+"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_special_status_comment
-msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) kommentaar"
+msgid ""
+"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_special_status_help
-msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) help"
+msgid ""
+"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_project
@@ -615,27 +622,33 @@ msgid "Omaduse Pildid (pictures) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_picture_icon
-msgid "Omaduse Ikooni url (picture_icon) caption"
+msgid "Omaduse Väike pilt (picture_icon) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_picture_icon_comment
-msgid "Omaduse Ikooni url (picture_icon) kommentaar"
+msgid "Omaduse Väike pilt (picture_icon) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_picture_icon_help
-msgid "Omaduse Ikooni url (picture_icon) help"
+msgid "Omaduse Väike pilt (picture_icon) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_map_create
-msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) caption"
+msgid ""
+"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
+"caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_map_create_comment
-msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) kommentaar"
+msgid ""
+"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_map_create_help
-msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) help"
+msgid ""
+"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
+"help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_apartment.aw:prop_map_url
@@ -2154,11 +2167,11 @@ msgstr ""
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:484 classes/applications/realestate_management/realestate_apartment.aw:492
+#: classes/applications/realestate_management/realestate_apartment.aw:484
+#: classes/applications/realestate_management/realestate_apartment.aw:492
 msgid "Kohustuslik väli"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_apartment.aw:515
+#: classes/applications/realestate_management/realestate_apartment.aw:518
 msgid "Viga andmetes: korruste arv korrusest väiksem. "
 msgstr ""
-

@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/contentmgmt/site_template_compiler.aw:919
+#: classes/contentmgmt/site_template_compiler.aw:922
 msgid ""
 "show_site::generate_code(): could not find generator for op %s (%s) op = %s"
 msgstr ""

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/address/address.aw:class_948_help
 msgid "Klassi Aadress v2 help"
 msgstr ""
@@ -142,11 +141,14 @@ msgstr ""
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr ""
 
-#: classes/common/address/address.aw:98
+#: classes/common/address/address.aw:rel_RELTYPE_ADMINISTRATIVE_UNIT
+msgid "Seose Halduspiirkond (RELTYPE_ADMINISTRATIVE_UNIT) tekst"
+msgstr ""
+
+#: classes/common/address/address.aw:101
 msgid "Haldusjaotus m‰‰ramata."
 msgstr ""
 
-#: classes/common/address/address.aw:343
+#: classes/common/address/address.aw:346
 msgid "T‰nav"
 msgstr ""
-

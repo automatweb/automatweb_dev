@@ -82,3 +82,19 @@ msgstr ""
 msgid "Tekst"
 msgstr ""
 
+#: classes/formgen/form_table.aw:34
+msgid "Salvesta"
+msgstr ""
+
+#: classes/formgen/form_table.aw:34
+msgid "Lisa"
+msgstr ""
+
+#: classes/formgen/form_table.aw:34
+msgid "Kustuta"
+msgstr ""
+
+#: classes/formgen/form_table.aw:34
+msgid "Liiguta"
+msgstr ""
+

@@ -122,6 +122,14 @@ msgstr ""
 msgid "Omaduse HTTP autoriseerimisel samad andmed (ll_http_auth) help"
 msgstr ""
 
+#: classes/import/livelink_import.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/import/livelink_import.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/import/livelink_import.aw:group_auth
 msgid "Grupi Autoriseerimine (auth) pealkiri"
 msgstr ""

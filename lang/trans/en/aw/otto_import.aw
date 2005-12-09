@@ -33,8 +33,8 @@ $GLOBALS["TRANS"]["Grupi Vaated (views) pealkiri"] = "Views";
 $GLOBALS["TRANS"]["Grupi Kustutamine (delete) pealkiri"] = "Deleting";
 $GLOBALS["TRANS"]["Grupi Parandused (post_import_fix) pealkiri"] = "Repairs";
 $GLOBALS["TRANS"]["Seose kataloog (RELTYPE_FOLDER) tekst"] = "folder";
+$GLOBALS["TRANS"]["AW Kataloogi ID"] = "AW Folder ID";
 $GLOBALS["TRANS"]["otto_import::images(): could not fetch html for url %s!"] = "otto_import::images(): could not fetch html for url %s!";
 $GLOBALS["TRANS"]["all done! <br>"] = "All done! <br>";
 $GLOBALS["TRANS"]["Lehed komaga eraldatult"] = "Pages separated with commas";
-$GLOBALS["TRANS"]["AW Kataloogi ID"] = "AW Folder ID";
 ?>

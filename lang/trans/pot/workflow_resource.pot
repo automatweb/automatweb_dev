@@ -50,12 +50,20 @@ msgstr ""
 msgid "Omaduse  (calendar) help"
 msgstr ""
 
+#: classes/workflow/workflow_resource.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/workflow/workflow_resource.aw:group_overview
-msgid "Grupi &Uuml;levaade (overview) pealkiri"
+msgid "Grupi Ülevaade (overview) pealkiri"
 msgstr ""
 
 #: classes/workflow/workflow_resource.aw:group_overview_help
-msgid "Grupi &Uuml;levaade (overview) help"
+msgid "Grupi Ülevaade (overview) help"
 msgstr ""
 
 #: classes/workflow/workflow_resource.aw:group_calendar
@@ -67,6 +75,6 @@ msgid "Grupi Kalender (calendar) help"
 msgstr ""
 
 #: classes/workflow/workflow_resource.aw:rel_RELTYPE_EVENT
-msgid "Seose t&ouml;&ouml; (RELTYPE_EVENT) tekst"
+msgid "Seose t&amp;ouml;&amp;ouml; (RELTYPE_EVENT) tekst"
 msgstr ""
 

@@ -10,83 +10,83 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_company_overview_impl.aw:180 classes/applications/crm/crm_company_overview_impl.aw:189
+#: classes/applications/crm/crm_company_overview_impl.aw:180 classes/applications/crm/crm_company_overview_impl.aw:191
 msgid ""
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:196
+#: classes/applications/crm/crm_company_overview_impl.aw:199
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:206
+#: classes/applications/crm/crm_company_overview_impl.aw:209
 msgid "Toimumisaeg"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:214
+#: classes/applications/crm/crm_company_overview_impl.aw:217
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:223
+#: classes/applications/crm/crm_company_overview_impl.aw:226
 msgid "Projekt"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:234
+#: classes/applications/crm/crm_company_overview_impl.aw:237
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:246
+#: classes/applications/crm/crm_company_overview_impl.aw:249
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:256
+#: classes/applications/crm/crm_company_overview_impl.aw:259
 msgid "Osalejad"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:329
+#: classes/applications/crm/crm_company_overview_impl.aw:335 classes/applications/crm/crm_company_overview_impl.aw:645
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:336 classes/applications/crm/crm_company_overview_impl.aw:588
+#: classes/applications/crm/crm_company_overview_impl.aw:342 classes/applications/crm/crm_company_overview_impl.aw:599
 msgid "M&auml;rgi tehtuks"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:343
+#: classes/applications/crm/crm_company_overview_impl.aw:349
 msgid "Koosta arve"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:354
+#: classes/applications/crm/crm_company_overview_impl.aw:360
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:359
+#: classes/applications/crm/crm_company_overview_impl.aw:365
 msgid "K&auml;ivita stopper"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:371
+#: classes/applications/crm/crm_company_overview_impl.aw:377
 msgid "Peata stopper (%s)"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:541
+#: classes/applications/crm/crm_company_overview_impl.aw:552
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:573
+#: classes/applications/crm/crm_company_overview_impl.aw:584
 msgid "P&auml;eva raport"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:595
+#: classes/applications/crm/crm_company_overview_impl.aw:606
 msgid "Kustuta toimetused"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:596
+#: classes/applications/crm/crm_company_overview_impl.aw:607
 msgid "Oled kindel et soovid valitud toimetusi kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:607
+#: classes/applications/crm/crm_company_overview_impl.aw:618
 msgid "Kalendrivaade"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:616
+#: classes/applications/crm/crm_company_overview_impl.aw:627
 msgid "Tabelivaade"
 msgstr ""
 

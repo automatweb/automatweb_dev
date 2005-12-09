@@ -9,52 +9,78 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/cfg/htmlclient.aw:256
 msgid "Viga sisendandmetes"
-msgstr ""
+msgstr "Error in data"
 
 #: classes/cfg/htmlclient.aw:279
 msgid "Jah"
-msgstr ""
+msgstr "Yes"
 
 #: classes/cfg/htmlclient.aw:280
 msgid "Ei"
-msgstr ""
+msgstr "No"
 
 #: classes/cfg/htmlclient.aw:306
 msgid "K&otilde;ik"
-msgstr ""
+msgstr "All"
 
 #: classes/cfg/htmlclient.aw:307
 msgid "Aktiivne"
-msgstr ""
+msgstr "Active"
 
 #: classes/cfg/htmlclient.aw:308
 msgid "Deaktiivne"
-msgstr ""
+msgstr "Not active"
 
 #: classes/cfg/htmlclient.aw:342
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 
-#: classes/cfg/htmlclient.aw:563
+#: classes/cfg/htmlclient.aw:423 classes/cfg/htmlclient.aw:563
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
-#: classes/cfg/htmlclient.aw:792
+#: classes/cfg/htmlclient.aw:792 classes/cfg/htmlclient.aw:869
 msgid "Toimetus"
-msgstr ""
+msgstr "Task"
 
-#: classes/cfg/htmlclient.aw:813
+#: classes/cfg/htmlclient.aw:813 classes/cfg/htmlclient.aw:871
 msgid "K&otilde;ne"
-msgstr ""
+msgstr "Call"
 
-#: classes/cfg/htmlclient.aw:825
+#: classes/cfg/htmlclient.aw:825 classes/cfg/htmlclient.aw:872
 msgid "Kohtumine"
-msgstr ""
+msgstr "Meeting"
 
-#: classes/cfg/htmlclient.aw:846
+#: classes/cfg/htmlclient.aw:846 classes/cfg/htmlclient.aw:873
 msgid "Pakkumine"
-msgstr ""
+msgstr "Offer"
 
+#: classes/cfg/htmlclient.aw:864
+msgid "Lisa"
+msgstr "Add"
+
+#: classes/cfg/htmlclient.aw:865
+msgid "Uus t&ouml;&ouml;"
+msgstr "New case"
+
+#: classes/cfg/htmlclient.aw:866
+msgid "Klient"
+msgstr "Customer"
+
+#: classes/cfg/htmlclient.aw:867
+msgid "Klient (eraisik)"
+msgstr "Customer (Person)"
+
+#: classes/cfg/htmlclient.aw:868
+msgid "Projekt"
+msgstr "Project"
+
+#: classes/cfg/htmlclient.aw:870
+msgid "Arve"
+msgstr "Invoice"
+
+#: classes/cfg/htmlclient.aw:874
+msgid "Logi v&auml;lja"
+msgstr "Log out"

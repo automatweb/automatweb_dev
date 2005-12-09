@@ -86,11 +86,11 @@ msgstr ""
 msgid "Seose Riik (RELTYPE_COUNTRY) tekst"
 msgstr ""
 
-#: classes/common/country/country_administrative_structure.aw:100
+#: classes/common/country/country_administrative_structure.aw:104
 msgid "Riik valimata"
 msgstr ""
 
-#: classes/common/country/country_administrative_structure.aw:112
+#: classes/common/country/country_administrative_structure.aw:116
 msgid "%s aadressi kasutab seda haldusjaotust! Muudatuste salvestamisel tekivad neis aadressides vead."
 msgstr ""
 

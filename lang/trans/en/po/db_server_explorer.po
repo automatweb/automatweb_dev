@@ -81,3 +81,9 @@ msgstr ""
 #: classes/applications/awmyadmin/db_server_explorer.aw:rel_RELTYPE_CONF
 msgid "Seose konfiguratsioon (RELTYPE_CONF) tekst"
 msgstr "configuration"
+
+#: classes/applications/awmyadmin/db_server_explorer.aw:383
+#: classes/applications/awmyadmin/db_server_explorer.aw:411
+#: classes/applications/awmyadmin/db_server_explorer.aw:597
+msgid "Salvesta"
+msgstr ""

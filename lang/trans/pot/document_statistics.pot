@@ -158,6 +158,14 @@ msgstr ""
 msgid "Omaduse Vaatamiste arvu stiil (comment_style) help"
 msgstr ""
 
+#: classes/contentmgmt/document_statistics.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/contentmgmt/document_statistics.aw:group_folders
 msgid "Grupi Kataloogid ja perioodid (folders) pealkiri"
 msgstr ""

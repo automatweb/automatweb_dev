@@ -677,7 +677,7 @@ msgid "Pealkiri"
 msgstr "Title"
 
 #: classes/cfg/cfgform.aw:891 classes/cfg/cfgform.aw:970
-#: classes/cfg/cfgform.aw:1421
+#: classes/cfg/cfgform.aw:1263 classes/cfg/cfgform.aw:1421
 msgid "Salvesta"
 msgstr "Save"
 

@@ -9,8 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/crm_company_bills_impl.aw:13 classes/applications/crm/crm_company_bills_impl.aw:114 classes/applications/crm/crm_company_bills_impl.aw:544
+#: classes/applications/crm/crm_company_bills_impl.aw:13
+#: classes/applications/crm/crm_company_bills_impl.aw:114
+#: classes/applications/crm/crm_company_bills_impl.aw:504
 msgid "Loo arve"
 msgstr ""
 
@@ -18,11 +19,14 @@ msgstr ""
 msgid "Projekt"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:27 classes/applications/crm/crm_company_bills_impl.aw:267
+#: classes/applications/crm/crm_company_bills_impl.aw:27
+#: classes/applications/crm/crm_company_bills_impl.aw:267
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:34 classes/applications/crm/crm_company_bills_impl.aw:146 classes/applications/crm/crm_company_bills_impl.aw:278
+#: classes/applications/crm/crm_company_bills_impl.aw:34
+#: classes/applications/crm/crm_company_bills_impl.aw:146
+#: classes/applications/crm/crm_company_bills_impl.aw:278
 msgid "Summa"
 msgstr ""
 
@@ -46,7 +50,8 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:244 classes/applications/crm/crm_company_bills_impl.aw:376
+#: classes/applications/crm/crm_company_bills_impl.aw:244
+#: classes/applications/crm/crm_company_bills_impl.aw:389
 msgid "Loo uus"
 msgstr ""
 
@@ -66,31 +71,45 @@ msgstr ""
 msgid "Staatus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:293 classes/applications/crm/crm_company_bills_impl.aw:387
+#: classes/applications/crm/crm_company_bills_impl.aw:293
 msgid "Tr&uuml;ki"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:401
+#: classes/applications/crm/crm_company_bills_impl.aw:374
+msgid "Prindi arve"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:378
+msgid "Prindi arve lisa"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:410
 msgid "<b>Summa</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:495 classes/applications/crm/crm_company_bills_impl.aw:527
+#: classes/applications/crm/crm_company_bills_impl.aw:426
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:455
+#: classes/applications/crm/crm_company_bills_impl.aw:487
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:501 classes/applications/crm/crm_company_bills_impl.aw:533
+#: classes/applications/crm/crm_company_bills_impl.aw:461
+#: classes/applications/crm/crm_company_bills_impl.aw:493
 msgid "Kustuta valitud arved"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:502 classes/applications/crm/crm_company_bills_impl.aw:534
+#: classes/applications/crm/crm_company_bills_impl.aw:462
+#: classes/applications/crm/crm_company_bills_impl.aw:494
 msgid "Oled kindel et soovid valitud arved kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:510
+#: classes/applications/crm/crm_company_bills_impl.aw:470
 msgid "Ekspordi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_bills_impl.aw:516
+#: classes/applications/crm/crm_company_bills_impl.aw:476
 msgid "Hansa raama"
 msgstr ""
-

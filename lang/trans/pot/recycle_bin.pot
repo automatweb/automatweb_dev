@@ -158,6 +158,38 @@ msgstr ""
 msgid "Omaduse  (s_res) help"
 msgstr ""
 
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_delete_grps
+msgid "Omaduse Grupid, kes saavad kustutada (delete_grps) caption"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_delete_grps_comment
+msgid "Omaduse Grupid, kes saavad kustutada (delete_grps) kommentaar"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_delete_grps_help
+msgid "Omaduse Grupid, kes saavad kustutada (delete_grps) help"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_admin_grps
+msgid "Omaduse Grupid, kes saavad m&auml;&auml;ranguid muuta (admin_grps) caption"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_admin_grps_comment
+msgid "Omaduse Grupid, kes saavad m&auml;&auml;ranguid muuta (admin_grps) kommentaar"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:prop_admin_grps_help
+msgid "Omaduse Grupid, kes saavad m&auml;&auml;ranguid muuta (admin_grps) help"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/recycle_bin/recycle_bin.aw:group_recycle
 msgid "Grupi Prügikast (recycle) pealkiri"
 msgstr ""
@@ -182,63 +214,79 @@ msgstr ""
 msgid "Grupi Otsing (recycle_search) help"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:110
-msgid ""
+#: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_settings
+msgid "Grupi Määrangud (recycle_settings) pealkiri"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:116
-msgid "Nimi"
+#: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_settings_help
+msgid "Grupi Määrangud (recycle_settings) help"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:122
-msgid "ID"
+#: classes/applications/recycle_bin/recycle_bin.aw:rel_RELTYPE_DEL_GRP
+msgid "Seose Kustutaja grupp (RELTYPE_DEL_GRP) tekst"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:130
-msgid "Tegevus"
-msgstr ""
-
-#: classes/applications/recycle_bin/recycle_bin.aw:135
-msgid "Objektitüüp"
-msgstr ""
-
-#: classes/applications/recycle_bin/recycle_bin.aw:142
-msgid "Kustutaja"
+#: classes/applications/recycle_bin/recycle_bin.aw:rel_RELTYPE_ADM_GRP
+msgid "Seose Admin grupp (RELTYPE_ADM_GRP) tekst"
 msgstr ""
 
 #: classes/applications/recycle_bin/recycle_bin.aw:150
-msgid "Kustutatud"
+msgid ""
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:156
+msgid "Nimi"
 msgstr ""
 
 #: classes/applications/recycle_bin/recycle_bin.aw:162
+msgid "ID"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:170
+msgid "Tegevus"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:175
+msgid "Objektitüüp"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:182
+msgid "Kustutaja"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:190
+msgid "Kustutatud"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:202
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:223
+#: classes/applications/recycle_bin/recycle_bin.aw:263
 msgid "Taasta"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:253
+#: classes/applications/recycle_bin/recycle_bin.aw:293
 msgid "Taasta valitud objektid"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:259
+#: classes/applications/recycle_bin/recycle_bin.aw:299
 msgid "Uuenda"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:266
+#: classes/applications/recycle_bin/recycle_bin.aw:324
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:268
+#: classes/applications/recycle_bin/recycle_bin.aw:326
 msgid "Kas olete 100% kindel et soovite valitud objekte l&otilde;plikult kustutada?"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:274
+#: classes/applications/recycle_bin/recycle_bin.aw:332
 msgid "T&uuml;hjenda"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:276
+#: classes/applications/recycle_bin/recycle_bin.aw:334
 msgid "Ettevaatust! Objektid kustutatakse j&auml;&auml;davalt!"
 msgstr ""
 

@@ -194,6 +194,14 @@ msgstr ""
 msgid "Omaduse Vali kataloogid, mida filtris kasutada (folders) help"
 msgstr ""
 
+#: classes/syslog/dronline.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/syslog/dronline.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/syslog/dronline.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
 msgstr ""

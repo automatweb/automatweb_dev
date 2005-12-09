@@ -20,6 +20,7 @@ $GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Toimetused (tasks) pealkiri"] = "Tasks";
 $GLOBALS["TRANS"]["Grupi Toimetused (tasks) help"] = "Tasks";
 $GLOBALS["TRANS"]["Grupi Eelvaade (preview) pealkiri"] = "Preview";
+$GLOBALS["TRANS"]["Grupi Arve Lisa (preview_add) pealkiri"] = "Appendix";
 $GLOBALS["TRANS"]["Koostamisel"] = "Not sent";
 $GLOBALS["TRANS"]["Saadetud"] = "Sent";
 $GLOBALS["TRANS"]["Makstud"] = "Payment recieved";

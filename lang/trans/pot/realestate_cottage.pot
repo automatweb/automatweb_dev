@@ -615,15 +615,15 @@ msgid "Omaduse Pildid (pictures) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_picture_icon
-msgid "Omaduse Ikooni url (picture_icon) caption"
+msgid "Omaduse Väike pilt (picture_icon) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_picture_icon_comment
-msgid "Omaduse Ikooni url (picture_icon) kommentaar"
+msgid "Omaduse Väike pilt (picture_icon) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_picture_icon_help
-msgid "Omaduse Ikooni url (picture_icon) help"
+msgid "Omaduse Väike pilt (picture_icon) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_map_create

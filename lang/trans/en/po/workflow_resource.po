@@ -10,61 +10,89 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/workflow/workflow_resource.aw:class__help
+#: classes/workflow/workflow_resource.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
 # classes/workflow/workflow_resource.aw:prop_is_subcontract
+#: classes/workflow/workflow_resource.aw:prop_is_subcontract
 msgid "Omaduse allhange (is_subcontract) caption"
 msgstr "subcontract"
 
 # classes/workflow/workflow_resource.aw:prop_is_subcontract_comment
+#: classes/workflow/workflow_resource.aw:prop_is_subcontract_comment
 msgid "Omaduse allhange (is_subcontract) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow_resource.aw:prop_is_subcontract_help
+#: classes/workflow/workflow_resource.aw:prop_is_subcontract_help
 msgid "Omaduse allhange (is_subcontract) help"
 msgstr ""
 
 # classes/workflow/workflow_resource.aw:prop_overview
+#: classes/workflow/workflow_resource.aw:prop_overview
 msgid "Omaduse  (overview) caption"
 msgstr ""
 
 # classes/workflow/workflow_resource.aw:prop_overview_comment
+#: classes/workflow/workflow_resource.aw:prop_overview_comment
 msgid "Omaduse  (overview) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow_resource.aw:prop_overview_help
+#: classes/workflow/workflow_resource.aw:prop_overview_help
 msgid "Omaduse  (overview) help"
 msgstr ""
 
 # classes/workflow/workflow_resource.aw:prop_calendar
+#: classes/workflow/workflow_resource.aw:prop_calendar
 msgid "Omaduse  (calendar) caption"
 msgstr ""
 
 # classes/workflow/workflow_resource.aw:prop_calendar_comment
+#: classes/workflow/workflow_resource.aw:prop_calendar_comment
 msgid "Omaduse  (calendar) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow_resource.aw:prop_calendar_help
+#: classes/workflow/workflow_resource.aw:prop_calendar_help
 msgid "Omaduse  (calendar) help"
 msgstr ""
 
-# classes/workflow/workflow_resource.aw:group_overview
-msgid "Grupi &Uuml;levaade (overview) pealkiri"
-msgstr "Overview"
+#: classes/workflow/workflow_resource.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
 
-# classes/workflow/workflow_resource.aw:group_overview_help
-msgid "Grupi &Uuml;levaade (overview) help"
+#: classes/workflow/workflow_resource.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:group_overview
+msgid "Grupi Ülevaade (overview) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_resource.aw:group_overview_help
+msgid "Grupi Ülevaade (overview) help"
 msgstr ""
 
 # classes/workflow/workflow_resource.aw:group_calendar
+#: classes/workflow/workflow_resource.aw:group_calendar
 msgid "Grupi Kalender (calendar) pealkiri"
 msgstr "Calendar"
 
 # classes/workflow/workflow_resource.aw:group_calendar_help
+#: classes/workflow/workflow_resource.aw:group_calendar_help
 msgid "Grupi Kalender (calendar) help"
 msgstr ""
 
+#: classes/workflow/workflow_resource.aw:rel_RELTYPE_EVENT
+msgid "Seose t&amp;ouml;&amp;ouml; (RELTYPE_EVENT) tekst"
+msgstr ""
+
+# classes/workflow/workflow_resource.aw:group_overview
+#~ msgid "Grupi &Uuml;levaade (overview) pealkiri"
+#~ msgstr "Overview"
+
 # classes/workflow/workflow_resource.aw:rel_RELTYPE_EVENT
-msgid "Seose t&ouml;&ouml; (RELTYPE_EVENT) tekst"
-msgstr "event"
+#~ msgid "Seose t&ouml;&ouml; (RELTYPE_EVENT) tekst"
+#~ msgstr "event"

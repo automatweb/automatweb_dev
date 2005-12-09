@@ -9,9 +9,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_client_selection.aw:class_1026_help
 msgid "Klassi Klientide valim help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_client_selection.aw:prop_client_ids
+msgid "Omaduse  (client_ids) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_client_selection.aw:prop_client_ids_comment
+msgid "Omaduse  (client_ids) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_client_selection.aw:prop_client_ids_help
+msgid "Omaduse  (client_ids) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_client_selection.aw:group_general
@@ -22,3 +33,19 @@ msgstr ""
 msgid "Grupi ‹ldine (general) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_client_selection.aw:rel_RELTYPE_MAILINGLIST
+msgid "Seose Valimi meililist (RELTYPE_MAILINGLIST) tekst"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_client_selection.aw:255
+msgid "\"Kıik lubatud\" kasutaja keskkonna seadetes m‰‰ramata"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_client_selection.aw:289
+msgid ""
+"Uue kliendivalimi loomisel ei antud argumendina kaasa loodud objekti id-d."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_client_selection.aw:299
+msgid "Kliendivalimi meilinglist"
+msgstr ""

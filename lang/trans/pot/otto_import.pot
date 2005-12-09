@@ -231,15 +231,15 @@ msgid "Omaduse Landscape vaatega lehed (sideways_pages) help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_foldernames
-msgid "Omaduse Kaustade nimed impordi jaoks (id=nimi,id=nimi) (foldernames) caption"
+msgid "Omaduse Kaustade nimed impordi jaoks (foldernames) caption"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_foldernames_comment
-msgid "Omaduse Kaustade nimed impordi jaoks (id=nimi,id=nimi) (foldernames) kommentaar"
+msgid "Omaduse Kaustade nimed impordi jaoks (foldernames) kommentaar"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_foldernames_help
-msgid "Omaduse Kaustade nimed impordi jaoks (id=nimi,id=nimi) (foldernames) help"
+msgid "Omaduse Kaustade nimed impordi jaoks (foldernames) help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_force_7_view
@@ -300,6 +300,18 @@ msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_force_no_side_view_help
 msgid "Omaduse Ilma detailvaate lisapiltideta lehed (force_no_side_view) help"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_force_7_view_for_trends
+msgid "Omaduse 7 pildiga trendide lehed (force_7_view_for_trends) caption"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_force_7_view_for_trends_comment
+msgid "Omaduse 7 pildiga trendide lehed (force_7_view_for_trends) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_force_7_view_for_trends_help
+msgid "Omaduse 7 pildiga trendide lehed (force_7_view_for_trends) help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_jm_clothes
@@ -454,19 +466,23 @@ msgstr ""
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:573
+#: classes/applications/shop/otto/otto_import.aw:239
+msgid "Kategooria nimi"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:244 classes/applications/shop/otto/otto_import.aw:2186
+msgid "AW Kataloogi ID"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:794
 msgid "otto_import::images(): could not fetch html for url %s!"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1460
+#: classes/applications/shop/otto/otto_import.aw:1723
 msgid "all done! <br>"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1892
+#: classes/applications/shop/otto/otto_import.aw:2180
 msgid "Lehed komaga eraldatult"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_import.aw:1898
-msgid "AW Kataloogi ID"
 msgstr ""
 

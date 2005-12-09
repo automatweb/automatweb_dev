@@ -34,8 +34,12 @@ msgstr ""
 msgid "Seda seost ei saa redigeerida!"
 msgstr ""
 
-#: classes/vcl/releditor.aw:391 classes/vcl/releditor.aw:410
+#: classes/vcl/releditor.aw:231 classes/vcl/releditor.aw:391 classes/vcl/releditor.aw:410
 msgid "Uus"
+msgstr ""
+
+#: classes/vcl/releditor.aw:298
+msgid "Salvesta"
 msgstr ""
 
 #: classes/vcl/releditor.aw:399

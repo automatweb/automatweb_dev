@@ -2,55 +2,167 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: 2005-12-04 19:51+0200\n"
-"Last-Translator: Erki <erki@struktuur.ee>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
+
 
 #: classes/applications/crm/crm_company_qv_impl.aw:14
+msgid ""
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:20
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:20
+#: classes/applications/crm/crm_company_qv_impl.aw:26 classes/applications/crm/crm_company_qv_impl.aw:369
 msgid "Nimetus"
 msgstr "Name"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:26
+#: classes/applications/crm/crm_company_qv_impl.aw:32
 msgid "Osalejad"
 msgstr "Participants"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:32
+#: classes/applications/crm/crm_company_qv_impl.aw:38
 msgid "Staatus"
 msgstr "Status"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:38
+#: classes/applications/crm/crm_company_qv_impl.aw:44
 msgid "Tunde"
 msgstr "Hours"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:44
+#: classes/applications/crm/crm_company_qv_impl.aw:50
 msgid "Summa"
 msgstr "Sum"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:96
+#: classes/applications/crm/crm_company_qv_impl.aw:77
+msgid "<b>Projektid</b>"
+msgstr "<b>Projects</b>"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:90
 msgid "<b>Projektid (5 värskemat)</b>"
 msgstr "<b>Projects (5 latest)</b>"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:133
-msgid "<b>Tegevused (10 värskemat)</b>"
-msgstr "<b>Actions (10 latest)</b>"
+#: classes/applications/crm/crm_company_qv_impl.aw:174
+msgid "<b>Tegevused</b>"
+msgstr "<b>Tasks</b>"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:135
+#: classes/applications/crm/crm_company_qv_impl.aw:187
+msgid "<b>Tegevused (10 värskemat)</b>"
+msgstr "<b>Tasks (10 latest)</b>"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:220
 msgid "Tehtud"
 msgstr "Done"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:135
+#: classes/applications/crm/crm_company_qv_impl.aw:220
 msgid "T&ouml;&ouml;s"
 msgstr "In progress"
 
-#: classes/applications/crm/crm_company_qv_impl.aw:170
+#: classes/applications/crm/crm_company_qv_impl.aw:238
+msgid "<span style='font-size: 0px;'>y</span><b>Arved</b>"
+msgstr "<span style='font-size: 0px;'>y</span><b>Bills</b>"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:251
 msgid "<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>"
-msgstr "<b>Invoices (10 latest)</b>"
+msgstr "<span style='font-size: 0px;'>y</span><b>Bills (10 latest)</b>"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:368
+msgid "Kliendi &uuml;ldandmed"
+msgstr "Customer info"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:370
+msgid "Alguskuup&auml;ev"
+msgstr "From"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:371
+msgid "Kood"
+msgstr "Code"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:372
+msgid "Suhte looja"
+msgstr "Customer relationship creator"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:373
+msgid "Registrikood"
+msgstr "Register code"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:374
+msgid "Kliendisuhe"
+msgstr "Customer relationship"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:375
+msgid "Sissetuleku meetod"
+msgstr "Referal method"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:376
+msgid "KMK nr"
+msgstr "KMK nr"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:377
+msgid "Kliendihaldur"
+msgstr "Client manager"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:378
+msgid "Tegevuse kirjeldus"
+msgstr "Description"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:379
+msgid "Kaubam&auml;rgid"
+msgstr "Trademarks"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:380
+msgid "Kontaktandmed"
+msgstr "Contact data"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:381
+msgid "Kontaktisikud"
+msgstr "Contact persons"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:382
+msgid "Aadress"
+msgstr "Address"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:383
+msgid "Telefon"
+msgstr "Phone"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:384
+msgid "Faks"
+msgstr "Fax"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:385
+msgid "E-post"
+msgstr "E-mail"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:386
+msgid "WWW"
+msgstr "WWW"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:387
+msgid "Tulud"
+msgstr "Income"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:388
+msgid "Ajavahemikul"
+msgstr "Timespan"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:389
+msgid "T&ouml;&ouml;tunde kokku"
+msgstr "Total working hours"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:390
+msgid "Arvele l&auml;inud t&ouml;&ouml;tunde"
+msgstr "Working hours on bill"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:391
+msgid "Tehtud t&ouml;id summas"
+msgstr "Total work sum"
+
+#: classes/applications/crm/crm_company_qv_impl.aw:392
+msgid "Esitatud arveid summas"
+msgstr "Invoices sent for sum"
 

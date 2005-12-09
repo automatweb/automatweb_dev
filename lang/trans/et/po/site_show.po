@@ -13,27 +13,27 @@ msgstr ""
 msgid "site_show::do_draw_menus(): no compiled filename set!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:1736
+#: classes/contentmgmt/site_show.aw:1740
 msgid ""
 "site_show::exec_subtemplate_handlers(): could not find subtemplate handler "
 "in %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:1920
+#: classes/contentmgmt/site_show.aw:1924
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2423
+#: classes/contentmgmt/site_show.aw:2427
 msgid ""
 "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: "
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2459
+#: classes/contentmgmt/site_show.aw:2463
 msgid ""
 "Access denied and error redirects are defined.incorrectly. Please report "
 "this to the site administrator"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2464
+#: classes/contentmgmt/site_show.aw:2468
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr ""

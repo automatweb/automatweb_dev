@@ -97,51 +97,51 @@ msgstr ""
 msgid "Grupi Üldine (general) help"
 msgstr ""
 
-#: classes/class_base.aw:571
+#: classes/class_base.aw:575
 msgid "Rohkem infot"
 msgstr ""
 
-#: classes/class_base.aw:572
+#: classes/class_base.aw:576
 msgid "Tõlgi"
 msgstr ""
 
-#: classes/class_base.aw:573
+#: classes/class_base.aw:577
 msgid "Peida ära"
 msgstr ""
 
-#: classes/class_base.aw:574
+#: classes/class_base.aw:578
 msgid "Abiinfo"
 msgstr ""
 
-#: classes/class_base.aw:619
+#: classes/class_base.aw:623
 msgid "tab panel"
 msgstr ""
 
-#: classes/class_base.aw:1215
+#: classes/class_base.aw:1235
 msgid "Muuda"
 msgstr ""
 
-#: classes/class_base.aw:1223
+#: classes/class_base.aw:1243
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1250
+#: classes/class_base.aw:1270
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1439 classes/class_base.aw:4623
-#: classes/class_base.aw:4634
+#: classes/class_base.aw:1460 classes/class_base.aw:4643
+#: classes/class_base.aw:4654
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:3199
+#: classes/class_base.aw:3219
 msgid "See väli ei tohi olla tühi!"
 msgstr ""
 
-#: classes/class_base.aw:3208
+#: classes/class_base.aw:3228
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4520
+#: classes/class_base.aw:4540
 msgid "%s is not a valid configuration form!"
 msgstr ""

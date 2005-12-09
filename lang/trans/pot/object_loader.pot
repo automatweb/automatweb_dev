@@ -14,39 +14,39 @@ msgstr ""
 msgid "object_loader::param_to_oid(%s): no object with alias $param!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:151
+#: classes/core/obj/object_loader.aw:152
 msgid "object_loader::param_to_oid(): parameter must be either: oid , string (alias) or object instance!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:170
+#: classes/core/obj/object_loader.aw:172
 msgid "no object with alias %s!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:215
+#: classes/core/obj/object_loader.aw:218
 msgid "parameter must be either: oid , string (alias), object instance or object list instance!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:241
+#: classes/core/obj/object_loader.aw:245
 msgid "object_loader::load(%s): parameter is not object id!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:258
+#: classes/core/obj/object_loader.aw:263
 msgid "object_loader::load(%s): no such object!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:285
+#: classes/core/obj/object_loader.aw:291
 msgid "object_loader::save(%s): no object with oid $oid exists in the global list"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:335
+#: classes/core/obj/object_loader.aw:342
 msgid "object_loader::save_new(%s): no object with oid %s exists in the global list"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:410
+#: classes/core/obj/object_loader.aw:420
 msgid "object_loader::switch_db_connection(%s): could nto find root connection!"
 msgstr ""
 
-#: classes/core/obj/object_loader.aw:601
+#: classes/core/obj/object_loader.aw:613
 msgid "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr ""
 
