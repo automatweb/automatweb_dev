@@ -602,6 +602,10 @@ msgstr ""
 msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
 msgstr ""
 
+#: classes/applications/groupware/task.aw:194 classes/applications/groupware/task.aw:205
+msgid "Stopper"
+msgstr ""
+
 #: classes/applications/groupware/task.aw:202
 msgid "Toimetus"
 msgstr "Task"
@@ -722,3 +726,30 @@ msgstr "--select--"
 msgid "Vali"
 msgstr "Select"
 
+#: classes/applications/groupware/task.aw:198
+msgid "Stopperid"
+msgstr "Stoppers"
+
+#: classes/applications/groupware/task.aw:199
+msgid "Algus"
+msgstr "Start"
+
+#: classes/applications/groupware/task.aw:200
+msgid "kulunud"
+msgstr "elapsed"
+
+#: classes/applications/groupware/task.aw:201
+msgid "Paus"
+msgstr "Pause"
+
+#: classes/applications/groupware/task.aw:202
+msgid "K&auml;ivita"
+msgstr "Start"
+
+#: classes/applications/groupware/task.aw:203
+msgid "L&otilde;peta"
+msgstr "Finish"
+
+#: classes/applications/groupware/task.aw:204 classes/applications/groupware/task.aw:959
+msgid "Kustuta"
+msgstr "Delete"

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.44 2005/12/09 07:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.45 2005/12/09 08:19:20 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -174,6 +174,104 @@ class task extends class_base
 		));
 	}
 
+	/**
+		@attrib name=stopper_pop
+		@param id optional
+		@param s_action optional
+		@param type optional
+		@param name optional
+		@param desc optional
+	**/
+	function stopper_pop($arr)
+	{
+		$this->read_template("stopper_pop.tpl");
+		$this->_proc_stop_act($arr);
+
+		$s = "";
+		$num = 0;
+		if (count(safe_array($_SESSION["crm_stoppers"])) < 1)
+		{
+			header("Location: ".aw_ini_get("baseurl")."/automatweb/closewin_no_r.html");
+			die();
+		}
+		$this->vars(array(
+			"stop_str" => t("Stopperid"),
+			"start_str" => t("Algus"),
+			"el_str" => t("kulunud"),
+			"p_str" => t("Paus"),
+			"s_str" => t("K&auml;ivita"),
+			"e_str" => t("L&otilde;peta"),
+			"d_str" => t("Kustuta")
+		));
+		foreach(safe_array($_SESSION["crm_stoppers"]) as $_id => $stopper)
+		{
+			if ($stopper["state"] == "running")
+			{
+				$el = (time() - $stopper["start"]) + $stopper["base"];
+			}
+			else
+			{
+				$el = $stopper["base"];
+			}
+			$elapsed_hr = (int)($el / 3600);
+			$elapsed_min = (int)(($el - $elapsed_hr * 3600) / 60);
+			$elapsed_sec = (int)($el - ($elapsed_hr * 3600 + $elapsed_min * 60));
+			$this->vars(array(
+				"task_type" => $stopper["type"],
+				"task_name" => $stopper["name"],
+				"time" => date("d.m.Y H:i:s", $stopper["start"]),
+				"elapsed" => sprintf("%02d:%02d:%02d",$elapsed_hr,$elapsed_min, $elapsed_sec),
+				"number" => $num++,
+				"start" => $stopper["start"],
+				"el_hr" => $elapsed_hr,
+				"el_min" => $elapsed_min,
+				"el_sec" => $elapsed_sec,
+				"pause_url" => $this->mk_my_orb("stopper_pop", array(
+					"id" => $_id,
+					"s_action" => "pause"
+				)),
+				"start_url" => $this->mk_my_orb("stopper_pop", array(
+					"id" => $_id,
+					"s_action" => "start"
+				)),
+				"stop_url" => $this->mk_my_orb("stopper_pop", array(
+					"id" => $_id,
+					"s_action" => "stop"
+				)),
+				"del_url" => $this->mk_my_orb("stopper_pop", array(
+					"id" => $_id,
+					"s_action" => "del"
+				)),
+			));
+
+			if ($stopper["state"] == "running")
+			{
+				$this->vars(array(
+					"PAUSE" => $this->parse("PAUSE"),
+					"RUNNER" => $this->parse("RUNNER"),
+					"PAUSER" => "",
+					"START" => ""
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"PAUSE" => "",
+					"START" => $this->parse("START"),
+					"RUNNER" => "",
+					"PAUSER" => $this->parse("PAUSER"),
+				));
+			}
+
+			$s .= $this->parse("STOPPER");
+		}
+
+		$this->vars(array(
+			"STOPPER" => $s
+		));
+
+		return $this->parse();
+	}
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -1459,95 +1557,7 @@ class task extends class_base
 		return parent::new_change($arr);
 	}
 
-	/**
-		@attrib name=stopper_pop
-		@param id optional
-		@param s_action optional
-		@param type optional
-		@param name optional
-		@param desc optional
-	**/
-	function stopper_pop($arr)
-	{
-		$this->read_template("stopper_pop.tpl");
-		$this->_proc_stop_act($arr);
 
-		$s = "";
-		$num = 0;
-		if (count(safe_array($_SESSION["crm_stoppers"])) < 1)
-		{
-			header("Location: ".aw_ini_get("baseurl")."/automatweb/closewin_no_r.html");
-			die();
-		}
-		foreach(safe_array($_SESSION["crm_stoppers"]) as $_id => $stopper)
-		{
-			if ($stopper["state"] == "running")
-			{
-				$el = (time() - $stopper["start"]) + $stopper["base"];
-			}
-			else
-			{
-				$el = $stopper["base"];
-			}
-			$elapsed_hr = (int)($el / 3600);
-			$elapsed_min = (int)(($el - $elapsed_hr * 3600) / 60);
-			$elapsed_sec = (int)($el - ($elapsed_hr * 3600 + $elapsed_min * 60));
-			$this->vars(array(
-				"task_type" => $stopper["type"],
-				"task_name" => $stopper["name"],
-				"time" => date("d.m.Y H:i:s", $stopper["start"]),
-				"elapsed" => sprintf("%02d:%02d:%02d",$elapsed_hr,$elapsed_min, $elapsed_sec),
-				"number" => $num++,
-				"start" => $stopper["start"],
-				"el_hr" => $elapsed_hr,
-				"el_min" => $elapsed_min,
-				"el_sec" => $elapsed_sec,
-				"pause_url" => $this->mk_my_orb("stopper_pop", array(
-					"id" => $_id,
-					"s_action" => "pause"
-				)),
-				"start_url" => $this->mk_my_orb("stopper_pop", array(
-					"id" => $_id,
-					"s_action" => "start"
-				)),
-				"stop_url" => $this->mk_my_orb("stopper_pop", array(
-					"id" => $_id,
-					"s_action" => "stop"
-				)),
-				"del_url" => $this->mk_my_orb("stopper_pop", array(
-					"id" => $_id,
-					"s_action" => "del"
-				)),
-			));
-
-			if ($stopper["state"] == "running")
-			{
-				$this->vars(array(
-					"PAUSE" => $this->parse("PAUSE"),
-					"RUNNER" => $this->parse("RUNNER"),
-					"PAUSER" => "",
-					"START" => ""
-				));
-			}
-			else
-			{
-				$this->vars(array(
-					"PAUSE" => "",
-					"START" => $this->parse("START"),
-					"RUNNER" => "",
-					"PAUSER" => $this->parse("PAUSER"),
-				));
-			}
-
-			$s .= $this->parse("STOPPER");
-		}
-
-		$this->vars(array(
-			"STOPPER" => $s
-		));
-
-		return $this->parse();
-	}
 
 	function _proc_stop_act($arr)
 	{

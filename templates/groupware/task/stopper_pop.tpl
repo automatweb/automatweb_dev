@@ -2,11 +2,11 @@
 var stops = new Array();
 </script>
 <span class="awmenuedittabletext">
-<b><font size="4">Stopperid</font></b><br>
+<b><font size="4">{VAR:stop_str}</font></b><br>
 <!-- SUB: STOPPER -->
 <hr>
 {VAR:task_type}: {VAR:task_name}<br>
-Algus: {VAR:time} | kulunud: 
+{VAR:start_str}: {VAR:time} | {VAR:el_str}: 
 <!-- SUB: RUNNER -->
 <span id="st{VAR:number}">{VAR:elapsed}</span><br>
 <!-- END SUB: RUNNER -->
@@ -19,14 +19,14 @@ Algus: {VAR:time} | kulunud:
 stops[{VAR:number}] = new Array({VAR:el_hr}, {VAR:el_min}, {VAR:el_sec});
 </script>
 <!-- SUB: PAUSE -->
-<a href='{VAR:pause_url}'>Paus</a>
+<a href='{VAR:pause_url}'>{VAR:p_str}</a>
 <!-- END SUB: PAUSE -->
 
 <!-- SUB: START -->
-<a href='{VAR:start_url}'>K&auml;ivita</a>
+<a href='{VAR:start_url}'>{VAR:s_str}</a>
 <!-- END SUB: START -->
 
- | <a href='#' onClick='desc=prompt("Kirjeldus");window.location="{VAR:stop_url}&desc="+desc;'>L&otilde;peta</a> | <a href='{VAR:del_url}'>Kustuta</a><br>
+ | <a href='#' onClick='desc=prompt("Kirjeldus");window.location="{VAR:stop_url}&desc="+desc;'>{VAR:e_str}</a> | <a href='{VAR:del_url}'>{VAR:d_str}</a><br>
 <!-- END SUB: STOPPER -->
 
 <script language="javascript">

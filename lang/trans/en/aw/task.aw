@@ -73,4 +73,11 @@ $GLOBALS["TRANS"]["Loo arve"] = "Create invoice";
 $GLOBALS["TRANS"]["%s toimetus"] = "%s task";
 $GLOBALS["TRANS"]["--vali--"] = "--select--";
 $GLOBALS["TRANS"]["Vali"] = "Select";
+$GLOBALS["TRANS"]["Stopperid"] = "Stoppers";
+$GLOBALS["TRANS"]["Algus"] = "Start";
+$GLOBALS["TRANS"]["kulunud"] = "elapsed";
+$GLOBALS["TRANS"]["Paus"] = "Pause";
+$GLOBALS["TRANS"]["K&auml;ivita"] = "Start";
+$GLOBALS["TRANS"]["L&otilde;peta"] = "Finish";
+$GLOBALS["TRANS"]["Kustuta"] = "Delet";
 ?>
