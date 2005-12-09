@@ -1178,7 +1178,7 @@ class _int_object
 					{
 						if (!in_array($c->prop("to"), $val))
 						{
-							$this->disconnect(array("from" => $c->prop("to"), "type" => $_rt));
+							//$this->disconnect(array("from" => $c->prop("to"), "type" => $_rt));
 						}
 					}
 				}

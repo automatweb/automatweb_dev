@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.33 2005/08/04 11:04:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.34 2005/12/09 09:43:17 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -11,7 +11,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 ------------------------------------------------------------------------
 @default group=general
 
-@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 rel=1 multiple=1
+@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Listi liikmete allikas
 
 @property multiple_folders type=checkbox ch_value=1
