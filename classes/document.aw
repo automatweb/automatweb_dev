@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.340 2005/12/09 09:57:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.341 2005/12/09 11:05:13 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1042,6 +1042,10 @@ class document extends aw_template
 		};
 		
 
+		if (!$this->can("view", $doc["docid"]))
+		{
+			return "";
+		}
 		$dc_obj = new object($doc["docid"]);
 		if ($this->is_template("LINKLIST") && $dc_obj->prop("no_topic_links") != 1)
 		{
