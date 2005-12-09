@@ -99,10 +99,8 @@ class site_template_compiler extends aw_template
 		}
 		$this->tplhash = md5($path.$tpl);
 		$this->parse_template_parts($mdefs);
-
 		$this->compile_template_parts();
 		$code =  "<?php\n".$this->generate_code()."?>";
-
 		exit_function("site_template_compiler::compile");
 		return $code;
 	}
@@ -409,7 +407,16 @@ class site_template_compiler extends aw_template
 		{
 			return;
 		}
-
+		
+		if ($this->_a_comp[$area][$level] == 1)
+		{
+			error::raise(array(
+				"id" => "ERR_TPL",
+				"msg" => sprintf(t("site_template_compiler::cimpile_template_level(%s, %s): broken template near MENU_%s_L%s"), $area, $level, $area, $level)
+			));
+		}
+		$this->_a_comp[$area][$level] = 1;
+		
 		$this->req_level ++;
 
 		$end_block = false;
