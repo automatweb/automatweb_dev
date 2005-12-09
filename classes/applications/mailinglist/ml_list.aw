@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.34 2005/12/09 09:43:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.35 2005/12/09 09:48:48 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -790,7 +790,7 @@ class ml_list extends class_base
 			$arr["action"] = "export_members";
 			$arr["args"]["filename"] = "members.txt";
 			$arr["args"]["export_type"] = $this->export_type;
-			$arr["args"]["export_date"] = strtotime($arr["request"]["export_from_date"]["year"]. "-". $arr["request"]["export_from_date"]["month"]."-".$arr["request"]["export_from_date"]["day"]);
+			$arr["args"]["export_date"] = date_edit::get_timestamp($arr["request"]["export_from_date"]);
 		}
 		if (isset($this->edit_msg))
 		{
@@ -1081,9 +1081,8 @@ class ml_list extends class_base
 				"lid" => $arr["id"],
 				"member" => $val["oid"],
 			));
-			
 			$member = &obj($memberdata["id"]);
-			if($member->created() > $arr["export_date"] || ($arr["export_date"] == -1))
+			if($member->created() > $arr["export_date"] || ($arr["export_date"] < 100))
 			{
 				switch($arr["export_type"])
 				{
@@ -1120,7 +1119,6 @@ class ml_list extends class_base
 				$ser .= "\n";
 			}
 		}
-
 		if ($arr["ret"] == true)
 		{
 			return $ser;
