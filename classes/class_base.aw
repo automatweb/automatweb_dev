@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.442 2005/12/09 10:48:47 kristo Exp $
+// $Id: class_base.aw,v 2.443 2005/12/09 11:12:50 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3667,6 +3667,7 @@ class class_base extends aw_template
 					}
 					else
 					{
+						classload("vcl/date_edit");
 						$property["value"] = date_edit::get_timestamp($rawdata[$name]);
 					};
 				};
