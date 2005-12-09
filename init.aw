@@ -509,7 +509,7 @@ function classload($args)
 
 				if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 				{
-					$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib);
+					$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib).".aw";
 //echo "classload: tf = $trans_fn <br>";
 					if (file_exists($trans_fn))
 					{
@@ -690,6 +690,14 @@ function not($arg)
 
 function load_vcl($lib)
 {
+	if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+	{
+		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib).".aw";
+		if (file_exists($trans_fn))
+		{
+			require_once($trans_fn);
+		}
+	}
 	include_once($GLOBALS["cfg"]["__default"]["classdir"]."/vcl/$lib.".$GLOBALS["cfg"]["__default"]["ext"]);
 }
 

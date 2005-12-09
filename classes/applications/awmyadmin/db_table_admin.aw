@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.4 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.5 2005/12/09 07:54:49 kristo Exp $
 
 /*
 
@@ -128,7 +128,7 @@ class db_table_admin extends class_base
 		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
-			'tooltip' => 'Salvesta',
+			'tooltip' => t('Salvesta'),
 			'url' => 'javascript:document.add.submit()',
 			'img' => 'save.gif'
 		));
@@ -392,7 +392,7 @@ class db_table_admin extends class_base
 		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
-			'tooltip' => 'Salvesta',
+			'tooltip' => t('Salvesta'),
 			'url' => 'javascript:document.add.submit()',
 			'img' => 'save.gif'
 		));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.9 2005/03/08 14:33:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.10 2005/12/09 07:54:49 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -205,7 +205,7 @@ class db_table_contents extends class_base
 		$tb =& $arr["prop"]["toolbar"];
 		$tb->add_button(array(
 			'name' => 'save',
-			'tooltip' => 'Salvesta',
+			'tooltip' => t('Salvesta'),
 			'url' => 'javascript:document.changeform.submit()',
 			'img' => 'save.gif'
 		));

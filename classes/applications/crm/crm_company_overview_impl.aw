@@ -642,11 +642,12 @@ class crm_company_overview_impl extends class_base
 		{
 			$v = $arr["request"]["act_s_part"];
 		}
+		$tt = t("Kustuta");
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "act_s_part",
 			"value" => $v,
 			"size" => 25
-		))."<a href='javascript:void(0)' onClick='document.changeform.act_s_part.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.act_s_part.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
 

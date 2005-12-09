@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.69 2005/10/31 11:19:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.70 2005/12/09 07:54:49 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -228,7 +228,7 @@ class releditor extends core
 			$act_props = array($this->elname . "_caption" => array(
 				"name" => $this->elname . "_caption",
 				"type" => "text",
-				"value" => "Uus",
+				"value" => t("Uus"),
 				"subtitle" => 1,
 			)) + $act_props;
 		};
@@ -295,7 +295,7 @@ class releditor extends core
 			$act_props["sbt"] = array(
 				"type" => "submit",
 				"name" => "sbt",
-				"value" => "Salvesta",
+				"value" => t("Salvesta"),
 			);
 
 			if ($arr["prop"]["cfgform"])

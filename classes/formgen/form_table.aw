@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.80 2005/11/18 11:59:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.81 2005/12/09 07:54:49 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -31,7 +31,7 @@ class form_table extends form_base
 		);
 
 		$this->lang_id = aw_global_get("lang_id");
-		$this->buttons = array("save" => "Salvesta", "add" => "Lisa", "delete" => "Kustuta", "move" => "Liiguta");
+		$this->buttons = array("save" => t("Salvesta"), "add" => t("Lisa"), "delete" => t("Kustuta"), "move" => t("Liiguta"));
 		$this->ru = aw_global_get("REQUEST_URI");
 		$this->image = get_instance(CL_IMAGE);
 		$this->uid = aw_global_get("uid");

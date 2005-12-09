@@ -20,7 +20,7 @@ class repeater_obj extends cal_event
 		
 		$tb->add_button(array(
 			'name' => 'save',
-			'tooltip' => 'Salvesta',
+			'tooltip' => t('Salvesta'),
 			'url' => 'javascript:document.add.submit()',
 			'imgover' => 'save_over.gif',
 			'img' => 'save.gif'

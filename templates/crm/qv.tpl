@@ -1,86 +1,78 @@
 <link rel="Stylesheet" href="{VAR:baseurl}/automatweb/css/aw.css" type="text/css">
-<table border=0>
+<table border='0' width='100%' cellspacing='1' cellpadding='3'>
 	<tr>
-		<td class='awmenuedittabletext'><b>{VAR:cust_gen_data}</b></td>
-		<td class='awmenuedittabletext'>&nbsp;</td>
-		<td class='awmenuedittabletext'><b>{VAR:crel_str}</b></td>
-		<td class='awmenuedittabletext'>&nbsp;</td>
-		<td class='awmenuedittabletext'><b>{VAR:inc_str}</b></td>
-		<td class='awmenuedittabletext'>&nbsp;</td>
+		<td class='awmenuedittablehead' colspan='2'><b>{VAR:cust_gen_data}</b></td>
+		<td class='awmenuedittablehead' colspan='2'><b>{VAR:crel_str}</b></td>
+		<td class='awmenuedittablehead' colspan='2'><b>{VAR:inc_str}</b></td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:cust_name}</td>
-		<td class='awmenuedittabletext'>{VAR:name}</td>
-		<td class='awmenuedittabletext'>{VAR:start_date}</td>
-		<td class='awmenuedittabletext'>{VAR:cust_contract_date}</td>
-		<td class='awmenuedittabletext'>{VAR:ts_str}</td>
-		<td class='awmenuedittabletext'>{VAR:time_span}</td>
+		<td class='awmenuedittablerow'>{VAR:cust_name}</td>
+		<td class='awmenuedittablerow'>{VAR:name}</td>
+		<td class='awmenuedittablerow'>{VAR:start_date}</td>
+		<td class='awmenuedittablerow'>{VAR:cust_contract_date}</td>
+		<td class='awmenuedittablerow'>{VAR:ts_str}</td>
+		<td class='awmenuedittablerow'>{VAR:timespan}</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:code_str}</td>
-		<td class='awmenuedittabletext'>{VAR:code}</td>
-		<td class='awmenuedittabletext'>{VAR:creat_str}</td>
-		<td class='awmenuedittabletext'>{VAR:cust_contract_creator}</td>
-		<td class='awmenuedittabletext'>{VAR:twh_str}</td>
-		<td class='awmenuedittabletext'>{VAR:total_work_hrs}</td>
+		<td class='awmenuedittablerow'>{VAR:code_str}</td>
+		<td class='awmenuedittablerow'>{VAR:code}</td>
+		<td class='awmenuedittablerow'>{VAR:creat_str}</td>
+		<td class='awmenuedittablerow'>{VAR:cust_contract_creator}</td>
+		<td class='awmenuedittablerow'>{VAR:twh_str}</td>
+		<td class='awmenuedittablerow'>{VAR:total_work_hrs}</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:reg_code_str}</td>
-		<td class='awmenuedittabletext'>{VAR:reg_code}</td>
-		<td class='awmenuedittabletext'>{VAR:ref_str}</td>
-		<td class='awmenuedittabletext'>{VAR:referal_type}</td>
-		<td class='awmenuedittabletext'>{VAR:hob_str}</td>
-		<td class='awmenuedittabletext'>{VAR:hrs_on_bill}</td>
+		<td class='awmenuedittablerow'>{VAR:reg_code_str}</td>
+		<td class='awmenuedittablerow'>{VAR:reg_code}</td>
+		<td class='awmenuedittablerow'>{VAR:ref_str}</td>
+		<td class='awmenuedittablerow'>{VAR:referal_type}</td>
+		<td class='awmenuedittablerow'>{VAR:hob_str}</td>
+		<td class='awmenuedittablerow'>{VAR:hrs_on_bill}</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:kmk_str}</td>
-		<td class='awmenuedittabletext'>{VAR:kmk_nr}</td>
-		<td class='awmenuedittabletext'>{VAR:cm_str}</td>
-		<td class='awmenuedittabletext'>{VAR:client_manager}</td>
-		<td class='awmenuedittabletext'>{VAR:d_str}</td>
-		<td class='awmenuedittabletext'>{VAR:done_sum}</td>
+		<td class='awmenuedittablerow'>{VAR:kmk_str}</td>
+		<td class='awmenuedittablerow'>{VAR:kmk_nr}</td>
+		<td class='awmenuedittablerow'>{VAR:cm_str}</td>
+		<td class='awmenuedittablerow'>{VAR:client_manager}</td>
+		<td class='awmenuedittablerow'>{VAR:d_str}</td>
+		<td class='awmenuedittablerow'>{VAR:done_sum}</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:desc_str}</td>
-		<td colspan="3" class='awmenuedittabletext'>{VAR:desc}</td>
-		<td class='awmenuedittabletext'>{VAR:pb_str}</td>
-		<td class='awmenuedittabletext'>{VAR:bills_in_sum}</td>
+		<td class='awmenuedittablerow'>{VAR:desc_str}</td>
+		<td colspan="3" class='awmenuedittablerow'>{VAR:desc}</td>
+		<td class='awmenuedittablerow'>{VAR:pb_str}</td>
+		<td class='awmenuedittablerow'>{VAR:bills_in_sum}</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:trm_str}</td>
-		<td colspan="3" class='awmenuedittabletext'>{VAR:trademarks}</td>
+		<td class='awmenuedittablerow'>{VAR:trm_str}</td>
+		<td colspan="3" class='awmenuedittablerow'>{VAR:trademarks}</td>
 	</tr>
 
 	<tr>
-		<td colspan="4">&nbsp;</td>
+		<td class='awmenuedittablehead' colspan='2'><b>{VAR:cd_str}</b></td>
+		<td class='awmenuedittablehead' colspan='2'><B>{VAR:cp_str}</b></td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'><b>{VAR:cd_str}</b></td>
-		<td class='awmenuedittabletext'>&nbsp;</td>
-		<td class='awmenuedittabletext'><B>{VAR:cp_str}</b></td>
-		<td class='awmenuedittabletext'>&nbsp;</td>
-	</tr>
-	<tr>
-		<td class='awmenuedittabletext'>{VAR:adr_str}</td>
-		<td class='awmenuedittabletext'>{VAR:address}</td>
-		<td valign="top" rowspan="5" colspan="2" class='awmenuedittabletext'>
+		<td class='awmenuedittablerow'>{VAR:adr_str}</td>
+		<td class='awmenuedittablerow'>{VAR:address}</td>
+		<td valign="top" rowspan="5" colspan="2" class='awmenuedittablerow'>
 			{VAR:contact_p}
 		</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:ph_str}</td>
-		<td class='awmenuedittabletext'>{VAR:phone}</td>
+		<td class='awmenuedittablerow'>{VAR:ph_str}</td>
+		<td class='awmenuedittablerow'>{VAR:phone}</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:fx_str}</td>
-		<td class='awmenuedittabletext'>{VAR:fax}</td>
+		<td class='awmenuedittablerow'>{VAR:fx_str}</td>
+		<td class='awmenuedittablerow'>{VAR:fax}</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:em_str}</td>
-		<td class='awmenuedittabletext'>{VAR:email}</td>
+		<td class='awmenuedittablerow'>{VAR:em_str}</td>
+		<td class='awmenuedittablerow'>{VAR:email}</td>
 	</tr>
 	<tr>
-		<td class='awmenuedittabletext'>{VAR:w_str}</td>
-		<td class='awmenuedittabletext'>{VAR:web}</td>
+		<td class='awmenuedittablerow'>{VAR:w_str}</td>
+		<td class='awmenuedittablerow'>{VAR:web}</td>
 	</tr>
 </table>

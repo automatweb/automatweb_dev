@@ -153,18 +153,18 @@ class date_edit
 						$retval.= "<option value='---'>---</option>\n";
 					}
 			        $mnames = array(
-						"1" => LC_M1,
-						"2" => LC_M2,
-						"3" => LC_M3,
-						"4" => LC_M4,
-						"5" => LC_M5,
-						"6" => LC_M6,
-						"7" => LC_M7,
-						"8" => LC_M8,
-						"9" => LC_M9,
-						"10" => LC_M10,
-						"11" => LC_M11,
-						"12" => LC_M12
+						"1" => t("Jaanuar"),
+						"2" => t("Veebruar"),
+						"3" => t("M&auml;rts"),
+						"4" => t("Aprill"),
+						"5" => t("Mai"),
+						"6" => t("Juuni"),
+						"7" => t("Juuli"),
+						"8" => t("August"),
+						"9" => t("September"),
+						"10" => t("Oktoober"),
+						"11" => t("November"),
+						"12" => t("Detsember")
 					);
 					// wtf is this mon_for thingie?
 					if(isset($this->mon_for))

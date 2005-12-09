@@ -1214,11 +1214,12 @@ class crm_company_cust_impl extends class_base
 		{
 			$v = $arr["request"]["all_proj_search_part"];
 		}
+		$tt = t("Kustuta");
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "all_proj_search_part",
 			"value" => $v,
 			"size" => 25
-		))."<a href='javascript:void(0)' onClick='document.changeform.all_proj_search_part.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.all_proj_search_part.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
 
@@ -1234,11 +1235,12 @@ class crm_company_cust_impl extends class_base
 		{
 			$v = $arr["request"]["proj_search_part"];
 		}
+		$tt = t("Kustuta");
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "proj_search_part",
 			"value" => $v,
 			"size" => 25
-		))."<a href='javascript:void(0)' onClick='document.changeform.proj_search_part.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.proj_search_part.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
 
@@ -1254,11 +1256,12 @@ class crm_company_cust_impl extends class_base
 		{
 			$v = $arr["request"]["customer_search_cust_mgr"];
 		}
+		$tt = t("Kustuta");
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "customer_search_cust_mgr",
 			"value" => $v,
 			"size" => 25
-		))."<a href='javascript:void(0)' onClick='document.changeform.customer_search_cust_mgr.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.customer_search_cust_mgr.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
 

@@ -367,6 +367,17 @@ class crm_company_bills_impl extends class_base
 				));
 			}
 			$cursum = $bill_i->get_sum($bill);
+
+			$pop = get_instance("vcl/popup_menu");
+			$pop->begin_menu("bill_".$bill->id());
+			$pop->add_item(Array(
+				"text" => t("Prindi arve"),
+				"link" => $this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $bill->id(), "group" => "preview"), CL_CRM_BILL)
+			));
+			$pop->add_item(Array(
+				"text" => t("Prindi arve lisa"),
+				"link" => $this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $bill->id(), "group" => "preview_add"), CL_CRM_BILL)
+			));
 			$t->define_data(array(
 				"bill_no" => html::get_change_url($bill->id(), array("return_url" => get_ru()), parse_obj_name($bill->prop("bill_no"))),
 				"create_new" => html::href(array(
@@ -384,11 +395,7 @@ class crm_company_bills_impl extends class_base
 				"sum" => number_format($cursum, 2),
 				"client_manager" => $cm,
 				"oid" => $bill->id(),
-				"print" => html::href(array(
-					"url" => $this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $bill->id(), "group" => "preview"), CL_CRM_BILL),
-					"caption" => t("Tr&uuml;ki"),
-					"target" => "_blank"
-				))
+				"print" => $pop->get_menu()
 			));
 			$sum+= $cursum;
 		}
@@ -416,11 +423,12 @@ class crm_company_bills_impl extends class_base
 		{
 			$v = $arr["request"]["bill_s_client_mgr"];
 		}
+		$tt = t("Kustuta");
 		$arr["prop"]["value"] = html::textbox(array(
 			"name" => "bill_s_client_mgr",
 			"value" => $v,
 			"size" => 25
-		))."<a href='javascript:void(0)' onClick='document.changeform.bill_s_client_mgr.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		))."<a href='javascript:void(0)' onClick='document.changeform.bill_s_client_mgr.value=\"\"' title=\"$tt\" alt=\"$tt\"><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
 

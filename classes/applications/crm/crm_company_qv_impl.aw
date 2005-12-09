@@ -336,6 +336,28 @@ class crm_company_qv_impl extends class_base
 			"tasks" => $arr["tasks"],
 			"request" => $arr["request"]
 		));
+
+		$tg = $_GET;
+
+		if (!$tg["stats_s_to"])
+		{
+			$tg["stats_s_to"] = time();
+		}
+		else
+		{
+			$tg["stats_s_to"] = date_edit::get_timestamp($tg["stats_s_to"]);
+		}
+
+		if (!$tg["stats_s_from"])
+		{
+			$tg["stats_s_from"] = $o->prop("cust_contract_date");
+		}
+		else
+		{
+			$tg["stats_s_from"] = date_edit::get_timestamp($tg["stats_s_from"]);
+		}
+
+		$ts = date("d.m.Y", $tg["stats_s_from"])." - ".date("d.m.Y", $tg["stats_s_to"]);
 		$this->vars(array(
 			"name" => $o->name()." ".$ev,
 			"code" => $o->prop("code"),
@@ -356,7 +378,8 @@ class crm_company_qv_impl extends class_base
 			"bills_in_sum" => number_format($this->bills_sum, 2),
 			"done_sum" => number_format($this->sum, 2),
 			"hrs_on_bill" => $this->hrs_on_bill,
-			"total_work_hrs" => $this->hrs_total
+			"total_work_hrs" => $this->hrs_total,
+			"timespan" => $ts
 		));
 		return $arr["prop"]["value"] = $this->parse();
 	}

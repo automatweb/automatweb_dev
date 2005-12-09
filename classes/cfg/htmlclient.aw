@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.129 2005/12/06 18:20:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.130 2005/12/09 07:54:49 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -420,7 +420,7 @@ class htmlclient extends aw_template
 	{
 		$name = "SUBMIT";
 		$tpl_vars = array(
-			"sbt_caption" => $arr["value"] ? $arr["value"] : "Salvesta",
+			"sbt_caption" => $arr["value"] ? $arr["value"] : t("Salvesta"),
 			"name" => $arr["name"] ? $arr["name"] : "",
 			"action" => $arr["action"] ? $arr["action"] : "",
 			"webform_element" => !empty($arr["style"]["prop"]) ? "st".$arr["style"]["prop"] : "",
@@ -861,17 +861,17 @@ class htmlclient extends aw_template
 
 				$bill_url = aw_ini_get("baseurl").aw_url_change_var("group", "bills", aw_url_change_var("proj", NULL));
 				$adds =  $this->picker("", array(
-					"" => "Lisa",
-					$cust_url => "Klient",
-					$cust_url_pri => "Klient (eraisik)",
-					$proj_url => "Projekt",
-					$task_url => "Toimetus",
-					$bill_url => "Arve",
-					$call_url => "K&otilde;ne",
-					$meeting_url => "Kohtumine",
-					$offer_url => "Pakkumine",
-					$job_url => "Uus t&ouml;&ouml;",
-					aw_ini_get("baseurl")."/orb.aw?class=users&action=logout" => "Logi v&auml;lja"
+					"" => t("Lisa"),
+					$job_url => t("Uus t&ouml;&ouml;"),
+					$cust_url => t("Klient"),
+					$cust_url_pri => t("Klient (eraisik)"),
+					$proj_url => t("Projekt"),
+					$task_url => t("Toimetus"),
+					$bill_url => t("Arve"),
+					$call_url => t("K&otilde;ne"),
+					$meeting_url => t("Kohtumine"),
+					$offer_url => t("Pakkumine"),
+					aw_ini_get("baseurl")."/orb.aw?class=users&action=logout" => t("Logi v&auml;lja")
 				));
 
 				$tp->vars(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.4 2005/11/03 13:24:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.5 2005/12/09 07:54:49 kristo Exp $
 
 /*
 	@classinfo syslog_type=ST_DB_SERVER_EXPLORER relationmgr=yes no_status=1 no_comment=1
@@ -380,7 +380,7 @@ class db_server_explorer extends class_base
 		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
-			'tooltip' => 'Salvesta',
+			'tooltip' => t('Salvesta'),
 			'url' => 'javascript:document.add.submit()',
 			'img' => 'save.gif'
 		));
@@ -408,7 +408,7 @@ class db_server_explorer extends class_base
 		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
-			'tooltip' => 'Salvesta',
+			'tooltip' => t('Salvesta'),
 			'url' => 'javascript:document.changeform.submit()',
 			'img' => 'save.gif'
 		));
@@ -594,7 +594,7 @@ class db_server_explorer extends class_base
 		$tb = get_instance('vcl/toolbar');
 		$tb->add_button(array(
 			'name' => 'save',
-			'tooltip' => 'Salvesta',
+			'tooltip' => t('Salvesta'),
 			'url' => 'javascript:document.add.submit()',
 			'img' => 'save.gif'
 		));

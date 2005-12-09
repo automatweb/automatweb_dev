@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.43 2005/12/07 12:19:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.44 2005/12/09 07:54:49 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -191,7 +191,7 @@ class task extends class_base
 				}
 				if ($arr["new"])
 				{
-					$data["post_append_text"] = " <a href='#' onClick='document.changeform.ppa.value=1;document.changeform.submit();'>Stopper</a>";
+					$data["post_append_text"] = " <a href='#' onClick='document.changeform.ppa.value=1;document.changeform.submit();'>".t("Stopper")."</a>";
 				}
 				else
 				if (is_object($arr["obj_inst"]))
@@ -202,7 +202,7 @@ class task extends class_base
 						"type" => t("Toimetus"),
 						"name" => urlencode($data["value"])
 					));
-					$data["post_append_text"] = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>Stopper</a>";
+					$data["post_append_text"] = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
 					if ($arr["request"]["stop_pop"] == 1)
 					{
 						$data["post_append_text"] .= "<script language='javascript'>aw_popup_scroll(\"$url\",\"aw_timers\",320,400)</script>";
@@ -1069,7 +1069,7 @@ class task extends class_base
 		foreach($dat as $idx => $row)
 		{
 			$date_sel = "<A HREF='#'  onClick=\"var cal=new CalendarPopup();cal.select(aw_get_el('rows[$idx][date]'),'anchor".$idx."','dd/MM/yy'); return false;\"
-						   NAME='anchor".$idx."' ID='anchor".$idx."'>vali</A>";
+						   NAME='anchor".$idx."' ID='anchor".$idx."'>".t("vali")."</A>";
 
 			$is = (is_array($row["impl"]) && count($row["impl"])) ? $row["impl"] : $def_impl;
 			foreach(safe_array($is) as $is_id)
@@ -1132,7 +1132,7 @@ class task extends class_base
 		$t->set_sortable(false);
 	}
 
-	function get_task_bill_rows($task)
+	function get_task_bill_rows($task, $only_on_bill = true)
 	{
 		// check if task has rows defined that go on bill
 		// if, then ret those
@@ -1142,7 +1142,7 @@ class task extends class_base
 		$dat = safe_array($task->meta("rows"));
 		foreach($dat as $idx => $row)
 		{
-			if ($row["on_bill"] == 1)
+			if ($row["on_bill"] == 1 || !$only_on_bill)
 			{
 				$id = $task->id()."_".$idx;
 				$rows[$id] = array(
@@ -1152,7 +1152,8 @@ class task extends class_base
 					"price" => $task->prop("hr_price"),
 					"amt" => $row["time_to_cust"],
 					"sum" => str_replace(",", ".", $row["time_to_cust"]) * $task->prop("hr_price"),
-					"has_tax" => 1
+					"has_tax" => 1,
+					"on_bill" => 1
 				);
 			}
 		}
@@ -1166,7 +1167,8 @@ class task extends class_base
 				"date" => $task->prop("start1"),
 				"amt" => $task->prop("num_hrs_to_cust"),
 				"sum" => str_replace(",", ".", $task->prop("num_hrs_to_cust")) * $task->prop("hr_price"),
-				"has_tax" => 1
+				"has_tax" => 1,
+				"on_bill" => 1
 			);
 		}
 
@@ -1181,7 +1183,8 @@ class task extends class_base
 				"amt" => 1,
 				"sum" => $oe["cost"],
 				"has_tax" => 1,
-				"is_oe" => true
+				"is_oe" => true,
+				"on_bill" => 1
 			);
 		}
 		
