@@ -274,6 +274,7 @@ class languages extends aw_template
 	// !this will get called once in the beginning of the page, so that the class can initialize itself nicely
 	function request_startup()
 	{
+		classload("vcl/date_edit");
 		$lang_id = aw_global_get("lang_id");
 
 		// if we explicitly request language change, we get that, except if the language is not active
