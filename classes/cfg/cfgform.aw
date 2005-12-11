@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.71 2005/12/09 07:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.72 2005/12/11 16:55:54 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1587,8 +1587,7 @@ class cfgform extends class_base
 				}
 			}
 		}
-
-		if ($read_from_trans)
+		if ($read_from_trans && aw_global_get("LC") != $o->lang())
 		{
 			// get all props from class
 			$tmp = obj();
@@ -1597,7 +1596,10 @@ class cfgform extends class_base
 			{
 				// trick here is, that we do not need to redo the t() calls, because the translations are already loaded
 				// so we just copy the captions
-				$ret[$pn]["caption"] = $pd["caption"];
+				if (isset($ret[$pn]))
+				{
+					$ret[$pn]["caption"] = $pd["caption"];
+				}
 			}
 		}
 		return $ret;
@@ -1623,7 +1625,7 @@ class cfgform extends class_base
 			}
 		}
 
-		if ($read_from_trans)
+		if ($read_from_transi && aw_global_get("LC") != $o->lang())
 		{
 			$tmp = obj();
 			$tmp->set_class_id($o->subclass());
@@ -1631,7 +1633,10 @@ class cfgform extends class_base
 			{
 				// trick here is, that we do not need to redo the t() calls, because the translations are already loaded
 				// so we just copy the captions
-				$ret[$gn]["caption"] = $gd["caption"];
+				if (isset($ret[$gn]))
+				{
+					$ret[$gn]["caption"] = $gd["caption"];
+				}
 			}
 		}
 		return $ret;
