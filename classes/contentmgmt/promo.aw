@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.77 2005/10/05 09:02:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.78 2005/12/12 07:16:13 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -958,6 +958,7 @@ class promo extends class_base
 
 				$d_cnt = 0;
 				$d_total = count($docid);
+				aw_global_set("in_promo_display", 1);
 				enter_function("mainc-contentmgmt/promo-show-docs");
 				foreach($docid as $d)
 				{
@@ -988,6 +989,7 @@ class promo extends class_base
 					//$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
 					$d_cnt++;
 				}
+				aw_global_set("in_promo_display", 0);
 				exit_function("mainc-contentmgmt/promo-show-docs");
 
 				if (true || $inst->is_template("PREV_LINK"))
