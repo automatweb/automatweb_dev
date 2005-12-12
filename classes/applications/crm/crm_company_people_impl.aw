@@ -389,7 +389,6 @@ class crm_company_people_impl extends class_base
 				"id" => $person->id(),
 				"cal_id" => $cal_id,
 			));
-
 			if(is_oid($arr['request']['cat']))
 			{
 				//persons only from this category
@@ -403,7 +402,7 @@ class crm_company_people_impl extends class_base
 			{
 				//showing only the professions that the unit AND the person is associated with
 				//in php 4.3 it would be a one-liner with intersect_assoc
-				$tmp_arr = array_intersect(array_keys($professions),array_keys($pdat['ranks_arr']));
+				/*$tmp_arr = array_intersect(array_keys($professions),array_keys($pdat['ranks_arr']));
 				$tmp_arr2 = array();
 				foreach($tmp_arr as $key=>$value)
 				{
@@ -425,7 +424,9 @@ class crm_company_people_impl extends class_base
 						}
 					}
 				}
-				$pdat['rank'] = join(', ',$tmp_arr2);
+				$pdat['rank'] = join(', ',$tmp_arr2);*/
+				$ol = new object_list($person->connections_from(array("type" => "RELTYPE_RANK")));
+				$pdat["rank"] = html::obj_change_url($ol->ids());
 			}
 			
 			$sections_professions = array();
