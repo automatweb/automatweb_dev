@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.21 2005/10/24 16:16:39 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.22 2005/12/12 09:47:04 ekke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -391,6 +391,7 @@ class crm_db extends class_base
 			');
 		}
 
+		load_vcl('table');
 		$t = new aw_table(array(
 			'prefix' => 'kliendibaas_manager',
 		));
