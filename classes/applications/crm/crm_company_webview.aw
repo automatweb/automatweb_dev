@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.2 2005/11/10 21:37:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.3 2005/12/12 10:04:10 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -181,6 +181,7 @@ class crm_company_webview extends class_base
 			$ret = $this->_get_company_show_html(array('list_id' => $arr['id'], 'company_id' => $org));;
 		}
 	exit_function('crm_company_webview::show');
+
 		return $ret;
 		
 	}
@@ -501,6 +502,13 @@ class crm_company_webview extends class_base
 			'images' => $images_html,
 		));
 
+		if (aw_global_get("uid") != "")
+		{
+			$this->vars(array(
+				"logged" => $this->parse("logged")
+			));
+		}
+
 		// Alrighty then, parse your arse away
 		return $this->parse('company_show');
 	}
@@ -721,7 +729,16 @@ class crm_company_webview extends class_base
 			}
 			$this->parse('company_list_item');
 		}
+
+		if (aw_global_get("uid") != "")
+		{
+			$this->vars(array(
+				"logged" => $this->parse("logged")
+			));
+		}
+
 		$this->parse('company_list');
+
 		return $this->parse();
 	}
 
