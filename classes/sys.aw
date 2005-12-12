@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.60 2005/11/10 14:16:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.61 2005/12/12 12:03:41 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -848,6 +848,42 @@ class sys extends aw_template
 			send_mail("kristo@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
 		}
 		die(t("All done"));
+	}
+
+	/**
+		@attrib name=do_test_dump nologin=1
+		
+	**/
+	function do_test_dump($arr)
+	{
+		$fld = aw_ini_get("site_basedir")."/files/dumper/";
+		@mkdir($fld, 0777);
+
+
+		$fn = $fld."dump.tar.gz";
+		@unlink($fn);
+
+		$base = aw_ini_get("basedir")."/";
+
+		$res = `cp -r $base/archive $fld`;
+		$res = `cp -r $base/aw.ini $fld`;
+		$res = `cp -r $base/files $fld`;
+		$res = `cp -r $base/img $fld`;
+		$res = `cp -r $base/lang $fld`;
+		$res = `cp -r $base/public $fld`;
+		$res = `cp -r $base/templates $fld`;
+
+		$u = aw_ini_get("db.user");
+		$h = aw_ini_get("db.host");
+		$p = aw_ini_get("db.pass");
+		$db = aw_ini_get("db.base");
+		$dump = $fld."db.sql";
+
+		$res = `/usr/local/bin/mysqldump --add-drop-table --quick -u $u -h $h --password=$p $db > $dump`;
+
+		$res = `/usr/bin/tar cvfz $fn $fld/*`;
+
+		die(t("$fn"));
 	}
 };
 ?>

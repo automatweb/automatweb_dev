@@ -87,5 +87,12 @@
 			</function>
 		</action>
 
+		<action name="do_test_dump" nologin="1">
+			<function name="do_test_dump">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
