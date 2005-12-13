@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.22 2005/12/12 09:47:04 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.23 2005/12/13 14:07:56 ahti Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -543,7 +543,7 @@ class crm_db extends class_base
 
 	function _get_name_for_object($obj_id)
 	{
-		if ($obj_id)
+		if (is_oid($obj_id) && $this->can("view", $obj_id))
 		{
 			$obj = new object($obj_id);
 			$rv = $obj->name();
