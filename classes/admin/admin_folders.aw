@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.52 2005/12/13 11:43:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.53 2005/12/13 20:23:20 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -125,8 +125,36 @@ class admin_folders extends aw_template
 	{
 		classload("core/icons");
 		$this->read_template("folders.tpl");
-
+		enter_function("gfn::list1");
 		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
+		$this->tree = get_instance("vcl/treeview");
+		$this->tree->start_tree(array(
+			"type" => TREE_DHTML,
+			"url_target" => "list",
+			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"],"period" => $this->period),"admin_menus"),
+			"root_name" => t("<b>AutomatWeb</b>"),
+			"has_root" => empty($this->use_parent) ? true : false,
+			"tree_id" => "ad_folders",
+			//"persist_state" => true,
+			"get_branch_func" => $this->mk_my_orb("gen_folders",array("NG" => $_GET["NG"], "period" => $this->period, "parent" => "0"),"workbench"),
+	
+		));
+
+		if (is_array($rn) && count($rn) >1)
+		{
+			foreach($rn as $rn_i)
+			{
+				$rn_o = obj($rn_i);
+				$this->tree->add_item(0,array(
+					"id" => $rn_i,
+					"parent" => 0,
+					"name" => parse_obj_name($rn_o->name()),
+					"iconurl" => icons::get_icon_url($rn_o),
+					"url" => $this->mk_my_orb("right_frame",array("parent" => $rn_o->id()),"admin_menus"),	
+				));
+			}
+			$this->force_0_parent= true;
+		}
 		// make a list of all the menus that should be shown
 		$ol = new object_list(array(
 			"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
@@ -142,19 +170,9 @@ class admin_folders extends aw_template
 			"site_id" => array(),
 			"sort_by" => "objects.parent,objects.jrk,objects.created"
 		));
+		exit_function("gfn::list1");
 
-		$this->tree = get_instance("vcl/treeview");
-		$this->tree->start_tree(array(
-			"type" => TREE_DHTML,
-			"url_target" => "list",
-			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"],"period" => $this->period),"admin_menus"),
-			"root_name" => t("<b>AutomatWeb</b>"),
-			"has_root" => empty($this->use_parent) ? true : false,
-			"tree_id" => "ad_folders",
-			//"persist_state" => true,
-			"get_branch_func" => $this->mk_my_orb("gen_folders",array("NG" => $_GET["NG"], "period" => $this->period, "parent" => "0"),"workbench"),
-		));
-
+		enter_function("gfn::insert1");
 		$second_level_parents = array();
 		foreach($ol->arr() as $menu)
 		{
@@ -167,7 +185,9 @@ class admin_folders extends aw_template
 				$second_level_parents[$rs["id"]] = $rs["id"];
 			}
 		}
+		exit_function("gfn::insert1");
 
+		enter_function("gfn::insert2");
 		if (count($second_level_parents))
 		{
 			$ol = new object_list(array(
@@ -193,7 +213,9 @@ class admin_folders extends aw_template
 				}
 			}
 		}
+		exit_function("gfn::insert2");
 
+		enter_function("gfn::insert3");
 		if (empty($this->use_parent))
 		{
 			$this->mk_home_folder_new();
@@ -202,8 +224,10 @@ class admin_folders extends aw_template
 			$this->sufix = "ad";
 			$this->mk_admin_tree_new();
 		};
+		exit_function("gfn::insert3");
 
-		$res = $this->tree->finalize_tree(array("rootnode" => empty($this->use_parent) && $set_by_p ? 0 : $rn));
+		enter_function("gfn::final");
+		$res = $this->tree->finalize_tree(array("rootnode" => $this->force_0_parent || (empty($this->use_parent) && $set_by_p) ? 0 : $rn));
 		
 		if (!empty($this->use_parent))
 		{
@@ -220,6 +244,7 @@ class admin_folders extends aw_template
 			"charset" => $t->get_charset(),
 
 		));
+		exit_function("gfn::final");
 		return $this->parse();
 	}
 
@@ -804,6 +829,7 @@ class admin_folders extends aw_template
 		$arr["id"] = $m->id();
 		if ($this->period > 0 && $m->prop("periodic") != 1)
 		{
+			exit_function("admin_folders::resolve_item_new");
 			return false;
 		};
 		$baseurl = $this->cfg["baseurl"];
@@ -855,7 +881,7 @@ class admin_folders extends aw_template
 		// kui n2idatakse ja menyy on perioodiline, siis n2itame menyyd
 		// kui pole perioodiline siis ei n2ita
 		$rv = true;
-
+		
 		if ($this->period > 0)
 		{
 			if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] == 0))
@@ -863,7 +889,7 @@ class admin_folders extends aw_template
 				$rv = false;
 			};
 		};
-		exit_function("admin_folders::resolve_item");
+		exit_function("admin_folders::resolve_item_new");
 		return $rv ? $arr : false;
 	}
 
@@ -960,17 +986,15 @@ class admin_folders extends aw_template
 			return;
 		}
 		$hf = new object($ucfg->prop("home_folder"));
-
 		// add home folder
 		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
 		$this->tree->add_item(is_array($rn) ? reset($rn) : $rn,array(
 			"id" => $hf->id(),
-			"parent" => is_array($rn) ? reset($rn) : $rn,
+			"parent" => $this->force_0_parent ? 0 : (is_array($rn) ? reset($rn) : $rn),
 			"name" => parse_obj_name($hf->name()),
 			"iconurl" => icons::get_icon_url("homefolder",""),
 			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf->id()),"admin_menus"),
 		));
-
 		$ol = new object_list(array(
 			"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
 			"parent" => $hf->id(),
@@ -1010,6 +1034,10 @@ class admin_folders extends aw_template
 		));
 		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
 		$rn = is_array($rn) ? reset($rn) : $rn;
+		if ($this->force_0_parent)
+		{
+			$rn = 0;
+		}
 		foreach($ol->arr() as $menu)
 		{
 			$rs = $this->resolve_item_new($menu);
