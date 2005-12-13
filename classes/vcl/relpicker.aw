@@ -92,8 +92,7 @@ class relpicker extends  core
 				"title" => t("Otsi")
 			));
 		}
-
-		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->prop($val["name"])))
+		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"])))
 		{
 			$val["post_append_text"] .= " ".html::href(array(
 				"url" => html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru())),
