@@ -35,6 +35,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MAIL_ADDRESS</reltype>
             <no_sel>1</no_sel>
+            <store>connect</store>
             <field>mfrom</field>
             <caption>Kellelt</caption>
       </property>
