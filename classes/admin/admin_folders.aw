@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.53 2005/12/13 20:23:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.54 2005/12/13 20:28:12 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -155,7 +155,10 @@ class admin_folders extends aw_template
 			}
 			$this->force_0_parent= true;
 		}
-		// make a list of all the menus that should be shown
+		else
+		{
+			$rn = reset($rn);
+		}
 		$ol = new object_list(array(
 			"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
 			"parent" => $rn,
