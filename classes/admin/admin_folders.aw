@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.54 2005/12/13 20:28:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.55 2005/12/13 20:30:18 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -139,7 +139,6 @@ class admin_folders extends aw_template
 			"get_branch_func" => $this->mk_my_orb("gen_folders",array("NG" => $_GET["NG"], "period" => $this->period, "parent" => "0"),"workbench"),
 	
 		));
-
 		if (is_array($rn) && count($rn) >1)
 		{
 			foreach($rn as $rn_i)
@@ -157,7 +156,10 @@ class admin_folders extends aw_template
 		}
 		else
 		{
-			$rn = reset($rn);
+			if (is_array($rn))
+			{	
+				$rn = reset($rn);
+			}
 		}
 		$ol = new object_list(array(
 			"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
