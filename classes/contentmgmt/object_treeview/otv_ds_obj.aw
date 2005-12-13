@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.41 2005/11/10 21:31:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.42 2005/12/13 21:16:14 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -684,7 +684,7 @@ class otv_ds_obj extends class_base
 			$clid = $t->class_id();
 			if ($clid == CL_EXTLINK)
 			{
-				$li = get_instance(CL_EXTLINK);
+				$li = get_instance("contentmgmt/links_display");
 				list($url,$target,$caption) = $li->draw_link($t->id());
 			}
 			else

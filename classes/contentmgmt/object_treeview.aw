@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.49 2005/04/21 10:07:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.50 2005/12/13 21:16:13 kristo Exp $
 
 /*
 
@@ -189,7 +189,7 @@ class object_treeview extends class_base
 			
 			if ($od->class_id() == CL_EXTLINK)
 			{
-				$li = get_instance(CL_EXTLINK);
+				$li = get_instance("contentmgmt/links_display");
 				list($url,$target,$caption) = $li->draw_link($oid);
 			}
 			else

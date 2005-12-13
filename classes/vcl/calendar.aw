@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.75 2005/12/06 18:20:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.76 2005/12/13 21:16:15 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -323,7 +323,7 @@ class vcalendar extends aw_template
 	{
 		global $awt;
 		$awt->start("gen-calendar-html");
-		$this->aliasmgr = get_instance("aliasmgr");
+		$this->aliasmgr = get_instance("alias_parser");
 		$this->styles = array();
 		if (is_array($arr["style"]))
 		{

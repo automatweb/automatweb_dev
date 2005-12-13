@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.152 2005/12/09 09:57:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.153 2005/12/13 21:16:13 kristo Exp $
 
 /*
 
@@ -1724,7 +1724,7 @@ class site_show extends class_base
 				if (count($ask_content) > 0)
 				{
 					$inst = get_instance($cldef["file"]);
-					if ($cldef["file"] == "contentmgmt/promo")
+					if ($cldef["file"] == "contentmgmt/promo_display")
 					{
 						$promo_done = true;
 					}
@@ -2480,10 +2480,13 @@ class site_show extends class_base
 
 		if ($this->section_obj->class_id() && isset($clss[$this->section_obj->class_id()]) && !$_GET["class"])
 		{
-			$obj_inst = $this->section_obj->instance();
-			if (method_exists($obj_inst, "request_execute"))
+			if ($this->section_obj->class_id() != CL_MENU) // menu is a large class and this is what it is 99% of the time and it has no handler. so don't load
 			{
-				$arr["text"] = $obj_inst->request_execute($this->section_obj);
+				$obj_inst = $this->section_obj->instance();
+				if (method_exists($obj_inst, "request_execute"))
+				{
+					$arr["text"] = $obj_inst->request_execute($this->section_obj);
+				}
 			}
 		}
 

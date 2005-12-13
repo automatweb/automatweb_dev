@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.341 2005/12/09 11:05:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.342 2005/12/13 21:16:12 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -462,8 +462,15 @@ class document extends aw_template
 		}
 
 		
-		$l = get_instance(CL_LANGUAGE);
-		$l->do_insert_texts($this);
+		$loid = aw_global_get("lang_oid");
+		if ($loid)
+		{
+			aw_disable_acl();
+			$o = obj($loid);
+			aw_restore_acl();
+			$txts = new aw_array($o->meta("texts"));
+			$this->vars($txts->get());
+		}
 
 		lc_site_load("document", &$this);
 
@@ -838,7 +845,7 @@ class document extends aw_template
 
 		// noja, mis fucking "undef" see siin on?
 		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
-		$al = get_instance("aliasmgr");
+		$al = get_instance("alias_parser");
 
 		if (!isset($text) || $text != "undef") 
 		{

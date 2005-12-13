@@ -1076,7 +1076,6 @@ function t2($s)
 
 function incl_f($lib)
 {
-	return;
 	static $f;
 	if ($f[$lib] == 1)
 	{

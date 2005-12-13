@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.28 2005/10/23 18:44:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.29 2005/12/13 21:16:13 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -261,10 +261,6 @@ class site_cache extends aw_template
 			"class_id" => CL_HTML_POPUP,
 			"site_id" => array(),
 		));
-		if (count($pl->ids()) > 0)
-		{
-			$t = get_instance(CL_HTML_POPUP);
-		};
 		foreach($pl->arr() as $o)
 		{
 			$o_id = $o->id();
@@ -279,6 +275,10 @@ class site_cache extends aw_template
 				if ($c->prop("to") == $this->sel_section)
 				{
 					//$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+					if (!$t)
+					{
+						$t = get_instance(CL_HTML_POPUP);
+					}
 					$popups .= $t->get_popup_data($o);
 					$sh = true;
 					$_SESSION["popups_shown"][$o_id] = 1;
@@ -297,6 +297,10 @@ class site_cache extends aw_template
 					if ($inc_submenus[$p_o->parent()])
 					{
 						//$popups .= sprintf("window.open('%s','htpopup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $url, $o->meta("width"), $o->meta("height"));
+						if (!$t)
+						{
+							$t = get_instance(CL_HTML_POPUP);
+						}
 						$popups .= $t->get_popup_data($o);
 						$_SESSION["popups_shown"][$o_id] = 1;
 					}
