@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.51 2005/11/16 10:46:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.52 2005/12/13 11:43:47 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -119,6 +119,108 @@ class admin_folders extends aw_template
 			WHERE
 				objects.oid = '$id'";
 		return $this->db_fetch_row($q);
+	}
+
+	function gen_folders_new($period)
+	{
+		classload("core/icons");
+		$this->read_template("folders.tpl");
+
+		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
+		// make a list of all the menus that should be shown
+		$ol = new object_list(array(
+			"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
+			"parent" => $rn,
+			"CL_MENU.type" => new obj_predicate_not(array(MN_FORM_ELEMENT, MN_HOME_FOLDER)),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+						"lang_id" => aw_global_get("lang_id"),
+						"CL_MENU.type" => array(MN_CLIENT, MN_ADMIN1)
+				)
+			)),
+			"site_id" => array(),
+			"sort_by" => "objects.parent,objects.jrk,objects.created"
+		));
+
+		$this->tree = get_instance("vcl/treeview");
+		$this->tree->start_tree(array(
+			"type" => TREE_DHTML,
+			"url_target" => "list",
+			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"],"period" => $this->period),"admin_menus"),
+			"root_name" => t("<b>AutomatWeb</b>"),
+			"has_root" => empty($this->use_parent) ? true : false,
+			"tree_id" => "ad_folders",
+			//"persist_state" => true,
+			"get_branch_func" => $this->mk_my_orb("gen_folders",array("NG" => $_GET["NG"], "period" => $this->period, "parent" => "0"),"workbench"),
+		));
+
+		$second_level_parents = array();
+		foreach($ol->arr() as $menu)
+		{
+			$rs = $this->resolve_item_new($menu);
+			if ($rs !== false)
+			{	
+				$this->tree->add_item($rs["parent"], $rs);
+				// also, gather all id's of objects that were inserted in the tree, so that
+				// we can also get their submenus so that the tree know is they have subitems
+				$second_level_parents[$rs["id"]] = $rs["id"];
+			}
+		}
+
+		if (count($second_level_parents))
+		{
+			$ol = new object_list(array(
+				"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
+				"parent" => $second_level_parents,
+				"CL_MENU.type" => new obj_predicate_not(array(MN_FORM_ELEMENT, MN_HOME_FOLDER)),
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+							"lang_id" => aw_global_get("lang_id"),
+							"CL_MENU.type" => array(MN_CLIENT, MN_ADMIN1)
+					)
+				)),
+				"site_id" => array(),
+				"sort_by" => "objects.parent,objects.jrk,objects.created"
+			));
+			foreach($ol->arr() as $menu)
+			{
+				$rs = $this->resolve_item_new($menu);
+				if ($rs !== false)
+				{	
+					$this->tree->add_item($rs["parent"], $rs);
+				}
+			}
+		}
+
+		if (empty($this->use_parent))
+		{
+			$this->mk_home_folder_new();
+
+			// shortcuts for the programs
+			$this->sufix = "ad";
+			$this->mk_admin_tree_new();
+		};
+
+		$res = $this->tree->finalize_tree(array("rootnode" => empty($this->use_parent) && $set_by_p ? 0 : $rn));
+		
+		if (!empty($this->use_parent))
+		{
+			print $res;
+			exit;
+		};
+
+		$this->_do_toolbar();
+		$t = get_instance("languages");
+		$this->vars(array(
+			"TREE" => $res,
+			"uid" => aw_global_get("uid"),
+			"date" => $this->time2date(time(),2),
+			"charset" => $t->get_charset(),
+
+		));
+		return $this->parse();
 	}
 
 	function gen_folders($period)
@@ -691,6 +793,233 @@ class admin_folders extends aw_template
 		}
 		exit_function("admin_folders::rec_tree");
 		return $ret;
+	}
+
+	// resolves icons, link .. and whatelse for a single menu item
+	// I'll do icons first	
+	function resolve_item_new($m)
+	{
+		enter_function("admin_folders::resolve_item_new");
+		$arr = array("parent" => $m->parent());
+		$arr["id"] = $m->id();
+		if ($this->period > 0 && $m->prop("periodic") != 1)
+		{
+			return false;
+		};
+		$baseurl = $this->cfg["baseurl"];
+		$ext = $this->cfg["ext"];
+
+		if ($m->class_id() == CL_PROMO)
+		{
+			$iconurl = icons::get_icon_url("promo_box","");
+		}
+		else
+		if ($m->class_id() == CL_BROTHER)
+		{
+			$iconurl = icons::get_icon_url("brother","");
+		}
+		else
+		if ($m->prop("admin_feature") > 0)
+		{
+			$iconurl = icons::get_feature_icon_url($m->prop("admin_feature"));
+		};
+
+		if ($this->can("view", $m->meta("sel_icon")))
+		{
+			$im = get_instance(CL_IMAGE);
+			$iconurl = $im->get_url_by_id($m->meta("sel_icon"));
+		}
+
+		// if all else fails ..
+		$arr["iconurl"] = $iconurl;
+
+		if ($m->prop("admin_feature"))
+		{
+			$prog = aw_ini_get("programs");
+			$arr["url"] = $prog[$m->prop("admin_feature")]["url"];
+		}
+		else
+		{
+			$arr["url"] = $this->mk_my_orb("right_frame",array("parent" => $arr["id"], "period" => $this->period),"admin_menus");
+		};
+	
+		if (empty($arr["url"]))
+		{
+			$arr["url"] = "about:blank";
+		};
+		$arr["name"] = parse_obj_name($m->name());
+				
+		// tshekime et kas menyyl on submenyysid
+		// kui on, siis n2itame alati
+		// kui pole, siis tshekime et kas n2idatakse perioodilisi dokke
+		// kui n2idatakse ja menyy on perioodiline, siis n2itame menyyd
+		// kui pole perioodiline siis ei n2ita
+		$rv = true;
+
+		if ($this->period > 0)
+		{
+			if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] == 0))
+			{
+				$rv = false;
+			};
+		};
+		exit_function("admin_folders::resolve_item");
+		return $rv ? $arr : false;
+	}
+
+	function _do_toolbar()
+	{
+		// perioodide tropp.
+		// temp workaround
+		$tb = get_instance("vcl/toolbar");
+		if ($this->cfg["per_oid"])
+		{
+			$per_oid = $this->cfg["per_oid"];
+			$dbp = get_instance(CL_PERIOD, $per_oid);
+			$act_per_id = $dbp->get_active_period();
+			//$dbp->clist(-1);
+			$pl = array();
+			$actrec = 0;
+			$rc = 0;
+			$period_list = new object_list(array(
+				"class_id" => CL_PERIOD,
+				"sort_by" => "objects.jrk DESC",
+			));
+
+			for ($period_obj = $period_list->begin(); !$period_list->end(); $period_obj = $period_list->next())
+			// loeme k6ik perioodid sisse
+			//while ($row = $dbp->db_next())
+			{
+				$rc++;
+				if ($period_obj->prop("per_id") == $act_per_id)
+				{
+					$actrec = $rc;
+				};
+				$pl[$rc] = array(
+					"id" => $period_obj->prop("per_id"),
+					"name" => $period_obj->name(),
+				);
+			}
+			// leiame praegune +-3
+			$ar = array();
+			for ($i=$actrec-6; $i <= ($actrec+6); $i++)
+			{
+				if (isset($pl[$i]))
+				{
+					if ($pl[$i]["id"] == $act_per_id)
+					{
+						$ar[$pl[$i]["id"]] = $pl[$i]["name"].MN_ACTIVE;
+					}
+					else
+					{
+						$ar[$pl[$i]["id"]] = $pl[$i]["name"];
+					}
+				}
+			}
+			$ar[0] = t("Mitteperioodilised");
+			$tb->add_cdata(html::select(array(
+				"name" => "period",
+				"options" => $ar,
+				"selected" => !empty($this->period) ? $this->period : 0,
+			)));
+		}
+
+		$tb->add_button(array(
+			"name" => "refresh",
+			"tooltip" => t("Reload"),
+			"url" => "javascript:document.pform.submit();",
+			"img" => "refresh.gif",
+		));
+		$tb->add_button(array(
+			"name" => "logout",
+			"tooltip" => t("Logi v&auml;lja"),
+			"url" => $this->mk_my_orb("logout", array(), "users"),
+			"img" => "logout.gif",
+			"target" => "_top"
+		));
+		$tb->add_cdata($this->mk_reforb("folders",array("no_reforb" => 1)));
+		$this->vars(array(
+			"toolbar" => $tb->get_toolbar(array("no_target" => true)),
+		));
+		$this->vars(array(
+			"has_toolbar" => $this->parse("has_toolbar"),
+		));
+	}
+
+	function mk_home_folder_new()
+	{
+		$us = get_instance(CL_USER);
+		if (!$this->can("view", $us->get_current_user()))
+		{
+			return;
+		}
+		$cur_oid = $us->get_current_user();
+		$ucfg = new object($cur_oid);
+		if (!$this->can("view", $ucfg->prop("home_folder")) || !is_oid($ucfg->prop("home_folder")))
+		{
+			return;
+		}
+		$hf = new object($ucfg->prop("home_folder"));
+
+		// add home folder
+		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
+		$this->tree->add_item(is_array($rn) ? reset($rn) : $rn,array(
+			"id" => $hf->id(),
+			"parent" => is_array($rn) ? reset($rn) : $rn,
+			"name" => parse_obj_name($hf->name()),
+			"iconurl" => icons::get_icon_url("homefolder",""),
+			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf->id()),"admin_menus"),
+		));
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
+			"parent" => $hf->id(),
+			"CL_MENU.type" => new obj_predicate_not(array(MN_FORM_ELEMENT, MN_HOME_FOLDER)),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+						"lang_id" => aw_global_get("lang_id"),
+						"CL_MENU.type" => array(MN_CLIENT, MN_ADMIN1)
+				)
+			)),
+			"site_id" => array(),
+			"sort_by" => "objects.parent,objects.jrk,objects.created"
+		));
+		foreach($ol->arr() as $menu)
+		{
+			$rs = $this->resolve_item_new($menu);
+			if ($rs !== false)
+			{	
+				$this->tree->add_item($rs["parent"], $rs);
+			}
+		}
+
+	}
+
+	function mk_admin_tree_new()
+	{
+		// make this one level only, so we save a lot on the headaches
+		$ol = new object_list(array(
+			"class_id" => CL_MENU,
+			"parent" => aw_ini_get("amenustart"),
+			"status" => STAT_ACTIVE,
+			"CL_MENU.type" => MN_ADMIN1,
+			"site_id" => array(),
+			"lang_id" => array(),
+			"sort_by" => "objects.parent,objects.jrk,objects.created"
+		));
+		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
+		$rn = is_array($rn) ? reset($rn) : $rn;
+		foreach($ol->arr() as $menu)
+		{
+			$rs = $this->resolve_item_new($menu);
+			if ($rs !== false)
+			{	
+				$rs["id"] .= "ad";
+				$rs["parent"] = $rn;
+				$this->tree->add_item($rs["parent"], $rs);
+			}
+		}
 	}
 
 }
