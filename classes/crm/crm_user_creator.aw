@@ -90,7 +90,7 @@ class crm_user_creator extends core
 	{
 		// info on group creation is stored in company as relation
 		obj_set_opt("no_cache", 1);
-		$grp = $co->get_first_obj_by_reltype(36);
+		$grp = $co->get_first_obj_by_reltype("RELTYPE_GROUP"); // CRM_COMPANY__RELTYPE_GROUP
 		obj_set_opt("no_cache", 0);
 		if (!$grp)
 		{
@@ -99,21 +99,34 @@ class crm_user_creator extends core
 			$grp->set_parent(aw_ini_get("groups.tree_root"));
 			$grp->set_class_id(CL_GROUP);
 			$grp->set_name($co->name());
-			$grp->set_prop("priority", 100);
+			$grp->set_prop("name", $grp->name());
+			$grp->set_prop("priority", 1200);
 			$grp->set_prop("type", GRP_REGULAR);
 			$grp->set_prop("can_admin_interface", 1);
+			$grp->set_status(STAT_ACTIVE);
+			aw_allow_recursive_messages();
 			$grp->save();
+			aw_restore_recursive_messages();
 			// connect co to grp
 			$co->connect(array(
 				"to" => $grp->id(),
 				"reltype" => "RELTYPE_GROUP"
 			));
 		}
+		else if(!$this->can('edit', $grp) || $co->name() == $grp->name())
+		{
+			return $grp;
+		}
 		else
 		{
 			$grp->set_name($co->name());
 			$grp->save();
 		}
+		$co->acl_set($grp, array(
+			'can_edit' => 1,
+			'can_view' => 1,
+			'can_add' => 1,
+		));
 		
 		return $grp;
 	}
@@ -254,6 +267,17 @@ class crm_user_creator extends core
 			// get grp
 	
 			$grp = $o->get_first_obj_by_reltype("RELTYPE_GROUP");
+			if ($grp)
+			{
+				$g->add_user_to_group($user, $grp);
+			}
+		}
+		
+		// get user's workplace's group, add user to that too
+		$co = $this->get_co_for_person($pers->id());
+		if ($co && $co->prop("do_create_users"))
+		{
+			$grp = $co->get_first_obj_by_reltype("RELTYPE_GROUP");
 			if ($grp)
 			{
 				$g->add_user_to_group($user, $grp);
