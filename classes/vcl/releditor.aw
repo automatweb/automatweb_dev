@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.71 2005/12/14 12:09:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.72 2005/12/14 12:54:37 ekke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -358,6 +358,20 @@ class releditor extends core
 		}
 		$createlinks = array();
 		$return_url = urlencode(aw_global_get("REQUEST_URI"));
+		// You can set newly created object's parent to be current object
+		if (!empty($arr['prop']['override_parent']) && $arr['prop']['override_parent'] == 'this')
+		{
+			$parent = $arr['obj_inst']->id();
+		}
+		// Or set any object for the parent
+		elseif (!empty($arr['prop']['override_parent']) && is_oid($arr['prop']['override_parent']))
+		{
+			$parent = $arr['prop']['override_parent'];
+		}
+		else // Or the default, current objects parent.
+		{
+			$parent = $arr['obj_inst']->parent();
+		}
 		foreach ($arr['prop']['clid'] as $clid)
 		{
 			if ($arr["prop"]["direct_links"])
@@ -371,7 +385,7 @@ class releditor extends core
 				}
 				$params["alias_to"] = $arr["obj_inst"]->id();
 				$params["reltype"] = $arr["prop"]["reltype"];
-				$newurl = html::get_new_url($clid, $arr["obj_inst"]->parent(), $params);
+				$newurl = html::get_new_url($clid, $parent, $params);
 			}
 			else
 			{
