@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.42 2005/11/09 12:36:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.43 2005/12/14 19:45:26 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -21,8 +21,12 @@ class cache extends core
 	// $content - cachetav asi
 	// $clear_flag - kui see on false, siis ei clearita cache_dirty flagi sellele objektile
 	//               idee on selles, et siis saab yhele objektile ka mitu cachet teha.
-	function set($oid,$arr,$content,$clear_flag = true)
+	function set($oid,$arr,$content,$clear_flag = true, $real_section = NULL)
 	{
+		if ($real_section === NULL)
+		{
+			$real_section = $oid;
+		}
 		if ($this->cfg["use_page_cache"] && !aw_global_get("uid") && !aw_global_get("no_cache"))
 		{
 			$fname = "/".str_replace("/","_",$oid);
@@ -70,7 +74,7 @@ class cache extends core
 			@chmod($fname, 0666);
 			if ($clear_flag)
 			{
-				$this->clear_cache($oid, $fname);
+				$this->clear_cache($real_section, $fname);
 			}
 		}
 	}
@@ -81,8 +85,12 @@ class cache extends core
 	// kui ei, siis false
 	// $oid - objekti id, mille kohta cahet kysitaxe
 	// $arr - array objekti kuju identivatest parameetritest (periood ntx), millest moodustatakse cache faili nimi.
-	function get($oid,$arr)
+	function get($oid,$arr, $real_oid = NULL)
 	{
+		if ($real_oid === NULL)
+		{
+			$real_oid = $oid;
+		}
 		if ($this->cfg["use_page_cache"] && !aw_global_get("uid"))
 		{
 			$fname = "/".str_replace("/","_",$oid);
@@ -102,12 +110,24 @@ class cache extends core
 				$fname = "/".md5($fname);
 			}
 			$fname = $this->get_fqfn($fname);
-			if ($this->cache_dirty($oid, $fname))
+			if ($_GET["CACHE_DBG"] == 1)
 			{
+				echo "look for $fname oid = $oid real_oid = $real_oid <br>";
+			}
+			if ($this->cache_dirty($real_oid, $fname))
+			{
+			if ($_GET["CACHE_DBG"] == 1)
+			{
+				echo "... cache is dirty<br>";
+			}
 				return false;
 			}
 			else
 			{
+			if ($_GET["CACHE_DBG"] == 1)
+			{
+				echo "read from cache!<br>";
+			}
 				$content = $this->get_file(array("file" => $fname));
 				if ($content == false)
 				{
