@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.2 2005/10/09 20:59:45 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.3 2005/12/14 12:46:32 ekke Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -112,10 +112,6 @@ class openhours extends class_base
 		return $retval;
 	}	
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
@@ -131,6 +127,7 @@ class openhours extends class_base
 	// 'style' - default | short
 	function show($arr)
 	{
+		$this->vars(array('ONEDAY' => '', 'TWODAYS' => '', 'TIMES' => '', 'TIMES_24H' => '', 'ALLBUTFIRST' => '', 'ALLBUTFIRST_SHORT' => '', 'LINE' => ''));
 		$this->sub_merge = 1;
 		$days_short = array (
 			0 => " ",
@@ -271,7 +268,7 @@ class openhours extends class_base
 		{
 			$arr2 = $arr[$name.'time1'];
 			$h1 = isset($arr2['hour']) && is_numeric($arr2['hour']) && between($arr2['hour'], 0, 23) ? $arr2['hour'] : null;
-			$m1 = isset($arr2['minute']) && is_numeric($arr2['minute']) && between($arr2['minute'], 0, 23) ? $arr2['minute'] : null;
+			$m1 = isset($arr2['minute']) && is_numeric($arr2['minute']) && between($arr2['minute'], 0, 59) ? $arr2['minute'] : null;
 		}
 		if(isset($arr[$name.'time2']))
 		{
