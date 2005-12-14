@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.24 2005/04/21 09:25:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.25 2005/12/14 13:01:26 ekke Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -16,7 +16,7 @@
 @caption J&auml;rjestatakse
 
 @property objects_from type=select
-@caption Millistele objektidele kehtib
+@caption Objektide piirang
 
 @property objects_from_clid type=select
 @caption Vali klass
@@ -27,29 +27,38 @@
 @property objects_from_oid type=relpicker reltype=RELTYPE_RATE_OID
 @caption Vali objekt
 
+@property objects_from_rate_scale type=relpicker reltype=RELTYPE_RATE_SCALE automatic=1
+@caption Vali skaala
+
+@property url_to type=textbox 
+@caption Aadress, kuhu suunata
+
 @reltype RATE_FOLDER value=1 clid=CL_MENU
 @caption Hinnatavate objektide kataloog
 
 @reltype RATE_OID value=2
 @caption Hinnatav objekt
 
+@reltype RATE_SCALE value=3 clid=CL_RATE_SCALE
+@caption Arvestatav skaala
 
 */
 define("OBJECTS_FROM_CLID", 1);
 define("OBJECTS_FROM_FOLDER", 2);
 define("OBJECTS_FROM_OID", 3);
+define("OBJECTS_FROM_RATE_SCALE", 4);
 
 define("ORDER_HIGHEST",1);
 define("ORDER_AVERAGE",2);
-define("ORDER_VIEW",3);
+define("ORDER_VIEWS",3);
 define("ORDER_LOWEST_RATE",4);
-define("ORDER_LOWEST_VIEW",5);
+define("ORDER_LOWEST_VIEWS",5);
 
 define("RATING_AVERAGE", 1);
 define("RATING_HIGHEST", 2);
-define("RATING_VIEW", 3);
+define("RATING_VIEWS", 3);
 define("RATING_LOWEST_RATE",4);
-define("RATING_LOWEST_VIEW",5);
+define("RATING_LOWEST_VIEWS",5);
 
 class rate extends class_base
 {
@@ -65,10 +74,12 @@ class rate extends class_base
 	function get_property(&$arr)
 	{
 		$prop =& $arr["prop"];
+		$myc = null;
 		switch($prop['name'])
 		{
 			case "objects_from":
 				$prop['options'] = array(
+					OBJECTS_FROM_RATE_SCALE => t("Hindamisskaala j&auml;rgi"),
 					OBJECTS_FROM_CLID => t("Klassi järgi"),
 					OBJECTS_FROM_FOLDER => t("Kataloogi järgi"),
 					OBJECTS_FROM_OID => t("Objektist"),
@@ -76,23 +87,17 @@ class rate extends class_base
 				break;
 
 			case "objects_from_clid":
-				if ($arr['obj_inst']->prop('objects_from') != OBJECTS_FROM_CLID)
-				{
-					return PROP_IGNORE;
-				}
+				$myc = is_null($myc) ? OBJECTS_FROM_CLID : $myc;
 				classload("aliasmgr");
 				$prop['options'] = aliasmgr::get_clid_picker();
-				break;
-
 			case "objects_from_folder":
-				if ($arr['obj_inst']->prop('objects_from') != OBJECTS_FROM_FOLDER)
-				{
-					return PROP_IGNORE;
-				}
-				break;
-
+				$myc = is_null($myc) ? OBJECTS_FROM_FOLDER : $myc;
 			case "objects_from_oid":
-				if ($arr['obj_inst']->prop('objects_from') != OBJECTS_FROM_OID)
+				$myc = is_null($myc) ? OBJECTS_FROM_OID : $myc;
+			case "objects_from_rate_scale":
+				$myc = is_null($myc) ? OBJECTS_FROM_RATE_SCALE : $myc;
+				
+				if ($arr['obj_inst']->prop('objects_from') != $myc)
 				{
 					return PROP_IGNORE;
 				}
@@ -111,24 +116,34 @@ class rate extends class_base
 		return PROP_OK;
 	}
 
-	function get_rating_for_object($oid, $type = RATING_AVERAGE)
+	function get_rating_for_object($oid, $type = RATING_AVERAGE, $rate_id = NULL)
 	{
 		if (!is_oid($oid) || !$this->can("view", $oid))
 		{
 			return 0;
 		}
 		
+		$rt_limit = "";
+		if (!is_null($rate_id) && is_oid($rate_id))
+		{
+			$rt_limit = ' AND rate_id='.$rate_id;
+		}
+		else
+		{
+			$rate_id = 0;
+		}
+		
 		// we need to cache this shit.
 		// so, let's make add_rate write it to the object's metadata, in the rate array
 		$ob = obj($oid);
 		$rts = $ob->meta("__ratings");
-		if (!is_array($rts))
+		if (!is_array($rts[$rate_id]))
 		{
-			$avg = $this->db_fetch_field("SELECT AVG(rating) AS avg FROM ratings WHERE oid = '$oid'", "avg");
-			$l_rate = $this->db_fetch_field("SELECT MIN(rating) AS min FROM ratings WHERE oid = '$oid'", "min");
-			$max = $this->db_fetch_field("SELECT MAX(rating) AS max FROM ratings WHERE oid = '$oid'", "max");
+			$avg = $this->db_fetch_field("SELECT AVG(rating) AS avg FROM ratings WHERE oid = '$oid' $rt_limit", "avg");
+			$l_rate = $this->db_fetch_field("SELECT MIN(rating) AS min FROM ratings WHERE oid = '$oid' $rt_limit", "min");
+			$max = $this->db_fetch_field("SELECT MAX(rating) AS max FROM ratings WHERE oid = '$oid' $rt_limit", "max");
 			$views = $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits");
-			$rts = array(
+			$rts[$rate_id] = array(
 				RATING_AVERAGE => $avg,
 				RATING_HIGHEST => $max,
 				RATING_VIEWS => $views,
@@ -139,32 +154,16 @@ class rate extends class_base
 			aw_disable_acl();
 			$ob->save();
 			aw_restore_acl();
-			
-			if ($type == RATING_AVERAGE)
-			{
-				return round($avg,2);
-			}
-			else
-			if ($type == RATING_VIEWS)
-			{
-				return round($views);
-			}
-			else
-			if ($type == RATING_LOWEST_VIEWS)
-			{
-				return round($views);
-			}
-			else
-			if ($type == RATING_LOWEST_RATE)
-			{
-				return round($l_rate);
-			}
-			else
-			{
-				return round($max);
-			}
 		}
-		return number_format((float)$rts[$type],2,".",",");
+		if ($type == RATING_AVERAGE)
+		{
+			return round($rts[$rate_id][$type],2);
+		}
+		else
+		{
+			return round($rts[$rate_id][$type]);
+		}
+		//return number_format((float)$rts[$rate_id][$type],2,".",",");
 	}
 
 	/**  
@@ -172,6 +171,7 @@ class rate extends class_base
 		@attrib name=rate params=name nologin="1" default="0"
 		
 		@param oid required type=int
+		@param rate_id optional type=int
 		@param return_url required
 		@param rate required
 		
@@ -183,43 +183,69 @@ class rate extends class_base
 	**/
 	function add_rate($arr)
 	{
-
 		extract($arr);
 		$ro = aw_global_get("rated_objs");
-
-		//if (!isset($ro[$oid]))
-		if (true)
+		if (!is_array($rate))
 		{
+			$rates = array($rate);
+		}
+		else
+		{
+			$rates = $rate;
+		}
+
+		if (!is_oid($oid) || !$this->can('view', $oid) || !count($rates))
+		{
+			header("Location: $return_url");
+			die();
+		}
+		$o = obj($oid);
+		$rs = $o->meta("__ratings");
+		
+		//if (!isset($ro[$oid]))
+		foreach ($rates as $rate_id => $rate)
+		{
+			if (!is_numeric($rate) || !is_numeric($rate_id))
+			{
+				continue;
+			}
+			// Update ratings
 			$this->db_query("
-				INSERT INTO ratings(oid, rating, tm, uid, ip) 
-				VALUES('$oid','$rate',".time().",'".aw_global_get("uid")."','".aw_global_get("REMOTE_ADDR")."')
+				INSERT INTO ratings(oid, rating,".($rate_id?' rate_id,':'')." tm, uid, ip) 
+				VALUES ($oid,$rate,".($rate_id?"$rate_id,":'').time().",'".aw_global_get("uid")."','".aw_global_get("REMOTE_ADDR")."')
 			");
-			$q = "SELECT COUNT(id) AS total FROM rating_sum WHERE oid = '$oid'";
+
+			// Fetch and cache statistics
+			$q = "SELECT COUNT(oid) AS total FROM rating_sum WHERE oid = $oid". ($rate_id?" and rate_id = $rate_id":'');
 			if($this->db_fetch_field($q, "total") > 0)
 			{
-				$this->db_query("UPDATE rating_sum SET divider=(divider+1), sum=(sum+".(int)$rate."), avg=(sum/divider) WHERE oid='$oid'");
+				$this->db_query("UPDATE rating_sum SET divider=(divider+1), sum=(sum+".(int)$rate."), avg=(sum/divider) WHERE oid=$oid".($rate_id?" AND rate_id = $rate_id":''));
 			}
 			else
 			{
-				$this->db_query("INSERT INTO rating_sum VALUES('', '$oid', '$rate', '1', '$rate')");
+				$this->db_query("INSERT INTO rating_sum (oid,".($rate_id?" rate_id,":'')." divider, sum, avg) VALUES($oid,".($rate_id?"$rate_id,":'')." 1, $rate, $rate)");
 			}
 			$ro[$oid] = $rate;
 
-			$stat_query = "SELECT MIN(rating) AS min,MAX(rating) AS max,AVG(rating) AS avg FROM ratings WHERE oid = '$oid'";
+			$stat_query = "SELECT MIN(rating) AS min,MAX(rating) AS max,AVG(rating) AS avg FROM ratings WHERE oid = $oid" . ($rate_id?" AND rate_id = $rate_id":'');
 			$this->db_query($stat_query);
 			$row = $this->db_next();
 
-			$rs = array(
+			$hits =  $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits");
+			if (empty($rate_id))
+			{
+				$rate_id = 0;
+			}
+			$rs[$rate_id] = array(
 				RATING_AVERAGE => $row["avg"],
 				RATING_HIGHEST => $row["max"],
-				RATING_VIEWS => $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits"),
-				RATING_LOWEST_VIEWS => $this->db_fetch_field("SELECT hits FROM hits WHERE oid = '$oid'", "hits"),
+				RATING_VIEWS => $hits,
+				RATING_LOWEST_VIEWS => $hits,
 				RATING_LOWEST_RATE => $row["min"],
 			);
-			$o = obj($oid);
-			$o->set_meta("__ratings",$rs);
-			$o->save();
 		}
+		$o->set_meta("__ratings",$rs);
+		$o->save();
 
 		if ($arr["no_redir"])
 		{
@@ -238,7 +264,7 @@ class rate extends class_base
 		@attrib name=show params=name nologin="1" default="0"
 		
 		@param id required type=int
-		@param gallery_id optional type=int
+		@param from_oid optional type=int
 		
 		@returns
 		
@@ -246,43 +272,46 @@ class rate extends class_base
 		@comment
 
 	**/
-	function show(&$arr)
+	function show($arr)
 	{
 		extract($arr);
+		$override_objects_from = null;
+		$override_param = null;
 		$this->read_any_template("show.tpl");
 		
 		$ob = obj($id);
 
 		if (!empty($from_oid))
 		{
-			// we we need to show results in the gallery, read objects from that
-			$ob->set_meta('objects_from',OBJECTS_FROM_OID);
-			$ob->set_meta('objects_from_oid',$from_oid);
-			$ob->save();
+			// we need to show results in the gallery, read objects from that
+			$override_objects_from = OBJECTS_FROM_OID;
+			$override_param = $from_oid;
 		}
 
 		// get list of all objects that this rating applies to
 		$oids = array();
-		switch($ob->meta("objects_from"))
+		$ofrom = empty($override_objects_from) ? $ob->prop('objects_from') : $override_objects_from;
+		$where = "false"; // Happy default!
+		switch($ofrom)
 		{
 			case OBJECTS_FROM_CLID:
-				$where = "objects.class_id = ".$ob->meta('objects_from_clid');
-				break;
-
+				$param = empty($override_param) ? $ob->prop('objects_from_clid') : $override_param;
+				$where = "objects.class_id = " . $param;
+			break;
 			case OBJECTS_FROM_FOLDER:
 				// need to get a list of all folders below that one.
 				$mn = array();
 				//$pts = new aw_array($ob['meta']['objects_from_folder']);
+				$param = empty($override_param) ? $ob->prop('objects_from_folder') : $override_param;
 				$_parent_list = new object_list(array(
-					"parent" => $ob->meta("objects_from_folder"),
+					"parent" => $param,
 					"class_id" => CL_MENU,
 				));
-				$mn = array($fld => $fld) + $_parent_list->ids();
-				$where = "objects.parent IN (".join(",",$mn).")";
-				break;
-
+				$mn = $_parent_list->ids();
+				$where = count($mn) ? "objects.parent IN (".join(",",$mn).")" : "false"; 
+			break;
 			case OBJECTS_FROM_OID:
-				$c_oid = $ob->meta('objects_from_oid');
+				$c_oid = empty($override_param) ? $ob->prop('objects_from_oid') : $override_param;
 				$c_obj = obj($c_oid);
 				$c_inst = $c_obj->instance();
 				if (method_exists($c_inst, "get_contained_objects"))
@@ -297,7 +326,15 @@ class rate extends class_base
 				}
 				$_tar = new aw_array(array_keys($c_objs));
 				$where = "objects.oid IN (".$_tar->to_sql().")";
-				break;
+			break;
+			case OBJECTS_FROM_RATE_SCALE:
+				$sc_id = empty($override_param) ? $ob->prop('objects_from_rate_scale') : $override_param;
+				if (is_oid($sc_id) && ($sc = obj($sc_id)) && $sc->class_id() == CL_RATE_SCALE)
+				{
+					$where = "ratings.rate_id = ".$sc_id;
+				}
+			break;
+			
 		}
 
 		// query the max/avg for those. 
@@ -305,11 +342,11 @@ class rate extends class_base
 		switch($ob->meta("top_type"))
 		{
 			case ORDER_HIGHEST:
-				$fun = "rating";
+				$fun = "ROUND(MAX(rating), 1)";
 				break;
 
 			case ORDER_AVERAGE:
-				$fun = "AVG(rating)";
+				$fun = "ROUND(AVG(rating), 1)";
 				break;
 
 			case ORDER_VIEWS:
@@ -317,7 +354,7 @@ class rate extends class_base
 				break;
 
 			case ORDER_LOWEST_RATE:
-				$fun = "rating";
+				$fun = "ROUND(MIN(rating), 1)";
 				$order = "ASC";
 				break;
 
@@ -327,7 +364,6 @@ class rate extends class_base
 				break;
 		}
 
-		$this->img = get_instance(CL_IMAGE);
 
 		$cnt = 1;
 
@@ -340,12 +376,13 @@ class rate extends class_base
 				hits.hits as hits,
 				images.file as img_file
 			FROM 
-				objects 
-				LEFT JOIN ratings ON ratings.oid = objects.oid
-				LEFT JOIN g_img_rel ON objects.oid = g_img_rel.img_id
-				LEFT JOIN hits ON hits.oid = objects.oid
-				LEFT JOIN images ON images.id = objects.oid
+				ratings
+				JOIN objects ON ratings.oid = objects.oid
+				LEFT JOIN g_img_rel ON ratings.oid = g_img_rel.img_id
+				LEFT JOIN hits ON hits.oid = ratings.oid
+				LEFT JOIN images ON images.id = ratings.oid
 			WHERE
+				objects.status = 2 AND
 				$where
 			GROUP BY 
 				objects.oid
@@ -370,8 +407,10 @@ class rate extends class_base
 			while ($row = $this->db_next())
 			{
 				$this->vars(array(
+					"oid" => $row["oid"],
+					"name" => $row['name'],
 					"rating" => $row['val'],
-					"view" => $this->_get_link($row),
+					"view" => $this->_get_link($row, $ob->prop('url_to')),
 					"hits" => $row['hits'],
 					"place" => $cnt++
 				));
@@ -386,13 +425,24 @@ class rate extends class_base
 		}
 	}
 
-	function _get_link($dat)
+	function _get_link($dat, $url = "")
 	{
 		if ($dat["class_id"] == CL_IMAGE)
 		{
+			if (!isset($this->img))
+			{
+				$this->img = get_instance(CL_IMAGE);
+			}
 			return image::make_img_tag($this->img->get_url($dat['img_file']));
 		}
-		return $this->mk_my_orb("change", array("id" => $dat["oid"]), basename($this->classes[$dat["class_id"]]["file"]));
+		if (!empty($url))
+		{
+			return $url.$dat['oid'];
+		}
+		else
+		{
+			return $this->mk_my_orb("change", array("id" => $dat["oid"]), basename($this->classes[$dat["class_id"]]["file"]));
+		}
 	}
 }
 ?>

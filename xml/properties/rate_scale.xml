@@ -7,6 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
+            <multiple>1</multiple>
             <caption>Mis objektit&amp;amp;uuml;&amp;amp;uuml;bile skaala kehtib</caption>
       </property>
       <property>
@@ -19,16 +20,6 @@
             <multiple>1</multiple>
             <reltype>RELTYPE_FOLDER</reltype>
             <caption>Mis kataloogidele skaala kehtib</caption>
-      </property>
-      <property>
-            <name>type_nr</name>
-            <table>objects</table>
-            <group>scale</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Numbriline skaala</caption>
       </property>
       <property>
             <name>nr_from</name>
@@ -61,14 +52,14 @@
             <caption>Aste</caption>
       </property>
       <property>
-            <name>type_ud</name>
+            <name>nr_descs</name>
             <table>objects</table>
             <group>scale</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>2</ch_value>
-            <caption>Kasutaja defineeritud skaala</caption>
+            <type>callback</type>
+            <callback>_get_nr_desc_form</callback>
+            <caption>Tekst hindele</caption>
       </property>
       <property>
             <name>no_rate</name>

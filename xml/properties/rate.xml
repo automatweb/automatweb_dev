@@ -26,7 +26,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Millistele objektidele kehtib</caption>
+            <caption>Objektide piirang</caption>
       </property>
       <property>
             <name>objects_from_clid</name>
@@ -58,6 +58,26 @@
             <reltype>RELTYPE_RATE_OID</reltype>
             <caption>Vali objekt</caption>
       </property>
+      <property>
+            <name>objects_from_rate_scale</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RATE_SCALE</reltype>
+            <automatic>1</automatic>
+            <caption>Vali skaala</caption>
+      </property>
+      <property>
+            <name>url_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Aadress, kuhu suunata</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_RATE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -72,6 +92,11 @@
                   <value>2</value>
                   <caption>Hinnatav objekt</caption>
             </RATE_OID>
+            <RATE_SCALE>
+                  <value>3</value>
+                  <clid>CL_RATE_SCALE</clid>
+                  <caption>Arvestatav skaala</caption>
+            </RATE_SCALE>
       </reltypes>
 </properties>
 

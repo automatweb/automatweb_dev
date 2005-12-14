@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.15 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate_scale.aw,v 1.16 2005/12/14 13:01:26 ekke Exp $
 
 /*
 
@@ -12,16 +12,13 @@
 @default field=meta
 @default method=serialize
 
-@property rate_clid type=select 
+@property rate_clid type=select multiple=1
 @caption Mis objektit&uuml;&uuml;bile skaala kehtib
 
 @property rate_folders type=relpicker multiple=1 reltype=RELTYPE_FOLDER
 @caption Mis kataloogidele skaala kehtib
 
 @default group=scale
-
-@property type_nr type=checkbox ch_value=1 
-@caption Numbriline skaala
 
 @property nr_from type=textbox size=3 
 @caption Alates
@@ -32,15 +29,11 @@
 @property nr_step type=textbox size=3
 @caption Aste
 
-@property type_ud type=checkbox ch_value=2
-@caption Kasutaja defineeritud skaala
+@property nr_descs type=callback callback=_get_nr_desc_form
+@caption Tekst hindele
 
 @property no_rate type=chooser multiple=1
 @caption Lisa "ei hinda" valik
-
-//@property ud_scale type=callback callback=get_udscale_entries 
-//@caption mingi sitt
-
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption Kehtiv kataloog
@@ -59,14 +52,6 @@ class rate_scale extends class_base
 		));
 	}
 
-	function get_udscale_entries($arr)
-	{
-		extract($arr);
-		$ret = array();
-		
-		return $ret;
-	}
-
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -75,22 +60,6 @@ class rate_scale extends class_base
 			case "no_rate":
 				$prop["options"] = array(1 => "");
 				break;
-			case "nr_from":
-			case "nr_to":
-			case "nr_step":
-				if (1 != $arr["obj_inst"]->prop("type_nr"))
-				{
-					return PROP_IGNORE;
-				}
-				break;
-
-			case "ud_scale":
-				if (2 == $arr["obj_inst"]->prop("type_ud"))
-				{
-					return PROP_IGNORE;
-				}
-				break;
-
 			case "rate_clid":
 				classload("aliasmgr");
 				$prop['options'] = aliasmgr::get_clid_picker();
@@ -99,88 +68,110 @@ class rate_scale extends class_base
 		return PROP_OK;
 	}
 
+	function set_property ($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			//-- set_property --//
+			case 'nr_step':
+				if (!is_numeric($prop['value']) || $prop['value'] < 1)
+				{
+					$prop['value'] = 1;
+				}
+			break;
+			case 'nr_descs':
+				$descs = $arr['obj_inst']->prop('nr_descs');
+				foreach ($prop['value'] as $i => $desc)
+				{
+					if (is_numeric($i))
+					{
+						$descs[$i] = $desc;
+					}
+				}
+				$prop['value'] = $descs;
+			break;
+		}
+		return $retval;
+	
+	}
+
 	function callback_post_save($arr)
 	{
 		extract($arr);
 		$ob = $arr["obj_inst"];
 		$id = $ob->id();
 		$this->db_query("DELETE FROM rate2menu WHERE rate_id = '$id'");
-		$d = new aw_array($ob->prop("rate_folders"));
-		$rate_clid = $ob->prop("rate_clid");
-		foreach($d->get() as $fld)
-		{
-			$this->db_query("INSERT INTO rate2menu(menu_id, rate_id, clid) VALUES('$fld','$id','".$rate_clid."')");
-		}
-
 		$this->db_query("DELETE FROM rate2clid WHERE rate_id = '$id'");
-		if ($d->count() == 0)
+		
+		$d = new aw_array($ob->prop("rate_folders"));
+		$clids = new aw_array($ob->prop("rate_clid"));
+		foreach ($clids->get() as $rate_clid)
 		{
-			$this->db_query("INSERT INTO rate2clid(rate_id, clid) VALUES('$id','".$rate_clid."')");
-		}
+			foreach($d->get() as $fld)
+			{
+				$this->db_query("INSERT INTO rate2menu(menu_id, rate_id, clid) VALUES('$fld','$id','".$rate_clid."')");
+			}
+
+			if ($d->count() == 0)
+			{
+				$this->db_query("INSERT INTO rate2clid(rate_id, clid) VALUES('$id','".$rate_clid."')");
+			}
+			else
+			{
+				$d->reset();
+			}
+		}	
 	}
 
-	function get_scale_obj_for_obj($oid)
+	// Return rate_scale objects that can be applied to object $oid
+	function get_scale_objs_for_obj($oid, $onlyfirst = false)
 	{
 		$ob = obj($oid);
 		$oc = $ob->path();
+		$scales = array();
 		foreach($oc as $odp)
 		{
-			$sql = "SELECT * FROM rate2menu WHERE menu_id = '".$odp->id()."'";
+			$sql = "SELECT clid, rate_id FROM rate2menu WHERE menu_id = '".$odp->id()."'";
 			$this->db_query($sql);
 			while ($row = $this->db_next())
 			{
 				if ($row["clid"] == $ob->class_id())
 				{
-					return $row["rate_id"];
+					if ($onlyfirst)
+					{
+						return array($row["rate_id"]);
+					}
+					else
+					{
+						$scales[] = $row['rate_id'];
+					}
 				}
 			}
 		}
-		if($rate = $this->db_fetch_field("SELECT rate_id FROM rate2clid WHERE clid = '".$ob->class_id()."'", "rate_id"))
+		$this->db_query("SELECT rate_id FROM rate2clid WHERE clid = '".$ob->class_id()."'");
+		while ($row = $this->db_next())
 		{
-			return $rate;
+			$scales[] = $row['rate_id'];
 		}
-		return false;
+		return $scales;
 	}
 
+	// Returns first found rate_scale object from object $oid
 	function get_scale_for_obj($oid)
 	{
-		// read the object
-		$ob = obj($oid);
-		// find the correct scale for the object
-
-		$oc = $ob->path();
-		// first, we check if any menus have rate objects in the menu chain for that object
-
-		foreach($oc as $odp)
+		// Get all scales
+		$scales = $this->get_scale_objs_for_obj($oid, true);
+		if (is_array($scales) && count($scales) > 0)
 		{
-			$sql = "SELECT * FROM rate2menu WHERE menu_id = '".$odp->id()."'";
-			$this->db_query($sql);
-			while ($row = $this->db_next())
-			{
-				//arr($odp->class_id());
-				//arr($row);
-				// if we find one, then we check if it only applies for a class
-				// if not, we found it!
-				// if it does and the clid does not match, then continue
-				//!$row['clid'] || (
-				if ($row["clid"] == $ob->class_id())
-				{
-					return $this->_get_scale($row["rate_id"]);
-				}
-			}
+			return $this->_get_scale($scales[0]);
 		}
-
-		// if we don't find one, then chect the rate2clid table
-			// if found, return
-			// if not, error
-		//arr($ob->class_id()); 
-		if (($rate = $this->db_fetch_field("SELECT rate_id FROM rate2clid WHERE clid = '".$ob->class_id()."'", "rate_id")))
+		else
 		{
-			
-			return $this->_get_scale($rate);
+			return array();
+			//$this->raise_error(ERR_RATE_NOT_FOUND, "rate::get_scale_for_obj($oid) - no rate for object is set!", true, false);
 		}
-		return array();
-		$this->raise_error(ERR_RATE_NOT_FOUND, "rate::get_scale_for_obj($oid) - no rate for object is set!", true, false);
 	}
 
 	function _get_scale($id)
@@ -194,15 +185,38 @@ class rate_scale extends class_base
 			{
 				$ret[0] = t("ei hinda");
 			}
-			if ($ob->prop("type_nr") == 1)
+			if ($ob->prop("nr_step") >= 1) // let's prevent that infinite loop, shall we
 			{
+				$descs = $ob->prop('nr_descs');
 				for ($i = $ob->prop("nr_from"); $i <= $ob->prop("nr_to"); $i += $ob->prop("nr_step"))
 				{
-					$ret[$i] = $i;
+					$ret[$i] = isset($descs[$i]) ? $descs[$i] : $i;
 				}
 			}
 		}
 		return $ret;
+	}
+
+	// Generates form for adding descriptions to numerical values
+	function _get_nr_desc_form ($arr)
+	{
+		$retval = array();
+		$ob = $arr['obj_inst'];
+		if ($ob->prop("nr_step") >= 1) // let's prevent that infinite loop here too, shall we
+		{
+			$descs = $ob->prop('nr_descs');
+			for ($i = $ob->prop("nr_from"); $i <= $ob->prop("nr_to"); $i += $ob->prop("nr_step"))
+			{
+				$retval[] = array(
+					'type' => 'textbox',
+					'size' => 60,
+					'name' => $arr['prop']['name'].'['.$i.']',
+					'caption' => $arr['prop']['caption'] . $i,
+					'value' => ifset($descs,$i),
+				);
+			}
+		}
+		return $retval;
 	}
 }
 ?>
