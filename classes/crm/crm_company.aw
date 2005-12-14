@@ -290,7 +290,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 ---------- ERIPAKKUMISED ---------
 @default group=special_offers
 
-	@property special_offers type=releditor reltype=RELTYPE_SPECIAL_OFFERS field=meta method=serialize mode=manager props=name,comment,ord,status,valid_from,valid_to table_fields=name,ord table_edit_fields=ord table=objects direct_links=1
+	@property special_offers type=releditor reltype=RELTYPE_SPECIAL_OFFERS field=meta method=serialize mode=manager props=name,comment,ord,status,valid_from,valid_to table_fields=name,ord table_edit_fields=ord table=objects direct_links=1 override_parent=this
 	@caption Eripakkumised
 ---------- END ERIPAKKUMISED ---------
 	
@@ -1603,7 +1603,7 @@ class crm_company extends class_base
 		switch($data["name"])
 		{
 			case "openhours":
-				if (empty($arr['prop']['id']) && is_oid($arr['obj_inst']->id()))
+				if (empty($data['value']['id']) && is_oid($arr['obj_inst']->id()))
 				{
 					// create new openhours obj as child
 					$oh = new object(array(
@@ -1613,7 +1613,15 @@ class crm_company extends class_base
 						'status' => STAT_ACTIVE,
 					));
 					$oh->save();
-					$arr['prop']['id'] = $oh->id();
+				
+					$data['value']['id'] = $oh->id();
+					$arr['request']['openhours']['id'] = $oh->id();
+					// And link it
+					$arr['obj_inst']->connect(array(
+						'to' => $oh->id(),
+						'reltype' => 'RELTYPE_OPENHOURS',
+					));
+					
 				}
 			break;
 			case "name":

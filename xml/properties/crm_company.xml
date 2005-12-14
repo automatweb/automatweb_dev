@@ -800,6 +800,7 @@
             </table_fields>
             <table_edit_fields>ord</table_edit_fields>
             <direct_links>1</direct_links>
+            <override_parent>this</override_parent>
             <store>no</store>
             <caption>Eripakkumised</caption>
       </property>
