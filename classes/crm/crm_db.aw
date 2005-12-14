@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.23 2005/12/13 14:07:56 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.24 2005/12/14 12:02:49 ekke Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -771,6 +771,7 @@ class crm_db extends class_base
 	
 	function init_firmad_table()
 	{
+		load_vcl('table');
 		$tf = new aw_table(array(
 			'prefix' => 'kliendibaas_frimad',
 		));
