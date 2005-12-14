@@ -1,16 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.2 2005/09/30 10:33:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.3 2005/12/14 12:36:41 ekke Exp $
 // site_styles.aw - Saidi stiilid 
 //
 // Usage: Create object, define alias, stylesheet files, default and random option.
-// add {VAR:styles} to template
+// add to template empty SUB named SITE_STYLES__LOCATION, eg:
+/*
+<!-- SUB: SITE_STYLES__LOCATION -->
+<!-- END SUB: SITE_STYLES__LOCATION -->
+*/
+// This will be replaced with html tags for css links
 // Change styles with url argument /?set_style_(alias)=val where (alias) means object's alias 
 // and val is one of: prev, next, last, random or numeric value representing style order num.
 /*
-HANDLE_MESSAGE
-// not right now
-
-(MSG_ON_SITE_SHOW_IMPORT_VARS, on_site_show)
 
 @classinfo syslog_type=ST_SITE_STYLES no_comment=1
 
@@ -194,11 +195,10 @@ class site_styles extends class_base
 	function select($arr, $ord)
 	{
 		$o = obj($arr['oid']);
-		$alias = $o->prop('alias');
 		$styles = $o->meta('styles');
 		if (isset($styles[$ord]))
 		{
-			$_SESSION['style_'.$alias] = $ord;
+			$_SESSION['style_'.$arr['oid']] = $ord;
 			$this->selected = $ord;
 		}
 	}
@@ -211,10 +211,9 @@ class site_styles extends class_base
 		if (is_null($this->selected))
 		{
 			$o = obj($arr['oid']);
-			$alias = $o->prop('alias');
-			if(isset($_SESSION['style_'.$alias]))
+			if(isset($_SESSION['style_'.$arr['oid']]))
 			{
-				$this->selected = $_SESSION['style_'.$alias];
+				$this->selected = $_SESSION['style_'.$arr['oid']];
 			}
 			else
 			{
@@ -250,8 +249,19 @@ class site_styles extends class_base
 	/**
 		Called by message ON_SITE_SHOW_IMPORT_VARS, adds value for template variable {VAR:styles}
 	**/
-	function on_site_show($arr)
+	//function on_site_show($arr)
+	function on_get_subtemplate_content($arr)
 	{
+		$fn = "site_styles::on_get_subtemplate_content";
+		enter_function($fn);
+		$name1 = 'SITE_STYLES__LOCATION';
+		// Double is no trouble
+		if (!$arr['inst']->is_template($name1))
+		{
+			exit_function($fn);
+			return;
+		}
+
 		$styles = "";
 		$ol = new object_list(array(
 			'class_id' => CL_SITE_STYLES,
@@ -292,16 +302,20 @@ class site_styles extends class_base
 			else
 			{
 				$r = $o->prop('random');
-				if ($r == SITE_STYLES_RAND_REFRESH || ($r == SITE_STYLES_RAND_SESSION && !isset($_SESSION['style_'.$alias]) ))
+				if ($r == SITE_STYLES_RAND_REFRESH || ($r == SITE_STYLES_RAND_SESSION && !isset($_SESSION['style_'.$o->id()]) ))
 				{
 					$inst->select_random($aoid);
 				}
 			}
-			$styles .= sprintf($link.'>', $inst->selected_style_url($aoid));
+			$styles .= sprintf($link.">\n", $inst->selected_style_url($aoid));
 		}
-		$arr['inst']->vars(array(
-			'styles' => $styles, 
-		)); 
+		if ($styles != "")
+		{
+			$arr['inst']->vars(array(
+				$name1 => $styles, 
+			)); 
+		}
+		exit_function($fn);
 	}
 }
 ?>
