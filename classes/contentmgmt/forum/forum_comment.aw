@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.15 2005/08/31 14:25:57 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.16 2005/12/14 12:40:29 ekke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -122,11 +122,15 @@ class forum_comment extends class_base
 	// !Returns a list of comments
 	function get_comment_list($arr)
 	{
+		if (empty($arr["parent"]))
+		{
+			return array();
+		}
 		//arr($arr);
 		$clist = new object_list(array(
 			"parent" => $arr["parent"],
 			"class_id" => $this->clid,
-			"period" => $arr["period"],
+			"period" => isset($arr["period"]) ? $arr["period"] : 0,
 			"sort_by" => !empty($arr["sort_by"]) ? $arr["sort_by"] : "created",
 		));
 		//arr($clist);
@@ -140,6 +144,24 @@ class forum_comment extends class_base
 			$retval[$comment->id()] = $row;
 		};
 		return $retval;
+	}
+	
+	////
+	// !Returns a number of comments under parent
+	//   parent - commented object
+	//   period - 
+	function get_comment_count($arr)
+	{
+		if (empty($arr["parent"]))
+		{
+			return array();
+		}
+		$clist = new object_list(array(
+			"parent" => $arr["parent"],
+			"class_id" => $this->clid,
+			"period" => isset($arr["period"]) ? $arr["period"] : 0,
+		));
+		return $clist->count();
 	}
 }
 ?>

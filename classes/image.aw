@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.149 2005/12/09 10:54:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.150 2005/12/14 12:40:29 ekke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -26,6 +26,9 @@
 
 	@property link type=textbox table=images field=link
 	@caption Link
+
+	@property can_comment type=checkbox table=objects field=flags method=bitmask ch_value=1
+	@caption K&otilde;ikjal kommenteeritav
 
 	/@property file_show type=text store=no editonly=1
 	/@caption Eelvaade 
@@ -95,6 +98,9 @@
 	@reltype MOD_COMMENT value=1 clid=CL_COMMENT
 	@caption Moderaatori kommentaar
 */
+
+define("FL_IMAGE_CAN_COMMENT", 1);
+
 class image extends class_base
 {
 	function image()
@@ -130,6 +136,7 @@ class image extends class_base
 				array_walk($row ,create_function('&$arr','$arr=trim($arr);')); 
 				$row["url"] = $this->get_url($row["file"]);
 				$row["meta"] = aw_unserialize($row["metadata"]);
+				$row["can_comment"] = $row["flags"] & FL_IMAGE_CAN_COMMENT;
 				if ($row["meta"]["file2"] != "")
 				{
 					$row["big_url"] = $this->get_url($row["meta"]["file2"]);
@@ -176,10 +183,15 @@ class image extends class_base
 
 	///
 	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse välja callbackina
+	//  force_comments - shows comment count and links to comment window even if not set in images prop
 	function parse_alias($args = array())
 	{
+		// Defaults
+		$force_comments = false;
+		
 		extract($args);
 		$f = $alias;
+		
 		if (!$f["target"])
 		{
 			// now try and list images by the old way
@@ -194,6 +206,9 @@ class image extends class_base
 		{
 			$idata = $this->get_image_by_id($f["target"]);
 		}
+		
+		// show commentlist and popup to if set in property or forced
+		$do_comments = (!empty($idata["can_comment"]) || $force_comments);
 
 		if (($GLOBALS["print"] == 1 || ($GLOBALS["class"] == "document" && $GLOBALS["action"] == "print"))  && $idata["meta"]["no_print"] == 1)
 		{
@@ -208,12 +223,26 @@ class image extends class_base
 				"target" => ($idata["newwindow"] ? "_blank" : "")
 			));
 		}
-		
+
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		$alstr = array("k" => "center","v" => "left","p" => "right","" => "");
 		if ($idata)
 		{
+			// Count comments, if needed
+			$num_comments = 0;
+			$show_link_arr = array("id" => $f["target"]);
+			if ($do_comments)
+			{
+				$com = get_instance(CL_COMMENT);
+				$num_comments = $com->get_comment_count(array(
+					'parent' => $idata["id"],
+				));
+				$show_link_arr["comments"] = 1; // Passed to popup window
+
+				$idata["comment"] .= ' ('.$num_comments.' '. ($num_comments == 1 ? t("kommentaar") : t("kommentaari")) .')';
+			}
+		
 			$alt = $idata["meta"]["alt"];
 			if ($idata["meta"]["file2"] != "")
 			{
@@ -222,14 +251,21 @@ class image extends class_base
 			if ($idata["file"] != "")
 			{
 				$i_size = @getimagesize($idata["file"]);
+				if (empty($idata['meta']['file2']) && $do_comments)
+				{
+					$size = $i_size;
+				}
 			};
 
 			if ($idata["url"] == "")
 			{
 				return "";
 			}
-			$bi_show_link = $this->mk_my_orb("show_big", array("id" => $f["target"]));
-			$bi_link = "window.open('$bi_show_link','popup','width=".($size[0]).",height=".($size[1])."');";
+			
+			$bi_show_link = $this->mk_my_orb("show_big", $show_link_arr);
+			$popup_width = min(1000, $size[0] + ($do_comments ? 500 : 0));
+			$popup_height = max(400, $size[1]);// + ($do_comments ? 200 : 0);
+			$bi_link = "window.open('$bi_show_link','popup','width=".($popup_width).",height=".($popup_height)."');";
 			$vars = array(
 				"width" => $i_size[0],
 				"height" => $i_size[1],
@@ -249,7 +285,8 @@ class image extends class_base
 				"bi_show_link" => $bi_show_link,
 				"bi_link" => $bi_link,
 				"author" => $idata["meta"]["author"],
-				"docid" => $args["oid"]
+				"docid" => $args["oid"],
+				"comments" => $num_comments,
 			);
 
 			$ha = ""; 
@@ -321,20 +358,17 @@ class image extends class_base
 				}
 				else if (!$this->cfg["no_default_template"])
 				{
+					$replacement = "";
 					if ($vars["align"] != "")
 					{
-						$replacement = "<table border=0 cellpadding=5 cellspacing=0 $vars[align]><tr><td>";
+						$replacement .= "<table border=0 cellpadding=5 cellspacing=0 $vars[align]><tr><td>";
 					}
-					else
-					{
-						$replacement = "";
-					}
-					if (!empty($idata["big_url"]))
+					if (!empty($idata["big_url"]) || $do_comments)
 					{
 						$replacement .= "<a href=\"javascript:void(0)\" onClick=\"$bi_link\">";
 					};
 					$replacement .= "<img src='$idata[url]' alt='$alt' title='$alt' border=\"0\" class=\"$use_style\">";
-					if (!empty($idata["big_url"]))
+					if (!empty($idata["big_url"]) || $do_comments)
 					{
 						$replacement .= "</a>";
 					}
@@ -858,9 +892,10 @@ class image extends class_base
 	////
 	// !adds an image to the system
 	// parameters:
-	//	from - either "file" or "string"
+	//	from - either "file" or "string" or "url"
 	//	str - if from is string, then this is the file content
 	//	file - if from is file, then this is the filename for file content
+	//	url - if from is url, then this is the url for file, will be downloaded
 	//	orig_name - the original name of the file, used as the object name
 	//	parent - the folder where to save the image
 	//	id - the if of the image to change, optional
@@ -870,6 +905,11 @@ class image extends class_base
 		if ($from == "file")
 		{
 			$str = $this->get_file(array("file" => $file));
+		}
+
+		if ($from == "url" && !empty($url))
+		{
+			$str = file_get_contents($url); // since php 4.3.0 
 		}
 
 		if (!$id)
@@ -1003,11 +1043,56 @@ class image extends class_base
 		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
 	}
 
+
+	/**  
+		
+		@attrib name=submit_comment params=name nologin="1" 
+		
+		@param id required type=int
+		@param comments optional type=int
+		
+		@returns
+		
+		
+		@comment Comment saved and returns to show_big
+
+	**/
+	function submit_comment($arr)
+	{
+		// Submitted new comment
+		if ($_SERVER['REQUEST_METHOD'] == "POST" && isset($arr['image_comm']) && is_array($arr['image_comm']))
+		{
+			$img = $arr['image_comm']['obj_id'];
+			$comment = $arr['image_comm']['comment'];
+			$o_img = is_oid($img) ? obj($img) : null;
+			if (is_object($o_img) && $o_img->class_id() == CL_IMAGE && $this->can("view", $img) && !empty($comment))
+			{
+				// Store comment
+				classload("vcl/comments");
+				$comm = get_instance(CL_COMMENT);
+				$added = $comm->submit(array(
+					'parent' => $img,
+					'commtext' => htmlspecialchars($comment),
+					'return' => "id",
+				));
+				return $this->mk_my_orb(CL_IMAGE, array(
+					'comments' => 1,
+					'id' => $img,
+					'action' => "show_big",
+				));
+			}
+			
+		}
+		return (aw_global_get("HTTP_REFERER"));
+		
+	}
+
 	/**  
 		
 		@attrib name=show_big params=name nologin="1" 
 		
 		@param id required type=int
+		@param comments optional type=int
 		
 		@returns
 		
@@ -1017,13 +1102,74 @@ class image extends class_base
 	**/
 	function show_big($arr)
 	{
+		// Defaults
+		$comments = 0;
+		$parse = "minimal"; // name of SUB in template
 		extract($arr);
+	
 		$im = $this->get_image_by_id($id);
 		$this->read_any_template("show_big.tpl");
+		if (empty($im['meta']['file2']) || !is_file($im['meta']['file2']))
+		{
+			$img_url = $im['url']; // Revert to small image
+		}
+		else
+		{
+			$img_url = $this->get_url($im["meta"]["file2"]);
+		}
 		$this->vars(array(
-			"big_url" => $this->get_url($im["meta"]["file2"]),
+			"big_url" => $img_url,
 		));
-		die($this->parse());
+		if ($comments)
+		{
+			$parse = "with_comments";
+			classload("vcl/comments");
+			$comments = new comments();
+			$ret_list = $comments->init_vcl_property(array(
+				'property' => array(
+					'name' => "image_comm",
+					"no_form" => 1,
+					'no_heading' => 1,
+					'sort_by' => "created desc", // Newer first
+				),
+				'obj_inst' => obj($id),
+			));
+			//$ret_form = array();
+			$ret_form = $comments->init_vcl_property(array(
+				'property' => array(
+					'name' => "image_comm",
+					"only_form" => true,
+					'no_heading' => 1,
+					'textarea_cols' => 30,
+					'textarea_rows' => 5,
+				),
+				'obj_inst' => obj($id),
+			));
+			$ret_form += array(
+				'submitbtn' => array(
+					'type' => "submit",
+					'value' => t("Lisa"),
+				),
+			);
+			classload("cfg/htmlclient");
+			$hc_inst = new htmlclient(array(
+				'template' => "real_webform",
+			));
+			foreach (($ret_form + $ret_list) as $el)
+			{
+				$hc_inst->add_property($el);
+			}
+			$hc_inst->finish_output(array(
+				'action' => 'submit_comment',
+				'data' => array('orb_class' => 'image'),
+			));
+			$out = $hc_inst->get_result(array('form_only' => true));
+		
+			$this->vars(array(
+				'comments'=> $out,
+			));
+		}
+		die($this->parse($parse));
 	}
 
 	/**  

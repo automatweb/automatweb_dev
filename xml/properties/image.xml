@@ -66,6 +66,16 @@
             <caption>Link</caption>
       </property>
       <property>
+            <name>can_comment</name>
+            <group>general</group>
+            <type>checkbox</type>
+            <table>objects</table>
+            <field>flags</field>
+            <method>bitmask</method>
+            <ch_value>1</ch_value>
+            <caption>K&amp;amp;otilde;ikjal kommenteeritav</caption>
+      </property>
+      <property>
             <name>show_conditions</name>
             <group>show</group>
             <type>chooser</type>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.11 2005/07/06 18:30:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.12 2005/12/14 12:42:43 ekke Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -13,9 +13,16 @@ class comments extends class_base
 		$this->init("");
 	}
 
+	// prop['only_form'] - returns only form, no comment list
+	// prop['no_form'] - the opposite
+	// prop['no_heading']
+	// prop['textarea_rows'] and prop['textarea_cols']
 	function init_vcl_property($arr)
 	{
 		$prop = &$arr["property"];
+		$prname = isset($prop["name"]) ? $prop["name"] : "comments";
+		$rv = array();
+		
 		$this->obj = $arr["obj_inst"];
 		// alright, It seems that I need another way to to initialize this object
 		// comments for an image get saved under the image itself
@@ -23,56 +30,59 @@ class comments extends class_base
 		{
 			$oid = $this->obj->id();
 		};
-		$fcg = get_instance(CL_COMMENT);
 
 		$parent = !empty($prop["use_parent"]) ? $prop["use_parent"] : $oid;
 
-		$comms = $fcg->get_comment_list(array(
-			"parent" => $parent,
-			"sort_by" => $prop["sort_by"],
-		));
-		$prname = $prop["name"];
-		$pager = $this->pager(array(
-			"total" => count($comms),
-			"onpage" => 20,
-		));
-		$res = "";
-		if ($prop["heading"])
+		if (empty($prop['only_form']))
 		{
-			$res .= "<h2>" . $prop["heading"] . "</h2>";
-		}
-		elseif (is_object($this->obj))
-		{
-			$res .= "<h2>" . $this->obj->name() . "</h2>";
-		};
-		$res .= count($comms) . t(" kommentaari<br><br>");
-		$res .= "$pager<br><br>";
-		$c = 0;
-		foreach($comms as $row)
-		{
-			$c++;
-			if ($c >= $this->from && $c <= $this->to)
+			$fcg = get_instance(CL_COMMENT);
+			$comms = $fcg->get_comment_list(array(
+				"parent" => $parent,
+				"sort_by" => isset($prop["sort_by"]) ? $prop["sort_by"] : null,
+			));
+			$pager = $this->pager(array(
+				"total" => count($comms),
+				"onpage" => 20,
+			));
+			$res = "";
+			if (!empty($prop["heading"]))
 			{
-				$author = $row["uname"];
-				if (empty($author))
-				{
-					$author = $row["createdby"];
-				};
-				$res .= "<p><b>" . $author . "</b>, " . $this->time2date($row["created"]) . "<br>";
-				$res .= nl2br(create_links($row["commtext"])) . "</p>";
+				$res .= "<h2>" . $prop["heading"] . "</h2>";
+			}
+			elseif (empty($prop["no_heading"]) && is_object($this->obj))
+			{
+				$res .= "<h2>" . $this->obj->name() . "</h2>";
 			};
-		};
-		$pr1 = $prop;
-		$pr1["type"] = "text";
-		$pr1["value"] = $res;
-		$pr1["name"] = $prname . "[list]";
-		$rv = array(
-			$prname . "_list" => $pr1,
-		);
-		if($prop["no_form"] == 1)
+			$res .= count($comms) . t(" kommentaari<br><br>");
+			$res .= "$pager<br><br>";
+			$c = 0;
+			foreach($comms as $row)
+			{
+				$c++;
+				if ($c >= $this->from && $c <= $this->to)
+				{
+					$author = $row["uname"];
+					if (empty($author))
+					{
+						$author = $row["createdby"];
+					};
+					$res .= "<p><b>" . $author . "</b>, " . $this->time2date($row["created"]) . "<br>";
+					$res .= nl2br(create_links($row["commtext"])) . "</p>";
+				};
+			};
+			$pr1 = $prop;
+			$pr1["type"] = "text";
+			$pr1["value"] = $res;
+			$pr1["name"] = $prname . "[list]";
+			$rv[$prname . "_list"] = $pr1;
+		}
+		if (!empty($prop["no_form"]))
 		{
 			return $rv;
+		
 		}
+		$cols = empty($prop['textarea_cols']) ? 60 : $prop['textarea_cols'];
+		$rows = empty($prop['textarea_rows']) ? 10 : $prop['textarea_rows'];
 		$rv2 = array(
 			$prname . "_capt2" => array(
 				"type" => "text",
@@ -90,8 +100,8 @@ class comments extends class_base
 				"type" => "textarea",
 				"caption" => t("Kommentaar"),
 				"name" => $prname . "[comment]",
-				"cols" => 60,
-				"rows" => 10,
+				"cols" => $cols,
+				"rows" => $rows,
 			),
 			$prname . "_obj_id" => array(
 				"type" => "hidden",
