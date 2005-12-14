@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.89 2005/12/06 18:20:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.90 2005/12/14 09:06:58 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -162,6 +162,10 @@ class html extends aw_template
 		$cols = isset($cols) ? $cols : 40;
 		$rows = isset($rows) ? $rows : 5;
 		$value = isset($value) ? $value : "";
+		if (strpos($value, "<") !== false)
+		{
+			$value = htmlspecialchars($value);
+		}
 		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
 		// now, the browser detection is best done in javascript
 		if (!empty($richtext))
