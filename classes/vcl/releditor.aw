@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.70 2005/12/09 07:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.71 2005/12/14 12:09:48 dragut Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -937,8 +937,11 @@ class releditor extends core
 				};
 			};
 		};
-
-		$obj->save();
+		// is this save() here really needed?  --dragut
+		// it seems that, in some cases it saves an object which has releditor
+		// although it shouldn't be saved cause some PROP_FATAL_ERROR appearance.
+		// --dragut
+	//	$obj->save();
 
 		$things = $arr["request"][$elname]["_data"];
 		if (sizeof($things) > 0)
