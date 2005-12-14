@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.153 2005/12/13 21:16:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.154 2005/12/14 12:02:09 kristo Exp $
 
 /*
 
@@ -1307,7 +1307,7 @@ class site_show extends class_base
 		$lang_id = aw_global_get("lang_id");
 		$langs = get_instance("languages");
 		$lar = $langs->listall();
-		$l = "";
+		$l = array();
 		$uid = aw_global_get("uid");
 
 		if (count($lar) < 2)
@@ -1325,6 +1325,13 @@ class site_show extends class_base
 
 		foreach($lar as $row)
 		{
+			$grp = $row["meta"]["lang_group"];
+			$grp_spec = $grp;
+			if ($grp != "")
+			{
+				$grp_spec = "_".$grp;
+			}
+
 			$sel_img_url = "";
 			$img_url = "";
 			
@@ -1355,13 +1362,13 @@ class site_show extends class_base
 			));
 			if ($row["id"] == $lang_id)
 			{
-				if ($this->is_template("SEL_LANG_BEGIN") && $l == "")
+				if ($this->is_template("SEL_LANG".$grp_spec."_BEGIN") && $l[$grp] == "")
 				{
-					$l.=$this->parse("SEL_LANG_BEGIN");
+					$l[$grp].=$this->parse("SEL_LANG".$grp_spec."_BEGIN");
 				}
 				else
 				{
-					$l.=$this->parse("SEL_LANG");
+					$l[$grp].=$this->parse("SEL_LANG".$grp_spec);
 				}
 				$sel_lang = $row;
 				$this->vars(array(
@@ -1371,13 +1378,13 @@ class site_show extends class_base
 			}
 			else
 			{
-				if ($this->is_template("LANG_BEGIN") && $l == "")
+				if ($this->is_template("LANG".$grp_spec."_BEGIN") && $l == "")
 				{
-					$l.=$this->parse("LANG_BEGIN");
+					$l[$grp].=$this->parse("LANG".$grp_spec."_BEGIN");
 				}
 				else
 				{
-					$l.=$this->parse("LANG");
+					$l[$grp].=$this->parse("LANG".$grp_spec);
 				}
 			}
 		}
@@ -1386,11 +1393,18 @@ class site_show extends class_base
 		{
 			$sel_lang = $langs->fetch($lang_id);
 		}
+
+		foreach($l as $_grp => $_l)
+		{
+			$app = ($_grp != "" ? "_".$grp : "");
+			$this->vars(array(
+				"LANG".$app => $_l,
+				"SEL_LANG".$app => "",
+				"SEL_LANG".$app."_BEGIN" => "",
+				"LANG".$app."_BEGIN" => ""
+			));
+		}
 		$this->vars(array(
-			"LANG" => $l,
-			"SEL_LANG" => "",
-			"SEL_LANG_BEGIN" => "",
-			"LANG_BEGIN" => "",
 			"sel_charset" => $sel_lang["charset"],
 			"charset" => $sel_lang["charset"],
 			"se_lang_id" => $lang_id,

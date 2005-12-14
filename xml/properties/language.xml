@@ -99,6 +99,15 @@
             <caption>Esilehe nimi</caption>
       </property>
       <property>
+            <name>lang_group</name>
+            <table>languages</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Grupp</caption>
+      </property>
+      <property>
             <name>temp_redir_url</name>
             <table>languages</table>
             <group>general</group>
