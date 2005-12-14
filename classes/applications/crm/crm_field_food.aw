@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_food.aw,v 1.1 2005/10/21 20:49:53 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_food.aw,v 1.2 2005/12/14 12:44:49 ekke Exp $
 // crm_field_food.aw - Toitlustus (valdkond) 
 /*
 
@@ -11,8 +11,87 @@
 
 @default group=general
 
+	@property national_cuisine type=select
+	@caption Rahvusk&ouml;&ouml;k
+	
+	@property location type=chooser
+	@caption Asukoht
+	
+	@property loc_fromcity type=textbox default=0 size=5
+	@caption Kaugus linnast (km)
+	
+	@property languages type=chooser multiple=1
+	@caption Teeninduskeeled
+
 	@property num_places type=textbox size=6
 	@caption Kohtade arv
+
+	@property num_tables type=textbox size=6
+	@caption Laudade arv
+
+	@property num_rooms type=textbox size=6
+	@caption Ruumide arv
+
+	@property has_ccards type=checkbox
+	@caption Aktsepteeritakse krediitkaarte
+
+	@property ign_spacer type=text store=no
+	@caption
+
+	@property for_disabled type=checkbox
+	@caption Sobib liikumispuudega inimestele
+
+	@property for_groups type=checkbox
+	@caption Sobib gruppidele (alates 10 inimest)
+
+	@property for_kids type=checkbox
+	@caption Sobib lastele (lastemen&uuml;&uuml;, lastetoolid)
+	
+	@property has_nonsmoker_rooms type=checkbox
+	@caption Suitsuvabad ruumid 
+	
+	@property ign_spacer2 type=text store=no
+	@caption
+	
+	@property has_parking_places type=checkbox
+	@caption Parkimiskohad
+	
+	@property has_parking type=checkbox
+	@caption Parkla
+
+@default group=extrainfo
+
+	@property has_veg type=checkbox
+	@caption Men&uuml;&uuml; taimetoitlastele
+
+	@property has_catering type=checkbox
+	@caption Catering teenus
+
+	@property has_takeaway type=checkbox
+	@caption Toidu kaasa ostmise v&otilde;imalus
+
+	@property has_delivery type=checkbox
+	@caption Toidu koju tellimise v&otilde;imalus
+	
+	@property has_live_music type=checkbox
+	@caption Elav muusika
+	
+	@property has_tv type=checkbox
+	@caption TV
+	
+	@property has_wifi type=checkbox
+	@caption WiFi leviala
+	
+	@property has_internet type=checkbox
+	@caption Interneti kasutamise v&otide;imalus
+	
+	@property has_outside_seating type=checkbox
+	@caption V&auml;likohvik (hooajaliselt)
+	
+	@property has_terrace type=checkbox
+	@caption Terrass
+
+@groupinfo extrainfo caption="Lisainfo"
 
 */
 
@@ -37,6 +116,32 @@ class crm_field_food extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case 'national_cuisine':
+				$prop['options'] = array(
+					'' => t("-- vali --"),
+					'est' => t("Eesti"),
+					'rus' => t("Vene"),
+					'gru' => t("Gruusia"),
+					'chi' => t("Hiina"),
+					'ita' => t("Itaalia"),
+					'tai' => t("Tai"),
+				);
+			break;
+			case 'location':
+				$prop["options"] = array(
+					'loc_city' => t("Kesklinnas"),
+					'loc_outside' => t("V&auml;ljaspool kesklinna"),
+					'loc_country' => t("V&auml;ljaspool linna"),
+				);
+			break;
+			case 'languages':
+				$langs = aw_ini_get('languages.list');
+				$prop["options"] = array();
+				foreach ($langs as $lang)
+				{
+					$prop["options"][$lang['acceptlang']] = t($lang['name']);
+				}
+			break;
 		};
 		return $retval;
 	}

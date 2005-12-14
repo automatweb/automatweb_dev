@@ -45,6 +45,7 @@
             <method>serialize</method>
             <group>general</group>
             <type>chooser</type>
+            <multiple>1</multiple>
             <caption>Hinnaklass</caption>
       </property>
       <property>

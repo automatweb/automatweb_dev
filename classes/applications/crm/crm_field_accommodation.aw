@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_accommodation.aw,v 1.2 2005/10/21 20:49:53 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_accommodation.aw,v 1.3 2005/12/14 12:44:49 ekke Exp $
 // crm_field_accommodation.aw - Majutusettev&otilde;te (valdkond) 
 /*
 
@@ -23,7 +23,7 @@
 	@property languages type=chooser multiple=1
 	@caption Teeninduskeeled
 
-	@property price_level type=chooser
+	@property price_level type=chooser multiple=1
 	@caption Hinnaklass
 	
 	@property price_txt type=textbox size=5
