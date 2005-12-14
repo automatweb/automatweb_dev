@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer.aw,v 1.1 2005/10/01 09:22:00 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer.aw,v 1.2 2005/12/14 12:22:35 ekke Exp $
 // crm_special_offer.aw - Organisatsiooni eripakkumine
 // Not related to crm_offer
 /*
@@ -119,14 +119,50 @@ class crm_special_offer extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
+		// Find company ID
+		$conns = $ob->connections_to(array(
+			'from.class_id' => CL_CRM_COMPANY,
+		));
+		$org_id = null;
+		if (count($conns))
+		{
+			$conn = $conns[0];
+			$org_id = $conn->conn['from'];
+		}
 		$this->read_template("show.tpl");
+		
+		// Images
+		$conns = $ob->connections_from(array(
+			'type' => 'RELTYPE_IMAGE',
+		));
+		$inst_img = get_instance(CL_IMAGE);
+		$images = array();
+		foreach ($conns as $conn)
+		{
+			$image = $conn->to();
+			if ($image->prop('status') != STAT_ACTIVE)
+			{
+				continue;
+			}
+			$tmp = $inst_img->parse_alias(array(
+				'alias' => array(
+					'target' => $image->id(),
+				),
+			));
+			$images[] = $tmp['replacement']; // No, replacement is not a logical name in this context. However, it works!
+		}
+		$images_html = join('<br><br>', $images);
+	
 		$this->vars(array(
-			"id"		=> $arr['id'],
-			"name" 	=> $ob->prop("name"),
+			"images" => $images_html,
+			"id" => $arr['id'],
+			"name" => $ob->prop("name"),
+			"desc" => $ob->comment(),
+			"org_id" => $org_id,
+			"url" => '/org?org=',
+			"txt_orglehele" => t("Asutuse juurde"),
 		));
 		return $this->parse();
 	}
-
-//-- methods --//
 }
 ?>
