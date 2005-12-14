@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.357 2005/12/14 19:33:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.358 2005/12/14 19:35:04 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -421,9 +421,7 @@ class menuedit extends aw_template
 					"site_id" => aw_ini_get("site_id"),
 					"lang_id" => array(),
 				);
-
 				$clist = new object_list($flt);
-
 				for($check_obj = $clist->begin(); !$clist->end(); $check_obj = $clist->next())
 				{
 					// put it in correct order and remove the first element (object itself)
