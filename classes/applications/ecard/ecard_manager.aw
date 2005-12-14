@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ecard/ecard_manager.aw,v 1.2 2005/09/15 12:43:47 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ecard/ecard_manager.aw,v 1.3 2005/12/14 12:17:25 ekke Exp $
 // ecard_manager.aw - E-kaardi haldur 
 // Use this class as alias in a document. CL_ECARD is for internal use
 // Make sure you attach the folders and a mini_gallery object
@@ -225,7 +225,7 @@ class ecard_manager extends class_base
 				'class_id' => CL_IMAGE,
 				'status' => STAT_ACTIVE,
 			));
-			$linkbase = aw_ini_get('baseurl').'/'.$arr['doc_id']."?card=";
+			$linkbase = '/'.aw_global_get("section")."?card=";
 			for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{ 
 				$link = $linkbase.$o->id();
