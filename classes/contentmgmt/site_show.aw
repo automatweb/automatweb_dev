@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.154 2005/12/14 12:02:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.155 2005/12/15 13:32:25 kristo Exp $
 
 /*
 
@@ -1309,7 +1309,6 @@ class site_show extends class_base
 		$lar = $langs->listall();
 		$l = array();
 		$uid = aw_global_get("uid");
-
 		if (count($lar) < 2)
 		{
 			// crap, we need to insert the sel lang acharset here at least!
@@ -1396,7 +1395,7 @@ class site_show extends class_base
 
 		foreach($l as $_grp => $_l)
 		{
-			$app = ($_grp != "" ? "_".$grp : "");
+			$app = ($_grp != "" ? "_".$_grp : "");
 			$this->vars(array(
 				"LANG".$app => $_l,
 				"SEL_LANG".$app => "",
