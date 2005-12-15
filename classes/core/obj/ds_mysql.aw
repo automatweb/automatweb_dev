@@ -1503,6 +1503,10 @@ die(dbg::dump($ret));
 
 		foreach($clids as $clid)
 		{
+			if (!is_class_id($clid))
+			{
+				continue;
+			}
 			if (!isset($GLOBALS["properties"][$clid]) || !isset($GLOBALS["tableinfo"][$clid]) || !isset($GLOBALS["relinfo"][$clid]))
 			{
 				list($GLOBALS["properties"][$clid], $GLOBALS["tableinfo"][$clid], $GLOBALS["relinfo"][$clid]) = $GLOBALS["object_loader"]->load_properties(array(
