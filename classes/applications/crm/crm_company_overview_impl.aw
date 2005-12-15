@@ -697,9 +697,16 @@ class crm_company_overview_impl extends class_base
 		{
 			case "my_tasks":
 				$tasks = $i->get_my_tasks();
+				/*$ol = new object_list($arr["obj_inst"]->connections_from(array(
+					"type" => array("RELTYPE_KOHTUMINE", "RELTYPE_CALL", "RELTYPE_TASK", "RELTYPE_DEAL", "RELTYPE_OFFER")
+				)));
+				$tasks = $this->make_keys($ol->ids());*/
+				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
+			/*case "overview":
+				$tasks = $i->get_my_tasks();
 				$clid = CL_TASK;
+				break;*/
 				break;
-
 			case "meetings":
 				$tasks = $i->get_my_meetings();
 				$clid = CL_CRM_MEETING;
@@ -716,8 +723,37 @@ class crm_company_overview_impl extends class_base
 				break;
 
 			default:
-				$tasks = $i->get_my_actions();
-				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
+				$u = get_instance(CL_USER);
+				$co = $u->get_current_company();
+
+				if ($co == $arr["obj_inst"]->id())
+				{
+					$tasks = array();
+					$tg = $i->get_my_actions();
+					foreach($tg as $t_id)
+					{
+						$o = obj($t_id);
+						if (!($o->flags() & OBJ_IS_DONE))
+						{
+							$tasks[$o->id()] = $o->id();
+						}
+					}
+				}
+				else
+				{
+					$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
+					$ol = new object_list($arr["obj_inst"]->connections_from(array(
+						"type" => array("RELTYPE_KOHTUMINE", "RELTYPE_CALL", "RELTYPE_TASK", "RELTYPE_DEAL", "RELTYPE_OFFER")
+					)));
+
+					$ol2 = new object_list(array(
+						"class_id" => $clid,
+                                        "customer" => $arr["obj_inst"]->id()
+					));
+					$ol->add($ol2);
+
+					$tasks = $this->make_keys($ol->ids());
+				}
 				break;
 		}
 		if ($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1)
@@ -733,14 +769,15 @@ class crm_company_overview_impl extends class_base
 			}
 			else
 			{
-				$ol = new object_list(array(
-					"class_id" => $clid,
+				/*$ol = new object_list(array(
+					//"class_id" => $clid,
 					"oid" => $tasks,
-					"is_done" => new obj_predicate_not(OBJ_IS_DONE)
-				));
+					//"is_done" => new obj_predicate_not(OBJ_IS_DONE)
+				));*/
+				$ol = new object_list();
+				$ol->add($tasks);
 			}
 		}
-
 		return $ol;
 	}
 }
