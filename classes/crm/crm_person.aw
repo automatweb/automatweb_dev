@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.94 2005/12/16 11:16:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.95 2005/12/16 12:17:14 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1809,6 +1809,34 @@ class crm_person extends class_base
 					"from" => $arr["obj_inst"]->id(), 
 				));
 			}
+		}
+
+		// gen code if not done
+		if ($arr["obj_inst"]->prop("code") == "")
+		{
+			if ($this->can("view", ($ct = $arr["obj_inst"]->prop("address"))))
+			{
+				$ct = obj($ct);
+				$rk = $ct->prop("riik");
+				if (is_oid($rk) && $this->can("view", $rk))
+				{
+					$rk = obj($rk);
+					$code = substr(trim($rk->ord()), 0, 1);
+					// get number of companies that have this country as an address
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_PERSON,
+						"CL_CRM_PERSON.address.riik.name" => $rk->name()
+					));
+					$ol2 = new object_list(array(
+						"class_id" => CL_CRM_COMPANY,
+						"CL_CRM_COMPANY.contact.riik.name" => $rk->name()
+					));
+					$code .= "-".sprintf("%04d", $ol->count() + $ol2->count()+1);
+					$arr["obj_inst"]->set_prop("code", $code);
+					$arr["obj_inst"]->save();
+				}
+			}
+
 		}
 	}	
 
