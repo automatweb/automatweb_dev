@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.33 2005/12/08 11:08:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.34 2005/12/16 12:46:15 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -55,6 +55,9 @@
 
 	@property fnames type=textarea rows=30 cols=80 group=files
 	@caption Failinimed
+
+	@property first_site_to_search_images type=select group=files field=meta method=serialize
+	@caption Esimene leht kust pilte otsitakse
 
 @groupinfo foldersa caption="Kataloogid"
 
@@ -157,6 +160,22 @@ class otto_import extends class_base
 					window.open(url,\"popupx\", \"width=400,height=600\");
 				}\n";
 				$prop["value"] .= "</script>\n";
+				break;
+
+			case "first_site_to_search_images":
+				// this one for Bonprix only:
+				if (aw_ini_get("site_id") == 276 || aw_ini_get("site_id") == 277)
+				{
+					$prop['options'] = array(
+						"bp_pl" => "Poola Bonprix",
+						"bp_de" => "Saksa Bonprix"	
+					);
+					$retval = PROP_OK;
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				}
 				break;
 
 			case "foldernames":
@@ -333,6 +352,7 @@ class otto_import extends class_base
 		echo "-----------[ start of picture import function ]------------------<br>";
 		if (is_object($arr))
 		{
+			$import_obj = $arr;
 			$data = array();
 			foreach(explode("\n", $arr->prop("fnames")) as $fname)
 			{
@@ -417,7 +437,6 @@ class otto_import extends class_base
 			echo "fixing not found codes:".join(", ",$data)." <br><br>";
 		}
 
-		//$data = array("");
 		$total = count($data);
 		$cur_cnt = -1;
 		$start_time = time();
@@ -458,176 +477,13 @@ class otto_import extends class_base
 			echo "process pcode $pcode (".($total - $cur_cnt)." to go, estimated time remaining $rem_hr hr, $rem_min min) <br>\n";
 			flush();
 			
-			// if site is bonprix:
+			// BONPRIX:
 			if (aw_ini_get("site_id") == 276 || aw_ini_get("site_id") == 277)
 			{
-				/**
-					BONPRIX-i piltide import!
-
-				**/
-	
-				$url = "http://www.bonprix.pl/katalog.php?ss=".$pcode;
-				$html = $this->file_get_contents($url);
-
-				if (strpos($html, "Niestety, ale nie ma") === false)
-				{
-					echo "[ BONPRIX POOLA ]<br>";
-					echo "-- Leidsin toote <trong>[ $pcode ]</strong><br />";
-					preg_match_all("/images\/all\/(\d+)\/(.*).jpg/", $html, $mt, PREG_PATTERN_ORDER);
-					$num = 0;
-					foreach($mt[2] as $idx => $nr)
-					{
-						$im = $mt[1][$idx]."/".$nr;
-						$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$num' AND pcode = '$pcode'", "pcode");
-						if (!$imnr)
-						{
-							echo "-- insert new image $im <br>\n";
-							flush();
-
-							$q = ("
-								INSERT INTO 
-									otto_prod_img(pcode, nr,imnr, server_id) 
-									values('$pcode','$num','$im', 7)
-							");
-							//echo "q = $q <br>";
-							$this->db_query($q);
-							$this->added_images[] = $im;
-						}
-						$num++;
-					}
-				}
-				else
-				{
-					// poola saidilt toodet ei leitud, nii et otsime siis saksa saidilt:
-					$url = "http://www.bonprix-shop.de/bp/search.htm?id=188035177146052928-0&nv=0%7C0%7C1&sc=0&pAnfrage=".$pcode;
-					$html = $this->file_get_contents($url);
-
-					if (strpos($html, "Leider konnten wir") === false)
-					{
-						echo "[ BONPRIX SAKSA ]<br>";
-						echo "-- Leidsin toote <strong>[ $pcode ]</strong> <br />";
-						// found prod, read images
-						if (preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var1\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var1";
-						}
-						else
-						if (preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var2\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var2";
-						}
-						else // paistab et saksa saidilt on http: pildi urli eest ära võetud
-						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var1\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var1";
-						}
-						else // paistab et saksa saidil on http: pildi urlilt eest ära võetud
-						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var2\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var2";
-						}
-						else 
-						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var3\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var3";
-						}
-						else 
-						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var4\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var4";
-						}
-						else
-						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var1\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var1";
-						}
-						else
-						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var2\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var2";
-						}
-						else
-						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var3\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var3";
-						}
-						else
-						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var4\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var4";
-						}
-						else
-						if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var5\/(.*).jpg/imsU", $html, $mt))
-						{
-							$first_im = $mt[1]."_var5";
-						}
-						else
-						{
-							echo "<span style='color:red'>&Uuml;heltki aadressilt pilte ei leitud !!!</span><br />";
-							flush();
-						}
-	
-						echo "---- Kontrollin baasist pilti [ $first_im ] <br>\n";
-						flush();
-						$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
-						echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
-						flush();
-						if (!$imnr && $first_im)
-						{	
-							echo "";
-							echo "------ insert new image [ $first_im ]<br>\n";
-							flush();
-	
-							$nr = $first_im{strlen($first_im)-1};
-							$q = ("
-								INSERT INTO 
-									otto_prod_img(pcode, nr,imnr, server_id) 
-									values('$pcode','$nr','$first_im', 6)
-							");
-							//echo "q = $q <br>";
-							$this->db_query($q);
-							$this->added_images[] = $first_im;
-						}
-	
-						// get other images
-						list($r_i) = explode("_", $first_im);
-						echo "---- Otsin teisi pilte: <br>";
-						if (!preg_match_all("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER))
-						{
-							preg_match_all("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER);
-						}
-						$otherim = $mt[1];
-						foreach($otherim as $nr)
-						{
-							$im = $r_i."_".$nr;
-							$nr = $nr{strlen($nr)-1};
-							echo "---- Kontrollin baasist pilti [ $im ] <br>\n";
-							flush();
-							$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "pcode");
-							echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
-							flush();
-							if (!$imnr)
-							{
-								echo "------ insert new image [ $im ]<br>\n";
-								flush();
-								$q = ("
-									INSERT INTO 
-										otto_prod_img(pcode, nr,imnr, server_id) 
-										values('$pcode','$nr','$im', 6)
-								");
-								//echo "q = $q <br>";
-								$this->db_query($q);
-								$this->added_images[] = $im;
-							}
-						}
-
-					}
-					else
-					{
-						// kui ka saksa saidilt pilti ei leitud:
-						echo "<span style='color:red'>Tundub et toodet ei leitud ei Saksa ega Poola saidilt!</span>";
-					}
-				}
+				$this->bonprix_picture_import(array(
+					"pcode" => $pcode,
+					"import_obj" => $import_obj,
+				));
 			}
 			else
 			{
@@ -636,7 +492,8 @@ class otto_import extends class_base
 
 			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewSearch-SearchStart;sid=mDuGagg9T0iHakspt6yqShOR_0e4OZ2Xs5qs8J39FNYYHvjet0FaQJmF?ls=0&Orengelet.sortPipelet.sortResultSetSize=15&SearchDetail=one&stype=N&Query_Text=".$pcode;
 
-//		echo "url = $url <br>";
+//			echo "url = $url <br>";
+			arr($url);
 			$html = $this->file_get_contents($url);
 
 			// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
@@ -658,6 +515,7 @@ class otto_import extends class_base
 				// subrequest for two images
 				//die($html);
 				if (!preg_match_all("/<\/table>\n<a href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER))
+		//$data = array("");
 				{
 					preg_match_all("/<td valign=\"middle\" align=\"center\" height=\"\d+\" width=\"\d+\"><a href=\"Javascript:document\.location\.href='(.*)'\+urlParameter\"/imsU", $html, $mt, PREG_PATTERN_ORDER);
 				}
@@ -824,6 +682,348 @@ class otto_import extends class_base
 		echo "-----------[ end of picture import function ]------------------<br>";
 
 		//die();
+	}
+
+	function bonprix_picture_import($arr)
+	{
+		$pcode = $arr['pcode'];
+		// so, here should i check which will be the first site to check for pictures
+		$first_site = $arr['import_obj']->prop("first_site_to_search_images");
+		switch ($first_site)
+		{
+			case "bp_de":
+				// if set so, search images from German Bonprix first
+				if ($this->bonprix_picture_import_de(array("pcode" => $pcode)) === false)
+				{
+					if ($this->bonprix_picture_import_pl(array("pcode" => $pcode)) === false)
+					{
+						echo "Toodet ei leitud! <br>";
+					}
+				}
+				break;
+			default:
+				// by default we search images from Polish Bonprix first
+				if ($this->bonprix_picture_import_pl(array("pcode" => $pcode)) === false)
+				{
+					if ($this->bonprix_picture_import_de(array("pcode" => $pcode)) === false)
+					{
+						echo "Toodet ei leitud!<br>";
+					}
+				}
+		}
+		
+/*	
+		$url = "http://www.bonprix.pl/katalog.php?ss=".$pcode;
+		$html = $this->file_get_contents($url);
+
+		if (strpos($html, "Niestety, ale nie ma") === false)
+		{
+			echo "[ BONPRIX POOLA ]<br>";
+			echo "-- Leidsin toote <trong>[ $pcode ]</strong><br />";
+			preg_match_all("/images\/all\/(\d+)\/(.*).jpg/", $html, $mt, PREG_PATTERN_ORDER);
+			$num = 0;
+			foreach($mt[2] as $idx => $nr)
+			{
+				$im = $mt[1][$idx]."/".$nr;
+				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$num' AND pcode = '$pcode'", "pcode");
+				echo "---- Otsin baasist pilti [$im] numbriga [$num] ja tootekoodiga [$pcode] <br>";
+				if (!$imnr)
+				{
+					echo "------ image not found, insert new image $im <br>\n";
+					flush();
+
+					$q = ("
+						INSERT INTO 
+							otto_prod_img(pcode, nr,imnr, server_id) 
+							values('$pcode','$num','$im', 7)
+						");
+						//echo "q = $q <br>";
+						$this->db_query($q);
+						$this->added_images[] = $im;
+				}
+				$num++;
+			}
+		}
+		else
+		{
+			// poola saidilt toodet ei leitud, nii et otsime siis saksa saidilt:
+			$url = "http://www.bonprix-shop.de/bp/search.htm?id=188035177146052928-0&nv=0%7C0%7C1&sc=0&pAnfrage=".$pcode;
+			$html = $this->file_get_contents($url);
+
+			if (strpos($html, "Leider konnten wir") === false)
+			{
+				echo "[ BONPRIX SAKSA ]<br>";
+				echo "-- Leidsin toote <strong>[ $pcode ]</strong> <br />";
+				// found prod, read images
+				if (preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var1\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var1";
+				}
+				else
+				if (preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var2\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var2";
+				}
+				else // paistab et saksa saidilt on http: pildi urli eest ära võetud
+				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var1\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var1";
+				}
+				else // paistab et saksa saidil on http: pildi urlilt eest ära võetud
+				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var2\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var2";
+				}
+				else 
+				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var3\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var3";
+				}
+				else 
+				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var4\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var4";
+				}
+				else
+				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var1\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var1";
+				}
+				else
+				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var2\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var2";
+				}
+				else
+				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var3\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var3";
+				}
+				else
+				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var4\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var4";
+				}
+				else
+				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var5\/(.*).jpg/imsU", $html, $mt))
+				{
+					$first_im = $mt[1]."_var5";
+				}
+				else
+				{
+					echo "<span style='color:red'>&Uuml;heltki aadressilt pilte ei leitud !!!</span><br />";
+					flush();
+				}
+	
+				echo "---- Kontrollin baasist pilti [ $first_im ] <br>\n";
+				flush();
+				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
+				echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
+				flush();
+				if (!$imnr && $first_im)
+				{	
+					echo "";
+					echo "------ insert new image [ $first_im ]<br>\n";
+					flush();
+	
+					$nr = $first_im{strlen($first_im)-1};
+					$q = ("
+						INSERT INTO 
+							otto_prod_img(pcode, nr,imnr, server_id) 
+							values('$pcode','$nr','$first_im', 6)
+					");
+					//echo "q = $q <br>";
+					$this->db_query($q);
+					$this->added_images[] = $first_im;
+				}
+	
+				// get other images
+				list($r_i) = explode("_", $first_im);
+				echo "---- Otsin teisi pilte: <br>";
+				if (!preg_match_all("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER))
+				{
+					preg_match_all("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER);
+				}
+				$otherim = $mt[1];
+				foreach($otherim as $nr)
+				{
+					$im = $r_i."_".$nr;
+					$nr = $nr{strlen($nr)-1};
+					echo "---- Kontrollin baasist pilti [ $im ] <br>\n";
+					flush();
+					$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "pcode");
+					echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
+					flush();
+					if (!$imnr)
+					{
+						echo "------ insert new image [ $im ]<br>\n";
+						flush();
+						$q = ("
+							INSERT INTO 
+								otto_prod_img(pcode, nr,imnr, server_id) 
+								values('$pcode','$nr','$im', 6)
+						");
+						//echo "q = $q <br>";
+						$this->db_query($q);
+						$this->added_images[] = $im;
+					}
+				}
+
+			}
+			else
+			{
+				// kui ka saksa saidilt pilti ei leitud:
+				echo "<span style='color:red'>Tundub et toodet <b>[$pcode]</b> ei leitud ei Saksa ega Poola saidilt!</span><br>";
+			}
+		}
+*/
+	}
+
+	////
+	// Picture import from Polish Bonprix (www.bonprix.pl)
+	// Parameters:
+	// 	pcode - product code which will be searched
+	// return:
+	// 	(boolean) true if product is found
+	// 	(boolean) false if not found
+	function bonprix_picture_import_pl($arr)
+	{
+		$pcode = $arr['pcode'];
+		$url = "http://www.bonprix.pl/katalog.php?ss=".$pcode;
+		$html = $this->file_get_contents($url);
+
+		if (strpos($html, "Niestety, ale nie ma") === false)
+		{
+			echo "[ BONPRIX POOLA ]<br>";
+			echo "-- Leidsin toote <trong>[ $pcode ]</strong><br />";
+			preg_match_all("/images\/all\/(\d+)\/(.*).jpg/", $html, $mt, PREG_PATTERN_ORDER);
+			$num = 0;
+			foreach($mt[2] as $idx => $nr)
+			{
+				$im = $mt[1][$idx]."/".$nr;
+				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$num' AND pcode = '$pcode'", "pcode");
+				echo "---- Otsin baasist pilti [$im] numbriga [$num] ja tootekoodiga [$pcode] <br>";
+				if (!$imnr)
+				{
+					echo "------ image not found, insert new image $im <br>\n";
+					flush();
+
+					$q = ("
+						INSERT INTO 
+							otto_prod_img(pcode, nr,imnr, server_id) 
+							values('$pcode','$num','$im', 7)
+						");
+						//echo "q = $q <br>";
+						$this->db_query($q);
+						$this->added_images[] = $im;
+				}
+				$num++;
+			}
+		}
+		else
+		{
+			// Poola Bonprixist toodet ei leitud
+			return false;
+		}
+
+		return true;
+
+	}
+	////
+	// Picture import from German Bonprix (www.bonprix.de)
+	// Parameters:
+	// 	pcode - product code which will be searched
+	// Return:
+	//	(boolean) true - product is found
+	//	(boolean) false - product is not found
+	function bonprix_picture_import_de($arr)
+	{
+		$pcode = $arr['pcode'];
+		$url = "http://www.bonprix-shop.de/bp/search.htm?id=188035177146052928-0&nv=0%7C0%7C1&sc=0&pAnfrage=".$pcode;
+		$html = $this->file_get_contents($url);
+
+		if (strpos($html, "Leider konnten wir") === false)
+		{
+			echo "[ BONPRIX SAKSA ]<br>";
+			echo "-- Leidsin toote <strong>[ $pcode ]</strong> <br />";
+
+			$patterns = array(
+				"/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var(\d+)\/(.*).jpg/imsU",
+				"/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var(\d+)\/(.*).jpg/imsU",
+				"/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var(\d+)\/(.*).jpg/imsU",
+			);
+
+			// lets make the search:
+			foreach ($patterns as $pattern)
+			{
+				if (preg_match($pattern, $html, $mt))
+				{
+					$first_im = $mt[2]."_var".$mt[1];
+					break;
+				}
+			}
+
+			echo "---- Kontrollin baasist pilti [ $first_im ] <br>\n";
+			flush();
+			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
+			echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
+			flush();
+			if (!$imnr && $first_im)
+			{	
+				echo "";
+				echo "------ insert new image [ $first_im ]<br>\n";
+				flush();
+	
+				$nr = $first_im{strlen($first_im)-1};
+				$q = ("
+					INSERT INTO 
+						otto_prod_img(pcode, nr,imnr, server_id) 
+						values('$pcode','$nr','$first_im', 6)
+				");
+				//echo "q = $q <br>";
+				$this->db_query($q);
+				$this->added_images[] = $first_im;
+			}
+	
+			// get other images
+			list($r_i) = explode("_", $first_im);
+			echo "---- Otsin teisi pilte: <br>";
+			if (!preg_match_all("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER))
+			{
+				preg_match_all("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER);
+			}
+			$otherim = $mt[1];
+			foreach($otherim as $nr)
+			{
+				$im = $r_i."_".$nr;
+				$nr = $nr{strlen($nr)-1};
+				echo "---- Kontrollin baasist pilti [ $im ] <br>\n";
+				flush();
+				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "pcode");
+				echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
+				flush();
+				if (!$imnr)
+				{
+					echo "------ insert new image [ $im ]<br>\n";
+					flush();
+					$q = ("
+						INSERT INTO 
+							otto_prod_img(pcode, nr,imnr, server_id) 
+							values('$pcode','$nr','$im', 6)
+					");
+					//echo "q = $q <br>";
+					$this->db_query($q);
+					$this->added_images[] = $im;
+				}
+			}
+		}
+		else
+		{
+			return false;
+		}
+
+		return true;
+
 	}
 
 	function do_prod_import($o)
@@ -2247,7 +2447,7 @@ class otto_import extends class_base
 	{
 		$pcode = str_replace(" ", "", $pcode);
 		$url = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/BaurDe/de_DE/-/EUR/BV_ParametricSearch-Progress;sid=9wziDKL5zmzox-N_94eyWWD0hj6lQBejDB2TPuW1?ls=0&_PipelineID=search_pipe_bbms&_QueryClass=MallSearch.V1&Servicelet.indexRetrieverPipelet.threshold=0.7&Orengelet.sortPipelet.sortResultSetSize=10&Query_Text=".$pcode."&Kategorie_Text=&x=23&y=13";
-
+		arr($url);
 		$fc = $this->file_get_contents($url);
 //		if (strpos($fc, "leider keine Artikel gefunden") !== false)
 		if (strpos($fc, "search/topcontent/noresult_slogan.gif") !== false)
@@ -2258,9 +2458,12 @@ class otto_import extends class_base
 		}
 
 //		preg_match_all("/ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
-		preg_match_all("/ProductRef=(\d.*)\"/ims", $fc, $mt, PREG_PATTERN_ORDER);
+//		preg_match_all("/ProductRef=(\d.*)\"/ims", $fc, $mt, PREG_PATTERN_ORDER);
+//		preg_match_all("/ProductRefID=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+//		preg_match_all("/ProductRefID=(\d.*)\"/ims", $fc, $mt, PREG_PATTERN_ORDER);
+		preg_match_all("/redirectIt\( \"(.*)\" \)/ims", $fc, $mt, PREG_PATTERN_ORDER);
+
 		$pcs = array_unique($mt[1]);
-arr($mt);
 		foreach($pcs as $n_pc)
 		{
 			$url2 = "http://www.baur.de/is-bin/INTERSHOP.enfinity/WFS/BaurDe/de_DE/-/EUR/BV_DisplayProductInformation-ProductRef;sid=vawch68xzhk1fe62PgtM0m08zJ5byxprRr3IpZL-?ls=0&ProductRef=".$n_pc."&SearchBack=true&SearchDetail=true";
@@ -2335,6 +2538,7 @@ arr($mt);
 	function read_img_from_schwab($pcode)
 	{
 		$url = "http://ww2.schwab.de/is-bin/INTERSHOP.enfinity/WFS/SchwabDe/de_DE/-/EUR/SV_ParametricSearch-Progress;sid=CUEKcPjDjXgLcLrISj06UONvQYLj_AIgPN2HQ_xO?_PipelineID=search_pipe_svms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortCursorPosition=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
+		arr($url);
 		$fc = $this->file_get_contents($url);
 
 		if (strpos($fc, "Wir konnten leider keine Ergebnisse") !== false)
@@ -2412,6 +2616,7 @@ arr($mt);
 	function read_img_from_albamoda($pcode)
 	{
 		$url = "http://www.albamoda.de/is-bin/INTERSHOP.enfinity/WFS/AlbaModaDe/de_DE/-/EUR/AM_ParametricSearch-Progress;sid=ytMKUs3doZEKUo_WSsAnctZxm9kZ5q0_w_o_iYvu?_PipelineID=search_pipe_am_de&Orengelet.sortPipelet.sortResultSetSize=10&Query_Text=".$pcode."&_QueryClass=MallSearch.V1";
+		arr($url);
 		$fc = $this->file_get_contents($url);
 		if (strpos($fc, "Es wurden leider keine Artikel") !== false)
 		{
@@ -2459,17 +2664,19 @@ arr($mt);
 		// no spaces in product code ! --dragut
 		$pcode = str_replace(" ", "", $pcode);
 		$url = "http://www.neu.heine.de/is-bin/INTERSHOP.enfinity/WFS/HeineDe/de_DE/-/EUR/SH_ParametricSearch-Progress;sid=YtPBfo9Zn47Dfs1V6VzvXpT13mqu32H0mc0eO27a?ls=&ArtikelID_Text=".$pcode."&y=9&x=11";
+		arr($url);
 		$fc = $this->file_get_contents($url);
 
 		if (strpos($fc, "keine passenden Ergebnisse") !== false)
 		{
+			echo "heine.de-st ka pilti ei leidnud<br>";
 			echo "NO IMAGE FOUND FOR PCODE $pcode <br>\n";
 			flush();
 			return;
 		}
 
 		// get prods
-		preg_match_all("/\?ProductRef=(.*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
+		preg_match_all("/ProductRef=([^\"].*)&/imsU", $fc, $mt, PREG_PATTERN_ORDER);
 		$pcs = array_unique($mt[1]);
 		//echo "got pcs as ".dbg::dump($pcs)."\n";
 
@@ -2481,16 +2688,35 @@ arr($mt);
 			}
 			$prod_url = "http://www.neu.heine.de/is-bin/INTERSHOP.enfinity/WFS/HeineDe/de_DE/-/EUR/SH_ViewProduct-ProductRef;sid=YtPBfo9Zn47Dfs1V6VzvXpT13mqu32H0mc0eO27a?ProductRef=".$prodref."&Source=Search";
 			$fc2 = $this->file_get_contents($prod_url);
-			
+			if (strpos($fc2, "Ihrer Anforderung sind technische Probleme aufgetreten.") !== false)
+			{
+				$fc2 = $fc;
+			}
 
+/*
 			if (!preg_match("/http:\/\/image01\.otto\.de:80\/pool\/HeineDe\/de_DE\/images\/format_hv_ds_a\/(\d+).jpg/imsU", $fc2, $mt))
 			{
 				// i'm not really sure that it works, so i have to look over it
 				// maybe this one works, but there are some other image urls which are not listed here
 				preg_match("/http:\/\/image01.otto.de\/pool\/images\/format_hv_ds_a\/(\d+).jpg/imsU", $fc2, $mt);
 			}
-			$first_im = $mt[1];
+*/
+			$patterns = array(
+				"/http:\/\/image01\.otto\.de:80\/pool\/HeineDe\/de_DE\/images\/format_hv_ds_a\/(\d+).jpg/imsU",
+				"/http:\/\/image01.otto.de\/pool\/images\/format_hv_ds_a\/(\d+).jpg/imsU",
+				"/http:\/\/image01.otto.de:80\/pool\/images\/format_hv_ds_a\/(\d+).jpg/imsU",
 
+			);
+
+			foreach ($patterns as $pattern)
+			{
+				if (preg_match($pattern, $fc2, $mt))
+				{
+					break;
+				}
+			}
+			$first_im = $mt[1];
+arr("<b>".$first_im."</b>");
 			$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
 			if (!$imnr)
 			{

@@ -138,6 +138,15 @@
             <caption>Failinimed</caption>
       </property>
       <property>
+            <name>first_site_to_search_images</name>
+            <table>objects</table>
+            <group>files</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Esimene leht kust pilte otsitakse</caption>
+      </property>
+      <property>
             <name>folders</name>
             <table>objects</table>
             <group>folders</group>
@@ -156,7 +165,7 @@
             <type>textarea</type>
             <rows>3</rows>
             <cols>40</cols>
-            <caption>L&amp;amp;otilde;pmatus vaatega lehed</caption>
+            <caption>L&amp;otilde;pmatus vaatega lehed</caption>
       </property>
       <property>
             <name>foldpri</name>
@@ -167,7 +176,7 @@
             <type>textarea</type>
             <rows>20</rows>
             <cols>20</cols>
-            <caption>T&amp;amp;auml;htede prioriteedid</caption>
+            <caption>T&amp;auml;htede prioriteedid</caption>
       </property>
       <property>
             <name>sideways_pages</name>
@@ -206,7 +215,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>L&amp;amp;otilde;pmatute pildiga lehehed</caption>
+            <caption>L&amp;otilde;pmatute pildiga lehehed</caption>
       </property>
       <property>
             <name>force_10_view</name>
@@ -254,7 +263,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>R&amp;amp;otilde;ivad</caption>
+            <caption>R&amp;otilde;ivad</caption>
       </property>
       <property>
             <name>jm_lasting</name>
@@ -276,7 +285,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>M&amp;amp;ouml;&amp;amp;ouml;bel</caption>
+            <caption>M&amp;ouml;&amp;ouml;bel</caption>
       </property>
       <property>
             <name>del_prods</name>
