@@ -1312,7 +1312,24 @@ die(dbg::dump($ret));
 
 					if (is_array($val->data))
 					{
-						$sql[] = $tf." NOT IN (".join(",", $v_data).") ";
+						$has_pct = false;
+						$tmp_sql = array();
+						foreach($v_data as $__val)
+						{
+							if (strpos($__val , "%") !== false)
+							{
+								$has_pct = true;
+							}
+							$tmp_sql[] = $tf." NOT LIKE '$__val' ";
+						}
+						if ($has_pct)
+						{
+							$sql[] = " ( ".join(" AND ", $tmp_sql)." ) ";
+						}
+						else
+						{
+							$sql[] = $tf." NOT IN (".join(",", $v_data).") ";
+						}
 					}
 					else
 					{
@@ -1322,7 +1339,14 @@ die(dbg::dump($ret));
 							$opn_app = "OR $tf IS NULL";
 						}
 	
-						$sql[] = " (".$tf." != '".$v_data."'  $opn_app ) ";
+						if (strpos($v_data, "%") !== false)
+						{
+							$sql[] = " (".$tf." NOT LIKE '".$v_data."'  $opn_app ) ";
+						}
+						else
+						{
+							$sql[] = " (".$tf." != '".$v_data."'  $opn_app ) ";
+						}
 					}
 				}
 				else
