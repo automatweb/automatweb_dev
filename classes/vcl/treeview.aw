@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.50 2005/11/16 13:45:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.51 2005/12/16 18:53:29 ekke Exp $
 // treeview.aw - tree generator
 /*
 
@@ -1122,8 +1122,9 @@ class treeview extends class_base
 	//	root_item - object instance that contains the root item
 	//	ot - object_tree instance that contains the needed objects
 	// no_urls - if set, urls for nodes won't be generated
+	//	target_url - url for link of menu items. optional.
 	//	var - variable name. links in the tree will be made with
-	//		aw_url_change_var($var, $item->id()) - the $var variable will
+	//		aw_url_change_var($var, $item->id(), $url) - the $var variable will
 	//		contain the active tree item
 	//	node_actions - array:  clid=>"action_name". This is for specifying different actions for different classes
 	// checkbox_class_filter - array of class id-s, objects of these classes will have checkboxed/buttoned tree nodes. Applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS.
@@ -1135,6 +1136,10 @@ class treeview extends class_base
 		$aw_classes = get_class_picker (array ("field" => "def"));
 
 		$req_uri = urlencode(aw_global_get('REQUEST_URI'));
+		if (!isset($target_url))
+		{
+			$target_url = null;
+		}
 
 		$class_id = $arr["root_item"]->class_id ();
 		$class_name = strtolower (substr ($aw_classes[$class_id], 3));
@@ -1148,7 +1153,7 @@ class treeview extends class_base
 		}
 		else
 		{
-			$tree_opts["root_url"] = aw_url_change_var ($var, $arr["root_item"]->id ());
+			$tree_opts["root_url"] = aw_url_change_var ($var, $arr["root_item"]->id(), $target_url);
 		}
 
 		$class_id = $root_item->class_id ();
@@ -1163,7 +1168,7 @@ class treeview extends class_base
 		}
 		else
 		{
-			$url = aw_url_change_var ($var, $root_item->id ());
+			$url = aw_url_change_var ($var, $root_item->id(), $target_url);
 		}
 
 		$tv->start_tree($tree_opts);
@@ -1218,7 +1223,7 @@ class treeview extends class_base
 			}
 			else
 			{
-				$url = aw_url_change_var ($var, $oid);
+				$url = aw_url_change_var ($var, $oid, $target_url);
 			}
 
 			$parent = $o->parent();
