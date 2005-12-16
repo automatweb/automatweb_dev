@@ -331,10 +331,9 @@ class popup_search extends aw_template
 		{
 			if ($v != "")
 			{
-				$filter[$k] = "%".$v."%";
+				$filter[$k] = map("%%%s%%", explode(",", $v));
 			}
 		}
-
 		if (count($filter) > 1 || $_GET["MAX_FILE_SIZE"])
 		{
 			// Pre-check checkboxes for relpicker
@@ -381,7 +380,7 @@ class popup_search extends aw_template
 					"select_this" => html::href(array(
 						"url" => "javascript:void(0)",
 						"caption" => t("Vali see"),
-						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);el.selectedIndex=0;el.options[0].value=\"".$o->id()."\";window.opener.document.changeform.submit();window.close()"
+						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);sz= el.options.length; el.options[sz] = new Option(".$o->id().", ".$o->id().");;el.options[sz].selected = 1;window.opener.document.changeform.submit();window.close()"
 					)),
 					"icon" => html::img(array("url" => icons::get_icon_url($o->class_id())))
 				));
@@ -474,11 +473,12 @@ function aw_get_el(name,form)
 }
 
 					el = aw_get_el('".$arr["pn"]."[]', window.opener.document.changeform);
-					el.selectedIndex = 0;
+					//el.selectedIndex = 0;
 			";
 			foreach(safe_array($arr["sel"]) as $idx => $val)
 			{
-				$str .= "el.options[".$idx."].value = \"$val\";el.options[".$idx."].selected = 1;";
+				$str .= "sz = el.options.length;";
+				$str .= "el.options[sz] = new Option($val, $val);el.options[sz].selected = 1;";
 			}
 			$str .= "window.opener.document.changeform.submit();
 					window.close()
