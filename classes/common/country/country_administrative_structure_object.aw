@@ -164,7 +164,7 @@ class country_administrative_structure_object extends _int_object
 		}
 
 		### ...
-		if ((boolean) $arr["return_object"])
+		if ($arr["return_object"])
 		{
 			return $o;
 		}
@@ -179,6 +179,7 @@ class country_administrative_structure_object extends _int_object
 	// @param parent required
 	// @param type required
 	// @param return_object optional
+	// @param calling_address_obj_oid optional for address system internal use
 	// @returns Unit object/oid (depending on whether return_object is true or false) corresponding to name.
 	function as_get_unit_by_name ($arr)
 	{
@@ -225,9 +226,20 @@ class country_administrative_structure_object extends _int_object
 			$list->remove ($o->id ());
 			$redundant_unit = $list->begin ();
 
+			### don't save currently saved address to avoid recursive address::save() call
+			if (is_oid ($arr["calling_address_obj_oid"]))
+			{
+				$oid_constraint = new obj_predicate_not ($arr["calling_address_obj_oid"]);
+			}
+			else
+			{
+				$oid_constraint = NULL;
+			}
+
 			while (is_object ($redundant_unit))
 			{
 				$child_list = new object_list (array (
+					"oid" => $oid_constraint,
 					"parent" => $redundant_unit->id (),
 					"site_id" => array (),
 					"lang_id" => array (),

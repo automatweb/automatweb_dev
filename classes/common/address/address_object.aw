@@ -534,12 +534,12 @@ class address_object extends _int_object
 			}
 			elseif ($parent->class_id () == CL_COUNTRY_ADMINISTRATIVE_STRUCTURE)
 			{ ### first position.
-				$division = $unit_data["division"];
+				$division = is_object ($unit_data["division"]) ? $unit_data["division"] : obj ($unit_data["division"]);
 				$division_of_parent = $parent_division = 0;
 			}
 			elseif (in_array ($parent->class_id (), $this->as_unit_classes))
 			{
-				$division = $unit_data["division"];
+				$division = is_object ($unit_data["division"]) ? $unit_data["division"] : obj ($unit_data["division"]);
 				$division_of_parent = $parent->subclass ();
 				$parent_division = $division->prop ("parent_division");
 			}
@@ -575,6 +575,7 @@ class address_object extends _int_object
 					"parent" => $parent,
 					"division" => $division,
 					"return_object" => true,
+					"calling_address_obj_oid" => $this->obj["oid"],
 				));
 
 				if ($new_parent === false)
