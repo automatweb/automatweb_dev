@@ -5,6 +5,7 @@
 			<function name="add_rate">
 				<arguments>
 					<required name="oid" type="int" />
+					<optional name="rate_id" type="int" />
 					<required name="return_url" />
 					<required name="rate" />
 				</arguments>
@@ -15,7 +16,7 @@
 			<function name="show">
 				<arguments>
 					<required name="id" type="int" />
-					<optional name="gallery_id" type="int" />
+					<optional name="from_oid" type="int" />
 				</arguments>
 			</function>
 		</action>
