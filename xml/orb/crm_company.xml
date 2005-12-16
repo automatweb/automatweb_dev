@@ -116,15 +116,6 @@
 			</function>
 		</action>
 
-		<action name="view" nologin="1">
-			<function name="view">
-				<arguments>
-					<required name="id" />
-					<optional name="cfgform" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="cut_p">
 			<function name="cut_p">
 				<arguments>

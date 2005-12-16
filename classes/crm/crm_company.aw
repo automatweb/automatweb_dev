@@ -2748,49 +2748,6 @@ class crm_company extends class_base
 		return $retval;	
 	}
 	
-	/** implement our own view!
-
-		@attrib name=view nologin=1
-
-		@param id required
-		@param cfgform optional
-
-	**/
-	function view($arr)
-	{
-		if ($arr["cfgform"])
-		{
-			$cfg = get_instance(CL_CFGFORM); 
-			$props = $cfg->get_props_from_cfgform(array("id" => $arr["cfgform"]));
-		}
-		else
-		{
-			$cfg = get_instance("cfg/cfgutils");
-			$props = $cfg->load_properties(array(
-				"clid" => CL_CRM_COMPANY
-			));
-		}
-
-		$this->read_template("show.tpl");
-
-		$o = obj($arr["id"]);
-
-		foreach($props as $pn => $pd)
-		{
-			//echo "$pn => $pd[caption] <br>";
-			$this->vars(array(
-				"prop" => $pd["caption"],
-				"value" => nl2br($o->prop_str($pn, in_array($pn, array("ettevotlusvorm", "firmajuht", "telefax_id"))))
-			));
-			$l .= $this->parse("LINE");
-		}
-
-		$this->vars(array(
-			"LINE" => $l
-		));
-		return $this->parse();
-	}
-
 	/** cuts the selected person objects
 
 		@attrib name=cut_p
