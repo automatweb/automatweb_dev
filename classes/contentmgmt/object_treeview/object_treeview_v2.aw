@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.93 2005/10/06 10:26:09 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.94 2005/12/16 12:04:33 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -177,7 +177,7 @@
 @caption andmete muundaja
 
 @reltype VIEW_CONTROLLER value=5 clid=CL_CFG_VIEW_CONTROLLER
-@caption N&auml;itamise kontroller
+@caption Tulpade n&auml;itamise kontroller
 
 */
 
@@ -2098,6 +2098,12 @@ class object_treeview_v2 extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "filter_not",
+			"caption" => t("V&auml;listav"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
 			"name" => "filter_strict",
 			"caption" => t("Kas t&auml;pne?"),
 			"align" => "center",
@@ -2137,21 +2143,26 @@ class object_treeview_v2 extends class_base
 						"name" => "filters[".$id."][group]",
 						"size" => 5,
 						"value" => $filter_data['group'],
-					)),
+				)),
 				"filter_field" => html::select(array(
 						"name" => "filters[".$id."][field]",
 						"options" => $cols,
 						"selected" => $filter_data['field'],
-					)),
+				)),
 				"filter_value" => html::textbox(array(
 						"name" => "filters[".$id."][value]",
 						"value" => $filter_data['value'],
-					)),
+				)),
+				"filter_not" => html::checkbox(array(
+						"name" => "filters[".$id."][is_not]",
+						"value" => 1,
+						"checked" => ($filter_data['is_not'] == 1) ? true : false,
+				)),
 				"filter_strict" => html::checkbox(array(
 						"name" => "filters[".$id."][is_strict]",
 						"value" => 1,
 						"checked" => ($filter_data['is_strict'] == 1) ? true : false,
-					)),
+				)),
 			));
 
 			$max_id = max($max_id, $id);

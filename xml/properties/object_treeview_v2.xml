@@ -517,7 +517,7 @@
             <VIEW_CONTROLLER>
                   <value>5</value>
                   <clid>CL_CFG_VIEW_CONTROLLER</clid>
-                  <caption>N&amp;amp;auml;itamise kontroller</caption>
+                  <caption>Tulpade n&amp;amp;auml;itamise kontroller</caption>
             </VIEW_CONTROLLER>
       </reltypes>
 </properties>
