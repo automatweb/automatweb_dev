@@ -180,6 +180,20 @@ class popup_search extends aw_template
 					}
 				}
 			}
+			// link to unlinkink page if there are any options and if we'ere in relpicker mode i guess
+			if (count($options) && isset($arr['property']['style']) && $arr['property']['style'] == 'relpicker' && isset($arr['property']['reltype']))
+			{
+				$url2 = $this->mk_my_orb("do_unlink", array(
+					"id" => $arr["obj_inst"]->id(),
+					"pn" => $tmp["name"],
+					"clid" => $clid,
+				));
+				$tmp["value"] .= " ".html::href(array(
+					"url" => "javascript:aw_popup_scroll(\"$url2\",\"Vali eemaldamiseks\",550,500)",
+					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
+					"title" => t("Eemalda")
+				));
+			}
 		}
 		return array(
 			$arr["property"]["name"] => $tmp,
@@ -189,6 +203,112 @@ class popup_search extends aw_template
 	function process_vcl_property($arr)
 	{
 		$arr["obj_inst"]->set_prop($arr["prop"]["name"], $arr["prop"]["value"]);
+	}
+				
+				
+	/**
+		@attrib name=do_unlink
+
+		@param id required type=int acl=view
+		@param pn required 
+		@param rem optional
+
+		@comment
+			With style=relpicker enables unlinking of the relations
+
+	**/
+	function do_unlink($arr)
+	{
+		$ob = obj($arr['id']);
+		$props = $ob->get_property_list();
+		$prop = $props[$arr['pn']];
+		if (isset($prop['style']) && $prop['style'] == 'relpicker' && isset($prop['reltype']))
+		{
+			$return = "";
+			if (isset($arr['id']) && is_oid($arr['id']) && $this->can('view', $arr['id']))
+			{
+				// If POSTed, handle results
+				if ($_SERVER['REQUEST_METHOD'] == 'POST')
+				{
+				$value = $ob->prop($arr['pn']);
+				$possible_value = null;
+				$reltype = $prop['reltype'];
+				foreach($ob->connections_from(array("type" => $reltype)) as $c)
+				{
+					$to = $c->to();
+					if (isset($arr['rem'][$to->id()]))
+					{
+						// If unlinkable object is also prop value, set to no value
+						if ($value == $to->id())
+						{
+							$value = null; // Actual saving after the loop
+						}
+						// Unlink
+						$c->delete();
+					}
+					else if (empty($possible_value))
+					{
+						$possible_value = $to->id();
+					}
+				}
+				if (empty($value))
+				{
+					$ob->set_prop($arr['pn'], $possible_value);
+					$ob->save();
+				}
+				
+				die("
+					<html><body><script language='javascript'>
+						window.opener.location.reload();
+						window.close();
+					</script></body></html>
+				");
+			}
+			else
+			{
+				classload("cfg/htmlclient");
+				$htmlc = new htmlclient(array(
+					'template' => "default",
+				));
+				$htmlc->start_output();
+				$htmlc->add_property(array(
+					"caption" => t("Vali eemaldatavad objektid"),
+				));
+
+				foreach($ob->connections_from(array("type" => $prop['reltype'])) as $c)
+				{
+					$o = $c->to();
+					$htmlc->add_property(array(
+						"name" => "rem[".$o->id()."]",
+						"type" => "checkbox",
+						"caption" => $o->name(),
+					));
+				}
+
+				$htmlc->add_property(array(
+					"name" => "s[submit]",
+					"type" => "submit",
+					"value" => "Vali",
+				));
+
+				$htmlc->finish_output(array(
+					"action" => "do_unlink",
+					"method" => "POST",
+					"data" => array(
+						"id" => $arr["id"],
+						"pn" => $arr["pn"],
+						"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
+						"orb_class" => "popup_search",
+						"reforb" => 0
+					)
+				));
+
+				$html = $htmlc->get_result();
+
+				return $html;
+			}
+		}	
+	  }
 	}
 
 	/**
@@ -490,8 +610,11 @@ function aw_get_el(name,form)
 		{
 			die("
 				<html><body><script language='javascript'>
+				if(window.opener.document.changeform.".$arr["pn"].")
+				{
 					window.opener.document.changeform.".$arr["pn"].".selectedIndex=0;
 					window.opener.document.changeform.".$arr["pn"].".options[0].value=\"".$arr["sel"][0]."\";
+				}	
 					window.opener.document.changeform.submit();
 					window.close()
 				</script></body></html>
