@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.33 2005/11/10 08:39:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.34 2005/12/16 11:37:53 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -769,6 +769,37 @@ class mysql
 						if (method_exists($i, "do_db_upgrade"))
 						{
 							return $i->do_db_upgrade($tn, $mt[2], $q, $errstr);
+						}
+					}
+				}
+			}
+		}
+
+		if (strpos($errstr, "doesn't exist") !== false)
+		{
+			preg_match("/Table '(.*)\.(.*)' doesn't exist'/imsU" , $errstr, $mt);
+
+			if ($this->db_proc_error_last_fn == $mt[2])
+			{
+				return false; // if we get the same error as last time, the upgrader did not create the correct field, so error out
+			}
+			$this->db_proc_error_last_fn = $mt[2];
+			// find the table from property list. oh this is gonna be slooooooow
+			$clss = aw_ini_get("classes");
+			foreach($clss as $clid => $inf)
+			{
+				$o = obj();
+				$o->set_class_id($clid);
+				$ti = $o->get_tableinfo();
+				foreach($ti as $tn => $td)
+				{
+					if ($mt[2] == $tn)
+					{
+						// got our class
+						$i = $o->instance();
+						if (method_exists($i, "do_db_upgrade"))
+						{
+							return $i->do_db_upgrade($tn, "", $q, $errstr);
 						}
 					}
 				}

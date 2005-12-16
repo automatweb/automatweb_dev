@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.1 2005/12/16 11:04:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.2 2005/12/16 11:37:53 kristo Exp $
 // crm_company_customer_data.aw - Kliendi andmed 
 /*
 
@@ -126,6 +126,24 @@ class crm_company_customer_data extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function do_db_upgrade($tbl, $fld, $q, $err)
+	{
+		$this->db_query("CREATE TABLE `aw_crm_customer_data` (
+  `aw_oid` int(11) NOT NULL default '0',
+  `aw_buyer` int(11) default NULL,
+  `aw_seller` int(11) default NULL,
+  `aw_cust_contract_creator` int(11) default NULL,
+  `aw_cust_contract_date` int(11) default NULL,
+  `aw_contact_person1` int(11) default NULL,
+  `aw_contact_person2` int(11) default NULL,
+  `aw_contact_person3` int(11) default NULL,
+  `aw_priority` int(11) default NULL,
+  `aw_client_manager` int(11) default NULL,
+  `aw_referal_type` int(11) default NULL,
+  PRIMARY KEY  (`aw_oid`)
+) ");
 	}
 }
 ?>

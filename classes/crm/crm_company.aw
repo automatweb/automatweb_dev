@@ -3261,12 +3261,18 @@ class crm_company extends class_base
 		$ret = array();
 		foreach($cs as $c)
 		{
-			$ret[] = $c["to"];
+			if ($this->can("view", $c["to"]))
+			{
+				$ret[] = $c["to"];
+			}
 		}
 
 		foreach($this->get_my_offers() as $ofid)
 		{
-			$ret[] = $ofid;
+			if ($this->can("view", $c["to"]))
+			{
+				$ret[] = $ofid;
+			}
 		}
 		return $ret;
 	}
