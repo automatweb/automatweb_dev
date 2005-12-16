@@ -1,3 +1,4 @@
+<!-- SUB: RE_SEARCH_FORM -->
 <form name="searchform" method="get" action="">
 <table cellspacing="0" cellpadding="0">
 <tr>
@@ -46,6 +47,7 @@
 </tr>
 </table>
 </form>
+<!-- END SUB: RE_SEARCH_FORM -->
 
 <style type="text/css">
 {VAR:table_style}
