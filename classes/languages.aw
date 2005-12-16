@@ -342,6 +342,18 @@ class languages extends aw_template
 		aw_global_set("lang_oid", $la["oid"]);
 		// and we should be all done. if after this, lang_id will still be not set I won't be able to write the
 		// code that fixes it anyway. 
+
+		// also, if we are in the site, not admin
+		// set the ui language to the active language
+		if (!is_admin())
+		{
+			// read the language from active lang
+			if ($GLOBALS["cfg"]["user_interface"]["use_site_lang"] == 1)
+			{
+				$_tmp = aw_global_get("LC");
+				$GLOBALS["cfg"]["user_interface"]["default_language"] = $_tmp;
+			}
+		}
 	}
 
 	function on_site_init($dbi, $site, &$ini_opts, &$log)
