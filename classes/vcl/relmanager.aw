@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.14 2005/09/09 07:51:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.15 2005/12/16 18:52:39 ekke Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -299,7 +299,21 @@ class relmanager extends aw_template
 				continue;
 			};
 
-			$arglist["parent"] = $arr["obj_inst"]->parent();
+			// You can set newly created object's parent to be current object
+			if (!empty($arr['prop']['override_parent']) && $arr['prop']['override_parent'] == 'this')
+			{
+				$parent = $arr['obj_inst']->id();
+			}
+			// Or set any object ID for the parent
+			elseif (!empty($arr['prop']['override_parent']) && is_oid($arr['prop']['override_parent']))
+			{
+				$parent = $arr['prop']['override_parent'];
+			}
+			else // Or the default, current object's parent.
+			{
+				$parent = $arr['obj_inst']->parent();
+			}
+			$arglist["parent"] = $parent;
 			$arglist["return"] = "id";
 
 			$inst = get_instance($clid);
