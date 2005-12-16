@@ -14,16 +14,16 @@ msgstr ""
 msgid "Klassi Messengeri identiteet help"
 msgstr ""
 
-#: classes/applications/messenger/messenger_identity.aw:prop_email
-msgid "Omaduse E-post (email) caption"
+#: classes/applications/messenger/messenger_identity.aw:prop_mail
+msgid "Omaduse E-post (mail) caption"
 msgstr ""
 
-#: classes/applications/messenger/messenger_identity.aw:prop_email_comment
-msgid "Omaduse E-post (email) kommentaar"
+#: classes/applications/messenger/messenger_identity.aw:prop_mail_comment
+msgid "Omaduse E-post (mail) kommentaar"
 msgstr ""
 
-#: classes/applications/messenger/messenger_identity.aw:prop_email_help
-msgid "Omaduse E-post (email) help"
+#: classes/applications/messenger/messenger_identity.aw:prop_mail_help
+msgid "Omaduse E-post (mail) help"
 msgstr ""
 
 #: classes/applications/messenger/messenger_identity.aw:prop_reply_to
@@ -60,5 +60,13 @@ msgstr ""
 
 #: classes/applications/messenger/messenger_identity.aw:prop_signature_help
 msgid "Omaduse Signatuur (signature) help"
+msgstr ""
+
+#: classes/applications/messenger/messenger_identity.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/messenger/messenger_identity.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 

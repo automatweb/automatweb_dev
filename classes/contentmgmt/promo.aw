@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.79 2005/12/13 21:16:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.80 2005/12/16 11:04:42 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -764,6 +764,12 @@ class promo extends class_base
 			"PREV_LINK" => $s_prev,
 			"NEXT_LINK" => $s_next
 		));
+	}
+
+	function on_get_subtemplate_content($args)
+	{
+		$d = get_instance("contentmgmt/promo_display");
+		return $d->on_get_subtemplate_content($args);
 	}
 
 	function on_save_document($arr)

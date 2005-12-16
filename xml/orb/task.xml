@@ -1,6 +1,18 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="task" folder="applications/groupware" extends="class_base">
+		<action name="stopper_pop">
+			<function name="stopper_pop">
+				<arguments>
+					<optional name="id" />
+					<optional name="s_action" />
+					<optional name="type" />
+					<optional name="name" />
+					<optional name="desc" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="search_for_proj">
 			<function name="search_for_proj">
 				<arguments>
@@ -42,18 +54,6 @@
 				<arguments>
 					<required name="id" type="int" acl="edit" />
 					<required name="post_ru" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="stopper_pop">
-			<function name="stopper_pop">
-				<arguments>
-					<optional name="id" />
-					<optional name="s_action" />
-					<optional name="type" />
-					<optional name="name" />
-					<optional name="desc" />
 				</arguments>
 			</function>
 		</action>

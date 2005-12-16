@@ -234,7 +234,7 @@ class crm_company_overview_impl extends class_base
 		if ($r["group"] != "meetings")
 		{
 			$t->define_field(array(
-				"caption" => t("T&auml;htaeg"),
+				"caption" => t("Aeg"),
 				"name" => "deadline",
 				"align" => "center",
 				"sortable" => 1,
@@ -280,7 +280,6 @@ class crm_company_overview_impl extends class_base
 		{
 			return PROP_IGNORE;
 		}
-
 		classload("core/icons");
 
 		$ol = $this->_get_task_list($arr);
@@ -308,7 +307,14 @@ class crm_company_overview_impl extends class_base
 			}
 
 			$col = "";
-			$dl = $task->prop("deadline");
+			if ($task->class_id() == CL_CRM_MEETING)
+			{
+				$dl = $task->prop("start1");
+			}
+			else
+			{
+				$dl = $task->prop("deadline");
+			}
 			if ($dl > 100 && time() > $dl)
 			{
 				$col = "#ff0000";
@@ -777,6 +783,14 @@ class crm_company_overview_impl extends class_base
 				$ol = new object_list();
 				$ol->add($tasks);
 			}
+		}
+
+		if ($ol->count())
+		{
+			$ol = new object_list(array(
+				"oid" => $ol->ids(),
+				"brother_of" => new obj_predicate_prop("id")
+			));
 		}
 		return $ol;
 	}

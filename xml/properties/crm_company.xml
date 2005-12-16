@@ -120,7 +120,34 @@
             <orient>vertical</orient>
             <editonly>1</editonly>
             <field>firmajuht</field>
-            <caption>Kontaktisik</caption>
+            <caption>Firmajuht</caption>
+      </property>
+      <property>
+            <name>contact_person</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <editonly>1</editonly>
+            <field>contact_person</field>
+            <caption>Kontaktisik </caption>
+      </property>
+      <property>
+            <name>contact_person2</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <editonly>1</editonly>
+            <field>contact_person2</field>
+            <caption>Kontaktisik 2</caption>
+      </property>
+      <property>
+            <name>contact_person3</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>relpicker</type>
+            <editonly>1</editonly>
+            <field>contact_person3</field>
+            <caption>Kontaktisik 3</caption>
       </property>
       <property>
             <name>year_founded</name>
@@ -2393,6 +2420,11 @@
                   <clid>CL_MRP_WORKSPACE</clid>
                   <caption>ressursihalduskeskkond</caption>
             </RESOURCE_MGR>
+            <CONTACT_PERSON>
+                  <value>54</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kontaktisik</caption>
+            </CONTACT_PERSON>
       </reltypes>
       <layout>
             <hbox_toolbar>

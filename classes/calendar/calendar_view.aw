@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.41 2005/12/09 09:57:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.42 2005/12/16 11:04:41 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -592,7 +592,7 @@ class calendar_view extends class_base
 			"parent" => $sources,
 			"class_id" => $this->event_entry_classes,
 			//new object_list_filter(array("non_filter_classes" => CL_CALENDAR_EVENT)),
-			"brother_of" => new obj_predicate_prop("id"),
+			//"brother_of" => new obj_predicate_prop("id"),
 			"status" => $status,
 			"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
 			"sort_by" => "planner.start DESC",
@@ -807,9 +807,12 @@ class calendar_view extends class_base
 						"sources" => $sources,
 						"status" => $status,
 					));
-					$f = $first->properties() + array("id" => $first->id());
-					$events = array($f);
-					$start1 = $first->prop("start1");
+					if ($first)
+					{
+						$f = $first->properties() + array("id" => $first->id());
+						$events = array($f);
+						$start1 = $first->prop("start1");
+					}
 				}
 				$vcal->items = array();
 				foreach($events as $event)
@@ -822,7 +825,10 @@ class calendar_view extends class_base
 					$i = $event->instance();
 					$text .= $i->request_execute($event);
 				}
-				$vcal->last_event = $event->properties() + array("id" => $event->id());
+				if ($event)
+				{
+					$vcal->last_event = $event->properties() + array("id" => $event->id());
+				}
 			}
 			$viewtype = "day";
 			$this->read_template($use_template."/intranet1.tpl");
@@ -860,7 +866,10 @@ class calendar_view extends class_base
 					"sort_by" => "planner.start ASC",
 				));
 				$obj = $objs->begin();
-				$start = $obj->prop("start1");
+				if ($obj)
+				{
+					$start = $obj->prop("start1");
+				}
 				$objs = new object_list(array(
 					"parent" => $sources,
 					"class_id" => $this->event_entry_classes,
@@ -871,7 +880,10 @@ class calendar_view extends class_base
 					"sort_by" => "planner.start DESC",
 				));
 				$obj = $objs->begin();
-				$end = $obj->prop("start1");
+				if ($obj)
+				{
+					$end = $obj->prop("start1");
+				}
 				$range = range(date("Y", $start), date("Y", $end));
 				foreach($range as $year)
 				{
@@ -884,10 +896,13 @@ class calendar_view extends class_base
 						"limit" => 1,
 					));
 					$obj = $objs->begin();
-					$this->vars(array(
-						"link" => aw_url_change_var(array("date" => date("d-m-Y", $obj->prop("start1")))),
-						"name" => $year,
-					));
+					if ($obj)
+					{
+						$this->vars(array(
+							"link" => aw_url_change_var(array("date" => date("d-m-Y", $obj->prop("start1")))),
+							"name" => $year,
+						));
+					}
 					$years .= $this->parse("YEARS");
 				}
 				$vcal->years = $years;

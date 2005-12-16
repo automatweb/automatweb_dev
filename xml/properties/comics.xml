@@ -51,14 +51,13 @@
             <caption>Seostehaldur</caption>
       </property>
       <property>
-            <name>project_selector</name>
+            <name>calendar_selector</name>
             <table>planner</table>
-            <group>projects</group>
-            <type>project_selector</type>
+            <group>calendars</group>
+            <type>calendar_selector</type>
             <store>no</store>
-            <all_projects>1</all_projects>
-            <field>project_selector</field>
-            <caption>Projektid</caption>
+            <field>calendar_selector</field>
+            <caption>Kalendrid</caption>
       </property>
       <property>
             <name>scripts</name>
@@ -81,6 +80,25 @@
             </table_fields>
             <store>no</store>
       </property>
+      <property>
+            <name>com_edit</name>
+            <table>planner</table>
+            <group>comments</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_COMMENT</reltype>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>commtext</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>commtext</num_1>
+            </table_fields>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>com_edit</field>
+      </property>
       <classinfo>
             <syslog_type>ST_COMICS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -88,12 +106,15 @@
             <r2>yes</r2>
       </classinfo>
       <groupinfo>
-            <projects>
-                  <caption>Projektid</caption>
-            </projects>
+            <calendars>
+                  <caption>Kalendrid</caption>
+            </calendars>
             <scripts>
                   <caption>Skriptid</caption>
             </scripts>
+            <comments>
+                  <caption>Kommentaarid</caption>
+            </comments>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -113,6 +134,11 @@
                   <clid>CL_COMICS_SCRIPT</clid>
                   <caption>Skript</caption>
             </SCRIPT>
+            <COMMENT>
+                  <value>3</value>
+                  <clid>CL_COMMENT</clid>
+                  <caption>Kommentaar</caption>
+            </COMMENT>
       </reltypes>
 </properties>
 

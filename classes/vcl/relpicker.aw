@@ -200,7 +200,7 @@ class relpicker extends  core
 						if (!in_array($conn->prop("to"),$property["value"]))
 						{
 
-							$conn->delete();
+						//	$conn->delete();
 						};
 					}
 				}

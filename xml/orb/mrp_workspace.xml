@@ -22,6 +22,13 @@
 			</function>
 		</action>
 
+		<action name="mark_p_as_important">
+			<function name="mark_p_as_important">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="copy_p">
 			<function name="copy_p">
 				<arguments>

@@ -6,6 +6,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_CRM_ADDRESS, on_save_address)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_ADDRESS, on_save_address)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create_customer)
 
 @classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY no_status=1 r2=yes
 
@@ -50,7 +51,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 	@caption Organisatsiooni logo
 
 	@property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
-	@caption Kontaktisik
+	@caption Firmajuht
+
+	@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype
+	@caption Kontaktisik 
+
+	@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1 
+	@caption Kontaktisik 2
+
+	@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1 
+	@caption Kontaktisik 3
 
 	@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1
 	@caption Asutatud
@@ -859,6 +869,10 @@ groupinfo org_objects_main caption="Objektid" submit=no
 @reltype RESOURCE_MGR value=53 clid=CL_MRP_WORKSPACE
 @caption ressursihalduskeskkond
 
+@reltype CONTACT_PERSON value=54 clid=CL_CRM_PERSON
+@caption Kontaktisik
+
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
@@ -1092,6 +1106,24 @@ class crm_company extends class_base
 		switch($data['name'])
 		{
 			/// GENERAL TAB
+			case "contact_person";
+			case "cust_contract_date";
+			case "referal_type";
+			case "contact_person2";
+			case "contact_person3";
+			case "priority";
+				// read from rel
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				{
+					$data["value"] = $rel->prop($data["name"]);
+				}
+				if (isset($data["options"]) && !isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$data["value"]] = $tmp->name();
+				}
+				break;
+
 			case "cust_contract_creator":
 				$this->_get_cust_contract_creator($arr);
 				break;
@@ -1115,6 +1147,16 @@ class crm_company extends class_base
 				if ($arr["new"])
 				{
 					$data["value"] = $u->get_current_person();
+				}
+
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				{
+					$data["value"] = $rel->prop($data["name"]);
+				}
+				if (isset($data["options"]) && !isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$data["value"]] = $tmp->name();
 				}
 				break;
 
@@ -1629,6 +1671,30 @@ class crm_company extends class_base
 				{
 					$data["error"] = t("Nimi peab olema t&auml;idetud!");
 					return PROP_ERROR;
+				}
+				break;
+
+			case "cust_contract_date":
+				// save to rel
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				{
+					$rel->set_prop($data["name"], date_edit::get_timestamp($data["value"]));
+					$rel->save();
+				}
+				break;
+
+			case "cust_contract_creator":
+			case "referal_type":
+			case "contact_person";
+			case "contact_person2";
+			case "contact_person3";
+			case "priority";
+			case "client_manager";
+				// save to rel
+				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				{
+					$rel->set_prop($data["name"], $data["value"]);
+					$rel->save();
 				}
 				break;
 		}
@@ -3599,6 +3665,16 @@ class crm_company extends class_base
 		$u = get_instance(CL_USER);
 		$co = $u->get_current_company();
 		$arr["prop"]["options"] = $this->get_employee_picker(obj($co), true);
+		if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+		{
+			$arr["prop"]["value"] = $rel->prop("cust_contract_creator");
+		}
+
+		if (!isset($arr["prop"]["options"][$arr["prop"]["value"]]) && $this->can("view", $arr["prop"]["value"]))
+		{
+			$v = obj($arr["prop"]["value"]);
+			$arr["prop"]["options"][$arr["prop"]["value"]] = $v->name();
+		}
 	}
 
 	function get_employee_picker($co, $add_empty = false)
@@ -3922,6 +3998,83 @@ class crm_company extends class_base
 		{
 			$s = $ol->begin();
 			return $s->prop("s_cfgform");
+		}
+	}
+
+	function on_create_customer($arr)
+	{
+		$conn = $arr["connection"];
+		$buyer_cat = $conn->from();
+
+		// find the company from the category
+		while (1)
+		{
+			$to = $buyer_cat->connections_to(array(
+				"from.class_id" => CL_CRM_COMPANY,
+				"type" => "RELTYPE_CATEGORY"
+			));
+			if (count($to))
+			{
+				$buyer_c = reset($to);
+				$buyer = $buyer_c->from();
+				break;
+			}
+			$to = $buyer_cat->connections_to(array(
+				"from.class_id" => CL_CRM_CATEGORY,
+				"type" => "RELTYPE_CATEGORY"
+			));
+			if (!count($to))
+			{
+				error::raise(array(
+					"id" => "ERR_NO_PREV_CAT",
+					"msg" => sprintf(t("crm_company::on_create_customer(): category %s has no parent company or category!"), $buyer_cat->id())
+				));
+			}
+			$c = reset($to);
+			$buyer_cat = $c->from();
+		}
+
+		$seller = $conn->to();
+
+		// add customer relation object if it does not exist already
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"buyer" => $buyer->id(),
+			"seller" => $seller->id()
+		));
+
+		if (!$ol->count())
+		{
+			$o = obj();
+			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+			$o->set_name("Kliendisuhe ".$buyer->name()." => ".$seller->name());
+			$o->set_parent($buyer->id()); 
+			$o->set_prop("seller", $buyer->id()); // yes this is correct, cause I'm a lazy iduit
+			$o->set_prop("buyer", $seller->id());
+			$o->save();
+		}
+	}
+
+	function get_cust_rel($view_co)
+	{
+		if (!is_oid($view_co->id()))
+		{
+			return false;
+		}
+		$u = get_instance(CL_USER);
+		$my_co = $u->get_current_company();
+		if ($view_co->id() == $my_co)
+		{
+			return false;
+		}
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+			"buyer" => $view_co->id(),
+			"seller" => $my_co
+		));
+		if ($ol->count())
+		{
+			return $ol->begin();
 		}
 	}
 }

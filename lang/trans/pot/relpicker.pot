@@ -10,23 +10,23 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/relpicker.aw:14
+#: classes/vcl/relpicker.aw:20
 msgid "--vali--"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:85
+#: classes/vcl/relpicker.aw:92
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:94
+#: classes/vcl/relpicker.aw:101
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:125
+#: classes/vcl/relpicker.aw:132
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:143
+#: classes/vcl/relpicker.aw:150
 msgid "Lisa uus %s"
 msgstr ""
 

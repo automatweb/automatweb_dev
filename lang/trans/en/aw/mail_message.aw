@@ -1,5 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Kirja redigeerimise toolbar (edit_toolbar) caption"] = "Edit toolbar";
 $GLOBALS["TRANS"]["Omaduse UIDL (uidl) caption"] = "UIDL";
 $GLOBALS["TRANS"]["Omaduse Kellelt nimi (mfrom_name) caption"] = "From name";
 $GLOBALS["TRANS"]["Omaduse Kellelt (mfrom) caption"] = "From";

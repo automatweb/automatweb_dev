@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.45 2005/12/09 08:19:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.46 2005/12/16 11:04:41 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -674,6 +674,7 @@ class task extends class_base
 			case "participants":
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
+					$this->post_save_add_parts = safe_array($prop["value"]);
 					return PROP_IGNORE;
 				}
 
@@ -794,6 +795,14 @@ class task extends class_base
 
 	function callback_post_save($arr)
 	{
+		if (is_array($this->post_save_add_parts))
+		{
+			foreach(safe_array($this->post_save_add_parts) as $person)
+			{
+				$this->add_participant($arr["obj_inst"], obj($person));
+			}
+			
+		}
 		//the person who added the task will be a participant, whether he likes it
 		//or not
 		if(!empty($arr['new']))

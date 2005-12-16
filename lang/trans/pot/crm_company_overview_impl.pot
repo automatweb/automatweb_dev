@@ -42,51 +42,51 @@ msgstr ""
 msgid "Osalejad"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:335 classes/applications/crm/crm_company_overview_impl.aw:645
+#: classes/applications/crm/crm_company_overview_impl.aw:334 classes/applications/crm/crm_company_overview_impl.aw:644
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:342 classes/applications/crm/crm_company_overview_impl.aw:599
+#: classes/applications/crm/crm_company_overview_impl.aw:341 classes/applications/crm/crm_company_overview_impl.aw:598
 msgid "M&auml;rgi tehtuks"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:349
+#: classes/applications/crm/crm_company_overview_impl.aw:348
 msgid "Koosta arve"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:360
+#: classes/applications/crm/crm_company_overview_impl.aw:359
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:365
+#: classes/applications/crm/crm_company_overview_impl.aw:364
 msgid "K&auml;ivita stopper"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:377
+#: classes/applications/crm/crm_company_overview_impl.aw:376
 msgid "Peata stopper (%s)"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:552
+#: classes/applications/crm/crm_company_overview_impl.aw:551
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:584
+#: classes/applications/crm/crm_company_overview_impl.aw:583
 msgid "P&auml;eva raport"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:606
+#: classes/applications/crm/crm_company_overview_impl.aw:605
 msgid "Kustuta toimetused"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:607
+#: classes/applications/crm/crm_company_overview_impl.aw:606
 msgid "Oled kindel et soovid valitud toimetusi kustutada?"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:618
+#: classes/applications/crm/crm_company_overview_impl.aw:617
 msgid "Kalendrivaade"
 msgstr ""
 
-#: classes/applications/crm/crm_company_overview_impl.aw:627
+#: classes/applications/crm/crm_company_overview_impl.aw:626
 msgid "Tabelivaade"
 msgstr ""
 

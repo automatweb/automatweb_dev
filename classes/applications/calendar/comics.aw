@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/comics.aw,v 1.1 2005/04/19 17:51:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/comics.aw,v 1.2 2005/12/16 11:04:41 kristo Exp $
 // comics.aw - Koomiks 
 /*
 
@@ -26,20 +26,27 @@
 @property relman type=aliasnmgr no_caption=1 store=no
 @caption Seostehaldur
 
-@groupinfo projects caption="Projektid"
+@groupinfo calendars caption=Kalendrid
 
-@property project_selector type=project_selector store=no group=projects all_projects=1
-@caption Projektid
+@property calendar_selector type=calendar_selector store=no group=calendars
+@caption Kalendrid
 
 @groupinfo scripts caption="Skriptid"
 
 @property scripts type=releditor reltype=RELTYPE_SCRIPT props=name,comment,content mode=manager field=meta method=serialize table=objects table_fields=name,comment,content group=scripts
+
+@groupinfo comments caption="Kommentaarid"
+
+	@property com_edit type=releditor reltype=RELTYPE_COMMENT mode=manager props=name,commtext table_fields=name,commtext no_caption=1 group=comments store=no
 
 @reltype PICTURE value=1 clid=CL_IMAGE
 @caption Pilt
 
 @reltype SCRIPT value=2 clid=CL_COMICS_SCRIPT
 @caption Skript
+
+@reltype COMMENT value=3 clid=CL_COMMENT
+@caption Kommentaar
 
 */
 
@@ -110,8 +117,53 @@ class comics extends class_base
 			}
 			$vars[$propname] = $value;
 		};
+		$vars["comment_url"] = aw_url_change_var("fanboys", 1);
+		$so = obj(aw_global_get("section"));
+		$vars["sm_n"] = $so->name();
 		$this->vars($vars);
+
+		if ($_GET["fanboys"] == 1)
+		{
+			$comment = "";
+			foreach($obj->connections_from(array("type" => "RELTYPE_COMMENT")) as $c)
+			{
+				$c = $c->to();
+				$this->vars(array(
+					"c_title" => $c->name(),
+					"c_commtext" => nl2br($c->prop("commtext"))
+				));
+				$comment .= $this->parse("COMMENT");
+			}
+			$this->vars(array(
+				"COMMENT" => $comment,
+				"reforb" => $this->mk_reforb("submit_comment", array("com" => $obj->id(), "ru" => post_ru()))
+			));
+			$this->vars(array(
+				"HAS_COMMENTS" => $this->parse("HAS_COMMENTS")
+			));
+		}
 		return $this->parse();
+	}
+
+	/**
+		@attrib name=submit_comment nologin=1 
+	**/
+	function submit_comment($arr)
+	{
+		$o = obj($arr["com"]);
+		aw_disable_acl();
+		$c = obj();
+		$c->set_parent($o->id());
+		$c->set_class_id(CL_COMMENT);
+		$c->set_name($arr["title"]);
+		$c->set_prop("commtext", $arr["ct"]);
+		$c->save();
+
+		$o->connect(array(
+			"type" => "RELTYPE_COMMENT",
+			"to" => $c->id()
+		));
+		return $arr["ru"];
 	}
 }
 ?>

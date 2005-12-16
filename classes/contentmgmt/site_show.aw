@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.155 2005/12/15 13:32:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.156 2005/12/16 11:04:42 kristo Exp $
 
 /*
 
@@ -1730,7 +1730,6 @@ class site_show extends class_base
 						$ask_content[] = $tpl;
 					}
 				}
-
 				global $awt;
 				$awt->start("mainc");
 

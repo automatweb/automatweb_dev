@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.151 2005/12/06 18:20:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.152 2005/12/16 11:04:42 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2819,8 +2819,9 @@ if ($_GET['show_thread_data'] == 1)
 			$arr["obj_inst"] = $o;
 			$co = $o->instance();
 			$co->callback_on_load($arr);
-			#$co->do_contact_toolbar($arr["prop"]['toolbar'],$arr);
-			$co->do_contact_toolbar($arr["prop"]['vcl_inst'],$arr);
+
+			$i = get_instance("applications/crm/crm_company_people_impl");
+			$i->_get_contact_toolbar($arr);
 
 			$tb =& $arr["prop"]["vcl_inst"];
 			$tb->remove_button("Kone");
@@ -2834,12 +2835,12 @@ if ($_GET['show_thread_data'] == 1)
 
 	function _user_list_tree($arr)
 	{
-		$this->_delegate_co_v($arr, "_do_unit_listing_tree");
+		$this->_delegate_co_v($arr, "_get_unit_listing_tree");
 	}
 
 	function _user_list($arr)
 	{
-		$this->_delegate_co_v($arr, "do_human_resources");
+		$this->_delegate_co_v($arr, "_get_human_resources");
 	}
 
 	function _delegate_co_v($arr, $fun)
@@ -2851,7 +2852,9 @@ if ($_GET['show_thread_data'] == 1)
 			$arr["obj_inst"] = $o;
 			$co = $o->instance();
 			$co->callback_on_load($arr);
-			$co->$fun($arr);
+
+			$i = get_instance("applications/crm/crm_company_people_impl");
+			$i->$fun($arr);
 			$arr["obj_inst"] = $tmp;
 		}
 	}
@@ -2901,6 +2904,16 @@ if ($_GET['show_thread_data'] == 1)
 		return $this->_delegate_co($arr, "cut_p");
 	}
 
+	/** marks persons as important
+
+		@attrib name=mark_p_as_important
+
+	**/
+	function mark_p_as_important($arr)
+	{
+		return $this->_delegate_co($arr, "mark_p_as_important");
+	}
+
 	/** copies the selected person objects
 
 		@attrib name=copy_p
@@ -2948,7 +2961,7 @@ if ($_GET['show_thread_data'] == 1)
 
 	function _user_mgr_tree($arr)
 	{
-		$this->_delegate_co_v($arr, "_do_unit_listing_tree");
+		$this->_delegate_co_v($arr, "_get_unit_listing_tree");
 		// remove all professions from the tree
 		$tv =& $arr["prop"]["vcl_inst"];
 
@@ -4419,9 +4432,10 @@ if ($_GET['show_thread_data'] == 1)
 
 	function callback_on_load($arr)
 	{
-		if ($this->can("view", 17639))
+		$o = obj($arr["request"]["id"]);
+		if ($this->can("view", $o->prop("workspace_configmanager")))
 		{
-			$this->cfgmanager = 17639;
+			$this->cfgmanager = $o->prop("workspace_configmanager");
 		}
 	}
 

@@ -422,75 +422,79 @@ msgstr ""
 msgid "Seose Omanik (RELTYPE_MESSENGER_OWNERSHIP) tekst"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:151
+#: classes/applications/messenger/messenger_v2.aw:rel_RELTYPE_FROMNAME
+msgid "Seose Saatja (RELTYPE_FROMNAME) tekst"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:154
 msgid "kulla mees, sa pole omale default messengeri ju valinud?"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:248
+#: classes/applications/messenger/messenger_v2.aw:251
 msgid "Kustutada?"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:249
-#: classes/applications/messenger/messenger_v2.aw:634
+#: classes/applications/messenger/messenger_v2.aw:252
+#: classes/applications/messenger/messenger_v2.aw:637
 msgid "Kustuta märgitud kirjad"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:293
+#: classes/applications/messenger/messenger_v2.aw:296
 msgid "IMAP extension not available"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:305
+#: classes/applications/messenger/messenger_v2.aw:308
 msgid "IMAP sissepääs on konfigureerimata"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:356
-#: classes/applications/messenger/messenger_v2.aw:582
+#: classes/applications/messenger/messenger_v2.aw:359
+#: classes/applications/messenger/messenger_v2.aw:585
 msgid ""
 "Login failed, check whether server name, user and password are correct.<br>"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:452
+#: classes/applications/messenger/messenger_v2.aw:455
 msgid "ei"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:452
+#: classes/applications/messenger/messenger_v2.aw:455
 msgid "jah"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:592
+#: classes/applications/messenger/messenger_v2.aw:595
 msgid "Uus kiri"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:607
+#: classes/applications/messenger/messenger_v2.aw:610
 msgid "Vii kirjad"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:621
+#: classes/applications/messenger/messenger_v2.aw:624
 msgid "Vii valitud kirjad kataloogi"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:635
+#: classes/applications/messenger/messenger_v2.aw:638
 msgid "Kustutada märgitud kirjad?"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:718
+#: classes/applications/messenger/messenger_v2.aw:721
 msgid "ükski kiri INBOXis ei matchinud ühegi ruuliga<br>"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:735
+#: classes/applications/messenger/messenger_v2.aw:738
 msgid "ühtegi ruuli pole seostatud"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:817
-#: classes/applications/messenger/messenger_v2.aw:830
+#: classes/applications/messenger/messenger_v2.aw:820
+#: classes/applications/messenger/messenger_v2.aw:833
 msgid "<strong>message with subject: %s</strong><br>"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:819
+#: classes/applications/messenger/messenger_v2.aw:822
 msgid ""
 " &nbsp; &nbsp; uid = %s, matches subject rule %s, moving to %s folder<br>"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:832
+#: classes/applications/messenger/messenger_v2.aw:835
 msgid " &nbsp; &nbsp; matches from rule %s, moving to %s folder<br>"
 msgstr ""

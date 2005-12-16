@@ -14,21 +14,6 @@ msgstr ""
 msgid "Klassi Message help"
 msgstr ""
 
-# classes/applications/messenger/mail_message.aw:prop_edit_toolbar
-#: classes/applications/messenger/mail_message.aw:prop_edit_toolbar
-msgid "Omaduse Kirja redigeerimise toolbar (edit_toolbar) caption"
-msgstr "Edit toolbar"
-
-# classes/applications/messenger/mail_message.aw:prop_edit_toolbar_comment
-#: classes/applications/messenger/mail_message.aw:prop_edit_toolbar_comment
-msgid "Omaduse Kirja redigeerimise toolbar (edit_toolbar) kommentaar"
-msgstr ""
-
-# classes/applications/messenger/mail_message.aw:prop_edit_toolbar_help
-#: classes/applications/messenger/mail_message.aw:prop_edit_toolbar_help
-msgid "Omaduse Kirja redigeerimise toolbar (edit_toolbar) help"
-msgstr ""
-
 # classes/applications/messenger/mail_message.aw:prop_uidl
 #: classes/applications/messenger/mail_message.aw:prop_uidl
 msgid "Omaduse UIDL (uidl) caption"
@@ -301,70 +286,74 @@ msgid "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 msgstr ""
 "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 
-#: classes/applications/messenger/mail_message.aw:265
+#: classes/applications/messenger/mail_message.aw:273
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr "Unfortunately your mail reader can not display HTML messages"
 
-#: classes/applications/messenger/mail_message.aw:543
+#: classes/applications/messenger/mail_message.aw:557
 msgid "Saada"
 msgstr "Sent"
 
-#: classes/applications/messenger/mail_message.aw:550
+#: classes/applications/messenger/mail_message.aw:564
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/applications/messenger/mail_message.aw:573
+#: classes/applications/messenger/mail_message.aw:587
 msgid "Vasta"
 msgstr "Reply"
 
-#: classes/applications/messenger/mail_message.aw:580
+#: classes/applications/messenger/mail_message.aw:594
 msgid "Vasta/kõigile"
 msgstr "Reply to all"
 
-#: classes/applications/messenger/mail_message.aw:587
+#: classes/applications/messenger/mail_message.aw:601
 msgid "Edasta"
 msgstr "Forward"
 
-#: classes/applications/messenger/mail_message.aw:595
+#: classes/applications/messenger/mail_message.aw:609
 msgid "Kustutada see kiri? (tagasi ei saa!)"
 msgstr "Delete this message? (can not be undone!)"
 
-#: classes/applications/messenger/mail_message.aw:596
+#: classes/applications/messenger/mail_message.aw:610
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/applications/messenger/mail_message.aw:616
+#: classes/applications/messenger/mail_message.aw:630
 msgid "Lisa kalendrisse"
 msgstr "Add to calendar"
 
-#: classes/applications/messenger/mail_message.aw:643
+#: classes/applications/messenger/mail_message.aw:657
 msgid "Päised"
 msgstr "Headers"
 
-#: classes/applications/messenger/mail_message.aw:648
+#: classes/applications/messenger/mail_message.aw:662
 msgid "Tavaline"
 msgstr "Regular"
 
-#: classes/applications/messenger/mail_message.aw:654
+#: classes/applications/messenger/mail_message.aw:668
 msgid "Kõik päised"
 msgstr "All headers"
 
-#: classes/applications/messenger/mail_message.aw:992
+#: classes/applications/messenger/mail_message.aw:1005
 msgid "kustutatud!"
 msgstr "deleted!"
 
-#: classes/applications/messenger/mail_message.aw:994
-#: classes/applications/messenger/mail_message.aw:1047
+#: classes/applications/messenger/mail_message.aw:1007
+#: classes/applications/messenger/mail_message.aw:1050
 msgid "sulge aken"
 msgstr "close window"
 
-#: classes/applications/messenger/mail_message.aw:1046
+#: classes/applications/messenger/mail_message.aw:1049
 msgid "saadetud<p>"
 msgstr "sent<p>"
 
-#: classes/applications/messenger/mail_message.aw:1163
+#: classes/applications/messenger/mail_message.aw:1166
 msgid "----Forwarded message-----\n"
 msgstr "----Forwarded message-----\n"
+
+# classes/applications/messenger/mail_message.aw:prop_edit_toolbar
+#~ msgid "Omaduse Kirja redigeerimise toolbar (edit_toolbar) caption"
+#~ msgstr "Edit toolbar"
 
 # classes/applications/messenger/mail_message.aw:group_
 #~ msgid "Grupi  () pealkiri"

@@ -1083,7 +1083,7 @@ function incl_f($lib)
 		return;
 	}
 	$f[$lib] = 1;
-	echo "$lib <br>";
+	echo "$lib ";
 	//echo shbt()." <Br>";
 }
 

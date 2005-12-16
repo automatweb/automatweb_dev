@@ -50,4 +50,9 @@
       <func>on_connect_to_profession</func>
       <param>CL_CRM_PROFESSION</param>
 </num_9>
+<num_10>
+      <class>doc</class>
+      <func>on_add_doc_rel</func>
+      <param>CL_DOCUMENT</param>
+</num_10>
 </xml>

@@ -3,4 +3,3 @@
 	<class name="crm_settings" folder="applications/crm" extends="class_base">
 	</class>
 </orb>
-		

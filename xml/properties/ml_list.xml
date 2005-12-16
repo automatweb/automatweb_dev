@@ -9,7 +9,6 @@
             <type>relpicker</type>
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
-            <rel>1</rel>
             <multiple>1</multiple>
             <caption>Listi liikmete allikas</caption>
       </property>
