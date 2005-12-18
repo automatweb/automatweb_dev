@@ -276,6 +276,7 @@ class country_administrative_structure_object extends _int_object
 
     // @attrib name=as_get_units_by_division
 	// @param division required
+	// @param parent optional type=int
 	// @returns AW object list of admin units corresponding to $division
 	function &as_get_units_by_division ($arr)
 	{
@@ -299,9 +300,20 @@ class country_administrative_structure_object extends _int_object
 			return false;
 		}
 
+		### get parent
+		if ($arr["parent"])
+		{
+			$parent = $arr["parent"];
+		}
+		else
+		{
+			$parent = NULL;
+		}
+
 		### get units
 		$args = array (
 			"class_id" => $class,
+			"parent" => $parent,
 			"subclass" => $subclass,
 			"site_id" => array(),
 			"lang_id" => array(),
