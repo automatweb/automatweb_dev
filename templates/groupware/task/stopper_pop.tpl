@@ -26,7 +26,7 @@ stops[{VAR:number}] = new Array({VAR:el_hr}, {VAR:el_min}, {VAR:el_sec});
 <a href='{VAR:start_url}'>{VAR:s_str}</a>
 <!-- END SUB: START -->
 
- | <a href='#' onClick='desc=prompt("Kirjeldus");window.location="{VAR:stop_url}&desc="+desc;'>{VAR:e_str}</a> | <a href='{VAR:del_url}'>{VAR:d_str}</a><br>
+ | <a href='#' onClick='desc=prompt("Kirjeldus");if (desc != null) {window.location="{VAR:stop_url}&desc="+desc;}else{return false;}'>{VAR:e_str}</a> | <a href='{VAR:del_url}'>{VAR:d_str}</a><br>
 <!-- END SUB: STOPPER -->
 
 <script language="javascript">
