@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_export.aw,v 1.2 2005/11/22 16:50:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_export.aw,v 1.3 2005/12/18 14:01:05 voldemar Exp $
 // realestate_export.aw - Kinnisvaraobjektide eksport
 /*
 
@@ -39,12 +39,23 @@
 */
 
 define ("REALESTATE_TIME_FORMAT", "j/m/Y H.i.s");
+define ("NEWLINE", "<br />\n");
 
 class realestate_export extends class_base
 {
 	var $realestate_manager;
 	var $export_objlist;
 	var $from_date;
+	var $realestate_classes = array (
+		CL_REALESTATE_HOUSE,
+		CL_REALESTATE_ROWHOUSE,
+		CL_REALESTATE_COTTAGE,
+		CL_REALESTATE_HOUSEPART,
+		CL_REALESTATE_APARTMENT,
+		CL_REALESTATE_COMMERCIAL,
+		CL_REALESTATE_GARAGE,
+		CL_REALESTATE_LAND,
+	);
 
 	function realestate_export()
 	{
@@ -64,7 +75,7 @@ class realestate_export extends class_base
 	{
 		$this_object = obj ($arr["id"]);
 
-		if (is_oid ($this_object->prop ("realestate_manager")) and $this->can ("view", $this_object->prop ("realestate_manager")))
+		if ($this->can ("view", $this_object->prop ("realestate_manager")))
 		{
 			$this->realestate_manager = obj ($this_object->prop ("realestate_manager"));
 		}
@@ -109,16 +120,6 @@ class realestate_export extends class_base
 	// @attrib name=get_objects
 	function get_objects ($arr)
 	{
-		$realestate_classes = array (
-			CL_REALESTATE_HOUSE,
-			CL_REALESTATE_ROWHOUSE,
-			CL_REALESTATE_COTTAGE,
-			CL_REALESTATE_HOUSEPART,
-			CL_REALESTATE_APARTMENT,
-			CL_REALESTATE_COMMERCIAL,
-			CL_REALESTATE_GARAGE,
-			CL_REALESTATE_LAND,
-		);
 		$realestate_folders = array (
 			$this->realestate_manager->prop ("houses_folder"),
 			$this->realestate_manager->prop ("rowhouses_folder"),
@@ -131,16 +132,17 @@ class realestate_export extends class_base
 		);
 
 		$this->export_objlist = new object_list (array (
-			"class_id" => $realestate_classes,
+			"class_id" => $this->realestate_classes,
 			"parent" => $realestate_folders,
 			"modified" => new obj_predicate_compare (OBJ_COMP_GREATER, $this->from_date),
+			"site_id" => array (),
 		));
 	}
 
-	// @param from_date required type=int
 /**
-	@attrib name=city24export
+	@attrib name=city24export nologin=1
 	@param id required type=int
+	@param from_date optional type=int
 **/
 	function city24export ($arr)
 	{
@@ -148,7 +150,7 @@ class realestate_export extends class_base
 		$errors = "";
 		$errors .= $this->init_local ($arr);
 		$this_object = obj ($arr["id"]);
-		$this->from_date = (int) $this_object->prop ("last_city24export_time");
+		$this->from_date = (int) (is_numeric ($arr["id"]) ? $arr["id"] : $this_object->prop ("last_city24export_time"));
 
 		$this->get_objects ($arr);
 		$objects = $this->export_objlist->arr ();
@@ -156,22 +158,34 @@ class realestate_export extends class_base
 		$xml[] = '<?xml version="1.0" encoding="iso-8859-4" ?>';
 		$xml[] = '<objects>';
 
+		### get realestate property class instances
+		foreach ($this->realestate_classes as $cls_id)
+		{
+			$cl_instance_var = "cl_property_" . $cls_id;
+
+			if (!is_object ($this->$cl_instance_var))
+			{
+				$this->$cl_instance_var = get_instance ($cls_id);
+			}
+		}
+
+		### export properties
 		foreach ($objects as $o)
 		{
-			$cl_realestate = $o->instance ();
-			$o_xml = $cl_realestate->export_xml (array (
-				"id" => $o->id (),
+			$cl_instance_var = "cl_property_" . $o->class_id ();
+			$o_xml = $this->$cl_instance_var->export_xml (array (
+				"this" => $o,
 				"no_declaration" => true,
 				"address_encoding" => $this_object->prop ("city24export_encoding"),
 			));
 
-			if (empty ($cl_realestate->export_errors))
+			if (empty ($this->$cl_instance_var->export_errors))
 			{
 				$xml[] = $o_xml;
 			}
 			else
 			{
-				$errors .= sprintf (t("Viga objekti ekspordil. AW id: %s.\n<blockquote>%s</blockquote>\n"), $o->id (), $cl_realestate->export_errors);
+				$errors .= sprintf (t("Viga objekti ekspordil. AW id: %s.\n<blockquote>%s</blockquote>"), $o->id (), $this->$cl_instance_var->export_errors) . NEWLINE;
 			}
 		}
 

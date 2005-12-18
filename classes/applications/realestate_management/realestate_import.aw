@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.5 2005/12/07 16:58:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.6 2005/12/18 14:01:05 voldemar Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -281,6 +281,7 @@ class realestate_import extends class_base
 		$cl_realestate_mgr = get_instance (CL_REALESTATE_MANAGER);
 		$cl_classificator = get_instance(CL_CLASSIFICATOR);
 		$cl_file = get_instance(CL_FILE);
+		$cl_image = get_instance(CL_IMAGE);
 
 		//!!!vaja?
 		if ($this->changed_visible_to)
@@ -392,7 +393,7 @@ class realestate_import extends class_base
 		{
 			if ((int) $property->prop ("city24_object_id"))
 			{
-				$imported_object_ids[$property->prop ("city24_object_id")] = $property->id ();
+				$imported_object_ids[(int) $property->prop ("city24_object_id")] = (int) $property->id ();
 			}
 		}
 
@@ -414,8 +415,10 @@ class realestate_import extends class_base
 		if (count ($duplicates) and (1 != $arr["quiet"]))
 		{
 			$duplicates = implode (",", $duplicates);
-			echo t("NB! Loetletud City24 id-ga objekte on AW objektisüsteemis rohkem kui üks:") . $duplicates . REALESTATE_NEWLINE;
+			$error_msg = t("NB! Loetletud City24 id-ga objekte on AW objektisüsteemis rohkem kui üks:") . $duplicates . REALESTATE_NEWLINE;
+			echo $error_msg;
 			$status = REALESTATE_IMPORT_ERR4;
+			$import_log[] = $error_msg;
 		}
 
 		### process data
@@ -443,8 +446,7 @@ class realestate_import extends class_base
 				if ($property_status)
 				{
 					$status = REALESTATE_IMPORT_ERR9;
-					$import_log[$property->id ()]["status"] = $property_status;
-					$import_log[$property->id ()]["messages"] = $status_messages;
+					$import_log[] = $status_messages;
 				}
 
 				$status_messages = array ();
@@ -608,7 +610,7 @@ class realestate_import extends class_base
 
 				if (!is_oid ($agent_oid))
 				{
-					$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud süsteemis ühkti kasutajat."), $city24_id, $agent_data) . REALESTATE_NEWLINE;;
+					$status_messages[] = sprintf (t("Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud süsteemis ühkti kasutajat."), $city24_id, $agent_data) . REALESTATE_NEWLINE;
 
 					if (1 != $arr["quiet"])
 					{
@@ -1027,8 +1029,33 @@ class realestate_import extends class_base
 				$property->set_prop ("additional_info_et", $value);
 
 				#### picture_icon
-				$value = $this->property_data["IKOONI_URL"];
-				$property->set_prop ("picture_icon", $value);
+				if (!$property->prop ("picture_icon_image"))
+				{
+					$image_url = $this->property_data["IKOONI_URL"];
+					$imagedata = file_get_contents ($image_url);
+					$file = $cl_file->_put_fs(array(
+						"type" => "image/jpeg",
+						"content" => $imagedata,
+					));
+
+					$picture =& new object ();
+					$picture->set_class_id (CL_IMAGE);
+					$picture->set_parent ($property->id ());
+					$picture->set_status(STAT_ACTIVE);
+					$picture->set_name ($property->id () . " " . t("väike pilt"));
+					$picture->set_prop ("file", $file);
+					$picture->save ();
+					$property->set_prop ("picture_icon_image", $picture->id ());
+					$property->set_prop ("picture_icon_city24", $image_url);
+					$property->set_prop ("picture_icon", $cl_image->get_url_by_id ($picture->id ()));
+					$property->connect (array (
+						"to" => $picture,
+						"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
+					));
+
+					unset ($imagedata);
+					unset ($picture);
+				}
 
 				#### pictures
 				$list = new object_list ($property->connections_from(array(
@@ -1559,8 +1586,7 @@ class realestate_import extends class_base
 					if ($property_status)
 					{
 						$status = REALESTATE_IMPORT_ERR9;
-						$import_log[$property->id ()]["status"] = $property_status;
-						$import_log[$property->id ()]["messages"] = $status_messages;
+						$import_log[] = $status_messages;
 					}
 
 					$status_messages = array ();
@@ -1761,7 +1787,11 @@ class realestate_import extends class_base
 
 	function add_variable ($clid, $name, $value)
 	{
-		$ot = get_instance(CL_OBJECT_TYPE);
+		if (!is_object ($this->cl_object_type))
+		{
+			$this->cl_object_type = get_instance(CL_OBJECT_TYPE);
+		}
+
 		$ff = $ot->get_obj_for_class(array(
 			"clid" => $clid,
 		));

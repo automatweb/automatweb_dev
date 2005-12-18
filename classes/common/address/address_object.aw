@@ -75,6 +75,18 @@ class address_object extends _int_object
 		}
 	}
 
+	function prop_str ($param)
+	{
+		switch ($param)
+		{
+			case "address_array":
+				return $this->as_get_string ();
+
+			default:
+				return parent::prop_str ($param);
+		}
+	}
+
 	function set_prop ($name, $param)
 	{
 		switch ($name)
@@ -139,6 +151,21 @@ class address_object extends _int_object
 		}
 
 		return $address_array;
+	}
+
+	function as_get_string ()
+	{
+		$address_array = $this->as_get_array ();
+		$street_address = $this->prop ("street_address");
+		$apartment = $this->prop ("apartment");
+		$po_box = $this->prop ("po_box");
+
+		$address_str = implode (", ", $address_array);
+		$address_str .= !empty ($street_address) ? " " . $street_address : "";
+		$address_str .= !empty ($apartment) and !empty ($street_address) ? "-" . $apartment : "";
+		$address_str .= !empty ($po_box) ? " " . t("Postkast") . " " . $po_box : "";
+
+		return $address_str;
 	}
 
     // @attrib name=as_get_id_array

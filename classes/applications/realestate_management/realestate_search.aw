@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.5 2005/12/07 16:58:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.6 2005/12/18 14:01:05 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -18,6 +18,10 @@
 	@property result_format type=select
 	@caption Otsingutulemuste näitamise formaat
 
+	@property result_no_form type=checkbox ch_value=1
+	@comment Näita otsingutulemusi ilma otsinguvormita. Ei mõjuta admin liidese otsingut.
+	@caption Tulemused otsinguvormita
+
 	@property searchform_select_size type=textbox datatype=int
 	@comment [0] - võimalus valida parameetrile vaid üks väärtus, [1 - ...] - võimalus valida mitu.
 	@caption Otsinguvormi valikuelementide suurus
@@ -26,8 +30,8 @@
 	@comment Kinnisvarahalduskeskkond, mille objektide hulgast otsida soovitakse
 	@caption Kinnisvarahalduskeskkond
 
-	@property searchparam_country type=relpicker reltype=RELTYPE_COUNTRY clid=CL_COUNTRY automatic=1
-	@caption Riik
+	@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1
+	@caption Haldusjaotus
 
 	@property save_search type=checkbox ch_value=1
 	@caption Salvesta otsingutulemus
@@ -82,6 +86,9 @@
 	@property search_agent type=select multiple=1 size=5
 	@caption Maakler
 
+	@property search_special_status type=select
+	@caption Eristaatus
+
 	@property search_is_middle_floor type=checkbox
 	@caption Pole esimene ega viimane korrus
 
@@ -109,8 +116,8 @@
 @reltype OWNER clid=CL_REALESTATE_MANAGER value=1
 @caption Kinnisvaraobjektide halduskeskkond
 
-@reltype COUNTRY clid=CL_COUNTRY value=2
-@caption Riik
+@reltype ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE value=2
+@caption Haldusjaotus
 
 */
 
@@ -130,6 +137,7 @@ class realestate_search extends class_base
 		CL_REALESTATE_GARAGE,
 		CL_REALESTATE_LAND,
 	);
+	var $result_table_recordsperpage = 50;
 
 	function realestate_search ()
 	{
@@ -295,6 +303,17 @@ class realestate_search extends class_base
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["up"];
 				break;
 
+			case "search_special_status":
+				$prop_args = array (
+					"clid" => CL_REALESTATE_HOUSE,
+					"name" => "special_status",
+				);
+				list ($options, $name, $use_type) = $this->classificator->get_choices($prop_args);
+				// $prop["options"] = array("" => "") + $options->names();
+				$prop["options"] = $options->names();
+				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["ss"];
+				break;
+
 			case "search_agent":
 				$sections = $this_object->prop ("agent_sections");
 
@@ -348,6 +367,7 @@ class realestate_search extends class_base
 					"searchparam_fromdate",
 					"search_usage_purpose",
 					"search_is_middle_floor",
+					"search_special_status",
 					"searchparam_onlywithpictures",
 					"search_agent",
 				);
@@ -430,7 +450,7 @@ class realestate_search extends class_base
 
 		enter_function("re_search::show - search");
 		$this_object = obj ($arr["id"]);
-		$formelements = $this_object->prop ("formelements");
+		$visible_formelements = $this_object->prop ("formelements");
 
 		if (is_oid ($this_object->prop ("realestate_mgr")))
 		{
@@ -465,6 +485,7 @@ class realestate_search extends class_base
 				"agent" => $this_object->prop ("search_agent"),
 				"c" => $this_object->prop ("search_condition"),
 				"imf" => $this_object->prop ("search_is_middle_floor"),
+				"ss" => $this_object->prop ("search_special_status"),
 				"owp" => $this_object->prop ("searchparam_onlywithpictures"),
 			);
 		}
@@ -488,166 +509,284 @@ class realestate_search extends class_base
 				"agent" => $_GET["realestate_agent"],
 				"c" => $_GET["realestate_c"],
 				"imf" => $_GET["realestate_imf"],
+				"ss" => $_GET["realestate_ss"],
 				"owp" => $_GET["realestate_owp"],
 			);
 		}
 		$search = $this->get_search_args ($args);
 
-		### form
-		$select_size = (int) $this_object->prop ("searchform_select_size");
+		if (!$this_object->prop ("result_no_form"))
+		{
+			### captions
+			$cl_cfgu = get_instance("cfg/cfgutils");
+			$properties = $cl_cfgu->load_properties(array ("clid" => CL_REALESTATE_SEARCH));
 
-		$form_ci = in_array ("search_class_id", $formelements) ?
-		html::select(array(
-			"name" => "realestate_ci",
-			"multiple" => $select_size,
-			"size" => $select_size,
-			"options" => $this->options_ci,
-			"value" => $search["ci"],
-		)) : "";
-		$form_tt = in_array ("search_transaction_type", $formelements) ?
-		html::select(array(
-			"name" => "realestate_tt",
-			"multiple" => $select_size,
-			"size" => $select_size,
-			"options" => $this->options_tt,
-			"value" => $search["tt"],
-		)) : "";
-		$form_tpmin = in_array ("search_transaction_price_min", $formelements) ?
-		html::textbox(array(
-			"name" => "realestate_tpmin",
-			"value" => empty ($search["tpmin"]) ? "" : $search["tpmin"],
-			"size" => "6",
-			// "textsize" => "11px",
-		)) : "";
-		$form_tpmax = in_array ("search_transaction_price_max", $formelements) ?
-		($form_tpmin ? " - " : "") . html::textbox(array(
-			"name" => "realestate_tpmax",
-			"value" => empty ($search["tpmax"]) ? "" : $search["tpmax"],
-			"size" => "6",
-			// "textsize" => "11px",
-		)) : "";
-		$form_tfamin = in_array ("search_total_floor_area_min", $formelements) ?
-		html::textbox(array(
-			"name" => "realestate_tfamin",
-			"value" => empty ($search["tfamin"]) ? "" : $search["tfamin"],
-			"size" => "6",
-			// "textsize" => "11px",
-		)) : "";
-		$form_tfamax = in_array ("search_total_floor_area_max", $formelements) ?
-		($form_tfamin ? " - " : "") . html::textbox(array(
-			"name" => "realestate_tfamax",
-			"value" => empty ($search["tfamax"]) ? "" : $search["tfamax"],
-			"size" => "6",
-			// "textsize" => "11px",
-		)) : "";
-		$form_nor = in_array ("search_number_of_rooms", $formelements) ?
-		html::textbox(array(
-			"name" => "realestate_nor",
-			"value" => $search["nor"],
-			"size" => "6",
-			// "textsize" => "11px",
-		)) : "";
-		$form_a1 = in_array ("searchparam_address1", $formelements) ?
-		html::select(array(
-			"name" => "realestate_a1",
-			"multiple" => $select_size,
-			"size" => $select_size,
-			"options" => $this->options_a1,
-			"value" => $search["a1"],
-		)) : "";
-		$form_a2 = in_array ("searchparam_address2", $formelements) ?
-		html::select(array(
-			"name" => "realestate_a2",
-			"multiple" => $select_size,
-			"size" => $select_size,
-			"options" => $this->options_a2,
-			"value" => $search["a2"],
-		)) : "";
-		$form_a3 = in_array ("searchparam_address3", $formelements) ?
-		html::select(array(
-			"name" => "realestate_a3",
-			"multiple" => $select_size,
-			"size" => $select_size,
-			"options" => $this->options_a3,
-			"value" => $search["a3"],
-		)) : "";
-		$form_at = in_array ("searchparam_addresstext", $formelements) ?
-		html::textbox(array(
-			"name" => "realestate_at",
-			"value" => $search["at"],
-			"size" => "16",
-			// "textsize" => "11px",
-		)) : "";
-		$form_fd = in_array ("searchparam_fromdate", $formelements) ?
-		html::date_select(array(
-			"name" => "realestate_fd",
-			"mon_for" => 1,
-			"value" => $search["fd"],
-			// "textsize" => "11px",
-		)) : "";
-		$form_c = in_array ("search_condition", $formelements) ?
-		html::select(array(
-			"name" => "realestate_c",
-			"multiple" => $select_size,
-			"size" => $select_size,
-			"options" => $this->options_c,
-			"value" => $search["c"],
-		)) : "";
-		$form_up = in_array ("search_usage_purpose", $formelements) ?
-		html::select(array(
-			"name" => "realestate_up",
-			"multiple" => $select_size,
-			"size" => $select_size,
-			"options" => $this->options_up,
-			"value" => $search["up"],
-		)) : "";
-		$form_agent = in_array ("search_agent", $formelements) ?
-		html::select(array(
-			"name" => "realestate_agent",
-			"multiple" => $select_size,
-			"size" => $select_size,
-			"options" => $this->options_agent,
-			"value" => $search["agent"],
-		)) : "";
-		// $form_agent = in_array ("search_agent", $formelements) ?
-		// html::textbox(array(
-			// "name" => "realestate_agent",
-			// "value" => $search["agent"],
-			// "size" => "16",
-			// "textsize" => "11px",
-		// )) : "";
-		$form_imf = in_array ("search_is_middle_floor", $formelements) ?
-		html::checkbox(array(
-			"name" => "realestate_imf",
-			"value" => 1,
-			"checked" => $search["imf"],
-		)) : "";
-		$form_owp = in_array ("searchparam_onlywithpictures", $formelements) ?
-		html::checkbox(array(
-			"name" => "realestate_owp",
-			"value" => 1,
-			"checked" => $search["owp"],
-		)) : "";
+			### formelements
+			$select_size = (int) $this_object->prop ("searchform_select_size");
+			$form_elements = array ();
 
-		if ( ($_GET["realestate_srch"] == 1) and $this->can ("view", $this_object->prop ("realestate_mgr")) )
+			if (in_array ("search_class_id", $visible_formelements))
+			{
+				$form_elements["ci"]["caption"] = $properties["search_class_id"]["caption"];
+				$form_elements["ci"]["element"] = html::select(array(
+					"name" => "realestate_ci",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $this->options_ci,
+					"value" => $search["ci"],
+				));
+			}
+
+			if (in_array ("search_transaction_type", $visible_formelements))
+			{
+				$form_elements["tt"]["caption"] = $properties["search_transaction_type"]["caption"];
+				$form_elements["tt"]["element"] = html::select(array(
+					"name" => "realestate_tt",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $this->options_tt,
+					"value" => $search["tt"],
+				));
+			}
+
+			if (in_array ("search_transaction_price_min", $visible_formelements))
+			{
+				$form_elements["tpmin"]["caption"] = $properties["search_transaction_price_min"]["caption"];
+				$form_elements["tpmin"]["element"] = html::textbox(array(
+					"name" => "realestate_tpmin",
+					"value" => empty ($search["tpmin"]) ? "" : $search["tpmin"],
+					"size" => "6",
+					// "textsize" => "11px",
+				));
+			}
+
+			if (in_array ("search_transaction_price_max", $visible_formelements))
+			{
+				$form_elements["tpmax"]["caption"] = $properties["search_transaction_price_max"]["caption"];
+				$form_elements["tpmax"]["element"] = html::textbox(array(
+					"name" => "realestate_tpmax",
+					"value" => empty ($search["tpmax"]) ? "" : $search["tpmax"],
+					"size" => "6",
+					// "textsize" => "11px",
+				));
+			}
+
+			if (in_array ("search_transaction_price_min", $visible_formelements) and in_array ("search_transaction_price_max", $visible_formelements))
+			{
+				$form_elements["tp"]["caption"] = t("Hind");
+				$form_elements["tp"]["element"] = $form_elements["tpmin"]["element"]  . t(" kuni ") . $form_elements["tpmax"]["element"];
+				unset ($form_elements["tpmin"]);
+				unset ($form_elements["tpmax"]);
+			}
+
+			if (in_array ("search_total_floor_area_min", $visible_formelements))
+			{
+				$form_elements["tfamin"]["caption"] = $properties["search_total_floor_area_min"]["caption"];
+				$form_elements["tfamin"]["element"] = html::textbox(array(
+					"name" => "realestate_tfamin",
+					"value" => empty ($search["tfamin"]) ? "" : $search["tfamin"],
+					"size" => "6",
+					// "textsize" => "11px",
+				));
+			}
+
+			if (in_array ("search_total_floor_area_max", $visible_formelements))
+			{
+				$form_elements["tfamax"]["caption"] = $properties["search_total_floor_area_max"]["caption"];
+				$form_elements["tfamax"]["element"] = html::textbox(array(
+					"name" => "realestate_tfamax",
+					"value" => empty ($search["tfamax"]) ? "" : $search["tfamax"],
+					"size" => "6",
+					// "textsize" => "11px",
+				));
+			}
+
+			if (in_array ("search_total_floor_area_min", $visible_formelements) and in_array ("search_total_floor_area_max", $visible_formelements))
+			{
+				$form_elements["tfa"]["caption"] = t("Üldpind");
+				$form_elements["tfa"]["element"] = $form_elements["tfamin"]["element"]  . t(" kuni ") . $form_elements["tfamax"]["element"];
+				unset ($form_elements["tfamin"]);
+				unset ($form_elements["tfamax"]);
+			}
+
+			if (in_array ("search_number_of_rooms", $visible_formelements))
+			{
+				$form_elements["nor"]["caption"] = $properties["search_number_of_rooms"]["caption"];
+				$form_elements["nor"]["element"] = html::textbox(array(
+					"name" => "realestate_nor",
+					"value" => $search["nor"],
+					"size" => "6",
+					// "textsize" => "11px",
+				));
+			}
+
+			if (in_array ("searchparam_address1", $visible_formelements))
+			{
+				$form_elements["a1"]["caption"] = $properties["searchparam_address1"]["caption"];
+				$form_elements["a1"]["element"] = html::select(array(
+					"name" => "realestate_a1",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $this->options_a1,
+					"value" => $search["a1"],
+				));
+			}
+
+			if (in_array ("searchparam_address2", $visible_formelements))
+			{
+				$form_elements["a2"]["caption"] = $properties["searchparam_address2"]["caption"];
+				$form_elements["a2"]["element"] = html::select(array(
+					"name" => "realestate_a2",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $this->options_a2,
+					"value" => $search["a2"],
+					"onchange" => (in_array ("searchparam_address3", $visible_formelements) ? "changeA3(this);" : NULL),
+				));
+
+				if (in_array ("searchparam_address3", $visible_formelements))
+				{
+					if (!is_object ($this->division3))
+					{
+						$this->division3 = $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3");
+					}
+
+					$a3_division = $this->division3->id ();
+				}
+			}
+
+			if (in_array ("searchparam_address3", $visible_formelements))
+			{
+				$form_elements["a3"]["caption"] = $properties["searchparam_address3"]["caption"];
+				$form_elements["a3"]["element"] = html::select(array(
+					"name" => "realestate_a3",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => (in_array ("searchparam_address2", $visible_formelements) ? NULL : $this->options_a3),
+					"value" => $search["a3"],
+				));
+			}
+
+			if (in_array ("searchparam_addresstext", $visible_formelements))
+			{
+				$form_elements["at"]["caption"] = $properties["searchparam_addresstext"]["caption"];
+				$form_elements["at"]["element"] = html::textbox(array(
+					"name" => "realestate_at",
+					"value" => $search["at"],
+					"size" => "16",
+					// "textsize" => "11px",
+				));
+			}
+
+			if (in_array ("searchparam_fromdate", $visible_formelements))
+			{
+				$form_elements["fd"]["caption"] = $properties["searchparam_fromdate"]["caption"];
+				$form_elements["fd"]["element"] = html::date_select(array(
+					"name" => "realestate_fd",
+					"mon_for" => 1,
+					"value" => $search["fd"],
+					// "textsize" => "11px",
+				));
+			}
+
+			if (in_array ("search_condition", $visible_formelements))
+			{
+				$form_elements["c"]["caption"] = $properties["search_condition"]["caption"];
+				$form_elements["c"]["element"] = html::select(array(
+					"name" => "realestate_c",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $this->options_c,
+					"value" => $search["c"],
+				));
+			}
+
+			if (in_array ("search_usage_purpose", $visible_formelements))
+			{
+				$form_elements["up"]["caption"] = $properties["search_usage_purpose"]["caption"];
+				$form_elements["up"]["element"] = html::select(array(
+					"name" => "realestate_up",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $this->options_up,
+					"value" => $search["up"],
+				));
+			}
+
+			if (in_array ("search_agent", $visible_formelements))
+			{
+				$form_elements["agent"]["caption"] = $properties["search_agent"]["caption"];
+				$form_elements["agent"]["element"] = html::select(array(
+					"name" => "realestate_agent",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $this->options_agent,
+					"value" => $search["agent"],
+				));
+				// $form_elements["agent"]["element"] = html::textbox(array(
+					// "name" => "realestate_agent",
+					// "value" => $search["agent"],
+					// "size" => "16",
+					// "textsize" => "11px",
+				// ));
+			}
+
+			if (in_array ("search_is_middle_floor", $visible_formelements))
+			{
+				$form_elements["imf"]["caption"] = $properties["search_is_middle_floor"]["caption"];
+				$form_elements["imf"]["element"] = html::checkbox(array(
+					"name" => "realestate_imf",
+					"value" => 1,
+					"checked" => $search["imf"],
+				));
+			}
+
+			if (in_array ("search_special_status", $visible_formelements))
+			{
+				$form_elements["ss"]["caption"] = $properties["search_special_status"]["caption"];
+				$form_elements["ss"]["element"] = html::select(array(
+					"name" => "realestate_ss",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $this->options_ss,
+					"value" => $search["ss"],
+				));
+			}
+
+			if (in_array ("searchparam_onlywithpictures", $visible_formelements))
+			{
+				$form_elements["owp"]["caption"] = $properties["searchparam_onlywithpictures"]["caption"];
+				$form_elements["owp"]["element"] = html::checkbox(array(
+					"name" => "realestate_owp",
+					"value" => 1,
+					"checked" => $search["owp"],
+				));
+			}
+		}
+
+		if ($_GET["realestate_srch"] == 1)
 		{ ### search
 			$args = array (
+				"this" => $this_object,
 				"manager" => $realestate_manager,
 				"search" => $search,
 			);
 			$list =& $this->search ($args);
+			$search_requested = true;
 		}
 		elseif ($this_object->prop ("save_search"))
 		{
 			$args = array (
-				"id" => $this_object->id (),
+				"this" => $this_object,
 				"manager" => $realestate_manager,
 			);
 			$list =& $this->search ($args);
+			$search_requested = true;
 		}
 		else
 		{
 			$list = array ();
+			$search_requested = false;
 		}
 
 		exit_function("re_search::show - search");
@@ -661,16 +800,6 @@ class realestate_search extends class_base
 			switch ($this_object->prop ("result_format"))
 			{
 				case "format1":
-					if (is_oid ($realestate_manager->prop ("template_obj_search_result")))
-					{
-						$template = obj ($realestate_manager->prop ("template_obj_search_result"));
-					}
-					else
-					{
-						return;
-					}
-
-					$tpl_source = $template->prop ("source_html");
 					$table->set_layout("realestate_searchresult");
 					$table->define_field(array(
 						"name" => "object",
@@ -711,10 +840,6 @@ class realestate_search extends class_base
 			$result = $table->get_html ();
 		}
 
-		### captions
-		$cl_cfgu = get_instance("cfg/cfgutils");
-		$properties = $cl_cfgu->load_properties(array ("clid" => CL_REALESTATE_SEARCH));
-
 		### style
 		$template = $this_object->prop ("template") . ".css";
 		$this->read_template($template);
@@ -724,46 +849,74 @@ class realestate_search extends class_base
 		### output
 		$template = $this_object->prop ("template") . ".tpl";
 		$this->read_template($template);
-		$this->vars(array(
-			"form_ci" => $form_ci,
-			"form_tt" => $form_tt,
-			"form_tpmin" => $form_tpmin,
-			"form_tpmax" => $form_tpmax,
-			"form_tfamin" => $form_tfamin,
-			"form_tfamax" => $form_tfamax,
-			"form_nor" => $form_nor,
-			"form_a1" => $form_a1,
-			"form_a2" => $form_a2,
-			"form_a3" => $form_a3,
-			"form_at" => $form_at,
-			"form_fd" => $form_fd,
-			"form_up" => $form_up,
-			"form_agent" => $form_agent,
-			"form_c" => $form_c,
-			"form_imf" => $form_imf,
-			"form_owp" => $form_owp,
-			"caption_ci" => $form_ci ? $properties["search_class_id"]["caption"] : "",
-			"caption_tt" => $form_tt ? $properties["search_transaction_type"]["caption"] : "",
-			"caption_tpmin" => $form_tpmin ? $properties["search_transaction_price_min"]["caption"] : "",
-			"caption_tpmax" => $form_tpmax ? ($form_tpmin ? " - " : "") . $properties["search_transaction_price_max"]["caption"] : "",
-			"caption_tfamin" => $form_tfamin ? $properties["search_total_floor_area_min"]["caption"] : "",
-			"caption_tfamax" => $form_tfamax ? ($form_tfamin ? " - " : "") . $properties["search_total_floor_area_max"]["caption"] : "",
-			"caption_nor" => $form_nor ? $properties["search_number_of_rooms"]["caption"] : "",
-			"caption_a1" => $form_a1 ? $properties["searchparam_address1"]["caption"] : "",
-			"caption_a2" => $form_a2 ? $properties["searchparam_address2"]["caption"] : "",
-			"caption_a3" => $form_a3 ? $properties["searchparam_address3"]["caption"] : "",
-			"caption_at" => $form_at ? $properties["searchparam_addresstext"]["caption"] : "",
-			"caption_fd" => $form_fd ? $properties["searchparam_fromdate"]["caption"] : "",
-			"caption_up" => $form_up ? $properties["search_usage_purpose"]["caption"] : "",
-			"caption_agent" => $form_agent ? $properties["search_agent"]["caption"] : "",
-			"caption_c" => $form_c ? $properties["search_condition"]["caption"] : "",
-			"caption_imf" => $form_imf ? $properties["search_is_middle_floor"]["caption"] : "",
-			"caption_owp" => $form_owp ? $properties["searchparam_onlywithpictures"]["caption"] : "",
-			"buttondisplay" => count ($formelements) ? "block" : "none",
-			"table_style" => $table_style,
-			"result" => $result,
-			"number_of_results" => count ($list),
-		));
+
+		if ($this_object->prop ("result_no_form") and $search_requested)
+		{ #### don't show search form
+			$this->vars(array(
+				"table_style" => $table_style,
+				"result" => $result,
+				"number_of_results" => count ($list),
+			));
+		}
+		else
+		{
+			$el_count = count ($form_elements);
+			$column_count = 2;
+			$elements_in_column = ceil ($el_count/$column_count);
+			$columns = "";
+			$j = $column_count;
+
+			while ($j--)
+			{
+				$i = $elements_in_column;
+				$rows = "";
+
+				while ($i--)
+				{
+					$caption = $element = "&nbsp;";
+					$el = array_shift ($form_elements);
+
+					if ($el)
+					{
+						$caption = $el["caption"];
+						$element = $el["element"];
+					}
+
+					$this->vars (array (
+						"caption" => $caption,
+						"element" => $element,
+					));
+					$rows .= $this->parse ("RE_SEARCHFORM_ROW");
+				}
+
+				$this->vars (array (
+					"RE_SEARCHFORM_ROW" => $rows,
+				));
+				$columns .= $this->parse ("RE_SEARCHFORM_COL");
+			}
+
+			$this->vars (array (
+				"RE_SEARCHFORM_COL" => $columns,
+				"buttondisplay" => $el_count ? "block" : "none",
+				"columns" => $column_count,
+			));
+			$form = $this->parse ("RE_SEARCHFORM");
+
+			$a3_options_url = $this->mk_my_orb ("get_a3_options", array (
+				"id" => $this_object->id (),
+			), CL_REALESTATE_SEARCH, false, true);
+
+			$this->vars (array (
+				"RE_SEARCHFORM" => $form,
+				"table_style" => $table_style,
+				"result" => $result,
+				"a3_options_url" => $a3_options_url,
+				"a3_element_id" => "realestate_a3",
+				"a3_division" => $a3_division,
+				"number_of_results" => count ($list),
+			));
+		}
+
 		return $this->parse();
 	}
 
@@ -838,9 +991,14 @@ class realestate_search extends class_base
 		natcasesort ($this->options_a2);
 
 		### address3
+		if (!is_object ($this->division3))
+		{
+			$this->division3 = $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3");
+		}
+
 		$list =& $administrative_structure->prop (array (
 			"prop" => "units_by_division",
-			"division" => $realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_3"),
+			"division" => $this->division3,
 		));
 		$options = is_object ($list) ? $list->names () : array (); // linnaosa
 		$this->options_a3 = array(REALESTATE_SEARCH_ALL => "") + $options;
@@ -863,6 +1021,15 @@ class realestate_search extends class_base
 		list ($options_up, $name, $use_type) = $classificator->get_choices($prop_args);
 		$this->options_up = array(REALESTATE_SEARCH_ALL => "") + $options_up->names();
 		natcasesort ($this->options_up);
+
+		### special_status
+		$prop_args = array (
+			"clid" => CL_REALESTATE_HOUSE,
+			"name" => "special_status",
+		);
+		list ($options_ss, $name, $use_type) = $classificator->get_choices($prop_args);
+		$this->options_ss = array(REALESTATE_SEARCH_ALL => "") + $options_ss->names();
+		natcasesort ($this->options_ss);
 
 		### agent
 		$sections = $this_object->prop ("agent_sections");
@@ -1011,6 +1178,19 @@ class realestate_search extends class_base
 				}
 			}
 
+			$arr["ss"] = ($arr["ss"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["ss"];
+			$search_ss = (array) $arr["ss"];
+			unset ($search_ss[REALESTATE_SEARCH_ALL]);
+
+			foreach ($search_ss as $value)
+			{
+				if (!isset ($this->options_ss[$value]))
+				{
+					$search_ss = NULL;
+					break;
+				}
+			}
+
 			// $arr["agent"] = ($arr["agent"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["agent"];
 			// $search_agent = (array) $arr["agent"];
 			// unset ($search_agent[REALESTATE_SEARCH_ALL]);
@@ -1047,6 +1227,7 @@ class realestate_search extends class_base
 			"at" => $search_at,
 			"fd" => $search_fd,
 			"up" => $search_up,
+			"ss" => $search_ss,
 			"agent" => $search_agent,
 			"c" => $search_c,
 			"imf" => $search_imf,
@@ -1058,53 +1239,26 @@ class realestate_search extends class_base
 	function &search ($arr)
 	{
 		enter_function ("re_search::search");
+		$this_object = $arr["this"];
 
-		if (!is_oid ($arr["id"]))
-		{
-			return false;
-		}
-
-		$this_object = obj ($arr["id"]);
-
-		if (is_object ($this_object) and $this_object->prop ("save_search"))
-		{
-			$search_ci = $this_object->prop ("search_class_id");
-			$search_tpmin = $this_object->prop ("search_transaction_price_min");
-			$search_tpmax = $this_object->prop ("search_transaction_price_max");
-			$search_tfamin = $this_object->prop ("search_total_floor_area_min");
-			$search_tfamax = $this_object->prop ("search_total_floor_area_max");
-			$search_fd = $this_object->prop ("searchparam_fromdate");
-			$search_nor = $this_object->prop ("search_number_of_rooms");
-			$search_tt = $this_object->prop ("search_transaction_type");
-			$search_c = $this_object->prop ("search_condition");
-			$search_agent = $this_object->prop ("search_agent");
-			$search_a1 = $this_object->prop ("searchparam_address1");
-			$search_a2 = $this_object->prop ("searchparam_address2");
-			$search_a3 = $this_object->prop ("searchparam_address3");
-			$search_at = $this_object->prop ("search_address_text");
-			$search_owp = $this_object->prop ("searchparam_onlywithpictures");
-			$search_imf = $this_object->prop ("search_is_middle_floor");
-		}
-		else
-		{
-			$search_ci = $arr["search"]["ci"];
-			$search_tpmin = $arr["search"]["tpmin"];
-			$search_tpmax = $arr["search"]["tpmax"];
-			$search_tfamin = $arr["search"]["tfamin"];
-			$search_tfamax = $arr["search"]["tfamax"];
-			$search_fd = $arr["search"]["fd"];
-			$search_nor = $arr["search"]["nor"];
-			$search_tt = $arr["search"]["tt"];
-			$search_c = $arr["search"]["c"];
-			$search_up = $arr["search"]["up"];
-			$search_agent = $arr["search"]["agent"];
-			$search_a1 = $arr["search"]["a1"];
-			$search_a2 = $arr["search"]["a2"];
-			$search_a3 = $arr["search"]["a3"];
-			$search_at = $arr["search"]["at"];
-			$search_owp = $arr["search"]["owp"];
-			$search_imf = $arr["search"]["imf"];
-		}
+		$search_ci = $arr["search"]["ci"];
+		$search_tpmin = $arr["search"]["tpmin"];
+		$search_tpmax = $arr["search"]["tpmax"];
+		$search_tfamin = $arr["search"]["tfamin"];
+		$search_tfamax = $arr["search"]["tfamax"];
+		$search_fd = $arr["search"]["fd"];
+		$search_nor = $arr["search"]["nor"];
+		$search_tt = $arr["search"]["tt"];
+		$search_c = $arr["search"]["c"];
+		$search_up = $arr["search"]["up"];
+		$search_ss = $arr["search"]["ss"];
+		$search_agent = $arr["search"]["agent"];
+		$search_a1 = $arr["search"]["a1"];
+		$search_a2 = $arr["search"]["a2"];
+		$search_a3 = $arr["search"]["a3"];
+		$search_at = $arr["search"]["at"];
+		$search_owp = $arr["search"]["owp"];
+		$search_imf = $arr["search"]["imf"];
 
 		$list = array ();
 		$manager =& $arr["manager"];
@@ -1123,48 +1277,56 @@ class realestate_search extends class_base
 					if (is_oid ($manager->prop ("houses_folder")))
 					{
 						$parents[] = $manager->prop ("houses_folder");
+						// $search_ci_clstr = "CL_REALESTATE_HOUSE";
 					}
 					break;
 				case CL_REALESTATE_ROWHOUSE:
 					if (is_oid ($manager->prop ("rowhouses_folder")))
 					{
 						$parents[] = $manager->prop ("rowhouses_folder");
+						// $search_ci_clstr = "CL_REALESTATE_ROWHOUSE";
 					}
 					break;
 				case CL_REALESTATE_COTTAGE:
 					if (is_oid ($manager->prop ("cottages_folder")))
 					{
 						$parents[] = $manager->prop ("cottages_folder");
+						// $search_ci_clstr = "CL_REALESTATE_COTTAGE";
 					}
 					break;
 				case CL_REALESTATE_HOUSEPART:
 					if (is_oid ($manager->prop ("houseparts_folder")))
 					{
 						$parents[] = $manager->prop ("houseparts_folder");
+						// $search_ci_clstr = "CL_REALESTATE_HOUSEPART";
 					}
 					break;
 				case CL_REALESTATE_COMMERCIAL:
 					if (is_oid ($manager->prop ("commercial_properties_folder")))
 					{
 						$parents[] = $manager->prop ("commercial_properties_folder");
+						// $search_ci_clstr = "CL_REALESTATE_COMMERCIAL";
 					}
 					break;
 				case CL_REALESTATE_GARAGE:
 					if (is_oid ($manager->prop ("garages_folder")))
 					{
 						$parents[] = $manager->prop ("garages_folder");
+						// $search_ci_clstr = "CL_REALESTATE_GARAGE";
 					}
 					break;
 				case CL_REALESTATE_LAND:
 					if (is_oid ($manager->prop ("land_estates_folder")))
 					{
 						$parents[] = $manager->prop ("land_estates_folder");
+						// $search_ci_clstr = "CL_REALESTATE_LAND";
 					}
 					break;
 				case CL_REALESTATE_APARTMENT:
 					if (is_oid ($manager->prop ("apartments_folder")))
 					{
 						$parents[] = $manager->prop ("apartments_folder");
+						// $search_ci_clstr = "CL_REALESTATE_APARTMENT";
 					}
 					break;
 			}
@@ -1172,6 +1334,7 @@ class realestate_search extends class_base
 
 		if (!empty ($search_agent))
 		{
+			// ### freetext agent search
 			// $agents_list = new object_list (array (
 				// "class_id" => CL_CRM_PERSON,
 				// "name" => "%" . $search_agent . "%",
@@ -1179,6 +1342,8 @@ class realestate_search extends class_base
 				// "lang_id" => array (),
 			// ));
 			// $search_agent = $agents_list->ids ();
+
+			### agent by selection
 			$agent_constraint = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array (
@@ -1187,7 +1352,10 @@ class realestate_search extends class_base
 				)
 			));
 		}
-
+		else
+		{
+			$agent_constraint = NULL;
+		}
 
 		### compose transaction_price constraint
 		if ($search_tpmin and $search_tpmax)
@@ -1226,34 +1394,97 @@ class realestate_search extends class_base
 		}
 
 		### compose address constraint
-		if (count ($search_a1) or count ($search_a2) or count ($search_a3))
-		{
-			$search_admin_units = array_merge ($search_a1, $search_a2, $search_a3);
-			$address_constraint = new object_list_filter (array (
-				"logic" => "OR",
-				"conditions" => array (
-					"CL_REALESTATE_APARTMENT.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-					"CL_REALESTATE_COMMERCIAL.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-					"CL_REALESTATE_COTTAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-					"CL_REALESTATE_GARAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-					"CL_REALESTATE_HOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-					"CL_REALESTATE_HOUSEPART.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-					"CL_REALESTATE_LAND.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-					"CL_REALESTATE_PROPERTY.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-					"CL_REALESTATE_ROWHOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
-				)
-			));
-		}
+		// if (count ($search_a1) or count ($search_a2) or count ($search_a3))
+		// {
+			// $search_admin_units = array_merge ($search_a1, $search_a2, $search_a3);
 
+			// if ($search_ci_clstr)
+			// {
+				// $address_constraint = new object_list_filter (array (
+					// "logic" => "OR",
+					// "conditions" => array (
+						// $search_ci_clstr . ".RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					// )
+				// ));
+			// }
+			// else
+			// {
+				// $address_constraint = new object_list_filter (array (
+					// "logic" => "OR",
+					// "conditions" => array (
+						// "CL_REALESTATE_APARTMENT.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+						// "CL_REALESTATE_COMMERCIAL.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+						// "CL_REALESTATE_COTTAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+						// "CL_REALESTATE_GARAGE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+						// "CL_REALESTATE_HOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+						// "CL_REALESTATE_HOUSEPART.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+						// "CL_REALESTATE_LAND.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+						// "CL_REALESTATE_ROWHOUSE.RELTYPE_REALESTATE_ADDRESS.RELTYPE_ADMINISTRATIVE_UNIT" => $search_admin_units,
+					// )
+				// ));
+				// $address_constraint = NULL;
+			// }
+		// }
+
+		// ### search addresses
+		// $search_admin_units = array_merge ($search_a1, $search_a2, $search_a3);
+		// $address_ids = NULL;
+
+		// if (count ($search_admin_units))
+		// {
+			// $ids = array ();
+			// $applicable_classes = array (
+				// CL_ADDRESS,
+				// CL_ADDRESS_STREET,
+				// CL_COUNTRY,
+				// CL_COUNTRY_ADMINISTRATIVE_STRUCTURE,
+				// CL_COUNTRY_ADMINISTRATIVE_UNIT,
+				// CL_COUNTRY_CITY,
+				// CL_COUNTRY_CITYDISTRICT,
+			// );
+
+			// foreach ($search_admin_units as $admin_unit)
+			// {
+				// if (is_oid ($admin_unit))
+				// {
+					// $tree = new object_tree (array (
+						// "parent" => $admin_unit,
+						// "class_id" => $applicable_classes,
+					// ));
+					// $list = $tree->to_list ();
+					// $ids = array_merge ($ids, $list->ids ());
+				// }
+			// }
+
+			// $list = new object_list (array (
+				// "oid" => $ids,
+				// "class_id" => CL_ADDRESS,
+				// "site_id" => array (),
+				// "lang_id" => array (),
+			// ));
+
+			// if ($list->count ())
+			// {
+				// $address_ids = $list->ids ();
+			// }
+		// }
+
+		### limit
+		$limit = isset ($_GET["ft_page"]) ? ($_GET["ft_page"] * $this->result_table_recordsperpage) . "," . $this->result_table_recordsperpage : NULL;
+
+		### search
 		$args = array (
 			"class_id" => $search_ci,
 			"parent" => $parents,
 			"transaction_type" => $search_tt,
 			"transaction_price" => $tp_constraint,
+			"special_status" => $search_ss,
 			"created" => new obj_predicate_compare (OBJ_COMP_GREATER, $search_fd),
-			"site_id" => array(),
-			"lang_id" => array(),
-			$address_constraint,
+			"site_id" => array (),
+			"lang_id" => array (),
+			"limit" => $limit,
+			// "address_connection" => $address_ids,
+			// $address_constraint,
 			$agent_constraint,
 
 			### class specific
@@ -1267,14 +1498,76 @@ class realestate_search extends class_base
 		$result_list = new object_list ($args);
 		$result_list = $result_list->arr ();
 
-// /* dbg */ if ($_GET["researchdbg"]==1){ arr ($args); }
-/* dbg */ if ($_GET["researchdbg"]==1){ arr (count($result_list)); }
+		### search by address
+		if (count ($search_a3))
+		{
+			$search_admin_units = $search_a3;
+		}
+		elseif (count ($search_a2))
+		{
+			$search_admin_units = $search_a2;
+		}
+		elseif (count ($search_a1))
+		{
+			$search_admin_units = $search_a1;
+		}
+		else
+		{
+			$search_admin_units = false;
+		}
 
-		### search for objects under admin units, if units specified, intersect results with objectlist found
-		// aw_switch_user (array ("uid" => $manager->prop ("almightyuser")));
+		if ($search_admin_units !== false)
+		{
+			$unit_classes = array (
+				CL_COUNTRY_ADMINISTRATIVE_UNIT,
+				CL_COUNTRY_CITY,
+				CL_COUNTRY_CITYDISTRICT,
+			);
 
-		// if (count ($search_a1) or count ($search_a2) or count ($search_a3))
+			### get addresses for all properties found
+			$connection = new connection ();
+			$address_connections = $connection->find (array (
+					"from" => array_keys ($result_list),
+					"type" => 1,
+			));
+
+			$address_ids = array ();
+			$property_index = array ();
+
+			foreach ($address_connections as $connection)
+			{
+				$address_ids[$connection["from"]] = $connection["to"];
+			}
+
+			### search by adminunit
+			$connection = new connection ();
+			$unit_connections = $connection->find (array (
+					"from" => $address_ids,
+					"to" => $search_admin_units,
+					"type" => 2,
+			));
+
+			### filter out properties not under specified admin units
+			$applicable_address_ids = array ();
+
+			foreach ($unit_connections as $connection)
+			{
+				$applicable_address_ids[] = $connection["from"];
+			}
+
+			foreach ($result_list as $property_oid => $property)
+			{
+				if (!in_array ($address_ids[$property_oid], $applicable_address_ids))
+				{
+					unset ($result_list[$property_oid]);
+				}
+			}
+		}
+
+		// ### address search in case searching from all realestate property classes. search for objects under admin units, if units specified, intersect results with objectlist found
+		// if (count ($search_a1) or count ($search_a2) or count ($search_a3) and $search_ci_clstr)
 		// {
+			// aw_switch_user (array ("uid" => $manager->prop ("almightyuser")));
 			// $search_admin_units = array_merge ($search_a1, $search_a2, $search_a3);
 
 			// foreach ($result_list as $oid => $property)
@@ -1295,9 +1588,10 @@ class realestate_search extends class_base
 					// unset ($result_list[$oid]);
 				// }
 			// }
+
+			// aw_restore_user ();
 		// }
 
-		// aw_restore_user ();
 
 /* dbg */ if ($_GET["researchdbg"]==1){ arr (count($result_list)); }
 		exit_function ("re_search::search");
@@ -1381,7 +1675,7 @@ class realestate_search extends class_base
 		$table->set_default_sorder ("desc");
 		$table->define_pageselector (array (
 			"type" => "text",
-			"records_per_page" => 50,
+			"records_per_page" => $this->result_table_recordsperpage,
 		));
 	}
 
@@ -1401,6 +1695,52 @@ class realestate_search extends class_base
 		}
 
 		return $this->$cl_instance_var->request_execute ($property);
+	}
+
+/**
+    @attrib name=get_a3_options nologin=1
+	@param id required type=int
+	@param reAddress2Selected optional type=int
+	@param reAddress3Division optional type=int
+	@returns List of options separated by newline (\n). Void on error.
+**/
+	function get_a3_options ($arr)
+	{
+		$this_object = obj ($arr["id"]);
+		$a2_value = $arr["reAddress2Selected"];
+		$a3_division = $arr["reAddress3Division"];
+		$administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
+
+		if (is_oid ($a2_value) and is_oid ($a3_division) and is_object ($administrative_structure))
+		{
+			### get units
+			$list =& $administrative_structure->prop (array (
+				"prop" => "units_by_division",
+				"division" => $a3_division,
+				"parent" => $a2_value,
+			));
+			$administrative_units = is_object ($list) ? $list->names () : array ();
+			natcasesort ($administrative_units);
+
+			### parse units to a3_options
+			$a3_options = array ();
+
+			foreach ($administrative_units as $unit_id => $unit_name)
+			{
+				$a3_options[] = $unit_id . "=>" . $unit_name;
+			}
+
+			$a3_options = implode ("\n", $a3_options);
+		}
+		else
+		{
+			$a3_options = '=> ';
+		}
+
+		$charset = aw_global_get("charset");
+		header ("Content-Type: text/html; charset=" . $charset);
+		echo $a3_options;
+		exit;
 	}
 }
 ?>

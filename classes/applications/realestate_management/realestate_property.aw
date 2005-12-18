@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.5 2005/12/07 16:58:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.6 2005/12/18 14:01:05 voldemar Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -12,7 +12,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 @groupinfo grp_main caption="&Uuml;ldandmed ja asukoht"
 @groupinfo grp_detailed caption="Kirjeldus"
-@groupinfo grp_additional_info caption="Lisainfo"
+@groupinfo grp_additional_info caption="Lisainfo" encoding="UTF-8"
 @groupinfo grp_photos caption="Pildid"
 @groupinfo grp_map caption="Kaart"
 
@@ -41,8 +41,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@caption Objekti aadress
 		@property address_connection type=releditor reltype=RELTYPE_REALESTATE_ADDRESS rel_id=first editonly=1 props=location_country,location,postal_code,street_address,po_box,apartment
 		@caption Aadress
-
-		@property address_text type=hidden table=realestate_property
 
 	@property title2 type=text store=no subtitle=1
 	@caption Tehingu andmed
@@ -154,14 +152,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@property keywords_et type=textarea rows=5 cols=74 field=meta method=serialize
 	@caption M&auml;rks&otilde;nad
 
-	@property translation type=translator store=no
-
 
 @default group=grp_photos
 	@property pictures type=releditor reltype=RELTYPE_REALESTATE_PICTURE mode=manager props=name,file,alt table_fields=name,created field=meta method=serialize
 	@caption Pildid
 
-	@property picture_icon type=text field=meta method=serialize
+	@property picture_icon_city24 type=hidden field=meta method=serialize
+	@property picture_icon type=hidden field=meta method=serialize
+	@property picture_icon_image  reltype=RELTYPE_REALESTATE_PICTUREICON clid=CL_IMAGE field=meta method=serialize
 	@caption Väike pilt
 
 @default group=grp_map
@@ -204,6 +202,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @reltype REALESTATE_PICTURE value=5 clid=CL_IMAGE
 @caption Pilt
 
+@reltype REALESTATE_PICTUREICON value=8 clid=CL_IMAGE
+@caption Väike pilt
+
 */
 
 /*
@@ -227,7 +228,6 @@ CREATE TABLE `realestate_property` (
 	`total_floor_area` float(7,2) unsigned default NULL,
 	`number_of_rooms` tinyint unsigned default NULL,
 	`is_middle_floor` bit default '0',
-	`address_text` char(255) default NULL,
 
 	PRIMARY KEY  (`oid`),
 	UNIQUE KEY `oid` (`oid`)
@@ -280,6 +280,7 @@ ALTER TABLE `realestate_property` ADD `loading_facilities` INT(11) UNSIGNED AFTE
 define ("REALESTATE_NF_DEC", 2);
 define ("REALESTATE_NF_POINT", ",");
 define ("REALESTATE_NF_SEP", " ");
+define ("NEWLINE", "<br />\n");
 
 class realestate_property extends class_base
 {
@@ -534,11 +535,11 @@ class realestate_property extends class_base
 				$prop["value"] = "";
 				break;
 
-			case "picture_icon":
-				$prop["value"] = html::img (array (
-					"url" => $prop["value"],
-				));
-				break;
+			// case "picture_icon":
+				// $prop["value"] = html::img (array (
+					// "url" => $prop["value"],
+				// ));
+				// break;
 		}
 
 		return $retval;
@@ -570,11 +571,7 @@ class realestate_property extends class_base
 
 			### additional info
 			case "additional_info_en":
-				// $prop["value"] = iconv("UTF-8", "iso-8859-1", $prop["value"]);
-				// break;
 			case "additional_info_ru":
-				// $prop["value"] = iconv("UTF-8", "iso-8859-5", $prop["value"]);
-				// break;
 			case "additional_info_et":
 			case "additional_info_fi":
 			case "keywords_et":
@@ -613,7 +610,7 @@ class realestate_property extends class_base
 		$this_object =& $arr["obj_inst"];
 
 		### set object name by address
-		$address = $this_object->get_first_obj_by_reltype("RELTYPE_REALESTATE_ADDRESS");
+		$address = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_ADDRESS");
 		$address_text = $address->prop ("address_array");
 		unset ($address_text[ADDRESS_COUNTRY_TYPE]);
 		$address_text = implode (", ", $address_text);
@@ -623,7 +620,7 @@ class realestate_property extends class_base
 
 		### seller and buyer info
 		#### seller
-		$client = $this_object->get_first_obj_by_reltype("RELTYPE_REALESTATE_SELLER");
+		$client = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_SELLER");
 
 		if (is_object ($client))
 		{
@@ -1125,6 +1122,7 @@ class realestate_property extends class_base
 					"no_picture_data" => true,
 					"no_client_data" => true,
 					"no_extended_agent_data" => true,
+					"no_address_data" => true,
 				));
 				break;
 
@@ -1484,30 +1482,31 @@ class realestate_property extends class_base
 	}
 
 	// attrib name=export_xml
-	// param id required type=int
+	// param this required
 	// param no_declaration optional
 	// param address_encoding optional
 	function export_xml ($arr)
 	{
 		$this->export_errors = "";
 
-		if ($this->can ("view", $arr["id"]))
+		if (is_object ($arr["this"]))
 		{
-			$this_object = obj ($arr["id"]);
+			$this_object = $arr["this"];
+		}
+		elseif (is_oid ($arr["this"]))
+		{
+			$this_object = obj ($arr["this"]);
 		}
 		else
 		{
-			$this->export_errors .= t("Objekti id pole aw id v6i puudub juurdep22su6igus.\n");
+			$this->export_errors .= t("Objekti id pole aw id v6i puudub juurdep22su6igus.") . NEWLINE;
 		}
 
-		$properties = $this->get_property_data (array (
-			"this" => $arr["id"],
-			"address_encoding" => $arr["address_encoding"],
-		));
+		$properties = $this->get_property_data ($arr);
 
 		if (empty ($properties))
 		{
-			$this->export_errors .= t("Objekti atribuute ei 6nnestunud lugeda.\n");
+			$this->export_errors .= t("Objekti atribuute ei 6nnestunud lugeda.") . NEWLINE;
 		}
 
 		$classes = aw_ini_get("classes");
@@ -1517,7 +1516,7 @@ class realestate_property extends class_base
 
 		if (empty ($class))
 		{
-			$this->export_errors .= t("Objekti klassi m22ramine eba6nnestus.\n");
+			$this->export_errors .= t("Objekti klassi m22ramine eba6nnestus.") . NEWLINE;
 		}
 
 		$xml_data = $arr["no_declaration"] ? array () : array ('<?xml version="1.0" encoding="iso-8859-4"?>');
@@ -1559,6 +1558,7 @@ class realestate_property extends class_base
 	// param no_picture_data optional
 	// param no_client_data optional
 	// param no_extended_agent_data optional
+	// param no_address_data optional
 	function get_property_data ($arr)
 	{
 		enter_function("re_property::get_property_data");
@@ -1623,13 +1623,14 @@ REALESTATE_NF_SEP);
 		}
 
 		exit_function("re_property::get_property_data - std props");
-		enter_function("re_property::get_property_data - address");
 
-		### add address properties
-		$address = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_ADDRESS");
-
-		if (is_object ($address))
+		if (!$arr["no_address_data"])
 		{
+			enter_function("re_property::get_property_data - address");
+
+			### add address properties
+			$address = $this_object->get_first_obj_by_reltype ("RELTYPE_REALESTATE_ADDRESS");
+
 			if (!is_object ($this->re_manager))
 			{
 				$this->re_manager = obj ($this_object->prop ("realestate_manager"));
@@ -1685,143 +1686,148 @@ REALESTATE_NF_SEP);
 				$this->admin_division5 = obj ($this->re_manager->prop ("address_equivalent_5"));
 			}
 
-			if ( !is_object ($this->address_encoding) or ($this->address_encoding->id () != $arr["address_encoding"]) )
+			if (is_object ($address))
 			{
-				if ($this->can ("view", $arr["address_encoding"]))
+				if ( !is_object ($this->address_encoding) or ($this->address_encoding->id () != $arr["address_encoding"]) )
 				{
-					$this->address_encoding = obj ($arr["address_encoding"]);
+					if ($this->can ("view", $arr["address_encoding"]))
+					{
+						$this->address_encoding = obj ($arr["address_encoding"]);
+					}
+					else
+					{
+						$this->address_encoding = false;
+					}
 				}
-				else
-				{
-					$this->address_encoding = false;
-				}
+
+				$address1_str = $address_array[$this->admin_division1->id ()];
+				$param = array (
+					"prop" => "unit_encoded",
+					"division" => $this->admin_division1,
+					"encoding" => $this->address_encoding,
+				);
+				$address1_alt = $this->address_encoding ? $address->prop ($param) : $address1_str;
+
+				$address2_str = $address_array[$this->admin_division2->id ()];
+				$param = array (
+					"prop" => "unit_encoded",
+					"division" => $this->admin_division2,
+					"encoding" => $this->address_encoding,
+				);
+				$address2_alt = $this->address_encoding ? $address->prop ($param) : $address2_str;
+
+				$address3_str = $address_array[$this->admin_division3->id ()];
+				$param = array (
+					"prop" => "unit_encoded",
+					"division" => $this->admin_division3,
+					"encoding" => $this->address_encoding,
+				);
+				$address3_alt = $this->address_encoding ? $address->prop ($param) : $address3_str;
+
+				$address4_str = $address_array[$this->admin_division4->id ()];
+				$param = array (
+					"prop" => "unit_encoded",
+					"division" => $this->admin_division4,
+					"encoding" => $this->address_encoding,
+				);
+				$address4_alt = $this->address_encoding ? $address->prop ($param) : $address4_str;
+
+				$address5_str = $address_array[$this->admin_division5->id ()];
+				$param = array (
+					"prop" => "unit_encoded",
+					"division" => $this->admin_division5,
+					"encoding" => $this->address_encoding,
+				);
+				$address5_alt = $this->address_encoding ? $address->prop ($param) : $address5_str;
+
+				$address_street = $address_array[ADDRESS_STREET_TYPE];
+				$address_street_address = $address->prop ("street_address");
+				$address_apartment = $address->prop ("apartment");
 			}
 
-			$address1_str = $address_array[$this->admin_division1->id ()];
-			$param = array (
-				"prop" => "unit_encoded",
-				"division" => $this->admin_division1,
-				"encoding" => $this->address_encoding,
+			$prop_name = "address_adminunit1";
+			$properties[$prop_name] = array (
+				"name" => $prop_name,
+				"type" => "text",
+				"caption" => $this->admin_division1->name (),
+				"value" => $address1_str,
+				"strvalue" => $address1_str,
+				"altvalue" => $address1_alt,
 			);
-			$address1_alt = $this->address_encoding ? $address->prop ($param) : $address1_str;
 
-			$address2_str = $address_array[$this->admin_division2->id ()];
-			$param = array (
-				"prop" => "unit_encoded",
-				"division" => $this->admin_division2,
-				"encoding" => $this->address_encoding,
+			$prop_name = "address_adminunit2";
+			$properties[$prop_name] = array (
+				"name" => $prop_name,
+				"type" => "text",
+				"caption" => $this->admin_division2->name (),
+				"value" => $address2_str,
+				"strvalue" => $address2_str,
+				"altvalue" => $address2_alt,
 			);
-			$address2_alt = $this->address_encoding ? $address->prop ($param) : $address2_str;
 
-			$address3_str = $address_array[$this->admin_division3->id ()];
-			$param = array (
-				"prop" => "unit_encoded",
-				"division" => $this->admin_division3,
-				"encoding" => $this->address_encoding,
+			$prop_name = "address_adminunit3";
+			$properties[$prop_name] = array (
+				"name" => $prop_name,
+				"type" => "text",
+				"caption" => $this->admin_division3->name (),
+				"value" => $address3_str,
+				"strvalue" => $address3_str,
+				"altvalue" => $address3_alt,
 			);
-			$address3_alt = $this->address_encoding ? $address->prop ($param) : $address3_str;
 
-			$address4_str = $address_array[$this->admin_division4->id ()];
-			$param = array (
-				"prop" => "unit_encoded",
-				"division" => $this->admin_division4,
-				"encoding" => $this->address_encoding,
+			$prop_name = "address_adminunit4";
+			$properties[$prop_name] = array (
+				"name" => $prop_name,
+				"type" => "text",
+				"caption" => $this->admin_division4->name (),
+				"value" => $address4_str,
+				"strvalue" => $address4_str,
+				"altvalue" => $address4_alt,
 			);
-			$address4_alt = $this->address_encoding ? $address->prop ($param) : $address4_str;
 
-			$address5_str = $address_array[$this->admin_division5->id ()];
-			$param = array (
-				"prop" => "unit_encoded",
-				"division" => $this->admin_division5,
-				"encoding" => $this->address_encoding,
+			$prop_name = "address_adminunit5";
+			$properties[$prop_name] = array (
+				"name" => $prop_name,
+				"type" => "text",
+				"caption" => $this->admin_division5->name (),
+				"value" => $address5_str,
+				"strvalue" => $address5_str,
+				"altvalue" => $address5_alt,
 			);
-			$address5_alt = $this->address_encoding ? $address->prop ($param) : $address5_str;
 
-			$address_street_address = $address->prop ("street_address");
-			$address_apartment = $address->prop ("apartment");
+			$prop_name = "address_street";
+			$properties[$prop_name] = array (
+				"name" => $prop_name,
+				"type" => "text",
+				"caption" => t("Tänav"),
+				"value" => $address_street,
+				"strvalue" => $address_street,
+				"altvalue" => $address_street,
+			);
+
+			$prop_name = "address_street_address";
+			$properties[$prop_name] = array (
+				"name" => $prop_name,
+				"type" => "text",
+				"caption" => t("Maja nr."),
+				"value" => $address_street_address,
+				"strvalue" => $address_street_address,
+				"altvalue" => $address_street_address,
+			);
+
+			$prop_name = "address_apartment";
+			$properties[$prop_name] = array (
+				"name" => $prop_name,
+				"type" => "text",
+				"caption" => t("Korter"),
+				"value" => $address_apartment,
+				"strvalue" => $address_apartment,
+				"altvalue" => $address_apartment,
+			);
+
+			exit_function("re_property::get_property_data - address");
 		}
 
-		$prop_name = "address_adminunit1";
-		$properties[$prop_name] = array (
-			"name" => $prop_name,
-			"type" => "text",
-			"caption" => $this->admin_division1->name (),
-			"value" => $address1_str,
-			"strvalue" => $address1_str,
-			"altvalue" => $address1_alt,
-		);
-
-		$prop_name = "address_adminunit2";
-		$properties[$prop_name] = array (
-			"name" => $prop_name,
-			"type" => "text",
-			"caption" => $this->admin_division2->name (),
-			"value" => $address2_str,
-			"strvalue" => $address2_str,
-			"altvalue" => $address2_alt,
-		);
-
-		$prop_name = "address_adminunit3";
-		$properties[$prop_name] = array (
-			"name" => $prop_name,
-			"type" => "text",
-			"caption" => $this->admin_division3->name (),
-			"value" => $address3_str,
-			"strvalue" => $address3_str,
-			"altvalue" => $address3_alt,
-		);
-
-		$prop_name = "address_adminunit4";
-		$properties[$prop_name] = array (
-			"name" => $prop_name,
-			"type" => "text",
-			"caption" => $this->admin_division4->name (),
-			"value" => $address4_str,
-			"strvalue" => $address4_str,
-			"altvalue" => $address4_alt,
-		);
-
-		$prop_name = "address_adminunit5";
-		$properties[$prop_name] = array (
-			"name" => $prop_name,
-			"type" => "text",
-			"caption" => $this->admin_division5->name (),
-			"value" => $address5_str,
-			"strvalue" => $address5_str,
-			"altvalue" => $address5_alt,
-		);
-
-		$prop_name = "address_street";
-		$properties[$prop_name] = array (
-			"name" => $prop_name,
-			"type" => "text",
-			"caption" => t("Tänav"),
-			"value" => $address_street,
-			"strvalue" => $address_street,
-			"altvalue" => $address_street,
-		);
-
-		$prop_name = "address_street_address";
-		$properties[$prop_name] = array (
-			"name" => $prop_name,
-			"type" => "text",
-			"caption" => t("Maja nr."),
-			"value" => $address_street_address,
-			"strvalue" => $address_street_address,
-			"altvalue" => $address_street_address,
-		);
-
-		$prop_name = "address_apartment";
-		$properties[$prop_name] = array (
-			"name" => $prop_name,
-			"type" => "text",
-			"caption" => t("Korter"),
-			"value" => $address_apartment,
-			"strvalue" => $address_apartment,
-			"altvalue" => $address_apartment,
-		);
-
-		exit_function("re_property::get_property_data - address");
 		enter_function("re_property::get_property_data - agent");
 
 		### add agent properties
