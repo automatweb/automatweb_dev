@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>transyes</name>
+            <table>objects</table>
+            <type>checkbox</type>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vajab t&amp;amp;otilde;lget</caption>
+      </property>
+      <property>
             <name>mgrtoolbar</name>
             <table>objects</table>
             <group>manager</group>
@@ -11,21 +20,19 @@
             <caption>Toolbar</caption>
       </property>
       <property>
-            <name>manager</name>
+            <name>mupload</name>
             <table>objects</table>
             <group>manager</group>
-            <type>text</type>
-            <no_caption>1</no_caption>
+            <type>fileupload</type>
             <store>no</store>
-            <wrapchildren>1</wrapchildren>
-            <field>manager</field>
-            <caption>Manager</caption>
+            <field>mupload</field>
+            <caption>Vali muutujatega fail</caption>
       </property>
       <property>
             <name>treeview</name>
             <table>objects</table>
             <group>manager</group>
-            <type>text</type>
+            <type>treeview</type>
             <store>no</store>
             <parent>mlist</parent>
             <no_caption>1</no_caption>
@@ -42,18 +49,12 @@
             <field>metalist</field>
       </property>
       <property>
-            <name>mupload</name>
-            <table>objects</table>
-            <group>import</group>
-            <type>fileupload</type>
-            <store>no</store>
-            <field>mupload</field>
-            <caption>Vali muutujatega fail</caption>
-      </property>
-      <property>
             <name>meta</name>
             <table>objects</table>
-            <group>manager</group>
+            <group>
+                  <num_0>manager</num_0>
+                  <num_1>translate</num_1>
+            </group>
             <type>hidden</type>
             <store>no</store>
             <field>meta</field>
@@ -67,16 +68,14 @@
             <manager>
                   <caption>Muutujad</caption>
                   <submit>no</submit>
+                  <encoding>utf-8</encoding>
             </manager>
-            <import>
-                  <caption>Import</caption>
-            </import>
       </groupinfo>
       <layout>
             <mlist>
                   <type>hbox</type>
-                  <group>manager</group>
                   <width>20%:80%</width>
+                  <group>manager</group>
             </mlist>
       </layout>
 </properties>

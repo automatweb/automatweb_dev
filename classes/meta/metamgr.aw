@@ -1,41 +1,37 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.10 2005/11/21 15:17:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.11 2005/12/20 16:37:42 markop Exp $
 // metamgr.aw - Muutujate haldus 
 
-// see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see kõik pole
-// ju üldse fun
+// see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
+// ju ldse fun
 /*
 
 @classinfo syslog_type=ST_METAMGR relationmgr=yes
-
 @default table=objects
-@default group=general
+
+@property transyes type=checkbox group=general field=meta method=serialize
+@caption Vajab t&otilde;lget
 
 @default group=manager
 
-@property mgrtoolbar type=toolbar no_caption=1 store=no
+
+@groupinfo manager caption="Muutujad" submit=no encoding=utf-8
+@property mgrtoolbar type=toolbar no_caption=1 store=no 
 @caption Toolbar
 
-
-@property manager type=text no_caption=1 store=no wrapchildren=1
-@caption Manager
-
-@layout mlist type=hbox group=manager width=20%:80%
-
-	@property treeview type=text store=no parent=mlist no_caption=1
-
-	@property metalist type=table store=no parent=mlist no_caption=1
-
-@property mupload type=fileupload store=no group=import
+@property mupload type=fileupload store=no
 @caption Vali muutujatega fail
 
-@property meta type=hidden store=no 
+
+@layout mlist type=hbox width=20%:80%
+	@property treeview type=treeview store=no parent=mlist no_caption=1
+	@property metalist type=table store=no parent=mlist no_caption=1
+@property meta type=hidden group=manager,translate store=no 
 @caption Metainfo
 
-@groupinfo manager caption="Muutujad" submit=no
-@groupinfo import caption="Import" 
 
 */
+
 
 class metamgr extends class_base
 {
@@ -75,41 +71,40 @@ class metamgr extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "mupload":
+				if (!$arr["obj_inst"]->prop("object_type"))
+				{
+					if(!$arr["request"]["do_import"])
+					{
+						return PROP_IGNORE;
+					}
+				}
+				break;
+			
 			case "treeview":
 				$this->do_meta_tree($arr);
 				break;
-
 			case "metalist":
 				$this->do_table($arr);
 				break;
-				
 			case "mgrtoolbar":
 				$this->do_toolbar($arr);
 				break;
-
 			case "meta":
 				$data["value"] = $arr["request"]["meta"];
 				break;
-					
-				
-
 		};
 		return $retval;
 	}
 
 	function do_meta_tree($arr)
-	{
-		$tree = get_instance("vcl/treeview");
+	{	
+		$tree = &$arr["prop"]["vcl_inst"];
 		$obj = $arr["obj_inst"];
-		$tree->start_tree(array(
-			"type" => TREE_DHTML,
-			"tree_id" => "metamgrtree", 
-			"persist_state" => 1,
-		));
-		$tree->add_item(0,array(
+		$tree->add_item(0, array(
 			"name" => $obj->name(),
 			"id" => $obj->id(),
-			"url" => $this->mk_my_orb("change",array(
+			"url" => $this->mk_my_orb("change", array(
 				"id" => $obj->id(),
 				"group" => $arr["prop"]["group"],
 			)),
@@ -131,9 +126,8 @@ class metamgr extends class_base
 		$tree->set_selected_item($arr["request"]["meta"]);
 
 		// hm .. now I also need to create an object_tree, eh?
-		$arr["prop"]["value"] = $tree->finalize_tree();
+		//$arr["prop"]["value"] = $tree->finalize_tree();
 	}
-
 	function do_table($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
@@ -149,9 +143,25 @@ class metamgr extends class_base
 			"callb_pass_row" => true,
 		));
 
+		$lg = get_instance("languages");
+		$langdata = array();
+		$langdata = $lg->get_list();
+
+		foreach($langdata as $id => $lang)
+		{
+			if($arr["obj_inst"]->lang_id() != $id)
+			{
+				$t->define_field(array(
+					"name" => $id,
+					"lang_id" => $id,
+					"caption" => t($lang),
+				));
+			}
+		}
+
 		$t->define_field(array(
 			"name" => "value",
-			"caption" => t("Väärtus"),
+			"caption" => t("V?rtus"),
 			"callback" => array(&$this, "callb_value"),
 			"callb_pass_row" => true,
 		));
@@ -187,23 +197,48 @@ class metamgr extends class_base
 			"lang_id" => array(),
 			"sort_by" => "objects.jrk",
 		));
-		$t->define_data(array(
+
+		$new_data = array(
 			"id" => "new",
 			"is_new" => 1,
 			"name" => "",
 			"ord" => "",
-		));
+		);
 
-		for ($o = $olist->begin(); !$olist->end(); $o = $olist->next())
+		foreach($langdata as $lid => $lang)
 		{
-			$id = $o->id();
-			$t->define_data(array(
+			 $new_data[$lid] = html::textbox(array(
+				"name" => "submeta[new][tolge][".$lid."]",
+				"size" => 15,
+				"value" => "",
+			));
+		}		
+
+		$t->define_data($new_data);
+
+		foreach($olist->arr() as $o)
+		{
+			$id = $o->id();$draw_text = $draw_text.
+
+			$trans = array(
 				"is_new" => 0,
 				"id" => $id,
 				"name" => $o->name(),
 				"value" => $o->comment(),
 				"ord" => $o->prop("ord"),
-			));
+			);
+
+			$tr = $o->meta("tolge");
+			foreach($langdata as $lid => $lang)
+			{
+				 $trans[$lid] = html::textbox(array(
+					"name" => "submeta[".$id."][tolge][".$lid."]",
+					"size" => 15,
+					"value" => $tr[$lid],
+				));
+			}
+
+			$t ->define_data($trans);
 		};
 
 		// now add the textbox thingies to allow adding of new data
@@ -237,13 +272,37 @@ class metamgr extends class_base
 		$t->set_sortable(false);
 
 		$t->table_header = "<small>" . join(" &gt; ",$pathstr) . "</small>";
-		/*
-		$t->sort_by(array(
-			"field" => array("is_new","ord"),
-			"sorder" => array("ord" => "desc","is_new" => "desc"),
-		));
-		*/
-
+		if ($_GET["do_export"] == 1)
+		{
+			$file_name = $root_obj->id().".txt";
+			header("Content-type: text/plain");
+			header("Content-disposition: inline; filename=".t("$file_name").";");
+			$draw_text = "";
+			foreach($olist->arr() as $o)
+			{
+				$draw_text = $draw_text.$arr["obj_inst"]->lang_id().":";				
+				$draw_text = $draw_text.$o->name();
+				foreach($langdata as $id => $lang)
+				{
+					$tr = $o->meta("tolge");
+					if(($arr["obj_inst"]->lang_id() != $id)&&(strlen($tr[$id])>0))
+					{						
+						$draw_text = $draw_text."\t".$id.":".$tr[$id];
+					}	
+				}
+				if(strlen($o->comment())>0)
+				{
+ 					$draw_text = $draw_text."\tcomm:".$o->comment();
+				}
+				if(strlen($o->prop("ord"))>0)
+				{
+					$draw_text = $draw_text."\tord:".$o->prop("ord");
+				}
+				$draw_text = $draw_text."\r\n";			
+			}				
+						
+			die($draw_text);
+		}
 	}
 
 	function callb_name($arr)
@@ -272,7 +331,6 @@ class metamgr extends class_base
 			"value" => $arr["ord"],
 		));
 	}
-
 	function submit_meta($arr = array())
 	{
 		$obj = $arr["obj_inst"];
@@ -292,6 +350,7 @@ class metamgr extends class_base
 			$no->set_comment($new["value"]);
 			$no->set_name($new["name"]);
 			$no->set_prop("ord",(int)$new["ord"]);
+			$no->set_meta("tolge", $new["tolge"]);
 			$no->save();
 		};	
 		$submeta = $arr["request"]["submeta"];
@@ -304,6 +363,7 @@ class metamgr extends class_base
 				$so->set_name($sval["name"]);
 				$so->set_comment($sval["value"]);
 				$so->set_prop("ord",$sval["ord"]);
+				$so->set_meta("tolge", $sval["tolge"]);
 				$so->save();
 			};
 		};
@@ -372,9 +432,26 @@ class metamgr extends class_base
 			};
 		};
 
+		$toolbar->add_separator();
 
+		$toolbar->add_button(array(
+			"name" => "export",
+			"tooltip" => t("Export"),
+			"img" => "export.gif",
+			"url" => aw_url_change_var("do_export", 1)
+			));
+		
+		$toolbar->add_separator();
+
+		$toolbar->add_button(array(
+			"name" => "import",
+			"tooltip" => t("Import"),
+			"img" => "import.gif",
+			"url" => aw_url_change_var("do_import", 1)
+			));
 
 		$toolbar->add_separator();
+
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => t("Kustuta valitud muutujad"),
@@ -465,41 +542,45 @@ class metamgr extends class_base
 			return false;
 		};
 		$parent = $arr["request"]["meta"];
+		if(!is_oid($parent) || !$this->can("view", $parent))
+		{
+			$parent = $arr["obj_inst"]->id();
+		}
 		while ($data = fgetcsv($handle, 1000, "\t"))
 		{
-			// that's for stat.
-			if (sizeof($data) == 3)
+			$no = new object;
+			$no->set_class_id(CL_META);
+			$no->set_status(STAT_ACTIVE);
+			$no->set_parent($parent);
+			$trans=array();
+			foreach($data as $id => $obj_data)
 			{
-				$no = new object;
-				$no->set_class_id(CL_META);
-				$no->set_status(STAT_ACTIVE);
-				$no->set_parent($parent);
-				$no->set_comment($data[2]);
-				$no->set_name($data[0] . " (" . $data[1] . ")");
-				$no->save();
+				if(strpos($obj_data, ":") !== false)
+				{
+					$prop = explode(":", $obj_data);
+					switch($prop[0])
+					{
+						case "comm":
+						$no->set_comment($prop[1]);
+						break;
+						
+						case $arr["obj_inst"]->lang_id():
+						$no->set_name($prop[1]);
+						break;
+					
+						case "ord":
+						$no->set_ord($prop[1]);
+						break;
+						
+						default:
+						$trans[$prop[0]] = $prop[1];
+					}
+					$no->set_meta("tolge", $trans);
+				}
 			}
-			if (sizeof($data) == 2)
-			{
-				$no = new object;
-				$no->set_class_id(CL_META);
-				$no->set_status(STAT_ACTIVE);
-				$no->set_parent($parent);
-				$no->set_comment($data[1]);
-				$no->set_name($data[0]);
-				$no->save();
-			};
-
-			if (sizeof($data) == 1)
-			{
-				$no = new object;
-				$no->set_class_id(CL_META);
-				$no->set_status(STAT_ACTIVE);
-				$no->set_parent($parent);
-				$no->set_name($data[0]);
-				$no->save();
-			};
+			$no->save();
 		
-		};
+		}
 		fclose($handle);	
 	}
 
@@ -510,6 +591,8 @@ class metamgr extends class_base
 			$arr["args"]["meta"] = $arr["request"]["meta"];
 		};
 	}
+
+
 
 }
 ?>

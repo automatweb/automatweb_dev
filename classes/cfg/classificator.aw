@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.11 2005/09/19 09:36:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.12 2005/12/20 16:37:42 markop Exp $
 
 /*
 
@@ -169,27 +169,30 @@ class classificator extends class_base
 			case "checkboxes":
 				$prop["type"] = "chooser";
 				$prop["multiple"] = 1;
-				$prop["options"] = $choices->names();
+				$prop["options"] = $choices["list_names"];
 				break;
 
 			case "radiobuttons":
 				$prop["type"] = "chooser";
-				$prop["options"] = $choices->names();
+				$prop["options"] = $choices["list_names"];
 				break;
 
 			case "mselect":
 				$prop["type"] = "select";
 				$prop["multiple"] = 1;
-				$prop["options"] = $choices->names();
+				$prop["options"] = $choices["list_names"];
 				break;
 
 			case "view":
-				$prop["options"] = $choices->names();
+				$prop["options"] = $choices["list_names"];
+
 				break;
 
 			default:
 				$prop["type"] = "select";
-				$prop["options"] = array("" => "") + $choices->names();
+				$prop["options"] = array("" => "") + $choices["list_names"];
+//				$prop["options"] = array("" => "") + $choices->names();
+
 		};
 
 		global $XX5;
@@ -197,6 +200,7 @@ class classificator extends class_base
 		{
 			arr($prop);
 		};
+
 
 		return array($prop["name"] => $prop);
 		// well, that was pretty easy. Now I need a way to tell the bloody classificator, that
@@ -221,6 +225,7 @@ class classificator extends class_base
 			}
 		}
 		$arr["property"]["value"] = implode(", ", $vals);
+	
 	}
 
 	function get_choices($arr)
@@ -296,8 +301,64 @@ class classificator extends class_base
 		{
 			$olx = new object_list($vars);
 		}
+		$langid = aw_global_get("lang_id");
 
+		$ret = array(
+			"list" => $olx->list,
+			"list_names" => $olx->list_names,
+		);
+		
+		
+/*
+		foreach($olx->arr() as $o)
+		{
+			$tolked = $o->meta();
+			$id = $o->id();
+			$parent_id = $o->parent();
+			$parent_obj = new object($parent_id);
+			$root_id = $parent_obj -> parent();
+			$root_obj = new object($root_id);
+			$root_meta = $root_obj->meta();
+			if ($root_meta[transyes])
+			{ 
+				if($tolked["tolge"][$langid])
+				{
+					$olx->list_names[$id] = $tolked["tolge"][$langid];
+				}
+			}
+		}		
 		return array($olx,$ofto->name(),$use_type, $default_value);
+*/	
+		$ret = array(
+			"list" => $olx->list,
+			"list_names" => $olx->list_names,
+		);
+
+		$obj_meta = array();
+		$parent_id;
+
+		foreach($olx->arr() as $o)
+		{
+			$obj_id = $o->id(); 
+			$parent_id = $o->parent();
+			$obj_meta[$obj_id] = $o->meta();
+		}
+
+		$parent_obj = new object($parent_id);
+		$root_id = $parent_obj -> parent();
+		$root_obj = new object($root_id);
+		$root_meta = $root_obj->meta();
+		if ($root_meta[transyes])
+		{
+			foreach($obj_meta as $asd => $val)
+			{
+				if($obj_meta[$asd]["tolge"][$langid])
+				{
+					$ret["list_names"][$asd] = $obj_meta[$asd]["tolge"][$langid];
+				}
+			}
+		}
+		return array($ret,$ofto->name(),$use_type, $default_value);
 	}
 
 	function process_vcl_property($arr)
@@ -328,8 +389,11 @@ class classificator extends class_base
 			"name" => $property["name"],
 			"obj_inst" => $arr["obj_inst"],
 		));
-		$ids = $this->make_keys($choices->ids());
+
+		$ids = $this->make_keys($choices["list"]);
 		// I need to list the choices
+//		echo $choices;
+
 		foreach($items->get() as $item)
 		{
 			// skip invalid items
@@ -423,7 +487,6 @@ class classificator extends class_base
 			"site_id" => array(),
 			"sort_by" => "objects.jrk"
 		));
-
 		return $items->names();
 	}
 
