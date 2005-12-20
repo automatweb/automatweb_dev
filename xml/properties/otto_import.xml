@@ -252,7 +252,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>7 pildiga trendide lehed</caption>
-            <comment>Ainult BonPrix. lk koodide asemel kaustade id-d, mille all 7st vaadet n&amp;auml;idata</comment>
+            <comment>Ainult BonPrix. lk koodide asemel kaustade id-d, mille all 7st vaadet n&amp;amp;auml;idata</comment>
       </property>
       <property>
             <name>jm_clothes</name>
