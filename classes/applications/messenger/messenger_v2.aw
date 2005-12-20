@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.13 2005/12/08 16:53:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.14 2005/12/20 15:42:43 ahti Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -90,7 +90,7 @@ comment Minutites
 @groupinfo settings caption="Seaded" parent=general
 @groupinfo advanced caption="Lisaks" parent=general
 @groupinfo imap caption="IMAP" parent=general
-@groupinfo main_view caption="Kirjad" submit=no 
+@groupinfo main_view caption="Kirjad" submit=no encoding=utf-8
 @groupinfo search caption=Otsing submit=no submit_action=change submit_method=GET
 @groupinfo rules caption=Reeglid submit=no
 @groupinfo rules_editor caption="Reeglite defineerimine" submit=no parent=rules
@@ -415,7 +415,7 @@ class messenger_v2 extends class_base
 
 			$t->define_data(array(
 				"id" => $key,
-				"from" => $this->_format($fromline,$seen),
+				"from" => $this->_format(iconv("iso-8859-1", "utf-8", $fromline),$seen),
 				"subject" => html::href(array(
 					"url" => "javascript:aw_popup_scroll(\"" . $this->mk_my_orb("change",array(
 							"msgrid" => $arr["obj_inst"]->id(),
@@ -424,7 +424,7 @@ class messenger_v2 extends class_base
 							"cb_part" => 1,
 							"mailbox" => $this->use_mailbox,
 					),"mail_message",false,true) . "\",\"$wname\",800,600)",
-					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
+					"caption" => $this->_format(parse_obj_name(iconv("iso-8859-1", "utf-8", $message["subject"])),$seen),
 				)),
 				"date" => $message["tstamp"],
 				"size" => $this->_format(sprintf("%d",$message["size"]/1024),$seen),

@@ -242,6 +242,7 @@
             <main_view>
                   <caption>Kirjad</caption>
                   <submit>no</submit>
+                  <encoding>utf-8</encoding>
             </main_view>
             <search>
                   <caption>Otsing</caption>

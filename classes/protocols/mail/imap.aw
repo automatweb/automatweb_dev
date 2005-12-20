@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.26 2005/10/19 18:38:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.27 2005/12/20 15:42:43 ahti Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -34,6 +34,7 @@
 
 class imap extends class_base
 {
+	var $charsets = array("KOI8-R", "iso-8859-4", "windows-1251", "iso-8859-1");
 	function imap()
 	{
 		$this->init(array(
@@ -187,8 +188,6 @@ class imap extends class_base
 
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
-
-
 		// mailbox has changed, reload from server
 		if ($last_check != $new_check)
 		{
@@ -232,6 +231,7 @@ class imap extends class_base
 					$addrinf = $this->_extract_address($message->from);
 					$rkey = $message->uid;
 					$req_msgs[$rkey] = array(
+						"encoding" => $str->parameters[0]->value,
 						"from" => $message->from,
 						"froma" => $addrinf["addr"],
 						"fromn" => $this->MIME_decode($addrinf["name"]),
@@ -381,44 +381,76 @@ class imap extends class_base
 
 		$this->partlist = array();
 		$this->attachments = array();
-
-		if ($structure->body)
+		if (!empty($structure->body))
 		{
-			$msgdata["content"] = $structure->body;
+			$msgdata["content"] = strip_tags($structure->body);
 		}
 		elseif (is_array($structure->parts))
 		{
 			foreach($structure->parts as $key => $val)
 			{
-				if (strtolower($val->ctype_primary) == "text" && strtolower($val->ctype_secondary) == "plain" && empty($val->disposition))
-				{
-					$msgdata["content"] .= $val->body;
-				}
-				else
-				if (!empty($val->disposition) && $val->disposition == "attachment")
-				{
-					$this->attachments[$key] = $val->d_parameters["filename"];
-
-					if (!empty($val->headers["content-description"]))
-					{
-						$this->attachments[$key] .= " : " . $val->headers["content-description"];
-					};
-				}
-				else
-				{
-					$this->attachments[$key] = $val->ctype_parameters["name"];
-				};
-
-			};
-
+				$this->add_parts($key, $val);
+			}
 		};
+		$msgdata["content"] .= $this->msg_content;
 
 		if (sizeof($this->attachments) > 0)
 		{
 			$msgdata["attachments"] = $this->attachments;
 		}
-
+		//arr($structure);
 		return $msgdata;
+	}
+
+	function add_parts($key, $val)
+	{
+		static $v;
+		list($keyx,) = each($val->parts);
+		if($keyx == 0 && isset($keyx))
+		{
+			$v++;
+			foreach($val->parts as $key2 => $val2)
+			{
+				$this->add_parts($key2, $val2);
+			}
+		}
+		else
+		{
+			if(strtolower($val->ctype_primary) == "text" && strtolower($val->ctype_secondary) == "plain" && ($val->disposition == "inline" || empty($val->disposition)))
+			{
+				if(!empty($val->ctype_parameters["charset"]) && in_array(strtolower($val->ctype_parameters["charset"]), $this->charsets))
+				{
+					$this->charset = $val->ctype_parameters["charset"];
+				}
+				if(!empty($this->charset))
+				{
+					//$val->body = iconv($this->charset, "utf-8", $val->body);
+					aw_global_set("output_charset", $this->charset);
+				}
+				$this->msg_content .= $val->body;
+			}
+			elseif(strtolower($val->ctype_primary) == "text" && strtolower($val->ctype_secondary) == "html" && ($val->disposition == "inline" || empty($val->disposition)))
+			{
+				// send this one to garbage, because we don't accept html at the moment...
+				return;
+			}
+			elseif(!empty($val->disposition) && $val->disposition == "attachment")
+			{
+				$this->attachments[$key] = $val->d_parameters["filename"];
+				if (!empty($val->headers["content-description"]))
+				{
+					$this->attachments[$key] .= " : " . $val->headers["content-description"];
+				};
+			}
+			else
+			{
+				// send this one to garbage also
+				return;
+				//echo "some other garbage";
+				//arr($val);
+				//$this->attachments[$key] = $val->ctype_parameters["name"];
+			};
+		}
 	}
 
 	function fetch_headers($arr)
