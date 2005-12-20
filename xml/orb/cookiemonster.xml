@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="cookiemonster" folder="core/dbg" extends="class_base">
+	<class name="cookiemonster" folder="applications/unittest" extends="class_base">
 		<action name="list" default="1">
 			<function name="gen_list">
 				<arguments>
