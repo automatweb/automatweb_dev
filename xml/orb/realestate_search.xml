@@ -1,5 +1,15 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="realestate_search" folder="applications/realestate_management" extends="class_base">
+		<action name="get_a3_options" nologin="1">
+			<function name="get_a3_options">
+				<arguments>
+					<required name="id" type="int" />
+					<optional name="reAddress2Selected" type="int" />
+					<optional name="reAddress3Division" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

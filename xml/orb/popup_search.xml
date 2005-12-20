@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="popup_search" folder="vcl" extends="aw_template">
+		<action name="do_unlink">
+			<function name="do_unlink">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="pn" />
+					<optional name="rem" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="do_search">
 			<function name="do_search">
 				<arguments>

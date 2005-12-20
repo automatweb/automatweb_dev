@@ -19,6 +19,17 @@
             <caption>Otsingutulemuste n&amp;auml;itamise formaat</caption>
       </property>
       <property>
+            <name>result_no_form</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <comment>N&amp;auml;ita otsingutulemusi ilma otsinguvormita. Ei m&amp;otilde;juta admin liidese otsingut.</comment>
+            <caption>Tulemused otsinguvormita</caption>
+      </property>
+      <property>
             <name>searchform_select_size</name>
             <table>objects</table>
             <group>general</group>
@@ -43,16 +54,16 @@
             <caption>Kinnisvarahalduskeskkond</caption>
       </property>
       <property>
-            <name>searchparam_country</name>
+            <name>administrative_structure</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_COUNTRY</reltype>
-            <clid>CL_COUNTRY</clid>
+            <reltype>RELTYPE_ADMINISTRATIVE_STRUCTURE</reltype>
+            <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
             <automatic>1</automatic>
-            <caption>Riik</caption>
+            <caption>Haldusjaotus</caption>
       </property>
       <property>
             <name>save_search</name>
@@ -214,6 +225,15 @@
             <caption>Maakler</caption>
       </property>
       <property>
+            <name>search_special_status</name>
+            <table>objects</table>
+            <group>grp_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Eristaatus</caption>
+      </property>
+      <property>
             <name>search_is_middle_floor</name>
             <table>objects</table>
             <group>grp_search</group>
@@ -294,11 +314,11 @@
                   <value>1</value>
                   <caption>Kinnisvaraobjektide halduskeskkond</caption>
             </OWNER>
-            <COUNTRY>
-                  <clid>CL_COUNTRY</clid>
+            <ADMINISTRATIVE_STRUCTURE>
+                  <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
                   <value>2</value>
-                  <caption>Riik</caption>
-            </COUNTRY>
+                  <caption>Haldusjaotus</caption>
+            </ADMINISTRATIVE_STRUCTURE>
       </reltypes>
       <layout>
             <box1>

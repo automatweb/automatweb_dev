@@ -46,7 +46,7 @@
 			</function>
 		</action>
 
-		<action name="show_aliased" nologin="1" caption="Näita galeriid">
+		<action name="show_aliased" nologin="1" caption="N&auml;ita galeriid">
 			<function name="show_aliased">
 				<arguments>
 					<required name="id" type="int" />

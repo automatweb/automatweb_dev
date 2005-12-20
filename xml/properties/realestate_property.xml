@@ -99,13 +99,6 @@
             <caption>Aadress</caption>
       </property>
       <property>
-            <name>address_text</name>
-            <table>realestate_property</table>
-            <group>grp_main</group>
-            <type>hidden</type>
-            <field>address_text</field>
-      </property>
-      <property>
             <name>title2</name>
             <table>objects</table>
             <group>grp_main</group>
@@ -477,14 +470,6 @@
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
       </property>
       <property>
-            <name>translation</name>
-            <table>objects</table>
-            <group>grp_additional_info</group>
-            <type>translator</type>
-            <store>no</store>
-            <field>translation</field>
-      </property>
-      <property>
             <name>pictures</name>
             <table>objects</table>
             <group>grp_photos</group>
@@ -506,10 +491,27 @@
             <caption>Pildid</caption>
       </property>
       <property>
+            <name>picture_icon_city24</name>
+            <table>objects</table>
+            <group>grp_photos</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>picture_icon</name>
             <table>objects</table>
             <group>grp_photos</group>
-            <type>text</type>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>picture_icon_image</name>
+            <table>objects</table>
+            <group>grp_photos</group>
+            <reltype>RELTYPE_REALESTATE_PICTUREICON</reltype>
+            <clid>CL_IMAGE</clid>
             <field>meta</field>
             <method>serialize</method>
             <caption>V&amp;auml;ike pilt</caption>
@@ -582,6 +584,7 @@
             </grp_detailed>
             <grp_additional_info>
                   <caption>Lisainfo</caption>
+                  <encoding>UTF-8</encoding>
             </grp_additional_info>
             <grp_photos>
                   <caption>Pildid</caption>
@@ -633,6 +636,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>Pilt</caption>
             </REALESTATE_PICTURE>
+            <REALESTATE_PICTUREICON>
+                  <value>8</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>V&amp;auml;ike pilt</caption>
+            </REALESTATE_PICTUREICON>
       </reltypes>
 </properties>
 
