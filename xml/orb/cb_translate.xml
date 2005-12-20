@@ -1,0 +1,29 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="cb_translate" folder="applications/cb_trans" extends="aw_template">
+		<action name="editor">
+			<function name="editor">
+				<arguments>
+					<required name="clid" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="groupedit">
+			<function name="groupedit">
+				<arguments>
+					<required name="clid" type="int" />
+					<required name="grpid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_editor">
+			<function name="submit_editor">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
