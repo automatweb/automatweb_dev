@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.81 2005/12/09 07:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.82 2005/12/21 19:25:16 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1909,9 +1909,9 @@ class form_table extends form_base
 
 	function do_menu()
 	{
-		//$tpl = get_instance("aw_template");
-		$this->tpl_init("forms");
-		$this->read_template("fg_table_menu.tpl");
+		$tpl = get_instance("aw_template");
+		$tpl->tpl_init("forms");
+		$tpl->read_template("fg_table_menu.tpl");
 
 		$items["change"] = array("name" => "Tulbad", "url" => $this->mk_my_orb("change", array("id" => $this->table_id), "",false,true));
 
@@ -1933,7 +1933,7 @@ class form_table extends form_base
 			$items["has_grpsettings"] = array("name" => "Gruppide m&auml;&auml;rangud", "url" => $this->mk_my_orb("change_grpsettings", array("id" => $this->table_id), "",false,true));
 		}
 
-		$this->vars(array(
+		$tpl->vars(array(
 			"menu" => $this->do_tpl_menu($items)
 		));
 	}
@@ -1967,7 +1967,6 @@ class form_table extends form_base
 		));
 
 		$style_inst = get_instance(CL_STYLE);
-
 		for ($col = 0; $col < $this->table["cols"]; $col++)
 		{
 			$this->vars(array(
@@ -2173,7 +2172,6 @@ class form_table extends form_base
 				$coldata[$col][14] = $this->parse("SEL_DATEFORMAT");
 			}
 		}
-
 		$l = "";
 		for ($idx = 1; $idx < 15; $idx++)
 		{
