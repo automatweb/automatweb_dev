@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.41 2005/11/10 14:16:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.42 2005/12/21 19:50:21 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -630,7 +630,7 @@ class object_import extends class_base
 		// js redir back to change
 		if ($o->prop("ds"))
 		{
-			set_time_limit(0);
+			set_time_limit(14400);
 			ignore_user_abort(true);
 			aw_global_set("no_cache_flush", 1);
 			obj_set_opt("no_cache", 1);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.55 2005/12/13 20:30:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.56 2005/12/21 19:50:21 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -128,6 +128,7 @@ class admin_folders extends aw_template
 		enter_function("gfn::list1");
 		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
 		$this->tree = get_instance("vcl/treeview");
+		$this->period = $period;
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
 			"url_target" => "list",
@@ -255,6 +256,7 @@ class admin_folders extends aw_template
 
 	function gen_folders($period)
 	{
+		return $this->gen_folders_new($period);
 		enter_function("admin_folders::gen_folders");
 		$this->read_template("folders.tpl");
 
@@ -887,13 +889,13 @@ class admin_folders extends aw_template
 		// kui pole perioodiline siis ei n2ita
 		$rv = true;
 		
-		if ($this->period > 0)
+		/*if ($this->period > 0)
 		{
 			if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] == 0))
 			{
-				$rv = false;
+				//$rv = false;
 			};
-		};
+		};*/
 		exit_function("admin_folders::resolve_item_new");
 		return $rv ? $arr : false;
 	}
@@ -1043,6 +1045,8 @@ class admin_folders extends aw_template
 		{
 			$rn = 0;
 		}
+		$tmp = $this->period;
+		$this->period = null;
 		foreach($ol->arr() as $menu)
 		{
 			$rs = $this->resolve_item_new($menu);
@@ -1053,6 +1057,7 @@ class admin_folders extends aw_template
 				$this->tree->add_item($rs["parent"], $rs);
 			}
 		}
+		$this->period = $tmp;
 	}
 
 }
