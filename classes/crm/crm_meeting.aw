@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.43 2005/11/28 13:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.44 2005/12/21 18:15:54 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -423,7 +423,23 @@ class crm_meeting extends class_base
 
 				$this->return_url=aw_global_get('REQUEST_URI');
 				break;
+
 			}
+
+			case "search_contact_company":
+			case "search_contact_firstname":
+			case "search_contact_lastname":
+			case "search_contact_code":
+				if ($arr["request"]["class"] != "planner")
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				break;
+
+			case "search_contact_results":
+				$p = get_instance(CL_PLANNER);
+				$data["value"] = $p->do_search_contact_results_tbl($arr["request"]);
+				break;
 		}
 	}
 	
