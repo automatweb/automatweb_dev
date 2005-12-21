@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.150 2005/12/14 12:40:29 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.151 2005/12/21 18:06:52 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1168,6 +1168,10 @@ class image extends class_base
 			$this->vars(array(
 				'comments'=> $out,
 			));
+		}
+		if (!$this->is_template($parse))
+		{
+			die($this->parse());	
 		}
 		die($this->parse($parse));
 	}
