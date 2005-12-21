@@ -8,6 +8,7 @@
             <reltype>RELTYPE_IMG_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
+            <parent>this.parent</parent>
             <caption>Piltide kataloog</caption>
       </property>
       <property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.18 2005/11/10 14:24:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.19 2005/12/21 20:02:26 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -8,7 +8,7 @@
 @default table=objects
 @default group=general
 
-@property folder type=relpicker reltype=RELTYPE_IMG_FOLDER field=meta method=serialize
+@property folder type=relpicker reltype=RELTYPE_IMG_FOLDER field=meta method=serialize parent=this.parent
 @caption Piltide kataloog
 
 @property cols type=textbox size=5 field=meta method=serialize default=2

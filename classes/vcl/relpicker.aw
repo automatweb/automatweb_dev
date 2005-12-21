@@ -106,7 +106,6 @@ class relpicker extends  core
 			$rel_val = $arr["relinfo"][$reltype]["value"];
 
 			$clss = aw_ini_get("classes");
-
 			if (count($clid) > 1)
 			{
 				$pm = get_instance("vcl/popup_menu");
@@ -117,7 +116,7 @@ class relpicker extends  core
 						"text" => $clss[$_clid]["name"],
 						"link" => html::get_new_url(
 							$_clid, 
-							$this->obj->id(), 
+							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(), 
 							array(
 								"alias_to" => $this->obj->id(), 
 								"reltype" => $rel_val,
@@ -138,7 +137,7 @@ class relpicker extends  core
 					$val["post_append_text"] .= " ".html::href(array(
 						"url" => html::get_new_url(
 							$_clid, 
-							$this->obj->id(), 
+							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(), 
 							array(
 								"alias_to" => $this->obj->id(), 
 								"reltype" => $rel_val,
