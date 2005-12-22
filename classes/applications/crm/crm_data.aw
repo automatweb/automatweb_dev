@@ -36,6 +36,10 @@ class crm_data extends class_base
 				"msg" => sprintf(t("crm_data::get_bills_by_co(): second parameter must be an array, if set!"))
 			));
 
+			if (isset($filter["bill_no"]))
+			{
+				$of["bill_no"] = $filter["bill_no"];
+			}
 			if (isset($filter["monthly"]))
 			{
 				$of["monthly_bill"] = $filter["monthly"];
@@ -78,7 +82,6 @@ class crm_data extends class_base
 				$of2["CL_CRM_BILL.customer(CL_CRM_PERSON).name"] = "%".$filter["customer"]."%";
 			}
 		}
-
 		$ret =  new object_list($of);
 		if (isset($of2))
 		{
