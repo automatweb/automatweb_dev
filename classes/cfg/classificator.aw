@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.13 2005/12/22 10:15:33 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.14 2005/12/22 11:08:55 markop Exp $
 
 /*
 
@@ -273,7 +273,10 @@ class classificator extends class_base
 		$use_type = $clf_type[$name];
 
 		// XXX: implement some error checking
-		if(!($this->can("view"))){return false;}
+		if(!is_oid($clf[$name]) || !$this->can("view", $clf[$name]))
+		{
+			return false;
+		}
 		$ofto = new object($clf[$name]);
 	
 		$parent = is_oid($ofto->id()) ? $ofto->id() : -1;
@@ -360,7 +363,6 @@ class classificator extends class_base
 				}
 			}
 		}
-		echo $ret;
 		return array($ret,$ofto->name(),$use_type, $default_value);
 	}
 
