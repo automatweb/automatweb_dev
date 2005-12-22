@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.70 2005/12/06 18:20:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.71 2005/12/22 15:36:02 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -1556,7 +1556,6 @@ class project extends class_base
 			"tooltip" => t("Uus"),
 		));
 		*/
-
 		$o = $arr["obj_inst"];
 		$inst = $o->instance();
 
@@ -1579,9 +1578,7 @@ class project extends class_base
 
 			};
 		};
-
 		//$tb->add_separator();
-
 		$tb->add_menu_button(array(
 			"name" => "subprj",
 			"img" => "new.gif",
@@ -1666,7 +1663,7 @@ class project extends class_base
 										'parent' => $arr["id"],
 										'return_url' => get_ru(),
 										"set_proj" => $arr["obj_inst"]->id()
-									),CL_TASK);	
+									),CL_TASK);
 									$tb->add_menu_item(array(
 										"name" => "x_" . $prj_id . "_" . $form_id."_".$add_clid,
 										"parent" => $prj_id,
@@ -1738,10 +1735,10 @@ class project extends class_base
 							'reltype_org' => 13,
 							'add_to_cal' => $this->cal_id,
 							'title' => t("Toimetus"),
-							'parent' => $arr["id"],
+							'parent' => $arr["obj_inst"]->id(),
 							'return_url' => get_ru(),
 							"set_proj" => $arr["obj_inst"]->id()
-						), CL_TASK);	
+						), CL_TASK);
 						$tb->add_menu_item(array(
 							"name" => "x_" . $o->id()."_".$add_clid,
 							"parent" => "subprj",
@@ -2483,7 +2480,6 @@ class project extends class_base
 			"img" => "new.gif",
 			"tooltip" => t("Lisa")
 		));
-
 		$t->add_menu_item(array(
 			"name" => "new_goal",
 			"parent" => "new",
@@ -2494,7 +2490,6 @@ class project extends class_base
 			),
 			"text" => t("Verstapost"),
 		));
-
 		$t->add_menu_item(array(
 			"name" => "new_event",
 			"parent" => "new",
@@ -2810,7 +2805,6 @@ class project extends class_base
 			"img" => "new.gif",
 			"tooltip" => t("Lisa"),
 		));
-
 		$tb->add_menu_item(array(
 			"parent" => "add",
 			"text" => t("Isik"),
@@ -2824,7 +2818,6 @@ class project extends class_base
 				)
 			)
 		));
-
 		$tb->add_menu_item(array(
 			"parent" => "add",
 			"text" => t("Organisatsioon"),
