@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.6 2005/09/13 17:45:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.7 2005/12/22 11:29:15 dragut Exp $
 // otv_data_filter.aw - Andmeallika andmete muundaja 
 /*
 
@@ -231,8 +231,9 @@ class otv_data_filter extends class_base
 	
 			$o - transformer object to use
 			$data - data to transform
+			$row_data - all row fields
 	**/
-	function transform($o, &$data)
+	function transform($o, &$data, $row_data)
 	{
 		if (is_array($data))
 		{

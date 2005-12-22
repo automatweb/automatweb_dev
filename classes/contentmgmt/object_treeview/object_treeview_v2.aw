@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.94 2005/12/16 12:04:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.95 2005/12/22 11:29:15 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1679,7 +1679,7 @@ class object_treeview_v2 extends class_base
 				{
 					foreach($trs[$colid] as $tr_id)
 					{
-						$this->tr_i->transform(obj($tr_id), $content);
+						$this->tr_i->transform(obj($tr_id), $content, $arr);
 					}
 				}
 				if ($edit_columns[$colid] == 1)
