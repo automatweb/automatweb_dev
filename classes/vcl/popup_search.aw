@@ -500,7 +500,7 @@ class popup_search extends aw_template
 					"select_this" => html::href(array(
 						"url" => "javascript:void(0)",
 						"caption" => t("Vali see"),
-						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);sz= el.options.length; el.options[sz] = new Option(".$o->id().", ".$o->id().");;el.options[sz].selected = 1;window.opener.document.changeform.submit();window.close()"
+						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform); sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;window.opener.document.changeform.submit();window.close()"
 					)),
 					"icon" => html::img(array("url" => icons::get_icon_url($o->class_id())))
 				));
@@ -598,7 +598,8 @@ function aw_get_el(name,form)
 			foreach(safe_array($arr["sel"]) as $idx => $val)
 			{
 				$str .= "sz = el.options.length;";
-				$str .= "el.options[sz] = new Option($val, $val);el.options[sz].selected = 1;";
+				$str .= "el.options.length=sz+1;";
+				$str .= "el.options[sz].value = $val;el.options[sz].selected = 1;";
 			}
 			$str .= "window.opener.document.changeform.submit();
 					window.close()
