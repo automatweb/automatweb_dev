@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.82 2005/12/21 19:25:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.83 2005/12/22 08:03:33 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -1933,8 +1933,8 @@ class form_table extends form_base
 			$items["has_grpsettings"] = array("name" => "Gruppide m&auml;&auml;rangud", "url" => $this->mk_my_orb("change_grpsettings", array("id" => $this->table_id), "",false,true));
 		}
 
-		$tpl->vars(array(
-			"menu" => $this->do_tpl_menu($items)
+		$this->vars(array(
+			"menu" => $this->do_tpl_menu($items, $tpl)
 		));
 	}
 
@@ -3560,30 +3560,30 @@ class form_table extends form_base
 	
 	////
 	// !generates a simple one-level menu from the given data structure - the active item is determined by orb action
-	function do_tpl_menu($items)
+	function do_tpl_menu($items, &$tpl)
 	{
 		global $action;
 		$im = "";
 		foreach($items as $iid => $idata)
 		{
-			$this->vars(array(
+			$tpl->vars(array(
 				"url"	=> $idata["url"],
 				"text" => $idata["name"]
 			));
 			if ($action == $iid)
 			{
-				$im.=$this->parse("SEL_ITEM");
+				$im.=$tpl->parse("SEL_ITEM");
 			}
 			else
 			{
-				$im.=$this->parse("ITEM");
+				$im.=$tpl->parse("ITEM");
 			}
 		}
-		$this->vars(array(
+		$tpl->vars(array(
 			"ITEM" => $im,
 			"SEL_ITEM" => ""
 		));
-		return $this->parse();
+		return $tpl->parse();
 	}
 }
 ?>
