@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.12 2005/12/20 16:37:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.13 2005/12/22 10:15:33 markop Exp $
 
 /*
 
@@ -163,7 +163,7 @@ class classificator extends class_base
 		{
 			$use_type = "view";
 		}
-
+		
 		switch($use_type)
 		{
 			case "checkboxes":
@@ -190,7 +190,10 @@ class classificator extends class_base
 
 			default:
 				$prop["type"] = "select";
-				$prop["options"] = array("" => "") + $choices["list_names"];
+				if(is_array($choices))
+				{
+					$prop["options"] = array("" => "") + $choices["list_names"];
+				}
 //				$prop["options"] = array("" => "") + $choices->names();
 
 		};
@@ -213,7 +216,6 @@ class classificator extends class_base
 	function get_vcl_property($arr)
 	{
 		$vals = array();
-
 		$prop = &$arr["property"];
 		$options = safe_array($prop["options"]);
 		$values = is_array($prop["value"]) ? $prop["value"] : array($prop["value"]);
@@ -271,11 +273,11 @@ class classificator extends class_base
 		$use_type = $clf_type[$name];
 
 		// XXX: implement some error checking
-
-
+		if(!($this->can("view"))){return false;}
 		$ofto = new object($clf[$name]);
-
+	
 		$parent = is_oid($ofto->id()) ? $ofto->id() : -1;
+		
 		$vars = array(
 			"parent" => $parent,
 			"class_id" => CL_META,
@@ -358,6 +360,7 @@ class classificator extends class_base
 				}
 			}
 		}
+		echo $ret;
 		return array($ret,$ofto->name(),$use_type, $default_value);
 	}
 
