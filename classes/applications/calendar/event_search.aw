@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.81 2005/12/22 15:17:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.82 2005/12/22 15:26:05 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -395,7 +395,7 @@ class event_search extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sepa",
-			"caption" => t("Eraldaja p�ast"),
+			"caption" => t("Eraldaja p&auml;rast"),
 			"align" => "center",
 		));
 		$t->define_field(array(
