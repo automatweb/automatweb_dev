@@ -58,5 +58,19 @@
 			</function>
 		</action>
 
+		<action name="search_contacts">
+			<function name="search_contacts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_participant_search_results">
+			<function name="save_participant_search_results">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

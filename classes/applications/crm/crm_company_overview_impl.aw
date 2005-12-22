@@ -703,15 +703,7 @@ class crm_company_overview_impl extends class_base
 		{
 			case "my_tasks":
 				$tasks = $i->get_my_tasks();
-				/*$ol = new object_list($arr["obj_inst"]->connections_from(array(
-					"type" => array("RELTYPE_KOHTUMINE", "RELTYPE_CALL", "RELTYPE_TASK", "RELTYPE_DEAL", "RELTYPE_OFFER")
-				)));
-				$tasks = $this->make_keys($ol->ids());*/
 				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
-			/*case "overview":
-				$tasks = $i->get_my_tasks();
-				$clid = CL_TASK;
-				break;*/
 				break;
 			case "meetings":
 				$tasks = $i->get_my_meetings();
@@ -731,6 +723,7 @@ class crm_company_overview_impl extends class_base
 			default:
 				$u = get_instance(CL_USER);
 				$co = $u->get_current_company();
+				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
 
 				if ($co == $arr["obj_inst"]->id())
 				{
@@ -747,7 +740,6 @@ class crm_company_overview_impl extends class_base
 				}
 				else
 				{
-					$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
 					$ol = new object_list($arr["obj_inst"]->connections_from(array(
 						"type" => array("RELTYPE_KOHTUMINE", "RELTYPE_CALL", "RELTYPE_TASK", "RELTYPE_DEAL", "RELTYPE_OFFER")
 					)));

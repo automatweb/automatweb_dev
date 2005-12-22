@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.105 2005/12/09 16:44:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.106 2005/12/22 10:30:16 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2370,9 +2370,7 @@ class planner extends class_base
 			}
 			$filter["CL_CRM_PERSON.work_contact.name"] = $t_filt;
 		}
-
 		$ol = new object_list($filter);
-
 		foreach($ol->arr() as $o)
 		{
 			$org_name = "";
@@ -2432,7 +2430,7 @@ class planner extends class_base
 				// connect the person to the event.. it seems that's it?
 				$o = obj($part);
 
-				$event_obj = obj($arr["event_id"]);
+				$event_obj = obj($arr["event_id"] ? $arr["event_id"] : $arr["id"]);
 				switch($event_obj->class_id())
 				{
 					case CL_TASK:
@@ -2446,11 +2444,10 @@ class planner extends class_base
 						$rt = "RELTYPE_PERSON_MEETING";
 						break;
 				}
-
 				if (!$o->is_connected_to(array("to" => $part, "type" => $rt)))
 				{
 					$o->connect(array(
-						"to" => $arr["event_id"],
+						"to" => ($arr["event_id"] ? $arr["event_id"] : $arr["id"]),
 						"reltype" => $rt,
 					));
 
@@ -2460,6 +2457,10 @@ class planner extends class_base
 					}
 				}
 			}
+		}
+		if ($arr["post_ru"])
+		{
+			return $arr["post_ru"];
 		}
 		return $this->mk_my_orb("change", array(
 			'id' => $arr['id'],

@@ -1962,7 +1962,8 @@ class crm_company extends class_base
 			'alias_to_org'=>$fake_alias,
 			'reltype_org'=> $arr['reltype'],
 			'alias_to_org_arr'=>urlencode(serialize($arr['check'])),
-			"parent" => $arr["id"]
+			"parent" => $arr["id"],
+			"return_url" => urlencode($arr["post_ru"])
 		),$arr['clid']);
 		header('Location: '.$url);	
 		die();

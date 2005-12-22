@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.14 2005/12/07 12:19:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.15 2005/12/22 10:30:17 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -89,6 +89,11 @@
 @caption keel
 
 */
+
+define("BILL_SUM", 1);
+define("BILL_SUM_WO_TAX", 2);
+define("BILL_SUM_TAX", 3);
+define("BILL_AMT", 4);
 
 class crm_bill extends class_base
 {
@@ -866,6 +871,68 @@ class crm_bill extends class_base
 			$res .= "<script language='javascript'>window.print();</script>";
 		}
 		die($res);
+	}
+
+	function get_bill_currency($b)
+	{
+		if ($this->can("view", $b->prop("customer")))
+		{
+			$ord = obj($b->prop("customer"));
+			if ($this->can("view", $ord->prop("currency")))
+			{
+				$ord_cur = obj($ord->prop("currency"));
+				return $ord_cur->name();
+			}
+		}
+		return false;
+	}
+
+	function get_bill_sum($b, $type = BILL_SUM)
+	{
+		$rs = "";
+		$sum_wo_tax = 0;
+		$tax = 0;
+		$sum = 0;
+		foreach($this->get_bill_rows($b) as $row)
+		{
+			$cur_tax = 0;
+			$cur_sum = 0;
+			
+			if ($row["has_tax"] == 1)
+			{
+				// tax needs to be added
+				$cur_sum = $row["sum"];
+				$cur_tax = ($row["sum"] * 0.18);
+				$cur_pr = $this->num($row["price"]);
+			}	
+			else
+			{
+				// tax does not need to be added, tax free it seems
+				$cur_sum = $row["sum"];
+				$cur_tax = 0;
+				$cur_pr = $this->num($row["price"]);
+			}
+
+			$sum_wo_tax += $cur_sum;
+			$tax += $cur_tax;
+			$sum += ($cur_tax+$cur_sum);
+			$unit = $row["unit"];
+			$tot_amt += $row["amt"];
+			$tot_cur_sum += $cur_sum;
+		}
+
+		switch($type)
+		{
+			case BILL_SUM_TAX:
+				return $tax;
+
+			case BILL_SUM_WO_TAX:
+				return $sum_wo_tax;
+
+			case BILL_AMT:
+				return $tot_amt;
+		}
+		return $sum;
 	}
 }
 ?>

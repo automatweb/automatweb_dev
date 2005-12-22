@@ -510,48 +510,170 @@ class crm_company_bills_impl extends class_base
 
 	function _do_export_hr($bills, $arr)
 	{
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		$fn = trim(mb_strtoupper($p->prop("firstname")));
+
 		$ct = array();
 		$i = get_instance(CL_CRM_BILL);
 		foreach($bills->arr() as $b)
 		{
+			// bill info row
+			$brow = array();
+			$brow[] = $b->prop("bill_no");						// arve nr
+			$brow[] = date("d.m.Y", $b->prop("bill_date"));		// arve kuup 
+			$brow[] = date("d.m.Y", $b->prop("bill_due_date"));	// tasumistähtaeg  
+			$brow[] = 0;										// 0 (teadmata - vaikeväärtus 0)
+			$brow[] = 1;										// 1 (teadmata -vaikeväärtus 1) 
+			$brow[] = $b->prop("bill_due_date_days"); 			// 7(tasumistingimuse kood - võrdusta hetkel päevade arvuga)
+			$brow[] = 7;										// 7(tasumistingimus)  
+			$brow[] = "";
+			$brow[] = "";
+			$brow[] = "";
+			$brow[] = "";
+			$brow[] = "";
+			$brow[] = 0;			//    0 (teadmata - vaikeväärtus 0) 
+			$brow[] = "0,00";		// 0,00 (teadmata - vaikeväärtus 0,00) 
+			$brow[] = 1;			// 1 (teadmata - vaikeväärtus 1)  
+			$brow[] = $fn;			// OBJEKT (kasutaja eesnimi suurte tähtedega, nt TEDDI)
+			$brow[] = 0;			//  0 (teadmata - vaikeväärtus 0)    
+			$brow[] = $i->get_bill_currency($b);	// EEK (valuuta)  
+			$brow[] = date("d.m.Y", $b->prop("bill_date"));		// arve kuupäev
+			$brow[] = 0;			// (teadmata - vaikeväärtus 0)    
+			$brow[] = "15,65";		// (EURO kurss) 
+			$brow[] = "1,00";		// (kursi suhe, vaikeväärtus 1,00)  
+			$ct[] = join("\t", $brow);
+
+			// customer info row
+			$custr = array();
+
+			if ($this->can("view", $b->prop("customer")))
+			{
+				$cust = obj($b->prop("customer"));
+
+				$custr[] = $cust->comment();	// kliendi kood hansaraamas
+				$custr[] = $cust->name();	// kliendi kood hansaraamas
+
+				$cust_code = $cust->prop("code");
+				list($cm) = explode(" ", $cust->prop_str("client_manager"));
+				$cm = mb_strtoupper($cm);
+			}
+			else
+			{
+				$custr[] = "";
+				$custr[] = "";
+			}
+			$ct[] = join("\t", $custr);
+			$ct[] = join("\t", array("", "", "", ""));	// esindajad
+	
+			// payment row
+			$pr = array();
+			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00) 
+			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM_WO_TAX));		// 33492,03 (summa käibemaksuta)  
+			$pr[] = "";
+			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM_TAX));		// 6028,57 (käibemaks) 
+			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM));		// 39520,60 (Summa koos käibemaksuga)      
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00)          
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "0,00"; //(teadmata - vaikeväärtus 0,00) 
+			$pr[] = "";		//LADU (võib ka tühjusega asendada)
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";		// 90000 (teadmata, võib ka tühjusega asendada) 
+			$pr[] = "";		// 00014 (teadmata, võib ka tühjusega asendada)  
+			$pr[] = "";
+			$pr[] = "0";	// (teadmata - vaikeväärtus 0) 
+			$pr[] = "";
+			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM));	//39520,60 (Summa koos käibemaksuga)    
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM_WO_TAX));		// 33492,03 (summa käibemaksuta)  
+			$pr[] = "0";	// (teadmata - vaikeväärtus 0) 
+			$pr[] = "0";	//  (teadmata - vaikeväärtus 0)   
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "";
+			$pr[] = "0";	// (teadmata - vaikeväärtus 0) 
+			$pr[] = "";
+			$pr[] = "0";	// 0(teadmata - vaikeväärtus 0) 
+			$pr[] = "0";	// (teadmata - vaikeväärtus 0) 
+			$pr[] = "";	
+			$pr[] =	"0";	// (teadmata - vaikeväärtus 0)  
+			$pr[] = str_replace(".", ",", $i->get_bill_sum($b, BILL_AMT)); //77,00 (kogus kokku) 
+			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00)  
+			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00)  
+			$pr[] = "0";		// (teadmata - vaikeväärtus 0) 
+			$pr[] = "";
+			$pr[] = "0";	//(teadmata - vaikeväärtus 0) 
+			$pr[] = "0";	//(teadmata - vaikeväärtus 0)  
+			$pr[] = "";
+			$pr[] = "0"; //(teadmata - vaikeväärtus 0)			
+			$ct[] = join("\t", $pr);
+
 			$rows = $i->get_bill_rows($b);
-			foreach($rows as $row)
+			foreach($rows as $idx => $row)
 			{
 				$ri = array();
-				$ri[] = $b->id();
-				$ri[] = date("d.m.Y", $b->prop("bill_date"));
-				$cust_code = "";
-				$cm = "";
-				if ($this->can("view", $b->prop("customer")))
-				{
-					$cust = obj($b->prop("customer"));
-					$cust_code = $cust->prop("code");
-					list($cm) = explode(" ", $cust->prop_str("client_manager"));
-					$cm = mb_strtoupper($cm);
-				}
-				$ri[] = $cust_code;
-				$ri[] = $b->prop_str("customer");
-				$ri[] = (int)$row["has_tax"];
-				$ri[] = ""; // - teenuse kood (1-8, ETTEM, VIIVIS), artikli (toote) mingi userdefined väli
-				$ri[] = $row["amt"];
-				$ri[] = $row["name"];
-				$ri[] = $row["price"];
-				$ri[] = $row["sum"];
-				$ri[] = ""; // - konto (artikli ehk toote juurest)
+				$ri[] = "1";	// (teadmata, vaikeväärtus 1)) 
+				$ri[] = $idx;	// TEST (artikli kood) 
+				$ri[] = $row["amt"];	//33 (kogus) 
+				$ri[] = $row["name"];	// testartikkel (toimetuse rea sisu) 
+				$ri[] = str_replace(".", ",", $row["price"]);	// 555,00 (ühiku hind) 
+				$ri[] = str_replace(".", ",", $row["sum"]);	// 16300,35 (rea summa km-ta) 
+				$ri[] = str_replace(".", ",", $b->prop("disc")); //11,0 (ale%) 
+				$ri[] = 3100;		// (konto)    
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = str_replace(".", ",", $row["sum"]);	// 16300,35 (rea summa km-ta) 
+				$ri[] = "";
+				$ri[] = "1";	// (käibemaksukood)         
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = $row["unit"];	//TK (ühik)     
 
-				$ri[] = $cm; // - müügimees (kliendihalduri eesnimi suurte tähtedega)
-				$ri[] = $b->prop_str("currency") == "EUR" ? str_replace(",", ".", $row["sum"]) * 15.64664 : $row["sum"];
-				$ri[] = $b->prop_str("currency") == "EUR" ? 6 : 1;
-				$ri[] = $b->prop_str("currency");
-				$ri[] = 1;
-				$ri[] = 15.64664;
+
 
 				$ct[] = join("\t", $ri);
 			}
+
+			$ct[] = ""; // next bill
 		}
 
 		header("Content-type: text/plain");
 		header('Content-Disposition: attachment; filename="arved.txt"');
+		echo "format	\n";	
+		echo "1	44	1	0	1	\n";
+		echo "\n";
+		echo "sysformat	\n";
+		echo "1	1	1	1	.	,	 	\n";
+		echo "\n";
+		echo "commentstring	\n";
+		echo "\n";
+		echo "\n";
+		echo "fakt1	\n";
+
 		die(join("\n", $ct));
 	}
 }

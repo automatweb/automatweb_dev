@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.46 2005/12/16 11:04:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.47 2005/12/22 10:30:17 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -618,6 +618,21 @@ class task extends class_base
 
 			case "files":
 				$this->_get_files($arr);
+				break;
+
+			case "search_contact_company":
+			case "search_contact_firstname":
+			case "search_contact_lastname":
+			case "search_contact_code":
+				if ($arr["request"]["class"] != "planner")
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				break;
+
+			case "search_contact_results":
+				$p = get_instance(CL_PLANNER);
+				$data["value"] = $p->do_search_contact_results_tbl($arr["request"]);
 				break;
 		};
 		return $retval;
@@ -1647,6 +1662,33 @@ class task extends class_base
 			}
 			$_SESSION["crm_stoppers"][$k]["state"] = "running";
 		}
+	}
+
+	/**
+		@attrib name=search_contacts
+	**/
+	function search_contacts($arr)
+	{
+		return $this->mk_my_orb('change',array(
+				'id' => $arr['id'],
+				'group' => $arr['group'],
+				'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
+				'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
+				'search_contact_code' => urlencode($arr['search_contact_code']),
+			),
+			$arr['class']
+		);
+	}
+
+	/**
+
+		@attrib name=save_participant_search_results
+
+	**/
+	function save_participant_search_results($arr)
+	{
+		$p = get_instance(CL_PLANNER);
+		return $p->save_participant_search_results($arr);
 	}
 }
 ?>
