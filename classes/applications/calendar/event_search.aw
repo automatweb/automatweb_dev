@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.80 2005/10/25 09:42:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.81 2005/12/22 15:17:27 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -395,7 +395,7 @@ class event_search extends class_base
 		));
 		$t->define_field(array(
 			"name" => "sepa",
-			"caption" => t("Eraldaja pärast"),
+			"caption" => t("Eraldaja pï¿½ast"),
 			"align" => "center",
 		));
 		$t->define_field(array(
@@ -682,6 +682,7 @@ class event_search extends class_base
 				unset($p_rn1[$pkey]);
 			}
 		}
+		
 		foreach($p_rn2 as $pkey => $pval)
 		{
 			if(!is_oid($pval) || !$this->can("view", $pval))
@@ -822,14 +823,14 @@ class event_search extends class_base
 			);
 			if(count($prj_ch1) > 1)
 			{
-				$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
+				$vars["options"] = array(0 => t("k&otilde;ik")) + $prj_ch1;
 				$vars["optgnames"] = $optgnames1;
 				$vars["optgroup"] = $prj_ch1;
 			}
 			else
 			{
-				//$vars["options"] = array(0 => t("kõik")) + reset($prj_ch1);
-				$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
+				$vars["options"] = array(0 => t("k&otilde;ik")) + reset($prj_ch1);
+				//$vars["options"] = array(0 => t("k&otilde;ik")) + $prj_ch1;
 			}
 			$htmlc->add_property($vars);
 		}
@@ -845,13 +846,13 @@ class event_search extends class_base
 			);
 			if(count($prj_ch2) > 1)
 			{
-				$vars["options"] = array(0 => t("kõik"));
+				$vars["options"] = array(0 => t("k&otilde;ik"));
 				$vars["optgnames"] = $optgnames2;
 				$vars["optgroup"] = $prj_ch2;
 			}
 			else
 			{
-				$vars["options"] = array(0 => t("kõik")) + reset($prj_ch2);
+				$vars["options"] = array(0 => t("k&otilde;ik")) + reset($prj_ch2);
 			}
 			$htmlc->add_property($vars);
 		}
