@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.35 2005/12/09 09:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.36 2005/12/23 09:41:43 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -818,6 +818,7 @@ class ml_list extends class_base
 	// list_id(id) - which list?
 	function mass_subscribe($arr)
 	{
+		aw_global_set("no_cache_flush", 1);
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
 		$fld = new aw_array($list_obj->prop("def_user_folder"));

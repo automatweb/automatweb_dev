@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.20 2005/11/28 08:01:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.21 2005/12/23 09:41:43 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -446,7 +446,7 @@ class ml_queue extends aw_template
 		flush();
 		//decho("process_queue:<br />");//dbg
 		$tm = time();
-		$old = time() - 20 * 60;
+		$old = time() - 2 * 60;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
 		$this->db_query("SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)");
 		echo "select <br />\n";
@@ -491,7 +491,7 @@ flush();
 				// okey. since there is a chance that, the processing is interrupted
 				// _after_ the queue has been locked, I need to minimize the time
 				// during which the queue remains locked.
-				$stat = ML_QUEUE_IN_PROGRESS;
+				$stat = 1/*ML_QUEUE_IN_PROGRESS*/;
 				$c = 0;
 				//arr($qid);
 				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND (mail_sent IS NULL OR mail_sent = 0)";
@@ -525,8 +525,13 @@ flush();
 				$row = $this->db_next();
 				if ($row["remaining"] == 0)
 				{
-					$stat = ML_QUEUE_READY;
-				};
+					$stat = 2/*ML_QUEUE_READY*/;
+				}
+				else
+				if ($stat === null)
+				{
+					$stat = 1;
+				}
 				//decho("saadetud<br />");flush();//dbg
 
 				// Kui on valmis, siis peab näitur näitama 100%
@@ -558,6 +563,7 @@ flush();
 	//! Protsessib queue itemist $r järgmise liikme
 	function do_queue_item($msg)
 	{
+echo "queue item: ".dbg::dump($msg)." <br>";
 		$this->awm->clean();
 		if (!is_oid($msg["mail"]) || !$this->can("view", $msg["mail"]))
 		{
@@ -597,6 +603,7 @@ flush();
 		// compatiblity with old messenger .. yikes
 		echo "from = {$msg["mailfrom"]}  <br />\n";
 		flush();
+echo dbg::dump($msg);
 		$this->awm->create_message(array(
 			"froma" => $msg["mailfrom"],
 			"subject" => $subject,
@@ -748,7 +755,7 @@ flush();
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = $this->replace_tags($message, $data);
 		$subject = $this->replace_tags($arr["msg"]["subject"], $data);
-		$from = $arr["msg"]["mfrom"];
+		$from = $address = $arr["msg"]["mfrom"];
 		if(is_oid($from) && $this->can("view", $from))
 		{
 			$adr = obj($from);
