@@ -872,7 +872,8 @@ groupinfo org_objects_main caption="Objektid" submit=no
 @reltype CONTACT_PERSON value=54 clid=CL_CRM_PERSON
 @caption Kontaktisik
 
-
+@reltype WAREHOUSE value=55 clid=CL_SHOP_WAREHOUSE
+@caption Ladu
 */
 /*
 CREATE TABLE `kliendibaas_firma` (

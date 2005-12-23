@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.15 2005/12/22 10:30:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.16 2005/12/23 11:29:56 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -215,6 +215,11 @@ class crm_bill extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "code",
+			"caption" => t("Kood")
+		));
+
+		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Kuup&auml;ev"),
 		));
@@ -240,6 +245,10 @@ class crm_bill extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "prod",
+			"caption" => t("Toode")
+		));
+		$t->define_field(array(
 			"name" => "has_tax",
 			"caption" => t("Lisandub k&auml;ibemaks?"),
 		));
@@ -255,6 +264,22 @@ class crm_bill extends class_base
 		$inf = safe_array($arr["obj_inst"]->meta("bill_inf"));
 		$task_i = get_instance(CL_TASK);
 
+		$prods = array("" => t("--vali--"));
+		// get prords from co
+		$u = get_instance(CL_USER);
+		$co = obj($u->get_current_company());
+		$wh = $co->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+		if ($wh)
+		{
+			$wh_i = $wh->instance();
+			$pkts = $wh_i->get_packet_list(array(
+				"id" => $wh->id()
+			));
+			foreach($pkts as $pko)
+			{
+				$prods[$pko->id()] = $pko->name();
+			}
+		}
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TASK")) as $c)
 		{
 			$task = $c->to();
@@ -272,6 +297,11 @@ class crm_bill extends class_base
 						"value" => $t_inf["name"],
 						"rows" => 5,
 						"cols" => 50
+					)),
+					"code" => html::textbox(array(
+						"name" => "rows[$id][code]",
+						"value" => $t_inf["code"],
+						"size" => 10
 					)),
 					"date" => html::textbox(array(
 						"name" => "rows[$id][date]",
@@ -302,6 +332,12 @@ class crm_bill extends class_base
 						"name" => "rows[$id][has_tax]",
 						"ch_value" => 1,
 						"checked" => $t_inf["has_tax"] == 1 ? true : false
+					)),
+					"prod" => html::select(array(
+						"name" => "rows[$id][prod]",
+						"options" => $prods,
+						"value" => $t_inf["prod"]
+					
 					))
 				));
 				$sum += $t_inf["sum"];

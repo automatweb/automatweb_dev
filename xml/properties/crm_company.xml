@@ -2425,6 +2425,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Kontaktisik</caption>
             </CONTACT_PERSON>
+            <WAREHOUSE>
+                  <value>55</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Ladu</caption>
+            </WAREHOUSE>
       </reltypes>
       <layout>
             <hbox_toolbar>
