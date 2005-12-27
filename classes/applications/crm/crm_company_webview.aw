@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.4 2005/12/14 12:44:49 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.5 2005/12/27 12:35:46 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -37,6 +37,13 @@
 @caption Organistatsioonide nimed on klikitavad
 
 
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
+
+@groupinfo transl caption=T&otilde;lgi
+
 
 @reltype LIMIT_SECTOR value=1 clid=CL_CRM_SECTOR
 @caption Tegevusala piirang
@@ -62,6 +69,10 @@ class crm_company_webview extends class_base
 			"tpldir" => "applications/crm/crm_company_webview",
 			"clid" => CL_CRM_COMPANY_WEBVIEW
 		));
+
+		$this->trans_props = array(
+			"name"
+		);
 	}
 
 	//////
@@ -120,6 +131,10 @@ class crm_company_webview extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			//-- set_property --//
 			case 'limit_city':
 			case 'limit_county':
@@ -255,7 +270,7 @@ class crm_company_webview extends class_base
 			'location' => array(
 				'loc_city' => t("Kesklinnas"),
 				'loc_outside' => t("V&auml;ljaspool kesklinna"),
-				'loc_country' => t("V&auml;ljaspool linna"),
+ 				'loc_country' => t("V&auml;ljaspool linna"),
 			),
 			'languages' => array(),
 			'type' => array( // copied from class/applications/crm/crm_field_accommodation get_property->type
@@ -936,5 +951,18 @@ class crm_company_webview extends class_base
 		return $this->parse();
 	}
 
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
 }
 ?>

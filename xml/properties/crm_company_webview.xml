@@ -92,6 +92,15 @@
             <method>bitmask</method>
             <caption>Organistatsioonide nimed on klikitavad</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_COMPANY_WEBVIEW</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -99,6 +108,11 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
       <reltypes>
             <LIMIT_SECTOR>
                   <value>1</value>

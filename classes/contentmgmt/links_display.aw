@@ -31,35 +31,62 @@ class links_display
 		{
 			if ($this->img)
 			{
-				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->cur_link->prop("alt"),$this->cur_link->prop("alt"),$this->img,$this->cur_link->prop("alt"));
+				$alt = $this->trans_get_val($this->cur_link, "alt");
+
+				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$alt,$alt,$this->img,$alt);
 			}
 			else
 			{
-				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'>%s</a>",$url,$target,$this->cur_link->prop("alt"),$this->cur_link->prop("alt"),$caption);
+				$replacement = sprintf("<a href='%s' %s alt='%s' title='%s'>%s</a>",$url,$target,$alt,$alt,$caption);
 			}
 		};
 		$this->img = "";
 		return $replacement;
 	}
 
+	function trans_get_val($obj, $prop)
+	{
+		if ($prop == "name")
+		{
+			$val = $obj->name();
+		}
+		else
+		{
+			$val = $obj->prop($prop);
+		}
+
+		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $obj->lang_id())
+		{
+			$trs = $obj->meta("translations");
+			if (isset($trs[$cur_lid]))
+			{
+				$val = $trs[$cur_lid][$prop];
+			}
+		}
+
+		return $val;	
+	}	
+
 	function draw_link($target)
 	{
 		$link = obj($target);
 		$this->cur_link = $link;
 
-		if (strpos($link->prop("url"),"@") > 0)
+		$url_pv = $this->trans_get_val($link, "url");
+
+		if (strpos($url_pv,"@") > 0)
 		{
-			$linksrc = $link->prop("url");
+			$linksrc = $url_pv;
 		}
 		elseif (aw_ini_get("extlinks.directlink") == 1)
 		{
-			$linksrc = $link->prop("url");
+			$linksrc = $url_pv;
 		}
 		else
 		{
 			$linksrc = aw_ini_get("baseurl")."/".$link->id();
 		};
-		$this->real_link = $link->prop("url");
+		$this->real_link = $url_pv;
 
 		if ($link->prop("link_image_check_active") && ($link->prop("link_image_active_until") < 100 || $link->prop("link_image_active_until") >= time()) )
 		{
@@ -72,7 +99,6 @@ class links_display
 			if ($img->count() > 0 && $awf->can_be_embedded($o =& $img->begin()))
 			{
 				$img = $awf->get_url($o->id(),"");
-				//$img = "<img border='0' src='$img' alt='".$link->prop("alt")."' title='".$link->prop("alt")."' />";
 			}
 			else
 			{
@@ -103,7 +129,7 @@ class links_display
 		};
 
 
-		return array($url,$target,$link->name());
+		return array($url,$target,$this->trans_get_val($link, "name"));
 	}
 }
 ?>

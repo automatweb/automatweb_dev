@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.443 2005/12/09 11:12:50 kristo Exp $
+// $Id: class_base.aw,v 2.444 2005/12/27 12:35:46 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4792,5 +4792,94 @@ class class_base extends aw_template
 		return aw_global_get("HTTP_REFERER");
 	}
 
+	/////////////////////////////////////////////
+	// sorta-automatic translation helpers
+	function trans_save($arr, $props)
+	{
+		$l = get_instance("languages");
+		$ll = $l->get_list(array("all_data" => true));
+		$all_vals = $arr["obj_inst"]->meta("translations");
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $arr["obj_inst"]->lang_id())
+			{
+				continue;
+			}
+
+			foreach($props as $p)
+			{
+				$nm = "trans_".$lid."_".$p;
+				$all_vals[$lid][$p] = iconv("UTF-8", $lang["charset"], $arr["request"][$nm]);
+			}
+		}
+		$arr["obj_inst"]->set_meta("translations", $all_vals);
+	}
+
+	function trans_callback($arr, $props)
+	{
+		aw_global_set("output_charset","UTF-8");
+		$ret = array();
+
+		// get langs
+		$l = get_instance("languages");
+		$ll = $l->get_list(array("all_data" => true));
+
+		$pl = $arr["obj_inst"]->get_property_list();
+
+		$all_vals = $arr["obj_inst"]->meta("translations");
+
+		foreach($ll as $lid => $lang)
+		{
+			if ($lid == $arr["obj_inst"]->lang_id())
+			{
+				continue;
+			}
+
+			$nm = "sep_$lid";
+			$ret[$nm] = array(
+				"name" => $nm,
+				"caption" => $lang["name"],
+				"type" => "text",
+				"subtitle" => 1,
+			);
+			$vals = $all_vals[$lid];
+			foreach($props as $p)
+			{
+				$nm = "trans_".$lid."_".$p;
+				$ret[$nm] = array(
+					"name" => $nm,
+					"caption" => $pl[$p]["caption"],
+					"type" => $pl[$p]["type"],
+					"value" => iconv($lang["charset"], "UTF-8", $vals[$p])
+				);
+			}
+		}
+
+		return $ret;
+	}
+
+	function trans_get_val($obj, $prop)
+	{
+		switch($prop)
+		{
+			case "name":
+				$val = $obj->$prop();
+				break;
+	
+			default:
+				$val = $obj->prop($prop);
+		}
+
+		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $obj->lang_id())
+		{
+			$trs = $obj->meta("translations");
+			if (isset($trs[$cur_lid]))
+			{
+				$val = $trs[$cur_lid][$prop];
+			}
+		}
+
+		return $val;	
+	}	
 };
 ?>

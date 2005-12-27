@@ -1,37 +1,37 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.10 2005/12/13 21:16:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.11 2005/12/27 12:35:46 kristo Exp $
 
 /*
-
-
-
+@classinfo no_status=1 syslog_type=ST_LINKS
 @tableinfo extlinks index=id master_table=objects master_index=oid
 
-@property comment type=textarea cols=30 rows=5 table=objects group=general
-@caption Kommentaar lingikogusse
+@default group=general
 
-@property url type=textbox table=extlinks group=general
-@caption URL
+	@property comment type=textarea cols=30 rows=5 table=objects 
+	@caption Kommentaar lingikogusse
 
-@property docid type=hidden table=extlinks group=general
+	@property url type=textbox table=extlinks 
+	@caption URL
 
-@property hits type=text table=extlinks group=general
-@caption Klikke
+	@property docid type=hidden table=extlinks 
 
-@property url_int_text type=text store=no group=general
-@caption Saidi sisene link
+	@property hits type=text table=extlinks 
+	@caption Klikke
 
-@property alt type=textbox table=objects field=meta method=serialize search=1 group=general
-@caption Alt tekst
+	@property url_int_text type=text store=no 
+	@caption Saidi sisene link
 
-@property newwindow type=checkbox ch_value=1 search=1 table=extlinks group=general
-@caption Uues aknas
+	@property alt type=textbox table=objects field=meta method=serialize search=1 
+	@caption Alt tekst
 
-@property doclinkcollection type=checkbox ch_value=1 table=extlinks group=general
-@caption Dokumendi lingikogusse
+	@property newwindow type=checkbox ch_value=1 search=1 table=extlinks 
+	@caption Uues aknas
 
-@property ord type=textbox size=3 table=objects field=jrk
-@caption J&auml;rjekord
+	@property doclinkcollection type=checkbox ch_value=1 table=extlinks 
+	@caption Dokumendi lingikogusse
+
+	@property ord type=textbox size=3 table=objects field=jrk
+	@caption J&auml;rjekord
 
 @groupinfo Javascript caption=Javascript table=extlinks
 
@@ -74,7 +74,13 @@
 	@caption Pilt aktiivne kuni
 
 
-@classinfo no_status=1 syslog_type=ST_LINKS
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
+
+@groupinfo transl caption=T&otilde;lgi
+
 
 */
 
@@ -88,6 +94,10 @@ class links extends class_base
 		));
 
 		$this->lc_load("extlinks","lc_extlinks");
+
+		$this->trans_props = array(
+			"name", "url", "alt"
+		);
 	}
 
 	/**  
@@ -215,7 +225,8 @@ class links extends class_base
 		extract($arr);
 		$link = obj($id);
 		$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
-		$url = $link->prop("url");
+		$url = $this->trans_get_val($link, "url");
+		
 		if ($url == "" && $link->prop("docid") != "")
 		{
 			$url = "/".$link->prop("docid");
@@ -300,7 +311,9 @@ class links extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 
 			case "newwintoolbar":
 			case "newwinlocation":
@@ -370,6 +383,20 @@ class links extends class_base
 	function request_execute($obj)
 	{
 		$this->show(array("id" => $obj->id()));
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>

@@ -2,76 +2,77 @@
 <properties>
       <property>
             <name>comment</name>
+            <group>general</group>
             <type>textarea</type>
             <cols>30</cols>
             <rows>5</rows>
             <table>objects</table>
-            <group>general</group>
             <field>comment</field>
             <caption>Kommentaar lingikogusse</caption>
       </property>
       <property>
             <name>url</name>
+            <group>general</group>
             <type>textbox</type>
             <table>extlinks</table>
-            <group>general</group>
             <field>url</field>
             <caption>URL</caption>
       </property>
       <property>
             <name>docid</name>
+            <group>general</group>
             <type>hidden</type>
             <table>extlinks</table>
-            <group>general</group>
             <field>docid</field>
       </property>
       <property>
             <name>hits</name>
+            <group>general</group>
             <type>text</type>
             <table>extlinks</table>
-            <group>general</group>
             <field>hits</field>
             <caption>Klikke</caption>
       </property>
       <property>
             <name>url_int_text</name>
+            <group>general</group>
             <type>text</type>
             <store>no</store>
-            <group>general</group>
             <field>url_int_text</field>
             <caption>Saidi sisene link</caption>
       </property>
       <property>
             <name>alt</name>
+            <group>general</group>
             <type>textbox</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <search>1</search>
-            <group>general</group>
             <caption>Alt tekst</caption>
       </property>
       <property>
             <name>newwindow</name>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <search>1</search>
             <table>extlinks</table>
-            <group>general</group>
             <field>newwindow</field>
             <caption>Uues aknas</caption>
       </property>
       <property>
             <name>doclinkcollection</name>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <table>extlinks</table>
-            <group>general</group>
             <field>doclinkcollection</field>
             <caption>Dokumendi lingikogusse</caption>
       </property>
       <property>
             <name>ord</name>
+            <group>general</group>
             <type>textbox</type>
             <size>3</size>
             <table>objects</table>
@@ -80,10 +81,10 @@
       </property>
       <property>
             <name>use_javascript</name>
+            <group>Javascript</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <search>1</search>
-            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -91,9 +92,9 @@
       </property>
       <property>
             <name>newwinwidth</name>
+            <group>Javascript</group>
             <type>textbox</type>
             <ch_value>1</ch_value>
-            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -101,9 +102,9 @@
       </property>
       <property>
             <name>newwinheight</name>
+            <group>Javascript</group>
             <type>textbox</type>
             <ch_value>1</ch_value>
-            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -111,18 +112,18 @@
       </property>
       <property>
             <name>js_attributes</name>
+            <group>Javascript</group>
             <type>chooser</type>
             <multiple>1</multiple>
             <store>no</store>
-            <group>Javascript</group>
             <field>js_attributes</field>
             <caption>Atribuudid</caption>
       </property>
       <property>
             <name>newwintoolbar</name>
+            <group>Javascript</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -130,9 +131,9 @@
       </property>
       <property>
             <name>newwinlocation</name>
+            <group>Javascript</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -140,9 +141,9 @@
       </property>
       <property>
             <name>newwinmenu</name>
+            <group>Javascript</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -150,9 +151,9 @@
       </property>
       <property>
             <name>newwinscroll</name>
+            <group>Javascript</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>Javascript</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -160,27 +161,27 @@
       </property>
       <property>
             <name>link_image</name>
+            <group>Pilt</group>
             <type>fileupload</type>
             <store>no</store>
             <editonly>1</editonly>
-            <group>Pilt</group>
             <field>link_image</field>
             <caption>Pilt</caption>
       </property>
       <property>
             <name>link_image_show</name>
+            <group>Pilt</group>
             <type>text</type>
             <store>no</store>
             <editonly>1</editonly>
-            <group>Pilt</group>
             <field>link_image_show</field>
             <caption></caption>
       </property>
       <property>
             <name>link_image_check_active</name>
+            <group>Pilt</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>Pilt</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -188,12 +189,20 @@
       </property>
       <property>
             <name>link_image_active_until</name>
-            <type>date_select</type>
             <group>Pilt</group>
+            <type>date_select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <caption>Pilt aktiivne kuni</caption>
+      </property>
+      <property>
+            <name>transl</name>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <classinfo>
             <no_status>1</no_status>
@@ -207,6 +216,9 @@
             <Pilt>
                   <caption>Pilt</caption>
             </Pilt>
+            <transl>
+                  <caption>T&amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <extlinks>

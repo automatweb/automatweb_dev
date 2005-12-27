@@ -663,6 +663,10 @@ default group=org_objects
 
 		@property res_tbl type=table no_caption=1 parent=res_lt
 
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
 
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
@@ -718,6 +722,8 @@ groupinfo org_objects_main caption="Objektid" submit=no
 @groupinfo stats caption="Statistika" submit_method=get
 @groupinfo quick_view caption="Vaata"  submit=no
 @groupinfo resources caption="Ressursid"  submit=no
+
+@groupinfo transl caption=T&otilde;lgi
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -915,6 +921,10 @@ class crm_company extends class_base
 			'clid' => CL_CRM_COMPANY,
 			'tpldir' => 'crm/crm_company',
 		));
+
+		$this->trans_props = array(
+			"tegevuse_kirjeldus", "userta1", "userta2", "userta3", "userta4", "userta5"
+		);
 	}
 
 	function crm_company_init()
@@ -1645,6 +1655,10 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "openhours":
 				if (empty($data['value']['id']) && is_oid($arr['obj_inst']->id()))
 				{
@@ -4041,6 +4055,20 @@ class crm_company extends class_base
 		{
 			return $ol->begin();
 		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>

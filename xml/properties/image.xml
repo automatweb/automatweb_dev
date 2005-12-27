@@ -195,6 +195,14 @@
             <field>resize_warn</field>
             <caption>Info</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <syslog_type>ST_IMAGE</syslog_type>
@@ -212,6 +220,9 @@
             <resize_big>
                   <caption>Muuda suure pildi suurust</caption>
             </resize_big>
+            <transl>
+                  <caption>T&amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <images>

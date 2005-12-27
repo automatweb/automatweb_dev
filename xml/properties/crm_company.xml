@@ -1979,6 +1979,16 @@
             <store>no</store>
             <field>res_tbl</field>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
@@ -2153,6 +2163,9 @@
                   <caption>Ressursid</caption>
                   <submit>no</submit>
             </resources>
+            <transl>
+                  <caption>T&amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>

@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.95 2005/12/16 12:17:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.96 2005/12/27 12:35:47 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -220,6 +220,12 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 @caption Kasutajadefineeritud TA5
 
 
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl store=no
+	@caption T&otilde;lgi
+
+
 ----------------------------------------------
 @groupinfo general2 caption="Üldine" parent=general
 @groupinfo description caption="Kirjeldus" parent=general
@@ -240,6 +246,7 @@ groupinfo skills caption="Oskused" parent=cv submit=no
 @groupinfo experiences caption="Töökogemused" parent=cv
 @groupinfo recommends caption="Soovitajad" parent=cv
 groupinfo cv_view caption="CV vaade" parent=cv
+@groupinfo transl caption=T&otilde;lgi
 
 default group=forms
 default field=meta
@@ -411,6 +418,10 @@ class crm_person extends class_base
 			"tpldir" => "crm/person",
 			"clid" => CL_CRM_PERSON,
 		));
+
+		$this->trans_props = array(
+			"udef_ta1", "udef_ta2", "udef_ta3", "udef_ta4", "udef_ta5"
+		);
 	}
 
 	function set_property($arr)
@@ -421,6 +432,10 @@ class crm_person extends class_base
 
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "lastname":
 				if (!empty($form["firstname"]) || !empty($form["lastname"]))
 				{
@@ -2357,6 +2372,20 @@ class crm_person extends class_base
 				return true;
 		}
 		return false;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>

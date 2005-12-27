@@ -1,8 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.151 2005/12/21 18:06:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.152 2005/12/27 12:35:46 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
+	@classinfo syslog_type=ST_IMAGE
+
+	@tableinfo images index=id master_table=objects master_index=oid
 
 
 @default group=general
@@ -91,12 +94,14 @@
 	@caption Info
 
 
-	@classinfo syslog_type=ST_IMAGE
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
 
-	@tableinfo images index=id master_table=objects master_index=oid
-
-	@reltype MOD_COMMENT value=1 clid=CL_COMMENT
-	@caption Moderaatori kommentaar
+@reltype MOD_COMMENT value=1 clid=CL_COMMENT
+@caption Moderaatori kommentaar
 */
 
 define("FL_IMAGE_CAN_COMMENT", 1);
@@ -109,6 +114,10 @@ class image extends class_base
 			"tpldir" => "automatweb/images",
 			"clid" => CL_IMAGE,
 		));
+
+		$this->trans_props = array(
+			"comment", "author", "alt", "link"
+		);
 	}
 
 	function get_image_by_id($id)
@@ -146,6 +155,15 @@ class image extends class_base
 					$row['file2'] = &$row['meta']['file2'];
 				}
 				aw_cache_set("get_image_by_id", $id, $row);
+			}
+
+			if ($this->can("view", $id))
+			{
+				$o = obj($id);
+				$row["comment"] = $this->trans_get_val($o, "comment");
+				$row["link"] = $this->trans_get_val($o, "link");
+				$row["meta"]["author"] = $this->trans_get_val($o, "author");
+				$row["meta"]["alt"] = $this->trans_get_val($o, "alt");
 			}
 		}
 		return $row;
@@ -418,6 +436,11 @@ class image extends class_base
 			{
 				$row["big_url"] = $this->get_url($row["meta"]["file2"]);
 			}
+
+			$row["comment"] = $this->trans_get_val($o, "comment");
+			$row["link"] = $this->trans_get_val($o, "link");
+			$row["meta"]["author"] = $this->trans_get_val($o, "author");
+			$row["meta"]["alt"] = $this->trans_get_val($o, "alt");
 
 			return $row;
 		}
@@ -791,7 +814,9 @@ class image extends class_base
 		$retval = PROP_OK;
 		switch ($prop["name"])
 		{
-
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 
 			case "newwindow":
 			case "no_print":
@@ -1473,7 +1498,17 @@ class image extends class_base
 			}
 			return $ret;
 		}
+
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
 		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 
 	function _mk_fn($fn)

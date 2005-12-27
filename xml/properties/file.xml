@@ -109,7 +109,7 @@
       <property>
             <name>udef1</name>
             <table>objects</table>
-            <group>general</group>
+            <group>dates</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -119,12 +119,22 @@
       <property>
             <name>udef2</name>
             <table>objects</table>
-            <group>general</group>
+            <group>dates</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
             <display>none</display>
             <caption>User-defined 2</caption>
+      </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <classinfo>
             <trans>1</trans>
@@ -138,6 +148,9 @@
             <dates>
                   <caption>Ajad</caption>
             </dates>
+            <transl>
+                  <caption>T&amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <files>

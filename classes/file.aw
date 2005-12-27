@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.115 2005/10/21 21:06:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.116 2005/12/27 12:35:46 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -18,9 +18,11 @@
 //
 
 /*
-	@classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
-	@default table=files
-	@default group=general
+@classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
+@tableinfo files index=id master_table=objects master_index=oid	
+@default table=files
+
+@default group=general
 
 	@property filename type=text store=no field=name form=+emb
 	@caption Faili nimi
@@ -42,24 +44,25 @@
 	@property showal type=checkbox ch_value=1
 	@caption Näita kohe
 
-	@property newwindow type=checkbox ch_value=1 group=settings
+@default group=settings
+
+	@property newwindow type=checkbox ch_value=1 
 	@caption Uues aknas
 	
 	@default table=objects
 	@default field=meta
 	@default method=serialize
 	
-	@property show_framed type=checkbox ch_value=1 group=settings
+	@property show_framed type=checkbox ch_value=1 
 	@caption Näita saidi raamis
 
-	@property j_time type=date_select group=dates
+@default group=dates
+	@property j_time type=date_select 
 	@caption Jõustumise kuupäev
 
-	@property act_date type=date_select group=dates
+	@property act_date type=date_select 
 	@caption Avaldamise kuupäev
 
-	@groupinfo settings caption=Seadistused
-    @groupinfo dates caption=Ajad
 
 	@property udef1 type=textbox display=none
 	@caption User-defined 1
@@ -67,10 +70,17 @@
 	@property udef2 type=textbox display=none
 	@caption User-defined 2
 
-	@tableinfo files index=id master_table=objects master_index=oid	
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
 
-	@reltype KEYWORD value=2 clid=CL_KEYWORD
-	@caption Märksõna
+@groupinfo settings caption=Seadistused
+@groupinfo dates caption=Ajad
+@groupinfo transl caption=T&otilde;lgi
+
+@reltype KEYWORD value=2 clid=CL_KEYWORD
+@caption Märksõna
 */
 
 
@@ -88,6 +98,9 @@ class file extends class_base
 		lc_load("definition");
 		$this->lc_load("file","lc_file");
 
+		$this->trans_props = array(
+			"comment"
+		);
 	}
 
 	function get_property($arr)
@@ -181,7 +194,11 @@ class file extends class_base
 		$request = &$arr["request"];
 		$retval = PROP_OK;
 		switch($data["name"])
-		{
+		{	
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "name":
 				$retval = PROP_IGNORE;
 				break;
@@ -651,6 +668,19 @@ class file extends class_base
 				$this->dequote($ret["content"]);
 			};
 		}
+
+		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $tmp->lang_id())
+		{
+			$trs = $tmp->meta("translations");
+			if (isset($trs[$cur_lid]))
+			{
+				$t = $trs[$cur_lid];
+				foreach($this->trans_props as $p)
+				{
+					$ret[$p] = $t[$p];
+				}
+			}
+		}
 		return $ret;
 	}
 
@@ -998,6 +1028,20 @@ class file extends class_base
 	function new_change($args)
 	{
 		return parent::change($args);
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 };
 ?>
