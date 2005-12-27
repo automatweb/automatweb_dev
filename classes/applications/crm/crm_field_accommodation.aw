@@ -1,7 +1,22 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_accommodation.aw,v 1.3 2005/12/14 12:44:49 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_accommodation.aw,v 1.4 2005/12/27 21:26:05 ekke Exp $
 // crm_field_accommodation.aw - Majutusettev&otilde;te (valdkond) 
 /*
+
+INFO ABOUT CRM_FIELD_* CLASSES:
+Creating a new class: 
+  oh: make sure it's name starts with 'crm_field_'
+ one: you should copy the common properties from one of the existing classes
+ two: register the class in following places:
+	crm_company properties definition for reltype FIELD
+	crm_company_webview::_get_company_show_html variable definition for $crm_field_titles
+
+Modifing classes:
+ one: keep the common properties in sync over all crm_field_* classes
+
+
+
+
 
 @classinfo syslog_type=ST_CRM_FIELD_ACCOMMODATION no_comment=1 no_status=1 prop_cb=1
 
@@ -206,11 +221,42 @@
 	@property has_renttwoskis type=checkbox
 	@caption Suusalaenutus
 
+@default group=cedit
 
+	@property phone_id type=relmanager reltype=RELTYPE_PHONE props=name override_parent=this
+	@caption Telefon
+
+	@property telefax_id type=relmanager reltype=RELTYPE_TELEFAX props=name override_parent=this
+	@caption Faks
+
+	@property email_id type=relmanager reltype=RELTYPE_EMAIL props=mail override_parent=this
+	@caption E-posti aadressid
+
+@default group=images
+
+	@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h,new_w_big,new_h_big,comment table_fields=name,ord table_edit_fields=ord override_parent=this direct_links=1 
+	@caption Pildid
+
+@groupinfo products caption="Tooted" submit=no
 
 @groupinfo services caption="Lisateenused"
 @groupinfo catering caption="Toitlustamine" 
 @groupinfo active_vacation caption="Aktiivne puhkus" 
+@groupinfo cedit caption="Kontaktandmed" 
+@groupinfo images caption="Pildid" submit=no
+
+@reltype EMAIL value=1 clid=CL_ML_MEMBER
+@caption E-post
+
+@reltype PHONE value=2 clid=CL_CRM_PHONE
+@caption Telefon
+
+@reltype TELEFAX value=3 clid=CL_CRM_PHONE
+@caption Fax
+
+@reltype IMAGE value=4 clid=CL_IMAGE
+@caption Pilt
+
 
 */
 

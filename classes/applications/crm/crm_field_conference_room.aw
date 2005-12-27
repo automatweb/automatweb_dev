@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_conference_room.aw,v 1.1 2005/10/21 20:49:53 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_conference_room.aw,v 1.2 2005/12/27 21:26:05 ekke Exp $
 // crm_field_conference_room.aw - Konverentsiruum (valdkond) 
 /*
 
@@ -13,6 +13,37 @@
 
 	@property num_places type=textbox size=6
 	@caption Kohtade arv
+
+@default group=cedit
+
+	@property phone_id type=relmanager reltype=RELTYPE_PHONE props=name override_parent=this
+	@caption Telefon
+
+	@property telefax_id type=relmanager reltype=RELTYPE_TELEFAX props=name override_parent=this
+	@caption Faks
+
+	@property email_id type=relmanager reltype=RELTYPE_EMAIL props=mail override_parent=this
+	@caption E-posti aadressid
+
+@default group=images
+
+	@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h,new_w_big,new_h_big,comment table_fields=name,ord table_edit_fields=ord override_parent=this direct_links=1 
+	@caption Pildid
+
+@groupinfo cedit caption="Kontaktandmed" 
+@groupinfo images caption="Pildid" submit=no
+
+@reltype EMAIL value=1 clid=CL_ML_MEMBER
+@caption E-post
+
+@reltype PHONE value=2 clid=CL_CRM_PHONE
+@caption Telefon
+
+@reltype TELEFAX value=3 clid=CL_CRM_PHONE
+@caption Fax
+
+@reltype IMAGE value=4 clid=CL_IMAGE
+@caption Pilt
 
 */
 
