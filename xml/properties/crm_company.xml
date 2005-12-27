@@ -306,6 +306,18 @@
             <caption>User-defined TA 5</caption>
       </property>
       <property>
+            <name>description_doc</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>popup_search</type>
+            <clid>CL_DOCUMENT</clid>
+            <style>relpicker</style>
+            <store>no</store>
+            <reltype>RELTYPE_DESCRIPTION</reltype>
+            <field>description_doc</field>
+            <caption>Lisakirjelduse dokument</caption>
+      </property>
+      <property>
             <name>do_create_users</name>
             <table>objects</table>
             <group>user_settings</group>
@@ -2443,6 +2455,11 @@
                   <clid>CL_SHOP_WAREHOUSE</clid>
                   <caption>Ladu</caption>
             </WAREHOUSE>
+            <DESCRIPTION>
+                  <value>56</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Lisakirjelduse dokument</caption>
+            </DESCRIPTION>
       </reltypes>
       <layout>
             <hbox_toolbar>

@@ -112,6 +112,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create
 
 	@property userta5 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 	@caption User-defined TA 5
+	
+	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
+	@caption Lisakirjelduse dokument
 
 ------ Yldine - kasutajate seaded grupp
 @default group=user_settings
@@ -880,6 +883,10 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @reltype WAREHOUSE value=55 clid=CL_SHOP_WAREHOUSE
 @caption Ladu
+
+@reltype DESCRIPTION value=56 clid=CL_DOCUMENT
+@caption Lisakirjelduse dokument
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
@@ -3835,15 +3842,23 @@ class crm_company extends class_base
 
 	// Finds first matching CRM_FIELD object and it's properties
 	//  oid - oid of CRM_COMPANY
-	//  type - FIELD type (suffix of class_id) - ec ACCOMMODATION for CL_CRM_FIELD_ACCOMMODATION
+	//  type - FIELD type (suffix of class_id) - eg ACCOMMODATION for CL_CRM_FIELD_ACCOMMODATION
+	//  clid - FIELD class id (alternative method)
 	function find_crm_field_obj($arr)
 	{
 		$c = obj($arr['oid']);
-		if (!is_object($c) || $c->class_id() != CL_CRM_COMPANY || empty($arr['type'])) 
+		if (!is_object($c) || $c->class_id() != CL_CRM_COMPANY || (empty($arr['type']) && empty($arr['clid'])) ) 
 		{
 			return;
 		}
-		$type = constant('CL_CRM_FIELD_'.strtoupper($arr['type']));
+		if (empty($arr['clid']))
+		{
+			$type = constant('CL_CRM_FIELD_'.strtoupper($arr['type']));
+		}
+		else
+		{
+			$type = $arr['clid'];
+		}
 		if (!is_numeric($type))
 		{
 			return;
