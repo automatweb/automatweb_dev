@@ -26,6 +26,7 @@
 <!-- END SUB: company_list -->
 
 <!-- SUB: company_show -->
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <!-- SUB: line_name -->
 <h1>{VAR:value}</h1>
 <!-- END SUB: line_name -->
@@ -95,6 +96,9 @@
 			<!-- SUB: line_description -->
 			<p>{VAR:value}</p>
 			<!-- END SUB: line_description -->
+			<!-- SUB: line_moreinfo_link -->
+			{VAR:value}
+			<!-- END SUB: line_moreinfo_link -->
 		</td>
 	</tr>
 	<tr>

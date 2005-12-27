@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.5 2005/12/27 12:35:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.6 2005/12/27 21:31:37 ekke Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property show_title type=checkbox field=flags ch_value=32 method=bitmask
+@caption Kuva pealkirja
 
 @property crm_db type=relpicker reltype=RELTYPE_CRM_DB automatic=1 field=meta method=serialize
 @caption Andmebaas, mille organisatsioone kuvatakse
@@ -31,11 +34,13 @@
 @caption J&auml;rjestamisprintsiip 2
 
 @property ord3 type=select field=meta method=serialize
-@caption J&auml;rjestamisprintsiip 2
+@caption J&auml;rjestamisprintsiip 3
 
 @property clickable type=checkbox field=flags ch_value=16 method=bitmask
 @caption Organistatsioonide nimed on klikitavad
 
+@property field type=select field=meta method=serialize
+@caption Tegevusala
 
 @default group=transl
 	
@@ -43,7 +48,6 @@
 	@caption T&otilde;lgi
 
 @groupinfo transl caption=T&otilde;lgi
-
 
 @reltype LIMIT_SECTOR value=1 clid=CL_CRM_SECTOR
 @caption Tegevusala piirang
@@ -119,7 +123,32 @@ class crm_company_webview extends class_base
 					'city' => t("Linn"),
 				);
 				$prop['options'] = $options;
-				
+			break;
+			case 'field':
+				$clss = aw_ini_get("classes");
+				$prop['options'][0] = t("K&otilde;ik");
+				foreach ($clss as $clid => $inf)
+				{
+					if (substr($inf['def'], 0, 13) == 'CL_CRM_FIELD_')
+					{
+						$prop['options'][$clid] = $inf['name'];
+					}
+				}
+				// Instead of:
+				/*
+				// We find out possible classes from CRM_COMPANY's FIELD reltype classes
+				$cfgu = get_instance("cfg/cfgutils");
+				$cfgu->load_properties(array(
+					'clid' => CL_CRM_COMPANY,
+				));
+				$cmp_reltypes = $cfgu->get_relinfo();
+				$classes = $cmp_reltypes['RELTYPE_FIELD']['clid'];
+				$prop['options'][0] = t('K&otilde;ik');
+				foreach ($classes as $i => $class)
+				{
+					$prop['options'][$class] = $clss[$class]['name'];
+				}
+				*/
 			break;
 		};
 		return $retval;
@@ -203,6 +232,7 @@ class crm_company_webview extends class_base
 	// Return html for company display
 	function _get_company_show_html ($arr)
 	{
+		// If request parameter 'l' is set, show only that webview
 		if (isset($_REQUEST['l']) && is_oid($_REQUEST['l']) && $arr['list_id'] != $_REQUEST['l'])
 		{
 			return "";
@@ -215,6 +245,13 @@ class crm_company_webview extends class_base
 		}
 		$this->add_hit($org);
 		
+		$webview = obj($arr['list_id']);
+		$crm_field = null;
+		if (empty($_REQUEST['allfields']))
+		{
+			$crm_field = $webview->prop('field'); // contains applicable CRM_FIELD_ class ID
+		}
+
 		// All possible line_* values are defined here
 		$datafields = array(
 			'sectors' => '',
@@ -228,16 +265,17 @@ class crm_company_webview extends class_base
 			'name' => 'name',
 			'founded' => 'year_founded',
 			'specialoffers' => 'special_offers',
+			'specialoffers_long' => 'special_offers',
 			'extrafeatures' => '',
 			'num_rooms' => '',
 			'num_beds' => '',
 			'prices' => 'price_txt',
 			'description' => 'tegevuse_kirjeldus',
 			'type' => '',
+			'moreinfo_link' => '',
 		);
 		
 		// Name is not obligatory - will go to template as {VAR:key}
-		// [not really: If name is not set here, it will be looked up from property definitions]
 		$fieldnames = array(
 			'address' => t("Aadress"),
 			'phone' => t("Tel"),
@@ -247,6 +285,7 @@ class crm_company_webview extends class_base
 			'sectors' => t("Tegevusalad"),
 			'founded' => t("Asutatud"),
 			'specialoffers' => t("Eripakkumised"),
+			'specialoffers_long' => t("Eripakkumised"),
 			'extrafeatures' => t("Lisav&otilde;imalused"),
 			'num_beds' => t("Kohti"),
 			'num_rooms' => t("Toad"),
@@ -254,10 +293,10 @@ class crm_company_webview extends class_base
 			'type' => t("T&uuml;&uuml;p"),
 		);
 		$crm_field_titles = array(
-			'ACCOMMODATION' => t("Majutusinfo"),
-			'FOOD' => t("Toitlustusinfo"),
-			'ENTERTAINMENT' => ("Meelelahutusinfo"),
-			'CONFERENCE_ROOM' => t("Konverentsiinfo"),
+			CL_CRM_FIELD_ACCOMMODATION => t("Majutusinfo"),
+			CL_CRM_FIELD_FOOD => t("Toitlustusinfo"),
+			CL_CRM_FIELD_ENTERTAINMENT => ("Meelelahutusinfo"),
+			CL_CRM_FIELD_CONFERENCE_ROOM => t("Konverentsiinfo"),
 		);
 		$exinf_remap = array(
 			'price_level' => array(
@@ -291,6 +330,11 @@ class crm_company_webview extends class_base
 				'ita' => t("Itaalia"),
 				'tai' => t("Tai"),
 			),
+			'caption' => array(
+				'phone_id' => t("Tel"),
+				'telefax_id' => t("Fax"),
+				'email_id' => t("E-post"),
+			),
 		);
 		$langs = aw_ini_get('languages.list');
 		foreach ($langs as $lang)
@@ -301,9 +345,11 @@ class crm_company_webview extends class_base
 		
 
 
-		$extrainfo = array(); // crm_field_{type} objects in type => array('o'=>obj,'p'=>properties)  array (type is one of 'ACCOMMODATION', ...) (see reltype FIELD on crm_company)
+		$extrainfo = array(); // crm_field_{type} objects in type => array('o'=>obj,'p'=>properties)  array (type is class id) (see reltype FIELD on crm_company)
 		$used_fields = $this->v2_name_map;
 		classload("crm/crm_company");
+
+		$images_conns = null; // Variable for connections to image objects, if this is set before parsing images, allows overriding image selection
 
 		foreach ($datafields as $item => $mapped)
 		{
@@ -312,9 +358,47 @@ class crm_company_webview extends class_base
 			{
 				continue;
 			}
-			$key = $value = "";
+			$key = $value = $reltype = "";
 			switch ($item)
 			{
+				case 'phone': // Display all phone numbers, not selected one
+					$reltype = 'RELTYPE_PHONE';
+				case 'fax':
+					$reltype = empty($reltype) ? 'RELTYPE_TELEFAX' : $reltype;
+				
+					$conns = $c->connections_from(array(
+						'type' => $reltype,
+					));
+					$ph_inst = get_instance(CL_CRM_PHONE);
+					foreach ($conns as $conn)
+					{
+						$thing = $conn->conn['to'];
+						if ($this->can('view', $thing))
+						{
+							$value[] = $ph_inst->show(array(
+								'oid' => $thing,
+							));
+						}
+					}
+				break;
+//				case 'phone': // Display all phone numbers, not selected one
+//					$reltype = 'RELTYPE_PHONE';
+				case 'sectors':
+					//$reltype = empty($reltype) ? 'RELTYPE_TEGEVUSALAD' : $reltype;
+					$reltype = 'RELTYPE_TEGEVUSALAD';
+					
+					$conns = $c->connections_from(array(
+						'type' => $reltype,
+					));
+					foreach ($conns as $conn)
+					{
+						$thing = $conn->to();
+						if ($this->can('view', $thing->id()))
+						{
+							$value[] = $thing->name();
+						}
+					}
+				break;
 				case 'openhours':
 					$inst = get_instance(CL_OPENHOURS);
 					$o_item = $c->get_first_obj_by_reltype('RELTYPE_OPENHOURS');
@@ -326,14 +410,23 @@ class crm_company_webview extends class_base
 						'id' => $o_item->id(),
 					));
 				break;
-				case 'sectors':
+				case 'moreinfo_link':
 					$conns = $c->connections_from(array(
-						'type' => 'RELTYPE_TEGEVUSALAD',
+						'type' => 'RELTYPE_DESCRIPTION',
+						'to.lang_id' => aw_global_get('lang_id'),
 					));
-					foreach ($conns as $conn)
+					if (count($conns))
 					{
-						$sector = $conn->to();
-						$value[] = $sector->name();
+						$conn = array_shift($conns);
+						$value = $conn->to();
+						//$value = $c->get_first_obj_by_reltype('RELTYPE_DESCRIPTION');
+						if ($value)
+						{
+							$value = html::href(array(
+								'caption' => t("Veel lisainfot"),
+								'url' => '/'.$value->id(),
+							));
+						}
 					}
 				break;
 				case 'name':
@@ -348,6 +441,7 @@ class crm_company_webview extends class_base
 					}
 				break;
 				case 'specialoffers':
+				case 'specialoffers_long':
 					$conns = $c->connections_from(array(
 						'type' => 'RELTYPE_SPECIAL_OFFERS',
 					));
@@ -356,25 +450,57 @@ class crm_company_webview extends class_base
 					foreach ($conns as $con)
 					{
 						$offer = $con->to();
-						$value[] = html::href(array(
-							'url' => $url.$offer->id(),
-							'caption' => $offer->name(),
-						));
+						if ($item == 'specialoffers_long')
+						{
+							$sp = get_instance(CL_CRM_SPECIAL_OFFER);
+							
+							$value[] = $sp->show(array(
+								'short' => true,
+								'id' => $offer->id(),
+							));
+						}
+						else
+						{
+							$value[] = html::href(array(
+								'url' => $url.$offer->id(),
+								'caption' => $offer->name(),
+							));
+						}
 					}
 					$value = implode(', ', $value);
 				break;
 				case 'extrafeatures':
-					$type = 'ACCOMMODATION';
 					$sm = $this->sub_merge;
 					$this->sub_merge = 0;
-					foreach (array('ACCOMMODATION', 'FOOD', 'ENTERTAINMENT', 'CONFERENCE_ROOM') as $type)
+	
+					// We find out possible classes by naming pattern
+					$classes = array();
+					$clss = aw_ini_get("classes");
+					foreach ($clss as $clid => $inf)
 					{
+						if (substr($inf['def'], 0, 13) == 'CL_CRM_FIELD_')
+						{
+							$classes[] = $clid;
+						}
+					}
+					$has_otherfields = false;
+					foreach ($classes as $type)
+					{
+						// If field was chosen in webview properties, show only information for that field
+						if (!empty($crm_field))
+						{
+							if ($type != $crm_field)
+							{
+								$has_otherfields = true;
+								continue;
+							}
+						}
 						// checkboxes in crm_field_accommodation
  						if (!array_key_exists($type, $extrainfo))
 						{
 							$extrainfo[$type]['o'] = crm_company::find_crm_field_obj(array(
 								'oid' => $c->id(),
-								'type' => $type,
+								'clid' => $type,
 							));
 							if (is_object($extrainfo[$type]['o']))
 							{
@@ -385,9 +511,41 @@ class crm_company_webview extends class_base
 						if (is_object($extrainfo[$type]['o']))
 						{
 							$innervalue = "";
-							// Get all checkbox properties and values
-							$pval = $extrainfo[$type]['p'];
+							$pval = $extrainfo[$type]['p']; // Property values
 							$pl = $extrainfo[$type]['o']->get_property_list();
+							
+							// Add phone / fax / email fields first
+							foreach (array('phone_id', 'telefax_id', 'email_id') as $name)
+							{
+								$thisval = "";
+								if (!empty($pval[$name]) && is_oid($pval[$name]) && $this->can('view', $pval[$name]))
+								{
+									$muki = obj($pval[$name]);
+									if ($name == 'email_id')
+									{
+										$thisval = $muki->prop('mail');
+										$thisval = html::href(array(
+											'url' => 'mailto:'.$thisval,
+											'caption' => $thisval,
+										));
+									}
+									else
+									{
+										$thisval = $muki->name();
+									}
+									$thisval = ifset($exinf_remap['caption'],$name).': '.$thisval;
+								}
+								if (!empty($thisval))
+								{
+ 									$this->vars(array(
+ 										'extraf_name' => $thisval,
+									));
+									$innervalue .= $this->parse('extraf_value');
+								}
+							}
+							
+							
+							// Get all checkbox properties and values
 							foreach ($pl as $name => $pinf)
 							{
 								if (in_array($name, $extrainfo_ignorefields))
@@ -395,14 +553,16 @@ class crm_company_webview extends class_base
 									continue;
 								}
 								$thisval = "";
-								// tyybid: checkbox, textbox, chooser (multiple=1), select 
+								// types we show: checkbox, textbox, chooser (multiple=1), select 
 								if ($pinf['type'] == 'checkbox' && $pval[$name])
 								{
 									$thisval = t($pinf['caption']);
-								} else if ($pinf['type'] == 'textbox' && !empty($pval[$name]))
+								}
+								else if ($pinf['type'] == 'textbox' && !empty($pval[$name]))
 								{
 									$thisval = t($pinf['caption']).': '.htmlspecialchars($pval[$name]);
-								} else if ($pinf['type'] == 'chooser' || $pinf['type'] == 'select')
+								}
+								else if ($pinf['type'] == 'chooser' || $pinf['type'] == 'select')
 								{
 									// location, languages, price_level, 
 									$values = array();
@@ -431,8 +591,6 @@ class crm_company_webview extends class_base
 									}
 								}
 								
-
-								
 								if (!empty($thisval))
 								{
  									$this->vars(array(
@@ -440,8 +598,9 @@ class crm_company_webview extends class_base
 									));
 									$innervalue .= $this->parse('extraf_value');
 								}
-								
 							}
+
+							
 							if (!empty($innervalue))
 							{
 								// find if the field object has been set it's own title, too
@@ -457,8 +616,35 @@ class crm_company_webview extends class_base
 								));
 								$value .= $this->parse('extrafeatures');
 							}	
+
+
+							// If we're displaying only one field and it has images, we override company's default images
+							if (!empty($crm_field))
+							{
+								$images_conns = $extrainfo[$type]['o']->connections_from(array(
+									'type' => 'RELTYPE_IMAGE',
+									'to.status' => STAT_ACTIVE,
+									'class' => CL_IMAGE,
+								));
+							}
 						}
 					}
+					
+					// If field is limited but there exists info for other fields, give link to show that
+					if (!empty($crm_field) && $has_otherfields)
+					{
+						$thisval = html::href(array(
+							'caption' => t('Teised tegevusalad'),
+							//'caption' => t('N&auml;ita k&otilde;iki tegevusalasid'),
+							'url' => aw_url_change_var('allfields', 1)
+						));
+						$this->vars(array(
+							'extraf_title' => $thisval,
+							'extraf_value' => '',
+						));
+						$value .= $this->parse('extrafeatures');
+					}
+				
 					$this->sub_merge = $sm;
 				break;
 					// Find the following from appropriate crm_field_ object
@@ -466,14 +652,14 @@ class crm_company_webview extends class_base
 				case 'num_beds':
 				case 'prices':
 				case 'type':
-					$type = 'ACCOMMODATION';
+					$type = CL_CRM_ACCOMMODATION;
 
 				// case 'whatever':
 					if (!array_key_exists($type, $extrainfo))
 					{
 						$extrainfo[$type]['o'] = crm_company::find_crm_field_obj(array(
 							'oid' => $c->id(),
-							'type' => $type,
+							'clid' => $type,
 						));
 						if (is_object($extrainfo[$type]['o']))
 						{
@@ -557,17 +743,17 @@ class crm_company_webview extends class_base
 		}
 
 		// Images
-		$conns = $c->connections_from(array(
-			'type' => 'RELTYPE_IMAGE',
-		));
 		$inst_img = get_instance(CL_IMAGE);
-		foreach ($conns as $conn)
+		if (!is_array($images_conns) || !count($images_conns))
+		{
+			$images_conns = $c->connections_from(array(
+				'type' => 'RELTYPE_IMAGE',
+				'to.status' => STAT_ACTIVE,
+			));
+		}	
+		foreach ($images_conns as $conn)
 		{
 			$image = $conn->to();
-			if ($image->prop('status') != STAT_ACTIVE)
-			{
-				continue;
-			}
 			$tmp = $inst_img->parse_alias(array(
 				'alias' => array(
 					'target' => $image->id(),
@@ -614,57 +800,23 @@ class crm_company_webview extends class_base
 
 		$this->sub_merge = $sm;
 		
-		// Rating, show form
-		$have_rating = false;
+		// Rating, show link 
+		$rating = "";
 		$ro = aw_global_get('rated_objs');
-		$this->vars(array('rating' => ''));
 		if (!is_array($ro) || !isset($ro[$c->id()]))
 		{
-			reset($scales);
-			foreach ($scales as $scale)
-			{
-				$scale_values = $scale_inst->_get_scale($scale);
-				$scale_obj = obj($scale);
-				$this->vars(array(
-					'rating_caption' => $scale_obj->name(),
-					'rating_value' => '',
-				));
-				foreach ($scale_values as $num => $txt)
-				{
-					$this->vars(array(
-						'rating_value_name' => 'rate['.$scale_obj->id().']',
-						'rating_value_value' => $num,
-						'rating_value_caption' => $txt,
-					));
-					$this->vars_merge(array('rating_value' => $this->parse('rating_value')));
-					$have_rating = true;
-				}
-				$this->vars_merge(array('rating' => $this->parse('rating')));
-			}
-		}
-		$rating_form = "";
-		if ($have_rating)
-		{
-			$rating_form .= html::submit(array(
-				'value' => t("H&auml;&auml;leta"),
+			$url = $this->mk_my_orb("rate_popup", array(
+				"oid" => $c->id(),
+			), CL_RATE, true);
+			$rating = html::href(array(
+				"url" => "javascript:aw_popup(\"$url\",\"Hinda objekti\",350,300)",
+				"caption" => t("Hinda"),
+				"title" => t("Hinda")
 			));
-			$hiddens = array(
-				'return_url' => htmlspecialchars(aw_global_get('REQUEST_URI')),
-				'class' => 'rate',
-				'action' => 'rate',
-				'oid' => $c->id(),
-			);
-			foreach ($hiddens as $name => $value)
-			{
-				$rating_form .= html::hidden(array(
-					'name' => $name,
-					'value' => $value,
-				));
-			}
 		}
-		
 		$this->vars(array(
-			'rating_form_vars' => $rating_form,
+		//	'rating_form_vars' => $rating_form,
+			'rating' => $rating,
 			'images' => $images_html,
 		));
 
@@ -805,17 +957,24 @@ class crm_company_webview extends class_base
 		$orgs = $this->_list_companies(array('id' => $arr['id']));
 
 		// Prepare for output
-		$do_link = $ob->prop('clickable');
 		$this->vars(array(
-			'name' => $ob->name(),
+			'company_list_title' => '',
 			'company_list_item' => '',
 			'company_list' => '',
 		));
+		$do_link = $ob->prop('clickable');
+		if ($ob->prop('show_title'))
+		{
+			$this->vars(array(
+				'title' => $this->trans_get_val($ob, "name"),
+			));	
+			$this->parse('company_list_title');
+		}
 		$datalist = array(
 			'address' => 'contact',
-			'phone' => 'phone_id',
+			'phone' => '',
 			'openhours' => '',
-			'fax' => 'telefax_id',
+			'fax' => '',
 			'email' => 'email_id',
 			'web' => 'url_id',
 			'images' => '',
@@ -827,6 +986,7 @@ class crm_company_webview extends class_base
 		// Output company list
 		$oh_inst = get_instance(CL_OPENHOURS);
 		$img_inst = get_instance(CL_IMAGE);
+		$ph_inst = get_instance(CL_CRM_PHONE);
 		foreach ($orgs as $o)
 		{
 			$address = $phone = $fax = $openhours = $email = $web = "";
@@ -924,6 +1084,30 @@ class crm_company_webview extends class_base
 						}
 						$value = join('<br>', $images);
 					}
+					elseif ($item == 'phone' || $item == 'fax')
+					{
+						$reltype = 'RELTYPE_PHONE';
+						if ($item == 'fax')
+						{
+							$reltype = 'RELTYPE_TELEFAX';
+						}
+						
+						$conns = $o->connections_from(array(
+							'type' => $reltype,
+						));
+						$value = array();
+						foreach ($conns as $conn)
+						{
+							$thing = $conn->conn['to'];
+							if ($this->can('view', $thing))
+							{
+								$value[] = $ph_inst->show(array(
+									'oid' => $thing,
+								));
+							}	
+						}
+						$value = join(', ', $value);
+					}
 					else
 					{
 						$value = $o_item->name();
@@ -935,6 +1119,13 @@ class crm_company_webview extends class_base
 					$this->vars(array('company_'.$item => $value));
 					$this->parse('company_item_'.$item);
 				}
+			}
+
+			if (aw_global_get("uid") != "")
+			{
+				$this->vars(array(
+					"logged" => $this->parse("logged")
+				));
 			}
 			$this->parse('company_list_item');
 		}
