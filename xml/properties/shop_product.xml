@@ -46,6 +46,17 @@
             <caption>Hinnakujundus</caption>
       </property>
       <property>
+            <name>tax_rate</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <automatic>1</automatic>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_TAX_RATE</reltype>
+            <caption>Maksum&amp;amp;auml;&amp;amp;auml;r</caption>
+      </property>
+      <property>
             <name>userch1</name>
             <table>aw_shop_products</table>
             <group>data</group>
@@ -763,6 +774,11 @@
                   <clid>CL_META</clid>
                   <caption>kasutajadefineeritud muutuja 10</caption>
             </VARUSERM10>
+            <TAX_RATE>
+                  <value>18</value>
+                  <clid>CL_CRM_TAX_RATE</clid>
+                  <caption>Maksum&amp;amp;auml;&amp;amp;auml;r</caption>
+            </TAX_RATE>
       </reltypes>
 </properties>
 
