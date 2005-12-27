@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.3 2005/11/02 09:06:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.4 2005/12/27 21:28:29 ekke Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -10,48 +10,53 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 @default table=objects
 @default group=general
 
-@property root type=relpicker reltype=RELTYPE_ROOT field=meta method=serialize 
-@caption Juurkaust/-grupp
-@comment Hallata saab selle objekti all olevaid gruppe ja kasutajaid
+	@property root type=relpicker reltype=RELTYPE_ROOT field=meta method=serialize 
+	@caption Juurkaust/-grupp
+	@comment Hallata saab selle objekti all olevaid gruppe ja kasutajaid
 
-@property default_loginmenu type=select field=meta method=serialize
-@caption Vaikimisi loginmen&uuml;&uuml; uutel gruppidel
-@comment Seos Loginmen&uuml;&uuml;de juurkaust peab olema loodud
+	@property default_loginmenu type=select field=meta method=serialize
+	@caption Vaikimisi loginmen&uuml;&uuml; uutel gruppidel
+	@comment Seos Loginmen&uuml;&uuml;de juurkaust peab olema loodud
+	
+	@property inactive_period type=select field=meta method=serialize
+	@caption Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks
 
 @groupinfo users caption=Kasutajad 
 @default group=users
 
-@layout hbox_toolbar type=hbox
+	@layout hbox_toolbar type=hbox
 
-@property users_tb type=toolbar store=no no_caption=1 editonly=1 parent=hbox_toolbar 
+		@property users_tb type=toolbar store=no no_caption=1 editonly=1 parent=hbox_toolbar 
 
-@layout hbox_data type=hbox width=20%:80%
+	@layout hbox_data type=hbox width=20%:80%
 
-@layout vbox_users_tree type=vbox parent=hbox_data 
+	@layout vbox_users_tree type=vbox parent=hbox_data 
 
-@property search_txt type=textbox store=no parent=vbox_users_tree size=20
-@caption Otsi gruppi
+		@property search_txt type=textbox store=no parent=vbox_users_tree size=20
+		@caption Otsi gruppi
 
-property search_btn type=submit store=no value=Otsi parent=vbox_users_tree no_caption=1 
-caption Otsi
+		@property groups_tree type=treeview no_caption=1 store=no parent=vbox_users_tree
+		@caption Puu
 
-@property groups_tree type=treeview no_caption=1 store=no parent=vbox_users_tree
-@caption Puu
+	@layout vbox_users_content type=vbox parent=hbox_data
 
-@layout vbox_users_content type=vbox parent=hbox_data
+		@property table_selected_groups type=table store=no no_caption=1 parent=vbox_users_content
+		@caption Grupid 
 
-@property table_selected_groups type=table store=no no_caption=1 parent=vbox_users_content
-@caption Grupid 
+		@property table_groups type=table store=no no_caption=1 parent=vbox_users_content
+		@caption Grupid 
 
-@property table_groups type=table store=no no_caption=1 parent=vbox_users_content
-@caption Grupid 
+		@property table_users type=table store=no no_caption=1 parent=vbox_users_content
+		@caption Kasutajad 
 
-@property table_users type=table store=no no_caption=1 parent=vbox_users_content
-@caption Kasutajad 
+		@property submit_save type=submit store=no value=Salvesta parent=vbox_users_content no_caption=1
+		@caption Salvesta
 
+@groupinfo inactive_users caption="Mitteaktiivsed kasutajad"
+@default group=inactive_users
 
-@property submit_save type=submit store=no value=Salvesta parent=vbox_users_content no_caption=1
-@caption Salvesta
+	@property inactive_tb type=toolbar store=no no_caption=1 editonly=1 parent=hbox_toolbar 
+	@property table_inactive type=table store=no no_caption=1
 
 @reltype ROOT value=1 clid=CL_GROUP,CL_MENU
 @caption Juurkaust/-grupp
@@ -110,6 +115,8 @@ class user_manager extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case 'inactive_tb':
+				$this->parent = null;
 			case 'users_tb':
 				$this->do_users_toolbar(&$prop['toolbar'], $arr);
 			break;
@@ -120,6 +127,9 @@ class user_manager extends class_base
 				$this->do_table_groups($prop['vcl_inst'], $arr);
 			break;
 			case 'table_users':
+				$arr['type'] = 'grouprelated';
+			case 'table_inactive':
+				$arr['type'] = $arr['type'] ? $arr['type'] : 'inactive';
 				$this->do_table_users($prop['vcl_inst'], $arr);
 			break;
 			case 'groups_tree':
@@ -169,6 +179,17 @@ class user_manager extends class_base
 					$prop['options'] = $list;
 				}	
 
+			break;
+			case 'inactive_period':
+				$prop['options'] = array (
+					1 => '1 ' . t('p&auml;ev'),
+					7 => '1 ' . t('n&auml;dal'),
+					31 => '1 ' . t('kuu'),
+					62 => '2 ' . t('kuud'),
+					92 => '3 ' . t('kuud'),
+					183 => '6 ' . t('kuud'),
+					365 => '1 ' . t('aasta'),
+				);
 			break;
 		}
 		return $retval;
@@ -237,30 +258,31 @@ class user_manager extends class_base
 	// Adds content to users toolbar
 	function do_users_toolbar(&$tb, $arr)
 	{	
-		if(!isset($this->parent))
+		if(isset($this->parent))
 		{
-			return "";
-		}
-		
-		$tb->add_menu_button(array(
-			'name'=>'add_item',
-			'tooltip'=> t('Uus')
-		));
-		
-		$clss = aw_ini_get("classes");
-		foreach(array(CL_USER, CL_GROUP) as $clid)
-		{
-			$tb->add_menu_item(array(
-				'parent' => 'add_item',
-				'text' => $clss[$clid]['name'],
-				'disabled' => !$this->can('edit', $this->parent),
-				'link' =>$this->mk_my_orb("new", array(
-					'parent' => $this->parent,
-					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
-				), $clid)
+			$tb->add_menu_button(array(
+				'name'=>'add_item',
+				'tooltip'=> t('Uus')
 			));
+		
+		
+			$clss = aw_ini_get("classes");
+			foreach(array(CL_USER, CL_GROUP) as $clid)
+				{
+				$tb->add_menu_item(array(
+					'parent' => 'add_item',
+					'text' => $clss[$clid]['name'],
+					'disabled' => !$this->can('edit', $this->parent),
+					'link' =>$this->mk_my_orb("new", array(
+						'parent' => $this->parent,
+						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+					), $clid)
+				));
+			}
+			$tb->add_separator();
 		}
-		/* Pointless here, simpler to use through popup menu
+		
+		/* Import button - Pointless here, simpler to use through popup menu
 		$tb->add_button(array(
 			'name' => 'import',
 			'tooltip' => t("Impordi"),
@@ -269,7 +291,6 @@ class user_manager extends class_base
 		));	
 		*/
 
-		$tb->add_separator();
 
 		// Copypaste buttons
 		$this->do_objectbuffer_toolbar(array(
@@ -283,7 +304,7 @@ class user_manager extends class_base
 			'name' => 'delete',
 			'tooltip' => t("Kustuta valitud"),
 			'img' => 'delete.gif',
-			"url" => "javascript:if(confirm('".t("Kustutada valitud objektid?")."')){submit('delete')};",
+			"url" => "javascript:if(confirm('".t("Kustutada valitud objektid?")."')){submit_changeform('delete')};",
 		));	
 
 	}
@@ -319,7 +340,7 @@ class user_manager extends class_base
 		$disabled = true;
 		$cut_objects = safe_array(aw_global_get('cut_objects'));
 		$copy_objects = safe_array(aw_global_get('copied_objects'));
-		if ((count($cut_objects) || count($copy_objects)) && $this->can('view', $this->parent))
+		if (isset($this->parent) && (count($cut_objects) || count($copy_objects)) && $this->can('view', $this->parent))
 		{
 			$tooltip = "";
 			$names = array();
@@ -389,6 +410,7 @@ class user_manager extends class_base
 		if (count($selected))
 		{
 			aw_session_del('copied_objects');
+			aw_session_del('cut_objects');
 		
 			$o = get_instance("admin/admin_menus");
 			return $o->cut(array('sel' => $selected, 'return_url' => $arr['post_ru']));
@@ -450,7 +472,7 @@ class user_manager extends class_base
 	// Recursively populates groups tree
 	function do_groups_tree(&$tree, $parent, $treeroot = 1)
 	{
-		$ol = new object_list(array(
+	/*	$ol = new object_list(array(
 			'parent' => $parent,
 			'class_id' => CL_GROUP,
 		));
@@ -466,6 +488,20 @@ class user_manager extends class_base
 			// make kids
 			$this->do_groups_tree(&$tree, $o->id());
 		}
+		*/
+
+		$treedata = new object_tree(array(
+			'parent' => $parent,
+			'class_id' => CL_GROUP,
+		));
+		$tmptree = $tree->tree_from_objects(array(
+			'ot' => $treedata,
+			'root_item' => obj($parent),
+			'var' => 'parent',
+			'no_root_item' => true,
+			'target_url' => aw_url_change_var('search_txt', ''),
+		));
+		$tree->items = $tmptree->items;
 	}
 
 	// Search functionality is in here, too
@@ -536,10 +572,11 @@ class user_manager extends class_base
 	// Defines and populates users table
 	function do_table_users (&$table, $arr)
 	{
-		if (!isset($this->parent) || !is_oid($this->parent))
+		if ($arr['type'] == 'grouprelated' && (!isset($this->parent) || !is_oid($this->parent)))
 		{
 			return;
 		}
+		print '<script src="/automatweb/js/popup_menu.js" type="text/javascript"></script>';
 		$fields = array(
 			array(
 				'name' => 'username',
@@ -591,24 +628,51 @@ class user_manager extends class_base
 			'chgbgcolor' => 'cutcopied',
 		));
 
-		$table->set_header("ja kasutajad".$link);	
 
 		// Now, find data for the table
-		$g = obj($this->parent);
-		$users = $g->connections_from(array(
-			'type' => 'RELTYPE_MEMBER',
-			'class' => CL_USER,
-		));
+		$users = array();
+		switch ($arr['type'])
+		{
+			case 'grouprelated':
+				$table->set_header("ja kasutajad".$link);	
+				$g = obj($this->parent);
+				$conns = $g->connections_from(array(
+					'type' => 'RELTYPE_MEMBER',
+					'class' => CL_USER,
+				));
+				foreach ($conns as $c)
+				{
+					$users[] = $c->prop('to');
+				}
 		
+			break;
+			case 'inactive':
+				$table->set_header(t("Mitteaktiivsed kasutajad").$link);	
+				// Find period of idleness needed to be listed
+				$period = $arr['obj_inst']->prop('inactive_period');
+				if (empty($period))
+				{
+					$period = 31; // 31 p2eva
+				}
+				$ol = new object_list(array(
+					'class_id' => CL_USER,
+					'lastaction' => new obj_predicate_compare(OBJ_COMP_LESS, time()-$period*24*3600),  // Last activity less than period days ago
+					'brother_of' => new obj_predicate_prop('id'),
+					//'status' => STAT_NOTACTIVE,
+				));
+				$users = $ol->list;
+				
+			break;
+		}
 		if (!count($users))
 		{
 			$table = "";
 		}
 
 		$df = aw_ini_get('config.dateformats');
-		foreach ($users as $c)
+		foreach ($users as $u)
 		{
-			$o = $c->to();
+			$o = obj($u);
 			if (!$this->can('view', $o->id()))
 			{
 				continue;
@@ -632,8 +696,16 @@ class user_manager extends class_base
 			}
 			arsort($groups); // Sort groups by priority
 			$groups = array_keys($groups);
-
+/*			if ($o->prop('uid') == 'Oioilane')
+			{
+				arr($groups);
+				arr($o->connections_to());
+				$u = get_instance('users');
+				$groups2 = $u->getgroupsforuser($o->prop('uid'));
+			}
+*/
 			// Find user's company, if CL_USER has CL_CRM_PERSON
+			$companies = array();
 			if ($person = $o->get_first_obj_by_reltype('RELTYPE_PERSON'))
 			{
 				$conns = $person->connections_from(array(
@@ -975,7 +1047,7 @@ class user_manager extends class_base
 	*/
 	function _get_menu($arr)
 	{
-		if (!isset($arr['id']) || !is_oid($arr['id']) || !$this->can('view', $arr['id']) || !is_array(ifset($arr, "items")))
+		if (!isset($arr['id']) || !is_oid($arr['id']) || !$this->can('view', $arr['id']) || !isset($arr['items']) || !is_array($arr["items"]))
 		{
 			return "";
 		}
@@ -1123,7 +1195,7 @@ class user_manager extends class_base
 				'request' => array('lm' => $lm),
 			));
 			$conf->save();
-			return '<script type="text/javascript">window.opener.location.reload(true);window.close() </script>';
+			return '<script type="text/javascript">window.opener.location.reload(true);window.close(); </script>';
 		}
 		else
 		{

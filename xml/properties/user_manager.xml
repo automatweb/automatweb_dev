@@ -22,6 +22,15 @@
             <comment>Seos Loginmen&amp;amp;uuml;&amp;amp;uuml;de juurkaust peab olema loodud</comment>
       </property>
       <property>
+            <name>inactive_period</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks</caption>
+      </property>
+      <property>
             <name>users_tb</name>
             <table>objects</table>
             <group>users</group>
@@ -99,6 +108,26 @@
             <field>submit_save</field>
             <caption>Salvesta</caption>
       </property>
+      <property>
+            <name>inactive_tb</name>
+            <table>objects</table>
+            <group>inactive_users</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <editonly>1</editonly>
+            <parent>hbox_toolbar</parent>
+            <field>inactive_tb</field>
+      </property>
+      <property>
+            <name>table_inactive</name>
+            <table>objects</table>
+            <group>inactive_users</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>table_inactive</field>
+      </property>
       <classinfo>
             <syslog_type>ST_USER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -109,6 +138,9 @@
             <users>
                   <caption>Kasutajad</caption>
             </users>
+            <inactive_users>
+                  <caption>Mitteaktiivsed kasutajad</caption>
+            </inactive_users>
       </groupinfo>
       <reltypes>
             <ROOT>
