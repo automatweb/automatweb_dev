@@ -11,7 +11,7 @@ of the file.
 
 </pre>
 </p><p>
-<div class="cmdsynopsis" id="id2747670"><a name="id2747670"></a><tt>@property</tt>  {name} {type=<i><tt>typestring</tt></i>} [group=<i><tt>groupid</tt></i>] [parent=<i><tt>propname</tt></i>] 
+<div class="cmdsynopsis" id="id2747670"><a name="id2747670"></a><b><tt>@property</tt></b>  {name} {type=<i><tt>typestring</tt></i>} [group=<i><tt>groupid</tt></i>] [parent=<i><tt>propname</tt></i>] 
 [default=<i><tt>value</tt></i>] [rel=1] [trans=1] [table=<i><tt>tablename</tt></i>] [field=<i><tt>fieldname</tt></i>] [method= [serialize | bitmask]] [no_caption=1] [store=no] [editonly=1] [newonly=1]</div>
 
 This is the single most important tag, it's used to define all the different properties. Additionaly to the attributes described here some properties have their own attributes.
@@ -31,24 +31,24 @@ This is the single most important tag, it's used to define all the different pro
 </p></dd><dt><a name="id2797366"></a><span class="term">editonly</span></dt><dd><p><a name="id2797373"></a>If set to 1, the property will be shown only if an existing object is being edited (it's ignored for when an object is created)
 </p></dd><dt><a name="id2797385"></a><span class="term">newonly</span></dt><dd><p><a name="id2797392"></a>If set to 1, the property will be shown only if a new object is being created (is ignored when editing an object).
 </p></dd></dl></div><p>
-<div class="cmdsynopsis" id="id2797408"><a name="id2797408"></a><tt>@caption</tt>  {string}</div>
+<div class="cmdsynopsis" id="id2797408"><a name="id2797408"></a><b><tt>@caption</tt></b>  {string}</div>
 
 This defines the caption for the property, it should be as short as possible while still making some sense and it has to follow the @property tag (be on the next line).
 </p><p>
-<div class="cmdsynopsis" id="id2797438"><a name="id2797438"></a><tt>@comment</tt>  {string}</div>
+<div class="cmdsynopsis" id="id2797438"><a name="id2797438"></a><b><tt>@comment</tt></b>  {string}</div>
 Description (or comment) of the property, can be used to give a longer explanation (help text) about the property.
 </p><p>
-<div class="cmdsynopsis" id="id2797468"><a name="id2797468"></a><tt>@default</tt>  {
+<div class="cmdsynopsis" id="id2797468"><a name="id2797468"></a><b><tt>@default</tt></b>  {
 	 [group=<i><tt>group_id</tt></i> | table=<i><tt>tablename</tt></i> | field=<i><tt>fieldname</tt></i> | method=<i><tt>methodname</tt></i>]
 }</div>
 
 Used to give a default value to a property attribute. Saves typing. For example, all properties following the @default table=objects tag will have the table attribute set to "objects".
 </p><p>
-<div class="cmdsynopsis" id="id2797556"><a name="id2797556"></a><tt>@groupinfo</tt>  {group_id} {caption=<i><tt>string</tt></i>} [default=1] [parent=<i><tt>group_id</tt></i>] [submit=<i><tt>no</tt></i>]</div>
+<div class="cmdsynopsis" id="id2797556"><a name="id2797556"></a><b><tt>@groupinfo</tt></b>  {group_id} {caption=<i><tt>string</tt></i>} [default=1] [parent=<i><tt>group_id</tt></i>] [submit=<i><tt>no</tt></i>]</div>
 Used to define additional information about a group.
 </p><div class="variablelist"><dl><dt><a name="id2797630"></a><span class="term">caption</span></dt><dd><p><a name="id2797637"></a>Human readable name of the group</p></dd><dt><a name="id2797646"></a><span class="term">default</span></dt><dd><p><a name="id2797653"></a>Is this group the default?</p></dd><dt><a name="id2797663"></a><span class="term">parent</span></dt><dd><p><a name="id2797670"></a>if specified, this group will be nested (second level) inside the parent group</p></dd><dt><a name="id2797681"></a><span class="term">submit</span></dt><dd><p><a name="id2797688"></a>if specified, submit button will be omitted from this group</p></dd></dl></div><p>
 
-<div class="cmdsynopsis" id="id2797703"><a name="id2797703"></a><tt>@classinfo</tt>  {
+<div class="cmdsynopsis" id="id2797703"><a name="id2797703"></a><b><tt>@classinfo</tt></b>  {
 	 [relationmgr=yes] [trans=1] [syslog_type=<i><tt>ST_EXAMPLE</tt></i>] [no_status=1] [no_comment=1]
 }</div>
 Used to define additional information about the class.
@@ -56,10 +56,22 @@ Used to define additional information about the class.
 <dt><span class="term">no_status</span></dt><dd>If specified, then the status property will be omitted from the form and the status of the object will always set to STAT_ACTIVE when saving</p></dd>
 <dt><span class="term">no_comment</span></dt><dd>If specified, then the comment property will be omitted from the form.</p></dd>
 </dl></div><p>
-<div class="cmdsynopsis" id="id2797829"><a name="id2797829"></a><tt>@tableinfo</tt>  {tablename} {master_table=tablename} {master_index=indexname}</div>
+<div class="cmdsynopsis" id="id2797829"><a name="id2797829"></a><b><tt>@tableinfo</tt></b>  {tablename} {master_table=tablename} {master_index=indexname}</div>
 
 Used to define additional about a table (how it's related to the master (objects) table)
-</p><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title"><a name="id2797873"></a>Important</h3><p>
+</p>
+
+<p>
+<div class="cmdsynopsis"><b><tt>@layout</tt></b> {name} [type=<i><tt>hbox | vbox</tt></i>] [width=Left%:Right%] [group=<i><tt>groupid</tt></i>] [parent=<i><tt>parentid</tt></i>] </div>
+Used to define visual structure for properties
+<div class="variablelist">
+<dl>
+<dt> <span class="term">type</span></dt> <dd><p>Layout division style - horizontal or vertical box</p></dd>
+<dt> <span class="term">width</span></dt> <dd><p>For hbox, sets width of either side... eg width=20%:80%</p></dd>
+</dl></div><p>
+
+
+<div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><h3 class="title"><a name="id2797873"></a>Important</h3><p>
 Execute "make properties" each time you change any of the property definitions, this will update 
 the property files.
 </p></div></div></div>
