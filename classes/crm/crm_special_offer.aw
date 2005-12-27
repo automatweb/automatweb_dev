@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer.aw,v 1.2 2005/12/14 12:22:35 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer.aw,v 1.3 2005/12/27 21:27:45 ekke Exp $
 // crm_special_offer.aw - Organisatsiooni eripakkumine
 // Not related to crm_offer
 /*
@@ -132,27 +132,30 @@ class crm_special_offer extends class_base
 		$this->read_template("show.tpl");
 		
 		// Images
-		$conns = $ob->connections_from(array(
-			'type' => 'RELTYPE_IMAGE',
-		));
-		$inst_img = get_instance(CL_IMAGE);
-		$images = array();
-		foreach ($conns as $conn)
+		$images_html = "";
+		if (empty($arr['short']) OR true)
 		{
-			$image = $conn->to();
-			if ($image->prop('status') != STAT_ACTIVE)
-			{
-				continue;
-			}
-			$tmp = $inst_img->parse_alias(array(
-				'alias' => array(
-					'target' => $image->id(),
-				),
+			$conns = $ob->connections_from(array(
+				'type' => 'RELTYPE_IMAGE',
 			));
-			$images[] = $tmp['replacement']; // No, replacement is not a logical name in this context. However, it works!
+			$inst_img = get_instance(CL_IMAGE);
+			$images = array();
+			foreach ($conns as $conn)
+			{
+				$image = $conn->to();
+				if ($image->prop('status') != STAT_ACTIVE)
+				{
+					continue;
+				}
+				$tmp = $inst_img->parse_alias(array(
+					'alias' => array(
+						'target' => $image->id(),
+					),
+				));
+				$images[] = $tmp['replacement']; // No, replacement is not a logical name in this context. However, it works!
+			}
+			$images_html = join('<br><br>', $images);
 		}
-		$images_html = join('<br><br>', $images);
-	
 		$this->vars(array(
 			"images" => $images_html,
 			"id" => $arr['id'],
@@ -162,7 +165,14 @@ class crm_special_offer extends class_base
 			"url" => '/org?org=',
 			"txt_orglehele" => t("Asutuse juurde"),
 		));
-		return $this->parse();
+		if (!empty($arr['short']))
+		{
+			return $this->parse('short');
+		}
+		else
+		{
+			return $this->parse('normal');
+		}
 	}
 }
 ?>
