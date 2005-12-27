@@ -26,6 +26,17 @@
             <method>serialize</method>
             <caption>Numbri t&amp;uuml;&amp;uuml;p</caption>
       </property>
+      <property>
+            <name>country</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COUNTRY</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <automatic>1</automatic>
+            <caption>Riik</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_PHONE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -41,6 +52,11 @@
                   </clid>
                   <caption>Numbriga seotud objekt</caption>
             </BELONGTO>
+            <COUNTRY>
+                  <value>2</value>
+                  <clid>CL_CRM_COUNTRY</clid>
+                  <caption>Riik </caption>
+            </COUNTRY>
       </reltypes>
 </properties>
 
