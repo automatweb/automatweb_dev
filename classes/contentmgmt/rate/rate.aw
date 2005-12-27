@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.25 2005/12/14 13:01:26 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.26 2005/12/27 21:29:51 ekke Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -172,7 +172,7 @@ class rate extends class_base
 		
 		@param oid required type=int
 		@param rate_id optional type=int
-		@param return_url required
+		@param return_url optional 
 		@param rate required
 		
 		@returns
@@ -443,6 +443,94 @@ class rate extends class_base
 		{
 			return $this->mk_my_orb("change", array("id" => $dat["oid"]), basename($this->classes[$dat["class_id"]]["file"]));
 		}
+	}
+	
+	/**  
+		
+		@attrib name=rate_popup params=name nologin="1" default="0"
+		
+		@param oid required type=int
+		@param close optional type=int
+		
+		@returns
+		
+		
+		@comment
+			Content for popup window where you can rate object $oid
+			Window closes after voting
+	**/
+	function rate_popup ($arr)
+	{
+		if (!empty($arr['close']))
+		{
+				die("
+					<html><body><script language='javascript'>
+						window.opener.location.reload();
+						window.close();
+					</script></body></html>
+				");
+		}
+		$this->read_any_template("popup.tpl");
+		// Rating, show form
+		$rating_form = "";
+		$o = obj($arr['oid']);
+		$title = $o->name();
+		$have_rating = false;
+		$ro = aw_global_get('rated_objs');
+	 	
+		$scale_inst = get_instance(CL_RATE_SCALE);
+		$scales = $scale_inst->get_scale_objs_for_obj($o->id());
+		
+		if (!is_array($ro) || !isset($ro[$o->id()]))
+		{
+			foreach ($scales as $scale)
+			{
+				$scale_values = $scale_inst->_get_scale($scale);
+				$scale_obj = obj($scale);
+				$this->vars(array(
+					'rating_caption' => $scale_obj->name(),
+					'rating_value' => '',
+				));
+				foreach ($scale_values as $num => $txt)
+				{
+					$this->vars(array(
+						'rating_value_name' => 'rate['.$scale_obj->id().']',
+						'rating_value_value' => $num,
+						'rating_value_caption' => $txt,
+					));
+					$this->vars_merge(array('rating_value' => $this->parse('rating_value')));
+					$have_rating = true;
+				}
+				$this->vars_merge(array('rating' => $this->parse('rating')));
+			}
+		}
+		
+		$rating_form = "";
+		if ($have_rating)
+		{
+			$rating_form = html::submit(array(
+				'value' => t("H&auml;&auml;leta"),
+			));
+			$hiddens = array(
+				'return_url' => htmlspecialchars(aw_url_change_var('close', '1')),
+				'class' => 'rate',
+				'action' => 'rate',
+				'oid' => $o->id(),
+			);
+			foreach ($hiddens as $name => $value)
+			{
+				$rating_form .= html::hidden(array(
+					'name' => $name,
+					'value' => $value,
+				));
+			}
+		}	
+		$this->vars(array(
+			'rating_form_vars' => $rating_form,
+			'title' => t('Hinda') . ' - ' .$title,
+		));
+		return $this->parse();
+		
 	}
 }
 ?>
