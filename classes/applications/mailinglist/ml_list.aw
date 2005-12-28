@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.37 2005/12/28 14:24:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.38 2005/12/28 15:04:48 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -417,7 +417,7 @@ class ml_list extends class_base
 
 		if(is_array($args["subscr_lang"]))
 		{
-			$lang_id = aw_global_get("lang_id");
+			$lang_id = $list_obj->lang_id();
 			$temp_use_folders = array();
 			$lg = get_instance("languages");
 			$langdata = $lg->get_list();
@@ -439,7 +439,7 @@ class ml_list extends class_base
 	
 						foreach($conns as $conn)
 						{
-							$temp_use_folders[] = $conn -> prop("to");
+							$temp_use_folders[] = $conn->prop("to");
 						}			
 					}
 				}
