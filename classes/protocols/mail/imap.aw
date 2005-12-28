@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.27 2005/12/20 15:42:43 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.28 2005/12/28 11:34:32 ahti Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -383,7 +383,7 @@ class imap extends class_base
 		$this->attachments = array();
 		if (!empty($structure->body))
 		{
-			$msgdata["content"] = strip_tags($structure->body);
+			$msgdata["content"] = $structure->body;
 		}
 		elseif (is_array($structure->parts))
 		{
