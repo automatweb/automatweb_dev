@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.72 2005/12/11 16:55:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.73 2005/12/28 14:49:27 ahti Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -605,6 +605,7 @@ class cfgform extends class_base
 				break;
 
 			case "edit_groups":
+				$this->_init_cfgform_data($arr["obj_inst"]);
 				$this->update_groups($arr);
 				break;
 
@@ -1133,28 +1134,46 @@ class cfgform extends class_base
 		foreach($grps->get() as $key => $item)
 		{
 			$res = array();
-			$res["grpcaption[".$key."]"] = array(
+			$rv["grpcaption[$key]"] = array(
 				"name" => "grpcaption[".$key."]",
 				"type" => "textbox",
 				"size" => 40,
-				"caption" => t("gdata"),
+				"caption" => t("Pealkiri"),
 				"value" => $item["caption"],
+				"parent" => "b".$key,
 			);
-			$res["grpstyle[".$key."]"] = array(
-				"name" => "grpstyle[".$key."]",
+			$rv["grpstyle[$key]"] = array(
+				"name" => "grpstyle[$key]",
 				"type" => "select",
 				"options" => $tps,
+				"caption" => t("Stiil"),
 				"selected" => $item["grpstyle"],
+				"parent" => "b".$key,
 			);
+			$rv["grpview[$key]"] = array(
+				"name" => "grpview[$key]",
+				"type" => "checkbox",
+				"no_caption" => 1,
+				"caption" => t("Vaikimisi view vaade"),
+				"value" => $item["grpview"],
+				"parent" => "b$key",
+			);
+			$rv["b".$key] = array(
+				"name" => "b".$key,
+				"type" => "layout",
+				"rtype" => "hbox",
+			);
+			/*
 			$items = array(
 				"type" => "text",
-				"name" => "b" . $key,
+				"name" => ,
 				"caption" => t("ab"),
 				"items" => $res,
 				"no_caption" => 1,
 			);		
 
 			$rv["b".$key] = $items;
+			*/
 		};
 		return $rv;
 	}
@@ -1166,8 +1185,14 @@ class cfgform extends class_base
 		{
 			foreach($arr["request"]["grpcaption"] as $key => $val)
 			{
-				$grplist[$key] = array("caption" => $val);
+				//$grplist[$key] = array("caption" => $val);
+				$grplist[$key]["caption"] = $val;
 				$styl = $arr["request"]["grpstyle"][$key];
+				$view = $arr["request"]["grpview"][$key];
+				if(!empty($view))
+				{
+					$grplist[$key]["grpview"] = $view;
+				}
 				if (!empty($styl))
 				{
 					$grplist[$key]["grpstyle"] = $styl;

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.446 2005/12/28 11:26:00 kristo Exp $
+// $Id: class_base.aw,v 2.447 2005/12/28 14:49:27 ahti Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -206,7 +206,7 @@ class class_base extends aw_template
 
 
 		@comment
-		id _always_ refers to the objects table. Always. If you want to load
+		id _always_ refers to the objects< table. Always. If you want to load
 		any other data, then you'll need to use other field name
 
 	**/
@@ -247,27 +247,6 @@ class class_base extends aw_template
 		{
 			$this->no_buttons = true;
 		}
-
-		if (1 == $args["view"])
-		{
-			$this->view = true;
-		};
-
-		$use_form = $args["form"];
-
-
-		if (method_exists($this->inst,"callback_on_load"))
-		{
-			$this->inst->callback_on_load(array(
-				"request" => $args,
-			));
-		}
-
-		if ($args["no_active_tab"])
-		{
-			$this->no_active_tab = 1;
-		};
-
 
 		if (empty($use_form))
 		{
@@ -312,9 +291,6 @@ class class_base extends aw_template
 
 		};
 
-
-		$this->use_form = $use_form;
-
 		//$cfgform_id = $args["cfgform"];
 		if (empty($cfgform_id) && is_object($this->obj_inst))
 		{
@@ -323,6 +299,9 @@ class class_base extends aw_template
 
 		$this->cfgform_id = $cfgform_id;
 
+		// well, i NEED to get the right property group BEFORE i get the right view..
+		// i hope this doesn't qualify as a hack, because nobody changes the args
+		// anyway -- ahz
 		$filter = array(
 			"clid" => $this->clid,
 			"clfile" => $this->clfile,
@@ -348,10 +327,53 @@ class class_base extends aw_template
 			$this->layout_mode = "fixed_toolbar";
 			$filter["layout_mode"] == "fixed_toolbar";
 		}
+		$properties = $this->get_property_group($filter);
+		/////////////////////
+
+		$defview = 0;
+		if(is_oid($this->cfgform_id) && $this->can("view", $this->cfgform_id) && $args["action"] != "view")
+		{
+			$f = obj($this->cfgform_id);
+			$grps = safe_array($f->meta("cfg_groups"));
+			if($grps[$this->use_group]["grpview"] == 1)
+			{
+				$defview = 1;
+			}
+		}
+		if($defview == 1)
+		{
+			// if by cfgform, the default is view, then take retour here to get the view 
+			$args["action"] = "view";
+			$args["view"] = 1;
+			$this->no_mod_view = 1;
+			//unset($args["return_url"]);
+			//return $this->mk_my_orb("change", $args, $args["class"]);
+		}
+
+		if (1 == $args["view"])
+		{
+			$this->view = true;
+		};
+
+		$use_form = $args["form"];
+
+
+		$this->use_form = $use_form;
+
+		if (method_exists($this->inst,"callback_on_load"))
+		{
+			$this->inst->callback_on_load(array(
+				"request" => $args,
+			));
+		}
+
+		if ($args["no_active_tab"])
+		{
+			$this->no_active_tab = 1;
+		};
 
 		// Now I need to deal with relation elements
 		// it's the bloody run order .. FUCK
-		$properties = $this->get_property_group($filter);
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
 			$o_t = get_instance("translate/object_translation");
@@ -533,7 +555,10 @@ class class_base extends aw_template
 				$cli->set_form_layout($use_layout);
 				if (is_callable(array($this->inst,"get_content_elements")))
 				{
-					$els = $this->inst->get_content_elements(array("obj_inst" => $this->obj_inst));
+					$els = $this->inst->get_content_elements(array(
+						"obj_inst" => $this->obj_inst,
+						"new" => $this->new,
+					));
 					if (is_array($els))
 					{
 						foreach($els as $location => $_content)
@@ -608,6 +633,23 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
+
+		// it may seem strange, but sometimes you have to change the layout from callback,
+		// and if you don't parse it again, it won't show -- ahz
+		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
+		{
+			$tmp = array();
+			// export only layout information for the current group
+			foreach($this->layoutinfo as $key => $val)
+			{
+				$_lgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);
+				if (in_array($this->use_group,$_lgroups))
+				{
+					$tmp[$key] = $val;
+				};
+			};
+			$cli->set_layout($tmp);
+		};
 
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
@@ -780,12 +822,16 @@ class class_base extends aw_template
 		{
 			$orb_action = "change";
 		}
+		elseif($this->no_mod_view == 1)
+		{
+			$orb_action = "change";
+		}
 		else
 		{
 			$orb_action = $args["action"];
 		};
 
-		if (isset($this->view) && $this->view == 1)
+		if (isset($this->view) && $this->view == 1 && !$this->no_mod_view)
 		{
 			$orb_action = "view";
 		};
@@ -1894,6 +1940,14 @@ class class_base extends aw_template
 			};
 			$val["type"] = "text";
 		};
+		if($val["type"] == "layout")
+		{
+			$val["group"] = $this->use_group;
+			$val["type"] = $val["rtype"];
+			$this->layoutinfo[$val["name"]] = $val;
+
+			unset($val);
+		}
 		// XXX: move get_html calls out of here, they really do not belong
 		if (($val["type"] == "toolbar") && is_object($val["vcl_inst"]))
 		{
@@ -2175,7 +2229,10 @@ class class_base extends aw_template
 					foreach($vx as $ekey => $eval)
 					{
 						$this->convert_element(&$eval);
-						$resprops[$ekey] = $eval;
+						if($eval["orig_type"] != "layout")
+						{
+							$resprops[$ekey] = $eval;
+						}
 					};
 				}
 			}
@@ -4094,7 +4151,6 @@ class class_base extends aw_template
 			$lx = $cl_vis->get_layouts(array(
 				"class_id" => $cls_id,
 			));
-
 			$this->layoutinfo = $lx;
 
 			// okei, aga kus see layout mäng tuleb?
@@ -4646,7 +4702,6 @@ class class_base extends aw_template
 		{
 			unset($defaults["comment"]);
 		};
-
 		$this->layoutinfo = $cfgu->get_layoutinfo();
 
 		$this->relinfo = $cfgu->get_relinfo();
