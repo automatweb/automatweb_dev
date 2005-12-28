@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.187 2005/11/21 13:28:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.188 2005/12/28 11:51:20 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -624,7 +624,7 @@ class aliasmgr extends aw_template
 		{
 			if (isset($cldat["alias"]))
 			{
-				if ($cldat["alias_class"])
+				if (false && $cldat["alias_class"])
 				{
 					$cldat["file"] = $cldat["alias_class"];
 					$classes[$clid]["file"] = $cldat["alias_class"];
@@ -1088,7 +1088,6 @@ class aliasmgr extends aw_template
 				}
 
 				$vals = $this->mk_kstring($this->rel_type_classes[$k]);
-
 				if (isset($this->rel_type_classes[$k][$objtype]))
 				{
 					$sele = $objtype;
