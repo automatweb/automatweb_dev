@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.10 2005/07/01 08:37:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.11 2005/12/28 11:07:24 ahti Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT relationmgr=yes no_status=1 layout=boxed
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT relationmgr=yes no_status=1
 
 @default table=objects
 @default group=general
@@ -223,6 +223,10 @@ class personnel_management extends class_base
 		switch($prop["name"])
 		{
 			case "tabpanel":
+				if($arr["new"])
+				{
+					return $retval;
+				}
 				$logos = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_LAYOUT_LOGO",
 				));
@@ -232,13 +236,15 @@ class personnel_management extends class_base
 					"type" => "RELTYPE_LAYOUT_BACKGROUND",
 				));
 				$first_bg = reset($bgs);
-
-				$t = get_instance(CL_IMAGE);
-				$prop["vcl_inst"]->set_style("with_logo");
-				$prop["vcl_inst"]->configure(array(
-					"logo_image" => $t->get_url_by_id($first_logo->prop("to")),
-					"background_image" => $t->get_url_by_id($first_bg->prop("to")),
-				));
+				if($first_logo && $first_bg)
+				{
+					$t = get_instance(CL_IMAGE);
+					$prop["vcl_inst"]->set_style("with_logo");
+					$prop["vcl_inst"]->configure(array(
+						"logo_image" => $t->get_url_by_id($first_logo->prop("to")),
+						"background_image" => $t->get_url_by_id($first_bg->prop("to")),
+					));
+				}
 						
 			break;
 			
@@ -1592,6 +1598,10 @@ class personnel_management extends class_base
 
 	function get_content_elements($arr)
 	{
+		if($arr["new"])
+		{
+			return array();
+		}
 		$obj_inst = $arr["obj_inst"];
 		$els = $obj_inst->connections_from(array(
 			"type" => "RELTYPE_CONTENT",
@@ -1604,11 +1614,11 @@ class personnel_management extends class_base
 			$to = $el->prop("to");
 			if ($locations[$to])
 			{
-                                //$rv[$to] = $locations[$to];
-                                $to_obj = $el->to();
-                                $ct = "";
-                                if (CL_PROMO == $to_obj->class_id())
-                                {
+				//$rv[$to] = $locations[$to];
+				$to_obj = $el->to();
+				$ct = "";
+				if (CL_PROMO == $to_obj->class_id())
+				{
 					// just shoot me
 					$gidlist = aw_global_get("gidlist");
 					$found = false;
