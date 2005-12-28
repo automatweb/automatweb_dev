@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.19 2005/12/14 12:02:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.20 2005/12/28 11:03:08 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -59,6 +59,12 @@
 
 @property texts type=table no_caption=1
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
+
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption pilt
 
@@ -82,6 +88,10 @@ class language extends class_base
 				"caption" => t("siit")
 			)));
 		}*/
+
+		$this->trans_props = array(
+			"lang_name", "lang_trans_msg"
+		);
 	}
 
 	//////
@@ -155,6 +165,10 @@ class language extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "langs":
 				$ol = new object_list(array(
 					"class_id" => CL_LANGUAGE,
@@ -365,6 +379,20 @@ class language extends class_base
 			$txts = new aw_array($o->meta("texts"));
 			$that->vars($txts->get());
 		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>

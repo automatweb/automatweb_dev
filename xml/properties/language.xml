@@ -135,6 +135,15 @@
             <store>no</store>
             <field>texts</field>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_LANGUAGE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -148,6 +157,9 @@
             <texts>
                   <caption>Tekstid</caption>
             </texts>
+            <transl>
+                  <caption>T&amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <languages>
