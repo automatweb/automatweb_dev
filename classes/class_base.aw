@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.444 2005/12/27 12:35:46 kristo Exp $
+// $Id: class_base.aw,v 2.445 2005/12/28 09:24:28 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4822,12 +4822,21 @@ class class_base extends aw_template
 
 		// get langs
 		$l = get_instance("languages");
-		$ll = $l->get_list(array("all_data" => true));
+		$ll = $l->get_list(array(/*"ignore_status" => true,*/ "all_data" => true));
 
 		$pl = $arr["obj_inst"]->get_property_list();
 
-		$all_vals = $arr["obj_inst"]->meta("translations");
+		$cfgform_id = $this->get_cfgform_for_object(array(
+			"obj_inst" => $arr["obj_inst"],
+			"args" => $arr["request"],
+		));
+		if ($this->can("view", $cfgform_id))
+		{
+			$cf = get_instance(CL_CFGFORM);
+			$pl = $cf->get_props_from_cfgform(array("id" => $cfgform_id));
+		}
 
+		$all_vals = $arr["obj_inst"]->meta("translations");
 		foreach($ll as $lid => $lang)
 		{
 			if ($lid == $arr["obj_inst"]->lang_id())
@@ -4875,11 +4884,33 @@ class class_base extends aw_template
 			$trs = $obj->meta("translations");
 			if (isset($trs[$cur_lid]))
 			{
+				if ((true || $prop == "url" || $prop == "author") && $trs[$cur_lid][$prop] == "")
+				{
+					return $val;
+				}
 				$val = $trs[$cur_lid][$prop];
 			}
 		}
 
 		return $val;	
+	}
+
+	function trans_get_val_str($obj, $prop)
+	{
+		$val = $obj->prop_str($prop);
+		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $obj->lang_id())
+		{
+			$trs = $obj->meta("translations");
+			if (isset($trs[$cur_lid]))
+			{
+				if ((true || $prop == "url" || $prop == "author") && $trs[$cur_lid][$prop] == "")
+				{
+					return $val;
+				}
+				$val = $trs[$cur_lid][$prop];
+			}
+		}
+		return $val;
 	}	
 };
 ?>
