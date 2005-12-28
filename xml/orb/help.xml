@@ -9,6 +9,13 @@
 			</function>
 		</action>
 
+		<action name="get_node" all_args="1">
+			<function name="get_node">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="grouphelp">
 			<function name="grouphelp">
 				<arguments>

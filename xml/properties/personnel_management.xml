@@ -313,7 +313,6 @@
             <syslog_type>ST_PERSONNEL_MANAGEMENT</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
-            <layout>boxed</layout>
       </classinfo>
       <groupinfo>
             <my_profile>
