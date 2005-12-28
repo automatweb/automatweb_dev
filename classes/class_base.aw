@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.445 2005/12/28 09:24:28 kristo Exp $
+// $Id: class_base.aw,v 2.446 2005/12/28 11:26:00 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4897,7 +4897,74 @@ class class_base extends aw_template
 
 	function trans_get_val_str($obj, $prop)
 	{
-		$val = $obj->prop_str($prop);
+		$pd = $GLOBALS["properties"][$obj->class_id()][$prop];
+		$type = $pd["type"];
+
+		$val = $obj->prop($prop);
+		switch($type)
+		{
+			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables 
+			case "relmanager":
+			case "relpicker": 
+			case "classificator":
+			case "popup_search":
+				if ($pd["store"] == "connect")
+				{
+					$rels = new object_list($obj->connections_from(array(
+						"type" => $pd["reltype"]
+					)));
+					$_tmp = $rels->names();
+					if (count($_tmp))
+					{
+						$val = join(",", $_tmp);
+					}
+					else
+					{
+						$val = "";
+					}
+					break;
+				}
+
+			case "oid":
+				if (is_oid($val))
+				{
+					if ($GLOBALS["object_loader"]->ds->can("view", $val))
+					{
+						$tmp = new object($val);
+						//$val = $tmp->name();
+						$val = $this->trans_get_val($tmp, "name");
+					}
+					else
+					{
+						$val = "";
+					}
+				}
+				else
+				if (is_array($val))
+				{
+					$vals = array();
+					foreach($val as $k)
+					{
+						if (is_oid($k))
+						{
+							if ($GLOBALS["object_loader"]->ds->can("view", $k))
+							{
+								$tmp = new object($k);
+								$vals[] = $this->trans_get_val($tmp, "name");
+								//$vals[] = $tmp->name();
+							}
+						}
+					}
+					$val = join(", ", $vals);
+				}
+				break;
+		}
+		if ($val === "0" || $val === 0)
+		{
+			$val = "";
+		}
+
+
 		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $obj->lang_id())
 		{
 			$trs = $obj->meta("translations");
