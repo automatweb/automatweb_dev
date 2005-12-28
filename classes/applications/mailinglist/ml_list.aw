@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.36 2005/12/23 09:41:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.37 2005/12/28 14:24:30 markop Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -14,8 +14,18 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Listi liikmete allikas
 
+@property choose_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@caption vali kaustad millega liituda
+
+@property choose_languages type=select multiple=1 field=meta method=serialize
+@caption vali keeled millega võib liituda
+
 @property multiple_folders type=checkbox ch_value=1
 @caption Lase liitumisel kausta valida
+
+@property multiple_languages type=checkbox ch_value=1
+@caption Lase liitumisel valida keelt
+
 
 @property msg_folder type=relpicker reltype=RELTYPE_MSG_FOLDER
 @caption Kirjade asukoht
@@ -28,6 +38,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
 @caption Listi liikmete seadetevorm
+
+
 ------------------------------------------------------------------------
 @default group=member_list
 
@@ -49,7 +61,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property import_textfile type=fileupload store=no
 @caption Impordi liikmed tekstifailist
 
-@property mass_subscribe type=textarea rows=25 store=no
+@property mass_subscribwrite_maile type=textarea rows=25 store=no
 @caption Massiline liitmine
 @comment Iga aadress eraldi real, nimi ja aadress komaga eraldatud
 
@@ -103,6 +115,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property mail_toolbar type=toolbar no_caption=1
 @caption Maili toolbar
 
+@property write_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@caption Grupid kellele kiri saata
+
 @property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
 @caption Maili kirjutamine
 
@@ -122,7 +137,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Viimane kiri saadeti
 
 @property list_source type=text store=no
-@caption Listi liikmete allikas
+@caption Saadetud liikmete allikas
 
 @property mail_report table type=table store=no no_caption=1
 @caption Meili raport
@@ -188,7 +203,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @reltype MSG_FOLDER value=6 clid=CL_MENU
 @caption Kirjade kaust
 
+@reltype LANGUAGE value=7 clid=CL_LANGUAGE
+@caption Keeled
+
+
+
 */
+
+
 
 define("ML_EXPORT_CSV",1);
 define("ML_EXPORT_NAMEADDR",2);
@@ -244,6 +266,8 @@ class ml_list extends class_base
 	**/
 	function post_message($args)
 	{
+	
+		echo $mto;
 		extract($args);
 		if($to_post)
 		{
@@ -323,6 +347,7 @@ class ml_list extends class_base
 			"mail_id" => $id,
 			"list_id" => $list_id,
 			"qid" => $qid,
+
 		));
 
 		// now I should mark the queue as "ready to send" or 0
@@ -343,6 +368,7 @@ class ml_list extends class_base
 	**/
 	function subscribe($args = array())
 	{
+	
 		$list_id = $args["id"];
 		$rel_id = $args["rel_id"];
 
@@ -352,25 +378,30 @@ class ml_list extends class_base
 		// her status "deactive" and generate her a confirmation code
 		// confirm code is added to the metad
 		$ml_member = get_instance(CL_ML_MEMBER);
-
 		$allow = false;
 		$use_folders = array();
-
+		$choose_menu = $list_obj->prop("choose_menu");	
 		// need to check those folders
+		foreach($choose_menu as $menu_id => $menu)
+		{
+			if(!is_oid($menu) || !$this->can("add" , $menu))
+			{
+				unset($choose_menu[$menu_id]);	
+			}
+		}
+		
+		
 		if ($list_obj->prop("multiple_folders") == 1)
 		{
 			if (!empty($args["subscr_folder"]))
 			{
 				// check the list of selected folders against the actual connections to folders
 				// and ignore ones that are not connected - e.g. don't take candy from strangers
-				$conns = $list_obj->connections_from(array(
-					"type" => "RELTYPE_MEMBER_PARENT",
-				));
-				foreach($conns as $conn)
-				{
-					if (!empty($args["subscr_folder"][$conn->prop("to")]))
+				foreach($args["subscr_folder"] as $ml_connect=>$ml_id)
+				{ 
+					if (in_array($ml_connect , $choose_menu))
 					{
-						$use_folders[] = $conn->prop("to");
+						$use_folders[] = $ml_connect;
 					}
 				}
 			}
@@ -383,7 +414,39 @@ class ml_list extends class_base
 		{
 			$allow = true;
 		};
-		
+
+		if(is_array($args["subscr_lang"]))
+		{
+			$lang_id = aw_global_get("lang_id");
+			$temp_use_folders = array();
+			$lg = get_instance("languages");
+			$langdata = $lg->get_list();
+			foreach ($args["subscr_lang"] as $user_lang => $user_lang_id)
+			{
+				foreach ($use_folders as $folder_id => $val)
+				{
+					if ($user_lang == $lang_id)
+					{
+						$temp_use_folders[] = $val;
+					}
+					else
+					{
+						$o = obj($val);
+						$conns = $o->connections_from(array(
+							"type" => "RELTYPE_LANG_REL",
+							"to.lang_id" => $user_lang,
+						));
+	
+						foreach($conns as $conn)
+						{
+							$temp_use_folders[] = $conn -> prop("to");
+						}			
+					}
+				}
+			}
+			$use_folders = $temp_use_folders;
+		}
+
 		if (empty($args["email"]))
 		{
 			$args["email"] = $args["mail"];
@@ -406,9 +469,11 @@ class ml_list extends class_base
 			"request" => $request,
 			"cfgform_id" => $cfgform,
 		));
-		$fld = $list_obj->prop("def_user_folder");
-		$members = $this->get_all_members($fld);
+		
+		$members = $this->get_all_members($use_folders);
+		
 		$erx = array();
+		
 		if(in_array($args["mail"], $members) || in_array($args["email"], $members) || empty($args["mail"]))
 		{
 			$allow = false;
@@ -437,10 +502,12 @@ class ml_list extends class_base
 		$udef_fields["checkboxes"] = $args["udef_checkbox"];
 		$udef_fields["classificators"] = $args["udef_classificator"];
 		$udef_fields["date1"] = $args["udef_date1"];
+
 		if ($allow === true)
 		{
 			if ($args["op"] == 1)
 			{
+
 				$retval = $ml_member->subscribe_member_to_list(array(
 					"name" => $args["name"],
 					"email" => $args["mail"],
@@ -482,17 +549,14 @@ class ml_list extends class_base
 	/** previews a mailing list message 
 		
 		@attrib name=msg_preview  
-		
 		@param id required type=int 
 		@param msg_id required type=int 
 		
 	**/
 	function msg_preview($arr)
 	{
-		//arr($arr);
 		extract($arr);
 		$msg_obj = new object($arr["msg_id"]);
-		//arr($msg_obj->properties());
 		$message = nl2br($msg_obj->prop("message"));
 		$al = get_instance("aliasmgr");
 		$al->parse_oo_aliases($msg_obj->id(), &$message);
@@ -672,6 +736,15 @@ class ml_list extends class_base
 				$prop["value"] = 1;
 				break;
 
+
+			case "choose_languages":
+				$lg = get_instance("languages");
+				$langdata = array();
+				$prop["options"] = $lg->get_list();
+				break;
+
+
+
 			case "show_mail_subject":
 			case "show_mail_from":
 			case "show_mail_message":
@@ -691,6 +764,10 @@ class ml_list extends class_base
 				$event = reset($exp);
 				$prop["value"] = date("d.m.Y H:i", $event["time"]);
 				break;
+			
+		//	case "write_mail":
+		//	break;
+			
 		}
 		return $retval;
 	}
@@ -1000,7 +1077,6 @@ class ml_list extends class_base
 		$t->set_default_sorder("desc");
 		$q = "SELECT DISTINCT m.mail FROM ml_sent_mails m LEFT JOIN objects ON (objects.oid = m.mail) WHERE objects.status != 0";
 		$fld = $arr["obj_inst"]->prop("msg_folder");
-		//arr($fld);
 		$mls = array();
 		$this->db_query($q);
 		while($w = $this->db_next())
@@ -1153,6 +1229,13 @@ class ml_list extends class_base
 			"caption" => t("Aadress"),
 			"sortable" => 1,
 		));
+		
+		$t->define_field(array(
+			"name" => "source",
+			"caption" => t("Allikas"),
+			"sortable" => 1,
+		));
+		
 		$t->define_field(array(
 			"name" => "joined",
 			"caption" => t("Liitunud"),
@@ -1215,16 +1298,20 @@ class ml_list extends class_base
 		if (is_array($ml_list_members))
 		{
 			foreach($ml_list_members as $key => $val)
+
 			{
 				list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
 					"lid" => $arr["obj_inst"]->id(),
 					"member" => $val["oid"],
 					"from_user" => true,
 				));
+				$parent_obj = obj($val["parent"]);
+				$parent_name = $parent_obj->name();
 				$tabledata = array(
 					"id" => $val["oid"],
 					"email" => $mailto,
 					"joined" => $memberdata["joined"],
+					"source" => $parent_name,
 					"others" => html::href(array(
 						"caption" => t("Vaata"),
 						"url" => $this->mk_my_orb("change", array(
@@ -1400,7 +1487,8 @@ class ml_list extends class_base
 	function get_members_ol($id)
 	{
 		$obj = &obj($id);
-		$fld = new aw_array($obj->prop("def_user_folder"));
+		$fld = new aw_array($obj->meta("list_source"));
+		
 		$objects = new object_list();
 		foreach($fld->get() as $folder_id)
 		{
@@ -1468,7 +1556,6 @@ class ml_list extends class_base
 				continue;
 			}
 			$source_obj = obj($folder_id);
-			//$this->get_members_ol($source_obj);
 			if($source_obj->class_id() == CL_MENU)
 			{
 				if ($from != 0 && $to != 0)
@@ -1549,14 +1636,123 @@ class ml_list extends class_base
 		return $ret;
 	}	
 
+	function send_mail_members($id, $from = 0, $to = 0)
+	{
+		$obj_inst = obj($id);
+		$ret = array();
+		$cnt = 0;
+		
+		$fld = new aw_array($obj_inst->prop("write_user_folder"));
+		
+		foreach($fld->get() as $folder_id)
+		{
+			if($cnt > ($to - $from))
+			{
+				break;
+			}
+			if(!is_oid($folder_id) || !$this->can("view", $folder_id))
+			{
+				continue;
+			}
+			$source_obj = obj($folder_id);
+			if($source_obj->class_id() == CL_MENU)
+			{
+				if ($from != 0 && $to != 0)
+				{
+					$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, CL_ML_MEMBER, $from, $to);
+				}
+				else
+				{
+					$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC", $folder_id, CL_ML_MEMBER);
+				}
+	
+				// why oh why is it so bloody slow with 1600 objects :(
+				/*
+				$member_list = new object_list(member_countarray(
+					"parent" => $list_obj->prop("def_user_folder"),
+					"class_id" => CL_ML_MEMBER,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				*/
+	
+				//$this->member_count = $member_list->count();
+				$this->db_query($q);
+	
+				while($row = $this->db_next())
+				//for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
+				{
+					/*
+					$ret[$o->id()] = array(
+						"oid" => $o->id(),
+						"parent" => $o->parent(),
+					);
+					*/
+					$ret[$row["oid"]] = array(
+						"oid" => $row["oid"],
+						"parent" => $row["parent"],
+					);
+					$cnt++;
+				}
+			}
+			elseif ($source_obj->class_id() == CL_GROUP)
+			{
+				$members = $source_obj->connections_from(array(
+					"type" => "RELTYPE_MEMBER",
+				));
+				foreach ($members as $member)
+				{
+					if($cnt > ($to - $from))
+					{
+						break;
+					}
+					$member = $member->to();
+					$email = $member->get_first_obj_by_reltype("RELTYPE_EMAIL");
+					if(!$email)
+					{
+						continue;
+					}
+					$ret[] = array(
+						"oid" => $email->id(),
+						"parent" => $email->parent(),
+					);
+					$cnt++;
+				}
+			}
+			elseif($source_obj->class_id() == CL_USER)
+			{
+				if($email = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+				{
+					$ret[] = array(
+						"oid" => $email->id(),
+						"parent" => $email->parent(),
+					);
+					$cnt++;
+				}
+			}
+		}
+		$this->get_member_count = $cnt;
+		return $ret;
+	}	
+
+
+
 	function get_member_count($id)
 	{
 		return count($this->get_members($id));
 	}
 
 
+	function send_member_count($id)
+	{
+		return count($this->send_mail_members($id));
+	}
+
+
+
 	function parse_alias($args = array())
 	{
+		$targ = obj($args["alias"]["target"]);
 		enter_function("ml_list::parse_alias");
 		$cb_errmsg = aw_global_get("cb_errmsg");
 		$cb_reqdata = aw_global_get("cb_reqdata");
@@ -1578,22 +1774,53 @@ class ml_list extends class_base
 		lc_site_load("ml_list", &$this);
 		if ($this->is_template("FOLDER") && $tobj->prop("multiple_folders") == 1)
 		{
+			$langid = aw_global_get("lang_id");
 			$folders = $tobj->connections_from(array(
 				"type" => "RELTYPE_MEMBER_PARENT",
 			));
 			$c = "";
+			$choose_menu = $targ->prop("choose_menu");	
 			foreach($folders as $folder_conn)
 			{
-				$this->vars(array(
-					"folder_name" => $folder_conn->prop("to.name"),
-					"folder_id" => $folder_conn->prop("to"),
-				));
-				$c .= $this->parse("FOLDER");
-			};
+				$folder_obj = obj($folder_conn->prop("to"));
+				if(($langid == $folder_obj->lang_id())&&(in_array($folder_conn->prop("to"), $choose_menu)))
+				{
+					$this->vars(array(
+						"folder_name" => $folder_conn->prop("to.name"),
+						"folder_id" => $folder_conn->prop("to"),
+					));
+					$c .= $this->parse("FOLDER");
+				}
+			}
 			$this->vars(array(
 				"FOLDER" => $c,
 			));	
-		};
+		}
+		
+			if ($this->is_template("LANGFOLDER") && $tobj->prop("multiple_languages") == 1)
+		{
+			
+			$lg = get_instance("languages");
+			$langdata = array();
+			$langdata = $lg->get_list();
+			$c = "";
+			$choose_languages = $targ->prop("choose_languages");
+			foreach($langdata as $id => $lang)
+			{
+				if(in_array($id, $choose_languages))
+				{	
+					$this->vars(array(
+					"lang_name" => $lang,
+					"lang_id" => $id,
+					));
+					$c .= $this->parse("LANGFOLDER");
+				}	
+			}			
+			$this->vars(array(
+				"LANGFOLDER" => $c,
+			));	
+		}
+		
 		
 		// this is sl8888w and otto needs to be fffffaaassssttt
 		/*
@@ -1619,8 +1846,8 @@ class ml_list extends class_base
 		{
 			$this->vars($cb_reqdata);
 		};
-		
-		$targ = obj($args["alias"]["target"]);
+
+
 		$this->vars(array(
 			"listname" => $tobj->name(),
 			"cb_errmsg" => $cb_errmsg,
@@ -1716,7 +1943,7 @@ class ml_list extends class_base
 	{
 		// how many members does this list have?
 		$list_id = $arr["obj_inst"]->id();
-		$_members = $this->get_members($list_id);
+		$_members = $this->send_mail_members($list_id);
 		$member_count = sizeof($_members);
 
 		$mail_id = $arr["request"]["mail_id"];
@@ -1934,9 +2161,8 @@ class ml_list extends class_base
 		$tpl = $msg_data["template_selector"];
 		if ($msg_data["send_away"] == 1)
 		{
-			$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("def_user_folder"));
+			$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("write_user_folder"));
 		}
-
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		// it does it's own redirecting .. duke
@@ -1947,7 +2173,6 @@ class ml_list extends class_base
 		if (is_oid($tpl) && $this->can("view", $tpl))
 		{
 			$msg_obj->set_meta("template_selector", $tpl);
-
 			$tpl_obj = new object($tpl);
 			if ($tpl_obj->prop("is_html") == 1)
 			{
@@ -1955,7 +2180,6 @@ class ml_list extends class_base
 			}	
 			$msg_obj->save();
 		}
-
 		if ($msg_data["send_away"] == 1)
 		{
 			// XXX: work out a way to save the message and not send it immediately
@@ -1963,6 +2187,7 @@ class ml_list extends class_base
 				"id" => $message_id,
 				"to_post" => $arr["to_post"],
 			));
+			//$msg_obj->set_meta("l ist_source", $arr["obj_inst"]->prop("write_user_folder"));
 		}
 		else
 		{

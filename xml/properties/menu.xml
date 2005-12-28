@@ -897,6 +897,11 @@
                   <clid>CL_FOLDER_CONTEXT</clid>
                   <caption>Kontekst</caption>
             </CTX>
+            <LANG_REL>
+                  <value>22</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Keeleseos</caption>
+            </LANG_REL>
       </reltypes>
 </properties>
 

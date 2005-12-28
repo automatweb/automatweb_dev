@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.4 2005/04/21 08:54:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.5 2005/12/28 14:24:30 markop Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -607,7 +607,7 @@ class aw_mail {
 
 		$email .= $this->build_message();
 		$to = $this->headers["To"];
-		$subject = $this->headers["Subject"];
+		//$subject = $this->headers["Subject"];
 		if (not($this->headers["Content-Type"]))
 		{
 			$ll = get_instance("languages");

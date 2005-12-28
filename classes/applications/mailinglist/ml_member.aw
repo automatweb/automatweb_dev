@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.13 2005/11/10 14:16:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.14 2005/12/28 14:24:30 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -177,7 +177,6 @@ class ml_member extends class_base
 		};
 
 		$status = 2;
-
 		
 		// I need to validate that stuff as well
 		if ($list_obj->prop("confirm_subscribe") != "")

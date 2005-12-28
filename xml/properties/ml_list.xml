@@ -13,6 +13,28 @@
             <caption>Listi liikmete allikas</caption>
       </property>
       <property>
+            <name>choose_menu</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MEMBER_PARENT</reltype>
+            <editonly>1</editonly>
+            <multiple>1</multiple>
+            <caption>vali kaustad millega liituda</caption>
+      </property>
+      <property>
+            <name>choose_languages</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>vali keeled millega v&amp;otilde;ib liituda</caption>
+      </property>
+      <property>
             <name>multiple_folders</name>
             <table>objects</table>
             <field>meta</field>
@@ -21,6 +43,16 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Lase liitumisel kausta valida</caption>
+      </property>
+      <property>
+            <name>multiple_languages</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lase liitumisel valida keelt</caption>
       </property>
       <property>
             <name>msg_folder</name>
@@ -117,7 +149,7 @@
             <caption>Impordi liikmed tekstifailist</caption>
       </property>
       <property>
-            <name>mass_subscribe</name>
+            <name>mass_subscribwrite_maile</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -257,6 +289,18 @@
             <caption>Maili toolbar</caption>
       </property>
       <property>
+            <name>write_user_folder</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>write_mail</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MEMBER_PARENT</reltype>
+            <editonly>1</editonly>
+            <multiple>1</multiple>
+            <caption>Grupid kellele kiri saata</caption>
+      </property>
+      <property>
             <name>write_mail</name>
             <table>objects</table>
             <field>meta</field>
@@ -316,7 +360,7 @@
             <group>mail_report</group>
             <type>text</type>
             <store>no</store>
-            <caption>Listi liikmete allikas</caption>
+            <caption>Saadetud liikmete allikas</caption>
       </property>
       <property>
             <name>mail_report</name>
@@ -482,6 +526,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Kirjade kaust</caption>
             </MSG_FOLDER>
+            <LANGUAGE>
+                  <value>7</value>
+                  <clid>CL_LANGUAGE</clid>
+                  <caption>Keeled</caption>
+            </LANGUAGE>
       </reltypes>
 </properties>
 

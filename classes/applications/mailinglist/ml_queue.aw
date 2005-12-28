@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.21 2005/12/23 09:41:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.22 2005/12/28 14:24:30 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -687,7 +687,7 @@ echo dbg::dump($msg);
 
 		$ml_list_inst = get_instance(CL_ML_LIST);
 		$list_obj = new object($arr["list_id"]);
-		$member_list = $ml_list_inst->get_members_ol($list_obj);
+		$member_list = $ml_list_inst->get_members_ol($msg);
 		$this->read_template("send_mail.tpl");
 		// 3) calls preprocess_one_message for each one
 		set_time_limit(0);
