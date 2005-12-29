@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ecard/ecard.aw,v 1.2 2005/10/09 20:54:26 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ecard/ecard.aw,v 1.3 2005/12/29 22:08:35 ekke Exp $
 // ecard.aw - E-kaart 
 // Sort of for internal use. Go see ecard_manager
 /*
 
-@classinfo syslog_type=ST_ECARD relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_ECARD relationmgr=yes no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general

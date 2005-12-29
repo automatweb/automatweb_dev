@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.152 2005/12/27 12:35:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.153 2005/12/29 22:08:34 ekke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -284,6 +284,10 @@ class image extends class_base
 			$popup_width = min(1000, $size[0] + ($do_comments ? 500 : 0));
 			$popup_height = max(400, $size[1]);// + ($do_comments ? 200 : 0);
 			$bi_link = "window.open('$bi_show_link','popup','width=".($popup_width).",height=".($popup_height)."');";
+			if (!empty($args['link_prefix'])) // Override image link
+			{
+				$idata['link'] = $args['link_prefix'].$idata['oid'];
+			}
 			$vars = array(
 				"width" => $i_size[0],
 				"height" => $i_size[1],
@@ -339,9 +343,14 @@ class image extends class_base
 				else 
 				if (!$this->cfg["no_default_template"])
 				{
-					if ($idata["comment"] != "")
+					$authortxt = "";
+					if ($idata['meta']['author'] != "")
 					{
-						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
+						$authortxt = ' ('.$idata['meta']['author'].')';
+					}
+					if ($idata["comment"] != "" || $authortxt != "")
+					{
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
 					}
 					else
 					{
@@ -390,9 +399,19 @@ class image extends class_base
 					{
 						$replacement .= "</a>";
 					}
+					
+					$subtxt = "";
 					if (!empty($idata["comment"]))
 					{
-						$replacement .= "<BR><span class=\"imagecomment\">".$idata["comment"]."</span>";
+						$subtxt .= $idata['comment'];
+					}
+					if (!empty($idata['meta']['author']))
+					{
+						$subtxt .= ' ('.$idata['meta']['author'].')';
+					}
+					if (strlen($subtxt))
+					{
+						$replacement .= "<BR><span class=\"imagecomment\">".$subtxt."</span>";
 					};
 					if ($vars["align"] != "")
 					{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/ecard/ecard_manager.aw,v 1.3 2005/12/14 12:17:25 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/ecard/ecard_manager.aw,v 1.4 2005/12/29 22:08:35 ekke Exp $
 // ecard_manager.aw - E-kaardi haldur 
 // Use this class as alias in a document. CL_ECARD is for internal use
 // Make sure you attach the folders and a mini_gallery object
@@ -200,6 +200,7 @@ class ecard_manager extends class_base
 				'parent' => $id_dir,
 				'class_id' => CL_MENU,
 				'status' => STAT_ACTIVE,
+				'lang_id' => 1,
 			));
 			for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
@@ -219,23 +220,7 @@ class ecard_manager extends class_base
 			{
 				$chosen_dir = $_GET['card_dir'];
 			}
-			
-			$ol = new object_list(array(
-				'parent' => $chosen_dir,
-				'class_id' => CL_IMAGE,
-				'status' => STAT_ACTIVE,
-			));
-			$linkbase = '/'.aw_global_get("section")."?card=";
-			for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-			{ 
-				$link = $linkbase.$o->id();
-				if ($o->prop('link') != $link)
-				{
-					$o->set_prop('link', $link);
-					$o->save();
-				}
-			}
-
+		
 			$gal = obj($ob->prop('gallery')); // Uses premade mini_gallery object for listing images
 			$gal->connect(array(
 				'type'	=> 1,
@@ -243,7 +228,10 @@ class ecard_manager extends class_base
 			));
 			$gal->set_prop('folder', $chosen_dir);
 			$i_gal = $gal->instance();
-			$gal_output = $i_gal->parse_alias(array('alias' => array('target' => $gal->id())));
+			$gal_output = $i_gal->show(array(
+				'id' => $gal->id(),
+				'link_prefix' => '/'.aw_global_get("section")."?card=",
+			));
 		
 			$this->vars(array(
 				"list" => $gal_output,
@@ -410,6 +398,7 @@ class ecard_manager extends class_base
 		$card = $image = $hash = $c = null;
 		$comment = $from = $to = "";
 		$spy = false;
+		$img_inst = get_instance(CL_IMAGE);
 
 		if (isset($arr['card']))
 		{
@@ -441,8 +430,16 @@ class ecard_manager extends class_base
 			$save_sub_merge = $this->sub_merge;
 			$this->sub_merge = 0;
 			$file2 = basename($img->prop("file2")); // Filename for big image
+			$author = "";
+			if (strlen($img->prop("author")))
+			{
+				$this->vars(array('img_author' => $img->prop("author")));
+				$author = $this->parse('card_'.$position.'_imgauthor');
+			}
 			$this->vars(array(
 				'imgurl' => $this->mk_my_orb("show", array('id'=>$img->id(), 'fastcall' => 1, 'file' => $file2 ), CL_IMAGE),
+				'card_'.$position.'_imgauthor' => $author,
+				'imgcomment' => $img->prop("comment"),
 				'imgtext' => htmlspecialchars($comment),
 				'from'	=> htmlspecialchars($from),
 				'to'	=> htmlspecialchars($to),

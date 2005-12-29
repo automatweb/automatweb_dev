@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.19 2005/12/21 20:02:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.20 2005/12/29 22:08:35 ekke Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -168,6 +168,7 @@ class mini_gallery extends class_base
 						"tpls" => $tplar,
 						"use_style" => $use_style,
 						"force_comments" => $ob->prop("comments"),
+						"link_prefix" => empty($arr['link_prefix']) ? "" : $arr['link_prefix'],
 					);
 					$tmp = $ii->parse_alias($args);
 					$this->vars(array(
