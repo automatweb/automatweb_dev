@@ -35,7 +35,7 @@
 // |         Tomas V.V.Cox <cox@idecnet.com> (port to PEAR)                |
 // +-----------------------------------------------------------------------+
 //
-// $Id: mime.php,v 1.1 2005/07/01 12:08:08 duke Exp $
+// $Id: mime.php,v 1.2 2005/12/29 12:03:47 ahti Exp $
 
 #require_once('PEAR.php');
 require_once('mimePart.php');
@@ -159,9 +159,11 @@ class Mail_mime
             }
         } else {
             $cont = $this->_file2str($data);
+			/*
             if (PEAR::isError($cont)) {
                 return $cont;
             }
+			*/
             if (!$append) {
                 $this->_txtbody = $cont;
             } else {
@@ -187,9 +189,11 @@ class Mail_mime
             $this->_htmlbody = $data;
         } else {
             $cont = $this->_file2str($data);
+			/*
             if (PEAR::isError($cont)) {
                 return $cont;
             }
+			*/
             $this->_htmlbody = $cont;
         }
 
@@ -218,9 +222,11 @@ class Mail_mime
         } else {
             $filename = basename($name);
         }
+		/*
         if (PEAR::isError($filedata)) {
             return $filedata;
         }
+		*/
         $this->_html_images[] = array(
                                       'body'   => $filedata,
                                       'name'   => $filename,

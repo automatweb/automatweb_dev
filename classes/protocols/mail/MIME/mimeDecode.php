@@ -87,7 +87,7 @@
 
 *
 * @author  Richard Heyes <richard@phpguru.org>
-* @version $Revision: 1.1 $
+* @version $Revision: 1.2 $
 * @package Mail
 */
 class Mail_mimeDecode 
@@ -186,7 +186,7 @@ class Mail_mimeDecode
 
         // Called statically but no input
         } elseif ($isStatic) {
-            return PEAR::raiseError('Called statically and no input given');
+            return;//PEAR::raiseError('Called statically and no input given');
 
         // Called via an object
         } else {
