@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.73 2005/12/28 14:49:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.74 2005/12/29 12:35:53 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1650,7 +1650,7 @@ class cfgform extends class_base
 			}
 		}
 
-		if ($read_from_transi && aw_global_get("LC") != $o->lang())
+		if ($read_from_trans && aw_global_get("LC") != $o->lang())
 		{
 			$tmp = obj();
 			$tmp->set_class_id($o->subclass());
