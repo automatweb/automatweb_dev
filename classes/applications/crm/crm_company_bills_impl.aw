@@ -339,9 +339,9 @@ class crm_company_bills_impl extends class_base
 		}
 		$bill_i = get_instance(CL_CRM_BILL);
 
-		if ($arr["request"]["export_hr"] == 1)
+		if ($arr["request"]["export_hr"] > 0)
 		{
-			$this->_do_export_hr($bills, $arr);
+			$this->_do_export_hr($bills, $arr, $arr["request"]["export_hr"]);
 		}
 
 		foreach($bills->arr() as $bill)
@@ -473,8 +473,14 @@ class crm_company_bills_impl extends class_base
 		
 		$tb->add_menu_item(array(
 			'parent'=>'export',
-			'text' => t("Hansa raama"),
+			'text' => t("Hansa raama (ridadega)"),
 			'link' => aw_url_change_var("export_hr", 1)
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "export",
+			"text" => t("Hansa raama (koondatud)"),
+			'link' => aw_url_change_var("export_hr", 2)
 		));
 	}
 
@@ -508,7 +514,7 @@ class crm_company_bills_impl extends class_base
 		
 	}
 
-	function _do_export_hr($bills, $arr)
+	function _do_export_hr($bills, $arr, $type = 1)
 	{
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
@@ -531,17 +537,31 @@ class crm_company_bills_impl extends class_base
 			$brow[] = "";
 			$brow[] = "";
 			$brow[] = "";
-			$brow[] = "";
+			//$brow[] = "";
 			$brow[] = 0;			//    0 (teadmata - vaikeväärtus 0) 
 			$brow[] = "0,00";		// 0,00 (teadmata - vaikeväärtus 0,00) 
-			$brow[] = 1;			// 1 (teadmata - vaikeväärtus 1)  
+			$brow[] = "";
+			$brow[] = 1;			// 1 (teadmata - vaikeväärtus 1) 
+			$brow[] = ""; 
 			$brow[] = $fn;			// OBJEKT (kasutaja eesnimi suurte tähtedega, nt TEDDI)
+			$brow[] = "";
 			$brow[] = 0;			//  0 (teadmata - vaikeväärtus 0)    
-			$brow[] = $i->get_bill_currency($b);	// EEK (valuuta)  
+			$cur = $i->get_bill_currency($b);
+			$brow[] = "";
+			$brow[] = "";
+			$brow[] = "";
+			$brow[] = ($cur ? $cur : t("EEK"));	// EEK (valuuta) 
+			$brow[] = ""; 
 			$brow[] = date("d.m.Y", $b->prop("bill_date"));		// arve kuupäev
-			$brow[] = 0;			// (teadmata - vaikeväärtus 0)    
+			$brow[] = 0;			// (teadmata - vaikeväärtus 0)   
+			$brow[] = "";
+			$brow[] = "";
+			$brow[] = "";
+			$brow[] = ""; 
 			$brow[] = "15,65";		// (EURO kurss) 
-			$brow[] = "1,00";		// (kursi suhe, vaikeväärtus 1,00)  
+			$brow[] = "1,00";		// (kursi suhe, vaikeväärtus 1,00) 
+			$brow[] = "";
+			$brow[] = ""; 
 			$ct[] = join("\t", $brow);
 
 			// customer info row
@@ -612,7 +632,8 @@ class crm_company_bills_impl extends class_base
 			$pr[] = "0";	// 0(teadmata - vaikeväärtus 0) 
 			$pr[] = "0";	// (teadmata - vaikeväärtus 0) 
 			$pr[] = "";	
-			$pr[] =	"0";	// (teadmata - vaikeväärtus 0)  
+			$pr[] =	"0";	// (teadmata - vaikeväärtus 0) 
+			$pr[] = ""; 
 			$pr[] = str_replace(".", ",", $i->get_bill_sum($b, BILL_AMT)); //77,00 (kogus kokku) 
 			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00)  
 			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00)  
@@ -625,11 +646,15 @@ class crm_company_bills_impl extends class_base
 			$ct[] = join("\t", $pr);
 
 			$rows = $i->get_bill_rows($b);
+
+			if ($type == 1)
+			{
 			foreach($rows as $idx => $row)
 			{
 				$ri = array();
 				$ri[] = "1";	// (teadmata, vaikeväärtus 1)) 
-				$ri[] = $idx;	// TEST (artikli kood) 
+				//$ri[] = $idx;	// TEST (artikli kood) 
+				$ri[] = $row["code"];
 				$ri[] = $row["amt"];	//33 (kogus) 
 				$ri[] = $row["name"];	// testartikkel (toimetuse rea sisu) 
 				$ri[] = str_replace(".", ",", $row["price"]);	// 555,00 (ühiku hind) 
@@ -654,7 +679,44 @@ class crm_company_bills_impl extends class_base
 				$ri[] = $row["unit"];	//TK (ühik)     
 
 
-
+				$ct[] = join("\t", $ri);
+			}
+			}
+			else
+			{
+				$code = $amt = $price = $sum = 0;
+				foreach($rows as $idx => $row)
+				{
+					$code = $row["code"];
+					$amt += str_replace(",", ".", $row["amt"]);
+					$sum += str_replace(",", ".", $row["sum"]); 
+				}
+				$price = $sum / $amt;
+				$ri = array();
+				$ri[] = "1";
+				$ri[] = $code;
+				$ri[] = $amt;
+				$ri[] = $b->prop("notes");  
+				$ri[] = number_format($price); 
+				$ri[] = str_replace(".", ",", $sum);
+				$ri[] = str_replace(".", ",", $b->prop("disc"));
+				$ri[] = 3100;
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = str_replace(".", ",", $sum);
+				$ri[] = "";
+				$ri[] = "1";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = "";
+				$ri[] = t("tundi");
 				$ct[] = join("\t", $ri);
 			}
 

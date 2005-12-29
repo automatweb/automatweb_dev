@@ -131,7 +131,6 @@ class crm_company_cust_impl extends class_base
 		{
 			$prj = $arr["prj"];
 		}
-		
 		if (!count($prj))
 		{
 			$conns_ol = new object_list();
@@ -806,11 +805,11 @@ class crm_company_cust_impl extends class_base
 		{
 			$tmp_ids[] = $conn["from"];
 		}
-		
+	 	
 		$ol = new object_list(array(
 			"oid" => $tmp_ids,
 		));
-		if ($arr["request"]["search_all_proj"] && $ol->count())
+		if (!$arr["request"]["search_all_proj"] && $ol->count())
 		{
 			if (!$arr["request"]["aps_sbt"])
 			{
@@ -825,11 +824,19 @@ class crm_company_cust_impl extends class_base
 		else
 		if ($ol->count())
 		{
-			$ol = new object_list(array(
+			/*$ol = new object_list(array(
 				"oid" => $ol->ids(),
 				"class_id" => CL_PROJECT,
 				"state" => $arr["request"]["group"] == "org_projects_archive" ? PROJ_DONE : new obj_predicate_not(PROJ_DONE)
 			));
+			*/
+			$u = get_instance(CL_USER);
+			$ps = obj($u->get_current_person());
+			$arr["request"] = array(
+				"all_proj_search_part" => $ps->name(),
+			);
+			$filt = $this->_get_my_proj_search_filt($arr["request"], $ol->ids(), "all_");
+			$ol = new object_list($filt);
 		}
 
 		$rs_by_co = array();

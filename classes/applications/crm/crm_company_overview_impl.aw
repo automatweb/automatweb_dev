@@ -435,7 +435,17 @@ class crm_company_overview_impl extends class_base
 
 		if ($arr["request"]["act_s_print_view"] == 1)
 		{
-			die($t->draw());
+					$sf = new aw_template;
+		$sf->db_init();
+		$sf->tpl_init("automatweb");
+		$sf->read_template("index.tpl");
+		$sf->vars(array(
+			"content"	=> $t->draw(),
+			"uid" => aw_global_get("uid"),
+			"charset" => aw_global_get("charset")
+		));
+		die($sf->parse());
+	
 		}
 	}
 

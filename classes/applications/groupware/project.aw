@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.71 2005/12/22 15:36:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.72 2005/12/29 12:38:47 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -302,6 +302,13 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "proj_type":
+				if ($arr["new"])
+				{
+					$data["value"] = array();
+				}
+				break;
+
 			case "files":
 				$this->_get_files($arr);
 				break;
