@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.14 2005/12/28 14:24:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.15 2005/12/29 08:14:39 ahti Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -98,7 +98,7 @@
 	@property udef_date2 type=date_select field=meta method=serialize year_from=1930 default=-1
 	@caption Kuup&auml;ev 2
 	
-	@groupinfo udef_fields caption=Muud väljad 
+	@groupinfo udef_fields caption="Muud väljad"
 	
 	@tableinfo ml_users index=id master_table=objects master_index=oid
 */
