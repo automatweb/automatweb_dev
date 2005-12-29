@@ -1450,9 +1450,10 @@ class user extends class_base
 	function get_person_for_user($u)
 	{
 		obj_set_opt("no_cache", 1);
-		$person_c = reset($u->connections_from(array(
+		$person_c = $u->connections_from(array(
 			"type" => "RELTYPE_PERSON",
-		)));
+		));
+		$person_c = reset($person_c);
 		obj_set_opt("no_cache", 0);
 
 		if (!$person_c)
