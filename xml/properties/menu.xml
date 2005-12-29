@@ -686,6 +686,15 @@
             <group>keywords</group>
             <caption>META description</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>
@@ -780,6 +789,9 @@
                   <caption>Võtmesõnad</caption>
                   <parent>menus</parent>
             </keywords>
+            <transl>
+                  <caption>T&amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <menu>

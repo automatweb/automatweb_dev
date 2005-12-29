@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.141 2005/12/02 05:49:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.142 2005/12/29 09:15:09 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -278,6 +278,11 @@
 		@caption META description
 
 
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
 
 
 	@classinfo relationmgr=yes
@@ -362,6 +367,10 @@ class menu extends class_base
 			"tpldir" => "automatweb/menu",
 			"clid" => CL_MENU,
 		));
+
+		$this->trans_props = array(
+			"name"
+		);
 	}
 
 	/** Generate a form for adding or changing an object 
@@ -964,6 +973,10 @@ class menu extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			// grkeywords just triggers an action, nothing should
 			// be saved into the objects table
 			case "grkeywords":
@@ -1651,5 +1664,18 @@ class menu extends class_base
 		}
 	}
 
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
 };
 ?>
