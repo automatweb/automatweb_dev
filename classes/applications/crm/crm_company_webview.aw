@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.6 2005/12/27 21:31:37 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.7 2005/12/29 22:03:26 ekke Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -836,62 +836,63 @@ class crm_company_webview extends class_base
 	{
 	enter_function('crm_company_webview::list');
 		$orgs = array(); // return value
-		$ob = new object($arr["id"]);
-		$db = $ob->prop('crm_db');
+		if (!empty($arr["id"]))
+		{
+			$ob = new object($arr["id"]);
+			$db = $ob->prop('crm_db');
+		}
+		elseif (!empty($arr['crm_db']))
+		{
+			$db = $arr['crm_db'];
+			$ob  = null;
+		}
 		$crm_db = obj($db);
 		$dir = is_oid($crm_db->prop('dir_firma')) ? $crm_db->prop('dir_firma') : $crm_db->prop('dir_default');
 		$objs = array();
 
 		// Get configuration
 		$limited = false;
-		
-		// Limit by sector
-		$sector = $ob->prop('limit_sector');
-		if (is_oid($sector) && ($osector = obj($sector)) && $osector->class_id() == CL_CRM_SECTOR)
+	
+		if (!is_null($ob))
 		{
-			$limit_sector = array($sector);
-		}
-
-		// If none is selected, limit by any connected sector
-		if (!isset($limit_sector))
-		{
-			$limit_sector = array();
-			foreach ($ob->connections_from(array('type' => 'RELTYPE_LIMIT_SECTOR')) as $con)
+	
+			// Limit by sector
+			$sector = $ob->prop('limit_sector');
+			if (is_oid($sector) && ($osector = obj($sector)) && $osector->class_id() == CL_CRM_SECTOR)
 			{
-				$limit_sector[] = $con->prop('to');
+				$limit_sector = array($sector);
+			}
+
+			// If none is selected, limit by any connected sector
+			if (!isset($limit_sector))
+			{
+				$limit_sector = array();
+				foreach ($ob->connections_from(array('type' => 'RELTYPE_LIMIT_SECTOR')) as $con)
+				{
+					$limit_sector[] = $con->prop('to');
+				}
+			}
+
+		
+
+			// Setup limit by location - county
+			$limit_city = $limit_county = null;
+			$county = $ob->prop('limit_county');
+			if (is_oid($county) && ($ocounty = obj($county)) && $ocounty->class_id() == CL_CRM_COUNTY)
+			{
+				$limit_county = $county;
+				$limit_county_excl = $ob->meta('limit_county_excl'); // Exclusive
+			}
+		
+			// Setup limit by location - city
+			$city = $ob->prop('limit_city');
+			if (is_oid($city) && ($ocity = obj($city)) && $ocity->class_id() == CL_CRM_CITY)
+			{
+				$limit_city = $city;
+				$limit_city_excl = $ob->meta('limit_city_excl'); // Exclusive
 			}
 		}
 
-		
-
-		// Setup limit by location - county
-		$limit_city = $limit_county = null;
-		$county = $ob->prop('limit_county');
-		if (is_oid($county) && ($ocounty = obj($county)) && $ocounty->class_id() == CL_CRM_COUNTY)
-		{
-			$limit_county = $county;
-			$limit_county_excl = $ob->meta('limit_county_excl'); // Exclusive
-		}
-		
-		// Setup limit by location - city
-		$city = $ob->prop('limit_city');
-		if (is_oid($city) && ($ocity = obj($city)) && $ocity->class_id() == CL_CRM_CITY)
-		{
-			$limit_city = $city;
-			$limit_city_excl = $ob->meta('limit_city_excl'); // Exclusive
-		}
-
-		$order_by = array($ob->prop('ord1'), $ob->prop('ord2'), $ob->prop('ord3'));
-
-		$this->vars(array(
-			'txt_address' => t("Aadress"),
-			'txt_phone' => t("Tel"),
-			'txt_fax' => t("Faks"),
-			'txt_openhours' => t("Avatud"),
-			'txt_email' => t("E-post"),
-			'txt_web' => t("Koduleht"),
-		));
-		
 		/// okay, I'm sorry, this is just SO badly done, I'm rewriting this completely.
 		$filt = array(
 			'class_id' => CL_CRM_COMPANY,
@@ -920,6 +921,20 @@ class crm_company_webview extends class_base
 			$filt["CL_CRM_COMPANY.contact.maakond"] = new obj_predicate_not($limit_county);
 		}
 
+		if (!empty($arr['limit_plaintext']))
+		{
+			$value = '%'.$arr['limit_plaintext'].'%';
+			$conditions = array();
+			foreach (array('name', 'comment') as $c) // Fields to search from listed here! here! here!
+			{
+				$conditions[$c] = $value;
+			}
+			$filt[] = new object_list_filter(array(
+				'logic' => "OR",
+				'conditions' => $conditions,
+			));
+		}
+
 		$o_lut = array(
 			'jrk' => "objects.jrk",
 			'name' => "objects.name",
@@ -927,17 +942,15 @@ class crm_company_webview extends class_base
 			'city' => "kliendibaas_address_129_contact.linn",
 		);
 		$order = array();
-		if ($ob->prop("ord1"))
+		if (!is_null($ob))
 		{
-			$order[] = $o_lut[$ob->prop("ord1")];
-		}
-		if ($ob->prop("ord2"))
-		{
-			$order[] = $o_lut[$ob->prop("ord2")];
-		}
-		if ($ob->prop("ord3"))
-		{
-			$order[] = $o_lut[$ob->prop("ord3")];
+			for ($i=1; $i<4; $i++)
+			{
+				if ($ob->prop('ord'.$i))
+				{
+					$order[] = $o_lut[$ob->prop('ord'.$i)];
+				}
+			}
 		}
 		if (count($order))
 		{
@@ -951,22 +964,47 @@ class crm_company_webview extends class_base
 	// Returns html for companies list
 	function _get_companies_list_html($arr)
 	{
-		$ob = new object($arr["id"]);
 		$this->sub_merge = 1;
+		$do_link = !empty($arr['do_link']);
+		$show_title = !empty($arr['show_title']);
+		$title = ifset($arr, 'title');
+		if (!empty($arr['id']))
+		{
+			$ob = new object($arr["id"]);
+			$do_link = $ob->prop('clickable');
+			$show_title = $ob->prop('show_title');
+			if ($show_title)
+			{
+				$title = $this->trans_get_val($ob, "name");
+			}
 	
-		$orgs = $this->_list_companies(array('id' => $arr['id']));
-
+			$orgs = $this->_list_companies(array('id' => $arr['id']));
+		}
+		elseif (!empty($arr['list']) && is_array($arr['list']))
+		{
+			$orgs = $arr['list'];
+		}
+		else
+		{
+			return;
+		}
 		// Prepare for output
 		$this->vars(array(
 			'company_list_title' => '',
 			'company_list_item' => '',
 			'company_list' => '',
+			'txt_address' => t("Aadress"),
+			'txt_phone' => t("Tel"),
+			'txt_fax' => t("Faks"),
+			'txt_openhours' => t("Avatud"),
+			'txt_email' => t("E-post"),
+			'txt_web' => t("Koduleht"),
 		));
-		$do_link = $ob->prop('clickable');
-		if ($ob->prop('show_title'))
+		
+		if ($show_title)
 		{
 			$this->vars(array(
-				'title' => $this->trans_get_val($ob, "name"),
+				'title' => $title,
 			));	
 			$this->parse('company_list_title');
 		}
@@ -980,7 +1018,14 @@ class crm_company_webview extends class_base
 			'images' => '',
 		);
 
-		$url = '/'.aw_global_get('section').'?org=';
+		if (!empty($arr['url']))
+		{
+			$url = $arr['url'];
+		}
+		else
+		{
+			$url = '/'.aw_global_get('section').'?org=';
+		}
 		$used_fields = $this->v2_name_map;
 
 		// Output company list
