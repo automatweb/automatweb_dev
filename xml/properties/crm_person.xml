@@ -489,6 +489,27 @@
             <field>add_edu_editor</field>
       </property>
       <property>
+            <name>languages</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <automatic>1</automatic>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <store>connect</store>
+            <field>languages</field>
+            <caption>Keeled</caption>
+      </property>
+      <property>
+            <name>udef_ch1</name>
+            <table>kliendibaas_isik</table>
+            <group>data</group>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <field>udef_ch1</field>
+            <caption>Kasutajadefineeritud CH1</caption>
+      </property>
+      <property>
             <name>udef_ta1</name>
             <table>kliendibaas_isik</table>
             <group>data</group>
@@ -805,6 +826,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Kliendihaldur</caption>
             </CLIENT_MANAGER>
+            <LANGUAGE>
+                  <value>45</value>
+                  <clid>CL_LANGUAGE</clid>
+                  <caption>Keel</caption>
+            </LANGUAGE>
       </reltypes>
 </properties>
 

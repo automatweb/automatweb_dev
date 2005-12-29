@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.96 2005/12/27 12:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.97 2005/12/29 22:06:42 ekke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -204,6 +204,12 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 @default group=data
 
+@property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect
+@caption Keeled
+
+@property udef_ch1 type=chooser multiple=1 
+@caption Kasutajadefineeritud CH1
+
 @property udef_ta1 type=textarea rows=5 cols=50
 @caption Kasutajadefineeritud TA1
 
@@ -224,7 +230,6 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 	
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
-
 
 ----------------------------------------------
 @groupinfo general2 caption="Üldine" parent=general
@@ -407,6 +412,9 @@ caption CV
 
 @reltype CLIENT_MANAGER value=44 clid=CL_CRM_PERSON
 @caption Kliendihaldur
+
+@reltype LANGUAGE value=45 clid=CL_LANGUAGE
+@caption Keel
 
 */
 
@@ -2368,6 +2376,12 @@ class crm_person extends class_base
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "text"
+				));
+				return true;
+			case "udef_ch1":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int",
 				));
 				return true;
 		}
