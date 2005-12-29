@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.16 2005/12/23 11:29:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.17 2005/12/29 13:58:23 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -52,6 +52,12 @@
 
 	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5 
 	@caption Allahindlus (%)
+
+	@property gen_unit type=textbox table=objects field=meta method=serialize size=5
+	@caption &Uuml;hik
+
+	@property gen_amt type=textbox table=objects field=meta method=serialize size=5
+	@caption Kogus
 
 	@property sum type=text table=aw_crm_bill field=aw_sum size=5 
 	@caption Summa
@@ -117,6 +123,14 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bill_no":
+				if ($prop["value"] == "")
+				{
+					$i = get_instance(CL_CRM_NUMBER_SERIES);
+					$prop["value"] = $i->find_series_and_get_next(CL_CRM_BILL);
+				}
+				break;
+
 			case "currency":
 				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
@@ -182,6 +196,32 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bill_no":
+				if ($prop["value"] != $arr["obj_inst"]->prop("bill_no"))
+				{
+					// check that no bills have the same number
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_BILL,
+						"bill_no" => $prop["value"],
+						"lang_id" => array(),
+						"site_id" => array(),
+						"oid" => new obj_predicate_not($arr["obj_inst"]->id())
+					));
+					if ($ol->count())
+					{
+						$prop["error"] = t("Sellise numberiga arve on juba olemas!");
+						return PROP_ERROR;
+					}
+
+					$ser = get_instance(CL_CRM_NUMBER_SERIES);
+					if (!$ser->number_is_in_series(CL_CRM_BILL, $prop["value"]))
+					{
+						$prop["error"] = t("Number ei ole seerias!");
+						return PROP_ERROR;
+					}
+				}
+				break;
+
 			case "bill_rows":
 				$inf = array();
 				foreach(safe_array($arr["request"]["rows"]) as $idx => $e)
@@ -445,6 +485,7 @@ class crm_bill extends class_base
 			{
 				$ord_cur = obj($ord->prop("currency"));
 			}
+			$cust_no = $ord->prop("code");
 		}
 		$logo = "";
 		$impl = obj();
@@ -512,6 +553,7 @@ class crm_bill extends class_base
 
 		$this->vars(array(
 			"orderer_name" => $ord->name(),
+			"orderer_code" => $cust_no,
 			"ord_currency_name" => $ord->prop_str("currency"),
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
@@ -657,6 +699,15 @@ class crm_bill extends class_base
 					$inf[$id] = $row;
 				}
 				
+				if ($this->can("view", $inf[$id]["prod"]))
+				{
+					$prod = obj($inf[$id]["prod"]);
+					if ($this->can("view", $prod->prop("tax_rate")))
+					{
+						$tr = obj($prod->prop("tax_rate"));
+						$inf[$id]["km_code"] = $tr->prop("code");
+					}
+				}
 			}
 		}
 
@@ -933,7 +984,35 @@ class crm_bill extends class_base
 		{
 			$cur_tax = 0;
 			$cur_sum = 0;
+			$cur_pr = 0;
 			
+			if ($this->can("view", $row["prod"]))
+			{
+				$set = false;
+				// get tax from prod
+				$prod = obj($row["prod"]);
+				if ($this->can("view", $prod->prop("tax_rate")))
+				{
+					$tr = obj($prod->prop("tax_rate"));
+
+					if (time() >= $tr->prop("act_from") && time() < $tr->prop("act_to"))
+					{
+						$cur_sum = $row["sum"];
+						$cur_tax = ($row["sum"] * ($tr->prop("tax_amt")/100.0));
+						$cur_pr = $this->num($row["price"]);
+						$set = true;
+					}
+				}
+
+				if (!$set)
+				{
+					// no tax
+					$cur_sum = $row["sum"];
+					$cur_tax = 0;
+					$cur_pr = $this->num($row["price"]);
+				}
+			}
+			else
 			if ($row["has_tax"] == 1)
 			{
 				// tax needs to be added

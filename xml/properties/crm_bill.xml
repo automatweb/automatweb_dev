@@ -130,6 +130,26 @@
             <caption>Allahindlus (%)</caption>
       </property>
       <property>
+            <name>gen_unit</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>5</size>
+            <caption>&amp;amp;Uuml;hik</caption>
+      </property>
+      <property>
+            <name>gen_amt</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <size>5</size>
+            <caption>Kogus</caption>
+      </property>
+      <property>
             <name>sum</name>
             <table>aw_crm_bill</table>
             <group>general</group>

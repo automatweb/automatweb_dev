@@ -33,6 +33,14 @@
             <field>aw_act_to</field>
             <caption>Kehtib kuni</caption>
       </property>
+      <property>
+            <name>code</name>
+            <table>aw_crm_tax_rate</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_code</field>
+            <caption>K&amp;amp;auml;ibemaksukood</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_TAX_RATE</syslog_type>
             <relationmgr>yes</relationmgr>

@@ -575,7 +575,10 @@ default group=org_objects
 			@caption Osaleja
 
 			@property act_s_task_name type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
-			@caption Toimetuse nimi
+			@caption Tegevuse nimi
+
+			@property act_s_task_content type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
+			@caption Tegevuse sisu
 
 			@property act_s_code type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Toimetuse kood
@@ -886,6 +889,9 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @reltype DESCRIPTION value=56 clid=CL_DOCUMENT
 @caption Lisakirjelduse dokument
+
+@reltype NUMBER_SERIES value=57 clid=CL_CRM_NUMBER_SERIES
+@caption Numbriseeria
 
 */
 /*
@@ -1444,6 +1450,7 @@ class crm_company extends class_base
 				
 			case "act_s_cust":
 			case "act_s_task_name":
+			case "act_s_task_content":
 			case "act_s_code":
 			case "act_s_proj_name":
 			case "act_s_sbt":
@@ -2455,6 +2462,7 @@ class crm_company extends class_base
 			$arr["args"]["act_s_cust"] = $arr["request"]["act_s_cust"];
 			$arr["args"]["act_s_part"] = $arr["request"]["act_s_part"];
 			$arr["args"]["act_s_task_name"] = $arr["request"]["act_s_task_name"];
+			$arr["args"]["act_s_task_content"] = $arr["request"]["act_s_task_content"];
 			$arr["args"]["act_s_code"] = $arr["request"]["act_s_code"];
 			$arr["args"]["act_s_proj_name"] = $arr["request"]["act_s_proj_name"];
 			$arr["args"]["act_s_dl_from"] = $arr["request"]["act_s_dl_from"];
@@ -3311,8 +3319,9 @@ class crm_company extends class_base
 		$bill->set_parent($arr["id"]);
 		$bill->save();
 
-		$bill->set_prop("bill_no", $bill->id());
-		$bill->set_name(sprintf(t("Arve nr %s"), $bill->id()));
+		$ser = get_instance(CL_CRM_NUMBER_SERIES);
+		$bill->set_prop("bill_no", $ser->find_series_and_get_next(CL_CRM_BILL));
+		$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
 
 		if (is_oid($arr["proj"]))
 		{
@@ -3343,7 +3352,7 @@ class crm_company extends class_base
 			));
 
 			$task_o = obj($task);
-			$task_o->set_prop("bill_no", $bill->id());
+			$task_o->set_prop("bill_no", $bill->prop("bill_no"));
 			$task_o->save();
 		}
 
@@ -3784,8 +3793,9 @@ class crm_company extends class_base
 			$n->set_class_id(CL_CRM_BILL);
 			$n->set_parent($b->parent());
 			$n->save();
-			$n->set_name(sprintf(t("Arve nr %s"), $n->id()));
-			$n->set_prop("bill_no", $n->id());
+			$ser = get_instance(CL_CRM_NUMBER_SERIES);
+			$n->set_prop("bill_no", $ser->find_series_and_get_next(CL_CRM_BILL));
+			$n->set_name(sprintf(t("Arve nr %s"), $n->prop("bill_no")));
 			$n->set_prop("bill_date", $b->prop("bill_date"));
 			$n->set_prop("bill_due_date_days", $b->prop("bill_due_date_days"));
 			$n->set_prop("bill_due_date", $b->prop("bill_due_date"));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_tax_rate.aw,v 1.1 2005/12/27 13:14:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_tax_rate.aw,v 1.2 2005/12/29 13:58:23 kristo Exp $
 // crm_tax_rate.aw - Maksum&auml;&auml;r 
 /*
 
@@ -20,6 +20,9 @@
 
 	@property act_to type=date_select field=aw_act_to
 	@caption Kehtib kuni
+
+	@property code type=textbox field=aw_code
+	@caption K&auml;ibemaksukood
 
 */
 

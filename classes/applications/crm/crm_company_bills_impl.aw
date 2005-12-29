@@ -471,16 +471,20 @@ class crm_company_bills_impl extends class_base
 			"img" => "export.gif"
 		));
 		
+		$last_bno = $arr["obj_inst"]->meta("last_exp_no");
+
 		$tb->add_menu_item(array(
 			'parent'=>'export',
 			'text' => t("Hansa raama (ridadega)"),
-			'link' => aw_url_change_var("export_hr", 1)
+			'link' => "#",
+			"onClick" => "v=prompt('Sisesta arve number?','$last_bno'); if (v) { window.location='".aw_url_change_var("export_hr", 1)."&exp_bno='+v;} else { return false; }" 
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "export",
 			"text" => t("Hansa raama (koondatud)"),
-			'link' => aw_url_change_var("export_hr", 2)
+			'link' => "#",
+			"onClick" => "v=prompt('Sisesta arve number?','$last_bno'); if (v) { window.location='".aw_url_change_var("export_hr", 2)."&exp_bno='+v;} else { return false; }" 
 		));
 	}
 
@@ -522,8 +526,34 @@ class crm_company_bills_impl extends class_base
 
 		$ct = array();
 		$i = get_instance(CL_CRM_BILL);
+
+		$renumber = false;
+		if ($_GET["exp_bno"] > 0)
+		{
+			$renumber = true;
+			$bno = $_GET["exp_bno"];
+		}
 		foreach($bills->arr() as $b)
 		{
+			if ($renumber)
+			{
+				$b->set_prop("bill_no", $bno);
+				$b->set_name(sprintf(t("Arve nr %s"), $bno));
+				// change bill numbers for all tasks that this bill is to
+				$ol = new object_list(array(
+					"class_id" => CL_TASK,
+					"bill_no" => $b->prop("bill_no"),
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				foreach($ol->arr() as $task)
+				{
+					$task->set_prop("bill_no", $bno);
+					$task->save();
+				}
+				$b->save();
+				$bno++;
+			}
 			// bill info row
 			$brow = array();
 			$brow[] = $b->prop("bill_no");						// arve nr
@@ -666,7 +696,8 @@ class crm_company_bills_impl extends class_base
 				$ri[] = "";
 				$ri[] = str_replace(".", ",", $row["sum"]);	// 16300,35 (rea summa km-ta) 
 				$ri[] = "";
-				$ri[] = "1";	// (käibemaksukood)         
+				//$ri[] = "1";	// (käibemaksukood)         
+				$ri[] = $row["km_code"];
 				$ri[] = "";
 				$ri[] = "";
 				$ri[] = "";
@@ -690,6 +721,11 @@ class crm_company_bills_impl extends class_base
 					$code = $row["code"];
 					$amt += str_replace(",", ".", $row["amt"]);
 					$sum += str_replace(",", ".", $row["sum"]); 
+				}
+
+				if ($b->prop("gen_amt") != "")
+				{
+					$amt = $b->prop("gen_amt");
 				}
 				$price = $sum / $amt;
 				$ri = array();
@@ -716,11 +752,18 @@ class crm_company_bills_impl extends class_base
 				$ri[] = "";
 				$ri[] = "";
 				$ri[] = "";
-				$ri[] = t("tundi");
+				$ri[] = $b->prop("gen_unit");
 				$ct[] = join("\t", $ri);
 			}
 
 			$ct[] = ""; // next bill
+		}
+
+		if ($renumber)
+		{
+			$co = obj($_GET["id"]);
+			$co->set_meta("last_exp_no", $bno);
+			$co->save();
 		}
 
 		header("Content-type: text/plain");

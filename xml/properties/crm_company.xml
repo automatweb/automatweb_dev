@@ -1634,7 +1634,25 @@
             <store>no</store>
             <captionside>top</captionside>
             <field>act_s_task_name</field>
-            <caption>Toimetuse nimi</caption>
+            <caption>Tegevuse nimi</caption>
+      </property>
+      <property>
+            <name>act_s_task_content</name>
+            <table>objects</table>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
+            </group>
+            <type>textbox</type>
+            <size>33</size>
+            <parent>act_s_dl_layout_top</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_task_content</field>
+            <caption>Tegevuse sisu</caption>
       </property>
       <property>
             <name>act_s_code</name>
@@ -2460,6 +2478,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Lisakirjelduse dokument</caption>
             </DESCRIPTION>
+            <NUMBER_SERIES>
+                  <value>57</value>
+                  <clid>CL_CRM_NUMBER_SERIES</clid>
+                  <caption>Numbriseeria</caption>
+            </NUMBER_SERIES>
       </reltypes>
       <layout>
             <hbox_toolbar>

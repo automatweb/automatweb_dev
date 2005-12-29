@@ -520,6 +520,16 @@ class crm_company_overview_impl extends class_base
 		{
 			$res["name"] = "%".$r["act_s_task_name"]."%";
 		}
+		if ($r["act_s_task_content"] != "")
+		{
+			$res[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"content" => "%".$r["act_s_task_content"]."%",
+					"summary" => "%".$r["act_s_task_content"]."%",
+				)
+			));
+		}
 		if ($r["act_s_code"] != "")
 		{
 			$res["code"] = "%".$r["act_s_code"]."%";
@@ -777,11 +787,6 @@ class crm_company_overview_impl extends class_base
 			}
 			else
 			{
-				/*$ol = new object_list(array(
-					//"class_id" => $clid,
-					"oid" => $tasks,
-					//"is_done" => new obj_predicate_not(OBJ_IS_DONE)
-				));*/
 				$ol = new object_list();
 				$ol->add($tasks);
 			}
