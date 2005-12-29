@@ -285,6 +285,7 @@
                         <num_2>CL_SHOP_PRODUCT_SEARCH</num_2>
                         <num_3>CL_SITE_SEARCH_CONTENT_GRP_HTML</num_3>
                         <num_4>CL_SITE_SEARCH_CONTENT_GRP_FS</num_4>
+                        <num_5>CL_CRM_DB_SEARCH</num_5>
                   </clid>
                   <caption>otsingu grupp</caption>
             </SEARCH_GRP>

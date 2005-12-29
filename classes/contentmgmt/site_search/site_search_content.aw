@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.57 2005/09/29 06:31:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.58 2005/12/29 17:23:57 ekke Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -116,7 +116,7 @@
 @reltype REPEATER value=1 clid=CL_RECURRENCE
 @caption kordus staatilise koopia genereerimiseks
 
-@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_HTML,CL_SITE_SEARCH_CONTENT_GRP_FS
+@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_HTML,CL_SITE_SEARCH_CONTENT_GRP_FS,CL_CRM_DB_SEARCH
 @caption otsingu grupp
 
 @reltype CPLX_EL_CTR value=3 clid=CL_FORM_CONTROLLER

@@ -1,0 +1,37 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>crm_db</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CRM_DB</reltype>
+            <automatic>1</automatic>
+            <caption>Kliendibaas</caption>
+      </property>
+      <property>
+            <name>url</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Url, millele lisatakse org. objekti id</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CRM_DB_SEARCH</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <reltypes>
+            <CRM_DB>
+                  <value>1</value>
+                  <clid>CL_CRM_DB</clid>
+                  <caption>Organisatsioonide andmebaas</caption>
+            </CRM_DB>
+      </reltypes>
+</properties>
+
