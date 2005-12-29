@@ -223,7 +223,7 @@ class crm_user_creator extends core
 			// create user
 			$us = get_instance(CL_USER);
 
-			$uid = htmlentities($pers->prop("firstname").".".$pers->prop("lastname"));
+			$uid = htmlentities($pers->prop("firstname").( strlen($pers->prop("lastname")) ?".":"").$pers->prop("lastname"));
 
 			$uid = str_replace("&Auml;", "A", $uid);
 			$uid = str_replace("&auml;", "a", $uid);
