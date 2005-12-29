@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.6 2005/11/10 06:55:29 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.7 2005/12/29 23:37:38 dragut Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
@@ -352,7 +352,6 @@ class otv_ds_kultuuriaken extends class_base
 	**/
 	function import_events($arr)
 	{
-		// seems it may take a loong time to execute:
 	//	set_time_limit(0);
 
 		if (!$this->can("view", $arr['id']))
@@ -418,7 +417,6 @@ class otv_ds_kultuuriaken extends class_base
 
 			$ol = new object_list(array(
 				"parent" => $parent_id,
-			//	"class_id" => CL_CRM_MEETING,
 				"class_id" => $class_id,
 			));
 			echo "parent: <strong>".$conn_to_parent->prop('to.name')."</strong> [".$ol->count()."]<br>";
@@ -472,7 +470,6 @@ class otv_ds_kultuuriaken extends class_base
 					{
 						$event_obj = new object;
 						$event_obj->set_parent($parent_id);
-					//	$event_obj->set_class_id(CL_CRM_MEETING);
 						$event_obj->set_class_id($class_id);
 						echo "<strong>[ new ] </strong>";
 						flush();
@@ -490,9 +487,7 @@ class otv_ds_kultuuriaken extends class_base
 					unset($event_data['jrk']);
 					foreach ($event_data as $k => $v)
 					{
-//						arr($event_data);
 						$event_obj->set_prop($k, $v);
-						
 					}
 					$event_obj->save();
 					echo " ".$event_data['name']." [ saved ]<br>";
@@ -510,13 +505,13 @@ class otv_ds_kultuuriaken extends class_base
 		$this->activate_next_auto_import(array(
 			"object" => $o,
 		));
-	//	$o->set_meta("next_import", $next);
+	
 		$o->save();
 		return $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id());
 	}
 
 	//// params:
-	// object => otv_ds_kultuuriaken object instance
+	// object => otv_ds_kultuuriaken object 
 	//
 	// this fn. checks if there is a recurrence object configured 
 	// to otv_ds_kultuuriaken import
