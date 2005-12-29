@@ -102,7 +102,7 @@
                   <parent>general</parent>
             </destination>
             <ihf>
-                  <caption>P&amp;auml;rimine</caption>
+                  <caption>P&amp;amp;auml;rimine</caption>
             </ihf>
             <ihf_donor>
                   <caption>Doonorklass</caption>

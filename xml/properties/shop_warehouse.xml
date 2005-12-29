@@ -412,7 +412,7 @@
             </storage_income>
             <storage_export>
                   <parent>storage</parent>
-                  <caption>V&amp;auml;ljaminekud</caption>
+                  <caption>V&amp;amp;auml;ljaminekud</caption>
             </storage_export>
             <order>
                   <caption>Tellimused</caption>

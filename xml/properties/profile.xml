@@ -240,11 +240,11 @@
                   <caption>Seaded</caption>
             </settings>
             <settings_general>
-                  <caption>Üldandmed</caption>
+                  <caption>&amp;Uuml;ldandmed</caption>
                   <parent>settings</parent>
             </settings_general>
             <settings_outlook>
-                  <caption>Välimus</caption>
+                  <caption>V&amp;auml;limus</caption>
                   <parent>settings</parent>
             </settings_outlook>
             <settings_hobbies>
@@ -256,7 +256,7 @@
                   <parent>settings</parent>
             </settings_habits>
             <settings_occupation>
-                  <caption>Kool/Töö</caption>
+                  <caption>Kool/T&amp;ouml;&amp;ouml;</caption>
                   <parent>settings</parent>
             </settings_occupation>
             <comments>

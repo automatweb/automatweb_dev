@@ -2009,11 +2009,11 @@
       </classinfo>
       <groupinfo>
             <general_sub>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general_sub>
             <cedit>
-                  <caption>Üldkontaktid</caption>
+                  <caption>&amp;Uuml;ldkontaktid</caption>
                   <parent>general</parent>
             </cedit>
             <org_sections>
@@ -2034,7 +2034,7 @@
                   <parent>general</parent>
             </special_offers>
             <people>
-                  <caption>T&amp;ouml;&amp;ouml;tajad</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;tajad</caption>
             </people>
             <contacts2>
                   <caption>Inimesed puuvaates</caption>
@@ -2042,7 +2042,7 @@
                   <submit>no</submit>
             </contacts2>
             <personal_offers>
-                  <caption>Tööpakkumised</caption>
+                  <caption>T&amp;ouml;&amp;ouml;pakkumised</caption>
                   <parent>people</parent>
                   <submit>no</submit>
             </personal_offers>
@@ -2058,7 +2058,7 @@
                   <caption>Tegevused</caption>
             </overview>
             <all_actions>
-                  <caption>Kõik</caption>
+                  <caption>K&amp;otilde;ik</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
             </all_actions>
@@ -2073,7 +2073,7 @@
                   <submit>no</submit>
             </meetings>
             <calls>
-                  <caption>Kõned</caption>
+                  <caption>K&amp;otilde;ned</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
             </calls>
@@ -2101,7 +2101,7 @@
                   <parent>projs</parent>
             </my_reports>
             <all_reports>
-                  <caption>K&amp;otilde;ik raportid</caption>
+                  <caption>K&amp;amp;otilde;ik raportid</caption>
                   <submit>no</submit>
                   <parent>projs</parent>
             </all_reports>
@@ -2176,7 +2176,7 @@
                   <submit>no</submit>
             </resources>
             <transl>
-                  <caption>T&amp;otilde;lgi</caption>
+                  <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
       </groupinfo>
       <tableinfo>

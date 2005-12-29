@@ -373,16 +373,16 @@
                   <parent>skills</parent>
             </other_skills>
             <education_main>
-                  <caption>Hariduskäik</caption>
+                  <caption>Haridusk&amp;auml;ik</caption>
                   <submit>no</submit>
             </education_main>
             <haridustee>
-                  <caption>Hariduskäik</caption>
+                  <caption>Haridusk&amp;auml;ik</caption>
                   <submit>no</submit>
                   <parent>education_main</parent>
             </haridustee>
             <taienduskoolitus>
-                  <caption>Täienduskoolitus</caption>
+                  <caption>T&amp;auml;ienduskoolitus</caption>
                   <submit>no</submit>
                   <parent>education_main</parent>
             </taienduskoolitus>
@@ -390,10 +390,10 @@
                   <caption>Soovitajad</caption>
             </soovitajad>
             <tookogemus>
-                  <caption>Töökogemused</caption>
+                  <caption>T&amp;ouml;&amp;ouml;kogemused</caption>
             </tookogemus>
             <toosoov>
-                  <caption>Soovitud töö</caption>
+                  <caption>Soovitud t&amp;ouml;&amp;ouml;</caption>
                   <submit>no</submit>
             </toosoov>
             <statistika>

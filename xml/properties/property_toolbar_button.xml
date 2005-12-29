@@ -97,10 +97,10 @@
       </classinfo>
       <groupinfo>
             <but_props>
-                  <caption>Nupu m&amp;auml;&amp;auml;rangud</caption>
+                  <caption>Nupu m&amp;amp;auml;&amp;amp;auml;rangud</caption>
             </but_props>
             <men_props>
-                  <caption>Nupu m&amp;auml;&amp;auml;rangud</caption>
+                  <caption>Nupu m&amp;amp;auml;&amp;amp;auml;rangud</caption>
                   <submit>no</submit>
             </men_props>
       </groupinfo>

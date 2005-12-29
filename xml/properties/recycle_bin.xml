@@ -136,7 +136,7 @@
       <groupinfo>
             <recycle>
                   <submit>no</submit>
-                  <caption>Prügikast</caption>
+                  <caption>Pr&amp;uuml;gikast</caption>
             </recycle>
             <recycle_list>
                   <submit>no</submit>
@@ -149,7 +149,7 @@
                   <submit_method>get</submit_method>
             </recycle_search>
             <recycle_settings>
-                  <caption>M&amp;auml;&amp;auml;rangud</caption>
+                  <caption>M&amp;amp;auml;&amp;amp;auml;rangud</caption>
             </recycle_settings>
       </groupinfo>
       <reltypes>

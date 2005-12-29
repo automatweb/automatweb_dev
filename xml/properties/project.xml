@@ -511,7 +511,7 @@
             </info>
             <general2>
                   <parent>general</parent>
-                  <caption>Üldine</caption>
+                  <caption>&amp;Uuml;ldine</caption>
             </general2>
             <web_settings>
                   <parent>general</parent>
@@ -527,21 +527,21 @@
             </participants>
             <sides>
                   <parent>general</parent>
-                  <caption>Konfliktianal&amp;uuml;&amp;uuml;s</caption>
+                  <caption>Konfliktianal&amp;amp;uuml;&amp;amp;uuml;s</caption>
                   <submit>no</submit>
             </sides>
             <event_list>
-                  <caption>Sündmused</caption>
+                  <caption>S&amp;uuml;ndmused</caption>
                   <submit>no</submit>
             </event_list>
             <add_event>
-                  <caption>Muuda sündmust</caption>
+                  <caption>Muuda s&amp;uuml;ndmust</caption>
             </add_event>
             <files>
                   <caption>Failid</caption>
             </files>
             <trans>
-                  <caption>Tõlkimine</caption>
+                  <caption>T&amp;otilde;lkimine</caption>
             </trans>
             <userdefined>
                   <caption>Andmed</caption>

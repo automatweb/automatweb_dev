@@ -463,7 +463,7 @@
       </classinfo>
       <groupinfo>
             <showing>
-                  <caption>N&amp;auml;itamine</caption>
+                  <caption>N&amp;amp;auml;itamine</caption>
             </showing>
             <styles>
                   <caption>Stiilid</caption>
@@ -480,7 +480,7 @@
                   <parent>columns</parent>
             </columns_modify>
             <inherit>
-                  <caption>P&amp;auml;rimine</caption>
+                  <caption>P&amp;amp;auml;rimine</caption>
             </inherit>
             <search>
                   <caption>Otsing</caption>

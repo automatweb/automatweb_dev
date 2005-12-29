@@ -202,10 +202,10 @@
                   <caption>Import</caption>
             </import>
             <objects>
-                  <caption>Objektid ja &amp;Otilde;igused</caption>
+                  <caption>Objektid ja &amp;amp;Otilde;igused</caption>
             </objects>
             <admin_rm>
-                  <caption>Admin rootmen&amp;uuml;&amp;uuml;</caption>
+                  <caption>Admin rootmen&amp;amp;uuml;&amp;amp;uuml;</caption>
             </admin_rm>
       </groupinfo>
       <tableinfo>

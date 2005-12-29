@@ -324,7 +324,7 @@
                   <submit>no</submit>
             </layout>
             <avail>
-                  <caption>Kıik omadused</caption>
+                  <caption>K&amp;otilde;ik omadused</caption>
                   <submit>no</submit>
             </avail>
             <controllers>
@@ -335,14 +335,14 @@
                   <parent>controllers</parent>
             </set_controllers>
             <get_controllers>
-                  <caption>N‰itamine</caption>
+                  <caption>N&amp;auml;itamine</caption>
                   <parent>controllers</parent>
             </get_controllers>
             <settings>
                   <caption>Seaded</caption>
             </settings>
             <defaults>
-                  <caption>Omaduste v‰‰rtused</caption>
+                  <caption>Omaduste v&amp;auml;&amp;auml;rtused</caption>
                   <parent>settings</parent>
             </defaults>
             <system>
@@ -350,7 +350,7 @@
                   <parent>settings</parent>
             </system>
             <translate>
-                  <caption>T&amp;otilde;lgi</caption>
+                  <caption>T&amp;amp;otilde;lgi</caption>
             </translate>
             <lang_1>
                   <caption>lang</caption>

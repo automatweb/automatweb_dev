@@ -39,7 +39,7 @@
                   <caption>Teksti asendused</caption>
             </str_replace>
             <char_replace>
-                  <caption>T&amp;auml;htede asendused</caption>
+                  <caption>T&amp;amp;auml;htede asendused</caption>
             </char_replace>
             <controller>
                   <caption>Kontroller</caption>

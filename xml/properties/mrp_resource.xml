@@ -205,7 +205,7 @@
                   <caption>Kalender</caption>
             </grp_resource_schedule>
             <grp_resource_joblist>
-                  <caption>Tööleht</caption>
+                  <caption>T&amp;ouml;&amp;ouml;leht</caption>
                   <submit>no</submit>
             </grp_resource_joblist>
             <grp_resource_settings>
@@ -215,10 +215,10 @@
                   <caption>Hooldus</caption>
             </grp_resource_maintenance>
             <grp_resource_unavailable>
-                  <caption>Tööajad</caption>
+                  <caption>T&amp;ouml;&amp;ouml;ajad</caption>
             </grp_resource_unavailable>
             <grp_resource_unavailable_work>
-                  <caption>T&amp;ouml;&amp;ouml;ajad</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;ajad</caption>
                   <parent>grp_resource_unavailable</parent>
             </grp_resource_unavailable_work>
             <grp_resource_unavailable_una>

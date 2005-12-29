@@ -308,7 +308,7 @@
                   <submit>no</submit>
             </show_entries>
             <entries>
-                  <caption>N&amp;auml;ita sisestusi</caption>
+                  <caption>N&amp;amp;auml;ita sisestusi</caption>
                   <submit>no</submit>
                   <parent>show_entries</parent>
             </entries>
@@ -327,7 +327,7 @@
                   <parent>controllers</parent>
             </set_controllers>
             <get_controllers>
-                  <caption>N&amp;auml;itamine</caption>
+                  <caption>N&amp;amp;auml;itamine</caption>
                   <parent>controllers</parent>
             </get_controllers>
       </groupinfo>

@@ -1358,32 +1358,32 @@
                   <submit>no</submit>
             </grp_printer>
             <grp_printer_current>
-                  <caption>Jooksvad t&amp;ouml;&amp;ouml;d</caption>
+                  <caption>Jooksvad t&amp;amp;ouml;&amp;amp;ouml;d</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_current>
             <grp_printer_done>
-                  <caption>Tehtud t&amp;ouml;&amp;ouml;d</caption>
+                  <caption>Tehtud t&amp;amp;ouml;&amp;amp;ouml;d</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_done>
             <grp_printer_aborted>
-                  <caption>Katkestatud t&amp;ouml;&amp;ouml;d</caption>
+                  <caption>Katkestatud t&amp;amp;ouml;&amp;amp;ouml;d</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_aborted>
             <grp_printer_in_progress>
-                  <caption>K&amp;otilde;ik t&amp;ouml;&amp;ouml;s olevad</caption>
+                  <caption>K&amp;amp;otilde;ik t&amp;amp;ouml;&amp;amp;ouml;s olevad</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_in_progress>
             <grp_printer_startable>
-                  <caption>K&amp;otilde;ik t&amp;ouml;&amp;ouml;d mida oleks v&amp;otilde;imalik alustada</caption>
+                  <caption>K&amp;amp;otilde;ik t&amp;amp;ouml;&amp;amp;ouml;d mida oleks v&amp;amp;otilde;imalik alustada</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_startable>
             <grp_printer_notstartable>
-                  <caption>T&amp;ouml;&amp;ouml;d, mida ei ole veel v&amp;otilde;imalik alustada</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;d, mida ei ole veel v&amp;amp;otilde;imalik alustada</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_notstartable>
@@ -1395,7 +1395,7 @@
                   <parent>grp_settings</parent>
             </grp_settings_def>
             <grp_settings_salesman>
-                  <caption>M&amp;uuml;&amp;uuml;gimehe seaded</caption>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gimehe seaded</caption>
                   <parent>grp_settings</parent>
             </grp_settings_salesman>
             <grp_users_tree>

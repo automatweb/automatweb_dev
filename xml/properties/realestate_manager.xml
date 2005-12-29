@@ -1015,7 +1015,7 @@
                   <caption>Objektid</caption>
             </grp_realestate_properties>
             <grp_realestate_properties_all>
-                  <caption>Kõik objektid</caption>
+                  <caption>K&amp;otilde;ik objektid</caption>
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_all>
             <grp_realestate_properties_houses>
@@ -1039,7 +1039,7 @@
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_apartments>
             <grp_realestate_properties_commercial_properties>
-                  <caption>Äripinnad</caption>
+                  <caption>&amp;Auml;ripinnad</caption>
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_commercial_properties>
             <grp_realestate_properties_garages>
@@ -1047,7 +1047,7 @@
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_garages>
             <grp_realestate_properties_land_estates>
-                  <caption>Maatükid</caption>
+                  <caption>Maat&amp;uuml;kid</caption>
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_land_estates>
             <grp_realestate_properties_search>

@@ -190,7 +190,7 @@
       </classinfo>
       <groupinfo>
             <settings>
-                  <caption>M&amp;auml;&amp;auml;rangud</caption>
+                  <caption>M&amp;amp;auml;&amp;amp;auml;rangud</caption>
             </settings>
             <layout>
                   <caption>Tabel</caption>
@@ -202,7 +202,7 @@
                   <caption>Tabeli sisu</caption>
             </aliases>
             <hfoot>
-                  <caption>P&amp;auml;is ja jalus</caption>
+                  <caption>P&amp;amp;auml;is ja jalus</caption>
             </hfoot>
             <import>
                   <caption>Import</caption>

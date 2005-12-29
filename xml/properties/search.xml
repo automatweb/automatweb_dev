@@ -212,10 +212,10 @@
       </property>
       <groupinfo>
             <search>
-                  <caption>Lihtne&amp;nbsp;otsing</caption>
+                  <caption>Lihtne&amp;amp;nbsp;otsing</caption>
             </search>
             <advanced>
-                  <caption>Advanced&amp;nbsp;otsing</caption>
+                  <caption>Advanced&amp;amp;nbsp;otsing</caption>
             </advanced>
             <objsearch>
                   <caption>Objektiotsing</caption>

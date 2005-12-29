@@ -172,7 +172,7 @@
       </classinfo>
       <groupinfo>
             <account_overview>
-                  <caption>Konto ülevaade</caption>
+                  <caption>Konto &amp;uuml;levaade</caption>
             </account_overview>
             <accounts>
                   <caption>Kontod</caption>
@@ -188,7 +188,7 @@
                   <parent>pank_owner_group</parent>
             </pank_owner_group_main_sub>
             <pank_make_trans>
-                  <caption>Tee ülekanne</caption>
+                  <caption>Tee &amp;uuml;lekanne</caption>
             </pank_make_trans>
       </groupinfo>
       <tableinfo>

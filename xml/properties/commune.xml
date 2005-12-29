@@ -770,7 +770,7 @@
                   <tabgroup>left</tabgroup>
             </profile_change>
             <all_profiles>
-                  <caption>Kõik profiilid</caption>
+                  <caption>K&amp;otilde;ik profiilid</caption>
                   <parent>profile</parent>
                   <tabgroup>left</tabgroup>
                   <submit>no</submit>
@@ -797,23 +797,23 @@
                   <submit>no</submit>
             </show_image_comments>
             <settings>
-                  <caption>Sätted</caption>
+                  <caption>S&amp;auml;tted</caption>
                   <parent>me</parent>
                   <tabgroup>left</tabgroup>
                   <submit>no</submit>
             </settings>
             <browsing_conditions>
-                  <caption>Sirvimise sätted</caption>
+                  <caption>Sirvimise s&amp;auml;tted</caption>
                   <parent>settings</parent>
                   <tabgroup>left</tabgroup>
             </browsing_conditions>
             <view_conditions>
-                  <caption>Kuvamise sätted</caption>
+                  <caption>Kuvamise s&amp;auml;tted</caption>
                   <parent>settings</parent>
                   <tabgroup>left</tabgroup>
             </view_conditions>
             <message_conditions>
-                  <caption>Teadete sätted</caption>
+                  <caption>Teadete s&amp;auml;tted</caption>
                   <parent>settings</parent>
                   <tabgroup>left</tabgroup>
             </message_conditions>
@@ -824,7 +824,7 @@
                   <submit>no</submit>
             </lists>
             <friend_list>
-                  <caption>Sõbralist</caption>
+                  <caption>S&amp;otilde;bralist</caption>
                   <parent>lists</parent>
                   <tabgroup>left</tabgroup>
                   <submit>no</submit>
@@ -883,11 +883,11 @@
                   <submit>no</submit>
             </matching_profiles>
             <friends>
-                  <caption>Sõbrad</caption>
+                  <caption>S&amp;otilde;brad</caption>
                   <submit>no</submit>
             </friends>
             <prof_friends>
-                  <caption>Minu sõbrad</caption>
+                  <caption>Minu s&amp;otilde;brad</caption>
                   <parent>friends</parent>
                   <tabgroup>left</tabgroup>
                   <submit>no</submit>
@@ -899,7 +899,7 @@
                   <submit>no</submit>
             </address_book>
             <friend_groups>
-                  <caption>Sõbragrupid</caption>
+                  <caption>S&amp;otilde;bragrupid</caption>
                   <parent>friends</parent>
                   <tabgroup>left</tabgroup>
                   <submit>no</submit>
@@ -990,7 +990,7 @@
                   <tabgroup>left</tabgroup>
             </my_forum_topics>
             <forum_settings>
-                  <caption>Sätted</caption>
+                  <caption>S&amp;auml;tted</caption>
                   <parent>forumtab</parent>
                   <tabgroup>left</tabgroup>
             </forum_settings>
@@ -1026,7 +1026,7 @@
                   <submit>no</submit>
             </my_statistics>
             <general_statistics>
-                  <caption>Üldstatistika</caption>
+                  <caption>&amp;Uuml;ldstatistika</caption>
                   <parent>statistics</parent>
                   <tabgroup>left</tabgroup>
                   <submit>no</submit>
@@ -1041,7 +1041,7 @@
                   <submit>no</submit>
             </join_form>
             <forgot_password>
-                  <caption>Unustasid salasõna?</caption>
+                  <caption>Unustasid salas&amp;otilde;na?</caption>
                   <parent>join</parent>
                   <tabgroup>left</tabgroup>
                   <submit>no</submit>

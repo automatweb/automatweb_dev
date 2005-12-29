@@ -704,11 +704,11 @@
       </classinfo>
       <groupinfo>
             <general_sub>
-                  <caption>Üldine</caption>
+                  <caption>&amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general_sub>
             <advanced_settings>
-                  <caption>Süvaseaded</caption>
+                  <caption>S&amp;uuml;vaseaded</caption>
                   <parent>general</parent>
             </advanced_settings>
             <import_export>
@@ -721,10 +721,10 @@
                   <parent>general</parent>
             </users>
             <show>
-                  <caption>Näitamine</caption>
+                  <caption>N&amp;auml;itamine</caption>
             </show>
             <show_sub>
-                  <caption>Näitamine</caption>
+                  <caption>N&amp;auml;itamine</caption>
                   <parent>show</parent>
             </show_sub>
             <doc_show>
@@ -732,7 +732,7 @@
                   <parent>show</parent>
             </doc_show>
             <doc_ord>
-                  <caption>Dokumentide järjestamine</caption>
+                  <caption>Dokumentide j&amp;auml;rjestamine</caption>
                   <parent>show</parent>
             </doc_ord>
             <ip>
@@ -740,14 +740,14 @@
                   <parent>show</parent>
             </ip>
             <look>
-                  <caption>Välimus</caption>
+                  <caption>V&amp;auml;limus</caption>
             </look>
             <look_sub>
-                  <caption>Välimus</caption>
+                  <caption>V&amp;auml;limus</caption>
                   <parent>look</parent>
             </look_sub>
             <templates>
-                  <caption>Kujunduspõhjad</caption>
+                  <caption>Kujundusp&amp;otilde;hjad</caption>
                   <parent>look</parent>
             </templates>
             <presentation>
@@ -786,7 +786,7 @@
                   <parent>menus</parent>
             </periods>
             <keywords>
-                  <caption>Võtmesõnad</caption>
+                  <caption>V&amp;otilde;tmes&amp;otilde;nad</caption>
                   <parent>menus</parent>
             </keywords>
             <transl>
@@ -909,11 +909,6 @@
                   <clid>CL_FOLDER_CONTEXT</clid>
                   <caption>Kontekst</caption>
             </CTX>
-            <LANG_REL>
-                  <value>22</value>
-                  <clid>CL_MENU</clid>
-                  <caption>Keeleseos</caption>
-            </LANG_REL>
       </reltypes>
 </properties>
 

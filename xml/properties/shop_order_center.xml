@@ -337,7 +337,7 @@
                   <caption>Makseviisid</caption>
             </payment>
             <appear>
-                  <caption>N&amp;auml;itamine</caption>
+                  <caption>N&amp;amp;auml;itamine</caption>
             </appear>
             <psfieldmap>
                   <caption>Isukuandmete kaart</caption>

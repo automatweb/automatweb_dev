@@ -474,7 +474,7 @@
       </classinfo>
       <groupinfo>
             <general_sub>
-                  <caption>Üldine</caption>
+                  <caption>&amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general_sub>
             <mail_settings>
@@ -486,7 +486,7 @@
                   <parent>general</parent>
             </users>
             <look>
-                  <caption>Välimus</caption>
+                  <caption>V&amp;auml;limus</caption>
             </look>
             <styles>
                   <caption>Stiilid</caption>

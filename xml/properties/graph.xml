@@ -305,7 +305,7 @@
                   <caption>Andmed</caption>
             </data>
             <data_settings>
-                  <caption>M&amp;auml;&amp;auml;rangud</caption>
+                  <caption>M&amp;amp;auml;&amp;amp;auml;rangud</caption>
                   <parent>data</parent>
             </data_settings>
             <data_entry>

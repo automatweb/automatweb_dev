@@ -398,7 +398,7 @@
                   <caption>Seaded</caption>
             </general>
             <general2>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general2>
             <advanced>
@@ -410,7 +410,7 @@
                   <parent>general</parent>
             </vac_settings>
             <views>
-                  <caption>S&amp;uuml;ndmused</caption>
+                  <caption>S&amp;amp;uuml;ndmused</caption>
                   <submit>no</submit>
                   <submit_method>get</submit_method>
             </views>
@@ -418,7 +418,7 @@
                   <caption>Vabad ajad</caption>
             </vacancies>
             <create_events>
-                  <caption>S&amp;uuml;ndmuste lisamine</caption>
+                  <caption>S&amp;amp;uuml;ndmuste lisamine</caption>
                   <parent>vacancies</parent>
             </create_events>
             <create_vacancies>
@@ -434,7 +434,7 @@
                   <parent>general</parent>
             </time_settings>
             <add_event>
-                  <caption>Muuda s&amp;uuml;ndmust</caption>
+                  <caption>Muuda s&amp;amp;uuml;ndmust</caption>
             </add_event>
             <search>
                   <caption>Otsing</caption>

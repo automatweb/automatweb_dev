@@ -209,7 +209,7 @@
       </classinfo>
       <groupinfo>
             <show>
-                  <caption>Näitamine</caption>
+                  <caption>N&amp;auml;itamine</caption>
             </show>
             <img2>
                   <caption>Suur pilt</caption>
@@ -221,7 +221,7 @@
                   <caption>Muuda suure pildi suurust</caption>
             </resize_big>
             <transl>
-                  <caption>T&amp;otilde;lgi</caption>
+                  <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
       </groupinfo>
       <tableinfo>

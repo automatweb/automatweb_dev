@@ -418,7 +418,7 @@
       </classinfo>
       <groupinfo>
             <grp_general>
-                  <caption>&amp;Uuml;ldine</caption>
+                  <caption>&amp;amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </grp_general>
             <grp_case_data>
@@ -426,7 +426,7 @@
                   <parent>general</parent>
             </grp_case_data>
             <grp_case_workflow>
-                  <caption>Ressursid ja töövoog</caption>
+                  <caption>Ressursid ja t&amp;ouml;&amp;ouml;voog</caption>
             </grp_case_workflow>
             <grp_case_schedule>
                   <caption>Kalender</caption>

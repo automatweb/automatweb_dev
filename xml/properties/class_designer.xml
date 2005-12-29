@@ -422,7 +422,7 @@
       </classinfo>
       <groupinfo>
             <general_sub>
-                  <caption>Üldine</caption>
+                  <caption>&amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general_sub>
             <settings>
@@ -447,7 +447,7 @@
                   <submit>no</submit>
             </int_refs>
             <ext_refs>
-                  <caption>Välised seosed</caption>
+                  <caption>V&amp;auml;lised seosed</caption>
                   <parent>relations</parent>
                   <submit>no</submit>
             </ext_refs>

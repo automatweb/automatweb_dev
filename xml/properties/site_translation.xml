@@ -138,29 +138,29 @@
       </classinfo>
       <groupinfo>
             <translated>
-                  <caption>Tõlgitud</caption>
+                  <caption>T&amp;otilde;lgitud</caption>
                   <submit>no</submit>
             </translated>
             <untranslated>
-                  <caption>Tõlkimata</caption>
+                  <caption>T&amp;otilde;lkimata</caption>
                   <submit>no</submit>
             </untranslated>
             <in_progress>
-                  <caption>T&amp;ouml;&amp;ouml;s</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;s</caption>
                   <submit>no</submit>
             </in_progress>
             <utr_all>
-                  <caption>Kõik</caption>
+                  <caption>K&amp;otilde;ik</caption>
                   <parent>untranslated</parent>
                   <submit>no</submit>
             </utr_all>
             <utr_day>
-                  <caption>Viimane päev</caption>
+                  <caption>Viimane p&amp;auml;ev</caption>
                   <parent>untranslated</parent>
                   <submit>no</submit>
             </utr_day>
             <utr_week>
-                  <caption>Viimane nädal</caption>
+                  <caption>Viimane n&amp;auml;dal</caption>
                   <parent>untranslated</parent>
                   <submit>no</submit>
             </utr_week>
@@ -170,17 +170,17 @@
                   <submit>no</submit>
             </utr_month>
             <ipr_all>
-                  <caption>Kõik</caption>
+                  <caption>K&amp;otilde;ik</caption>
                   <parent>in_progress</parent>
                   <submit>no</submit>
             </ipr_all>
             <ipr_day>
-                  <caption>Viimane päev</caption>
+                  <caption>Viimane p&amp;auml;ev</caption>
                   <parent>in_progress</parent>
                   <submit>no</submit>
             </ipr_day>
             <ipr_week>
-                  <caption>Viimane nädal</caption>
+                  <caption>Viimane n&amp;auml;dal</caption>
                   <parent>in_progress</parent>
                   <submit>no</submit>
             </ipr_week>
@@ -190,17 +190,17 @@
                   <submit>no</submit>
             </ipr_month>
             <tr_all>
-                  <caption>Kõik</caption>
+                  <caption>K&amp;otilde;ik</caption>
                   <parent>translated</parent>
                   <submit>no</submit>
             </tr_all>
             <tr_day>
-                  <caption>Viimane päev</caption>
+                  <caption>Viimane p&amp;auml;ev</caption>
                   <parent>translated</parent>
                   <submit>no</submit>
             </tr_day>
             <tr_week>
-                  <caption>Viimane nädal</caption>
+                  <caption>Viimane n&amp;auml;dal</caption>
                   <parent>translated</parent>
                   <submit>no</submit>
             </tr_week>

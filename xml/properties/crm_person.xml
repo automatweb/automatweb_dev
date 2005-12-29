@@ -564,7 +564,7 @@
       </classinfo>
       <groupinfo>
             <general2>
-                  <caption>Üldine</caption>
+                  <caption>&amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general2>
             <description>
@@ -582,12 +582,12 @@
                   <caption>Tegevused</caption>
             </overview>
             <all_actions>
-                  <caption>Kõik</caption>
+                  <caption>K&amp;otilde;ik</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
             </all_actions>
             <calls>
-                  <caption>Kõned</caption>
+                  <caption>K&amp;otilde;ned</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
             </calls>
@@ -602,7 +602,7 @@
                   <submit>no</submit>
             </tasks>
             <forms>
-                  <caption>Väljundid</caption>
+                  <caption>V&amp;auml;ljundid</caption>
             </forms>
             <cv>
                   <caption>Elulugu</caption>
@@ -611,15 +611,15 @@
                   <caption>Andmed</caption>
             </data>
             <education>
-                  <caption>Hariduskäik</caption>
+                  <caption>Haridusk&amp;auml;ik</caption>
                   <parent>cv</parent>
             </education>
             <add_edu>
-                  <caption>Täienduskoolitus</caption>
+                  <caption>T&amp;auml;ienduskoolitus</caption>
                   <parent>cv</parent>
             </add_edu>
             <experiences>
-                  <caption>Töökogemused</caption>
+                  <caption>T&amp;ouml;&amp;ouml;kogemused</caption>
                   <parent>cv</parent>
             </experiences>
             <recommends>
@@ -627,7 +627,7 @@
                   <parent>cv</parent>
             </recommends>
             <transl>
-                  <caption>T&amp;otilde;lgi</caption>
+                  <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
       </groupinfo>
       <tableinfo>

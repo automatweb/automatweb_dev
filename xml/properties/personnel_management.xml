@@ -320,15 +320,15 @@
                   <tabgroup>navi</tabgroup>
             </my_profile>
             <org_profile>
-                  <caption>Tööpakkuja profiil</caption>
+                  <caption>T&amp;ouml;&amp;ouml;pakkuja profiil</caption>
                   <submit>no</submit>
             </org_profile>
             <employee>
-                  <caption>Tööotsijad</caption>
+                  <caption>T&amp;ouml;&amp;ouml;otsijad</caption>
                   <submit>no</submit>
             </employee>
             <employers>
-                  <caption>Tööpakkumised</caption>
+                  <caption>T&amp;ouml;&amp;ouml;pakkumised</caption>
                   <submit>no</submit>
             </employers>
             <managers>
@@ -352,7 +352,7 @@
                   <tabgroup>navi</tabgroup>
             </my_profile_personal>
             <org_profile_jobs>
-                  <caption>Tööpakkumised</caption>
+                  <caption>T&amp;ouml;&amp;ouml;pakkumised</caption>
                   <parent>org_profile</parent>
                   <submit>no</submit>
             </org_profile_jobs>
@@ -361,7 +361,7 @@
                   <parent>org_profile</parent>
             </org_profile_candits>
             <org_profile_info>
-                  <caption>Tööpakkuja andmed</caption>
+                  <caption>T&amp;ouml;&amp;ouml;pakkuja andmed</caption>
                   <parent>org_profile</parent>
             </org_profile_info>
             <all_setings>
@@ -388,12 +388,12 @@
                   <tabgroup>left</tabgroup>
             </my_join>
             <my_join_worker>
-                  <caption>T&amp;ouml;&amp;ouml;otsija</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;otsija</caption>
                   <parent>my_join</parent>
                   <tabgroup>left</tabgroup>
             </my_join_worker>
             <my_join_offerer>
-                  <caption>T&amp;ouml;&amp;ouml;pakkuja</caption>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkuja</caption>
                   <parent>my_join</parent>
                   <tabgroup>left</tabgroup>
             </my_join_offerer>
@@ -401,11 +401,11 @@
                   <caption>Halduri profiil</caption>
             </manager_profile>
             <manager_profile_persons>
-                  <caption>Tööotsijad</caption>
+                  <caption>T&amp;ouml;&amp;ouml;otsijad</caption>
                   <parent>manager_profile</parent>
             </manager_profile_persons>
             <manager_profile_orgs>
-                  <caption>Tööpakkujad</caption>
+                  <caption>T&amp;ouml;&amp;ouml;pakkujad</caption>
                   <parent>manager_profile</parent>
             </manager_profile_orgs>
             <search>

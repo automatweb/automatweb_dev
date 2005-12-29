@@ -328,17 +328,17 @@
       </classinfo>
       <groupinfo>
             <organisation_general_information>
-                  <caption>Ettev&amp;otilde;tte &amp;uuml;ldandmed</caption>
+                  <caption>Ettev&amp;amp;otilde;tte &amp;amp;uuml;ldandmed</caption>
             </organisation_general_information>
             <publications>
-                  <caption>V&amp;auml;ljaanded</caption>
+                  <caption>V&amp;amp;auml;ljaanded</caption>
             </publications>
             <publications_general_info>
-                  <caption>V&amp;auml;ljaannete &amp;uuml;ldinfo</caption>
+                  <caption>V&amp;amp;auml;ljaannete &amp;amp;uuml;ldinfo</caption>
                   <parent>publications</parent>
             </publications_general_info>
             <publications_list>
-                  <caption>Alamv&amp;auml;ljaanded</caption>
+                  <caption>Alamv&amp;amp;auml;ljaanded</caption>
                   <parent>publications</parent>
             </publications_list>
             <general_images>
@@ -358,7 +358,7 @@
                   <parent>publications</parent>
             </general_documents>
             <general_polls>
-                  <caption>Kiirk&amp;uuml;sitlused</caption>
+                  <caption>Kiirk&amp;amp;uuml;sitlused</caption>
                   <parent>publications</parent>
             </general_polls>
             <general_webforms>
