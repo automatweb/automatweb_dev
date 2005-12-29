@@ -324,6 +324,10 @@ class propcollector extends aw_template
 					if (strlen($tmp) > 0)
 					{
 						list($_name,$_value) = explode("=",$tmp);
+						if($_name == "caption")
+						{
+							$_value = htmlentities($_value);
+						}
 						$this->groupinfo[$id][$_name] = $_value;
 						$tmp = "";
 					};
@@ -345,6 +349,10 @@ class propcollector extends aw_template
 					if (strlen($tmp) > 0)
 					{
 						list($_name,$_value) = explode("=",$tmp);
+						if($_name == "caption")
+						{
+							$_value = htmlentities($_value);
+						}
 						$this->groupinfo[$id][$_name] = $_value;
 						$tmp = "";
 					};
