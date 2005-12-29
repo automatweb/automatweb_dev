@@ -318,7 +318,7 @@ class popup_search extends aw_template
 		@param id required type=int acl=view
 		@param pn required 
 		@param multiple optional
-		@param clid required 
+		@param clid optional 
 		@param s optional
 		@param append_html optional
 
