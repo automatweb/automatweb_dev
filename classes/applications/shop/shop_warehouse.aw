@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.35 2005/12/27 13:14:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.36 2005/12/29 10:35:47 ahti Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -990,7 +990,6 @@ class shop_warehouse extends class_base
 		if (!$arr["obj_inst"]->prop("conf"))
 		{
 			//$arr["prop"]["value"] =  t("VIGA: konfiguratsioon on valimata!");
-echo "a <br>";
 			return false;
 		}
 		$this->config = obj($arr["obj_inst"]->prop("conf"));
@@ -1000,7 +999,6 @@ echo "a <br>";
 		{
 			if(!$this->config->prop($check))
 			{
-echo "ch = $check <br>";
 				return false;
 			}
 		}
