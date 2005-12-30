@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.447 2005/12/28 14:49:27 ahti Exp $
+// $Id: class_base.aw,v 2.448 2005/12/30 10:10:47 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4927,7 +4927,15 @@ class class_base extends aw_template
 		switch($prop)
 		{
 			case "name":
-				$val = $obj->$prop();
+				if ($obj->class_id() == CL_LANGUAGE)
+				{
+					$val = $obj->prop("lang_name");
+					$prop = "lang_name";
+				}
+				else
+				{
+					$val = $obj->$prop();
+				}
 				break;
 	
 			default:
@@ -4954,7 +4962,6 @@ class class_base extends aw_template
 	{
 		$pd = $GLOBALS["properties"][$obj->class_id()][$prop];
 		$type = $pd["type"];
-
 		$val = $obj->prop($prop);
 		switch($type)
 		{
@@ -4968,10 +4975,15 @@ class class_base extends aw_template
 					$rels = new object_list($obj->connections_from(array(
 						"type" => $pd["reltype"]
 					)));
-					$_tmp = $rels->names();
+					//$_tmp = $rels->names();
+					$_tmp = array();
+					foreach($rels->arr() as $relo)
+					{
+						$_tmp[] = $this->trans_get_val($relo, "name");
+					}
 					if (count($_tmp))
 					{
-						$val = join(",", $_tmp);
+						$val = join(", ", $_tmp);
 					}
 					else
 					{

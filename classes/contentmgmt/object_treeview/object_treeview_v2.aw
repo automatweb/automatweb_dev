@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.95 2005/12/22 11:29:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.96 2005/12/30 10:10:47 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -718,6 +718,11 @@ class object_treeview_v2 extends class_base
 						if ($value["field"] == "add_date")
 						{
 							$scf_val = date("d.m.Y H:i", $ol_item[$value['field']]);
+						}
+						else
+						if ($sel_columns_full_prop_info[$value['field']]["type"] == "date_select")
+						{
+							$scf_val = date("d.m.Y", $ol_item[$value['field']]);
 						}
 						else
 						{

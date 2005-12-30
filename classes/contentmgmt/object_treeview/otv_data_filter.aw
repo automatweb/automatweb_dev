@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.7 2005/12/22 11:29:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.8 2005/12/30 10:10:47 kristo Exp $
 // otv_data_filter.aw - Andmeallika andmete muundaja 
 /*
 
@@ -48,6 +48,9 @@ class otv_data_filter extends class_base
 
 			case "char_replace":
 				$this->_char_replace($arr);
+				break;
+			case "controller":
+				$prop["value"] = htmlspecialchars($prop["value"]);
 				break;
 		};
 		return $retval;
