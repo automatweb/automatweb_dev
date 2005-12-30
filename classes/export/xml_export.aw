@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.3 2005/08/30 13:04:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.4 2005/12/30 09:49:42 dragut Exp $
 // xml_export.aw - XML eksport 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
@@ -65,6 +65,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 @groupinfo xml_struct caption="XML struktuur"
 @default group=xml_struct
 
+	@property xml_root_tag_name type=textbox field=meta method=serialize
+	@caption Juur m&auml;rgendi nimi
+
+	@property xml_object_tag_name type=textbox field=meta method=serialize
+	@caption Objekti m&auml;rgendi nimi
+
 	@property xml_struct_table type=table store=no no_caption=1
 	@caption Seadete vormi v&auml;ljad
 
@@ -74,8 +80,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 @reltype EXP_RECURRENCE value=2 clid=CL_RECURRENCE
 @caption Faili genereerimise kordus
 
-@reltype PARENT value=3 clid=CL_MENU
-@caption Kaust
+@reltype PARENT value=3 clid=CL_MENU,CL_PROJECT
+@caption S&uuml;ndmuste asukoht
 
 */
 
@@ -177,6 +183,12 @@ class xml_export extends class_base
 				break;
 			case "parents_table":
 				$this->create_parents_table($arr);
+				break;
+			case "xml_root_tag_name":
+				$prop['value'] = (empty($prop['value'])) ? "objects" : $prop['value'];
+				break;
+			case "xml_object_tag_name":
+				$prop['value'] = (empty($prop['value'])) ? "object" : $prop['value'];
 				break;
 			case "xml_struct_table":
 				$this->create_xml_struct_table($arr);
@@ -310,10 +322,13 @@ class xml_export extends class_base
 		$t->define_field(array(
 			"name" => "parent",
 			"caption" => t("Kaust"),
+			"width" => "85%",
 		));
 		$t->define_field(array(
 			"name" => "include_sub",
 			"caption" => t("Kaasaarvatud alamkaustad"),
+			"width" => "15%",
+			"align" => "center",
 		));
 
 		$conns_to_parents = $o->connections_from(array(
@@ -398,7 +413,7 @@ class xml_export extends class_base
 		$options_arr = array("" => "");
 		foreach($all_properties as $prop_data)
 		{
-			$options_arr[$prop_data['name']] = $prop_data['caption'];
+			$options_arr[$prop_data['name']] = (empty($prop_data['caption'])) ? $prop_data['name'] : $prop_data['caption'];
 		}
 		// ah, ok, lets add those fields to $options_arr which are objects table fields and can
 		// be accessible via ->prop() fn.
@@ -505,7 +520,7 @@ class xml_export extends class_base
 					"name" => "xml_data[".$prop_data['name']."][export_this_field]",
 					"checked" => isset($saved_xml_data[$prop_data['name']]['export_this_field']) ? true : false,
 				)),
-				"cfgform_field" => $prop_data['caption'],
+				"cfgform_field" => (empty($prop_data['caption'])) ? $prop_data['name'] : $prop_data['caption'],
 				// [begin] - these are for ord textbox
 				"ord_name" => "xml_data[".$prop_data['name']."][ord]",
 				"ord_size" => 5,
@@ -648,20 +663,24 @@ class xml_export extends class_base
 
 		$all_objects = new object_list($params);
 
+		$xml_root_tag_name = $o->prop("xml_root_tag_name");
+		$xml_object_tag_name = $o->prop("xml_object_tag_name");
 
 //arr("<strong>".$all_objects->count()."</strong>");
 
 		////
 		// i think this is the place to generate actually the XML file
 		//
-
 		$xml_file = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\"?>\n";
 //		$xml_file = "";
-		$xml_file .= "<objects>\n";
+//		$xml_file .= "<objects>\n";
+		$xml_file .= "<".$xml_root_tag_name.">\n";
 
 		foreach ($all_objects->arr() as $oid => $obj)
 		{
-			$xml_file .= "<object>\n";
+//			$xml_file .= "<object>\n";
+			$xml_file .= "<".$xml_object_tag_name.">\n";
+
 			foreach ($xml_config_data as $field_name => $field_config)
 			{
 				if (empty($field_config['name']) || empty($field_config['export_this_field']))
@@ -698,11 +717,14 @@ class xml_export extends class_base
 					$xml_file .= "</".$field_config['name'].">\n";
 				}
 			}
-			$xml_file .= "</object>\n";
+//			$xml_file .= "</object>\n";
+			$xml_file .= "</".$xml_object_tag_name.">\n";
 
 		} 
 
-		$xml_file .= "</objects>";
+//		$xml_file .= "</objects>";
+		$xml_file .= "</".$xml_root_tag_name.">";
+
 		if ($o->prop("remove_aliases"))
 		{
 			$xml_file  = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$xml_file);
