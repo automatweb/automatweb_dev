@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.39 2005/12/28 15:07:47 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.40 2005/12/30 12:36:06 dragut Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -1518,11 +1518,14 @@ class ml_list extends class_base
 				
 				foreach ($users_list->arr() as $user)
 				{
-					if($tmp = $user->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+					if ($user->prop("blocked") > 0)
 					{
-						$objects->add($tmp);
+						if($tmp = $user->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+						{
+							$objects->add($tmp);
+						}
+						unset($tmp);
 					}
-					unset($tmp);
 				}
 			}
 			elseif($source_obj->class_id() == CL_USER)
