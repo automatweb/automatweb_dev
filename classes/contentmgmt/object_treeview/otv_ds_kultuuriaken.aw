@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.7 2005/12/29 23:37:38 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.8 2005/12/30 00:51:49 dragut Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
@@ -419,7 +419,7 @@ class otv_ds_kultuuriaken extends class_base
 				"parent" => $parent_id,
 				"class_id" => $class_id,
 			));
-			echo "parent: <strong>".$conn_to_parent->prop('to.name')."</strong> [".$ol->count()."]<br>";
+			echo "parent: ".$conn_to_parent->prop("to")." <strong>".$conn_to_parent->prop('to.name')."</strong> [".$ol->count()."]<br>";
 			flush();
 
 			// creating an array of existing objects:
@@ -484,7 +484,9 @@ class otv_ds_kultuuriaken extends class_base
 					// setting the objects properties
 					// seems that there are no ord/jrk property
 					$event_obj->set_ord($event_data['jrk']);
+					$event_obj->set_comment($event_data['comment']);
 					unset($event_data['jrk']);
+					unset($event_data['comment']);
 					foreach ($event_data as $k => $v)
 					{
 						$event_obj->set_prop($k, $v);
