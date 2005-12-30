@@ -130,6 +130,24 @@
             <caption>Kaustad, mille alt objekte v&amp;amp;otilde;etakse</caption>
       </property>
       <property>
+            <name>xml_root_tag_name</name>
+            <table>objects</table>
+            <group>xml_struct</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Juur m&amp;amp;auml;rgendi nimi</caption>
+      </property>
+      <property>
+            <name>xml_object_tag_name</name>
+            <table>objects</table>
+            <group>xml_struct</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objekti m&amp;amp;auml;rgendi nimi</caption>
+      </property>
+      <property>
             <name>xml_struct_table</name>
             <table>objects</table>
             <group>xml_struct</group>
@@ -167,8 +185,11 @@
             </EXP_RECURRENCE>
             <PARENT>
                   <value>3</value>
-                  <clid>CL_MENU</clid>
-                  <caption>Kaust</caption>
+                  <clid>
+                        <num_0>CL_MENU</num_0>
+                        <num_1>CL_PROJECT</num_1>
+                  </clid>
+                  <caption>S&amp;amp;uuml;ndmuste asukoht</caption>
             </PARENT>
       </reltypes>
 </properties>
