@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.71 2005/12/09 09:57:45 kristo Exp $
+// $Id: cfgutils.aw,v 1.72 2005/12/30 12:14:33 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -523,7 +523,17 @@ class cfgutils extends aw_template
 		{
 			$file = basename($clinf[$clid]["file"]);
 			if ($clid == 7) $file = "doc";
-		};
+		}
+
+		if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+		{
+			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($file).".aw";
+			if (file_exists($trans_fn))
+			{
+				incl_f($trans_fn);
+				require_once($trans_fn);
+			}
+		}
 		$this->groupinfo = array();
 		$coreprops = $this->load_class_properties(array(
 			"file" => "class_base",
