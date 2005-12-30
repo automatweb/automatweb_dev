@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_publication.aw,v 1.4 2005/11/04 02:53:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_publication.aw,v 1.5 2005/12/30 12:44:14 dragut Exp $
 // expp_publication.aw - V&auml;ljaanne 
 /*
 
-@classinfo syslog_type=ST_EXPP_PUBLICATION relationmgr=yes no_status=1 prop_cb=1
+@classinfo syslog_type=ST_EXPP_PUBLICATION relationmgr=yes prop_cb=1
 
 @default table=objects
 @default group=general
