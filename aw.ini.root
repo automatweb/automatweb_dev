@@ -29,6 +29,7 @@ include ${ini_dir}/errors.ini
 
 # class specific stuff
 
+include ${ini_dir}/class_base.ini
 include ${ini_dir}/db.ini
 include ${ini_dir}/acl.ini
 include ${ini_dir}/groups.ini
