@@ -110,7 +110,14 @@ function show_property_help(propname)
 	{
 		helptext_layer = document.getElementById('helptext_layer');
 		helptext_layer.innerHTML = prophelp_layer.innerHTML;
-		show_help();
+		if (help_layer.style.display == 'none')
+		{
+			show_help();
+		}
+		else
+		{
+			close_help();
+		}
 	}
 
 }
