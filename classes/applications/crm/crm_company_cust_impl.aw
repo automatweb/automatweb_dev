@@ -168,7 +168,7 @@ class crm_company_cust_impl extends class_base
 			$data[] = array(
 				"project_name" => html::get_change_url($project_obj->id(), array("return_url" => get_ru()), parse_obj_name($project_obj->name())),
 				"project_code" => $project_obj->prop("code"),
-				"project_participants"	=> $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
+				"project_participants"	=> $this->_get_part_names($project_obj->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
 				"project_created" => $project_obj->created(),
 				"project_orderer" => $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_ORDERER"))),
 				"project_impl" => $impl,
@@ -184,6 +184,22 @@ class crm_company_cust_impl extends class_base
 			$table->define_data($row);
 		}
 		return PROP_OK;
+	}
+
+	function _get_part_names($conns)
+	{
+		if (!count($conns))
+		{
+			return;
+		}
+		$ol = new object_list($conns);
+
+		$ol2 = new object_list(array(
+			"oid" => $ol->ids(),
+			"sort_by" => "objects.class_id, objects.name"
+		));
+
+		return html::obj_change_url($ol2->ids());
 	}
 
 	function _org_table_header($tf)

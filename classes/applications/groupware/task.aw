@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.49 2006/01/03 19:19:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.50 2006/01/03 20:58:34 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -69,7 +69,7 @@
 @property files type=text 
 @caption Failid
 
-@property participants type=select multiple=1 table=objects field=meta method=serialize
+@property participants type=popup_search multiple=1 table=objects field=meta method=serialize clid=CL_CRM_PERSON
 @caption Osalejad
 
 @property aliasmgr type=aliasmgr store=no
@@ -327,6 +327,7 @@ class task extends class_base
 				break;
 
 			case "participants":
+				$data["options"] = $this->_get_possible_participants($arr["obj_inst"]);
 				$p = array();
 				if ($this->can("view", $arr["request"]["alias_to_org"]))
 				{
@@ -334,6 +335,10 @@ class task extends class_base
 					if ($ao->class_id() == CL_CRM_PERSON)
 					{
 						$p[$ao->id()] = $ao->id();
+						if (!isset($data["options"][$ao->id()]))
+						{
+							$data["options"][$ao->id()] = $ao->name();
+						}
 					}
 				}
 
@@ -346,9 +351,12 @@ class task extends class_base
 					{
 						$obj = $conn->from();
 						$p[$obj->id()] = $obj->id();
+						if (!isset($data["options"][$obj->id()]))
+						{
+							$data["options"][$obj->id()] = $obj->name();
+						}
 					}
 				}
-				$data["options"] = $this->_get_possible_participants($arr["obj_inst"]);
 				$data["value"] = $p;
 				break;
 
@@ -1488,7 +1496,7 @@ class task extends class_base
 		$co = $u->get_current_company();
 		$w = array();
 		$i = get_instance(CL_CRM_COMPANY);
-		$i->get_all_workers_for_company(obj($co), &$w);
+		$w = array_keys($i->get_employee_picker(obj($co), false, true));
 		foreach($w as $oid)
 		{
 			$t = obj($oid);

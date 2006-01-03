@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.98 2006/01/03 16:50:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.99 2006/01/03 20:58:34 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2457,6 +2457,33 @@ class crm_person extends class_base
 			}
 		}".
 		"return true;}";
+	}
+
+	function callback_get_cfgform($arr)
+	{
+		// if this is the current users employer, do nothing
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		if ($co == $arr["obj_inst"]->prop("work_contact"))
+		{
+			$s = get_instance(CL_CRM_SETTINGS);
+			if (($o = $s->get_current_settings()))
+			{
+				return $o->prop("coworker_cfgform");
+			}
+		}
+
+		if ($arr["obj_inst"]->prop("is_customer") == 1)
+		{
+			// find the crm settings object for the current user
+			$s = get_instance(CL_CRM_SETTINGS);
+			if (($o = $s->get_current_settings()))
+			{
+				return $o->prop("s_p_cfgform");
+			}
+		}
+
+		return false;
 	}
 }
 ?>

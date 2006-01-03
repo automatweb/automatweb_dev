@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.3 2005/12/07 11:34:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.4 2006/01/03 20:58:34 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded 
 /*
 
@@ -13,11 +13,43 @@
 	@property s_cfgform type=relpicker reltype=RELTYPE_CFGFORM table=objects field=meta method=serialize
 	@caption Kliendi seadete vorm 
 
+	@property s_p_cfgform type=relpicker reltype=RELTYPE_CFGFORM table=objects field=meta method=serialize
+	@caption Eraisikust kliendi seadete vorm 
+
+	@property work_cfgform type=relpicker reltype=RELTYPE_CFGFORM table=objects field=meta method=serialize
+	@caption Minu t&ouml;&ouml;koha seadete vorm
+
+	@property coworker_cfgform type=relpicker reltype=RELTYPE_CFGFORM table=objects field=meta method=serialize
+	@caption T&ouml;&ouml;kaaslaste seadete vorm 
+
+@default group=whom
+
+	@property users type=relpicker multiple=1 store=connect reltype=RELTYPE_USER
+	@caption Kasutajad
+
+	@property persons type=relpicker multiple=1 store=connect reltype=RELTYPE_PERSON
+	@caption Isikud
+
+	@property cos type=relpicker multiple=1 store=connect reltype=RELTYPE_COMPANY
+	@caption Organisatsioonid
+
+	@property everyone type=checkbox ch_value=1 table=objects field=flags
+	@caption K&otilde;ik 
+
+
+@groupinfo whom caption="Kellele kehtib"
+
 @reltype USER value=1 clid=CL_USER
 @caption Kasutaja
 
 @reltype CFGFORM value=2 clid=CL_CFGFORM
 @caption Seadete vorm
+
+@reltype PERSON value=3 clid=CL_CRM_PERSON
+@caption Isik
+
+@reltype COMPANY value=4 clid=CL_CRM_COMPANY
+@caption Organisatsioon
 
 */
 
@@ -54,6 +86,27 @@ class crm_settings extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function get_current_settings()
+	{
+		$u = get_instance(CL_USER);
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_SETTINGS,
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_CRM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid"),
+					"CL_CRM_SETTINGS.RELTYPE_PERSON" => $u->get_current_person(),
+					"CL_CRM_SETTINGS.RELTYPE_COMPANY" => $u->get_current_company(),
+					"CL_CRM_SETTINGS.everyone" => 1
+				)
+			))
+		));
+		if ($ol->count())
+		{
+			return $ol->begin();
+		}
 	}
 }
 ?>

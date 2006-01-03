@@ -3691,7 +3691,7 @@ class crm_company extends class_base
 		}
 	}
 
-	function get_employee_picker($co, $add_empty = false)
+	function get_employee_picker($co, $add_empty = false, $important_only = false)
 	{
 		if ($add_empty)
 		{
@@ -3706,6 +3706,24 @@ class crm_company extends class_base
 		{
 			return $res;
 		}
+
+		if ($important_only)
+		{
+			// filter out my important persons
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+
+			$tmp = array();
+			foreach($p->connections_from(array("type" => "RELTYPE_IMPORTANT_PERSON")) as $c)
+			{
+				if ($res[$c->prop("to")])
+				{
+					$tmp[$c->prop("to")] = $c->prop("to");
+				}
+			}
+			$res = $tmp;
+		}
+
 		$ol = new object_list(array("oid" => $res, "sort_by" => "objects.name"));
 		$res = ($add_empty ? array("" => t("--vali--")) : array()) +  $ol->names();
 		uasort($res, array(&$this, "__person_name_sorter"));
@@ -4009,18 +4027,18 @@ class crm_company extends class_base
 		$co = $u->get_current_company();
 		if ($co == $arr["obj_inst"]->id())
 		{
-			return false;
+			$s = get_instance(CL_CRM_SETTINGS);
+			if (($o = $s->get_current_settings()))
+			{
+				return $o->prop("work_cfgform");
+			}
 		}
 
 		// find the crm settings object for the current user
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_SETTINGS,
-			"CL_CRM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid")
-		));
-		if ($ol->count())
+		$s = get_instance(CL_CRM_SETTINGS);
+		if (($o = $s->get_current_settings()))
 		{
-			$s = $ol->begin();
-			return $s->prop("s_cfgform");
+			return $o->prop("s_cfgform");
 		}
 	}
 

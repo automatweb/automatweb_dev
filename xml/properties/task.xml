@@ -194,10 +194,11 @@
             <name>participants</name>
             <table>objects</table>
             <group>general</group>
-            <type>select</type>
+            <type>popup_search</type>
             <multiple>1</multiple>
             <field>meta</field>
             <method>serialize</method>
+            <clid>CL_CRM_PERSON</clid>
             <caption>Osalejad</caption>
       </property>
       <property>

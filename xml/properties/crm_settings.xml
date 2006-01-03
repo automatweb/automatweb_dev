@@ -10,6 +10,78 @@
             <method>serialize</method>
             <caption>Kliendi seadete vorm </caption>
       </property>
+      <property>
+            <name>s_p_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Eraisikust kliendi seadete vorm </caption>
+      </property>
+      <property>
+            <name>work_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Minu t&amp;amp;ouml;&amp;amp;ouml;koha seadete vorm</caption>
+      </property>
+      <property>
+            <name>coworker_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;kaaslaste seadete vorm </caption>
+      </property>
+      <property>
+            <name>users</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_USER</reltype>
+            <field>users</field>
+            <caption>Kasutajad</caption>
+      </property>
+      <property>
+            <name>persons</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_PERSON</reltype>
+            <field>persons</field>
+            <caption>Isikud</caption>
+      </property>
+      <property>
+            <name>cos</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_COMPANY</reltype>
+            <field>cos</field>
+            <caption>Organisatsioonid</caption>
+      </property>
+      <property>
+            <name>everyone</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>flags</field>
+            <caption>K&amp;amp;otilde;ik </caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SETTINGS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -17,6 +89,11 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <whom>
+                  <caption>Kellele kehtib</caption>
+            </whom>
+      </groupinfo>
       <reltypes>
             <USER>
                   <value>1</value>
@@ -28,6 +105,16 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>Seadete vorm</caption>
             </CFGFORM>
+            <PERSON>
+                  <value>3</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Isik</caption>
+            </PERSON>
+            <COMPANY>
+                  <value>4</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Organisatsioon</caption>
+            </COMPANY>
       </reltypes>
 </properties>
 
