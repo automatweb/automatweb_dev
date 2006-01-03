@@ -3357,7 +3357,21 @@ class crm_company extends class_base
 			));
 
 			$task_o = obj($task);
-			$task_o->set_prop("bill_no", $bill->prop("bill_no"));
+			$task_o->connect(array(
+				"to" => $bill->id(),
+				"type" => "RELTYPE_BILL"
+			));
+
+			// add bill id to all rows in task that don't have one already
+			$rows = safe_array($task_o->meta("rows"));
+			foreach($rows as $idx => $row)
+			{
+				if (!$row["bill_id"] && $row["on_bill"])
+				{
+					$rows[$idx]["bill_id"] = $bill->id();
+				}
+			}
+			$task_o->set_meta("rows", $rows);
 			$task_o->save();
 		}
 

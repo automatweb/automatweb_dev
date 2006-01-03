@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.17 2005/12/29 13:58:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.18 2006/01/03 19:19:59 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -323,7 +323,7 @@ class crm_bill extends class_base
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TASK")) as $c)
 		{
 			$task = $c->to();
-			foreach($task_i->get_task_bill_rows($task) as $id => $row)
+			foreach($task_i->get_task_bill_rows($task, true, $arr["obj_inst"]->id()) as $id => $row)
 			{
 				if (!isset($inf[$id]))
 				{
@@ -692,7 +692,7 @@ class crm_bill extends class_base
 		foreach($bill->connections_from(array("type" => "RELTYPE_TASK")) as $c)
 		{
 			$task = $c->to();
-			foreach($task_i->get_task_bill_rows($task) as $id => $row)
+			foreach($task_i->get_task_bill_rows($task, true, $bill->id()) as $id => $row)
 			{
 				if (!isset($inf[$id]))
 				{

@@ -483,6 +483,11 @@
                   <clid>CL_MRP_RESOURCE</clid>
                   <caption>ressurss</caption>
             </RESOURCE>
+            <BILL>
+                  <value>6</value>
+                  <clid>CL_CRM_BILL</clid>
+                  <caption>arve</caption>
+            </BILL>
       </reltypes>
       <layout>
             <num_hrs>

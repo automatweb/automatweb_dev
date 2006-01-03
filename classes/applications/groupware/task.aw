@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.48 2006/01/03 16:50:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.49 2006/01/03 19:19:59 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -162,6 +162,9 @@ caption Osalejad
 
 @reltype RESOURCE value=5 clid=CL_MRP_RESOURCE
 @caption ressurss
+
+@reltype BILL value=6 clid=CL_CRM_BILL
+@caption arve
 */
 
 class task extends class_base
@@ -386,21 +389,27 @@ class task extends class_base
 				break;
 
 			case "bill_no":
-				if ($data["value"] != "")
+				// small conversion - if set, create a relation instead and clear, so that we can have multiple
+				if ($this->can("view", $data["value"] ))
 				{
-					$data["value"] = html::get_change_url($data["value"], array("return_url" => get_ru()), $data["value"]);
+					$arr["obj_inst"]->connect(array(
+						"to" => $data["value"],
+						"type" => "RELTYPE_BILL"
+					));
+					$arr["obj_inst"]->set_prop("bill_no", "");
+					$arr["obj_inst"]->save();
+					$data["value"] = "";
 				}
-				else
-				if (is_object($arr["obj_inst"]))
+
+				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL")));
+				$data["value"] = html::obj_change_url($ol->arr());
+
+				if ($data["value"] == "" && is_object($arr["obj_inst"]))
 				{
 					$data["value"] = html::href(array(
 						"url" => $this->mk_my_orb("create_bill_from_task", array("id" => $arr["obj_inst"]->id(),"post_ru" => get_ru())),
 						"caption" => t("Loo uus arve")
 					));
-				}
-				else
-				{
-					return PROP_IGNORE;
 				}
 				break;
 
@@ -1202,6 +1211,12 @@ class task extends class_base
 					$impls[$is_id] = $iso->name();
 				}
 			}
+			$bno = "";
+			if ($row["bill_id"])
+			{
+				$bo = obj($row["bill_id"]);
+				$bno = $bo->prop("bill_no");
+			}
 			$t->define_data(array(
 				"task" => "<a name='row_".$row["date"]."'/>".html::textarea(array(
 					"name" => "rows[$idx][task]",
@@ -1240,21 +1255,20 @@ class task extends class_base
 					"value" => 1,
 					"checked" => $row["done"]
 				)),
-				"on_bill" => html::checkbox(array(
+				"on_bill" => ($row["bill_id"] ? sprintf(t("Arve nr %s"), $bno).html::hidden(array("name" => "rows[$idx][on_bill]", "value" => $row["on_bill"])) : html::checkbox(array(
 					"name" => "rows[$idx][on_bill]",
 					"value" => 1,
 					"checked" => $row["on_bill"]
+				))).html::hidden(array(
+					"name" => "rows[$idx][bill_id]",
+					"value" => $row["bill_id"]
 				)),
-				/*"com" => html::textbox(array(
-					"name" => "rows[$idx][com]",
-					"value" => $row["com"],
-				)),*/
 			));
 		}
 		$t->set_sortable(false);
 	}
 
-	function get_task_bill_rows($task, $only_on_bill = true)
+	function get_task_bill_rows($task, $only_on_bill = true, $bill_id = null)
 	{
 		// check if task has rows defined that go on bill
 		// if, then ret those
@@ -1264,7 +1278,7 @@ class task extends class_base
 		$dat = safe_array($task->meta("rows"));
 		foreach($dat as $idx => $row)
 		{
-			if ($row["on_bill"] == 1 || !$only_on_bill)
+			if (($row["on_bill"] == 1 || !$only_on_bill) && ($bill_id === null || $row["bill_id"] == $bill_id))
 			{
 				$id = $task->id()."_".$idx;
 				$rows[$id] = array(
@@ -1282,16 +1296,31 @@ class task extends class_base
 
 		if (!count($rows))
 		{
-			$rows[$task->id()] = array(
-				"name" => $task->name(),
-				"unit" => t("tund"),
-				"price" => $task->prop("hr_price"),
-				"date" => $task->prop("start1"),
-				"amt" => $task->prop("num_hrs_to_cust"),
-				"sum" => str_replace(",", ".", $task->prop("num_hrs_to_cust")) * $task->prop("hr_price"),
-				"has_tax" => 1,
-				"on_bill" => 1
-			);
+			// add the main task to the first bill only
+			$add = true;
+			if ($bill_id !== null)
+			{
+				$conns = $task->connections_from(array("type" => "RELTYPE_BILL", "order_by" => "to.id"));
+				$bc = reset($conns);
+				if ($bill_id != $bc->prop("to"))
+				{
+					$add = false;
+				}
+			}
+
+			if ($add)
+			{
+				$rows[$task->id()] = array(
+					"name" => $task->name(),
+					"unit" => t("tund"),
+					"price" => $task->prop("hr_price"),
+					"date" => $task->prop("start1"),
+					"amt" => $task->prop("num_hrs_to_cust"),
+					"sum" => str_replace(",", ".", $task->prop("num_hrs_to_cust")) * $task->prop("hr_price"),
+					"has_tax" => 1,
+					"on_bill" => 1
+				);
+			}
 		}
 
 		// add other expenses rows

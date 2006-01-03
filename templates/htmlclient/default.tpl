@@ -137,8 +137,7 @@ function submit_changeform(action)
 {
 	changed = 0;
 	{VAR:submit_handler}
-
-	if (aw_submit_handler)
+	if (typeof(aw_submit_handler) != "undefined")
 	{
 		if (aw_submit_handler() == false)
 		{
