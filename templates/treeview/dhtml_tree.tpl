@@ -78,7 +78,8 @@ function onload_handler(arg)
 
 function fetch_node(node)
 {
-	uri = get_branch_func + parseInt(node);
+	//uri = get_branch_func + parseInt(node);
+	uri = get_branch_func + node;
 	var frame = document.createElement("iframe");
         frame.setAttribute("width",0);
         frame.setAttribute("height",1);
