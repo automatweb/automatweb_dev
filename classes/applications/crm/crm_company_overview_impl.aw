@@ -239,9 +239,11 @@ class crm_company_overview_impl extends class_base
 				"align" => "center",
 				"sortable" => 1,
 				"numeric" => 1,
-				"type" => "time",
+				//"type" => "time",
 				"chgbgcolor" => "col",
-				"format" => "d.m.Y H:i"
+				//"format" => "d.m.Y H:i",
+				"callback" => array(&$this, "_format_deadline"),
+				"callb_pass_row" => 1
 			));
 		}
 
@@ -307,7 +309,7 @@ class crm_company_overview_impl extends class_base
 			}
 
 			$col = "";
-			if ($task->class_id() == CL_CRM_MEETING)
+			if ($task->class_id() == CL_CRM_MEETING || $task->class_id() == CL_CRM_CALL || $task->class_id() == CL_CRM_OFFER)
 			{
 				$dl = $task->prop("start1");
 			}
@@ -394,6 +396,7 @@ class crm_company_overview_impl extends class_base
 				"proj_name" => $proj_str,
 				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($task->name())),
 				"deadline" => $dl,
+				"end" => $task->prop("end"),
 				"oid" => $task->id(),
 				"priority" => $task->prop("priority"),
 				"col" => $col,
@@ -800,6 +803,47 @@ class crm_company_overview_impl extends class_base
 			));
 		}
 		return $ol;
+	}
+
+	function _format_deadline($arg)
+	{
+		$o = obj($arg["oid"]);
+		if ($o->class_id() == CL_TASK)
+		{
+			if ($arg["deadline"] > 1000)
+			{
+				$arg["deadline"] = date("d.m.Y H:i", $arg["deadline"]);
+			}
+			else
+			{
+				return "";
+			}
+		}
+		else
+		if ($arg["end"] > 1000 && $arg["end"] > $arg["deadline"] && $arg["end"] != $arg["deadline"])
+		{
+			$d1 = date("d.m.Y", $arg["deadline"]);
+			$d2 = date("d.m.Y", $arg["end"]);
+			if ($d1 == $d2)
+			{
+				$arg["deadline"] = $d1."<br>".date("H:i", $arg["deadline"])." - ".date("H:i", $arg["end"]);
+			}
+			else
+			{
+				$arg["deadline"] = date("d.m.Y H:i", $arg["deadline"])." - ".date("d.m.Y H:i", $arg["end"]);
+			}
+		}
+		else
+		if ($arg["deadline"] > 1000)
+		{
+			$arg["deadline"] = date("d.m.Y H:i", $arg["deadline"]);
+		}
+		else
+		{
+			return "";
+		}
+
+		return $arg["deadline"];
 	}
 }
 ?>

@@ -246,3 +246,25 @@ function aw_date_edit_set_val(y,m,d)
 	aw_set_lb_val(d_el, d);
 	d_el.value = d;
 }
+
+function aw_get_url_contents(url)
+{
+	var req;
+	if (window.XMLHttpRequest) 
+	{
+		req = new XMLHttpRequest();
+		req.open('GET', url, false);
+		req.send(null);
+	} 
+	else 
+	if (window.ActiveXObject) 
+	{
+		req = new ActiveXObject('Microsoft.XMLHTTP');
+		if (req) 
+		{
+			req.open('GET', url, false);
+			req.send();
+		}
+	}
+	return req.responseText;
+}

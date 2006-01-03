@@ -137,6 +137,14 @@ function submit_changeform(action)
 {
 	changed = 0;
 	{VAR:submit_handler}
+
+	if (aw_submit_handler)
+	{
+		if (aw_submit_handler() == false)
+		{
+			return false;
+		}
+	}
 	if (typeof action == "string" && action.length>0)
 	{
 		document.changeform.action.value = action;

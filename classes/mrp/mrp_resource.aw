@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.82 2005/12/06 18:20:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.83 2006/01/03 16:50:44 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -808,7 +808,6 @@ class mrp_resource extends class_base
 		$dates = explode (";", $dates);
 		$separators = " ,.:/|-\\";
 		$period_start_year = date ("Y", $period_start);
-
 		foreach ($dates as $date)
 		{
 			$start_day = (int) strtok ($date, $separators);
@@ -1272,6 +1271,142 @@ class mrp_resource extends class_base
 		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
 		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
 		return (float) ("{$int}.{$dec}");
+	}
+
+	function get_events_for_range($resource, $start, $end)
+	{
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_PAUSED,
+			MRP_STATUS_INPROGRESS,
+		);
+
+		$list = new object_list(array(
+			"class_id" => CL_MRP_JOB,
+			"state" => $applicable_states,
+			"resource" => $resource->id (),
+			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $start, $end),
+		));
+
+		$ret = array();
+		if ($list->count () > 0)
+		{
+			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
+			{
+				if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+				{
+					continue;
+				}
+
+				### show only applicable projects' jobs
+				$project = obj ($job->prop ("project"));
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_PAUSED,
+					MRP_STATUS_INPROGRESS,
+					MRP_STATUS_DONE,
+				);
+
+				if (in_array ($project->prop ("state"), $applicable_states))
+				{
+					$project_name = $project->name () ? $project->name () : "...";
+
+					### set timestamp according to state
+					$timestamp = ($job->prop ("state") == MRP_STATUS_DONE) ? $job->prop ("started") : $job->prop ("starttime");
+
+					$ret[] = array(
+						"start" => $timestamp,
+						"end" => $timestamp + $job->prop("planned_length"),
+						"name" => $job->name()
+					);
+				}
+			}
+		}
+		$list = new object_list(array(
+			"class_id" => array(CL_CRM_MEETING, CL_TASK),
+			"CL_TASK.RELTYPE_RESOURCE" => $resource->id(),
+		));
+		foreach($list->arr() as $task)
+		{
+			if ($task->prop("start1") > $end || $task->prop("end") < $start)
+			{
+				continue;
+			}
+			$ret[] = array(
+				"start" => $task->prop("start1"),
+				"end" => $task->prop("end"),
+				"name" => $task->name()
+			);
+		}
+		
+		return $ret;
+	}
+
+	function is_available_for_range($resource, $start, $end)
+	{
+		$avail = true;
+		$evstr = "";
+		$ri = $resource->instance();
+		$events = $ri->get_events_for_range(
+			$resource, 
+			$start, 
+			$end
+		);
+		if (count($events))
+		{
+			$avail = false;
+			$evstr = t("Ressurss on valitud aegadel kasutuses:<br>");
+			foreach($events as $event)
+			{
+				$evstr .= date("d.m.Y H:i", $event["start"])." - ".
+						  date("d.m.Y H:i", $event["end"])."  ".$event["name"]."<br>";
+			}
+		}
+
+		if ($avail)
+		{
+			$una = $ri->get_unavailable_periods(
+				$resource, 
+				$start, 
+				$end
+			);
+
+			if (count($una))
+			{
+				$avail = false;
+				$evstr = t("Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>");
+				foreach($una as $event)
+				{
+					$evstr .= date("d.m.Y H:i", $event["start"])." - ".
+							  date("d.m.Y H:i", $event["end"]).": ".$event["name"];
+				}
+			}
+		}			
+
+		if ($avail)
+		{
+			$una = $ri->get_recurrent_unavailable_periods(
+				$resource, 
+				$start, 
+				$end
+			);
+			if (count($una))
+			{
+				$avail = false;
+				$evstr = t("Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>");
+				foreach($una as $event)
+				{
+					$evstr .= date("d.m.Y H:i", $event["start"])." - ".
+							  date("d.m.Y H:i", $event["end"])."<br>";
+				}
+			}
+		}
+		
+		if ($avail)
+		{
+			return true;
+		}
+		return $evstr;
 	}
 }
 

@@ -1854,7 +1854,7 @@ class user extends class_base
 
 	function username_is_taken($uid)
 	{
-		if (trim($this->db_fetch_field("SELECT uid FROM users WHERE uid = '$uid'", "uid")) == trim($uid))
+		if (trim($this->db_fetch_field("SELECT uid FROM users WHERE uid LIKE '$uid'", "uid")) != "")
 		{
 			return true;
 		}

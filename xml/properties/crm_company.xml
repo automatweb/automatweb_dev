@@ -2069,6 +2069,10 @@
                   <parent>people</parent>
                   <submit>no</submit>
             </personal_candits>
+            <resources>
+                  <caption>Ressursid</caption>
+                  <submit>no</submit>
+            </resources>
             <contacts>
                   <caption>Kontaktid</caption>
             </contacts>
@@ -2189,10 +2193,6 @@
                   <caption>Vaata</caption>
                   <submit>no</submit>
             </quick_view>
-            <resources>
-                  <caption>Ressursid</caption>
-                  <submit>no</submit>
-            </resources>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>

@@ -687,6 +687,7 @@ default group=org_objects
 	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no
 	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no
 
+@groupinfo resources caption="Ressursid"  submit=no
 @groupinfo contacts caption="Kontaktid"
 @groupinfo overview caption="Tegevused" 
 
@@ -727,7 +728,6 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @groupinfo stats caption="Statistika" submit_method=get
 @groupinfo quick_view caption="Vaata"  submit=no
-@groupinfo resources caption="Ressursid"  submit=no
 
 @groupinfo transl caption=T&otilde;lgi
 
@@ -1130,6 +1130,11 @@ class crm_company extends class_base
 		switch($data['name'])
 		{
 			/// GENERAL TAB
+			case "reg_nr":
+				// append link to go to thingie
+				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://info.eer.ee/ari/ariweb_package1.lihtparingu_vastus METHOD=POST ><INPUT TYPE=text NAME=paritud_arinimi><INPUT TYPE=text NAME=paritud_arir_kood></form>\" );win.document.forms[0].paritud_arinimi.value = document.changeform.name.value;win.document.forms[0].paritud_arir_kood = document.changeform.reg_nr.value;win.document.forms[0].submit();'>&Auml;riregistri p&auml;ring</a>";
+				break;
+
 			case "contact_person";
 			case "cust_contract_date";
 			case "referal_type";
@@ -4094,6 +4099,82 @@ class crm_company extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	/** 
+		@attrib name=get_company_count_by_name
+
+		@param co_name optional
+	**/
+	function get_company_count_by_name($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name" => $arr["co_name"],
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		die($ol->count()."\n");
+	}
+	
+	/**
+		@attrib name=go_to_first_co_by_name
+		@param co_name optional
+	**/
+	function go_to_first_co_by_name($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name" => $arr["co_name"],
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$o = $ol->begin();
+		header("Location: ".html::get_change_url($o->id())."&warn_conflicts=1");
+		die();
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		if (!$arr["new"])
+		{
+			if ($arr["request"]["warn_conflicts"] == 1)
+			{
+				// get conflicts list and warn user if there are any
+
+				// to do this, get all projects for this company that have the current company as a side
+				$u = get_instance(CL_USER);
+				$ol = new object_list(array(
+					"class_id" => CL_PROJECT,
+					"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->id(),
+					"CL_PROJECT.RELTYPE_SIDE" => $u->get_current_company(),
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				if ($ol->count())
+				{
+					return "alert('Konfliktsed projektid:\\n".join("\\n", $ol->names())."');";
+				}
+			}
+			return "";
+		}
+		return 
+		"function aw_submit_handler() {".
+		// fetch list of companies with that name and ask user if count > 0
+		"var url = '".$this->mk_my_orb("get_company_count_by_name")."';".
+		"url = url + '&co_name=' + document.changeform.name.value;".
+		"num= parseInt(aw_get_url_contents(url));".
+		"if (num >0)
+		{
+			var ansa = confirm('Sellise nimega organisatsioon on juba olemas. Kas soovite minna selle objekti muutmisele?');
+			if (ansa)
+			{
+				window.location = '".$this->mk_my_orb("go_to_first_co_by_name")."&co_name=' + document.changeform.name.value; 
+				return false;
+			}
+			return false;
+		}".
+		"return true;}";
 	}
 }
 ?>

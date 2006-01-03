@@ -208,6 +208,26 @@
             <cols>50</cols>
             <caption>Sisu</caption>
       </property>
+      <property>
+            <name>res_desc</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <caption>Ressursid</caption>
+      </property>
+      <property>
+            <name>resource_sel</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>Ressursid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_JOB_ENTRY</syslog_type>
             <no_comment>1</no_comment>

@@ -326,5 +326,21 @@
 			</function>
 		</action>
 
+		<action name="get_company_count_by_name">
+			<function name="get_company_count_by_name">
+				<arguments>
+					<optional name="co_name" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="go_to_first_co_by_name">
+			<function name="go_to_first_co_by_name">
+				<arguments>
+					<optional name="co_name" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

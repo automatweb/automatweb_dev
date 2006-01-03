@@ -3,4 +3,3 @@
 	<class name="crm_tax_rate" folder="applications/crm" extends="class_base">
 	</class>
 </orb>
-		

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.2 2005/11/22 10:52:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.3 2006/01/03 16:50:42 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -77,7 +77,11 @@
 @property task_content type=textarea rows=10 cols=50
 @caption Sisu
 
+@property res_desc type=text subtitle=1 
+@caption Ressursid
 
+@property resource_sel type=chooser multiple=1
+@caption Ressursid
 */
 
 class crm_job_entry extends class_base
@@ -145,6 +149,14 @@ class crm_job_entry extends class_base
 					CL_CRM_OFFER => $clss[CL_CRM_OFFER]["name"],
 				);
 				break;
+
+			case "resource_sel":
+				$u = get_instance(CL_USER);
+				$co = obj($u->get_current_company());
+				$i = $co->instance();
+				$res = $i->get_my_resources();
+				$prop["options"] = $res->names();
+				break;
 		};
 		return $retval;
 	}
@@ -155,6 +167,24 @@ class crm_job_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "resource_sel":
+				$ts = date_edit::get_timestamp($arr["request"]["task_start"]);
+				$te = date_edit::get_timestamp($arr["request"]["task_end"]);
+				if ($ts < 100 | $te < 100)
+				{
+					return PROP_IGNORE;
+				}
+				foreach(safe_array($prop["value"]) as $res)
+				{
+					$res = obj($res);
+					$i = $res->instance();
+					if (($desc = $i->is_available_for_range($res, $ts, $te)) !== true)
+					{
+						$prop["error"] = $res->name().": ".$desc;
+						return PROP_FATAL_ERROR;
+					}
+				}
+				break;
 		}
 		return $retval;
 	}	

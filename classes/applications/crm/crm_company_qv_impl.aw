@@ -127,6 +127,16 @@ class crm_company_qv_impl extends class_base
 				"state" => $pi->states[$o->prop("state")]
 			));
 		}
+		if ($ol->count() == 0)
+		{
+			$t->define_data(array(
+				"date" => "",
+				"name" => t("Valitud ajavahemikus ei ole &uuml;htegi projekti!"),
+				"parts" => "",
+				"grp_desc" => $bd,
+				"grp_num" => 3,
+			));
+		}
 		
 
 		// tasks
@@ -217,8 +227,18 @@ class crm_company_qv_impl extends class_base
 				"sum" => number_format($sum, 2),
 				"grp_desc" => $grpd,
 				"grp_num" => 2,
-				"state" => $o->prop("is_done") == 1 ? t("Tehtud") : t("T&ouml;&ouml;s"),
+				"state" => ($o->flags() & 8)  == 8 ? t("Tehtud") : t("T&ouml;&ouml;s"),
 				"sb" => $o->prop("start1")
+			));
+		}
+		if ($ol->count() == 0)
+		{
+			$t->define_data(array(
+				"date" => "",
+				"name" => t("Valitud ajavahemikus ei ole &uuml;htegi tegevust!"),
+				"parts" => "",
+				"grp_desc" => $bd,
+				"grp_num" => 3,
 			));
 		}
 
@@ -277,6 +297,16 @@ class crm_company_qv_impl extends class_base
 			));
 			$this->bills_sum += str_replace(",", "", $sum);
 			$this->hrs_on_bill += $hrs;
+		}
+		if ($ol->count() == 0)
+		{
+			$t->define_data(array(
+				"date" => "",
+				"name" => t("Valitud ajavahemikus ei ole &uuml;htegi arvet!"),
+				"parts" => "",
+				"grp_desc" => $bd,
+				"grp_num" => 3,
+			));
 		}
 		
 		$t->sort_by(array(

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.448 2005/12/30 10:10:47 kristo Exp $
+// $Id: class_base.aw,v 2.449 2006/01/03 16:50:42 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -786,6 +786,16 @@ class class_base extends aw_template
 			$cli->set_form_target(aw_global_get("changeform_target"));
 		}
 
+		if (method_exists($this, "callback_generate_scripts"))
+		{
+			$scripts = $this->callback_generate_scripts(array(
+				"request" => isset($this->request) ? $this->request : "",
+				"obj_inst" => &$this->obj_inst,
+				"groupinfo" => &$this->groupinfo,
+				"new" => $this->new,
+				"view" => $this->view,
+			));
+		}
 		$awt->start("final-bit");
 		$cli->finish_output(array(
 			"method" => $method,
@@ -797,6 +807,7 @@ class class_base extends aw_template
 			// should be focused by the output client
 			"focus" => $gdata["focus"],
 			"help" => "Siin tuleb üldine info selle tabi (grupi) kohta, aga seda pole veel kirjutatud. Proovi klikkida omaduste esitähtedel.",
+			"scripts" => $scripts
 		));
 
 		extract($args);

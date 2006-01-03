@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.47 2005/12/22 10:30:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.48 2006/01/03 16:50:42 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1510,6 +1510,20 @@ class task extends class_base
 	function _init_sel_res_t(&$t)
 	{
 		$t->define_field(array(
+			"name" => "cal",
+			"caption" => t("Kalender"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "events",
+			"caption" => t("Staatus"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 			"sortable" => 1,
@@ -1536,13 +1550,74 @@ class task extends class_base
 		$sel_ids = array_flip($sel_res->ids());
 		foreach($res->arr() as $r)
 		{
+			// get events for the resource 
+			$avail = true;
+			$evstr = "";
+			$ri = $r->instance();
+			$events = $ri->get_events_for_range(
+				$r, 
+				$arr["obj_inst"]->prop("start1"), 
+				$arr["obj_inst"]->prop("end")
+			);
+			if (count($events))
+			{
+				$avail = false;
+				$evstr = t("Ressurss on valitud aegadel kasutuses:<br>");
+				foreach($events as $event)
+				{
+					$evstr .= date("d.m.Y H:i", $event["start"])." - ".
+							  date("d.m.Y H:i", $event["end"])."  ".$event["name"]."<br>";
+				}
+			}
+
+			if ($avail)
+			{
+				$una = $ri->get_unavailable_periods(
+					$r, 
+					$arr["obj_inst"]->prop("start1"), 
+					$arr["obj_inst"]->prop("end")
+				);
+
+				if (count($una))
+				{
+					$avail = false;
+					$evstr = t("Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>");
+					foreach($una as $event)
+					{
+						$evstr .= date("d.m.Y H:i", $event["start"])." - ".
+								  date("d.m.Y H:i", $event["end"]).": ".$event["name"];
+					}
+				}
+			}			
+
+			if ($avail)
+			{
+				$una = $ri->get_recurrent_unavailable_periods(
+					$r, 
+					$arr["obj_inst"]->prop("start1"), 
+					$arr["obj_inst"]->prop("end")
+				);
+				if (count($una))
+				{
+					$avail = false;
+					$evstr = t("Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>");
+					foreach($una as $event)
+					{
+						$evstr .= date("d.m.Y H:i", $event["start"])." - ".
+								  date("d.m.Y H:i", $event["end"])."<br>";
+					}
+				}
+			}			
+
 			$t->define_data(array(
 				"name" => html::obj_change_url($r),
+				"cal" => html::get_change_url($r->id(), array("return_url" => get_ru(), "group" => "grp_resource_schedule"), t("Vaata")),
 				"sel" => html::checkbox(array(
 					"name" => "sel[".$r->id()."]",
 					"value" => 1,
 					"checked" => isset($sel_ids[$r->id()]) ? true : false
-				))
+				)),
+				"events" => ($avail ? t("Ressurss on vaba") : $evstr)
 			));
 		}
 	}

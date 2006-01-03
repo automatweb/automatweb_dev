@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.97 2005/12/29 22:06:42 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.98 2006/01/03 16:50:43 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2400,6 +2400,63 @@ class crm_person extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	/** 
+		@attrib name=get_person_count_by_name
+
+		@param co_name optional
+		@param ignore_id optional
+	**/
+	function get_person_count_by_name($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"name" => $arr["co_name"],
+			"lang_id" => array(),
+			"site_id" => array(),
+			"oid" => new obj_predicate_not($arr["ignore_id"])
+		));
+		die($ol->count()."\n");
+	}
+
+	/**
+		@attrib name=go_to_first_person_by_name
+		@param co_name optional
+	**/
+	function go_to_first_person_by_name($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"name" => $arr["co_name"],
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$o = $ol->begin();
+		header("Location: ".html::get_change_url($o->id()));
+		die();
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		return 
+		"function aw_submit_handler() {".
+		"if (document.changeform.firstname.value=='".$arr["obj_inst"]->prop("firstname")."' && document.changeform.lastname.value=='".$arr["obj_inst"]->prop("lastname")."') { return true; }".
+		// fetch list of companies with that name and ask user if count > 0
+		"var url = '".$this->mk_my_orb("get_person_count_by_name")."';".
+		"url = url + '&co_name=' + document.changeform.firstname.value + ' '+document.changeform.lastname.value + '&ignore_id=".$arr["obj_inst"]->id()."';".
+		"ct = aw_get_url_contents(url);".
+		"num= parseInt(ct);".
+		"if (num >0)
+		{
+			var ansa = confirm('Sellise nimega isik on juba olemas. Kas soovite minna selle objekti muutmisele?');
+			if (ansa)
+			{
+				window.location = '".$this->mk_my_orb("go_to_first_person_by_name")."&co_name=' + document.changeform.firstname.value + ' '+document.changeform.lastname.value; 
+				return false;
+			}
+		}".
+		"return true;}";
 	}
 }
 ?>
