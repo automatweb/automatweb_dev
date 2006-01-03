@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.22 2005/12/13 14:05:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.23 2006/01/03 13:37:45 markop Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -15,7 +15,7 @@
 	
 	@property mfrom_name type=hidden table=objects field=meta method=serialize
 	@caption Kellelt nimi
-	
+
 	@property mfrom type=relpicker reltype=RELTYPE_MAIL_ADDRESS no_sel=1 store=connect
 	@caption Kellelt
 	
@@ -196,6 +196,22 @@ class mail_message extends class_base
 		*/
 
 		$to_addr = $msgobj->prop("mto");
+		$from = $msgobj->prop("mfrom");
+		
+		if(is_oid($from) && $this->can("view", $from))
+		{
+			$adr = obj($from);
+			$address = $adr->prop("mail");
+			if($adr->class_id() == CL_ML_MEMBER)
+			{
+				$name = $adr->prop("name");
+			}
+			else
+			{
+				$name = $adr->name();
+			}
+		}		
+		
 		// jesus fucking christ, I hate this approach
 		// now I need to fix sending from lists as well. How tha fuck am I going to do that?
 		if (is_numeric($to_addr))
@@ -243,24 +259,14 @@ class mail_message extends class_base
 			$url = $mllist->route_post_message(array(
 				"id" => $this->id,
 				"targets" => $lists,
+//				"mfrom" => $mfrom,
 			));
 			Header("Location: $url");
 			die();
 		};
-		$from = $msgobj->prop("mfrom");
-		if(is_oid($from) && $this->can("view", $from))
-		{
-			$adr = obj($from);
-			$address = $adr->prop("mail");
-			if($adr->class_id() == CL_ML_MEMBER)
-			{
-				$name = $adr->prop("name");
-			}
-			else
-			{
-				$name = $adr->name();
-			}
-		}
+
+
+
 		if ($msgobj->prop("html_mail") == 1)
 		{
 			$this->awm->create_message(array(

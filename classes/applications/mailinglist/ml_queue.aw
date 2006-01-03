@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.22 2005/12/28 14:24:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.23 2006/01/03 13:37:45 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -143,7 +143,7 @@ class ml_queue extends aw_template
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
-			//echo("<pre>");print_r($row);echo("</pre>");//dbg
+			//("<pre>");print_r($row);echo("</pre>");//dbg
 			$listname = $lists[$row["lid"].":0"];
 			$groupids=explode("|",$row["gid"]);
 			$gnames=array();
@@ -435,6 +435,7 @@ class ml_queue extends aw_template
 	**/
 	function process_queue($arr)
 	{
+			
 		set_time_limit(0);
 		$sched = get_instance("scheduler");
 		$sched->add(array(
@@ -493,7 +494,6 @@ flush();
 				// during which the queue remains locked.
 				$stat = 1/*ML_QUEUE_IN_PROGRESS*/;
 				$c = 0;
-				//arr($qid);
 				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND (mail_sent IS NULL OR mail_sent = 0)";
 				echo "qx = $qx <br>";
 				$this->db_query($qx);
@@ -503,7 +503,6 @@ flush();
 					$msg_data = $this->db_next();
 					if ($msg_data)
 					{
-						//arr($msg_data);
 						$this->save_handle();
 						// 1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
 						echo "sending queue item..<br />\n";
@@ -560,9 +559,10 @@ flush();
 	}
 
 	////
-	//! Protsessib queue itemist $r järgmise liikme
+	//! Protsessib queue itemist 		echo $mailfrom;$r järgmise liikme
 	function do_queue_item($msg)
 	{
+	
 echo "queue item: ".dbg::dump($msg)." <br>";
 		$this->awm->clean();
 		if (!is_oid($msg["mail"]) || !$this->can("view", $msg["mail"]))
@@ -570,12 +570,13 @@ echo "queue item: ".dbg::dump($msg)." <br>";
 			echo "couldn't send mail<br />\n";
 			return;
 		}
-		$subject = $msg["subject"];
+		
 		$msg_obj = new object($msg["mail"]);
 		$is_html = $msg_obj->prop("html_mail") == 1024;
 		//$is_html=$msg["type"] & MSG_HTML;
+		$subject = $msg["subject"];
 		$message = $msg["message"];
-		if($is_html)
+		if($is_html) // && strpos("<br />" ,$message) !== true && strpos("<br>", $message) !== true)
 		{
 			$message = nl2br($message);
 		}
@@ -599,16 +600,16 @@ echo "queue item: ".dbg::dump($msg)." <br>";
 			$template = str_replace("#container#", $c_content, $template);
 			$message = str_replace("#content#", $message, $template);
 		}
-
 		// compatiblity with old messenger .. yikes
 		echo "from = {$msg["mailfrom"]}  <br />\n";
 		flush();
 echo dbg::dump($msg);
 		$this->awm->create_message(array(
+
 			"froma" => $msg["mailfrom"],
-			"subject" => $subject,
+			"subject" => $msg["subject"],
 			"To" => $msg["target"],
-			"Sender"=>"bounces@struktuur.ee",
+			//"Sender"=>"bounces@struktuur.ee",
 			"body" => $message,
 			//"body" => $is_html ? strip_tags(strtr($message,array("<br />" => "\r\n", "<br />" => "\r\n", "</p>" => "\r\n", "</p>" => "\r\n"))) : $message,
 		));
@@ -682,9 +683,14 @@ echo dbg::dump($msg);
 		{
 			$this->d = get_instance(CL_MESSAGE);
 		};
+		
 
 		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
 
+		if($arr["mfrom"])
+		{
+			$msg["mfrom"] = $arr["mfrom"];
+		}
 		$ml_list_inst = get_instance(CL_ML_LIST);
 		$list_obj = new object($arr["list_id"]);
 		$member_list = $ml_list_inst->get_members_ol($msg);
@@ -738,7 +744,6 @@ echo dbg::dump($msg);
 			"subject" => $arr["msg"]["subject"],
 			"traceid" => "?t=$vars",
 		);
-		
 		$this->used_variables = array();
 		$obj = obj($arr["member_id"]);
 		$user = reset($obj->connections_to(array(
@@ -761,12 +766,12 @@ echo dbg::dump($msg);
 			$adr = obj($from);
 			$address = $adr->prop("mail");
 		}
-		$mailfrom = $this->replace_tags($address, $data);
-		$mailfrom = trim($mailfrom);
+		
+		//$mailfrom = $this->replace_tags($address, $data);
+		$mailfrom = trim($address);
 		$subject = trim($subject);
-		$mailfrom = $arr["msg"]["meta"]["mfrom_name"] . " <" . $mailfrom . ">";
+		$mailfrom = $arr["msg"]["meta"]["mfrom_name"] . ' <' . $mailfrom . '>';
 		//$used_vars = array_keys($this->used_variables);
-
 		$mid = $arr["mail_id"];
 		$member_id = $arr["member_id"];
 		$lid = $arr["list_id"];
