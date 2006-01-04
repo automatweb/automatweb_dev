@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.41 2006/01/03 13:37:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.42 2006/01/04 11:56:49 markop Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -61,7 +61,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property import_textfile type=fileupload store=no
 @caption Impordi liikmed tekstifailist
 
-@property mass_subscribwrite_maile type=textarea rows=25 store=no
+@property mass_subscribe type=textarea rows=25 store=no
 @caption Massiline liitmine
 @comment Iga aadress eraldi real, nimi ja aadress komaga eraldatud
 
@@ -336,11 +336,26 @@ class ml_list extends class_base
 		$_start_at = date_edit::get_timestamp($start_at);
 		$_delay = $delay * 60;
 		$_patch_size = $patch_size;
-		$count = $this->get_member_count($list_id, $id);
-		$total++;
 
+		//$count = $this->get_member_count($list_id, $id);
+		$total++;
 		// mark the queue as "processing" - 5
 		$qid = $this->db_fetch_field("SELECT max(qid) as qid FROM ml_queue", "qid")+1;
+		
+		$count = 0;
+		$_members = $this->send_mail_members($list_id , $id);
+		$member_count = 0;
+		$temp_member_arr = array();
+		foreach($_members as $member => $id2)
+		{
+			if(!in_array($id2["name"] , $temp_member_arr))
+			{
+				$member_count++;
+				$temp_member_arr[] = $id2["name"];
+			}
+		}	
+		$count = $member_count;	
+		
 		$this->db_query("INSERT INTO ml_queue (qid,lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
 			VALUES ('$qid','$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
 
@@ -370,6 +385,7 @@ class ml_list extends class_base
 	**/
 	function subscribe($args = array())
 	{
+		arr($args);
 		$list_id = $args["id"];
 		$rel_id = $args["rel_id"];
 
@@ -416,7 +432,8 @@ class ml_list extends class_base
 		};
 		if(is_array($args["subscr_lang"]))
 		{
-			$lang_id = $list_obj->lang_id();
+//			$lang_id = $list_obj->lang_id();
+			$lang_id = aw_global_get("lang_id");
 			$temp_use_folders = array();
 			foreach ($args["subscr_lang"] as $user_lang => $user_lang_id)
 			{
@@ -433,11 +450,12 @@ class ml_list extends class_base
 							"type" => "RELTYPE_LANG_REL",
 							"to.lang_id" => $user_lang,
 						));
-						if(!is_array($conns))
+		//				arr($conns);
+						if(count($conns)<1)
 						{
 							$conns_to_orig = $o->connections_to(array(
-							"type" => "RELTYPE_LANG_REL",
-	//						"to.lang_id" => $user_lang,
+							"type" => 22,
+					//		"from.lang_id" => $user_lang,
 							));
 						}
 						
@@ -447,15 +465,17 @@ class ml_list extends class_base
 							{
 							 $temp_use_folders[] = $conn->prop("from");
 							}
-							$from_obj = obj($conn->prop("from"));
-							$conns = $from_obj->connections_to(array(
-								"type" => "RELTYPE_LANG_REL",
-								"to.lang_id" => $user_lang,
-							));
-							foreach($conns as $conn)
-							{
-								$temp_use_folders[] = $conn->prop("to");
-							}			
+							else {
+								$from_obj = obj($conn->prop("from"));
+								$conns = $from_obj->connections_from(array(
+									"type" => "RELTYPE_LANG_REL",
+									"to.lang_id" => $user_lang,
+								));
+								foreach($conns as $conn)
+								{
+									$temp_use_folders[] = $conn->prop("to");
+								}			
+							}
 						}						
 						
 						foreach($conns as $conn)
@@ -528,7 +548,6 @@ class ml_list extends class_base
 		{
 			if ($args["op"] == 1)
 			{
-
 				$retval = $ml_member->subscribe_member_to_list(array(
 					"name" => $args["name"],
 					"email" => $args["mail"],
@@ -924,6 +943,7 @@ class ml_list extends class_base
 	// list_id(id) - which list?
 	function mass_subscribe($arr)
 	{
+	//def_user_folder
 		aw_global_set("no_cache_flush", 1);
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
@@ -940,70 +960,72 @@ class ml_list extends class_base
 				continue;
 			}
 			$is_fold = true;
-			break;
-		}
-		if(!$is_fold)
-		{
-			return false;
-		}
-		$members = $this->get_all_members($fold);
-		$name = $fld_obj->name();
-		echo "Impordin kasutajaid kataloogi $fld / $name... <br />";
-		set_time_limit(0);
-		$ml_member = get_instance(CL_ML_MEMBER);
-		$cnt = 0;
-		if (sizeof($lines) > 0)
-		{
-			foreach($lines as $line)
-			{
-				$line = trim($line);
-				if (strlen($line) == 0)
-				{
-					continue;
-				}
-				if (strpos($line,",") !== false)
-				{
-					list($name,$addr) = explode(",", $line);
-				}
-				elseif (strpos($line,";") !== false)
-				{
-					list($name,$addr) = explode(";",$line);
-				}
-				else
-				{
-					$name = "";
-					$addr = $line;
-				}
-				$name = trim($name);
-				$addr = trim($addr);
+//			$use_folders[] = $fold;
+//			break;
 
-				if (is_email($addr) && !in_array($addr, $members))
+			if(!$is_fold)
+			{
+				return false;
+			}
+			$members = $this->get_all_members($fold);
+			$name = $fld_obj->name();
+			echo "Impordin kasutajaid kataloogi $fold / $name... <br />";
+			set_time_limit(0);
+			$ml_member = get_instance(CL_ML_MEMBER);
+			$cnt = 0;
+			if (sizeof($lines) > 0)
+			{
+				foreach($lines as $line)
 				{
-					print "OK - nimi: $name, aadress: $addr<br />";
-					flush();
-					$cnt++;
-					$retval = $ml_member->subscribe_member_to_list(array(
-						"name" => $name,
-						"email" => $addr,
-						"list_id" => $list_obj->id(),
-						"use_folders" => $fold,
-					));
-					usleep(500000);
-					$members[] = $addr;
-				}
-				elseif(in_array($addr, $members))
-				{
-					print "Juba olemas listis - nimi: $name, aadress: $addr<br />";
-					flush();
-				}
-				else
-				{
-					print "Vale aadress - nimi: $name, aadress: $addr<br />";
-					flush();
+					$line = trim($line);
+					if (strlen($line) == 0)
+					{
+						continue;
+					}
+					if (strpos($line,",") !== false)
+					{
+						list($name,$addr) = explode(",", $line);
+					}
+					elseif (strpos($line,";") !== false)
+					{
+						list($name,$addr) = explode(";",$line);
+					}
+					else
+					{
+						$name = "";
+						$addr = $line;
+					}
+					$name = trim($name);
+					$addr = trim($addr);
+	
+					if (is_email($addr) && !in_array($addr, $members))
+					{
+						print "OK - nimi: $name, aadress: $addr<br />";
+						flush();
+						$cnt++;
+						$retval = $ml_member->subscribe_member_to_list(array(
+							"name" => $name,
+							"email" => $addr,
+							"list_id" => $list_obj->id(),
+							"use_folders" => $fold,
+						));
+						usleep(500000);
+						$members[] = $addr;
+					}
+					elseif(in_array($addr, $members))
+					{
+						print "Juba olemas listis - nimi: $name, aadress: $addr<br />";
+						flush();
+					}
+					else
+					{
+						print "Vale aadress - nimi: $name, aadress: $addr<br />";
+						flush();
+					}
 				}
 			}
+			print "Importisin $cnt aadressi<br>";
 		}
-		print "Importisin $cnt aadressi<br>";
 		return true;
 	}
 
@@ -1817,23 +1839,62 @@ class ml_list extends class_base
 				{
 					$this->vars(array(
 						"folder_name" => $folder_obj -> name(),
-						"folder_id" => $folder_obj -> lang_id(),
+						"folder_id" => $folder_obj -> id(),
 					));
 					$c .= $this->parse("FOLDER");
 				}
+				
 				else
 				{
-					foreach($folders as $folder_conn)
+					if(count($folders)>1)
 					{
-						$conn_fold_obj = obj($folder_conn->prop("to"));
-						if(($langid == $conn_fold_obj->lang_id())&&($folder_conn->prop("from") == $folder))
+						foreach($folders as $folder_conn)
 						{
-							$this->vars(array(
-								"folder_name" => $folder_conn->prop("to.name"),
-								"folder_id" => $folder_conn->prop("to"),
-							));
-							$c .= $this->parse("FOLDER");
+							$conn_fold_obj = obj($folder_conn->prop("to"));
+							if(($langid == $conn_fold_obj->lang_id()) && ($folder_conn->prop("from") == $folder))
+							{
+								$this->vars(array(
+									"folder_name" => $folder_conn->prop("to.name"),
+									"folder_id" => $folder_conn->prop("to"),
+								));
+								$c .= $this->parse("FOLDER");
+							}
 						}
+					}
+					else
+					{
+						$conns_to_orig = $folder_obj->connections_to(array(
+							"type" => 22,
+//							"to.lang_id" => $langid,
+						));
+						
+						foreach($conns_to_orig as $conn)
+						{
+							if($conn->prop("from.lang_id") == $langid)
+							{
+								$this->vars(array(
+								"folder_name" => $conn->prop("from.name"),
+								"folder_id" => $conn->prop("from"),
+								));
+								$c .= $this->parse("FOLDER");
+							}
+							else 
+							{
+								$from_obj = obj($conn->prop("from"));
+								$conns = $from_obj->connections_from(array(
+									"type" => "RELTYPE_LANG_REL",
+									"to.lang_id" => $user_lang,
+								));
+								foreach($conns as $conn)
+								{
+									$this->vars(array(
+									"folder_name" => $conn->prop("to.name"),
+									"folder_id" => $conn->prop("to"),
+									));
+									$c .= $this->parse("FOLDER");
+								}			
+							}
+						}						
 					}
 				}
 			}
@@ -2023,12 +2084,12 @@ class ml_list extends class_base
 		// how many members have been served?	
 		$row = $this->db_fetch_row("SELECT count(*) AS cnt FROM ml_sent_mails WHERE lid = '$list_id' AND mail = '$mail_id'");
 		
-/*		$q = "SELECT * FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'";
+		$q = "SELECT * FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'";
 		
 		$this->db_query($q);
 		$qid=0;
 		$served_count = 0;
-		while ($row3 = $this->db_next())
+/*		while ($row3 = $this->db_next())
 		{
 			arr($row3);
 			if($row3[qid] = $qid)
@@ -2117,9 +2178,9 @@ class ml_list extends class_base
 			$msg_obj = new object($arr["request"]["msg_id"]);
 			$arr["obj_inst"]->set_prop("write_user_folder", $msg_obj->meta("list_source"));
 		}
-		
 		else
 		{
+			$arr["obj_inst"]->set_prop("write_user_folder", null);
 			$msg_obj = new object();
 			$msg_obj->set_class_id(CL_MESSAGE);
 			$folder = $arr["obj_inst"]->prop("msg_folder");
@@ -2235,27 +2296,53 @@ class ml_list extends class_base
 		#$msg_data["parent"] = $arr["obj_inst"]->parent();
 		$msg_data["mto"] = $arr["obj_inst"]->id();
 		$folder = $arr["obj_inst"]->prop("msg_folder");
-		if(!is_oid($msg_data["id"]) || !$this->can("view", $msg_data["id"]))
+		$mail_id = $msg_data["id"];
+		
+		$q = "SELECT DISTINCT m.mail FROM ml_sent_mails m LEFT JOIN objects ON (objects.oid = m.mail) WHERE objects.status != 0";
+		$fld = $arr["obj_inst"]->prop("msg_folder");
+		$mls = array();
+		$this->db_query($q);
+		while($w = $this->db_next())
 		{
+			$mls[] = $w["mail"];
+		}
+		$mails = new object_list(array(
+			"class_id" => CL_MESSAGE,
+			"parent" => !empty($fld) ? $fld : $arr["obj_inst"]->parent(),
+		));
+		foreach($mails->arr() as $mail)
+		{
+			if(!in_array($mail->id(), $mls))
+			{
+			if($mail_id == $mail->id() &&  is_oid($mail_id) && $this->can("delete", $mail_id))
+				{
+					$del_obj = new object($mail_id);
+					$del_obj->delete();
+				}
+			}
+		}
+
+
+//		if(!is_oid($msg_data["id"]) || !$this->can("view", $msg_data["id"]))
+//		{
 			$msg_obj = obj();
 			$msg_obj->set_parent((!empty($folder) ? $folder : $arr["obj_inst"]->parent()));
 			$msg_obj->set_class_id(CL_MESSAGE);
 			$msg_obj->save();
 			$msg_data["id"] = $msg_obj->id();
-		}
-		else
-		{
-			$msg_obj = obj($msg_data["id"]);
-		}
-		$tpl = $msg_data["template_selector"];
-		if ($msg_data["send_away"] == 1)
-		{
-			$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("write_user_folder"));
-		}
-		$writer = get_instance(CL_MESSAGE);
-		$writer->init_class_base();
-		// it does it's own redirecting .. duke
+//		}
 
+
+
+//		else
+//		{
+//			$msg_obj = obj($msg_data["id"]);
+//		}
+		$tpl = $msg_data["template_selector"];
+//		if ($msg_data["send_away"] == 1)
+//		{
+			$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("write_user_folder"));
+//		}
 		$msg_data["return"] = "id";
 		// no, it fucking does not!
 	
@@ -2286,12 +2373,14 @@ class ml_list extends class_base
 		}
 		
 		$msg_data["mfrom"] = $member_obj->id();
-		
-		$message_id = $writer->submit($msg_data);
-		
 		$msg_obj->set_prop("mfrom", $msg_data["mfrom"]);
 		$msg_obj->save();
-
+		
+		$writer = get_instance(CL_MESSAGE);
+		$writer->init_class_base();
+		// it does it's own redirecting .. duke
+		$message_id = $writer->submit($msg_data);
+		
 		if (is_oid($tpl) && $this->can("view", $tpl))
 		{
 			$msg_obj->set_meta("template_selector", $tpl);

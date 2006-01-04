@@ -149,7 +149,7 @@
             <caption>Impordi liikmed tekstifailist</caption>
       </property>
       <property>
-            <name>mass_subscribwrite_maile</name>
+            <name>mass_subscribe</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
