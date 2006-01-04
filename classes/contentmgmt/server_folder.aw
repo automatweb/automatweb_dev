@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.7 2005/11/21 15:52:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.8 2006/01/04 14:36:17 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -151,11 +151,10 @@ class server_folder extends class_base
 		$o = obj($oid);
 		$old_fqfn = $o->prop("folder")."/".urldecode(basename($fname));
 		$new_fqfn = $o->prop("folder")."/".urldecode(basename($_FILES["chf_file"]["name"]));
-
 		if (is_uploaded_file($_FILES["chf_file"]["tmp_name"]))
 		{
 			move_uploaded_file($_FILES["chf_file"]["tmp_name"], $new_fqfn);
-			@unlink($old_fqfn);
+			unlink($old_fqfn);
 			$fid = $oid.":".basename($_FILES["chf_file"]["name"]);
 		}
 
@@ -324,6 +323,7 @@ class server_folder extends class_base
 			$dir = $this->_get_safe_path($ob,$tv_sel);
 		}
 
+		$nmps = aw_ini_get("server.name_mappings");
 		$list = array();
 		if ($dh = @opendir($dir)) 
 		{
@@ -336,6 +336,21 @@ class server_folder extends class_base
 					$adder = $udata["name"];
 					$file_p = str_replace($ob->prop("folder"), "", $fn);
 					$fid = $ob->id().":".$file_p;
+
+					if ($params["get_server_paths"])
+					{
+						$url = $fn;
+						foreach($nmps as $_sname => $_spath)
+						{
+							$url = str_replace($_spath, $_sname, $url);
+						}
+						$url = "file://".str_replace("/", "\\", $url);
+						$iurl = $this->mk_my_orb("show_file", array("fid" => $fid));
+					}
+					else
+					{
+						$url = $iurl = $this->mk_my_orb("show_file", array("fid" => $fid));
+					}
 					$list[$file_p] = array(
 						"id" => $file_p,
 						"name" => $file,
@@ -346,7 +361,9 @@ class server_folder extends class_base
 						"modder" => $adder,
 						"icon" => image::make_img_tag(icons::get_icon_url(CL_FILE, $fn)),
 						"jrk" => $num++,
-						"url" => $this->mk_my_orb("show_file", array("fid" => $fid)),
+						"url" => $url,
+						"inet_url" => $iurl,
+						"change_url" => $this->mk_my_orb("change_file", array("fid" => $fid, "section" => aw_global_get("section"))),
 						/*"change" => html::href(array(
 							"url" => $this->mk_my_orb("change_file", array("fid" => $fid, "section" => aw_global_get("section"))),
 							"caption" => html::img(array(

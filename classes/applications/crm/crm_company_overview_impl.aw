@@ -57,6 +57,36 @@ class crm_company_overview_impl extends class_base
 			"overview_func" => array(&$this,"get_overview"),
 		));
 
+		$p = get_instance(CL_PLANNER);
+		$cal = $p->get_calendar_for_user();
+		if ($cal)
+		{
+			$calo = obj($cal);
+			if (!$arr["request"]["viewtype"])
+			{
+				$arr["request"]["viewtype"] = $p->viewtypes[$calo->prop("default_view")];
+			}
+
+			$wds = safe_array($calo->prop("workdays"));
+			$full_weeks = false;
+			// if no workdays are defined, use all of them
+			for($wd = 1; $wd <= 7; $wd++)
+			{
+				if(!$wds[$wd])
+				{
+					$full_weeks = false;
+					break;
+				}	
+				else
+				{
+					$full_weeks = true;
+				}
+			}
+			$arr["prop"]["vcl_inst"]->configure(array(
+				"full_weeks" => $full_weeks
+			));
+		}
+
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
 			"viewtype" => !empty($arr["request"]["viewtype"]) ? $arr["request"]["viewtype"] : $arr["prop"]["viewtype"],
@@ -454,15 +484,15 @@ class crm_company_overview_impl extends class_base
 
 	function _get_tasks_search_filt($r, $tasks, $clid)
 	{
-		if (count($tasks) == 0)
-		{
-			$tasks = -1;
-		}
 		$res = array(
 			"class_id" => $clid,
 			"brother_of" => new obj_predicate_prop("id")
-			//"oid" => $tasks
 		);
+		if (count($tasks))
+		{
+			$res["oid"] = $tasks;
+		}
+
 		$clss = aw_ini_get("classes");
 		if (is_array($clid))
 		{
@@ -505,7 +535,10 @@ class crm_company_overview_impl extends class_base
 				$oids = array();
 				foreach($conns as $con)
 				{
-					$oids[] = $con["to"];
+					if (!isset($res["oid"]) || isset($res["oid"][$con["to"]]))
+					{
+						$oids[] = $con["to"];
+					}
 				}
 
 				if (count($oids))
@@ -720,6 +753,9 @@ class crm_company_overview_impl extends class_base
 
 	function _get_task_list($arr)
 	{
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+
 		$i = get_instance(CL_CRM_COMPANY);
 		$clid = NULL;
 		switch($arr["request"]["group"])
@@ -744,8 +780,6 @@ class crm_company_overview_impl extends class_base
 				break;
 
 			default:
-				$u = get_instance(CL_USER);
-				$co = $u->get_current_company();
 				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
 
 				if ($co == $arr["obj_inst"]->id())
@@ -769,10 +803,9 @@ class crm_company_overview_impl extends class_base
 
 					$ol2 = new object_list(array(
 						"class_id" => $clid,
-                                        "customer" => $arr["obj_inst"]->id()
+						"customer" => $arr["obj_inst"]->id()
 					));
 					$ol->add($ol2);
-
 					$tasks = $this->make_keys($ol->ids());
 				}
 				break;
@@ -780,7 +813,12 @@ class crm_company_overview_impl extends class_base
 		if ($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1)
 		{
 			// filter
-			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $tasks, $clid));
+			$param = $tasks;
+			if ($co == $arr["obj_inst"]->id())
+			{
+				$param = array();
+			}
+			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $param, $clid));
 		}
 		else
 		{

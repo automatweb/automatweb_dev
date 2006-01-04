@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.50 2006/01/03 20:58:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.51 2006/01/04 14:36:16 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -281,6 +281,18 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "start1":
+			case "end":
+			case "deadline":
+				$p = get_instance(CL_PLANNER);
+				$cal = $p->get_calendar_for_user();
+				if ($cal)
+				{
+					$calo = obj($cal);
+					$data["minute_step"] = $calo->prop("minute_step");
+				}
+				break;
+
 			case "sel_resources":
 				$this->_get_sel_resources($arr);
 				break;

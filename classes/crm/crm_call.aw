@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.27 2005/11/28 13:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.28 2006/01/04 14:36:17 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -121,6 +121,17 @@ class crm_call extends class_base
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
+			case "start1":
+			case "end":
+				$p = get_instance(CL_PLANNER);
+				$cal = $p->get_calendar_for_user();
+				if ($cal)
+				{
+					$calo = obj($cal);
+					$data["minute_step"] = $calo->prop("minute_step");
+				}
+				break;
+
 			case 'info_on_object':
 				$crm_person = get_instance(CL_CRM_PERSON);
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))

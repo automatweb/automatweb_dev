@@ -287,17 +287,29 @@ class crm_company_cust_impl extends class_base
 		}
 		else
 		{
-			if ($arr["request"]["customer_search_submit"] != "")
+			// different for customer vs my co. 
+			$u = get_instance(CL_USER);
+			$co = $u->get_current_company();
+			if ($arr["obj_inst"]->id() == $co)
 			{
-				$ol = new object_list($this->_get_customer_search_filter($arr["request"]));
-				$orglist = $this->make_keys($ol->ids());
+				if ($arr["request"]["customer_search_submit"] != "")
+				{
+					$ol = new object_list($this->_get_customer_search_filter($arr["request"]));
+					$orglist = $this->make_keys($ol->ids());
+				}
+				else
+				{
+					$u = get_instance(CL_USER);
+					$p = obj($u->get_current_person());
+					$ol = new object_list($this->_get_customer_search_filter(array("customer_search_cust_mgr" => $p->name())));
+					$orglist = $this->make_keys($ol->ids());
+				}
 			}
 			else
 			{
-				$u = get_instance(CL_USER);
-				$p = obj($u->get_current_person());
-				$ol = new object_list($this->_get_customer_search_filter(array("customer_search_cust_mgr" => $p->name())));
-				$orglist = $this->make_keys($ol->ids());
+				// get all companies that are customers of THAT company
+				$d = get_instance("applications/crm/crm_data");
+				$orglist = $d->get_customers_for_company($arr["obj_inst"]);
 			}
 		}
 

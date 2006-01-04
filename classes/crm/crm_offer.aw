@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.43 2005/11/28 13:20:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.44 2006/01/04 14:36:17 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -161,6 +161,16 @@ class crm_offer extends class_base
 		
 		switch($prop["name"])
 		{
+			case "start1":
+				$p = get_instance(CL_PLANNER);
+				$cal = $p->get_calendar_for_user();
+				if ($cal)
+				{
+					$calo = obj($cal);
+					$data["minute_step"] = $calo->prop("minute_step");
+				}
+				break;
+
 			case "preformer":
 				if (($arr["new"] || $_GET["group"] == "add_event") && !$prop["value"])
 				{

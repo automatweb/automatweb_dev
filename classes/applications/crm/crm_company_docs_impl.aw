@@ -212,6 +212,12 @@ class crm_company_docs_impl extends class_base
 			"format" => "d.m.Y H:i"
 		));
 
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "pop",
+			"align" => "center"
+		));
+
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel"
@@ -226,14 +232,32 @@ class crm_company_docs_impl extends class_base
 		{
 			$sf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
 			$i = $sf->instance();
-			$ob = $i->get_objects($sf, NULL, $_GET["files_from_fld"]);
+			$ob = $i->get_objects($sf, NULL, $_GET["files_from_fld"], array(
+				"get_server_paths" => true
+			));
 			foreach($ob as $nm => $dat)
 			{
+				$pm = get_instance("vcl/popup_menu");
+				$pm->begin_menu("sf".$dat["id"]);
+
+				$pm->add_item(array(
+					"text" => t("Ava internetist"),
+					"link" => $dat["inet_url"]
+				));
+				$pm->add_item(array(
+					"text" => t("Ava serverist"),
+					"link" => $dat["url"]
+				));
+				$pm->add_item(array(
+					"text" => t("Laadi uus versioon"),
+					"link" => $dat["change_url"]
+				));
 				$t->define_data(array(
 					"name" => html::href(array("url" => $dat["url"], "caption" => $dat["name"])),
 					"created" => $dat["add_date"],
 					"modified" => $dat["mod_date"],
-					"createdby" => $dat["adder"]
+					"createdby" => $dat["adder"],
+					"pop" => $pm->get_menu()
 				));
 			}
 			return;

@@ -328,6 +328,15 @@
             <caption>Kas isikud on kasutajad</caption>
       </property>
       <property>
+            <name>server_folder</name>
+            <table>objects</table>
+            <group>user_settings</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kataloog serveris, kus asuvad failid</caption>
+      </property>
+      <property>
             <name>contact_toolbar</name>
             <table>objects</table>
             <group>contacts2</group>
@@ -2019,6 +2028,17 @@
             <field>transl</field>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
+      <property>
+            <name>forum</name>
+            <table>objects</table>
+            <group>documents_forum</group>
+            <type>callback</type>
+            <callback>callback_gen_forum</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>forum</field>
+            <caption>Foorumi sisu</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
@@ -2043,7 +2063,7 @@
                   <parent>general</parent>
             </add_info>
             <user_settings>
-                  <caption>Kasutajate seaded</caption>
+                  <caption>Seaded</caption>
                   <parent>general</parent>
             </user_settings>
             <special_offers>
@@ -2146,21 +2166,22 @@
                   <caption>Pildid</caption>
                   <submit>yes</submit>
             </org_images>
-            <documents>
-                  <caption>Dokumendid</caption>
-                  <submit>no</submit>
-            </documents>
             <documents_all>
                   <caption>Dokumendid</caption>
                   <submit>no</submit>
-                  <parent>documents</parent>
+                  <parent>general</parent>
             </documents_all>
             <documents_news>
                   <caption>Uudised</caption>
                   <submit>no</submit>
-                  <parent>documents</parent>
+                  <parent>general</parent>
                   <submit_method>get</submit_method>
             </documents_news>
+            <documents_forum>
+                  <caption>Foorum</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </documents_forum>
             <bills>
                   <caption>Arved</caption>
                   <submit>no</submit>
@@ -2483,6 +2504,11 @@
                   <clid>CL_CRM_NUMBER_SERIES</clid>
                   <caption>Numbriseeria</caption>
             </NUMBER_SERIES>
+            <FORUM>
+                  <value>58</value>
+                  <clid>CL_FORUM_V2</clid>
+                  <caption>Foorum</caption>
+            </FORUM>
       </reltypes>
       <layout>
             <hbox_toolbar>

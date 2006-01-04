@@ -122,6 +122,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create
 	@property do_create_users type=checkbox ch_value=1 table=objects field=meta method=serialize group=user_settings
 	@caption Kas isikud on kasutajad
 
+	@property server_folder type=textbox table=objects field=meta method=serialize group=user_settings
+	@caption Kataloog serveris, kus asuvad failid
+
 --------------------------------------
 @default group=contacts2
 
@@ -674,12 +677,17 @@ default group=org_objects
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
+@default group=documents_forum
+
+	@property forum type=callback callback=callback_gen_forum store=no no_caption=1
+	@caption Foorumi sisu
+
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
 @groupinfo org_sections caption="Tegevus" parent=general
 @groupinfo add_info caption="Lisainfo" parent=general
-@groupinfo user_settings caption="Kasutajate seaded" parent=general
+@groupinfo user_settings caption="Seaded" parent=general
 @groupinfo special_offers caption="Eripakkumised" submit=no parent=general
 @groupinfo people caption="T&ouml;&ouml;tajad"
 
@@ -715,9 +723,11 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @groupinfo org_images caption="Pildid" submit=yes
 
-@groupinfo documents caption="Dokumendid" submit=no
-	@groupinfo documents_all caption="Dokumendid" submit=no parent=documents
-	@groupinfo documents_news caption="Uudised" submit=no parent=documents submit_method=get
+groupinfo documents caption="Dokumendid" submit=no
+
+	@groupinfo documents_all caption="Dokumendid" submit=no parent=general
+	@groupinfo documents_news caption="Uudised" submit=no parent=general submit_method=get
+	@groupinfo documents_forum caption="Foorum" submit=no parent=general 
 
 @groupinfo bills caption="Arved" submit=no
 
@@ -892,6 +902,9 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @reltype NUMBER_SERIES value=57 clid=CL_CRM_NUMBER_SERIES
 @caption Numbriseeria
+
+@reltype FORUM value=58 clid=CL_FORUM_V2
+@caption Foorum
 
 */
 /*
@@ -1130,6 +1143,11 @@ class crm_company extends class_base
 		switch($data['name'])
 		{
 			/// GENERAL TAB
+			case "name":
+				//$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
+				//$data["autocomplete_params"] = array("name");
+				break;
+
 			case "reg_nr":
 				// append link to go to thingie
 				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://info.eer.ee/ari/ariweb_package1.lihtparingu_vastus METHOD=POST ><INPUT TYPE=text NAME=paritud_arinimi><INPUT TYPE=text NAME=paritud_arir_kood></form>\" );win.document.forms[0].paritud_arinimi.value = document.changeform.name.value;win.document.forms[0].paritud_arir_kood = document.changeform.reg_nr.value;win.document.forms[0].submit();'>&Auml;riregistri p&auml;ring</a>";
@@ -1674,6 +1692,10 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "server_folder":
+				$this->_proc_server_folder($arr);
+				break;
+
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
@@ -4207,6 +4229,78 @@ class crm_company extends class_base
 			return false;
 		}".
 		"return true;}";
+	}
+
+	function callback_gen_forum($arr)
+	{
+		// check/create forum
+		$forum = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FORUM");
+		if (!$forum)
+		{
+			$o = obj();
+			$o->set_class_id(CL_FORUM_V2);
+			$o->set_parent($arr["obj_inst"]->id());
+			$o->set_name(sprintf(t("%s foorum"), $arr["obj_inst"]->name()));
+			$o->save();
+			$arr["obj_inst"]->connect(array(
+				"to" => $o->id(),
+				"type" => "RELTYPE_FORUM"
+			));
+
+			$fi = $o->instance();
+			$fi->callback_post_save(array(
+				"obj_inst" => $o,
+				"request" => array("new" => 1)
+			));
+			$forum = $o;
+		}
+
+		$fi = $forum->instance();
+		return $fi->callback_gen_contents(array(
+			"obj_inst" => $forum,
+			"request" => $arr["request"],
+		));
+	}
+
+	function _proc_server_folder($arr)
+	{
+		if ($arr["prop"]["value"] == "")
+		{
+			return;
+		}
+
+		if ($arr["prop"]["value"] == $arr["obj_inst"]->prop("server_folder"))
+		{
+			return;
+		}
+
+		// if changed, recreate
+		$srv = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
+		if (!$srv)
+		{
+			$srv = obj();
+			$srv->set_class_id(CL_SERVER_FOLDER);
+			$srv->set_parent($arr["obj_inst"]->id());
+			$srv->set_name(sprintf(t("%s serveri failid"), $arr["obj_inst"]->name()));
+		}
+
+		$srv->set_prop("folder", $arr["prop"]["value"]);
+		$srv->save();
+	}
+
+	/**
+		@attrib name=name_autocomplete_source
+		@param name optional
+	**/
+	function name_autocomplete_source($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name" => $arr["name"]."%",
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		die(join("\n", $ol->names())."\n");
 	}
 }
 ?>

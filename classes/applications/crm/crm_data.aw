@@ -89,5 +89,30 @@ class crm_data extends class_base
 		}
 		return $ret;
 	}
+
+	///////////////// customers
+
+	/** returns customers for company 
+	**/
+	function get_customers_for_company($co)
+	{
+		$ret = array();
+		$this->_int_req_get_cust_co($co, $ret);
+
+		return $ret;
+	}
+
+	function _int_req_get_cust_co($co, &$ret)
+	{
+		foreach($co->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		{
+			$ret[$c->prop("to")] = $c->prop("to");
+		}
+		
+		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
+		{
+			$this->_int_req_get_cust_co($c->to(), $ret);
+		}
+	}
 }
 ?>
