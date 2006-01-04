@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.42 2006/01/04 11:56:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.43 2006/01/04 13:32:38 markop Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -385,7 +385,6 @@ class ml_list extends class_base
 	**/
 	function subscribe($args = array())
 	{
-		arr($args);
 		$list_id = $args["id"];
 		$rel_id = $args["rel_id"];
 
@@ -450,7 +449,7 @@ class ml_list extends class_base
 							"type" => "RELTYPE_LANG_REL",
 							"to.lang_id" => $user_lang,
 						));
-		//				arr($conns);
+						
 						if(count($conns)<1)
 						{
 							$conns_to_orig = $o->connections_to(array(
@@ -1898,21 +1897,6 @@ class ml_list extends class_base
 					}
 				}
 			}
-
-/*
-			foreach($folders as $folder_conn)
-			{
-				$folder_obj = obj($folder_conn->prop("to"));
-				if(($langid == $folder_obj->lang_id())&&(in_array($folder_conn->prop("to"), $choose_menu)))
-				{
-					$this->vars(array(
-						"folder_name" => $folder_conn->prop("to.name"),
-						"folder_id" => $folder_conn->prop("to"),
-					));
-					$c .= $this->parse("FOLDER");
-				}
-			}
-*/			
 			
 			
 			$this->vars(array(
@@ -2089,20 +2073,8 @@ class ml_list extends class_base
 		$this->db_query($q);
 		$qid=0;
 		$served_count = 0;
-/*		while ($row3 = $this->db_next())
-		{
-			arr($row3);
-			if($row3[qid] = $qid)
-			{
-				$served_count++;
-			}
-			else
-			{
-				$served_count = 1;
-				$qid = $row3[qid];
-			}	
-		}
-*/		$q2 = "SELECT * FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'";
+		
+		$q2 = "SELECT * FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'";
 		$row2 = $this->db_fetch_row("SELECT * FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");
 		
 
