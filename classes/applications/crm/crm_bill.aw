@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.18 2006/01/03 19:19:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.19 2006/01/04 11:06:24 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -226,8 +226,15 @@ class crm_bill extends class_base
 				$inf = array();
 				foreach(safe_array($arr["request"]["rows"]) as $idx => $e)
 				{
-					list($d,$m,$y) = explode("/", $e["date"]);
-					$e["date"] = mktime(0,0,0, $m, $d, $y);
+					if (trim($e["date"]) == "")
+					{
+						$e["date"] = -1;
+					}
+					else
+					{
+						list($d,$m,$y) = explode("/", $e["date"]);
+						$e["date"] = mktime(0,0,0, $m, $d, $y);
+					}
 					$e["sum"] = $this->num($e["price"]) * $this->num($e["amt"]);
 					$inf[$idx] = $e;
 				}	
@@ -254,10 +261,10 @@ class crm_bill extends class_base
 			"caption" => t("Nimetus"),
 		));
 
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "code",
 			"caption" => t("Kood")
-		));
+		));*/
 
 		$t->define_field(array(
 			"name" => "date",
@@ -286,7 +293,7 @@ class crm_bill extends class_base
 
 		$t->define_field(array(
 			"name" => "prod",
-			"caption" => t("Toode")
+			"caption" => t("Artikkel")
 		));
 		$t->define_field(array(
 			"name" => "has_tax",
@@ -345,7 +352,7 @@ class crm_bill extends class_base
 					)),
 					"date" => html::textbox(array(
 						"name" => "rows[$id][date]",
-						"value" => date("d/m/y", $t_inf["date"]),
+						"value" => $t_inf["date"] > 100 ? date("d/m/y", $t_inf["date"]) : "",
 						"size" => 10
 					)),
 					"unit" => html::textbox(array(
@@ -885,7 +892,7 @@ class crm_bill extends class_base
 				"price" => number_format($row["price"], 2),
 				"sum" => number_format($cur_sum, 2),
 				"desc" => $row["name"],
-				"date" => date("d.m.Y", $row["date"]) 
+				"date" => $row["date"] > 1000 ? date("d.m.Y", $row["date"]) : "" 
 			));
 			$rs .= $this->parse("ROW");
 
