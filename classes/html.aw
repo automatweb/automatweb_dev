@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.90 2005/12/14 09:06:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.91 2006/01/04 20:46:15 voldemar Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -134,11 +134,11 @@ class html extends aw_template
 			if ($option_is_tuple)
 			{
 				// return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"{$name}-awAutoCompleteTextbox\" size=\"40\" value=\"$content\" onfocus=\"{$get_autocomplete}\" onchange=\"{$select_autocomplete}\" $disabled $textsize />\n<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n" . $autocomplete_init;//IE6-s viga -- onchange ei esine kui programmaatiliselt elem. sisu muudetakse
-				return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"{$name}-awAutoCompleteTextbox\" size=\"40\" value=\"$content\" onfocus=\"{$get_autocomplete}\" {$select_autocomplete} $onkeypress $disabled $textsize />\n<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n" . $autocomplete_init;
+				return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"{$name}-awAutoCompleteTextbox\" size=\"{$size}\" value=\"{$content}\" onfocus=\"{$get_autocomplete}\" {$select_autocomplete} $onkeypress $disabled $textsize />\n<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n" . $autocomplete_init;
 			}
 			else
 			{
-				return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" onfocus=\"{$get_autocomplete}\" $onkeypress $disabled $textsize />\n" . $autocomplete_init;
+				return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" onfocus=\"{$get_autocomplete}\" $onkeypress $disabled $textsize />\n" . $autocomplete_init;
 			}
 		}
 		else
