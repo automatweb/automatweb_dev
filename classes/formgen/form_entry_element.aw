@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.16 2005/03/20 16:48:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.17 2006/01/05 08:39:05 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -203,7 +203,7 @@ class form_entry_element extends form_element
 		if ($this->arr["type"] == "textbox")
 		{
 			$src = ($this->form->arr["allow_html"]) ? $this->entry : htmlspecialchars($this->entry);
-			if (strpos($src, "<a h") === false)
+			if (strpos($src, "<a h") === false && !$this->arr["value_controller"])
 			{
 				$src = trim(create_links(" ".$src." " ));
 			}
@@ -289,20 +289,24 @@ class form_entry_element extends form_element
 				}
 			}
 		}
-
 		if ($this->arr["type"] == "file")
 		{
 			classload("file");
 			if ($this->entry["url"] != "")	
 			{
+				$furl = file::check_url($this->entry["url"]);
+				if (substr($furl, 0, 4) != "http")
+				{
+					$furl = aw_ini_get("baseurl").$furl;
+				}
 				if ($this->arr["ftype"] == 1)
 				{
-					$html.="<img src='".file::check_url($this->entry["url"])."'>";
+					$html.="<img src='".$furl."'>";
 				}
 				else
 				{
 					$linktext = ($this->entry["name"]) ? $this->entry["name"] : $this->arr["flink_text"];
-					$html.="<a target='_new' href='".file::check_url($this->entry["url"])."'>".$linktext."</a>";
+					$html.="<a target='_new' href='".$furl."'>".$linktext."</a>";
 				}
 			}
 		}
