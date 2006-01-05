@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.32 2005/12/09 09:57:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.33 2006/01/05 11:08:45 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -95,14 +95,12 @@ class period extends class_base
 		switch($data["name"])
 		{
 			case "pyear":
-				$data["options"] = array(
-					2000 => 2000,
-					2001 => 2001,
-					2002 => 2002,
-					2003 => 2003,
-					2004 => 2004,
-					2005 => 2005,
-				);
+				$opt = array();
+				for($i = date("Y")-5; $i < date("Y")+6; $i++)
+				{
+					$opt[$i] = $i;
+				}
+				$data["options"] = $opt; 
 				break;
 
 			case "preview":
