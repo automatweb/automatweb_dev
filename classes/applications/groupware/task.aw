@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.51 2006/01/04 14:36:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.52 2006/01/05 11:49:11 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -34,8 +34,14 @@
 @property deadline type=datetime_select table=planner field=deadline 
 @caption T&auml;htaeg
 
-@property whole_day type=checkbox ch_value=1 field=meta method=serialize
+@layout personal type=hbox
 @caption Kestab terve päeva
+
+
+	@property whole_day type=checkbox ch_value=1 field=meta method=serialize parent=personal no_caption=1
+
+	@property is_personal type=checkbox ch_value=1 field=meta method=serialize parent=personal no_caption=1
+	@caption Isiklik
 
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
 @caption Saata arve
@@ -278,6 +284,14 @@ class task extends class_base
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
+		if ($arr["obj_inst"]->prop("is_personal") && aw_global_get("uid") != $arr["obj_inst"]->createdby())
+		{
+			if (!($arr["prop"]["name"] == "start1" || $arr["prop"]["name"] == "end" || $arr["prop"]["name"] == "deadline"))
+			{
+				return PROP_IGNORE;
+			}
+		}
+
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -1813,6 +1827,18 @@ class task extends class_base
 	{
 		$p = get_instance(CL_PLANNER);
 		return $p->save_participant_search_results($arr);
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["obj_inst"]->prop("is_personal") && aw_global_get("uid") != $arr["obj_inst"]->createdby())
+		{
+			if ($arr["id"] != "general")
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 }
 ?>

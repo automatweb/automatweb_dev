@@ -91,7 +91,20 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kestab terve p&amp;auml;eva</caption>
+            <parent>personal</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>is_personal</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>personal</parent>
+            <no_caption>1</no_caption>
+            <caption>Isiklik</caption>
       </property>
       <property>
             <name>send_bill</name>
@@ -491,6 +504,11 @@
             </BILL>
       </reltypes>
       <layout>
+            <personal>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <caption>Kestab terve p&amp;auml;eva</caption>
+            </personal>
             <num_hrs>
                   <type>hbox</type>
                   <group>general</group>

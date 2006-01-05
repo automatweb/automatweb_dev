@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.45 2006/01/04 14:36:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.46 2006/01/05 11:49:11 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -20,6 +20,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
+
+@property is_personal type=checkbox ch_value=1 field=meta method=serialize 
+@caption Isiklik
 
 @property start1 type=datetime_select field=start table=planner 
 @caption Algab 
@@ -133,6 +136,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 	@property sel_resources type=table no_caption=1
 
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
+
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
 @groupinfo others caption=Teised
@@ -140,6 +148,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @groupinfo comments caption=Kommentaarid
 @groupinfo participants caption=Osalejad submit=no
 @groupinfo resources caption="Ressursid" 
+@groupinfo transl caption=T&otilde;lgi
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
@@ -160,10 +169,22 @@ class crm_meeting extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_MEETING,
 		));
+
+		$this->trans_props = array(
+			"name", "comment", "content"
+		);
 	}
 
 	function get_property($arr)
 	{
+		if ($arr["obj_inst"]->prop("is_personal") && aw_global_get("uid") != $arr["obj_inst"]->createdby())
+		{
+			if (!($arr["prop"]["name"] == "start1" || $arr["prop"]["name"] == "end" || $arr["prop"]["name"] == "deadline"))
+			{
+				return PROP_IGNORE;
+			}
+		}
+
 		$data = &$arr['prop'];
 		switch($data['name'])
 		{
@@ -484,6 +505,10 @@ class crm_meeting extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "sel_resources":
 				$t = get_instance(CL_TASK);
 				$t->_set_resources($arr);
@@ -707,6 +732,20 @@ class crm_meeting extends class_base
 	{
 		aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 		return parent::new_change($arr);
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>

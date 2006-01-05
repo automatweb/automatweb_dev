@@ -38,6 +38,16 @@
             <caption>Tehtud</caption>
       </property>
       <property>
+            <name>is_personal</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Isiklik</caption>
+      </property>
+      <property>
             <name>start1</name>
             <table>planner</table>
             <group>general</group>
@@ -413,6 +423,16 @@
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_MEETING</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -441,6 +461,9 @@
             <resources>
                   <caption>Ressursid</caption>
             </resources>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <documents>

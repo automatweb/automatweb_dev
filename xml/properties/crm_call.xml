@@ -20,6 +20,16 @@
             <caption>Tehtud</caption>
       </property>
       <property>
+            <name>is_personal</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Isiklik</caption>
+      </property>
+      <property>
             <name>start1</name>
             <table>planner</table>
             <group>general</group>

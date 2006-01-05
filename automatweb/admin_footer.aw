@@ -21,10 +21,20 @@ $apd = get_instance("layout/active_page_data");
 $styles = $apd->on_shutdown_get_styles();
 $styles_done = false;
 
+$pm = get_instance("vcl/popup_menu");
+$pm->begin_menu("ui_lang");
+
+$pm->add_item(array(
+	"text" => t("Foo"),
+	"link" => aw_url_change_var("set_ui_lang", 1)
+));
 
 // do not display the YAH bar, if site_title is empty
 $sf->vars(array(
 	"site_title" => $site_title,
+	/*"ui_lang" => $pm->get_menu(array(
+		"icon" => "class_".CL_LANGUAGE.".gif"
+	))*/
 ));
 
 $sf->vars(array(

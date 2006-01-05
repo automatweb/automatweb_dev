@@ -35,10 +35,24 @@
             <field>kood</field>
             <caption>Tegevusala kood</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <no_status>1</no_status>
             <syslog_type>ST_CRM_SECTOR</syslog_type>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
       <tableinfo>
             <kliendibaas_tegevusala>
                   <index>oid</index>

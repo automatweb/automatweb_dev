@@ -1144,8 +1144,9 @@ class crm_company extends class_base
 		{
 			/// GENERAL TAB
 			case "name":
-				//$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
-				//$data["autocomplete_params"] = array("name");
+				$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
+				$data["autocomplete_params"] = array("name");
+				$data["option_is_tuple"] = true;
 				break;
 
 			case "reg_nr":
@@ -4300,7 +4301,12 @@ class crm_company extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-		die(join("\n", $ol->names())."\n");
+		$ars = array();
+		foreach($ol->names() as $name)
+		{
+			$ars[] = $name."=>".$name;
+		}
+		die(join("\n", $ars)."\n");
 	}
 }
 ?>

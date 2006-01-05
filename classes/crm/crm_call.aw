@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.28 2006/01/04 14:36:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.29 2006/01/05 11:49:11 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -13,6 +13,9 @@
 
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
+
+@property is_personal type=checkbox ch_value=1 field=meta method=serialize 
+@caption Isiklik
 
 @property start1 type=datetime_select field=start 
 @caption Algus
@@ -117,6 +120,14 @@ class crm_call extends class_base
 
 	function get_property($arr)
 	{
+		if ($arr["obj_inst"]->prop("is_personal") && aw_global_get("uid") != $arr["obj_inst"]->createdby())
+		{
+			if (!($arr["prop"]["name"] == "start1" || $arr["prop"]["name"] == "end" || $arr["prop"]["name"] == "deadline"))
+			{
+				return PROP_IGNORE;
+			}
+		}
+
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data['name'])

@@ -501,6 +501,15 @@
             <no_caption>1</no_caption>
             <field>goals_gantt</field>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -564,6 +573,9 @@
                   <caption>Meeskond</caption>
                   <submit>no</submit>
             </team>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <tableinfo>
             <aw_projects>

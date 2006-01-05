@@ -1445,6 +1445,10 @@ class _int_object
 			$i->props_loaded = $this->props_loaded;
 			$i->obj_sys_flags = $this->obj_sys_flags;
 			$i->obj_sys_flags = $GLOBALS["__obj_sys_opts"];
+			if (method_exists($i, "_init_override_object"))
+			{
+				$i->_init_override_object();
+			}
 			$GLOBALS["objects"][$oid] = $i;
 			$GLOBALS["objects"][$this->obj["oid"]] = $i;
 		}

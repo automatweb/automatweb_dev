@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.73 2006/01/03 20:58:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.74 2006/01/05 11:49:11 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -204,6 +204,10 @@
 
 	@property goals_gantt type=text store=no no_caption=1
 
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
 
 
 @groupinfo info caption="Projekti info"
@@ -227,6 +231,7 @@
 	@groupinfo goals_gantt caption="Vaata" parent=goals submit=no
 
 @groupinfo team caption="Meeskond" submit=no
+@groupinfo transl caption=T&otilde;lgi
 
 		
 
@@ -293,6 +298,10 @@ class project extends class_base
 		$this->states = array(
 			PROJ_IN_PROGRESS => t("T&ouml;&ouml;s"),
 			PROJ_DONE => t("Valmis")
+		);
+
+		$this->trans_props = array(
+			"name"
 		);
 	}
 
@@ -516,6 +525,10 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "files":
 				$this->_set_files($arr);
 				break;
@@ -2169,6 +2182,17 @@ class project extends class_base
 		{
 			return false;
 		};
+
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 
 	function callback_mod_retval($arr)

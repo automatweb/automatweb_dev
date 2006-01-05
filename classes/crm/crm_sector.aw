@@ -18,6 +18,14 @@
 	@caption Tegevusala kood
 
 	@classinfo no_status=1 syslog_type=ST_CRM_SECTOR
+
+
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
+
 */
 
 /*
@@ -41,6 +49,10 @@ class crm_sector extends class_base
 		$this->init(array(
 			'clid' => CL_CRM_SECTOR,
 		));
+
+		$this->trans_props = array(
+			"tegevusala", "comment"
+		);
 	}
 
 	function get_property($arr)
@@ -64,11 +76,29 @@ class crm_sector extends class_base
 		$form = &$arr["request"];
 		switch($data["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case 'kood':
 				$arr["obj_inst"]->set_name(($form['kood'] ? ''.$form['kood'].' ' : '').$form['tegevusala']);
 				break;
 		};
 		return $retval;
 	}	
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		return true;
+	}
 }
 ?>
