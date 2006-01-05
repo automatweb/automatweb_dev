@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.208 2005/11/03 18:02:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.209 2006/01/05 13:41:22 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1303,14 +1303,15 @@ if (!defined("DEFS"))
 
 		function get_lc_weekday($num, $short = false)
 		{
-			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
-			if(!is_object($this->lc_date_inst))
+			static $lc_date_inst;
+			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+			if(!is_object($lc_date_inst))
 			{
-				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en") . "/date");
+				$lc_date_inst = get_instance("core/locale/en/date");
 			};
-			if (method_exists($this->lc_date_inst,"get_lc_weekday"))
+			if (method_exists($lc_date_inst,"get_lc_weekday"))
 			{
-				return $this->lc_date_inst->get_lc_weekday($num,$short);
+				return $lc_date_inst->get_lc_weekday($num,$short);
 			}
 			else
 			{
@@ -1320,14 +1321,15 @@ if (!defined("DEFS"))
 		
 		function get_lc_month($num)
 		{
-			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
-			if(!is_object($this->lc_date_inst))
+			static $lc_date_inst;
+			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+			if(!is_object($lc_date_inst))
 			{
-				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en") . "/date");
+				$lc_date_inst = get_instance("core/locale/en/date");
 			};
-			if (method_exists($this->lc_date_inst,"get_lc_month"))
+			if (method_exists($lc_date_inst,"get_lc_month"))
 			{
-				return $this->lc_date_inst->get_lc_month($num);
+				return $lc_date_inst->get_lc_month($num);
 			}
 			else
 			{
@@ -1337,14 +1339,15 @@ if (!defined("DEFS"))
 
 		function get_lc_date($timestamp,$format)
 		{
-			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
-			if(!is_object($this->lc_date_inst))
+			static $lc_date_inst;
+			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
+			if(!is_object($lc_date_inst))
 			{
-				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en")  . "/date");
+				$lc_date_inst = get_instance("core/locale/en/date");
 			};
-			if (method_exists($this->lc_date_inst,"get_lc_date"))
+			if (method_exists($lc_date_inst,"get_lc_date"))
 			{
-				return $this->lc_date_inst->get_lc_date($timestamp,$format);
+				return $lc_date_inst->get_lc_date($timestamp,$format);
 			}
 			else
 			{
@@ -1354,14 +1357,15 @@ if (!defined("DEFS"))
 
 		function get_lc_number($number)
 		{
-			$this->lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/number", array(), false);
-			if(!is_object($this->lc_date_inst))
+			static $lc_date_inst;
+			$lc_date_inst = @get_instance("core/locale/".aw_global_get("LC")."/number", array(), false);
+			if(!is_object($lc_date_inst))
 			{
-				$this->lc_date_inst = get_instance("core/locale/" . ($this->default_locale ? $this->default_locale : "en")  . "/number");
+				$lc_date_inst = get_instance("core/locale/en/number");
 			};
-			if (method_exists($this->lc_date_inst,"get_lc_number"))
+			if (method_exists($lc_date_inst,"get_lc_number"))
 			{
-				return $this->lc_date_inst->get_lc_number($number);
+				return $lc_date_inst->get_lc_number($number);
 			}
 			else
 			{
@@ -1376,14 +1380,15 @@ if (!defined("DEFS"))
 				$lc = aw_global_get("LC");
 			}
 
-			$this->lc_date_inst[$lc] = @get_instance("core/locale/".$lc."/number", array(), false);
-			if(!is_object($this->lc_date_inst[$lc]))
+			static $lc_date_inst;
+			$lc_date_inst[$lc] = @get_instance("core/locale/".$lc."/number", array(), false);
+			if(!is_object($lc_date_inst[$lc]))
 			{
-				$this->lc_date_inst[$lc] = get_instance("core/locale/" .$lc. "/number");
+				$lc_date_inst[$lc] = get_instance("core/locale/" .$lc. "/number");
 			};
-			if (method_exists($this->lc_date_inst[$lc],"get_lc_money_text"))
+			if (method_exists($lc_date_inst[$lc],"get_lc_money_text"))
 			{
-				return $this->lc_date_inst[$lc]->get_lc_money_text($number, $currency);
+				return $lc_date_inst[$lc]->get_lc_money_text($number, $currency);
 			}
 			else
 			{
