@@ -34,11 +34,11 @@ class promo_display
 		$filter["class_id"] = CL_PROMO;
 		//$filter["sort_by"] = "objects.jrk";
 
-		/*if (aw_ini_get("menuedit.lang_menus"))
+		if (aw_ini_get("menuedit.lang_menus"))
 		{
 			$filter["lang_id"] = aw_global_get("lang_id");
-		}*/
-		$filter["lang_id"] = array();
+		}
+		//$filter["lang_id"] = array();
 
 		enter_function("promo_get_list");
 		$list = new object_list($filter);
