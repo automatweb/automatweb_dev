@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.91 2006/01/04 20:46:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.92 2006/01/05 12:00:04 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -703,7 +703,7 @@ class html extends aw_template
 
 	function get_new_url($class_id, $parent, $params = array(), $caption = false)
 	{
-		$params["parent"] = $parent;
+		$params = array("parent" => $parent) + $params;
 		$retval =  $this->mk_my_orb("new", $params, $class_id);
 		if($caption)
 		{
