@@ -531,6 +531,11 @@
                   <clid>CL_LANGUAGE</clid>
                   <caption>Keeled</caption>
             </LANGUAGE>
+            <SENDER>
+                  <value>8</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>Saatja</caption>
+            </SENDER>
       </reltypes>
 </properties>
 

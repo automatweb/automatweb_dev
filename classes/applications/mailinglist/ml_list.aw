@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.43 2006/01/04 13:32:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.44 2006/01/05 12:49:49 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -206,8 +206,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @reltype LANGUAGE value=7 clid=CL_LANGUAGE
 @caption Keeled
 
-
-
+@reltype SENDER value=8 clid=CL_ML_MEMBER
+@caption Saatja
 */
 
 
@@ -760,6 +760,13 @@ class ml_list extends class_base
 
 			case "member_list_tb":
 				$tb = &$prop["vcl_inst"];
+				$mem = reset(safe_array($arr["obj_inst"]->prop("def_user_folder")));
+				$tb->add_button(array(
+					"name" => "new",
+					"img" => "new.gif",
+					"tooltip" => t("Lisa uus"),
+					"url" => html::get_new_url(CL_ML_MEMBER, ($this->can("add", $mem) ? $mem : $arr["obj_inst"]->parent()), array("return_url" => get_ru())),
+				));
 				$tb->add_button(array(
 					"name" => "save",
 					"img" => "save.gif",
@@ -1334,10 +1341,6 @@ class ml_list extends class_base
 				"caption" => t("Liitumisinfo"),
 			));
 		}
-		$t->define_field(array(
-			"name" => "change",
-			"caption" => t("Muuda"),
-		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "id",
@@ -1361,7 +1364,10 @@ class ml_list extends class_base
 					"id" => $val["oid"],
 					"email" => $mailto,
 					"joined" => $memberdata["joined"],
-					"source" => $parent_name,
+					"source" => html::href(array(
+						"url" => $this->mk_my_orb("right_frame", array("parent" => $val["parent"], "return_url" => get_ru()), "admin_menus"),
+						"caption" => $parent_name,
+					)),
 					"others" => html::href(array(
 						"caption" => t("Vaata"),
 						"url" => $this->mk_my_orb("change", array(
@@ -1370,8 +1376,7 @@ class ml_list extends class_base
 							"cfgform" => $arr["obj_inst"]->prop("member_config"),
 							), CL_ML_MEMBER),
 					)), 
-					"change" => html::get_change_url($memberdata["id"], array(), "Muuda"),
-					"name" => $memberdata["name"],
+					"name" => html::get_change_url($memberdata["id"], array("return_url" => get_ru()), $memberdata["name"]),
 				);
 				$member_obj = &obj($memberdata["id"]);
 				for($i = 0; $i < 10; $i++)
@@ -1537,7 +1542,15 @@ class ml_list extends class_base
 	function get_members_ol($id)
 	{
 		$obj = &obj($id);
-		$fld = new aw_array($obj->meta("list_source"));
+		if($obj->class_id = CL_MAIL_MESSAGE)
+		{
+			$src = $obj->meta("list_source");
+		}
+		else
+		{
+			$src = $obj->prop("def_user_folder");
+		}
+		$fld = new aw_array($src);
 		
 		$objects = new object_list();
 		foreach($fld->get() as $folder_id)
@@ -1917,8 +1930,8 @@ class ml_list extends class_base
 				if(in_array($id, $choose_languages))
 				{	
 					$this->vars(array(
-					"lang_name" => $lang,
-					"lang_id" => $id,
+						"lang_name" => $lang,
+						"lang_id" => $id,
 					));
 					$c .= $this->parse("LANGFOLDER");
 				}	
@@ -2147,6 +2160,7 @@ class ml_list extends class_base
 		));
 		if (is_oid($arr["request"]["msg_id"]))
 		{
+
 			$msg_obj = new object($arr["request"]["msg_id"]);
 			$arr["obj_inst"]->set_prop("write_user_folder", $msg_obj->meta("list_source"));
 		}
@@ -2204,7 +2218,6 @@ class ml_list extends class_base
 				if ($id == "mfrom")
 				{
 					$prop["caption"] = t("Saatja e-maili aadress");
-					$prop["type"] = "textbox";
 				}
 				elseif($id == "mfrom_name")
 				{
@@ -2270,90 +2283,33 @@ class ml_list extends class_base
 		$folder = $arr["obj_inst"]->prop("msg_folder");
 		$mail_id = $msg_data["id"];
 		
-		$q = "SELECT DISTINCT m.mail FROM ml_sent_mails m LEFT JOIN objects ON (objects.oid = m.mail) WHERE objects.status != 0";
-		$fld = $arr["obj_inst"]->prop("msg_folder");
-		$mls = array();
-		$this->db_query($q);
-		while($w = $this->db_next())
-		{
-			$mls[] = $w["mail"];
-		}
-		$mails = new object_list(array(
-			"class_id" => CL_MESSAGE,
-			"parent" => !empty($fld) ? $fld : $arr["obj_inst"]->parent(),
-		));
-		foreach($mails->arr() as $mail)
-		{
-			if(!in_array($mail->id(), $mls))
-			{
-			if($mail_id == $mail->id() &&  is_oid($mail_id) && $this->can("delete", $mail_id))
-				{
-					$del_obj = new object($mail_id);
-					$del_obj->delete();
-				}
-			}
-		}
 
 
-//		if(!is_oid($msg_data["id"]) || !$this->can("view", $msg_data["id"]))
-//		{
+
+		if(!is_oid($msg_data["id"]) || !$this->can("view", $msg_data["id"]))
+		{
 			$msg_obj = obj();
 			$msg_obj->set_parent((!empty($folder) ? $folder : $arr["obj_inst"]->parent()));
 			$msg_obj->set_class_id(CL_MESSAGE);
 			$msg_obj->save();
 			$msg_data["id"] = $msg_obj->id();
-//		}
-
-
-
-//		else
-//		{
-//			$msg_obj = obj($msg_data["id"]);
-//		}
-		$tpl = $msg_data["template_selector"];
-//		if ($msg_data["send_away"] == 1)
-//		{
-			$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("write_user_folder"));
-//		}
-		$msg_data["return"] = "id";
-		// no, it fucking does not!
-	
-		
-		$objs = new object_list(array(
-			"class_id" => CL_ML_MEMBER,
-			"mail" => $msg_data["mfrom"],
-		));
-		
-		if($objs->count() < 1)
-		{
-			$ml_member = get_instance(CL_ML_MEMBER);
-			$member_obj = new object();
-			$member_obj->set_class_id($ml_member->clid);
-			$member_obj->set_parent($arr["obj_inst"]->parent());
-			$member_obj->set_name($msg_data["mfrom_name"]. " <" . $msg_data["mfrom"] . ">");
-			$member_obj->set_prop("name",$msg_data["mfrom_name"]);
-			$member_obj->set_prop("mail",$msg_data["mfrom"]);
-			$member_obj->save();
-			$msg_obj->connect(array(
-				"to" => $member_obj,
-				"reltype" => "RELTYPE_MAIL_ADDRESS",
-			));
 		}
 		else
 		{
-			$member_obj = $objs->begin();
+			$msg_obj = obj($msg_data["id"]);
 		}
-		
-		$msg_data["mfrom"] = $member_obj->id();
-		$msg_obj->set_prop("mfrom", $msg_data["mfrom"]);
-		$msg_obj->save();
-		
+		$tpl = $msg_data["template_selector"];
+		//if ($msg_data["send_away"] == 1)
+		//{
+		$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("write_user_folder"));
+		//}
+		$msg_data["return"] = "id";
+	
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
-		// it does it's own redirecting .. duke
 		$message_id = $writer->submit($msg_data);
 		
-		if (is_oid($tpl) && $this->can("view", $tpl))
+		if ($this->can("view", $tpl))
 		{
 			$msg_obj->set_meta("template_selector", $tpl);
 			$tpl_obj = new object($tpl);
@@ -2365,14 +2321,12 @@ class ml_list extends class_base
 		}
 		if ($msg_data["send_away"] == 1)
 		{
-		//	sleep(1);
 			// XXX: work out a way to save the message and not send it immediately
 			$writer->send_message(array(
 				"id" => $message_id,
 				"to_post" => $arr["to_post"],
 				"mfrom"	=> $msg_data["mfrom"],
 			));
-			//$msg_obj->set_meta("l ist_source", $arr["obj_inst"]->prop("write_user_folder"));
 		}
 		else
 		{
