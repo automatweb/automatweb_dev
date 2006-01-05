@@ -9,6 +9,14 @@
             <caption>Algab</caption>
       </property>
       <property>
+            <name>end</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>date_chooser</type>
+            <field>end</field>
+            <caption>L&amp;otilde;ppeb</caption>
+      </property>
+      <property>
             <name>img</name>
             <table>objects</table>
             <group>general</group>

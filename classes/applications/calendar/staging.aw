@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.19 2005/11/10 14:07:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.20 2006/01/05 11:27:34 ahti Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -10,6 +10,9 @@
 
 @property start1 type=date_chooser field=start table=planner
 @caption Algab
+
+@property end type=date_chooser field=end table=planner
+@caption Lõppeb
 
 @property img type=releditor reltype=RELTYPE_PICTURE use_form=emb rel_id=first
 @caption Pilt
