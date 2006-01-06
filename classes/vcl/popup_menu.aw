@@ -48,6 +48,7 @@ class popup_menu extends aw_template
 		{
 			$is .= "<a class=\"menuItem\" $item[oncl] href=\"".$item["link"]."\">".$item["text"]."</a>";
 		}
+
 		$this->vars(array(
 			"MENU_ITEM" => $is,
 			"menu_id" => $this->menu_id,
@@ -55,6 +56,21 @@ class popup_menu extends aw_template
 			"alt" => $param["alt"]
 		));
 
+		if (!empty($param["text"]))
+		{
+			$this->vars(array(
+				"text" => $param["text"]
+			));
+			$this->vars(array(
+				"HAS_TEXT" => $this->parse("HAS_TEXT")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"HAS_ICON" => $this->parse("HAS_ICON")
+			));
+		}
 		return $this->parse();
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.107 2005/12/27 06:57:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.108 2006/01/06 09:56:23 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -7,8 +7,10 @@
 EMIT_MESSAGE(MSG_EVENT_ADD);
 EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
-	@default table=objects
-	@default group=general2
+@default table=objects
+@classinfo relationmgr=yes syslog_type=ST_PLANNER
+
+@default group=general2
 
 	@property name type=textbox
 	@caption Nimi
@@ -18,32 +20,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	
 	@default field=meta
 	@default method=serialize
-	@classinfo relationmgr=yes syslog_type=ST_PLANNER
 
 	@property default_view type=select rel=1
 	@caption Aeg
-
-	property event_cfgform type=relpicker reltype=RELTYPE_EVENT_ENTRY
-	caption Def. s&uuml;ndmuse sisetamise vorm
-
-	@property day_start type=time_select group=time_settings rel=1
-	@caption Päev algab
-
-	@property day_end type=time_select group=time_settings rel=1
-	@caption Päev lõpeb
-
-	@property minute_step type=select group=time_settings
-	@caption Sündmuse sisestamise minutite täpsus
-	
-	@property navigator_visible type=checkbox ch_value=1 default=1 group=advanced
-	@caption Näita navigaatorit
-	
-	@property navigator_months type=select group=advanced
-	@caption Kuud navigaatoris
-
-	@property my_projects type=checkbox ch_value=1 group=advanced
-	@caption Näita projekte
-	@comment Kui valitud, siis näidatakse ka sündmusi kõigist projektidest, milles kalendri omanik osaleb.
 
 	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
 	@caption S&uuml;ndmuste kataloog
@@ -52,64 +31,100 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property no_event_folder type=checkbox store=no newonly=1 ch_value=1
 	@caption Ära tee sündmuste kataloogi
 
-	@property workdays type=chooser multiple=1 group=advanced
+@default group=time_settings
+
+	@property day_start type=time_select rel=1
+	@caption Päev algab
+
+	@property day_end type=time_select rel=1
+	@caption Päev lõpeb
+
+	@property minute_step type=select 
+	@caption Sündmuse sisestamise minutite täpsus
+	
+@default group=advanced
+
+	@property navigator_visible type=checkbox ch_value=1 default=1 
+	@caption Näita navigaatorit
+	
+	@property navigator_months type=select 
+	@caption Kuud navigaatoris
+
+	@property my_projects type=checkbox ch_value=1 
+	@caption Näita projekte
+	@comment Kui valitud, siis näidatakse ka sündmusi kõigist projektidest, milles kalendri omanik osaleb.
+
+	@property workdays type=chooser multiple=1 
 	@caption Tööpäevad
 	
-	@property tab_views type=chooser multiple=1 group=advanced
+	@property tab_views type=chooser multiple=1 
 	@caption Vaate tabid
 	
-	@property del_views type=select multiple=1 group=advanced
+	@property del_views type=select multiple=1 
 	@caption Kustutamisvõimalusega vaated
 	
-	@property event_entry_classes type=chooser multiple=1 orient=vertical group=advanced
+	@property event_entry_classes type=chooser multiple=1 orient=vertical 
 	@caption Sündmuste klassid
 	@comment Siit valitud klasse saab kasutada kalendrisse sündmuste sisestamiseks
 
-	@property month_week type=checkbox ch_value=1 group=advanced
+	@property month_week type=checkbox ch_value=1 
 	@caption Näita kuuvaadet samamoodi nagu nädalavaadet
 	
-	@property multi_days type=checkbox ch_value=1 group=advanced
+	@property multi_days type=checkbox ch_value=1 
 	@caption Näita mitmepäevaseid sündmusi ainult esimesel päeval
 	
-	@property vac_count type=textbox size=2 group=vac_settings default=10
+	@property show_bdays type=checkbox ch_value=1 
+	@caption Näita s&uuml;nnip&auml;evi
+	
+@default group=vac_settings
+
+	@property vac_count type=textbox size=2 default=10
 	@caption Vabu aegu
 
-	@property vac_length type=textbox size=2 group=vac_settings default=90
+	@property vac_length type=textbox size=2 default=90
 	@caption Vaba aja pikkus (minutid)
 
-	@default store=no
+@default store=no
 
-	@property navtoolbar type=toolbar group=views no_caption=1
-	@caption Nav. toolbar
+@default group=add_event
 
-	@property project type=hidden group=views
-	@caption Projekti ID
-	
-	@property calendar_contents type=calendar group=views no_caption=1 viewtype=week
-	@caption Kalendri sisu
-
-	@property add_event callback=callback_get_add_event group=add_event 
+	@property add_event callback=callback_get_add_event 
 	@caption Lisa s&uuml;ndmus
 
-	@property create_event_table type=table group=create_events no_caption=1
+@default group=create_events
+
+	@property create_event_table type=table no_caption=1
 	@caption Loo s&uuml;ndmused
 
-	@property vacancies type=text group=create_vacancies type=table no_caption=1
+@default group=create_vacancies 
+
+	@property vacancies type=text type=table no_caption=1
 	@caption Ajad
 
-	@property confirm_vacancies type=checkbox group=create_vacancies store=no no_caption=1 
+	@property confirm_vacancies type=checkbox store=no no_caption=1 
 	@caption Kinnita vabad ajad
 
-	@property vacancies_cal group=create_vacancies_cal type=calendar no_caption=1
+@default group=create_vacancies_cal
+
+	@property vacancies_cal  type=calendar no_caption=1
 	@caption Ajad
 
-	@property vacancies_cal_sbt group=create_vacancies_cal type=submit no_caption=1 value="Kinnita ajad"
+	@property vacancies_cal_sbt type=submit no_caption=1 value="Kinnita ajad"
 	@caption Kinnita ajad
 
-	@default group=views
-	@default store=no
+@default group=views
+
+	@property navtoolbar type=toolbar no_caption=1
+	@caption Nav. toolbar
+
+	@property project type=hidden 
+	@caption Projekti ID
 	
-	@default group=search
+	@property calendar_contents type=calendar no_caption=1 viewtype=week
+	@caption Kalendri sisu
+	
+@default group=search
+
 	@property event_search_name type=textbox 
 	@caption S&uuml;ndmuse nimi
 	
@@ -132,7 +147,8 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@property event_search_results_table type=table store=no no_caption=1 
 
-	@property task_list type=table store=no no_caption=1 group=tasks
+@default group=tasks
+	@property task_list type=table store=no no_caption=1 
 	
 	@groupinfo general caption=Seaded
 	@groupinfo general2 caption=&Uuml;ldine parent=general

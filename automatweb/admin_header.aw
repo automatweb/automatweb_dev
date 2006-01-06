@@ -3,6 +3,13 @@ $uid = "";	// for the extra paranoid
 ini_set("session.save_handler", "files");
 session_name("automatweb");
 session_start();
+
+
+if ($_GET["set_ui_lang"] != "")
+{
+	$_SESSION["user_adm_ui_lc"] = $_GET["set_ui_lang"];
+}
+
 lc_init();
 
 classload("timer");

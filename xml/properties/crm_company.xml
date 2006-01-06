@@ -653,6 +653,24 @@
             <field>personal_candidates_table</field>
       </property>
       <property>
+            <name>sect_tb</name>
+            <table>objects</table>
+            <group>edit_sects</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>sect_tb</field>
+      </property>
+      <property>
+            <name>sect_edit</name>
+            <table>objects</table>
+            <group>edit_sects</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>sect_edit</field>
+      </property>
+      <property>
             <name>my_customers_toolbar</name>
             <table>objects</table>
             <group>relorg_s</group>
@@ -2089,6 +2107,11 @@
                   <parent>people</parent>
                   <submit>no</submit>
             </personal_candits>
+            <edit_sects>
+                  <caption>Muuda &amp;amp;uuml;ksuseid</caption>
+                  <parent>people</parent>
+                  <submit>no</submit>
+            </edit_sects>
             <resources>
                   <caption>Ressursid</caption>
                   <submit>no</submit>

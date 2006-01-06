@@ -263,7 +263,7 @@ class planner_model extends core
 		
 		$rv = array();
 		$eidstr = $parstr = "";
-		
+
 		if (sizeof($folders) == 0)
 		{
 			return array();

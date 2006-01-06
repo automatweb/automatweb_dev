@@ -350,5 +350,12 @@
 			</function>
 		</action>
 
+		<action name="submit_delete_sects">
+			<function name="submit_delete_sects">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

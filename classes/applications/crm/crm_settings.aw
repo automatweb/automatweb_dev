@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.4 2006/01/03 20:58:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.5 2006/01/06 09:56:23 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded 
 /*
 
@@ -91,18 +91,63 @@ class crm_settings extends class_base
 	function get_current_settings()
 	{
 		$u = get_instance(CL_USER);
+		$curp = $u->get_current_person();
+		$curco = $u->get_current_company();
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_SETTINGS,
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
 					"CL_CRM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid"),
-					"CL_CRM_SETTINGS.RELTYPE_PERSON" => $u->get_current_person(),
-					"CL_CRM_SETTINGS.RELTYPE_COMPANY" => $u->get_current_company(),
+					"CL_CRM_SETTINGS.RELTYPE_PERSON" => $curp,
+					"CL_CRM_SETTINGS.RELTYPE_COMPANY" => $curco,
 					"CL_CRM_SETTINGS.everyone" => 1
 				)
 			))
 		));
+
+		if ($ol->count() > 1)
+		{
+			// the most accurate setting SHALL Prevail!
+			$has_co = $has_p = $has_u = $has_all = false;
+			foreach($ol->arr() as $o)
+			{
+				if ($o->is_connected_to(array("to" => $curco)))
+				{
+					$has_co = $o;
+				}
+				if ($o->is_connected_to(array("to" => $curp)))
+				{
+					$has_p = $o;
+				}
+				if ($o->is_connected_to(array("to" => aw_global_get("uid_oid"))))
+				{
+					$has_u = $o;
+				}
+				if ($o->prop("everyone"))
+				{
+					$has_all = $o;
+				}
+			}
+
+			if ($has_u)
+			{
+				return $has_u;
+			}
+			if ($has_p)
+			{
+				return $has_p;
+			}
+			if ($has_co)
+			{
+				return $has_co;
+			}
+			if ($has_all)
+			{
+				return $has_all;
+			}
+		}
+
 		if ($ol->count())
 		{
 			return $ol->begin();

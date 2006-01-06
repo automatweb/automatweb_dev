@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.29 2006/01/05 11:49:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.30 2006/01/06 09:56:23 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -14,7 +14,7 @@
 @property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
 @caption Tehtud
 
-@property is_personal type=checkbox ch_value=1 field=meta method=serialize 
+@property is_personal type=checkbox ch_value=1 field=meta method=serialize table=objects
 @caption Isiklik
 
 @property start1 type=datetime_select field=start 

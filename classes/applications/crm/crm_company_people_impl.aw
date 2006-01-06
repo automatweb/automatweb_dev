@@ -954,5 +954,63 @@ class crm_company_people_impl extends class_base
 
 		return $ret;
 	}
+
+	function _init_sect_edit_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _get_sect_edit($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_sect_edit_t($t);
+
+		classload("core/icons");
+		$this->_req_draw_sects($arr["obj_inst"], $t);
+		$t->set_sortable(false);
+	}
+
+	function _req_draw_sects($o, &$t)
+	{
+		$this->sect_level++;
+		foreach($o->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
+		{
+			$to = $c->to();
+			$t->define_data(array(
+				"name" => str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $this->sect_level-1).icons::get_icon($to).html::obj_change_url($to),
+				"oid" => $c->prop("to")
+			));
+
+			foreach($to->connections_from(array("type" => "RELTYPE_PROFESSIONS")) as $c)
+			{
+				$t->define_data(array(
+					"name" => str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $this->sect_level).icons::get_icon($c->to()).html::obj_change_url($c->to()),
+					"oid" => $c->prop("to")
+				));
+			}
+			$this->_req_draw_sects($to, $t);
+		}
+		$this->sect_level--;
+	}
+
+	function _get_sect_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta valitud'),
+			'action' => 'submit_delete_sects',
+		));
+	}
 }
 ?>

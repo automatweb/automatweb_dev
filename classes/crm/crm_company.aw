@@ -240,6 +240,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create
 
 
 ---------------------------------------------------
+@default group=edit_sects
+
+	@property sect_tb type=toolbar no_caption=1 store=no
+
+	@property sect_edit type=table no_caption=1 store=no
 
 
 /////start of my_customers
@@ -694,6 +699,7 @@ default group=org_objects
 	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no
 	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no
 	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no
+	@groupinfo edit_sects caption="Muuda &uuml;ksuseid" parent=people submit=no
 
 @groupinfo resources caption="Ressursid"  submit=no
 @groupinfo contacts caption="Kontaktid"
@@ -1146,7 +1152,7 @@ class crm_company extends class_base
 			case "name":
 				$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
 				$data["autocomplete_params"] = array("name");
-				$data["option_is_tuple"] = true;
+				//$data["option_is_tuple"] = true;
 				break;
 
 			case "reg_nr":
@@ -1498,6 +1504,8 @@ class crm_company extends class_base
 			case "personal_candidates_toolbar":
 			case "unit_listing_tree_candidates":
 			case "personal_candidates_table":
+			case "sect_edit":
+			case "sect_tb":
 				static $people_impl;
 				if (!$people_impl)
 				{
@@ -4301,12 +4309,25 @@ class crm_company extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-		$ars = array();
-		foreach($ol->names() as $name)
+		$ars = $ol->names();
+		/*foreach($ol->names() as $name)
 		{
 			$ars[] = $name."=>".$name;
-		}
+		}*/
 		die(join("\n", $ars)."\n");
+	}
+	
+	/**
+		@attrib name=submit_delete_sects
+	**/
+	function submit_delete_sects($arr)
+	{
+		foreach(safe_array($arr["sel"]) as $oid)
+		{
+			$o = obj($oid);
+			$o->delete();
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

@@ -27,6 +27,29 @@
             <caption>Aeg</caption>
       </property>
       <property>
+            <name>event_folder</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_EVENT_FOLDER</reltype>
+            <caption>S&amp;amp;uuml;ndmuste kataloog</caption>
+            <comment>Sellest kataloogist v&amp;otilde;etakse ja ka salvestatakse siia kalendrisse lisatavaid s&amp;uuml;ndmusi</comment>
+      </property>
+      <property>
+            <name>no_event_folder</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <store>no</store>
+            <newonly>1</newonly>
+            <ch_value>1</ch_value>
+            <caption>&amp;Auml;ra tee s&amp;uuml;ndmuste kataloogi</caption>
+      </property>
+      <property>
             <name>day_start</name>
             <table>objects</table>
             <group>time_settings</group>
@@ -85,29 +108,6 @@
             <ch_value>1</ch_value>
             <caption>N&amp;auml;ita projekte</caption>
             <comment>Kui valitud, siis n&amp;auml;idatakse ka s&amp;uuml;ndmusi k&amp;otilde;igist projektidest, milles kalendri omanik osaleb.</comment>
-      </property>
-      <property>
-            <name>event_folder</name>
-            <table>objects</table>
-            <group>general2</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_EVENT_FOLDER</reltype>
-            <caption>S&amp;amp;uuml;ndmuste kataloog</caption>
-            <comment>Sellest kataloogist v&amp;otilde;etakse ja ka salvestatakse siia kalendrisse lisatavaid s&amp;uuml;ndmusi</comment>
-      </property>
-      <property>
-            <name>no_event_folder</name>
-            <table>objects</table>
-            <group>general2</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <store>no</store>
-            <newonly>1</newonly>
-            <ch_value>1</ch_value>
-            <caption>&amp;Auml;ra tee s&amp;uuml;ndmuste kataloogi</caption>
       </property>
       <property>
             <name>workdays</name>
@@ -172,6 +172,16 @@
             <caption>N&amp;auml;ita mitmep&amp;auml;evaseid s&amp;uuml;ndmusi ainult esimesel p&amp;auml;eval</caption>
       </property>
       <property>
+            <name>show_bdays</name>
+            <table>objects</table>
+            <group>advanced</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;auml;ita s&amp;amp;uuml;nnip&amp;amp;auml;evi</caption>
+      </property>
+      <property>
             <name>vac_count</name>
             <table>objects</table>
             <group>vac_settings</group>
@@ -192,39 +202,6 @@
             <size>2</size>
             <default>90</default>
             <caption>Vaba aja pikkus (minutid)</caption>
-      </property>
-      <property>
-            <name>navtoolbar</name>
-            <table>objects</table>
-            <group>views</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>no</store>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <caption>Nav. toolbar</caption>
-      </property>
-      <property>
-            <name>project</name>
-            <table>objects</table>
-            <group>views</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>no</store>
-            <type>hidden</type>
-            <caption>Projekti ID</caption>
-      </property>
-      <property>
-            <name>calendar_contents</name>
-            <table>objects</table>
-            <group>views</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <store>no</store>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <viewtype>week</viewtype>
-            <caption>Kalendri sisu</caption>
       </property>
       <property>
             <name>add_event</name>
@@ -293,6 +270,39 @@
             <![CDATA["Kinnita]]>
             </value>
             <caption>Kinnita ajad</caption>
+      </property>
+      <property>
+            <name>navtoolbar</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <caption>Nav. toolbar</caption>
+      </property>
+      <property>
+            <name>project</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>hidden</type>
+            <caption>Projekti ID</caption>
+      </property>
+      <property>
+            <name>calendar_contents</name>
+            <table>objects</table>
+            <group>views</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <viewtype>week</viewtype>
+            <caption>Kalendri sisu</caption>
       </property>
       <property>
             <name>event_search_name</name>

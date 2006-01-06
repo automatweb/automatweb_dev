@@ -79,7 +79,7 @@ function check_generic_unloader()
 {VAR:site_title}
 <!-- END SUB: YAH -->
 	</td>
-	<td nowrap align="right" class="aw04yah">{VAR:header_text}<span class="mlang">[{VAR:lang_string}]</span>&nbsp;&nbsp;&nbsp;&nbsp;{VAR:ui_lang}</td>
+	<td nowrap align="right" class="aw04yah">{VAR:header_text}<span class="mlang">[{VAR:lang_string}]</span>&nbsp;&nbsp;{VAR:ui_lang}&nbsp;&nbsp;</td>
 </tr>
 </table>
 	<!-- END SUB: LANG_STRING -->

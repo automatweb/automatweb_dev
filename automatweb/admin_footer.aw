@@ -24,17 +24,21 @@ $styles_done = false;
 $pm = get_instance("vcl/popup_menu");
 $pm->begin_menu("ui_lang");
 
-$pm->add_item(array(
-	"text" => t("Foo"),
-	"link" => aw_url_change_var("set_ui_lang", 1)
-));
+$i = get_instance("core/trans/pot_scanner");
+foreach($i->get_langs() as $_uil)
+{
+	$pm->add_item(array(
+		"text" => $_uil,
+		"link" => aw_url_change_var("set_ui_lang", $_uil)
+	));
+}
 
 // do not display the YAH bar, if site_title is empty
 $sf->vars(array(
 	"site_title" => $site_title,
-	/*"ui_lang" => $pm->get_menu(array(
-		"icon" => "class_".CL_LANGUAGE.".gif"
-	))*/
+	"ui_lang" => $pm->get_menu(array(
+		"text" => t("[Liidese keel]")
+	))
 ));
 
 $sf->vars(array(
