@@ -1,15 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.44 2006/01/05 12:49:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.45 2006/01/06 11:55:04 ahti Exp $
 // ml_list.aw - Mailing list
 /*
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
+@classinfo syslog_type=ST_MAILINGLIST relationmgr=yes no_status=1 r2=yes
+
 @default table=objects
 @default field=meta
 @default method=serialize
 
-HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
+@default group=general
 
 ------------------------------------------------------------------------
-@default group=general
 
 @property choose_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption vali kaustad millega liituda
@@ -22,7 +24,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property multiple_languages type=checkbox ch_value=1
 @caption Lase liitumisel valida keelt
-
 
 @property msg_folder type=relpicker reltype=RELTYPE_MSG_FOLDER
 @caption Kirjade asukoht
@@ -37,7 +38,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Listi liikmete seadetevorm
 
 
+@groupinfo membership caption=Liikmed 
 ------------------------------------------------------------------------
+
+@groupinfo member_list caption=Nimekiri submit=no parent=membership
 @default group=member_list
 
 @property member_list_tb type=toolbar no_caption=1
@@ -50,6 +54,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Liikmed
 
 ------------------------------------------------------------------------
+
+@groupinfo subscribing caption=Liitumine parent=membership
 @default group=subscribing
 
 @property confirm_subscribe type=checkbox ch_value=1 
@@ -66,6 +72,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @comment Iga aadress eraldi real, nimi ja aadress komaga eraldatud
 
 ------------------------------------------------------------------------
+
+@groupinfo unsubscribing caption=Lahkumine parent=membership
 @default group=unsubscribing
 
 @property confirm_unsubscribe type=checkbox ch_value=1 
@@ -81,7 +89,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Massiline kustutamine
 
 ------------------------------------------------------------------------
+
+@groupinfo export_members caption=Eksport parent=membership
 @default group=export_members
+
 @property export_type type=chooser orient=vertical store=no
 @caption Formaat
 
@@ -92,6 +103,24 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Ekspordi
 
 ------------------------------------------------------------------------
+
+@groupinfo export_to_file caption="Eksport faili" parent=membership
+@default group=export_to_file
+
+@property expf_path type=textbox 
+@caption Kataloog serveris
+
+@property expf_num_per_day type=textbox size=5
+@caption Mitu korda p&auml;evas eksport teha
+
+@property expf_next_time type=text store=no
+@caption Millal j&auml;rgmine eksport toimub
+
+------------------------------------------------------------------------
+
+@groupinfo raports caption=Kirjad
+@groupinfo list_status caption="Saadetud kirjad" parent=raports submit=no
+
 @default group=list_status
 
 @property list_status_tb type=toolbar store=no no_caption=1
@@ -101,6 +130,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Listi staatus
 
 ------------------------------------------------------------------------
+
+@groupinfo unsent caption="Saatmata kirjad" parent=raports submit=no
 @default group=unsent
 
 @property unsent_tb type=toolbar store=no no_caption=1
@@ -110,6 +141,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Listi staatus
 
 ------------------------------------------------------------------------
+
+@groupinfo write_mail caption="Saada kiri" parent=raports 
 @default group=write_mail
 
 @property mail_toolbar type=toolbar no_caption=1
@@ -122,6 +155,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Maili kirjutamine
 
 ------------------------------------------------------------------------
+
+@groupinfo mail_report caption="Kirja raport" parent=raports submit=no
 @default group=mail_report
 
 @property mail_subject type=text store=no 
@@ -143,6 +178,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Meili raport
 
 ------------------------------------------------------------------------
+
+@groupinfo show_mail caption="Listi kiri" parent=raports submit=no
 @default group=show_mail
 @property show_mail_subject type=text store=no
 @caption Teema
@@ -154,36 +191,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Sisu
 
 ------------------------------------------------------------------------
-@default group=export_to_file
-
-@property expf_path type=textbox 
-@caption Kataloog serveris
-
-@property expf_num_per_day type=textbox size=5
-@caption Mitu korda p&auml;evas eksport teha
-
-@property expf_next_time type=text store=no
-@caption Millal j&auml;rgmine eksport toimub
-
-------------------------------------------------------------------------
-@groupinfo membership caption=Liikmed 
-@groupinfo member_list caption=Nimekiri submit=no parent=membership
-@groupinfo subscribing caption=Liitumine parent=membership
-@groupinfo unsubscribing caption=Lahkumine parent=membership
-@groupinfo export_members caption=Eksport parent=membership
-@groupinfo export_to_file caption="Eksport faili" parent=membership
-
-@groupinfo raports caption=Kirjad
-@groupinfo list_status caption="Saadetud kirjad" parent=raports submit=no
-@groupinfo unsent caption="Saatmata kirjad" parent=raports submit=no
-@groupinfo write_mail caption="Saada kiri" parent=raports 
-@groupinfo mail_report caption="Kirja raport" parent=raports submit=no
-@groupinfo show_mail caption="Listi kiri" parent=raports submit=no
-
-------------------------------------------------------------------------
-@classinfo syslog_type=ST_MAILINGLIST
-@classinfo relationmgr=yes
-@classinfo no_status=1
 
 @reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER
 @caption Listi liikmete allikas
@@ -208,9 +215,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @reltype SENDER value=8 clid=CL_ML_MEMBER
 @caption Saatja
+
 */
-
-
 
 define("ML_EXPORT_CSV",1);
 define("ML_EXPORT_NAMEADDR",2);
@@ -548,6 +554,8 @@ class ml_list extends class_base
 			if ($args["op"] == 1)
 			{
 				$retval = $ml_member->subscribe_member_to_list(array(
+					"firstname" => $args["firstname"],
+					"lastname" => $args["lastname"],
 					"name" => $args["name"],
 					"email" => $args["mail"],
 					"use_folders" => $use_folders,
@@ -646,6 +654,22 @@ class ml_list extends class_base
 				}
 				break;
 			*/
+			case "emb[mfrom]":
+
+				$objs = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_SENDER",
+				));
+				$opts = safe_array($prop["options"]);
+				foreach($objs as $obj)
+				{
+					if(in_array(array_keys($opts), $obj->prop("to")))
+					{
+						continue;
+					}
+					$opts[$obj->prop("to")] = $obj->prop("to.name");
+				}
+				$prop["options"] = $opts;
+				break;
 			case "sub_form_type":
 				$prop["options"] = array(
 					"0" => t("liitumine"),
@@ -2309,6 +2333,18 @@ class ml_list extends class_base
 		$writer->init_class_base();
 		$message_id = $writer->submit($msg_data);
 		
+		$sender = $msg_obj->prop("mfrom");
+		
+		// if you send from this address a mail once, you send from it again,
+		// without needance to use that relpickah search -- ahz
+		if($this->can("view", $sender))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $sender,
+				"reltype" => "RELTYPE_SENDER",
+			));
+		}
+
 		if ($this->can("view", $tpl))
 		{
 			$msg_obj->set_meta("template_selector", $tpl);

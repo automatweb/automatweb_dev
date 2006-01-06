@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.15 2005/12/29 08:14:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.16 2006/01/06 11:55:04 ahti Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -165,6 +165,10 @@ class ml_member extends class_base
 		$name = $args["name"];
 		$email = $args["email"];
 		$list_id = $args["list_id"];
+		if($args["firstname"] || $args["lastname"])
+		{
+			$name = $args["firstname"]." ".$args["lastname"];
+		}
 
 		$list_obj = new object($list_id);
 		$user_folder = $list_obj->prop("def_user_folder");

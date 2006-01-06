@@ -234,6 +234,35 @@
             <caption>Ekspordi</caption>
       </property>
       <property>
+            <name>expf_path</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_to_file</group>
+            <type>textbox</type>
+            <caption>Kataloog serveris</caption>
+      </property>
+      <property>
+            <name>expf_num_per_day</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_to_file</group>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Mitu korda p&amp;amp;auml;evas eksport teha</caption>
+      </property>
+      <property>
+            <name>expf_next_time</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>export_to_file</group>
+            <type>text</type>
+            <store>no</store>
+            <caption>Millal j&amp;amp;auml;rgmine eksport toimub</caption>
+      </property>
+      <property>
             <name>list_status_tb</name>
             <table>objects</table>
             <field>meta</field>
@@ -404,39 +433,11 @@
             <no_caption>1</no_caption>
             <caption>Sisu</caption>
       </property>
-      <property>
-            <name>expf_path</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>export_to_file</group>
-            <type>textbox</type>
-            <caption>Kataloog serveris</caption>
-      </property>
-      <property>
-            <name>expf_num_per_day</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>export_to_file</group>
-            <type>textbox</type>
-            <size>5</size>
-            <caption>Mitu korda p&amp;amp;auml;evas eksport teha</caption>
-      </property>
-      <property>
-            <name>expf_next_time</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>export_to_file</group>
-            <type>text</type>
-            <store>no</store>
-            <caption>Millal j&amp;amp;auml;rgmine eksport toimub</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_MAILINGLIST</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <r2>yes</r2>
       </classinfo>
       <groupinfo>
             <membership>
