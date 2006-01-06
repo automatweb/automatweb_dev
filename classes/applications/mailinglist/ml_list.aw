@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.46 2006/01/06 14:04:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.47 2006/01/06 14:05:37 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -232,7 +232,7 @@ class ml_list extends class_base
 			"clid" => CL_ML_LIST,
 		));
 		lc_load("definition");
-		lc_site_load("mailinglist", &$this);
+		lc_site_load("ml_list", &$this);
 	}
 
 	function on_mconnect_to($arr)
