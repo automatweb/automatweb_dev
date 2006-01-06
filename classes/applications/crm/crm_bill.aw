@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.19 2006/01/04 11:06:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.20 2006/01/06 07:35:17 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -146,8 +146,11 @@ class crm_bill extends class_base
 				break;
 
 			case "impl":
-				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMPL")));
-				$prop["options"] = $ol->names();
+				if (!$arr["new"])
+				{
+					$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMPL")));
+					$prop["options"] = $ol->names();
+				}
 				$u = get_instance(CL_USER);
 				$co = obj($u->get_current_company());
 				$prop["options"][$co->id()] = $co->name();
