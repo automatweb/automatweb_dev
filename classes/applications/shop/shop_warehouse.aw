@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.36 2005/12/29 10:35:47 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.37 2006/01/06 07:34:53 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -446,12 +446,20 @@ class shop_warehouse extends class_base
 		if(is_array($srch["osearch_odates"]))
 		{
 			$d = $srch["osearch_odates"];
-			$z .= " AND objects.created > ".mktime(0, 0, 0, $d["month"], $d["day"], $d["year"]);
+			$d_ts = mktime(0, 0, 0, $d["month"], $d["day"], $d["year"]);
+			if ($d_ts > 100)
+			{
+				$z .= " AND objects.created > ".$d_ts;
+			}
 		}
 		if(is_array($srch["osearch_odatee"]))
 		{
 			$d = $srch["osearch_odatee"];
-			$z .= " AND objects.created < ".mktime(23, 59, 59, $d["month"], $d["day"], $d["year"]);
+			$d_ts = mktime(23, 59, 59, $d["month"], $d["day"], $d["year"]);
+			if ($d_ts > 30000)
+			{
+				$z .= " AND objects.created < ".$d_ts;
+			}
 		}
 		if($srch["osearch_from"] == 1)
 		{
@@ -460,6 +468,12 @@ class shop_warehouse extends class_base
 		elseif($srch["osearch_from"] == 2)
 		{
 			$z .= " AND so.confirmed = 0";
+		}
+
+		$lim = " LIMIT 200 ";
+		if ($srch["osearch_prodname"] != "")
+		{
+			$lim = "";
 		}
 		$q = "
 			SELECT
@@ -488,16 +502,18 @@ class shop_warehouse extends class_base
 				objects.parent = ".$this->order_fld."
 				$z
 				GROUP BY objects.created DESC
+				$lim	
 		";
 		$this->db_query($q);
 		$vars = array("return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")));
-		$t->table_header = t("<center>Leiti ".$this->num_rows()." kirjet</center>");
+		//$t->table_header = t("<center>Leiti ".$this->num_rows()." kirjet</center>");
+		$mt = 0;
 		while($w = $this->db_next())
 		{
 			$this->save_handle();
 			if($srch["osearch_prodname"])
 			{
-				$z2 .= " AND objects.name LIKE '%".$srch["osearch_prodname"]."%'";
+				$z2 = " AND objects.name LIKE '%".$srch["osearch_prodname"]."%'";
 			}
 			$q2 = "
 			SELECT objects.name AS name, objects.oid AS id
@@ -513,6 +529,7 @@ class shop_warehouse extends class_base
 			
 			if($this->num_rows() == 0)
 			{
+				$this->restore_handle();
 				continue;
 			}
 			$e = array();
@@ -529,7 +546,9 @@ class shop_warehouse extends class_base
 				"prodname" => implode(", ", $e),
 				"odate" => date("d-m-Y", $w["odate"]),
 			));
+			$mt++;
 		}
+		$t->table_header = t("<center>Leiti ".$mt." kirjet</center>");
 		
 	}
 
