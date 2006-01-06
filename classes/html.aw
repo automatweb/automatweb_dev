@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.92 2006/01/05 12:00:04 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.93 2006/01/06 09:27:17 voldemar Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -117,15 +117,15 @@ class html extends aw_template
 			$select_autocomplete = "{$event}=\"selectAutoCompleteOption (this);\"";
 
 			### compose autocompletes html
-			if (in_array ($name, $autocomplete_params))//!!! milleks see on?
+			if (in_array ($name, $autocomplete_params))//!!! milleks see on? == kui prop on iseendale autocmpl argumendiks ilmselt. midagi siin teisiti kui muidu.
 			{
 				$get_autocomplete = "";//!!!?
-				$autocomplete_init = "<script>new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, '{$autocomplete_source}', {$autocomplete_params});</script>\n";
+				$autocomplete_init = "<script type=\"text/javascript\">new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, '{$autocomplete_source}', {$autocomplete_params});</script>\n";
 			}
 			else
 			{
 				$get_autocomplete = "getAutoCompleteOptions (this, '{$autocomplete_source}', {$autocomplete_params}, {$is_tuple});";
-				$autocomplete_init = "<script>new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, false, false);</script>\n";
+				$autocomplete_init = "<script type=\"text/javascript\">new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, false, false);</script>\n";
 			}
 		}
 
@@ -670,7 +670,7 @@ class html extends aw_template
 		return html::get_change_url($o->id(), array("return_url" => get_ru()), parse_obj_name($o->name()));
 	}
 
-	function get_change_url($oid, $params = array(), $caption = false)
+	function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
 	{
 		if (!$this->can("view", $oid))
 		{
@@ -695,7 +695,8 @@ class html extends aw_template
 		{
 			$retval = html::href(array(
 				"url" => $retval,
-				"caption" => $caption
+				"caption" => $caption,
+				"title" => $title
 			));
 		}
 		return $retval;
