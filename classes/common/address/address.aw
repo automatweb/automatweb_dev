@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.6 2005/12/07 16:58:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.7 2006/01/06 09:37:26 voldemar Exp $
 // address.aw - Aadress v2
 /*
 
@@ -199,19 +199,20 @@ class address extends class_base
 				}
 			}
 		}
-		elseif (array_key_exists (ADDRESS_COUNTRY_TYPE, $parameters) and is_oid ($parameters[ADDRESS_COUNTRY_TYPE]))
-		{
-			$ac_country = obj ($parameters[ADDRESS_COUNTRY_TYPE]);
-			$parent = $ac_country->prop ("administrative_structure");
-		}
 		elseif (is_oid (reset ($parameters)))
 		{
 			$parent = (int) reset ($parameters);
 		}
+		else
+		{
+			$parent = $this->administrative_structure->id ();
+		}
+
+		define ("AC_ERROR_PREFIX", ">>>AC-error>>>");
 
 		if (empty ($parent))
 		{
-			exit;
+			exit (AC_ERROR_PREFIX . t("Viga: k6rgem haldusjaotus m22ramata."));//!!! teha autocomplete-i js-i veateate n2itamine
 		}
 
 		### get subclass/class of requesting property
@@ -219,10 +220,10 @@ class address extends class_base
 		preg_match ("/location_(\d{1,11}|street)/S", urldecode ($arr["requester"]), $matches);
 		$requester_id = $matches[1];
 
-		if (is_oid ($requester_id) and $this->can ("view", $requester_id))
+		if ($this->can ("view", $requester_id))
 		{
 			$requesting_division = obj ($requester_id);
-			$class_id = (int) $requesting_division->prop ("division");
+			$class_id = (int) $requesting_division->prop ("type");
 			$subclass = $requesting_division->id ();
 		}
 		elseif ($requester_id == ADDRESS_STREET_TYPE)
@@ -231,21 +232,18 @@ class address extends class_base
 		}
 		else
 		{
-			exit;
+			exit (AC_ERROR_PREFIX . t("Viga: valikute taotleja-property m22ramata."));//!!! teha autocomplete-i js-i veateate n2itamine
 		}
 
-// /* dbg */ $o = obj(140168);
-// /* dbg */ echo $class_id . "=" . $o->class_id() . "<br>";
-// /* dbg */ echo $subclass . "=" . $o->subclass() . "<br>";
-// /* dbg */ echo $parent . "=" . $o->parent() . "<br>";
-
 		### get options
-		$list = new object_list (array (
+		$args = array (
 			"class_id" => $class_id,
 			"subclass" => $subclass,
 			"parent" => $parent,
-		));
+		);
+		$list = new object_list ($args);
 
+// /* dbg */ arr ($args);
 // /* dbg */ arr ($list->count());
 
 		$administrative_units = $list->arr ();
@@ -285,10 +283,6 @@ class address extends class_base
 			if ($parent->class_id() == CL_COUNTRY_ADMINISTRATIVE_DIVISION)
 			{
 				$autocomplete_params[$division->id ()][] = "location_" . $parent->id ();
-			}
-			elseif ($parent->class_id() == CL_COUNTRY_ADMINISTRATIVE_STRUCTURE)
-			{
-				$autocomplete_params[$division->id ()][] = "location_country";
 			}
 
 			### add all divisions to potential parent divisions for street
@@ -361,17 +355,13 @@ class address extends class_base
 				$parameters = $this->get_autocomplete_parameters ($value) + $parameters;
 			}
 
-			if (preg_match ("/location_(\d{1,11}|street|country)/S", $name, $matches))
+			if (preg_match ("/location_(\d{1,11}|street)/S", $name, $matches))
 			{
 				$division_id = $matches[1];
 
 				if ($division_id == ADDRESS_STREET_TYPE)
 				{
 					$parameters[ADDRESS_STREET_TYPE] = urldecode ($value);
-				}
-				elseif ($division_id == ADDRESS_COUNTRY_TYPE)
-				{
-					$parameters[ADDRESS_COUNTRY_TYPE] = urldecode ($value);
 				}
 				else
 				{
