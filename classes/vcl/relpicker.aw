@@ -86,11 +86,14 @@ class relpicker extends  core
 				"multiple" => $arr["property"]["multiple"]
 			), "popup_search");
 	
-			$val["post_append_text"] .= " ".html::href(array(
-				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
-				"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
-				"title" => t("Otsi")
-			));
+			if (is_oid($this->obj->id()))
+			{
+				$val["post_append_text"] .= " ".html::href(array(
+					"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+					"title" => t("Otsi")
+				));
+			}
 		}
 		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"])))
 		{
