@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.5 2005/12/07 16:58:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.6 2006/01/08 19:01:32 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -216,37 +216,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@property realestatemgr_cfgmgr type=relpicker reltype=RELTYPE_REALESTATEMGR_CFGMGR clid=CL_CFGMANAGER
 	@caption Keskkonna seadetehaldur
 
-	@property print_properties_house type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
-	@comment On/pole tüüpi elemendid kuvatakse prindivaates "lisainfo" all, ülejäänud kahes tulbas enne lisaandmeid. Seejuures kasutatakse ekspordi objekti vaates "Koosta tabel" leiduvat "Tulba pealkiri" väärtust elemendi suffiksi kuvamiseks (näiteks üldpinna puhul mõõtühik m2).
-	@caption Prinditavad elemendid (Maja)
-
-	@property print_properties_housepart type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
-	@comment vt. kommentaari Prinditavad elemendid (Maja)
-	@caption Prinditavad elemendid (Majaosa)
-
-	@property print_properties_rowhouse type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
-	@comment vt. kommentaari Prinditavad elemendid (Maja)
-	@caption Prinditavad elemendid (Ridaelamu)
-
-	@property print_properties_cottage type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
-	@comment vt. kommentaari Prinditavad elemendid (Maja)
-	@caption Prinditavad elemendid (Suvila)
-
-	@property print_properties_apartment type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
-	@comment vt. kommentaari Prinditavad elemendid (Maja)
-	@caption Prinditavad elemendid (Korter)
-
-	@property print_properties_commercial type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
-	@comment vt. kommentaari Prinditavad elemendid (Maja)
-	@caption Prinditavad elemendid (&Auml;ripind)
-
-	@property print_properties_garage type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
-	@comment vt. kommentaari Prinditavad elemendid (Maja)
-	@caption Prinditavad elemendid (Garaaz)
-
-	@property print_properties_land type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
-	@comment vt. kommentaari Prinditavad elemendid (Maja)
-	@caption Prinditavad elemendid (Maatükk)
+	// @property print_properties_house type=relpicker reltype=RELTYPE_PROPERTY_PRINT_SELECTION clid=CL_OBJECT_EXPORT
+	// @comment On/pole tüüpi elemendid kuvatakse prindivaates "lisainfo" all, ülejäänud kahes tulbas enne lisaandmeid. Seejuures kasutatakse ekspordi objekti vaates "Koosta tabel" leiduvat "Tulba pealkiri" väärtust elemendi suffiksi kuvamiseks (näiteks üldpinna puhul mõõtühik m2).
+	// @caption Prinditavad elemendid (Maja)
 
 	@property available_variables_names type=text store=no
 	@caption Template'ites kasutada olevad muutujad
@@ -1669,58 +1641,6 @@ class realestate_manager extends class_base
 				continue;
 			}
 
-			### compose agent name
-			#### agent1
-			$agent1_oid = $property->prop ("realestate_agent1");
-
-			if (!isset ($this->realestate_agent_data[$agent1_oid]["change_link"]))
-			{
-				if ($this->can ("view", $agent1_oid))
-				{
-					$agent = obj ($agent1_oid);
-					$this->realestate_agent_data[$agent1_oid]["change_link"] = html::get_change_url ($agent->id (), array("return_url" => $return_url, "group" => "grp_main"), $agent->name ());
-				}
-				else
-				{
-					$this->realestate_agent_data[$agent1_oid]["change_link"] = "";
-				}
-			}
-
-			#### agent2
-			$agent2_oid = $property->prop ("realestate_agent2");
-
-			if (!isset ($this->realestate_agent_data[$agent2_oid]["change_link"]))
-			{
-				if ($this->can ("view", $agent2_oid))
-				{
-					$agent = obj ($agent2_oid);
-					$this->realestate_agent_data[$agent2_oid]["change_link"] = html::get_change_url ($agent->id (), array("return_url" => $return_url, "group" => "grp_main"), $agent->name ());
-				}
-				else
-				{
-					$this->realestate_agent_data[$agent_oid]["change_link"] = "";
-				}
-			}
-
-			if (!empty ($this->realestate_agent_data[$agent1_oid]["change_link"]))
-			{
-				$agent_name = $this->realestate_agent_data[$agent1_oid]["change_link"];
-
-				if (!empty ($this->realestate_agent_data[$agent2_oid]["change_link"]))
-				{
-					$agent_name .= ", " . $this->realestate_agent_data[$agent2_oid]["change_link"];
-				}
-			}
-			elseif (!empty ($this->realestate_agent_data[$agent2_oid]["change_link"]))
-			{
-				$agent_name = $this->realestate_agent_data[$agent2_oid]["change_link"];
-			}
-			else
-			{
-				$agent_name = "...";
-			}
-
-
 			### get owner company and unit
 			$owner_company_section_oid = $property->meta ("owner_company_section");
 
@@ -1746,6 +1666,69 @@ class realestate_manager extends class_base
 						$this->realestate_company_data[$owner_company_section_oid]["name"] = $owner_company_name;
 					}
 				}
+			}
+
+			### compose agent name
+			#### agent1
+			$agent1_oid = $property->prop ("realestate_agent1");
+
+			if (!isset ($this->realestate_agent_data[$agent1_oid]["change_link"]))
+			{
+				if ($this->can ("view", $agent1_oid))
+				{
+					$agent = obj ($agent1_oid);
+					$this->realestate_agent_data[$agent1_oid]["change_link"] = html::get_change_url ($agent->id (), array("return_url" => $return_url, "group" => "grp_main"), $agent->name (), $this->realestate_company_data[$owner_company_section_oid]["name"]);
+				}
+				else
+				{
+					$this->realestate_agent_data[$agent1_oid]["change_link"] = "";
+				}
+			}
+
+			#### agent2
+			$agent2_oid = $property->prop ("realestate_agent2");
+
+			if (!isset ($this->realestate_agent_data[$agent2_oid]["change_link"]))
+			{
+				if ($this->can ("view", $agent2_oid))
+				{
+					$agent = obj ($agent2_oid);
+					$this->realestate_agent_data[$agent2_oid]["change_link"] = html::get_change_url ($agent->id (), array("return_url" => $return_url, "group" => "grp_main"), $agent->name (), $this->realestate_company_data[$owner_company_section_oid]["name"]);
+				}
+				else
+				{
+					$this->realestate_agent_data[$agent_oid]["change_link"] = "";
+				}
+			}
+
+			if (!empty ($this->realestate_agent_data[$agent1_oid]["change_link"]))
+			{
+				$agent_name = $this->realestate_agent_data[$agent1_oid]["change_link"];
+
+				if (!empty ($this->realestate_agent_data[$agent2_oid]["change_link"]))
+				{
+					$agent_name .= ", " . $this->realestate_agent_data[$agent2_oid]["change_link"];
+				}
+			}
+			elseif (!empty ($this->realestate_agent_data[$agent2_oid]["change_link"]))
+			{
+				$agent_name = $this->realestate_agent_data[$agent2_oid]["change_link"];
+			}
+			else
+			{
+				$agent_name = "...";
+			}
+
+			### compose seller name
+			$seller = $property->get_first_obj_by_reltype ("RELTYPE_REALESTATE_SELLER");
+
+			if (is_object ($seller))
+			{
+				$seller_name = html::get_change_url ($seller->id (), array("return_url" => $return_url, "group" => "grp_main"), $seller->name ());
+			}
+			else
+			{
+				$seller_name = "...";
 			}
 
 			### get address parts
@@ -1857,7 +1840,8 @@ class realestate_manager extends class_base
 				"created" => $property->created (),
 				"modified" => $property->modified (),
 				"agent" => $agent_name,
-				"owner_company" => $this->realestate_company_data[$owner_company_section_oid]["name"],
+				"seller" => $seller_name,
+				// "owner_company" => $this->realestate_company_data[$owner_company_section_oid]["name"],
 				"actions" => $actions_menu . html::hidden (array(
 					"name" => "realestatemgr_property_id[" . $property->id () . "]",
 					"value" => $property->id (),
@@ -2037,9 +2021,15 @@ class realestate_manager extends class_base
 			"sortable" => 1
 		));
 
+		// $table->define_field(array(
+			// "name" => "owner_company",
+			// "caption" => t("Omanik"),
+			// "sortable" => 1
+		// ));
+
 		$table->define_field(array(
-			"name" => "owner_company",
-			"caption" => t("Omanik"),
+			"name" => "seller",
+			"caption" => t("Müüja"),
 			"sortable" => 1
 		));
 

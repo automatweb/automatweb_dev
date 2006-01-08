@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.6 2005/12/18 14:01:05 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.7 2006/01/08 19:01:32 voldemar Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -383,7 +383,7 @@ class realestate_import extends class_base
 		$list = new object_list (array (
 			"class_id" => $realestate_classes,
 			"parent" => $realestate_folders,
-			// "city24_object_id" => new obj_predicate_prop (OBJ_COMP_GREATER, 0),//!!! viga: can not complex searches on metadata fields!
+			"city24_object_id" => new obj_predicate_prop (OBJ_COMP_GREATER, 0),
 		));
 		$list = $list->arr ();
 
@@ -421,6 +421,8 @@ class realestate_import extends class_base
 			$import_log[] = $error_msg;
 		}
 
+		$imported_properties = array ();
+
 		### process data
 		foreach ($xml_data as $key => $data)
 		{
@@ -436,6 +438,12 @@ class realestate_import extends class_base
 				if (is_object ($property))
 				{
 					if (1 != $arr["quiet"]) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE; flush(); }
+
+					if ($property_status === REALESTATE_IMPORT_OK)
+					{
+						$imported_properties[$property->id ()] = $property->id ();
+					}
+
 					unset ($property);
 				}
 				else
@@ -1545,6 +1553,7 @@ class realestate_import extends class_base
 						break;
 				}
 
+				$property->set_prop ("is_visible", 1);
 				$property->save ();
 			}
 		}
@@ -1573,6 +1582,11 @@ class realestate_import extends class_base
 						if (1 != $arr["quiet"])
 						{
 							echo sprintf (t("Lisainfo (%s) objektile city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $lang_name, $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE;
+						}
+
+						if ($property_status)
+						{
+							unset ($imported_properties[$property->id ()]);
 						}
 					}
 					else
@@ -1759,6 +1773,21 @@ class realestate_import extends class_base
 			}
 		}
 
+		### set is_visible to false for objects not found in city24 xml
+		$oid_constraint = new obj_predicate_not ($imported_properties);
+		$realestate_objects = new object_list (array (
+			"oid" => $oid_constraint,
+			"class_id" => $realestate_classes,
+			"parent" => $realestate_folders,
+			"modified" => new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $last_import),
+			"is_archived" => 0,
+			"is_visible" => 1,
+			"site_id" => array (),
+			"lang_id" => array (),
+		));
+		$realestate_objects->set_prop ("is_visible", 0);
+		$realestate_objects->save ();
+
 		### save log
 		$logs = (array) $this_object->prop ("city24_log");
 		$logs[$import_time] = $import_log;
@@ -1792,7 +1821,7 @@ class realestate_import extends class_base
 			$this->cl_object_type = get_instance(CL_OBJECT_TYPE);
 		}
 
-		$ff = $ot->get_obj_for_class(array(
+		$ff = $this->cl_object_type->get_obj_for_class(array(
 			"clid" => $clid,
 		));
 		$oft = obj ($ff);
