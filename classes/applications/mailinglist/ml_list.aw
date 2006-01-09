@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.47 2006/01/06 14:05:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.48 2006/01/09 11:42:21 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2022,7 +2022,6 @@ class ml_list extends class_base
 			$p = (int)((int)$osa * 100 / (int)$kogu);
 		}
 		$not_p = 100 - $p;
-		//echo("qri($osa,$kogu)=$p");//dbg
 		// tekst pane sinna, kus on rohkem ruumi.
 		if ($p > $not_p)
 		{
