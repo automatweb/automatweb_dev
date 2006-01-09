@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.48 2006/01/09 11:42:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.49 2006/01/09 12:38:49 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -392,6 +392,7 @@ class ml_list extends class_base
 	**/
 	function subscribe($args = array())
 	{
+
 		$list_id = $args["id"];
 		$rel_id = $args["rel_id"];
 
@@ -493,7 +494,6 @@ class ml_list extends class_base
 			}
 			$use_folders = $temp_use_folders;
 		}
-
 		if (empty($args["email"]))
 		{
 			$args["email"] = $args["mail"];
@@ -520,13 +520,21 @@ class ml_list extends class_base
 		$members = $this->get_all_members($use_folders);
 		
 		$erx = array();
+				
 		
-		if(in_array($args["mail"], $members) || in_array($args["email"], $members) || empty($args["mail"]))
+		if(in_array($args["mail"], $members) || in_array($args["email"], $members))
 		{
 			$allow = false;
 			$erx["XXX"]["msg"] = t("Sellise aadressiga inimene on juba listiga liitunud");
 		}
-		if (sizeof($errors) > 0 or (!$allow && $args["op"] == 1))
+		
+		if(empty($args["name"]) || empty($args["email"]))
+		{
+			$allow = false;
+			$erx["XXX"]["msg"] = t("Liitumisel vaja nii nime kui ka aadressi");
+		}
+		
+		if (sizeof($errors) > 0 || (!$allow && $args["op"] == 1))
 		{
 			$errors = $errors + $erx;
 			$errmsg = "";
@@ -536,11 +544,12 @@ class ml_list extends class_base
 			}
 
 			aw_session_set("no_cache", 1);
-		
-			// fsck me plenty
+			//arr($errmsg);
+			//* fsck me plenty
 			$request["mail"] = $_POST["mail"];
 			aw_session_set("cb_reqdata", $request);
 			aw_session_set("cb_errmsg", $errmsg);
+			die();
 			return aw_global_get("HTTP_REFERER");
 		};
 		
@@ -565,10 +574,20 @@ class ml_list extends class_base
 					"confirm_message" => $list_obj->prop("confirm_subscribe_msg"),
 					"udef_fields" => $udef_fields,
 				));
+				
+			//	$msg_to_admin = $args["name"].' , aadressiga '.$args["email"].' liitus mailinglistiga kaustadesse :<br>';
+			//	foreach ($use_folders as $folder_to_send)
+			//	{
+			//		$folder = obj($folder_to_send);
+			//		$msg_to_admin = $msg_to_admin.($folder->name()).'<br>';
+			//	}
+			
 			}
 		}
+		
 		if ($args["op"] == 2)
 		{
+			
 			$retval = $ml_member->unsubscribe_member_from_list(array(
 				"email" => $args["email"],
 				"list_id" => $list_obj->id(),
@@ -1079,58 +1098,60 @@ class ml_list extends class_base
 				continue;
 			}
 			$is_fold = true;
-			break;
-		}
-		if(!$is_fold)
-		{
-			return false;
-		}
-		$name = $fld_obj->name();
-		echo "Kustutan kasutajaid kataloogist $fld / $name... <br />";
-		set_time_limit(0);
-		$ml_member = get_instance(CL_ML_MEMBER);
-		$cnt = 0;
-		if (sizeof($lines) > 0)
-		{
-			foreach($lines as $line)
+			//break;
+			
+			
+			if(!$is_fold)
 			{
-				if (strlen($line) == 0)
+				return false;
+			}
+			$name = $fld_obj->name();
+			echo "Kustutan kasutajaid kataloogist $fld / $name... <br />";
+			set_time_limit(0);
+			$ml_member = get_instance(CL_ML_MEMBER);
+			$cnt = 0;
+			if (sizeof($lines) > 0)
+			{
+				foreach($lines as $line)
 				{
-					continue;
-				}
-				// no, this is different, no explode. I need to extract an email address from the
-				// line
-				preg_match("/(\S*@\S*)/",$line,$m);
-				$addr = $m[1];
-				if (is_email($addr))
-				{
-					$retval = $ml_member->unsubscribe_member_from_list(array(
-						"email" => $addr,
-						"list_id" => $list_obj->id(),
-						"ret_status" => true,
-						"use_folders" => $fold,
-					));
-					if ($retval)
+					if (strlen($line) == 0)
 					{
-						$cnt++;
-						print "OK a:$addr<br />";
+						continue;
+					}
+					// no, this is different, no explode. I need to extract an email address from the
+					// line
+					preg_match("/(\S*@\S*)/",$line,$m);
+					$addr = $m[1];
+					if (is_email($addr))
+					{
+						$retval = $ml_member->unsubscribe_member_from_list(array(
+							"email" => $addr,
+							"list_id" => $list_obj->id(),
+							"ret_status" => true,
+							"use_folders" => $fold,
+						));
+						if ($retval)
+						{
+							$cnt++;
+							print "OK a:$addr<br />";
+						}
+						else
+						{
+							print "Ei leidnud $addr<br />";
+						}
+						flush();
+						usleep(500000);
 					}
 					else
 					{
-						print "Ei leidnud $addr<br />";
+						print "IGN - a:$addr<br />";
+						flush();
 					}
-					flush();
-					usleep(500000);
-				}
-				else
-				{
-					print "IGN - a:$addr<br />";
-					flush();
 				}
 			}
-		}
 		print "Kustutasin $cnt aadressi<br>";
-		return true;
+		}
+		return true;		
 	}
 
 	function gen_unsent_table($arr)
@@ -1223,6 +1244,7 @@ class ml_list extends class_base
 	{
 		$arr["obj_inst"] = &obj($arr["id"]);
 		$members = $this->get_members($arr["id"]);
+		
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
 		$ser = "";
 		
@@ -1234,48 +1256,54 @@ class ml_list extends class_base
 			uasort($config_data, array($this,"__sort_props_by_ord"));
 		}
 		
+		$imported = array();
 		foreach($members as $key => $val)
 		{
 			list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
 				"lid" => $arr["id"],
 				"member" => $val["oid"],
 			));
-			$member = &obj($memberdata["id"]);
-			if($member->created() > $arr["export_date"] || ($arr["export_date"] < 100))
+			if(!in_array($mailto, $imported))
 			{
-				switch($arr["export_type"])
-				{
-					case ML_EXPORT_ADDR:
-						$ser .= $mailto;
-						break;
+				$imported[] = $mailto;
 	
-					case ML_EXPORT_NAMEADDR:
-						$ser .= $memberdata["name"] . " <" . $mailto . ">";
-						break;
-					
-					case ML_EXPORT_ALL:
-						$ser .= $memberdata["name"] . ";" . $mailto . ";";
-						foreach ($config_data as $key2 => $value)
-						{
-							if(strpos($key2, "def_"))
+				$member = &obj($memberdata["id"]);
+				if($member->created() > $arr["export_date"] || ($arr["export_date"] < 100))
+				{
+					switch($arr["export_type"])
+					{
+						case ML_EXPORT_ADDR:
+							$ser .= $mailto;
+							break;
+		
+						case ML_EXPORT_NAMEADDR:
+							$ser .= $memberdata["name"] . " <" . $mailto . ">";
+							break;
+						
+						case ML_EXPORT_ALL:
+							$ser .= $memberdata["name"] . ";" . $mailto . ";";
+							foreach ($config_data as $key2 => $value)
 							{
-								if(strpos($key2, "def_date"))
+								if(strpos($key2, "def_"))
 								{
-									$ser .= get_lc_date($member->prop($key2));
+									if(strpos($key2, "def_date"))
+									{
+										$ser .= get_lc_date($member->prop($key2));
+									}
+									else
+									{
+										$ser .= $member->prop($key2);
+									}
+									$ser .= ";";
 								}
-								else
-								{
-									$ser .= $member->prop($key2);
-								}
-								$ser .= ";";
 							}
-						}
-						break;
-					default:
-						$ser .= $memberdata["name"] . "," . $mailto;
-						break;
+							break;
+						default:
+							$ser .= $memberdata["name"] . "," . $mailto;
+							break;
+					}
+					$ser .= "\n";
 				}
-				$ser .= "\n";
 			}
 		}
 		if ($arr["ret"] == true)
@@ -1637,7 +1665,7 @@ class ml_list extends class_base
 		{
 			if($cnt > ($to - $from))
 			{
-				break;
+	//			break;
 			}
 			if(!is_oid($folder_id) || !$this->can("view", $folder_id))
 			{
