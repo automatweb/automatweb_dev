@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.24 2006/01/09 15:07:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.25 2006/01/09 15:13:31 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -539,7 +539,7 @@ class mail_message extends class_base
 		
 		if(!$row["mfrom"])
 		{
-			$row["mfrom"] = $confirm_msg->prop(mfrom);
+			$row["mfrom"] = $confirm_msg->prop("mfrom");
 		}
 		
 		$from = $row["mfrom"];
