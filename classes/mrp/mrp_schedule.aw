@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.128 2005/10/31 11:58:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.129 2006/01/09 13:27:26 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1398,16 +1398,15 @@ class mrp_schedule extends class_base
 				if ( (($prev_range_end + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
 				{
 					$start1 = $prev_range_end;
-					$length1 = 0;
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "A -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2)  . MRP_NEWLINE;
-/* dbg */ echo "A -- start1:". $start1." - length1:".$length1." - start:". $start ."-start2:".$start2  . MRP_NEWLINE;
+/* dbg */ echo "A -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:0 - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2)  . MRP_NEWLINE;
+/* dbg */ echo "A -- start1:". $start1." - length1:0 - start:". $start ."-start2:".$start2  . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-					$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
+					$reserved_time = ($start1 >= $start) ? $start1 : $start;
 					list ($reserved_time, $reserved_length) = $this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1432,29 +1431,33 @@ class mrp_schedule extends class_base
 							$start2 = $this->get_next_range_first_job ($resource_tag, $time_range);
 						}
 
-						$d = ($start < ($start1 + $length1)) ? 0 : ($start - ($start1 + $length1));
+						$end1 = $start1 + $length1;
+						$d = ($start < $end1) ? 0 : ($start - $end1);
 
 						### check if requested space is available between start1 & start2
-						if ( (($start1 + $length1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
+						if ( (($end1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
 						{
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "B -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) . MRP_NEWLINE;
-/* dbg */ echo "B -- start1:". $start1." - length1:".$length1." - start:". $start ."-start2:".$start2 . MRP_NEWLINE;
+/* dbg */ echo "B -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ." - start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) . MRP_NEWLINE;
+/* dbg */ echo "B -- start1:". $start1." - length1:".$length1." - start:". $start ." - start2:".$start2 . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-							$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
+							$reserved_time = (($end1) >= $start) ? ($end1) : $start;
 							list ($reserved_time, $reserved_length) = $this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){ echo "B -- suitable slot found in start range nr {$time_range}. among reserved times" . MRP_NEWLINE; }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-							break;
+							if (isset ($reserved_time) and isset ($reserved_length))
+							{
+								break;
+							}
 						}
 
-						next ($this->reserved_times[$resource_tag][$time_range]);
+						next ($this->reserved_times[$resource_tag][$time_range]);//!!! next pole hea. eachiga vbl teha
 					}
 				}
 			}
@@ -1479,21 +1482,20 @@ class mrp_schedule extends class_base
 
 				}
 
-				$length1 = 0;
 				$start2 = $this->get_next_range_first_job ($resource_tag, $time_range);
-				$d = ($start < ($start1 + $length1)) ? 0 : ($start - ($start1 + $length1));
+				$d = ($start < $start1) ? 0 : ($start - $start1);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "C -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) . MRP_NEWLINE;
-/* dbg */ echo "C -- start1:". $start1." - length1:".$length1." - start:". $start ."-start2:".$start2 . MRP_NEWLINE;
+/* dbg */ echo "C -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:0 - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) . MRP_NEWLINE;
+/* dbg */ echo "C -- start1:". $start1." - length1:0 - start:". $start ."-start2:".$start2 . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 				### check if requested space is available between start1 & start2
-				if ( (($start1 + $length1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
+				if ( (($start1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
 				{
-					$reserved_time = (($start1 + $length1) > $start) ? ($start1 + $length1) : $start;
+					$reserved_time = ($start1 > $start) ? $start1 : $start;
 					list ($reserved_time, $reserved_length) = $this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1516,10 +1518,18 @@ class mrp_schedule extends class_base
 /* timing */ timing ("get_available_time", "end");
 
 		### return planned starttime
-		if (isset ($reserved_time) and isset ($reserved_length))
+		$time_range--;
+
+		if (!isset ($reserved_time) or !isset ($reserved_length))
 		{
-			return array ($reserved_time, $reserved_length, --$time_range);
+			### place after last range last job. assume reserved times array has been traversed and $time_range points to last range
+			$length1 = end ($this->reserved_times[$resource_tag][$time_range]);
+			$start1 = key ($this->reserved_times[$resource_tag][$time_range]);
+			$reserved_time = $start1 + $length1;
+			list ($reserved_time, $reserved_length) = $this->add_unavailable_times ($resource_id, $reserved_time, $length, MRP_INF);
 		}
+
+		return array ($reserved_time, $reserved_length, $time_range);
 	}
 
 	function find_range ($starttime)
