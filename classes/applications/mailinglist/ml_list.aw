@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.50 2006/01/10 10:11:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.51 2006/01/10 11:11:25 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -516,15 +516,22 @@ class ml_list extends class_base
 			"request" => $request,
 			"cfgform_id" => $cfgform,
 		));
-		$members = $this->get_all_members($use_folders);
 		
+		foreach($use_folders as $key => $folder)
+		{
+			$members = $this->get_all_members(array($folder));
+			if(in_array($args["mail"], $members) || in_array($args["email"], $members))
+			{
+				unset($use_folders[$key]);
+			}
+		}
+	
 		$erx = array();
-				
 		
-		if(in_array($args["mail"], $members) || in_array($args["email"], $members))
+		if(in_array($args["mail"], $members) || in_array($args["email"], $members) ||  count($use_folders) < 1)
 		{
 			$allow = false;
-			$erx["XXX"]["msg"] = t("Sellise aadressiga inimene on juba listiga liitunud");
+			$erx["XXX"]["msg"] = t("Sellise aadressiga inimene on juba valitud listidega liitunud");
 		}
 		
 		if(empty($args["name"]) || empty($args["email"]))
@@ -548,8 +555,10 @@ class ml_list extends class_base
 			$request["mail"] = $_POST["mail"];
 			aw_session_set("cb_reqdata", $request);
 			aw_session_set("cb_errmsg", $errmsg);
+			//die();
 			return aw_global_get("HTTP_REFERER");
 		};
+		
 		$udef_fields["textboxes"] = $args["udef_txbox"];
 		$udef_fields["textareas"] = $args["udef_txtarea"];
 		$udef_fields["checkboxes"] = $args["udef_checkbox"];
