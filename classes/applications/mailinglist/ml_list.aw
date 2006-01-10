@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.51 2006/01/10 11:11:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.52 2006/01/10 11:46:00 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -534,10 +534,20 @@ class ml_list extends class_base
 			$erx["XXX"]["msg"] = t("Sellise aadressiga inimene on juba valitud listidega liitunud");
 		}
 		
-		if(empty($args["name"]) || empty($args["email"]))
+		if(empty($args["name"])){
+			$args["name"] = $args["firstname"].' '.$args["lastname"];
+		}
+		
+		if(empty($args["name"]) && empty($args["firstname"]) && empty($args["lastname"]))
 		{
 			$allow = false;
-			$erx["XXX"]["msg"] = t("Liitumisel vaja nii nime kui ka aadressi");
+			$erx["XXX"]["msg"] = t("Liitumisel vaja ka nime");
+		}
+		
+		if(empty($args["email"]))
+		{
+			$allow = false;
+			$erx["XXX"]["msg"] = t("Liitumisel vaja täita aadressi väli");
 		}
 		
 		if (sizeof($errors) > 0 || (!$allow && $args["op"] == 1))
