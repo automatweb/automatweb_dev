@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.49 2006/01/09 12:38:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.50 2006/01/10 10:11:04 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -516,7 +516,6 @@ class ml_list extends class_base
 			"request" => $request,
 			"cfgform_id" => $cfgform,
 		));
-		
 		$members = $this->get_all_members($use_folders);
 		
 		$erx = array();
@@ -549,10 +548,8 @@ class ml_list extends class_base
 			$request["mail"] = $_POST["mail"];
 			aw_session_set("cb_reqdata", $request);
 			aw_session_set("cb_errmsg", $errmsg);
-			die();
 			return aw_global_get("HTTP_REFERER");
 		};
-		
 		$udef_fields["textboxes"] = $args["udef_txbox"];
 		$udef_fields["textareas"] = $args["udef_txtarea"];
 		$udef_fields["checkboxes"] = $args["udef_checkbox"];
