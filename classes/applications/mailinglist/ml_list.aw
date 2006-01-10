@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.52 2006/01/10 11:46:00 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.53 2006/01/10 12:49:46 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -624,6 +624,24 @@ class ml_list extends class_base
 		if  (is_oid($list_obj->prop("redir_obj")) && $this->can("view", $list_obj->prop("redir_obj")))
 		{
 			$ro = obj($list_obj->prop("redir_obj"));
+			
+			$langid = aw_global_get("lang_id");
+			$doc_langid = $ro -> lang_id();
+			if($doc_langid != $langid)
+			{
+				$documents = $ro->connections_from(array(
+					"type" => "RELTYPE_LANG_REL",
+					"to.lang_id" => $langid,
+				));
+				if(count($documents) > 0)
+				{
+					foreach ($documents as $doc_conn)
+					{
+						$new_doc_id = $doc_conn->prop("to");
+						$ro = obj($new_doc_id);
+					}
+				}
+			}
 			$retval = $this->cfg["baseurl"] . "/" . $ro->id();
 		}
 		return $retval;
