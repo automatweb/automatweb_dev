@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.34 2005/12/16 12:46:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.35 2006/01/10 11:47:50 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -58,6 +58,20 @@
 
 	@property first_site_to_search_images type=select group=files field=meta method=serialize
 	@caption Esimene leht kust pilte otsitakse
+
+@groupinfo discount_products caption="Soodustooted"
+
+	@property discount_products_file type=textbox size=60 group=discount_products field=meta method=serialize
+	@caption Soodustoodete faili asukoht
+
+	@property discount_products_count type=text store=no group=discount_products
+	@caption Ridu tabelis
+
+	@property import_discount_products type=text store=no group=discount_products
+	@caption &nbsp;
+
+	@property clear_discount_products type=text store=no group=discount_products
+	@caption &nbsp;
 
 @groupinfo foldersa caption="Kataloogid"
 
@@ -176,6 +190,28 @@ class otto_import extends class_base
 				{
 					$retval = PROP_IGNORE;
 				}
+				break;
+			
+			case "import_discount_products":
+				$prop['value'] = html::href(array(
+					"caption" => t("Impordi soodustooted"),
+					"url" => $this->mk_my_orb("import_discount_products", array(
+						"id" => $arr['obj_inst']->id(),
+					)),
+				));
+				break;
+
+			case "clear_discount_products":
+				$prop['value'] = html::href(array(
+					"caption" => t("T&uuml;hjenda soodustoodete tabel"),
+					"url" => $this->mk_my_orb("clear_discount_products", array(
+						"id" => $arr['obj_inst']->id(),
+					)),
+				));
+				break;
+
+			case "discount_products_count":
+				$prop['value'] = $this->db_fetch_field("select count(*) as count from bp_discount_products", "count");
 				break;
 
 			case "foldernames":
@@ -2122,12 +2158,12 @@ class otto_import extends class_base
 		{
 			$retval = aw_ini_get("baseurl").str_replace("afto=1", "", $arr["return_url"])."&afto=".$afv;
 		}
-
+/*
 		if (!$arr["testjs"])
 		{
 			//return $retval;
 		}
-
+*/
 		// rewrite some vars that are hard to rewire in js and forward to shop order cart
 		$vars = $arr;
 		if ($arr["spid"])
@@ -2142,9 +2178,16 @@ class otto_import extends class_base
 		}
 		else
 		{
+/*
+if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
+{
+	arr($arr);
+}
+*/
 			$vars["order_data"] = array();
 			$vars["order_data"][$arr["add_to_cart"]]["color"] = ($arr["order_data_color"] != "" ? $arr["order_data_color"] : "---");
 			$vars["order_data"][$arr["add_to_cart"]]["size"] = $arr["size_name"];
+			$vars["order_data"][$arr["add_to_cart"]]["new_price"] = $arr["new_price"];
 			$vars["order_data"][$arr["add_to_cart"]]["url"] = $retval;
 
 			$vars["add_to_cart"] = array();
@@ -2815,6 +2858,70 @@ arr("<b>".$first_im."</b>");
 			$ret[] = obj($row["aw_oid"]);
 		}
 		return $ret;
+	}
+	/**
+		@attrib name=import_discount_products
+		@param id required type=int
+	**/
+	function import_discount_products($args)
+	{
+		$object_id = $args['id'];
+		$object = new object($object_id);
+
+		$file_url = $object->prop("discount_products_file");
+		if (!empty($file_url))
+		{
+			$rows = file($file_url);
+			if ($rows !== false)
+			{
+				// unset the firs row:
+				unset($rows[0]);
+				// empty yhe table
+				$this->db_query("delete from bp_discount_products");
+			//	echo "importing ".count($rows)." products<br>";
+				foreach($rows as $row)
+				{
+					$fields = explode("\t", $row);
+
+					$sql = "insert into bp_discount_products set ";
+					$sql .= "prom=".$fields[0].",";
+					$sql .= "product_code='".$fields[1]."',";
+					$sql .= "size='".$fields[2]."',";
+					$sql .= "name='".$fields[3]."',";
+					// in the fields[4], size is second time
+					$sql .= "amount=".$fields[5].",";
+					$sql .= "old_price=".$fields[6].",";
+					$sql .= "new_price=".$fields[7].",";
+					$sql .= "category='".$fields[8]."';";
+
+					$this->db_query($sql);
+				}
+			//	echo ".::[ import complete ]::.<br>";
+			}
+			else
+			{
+				echo "<span style=\"color:red;\">Faili ei &otilde;nnestunud lugeda!</span><br>";
+			}
+			
+		}
+		return $this->mk_my_orb("change", array(
+			"id" => $object_id,
+			"group" => "discount_products",
+		));
+	}
+
+	/**
+		@attrib name=clear_discount_products
+		@param id optional int
+	**/
+	function clear_discount_products($args)
+	{
+		$this->db_query("delete from bp_discount_products");
+
+		return $this->mk_my_orb("change", array(
+			"id" => $args['id'],
+			"group" => "discount_products",
+		));	
 	}
 }
 
