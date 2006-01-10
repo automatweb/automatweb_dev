@@ -147,6 +147,46 @@
             <caption>Esimene leht kust pilte otsitakse</caption>
       </property>
       <property>
+            <name>discount_products_file</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>60</size>
+            <caption>Soodustoodete faili asukoht</caption>
+      </property>
+      <property>
+            <name>discount_products_count</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>Ridu tabelis</caption>
+      </property>
+      <property>
+            <name>import_discount_products</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>&amp;nbsp;</caption>
+      </property>
+      <property>
+            <name>clear_discount_products</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>&amp;nbsp;</caption>
+      </property>
+      <property>
             <name>folders</name>
             <table>objects</table>
             <group>folders</group>
@@ -322,6 +362,9 @@
             <files>
                   <caption>Failid</caption>
             </files>
+            <discount_products>
+                  <caption>Soodustooted</caption>
+            </discount_products>
             <foldersa>
                   <caption>Kataloogid</caption>
             </foldersa>
