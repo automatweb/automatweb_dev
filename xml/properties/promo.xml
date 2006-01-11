@@ -185,6 +185,40 @@
             <group>doc_ord</group>
       </property>
       <property>
+            <name>sort_by2</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>doc_ord</group>
+            <caption>Dokumente j&amp;amp;auml;rjestatakse (2)</caption>
+      </property>
+      <property>
+            <name>sort_ord2</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>doc_ord</group>
+      </property>
+      <property>
+            <name>sort_by3</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>doc_ord</group>
+            <caption>Dokumente j&amp;amp;auml;rjestatakse (3)</caption>
+      </property>
+      <property>
+            <name>sort_ord3</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>doc_ord</group>
+      </property>
+      <property>
             <name>image</name>
             <type>relpicker</type>
             <reltype>RELTYPE_IMAGE</reltype>

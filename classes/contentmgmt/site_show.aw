@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.156 2005/12/16 11:04:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.157 2006/01/11 13:09:36 kristo Exp $
 
 /*
 
@@ -684,8 +684,33 @@ class site_show extends class_base
 				{
 					$ordby = aw_ini_get("menuedit.document_list_order_by");
 				}
-			}
 
+				if ($obj->meta("sort_by2") != "")
+				{
+					$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by2");
+					if ($obj->meta("sort_ord2") != "")
+					{
+						$ordby .= " ".$obj->meta("sort_ord2");
+					}
+					if ($obj->meta("sort_by2") == "documents.modified")
+					{
+						$ordby .= ", objects.created DESC";
+					};
+				}
+
+				if ($obj->meta("sort_by3") != "")
+				{
+					$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by3");
+					if ($obj->meta("sort_ord3") != "")
+					{
+						$ordby .= " ".$obj->meta("sort_ord3");
+					}
+					if ($obj->meta("sort_by3") == "documents.modified")
+					{
+						$ordby .= ", objects.created DESC";
+					};
+				}
+			}
 			if ($ordby == "")
 			{
 				$ordby = "objects.jrk";

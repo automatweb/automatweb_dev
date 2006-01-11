@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.80 2005/12/16 11:04:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.81 2006/01/11 13:09:36 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -93,6 +93,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 		@caption Dokumente j&auml;rjestatakse
 
 		@property sort_ord type=select table=objects field=meta method=serialize group=doc_ord
+
+		@property sort_by2 type=select table=objects field=meta method=serialize group=doc_ord
+		@caption Dokumente j&auml;rjestatakse (2)
+
+		@property sort_ord2 type=select table=objects field=meta method=serialize group=doc_ord
+
+		@property sort_by3 type=select table=objects field=meta method=serialize group=doc_ord
+		@caption Dokumente j&auml;rjestatakse (3)
+
+		@property sort_ord3 type=select table=objects field=meta method=serialize group=doc_ord
 
 @groupinfo look caption="Välimus"
 
@@ -218,6 +228,8 @@ class promo extends class_base
 				break;
 
 			case "sort_by":
+			case "sort_by2":
+			case "sort_by3":
 				$prop['options'] = array(
 					'' => "",
 					'objects.jrk' => t("J&auml;rjekorra j&auml;rgi"),
@@ -230,6 +242,8 @@ class promo extends class_base
 				break;
 
 			case "sort_ord":
+			case "sort_ord2":
+			case "sort_ord3":
 				$prop['options'] = array(
 					'DESC' => t("Suurem (uuem) enne"),
 					'ASC' => t("V&auml;iksem (vanem) enne"),
