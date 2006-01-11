@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.74 2005/12/29 12:35:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.75 2006/01/11 09:05:15 ahti Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1162,6 +1162,7 @@ class cfgform extends class_base
 				"name" => "b".$key,
 				"type" => "layout",
 				"rtype" => "hbox",
+				"no_caption" => 1,
 			);
 			/*
 			$items = array(
@@ -1189,10 +1190,7 @@ class cfgform extends class_base
 				$grplist[$key]["caption"] = $val;
 				$styl = $arr["request"]["grpstyle"][$key];
 				$view = $arr["request"]["grpview"][$key];
-				if(!empty($view))
-				{
-					$grplist[$key]["grpview"] = $view;
-				}
+				$grplist[$key]["grpview"] = $view;
 				if (!empty($styl))
 				{
 					$grplist[$key]["grpstyle"] = $styl;
