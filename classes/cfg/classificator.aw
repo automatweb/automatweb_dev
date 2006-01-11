@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.14 2005/12/22 11:08:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.15 2006/01/11 10:54:09 ahti Exp $
 
 /*
 
@@ -101,7 +101,7 @@ class classificator extends class_base
 			$ch_args["object_type_id"] = $prop["object_type_id"];
 		}
 
-		list($choices,$name,$use_type,$default_value) = $this->get_choices($ch_args);
+		list($achoices,$name,$use_type,$default_value,$choices) = $this->get_choices($ch_args);
 
 		$selected = false;
 		$connections = array();
@@ -309,34 +309,8 @@ class classificator extends class_base
 		$langid = aw_global_get("lang_id");
 
 		$ret = array(
-			"list" => $olx->list,
-			"list_names" => $olx->list_names,
-		);
-		
-		
-/*
-		foreach($olx->arr() as $o)
-		{
-			$tolked = $o->meta();
-			$id = $o->id();
-			$parent_id = $o->parent();
-			$parent_obj = new object($parent_id);
-			$root_id = $parent_obj -> parent();
-			$root_obj = new object($root_id);
-			$root_meta = $root_obj->meta();
-			if ($root_meta[transyes])
-			{ 
-				if($tolked["tolge"][$langid])
-				{
-					$olx->list_names[$id] = $tolked["tolge"][$langid];
-				}
-			}
-		}		
-		return array($olx,$ofto->name(),$use_type, $default_value);
-*/	
-		$ret = array(
-			"list" => $olx->list,
-			"list_names" => $olx->list_names,
+			"list" => $olx->ids(),
+			"list_names" => $olx->names(),
 		);
 
 		$obj_meta = array();
@@ -363,7 +337,7 @@ class classificator extends class_base
 				}
 			}
 		}
-		return array($ret,$ofto->name(),$use_type, $default_value);
+		return array($olx,$ofto->name(),$use_type, $default_value, $ret);
 	}
 
 	function process_vcl_property($arr)
@@ -389,7 +363,7 @@ class classificator extends class_base
 			};
 		};
 
-		list($choices,,) = $this->get_choices(array(
+		list(,,,,$choices) = $this->get_choices(array(
 			"clid" => $arr["clid"],
 			"name" => $property["name"],
 			"obj_inst" => $arr["obj_inst"],
