@@ -641,9 +641,17 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		$mh = md5($content);
+		if ($_SESSION["last_mail"] == $mh && $_SESSION["last_mail_time"] > (time() - 60))
+		{
+			$send_mail = false;
+		}
+
 		if ($send_mail)
 		{
 			send_mail("vead@struktuur.ee", $subj, $content,$head);
+			$_SESSION["last_mail"] = $mh;
+			$_SESSION["last_mail_time"] = time();
 		}
 
 		// here we replicate the error to the site that logs all errors (usually aw.struktuur.ee)
