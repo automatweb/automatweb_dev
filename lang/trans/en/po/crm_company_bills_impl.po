@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_bills_impl.aw:13
 #: classes/applications/crm/crm_company_bills_impl.aw:114
-#: classes/applications/crm/crm_company_bills_impl.aw:504
+#: classes/applications/crm/crm_company_bills_impl.aw:514
 msgid "Loo arve"
 msgstr "Create invoice"
 
@@ -93,17 +93,17 @@ msgid "Kustuta"
 msgstr "Delete"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:455
-#: classes/applications/crm/crm_company_bills_impl.aw:487
+#: classes/applications/crm/crm_company_bills_impl.aw:497
 msgid "Salvesta"
 msgstr "Save"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:461
-#: classes/applications/crm/crm_company_bills_impl.aw:493
+#: classes/applications/crm/crm_company_bills_impl.aw:503
 msgid "Kustuta valitud arved"
 msgstr "Delete selected invoices"
 
 #: classes/applications/crm/crm_company_bills_impl.aw:462
-#: classes/applications/crm/crm_company_bills_impl.aw:494
+#: classes/applications/crm/crm_company_bills_impl.aw:504
 msgid "Oled kindel et soovid valitud arved kustutada?"
 msgstr "Are You sure You want to delete selected invoices?"
 
@@ -111,6 +111,21 @@ msgstr "Are You sure You want to delete selected invoices?"
 msgid "Ekspordi"
 msgstr "Export"
 
-#: classes/applications/crm/crm_company_bills_impl.aw:476
-msgid "Hansa raama"
-msgstr "Hansa Raama"
+#: classes/applications/crm/crm_company_bills_impl.aw:478
+msgid "Hansa raama (ridadega)"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:485
+msgid "Hansa raama (koondatud)"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:541
+msgid "Arve nr %s"
+msgstr ""
+
+#: classes/applications/crm/crm_company_bills_impl.aw:583
+msgid "EEK"
+msgstr ""
+
+#~ msgid "Hansa raama"
+#~ msgstr "Hansa Raama"

@@ -18,7 +18,7 @@ msgstr ""
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:26 classes/applications/crm/crm_company_qv_impl.aw:391
+#: classes/applications/crm/crm_company_qv_impl.aw:26 classes/applications/crm/crm_company_qv_impl.aw:421
 msgid "Nimetus"
 msgstr ""
 
@@ -46,123 +46,135 @@ msgstr ""
 msgid "<b>Projektid (5 värskemat)</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:174
+#: classes/applications/crm/crm_company_qv_impl.aw:134
+msgid "Valitud ajavahemikus ei ole &uuml;htegi projekti!"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:184
 msgid "<b>Tegevused</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:187
+#: classes/applications/crm/crm_company_qv_impl.aw:197
 msgid "<b>Tegevused (10 värskemat)</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:220
+#: classes/applications/crm/crm_company_qv_impl.aw:230
 msgid "Tehtud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:220
+#: classes/applications/crm/crm_company_qv_impl.aw:230
 msgid "T&ouml;&ouml;s"
 msgstr ""
 
 #: classes/applications/crm/crm_company_qv_impl.aw:238
+msgid "Valitud ajavahemikus ei ole &uuml;htegi tegevust!"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:258
 msgid "<span style='font-size: 0px;'>y</span><b>Arved</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:251
+#: classes/applications/crm/crm_company_qv_impl.aw:271
 msgid "<span style='font-size: 0px;'>y</span><b>Arved (10 värskemat)</b>"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:390
+#: classes/applications/crm/crm_company_qv_impl.aw:305
+msgid "Valitud ajavahemikus ei ole &uuml;htegi arvet!"
+msgstr ""
+
+#: classes/applications/crm/crm_company_qv_impl.aw:420
 msgid "Kliendi &uuml;ldandmed"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:392
+#: classes/applications/crm/crm_company_qv_impl.aw:422
 msgid "Alguskuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:393
+#: classes/applications/crm/crm_company_qv_impl.aw:423
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:394
+#: classes/applications/crm/crm_company_qv_impl.aw:424
 msgid "Suhte looja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:395
+#: classes/applications/crm/crm_company_qv_impl.aw:425
 msgid "Registrikood"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:396
+#: classes/applications/crm/crm_company_qv_impl.aw:426
 msgid "Kliendisuhe"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:397
+#: classes/applications/crm/crm_company_qv_impl.aw:427
 msgid "Sissetuleku meetod"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:398
+#: classes/applications/crm/crm_company_qv_impl.aw:428
 msgid "KMK nr"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:399
+#: classes/applications/crm/crm_company_qv_impl.aw:429
 msgid "Kliendihaldur"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:400
+#: classes/applications/crm/crm_company_qv_impl.aw:430
 msgid "Tegevuse kirjeldus"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:401
+#: classes/applications/crm/crm_company_qv_impl.aw:431
 msgid "Kaubam&auml;rgid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:402
+#: classes/applications/crm/crm_company_qv_impl.aw:432
 msgid "Kontaktandmed"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:403
+#: classes/applications/crm/crm_company_qv_impl.aw:433
 msgid "Kontaktisikud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:404
+#: classes/applications/crm/crm_company_qv_impl.aw:434
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:405
+#: classes/applications/crm/crm_company_qv_impl.aw:435
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:406
+#: classes/applications/crm/crm_company_qv_impl.aw:436
 msgid "Faks"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:407
+#: classes/applications/crm/crm_company_qv_impl.aw:437
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:408
+#: classes/applications/crm/crm_company_qv_impl.aw:438
 msgid "WWW"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:409
+#: classes/applications/crm/crm_company_qv_impl.aw:439
 msgid "Tulud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:410
+#: classes/applications/crm/crm_company_qv_impl.aw:440
 msgid "Ajavahemikul"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:411
+#: classes/applications/crm/crm_company_qv_impl.aw:441
 msgid "T&ouml;&ouml;tunde kokku"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:412
+#: classes/applications/crm/crm_company_qv_impl.aw:442
 msgid "Arvele l&auml;inud t&ouml;&ouml;tunde"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:413
+#: classes/applications/crm/crm_company_qv_impl.aw:443
 msgid "Tehtud t&ouml;id summas"
 msgstr ""
 
-#: classes/applications/crm/crm_company_qv_impl.aw:414
+#: classes/applications/crm/crm_company_qv_impl.aw:444
 msgid "Esitatud arveid summas"
 msgstr ""
 

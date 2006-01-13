@@ -69,6 +69,10 @@ msgstr ""
 msgid "Klassi Konteiner (22) nimi"
 msgstr ""
 
+#: aw.ini:class_23
+msgid "Klassi Konteineri n&auml;itamine (23) nimi"
+msgstr ""
+
 #: aw.ini:class_28
 msgid "Klassi Graafik (28) nimi"
 msgstr ""
@@ -341,6 +345,10 @@ msgstr ""
 # aw.ini:class_123
 #: aw.ini:class_123
 msgid "Klassi Ikoon (123) nimi"
+msgstr ""
+
+#: aw.ini:class_124
+msgid "Klassi Objekti otsing (124) nimi"
 msgstr ""
 
 # aw.ini:class_126
@@ -2166,6 +2174,22 @@ msgstr ""
 
 #: aw.ini:class_1036
 msgid "Klassi Kliendibaasi seaded (1036) nimi"
+msgstr ""
+
+#: aw.ini:class_1046
+msgid "Klassi Maksum&auml;&auml;r (1046) nimi"
+msgstr ""
+
+#: aw.ini:class_1047
+msgid "Klassi Taavi import (1047) nimi"
+msgstr ""
+
+#: aw.ini:class_1048
+msgid "Klassi CRM Numbriseeria (1048) nimi"
+msgstr ""
+
+#: aw.ini:class_1049
+msgid "Klassi Kliendibaasi otsingu grupp (1049) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29

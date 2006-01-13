@@ -45,7 +45,6 @@ $GLOBALS["TRANS"]["Seose konfiguratsioon (RELTYPE_CONFIG) tekst"] = "configurati
 $GLOBALS["TRANS"]["Seose toode (RELTYPE_PRODUCT) tekst"] = "product";
 $GLOBALS["TRANS"]["Seose pakett (RELTYPE_PACKET) tekst"] = "packet";
 $GLOBALS["TRANS"]["Seose lao sissetulek (RELTYPE_STORAGE_INCOME) tekst"] = "warehouse reception";
-$GLOBALS["TRANS"]["Seose lao v&auml;jaminek (RELTYPE_STORAGE_EXPORT) tekst"] = "warehouse export";
 $GLOBALS["TRANS"]["Seose tellimus (RELTYPE_ORDER) tekst"] = "order";
 $GLOBALS["TRANS"]["Seose tellimiskeskkond (RELTYPE_ORDER_CENTER) tekst"] = "ordering center";
 $GLOBALS["TRANS"]["Seose saada tellimused (RELTYPE_EMAIL) tekst"] = "send offers";

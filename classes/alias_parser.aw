@@ -26,7 +26,6 @@ class alias_parser extends core
 			// if no aliases are in text, don't do nothin
 			return;
 		}
-
 		extract($args);
 
 		$this->tmp_vars = array();

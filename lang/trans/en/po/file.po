@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-06 12:50+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 # classes/file.aw:class_41_help
 #: classes/file.aw:class_41_help
@@ -231,12 +231,16 @@ msgstr ""
 msgid "Omaduse User-defined 2 (udef2) help"
 msgstr ""
 
-#: classes/file.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/file.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/file.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/file.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
 # classes/file.aw:group_settings
@@ -259,15 +263,22 @@ msgstr "Times"
 msgid "Grupi Ajad (dates) help"
 msgstr ""
 
+#: classes/file.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/file.aw:rel_RELTYPE_KEYWORD
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:115
+#: classes/file.aw:128
 msgid "fail puudub"
 msgstr "file missing"
 
-#: classes/file.aw:955
+#: classes/file.aw:985
 msgid "Need either id or parent"
 msgstr "Need either id or parent"
-

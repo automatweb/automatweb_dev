@@ -209,14 +209,6 @@ msgstr ""
 msgid "Omaduse Tulemuste tabel (result_table) help"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/calendar/event_search.aw:group_ftsearch
 #: classes/applications/calendar/event_search.aw:group_ftsearch
 msgid "Grupi Otsinguvorm (ftsearch) pealkiri"
@@ -379,7 +371,7 @@ msgid "Eraldaja enne"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:398
-msgid "Eraldaja pärast"
+msgid "Eraldaja p&auml;rast"
 msgstr ""
 
 #: classes/applications/calendar/event_search.aw:403
@@ -402,14 +394,14 @@ msgstr ""
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:825
-#: classes/applications/calendar/event_search.aw:831
+#: classes/applications/calendar/event_search.aw:826
 #: classes/applications/calendar/event_search.aw:832
-#: classes/applications/calendar/event_search.aw:848
-#: classes/applications/calendar/event_search.aw:854
-msgid "kõik"
+#: classes/applications/calendar/event_search.aw:833
+#: classes/applications/calendar/event_search.aw:849
+#: classes/applications/calendar/event_search.aw:855
+msgid "k&otilde;ik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:861
+#: classes/applications/calendar/event_search.aw:862
 msgid "Otsi"
 msgstr ""

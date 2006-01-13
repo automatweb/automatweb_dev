@@ -1,7 +1,6 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Mitu topis (top) caption"] = "Number of entries in top";
 $GLOBALS["TRANS"]["Omaduse J&auml;rjestatakse (top_type) caption"] = "Sort by";
-$GLOBALS["TRANS"]["Omaduse Millistele objektidele kehtib (objects_from) caption"] = "Which obects rating applies to";
 $GLOBALS["TRANS"]["Omaduse Vali klass (objects_from_clid) caption"] = "Select class";
 $GLOBALS["TRANS"]["Omaduse Vali kataloogid (objects_from_folder) caption"] = "Select folders";
 $GLOBALS["TRANS"]["Omaduse Vali objekt (objects_from_oid) caption"] = "Select object";

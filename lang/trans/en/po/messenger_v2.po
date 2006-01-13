@@ -299,14 +299,6 @@ msgstr ""
 msgid "Omaduse Reeglid (rule_editor) help"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/messenger/messenger_v2.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/messenger/messenger_v2.aw:group_settings
 #: classes/applications/messenger/messenger_v2.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
@@ -435,7 +427,7 @@ msgid "Kustutada?"
 msgstr "Delete?"
 
 #: classes/applications/messenger/messenger_v2.aw:252
-#: classes/applications/messenger/messenger_v2.aw:637
+#: classes/applications/messenger/messenger_v2.aw:655
 msgid "Kustuta märgitud kirjad"
 msgstr "Delete marked messages"
 
@@ -448,56 +440,56 @@ msgid "IMAP sissepääs on konfigureerimata"
 msgstr "IMAP login is not configured"
 
 #: classes/applications/messenger/messenger_v2.aw:359
-#: classes/applications/messenger/messenger_v2.aw:585
+#: classes/applications/messenger/messenger_v2.aw:603
 msgid ""
 "Login failed, check whether server name, user and password are correct.<br>"
 msgstr ""
 "Login failed, check whether server name, user and password are correct.<br>"
 
-#: classes/applications/messenger/messenger_v2.aw:455
+#: classes/applications/messenger/messenger_v2.aw:473
 msgid "ei"
 msgstr "no"
 
-#: classes/applications/messenger/messenger_v2.aw:455
+#: classes/applications/messenger/messenger_v2.aw:473
 msgid "jah"
 msgstr "yes"
 
-#: classes/applications/messenger/messenger_v2.aw:595
+#: classes/applications/messenger/messenger_v2.aw:613
 msgid "Uus kiri"
 msgstr "New message"
 
-#: classes/applications/messenger/messenger_v2.aw:610
+#: classes/applications/messenger/messenger_v2.aw:628
 msgid "Vii kirjad"
 msgstr "Move messages"
 
-#: classes/applications/messenger/messenger_v2.aw:624
+#: classes/applications/messenger/messenger_v2.aw:642
 msgid "Vii valitud kirjad kataloogi"
 msgstr "Move messages to folder"
 
-#: classes/applications/messenger/messenger_v2.aw:638
+#: classes/applications/messenger/messenger_v2.aw:656
 msgid "Kustutada märgitud kirjad?"
 msgstr "Delete marked messages?"
 
-#: classes/applications/messenger/messenger_v2.aw:721
+#: classes/applications/messenger/messenger_v2.aw:739
 msgid "ükski kiri INBOXis ei matchinud ühegi ruuliga<br>"
 msgstr "no messages in INBOX matched any rule"
 
-#: classes/applications/messenger/messenger_v2.aw:738
+#: classes/applications/messenger/messenger_v2.aw:756
 msgid "ühtegi ruuli pole seostatud"
 msgstr "no rule connected"
 
-#: classes/applications/messenger/messenger_v2.aw:820
-#: classes/applications/messenger/messenger_v2.aw:833
+#: classes/applications/messenger/messenger_v2.aw:838
+#: classes/applications/messenger/messenger_v2.aw:851
 msgid "<strong>message with subject: %s</strong><br>"
 msgstr "<strong>message with subject: %s</strong><br>"
 
-#: classes/applications/messenger/messenger_v2.aw:822
+#: classes/applications/messenger/messenger_v2.aw:840
 msgid ""
 " &nbsp; &nbsp; uid = %s, matches subject rule %s, moving to %s folder<br>"
 msgstr ""
 " &nbsp; &nbsp; uid = %s, matches subject rule %s, moving to %s folder<br>"
 
-#: classes/applications/messenger/messenger_v2.aw:835
+#: classes/applications/messenger/messenger_v2.aw:853
 msgid " &nbsp; &nbsp; matches from rule %s, moving to %s folder<br>"
 msgstr " &nbsp; &nbsp; matches from rule %s, moving to %s folder<br>"
 

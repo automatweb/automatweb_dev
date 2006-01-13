@@ -174,14 +174,6 @@ msgstr ""
 msgid "Omaduse Parool (auto_import_passwd) help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_config
 #: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:group_config
 msgid "Grupi Seaded (config) pealkiri"
@@ -258,11 +250,11 @@ msgstr "XML field"
 msgid "Vormi v&auml;li"
 msgstr "Form field"
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:361
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:360
 msgid "You don't have view access to import object!"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:371
+#: classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:370
 msgid "You don't have view access to eventform object!"
 msgstr ""
 

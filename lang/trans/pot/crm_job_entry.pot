@@ -278,15 +278,31 @@ msgstr ""
 msgid "Omaduse Sisu (task_content) help"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/applications/crm/crm_job_entry.aw:prop_res_desc
+msgid "Omaduse Ressursid (res_desc) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/applications/crm/crm_job_entry.aw:prop_res_desc_comment
+msgid "Omaduse Ressursid (res_desc) kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:110 classes/applications/crm/crm_job_entry.aw:119 classes/applications/crm/crm_job_entry.aw:128
+#: classes/applications/crm/crm_job_entry.aw:prop_res_desc_help
+msgid "Omaduse Ressursid (res_desc) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_resource_sel
+msgid "Omaduse Ressursid (resource_sel) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_resource_sel_comment
+msgid "Omaduse Ressursid (resource_sel) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_resource_sel_help
+msgid "Omaduse Ressursid (resource_sel) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:114 classes/applications/crm/crm_job_entry.aw:123 classes/applications/crm/crm_job_entry.aw:132
 msgid "--Vali--"
 msgstr ""
 

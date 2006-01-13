@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_export.aw:class_1002_help
 msgid "Klassi Kinnisvaraobjektide eksport help"
 msgstr ""
@@ -39,15 +38,20 @@ msgid "Omaduse City24 ekspordi xsl faili url (city24export_xsl) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:prop_city24export_encoding
-msgid "Omaduse Koodid aadresside City24 ekspordi jaoks (city24export_encoding) caption"
+msgid ""
+"Omaduse Koodid aadresside City24 ekspordi jaoks (city24export_encoding) "
+"caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:prop_city24export_encoding_comment
-msgid "Omaduse Koodid aadresside City24 ekspordi jaoks (city24export_encoding) kommentaar"
+msgid ""
+"Omaduse Koodid aadresside City24 ekspordi jaoks (city24export_encoding) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:prop_city24export_encoding_help
-msgid "Omaduse Koodid aadresside City24 ekspordi jaoks (city24export_encoding) help"
+msgid ""
+"Omaduse Koodid aadresside City24 ekspordi jaoks (city24export_encoding) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:prop_last_city24export
@@ -75,23 +79,17 @@ msgid "Omaduse Viimane eksport City24 (last_city24export_time) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:prop_last_city24export_error
-msgid "Omaduse Viimasel ekspordil esinenud vead (last_city24export_error) caption"
+msgid ""
+"Omaduse Viimasel ekspordil esinenud vead (last_city24export_error) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:prop_last_city24export_error_comment
-msgid "Omaduse Viimasel ekspordil esinenud vead (last_city24export_error) kommentaar"
+msgid ""
+"Omaduse Viimasel ekspordil esinenud vead (last_city24export_error) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:prop_last_city24export_error_help
 msgid "Omaduse Viimasel ekspordil esinenud vead (last_city24export_error) help"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_export.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_export.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_export.aw:rel_RELTYPE_OWNER
@@ -102,11 +100,12 @@ msgstr ""
 msgid "Seose Aadresside vastavuskoodid (RELTYPE_ENCODING) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:73
+#: classes/applications/realestate_management/realestate_export.aw:84
 msgid "Kinnisvarahalduskeskkond m22ramata v6i puudub juurdep22su6igus.\n"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:174
-msgid "Viga objekti ekspordil. AW id: %s.\n<blockquote>%s</blockquote>\n"
+#: classes/applications/realestate_management/realestate_export.aw:188
+msgid ""
+"Viga objekti ekspordil. AW id: %s.\n"
+"<blockquote>%s</blockquote>"
 msgstr ""
-

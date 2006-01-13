@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/site_styles.aw:class_998_help
 msgid "Klassi Saidi stiilid help"
 msgstr ""
@@ -62,35 +61,26 @@ msgstr ""
 msgid "Omaduse Juhuslik valik (random) help"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/site_styles.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
-#: classes/contentmgmt/site_styles.aw:65
+#: classes/contentmgmt/site_styles.aw:66
 msgid "Ei valita juhuslikult"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:66
+#: classes/contentmgmt/site_styles.aw:67
 msgid "Juhuslik sessiooniti"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:67
+#: classes/contentmgmt/site_styles.aw:68
 msgid "Juhuslik igal laadimisel"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:139
+#: classes/contentmgmt/site_styles.aw:140
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:145
+#: classes/contentmgmt/site_styles.aw:146
 msgid "jrk"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:150
+#: classes/contentmgmt/site_styles.aw:151
 msgid "url"
 msgstr ""
-

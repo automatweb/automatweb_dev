@@ -13,18 +13,18 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:92
+#: classes/vcl/relpicker.aw:94
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:101
+#: classes/vcl/relpicker.aw:103
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:132
+#: classes/vcl/relpicker.aw:133
 msgid "Lisa"
 msgstr ""
 
-#: classes/vcl/relpicker.aw:150
+#: classes/vcl/relpicker.aw:151
 msgid "Lisa uus %s"
 msgstr ""

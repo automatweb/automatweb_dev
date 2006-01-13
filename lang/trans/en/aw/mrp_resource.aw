@@ -19,6 +19,7 @@ $GLOBALS["TRANS"]["Grupi Tööleht (grp_resource_joblist) pealkiri"] = "Job list";
 $GLOBALS["TRANS"]["Grupi Seaded (grp_resource_settings) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Grupi Hooldus (grp_resource_maintenance) pealkiri"] = "Maitenance";
 $GLOBALS["TRANS"]["Grupi Tööajad (grp_resource_unavailable) pealkiri"] = "Available times";
+$GLOBALS["TRANS"]["Grupi T&ouml;&ouml;ajad (grp_resource_unavailable_work) pealkiri"] = "Available times";
 $GLOBALS["TRANS"]["Grupi Kinnised ajad (grp_resource_unavailable_una) pealkiri"] = "Unavailable times";
 $GLOBALS["TRANS"]["Seose Ressursi kalender (RELTYPE_MRP_SCHEDULE) tekst"] = "Resource calendar";
 $GLOBALS["TRANS"]["Seose Ressursi omanik (RELTYPE_MRP_OWNER) tekst"] = "Resource owner";

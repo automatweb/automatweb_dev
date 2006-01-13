@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.74 2006/01/05 11:49:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.75 2006/01/13 11:12:18 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -461,7 +461,14 @@ class project extends class_base
 				$co = $u->get_current_company();
 				$i = get_instance(CL_CRM_COMPANY);
 				$people = array_keys($i->get_employee_picker(obj($co),false,true));
-				$ol = new object_list(array("oid" => array_values($people)));
+				if (!count($people))
+				{
+					$ol = new object_list();
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => array_values($people), "lang_id" => array(), "site_id" => array()));
+				}
 				$sel = array();
 				foreach($cur_pts as $pt)
 				{

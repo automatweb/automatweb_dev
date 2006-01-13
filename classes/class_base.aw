@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.449 2006/01/03 16:50:42 kristo Exp $
+// $Id: class_base.aw,v 2.450 2006/01/13 11:12:17 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2180,6 +2180,10 @@ class class_base extends aw_template
 		};
 
 
+		if (!is_array($this->relinfo))
+		{
+			$this->load_defaults();
+		}
 
 		// only relation object uses this. But hey, if the relation object
 		// thingie is now done differently then I do not need this, yees?
@@ -2516,7 +2520,6 @@ class class_base extends aw_template
 					$val["caption"] = $trans;
 				};
 			}
-
 
 			$argblock["prop"] = &$val;
 

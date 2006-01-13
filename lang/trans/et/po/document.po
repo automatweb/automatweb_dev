@@ -13,45 +13,45 @@ msgstr ""
 msgid "Viimati muudetud:"
 msgstr ""
 
-#: classes/document.aw:626
+#: classes/document.aw:633
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
 msgstr ""
 
-#: classes/document.aw:650
+#: classes/document.aw:657
 msgid "Loe edasi"
 msgstr ""
 
-#: classes/document.aw:1049 classes/document.aw:1098
+#: classes/document.aw:1060 classes/document.aw:1109
 msgid "Vaata lisaks:"
 msgstr ""
 
-#: classes/document.aw:1054 classes/document.aw:1103
+#: classes/document.aw:1065 classes/document.aw:1114
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2293
+#: classes/document.aw:2304
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2300
+#: classes/document.aw:2311
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2308
+#: classes/document.aw:2319
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:2831
+#: classes/document.aw:2842
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!"
 "<br /><br />\n"
 "\n"
 msgstr ""
 
-#: classes/document.aw:2861
+#: classes/document.aw:2872
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:2863
+#: classes/document.aw:2874
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""

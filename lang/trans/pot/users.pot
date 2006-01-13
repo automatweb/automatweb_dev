@@ -10,27 +10,27 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/users.aw:225
+#: classes/users.aw:223
 msgid "Parool on edukalt vahetatud"
 msgstr ""
 
-#: classes/users.aw:775
+#: classes/users.aw:773
 msgid "Vigane kasutajanimi"
 msgstr ""
 
-#: classes/users.aw:787
+#: classes/users.aw:785
 msgid "Sellist kasutajat pole registreeritud"
 msgstr ""
 
-#: classes/users.aw:799
+#: classes/users.aw:797
 msgid "Sellist võtit pole väljastatud"
 msgstr ""
 
-#: classes/users.aw:811
+#: classes/users.aw:809
 msgid "See võti on juba aegunud"
 msgstr ""
 
-#: classes/users.aw:811
+#: classes/users.aw:809
 msgid "Telli uusi v&otilde;ti"
 msgstr ""
 

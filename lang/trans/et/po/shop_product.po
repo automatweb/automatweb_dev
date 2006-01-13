@@ -89,6 +89,18 @@ msgstr ""
 msgid "Omaduse Hinnakujundus (price_settings) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_tax_rate
+msgid "Omaduse Maksum&auml;&auml;r (tax_rate) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_tax_rate_comment
+msgid "Omaduse Maksum&auml;&auml;r (tax_rate) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_tax_rate_help
+msgid "Omaduse Maksum&auml;&auml;r (tax_rate) help"
+msgstr ""
+
 # classes/applications/shop/shop_product.aw:prop_userch1
 #: classes/applications/shop/shop_product.aw:prop_userch1
 msgid "Omaduse User-defined checkbox 1 (userch1) caption"
@@ -983,14 +995,6 @@ msgstr ""
 msgid "Omaduse Lingid (lnk) help"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/shop_product.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/shop/shop_product.aw:group_data
 #: classes/applications/shop/shop_product.aw:group_data
 msgid "Grupi Toote info (data) pealkiri"
@@ -1133,6 +1137,10 @@ msgstr ""
 msgid "Seose kasutajadefineeritud muutuja 10 (RELTYPE_VARUSERM10) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:503
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_TAX_RATE
+msgid "Seose Maksum&amp;auml;&amp;auml;r (RELTYPE_TAX_RATE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:509
 msgid "shop_product::draw(): no layout set!"
 msgstr ""

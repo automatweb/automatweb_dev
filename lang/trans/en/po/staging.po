@@ -59,6 +59,18 @@ msgstr ""
 msgid "Omaduse Algab (start1) help"
 msgstr ""
 
+#: classes/applications/calendar/staging.aw:prop_end
+msgid "Omaduse Lõppeb (end) caption"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_end_comment
+msgid "Omaduse Lõppeb (end) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:prop_end_help
+msgid "Omaduse Lõppeb (end) help"
+msgstr ""
+
 # classes/applications/calendar/staging.aw:prop_img
 #: classes/applications/calendar/staging.aw:prop_img
 msgid "Omaduse Pilt (img) caption"
@@ -182,14 +194,6 @@ msgstr ""
 msgid "Omaduse Ajad (times) help"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/calendar/staging.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/calendar/staging.aw:group_projects
 #: classes/applications/calendar/staging.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
@@ -202,11 +206,11 @@ msgstr ""
 
 # classes/applications/calendar/staging.aw:group_trans
 #: classes/applications/calendar/staging.aw:group_trans
-msgid "Grupi Tõlkimine (trans) pealkiri"
+msgid "Grupi T&otilde;lkimine (trans) pealkiri"
 msgstr "Translation"
 
 #: classes/applications/calendar/staging.aw:group_trans_help
-msgid "Grupi Tõlkimine (trans) help"
+msgid "Grupi T&otilde;lkimine (trans) help"
 msgstr ""
 
 # classes/applications/calendar/staging.aw:group_times
@@ -233,40 +237,40 @@ msgstr "Copy"
 msgid "Seose Dokument (RELTYPE_DOCUMENT) tekst"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:141
+#: classes/applications/calendar/staging.aw:144
 msgid "Aktiivne objekt"
 msgstr "Active object"
 
-#: classes/applications/calendar/staging.aw:151
+#: classes/applications/calendar/staging.aw:154
 msgid "Originaalobjekti ID"
 msgstr "Original object ID"
 
-#: classes/applications/calendar/staging.aw:158
+#: classes/applications/calendar/staging.aw:161
 msgid "Originaalobjekt"
 msgstr "Original"
 
-#: classes/applications/calendar/staging.aw:166
+#: classes/applications/calendar/staging.aw:169
 msgid "Koopia"
 msgstr "Copy"
 
-#: classes/applications/calendar/staging.aw:169
+#: classes/applications/calendar/staging.aw:172
 msgid " (Aktiivne)"
 msgstr " (Active)"
 
-#: classes/applications/calendar/staging.aw:187
+#: classes/applications/calendar/staging.aw:190
 msgid "Uued"
 msgstr "New"
 
-#: classes/applications/calendar/staging.aw:196
+#: classes/applications/calendar/staging.aw:199
 msgid "Uus %s"
 msgstr "New %s"
 
-#: classes/applications/calendar/staging.aw:206
+#: classes/applications/calendar/staging.aw:209
 msgid "Tee sündmus %s"
 msgstr "Create event %s"
 
 # classes/applications/calendar/staging.aw:group_trans
-#~ msgid "Grupi T&otilde;lkimine (trans) pealkiri"
+#~ msgid "Grupi Tõlkimine (trans) pealkiri"
 #~ msgstr "Translation"
 
 # classes/applications/calendar/staging.aw:prop_trans

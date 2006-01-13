@@ -182,20 +182,12 @@ msgstr ""
 msgid "Omaduse Click-through ratio (click_through) help"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/banner/banner.aw:group_display
-msgid "Grupi Näitamine (display) pealkiri"
+msgid "Grupi N&auml;itamine (display) pealkiri"
 msgstr ""
 
 #: classes/applications/banner/banner.aw:group_display_help
-msgid "Grupi Näitamine (display) help"
+msgid "Grupi N&auml;itamine (display) help"
 msgstr ""
 
 #: classes/applications/banner/banner.aw:group_stats

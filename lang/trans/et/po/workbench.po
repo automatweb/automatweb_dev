@@ -10,17 +10,21 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/admin/workbench.aw:class_234_help
+#: classes/admin/workbench.aw:class_234_help
 msgid "Klassi T&ouml;&ouml;laud help"
 msgstr ""
 
 # classes/admin/workbench.aw:prop_preview
+#: classes/admin/workbench.aw:prop_preview
 msgid "Omaduse Näita (preview) caption"
 msgstr ""
 
 # classes/admin/workbench.aw:prop_preview_comment
+#: classes/admin/workbench.aw:prop_preview_comment
 msgid "Omaduse Näita (preview) kommentaar"
 msgstr ""
 
 # classes/admin/workbench.aw:prop_preview_help
+#: classes/admin/workbench.aw:prop_preview_help
 msgid "Omaduse Näita (preview) help"
 msgstr ""

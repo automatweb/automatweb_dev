@@ -134,14 +134,6 @@ msgstr ""
 msgid "Omaduse Vaatamisel saada teade (spy) help"
 msgstr ""
 
-#: classes/applications/ecard/ecard.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/ecard/ecard.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/ecard/ecard.aw:group_image
 msgid "Grupi Pilt (image) pealkiri"
 msgstr ""

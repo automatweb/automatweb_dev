@@ -542,12 +542,12 @@ msgstr ""
 #: classes/applications/cb_form_chain/cb_form_chain.aw:1579
 #: classes/applications/cb_form_chain/cb_form_chain.aw:1614
 msgid "Muuda"
-msgstr ""
+msgstr "Edit"
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:1630
 msgid "Omadus"
-msgstr ""
+msgstr "Property"
 
 #: classes/applications/cb_form_chain/cb_form_chain.aw:1636
 msgid "N&auml;ita tabelis"
-msgstr ""
+msgstr "Display in table"

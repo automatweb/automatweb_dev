@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.5 2006/01/06 09:56:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.6 2006/01/13 11:12:18 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded 
 /*
 
@@ -24,13 +24,13 @@
 
 @default group=whom
 
-	@property users type=relpicker multiple=1 store=connect reltype=RELTYPE_USER
+	@property users type=relpicker multiple=1 store=connect reltype=RELTYPE_USER field=meta method=serialize
 	@caption Kasutajad
 
-	@property persons type=relpicker multiple=1 store=connect reltype=RELTYPE_PERSON
+	@property persons type=relpicker multiple=1 store=connect reltype=RELTYPE_PERSON field=meta method=serialize
 	@caption Isikud
 
-	@property cos type=relpicker multiple=1 store=connect reltype=RELTYPE_COMPANY
+	@property cos type=relpicker multiple=1 store=connect reltype=RELTYPE_COMPANY field=meta method=serialize
 	@caption Organisatsioonid
 
 	@property everyone type=checkbox ch_value=1 table=objects field=flags

@@ -253,14 +253,6 @@ msgid ""
 "p.k, h:m;</span><br /> ...) (unavailable_dates) help"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/mrp/mrp_resource.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/mrp/mrp_resource.aw:group_grp_resource_schedule
 #: classes/mrp/mrp_resource.aw:group_grp_resource_schedule
 msgid "Grupi Kalender (grp_resource_schedule) pealkiri"
@@ -312,11 +304,11 @@ msgid "Grupi Tööajad (grp_resource_unavailable) help"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_work
-msgid "Grupi Tööajad (grp_resource_unavailable_work) pealkiri"
+msgid "Grupi T&ouml;&ouml;ajad (grp_resource_unavailable_work) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_work_help
-msgid "Grupi Tööajad (grp_resource_unavailable_work) help"
+msgid "Grupi T&ouml;&ouml;ajad (grp_resource_unavailable_work) help"
 msgstr ""
 
 # classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_una
@@ -486,4 +478,12 @@ msgstr ""
 
 #: classes/mrp/mrp_resource.aw:603
 msgid "Tr&uuml;kiarv Notes"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:1358
+msgid "Ressurss on valitud aegadel kasutuses:<br>"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:1377 classes/mrp/mrp_resource.aw:1396
+msgid "Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>"
 msgstr ""

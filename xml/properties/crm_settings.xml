@@ -48,7 +48,8 @@
             <multiple>1</multiple>
             <store>connect</store>
             <reltype>RELTYPE_USER</reltype>
-            <field>users</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Kasutajad</caption>
       </property>
       <property>
@@ -59,7 +60,8 @@
             <multiple>1</multiple>
             <store>connect</store>
             <reltype>RELTYPE_PERSON</reltype>
-            <field>persons</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Isikud</caption>
       </property>
       <property>
@@ -70,7 +72,8 @@
             <multiple>1</multiple>
             <store>connect</store>
             <reltype>RELTYPE_COMPANY</reltype>
-            <field>cos</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Organisatsioonid</caption>
       </property>
       <property>

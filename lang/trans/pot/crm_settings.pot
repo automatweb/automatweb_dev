@@ -26,12 +26,96 @@ msgstr ""
 msgid "Omaduse Kliendi seadete vorm  (s_cfgform) help"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/applications/crm/crm_settings.aw:prop_s_p_cfgform
+msgid "Omaduse Eraisikust kliendi seadete vorm  (s_p_cfgform) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_settings.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/applications/crm/crm_settings.aw:prop_s_p_cfgform_comment
+msgid "Omaduse Eraisikust kliendi seadete vorm  (s_p_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_s_p_cfgform_help
+msgid "Omaduse Eraisikust kliendi seadete vorm  (s_p_cfgform) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_work_cfgform
+msgid "Omaduse Minu t&ouml;&ouml;koha seadete vorm (work_cfgform) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_work_cfgform_comment
+msgid "Omaduse Minu t&ouml;&ouml;koha seadete vorm (work_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_work_cfgform_help
+msgid "Omaduse Minu t&ouml;&ouml;koha seadete vorm (work_cfgform) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_coworker_cfgform
+msgid "Omaduse T&ouml;&ouml;kaaslaste seadete vorm  (coworker_cfgform) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_coworker_cfgform_comment
+msgid "Omaduse T&ouml;&ouml;kaaslaste seadete vorm  (coworker_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_coworker_cfgform_help
+msgid "Omaduse T&ouml;&ouml;kaaslaste seadete vorm  (coworker_cfgform) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_users
+msgid "Omaduse Kasutajad (users) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_users_comment
+msgid "Omaduse Kasutajad (users) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_users_help
+msgid "Omaduse Kasutajad (users) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_persons
+msgid "Omaduse Isikud (persons) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_persons_comment
+msgid "Omaduse Isikud (persons) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_persons_help
+msgid "Omaduse Isikud (persons) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_cos
+msgid "Omaduse Organisatsioonid (cos) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_cos_comment
+msgid "Omaduse Organisatsioonid (cos) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_cos_help
+msgid "Omaduse Organisatsioonid (cos) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_everyone
+msgid "Omaduse K&otilde;ik  (everyone) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_everyone_comment
+msgid "Omaduse K&otilde;ik  (everyone) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_everyone_help
+msgid "Omaduse K&otilde;ik  (everyone) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:group_whom
+msgid "Grupi Kellele kehtib (whom) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:group_whom_help
+msgid "Grupi Kellele kehtib (whom) help"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_USER
@@ -40,5 +124,13 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_CFGFORM
 msgid "Seose Seadete vorm (RELTYPE_CFGFORM) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:rel_RELTYPE_PERSON
+msgid "Seose Isik (RELTYPE_PERSON) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:rel_RELTYPE_COMPANY
+msgid "Seose Organisatsioon (RELTYPE_COMPANY) tekst"
 msgstr ""
 

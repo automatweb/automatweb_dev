@@ -10,57 +10,14 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/core/dbg/cookiemonster.aw:class__help
+#: classes/applications/unittest/cookiemonster.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
-# classes/core/dbg/cookiemonster.aw:prop_cookietable
-msgid "Omaduse  (cookietable) caption"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:prop_cookietable_comment
-msgid "Omaduse  (cookietable) kommentaar"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:prop_cookietable_help
-msgid "Omaduse  (cookietable) help"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:prop_new_name
-msgid "Omaduse  (new_name) caption"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:prop_new_name_comment
-msgid "Omaduse  (new_name) kommentaar"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:prop_new_name_help
-msgid "Omaduse  (new_name) help"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:prop_new_value
-msgid "Omaduse  (new_value) caption"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:prop_new_value_comment
-msgid "Omaduse  (new_value) kommentaar"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:prop_new_value_help
-msgid "Omaduse  (new_value) help"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr ""
-
-# classes/core/dbg/cookiemonster.aw:group__help
-msgid "Grupi  () help"
-msgstr ""
-
-#: classes/core/dbg/cookiemonster.aw:50
+#: classes/applications/unittest/cookiemonster.aw:50
 msgid "Nimi"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:56
+#: classes/applications/unittest/cookiemonster.aw:56
 msgid "V‰‰rtus"
 msgstr ""

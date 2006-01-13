@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Tehtud (is_done) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_is_personal
+msgid "Omaduse Isiklik (is_personal) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_personal_comment
+msgid "Omaduse Isiklik (is_personal) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_personal_help
+msgid "Omaduse Isiklik (is_personal) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_start1
 msgid "Omaduse Algab  (start1) caption"
 msgstr ""
@@ -494,12 +506,16 @@ msgstr ""
 msgid "Omaduse  (sel_resources) help"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/crm/crm_meeting.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/crm/crm_meeting.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:group_recurrence
@@ -558,6 +574,14 @@ msgstr ""
 msgid "Grupi Ressursid (resources) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr ""
@@ -566,23 +590,23 @@ msgstr ""
 msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:315
+#: classes/crm/crm_meeting.aw:347
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:394
+#: classes/crm/crm_meeting.aw:426
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:396
+#: classes/crm/crm_meeting.aw:428
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:404
+#: classes/crm/crm_meeting.aw:436
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:413
+#: classes/crm/crm_meeting.aw:445
 msgid "Salvesta"
 msgstr ""
 

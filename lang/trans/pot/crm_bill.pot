@@ -182,6 +182,30 @@ msgstr ""
 msgid "Omaduse Allahindlus (%) (disc) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill.aw:prop_gen_unit
+msgid "Omaduse &Uuml;hik (gen_unit) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_gen_unit_comment
+msgid "Omaduse &Uuml;hik (gen_unit) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_gen_unit_help
+msgid "Omaduse &Uuml;hik (gen_unit) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_gen_amt
+msgid "Omaduse Kogus (gen_amt) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_gen_amt_comment
+msgid "Omaduse Kogus (gen_amt) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_gen_amt_help
+msgid "Omaduse Kogus (gen_amt) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill.aw:prop_sum
 msgid "Omaduse Summa (sum) caption"
 msgstr ""
@@ -230,14 +254,6 @@ msgstr ""
 msgid "Omaduse  (task_list) help"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/crm/crm_bill.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/crm/crm_bill.aw:group_tasks
 msgid "Grupi Toimetused (tasks) pealkiri"
 msgstr ""
@@ -278,51 +294,67 @@ msgstr ""
 msgid "Seose keel (RELTYPE_LANGUAGE) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:103
+#: classes/applications/crm/crm_bill.aw:114
 msgid "Koostamisel"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:104
+#: classes/applications/crm/crm_bill.aw:115
 msgid "Saadetud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:105
+#: classes/applications/crm/crm_bill.aw:116
 msgid "Makstud"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:136
+#: classes/applications/crm/crm_bill.aw:158 classes/applications/crm/crm_bill.aw:317
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:209
+#: classes/applications/crm/crm_bill.aw:215
+msgid "Sellise numberiga arve on juba olemas!"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:222
+msgid "Number ei ole seerias!"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:264
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:214
+#: classes/applications/crm/crm_bill.aw:269
+msgid "Kood"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:274
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:219
+#: classes/applications/crm/crm_bill.aw:279
 msgid "&Uuml;hik"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:224
+#: classes/applications/crm/crm_bill.aw:284
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:229
+#: classes/applications/crm/crm_bill.aw:289
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:234
+#: classes/applications/crm/crm_bill.aw:294
 msgid "Summa"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:239
+#: classes/applications/crm/crm_bill.aw:299
+msgid "Artikkel"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:303
 msgid "Lisandub k&auml;ibemaks?"
 msgstr ""
 
-#: classes/applications/crm/crm_bill.aw:592 classes/applications/crm/crm_bill.aw:859
+#: classes/applications/crm/crm_bill.aw:685 classes/applications/crm/crm_bill.aw:961
 msgid "Prinditav arve"
 msgstr ""
 

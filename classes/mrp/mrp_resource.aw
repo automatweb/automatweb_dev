@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.83 2006/01/03 16:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.84 2006/01/13 11:12:18 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -770,7 +770,8 @@ class mrp_resource extends class_base
 		foreach($list->arr() as $task)
 		{
 			$calendar->add_item (array (
-				"timestamp" => $task->prop("start1"),
+				"item_start" => $task->prop("start1"),
+				"item_end" => $task->prop("end"),
 				"data" => array(
 					"name" => $task->name(),
 					"link" => html::get_change_url($task->id(), array("return_url" => get_ru())),

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/ecard/ecard_manager.aw:class_996_help
 msgid "Klassi E-kaardi haldur help"
 msgstr ""
@@ -48,14 +47,6 @@ msgstr ""
 
 #: classes/applications/ecard/ecard_manager.aw:prop_gallery_help
 msgid "Omaduse Minigalerii (gallery) help"
-msgstr ""
-
-#: classes/applications/ecard/ecard_manager.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/ecard/ecard_manager.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/applications/ecard/ecard_manager.aw:rel_RELTYPE_DIR_IMAGES
@@ -118,39 +109,38 @@ msgstr ""
 msgid "Esimesed"
 msgstr ""
 
-#: classes/applications/ecard/ecard_manager.aw:278
+#: classes/applications/ecard/ecard_manager.aw:266
 msgid "Viga"
 msgstr ""
 
-#: classes/applications/ecard/ecard_manager.aw:331
+#: classes/applications/ecard/ecard_manager.aw:319
 msgid "Kaart saadetud"
 msgstr ""
 
-#: classes/applications/ecard/ecard_manager.aw:343
+#: classes/applications/ecard/ecard_manager.aw:331
 msgid "Kaart salvestatud"
 msgstr ""
 
-#: classes/applications/ecard/ecard_manager.aw:357
+#: classes/applications/ecard/ecard_manager.aw:345
 msgid "Väli peab olema täidetud"
 msgstr ""
 
-#: classes/applications/ecard/ecard_manager.aw:372
+#: classes/applications/ecard/ecard_manager.aw:360
 msgid "Teie e-posti aadress vigane"
 msgstr ""
 
-#: classes/applications/ecard/ecard_manager.aw:377
+#: classes/applications/ecard/ecard_manager.aw:365
 msgid "Saaja e-posti aadress vigane"
 msgstr ""
 
-#: classes/applications/ecard/ecard_manager.aw:383
+#: classes/applications/ecard/ecard_manager.aw:371
 msgid "Kuupäev vigane"
 msgstr ""
 
-#: classes/applications/ecard/ecard_manager.aw:394
+#: classes/applications/ecard/ecard_manager.aw:382
 msgid "Saada"
 msgstr ""
 
-#: classes/applications/ecard/ecard_manager.aw:396
+#: classes/applications/ecard/ecard_manager.aw:384
 msgid "Tagasi"
 msgstr ""
-

@@ -599,15 +599,6 @@ msgstr ""
 msgid "Omaduse  (join_form_entry) help"
 msgstr ""
 
-# classes/core/users/user.aw:group_general
-#: classes/core/users/user.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
-
-#: classes/core/users/user.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/core/users/user.aw:group_chpwd
 #: classes/core/users/user.aw:group_chpwd
 msgid "Grupi Parool (chpwd) pealkiri"
@@ -617,12 +608,13 @@ msgstr "Password"
 msgid "Grupi Parool (chpwd) help"
 msgstr ""
 
+# classes/core/users/user.aw:group_objects
 #: classes/core/users/user.aw:group_objects
-msgid "Grupi Objektid ja Õigused (objects) pealkiri"
-msgstr ""
+msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
+msgstr "Objects and rights"
 
 #: classes/core/users/user.aw:group_objects_help
-msgid "Grupi Objektid ja Õigused (objects) help"
+msgid "Grupi Objektid ja &Otilde;igused (objects) help"
 msgstr ""
 
 # classes/core/users/user.aw:group_objects_own
@@ -817,33 +809,33 @@ msgstr "OID"
 msgid "Mida"
 msgstr "What"
 
-#: classes/core/users/user.aw:1554
+#: classes/core/users/user.aw:1555
 msgid "users::add_user(%s): no uid specified"
 msgstr "users::add_user(%s): no uid specified"
 
-#: classes/core/users/user.aw:1625
+#: classes/core/users/user.aw:1626
 msgid "Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
 msgstr ""
 
-#: classes/core/users/user.aw:1633
+#: classes/core/users/user.aw:1634
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr "Object has been deleted, permission denied!"
 
-#: classes/core/users/user.aw:1638
+#: classes/core/users/user.aw:1639
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr "Object does not exist and never has, permission denied!"
 
-#: classes/core/users/user.aw:1643
+#: classes/core/users/user.aw:1644
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr "Object's parent object (%s) is deleted. No access!"
 
-#: classes/core/users/user.aw:1653
+#: classes/core/users/user.aw:1654
 msgid ""
 "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, "
 "kehtib default.<br>N&auml;gemis&otilde;igus ainult."
 msgstr ""
 
-#: classes/core/users/user.aw:1689
+#: classes/core/users/user.aw:1690
 msgid ""
 "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;"
 "rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele "
@@ -851,6 +843,10 @@ msgid ""
 msgstr ""
 "Info on object's acl:<br><br>Access is set by access-relation between object "
 "%s and group %s<br><br>ACL set for that relation are: %s"
+
+# classes/core/users/user.aw:group_general
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"
 
 # classes/core/users/user.aw:prop_online
 #~ msgid "Omaduse Sisselogitud (online) caption"
@@ -863,10 +859,6 @@ msgstr ""
 # classes/core/users/user.aw:prop_name
 #~ msgid "Omaduse Nimi (name) caption"
 #~ msgstr "Name"
-
-# classes/core/users/user.aw:group_objects
-#~ msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
-#~ msgstr "Objects and rights"
 
 #~ msgid ""
 #~ "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;"

@@ -323,12 +323,16 @@ msgstr ""
 msgid "Omaduse Pilt aktiivne kuni (link_image_active_until) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/contentmgmt/links.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/contentmgmt/links.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
 # classes/contentmgmt/links.aw:group_Javascript
@@ -351,30 +355,30 @@ msgstr "Image"
 msgid "Grupi Pilt (Pilt) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:group_
-msgid "Grupi  () pealkiri"
+#: classes/contentmgmt/links.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:group__help
-msgid "Grupi  () help"
+#: classes/contentmgmt/links.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:120 classes/contentmgmt/links.aw:168
+#: classes/contentmgmt/links.aw:130 classes/contentmgmt/links.aw:178
 msgid "Vali see"
 msgstr "Select this"
 
-#: classes/contentmgmt/links.aw:124
+#: classes/contentmgmt/links.aw:134
 msgid "Nimetus"
 msgstr "Name"
 
-#: classes/contentmgmt/links.aw:129
+#: classes/contentmgmt/links.aw:139
 msgid "Asukoht"
 msgstr "Location"
 
-#: classes/contentmgmt/links.aw:134
+#: classes/contentmgmt/links.aw:144
 msgid "Looja"
 msgstr "Createdby"
 
-#: classes/contentmgmt/links.aw:139
+#: classes/contentmgmt/links.aw:149
 msgid "Viimati muudetud"
 msgstr "Last modified"

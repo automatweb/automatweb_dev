@@ -62,14 +62,6 @@ msgstr ""
 msgid "Omaduse Vaikimisi objekt (default_object) help"
 msgstr ""
 
-#: classes/admin/object_type.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/admin/object_type.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/admin/object_type.aw:group_settings
 msgid "Grupi Klassi konfiguratsioon (settings) pealkiri"
 msgstr ""

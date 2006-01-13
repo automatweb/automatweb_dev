@@ -7,7 +7,6 @@ $GLOBALS["TRANS"]["Omaduse Tooted (products_caption) caption"] = "Products";
 $GLOBALS["TRANS"]["Omaduse Tooted (products) caption"] = "Products";
 $GLOBALS["TRANS"]["Omaduse Toote paketid (packets_caption) caption"] = "Packets";
 $GLOBALS["TRANS"]["Omaduse Toote paketid (packets) caption"] = "Packets";
-$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Pildid (images) pealkiri"] = "Images";
 $GLOBALS["TRANS"]["Grupi Tooted (products) pealkiri"] = "Products";
 ?>

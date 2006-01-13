@@ -10,57 +10,81 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/crm/crm_phone.aw:class_219_help
+#: classes/crm/crm_phone.aw:class_219_help
 msgid "Klassi Telefon help"
 msgstr ""
 
 # classes/crm/crm_phone.aw:prop_name
+#: classes/crm/crm_phone.aw:prop_name
 msgid "Omaduse Number (name) caption"
 msgstr "Number"
 
 # classes/crm/crm_phone.aw:prop_name_comment
+#: classes/crm/crm_phone.aw:prop_name_comment
 msgid "Omaduse Number (name) kommentaar"
 msgstr ""
 
 # classes/crm/crm_phone.aw:prop_name_help
+#: classes/crm/crm_phone.aw:prop_name_help
 msgid "Omaduse Number (name) help"
 msgstr ""
 
 # classes/crm/crm_phone.aw:prop_type
+#: classes/crm/crm_phone.aw:prop_type
 msgid "Omaduse Numbri tüüp (type) caption"
 msgstr "Number type"
 
 # classes/crm/crm_phone.aw:prop_type_comment
+#: classes/crm/crm_phone.aw:prop_type_comment
 msgid "Omaduse Numbri tüüp (type) kommentaar"
 msgstr ""
 
 # classes/crm/crm_phone.aw:prop_type_help
+#: classes/crm/crm_phone.aw:prop_type_help
 msgid "Omaduse Numbri tüüp (type) help"
 msgstr ""
 
+#: classes/crm/crm_phone.aw:prop_country
+msgid "Omaduse Riik (country) caption"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_country_comment
+msgid "Omaduse Riik (country) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:prop_country_help
+msgid "Omaduse Riik (country) help"
+msgstr ""
+
 # classes/crm/crm_phone.aw:rel_RELTYPE_BELONGTO
+#: classes/crm/crm_phone.aw:rel_RELTYPE_BELONGTO
 msgid "Seose Numbriga seotud objekt (RELTYPE_BELONGTO) tekst"
 msgstr "Number belongs to"
 
-#: classes/crm/crm_phone.aw:45
+#: classes/crm/crm_phone.aw:rel_RELTYPE_COUNTRY
+msgid "Seose Riik  (RELTYPE_COUNTRY) tekst"
+msgstr ""
+
+#: classes/crm/crm_phone.aw:51
 msgid "tööl"
 msgstr "at work"
 
-#: classes/crm/crm_phone.aw:46
+#: classes/crm/crm_phone.aw:52
 msgid "kodus"
 msgstr "at home"
 
-#: classes/crm/crm_phone.aw:47
+#: classes/crm/crm_phone.aw:53
 msgid "lühinumber"
 msgstr "short number"
 
-#: classes/crm/crm_phone.aw:48
+#: classes/crm/crm_phone.aw:54
 msgid "mobiil"
 msgstr "mobile"
 
-#: classes/crm/crm_phone.aw:49
+#: classes/crm/crm_phone.aw:55
 msgid "faks"
 msgstr "fax"
 
-#: classes/crm/crm_phone.aw:50
+#: classes/crm/crm_phone.aw:56
 msgid "skype"
 msgstr "skype"

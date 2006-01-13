@@ -174,6 +174,18 @@ msgstr ""
 "siis tuleb aadress sisestada kujul http://... (N: http://www.struktuur.ee). "
 "Veebilehe sisese lingi puhul piisab kui kirjutada / ja objekti ID "
 
+#: classes/image.aw:prop_can_comment
+msgid "Omaduse K&otilde;ikjal kommenteeritav (can_comment) caption"
+msgstr ""
+
+#: classes/image.aw:prop_can_comment_comment
+msgid "Omaduse K&otilde;ikjal kommenteeritav (can_comment) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_can_comment_help
+msgid "Omaduse K&otilde;ikjal kommenteeritav (can_comment) help"
+msgstr ""
+
 #: classes/image.aw:prop_show_conditions
 msgid "Omaduse Tingimused (show_conditions) caption"
 msgstr ""
@@ -382,12 +394,16 @@ msgstr ""
 msgid "Omaduse Info (resize_warn) help"
 msgstr ""
 
-#: classes/image.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/image.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/image.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/image.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/image.aw:group_show
@@ -428,11 +444,31 @@ msgstr ""
 msgid "Grupi Muuda suure pildi suurust (resize_big) help"
 msgstr ""
 
+#: classes/image.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/image.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 # classes/image.aw:rel_RELTYPE_MOD_COMMENT
 #: classes/image.aw:rel_RELTYPE_MOD_COMMENT
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
 msgstr ""
 
-#: classes/image.aw:676
+#: classes/image.aw:261
+msgid "kommentaar"
+msgstr ""
+
+#: classes/image.aw:261
+msgid "kommentaari"
+msgstr ""
+
+#: classes/image.aw:752
 msgid "Piltide automaatset suurendamist kontrollib objekt "
+msgstr ""
+
+#: classes/image.aw:1195
+msgid "Lisa"
 msgstr ""

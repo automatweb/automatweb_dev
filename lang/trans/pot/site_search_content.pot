@@ -302,14 +302,6 @@ msgstr ""
 msgid "Omaduse Tulemused (c_results) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/contentmgmt/site_search/site_search_content.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"
 msgstr ""

@@ -605,14 +605,6 @@ msgstr ""
 msgid "Omaduse  (join_form_entry) help"
 msgstr ""
 
-#: classes/core/users/user.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/core/users/user.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/core/users/user.aw:group_chpwd
 #: classes/core/users/user.aw:group_chpwd
 msgid "Grupi Parool (chpwd) pealkiri"
@@ -624,11 +616,11 @@ msgid "Grupi Parool (chpwd) help"
 msgstr ""
 
 #: classes/core/users/user.aw:group_objects
-msgid "Grupi Objektid ja Õigused (objects) pealkiri"
+msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
 msgstr ""
 
 #: classes/core/users/user.aw:group_objects_help
-msgid "Grupi Objektid ja Õigused (objects) help"
+msgid "Grupi Objektid ja &Otilde;igused (objects) help"
 msgstr ""
 
 # classes/core/users/user.aw:group_objects_own
@@ -831,33 +823,33 @@ msgstr ""
 msgid "Mida"
 msgstr ""
 
-#: classes/core/users/user.aw:1554
+#: classes/core/users/user.aw:1555
 msgid "users::add_user(%s): no uid specified"
 msgstr ""
 
-#: classes/core/users/user.aw:1625
+#: classes/core/users/user.aw:1626
 msgid "Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
 msgstr ""
 
-#: classes/core/users/user.aw:1633
+#: classes/core/users/user.aw:1634
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1638
+#: classes/core/users/user.aw:1639
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1643
+#: classes/core/users/user.aw:1644
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1653
+#: classes/core/users/user.aw:1654
 msgid ""
 "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, "
 "kehtib default.<br>N&auml;gemis&otilde;igus ainult."
 msgstr ""
 
-#: classes/core/users/user.aw:1689
+#: classes/core/users/user.aw:1690
 msgid ""
 "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;"
 "rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele "

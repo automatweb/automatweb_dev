@@ -22,5 +22,4 @@ $GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Kustuta valitud arved"] = "Delete selected invoices";
 $GLOBALS["TRANS"]["Oled kindel et soovid valitud arved kustutada?"] = "Are You sure You want to delete selected invoices?";
 $GLOBALS["TRANS"]["Ekspordi"] = "Export";
-$GLOBALS["TRANS"]["Hansa raama"] = "Hansa Raama";
 ?>

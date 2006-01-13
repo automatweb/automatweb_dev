@@ -41,31 +41,28 @@
       </property>
       <property>
             <name>city24_object_id</name>
-            <table>objects</table>
+            <table>realestate_property</table>
             <group>grp_main</group>
             <type>text</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>city24_object_id</field>
             <caption>Objekti id City24 andmebaasis</caption>
       </property>
       <property>
             <name>is_visible</name>
-            <table>objects</table>
+            <table>realestate_property</table>
             <group>grp_main</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>is_visible</field>
             <caption>N&amp;auml;htav</caption>
       </property>
       <property>
             <name>is_archived</name>
-            <table>objects</table>
+            <table>realestate_property</table>
             <group>grp_main</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>is_archived</field>
             <caption>Arhiveeritud</caption>
       </property>
       <property>

@@ -1618,14 +1618,6 @@ msgstr ""
 msgid "Omaduse Vali kasutatav ressurss (select_session_resource) help"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/mrp/mrp_workspace.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/mrp/mrp_workspace.aw:group_grp_customers
 #: classes/mrp/mrp_workspace.aw:group_grp_customers
 msgid "Grupi Kliendid (grp_customers) pealkiri"
@@ -1696,58 +1688,67 @@ msgstr "Operator view"
 msgid "Grupi Operaatori vaade (grp_printer) help"
 msgstr ""
 
+# classes/mrp/mrp_workspace.aw:group_grp_printer_current
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_current
-msgid "Grupi Jooksvad tööd (grp_printer_current) pealkiri"
-msgstr ""
+msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) pealkiri"
+msgstr "Current jobs"
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_current_help
-msgid "Grupi Jooksvad tööd (grp_printer_current) help"
+msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) help"
 msgstr ""
 
+# classes/mrp/mrp_workspace.aw:group_grp_printer_done
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_done
-msgid "Grupi Tehtud tööd (grp_printer_done) pealkiri"
-msgstr ""
+msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) pealkiri"
+msgstr "Done jobs"
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_done_help
-msgid "Grupi Tehtud tööd (grp_printer_done) help"
+msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) help"
 msgstr ""
 
+# classes/mrp/mrp_workspace.aw:group_grp_printer_aborted
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_aborted
-msgid "Grupi Katkestatud tööd (grp_printer_aborted) pealkiri"
-msgstr ""
+msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) pealkiri"
+msgstr "Aborted jobs"
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_aborted_help
-msgid "Grupi Katkestatud tööd (grp_printer_aborted) help"
+msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) help"
 msgstr ""
 
+# classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress
-msgid "Grupi Kõik töös olevad (grp_printer_in_progress) pealkiri"
-msgstr ""
+msgid ""
+"Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) pealkiri"
+msgstr "All jobs in progress"
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress_help
-msgid "Grupi Kõik töös olevad (grp_printer_in_progress) help"
+msgid "Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) help"
 msgstr ""
 
+# classes/mrp/mrp_workspace.aw:group_grp_printer_startable
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_startable
 msgid ""
-"Grupi Kõik tööd mida oleks võimalik alustada (grp_printer_startable) pealkiri"
-msgstr ""
+"Grupi K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada "
+"(grp_printer_startable) pealkiri"
+msgstr "All jobs that can be started"
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_startable_help
 msgid ""
-"Grupi Kõik tööd mida oleks võimalik alustada (grp_printer_startable) help"
+"Grupi K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada "
+"(grp_printer_startable) help"
 msgstr ""
 
+# classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable
 msgid ""
-"Grupi Tööd, mida ei ole veel võimalik alustada (grp_printer_notstartable) "
-"pealkiri"
-msgstr ""
+"Grupi T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada "
+"(grp_printer_notstartable) pealkiri"
+msgstr "All jobs that can not be started yet"
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable_help
 msgid ""
-"Grupi Tööd, mida ei ole veel võimalik alustada (grp_printer_notstartable) "
-"help"
+"Grupi T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada "
+"(grp_printer_notstartable) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_settings
@@ -1770,12 +1771,13 @@ msgstr "Settings"
 msgid "Grupi Seaded (grp_settings_def) help"
 msgstr ""
 
+# classes/mrp/mrp_workspace.aw:group_grp_settings_salesman
 #: classes/mrp/mrp_workspace.aw:group_grp_settings_salesman
-msgid "Grupi Müügimehe seaded (grp_settings_salesman) pealkiri"
-msgstr ""
+msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) pealkiri"
+msgstr "Salesperson settings"
 
 #: classes/mrp/mrp_workspace.aw:group_grp_settings_salesman_help
-msgid "Grupi Müügimehe seaded (grp_settings_salesman) help"
+msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_users_tree
@@ -2056,7 +2058,7 @@ msgstr "Aborted jobs"
 
 #: classes/mrp/mrp_workspace.aw:1698 classes/mrp/mrp_workspace.aw:1933
 #: classes/mrp/mrp_workspace.aw:2053 classes/mrp/mrp_workspace.aw:3518
-#: classes/mrp/mrp_workspace.aw:4668
+#: classes/mrp/mrp_workspace.aw:4669
 msgid "Klient"
 msgstr "Customer"
 
@@ -2251,54 +2253,21 @@ msgstr "Save comment"
 msgid "Oled kindel et soovid kommentaari salvestada?"
 msgstr "Are you sure you want to enter a comment?"
 
-#: classes/mrp/mrp_workspace.aw:4496
+#: classes/mrp/mrp_workspace.aw:4497
 msgid "Logi v&auml;lja"
 msgstr "Log out"
 
-#: classes/mrp/mrp_workspace.aw:4602 classes/mrp/mrp_workspace.aw:4660
+#: classes/mrp/mrp_workspace.aw:4603 classes/mrp/mrp_workspace.aw:4661
 msgid "Valitud projekt"
 msgstr "Selected project"
 
-#: classes/mrp/mrp_workspace.aw:4701
+#: classes/mrp/mrp_workspace.aw:4702
 msgid "Nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:4706 classes/mrp/mrp_workspace.aw:4721
+#: classes/mrp/mrp_workspace.aw:4707 classes/mrp/mrp_workspace.aw:4722
 msgid "Vali see"
 msgstr ""
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_current
-#~ msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) pealkiri"
-#~ msgstr "Current jobs"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_done
-#~ msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) pealkiri"
-#~ msgstr "Done jobs"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_aborted
-#~ msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) pealkiri"
-#~ msgstr "Aborted jobs"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress
-#~ msgid ""
-#~ "Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) pealkiri"
-#~ msgstr "All jobs in progress"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_startable
-#~ msgid ""
-#~ "Grupi K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada "
-#~ "(grp_printer_startable) pealkiri"
-#~ msgstr "All jobs that can be started"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable
-#~ msgid ""
-#~ "Grupi T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada "
-#~ "(grp_printer_notstartable) pealkiri"
-#~ msgstr "All jobs that can not be started yet"
-
-# classes/mrp/mrp_workspace.aw:group_grp_settings_salesman
-#~ msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) pealkiri"
-#~ msgstr "Salesperson settings"
 
 #~ msgid "T&ouml;&ouml;s / v&otilde;ib alustada"
 #~ msgstr "In progress / can be started"

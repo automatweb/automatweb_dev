@@ -38,11 +38,3 @@ msgstr ""
 msgid "Omaduse Kirjeldus (description) help"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_publication.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/clients/expp/expp_publication.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-

@@ -105,14 +105,6 @@ class crm_company_overview_impl extends class_base
 		$task_ol = $this->_get_task_list($arr);
 		$evts = $this->make_keys($task_ol->ids());
 
-		// also, do the search filter thingie here
-		if ($arr["request"]["act_s_sbt"] != "")
-		{
-			// filter
-			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $evts, $clid));
-			$evts = $this->make_keys($ol->ids());
-		}
-		
 
 		$this->overview = array();
 		classload("core/icons");
@@ -496,7 +488,7 @@ class crm_company_overview_impl extends class_base
 		$clss = aw_ini_get("classes");
 		if (is_array($clid))
 		{
-			$def = CL_TASK;
+			$def = "CL_TASK";
 		}
 		else
 		{
@@ -521,34 +513,51 @@ class crm_company_overview_impl extends class_base
 				// get the person(s) typed
 				$persons = new object_list(array(
 					"class_id" => CL_CRM_PERSON,
-					"name" => map("%%%s%%", explode(",", $r["act_s_part"]))
+					"name" => map("%%%s%%", explode(",", $r["act_s_part"])),
+					"lang_id" => array(),
+					"site_id" => array()
 				));
-
-				$c = new connection();
-				$conns = $c->find(array(
-					"from" => $persons->ids(),
-					"from.class_id" => CL_CRM_PERSON,
-					"to.class_id" => $clid,
-					//"type" => "RELTYPE_PERSON_TASK"
-				));
-
-				$oids = array();
-				foreach($conns as $con)
+				if (!$persons->count())
 				{
-					if (!isset($res["oid"]) || isset($res["oid"][$con["to"]]))
-					{
-						$oids[] = $con["to"];
-					}
-				}
-
-				if (count($oids))
-				{
-					$res["oid"] = $oids;
+					$_res["oid"] = -1;
 				}
 				else
 				{
-					$res["oid"] = 1;
+					$c = new connection();
+					$conns = $c->find(array(
+						"from" => $persons->ids(),
+						"from.class_id" => CL_CRM_PERSON,
+						"to.class_id" => $clid,
+						//"type" => "RELTYPE_PERSON_TASK"
+					));
+
+					$oids = array();
+					foreach($conns as $con)
+					{
+						if (!isset($res["oid"]) || isset($res["oid"][$con["to"]]))
+						{
+							$oids[] = $con["to"];
+						}
+					}
+
+					if (count($oids))
+					{
+						$_res["oid"] = $oids;
+					}
+					else
+					{
+						$_res["oid"] = 1;
+					}
 				}
+
+				// also search from connected resources
+				$res[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"oid" => $_res["oid"],
+						$def.".RELTYPE_RESOURCE.name" => map("%%%s%%", explode(",", $r["act_s_part"]))	
+					)
+				));
 			}
 		}
 

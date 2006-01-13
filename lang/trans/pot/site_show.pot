@@ -10,27 +10,27 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/contentmgmt/site_show.aw:1656
+#: classes/contentmgmt/site_show.aw:1691
 msgid "site_show::do_draw_menus(): no compiled filename set!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:1740
+#: classes/contentmgmt/site_show.aw:1774
 msgid "site_show::exec_subtemplate_handlers(): could not find subtemplate handler in %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:1924
+#: classes/contentmgmt/site_show.aw:1958
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2427
+#: classes/contentmgmt/site_show.aw:2461
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: "
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2463
+#: classes/contentmgmt/site_show.aw:2497
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2468
+#: classes/contentmgmt/site_show.aw:2502
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr ""
 

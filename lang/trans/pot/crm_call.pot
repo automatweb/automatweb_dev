@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Tehtud (is_done) help"
 msgstr ""
 
+#: classes/crm/crm_call.aw:prop_is_personal
+msgid "Omaduse Isiklik (is_personal) caption"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_is_personal_comment
+msgid "Omaduse Isiklik (is_personal) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_is_personal_help
+msgid "Omaduse Isiklik (is_personal) help"
+msgstr ""
+
 #: classes/crm/crm_call.aw:prop_start1
 msgid "Omaduse Algus (start1) caption"
 msgstr ""
@@ -230,14 +242,6 @@ msgstr ""
 msgid "Omaduse Tulemuste tabel (search_contact_results) help"
 msgstr ""
 
-#: classes/crm/crm_call.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/crm/crm_call.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/crm/crm_call.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
 msgstr ""
@@ -286,15 +290,15 @@ msgstr ""
 msgid "Seose Helistaja (RELTYPE_CALLER) tekst"
 msgstr ""
 
-#: classes/crm/crm_call.aw:207
+#: classes/crm/crm_call.aw:229
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_call.aw:216
+#: classes/crm/crm_call.aw:238
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_call.aw:225
+#: classes/crm/crm_call.aw:247
 msgid "Salvesta"
 msgstr ""
 

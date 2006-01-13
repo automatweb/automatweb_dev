@@ -38,18 +38,6 @@ msgstr ""
 msgid "Omaduse Mis kataloogidele skaala kehtib (rate_folders) help"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr
-msgid "Omaduse Numbriline skaala (type_nr) caption"
-msgstr ""
-
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr_comment
-msgid "Omaduse Numbriline skaala (type_nr) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr_help
-msgid "Omaduse Numbriline skaala (type_nr) help"
-msgstr ""
-
 #: classes/contentmgmt/rate/rate_scale.aw:prop_nr_from
 msgid "Omaduse Alates (nr_from) caption"
 msgstr ""
@@ -86,16 +74,16 @@ msgstr ""
 msgid "Omaduse Aste (nr_step) help"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud
-msgid "Omaduse Kasutaja defineeritud skaala (type_ud) caption"
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_descs
+msgid "Omaduse Tekst hindele (nr_descs) caption"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud_comment
-msgid "Omaduse Kasutaja defineeritud skaala (type_ud) kommentaar"
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_descs_comment
+msgid "Omaduse Tekst hindele (nr_descs) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud_help
-msgid "Omaduse Kasutaja defineeritud skaala (type_ud) help"
+#: classes/contentmgmt/rate/rate_scale.aw:prop_nr_descs_help
+msgid "Omaduse Tekst hindele (nr_descs) help"
 msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_no_rate
@@ -122,7 +110,7 @@ msgstr ""
 msgid "Seose Kehtiv kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate_scale.aw:195
+#: classes/contentmgmt/rate/rate_scale.aw:186
 msgid "ei hinda"
 msgstr ""
 

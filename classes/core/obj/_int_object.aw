@@ -502,6 +502,10 @@ class _int_object
        	if (isset($param["max_len"]))
 		{
 			$i = $cnt - $param["max_len"];
+			if (!empty($param["path_only"]))
+			{
+				$i--;
+			}
 		}
 
 		$skip = is_oid($param["start_at"]) ? true : false;

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/openhours.aw:class_1014_help
 msgid "Klassi Avamisajad help"
 msgstr ""
@@ -26,14 +25,6 @@ msgstr ""
 msgid "Omaduse Avamisajad (openhours) help"
 msgstr ""
 
-#: classes/common/openhours.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/common/openhours.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/common/openhours.aw:54
 msgid "Lisa"
 msgstr ""
@@ -42,51 +33,50 @@ msgstr ""
 msgid "Rida"
 msgstr ""
 
-#: classes/common/openhours.aw:137
+#: classes/common/openhours.aw:134
 msgid "E"
 msgstr ""
 
-#: classes/common/openhours.aw:138
+#: classes/common/openhours.aw:135
 msgid "T"
 msgstr ""
 
-#: classes/common/openhours.aw:139
+#: classes/common/openhours.aw:136
 msgid "K"
 msgstr ""
 
-#: classes/common/openhours.aw:140
+#: classes/common/openhours.aw:137
 msgid "N"
 msgstr ""
 
-#: classes/common/openhours.aw:141
+#: classes/common/openhours.aw:138
 msgid "R"
 msgstr ""
 
-#: classes/common/openhours.aw:142
+#: classes/common/openhours.aw:139
 msgid "L"
 msgstr ""
 
-#: classes/common/openhours.aw:143
+#: classes/common/openhours.aw:140
 msgid "P"
 msgstr ""
 
-#: classes/common/openhours.aw:222
+#: classes/common/openhours.aw:219
 msgid "-- Valimata --"
 msgstr ""
 
-#: classes/common/openhours.aw:285
+#: classes/common/openhours.aw:282
 msgid "Vigane perioodi alguse p&auml;ev"
 msgstr ""
 
-#: classes/common/openhours.aw:289
+#: classes/common/openhours.aw:286
 msgid "Vigane perioodi l&otilde;pu p&auml;ev"
 msgstr ""
 
-#: classes/common/openhours.aw:293
+#: classes/common/openhours.aw:290
 msgid "Vigane perioodi alguse aeg"
 msgstr ""
 
-#: classes/common/openhours.aw:297
+#: classes/common/openhours.aw:294
 msgid "Vigane perioodi l&otilde;pu aeg"
 msgstr ""
-

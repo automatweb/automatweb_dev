@@ -514,6 +514,10 @@ default group=org_objects
 
 		@property dn_res type=table no_caption=1 store=no parent=docs_news_lt
 
+@default group=documents_lmod
+
+	@property documents_lmod type=table store=no no_caption=1
+
 @default group=bills_create
 
 	@property bill_tb type=toolbar store=no no_caption=1
@@ -734,6 +738,7 @@ groupinfo documents caption="Dokumendid" submit=no
 	@groupinfo documents_all caption="Dokumendid" submit=no parent=general
 	@groupinfo documents_news caption="Uudised" submit=no parent=general submit_method=get
 	@groupinfo documents_forum caption="Foorum" submit=no parent=general 
+	@groupinfo documents_lmod caption="Viimati muudetud" submit=no parent=general	
 
 @groupinfo bills caption="Arved" submit=no
 
@@ -1160,12 +1165,14 @@ class crm_company extends class_base
 				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://info.eer.ee/ari/ariweb_package1.lihtparingu_vastus METHOD=POST ><INPUT TYPE=text NAME=paritud_arinimi><INPUT TYPE=text NAME=paritud_arir_kood></form>\" );win.document.forms[0].paritud_arinimi.value = document.changeform.name.value;win.document.forms[0].paritud_arir_kood = document.changeform.reg_nr.value;win.document.forms[0].submit();'>&Auml;riregistri p&auml;ring</a>";
 				break;
 
-			case "contact_person";
-			case "cust_contract_date";
-			case "referal_type";
-			case "contact_person2";
-			case "contact_person3";
-			case "priority";
+			case "contact_person":
+			case "contact_person2":
+			case "contact_person3":
+				$data["options"] = $this->get_employee_picker($arr["obj_inst"], true);
+
+			case "cust_contract_date":
+			case "referal_type":
+			case "priority":
 				// read from rel
 				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
 				{
@@ -1552,6 +1559,7 @@ class crm_company extends class_base
 			case 'docs_s_type':
 			case "docs_news_tb":
 			case "dn_res":
+			case "documents_lmod":
 				static $docs_impl;
 				if (!$docs_impl)
 				{
@@ -3755,7 +3763,14 @@ class crm_company extends class_base
 			$res = $tmp;
 		}
 
-		$ol = new object_list(array("oid" => $res, "sort_by" => "objects.name"));
+		if (count($res))
+		{
+			$ol = new object_list(array("oid" => $res, "sort_by" => "objects.name", "lang_id" => array(), "site_id" => array()));
+		}
+		else
+		{
+			$ol = new object_list();
+		}
 		$res = ($add_empty ? array("" => t("--vali--")) : array()) +  $ol->names();
 		uasort($res, array(&$this, "__person_name_sorter"));
 		return $res;

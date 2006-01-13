@@ -307,9 +307,17 @@ class crm_company_cust_impl extends class_base
 			}
 			else
 			{
-				// get all companies that are customers of THAT company
-				$d = get_instance("applications/crm/crm_data");
-				$orglist = $d->get_customers_for_company($arr["obj_inst"]);
+				if ($arr["request"]["customer_search_submit"] != "")
+				{
+					$ol = new object_list($this->_get_customer_search_filter($arr["request"]));
+					$orglist = $this->make_keys($ol->ids());
+				}
+				else
+				{
+					// get all companies that are customers of THAT company
+					$d = get_instance("applications/crm/crm_data");
+					$orglist = $d->get_customers_for_company($arr["obj_inst"]);
+				}
 			}
 		}
 
@@ -1304,6 +1312,8 @@ class crm_company_cust_impl extends class_base
 	{
 		$ret = array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
+			"site_id" => array(),
+			"lang_id" => array()
 		);
 
 		if ($r["customer_search_name"] != "")
@@ -1372,7 +1382,6 @@ class crm_company_cust_impl extends class_base
 				)
 			));
 		}
-
 		return $ret;
 	}
 

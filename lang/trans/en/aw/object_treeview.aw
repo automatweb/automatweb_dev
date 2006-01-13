@@ -21,7 +21,6 @@ $GLOBALS["TRANS"]["Grupi Objektit&uuml;&uuml;bid (clids) pealkiri"] = "Object ty
 $GLOBALS["TRANS"]["Grupi Stiilid (styles) pealkiri"] = "Styles";
 $GLOBALS["TRANS"]["Grupi Tulbad (columns) pealkiri"] = "Columns";
 $GLOBALS["TRANS"]["Seose kataloog (RELTYPE_FOLDER) tekst"] = "folder";
-$GLOBALS["TRANS"]["Seose lisatav objektit&uuml;&uuml;p (RELTYPE_ADD_TYPE) tekst"] = "addable object type";
 $GLOBALS["TRANS"]["Seose projekti haldaja grupp (RELTYPE_ALL_ACSS_GRP) tekst"] = "all access group";
 $GLOBALS["TRANS"]["Seose css stiil (RELTYPE_CSS) tekst"] = "css style";
 $GLOBALS["TRANS"]["Seose stiilide doonor (RELTYPE_STYLE_DONOR) tekst"] = "style donor";

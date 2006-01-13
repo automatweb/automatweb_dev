@@ -194,14 +194,6 @@ msgstr ""
 msgid "Omaduse Aktiivsus (activity) help"
 msgstr ""
 
-#: classes/period.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/period.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/period.aw:group_activity
 #: classes/period.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"

@@ -101,14 +101,6 @@ msgstr ""
 msgid "Omaduse Uploadi ZIP fail (zip_file) help"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/gallery/mini_gallery.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/contentmgmt/gallery/mini_gallery.aw:group_import
 #: classes/contentmgmt/gallery/mini_gallery.aw:group_import
 msgid "Grupi Import (import) pealkiri"
@@ -129,14 +121,14 @@ msgstr "image folder"
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr "style"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:205
+#: classes/contentmgmt/gallery/mini_gallery.aw:206
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr "No add access to the selected image folder"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:314
+#: classes/contentmgmt/gallery/mini_gallery.aw:315
 msgid "Galerii "
 msgstr "Gallery"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:314
+#: classes/contentmgmt/gallery/mini_gallery.aw:315
 msgid " pildid"
 msgstr " images"

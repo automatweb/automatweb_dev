@@ -758,12 +758,60 @@ msgstr ""
 msgid "Omaduse Suusalaenutus (has_renttwoskis) help"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/applications/crm/crm_field_accommodation.aw:prop_phone_id
+msgid "Omaduse Telefon (phone_id) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/applications/crm/crm_field_accommodation.aw:prop_phone_id_comment
+msgid "Omaduse Telefon (phone_id) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_phone_id_help
+msgid "Omaduse Telefon (phone_id) help"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_telefax_id
+msgid "Omaduse Faks (telefax_id) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_telefax_id_comment
+msgid "Omaduse Faks (telefax_id) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_telefax_id_help
+msgid "Omaduse Faks (telefax_id) help"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_email_id
+msgid "Omaduse E-posti aadressid (email_id) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_email_id_comment
+msgid "Omaduse E-posti aadressid (email_id) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_email_id_help
+msgid "Omaduse E-posti aadressid (email_id) help"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_images
+msgid "Omaduse Pildid (images) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_images_comment
+msgid "Omaduse Pildid (images) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:prop_images_help
+msgid "Omaduse Pildid (images) help"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:group_products
+msgid "Grupi Tooted (products) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:group_products_help
+msgid "Grupi Tooted (products) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:group_services
@@ -790,67 +838,99 @@ msgstr ""
 msgid "Grupi Aktiivne puhkus (active_vacation) help"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:240
+#: classes/applications/crm/crm_field_accommodation.aw:group_cedit
+msgid "Grupi Kontaktandmed (cedit) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:group_cedit_help
+msgid "Grupi Kontaktandmed (cedit) help"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:group_images
+msgid "Grupi Pildid (images) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:group_images_help
+msgid "Grupi Pildid (images) help"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:rel_RELTYPE_EMAIL
+msgid "Seose E-post (RELTYPE_EMAIL) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:rel_RELTYPE_PHONE
+msgid "Seose Telefon (RELTYPE_PHONE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:rel_RELTYPE_TELEFAX
+msgid "Seose Fax (RELTYPE_TELEFAX) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:rel_RELTYPE_IMAGE
+msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_field_accommodation.aw:286
 msgid "Hotell"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:241
+#: classes/applications/crm/crm_field_accommodation.aw:287
 msgid "Motell"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:242
+#: classes/applications/crm/crm_field_accommodation.aw:288
 msgid "K&uuml;lalistemaja"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:243
+#: classes/applications/crm/crm_field_accommodation.aw:289
 msgid "Hostel"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:244
+#: classes/applications/crm/crm_field_accommodation.aw:290
 msgid "Puhkek&uuml;la ja -laager"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:245
+#: classes/applications/crm/crm_field_accommodation.aw:291
 msgid "Puhkemaja"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:246
+#: classes/applications/crm/crm_field_accommodation.aw:292
 msgid "K&uuml;laliskorter"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:247
+#: classes/applications/crm/crm_field_accommodation.aw:293
 msgid "Kodumajutus"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:252
+#: classes/applications/crm/crm_field_accommodation.aw:298
 msgid "Kesklinnas"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:253
+#: classes/applications/crm/crm_field_accommodation.aw:299
 msgid "V&auml;ljaspool kesklinna"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:254
+#: classes/applications/crm/crm_field_accommodation.aw:300
 msgid "V&auml;ljaspool linna"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:259
+#: classes/applications/crm/crm_field_accommodation.aw:305
 msgid "A"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:260
+#: classes/applications/crm/crm_field_accommodation.aw:306
 msgid "B"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:261
+#: classes/applications/crm/crm_field_accommodation.aw:307
 msgid "C"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:262
+#: classes/applications/crm/crm_field_accommodation.aw:308
 msgid "D"
 msgstr ""
 
-#: classes/applications/crm/crm_field_accommodation.aw:263
+#: classes/applications/crm/crm_field_accommodation.aw:309
 msgid "E"
 msgstr ""
 

@@ -41,6 +41,29 @@
             <caption>Otsinguvormi valikuelementide suurus</caption>
       </property>
       <property>
+            <name>searchform_columns</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <default>2</default>
+            <comment>Mtimes tulbas otsingu vormielemente kuvada.</comment>
+            <caption>Otsinguvormi tulpade arv</caption>
+      </property>
+      <property>
+            <name>searchform_pagesize</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <default>25</default>
+            <caption>Otsingutulemusi lehel</caption>
+      </property>
+      <property>
             <name>realestate_mgr</name>
             <table>objects</table>
             <group>general</group>
@@ -74,6 +97,14 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Salvesta otsingutulemus</caption>
+      </property>
+      <property>
+            <name>sort_by_options</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
       </property>
       <property>
             <name>search_class_id</name>
@@ -252,6 +283,24 @@
             <caption>N&amp;auml;ita ainult pildiga kuulutusi</caption>
       </property>
       <property>
+            <name>searchparam_sort_by</name>
+            <table>objects</table>
+            <group>grp_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>J&amp;auml;rjestus</caption>
+      </property>
+      <property>
+            <name>searchparam_sort_order</name>
+            <table>objects</table>
+            <group>grp_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>J&amp;auml;rjestuse suund</caption>
+      </property>
+      <property>
             <name>search_button</name>
             <table>objects</table>
             <group>grp_search</group>
@@ -281,6 +330,18 @@
             <multiple>1</multiple>
             <orient>vertical</orient>
             <caption>Otsinguparameetrid</caption>
+      </property>
+      <property>
+            <name>formdesign_sort_options</name>
+            <table>objects</table>
+            <group>grp_formdesign</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>5</size>
+            <comment>Objektiatribuudid, mida n&amp;auml;idatakse sortimise valikus</comment>
+            <caption>J&amp;auml;rjestamise valik</caption>
       </property>
       <property>
             <name>agent_sections</name>

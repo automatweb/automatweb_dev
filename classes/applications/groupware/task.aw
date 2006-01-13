@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.52 2006/01/05 11:49:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.53 2006/01/13 11:12:18 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -435,10 +435,21 @@ class task extends class_base
 					$data["value"] = "";
 				}
 
-				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL")));
-				$data["value"] = html::obj_change_url($ol->arr());
+				if (!$arr["new"])
+				{
+					$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL"));
+					if (!count($cs))
+					{
+						$ol = new object_list();
+					}
+					else
+					{
+						$ol = new object_list($cs);
+					}
+					$data["value"] = html::obj_change_url($ol->arr());
+				}
 
-				if ($data["value"] == "" && is_object($arr["obj_inst"]))
+				if ($data["value"] == "" && is_object($arr["obj_inst"]) && !$arr["new"])
 				{
 					$data["value"] = html::href(array(
 						"url" => $this->mk_my_orb("create_bill_from_task", array("id" => $arr["obj_inst"]->id(),"post_ru" => get_ru())),

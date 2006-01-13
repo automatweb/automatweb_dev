@@ -9,18 +9,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/help/help.aw:25 classes/core/help/help.aw:93
+#: classes/core/help/help.aw:25 classes/core/help/help.aw:186
+#: classes/core/help/help.aw:380
 msgid "Selle klassil puudub abiinfo"
 msgstr "No help available for this class"
 
-#: classes/core/help/help.aw:73
+#: classes/core/help/help.aw:166 classes/core/help/help.aw:355
 msgid "Klassi '%s' abiinfo"
 msgstr "'%s' help"
 
-#: classes/core/help/help.aw:76
+#: classes/core/help/help.aw:169 classes/core/help/help.aw:358
 msgid "AW abiinfo"
 msgstr "AW Help Center"
 
-#: classes/core/help/help.aw:104
+#: classes/core/help/help.aw:391
 msgid "Sellist gruppi pole"
 msgstr "No such group"

@@ -425,14 +425,6 @@ msgstr ""
 msgid "Omaduse Kontrollerid (view_controllers) help"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/contentmgmt/webform.aw:group_form
 #: classes/contentmgmt/webform.aw:group_form
 msgid "Grupi Vorm (form) pealkiri"
@@ -483,12 +475,13 @@ msgstr "Entries"
 msgid "Grupi Sisestused (show_entries) help"
 msgstr ""
 
+# classes/contentmgmt/webform.aw:group_entries
 #: classes/contentmgmt/webform.aw:group_entries
-msgid "Grupi Näita sisestusi (entries) pealkiri"
-msgstr ""
+msgid "Grupi N&auml;ita sisestusi (entries) pealkiri"
+msgstr "Display entries"
 
 #: classes/contentmgmt/webform.aw:group_entries_help
-msgid "Grupi Näita sisestusi (entries) help"
+msgid "Grupi N&auml;ita sisestusi (entries) help"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:group_search
@@ -521,12 +514,13 @@ msgstr "Saving data"
 msgid "Grupi Salvestamine (set_controllers) help"
 msgstr ""
 
+# classes/contentmgmt/webform.aw:group_get_controllers
 #: classes/contentmgmt/webform.aw:group_get_controllers
-msgid "Grupi Näitamine (get_controllers) pealkiri"
-msgstr ""
+msgid "Grupi N&auml;itamine (get_controllers) pealkiri"
+msgstr "Display"
 
 #: classes/contentmgmt/webform.aw:group_get_controllers_help
-msgid "Grupi Näitamine (get_controllers) help"
+msgid "Grupi N&auml;itamine (get_controllers) help"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_METAMGR
@@ -844,17 +838,9 @@ msgstr "Register"
 msgid "Saada"
 msgstr "Send"
 
-#: classes/contentmgmt/webform.aw:2223
+#: classes/contentmgmt/webform.aw:2222
 msgid "Liigu edasi &raquo;"
 msgstr "Go on &raquo;"
-
-# classes/contentmgmt/webform.aw:group_entries
-#~ msgid "Grupi N&auml;ita sisestusi (entries) pealkiri"
-#~ msgstr "Display entries"
-
-# classes/contentmgmt/webform.aw:group_get_controllers
-#~ msgid "Grupi N&auml;itamine (get_controllers) pealkiri"
-#~ msgstr "Display"
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_VIEWCONTROLLER
 #~ msgid "Seose N&auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"

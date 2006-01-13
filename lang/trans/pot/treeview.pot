@@ -86,14 +86,6 @@ msgstr ""
 msgid "Omaduse Kinnise kausta ikoon (icon_folder_closed) help"
 msgstr ""
 
-#: classes/vcl/treeview.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/vcl/treeview.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/vcl/treeview.aw:rel_RELTYPE_FOLDER
 msgid "Seose root kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""

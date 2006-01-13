@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.99 2006/01/03 20:58:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.100 2006/01/13 11:12:18 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -505,9 +505,14 @@ class crm_person extends class_base
 					$ol = new object_list(array("oid" => $ws));
 					$data["options"] = array("" => t("--vali--")) + $ol->names();
 				}
-				if (!$data["value"])
+				if ($arr["new"])
 				{
 					$data["value"] = $u->get_current_person();
+				}
+				if (isset($data["options"]) && !isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$data["value"]] = $tmp->name();
 				}
 				break;
 

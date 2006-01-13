@@ -217,12 +217,16 @@ msgstr ""
 msgid "Omaduse User-defined 2 (udef2) help"
 msgstr ""
 
-#: classes/file.aw:group_general
-msgid "Grupi ldine (general) pealkiri"
+#: classes/file.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/file.aw:group_general_help
-msgid "Grupi ldine (general) help"
+#: classes/file.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
 # classes/file.aw:group_settings
@@ -245,15 +249,23 @@ msgstr ""
 msgid "Grupi Ajad (dates) help"
 msgstr ""
 
+#: classes/file.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/file.aw:rel_RELTYPE_KEYWORD
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:115
+#: classes/file.aw:128
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:955
+#: classes/file.aw:985
 msgid "Need either id or parent"
 msgstr ""
 

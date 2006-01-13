@@ -122,14 +122,6 @@ msgstr ""
 msgid "Omaduse Postkast (po_box) help"
 msgstr ""
 
-#: classes/common/address/address.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/common/address/address.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/common/address/address.aw:group_grp_address
 msgid "Grupi Aadress (grp_address) pealkiri"
 msgstr ""
@@ -150,7 +142,15 @@ msgstr ""
 msgid "Haldusjaotus määramata."
 msgstr ""
 
-#: classes/common/address/address.aw:346
+#: classes/common/address/address.aw:215
+msgid "Viga: k6rgem haldusjaotus m22ramata."
+msgstr ""
+
+#: classes/common/address/address.aw:235
+msgid "Viga: valikute taotleja-property m22ramata."
+msgstr ""
+
+#: classes/common/address/address.aw:340
 msgid "Tänav"
 msgstr ""
 

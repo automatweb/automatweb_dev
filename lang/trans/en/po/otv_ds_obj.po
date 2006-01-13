@@ -191,14 +191,6 @@ msgstr ""
 msgid "Omaduse Lisatavad objektit&uuml;&uuml;bid (add_ots) help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
@@ -210,11 +202,11 @@ msgid "Grupi Kataloogid (folders) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_types
-msgid "Grupi Objektitüübid (types) pealkiri"
+msgid "Grupi Objektit&uuml;&uuml;bid (types) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_types_help
-msgid "Grupi Objektitüübid (types) help"
+msgid "Grupi Objektit&uuml;&uuml;bid (types) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_FOLDER

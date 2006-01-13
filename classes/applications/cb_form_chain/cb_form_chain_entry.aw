@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.10 2005/08/18 12:52:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.11 2006/01/13 11:12:17 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -249,7 +249,19 @@ class cb_form_chain_entry extends class_base
 					$val = $d->prop_str($pn);
 				}
 			}
-
+			if ($pd["type"] == "releditor")
+			{
+				// file upload, get conn file and 
+				$o = $d->get_first_obj_by_reltype($pd["reltype"]);
+				if ($o)
+				{
+					$file_i = get_instance(CL_FILE);
+					$val = html::href(array(
+						"url" => $file_i->get_url($o->id(), $o->name()),
+						"caption" => $o->name()
+					));
+				}
+			}
 			if ($val == "")
 			{
 			//	continue;

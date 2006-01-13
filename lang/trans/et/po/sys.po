@@ -17,34 +17,38 @@ msgstr ""
 msgid "Write error"
 msgstr ""
 
-#: classes/sys.aw:507
+#: classes/sys.aw:509
 msgid "L&otilde;i saidi andmebaasi tabelid"
 msgstr ""
 
-#: classes/sys.aw:563
+#: classes/sys.aw:565
 msgid "all done! "
 msgstr ""
 
-#: classes/sys.aw:609
+#: classes/sys.aw:611
 msgid "Nimi"
 msgstr ""
 
-#: classes/sys.aw:613
+#: classes/sys.aw:615
 msgid "Klass"
 msgstr ""
 
-#: classes/sys.aw:617
+#: classes/sys.aw:619
 msgid "Muutja"
 msgstr ""
 
-#: classes/sys.aw:621
+#: classes/sys.aw:623
 msgid "Muutmise aeg"
 msgstr ""
 
-#: classes/sys.aw:790
+#: classes/sys.aw:792
 msgid "all done!! database seems to be relatively ok!"
 msgstr ""
 
-#: classes/sys.aw:850
+#: classes/sys.aw:852
 msgid "All done"
+msgstr ""
+
+#: classes/sys.aw:888
+msgid "$fn"
 msgstr ""

@@ -86,14 +86,6 @@ msgstr ""
 msgid "Omaduse Viimasel ekspordil esinenud vead (last_city24export_error) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_export.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_export.aw:rel_RELTYPE_OWNER
 msgid "Seose Kinnisvaraobjektide halduskeskkond (RELTYPE_OWNER) tekst"
 msgstr ""
@@ -102,11 +94,11 @@ msgstr ""
 msgid "Seose Aadresside vastavuskoodid (RELTYPE_ENCODING) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:73
+#: classes/applications/realestate_management/realestate_export.aw:84
 msgid "Kinnisvarahalduskeskkond m22ramata v6i puudub juurdep22su6igus.\n"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:174
-msgid "Viga objekti ekspordil. AW id: %s.\n<blockquote>%s</blockquote>\n"
+#: classes/applications/realestate_management/realestate_export.aw:188
+msgid "Viga objekti ekspordil. AW id: %s.\n<blockquote>%s</blockquote>"
 msgstr ""
 

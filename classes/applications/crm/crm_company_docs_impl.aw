@@ -523,5 +523,85 @@ class crm_company_docs_impl extends class_base
 		}
 		return $ol;
 	}
+
+	function _init_docs_lmod_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "files",
+			"caption" => t("Failid"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "parent",
+			"caption" => t("Asukoht"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => t("Muutja"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muutmisaeg"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+	}
+
+	function _get_documents_lmod($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_docs_lmod_t($t);
+
+		$fld = $this->_init_docs_fld($arr["obj_inst"]);
+		$ot = new object_tree(array(
+			"class_id" => CL_MENU,
+			"parent" => $fld->id()
+		));
+		$ol = $ot->to_list();
+		$ol->add($fld);
+
+		// search for 30 last mod docs
+		$lm = new object_list(array(
+			"parent" => $ol->ids(),
+			"sort_by" => "objects.modified desc",
+			"limit" => 30,
+			"class_id" => array(CL_FILE,CL_CRM_MEMO,CL_CRM_DEAL,CL_CRM_DOCUMENT,CL_CRM_OFFER, CL_FILE)
+		));
+		//$t->data_from_ol($lm);
+		$u = get_instance(CL_USER);
+		$us = get_instance("users");
+		foreach($lm->arr() as $o)
+		{
+			$p = obj($u->get_person_for_user(obj($us->get_oid_for_uid($o->modifiedby()))));
+			$fs = new object_list($o->connections_from(array("type" => "RELTYPE_FILE")));
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"files" => html::obj_change_url($fs->ids()),
+				"parent" => $o->path_str(array("path_only" => true, "max_len" => 2)),
+				"modifiedby" => $p->name(),
+				"modified" => $o->modified()
+			));
+		}
+		$t->set_default_sortby("modified");
+		$t->set_default_sorder("desc");
+	}
 }
 ?>

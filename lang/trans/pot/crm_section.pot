@@ -87,7 +87,7 @@ msgid "Omaduse Kas tehakse kasutajagrupp alamametinimetustele (has_group_subs_pr
 msgstr ""
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_SECTION
-msgid "Seose Alamüksus (RELTYPE_SECTION) tekst"
+msgid "Seose Alam&uuml;ksus (RELTYPE_SECTION) tekst"
 msgstr ""
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_WORKERS
@@ -99,7 +99,7 @@ msgid "Seose Roll (RELTYPE_PROFESSIONS) tekst"
 msgstr ""
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_JOB_OFFER
-msgid "Seose Tööpakkumine (RELTYPE_JOB_OFFER) tekst"
+msgid "Seose T&ouml;&ouml;pakkumine (RELTYPE_JOB_OFFER) tekst"
 msgstr ""
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_GROUP

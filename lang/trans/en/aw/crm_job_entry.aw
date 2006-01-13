@@ -21,6 +21,5 @@ $GLOBALS["TRANS"]["Omaduse Liik (task_type) caption"] = "Action type";
 $GLOBALS["TRANS"]["Omaduse Algus (task_start) caption"] = "Start";
 $GLOBALS["TRANS"]["Omaduse L&otilde;pp (task_end) caption"] = "End";
 $GLOBALS["TRANS"]["Omaduse Sisu (task_content) caption"] = "Content";
-$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["--Vali--"] = "--Select--";
 ?>

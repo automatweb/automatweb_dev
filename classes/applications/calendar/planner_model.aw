@@ -164,6 +164,11 @@ class planner_model extends core
 			};
 
 			$row["event_icon_url"] = icons::get_icon_url($eo);
+			if ($of->class_id() == CL_CRM_PERSON)
+			{
+				$row["name"] = sprintf(t("%s s&uuml;nnip&auml;ev!"), $of->name());
+			}
+
 			$rv[$gx][$row["brother_of"]] = $row;
 			if ($args["flatlist"])
 			{
@@ -374,6 +379,38 @@ class planner_model extends core
 			};
 		};
 		exit_function("get_event_list::recur");
+
+		// get b-days
+		if ($obj->prop("show_bdays") == 1)
+		{
+			$s_m = date("m", $_start);
+			$e_m = date("m", $_end);
+			$pred = $s_m > $e_m ? "OR" : "AND";
+			$q = "
+				SELECT 
+					objects.name as name,
+					objects.oid as oid,
+					kliendibaas_isik.birthday as bd
+				FROM 
+					objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of  
+				WHERE	
+					objects.class_id = '145' AND 
+					(MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) >= $s_m $pred MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) <= $e_m) AND 
+					objects.status > 0  AND
+					kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
+			";
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$ds = $obj->prop("day_start");
+				$bs = mktime($ds["hour"], $ds["minute"], 0, date("m", $row["bd"]), date("d", $row["bd"]), date("Y"));
+				$rv[$row["oid"]] = array(
+					"id" => $row["oid"],
+					"start" => $bs,
+					"end" => $bs+3600,
+				);
+			}
+		}
 		return $rv;
 	}
 
@@ -382,6 +419,11 @@ class planner_model extends core
 	// event_id - id of an event
 	function get_event_edit_link($arr)
 	{
+		$evo = obj($arr["event_id"]);
+		if ($evo->class_id() == CL_CRM_PERSON) // birthday
+		{
+			return html::get_change_url($evo->id(), array("return_url" => get_ru()));
+		}
 		return $this->mk_my_orb("change",array(
 			"id" => $arr["cal_id"],
 			"group" => "add_event",

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.15 2005/07/25 14:04:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.16 2006/01/13 11:12:17 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -427,7 +427,6 @@ class cb_form_chain extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-
 		if ($_GET["display"])
 		{
 			$i = get_instance(CL_CB_FORM_CHAIN_ENTRY);
@@ -496,6 +495,11 @@ class cb_form_chain extends class_base
 					$ci = get_instance(CL_CFGCONTROLLER);
 					$fd["rep_cnt"] = $ci->check_property($dat["rep_ctr"], $form, $form, $form, $form, $form);
 				}
+				else
+				if ($dat["repeat"])
+				{
+					$fd["rep_cnt"] = $this->get_current_entry_count($fd)+1;
+				}
 
 				if (is_oid($dat["def_ctr"]) && $this->can("view", $dat["def_ctr"]))
 				{
@@ -513,7 +517,6 @@ class cb_form_chain extends class_base
 		$this->read_template("show_form.tpl");
 
 		$this->_draw_page_titles($o);
-
 		foreach($forms as $form_dat)
 		{
 			$wf = obj($form_dat["form"]);
@@ -705,12 +708,31 @@ class cb_form_chain extends class_base
 							}
 						}
 					}
+
+					// if the property is a damn file upload, then we are sorta fucked. so try to come up with some sort of a clever way
+					// to get around that
+					if (strpos($pd["name"], "userfile") !== false)
+					{
+						// get the uploaded file from the files array and store it ... somewhere. try to store it in the temp 
+						// folder for now
+						$fn = tempnam(aw_ini_get("server.tmpdir"), "cbfc_f");
+						if (is_uploaded_file($_FILES[$k]["tmp_name"][$pd["name"]]["file"]))
+						{
+							move_uploaded_file($_FILES[$k]["tmp_name"][$pd["name"]]["file"], $fn);
+							$data[$pd["name"]] = $fn;
+							$_SESSION["cbfc_file_data"][$wf_id][$num][$pd["name"]]["name"] = $_FILES[$k]["name"][$pd["name"]]["file"];
+							$_SESSION["cbfc_file_data"][$wf_id][$num][$pd["name"]]["mtype"] = $_FILES[$k]["type"][$pd["name"]]["file"];
+						}
+						else
+						{
+							$data[$pd["name"]] = $_SESSION["cbfc_data"][$wf_id][$num][$pd["name"]];
+						}
+					}
 				}
 
 				$_SESSION["cbfc_data"][$wf_id][$num] = $data;
 			}
 		}
-
 		if (count($errors))
 		{
 			$_SESSION["cbfc_errors"] = $errors;
@@ -930,6 +952,7 @@ class cb_form_chain extends class_base
 		$props = $o->get_property_list();
 
 		$metaf = array();
+		$file_ids = array();
 		foreach($dat as $k => $v)
 		{
 			if ($props[$k]["type"] == "date_select")
@@ -941,6 +964,19 @@ class cb_form_chain extends class_base
 			{
 				$metaf[$k] = $v;
 			}
+			else
+			if ($props[$k]["type"] == "releditor" && strpos($k, "userfile") !== false)
+			{
+				// handle file upload save
+				$f = get_instance(CL_FILE);
+				$file_ids[$props[$k]["reltype"]] = $f->save_file(array(
+					"name" => $_SESSION["cbfc_file_data"][$wf->id()][0][$k]["name"],
+					"type" => $_SESSION["cbfc_file_data"][$wf->id()][0][$k]["mtype"],
+					"content" => $this->get_file(array("file" => $_SESSION["cbfc_data"][$wf->id()][0][$k])),
+					"parent" => $o->parent(),
+				));
+			}
+			else
 			if ($o->is_property($k))
 			{
 				$o->set_prop($k, $v);
@@ -948,6 +984,11 @@ class cb_form_chain extends class_base
 		}
 		$o->set_meta("metaf", $metaf);
 		$o->save();
+
+		foreach($file_ids as $_rt => $_fid)
+		{
+			$o->connect(array("to" => $_fid, "type" => $_rt));
+		}
 
 		$entry->connect(array(
 			"to" => $o->id(),
@@ -1387,18 +1428,32 @@ class cb_form_chain extends class_base
 				$nps[$k] = $v;
 			}
 			$props = $nps;
-
 			$rd = get_instance(CL_REGISTER_DATA);
 			$els = $rd->parse_properties(array(
 				"properties" => $props,
 				"name_prefix" => "f_".$wf->id()."_".$i,
 				"object_type_id" => $ot->id()
 			));
-
 			$htmlc = get_instance("cfg/htmlclient");
 			$htmlc->start_output();
 			foreach($els as $pn => $pd)
 			{
+				// rewrite file does not exist thingie if it is so
+				if (strpos($pd["name"], "f_".$wf->id()."_".$i."[userfile") !== false && strpos($pd["name"], "filename") !== false)
+				{
+					list(,,,$r_pn) = explode("_", $pn);
+					if ($_SESSION["cbfc_data"][$wf->id()][$i][$r_pn] != "")
+					{
+						$pd["value"] = html::href(array(
+							"url" => $this->mk_my_orb("show_up_file", array("wfid" => $wf->id(), "i" => $i, "rpn" => $r_pn)),
+							"caption" => $_SESSION["cbfc_file_data"][$wf->id()][$i][$r_pn]["name"]
+						));
+					}
+					else
+					{
+						$pd["value"] = "";
+					}
+				}
 				$htmlc->add_property($pd);
 			}
 			$htmlc->finish_output();
@@ -1502,7 +1557,8 @@ class cb_form_chain extends class_base
 		foreach($titles as $pg => $title)
 		{
 			$this->vars(array(
-				"title" => $title
+				"title" => $title,
+				"title_url" => aw_url_change_var("cbfc_pg", $pg)
 			));
 
 			if ($pg == $page)
@@ -1669,6 +1725,32 @@ class cb_form_chain extends class_base
 		}
 
 		$t->set_sortable(false);
+	}
+
+	function get_current_entry_count($fd)
+	{
+		$count = 0;
+		foreach(safe_array($_SESSION["cbfc_data"][$fd["form"]]) as $entry)
+		{
+			if (!$this->_is_empty($entry))
+			{
+				$count++;
+			}
+		}
+		return $count;
+	}
+
+	/**
+		@attrib name=show_up_file nologin="1"
+		@param wfid required
+		@param i optional
+		@param rpn required
+	**/
+	function show_up_file($arr)
+	{
+		header("Content-type: ".$_SESSION["cbfc_file_data"][$arr["wfid"]][$arr["i"]][$arr["rpn"]]["mtype"]);
+		readfile($_SESSION["cbfc_data"][$arr["wfid"]][$arr["i"]][$arr["rpn"]]);
+		die();
 	}
 }
 ?>

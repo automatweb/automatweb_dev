@@ -110,14 +110,6 @@ msgstr ""
 msgid "Omaduse Toote paketid (packets) help"
 msgstr ""
 
-#: classes/crm/crm_special_offer.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/crm/crm_special_offer.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/crm/crm_special_offer.aw:group_images
 msgid "Grupi Pildid (images) pealkiri"
 msgstr ""
@@ -144,5 +136,9 @@ msgstr ""
 
 #: classes/crm/crm_special_offer.aw:rel_RELTYPE_SHOP_PACKET
 msgid "Seose Lao pakett (RELTYPE_SHOP_PACKET) tekst"
+msgstr ""
+
+#: classes/crm/crm_special_offer.aw:166
+msgid "Asutuse juurde"
 msgstr ""
 

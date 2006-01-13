@@ -209,14 +209,6 @@ msgstr ""
 msgid "Omaduse Tulemuste tabel (result_table) help"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/calendar/event_search.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/calendar/event_search.aw:group_ftsearch
 #: classes/applications/calendar/event_search.aw:group_ftsearch
 msgid "Grupi Otsinguvorm (ftsearch) pealkiri"
@@ -379,8 +371,8 @@ msgid "Eraldaja enne"
 msgstr "Seprator before"
 
 #: classes/applications/calendar/event_search.aw:398
-msgid "Eraldaja pärast"
-msgstr "Separator after"
+msgid "Eraldaja p&auml;rast"
+msgstr ""
 
 #: classes/applications/calendar/event_search.aw:403
 msgid "Jrk"
@@ -402,17 +394,23 @@ msgstr "Additional fields"
 msgid "V&auml;ljundvorm on valimata"
 msgstr "Output form not selected"
 
-#: classes/applications/calendar/event_search.aw:825
-#: classes/applications/calendar/event_search.aw:831
+#: classes/applications/calendar/event_search.aw:826
 #: classes/applications/calendar/event_search.aw:832
-#: classes/applications/calendar/event_search.aw:848
-#: classes/applications/calendar/event_search.aw:854
-msgid "kõik"
-msgstr "all"
+#: classes/applications/calendar/event_search.aw:833
+#: classes/applications/calendar/event_search.aw:849
+#: classes/applications/calendar/event_search.aw:855
+msgid "k&otilde;ik"
+msgstr ""
 
-#: classes/applications/calendar/event_search.aw:861
+#: classes/applications/calendar/event_search.aw:862
 msgid "Otsi"
 msgstr "Search"
+
+#~ msgid "Eraldaja pärast"
+#~ msgstr "Separator after"
+
+#~ msgid "kõik"
+#~ msgstr "all"
 
 # classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_CFGFORM
 #~ msgid "Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_CFGFORM) tekst"

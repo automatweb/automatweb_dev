@@ -14,14 +14,6 @@ msgstr ""
 msgid "Klassi Ressursiplaneerija help"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/mrp/mrp_schedule.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/mrp/mrp_schedule.aw:255
 msgid "Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata või puuduvad õigused selle vaatamiseks."
 msgstr ""
@@ -118,23 +110,23 @@ msgstr ""
 msgid "Unavailable times covered by reserved exceeded reasonable limit (%s). Resource %s, job %s"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:1569
+#: classes/mrp/mrp_schedule.aw:1579
 msgid "error@%s. job: %s<br>"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:1571
+#: classes/mrp/mrp_schedule.aw:1581
 msgid "Timerange search exceeded reasonable limit (%s) of cycles. Job %s"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:1635
+#: classes/mrp/mrp_schedule.aw:1645
 msgid "error@%s. res: %s, job %s<br>"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:1637 classes/mrp/mrp_schedule.aw:1641
+#: classes/mrp/mrp_schedule.aw:1647 classes/mrp/mrp_schedule.aw:1651
 msgid "Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades. Töö id: %s"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:1946
+#: classes/mrp/mrp_schedule.aw:1956
 msgid "Search for unavailable times for range exceeded reasonable limit (%s) of cycles. Resource %s"
 msgstr ""
 

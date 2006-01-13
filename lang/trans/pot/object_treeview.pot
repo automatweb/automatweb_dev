@@ -255,7 +255,7 @@ msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview.aw:rel_RELTYPE_ADD_TYPE
-msgid "Seose lisatav objektit&uuml;&uuml;p (RELTYPE_ADD_TYPE) tekst"
+msgid "Seose lisatav objektit&amp;uuml;&amp;uuml;p (RELTYPE_ADD_TYPE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview.aw:rel_RELTYPE_ALL_ACSS_GRP

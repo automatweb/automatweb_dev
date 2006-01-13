@@ -242,14 +242,6 @@ msgstr ""
 msgid "Omaduse Maksimaalne objektide arv mida kustutada (del_max) help"
 msgstr ""
 
-#: classes/admin/object_import.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/admin/object_import.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/admin/object_import.aw:group_props
 msgid "Grupi Omadused (props) pealkiri"
 msgstr ""

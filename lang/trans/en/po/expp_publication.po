@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/expp/expp_publication.aw:class_1011_help
 msgid "Klassi V&auml;ljaanne help"
 msgstr ""
@@ -37,12 +36,3 @@ msgstr ""
 #: classes/applications/clients/expp/expp_publication.aw:prop_description_help
 msgid "Omaduse Kirjeldus (description) help"
 msgstr ""
-
-#: classes/applications/clients/expp/expp_publication.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/clients/expp/expp_publication.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-

@@ -278,14 +278,6 @@ msgstr ""
 msgid "Omaduse Sündmused (show_events) help"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/calendar/calendar_view.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/calendar/calendar_view.aw:group_style
 msgid "Grupi Stiilid (style) pealkiri"
 msgstr ""
@@ -402,11 +394,11 @@ msgstr ""
 msgid "Väljundvorm on valimata"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:994
+#: classes/calendar/calendar_view.aw:1013
 msgid "&lt;&lt;"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1001
+#: classes/calendar/calendar_view.aw:1020
 msgid "&gt;&gt;"
 msgstr ""
 

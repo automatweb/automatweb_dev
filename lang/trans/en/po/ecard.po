@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/ecard/ecard.aw:class_997_help
 msgid "Klassi E-kaart help"
 msgstr ""
@@ -134,14 +133,6 @@ msgstr ""
 msgid "Omaduse Vaatamisel saada teade (spy) help"
 msgstr ""
 
-#: classes/applications/ecard/ecard.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/ecard/ecard.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/ecard/ecard.aw:group_image
 msgid "Grupi Pilt (image) pealkiri"
 msgstr ""
@@ -169,4 +160,3 @@ msgstr ""
 #: classes/applications/ecard/ecard.aw:76
 msgid "Tekst pildi kõrval"
 msgstr ""
-

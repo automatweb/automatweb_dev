@@ -1446,6 +1446,15 @@
             <field>dn_res</field>
       </property>
       <property>
+            <name>documents_lmod</name>
+            <table>objects</table>
+            <group>documents_lmod</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>documents_lmod</field>
+      </property>
+      <property>
             <name>bill_tb</name>
             <table>objects</table>
             <group>bills_create</group>
@@ -2205,6 +2214,11 @@
                   <submit>no</submit>
                   <parent>general</parent>
             </documents_forum>
+            <documents_lmod>
+                  <caption>Viimati muudetud</caption>
+                  <submit>no</submit>
+                  <parent>general	</parent>
+            </documents_lmod>
             <bills>
                   <caption>Arved</caption>
                   <submit>no</submit>

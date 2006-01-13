@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/languages.aw:361
+#: classes/languages.aw:374
 msgid "Lisas keele"
 msgstr ""
 

@@ -29,14 +29,6 @@ msgstr ""
 msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) help"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/server_folder.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/contentmgmt/server_folder.aw:72
 msgid ""
 "server_folder::show_file(%s): the fid parameter does not contain a valid "
@@ -62,7 +54,7 @@ msgstr ""
 "server_folder::change_file(%s): the fid parameter does not contain a valid "
 "object id!"
 
-#: classes/contentmgmt/server_folder.aw:226
+#: classes/contentmgmt/server_folder.aw:225
 msgid ""
 "server_folder::submit_addfile(%s): the id parameter does not contain a valid "
 "object id!"
@@ -70,19 +62,19 @@ msgstr ""
 "server_folder::submit_addfile(%s): the id parameter does not contain a valid "
 "object id!"
 
-#: classes/contentmgmt/server_folder.aw:304
+#: classes/contentmgmt/server_folder.aw:303
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:305
+#: classes/contentmgmt/server_folder.aw:304
 msgid "Faili suurus"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:306
+#: classes/contentmgmt/server_folder.aw:305
 msgid "Loomise kuup&auml;ev"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:307
+#: classes/contentmgmt/server_folder.aw:306
 msgid "Muutmise kuup&auml;ev"
 msgstr ""
 

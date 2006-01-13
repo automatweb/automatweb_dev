@@ -218,14 +218,6 @@ msgstr ""
 msgid "Omaduse  (offer) help"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/crm/crm_offer.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/crm/crm_offer.aw:group_content
 msgid "Grupi Sisu (content) pealkiri"
 msgstr ""
@@ -350,67 +342,67 @@ msgstr ""
 msgid "Projekt"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:177
+#: classes/crm/crm_offer.aw:187
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:393
+#: classes/crm/crm_offer.aw:403
 msgid "Algstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:399
+#: classes/crm/crm_offer.aw:409
 msgid "Lõppstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:405
+#: classes/crm/crm_offer.aw:415
 msgid "Muutuse aeg"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:411
+#: classes/crm/crm_offer.aw:421
 msgid "Muutja"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:443
+#: classes/crm/crm_offer.aw:453
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:469
+#: classes/crm/crm_offer.aw:479
 msgid "T&uuml;&uuml;pkomponendid"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:491
+#: classes/crm/crm_offer.aw:501
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:498
+#: classes/crm/crm_offer.aw:508
 msgid "Kustuta valitud osad"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:499
+#: classes/crm/crm_offer.aw:509
 msgid "Oled kindel et soovid valitud osad kustutada?"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:557
+#: classes/crm/crm_offer.aw:567
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:565
+#: classes/crm/crm_offer.aw:575
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:571
+#: classes/crm/crm_offer.aw:581
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:577
+#: classes/crm/crm_offer.aw:587
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:620
+#: classes/crm/crm_offer.aw:630
 msgid "Eemalda t&uuml;&uuml;pkomonentide nimekirjast"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:631
+#: classes/crm/crm_offer.aw:641
 msgid "Tee t&uuml;&uuml;pkomponendiks"
 msgstr ""
 

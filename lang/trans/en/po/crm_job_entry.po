@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 22:08+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 #: classes/applications/crm/crm_job_entry.aw:class_1035_help
 msgid "Klassi T88 kirje help"
@@ -278,17 +278,35 @@ msgstr ""
 msgid "Omaduse Sisu (task_content) help"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
-
-#: classes/applications/crm/crm_job_entry.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/applications/crm/crm_job_entry.aw:prop_res_desc
+msgid "Omaduse Ressursid (res_desc) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:110
-#: classes/applications/crm/crm_job_entry.aw:119
-#: classes/applications/crm/crm_job_entry.aw:128
+#: classes/applications/crm/crm_job_entry.aw:prop_res_desc_comment
+msgid "Omaduse Ressursid (res_desc) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_res_desc_help
+msgid "Omaduse Ressursid (res_desc) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_resource_sel
+msgid "Omaduse Ressursid (resource_sel) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_resource_sel_comment
+msgid "Omaduse Ressursid (resource_sel) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_resource_sel_help
+msgid "Omaduse Ressursid (resource_sel) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:114
+#: classes/applications/crm/crm_job_entry.aw:123
+#: classes/applications/crm/crm_job_entry.aw:132
 msgid "--Vali--"
 msgstr "--Select--"
 
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"

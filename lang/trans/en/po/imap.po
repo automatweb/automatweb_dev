@@ -104,14 +104,6 @@ msgstr ""
 msgid "Omaduse Testi tulemused (test) help"
 msgstr ""
 
-#: classes/protocols/mail/imap.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/protocols/mail/imap.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/protocols/mail/imap.aw:group_test
 #: classes/protocols/mail/imap.aw:group_test
 msgid "Grupi Testi (test) pealkiri"

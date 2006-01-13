@@ -96,6 +96,12 @@ class crm_company_res_impl extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "cal",
+			"caption" => t("Kalender"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "createdby",
 			"caption" => t("Looja"),
 			"sortable" => 1,
@@ -146,7 +152,19 @@ class crm_company_res_impl extends class_base
 			"class_id" => CL_MRP_RESOURCE,
 			"parent" => $parent
 		));
-		$t->data_from_ol($ol, array("change_col" => "name"));
+		//$t->data_from_ol($ol, array("change_col" => "name"));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"cal" => html::get_change_url($o->id(), array("group" => "grp_resource_schedule", "return_url" => get_ru()), t("Kalender")),
+				"createdby" => $o->createdby(),
+				"created" => $o->created(),
+				"modifiedby" => $o->modifiedby(),
+				"modified" => $o->modified(),
+				"oid" => $o->id()
+			));
+		}
 	}
 
 	function _get_res_parent($co)

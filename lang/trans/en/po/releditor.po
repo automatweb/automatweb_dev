@@ -35,8 +35,8 @@ msgstr "Error in the definition of %s (connection type undefined!)"
 msgid "Seda seost ei saa redigeerida!"
 msgstr "This connection can not be edited"
 
-#: classes/vcl/releditor.aw:231 classes/vcl/releditor.aw:391
-#: classes/vcl/releditor.aw:410
+#: classes/vcl/releditor.aw:231 classes/vcl/releditor.aw:405
+#: classes/vcl/releditor.aw:424
 msgid "Uus"
 msgstr "New"
 
@@ -44,38 +44,38 @@ msgstr "New"
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/releditor.aw:399
+#: classes/vcl/releditor.aw:413
 msgid "Uus "
 msgstr "New"
 
-#: classes/vcl/releditor.aw:400
+#: classes/vcl/releditor.aw:414
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/vcl/releditor.aw:415
+#: classes/vcl/releditor.aw:429
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/vcl/releditor.aw:418
+#: classes/vcl/releditor.aw:432
 msgid "Kustutada valitud seosed?"
 msgstr "Delete selected relations?"
 
-#: classes/vcl/releditor.aw:435
+#: classes/vcl/releditor.aw:449
 msgid "Klooni valitud objektid"
 msgstr "Clone selected objects"
 
-#: classes/vcl/releditor.aw:504 classes/vcl/releditor.aw:686
+#: classes/vcl/releditor.aw:518 classes/vcl/releditor.aw:700
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/releditor.aw:626
+#: classes/vcl/releditor.aw:640
 msgid "Vali üks"
 msgstr "Pick one"
 
-#: classes/vcl/releditor.aw:635 classes/vcl/releditor.aw:673
+#: classes/vcl/releditor.aw:649 classes/vcl/releditor.aw:687
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/releditor.aw:678
+#: classes/vcl/releditor.aw:692
 msgid "Nimi"
 msgstr "Name"

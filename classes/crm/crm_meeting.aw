@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.47 2006/01/12 14:14:31 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.48 2006/01/13 11:12:18 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -530,6 +530,7 @@ class crm_meeting extends class_base
 			case "participants":
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
+					$this->post_save_add_parts = safe_array($data["value"]);
 					return PROP_IGNORE;
 				}
 				$pl = get_instance(CL_PLANNER);
@@ -573,6 +574,14 @@ class crm_meeting extends class_base
 
 	function callback_post_save($arr)
 	{
+		if (is_array($this->post_save_add_parts))
+		{
+			foreach(safe_array($this->post_save_add_parts) as $person)
+			{
+				$this->add_participant($arr["obj_inst"], obj($person));
+			}
+			
+		}
 		if($arr['new'])
 		{
 			//
@@ -667,6 +676,7 @@ class crm_meeting extends class_base
 				'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
 				'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
 				'search_contact_code' => urlencode($arr['search_contact_code']),
+				'search_contact_company' => urlencode($arr['search_contact_company']),
 			),
 			$arr['class']
 		);
@@ -746,6 +756,32 @@ class crm_meeting extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	function add_participant($task, $person)
+	{
+		$pl = get_instance(CL_PLANNER);
+		$person->connect(array(
+			"to" => $task->id(),
+			"reltype" => "RELTYPE_PERSON_MEETING"
+		));
+
+		// also add to their calendar
+		if (($cal = $pl->get_calendar_for_person($person)))
+		{
+			$pl->add_event_to_calendar(obj($cal), $task);
+		}
+	}
+
+	/**
+
+		@attrib name=save_participant_search_results
+
+	**/
+	function save_participant_search_results($arr)
+	{
+		$p = get_instance(CL_PLANNER);
+		return $p->save_participant_search_results($arr);
 	}
 }
 ?>

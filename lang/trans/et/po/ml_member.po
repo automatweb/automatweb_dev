@@ -434,20 +434,10 @@ msgstr ""
 msgid "Omaduse Kuup&auml;ev 2 (udef_date2) help"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_member.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/mailinglist/ml_member.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
-# classes/applications/mailinglist/ml_member.aw:group_udef_fields
 #: classes/applications/mailinglist/ml_member.aw:group_udef_fields
-msgid "Grupi Muud (udef_fields) pealkiri"
+msgid "Grupi Muud väljad (udef_fields) pealkiri"
 msgstr ""
 
-# classes/applications/mailinglist/ml_member.aw:group_udef_fields_help
 #: classes/applications/mailinglist/ml_member.aw:group_udef_fields_help
-msgid "Grupi Muud (udef_fields) help"
+msgid "Grupi Muud väljad (udef_fields) help"
 msgstr ""

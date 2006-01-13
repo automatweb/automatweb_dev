@@ -41,12 +41,10 @@ $GLOBALS["TRANS"]["Klikitav"] = "Clickable";
 $GLOBALS["TRANS"]["T&auml;isvaates"] = "Full view";
 $GLOBALS["TRANS"]["Reavahetused"] = "Line breaks";
 $GLOBALS["TRANS"]["Eraldaja enne"] = "Seprator before";
-$GLOBALS["TRANS"]["Eraldaja pärast"] = "Separator after";
 $GLOBALS["TRANS"]["Jrk"] = "Ord";
 $GLOBALS["TRANS"]["Seaded"] = "Settings";
 $GLOBALS["TRANS"]["V&auml;ljade eraldaja"] = "Field separator";
 $GLOBALS["TRANS"]["Lisav&auml;ljad"] = "Additional fields";
 $GLOBALS["TRANS"]["V&auml;ljundvorm on valimata"] = "Output form not selected";
-$GLOBALS["TRANS"]["kõik"] = "all";
 $GLOBALS["TRANS"]["Otsi"] = "Search";
 ?>

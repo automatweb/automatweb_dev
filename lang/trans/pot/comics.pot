@@ -74,16 +74,16 @@ msgstr ""
 msgid "Omaduse Seostehaldur (relman) help"
 msgstr ""
 
-#: classes/applications/calendar/comics.aw:prop_project_selector
-msgid "Omaduse Projektid (project_selector) caption"
+#: classes/applications/calendar/comics.aw:prop_calendar_selector
+msgid "Omaduse Kalendrid (calendar_selector) caption"
 msgstr ""
 
-#: classes/applications/calendar/comics.aw:prop_project_selector_comment
-msgid "Omaduse Projektid (project_selector) kommentaar"
+#: classes/applications/calendar/comics.aw:prop_calendar_selector_comment
+msgid "Omaduse Kalendrid (calendar_selector) kommentaar"
 msgstr ""
 
-#: classes/applications/calendar/comics.aw:prop_project_selector_help
-msgid "Omaduse Projektid (project_selector) help"
+#: classes/applications/calendar/comics.aw:prop_calendar_selector_help
+msgid "Omaduse Kalendrid (calendar_selector) help"
 msgstr ""
 
 #: classes/applications/calendar/comics.aw:prop_scripts
@@ -98,12 +98,24 @@ msgstr ""
 msgid "Omaduse  (scripts) help"
 msgstr ""
 
-#: classes/applications/calendar/comics.aw:group_projects
-msgid "Grupi Projektid (projects) pealkiri"
+#: classes/applications/calendar/comics.aw:prop_com_edit
+msgid "Omaduse  (com_edit) caption"
 msgstr ""
 
-#: classes/applications/calendar/comics.aw:group_projects_help
-msgid "Grupi Projektid (projects) help"
+#: classes/applications/calendar/comics.aw:prop_com_edit_comment
+msgid "Omaduse  (com_edit) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/comics.aw:prop_com_edit_help
+msgid "Omaduse  (com_edit) help"
+msgstr ""
+
+#: classes/applications/calendar/comics.aw:group_calendars
+msgid "Grupi Kalendrid (calendars) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/comics.aw:group_calendars_help
+msgid "Grupi Kalendrid (calendars) help"
 msgstr ""
 
 #: classes/applications/calendar/comics.aw:group_scripts
@@ -114,11 +126,23 @@ msgstr ""
 msgid "Grupi Skriptid (scripts) help"
 msgstr ""
 
+#: classes/applications/calendar/comics.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/comics.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
+msgstr ""
+
 #: classes/applications/calendar/comics.aw:rel_RELTYPE_PICTURE
 msgid "Seose Pilt (RELTYPE_PICTURE) tekst"
 msgstr ""
 
 #: classes/applications/calendar/comics.aw:rel_RELTYPE_SCRIPT
 msgid "Seose Skript (RELTYPE_SCRIPT) tekst"
+msgstr ""
+
+#: classes/applications/calendar/comics.aw:rel_RELTYPE_COMMENT
+msgid "Seose Kommentaar (RELTYPE_COMMENT) tekst"
 msgstr ""
 

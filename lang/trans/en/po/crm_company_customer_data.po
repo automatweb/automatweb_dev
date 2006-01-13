@@ -134,14 +134,6 @@ msgstr ""
 msgid "Omaduse Kliendihaldur (client_manager) help"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
-
-#: classes/applications/crm/crm_company_customer_data.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_BUYER
 msgid "Seose Ostja (RELTYPE_BUYER) tekst"
 msgstr ""
@@ -165,3 +157,6 @@ msgstr ""
 #: classes/applications/crm/crm_company_customer_data.aw:87
 msgid "--vali--"
 msgstr ""
+
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"

@@ -54,31 +54,31 @@ msgstr ""
 msgid "Seose tüüp"
 msgstr ""
 
-#: classes/aliasmgr.aw:1154
+#: classes/aliasmgr.aw:1153
 msgid "Lisa uus objekt"
 msgstr ""
 
-#: classes/aliasmgr.aw:1164 classes/aliasmgr.aw:1173
+#: classes/aliasmgr.aw:1163 classes/aliasmgr.aw:1172
 msgid "Otsi"
 msgstr ""
 
-#: classes/aliasmgr.aw:1190
+#: classes/aliasmgr.aw:1189
 msgid "Tõlgi"
 msgstr ""
 
-#: classes/aliasmgr.aw:1201
+#: classes/aliasmgr.aw:1200
 msgid "Reload"
 msgstr ""
 
-#: classes/aliasmgr.aw:1212
+#: classes/aliasmgr.aw:1211
 msgid "Loo seos(ed)"
 msgstr ""
 
-#: classes/aliasmgr.aw:1222
+#: classes/aliasmgr.aw:1221
 msgid "Salvesta"
 msgstr ""
 
-#: classes/aliasmgr.aw:1229
+#: classes/aliasmgr.aw:1228
 msgid "Kustuta valitud seos(ed)"
 msgstr ""
 

@@ -338,14 +338,6 @@ msgstr ""
 msgid "Omaduse Kontrollerid (view_controllers) help"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/webform.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/contentmgmt/webform.aw:group_form
 msgid "Grupi Vorm (form) pealkiri"
 msgstr ""
@@ -387,11 +379,11 @@ msgid "Grupi Sisestused (show_entries) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_entries
-msgid "Grupi Näita sisestusi (entries) pealkiri"
+msgid "Grupi N&auml;ita sisestusi (entries) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_entries_help
-msgid "Grupi Näita sisestusi (entries) help"
+msgid "Grupi N&auml;ita sisestusi (entries) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_search
@@ -419,11 +411,11 @@ msgid "Grupi Salvestamine (set_controllers) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_get_controllers
-msgid "Grupi Näitamine (get_controllers) pealkiri"
+msgid "Grupi N&auml;itamine (get_controllers) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_get_controllers_help
-msgid "Grupi Näitamine (get_controllers) help"
+msgid "Grupi N&auml;itamine (get_controllers) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_METAMGR
@@ -730,7 +722,7 @@ msgstr ""
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2223
+#: classes/contentmgmt/webform.aw:2222
 msgid "Liigu edasi &raquo;"
 msgstr ""
 

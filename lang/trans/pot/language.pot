@@ -146,6 +146,18 @@ msgstr ""
 msgid "Omaduse Esilehe nimi (fp_text) help"
 msgstr ""
 
+#: classes/core/language.aw:prop_lang_group
+msgid "Omaduse Grupp (lang_group) caption"
+msgstr ""
+
+#: classes/core/language.aw:prop_lang_group_comment
+msgid "Omaduse Grupp (lang_group) kommentaar"
+msgstr ""
+
+#: classes/core/language.aw:prop_lang_group_help
+msgid "Omaduse Grupp (lang_group) help"
+msgstr ""
+
 #: classes/core/language.aw:prop_temp_redir_url
 msgid "Omaduse Ajutine AW-v&auml;line aadress sisse logimata kasutajatele (temp_redir_url) caption"
 msgstr ""
@@ -182,6 +194,18 @@ msgstr ""
 msgid "Omaduse  (texts) help"
 msgstr ""
 
+#: classes/core/language.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/core/language.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/core/language.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/core/language.aw:group_langs
 msgid "Grupi K&otilde;ik keeled (langs) pealkiri"
 msgstr ""
@@ -198,31 +222,39 @@ msgstr ""
 msgid "Grupi Tekstid (texts) help"
 msgstr ""
 
+#: classes/core/language.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/core/language.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/core/language.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
 
-#: classes/core/language.aw:81
+#: classes/core/language.aw:88
 msgid "siit"
 msgstr ""
 
-#: classes/core/language.aw:235
+#: classes/core/language.aw:251
 msgid "Keel"
 msgstr ""
 
-#: classes/core/language.aw:240
+#: classes/core/language.aw:256
 msgid "Staatus"
 msgstr ""
 
-#: classes/core/language.aw:245
+#: classes/core/language.aw:261
 msgid "Valitud"
 msgstr ""
 
-#: classes/core/language.aw:289
+#: classes/core/language.aw:305
 msgid "Muutuja nimi"
 msgstr ""
 
-#: classes/core/language.aw:294
+#: classes/core/language.aw:310
 msgid "Muutuja v&auml;&auml;rtus"
 msgstr ""
 

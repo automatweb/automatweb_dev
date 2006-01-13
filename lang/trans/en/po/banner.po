@@ -218,20 +218,13 @@ msgstr ""
 msgid "Omaduse Click-through ratio (click_through) help"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/banner/banner.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
+# classes/applications/banner/banner.aw:group_display
 #: classes/applications/banner/banner.aw:group_display
-msgid "Grupi Näitamine (display) pealkiri"
-msgstr ""
+msgid "Grupi N&auml;itamine (display) pealkiri"
+msgstr "Display"
 
 #: classes/applications/banner/banner.aw:group_display_help
-msgid "Grupi Näitamine (display) help"
+msgid "Grupi N&auml;itamine (display) help"
 msgstr ""
 
 # classes/applications/banner/banner.aw:group_stats
@@ -269,10 +262,6 @@ msgstr ""
 #: classes/applications/banner/banner.aw:442
 msgid "No banner location id given"
 msgstr "No banner location id given"
-
-# classes/applications/banner/banner.aw:group_display
-#~ msgid "Grupi N&auml;itamine (display) pealkiri"
-#~ msgstr "Display"
 
 #~ msgid "N&auml;itamise t&otilde;en&auml;osuse %"
 #~ msgstr "Display probability %"

@@ -36,7 +36,6 @@ $GLOBALS["TRANS"]["Omaduse Kõned (org_calls) caption"] = "Phonecalls";
 $GLOBALS["TRANS"]["Omaduse Kohtumised (org_meetings) caption"] = "Meetings";
 $GLOBALS["TRANS"]["Omaduse Toimetused (org_tasks) caption"] = "Events";
 $GLOBALS["TRANS"]["Omaduse Väljund (templates) caption"] = "Output";
-$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Üldine (general2) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Kirjeldus (description) pealkiri"] = "Description";
 $GLOBALS["TRANS"]["Grupi Sugulased (relatives) pealkiri"] = "Relatives";

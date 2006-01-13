@@ -10,23 +10,23 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/comments.aw:48
+#: classes/vcl/comments.aw:56
 msgid " kommentaari<br><br>"
 msgstr ""
 
-#: classes/vcl/comments.aw:80
+#: classes/vcl/comments.aw:90
 msgid "Lisa kommentaar"
 msgstr ""
 
-#: classes/vcl/comments.aw:85
+#: classes/vcl/comments.aw:95
 msgid "Kasutaja"
 msgstr ""
 
-#: classes/vcl/comments.aw:91
+#: classes/vcl/comments.aw:101
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/vcl/comments.aw:98
+#: classes/vcl/comments.aw:108
 msgid ""
 msgstr ""
 
