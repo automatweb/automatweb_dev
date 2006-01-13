@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.116 2005/12/27 12:35:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.117 2006/01/13 08:18:22 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -633,12 +633,12 @@ class file extends class_base
 	// !returns file by id
 	function get_file_by_id($id, $fetch_file = true) 
 	{
-		$tmp = obj($id);
-		if ($tmp->class_id() != CL_FILE)
+		$tmpo = obj($id);
+		if ($tmpo->class_id() != CL_FILE)
 		{
 			return array();
 		}
-		$ret = $tmp->fetch();
+		$ret = $tmpo->fetch();
 		$ret["id"] = $id;
 
 		$ret["file"] = basename($ret["file"]);
@@ -669,7 +669,7 @@ class file extends class_base
 			};
 		}
 
-		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $tmp->lang_id())
+		if (aw_ini_get("user_interface.content_trans") == 1 && ($cur_lid = aw_global_get("lang_id")) != $tmpo->lang_id())
 		{
 			$trs = $tmp->meta("translations");
 			if (isset($trs[$cur_lid]))
