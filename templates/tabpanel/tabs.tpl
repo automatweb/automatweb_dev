@@ -166,7 +166,7 @@ function show_property_help(propname)
 {VAR:help}
 </div>
 <div style="text-align: right; width: 100%; font-family: verdana, sans-serif; font-size: 11px; font-weight: normal; color: #000000;">
-<a href="javascript:void(0);" onclick="window.open('{VAR:translate_url}','awtrans','width=600,height=400');">{VAR:translate_text}</a> |
+<a href="javascript:void(0);" onclick="window.open('{VAR:translate_url}','awtrans','width=600,height=400,resizable=1,scrollbars=1');">{VAR:translate_text}</a> |
 <a href="javascript:void(0);" onclick="window.open('{VAR:help_url}','awhelp','width=600,height=400,resizable=1,scrollbars=1');">{VAR:more_help_text}</a> | <a href="javascript:close_help();">{VAR:close_help_text}</a>
 </div>
 </div>
