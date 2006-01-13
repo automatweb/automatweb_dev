@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.53 2006/01/13 11:12:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.54 2006/01/13 11:46:56 ahti Exp $
 // task.aw - TODO item
 /*
 
@@ -284,7 +284,7 @@ class task extends class_base
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
-		if ($arr["obj_inst"]->prop("is_personal") && aw_global_get("uid") != $arr["obj_inst"]->createdby())
+		if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->prop("is_personal") && aw_global_get("uid") != $arr["obj_inst"]->createdby())
 		{
 			if (!($arr["prop"]["name"] == "start1" || $arr["prop"]["name"] == "end" || $arr["prop"]["name"] == "deadline"))
 			{
@@ -435,7 +435,7 @@ class task extends class_base
 					$data["value"] = "";
 				}
 
-				if (!$arr["new"])
+				if (!$arr["new"] && is_object($arr["obj_inst"]))
 				{
 					$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL"));
 					if (!count($cs))
