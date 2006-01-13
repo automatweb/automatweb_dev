@@ -4224,8 +4224,8 @@ class crm_company extends class_base
 				$u = get_instance(CL_USER);
 				$ol = new object_list(array(
 					"class_id" => CL_PROJECT,
-					"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->id(),
-					"CL_PROJECT.RELTYPE_SIDE" => $u->get_current_company(),
+					"CL_PROJECT.RELTYPE_SIDE.name" => $arr["obj_inst"]->name(),
+					//"CL_PROJECT.RELTYPE_ORDERER" => $u->get_current_company(),
 					"lang_id" => array(),
 					"site_id" => array()
 				));

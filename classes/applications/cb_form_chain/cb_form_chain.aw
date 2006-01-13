@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.16 2006/01/13 11:12:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.17 2006/01/13 13:03:34 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -785,6 +785,14 @@ class cb_form_chain extends class_base
 			}
 		}
 
+		// if this is an unbounded repeating form, advance to the next entry after save
+		$fd = $this->_get_forms_for_page(obj($arr["id"]), $arr["cbfc_pg"]);
+		$ed = max(1, $arr["edit_num"]);
+		if ($fd[0]["rep"] == 1 && $fd[0]["repeat_fix"] == 0)
+		{
+			return aw_url_change_var("edit_num", $ed+1, $arr["ret"]);
+		}
+		
 		return $arr["ret"];
 	}
 
