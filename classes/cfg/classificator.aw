@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.15 2006/01/11 10:54:09 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.16 2006/01/15 10:08:17 ahti Exp $
 
 /*
 
@@ -273,14 +273,11 @@ class classificator extends class_base
 		$use_type = $clf_type[$name];
 
 		// XXX: implement some error checking
-		if(!is_oid($clf[$name]) || !$this->can("view", $clf[$name]))
+		if(!$this->can("view", $clf[$name]))
 		{
 			return false;
 		}
 		$ofto = new object($clf[$name]);
-	
-		$parent = is_oid($ofto->id()) ? $ofto->id() : -1;
-		
 		$vars = array(
 			"parent" => $parent,
 			"class_id" => CL_META,
@@ -312,32 +309,21 @@ class classificator extends class_base
 			"list" => $olx->ids(),
 			"list_names" => $olx->names(),
 		);
-
-		$obj_meta = array();
-		$parent_id;
-
-		foreach($olx->arr() as $o)
+		$metamgr_obj = new object($ofto->parent());
+		$transyes = $metamgr_obj->prop("transyes");
+		if ($transyes)
 		{
-			$obj_id = $o->id(); 
-			$parent_id = $o->parent();
-			$obj_meta[$obj_id] = $o->meta();
-		}
-
-		$parent_obj = new object($parent_id);
-		$root_id = $parent_obj -> parent();
-		$root_obj = new object($root_id);
-		$root_meta = $root_obj->meta();
-		if ($root_meta[transyes])
-		{
-			foreach($obj_meta as $asd => $val)
+			foreach($olx->arr() as $o)
 			{
-				if($obj_meta[$asd]["tolge"][$langid])
+				$obj_id = $o->id();
+				$obj_meta = $o->meta("tolge");
+				if($obj_meta[$langid])
 				{
-					$ret["list_names"][$asd] = $obj_meta[$asd]["tolge"][$langid];
+					$ret["list_names"][$obj_id] = $obj_meta[$langid];
 				}
 			}
 		}
-		return array($olx,$ofto->name(),$use_type, $default_value, $ret);
+		return array($olx, $ofto->name(), $use_type, $default_value, $ret);
 	}
 
 	function process_vcl_property($arr)
