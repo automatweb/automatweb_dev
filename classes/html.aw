@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.93 2006/01/06 09:27:17 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.94 2006/01/15 17:33:38 voldemar Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -585,14 +585,14 @@ class html extends aw_template
 		{
 			$onClick = $onclick;
 		}
-		$textsize = isset($textsize) ? 'style="font-size: ' . $textsize . ';"' : "";
-		$target = isset($target) ? " target='$target' " : "";
-		$onClick = isset($onClick) ? " onClick='$onClick' " : "";
-		$title = isset($title) ? " alt='$title' title='$title' " : "";
-		$class = isset($class) ? " class='$class' " : "";
-		$ti = isset($tabindex) ? " tabindex='$tabindex' " : "";
-		$id = isset($id) ? " id='$id' " : "";
-		return "<a href='$url' $target $title $onClick $ti $textsize $class $id>$caption</a>";
+		$textsize = isset($textsize) ? ' style="font-size: ' . $textsize . ';"' : "";
+		$target = isset($target) ? " target='$target'" : "";
+		$onClick = isset($onClick) ? " onClick='$onClick'" : "";
+		$title = isset($title) ? " alt='$title' title='$title'" : "";
+		$class = isset($class) ? " class='$class'" : "";
+		$ti = isset($tabindex) ? " tabindex='$tabindex'" : "";
+		$id = isset($id) ? " id='$id'" : "";
+		return "<a href='{$url}'" . $target . $title . $onClick . $ti . $textsize . $class . $id . ">{$caption}</a>";
 	}
 
 	////
