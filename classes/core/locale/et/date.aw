@@ -56,11 +56,12 @@ class date
 		return $rv;
 	}
 
-	function get_lc_weekday($num, $short = false)
+	function get_lc_weekday($num, $short = false, $ucfirst = false)
 	{
 		// date("w") returns 0 for sunday, but for historical reasons should also work with 7
 		$names = array("pühapäev","esmaspäev","teisipäev","kolmapäev","neljapäev","reede","laupäev","pühapäev");
-		return $short ? substr($names[$num],0,1) : $names[$num];
+		$name = ($ucfirst) ? ucfirst($names[$num]) : $names[$num];
+		return $short ? substr($name,0,1) : $name;
 	}
 	
 	function get_lc_month($num)

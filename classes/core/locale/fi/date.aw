@@ -44,11 +44,12 @@ class date
 		return $rv;
 	}
 
-	function get_lc_weekday($num, $short = false)
+	function get_lc_weekday($num, $short = false, $ucfirst = false)
 	{
 		$names = array("maanantai", "tiistai", "keskiviikko", "torstai", "perjantai", "lauantai", "sunnuntai");
 		$num--;
-		return $short ? substr($names[$num], 0, 2) : $names[$num];
+		$name = ($ucfirst) ? ucfirst($names[$num]) : $names[$num];
+		return $short ? substr($name, 0, 2) : $name;
 	}
 	
 	function get_lc_month($num)

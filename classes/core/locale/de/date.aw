@@ -47,11 +47,13 @@ class date
 		}
 	}
 	
-	function get_lc_weekday($num, $short = false)
+	function get_lc_weekday($num, $short = false, $ucfirst = true)
 	{
 		// date("w") returns 0 for sunday, but for historical reasons 7 should also be sunday
-		$names = array("Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag");
-		return $short ? substr($names[$num],0,3) : $names[$num];
+//		$names = array("Sonntag","Montag","Dienstag","Mittwoch","Donnerstag","Freitag","Samstag","Sonntag");
+		$names = array("sonntag","montag","dienstag","mittwoch","donnerstag","freitag","samstag","sonntag");
+		$name = ($ucfirst) ? ucfirst($names[$num]) : $names[$num];
+		return $short ? substr($name,0,3) : $name;
 	}
 
 	function get_lc_month($num)
