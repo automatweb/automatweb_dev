@@ -174,7 +174,7 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
-            <caption>&amp;nbsp;</caption>
+            <caption>&amp;amp;nbsp;</caption>
       </property>
       <property>
             <name>clear_discount_products</name>
@@ -184,7 +184,7 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
-            <caption>&amp;nbsp;</caption>
+            <caption>&amp;amp;nbsp;</caption>
       </property>
       <property>
             <name>folders</name>
@@ -238,6 +238,17 @@
             <type>table</type>
             <store>no</store>
             <caption>Kaustade nimed impordi jaoks</caption>
+      </property>
+      <property>
+            <name>categories</name>
+            <table>objects</table>
+            <group>categories</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Kategooriad</caption>
       </property>
       <property>
             <name>force_7_view</name>
@@ -354,6 +365,7 @@
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
             <no_comment>1</no_comment>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <imgs>
@@ -369,7 +381,7 @@
                   <caption>Kataloogid</caption>
             </foldersa>
             <folders>
-                  <caption>Kataloogid</caption>
+                  <caption>Kataloogid (deprecated)</caption>
                   <parent>foldersa</parent>
             </folders>
             <folderspri>
@@ -377,9 +389,13 @@
                   <parent>foldersa</parent>
             </folderspri>
             <foldersnames>
-                  <caption>Kaustade nimed</caption>
+                  <caption>Kaustade nimed (deprecated)</caption>
                   <parent>foldersa</parent>
             </foldersnames>
+            <categories>
+                  <caption>Kategooriad</caption>
+                  <parent>foldersa</parent>
+            </categories>
             <views>
                   <caption>Vaated</caption>
             </views>

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.35 2006/01/10 11:47:50 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.36 2006/01/16 07:11:26 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
-@classinfo syslog_type=ST_OTTO_IMPORT relationmgr=yes no_status=1 no_comment=1
+@classinfo syslog_type=ST_OTTO_IMPORT relationmgr=yes no_status=1 no_comment=1 prop_cb=1
 
 @default table=objects
 @default group=general
@@ -75,25 +75,30 @@
 
 @groupinfo foldersa caption="Kataloogid"
 
-@groupinfo folders caption="Kataloogid" parent=foldersa
+	@groupinfo folders caption="Kataloogid (deprecated)" parent=foldersa
 
-@property folders type=table store=no group=folders no_caption=1
+		@property folders type=table store=no group=folders no_caption=1
 
-@property inf_pages type=textarea rows=3 cols=40 group=folders field=meta method=serialize table=objects
-@caption L&otilde;pmatus vaatega lehed
+		@property inf_pages type=textarea rows=3 cols=40 group=folders field=meta method=serialize table=objects
+		@caption L&otilde;pmatus vaatega lehed
 
-@groupinfo folderspri caption="Kataloogide m&auml;&auml;rangud" parent=foldersa
+	@groupinfo folderspri caption="Kataloogide m&auml;&auml;rangud" parent=foldersa
 
-	@property foldpri type=textarea rows=20 cols=20 table=objects field=meta method=serialize group=folderspri
-	@caption T&auml;htede prioriteedid
+		@property foldpri type=textarea rows=20 cols=20 table=objects field=meta method=serialize group=folderspri
+		@caption T&auml;htede prioriteedid
 
-	@property sideways_pages type=textarea rows=4 cols=30 table=objects field=meta method=serialize group=folderspri
-	@caption Landscape vaatega lehed
+		@property sideways_pages type=textarea rows=4 cols=30 table=objects field=meta method=serialize group=folderspri
+		@caption Landscape vaatega lehed
 
-@groupinfo foldersnames caption="Kaustade nimed" parent=foldersa
+	@groupinfo foldersnames caption="Kaustade nimed (deprecated)" parent=foldersa
 
-	@property foldernames type=table store=no group=foldersnames
-	@caption Kaustade nimed impordi jaoks
+		@property foldernames type=table store=no group=foldersnames
+		@caption Kaustade nimed impordi jaoks
+
+	@groupinfo categories caption="Kategooriad" parent=foldersa
+		
+		@property categories type=table store=no group=categories no_caption=1
+		@caption Kategooriad
 
 @groupinfo views caption="Vaated"
 
@@ -530,8 +535,10 @@ class otto_import extends class_base
 
 //			echo "url = $url <br>";
 			arr($url);
+			flush();
 			$html = $this->file_get_contents($url);
-
+			echo "Page content loaded, parsing ...<br>";
+			flush();
 			// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
 			if (strpos($html,"Leider konnten wir im gesamten OTTO") !== false)
 			{ 
@@ -1158,6 +1165,8 @@ class otto_import extends class_base
 
 		echo "<b>[!!]</b> start reading data from csv files <b>[!!]</b><br>\n";
 
+		$import_time = time();
+
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
 		{
 			if (trim($fname) == "")
@@ -1174,6 +1183,7 @@ class otto_import extends class_base
 			echo "from url ".$fld_url." read: <br>";
 			list(, $cur_pg) = explode(".", $fname);
 			$cur_pg = substr($cur_pg,1);
+
 			if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
 			{
 				$cur_pg = (int)$cur_pg;
@@ -1218,6 +1228,7 @@ class otto_import extends class_base
 				$this->quote(&$row);
 				$row = $this->char_replacement($row);
 				$row[2] = $this->conv($row[2]);
+
 				if (true || aw_ini_get("site_id") == 276 || aw_ini_get("site_id") == 277)
 				{
 					$extrafld = trim($row[3]);
@@ -1228,6 +1239,7 @@ class otto_import extends class_base
 					//$extrafld = trim($row[3]);
 					$desc = $this->conv(trim($row[3]." ".$row[5]." ".$row[6]." ".$row[7]." ".$row[8]." ".$row[9]." ".$row[10]." ".$row[11]." ".$row[12]." ".$row[13]." ".$row[14]." ".$row[15]." ".$row[16]." ".$row[17]." ".$row[18]." ".$row[19]." ".$row[20]." ".$row[21]." ".$row[22]." ".$row[23]." ".$row[24]." ".$row[25]." ".$row[26]." ".$row[27]." ".$row[28]." ".$row[29]." ".$row[30]." ".$row[31]." ".$row[32]." ".$row[33]." ".$row[34]." ".$row[35]." ".$row[36]." ".$row[37]." ".$row[38]." ".$row[39]." ".$row[40]." ".$row[41]." ".$row[42]));
 				}
+
 				$this->db_query("
 					INSERT INTO otto_imp_t_prod(pg,nr,title,c,extrafld)
 					VALUES('$cur_pg','$row[1]','$row[2]','$desc','$extrafld')
@@ -1605,6 +1617,46 @@ class otto_import extends class_base
 			$dat->set_prop("user17", $row["color"]);
 			$dat->set_prop("user18", $row["pg"]);
 			$dat->set_prop("user11", $row["extrafld"]);
+
+
+			// i need to add those categories or extraflds to the 'otto_imp_t_prod_to_cat' table too
+			if (!empty($row['extrafld']))
+			{
+				$this->save_handle();
+				$categories = explode(',', $row['extrafld']);
+				foreach ($categories as $category)
+				{
+					$prod_to_cat_id = $this->db_fetch_field("SELECT id FROM otto_imp_t_prod_to_cat WHERE product_code='".$row['code']."' AND category='$category'", "id");
+					if (empty($prod_to_cat_id))
+					{
+						$this->db_query("
+							INSERT INTO 
+								otto_imp_t_prod_to_cat 
+							SET
+								product_code = '".$row['code']."',
+								category = '".$category."',
+								import_time = ".$import_time.",
+								lang_id = '".aw_global_get('lang_id')."'
+						");
+					}
+					else
+					{
+						$this->db_query("
+							UPDATE 
+								otto_imp_t_prod_to_cat 
+							SET
+								product_code = '".$row['code']."',
+								category = '".$category."',
+								import_time = ".$import_time.",
+								lang_id = '".aw_global_get('lang_id')."'
+							WHERE
+								id = ".$prod_to_cat_id."
+						");
+					}
+				}
+				$this->restore_handle();
+			}
+
 			if (!$new)
 			{
 				echo "---- if not new object: <br>\n";
@@ -2484,6 +2536,99 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 			$ret[$row["fld"]][] = $row["pg"];
 		}
 		return $ret;
+	}
+
+	function _get_categories($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);
+		$t->define_field(array(
+			'name' => 'aw_folder_id',
+			'caption' => t('AW Kataloogi ID'),
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'categories',
+			'caption' => t('Kategooriad'),
+			'align' => 'center'
+		));
+		
+		$count = 1;
+		$data = array();
+		
+		// otto lehed lähevad kategooriateks:
+		$this->db_query("SELECT * FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get('lang_id'));
+		while ($row = $this->db_next())
+		{
+			$data[$row['fld']][] = $row['pg'];
+		}
+
+		// bonpriksi stiilis kategooriad ka kõik üheks kategooriate värgiks kokku:
+		$foldernames = explode(',', $args['obj_inst']->meta('foldernames'));
+		foreach ($foldernames as $pair)
+		{
+			list($aw_folder_id, $category) = explode('=', $pair);
+			if (!in_array($category, $data[$aw_folder_id]))
+			{
+				$data[$aw_folder_id][] = $category;
+			}
+		}
+
+		foreach ($data as $aw_folder => $categories)
+		{
+
+			$t->define_data(array(
+				'aw_folder_id' => html::textbox(array(
+					'name' => 'data['.$count.'][aw_folder_id]',
+					'value' => $aw_folder,
+				)),
+				'categories' => html::textbox(array(
+					'name' => 'data['.$count.'][categories]',
+					'value' => implode(',', $categories),
+					'size' => '80',
+				)),
+			));
+			$count++;
+
+		}
+
+		for ($i = 0; $i<10; $i++)
+		{
+			$t->define_data(array(
+				'aw_folder_id' => html::textbox(array(
+					'name' => 'data['.$count.'][aw_folder_id]',
+					'value' => '',
+				)),
+				'categories' => html::textbox(array(
+					'name' => 'data['.$count.'][categories]',
+					'value' => '',
+					'size' => '80'
+				)),
+			));
+			$count++;
+		}
+
+		return PROP_OK;
+	}
+
+	function _set_categories($args)
+	{
+		$this->db_query('DELETE FROM otto_imp_t_aw_to_cat where lang_id = '.aw_global_get('lang_id'));
+		foreach (safe_array($args['request']['data']) as $count => $data)
+		{
+			foreach (explode(',', $data['categories']) as $category)
+			{
+				if (!empty($category) && !empty($data['aw_folder_id']))
+				{
+					$this->db_query("INSERT INTO otto_imp_t_aw_to_cat set 
+						category = '$category',
+						aw_folder = ".$data['aw_folder_id'].",
+						lang_id = ".aw_global_get('lang_id')."
+					");
+				}
+			}
+		}
+		return PROP_OK;
 	}
 
 	function read_img_from_baur($pcode)
