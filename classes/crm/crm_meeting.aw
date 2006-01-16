@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.49 2006/01/13 11:48:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.50 2006/01/16 10:25:36 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -744,6 +744,17 @@ class crm_meeting extends class_base
 		return parent::new_change($arr);
 	}
 
+	/**
+
+		@attrib name=save_participant_search_results
+
+	**/
+	function save_participant_search_results($arr)
+	{
+		$p = get_instance(CL_PLANNER);
+		return $p->save_participant_search_results($arr);
+	}
+
 	function callback_mod_tab($arr)
 	{
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
@@ -771,17 +782,6 @@ class crm_meeting extends class_base
 		{
 			$pl->add_event_to_calendar(obj($cal), $task);
 		}
-	}
-
-	/**
-
-		@attrib name=save_participant_search_results
-
-	**/
-	function save_participant_search_results($arr)
-	{
-		$p = get_instance(CL_PLANNER);
-		return $p->save_participant_search_results($arr);
 	}
 }
 ?>

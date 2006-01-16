@@ -724,11 +724,8 @@ function aw_startup()
 {
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_s = $sec + $micro;
-
 	// reset aw_cache_* function globals
 	$GLOBALS["__aw_cache"] = array();
-
-
 
 	classload("defs", "core/error", "core/obj/object");
 	_aw_global_init();
@@ -745,7 +742,6 @@ function aw_startup()
 
 	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/errors.".$GLOBALS["cfg"]["__default"]["ext"]);
 	@include($GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $LC . "/common.".$GLOBALS["cfg"]["__default"]["ext"]);
-
 	$p = get_instance(CL_PERIOD);
 	$p->request_startup();
 	
@@ -763,10 +759,8 @@ function aw_startup()
 
 	#$syslog = get_instance("syslog/syslog");
 	#$syslog->request_startup();
-	
 	$m = get_instance("menuedit");
 	$m->request_startup();
-	
 	__init_aw_session_track();
 
 //	list($micro,$sec) = split(" ",microtime());

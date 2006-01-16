@@ -71,6 +71,7 @@ class crm_company_people_impl extends class_base
 			'name' => 'del',
 			'img' => 'delete.gif',
 			'tooltip' => t('Kustuta valitud'),
+			"confirm" => t("Oled kindel et soovid kustutada valitud t&ouml;&ouml;tajad?"),
 			'action' => 'submit_delete_relations',
 		));
 	

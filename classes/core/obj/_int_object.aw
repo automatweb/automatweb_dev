@@ -1712,7 +1712,7 @@ class _int_object
 			$rootmenu = array($GLOBALS["cfg"]["__default"]["rootmenu"]);
 			$add = true;
 		}
-
+		
 		while ($parent && !in_array($parent, $rootmenu))
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent))

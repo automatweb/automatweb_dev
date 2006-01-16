@@ -242,20 +242,28 @@ msgstr ""
 msgid "Omaduse  (active_selection) help"
 msgstr ""
 
+#: classes/search.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/search.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/search.aw:group_search
-msgid "Grupi Lihtne&nbsp;otsing (search) pealkiri"
+msgid "Grupi Lihtne otsing (search) pealkiri"
 msgstr ""
 
 #: classes/search.aw:group_search_help
-msgid "Grupi Lihtne&nbsp;otsing (search) help"
+msgid "Grupi Lihtne otsing (search) help"
 msgstr ""
 
 #: classes/search.aw:group_advanced
-msgid "Grupi Advanced&nbsp;otsing (advanced) pealkiri"
+msgid "Grupi Advanced otsing (advanced) pealkiri"
 msgstr ""
 
 #: classes/search.aw:group_advanced_help
-msgid "Grupi Advanced&nbsp;otsing (advanced) help"
+msgid "Grupi Advanced otsing (advanced) help"
 msgstr ""
 
 #: classes/search.aw:group_objsearch

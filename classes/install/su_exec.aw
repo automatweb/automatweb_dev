@@ -61,6 +61,7 @@ class su_exec extends class_base
 	function is_ok()
 	{
 		$fp = fileperms($this->cfg['basedir']."/scripts/install/su_exec/su_exec");
+		$x = $this->cfg['basedir']."/scripts/install/su_exec/su_exec";
 		if ($fp == 35309)
 		{
 			return true;

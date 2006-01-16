@@ -129,13 +129,21 @@ class popup_search extends aw_template
 				));
 
 			}
-
 			// add new
-			if ($arr['property']['reltype'])
+			//$pl = $arr["obj_inst"]->get_property_list();
+			$cu = get_instance("cfg/cfgutils");
+			$pl = $cu->load_properties(array("clid" => $arr["obj_inst"]->class_id()));
+			$rt = $pl[$arr["property"]["name"]]["reltype"];
+			if ($_GET["PROP_DBG"] == 1)
+			{
+				print "clid = " . print $arr["obj_inst"]->class_id();
+				echo dbg::dump($pl);
+			}
+			if ($rt)
 			{
 				$clss = aw_ini_get("classes");
-				$clid = new aw_array($arr["relinfo"][$arr['property']['reltype']]["clid"]);
-				$rel_val = $arr["relinfo"][$arr['property']['reltype']]["value"];
+				$clid = new aw_array($arr["relinfo"][$rt]["clid"]);
+				$rel_val = $arr["relinfo"][$rt]["value"];
 				if ($clid->count() > 1)
 				{
 					$pm = get_instance("vcl/popup_menu");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.24 2005/12/14 12:02:49 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.25 2006/01/16 10:25:36 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -771,7 +771,7 @@ class crm_db extends class_base
 	
 	function init_firmad_table()
 	{
-		load_vcl('table');
+		load_vcl("table");
 		$tf = new aw_table(array(
 			'prefix' => 'kliendibaas_frimad',
 		));
@@ -857,8 +857,11 @@ class crm_db extends class_base
 		if (is_array($arr))
 		foreach($arr as $val)
 		{
-			$obj = new object($val["oid"]);
-			$this->_add_org_to_table(&$tf,$obj);
+			if(is_oid($val["oid"]) && $this->can("view", $val["oid"]))
+			{
+				$obj = new object($val["oid"]);
+				$this->_add_org_to_table(&$tf,$obj);
+			}
 		}
 
 		$tf->sort_by();
