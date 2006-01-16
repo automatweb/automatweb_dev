@@ -63,47 +63,47 @@ msgstr ""
 
 #: classes/applications/ecard/ecard_manager.aw:64
 msgid "Teie nimi"
-msgstr ""
+msgstr "Your name"
 
 #: classes/applications/ecard/ecard_manager.aw:65
 msgid "Teie e-post"
-msgstr ""
+msgstr "Your e-mail address"
 
 #: classes/applications/ecard/ecard_manager.aw:66
 msgid "Saaja nimi"
-msgstr ""
+msgstr "Name of recipient"
 
 #: classes/applications/ecard/ecard_manager.aw:67
 msgid "Saaja e-post"
-msgstr ""
+msgstr "E-mail address of recipient"
 
 #: classes/applications/ecard/ecard_manager.aw:68
 msgid "Tekst kaardil"
-msgstr ""
+msgstr "Text for the card"
 
 #: classes/applications/ecard/ecard_manager.aw:69
 msgid "Millal saata"
-msgstr ""
+msgstr "When to send"
 
 #: classes/applications/ecard/ecard_manager.aw:70
 msgid "Paigutus"
-msgstr ""
+msgstr "Placement"
 
 #: classes/applications/ecard/ecard_manager.aw:70
 msgid "Tekst all"
-msgstr ""
+msgstr "Text below"
 
 #: classes/applications/ecard/ecard_manager.aw:70
 msgid "Tekst k&otilde;rval"
-msgstr ""
+msgstr "Text beside"
 
 #: classes/applications/ecard/ecard_manager.aw:71
 msgid "Teata vaatamisest meiliga"
-msgstr ""
+msgstr "Confirm reading by e-mail"
 
 #: classes/applications/ecard/ecard_manager.aw:72
 msgid "Edasi eelvaatele"
-msgstr ""
+msgstr "Proceed to preview"
 
 #: classes/applications/ecard/ecard_manager.aw:194
 msgid "Esimesed"
@@ -111,36 +111,36 @@ msgstr ""
 
 #: classes/applications/ecard/ecard_manager.aw:266
 msgid "Viga"
-msgstr ""
+msgstr "Error"
 
 #: classes/applications/ecard/ecard_manager.aw:319
 msgid "Kaart saadetud"
-msgstr ""
+msgstr "Card sent"
 
 #: classes/applications/ecard/ecard_manager.aw:331
 msgid "Kaart salvestatud"
-msgstr ""
+msgstr "Card saved"
 
 #: classes/applications/ecard/ecard_manager.aw:345
-msgid "V‰li peab olema t‰idetud"
-msgstr ""
+msgid "V√§li peab olema t√§idetud"
+msgstr "Field must be filled in"
 
 #: classes/applications/ecard/ecard_manager.aw:360
 msgid "Teie e-posti aadress vigane"
-msgstr ""
+msgstr "Error in your e-mail address"
 
 #: classes/applications/ecard/ecard_manager.aw:365
 msgid "Saaja e-posti aadress vigane"
-msgstr ""
+msgstr "Error in e-mail address of recipient"
 
 #: classes/applications/ecard/ecard_manager.aw:371
-msgid "Kuup‰ev vigane"
-msgstr ""
+msgid "Kuup√§ev vigane"
+msgstr "Error in date"
 
 #: classes/applications/ecard/ecard_manager.aw:382
 msgid "Saada"
-msgstr ""
+msgstr "Send"
 
 #: classes/applications/ecard/ecard_manager.aw:384
 msgid "Tagasi"
-msgstr ""
+msgstr "Back"
