@@ -141,14 +141,14 @@ msgstr ""
 msgid "Haldusjaotus määramata."
 msgstr ""
 
-#: classes/common/address/address.aw:215
+#: classes/common/address/address.aw:216
 msgid "Viga: k6rgem haldusjaotus m22ramata."
 msgstr ""
 
-#: classes/common/address/address.aw:235
+#: classes/common/address/address.aw:236
 msgid "Viga: valikute taotleja-property m22ramata."
 msgstr ""
 
-#: classes/common/address/address.aw:340
+#: classes/common/address/address.aw:341
 msgid "Tänav"
 msgstr ""

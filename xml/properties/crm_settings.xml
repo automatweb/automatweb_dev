@@ -77,6 +77,30 @@
             <caption>Organisatsioonid</caption>
       </property>
       <property>
+            <name>sects</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_SECTION</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Osakonnad</caption>
+      </property>
+      <property>
+            <name>profs</name>
+            <table>objects</table>
+            <group>whom</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <reltype>RELTYPE_PROFESSION</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Ametinimetused</caption>
+      </property>
+      <property>
             <name>everyone</name>
             <table>objects</table>
             <group>whom</group>
@@ -118,6 +142,16 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Organisatsioon</caption>
             </COMPANY>
+            <SECTION>
+                  <value>5</value>
+                  <clid>CL_CRM_SECTION</clid>
+                  <caption>Osakond</caption>
+            </SECTION>
+            <PROFESSION>
+                  <value>6</value>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Ametinimetus</caption>
+            </PROFESSION>
       </reltypes>
 </properties>
 

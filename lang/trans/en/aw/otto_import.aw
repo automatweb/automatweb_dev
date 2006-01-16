@@ -28,7 +28,6 @@ $GLOBALS["TRANS"]["Omaduse Soorita parandus (do_fixes) caption"] = "Do fixes";
 $GLOBALS["TRANS"]["Grupi Pildid (imgs) pealkiri"] = "Images";
 $GLOBALS["TRANS"]["Grupi Failid (files) pealkiri"] = "Files";
 $GLOBALS["TRANS"]["Grupi Kataloogid (foldersa) pealkiri"] = "Folders";
-$GLOBALS["TRANS"]["Grupi Kataloogid (folders) pealkiri"] = "Folders";
 $GLOBALS["TRANS"]["Grupi Kataloogide m&auml;&auml;rangud (folderspri) pealkiri"] = "Folder settings";
 $GLOBALS["TRANS"]["Grupi Vaated (views) pealkiri"] = "Views";
 $GLOBALS["TRANS"]["Grupi J&auml;relmaks (jm) pealkiri"] = "Rent";

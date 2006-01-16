@@ -50,14 +50,6 @@ msgstr ""
 msgid "Omaduse  (data) help"
 msgstr ""
 
-#: classes/applications/cb_form_chain/cb_form_chain_entry.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/cb_form_chain/cb_form_chain_entry.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/cb_form_chain/cb_form_chain_entry.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
 msgstr ""

@@ -98,6 +98,30 @@ msgstr ""
 msgid "Omaduse Organisatsioonid (cos) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_sects
+msgid "Omaduse Osakonnad (sects) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_sects_comment
+msgid "Omaduse Osakonnad (sects) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_sects_help
+msgid "Omaduse Osakonnad (sects) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_profs
+msgid "Omaduse Ametinimetused (profs) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_profs_comment
+msgid "Omaduse Ametinimetused (profs) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_profs_help
+msgid "Omaduse Ametinimetused (profs) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:prop_everyone
 msgid "Omaduse K&otilde;ik  (everyone) caption"
 msgstr ""
@@ -132,5 +156,13 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_COMPANY
 msgid "Seose Organisatsioon (RELTYPE_COMPANY) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:rel_RELTYPE_SECTION
+msgid "Seose Osakond (RELTYPE_SECTION) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:rel_RELTYPE_PROFESSION
+msgid "Seose Ametinimetus (RELTYPE_PROFESSION) tekst"
 msgstr ""
 

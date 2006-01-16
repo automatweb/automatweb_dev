@@ -9,72 +9,72 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/releditor.aw:47
+#: classes/vcl/releditor.aw:46
 msgid "Klassi ID"
 msgstr ""
 
-#: classes/vcl/releditor.aw:48
+#: classes/vcl/releditor.aw:47
 msgid "Klass"
 msgstr ""
 
-#: classes/vcl/releditor.aw:65 classes/vcl/releditor.aw:75
-#: classes/vcl/releditor.aw:114
+#: classes/vcl/releditor.aw:64 classes/vcl/releditor.aw:74
+#: classes/vcl/releditor.aw:113
 msgid " "
 msgstr ""
 
-#: classes/vcl/releditor.aw:66
+#: classes/vcl/releditor.aw:65
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr ""
 
-#: classes/vcl/releditor.aw:76
+#: classes/vcl/releditor.aw:75
 msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 msgstr ""
 
-#: classes/vcl/releditor.aw:115
+#: classes/vcl/releditor.aw:114
 msgid "Seda seost ei saa redigeerida!"
 msgstr ""
 
-#: classes/vcl/releditor.aw:231 classes/vcl/releditor.aw:405
-#: classes/vcl/releditor.aw:424
+#: classes/vcl/releditor.aw:230 classes/vcl/releditor.aw:404
+#: classes/vcl/releditor.aw:423
 msgid "Uus"
 msgstr ""
 
-#: classes/vcl/releditor.aw:298
+#: classes/vcl/releditor.aw:297
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/releditor.aw:413
+#: classes/vcl/releditor.aw:412
 msgid "Uus "
 msgstr ""
 
-#: classes/vcl/releditor.aw:414
+#: classes/vcl/releditor.aw:413
 msgid "Lisa %s"
 msgstr ""
 
-#: classes/vcl/releditor.aw:429
+#: classes/vcl/releditor.aw:428
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/vcl/releditor.aw:432
+#: classes/vcl/releditor.aw:431
 msgid "Kustutada valitud seosed?"
 msgstr ""
 
-#: classes/vcl/releditor.aw:449
+#: classes/vcl/releditor.aw:448
 msgid "Klooni valitud objektid"
 msgstr ""
 
-#: classes/vcl/releditor.aw:518 classes/vcl/releditor.aw:700
+#: classes/vcl/releditor.aw:517 classes/vcl/releditor.aw:699
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/releditor.aw:640
+#: classes/vcl/releditor.aw:639
 msgid "Vali üks"
 msgstr ""
 
-#: classes/vcl/releditor.aw:649 classes/vcl/releditor.aw:687
+#: classes/vcl/releditor.aw:648 classes/vcl/releditor.aw:686
 msgid "ID"
 msgstr ""
 
-#: classes/vcl/releditor.aw:692
+#: classes/vcl/releditor.aw:691
 msgid "Nimi"
 msgstr ""

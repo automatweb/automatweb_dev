@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.6 2006/01/13 11:12:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.7 2006/01/16 10:27:52 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded 
 /*
 
@@ -33,6 +33,12 @@
 	@property cos type=relpicker multiple=1 store=connect reltype=RELTYPE_COMPANY field=meta method=serialize
 	@caption Organisatsioonid
 
+	@property sects type=relpicker multiple=1 store=connect reltype=RELTYPE_SECTION field=meta method=serialize
+	@caption Osakonnad
+
+	@property profs type=relpicker multiple=1 store=connect reltype=RELTYPE_PROFESSION field=meta method=serialize
+	@caption Ametinimetused
+
 	@property everyone type=checkbox ch_value=1 table=objects field=flags
 	@caption K&otilde;ik 
 
@@ -50,6 +56,12 @@
 
 @reltype COMPANY value=4 clid=CL_CRM_COMPANY
 @caption Organisatsioon
+
+@reltype SECTION value=5 clid=CL_CRM_SECTION
+@caption Osakond
+
+@reltype PROFESSION value=6 clid=CL_CRM_PROFESSION
+@caption Ametinimetus
 
 */
 
@@ -93,6 +105,11 @@ class crm_settings extends class_base
 		$u = get_instance(CL_USER);
 		$curp = $u->get_current_person();
 		$curco = $u->get_current_company();
+		
+		$cd = get_instance("applications/crm/crm_data");
+		$cursec = $cd->get_current_section();
+		$curprof = $cd->get_current_profession();
+
 		$ol = new object_list(array(
 			"class_id" => CL_CRM_SETTINGS,
 			new object_list_filter(array(
@@ -101,6 +118,8 @@ class crm_settings extends class_base
 					"CL_CRM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid"),
 					"CL_CRM_SETTINGS.RELTYPE_PERSON" => $curp,
 					"CL_CRM_SETTINGS.RELTYPE_COMPANY" => $curco,
+					"CL_CRM_SETTINGS.RELTYPE_SECTION" => $cursec,
+					"CL_CRM_SETTINGS.RELTYPE_PROFESSION" => $curprof,
 					"CL_CRM_SETTINGS.everyone" => 1
 				)
 			))
@@ -109,9 +128,18 @@ class crm_settings extends class_base
 		if ($ol->count() > 1)
 		{
 			// the most accurate setting SHALL Prevail!
-			$has_co = $has_p = $has_u = $has_all = false;
+			$has_co = $has_p = $has_u = $has_all = $has_sec = $has_prof = false;
 			foreach($ol->arr() as $o)
 			{
+				if ($cursec && $o->is_connected_to(array("to" => $cursec)))
+				{
+					$has_sec = $o;
+				}
+				if ($curprof && $o->is_connected_to(array("to" => $curprof)))
+				{
+					$has_prof = $o;
+				}
+
 				if ($o->is_connected_to(array("to" => $curco)))
 				{
 					$has_co = $o;
@@ -137,6 +165,14 @@ class crm_settings extends class_base
 			if ($has_p)
 			{
 				return $has_p;
+			}
+			if ($has_prof)
+			{
+				return $has_prof;
+			}
+			if ($has_sec)
+			{
+				return $has_sec;
 			}
 			if ($has_co)
 			{

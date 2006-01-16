@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.100 2006/01/13 11:12:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.101 2006/01/16 10:27:52 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -777,6 +777,35 @@ class crm_person extends class_base
 					array("return_url" => get_ru()),
 					$tmp->name()
 				);
+				break;
+			
+			case "name":
+				$u = get_instance(CL_USER);
+				$p = $u->get_current_person();
+				if ($p == $arr["obj_inst"]->id())
+				{
+					// get all crm settings for this person or user
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_SETTINGS,
+						"CL_CRM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid")
+					));
+					if (!$ol->count())
+					{
+						$ol = new object_list(array(
+							"class_id" => CL_CRM_SETTINGS,
+							"CL_CRM_SETTINGS.RELTYPE_PERSON" => aw_global_get("uid_oid")
+						));	
+					}
+
+					if ($ol->count())
+					{
+						$b = $ol->begin();
+						$data["value"] .= " / ".html::href(array(
+							"url" => html::get_change_url($b->id(), array("return_url" => get_ru())),
+							"caption" => t("Muuda kliendibaasi seadeid")
+						));
+					}
+				}
 				break;
 		}
 		return $retval;

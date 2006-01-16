@@ -467,68 +467,68 @@ msgstr "Phone"
 msgid "Organisatsiooni juht"
 msgstr "Organisation leader"
 
-#: classes/crm/crm_db.aw:881
+#: classes/crm/crm_db.aw:884
 msgid "Uus"
 msgstr "New"
 
-#: classes/crm/crm_db.aw:899 classes/crm/crm_db.aw:1104
+#: classes/crm/crm_db.aw:902 classes/crm/crm_db.aw:1107
 msgid "Kaust m‰‰ramata"
 msgstr "Folder not set"
 
-#: classes/crm/crm_db.aw:900 classes/crm/crm_db.aw:913
-#: classes/crm/crm_db.aw:1040 classes/crm/crm_db.aw:1111
-#: classes/crm/crm_db.aw:1125 classes/crm/crm_db.aw:1140
+#: classes/crm/crm_db.aw:903 classes/crm/crm_db.aw:916
+#: classes/crm/crm_db.aw:1043 classes/crm/crm_db.aw:1114
+#: classes/crm/crm_db.aw:1128 classes/crm/crm_db.aw:1143
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/crm/crm_db.aw:928 classes/crm/crm_db.aw:1164
+#: classes/crm/crm_db.aw:931 classes/crm/crm_db.aw:1167
 msgid "Kasutaja kalender"
 msgstr "User calendar"
 
-#: classes/crm/crm_db.aw:940
+#: classes/crm/crm_db.aw:943
 msgid "Ava valim"
 msgstr "Open selection"
 
-#: classes/crm/crm_db.aw:948 classes/crm/crm_db.aw:1149
+#: classes/crm/crm_db.aw:951 classes/crm/crm_db.aw:1152
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/crm/crm_db.aw:950 classes/crm/crm_db.aw:1151
+#: classes/crm/crm_db.aw:953 classes/crm/crm_db.aw:1154
 msgid "Kustutada valitud organisatsioonid?"
 msgstr "Delete selected organisations"
 
-#: classes/crm/crm_db.aw:960
+#: classes/crm/crm_db.aw:963
 msgid "-- vali valim --"
 msgstr "-- select selection --"
 
-#: classes/crm/crm_db.aw:984 classes/crm/crm_db.aw:1205
+#: classes/crm/crm_db.aw:987 classes/crm/crm_db.aw:1208
 msgid "Lisa valitud valimisse"
 msgstr "Add to selected selection"
 
-#: classes/crm/crm_db.aw:986
+#: classes/crm/crm_db.aw:989
 msgid "Paiguta valitud organisatsioonid sellesse valimisse?"
 msgstr "Put selected organisations to this selection?"
 
-#: classes/crm/crm_db.aw:1007
+#: classes/crm/crm_db.aw:1010
 msgid "Lisa uus objekt"
 msgstr "Add new object"
 
-#: classes/crm/crm_db.aw:1039
+#: classes/crm/crm_db.aw:1042
 msgid "%s kaust m‰‰ramata"
 msgstr "%s folder not set"
 
-#: classes/crm/crm_db.aw:1088
+#: classes/crm/crm_db.aw:1091
 msgid "Tegevusala valimata"
 msgstr "Sector not selected"
 
-#: classes/crm/crm_db.aw:1094
+#: classes/crm/crm_db.aw:1097
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/crm/crm_db.aw:1188
+#: classes/crm/crm_db.aw:1191
 msgid "- lisa uude valimisse -"
 msgstr "- add to new selection -"
 
-#: classes/crm/crm_db.aw:1215
+#: classes/crm/crm_db.aw:1218
 msgid "Muuda valimit"
 msgstr "Change selection"

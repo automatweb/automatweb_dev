@@ -114,5 +114,60 @@ class crm_data extends class_base
 			$this->_int_req_get_cust_co($c->to(), $ret);
 		}
 	}
+
+	//////////////////////////////////////////// company
+
+	/** returns sections from the given company 
+	**/
+	function get_section_picker_from_company($co)
+	{
+		$ret = array();
+		$this->req_level = -1;
+		$this->_req_get_sect_picker($co, $ret);
+		return $ret;
+	}
+
+	function _req_get_sect_picker($o, &$ret)
+	{
+		$this->req_level++;
+		foreach($o->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
+		{
+			$ret[$c->prop("to")] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->req_level).$c->prop("to.name");
+			$this->_req_get_sect_picker($c->to(), $ret);
+		}
+		$this->req_level--;
+	}
+
+	////////////////////////////////////////// current person
+
+	function get_current_section()
+	{
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		
+		$cs = $p->connections_to(array("from.class_id" => CL_CRM_SECTION));
+		$c = reset($cs);
+		if (!$c)
+		{
+			return NULL;
+		}
+
+		return $c->prop("from");
+	}
+
+	function get_current_profession()
+	{
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		
+		$cs = $p->connections_from(array("to.class_id" => CL_CRM_PROFESSION));
+		$c = reset($cs);
+		if (!$c)
+		{
+			return NULL;
+		}
+
+		return $c->prop("to");
+	}
 }
 ?>

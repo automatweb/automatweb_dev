@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 19:53+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 #: classes/applications/crm/crm_company_res_impl.aw:16
 msgid "Uus"
@@ -39,26 +39,30 @@ msgid "Nimi"
 msgstr "Name"
 
 #: classes/applications/crm/crm_company_res_impl.aw:100
+#: classes/applications/crm/crm_company_res_impl.aw:160
+msgid "Kalender"
+msgstr ""
+
+#: classes/applications/crm/crm_company_res_impl.aw:106
 msgid "Looja"
 msgstr "Creator"
 
-#: classes/applications/crm/crm_company_res_impl.aw:107
+#: classes/applications/crm/crm_company_res_impl.aw:113
 msgid "Loodud"
 msgstr "Created"
 
-#: classes/applications/crm/crm_company_res_impl.aw:117
+#: classes/applications/crm/crm_company_res_impl.aw:123
 msgid "Muutja"
 msgstr "Modifier"
 
-#: classes/applications/crm/crm_company_res_impl.aw:124
+#: classes/applications/crm/crm_company_res_impl.aw:130
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/applications/crm/crm_company_res_impl.aw:160
+#: classes/applications/crm/crm_company_res_impl.aw:178
 msgid "%s ressursid"
 msgstr "%s resources"
 
-#: classes/applications/crm/crm_company_res_impl.aw:178
+#: classes/applications/crm/crm_company_res_impl.aw:196
 msgid "%s ressursihalduskeskkond"
 msgstr "%s resource management"
-

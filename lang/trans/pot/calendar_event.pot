@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Kalendri sündmus help"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:prop_jrk
+msgid "Omaduse Jrk (jrk) caption"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_jrk_comment
+msgid "Omaduse Jrk (jrk) kommentaar"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:prop_jrk_help
+msgid "Omaduse Jrk (jrk) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_event.aw:prop_start1
 msgid "Omaduse Algab (start1) caption"
 msgstr ""
@@ -408,14 +420,6 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_recurrence_help
 msgid "Omaduse Kordused (recurrence) help"
-msgstr ""
-
-#: classes/applications/calendar/calendar_event.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/calendar/calendar_event.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:group_projects

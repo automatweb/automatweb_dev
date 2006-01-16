@@ -484,11 +484,11 @@ msgstr ""
 msgid "Tr&uuml;kiarv Notes"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1358
+#: classes/mrp/mrp_resource.aw:1359
 msgid "Ressurss on valitud aegadel kasutuses:<br>"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1377 classes/mrp/mrp_resource.aw:1396
+#: classes/mrp/mrp_resource.aw:1378 classes/mrp/mrp_resource.aw:1397
 msgid "Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>"
 msgstr ""
 

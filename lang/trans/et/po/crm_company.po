@@ -1671,6 +1671,18 @@ msgstr ""
 msgid "Omaduse  (dn_res) help"
 msgstr ""
 
+#: classes/crm/crm_company.aw:prop_documents_lmod
+msgid "Omaduse  (documents_lmod) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_documents_lmod_comment
+msgid "Omaduse  (documents_lmod) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_documents_lmod_help
+msgid "Omaduse  (documents_lmod) help"
+msgstr ""
+
 #: classes/crm/crm_company.aw:prop_bill_tb
 msgid "Omaduse  (bill_tb) caption"
 msgstr ""
@@ -2541,6 +2553,14 @@ msgstr ""
 msgid "Grupi Foorum (documents_forum) help"
 msgstr ""
 
+#: classes/crm/crm_company.aw:group_documents_lmod
+msgid "Grupi Viimati muudetud (documents_lmod) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_company.aw:group_documents_lmod_help
+msgid "Grupi Viimati muudetud (documents_lmod) help"
+msgstr ""
+
 #: classes/crm/crm_company.aw:group_bills
 msgid "Grupi Arved (bills) pealkiri"
 msgstr ""
@@ -2847,88 +2867,88 @@ msgstr ""
 msgid "Seose Foorum (RELTYPE_FORUM) tekst"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1248
+#: classes/crm/crm_company.aw:1255
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1265
+#: classes/crm/crm_company.aw:1272
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1275
+#: classes/crm/crm_company.aw:1282
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1479
+#: classes/crm/crm_company.aw:1486
 msgid "T&ouml;&ouml;s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1479
+#: classes/crm/crm_company.aw:1486
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1479
+#: classes/crm/crm_company.aw:1486
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1737
+#: classes/crm/crm_company.aw:1745
 msgid "Nimi peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2983
+#: classes/crm/crm_company.aw:2991
 msgid "Uus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3021 classes/crm/crm_company.aw:3078
+#: classes/crm/crm_company.aw:3029 classes/crm/crm_company.aw:3086
 msgid "Lisa %s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3023
+#: classes/crm/crm_company.aw:3031
 msgid "Kataloog määramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3077
+#: classes/crm/crm_company.aw:3085
 msgid "Kalender või kalendri sündmuste kataloog määramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3090 classes/crm/crm_company.aw:3091
+#: classes/crm/crm_company.aw:3098 classes/crm/crm_company.aw:3099
 msgid "Lisa pakkumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3103
+#: classes/crm/crm_company.aw:3111
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3360 classes/crm/crm_company.aw:3866
+#: classes/crm/crm_company.aw:3368 classes/crm/crm_company.aw:3881
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3473 classes/crm/crm_company.aw:3547
+#: classes/crm/crm_company.aw:3481 classes/crm/crm_company.aw:3555
 msgid "Toimetus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3498 classes/crm/crm_company.aw:3576
+#: classes/crm/crm_company.aw:3506 classes/crm/crm_company.aw:3584
 msgid "Kohtumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3523 classes/crm/crm_company.aw:3605
+#: classes/crm/crm_company.aw:3531 classes/crm/crm_company.aw:3613
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3729 classes/crm/crm_company.aw:3759
+#: classes/crm/crm_company.aw:3737 classes/crm/crm_company.aw:3774
 msgid "--vali--"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4102
+#: classes/crm/crm_company.aw:4117
 msgid ""
 "crm_company::on_create_customer(): category %s has no parent company or "
 "category!"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4252
+#: classes/crm/crm_company.aw:4267
 msgid "%s foorum"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4293
+#: classes/crm/crm_company.aw:4308
 msgid "%s serveri failid"
 msgstr ""

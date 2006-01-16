@@ -1144,198 +1144,202 @@ msgstr ""
 msgid "Seose Keel (RELTYPE_LANGUAGE) tekst"
 msgstr ""
 
-#: classes/crm/crm_person.aw:506 classes/crm/crm_person.aw:532
-#: classes/crm/crm_person.aw:576
+#: classes/crm/crm_person.aw:506 classes/crm/crm_person.aw:537
+#: classes/crm/crm_person.aw:581
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/crm/crm_person.aw:582
+#: classes/crm/crm_person.aw:587
 msgid "Härra"
 msgstr "Mr"
 
-#: classes/crm/crm_person.aw:583
+#: classes/crm/crm_person.aw:588
 msgid "Proua"
 msgstr "Mrs"
 
-#: classes/crm/crm_person.aw:584
+#: classes/crm/crm_person.aw:589
 msgid "Preili"
 msgstr "Ms"
 
-#: classes/crm/crm_person.aw:590
+#: classes/crm/crm_person.aw:595
 msgid "Vallaline"
 msgstr "Single"
 
-#: classes/crm/crm_person.aw:591
+#: classes/crm/crm_person.aw:596
 msgid "Abielus"
 msgstr "Married"
 
-#: classes/crm/crm_person.aw:592
+#: classes/crm/crm_person.aw:597
 msgid "Vabaabielus"
 msgstr "Free marriage"
 
-#: classes/crm/crm_person.aw:598
+#: classes/crm/crm_person.aw:603
 msgid "Pilt, kontakt, artiklid"
 msgstr "Image, contact, articles"
 
-#: classes/crm/crm_person.aw:599
+#: classes/crm/crm_person.aw:604
 msgid "kontakt"
 msgstr "contact"
 
-#: classes/crm/crm_person.aw:613
+#: classes/crm/crm_person.aw:618
 msgid "mees"
 msgstr "man"
 
-#: classes/crm/crm_person.aw:614
+#: classes/crm/crm_person.aw:619
 msgid "naine"
 msgstr "woman"
 
-#: classes/crm/crm_person.aw:803
+#: classes/crm/crm_person.aw:805
+msgid "Muuda kliendibaasi seadeid"
+msgstr ""
+
+#: classes/crm/crm_person.aw:837
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/crm/crm_person.aw:808 classes/crm/crm_person.aw:862
-#: classes/crm/crm_person.aw:1626
+#: classes/crm/crm_person.aw:842 classes/crm/crm_person.aw:896
+#: classes/crm/crm_person.aw:1660
 msgid "Uus"
 msgstr "New"
 
-#: classes/crm/crm_person.aw:821 classes/crm/crm_person.aw:878
+#: classes/crm/crm_person.aw:855 classes/crm/crm_person.aw:912
 msgid "Kalender määramata"
 msgstr "Calendar not set"
 
-#: classes/crm/crm_person.aw:822 classes/crm/crm_person.aw:839
-#: classes/crm/crm_person.aw:879
+#: classes/crm/crm_person.aw:856 classes/crm/crm_person.aw:873
+#: classes/crm/crm_person.aw:913
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/crm/crm_person.aw:899
+#: classes/crm/crm_person.aw:933
 msgid "Lisa "
 msgstr "Add "
 
-#: classes/crm/crm_person.aw:908
+#: classes/crm/crm_person.aw:942
 msgid "Kasutaja kalender"
 msgstr "User calendar"
 
-#: classes/crm/crm_person.aw:1632
+#: classes/crm/crm_person.aw:1666
 msgid "Kustuta valitud tööpakkumised"
 msgstr "Delete selected job offers"
 
-#: classes/crm/crm_person.aw:1638 classes/crm/crm_person.aw:1742
+#: classes/crm/crm_person.aw:1672 classes/crm/crm_person.aw:1776
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/crm/crm_person.aw:1650
+#: classes/crm/crm_person.aw:1684
 msgid "Arvutioskused"
 msgstr "Computer skills"
 
-#: classes/crm/crm_person.aw:1656
+#: classes/crm/crm_person.aw:1690
 msgid "Rakendused"
 msgstr "Applications"
 
-#: classes/crm/crm_person.aw:1662
+#: classes/crm/crm_person.aw:1696
 msgid "Programmeerimine"
 msgstr "Programming"
 
-#: classes/crm/crm_person.aw:1672
+#: classes/crm/crm_person.aw:1706
 msgid "Muu"
 msgstr "Other"
 
-#: classes/crm/crm_person.aw:1678
+#: classes/crm/crm_person.aw:1712
 msgid "<b>Keeled</b>"
 msgstr "<b>Languages</b>"
 
-#: classes/crm/crm_person.aw:1682
+#: classes/crm/crm_person.aw:1716
 msgid "Keeled"
 msgstr "Languages"
 
-#: classes/crm/crm_person.aw:1697
+#: classes/crm/crm_person.aw:1731
 msgid "Juhiload"
 msgstr "Drivers licence"
 
-#: classes/crm/crm_person.aw:1715
+#: classes/crm/crm_person.aw:1749
 msgid "Lisa uus töökogemus"
 msgstr "Add new work experience"
 
-#: classes/crm/crm_person.aw:1726
+#: classes/crm/crm_person.aw:1760
 msgid "Kustuta töökogemused"
 msgstr "Delete work experience"
 
-#: classes/crm/crm_person.aw:1728 classes/crm/crm_person.aw:1918
+#: classes/crm/crm_person.aw:1762 classes/crm/crm_person.aw:1952
 msgid "Oled kindel, et kustutada?"
 msgstr "Are you sure you want to delete?"
 
-#: classes/crm/crm_person.aw:1734
+#: classes/crm/crm_person.aw:1768
 msgid "Muuda tkogemust"
 msgstr "Change work experience"
 
-#: classes/crm/crm_person.aw:1753
+#: classes/crm/crm_person.aw:1787
 msgid "Asutus"
 msgstr "Organisation"
 
-#: classes/crm/crm_person.aw:1759
+#: classes/crm/crm_person.aw:1793
 msgid "Ametikoht"
 msgstr "Position"
 
-#: classes/crm/crm_person.aw:1765 classes/crm/crm_person.aw:1975
+#: classes/crm/crm_person.aw:1799 classes/crm/crm_person.aw:2009
 msgid "Alates"
 msgstr "From"
 
-#: classes/crm/crm_person.aw:1771 classes/crm/crm_person.aw:1985
+#: classes/crm/crm_person.aw:1805 classes/crm/crm_person.aw:2019
 msgid "Kuni"
 msgstr "Until"
 
-#: classes/crm/crm_person.aw:1910
+#: classes/crm/crm_person.aw:1944
 msgid "Hariduse lisamine"
 msgstr "Add education"
 
-#: classes/crm/crm_person.aw:1916
+#: classes/crm/crm_person.aw:1950
 msgid "Kustuta haridus"
 msgstr "Delete education"
 
-#: classes/crm/crm_person.aw:1923
+#: classes/crm/crm_person.aw:1957
 msgid "Põhiharidus"
 msgstr "Main education"
 
-#: classes/crm/crm_person.aw:1934 classes/crm/crm_person.aw:2047
+#: classes/crm/crm_person.aw:1968 classes/crm/crm_person.aw:2081
 msgid "Keskharidus"
 msgstr "Middle education"
 
-#: classes/crm/crm_person.aw:1944 classes/crm/crm_person.aw:2068
+#: classes/crm/crm_person.aw:1978 classes/crm/crm_person.aw:2102
 msgid "Kõrgharidus"
 msgstr "Higher education"
 
-#: classes/crm/crm_person.aw:1954 classes/crm/crm_person.aw:2089
+#: classes/crm/crm_person.aw:1988 classes/crm/crm_person.aw:2123
 msgid "Kutseharidus"
 msgstr "Vocational education"
 
-#: classes/crm/crm_person.aw:1969
+#: classes/crm/crm_person.aw:2003
 msgid "Kool"
 msgstr "School"
 
-#: classes/crm/crm_person.aw:1995
+#: classes/crm/crm_person.aw:2029
 msgid "Haridusliik"
 msgstr "Education"
 
-#: classes/crm/crm_person.aw:2001
+#: classes/crm/crm_person.aw:2035
 msgid "Eriala"
 msgstr "Sepcialty"
 
-#: classes/crm/crm_person.aw:2114
+#: classes/crm/crm_person.aw:2148
 msgid "Keel"
 msgstr "Language"
 
-#: classes/crm/crm_person.aw:2119
+#: classes/crm/crm_person.aw:2153
 msgid "Rääkimine"
 msgstr "Speaking"
 
-#: classes/crm/crm_person.aw:2125
+#: classes/crm/crm_person.aw:2159
 msgid "Kirjutamine"
 msgstr "Writing"
 
-#: classes/crm/crm_person.aw:2131
+#: classes/crm/crm_person.aw:2165
 msgid "Arusaamine"
 msgstr "Understanding"
 
-#: classes/crm/crm_person.aw:2137
+#: classes/crm/crm_person.aw:2171
 msgid "Mitu aastat kogemusi"
 msgstr "How many years of experience"
 

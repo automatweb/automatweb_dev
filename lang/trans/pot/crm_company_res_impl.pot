@@ -38,27 +38,31 @@ msgstr ""
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:100
+#: classes/applications/crm/crm_company_res_impl.aw:100 classes/applications/crm/crm_company_res_impl.aw:160
+msgid "Kalender"
+msgstr ""
+
+#: classes/applications/crm/crm_company_res_impl.aw:106
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:107
+#: classes/applications/crm/crm_company_res_impl.aw:113
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:117
+#: classes/applications/crm/crm_company_res_impl.aw:123
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:124
+#: classes/applications/crm/crm_company_res_impl.aw:130
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:160
+#: classes/applications/crm/crm_company_res_impl.aw:178
 msgid "%s ressursid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_res_impl.aw:178
+#: classes/applications/crm/crm_company_res_impl.aw:196
 msgid "%s ressursihalduskeskkond"
 msgstr ""
 
