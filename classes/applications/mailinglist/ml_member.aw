@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.17 2006/01/09 15:07:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.18 2006/01/16 10:35:12 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -366,7 +366,14 @@ class ml_member extends class_base
 	function callback_pre_save($arr)
 	{
 		$request = $arr["request"];
-		$arr["obj_inst"]->set_name($request["name"] . " &lt;" .$request["mail"] . "&gt;");
+		if ($request["name"] != "")
+		{
+			$arr["obj_inst"]->set_name($request["name"] . " &lt;" .$request["mail"] . "&gt;");
+		}
+		else
+		{
+			$arr["obj_inst"]->set_name($request["mail"]);
+		}
 	}		
 
 	function parse_alias($arr)
