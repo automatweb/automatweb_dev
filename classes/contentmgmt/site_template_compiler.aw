@@ -133,6 +133,11 @@ class site_template_compiler extends aw_template
 				$mdefs = $mdefs[aw_global_get("lang_id")];
 			}
 		}
+
+		if ($_GET["TPLC_DBG"] == 1)
+		{
+			echo "tpls = ".dbg::dump($tpls)." <br>";
+		}
 		foreach($tpls as $tpl)
 		{
 			$parts = explode("_", $tpl);
@@ -346,6 +351,11 @@ class site_template_compiler extends aw_template
 				$this->menu_areas[$area]["levels"][($level-1)]["no_subitems_sel_check_tpl_fq"] = $this->v2_name_map[$tpl];
 			}
 		}
+	
+		if ($_GET["TPLC_DBG"] == 1)
+		{
+			echo "menu_areas= ".dbg::dump($this->menu_areas)." <br>";
+		}
 	}
 
 	function _mf_srch($area, $defs)
@@ -400,6 +410,11 @@ class site_template_compiler extends aw_template
 				// are more than a bit fucked up "thanks" to this -- ahz
 				$this->compile_template_level($area, $adat, $level, $ldat);
 			}
+		}
+		
+		if ($_GET["TPLC_DBG"] == 1)
+		{
+			$this->dbg_show_template_ops();
 		}
 	}
 
@@ -640,12 +655,24 @@ class site_template_compiler extends aw_template
 					);
 				}
 
+				$grp_p = false;
+				if ($adat["grps"][$level])
+				{
+					$grp_p = array(
+						"a_parent" => $adat["parent"],
+						"level" => $level,
+						"a_name" => $area,
+						"grp_cnt" => $adat["grps"][$level],
+						"tpl" => $cur_tpl_fqn
+					);
+				}
 				$this->ops[] = array(
 					"op" => OP_SHOW_ITEM_INSERT,
 					"params" => array(
 						"tpl" => $cur_tpl_fqn,
 						"has_image_tpl" => $ldat["has_image_tpl"],
 						"no_image_tpl" => $ldat["no_image_tpl"],
+						"grp_p" => $grp_p
 					)
 				);
 			}
@@ -911,7 +938,6 @@ class site_template_compiler extends aw_template
 			}
 			echo "} }<br>\n";
 		}
-		die();
 	}
 
 	function generate_code()
@@ -1129,6 +1155,12 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 		$ret .= $this->_gi().$content_name." .= \$this->parse(\"".$arr["tpl"]."\");\n";
+
+		if ($arr["grp_p"])
+		{
+			$arr["grp_p"]["no_pop"] = 1;
+			$ret .= $this->_g_op_grp_end($arr["grp_p"]);
+		}
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 		return $ret;
@@ -1976,7 +2008,7 @@ class site_template_compiler extends aw_template
 		
 
 		// if % count
-		$res .= $this->_gi()."if (($loop_counter_name > 0 && ($loop_counter_name % $arr[grp_cnt]) == 1) || ($loop_counter_name == (".$list_name."->count() - 1)))\n";
+		$res .= $this->_gi()."if (($loop_counter_name > 0 && ($loop_counter_name % $arr[grp_cnt]) == 1) || ($loop_counter_name == (".$list_name."->count() - 1)) )\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 
@@ -2000,13 +2032,16 @@ class site_template_compiler extends aw_template
 		// insert the same thing that op_loop_list_end does, but for groups
 
 		// pop one item off the list name stack
-		$dat = array_pop($this->list_name_stack);
-		$this->last_list_dat = $dat;
+		if (!$arr["no_pop"])
+		{
+			$dat = array_pop($this->list_name_stack);
+			$this->last_list_dat = $dat;
 
-		$this->brace_level--;
-		$res .= $this->_gi()."}\n";
-		$res .= $this->_gi()."\$this->vars(array(\"".$grp_tpl."\" => ".$grp_ct_name."));\n";
-		
+
+			$this->brace_level--;
+			$res .= $this->_gi()."}\n";
+			$res .= $this->_gi()."\$this->vars(array(\"".$grp_tpl."\" => ".$grp_ct_name."));\n";
+		}
 		return $res;
 	}
 }
