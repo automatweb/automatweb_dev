@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>jrk</name>
+            <group>general_sub</group>
+            <table>objects</table>
+            <type>textbox</type>
+            <size>4</size>
+            <field>jrk</field>
+            <caption>Jrk</caption>
+      </property>
+      <property>
             <name>start1</name>
             <group>general</group>
             <table>planner</table>

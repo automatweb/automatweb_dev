@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.15 2005/07/22 11:47:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.16 2006/01/16 08:30:02 dragut Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -7,6 +7,9 @@
 
 @default group=general
 @default table=planner
+
+@property jrk type=textbox size=4 group=general_sub table=objects
+@caption Jrk
 
 @property start1 type=datetime_select field=start 
 @caption Algab
