@@ -2,7 +2,7 @@
 <properties>
       <property>
             <name>jrk</name>
-            <group>general_sub</group>
+            <group>general</group>
             <table>objects</table>
             <type>textbox</type>
             <size>4</size>
