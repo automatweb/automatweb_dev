@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.7 2005/05/16 07:02:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.8 2006/01/16 13:02:17 kristo Exp $
 // menu_export.aw - helper class for exporting menus
 class menu_export
 {
@@ -74,6 +74,10 @@ class menu_export
 	{
 		$ret = array();
 		$ret["db"] = $db;
+		if (!is_array($menus[$db["parent"]]))
+		{
+			$menus[$db["parent"]] = array();
+		}
 		$menus[$db["parent"]][] = $ret;
 	}
 
