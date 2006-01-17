@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.31 2006/01/13 11:48:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.32 2006/01/17 09:22:56 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -7,6 +7,12 @@
 
 @default table=planner
 @default group=general
+
+@property customer type=popup_search table=planner field=customer clid=CL_CRM_COMPANY
+@caption Klient
+
+@property project type=popup_search table=planner field=project clid=CL_PROJECT
+@caption Projekt
 
 @property info_on_object type=text store=no
 @caption Osalejad
@@ -132,6 +138,108 @@ class crm_call extends class_base
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
+			case "project":
+				$nms = array();
+				if ($this->can("view",$arr["request"]["alias_to_org"]))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_PROJECT,
+						"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["request"]["alias_to_org"],
+					));
+				}
+				else
+				if (is_object($arr["obj_inst"]))
+				{
+					if($this->can("view", $arr["obj_inst"]->prop("customer")))
+					{
+						$ol = new object_list(array(
+							"class_id" => CL_PROJECT,
+							"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["obj_inst"]->prop("customer"),
+						));
+						$nms = $ol->names();
+					}
+					else
+					{
+						$nms = array();
+					}
+				}
+				else
+				{
+					$i = get_instance(CL_CRM_COMPANY);
+					$prj = $i->get_my_projects();
+					if (!count($prj))
+					{
+						$ol = new object_list();
+					}
+					else
+					{
+						$ol = new object_list(array("oid" => $prj));
+					}
+					$nms = $ol->names();
+				}
+
+				$data["options"] = array("" => "") + $nms;
+
+				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+				{
+					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+					{
+						$data["options"][$c->prop("to")] = $c->prop("to.name");
+					}
+				}
+
+				if ($arr["request"]["set_proj"])
+				{
+					$data["value"] = $arr["request"]["set_proj"];
+				}
+
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
+				}
+				asort($data["options"]);
+				break;
+
+			case "customer":
+				$i = get_instance(CL_CRM_COMPANY);
+				$cst = $i->get_my_customers();
+				if (!count($cst))
+				{
+					$data["options"] = array("" => "");
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $cst));
+					$data["options"] = array("" => "") + $ol->names();
+				}
+				if ($this->can("view", $arr["request"]["alias_to_org"]))
+				{
+					$ao = obj($arr["request"]["alias_to_org"]);
+					if ($ao->class_id() == CL_CRM_PERSON)
+					{
+						$u = get_instance(CL_USER);
+						$data["value"] = $u->get_company_for_person($ao->id());
+					}
+					else
+					{
+						$data["value"] = $arr["request"]["alias_to_org"];
+					}
+				}
+
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
+				}
+
+				asort($data["options"]);
+				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+				{
+					$arr["obj_inst"]->set_prop("customer", $data["value"]);
+				}
+				break;
+
 			case "start1":
 			case "end":
 				$p = get_instance(CL_PLANNER);

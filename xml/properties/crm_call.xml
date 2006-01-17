@@ -1,6 +1,24 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>customer</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>popup_search</type>
+            <field>customer</field>
+            <clid>CL_CRM_COMPANY</clid>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>project</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>popup_search</type>
+            <field>project</field>
+            <clid>CL_PROJECT</clid>
+            <caption>Projekt</caption>
+      </property>
+      <property>
             <name>info_on_object</name>
             <table>planner</table>
             <group>general</group>
