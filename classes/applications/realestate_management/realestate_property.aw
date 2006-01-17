@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.7 2006/01/08 19:01:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.8 2006/01/17 08:41:10 voldemar Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -1562,7 +1562,7 @@ class realestate_property extends class_base
 				$value = $first_char . substr ($prop_caption, 1);
 				$extras[] = $value;
 			}
-			else
+			elseif (!empty ($prop_data["strvalue"]))
 			{
 				### ..
 				$vars = array (
@@ -1583,6 +1583,10 @@ class realestate_property extends class_base
 			);
 			$this->vars ($vars);
 			$extras = $this->parse ("extras");
+		}
+		else
+		{
+			$extras = "";
 		}
 
 		$data["docid"] = $this_object->id ();
@@ -2009,18 +2013,18 @@ REALESTATE_NF_SEP);
 					"strvalue" => $value,
 					"altvalue" => $value,
 				);
-			}
 
-			$name = "agent_id";
-			$value = $agent1_oid;
-			$properties[$name] = array (
-				"name" => $name,
-				"type" => "text",
-				"caption" => t("Maakleri id"),
-				"value" => $value,
-				"strvalue" => $value,
-				"altvalue" => $value,
-			);
+				$name = "agent_id";
+				$value = $agent1_oid;
+				$properties[$name] = array (
+					"name" => $name,
+					"type" => "text",
+					"caption" => t("Maakleri id"),
+					"value" => $value,
+					"strvalue" => $value,
+					"altvalue" => $value,
+				);
+			}
 
 			$name = "agent_name";
 			$value = $this->realestate_agents_data[$agent1_oid]["name"];
@@ -2050,6 +2054,17 @@ REALESTATE_NF_SEP);
 				"name" => $name,
 				"type" => "text",
 				"caption" => t("Maakleri telefon"),
+				"value" => $value,
+				"strvalue" => $value,
+				"altvalue" => $value,
+			);
+
+			$name = "agent_rank";
+			$value = $this->realestate_agents_data[$agent2_oid]["rank"];
+			$properties[$name] = array (
+				"name" => $name,
+				"type" => "text",
+				"caption" => t("Maakleri ametinimetus"),
 				"value" => $value,
 				"strvalue" => $value,
 				"altvalue" => $value,
@@ -2124,6 +2139,17 @@ REALESTATE_NF_SEP);
 					"name" => $name,
 					"type" => "text",
 					"caption" => t("Maakleri telefon"),
+					"value" => $value,
+					"strvalue" => $value,
+					"altvalue" => $value,
+				);
+
+				$name = "agent2_rank";
+				$value = $this->realestate_agents_data[$agent2_oid]["rank"];
+				$properties[$name] = array (
+					"name" => $name,
+					"type" => "text",
+					"caption" => t("Maakleri ametinimetus"),
 					"value" => $value,
 					"strvalue" => $value,
 					"altvalue" => $value,
@@ -2374,7 +2400,14 @@ REALESTATE_NF_SEP);
 			return false;
 		}
 
+		$rank = $agent->get_first_obj_by_reltype ("RELTYPE_RANK");
+
 		$this->realestate_agents_data[$agent_oid]["name"] = $agent->name ();
+
+		if (is_object ($rank))
+		{
+			$this->realestate_agents_data[$agent_oid]["rank"] = $rank->name ();
+		}
 
 		### agent phones
 		$agent_phones = array ();

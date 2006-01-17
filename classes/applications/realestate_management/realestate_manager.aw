@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.6 2006/01/08 19:01:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.7 2006/01/17 08:41:10 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -456,7 +456,7 @@ class realestate_manager extends class_base
 			case "available_variables_names":
 				$prop["value"] = t("
 					Kõik klassi propertyd kujul <i>property_name</i> ning nende nimed kujul <i>property_name_caption</i>.  <br />
-					Ostja, müüja ning maaklerite andmed kujul  <i>buyer_*</i>, <i>seller_*</i>, <i>agent_*</i> ja <i>agent2_*</i> (name, phone, email, picture_url).  <br />
+					Ostja, müüja ning maaklerite andmed kujul  <i>buyer_*</i>, <i>seller_*</i>, <i>agent_*</i> ja <i>agent2_*</i> (name, phone, email, picture_url, rank).  <br />
 					Pildid kujul <i>picture</i><b>n</b><i>_url</i> ning <i>picture</i><b>n</b><i>_city24_id</i> (n on 1 .. piltide arv). <br />
 					Piltide arv: picture_count<br />
 					Lisaks: <br />
@@ -1407,64 +1407,79 @@ class realestate_manager extends class_base
 		$table =& $arr["prop"]["vcl_inst"];
 		$table_name = str_replace ("grp_realestate_properties_", "", $arr["request"]["group"]);
 		$table->name = ("grp_realestate_properties" != $table_name) ? $table_name : "all";
-		$this->_init_properties_list ($arr);
 
 		switch ($table->name)
 		{
 			case "houses":
-				$list = new object_list (array (
-					"class_id" => CL_REALESTATE_HOUSE,
-					"parent" => array ($this_object->prop ("houses_folder")),
-				));
+				$classes = array (
+					CL_REALESTATE_HOUSE,
+				);
+				$parents = array(
+					$this_object->prop ("houses_folder"),
+				);
 				break;
 
 			case "rowhouses":
-				$list = new object_list (array (
-					"class_id" => CL_REALESTATE_ROWHOUSE,
-					"parent" => array ($this_object->prop ("rowhouses_folder")),
-				));
+				$classes = array (
+					CL_REALESTATE_ROWHOUSE,
+				);
+				$parents = array(
+					$this_object->prop ("rowhouses_folder"),
+				);
 				break;
 
 			case "cottages":
-				$list = new object_list (array (
-					"class_id" => CL_REALESTATE_COTTAGE,
-					"parent" => array ($this_object->prop ("cottages_folder")),
-				));
+				$classes = array (
+					CL_REALESTATE_COTTAGE,
+				);
+				$parents = array(
+					$this_object->prop ("cottages_folder"),
+				);
 				break;
 
 			case "houseparts":
-				$list = new object_list (array (
-					"class_id" => CL_REALESTATE_HOUSEPART,
-					"parent" => array ($this_object->prop ("houseparts_folder")),
-				));
+				$classes = array (
+					CL_REALESTATE_HOUSEPART,
+				);
+				$parents = array(
+					$this_object->prop ("houseparts_folder"),
+				);
 				break;
 
 			case "apartments":
-				$list = new object_list (array (
-					"class_id" => CL_REALESTATE_APARTMENT,
-					"parent" => array ($this_object->prop ("apartments_folder")),
-				));
+				$classes = array (
+					CL_REALESTATE_APARTMENT,
+				);
+				$parents = array(
+					$this_object->prop ("apartments_folder"),
+				);
 				break;
 
 			case "commercial_properties":
-				$list = new object_list (array (
-					"class_id" => CL_REALESTATE_COMMERCIAL,
-					"parent" => array ($this_object->prop ("commercial_properties_folder")),
-				));
+				$classes = array (
+					CL_REALESTATE_COMMERCIAL,
+				);
+				$parents = array(
+					$this_object->prop ("commercial_properties_folder"),
+				);
 				break;
 
 			case "garages":
-				$list = new object_list (array (
-					"class_id" => CL_REALESTATE_GARAGE,
-					"parent" => array ($this_object->prop ("garages_folder")),
-				));
+				$classes = array (
+					CL_REALESTATE_GARAGE,
+				);
+				$parents = array(
+					$this_object->prop ("garages_folder"),
+				);
 				break;
 
 			case "land_estates":
-				$list = new object_list (array (
-					"class_id" => CL_REALESTATE_LAND,
-					"parent" => array ($this_object->prop ("land_estates_folder")),
-				));
+				$classes = array (
+					CL_REALESTATE_LAND,
+				);
+				$parents = array(
+					$this_object->prop ("land_estates_folder"),
+				);
 				break;
 
 			case "search":
@@ -1486,7 +1501,7 @@ class realestate_manager extends class_base
 				break;
 
 			case "all":
-				$class_list = array (
+				$classes = array (
 					CL_REALESTATE_HOUSE,
 					CL_REALESTATE_ROWHOUSE,
 					CL_REALESTATE_COTTAGE,
@@ -1496,7 +1511,7 @@ class realestate_manager extends class_base
 					CL_REALESTATE_GARAGE,
 					CL_REALESTATE_LAND,
 				);
-				$parent_list = array (
+				$parents = array (
 					$this_object->prop ("houses_folder"),
 					$this_object->prop ("rowhouses_folder"),
 					$this_object->prop ("cottages_folder"),
@@ -1506,30 +1521,129 @@ class realestate_manager extends class_base
 					$this_object->prop ("garages_folder"),
 					$this_object->prop ("land_estates_folder"),
 				);
-				$list = new object_list (array (
-					"class_id" => $class_list,
-					"parent" => $parent_list,
-				));
 				break;
 		}
 
+		### modified constraint
+		$modified_after = aw_global_get ("realestate_proplist_filter_modifiedafter");
+		$modified_before = aw_global_get ("realestate_proplist_filter_modifiedbefore");
+
+		if ($modified_after and $modified_before)
+		{
+			$modified_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $modified_after, $modified_before);
+		}
+		elseif ($modified_after)
+		{
+			$modified_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $modified_after);
+		}
+		elseif ($modified_before)
+		{
+			$modified_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $modified_before);
+		}
+		else
+		{
+			$modified_constraint = null;
+		}
+
+
+		### created constraint
+		$created_after = aw_global_get ("realestate_proplist_filter_createdafter");
+		$created_before = aw_global_get ("realestate_proplist_filter_createdbefore");
+
+		if ($created_after and $created_before)
+		{
+			$created_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $created_after, $created_before);
+		}
+		elseif ($created_after)
+		{
+			$created_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $created_after);
+		}
+		elseif ($created_before)
+		{
+			$created_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $created_before);
+		}
+		else
+		{
+			$created_constraint = null;
+		}
+
+
+		### closed constraint
+		$closed_after = aw_global_get ("realestate_proplist_filter_closedafter");
+		$closed_before = aw_global_get ("realestate_proplist_filter_closedbefore");
+
+		if ($closed_after and $closed_before)
+		{
+			$closed_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $closed_after, $closed_before);
+		}
+		elseif ($closed_after)
+		{
+			$closed_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $closed_after);
+		}
+		elseif ($closed_before)
+		{
+			$closed_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $closed_before);
+		}
+		else
+		{
+			$closed_constraint = null;
+		}
+
+
+		### price constraint
+		$pricemin = aw_global_get ("realestate_proplist_filter_pricemin");
+		$pricemax = aw_global_get ("realestate_proplist_filter_pricemax");
+
+		if ($pricemin and $pricemax)
+		{
+			$price_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $pricemin, $pricemax);
+		}
+		elseif ($pricemin)
+		{
+			$price_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $pricemin);
+		}
+		elseif ($pricemax)
+		{
+			$price_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $pricemax);
+		}
+		else
+		{
+			$price_constraint = null;
+		}
+
+
+		### other constraints
+		$transaction_closed = aw_global_get ("realestate_proplist_filter_transaction_closed") ? 1 : null;
+		$legal_status = is_array (aw_global_get ("realestate_proplist_filter_legal_status")) ? aw_global_get ("realestate_proplist_filter_legal_status") : null;
+		$quality_class = is_array (aw_global_get ("realestate_proplist_filter_quality_class")) ? aw_global_get ("realestate_proplist_filter_quality_class") : null;
+
+		$args = array (
+			"class_id" => $classes,
+			"parent" => $parents,
+			"modified" => $modified_constraint,
+			"created" => $created_constraint,
+			"transaction_price" => $price_constraint,
+			"transaction_date" => $closed_constraint,
+			"transaction_closed" => $transaction_closed,
+			"legal_status" => $legal_status,
+			"quality_class" => $quality_class,
+		);
+		$list = new object_list ($args);
+
+		### count all
+		$this->properties_result_count = $list->count ();
+
+		### limit
+		$limit = ((int) $_GET["ft_page"] * $this_object->prop ("properties_list_perpage")) . "," . $this_object->prop ("properties_list_perpage");
+		$args["limit"] = $limit;
+		$list->filter ($args);
+
 		$properties = is_array ($list) ? $list : $list->arr ();
 		$return_url = urlencode(aw_global_get('REQUEST_URI'));
-		$classes = aw_ini_get("classes");
-		$modified_after = aw_global_get ("realestate_proplist_filter_modifiedafter") ? aw_global_get ("realestate_proplist_filter_modifiedafter") : 0;
-		$modified_before = aw_global_get ("realestate_proplist_filter_modifiedbefore") ? aw_global_get ("realestate_proplist_filter_modifiedbefore") : time ();
-		$created_after = aw_global_get ("realestate_proplist_filter_createdafter") ? aw_global_get ("realestate_proplist_filter_createdafter") : 0;
-		$created_before = aw_global_get ("realestate_proplist_filter_createdbefore") ? aw_global_get ("realestate_proplist_filter_createdbefore") : (time () + 86400);
-		$closed_after = aw_global_get ("realestate_proplist_filter_closedafter") ? aw_global_get ("realestate_proplist_filter_closedafter") : NULL;
-		$closed_before = aw_global_get ("realestate_proplist_filter_closedbefore") ? aw_global_get ("realestate_proplist_filter_closedbefore") : (time () + 86400);
-		$pricemin = aw_global_get ("realestate_proplist_filter_pricemin") ? aw_global_get ("realestate_proplist_filter_pricemin") : 0;
-		$pricemax = aw_global_get ("realestate_proplist_filter_pricemax") ? aw_global_get ("realestate_proplist_filter_pricemax") : 999999999999999;
-		$transaction_closed = (int) aw_global_get ("realestate_proplist_filter_transaction_closed");
-		$legal_status = aw_global_get ("realestate_proplist_filter_legal_status");
-		$quality_class = aw_global_get ("realestate_proplist_filter_quality_class");
+		$all_classes = aw_ini_get("classes");
 		$first = true;
-		$sum_tfa = NULL;
-		$sum_tp = NULL;
+		$sum_tfa = null;
+		$sum_tp = null;
 
 		$applicable_tables = array (
 			"houses",
@@ -1539,7 +1653,7 @@ class realestate_manager extends class_base
 			"apartments",
 		);
 
-		### frequently used human readable strings
+		### frequently used human-readable strings
 		$str_yes = t("Jah");
 		$str_no = t("Ei");
 		$str_change = t("Muuda");
@@ -1547,6 +1661,9 @@ class realestate_manager extends class_base
 		$str_archive = t("Arhiveeri");
 		$str_confirm_delete = t("Kustutada objekt?");
 		$str_delete = t("Kustuta");
+
+		### ...
+		$this->_init_properties_list ($arr);
 
 		### actions menu init
 		$actions_menu_script = '<script src="http://voldemar.dev.struktuur.ee/automatweb/js/popup_menu.js" type="text/javascript">
@@ -1559,88 +1676,9 @@ class realestate_manager extends class_base
 		$this->set_parse_method("eval");
 		$this->read_template($tpl);
 
+
 		foreach ($properties as $property)
 		{
-			### filter by modification
-			if ($property->modified () < $modified_after)
-			{
-				continue;
-			}
-
-			if ($property->modified () > $modified_before)
-			{
-				continue;
-			}
-
-			### filter by creation
-			if ($property->created () < $created_after)
-			{
-				continue;
-			}
-
-			if ($property->created () > $created_before)
-			{
-				continue;
-			}
-
-			### filter by trancaction closing
-			if (isset ($closed_after) and $property->prop ("transaction_date") < $closed_after)
-			{
-				continue;
-			}
-
-			if ($property->prop ("transaction_date") > $closed_before)
-			{
-				continue;
-			}
-
-			if ($transaction_closed and !$property->prop ("transaction_closed"))
-			{
-				continue;
-			}
-
-			### filter by trancaction price
-			if ($property->prop ("transaction_price") < $pricemin)
-			{
-				continue;
-			}
-
-			if ($property->prop ("transaction_price") > $pricemax)
-			{
-				continue;
-			}
-
-			### filter by legal_status
-			$applicable_classes = array (
-				CL_REALESTATE_HOUSE,
-				CL_REALESTATE_ROWHOUSE,
-				CL_REALESTATE_COTTAGE,
-				CL_REALESTATE_HOUSEPART,
-				CL_REALESTATE_APARTMENT,
-				CL_REALESTATE_GARAGE,
-				CL_REALESTATE_LAND,
-			);
-
-			if (is_array ($legal_status) and in_array ($property->class_id (), $applicable_classes) and !in_array ($property->prop ("legal_status"), $legal_status))
-			{
-				continue;
-			}
-
-			### filter by quality_class
-			$applicable_classes = array (
-				CL_REALESTATE_HOUSE,
-				CL_REALESTATE_ROWHOUSE,
-				CL_REALESTATE_COTTAGE,
-				CL_REALESTATE_HOUSEPART,
-				CL_REALESTATE_APARTMENT,
-				CL_REALESTATE_COMMERCIAL,
-			);
-
-			if (is_array ($quality_class) and in_array ($property->class_id (), $applicable_classes) and !in_array ($property->prop ("quality_class"), $quality_class))
-			{
-				continue;
-			}
-
 			### get owner company and unit
 			$owner_company_section_oid = $property->meta ("owner_company_section");
 
@@ -1677,7 +1715,12 @@ class realestate_manager extends class_base
 				if ($this->can ("view", $agent1_oid))
 				{
 					$agent = obj ($agent1_oid);
-					$this->realestate_agent_data[$agent1_oid]["change_link"] = html::get_change_url ($agent->id (), array("return_url" => $return_url, "group" => "grp_main"), $agent->name (), $this->realestate_company_data[$owner_company_section_oid]["name"]);
+					$this->realestate_agent_data[$agent1_oid]["change_link"] = html::get_change_url (
+						$agent->id (),
+						array("return_url" => $return_url, "group" => "grp_main"),
+						$agent->name (),
+						t("Osakond: ") . $this->realestate_company_data[$owner_company_section_oid]["name"]
+					);
 				}
 				else
 				{
@@ -1693,7 +1736,7 @@ class realestate_manager extends class_base
 				if ($this->can ("view", $agent2_oid))
 				{
 					$agent = obj ($agent2_oid);
-					$this->realestate_agent_data[$agent2_oid]["change_link"] = html::get_change_url ($agent->id (), array("return_url" => $return_url, "group" => "grp_main"), $agent->name (), $this->realestate_company_data[$owner_company_section_oid]["name"]);
+					$this->realestate_agent_data[$agent2_oid]["change_link"] = html::get_change_url ($agent->id (), array("return_url" => $return_url, "group" => "grp_main"), $agent->name (), t("Osakond: ") . $this->realestate_company_data[$owner_company_section_oid]["name"]);
 				}
 				else
 				{
@@ -1750,7 +1793,7 @@ class realestate_manager extends class_base
 			$actions_menu = "";
 
 			#### get actions
-			$class = $classes[$property->class_id ()]["file"];
+			$class = $all_classes[$property->class_id ()]["file"];
 			$class = explode ("/", $class);
 			$class = array_pop ($class);
 
@@ -1820,7 +1863,7 @@ class realestate_manager extends class_base
 			$actions_menu = $this->parse();
 
 
-			$class_name = $classes[$property->class_id ()]["name"];
+			$class_name = $all_classes[$property->class_id ()]["name"];
 			$data = array (
 				"class" => html::get_change_url ($property->id (), array("return_url" => $return_url, "group" => "grp_main"), $class_name),
 				"address_1" => $address_1,
@@ -2121,6 +2164,7 @@ class realestate_manager extends class_base
 		$table->set_default_sorder ("desc");
 		$table->define_pageselector (array (
 			"type" => "text",
+			"d_row_cnt" => $this->properties_result_count,
 			"records_per_page" => ($this_object->prop ("properties_list_perpage") ? $this_object->prop ("properties_list_perpage") : 50),
 		));
 	}
@@ -3204,13 +3248,18 @@ class realestate_manager extends class_base
 			{
 				$property->set_meta ("owner_company_section", $arr["section"]);
 			}
-			elseif ($section = $person->get_first_obj_by_reltype ("RELTYPE_SECTION"))
-			{
-				$property->set_meta ("owner_company_section", $section->id ());
-			}
 			else
 			{
-				echo t("Organisatsiooni üksus määramata. ");
+				$section = $person->get_first_obj_by_reltype ("RELTYPE_SECTION");
+
+				if (is_object ($section))
+				{
+					$property->set_meta ("owner_company_section", $section->id ());
+				}
+				else
+				{
+					echo t("Organisatsiooni üksus määramata. ");
+				}
 			}
 
 			### save & go to created object

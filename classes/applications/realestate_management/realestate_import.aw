@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.7 2006/01/08 19:01:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.8 2006/01/17 08:41:10 voldemar Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -52,7 +52,6 @@
 
 @default group=grp_city24_log
 	@property last_city24import type=hidden
-	@property city24_log type=hidden
 	@property city24_log_table type=callback callback=callback_city24_log no_caption=1 store=no
 
 
@@ -190,7 +189,7 @@ class realestate_import extends class_base
 	{
 		$this_object = $arr["obj_inst"];
 		$prop = array ();
-		$log = (array) $this_object->prop ("city24_log");
+		$log = (array) $this_object->meta ("city24_log");
 
 		if (is_oid ($this_object->prop("realestate_mgr")))
 		{
@@ -206,6 +205,11 @@ class realestate_import extends class_base
 
 		foreach ($log as $date => $entry)
 		{
+			foreach ($entry as $key => $line)
+			{
+				$entry[$key] = is_array ($line) ? implode ('<br>', $line) : $line;
+			}
+
 			$entry = implode ('<hr size=1>', $entry);
 			$name = "log_{$date}";
 			$prop[$name] = array(
@@ -339,8 +343,27 @@ class realestate_import extends class_base
 			"type" => "RELTYPE_WORKERS",
 			"class_id" => CL_CRM_PERSON,
 		)));
-		$employees = $employees->names ();
+		$employee_data = $employees->names ();
+		$employees = array ();
 		$realestate_agent_data = array ();
+
+		foreach ($employee_data as $oid => $name)
+		{
+			$name = split (" ", $name);
+			$name_parsed = array ();
+
+			foreach ($name as $string)
+			{
+				$string = trim ($string);
+
+				if ($string)
+				{
+					$name_parsed[] = $string;
+				}
+			}
+
+			$employees[$oid] =join (" ", $name_parsed);
+		}
 
 		### initialize log
 		$import_log = array ();
@@ -422,6 +445,23 @@ class realestate_import extends class_base
 		}
 
 		$imported_properties = array ();
+
+		// ### set locale
+		// $locale1 = "et_ET";
+		// $locale2 = "et";
+		// $locale3 = "est";
+		// $locale4 = "est_est";
+		// $locale = setlocale ( LC_CTYPE, $locale1, $locale2, $locale3, $locale4);
+
+		// if (false === $locale)
+		// {
+			// error::raise(array(
+				// "msg" => sprintf (t("Locales (%s, %s, %s, %s) not supported in this system."), $locale1, $locale2, $locale3, $locale4),
+				// "fatal" => false,
+				// "show" => false,
+			// ));
+		// }
+
 
 		### process data
 		foreach ($xml_data as $key => $data)
@@ -597,24 +637,47 @@ class realestate_import extends class_base
 				}
 
 				### get agent
-				if (!$new_property)
-				{
-					$agent_oid = $property->prop ("realestate_agent1");
-				}
+				#### city24 agent priority
+				$agent_data = split (" ", $this->property_data["MAAKLER_NIMI"]);
+				$agent_data_parsed = array ();
 
-				if ($new_property or !is_oid ($agent_oid))
+				foreach ($agent_data as $string)
 				{
-					$agent_data = iconv (REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["MAAKLER_NIMI"]));
+					$string = trim ($string);
 
-					foreach ($employees as $employee_oid => $employee_name)
+					if ($string)
 					{
-						if ($agent_data == ((string) $employee_name))
-						{
-							$agent_oid = $employee_oid;
-							break;
-						}
+						$agent_data_parsed[] = $string;
 					}
 				}
+
+				$agent_data = iconv (REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, join (" ", $agent_data_parsed));
+				$agent_oid = (int) reset (array_keys ($employees, $agent_data));
+
+/* dbg */ if (1 == $_GET["re_import_dbg"]){ echo "maakler: [{$agent_data}]"; }
+
+				#### aw agent priority
+				// if (!$new_property)
+				// {
+					// $agent_oid = $property->prop ("realestate_agent1");
+				// }
+
+				// if ($new_property or !is_oid ($agent_oid))
+				// {
+					// $agent_data = iconv (REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["MAAKLER_NIMI"]));
+					// $agent_oid = (int) reset (array_keys ($employees, $agent_data));
+
+// /* dbg */ if (1 == $_GET["re_import_dbg"]){ echo "maakler: [{$agent_data}]"; }
+
+					// foreach ($employees as $employee_oid => $employee_name)
+					// {
+						// if ($agent_data and $employee_name and ($agent_data == ((string) $employee_name)))
+						// {
+							// $agent_oid = (int) $employee_oid;
+							// break;
+						// }
+					// }
+				// }
 
 				if (!is_oid ($agent_oid))
 				{
@@ -660,7 +723,7 @@ class realestate_import extends class_base
 					### get agent uid
 					$connection = new connection();
 					$connections = $connection->find(array(
-						"to" => $agent->id(),
+						"to" => $agent->id (),
 						"from.class_id" => CL_USER,
 						"type" => "RELTYPE_PERSON",
 					));
@@ -731,11 +794,6 @@ class realestate_import extends class_base
 					if (is_oid ($oid))
 					{
 						$property = obj ($oid);
-						$property->set_prop ("realestate_agent1", $agent_oid);
-						$property->connect (array (
-							"to" => $realestate_agent_data[$agent_oid]["object"],
-							"reltype" => "RELTYPE_REALESTATE_AGENT",
-						));
 
 						if (1 != $arr["quiet"])
 						{
@@ -755,6 +813,16 @@ class realestate_import extends class_base
 						continue;
 					}
 				}
+
+				if ($property->prop ("realestate_agent1") != $agent_oid)
+				{
+					$property->set_prop ("realestate_agent1", $agent_oid);
+					$property->connect (array (
+						"to" => $realestate_agent_data[$agent_oid]["object"],
+						"reltype" => "RELTYPE_REALESTATE_AGENT",
+					));
+				}
+
 
 				### set general property values
 				#### city24_object_id
@@ -893,12 +961,13 @@ class realestate_import extends class_base
 				#### seller data
 				$client = $property->get_first_obj_by_reltype("RELTYPE_REALESTATE_SELLER");
 				$clients = array ();
+				$seller_name = trim ($this->property_data["MYYJA_NIMI"]);
 
-				if (!is_object ($client) and !empty ($this->property_data["MYYJA_NIMI"]))
+				if (!is_object ($client) and !empty ($seller_name))
 				{
 					$duplicate_client = false;
 
-					$seller_firstname = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, strtok ($this->property_data["MYYJA_NIMI"], " "));
+					$seller_firstname = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, strtok ($seller_name, " "));
 					$seller_lastname = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, strtok (" "));
 
 					##### search for existing client by name
@@ -939,7 +1008,7 @@ class realestate_import extends class_base
 							}
 
 							$clients = implode (" ", $clients);
-							$status_messages[] = sprintf (t("Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui üks. Ei tea millist valida. AW oid: %s. Leitud kliendid: <blockquote>%s</blockquote>"), $city24_id, $property->id (), $clients) . REALESTATE_NEWLINE;
+							$status_messages[] = sprintf (t("Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui üks. Ei tea millist valida. AW oid: %s. Leitud kliendid: "), $city24_id, $property->id ()) . '<blockquote>' . $clients . '</blockquote>' . REALESTATE_NEWLINE . REALESTATE_NEWLINE;
 
 							if (1 != $arr["quiet"])
 							{
@@ -1019,13 +1088,10 @@ class realestate_import extends class_base
 				$altvalue = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["PRIO"]));
 				$variable_oid = $priorities[$altvalue];
 
-				if (!is_oid ($variable_oid) and !empty ($value))
+				if (is_oid ($variable_oid))
 				{
-					$variable_oid = $this->add_variable (CL_REALESTATE_PROPERTY, "priority", $value);
-					$this->changed_priorities = true;
+					$property->set_prop ("priority", $variable_oid);
 				}
-
-				$property->set_prop ("priority", $variable_oid);
 
 				#### show_house_number_on_web
 				$value = (int) (bool) strstr ($this->property_data["NAITAMAJANR"], "Y");
@@ -1364,10 +1430,6 @@ class realestate_import extends class_base
 						$value = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, trim ($this->property_data["KATUS"]));
 						$variable_oid = (int) reset (array_keys ($roof_types, $value));
 
-						#### has_fireplace
-						$value = (int) (bool) strstr ($this->property_data["KIRJELDUS_KAMIN"], "Y");
-						$property->set_prop ("has_fireplace_heating", $value);
-
 						if (!is_oid ($variable_oid) and !empty ($value))
 						{
 							$variable_oid = $this->add_variable (CL_REALESTATE_HOUSE, "roof_type", $value);
@@ -1375,6 +1437,10 @@ class realestate_import extends class_base
 						}
 
 						$property->set_prop ("roof_type", $variable_oid);
+
+						#### has_fireplace
+						$value = (int) (bool) strstr ($this->property_data["KIRJELDUS_KAMIN"], "Y");
+						$property->set_prop ("has_fireplace_heating", $value);
 						break;
 
 					case "apartment":
@@ -1789,7 +1855,7 @@ class realestate_import extends class_base
 		$realestate_objects->save ();
 
 		### save log
-		$logs = (array) $this_object->prop ("city24_log");
+		$logs = (array) $this_object->meta ("city24_log");
 		$logs[$import_time] = $import_log;
 		krsort ($logs);
 
@@ -1798,7 +1864,7 @@ class realestate_import extends class_base
 			array_pop ($logs);
 		}
 
-		$this_object->set_prop ("city24_log", $logs);
+		$this_object->set_meta ("city24_log", $logs);
 
 		### fin.
 		$this_object->save ();
