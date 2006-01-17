@@ -21,7 +21,7 @@
             <group>general</group>
             <type>text</type>
             <field>subclass</field>
-            <caption>T&amp;uuml;&amp;uuml;p</caption>
+            <caption>Tüüp</caption>
       </property>
       <property>
             <name>parent</name>
@@ -29,8 +29,8 @@
             <group>general</group>
             <type>text</type>
             <field>parent</field>
-            <comment>Halduspiirkond, millesse k&amp;auml;esolev halduspiirkond kuulub</comment>
-            <caption>K&amp;otilde;rgem halduspiirkond</caption>
+            <comment>Halduspiirkond, millesse käesolev halduspiirkond kuulub</comment>
+            <caption>Kõrgem halduspiirkond</caption>
       </property>
       <property>
             <name>parent_show</name>
@@ -39,7 +39,7 @@
             <type>text</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>K&amp;otilde;rgem halduspiirkond</caption>
+            <caption>Kõrgem halduspiirkond</caption>
       </property>
       <property>
             <name>parent_select</name>
@@ -54,8 +54,8 @@
             </clid>
             <store>no</store>
             <field>parent_select</field>
-            <comment>Halduspiirkond, millesse k&amp;auml;esolev halduspiirkond kuulub</comment>
-            <caption>Vali k&amp;otilde;rgem halduspiirkond</caption>
+            <comment>Halduspiirkond, millesse käesolev halduspiirkond kuulub</comment>
+            <caption>Vali kõrgem halduspiirkond</caption>
       </property>
       <property>
             <name>administrative_structure_oid</name>
@@ -78,7 +78,7 @@
                         <num_1>CL_COUNTRY_CITY</num_1>
                         <num_2>CL_COUNTRY_CITYDISTRICT</num_2>
                   </clid>
-                  <caption>K&amp;otilde;rgem halduspiirkond</caption>
+                  <caption>Kõrgem halduspiirkond</caption>
             </PARENT_ADMINISTRATIVE_UNIT>
       </reltypes>
 </properties>

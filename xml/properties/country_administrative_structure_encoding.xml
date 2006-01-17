@@ -20,7 +20,7 @@
             <group>grp_encodings</group>
             <type>select</type>
             <store>no</store>
-            <caption>Vali haldus&amp;uuml;ksus</caption>
+            <caption>Vali haldusüksus</caption>
       </property>
       <property>
             <name>encodings_list</name>

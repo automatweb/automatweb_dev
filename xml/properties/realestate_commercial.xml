@@ -54,7 +54,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>is_visible</field>
-            <caption>N&amp;auml;htav</caption>
+            <caption>Nähtav</caption>
       </property>
       <property>
             <name>is_archived</name>
@@ -111,7 +111,7 @@
             <group>grp_main</group>
             <type>classificator</type>
             <field>transaction_type</field>
-            <caption>Tehingu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            <caption>Tehingu t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>transaction_price</name>
@@ -128,7 +128,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>M&amp;uuml;&amp;uuml;gihind</caption>
+            <caption>Müügihind</caption>
       </property>
       <property>
             <name>transaction_rent</name>
@@ -137,7 +137,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kuu&amp;uuml;&amp;uuml;r</caption>
+            <caption>Kuuüür</caption>
       </property>
       <property>
             <name>transaction_constraints</name>
@@ -164,7 +164,7 @@
             <field>meta</field>
             <method>serialize</method>
             <default>-1</default>
-            <caption>Tehingu kuup&amp;auml;ev</caption>
+            <caption>Tehingu kuupäev</caption>
       </property>
       <property>
             <name>transaction_closed</name>
@@ -174,7 +174,7 @@
             <field>meta</field>
             <method>serialize</method>
             <ch_value>1</ch_value>
-            <caption>Tehing s&amp;otilde;lmitud</caption>
+            <caption>Tehing sõlmitud</caption>
       </property>
       <property>
             <name>title3</name>
@@ -184,7 +184,7 @@
             <store>no</store>
             <subtitle>1</subtitle>
             <field>title3</field>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;ja andmed</caption>
+            <caption>M&amp;uuml;&amp;uuml;ja andmed</caption>
       </property>
       <property>
             <name>seller_search</name>
@@ -193,7 +193,7 @@
             <type>text</type>
             <store>no</store>
             <field>seller_search</field>
-            <caption>M&amp;uuml;&amp;uuml;ja</caption>
+            <caption>Müüja</caption>
       </property>
       <property>
             <name>seller</name>
@@ -284,7 +284,7 @@
             <store>no</store>
             <subtitle>1</subtitle>
             <field>title5</field>
-            <caption>T&amp;auml;nukiri</caption>
+            <caption>Tänukiri</caption>
       </property>
       <property>
             <name>appreciation_note_date</name>
@@ -294,7 +294,7 @@
             <field>meta</field>
             <method>serialize</method>
             <default>-1</default>
-            <caption>T&amp;auml;nukirja saatmise kuup&amp;auml;ev</caption>
+            <caption>Tänukirja saatmise kuupäev</caption>
       </property>
       <property>
             <name>appreciation_note_type</name>
@@ -303,7 +303,7 @@
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>T&amp;auml;nukirja t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Tänukirja tüüp</caption>
       </property>
       <property>
             <name>title4</name>
@@ -343,7 +343,7 @@
             <default>12</default>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kehtib (n&amp;amp;auml;dalat)</caption>
+            <caption>Kehtib (n&amp;auml;dalat)</caption>
       </property>
       <property>
             <name>visible_to</name>
@@ -351,7 +351,7 @@
             <group>grp_main</group>
             <type>classificator</type>
             <field>visible_to</field>
-            <caption>N&amp;amp;auml;htav</caption>
+            <caption>N&amp;auml;htav</caption>
       </property>
       <property>
             <name>priority</name>
@@ -370,7 +370,7 @@
             <field>meta</field>
             <method>serialize</method>
             <default>1</default>
-            <caption>N&amp;amp;auml;ita firma kodulehel</caption>
+            <caption>N&amp;auml;ita firma kodulehel</caption>
       </property>
       <property>
             <name>show_house_number_on_web</name>
@@ -380,7 +380,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>N&amp;amp;auml;ita majanumbrit kodulehel</caption>
+            <caption>N&amp;auml;ita majanumbrit kodulehel</caption>
       </property>
       <property>
             <name>special_homepage</name>
@@ -464,7 +464,7 @@
             <cols>74</cols>
             <field>meta</field>
             <method>serialize</method>
-            <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+            <caption>M&amp;auml;rks&amp;otilde;nad</caption>
       </property>
       <property>
             <name>pictures</name>
@@ -511,7 +511,7 @@
             <clid>CL_IMAGE</clid>
             <field>meta</field>
             <method>serialize</method>
-            <caption>V&amp;auml;ike pilt</caption>
+            <caption>Väike pilt</caption>
       </property>
       <property>
             <name>map_create</name>
@@ -594,7 +594,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>K&amp;auml;ibemaks lisandub</caption>
+            <caption>Käibemaks lisandub</caption>
       </property>
       <property>
             <name>transaction_additional_costs</name>
@@ -604,7 +604,7 @@
             <datatype>int</datatype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>K&amp;otilde;rvalkulud EEK/m2</caption>
+            <caption>Kõrvalkulud EEK/m2</caption>
       </property>
       <property>
             <name>usage_purpose</name>
@@ -637,7 +637,7 @@
             <group>grp_detailed</group>
             <type>textbox</type>
             <field>total_floor_area</field>
-            <caption>&amp;Uuml;ldpind</caption>
+            <caption>Üldpind</caption>
       </property>
       <property>
             <name>number_of_rooms</name>
@@ -695,7 +695,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>K&amp;ouml;&amp;ouml;k</caption>
+            <caption>Köök</caption>
       </property>
       <property>
             <name>room_height</name>
@@ -704,7 +704,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Ruumide k&amp;otilde;rgus</caption>
+            <caption>Ruumide kõrgus</caption>
       </property>
       <property>
             <name>door_height</name>
@@ -713,7 +713,7 @@
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Ukse k&amp;otilde;rgus</caption>
+            <caption>Ukse kõrgus</caption>
       </property>
       <property>
             <name>loading_facilities</name>
@@ -740,7 +740,7 @@
             <store>no</store>
             <subtitle>1</subtitle>
             <field>childtitle1</field>
-            <caption>K&amp;uuml;te ja ventilatsioon</caption>
+            <caption>Küte ja ventilatsioon</caption>
       </property>
       <property>
             <name>has_central_heating</name>
@@ -750,7 +750,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Keskk&amp;uuml;te</caption>
+            <caption>Keskküte</caption>
       </property>
       <property>
             <name>has_electric_heating</name>
@@ -760,7 +760,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Elektrik&amp;uuml;te</caption>
+            <caption>Elektriküte</caption>
       </property>
       <property>
             <name>has_gas_heating</name>
@@ -770,7 +770,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Gaasik&amp;uuml;te</caption>
+            <caption>Gaasiküte</caption>
       </property>
       <property>
             <name>has_forced_ventilation</name>
@@ -829,7 +829,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>T&amp;ouml;&amp;ouml;stusvool</caption>
+            <caption>Tööstusvool</caption>
       </property>
       <property>
             <name>has_internet</name>
@@ -888,7 +888,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>K&amp;uuml;lmik</caption>
+            <caption>Külmik</caption>
       </property>
       <property>
             <name>has_furniture</name>
@@ -898,7 +898,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>M&amp;ouml;&amp;ouml;bel</caption>
+            <caption>Mööbel</caption>
       </property>
       <property>
             <name>has_furniture_option</name>
@@ -908,7 +908,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <caption>M&amp;ouml;&amp;ouml;bli v&amp;otilde;imalus</caption>
+            <caption>Mööbli võimalus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_REALESTATE_COMMERCIAL</syslog_type>
@@ -919,7 +919,7 @@
       </classinfo>
       <groupinfo>
             <grp_main>
-                  <caption>&amp;amp;Uuml;ldandmed ja asukoht</caption>
+                  <caption>&amp;Uuml;ldandmed ja asukoht</caption>
             </grp_main>
             <grp_detailed>
                   <caption>Kirjeldus</caption>
@@ -951,7 +951,7 @@
             <REALESTATE_SELLER>
                   <value>2</value>
                   <clid>CL_CRM_PERSON</clid>
-                  <caption>Klient (M&amp;uuml;&amp;uuml;ja)</caption>
+                  <caption>Klient (Müüja)</caption>
             </REALESTATE_SELLER>
             <REALESTATE_BUYER>
                   <value>7</value>
@@ -981,7 +981,7 @@
             <REALESTATE_PICTUREICON>
                   <value>8</value>
                   <clid>CL_IMAGE</clid>
-                  <caption>V&amp;auml;ike pilt</caption>
+                  <caption>Väike pilt</caption>
             </REALESTATE_PICTUREICON>
       </reltypes>
 </properties>

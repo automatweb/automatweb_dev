@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>N&amp;auml;itamise p&amp;otilde;hi (template)</caption>
+            <caption>Näitamise põhi (template)</caption>
       </property>
       <property>
             <name>result_format</name>
@@ -16,7 +16,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Otsingutulemuste n&amp;auml;itamise formaat</caption>
+            <caption>Otsingutulemuste näitamise formaat</caption>
       </property>
       <property>
             <name>result_no_form</name>
@@ -26,7 +26,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <comment>N&amp;auml;ita otsingutulemusi ilma otsinguvormita. Ei m&amp;otilde;juta admin liidese otsingut.</comment>
+            <comment>Näita otsingutulemusi ilma otsinguvormita. Ei mõjuta admin liidese otsingut.</comment>
             <caption>Tulemused otsinguvormita</caption>
       </property>
       <property>
@@ -37,7 +37,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <datatype>int</datatype>
-            <comment>[0] - v&amp;otilde;imalus valida parameetrile vaid &amp;uuml;ks v&amp;auml;&amp;auml;rtus, [1 - ...] - v&amp;otilde;imalus valida mitu.</comment>
+            <comment>[0] - võimalus valida parameetrile vaid üks väärtus, [1 - ...] - võimalus valida mitu.</comment>
             <caption>Otsinguvormi valikuelementide suurus</caption>
       </property>
       <property>
@@ -126,7 +126,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>3</size>
-            <caption>Tehingu t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Tehingu tüüp</caption>
       </property>
       <property>
             <name>search_transaction_price_min</name>
@@ -159,7 +159,7 @@
             <type>textbox</type>
             <parent>box2</parent>
             <size>10</size>
-            <caption>&amp;Uuml;ldpind min</caption>
+            <caption>Üldpind min</caption>
       </property>
       <property>
             <name>search_total_floor_area_max</name>
@@ -170,7 +170,7 @@
             <type>textbox</type>
             <parent>box2</parent>
             <size>10</size>
-            <caption>&amp;Uuml;ldpind max</caption>
+            <caption>Üldpind max</caption>
       </property>
       <property>
             <name>search_number_of_rooms</name>
@@ -231,7 +231,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Alates kuup&amp;auml;evast</caption>
+            <caption>Alates kuupäevast</caption>
       </property>
       <property>
             <name>search_usage_purpose</name>
@@ -242,7 +242,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>5</size>
-            <caption>&amp;Auml;ripinna t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Äripinna tüüp</caption>
       </property>
       <property>
             <name>search_agent</name>
@@ -280,7 +280,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
-            <caption>N&amp;auml;ita ainult pildiga kuulutusi</caption>
+            <caption>Näita ainult pildiga kuulutusi</caption>
       </property>
       <property>
             <name>searchparam_sort_by</name>
@@ -289,7 +289,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>J&amp;auml;rjestus</caption>
+            <caption>Järjestus</caption>
       </property>
       <property>
             <name>searchparam_sort_order</name>
@@ -298,7 +298,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>J&amp;auml;rjestuse suund</caption>
+            <caption>Järjestuse suund</caption>
       </property>
       <property>
             <name>search_button</name>
@@ -340,8 +340,8 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>5</size>
-            <comment>Objektiatribuudid, mida n&amp;auml;idatakse sortimise valikus</comment>
-            <caption>J&amp;auml;rjestamise valik</caption>
+            <comment>Objektiatribuudid, mida näidatakse sortimise valikus</comment>
+            <caption>Järjestamise valik</caption>
       </property>
       <property>
             <name>agent_sections</name>
@@ -352,7 +352,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>5</size>
-            <comment>Osakonnad, mille maaklereid otsinguparameetri v&amp;auml;&amp;auml;rtuse valikus n&amp;auml;idatakse</comment>
+            <comment>Osakonnad, mille maaklereid otsinguparameetri väärtuse valikus näidatakse</comment>
             <caption>Maaklerite osakonnad</caption>
       </property>
       <classinfo>
@@ -390,7 +390,7 @@
             <box2>
                   <type>hbox</type>
                   <group>grp_search</group>
-                  <caption>&amp;Uuml;ldpinna vahemik</caption>
+                  <caption>Üldpinna vahemik</caption>
             </box2>
       </layout>
 </properties>
