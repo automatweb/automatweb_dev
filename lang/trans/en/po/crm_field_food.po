@@ -63,7 +63,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_num_places
 msgid "Omaduse Kohtade arv (num_places) caption"
-msgstr ""
+msgstr "Number of places"
 
 #: classes/applications/crm/crm_field_food.aw:prop_num_places_comment
 msgid "Omaduse Kohtade arv (num_places) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_ccards
 msgid "Omaduse Aktsepteeritakse krediitkaarte (has_ccards) caption"
-msgstr ""
+msgstr "Credit cards accepted"
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_ccards_comment
 msgid "Omaduse Aktsepteeritakse krediitkaarte (has_ccards) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_for_disabled
 msgid "Omaduse Sobib liikumispuudega inimestele (for_disabled) caption"
-msgstr ""
+msgstr "Facilities for handicapped persons"
 
 #: classes/applications/crm/crm_field_food.aw:prop_for_disabled_comment
 msgid "Omaduse Sobib liikumispuudega inimestele (for_disabled) kommentaar"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_for_groups
 msgid "Omaduse Sobib gruppidele (alates 10 inimest) (for_groups) caption"
-msgstr ""
+msgstr "Suitable for groups (from 10 persons)"
 
 #: classes/applications/crm/crm_field_food.aw:prop_for_groups_comment
 msgid "Omaduse Sobib gruppidele (alates 10 inimest) (for_groups) kommentaar"
@@ -148,7 +148,7 @@ msgstr ""
 #: classes/applications/crm/crm_field_food.aw:prop_for_kids
 msgid ""
 "Omaduse Sobib lastele (lastemen&uuml;&uuml;, lastetoolid) (for_kids) caption"
-msgstr ""
+msgstr "Child-friendly (children’s menu, high chairs)"
 
 #: classes/applications/crm/crm_field_food.aw:prop_for_kids_comment
 msgid ""
@@ -163,7 +163,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_nonsmoker_rooms
 msgid "Omaduse Suitsuvabad ruumid  (has_nonsmoker_rooms) caption"
-msgstr ""
+msgstr "Rooms for non-smokers"
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_nonsmoker_rooms_comment
 msgid "Omaduse Suitsuvabad ruumid  (has_nonsmoker_rooms) kommentaar"
@@ -211,7 +211,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_veg
 msgid "Omaduse Men&uuml;&uuml; taimetoitlastele (has_veg) caption"
-msgstr ""
+msgstr "Vegetarian menu"
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_veg_comment
 msgid "Omaduse Men&uuml;&uuml; taimetoitlastele (has_veg) kommentaar"
@@ -223,7 +223,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_catering
 msgid "Omaduse Catering teenus (has_catering) caption"
-msgstr ""
+msgstr "Catering service"
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_catering_comment
 msgid "Omaduse Catering teenus (has_catering) kommentaar"
@@ -235,7 +235,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_takeaway
 msgid "Omaduse Toidu kaasa ostmise v&otilde;imalus (has_takeaway) caption"
-msgstr ""
+msgstr "Take out possible"
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_takeaway_comment
 msgid "Omaduse Toidu kaasa ostmise v&otilde;imalus (has_takeaway) kommentaar"
@@ -247,7 +247,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_delivery
 msgid "Omaduse Toidu koju tellimise v&otilde;imalus (has_delivery) caption"
-msgstr ""
+msgstr "Order out possible"
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_delivery_comment
 msgid "Omaduse Toidu koju tellimise v&otilde;imalus (has_delivery) kommentaar"
@@ -259,7 +259,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_live_music
 msgid "Omaduse Elav muusika (has_live_music) caption"
-msgstr ""
+msgstr "Live music"
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_live_music_comment
 msgid "Omaduse Elav muusika (has_live_music) kommentaar"
@@ -307,7 +307,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_outside_seating
 msgid "Omaduse V&auml;likohvik (hooajaliselt) (has_outside_seating) caption"
-msgstr ""
+msgstr "Outdoor cafe"
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_outside_seating_comment
 msgid "Omaduse V&auml;likohvik (hooajaliselt) (has_outside_seating) kommentaar"
@@ -319,7 +319,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_terrace
 msgid "Omaduse Terrass (has_terrace) caption"
-msgstr ""
+msgstr "Terrace"
 
 #: classes/applications/crm/crm_field_food.aw:prop_has_terrace_comment
 msgid "Omaduse Terrass (has_terrace) kommentaar"
