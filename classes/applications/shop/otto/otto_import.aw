@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.36 2006/01/16 07:11:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.37 2006/01/17 17:29:17 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2543,6 +2543,11 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		$t = &$args['prop']['vcl_inst'];
 		$t->set_sortable(false);
 		$t->define_field(array(
+			'name' => 'jrk',
+			'caption' => t('Jrk'),
+			'align' => 'center'
+		));
+		$t->define_field(array(
 			'name' => 'aw_folder_id',
 			'caption' => t('AW Kataloogi ID'),
 			'align' => 'center'
@@ -2578,6 +2583,7 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		{
 
 			$t->define_data(array(
+				'jrk' => $count,
 				'aw_folder_id' => html::textbox(array(
 					'name' => 'data['.$count.'][aw_folder_id]',
 					'value' => $aw_folder,
