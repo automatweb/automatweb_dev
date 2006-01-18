@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.16 2006/01/15 10:08:17 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.17 2006/01/18 17:07:58 ahti Exp $
 
 /*
 
@@ -251,7 +251,7 @@ class classificator extends class_base
 		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->meta("object_type")))
 		{
 			$custom_ff = $arr["obj_inst"]->meta("object_type");
-			if (is_oid($custom_ff))
+			if ($this->can("view", $custom_ff))
 			{
 				$ff = $custom_ff;
 			}
@@ -279,7 +279,7 @@ class classificator extends class_base
 		}
 		$ofto = new object($clf[$name]);
 		$vars = array(
-			"parent" => $parent,
+			"parent" => $clf[$name],
 			"class_id" => CL_META,
 			"lang_id" => array(),
 			"site_id" => array(),
