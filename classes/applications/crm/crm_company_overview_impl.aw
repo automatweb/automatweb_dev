@@ -382,7 +382,8 @@ class crm_company_overview_impl extends class_base
 					"post_ru" => get_ru()
 				), CL_TASK)
 			));
-			if ($task->meta("stopper_state") != "started")
+			$ti = get_instance(CL_TASK);
+			if (!$ti->stopper_is_running($task->id()))
 			{
 				$url = $this->mk_my_orb("stopper_pop", array(
 					"id" => $t_id,
@@ -399,16 +400,23 @@ class crm_company_overview_impl extends class_base
 			}
 			else
 			{
-				$elapsed = (time() - $task->meta("stopper_start")) + $task->meta("stopper_total");
+
+				$url = $this->mk_my_orb("stopper_pop", array(
+					"id" => $t_id,
+					"s_action" => "stop",
+					"type" => t("Toimetus"),
+					"name" => urlencode($task->name())
+				),CL_TASK);
+
+				$elapsed = $ti->get_stopper_time($task->id());
 				$hrs = (int)($elapsed / 3600);
 				$mins = (int)(($elapsed - ($hrs * 3600)) / 60);
 				$elapsed = sprintf("%02d:%02d", $hrs, $mins); 
+
 				$pm->add_item(array(
 					"text" => sprintf(t("Peata stopper (%s)"), $elapsed), 
-					"link" => $this->mk_my_orb("stop_task_timer", array(
-						"id" => $t_id,
-						"post_ru" => get_ru()
-					), CL_TASK)
+					"link" => "#",
+					"oncl" => "onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'"
 				));
 			}
 			
@@ -572,6 +580,7 @@ class crm_company_overview_impl extends class_base
 				"conditions" => array(
 					"content" => "%".$r["act_s_task_content"]."%",
 					"summary" => "%".$r["act_s_task_content"]."%",
+					"CL_TASK.RELTYPE_ROW.content" => "%".$r["act_s_task_content"]."%"
 				)
 			));
 		}
@@ -594,7 +603,7 @@ class crm_company_overview_impl extends class_base
 		}
 		if ($r["act_s_dl_from"] > 1 && $r["act_s_dl_to"] > 1)
 		{
-			$res[$dl] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["act_s_dl_from"], $r["act_s_dl_to"]);
+			$res[$dl] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $r["act_s_dl_from"], $r["act_s_dl_to"]);
 		}
 		else
 		if ($r["act_s_dl_from"] > 1)

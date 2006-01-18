@@ -207,5 +207,12 @@
 			</function>
 		</action>
 
+		<action name="conv_task_rows">
+			<function name="conv_task_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

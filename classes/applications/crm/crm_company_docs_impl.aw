@@ -148,6 +148,8 @@ class crm_company_docs_impl extends class_base
 				"name" => $sf->name(),
 				"url" => aw_url_change_var("files_from_fld", "/")
 			));
+
+			usort($fld, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
 			foreach($fld as $item)
 			{
 				$item["url"] = aw_url_change_var("files_from_fld", $item["id"]);
@@ -235,6 +237,7 @@ class crm_company_docs_impl extends class_base
 			$ob = $i->get_objects($sf, NULL, $_GET["files_from_fld"], array(
 				"get_server_paths" => true
 			));
+			usort($ob, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
 			foreach($ob as $nm => $dat)
 			{
 				$pm = get_instance("vcl/popup_menu");
@@ -260,6 +263,7 @@ class crm_company_docs_impl extends class_base
 					"pop" => $pm->get_menu()
 				));
 			}
+			$t->set_default_sortby("name");
 			return;
 		}
 

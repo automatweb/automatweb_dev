@@ -1106,7 +1106,7 @@ class crm_company_cust_impl extends class_base
 
 		if ($ar[$prefix."proj_search_dl_from"] > 1 && $ar[$prefix."proj_search_dl_to"] > 1)
 		{
-			$ret["deadline"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $ar[$prefix."proj_search_dl_from"], $ar[$prefix."proj_search_dl_to"]);
+			$ret["deadline"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $ar[$prefix."proj_search_dl_from"], $ar[$prefix."proj_search_dl_to"]);
 		}
 		else
 		if ($ar[$prefix."proj_search_dl_from"] > 1)
@@ -1125,7 +1125,7 @@ class crm_company_cust_impl extends class_base
 
 		if ($ar[$prefix."proj_search_end_from"] > 1 && $ar[$prefix."proj_search_end_to"] > 1)
 		{
-			$ret["end"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $ar[$prefix."proj_search_end_from"], $ar[$prefix."proj_search_end_to"]);
+			$ret["end"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $ar[$prefix."proj_search_end_from"], $ar[$prefix."proj_search_end_to"]);
 		}
 		else
 		if ($ar[$prefix."proj_search_end_from"] > 1)

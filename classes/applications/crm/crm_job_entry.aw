@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.3 2006/01/03 16:50:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.4 2006/01/18 18:09:07 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -333,6 +333,15 @@ class crm_job_entry extends class_base
 					$_pers->connect(array(
 						"to" => $t->id(),
 						"type" => "RELTYPE_PERSON_TASK"
+					));
+				}
+
+				// connect resources
+				foreach(safe_array($arr["request"]["resource_sel"]) as $res_id)
+				{
+					$t->connect(array(
+						"to" => $res_id,
+						"type" => "RELTYPE_RESOURCE"
 					));
 				}
 				header("Location: ".html::get_change_url($t->id(), array("group" => "rows", "return_url" => urlencode($arr["request"]["return_url"]))));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.54 2006/01/13 11:46:56 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.55 2006/01/18 18:09:07 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -158,19 +158,22 @@ caption Osalejad
 @caption Kordus
 
 @reltype FILE value=2 clid=CL_FILE
-@caption fail
+@caption Fail
 
 @reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
-@caption klient
+@caption Klient
 
 @reltype PROJECT value=4 clid=CL_PROJECT
-@caption projekt
+@caption Projekt
 
 @reltype RESOURCE value=5 clid=CL_MRP_RESOURCE
-@caption ressurss
+@caption Ressurss
 
 @reltype BILL value=6 clid=CL_CRM_BILL
-@caption arve
+@caption Arve
+
+@reltype ROW value=7 clid=CL_TASK_ROW
+@caption Rida
 */
 
 class task extends class_base
@@ -711,29 +714,7 @@ class task extends class_base
 				break;
 
 			case "rows":
-				$res = array();
-				foreach(safe_array($_POST["rows"]) as $e)
-				{
-					if ($e["task"] != "")
-					{
-						list($d,$m,$y) = explode("/", $e["date"]);
-						$e["date"] = mktime(0,0,0, $m, $d, $y);
-						if ($e["time_to_cust"] == "")
-						{
-							$e["time_to_cust"] = $e["time_real"];
-						}
-						foreach(safe_array($e["impl"]) as $i)
-						{
-							if ($this->can("view", $i))
-							{
-								$this->add_participant($arr["obj_inst"], obj($i));
-							}
-						}
-						$res[] = $e;
-					}
-				}
-
-				$arr["obj_inst"]->set_meta("rows", $res);
+				$this->_save_rows($arr);
 				break;
 
 			case "files":
@@ -1238,16 +1219,27 @@ class task extends class_base
 		$def_impl = $u->get_current_person();
 		$def_impl = array($def_impl => $def_impl);
 
-		$dat = safe_array($arr["obj_inst"]->meta("rows"));
-		$dat[] = array();
-		$dat[] = array();
-		$dat[] = array();
-		foreach($dat as $idx => $row)
+		$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW"));
+		$cs[] = NULL;
+		$cs[] = NULL;
+		$cs[] = NULL;
+		$null_idx = 0;
+		foreach($cs as $ro)
 		{
+			if ($ro === null)
+			{
+				$idx = $null_idx--;
+				$row = obj();
+			}
+			else
+			{
+				$idx = $ro->prop("to");
+				$row = $ro->to();
+			}
 			$date_sel = "<A HREF='#'  onClick=\"var cal=new CalendarPopup();cal.select(aw_get_el('rows[$idx][date]'),'anchor".$idx."','dd/MM/yy'); return false;\"
 						   NAME='anchor".$idx."' ID='anchor".$idx."'>".t("vali")."</A>";
 
-			$is = (is_array($row["impl"]) && count($row["impl"])) ? $row["impl"] : $def_impl;
+			$is = (is_array($row->prop("impl")) && count($row->prop("impl"))) ? $row->prop("impl") : $def_impl;
 			foreach(safe_array($is) as $is_id)
 			{
 				if (!isset($impls[$is_id]))
@@ -1257,21 +1249,21 @@ class task extends class_base
 				}
 			}
 			$bno = "";
-			if ($row["bill_id"])
+			if ($row->prop("bill_id"))
 			{
-				$bo = obj($row["bill_id"]);
+				$bo = obj($row->prop("bill_id"));
 				$bno = $bo->prop("bill_no");
 			}
 			$t->define_data(array(
-				"task" => "<a name='row_".$row["date"]."'/>".html::textarea(array(
+				"task" => "<a name='row_".$idx."'/>".html::textarea(array(
 					"name" => "rows[$idx][task]",
-					"value" => $row["task"],
+					"value" => $row->prop("content"),
 					"rows" => 5,
 					"cols" => 50
 				)),
 				"date" => html::textbox(array(
 					"name" => "rows[$idx][date]",
-					"value" => date("d/m/y",($row["date"] > 100 ? $row["date"] : $arr["obj_inst"]->prop("start1"))),
+					"value" => date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : $arr["obj_inst"]->prop("start1"))),
 					"size" => 7
 				)).$date_sel,
 				"impl" => html::select(array(
@@ -1282,32 +1274,29 @@ class task extends class_base
 				)),
 				"time_guess" => html::textbox(array(
 					"name" => "rows[$idx][time_guess]",
-					"value" => $row["time_guess"],
+					"value" => $row->prop("time_guess"),
 					"size" => 5
 				)),
 				"time_real" => html::textbox(array(
 					"name" => "rows[$idx][time_real]",
-					"value" => $row["time_real"],
+					"value" => $row->prop("time_real"),
 					"size" => 5
 				)),
 				"time_to_cust" => html::textbox(array(
 					"name" => "rows[$idx][time_to_cust]",
-					"value" => $row["time_to_cust"],
+					"value" => $row->prop("time_to_cust"),
 					"size" => 5
 				)),
 				"done" => html::checkbox(array(
 					"name" => "rows[$idx][done]",
 					"value" => 1,
-					"checked" => $row["done"]
+					"checked" => $row->prop("done")
 				)),
-				"on_bill" => ($row["bill_id"] ? sprintf(t("Arve nr %s"), $bno).html::hidden(array("name" => "rows[$idx][on_bill]", "value" => $row["on_bill"])) : html::checkbox(array(
+				"on_bill" => ($row->prop("bill_id") ? sprintf(t("Arve nr %s"), $bno) : html::checkbox(array(
 					"name" => "rows[$idx][on_bill]",
 					"value" => 1,
-					"checked" => $row["on_bill"]
-				))).html::hidden(array(
-					"name" => "rows[$idx][bill_id]",
-					"value" => $row["bill_id"]
-				)),
+					"checked" => $row->prop("on_bill")
+				))),
 			));
 		}
 		$t->set_sortable(false);
@@ -1320,19 +1309,21 @@ class task extends class_base
 		// if not, return data for bill
 
 		$rows = array();
-		$dat = safe_array($task->meta("rows"));
-		foreach($dat as $idx => $row)
+		//$dat = safe_array($task->meta("rows"));
+		foreach($task->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
-			if (($row["on_bill"] == 1 || !$only_on_bill) && ($bill_id === null || $row["bill_id"] == $bill_id))
+			$row = $c->to();
+			$idx = $row->id();
+			if (($row->prop("on_bill") == 1 || !$only_on_bill) && ($bill_id === null || $row->prop("bill_id") == $bill_id))
 			{
 				$id = $task->id()."_".$idx;
 				$rows[$id] = array(
-					"name" => $row["task"],
+					"name" => $row->prop("task"),
 					"unit" => t("tund"),
-					"date" => $row["date"],
+					"date" => $row->prop("date"),
 					"price" => $task->prop("hr_price"),
-					"amt" => $row["time_to_cust"],
-					"sum" => str_replace(",", ".", $row["time_to_cust"]) * $task->prop("hr_price"),
+					"amt" => $row->prop("time_to_cust"),
+					"sum" => str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price"),
 					"has_tax" => 1,
 					"on_bill" => 1
 				);
@@ -1458,37 +1449,6 @@ class task extends class_base
 			"sel" => array($task->id() => $task->id()),
 			"post_ru" => $arr["post_ru"]
 		));
-	}
-
-	/**
-		@attrib name=start_task_timer
-		@param id required type=int acl=edit
-		@param post_ru required
-	**/
-	function start_task_timer($arr)
-	{
-		$o = obj($arr["id"]);
-		$o->set_meta("stopper_state", "started");
-		$o->set_meta("stopper_start", time());
-		$o->save();
-
-		return $arr["post_ru"];
-	}
-
-	/**
-		@attrib name=stop_task_timer
-		@param id required type=int acl=edit
-		@param post_ru required
-	**/
-	function stop_task_timer($arr)
-	{
-		$o = obj($arr["id"]);
-		$o->set_meta("stopper_total", $o->meta("stopper_total") + (time() - $o->meta("stopper_start")));
-		$o->set_meta("stopper_state", "");
-		$o->set_meta("stopper_start", 0);
-		$o->save();
-
-		return $arr["post_ru"];
 	}
 
 	function _get_default_name($o)
@@ -1730,7 +1690,16 @@ class task extends class_base
 		return parent::new_change($arr);
 	}
 
+	function stopper_is_running($task_id)
+	{
+		return $_SESSION["crm_stoppers"][$task_id]["state"] == "running";
+	}
 
+	function get_stopper_time($task_id)
+	{
+		$elapsed = time() - $_SESSION["crm_stoppers"][$task_id]["start"];
+		return $_SESSION["crm_stoppers"][$task_id]["base"] + $elapsed;
+	}
 
 	function _proc_stop_act($arr)
 	{
@@ -1770,15 +1739,19 @@ class task extends class_base
 				$el_hr += 0.75;
 			}
 			$o = obj($arr["id"]);
-			$r = $o->meta("rows");
-			$r[] = array(
-				"date" => $stopper["start"],
-				"impl" => array($cp->id() => $cp->id()),
-				"time_real" => $el_hr,
-				"task" => $arr["desc"]
-			);
-			$o->set_meta("rows", $r);
-			$o->save();
+			$row = obj();
+			$row->set_parent($o->id());
+			$row->set_class_id(CL_TASK_ROW);
+			$row->set_prop("content", $arr["desc"]);
+			$row->set_prop("date", $stopper["start"]);
+			$row->set_prop("impl", array($cp->id() => $cp->id()));
+			$row->set_prop("time_real", $el_hr);
+			$row->set_prop("done", 1);
+			$row->save();
+			$o->connect(array(
+				"to" => $row->id(),
+				"type" => "RELTYPE_ROW"
+			));
 			unset($_SESSION["crm_stoppers"][$arr["id"]]);
 		}
 		else
@@ -1821,6 +1794,7 @@ class task extends class_base
 		return $this->mk_my_orb('change',array(
 				'id' => $arr['id'],
 				'group' => $arr['group'],
+				'search_contact_company' => urlencode($arr['search_contact_company']),
 				'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
 				'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
 				'search_contact_code' => urlencode($arr['search_contact_code']),
@@ -1850,6 +1824,73 @@ class task extends class_base
 			}
 		}
 		return true;
+	}
+
+	function _save_rows($arr)
+	{
+		$res = array();
+		// go over existing rows and save info for those
+		// add new rows that are without oid
+		// I think rows should not be deleted. or we can add that later
+		$task = obj($arr["request"]["id"]);
+
+		foreach(safe_array($_POST["rows"]) as $_oid => $e)
+		{
+			if (!is_oid($_oid))
+			{
+				if ($e["task"] == "")
+				{
+					continue;
+				}
+				$o = obj();
+				$o->set_class_id(CL_TASK_ROW);
+				$o->set_parent($arr["request"]["id"]);
+
+			}
+			else
+			{
+				$cs = $task->connections_from(array("to" => $_oid));
+				$c = reset($cs);
+				$o = $c->to();
+				if ($e["task"] == "")
+				{
+					$o->delete();
+					continue;
+				}
+			}
+
+			list($d,$m,$y) = explode("/", $e["date"]);
+			$o->set_prop("date", mktime(0,0,0, $m, $d, $y));
+			if ($e["time_to_cust"] == "")
+			{
+				$e["time_to_cust"] = $e["time_real"];
+			}
+
+			foreach(safe_array($e["impl"]) as $i)
+			{
+				if ($this->can("view", $i))
+				{
+					$this->add_participant($task, obj($i));
+				}
+			}
+
+			$o->set_prop("content", $e["task"]);
+			$o->set_prop("impl", $e["impl"]);
+			$o->set_prop("time_guess", $e["time_guess"]);
+			$o->set_prop("time_real", $e["time_real"]);
+			$o->set_prop("time_to_cust", $e["time_to_cust"]);
+			$o->set_prop("done", $e["done"]);
+			$o->set_prop("on_bill", $e["on_bill"]);
+			$o->save();
+
+			if (!is_oid($_oid))
+			{
+				$task->connect(array(
+					"to" => $o->id(),
+					"type" => "RELTYPE_ROW"
+				));
+			}
+		}
 	}
 }
 ?>

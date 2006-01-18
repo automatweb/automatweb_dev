@@ -1043,7 +1043,7 @@ function log_pv($mt)
 	$promo_time = $GLOBALS["awt"]->timers["mainc-contentmgmt/promo"]["elapsed"];
 
 	// log pv to file
-	$fn = aw_ini_get("basedir")."/files/logs/";
+	$fn = "/www/automatweb_new/files/logs/";
 	if (!is_dir($fn))
 	{
 		@mkdir($fn);

@@ -60,6 +60,10 @@ class links_display
 			$trs = $obj->meta("translations");
 			if (isset($trs[$cur_lid]))
 			{
+				if ($trs[$cur_lid][$prop] == "")
+				{
+					return $val;
+				}
 				$val = $trs[$cur_lid][$prop];
 			}
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.11 2005/12/27 12:35:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.12 2006/01/18 18:09:09 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -226,7 +226,7 @@ class links extends class_base
 		$link = obj($id);
 		$this->add_hit($id,aw_global_get("HTTP_HOST"),aw_global_get("uid"));
 		$url = $this->trans_get_val($link, "url");
-		
+
 		if ($url == "" && $link->prop("docid") != "")
 		{
 			$url = "/".$link->prop("docid");

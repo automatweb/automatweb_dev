@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.7 2005/10/26 20:02:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.8 2006/01/18 18:09:07 kristo Exp $
 // crm_memo.aw - Memo 
 /*
 
@@ -95,7 +95,15 @@ class crm_memo extends class_base
 
 			case "project":
 				$i = get_instance(CL_CRM_COMPANY);
-				$ol = new object_list(array("oid" => $i->get_my_projects()));
+				$myp = $i->get_my_projects();
+				if (!count($myp))
+				{
+					$ol = new object_list();
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $myp));
+				}
 				$prop["options"] = array("" => "") + $ol->names();
 				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{

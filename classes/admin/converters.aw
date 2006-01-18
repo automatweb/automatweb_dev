@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.60 2005/12/21 19:50:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.61 2006/01/18 18:09:07 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1800,6 +1800,54 @@ class converters extends aw_template
 				$this->restore_handle();
 			}
 		}
+		die("all done");
+	}
+
+	/**
+		@attrib name=conv_task_rows
+
+	**/
+	function conv_task_rows($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_TASK,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		aw_global_set("no_cache_flush", 1);
+		foreach($ol->arr() as $o)
+		{
+			// get all rows from task, convert to objects below task, connect to task and clear rows
+			foreach(safe_array($o->meta("rows")) as $row)
+			{
+				$ro = obj();
+				$ro->set_parent($o->id());
+				$ro->set_class_id(CL_TASK_ROW);
+				$ro->set_name($row["task"]);
+				$ro->set_prop("content", $row["task"]);
+				$ro->set_prop("date", $row["date"]);
+				$ro->set_prop("impl", $row["impl"]);
+				$ro->set_prop("time_guess", $row["time_guess"]);
+				$ro->set_prop("time_real", $row["time_real"]);
+				$ro->set_prop("time_to_cust", $row["time_to_cust"]);
+				$ro->set_prop("done", $row["done"]);
+				$ro->set_prop("on_bill", $row["on_bill"]);
+				$ro->set_prop("bill_id", $row["bill_id"]);
+				$ro->save();
+
+				$o->connect(array(
+					"to" => $ro->id(),
+					"type" => "RELTYPE_ROW"
+				));
+
+				$o->set_meta("rows", null);
+				$o->save();
+				echo "converted ".$o->id()."<br>\n";
+				flush();
+			}
+		}
+		$c = get_instance("cache");
+		$c->full_flush();
 		die("all done");
 	}
 };

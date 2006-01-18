@@ -688,8 +688,10 @@ default group=org_objects
 
 @default group=documents_forum
 
-	@property forum type=callback callback=callback_gen_forum store=no no_caption=1
+	@property forum type=text store=no no_caption=1
 	@caption Foorumi sisu
+
+ype=callback callback=callback_gen_forum store=no no_caption=1
 
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
@@ -1154,6 +1156,36 @@ class crm_company extends class_base
 		switch($data['name'])
 		{
 			/// GENERAL TAB
+			case "forum":
+				$forum = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FORUM");
+				if (!$forum)
+				{
+					$o = obj();
+					$o->set_class_id(CL_FORUM_V2);
+					$o->set_parent($arr["obj_inst"]->id());
+					$o->set_name(sprintf(t("%s foorum"), $arr["obj_inst"]->name()));
+					$o->save();
+					$arr["obj_inst"]->connect(array(
+						"to" => $o->id(),
+						"type" => "RELTYPE_FORUM"
+					));
+
+					$fi = $o->instance();
+					$fi->callback_post_save(array(
+						"obj_inst" => $o,
+						"request" => array("new" => 1)
+					));
+					$forum = $o;
+				}
+
+				$i = $forum->instance();
+				$i->obj_inst = $forum;
+				$data["value"] = $i->draw_all_folders(array(
+					"obj_inst" => $forum,
+					"request" => $arr["request"]
+				));
+				break;
+
 			case "name":
 				$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
 				$data["autocomplete_params"] = array("name");
@@ -1162,7 +1194,7 @@ class crm_company extends class_base
 
 			case "reg_nr":
 				// append link to go to thingie
-				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://info.eer.ee/ari/ariweb_package1.lihtparingu_vastus METHOD=POST ><INPUT TYPE=text NAME=paritud_arinimi><INPUT TYPE=text NAME=paritud_arir_kood></form>\" );win.document.forms[0].paritud_arinimi.value = document.changeform.name.value;win.document.forms[0].paritud_arir_kood = document.changeform.reg_nr.value;win.document.forms[0].submit();'>&Auml;riregistri p&auml;ring</a>";
+				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://info.eer.ee/ari/ariweb_package1.lihtparingu_vastus METHOD=POST name=kraaks><INPUT TYPE=text NAME=paritud_arinimi><INPUT TYPE=text NAME=paritud_arir_kood><input type=submit></form>\" );win.document.kraaks.paritud_arinimi.value = document.changeform.name.value;win.document.kraaks.paritud_arir_kood.value = document.changeform.reg_nr.value;win.document.kraaks.submit();'>&Auml;riregistri p&auml;ring</a>";
 				break;
 
 			case "contact_person":

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.129 2006/01/09 13:27:26 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.130 2006/01/18 18:09:11 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -413,6 +413,10 @@ class mrp_schedule extends class_base
 			MRP_STATUS_INPROGRESS,
 		);
 
+		if (!is_oid($workspace->prop ("projects_folder")))
+		{
+			return;
+		}
 		$this->db_query (
 		"SELECT mrp_case.* " .
 		"FROM " .

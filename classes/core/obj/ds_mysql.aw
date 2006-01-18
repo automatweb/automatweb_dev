@@ -1382,6 +1382,11 @@ die(dbg::dump($ret));
 							$v_data = $val->data2;
 							break;
 
+						case OBJ_COMP_BETWEEN_INCLUDING:
+							$comparator = " >= ".$v_data." AND $tf <= ";
+							$v_data = $val->data2;
+							break;
+
 						case OBJ_COMP_EQUAL:
 							$comparator = " = ";
 							$v_data = $val->data2;

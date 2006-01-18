@@ -2059,8 +2059,7 @@
             <name>forum</name>
             <table>objects</table>
             <group>documents_forum</group>
-            <type>callback</type>
-            <callback>callback_gen_forum</callback>
+            <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>forum</field>

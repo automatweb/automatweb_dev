@@ -477,7 +477,7 @@
             <FILE>
                   <value>2</value>
                   <clid>CL_FILE</clid>
-                  <caption>fail</caption>
+                  <caption>Fail</caption>
             </FILE>
             <CUSTOMER>
                   <value>3</value>
@@ -485,23 +485,28 @@
                         <num_0>CL_CRM_COMPANY</num_0>
                         <num_1>CL_CRM_PERSON</num_1>
                   </clid>
-                  <caption>klient</caption>
+                  <caption>Klient</caption>
             </CUSTOMER>
             <PROJECT>
                   <value>4</value>
                   <clid>CL_PROJECT</clid>
-                  <caption>projekt</caption>
+                  <caption>Projekt</caption>
             </PROJECT>
             <RESOURCE>
                   <value>5</value>
                   <clid>CL_MRP_RESOURCE</clid>
-                  <caption>ressurss</caption>
+                  <caption>Ressurss</caption>
             </RESOURCE>
             <BILL>
                   <value>6</value>
                   <clid>CL_CRM_BILL</clid>
-                  <caption>arve</caption>
+                  <caption>Arve</caption>
             </BILL>
+            <ROW>
+                  <value>7</value>
+                  <clid>CL_TASK_ROW</clid>
+                  <caption>Rida</caption>
+            </ROW>
       </reltypes>
       <layout>
             <personal>
