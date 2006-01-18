@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.20 2006/01/06 07:35:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.21 2006/01/18 18:58:32 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -346,7 +346,7 @@ class crm_bill extends class_base
 						"name" => "rows[$id][name]",
 						"value" => $t_inf["name"],
 						"rows" => 5,
-						"cols" => 50
+						"cols" => 45
 					)),
 					"code" => html::textbox(array(
 						"name" => "rows[$id][code]",
@@ -356,12 +356,12 @@ class crm_bill extends class_base
 					"date" => html::textbox(array(
 						"name" => "rows[$id][date]",
 						"value" => $t_inf["date"] > 100 ? date("d/m/y", $t_inf["date"]) : "",
-						"size" => 10
+						"size" => 8
 					)),
 					"unit" => html::textbox(array(
 						"name" => "rows[$id][unit]",
 						"value" => $t_inf["unit"],
-						"size" => 10
+						"size" => 3
 					)),
 					"price" => html::textbox(array(
 						"name" => "rows[$id][price]",
@@ -590,7 +590,8 @@ class crm_bill extends class_base
 		$sum_wo_tax = 0;
 		$tax = 0;
 		$sum = 0;
-		foreach($this->get_bill_rows($b) as $row)
+		$brows = $this->get_bill_rows($b);
+		foreach($brows as $row)
 		{
 			if ($row["is_oe"])
 			{
@@ -621,12 +622,13 @@ class crm_bill extends class_base
 			$tot_amt += $row["amt"];
 			$tot_cur_sum += $cur_sum;
 		}
+		$fbr = reset($brows);
 		$this->vars(array(
 			"unit" => $unit,
 			"amt" => $tot_amt,
 			"price" => (int)($tot_cur_sum / $tot_amt),
 			"sum" => number_format($tot_cur_sum, 2),
-			"desc" => $b->prop("notes"),
+			"desc" => $b->prop("notes") == "" && count($brows) == 1 ? $fbr["name"] : $b->prop("notes"),
 			"date" => "" 
 		));
 		$rs .= $this->parse("ROW");

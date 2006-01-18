@@ -4230,6 +4230,7 @@ class crm_company extends class_base
 	/**
 		@attrib name=go_to_first_co_by_name
 		@param co_name optional
+		@param return_url optional
 	**/
 	function go_to_first_co_by_name($arr)
 	{
@@ -4240,7 +4241,7 @@ class crm_company extends class_base
 			"site_id" => array()
 		));
 		$o = $ol->begin();
-		header("Location: ".html::get_change_url($o->id())."&warn_conflicts=1");
+		header("Location: ".html::get_change_url($o->id())."&warn_conflicts=1&return_url=".urlencode($arr["return_url"]));
 		die();
 	}
 
@@ -4279,7 +4280,7 @@ class crm_company extends class_base
 			var ansa = confirm('Sellise nimega organisatsioon on juba olemas. Kas soovite minna selle objekti muutmisele?');
 			if (ansa)
 			{
-				window.location = '".$this->mk_my_orb("go_to_first_co_by_name")."&co_name=' + document.changeform.name.value; 
+				window.location = '".$this->mk_my_orb("go_to_first_co_by_name", array("return_url" => urlencode($arr["request"]["return_url"])))."&co_name=' + document.changeform.name.value; 
 				return false;
 			}
 			return false;

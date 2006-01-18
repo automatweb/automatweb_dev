@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.4 2006/01/18 18:09:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.5 2006/01/18 18:58:32 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -308,6 +308,7 @@ class crm_job_entry extends class_base
 		$t->set_prop("start1", date_edit::get_timestamp($arr["request"]["task_start"]));
 		$t->set_prop("end", date_edit::get_timestamp($arr["request"]["task_end"]));
 		$t->set_prop("content", $arr["request"]["task_content"]);
+		$t->set_prop("participants", safe_array($arr["request"]["proj_parts"]));
 		if ($t->class_id() == CL_CRM_OFFER)
 		{
 			$t->set_prop("orderer", $c->id());
@@ -319,6 +320,13 @@ class crm_job_entry extends class_base
 			$t->set_prop("project", $p->id());
 		}
 		$t->save();
+
+		// add participants to task from project
+		$task_inst = get_instance(CL_TASK);
+		foreach(safe_array($arr["request"]["proj_parts"]) as $person)
+		{
+			$task_inst->add_participant($t, obj($person));
+		}
 
 		switch($t->class_id())
 		{

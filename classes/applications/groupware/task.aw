@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.55 2006/01/18 18:09:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.56 2006/01/18 18:58:33 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1263,7 +1263,7 @@ class task extends class_base
 				)),
 				"date" => html::textbox(array(
 					"name" => "rows[$idx][date]",
-					"value" => date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : $arr["obj_inst"]->prop("start1"))),
+					"value" => date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : time())),
 					"size" => 7
 				)).$date_sel,
 				"impl" => html::select(array(
@@ -1338,7 +1338,7 @@ class task extends class_base
 			{
 				$conns = $task->connections_from(array("type" => "RELTYPE_BILL", "order_by" => "to.id"));
 				$bc = reset($conns);
-				if ($bill_id != $bc->prop("to"))
+				if ($bc && $bill_id != $bc->prop("to"))
 				{
 					$add = false;
 				}

@@ -338,6 +338,7 @@
 			<function name="go_to_first_co_by_name">
 				<arguments>
 					<optional name="co_name" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>
