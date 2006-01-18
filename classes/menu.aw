@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.142 2005/12/29 09:15:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.143 2006/01/18 16:25:10 markop Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -353,6 +353,9 @@
 
 	@reltype CTX value=21 clid=CL_FOLDER_CONTEXT
 	@caption Kontekst
+
+	@reltype LANG_REL value=22 clid=CL_MENU
+	@caption Keeleseos
 
 */
 
