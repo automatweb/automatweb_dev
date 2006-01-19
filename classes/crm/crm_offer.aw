@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.44 2006/01/04 14:36:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.45 2006/01/19 13:25:02 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -14,6 +14,9 @@
 
 	@property orderer type=select table=aw_crm_offer datatype=int
 	@caption Tellija
+
+	@property project type=relpicker table=aw_crm_offer datatype=int reltype=RELTYPE_PROJECT
+	@caption Projekt
 
 	@property start1 type=datetime_select field=start table=planner
 	@caption Algus
@@ -80,6 +83,13 @@
 
 	@property offer type=text no_caption=1
 
+@default group=parts
+
+	@property parts_tb type=toolbar no_caption=1
+
+	@property acts type=table store=no no_caption=1
+	@caption Tegevused
+
 @groupinfo content caption="Sisu" submit=no
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
@@ -87,6 +97,7 @@
 @groupinfo products_show caption=Tooted submit=no
 @groupinfo history caption=Ajalugu submit=no
 @groupinfo offer caption="Pakkumine" submit=no
+@groupinfo parts caption="Osalejad" 
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
@@ -105,6 +116,12 @@
 
 @reltype OFFER_MGR value=7 clid=CL_CRM_OFFER_MGR
 @caption Pakkumiste haldus
+
+@reltype ACTION value=8 clid=CL_CRM_DOCUMENT_ACTION
+@caption Tegevus
+
+@reltype PROJECT value=9 clid=CL_PROJECT
+@caption Projekt
 */
 
 /*
@@ -161,6 +178,10 @@ class crm_offer extends class_base
 		
 		switch($prop["name"])
 		{
+			case "acts":
+				$i = get_instance("applications/crm/crm_document_base");
+				return $i->get_property($arr);
+
 			case "start1":
 				$p = get_instance(CL_PLANNER);
 				$cal = $p->get_calendar_for_user();
@@ -308,6 +329,10 @@ class crm_offer extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "acts":
+				$i = get_instance("applications/crm/crm_document_base");
+				return $i->set_property($arr);
+
 			case "salesman":
 				if($data["value"])
 				{

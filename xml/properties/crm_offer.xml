@@ -10,6 +10,16 @@
             <caption>Tellija</caption>
       </property>
       <property>
+            <name>project</name>
+            <table>aw_crm_offer</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <datatype>int</datatype>
+            <reltype>RELTYPE_PROJECT</reltype>
+            <field>project</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
             <name>start1</name>
             <table>planner</table>
             <group>general</group>
@@ -163,6 +173,27 @@
             <no_caption>1</no_caption>
             <field>offer</field>
       </property>
+      <property>
+            <name>parts_tb</name>
+            <table>objects</table>
+            <group>parts</group>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>parts_tb</field>
+      </property>
+      <property>
+            <name>acts</name>
+            <table>objects</table>
+            <group>parts</group>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>acts</field>
+            <caption>Tegevused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -194,6 +225,9 @@
                   <caption>Pakkumine</caption>
                   <submit>no</submit>
             </offer>
+            <parts>
+                  <caption>Osalejad</caption>
+            </parts>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -238,6 +272,16 @@
                   <clid>CL_CRM_OFFER_MGR</clid>
                   <caption>Pakkumiste haldus</caption>
             </OFFER_MGR>
+            <ACTION>
+                  <value>8</value>
+                  <clid>CL_CRM_DOCUMENT_ACTION</clid>
+                  <caption>Tegevus</caption>
+            </ACTION>
+            <PROJECT>
+                  <value>9</value>
+                  <clid>CL_PROJECT</clid>
+                  <caption>Projekt</caption>
+            </PROJECT>
       </reltypes>
       <layout>
             <vbox_others>

@@ -323,7 +323,7 @@ class popup_search extends aw_template
 		
 		@attrib name=do_search
 
-		@param id required type=int acl=view
+		@param id optional
 		@param pn required 
 		@param multiple optional
 		@param clid optional 

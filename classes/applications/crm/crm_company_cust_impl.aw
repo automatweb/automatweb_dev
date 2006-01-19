@@ -1163,6 +1163,13 @@ class crm_company_cust_impl extends class_base
 				"org_id" => NULL
 			))
 		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "delete_projs",
+			"confirm" => t("Oled kindel et soovid valitud projekte kustutada?")
+		));
 	}
 
 	function _get_first_cust_cat($o)

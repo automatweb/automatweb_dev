@@ -507,6 +507,16 @@
                   <clid>CL_TASK_ROW</clid>
                   <caption>Rida</caption>
             </ROW>
+            <ATTACH>
+                  <value>8</value>
+                  <clid>
+                        <num_0>CL_CRM_MEMO</num_0>
+                        <num_1>CL_CRM_DEAL</num_1>
+                        <num_2>CL_CRM_DOCUMENT</num_2>
+                        <num_3>CRM_OFFER</num_3>
+                  </clid>
+                  <caption>MAnus</caption>
+            </ATTACH>
       </reltypes>
       <layout>
             <personal>

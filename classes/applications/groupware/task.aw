@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.56 2006/01/18 18:58:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.57 2006/01/19 13:25:02 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -174,6 +174,9 @@ caption Osalejad
 
 @reltype ROW value=7 clid=CL_TASK_ROW
 @caption Rida
+
+@reltype ATTACH value=8 clid=CL_CRM_MEMO,CL_CRM_DEAL,CL_CRM_DOCUMENT,CRM_OFFER
+@caption MAnus
 */
 
 class task extends class_base

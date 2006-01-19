@@ -269,15 +269,18 @@ class crm_company_overview_impl extends class_base
 			));
 		}
 
-		$t->define_field(array(
-			"caption" => t("Prioriteet"),
-			"name" => "priority",
-//			"chgbgcolor" => "col",
-			"align" => "center",
-			"sortable" => 1,
-			"numeric" => 1,
-			"filter" => array_unique($filt["priority"])
-		));
+		if ($r["group"] != "ovrv_offers")
+		{
+			$t->define_field(array(
+				"caption" => t("Prioriteet"),
+				"name" => "priority",
+	//			"chgbgcolor" => "col",
+				"align" => "center",
+				"sortable" => 1,
+				"numeric" => 1,
+				"filter" => array_unique($filt["priority"])
+			));
+		}
 
 		$t->define_field(array(
 			"caption" => t("Osalejad"),
@@ -307,6 +310,11 @@ class crm_company_overview_impl extends class_base
 		classload("core/icons");
 
 		$ol = $this->_get_task_list($arr);
+
+		if ($arr["request"]["group"] == "ovrv_offers")
+		{
+			return $this->_get_ovrv_offers($arr, $ol);
+		}
 		$pm = get_instance("vcl/popup_menu");
 
 		$table_data = array();
@@ -468,17 +476,16 @@ class crm_company_overview_impl extends class_base
 
 		if ($arr["request"]["act_s_print_view"] == 1)
 		{
-					$sf = new aw_template;
-		$sf->db_init();
-		$sf->tpl_init("automatweb");
-		$sf->read_template("index.tpl");
-		$sf->vars(array(
-			"content"	=> $t->draw(),
-			"uid" => aw_global_get("uid"),
-			"charset" => aw_global_get("charset")
-		));
-		die($sf->parse());
-	
+			$sf = new aw_template;
+			$sf->db_init();
+			$sf->tpl_init("automatweb");
+			$sf->read_template("index.tpl");
+			$sf->vars(array(
+				"content"	=> $t->draw(),
+				"uid" => aw_global_get("uid"),
+				"charset" => aw_global_get("charset")
+			));
+			die($sf->parse());
 		}
 	}
 
@@ -793,8 +800,17 @@ class crm_company_overview_impl extends class_base
 				break;
 
 			case "ovrv_offers":
-				$tasks = $i->get_my_offers();
-				$clid = CL_CRM_OFFER;
+				/// this tab got turned into docmanagement. whoo
+				/*$tasks = $i->get_my_offers();*/
+				$clid = array(CL_CRM_DOCUMENT_ACTION);
+				// now, find all thingies that I am part of
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_DOCUMENT_ACTION,
+					"site_id" => array(),
+					"lang_id" => array(),
+					"actor" => $u->get_current_person(),
+				));
+				$tasks = $this->make_keys($ol->ids());
 				break;
 
 			default:
@@ -900,6 +916,128 @@ class crm_company_overview_impl extends class_base
 		}
 
 		return $arg["deadline"];
+	}
+
+	function _get_ovrv_offers($arr, $ol)
+	{
+		$pm = get_instance("vcl/popup_menu");
+		$table_data = array();
+		foreach($ol->ids() as $act_id)
+		{
+			$act = obj($act_id);
+			$task_c = reset($act->connections_to());
+			$task = $task_c->from();
+
+			// if this has a predicate thingie, then check if that is done before showing it here
+			if ($this->can("view", $act->prop("predicate")))
+			{
+				$pred = obj($act->prop("predicate"));
+				if ($pred->prop("is_done") != 1)
+				{
+					continue;
+				}
+			}
+
+			if ($task->class_id() == CL_CRM_OFFER)
+			{
+				$cust = $task->prop("orderer");
+			}
+			else
+			{
+				$cust = $task->prop("customer");
+			}
+			$cust_str = "";
+			if (is_oid($cust) && $this->can("view", $cust))
+			{
+				$cust_o = obj($cust);
+				$cust_str = html::get_change_url($cust, array("return_url" => get_ru()), parse_obj_name($cust_o->name()));
+			}
+
+			$proj = $task->prop("project");
+			$proj_str = "";
+			if (is_oid($proj) && $this->can("view", $proj))
+			{
+				$proj_o = obj($proj);
+				$proj_str = html::get_change_url($proj, array("return_url" => get_ru()), parse_obj_name($proj_o->name()));
+			}
+
+			$col = "";
+			$dl = $act->prop("date");
+			if ($dl > 100 && time() > $dl)
+			{
+				$col = "#ff0000";
+			}
+			else
+			if ($dl > 100 && date("d.m.Y") == date("d.m.Y", $dl)) // today
+			{
+				$col = "#f3f27e";
+			}
+
+			$ns = html::obj_change_url($act->prop("actor"));
+			if ($ns != "")
+			{
+				$nso = obj($act->prop("actor"));
+				$work = html::obj_change_url($nso->prop("work_contact"));
+				$ns .= ($work != "" ? ", ".$work : "");
+			}
+
+			$t_id = $task->id();
+			
+			$table_data[] = array(
+				"icon" => html::img(array("url" => icons::get_icon_url($task))),
+				"customer" => $cust_str,
+				"proj_name" => $proj_str,
+				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($act->name())),
+				"deadline" => $dl,
+				"oid" => $act->id(),
+				"col" => $col,
+				"parts" => $ns,
+			);
+		}
+
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_my_tasks_t($t, $table_data, $arr["request"]);
+
+		foreach($table_data as $row)
+		{
+			if ($row["deadline"] > 100 || ($_GET["sortby"] != "" && $_GET["sortby"] != "deadline"))
+			{
+				$t->define_data($row);
+			}
+		}
+		$t->set_default_sortby("deadline");
+		$t->set_default_sorder("asc");
+
+		$t->sort_by(array(
+			"field" => $arr["request"]["sortby"],
+			"sorder" => ($arr["request"]["sortby"] == "priority" ? "desc" : $arr["request"]["sort_order"])
+		));
+
+		$t->set_sortable(false);
+		if (!($_GET["sortby"] != "" && $_GET["sortby"] != "deadline"))
+		{
+			foreach($table_data as $row)
+			{
+				if ($row["deadline"] < 100)
+				{
+					$t->define_data($row);
+				}
+			}
+		}
+
+		if ($arr["request"]["act_s_print_view"] == 1)
+		{
+			$sf = new aw_template;
+			$sf->db_init();
+			$sf->tpl_init("automatweb");
+			$sf->read_template("index.tpl");
+			$sf->vars(array(
+				"content"	=> $t->draw(),
+				"uid" => aw_global_get("uid"),
+				"charset" => aw_global_get("charset")
+			));
+			die($sf->parse());
+		}
 	}
 }
 ?>

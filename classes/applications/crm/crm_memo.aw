@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.8 2006/01/18 18:09:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.9 2006/01/19 13:25:02 kristo Exp $
 // crm_memo.aw - Memo 
 /*
 
@@ -39,7 +39,27 @@
 	@property files type=releditor reltype=RELTYPE_FILE field=meta method=serialize mode=manager props=name,file,type,comment,file_url,newwindow table_fields=name 
 	@caption Failid
 
+@default group=parts
+
+	@property parts_tb type=toolbar no_caption=1
+
+	@property acts type=table store=no no_caption=1
+	@caption Tegevused
+
+	property srch_txt type=text subtitle=1 
+	caption Otsing
+
+	property part_s_person type=textbox store=no
+	caption Isiku nimi
+
+	property part_s_co type=textbox store=no
+	caption T&ouml;&ouml;koht
+
+	property parts_s_sbt type=submit 
+	caption Otsi
+
 @groupinfo files caption="Failid"
+@groupinfo parts caption="Osalejad" 
 
 @reltype FILE value=1 clid=CL_FILE
 @caption fail
@@ -50,6 +70,8 @@
 @reltype READER value=3 clid=CL_CRM_PERSON
 @caption lugeja
 
+@reltype ACTION value=8 clid=CL_CRM_DOCUMENT_ACTION
+@caption Tegevus
 */
 
 class crm_memo extends class_base
@@ -64,94 +86,22 @@ class crm_memo extends class_base
 
 	function get_property($arr)
 	{
+		$b = get_instance("applications/crm/crm_document_base");
+		$retval = $b->get_property($arr);
+
 		$prop = &$arr["prop"];
-		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "creator":
-			case "reader":
-				$u = get_instance("users");
-				$ui = get_instance(CL_USER);
-				$c_uid = $arr["obj_inst"]->createdby();
-				if ($c_uid != "")
-				{
-					$ps = obj($ui->get_person_for_user(obj($u->get_oid_for_uid($c_uid))));
-					$co = obj($ui->get_company_for_person($ps));
-				}
-				else
-				{
-					$co = obj($ui->get_current_company());
-					$ps = obj($ui->get_current_person());
-				}
-
-				$c = get_instance(CL_CRM_COMPANY);
-				$prop["options"] = $c->get_employee_picker($co);
-	
-				if ($prop["value"] == "" && $ps)
-				{
-					$prop["value"] = $ps->id();
-				}
-				break;
-
-			case "project":
-				$i = get_instance(CL_CRM_COMPANY);
-				$myp = $i->get_my_projects();
-				if (!count($myp))
-				{
-					$ol = new object_list();
-				}
-				else
-				{
-					$ol = new object_list(array("oid" => $myp));
-				}
-				$prop["options"] = array("" => "") + $ol->names();
-				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
-				{
-					$tmp = obj($prop["value"]);
-					$prop["options"][$tmp->id()] = $tmp->name();
-				}
-				asort($prop["options"]);
-				break;
-
-			case "customer":
-				$i = get_instance(CL_CRM_COMPANY);
-				$ol = new object_list(array("oid" => $i->get_my_customers()));
-				$prop["options"] = array("" => "") + $ol->names();
-				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
-				{
-					$tmp = obj($prop["value"]);
-					$prop["options"][$tmp->id()] = $tmp->name();
-				}
-				asort($prop["options"]);
-				break;
-
-			case "task":
-				$i = get_instance(CL_CRM_COMPANY);
-				$tsk = $i->get_my_tasks();
-				if (count($tsk))
-				{
-					$ol = new object_list(array("oid" => $tsk));
-					$prop["options"] = array("" => "") + $ol->names();
-				}
-				else
-				{
-					$prop["options"] = array("" => "");
-				}
-				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
-				{
-					$tmp = obj($prop["value"]);
-					$prop["options"][$tmp->id()] = $tmp->name();
-				}
-				asort($prop["options"]);
-				break;
 		};
 		return $retval;
 	}
 
 	function set_property($arr = array())
 	{
+		$b = get_instance("applications/crm/crm_document_base");
+		$retval = $b->set_property($arr);
+
 		$prop = &$arr["prop"];
-		$retval = PROP_OK;
 		switch($prop["name"])
 		{
 			case "files":

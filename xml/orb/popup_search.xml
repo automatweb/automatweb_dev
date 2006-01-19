@@ -14,7 +14,7 @@
 		<action name="do_search">
 			<function name="do_search">
 				<arguments>
-					<required name="id" type="int" acl="view" />
+					<optional name="id" />
 					<required name="pn" />
 					<optional name="multiple" />
 					<optional name="clid" />

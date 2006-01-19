@@ -108,6 +108,25 @@
             <store>no</store>
             <caption>Failid</caption>
       </property>
+      <property>
+            <name>parts_tb</name>
+            <table>objects</table>
+            <group>parts</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>parts_tb</field>
+      </property>
+      <property>
+            <name>acts</name>
+            <table>objects</table>
+            <group>parts</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>acts</field>
+            <caption>Tegevused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_DOCUMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -118,6 +137,9 @@
             <files>
                   <caption>Failid</caption>
             </files>
+            <parts>
+                  <caption>Osalejad</caption>
+            </parts>
       </groupinfo>
       <tableinfo>
             <aw_crm_document>
@@ -142,6 +164,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>lugeja</caption>
             </READER>
+            <ACTION>
+                  <value>8</value>
+                  <clid>CL_CRM_DOCUMENT_ACTION</clid>
+                  <caption>Tegevus</caption>
+            </ACTION>
       </reltypes>
 </properties>
 

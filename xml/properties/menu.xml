@@ -790,7 +790,7 @@
                   <parent>menus</parent>
             </keywords>
             <transl>
-                  <caption>T&amp;otilde;lgi</caption>
+                  <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
       </groupinfo>
       <tableinfo>
@@ -909,6 +909,11 @@
                   <clid>CL_FOLDER_CONTEXT</clid>
                   <caption>Kontekst</caption>
             </CTX>
+            <LANG_REL>
+                  <value>22</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Keeleseos</caption>
+            </LANG_REL>
       </reltypes>
 </properties>
 

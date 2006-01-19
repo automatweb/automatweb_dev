@@ -715,7 +715,7 @@ ype=callback callback=callback_gen_forum store=no no_caption=1
 	@groupinfo my_tasks caption="Toimetused" parent=overview submit=no
 	@groupinfo meetings caption="Kohtumised" parent=overview submit=no
 	@groupinfo calls caption="Kõned" parent=overview submit=no
-	@groupinfo ovrv_offers caption="Pakkumised" parent=overview submit=no
+	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no
 
 @groupinfo projs caption="Projektid"
 	@groupinfo my_projects caption="Projektid" parent=projs submit=no
