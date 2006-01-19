@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.57 2006/01/19 13:25:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.58 2006/01/19 22:32:41 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1131,6 +1131,22 @@ class task extends class_base
 						$o->set_prop("project", $t->prop("project"));
 						$o->set_prop("task", $t->id());
 						$o->set_prop("customer", $t->prop("customer"));
+
+						if ($entry["type"] == CL_CRM_DEAL)
+						{
+							$o->connect(array(
+								"to" => $t->prop("customer"),
+								"type" => "RELTYPE_SIDE"
+							));
+							$o->connect(array(
+								"to" => $co->id(),
+								"type" => "RELTYPE_SIDE"
+							));
+							$o->set_prop("sides", array(
+								$t->prop("customer") => $t->prop("customer"),
+								$co->id() => $co->id()
+							));
+						}
 					}
 					$o->save();
 
@@ -1204,6 +1220,12 @@ class task extends class_base
 			"align" => "center"
 		));
 
+		$t->define_field(array(
+			"name" => "comments",
+			"caption" => t("Kommentaarid"),
+			"align" => "center"
+		));
+
 		/*$t->define_field(array(
 			"name" => "com",
 			"caption" => t("Kommentaar"),
@@ -1227,6 +1249,7 @@ class task extends class_base
 		$cs[] = NULL;
 		$cs[] = NULL;
 		$null_idx = 0;
+		$comm = get_instance(CL_COMMENT);
 		foreach($cs as $ro)
 		{
 			if ($ro === null)
@@ -1241,6 +1264,19 @@ class task extends class_base
 			}
 			$date_sel = "<A HREF='#'  onClick=\"var cal=new CalendarPopup();cal.select(aw_get_el('rows[$idx][date]'),'anchor".$idx."','dd/MM/yy'); return false;\"
 						   NAME='anchor".$idx."' ID='anchor".$idx."'>".t("vali")."</A>";
+
+			$comments = "";
+			if (is_oid($idx))
+			{
+
+				$comments = html::popup(array(
+					"width" => 800,
+					"height" => 500,
+					"scrollbars" => 1,
+					"url" => html::get_change_url($idx, array("group" => "comments")),
+					"caption" => sprintf(t("Kommentaarid (%s)"), $comm->get_comment_count(array("parent" => $idx)))
+				));
+			}
 
 			$is = (is_array($row->prop("impl")) && count($row->prop("impl"))) ? $row->prop("impl") : $def_impl;
 			foreach(safe_array($is) as $is_id)
@@ -1300,6 +1336,7 @@ class task extends class_base
 					"value" => 1,
 					"checked" => $row->prop("on_bill")
 				))),
+				"comments" => $comments
 			));
 		}
 		$t->set_sortable(false);

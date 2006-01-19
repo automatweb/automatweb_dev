@@ -83,6 +83,14 @@
             <field>aw_bill_id</field>
             <caption>Arve</caption>
       </property>
+      <property>
+            <name>comments</name>
+            <table>objects</table>
+            <group>comments</group>
+            <type>comments</type>
+            <field>comments</field>
+            <caption>Kommentaarid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK_ROW</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -90,6 +98,11 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <comments>
+                  <caption>Kommentaarid</caption>
+            </comments>
+      </groupinfo>
       <tableinfo>
             <aw_task_rows>
                   <index>aw_oid</index>

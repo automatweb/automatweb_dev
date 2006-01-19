@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.1 2006/01/18 18:09:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.2 2006/01/19 22:32:41 kristo Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -37,6 +37,13 @@
 
 	@property bill_id type=relpicker reltype=RELTYPE_BILL table=aw_task_rows field=aw_bill_id
 	@caption Arve
+
+@default group=comments
+
+	@property comments type=comments
+	@caption Kommentaarid
+
+@groupinfo comments caption="Kommentaarid"
 
 @reltype BILL value=1 clid=CL_CRM_BILL
 @caption Arve

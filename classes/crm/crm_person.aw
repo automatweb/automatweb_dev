@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.103 2006/01/19 17:12:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.104 2006/01/19 22:32:41 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -92,6 +92,9 @@ caption Msn/yahoo/aol/icq
 
 	@property is_important type=checkbox ch_value=1 store=no
 	@caption Oluline
+
+	@property crm_settings type=text store=no
+	@caption CRM Seaded
 
 //@property profession type=select store=no edit_only=1
 //@caption Ametinimetus
@@ -865,7 +868,7 @@ class crm_person extends class_base
 				);
 				break;
 			
-			case "name":
+			case "crm_settings":
 				$u = get_instance(CL_USER);
 				$p = $u->get_current_person();
 				if ($p == $arr["obj_inst"]->id())
@@ -886,12 +889,14 @@ class crm_person extends class_base
 					if ($ol->count())
 					{
 						$b = $ol->begin();
-						$data["value"] .= " / ".html::href(array(
+						$data["value"] = html::href(array(
 							"url" => html::get_change_url($b->id(), array("return_url" => get_ru())),
-							"caption" => t("Muuda kliendibaasi seadeid")
+							"caption" => t("Muuda")
 						));
+						return PROP_OK;
 					}
 				}
+				return PROP_IGNORE;
 				break;
 		}
 		return $retval;

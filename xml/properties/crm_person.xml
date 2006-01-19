@@ -232,6 +232,15 @@
             <caption>Oluline</caption>
       </property>
       <property>
+            <name>crm_settings</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>text</type>
+            <store>no</store>
+            <field>crm_settings</field>
+            <caption>CRM Seaded</caption>
+      </property>
+      <property>
             <name>notes</name>
             <table>kliendibaas_isik</table>
             <group>description</group>

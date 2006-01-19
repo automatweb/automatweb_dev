@@ -109,6 +109,32 @@ class crm_company_overview_impl extends class_base
 		$this->overview = array();
 		classload("core/icons");
 
+		// get b-days
+		if ($calo->prop("show_bdays") == 1)
+		{
+			$s_m = date("m", $start);
+			$e_m = date("m", $end);
+			$pred = $s_m > $e_m ? "OR" : "AND";
+			$q = "
+				SELECT 
+					objects.name as name,
+					objects.oid as oid,
+					kliendibaas_isik.birthday as bd
+				FROM 
+					objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of  
+				WHERE	
+					objects.class_id = '145' AND 
+					(MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) >= $s_m $pred MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) <= $e_m) AND 
+					objects.status > 0  AND
+					kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
+			";
+			$this->db_query($q);
+			while ($row = $this->db_next())
+			{
+				$evts[$row["oid"]] = $row["oid"];
+			}
+		}
+
 		foreach($evts as $obj_id)
 		{
 			$item = new object($obj_id);
@@ -119,7 +145,14 @@ class crm_company_overview_impl extends class_base
 			{
 				$date = $item->prop("date");
 			}
-			if ($range["viewtype"] != "relative" && $date < $overview_start)
+			else
+			if ($item->class_id() == CL_CRM_PERSON && $calo)
+			{
+				$ds = $calo->prop("day_start");
+				$bd = $item->prop("birthday");
+				$date = mktime($ds["hour"], $ds["minute"], 0, date("m", $bd), date("d", $bd), date("Y"));
+			}
+			if ($range["viewtype"] != "relative" && ($date < $overview_start))
 			{
 				continue;
 			};
@@ -143,6 +176,13 @@ class crm_company_overview_impl extends class_base
 					"return_url" => $return_url,
 				),CL_DOCUMENT);
 			}
+			if ($item->class_id() == CL_CRM_PERSON)
+			{
+				$link = $this->mk_my_orb("change",array(
+					"id" => $item->id(),
+					"return_url" => $return_url,
+				),CL_CRM_PERSON);
+			}
 			else
 			{
 				$link = $planner->get_event_edit_link(array(
@@ -159,7 +199,7 @@ class crm_company_overview_impl extends class_base
 					"item_start" => ($item->class_id() == CL_CRM_MEETING ? $item->prop("start1") : NULL),
 					"item_end" => ($item->class_id() == CL_CRM_MEETING ? $item->prop("end") : NULL),
 					"data" => array(
-						"name" => $item->name(),
+						"name" => $item->class_id() == CL_CRM_PERSON ? sprintf(t("%s s&uuml;nnip&auml;ev!"), $item->name()) : $item->name(),
 						"link" => $link,
 						"modifiedby" => $item->prop("modifiedby"),
 						"icon" => $icon,

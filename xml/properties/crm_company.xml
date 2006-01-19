@@ -21,6 +21,15 @@
             <caption>Organisatsiooni nimi</caption>
       </property>
       <property>
+            <name>short_name</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <size>10</size>
+            <field>aw_short_name</field>
+            <caption>Nime l&amp;amp;uuml;hend</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general_sub</group>
@@ -2196,6 +2205,7 @@
             <org_images>
                   <caption>Pildid</caption>
                   <submit>yes</submit>
+                  <parent>general</parent>
             </org_images>
             <documents_all>
                   <caption>Dokumendid</caption>

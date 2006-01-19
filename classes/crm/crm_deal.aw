@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.11 2006/01/19 13:25:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.12 2006/01/19 22:32:41 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -34,6 +34,9 @@
 	@property comment type=textarea rows=5 cols=50 table=objects field=comment
 	@caption Kirjeldus
 
+	@property sides type=relpicker store=connect multiple=1 reltype=RELTYPE_SIDE table=objects field=meta method=serialize
+	@caption Osapooled
+
 @default group=files
 
 	@property files type=releditor reltype=RELTYPE_FILE field=meta method=serialize mode=manager props=name,file,type,comment,file_url,newwindow table_fields=name 
@@ -57,6 +60,9 @@
 
 @reltype READER value=3 clid=CL_CRM_PERSON
 @caption lugeja
+
+@reltype SIDE value=4 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Osapool
 
 @reltype ACTION value=8 clid=CL_CRM_DOCUMENT_ACTION
 @caption Tegevus

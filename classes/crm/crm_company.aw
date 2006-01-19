@@ -21,6 +21,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create
 	@property name type=textbox size=30 maxlength=255 table=objects
 	@caption Organisatsiooni nimi
 
+	@property short_name type=textbox size=10 table=kliendibaas_firma field=aw_short_name
+	@caption Nime l&uuml;hend
+
 	@property comment type=textarea cols=65 rows=3 table=objects
 	@caption Kommentaar
 
@@ -733,7 +736,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	groupinfo org_objects caption="Objektid" submit=no parent=org_objects_main
 
 
-@groupinfo org_images caption="Pildid" submit=yes
+@groupinfo org_images caption="Pildid" submit=yes parent=general
 
 groupinfo documents caption="Dokumendid" submit=no
 
@@ -3417,18 +3420,19 @@ class crm_company extends class_base
 			$cust = $proj->get_first_obj_by_reltype("RELTYPE_ORDERER");
 			$bill->set_prop("impl", reset($proj->prop("implementor")));
 		}
-		
+		else
 		if (is_oid($arr["cust"]))
 		{
 			$cust = obj($arr["cust"]);
 			$u = get_instance(CL_USER);
 			$bill->set_prop("impl", $u->get_current_company());
 		}
+
 		if ($cust)
 		{
 			$bill->set_prop("customer", $cust->id());
 		}
-		
+
 		$bill->save();
 
 		foreach(safe_array($arr["sel"]) as $task)
@@ -4210,14 +4214,6 @@ class crm_company extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] == "general")
-		{
-			$u = get_instance(CL_USER);
-			if ($u->get_current_company() == $arr["obj_inst"]->id())
-			{
-				$arr["caption"] = "B&uuml;roo";
-			}
-		}
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;

@@ -64,6 +64,18 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
+            <name>sides</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_SIDE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Osapooled</caption>
+      </property>
+      <property>
             <name>files</name>
             <table>objects</table>
             <group>files</group>
@@ -138,6 +150,14 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>lugeja</caption>
             </READER>
+            <SIDE>
+                  <value>4</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
+                  <caption>Osapool</caption>
+            </SIDE>
             <ACTION>
                   <value>8</value>
                   <clid>CL_CRM_DOCUMENT_ACTION</clid>
