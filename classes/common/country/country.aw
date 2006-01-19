@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country.aw,v 1.4 2005/11/21 09:04:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country.aw,v 1.5 2006/01/19 19:21:51 voldemar Exp $
 // country.aw - Riik v2
 /*
 
@@ -16,6 +16,10 @@
 @default group=grp_settings
 	@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE
 	@caption Haldusjaotus
+
+	@property code type=textbox
+	@comment Kahetäheline riigi kood (ISO 3166-1 alpha-2)
+	@caption Kood
 
 
 // --------------- RELATION TYPES ---------------------
