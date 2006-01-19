@@ -11,6 +11,16 @@
             <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
             <caption>Haldusjaotus</caption>
       </property>
+      <property>
+            <name>code</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>textbox</type>
+            <comment>Kahet&amp;auml;heline riigi kood (ISO 3166-1 alpha-2)</comment>
+            <caption>Kood</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_COUNTRY</syslog_type>
             <relationmgr>yes</relationmgr>
