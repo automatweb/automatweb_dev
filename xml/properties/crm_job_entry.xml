@@ -161,6 +161,16 @@
             <caption>Osalejad</caption>
       </property>
       <property>
+            <name>proj_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Liik</caption>
+      </property>
+      <property>
             <name>task_desc</name>
             <table>objects</table>
             <group>general</group>

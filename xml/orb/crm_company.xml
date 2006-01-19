@@ -343,6 +343,14 @@
 			</function>
 		</action>
 
+		<action name="disp_conflict_pop">
+			<function name="disp_conflict_pop">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="name_autocomplete_source">
 			<function name="name_autocomplete_source">
 				<arguments>

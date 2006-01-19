@@ -4264,6 +4264,33 @@ class crm_company extends class_base
 		die();
 	}
 
+	/**
+		@attrib name=disp_conflict_pop
+		@param id required
+	**/
+	function disp_conflict_pop($arr)
+	{
+		$co = obj($arr["id"]);
+		$u = get_instance(CL_USER);
+		$ol = new object_list(array(
+			"class_id" => CL_PROJECT,
+			"CL_PROJECT.RELTYPE_SIDE.name" => $co->name(),
+			//"CL_PROJECT.RELTYPE_ORDERER" => $u->get_current_company(),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$ret = t("Konfliktsed projektid:<br>");
+		foreach($ol->arr() as $o)
+		{
+			$ret .= html::href(array(
+				"url" => html::get_change_url($o->id()),
+				"caption" => $o->name(),
+				"target" => "_blank"
+			))."<br>";
+		}
+		return $ret;
+	}
+
 	function callback_generate_scripts($arr)
 	{
 		if (!$arr["new"])
@@ -4283,7 +4310,8 @@ class crm_company extends class_base
 				));
 				if ($ol->count())
 				{
-					return "alert('Konfliktsed projektid:\\n".join("\\n", $ol->names())."');";
+					$link = $this->mk_my_orb("disp_conflict_pop", array("id" => $arr["obj_inst"]->id()));
+					return "aw_popup_scroll('$link','confl','200','200');"; 
 				}
 			}
 			return "";

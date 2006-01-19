@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.102 2006/01/19 16:17:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.103 2006/01/19 17:12:09 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -204,6 +204,9 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 @default group=data
 
+	@property server_folder type=textbox table=objects field=meta method=serialize group=user_settings
+	@caption Kataloog serveris, kus asuvad failid
+
 @property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect
 @caption Keeled
 
@@ -231,10 +234,49 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
+@default group=documents_all
+
+	@property docs_tb type=toolbar no_caption=1
+
+	@layout docs_lt type=hbox width=20%:80%
+
+		@layout docs_left type=vbox parent=docs_lt 
+
+			@property docs_tree type=treeview parent=docs_left no_caption=1
+
+			@layout docs_search type=vbox parent=docs_left
+
+				@property docs_s_name type=textbox size=30 store=no captionside=top parent=docs_search
+				@caption Nimetus
+
+				@property docs_s_type type=select store=no captionside=top parent=docs_search
+				@caption Liik
+
+				@property docs_s_task type=textbox size=30 store=no captionside=top parent=docs_search
+				@caption Toimetus
+
+				@property docs_s_user type=textbox size=30 store=no captionside=top parent=docs_search
+				@caption Tegija
+
+				@property docs_s_customer type=textbox size=30 store=no captionside=top parent=docs_search
+				@caption Klient
+
+			@layout docs_s_but_row type=hbox parent=docs_left
+
+				@property docs_s_sbt type=submit store=no no_caption=1 parent=docs_s_but_row
+				@caption Otsi
+
+				@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
+				@caption T&uuml;hista otsing
+	
+
+		@property docs_tbl type=table store=no no_caption=1 parent=docs_lt
+
 ----------------------------------------------
 @groupinfo general2 caption="Üldine" parent=general
 @groupinfo description caption="Kirjeldus" parent=general
 @groupinfo relatives caption="Sugulased" parent=general
+@groupinfo documents_all caption="Dokumendid" submit=no parent=general
 @groupinfo contact caption="Kontaktandmed"
 @groupinfo overview caption=Tegevused
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
@@ -416,6 +458,12 @@ caption CV
 @reltype LANGUAGE value=45 clid=CL_LANGUAGE
 @caption Keel
 
+@reltype DOCS_FOLDER value=46 clid=CL_MENU
+@caption Dokumentide kataloog
+
+@reltype SERVER_FILES value=51 clid=CL_SERVER_FOLDER
+@caption Failide kataloog serveris
+
 */
 
 class crm_person extends class_base
@@ -462,6 +510,44 @@ class crm_person extends class_base
 	
 		switch($data["name"])
 		{
+			case "server_folder":
+				$i = get_instance(CL_CRM_COMPANY);
+				$i->_proc_server_folder($arr);
+				break;
+
+			case "docs_tb":
+			case "docs_tree":
+			case "docs_tbl":
+			case 'docs_s_type':
+			case "docs_news_tb":
+			case "dn_res":
+			case "documents_lmod":
+				static $docs_impl;
+				if (!$docs_impl)
+				{
+					$docs_impl = get_instance("applications/crm/crm_company_docs_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $docs_impl->$fn($arr);
+			
+
+			case 'docs_s_name':
+			case 'docs_s_task':
+			case 'docs_s_name':
+			case 'docs_s_customer':
+			case 'docs_s_user':
+			case 'docs_s_sbt':
+			case 'docs_s_clear':
+				if(!$arr['request']['do_doc_search'])
+				{
+					return PROP_IGNORE;
+				}
+				else
+				{
+					$data['value'] = $arr['request'][$data["name"]];
+				}
+				break;
+
 			case "is_important":
 				$u = get_instance(CL_USER);
 				$p = obj($u->get_current_person());
@@ -2491,7 +2577,8 @@ class crm_person extends class_base
 				));
 				if ($ol->count())
 				{
-					return "alert('Konfliktsed projektid:\\n".join("\\n", $ol->names())."');";
+					$link = $this->mk_my_orb("disp_conflict_pop", array("id" => $arr["obj_inst"]->id()),CL_CRM_COMPANY);
+					return "aw_popup_scroll('$link','confl','200','200');"; 
 				}
 			}
 			return "";

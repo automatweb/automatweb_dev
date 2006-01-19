@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.5 2006/01/18 18:58:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.6 2006/01/19 17:12:08 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -62,6 +62,9 @@
 @property proj_parts type=select multiple=1
 @caption Osalejad
 
+@property proj_type type=select multiple=1
+@caption Liik
+
 @property task_desc type=text subtitle=1 
 @caption Tegevuse andmed
 
@@ -100,6 +103,14 @@ class crm_job_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "proj_type":
+				$cl = get_instance(CL_CLASSIFICATOR);
+				$prop["options"] = $cl->get_options_for(array(
+					"name" => "proj_type",
+					"clid" => CL_PROJECT
+				));
+				break;
+
 			case "name":
 				return PROP_IGNORE;
 
@@ -289,6 +300,7 @@ class crm_job_entry extends class_base
 		$p->set_prop("orderer", $c->id());
 		$p->set_prop("description", $arr["request"]["proj_desc"]);
 		$p->set_prop("participants", $arr["request"]["proj_parts"]);
+		$p->set_prop("proj_type", $arr["request"]["proj_type"]);
 		$p->save();
 		$si = __get_site_instance();
 		if (method_exists($si, "project_gen_code"))
@@ -371,7 +383,7 @@ class crm_job_entry extends class_base
 				}
 				break;
 
-			case CL_CRM_CALL:
+			case CL_CRM_MEETING:
 				foreach((array)$arr["request"]["proj_parts"] as $part)
 				{
 					if (!$this->can("view", $part))
@@ -382,6 +394,15 @@ class crm_job_entry extends class_base
 					$_pers->connect(array(
 						"to" => $t->id(),
 						"type" => "RELTYPE_PERSON_MEETING"
+					));
+				}
+
+				// connect resources
+				foreach(safe_array($arr["request"]["resource_sel"]) as $res_id)
+				{
+					$t->connect(array(
+						"to" => $res_id,
+						"type" => "RELTYPE_RESOURCE"
 					));
 				}
 				break;

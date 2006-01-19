@@ -489,6 +489,15 @@
             <field>add_edu_editor</field>
       </property>
       <property>
+            <name>server_folder</name>
+            <table>objects</table>
+            <group>user_settings</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kataloog serveris, kus asuvad failid</caption>
+      </property>
+      <property>
             <name>languages</name>
             <table>kliendibaas_isik</table>
             <group>data</group>
@@ -570,6 +579,116 @@
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <property>
+            <name>docs_tb</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>docs_tb</field>
+      </property>
+      <property>
+            <name>docs_tree</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>treeview</type>
+            <parent>docs_left</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>docs_tree</field>
+      </property>
+      <property>
+            <name>docs_s_name</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_name</field>
+            <caption>Nimetus</caption>
+      </property>
+      <property>
+            <name>docs_s_type</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_type</field>
+            <caption>Liik</caption>
+      </property>
+      <property>
+            <name>docs_s_task</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_task</field>
+            <caption>Toimetus</caption>
+      </property>
+      <property>
+            <name>docs_s_user</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_user</field>
+            <caption>Tegija</caption>
+      </property>
+      <property>
+            <name>docs_s_customer</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>docs_s_sbt</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>docs_s_but_row</parent>
+            <field>docs_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>docs_s_clear</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>docs_s_but_row</parent>
+            <field>docs_s_clear</field>
+            <caption>T&amp;amp;uuml;hista otsing</caption>
+      </property>
+      <property>
+            <name>docs_tbl</name>
+            <table>kliendibaas_isik</table>
+            <group>documents_all</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>docs_lt</parent>
+            <field>docs_tbl</field>
+      </property>
+      <property>
             <name>templates</name>
             <table>objects</table>
             <group>forms</group>
@@ -596,6 +715,11 @@
                   <caption>Sugulased</caption>
                   <parent>general</parent>
             </relatives>
+            <documents_all>
+                  <caption>Dokumendid</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </documents_all>
             <contact>
                   <caption>Kontaktandmed</caption>
             </contact>
@@ -831,6 +955,38 @@
                   <clid>CL_LANGUAGE</clid>
                   <caption>Keel</caption>
             </LANGUAGE>
+            <DOCS_FOLDER>
+                  <value>46</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Dokumentide kataloog</caption>
+            </DOCS_FOLDER>
+            <SERVER_FILES>
+                  <value>51</value>
+                  <clid>CL_SERVER_FOLDER</clid>
+                  <caption>Failide kataloog serveris</caption>
+            </SERVER_FILES>
       </reltypes>
+      <layout>
+            <docs_lt>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>documents_all</group>
+            </docs_lt>
+            <docs_left>
+                  <type>vbox</type>
+                  <parent>docs_lt</parent>
+                  <group>documents_all</group>
+            </docs_left>
+            <docs_search>
+                  <type>vbox</type>
+                  <parent>docs_left</parent>
+                  <group>documents_all</group>
+            </docs_search>
+            <docs_s_but_row>
+                  <type>hbox</type>
+                  <parent>docs_left</parent>
+                  <group>documents_all</group>
+            </docs_s_but_row>
+      </layout>
 </properties>
 
