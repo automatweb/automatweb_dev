@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.12 2006/01/19 22:32:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.13 2006/01/19 22:40:32 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -91,8 +91,10 @@ class crm_deal extends class_base
 
 	function set_property($arr = array())
 	{
+		$b = get_instance("applications/crm/crm_document_base");
+		$retval = $b->set_property($arr);
+
 		$prop = &$arr["prop"];
-		$retval = PROP_OK;
 		switch($prop["name"])
 		{
 		}
