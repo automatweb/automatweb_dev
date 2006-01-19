@@ -1197,6 +1197,11 @@ class crm_company extends class_base
 				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://info.eer.ee/ari/ariweb_package1.lihtparingu_vastus METHOD=POST name=kraaks><INPUT TYPE=text NAME=paritud_arinimi><INPUT TYPE=text NAME=paritud_arir_kood><input type=submit></form>\" );win.document.kraaks.paritud_arinimi.value = document.changeform.name.value;win.document.kraaks.paritud_arir_kood.value = document.changeform.reg_nr.value;win.document.kraaks.submit();'>&Auml;riregistri p&auml;ring</a>";
 				break;
 
+			case "tax_nr":
+				// append link to go to thingie
+				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://maksuamet.ma.ee/e-service/doc/a0003.xsql METHOD=POST name=kraaks><INPUT TYPE=text NAME=p_kkood><input type=hidden name=p_submit value=Otsi><input type=hidden name=p_isikukood ><input type=hidden name=p_tegevus ><input type=hidden name=p_context ><input type=hidden name=p_tagasi ><input type=hidden name=p_mode value=1><input type=hidden name=p_queryobject></form>\" );win.document.kraaks.p_kkood.value = document.changeform.tax_nr.value;win.document.kraaks.submit();'>Maksuameti p&auml;ring</a>";
+				break;
+
 			case "contact_person":
 			case "contact_person2":
 			case "contact_person3":
@@ -1516,11 +1521,18 @@ class crm_company extends class_base
 
 			case "act_s_status":
 				$data["options"] = array(1 => t("T&ouml;&ouml;s"), 2 => t("Tehtud"), "3" => t("K&otilde;ik"));
-				
-			case "act_s_cust":
-			case "act_s_task_name":
+				$data['value'] = $arr['request'][$data["name"]];
+				break;
+
 			case "act_s_task_content":
 			case "act_s_code":
+				if ($arr["request"]["group"] == "ovrv_offers")
+				{
+					return PROP_IGNORE;
+				}
+
+			case "act_s_cust":
+			case "act_s_task_name":
 			case "act_s_proj_name":
 			case "act_s_sbt":
 				$data['value'] = $arr['request'][$data["name"]];

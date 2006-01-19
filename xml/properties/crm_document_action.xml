@@ -52,6 +52,15 @@
             <field>aw_is_done</field>
             <caption>Tehtud</caption>
       </property>
+      <property>
+            <name>document</name>
+            <table>aw_crm_doc_actions</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DOC</reltype>
+            <field>aw_document</field>
+            <caption>Dokument</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_DOCUMENT_ACTION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -77,6 +86,16 @@
                   <clid>CL_CRM_DOCUMENT_ACTION</clid>
                   <caption>Eeldustegevus</caption>
             </PRED>
+            <DOC>
+                  <value>3</value>
+                  <clid>
+                        <num_0>CL_CRM_MEMO</num_0>
+                        <num_1>CL_CRM_DEAL</num_1>
+                        <num_2>CL_CRM_OFFER</num_2>
+                        <num_3>CL_CRM_DOCUMENT</num_3>
+                  </clid>
+                  <caption>Dokument</caption>
+            </DOC>
       </reltypes>
 </properties>
 

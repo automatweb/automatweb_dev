@@ -102,7 +102,7 @@
             <group>general</group>
             <type>select</type>
             <field>oppevorm</field>
-            <caption>&amp;Otilde;ppevorm</caption>
+            <caption>&amp;amp;Otilde;ppevorm</caption>
       </property>
       <property>
             <name>eelistus</name>

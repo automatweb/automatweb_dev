@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document_action.aw,v 1.1 2006/01/19 13:25:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document_action.aw,v 1.2 2006/01/19 16:17:03 kristo Exp $
 // crm_document_action.aw - CRM Dokumendi tegevus 
 /*
 
@@ -27,11 +27,17 @@
 	@property is_done type=checkbox ch_value=1 field=aw_is_done
 	@caption Tehtud
 
+	@property document type=relpicker reltype=RELTYPE_DOC field=aw_document
+	@caption Dokument
+
 @reltype ACTOR value=1 clid=CL_CRM_PERSON
 @caption Tegija
 
 @reltype PRED value=2 clid=CL_CRM_DOCUMENT_ACTION
 @caption Eeldustegevus
+
+@reltype DOC value=3 clid=CL_CRM_MEMO,CL_CRM_DEAL,CL_CRM_OFFER,CL_CRM_DOCUMENT
+@caption Dokument
 */
 
 class crm_document_action extends class_base

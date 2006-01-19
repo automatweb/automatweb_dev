@@ -114,13 +114,28 @@ class crm_company_overview_impl extends class_base
 			$item = new object($obj_id);
 			// relative needs last n and next m items, those might be 
 			// outside of the current range
-			if ($range["viewtype"] != "relative" && $item->prop("start1") < $overview_start)
+			$date = $item->prop("start1");
+			if ($item->class_id() == CL_CRM_DOCUMENT_ACTION)
+			{
+				$date = $item->prop("date");
+			}
+			if ($range["viewtype"] != "relative" && $date < $overview_start)
 			{
 				continue;
 			};
-			
+
 			$icon = icons::get_icon_url($item);
 
+			if ($item->class_id() == CL_CRM_DOCUMENT_ACTION)
+			{
+				$t_c = reset($item->connections_to());
+				$t_o = $t_c->from();
+				$link = $this->mk_my_orb("change",array(
+					"id" => $t_o->id(),
+					"return_url" => $return_url,
+				),$t_o->class_id());
+			}
+			else
 			if ($item->class_id() == CL_DOCUMENT)
 			{
 				$link = $this->mk_my_orb("change",array(
@@ -137,10 +152,10 @@ class crm_company_overview_impl extends class_base
 				));
 			};
 
-			if ($item->prop("start1") > $start)
+			if ($date > $start)
 			{
 				$t->add_item(array(
-					"timestamp" => $item->prop("start1"),
+					"timestamp" => $date,
 					"item_start" => ($item->class_id() == CL_CRM_MEETING ? $item->prop("start1") : NULL),
 					"item_end" => ($item->class_id() == CL_CRM_MEETING ? $item->prop("end") : NULL),
 					"data" => array(
@@ -153,9 +168,9 @@ class crm_company_overview_impl extends class_base
 				));
 			};
 
-			if ($item->prop("start1") > $overview_start)
+			if ($date > $overview_start)
 			{
-				$this->overview[$item->prop("start1")] = 1;
+				$this->overview[$date] = 1;
 			};
 		}
 	}
@@ -512,10 +527,22 @@ class crm_company_overview_impl extends class_base
 	
 		if ($r["act_s_cust"] != "")
 		{
-			$res[$def.".customer(CL_CRM_COMPANY).name"] = "%".$r["act_s_cust"]."%";
+			if ($clid == CL_CRM_DOCUMENT_ACTION)
+			{
+				$res[$def.".document.customer.name"] = "%".$r["act_s_cust"]."%";
+			}
+			else
+			{
+				$res[$def.".customer(CL_CRM_COMPANY).name"] = "%".$r["act_s_cust"]."%";
+			}
 		}
 		if ($r["act_s_part"] != "")
 		{
+			if ($clid == CL_CRM_DOCUMENT_ACTION)
+			{
+				$res[$def.".actor.name"] = map("%%%s%%", explode(",", $r["act_s_part"]));
+			}
+			else
 			if ($clid == CL_CRM_OFFER)
 			{
 				$res["CL_CRM_OFFER.RELTYPE_SALESMAN.name"] = map("%%%s%%", explode(",", $r["act_s_part"]));
@@ -597,7 +624,14 @@ class crm_company_overview_impl extends class_base
 		}
 		if ($r["act_s_proj_name"] != "")
 		{
-			$res[$def.".project(CL_PROJECT).name"] = "%".$r["act_s_proj_name"]."%";
+			if ($clid == CL_CRM_DOCUMENT_ACTION)
+			{
+				$res[$def.".document.project.name"] = "%".$r["act_s_proj_name"]."%";
+			}
+			else
+			{
+				$res[$def.".project(CL_PROJECT).name"] = "%".$r["act_s_proj_name"]."%";
+			}
 		}
 
 		$r["act_s_dl_from"] = date_edit::get_timestamp($r["act_s_dl_from"]);
@@ -607,6 +641,11 @@ class crm_company_overview_impl extends class_base
 		if ($clid == CL_CRM_OFFER || $clid == CL_CRM_MEETING || $clid == CL_CRM_CALL )
 		{
 			$dl = "start1";
+		}
+		else
+		if ($clid == CL_CRM_DOCUMENT_ACTION)
+		{
+			$dl = "date";
 		}
 		if ($r["act_s_dl_from"] > 1 && $r["act_s_dl_to"] > 1)
 		{
@@ -625,7 +664,14 @@ class crm_company_overview_impl extends class_base
 
 		if ($r["act_s_status"] > 0 && $r["act_s_status"] < 3)
 		{
-			$res["flags"] = array("mask" => OBJ_IS_DONE, "flags" => $r["act_s_status"] == 1 ? 0 : OBJ_IS_DONE);
+			if ($clid == CL_CRM_DOCUMENT_ACTION)
+			{
+				$res["is_done"] = $r["act_s_status"] == 1 ? 0 : 1;
+			}
+			else
+			{
+				$res["flags"] = array("mask" => OBJ_IS_DONE, "flags" => $r["act_s_status"] == 1 ? 0 : OBJ_IS_DONE);
+			}
 		}
 		return $res;
 	}
@@ -764,8 +810,8 @@ class crm_company_overview_impl extends class_base
 				break;
 
 			case "ovrv_offers":
-				$args["type"] = "RELTYPE_OFFER";
-				$clid = CL_CRM_OFFER;
+				//$args["type"] = "RELTYPE_OFFER";
+				$clid = CL_CRM_DOCUMENT_ACTION;
 				break;
 
 			default:
@@ -801,8 +847,7 @@ class crm_company_overview_impl extends class_base
 
 			case "ovrv_offers":
 				/// this tab got turned into docmanagement. whoo
-				/*$tasks = $i->get_my_offers();*/
-				$clid = array(CL_CRM_DOCUMENT_ACTION);
+				$clid = CL_CRM_DOCUMENT_ACTION;
 				// now, find all thingies that I am part of
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_DOCUMENT_ACTION,
@@ -852,7 +897,8 @@ class crm_company_overview_impl extends class_base
 			{
 				$param = array();
 			}
-			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $param, $clid));
+			$p = $this->_get_tasks_search_filt($arr["request"], $param, $clid);
+			$ol = new object_list($p);
 		}
 		else
 		{
@@ -987,7 +1033,7 @@ class crm_company_overview_impl extends class_base
 				"icon" => html::img(array("url" => icons::get_icon_url($task))),
 				"customer" => $cust_str,
 				"proj_name" => $proj_str,
-				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($act->name())),
+				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($task->name()))." / ".html::get_change_url($act->id(), array("return_url" => get_ru()), parse_obj_name($act->name())),
 				"deadline" => $dl,
 				"oid" => $act->id(),
 				"col" => $col,

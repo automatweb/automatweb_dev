@@ -278,9 +278,10 @@ class crm_document_base extends class_base
 				$cos = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ACTION", "to" => $_oid));
 				$co = reset($cos);
 				$o = $co->to();
-				if ($row["actor"] == "" && $row["action"] == "")
+				if ($row["actor"] == 0 && $row["action"] == "")
 				{
 					$o->delete();
+					continue;
 				}
 			}
 
@@ -292,6 +293,7 @@ class crm_document_base extends class_base
 			$o->set_prop("ord", $row["ord"]);
 			$o->set_prop("predicate", $this->_find_pred_oid($arr["obj_inst"], $row["predicate"]));
 			$o->set_prop("is_done", $row["done"]);
+			$o->set_prop("document", $arr["obj_inst"]->id());
 			$o->save();
 
 			$arr["obj_inst"]->connect(array(

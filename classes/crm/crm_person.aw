@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.101 2006/01/16 10:27:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.102 2006/01/19 16:17:03 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2457,6 +2457,7 @@ class crm_person extends class_base
 	/**
 		@attrib name=go_to_first_person_by_name
 		@param co_name optional
+		@param return_url optional
 	**/
 	function go_to_first_person_by_name($arr)
 	{
@@ -2467,12 +2468,34 @@ class crm_person extends class_base
 			"site_id" => array()
 		));
 		$o = $ol->begin();
-		header("Location: ".html::get_change_url($o->id()));
+		header("Location: ".html::get_change_url($o->id())."&return_url=".urlencode($arr["return_url"])."&warn_conflicts=1");
 		die();
 	}
 
 	function callback_generate_scripts($arr)
 	{
+		if (!$arr["new"])
+		{
+			if ($arr["request"]["warn_conflicts"] == 1)
+			{
+				// get conflicts list and warn user if there are any
+
+				// to do this, get all projects for this company that have the current company as a side
+				$u = get_instance(CL_USER);
+				$ol = new object_list(array(
+					"class_id" => CL_PROJECT,
+					"CL_PROJECT.RELTYPE_SIDE.name" => $arr["obj_inst"]->name(),
+					//"CL_PROJECT.RELTYPE_ORDERER" => $u->get_current_company(),
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				if ($ol->count())
+				{
+					return "alert('Konfliktsed projektid:\\n".join("\\n", $ol->names())."');";
+				}
+			}
+			return "";
+		}
 		return 
 		"function aw_submit_handler() {".
 		"if (document.changeform.firstname.value=='".$arr["obj_inst"]->prop("firstname")."' && document.changeform.lastname.value=='".$arr["obj_inst"]->prop("lastname")."') { return true; }".
@@ -2486,7 +2509,7 @@ class crm_person extends class_base
 			var ansa = confirm('Sellise nimega isik on juba olemas. Kas soovite minna selle objekti muutmisele?');
 			if (ansa)
 			{
-				window.location = '".$this->mk_my_orb("go_to_first_person_by_name")."&co_name=' + document.changeform.firstname.value + ' '+document.changeform.lastname.value; 
+				window.location = '".$this->mk_my_orb("go_to_first_person_by_name", array("return_url" => urlencode($arr["request"]["return_url"])))."&co_name=' + document.changeform.firstname.value + ' '+document.changeform.lastname.value; 
 				return false;
 			}
 		}".

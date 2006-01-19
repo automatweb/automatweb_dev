@@ -94,7 +94,7 @@
             <field>meta</field>
             <method>serialize</method>
             <ch_value>1</ch_value>
-            <caption>Kinnitan andmed (peale andmete kinnitamist ja seej&amp;auml;rel salvestamist ei saa neid piiratud &amp;otilde;igustega kasutaja enam muuta.)</caption>
+            <caption>Kinnitan andmed (peale andmete kinnitamist ja seej&amp;amp;auml;rel salvestamist ei saa neid piiratud &amp;amp;otilde;igustega kasutaja enam muuta.)</caption>
       </property>
       <property>
             <name>isik_firstname</name>
@@ -257,7 +257,7 @@
             <type>text</type>
             <store>no</store>
             <field>oppekeel_title</field>
-            <caption>&amp;otilde;ppekeel keskkoolis</caption>
+            <caption>&amp;amp;otilde;ppekeel keskkoolis</caption>
       </property>
       <property>
             <name>oppekeel_sel</name>
@@ -441,7 +441,7 @@
             <type>text</type>
             <store>no</store>
             <field>ex_vene</field>
-            <caption>Vene keel v&amp;otilde;&amp;otilde;rkeelena</caption>
+            <caption>Vene keel v&amp;amp;otilde;&amp;amp;otilde;rkeelena</caption>
       </property>
       <property>
             <name>ex_vene_aasta</name>
@@ -471,7 +471,7 @@
             <type>text</type>
             <store>no</store>
             <field>ex_yhisk</field>
-            <caption>&amp;uuml;hiskonnapetus</caption>
+            <caption>&amp;amp;uuml;hiskonnapetus</caption>
       </property>
       <property>
             <name>ex_yhisk_aasta</name>
@@ -561,7 +561,7 @@
             <type>text</type>
             <store>no</store>
             <field>ex_fyysika</field>
-            <caption>F&amp;uuml;&amp;uuml;sika</caption>
+            <caption>F&amp;amp;uuml;&amp;amp;uuml;sika</caption>
       </property>
       <property>
             <name>ex_fyysika_aasta</name>
@@ -698,7 +698,7 @@
             <subtitle>1</subtitle>
             <store>no</store>
             <field>hinded_title_b</field>
-            <caption>Hinded keskharidust t&amp;otilde;endaval dokumendil</caption>
+            <caption>Hinded keskharidust t&amp;amp;otilde;endaval dokumendil</caption>
       </property>
       <property>
             <name>hinded_title_m</name>
@@ -708,7 +708,7 @@
             <subtitle>1</subtitle>
             <store>no</store>
             <field>hinded_title_m</field>
-            <caption>Hinded akadeemilisel &amp;otilde;iendil</caption>
+            <caption>Hinded akadeemilisel &amp;amp;otilde;iendil</caption>
       </property>
       <property>
             <name>hinnete_arvud</name>
@@ -726,7 +726,7 @@
             <type>text</type>
             <store>no</store>
             <field>hinnete_arvud2</field>
-            <caption>&amp;nbsp;</caption>
+            <caption>&amp;amp;nbsp;</caption>
       </property>
       <property>
             <name>kk_hinne_5</name>
@@ -909,7 +909,7 @@
             <group>grp_sisseastuja_andmed</group>
             <type>select</type>
             <field>v66rkeel</field>
-            <caption>Kohustuslik v&amp;otilde;&amp;otilde;rkeel</caption>
+            <caption>Kohustuslik v&amp;amp;otilde;&amp;amp;otilde;rkeel</caption>
       </property>
       <property>
             <name>sisseastuja_nr</name>
@@ -982,7 +982,7 @@
             <year_to>1988</year_to>
             <save_format>iso8601</save_format>
             <field>isik_birthday</field>
-            <caption>S&amp;uuml;nniaeg</caption>
+            <caption>S&amp;amp;uuml;nniaeg</caption>
       </property>
       <property>
             <name>isik_social_status</name>
@@ -1015,7 +1015,7 @@
             <group>grp_sisseastuja_andmed</group>
             <type>textarea</type>
             <field>t88koht</field>
-            <caption>Sisseastuja t&amp;ouml;&amp;ouml;koht, amet</caption>
+            <caption>Sisseastuja t&amp;amp;ouml;&amp;amp;ouml;koht, amet</caption>
       </property>
       <property>
             <name>t88tel</name>
@@ -1023,7 +1023,7 @@
             <group>grp_sisseastuja_andmed</group>
             <type>textbox</type>
             <field>t88tel</field>
-            <caption>Telefon t&amp;ouml;&amp;ouml;kohas</caption>
+            <caption>Telefon t&amp;amp;ouml;&amp;amp;ouml;kohas</caption>
       </property>
       <property>
             <name>laste_arv</name>
@@ -1086,7 +1086,7 @@
             <size>4</size>
             <datatype>int</datatype>
             <field>haridus_aasta</field>
-            <caption>Eelmise haridusasutuse l&amp;otilde;petamise aasta</caption>
+            <caption>Eelmise haridusasutuse l&amp;amp;otilde;petamise aasta</caption>
       </property>
       <property>
             <name>haridus_v2lismaal</name>
@@ -1094,7 +1094,7 @@
             <group>grp_sisseastuja_andmed</group>
             <type>select</type>
             <field>haridus_v2lismaal</field>
-            <caption>Haridus omandatud v&amp;auml;lismaal</caption>
+            <caption>Haridus omandatud v&amp;amp;auml;lismaal</caption>
       </property>
       <property>
             <name>haridus_medal</name>
@@ -1102,7 +1102,7 @@
             <group>grp_sisseastuja_andmed</group>
             <type>select</type>
             <field>haridus_medal</field>
-            <caption>L&amp;otilde;petatud medaliga</caption>
+            <caption>L&amp;amp;otilde;petatud medaliga</caption>
       </property>
       <property>
             <name>haridus_k6rgkool</name>
@@ -1110,7 +1110,7 @@
             <group>grp_sisseastuja_andmed</group>
             <type>textbox</type>
             <field>haridus_k6rgkool</field>
-            <caption>Eelnevalt l&amp;otilde;petatud k&amp;otilde;rgkool</caption>
+            <caption>Eelnevalt l&amp;amp;otilde;petatud k&amp;amp;otilde;rgkool</caption>
       </property>
       <property>
             <name>kool_title</name>
@@ -1120,7 +1120,7 @@
             <subtitle>1</subtitle>
             <store>no</store>
             <field>kool_title</field>
-            <caption>Kool, mille l&amp;otilde;putunnistus esitatud</caption>
+            <caption>Kool, mille l&amp;amp;otilde;putunnistus esitatud</caption>
       </property>
       <property>
             <name>haridus_kool_tyyp</name>
@@ -1128,7 +1128,7 @@
             <group>grp_sisseastuja_andmed</group>
             <type>select</type>
             <field>haridus_kool_tyyp</field>
-            <caption>Kooli t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Kooli t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>haridus_kool_aasta</name>
@@ -1138,7 +1138,7 @@
             <size>4</size>
             <datatype>int</datatype>
             <field>haridus_kool_aasta</field>
-            <caption>L&amp;otilde;petamise aasta</caption>
+            <caption>L&amp;amp;otilde;petamise aasta</caption>
       </property>
       <property>
             <name>haridus_kool_kood</name>
@@ -1156,7 +1156,7 @@
             <group>grp_sisseastuja_andmed</group>
             <type>select</type>
             <field>haridus_kool_6ppevorm</field>
-            <caption>&amp;otilde;ppevorm koolis</caption>
+            <caption>&amp;amp;otilde;ppevorm koolis</caption>
       </property>
       <property>
             <name>aadress_kood</name>
@@ -1174,7 +1174,7 @@
             <group>grp_sisseastuja_andmed</group>
             <type>textbox</type>
             <field>aadress_t2nav</field>
-            <caption>T&amp;auml;nav, maja, korter/k&amp;uuml;la</caption>
+            <caption>T&amp;amp;auml;nav, maja, korter/k&amp;amp;uuml;la</caption>
       </property>
       <property>
             <name>aadress_sjsk</name>
@@ -1444,7 +1444,7 @@
             <size>3</size>
             <datatype>int</datatype>
             <field>tulemus_vr</field>
-            <caption>Rakendush&amp;uuml;drobioloogia eriala vestlus</caption>
+            <caption>Rakendush&amp;amp;uuml;drobioloogia eriala vestlus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_VASTUV6TT_SISSEASTUJA</syslog_type>
