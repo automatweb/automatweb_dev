@@ -3417,19 +3417,18 @@ class crm_company extends class_base
 			$cust = $proj->get_first_obj_by_reltype("RELTYPE_ORDERER");
 			$bill->set_prop("impl", reset($proj->prop("implementor")));
 		}
-		else
+		
 		if (is_oid($arr["cust"]))
 		{
 			$cust = obj($arr["cust"]);
 			$u = get_instance(CL_USER);
 			$bill->set_prop("impl", $u->get_current_company());
 		}
-
 		if ($cust)
 		{
 			$bill->set_prop("customer", $cust->id());
 		}
-
+		
 		$bill->save();
 
 		foreach(safe_array($arr["sel"]) as $task)
@@ -4211,6 +4210,14 @@ class crm_company extends class_base
 
 	function callback_mod_tab($arr)
 	{
+		if ($arr["id"] == "general")
+		{
+			$u = get_instance(CL_USER);
+			if ($u->get_current_company() == $arr["obj_inst"]->id())
+			{
+				$arr["caption"] = "B&uuml;roo";
+			}
+		}
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;
