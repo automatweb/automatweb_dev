@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.45 2006/01/19 13:25:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.46 2006/01/19 22:41:31 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -325,8 +325,10 @@ class crm_offer extends class_base
 	
 	function set_property($arr)
 	{
+		$b = get_instance("applications/crm/crm_document_base");
+		$retval = $b->set_property($arr);
+
 		$data = &$arr["prop"];
-		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "acts":
