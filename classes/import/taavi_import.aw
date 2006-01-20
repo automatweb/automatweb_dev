@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.1 2005/12/29 08:52:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.2 2006/01/20 12:17:47 markop Exp $
 // taavi_import.aw - Taavi import 
 /*
 
@@ -7,6 +7,19 @@
 
 @default table=objects
 @default group=general
+@default field=meta 
+@default method=serialize
+
+@property url type=textbox
+@caption Url
+
+@property port type=textbox size=4
+@caption Port
+
+@property impordi type=text
+@caption Impordi
+
+
 
 */
 
@@ -27,9 +40,35 @@ class taavi_import extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+	
+			case "impordi":
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb(
+						"import",
+						array(
+							"id" => $arr["obj_inst"]->id(),
+						),
+						"taavi_import"),
+					"caption" => t("Impordi"),
+						/*$this->mk_my_orb(
+						"import",
+						array(
+							"oid" => $arr["obj_inst"]->id(),
+							"return_url" => get_ru()),
+						"admin_menus")*/
+				));
+				break;		
+
+	
 		};
 		return $retval;
 	}
+
+//	function get_port($arr)
+//	{
+//		return $arr["obj_inst"]->prop("port");
+//	}
+
 
 	function set_property($arr = array())
 	{
@@ -57,90 +96,418 @@ class taavi_import extends class_base
 	**/
 	function import($arr)
 	{
-		include("xmlrpc_lib.aw");
-		$client = new IXR_Client("ekstra.masendav.com", "/xmlrpc/index.php", 80);
-		$client->query("server.getinfo");
-		$data = $client->getResponse();
-//		arr($data);
-		$this->export_xml($data);
+		$var = $this->export_xml($arr["id"]);
+		header("Content-type: text/xml; encoding='UTF-8';");
+		print $var;
+		die();
 	}
 
-
-	function export_xml($arr)
+//leiab 
+	function find_asula($arr)
 	{
-		$vars = array("eesnimi","perekonnanimi","synniaeg","aadress","ia_tanav","ia_maja","ia_korter","ia_talu","ia_pindeks","ia_linn","ia_asula","ia_vald","ia_maakond","ia_riik","haridustase","eriala","oppeasutus","telefon","mobiiltelefon","lyhinumber","e_post","ametikoht_nimetus","ametijuhend_viit","ruum","palgaaste","asutus","allasutus","yksus_nimetus","yksus_id","prioriteet","on_peatumine","peatumine_pohjus","toole_tulek_kp","on_asendaja","asendamine_tookoht");
-		$struct["tootajad"]["ekspordi_aeg"]="asd";
-		arr($arr[0]);
-		foreach($arr as $skey => $val)	
+		$ret = ''; $asula = '';
+		$prop = explode(" " , $arr["data"]);
+		foreach($prop as $txt)
 		{
-			$struct["tootajad"]["tootaja"]["tootaja_id"]=$skey;
-			foreach($vars as $tag)	
+			$txt = trim($txt, ",");
+			if(substr_count($txt, $arr["asula"]) > 0)
 			{
-//				if ((in_array(strtolower($tag), $vars))||(in_array($tag, $vars))) 
-//				{				
-				switch($tag)
-				{
-					case "eesnimi":$struct["tootajad"]["tootaja"][$tag]=$val["EESNIMI"];break;
-					case "perekonnanimi":$struct["tootajad"]["tootaja"][$tag]=$val["PERENIMI"];break;
-//					case "synniaeg":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-					case "aadress":$struct["tootajad"]["tootaja"][$tag]=$val["AADRESS1"];break;
-//					case "ia_tanav":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "ia_maja":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "ia_korter":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "ia_talu":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-					//case "ia_pindeks":$struct["tootajad"]["tootaja"][$tag]=
-					/*
-				if(strpos($val["AADRESS1"], " ") !== 5)
-				{
-					$prop = explode(" ", strpos($val["AADRESS1"]);
-				}
-				if(strpos($val["AADRESS1"], ",") !== 5)
-				{	
-					$prop = explode(" ", strpos($val["AADRESS1"]);
-				}
-				
-				
-				
-				{
-					$prop = explode(" ", strpos($val["AADRESS1"]);
-					$prop = explode(":", $obj_data);
-					switch($prop[0])
-					
-					$val["INDEKS1"];break;
-					*/
-					case "ia_linn":$struct["tootajad"]["tootaja"][$tag]=$val["INDEKS1"];break;
-//					case "ia_asula":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "ia_vald":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "ia_maakond":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "ia_riik":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-					case "haridustase":$struct["tootajad"]["tootaja"][$tag]=$val["HARIDUS"];break;
-					case "eriala":$struct["tootajad"]["tootaja"][$tag]=$val["ERIALA"];break;
-//					case "oppeasutus":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-					case "telefon":$struct["tootajad"]["tootaja"][$tag]=$val["TELEFON1"];break;
-					case "mobiiltelefon":$struct["tootajad"]["tootaja"][$tag]=$val["TELEFON2"];break;
-//					case "lyhinumber":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-					case "e_post":$struct["tootajad"]["tootaja"][$tag]=$val["EMAIL"];break;
-//					case "ametikoht_nimetus":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "ametijuhend_viit":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "ruum":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-					case "palgaaste":$struct["tootajad"]["tootaja"][$tag]=$val["SUMMA"];break;
-					case "asutus":$struct["tootajad"]["tootaja"][$tag]=$val["ASUTUS"];break;
-//					case "allasutus":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "yksus_nimetus":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "yksus_id":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "prioriteet":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "on_peatumine":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "peatumine_pohjus":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-					case "toole_tulek_kp":$struct["tootajad"]["tootaja"][$tag]=$val["MEILE_TOOL"];break;
-//					case "on_asendaja":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-//					case "asendamine_tookoht":$struct["tootajad"]["tootaja"][$tag]=$dat;break;
-				}					
-//				$struct["tootajad"]["tootaja"][strtolower($tag)]=$dat;
+				$ret = $asula;
+			}
+			else
+			{
+				$asula = $txt;
 			}
 		}
-		header("Content-type: text/xml");
-		print aw_serialize($struct,SERIALIZE_XML);
-		die();
+		if($ret != '')
+		{
+			$ret = ucwords(strtolower($ret)).' '.$arr["asula"];
+		}
+		return $ret;
+	}
+
+	function export_xml($id)
+	{
+		include("xmlrpc_lib.aw");
+		$import_obj = obj($id);
+		$port = $import_obj->prop("port");
+		$url = $import_obj->prop("url");
+		$remove = array("http://" , "ftp://");
+		$url = str_replace($remove, "", $url);
+		$pos = strpos($url, '/');
+		$domain = substr($url , 0 , $pos);
+		$path = substr($url , $pos ,strlen($url));
+		$client = new IXR_Client($domain, $path, $port);
+		$client->query("server.getinfo");
+		$data = $client->getResponse();
+		$vars = array("eesnimi","perekonnanimi","synniaeg","aadress","ia_tanav","ia_maja","ia_korter","ia_talu","ia_pindeks","ia_linn","ia_asula","ia_vald","ia_maakond","ia_riik","haridustase","eriala","oppeasutus","telefon","mobiiltelefon","lyhinumber","e_post","ametikoht_nimetus","ametijuhend_viit","ruum","palgaaste","asutus","allasutus","yksus_nimetus","yksus_id","prioriteet","on_peatumine","peatumine_pohjus","toole_tulek_kp","on_asendaja","asendamine_tookoht");
+	
+		$t = localtime();
+		$t[4] = $t[4] + 1;
+		foreach($t as $key => $xdata)
+		{
+			if($xdata < 10)
+			{
+				$t[$key] = "0".$data;
+			}
+		}
+		$all_xml = '<tootajad><ekspordi_aeg>'.($t[5] + 1900).$t[4].$t[3].'T'.$t[2].':'.$t[1].':'.$t[0].'</ekspordi_aeg>';
+		foreach($data as $skey => $val)
+		{
+			$all_xml = $all_xml.'<tootaja><tootaja_id>'.($skey).'</tootaja_id>';
+		//	$struct["tootajad"]["tootaja"]["tootaja_id"]=$skey;
+			foreach($vars as $tag)	
+			{
+				switch($tag)
+				{
+					case "eesnimi":
+						$struct["tootajad"]["tootaja"][$tag] =  ucwords(strtolower($val["EESNIMI"]));
+						break;
+						
+					case "perekonnanimi":
+						$struct["tootajad"]["tootaja"][$tag] = ucwords(strtolower($val["PERENIMI"]));
+						break;
+						
+					case "synniaeg":
+						$day = $val["SYNNIPAEV"];
+						$struct["tootajad"]["tootaja"][$tag] = 
+						substr($day, 6, 7).'.'.substr($day, 4, 2).'.'.substr($day, 0, 4);
+						break;
+						
+					case "aadress":
+						if(strlen($val["AADRESS"]) > 3)
+						{
+							$struct["tootajad"]["tootaja"][$tag] = $val["AADRESS"];
+						}
+						else
+						{
+							$struct["tootajad"]["tootaja"][$tag] = $val["AADRESS1"];
+						}
+						break;
+						
+					case "ia_tanav":
+						$prop = explode(" ",$val["AADRESS1"]);
+						$ret = '';
+						foreach($prop as $txt)
+						{	
+							if(!($txt[0] > 0) || ($txt[2] == '.'))
+							{
+								if(strlen($ret > 0))
+								{
+									$ret = $ret.' ';
+								}
+								$ret = $ret.$txt;
+							}
+							else
+							{
+								break;
+							}
+							if(($txt == 'küla') || ($txt == 'talu'))
+							{
+								$ret = null;
+								break;
+							}							
+							if($txt[strlen($txt)-1] == ',')
+							{
+								break;
+							}
+						}
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;
+
+					case "ia_maja":
+						$prop = explode(" ",$val["AADRESS1"]);
+						$ret = null;
+						foreach($prop as $txt)
+						{
+							if($txt[0] > 0)
+							{
+								$maja = explode("-",$txt);
+								if(strlen($maja[0])>0)
+								{
+									$ret = $maja[0];
+								}
+							}
+						}
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;
+
+					case "ia_korter":
+						$prop = explode(" ",$val["AADRESS1"]);
+						$ret = null;
+						foreach($prop as $txt)
+						{
+							if($txt[0] > 0)
+							{
+								$dir = substr(strrchr($txt, "-"), 1 ,  strlen(strrchr($txt, "-"))-1);
+								if(strlen($dir)>0)
+								{
+									$ret = $dir;
+								}
+							}
+						}
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;
+
+					case "ia_talu":
+						$ret = $this->find_asula(array(
+							"data" => $val["AADRESS1"],
+							"asula" => 'talu'
+						));
+						if($ret == '')
+						{
+							$ret = $this->find_asula(array(
+								"data" => $val["AADRESS"],
+								"asula" => 'talu'
+							));
+						}
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;
+					
+					case "ia_pindeks":
+						$prop = explode(" ",$val["INDEKS1"]);
+						$ret = null;
+						foreach($prop as $txt)
+						{
+							if((strlen($txt) == 6) && ($txt[5] == ','))
+							{
+								$txt = substr($txt , 0 , 5);
+							}
+							if((strlen($txt) == 5)
+							&& ($txt > 10000) && ($txt < 100000)
+							)
+							{
+								$ret = $txt;
+							}
+						}
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;
+					
+					case "ia_linn":
+						$prop = explode(" ",$val["INDEKS1"]);
+						$ret = null;
+						foreach($prop as $txt)
+						{
+							if(
+							(substr_count($val["INDEKS1"], 'mk') == 0)
+							&& (substr_count($val["INDEKS1"], 'maakond') == 0)
+							&& (substr_count($val["INDEKS1"], 'vald') == 0)
+							&& (substr_count($val["INDEKS1"], 'maa') == 0)
+							)
+							{							
+								$txt = trim($txt, ",");
+								if((strlen($txt) == 6) && ($txt[5] == ','))
+								{
+									$txt = substr($txt , 0 , 5);
+								}
+								if(	
+									!($txt[0] > 0)
+									&& (substr_count($txt, 'vald') == 0)
+									&& (substr_count($txt, 'maa') == 0)
+									&& (substr_count($txt, 'mk') == 0)
+									&& (substr_count($txt, 'maakond') == 0)
+									&& (strlen($txt) > 2)
+								)
+								{
+									$ret = $txt;
+								}
+								if(
+									(substr_count($txt, 'vald') > 0)
+									|| (substr_count($txt, 'mk') > 0)
+									|| (substr_count($txt, 'maakond') > 0)
+								)
+								{
+									$ret = '';
+								}
+							}
+						}
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;
+
+					
+					case "ia_asula":
+						$ret = null;						
+						if(
+						   (substr_count($val["INDEKS1"], 'mk') > 0)
+						|| (substr_count($val["INDEKS1"], 'maakond') > 0)
+						|| (substr_count($val["INDEKS1"], 'vald') > 0)
+						|| (substr_count($val["INDEKS1"], 'maa') > 0)
+						)
+						{
+							$prop = explode(" ",$val["INDEKS1"]);
+
+							foreach($prop as $txt)
+							{
+								$txt = trim($txt, ",");
+								if((strlen($txt) == 6) && ($txt[5] == ','))
+								{
+									$txt = substr($txt , 0 , 5);
+								}
+								if(	
+									!($txt[0] > 0)
+									&& (substr_count($txt, 'vald') == 0)
+									&& (substr_count($txt, 'maa') == 0)
+									&& (substr_count($txt, 'mk') == 0)
+									&& (substr_count($txt, 'maakond') == 0)
+									&& (strlen($txt) > 2)
+								)
+								{
+									$ret = $txt;
+								}
+								if(
+									(substr_count($txt, 'vald') > 0)
+									|| (substr_count($txt, 'mk') > 0)
+									|| (substr_count($txt, 'maakond') > 0)
+								)
+								{
+									$ret = '';
+								}
+							}
+						}
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;
+					
+					case "ia_vald":
+						$ret = $this->find_asula(array(
+							"data" => $val["INDEKS1"],
+							"asula" => 'vald'
+						));
+						if($ret == '')
+						{
+							$ret = $this->find_asula(array(
+								"data" => $val["AADRESS1"],
+								"asula" => 'vald'
+							));
+						}
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;
+						
+					case "ia_maakond":
+						$ret = $this->find_asula(array(
+							"data" => $val["INDEKS1"],
+							"asula" => 'maakond'
+						));
+						
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;					
+
+					case "ia_riik":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+						
+					case "haridustase": //annab moment numbrites
+						$struct["tootajad"]["tootaja"][$tag]=$val["HARIDUS"];
+						break;
+						
+					case "eriala":
+						$struct["tootajad"]["tootaja"][$tag]=$val["ERIALA"];
+						break;
+						
+					case "oppeasutus":
+						$struct["tootajad"]["tootaja"][$tag] = $val["KOOL"];
+						break;
+						
+					case "telefon":
+						$struct["tootajad"]["tootaja"][$tag] = $val["TELEFON"];
+						break;
+	
+					case "mobiiltelefon":
+						$struct["tootajad"]["tootaja"][$tag] = $val["TELEFON2"];
+						break;
+
+					case "lyhinumber":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+						
+					case "e_post":
+						$struct["tootajad"]["tootaja"][$tag] = strtolower($val["EMAIL"]);
+						break;
+						
+					case "ametikoht_nimetus":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+						
+					case "ametijuhend_viit":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+						
+					case "ruum":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+						
+					case "palgaaste"://kui see summa on 0, siis "TARIIF" on miski arv
+						$struct["tootajad"]["tootaja"][$tag] = $val["SUMMA"];
+						if($val["SUMMA"] == 0)
+						{
+							$struct["tootajad"]["tootaja"][$tag] = $val["TARIIF"];
+						}
+						break;
+						
+					case "asutus"://tühi väli
+						$struct["tootajad"]["tootaja"][$tag] = $val["ASUTUS"];
+						break;
+						
+					case "allasutus":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+						
+					case "yksus_nimetus":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+						
+					case "yksus_id":
+						$struct["tootajad"]["tootaja"][$tag] = $val["ALLYKSUS"];
+						break;
+
+					case "prioriteet":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+						
+					case "on_peatumine":
+						$struct["tootajad"]["tootaja"][$tag] = 0;
+						break;
+						
+					case "peatumine_pohjus":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+						
+					case "toole_tulek_kp":
+						$ret = null;
+						if(strlen($val["MEILE_TOOL"]) > 1)
+						{
+							$ret = $val["MEILE_TOOL"].'T00:00:00';
+						}
+						$struct["tootajad"]["tootaja"][$tag] = $ret;
+						break;
+						
+					case "on_asendaja":
+						$struct["tootajad"]["tootaja"][$tag] = 0;
+						break;
+						
+					case "asendamine_tookoht":
+						$struct["tootajad"]["tootaja"][$tag] = null;
+						break;
+				}					
+			}
+			foreach($struct["tootajad"]["tootaja"] as $key => $val)
+			{	
+				if(strlen($val) > 0)
+				{
+					$all_xml = $all_xml.'<'.$key.'>'.$val.'</'.$key.'>';
+				}
+				else
+				{
+					$all_xml = $all_xml.'<'.$key.'/>';
+				}
+			}
+			$all_xml = $all_xml.'</tootaja>';
+		}
+		$all_xml = $all_xml.'</tootajad>';
+		$all_xml = iconv("ISO-8859-4","UTF-8", $all_xml);
+	//	$all_xml = str_replace($changechar , $code , $all_xml);
+	//	$all_xml = htmlentities(htmlentities($all_xml));
+	//	$all_xml = htmlspecialchars($all_xml, ENT_NOQUOTES);
+		return $all_xml;
 	}
 //-- methods --//
 }

@@ -83,6 +83,16 @@
             <caption>Struktuuri&amp;uuml;ksuste XML fail</caption>
       </property>
       <property>
+            <name>xml_link</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LINK_REL</reltype>
+            <caption>vali , kust imporditava XMLi link saada</caption>
+      </property>
+      <property>
             <name>xml_image_folder</name>
             <table>objects</table>
             <group>settings</group>
@@ -162,6 +172,11 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECURRENCE>
+            <LINK_REL>
+                  <value>22</value>
+                  <clid>CL_MENU</clid>
+                  <caption>XML lingi seos</caption>
+            </LINK_REL>
       </reltypes>
 </properties>
 

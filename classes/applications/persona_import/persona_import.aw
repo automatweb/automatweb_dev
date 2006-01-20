@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.15 2005/09/20 11:28:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.16 2006/01/20 12:17:47 markop Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -36,6 +36,9 @@
 @property xml_structure_file type=textbox
 @caption Struktuuriüksuste XML fail
 
+@property xml_link type=relpicker reltype=RELTYPE_LINK_REL
+@caption vali , kust imporditava XMLi link saada
+
 @property xml_image_folder type=textbox
 @caption Pildifailide kataloog (kui on eraldi)
 
@@ -65,6 +68,9 @@
 
 @reltype RECURRENCE value=5 clid=CL_RECURRENCE
 @caption Kordus
+
+@reltype LINK_REL value=22 clid=CL_MENU
+@caption XML lingi seos
 
 */
 
@@ -193,16 +199,12 @@ class persona_import extends class_base
 
 		$c = get_instance(CL_FTP_LOGIN);
 		$c->connect($config["ftp"]);
-
 		$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_filename");
 		$fdat = $c->get_file($fqfn);
 		$c->disconnect();
-
 		header("Content-type: text/xml");
 		print $fdat;
 		exit;
-
-
 	}
 
 	/**
@@ -215,14 +217,18 @@ class persona_import extends class_base
 		$obj = new object($arr["id"]);
 
 		$config = $this->get_config($arr);
+		
+		$import_id = $obj->prop("xml_link");
 
-
-		if (sizeof($config["ftp"]) == 0)
+		
+		
+		if (sizeof($config["ftp"]) == 0 && !$this->can("view" , $import_id))
 		{
 			die(t("You forgot to enter server data"));
 		};
 
 		$crm_db_id = $obj->prop("crm_db_id");
+
 		if (!is_oid($crm_db_id))
 		{
 			die(t("Nii ei saa ju rallit sõita!"));
@@ -231,7 +237,8 @@ class persona_import extends class_base
 		$crm_db = new object($crm_db_id);
 
 		$folder_person = $crm_db->prop("folder_person");
-		arr($crm_db->properties());
+		//arr($crm_db->properties());
+
 
 		if (!is_oid($folder_person))
 		{
@@ -308,13 +315,21 @@ class persona_import extends class_base
 		print t("Getting source data<br>");
 		flush();
 
-		$c = get_instance(CL_FTP_LOGIN);
-		$c->connect($config["ftp"]);
-
-		$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_filename");
-		$fdat = $c->get_file($fqfn);
-		$c->disconnect();
+		if($this->can("view" , $import_id))
+		{
+			$import_obj = get_instance(CL_TAAVI_IMPORT);
+			$fdat = $import_obj->export_xml($import_id);
+		}
 		
+		else
+		{	
+			$c = get_instance(CL_FTP_LOGIN);
+			$c->connect($config["ftp"]);
+	
+			$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_filename");
+			$fdat = $c->get_file($fqfn);
+			$c->disconnect();
+		}
 		print "<h5>" . $fqfn . "</h5>";
 
 		if (strlen($fdat) == 0)
@@ -723,7 +738,6 @@ class persona_import extends class_base
 			$bday = mktime(0,0,0,$bd_parts[1],$bd_parts[0],$bd_parts[2]);
 
 			print "tm = " . $bday . "<br>";
-
 			;
 			print "<b>Processing $person_name</b><br>";
 			print "id = " . $person_obj->id() . "<br>";
@@ -732,13 +746,12 @@ class persona_import extends class_base
 				"caption" => t("Vaata"),
 			));
 			print "<br>";
-			
 			$person_obj->set_name($person_name);
 			$person_obj->set_prop("firstname",$worker["EESNIMI"]);
 			$person_obj->set_prop("lastname",$worker["PEREKONNANIMI"]);
 			$person_obj->set_prop("ext_id",$ext_id);
 			$person_obj->set_prop("birthday",$bday);
-			$person_obj->set_prop("ord",$worker["PRIORITEET"]);
+			$person_obj->set_ord($worker["PRIORITEET"]);
 			$person_obj->set_status(STAT_ACTIVE);
 
 			if (!in_array($worker["AADRESS"],$addr))
@@ -824,12 +837,14 @@ class persona_import extends class_base
 				$person_obj->set_prop("email",$mid);
 			};
 
+
 			foreach($simple_attribs as $skey => $sdata)
 			{
 				if (empty($worker[$skey]))
 				{
 					continue;
 				};
+				
 				
 				$_name = $worker[$skey];
 				$_name = iconv("UTF-8", "ISO-8859-4",$_name);
@@ -1007,14 +1022,13 @@ class persona_import extends class_base
 		$cache->full_flush();
 
 		print "everything is done";
+
+		if(!$this->can("view" , $import_id))
+		{
+			$this->import_images($arr);		
+		}
 		exit;
 	
-		/*
-		print "<h1>peatumised</h1>";
-		arr($data["PEATUMISED"]);
-		print "<h1>puhkused</h1>";
-		arr($data["PUHKUSED"]);
-		*/
 		print "<h1>all done</h1>";
 
 		print "teeme peatuste ja puhkuste objektid";
@@ -1146,6 +1160,9 @@ class persona_import extends class_base
 		};
 
 		print "finished<br>";
+		
+		
+
 
 		// puhkusi ning ka peatumisi näidatakse eraldi tabelis
 		// ainus asi mis neid eristab on töötaja ID. sama peatumise kohta. Therefore I have no way in hell
@@ -1173,6 +1190,8 @@ class persona_import extends class_base
 
 
 		print "all done";
+
+
 
 		/*
 			<taitmata_ametikohad>
@@ -1223,6 +1242,7 @@ class persona_import extends class_base
 	**/
 	function import_images($arr)
 	{
+		
 		$obj = new object($arr["id"]);
 		
 		$config = $this->get_config($arr);
