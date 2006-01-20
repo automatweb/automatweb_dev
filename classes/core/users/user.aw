@@ -342,8 +342,8 @@ class user extends class_base
 
 				$admin_lang = $prop['value'];
 				$admin_lang_lc = $t->get_langid($admin_lang);
-				setcookie("admin_lang",$admin_lang,time()*24*3600*1000,"/");
-				setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
+				setcookie("admin_lang",$admin_lang,time()+24*3600*1000,"/");
+				setcookie("admin_lang_lc",$admin_lang_lc,time()+24*3600*1000,"/");
 				break;
 
 			case "passwd_again":
