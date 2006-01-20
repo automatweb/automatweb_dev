@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.6 2006/01/19 17:12:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.7 2006/01/20 08:03:41 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -16,11 +16,11 @@
 @property sel_cust type=select
 @caption Vali olemasolev klient
 
-@property cust_n type=textbox 
-@caption Nimetus
-
 @property ettevotlusvorm type=select
 @caption &Otilde;iguslik vorm
+
+@property cust_n type=textbox 
+@caption Nimetus
 
 @property addr type=textbox 
 @caption Aadress
