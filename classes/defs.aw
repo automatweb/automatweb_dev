@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.210 2006/01/16 15:47:34 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.211 2006/01/20 14:18:03 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -972,7 +972,7 @@ if (!defined("DEFS"))
 		{
 			$old_uids = array();
 		}
-		array_push($old_uids, $arr["uid"]);
+		array_push($old_uids, aw_global_get("uid"));
 		aw_global_set("old_uids", $old_uids);
 		
 		__aw_int_do_switch_user($arr["uid"]);
