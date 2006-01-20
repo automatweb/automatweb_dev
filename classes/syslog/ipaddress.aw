@@ -14,6 +14,9 @@
 @property addr type=textbox table=ipaddresses field=ip
 @caption IP Aadress
 
+@property range type=textarea table=objects field=meta method=serialize rows=5 cols=50
+@caption Vahemik
+
 */
 
 class ipaddress extends class_base
@@ -74,6 +77,23 @@ class ipaddress extends class_base
 	{
 		$o = obj($oid);
 		return $o->prop("ip");
+	}
+
+	function match_range($range, $adr)
+	{
+		// silly ass check - iterate over range and check each
+		$res = false;
+		list($from,$to) = explode("-", trim($range));
+		list($f1,$f2,$f3,$f4) = explode(".", $from);
+		list($t1,$t2,$t3,$t4) = explode(".", $to);
+
+		for($i = $f4; $i <= $t4; $i++)
+		{
+			$a = $f1.".".$f2.".".$f3.".".$i;
+			$res |= $this->match($a, $adr);
+		}
+
+		return $res;
 	}
 
 	////

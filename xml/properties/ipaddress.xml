@@ -8,6 +8,15 @@
             <field>ip</field>
             <caption>IP Aadress</caption>
       </property>
+      <property>
+            <name>range</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vahemik</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_IPADDRESS</syslog_type>
             <no_status>1</no_status>
