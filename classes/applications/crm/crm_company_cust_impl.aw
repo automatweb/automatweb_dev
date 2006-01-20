@@ -123,13 +123,27 @@ class crm_company_cust_impl extends class_base
 		$table = &$arr["prop"]["vcl_inst"];
 		
 		$i = get_instance(CL_CRM_COMPANY);
-		if (!is_array($arr["prj"]))
+		$u = get_instance(CL_USER);
+		$cur_co = $u->get_current_company();
+		if ($cur_co != $arr["obj_inst"]->id())
 		{
-			$prj = $i->get_my_projects();
+			// get all projects that are ordered by THAT company
+			$ol = new object_list(array(
+				"class_id" => CL_PROJECT,
+				"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->id()
+			));
+			$prj = $ol->ids();
 		}
 		else
 		{
-			$prj = $arr["prj"];
+			if (!is_array($arr["prj"]))
+			{
+				$prj = $i->get_my_projects();
+			}
+			else
+			{
+				$prj = $arr["prj"];
+			}
 		}
 		if (!count($prj))
 		{
@@ -149,7 +163,7 @@ class crm_company_cust_impl extends class_base
 			}
 		}
 		
-		if ($arr["request"]["do_proj_search"] /*&& $conns_ol->count() */)
+		if ($arr["request"]["do_proj_search"] && $conns_ol->count() )
 		{
 			$filt = $this->_get_my_proj_search_filt($arr["request"], $conns_ol->ids());
 			$conns_ol = new object_list($filt);
@@ -845,7 +859,7 @@ class crm_company_cust_impl extends class_base
 		$ol = new object_list(array(
 			"oid" => $tmp_ids,
 		));
-		if (!$arr["request"]["search_all_proj"] && $ol->count())
+		if (!$arr["request"]["search_all_proj"] /*&& $ol->count()*/)
 		{
 			if (!$arr["request"]["aps_sbt"])
 			{
@@ -854,7 +868,7 @@ class crm_company_cust_impl extends class_base
 				$arr["request"]["all_proj_search_part"] = $p->name();
 				$arr["request"]["all_proj_search_state"] = PROJ_DONE;
 			}
-			$filt = $this->_get_my_proj_search_filt($arr["request"], $ol->ids(), "all_");
+			$filt = $this->_get_my_proj_search_filt($arr["request"], /*$ol->ids()*/ null, "all_");
 			$ol = new object_list($filt);
 		}
 		else
@@ -871,7 +885,7 @@ class crm_company_cust_impl extends class_base
 			$arr["request"] = array(
 				"all_proj_search_part" => $ps->name(),
 			);
-			$filt = $this->_get_my_proj_search_filt($arr["request"], $ol->ids(), "all_");
+			$filt = $this->_get_my_proj_search_filt($arr["request"], /*$ol->ids()*/ null, "all_");
 			$ol = new object_list($filt);
 		}
 
@@ -1067,7 +1081,7 @@ class crm_company_cust_impl extends class_base
 			"class_id" => CL_PROJECT,
 			"lang_id" => array(),
 			"site_id" => array(),
-			//"oid" => $oids
+			"oid" => $oids
 		);
 
 		if ($ar[$prefix."proj_search_cust"] != "")

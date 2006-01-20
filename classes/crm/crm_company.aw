@@ -1202,7 +1202,7 @@ class crm_company extends class_base
 
 			case "tax_nr":
 				// append link to go to thingie
-				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://maksuamet.ma.ee/e-service/doc/a0003.xsql METHOD=POST name=kraaks><INPUT TYPE=text NAME=p_kkood><input type=hidden name=p_submit value=Otsi><input type=hidden name=p_isikukood ><input type=hidden name=p_tegevus ><input type=hidden name=p_context ><input type=hidden name=p_tagasi ><input type=hidden name=p_mode value=1><input type=hidden name=p_queryobject></form>\" );win.document.kraaks.p_kkood.value = document.changeform.tax_nr.value;win.document.kraaks.submit();'>Maksuameti p&auml;ring</a>";
+				$data["post_append_text"] = "<a href='#' onClick='win = window.open(); win.document.write(\"<form action=https://maksuamet.ma.ee/e-service/doc/a0003.xsql METHOD=POST name=kraaks><INPUT TYPE=text NAME=p_kkood><input type=hidden name=p_submit value=Otsi><input type=hidden name=p_isikukood ><input type=hidden name=p_tegevus ><input type=hidden name=p_context ><input type=hidden name=p_tagasi ><input type=hidden name=p_mode value=1><input type=hidden name=p_queryobject></form>\" );win.document.kraaks.p_kkood.value = document.changeform.reg_nr.value;win.document.kraaks.submit();'>Maksuameti p&auml;ring</a>";
 				break;
 
 			case "contact_person":

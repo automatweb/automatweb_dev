@@ -752,7 +752,7 @@ class crm_company_overview_impl extends class_base
 			));
 		}
 
-		$tb->add_menu_item(array(
+		/*$tb->add_menu_item(array(
 			'parent' => 'add_item',
 			"text" => t("P&auml;eva raport"),
 			'link' => html::get_new_url(
@@ -764,7 +764,7 @@ class crm_company_overview_impl extends class_base
 					"return_url" => get_ru()
 				)
 			),
-		));
+		));*/
 
 		$tb->add_button(array(
 			'name' => 'mark_as_done',
