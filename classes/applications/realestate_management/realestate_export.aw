@@ -1,12 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_export.aw,v 1.3 2005/12/18 14:01:05 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_export.aw,v 1.4 2006/01/20 15:49:42 voldemar Exp $
 // realestate_export.aw - Kinnisvaraobjektide eksport
 /*
 
 @classinfo syslog_type=ST_REALESTATE_EXPORT relationmgr=yes no_comment=1 no_status=1
 
+@groupinfo grp_settings caption="Seaded" parent=general
+@groupinfo grp_users caption="Kasutajanimed" parent=general
+
 @default table=objects
-@default group=general
+@default group=grp_settings
 @default field=meta
 @default method=serialize
 	@property realestate_manager type=relpicker reltype=RELTYPE_OWNER clid=CL_REALESTATE_MANAGER automatic=1
@@ -28,6 +31,12 @@
 	@property last_city24export_error type=text
 	@caption Viimasel ekspordil esinenud vead
 
+@default group=grp_users
+	@property box type=text no_caption=1 store=no
+	@layout vsplitbox type=hbox width="30%:70%"
+	@property user_names_definition_tree type=treeview store=no no_caption=1 parent=vsplitbox
+	@property user_names_definition_table type=table store=no no_caption=1 parent=vsplitbox
+
 // --------------- RELATION TYPES ---------------------
 
 @reltype OWNER clid=CL_REALESTATE_MANAGER value=1
@@ -40,6 +49,7 @@
 
 define ("REALESTATE_TIME_FORMAT", "j/m/Y H.i.s");
 define ("NEWLINE", "<br />\n");
+define ("RE_EXPORT_CITY24USER_VAR_NAME", "realestate_city24username");
 
 class realestate_export extends class_base
 {
@@ -65,10 +75,6 @@ class realestate_export extends class_base
 		));
 	}
 
-	function callback_on_load ($arr)
-	{
-	}
-
 	// @attrib name=init_local
 	// @param id required type=int
 	function init_local ($arr)
@@ -92,12 +98,154 @@ class realestate_export extends class_base
 
 		switch($prop["name"])
 		{
+			case "user_names_definition_table":
+				$this->_user_names_definition_table ($arr);
+				break;
+
+			case "user_names_definition_tree":
+				$this->_user_names_definition_tree ($arr);
+				break;
+
 			case "last_city24export_time":
 				$prop["value"] = date (REALESTATE_TIME_FORMAT, $prop["value"]);
 				break;
 		}
 
 		return $retval;
+	}
+
+	function _user_names_definition_table ($arr = array ())
+	{
+		if (is_oid ($arr["request"]["unit"]))
+		{
+			$unit = obj ($arr["request"]["unit"]);
+
+			if ($unit->class_id () != CL_CRM_SECTION)
+			{
+				return;
+			}
+
+			$table =& $arr["prop"]["vcl_inst"];
+			$table->define_field(array(
+				"name" => "name",
+				"caption" => t("Nimi"),
+				"sortable" => 1,
+			));
+
+			$table->define_field(array(
+				"name" => "city24user",
+				"caption" => t("Kasutajanimi City24 süsteemis"),
+			));
+
+			$table->set_default_sortby ("name");
+			$table->set_default_sorder ("asc");
+
+			$conns = $unit->connections_from(array(
+				"type" => "RELTYPE_WORKERS",
+			));
+
+			foreach($conns as $conn)
+			{
+				$person = new object ($conn->prop('to'));
+				$tdata = array(
+					"name" => $person->prop ('name'),
+					"city24user" => html::textbox(array(
+						"name" => "person[" . $person->id () . "]",
+						"value" => $person->meta (RE_EXPORT_CITY24USER_VAR_NAME),
+						"size" => 30,
+						"textsize" => "11px"
+					)),
+				);
+				$table->define_data($tdata);
+			}
+		}
+	}
+
+	function _user_names_definition_tree ($arr = array ())
+	{
+		$this_object = $arr["obj_inst"];
+
+		if (!is_oid ($this_object->prop ("realestate_manager")))
+		{
+			return;
+		}
+
+		$manager = obj ($this_object->prop ("realestate_manager"));
+		$tree = $arr["prop"]["vcl_inst"];
+		$trees = array ();
+
+		foreach($manager->connections_from(array("type" => "RELTYPE_REALESTATEMGR_USER")) as $c)
+		{
+			$o = $c->to();
+
+			if ($this->can("view", $o->id()))
+			{
+				$tree->add_item(0, array(
+					"name" => $o->name(),
+					"id" => $o->id(),
+					"url" => aw_url_change_var("company", $o->id()),
+				));
+
+				$treeview = get_instance(CL_TREEVIEW);
+				$treeview->init_vcl_property ($arr);
+				$arr["prop"]["vcl_inst"] =& $treeview;
+				$this->_delegate_co_v($arr, "_get_unit_listing_tree", $o);
+				$trees[$o->id ()] = $arr["prop"]["vcl_inst"];
+			}
+		}
+
+		### merge trees to one
+		foreach ($trees as $id => $subtree)
+		{
+			foreach ($subtree->itemdata as $item)
+			{
+				### find item parent
+				foreach ($subtree->items as $parent => $items)
+				{
+					foreach ($items as $itemdata)
+					{
+						if ($itemdata["id"] == $item["id"])
+						{
+							$item_parent = $parent;
+							break;
+						}
+					}
+				}
+
+				$item_parent = $item_parent ? $id . $item_parent : $id;
+
+				###...
+				if (!preg_match ("/(\&|\?)cat=\d{0,11}/U", $item["url"]))
+				{
+					$tree->add_item($item_parent , array(
+						"name" => $item["name"],
+						"id" => $id . $item["id"],
+						"url" => $item["url"],
+						"iconurl" => $item["iconurl"],
+						"class_id" => $item["class_id"],
+					));
+				}
+			}
+		}
+
+		if (is_oid ($arr["request"]["company"]))
+		{
+			$tree->set_selected_item ($arr["request"]["company"]);
+		}
+
+		$arr["prop"]["vcl_inst"] = $tree;
+		unset ($tree);
+		unset ($trees);
+	}
+
+	function _delegate_co_v($arr, $fun, &$o)
+	{
+		$tmp = $arr["obj_inst"];
+		$arr["obj_inst"] = $o;
+		$co = get_instance("applications/crm/crm_company_people_impl");
+		$co->$fun($arr);
+		$arr["obj_inst"] = $tmp;
+		unset ($tmp);
 	}
 
 	function set_property($arr = array())
@@ -107,14 +255,46 @@ class realestate_export extends class_base
 
 		switch($prop["name"])
 		{
+			case "user_names_definition_table":
+				$save = $this->_save_user_names_data ($arr);
+
+				if ($save !== PROP_OK)
+				{
+					$prop["error"] = $save;
+					return PROP_FATAL_ERROR;
+				}
+				break;
+
 		}
 
 		return $retval;
 	}
 
-	function callback_mod_reforb($arr)
+	function _save_user_names_data ($arr)
+	{
+		foreach ($arr["request"]["person"] as $oid => $value)
+		{
+			$person = obj ($oid);
+			$person->set_meta (RE_EXPORT_CITY24USER_VAR_NAME, $value);
+			$person->save ();
+		}
+
+		return PROP_OK;
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["unit"] = $arr["request"]["realestate_unit"];
+	}
+
+	function callback_mod_reforb($arr, $request)
 	{
 		$arr["post_ru"] = post_ru();
+
+		if ($request["unit"])
+		{
+			$arr["realestate_unit"] = $request["unit"];
+		}
 	}
 
 	// @attrib name=get_objects

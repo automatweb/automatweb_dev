@@ -69,7 +69,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>Näita ainult objekte millel on:</caption>
+            <caption>N&amp;auml;ita ainult objekte millel on:</caption>
       </property>
       <property>
             <name>proplist_filter_modifiedafter</name>
@@ -169,7 +169,7 @@
             </group>
             <type>textbox</type>
             <store>no</store>
-            <caption>hind üle</caption>
+            <caption>hind &amp;uuml;le</caption>
       </property>
       <property>
             <name>proplist_filter_pricemax</name>
@@ -251,7 +251,7 @@
             </group>
             <type>date_select</type>
             <store>no</store>
-            <caption>tehingu sõlmimise aeg peale</caption>
+            <caption>tehingu s&amp;otilde;lmimise aeg peale</caption>
       </property>
       <property>
             <name>proplist_filter_closedbefore</name>
@@ -271,7 +271,7 @@
             </group>
             <type>date_select</type>
             <store>no</store>
-            <caption>tehingu sõlmimise aeg enne</caption>
+            <caption>tehingu s&amp;otilde;lmimise aeg enne</caption>
       </property>
       <property>
             <name>proplist_filter_transaction_closed</name>
@@ -292,7 +292,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
-            <caption>tehing sõlmitud</caption>
+            <caption>tehing s&amp;otilde;lmitud</caption>
       </property>
       <property>
             <name>button1</name>
@@ -411,6 +411,19 @@
             <parent>lbox</parent>
       </property>
       <property>
+            <name>user_mgr_show_all_objects</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_users_mgr</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>tbox</parent>
+            <comment>N&amp;auml;ita selle ametinimetusega kasutajatele teiste ametinimetusega kasutajate kinnisvaraobjekte</comment>
+            <caption>N&amp;auml;eb teiste objekte</caption>
+      </property>
+      <property>
             <name>title1</name>
             <table>objects</table>
             <field>meta</field>
@@ -420,7 +433,7 @@
             <store>no</store>
             <subtitle>1</subtitle>
             <parent>tbox</parent>
-            <caption>Ametile antud õigused objektitüüpide järgi</caption>
+            <caption>Ametile antud &amp;otilde;igused objektit&amp;uuml;&amp;uuml;pide j&amp;auml;rgi</caption>
       </property>
       <property>
             <name>user_mgr_division_rights</name>
@@ -443,7 +456,7 @@
             <store>no</store>
             <subtitle>1</subtitle>
             <parent>tbox</parent>
-            <caption>&amp;Otilde;igused objekti aadressi järgi</caption>
+            <caption>&amp;amp;Otilde;igused objekti aadressi j&amp;auml;rgi</caption>
       </property>
       <property>
             <name>rights_administrative_structure</name>
@@ -457,7 +470,7 @@
             <automatic>1</automatic>
             <parent>tbox</parent>
             <store>no</store>
-            <comment>Haldusjaotus, mille kohta õigusi määratakse.</comment>
+            <comment>Haldusjaotus, mille kohta &amp;otilde;igusi m&amp;auml;&amp;auml;ratakse.</comment>
             <caption>Haldusjaotus</caption>
       </property>
       <property>
@@ -469,7 +482,7 @@
             <type>select</type>
             <parent>tbox</parent>
             <store>no</store>
-            <comment>Aadressitase, mille kohta õigusi määratakse. Aadressitaseme muutmisel jäävad teiste aadressitasemete seaded samaks! Et neid muuta tuleb valida uuesti sama aadressitase.</comment>
+            <comment>Aadressitase, mille kohta &amp;otilde;igusi m&amp;auml;&amp;auml;ratakse. Aadressitaseme muutmisel j&amp;auml;&amp;auml;vad teiste aadressitasemete seaded samaks! Et neid muuta tuleb valida uuesti sama aadressitase.</comment>
             <caption>Aadressitase</caption>
       </property>
       <property>
@@ -523,7 +536,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>Näita ainult kliente kellel:</caption>
+            <caption>N&amp;auml;ita ainult kliente kellel:</caption>
       </property>
       <property>
             <name>clientlist_filter_name</name>
@@ -553,7 +566,7 @@
             <group>grp_client_list</group>
             <type>date_select</type>
             <store>no</store>
-            <caption>tänukirja kuupäev peale</caption>
+            <caption>t&amp;auml;nukirja kuup&amp;auml;ev peale</caption>
       </property>
       <property>
             <name>clientlist_filter_appreciationbefore</name>
@@ -563,7 +576,7 @@
             <group>grp_client_list</group>
             <type>date_select</type>
             <store>no</store>
-            <caption>tänukirja kuupäev enne</caption>
+            <caption>t&amp;auml;nukirja kuup&amp;auml;ev enne</caption>
       </property>
       <property>
             <name>clientlist_filter_appreciationtype</name>
@@ -574,7 +587,7 @@
             <type>chooser</type>
             <multiple>1</multiple>
             <store>no</store>
-            <caption>tänukirja tüüp</caption>
+            <caption>t&amp;auml;nukirja t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>clientlist_filter_agent</name>
@@ -635,9 +648,7 @@
             <method>serialize</method>
             <group>grp_settings</group>
             <type>textbox</type>
-            <caption>
-            <![CDATA["Kõik lubatud" kasutaja uid]]>
-            </caption>
+            <caption>&amp;quot;K&amp;otilde;ik lubatud&amp;quot; kasutaja uid</caption>
       </property>
       <property>
             <name>houses_folder</name>
@@ -703,7 +714,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_REALESTATEMGR_FOLDER</reltype>
             <clid>CL_MENU</clid>
-            <caption>&amp;Auml;ripindade kaust</caption>
+            <caption>&amp;amp;Auml;ripindade kaust</caption>
       </property>
       <property>
             <name>garages_folder</name>
@@ -769,7 +780,7 @@
             <group>grp_settings</group>
             <type>textbox</type>
             <default>jmYHi</default>
-            <caption>Kuupäevaformaat</caption>
+            <caption>Kuup&amp;auml;evaformaat</caption>
       </property>
       <property>
             <name>properties_list_perpage</name>
@@ -790,7 +801,7 @@
             <group>grp_settings</group>
             <type>textbox</type>
             <size>100</size>
-            <comment>Võimalikud muutujad urlis: address_parsed - objekti aadress, mis antakse argumendina kaasa, save_url - url millele pärigut tehes tagastatakse kaardi andmed argumentidena</comment>
+            <comment>V&amp;otilde;imalikud muutujad urlis: address_parsed - objekti aadress, mis antakse argumendina kaasa, save_url - url millele p&amp;auml;rigut tehes tagastatakse kaardi andmed argumentidena</comment>
             <caption>Kaardiserveri url</caption>
       </property>
       <property>
@@ -835,7 +846,7 @@
             <reltype>RELTYPE_ADMINISTRATIVE_STRUCTURE</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
             <automatic>1</automatic>
-            <comment>Riigi haldusjaotus, milles süsteemis hallatavad kinnisvaraobjektid asuvad</comment>
+            <comment>Riigi haldusjaotus, milles s&amp;uuml;steemis hallatavad kinnisvaraobjektid asuvad</comment>
             <caption>Haldusjaotus</caption>
       </property>
       <property>
@@ -848,7 +859,7 @@
             <reltype>RELTYPE_ADDRESS_EQUIVALENT_1</reltype>
             <clid>CL_COUNTRY_ADMINISTRATIVE_DIVISION</clid>
             <editonly>1</editonly>
-            <comment>Haldusjaotis aadressisüsteemis, mis vastab maakonnale</comment>
+            <comment>Haldusjaotis aadressis&amp;uuml;steemis, mis vastab maakonnale</comment>
             <caption>Maakond haldusjaotuses</caption>
       </property>
       <property>
@@ -921,7 +932,7 @@
                   <caption>Objektid</caption>
             </grp_realestate_properties>
             <grp_realestate_properties_all>
-                  <caption>Kõik objektid</caption>
+                  <caption>K&amp;otilde;ik objektid</caption>
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_all>
             <grp_realestate_properties_houses>
@@ -945,7 +956,7 @@
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_apartments>
             <grp_realestate_properties_commercial_properties>
-                  <caption>Äripinnad</caption>
+                  <caption>&amp;Auml;ripinnad</caption>
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_commercial_properties>
             <grp_realestate_properties_garages>
@@ -953,7 +964,7 @@
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_garages>
             <grp_realestate_properties_land_estates>
-                  <caption>Maatükid</caption>
+                  <caption>Maat&amp;uuml;kid</caption>
                   <parent>grp_realestate_properties</parent>
             </grp_realestate_properties_land_estates>
             <grp_realestate_properties_search>
@@ -1059,6 +1070,9 @@
                         <num_0>grp_users_tree</num_0>
                         <num_1>grp_users_mgr</num_1>
                   </group>
+                  <width>
+                  <![CDATA["30%:70%"]]>
+                  </width>
             </vsplitbox>
             <lbox>
                   <type>vbox</type>

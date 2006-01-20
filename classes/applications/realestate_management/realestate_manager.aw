@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.7 2006/01/17 08:41:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.8 2006/01/20 15:49:42 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -91,7 +91,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 
 @default group=grp_users_tree
 	@property box type=text no_caption=1 store=no group=grp_users_tree,grp_users_mgr
-	@layout vsplitbox type=hbox group=grp_users_tree,grp_users_mgr
+	@layout vsplitbox type=hbox group=grp_users_tree,grp_users_mgr width="30%:70%"
 	@property user_list_toolbar type=toolbar store=no no_caption=1
 	@property user_list_tree type=treeview store=no no_caption=1 parent=vsplitbox
 	@property user_list type=table store=no no_caption=1 parent=vsplitbox
@@ -101,6 +101,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@layout lbox type=vbox parent=vsplitbox
 	@property user_mgr_tree type=treeview store=no no_caption=1 parent=lbox
 	@layout tbox type=vbox parent=vsplitbox
+
+	@property user_mgr_show_all_objects type=checkbox ch_value=1 store=no parent=tbox
+	@comment Näita selle ametinimetusega kasutajatele teiste ametinimetusega kasutajate kinnisvaraobjekte
+	@caption Näeb teiste objekte
 
 	@property title1 type=text store=no subtitle=1 parent=tbox
 	@caption Ametile antud õigused objektitüüpide järgi
@@ -299,11 +303,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 
 */
 
+define ("RE_USERMGR_SHOWALLOBJ_VAR_NAME", "realestate_showallobj");
+
 class realestate_manager extends class_base
 {
 	var $realestate_search = 0;
 	var $default_date_format = "j/m/Y H.i";
 	var $cl_users;
+	var $cl_user;
 	var $cl_classificator;
 	var $usr_mgr_profession_group;
 
@@ -355,6 +362,7 @@ class realestate_manager extends class_base
 		aw_session_set ("realsestate_usr_mgr_unit", $arr["request"]["unit"]);
 		aw_session_set ("realsestate_usr_mgr_company", $arr["request"]["company"]);
 		$this->cl_users = get_instance("users");
+		$this->cl_user = get_instance (CL_USER);
 		$this->cl_classificator = get_instance(CL_CLASSIFICATOR);
 
 		if (
@@ -363,8 +371,8 @@ class realestate_manager extends class_base
 			is_oid (aw_global_get ("realsestate_usr_mgr_cat"))
 		)
 		{
-			$profession = obj (aw_global_get ("realsestate_usr_mgr_cat"));
-			$this->usr_mgr_profession_group = $profession->get_first_obj_by_reltype ("RELTYPE_GROUP");
+			$this->usr_mgr_profession = obj (aw_global_get ("realsestate_usr_mgr_cat"));
+			$this->usr_mgr_profession_group = $this->usr_mgr_profession->get_first_obj_by_reltype ("RELTYPE_GROUP");
 
 			if (!is_object ($this->usr_mgr_profession_group))
 			{
@@ -641,6 +649,23 @@ class realestate_manager extends class_base
 				$prop["value"] = $this->administrative_structure->id ();
 				break;
 
+			case "user_mgr_show_all_objects":
+				### proceed only if a profession is selected
+				if (!is_oid ($arr["request"]["cat"]))
+				{
+					return PROP_IGNORE;
+				}
+
+				if (!is_object ($this->usr_mgr_profession))
+				{
+					$prop["error"] .= sprintf (t("Amet määramata. "));
+					return PROP_ERROR;
+					// return PROP_IGNORE;
+				}
+
+				$prop["value"] = $this->usr_mgr_profession->meta (RE_USERMGR_SHOWALLOBJ_VAR_NAME);
+				break;
+
 			case "rights_admindivision_current":
 			case "rights_admindivision":
 				### proceed only if a profession is selected
@@ -846,6 +871,19 @@ class realestate_manager extends class_base
 			case "rights_administrative_structure":
 				aw_session_set ("realestate_usr_mgr_" . $prop["name"], $prop["value"]);
 				return PROP_IGNORE;
+
+			case "user_mgr_show_all_objects":
+				### proceed only if a profession is selected
+				if (!is_object ($this->usr_mgr_profession))
+				{
+					$prop["error"] .= sprintf (t("Amet määramata. "));
+					return PROP_ERROR;
+					// return PROP_IGNORE;
+				}
+
+				$this->usr_mgr_profession->set_meta (RE_USERMGR_SHOWALLOBJ_VAR_NAME, (int) $prop["value"]);
+				$this->usr_mgr_profession->save ();
+				break;
 
 			case "rights_adminunit":
 				if (!is_object ($this->usr_mgr_profession_group))
@@ -1408,6 +1446,29 @@ class realestate_manager extends class_base
 		$table_name = str_replace ("grp_realestate_properties_", "", $arr["request"]["group"]);
 		$table->name = ("grp_realestate_properties" != $table_name) ? $table_name : "all";
 
+		### current agent
+		$agent_constraint = null;
+		$this->current_agent_can_see_all_objects = true;
+		$oid = $this->cl_user->get_current_person ();
+		$this->current_agent = obj ($oid);
+
+		### get current user profession
+		$profession = $this->current_agent->get_first_obj_by_reltype ("RELTYPE_RANK");
+
+		if (is_object ($profession) and !$profession->meta (RE_USERMGR_SHOWALLOBJ_VAR_NAME))
+		{
+			$this->current_agent_can_see_all_objects = false;
+
+			### agent constraint
+			$agent_constraint = new object_list_filter (array (
+				"logic" => "OR",
+				"conditions" => array (
+					"realestate_agent1" => (int) $this->current_agent->id (),
+					"realestate_agent2" => (int) $this->current_agent->id (),
+				)
+			));
+		}
+
 		switch ($table->name)
 		{
 			case "houses":
@@ -1627,6 +1688,7 @@ class realestate_manager extends class_base
 			"transaction_closed" => $transaction_closed,
 			"legal_status" => $legal_status,
 			"quality_class" => $quality_class,
+			$agent_constraint,
 		);
 		$list = new object_list ($args);
 
@@ -1969,10 +2031,6 @@ class realestate_manager extends class_base
 
 		natcasesort ($agents_filter);
 
-		$cl_user = get_instance (CL_USER);
-		$oid = $cl_user->get_current_person ();
-		$agent = obj ($oid);
-
 		### address filter
 		if (!is_object ($this->administrative_structure))
 		{
@@ -2076,16 +2134,19 @@ class realestate_manager extends class_base
 			"sortable" => 1
 		));
 
-		$table->define_field(array(
-			"name" => "agent",
-			"caption" => t("Maakler"),
-			"filter" => $agents_filter,
-			"filter_options" => array (
-				"match" => "substring",
-				"selected" => $agent->name (),
-			),
-			"sortable" => 1,
-		));
+		if ($this->current_agent_can_see_all_objects)
+		{
+			$table->define_field(array(
+				"name" => "agent",
+				"caption" => t("Maakler"),
+				"filter" => $agents_filter,
+				"filter_options" => array (
+					"match" => "substring",
+					"selected" => $this->current_agent->name (),
+				),
+				"sortable" => 1,
+			));
+		}
 
 		if ($table->name == "apartments")
 		{
@@ -2506,11 +2567,6 @@ class realestate_manager extends class_base
 		$table =& $arr["prop"]["vcl_inst"];
 		$table->name = "clients_list";
 		$this->_init_clients_list ($arr);
-
-		if (!is_object  ($this->cl_user))
-		{
-			$this->cl_user = get_instance (CL_USER);
-		}
 
 		### properties menu script
 		$actions_menu_script = '<script src="http://voldemar.dev.struktuur.ee/automatweb/js/popup_menu.js" type="text/javascript">

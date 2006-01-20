@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.8 2006/01/17 08:41:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.9 2006/01/20 15:49:42 voldemar Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -285,6 +285,7 @@ define ("REALESTATE_NF_DEC", 2);
 define ("REALESTATE_NF_POINT", ",");
 define ("REALESTATE_NF_SEP", " ");
 define ("NEWLINE", "<br />\n");
+define ("RE_EXPORT_CITY24USER_VAR_NAME", "realestate_city24username");
 
 class realestate_property extends class_base
 {
@@ -712,11 +713,14 @@ class realestate_property extends class_base
 		settype ($pid, "string");
 		define ("PID_GENDER_FEMALE", 2);
 		define ("PID_GENDER_MALE", 1);
+		define ("PID_ERROR_LENGTH", 1);
+		define ("PID_ERROR_CHECKSUM", 2);
+		define ("PID_ERROR_INVALID_DATE", 3);
 		$errors = array ();
 
 		if (strlen ($pid) != 11)
 		{
-			$errors[] = t("Isikukood vale pikkusega.");
+			$errors[PID_ERROR_LENGTH] = t("Isikukood vale pikkusega.");
 		}
 
 		$quotient = 10;
@@ -752,7 +756,7 @@ class realestate_property extends class_base
 
 		if (!$check)
 		{
-			$errors[] = t("Isikukood ei vasta Eesti Vabariigi isikukoodi standardile.");
+			$errors[PID_ERROR_CHECKSUM] = t("Isikukood ei vasta Eesti Vabariigi isikukoodi standardile.");
 		}
 
 		$pid_1 = (int) substr ($pid, 0, 1);
@@ -799,7 +803,7 @@ class realestate_property extends class_base
 		}
 		else
 		{
-			$errors[] = t("Isikukoodis leiduv sünnikuupäevateave ei vasta ühelegi kuupäevale Gregoriuse kalendris.");
+			$errors[PID_ERROR_INVALID_DATE] = t("Isikukoodis leiduv sünnikuupäevateave ei vasta ühelegi kuupäevale Gregoriuse kalendris.");
 		}
 
 		if (count ($errors))
@@ -1645,6 +1649,15 @@ class realestate_property extends class_base
 			$this->export_errors .= t("Objekti klassi m22ramine eba6nnestus.") . NEWLINE;
 		}
 
+		### additional properties
+		$properties[] = array (
+			"name" => "modified",
+			"type" => "text",
+			"value" => $this_object->modified (),
+			"strvalue" => "",
+			"altvalue" => date ("YmdHis", $this_object->modified ()),
+		);
+
 		$xml_data = $arr["no_declaration"] ? array () : array ('<?xml version="1.0" encoding="iso-8859-4"?>');
 		$xml_data[] = '<realestate_object xmlns="http://www.automatweb.com/realestate_management">';
 		$xml_data[] = '<class_name>' . $class . '</class_name>';
@@ -2020,6 +2033,17 @@ REALESTATE_NF_SEP);
 					"name" => $name,
 					"type" => "text",
 					"caption" => t("Maakleri id"),
+					"value" => $value,
+					"strvalue" => $value,
+					"altvalue" => $value,
+				);
+
+				$name = "agent_city24_user";
+				$value = $this->realestate_agents_data[$agent1_oid]["city24_user"];
+				$properties[$name] = array (
+					"name" => $name,
+					"type" => "text",
+					"caption" => t("Maakleri kasutajanimi City24 süsteemis"),
 					"value" => $value,
 					"strvalue" => $value,
 					"altvalue" => $value,
@@ -2439,6 +2463,7 @@ REALESTATE_NF_SEP);
 			}
 
 			$this->realestate_agents_data[$agent_oid]["picture_url"] = $agent_picture_url;
+			$this->realestate_agents_data[$agent_oid]["city24_user"] = $agent->meta (RE_EXPORT_CITY24USER_VAR_NAME);
 		}
 
 		exit_function("re_property::load_agent_data");
