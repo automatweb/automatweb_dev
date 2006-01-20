@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.6 2005/04/25 09:09:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.7 2006/01/20 11:39:59 kristo Exp $
 // auth_server_local.aw - Autentimsserver Kohalik 
 /*
 
@@ -98,6 +98,10 @@ class auth_server_local extends class_base
 				foreach($conns as $c)
 				{
 					$ipa = $c->to();
+					if ($ipa->prop("range") != "" && $ipi->match_range($ipa->prop("range"), $cur_ip))
+					{
+						$allow = true;	
+					}
 					if ($ipi->match($ipa->prop("addr"), $cur_ip))
 					{
 						$allow = true;
