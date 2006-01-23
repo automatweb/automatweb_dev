@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.16 2006/01/20 12:17:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.17 2006/01/23 15:47:42 ahti Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -37,7 +37,7 @@
 @caption Struktuuriüksuste XML fail
 
 @property xml_link type=relpicker reltype=RELTYPE_LINK_REL
-@caption vali , kust imporditava XMLi link saada
+@caption Impordi objekt
 
 @property xml_image_folder type=textbox
 @caption Pildifailide kataloog (kui on eraldi)
@@ -69,8 +69,8 @@
 @reltype RECURRENCE value=5 clid=CL_RECURRENCE
 @caption Kordus
 
-@reltype LINK_REL value=22 clid=CL_MENU
-@caption XML lingi seos
+@reltype LINK_REL value=22 clid=CL_TAAVI_IMPORT
+@caption Impordi objekt
 
 */
 
