@@ -94,10 +94,13 @@ class crm_company_bills_impl extends class_base
 				{
 					continue;
 				}
-				$has_rows = true;
 				foreach($rows as $row)
 				{
-					$sum += $row["sum"];
+					if (!$row["bill_id"])
+					{
+						$has_rows = true;
+						$sum += $row["sum"];
+					}
 				}
 			}
 
@@ -196,8 +199,11 @@ class crm_company_bills_impl extends class_base
 					$rows = $task_i->get_task_bill_rows($o);
 					foreach($rows as $row)
 					{
-						$sum += $row["sum"];
-						$hrs += $row["amt"];
+						if (!$row["bill_id"])
+						{
+							$sum += $row["sum"];
+							$hrs += $row["amt"];
+						}
 					}
 
 					$t->define_data(array(
@@ -684,7 +690,14 @@ class crm_company_bills_impl extends class_base
 				$ri = array();
 				$ri[] = "1";	// (teadmata, vaikeväärtus 1)) 
 				//$ri[] = $idx;	// TEST (artikli kood) 
-				$ri[] = $row["code"];
+				//$ri[] = $row["code"];
+				$code = "";
+				if ($this->can("view", $row["prod"]))
+				{
+					$prod = obj($row["prod"]);
+					$code = $prod->name();
+				}
+				$ri[] = $code;
 				$ri[] = $row["amt"];	//33 (kogus) 
 				$ri[] = $row["name"];	// testartikkel (toimetuse rea sisu) 
 				$ri[] = str_replace(".", ",", $row["price"]);	// 555,00 (ühiku hind) 

@@ -50,7 +50,7 @@ class crm_data extends class_base
 
 				if ($r["from"] > 100 && $r["to"] > 100)
 				{
-					$of["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["from"], $r["to"]);
+					$of["bill_date"] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $r["from"], $r["to"]);
 				}
 				else
 				if ($r["from"] > 100)

@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.104 2006/01/19 22:32:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.105 2006/01/23 08:44:31 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -871,18 +871,23 @@ class crm_person extends class_base
 			case "crm_settings":
 				$u = get_instance(CL_USER);
 				$p = $u->get_current_person();
-				if ($p == $arr["obj_inst"]->id())
+				if (true || $p == $arr["obj_inst"]->id())
 				{
-					// get all crm settings for this person or user
+				// get all crm settings for this person or user
+					$user = $this->has_user($arr["obj_inst"]);
+					if (!$user)
+					{
+						return PROP_IGNORE;
+					}
 					$ol = new object_list(array(
 						"class_id" => CL_CRM_SETTINGS,
-						"CL_CRM_SETTINGS.RELTYPE_USER" => aw_global_get("uid_oid")
+						"CL_CRM_SETTINGS.RELTYPE_USER" => $user->id() 
 					));
 					if (!$ol->count())
 					{
 						$ol = new object_list(array(
 							"class_id" => CL_CRM_SETTINGS,
-							"CL_CRM_SETTINGS.RELTYPE_PERSON" => aw_global_get("uid_oid")
+							"CL_CRM_SETTINGS.RELTYPE_PERSON" => $arr["obj_inst"]->id() 
 						));	
 					}
 

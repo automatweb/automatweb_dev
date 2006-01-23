@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.7 2006/01/20 08:03:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.8 2006/01/23 08:44:30 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -113,6 +113,11 @@ class crm_job_entry extends class_base
 
 			case "name":
 				return PROP_IGNORE;
+
+			case "cust_n":
+				$prop["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
+				$prop["autocomplete_params"] = array("cust_n");
+				break;
 
 			case "sel_cust":
 				$i = get_instance(CL_CRM_COMPANY);
@@ -301,6 +306,7 @@ class crm_job_entry extends class_base
 		$p->set_prop("description", $arr["request"]["proj_desc"]);
 		$p->set_prop("participants", $arr["request"]["proj_parts"]);
 		$p->set_prop("proj_type", $arr["request"]["proj_type"]);
+		$p->set_prop("implementor", $u->get_current_company());
 		$p->save();
 		$si = __get_site_instance();
 		if (method_exists($si, "project_gen_code"))

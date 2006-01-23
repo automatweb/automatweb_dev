@@ -108,7 +108,6 @@ class crm_company_overview_impl extends class_base
 
 		$this->overview = array();
 		classload("core/icons");
-
 		// get b-days
 		if ($calo->prop("show_bdays") == 1)
 		{
@@ -124,14 +123,20 @@ class crm_company_overview_impl extends class_base
 					objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of  
 				WHERE	
 					objects.class_id = '145' AND 
-					(MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) >= $s_m $pred MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) <= $e_m) AND 
 					objects.status > 0  AND
 					kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
 			";
+//echo "q = $q <br>";
+// (MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) >= $s_m $pred MONTH(FROM_UNIXTIME(kliendiba
+//as_isik.birthday)) <= $e_m) AND
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
-				$evts[$row["oid"]] = $row["oid"];
+				$m = date("m", $row["bd"]);
+				if (($s_m > $e_m ? ($m >= $s_m || $m <= $e_m) : ($m >= $s_m && $m <= $e_m)))
+				{
+					$evts[$row["oid"]] = $row["oid"];
+				}	
 			}
 		}
 

@@ -3418,7 +3418,13 @@ class crm_company extends class_base
 		{
 			$proj = obj($arr["proj"]);
 			$cust = $proj->get_first_obj_by_reltype("RELTYPE_ORDERER");
-			$bill->set_prop("impl", reset($proj->prop("implementor")));
+			$impl = $proj->prop("orderer");
+			if (is_array($impl))
+			{
+				$impl = reset($impl);
+			}
+			$bill->set_prop("customer", $impl);
+			$bill->set_prop("impl", $proj->prop("implementor"));
 		}
 		else
 		if (is_oid($arr["cust"]))
@@ -3449,7 +3455,7 @@ class crm_company extends class_base
 			));
 
 			// add bill id to all rows in task that don't have one already
-			$rows = safe_array($task_o->meta("rows"));
+			/*$rows = safe_array($task_o->meta("rows"));
 			foreach($rows as $idx => $row)
 			{
 				if (!$row["bill_id"] && $row["on_bill"])
@@ -3457,7 +3463,16 @@ class crm_company extends class_base
 					$rows[$idx]["bill_id"] = $bill->id();
 				}
 			}
-			$task_o->set_meta("rows", $rows);
+			$task_o->set_meta("rows", $rows);*/
+			foreach($task_o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+			{
+				$row = $c->to();
+				if (!$row->prop("bill_id") && $row->prop("on_bill"))
+				{
+					$row->set_prop("bill_id", $bill->id());
+					$row->save();
+				}
+			}
 			$task_o->save();
 		}
 
@@ -4214,6 +4229,15 @@ class crm_company extends class_base
 
 	function callback_mod_tab($arr)
 	{
+		if ($arr["id"] == "general")
+		{
+			$u = get_instance(CL_USER);
+			$co = $u->get_current_company();
+			if ($co == $arr["obj_inst"]->id())
+			{
+				$arr["caption"] = t("B&uuml;roo");
+			}	
+		}
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;
@@ -4405,6 +4429,7 @@ class crm_company extends class_base
 		{
 			$ars[] = $name."=>".$name;
 		}*/
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die(join("\n", $ars)."\n");
 	}
 	

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.8 2006/01/04 14:36:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.9 2006/01/23 08:44:31 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -344,7 +344,7 @@ class server_folder extends class_base
 						{
 							$url = str_replace($_spath, $_sname, $url);
 						}
-						$url = "file://".str_replace("/", "\\", $url);
+						$url = "file://\\".str_replace("/", "\\", $url);
 						$iurl = $this->mk_my_orb("show_file", array("fid" => $fid));
 					}
 					else

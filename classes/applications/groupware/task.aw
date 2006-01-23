@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.58 2006/01/19 22:32:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.59 2006/01/23 08:44:31 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1358,14 +1358,15 @@ class task extends class_base
 			{
 				$id = $task->id()."_".$idx;
 				$rows[$id] = array(
-					"name" => $row->prop("task"),
+					"name" => $row->prop("content"),
 					"unit" => t("tund"),
 					"date" => $row->prop("date"),
 					"price" => $task->prop("hr_price"),
 					"amt" => $row->prop("time_to_cust"),
 					"sum" => str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price"),
 					"has_tax" => 1,
-					"on_bill" => 1
+					"on_bill" => 1,
+					"bill_id" => $row->prop("bill_id")
 				);
 			}
 		}
@@ -1380,7 +1381,10 @@ class task extends class_base
 				$bc = reset($conns);
 				if ($bc && $bill_id != $bc->prop("to"))
 				{
-					$add = false;
+					if ($bill_id != $bc->prop("to"))
+					{
+						$add = false;
+					}
 				}
 			}
 

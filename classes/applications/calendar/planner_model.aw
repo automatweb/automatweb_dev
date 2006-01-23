@@ -395,20 +395,23 @@ class planner_model extends core
 					objects  LEFT JOIN kliendibaas_isik ON kliendibaas_isik.oid = objects.brother_of  
 				WHERE	
 					objects.class_id = '145' AND 
-					(MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) >= $s_m $pred MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) <= $e_m) AND 
 					objects.status > 0  AND
 					kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
 			";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
-				$ds = $obj->prop("day_start");
-				$bs = mktime($ds["hour"], $ds["minute"], 0, date("m", $row["bd"]), date("d", $row["bd"]), date("Y"));
-				$rv[$row["oid"]] = array(
-					"id" => $row["oid"],
-					"start" => $bs,
-					"end" => $bs+3600,
-				);
+				$m = date("m", $row["bd"]);
+                                if (($s_m > $e_m ? ($m >= $s_m || $m <= $e_m) : ($m >= $s_m && $m <= $e_m)))
+                                {
+					$ds = $obj->prop("day_start");
+					$bs = mktime($ds["hour"], $ds["minute"], 0, date("m", $row["bd"]), date("d", $row["bd"]), date("Y"));
+					$rv[$row["oid"]] = array(
+						"id" => $row["oid"],
+						"start" => $bs,
+						"end" => $bs+3600,
+					);
+				}
 			}
 		}
 		return $rv;

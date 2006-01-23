@@ -295,7 +295,6 @@ class crm_document_base extends class_base
 			$o->set_prop("is_done", $row["done"]);
 			$o->set_prop("document", $arr["obj_inst"]->id());
 			$o->save();
-
 			$arr["obj_inst"]->connect(array(
 				"type" => "RELTYPE_ACTION",
 				"to" => $o->id()
