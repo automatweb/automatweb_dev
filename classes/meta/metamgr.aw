@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.11 2005/12/20 16:37:42 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.12 2006/01/23 10:40:48 ahti Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
@@ -15,7 +15,7 @@
 @default group=manager
 
 
-@groupinfo manager caption="Muutujad" submit=no encoding=utf-8
+@groupinfo manager caption="Muutujad" submit=no
 @property mgrtoolbar type=toolbar no_caption=1 store=no 
 @caption Toolbar
 
@@ -142,26 +142,30 @@ class metamgr extends class_base
 			"callback" => array(&$this, "callb_name"),
 			"callb_pass_row" => true,
 		));
-
-		$lg = get_instance("languages");
+		$transyes = $arr["obj_inst"]->prop("transyes");
 		$langdata = array();
-		$langdata = $lg->get_list();
-
-		foreach($langdata as $id => $lang)
+		if($transyes == 1)
 		{
-			if($arr["obj_inst"]->lang_id() != $id)
+			aw_global_set("output_charset", "utf-8");
+			$lg = get_instance("languages");
+			$langdata = $lg->get_list();
+
+			foreach($langdata as $id => $lang)
 			{
-				$t->define_field(array(
-					"name" => $id,
-					"lang_id" => $id,
-					"caption" => t($lang),
-				));
+				if($arr["obj_inst"]->lang_id() != $id)
+				{
+					$t->define_field(array(
+						"name" => $id,
+						"lang_id" => $id,
+						"caption" => t($lang),
+					));
+				}
 			}
 		}
 
 		$t->define_field(array(
 			"name" => "value",
-			"caption" => t("V?rtus"),
+			"caption" => t("V&auml;&auml;rtus"),
 			"callback" => array(&$this, "callb_value"),
 			"callb_pass_row" => true,
 		));
