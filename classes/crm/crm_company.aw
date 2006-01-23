@@ -2620,7 +2620,7 @@ class crm_company extends class_base
 			$person->set_prop('work_contact',$arr['id']);
 			$person->save();
 
-			if ($arr["cat"])
+			if ($arr["cat"] && $cat != 999999)
 			{
 				$person->connect(array(
 					"to" => $arr["cat"],

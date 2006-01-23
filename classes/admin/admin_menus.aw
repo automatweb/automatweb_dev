@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.109 2005/11/09 18:19:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.110 2006/01/23 08:47:15 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -358,7 +358,6 @@ class admin_menus extends aw_template
 
 			$menus = unserialize($d);
 			$i_p = $menus[0];
-
 			$this->req_import_menus($i_p, &$menus, $parent);
 		}
 

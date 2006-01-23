@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.59 2006/01/23 08:44:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.60 2006/01/23 08:47:16 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -176,7 +176,7 @@ caption Osalejad
 @caption Rida
 
 @reltype ATTACH value=8 clid=CL_CRM_MEMO,CL_CRM_DEAL,CL_CRM_DOCUMENT,CRM_OFFER
-@caption MAnus
+@caption Manus
 */
 
 class task extends class_base
@@ -582,10 +582,11 @@ class task extends class_base
 				else
 				if (is_object($arr["obj_inst"]) && $this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
-					$ol = new object_list(array(
+					$filt = array(
 						"class_id" => CL_PROJECT,
 						"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->prop("customer"),
-					));
+					);
+					$ol = new object_list($filt);
 				}
 				else
 				{
@@ -1294,7 +1295,7 @@ class task extends class_base
 				$bno = $bo->prop("bill_no");
 			}
 			$t->define_data(array(
-				"task" => "<a name='row_".$idx."'/>".html::textarea(array(
+				"task" => "<a name='row_".$idx."'></a>".html::textarea(array(
 					"name" => "rows[$idx][task]",
 					"value" => $row->prop("content"),
 					"rows" => 5,
@@ -1877,7 +1878,7 @@ class task extends class_base
 		// add new rows that are without oid
 		// I think rows should not be deleted. or we can add that later
 		$task = obj($arr["request"]["id"]);
-
+		aw_global_set("no_cache_flush", 1);
 		foreach(safe_array($_POST["rows"]) as $_oid => $e)
 		{
 			if (!is_oid($_oid))
@@ -1935,6 +1936,8 @@ class task extends class_base
 				));
 			}
 		}
+		$c = get_instance("cache");
+		$c->full_flush();
 	}
 }
 ?>
