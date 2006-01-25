@@ -1,5 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="bug_tracker" folder="applications/bug_o_matic_3000" extends="class_base">
+		<action name="delete">
+			<function name="delete">
+				<arguments>
+					<optional name="cat" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

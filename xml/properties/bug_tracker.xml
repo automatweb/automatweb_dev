@@ -3,9 +3,8 @@
       <property>
             <name>bug_tb</name>
             <table>objects</table>
-            <group>general</group>
+            <group>bugs</group>
             <type>toolbar</type>
-            <parent>bugl</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>bug_tb</field>
@@ -13,9 +12,9 @@
       <property>
             <name>bug_tree</name>
             <table>objects</table>
-            <group>general</group>
+            <group>bugs</group>
             <type>treeview</type>
-            <parent>bugl_lower</parent>
+            <parent>bug</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>bug_tree</field>
@@ -23,9 +22,9 @@
       <property>
             <name>bug_list</name>
             <table>objects</table>
-            <group>general</group>
+            <group>bugs</group>
             <type>table</type>
-            <parent>bugl_lower</parent>
+            <parent>bug</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>bug_list</field>
@@ -36,21 +35,18 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <bugs>
+                  <caption>Bugid</caption>
+                  <submit>no</submit>
+            </bugs>
+      </groupinfo>
       <layout>
-            <bugl>
-                  <type>vbox</type>
-                  <group>general</group>
-            </bugl>
-            <bugl_tb>
+            <bug>
                   <type>hbox</type>
-                  <parent>bugl</parent>
-                  <group>general</group>
-            </bugl_tb>
-            <bugl_lower>
-                  <type>hbox</type>
-                  <parent>bugl</parent>
-                  <group>general</group>
-            </bugl_lower>
+                  <width>15%:85%</width>
+                  <group>bugs</group>
+            </bug>
       </layout>
 </properties>
 

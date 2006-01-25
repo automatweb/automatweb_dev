@@ -77,6 +77,18 @@
             <caption>Bugmail CC</caption>
       </property>
       <property>
+            <name>monitors</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MONITOR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <multiple>1</multiple>
+            <size>5</size>
+            <caption>J&amp;amp;auml;lgijad</caption>
+      </property>
+      <property>
             <name>comms</name>
             <group>comments</group>
             <table>aw_bugs</table>

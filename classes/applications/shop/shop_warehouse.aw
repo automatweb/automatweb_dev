@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.37 2006/01/06 07:34:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.38 2006/01/25 14:56:52 ahti Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2594,7 +2594,7 @@ class shop_warehouse extends class_base
 
 		@attrib name=add_to_cart
 
-		@param id required type=ind acl=view
+		@param id required type=int acl=view
 		@param sel optional
 		@param group optional
 	**/

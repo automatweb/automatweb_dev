@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.4 2005/07/06 19:05:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.5 2006/01/25 14:56:51 ahti Exp $
 // bug.aw - Bugi 
 /*
 
@@ -44,6 +44,9 @@ caption OS
 @property bug_mail type=textbox size=60
 @caption Bugmail CC
 
+@property monitors type=relpicker reltype=RELTYPE_MONITOR table=objects field=meta method=serialize multiple=1 size=5
+@caption J&auml;lgijad
+
 @property comms type=comments group=comments store=no
 @caption Kommentaarid
 
@@ -72,7 +75,32 @@ class bug extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bug_status":	
+				$prop["options"] = array(
+					0 => t("Lahtine"),
+					1 => t("Töös"),
+					2 => t("Parandatud"),
+				);
+				break;
 
+			case "bug_priority":
+			case "bug_severity":
+				foreach(range(1, 5) as $r)
+				{
+					$prop["options"][$r] = $r;
+				}
+				break;
+
+			case "bug_class":
+				$cx = get_instance("cfg/cfgutils");
+				$class_list = new aw_array($cx->get_classes_with_properties());
+				$cp = get_class_picker(array("field" => "def"));
+
+				foreach($class_list->get() as $key => $val)
+				{
+					$prop["options"][$key] = $val;
+				};	
+				break;
 		};
 		return $retval;
 	}
@@ -93,14 +121,21 @@ class bug extends class_base
 
 	function notify_monitors($arr)
 	{
+		$monitors = $arr["obj_inst"]->prop("monitors");
+		/*
 		$monitors = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_MONITOR",
 		));
-
+		*/
 		// I should add a way to send CC-s to arbitraty e-mail addresses as well
 		foreach($monitors as $person)
 		{
-			$person_obj = $person->to();
+			if(!$this->can("view", $person))
+			{
+				continue;
+			}
+			//$person_obj = $person->to();
+			$person_obj = obj($person); 
 			$email = $person_obj->prop("email");
 			$notify_addresses = array();
 			if (is_oid($email))
@@ -140,14 +175,8 @@ class bug extends class_base
 		$msgtxt .= $arr["request"]["comms"]["comment"];
 
 		send_mail($notify_list,"Bug #" . $oid . ": " . $name . " : " . $uid . " lisas kommentaari",$msgtxt,"From: automatweb@automatweb.com");
-
-		/*
-		print "<pre>";
-		print $msgtxt;
-		print "</pre>";
-		*/
 	}
-
+/*
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
@@ -162,5 +191,6 @@ class bug extends class_base
 		));
 		return $this->parse();
 	}
+	*/
 }
 ?>

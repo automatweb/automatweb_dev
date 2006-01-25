@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.51 2005/12/16 18:53:29 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.52 2006/01/25 14:56:52 ahti Exp $
 // treeview.aw - tree generator
 /*
 
@@ -1247,7 +1247,6 @@ class treeview extends class_base
 				"checkbox" => $checkbox_status,
 			));
 		}
-
 		return $tv;
 	}
 
