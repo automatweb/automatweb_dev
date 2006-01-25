@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.4 2006/01/25 14:56:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.5 2006/01/25 15:36:48 dragut Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -158,7 +158,7 @@ class bug_tracker extends class_base
 
 		$t->define_field(array(
 			"name" => "status",
-			"caption" => t("Staatus"),
+			"caption" => t("Aktiivne"),
 			"sortable" => 1,
 			"callback" => array(&$this, "callb_status"),
 			//"callback_pass_row" => 1,
