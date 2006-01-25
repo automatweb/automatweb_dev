@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.6 2006/01/03 13:41:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.7 2006/01/25 13:10:34 ahti Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -622,7 +622,7 @@ class aw_mail {
 		// why is this here? it will screw up sending to mailinglists - only the first mail will get the subject
 		// unset($this->headers["Subject"]);
 		$this->set_header("Message-Id",$this->gen_message_id());
-		$this->set_header("Sender",$this->headers["From"]);
+		//$this->set_header("Sender",$this->headers["From"]);
 		foreach($this->headers as $name => $value)
 		{
 			if ($value)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.25 2006/01/09 15:13:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.26 2006/01/25 13:10:33 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -198,7 +198,7 @@ class mail_message extends class_base
 		$to_addr = $msgobj->prop("mto");
 		$from = $msgobj->prop("mfrom");
 		
-		if(is_oid($from) && $this->can("view", $from))
+		if($this->can("view", $from))
 		{
 			$adr = obj($from);
 			$address = $adr->prop("mail");
@@ -1065,9 +1065,23 @@ class mail_message extends class_base
 
 		// would be nice to set the replied flag for the original message too
 		// but I really don't know how on earth I'm going to do that
+		$from = $arr["mfrom"];
+		if($this->can("view", $from))
+		{
+			$adr = obj($from);
+			$address = $adr->prop("mail");
+			if($adr->class_id() == CL_ML_MEMBER)
+			{
+				$from = $adr->prop("name");
+			}
+			else
+			{
+				$from = $adr->name();
+			}
+		}	
 		$msgr->drv_inst->store_message(array(
-			"from" => $arr["mfrom"],
-			"date" => $arr["date"],
+			"from" => $from,
+			"date" => time(),
 			"to" => $arr["mto"],
 			"cc" => $arr["cc"],
 			"subject" => $arr["name"],
@@ -1121,7 +1135,7 @@ class mail_message extends class_base
 		));
 
 		$msgobj->set_name("Re: " . $msgdata["subject"]);
-		$msgobj->set_prop("mto",!empty($msgdata["reply_to"]) ? $msgdata["reply_to"] : $msgdata["from"]);
+		$msgobj->set_prop("mto",(!empty($msgdata["reply_to"]) ? $msgdata["reply_to"] : $msgdata["from"]));
 		$msgobj->set_prop("message","\n\n\n> " . str_replace("\n","\n> ",$msgdata["content"]));
 		$msgobj->save();
 

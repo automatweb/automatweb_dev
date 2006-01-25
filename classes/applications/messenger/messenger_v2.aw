@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.15 2005/12/28 12:16:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.16 2006/01/25 13:10:33 ahti Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -403,7 +403,7 @@ class messenger_v2 extends class_base
 					"url" => "javascript:void();",
 					"title" => $message["froma"],
 					"caption" => substr($message["fromn"],0,1),
-				)) . substr($message["fromn"],1);
+				)) . substr($message["fromn"], 1);
 			}
 			else
 			{
@@ -415,7 +415,7 @@ class messenger_v2 extends class_base
 
 			$t->define_data(array(
 				"id" => $key,
-				"from" => $this->_format($fromline,$seen),
+				"from" => $this->_format($fromline, $seen),
 				"subject" => html::popup(array(
 					"url" => $this->mk_my_orb("change",array(
 							"msgrid" => $arr["obj_inst"]->id(),
@@ -444,7 +444,7 @@ class messenger_v2 extends class_base
 					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
 				)),
 				*/
-				"date" => $message["tstamp"],
+				"date" => $message["date"],
 				"size" => $this->_format(sprintf("%d",$message["size"]/1024),$seen),
 				"answered" => $this->_format($this->_conv_stat($message["answered"]),$seen),
 				"attach" => $message["has_attachments"] ? html::img(array("url" => $this->cfg["baseurl"] . "/automatweb/images/attach.gif")) : "",

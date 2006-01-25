@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.28 2005/12/28 11:34:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.29 2006/01/25 13:10:34 ahti Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -223,8 +223,12 @@ class imap extends class_base
 				{
 					//print "fetching message with uid $msg_uid<br>";
 					//flush();
+					$hdrinfo = @imap_headerinfo($this->mbox,$msg_uid);
 					$overview = imap_fetch_overview($this->mbox,$msg_uid,FT_UID);
 					$str = imap_fetchstructure($this->mbox,$msg_uid,FT_UID);
+					//arr($str);
+					//arr($hdrinfo);
+					//arr($overview);
 					//print "fetch done, processing<br>";
 					//flush();
 					$message = $overview[0];
@@ -236,8 +240,8 @@ class imap extends class_base
 						"froma" => $addrinf["addr"],
 						"fromn" => $this->MIME_decode($addrinf["name"]),
 						"subject" => $this->_parse_subj($message->subject),
-						"date" => $message->date,
-						"tstamp" => strtotime($message->date),
+						"date" => $hdrinfo->udate, //$message->date,
+						"tstamp" => strtotime($hdrinfo->udate),
 						"size" => $message->size,
 						"seen" => $message->seen,
 						"answered" => $message->answered,
@@ -338,7 +342,6 @@ class imap extends class_base
 
 		$mbox_over["contents"][$arr["msgid"]]["seen"] = 1;
 		$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
-
 		$msgdata = array(
 			"from" => $this->MIME_decode($hdrinfo->fromaddress),
 			"reply_to" => $this->MIME_decode($hdrinfo->reply_toaddress),
@@ -564,14 +567,12 @@ class imap extends class_base
 
 	function store_message($arr)
 	{
-		imap_append($this->mbox,$this->servspec . $this->outbox,
-			"From: $arr[from]\r\n"
-			."To: $arr[to]\r\n"
-			."Cc: $arr[cc]\r\n"
-			."Subject: $arr[subject]\r\n"
-			."\r\n"
-			.$arr[message] . "\r\n"
-		);
+		if(!empty($arr["cc"]))
+		{
+			$sr = "Cc: $arr[cc]\r\n";
+		}
+		$str = 	"From: $arr[from]\r\n"."To: $arr[to]\r\n".$sr."Subject: $arr[subject]\r\n"."\r\n".$arr["message"] . "\r\n";
+		imap_append($this->mbox,$this->servspec.$this->outbox, $str);
 	}
 
 	function _get_overview()
