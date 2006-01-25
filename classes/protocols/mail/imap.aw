@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.29 2006/01/25 13:10:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.30 2006/01/25 17:09:36 ahti Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -234,14 +234,19 @@ class imap extends class_base
 					$message = $overview[0];
 					$addrinf = $this->_extract_address($message->from);
 					$rkey = $message->uid;
+					$dinfo = $message->date;
+					if(empty($message->date))
+					{
+						$dinfo = $hdrinfo->udate;
+					}
 					$req_msgs[$rkey] = array(
 						"encoding" => $str->parameters[0]->value,
 						"from" => $message->from,
 						"froma" => $addrinf["addr"],
 						"fromn" => $this->MIME_decode($addrinf["name"]),
 						"subject" => $this->_parse_subj($message->subject),
-						"date" => $hdrinfo->udate, //$message->date,
-						"tstamp" => strtotime($hdrinfo->udate),
+						"date" => $dinfo,
+						"tstamp" => strtotime($dinfo),
 						"size" => $message->size,
 						"seen" => $message->seen,
 						"answered" => $message->answered,
