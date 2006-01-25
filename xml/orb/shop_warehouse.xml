@@ -32,7 +32,7 @@
 		<action name="add_to_cart">
 			<function name="add_to_cart">
 				<arguments>
-					<required name="id" type="ind" acl="view" />
+					<required name="id" type="int" acl="view" />
 					<optional name="sel" />
 					<optional name="group" />
 				</arguments>
