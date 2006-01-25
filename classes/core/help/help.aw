@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.3 2005/12/20 13:20:08 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.4 2006/01/25 13:07:56 ahti Exp $
 
 // more ideas --- I might want to keep the help open when switching between tabs... for this I need to 
 // set a cookie
@@ -57,7 +57,7 @@ class help extends aw_template
 		$tree->start_tree (array (
 			"type" => TREE_DHTML,
 			"url_target" => "helpcontent",
-			"get_branch_func" => $this->mk_my_orb("get_node",array("parent" => " ")),
+			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $arr["clid"], "parent" => " ")),
 			"has_root" => 1,
 			//"tree_id" => "resourcetree",
 			//"persist_state" => 1,
@@ -175,7 +175,7 @@ class help extends aw_template
 		@attrib name=get_node all_args=1
 
 	**/
-	function get_node($arr) 
+	function get_node($arr)
 	{
 		$this->read_template("browser.tpl");
 
@@ -217,7 +217,7 @@ class help extends aw_template
 			"type" => TREE_DHTML,
 			"url_target" => "helpcontent",
 			// vbla peaks see get_branc_func olema igal pool node juures .. oh geez.
-			"get_branch_func" => $this->mk_my_orb("get_node",array("parent" => " ")),
+			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $arr["clid"], "parent" => " ")),
 			//"tree_id" => "resourcetree",
 			//"persist_state" => 1,
                 ));
@@ -334,12 +334,12 @@ class help extends aw_template
 		{
 			foreach($groups as $gkey => $gdata)
 			{
-				$parent = isset($gdata["parent"]) ? $gdata["parent"] : "root";
+				//$parent = isset($gdata["parent"]) ? $gdata["parent"] : "root";
 				$tree->add_item(0,array(
 					"name" => $gdata["caption"],
 					"id" => $gkey,
 					"url" => $this->mk_my_orb("grouphelp",array(
-						"clid" => $arr["clid"],
+						"clid" => $parent,
 						"grpid" => $gkey,
 					))	, 
 					"is_open" => 1,

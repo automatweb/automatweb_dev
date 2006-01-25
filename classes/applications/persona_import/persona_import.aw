@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.17 2006/01/23 15:47:42 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.18 2006/01/25 13:06:49 ahti Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -194,8 +194,11 @@ class persona_import extends class_base
 	{
 		aw_disable_acl();
 		$obj = new object($arr["id"]);
-
-		$config = $this->get_config($arr);
+		$import_id = $obj->prop("xml_link");
+		if(!!$this->can("view" , $import_id))
+		{
+			$config = $this->get_config($arr);
+		}
 
 		$c = get_instance(CL_FTP_LOGIN);
 		$c->connect($config["ftp"]);
@@ -215,10 +218,12 @@ class persona_import extends class_base
 	{
 		aw_disable_acl();
 		$obj = new object($arr["id"]);
-
-		$config = $this->get_config($arr);
 		
 		$import_id = $obj->prop("xml_link");
+		if(!$this->can("view" , $import_id))
+		{
+			$config = $this->get_config($arr);
+		}
 
 		
 		

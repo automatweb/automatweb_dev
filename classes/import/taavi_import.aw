@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.3 2006/01/23 15:51:42 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.4 2006/01/25 13:05:38 ahti Exp $
 // taavi_import.aw - Taavi import 
 /*
 
@@ -128,7 +128,7 @@ class taavi_import extends class_base
 
 	function export_xml($id)
 	{
-		include("protocols/xmlrpc/xmlrpc_lib.aw");
+		include(aw_ini_get("basedir")."/classes/protocols/xmlrpc/xmlrpc_lib.aw");
 		$import_obj = obj($id);
 		$port = $import_obj->prop("port");
 		$url = $import_obj->prop("url");
