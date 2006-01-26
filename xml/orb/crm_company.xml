@@ -366,5 +366,19 @@
 			</function>
 		</action>
 
+		<action name="save_as_customer">
+			<function name="save_as_customer">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_report">
+			<function name="save_report">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

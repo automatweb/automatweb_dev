@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.17 2006/01/13 13:03:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.18 2006/01/26 09:56:20 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -12,6 +12,9 @@
 
 	@property confirm_sep_page type=checkbox ch_value=1
 	@caption Kinnitusvaade enne saatmist
+
+	@property entry_finder_controller type=relpicker reltype=RELTYPE_ENTRY_FINDER_CONTOLLER
+	@caption Olemasoleva sisestuse leidmise kontroller
 
 @default group=cfs_tbl
 
@@ -113,6 +116,8 @@
 @reltype GEN_CTR value=5 clid=CL_CFGCONTROLLER
 @caption info kontroller
 
+@reltype ENTRY_FINDER_CONTOLLER value=6 clid=CL_CFGCONTROLLER
+@caption Sisestuse leidmise kontroller
 */
 
 class cb_form_chain extends class_base
@@ -441,7 +446,22 @@ class cb_form_chain extends class_base
 		}
 
 		$page = $this->_get_page($ob);
+		if ($page == 1 && !$_SESSION["cbfc_data"])
+		{
+			// see if we need to get another entry
+			if ($this->can("view", $ob->prop("entry_finder_controller")))
+			{
+				$ctr = obj($ob->prop("entry_finder_controller"));
+				$ctr_i = $ctr->instance();
 
+				$load_entry_id = $ctr_i->check_property($ctr->id(), $ctr->id(), $ctr, $_GET, $ctr, $ob);
+				if ($load_entry_id)
+				{
+					$_SESSION["cbfc_current_entry_id"] = $load_entry_id;
+					$this->_load_entry($load_entry_id);
+				}
+			}
+		}
 		$forms = $this->_get_forms_for_page($ob, $page);
 
 		$html = $this->_draw_forms($ob, $forms);
@@ -845,12 +865,27 @@ class cb_form_chain extends class_base
 		$_SESSION["no_cache"] = 1;
 		
 		// first, entry object
-		$entry = obj();
-		$entry->set_parent($this->_get_parent($o));
-		$entry->set_class_id(CL_CB_FORM_CHAIN_ENTRY);
-		$entry->set_name($this->_get_entry_name($o));
-		$entry->set_prop("cb_form_id", $o->id());
-		$entry->save();
+		if ($this->can("view", $_SESSION["cbfc_current_entry_id"]))
+		{
+			$entry = obj($_SESSION["cbfc_current_entry_id"]);
+			$entry->set_name($this->_get_entry_name($o));
+			$entry->save();
+			// do the crappy, but quicker and safer method - delete all connected entries and create new ones
+			foreach($entry->connections_from(array("type" => "RELTYPE_ENTRY")) as $c)
+			{
+				$eo = $c->to();
+				$eo->delete(true);
+			}
+		}
+		else
+		{
+			$entry = obj();
+			$entry->set_parent($this->_get_parent($o));
+			$entry->set_class_id(CL_CB_FORM_CHAIN_ENTRY);
+			$entry->set_name($this->_get_entry_name($o));
+			$entry->set_prop("cb_form_id", $o->id());
+			$entry->save();
+		}
 
 		// then for each form, data objects in entry object
 		// for each page
@@ -973,7 +1008,7 @@ class cb_form_chain extends class_base
 				$metaf[$k] = $v;
 			}
 			else
-			if ($props[$k]["type"] == "releditor" && strpos($k, "userfile") !== false)
+			if ($props[$k]["type"] == "releditor" && strpos($k, "userfile") !== false && $_SESSION["cbfc_data"][$wf->id()][0][$k] != "")
 			{
 				// handle file upload save
 				$f = get_instance(CL_FILE);
@@ -1759,6 +1794,24 @@ class cb_form_chain extends class_base
 		header("Content-type: ".$_SESSION["cbfc_file_data"][$arr["wfid"]][$arr["i"]][$arr["rpn"]]["mtype"]);
 		readfile($_SESSION["cbfc_data"][$arr["wfid"]][$arr["i"]][$arr["rpn"]]);
 		die();
+	}
+
+	function _load_entry($eid)
+	{
+		$e = obj($eid);
+		$_SESSION["cbfc_data"] = array();
+		foreach($e->connections_from(array("RELTYPE_ENTRY")) as $c)
+		{
+			$rd = $c->to();
+			$wf_id = $rd->meta("webform_id");
+			$cur_cnt = ((int)$counts_by_wf[$wf_id]++);
+			$_SESSION["cbfc_data"][$wf_id][$cur_cnt] = $rd->properties();
+
+			/*foreach($rd->properties() as $pn => $pv)
+			{
+
+			}*/
+		}
 	}
 }
 ?>

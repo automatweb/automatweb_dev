@@ -1,73 +1,78 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/user_manager</class>
-      <func>on_create_group</func>
-      <param>CL_GROUP</param>
-</num_0>
-<num_1>
       <class>crm/crm_company</class>
       <func>on_save_address</func>
       <param>CL_CRM_ADDRESS</param>
+</num_0>
+<num_1>
+      <class>crm/crm_company</class>
+      <func>on_create_company</func>
+      <param>CL_CRM_COMPANY</param>
 </num_1>
 <num_2>
-      <class>mrp/mrp_case</class>
-      <func>on_new_case</func>
-      <param>CL_MRP_CASE</param>
+      <class>core/users/user_manager</class>
+      <func>on_create_group</func>
+      <param>CL_GROUP</param>
 </num_2>
 <num_3>
-      <class>mrp/mrp_resource</class>
-      <func>on_create_resource</func>
-      <param>CL_MRP_RESOURCE</param>
-</num_3>
-<num_4>
       <class>applications/realestate_management/realestate_apartment</class>
       <func>on_create</func>
       <param>CL_REALESTATE_APARTMENT</param>
-</num_4>
-<num_5>
+</num_3>
+<num_4>
       <class>applications/realestate_management/realestate_client_selection</class>
       <func>on_create</func>
       <param>CL_REALESTATE_CLIENT_SELECTION</param>
-</num_5>
-<num_6>
+</num_4>
+<num_5>
       <class>applications/realestate_management/realestate_commercial</class>
       <func>on_create</func>
       <param>CL_REALESTATE_COMMERCIAL</param>
-</num_6>
-<num_7>
+</num_5>
+<num_6>
       <class>applications/realestate_management/realestate_cottage</class>
       <func>on_create</func>
       <param>CL_REALESTATE_COTTAGE</param>
-</num_7>
-<num_8>
+</num_6>
+<num_7>
       <class>applications/realestate_management/realestate_garage</class>
       <func>on_create</func>
       <param>CL_REALESTATE_GARAGE</param>
-</num_8>
-<num_9>
+</num_7>
+<num_8>
       <class>applications/realestate_management/realestate_house</class>
       <func>on_create</func>
       <param>CL_REALESTATE_HOUSE</param>
-</num_9>
-<num_10>
+</num_8>
+<num_9>
       <class>applications/realestate_management/realestate_housepart</class>
       <func>on_create</func>
       <param>CL_REALESTATE_HOUSEPART</param>
-</num_10>
-<num_11>
+</num_9>
+<num_10>
       <class>applications/realestate_management/realestate_land</class>
       <func>on_create</func>
       <param>CL_REALESTATE_LAND</param>
-</num_11>
-<num_12>
+</num_10>
+<num_11>
       <class>applications/realestate_management/realestate_property</class>
       <func>on_create</func>
       <param>CL_REALESTATE_PROPERTY</param>
-</num_12>
-<num_13>
+</num_11>
+<num_12>
       <class>applications/realestate_management/realestate_rowhouse</class>
       <func>on_create</func>
       <param>CL_REALESTATE_ROWHOUSE</param>
+</num_12>
+<num_13>
+      <class>mrp/mrp_case</class>
+      <func>on_new_case</func>
+      <param>CL_MRP_CASE</param>
 </num_13>
+<num_14>
+      <class>mrp/mrp_resource</class>
+      <func>on_create_resource</func>
+      <param>CL_MRP_RESOURCE</param>
+</num_14>
 </xml>

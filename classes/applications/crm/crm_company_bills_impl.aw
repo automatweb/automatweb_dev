@@ -57,6 +57,7 @@ class crm_company_bills_impl extends class_base
 			"site_id" => array(),
 			"lang_id" => array()
 		));
+
 		foreach($ol->ids() as $p)
 		{
 			$events = $proj_i->get_events(array(

@@ -177,13 +177,31 @@
             <field>preview_add</field>
       </property>
       <property>
-            <name>task_list</name>
+            <name>bill_tb</name>
+            <table>objects</table>
+            <group>tasks</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bill_tb</field>
+      </property>
+      <property>
+            <name>bill_proj_list</name>
             <table>objects</table>
             <group>tasks</group>
             <type>table</type>
-            <no_caption>1</no_caption>
             <store>no</store>
-            <field>task_list</field>
+            <no_caption>1</no_caption>
+            <field>bill_proj_list</field>
+      </property>
+      <property>
+            <name>bill_task_list</name>
+            <table>objects</table>
+            <group>tasks</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bill_task_list</field>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_BILL</syslog_type>
@@ -195,6 +213,7 @@
       <groupinfo>
             <tasks>
                   <caption>Toimetused</caption>
+                  <submit>no</submit>
             </tasks>
             <preview>
                   <caption>Eelvaade</caption>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.60 2006/01/23 08:47:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.61 2006/01/26 09:56:21 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -301,8 +301,13 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "start1":
 			case "end":
+				if ($arr["new"])
+				{
+					$data["value"] = time() + 900;
+				}
+
+			case "start1":
 			case "deadline":
 				$p = get_instance(CL_PLANNER);
 				$cal = $p->get_calendar_for_user();
@@ -1921,9 +1926,9 @@ class task extends class_base
 
 			$o->set_prop("content", $e["task"]);
 			$o->set_prop("impl", $e["impl"]);
-			$o->set_prop("time_guess", $e["time_guess"]);
-			$o->set_prop("time_real", $e["time_real"]);
-			$o->set_prop("time_to_cust", $e["time_to_cust"]);
+			$o->set_prop("time_guess", str_replace(",", ".", $e["time_guess"]));
+			$o->set_prop("time_real", str_replace(",", ".", $e["time_real"]));
+			$o->set_prop("time_to_cust", str_replace(",", ".", $e["time_to_cust"]));
 			$o->set_prop("done", $e["done"]);
 			$o->set_prop("on_bill", $e["on_bill"]);
 			$o->save();

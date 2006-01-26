@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.21 2006/01/18 18:58:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.22 2006/01/26 09:56:21 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -73,10 +73,13 @@
 
 @default group=tasks
 
-	@property task_list type=table no_caption=1 store=no
+	@property bill_tb type=toolbar store=no no_caption=1
+
+	@property bill_proj_list type=table store=no no_caption=1
+	@property bill_task_list type=table store=no no_caption=1
 
 
-@groupinfo tasks caption="Toimetused"
+@groupinfo tasks caption="Toimetused" submit=no
 @groupinfo preview caption="Eelvaade"
 @groupinfo preview_add caption="Arve Lisa"
 
@@ -123,6 +126,17 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case 'bill_proj_list':
+			case 'bill_task_list':
+			case 'bill_tb':
+				static $bills_impl;
+				if (!$bills_impl)
+				{
+					$bills_impl = get_instance("applications/crm/crm_company_bills_impl");
+				}
+				$fn = "_get_".$prop["name"];
+				return $bills_impl->$fn($arr);
+		
 			case "bill_no":
 				if ($prop["value"] == "")
 				{

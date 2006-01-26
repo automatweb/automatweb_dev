@@ -11,6 +11,16 @@
             <caption>Kinnitusvaade enne saatmist</caption>
       </property>
       <property>
+            <name>entry_finder_controller</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ENTRY_FINDER_CONTOLLER</reltype>
+            <caption>Olemasoleva sisestuse leidmise kontroller</caption>
+      </property>
+      <property>
             <name>cfs</name>
             <table>objects</table>
             <group>cfs_tbl</group>
@@ -279,6 +289,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>info kontroller</caption>
             </GEN_CTR>
+            <ENTRY_FINDER_CONTOLLER>
+                  <value>6</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>Sisestuse leidmise kontroller</caption>
+            </ENTRY_FINDER_CONTOLLER>
       </reltypes>
 </properties>
 

@@ -1,58 +1,105 @@
-	<style type="text/css">
-	#objekt101 { border-collapse: collapse;}
-	#objekt101 * {font-family: verdana; font-size: 11px; line-height: 16px;}
-	#objekt101 td { padding: 0; vertical-align: top;}
-	#objekt101 .tagasi {vertical-align: top; text-align: right; height: 17px; }
-	#objekt101 .sisu a {color: #006600; text-decoration: none; }
-	#objekt101 .sisu img {border: 1px solid #006600;}
-	#objekt101 .sisu .teised_majad a {font-weight: bold;} 
-	#objekt101 .sisu a:hover {text-decoration: underline;}
-	#objekt101 .sisu .vasak_tulp {vertical-align: top;}
-	#objekt101 .sisu .vasak_tulp img {margin-bottom: 5px;}
-	#objekt101 .sisu .vasak_tulp .pilte_kokku {color: #006600;}
-	</style>
-
 <table id="objekt101">
 <tr class="sisu">
-	<td class="vasak_tulp" style="padding-right: 12px;"><a href="{VAR:open_pictureview_url}" target="_blank"><img src="http://www.city24.ee/MEDIA/PICTURE/PICTURE_{VAR:picture1_city24_id}.jpeg" alt="" width="118" height="88" border="0"></a><br>
+	<td class="vasak_tulp" style="padding-right: 12px;"><a target="_blank" href="{VAR:open_pictureview_url}">
+	<!-- SUB: picture_icon -->
+	<img src="{VAR:value}" alt="" width="118" height="88" border="0">
+	<!-- END SUB: picture_icon -->
+	</a><br>
 	<span class="pilte_kokku"><a href="{VAR:open_pictureview_url}" target="_blank">Pilte kokku: {VAR:picture_count}</a> </span>
+	<br><a href="javascript:void(0);">
+	<!-- SUB: map_url -->
+	<img src="{VAR:value}" id="kaart" style="width: 118px" border="0">
+	<!-- END SUB: map_url -->
+	</a>
 	</td><!-- vasak_tulp -->
 	<td class="parem_tulp">
 	
 	<table>
 	<tr>
-		<td style="padding-right: 20px;">{VAR:transaction_type_caption}: <strong>{VAR:transaction_type}, {VAR:class_name} </strong>   <br>
-		Tubade arv: <strong>{VAR:number_of_rooms}</strong>  <br> 
-		Vannitubade arv: <strong>{VAR:number_of_bathrooms}</strong><br>
-		Katuse tüüp: <strong>{VAR:roof_type}</strong><br><br>
+		<td style="padding-right: 20px;">
+		<!-- SUB: transaction_type -->
+		{VAR:caption}: <strong>{VAR:value}, </strong>  
+		<!-- END SUB: transaction_type -->
+		<strong>{VAR:class_name}</strong><br>
+		
+		<!-- SUB: number_of_rooms -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: number_of_rooms -->
+		
+		<!-- SUB: number_of_bathrooms -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: number_of_bathrooms -->
+
+		<!-- SUB: roof_type -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br><br>
+		<!-- END SUB: roof_type -->
 		 
-		Omandivorm: <strong>{VAR:legal_status}</strong><br>
-		Üldpind: <strong>{VAR:total_floor_area} m<sup>2</sup></strong><br>
-		Koguhind: <strong>{VAR:transaction_price2} kr</strong><br>
+		<!-- SUB: legal_status -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: legal_status -->
+
+		<!-- SUB: total_floor_area -->
+		{VAR:caption}: <strong>{VAR:value} m<sup>2</sup></strong><br>
+		<!-- END SUB: total_floor_area -->
+
+		<!-- SUB: transaction_price2 -->
+		{VAR:caption}: <strong>{VAR:value} kr</strong><br>
+		<!-- END SUB: transaction_price2 -->
 		</td>
 		<td>
-		Korruseid: <strong>{VAR:number_of_floors}</strong><br>
-		Magamistubade arv: <strong>{VAR:number_of_bedrooms}</strong><br>
-		Ehitusaasta: <strong>{VAR:year_built}</strong><br>
-		Valmidusaste: <strong>{VAR:condition}</strong><br>
-		Krundi suurus: <strong>{VAR:property_area}</strong><br>
-		Hind: <strong>{VAR:transaction_price} kr</strong>
+		<!-- SUB: number_of_floors -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: number_of_floors -->
+
+		<!-- SUB: number_of_bedrooms -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: number_of_bedrooms -->
+
+		<!-- SUB: year_built -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: year_built -->
+
+		<!-- SUB: condition -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: condition -->
+
+		<!-- SUB: property_area -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: property_area -->
+
+		<!-- SUB: transaction_price -->
+		{VAR:caption}: <strong>{VAR:value} kr</strong>
+		<!-- END SUB: transaction_price -->
 		</td>
 	</tr>
 	</table>
 	<br>
 	<strong>Lisaandmed:</strong> {VAR:extras}<br><br>
+	
+	<!-- SUB: additional_info_et -->
+	<strong>Info:</strong> {VAR:value} <br><br>
+	<!-- END SUB: additional_info_et -->
 	 
-	<strong>Selle objekti laenumakse:</strong> <br><br>
+	<strong>Kontakt:</strong>
+	
+	<!-- SUB: agent_name -->
+	{VAR:value},
+	<!-- END SUB: agent_name -->
+	
+	<!-- SUB: agent_phone -->
+	{VAR:value},
+	<!-- END SUB: agent_phone -->
+	
+	<!-- SUB: agent_email -->
+	<a href="mailto:{VAR:value}">{VAR:value}</a>
+	<!-- END SUB: agent_email -->
+	<br><br>
 	 
-	<strong>Info:</strong> {VAR:additional_info_et} <br><br>
+	<span class="teised_majad"><a href="{VAR:show_agent_properties_url}">Näita ka selle maakleri teisi objekte</a></span>  <br><br>
 	 
-	<strong>Kontakt:</strong> {VAR:agent_name}, {VAR:agent_phone}, <a href="mailto:{VAR:agent_email}">{VAR:agent_email}</a><br><br>
-	 
-	<span class="teised_majad"><a href="{VAR:show_agent_properties_url}">Näita ka selle maakleri teisi maju</a></span>  <br><br>
-	 
-	ID: {VAR:city24_object_id} <br><br>
-		
+	<!-- SUB: city24_object_id -->
+	ID: {VAR:value} <br><br>
+	<!-- END SUB: city24_object_id -->
 	
 	
 	</td><!-- parem_tulp -->

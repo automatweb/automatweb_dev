@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.17 2005/11/30 13:32:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.18 2006/01/26 09:56:20 kristo Exp $
 
 /*
 
@@ -620,6 +620,15 @@ class banner extends class_base
 				return $html;
 			}
 		}
+	}
+
+	function put_banners_in_html($html, $list)
+	{
+		foreach($list[0] as $idx => $repl)
+		{
+			$html = str_replace($repl, $this->get_banner_html($list[1][$idx]), $html);
+		}
+		return $html;
 	}
 }
 ?>

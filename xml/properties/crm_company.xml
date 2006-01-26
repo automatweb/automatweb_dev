@@ -1870,9 +1870,18 @@
             <field>my_tasks_cal</field>
       </property>
       <property>
+            <name>stats_s_toolbar</name>
+            <table>objects</table>
+            <group>stats_s</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stats_s_toolbar</field>
+      </property>
+      <property>
             <name>stats_s_cust</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>textbox</type>
             <store>no</store>
             <field>stats_s_cust</field>
@@ -1881,7 +1890,7 @@
       <property>
             <name>stats_s_cust_type</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>chooser</type>
             <store>no</store>
             <field>stats_s_cust_type</field>
@@ -1890,7 +1899,7 @@
       <property>
             <name>stats_s_proj</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>textbox</type>
             <store>no</store>
             <field>stats_s_proj</field>
@@ -1899,7 +1908,7 @@
       <property>
             <name>stats_s_worker</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>textbox</type>
             <store>no</store>
             <field>stats_s_worker</field>
@@ -1908,7 +1917,7 @@
       <property>
             <name>stats_s_worker_sel</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>select</type>
             <multiple>1</multiple>
             <store>no</store>
@@ -1918,7 +1927,7 @@
       <property>
             <name>stats_s_from</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>date_select</type>
             <store>no</store>
             <field>stats_s_from</field>
@@ -1927,7 +1936,7 @@
       <property>
             <name>stats_s_to</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>date_select</type>
             <store>no</store>
             <field>stats_s_to</field>
@@ -1936,7 +1945,7 @@
       <property>
             <name>stats_s_time_sel</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>select</type>
             <store>no</store>
             <field>stats_s_time_sel</field>
@@ -1945,7 +1954,7 @@
       <property>
             <name>stats_s_state</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>select</type>
             <store>no</store>
             <field>stats_s_state</field>
@@ -1954,7 +1963,7 @@
       <property>
             <name>stats_s_bill_state</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>select</type>
             <store>no</store>
             <field>stats_s_bill_state</field>
@@ -1963,7 +1972,7 @@
       <property>
             <name>stats_s_only_billable</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
@@ -1973,7 +1982,7 @@
       <property>
             <name>stats_s_area</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>select</type>
             <store>no</store>
             <field>stats_s_area</field>
@@ -1982,7 +1991,7 @@
       <property>
             <name>stats_s_res_type</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>select</type>
             <store>no</store>
             <field>stats_s_res_type</field>
@@ -1991,7 +2000,7 @@
       <property>
             <name>stats_s_sbt</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>submit</type>
             <store>no</store>
             <field>stats_s_sbt</field>
@@ -2000,12 +2009,30 @@
       <property>
             <name>stats_s_res</name>
             <table>objects</table>
-            <group>stats</group>
+            <group>stats_s</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <field>stats_s_res</field>
             <caption>Tulemused</caption>
+      </property>
+      <property>
+            <name>stats_tb</name>
+            <table>objects</table>
+            <group>stats_view</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>stats_tb</field>
+      </property>
+      <property>
+            <name>stats_list</name>
+            <table>objects</table>
+            <group>stats_view</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>stats_list</field>
       </property>
       <property>
             <name>qv_cust_inf</name>
@@ -2232,11 +2259,6 @@
                   <caption>Arved</caption>
                   <submit>no</submit>
             </bills>
-            <bills_create>
-                  <parent>bills</parent>
-                  <caption>Loo arve</caption>
-                  <submit>no</submit>
-            </bills_create>
             <bills_list>
                   <parent>bills</parent>
                   <caption>Nimekiri</caption>
@@ -2252,10 +2274,24 @@
                   <caption>Otsi toimetusi</caption>
                   <submit>no</submit>
             </bills_search>
+            <bills_create>
+                  <parent>bills</parent>
+                  <caption>Loo arve</caption>
+                  <submit>no</submit>
+            </bills_create>
             <stats>
-                  <caption>Statistika</caption>
-                  <submit_method>get</submit_method>
+                  <caption>Aruanded</caption>
             </stats>
+            <stats_s>
+                  <parent>stats</parent>
+                  <caption>Otsi</caption>
+                  <submit_method>get</submit_method>
+            </stats_s>
+            <stats_view>
+                  <parent>stats</parent>
+                  <caption>Vaata</caption>
+                  <submit>no</submit>
+            </stats_view>
             <quick_view>
                   <caption>Vaata</caption>
                   <submit>no</submit>

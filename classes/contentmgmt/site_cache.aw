@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.30 2005/12/14 19:45:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.31 2006/01/26 09:56:21 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -183,8 +183,12 @@ class site_cache extends aw_template
 		};
 		if (strpos($res,"[bloc") !== false)
 		{
-			$bn = get_instance(CL_BANNER);
-			$res = preg_replace("/\[bloc(\d+)\]/e","\$bn->get_banner_html(\"\\1\")",$res);
+			preg_match_all("/\[bloc(\d+)\]/",$res, $mt);
+			if (count($mt))
+			{
+				$bn = get_instance(CL_BANNER);
+				$res = $bn->put_banners_in_html($res, $mt);
+			}
 		};
 		if (strpos($res,"[document_statistics") !== false)
 		{

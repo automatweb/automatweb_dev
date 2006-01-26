@@ -383,7 +383,7 @@ class crm_company_cust_impl extends class_base
 		$tb->add_sub_menu(array(
 			"parent" => "add_item",
 			"name" => "add_cust_co",
-			"text" => t("Klient")
+			"text" => t("Organisatsioon")
 		));
 		$link = $this->mk_my_orb('new',array(
 				'parent' => $arr['obj_inst']->id(),
@@ -406,7 +406,7 @@ class crm_company_cust_impl extends class_base
 		$tb->add_sub_menu(array(
 			"parent" => "add_item",
 			"name" => "add_cust_p",
-			"text" => t("Klient (eraisik)")
+			"text" => t("Eraisik")
 		));
 
 		$this->_do_cust_cat_tb_submenus($tb, $link, $arr["obj_inst"], "add_cust_p");
@@ -426,11 +426,6 @@ class crm_company_cust_impl extends class_base
 			'text' => t('Tellijana'),
 			"action" => "add_proj_to_co_as_ord"
 		));
-		/*$tb->add_menu_item(array(
-			'parent'=>'add_item',
-			'text' => t('Toimetus'),
-			"action" => "add_task_to_co"
-		));*/
 
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
@@ -453,6 +448,15 @@ class crm_company_cust_impl extends class_base
 			'tooltip' => t('Kustuta valitud'),
 			'action' => 'submit_delete_my_customers_relations',
 		));
+
+		$tb->add_menu_button(array(
+			'name'=>'save_as_cust',
+			'tooltip'=> t('Salvesta kliendina'),
+			"img" => "save.gif"
+		));
+
+		$link = "#";
+		$this->_do_cust_cat_tb_submenus($tb, $link, $arr["obj_inst"], "save_as_cust", "document.changeform.elements.cust_cat.value=%s;submit_changeform('save_as_customer')");
 	}
 
 	function _get_my_customers_listing_tree($arr)
@@ -1395,11 +1399,24 @@ class crm_company_cust_impl extends class_base
 
 		if ($r["customer_search_cust_mgr"] != "")
 		{
+			// seems this should also search from roles. so, get all role entries for that person and collect the cos from those
+			$relist = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
+				"CL_CRM_COMPANY_ROLE_ENTRY.person.name" => map("%%%s%%", explode(",", $r["customer_search_cust_mgr"]))
+			));
+
+			$rs = array();
+			foreach($relist->arr() as $o)
+			{
+				$rs = $o->prop("client");
+			}
+
 			$ret[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
 					"CL_CRM_COMPANY.client_manager.name" => map("%%%s%%", explode(",", $r["customer_search_cust_mgr"])),
-					"CL_CRM_PERSON.client_manager.name" => map("%%%s%%", explode(",", $r["customer_search_cust_mgr"]))
+					"CL_CRM_PERSON.client_manager.name" => map("%%%s%%", explode(",", $r["customer_search_cust_mgr"])),
+					"oid" => $rs
 				)
 			));
 		}
@@ -1484,18 +1501,8 @@ class crm_company_cust_impl extends class_base
 			'name' => 'Search',
 			'img' => 'search.gif',
 			'tooltip' => t('Otsi'),
-			'action' => 'search_for_customers'
+			'url' => aw_url_change_var("group", "relorg_s")
 		));
-		
-		if($arr['request']['customer_search'])
-		{
-			$tb->add_button(array(
-				'name' => 'Save',
-				'img' => 'save.gif',
-				'tooltip' => t('Salvesta'),
-				'action' => 'save_customer_search_results'
-			));
-		}
 
 		return PROP_OK;
 	}
@@ -1719,14 +1726,14 @@ class crm_company_cust_impl extends class_base
 		$this->_finish_org_tbl($arr, $orglist);
 	}
 
-	function _do_cust_cat_tb_submenus(&$tb, $link, $p, $p_str)
+	function _do_cust_cat_tb_submenus(&$tb, $link, $p, $p_str, $oncl = null)
 	{
 		$cnt = 0;
 		foreach($p->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 		{
 			$cnt++;
 			$name = $p_str."_".$c->prop("to");
-			if ($this->_do_cust_cat_tb_submenus($tb, $link, $c->to(), $name) > 0)
+			if ($this->_do_cust_cat_tb_submenus($tb, $link, $c->to(), $name, $oncl) > 0)
 			{
 				$tb->add_sub_menu(array(
 					'parent'=> $p_str,
@@ -1736,11 +1743,17 @@ class crm_company_cust_impl extends class_base
 			}
 			else
 			{
-				$tb->add_menu_item(array(
+				$parm = array(
 					'parent'=>$p_str,
 					'text' => $c->prop("to.name"),
 					'link' => str_replace("%s", $c->prop("to"), $link)
-				));
+				);
+				if ($oncl !== NULL)
+				{
+					$parm["onClick"] = str_replace("%s", $c->prop("to"), $oncl);
+					$parm["link"] = "#";
+				}
+				$tb->add_menu_item($parm);
 			}
 		}
 		return $cnt;

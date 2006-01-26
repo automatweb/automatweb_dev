@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.189 2005/12/30 10:10:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.190 2006/01/26 09:56:20 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -416,48 +416,83 @@ class aliasmgr extends aw_template
 						$$emb_obj_name->embedded = true;
 					}
 
-
-					// if not, then parse all the aliases one by one
-					foreach($claliases as $avalue => $adata)
+					if (method_exists($$emb_obj_name, "parse_alias_list"))
 					{
-						// if there is no object, then we just skip it -- ahz
-						if(!is_oid($adata["target"]) || !$this->can("view", $adata["target"]))
+						// if the class supports alias list parsing, do it
+						$repl = $$emb_obj_name->parse_alias_list(array(
+							"oid" => $oid,
+							"aliases" => $claliases,
+							"tpls" => &$args["templates"],
+						));
+						if (is_array($repl))
 						{
-							$source = str_replace($avalue, "", $source);
-							continue;
+							foreach($repl as $aname => $avalue)
+							{
+								$inplace = false;
+								if (is_array($avalue))
+								{
+									$replacement = $avalue["replacement"];
+									$inplace = $avalue["inplace"];
+								}
+								else
+								{
+									$replacement = $avalue;
+								}
+
+								if ($inplace)
+								{
+									$this->tmp_vars = array($inplace => $replacement);
+									$replacement = "";
+								};
+
+								$source = str_replace($aname,$replacement,$source);
+							}
 						}
-						$replacement = false;
-						if (method_exists($$emb_obj_name,"parse_alias"))
+					}
+					else
+					{
+						// if not, then parse all the aliases one by one
+						foreach($claliases as $avalue => $adata)
 						{
-							$parm = array(
-								"oid" => $oid,
-								"matches" => $adata["val"],
-								"alias" => $adata,
-								"tpls" => &$args["templates"],
-							);
-							enter_function("aliasmgr::parse_oo_aliases::loop::do_palias");
-							$repl = $$emb_obj_name->parse_alias($parm);
-							exit_function("aliasmgr::parse_oo_aliases::loop::do_palias");
-
-							$inplace = false;
-							if (is_array($repl))
+							// if there is no object, then we just skip it -- ahz
+							if(!is_oid($adata["target"]) || !$this->can("view", $adata["target"]))
 							{
-								$replacement = $repl["replacement"];
-								$inplace = $repl["inplace"];
+								$source = str_replace($avalue, "", $source);
+								continue;
 							}
-							else
+							$replacement = false;
+							if (method_exists($$emb_obj_name,"parse_alias"))
 							{
-								$replacement = $repl;
+								$parm = array(
+									"oid" => $oid,
+									"matches" => $adata["val"],
+									"alias" => $adata,
+									"tpls" => &$args["templates"],
+								);
+								enter_function("aliasmgr::parse_oo_aliases::loop::do_palias");
+								$repl = $$emb_obj_name->parse_alias($parm);
+								exit_function("aliasmgr::parse_oo_aliases::loop::do_palias");
+
+								$inplace = false;
+								if (is_array($repl))
+								{
+									$replacement = $repl["replacement"];
+									$inplace = $repl["inplace"];
+								}
+								else
+								{
+									$replacement = $repl;
+								}
+
+								if ($inplace)
+								{
+									$this->tmp_vars[$inplace] = $replacement;
+									$replacement = "";
+								};
 							}
 
-							if ($inplace)
-							{
-								$this->tmp_vars[$inplace] = $replacement;
-								$replacement = "";
-							};
+							$source = str_replace($avalue,$replacement,$source);
 						}
-
-						$source = str_replace($avalue,$replacement,$source);
 					}
 				}
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.450 2006/01/13 11:12:17 kristo Exp $
+// $Id: class_base.aw,v 2.451 2006/01/26 09:56:20 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1947,10 +1947,21 @@ class class_base extends aw_template
 		{
 			if ($val["type"] == "date_select")
 			{
-				$val["value"] = get_lc_date($val["value"]);
+				if ($val["value"] == -1)
+				{
+					$val["value"] = "";
+				}
+				else
+				{
+					$val["value"] = get_lc_date($val["value"]);
+				}
 			};
 			$val["type"] = "text";
 		};
+		if ($val["orig_type"] == "select" && $val["options"][$val["value"]] != "" && $this->view == 1)
+		{
+			$val["value"] = $val["options"][$val["value"]];
+		}
 		if($val["type"] == "layout")
 		{
 			$val["group"] = $this->use_group;

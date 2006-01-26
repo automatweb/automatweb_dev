@@ -1,9 +1,18 @@
+<body id="print">
+<script type="text/javascript">
+window.onload = function ()
+{
+	window.print();
+}
+</script>
+
+
 <div class="navLink">
-<a class="navLink" href="javascript:window.print();" style="margin-right: 20px;">Prindi</a>
 <a class="navLink" href="{VAR:return_url}">Tagasi</a>
 </div>
 
-<hr width="100%" size="1" noshade>
+<hr width="100%" size="1" noshade class="hr_printview">
+
 
 <!-- SUB: property_cell -->
 <td width="50%" class="txt11px">{VAR:prop_caption}: <strong>{VAR:prop_value}</strong> {VAR:prop_suffix}</td>
@@ -22,7 +31,7 @@
 
 
 
-<table id="detailotsing">
+<table id="detailotsing_printview">
 <tr class="pealkiri">
 	<td>
 	<table style="margin-bottom: 5px;">
@@ -39,7 +48,7 @@
 	<table>
 	<tr>
 		<td class="pealkiri" style="padding-right: 10px;">Objekti andmed</td>
-		<td class="joon" style="background: url('{VAR:baseurl}/img/1x1.gif') repeat-x center;"></td>
+		<td class="joon"><hr size="1" noshade></td>
 	</tr>
 	</table>
 	</td>
@@ -49,12 +58,11 @@
 	<td>
 	<table>
 	<tr>
-
 		<td style="padding-right: 30px;">
 		<!-- SUB: re_transaction_type -->
-		{VAR:caption}: <strong>{VAR:value},
+		{VAR:caption}: <strong>{VAR:value}, </strong>  
 		<!-- END SUB: re_transaction_type -->
-		{VAR:class_name}</strong><br>
+		<strong>{VAR:class_name}</strong><br>
 		
 		<!-- SUB: re_floor -->
 		{VAR:caption}: <strong>{VAR:value}</strong><br>
@@ -67,38 +75,35 @@
 		<!-- SUB: re_condition -->
 		{VAR:caption}: <strong>{VAR:value}</strong><br>
 		<!-- END SUB: re_condition -->
+
+		<!-- SUB: re_total_floor_area -->
+		{VAR:caption}: <strong>{VAR:value}</strong> m<sup>2</sup><br>
+		<!-- END SUB: re_total_floor_area -->
 		</td>
 		
-		<td style="padding-right: 30px;">
-		<!-- SUB: re_number_of_floors -->
-		{VAR:caption}: <strong>{VAR:value}</strong><br>
-		<!-- END SUB: re_number_of_floors -->
-		
-		<!-- SUB: re_year_built -->
-		{VAR:caption}:<strong>{VAR:value}</strong><br>
-		<!-- END SUB: re_year_built -->
 
-		<!-- SUB: re_transaction_price2 -->
-		{VAR:caption}: <strong>{VAR:value} kr</strong><br>
-		<!-- END SUB: re_transaction_price2 -->
+		<td style="padding-right: 30px;">
 		
-		<td>
-		<!-- SUB: re_total_floor_area -->
-		{VAR:caption}: <strong>{VAR:value} m<sup>2</sup></strong><br>
-		<!-- END SUB: re_total_floor_area -->
+		<!-- SUB: re_number_of_storeys -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: re_number_of_storeys -->
+
+		<!-- SUB: re_year_built -->
+		{VAR:caption}: <strong>{VAR:value}</strong><br>
+		<!-- END SUB: re_year_built -->
 		
 		<!-- SUB: re_transaction_price -->
-		{VAR:caption}: <strong>{VAR:value} kr</strong>
+		{VAR:caption}: <strong>{VAR:value}</strong> kr<br>
 		<!-- END SUB: re_transaction_price -->
 		</td>
 	</tr>
 	</table>
 	<br><br>
 
-	<strong>Lisaandmed:</strong> {VAR:extras}<br>
+	<!-- SUB: extras -->
+	<strong>Lisaandmed:</strong> {VAR:value}<br>
 	<br>
-	<strong>Objekti laenuinfo:</strong> {VAR:additional_info}<br>
-	<br>
+	<!-- END SUB: extras -->
 	
 	<table class="pildid_joondusega_alla">
 	<tr>
@@ -108,14 +113,22 @@
 	</tr>
 	</table><!-- pildid_joondusega_alla -->
 	
-	<!--
-	<table class="pildid_joondusega_yles">
+	<table class="kaart_ja_ikoon">
 	<tr>
-		<td><img src="{VAR:baseurl}/img/img-no-disain/uks.jpg" alt="" width="159" height="120" border="0"></td>
-		<td><img src="{VAR:baseurl}/img/img-no-disain/kamin.jpg" alt="" width="159" height="120" border="0"></td>
-		<td><a href="#"><img src="{VAR:baseurl}/img/img-no-disain/dush.jpg" alt="" width="120" height="159" border="0"></a></td>
+	<td class="esimene">
+	<!-- SUB: re_picture_icon -->
+	<img src="{VAR:value}" alt="" width="118" height="88" border="0">
+	<!-- END SUB: re_picture_icon -->
+	</td>
+		
+	<td class="teine">
+	<!-- SUB: re_map_url -->
+	<img src="{VAR:value}" id="kaart" style="width: 118px" border="0">
+	<!-- END SUB: re_map_url -->
+	</td>
 	</tr>
-	</table>--><!-- pildid_joondusega_yles -->
+	</table><!-- kaart_ja_ikoon -->
+
 	
 	</td>
 </tr><!-- sisu -->
@@ -125,61 +138,76 @@
 	<table>
 	<tr>
 		<td class="pealkiri" style="padding-right: 10px; ">Maaklerid</td>
-		<td class="joon" style="background: url('{VAR:baseurl}/img/1x1.gif') repeat-x center;"></td>
+		<td class="joon"><hr size="1" noshade></td>
 	</tr>
 	</table>
 	</td>
 </tr><!-- alapealkiri -->
 
+
 <tr class="sisu">
 	<td>
 	<table style="width: 100%;">
 	<tr>
-		<td class="foto"><img src="{VAR:baseurl}/img/img-no-disain/raimond_irjas.jpg" alt="" width="70" height="105" border="0"></td>
+		<!-- SUB: re_agent_picture_url -->
+		<td class="foto"><img src="{VAR:value}" alt="" border="0"></td>
+		<!-- END SUB: re_agent_picture_url -->
 		<td class="isiku_kontakt" style="padding: 12px 11px;">
-		<strong>Raimond Irjas</strong><br>
-		Elamispindade maakler<br>
+
+		<!-- SUB: re_agent_name -->
+		<strong>{VAR:value}</strong><br> 
+		<!-- END SUB: re_agent_name -->
+
+		<!-- SUB: re_agent_rank -->
+		<strong>{VAR:value}</strong><br> 
+		<!-- END SUB: re_agent_rank -->
+
 		<br>
-		GSM: +372 51 18 337<br>
-		Telefon: +372 626 64 55<br>
-		Faks: +372 626 64 56<br>
-		E-post: raimond.irjas@eri.ee
+		
+		<!-- SUB: re_agent_phone -->
+		Telefon: <span class="strong">{VAR:value}</span><br> 
+		<!-- END SUB: re_agent_phone -->
+
+		<!-- SUB: re_agent_email -->
+		E-post: <span class="strong">{VAR:value}</span><br> 
+		<!-- END SUB: re_agent_email -->
 		</td><!-- isiku_kontakt -->
-		<td class="foto"><img src="{VAR:baseurl}/img/img-no-disain/aigar_mets.jpg" alt="" width="70" height="105" border="0"></td>
-		<td class="isiku_kontakt" style="padding: 12px 11px;">
-		<strong>Aigar Mets</strong><br>
-		Elamispindade maakler<br>
-		<br>
-		GSM: +372 51 18 337<br>
-		Telefon: +372 626 64 55<br>
-		Faks: +372 626 64 56<br>
-		E-post: raimond.irjas@eri.ee
-		</td><!-- isiku_kontakt -->
+
+	
 		<td id="logo"><div><img src="{VAR:company_logo_url}" alt="{VAR:company_logo_alt}" border="0"></div></td>
 	</tr>
 	</table>
 	</td>
 </tr><!-- sisu -->
 
-<tr class="alapealkiri">
-	<td>
-	<table>
-	<tr>
-		<td class="pealkiri" style="padding-right: 10px;">M&uuml;&uuml;ja</td>
-		<td class="joon" style="background: url('{VAR:baseurl}/img/1x1.gif') repeat-x center;"></td>
-	</tr>
-	</table>
-	</td>
-</tr><!-- alapealkiri -->
 
 <tr class="sisu">
-	<td>{VAR:contact_data}
-	<!-- SUB: contact_email -->
-	E-mail: <a href="mailto:{VAR:contact_email}">{VAR:contact_email}</a>
-	<!-- END SUB: contact_email -->
-	<!-- -{VAR:contact_picture_url} -->
-	</td>
-</tr><!-- sisu -->
+	<!-- SUB: re_agent2_picture_url -->
+		<td class="foto"><img src="{VAR:value}" alt=""></td>
+		<!-- END SUB: re_agent2_picture_url -->
+		
+		<td class="isiku_kontakt" style="padding: 12px 11px;">
+		<!-- SUB: re_agent2_name -->
+		<strong>{VAR:value}</strong><br>
+		<!-- END SUB: re_agent2_name -->
+
+		<!-- SUB: re_agent2_rank -->
+		<strong>{VAR:value}</strong><br> 
+		<!-- END SUB: re_agent2_rank -->
+		<br>
+		
+		<!-- SUB: re_agent2_phone -->
+		Telefon: <strong>{VAR:value}</strong><br> 
+		<!-- END SUB: re_agent2_phone -->
+
+		<!-- SUB: re_agent2_email -->
+		E-post: <strong>{VAR:value}</strong><br> 
+		<!-- END SUB: re_agent2_email -->
+		</td><!-- isiku_kontakt -->
+</tr><!-- sisu --><!-- sisu -->
+
+
 </table><!-- detailotsing -->
 
 
+</body>

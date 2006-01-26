@@ -12,9 +12,11 @@
             <name>range</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
+            <rows>5</rows>
+            <cols>50</cols>
             <caption>Vahemik</caption>
       </property>
       <classinfo>

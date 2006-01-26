@@ -7,6 +7,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_CRM_ADDRESS, on_save_address)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_ADDRESS, on_save_address)
 HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create_customer)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 @classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY no_status=1 r2=yes
 
@@ -621,7 +622,9 @@ default group=org_objects
 		@property my_tasks type=table store=no no_caption=1 parent=my_tasks group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 		@property my_tasks_cal type=calendar store=no no_caption=1 parent=my_tasks
 
-@default group=stats
+@default group=stats_s
+
+	@property stats_s_toolbar type=toolbar store=no no_caption=1
 
 	@property stats_s_cust type=textbox store=no
 	@caption Klient
@@ -668,6 +671,11 @@ default group=org_objects
 	@property stats_s_res type=table store=no no_caption=1
 	@caption Tulemused
 
+@default group=stats_view
+
+	@property stats_tb type=toolbar no_caption=1 store=no
+
+	@property stats_list type=table no_caption=1 store=no
 
 @default group=quick_view
 
@@ -747,12 +755,16 @@ groupinfo documents caption="Dokumendid" submit=no
 
 @groupinfo bills caption="Arved" submit=no
 
-	@groupinfo bills_create parent=bills caption="Loo arve" submit=no
 	@groupinfo bills_list parent=bills caption="Nimekiri" submit=no
 	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no
 	@groupinfo bills_search parent=bills caption="Otsi toimetusi" submit=no
+	@groupinfo bills_create parent=bills caption="Loo arve" submit=no
 
-@groupinfo stats caption="Statistika" submit_method=get
+@groupinfo stats caption="Aruanded" 
+
+	@groupinfo stats_s parent=stats caption="Otsi" submit_method=get
+	@groupinfo stats_view parent=stats caption="Vaata" submit=no
+
 @groupinfo quick_view caption="Vaata"  submit=no
 
 @groupinfo transl caption=T&otilde;lgi
@@ -1708,6 +1720,9 @@ class crm_company extends class_base
 				aw_global_set("changeform_target",  "_blank");
 				break;
 
+			case "stats_tb":
+			case "stats_list":
+			case "stats_s_toolbar":
 			case "stats_s_from":
 			case "stats_s_cust_type":
 			case "stats_s_res":
@@ -2307,6 +2322,7 @@ class crm_company extends class_base
 		$arr['proj'] = $_GET["proj"];
 		$arr["post_ru"] = post_ru();
 		$arr["tf"] = $_GET["tf"];
+		$arr["cust_cat"] = 1;
 	}
 
 	/**
@@ -3611,7 +3627,7 @@ class crm_company extends class_base
 		$o = obj($proj);
 
 		return $this->mk_my_orb('new',array(
-			'alias_to_org' => $o->prop("orderer"),
+			'alias_to_org' => reset($o->prop("orderer")),
 			'reltype_org' => 13,
 			'add_to_cal' => $this->cal_id,
 			'title' => t("Toimetus"),
@@ -4444,6 +4460,66 @@ class crm_company extends class_base
 			$o->delete();
 		}
 		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=save_as_customer
+	**/
+	function save_as_customer($arr)
+	{
+		// add all custs in $check as cust to $cust_cat
+		$cat = obj($arr["cust_cat"]);
+		foreach(safe_array($arr["check"]) as $cust)
+		{
+			if (!$cat->is_connected_to(array("to" => $cust)))
+			{
+				$cat->connect(array(
+					"to" => $cust,
+					"type" => "RELTYPE_CUSTOMER"
+				));
+			}
+		}
+
+		return $arr["post_ru"];
+	}
+
+	function on_create_company($arr)
+	{
+		// make sure all companies added are added under the current user's company
+		$o = obj($arr["oid"]);
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		if ($co != $o->parent())
+		{
+			$o->set_parent($co);
+			$o->save();
+		}
+	}
+	
+	/**
+		@attrib name=save_report
+	**/
+	function save_report($arr)
+	{
+		$o = obj();
+		$arr = $_GET;
+		$o->set_class_id(CL_CRM_REPORT_ENTRY);
+		$o->set_parent($arr["id"]);
+		$o->set_prop("cust", $arr["stats_s_cust"]);
+		$o->set_prop("cust_type", $arr["stats_s_cust_type"]);
+		$o->set_prop("proj", $arr["stats_s_proj"]);
+		$o->set_prop("worker", $arr["stats_s_worker"]);
+		$o->set_prop("worker_sel", $arr["stats_s_worker_sel"]);
+		$o->set_prop("from", date_edit::get_timestamp($arr["stats_s_from"]));
+		$o->set_prop("to", date_edit::get_timestamp($arr["stats_s_to"]));
+		$o->set_prop("time_sel", $arr["stats_s_time_sel"]);
+		$o->set_prop("state", $arr["stats_s_state"]);
+		$o->set_prop("bill_state", $arr["stats_s_bill_state"]);
+		$o->set_prop("only_billable", $arr["stats_s_only_billable"]);
+		$o->set_prop("area", $arr["stats_s_area"]);
+		$o->set_prop("res_type", $arr["stats_s_res_type"]);
+		$o->save();
+		return html::get_change_url($o->id(), array("return_url" => urlencode($arr["post_ru"])));
 	}
 }
 ?>

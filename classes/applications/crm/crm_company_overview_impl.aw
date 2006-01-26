@@ -650,7 +650,7 @@ class crm_company_overview_impl extends class_base
 
 		if ($r["act_s_task_name"] != "")
 		{
-			$res["name"] = "%".$r["act_s_task_name"]."%";
+			$res["name"] = $this->_parse_search_string($r["act_s_task_name"]); // "%".$r["act_s_task_name"]."%";
 		}
 		if ($r["act_s_task_content"] != "")
 		{
@@ -1129,6 +1129,21 @@ class crm_company_overview_impl extends class_base
 			));
 			die($sf->parse());
 		}
+	}
+
+	function _parse_search_string($str)
+	{
+		// split string by "
+		if (strpos($str, "\"") !== false)
+		{
+			$len = strlen($str);
+			
+		}
+		else
+		{
+			$parts = explode(",", $str);
+		}
+		return "%".$str."%";
 	}
 }
 ?>
