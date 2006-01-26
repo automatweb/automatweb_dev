@@ -75,6 +75,15 @@
             <caption>Riik </caption>
       </property>
       <property>
+            <name>cust_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kliendi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>cont_d</name>
             <table>objects</table>
             <group>general</group>

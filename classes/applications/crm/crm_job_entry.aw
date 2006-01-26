@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.8 2006/01/23 08:44:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.9 2006/01/26 12:30:00 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -33,6 +33,9 @@
 
 @property riik type=textbox default=Eesti
 @caption Riik 
+
+@property cust_type type=select 
+@caption Kliendi t&uuml;&uuml;p
 
 @property cont_d type=text subtitle=1
 @caption Kontaktisiku andmed
@@ -103,6 +106,9 @@ class crm_job_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "cust_type":
+				$prop["options"] = array(CL_CRM_COMPANY => t("Organisatsioon"), CL_CRM_PERSON => t("Isik"));
+				break;
 			case "proj_type":
 				$cl = get_instance(CL_CLASSIFICATOR);
 				$prop["options"] = $cl->get_options_for(array(
@@ -219,7 +225,7 @@ class crm_job_entry extends class_base
 			"site_id" => array(),
 			"name" => $arr["request"]["cust_n"]
 		));
-
+			
 		if ($this->can("view", $arr["request"]["sel_cust"]))
 		{
 			$c = obj($arr["request"]["sel_cust"]);
@@ -232,10 +238,13 @@ class crm_job_entry extends class_base
 		else
 		{
 			$c = obj();
-			$c->set_class_id(CL_CRM_COMPANY);
+			$c->set_class_id($arr["request"]["cust_type"] == CL_CRM_PERSON ? CL_CRM_PERSON : CL_CRM_COMPANY);
 			$c->set_parent($arr["request"]["parent"]);
 			$c->set_name($arr["request"]["cust_n"]);
-			$c->set_prop("ettevotlusvorm", $arr["request"]["ettevotlusvorm"]);
+			if ($c->is_property("ettevotlusvorm"))
+			{
+				$c->set_prop("ettevotlusvorm", $arr["request"]["ettevotlusvorm"]);
+			}
 			$c->save();
 
 			// create address
@@ -254,15 +263,29 @@ class crm_job_entry extends class_base
 			$name[] = $form['maakond'];
 			$addr->set_name(join(",  ", $name));
 			$addr->save();
-
-			$c->set_prop("contact", $addr->id());
+			
+			$c->set_prop($c->class_id() == CL_CRM_COMPANY ? "contact" : "address", $addr->id());
 			$c_i = $c->instance();
-			$c_i->_gen_company_code($c);
+			if ($c->class_id() == CL_CRM_COMPANY)
+			{
+				$c_i->_gen_company_code($c);
+			}
 			$c->save();
 		}
 
 
-
+		if ($c->class_id() == CL_CRM_PERSON)
+		{
+			$c->set_name($arr["request"]["ct_fn"]." ".$arr["request"]["ct_ln"]);
+			$c->set_prop("firstname", $arr["request"]["ct_fn"]);
+			$c->set_prop("lastname", $arr["request"]["ct_ln"]);
+			$this->set_by_n($c, "phone", $arr["request"]["ct_phone"], CL_CRM_PHONE, $c->id());
+			$this->set_by_n($c, "email", $arr["request"]["ct_email"], CL_ML_MEMBER, $c->id());
+			$c->save();
+		}
+		else
+		if ($c->class_id() == CL_CRM_COMPANY)
+		{
 		// check if such a person already exists in that co
 		$c_i = $c->instance();
 		$emp_p = array_flip($c_i->get_employee_picker($c));
@@ -295,8 +318,9 @@ class crm_job_entry extends class_base
 				"type" => "RELTYPE_IMPORTANT_PERSON"
 			));
 		}
+		}
 
-
+		$u = get_instance(CL_USER);
 		// create proj
 		$p = obj();
 		$p->set_class_id(CL_PROJECT);
