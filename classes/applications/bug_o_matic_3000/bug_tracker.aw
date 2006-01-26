@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.5 2006/01/25 15:36:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.6 2006/01/26 11:42:17 ahti Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -123,8 +123,8 @@ class bug_tracker extends class_base
 		{
 			$ot = new object_tree(array(
 				"parent" => $arr["obj_inst"]->id(),
-				"class_id" => CL_MENU,
-				//"class_id" => array(CL_MENU,CL_BUG)
+				//"class_id" => CL_MENU,
+				"class_id" => array(CL_MENU,CL_BUG)
 			));
 		}
 		else
@@ -198,6 +198,12 @@ class bug_tracker extends class_base
 			"type" => "time",
 			"numberic" => 1,
 			"format" => "d.m.Y / H:i"
+		));
+		$t->define_field(array(
+			"name" => "comments",
+			"caption" => t("Kommentaare"),
+			"sortable" => 1,
+			"numeric" => 1,
 		));
 		$t->define_chooser(array(
 			"field" => "id",
