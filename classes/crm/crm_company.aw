@@ -3291,6 +3291,14 @@ class crm_company extends class_base
 		$ret = array();
 		foreach($conns as $c)
 		{
+			if ($c["to.class_id"] == CL_CRM_PERSON)
+			{
+				$p = obj($c["to"]);
+				if (!$p->prop("is_customer"))
+				{
+					continue;
+				}
+			}
 			$ret[] = $c["to"];
 		}
 		
