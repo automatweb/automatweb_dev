@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.5 2006/01/25 14:56:51 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.6 2006/01/26 15:25:24 ahti Exp $
 // bug.aw - Bugi 
 /*
 
-@classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 
+@classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 no_status=1
 
 @tableinfo aw_bugs index=aw_id master_index=brother_of master_table=objects
 
@@ -18,6 +18,9 @@
 
 @property bug_status type=select
 @caption Staatus
+
+@property who type=relpicker reltype=RELTYPE_MONITOR table=objects field=meta method=serialize
+@caption Kellele
 
 @property bug_priority type=select
 @caption Prioriteet
@@ -55,8 +58,6 @@ caption OS
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption Jälgija
 
-
-
 */
 
 class bug extends class_base
@@ -85,7 +86,7 @@ class bug extends class_base
 
 			case "bug_priority":
 			case "bug_severity":
-				foreach(range(1, 5) as $r)
+				foreach(range(5, 1) as $r)
 				{
 					$prop["options"][$r] = $r;
 				}

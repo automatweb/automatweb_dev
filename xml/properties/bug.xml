@@ -27,6 +27,16 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>who</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MONITOR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kellele</caption>
+      </property>
+      <property>
             <name>bug_priority</name>
             <group>general</group>
             <table>aw_bugs</table>
@@ -101,6 +111,7 @@
             <syslog_type>ST_BUG</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <comments>

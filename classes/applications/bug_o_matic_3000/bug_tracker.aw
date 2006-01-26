@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.6 2006/01/26 11:42:17 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.7 2006/01/26 15:25:24 ahti Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -143,9 +143,15 @@ class bug_tracker extends class_base
 		));
 	}
 	
-	function callb_status($val)
+	function callb_who($val)
 	{
-		return $val == 1 ? t("Ei") : t("Jah");
+		$name = "";
+		if($this->can("view", $val))
+		{
+			$obj = obj($val);
+			$name = $obj->name();
+		}
+		return $name;
 	}
 
 	function _init_bug_list_tbl(&$t)
@@ -155,12 +161,11 @@ class bug_tracker extends class_base
 			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
-
 		$t->define_field(array(
-			"name" => "status",
-			"caption" => t("Aktiivne"),
+			"name" => "who",
+			"caption" => t("Kellele"),
 			"sortable" => 1,
-			"callback" => array(&$this, "callb_status"),
+			//"callback" => array(&$this, "callb_who"),
 			//"callback_pass_row" => 1,
 		));
 		$t->define_field(array(
@@ -199,12 +204,14 @@ class bug_tracker extends class_base
 			"numberic" => 1,
 			"format" => "d.m.Y / H:i"
 		));
+		/*
 		$t->define_field(array(
 			"name" => "comments",
 			"caption" => t("Kommentaare"),
 			"sortable" => 1,
 			"numeric" => 1,
 		));
+		*/
 		$t->define_chooser(array(
 			"field" => "id",
 			"name" => "sel",
