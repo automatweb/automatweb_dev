@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.1 2006/01/24 15:07:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.2 2006/01/26 13:20:10 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -7,10 +7,23 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
 @property template type=select rel=1 field=meta method=serialize
-@caption vali template
+@caption Template
 
+@property register_data type=relpicker reltype=RELTYPE_REGISTER_DATA
+@caption Registri andmed
+
+@property cfg_form type=relpicker reltype=RELTYPE_CFGFORM
+@caption Seadete vorm
+
+@reltype REGISTER_DATA value=1 clid=CL_REGISTER_DATA
+@caption Registri andmed
+
+@reltype CFGFORM value=2 clid=CL_CFGFORM
+@caption Seadete vorm
 
 */
 
@@ -21,7 +34,7 @@ class interim_page extends class_base
 		// change this to the folder under the templates folder, where this classes templates will be, 
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
-			"tpldir" => "interim_page",
+			"tpldir" => "contentmgmt/interim_page",
 			"clid" => CL_INTERIM_PAGE
 		));
 	}
@@ -34,7 +47,7 @@ class interim_page extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "template":
+/*			case "template":
 				$dir = $this->site_template_dir;
 				$template_list = array();
 				sort($template_list);
@@ -54,7 +67,32 @@ class interim_page extends class_base
 					$prop["options"][$filename] = t($filename);
 				}
 				break;			
-			//-- get_property --//
+			//-- get_property --//*/
+			case "template":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "contentmgmt/interim_page"
+				));
+				break;		
+			case "register_data":
+				if (!$arr["obj_inst"]->prop("cfg_form"))
+				{
+					return PROP_IGNORE;
+				}
+				break;		
+			case "cfg_form":
+				$mem_list = new object_list(array(
+					"class_id" => CL_CFGFORM,
+					"subclass" => CL_REGISTER_DATA,
+				));
+				$prop["options"] = array("" => " --vali-- ");
+				$member_list = array();
+				foreach($mem_list->arr() as $mem)
+				{
+					$member_list[$mem->id()] = $mem->name();
+				}
+				$prop["options"] = $prop["options"] + $member_list;
+				break;				
 		};
 		return $retval;
 	}
@@ -66,7 +104,13 @@ class interim_page extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
-
+			case "register_data":
+				if($arr["prop"]["value"])
+				{
+					$register_data_obj = obj($arr["prop"]["value"]);
+					$register_data_obj -> set_meta("cfgform_id" , $arr["request"]["cfg_form"]);
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -88,25 +132,19 @@ class interim_page extends class_base
 	{
 		$targ = obj($arr["alias"]["target"]);
 		enter_function("interim_page::parse_alias");
-		
 		$tpl = $targ->prop("template");	
 		$this->read_template($tpl);
-		lc_site_load("interim_page", &$this);	
+		lc_site_load("interim_page", &$this);
 		$connections = $targ->connections_from();
-		foreach($connections as $conn)
-		{
-			$register_id = $conn->prop("to");
-		}
-		if(is_oid($document_obj))
+		$register_id = $targ->prop("register_data");
+		if(is_oid($register_id))
 		{
 			$register_obj = obj($register_id);
+			$this->vars($register_obj->properties());
 		}
-	
 		exit_function("interim_page::parse_alias");
 //		return $this->show(array("id" => $arr["alias"]["target"]));
-
 		return $this->parse();		
-//		return $tpl;
 	}
 
 	////
