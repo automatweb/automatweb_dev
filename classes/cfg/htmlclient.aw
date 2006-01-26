@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.133 2006/01/26 13:58:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.134 2006/01/26 14:07:39 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -777,12 +777,15 @@ class htmlclient extends aw_template
 					$proj_url = 'submit_changeform("add_proj_to_co_as_impl");';
 				}
 
+				$u = get_instance(CL_USER);
+				$cur_co = $u->get_current_company();
+
 				$pl = get_instance(CL_PLANNER);
 				$this->cal_id = $pl->get_calendar_for_user(array(
 					"uid" => aw_global_get("uid"),
 				));
 				$task_url = $this->mk_my_orb('new',array(
-					'alias_to_org' => $_REQUEST["id"],
+					'alias_to_org' => $_REQUEST["id"] == $cur_co ? null : $_REQUEST["id"],
 					'reltype_org' => 13,
 					'class' => 'task',
 					'add_to_cal' => $this->cal_id,
@@ -801,7 +804,7 @@ class htmlclient extends aw_template
 					$task_url = "submit_changeform(\"add_task_to_co\");";
 				}
 				$call_url = $this->mk_my_orb('new',array(
-					'alias_to_org' => $_REQUEST["id"],
+					'alias_to_org' => $_REQUEST["id"] == $cur_co ? null : $_REQUEST["id"],
 					'reltype_org' => 12,
 					'class' => 'crm_call',
 					'add_to_cal' => $this->cal_id,
@@ -810,7 +813,7 @@ class htmlclient extends aw_template
 					'return_url' => get_ru()
 				));
 				$meeting_url = $this->mk_my_orb('new',array(
-					'alias_to_org' => $_REQUEST["id"],
+					'alias_to_org' => $_REQUEST["id"] == $cur_co ? null : $_REQUEST["id"],
 					'reltype_org' => 11,
 					'class' => 'crm_meeting',
 					'add_to_cal' => $this->cal_id,
