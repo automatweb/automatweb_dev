@@ -279,40 +279,40 @@ msgid "Omaduse Garaa&#158; (has_garage) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_seminar_rooms
-msgid "Omaduse Seminari- ja/vıi konverentsiruumid (has_seminar_rooms) caption"
+msgid "Omaduse Seminari- ja/v√µi konverentsiruumid (has_seminar_rooms) caption"
 msgstr "Seminar rooms"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_seminar_rooms_comment
 msgid ""
-"Omaduse Seminari- ja/vıi konverentsiruumid (has_seminar_rooms) kommentaar"
+"Omaduse Seminari- ja/v√µi konverentsiruumid (has_seminar_rooms) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_seminar_rooms_help
-msgid "Omaduse Seminari- ja/vıi konverentsiruumid (has_seminar_rooms) help"
+msgid "Omaduse Seminari- ja/v√µi konverentsiruumid (has_seminar_rooms) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_extra_beds
-msgid "Omaduse Lisavoodi vıimalus (has_extra_beds) caption"
+msgid "Omaduse Lisavoodi v√µimalus (has_extra_beds) caption"
 msgstr "Extra bed"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_extra_beds_comment
-msgid "Omaduse Lisavoodi vıimalus (has_extra_beds) kommentaar"
+msgid "Omaduse Lisavoodi v√µimalus (has_extra_beds) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_extra_beds_help
-msgid "Omaduse Lisavoodi vıimalus (has_extra_beds) help"
+msgid "Omaduse Lisavoodi v√µimalus (has_extra_beds) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_baby_beds
-msgid "Omaduse Beebivoodi vıimalus (has_baby_beds) caption"
+msgid "Omaduse Beebivoodi v√µimalus (has_baby_beds) caption"
 msgstr "Baby cot"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_baby_beds_comment
-msgid "Omaduse Beebivoodi vıimalus (has_baby_beds) kommentaar"
+msgid "Omaduse Beebivoodi v√µimalus (has_baby_beds) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_baby_beds_help
-msgid "Omaduse Beebivoodi vıimalus (has_baby_beds) help"
+msgid "Omaduse Beebivoodi v√µimalus (has_baby_beds) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_cur_xch
@@ -340,15 +340,15 @@ msgid "Omaduse WiFi leviala (has_wifi) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_internet
-msgid "Omaduse Interneti kasutamise vıimalus (has_internet) caption"
+msgid "Omaduse Interneti kasutamise v√µimalus (has_internet) caption"
 msgstr "Internet"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_internet_comment
-msgid "Omaduse Interneti kasutamise vıimalus (has_internet) kommentaar"
+msgid "Omaduse Interneti kasutamise v√µimalus (has_internet) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_internet_help
-msgid "Omaduse Interneti kasutamise vıimalus (has_internet) help"
+msgid "Omaduse Interneti kasutamise v√µimalus (has_internet) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_safety_boxes
@@ -412,15 +412,15 @@ msgid "Omaduse Raviteenused (has_services_heal) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_washing
-msgid "Omaduse Pesu pesemisvıimalus (has_washing) caption"
+msgid "Omaduse Pesu pesemisv√µimalus (has_washing) caption"
 msgstr "Laundry room"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_washing_comment
-msgid "Omaduse Pesu pesemisvıimalus (has_washing) kommentaar"
+msgid "Omaduse Pesu pesemisv√µimalus (has_washing) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_washing_help
-msgid "Omaduse Pesu pesemisvıimalus (has_washing) help"
+msgid "Omaduse Pesu pesemisv√µimalus (has_washing) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_services_carrental
@@ -484,33 +484,33 @@ msgid "Omaduse L&otilde;kkeplats/grill (has_grill) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_tent
-msgid "Omaduse Telkimisvıimalus (has_camping_tent) caption"
-msgstr "Camping"
+msgid "Omaduse Telkimisv√µimalus (has_camping_tent) caption"
+msgstr "Tenting"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_tent_comment
-msgid "Omaduse Telkimisvıimalus (has_camping_tent) kommentaar"
+msgid "Omaduse Telkimisv√µimalus (has_camping_tent) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_tent_help
-msgid "Omaduse Telkimisvıimalus (has_camping_tent) help"
+msgid "Omaduse Telkimisv√µimalus (has_camping_tent) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_trailer
-msgid "Omaduse Haagissuvilaga peatumise vıimalus (has_camping_trailer) caption"
-msgstr ""
+msgid "Omaduse Haagissuvilaga peatumise v√µimalus (has_camping_trailer) caption"
+msgstr "Trailer Camper Stop"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_trailer_comment
 msgid ""
-"Omaduse Haagissuvilaga peatumise vıimalus (has_camping_trailer) kommentaar"
+"Omaduse Haagissuvilaga peatumise v√µimalus (has_camping_trailer) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_trailer_help
-msgid "Omaduse Haagissuvilaga peatumise vıimalus (has_camping_trailer) help"
+msgid "Omaduse Haagissuvilaga peatumise v√µimalus (has_camping_trailer) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_caravan
 msgid "Omaduse Karavanikohad (has_camping_caravan) caption"
-msgstr ""
+msgstr "Caravan Facilities"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_caravan_comment
 msgid "Omaduse Karavanikohad (has_camping_caravan) kommentaar"
@@ -521,21 +521,21 @@ msgid "Omaduse Karavanikohad (has_camping_caravan) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_rentatent
-msgid "Omaduse Telkide laenutamise vıimalus (has_camping_rentatent) caption"
-msgstr ""
+msgid "Omaduse Telkide laenutamise v√µimalus (has_camping_rentatent) caption"
+msgstr "Rental of Tents"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_rentatent_comment
-msgid "Omaduse Telkide laenutamise vıimalus (has_camping_rentatent) kommentaar"
+msgid "Omaduse Telkide laenutamise v√µimalus (has_camping_rentatent) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_camping_rentatent_help
-msgid "Omaduse Telkide laenutamise vıimalus (has_camping_rentatent) help"
+msgid "Omaduse Telkide laenutamise v√µimalus (has_camping_rentatent) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_breakfast_included
 msgid ""
 "Omaduse Hommikus&ouml;&ouml;k hinna sees (food_breakfast_included) caption"
-msgstr ""
+msgstr "Breakfast Included in Price"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_breakfast_included_comment
 msgid ""
@@ -549,7 +549,7 @@ msgstr ""
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_breakfast_canorder
 msgid ""
 "Omaduse Hommikus&ouml;&ouml;k tellimisel (food_breakfast_canorder) caption"
-msgstr ""
+msgstr "Breakfast at Request"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_breakfast_canorder_comment
 msgid ""
@@ -562,7 +562,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_restaurant
 msgid "Omaduse Restoran (food_restaurant) caption"
-msgstr ""
+msgstr "Restaurant"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_restaurant_comment
 msgid "Omaduse Restoran (food_restaurant) kommentaar"
@@ -574,7 +574,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_cafe
 msgid "Omaduse Kohvik (food_cafe) caption"
-msgstr ""
+msgstr "Caf√©"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_cafe_comment
 msgid "Omaduse Kohvik (food_cafe) kommentaar"
@@ -586,7 +586,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_bar
 msgid "Omaduse Lobby baar (food_bar) caption"
-msgstr ""
+msgstr "Lobby Bar"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_bar_comment
 msgid "Omaduse Lobby baar (food_bar) kommentaar"
@@ -597,68 +597,68 @@ msgid "Omaduse Lobby baar (food_bar) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_use_kitchen
-msgid "Omaduse Toidu valmistamise vıimalus (food_use_kitchen) caption"
-msgstr ""
+msgid "Omaduse Toidu valmistamise v√µimalus (food_use_kitchen) caption"
+msgstr "Prepare Your Own Meals"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_use_kitchen_comment
-msgid "Omaduse Toidu valmistamise vıimalus (food_use_kitchen) kommentaar"
+msgid "Omaduse Toidu valmistamise v√µimalus (food_use_kitchen) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_food_use_kitchen_help
-msgid "Omaduse Toidu valmistamise vıimalus (food_use_kitchen) help"
+msgid "Omaduse Toidu valmistamise v√µimalus (food_use_kitchen) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_playground
-msgid "Omaduse Laste m‰nguv‰ljak (has_playground) caption"
-msgstr ""
+msgid "Omaduse Laste m√§nguv√§ljak (has_playground) caption"
+msgstr "Playground"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_playground_comment
-msgid "Omaduse Laste m‰nguv‰ljak (has_playground) kommentaar"
+msgid "Omaduse Laste m√§nguv√§ljak (has_playground) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_playground_help
-msgid "Omaduse Laste m‰nguv‰ljak (has_playground) help"
+msgid "Omaduse Laste m√§nguv√§ljak (has_playground) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_sporting_ground
-msgid "Omaduse Spordiv‰ljak (has_sporting_ground) caption"
-msgstr ""
+msgid "Omaduse Spordiv√§ljak (has_sporting_ground) caption"
+msgstr "Sports Fields"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_sporting_ground_comment
-msgid "Omaduse Spordiv‰ljak (has_sporting_ground) kommentaar"
+msgid "Omaduse Spordiv√§ljak (has_sporting_ground) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_sporting_ground_help
-msgid "Omaduse Spordiv‰ljak (has_sporting_ground) help"
+msgid "Omaduse Spordiv√§ljak (has_sporting_ground) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_tennis
-msgid "Omaduse Tennisev‰ljak (has_tennis) caption"
-msgstr ""
+msgid "Omaduse Tennisev√§ljak (has_tennis) caption"
+msgstr "Tennis Court"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_tennis_comment
-msgid "Omaduse Tennisev‰ljak (has_tennis) kommentaar"
+msgid "Omaduse Tennisev√§ljak (has_tennis) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_tennis_help
-msgid "Omaduse Tennisev‰ljak (has_tennis) help"
+msgid "Omaduse Tennisev√§ljak (has_tennis) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_ballgames
-msgid "Omaduse Pallim‰ngud (has_ballgames) caption"
-msgstr ""
+msgid "Omaduse Pallim√§ngud (has_ballgames) caption"
+msgstr "Ball Courts"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_ballgames_comment
-msgid "Omaduse Pallim‰ngud (has_ballgames) kommentaar"
+msgid "Omaduse Pallim√§ngud (has_ballgames) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_ballgames_help
-msgid "Omaduse Pallim‰ngud (has_ballgames) help"
+msgid "Omaduse Pallim√§ngud (has_ballgames) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_horseriding
 msgid "Omaduse Ratsutamine (has_horseriding) caption"
-msgstr ""
+msgstr "Horseback Riding"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_horseriding_comment
 msgid "Omaduse Ratsutamine (has_horseriding) kommentaar"
@@ -670,7 +670,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_rentabike
 msgid "Omaduse Jalgrattalaenutus (has_rentabike) caption"
-msgstr ""
+msgstr "Bicycle Rent"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_rentabike_comment
 msgid "Omaduse Jalgrattalaenutus (has_rentabike) kommentaar"
@@ -681,32 +681,32 @@ msgid "Omaduse Jalgrattalaenutus (has_rentabike) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_rentafloatingvehicle
-msgid "Omaduse Veesıiduki laenutus (has_rentafloatingvehicle) caption"
-msgstr ""
+msgid "Omaduse Vees√µiduki laenutus (has_rentafloatingvehicle) caption"
+msgstr "Boat Rental"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_rentafloatingvehicle_comment
-msgid "Omaduse Veesıiduki laenutus (has_rentafloatingvehicle) kommentaar"
+msgid "Omaduse Vees√µiduki laenutus (has_rentafloatingvehicle) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_rentafloatingvehicle_help
-msgid "Omaduse Veesıiduki laenutus (has_rentafloatingvehicle) help"
+msgid "Omaduse Vees√µiduki laenutus (has_rentafloatingvehicle) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_swimming_out
-msgid "Omaduse Ujumisvıimalus (v‰litingimustes) (has_swimming_out) caption"
-msgstr ""
+msgid "Omaduse Ujumisv√µimalus (v√§litingimustes) (has_swimming_out) caption"
+msgstr "Swimming (Outdoor)"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_swimming_out_comment
-msgid "Omaduse Ujumisvıimalus (v‰litingimustes) (has_swimming_out) kommentaar"
+msgid "Omaduse Ujumisv√µimalus (v√§litingimustes) (has_swimming_out) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_swimming_out_help
-msgid "Omaduse Ujumisvıimalus (v‰litingimustes) (has_swimming_out) help"
+msgid "Omaduse Ujumisv√µimalus (v√§litingimustes) (has_swimming_out) help"
 msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_fishing
 msgid "Omaduse Kalastamine (has_fishing) caption"
-msgstr ""
+msgstr "Fishing"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_fishing_comment
 msgid "Omaduse Kalastamine (has_fishing) kommentaar"
@@ -718,7 +718,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_rentarod
 msgid "Omaduse Kalastustarvete rent (has_rentarod) caption"
-msgstr ""
+msgstr "Fishing Equipment Rent"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_rentarod_comment
 msgid "Omaduse Kalastustarvete rent (has_rentarod) kommentaar"
@@ -730,7 +730,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_hiking
 msgid "Omaduse Matkarajad (has_hiking) caption"
-msgstr ""
+msgstr "Hiking Trails"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_hiking_comment
 msgid "Omaduse Matkarajad (has_hiking) kommentaar"
@@ -742,7 +742,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_skiing
 msgid "Omaduse Suusarajad (has_skiing) caption"
-msgstr ""
+msgstr "Ski Trails"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_skiing_comment
 msgid "Omaduse Suusarajad (has_skiing) kommentaar"
@@ -754,7 +754,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_renttwoskis
 msgid "Omaduse Suusalaenutus (has_renttwoskis) caption"
-msgstr ""
+msgstr "Ski Rental"
 
 #: classes/applications/crm/crm_field_accommodation.aw:prop_has_renttwoskis_comment
 msgid "Omaduse Suusalaenutus (has_renttwoskis) kommentaar"
@@ -822,7 +822,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:group_services
 msgid "Grupi Lisateenused (services) pealkiri"
-msgstr ""
+msgstr "Additional services"
 
 #: classes/applications/crm/crm_field_accommodation.aw:group_services_help
 msgid "Grupi Lisateenused (services) help"
@@ -830,7 +830,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:group_catering
 msgid "Grupi Toitlustamine (catering) pealkiri"
-msgstr ""
+msgstr "Catering"
 
 #: classes/applications/crm/crm_field_accommodation.aw:group_catering_help
 msgid "Grupi Toitlustamine (catering) help"
@@ -838,7 +838,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:group_active_vacation
 msgid "Grupi Aktiivne puhkus (active_vacation) pealkiri"
-msgstr ""
+msgstr "Recreation"
 
 #: classes/applications/crm/crm_field_accommodation.aw:group_active_vacation_help
 msgid "Grupi Aktiivne puhkus (active_vacation) help"
@@ -878,64 +878,64 @@ msgstr ""
 
 #: classes/applications/crm/crm_field_accommodation.aw:286
 msgid "Hotell"
-msgstr ""
+msgstr "Hotel"
 
 #: classes/applications/crm/crm_field_accommodation.aw:287
 msgid "Motell"
-msgstr ""
+msgstr "Motel"
 
 #: classes/applications/crm/crm_field_accommodation.aw:288
 msgid "K&uuml;lalistemaja"
-msgstr ""
+msgstr "Guest house / Bed and Breakfast"
 
 #: classes/applications/crm/crm_field_accommodation.aw:289
 msgid "Hostel"
-msgstr ""
+msgstr "Hostel"
 
 #: classes/applications/crm/crm_field_accommodation.aw:290
 msgid "Puhkek&uuml;la ja -laager"
-msgstr ""
+msgstr "Camp Ground"
 
 #: classes/applications/crm/crm_field_accommodation.aw:291
 msgid "Puhkemaja"
-msgstr ""
+msgstr "Cottage"
 
 #: classes/applications/crm/crm_field_accommodation.aw:292
 msgid "K&uuml;laliskorter"
-msgstr ""
+msgstr "Guest Apartment"
 
 #: classes/applications/crm/crm_field_accommodation.aw:293
 msgid "Kodumajutus"
-msgstr ""
+msgstr "Home Accommodation"
 
 #: classes/applications/crm/crm_field_accommodation.aw:298
 msgid "Kesklinnas"
-msgstr ""
+msgstr "Town Centre"
 
 #: classes/applications/crm/crm_field_accommodation.aw:299
 msgid "V&auml;ljaspool kesklinna"
-msgstr ""
+msgstr "Outside of Town"
 
 #: classes/applications/crm/crm_field_accommodation.aw:300
 msgid "V&auml;ljaspool linna"
-msgstr ""
+msgstr "Distance from Town"
 
 #: classes/applications/crm/crm_field_accommodation.aw:305
 msgid "A"
-msgstr ""
+msgstr "A"
 
 #: classes/applications/crm/crm_field_accommodation.aw:306
 msgid "B"
-msgstr ""
+msgstr "B"
 
 #: classes/applications/crm/crm_field_accommodation.aw:307
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: classes/applications/crm/crm_field_accommodation.aw:308
 msgid "D"
-msgstr ""
+msgstr "D"
 
 #: classes/applications/crm/crm_field_accommodation.aw:309
 msgid "E"
-msgstr ""
+msgstr "E"
