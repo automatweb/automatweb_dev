@@ -197,7 +197,7 @@ class popup_search extends aw_template
 					"clid" => $clid,
 				));
 				$tmp["value"] .= " ".html::href(array(
-					"url" => "javascript:aw_popup_scroll(\"$url2\",\"Vali eemaldamiseks\",550,500)",
+					"url" => "javascript:aw_popup_scroll(\"$url2\",\"Eemalda\",550,500)",
 					"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0>",
 					"title" => t("Eemalda")
 				));
