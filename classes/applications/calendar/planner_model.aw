@@ -137,6 +137,10 @@ class planner_model extends core
 			// fuck me. plenty of places expect different data from me .. until I'm
 			// sure that nothing breaks, I can't remove this
 			$awt->start("get-edit-link");
+			if (!$this->can("view", $event["id"]))
+			{
+				continue;
+			}
 			$of = new object($event["id"]);
 			$row = $event + $of->properties();
 			$awt->stop("get-edit-link");
