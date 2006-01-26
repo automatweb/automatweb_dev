@@ -4,10 +4,8 @@
             <name>customer</name>
             <table>planner</table>
             <group>general</group>
-            <type>popup_search</type>
+            <type>relpicker</type>
             <field>customer</field>
-            <clid>CL_CRM_COMPANY</clid>
-            <style>relpicker</style>
             <reltype>RELTYPE_CUSTOMER</reltype>
             <caption>Klient</caption>
       </property>
@@ -24,10 +22,8 @@
             <name>project</name>
             <table>planner</table>
             <group>general</group>
-            <type>popup_search</type>
+            <type>relpicker</type>
             <field>project</field>
-            <clid>CL_PROJECT</clid>
-            <style>relpicker</style>
             <reltype>RELTYPE_PROJECT</reltype>
             <caption>Projekt</caption>
       </property>

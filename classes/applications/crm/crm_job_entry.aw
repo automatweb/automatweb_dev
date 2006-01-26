@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.9 2006/01/26 12:30:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.10 2006/01/26 13:58:35 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -25,6 +25,9 @@
 @property addr type=textbox 
 @caption Aadress
 
+@property post_index type=textbox size=8
+@caption Postiindeks
+
 @property addr_linn type=textbox 
 @caption Linn
 
@@ -33,6 +36,9 @@
 
 @property riik type=textbox default=Eesti
 @caption Riik 
+
+@property cust_mgr type=select
+@caption Kliendihaldur
 
 @property cust_type type=select 
 @caption Kliendi t&uuml;&uuml;p
@@ -106,9 +112,28 @@ class crm_job_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "cust_mgr":
+				$u = get_instance(CL_USER);
+				$c = get_instance(CL_CRM_COMPANY);
+				$prop["options"] = $c->get_employee_picker(obj($u->get_current_company()), true);
+				$prop["value"] = $u->get_current_person();
+
+				if (isset($prop["options"]) && !isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$prop["value"]] = $tmp->name();
+				}
+				break;
+
+			case "addr":
+				$oncl = "window.open('http://www.post.ee/?id=1069&op=sihtnumbriotsing&tanav='+document.changeform.addr.value+'&linn='+document.changeform.addr_linn.value+'&x=30&y=6');";
+				$prop["post_append_text"] = sprintf("<a href='#' onClick=\"$oncl\">%s</a>", t("Otsi postiindeksit"));
+				break;
+
 			case "cust_type":
 				$prop["options"] = array(CL_CRM_COMPANY => t("Organisatsioon"), CL_CRM_PERSON => t("Isik"));
 				break;
+
 			case "proj_type":
 				$cl = get_instance(CL_CLASSIFICATOR);
 				$prop["options"] = $cl->get_options_for(array(
@@ -189,6 +214,22 @@ class crm_job_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "sel_cust":
+				if (!$prop["value"] && $arr["request"]["cust_n"] == "")
+				{
+					$prop["error"] = t("Kliendi nimi peab olema t&auml;idetud v&otilde;i olemasolev klient peab olema valitud");
+					return PROP_FATAL_ERROR;
+				}
+				break;
+			
+			case "proj_name":
+				if ($prop["value"] == "")
+				{
+					$prop["error"] = t("Projekti nimi peab olema t&auml;idetud");
+					return PROP_FATAL_ERROR;
+				}
+				break;
+
 			case "resource_sel":
 				$ts = date_edit::get_timestamp($arr["request"]["task_start"]);
 				$te = date_edit::get_timestamp($arr["request"]["task_end"]);
@@ -245,6 +286,7 @@ class crm_job_entry extends class_base
 			{
 				$c->set_prop("ettevotlusvorm", $arr["request"]["ettevotlusvorm"]);
 			}
+			$c->set_prop("client_manager", $arr["request"]["cust_mgr"]);
 			$c->save();
 
 			// create address
@@ -252,6 +294,7 @@ class crm_job_entry extends class_base
 			$addr->set_class_id(CL_CRM_ADDRESS);
 			$addr->set_parent($c->id());
 			$addr->set_prop("aadress", $arr["request"]["addr"]);
+			$addr->set_prop("postiindeks", $arr["request"]["post_index"]);
 			$addr->save();
 			$this->set_by_n($addr, "linn", $arr["request"]["addr_linn"], CL_CRM_CITY, $addr->id());
 			$addr->set_prop("maakond", $arr["request"]["maakond"]);
@@ -286,38 +329,38 @@ class crm_job_entry extends class_base
 		else
 		if ($c->class_id() == CL_CRM_COMPANY)
 		{
-		// check if such a person already exists in that co
-		$c_i = $c->instance();
-		$emp_p = array_flip($c_i->get_employee_picker($c));
-		if (!isset($emp_p[$arr["request"]["ct_fn"]." ".$arr["request"]["ct_ln"]]))
-		{
-			// kontaktisik
-			$pers = obj();
-			$pers->set_class_id(CL_CRM_PERSON);
-			$pers->set_parent($c->id());
-			$pers->set_name($arr["request"]["ct_fn"]." ".$arr["request"]["ct_ln"]);
-			$pers->set_prop("firstname", $arr["request"]["ct_fn"]);
-			$pers->set_prop("lastname", $arr["request"]["ct_ln"]);
-			$this->set_by_n($pers, "phone", $arr["request"]["ct_phone"], CL_CRM_PHONE, $c->id());
-			$this->set_by_n($pers, "email", $arr["request"]["ct_email"], CL_ML_MEMBER, $c->id());
-			$pers->save();
+			// check if such a person already exists in that co
+			$c_i = $c->instance();
+			$emp_p = array_flip($c_i->get_employee_picker($c));
+			if (!isset($emp_p[$arr["request"]["ct_fn"]." ".$arr["request"]["ct_ln"]]))
+			{
+				// kontaktisik
+				$pers = obj();
+				$pers->set_class_id(CL_CRM_PERSON);
+				$pers->set_parent($c->id());
+				$pers->set_name($arr["request"]["ct_fn"]." ".$arr["request"]["ct_ln"]);
+				$pers->set_prop("firstname", $arr["request"]["ct_fn"]);
+				$pers->set_prop("lastname", $arr["request"]["ct_ln"]);
+				$this->set_by_n($pers, "phone", $arr["request"]["ct_phone"], CL_CRM_PHONE, $c->id());
+				$this->set_by_n($pers, "email", $arr["request"]["ct_email"], CL_ML_MEMBER, $c->id());
+				$pers->save();
 
-			// add person as employee
-			$pers->set_prop("work_contact", $c->id());
-			$pers->save();
-			$c->connect(array(
-				"to" => $pers->id(),
-				"type" => "RELTYPE_WORKERS"
-			));
+				// add person as employee
+				$pers->set_prop("work_contact", $c->id());
+				$pers->save();
+				$c->connect(array(
+					"to" => $pers->id(),
+					"type" => "RELTYPE_WORKERS"
+				));
 
-			// add as important person for me
-			$u = get_instance(CL_USER);
-			$cur_p = obj($u->get_current_person());
-			$cur_p->connect(array(
-				"to" => $pers->id(),
-				"type" => "RELTYPE_IMPORTANT_PERSON"
-			));
-		}
+				// add as important person for me
+				$u = get_instance(CL_USER);
+				$cur_p = obj($u->get_current_person());
+				$cur_p->connect(array(
+					"to" => $pers->id(),
+					"type" => "RELTYPE_IMPORTANT_PERSON"
+				));
+			}
 		}
 
 		$u = get_instance(CL_USER);
@@ -328,7 +371,14 @@ class crm_job_entry extends class_base
 		$p->set_name($arr["request"]["proj_name"]);
 		$p->set_prop("orderer", $c->id());
 		$p->set_prop("description", $arr["request"]["proj_desc"]);
-		$p->set_prop("participants", $arr["request"]["proj_parts"]);
+		$ppt = $arr["request"]["proj_parts"];
+		if (!is_array($ppt) || count($ppt) == 0)
+		{
+			$u = get_instance(CL_USER);
+			$curp = $u->get_current_person();
+			$ppt = array($curp => $curp);
+		}
+		$p->set_prop("participants", $ppt);
 		$p->set_prop("proj_type", $arr["request"]["proj_type"]);
 		$p->set_prop("implementor", $u->get_current_company());
 		$p->save();
@@ -350,7 +400,7 @@ class crm_job_entry extends class_base
 		$t->set_prop("start1", date_edit::get_timestamp($arr["request"]["task_start"]));
 		$t->set_prop("end", date_edit::get_timestamp($arr["request"]["task_end"]));
 		$t->set_prop("content", $arr["request"]["task_content"]);
-		$t->set_prop("participants", safe_array($arr["request"]["proj_parts"]));
+		$t->set_prop("participants", safe_array($ppt));
 		if ($t->class_id() == CL_CRM_OFFER)
 		{
 			$t->set_prop("orderer", $c->id());
@@ -365,7 +415,7 @@ class crm_job_entry extends class_base
 
 		// add participants to task from project
 		$task_inst = get_instance(CL_TASK);
-		foreach(safe_array($arr["request"]["proj_parts"]) as $person)
+		foreach(safe_array($ppt) as $person)
 		{
 			$task_inst->add_participant($t, obj($person));
 		}
@@ -373,7 +423,7 @@ class crm_job_entry extends class_base
 		switch($t->class_id())
 		{
 			case CL_TASK:
-				foreach((array)$arr["request"]["proj_parts"] as $part)
+				foreach((array)$ppt as $part)
 				{
 					if (!$this->can("view", $part))
 					{
@@ -399,7 +449,7 @@ class crm_job_entry extends class_base
 				break;
 
 			case CL_CRM_CALL:
-				foreach((array)$arr["request"]["proj_parts"] as $part)
+				foreach((array)$ppt as $part)
 				{
 					if (!$this->can("view", $part))
 					{
@@ -414,7 +464,7 @@ class crm_job_entry extends class_base
 				break;
 
 			case CL_CRM_MEETING:
-				foreach((array)$arr["request"]["proj_parts"] as $part)
+				foreach((array)$ppt as $part)
 				{
 					if (!$this->can("view", $part))
 					{

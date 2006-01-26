@@ -1604,6 +1604,7 @@ class crm_company_cust_impl extends class_base
 			}
 
 			$phone = "";
+			$ceo = "";
 			if ($o->class_id() == CL_CRM_COMPANY)
 			{
 				$ceo = html::href(array(
@@ -1630,7 +1631,7 @@ class crm_company_cust_impl extends class_base
 				}
 				$mail = $o->prop_str("phone_id")." ".$mail;
 			}
-			else
+			/*else
 			{
 				$ceo = $o->name();
 				$mail = "";
@@ -1660,7 +1661,7 @@ class crm_company_cust_impl extends class_base
 					$urlo = obj($o->prop("phone"));
 					$mail = $urlo->name()." ".$mail;
 				}
-			}
+			}*/
 
 			$pm = get_instance("vcl/popup_menu");
 			$pm->begin_menu("org".$o->id());

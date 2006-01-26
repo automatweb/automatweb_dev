@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.84 2006/01/13 11:12:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.85 2006/01/26 13:58:36 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -27,6 +27,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@caption Kategooria
 
 @default group=grp_resource_schedule
+	@property cal_tb type=toolbar store=no no_caption=1
+
 	@property resource_calendar type=text store=no no_caption=1
 	@caption Tööd
 
@@ -227,6 +229,10 @@ class mrp_resource extends class_base
 
 		switch($prop["name"])
 		{
+			case "cal_tb";
+				$this->_get_cal_tb($arr);
+				break;
+
 			case "category":
 				$resources_folder_id = $this->workspace->prop ("resources_folder");
 				$parent_folder_id = $this_object->parent ();
@@ -1408,6 +1414,43 @@ class mrp_resource extends class_base
 			return true;
 		}
 		return $evstr;
+	}
+
+	function _get_cal_tb($arr)
+	{
+		$tb =&  $arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			'name'=>'add_item',
+			'tooltip'=> t('Uus')
+		));
+
+		$pl = get_instance(CL_PLANNER);
+		$cal_id = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
+
+		$clids = array(CL_TASK => 13, CL_CRM_MEETING => 11, CL_CRM_CALL => 12, CL_CRM_OFFER => 9);
+		$clss = aw_ini_get("classes");
+
+		$u = get_instance(CL_USER);
+		$cur_co = $u->get_current_company();
+
+		foreach($clids as $clid => $relt)
+		{
+			$url = $this->mk_my_orb('new',array(
+				'add_to_cal' => $cal_id,
+				'clid' => $clid,
+				'title' => $clss[$clid]["name"],
+				'parent' => $arr["obj_inst"]->id(),
+				'return_url' => get_ru()
+			), $clid);
+
+			$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text' => $clss[$clid]["name"],
+				'link' => $url
+			));
+		}
 	}
 }
 

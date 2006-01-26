@@ -117,6 +117,11 @@ class crm_company_docs_impl extends class_base
 			return PROP_IGNORE;
 		}
 
+		if (!$arr["request"]["tf"] && !$arr["request"]["files_from_fld"])
+		{
+			$arr["request"]["files_from_fld"] = "/";
+		}
+
 		$fld = $this->_init_docs_fld($arr["obj_inst"]);
 
 		classload("core/icons");
@@ -141,11 +146,10 @@ class crm_company_docs_impl extends class_base
 		{
 			$s = $sf->instance();
 			$fld = $s->get_folders($sf);
-
 			$t =& $arr["prop"]["vcl_inst"];
 			$t->add_item(0, array(
 				"id" => $sf->id(),
-				"name" => $sf->name(),
+				"name" => ($arr["request"]["files_from_fld"] == "/" ? "<b>".$sf->name()."</b>" : $sf->name()),
 				"url" => aw_url_change_var("files_from_fld", "/")
 			));
 
@@ -158,7 +162,7 @@ class crm_company_docs_impl extends class_base
 		}
 	}
 
-	function _init_docs_tbl(&$t)
+	function _init_docs_tbl(&$t, $r)
 	{
 		$t->define_field(array(
 			"caption" => t("Nimi"),
@@ -167,7 +171,7 @@ class crm_company_docs_impl extends class_base
 			"sortable" => 1
 		));
 
-		if ($_GET["files_from_fld"] == "")
+		if ($r["files_from_fld"] == "")
 		{
 			$t->define_field(array(
 				"caption" => t("T&uuml;&uuml;p"),
@@ -194,7 +198,7 @@ class crm_company_docs_impl extends class_base
 			"format" => "d.m.Y H:i"
 		));
 
-		if ($_GET["files_from_fld"] == "")
+		if ($r["files_from_fld"] == "")
 		{
 			$t->define_field(array(
 				"caption" => t("Muutja"),
@@ -228,43 +232,51 @@ class crm_company_docs_impl extends class_base
 
 	function _get_docs_tbl($arr)
 	{
+		if (!$arr["request"]["tf"] && !$arr["request"]["files_from_fld"])
+		{
+			$arr["request"]["files_from_fld"] = "/";
+		}
+
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_docs_tbl($t);
-		if ($_GET["files_from_fld"] != "")
+		$this->_init_docs_tbl($t, $arr["request"]);
+		if ($arr["request"]["files_from_fld"] != "")
 		{
 			$sf = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
-			$i = $sf->instance();
-			$ob = $i->get_objects($sf, NULL, $_GET["files_from_fld"], array(
-				"get_server_paths" => true
-			));
-			usort($ob, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
-			foreach($ob as $nm => $dat)
+			if ($sf)
 			{
-				$pm = get_instance("vcl/popup_menu");
-				$pm->begin_menu("sf".$dat["id"]);
+				$i = $sf->instance();
+				$ob = $i->get_objects($sf, NULL, $arr["request"]["files_from_fld"], array(
+					"get_server_paths" => true
+				));
+				usort($ob, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
+				foreach($ob as $nm => $dat)
+				{
+					$pm = get_instance("vcl/popup_menu");
+					$pm->begin_menu("sf".$dat["id"]);
 
-				$pm->add_item(array(
-					"text" => t("Ava internetist"),
-					"link" => $dat["inet_url"]
-				));
-				$pm->add_item(array(
-					"text" => t("Ava serverist"),
-					"link" => $dat["url"]
-				));
-				$pm->add_item(array(
-					"text" => t("Laadi uus versioon"),
-					"link" => $dat["change_url"]
-				));
-				$t->define_data(array(
-					"name" => html::href(array("url" => $dat["url"], "caption" => $dat["name"])),
-					"created" => $dat["add_date"],
-					"modified" => $dat["mod_date"],
-					"createdby" => $dat["adder"],
-					"pop" => $pm->get_menu()
-				));
+					$pm->add_item(array(
+						"text" => t("Ava internetist"),
+						"link" => $dat["inet_url"]
+					));
+					$pm->add_item(array(
+						"text" => t("Ava serverist"),
+						"link" => $dat["url"]
+					));
+					$pm->add_item(array(
+						"text" => t("Laadi uus versioon"),
+						"link" => $dat["change_url"]
+					));
+					$t->define_data(array(
+						"name" => html::href(array("url" => $dat["url"], "caption" => $dat["name"])),
+						"created" => $dat["add_date"],
+						"modified" => $dat["mod_date"],
+						"createdby" => $dat["adder"],
+						"pop" => $pm->get_menu()
+					));
+				}
+				$t->set_default_sortby("name");
+				return;
 			}
-			$t->set_default_sortby("name");
-			return;
 		}
 
 		$fld = $this->_init_docs_fld($arr["obj_inst"]);

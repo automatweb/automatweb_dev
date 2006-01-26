@@ -3285,7 +3285,7 @@ class crm_company extends class_base
 			"from.class_id" => CL_PROJECT,
 			"type" => "RELTYPE_PARTICIPANT",
 			"from" => $projs,
-			"to.class_id" => CL_CRM_COMPANY
+			"to.class_id" => array(CL_CRM_COMPANY,CL_CRM_PERSON)
 		));
 
 		$ret = array();

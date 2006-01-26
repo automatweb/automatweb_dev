@@ -24,6 +24,16 @@
             <caption>Kategooria</caption>
       </property>
       <property>
+            <name>cal_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_resource_schedule</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>resource_calendar</name>
             <table>objects</table>
             <field>meta</field>

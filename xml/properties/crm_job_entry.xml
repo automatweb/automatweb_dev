@@ -47,6 +47,16 @@
             <caption>Aadress</caption>
       </property>
       <property>
+            <name>post_index</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>8</size>
+            <caption>Postiindeks</caption>
+      </property>
+      <property>
             <name>addr_linn</name>
             <table>objects</table>
             <group>general</group>
@@ -73,6 +83,15 @@
             <type>textbox</type>
             <default>Eesti</default>
             <caption>Riik </caption>
+      </property>
+      <property>
+            <name>cust_mgr</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kliendihaldur</caption>
       </property>
       <property>
             <name>cust_type</name>

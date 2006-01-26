@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.32 2006/01/17 09:22:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.33 2006/01/26 13:58:36 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -8,10 +8,10 @@
 @default table=planner
 @default group=general
 
-@property customer type=popup_search table=planner field=customer clid=CL_CRM_COMPANY
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
 @caption Klient
 
-@property project type=popup_search table=planner field=project clid=CL_PROJECT
+@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
 @caption Projekt
 
 @property info_on_object type=text store=no
@@ -88,6 +88,12 @@
 
 @reltype CALLER value=2 clid=CL_CRM_PERSON
 @caption Helistaja
+
+@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Klient
+
+@reltype PROJECT value=4 clid=CL_PROJECT
+@caption Projekt
 
 */
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.61 2006/01/26 09:56:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.62 2006/01/26 13:58:36 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -8,13 +8,13 @@
 @default table=objects
 @default group=general
 
-@property customer type=popup_search table=planner field=customer clid=CL_CRM_COMPANY style=relpicker reltype=RELTYPE_CUSTOMER
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
 @caption Klient
 
 @property code type=text size=5 table=planner field=code
 @caption Kood
 
-@property project type=popup_search table=planner field=project clid=CL_PROJECT style=relpicker reltype=RELTYPE_PROJECT
+@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
 @caption Projekt
 
 @property ppa type=hidden store=no no_caption=1
@@ -1372,7 +1372,8 @@ class task extends class_base
 					"sum" => str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price"),
 					"has_tax" => 1,
 					"on_bill" => 1,
-					"bill_id" => $row->prop("bill_id")
+					"bill_id" => $row->prop("bill_id"),
+					"impl" => $row->prop("impl")
 				);
 			}
 		}
@@ -1404,7 +1405,8 @@ class task extends class_base
 					"amt" => $task->prop("num_hrs_to_cust"),
 					"sum" => str_replace(",", ".", $task->prop("num_hrs_to_cust")) * $task->prop("hr_price"),
 					"has_tax" => 1,
-					"on_bill" => 1
+					"on_bill" => 1,
+					"impl" => $task->prop("participants")
 				);
 			}
 		}
@@ -1884,6 +1886,7 @@ class task extends class_base
 		// I think rows should not be deleted. or we can add that later
 		$task = obj($arr["request"]["id"]);
 		aw_global_set("no_cache_flush", 1);
+
 		foreach(safe_array($_POST["rows"]) as $_oid => $e)
 		{
 			if (!is_oid($_oid))
@@ -1933,14 +1936,12 @@ class task extends class_base
 			$o->set_prop("on_bill", $e["on_bill"]);
 			$o->save();
 
-			if (!is_oid($_oid))
-			{
-				$task->connect(array(
-					"to" => $o->id(),
-					"type" => "RELTYPE_ROW"
-				));
-			}
+			$task->connect(array(
+				"to" => $o->id(),
+				"type" => "RELTYPE_ROW"
+			));
 		}
+		aw_global_set("no_cache_flush", 0);
 		$c = get_instance("cache");
 		$c->full_flush();
 	}

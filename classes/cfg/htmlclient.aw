@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.132 2006/01/23 08:44:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.133 2006/01/26 13:58:36 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -784,11 +784,9 @@ class htmlclient extends aw_template
 				$task_url = $this->mk_my_orb('new',array(
 					'alias_to_org' => $_REQUEST["id"],
 					'reltype_org' => 13,
-					'class' => 'planner',
-					'id' => $this->cal_id,
-					'group' => 'add_event',
+					'class' => 'task',
+					'add_to_cal' => $this->cal_id,
 					'clid' => CL_TASK,
-					'action' => 'change',
 					'title' => t("Toimetus"),
 					'parent' => $_REQUEST["id"],
 					'return_url' => get_ru()
@@ -805,11 +803,8 @@ class htmlclient extends aw_template
 				$call_url = $this->mk_my_orb('new',array(
 					'alias_to_org' => $_REQUEST["id"],
 					'reltype_org' => 12,
-					'class' => 'planner',
-					'id' => $this->cal_id,
-					'group' => 'add_event',
-					'clid' => CL_CRM_CALL,
-					'action' => 'change',
+					'class' => 'crm_call',
+					'add_to_cal' => $this->cal_id,
 					'title' => t("K&otilde;ne"),
 					'parent' => $_REQUEST["id"],
 					'return_url' => get_ru()
@@ -817,11 +812,9 @@ class htmlclient extends aw_template
 				$meeting_url = $this->mk_my_orb('new',array(
 					'alias_to_org' => $_REQUEST["id"],
 					'reltype_org' => 11,
-					'class' => 'planner',
-					'id' => $this->cal_id,
-					'group' => 'add_event',
+					'class' => 'crm_meeting',
+					'add_to_cal' => $this->cal_id,
 					'clid' => CL_CRM_MEETING,
-					'action' => 'change',
 					'title' => t("Kohtumine"),
 					'parent' => $_REQUEST["id"],
 					'return_url' => get_ru()
@@ -838,11 +831,9 @@ class htmlclient extends aw_template
 				$offer_url = $this->mk_my_orb('new',array(
 					'alias_to_org' => $_REQUEST["id"],
 					'reltype_org' => 9,
-					'class' => 'planner',
-					'id' => $this->cal_id,
-					'group' => 'add_event',
+					'class' => 'crm_offer',
+					'add_to_cal' => $this->cal_id,
 					'clid' => CL_CRM_OFFER,
-					'action' => 'change',
 					'title' => t("Pakkumine"),
 					'parent' => $_REQUEST["id"],
 					'return_url' => get_ru()

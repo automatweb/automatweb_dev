@@ -738,10 +738,13 @@ class crm_company_overview_impl extends class_base
 		$clids = array(CL_TASK => 13, CL_CRM_MEETING => 11, CL_CRM_CALL => 12, CL_CRM_OFFER => 9);
 		$clss = aw_ini_get("classes");
 
+		$u = get_instance(CL_USER);
+		$cur_co = $u->get_current_company();
+
 		foreach($clids as $clid => $relt)
 		{
 			$url = $this->mk_my_orb('new',array(
-				'alias_to_org' => $arr['obj_inst']->id(),
+				'alias_to_org' => $cur_co == $arr['obj_inst']->id() ? null : $arr['obj_inst']->id(),
 				'reltype_org' => $relt,
 				'add_to_cal' => $this->cal_id,
 				'clid' => $clid,

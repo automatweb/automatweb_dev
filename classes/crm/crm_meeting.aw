@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.50 2006/01/16 10:25:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.51 2006/01/26 13:58:36 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -9,10 +9,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @default table=objects
 @default group=general
 
-@property customer type=popup_search table=planner field=customer clid=CL_CRM_COMPANY
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
 @caption Klient
 
-@property project type=popup_search table=planner field=project clid=CL_PROJECT
+@property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
 @caption Projekt
 
 @property info_on_object type=text store=no
@@ -156,6 +156,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
 
+@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Klient
+
+@reltype PROJECT value=4 clid=CL_PROJECT
+@caption Projekt
+
 @reltype RESOURCE value=5 clid=CL_MRP_RESOURCE
 @caption ressurss
 */
@@ -214,7 +220,7 @@ class crm_meeting extends class_base
 					));
 				}
 				else
-				if (is_object($arr["obj_inst"]))
+				if (is_object($arr["obj_inst"]) && !$arr["new"])
 				{
 					if($this->can("view", $arr["obj_inst"]->prop("customer")))
 					{
