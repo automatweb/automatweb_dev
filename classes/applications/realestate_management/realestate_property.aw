@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.9 2006/01/20 15:49:42 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.10 2006/01/26 13:02:18 voldemar Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -1768,7 +1768,7 @@ class realestate_property extends class_base
 			{
 				$altvalue = $value;
 
-				if ($data["type"] == "classificator" and is_oid ($value))
+				if ($data["type"] == "classificator" and $this->can ("view", $value))
 				{
 					$meta = obj ($value);
 					$altvalue = $meta->comment ();
@@ -2448,9 +2448,9 @@ REALESTATE_NF_SEP);
 		$agent_email =  is_object ($agent_email) ? $agent_email->prop ("mail") : "";
 		$this->realestate_agents_data[$agent_oid]["email"] = $agent_email;
 
-		### picture
 		if (!$no_extended_data)
 		{
+			### picture
 			$agent_picture = $agent->get_first_obj_by_reltype ("RELTYPE_PICTURE");
 
 			if (is_object ($agent_picture))
@@ -2463,6 +2463,8 @@ REALESTATE_NF_SEP);
 			}
 
 			$this->realestate_agents_data[$agent_oid]["picture_url"] = $agent_picture_url;
+
+			### city24 user name
 			$this->realestate_agents_data[$agent_oid]["city24_user"] = $agent->meta (RE_EXPORT_CITY24USER_VAR_NAME);
 		}
 
