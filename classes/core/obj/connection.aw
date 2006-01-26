@@ -124,7 +124,17 @@ class connection
 			$param["type"] = $GLOBALS["object_loader"]->resolve_reltype($param["type"], $param["from.class_id"]);
 		}
 
-		return $GLOBALS["object_loader"]->ds->find_connections($param);
+		$retval =  $GLOBALS["object_loader"]->ds->find_connections($param);
+		$rv = array();
+		foreach($retval as $k => $v)
+		{
+			if ($GLOBALS["object_loader"]->can("view", $v["to"]) && 
+			    $GLOBALS["object_loader"]->can("view", $v["from"]))
+			{
+				$rv[$k] = $v;
+			}
+		}
+		return $rv;
 	}
 
 	function change($param)
