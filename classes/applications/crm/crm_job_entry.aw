@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.12 2006/01/27 09:21:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.13 2006/01/27 09:23:29 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -368,6 +368,7 @@ class crm_job_entry extends class_base
 				$c->set_prop("lastname", $arr["request"]["custp_ln"]);
 				$this->set_by_n($c, "phone", $arr["request"]["custp_phone"], CL_CRM_PHONE, $c->id());
 				$this->set_by_n($c, "email", $arr["request"]["custp_email"], CL_ML_MEMBER, $c->id());
+				$c->set_prop("is_customer", 1);
 			}
 
 			$c->save();
