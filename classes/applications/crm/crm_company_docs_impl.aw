@@ -149,13 +149,14 @@ class crm_company_docs_impl extends class_base
 			$t =& $arr["prop"]["vcl_inst"];
 			$t->add_item(0, array(
 				"id" => $sf->id(),
-				"name" => ($arr["request"]["files_from_fld"] == "/" ? "<b>".$sf->name()."</b>" : $sf->name()),
+				"name" => ($arr["request"]["files_from_fld"] == "/" ? "<b>".iconv("utf-8", aw_global_get("charset"), $sf->name())."</b>" : iconv("utf-8", aw_global_get("charset"), $sf->name())),
 				"url" => aw_url_change_var("files_from_fld", "/")
 			));
 
 			usort($fld, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
 			foreach($fld as $item)
 			{
+				$item["name"] = iconv("utf-8", aw_global_get("charset"), $item["name"]);
 				$item["url"] = aw_url_change_var("files_from_fld", $item["id"]);
 				$t->add_item($item["parent"] === 0 ? $sf->id() : $item["parent"], $item);
 			}
@@ -266,8 +267,10 @@ class crm_company_docs_impl extends class_base
 						"text" => t("Laadi uus versioon"),
 						"link" => $dat["change_url"]
 					));
+					$url = $dat["url"];
+					$url = iconv("utf-8", aw_global_get("charset")."//IGNORE", $url);
 					$t->define_data(array(
-						"name" => html::href(array("url" => $dat["url"], "caption" => $dat["name"])),
+						"name" => html::href(array("url" => $url, "caption" => iconv("utf-8", aw_global_get("charset"), $dat["name"]))),
 						"created" => $dat["add_date"],
 						"modified" => $dat["mod_date"],
 						"createdby" => $dat["adder"],

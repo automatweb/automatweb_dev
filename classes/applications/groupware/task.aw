@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.63 2006/01/27 08:03:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.64 2006/01/27 08:58:35 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1529,9 +1529,9 @@ class task extends class_base
 	function _get_possible_participants($o, $proj_only = false, $sel = array())
 	{
 		$opts = array();
-		if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
+		if(is_object($o) && is_oid($o->id()))
 		{
-			$conns = $arr['obj_inst']->connections_to(array(
+			$conns = $o->connections_to(array(
 				'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
 			));
 			foreach($conns as $conn)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.10 2006/01/26 13:58:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.11 2006/01/27 08:58:34 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -25,11 +25,11 @@
 @property addr type=textbox 
 @caption Aadress
 
-@property post_index type=textbox size=8
-@caption Postiindeks
-
 @property addr_linn type=textbox 
 @caption Linn
+
+@property post_index type=textbox size=8
+@caption Postiindeks
 
 @property maakond type=select
 @caption Maakond
@@ -125,9 +125,9 @@ class crm_job_entry extends class_base
 				}
 				break;
 
-			case "addr":
-				$oncl = "window.open('http://www.post.ee/?id=1069&op=sihtnumbriotsing&tanav='+document.changeform.addr.value+'&linn='+document.changeform.addr_linn.value+'&x=30&y=6');";
-				$prop["post_append_text"] = sprintf("<a href='#' onClick=\"$oncl\">%s</a>", t("Otsi postiindeksit"));
+			case "post_index":
+				$oncl = "window.open('http://www.post.ee/?id=1069&op=sihtnumbriotsing&tanav='+document.changeform.addr.value.replace(/[0-9]/, '')+'&linn='+document.changeform.addr_linn.value+'&x=30&y=6');";
+				$prop["post_append_text"] = sprintf(" <a href='#' onClick=\"$oncl\">%s</a>", t("Otsi postiindeksit"));
 				break;
 
 			case "cust_type":
@@ -371,6 +371,9 @@ class crm_job_entry extends class_base
 		$p->set_name($arr["request"]["proj_name"]);
 		$p->set_prop("orderer", $c->id());
 		$p->set_prop("description", $arr["request"]["proj_desc"]);
+		$p->set_prop("start", date_edit::get_timestamp($arr["request"]["task_start"]));
+		$p->set_prop("end", date_edit::get_timestamp($arr["request"]["task_end"]));
+
 		$ppt = $arr["request"]["proj_parts"];
 		if (!is_array($ppt) || count($ppt) == 0)
 		{

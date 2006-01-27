@@ -574,7 +574,14 @@ class crm_company_overview_impl extends class_base
 		{
 			if ($clid == CL_CRM_DOCUMENT_ACTION)
 			{
-				$res[$def.".document.customer.name"] = "%".$r["act_s_cust"]."%";
+				$res[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						$def.".document(CL_CRM_DEAL).customer.name" => "%".$r["act_s_cust"]."%",
+						$def.".document(CL_CRM_MEMO).customer.name" => "%".$r["act_s_cust"]."%"	
+					)
+				));
+				//$res[$def.".document(CL_CRM_DEAL).customer.name"] = "%".$r["act_s_cust"]."%";
 			}
 			else
 			{
@@ -617,11 +624,10 @@ class crm_company_overview_impl extends class_base
 						"to.class_id" => $clid,
 						//"type" => "RELTYPE_PERSON_TASK"
 					));
-
 					$oids = array();
 					foreach($conns as $con)
 					{
-						if (!isset($res["oid"]) || isset($res["oid"][$con["to"]]))
+						if (!isset($res["oid"]) || !isset($res["oid"][$con["to"]]))
 						{
 							$oids[] = $con["to"];
 						}
@@ -650,7 +656,20 @@ class crm_company_overview_impl extends class_base
 
 		if ($r["act_s_task_name"] != "")
 		{
-			$res["name"] = $this->_parse_search_string($r["act_s_task_name"]); // "%".$r["act_s_task_name"]."%";
+			if ($clid == CL_CRM_DOCUMENT_ACTION)
+			{
+				$res[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"name" =>  "%".$r["act_s_task_name"]."%",
+						"CL_CRM_DOCUMENT_ACTION.document.name" =>  "%".$r["act_s_task_name"]."%",
+					)	
+				));
+			}
+			else
+			{
+				$res["name"] = "%".$r["act_s_task_name"]."%";
+			}
 		}
 		if ($r["act_s_task_content"] != "")
 		{
@@ -880,7 +899,7 @@ class crm_company_overview_impl extends class_base
 		switch($arr["request"]["group"])
 		{
 			case "my_tasks":
-				$tasks = $i->get_my_tasks();
+				$tasks = $i->get_my_tasks(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1));
 				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
 				break;
 			case "meetings":

@@ -3327,7 +3327,7 @@ class crm_company extends class_base
 		return $ret;
 	}
 
-	function get_my_tasks()
+	function get_my_tasks($only_not_done = false)
 	{
 		$u = get_instance(CL_USER);
 		$c = new connection();
@@ -3339,7 +3339,11 @@ class crm_company extends class_base
 		$ret = array();
 		foreach($cs as $c)
 		{
-			$ret[] = $c["to"];
+			$task = obj($c["to"]);
+			if (!$task->prop("is_done") || !$only_not_done)
+			{
+				$ret[] = $c["to"];
+			}
 		}
 		return $ret;
 	}
@@ -4419,7 +4423,7 @@ class crm_company extends class_base
 
 		if ($arr["prop"]["value"] == $arr["obj_inst"]->prop("server_folder"))
 		{
-			return;
+		//	return;
 		}
 
 		// if changed, recreate
@@ -4434,6 +4438,10 @@ class crm_company extends class_base
 
 		$srv->set_prop("folder", $arr["prop"]["value"]);
 		$srv->save();
+		$arr["obj_inst"]->connect(array(
+			"to" => $srv->id(),
+			"type" => "RELTYPE_SERVER_FILES"
+		));
 	}
 
 	/**
