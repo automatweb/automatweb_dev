@@ -129,7 +129,7 @@
       <property>
             <name>fnames</name>
             <table>objects</table>
-            <group>files</group>
+            <group>files_import</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
@@ -140,11 +140,21 @@
       <property>
             <name>first_site_to_search_images</name>
             <table>objects</table>
-            <group>files</group>
+            <group>files_import</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
             <caption>Esimene leht kust pilte otsitakse</caption>
+      </property>
+      <property>
+            <name>files_order</name>
+            <table>objects</table>
+            <group>files_order</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Failide n&amp;auml;itamise j&amp;auml;rjekord	</caption>
       </property>
       <property>
             <name>discount_products_file</name>
@@ -174,7 +184,7 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
-            <caption>&amp;amp;nbsp;</caption>
+            <caption>&amp;nbsp;</caption>
       </property>
       <property>
             <name>clear_discount_products</name>
@@ -184,7 +194,50 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
-            <caption>&amp;amp;nbsp;</caption>
+            <caption>&amp;nbsp;</caption>
+      </property>
+      <property>
+            <name>categories</name>
+            <table>objects</table>
+            <group>categories</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Kategooriad</caption>
+      </property>
+      <property>
+            <name>bubble_pictures</name>
+            <table>objects</table>
+            <group>category_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Mullipildid</caption>
+      </property>
+      <property>
+            <name>firm_pictures</name>
+            <table>objects</table>
+            <group>category_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Firmapildid</caption>
+      </property>
+      <property>
+            <name>sideways_pages</name>
+            <table>objects</table>
+            <group>category_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>4</rows>
+            <cols>80</cols>
+            <comment>Ilmselt hetkel ei t&amp;ouml;&amp;ouml;ta!</comment>
+            <caption>Landscape vaatega lehed</caption>
       </property>
       <property>
             <name>folders</name>
@@ -205,7 +258,7 @@
             <type>textarea</type>
             <rows>3</rows>
             <cols>40</cols>
-            <caption>L&amp;amp;otilde;pmatus vaatega lehed</caption>
+            <caption>L&amp;otilde;pmatus vaatega lehed</caption>
       </property>
       <property>
             <name>foldpri</name>
@@ -216,18 +269,7 @@
             <type>textarea</type>
             <rows>20</rows>
             <cols>20</cols>
-            <caption>T&amp;amp;auml;htede prioriteedid</caption>
-      </property>
-      <property>
-            <name>sideways_pages</name>
-            <table>objects</table>
-            <group>folderspri</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textarea</type>
-            <rows>4</rows>
-            <cols>30</cols>
-            <caption>Landscape vaatega lehed</caption>
+            <caption>T&amp;auml;htede prioriteedid</caption>
       </property>
       <property>
             <name>foldernames</name>
@@ -238,17 +280,6 @@
             <type>table</type>
             <store>no</store>
             <caption>Kaustade nimed impordi jaoks</caption>
-      </property>
-      <property>
-            <name>categories</name>
-            <table>objects</table>
-            <group>categories</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <caption>Kategooriad</caption>
       </property>
       <property>
             <name>force_7_view</name>
@@ -266,7 +297,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>L&amp;amp;otilde;pmatute pildiga lehehed</caption>
+            <caption>L&amp;otilde;pmatute pildiga lehehed</caption>
       </property>
       <property>
             <name>force_10_view</name>
@@ -296,16 +327,6 @@
             <caption>Ilma detailvaate lisapiltideta lehed</caption>
       </property>
       <property>
-            <name>force_7_view_for_trends</name>
-            <table>objects</table>
-            <group>views</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>7 pildiga trendide lehed</caption>
-            <comment>Ainult BonPrix. lk koodide asemel kaustade id-d, mille all 7st vaadet n&amp;amp;auml;idata</comment>
-      </property>
-      <property>
             <name>jm_clothes</name>
             <table>objects</table>
             <group>jm</group>
@@ -314,7 +335,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>R&amp;amp;otilde;ivad</caption>
+            <caption>R&amp;otilde;ivad</caption>
       </property>
       <property>
             <name>jm_lasting</name>
@@ -336,7 +357,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>M&amp;amp;ouml;&amp;amp;ouml;bel</caption>
+            <caption>M&amp;ouml;&amp;ouml;bel</caption>
       </property>
       <property>
             <name>del_prods</name>
@@ -374,33 +395,45 @@
             <files>
                   <caption>Failid</caption>
             </files>
+            <files_import>
+                  <caption>Imporditavad failid</caption>
+                  <parent>files</parent>
+            </files_import>
+            <files_order>
+                  <caption>Failide j&amp;auml;rjekord</caption>
+                  <parent>files</parent>
+            </files_order>
             <discount_products>
                   <caption>Soodustooted</caption>
             </discount_products>
             <foldersa>
                   <caption>Kataloogid</caption>
             </foldersa>
+            <categories>
+                  <caption>Kategooriad</caption>
+                  <parent>foldersa</parent>
+            </categories>
+            <category_settings>
+                  <caption>Kategooriate seaded</caption>
+                  <parent>foldersa</parent>
+            </category_settings>
             <folders>
                   <caption>Kataloogid (deprecated)</caption>
                   <parent>foldersa</parent>
             </folders>
             <folderspri>
-                  <caption>Kataloogide m&amp;amp;auml;&amp;amp;auml;rangud</caption>
+                  <caption>Kataloogide m&amp;auml;&amp;auml;rangud (deprecated)</caption>
                   <parent>foldersa</parent>
             </folderspri>
             <foldersnames>
                   <caption>Kaustade nimed (deprecated)</caption>
                   <parent>foldersa</parent>
             </foldersnames>
-            <categories>
-                  <caption>Kategooriad</caption>
-                  <parent>foldersa</parent>
-            </categories>
             <views>
                   <caption>Vaated</caption>
             </views>
             <jm>
-                  <caption>J&amp;amp;auml;relmaks</caption>
+                  <caption>J&amp;auml;relmaks</caption>
             </jm>
             <delete>
                   <caption>Kustutamine</caption>

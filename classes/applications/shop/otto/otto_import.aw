@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.37 2006/01/17 17:29:17 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.38 2006/01/27 15:27:47 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -53,11 +53,18 @@
 
 @groupinfo files caption="Failid"
 
-	@property fnames type=textarea rows=30 cols=80 group=files
-	@caption Failinimed
+	@groupinfo files_import caption="Imporditavad failid" parent=files
 
-	@property first_site_to_search_images type=select group=files field=meta method=serialize
-	@caption Esimene leht kust pilte otsitakse
+		@property fnames type=textarea rows=30 cols=80 group=files_import
+		@caption Failinimed
+
+		@property first_site_to_search_images type=select group=files_import field=meta method=serialize
+		@caption Esimene leht kust pilte otsitakse
+
+	@groupinfo files_order caption="Failide j&auml;rjekord" parent=files
+
+		@property files_order type=table group=files_order
+		@caption Failide n&auml;itamise j&auml;rjekord	
 
 @groupinfo discount_products caption="Soodustooted"
 
@@ -75,6 +82,23 @@
 
 @groupinfo foldersa caption="Kataloogid"
 
+	@groupinfo categories caption="Kategooriad" parent=foldersa
+		
+		@property categories type=table store=no group=categories no_caption=1
+		@caption Kategooriad
+	
+	@groupinfo category_settings caption="Kategooriate seaded" parent=foldersa
+
+		@property bubble_pictures type=table group=category_settings
+		@caption Mullipildid
+
+		@property firm_pictures type=table group=category_settings
+		@caption Firmapildid
+
+		@property sideways_pages type=textarea rows=4 cols=80 table=objects field=meta method=serialize group=category_settings
+		@comment Ilmselt hetkel ei t&ouml;&ouml;ta!
+		@caption Landscape vaatega lehed
+
 	@groupinfo folders caption="Kataloogid (deprecated)" parent=foldersa
 
 		@property folders type=table store=no group=folders no_caption=1
@@ -82,44 +106,36 @@
 		@property inf_pages type=textarea rows=3 cols=40 group=folders field=meta method=serialize table=objects
 		@caption L&otilde;pmatus vaatega lehed
 
-	@groupinfo folderspri caption="Kataloogide m&auml;&auml;rangud" parent=foldersa
+	@groupinfo folderspri caption="Kataloogide m&auml;&auml;rangud (deprecated)" parent=foldersa
 
 		@property foldpri type=textarea rows=20 cols=20 table=objects field=meta method=serialize group=folderspri
 		@caption T&auml;htede prioriteedid
-
-		@property sideways_pages type=textarea rows=4 cols=30 table=objects field=meta method=serialize group=folderspri
-		@caption Landscape vaatega lehed
 
 	@groupinfo foldersnames caption="Kaustade nimed (deprecated)" parent=foldersa
 
 		@property foldernames type=table store=no group=foldersnames
 		@caption Kaustade nimed impordi jaoks
 
-	@groupinfo categories caption="Kategooriad" parent=foldersa
-		
-		@property categories type=table store=no group=categories no_caption=1
-		@caption Kategooriad
-
 @groupinfo views caption="Vaated"
 
-@property force_7_view type=textbox table=objects field=meta method=serialize group=views
-@caption 7 pildiga lehed
+	@property force_7_view type=textbox table=objects field=meta method=serialize group=views
+	@caption 7 pildiga lehed
 
-@property force_inf_view type=textbox table=objects field=meta method=serialize group=views
-@caption L&otilde;pmatute pildiga lehehed
+	@property force_inf_view type=textbox table=objects field=meta method=serialize group=views
+	@caption L&otilde;pmatute pildiga lehehed
 
-@property force_10_view type=textbox table=objects field=meta method=serialize group=views
-@caption 10 pildiga lehed
+	@property force_10_view type=textbox table=objects field=meta method=serialize group=views
+	@caption 10 pildiga lehed
 
-@property force_8_view type=textbox table=objects field=meta method=serialize group=views
-@caption 8 pildiga lehed
+	@property force_8_view type=textbox table=objects field=meta method=serialize group=views
+	@caption 8 pildiga lehed
 
-@property force_no_side_view type=textbox table=objects field=meta method=serialize group=views
-@caption Ilma detailvaate lisapiltideta lehed
+	@property force_no_side_view type=textbox table=objects field=meta method=serialize group=views
+	@caption Ilma detailvaate lisapiltideta lehed
 
-@property force_7_view_for_trends type=textbox table=objects field=meta method=serialize group=views
-@caption 7 pildiga trendide lehed
-@comment Ainult BonPrix. lk koodide asemel kaustade id-d, mille all 7st vaadet n&auml;idata
+	property force_7_view_for_trends type=textbox table=objects field=meta method=serialize group=views
+	caption 7 pildiga trendide lehed
+	comment Ainult BonPrix. lk koodide asemel kaustade id-d, mille all 7st vaadet n&auml;idata
 
 @groupinfo jm caption="J&auml;relmaks"
 
@@ -291,6 +307,18 @@ class otto_import extends class_base
 		}
 		return $retval;
 	}	
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr['id'] == 'discount_products')
+		{
+			// lets show the tab only in bonprix
+			if (aw_ini_get("site_id") != 276 && aw_ini_get("site_id") != 277)
+			{
+				return false;
+			}
+		}
+	}
 
 	function _init_fn_t(&$t)
 	{
@@ -1622,6 +1650,13 @@ class otto_import extends class_base
 			// i need to add those categories or extraflds to the 'otto_imp_t_prod_to_cat' table too
 			if (!empty($row['extrafld']))
 			{
+
+				/**
+					after the following thing i have to delete all rows, which are created using this page(or file)
+					and which import time doesn't match the current one, cause they were not updated from the file
+					so they should be deleted from there ... actually i think, that to check page is irrelevant ...
+					i'l implement it later --dragut
+				**/
 				$this->save_handle();
 				$categories = explode(',', $row['extrafld']);
 				foreach ($categories as $category)
@@ -1635,6 +1670,7 @@ class otto_import extends class_base
 							SET
 								product_code = '".$row['code']."',
 								category = '".$category."',
+								page = '".$row['pg']."',
 								import_time = ".$import_time.",
 								lang_id = '".aw_global_get('lang_id')."'
 						");
@@ -1647,6 +1683,7 @@ class otto_import extends class_base
 							SET
 								product_code = '".$row['code']."',
 								category = '".$category."',
+								page = '".$row['pg']."',
 								import_time = ".$import_time.",
 								lang_id = '".aw_global_get('lang_id')."'
 							WHERE
@@ -1654,6 +1691,16 @@ class otto_import extends class_base
 						");
 					}
 				}
+				// now, the otto_imp_t_prod_to_cat table is updated, so i can now delete the unmodified rows
+				$this->db_query("
+					DELETE FROM 
+						otto_imp_t_prod_to_cat 
+					WHERE 
+						import_time < $import_time
+						AND page = '".$row['pg']."'
+						AND lang_id = '".aw_global_get('lang_id')."'
+			
+				");
 				$this->restore_handle();
 			}
 
@@ -1988,7 +2035,10 @@ class otto_import extends class_base
 			"content" => join("\n", $log)
 		));
 
-		$this->pictfix(array());
+//		$this->pictfix(array());
+		$this->pictfix(array(
+			'import_obj' => $o
+		));
 
 		$this->fix_image_codes();
 
@@ -2258,7 +2308,8 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 	**/
 	function pictfix($arr)
 	{
-		$this->pictimp(array(), true);
+	//	$this->pictimp(array(), true);
+		$this->pictimp($arr['import_obj'], true);
 	}
 
 	function do_post_import_fixes($obj)
@@ -2538,10 +2589,85 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		return $ret;
 	}
 
+	function _get_files_order($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'file',
+			'caption' => t('Fail'),
+		));
+		$t->define_field(array(
+			'name' => 'order',
+			'caption' => t('J&auml;rjekord'),	
+		));
+
+		$count = 0;
+		$saved_data = $args['obj_inst']->meta('files_order');
+		foreach (safe_array($saved_data) as $file => $order)
+		{
+			$t->define_data(array(
+				'file' => html::textbox(array(
+					'name' => 'files_order['.$count.'][file]',
+					'value' => $file,
+					'size' => '10'
+				)),
+				'order' => html::textbox(array(
+					'name' => 'files_order['.$count.'][order]',
+					'value' => $order
+				)),
+			));
+			$count++;
+		}
+
+		$t->define_data(array(
+			'file' => html::textbox(array(
+				'name' => 'files_order['.$count.'][file]',
+				'size' => '10'
+			)),
+			'order' => html::textbox(array(
+				'name' => 'files_order['.$count.'][order]'
+			)),
+		));
+		return PROP_OK;
+	}
+
+	function _set_files_order($args)
+	{
+		$valid_data = array();
+		foreach (safe_array($args['request']['files_order']) as $data)
+		{
+			if (!empty($data['file']) && !empty($data['order']))
+			{
+				$valid_data[$data['file']] = $data['order'];
+			}
+		}
+		$args['obj_inst']->set_meta('files_order', $valid_data);
+		// i think that to avoid the scannig for orders from otto_prod_img table
+		// i should keep them in meta too ... maybe it isn't necessary, anyway, this is
+		// the place where i should update otto_prod_img table and set the order
+		
+		foreach ($valid_data as $file => $order)
+		{
+			// i need the short version of the file name, aka. page (in otto_prod_img p_pg field)
+			list(, $cur_pg) = explode(".", $file);
+			$cur_pg = substr($cur_pg,1);
+			if ((string)((int)$cur_pg{0}) === (string)$cur_pg{0})
+			{
+				$cur_pg = (int)$cur_pg;
+			}
+			$cur_pg = trim($cur_pg);
+			$this->db_query("UPDATE otto_prod_img set file_order='".(int)$order."' WHERE p_pg='$cur_pg'");
+		}
+		return PROP_OK;
+	}
+
 	function _get_categories($args)
 	{
 		$t = &$args['prop']['vcl_inst'];
 		$t->set_sortable(false);
+
 		$t->define_field(array(
 			'name' => 'jrk',
 			'caption' => t('Jrk'),
@@ -2555,7 +2681,6 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		$t->define_field(array(
 			'name' => 'categories',
 			'caption' => t('Kategooriad'),
-			'align' => 'center'
 		));
 		
 		$count = 1;
@@ -2579,6 +2704,18 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 			}
 		}
 
+		// and i should merge here the categories table content too (the new table)
+		// in some point of time, i can have the categories only from the categories table
+		$this->db_query("SELECT * FROM otto_imp_t_aw_to_cat WHERE lang_id=".aw_global_get('lang_id'));
+		while ($row = $this->db_next())
+		{
+			if (!in_array($row['category'], $data[$row['aw_folder']]))
+			{
+				$data[$row['aw_folder']][] = $row['category'];
+			}
+		}
+
+
 		foreach ($data as $aw_folder => $categories)
 		{
 
@@ -2587,6 +2724,7 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 				'aw_folder_id' => html::textbox(array(
 					'name' => 'data['.$count.'][aw_folder_id]',
 					'value' => $aw_folder,
+					'size' => '10'
 				)),
 				'categories' => html::textbox(array(
 					'name' => 'data['.$count.'][categories]',
@@ -2604,6 +2742,7 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 				'aw_folder_id' => html::textbox(array(
 					'name' => 'data['.$count.'][aw_folder_id]',
 					'value' => '',
+					'size' => '10'
 				)),
 				'categories' => html::textbox(array(
 					'name' => 'data['.$count.'][categories]',
@@ -2634,6 +2773,135 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 				}
 			}
 		}
+		return PROP_OK;
+	}
+
+	function _get_bubble_pictures($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'category',
+			'caption' => t('Kategooria'),
+		));
+		$t->define_field(array(
+			'name' => 'image_url',
+			'caption' => t('Pildi aadress'),
+		));
+/*
+		// maybe it would be nice to make the image upload here
+		// but where can i upload those images, so they will be 
+		// accessible via web?
+		// can i use any aw objects for that? i don't need image
+		// image objects, just regular image files possibly under
+		// public/img/bubble directory or smth
+		$t->define_field(array(
+			'name' => 'image_upload',
+			'caption' => t('Pildi &uuml;leslaadimine'),
+		));
+*/
+		$count = 0;
+		$saved_data = $args['obj_inst']->meta('bubble_pictures');
+		foreach (safe_array($saved_data) as $category => $image_url)
+		{
+			$t->define_data(array(
+				'category' => html::textbox(array(
+					'name' => 'bubble_data['.$count.'][category]',
+					'value' => $category
+				)),
+				'image_url' => html::textbox(array(
+					'name' => 'bubble_data['.$count.'][image_url]',
+					'value' => $image_url
+				)),
+/*
+				'image_upload' => html::fileupload(array(
+					'name' => 'bubble_data['.$count.'][image_upload]'
+				)),
+*/
+			));
+			$count++;
+		}
+		$t->define_data(array(
+			'category' => html::textbox(array(
+				'name' => 'bubble_data['.$count.'][category]'
+			)),
+			'image_url' => html::textbox(array(
+				'name' => 'bubble_data['.$count.'][image_url]'
+			)),
+		));
+		return PROP_OK;
+	}
+
+	function _set_bubble_pictures($args)
+	{
+		// proovib selle failide uploadimise ka siis ära teha ...
+		
+		$valid_data = array();
+		foreach (safe_array($args['request']['bubble_data']) as $data)
+		{
+			if (!empty($data['category']) && !empty($data['image_url']))
+			{
+				$valid_data[$data['category']] = $data['image_url'];
+			}
+		}
+		$args['obj_inst']->set_meta('bubble_pictures', $valid_data);
+		return PROP_OK;
+	}
+
+	function _get_firm_pictures($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);		
+
+		$t->define_field(array(
+			'name' => 'category',
+			'caption' => t('Kategooria'),
+		));
+		$t->define_field(array(
+			'name' => 'image_url',
+			'caption' => t('Pildi aadress'),
+		));
+		$count = 0;
+		$saved_data = $args['obj_inst']->meta('firm_pictures');
+	
+		foreach (safe_array($saved_data) as $category => $image_url)
+		{
+			$t->define_data(array(
+				'category' => html::textbox(array(
+					'name' => 'firm_data['.$count.'][category]',
+					'value' => $category
+				)),
+				'image_url' => html::textbox(array(
+					'name' => 'firm_data['.$count.'][image_url]',
+					'value' => $image_url
+				)),			
+			));
+			$count++;
+		}
+	
+		$t->define_data(array(
+			'category' => html::textbox(array(
+				'name' => 'firm_data['.$count.'][category]'
+			)),
+			'image_url' => html::textbox(array(
+				'name' => 'firm_data['.$count.'][image_url]'
+			)),
+		));
+		return PROP_OK;
+	}
+
+	function _set_firm_pictures($args)
+	{
+		$valid_data = array();
+		foreach (safe_array($args['request']['firm_data']) as $data)
+		{
+			if (!empty($data['category']) && !empty($data['image_url']))
+			{
+				$valid_data[$data['category']] = $data['image_url'];
+			}
+		}
+		$args['obj_inst']->set_meta('firm_pictures', $valid_data);
 		return PROP_OK;
 	}
 
