@@ -11,6 +11,15 @@
             <caption>Kliendi andmed</caption>
       </property>
       <property>
+            <name>cust_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kliendi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>sel_cust</name>
             <table>objects</table>
             <group>general</group>
@@ -36,6 +45,51 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Nimetus</caption>
+      </property>
+      <property>
+            <name>sel_cust_p</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Vali olemasolev klient</caption>
+      </property>
+      <property>
+            <name>custp_fn</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Eesnimi</caption>
+      </property>
+      <property>
+            <name>custp_ln</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Perenimi</caption>
+      </property>
+      <property>
+            <name>custp_phone</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>custp_email</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>E-post</caption>
       </property>
       <property>
             <name>addr</name>
@@ -92,15 +146,6 @@
             <method>serialize</method>
             <type>select</type>
             <caption>Kliendihaldur</caption>
-      </property>
-      <property>
-            <name>cust_type</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Kliendi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>cont_d</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.11 2006/01/27 08:58:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.12 2006/01/27 09:21:40 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -13,6 +13,9 @@
 @property cust_d type=text subtitle=1
 @caption Kliendi andmed
 
+@property cust_type type=select 
+@caption Kliendi t&uuml;&uuml;p
+
 @property sel_cust type=select
 @caption Vali olemasolev klient
 
@@ -21,6 +24,23 @@
 
 @property cust_n type=textbox 
 @caption Nimetus
+
+
+@property sel_cust_p type=select
+@caption Vali olemasolev klient
+
+@property custp_fn type=textbox 
+@caption Eesnimi
+
+@property custp_ln type=textbox 
+@caption Perenimi
+
+@property custp_phone type=textbox 
+@caption Telefon
+
+@property custp_email type=textbox 
+@caption E-post
+
 
 @property addr type=textbox 
 @caption Aadress
@@ -39,9 +59,6 @@
 
 @property cust_mgr type=select
 @caption Kliendihaldur
-
-@property cust_type type=select 
-@caption Kliendi t&uuml;&uuml;p
 
 @property cont_d type=text subtitle=1
 @caption Kontaktisiku andmed
@@ -132,6 +149,7 @@ class crm_job_entry extends class_base
 
 			case "cust_type":
 				$prop["options"] = array(CL_CRM_COMPANY => t("Organisatsioon"), CL_CRM_PERSON => t("Isik"));
+				$prop["onchange"] = "if (navigator.userAgent.toLowerCase().indexOf('msie')>=0){d = 'block';} else { d = 'table-row';} if (this.selectedIndex == 1) {document.getElementById('ettevotlusvorm').parentNode.parentNode.style.display = 'none';document.getElementById('sel_cust').parentNode.parentNode.style.display = 'none';document.getElementById('cust_nawAutoCompleteTextbox').parentNode.parentNode.style.display = 'none';document.getElementById('ct_fn').parentNode.parentNode.style.display = 'none';document.getElementById('ct_ln').parentNode.parentNode.style.display = 'none';document.getElementById('ct_phone').parentNode.parentNode.style.display = 'none';document.getElementById('ct_email').parentNode.parentNode.style.display = 'none';document.getElementById('sel_cust_p').parentNode.parentNode.style.display = d;document.getElementById('custp_fn').parentNode.parentNode.style.display = d; document.getElementById('custp_ln').parentNode.parentNode.style.display = d;document.getElementById('custp_phone').parentNode.parentNode.style.display = d;document.getElementById('custp_email').parentNode.parentNode.style.display = d; } else { document.getElementById('ettevotlusvorm').parentNode.parentNode.style.display = d;document.getElementById('sel_cust').parentNode.parentNode.style.display = d;document.getElementById('cust_nawAutoCompleteTextbox').parentNode.parentNode.style.display = d;document.getElementById('ct_fn').parentNode.parentNode.style.display = d;document.getElementById('ct_ln').parentNode.parentNode.style.display = d;document.getElementById('ct_phone').parentNode.parentNode.style.display = d;document.getElementById('ct_email').parentNode.parentNode.style.display = d;document.getElementById('sel_cust_p').parentNode.parentNode.style.display = 'none';document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none'; document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';document.getElementById('custp_phone').parentNode.parentNode.style.display = 'none';document.getElementById('custp_email').parentNode.parentNode.style.display = 'none';}";
 				break;
 
 			case "proj_type":
@@ -157,7 +175,18 @@ class crm_job_entry extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				$ol = new object_list(array("oid" => $my_c));
+				$ol = new object_list(array("oid" => $my_c, "class_id" => CL_CRM_COMPANY));
+				$prop["options"] = array("" => t("--Vali--")) + $ol->names();
+				break;
+
+			case "sel_cust_p":
+				$i = get_instance(CL_CRM_COMPANY);
+				$my_c = $i->get_my_customers();
+				if (!count($my_c))
+				{
+					return PROP_IGNORE;
+				}
+				$ol = new object_list(array("oid" => $my_c, "class_id" => CL_CRM_PERSON));
 				$prop["options"] = array("" => t("--Vali--")) + $ol->names();
 				break;
 
@@ -215,7 +244,7 @@ class crm_job_entry extends class_base
 		switch($prop["name"])
 		{
 			case "sel_cust":
-				if (!$prop["value"] && $arr["request"]["cust_n"] == "")
+				if (!$prop["value"] && $arr["request"]["cust_n"] == "" && $arr["request"]["custp_fn"] == "" && $arr["request"]["custp_ln"] == "")
 				{
 					$prop["error"] = t("Kliendi nimi peab olema t&auml;idetud v&otilde;i olemasolev klient peab olema valitud");
 					return PROP_FATAL_ERROR;
@@ -260,13 +289,31 @@ class crm_job_entry extends class_base
 	function callback_pre_save($arr)
 	{
 		// create cust
-		$ol = new object_list(array(
-			"class_id" => CL_CRM_COMPANY,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"name" => $arr["request"]["cust_n"]
-		));
-			
+		if ($arr["request"]["cust_type"] == CL_CRM_PERSON)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"firstname" => $arr["request"]["custp_fn"],
+				"lastname" => $arr["request"]["custp_ln"]
+			));
+		}
+		else
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => $arr["request"]["cust_n"]
+			));
+		}
+
+		if ($this->can("view", $arr["request"]["sel_cust_p"]))
+		{
+			$c = obj($arr["request"]["sel_cust_p"]);
+		}
+		else
 		if ($this->can("view", $arr["request"]["sel_cust"]))
 		{
 			$c = obj($arr["request"]["sel_cust"]);
@@ -313,20 +360,20 @@ class crm_job_entry extends class_base
 			{
 				$c_i->_gen_company_code($c);
 			}
+
+			if ($c->class_id() == CL_CRM_PERSON)
+			{
+				$c->set_name($arr["request"]["custp_fn"]." ".$arr["request"]["custp_ln"]);
+				$c->set_prop("firstname", $arr["request"]["custp_fn"]);
+				$c->set_prop("lastname", $arr["request"]["custp_ln"]);
+				$this->set_by_n($c, "phone", $arr["request"]["custp_phone"], CL_CRM_PHONE, $c->id());
+				$this->set_by_n($c, "email", $arr["request"]["custp_email"], CL_ML_MEMBER, $c->id());
+			}
+
 			$c->save();
 		}
 
 
-		if ($c->class_id() == CL_CRM_PERSON)
-		{
-			$c->set_name($arr["request"]["ct_fn"]." ".$arr["request"]["ct_ln"]);
-			$c->set_prop("firstname", $arr["request"]["ct_fn"]);
-			$c->set_prop("lastname", $arr["request"]["ct_ln"]);
-			$this->set_by_n($c, "phone", $arr["request"]["ct_phone"], CL_CRM_PHONE, $c->id());
-			$this->set_by_n($c, "email", $arr["request"]["ct_email"], CL_ML_MEMBER, $c->id());
-			$c->save();
-		}
-		else
 		if ($c->class_id() == CL_CRM_COMPANY)
 		{
 			// check if such a person already exists in that co
@@ -520,6 +567,11 @@ class crm_job_entry extends class_base
 			$o->save();
 		}
 		$ro->set_prop($prop, $o->id());
+	}
+
+	function callback_generate_scripts()
+	{
+		return "if (navigator.userAgent.toLowerCase().indexOf('msie')>=0){d = 'block';} else { d = 'table-row';} document.getElementById('ettevotlusvorm').parentNode.parentNode.style.display = d;document.getElementById('sel_cust').parentNode.parentNode.style.display = d;document.getElementById('cust_nawAutoCompleteTextbox').parentNode.parentNode.style.display = d;document.getElementById('ct_fn').parentNode.parentNode.style.display = d;document.getElementById('ct_ln').parentNode.parentNode.style.display = d;document.getElementById('ct_phone').parentNode.parentNode.style.display = d;document.getElementById('ct_email').parentNode.parentNode.style.display = d;document.getElementById('sel_cust_p').parentNode.parentNode.style.display = 'none';document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none'; document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';document.getElementById('custp_phone').parentNode.parentNode.style.display = 'none';document.getElementById('custp_email').parentNode.parentNode.style.display = 'none';";
 	}
 }
 ?>
