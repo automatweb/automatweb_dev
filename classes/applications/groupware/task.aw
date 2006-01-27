@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.62 2006/01/26 13:58:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.63 2006/01/27 08:03:39 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1898,7 +1898,7 @@ class task extends class_base
 				$o = obj();
 				$o->set_class_id(CL_TASK_ROW);
 				$o->set_parent($arr["request"]["id"]);
-
+				$is_mod = true;
 			}
 			else
 			{
@@ -1910,10 +1910,16 @@ class task extends class_base
 					$o->delete();
 					continue;
 				}
+				$is_mod = false;
 			}
 
 			list($d,$m,$y) = explode("/", $e["date"]);
-			$o->set_prop("date", mktime(0,0,0, $m, $d, $y));
+			$_tm = mktime(0,0,0, $m, $d, $y);
+			if ($o->prop("date") != $_tm)
+			{
+				$o->set_prop("date", $_tm);
+				$is_mod = true;
+			}
 			if ($e["time_to_cust"] == "")
 			{
 				$e["time_to_cust"] = $e["time_real"];
@@ -1927,14 +1933,55 @@ class task extends class_base
 				}
 			}
 
-			$o->set_prop("content", $e["task"]);
-			$o->set_prop("impl", $e["impl"]);
-			$o->set_prop("time_guess", str_replace(",", ".", $e["time_guess"]));
-			$o->set_prop("time_real", str_replace(",", ".", $e["time_real"]));
-			$o->set_prop("time_to_cust", str_replace(",", ".", $e["time_to_cust"]));
-			$o->set_prop("done", $e["done"]);
-			$o->set_prop("on_bill", $e["on_bill"]);
-			$o->save();
+			if ($o->prop("content") != $e["task"])
+			{
+				$o->set_prop("content", $e["task"]);
+				$is_mod = true;
+			}
+
+			if ($o->prop("impl") != $this->make_keys($e["impl"]))
+			{
+				$o->set_prop("impl", $e["impl"]);
+				$is_mod = true;
+			}
+
+			$e["time_guess"] = str_replace(",", ".", $e["time_guess"]);
+			if ($o->prop("time_guess") != $e["time_guess"])
+			{
+				$o->set_prop("time_guess", $e["time_guess"]);
+				$is_mod = true;
+			}
+
+			$e["time_real"] = str_replace(",", ".", $e["time_real"]);
+			if ($o->prop("time_real") != $e["time_real"])
+			{
+				$o->set_prop("time_real", $e["time_real"]);
+				$is_mod = true;
+			}
+
+			$e["time_to_cust"] = str_replace(",", ".", $e["time_to_cust"]);
+			if ($o->prop("time_to_cust") != $e["time_to_cust"])
+			{
+				$o->set_prop("time_to_cust", $e["time_to_cust"]);
+				$is_mod = true;
+			}
+
+			if ((int)$o->prop("done") != (int)$e["done"])
+			{
+				$o->set_prop("done", $e["done"]);
+				$is_mod = true;
+			}
+
+			if ((int)$o->prop("on_bill") != (int)$e["on_bill"])
+			{
+				$o->set_prop("on_bill", $e["on_bill"]);
+				$is_mod = true;
+			}
+
+			if ($is_mod)
+			{
+				$o->save();
+			}
 
 			$task->connect(array(
 				"to" => $o->id(),
