@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.157 2006/01/11 13:09:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.158 2006/01/30 11:13:34 kristo Exp $
 
 /*
 
@@ -850,6 +850,7 @@ class site_show extends class_base
 		$awt->start("int-show-doc");
 		$d = get_instance(CL_DOCUMENT);
 		$d->set_opt("parent", $this->sel_section);
+		aw_register_default_class_member("document", "parent", $this->sel_section);
 		$ct = "";
 
 
@@ -868,7 +869,8 @@ class site_show extends class_base
 			// I need to  know that for the public method menus
 			// christ, this sucks ass, we really should put that somewhere else! - terryf
 			$d->set_opt("cnt_documents",sizeof($docid));
-		
+			aw_register_default_class_member("document", "cnt_documents", sizeof($docid));
+
 			$template = $template == "" ? "plain.tpl" : $template;
 			$template2 = file_exists($this->cfg["tpldir"]."/automatweb/documents/".$template."2") ? $template."2" : $template;
 
@@ -905,7 +907,9 @@ class site_show extends class_base
 			{
 				$this->active_doc = $docid;
 				$d->set_opt("cnt_documents",1);
+				aw_register_default_class_member("document", "cnt_documents", 1);
 				$d->set_opt("shown_document",$docid);
+				aw_register_default_class_member("document", "shown_document", $docid);
 
 				$awt->start("gen-preview");
 				$ct = $d->gen_preview(array(
@@ -950,7 +954,6 @@ class site_show extends class_base
 			}
 		}
 		$awt->stop("int-show-doc");
-		upd_instance("document",$d);
 
 		$vars = array();
 		if ( (is_array($blocks)) && (sizeof($blocks) > 0) )
