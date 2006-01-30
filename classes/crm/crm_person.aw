@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.105 2006/01/23 08:44:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.106 2006/01/30 12:30:31 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_SECTION, on_connect
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disconnect_section_from_person)
 
-@classinfo relationmgr=yes syslog_type=ST_CRM_PERSON
+@classinfo relationmgr=yes syslog_type=ST_CRM_PERSON no_status=1
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 
 @default table=objects
@@ -207,7 +207,7 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 @default group=data
 
-	@property server_folder type=textbox table=objects field=meta method=serialize group=user_settings
+	@property server_folder type=textbox table=objects field=meta method=serialize 
 	@caption Kataloog serveris, kus asuvad failid
 
 @property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect
@@ -275,49 +275,53 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 		@property docs_tbl type=table store=no no_caption=1 parent=docs_lt
 
+@default group=forms
+
+	@property templates type=select table=objects field=meta method=serialize
+	@caption Väljund
+
+@default group=my_stats
+
+	@property stats_s_from type=date_select store=no
+	@caption Alates
+
+	@property stats_s_to type=date_select store=no
+	@caption Kuni
+
+	@property stats_s_time_sel type=select store=no
+	@caption Ajavahemik
+
+	@property stats_s_cust type=textbox store=no
+	@caption Klient
+
+	@property my_stats type=text store=no no_caption=1
+
 ----------------------------------------------
 @groupinfo general2 caption="Üldine" parent=general
 @groupinfo description caption="Kirjeldus" parent=general
 @groupinfo relatives caption="Sugulased" parent=general
 @groupinfo documents_all caption="Dokumendid" submit=no parent=general
+@groupinfo my_stats caption="Minu statistika" submit=no parent=general submit_method=get
+
 @groupinfo contact caption="Kontaktandmed"
 @groupinfo overview caption=Tegevused
-@groupinfo all_actions caption="Kõik" parent=overview submit=no
-@groupinfo calls caption="Kõned" parent=overview submit=no
-@groupinfo meetings caption="Kohtumised" parent=overview submit=no
-@groupinfo tasks caption="Toimetused" parent=overview submit=no
+	@groupinfo all_actions caption="Kõik" parent=overview submit=no
+	@groupinfo calls caption="Kõned" parent=overview submit=no
+	@groupinfo meetings caption="Kohtumised" parent=overview submit=no
+	@groupinfo tasks caption="Toimetused" parent=overview submit=no
+
 @groupinfo forms caption=Väljundid
 @groupinfo cv caption="Elulugu"
+	@groupinfo education caption="Hariduskäik" parent=cv
+	@groupinfo add_edu caption="Täienduskoolitus" parent=cv
+	@groupinfo experiences caption="Töökogemused" parent=cv
+	@groupinfo recommends caption="Soovitajad" parent=cv
+	groupinfo cv_view caption="CV vaade" parent=cv
+
 @groupinfo data caption="Andmed"
 
-@groupinfo education caption="Hariduskäik" parent=cv
-@groupinfo add_edu caption="Täienduskoolitus" parent=cv
-groupinfo skills caption="Oskused" parent=cv submit=no
-@groupinfo experiences caption="Töökogemused" parent=cv
-@groupinfo recommends caption="Soovitajad" parent=cv
-groupinfo cv_view caption="CV vaade" parent=cv
 @groupinfo transl caption=T&otilde;lgi
 
-default group=forms
-default field=meta
-default table=objects
-default method=serialize
-
-property forms type=relpicker reltype=RELTYPE_BACKFORMS
-caption tagasiside vormid
-selection.aw
-
-@property templates type=select group=forms table=objects field=meta method=serialize
-@caption Väljund
-
-default group=show
-groupinfo show caption=Visiitkaart submit=no
-@groupinfo contact caption=Kontaktandmed
-property dokus type=text callback=show_isik
-
-// 1 - make it display my documents - how on earth am I going to do that?
-
-@classinfo no_status=1
 
 
 */
@@ -513,6 +517,26 @@ class crm_person extends class_base
 	
 		switch($data["name"])
 		{
+			case "stats_s_time_sel":
+				$data["options"] = array(
+					"" => t("--vali--"),
+					"today" => t("T&auml;na"),
+					"yesterday" => t("Eile"),
+					"cur_week" => t("Jooksev n&auml;dal"),
+					"cur_mon" => t("Jooksev kuu"),
+					"last_mon" => t("Eelmine kuu")
+				);
+				$data["value"] = $arr["request"]["stats_s_time_sel"];
+				if (!$data["value"])
+				{
+					$data["value"] = "cur_mon";
+				}
+				break;
+
+			case "my_stats":
+				$this->_get_my_stats($arr);
+				break;
+
 			case "server_folder":
 				$i = get_instance(CL_CRM_COMPANY);
 				$i->_proc_server_folder($arr);
@@ -2524,6 +2548,15 @@ class crm_person extends class_base
 		{
 			return false;
 		}
+
+		if ($arr["id"] == "my_stats")
+		{
+			$u = get_instance(CL_USER);
+			if ($arr["obj_inst"]->id() != $u->get_current_person())
+			{
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -2638,6 +2671,23 @@ class crm_person extends class_base
 		}
 
 		return false;
+	}
+
+	function _get_my_stats($arr)
+	{
+		$i = get_instance("applications/crm/crm_company_stats_impl");
+		if (!$arr["request"]["MAX_FILE_SIZE"])
+		{
+			$arr["request"]["stats_s_time_sel"] = "cur_mon";
+			$arr["request"]["MAX_FILE_SIZE"] = 1;
+		}
+		$arr["request"]["stats_s_res_type"] = "pers_det";
+		$arr["request"]["stats_s_worker_sel"] = $this->make_keys(array($arr["obj_inst"]->id()));
+		classload("vcl/table");
+		$t = new vcl_table;
+		$arr["prop"]["vcl_inst"] = $t;
+		$arr["request"]["ret"] = 1;
+		$arr["prop"]["value"] = $i->_get_stats_s_res($arr);
 	}
 }
 ?>

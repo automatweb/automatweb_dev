@@ -126,9 +126,6 @@ class crm_company_overview_impl extends class_base
 					objects.status > 0  AND
 					kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
 			";
-//echo "q = $q <br>";
-// (MONTH(FROM_UNIXTIME(kliendibaas_isik.birthday)) >= $s_m $pred MONTH(FROM_UNIXTIME(kliendiba
-//as_isik.birthday)) <= $e_m) AND
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
@@ -157,7 +154,20 @@ class crm_company_overview_impl extends class_base
 				$bd = $item->prop("birthday");
 				$date = mktime($ds["hour"], $ds["minute"], 0, date("m", $bd), date("d", $bd), date("Y"));
 			}
-			if ($range["viewtype"] != "relative" && ($date < $overview_start))
+
+			// if this thing has recurrences attached, then stick those in there
+			$recurs = array();
+			foreach($item->connections_from(array("type" => "RELTYPE_RECURRENCE")) as $c)
+			{
+				// get all times for this one from the recurrence table
+				$this->db_query("SELECT recur_start, recur_end from recurrence where recur_id = ".$c->prop("to")." AND recur_start > $overview_start");
+				while ($row = $this->db_next())
+				{
+					$recurs[] = $row;
+				}
+			}
+
+			if ($range["viewtype"] != "relative" && ($date < $overview_start) && count($recurs) == 0)
 			{
 				continue;
 			};
@@ -196,6 +206,32 @@ class crm_company_overview_impl extends class_base
 					"return_url" => $return_url,
 				));
 			};
+
+			// if this thing has recurrences attached, then stick those in there
+			foreach($recurs as $row)
+			{
+				$rd = $row["recur_start"];
+				if ($rd > $start)
+				{
+					$t->add_item(array(
+						"timestamp" => $rd,
+						"item_start" => $rd,
+						"item_end" => $row["recur_end"],
+						"data" => array(
+							"name" => $item->class_id() == CL_CRM_PERSON ? sprintf(t("%s s&uuml;nnip&auml;ev!"), $item->name()) : $item->name(),
+							"link" => $link,
+							"modifiedby" => $item->prop("modifiedby"),
+							"icon" => $icon,
+							'comment' => $item->comment(),
+						),
+					));
+				};
+
+				if ($rd > $overview_start)
+				{
+					$this->overview[$rd] = 1;
+				};
+			}
 
 			if ($date > $start)
 			{
@@ -488,6 +524,33 @@ class crm_company_overview_impl extends class_base
 				));
 			}
 			
+			// if this thing has recurrences attached, then stick those in there
+			$recurs = array();
+			foreach($task->connections_from(array("type" => "RELTYPE_RECURRENCE")) as $c)
+			{
+				// get all times for this one from the recurrence table
+				$this->db_query("SELECT recur_start, recur_end from recurrence where recur_id = ".$c->prop("to"));
+				while ($row = $this->db_next())
+				{
+					$table_data[] = array(
+						"icon" => html::img(array("url" => icons::get_icon_url($task))),
+						"customer" => $cust_str,
+						"proj_name" => $proj_str,
+						"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($task->name())),
+						"deadline" => $dl,
+						"end" => $row["recur_end"],
+						"start" => $row["recur_start"],
+						"oid" => $task->id(),
+						"priority" => $task->prop("priority"),
+						"col" => $col,
+						"parts" => join(", ", $ns),
+						"menu" => $pm->get_menu(),
+						"when" => date("d.m.Y H:i", $row["recur_start"])." - ".date("d.m.Y H:i",$row["recur_end"]),
+						"is_recur" => 1
+					);
+				}
+			}
+
 			$table_data[] = array(
 				"icon" => html::img(array("url" => icons::get_icon_url($task))),
 				"customer" => $cust_str,
@@ -993,6 +1056,14 @@ class crm_company_overview_impl extends class_base
 	function _format_deadline($arg)
 	{
 		$o = obj($arg["oid"]);
+		if ($arg["is_recur"] == 1)
+		{
+			if ($arg["start"] == $arg["end"])
+			{
+				return date("d.m.Y H:i", $arg["start"]);
+			}
+			return date("d.m.Y H:i", $arg["start"])." - ".date("d.m.Y H:i", $arg["end"]);
+		}
 		if ($o->class_id() == CL_TASK)
 		{
 			if ($arg["deadline"] > 1000)

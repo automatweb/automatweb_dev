@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.75 2006/01/11 09:05:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.76 2006/01/30 12:30:31 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1131,6 +1131,8 @@ class cfgform extends class_base
 			"" => t("vaikestiil"),
 			"stacked" => t("pealkiri yleval, sisu all"),
 		);
+
+		$ctr_list = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VIEWCONTROLLER")));
 		foreach($grps->get() as $key => $item)
 		{
 			$res = array();
@@ -1157,6 +1159,14 @@ class cfgform extends class_base
 				"caption" => t("Vaikimisi view vaade"),
 				"value" => $item["grpview"],
 				"parent" => "b$key",
+			);
+			$rv["grpctl[$key]"] = array(
+				"name" => "grpctl[$key]",
+				"type" => "select",
+				"caption" => t("Sisu kontroller"),
+				"value" => $item["grpctl"],
+				"parent" => "b$key",
+				"options" => array("" => t("--vali--")) + $ctr_list->names()
 			);
 			$rv["b".$key] = array(
 				"name" => "b".$key,
@@ -1190,7 +1200,9 @@ class cfgform extends class_base
 				$grplist[$key]["caption"] = $val;
 				$styl = $arr["request"]["grpstyle"][$key];
 				$view = $arr["request"]["grpview"][$key];
+				$ctl = $arr["request"]["grpctl"][$key];
 				$grplist[$key]["grpview"] = $view;
+				$grplist[$key]["grpctl"] = $ctl;
 				if (!empty($styl))
 				{
 					$grplist[$key]["grpstyle"] = $styl;
@@ -1622,6 +1634,23 @@ class cfgform extends class_base
 				if (isset($ret[$pn]))
 				{
 					$ret[$pn]["caption"] = $pd["caption"];
+				}
+			}
+		}
+
+		// also eval all controllers
+		foreach((array)$o->prop("cfg_groups") as $grpn => $grpdat)
+		{
+			if ($this->can("view", $grpdat["grpctl"]))
+			{
+				$ctl = obj($grpdat["grpctl"]);
+				$ctl_i = $ctl->instance();
+				$ps = $ctl_i->check_property($grpdat, $ctl->id(), $_GET, $grpdat);
+				foreach(safe_array($ps) as $pn => $pd)
+				{
+					$pd["group"] = $grpn;
+					$pd["force_display"] = 1;
+					$ret[$pn] = $pd;
 				}
 			}
 		}

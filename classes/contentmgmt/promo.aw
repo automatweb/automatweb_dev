@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.81 2006/01/11 13:09:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.82 2006/01/30 12:30:31 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -857,7 +857,9 @@ class promo extends class_base
 					}
 					// now we know the whole list, so just set that
 					$box->set_meta("content_documents", $this->make_keys($ids));
+					aw_disable_acl();
 					$box->save();
+					aw_restore_acl();
 					continue;
 				}
 				else
@@ -894,7 +896,9 @@ class promo extends class_base
 				}
 
 				$box->set_meta("content_documents", $mt);
+				aw_disable_acl();
 				$box->save();
+				aw_restore_acl();
 			}
 		}
 	}

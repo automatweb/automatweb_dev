@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.451 2006/01/26 09:56:20 kristo Exp $
+// $Id: class_base.aw,v 2.452 2006/01/30 12:30:30 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -298,7 +298,6 @@ class class_base extends aw_template
 		};
 
 		$this->cfgform_id = $cfgform_id;
-
 		// well, i NEED to get the right property group BEFORE i get the right view..
 		// i hope this doesn't qualify as a hack, because nobody changes the args
 		// anyway -- ahz
@@ -328,6 +327,7 @@ class class_base extends aw_template
 			$filter["layout_mode"] == "fixed_toolbar";
 		}
 		$properties = $this->get_property_group($filter);
+
 		/////////////////////
 
 		$defview = 0;
@@ -4196,7 +4196,6 @@ class class_base extends aw_template
 			{
 				print "loading from " . $arr["cfgform_id"] . "<br>";
 			};
-
 			// if there is a bug in config form which caused the groupdata
 			// to be empty, then this is the place where we should fix it.
 		}
@@ -4408,7 +4407,7 @@ class class_base extends aw_template
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
-			if (!$all_properties[$key])
+			if (!$all_properties[$key] && !$val["force_display"])
 			{
 				continue;
 			};
@@ -4456,7 +4455,7 @@ class class_base extends aw_template
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
-			if (!$all_properties[$key])
+			if (!$all_properties[$key] && !$val["force_display"])
 			{
 				continue;
 			};
@@ -4607,7 +4606,6 @@ class class_base extends aw_template
 
 			$rv = $prps;
 			$grps = $ci->get_cfg_groups($cfgform_obj->id());
-
 			foreach($cfg_flags as $key => $val)
 			{
 				$this->classinfo[$val] = $cfgform_obj->prop($key);
@@ -4657,6 +4655,7 @@ class class_base extends aw_template
 			// if the class has a default config file, then load
 			// that as well
 		};
+
 		return $rv;
 	}
 
@@ -4820,7 +4819,6 @@ class class_base extends aw_template
 
 			$rv[$vgr] = $gval;
 		};
-
 
 		return $rv;
 	}

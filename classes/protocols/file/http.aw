@@ -339,7 +339,10 @@ class http
 		$op .= $request;
 
 		fputs($fp, $op, strlen($op));
+
+		$str = fread($fp, 10000);
 		fclose($fp);
+		return $str;
 	}
 }
 ?>

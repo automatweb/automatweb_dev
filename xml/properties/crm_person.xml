@@ -500,7 +500,7 @@
       <property>
             <name>server_folder</name>
             <table>objects</table>
-            <group>user_settings</group>
+            <group>data</group>
             <type>textbox</type>
             <field>meta</field>
             <method>serialize</method>
@@ -706,6 +706,51 @@
             <method>serialize</method>
             <caption>V&amp;auml;ljund</caption>
       </property>
+      <property>
+            <name>stats_s_from</name>
+            <table>kliendibaas_isik</table>
+            <group>my_stats</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>stats_s_from</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>stats_s_to</name>
+            <table>kliendibaas_isik</table>
+            <group>my_stats</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>stats_s_to</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>stats_s_time_sel</name>
+            <table>kliendibaas_isik</table>
+            <group>my_stats</group>
+            <type>select</type>
+            <store>no</store>
+            <field>stats_s_time_sel</field>
+            <caption>Ajavahemik</caption>
+      </property>
+      <property>
+            <name>stats_s_cust</name>
+            <table>kliendibaas_isik</table>
+            <group>my_stats</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>stats_s_cust</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>my_stats</name>
+            <table>kliendibaas_isik</table>
+            <group>my_stats</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>my_stats</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_PERSON</syslog_type>
@@ -729,6 +774,12 @@
                   <submit>no</submit>
                   <parent>general</parent>
             </documents_all>
+            <my_stats>
+                  <caption>Minu statistika</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+                  <submit_method>get</submit_method>
+            </my_stats>
             <contact>
                   <caption>Kontaktandmed</caption>
             </contact>
@@ -761,9 +812,6 @@
             <cv>
                   <caption>Elulugu</caption>
             </cv>
-            <data>
-                  <caption>Andmed</caption>
-            </data>
             <education>
                   <caption>Haridusk&amp;auml;ik</caption>
                   <parent>cv</parent>
@@ -780,6 +828,9 @@
                   <caption>Soovitajad</caption>
                   <parent>cv</parent>
             </recommends>
+            <data>
+                  <caption>Andmed</caption>
+            </data>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
