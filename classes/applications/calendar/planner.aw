@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.109 2006/01/23 10:16:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.110 2006/01/30 17:10:53 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -852,7 +852,11 @@ class planner extends class_base
 		{
 			return PROP_ERROR;
 		};
-		$emb = array_merge($args["request"], $args["request"]["emb"]);
+		$emb = $args["request"]["emb"];
+		if (!isset($emb["customer"]))
+		{
+			$emb["customer"] = $args["request"]["customer"];
+		}
 		$is_doc = false;
 		if (!empty($emb["clid"]))
 		{
