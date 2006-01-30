@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.110 2006/01/23 08:47:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.111 2006/01/30 10:38:11 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -858,6 +858,10 @@ class admin_menus extends aw_template
 		$this->co_id = 0;
 
 		// check if any parent menus have config objects attached 
+		if (is_array($parent))
+		{
+			$parent = reset($parent);
+		}
 		$p_o = obj($parent);
 		
 		$ch = $p_o->path();
