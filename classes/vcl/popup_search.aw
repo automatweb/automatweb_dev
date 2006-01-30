@@ -210,7 +210,10 @@ class popup_search extends aw_template
 
 	function process_vcl_property($arr)
 	{
-		$arr["obj_inst"]->set_prop($arr["prop"]["name"], $arr["prop"]["value"]);
+		if ($arr["obj_inst"]->is_property($arr["prop"]["name"]))
+		{
+			$arr["obj_inst"]->set_prop($arr["prop"]["name"], $arr["prop"]["value"]);
+		}
 	}
 				
 				
