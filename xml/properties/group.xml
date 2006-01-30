@@ -233,6 +233,7 @@
             </ACL>
             <ADMIN_ROOT>
                   <value>4</value>
+                  <clid>CL_MENU</clid>
                   <caption>rootmen&amp;amp;uuml;&amp;amp;uuml;</caption>
             </ADMIN_ROOT>
             <ADD_TREE>

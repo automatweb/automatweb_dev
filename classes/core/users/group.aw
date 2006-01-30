@@ -106,7 +106,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @reltype ACL value=3 clid=CL_ACL
 @caption acl
 
-@reltype ADMIN_ROOT value=4 
+@reltype ADMIN_ROOT value=4 clid=CL_MENU
 @caption rootmen&uuml;&uuml;
 
 @reltype ADD_TREE value=5 clid=CL_ADD_TREE_CONF
@@ -565,8 +565,20 @@ class group extends class_base
 
 		$meta = $arr["obj_inst"]->meta();
 
+		$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ADMIN_ROOT")));
+		$oopts = array("" => t("--vali--")) + $ol->names();
+
 		foreach($ll as $lid => $lname)
 		{
+			$opts = $oopts;
+			foreach((array)$meta["admin_rootmenu2"][$lid] as $k => $v)
+			{
+				if (!isset($opts[$v]) && $this->can("view", $v))
+				{
+					$o = obj($v);
+					$opts[$v] = $o->name();
+				}
+			}
 			$ret["admin_rootmenu2[$lid]"] = array(
 				"name" => "admin_rootmenu2[$lid]",
 				"type" => "relpicker",
@@ -577,7 +589,8 @@ class group extends class_base
 				"multiple" => 1,
 				"caption" => sprintf(t("Administreerimisliidese juurkaust (%s)"), $lname),
 				"value" => $meta["admin_rootmenu2"][$lid],
-				"reltype" => "RELTYPE_ADMIN_ROOT"
+				"reltype" => "RELTYPE_ADMIN_ROOT",
+				"options" => $opts
 			);
 		}
 		return $ret;
