@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.16 2006/01/25 13:10:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.17 2006/01/30 15:35:33 ahti Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -347,6 +347,64 @@ class messenger_v2 extends class_base
 		return true;
 	}
 
+	function _mk_mb_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "answered",
+			"caption" => t("Vast."),
+			"talign" => "center",
+			"align" => "center",
+			"width" => 20,
+			"nowrap" => 1,
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "attach",
+			"caption" => t("A"),
+			"talign" => "center",
+			"align" => "center",
+			"width" => 10,
+			"nowrap" => 1,
+		));
+		$t->define_field(array(
+			"name" => "from",
+			"caption" => t("Kellelt"),
+			"talign" => "center",
+			"sortable" => 1,
+			"nowrap" => 1,
+		));
+		$t->define_field(array(
+			"name" => "subject",
+			"caption" => t("Teema"),
+			"talign" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"talign" => "center",
+			"nowrap" => 1,
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "H:i d-M",
+			"smart" => "1",
+		));
+		$t->define_field(array(
+			"name" => "size",
+			"caption" => t("KB"),
+			"talign" => "center",
+			"nowrap" => 1,
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+		));
+		$t->define_chooser(array(
+			"name" => "mark",
+			"field" => "id",
+		));
+	}
+
 	function gen_message_list(&$arr)
 	{
 		$this->_connect_server(array(
@@ -376,8 +434,7 @@ class messenger_v2 extends class_base
 		$count = $this->drv_inst->count;
 
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->parse_xml_def("messenger/mailbox_view");
-
+		$this->_mk_mb_table(&$t);
 		$t->d_row_cnt = $count;
 
 		$pageselector = "";
@@ -392,7 +449,6 @@ class messenger_v2 extends class_base
 		$fldr = $this->use_mailbox;	
 
 		$t->table_header = $pageselector;
-
 		foreach($contents as $key => $message)
 		{
 			$seen = $message["seen"];
@@ -444,16 +500,12 @@ class messenger_v2 extends class_base
 					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
 				)),
 				*/
-				"date" => $message["date"],
+				"date" => $message["tstamp"],
 				"size" => $this->_format(sprintf("%d",$message["size"]/1024),$seen),
 				"answered" => $this->_format($this->_conv_stat($message["answered"]),$seen),
 				"attach" => $message["has_attachments"] ? html::img(array("url" => $this->cfg["baseurl"] . "/automatweb/images/attach.gif")) : "",
 			));
 		};
-		$t->define_chooser(array(
-			"name" => "mark",
-			"field" => "id",
-		));
 		$t->set_default_sortby("date");
 		$t->set_default_sorder("desc");
 
@@ -1024,11 +1076,7 @@ class messenger_v2 extends class_base
 	function do_search($arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->parse_xml_def("messenger/mailbox_view");
-		$t->define_chooser(array(
-			"field" => "id",
-			"name" => "mark",
-		));
+		$this->_mk_mb_table($t);
 		$from = $arr["request"]["s_from"];
 		$subj = $arr["request"]["s_subject"];
 		$this->_connect_server(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.30 2006/01/25 17:09:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.31 2006/01/30 15:35:33 ahti Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -259,7 +259,6 @@ class imap extends class_base
 					);
 				};
 			};
-
 			uasort($req_msgs,array($this,"__date_sort"));
 
 			$mbox_over["contents"] = $req_msgs;

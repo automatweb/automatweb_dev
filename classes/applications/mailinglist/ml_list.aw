@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.53 2006/01/10 12:49:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.54 2006/01/30 15:35:33 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1530,6 +1530,82 @@ class ml_list extends class_base
 		));
 	}
 
+	function _gen_ls_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "qid",
+			"caption" => t("#"),
+			"talign" => "center",
+			"sortable" => 1,
+			"type" => "int",
+			"numeric" => 1,
+		));
+		$t->define_field(array(
+			"name" => "subject",
+			"caption" => t("Kiri"),
+			"talign" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"talign" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "start_at",
+			"caption" => t("Algus"),
+			"talign" => "center",
+			"type" => "time",
+			"format" => "H:i d-m-Y",
+			"sortable" => 1,
+			"numeric" => 1,
+		));
+		$t->define_field(array(
+			"name" => "last_sent",
+			"caption" => t("Viimane"),
+			"talign" => "center",
+			"type" => "time",
+			"format" => "H:i:s",
+			"sortable" => 1,
+			"numeric" => 1,
+		));
+		$t->define_field(array(
+			"name" => "perf",
+			"caption" => t("Perf"),
+			"talign" => "center",
+			"numeric" => 1,
+		));
+		$t->define_field(array(
+			"name" => "patch_size",
+			"caption" => t("Korraga"),
+			"talign" => "center",
+			"sortable" => 1,
+			"type" => "int",
+			"numeric" => 1,
+		));
+		$t->define_field(array(
+			"name" => "delay",
+			"caption" => t("Oota"),
+			"talign" => "center",
+			"sortable" => 1,
+			"type" => "int",
+			"numeric" => 1,
+		));
+		$t->define_field(array(
+			"name" => "protsent",
+			"caption" => t("Valmis"),
+			"talign" => "center",
+			"sortable" => 1,
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "qid",
+		));
+		$t->set_default_sortby("last_sent");
+		$t->set_default_sorder("desc");
+	}
+
 	function gen_list_status_table($arr)
 	{
 		/*
@@ -1541,13 +1617,7 @@ class ml_list extends class_base
 		*/
 		$mq = get_instance("applications/mailinglist/ml_queue");
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->parse_xml_def("mlist/queue");
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "qid",
-		));
-		$t->set_default_sortby("last_sent");
-		$t->set_default_sorder("desc");
+		$this->_gen_ls_table($t);
 		$q = "SELECT ml_queue.* FROM ml_queue LEFT JOIN objects ON (ml_queue.mid = objects.oid) WHERE objects.status != 0 AND lid = " . $arr["obj_inst"]->id() . " ORDER BY start_at DESC";
 		$this->db_query($q);
 		while ($row = $this->db_next())
@@ -2104,7 +2174,23 @@ class ml_list extends class_base
 	{
 		$perpage = 100;
 		$t = &$arr["prop"]["vcl_inst"];
-		$t->parse_xml_def("mlist/report");
+		$t->define_field(array(
+			"name" => "member",
+			"caption" => t("Kellele"),
+		));
+		$t->define_field(array(
+			"name" => "tm",
+			"caption" => t("Millal"),
+			"talign" => "center",
+			"type" => "time",
+			"format" => "H:i d-m-Y",
+			"sortable" => 1,
+			"numeric" => 1,
+		));
+		$t->define_field(array(
+			"name" => "clicked",
+			"caption" => t("Klikitud"),
+		));
 		$_mid = $arr["request"]["mail_id"];
 		$qid = $arr["request"]["qid"];
 		$id = $arr["obj_inst"]->id();
@@ -2134,7 +2220,7 @@ class ml_list extends class_base
 		}
 		$t->d_row_cnt = $cnt;
 		$t->table_header = $t->draw_text_pageselector(array(
-			"records_per_page" => $perpage
+			"records_per_page" => $perpage,
 		));
 		$t->sort_by();
 	}
