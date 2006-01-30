@@ -211,7 +211,7 @@ class crm_company_overview_impl extends class_base
 			foreach($recurs as $row)
 			{
 				$rd = $row["recur_start"];
-				if ($rd > $start)
+				if ($rd > ($start-(7*24*3600)))
 				{
 					$t->add_item(array(
 						"timestamp" => $rd,
@@ -233,7 +233,7 @@ class crm_company_overview_impl extends class_base
 				};
 			}
 
-			if ($date > $start)
+			if ($date > ($start-(7*24*3600)))
 			{
 				$t->add_item(array(
 					"timestamp" => $date,
