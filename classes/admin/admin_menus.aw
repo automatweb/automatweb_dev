@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.111 2006/01/30 10:38:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.112 2006/01/30 10:46:41 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1133,9 +1133,14 @@ class admin_menus extends aw_template
 			}
 			else
 			{
-				$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period),$row["class_id"]);
-				
-
+				if ($can_change)
+				{
+					$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period),$row["class_id"]);
+				}
+				else
+				{
+					$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period),$row["class_id"]);
+				}
 			}
 
 			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "admin_menus",true,true);
