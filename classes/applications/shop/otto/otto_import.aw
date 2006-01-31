@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.38 2006/01/27 15:27:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.39 2006/01/31 15:45:51 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -151,7 +151,7 @@
 @groupinfo delete caption="Kustutamine"
 
 	@property del_prods type=textarea rows=10 cols=50 store=no group=delete
-	@caption Kustuta tooted koodidega (komaga eraldatud)
+	@caption Kustuta tooted koodidega (komaga eraldatud, ilma t&uuml;hikuteta)
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
@@ -284,7 +284,12 @@ class otto_import extends class_base
 			case "del_prods":
 				if ($prop["value"] != "")
 				{
-					$this->_do_del_prods(explode(",", $prop["value"]));
+					$product_codes = explode(",", $prop["value"]);
+					foreach ($product_codes as $key => $product_code)
+					{
+						$product_codes[$key] = str_replace(" ", "", $product_code);
+					}
+					$this->_do_del_prods($product_codes);
 				}
 				break;
 
