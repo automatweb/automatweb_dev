@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.39 2006/01/31 15:45:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.40 2006/01/31 15:48:09 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -151,7 +151,7 @@
 @groupinfo delete caption="Kustutamine"
 
 	@property del_prods type=textarea rows=10 cols=50 store=no group=delete
-	@caption Kustuta tooted koodidega (komaga eraldatud, ilma t&uuml;hikuteta)
+	@caption Kustuta tooted koodidega (komaga eraldatud)
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
