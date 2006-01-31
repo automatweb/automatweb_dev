@@ -86,7 +86,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		// after creating a new object, we need to clear storage search cache and html cache
 		// but html cache clear is done in ds_mysql, not here
-		$this->file_clear_pt("storage_search");
+		$this->cache->file_clear_pt("storage_search");
 
 		return $id;
 	}
@@ -97,7 +97,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		// after creating a new object, we need to clear storage search cache and html cache
 		// but html cache clear is done in ds_mysql, not here
-		$this->file_clear_pt("storage_search");
+		$this->cache->file_clear_pt("storage_search");
 
 		return $id;
 	}
