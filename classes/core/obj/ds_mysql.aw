@@ -5,6 +5,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function _int_obj_ds_mysql()
 	{
 		$this->init();
+		$this->cache = get_instance("cache");
 	}
 
 	// returns oid for alias
@@ -46,17 +47,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		else
 		{
 			$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = '$oid' AND status != 0");
-/*if ($oid == 231371 && aw_global_get("uid") == "struktuur")
-{
-die(dbg::dump($ret));
-}*/
- 
 			$ret = $this->_get_objdata_proc($ret, $param, $oid);
 		}
-/*if ($oid == 231371 && aw_global_get("uid") == "struktuur")
-{
-die(dbg::dump($ret));
-}*/
 		return $ret;
 	}
 
@@ -325,11 +317,6 @@ die(dbg::dump($ret));
 			}
 		}
 
-		/*foreach($conn_prop_vals as $prop => $val)
-		{
-			$ret[$prop] = $val;
-			//echo "set $prop => ".dbg::dump($val)." <br>";
-		}*/
 		return $ret;
 	}
 
@@ -644,7 +631,16 @@ die(dbg::dump($ret));
 			$q = "INSERT INTO $tbl (".$idx.$fds.") VALUES('".$oid."'".$vls.")";
 			$this->db_query($q);
 		}
-		
+
+		// we need to clear the html cache here, not in ds_cache, because ds_cache can be not loaded
+		// even when html caching is turned on
+		// now. there are two ways of doing this:
+		// 1) clear the html cache folder
+		// 2) $this->cache->flush_cache() that clears the object table in db
+		// now, previously 1) would have been pretty slow
+		// but now it should no longer be, so we do 1)
+		$this->cache->file_clear_pt("html");
+
 		return $oid;
 	}
 
@@ -814,6 +810,8 @@ die(dbg::dump($ret));
 
 		unset($this->read_properties_data_cache[$objdata["oid"]]);
 		unset($this->read_properties_data_cache[$objdata["brother_of"]]);
+
+		$this->cache->file_clear_pt("html");
 	}
 
 	function read_connection($id)
@@ -872,12 +870,15 @@ die(dbg::dump($ret));
 			$data['id'] = $this->db_last_insert_id();
 		}
 
+		$this->cache->file_clear_pt("html");
+
 		return $data['id'];
 	}
 
 	function delete_connection($id)
 	{
 		$this->db_query("DELETE FROM aliases WHERE id = '$id'");
+		$this->cache->file_clear_pt("html");
 	}
 
 	function connection_query_fetch()
@@ -1141,6 +1142,7 @@ die(dbg::dump($ret));
 		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid = '$oid'");
 		//$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
 		//$this->db_query("DELETE FROM aliases WHERE source = '$oid'");
+		$this->cache->file_clear_pt("html");
 	}
 
 	function final_delete_object($oid)
@@ -1179,6 +1181,7 @@ die(dbg::dump($ret));
 
 		// also, aliases
 		$this->db_query("DELETE FROM aliases WHERE source = '$oid' OR target = '$oid'");
+		$this->cache->file_clear_pt("html");
 	}
 
 	function req_make_sql($params, $logic = "AND", $dbg = false)
@@ -1603,6 +1606,8 @@ die(dbg::dump($ret));
 
 		// hits
 		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
+
+		$this->cache->file_clear_pt("html");
 
 		return $oid;
 	}

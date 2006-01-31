@@ -17,5 +17,12 @@
 			</function>
 		</action>
 
+		<action name="cache_update" nologin="1">
+			<function name="cache_update">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

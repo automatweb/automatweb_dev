@@ -115,7 +115,13 @@ if ($sf->is_template("aw_styles"))
 //}
 //else
 //{
-	echo $sf->parse();
+$str= $sf->parse();
+if ($_SESSION["last_cache_clear"] < (time() - 3600))
+{
+	$str .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=maitenance&action=cache_update' alt='' height='1' width='1'>";
+	$_SESSION["last_cache_clear"] = time();
+}
+echo $str;
 //};
 
 if (!$styles_done)

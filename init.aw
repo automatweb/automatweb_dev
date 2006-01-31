@@ -727,6 +727,9 @@ function aw_startup()
 	// reset aw_cache_* function globals
 	$GLOBALS["__aw_cache"] = array();
 
+	// check pagecache folders
+	check_pagecache_folders();
+
 	classload("defs", "core/error", "core/obj/object");
 	_aw_global_init();
 	$l = get_instance("languages");
@@ -1121,4 +1124,54 @@ function incl_f($lib)
 //error_reporting(E_ALL ^ E_NOTICE);
 //set_error_handler("__aw_error_handler");
 //error_reporting(E_ALL ^ E_NOTICE);
+
+function check_pagecache_folders()
+{
+	// folders are:
+
+	$flds = array(
+		"menu_area_cache",			// done
+		"storage_search",  			// done
+		"storage_object_data",		// done
+		"html",						// done
+		"acl",						// done
+	);
+
+	$pg = aw_ini_get("cache.page_cache");
+	foreach($flds as $f)
+	{
+		$fq = $pg."/".$f;
+		if (!is_dir($fq))
+		{
+			if (!mkdir($fq, 0777))
+			{
+				error::raise(array(
+					"id" => "ERR_NO_FOLD",
+					"msg" => sprintf(t("check_pagecache_folders(): could not create folder %s"), $fq)
+				));
+				die();
+			}
+			chmod($fq, 0777);
+			for($i = 0; $i < 16; $i++)
+			{
+				$ffq = $fq ."/".($i < 10 ? $i : chr(ord('a') + ($i- 10)));
+				if (!mkdir($ffq, 0777))
+				{
+					error::raise(array(
+						"id" => "ERR_NO_FOLD",
+						"msg" => sprintf(t("check_pagecache_folders(): could not create folder %s"), $ffq)
+					));
+					die();
+				}
+				chmod($ffq, 0777);
+			}
+		}
+	}
+	if (!is_dir($pg."/temp"))
+	{
+		mkdir($pg."/temp", 0777);
+		chmod($pg."/temp", 0777);
+	}
+}
+
 ?>

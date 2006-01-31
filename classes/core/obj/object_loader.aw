@@ -443,8 +443,8 @@ class _int_object_loader extends core
 
 			// try for file cache
 			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
-			$hash = (string)$oid;
-			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$fn;
+			$hash = substr($oid, -1, 1);
+			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/acl/".$hash."/".$fn;
 			if (file_exists($fqfn))
 			{
 				include($fqfn);
@@ -472,16 +472,6 @@ class _int_object_loader extends core
 					$str = "<?php\n";
 					$str .= aw_serialize($max_acl, SERIALIZE_PHP_FILE, array("arr_name" => "max_acl"));
 					$str .= "?>";
-
-					// make folders if not exist. this is copypaste from cache class, but we can't access that from here. 
-					$fname = $GLOBALS["cfg"]["cache"]["page_cache"];
-
-					$fname .= "/".$hash{0};
-					if (!is_dir($fname))
-					{
-						mkdir($fname, 0777);
-						chmod($fname, 0777);
-					}
 
 					$fp = fopen($fqfn, "w");
 					fwrite($fp, $str);

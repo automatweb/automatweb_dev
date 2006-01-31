@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.15 2005/10/19 15:54:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.16 2006/01/31 15:25:59 kristo Exp $
 
 lc_load("definition");
 
@@ -71,7 +71,8 @@ class acl_base extends db_connector
 		{
 			aw_session_set("__acl_cache", array());
 			$c = get_instance("cache");
-			$c->file_invalidate_regex("acl-cache(.*)");
+			$c->file_clear_pt("acl");
+			$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
 		}
 	}
 
@@ -111,8 +112,8 @@ class acl_base extends db_connector
 
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
-		$c->file_invalidate("objcache-get_objdata-$oid");
+		$c->file_clear_pt("acl");
+		$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
 	}
 
 	function save_acl($oid,$gid,$aclarr, $invd = true)
@@ -137,8 +138,8 @@ class acl_base extends db_connector
 		{
 			aw_session_set("__acl_cache", array());
 			$c = get_instance("cache");
-			$c->file_invalidate_regex("acl-cache(.*)");
-			$c->file_invalidate("objcache-get_objdata-$oid");
+			$c->file_clear_pt("acl");
+			$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
 		}
 	}
 
@@ -188,8 +189,8 @@ class acl_base extends db_connector
 
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
-		$c->file_invalidate("objcache-get_objdata-$oid");
+		$c->file_clear_pt("acl");
+		$c->file_clear_pt_oid_fn("storage_object_data", $oid, "objdata-".$oid);
 	}
 
 	function get_acl_for_oid_gid($oid,$gid)
@@ -383,8 +384,8 @@ class acl_base extends db_connector
 		{
 			// try for file cache
 			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
-			$hash = md5($fn);
-			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$fn;
+			$sub = substr($oid, -1, 1);
+			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/acl/".$sub."/".$fn;
 			if (file_exists($fqfn) && !$GLOBALS["acl_dbg"])
 			{
 				include($fqfn);
@@ -402,16 +403,6 @@ class acl_base extends db_connector
 					$str = "<?php\n";
 					$str .= aw_serialize($max_acl, SERIALIZE_PHP_FILE, array("arr_name" => "max_acl"));
 					$str .= "?>";
-
-					// make folders if not exist. this is copypaste from cache class, but we can't access that from here. 
-					$fname = $GLOBALS["cfg"]["cache"]["page_cache"];
-
-					$fname .= "/".$hash{0};
-					if (!is_dir($fname))
-					{
-						mkdir($fname, 0777);
-						chmod($fname, 0777);
-					}
 
 					$fp = fopen($fqfn, "w");
 					fwrite($fp, $str);

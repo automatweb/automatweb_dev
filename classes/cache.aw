@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.43 2005/12/14 19:45:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.44 2006/01/31 15:25:59 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -30,48 +30,18 @@ class cache extends core
 		if ($this->cfg["use_page_cache"] && !aw_global_get("uid") && !aw_global_get("no_cache"))
 		{
 			$fname = "/".str_replace("/","_",$oid);
-			reset($arr);
-			while (list(,$v) = each($arr))
+			foreach($arr as $v)
 			{
 				$fname.="-".str_replace("/","_",str_replace(" ","_",$v));
 			}
-			if (is_array($this->metaref) && (in_array($this->referer,$this->metaref)) )
-			{
-				$fname .= "-" . substr($this->referer,7);
-			}
+
 			if (strlen($fname) > 100)
 			{
 				$fname = "/".md5($fname);
 			}
 
-			$hash = md5($fname);
-			$fqfn = $this->cfg["page_cache"]."/".$hash{0};
-			if (!is_dir($fqfn))
-			{
-				mkdir($fqfn, 0777);
-				chmod($fqfn, 0777);
-			}
+			$this->file_set_pt_oid("html", $real_section, $fname, $content);
 
-			/*
-			$fqfn .= "/".$hash{1};
-			if (!is_dir($fqfn))
-			{
-				mkdir($fqfn, 0777);
-				chmod($fqfn, 0777);
-			}
-
-			$fqfn .= "/".$hash{2};
-			if (!is_dir($fqfn))
-			{
-				mkdir($fqfn, 0777);
-				chmod($fqfn, 0777);
-			}
-			*/
-
-			
-			$fname = $fqfn.$fname;
-			$this->put_file(array("file" => $fname, "content" => $content));
-			@chmod($fname, 0666);
 			if ($clear_flag)
 			{
 				$this->clear_cache($real_section, $fname);
@@ -94,55 +64,29 @@ class cache extends core
 		if ($this->cfg["use_page_cache"] && !aw_global_get("uid"))
 		{
 			$fname = "/".str_replace("/","_",$oid);
-			reset($arr);
-			while (list(,$v) = each($arr))
+			foreach($arr as $v)
 			{
 				$fname.="-".str_replace("/","_",str_replace(" ","_",$v));
-			}
-
-			if (is_array($this->metaref) && (in_array($this->referer,$this->metaref)) )
-			{
-				$fname .= "-" . substr($this->referer,7);
 			}
 
 			if (strlen($fname) > 100)
 			{
 				$fname = "/".md5($fname);
 			}
-			$fname = $this->get_fqfn($fname);
-			if ($_GET["CACHE_DBG"] == 1)
-			{
-				echo "look for $fname oid = $oid real_oid = $real_oid <br>";
-			}
+
 			if ($this->cache_dirty($real_oid, $fname))
 			{
-			if ($_GET["CACHE_DBG"] == 1)
-			{
-				echo "... cache is dirty<br>";
-			}
 				return false;
 			}
 			else
 			{
-			if ($_GET["CACHE_DBG"] == 1)
-			{
-				echo "read from cache!<br>";
+				return $this->file_get_pt_oid("html", $real_oid, $fname);
 			}
-				$content = $this->get_file(array("file" => $fname));
-				if ($content == false)
-				{
-					return false;
-				} 
-				else 
-				{
-					return $content;
-				};
-			};
 		}
 		else
 		{
 			return false;
-		};
+		}
 	}
 
 	function file_set($key,$value)
@@ -159,22 +103,6 @@ class cache extends core
 				@mkdir($fname, 0777);
 				chmod($fname, 0777);
 			}
-
-			/*
-			$fname .= "/".$hash{1};
-			if (!is_dir($fname))
-			{
-				@mkdir($fname, 0777);
-				chmod($fname, 0777);
-			}
-
-			$fname .= "/".$hash{2};
-			if (!is_dir($fname))
-			{
-				@mkdir($fname, 0777);
-				chmod($fname, 0777);
-			}
-			*/
 
 			$fname .= "/$key";
 			$this->put_file(array("file" => $fname, "content" => $value));
@@ -229,6 +157,208 @@ class cache extends core
 		if ($this->cfg["page_cache"] != "")
 		{
 			@unlink($this->get_fqfn($key));
+		}
+	}
+
+	function file_get_incl_pt_oid($pt, $oid, $fn)
+	{
+		$fq = $this->cfg["page_cache"]."/".$pt."/".substr($oid, -1, 1)."/".$fn;
+		if (!file_exists($fq))
+		{
+			return false;
+		}
+		include($fq);
+		return $arr;
+	}
+
+	function file_get_incl_pt($pt, $subf, $fn)
+	{
+		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
+		if (!file_exists($fq))
+		{
+			return false;
+		}
+		include($fq);
+		return $arr;
+	}
+
+	function file_set_incl_pt_oid($pt, $oid, $fn, $dat)
+	{
+		$fq = $this->cfg["page_cache"]."/".$pt."/".substr($oid, -1, 1)."/".$fn;
+
+		$str = "<?php\n";
+		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
+		$str .= "?>";
+		
+		return $this->file_set_pt($pt, substr($oid, -1, 1), $fn, $str);
+	}
+
+	function file_set_incl_pt($pt, $subf, $fn, $dat)
+	{
+		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
+
+		$str = "<?php\n";
+		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
+		$str .= "?>";
+		
+		return $this->file_set_pt($pt, $subf, $fn, $str);
+	}
+
+	function file_set_pt_oid($pt, $oid, $fn, $cont)
+	{
+		//echo "file_set_pt_oid pt = $pt ,oid =  $oid, fn = $fn <br>";
+		return $this->file_set_pt($pt, substr($oid, -1, 1), $fn, $cont);
+	}
+
+	function file_get_pt_oid($pt, $oid, $fn)
+	{
+		//echo "file_get_pt_oid pt = $pt ,oid =  $oid, fn = $fn <br>";
+		return $this->file_get_pt($pt, substr($oid, -1, 1), $fn);
+	}
+
+	function file_get_pt_oid_ts($pt, $oid, $fn, $ts)
+	{
+		//echo "file_get_pt_oid_ts pt = $pt ,oid =  $oid, fn = $fn, ts = $ts <br>";
+		return $this->file_get_pt_ts($pt, substr($oid, -1, 1), $fn, $ts);
+	}
+
+	function file_set_pt($pt, $subf, $fn, $cont)
+	{
+		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
+		$f = fopen($fq, "w");
+		if (!$f)
+		{
+			error::raise(array(
+				"id" => "ERR_CACHE_FILE",
+				"msg" => sprintf(t("cache::file_set_pt(%s, %s, %s): could not open file %s for writing!"), $pt, $subf, $fn, $fq)
+			));
+		}
+		fwrite($f, $cont);
+		fclose($f);
+		@chmod($fname, 0666);
+	}
+
+	function file_get_pt($pt, $subf, $fn)
+	{
+		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
+		$f = fopen($fq, "r");
+		if (!$f)
+		{
+			return false;
+		}
+		$ret = fread($f, filesize($fq));
+		fclose($f);
+		return $ret;
+	}
+
+	function file_get_pt_ts($pt, $subf, $fn, $ts)
+	{
+		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
+
+		if ((@filemtime($fq)) < $ts)
+		{
+			return false;
+		}
+
+		$f = fopen($fq, "r");
+		if (!$f)
+		{
+			return false;
+		}
+		$ret = fread($f, filesize($fq));
+		fclose($f);
+		return $ret;
+	}
+
+	function file_clear_pt($pt)
+	{
+		// now, this is where the magic happens. 
+		// basically, we rename the whole folder and clear it's contents later. 
+		$fq = $this->cfg["page_cache"]."/".$pt;
+		$nn = $this->cfg["page_cache"]."/temp/".$pt."_".gen_uniq_id();
+
+		if (!rename($fq, $nn))
+		{
+			error::raise(array(
+				"id" => "ERR_CACHE_CLEAR",
+				"msg" => sprintf(t("cache::file_clear_pt(%s): could not rename %s to %s!"), $pt, $fq, $nn)
+			));
+		}
+
+		$this->_crea_fld($pt);
+	}
+
+	function file_clear_pt_oid($pt, $oid)
+	{
+		$of = substr($oid, -1, 1);
+		$fq = $this->cfg["page_cache"]."/".$pt."/".$of;
+		$nn = $this->cfg["page_cache"]."/temp/".$pt."_".$of."_".gen_uniq_id();
+
+		if (!rename($fq, $nn))
+		{
+			error::raise(array(
+				"id" => "ERR_CACHE_CLEAR",
+				"msg" => sprintf(t("cache::file_clear_pt_oid(%s, %s): could not rename %s to %s!"), $pt, $oid, $fq, $nn)
+			));
+		}
+
+		// recreate
+		mkdir($fq, 0777);
+		chmod($fq, 0777);
+	}
+
+	function file_clear_pt_oid_fn($pt, $oid, $fn)
+	{
+		$of = substr($oid, -1, 1);
+		$fq = $this->cfg["page_cache"]."/".$pt."/".$of."/".$fn;
+
+		// here we know the full path to the file, so just delete the damn thing
+		@unlink($fq);
+	}
+
+	function file_clear_pt_sub($pt, $subf)
+	{
+		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf;
+		$nn = $this->cfg["page_cache"]."/temp/".$pt."_".$subf."_".gen_uniq_id();
+
+		if (!rename($fq, $nn))
+		{
+			error::raise(array(
+				"id" => "ERR_CACHE_CLEAR",
+				"msg" => sprintf(t("cache::file_clear_pt_sub(%s, %s): could not rename %s to %s!"), $pt, $sub, $fq, $nn)
+			));
+		}
+
+		// recreate
+		mkdir($fq, 0777);
+		chmod($fq, 0777);
+	}
+
+	function _crea_fld($f)
+	{
+		$fq = $this->cfg["page_cache"]."/".$f;
+		if (!mkdir($fq, 0777))
+		{
+			error::raise(array(
+				"id" => "ERR_NO_FOLD",
+				"msg" => sprintf(t("cache::_crea_fld(%s): could not create folder %s"), $f, $fq)
+			));
+			die();
+		}
+
+		chmod($fq, 0777);
+		for($i = 0; $i < 16; $i++)
+		{
+			$ffq = $fq ."/".($i < 10 ? $i : chr(ord('a') + ($i- 10)));
+			if (!mkdir($ffq, 0777))
+			{
+				error::raise(array(
+					"id" => "ERR_NO_FOLD",
+					"msg" => sprintf(t("cache::_crea_fld(%s): could not create folder %s"), $f, $ffq)
+				));
+				die();
+			}
+			chmod($ffq, 0777);
 		}
 	}
 

@@ -39,12 +39,19 @@ else
 if (aw_ini_get("menuedit.protect_emails") == 1)
 {
 	$i = get_instance("contentmgmt/mail_protector");
-	echo $i->protect($sf->parse());
+	$str = $i->protect($sf->parse());
 }
 else
 {
-	echo $sf->parse();
+	$str = $sf->parse();
 }
+// do a cache clean every hour for this session
+if ($_SESSION["last_cache_clear"] < (time() - 3600))
+{
+	$str .= "<img src='".aw_ini_get("baseurl")."/orb.aw?class=maitenance&action=cache_update' alt='' height='1' width='1'>";
+	$_SESSION["last_cache_clear"] = time();
+}
+echo $str;
 
 aw_shutdown();
 ?>

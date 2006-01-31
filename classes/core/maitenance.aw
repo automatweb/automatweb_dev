@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.1 2005/04/21 08:22:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.2 2006/01/31 15:25:59 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -96,6 +96,46 @@ class maitenance extends class_base
 		$i->submit_exec(array(
 			"eurl" => "orb.aw?class=maitenance&action=cache_clear&clear=1"
 		));
+	}
+
+	/** clear stale pagecache entries
+		@attrib name=cache_update nologin=1
+	**/
+	function cache_update($arr)
+	{
+		// let the user continue with their business
+		header("Content-Type: image/gif");
+		header("Content-Length: 43");
+		header("Connection: close");
+		echo base64_decode("R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==")."\n";
+		flush();
+
+		// go over temp folder and delete
+		$fld = aw_ini_get("cache.page_cache")."/temp";
+		$this->_req_cupd($fld);
+	}
+
+	function _req_cupd($dir)
+	{
+		$files = array();
+		if ($DH = @opendir($dir)) 
+		{
+			while (false !== ($file = readdir($DH))) 
+			{
+				$fn = $dir . "/" . $file;
+				if (is_file($fn))
+				{
+					unlink($fn);
+				}
+				else
+				if (is_dir($fn) && $file != "." && $file != "..")
+				{
+					$this->_req_cupd($fn);
+					rmdir($fn);
+				}
+			}
+			closedir($DH);
+		}
 	}
 }
 ?>

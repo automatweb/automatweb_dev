@@ -24,6 +24,8 @@ classload("core/error", "core/obj/object");
 $GLOBALS["__aw_cache"] = array();
 _aw_global_init();
 
+check_pagecache_folders();
+
 $u = new users;
 $u->request_startup();
 $l = new languages;
