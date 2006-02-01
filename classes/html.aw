@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.95 2006/02/01 14:36:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.96 2006/02/01 14:44:10 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -178,18 +178,6 @@ class html extends aw_template
 				$wrap = isset($wrap) ? $wrap : "soft";
 				$style = isset($style) ? " style='$style' " : "";
 				$retval .= "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style $disabled $textsize>$value</textarea>\n";
-	/*
-				$args["type"] = "richtext";
-				$args["width"] = $cols;
-				$args["height"] = $rows;
-				$args["value"] = str_replace("\"" , "&quot;",$args["value"]); //"
-
-
-			$disabled = ($disabled ? " disabled" : "");
-			$wrap = isset($wrap) ? $wrap : "soft";
-			$style = isset($style) ? " style='$style' " : "";
-			$retval = "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style $disabled $textsize>$value</textarea>\n";
-			*/
 			}
 			else
 			{
