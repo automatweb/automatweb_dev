@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.135 2006/02/01 14:36:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.136 2006/02/01 14:45:41 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -616,7 +616,7 @@ class htmlclient extends aw_template
 		$submit_handler = $txt = "";
 		if ($this->rte)
 		{
-			if($this->rte_type == 1)
+			if($this->rte_type != 2)
 			{
 				// make a list of of all RTE-s
 
