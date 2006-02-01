@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.76 2006/01/30 12:30:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.77 2006/02/01 14:36:31 ahti Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -28,8 +28,8 @@
 	@property classinfo_fixed_toolbar type=checkbox ch_value=1 field=meta method=serialize
 	@caption Fix. toolbar
 
-	@property classinfo_allow_rte type=checkbox ch_value=1 field=meta method=serialize
-	@caption Luba RTE kasutamist
+	@property classinfo_allow_rte type=chooser field=meta method=serialize
+	@caption RTE
 
 	@property classinfo_allow_rte_toggle type=checkbox ch_value=1 field=meta method=serialize
 	@caption Näita RTE/HTML nuppu
@@ -151,7 +151,14 @@ class cfgform extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-
+			case "classinfo_allow_rte":
+				$data["options"] = array(
+					0 => t("Ei kuva"),
+					1 => t("AW RTE"),
+					2 => t("FCKeditor"),
+				);
+				$data["type"] = "select";
+				break;
 			case "sysdefault":
 				$this->do_sysdefaults($arr);
 				break;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.134 2006/01/26 14:07:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.135 2006/02/01 14:36:31 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -616,24 +616,25 @@ class htmlclient extends aw_template
 		$submit_handler = $txt = "";
 		if ($this->rte)
 		{
-			// make a list of of all RTE-s
-
-			// would be nice if I could update the textareas right when the iframe loses focus ..
-			// I'm almost sure I can do that.
-			$baseurl = aw_ini_get("baseurl");
-
-			foreach($this->rtes as $rte)
+			if($this->rte_type == 1)
 			{
-				$txt .= "if (document.getElementById('${rte}_edit'))\n";
-				$txt .= "{\n";
-				$txt .= "tmpdat = document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
-				$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
-				$txt .= "}\n";
-				$data["cb_nobreaks[${rte}]"] = 1;
-			};
+				// make a list of of all RTE-s
 
+				// would be nice if I could update the textareas right when the iframe loses focus ..
+				// I'm almost sure I can do that.
+				$baseurl = aw_ini_get("baseurl");
 
-			$submit_handler = $txt;
+				foreach($this->rtes as $rte)
+				{
+					$txt .= "if (document.getElementById('${rte}_edit'))\n";
+					$txt .= "{\n";
+					$txt .= "tmpdat = document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+					$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+					$txt .= "}\n";
+					$data["cb_nobreaks[${rte}]"] = 1;
+				};
+				$submit_handler = $txt;
+			}
 		}
 
 		$scripts = isset($scripts) ? $scripts : "";
@@ -1022,6 +1023,7 @@ class htmlclient extends aw_template
 			case "textarea":
 				if (isset($arr["richtext"]))
 				{
+					$arr["rte_type"] = $this->rte_type;
 					$this->rte = true;
 					$this->rtes[] = $arr["name"];
 				}

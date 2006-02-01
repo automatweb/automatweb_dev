@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.452 2006/01/30 12:30:30 kristo Exp $
+// $Id: class_base.aw,v 2.453 2006/02/01 14:36:30 ahti Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -479,7 +479,7 @@ class class_base extends aw_template
 			{
 				$new_uri .= "&no_rte=1";
 			};
-
+			$cli->rte_type = $this->classinfo(array("name" => "allow_rte"));
 			$properties["iframe_container"] = array(
 				"type" => "iframe",
 				"src" => $new_uri,
@@ -583,6 +583,7 @@ class class_base extends aw_template
 			"show_help" => aw_ini_get("class_base.show_help"),
 			"add_txt" => aw_ini_get("site_id") == 288
 		));
+		$cli->rte_type = $this->classinfo(array("name" => "allow_rte"));
 
 		// käes ongi .. see asi eeldab, et layoutile on grupp peale väänatud ..
 		// samas ei pruugi see üldse case olla. sitta sellest grupist .. propertyle öeldakse
@@ -1832,7 +1833,7 @@ class class_base extends aw_template
 					"name" => "allow_rte",
 				));
 
-				if ($this->classinfo["allow_rte"] != 1)
+				if ($allow_rte < 1)
 				{
 					unset($val["richtext"]);
 				};
@@ -2407,7 +2408,7 @@ class class_base extends aw_template
 		}
 
 
-		if (1 != $this->classinfo(array("name" => "allow_rte")))
+		if ($this->classinfo(array("name" => "allow_rte")) < 1)
 		{
 			$has_rte = false;
 		}
@@ -2743,11 +2744,21 @@ class class_base extends aw_template
 					//if (1 == $this->has_feature("has_rte"))
 					if ($has_rte)
 					{
-						$rte = get_instance("vcl/rte");
-						$rte->get_rte_toolbar(array(
-							"toolbar" => &$val["vcl_inst"],
-							"target" => $this->layout_mode == "fixed_toolbar" ? "contentarea" : "",
-						));
+						if($this->classinfo(array("name" => "allow_rte")) == 2)
+						{
+							$rte = get_instance("vcl/fck_editor");
+							$rte->get_rte_toolbar(array(
+								"toolbar" => &$val["vcl_inst"],
+							));
+						}
+						else
+						{
+							$rte = get_instance("vcl/rte");
+							$rte->get_rte_toolbar(array(
+								"toolbar" => &$val["vcl_inst"],
+								"target" => $this->layout_mode == "fixed_toolbar" ? "contentarea" : "",
+							));
+						}
 					};
 				};
 

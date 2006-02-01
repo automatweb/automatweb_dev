@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.94 2006/01/15 17:33:38 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.95 2006/02/01 14:36:30 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -170,12 +170,36 @@ class html extends aw_template
 		// now, the browser detection is best done in javascript
 		if (!empty($richtext))
 		{
-			$args["type"] = "richtext";
-			$args["width"] = $cols;
-			$args["height"] = $rows;
-			$args["value"] = str_replace("\"" , "&quot;",$args["value"]); //"
-			$rte = get_instance("vcl/rte");
-			$retval = $rte->draw_editor($args);
+			if($rte_type == 2)
+			{
+				$rte = get_instance("vcl/fck_editor");
+				$retval = $rte->draw_editor($args);
+				$disabled = ($disabled ? " disabled" : "");
+				$wrap = isset($wrap) ? $wrap : "soft";
+				$style = isset($style) ? " style='$style' " : "";
+				$retval .= "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style $disabled $textsize>$value</textarea>\n";
+	/*
+				$args["type"] = "richtext";
+				$args["width"] = $cols;
+				$args["height"] = $rows;
+				$args["value"] = str_replace("\"" , "&quot;",$args["value"]); //"
+
+
+			$disabled = ($disabled ? " disabled" : "");
+			$wrap = isset($wrap) ? $wrap : "soft";
+			$style = isset($style) ? " style='$style' " : "";
+			$retval = "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style $disabled $textsize>$value</textarea>\n";
+			*/
+			}
+			else
+			{
+				$args["type"] = "richtext";
+				$args["width"] = $cols;
+				$args["height"] = $rows;
+				$args["value"] = str_replace("\"" , "&quot;",$args["value"]); //"
+				$rte = get_instance("vcl/rte");
+				$retval = $rte->draw_editor($args);
+			}
 		}
 		else
 		{

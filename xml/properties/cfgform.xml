@@ -65,9 +65,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Luba RTE kasutamist</caption>
+            <type>chooser</type>
+            <caption>RTE</caption>
       </property>
       <property>
             <name>classinfo_allow_rte_toggle</name>

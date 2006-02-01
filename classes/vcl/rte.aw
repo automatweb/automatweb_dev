@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.15 2005/07/14 21:51:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.16 2006/02/01 14:36:32 ahti Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -10,7 +10,7 @@
 
 */
 
-class rte extends class_base
+class rte extends aw_template
 {
 	function rte()
 	{
