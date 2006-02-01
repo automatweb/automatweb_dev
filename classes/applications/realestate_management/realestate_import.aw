@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.8 2006/01/17 08:41:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.9 2006/02/01 09:08:17 voldemar Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -339,31 +339,40 @@ class realestate_import extends class_base
 		#### organisatsiooni t88tajad
 		$company = obj ($arr["company"]);
 		$cl_user = get_instance (CL_USER);
-		$employees = new object_list ($company->connections_from (array (
-			"type" => "RELTYPE_WORKERS",
-			"class_id" => CL_CRM_PERSON,
-		)));
-		$employee_data = $employees->names ();
+		$cl_crm_company = get_instance (CL_CRM_COMPANY);
+
+		// $employees = new object_list ($company->connections_from (array (
+			// "type" => "RELTYPE_WORKERS",
+			// "class_id" => CL_CRM_PERSON,
+		// )));
+		// $employee_data = $employees->names ();
+
+		$employee_data = $cl_crm_company->get_employee_picker($company);
 		$employees = array ();
 		$realestate_agent_data = array ();
 
 		foreach ($employee_data as $oid => $name)
 		{
-			$name = split (" ", $name);
-			$name_parsed = array ();
-
-			foreach ($name as $string)
+			if (trim($name))
 			{
-				$string = trim ($string);
+				$name = split (" ", $name);
+				$name_parsed = array ();
 
-				if ($string)
+				foreach ($name as $string)
 				{
-					$name_parsed[] = $string;
-				}
-			}
+					$string = trim ($string);
 
-			$employees[$oid] =join (" ", $name_parsed);
+					if ($string)
+					{
+						$name_parsed[] = $string;
+					}
+				}
+
+				$employees[$oid] =join (" ", $name_parsed);
+			}
 		}
+
+/* dbg */ if (1 == $_GET["re_import_dbg"]){ arr($employees); }
 
 		### initialize log
 		$import_log = array ();
