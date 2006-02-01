@@ -39,5 +39,13 @@
 			</function>
 		</action>
 
+		<action name="showe">
+			<function name="showe">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

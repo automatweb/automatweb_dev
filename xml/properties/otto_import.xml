@@ -154,7 +154,7 @@
             <method>serialize</method>
             <type>table</type>
             <store>no</store>
-            <caption>Failide n&amp;auml;itamise j&amp;auml;rjekord	</caption>
+            <caption>Failide n&amp;amp;auml;itamise j&amp;amp;auml;rjekord	</caption>
       </property>
       <property>
             <name>discount_products_file</name>
@@ -184,7 +184,7 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
-            <caption>&amp;nbsp;</caption>
+            <caption>&amp;amp;nbsp;</caption>
       </property>
       <property>
             <name>clear_discount_products</name>
@@ -194,7 +194,7 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
-            <caption>&amp;nbsp;</caption>
+            <caption>&amp;amp;nbsp;</caption>
       </property>
       <property>
             <name>categories</name>
@@ -236,7 +236,7 @@
             <type>textarea</type>
             <rows>4</rows>
             <cols>80</cols>
-            <comment>Ilmselt hetkel ei t&amp;ouml;&amp;ouml;ta!</comment>
+            <comment>Ilmselt hetkel ei t&amp;amp;ouml;&amp;amp;ouml;ta!</comment>
             <caption>Landscape vaatega lehed</caption>
       </property>
       <property>
@@ -258,7 +258,7 @@
             <type>textarea</type>
             <rows>3</rows>
             <cols>40</cols>
-            <caption>L&amp;otilde;pmatus vaatega lehed</caption>
+            <caption>L&amp;amp;otilde;pmatus vaatega lehed</caption>
       </property>
       <property>
             <name>foldpri</name>
@@ -269,7 +269,7 @@
             <type>textarea</type>
             <rows>20</rows>
             <cols>20</cols>
-            <caption>T&amp;auml;htede prioriteedid</caption>
+            <caption>T&amp;amp;auml;htede prioriteedid</caption>
       </property>
       <property>
             <name>foldernames</name>
@@ -297,7 +297,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>L&amp;otilde;pmatute pildiga lehehed</caption>
+            <caption>L&amp;amp;otilde;pmatute pildiga lehehed</caption>
       </property>
       <property>
             <name>force_10_view</name>
@@ -335,7 +335,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>R&amp;otilde;ivad</caption>
+            <caption>R&amp;amp;otilde;ivad</caption>
       </property>
       <property>
             <name>jm_lasting</name>
@@ -357,7 +357,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>M&amp;ouml;&amp;ouml;bel</caption>
+            <caption>M&amp;amp;ouml;&amp;amp;ouml;bel</caption>
       </property>
       <property>
             <name>del_prods</name>
@@ -400,7 +400,7 @@
                   <parent>files</parent>
             </files_import>
             <files_order>
-                  <caption>Failide j&amp;auml;rjekord</caption>
+                  <caption>Failide j&amp;amp;auml;rjekord</caption>
                   <parent>files</parent>
             </files_order>
             <discount_products>
@@ -422,7 +422,7 @@
                   <parent>foldersa</parent>
             </folders>
             <folderspri>
-                  <caption>Kataloogide m&amp;auml;&amp;auml;rangud (deprecated)</caption>
+                  <caption>Kataloogide m&amp;amp;auml;&amp;amp;auml;rangud (deprecated)</caption>
                   <parent>foldersa</parent>
             </folderspri>
             <foldersnames>
@@ -433,7 +433,7 @@
                   <caption>Vaated</caption>
             </views>
             <jm>
-                  <caption>J&amp;auml;relmaks</caption>
+                  <caption>J&amp;amp;auml;relmaks</caption>
             </jm>
             <delete>
                   <caption>Kustutamine</caption>

@@ -189,6 +189,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !returns all connections that match filter
 	function find_connections($arr)
 	{
+		if (!empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
+		{
+			return $this->contained->find_connections($arr);
+		}
+
 		$query_hash = md5(serialize($arr));
 
 		$c_fn = "conn_find-$query_hash";
@@ -229,6 +234,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function search($params, $to_fetch = NULL)
 	{
+		if (!empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
+		{
+			return $this->contained->search($params, $to_fetch);
+		}
+
 		$tp = $params;
 		if (!isset($tp["lang_id"]))
 		{
@@ -263,6 +273,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function fetch_list($param)
 	{
+		if (!empty($GLOBALS["__obj_sys_opts"]["no_cache"]))
+		{
+			return $this->contained->fetch_list($param);
+		}
+
 		$query_hash = md5(serialize($param));
 
 		$c_fn = "obj_fetch-$query_hash";

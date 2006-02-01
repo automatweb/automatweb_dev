@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.11 2006/01/13 11:12:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.12 2006/02/01 13:04:53 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -64,6 +64,10 @@ class cb_form_chain_entry extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	/**
+		@attrib name=show
+		@param id required type=int acl=view
+	**/
 	function show($arr)
 	{
 		$o = obj($arr["id"]);

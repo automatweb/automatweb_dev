@@ -213,6 +213,25 @@
             <store>no</store>
             <caption>Andmed</caption>
       </property>
+      <property>
+            <name>search_cb</name>
+            <table>objects</table>
+            <group>entries_src</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_search</callback>
+      </property>
+      <property>
+            <name>search_res</name>
+            <table>objects</table>
+            <group>entries_src</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
       <classinfo>
             <syslog_type>ST_CB_FORM_CHAIN</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -262,6 +281,12 @@
                   <parent>entries</parent>
                   <submit>no</submit>
             </entries_con>
+            <entries_src>
+                  <caption>Otsing</caption>
+                  <parent>entries</parent>
+                  <submit>no</submit>
+                  <submit_method>get</submit_method>
+            </entries_src>
       </groupinfo>
       <reltypes>
             <CF>

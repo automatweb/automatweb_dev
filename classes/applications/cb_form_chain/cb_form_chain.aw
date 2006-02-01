@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.18 2006/01/26 09:56:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.19 2006/02/01 13:04:53 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -85,6 +85,11 @@
 	@property entry_table type=table no_caption=1
 	@caption Andmed
 
+@default group=entries_src
+
+	@property search_cb type=callback callback=callback_get_search 
+	@property search_res type=table no_caption=1 store=no
+
 @groupinfo cfs caption="Vormid"
 	@groupinfo cfs_tbl caption="Vormid" parent=cfs
 	@groupinfo cfs_headers caption="Pealkirjad" parent=cfs
@@ -99,6 +104,7 @@
 @groupinfo entries caption="Andmed"
 	@groupinfo entries_unc caption="Kinnitamata" parent=entries submit=no
 	@groupinfo entries_con caption="Kinnitatud" parent=entries submit=no
+	@groupinfo entries_src caption="Otsing" parent=entries submit=no submit_method=get
 
 
 @reltype CF value=1 clid=CL_WEBFORM
@@ -136,6 +142,10 @@ class cb_form_chain extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "search_res":
+				$this->_search_res($arr);
+				break;
+
 			case "cfs":
 				$this->_cfs($arr);
 				break;
@@ -462,6 +472,7 @@ class cb_form_chain extends class_base
 				}
 			}
 		}
+
 		$forms = $this->_get_forms_for_page($ob, $page);
 
 		$html = $this->_draw_forms($ob, $forms);
@@ -1289,6 +1300,20 @@ class cb_form_chain extends class_base
 			"sortable" => 1
 		));
 
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => t("Vaata"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid"
@@ -1305,7 +1330,24 @@ class cb_form_chain extends class_base
 			"class_id" => CL_CB_FORM_CHAIN_ENTRY,
 			"confirmed" => $arr["request"]["group"] == "entries_con" ? 1 : new obj_predicate_not(1)
 		));
-		$t->data_from_ol($ol, array("change_col" => "name"));
+//		$t->data_from_ol($ol, array("change_col" => "name"));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => $o->name(),
+				"created" => $o->created(),
+				"createdby" => $o->createdby(),
+				"oid" => $o->id(),
+				"view" => html::href(array(
+					"url" => $this->mk_my_orb("show", array("id" => $o->id(), "return_url" => get_ru()), CL_CB_FORM_CHAIN_ENTRY),
+					"caption" => t("Vaata")
+				)),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("showe", array("id" => $o->id(), array("return_url" => get_ru()))),
+					"caption" => t("Change")
+				))
+			));
+		}
 		$t->set_default_sortby("created");
 		$t->set_default_sorder("desc");
 	}
@@ -1806,12 +1848,164 @@ class cb_form_chain extends class_base
 			$wf_id = $rd->meta("webform_id");
 			$cur_cnt = ((int)$counts_by_wf[$wf_id]++);
 			$_SESSION["cbfc_data"][$wf_id][$cur_cnt] = $rd->properties();
-
-			/*foreach($rd->properties() as $pn => $pv)
-			{
-
-			}*/
 		}
+	}
+
+	function callback_get_search($arr)
+	{
+		$ret = array();
+		// get all defined searches from webforms
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CF")) as $c)
+		{
+			$wf = $c->to();
+			$reg = $wf->get_first_obj_by_reltype("RELTYPE_REGISTER");
+			if ($reg && $this->can("view", $reg->prop("search_o")))
+			{
+				$srch = obj($reg->prop("search_o"));
+				$srch_i = $srch->instance();
+
+				foreach($srch_i->get_sform_properties($srch, $arr["request"]) as $pn => $pd)
+				{
+					$ret[$pn] = $pd;
+				}
+			}
+		}
+		return $ret;
+	}
+
+	function _init_search_res_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Loodud"),
+			"sortable" => 1,
+			"align" => "center",
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Looja"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"sortable" => 1,
+			"align" => "center",
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => t("Muutja"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "view",
+			"caption" => t("Vaata"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+	}
+
+	function _search_res($arr)
+	{
+		$matches = array();
+		// get search results from all webforms, then get all matching 
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CF")) as $c)
+		{
+			$wf = $c->to();
+			$reg = $wf->get_first_obj_by_reltype("RELTYPE_REGISTER");
+			if ($reg && $this->can("view", $reg->prop("search_o")))
+			{
+				$srch = obj($reg->prop("search_o"));
+				$srch_i = $srch->instance();
+
+				$arr["request"]["search_butt"] = 1;
+				list($res_ol, $res_ol_cnt) = $srch_i->get_search_results($srch, $arr["request"], array());
+
+				// get all cbf entries from that list
+				if ($res_ol->count())
+				{
+					$c = new connection();
+					$cs = $c->find(array(
+						"to" => $res_ol->ids(),
+						"from.class_id" => CL_CB_FORM_CHAIN_ENTRY
+					));
+					foreach($cs as $c)
+					{
+						$matches[$c["from"]] = $c["from"];
+					}
+				}
+			}
+		}
+
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_search_res_t($t);
+
+		if (count($matches))
+		{
+			$ol = new object_list(array("oid" => $matches));
+		}
+		else
+		{
+			$ol = new object_list();
+		}
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => $o->name(),
+				"created" => $o->created(),
+				"createdby" => $o->createdby(),
+				"modified" => $o->modified(),
+				"modifiedby" => $o->modifiedby(),
+				"view" => html::href(array(
+					"url" => $this->mk_my_orb("show", array("id" => $o->id(), "return_url" => get_ru()), CL_CB_FORM_CHAIN_ENTRY),
+					"caption" => t("Vaata")
+				)),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("showe", array("id" => $o->id(), array("return_url" => get_ru()))),
+					"caption" => t("Change")
+				))
+			));
+		}
+	}
+
+	/**
+		@attrib name=showe
+		@param id required
+	**/
+	function showe($arr)
+	{
+		$_SESSION["cbfc_current_entry_id"] = $arr["id"];
+		$this->_load_entry($arr["id"]);
+		$o = obj($arr["id"]);
+		return $this->show(array(
+			"id" => $o->prop("cb_form_id")
+		));
 	}
 }
 ?>

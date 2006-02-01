@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.30 2005/11/18 12:10:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.31 2006/02/01 13:04:53 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -570,7 +570,6 @@ class register_search extends class_base
 			"type" => "submit",
 			"store" => "no",
 		);
-		header("loll");
 
 		return $xp;
 	}
@@ -646,36 +645,48 @@ class register_search extends class_base
 		}
 	}
 
-	function get_search_results($o, $request)
+	function get_search_results($o, $request, $reg_flds = false)
 	{
 		// return immediately if nothing is to be done
 		if (empty($request["search_butt"]) && !$o->prop("show_all_right_away"))
 		{
 			return array(new object_list(), new object_list());
 		}
-		
+
 		enter_function("register_search::show::dsrt::gsr::init");
 		$reg = obj($o->prop("register"));
 		$reg_i = $reg->instance();
 
 		$props = $this->get_props_from_reg($reg);
 
-		$reg_flds = $reg_i->_get_reg_folders($reg);
-		foreach($o->connections_from(array("type" => "RELTYPE_SEARCH_FOLDER")) as $c)
+		if ($reg_flds === null)
 		{
-			$reg_flds[] = $c->prop("to");
+			$reg_flds = $reg_i->_get_reg_folders($reg);
+			foreach($o->connections_from(array("type" => "RELTYPE_SEARCH_FOLDER")) as $c)
+			{
+				$reg_flds[] = $c->prop("to");
+			}
 		}
+		else
+		{
+			$ign = true;
+		}
+
 		$filter = array(
 			"class_id" => CL_REGISTER_DATA,
 			"status" => $o->prop("show_only_act") ? STAT_ACTIVE : array(STAT_ACTIVE, STAT_NOTACTIVE),
-			new object_list_filter(array(
+		);
+
+		if (!$ign)
+		{
+			$filter[] = new object_list_filter(array(
 				"logic" => "OR", 
 				"conditions" => array(
 					"register_id" => $reg->id(),
 					"parent" => $reg_flds
 				)
-			))
-		);
+			));
+		}
 
 		if ($o->prop("results_from_all_langs"))
 		{
