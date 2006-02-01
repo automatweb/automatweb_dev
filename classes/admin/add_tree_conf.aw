@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.33 2005/10/07 17:02:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.34 2006/02/01 09:55:55 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -693,6 +693,10 @@ class add_tree_conf extends class_base
 
 		foreach($folders as $folder_id => $folder_data)
 		{
+			if (!$this->visible["fld"][$folder_id])
+			{
+				continue;
+			}
 			$parent = "root";
 			if (!empty($folder_data["parent"]))
 			{
