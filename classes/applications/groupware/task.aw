@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.64 2006/01/27 08:58:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.65 2006/02/02 13:53:58 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -832,11 +832,6 @@ class task extends class_base
 				break;
 		};
 		return $retval;
-	}
-
-	function callback_mod_reforb($arr)
-	{
-		$arr["post_ru"] = post_ru();
 	}
 
 	function callback_mod_retval($arr)
@@ -1991,6 +1986,27 @@ class task extends class_base
 		aw_global_set("no_cache_flush", 0);
 		$c = get_instance("cache");
 		$c->full_flush();
+	}
+
+	/**
+
+      @attrib name=submit_delete_participants_from_calendar
+      @param id required type=int acl=view
+
+	**/
+	function submit_delete_participants_from_calendar($arr)
+	{
+		post_message_with_param(
+			MSG_MEETING_DELETE_PARTICIPANTS,
+			CL_CRM_MEETING,
+			&$arr
+		);
+		return $arr['post_ru'];
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
 	}
 }
 ?>

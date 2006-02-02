@@ -54,5 +54,13 @@
 			</function>
 		</action>
 
+		<action name="submit_delete_participants_from_calendar">
+			<function name="submit_delete_participants_from_calendar">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

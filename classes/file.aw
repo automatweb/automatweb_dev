@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.117 2006/01/13 08:18:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.118 2006/02/02 13:53:57 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -1021,6 +1021,7 @@ class file extends class_base
 		@param parent optional type=int acl="add"
 		@param period optional
 		@param alias_to optional
+		@param alias_to_prop optional
 		@param return_url optional
 		@param reltype optional type=int
 

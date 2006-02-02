@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.44 2006/01/31 15:25:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.45 2006/02/02 13:53:57 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -277,14 +277,7 @@ class cache extends core
 		$fq = $this->cfg["page_cache"]."/".$pt;
 		$nn = $this->cfg["page_cache"]."/temp/".$pt."_".gen_uniq_id();
 
-		if (!rename($fq, $nn))
-		{
-			error::raise(array(
-				"id" => "ERR_CACHE_CLEAR",
-				"msg" => sprintf(t("cache::file_clear_pt(%s): could not rename %s to %s!"), $pt, $fq, $nn)
-			));
-		}
-
+		rename($fq, $nn);
 		$this->_crea_fld($pt);
 	}
 
@@ -337,28 +330,13 @@ class cache extends core
 	function _crea_fld($f)
 	{
 		$fq = $this->cfg["page_cache"]."/".$f;
-		if (!mkdir($fq, 0777))
-		{
-			error::raise(array(
-				"id" => "ERR_NO_FOLD",
-				"msg" => sprintf(t("cache::_crea_fld(%s): could not create folder %s"), $f, $fq)
-			));
-			die();
-		}
-
-		chmod($fq, 0777);
+		mkdir($fq, 0777);
+		@chmod($fq, 0777);
 		for($i = 0; $i < 16; $i++)
 		{
 			$ffq = $fq ."/".($i < 10 ? $i : chr(ord('a') + ($i- 10)));
-			if (!mkdir($ffq, 0777))
-			{
-				error::raise(array(
-					"id" => "ERR_NO_FOLD",
-					"msg" => sprintf(t("cache::_crea_fld(%s): could not create folder %s"), $f, $ffq)
-				));
-				die();
-			}
-			chmod($ffq, 0777);
+			@mkdir($ffq, 0777);
+			@chmod($ffq, 0777);
 		}
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.33 2006/01/26 13:58:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.34 2006/02/02 13:53:58 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -372,6 +372,21 @@ class crm_call extends class_base
 				$this->return_url=aw_global_get('REQUEST_URI');
 				break;
 			}
+
+			case "search_contact_company":
+			case "search_contact_firstname":
+			case "search_contact_lastname":
+			case "search_contact_code":
+				if ($arr["request"]["class"] != "planner")
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				break;
+
+			case "search_contact_results":
+				$p = get_instance(CL_PLANNER);
+				$data["value"] = $p->do_search_contact_results_tbl($arr["request"]);
+				break;
 		}
 		return $retval;
 	}
@@ -417,6 +432,55 @@ class crm_call extends class_base
 	{
 		aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 		return parent::new_change($arr);
+	}
+
+	/**
+		@attrib name=search_contacts
+	**/
+	function search_contacts($arr)
+	{
+		return $this->mk_my_orb('change',array(
+				'id' => $arr['id'],
+				'group' => $arr['group'],
+				'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
+				'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
+				'search_contact_code' => urlencode($arr['search_contact_code']),
+				'search_contact_company' => urlencode($arr['search_contact_company']),
+			),
+			$arr['class']
+		);
+	}
+
+	/**
+
+		@attrib name=save_participant_search_results
+
+	**/
+	function save_participant_search_results($arr)
+	{
+		$p = get_instance(CL_PLANNER);
+		return $p->save_participant_search_results($arr);
+	}
+
+	/**
+
+      @attrib name=submit_delete_participants_from_calendar
+      @param id required type=int acl=view
+
+	**/
+	function submit_delete_participants_from_calendar($arr)
+	{
+		post_message_with_param(
+			MSG_MEETING_DELETE_PARTICIPANTS,
+			CL_CRM_MEETING,
+			&$arr
+		);
+		return $arr['post_ru'];
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
 	}
 };
 ?>

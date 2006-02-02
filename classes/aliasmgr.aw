@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.190 2006/01/26 09:56:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.191 2006/02/02 13:53:57 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -230,7 +230,7 @@ class aliasmgr extends aw_template
 		{
 			$act = "list_aliases";
 		};
-		$xargs = array("reforb", "check", "subaction", "emb", "alias_to", "cfgform", "ret_to_orb", "artists", "MAX_FILE_SIZE");
+		$xargs = array("reforb", "check", "subaction", "emb", "alias_to", "alias_to_prop", "cfgform", "ret_to_orb", "artists", "MAX_FILE_SIZE");
 		foreach($xargs as $arg)
 		{
 			unset($args[$arg]);

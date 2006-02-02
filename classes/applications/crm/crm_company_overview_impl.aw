@@ -1047,7 +1047,9 @@ class crm_company_overview_impl extends class_base
 		{
 			$ol = new object_list(array(
 				"oid" => $ol->ids(),
-				"brother_of" => new obj_predicate_prop("id")
+				"brother_of" => new obj_predicate_prop("id"),
+				"lang_id" => array(),
+				"site_id" => array()
 			));
 		}
 		return $ol;

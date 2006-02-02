@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.342 2005/12/13 21:16:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.343 2006/02/02 13:53:57 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1652,6 +1652,7 @@ class document extends aw_template
 		@param parent required acl="add"
 		@param period optional
 		@param alias_to optional
+		@param alias_to_prop optional
 		@param return_url optional
 		@param reltype optional
 		

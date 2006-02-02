@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.110 2006/01/30 17:10:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.111 2006/02/02 13:53:57 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2397,9 +2397,34 @@ class planner extends class_base
 
 		if (!$hasf)
 		{
-			return;
+			/// check if the object has a customer and if so, then display a list of that customer's important persons
+			if ($this->can("view", $r["id"]))
+			{
+				$o = obj($r["id"]);
+				if ($this->can("view", $o->prop("customer")))
+				{
+					$co = get_instance(CL_CRM_COMPANY);
+					$pp = $co->get_employee_picker(obj($o->prop("customer")), false, true);
+					if (!count($pp))
+					{
+						return;
+					}
+					$ol = new object_list(array("oid" => array_keys($pp), "lang_id" => array(), "site_id" => array()));
+				}
+				else
+				{
+					return;
+				}
+			}
+			else
+			{
+				return;
+			}
 		}
-		$ol = new object_list($filter);
+		else
+		{
+			$ol = new object_list($filter);
+		}
 		foreach($ol->arr() as $o)
 		{
 			$org_name = "";

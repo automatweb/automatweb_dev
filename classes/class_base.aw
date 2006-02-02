@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.453 2006/02/01 14:36:30 ahti Exp $
+// $Id: class_base.aw,v 2.454 2006/02/02 13:53:57 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -179,6 +179,7 @@ class class_base extends aw_template
 		@param parent optional type=int acl="add"
 		@param period optional
 		@param alias_to optional
+		@param alias_to_prop optional
 		@param return_url optional
 		@param reltype optional type=int
 
@@ -200,6 +201,7 @@ class class_base extends aw_template
 		@param group optional
 		@param period optional
 		@param alias_to optional
+		@param alias_to_prop optional
 		@param return_url optional
 
 		@returns data formatted by the currently used output client. For example a HTML form if htmlclient is used
@@ -711,6 +713,7 @@ class class_base extends aw_template
 			"section" => aw_global_get("section"),
 			"period" => isset($this->request["period"]) ? $this->request["period"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
+			"alias_to_prop" => isset($this->request["alias_to_prop"]) ? $this->request["alias_to_prop"] : "",
 			"cfgform" => empty($this->auto_cfgform) && isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
 			"return_url" => !empty($this->request["return_url"]) ? $this->request["return_url"] : "",
 			"subgroup" => $this->subgroup,
@@ -914,6 +917,7 @@ class class_base extends aw_template
 			"return" => isset($args["return"]) ? $args["return"] : null,
 			"period" => aw_global_get("period"),
 			"alias_to" => $request["alias_to"],
+			"alias_to_prop" => $request["alias_to_prop"],
 			"return_url" => $request["return_url"],
 		) + ( (isset($extraids) && is_array($extraids)) ? $extraids : array());
 
@@ -3958,6 +3962,25 @@ class class_base extends aw_template
 				if ($target_prop != "" && ($conn_count == 1 || !$bt[$target_prop]["multiple"] ))
 				{
 					$_to->set_prop($target_prop,$this->obj_inst->id());
+					if (!($alias_to_prop || $rawdata["alias_to_prop"])) // avoid double save
+					{
+						$_to->save();
+					}
+				}
+				if ($alias_to_prop || $rawdata["alias_to_prop"])
+				{
+					$altp = $alias_to_prop ? $alias_to_prop : $rawdata["alias_to_prop"];
+					echo "altp = $altp <br>";
+					$curpv = $_to->prop($altp);
+					if (is_array($altp))
+					{
+						$curpv[$this->obj_inst->id()] = $this->obj_inst->id();
+					}
+					else
+					{
+						$curpv = $this->obj_inst->id();
+					}
+					$_to->set_prop($altp, $curpv);
 					$_to->save();
 				}
 			};

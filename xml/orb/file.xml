@@ -23,6 +23,7 @@
 					<optional name="parent" type="int" acl="add" />
 					<optional name="period" />
 					<optional name="alias_to" />
+					<optional name="alias_to_prop" />
 					<optional name="return_url" />
 					<optional name="reltype" type="int" />
 				</arguments>

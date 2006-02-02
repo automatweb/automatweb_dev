@@ -15,6 +15,7 @@
 					<required name="parent" acl="add" />
 					<optional name="period" />
 					<optional name="alias_to" />
+					<optional name="alias_to_prop" />
 					<optional name="return_url" />
 					<optional name="reltype" />
 				</arguments>

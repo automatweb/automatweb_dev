@@ -2828,6 +2828,14 @@ class crm_company extends class_base
 		}
 		$person->set_prop("org_section", $orgs);
 		$person->save();
+
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		$p->connect(array(
+			"to" => $person->id(), 
+			"type" => "RELTYPE_IMPORTANT_PERSON"
+		));
+
 		if ($arr["get_ru"])
 		{
 			$ru = urlencode($arr["get_ru"]);
@@ -3416,7 +3424,6 @@ class crm_company extends class_base
 				$ret[] = $c["to"];
 			}
 		}
-
 		foreach($this->get_my_offers() as $ofid)
 		{
 			if ($this->can("view", $c["to"]))

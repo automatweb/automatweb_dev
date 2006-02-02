@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.51 2006/01/26 13:58:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.52 2006/02/02 13:53:58 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -220,20 +220,13 @@ class crm_meeting extends class_base
 					));
 				}
 				else
-				if (is_object($arr["obj_inst"]) && !$arr["new"])
+				if (is_object($arr["obj_inst"]) && !$arr["new"] && $this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
-					if($this->can("view", $arr["obj_inst"]->prop("customer")))
-					{
-						$ol = new object_list(array(
-							"class_id" => CL_PROJECT,
-							"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["obj_inst"]->prop("customer"),
-						));
-						$nms = $ol->names();
-					}
-					else
-					{
-						$nms = array();
-					}
+					$ol = new object_list(array(
+						"class_id" => CL_PROJECT,
+						"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["obj_inst"]->prop("customer"),
+					));
+					$nms = $ol->names();
 				}
 				else
 				{
@@ -623,7 +616,7 @@ class crm_meeting extends class_base
 				$obj = new object($person_id);
 				if($obj->class_id() == CL_CRM_PERSON)
 				{
-					$ev = obj($arr["event_id"]);
+					$ev = obj($arr["event_id"] ? $arr["event_id"] : $arr["id"]);
 					if ($obj->is_connected_to(array("to" => $ev->brother_of())))
 					{
 						$obj->disconnect(array("from" => $ev->brother_of()));
@@ -788,6 +781,11 @@ class crm_meeting extends class_base
 		{
 			$pl->add_event_to_calendar(obj($cal), $task);
 		}
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
 	}
 }
 ?>

@@ -122,6 +122,7 @@ class relpicker extends  core
 							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(), 
 							array(
 								"alias_to" => $this->obj->id(), 
+								"alias_to_prop" => $arr["prop"]["name"],
 								"reltype" => $rel_val,
 								"return_url" => get_ru()
 							)
@@ -142,6 +143,7 @@ class relpicker extends  core
 							$_clid, 
 							$arr["prop"]["parent"] == "this.parent" ? $this->obj->parent() : $this->obj->id(), 
 							array(
+								"alias_to_prop" => $arr["prop"]["name"],
 								"alias_to" => $this->obj->id(), 
 								"reltype" => $rel_val,
 								"return_url" => get_ru()

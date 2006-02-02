@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.106 2006/01/30 12:30:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.107 2006/02/02 13:53:58 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -651,6 +651,7 @@ class crm_person extends class_base
 				$data['options'] = array_reverse($data['options'], true);
 				break;
 			case 'rank' :
+				/*
 				//let's list the professions the organization/unit is associated with
 				$drop_down_list = array();
 				//if the person is associated with a section then show the professions
@@ -693,7 +694,7 @@ class crm_person extends class_base
 				$drop_down_list = array_reverse($drop_down_list,true);
 				$drop_down_list[0] = t('--vali--');
 				$drop_down_list = array_reverse($drop_down_list,true);
-				$data['options'] = &$drop_down_list;
+				$data['options'] = &$drop_down_list;*/
 				break;
 			case "title":
 				$data["options"] = array(
