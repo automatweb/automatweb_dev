@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.8 2006/01/20 15:49:42 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.9 2006/02/02 13:24:32 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -1092,13 +1092,21 @@ class realestate_manager extends class_base
 		switch ($unit->class_id ())
 		{
 			case CL_CRM_SECTION:
-				$o =& $this->find_connection_parent_by_class ($unit->id (), CL_CRM_COMPANY);
+				//$o =& $this->find_connection_parent_by_class ($unit->id (), CL_CRM_COMPANY);
+				$o = $this->find_co_by_section($unit);
 				break;
 
 			case CL_CRM_COMPANY:
 				$o =& $unit;
 				break;
 		}
+
+//terryf
+		if (!$o)
+		{
+			return;
+		}
+//END terryf
 
 		$tmp = $arr["obj_inst"];
 		$arr["obj_inst"] = $o;
@@ -1117,17 +1125,60 @@ class realestate_manager extends class_base
 		$arr["obj_inst"] = $tmp;
 	}
 
+//terryf
+	function find_co_by_section($sect)
+	{
+		while(50 > $cnt++)
+		{
+			foreach($sect->connections_to(array("from.class_id" => array(CL_CRM_COMPANY, CL_CRM_SECTION))) as $c)
+			{
+				if ($c->prop("from.class_id") == CL_CRM_COMPANY)
+				{
+					return $c->from();
+				}
+				else
+				{
+					$sect = $c->from();
+					break;
+				}
+			}
+		}
+
+		return false;
+	}
+//END terryf
+
+/*
 	function &find_connection_parent_by_class ($object_id, $parent_class_id)
 	{
+//terryf
+		$used_oids = array();
+//END terryf
+
 		while (is_oid ($object_id))
 		{
 			$object = obj ($object_id);
 			$connections = $object->connections_to ();
 
+//terryf
+			if (!count($connections))
+			{
+				return false;
+			}
+//END terryf
+
 			foreach ($connections as $connection)
 			{
 				$object_id = $connection->prop("from");
 				$parent = obj ($object_id);
+
+//terryf
+				if (isset($used_oids[$object_id]))
+				{
+					return false;
+				}
+				$used_oids[$object_id] = 1;
+//END terryf
 
 				if ($parent->class_id () == $parent_class_id)
 				{
@@ -1138,6 +1189,7 @@ class realestate_manager extends class_base
 
 		return false;
 	}
+*/
 
 	function _user_list_tree($arr)
 	{
@@ -1220,9 +1272,10 @@ class realestate_manager extends class_base
 					break;
 
 				case CL_CRM_SECTION:
-					$o =& $this->find_connection_parent_by_class ($unit->id (), CL_CRM_COMPANY, 28);
+					//$o =& $this->find_connection_parent_by_class ($unit->id (), CL_CRM_COMPANY, 28);
+					$o = $this->find_co_by_section($unit);
 
-					if ($this->can("view", $o->id()))
+					if ($o && $this->can("view", $o->id()))
 					{
 						$this->_delegate_co_v($arr, "_get_human_resources", $o);
 					}
