@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.19 2006/02/01 13:04:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.20 2006/02/02 13:54:55 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1848,6 +1848,18 @@ class cb_form_chain extends class_base
 			$wf_id = $rd->meta("webform_id");
 			$cur_cnt = ((int)$counts_by_wf[$wf_id]++);
 			$_SESSION["cbfc_data"][$wf_id][$cur_cnt] = $rd->properties();
+
+			for ($i = 1; $i < 6; $i++)
+			{
+				$pn = "userfile".$i;
+				$fo = $rd->get_first_obj_by_reltype("RELTYPE_FILE".$i);
+				if ($fo)
+				{
+					$_SESSION["cbfc_file_data"][$wf_id][$cur_cnt][$pn]["name"] = $fo->name();
+					$_SESSION["cbfc_file_data"][$wf_id][$cur_cnt][$pn]["mtype"] = $fo->prop("type");
+					$_SESSION["cbfc_data"][$wf_id][$cur_cnt][$pn] = $fo->prop("file");
+				}
+			}
 		}
 	}
 
