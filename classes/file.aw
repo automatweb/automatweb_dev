@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.118 2006/02/02 13:53:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.119 2006/02/03 09:18:53 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -17,7 +17,13 @@
 // we use db storage of filesystem storage for files
 //
 
+
+// UUS KOMMENTAAR
+
 /*
+
+
+
 @classinfo trans=1 relationmgr=yes syslog_type=ST_FILE
 @tableinfo files index=id master_table=objects master_index=oid	
 @default table=files
