@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.7 2006/02/03 11:17:00 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.8 2006/02/03 17:32:41 sander Exp $
 // bug.aw - Bugi 
 /*
 
@@ -19,10 +19,16 @@
 @property bug_status type=select
 @caption Staatus
 
-@property deadline type=date_select default=-1 table=objects field=meta method=serialize
+@property customer type=relpicker reltype=RELTYPE_CUSTOMER
+@caption Klient
+
+@property project type=relpicker reltype=RELTYPE_PROJECT
+@caption Projekt
+
+@property deadline type=date_select default=-1
 @caption T&auml;htaeg
 
-@property who type=relpicker reltype=RELTYPE_MONITOR table=objects field=meta method=serialize
+@property who type=relpicker reltype=RELTYPE_MONITOR
 @caption Kellele
 
 @property bug_priority type=select
@@ -41,7 +47,7 @@ caption OS
 @property bug_class type=select
 @caption Klass
 
-@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb table=objects field=meta method=serialize
+@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb
 @caption Fail
 
 @property bug_component type=textbox 
@@ -53,7 +59,7 @@ caption OS
 @property bug_mail type=textbox size=60
 @caption Bugmail CC
 
-@property monitors type=relpicker reltype=RELTYPE_MONITOR table=objects field=meta method=serialize multiple=1 size=5
+@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=5 method=serialize
 @caption J&auml;lgijad
 
 @property comms type=comments group=comments store=no
@@ -67,6 +73,11 @@ caption OS
 @reltype FILE value=2 clid=CL_FILE
 @caption Fail
 
+@reltype CUSTOMER value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption Klient
+
+@reltype PROJECT value=4 clid=CL_PROJECT
+@caption Projekt
 */
 
 class bug extends class_base
@@ -79,17 +90,39 @@ class bug extends class_base
 		));
 	}
 
+	function callback_on_load($arr)
+	{
+		if($this->can("add", $arr["request"]["parent"]) && $arr["request"]["action"] == "new")
+		{
+			$parent = new object($arr["request"]["parent"]);
+			$props = $parent->properties();
+			$this->parent_data = array(
+				"who" => $props["who"],
+				"bug_class" => $props["bug_class"],
+				"monitors" => $props["monitors"],
+				"project" => $props["project"],
+				"customer" => $props["customer"],
+				"deadline" => $props["deadline"],
+			);
+		}
+	}
+
 	function get_property($arr)
 	{
+		//arr($arr["new"]);
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
 			case "bug_status":	
 				$prop["options"] = array(
-					0 => t("Lahtine"),
-					1 => t("Töös"),
-					2 => t("Parandatud"),
+					1 => t("Uus"),
+					2 => t("Tegemisel"),
+					3 => t("Valmis"),
+					4 => t("Suletud"),
+					5 => t("Vale teade"),
+					6 => t("Kordamatu"),
+					7 => t("Parandamatu"),
 				);
 				break;
 
@@ -105,11 +138,87 @@ class bug extends class_base
 				$cx = get_instance("cfg/cfgutils");
 				$class_list = new aw_array($cx->get_classes_with_properties());
 				$cp = get_class_picker(array("field" => "def"));
-
+				
+				$prop["options"][0] = "";
 				foreach($class_list->get() as $key => $val)
 				{
 					$prop["options"][$key] = $val;
 				};	
+				break;
+			case "project":
+				if (is_object($arr["obj_inst"]) && $this->can("view", $arr["obj_inst"]->prop("customer")))
+				{
+					$filt = array(
+						"class_id" => CL_PROJECT,
+						"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->prop("customer"),
+					);
+					$ol = new object_list($filt);
+				}
+				else
+				{
+					$i = get_instance(CL_CRM_COMPANY);
+					$prj = $i->get_my_projects();
+					if (!count($prj))
+					{
+						$ol = new object_list();
+					}
+					else
+					{
+						$ol = new object_list(array("oid" => $prj));
+					}
+				}
+
+				$data["options"] = array("" => "") + $ol->names();
+
+				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+				{
+					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
+					{
+						$data["options"][$c->prop("to")] = $c->prop("to.name");
+					}
+				}
+
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
+				}
+
+				asort($data["options"]);
+				break;
+
+			case "customer":
+				$i = get_instance(CL_CRM_COMPANY);
+				$cst = $i->get_my_customers();
+				if (!count($cst))
+				{
+					$data["options"] = array("" => "");
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $cst));
+					$data["options"] = array("" => "") + $ol->names();
+				}
+
+				if (is_object($arr["obj_inst"]) && !$arr["new"])
+				{
+					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+					{
+						$data["options"][$c->prop("to")] = $c->prop("to.name");
+					}
+				}
+
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
+				}
+
+				asort($data["options"]);
+				if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->class_id() == CL_TASK)
+				{
+					$arr["obj_inst"]->set_prop("customer", $data["value"]);
+				}
 				break;
 		};
 		return $retval;
@@ -124,6 +233,16 @@ class bug extends class_base
 			case "comms":
 				// email any persons interested in status changes of that bug
 				$this->notify_monitors($arr);
+				break;
+			case "bug_status":
+				if($prop["value"] == 4 && !$arr["new"])
+				{
+					if(aw_global_get("uid") != $arr["obj_inst"]->createdby())
+					{
+						$retval = PROP_FATAL_ERROR;
+						$prop["error"] = t("Puuduvad õigused bugi sulgeda!");
+					}
+				}
 				break;
 		}
 		return $retval;

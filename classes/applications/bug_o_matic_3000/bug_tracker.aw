@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.9 2006/02/03 11:58:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.10 2006/02/03 17:32:41 sander Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -158,9 +158,13 @@ class bug_tracker extends class_base
 	function show_status($_val)
 	{
 		$values = array(
-			0 => t("Lahtine"),
-			1 => t("Töös"),
-			2 => t("Parandatud"),
+			1 => t("Uus"),
+			2 => t("Tegemisel"),
+			3 => t("Valmis"),
+			4 => t("Suletud"),
+			5 => t("Vale teade"),
+			6 => t("Kordamatu"),
+			7 => t("Parandamatu"),
 		);
 		return $values[$_val];
 	}
