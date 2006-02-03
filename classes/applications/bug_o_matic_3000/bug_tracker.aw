@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.7 2006/01/26 15:25:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.8 2006/02/03 11:17:00 tarvo Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -16,6 +16,7 @@
 @layout bug type=hbox width=15%:85%
 	@property bug_tree type=treeview parent=bug no_caption=1
 	@property bug_list type=table parent=bug no_caption=1
+
 
 */
 
@@ -153,6 +154,25 @@ class bug_tracker extends class_base
 		}
 		return $name;
 	}
+	
+	function show_status($_val)
+	{
+		$values = array(
+			0 => t("Lahtine"),
+			1 => t("Töös"),
+			2 => t("Parandatud"),
+		);
+		return $values[$_val];
+	}
+	
+	function comment_callback($arr)
+	{
+		$ol = new object_list(array(
+			"parent" => $arr["oid"],
+			"class_id" => CL_COMMENT,
+		));
+		return html::get_change_url($arr["oid"] , array("group" => "comments" , "return_url" => get_ru()), $ol->count());
+	}
 
 	function _init_bug_list_tbl(&$t)
 	{
@@ -174,6 +194,12 @@ class bug_tracker extends class_base
 			"sortable" => 1,
 			"numeric" => 1,
 		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Staatus"),
+			"sortable" => 1,
+			"callback" => array(&$this, "show_status")
+		));
 
 		$t->define_field(array(
 			"name" => "createdby",
@@ -186,23 +212,17 @@ class bug_tracker extends class_base
 			"caption" => t("Loodud"),
 			"sortable" => 1,
 			"type" => "time",
-			"numberic" => 1,
+			"numeric" => 1,
 			"format" => "d.m.Y / H:i"
 		));
 
 		$t->define_field(array(
-			"name" => "modifiedby",
-			"caption" => t("Muutja"),
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"name" => "modified",
-			"caption" => t("Muudetud"),
+			"name" => "comment",
+			"caption" => t("Kommentaare"),
 			"sortable" => 1,
-			"type" => "time",
-			"numberic" => 1,
-			"format" => "d.m.Y / H:i"
+			"numeric" => 1,
+			"callback" => array(&$this,"comment_callback"),
+			"callb_pass_row" => 1,
 		));
 		/*
 		$t->define_field(array(

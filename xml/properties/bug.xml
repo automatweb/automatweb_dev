@@ -27,6 +27,16 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>deadline</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>date_select</type>
+            <default>-1</default>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>T&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
             <name>who</name>
             <group>general</group>
             <table>objects</table>
@@ -59,6 +69,19 @@
             <type>select</type>
             <field>bug_class</field>
             <caption>Klass</caption>
+      </property>
+      <property>
+            <name>fileupload</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <caption>Fail</caption>
       </property>
       <property>
             <name>bug_component</name>
@@ -112,6 +135,7 @@
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
+            <r2>yes</r2>
       </classinfo>
       <groupinfo>
             <comments>
@@ -131,6 +155,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>J&amp;auml;lgija</caption>
             </MONITOR>
+            <FILE>
+                  <value>2</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Fail</caption>
+            </FILE>
       </reltypes>
 </properties>
 

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.6 2006/01/26 15:25:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.7 2006/02/03 11:17:00 tarvo Exp $
 // bug.aw - Bugi 
 /*
 
-@classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 no_status=1 r2=yes
 
 @tableinfo aw_bugs index=aw_id master_index=brother_of master_table=objects
 
@@ -18,6 +18,9 @@
 
 @property bug_status type=select
 @caption Staatus
+
+@property deadline type=date_select default=-1 table=objects field=meta method=serialize
+@caption T&auml;htaeg
 
 @property who type=relpicker reltype=RELTYPE_MONITOR table=objects field=meta method=serialize
 @caption Kellele
@@ -38,6 +41,9 @@ caption OS
 @property bug_class type=select
 @caption Klass
 
+@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb table=objects field=meta method=serialize
+@caption Fail
+
 @property bug_component type=textbox 
 @caption Komponent
 
@@ -57,6 +63,9 @@ caption OS
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption Jälgija
+
+@reltype FILE value=2 clid=CL_FILE
+@caption Fail
 
 */
 
