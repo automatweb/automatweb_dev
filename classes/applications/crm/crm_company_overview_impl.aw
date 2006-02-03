@@ -1028,6 +1028,8 @@ class crm_company_overview_impl extends class_base
 				$param = array();
 			}
 			$p = $this->_get_tasks_search_filt($arr["request"], $param, $clid);
+			$p["lang_id"] = array();
+			$p["site_id"] = array();
 			$ol = new object_list($p);
 		}
 		else
