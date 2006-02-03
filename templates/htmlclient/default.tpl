@@ -44,7 +44,7 @@
 <!-- SUB: SUB_TITLE -->
 <tr>
 	<td colspan='2' class='aw04contentcellsubtitle'>
-	{VAR:value}
+	<span id='{VAR:st_id}' >{VAR:value}</span>
 	</td>
 </tr>
 <!-- END SUB: SUB_TITLE -->
