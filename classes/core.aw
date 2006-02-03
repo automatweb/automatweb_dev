@@ -15,6 +15,7 @@ define("STAT_DELETED", 0);
 define("STAT_NOTACTIVE", 1);
 define("STAT_ACTIVE", 2);
 
+//kommentaar
 classload("core/obj/acl_base");
 class core extends acl_base
 {
