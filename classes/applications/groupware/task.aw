@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.65 2006/02/02 13:53:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.66 2006/02/03 10:39:40 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1364,6 +1364,8 @@ class task extends class_base
 					"date" => $row->prop("date"),
 					"price" => $task->prop("hr_price"),
 					"amt" => $row->prop("time_to_cust"),
+					"amt_real" => $row->prop("time_real"),
+					"amt_guess" => $row->prop("time_guess"),
 					"sum" => str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price"),
 					"has_tax" => 1,
 					"on_bill" => 1,
@@ -1398,6 +1400,8 @@ class task extends class_base
 					"price" => $task->prop("hr_price"),
 					"date" => $task->prop("start1"),
 					"amt" => $task->prop("num_hrs_to_cust"),
+					"amt_real" => $task->prop("num_hrs_real"),
+					"amt_guess" => $task->prop("num_hrs_guess"),
 					"sum" => str_replace(",", ".", $task->prop("num_hrs_to_cust")) * $task->prop("hr_price"),
 					"has_tax" => 1,
 					"on_bill" => 1,
@@ -1415,6 +1419,8 @@ class task extends class_base
 				"unit" => "",
 				"price" => $oe["cost"],
 				"amt" => 1,
+				"amt_real" => 1,
+				"amt_guess" => 1,
 				"sum" => $oe["cost"],
 				"has_tax" => 1,
 				"is_oe" => true,

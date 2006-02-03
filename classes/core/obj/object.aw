@@ -478,7 +478,17 @@ class object
 
 	function acl_del($g_oid)
 	{
-		
+	}
+
+	function get_xml($options)
+	{
+		$i = get_instance("core/obj/obj_xml_gen");
+		return $i->gen($this->id(), $options);
+	}
+
+	function from_xml($options)
+	{
+
 	}
 }
 

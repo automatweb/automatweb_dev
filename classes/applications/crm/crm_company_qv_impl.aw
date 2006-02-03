@@ -208,6 +208,10 @@ class crm_company_qv_impl extends class_base
 			$hrs = 0;
 			foreach($t_i->get_task_bill_rows($o, false) as $row)
 			{
+				if ($row["date"] < $r["stats_s_from"] || ($row["date"] > $r["stats_s_to"] && $row["stats_s_to"] > 100))
+				{
+					continue;
+				}
 				$sum += str_replace(",", "",$row["sum"]);
 				$hrs += $row["amt"];
 				$this->hrs_total += $row["amt"];
