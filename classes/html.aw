@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.96 2006/02/01 14:44:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.97 2006/02/03 11:31:36 tarvo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -703,7 +703,7 @@ class html extends aw_template
 			$act = "view";
 		}
 		$retval = $this->mk_my_orb($act, $params, $obj->class_id());
-		if($caption)
+		if($caption || (is_integer($caption) && $caption == 0))
 		{
 			$retval = html::href(array(
 				"url" => $retval,
