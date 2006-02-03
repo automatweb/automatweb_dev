@@ -2135,99 +2135,119 @@
             </special_offers>
             <people>
                   <caption>T&amp;amp;ouml;&amp;amp;ouml;tajad</caption>
+                  <save>no</save>
             </people>
             <contacts2>
                   <caption>Inimesed puuvaates</caption>
                   <parent>people</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </contacts2>
             <personal_offers>
                   <caption>T&amp;ouml;&amp;ouml;pakkumised</caption>
                   <parent>people</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </personal_offers>
             <personal_candits>
                   <caption>Kandideerijad</caption>
                   <parent>people</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </personal_candits>
             <edit_sects>
                   <caption>Muuda &amp;amp;uuml;ksuseid</caption>
                   <parent>people</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </edit_sects>
             <resources>
                   <caption>Ressursid</caption>
                   <submit>no</submit>
+                  <save>no</save>
             </resources>
             <contacts>
                   <caption>Kontaktid</caption>
             </contacts>
             <overview>
                   <caption>Tegevused</caption>
+                  <save>no</save>
             </overview>
             <all_actions>
                   <caption>K&amp;otilde;ik</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </all_actions>
             <my_tasks>
                   <caption>Toimetused</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </my_tasks>
             <meetings>
                   <caption>Kohtumised</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </meetings>
             <calls>
                   <caption>K&amp;otilde;ned</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </calls>
             <ovrv_offers>
                   <caption>Dokumendihaldus</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </ovrv_offers>
             <projs>
                   <caption>Projektid</caption>
+                  <save>no</save>
             </projs>
             <my_projects>
                   <caption>Projektid</caption>
                   <parent>projs</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </my_projects>
             <org_projects_archive>
                   <caption>Projektide arhiiv</caption>
                   <submit>no</submit>
                   <parent>projs</parent>
+                  <save>no</save>
             </org_projects_archive>
             <my_reports>
                   <caption>Minu raportid</caption>
                   <submit>no</submit>
                   <parent>projs</parent>
+                  <save>no</save>
             </my_reports>
             <all_reports>
                   <caption>K&amp;amp;otilde;ik raportid</caption>
                   <submit>no</submit>
                   <parent>projs</parent>
+                  <save>no</save>
             </all_reports>
             <relorg>
                   <caption>Kliendid</caption>
                   <focus>customer_search_name</focus>
+                  <save>no</save>
             </relorg>
             <relorg_s>
                   <caption>Otsing</caption>
                   <focus>customer_search_name</focus>
                   <parent>relorg</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </relorg_s>
             <relorg_t>
                   <caption>Puuvaade</caption>
                   <parent>relorg</parent>
                   <submit>no</submit>
+                  <save>no</save>
             </relorg_t>
             <org_images>
                   <caption>Pildid</caption>
@@ -2238,12 +2258,14 @@
                   <caption>Dokumendid</caption>
                   <submit>no</submit>
                   <parent>general</parent>
+                  <save>no</save>
             </documents_all>
             <documents_news>
                   <caption>Uudised</caption>
                   <submit>no</submit>
                   <parent>general</parent>
                   <submit_method>get</submit_method>
+                  <save>no</save>
             </documents_news>
             <documents_forum>
                   <caption>Foorum</caption>
@@ -2253,48 +2275,57 @@
             <documents_lmod>
                   <caption>Viimati muudetud</caption>
                   <submit>no</submit>
-                  <parent>general	</parent>
+                  <parent>general	save</parent>
             </documents_lmod>
             <bills>
                   <caption>Arved</caption>
                   <submit>no</submit>
+                  <save>no</save>
             </bills>
             <bills_list>
                   <parent>bills</parent>
                   <caption>Nimekiri</caption>
                   <submit>no</submit>
+                  <save>no</save>
             </bills_list>
             <bills_monthly>
                   <parent>bills</parent>
                   <caption>Kuuarved</caption>
                   <submit>no</submit>
+                  <save>no</save>
             </bills_monthly>
             <bills_search>
                   <parent>bills</parent>
                   <caption>Otsi toimetusi</caption>
                   <submit>no</submit>
+                  <save>no</save>
             </bills_search>
             <bills_create>
                   <parent>bills</parent>
                   <caption>Loo arve</caption>
                   <submit>no</submit>
+                  <save>no</save>
             </bills_create>
             <stats>
                   <caption>Aruanded</caption>
+                  <save>no</save>
             </stats>
             <stats_s>
                   <parent>stats</parent>
                   <caption>Otsi</caption>
                   <submit_method>get</submit_method>
+                  <save>no</save>
             </stats_s>
             <stats_view>
                   <parent>stats</parent>
                   <caption>Vaata</caption>
                   <submit>no</submit>
+                  <save>no</save>
             </stats_view>
             <quick_view>
                   <caption>Vaata</caption>
                   <submit>no</submit>
+                  <save>no</save>
             </quick_view>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>

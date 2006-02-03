@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.454 2006/02/02 13:53:57 kristo Exp $
+// $Id: class_base.aw,v 2.455 2006/02/03 11:52:13 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3422,7 +3422,6 @@ class class_base extends aw_template
 
 		$args["new"] = $this->new = $new;
 
-
 		// the question is .. should I call set_property for those too?
 		// and how do I load the stuff with defaults?
 		if (!$new)
@@ -3465,6 +3464,12 @@ class class_base extends aw_template
 		{
 			$properties = $this->get_property_group($filter);
 		};
+
+		if ($this->groupinfo[$group]["save"] == "no")
+		{
+			return true;
+		}
+
 		if ($this->new && is_array($this->_cfg_props))
 		{
 			foreach($this->_cfg_props as $key => $val)

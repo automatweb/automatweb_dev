@@ -711,61 +711,61 @@ ype=callback callback=callback_gen_forum store=no no_caption=1
 @groupinfo add_info caption="Lisainfo" parent=general
 @groupinfo user_settings caption="Seaded" parent=general
 @groupinfo special_offers caption="Eripakkumised" submit=no parent=general
-@groupinfo people caption="T&ouml;&ouml;tajad"
+@groupinfo people caption="T&ouml;&ouml;tajad" save=no
 
-	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no
-	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no
-	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no
-	@groupinfo edit_sects caption="Muuda &uuml;ksuseid" parent=people submit=no
+	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no save=no
+	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no save=no
+	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no save=no
+	@groupinfo edit_sects caption="Muuda &uuml;ksuseid" parent=people submit=no save=no
 
-@groupinfo resources caption="Ressursid"  submit=no
-@groupinfo contacts caption="Kontaktid"
-@groupinfo overview caption="Tegevused" 
+@groupinfo resources caption="Ressursid"  submit=no save=no
+@groupinfo contacts caption="Kontaktid" 
+@groupinfo overview caption="Tegevused" save=no
 
-	@groupinfo all_actions caption="Kõik" parent=overview submit=no
-	@groupinfo my_tasks caption="Toimetused" parent=overview submit=no
-	@groupinfo meetings caption="Kohtumised" parent=overview submit=no
-	@groupinfo calls caption="Kõned" parent=overview submit=no
-	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no
+	@groupinfo all_actions caption="Kõik" parent=overview submit=no save=no
+	@groupinfo my_tasks caption="Toimetused" parent=overview submit=no save=no
+	@groupinfo meetings caption="Kohtumised" parent=overview submit=no save=no
+	@groupinfo calls caption="Kõned" parent=overview submit=no save=no
+	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no save=no
 
-@groupinfo projs caption="Projektid"
-	@groupinfo my_projects caption="Projektid" parent=projs submit=no
-	groupinfo org_projects caption="Projektid" submit=no parent=projs
-	@groupinfo org_projects_archive caption="Projektide arhiiv" submit=no parent=projs
-	@groupinfo my_reports caption="Minu raportid" submit=no parent=projs
-	@groupinfo all_reports caption="K&otilde;ik raportid" submit=no parent=projs
+@groupinfo projs caption="Projektid" save=no
+	@groupinfo my_projects caption="Projektid" parent=projs submit=no save=no
+	groupinfo org_projects caption="Projektid" submit=no parent=projs save=no
+	@groupinfo org_projects_archive caption="Projektide arhiiv" submit=no parent=projs save=no
+	@groupinfo my_reports caption="Minu raportid" submit=no parent=projs save=no
+	@groupinfo all_reports caption="K&otilde;ik raportid" submit=no parent=projs save=no
 
-@groupinfo relorg caption="Kliendid" focus=customer_search_name
-	@groupinfo relorg_s caption="Otsing" focus=customer_search_name parent=relorg submit=no
-	@groupinfo relorg_t caption="Puuvaade" parent=relorg submit=no
+@groupinfo relorg caption="Kliendid" focus=customer_search_name save=no
+	@groupinfo relorg_s caption="Otsing" focus=customer_search_name parent=relorg submit=no save=no
+	@groupinfo relorg_t caption="Puuvaade" parent=relorg submit=no save=no
 
 groupinfo org_objects_main caption="Objektid" submit=no
 
 	groupinfo org_objects caption="Objektid" submit=no parent=org_objects_main
 
 
-@groupinfo org_images caption="Pildid" submit=yes parent=general
+@groupinfo org_images caption="Pildid" submit=yes parent=general 
 
 groupinfo documents caption="Dokumendid" submit=no
 
-	@groupinfo documents_all caption="Dokumendid" submit=no parent=general
-	@groupinfo documents_news caption="Uudised" submit=no parent=general submit_method=get
+	@groupinfo documents_all caption="Dokumendid" submit=no parent=general save=no
+	@groupinfo documents_news caption="Uudised" submit=no parent=general submit_method=get save=no
 	@groupinfo documents_forum caption="Foorum" submit=no parent=general 
-	@groupinfo documents_lmod caption="Viimati muudetud" submit=no parent=general	
+	@groupinfo documents_lmod caption="Viimati muudetud" submit=no parent=general	save=no
 
-@groupinfo bills caption="Arved" submit=no
+@groupinfo bills caption="Arved" submit=no save=no
 
-	@groupinfo bills_list parent=bills caption="Nimekiri" submit=no
-	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no
-	@groupinfo bills_search parent=bills caption="Otsi toimetusi" submit=no
-	@groupinfo bills_create parent=bills caption="Loo arve" submit=no
+	@groupinfo bills_list parent=bills caption="Nimekiri" submit=no save=no
+	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no save=no
+	@groupinfo bills_search parent=bills caption="Otsi toimetusi" submit=no save=no
+	@groupinfo bills_create parent=bills caption="Loo arve" submit=no save=no
 
-@groupinfo stats caption="Aruanded" 
+@groupinfo stats caption="Aruanded" save=no
 
-	@groupinfo stats_s parent=stats caption="Otsi" submit_method=get
-	@groupinfo stats_view parent=stats caption="Vaata" submit=no
+	@groupinfo stats_s parent=stats caption="Otsi" submit_method=get save=no
+	@groupinfo stats_view parent=stats caption="Vaata" submit=no save=no
 
-@groupinfo quick_view caption="Vaata"  submit=no
+@groupinfo quick_view caption="Vaata"  submit=no save=no
 
 @groupinfo transl caption=T&otilde;lgi
 
