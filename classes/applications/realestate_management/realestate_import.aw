@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.9 2006/02/01 09:08:17 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.10 2006/02/06 11:54:36 voldemar Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -93,6 +93,7 @@ define ("REALESTATE_IMPORT_ERR12", 14);
 define ("REALESTATE_IMPORT_ERR13", 15);
 define ("REALESTATE_IMPORT_ERR14", 16);
 define ("REALESTATE_IMPORT_ERR15", 17);
+define ("REALESTATE_IMPORT_ERR16", 18);
 
 define ("REALESTATE_NEWLINE", "<br />");
 
@@ -330,6 +331,18 @@ class realestate_import extends class_base
 		$this->changed_land_uses = true;
 
 		#### admin division objects
+		if (
+			!$this->can("view", $this_object->prop ("city24_county")) or
+			!$this->can("view", $this_object->prop ("city24_parish")) or
+			!$this->can("view", $this_object->prop ("city24_city")) or
+			!$this->can("view", $this_object->prop ("city24_citypart")) or
+			!$this->can("view", $this_object->prop ("city24_settlement"))
+		)
+		{
+			echo t("Viga: administratiivjaotuse vasted määramata.") . REALESTATE_NEWLINE;
+			return REALESTATE_IMPORT_ERR16;
+		}
+
 		$maakond_division = obj ($this_object->prop ("city24_county"));
 		$vald_division = obj ($this_object->prop ("city24_parish"));
 		$linn_division = obj ($this_object->prop ("city24_city"));
