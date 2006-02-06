@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.7 2006/01/08 19:01:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.8 2006/02/06 12:08:22 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -49,6 +49,9 @@
 @default group=grp_search
 	@property search_class_id type=select multiple=1 size=5
 	@caption Objekt
+
+	@property search_city24_id type=textbox datatype=int size=10
+	@caption City24 ID
 
 	@property search_transaction_type type=select multiple=1 size=3
 	@caption Tehingu tüüp
@@ -278,6 +281,10 @@ class realestate_search extends class_base
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["nor"];
 				break;
 
+			case "search_city24_id":
+				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["c24id"];
+				break;
+
 			case "searchparam_address1":
 				$list =& $this->administrative_structure->prop (array (
 					"prop" => "units_by_division",
@@ -435,6 +442,7 @@ class realestate_search extends class_base
 
 				$applicable_properties = array (
 					"search_class_id",
+					"search_city24_id",
 					"search_transaction_type",
 					"search_transaction_price_min",
 					"search_transaction_price_max",
@@ -599,6 +607,7 @@ class realestate_search extends class_base
 			$args = array (
 				"realestate_srch" => 1,
 				"ci" => $this_object->prop ("search_class_id"),
+				"c24id" => $this_object->prop ("search_city24_id"),
 				"tt" => $this_object->prop ("search_transaction_type"),
 				"tpmin" => $this_object->prop ("search_transaction_price_min"),
 				"tpmax" => $this_object->prop ("search_transaction_price_max"),
@@ -626,6 +635,7 @@ class realestate_search extends class_base
 			$args = array (
 				"realestate_srch" => $_GET["realestate_srch"],
 				"ci" => $_GET["realestate_ci"],
+				"c24id" => $_GET["realestate_c24id"],
 				"tt" => $_GET["realestate_tt"],
 				"tpmin" => $_GET["realestate_tpmin"],
 				"tpmax" => $_GET["realestate_tpmax"],
@@ -668,6 +678,17 @@ class realestate_search extends class_base
 					"size" => $select_size,
 					"options" => $this->options_ci,
 					"value" => ($saved_search and is_array ($search["ci"])) ? NULL : $search["ci"],
+				));
+			}
+
+			if (in_array ("search_city24_id", $visible_formelements))
+			{
+				$form_elements["c24id"]["caption"] = $properties["search_city24_id"]["caption"];
+				$form_elements["c24id"]["element"] = html::textbox(array(
+					"name" => "realestate_c24id",
+					"value" => $search["c24id"],
+					"size" => "6",
+					// "textsize" => "11px",
 				));
 			}
 
@@ -1371,7 +1392,8 @@ class realestate_search extends class_base
 			$search_tpmax = (float) $arr["tpmax"];
 			$search_tfamin = (float) $arr["tfamin"];
 			$search_tfamax = (float) $arr["tfamax"];
-			$search_nor = $arr["nor"] ? (int) $arr["nor"] : NULL;
+			$search_nor = strlen(trim($arr["nor"])) ? (int) $arr["nor"] : NULL;
+			$search_c24id = strlen(trim($arr["c24id"])) ? (int) $arr["c24id"] : NULL;
 
 			$arr["a1"] = ($arr["a1"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["a1"];
 			$search_a1 = (array) $arr["a1"];
@@ -1488,6 +1510,7 @@ class realestate_search extends class_base
 
 		$args = array (
 			"ci" => $search_ci,
+			"c24id" => $search_c24id,
 			"tt" => $search_tt,
 			"tpmin" => $search_tpmin,
 			"tpmax" => $search_tpmax,
@@ -1517,6 +1540,7 @@ class realestate_search extends class_base
 		$this_object = $arr["this"];
 
 		$search_ci = $arr["search"]["ci"];
+		$search_c24id = $arr["search"]["c24id"];
 		$search_tpmin = $arr["search"]["tpmin"];
 		$search_tpmax = $arr["search"]["tpmax"];
 		$search_tfamin = $arr["search"]["tfamin"];
@@ -1777,6 +1801,7 @@ class realestate_search extends class_base
 			"created" => new obj_predicate_compare (OBJ_COMP_GREATER, $search_fd),
 			"site_id" => array (),
 			"lang_id" => array (),
+			"city24_object_id" => $search_c24id,
 			"transaction_type" => $search_tt,
 			"transaction_price" => $tp_constraint,
 			"special_status" => $search_ss,
