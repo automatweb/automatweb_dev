@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.112 2006/01/30 10:46:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.113 2006/02/06 12:37:45 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -616,7 +616,6 @@ class admin_menus extends aw_template
 						}
 					}
 					
-					$cache->file_invalidate_regex("admin_menus_".$o->parent().".*");
 					$o->set_parent($parent);
 					if ($period)
 					{
@@ -701,11 +700,7 @@ class admin_menus extends aw_template
 
 	function invalidate_menu_cache()
 	{
-		$cache = get_instance("cache");
-
-		// here we gots to invalidate the objects::get_list cache as well, cause it also contains menus
-		$cache->file_invalidate_regex("objects::get_list::.*");
-		$cache->file_invalidate_regex("menuedit::menu_cache::.*");
+		// I REALLY don't think this is necessary eny more
 	}
 
 	////	

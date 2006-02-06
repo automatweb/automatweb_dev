@@ -612,7 +612,7 @@ class user extends class_base
 		}
 
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
+		$c->file_clear_pt("acl");
 	}
 
 	function &_start_gm_table()
@@ -1021,7 +1021,7 @@ class user extends class_base
 			}
 		}
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
+		$c->file_clear_pt("acl");
 	}
 
 	function on_delete_alias($arr)
@@ -1091,7 +1091,7 @@ class user extends class_base
 			}
 		}
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
+		$c->file_clear_pt("acl");
 	}
 
 	function _get_stat($uid)
@@ -1223,7 +1223,7 @@ class user extends class_base
 				}
 			}
 			$c = get_instance("cache");
-			$c->file_invalidate_regex("acl-cache(.*)");
+			$c->file_clear_pt("acl");
 		}
 		else
 		if ($arr["connection"]->prop("reltype") == 7 )// FG_PROFILE

@@ -673,7 +673,7 @@ class group extends class_base
 				);
 			}
 			$c = get_instance("cache");
-			$c->file_invalidate_regex("acl-cache(.*)");
+			$c->file_clear_pt("acl");
 		}
 	}
 
@@ -733,7 +733,7 @@ class group extends class_base
 			}
 		}
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
+		$c->file_clear_pt("acl");
 	}
 
 	function on_add_alias_to_group($arr)
@@ -789,7 +789,7 @@ class group extends class_base
 			}
 		}
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
+		$c->file_clear_pt("acl");
 	}
 
 	function on_delete_grp($arr)
@@ -810,7 +810,7 @@ class group extends class_base
 
 			$this->users->deletegroup($gid);
 			$c = get_instance("cache");
-			$c->file_invalidate_regex("acl-cache(.*)");
+			$c->file_clear_pt("acl");
 		}
 	}
 
@@ -930,7 +930,7 @@ class group extends class_base
 			$user->create_brother($p_o->id());
 		}
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
+		$c->file_clear_pt("acl");
 	}
 
 	/** removes user $user from group $group
@@ -991,7 +991,7 @@ class group extends class_base
 			}
 		}
 		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
+		$c->file_clear_pt("acl");
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.73 2006/01/13 11:12:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.74 2006/02/06 12:37:45 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -82,9 +82,6 @@ class releditor extends core
 		$found = true;
 		
 		$cache_inst = get_instance("cache");
-		$cache_inst->file_invalidate_regex('alias_cache-source-.*');
-		// XXX: there is a weird bug with connection caching .. this NEEDS to be fixed in the future
-		$cache_inst->file_invalidate_regex('connection-search.*');
 
 		if (!empty($edit_id) && is_oid($edit_id))
 		{
@@ -767,12 +764,6 @@ class releditor extends core
 				}
 			};
 
-			// dunno about that, is it still needed?
-			/*
-			$cache_inst = get_instance("cache");
-			$cache_inst->file_invalidate_regex('alias_cache-source-.*');
-			*/
-
 			return PROP_OK;
 		};
 	
@@ -994,12 +985,6 @@ class releditor extends core
 				}
 			}
 		}
-
-		/*
-		$cache_inst = get_instance("cache");
-		$cache_inst->file_invalidate_regex('alias_cache-source-.*');
-		*/
-
 	}
 
 	function get_html()

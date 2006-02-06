@@ -1925,7 +1925,7 @@ class _int_object
 		if (!aw_ini_get("acl.use_new_acl"))
 		{
 			$c = get_instance("cache");
-			$c->file_invalidate_regex("acl");
+			$c->file_clear_pt("acl");
 		}
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.359 2005/12/14 19:45:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.360 2006/02/06 12:37:45 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -597,11 +597,6 @@ class menuedit extends aw_template
 
 	function invalidate_menu_cache()
 	{
-		$cache = get_instance("cache");
-
-		// here we gots to invalidate the objects::get_list cache as well, cause it also contains menus
-		$cache->file_invalidate_regex("objects::get_list::.*");
-		$cache->file_invalidate_regex("menuedit::menu_cache::.*");
 	}
 
 	// builds HTML popups

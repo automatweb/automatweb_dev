@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.19 2005/12/06 09:43:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.20 2006/02/06 12:37:45 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -345,7 +345,7 @@ class recycle_bin extends class_base
 		$this->db_query($query);
 		// clear cache
 		$c = get_instance("cache");
-		$c->file_invalidate_regex(".*");
+		$c->file_clear_pt("acl");
 		
 		return aw_ini_get("baseurl").$arr["return_url"];
 	}
@@ -371,7 +371,7 @@ class recycle_bin extends class_base
 
 		// clear cache
 		$c = get_instance("cache");
-		$c->file_invalidate_regex(".*");
+		$c->file_clear_pt("acl");
 
 		return aw_ini_get("baseurl").$arr["return_url"];
 	}

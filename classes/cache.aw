@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.45 2006/02/02 13:53:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.46 2006/02/06 12:37:45 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -451,45 +451,6 @@ class cache extends core
 
 	}
 
-	////
-	// invalidates all cache files that match pcre regex $regex
-	// returns the number of caches that were invalidated
-
-	// this can be really dangerous, we don't check whether the file is actually
-	// in the correct directory. 
-
-	// why preg_match is bad?
-	// [preg_match] => 2.6577 (14.42%)
-	// [counter_preg_match] => 26608
-	function file_invalidate_regex($regex)
-	{
-		if (aw_global_get("no_cache_flush") == 1)
-		{
-			return;
-		}
-		$this->__fir_cnt = 0;
-		$this->cache_files = aw_cache_get_array("cache_files");
-		global $awt;
-		if (!is_array($this->cache_files))
-		{
-			$this->cache_files = array();
-			// XXX: this is really slow. Check whether files could be
-			// scattered into directories more intelligently
-			$awt->start("gather-cache-files");
-			$this->_get_cache_files($this->cfg["page_cache"]);
-			$awt->stop("gather-cache-files");
-			sort($this->cache_files);
-			//aw_cache_set_array("cache_files",$this->cache_files);
-		}
-		//$is_flushed = aw_cache_get("flush_cache",$regex);
-		//if (!$is_flushed)
-		//{
-			$this->_file_inv_re_req($this->cfg["page_cache"], $regex);
-			//aw_cache_set("flush_cache",$regex,true);
-		//};
-		return $this->__fir_cnt;
-	}
-
 	function _get_cache_files($fld)
 	{
 		if ($dir = @opendir($fld))
@@ -512,54 +473,6 @@ class cache extends core
 		}
 	}
 
-
-	function _file_inv_re_req($fld, $regex)
-	{
-		// we don't really need regular expressions here, do we?
-		// simple string comparision is more than enough
-		$r_regex = str_replace("(.*)","",$regex);
-		$r_regex = str_replace(".*","",$r_regex);
-
-		// basic binary search, finds first matching element from the cache_files array
-		// it's a lot faster than a linear search
-		$high = count($this->cache_files);
-		$low = 0;
-		$nlen = strlen($r_regex);
-		
-		while ($high - $low > 1)
-		{
-			$probe = (int)(($high + $low) / 2);
-			if (substr($this->cache_files[$probe],0,$nlen) < $r_regex)
-			{
-			   $low = $probe;
-			}
-			else
-			{
-			   $high = $probe;
-			}
-		}
-		
-		if ($high == count($this->cache_files) || @strpos($this->cache_files[$high],$r_regex) === false)
-		{
-			$lookfor = false;
-		}
-		else
-		{
-			$lookfor = $high;
-		}
-
-
-		// this gives the position of first item in the list that matches the "regex"
-		if (!empty($lookfor))
-		{
-			// delete all matching cache files
-			while(substr($this->cache_files[$lookfor],0,$nlen) == $r_regex)
-			{
-				$this->file_invalidate($this->cache_files[$lookfor]);
-				$lookfor++;
-			};
-		};
-	}
 
 	/** returns the timestamp of the last modified object. caches it as well.
 

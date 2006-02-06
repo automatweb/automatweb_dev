@@ -914,22 +914,6 @@ class relationmgr extends aw_template
 		{
 			$arr["obj_inst"]->set_meta("aliaslinks", $arr["request"]["link"]);
 			$arr["obj_inst"]->save();
-	
-			$cache = $arr["request"]["cache"];
-			$cache_inst = get_instance("cache");
-			foreach($arr["obj_inst"]->connections_from() as $ad)
-			{
-				if ($ad->prop("cached") != $cache[$ad->prop("to")])
-				{
-					if (!$cache[$ad->prop("to")])
-					{
-						$cache_inst->file_invalidate_regex('alias_cache-source-'.$id.'-target-'.$ad->prop("to").'.*');
-					}
-					$ad->change(array(
-						"cached" => $cache[$ad->prop("to")],
-					));
-				}
-			}
 		}
 	}
 }
