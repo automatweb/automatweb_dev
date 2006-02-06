@@ -118,6 +118,17 @@
             <caption>Objekt</caption>
       </property>
       <property>
+            <name>search_city24_id</name>
+            <table>objects</table>
+            <group>grp_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <datatype>int</datatype>
+            <size>10</size>
+            <caption>City24 ID</caption>
+      </property>
+      <property>
             <name>search_transaction_type</name>
             <table>objects</table>
             <group>grp_search</group>
