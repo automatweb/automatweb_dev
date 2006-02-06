@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.9 2006/02/02 13:24:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.10 2006/02/06 17:30:34 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -1597,13 +1597,15 @@ class realestate_manager extends class_base
 				break;
 
 			case "search":
-				if (is_array ($this->realestate_search))
+				if (is_array ($this->realestate_search) and $this->can("view", $this->realestate_search["realestate_search_id"]))
 				{
 					$cl_realestate_search = get_instance (CL_REALESTATE_SEARCH);
+					$search_object = obj ($this->realestate_search["realestate_search_id"]);
 					$cl_realestate_search->get_options (array ("id" => $this->realestate_search["realestate_search_id"]));
-					$search = $cl_realestate_search->get_search_args ($this->realestate_search);
+					$search = $cl_realestate_search->get_search_args ($this->realestate_search, $search_object);
+					$cl_realestate_search->realestate_manager = $this_object;
 					$args = array (
-						"manager" => $this_object,
+						"this" => $search_object,
 						"search" => $search,
 					);
 					$list =& $cl_realestate_search->search ($args);
@@ -1615,6 +1617,7 @@ class realestate_manager extends class_base
 				break;
 
 			case "all":
+			default:
 				$classes = array (
 					CL_REALESTATE_HOUSE,
 					CL_REALESTATE_ROWHOUSE,
@@ -1638,120 +1641,123 @@ class realestate_manager extends class_base
 				break;
 		}
 
-		### modified constraint
-		$modified_after = aw_global_get ("realestate_proplist_filter_modifiedafter");
-		$modified_before = aw_global_get ("realestate_proplist_filter_modifiedbefore");
+		if ("search" != $table->name)
+		{
+			### modified constraint
+			$modified_after = aw_global_get ("realestate_proplist_filter_modifiedafter");
+			$modified_before = aw_global_get ("realestate_proplist_filter_modifiedbefore");
 
-		if ($modified_after and $modified_before)
-		{
-			$modified_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $modified_after, $modified_before);
-		}
-		elseif ($modified_after)
-		{
-			$modified_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $modified_after);
-		}
-		elseif ($modified_before)
-		{
-			$modified_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $modified_before);
-		}
-		else
-		{
-			$modified_constraint = null;
-		}
-
-
-		### created constraint
-		$created_after = aw_global_get ("realestate_proplist_filter_createdafter");
-		$created_before = aw_global_get ("realestate_proplist_filter_createdbefore");
-
-		if ($created_after and $created_before)
-		{
-			$created_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $created_after, $created_before);
-		}
-		elseif ($created_after)
-		{
-			$created_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $created_after);
-		}
-		elseif ($created_before)
-		{
-			$created_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $created_before);
-		}
-		else
-		{
-			$created_constraint = null;
-		}
+			if ($modified_after and $modified_before)
+			{
+				$modified_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $modified_after, $modified_before);
+			}
+			elseif ($modified_after)
+			{
+				$modified_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $modified_after);
+			}
+			elseif ($modified_before)
+			{
+				$modified_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $modified_before);
+			}
+			else
+			{
+				$modified_constraint = null;
+			}
 
 
-		### closed constraint
-		$closed_after = aw_global_get ("realestate_proplist_filter_closedafter");
-		$closed_before = aw_global_get ("realestate_proplist_filter_closedbefore");
+			### created constraint
+			$created_after = aw_global_get ("realestate_proplist_filter_createdafter");
+			$created_before = aw_global_get ("realestate_proplist_filter_createdbefore");
 
-		if ($closed_after and $closed_before)
-		{
-			$closed_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $closed_after, $closed_before);
+			if ($created_after and $created_before)
+			{
+				$created_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $created_after, $created_before);
+			}
+			elseif ($created_after)
+			{
+				$created_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $created_after);
+			}
+			elseif ($created_before)
+			{
+				$created_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $created_before);
+			}
+			else
+			{
+				$created_constraint = null;
+			}
+
+
+			### closed constraint
+			$closed_after = aw_global_get ("realestate_proplist_filter_closedafter");
+			$closed_before = aw_global_get ("realestate_proplist_filter_closedbefore");
+
+			if ($closed_after and $closed_before)
+			{
+				$closed_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $closed_after, $closed_before);
+			}
+			elseif ($closed_after)
+			{
+				$closed_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $closed_after);
+			}
+			elseif ($closed_before)
+			{
+				$closed_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $closed_before);
+			}
+			else
+			{
+				$closed_constraint = null;
+			}
+
+
+			### price constraint
+			$pricemin = aw_global_get ("realestate_proplist_filter_pricemin");
+			$pricemax = aw_global_get ("realestate_proplist_filter_pricemax");
+
+			if ($pricemin and $pricemax)
+			{
+				$price_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $pricemin, $pricemax);
+			}
+			elseif ($pricemin)
+			{
+				$price_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $pricemin);
+			}
+			elseif ($pricemax)
+			{
+				$price_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $pricemax);
+			}
+			else
+			{
+				$price_constraint = null;
+			}
+
+
+			### other constraints
+			$transaction_closed = aw_global_get ("realestate_proplist_filter_transaction_closed") ? 1 : null;
+			$legal_status = is_array (aw_global_get ("realestate_proplist_filter_legal_status")) ? aw_global_get ("realestate_proplist_filter_legal_status") : null;
+			$quality_class = is_array (aw_global_get ("realestate_proplist_filter_quality_class")) ? aw_global_get ("realestate_proplist_filter_quality_class") : null;
+
+			$args = array (
+				"class_id" => $classes,
+				"parent" => $parents,
+				"modified" => $modified_constraint,
+				"created" => $created_constraint,
+				"transaction_price" => $price_constraint,
+				"transaction_date" => $closed_constraint,
+				"transaction_closed" => $transaction_closed,
+				"legal_status" => $legal_status,
+				"quality_class" => $quality_class,
+				$agent_constraint,
+			);
+			$list = new object_list ($args);
+
+			### count all
+			$this->properties_result_count = $list->count ();
+
+			### limit
+			$limit = ((int) $_GET["ft_page"] * $this_object->prop ("properties_list_perpage")) . "," . $this_object->prop ("properties_list_perpage");
+			$args["limit"] = $limit;
+			$list->filter ($args);
 		}
-		elseif ($closed_after)
-		{
-			$closed_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $closed_after);
-		}
-		elseif ($closed_before)
-		{
-			$closed_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $closed_before);
-		}
-		else
-		{
-			$closed_constraint = null;
-		}
-
-
-		### price constraint
-		$pricemin = aw_global_get ("realestate_proplist_filter_pricemin");
-		$pricemax = aw_global_get ("realestate_proplist_filter_pricemax");
-
-		if ($pricemin and $pricemax)
-		{
-			$price_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $pricemin, $pricemax);
-		}
-		elseif ($pricemin)
-		{
-			$price_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $pricemin);
-		}
-		elseif ($pricemax)
-		{
-			$price_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $pricemax);
-		}
-		else
-		{
-			$price_constraint = null;
-		}
-
-
-		### other constraints
-		$transaction_closed = aw_global_get ("realestate_proplist_filter_transaction_closed") ? 1 : null;
-		$legal_status = is_array (aw_global_get ("realestate_proplist_filter_legal_status")) ? aw_global_get ("realestate_proplist_filter_legal_status") : null;
-		$quality_class = is_array (aw_global_get ("realestate_proplist_filter_quality_class")) ? aw_global_get ("realestate_proplist_filter_quality_class") : null;
-
-		$args = array (
-			"class_id" => $classes,
-			"parent" => $parents,
-			"modified" => $modified_constraint,
-			"created" => $created_constraint,
-			"transaction_price" => $price_constraint,
-			"transaction_date" => $closed_constraint,
-			"transaction_closed" => $transaction_closed,
-			"legal_status" => $legal_status,
-			"quality_class" => $quality_class,
-			$agent_constraint,
-		);
-		$list = new object_list ($args);
-
-		### count all
-		$this->properties_result_count = $list->count ();
-
-		### limit
-		$limit = ((int) $_GET["ft_page"] * $this_object->prop ("properties_list_perpage")) . "," . $this_object->prop ("properties_list_perpage");
-		$args["limit"] = $limit;
-		$list->filter ($args);
 
 		$properties = is_array ($list) ? $list : $list->arr ();
 		$return_url = urlencode(aw_global_get('REQUEST_URI'));

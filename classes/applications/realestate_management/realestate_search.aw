@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.8 2006/02/06 12:08:22 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.9 2006/02/06 17:30:34 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -209,14 +209,35 @@ class realestate_search extends class_base
 
 		if ($prop["group"] == "grp_search" and !is_object ($this->realestate_manager))
 		{
-			$prop["error"] = t("Kinnisvarahalduskeskkond määramata");
-			return PROP_FATAL_ERROR;
+			if ($this->can ("view", $this_object->prop ("realestate_mgr")))
+			{
+				$this->realestate_manager = obj ($this_object->prop ("realestate_mgr"));
+			}
+
+			if ($prop["group"] == "grp_search" and !is_object ($this->realestate_manager))
+			{
+				$prop["error"] = t("Kinnisvarahalduskeskkond määramata");
+				return PROP_FATAL_ERROR;
+			}
 		}
 
 		if ($prop["group"] == "grp_search" and !is_object ($this->administrative_structure))
 		{
-			$prop["error"] = t("Haldusjaotus määramata");
-			return PROP_FATAL_ERROR;
+			if (is_oid ($this_object->prop ("administrative_structure")))
+			{
+				$this->administrative_structure = obj ($this_object->prop ("administrative_structure"));
+			}
+
+			if ($prop["group"] == "grp_search" and !is_object ($this->administrative_structure))
+			{
+				$prop["error"] = t("Haldusjaotus määramata");
+				return PROP_FATAL_ERROR;
+			}
+		}
+
+		if (!is_object($this->classificator))
+		{
+			$this->classificator = get_instance(CL_CLASSIFICATOR);
 		}
 
 		switch($prop["name"])
