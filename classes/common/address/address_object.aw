@@ -250,9 +250,11 @@ class address_object extends _int_object
 		$this->as_load_structure ();
 
 		### check if all specified unit is in the same admin structure as others
-		if ($this->as_administrative_structure->id () != $division->prop ("administrative_structure"))
+		$admin_structure_id = $this->as_administrative_structure->id ();
+
+		if (is_object($division) and ($admin_structure_id != $division->prop ("administrative_structure")))
 		{
-/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: division [%s] admin structure [%s] different from current [%s]", $division->id (), $division->prop ("administrative_structure"), $this->as_administrative_structure->id ()).NEWLINE; }
+/* dbg */ if ($_GET[ADDRESS_DBG_FLAG]) { echo sprintf ("address::set_by_id: division [%s] admin structure [%s] different from current [%s]. division var: [%s]", $division->id (), $division->prop ("administrative_structure"), $admin_structure_id, $division).NEWLINE; }
 			return false;
 		}
 
