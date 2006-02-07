@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.52 2006/02/02 13:53:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.53 2006/02/07 09:16:57 markop Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -180,7 +180,21 @@ class crm_meeting extends class_base
 			"name", "comment", "content"
 		);
 	}
-
+	
+	function callback_on_load($arr)
+	{
+		if(($arr["request"]["msgid"]))
+		{
+			$mail = get_instance(CL_MESSAGE);
+			$this->mail_data = $mail->fetch_message(Array(
+				"mailbox" => "INBOX" ,
+				"msgrid" => $arr["request"]["msgrid"],
+				"msgid" => $arr["request"]["msgid"],
+				"fullheaders" => "",
+			));
+		}	
+	}
+	
 	function get_property($arr)
 	{
 		if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->prop("is_personal") && aw_global_get("uid") != $arr["obj_inst"]->createdby())
@@ -194,6 +208,24 @@ class crm_meeting extends class_base
 		$data = &$arr['prop'];
 		switch($data['name'])
 		{
+			case "name":
+				if($this->mail_data)
+				{
+					$data["value"] = $this->mail_data["subject"];
+				break;
+				}
+			case "content":
+				if($this->mail_data)
+				{
+					$data["value"] = sprintf(
+					"From: %s\nTo: %s\nSubject: %s\nDate: %s\n\n%s",
+						$this->mail_data["from"],
+						$this->mail_data["to"],
+						$this->mail_data["subject"],
+						$this->mail_data["date"],
+						$this->mail_data["content"]);
+					break;
+				}
 			case "start1":
 			case "end":
 				$p = get_instance(CL_PLANNER);

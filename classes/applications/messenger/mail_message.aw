@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.26 2006/01/25 13:10:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.27 2006/02/07 09:16:57 markop Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -135,7 +135,6 @@ class mail_message extends class_base
 				"msgid" => $msgid,
 			));
 		};
-
 		return $rv;
 	}
 
@@ -667,16 +666,21 @@ class mail_message extends class_base
 				$tb->add_menu_item(array(
 					"parent" => "calendar",
 					"text" => $clinf[$clid]["name"],
-					"url" => $this->mk_my_orb("register_event",array(
+/*					"url" => $this->mk_my_orb("register_event",array(
 						"mailbox" => $req["mailbox"],
 						"msgrid" => $req["msgrid"],
 						"msgid" => $req["msgid"],
 						"create_class" => $clid,
 					)),
+*/					"url" =>$this->mk_my_orb("new" , array(
+						"msgrid" => $req["msgrid"],
+						"msgid" => $req["msgid"],
+						"parent" => $user_cal,
+						) ,$clid),
 					//"action" => "register_event",
 				));
-			};
-		};
+			}
+		}
 
 		$tb->add_separator();
 
@@ -824,6 +828,7 @@ class mail_message extends class_base
 		return $this->_gen_edit_url($arr);
 	}
 
+//--------------------register_event funktsiooni vist rohkem vaja ei ole--------------------
 	/** Creates a calendar event from a message object 
 		
 		@attrib name=register_event
@@ -863,7 +868,6 @@ class mail_message extends class_base
 			"sort_by" => "name",
 			"site_id" => array(),
 		));
-
 
 		// not using names(), because I only need calendars with valid event_folders
 		foreach($cal_list->arr() as $cal)
@@ -922,8 +926,8 @@ class mail_message extends class_base
 		));
 
                 $html = $htmlc->get_result(array());
-
 		return $html;
+		//return  $this->cfg["baseurl"]."/automatweb/orb.aw?class=task&action=new&msgid=".$arr["msgid"]."&msgrid=".$arr["msgrid"];
 	}
 
 	/**
@@ -1245,7 +1249,6 @@ class mail_message extends class_base
 		};
 		return $row;
 	}
-		
 
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.66 2006/02/03 10:39:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.67 2006/02/07 09:16:57 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -287,9 +287,28 @@ class task extends class_base
 
 		return $this->parse();
 	}
+	
+	function callback_on_load($arr)
+	{
+		if(($arr["request"]["msgid"]))
+		{
+			$mail = get_instance(CL_MESSAGE);
+			$this->mail_data = $mail->fetch_message(Array(
+				"mailbox" => "INBOX" ,
+				"msgrid" => $arr["request"]["msgrid"],
+				"msgid" => $arr["request"]["msgid"],
+				"fullheaders" => "",
+			));
+		}
+		$u = get_instance(CL_USER);
+		$this->co = $u->get_current_company();
+		$this->person = $u->get_current_person();
+	}
+	
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
+
 		if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->prop("is_personal") && aw_global_get("uid") != $arr["obj_inst"]->createdby())
 		{
 			if (!($arr["prop"]["name"] == "start1" || $arr["prop"]["name"] == "end" || $arr["prop"]["name"] == "deadline"))
@@ -297,10 +316,22 @@ class task extends class_base
 				return PROP_IGNORE;
 			}
 		}
-
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "content":
+				if($this->mail_data)
+				{
+					$data["value"] = sprintf(
+					"From: %s\nTo: %s\nSubject: %s\nDate: %s\n\n%s",
+						$this->mail_data["from"],
+						$this->mail_data["to"],
+						$this->mail_data["subject"],
+						$this->mail_data["date"],
+						$this->mail_data["content"]);
+					break;
+				}
+				
 			case "end":
 				if ($arr["new"])
 				{
@@ -323,6 +354,10 @@ class task extends class_base
 				break;
 
 			case "name":
+				if($this->mail_data)
+				{
+					$data["value"] = $this->mail_data["subject"];
+				}
 				if (is_object($arr["obj_inst"]) && $data["value"] == "")
 				{
 					$data["value"] = $this->_get_default_name($arr["obj_inst"]);
@@ -634,6 +669,11 @@ class task extends class_base
 			case "customer":
 				$i = get_instance(CL_CRM_COMPANY);
 				$cst = $i->get_my_customers();
+// 				if($this->$co)
+// 				{
+// 					$data["value"] = $this->$co;
+// 				}
+				
 				if (!count($cst))
 				{
 					$data["options"] = array("" => "");
@@ -833,7 +873,17 @@ class task extends class_base
 		};
 		return $retval;
 	}
+/*
+<<<<<<< task.aw
 
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
+
+=======
+>>>>>>> 1.65
+*/
 	function callback_mod_retval($arr)
 	{
 		$arr["args"]["stop_pop"] = $arr["request"]["ppa"];

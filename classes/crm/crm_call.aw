@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.34 2006/02/02 13:53:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.35 2006/02/07 09:16:57 markop Exp $
 // crm_call.aw - phone call
 /*
 
@@ -129,6 +129,19 @@ class crm_call extends class_base
 		return $done;
 	}
 
+	function callback_on_load($arr)
+	{
+		if(($arr["request"]["msgid"]))
+		{
+			$mail = get_instance(CL_MESSAGE);
+			$this->mail_data = $mail->fetch_message(Array(
+				"mailbox" => "INBOX" ,
+				"msgrid" => $arr["request"]["msgrid"],
+				"msgid" => $arr["request"]["msgid"],
+				"fullheaders" => "",
+			));
+		}	
+	}
 
 	function get_property($arr)
 	{
@@ -144,6 +157,25 @@ class crm_call extends class_base
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
+			case "name":	
+				if($this->mail_data)
+				{
+					$data["value"] = $this->mail_data["subject"];
+				}	
+				break;		
+			case "content":
+				if($this->mail_data)
+				{
+					$data["value"] = sprintf(
+					"From: %s\nTo: %s\nSubject: %s\nDate: %s\n\n%s",
+						$this->mail_data["from"],
+						$this->mail_data["to"],
+						$this->mail_data["subject"],
+						$this->mail_data["date"],
+						$this->mail_data["content"]);
+					break;
+				}
+			
 			case "project":
 				$nms = array();
 				if ($this->can("view",$arr["request"]["alias_to_org"]))
