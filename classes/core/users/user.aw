@@ -324,7 +324,7 @@ class user extends class_base
 			case "uid_entry":
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
-					if ($this->db_fetch_field("SELECT uid FROM users WHERE uid = '".$prop["value"]."'", "uid") == $prop["value"])
+					if (strtolower($this->db_fetch_field("SELECT uid FROM users WHERE uid = '".$prop["value"]."'", "uid")) == strtolower($prop["value"]))
 					{
 						$prop["error"] = t("Selline kasutaja on juba olemas!");
 						return PROP_FATAL_ERROR;
