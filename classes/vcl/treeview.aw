@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.52 2006/01/25 14:56:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.53 2006/02/07 08:54:47 tarvo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -77,6 +77,7 @@ class treeview extends class_base
                         "type" => TREE_DHTML,
                         "tree_id" => $pr["name"], // what if there are multiple trees
                         "persist_state" => 1,
+						"item_name_length" => $pr["item_name_length"],
                 ));
 		$pr["vcl_inst"] = $this;
 		return array($pr["name"] => $pr);
@@ -266,6 +267,7 @@ class treeview extends class_base
 		$this->items = array();
 		$this->tree_type = empty($arr["type"]) ? TREE_JS : $arr["type"];
 		$this->tree_dat = $arr;
+		$this->item_name_length = empty($arr["item_name_length"]) ? false : $arr["item_name_length"];
 		$this->has_root = empty($arr["has_root"]) ? false : $arr["has_root"];
 		$this->tree_id = empty($arr["tree_id"]) ? false : $arr["tree_id"];
 		$this->get_branch_func = empty($arr["get_branch_func"]) ? false : $arr["get_branch_func"];
@@ -326,6 +328,10 @@ class treeview extends class_base
 		// dhtml tree (sometimes) needs to know information about
 		// a specific node and for this it needs to access
 		// that node directly.
+		if($this->item_name_length)
+		{
+			$item["caption"]= substr($item["caption"], 0, $this->item_name_length).(strlen($item["caption"]) > 20 ? "..." : "");
+		}
 		$this->itemdata[$item["id"]] = $item;
 		$this->items[$parent][] = &$this->itemdata[$item["id"]];
 		if (!empty($item["is_open"]))
@@ -1187,6 +1193,10 @@ class treeview extends class_base
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$oname = parse_obj_name($o->name());
+			if(isset($arr["tree_opts"]["item_name_length"]))
+			{
+				$oname = substr($oname, 0, $arr["tree_opts"]["item_name_length"]).(strlen($oname) > 20 ? "..." : "");
+			}
 			$oid = $o->id();
 			$class_id = $o->class_id();
 

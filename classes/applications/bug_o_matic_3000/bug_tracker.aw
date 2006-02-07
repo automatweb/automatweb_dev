@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.10 2006/02/03 17:32:41 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.11 2006/02/07 08:54:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.11 2006/02/07 08:54:46 tarvo Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -140,6 +141,7 @@ class bug_tracker extends class_base
 				"type" => TREE_DHTML,
 				"tree_id" => "prods",
 				"persist_state" => true,
+				"item_name_length" => 20,
 			)
 		));
 	}
