@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.113 2006/02/06 12:37:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.114 2006/02/07 13:55:46 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -472,6 +472,7 @@ class admin_menus extends aw_template
 	function copy($arr)
 	{
 		extract($arr);
+		return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel));
 
 		// check if any objects that are to be copied need special handling
 		if (is_array($sel))
@@ -553,7 +554,7 @@ class admin_menus extends aw_template
 	function submit_copy_feedback($arr)
 	{
 		extract($arr);
-		aw_register_default_class_member("admin_menus", "serialize_submenus", $ser_submenus);
+		/*aw_register_default_class_member("admin_menus", "serialize_submenus", $ser_submenus);
 		aw_register_default_class_member("admin_menus", "serialize_subobjs",$ser_subobjs);
 
 		$copied_objects = array();
@@ -566,6 +567,23 @@ class admin_menus extends aw_template
 				{
 					$copied_objects[$oid] = $r;
 				}
+			}
+		}*/
+
+		$params = array(
+			"copy_subobjects" => $ser_type == 2 ? 1 : 0,
+			"copy_subfolders" => $ser_type == 1 ? 1 : 0,
+			"copy_subdocs" => $ser_type == 3 ? 1 : 0,
+			"copy_rels" => $ser_rels == 1 ? 1 : 0,
+			"new_rels" => $ser_rels == 2 ? 1 : 0
+		);
+		$copied_objects = array();
+		if (is_array($sel))
+		{
+			foreach($sel as $oid => $one)
+			{
+				$o = obj($oid);
+				$copied_objects[$oid] = $o->get_xml($params);
 			}
 		}
 		aw_session_set("copied_objects", $copied_objects);
@@ -633,36 +651,11 @@ class admin_menus extends aw_template
 		$msgs = array();
 		if (is_array($copied_objects))
 		{
-			reset($copied_objects);
-			while (list($oid,$str) = each($copied_objects))
+			foreach($copied_objects as $oid => $xml)
 			{
-				$id = $this->unserialize(array("str" => $str, "parent" => $parent, "period" => $period));
-				if (is_oid($id))
-				{
-					$obj_id_map[$oid] = $id;
-					if (is_array($str["connections"]))
-					{
-						$conns[$id] = $str["connections"];
-					};
-				}
+				$oid = object::from_xml($xml, $parent);
 			}
 		}
-
-		// now, cycle over those and create the bloody relations and be done with it
-		foreach($conns as $obj_id => $connections)
-		{
-			foreach($connections as $connection)
-			{
-				// now, create the alias?
-				$obj_inst = new object($obj_id);
-				$obj_inst->connect(array(
-					"to" => $obj_id_map[$connection["to"]],
-					"reltype" => $connection["reltype"],
-				));
-			}
-		};
-
-		$this->invalidate_menu_cache();
 
 		aw_session_set("copied_objects",array());
 		$_SESSION["cut_objects"] = false;

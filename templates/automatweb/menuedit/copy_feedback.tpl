@@ -32,13 +32,27 @@
 
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
 										<tr>
-											<td class="celltext">Kas kopeerime alammen&uuml;&uuml;d:</td><td class="celltext"><input type='checkbox' NAME='ser_submenus' VALUE='1' class="formcheck"></td>
+											<td class="celltext" colspan="2"><b>Objektid:</b></td>
 										</tr>
 										<tr>
-											<td class="celltext">Kas kopeerime alamobjektid:</td><td class="celltext"><input type='checkbox' NAME='ser_subobjs' VALUE='1' class="formcheck"></td>
+											<td class="celltext">Kopeeri alamobjektid:</td><td class="celltext"><input checked type='radio' NAME='ser_type' VALUE='2' class="formcheck"></td>
+										</tr>
+										<tr>
+											<td class="celltext">Kopeeri alammen&uuml;&uuml;d:</td><td class="celltext"><input type='radio' NAME='ser_type' VALUE='1' class="formcheck"></td>
+										</tr>
+										<tr>
+											<td class="celltext">Kopeeri dokumendid:</td><td class="celltext"><input type='radio' NAME='ser_type' VALUE='3' class="formcheck"></td>
+										</tr>
+										<tr>
+											<td class="celltext" colspan="2"><b>Seosed:</b></td>
+										</tr>
+										<tr>
+											<td class="celltext">Seosta samade objektidega:</td><td class="celltext"><input checked type='radio' NAME='ser_rels' VALUE='1' class="formcheck"></td>
+										</tr>
+										<tr>
+											<td class="celltext">Loo uued seotud objektid:</td><td class="celltext"><input type='radio' NAME='ser_rels' VALUE='2' class="formcheck"></td>
 										</tr>
 									</table>
-
 
 
 

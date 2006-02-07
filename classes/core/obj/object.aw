@@ -486,9 +486,11 @@ class object
 		return $i->gen($this->id(), $options);
 	}
 
-	function from_xml($options)
+	function from_xml($xml, $parent)
 	{
-
+		$i = get_instance("core/obj/obj_xml_gen");
+		$oid = $i->unser($xml, $parent);
+		return new object($oid);
 	}
 }
 
