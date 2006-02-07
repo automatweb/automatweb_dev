@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.54 2006/01/30 15:35:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.55 2006/02/07 11:21:01 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -435,6 +435,7 @@ class ml_list extends class_base
 		}
 		else
 		{
+			$use_folders = $list_obj->prop("choose_menu");
 			$allow = true;
 		};
 		if(is_array($args["subscr_lang"]))
@@ -1434,7 +1435,6 @@ class ml_list extends class_base
 		));
 
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
-
 		if (is_array($ml_list_members))
 		{
 			foreach($ml_list_members as $key => $val)
@@ -1445,6 +1445,10 @@ class ml_list extends class_base
 					"member" => $val["oid"],
 					"from_user" => true,
 				));
+				if(!(strlen($memberdata["name"]) > 0))
+				{
+					$memberdata["name"] = "(nimetu)";
+				}
 				$parent_obj = obj($val["parent"]);
 				$parent_name = $parent_obj->name();
 				$tabledata = array(
