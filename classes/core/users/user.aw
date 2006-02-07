@@ -886,10 +886,15 @@ class user extends class_base
 		if ($arr["request"]["action"] == "new")
 		{
 			$po = obj($arr["request"]["parent"]);
-			if ($po->class_id() != CL_GROUP && $po->id() != aw_ini_get("users.rootmenu"))
+			$rm = aw_ini_get("users.rootmenu");
+			if (!$rm)
+			{
+				$rm = aw_ini_get("users.root_folder");
+			}
+			if ($po->class_id() != CL_GROUP && $po->id() != $rm)
 			{
 				// redirect to main user folder
-				header("Location: ".aw_url_change_var("parent", aw_ini_get("users.rootmenu")));
+				header("Location: ".aw_url_change_var("parent", $rm));
 				die();
 
 			}
