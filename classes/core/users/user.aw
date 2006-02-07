@@ -883,6 +883,17 @@ class user extends class_base
 
 	function callback_on_load($arr)
 	{
+		if ($arr["request"]["action"] == "new")
+		{
+			$po = obj($arr["request"]["parent"]);
+			if ($po->class_id() != CL_GROUP && $po->id() != aw_ini_get("users.rootmenu"))
+			{
+				// redirect to main user folder
+				header("Location: ".aw_url_change_var("parent", aw_ini_get("users.rootmenu")));
+				die();
+
+			}
+		}
 		$o = obj($arr["request"]["id"]);
 		if ($o->id() != $o->brother_of())
 		{
