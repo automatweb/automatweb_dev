@@ -460,6 +460,13 @@ class user extends class_base
 				$tmp = obj($gd["oid"]);
 				$gd["name"] = $tmp->name();
 			}
+
+			$can_edit = true;
+			if (is_oid($gd["oid"]) && !$this->can("edit", $gd["oid"]))
+			{
+				$can_edit = false;
+			}
+
 			if ($gd["type"] == GRP_DYNAMIC)
 			{
 				$gd["type"] = t("D&uuml;naamiline");
@@ -468,11 +475,18 @@ class user extends class_base
 			else
 			{
 				$gd["type"] = t("Tavaline");
-				$gd["is_member"] = html::checkbox(array(
-					"name" => "member[$gid]",
-					"value" => 1,
-					"checked" => isset($groups[$gid])
-				));
+				if (!$can_edit)
+				{
+					$gd["is_member"] = isset($groups[$gid]) ? t("Jah") : t("Ei");
+				}
+				else
+				{
+					$gd["is_member"] = html::checkbox(array(
+						"name" => "member[$gid]",
+						"value" => 1,
+						"checked" => isset($groups[$gid])
+					));
+				}
 			}
 
 			$t->define_data($gd);
@@ -520,6 +534,10 @@ class user extends class_base
 		// now, remove user from all removed groups
 		foreach($groups as $gid => $is)
 		{
+			if (!$this->can("edit", $gl[$gid]["oid"]))
+			{
+				continue;
+			}
 			if ($member[$gid] != 1 && $is && isset($gl[$gid]))
 			{
 				$this->users->remove_users_from_group_rec($gid, array($uid), false, false);
