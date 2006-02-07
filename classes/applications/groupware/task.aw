@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.67 2006/02/07 09:16:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.68 2006/02/07 10:11:22 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -873,17 +873,7 @@ class task extends class_base
 		};
 		return $retval;
 	}
-/*
-<<<<<<< task.aw
 
-	function callback_mod_reforb($arr)
-	{
-		$arr["post_ru"] = post_ru();
-	}
-
-=======
->>>>>>> 1.65
-*/
 	function callback_mod_retval($arr)
 	{
 		$arr["args"]["stop_pop"] = $arr["request"]["ppa"];
