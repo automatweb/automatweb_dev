@@ -264,6 +264,8 @@ class export_lite extends aw_template
 		// sitemap
 		$fc = str_replace("\"/sitemap","\"".$baseurl."/sitemap",$fc);
 		$fc = str_replace("'/sitemap","'".$baseurl."/sitemap",$fc);
+		$fc = str_replace("'/tellimine","'".$baseurl."/tellimine",$fc);
+		$fc = str_replace("\"/tellimine","\"".$baseurl."/tellimine",$fc);
 
 		// href='/666' type of links
 		$fc = preg_replace("/href='\/(\d*)'/iU","href='".$baseurl."/\\1'",$fc);
@@ -285,7 +287,6 @@ class export_lite extends aw_template
 
 			// correct the link
 			$link = $this->rewrite_link(substr($fc,$begin,($end-$begin)));
-
 			if (!$this->is_external($link))
 			{
 				// fetch the page
@@ -352,11 +353,13 @@ class export_lite extends aw_template
 		
 		$title = trim(strip_tags($title));
 
+		//echo "title b4 preg = $title <br>";
 		if ($title == "")
 		{
 			// if all else fails, read the <TITLE>foo</TITLE> tag...
 			preg_match("/<TITLE>(.*)<\/TITLE>/iUs", $o_fc, $nt_t);
 			$title = trim(strip_tags($nt_t[1]));
+		//	echo "title from preg = $title <br>";
 		}
 		$title = trim(strip_tags($title));
 
@@ -470,6 +473,10 @@ class export_lite extends aw_template
 	// things work correctly
 	function rewrite_link($link)
 	{
+		if (strpos($link, "/tellimine") !== false)
+		{
+			return $link;
+		}
 		if (isset($this->rewrite_link_cache[$link]))
 		{
 			return $this->rewrite_link_cache[$link];
