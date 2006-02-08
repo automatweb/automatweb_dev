@@ -598,7 +598,18 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				// check if the property has a value
 				if (isset($objdata["properties"][$prop]))
 				{
-					$tbls[$data["table"]]["defaults"][$data["field"]] = $objdata["properties"][$prop];
+					// if the prop is in a serialized field, then respect that
+					if ($data["method"] == "serialize")
+					{
+						// unpack field, add value, repack field
+						$_field_val = aw_unserialize($tbls[$data["table"]]["defaults"][$data["field"]]);
+						$_field_val[$prop] = $objdata["properties"][$prop];
+						$tbls[$data["table"]]["defaults"][$data["field"]] = aw_serialize($_field_val);
+					}
+					else
+					{
+						$tbls[$data["table"]]["defaults"][$data["field"]] = $objdata["properties"][$prop];
+					}
 				}
 				else
 				{
