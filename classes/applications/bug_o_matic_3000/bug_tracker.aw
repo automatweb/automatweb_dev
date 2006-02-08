@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.12 2006/02/08 08:26:45 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.12 2006/02/08 08:26:45 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.13 2006/02/08 13:49:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.13 2006/02/08 13:49:38 tarvo Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -8,6 +8,9 @@
 
 @default table=objects
 @default group=general
+
+@property object_type type=relpicker reltype=RELTYPE_OBJECT_TYPE table=objects field=meta method=serialize
+@caption Bugi objekti t&uuml;&uuml;p
 
 @groupinfo bugs caption="Bugid" submit=no
 @default group=bugs
@@ -19,6 +22,8 @@
 	@property bug_list type=table parent=bug no_caption=1
 
 
+@reltype OBJECT_TYPE value=1 clid=CL_OBJECT_TYPE
+@caption Objekti t&uuml;&uuml;p
 */
 
 class bug_tracker extends class_base
@@ -136,32 +141,66 @@ class bug_tracker extends class_base
 
 	function _bug_tree($arr)
 	{
-		get_instance(CL_TREEVIEW);
-		if($this->can("view", $arr["obj_inst"]->id()))
-		{
-			$ot = new object_tree(array(
-				"parent" => $arr["obj_inst"]->id(),
-				//"class_id" => CL_MENU,
-				"class_id" => array(CL_MENU,CL_BUG)
-			));
-		}
-		else
-		{
-			$ot = new object_tree();
-		}
-		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
-			"root_item" => $arr["obj_inst"],
-			"ot" => $ot,
-			"var" => "cat",
-			"tree_opts" => array(
-				"type" => TREE_DHTML,
-				"tree_id" => "prods",
-				"persist_state" => true,
-				"item_name_length" => 20,
-			)
+		classload("core/icons");
+		$this->tree = get_instance("vcl/treeview");
+
+		$this->tree->start_tree(array(
+			"type" => TREE_DHTML,
+			//"root_url" => $this->mk_my_orb("root_action", array()),
+			"root_icon" => "/path/to/some/image",
+			"tree_id" => "ad_folders",
+			"persist_state" => true,
+			//"get_branch_func" => $this->mk_my_orb("gen_branch",array("parent" => "0")),
 		));
+
+		$this->self_id = $arr["obj_inst"]->id();
+
+		$self_ol = new object_list(array(
+			"parent" => $this->self_id,
+			"class_id" => array(CL_BUG, CL_MENU),
+		));
+		$nimi = "Bug-Tracker";
+		$nimi .= ($self_ol->count() > 0)?" (".$self_ol->count().")":"";
+
+		$this->tree->add_item(0,array(
+			"id" => $this->self_id,
+			"name" => $nimi,
+			"url" => html::get_change_url($this->self_id, array("group" => "bugs")),
+		));
+		$this->generate_bug_tree(array(
+			"oid" => $this->self_id,
+		));
+
+		$arr["prop"]["value"] = $this->tree->finalize_tree();
+		$arr["prop"]["type"] = "text";
+
 	}
-	
+
+	function generate_bug_tree($arr)
+	{
+		$ol = new object_list(array("parent" => $arr["oid"],"class_id" => array(CL_BUG, CL_MENU)));
+		$objects = $ol->arr();
+		foreach($objects as $obj_id => $object)
+		{
+			$sub_ol = new object_list(array(
+				"parent" => $obj_id,
+				"class_id" => array(CL_BUG, CL_MENU),
+			));
+			
+			$nimi = substr($object->name(),0,20);
+			$nimi .= (strlen($object->name()) > 20)?"...":"";
+			$nimi .= ($sub_ol->count() > 0)?" (".$sub_ol->count().")":"";
+			$this->tree->add_item($arr["oid"],array(
+				"id" => $obj_id,
+				"name" => $nimi,
+				"iconurl" => icons::get_icon_url($object->class_id()),
+				"url" => html::get_change_url($this->self_id, array("group" => "bugs" ,"cat" => $obj_id)),
+			));
+			
+			$this->generate_bug_tree(array("oid" => $obj_id));
+		}
+	}
+
 	function callb_who($val)
 	{
 		$name = "";

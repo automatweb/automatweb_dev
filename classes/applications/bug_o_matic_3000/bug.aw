@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.9 2006/02/08 08:31:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.10 2006/02/08 13:49:38 tarvo Exp $
 // bug.aw - Bugi 
 /*
 
@@ -15,6 +15,9 @@
 @default table=aw_bugs
 @property bug_content type=textarea rows=10 cols=80
 @caption Sisu
+
+@property bug_type type=classificator table=objects field=meta method=serialize
+@caption T&uuml;&uuml;p
 
 @property bug_status type=select
 @caption Staatus
