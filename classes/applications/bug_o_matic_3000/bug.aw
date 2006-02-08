@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.10 2006/02/08 13:49:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.11 2006/02/08 14:06:28 sander Exp $
 // bug.aw - Bugi 
 /*
 
@@ -95,10 +95,33 @@ class bug extends class_base
 
 	function callback_on_load($arr)
 	{
+		$this->cx = get_instance("cfg/cfgutils");
 		if($this->can("add", $arr["request"]["parent"]) && $arr["request"]["action"] == "new")
 		{
 			$parent = new object($arr["request"]["parent"]);
 			$props = $parent->properties();
+			$cx_props = $this->cx->load_properties(array(
+				"clid" => $parent->class_id(),
+				"filter" => array(
+					"group" => "general",
+				),
+			));
+			$this->parent_options = array();
+			$els = array("who", "monitors", "project", "customer");
+			foreach($els as $el)
+			{
+				$this->parent_options[$el] = array();
+				if($this->can("view", $props[$el]))
+				{
+					$objs = $parent->connections_from(array(
+						"type" => $cx_props[$el]["reltype"],
+					));
+					foreach($objs as $obj)
+					{
+						$this->parent_options[$el][$obj->prop("to")] = $obj->prop("to.name");
+					}
+				}
+			}
 			$this->parent_data = array(
 				"who" => $props["who"],
 				"bug_class" => $props["bug_class"],
@@ -112,9 +135,12 @@ class bug extends class_base
 
 	function get_property($arr)
 	{
-		//arr($arr["new"]);
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		if($arr["new"] && !empty($this->parent_data[$prop["name"]]))
+		{ 
+			$prop["value"] = $this->parent_data[$prop["name"]];
+		}
 		switch($prop["name"])
 		{
 			case "bug_status":	
@@ -136,17 +162,27 @@ class bug extends class_base
 					$prop["options"][$r] = $r;
 				}
 				break;
+				
+			case "who":
+			case "monitors":
+				if($arr["new"])
+				{
+					foreach($this->parent_options["who"] as $key => $val)
+					{
+						$prop["options"][$key] = $val;
+					}
+				}
+				break;
 
 			case "bug_class":
-				$cx = get_instance("cfg/cfgutils");
-				$class_list = new aw_array($cx->get_classes_with_properties());
+				$class_list = new aw_array($this->cx->get_classes_with_properties());
 				$cp = get_class_picker(array("field" => "def"));
 				
 				$prop["options"][0] = "";
 				foreach($class_list->get() as $key => $val)
 				{
 					$prop["options"][$key] = $val;
-				};	
+				};
 				break;
 			case "project":
 				if (is_object($arr["obj_inst"]) && $this->can("view", $arr["obj_inst"]->prop("customer")))
@@ -188,6 +224,13 @@ class bug extends class_base
 				}
 
 				asort($data["options"]);
+				if($arr["new"])
+				{
+					foreach($this->parent_options[$prop["name"]] as $key => $val)
+					{
+						$prop["options"][$key] = $val;
+					}
+				}
 				break;
 
 			case "customer":
@@ -222,6 +265,13 @@ class bug extends class_base
 				{
 					$arr["obj_inst"]->set_prop("customer", $data["value"]);
 				}
+				if($arr["new"])
+				{
+					foreach($this->parent_options[$prop["name"]] as $key => $val)
+					{
+						$prop["options"][$key] = $val;
+					}
+				}
 				break;
 		};
 		return $retval;
@@ -237,6 +287,7 @@ class bug extends class_base
 				// email any persons interested in status changes of that bug
 				$this->notify_monitors($arr);
 				break;
+				
 			case "bug_status":
 				if($prop["value"] == 4 && !$arr["new"])
 				{

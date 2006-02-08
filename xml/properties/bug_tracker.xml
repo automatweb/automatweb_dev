@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>object_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OBJECT_TYPE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Bugi objekti t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>bug_tb</name>
             <table>objects</table>
             <group>bugs</group>
@@ -41,6 +51,18 @@
                   <submit>no</submit>
             </bugs>
       </groupinfo>
+      <reltypes>
+            <MONITOR>
+                  <value>1</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>J&amp;auml;lgija</caption>
+            </MONITOR>
+            <OBJECT_TYPE>
+                  <value>2</value>
+                  <clid>CL_OBJECT_TYPE</clid>
+                  <caption>Objekti t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            </OBJECT_TYPE>
+      </reltypes>
       <layout>
             <bug>
                   <type>hbox</type>

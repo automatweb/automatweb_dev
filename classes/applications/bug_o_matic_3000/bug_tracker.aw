@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.13 2006/02/08 13:49:38 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.13 2006/02/08 13:49:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.14 2006/02/08 14:06:28 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.14 2006/02/08 14:06:28 sander Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -21,8 +21,10 @@
 	@property bug_tree type=treeview parent=bug no_caption=1
 	@property bug_list type=table parent=bug no_caption=1
 
+@reltype MONITOR value=1 clid=CL_CRM_PERSON
+@caption Jälgija
 
-@reltype OBJECT_TYPE value=1 clid=CL_OBJECT_TYPE
+@reltype OBJECT_TYPE value=2 clid=CL_OBJECT_TYPE
 @caption Objekti t&uuml;&uuml;p
 */
 

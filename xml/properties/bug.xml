@@ -19,6 +19,15 @@
             <caption>Sisu</caption>
       </property>
       <property>
+            <name>bug_type</name>
+            <group>general</group>
+            <table>objects</table>
+            <type>classificator</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>bug_status</name>
             <group>general</group>
             <table>aw_bugs</table>
