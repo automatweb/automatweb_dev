@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.12 2006/02/01 13:04:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.13 2006/02/08 11:20:20 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -65,6 +65,18 @@ class cb_form_chain_entry extends class_base
 	}
 
 	/**
+		@attrib name=show_pdf
+		@param id required type=int acl=view
+	**/
+	function show_pdf($arr)
+	{
+		$html = $this->show($arr);
+		$c = get_instance("core/converters/html2pdf");
+		header("Content-type: application/pdf");
+		die($c->convert(array("source" => $html)));
+	}
+
+	/**
 		@attrib name=show
 		@param id required type=int acl=view
 	**/
@@ -93,6 +105,10 @@ class cb_form_chain_entry extends class_base
 		}
 		foreach($f2d as $wf_id => $entries)
 		{
+			if (!$wf_id)
+			{
+				continue;
+			}
 			if (count($entries) > 1)
 			{
 				$form_str .= $this->_display_data_table($o, $wf_id, $entries, $di);

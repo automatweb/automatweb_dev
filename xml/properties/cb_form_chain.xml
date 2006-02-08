@@ -21,6 +21,16 @@
             <caption>Olemasoleva sisestuse leidmise kontroller</caption>
       </property>
       <property>
+            <name>redir_to</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_redir</callback>
+            <caption>P&amp;amp;auml;rast t&amp;amp;auml;itmist suuna</caption>
+      </property>
+      <property>
             <name>cfs</name>
             <table>objects</table>
             <group>cfs_tbl</group>
@@ -319,6 +329,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>Sisestuse leidmise kontroller</caption>
             </ENTRY_FINDER_CONTOLLER>
+            <DOC>
+                  <value>7</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Dokument kuhu suunata</caption>
+            </DOC>
       </reltypes>
 </properties>
 

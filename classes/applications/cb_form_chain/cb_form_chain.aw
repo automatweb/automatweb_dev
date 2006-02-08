@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.20 2006/02/02 13:54:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.21 2006/02/08 11:20:20 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -15,6 +15,9 @@
 
 	@property entry_finder_controller type=relpicker reltype=RELTYPE_ENTRY_FINDER_CONTOLLER
 	@caption Olemasoleva sisestuse leidmise kontroller
+
+	@property redir_to type=callback callback=callback_get_redir
+	@caption P&auml;rast t&auml;itmist suuna
 
 @default group=cfs_tbl
 
@@ -124,6 +127,9 @@
 
 @reltype ENTRY_FINDER_CONTOLLER value=6 clid=CL_CFGCONTROLLER
 @caption Sisestuse leidmise kontroller
+
+@reltype DOC value=7 clid=CL_DOCUMENT
+@caption Dokument kuhu suunata
 */
 
 class cb_form_chain extends class_base
@@ -218,6 +224,10 @@ class cb_form_chain extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "redir_to":
+				$this->_save_redir($arr);
+				break;
+
 			case "cfs":
 				$arr["obj_inst"]->set_meta("d", $arr["request"]["d"]);
 				break;
@@ -442,6 +452,15 @@ class cb_form_chain extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
+
+		if ($_GET["del_num"])
+		{
+			unset($_SESSION["cbfc_data"][$_GET["del_wf"]][$_GET["del_num"]-1]);
+			$_SESSION["cbfc_data"][$_GET["del_wf"]] = array_values($_SESSION["cbfc_data"][$_GET["del_wf"]]);
+			header("Location: ".aw_url_change_var(array("del_num" => null, "del_wf" => null)));
+			die();
+		}
+
 		if ($_GET["display"])
 		{
 			$i = get_instance(CL_CB_FORM_CHAIN_ENTRY);
@@ -931,6 +950,12 @@ class cb_form_chain extends class_base
 
 		$_SESSION["cbfc_last_entry"] = $entry->id();
 
+		$rd = $o->meta("redir");
+		if ($this->can("view", $rd[aw_global_get("lang_id")]))
+		{
+			return obj_link($rd[aw_global_get("lang_id")]);
+		}
+
 		return aw_url_change_var(
 			"cbfc_pg", 
 			NULL, 
@@ -1341,6 +1366,9 @@ class cb_form_chain extends class_base
 				"view" => html::href(array(
 					"url" => $this->mk_my_orb("show", array("id" => $o->id(), "return_url" => get_ru()), CL_CB_FORM_CHAIN_ENTRY),
 					"caption" => t("Vaata")
+				)) ." | ".html::href(array(
+					"url" => $this->mk_my_orb("show_pdf", array("id" => $o->id(), "return_url" => get_ru()), CL_CB_FORM_CHAIN_ENTRY),
+					"caption" => t("PDF")
 				)),
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("showe", array("id" => $o->id(), array("return_url" => get_ru()))),
@@ -1538,6 +1566,21 @@ class cb_form_chain extends class_base
 					{
 						$pd["value"] = "";
 					}
+
+					if ($this->is_template("FN_CAPTION"))
+					{
+						$pd["caption"] = $this->parse("FN_CAPTION");
+						$pd["comment"] = "";
+					}
+				}
+				else
+				if (strpos($pd["name"], "f_".$wf->id()."_".$i."[userfile") !== false)
+				{
+					if ($this->is_template("FU_CAPTION"))
+					{
+						$pd["caption"] = $this->parse("FU_CAPTION");
+						$pd["comment"] = "";
+					}
 				}
 				$htmlc->add_property($pd);
 			}
@@ -1714,13 +1757,30 @@ class cb_form_chain extends class_base
 				}
 			}
 
+			$cht = $this->is_template("CHANGE_TEXT") ? $this->parse("CHANGE_TEXT") : t("Muuda");
+			if (!$form_dat["repeat_fix"] && $i == ($form_dat["rep_cnt"] -1 ))
+			{
+				$cht = $this->is_template("NEW_TEXT") ? $this->parse("NEW_TEXT") : t("Uus");
+			}
 			$this->vars(array(
 				"content" => html::href(array(
 					"url" => aw_url_change_var("edit_num", $i+1),
-					"caption" => t("Muuda")
+					"caption" => $cht
 				))
 			));
 			$col .= $this->parse("DT_COL");
+
+			if (!$form_dat["repeat_fix"] && $i < ($form_dat["rep_cnt"] -1 ))
+			{
+				$cht = $this->is_template("DEL_TEXT") ? $this->parse("DEL_TEXT") : t("Kustuta");
+				$this->vars(array(
+					"content" => html::href(array(
+						"url" => aw_url_change_var(array("del_num" =>  $i+1, "del_wf" => $wf->id())),
+						"caption" => $cht
+					))
+				));
+				$col .= $this->parse("DT_COL");
+			}
 
 			$this->vars(array(
 				"DT_COL" => $col
@@ -1730,7 +1790,7 @@ class cb_form_chain extends class_base
 		
 
 		$this->vars(array(
-			"DT_HEADER" => $this->_get_data_table_header($nprops),
+			"DT_HEADER" => $this->_get_data_table_header($nprops, $form_dat),
 			"DT_ROW" => $row
 		));
 
@@ -1739,7 +1799,7 @@ class cb_form_chain extends class_base
 		));
 	}
 
-	function _get_data_table_header($props)
+	function _get_data_table_header($props, $form_dat = NULL)
 	{
 		// show header
 		$header = "";
@@ -1752,8 +1812,16 @@ class cb_form_chain extends class_base
 		}
 
 		$this->vars(array(
-			"col_name" => t("Muuda")
+			"col_name" => $this->is_template("CHANGE_TEXT") ? $this->parse("CHANGE_TEXT") : t("Muuda")
 		));
+		$header .= $this->parse("DT_HEADER");
+
+		if (!$form_dat["repeat_fix"])
+		{
+			$this->vars(array(
+				"col_name" => $this->is_template("DEL_TEXT") ? $this->parse("DEL_TEXT") : t("Kustuta")
+			));
+		}
 		$header .= $this->parse("DT_HEADER");
 
 		return $header;
@@ -1876,12 +1944,31 @@ class cb_form_chain extends class_base
 				$srch = obj($reg->prop("search_o"));
 				$srch_i = $srch->instance();
 
-				foreach($srch_i->get_sform_properties($srch, $arr["request"]) as $pn => $pd)
+				$req = $arr["request"];
+				foreach($req as $k => $v)
 				{
-					$ret[$pn] = $pd;
+					if ($k == $wf->id()."_rsf")
+					{
+						$req["rsf"] = $v;
+					}
+				}
+				foreach($srch_i->get_sform_properties($srch, $req) as $pn => $pd)
+				{
+					if ($pd["type"] == "submit")
+					{
+						$sbt = array($pn, $pd);
+					}
+					else
+					{
+						$pn = $wf->id()."_".$pn;
+						$pd["name"] = $wf->id()."_".$pd["name"];
+						$ret[$pn] = $pd;
+					}
 				}
 			}
 		}
+		$sbt[1]["caption"] = t("Otsi");
+		$ret[$sbt[0]] = $sbt[1];
 		return $ret;
 	}
 
@@ -1947,7 +2034,9 @@ class cb_form_chain extends class_base
 	{
 		$matches = array();
 		// get search results from all webforms, then get all matching 
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CF")) as $c)
+		$cfs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CF"));
+		$cfs_cnt = count($cfs);
+		foreach($cfs as $c)
 		{
 			$wf = $c->to();
 			$reg = $wf->get_first_obj_by_reltype("RELTYPE_REGISTER");
@@ -1957,7 +2046,25 @@ class cb_form_chain extends class_base
 				$srch_i = $srch->instance();
 
 				$arr["request"]["search_butt"] = 1;
-				list($res_ol, $res_ol_cnt) = $srch_i->get_search_results($srch, $arr["request"], array());
+				$req = $arr["request"];
+				foreach($req as $k => $v)
+				{
+					if ($k == $wf->id()."_rsf")
+					{
+						$req["rsf"] = $v;
+						// if the thing is empty, then don't search from that form
+						$has = false;
+						foreach(safe_array($v) as $k => $v)
+						{
+							if ($v != "")
+							{
+								$has = true;
+							}
+						}
+					}
+				}
+
+				list($res_ol, $res_ol_cnt) = $srch_i->get_search_results($srch, $req, array());
 
 				// get all cbf entries from that list
 				if ($res_ol->count())
@@ -1967,13 +2074,30 @@ class cb_form_chain extends class_base
 						"to" => $res_ol->ids(),
 						"from.class_id" => CL_CB_FORM_CHAIN_ENTRY
 					));
+					$tmp = array();
 					foreach($cs as $c)
 					{
-						$matches[$c["from"]] = $c["from"];
+						$tmp[$c["from"]] = $c["from"];
+					}
+					
+					foreach($tmp as $c_id)
+					{
+						$matches[$c_id] = ((int)$matches[$c_id]) + 1;
 					}
 				}
 			}
 		}
+	
+		// leave all that have matches count that equals number of forms-1
+		$tm = array();
+		foreach($matches as $m_oid => $m_cnt)
+		{
+			if ($m_cnt == ($cfs_cnt))
+			{
+				$tm[$m_oid] = $m_oid;
+			}
+		}
+		$matches = $tm;
 
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_search_res_t($t);
@@ -1997,6 +2121,9 @@ class cb_form_chain extends class_base
 				"view" => html::href(array(
 					"url" => $this->mk_my_orb("show", array("id" => $o->id(), "return_url" => get_ru()), CL_CB_FORM_CHAIN_ENTRY),
 					"caption" => t("Vaata")
+				))." | ".html::href(array(
+					"url" => $this->mk_my_orb("show_pdf", array("id" => $o->id(), "return_url" => get_ru()), CL_CB_FORM_CHAIN_ENTRY),
+					"caption" => t("PDF")
 				)),
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("showe", array("id" => $o->id(), array("return_url" => get_ru()))),
@@ -2018,6 +2145,45 @@ class cb_form_chain extends class_base
 		return $this->show(array(
 			"id" => $o->prop("cb_form_id")
 		));
+	}
+
+	function callback_get_redir($arr)
+	{
+		$l = get_instance("languages");
+		$ll = $l->get_list();
+		$ret = array();
+		$vals = $arr["obj_inst"]->meta("redir");
+		foreach($ll as $lid => $ln)
+		{
+			$nm = "rd[$lid]";
+			$ret[$nm] = array(
+				"name" => $nm,
+				"type" => "relpicker",
+				"reltype" => "RELTYPE_DOC",
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"value" => $vals[$lid],
+				"caption" => sprintf(t("Kuhu suunata p&auml;rast sisestust (%s)"), $ln)
+			);
+		}
+
+		return $ret;
+	}
+
+	function _save_redir($arr)
+	{
+		foreach(safe_array($arr["request"]["rd"]) as $lid => $selecta)
+		{
+			if ($this->can("view", $selecta))
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $selecta,
+					"type" => "RELTYPE_DOC"
+				));
+			}
+		}
+		$arr["obj_inst"]->set_meta("redir", $arr["request"]["rd"]);
 	}
 }
 ?>

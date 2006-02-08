@@ -1,5 +1,6 @@
+<span style="font-family: Verdana, Arial, sans-serif; font-size: 11px; color:#000000;">
 <!-- SUB: TITLE -->
-{VAR:title}
+<a href='{VAR:title_url}'>{VAR:title}</a>
 <!-- END SUB: TITLE -->
 
 <!-- SUB: TITLE_SEL -->
@@ -14,14 +15,14 @@
 <table border="1">
 	<tr>
 		<!-- SUB: DT_HEADER -->
-		<td>{VAR:col_name}</td>
+		<td><span style="font-family: Verdana, Arial, sans-serif; font-size: 11px; color:#000000;">{VAR:col_name}</span>&nbsp;</td>
 		<!-- END SUB: DT_HEADER -->
 	</tr>
 
 	<!-- SUB: DT_ROW -->
 	<tr>
 		<!-- SUB: DT_COL -->
-		<td>{VAR:content}</td>
+		<td><span style="font-family: Verdana, Arial, sans-serif; font-size: 11px; color:#000000;">{VAR:content}</span>&nbsp;</td>
 		<!-- END SUB: DT_COL -->
 	</tr>
 	<!-- END SUB: DT_ROW -->
@@ -74,7 +75,7 @@ function submit_changeform(action)
 
 <!-- SUB: FORM_HEADER -->
 <tr>
-	<td colspan="2">{VAR:form_name}</td>
+	<td colspan="2"><span style="font-family: Verdana, Arial, sans-serif; font-size: 11px; color:#000000;">{VAR:form_name}</span></td>
 </tr>
 <!-- END SUB: FORM_HEADER -->
 
@@ -83,14 +84,14 @@ function submit_changeform(action)
 <table border="1">
 	<tr>
 	<!-- SUB: HEADER -->
-		<td>{VAR:caption}</td>
+		<td class="aw04contentcellleft">{VAR:caption}</td>
 	<!-- END SUB: HEADER -->
 	</tr>
 
 	<!-- SUB: FORM -->
 	<tr>
 		<!-- SUB: ELEMENT -->
-		<td>{VAR:element}</td>
+		<td class="aw04contentcellleft">{VAR:element}</td>
 		<!-- END SUB: ELEMENT -->
 	</tr>
 	<!-- END SUB: FORM -->
