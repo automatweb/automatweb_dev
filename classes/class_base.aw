@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.455 2006/02/03 11:52:13 kristo Exp $
+// $Id: class_base.aw,v 2.456 2006/02/08 10:46:51 ahti Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -434,6 +434,7 @@ class class_base extends aw_template
 					"request" => $this->request,
 					"obj_inst" => &$this->obj_inst,
 					"group" => $this->use_group,
+					"classinfo" => &$this->classinfo,
 				));
 
 
@@ -2746,13 +2747,14 @@ class class_base extends aw_template
 
 					// if we are using rte, then add RTE buttons to the toolbar
 					//if (1 == $this->has_feature("has_rte"))
-					if ($has_rte)
+					if ($has_rte || $this->no_rte == 1)
 					{
 						if($this->classinfo(array("name" => "allow_rte")) == 2)
 						{
 							$rte = get_instance("vcl/fck_editor");
 							$rte->get_rte_toolbar(array(
 								"toolbar" => &$val["vcl_inst"],
+								"no_rte" => $this->no_rte,
 							));
 						}
 						else
@@ -2761,6 +2763,7 @@ class class_base extends aw_template
 							$rte->get_rte_toolbar(array(
 								"toolbar" => &$val["vcl_inst"],
 								"target" => $this->layout_mode == "fixed_toolbar" ? "contentarea" : "",
+								"no_rte" => $this->no_rte,
 							));
 						}
 					};

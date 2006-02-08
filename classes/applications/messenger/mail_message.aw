@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.27 2006/02/07 09:16:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.28 2006/02/08 10:46:52 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
-	@classinfo no_comment=1 no_status=1 syslog_type=ST_MAIL_MESSAGE relationmgr=yes
+	@classinfo no_comment=1 no_status=1 syslog_type=ST_MAIL_MESSAGE relationmgr=yes allow_rte=2
 	@default group=general
 	@default table=messages
 
@@ -37,7 +37,7 @@
 	@property html_mail type=checkbox ch_value=1 field=type method=bitmask ch_value=1024
 	@caption HTML kiri
 
-	@property message type=textarea cols=80 rows=40
+	@property message type=textarea cols=80 rows=40 richtext=1
 	@caption Sisu
 
 	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file chooser=no new_items=5

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.1 2006/02/01 14:36:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.2 2006/02/08 10:46:52 ahti Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor extends aw_template
@@ -18,12 +18,25 @@ class fck_editor extends aw_template
 	{
 
 		$toolbar = &$arr["toolbar"];
-		$toolbar->add_button(array(
-			"name" => "source",
-			"tooltip" => t("HTML"),
-			"target" => "_self",
-			"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
-		));
+		$toolbar->add_separator();
+		if($arr["no_rte"] == 1)
+		{
+			$toolbar->add_button(array(
+				"name" => "source",
+				"tooltip" => t("RTE"),
+				"target" => "_self",
+				"url" => aw_url_change_var("no_rte", ""),
+			));
+		}
+		else
+		{
+			$toolbar->add_button(array(
+				"name" => "source",
+				"tooltip" => t("HTML"),
+				"target" => "_self",
+				"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
+			));
+		}
 		/*
 		$js_url_prefix = "";
 		if (!empty($arr["target"]))

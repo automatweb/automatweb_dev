@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.16 2006/02/01 14:36:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.17 2006/02/08 10:46:52 ahti Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -71,6 +71,7 @@ class rte extends aw_template
 
 	function get_rte_toolbar($arr)
 	{
+
 		$toolbar = &$arr["toolbar"];
 		$toolbar->add_separator();
 
@@ -79,242 +80,253 @@ class rte extends aw_template
 		{
 			$js_url_prefix = "parent.contentarea.";
 		};
+		if($arr["no_rte"] == 1)
+		{
+			$toolbar->add_button(array(
+				"name" => "source",
+				"tooltip" => t("RTE"),
+				"target" => "_self",
+				"url" => aw_url_change_var("no_rte", ""),
+			));
+		}
+		else
+		{
+			$toolbar->add_button(array(
+				"name" => "bold",
+				"tooltip" => t("Bold"),
+				"url" => "javascript:${js_url_prefix}format_selection('bold');",
+				"img" => "rte_bold.gif",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "bold",
-			"tooltip" => t("Bold"),
-			"url" => "javascript:${js_url_prefix}format_selection('bold');",
-			"img" => "rte_bold.gif",
-		));
+			$toolbar->add_button(array(
+				"name" => "italic",
+				"tooltip" => t("Italic"),
+				"url" => "javascript:${js_url_prefix}format_selection('italic');",
+				"img" => "rte_italic.gif",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "italic",
-			"tooltip" => t("Italic"),
-			"url" => "javascript:${js_url_prefix}format_selection('italic');",
-			"img" => "rte_italic.gif",
-		));
+			$toolbar->add_button(array(
+				"name" => "underline",
+				"tooltip" => t("Underline"),
+				"url" => "javascript:${js_url_prefix}format_selection('underline');",
+				"img" => "rte_underline.gif",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "underline",
-			"tooltip" => t("Underline"),
-			"url" => "javascript:${js_url_prefix}format_selection('underline');",
-			"img" => "rte_underline.gif",
-		));
+			$toolbar->add_separator();
 
-		$toolbar->add_separator();
+			$toolbar->add_button(array(
+				"name" => "align_left",
+				"tooltip" => t("Align left"),
+				"url" => "javascript:${js_url_prefix}format_selection('justifyleft');",
+				"img" => "rte_align_left.gif",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "align_left",
-			"tooltip" => t("Align left"),
-			"url" => "javascript:${js_url_prefix}format_selection('justifyleft');",
-			"img" => "rte_align_left.gif",
-		));
+			$toolbar->add_button(array(
+				"name" => "align_center",
+				"tooltip" => t("Align center"),
+				"url" => "javascript:${js_url_prefix}format_selection('justifycenter');",
+				"img" => "rte_align_center.gif",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "align_center",
-			"tooltip" => t("Align center"),
-			"url" => "javascript:${js_url_prefix}format_selection('justifycenter');",
-			"img" => "rte_align_center.gif",
-		));
+			$toolbar->add_button(array(
+				"name" => "align_right",
+				"tooltip" => t("Align right"),
+				"url" => "javascript:${js_url_prefix}format_selection('justifyright');",
+				"img" => "rte_align_right.gif",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "align_right",
-			"tooltip" => t("Align right"),
-			"url" => "javascript:${js_url_prefix}format_selection('justifyright');",
-			"img" => "rte_align_right.gif",
-		));
+			$toolbar->add_separator();
 
-		$toolbar->add_separator();
+			$toolbar->add_button(array(
+				"name" => "num_list",
+				"tooltip" => t("Numbered list"),
+				"url" => "javascript:${js_url_prefix}format_selection('insertorderedlist');",
+				"img" => "rte_num_list.gif",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "num_list",
-			"tooltip" => t("Numbered list"),
-			"url" => "javascript:${js_url_prefix}format_selection('insertorderedlist');",
-			"img" => "rte_num_list.gif",
-		));
+			$toolbar->add_button(array(
+				"name" => "bul_list",
+				"tooltip" => t("Bulleted list"),
+				"url" => "javascript:${js_url_prefix}format_selection('insertunorderedlist');",
+				"img" => "rte_bul_list.gif",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "bul_list",
-			"tooltip" => t("Bulleted list"),
-			"url" => "javascript:${js_url_prefix}format_selection('insertunorderedlist');",
-			"img" => "rte_bul_list.gif",
-		));
+			$toolbar->add_separator();
 
-		$toolbar->add_separator();
+			$toolbar->add_button(array(
+				"name" => "outdent",
+				"tooltip" => t("Outdent"),
+				"url" => "javascript:${js_url_prefix}format_selection('outdent');",
+				"img" => "rte_outdent.gif",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "outdent",
-			"tooltip" => t("Outdent"),
-			"url" => "javascript:${js_url_prefix}format_selection('outdent');",
-			"img" => "rte_outdent.gif",
-		));
+			$toolbar->add_button(array(
+				"name" => "indent",
+				"tooltip" => t("Indent"),
+				"url" => "javascript:${js_url_prefix}format_selection('indent');",
+				"img" => "rte_indent.gif",
+			));
+			
+			$toolbar->add_separator();
 
-		$toolbar->add_button(array(
-			"name" => "indent",
-			"tooltip" => t("Indent"),
-			"url" => "javascript:${js_url_prefix}format_selection('indent');",
-			"img" => "rte_indent.gif",
-		));
+			$toolbar->add_button(array(
+				"name" => "link",
+				"tooltip" => t("link"),
+				"url" => "javascript:${js_url_prefix}link_dialog();",
+				"img" => "rte_link.gif",
+			));
+
+
+			$toolbar->add_separator();
+
+			$toolbar->add_menu_button(array(
+				"name" => "table_props",
+				"tooltip" => t("Tabel"),
+				"img" => "rte_table.gif",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "table_props",
+				"text" => t("Lisa tabel"),
+				"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}table_dialog();",
+			));
+			
+			$toolbar->add_menu_separator(array("parent" => "table_props"));
+
+			$toolbar->add_menu_item(array(
+				"parent" => "table_props",
+				"text" => t("Lisa tulp"),
+				"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}insert_column();",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "table_props",
+				"text" => t("Lisa rida"),
+				"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}insert_row();",
+			));
+
+			$toolbar->add_menu_separator(array("parent" => "table_props"));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "table_props",
+				"text" => t("Kustuta tulp"),
+				"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}delete_column();",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "table_props",
+				"text" => t("Kustuta rida"),
+				"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}delete_row();",
+			));
 		
-		$toolbar->add_separator();
+			/*
+			$toolbar->add_menu_separator(array("parent" => "table_props"));
+			$toolbar->add_menu_item(array(
+				"parent" => "table_props",
+				"text" => t("Poolita rida"),
+				"url" => "javascript:{$js_url_prefix}split_row();",
+			));
+			$toolbar->add_menu_item(array(
+				"parent" => "table_props",
+				"text" => t("Poolita tulp"),
+				"url" => "javascript:{$js_url_prefix}split_cell();",
+			));
+			*/
 
-		$toolbar->add_button(array(
-			"name" => "link",
-			"tooltip" => t("link"),
-			"url" => "javascript:${js_url_prefix}link_dialog();",
-			"img" => "rte_link.gif",
-		));
-
-
-		$toolbar->add_separator();
-
-		$toolbar->add_menu_button(array(
-			"name" => "table_props",
-			"tooltip" => t("Tabel"),
-			"img" => "rte_table.gif",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "table_props",
-			"text" => t("Lisa tabel"),
-			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}table_dialog();",
-		));
-		
-		$toolbar->add_menu_separator(array("parent" => "table_props"));
-
-		$toolbar->add_menu_item(array(
-			"parent" => "table_props",
-			"text" => t("Lisa tulp"),
-			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}insert_column();",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "table_props",
-			"text" => t("Lisa rida"),
-			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}insert_row();",
-		));
-
-		$toolbar->add_menu_separator(array("parent" => "table_props"));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "table_props",
-			"text" => t("Kustuta tulp"),
-			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}delete_column();",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "table_props",
-			"text" => t("Kustuta rida"),
-			"url" => "javascript:document.getElementById('table_props').style.visibility='hidden';{$js_url_prefix}delete_row();",
-		));
-	
-		/*
-		$toolbar->add_menu_separator(array("parent" => "table_props"));
-		$toolbar->add_menu_item(array(
-			"parent" => "table_props",
-			"text" => t("Poolita rida"),
-			"url" => "javascript:{$js_url_prefix}split_row();",
-		));
-		$toolbar->add_menu_item(array(
-			"parent" => "table_props",
-			"text" => t("Poolita tulp"),
-			"url" => "javascript:{$js_url_prefix}split_cell();",
-		));
-		*/
-
-		$toolbar->add_separator();
+			$toolbar->add_separator();
 
 
-		$toolbar->add_button(array(
-			"name" => "source",
-			"tooltip" => t("HTML"),
-			"target" => "_self",
-			"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
-		));
+			$toolbar->add_button(array(
+				"name" => "source",
+				"tooltip" => t("HTML"),
+				"target" => "_self",
+				"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
+			));
 
-		$toolbar->add_separator();
-		
-		/*$toolbar->add_menu_button(array(
-			"name" => "headings",
-			"tooltip" => t("Päised"),
-			"img" => "h1.gif",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "headings",
-			"text" => t("Heading 1"),
-			"url" => "javascript:{$js_url_prefix}surroundHTML('<h1>','</h1>');",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "headings",
-			"text" => t("Heading 2"),
-			"url" => "javascript:{$js_url_prefix}surroundHTML('<h2>','</h2>');",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "headings",
-			"text" => t("Heading 3"),
-			"url" => "javascript:{$js_url_prefix}surroundHTML('<h3>','</h3>');",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "headings",
-			"text" => t("Heading 4"),
-			"url" => "javascript:{$js_url_prefix}surroundHTML('<h4>','</h4>');",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "headings",
-			"text" => t("Heading 5"),
-			"url" => "javascript:{$js_url_prefix}surroundHTML('<h5>','</h5>');",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "headings",
-			"text" => t("Heading 6"),
-			"url" => "javascript:{$js_url_prefix}surroundHTML('<h6>','</h6>');",
-		));
-		
-		$toolbar->add_menu_button(array(
-			"name" => "textcolor",
-			"tooltip" => t("Teksti värv"),
-			"img" => "textcolor.gif",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "textcolor",
-			"text" => t("Sinine"),
-			"url" => "javascript:{$js_url_prefix}colortext('#0000ff');",
-		));
-		
-		$toolbar->add_menu_item(array(
-			"parent" => "textcolor",
-			"text" => t("Punane"),
-			"url" => "javascript:{$js_url_prefix}colortext('#ff0000');",
-		));*/
+			$toolbar->add_separator();
+			
+			/*$toolbar->add_menu_button(array(
+				"name" => "headings",
+				"tooltip" => t("Päised"),
+				"img" => "h1.gif",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "headings",
+				"text" => t("Heading 1"),
+				"url" => "javascript:{$js_url_prefix}surroundHTML('<h1>','</h1>');",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "headings",
+				"text" => t("Heading 2"),
+				"url" => "javascript:{$js_url_prefix}surroundHTML('<h2>','</h2>');",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "headings",
+				"text" => t("Heading 3"),
+				"url" => "javascript:{$js_url_prefix}surroundHTML('<h3>','</h3>');",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "headings",
+				"text" => t("Heading 4"),
+				"url" => "javascript:{$js_url_prefix}surroundHTML('<h4>','</h4>');",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "headings",
+				"text" => t("Heading 5"),
+				"url" => "javascript:{$js_url_prefix}surroundHTML('<h5>','</h5>');",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "headings",
+				"text" => t("Heading 6"),
+				"url" => "javascript:{$js_url_prefix}surroundHTML('<h6>','</h6>');",
+			));
+			
+			$toolbar->add_menu_button(array(
+				"name" => "textcolor",
+				"tooltip" => t("Teksti värv"),
+				"img" => "textcolor.gif",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "textcolor",
+				"text" => t("Sinine"),
+				"url" => "javascript:{$js_url_prefix}colortext('#0000ff');",
+			));
+			
+			$toolbar->add_menu_item(array(
+				"parent" => "textcolor",
+				"text" => t("Punane"),
+				"url" => "javascript:{$js_url_prefix}colortext('#ff0000');",
+			));*/
 
 
-		$this->get_styles_from_site();
+			$this->get_styles_from_site();
 
-               
-	       	/*
-                $toolbar->add_separator();
-		$this->read_template("stylebox.tpl");
-		$toolbar->add_cdata($this->parse(),"right");
-		*/
+				   
+				/*
+					$toolbar->add_separator();
+			$this->read_template("stylebox.tpl");
+			$toolbar->add_cdata($this->parse(),"right");
+			*/
 
-                $toolbar->add_separator(array(
-			"side" => "right",
-		));
+					$toolbar->add_separator(array(
+				"side" => "right",
+			));
 
-		$toolbar->add_button(array(
-			"name" => "clearstyles",
-			"img" => "clearstyles.gif",
-			"tooltip" => T("Tühista stiilid"),
-			"url" => "javascript:${js_url_prefix}clearstyles()",
-			"side" => "right",
-		));
+			$toolbar->add_button(array(
+				"name" => "clearstyles",
+				"img" => "clearstyles.gif",
+				"tooltip" => T("Tühista stiilid"),
+				"url" => "javascript:${js_url_prefix}clearstyles()",
+				"side" => "right",
+			));
+		}
 	}
 
 	function get_styles_from_site($arr = array())

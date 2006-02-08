@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.55 2006/02/07 11:21:01 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.56 2006/02/08 10:46:52 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -233,6 +233,14 @@ class ml_list extends class_base
 		));
 		lc_load("definition");
 		lc_site_load("ml_list", &$this);
+	}
+
+	function callback_pre_edit($arr)
+	{
+		if($arr["group"] == "write_mail")
+		{
+			$arr["classinfo"]["allow_rte"] = 2;
+		}
 	}
 
 	function on_mconnect_to($arr)
