@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.42 2005/12/21 19:50:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.43 2006/02/08 10:53:12 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -612,7 +612,28 @@ class object_import extends class_base
 				$this->do_exec_import($o, $o->meta("import_row_count"));
 			}
 			echo "for o ".$o->id()." status = ".$o->meta("import_status")." last time = ".date("d.m.Y H:i", $o->meta("import_last_time"))." <br>";
+
+			if (is_oid($o->prop("recurrence")) && $o->prop("aimp_uid") != "" && $o->prop("aimp_pwd") != "")
+			{
+				$t = get_instance(CL_RECURRENCE); 
+				$next = $t->get_next_event(array(
+					"id" => $o->prop("recurrence")
+				));
+
+				if ($next)
+				{
+					// add to scheduler
+					$sc = get_instance("scheduler");
+					$sc->add(array(
+						"event" => $this->mk_my_orb("automatic_import", array("id" => $o->id())),
+						"time" => $next,
+						"uid" => $o->prop("aimp_uid"),
+						"password" => $o->prop("aimp_pwd")
+					));
+				}
+			}
 		}
+
 	}
 
 	function do_exec_import($o, $start_from_row = 0)
