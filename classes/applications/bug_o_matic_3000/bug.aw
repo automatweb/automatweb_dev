@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.8 2006/02/03 17:32:41 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.9 2006/02/08 08:31:30 tarvo Exp $
 // bug.aw - Bugi 
 /*
 
@@ -13,7 +13,7 @@
 @caption Lühikirjeldus
 
 @default table=aw_bugs
-@property bug_content type=textarea rows=5 cols=80
+@property bug_content type=textarea rows=10 cols=80
 @caption Sisu
 
 @property bug_status type=select

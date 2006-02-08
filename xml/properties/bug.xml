@@ -13,7 +13,7 @@
             <group>general</group>
             <table>aw_bugs</table>
             <type>textarea</type>
-            <rows>5</rows>
+            <rows>10</rows>
             <cols>80</cols>
             <field>bug_content</field>
             <caption>Sisu</caption>
