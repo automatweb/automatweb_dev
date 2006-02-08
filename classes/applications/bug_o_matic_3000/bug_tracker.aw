@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.11 2006/02/07 08:54:46 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.11 2006/02/07 08:54:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.12 2006/02/08 08:26:45 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.12 2006/02/08 08:26:45 tarvo Exp $
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -58,7 +58,17 @@ class bug_tracker extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "bug_list":
+				foreach($arr["request"]["bug_priority"] as $bug_id => $bug_val)
+				{
+					if($this->can("edit",$bug_id))
+					{
+						$bug = obj($bug_id);
+						$bug-> set_prop("bug_priority",$bug_val);
+						$bug->save();
+					}
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -110,6 +120,12 @@ class bug_tracker extends class_base
 			))
 		));
 		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"action" => "",
+			"img" => "save.gif",
+		));
+		$tb->add_button(array(
 			"name" => "delete",
 			"tooltip" => t("Kustuta"),
 			"img" => "delete.gif",
@@ -157,6 +173,16 @@ class bug_tracker extends class_base
 		return $name;
 	}
 	
+	function show_priority($_param)
+	{
+		$return = html::textbox(array(
+			"name" => "bug_priority[".$_param["oid"]."]",
+			"size" => 3,
+			"value" => $_param["bug_priority"],
+		));
+		return $return;
+	}
+
 	function show_status($_val)
 	{
 		$values = array(
@@ -199,6 +225,8 @@ class bug_tracker extends class_base
 			"caption" => t("Prioriteet"),
 			"sortable" => 1,
 			"numeric" => 1,
+			"callback" => array(&$this, "show_priority"),
+			"callb_pass_row" => 1,
 		));
 		$t->define_field(array(
 			"name" => "bug_status",
