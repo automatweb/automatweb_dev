@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.28 2006/02/08 10:46:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.29 2006/02/09 08:34:45 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -645,12 +645,14 @@ class mail_message extends class_base
 		$cal_o = $pl->get_calendar_obj_for_user(array(
 			"uid" => aw_global_get("uid"),
 		));
-
-		$user_cal = $cal_o->id();
+		if(is_object($cal_o))
+		{
+			$user_cal = $cal_o->id();
+		}
 
 		$req = $arr["request"];
 
-		if (is_oid($user_cal))
+		if ($this->can("edit", $user_cal))
 		{
 			$tb->add_separator();
 			$tb->add_menu_button(array(
@@ -658,6 +660,8 @@ class mail_message extends class_base
 				"tooltip" => t("Lisa kalendrisse"),
 				"img" => "icon_cal_today.gif",
 			));
+			$events = $cal_o->prop("event_folder");
+			$ef = $this->can("edit", $events) ? $events : $user_cal;
 			$ev_classes = $pl->get_event_entry_classes($cal_o);
 
 			$clinf = aw_ini_get("classes");
@@ -675,7 +679,7 @@ class mail_message extends class_base
 */					"url" =>$this->mk_my_orb("new" , array(
 						"msgrid" => $req["msgrid"],
 						"msgid" => $req["msgid"],
-						"parent" => $user_cal,
+						"parent" => $ef,
 						) ,$clid),
 					//"action" => "register_event",
 				));
