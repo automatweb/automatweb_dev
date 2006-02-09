@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.64 2006/02/07 20:00:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.65 2006/02/09 15:17:31 dragut Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -240,10 +240,11 @@ class sys extends aw_template
 			"server" => $donor,
 			"url" => "/?class=sys&action=gen_db_struct",
 		));
-		global $donor_struct;
+//		global $donor_struct;
 		$dsource = aw_unserialize($block);
 		$donor_struct = $dsource;
-		session_register("donor_struct");
+//		session_register("donor_struct");
+		$_SESSION['donor_struct'] = $donor_struct;
 		$all_keys = array_merge(array_flip(array_keys($dsource)),array_flip(array_keys($right)));
 		ksort($all_keys);
 		$this->read_template("compare_db.tpl");
@@ -384,7 +385,8 @@ class sys extends aw_template
 	**/
 	function submit_compare_db($args = array())
 	{
-		global $donor_struct;
+	//	global $donor_struct;
+		$donor_struct = $_SESSION['donor_struct'];
 		$orig = $this->db_get_struct();
 		extract($args);
 		if (is_array($check))
