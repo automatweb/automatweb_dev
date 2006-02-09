@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.20 2005/12/29 22:08:35 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.21 2006/02/09 14:59:02 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -205,25 +205,47 @@ class mini_gallery extends class_base
 		{
 			die(t("Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"));
 		}
-		$zf = escapeshellarg($zip);
-		$zip = aw_ini_get("server.unzip_path");
-		$tn = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
-		mkdir($tn,0777);
-		$cmd = $zip." -d $tn $zf";
-		$op = shell_exec($cmd);
 
-
-		$files = array();
-		if ($dir = @opendir($tn)) 
+		if (extension_loaded("zip"))
 		{
-			while (($file = readdir($dir)) !== false) 
+			$folder = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
+			mkdir($folder, 0777);
+			$tn = $folder;
+			$zip = zip_open($zip);
+			while ($zip_entry = zip_read($zip)) 
 			{
-				if (!($file == "." || $file == ".."))
+				zip_entry_open($zip, $zip_entry, "r");
+				$fn = $folder."/".zip_entry_name($zip_entry);
+				$files[] = basename($fn);
+				$fc = zip_entry_read($zip_entry, zip_entry_filesize($zip_entry));
+				$this->put_file(array(
+					"file" => $fn,
+					"content" => $fc
+				));
+			}
+		}
+		else
+		{
+			$zf = escapeshellarg($zip);
+			$zip = aw_ini_get("server.unzip_path");
+			$tn = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
+			mkdir($tn,0777);
+			$cmd = $zip." -d $tn $zf";
+			$op = shell_exec($cmd);
+
+
+			$files = array();
+			if ($dir = @opendir($tn)) 
+			{
+				while (($file = readdir($dir)) !== false) 
 				{
-					$files[] = $file;
-				}
-			}  
-			closedir($dir);
+					if (!($file == "." || $file == ".."))
+					{
+						$files[] = $file;
+					}
+				}  
+				closedir($dir);
+			}
 		}
 
 		$imgi = get_instance(CL_IMAGE);
@@ -319,5 +341,4 @@ class mini_gallery extends class_base
 			$arr["obj_inst"]->save();
 		}
 	}
-}
-?>
+}?>
