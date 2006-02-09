@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.2 2006/01/26 13:20:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.3 2006/02/09 14:38:08 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -137,14 +137,88 @@ class interim_page extends class_base
 		lc_site_load("interim_page", &$this);
 		$connections = $targ->connections_from();
 		$register_id = $targ->prop("register_data");
+	
 		if(is_oid($register_id))
 		{
 			$register_obj = obj($register_id);
-			$this->vars($register_obj->properties());
+			$property_values = $register_obj->properties();
+			$this->vars($property_values);
+			$form_obj = obj($register_obj->meta("cfgform_id"));
+			$property_list = $form_obj->properties();
+			$parser = get_instance("alias_parser");
+			foreach ($property_values as $key => $val)
+			{
+				$parser->parse_oo_aliases($register_id, $property_values[$key]);
+			}
+			
+			//tekitab userim muutujad ja annab neile väärtuseks pildiurlid:
+			$img_props = array();//siia paigutab miski hulk piltide properteid .. hiljem läheb vaja
+			$x = 1;
+			while($x < 6)
+			{
+				$img_props[] = "userim".$x;
+				$image = $register_obj->get_first_obj_by_reltype("RELTYPE_IMAGE".$x);
+				if($image)
+				{
+					$image_inst = $image->instance();
+					$image_url = $image_inst->get_url_by_id($image->id());
+					$this->vars(array("userim".$x => $image_url));
+				}
+				$x++;
+			}
+			//järgnev on subide väljapraakimiseks group järgi, et noh, kui miski grupi propertitel väärtusi pole, siis templades sellenimelise SUBi koodi näha ei ole
+			foreach($register_obj->get_group_list() as $sub => $data)
+			{
+				if ($this->is_template($sub))
+				{
+					$not_empty_sub = 0;
+					$c = "";
+					foreach($property_list["cfg_proplist"] as $prop => $prop_data)
+					{
+						if($prop_data["group"] == $sub)
+						{
+							if(in_array($prop, $img_props))//piltidega peab veidi teisiti käituma
+							{
+								$image = $register_obj->get_first_obj_by_reltype("RELTYPE_IMAGE".$x);
+								if($image)
+								{
+									$image_inst = $image->instance();
+									$image_url = $image_inst->get_url_by_id($image->id());
+									$this->vars(array($prop => $image_url));
+									if(strlen($image_url) > 1)
+									{
+										$not_empty_sub = 1;
+									}						
+								}
+							}
+							else
+							{
+								$this->vars(array(
+									$prop => $property_values[$prop],
+								));
+								if($property_values[$prop])
+								{
+									$not_empty_sub = 1;
+								}
+							}
+						}
+						$c = $this->parse($sub);
+					}
+					if($not_empty_sub)
+					{
+						$this->vars(array(
+							$sub => $c,
+						));
+					}
+				}
+			}
+			//$c = new connection();
+			//$conns = $c->find(array("from" => $register_id, "from.class_id" =>
+			// CL_REGISTER_DATA, "type" => array("RELTYPE_IMAGE1", "RELTYPE_IMAGE2",
+			// "RELTYPE_IMAGE3", "RELTYPE_IMAGE4", "RELTYPE_IMAGE5")));
 		}
 		exit_function("interim_page::parse_alias");
-//		return $this->show(array("id" => $arr["alias"]["target"]));
-		return $this->parse();		
+		return $this->parse();
 	}
 
 	////
