@@ -28,7 +28,7 @@ class relpicker extends  core
 		}
 		else
 		{
-		// if automatic is set, then create a list of all properties of that type
+			// if automatic is set, then create a list of all properties of that type
 			if (isset($prop["automatic"]))
 			{
 				$clid = $arr["relinfo"][$reltype]["clid"];
@@ -43,7 +43,7 @@ class relpicker extends  core
 					$names = $olist->names();
 					asort($names);            
 					$val["options"] = $options + $names;
-					if ($arr["id"])
+					/*if ($arr["id"])
 					{
 						$o = obj($arr["id"]);
 						$conn = $o->connections_from(array(
@@ -55,7 +55,8 @@ class relpicker extends  core
 							$sel[$c->prop("to")] = $c->prop("to");
 						}
 						$val["value"] = $sel;
-					};
+					};*/
+					// since when do automatic relpickers get all relations selected?!?!
 				};
 			}
 			else
