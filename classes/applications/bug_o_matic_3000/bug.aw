@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.11 2006/02/08 14:06:28 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.12 2006/02/10 09:23:31 tarvo Exp $
 // bug.aw - Bugi 
 /*
 
@@ -16,22 +16,22 @@
 @property bug_content type=textarea rows=10 cols=80
 @caption Sisu
 
-@property bug_type type=classificator table=objects field=meta method=serialize
+@property bug_type type=classificator store=connect
 @caption T&uuml;&uuml;p
 
 @property bug_status type=select
 @caption Staatus
 
-@property customer type=relpicker reltype=RELTYPE_CUSTOMER
+@property customer type=relpicker reltype=RELTYPE_CUSTOMER store=connect
 @caption Klient
 
-@property project type=relpicker reltype=RELTYPE_PROJECT
+@property project type=relpicker reltype=RELTYPE_PROJECT store=connect
 @caption Projekt
 
 @property deadline type=date_select default=-1
 @caption T&auml;htaeg
 
-@property who type=relpicker reltype=RELTYPE_MONITOR
+@property who type=relpicker reltype=RELTYPE_MONITOR store=connect
 @caption Kellele
 
 @property bug_priority type=select
@@ -62,7 +62,7 @@ caption OS
 @property bug_mail type=textbox size=60
 @caption Bugmail CC
 
-@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=5 method=serialize
+@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=5 store=connect
 @caption J&auml;lgijad
 
 @property comms type=comments group=comments store=no

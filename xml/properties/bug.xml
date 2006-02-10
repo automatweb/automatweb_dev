@@ -21,10 +21,10 @@
       <property>
             <name>bug_type</name>
             <group>general</group>
-            <table>objects</table>
+            <table>aw_bugs</table>
             <type>classificator</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>connect</store>
+            <field>bug_type</field>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
@@ -41,6 +41,7 @@
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_CUSTOMER</reltype>
+            <store>connect</store>
             <field>customer</field>
             <caption>Klient</caption>
       </property>
@@ -50,6 +51,7 @@
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_PROJECT</reltype>
+            <store>connect</store>
             <field>project</field>
             <caption>Projekt</caption>
       </property>
@@ -68,6 +70,7 @@
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_MONITOR</reltype>
+            <store>connect</store>
             <field>who</field>
             <caption>Kellele</caption>
       </property>
@@ -141,7 +144,7 @@
             <reltype>RELTYPE_MONITOR</reltype>
             <multiple>1</multiple>
             <size>5</size>
-            <method>serialize</method>
+            <store>connect</store>
             <field>monitors</field>
             <caption>J&amp;amp;auml;lgijad</caption>
       </property>

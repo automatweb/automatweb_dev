@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.15 2006/02/10 09:08:31 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.15 2006/02/10 09:08:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.16 2006/02/10 09:23:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.16 2006/02/10 09:23:31 tarvo Exp $
 
 // bug_tracker.aw - BugTrack 
 /*
@@ -288,6 +288,13 @@ class bug_tracker extends class_base
 			"numeric" => 1,
 			"callback" => array(&$this, "show_priority"),
 			"callb_pass_row" => 1,
+			"filter" => array(
+				t("1"),
+				t("2"),
+				t("3"),
+				t("4"),
+				t("5"),
+			),
 		));
 		$t->define_field(array(
 			"name" => "bug_severity",
@@ -296,6 +303,13 @@ class bug_tracker extends class_base
 			"numeric" => 1,
 			"callback" => array(&$this, "show_severity"),
 			"callb_pass_row" => 1,
+			"filter" => array(
+				t("1"),
+				t("2"),
+				t("3"),
+				t("4"),
+				t("5"),
+			),
 		));
 
 		$t->define_field(array(
@@ -312,7 +326,6 @@ class bug_tracker extends class_base
 				t("6"),
 				t("7"),
 			),
-
 		));
 
 		$t->define_field(array(
