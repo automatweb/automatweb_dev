@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.456 2006/02/08 10:46:51 ahti Exp $
+// $Id: class_base.aw,v 2.457 2006/02/10 06:22:34 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3978,7 +3978,6 @@ class class_base extends aw_template
 				if ($alias_to_prop || $rawdata["alias_to_prop"])
 				{
 					$altp = $alias_to_prop ? $alias_to_prop : $rawdata["alias_to_prop"];
-					echo "altp = $altp <br>";
 					$curpv = $_to->prop($altp);
 					if (is_array($altp))
 					{
