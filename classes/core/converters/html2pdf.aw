@@ -35,6 +35,15 @@ class html2pdf extends class_base
 		}
 	}
 
+	function gen_pdf($arr)
+	{
+		$str = $this->convert($arr);
+		header("Content-type: application/pdf");
+		header("Content-Disposition: filename=".(strpos($arr["filename"], ".pdf") !== false ? $arr["filename"] : $arr["filename"].".pdf"));
+		header("Content-Length: ".strlen($str));
+		die($str);
+	}
+
 	function _convert_using_htmldoc($arr)
 	{
 		$tmpf = aw_ini_get("server.tmpdir")."/aw-html2pdf-".gen_uniq_id();
