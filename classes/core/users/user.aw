@@ -1536,9 +1536,10 @@ class user extends class_base
 	{
 		obj_set_opt("no_cache", 1);
 		$p_o = obj($person);
-		$org_c = reset($p_o->connections_from(array(
+		$cons = $p_o->connections_from(array(
 			"type" => "RELTYPE_WORK",
-		)));
+		));
+		$org_c = reset($cons);
 		obj_set_opt("no_cache", 0);
 		if (!$org_c)
 		{
