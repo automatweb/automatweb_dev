@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.12 2006/02/10 09:23:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.13 2006/02/10 09:50:54 sander Exp $
 // bug.aw - Bugi 
 /*
 
@@ -145,7 +145,7 @@ class bug extends class_base
 		{
 			case "bug_status":	
 				$prop["options"] = array(
-					1 => t("Uus"),
+					1 => t("Lahtine"),
 					2 => t("Tegemisel"),
 					3 => t("Valmis"),
 					4 => t("Suletud"),

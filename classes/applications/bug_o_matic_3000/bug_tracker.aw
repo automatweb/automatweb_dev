@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.16 2006/02/10 09:23:31 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.16 2006/02/10 09:23:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.17 2006/02/10 09:50:54 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.17 2006/02/10 09:50:54 sander Exp $
 
 // bug_tracker.aw - BugTrack 
 /*
@@ -247,7 +247,7 @@ class bug_tracker extends class_base
 	function show_status($_val)
 	{
 		$values = array(
-			1 => t("Uus"),
+			1 => t("Lahtine"),
 			2 => t("Tegemisel"),
 			3 => t("Valmis"),
 			4 => t("Suletud"),
