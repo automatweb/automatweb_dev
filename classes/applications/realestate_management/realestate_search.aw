@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.9 2006/02/06 17:30:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.10 2006/02/10 10:47:24 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1158,12 +1158,20 @@ class realestate_search extends class_base
 				"id" => $this_object->id (),
 			), CL_REALESTATE_SEARCH, false, true);
 
+			### search result count
+			$number_of_results = "";
+
+			if ($search_requested)
+			{
+				$number_of_results = (0 < $this->result_count) ? sprintf (t("Leitud %s objekti"), $this->result_count) : t("Otsinguparameetritele vastavaid objekte ei leitud");
+			}
+
 			$this->vars (array (
 				"RE_SEARCHFORM" => $form,
 				"table_style" => $table_style,
 				"result" => $result,
 				"options_url" => $options_url,
-				"number_of_results" => (0 < $this->result_count) ? sprintf (t("Leitud %s objekti"), $this->result_count) : t("Otsinguparameetritele vastavaid objekte ei leitud"),
+				"number_of_results" => $number_of_results,
 			));
 		}
 
