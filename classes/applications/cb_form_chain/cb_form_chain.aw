@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.21 2006/02/08 11:20:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.22 2006/02/10 08:35:35 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1694,6 +1694,11 @@ class cb_form_chain extends class_base
 				$ts[] = $this->parse("TITLE_SEL");
 			}
 			else
+			if ($this->is_template("TITLE_NO_LINK") && !$this->_page_is_filled($o, $pg))
+			{
+				$ts[] = $this->parse("TITLE_NO_LINK");
+			}
+			else
 			{
 				$ts[] = $this->parse("TITLE");
 			}
@@ -2184,6 +2189,27 @@ class cb_form_chain extends class_base
 			}
 		}
 		$arr["obj_inst"]->set_meta("redir", $arr["request"]["rd"]);
+	}
+
+	function _page_is_filled($o, $page)
+	{
+		if ($_SESSION["cbfc_current_entry_id"])
+		{
+			return true;
+		}
+
+		$ret = false;
+		$forms = $this->_get_forms_for_page($o, $page);
+		foreach($forms as $form_dat)
+		{
+			$entries = $_SESSION["cbfc_data"][$form_dat["form"]];
+			if (count($entries))
+			{
+				$ret = true;
+				break;
+			}
+		}
+		return $ret;
 	}
 }
 ?>
