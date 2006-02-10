@@ -1964,7 +1964,7 @@ class _int_object
 				$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
 				if (in_array($prop_dat["type"], array("relpicker", "classificator", "popup_search", "relmanager")))
 				{
-					if (!$GLOBALS["object_loader"]->can("view", $cur_v))
+					if (!$GLOBALS["object_loader"]->ds->can("view", $cur_v))
 					{
 						return null;
 					}
