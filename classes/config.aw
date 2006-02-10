@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.72 2005/12/06 18:20:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.73 2006/02/10 11:35:47 kristo Exp $
 
 class config extends aw_template
 {
@@ -13,6 +13,7 @@ class config extends aw_template
 	function set_simple_config($ckey,$value)
 	{
 		// 1st, check if the necessary key exists
+		$this->quote(&$value);
 		$ret = $this->db_fetch_field("SELECT COUNT(*) AS cnt FROM config WHERE ckey = '$ckey'","cnt");
 		if ($ret == false)
 		{

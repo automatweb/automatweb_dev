@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.61 2006/01/18 18:09:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.62 2006/02/10 11:35:47 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1848,6 +1848,79 @@ class converters extends aw_template
 		}
 		$c = get_instance("cache");
 		$c->full_flush();
+		die("all done");
+	}
+
+	/**
+		@attrib name=convert_bill_rows
+	**/
+	function convert_bill_rows($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_BILL,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $bill)
+		{
+			$inf = safe_array($bill->meta("bill_inf"));
+			$task_i = get_instance(CL_TASK);
+
+			foreach($bill->connections_from(array("type" => "RELTYPE_TASK")) as $c)
+			{
+				$task = $c->to();
+				foreach($task_i->get_task_bill_rows($task, true, $bill->id()) as $id => $row)
+				{
+					if (!isset($inf[$id]))
+					{
+						$inf[$id] = $row;
+					}
+					
+					if ($this->can("view", $inf[$id]["prod"]))
+					{
+						$prod = obj($inf[$id]["prod"]);
+						if ($this->can("view", $prod->prop("tax_rate")))
+						{
+							$tr = obj($prod->prop("tax_rate"));
+							$inf[$id]["km_code"] = $tr->prop("code");
+						}
+					}
+
+					$r = obj();
+					$r->set_class_id(CL_CRM_BILL_ROW);
+					$r->set_parent($bill->id());
+					$r->set_prop("name", $inf[$id]["name"]);
+					$r->set_prop("amt", $inf[$id]["amt"]);
+					$r->set_prop("prod", $inf[$id]["prod"]);
+					$r->set_prop("price", $inf[$id]["price"]);
+					$r->set_prop("unit", $inf[$id]["unit"]);
+					$r->set_prop("is_oe", $inf[$id]["is_oe"]);
+					$r->set_prop("has_tax", $inf[$id]["has_tax"]);
+					$r->set_prop("date", $inf[$id]["date"]);
+					echo dbg::dump($r->properties());
+					$r->save();
+
+					$r->connect(array(
+						"to" => $task->id(),
+						"type" => "RELTYPE_TASK"
+					));
+					if ($inf[$id]["row_oid"])
+					{
+						$r->connect(array(
+							"to" => $inf[$id]["row_oid"],
+							"type" => "RELTYPE_TASK_ROW"
+						));
+					}
+
+					$bill->connect(array(
+						"to" => $r->id(),
+						"type" => "RELTYPE_ROW"
+					));
+				}
+			}
+			$bill->set_meta("bill_inf", null);
+			$bill->save();
+		}
 		die("all done");
 	}
 };

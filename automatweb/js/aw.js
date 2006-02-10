@@ -147,8 +147,14 @@ function aw_date_edit_clear(name)
         el = document.changeform.elements[i];
         if (el.name.indexOf(name) != -1)
 		{
-		  el.selectedIndex = 0;
-		  el.value = '';
+			if (el.options)
+			{
+				el.selectedIndex = 0;
+			}
+			else
+			{
+				el.value = '';
+			}
 		}
 	}
 } 
@@ -175,17 +181,18 @@ function aw_date_edit_show_cal(elname)
 		var y = y_obj.value;
 	}
 	else
-    if (y_obj.options)
+    if (y_obj.options && y_obj.selectedIndex > -1)
 	{
 		var y = y_obj.options[y_obj.selectedIndex].value;
 	}
+
 
 	if (m_obj.value > 0)
 	{
 		var m = m_obj.value;
 	}
 	else
-    if (m_obj.options)
+    if (m_obj.options && m_obj.selectedIndex > -1)
 	{
 		var m = m_obj.options[m_obj.selectedIndex].value;
 	}
@@ -195,7 +202,7 @@ function aw_date_edit_show_cal(elname)
 		var d = d_obj.value;
 	}
 	else
-    if (d_obj.options)
+    if (d_obj.options && d_obj.selectedIndex > -1)
 	{
 		var d = d_obj.options[d_obj.selectedIndex].value;
 	}
@@ -204,7 +211,7 @@ function aw_date_edit_show_cal(elname)
 	{ 
 		d=1; 
 	}
-	if (y=="---" || m=="---" || y == undefined || m == undefined) 
+	if (y=="---" || m=="---" || y == undefined || m == undefined || y == "" || m == "") 
 	{ 
 		dt = null; 
 	}

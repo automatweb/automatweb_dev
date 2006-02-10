@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.11 2006/01/27 07:32:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.12 2006/02/10 11:35:47 kristo Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -1360,7 +1360,7 @@ class realestate_property extends class_base
 		$class = str_replace ("realestate_", "", $class_file);
 
 		$tmp = $this->template_dir;
-		$this->template_dir = $this->cfg["basedir"] . "/templates/applications/realestate_management/realestate_property";
+		$this->template_dir = $this->cfg["site_basedir"] . "/templates/applications/realestate_management/realestate_property";
 		$this->read_template ("printview_{$class}.tpl");
 
 		$data = array ();

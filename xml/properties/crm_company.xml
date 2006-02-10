@@ -1549,6 +1549,11 @@
             <store>no</store>
             <parent>bills_list_s</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>bill_s_from</field>
             <caption>Esitatud alates</caption>
       </property>
@@ -1560,6 +1565,11 @@
             <store>no</store>
             <parent>bills_list_s</parent>
             <captionside>top</captionside>
+            <format>
+                  <num_0>day_textbox</num_0>
+                  <num_1>month_textbox</num_1>
+                  <num_2>year_textbox</num_2>
+            </format>
             <field>bill_s_to</field>
             <caption>Esitatud kuni</caption>
       </property>

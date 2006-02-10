@@ -214,5 +214,12 @@
 			</function>
 		</action>
 
+		<action name="convert_bill_rows">
+			<function name="convert_bill_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

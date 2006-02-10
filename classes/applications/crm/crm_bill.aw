@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.22 2006/01/26 09:56:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.23 2006/02/10 11:35:47 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -86,17 +86,19 @@
 
 
 @reltype TASK value=1 clid=CL_TASK
-@caption &uuml;lesanne
+@caption &Uuml;lesanne
 
 @reltype CUST value=2 clid=CL_CRM_COMPANY,CL_CRM_PERSON
-@caption klient
+@caption Klient
 
 @reltype IMPL value=3 clid=CL_CRM_COMPANY,CL_CRM_PERSON
-@caption teostaja
+@caption Teostaja
 
 @reltype LANGUAGE value=4 clid=CL_LANGUAGE
-@caption keel
+@caption Keel
 
+@reltype ROW value=5 clid=CL_BILL_ROW
+@caption Rida
 */
 
 define("BILL_SUM", 1);
@@ -146,17 +148,11 @@ class crm_bill extends class_base
 				break;
 
 			case "currency":
-				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
+				$prop["value"] = $arr["obj_inst"]->prop("customer.currency.name");
+				if ($prop["value"] == "")
 				{
-					$ord = obj($arr["obj_inst"]->prop("customer"));
-					if ($this->can("view", $ord->prop("currency")))
-					{
-						$ord_cur = obj($ord->prop("currency"));
-						$prop["value"] = $ord_cur->name();
-						return PROP_OK;
-					}
+					return PROP_IGNORE;
 				}
-				return PROP_IGNORE;
 				break;
 
 			case "impl":
@@ -240,22 +236,7 @@ class crm_bill extends class_base
 				break;
 
 			case "bill_rows":
-				$inf = array();
-				foreach(safe_array($arr["request"]["rows"]) as $idx => $e)
-				{
-					if (trim($e["date"]) == "")
-					{
-						$e["date"] = -1;
-					}
-					else
-					{
-						list($d,$m,$y) = explode("/", $e["date"]);
-						$e["date"] = mktime(0,0,0, $m, $d, $y);
-					}
-					$e["sum"] = $this->num($e["price"]) * $this->num($e["amt"]);
-					$inf[$idx] = $e;
-				}	
-				$arr["obj_inst"]->set_meta("bill_inf", $inf);
+				$this->_save_rows($arr);
 				break;
 		}
 		return $retval;
@@ -325,7 +306,6 @@ class crm_bill extends class_base
 
 		$sum = 0;
 
-		$inf = safe_array($arr["obj_inst"]->meta("bill_inf"));
 		$task_i = get_instance(CL_TASK);
 
 		$prods = array("" => t("--vali--"));
@@ -344,68 +324,61 @@ class crm_bill extends class_base
 				$prods[$pko->id()] = $pko->name();
 			}
 		}
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TASK")) as $c)
+		$rows = $this->get_bill_rows($arr["obj_inst"]);
+		foreach($rows as $row)
 		{
-			$task = $c->to();
-			foreach($task_i->get_task_bill_rows($task, true, $arr["obj_inst"]->id()) as $id => $row)
-			{
-				if (!isset($inf[$id]))
-				{
-					$inf[$id] = $row;
-				}
-
-				$t_inf = $inf[$id];
-				$t->define_data(array(
-					"name" => html::textarea(array(
-						"name" => "rows[$id][name]",
-						"value" => $t_inf["name"],
-						"rows" => 5,
-						"cols" => 45
-					)),
-					"code" => html::textbox(array(
-						"name" => "rows[$id][code]",
-						"value" => $t_inf["code"],
-						"size" => 10
-					)),
-					"date" => html::textbox(array(
-						"name" => "rows[$id][date]",
-						"value" => $t_inf["date"] > 100 ? date("d/m/y", $t_inf["date"]) : "",
-						"size" => 8
-					)),
-					"unit" => html::textbox(array(
-						"name" => "rows[$id][unit]",
-						"value" => $t_inf["unit"],
-						"size" => 3
-					)),
-					"price" => html::textbox(array(
-						"name" => "rows[$id][price]",
-						"value" => $t_inf["price"],
-						"size" => 5
-					)),
-					"amt" => html::textbox(array(
-						"name" => "rows[$id][amt]",
-						"value" => $t_inf["amt"],
-						"size" => 5
-					)),
-					"sum" => html::textbox(array(
-						"name" => "rows[$id][sum]",
-						"value" => $t_inf["sum"],
-						"size" => 5
-					)),
-					"has_tax" => html::checkbox(array(
-						"name" => "rows[$id][has_tax]",
-						"ch_value" => 1,
-						"checked" => $t_inf["has_tax"] == 1 ? true : false
-					)),
-					"prod" => html::select(array(
-						"name" => "rows[$id][prod]",
-						"options" => $prods,
-						"value" => $t_inf["prod"]
-					
-					))
-				));
-				$sum += $t_inf["sum"];
-			}
+			$t_inf = $row;
+			$id = $row["id"];
+			$t->define_data(array(
+				"name" => html::textarea(array(
+					"name" => "rows[$id][name]",
+					"value" => $t_inf["name"],
+					"rows" => 5,
+					"cols" => 45
+				)),
+				"code" => html::textbox(array(
+					"name" => "rows[$id][code]",
+					"value" => $t_inf["code"],
+					"size" => 10
+				)),
+				"date" => html::textbox(array(
+					"name" => "rows[$id][date]",
+					"value" => $t_inf["date"] > 100 ? date("d/m/y", $t_inf["date"]) : "",
+					"size" => 8
+				)),
+				"unit" => html::textbox(array(
+					"name" => "rows[$id][unit]",
+					"value" => $t_inf["unit"],
+					"size" => 3
+				)),
+				"price" => html::textbox(array(
+					"name" => "rows[$id][price]",
+					"value" => $t_inf["price"],
+					"size" => 5
+				)),
+				"amt" => html::textbox(array(
+					"name" => "rows[$id][amt]",
+					"value" => $t_inf["amt"],
+					"size" => 5
+				)),
+				"sum" => html::textbox(array(
+					"name" => "rows[$id][sum]",
+					"value" => $t_inf["sum"],
+					"size" => 5
+				)),
+				"has_tax" => html::checkbox(array(
+					"name" => "rows[$id][has_tax]",
+					"ch_value" => 1,
+					"checked" => $t_inf["has_tax"] == 1 ? true : false
+				)),
+				"prod" => html::select(array(
+					"name" => "rows[$id][prod]",
+					"options" => $prods,
+					"value" => $t_inf["prod"]
+				
+				))
+			));
+			$sum += $t_inf["sum"];
 		}
 		$t->set_sortable(false);
 
@@ -427,9 +400,9 @@ class crm_bill extends class_base
 
 	function _calc_sum($bill)
 	{
-		$inf = safe_array($bill->meta("bill_inf"));
+		$rows = $this->get_bill_rows($bill);
 		$sum = 0;
-		foreach($inf as $row)
+		foreach($rows as $row)
 		{
 			$sum+= $row["sum"];
 		}
@@ -712,31 +685,37 @@ class crm_bill extends class_base
 
 	function get_bill_rows($bill)
 	{
-		$inf = safe_array($bill->meta("bill_inf"));
-		$task_i = get_instance(CL_TASK);
-
-		foreach($bill->connections_from(array("type" => "RELTYPE_TASK")) as $c)
+		$inf = array();
+		// bill rows are objects connected and get info copied into them from task rows
+		foreach($bill->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
-			$task = $c->to();
-			foreach($task_i->get_task_bill_rows($task, true, $bill->id()) as $id => $row)
+			$row = $c->to();
+			$kmk = "";
+			if ($this->can("view", $row->prop("prod")))
 			{
-				if (!isset($inf[$id]))
+				$prod = obj($row->prop("prod"));
+				if ($this->can("view", $prod->prop("tax_rate")))
 				{
-					$inf[$id] = $row;
-				}
-				
-				if ($this->can("view", $inf[$id]["prod"]))
-				{
-					$prod = obj($inf[$id]["prod"]);
-					if ($this->can("view", $prod->prop("tax_rate")))
-					{
-						$tr = obj($prod->prop("tax_rate"));
-						$inf[$id]["km_code"] = $tr->prop("code");
-					}
+					$tr = obj($prod->prop("tax_rate"));
+					$kmk = $tr->prop("code");
 				}
 			}
-		}
 
+			$rd = array(
+				"amt" => $row->prop("amt"),
+				"prod" => $row->prop("prod"),
+				"name" => $row->prop("name"),
+				"price" => $row->prop("price"),
+				"sum" => str_replace(",", ".", $row->prop("amt")) * str_replace(",", ".", $row->prop("price")),
+				"km_code" => $kmk,
+				"unit" => $row->prop("unit"),
+				"is_oe" => $row->prop("is_oe"),
+				"has_tax" => $row->prop("has_tax"),
+				"date" => $row->prop("date"),
+				"id" => $row->id()
+			);
+			$inf[] = $rd;
+		}
 		return $inf;
 	}
 
@@ -988,16 +967,7 @@ class crm_bill extends class_base
 
 	function get_bill_currency($b)
 	{
-		if ($this->can("view", $b->prop("customer")))
-		{
-			$ord = obj($b->prop("customer"));
-			if ($this->can("view", $ord->prop("currency")))
-			{
-				$ord_cur = obj($ord->prop("currency"));
-				return $ord_cur->name();
-			}
-		}
-		return false;
+		return $b->prop("customer.currency.name");
 	}
 
 	function get_bill_sum($b, $type = BILL_SUM)
@@ -1074,6 +1044,37 @@ class crm_bill extends class_base
 				return $tot_amt;
 		}
 		return $sum;
+	}
+
+	function _save_rows($arr)
+	{
+		foreach(safe_array($arr["request"]["rows"]) as $oid => $row)
+		{
+			if ($this->can("edit", $oid))
+			{
+				$o = obj($oid);
+				$o->set_prop("name", $row["name"]);
+
+				if (trim($row["date"]) == "")
+				{
+					$row["date"] = -1;
+				}
+				else
+				{
+					list($d,$m,$y) = explode("/", $row["date"]);
+					$row["date"] = mktime(0,0,0, $m, $d, $y);
+				}
+
+				$o->set_prop("date", $row["date"]);
+				$o->set_prop("unit", $row["unit"]);
+				$o->set_prop("price", $row["price"]);
+				$o->set_prop("amt", $row["amt"]);
+				$o->set_prop("sum", $row["sum"]);
+				$o->set_prop("prod", $row["prod"]);
+				$o->set_prop("has_tax", $row["has_tax"]);
+				$o->save();
+			}
+		}
 	}
 }
 ?>

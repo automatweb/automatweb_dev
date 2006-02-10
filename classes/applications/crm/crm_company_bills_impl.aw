@@ -33,7 +33,7 @@ class crm_company_bills_impl extends class_base
 		$t->define_field(array(
 			"caption" => t("Summa"),
 			"name" => "sum",
-			"align" => "center",
+			"align" => "right",
 			"sortable" => 1
 		));
 	}
@@ -135,21 +135,21 @@ class crm_company_bills_impl extends class_base
 		$t->define_field(array(
 			"caption" => t("Tunde"),
 			"name" => "hrs",
-			"align" => "center",
+			"align" => "right",
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"caption" => t("Tunni hind"),
 			"name" => "hr_price",
-			"align" => "center",
+			"align" => "right",
 			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"caption" => t("Summa"),
 			"name" => "sum",
-			"align" => "center",
+			"align" => "right",
 			"sortable" => 1
 		));
 
@@ -284,7 +284,8 @@ class crm_company_bills_impl extends class_base
 			"name" => "sum",
 			"caption" => t("Summa"),
 			"sortable" => 1,
-			"numeric" => 1
+			"numeric" => 1,
+			"align" => "right"
 		));
 
 		if ($r["group"] != "bills_monthly")

@@ -233,7 +233,7 @@
             <TASK>
                   <value>1</value>
                   <clid>CL_TASK</clid>
-                  <caption>&amp;amp;uuml;lesanne</caption>
+                  <caption>&amp;amp;Uuml;lesanne</caption>
             </TASK>
             <CUST>
                   <value>2</value>
@@ -241,7 +241,7 @@
                         <num_0>CL_CRM_COMPANY</num_0>
                         <num_1>CL_CRM_PERSON</num_1>
                   </clid>
-                  <caption>klient</caption>
+                  <caption>Klient</caption>
             </CUST>
             <IMPL>
                   <value>3</value>
@@ -249,13 +249,18 @@
                         <num_0>CL_CRM_COMPANY</num_0>
                         <num_1>CL_CRM_PERSON</num_1>
                   </clid>
-                  <caption>teostaja</caption>
+                  <caption>Teostaja</caption>
             </IMPL>
             <LANGUAGE>
                   <value>4</value>
                   <clid>CL_LANGUAGE</clid>
-                  <caption>keel</caption>
+                  <caption>Keel</caption>
             </LANGUAGE>
+            <ROW>
+                  <value>5</value>
+                  <clid>CL_BILL_ROW</clid>
+                  <caption>Rida</caption>
+            </ROW>
       </reltypes>
 </properties>
 

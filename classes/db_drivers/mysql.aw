@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.34 2005/12/16 11:37:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.35 2006/02/10 11:35:48 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -777,7 +777,7 @@ class mysql
 
 		if (strpos($errstr, "doesn't exist") !== false)
 		{
-			preg_match("/Table '(.*)\.(.*)' doesn't exist'/imsU" , $errstr, $mt);
+			preg_match("/Table '(.*)\.(.*)' doesn't exist/imsU" , $errstr, $mt);
 
 			if ($this->db_proc_error_last_fn == $mt[2])
 			{

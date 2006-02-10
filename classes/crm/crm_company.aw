@@ -555,10 +555,10 @@ default group=org_objects
 			@property bill_s_bill_no type=textbox size=30 store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Arve nr
 
-			@property bill_s_from type=date_select store=no parent=bills_list_s captionside=top group=bills_list
+			@property bill_s_from type=date_select store=no parent=bills_list_s captionside=top group=bills_list format=day_textbox,month_textbox,year_textbox 
 			@caption Esitatud alates
 
-			@property bill_s_to type=date_select store=no parent=bills_list_s captionside=top group=bills_list
+			@property bill_s_to type=date_select store=no parent=bills_list_s captionside=top group=bills_list format=day_textbox,month_textbox,year_textbox 
 			@caption Esitatud kuni
 
 			@property bill_s_client_mgr type=text store=no parent=bills_list_s captionside=top group=bills_list
@@ -3446,7 +3446,12 @@ class crm_company extends class_base
 		$bill->save();
 
 		$ser = get_instance(CL_CRM_NUMBER_SERIES);
-		$bill->set_prop("bill_no", $ser->find_series_and_get_next(CL_CRM_BILL));
+		$bno = $ser->find_series_and_get_next(CL_CRM_BILL);
+		if (!$bno)
+		{
+			$bno = $bill->id();
+		}
+		$bill->set_prop("bill_no", $bno);
 		$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
 
 		if (is_oid($arr["proj"]))
@@ -3461,7 +3466,7 @@ class crm_company extends class_base
 			$bill->set_prop("customer", $impl);
 			$bill->set_prop("impl", $proj->prop("implementor"));
 		}
-		else
+
 		if (is_oid($arr["cust"]))
 		{
 			$cust = obj($arr["cust"]);
@@ -3474,6 +3479,11 @@ class crm_company extends class_base
 			$bill->set_prop("customer", $cust->id());
 		}
 
+		if (!$bill->prop("impl"))
+		{
+			$u = get_instance(CL_USER);
+			$bill->set_prop("impl", $u->get_current_company());
+		}
 		$bill->save();
 
 		foreach(safe_array($arr["sel"]) as $task)
@@ -3489,26 +3499,53 @@ class crm_company extends class_base
 				"type" => "RELTYPE_BILL"
 			));
 
-			// add bill id to all rows in task that don't have one already
-			/*$rows = safe_array($task_o->meta("rows"));
-			foreach($rows as $idx => $row)
-			{
-				if (!$row["bill_id"] && $row["on_bill"])
-				{
-					$rows[$idx]["bill_id"] = $bill->id();
-				}
-			}
-			$task_o->set_meta("rows", $rows);*/
 			foreach($task_o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 			{
 				$row = $c->to();
 				if (!$row->prop("bill_id") && $row->prop("on_bill"))
 				{
-					$row->set_prop("bill_id", $bill->id());
+					$row->set_prop("bill_id", $bill->prop("bill_id"));
 					$row->save();
 				}
 			}
 			$task_o->save();
+
+			// now, get all rows from task and convert to bill rows
+			$task_i = $task_o->instance();
+			foreach($task_i->get_task_bill_rows($task_o, true, $bill->prop("bill_id")) as $row)
+			{
+				$br = obj();
+				$br->set_class_id(CL_CRM_BILL_ROW);
+				$br->set_parent($bill->id());
+				$br->set_prop("name", $row["name"]);
+				$br->set_prop("amt", $row["amt"]);
+				$br->set_prop("prod", $row["prod"]);
+				$br->set_prop("price", $row["price"]);
+				$br->set_prop("unit", $row["unit"]);
+				$br->set_prop("is_oe", $row["is_oe"]);
+				$br->set_prop("has_tax", $row["has_tax"]);
+				$br->set_prop("date", $row["date"]);
+				$br->save();
+
+				$br->connect(array(
+					"to" => $task_o->id(),
+					"type" => "RELTYPE_TASK"
+				));
+
+				if ($row["row_oid"])
+				{
+					$br->connect(array(
+						"to" => $row["row_oid"],
+						"type" => "RELTYPE_TASK_ROW"
+					));
+				}
+
+				$bill->connect(array(
+					"to" => $br->id(),
+					"type" => "RELTYPE_ROW"
+				));
+			
+			}
 		}
 
 		return html::get_change_url($bill->id(), array("return_url" => urlencode(aw_url_change_var("proj", NULL, $arr["post_ru"]))));

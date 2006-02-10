@@ -1946,10 +1946,6 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi().$p_v_name." = true;\n";
 		$ret .= $this->_gi().$cache_name." = false;\n";
 
-		// we need to clear the previous level's cache here :(
-//		$res .= $this->_gi()."\$this->cache->file_invalidate(\"site_show_menu_area_cache_tpl_".$this->tplhash."_lid_\".aw_global_get(\"lang_id\").\"_section_\".aw_global_get(\"section\").\"_".$arr["a_name"]."_level_".($arr["level"]-1)."_uid_\".aw_global_get(\"uid\").\"_period_\".aw_global_get(\"act_per_id\")\n";
-		
-
 		return $ret;
 	}
 

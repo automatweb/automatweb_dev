@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.46 2006/02/06 12:37:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.47 2006/02/10 11:35:47 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -153,7 +153,6 @@ class cache extends core
 
 	function file_invalidate($key)
 	{
-		global $awt;
 		if ($this->cfg["page_cache"] != "")
 		{
 			@unlink($this->get_fqfn($key));
@@ -382,13 +381,6 @@ class cache extends core
 
 		$cachefile = $cachedir . "/" . $cache_id;
 			
-		//if (!is_writable($cachedir))
-		//{
-			// cannot write cache, bail out
-			// OTOH this is not a fatal error, we can still work without cache
-		//	return false;
-		//}
-
 		// now get mtime for both files, source and cache
 		$source_mtime = @filemtime($fqfn);
 		$cache_mtime = @filemtime($cachefile);
