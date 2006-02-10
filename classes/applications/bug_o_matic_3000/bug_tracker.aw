@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.14 2006/02/08 14:06:28 sander Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.14 2006/02/08 14:06:28 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.15 2006/02/10 09:08:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.15 2006/02/10 09:08:31 tarvo Exp $
+
 // bug_tracker.aw - BugTrack 
 /*
 
@@ -26,6 +27,7 @@
 
 @reltype OBJECT_TYPE value=2 clid=CL_OBJECT_TYPE
 @caption Objekti t&uuml;&uuml;p
+
 */
 
 class bug_tracker extends class_base
@@ -61,6 +63,7 @@ class bug_tracker extends class_base
 
 	function set_property($arr = array())
 	{
+		arr(&$arr);
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -71,7 +74,16 @@ class bug_tracker extends class_base
 					if($this->can("edit",$bug_id))
 					{
 						$bug = obj($bug_id);
-						$bug-> set_prop("bug_priority",$bug_val);
+						$bug->set_prop("bug_priority",$bug_val);
+						$bug->save();
+					}
+				}
+				foreach($arr["request"]["bug_severity"] as $bug_id => $bug_val)
+				{
+					if($this->can("edit",$bug_id))
+					{
+						$bug = obj($bug_id);
+						$bug->set_prop("bug_severity",$bug_val);
 						$bug->save();
 					}
 				}
@@ -148,11 +160,9 @@ class bug_tracker extends class_base
 
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
-			//"root_url" => $this->mk_my_orb("root_action", array()),
 			"root_icon" => "/path/to/some/image",
 			"tree_id" => "ad_folders",
 			"persist_state" => true,
-			//"get_branch_func" => $this->mk_my_orb("gen_branch",array("parent" => "0")),
 		));
 
 		$this->self_id = $arr["obj_inst"]->id();
@@ -218,8 +228,18 @@ class bug_tracker extends class_base
 	{
 		$return = html::textbox(array(
 			"name" => "bug_priority[".$_param["oid"]."]",
-			"size" => 3,
+			"size" => 2,
 			"value" => $_param["bug_priority"],
+		));
+		return $return;
+	}
+
+	function show_severity($_param)
+	{
+		$return = html::textbox(array(
+			"name" => "bug_severity[".$_param["oid"]."]",
+			"size" => 2,
+			"value" => $_param["bug_severity"],
 		));
 		return $return;
 	}
@@ -270,10 +290,29 @@ class bug_tracker extends class_base
 			"callb_pass_row" => 1,
 		));
 		$t->define_field(array(
+			"name" => "bug_severity",
+			"caption" => t("T&ouml;sidus"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"callback" => array(&$this, "show_severity"),
+			"callb_pass_row" => 1,
+		));
+
+		$t->define_field(array(
 			"name" => "bug_status",
 			"caption" => t("Staatus"),
 			"sortable" => 1,
-			"callback" => array(&$this, "show_status")
+			"callback" => array(&$this, "show_status"),
+			"filter" => array(
+				t("1"),
+				t("2"),
+				t("3"),
+				t("4"),
+				t("5"),
+				t("6"),
+				t("7"),
+			),
+
 		));
 
 		$t->define_field(array(
