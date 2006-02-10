@@ -1954,7 +1954,30 @@ class _int_object
 			$this->_int_load_property_values();
 		}
 
-//		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];
+		// if this is a complex thingie, then loopdaloop
+		if (strpos($prop, ".") !== false)
+		{
+			$o = $this;
+			foreach(explode(".", $prop) as $part)
+			{
+				$cur_v = $o->prop($part);
+				$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
+				if (in_array($prop_dat["type"], array("relpicker", "classificator", "popup_search", "relmanager")))
+				{
+					if (!$GLOBALS["object_loader"]->can("view", $cur_v))
+					{
+						return null;
+					}
+					$o = obj($cur_v);
+				}
+				else
+				{
+					return $cur_v;
+				}
+			}
+			return $cur_v;
+		}
+
 		if (isset($GLOBALS["properties"][$this->obj["class_id"]][$prop]))
 		{
 			$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];

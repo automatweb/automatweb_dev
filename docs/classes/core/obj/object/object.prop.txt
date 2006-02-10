@@ -4,7 +4,11 @@ returns the value for the specified property for the current object
 none
 
 <b>parameters:</b>
-- the name of the property whose value is to be returned
+- the name of the property whose value is to be returned. 
+  the property name might also be a chain of property names, for instance
+  if the object is of type CL_TASK, then you could give the argument
+  customer.contact.linn.name and get the name of the city of the address of the customer that is in the customer property of the task object
+  if any of the properties is empty or contains a deleted object, null is returned
 type: text
 
 <b>returns:</b>
@@ -13,4 +17,8 @@ NULL if no current object is loaded
 
 <b>examples:</b>#php#
 $o = obj(56);
-$val = $o->prop("fish");#/php#
+$val = $o->prop("fish");
+
+$o = obj(1405); 
+echo $o->prop("customer.contact.linn.name");
+#/php#
