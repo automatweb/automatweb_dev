@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.8 2005/04/26 14:14:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.9 2006/02/10 10:34:31 ahti Exp $
 // personnel_management_cv.aw - CV 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_CV, on_cv_save)
@@ -391,8 +391,8 @@ class personnel_management_cv extends class_base
 		$job = &obj($arr["id"]);
 		$pdf_gen = get_instance("core/converters/html2pdf");
 		session_cache_limiter("public");
-		header('Content-type: application/pdf');
-		die($pdf_gen->convert(array(
+		die($pdf_gen->gen_pdf(array(
+			"filename" => $arr["id"],
 			"source" => $this->show(array(
 				"id" => $arr["id"]
 			))
@@ -651,16 +651,15 @@ class personnel_management_cv extends class_base
 			"tooltip" => t("Muuda valitud haridust"),
 			"action" => "edit_something",
 		));
-
+		/*
 		$manager = current($this->my_profile["manager_list"]);		
 		
 		foreach ($manager->meta("education_types") as $key=>$value)
 		{
 			$key_list[] = $key;
 		}
-		
 		$educations_list = new object_list(array(
-			"oid" => $key_list 
+			"oid" => $arr["obj_inst"],
 		));
 		
 		$educations_list->sort_by(array(
@@ -678,6 +677,7 @@ class personnel_management_cv extends class_base
     			"disabled" => false,
 			));
 		}
+		*/
 	}
 
 	function do_lang_tb(&$arr)
@@ -975,6 +975,10 @@ class personnel_management_cv extends class_base
 	{
 		$ob = new object($arr["id"]);
 		$person_obj = current($ob->connections_to(/*array("from.class_id" => CL_CRM_PERSON)*/));
+		if(!is_object($person_obj))
+		{
+			return false;
+		}
 		$person_obj = &obj($person_obj->prop("from"));
 
 		$email_obj = &obj($person_obj->prop("email"));
