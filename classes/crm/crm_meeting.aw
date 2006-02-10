@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.53 2006/02/07 09:16:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.54 2006/02/10 08:13:08 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -564,6 +564,7 @@ class crm_meeting extends class_base
 					$this->post_save_add_parts = safe_array($data["value"]);
 					return PROP_IGNORE;
 				}
+				$prop["value"] = $_POST["participants"];
 				$pl = get_instance(CL_PLANNER);
 				foreach(safe_array($data["value"]) as $person)
 				{

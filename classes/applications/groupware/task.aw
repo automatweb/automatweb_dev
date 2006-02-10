@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.68 2006/02/07 10:11:22 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.69 2006/02/10 08:12:22 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -776,7 +776,7 @@ class task extends class_base
 					$this->post_save_add_parts = safe_array($prop["value"]);
 					return PROP_IGNORE;
 				}
-
+				$prop["value"] = $_POST["participants"];
 				$p = array();
 				$conns = $arr['obj_inst']->connections_to(array(
 					'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
