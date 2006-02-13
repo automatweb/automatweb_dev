@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.17 2006/02/10 09:50:54 sander Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.17 2006/02/10 09:50:54 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.18 2006/02/13 13:05:52 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.18 2006/02/13 13:05:52 sander Exp $
 
 // bug_tracker.aw - BugTrack 
 /*
@@ -17,6 +17,8 @@
 @default group=bugs
 
 @property bug_tb type=toolbar no_caption=1
+
+@property cat type=hidden store=no
 
 @layout bug type=hbox width=15%:85%
 	@property bug_tree type=treeview parent=bug no_caption=1
@@ -57,13 +59,19 @@ class bug_tracker extends class_base
 			case "bug_list":
 				$this->_bug_list($arr);
 				break;
+				
+			case "cat":
+				if($this->can("view", $arr["request"]["cat"]))
+				{
+					$prop["value"] = $arr["request"]["cat"];
+				}
+				break;
 		};
 		return $retval;
 	}
 
 	function set_property($arr = array())
 	{
-		arr(&$arr);
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
@@ -405,7 +413,8 @@ class bug_tracker extends class_base
 				$obj->delete();
 			}
 		}
-		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
+		//return html::get_change_url($arr["id"], array("group" => $arr["group"], "cat" => $arr["cat"]));
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "cat" => $arr["cat"], "group" => $arr["group"]), $arr["class"]);
 	}
 }
 ?>

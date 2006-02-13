@@ -20,6 +20,14 @@
             <field>bug_tb</field>
       </property>
       <property>
+            <name>cat</name>
+            <table>objects</table>
+            <group>bugs</group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>cat</field>
+      </property>
+      <property>
             <name>bug_tree</name>
             <table>objects</table>
             <group>bugs</group>
