@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.54 2006/02/10 08:13:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.55 2006/02/14 11:35:52 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -819,6 +819,12 @@ class crm_meeting extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		if ($_GET["action"] == "new")
+		{
+			$arr["add_to_cal"] = $_GET["add_to_cal"];
+			$arr["alias_to_org"] = $_GET["alias_to_org"];
+			$arr["reltype_org"] = $_GET["reltype_org"];
+		}
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.70 2006/02/10 11:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.71 2006/02/14 11:35:52 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2054,6 +2054,12 @@ class task extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		if ($_GET["action"] == "new")
+		{
+			$arr["add_to_cal"] = $_GET["add_to_cal"];
+			$arr["alias_to_org"] = $_GET["alias_to_org"];
+			$arr["reltype_org"] = $_GET["reltype_org"];
+		}
 	}
 }
 ?>

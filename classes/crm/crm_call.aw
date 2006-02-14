@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.35 2006/02/07 09:16:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.36 2006/02/14 11:35:51 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -513,6 +513,12 @@ class crm_call extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		if ($_GET["action"] == "new")
+		{
+			$arr["add_to_cal"] = $_GET["add_to_cal"];
+			$arr["alias_to_org"] = $_GET["alias_to_org"];
+			$arr["reltype_org"] = $_GET["reltype_org"];
+		}
 	}
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.111 2006/02/02 13:53:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.112 2006/02/14 11:35:52 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2477,6 +2477,7 @@ class planner extends class_base
 	function save_participant_search_results($arr)
 	{
 		extract($arr);
+
 		foreach($sel_search as $part)
 		{
 			if (is_oid($part) && $this->can("view", $part))
@@ -2498,17 +2499,14 @@ class planner extends class_base
 						$rt = "RELTYPE_PERSON_MEETING";
 						break;
 				}
-				if (!$o->is_connected_to(array("to" => $part, "type" => $rt)))
-				{
-					$o->connect(array(
-						"to" => ($arr["event_id"] ? $arr["event_id"] : $arr["id"]),
-						"reltype" => $rt,
-					));
+				$o->connect(array(
+					"to" => $event_obj->id(),
+					"reltype" => $rt,
+				));
 
-					if (($cal = $this->get_calendar_for_person($o)))
-					{
-						$this->add_event_to_calendar(obj($cal), $event_obj);
-					}
+				if (($cal = $this->get_calendar_for_person($o)))
+				{
+					$this->add_event_to_calendar(obj($cal), $event_obj);
 				}
 			}
 		}
@@ -2839,6 +2837,28 @@ class planner extends class_base
 
 	function post_submit_event($event)
 	{
+		$pl = get_instance(CL_PLANNER);
+		if ($_REQUEST["add_to_cal"])
+		{
+			$pl->add_event_to_calendar(obj($_REQUEST["add_to_cal"]), $event);
+		}
+		if ($_REQUEST["alias_to_org"])
+		{
+			$org = obj($_REQUEST["alias_to_org"]);
+			$org->connect(array(
+				"to" => $event->id(),
+				"reltype" => $_REQUEST["reltype_org"]
+			));
+			if ($org->class_id() == CL_CRM_PERSON)
+			{
+				$cal = $pl->get_calendar_for_person($org);
+				if ($this->can("view", $cal))
+				{
+					$pl->add_event_to_calendar(obj($cal), $event);
+				}
+			}
+		}
+
 		$gl = aw_global_get('org_action',aw_global_get('REQUEST_URI'));
 		if ($gl == "")
 		{
