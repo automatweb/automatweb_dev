@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.458 2006/02/14 10:25:34 kristo Exp $
+// $Id: class_base.aw,v 2.459 2006/02/14 10:42:21 ahti Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2162,7 +2162,7 @@ class class_base extends aw_template
 				{
 					// &$properties[$key], $value, $argblock
 					// $prop, $controller_oid, $arr
-					$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock, $properties[$key]);
+					$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
 					/*
 					$retval = $view_controller_inst->check_property(array(
 						"prop" => &$properties[$key],

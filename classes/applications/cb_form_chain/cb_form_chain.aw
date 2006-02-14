@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.22 2006/02/10 08:35:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.23 2006/02/14 10:42:21 ahti Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1476,7 +1476,7 @@ class cb_form_chain extends class_base
 					{
 						$tmp = $_SESSION["cbfc_data"][$wf->id()][$i];
 						$tmp["__entry_num"] = $i;
-						$cpv = $ci->check_property($v, $ctr_id, $tmp, $props[$k]);
+						$cpv = $ci->check_property($v, $ctr_id, $tmp);
 						if ($cpv == PROP_IGNORE)
 						{
 							unset($props[$k]);
