@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.82 2006/01/11 10:54:09 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.83 2006/02/15 09:08:06 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2077,18 +2077,16 @@ class webform extends class_base
 				}
 				if($prplist[$key]["type"] == "classificator")
 				{
-					list(,,,,$choices) = $cls->get_choices(array(
-						"clid" => CL_REGISTER_DATA,
-						"name" => $key,
-						"object_type_id" => $object_type->id(),
-					));
-					$vals = array();
-					$val = is_array($val) ? $val : array($val);
-					foreach($val as $valx)
+					if (!is_array($val) && $this->can("view", $val))
 					{
-						$vals[] = $choices[$valx];
+						$val = array($val);
 					}
-					$arr[$key] = implode(", ", $vals);
+
+					if (is_array($val) && count($val))
+					{
+						$objs = new object_list(array("oid" => $val, "lang_id" => array(), "site_id" => array()));
+						$arr[$key] = join(", ", $objs->names());
+					}
 				}
 				if(!in_array($prplist[$key]["type"], $this->no_trans) && !empty($arr[$key]))
 				{
