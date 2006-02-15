@@ -109,7 +109,7 @@ class crm_company_overview_impl extends class_base
 		$this->overview = array();
 		classload("core/icons");
 		// get b-days
-		if ($calo->prop("show_bdays") == 1)
+		if ($calo && $calo->prop("show_bdays") == 1)
 		{
 			$s_m = date("m", $start);
 			$e_m = date("m", $end);
