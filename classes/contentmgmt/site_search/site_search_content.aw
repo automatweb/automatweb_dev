@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.59 2006/01/18 18:09:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.60 2006/02/15 12:51:44 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -851,7 +851,7 @@ class site_search_content extends class_base
 		}
 
 		$stat = " o.status = 2 AND ";
-		if ($arr["opts"]["search_notactive"] == 1)
+		if ($arr["opts"]["search_notactive"] == 1 || $arr["opts"]["str"]["search_notactive"] == 1)
 		{
 			$stat = " o.status > 0 AND ";
 		}
