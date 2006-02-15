@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.11 2005/06/17 14:53:17 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.12 2006/02/15 13:03:40 kristo Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -363,8 +363,6 @@ class timing extends class_base
 			}
 //			$obj->save();
 		}
-		$mait = get_instance("cache");
-		$mait->full_flush();
 		return "done";
 	}
 }

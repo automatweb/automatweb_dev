@@ -62,5 +62,12 @@
 			</function>
 		</action>
 
+		<action name="add_meeting_as_row">
+			<function name="add_meeting_as_row">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

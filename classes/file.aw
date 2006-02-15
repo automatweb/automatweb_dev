@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.119 2006/02/03 09:18:53 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.120 2006/02/15 13:03:39 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -437,7 +437,14 @@ class file extends class_base
 	// returns the name of the file that the data was saved in
 	function _put_fs($arr)
 	{
-		$file = $this->generate_file_path($arr);
+		if ($arr["fs_folder_to_save_to"])
+		{
+			$file = $arr["fs_folder_to_save_to"]."/".$arr["name"];
+		}
+		else
+		{
+			$file = $this->generate_file_path($arr);
+		}
 		$this->put_file(array(
 			"file" => $file,
 			"content" => $arr["content"],
@@ -501,7 +508,12 @@ class file extends class_base
 		if ($content != "")
 		{
 			// stick the file in the filesystem
-			$fs = $this->_put_fs(array("type" => $type, "content" => $content));
+			$fs = $this->_put_fs(array(
+				"type" => $type, 
+				"content" => $content, 
+				"fs_folder_to_save_to" => $arr["fs_folder_to_save_to"],
+				"name" => $arr["name"]
+			));
 		}
 
 		// now if we need to create a new object, do so
@@ -517,6 +529,16 @@ class file extends class_base
 			$o->set_prop("showal", $showal);
 			$o->set_prop("type", $type);
 			$o->set_prop("newwindow", $newwindow);
+
+			if ($arr["fs_folder_to_save_to"] != "")
+			{
+				$o->set_meta("force_path", $arr["fs_folder_to_save_to"]);
+			}
+			else
+			{
+				$o->set_meta("force_path", "");
+			}
+
 			$file_id = $o->save();
 		}
 		else
@@ -540,6 +562,14 @@ class file extends class_base
 				$o->set_prop("type",$type);
 			}
 
+			if ($arr["fs_folder_to_save_to"] != "")
+			{
+				$o->set_meta("force_path", $arr["fs_folder_to_save_to"]);
+			}
+			else
+			{
+				$o->set_meta("force_path", "");
+			}
 			$o->set_prop("showal", $showal);
 			$o->set_prop("newwindow", $newwindow);
 			$o->save();
@@ -662,11 +692,22 @@ class file extends class_base
 			if ($ret["file"] != "")
 			{
 				// file saved in filesystem - fetch it
-				$file = $this->cfg["site_basedir"]."/files/".$ret["file"][0]."/".$ret["file"];
-				$tmp = $this->get_file(array("file" => $file));
-				if ($tmp !== false)
+				if ($tmpo->meta("force_path") != "")
 				{
-					$ret["content"] = $tmp;
+					$tmp = $this->get_file(array("file" => $tmpo->prop("file")));
+					if ($tmp !== false)
+					{
+						$ret["content"] = $tmp;
+					}
+				}
+				else
+				{
+					$file = $this->cfg["site_basedir"]."/files/".$ret["file"][0]."/".$ret["file"];
+					$tmp = $this->get_file(array("file" => $file));
+					if ($tmp !== false)
+					{
+						$ret["content"] = $tmp;
+					}
 				}
 			}
 			else
@@ -811,7 +852,7 @@ class file extends class_base
 	// $name - the name of the file input in form
 	// $parent - the parent object of the file
 	// $file_id - if not specified, file will be added, else changed
-	function add_upload_image($name,$parent,$file_id = 0)
+	function add_upload_image($name,$parent,$file_id = 0, $fs_folder_to_save_to = null)
 	{
 		$file_id = (int)$file_id;
 
@@ -841,7 +882,8 @@ class file extends class_base
 				"parent" => $parent,
 				"name" => $fname,
 				"content" => $fc,
-				"type" => $type
+				"type" => $type,
+				"fs_folder_to_save_to" => $fs_folder_to_save_to
 			));
 
 			return array("id" => $id,"url" => $this->get_url($id,$fname), "orig_name" => $fname);

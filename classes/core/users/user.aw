@@ -2005,7 +2005,9 @@ class user extends class_base
 		obj_set_opt("no_cache", 0);
 
 		$c = get_instance("cache");
-		$c->full_flush();
+		$c->file_clear_pt("acl");
+		$c->file_clear_pt("storage_object_data");
+		$c->file_clear_pt("storage_search");
 	}
 
 	function _object_ex($oid)

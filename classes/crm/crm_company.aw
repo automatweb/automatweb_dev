@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create_customer)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
-@classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY no_status=1 r2=yes
+@classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY no_status=1 r2=yes confirm_save_data=1
 
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
 
@@ -3486,6 +3486,9 @@ class crm_company extends class_base
 		}
 		$bill->save();
 
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+
 		foreach(safe_array($arr["sel"]) as $task)
 		{
 			$bill->connect(array(
@@ -3525,6 +3528,12 @@ class crm_company extends class_base
 				$br->set_prop("is_oe", $row["is_oe"]);
 				$br->set_prop("has_tax", $row["has_tax"]);
 				$br->set_prop("date", $row["date"]);
+				// get default prod 
+
+				if ($sts)
+				{
+					$br->set_prop("prod", $sts->prop("bill_def_prod"));
+				}
 				$br->save();
 
 				$br->connect(array(

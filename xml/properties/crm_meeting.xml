@@ -243,6 +243,39 @@
             <caption>Osalejad</caption>
       </property>
       <property>
+            <name>time_guess</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>num_hrs</parent>
+            <caption>Prognoositav tundide arv 	</caption>
+      </property>
+      <property>
+            <name>time_real</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>num_hrs</parent>
+            <caption>Tegelik tundide arv</caption>
+      </property>
+      <property>
+            <name>time_to_cust</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>num_hrs</parent>
+            <caption>Tundide arv kliendile</caption>
+      </property>
+      <property>
             <name>summary</name>
             <table>planner</table>
             <group>general</group>
@@ -436,6 +469,7 @@
       <classinfo>
             <syslog_type>ST_CRM_MEETING</syslog_type>
             <relationmgr>yes</relationmgr>
+            <confirm_save_data>1</confirm_save_data>
       </classinfo>
       <groupinfo>
             <recurrence>
@@ -501,5 +535,11 @@
                   <caption>ressurss</caption>
             </RESOURCE>
       </reltypes>
+      <layout>
+            <num_hrs>
+                  <type>hbox</type>
+                  <group>general</group>
+            </num_hrs>
+      </layout>
 </properties>
 

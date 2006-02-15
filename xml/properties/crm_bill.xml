@@ -115,7 +115,7 @@
             <name>bill_rows</name>
             <table>objects</table>
             <group>general</group>
-            <type>table</type>
+            <type>text</type>
             <store>no</store>
             <field>bill_rows</field>
             <caption>Arveread </caption>
@@ -148,6 +148,16 @@
             <method>serialize</method>
             <size>5</size>
             <caption>Kogus</caption>
+      </property>
+      <property>
+            <name>gen_prod</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_PROD</reltype>
+            <caption>Toode</caption>
       </property>
       <property>
             <name>sum</name>
@@ -261,6 +271,11 @@
                   <clid>CL_BILL_ROW</clid>
                   <caption>Rida</caption>
             </ROW>
+            <PROD>
+                  <value>6</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Toode</caption>
+            </PROD>
       </reltypes>
 </properties>
 

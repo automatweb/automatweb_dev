@@ -41,6 +41,14 @@
             <field>aw_code</field>
             <caption>K&amp;amp;auml;ibemaksukood</caption>
       </property>
+      <property>
+            <name>acct</name>
+            <table>aw_crm_tax_rate</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_acct_no</field>
+            <caption>Arve nr</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_TAX_RATE</syslog_type>
             <relationmgr>yes</relationmgr>

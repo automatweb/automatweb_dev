@@ -41,6 +41,16 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;kaaslaste seadete vorm </caption>
       </property>
       <property>
+            <name>bill_def_prod</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROD</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi toode arve ridadel</caption>
+      </property>
+      <property>
             <name>users</name>
             <table>objects</table>
             <group>whom</group>
@@ -152,6 +162,11 @@
                   <clid>CL_CRM_PROFESSION</clid>
                   <caption>Ametinimetus</caption>
             </PROFESSION>
+            <PROD>
+                  <value>7</value>
+                  <clid>CL_SHOP_PRODUCT</clid>
+                  <caption>Toode</caption>
+            </PROD>
       </reltypes>
 </properties>
 

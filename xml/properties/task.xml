@@ -421,6 +421,7 @@
             <syslog_type>ST_TASK</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <confirm_save_data>1</confirm_save_data>
       </classinfo>
       <groupinfo>
             <rows>

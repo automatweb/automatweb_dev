@@ -2116,6 +2116,7 @@
             <syslog_type>ST_CRM_COMPANY</syslog_type>
             <no_status>1</no_status>
             <r2>yes</r2>
+            <confirm_save_data>1</confirm_save_data>
       </classinfo>
       <groupinfo>
             <general_sub>

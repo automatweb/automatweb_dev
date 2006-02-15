@@ -275,3 +275,25 @@ function aw_get_url_contents(url)
 	}
 	return req.responseText;
 }
+
+function aw_do_xmlhttprequest(url, finish_callb)
+{
+	if (window.XMLHttpRequest) 
+	{
+        req = new XMLHttpRequest();
+        req.onreadystatechange = finish_callb;
+        req.open("GET", url, true);
+        req.send(null);
+	} 
+	else 
+	if (window.ActiveXObject) 
+	{
+		req = new ActiveXObject("Microsoft.XMLHTTP");
+		if (req) 
+		{
+            req.onreadystatechange = finish_callb;
+			req.open("GET", url, true);
+			req.send();
+		}
+	}
+}

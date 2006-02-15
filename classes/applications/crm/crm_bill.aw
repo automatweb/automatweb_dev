@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.23 2006/02/10 11:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.24 2006/02/15 13:03:39 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
-@classinfo syslog_type=ST_CRM_BILL relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_BILL relationmgr=yes no_comment=1 no_status=1 prop_cb=1 confirm_save_data=1
 
 @default table=objects
 
@@ -47,7 +47,7 @@
 	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE
 	@caption Keel
 
-	@property bill_rows type=table store=no 
+	@property bill_rows type=text store=no 
 	@caption Arveread 
 
 	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5 
@@ -58,6 +58,9 @@
 
 	@property gen_amt type=textbox table=objects field=meta method=serialize size=5
 	@caption Kogus
+
+	@property gen_prod type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_PROD
+	@caption Toode
 
 	@property sum type=text table=aw_crm_bill field=aw_sum size=5 
 	@caption Summa
@@ -99,6 +102,9 @@
 
 @reltype ROW value=5 clid=CL_BILL_ROW
 @caption Rida
+
+@reltype PROD value=6 clid=CL_SHOP_PRODUCT
+@caption Toode
 */
 
 define("BILL_SUM", 1);
@@ -198,6 +204,18 @@ class crm_bill extends class_base
 					}
 				}
 				asort($prop["options"]);
+				break;
+
+			case "sum":
+				$prop["value"].= " / ".html::href(array(
+					"url" => "#",
+					"caption" => t("Prindi arve"),
+					"onClick" => "window.open(\"".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."\",\"billprint\",\"width=100,height=100\")"
+				)). " / ".html::href(array(
+					"url" => "#",
+					"caption" => t("Prindi arve lisa"),
+					"onClick" => "window.open(\"".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."\",\"billprint\",\"width=100,height=100\")"
+				));
 				break;
 		};
 		return $retval;
@@ -301,7 +319,8 @@ class crm_bill extends class_base
 
 	function _bill_rows($arr)
 	{
-		$t =& $arr["prop"]["vcl_inst"];
+		classload("vcl/table");
+		$t = new vcl_table();
 		$this->_init_bill_rows_t($t);
 
 		$sum = 0;
@@ -391,6 +410,12 @@ class crm_bill extends class_base
 			$arr["obj_inst"]->set_prop("sum", $sum);
 			$arr["obj_inst"]->save();
 		}
+
+		$arr["prop"]["value"] = $t->draw();
+		$arr["prop"]["value"] .= html::href(array(
+			"caption" => t("Lisa rida"),
+			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru()))
+		));
 	}
 
 	function get_sum($bill)
@@ -678,7 +703,7 @@ class crm_bill extends class_base
 
 		if ($_GET["openprintdialog"] == 1)
 		{
-			$res .= "<script language='javascript'>window.print();</script>";
+			$res .= "<script language='javascript'>window.print();window.close();</script>";
 		}
 		die($res);
 	}
@@ -960,7 +985,7 @@ class crm_bill extends class_base
 
 		if ($_GET["openprintdialog"] == 1)
 		{
-			$res .= "<script language='javascript'>window.print();</script>";
+			$res .= "<script language='javascript'>window.print();window.close();</script>";
 		}
 		die($res);
 	}
@@ -1075,6 +1100,29 @@ class crm_bill extends class_base
 				$o->save();
 			}
 		}
+	}
+
+	/**
+		@attrib name=add_row
+		@param id required type=int acl=edit
+		@param retu optional
+	**/
+	function add_row($arr)
+	{
+		$bill = obj($arr["id"]);
+		
+		$row = obj();
+		$row->set_parent($bill->id());
+		$row->set_class_id(CL_CRM_BILL_ROW);
+		$row->set_prop("date", time());
+		$row->save();
+
+		$bill->connect(array(
+			"to" => $row->id(),
+			"type" => "RELTYPE_ROW"
+		));
+
+		return $arr["retu"];
 	}
 }
 ?>

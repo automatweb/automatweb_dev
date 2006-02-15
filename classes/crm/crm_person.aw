@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.108 2006/02/03 11:31:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.109 2006/02/15 13:03:40 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_SECTION, on_connect
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disconnect_section_from_person)
 
-@classinfo relationmgr=yes syslog_type=ST_CRM_PERSON no_status=1
+@classinfo relationmgr=yes syslog_type=ST_CRM_PERSON no_status=1 confirm_save_data=1
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 
 @default table=objects
@@ -294,6 +294,9 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 	@property stats_s_cust type=textbox store=no
 	@caption Klient
 
+	@property stats_s_show type=submit no_caption=1
+	@caption N&auml;ita
+
 	@property my_stats type=text store=no no_caption=1
 
 ----------------------------------------------
@@ -527,10 +530,19 @@ class crm_person extends class_base
 					"last_mon" => t("Eelmine kuu")
 				);
 				$data["value"] = $arr["request"]["stats_s_time_sel"];
-				if (!$data["value"])
+				if (!isset($arr["request"]["stats_s_time_sel"]))
 				{
 					$data["value"] = "cur_mon";
 				}
+				break;
+
+			case "stats_s_from":
+			case "stats_s_to":
+				$data["value"] = date_edit::get_timestamp($arr["request"][$data["name"]]);
+				break;
+
+			case "stats_s_cust":
+				$data["value"] = $arr["request"]["stats_s_cust"];
 				break;
 
 			case "my_stats":
@@ -2717,6 +2729,8 @@ class crm_person extends class_base
 		$t = new vcl_table;
 		$arr["prop"]["vcl_inst"] = $t;
 		$arr["request"]["ret"] = 1;
+		$i->table_sum = true;
+		$i->table_filt = true;
 		$arr["prop"]["value"] = $i->_get_stats_s_res($arr);
 	}
 }

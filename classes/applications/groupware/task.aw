@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.71 2006/02/14 11:35:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.72 2006/02/15 13:03:40 kristo Exp $
 // task.aw - TODO item
 /*
 
-@classinfo syslog_type=ST_TASK relationmgr=yes no_status=1 
+@classinfo syslog_type=ST_TASK relationmgr=yes no_status=1 confirm_save_data=1
 
 @default table=objects
 @default group=general
@@ -716,6 +716,7 @@ class task extends class_base
 				{
 					$arr["obj_inst"]->set_prop("customer", $data["value"]);
 				}
+				$data["onchange"] = "upd_proj_list()";
 				break;
 
 			case "other_expenses":
@@ -1012,8 +1013,9 @@ class task extends class_base
 		$impl = $u->get_current_company();
 		if ($this->can("view", $impl))
 		{
+			$implo = obj($impl);
 			$f = get_instance("applications/crm/crm_company_docs_impl");
-			$fldo = $f->_init_docs_fld(obj($impl));
+			$fldo = $f->_init_docs_fld($implo);
 			$ot = new object_tree(array(
 				"parent" => $fldo->id(),
 				"class_id" => CL_MENU
@@ -1021,6 +1023,20 @@ class task extends class_base
 			$folders = array($fldo->id() => $fldo->name());
 			$this->_req_level = 0;
 			$this->_req_get_folders($ot, $folders, $fldo->id());
+
+			// add server folders if set
+			$sf = $implo->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
+			if ($sf)
+			{
+				$s = $sf->instance();
+				$fld = $s->get_folders($sf);
+				$t =& $arr["prop"]["vcl_inst"];
+
+				usort($fld, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
+
+				$folders[$sf->id().":/"] = $sf->name();
+				$this->_req_get_s_folders($fld, $sf, $folders, 0);
+			}
 		}
 		else
 		{
@@ -1150,7 +1166,15 @@ class task extends class_base
 				{
 					// add file
 					$f = get_instance(CL_FILE);
-					$fil = $f->add_upload_image("fups_$num", $fldo->id());
+
+					$fs_fld = null;
+					if (strpos($entry["folder"], ":") !== false)
+					{
+						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
+						$sf_o = obj($sf_id);
+						$fs_fld = $sf_o->prop("folder").$sf_path;
+					}
+					$fil = $f->add_upload_image("fups_$num", $fldo->id(), 0, $fs_fld);
 					if (is_array($fil))
 					{
 						$t->connect(array(
@@ -1193,7 +1217,16 @@ class task extends class_base
 
 					// add file
 					$f = get_instance(CL_FILE);
-					$fil = $f->add_upload_image("fups_$num", $o->id());
+
+					$fs_fld = null;
+					if (strpos($entry["folder"], ":") !== false)
+					{
+						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
+						$sf_o = obj($sf_id);
+						$fs_fld = $sf_o->prop("folder").$sf_path;
+					}
+					$fil = $f->add_upload_image("fups_$num", $o->id(), 0, $fs_fld);
+
 					if (is_array($fil))
 					{
 						$o->connect(array(
@@ -1334,16 +1367,36 @@ class task extends class_base
 				$bo = obj($row->prop("bill_id"));
 				$bno = $bo->prop("bill_no");
 			}
+			if ($row->class_id() == CL_CRM_MEETING)
+			{
+				$date = date("d/m/y",($row->prop("start1") > 100 ? $row->prop("start1") : time()));
+				$i = $row->instance();
+				$pr = array("name" => "participants");
+				$argb = array(
+					"obj_inst" => $row,
+					"request" => $arr["request"],
+					"prop" => &$pr
+				);
+				$i->get_property($argb);
+				$impls = $pr["options"];
+				$is = $pr["value"];
+				$app = "<br>".html::obj_change_url($row, t("Muuda kohtumist"));
+			}
+			else
+			{
+				$date = date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : time()));
+				$app = "";
+			}
 			$t->define_data(array(
 				"task" => "<a name='row_".$idx."'></a>".html::textarea(array(
 					"name" => "rows[$idx][task]",
 					"value" => $row->prop("content"),
 					"rows" => 5,
 					"cols" => 50
-				)),
+				)).$app,
 				"date" => html::textbox(array(
 					"name" => "rows[$idx][date]",
-					"value" => date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : time())),
+					"value" => $date,
 					"size" => 7
 				)).$date_sel,
 				"impl" => html::select(array(
@@ -1370,12 +1423,12 @@ class task extends class_base
 				"done" => html::checkbox(array(
 					"name" => "rows[$idx][done]",
 					"value" => 1,
-					"checked" => $row->prop("done")
+					"checked" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done")
 				)),
 				"on_bill" => ($row->prop("bill_id") ? sprintf(t("Arve nr %s"), $bno) : html::checkbox(array(
 					"name" => "rows[$idx][on_bill]",
 					"value" => 1,
-					"checked" => $row->prop("on_bill")
+					"checked" => ($row->class_id() == CL_CRM_MEETING ? $row->meta("on_bill") : $row->prop("on_bill"))
 				))),
 				"comments" => $comments
 			));
@@ -1506,6 +1559,23 @@ class task extends class_base
 	function _rows_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			"name" => "new_meeting",
+			"img" => "new.gif",
+			"tooltip" => t("Kohtumine"),
+			"url" => $this->mk_my_orb(
+				"new", 
+				array(
+					"parent" => $arr["obj_inst"]->parent(),
+					"return_url" => get_ru(),
+					"alias_to" => $arr["obj_inst"]->id(),
+					"reltype" => 7
+				),
+				CL_CRM_MEETING
+			)
+		));
+
 		$b = array(
 			'name' => 'create_bill',
 			'img' => 'save.gif',
@@ -1927,7 +1997,6 @@ class task extends class_base
 		// add new rows that are without oid
 		// I think rows should not be deleted. or we can add that later
 		$task = obj($arr["request"]["id"]);
-		aw_global_set("no_cache_flush", 1);
 
 		foreach(safe_array($_POST["rows"]) as $_oid => $e)
 		{
@@ -1957,10 +2026,21 @@ class task extends class_base
 
 			list($d,$m,$y) = explode("/", $e["date"]);
 			$_tm = mktime(0,0,0, $m, $d, $y);
-			if ($o->prop("date") != $_tm)
+			if ($o->class_id() == CL_CRM_MEETING)
 			{
-				$o->set_prop("date", $_tm);
-				$is_mod = true;
+				if ($o->prop("start1") != $_tm)
+				{
+					$o->set_prop("start1", $_tm);
+					$is_mod = true;
+				}
+			}
+			else
+			{
+				if ($o->prop("date") != $_tm)
+				{
+					$o->set_prop("date", $_tm);
+					$is_mod = true;
+				}
 			}
 			if ($e["time_to_cust"] == "")
 			{
@@ -1981,10 +2061,28 @@ class task extends class_base
 				$is_mod = true;
 			}
 
-			if ($o->prop("impl") != $this->make_keys($e["impl"]))
+			if ($o->class_id() == CL_CRM_MEETING)
 			{
-				$o->set_prop("impl", $e["impl"]);
+				$mti = $o->instance();
+				$pr = array(
+					"name" => "participants",
+					"value" => $this->make_keys($e["impl"]),
+				);
+				$_POST["participants"] = $this->make_keys($e["impl"]);
+				$mti->set_property(array(
+					"obj_inst" => $o,
+					"request" => $arr["request"],
+					"prop" => $pr
+				));
 				$is_mod = true;
+			}
+			else
+			{
+				if ($o->prop("impl") != $this->make_keys($e["impl"]))
+				{
+					$o->set_prop("impl", $e["impl"]);
+					$is_mod = true;
+				}
 			}
 
 			$e["time_guess"] = str_replace(",", ".", $e["time_guess"]);
@@ -2008,16 +2106,30 @@ class task extends class_base
 				$is_mod = true;
 			}
 
-			if ((int)$o->prop("done") != (int)$e["done"])
+			if ($o->class_id() == CL_CRM_MEETING)
 			{
-				$o->set_prop("done", $e["done"]);
-				$is_mod = true;
+				$o->set_prop("is_done", $e["done"]);
+			}	
+			else
+			{
+				if ((int)$o->prop("done") != (int)$e["done"])
+				{
+					$o->set_prop("done", $e["done"]);
+					$is_mod = true;
+				}
 			}
 
-			if ((int)$o->prop("on_bill") != (int)$e["on_bill"])
+			if ($o->class_id() != CL_CRM_MEETING)
 			{
-				$o->set_prop("on_bill", $e["on_bill"]);
-				$is_mod = true;
+				if ((int)$o->prop("on_bill") != (int)$e["on_bill"])
+				{
+					$o->set_prop("on_bill", $e["on_bill"]);
+					$is_mod = true;
+				}
+			}
+			else
+			{
+				$o->set_meta("on_bill", (int)$e["on_bill"]);
 			}
 
 			if ($is_mod)
@@ -2030,9 +2142,6 @@ class task extends class_base
 				"type" => "RELTYPE_ROW"
 			));
 		}
-		aw_global_set("no_cache_flush", 0);
-		$c = get_instance("cache");
-		$c->full_flush();
 	}
 
 	/**
@@ -2060,6 +2169,30 @@ class task extends class_base
 			$arr["alias_to_org"] = $_GET["alias_to_org"];
 			$arr["reltype_org"] = $_GET["reltype_org"];
 		}
+	}
+
+	function _req_get_s_folders($fld, $fldo, &$folders, $parent)
+	{
+		$this->_lv++;
+		foreach($fld as $dat)
+		{
+			if ($dat["parent"] === $parent)
+			{
+				$folders[$fldo->id().":".$dat["id"]] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_lv).$dat["name"];
+				$this->_req_get_s_folders($fld, $fldo, $folders, $dat["id"]);
+			}
+		}
+		$this->_lv--;
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		return "
+			function upd_proj_list()
+			{
+				alert(\"uhaa\");
+			}
+		";
 	}
 }
 ?>

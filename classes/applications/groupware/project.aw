@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.75 2006/01/13 11:12:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.76 2006/02/15 13:03:40 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -3385,6 +3385,7 @@ class project extends class_base
 		}
 		if ($this->can("view", $impl))
 		{
+			$implo = obj($impl);
 			$f = get_instance("applications/crm/crm_company_docs_impl");
 			$fldo = $f->_init_docs_fld(obj($impl));
 			$ot = new object_tree(array(
@@ -3394,6 +3395,20 @@ class project extends class_base
 			$folders = array($fldo->id() => $fldo->name());
 			$this->_req_level = 0;
 			$this->_req_get_folders($ot, $folders, $fldo->id());
+
+			// add server folders if set
+			$sf = $implo->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
+			if ($sf)
+			{
+				$s = $sf->instance();
+				$fld = $s->get_folders($sf);
+				$t =& $arr["prop"]["vcl_inst"];
+
+				usort($fld, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
+
+				$folders[$sf->id().":/"] = $sf->name();
+				$this->_req_get_s_folders($fld, $sf, $folders, 0);
+			}
 		}
 		else
 		{
@@ -3524,7 +3539,16 @@ class project extends class_base
 				{
 					// add file
 					$f = get_instance(CL_FILE);
-					$fil = $f->add_upload_image("fups_$num", $fldo->id());
+
+					$fs_fld = null;
+					if (strpos($entry["folder"], ":") !== false)
+					{
+						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
+						$sf_o = obj($sf_id);
+						$fs_fld = $sf_o->prop("folder").$sf_path;
+					}
+					$fil = $f->add_upload_image("fups_$num", $fldo->id(), 0, $fs_fld);
+
 					if (is_array($fil))
 					{
 						$t->connect(array(
@@ -3550,7 +3574,16 @@ class project extends class_base
 
 					// add file
 					$f = get_instance(CL_FILE);
-					$fil = $f->add_upload_image("fups_$num", $o->id());
+
+					$fs_fld = null;
+					if (strpos($entry["folder"], ":") !== false)
+					{
+						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
+						$sf_o = obj($sf_id);
+						$fs_fld = $sf_o->prop("folder").$sf_path;
+					}
+					$fil = $f->add_upload_image("fups_$num", $o->id(), 0, $fs_fld);
+
 					if (is_array($fil))
 					{
 						$o->connect(array(
@@ -3609,6 +3642,20 @@ class project extends class_base
 				$arr["obj_inst"]->set_prop("code", $si->project_gen_code($arr));
 			}
 		}
+	}
+
+	function _req_get_s_folders($fld, $fldo, &$folders, $parent)
+	{
+		$this->_lv++;
+		foreach($fld as $dat)
+		{
+			if ($dat["parent"] === $parent)
+			{
+				$folders[$fldo->id().":".$dat["id"]] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_lv).$dat["name"];
+				$this->_req_get_s_folders($fld, $fldo, $folders, $dat["id"]);
+			}
+		}
+		$this->_lv--;
 	}
 };
 ?>

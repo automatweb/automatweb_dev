@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.55 2006/02/14 11:35:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.56 2006/02/15 13:03:40 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
 
-@classinfo syslog_type=ST_CRM_MEETING relationmgr=yes
+@classinfo syslog_type=ST_CRM_MEETING relationmgr=yes confirm_save_data=1
 
 @default table=objects
 @default group=general
@@ -83,6 +83,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property participants type=select multiple=1 table=objects field=meta method=serialize
 @caption Osalejad
+
+@layout num_hrs type=hbox 
+
+	@property time_guess type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@caption Prognoositav tundide arv 	
+
+	@property time_real type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@caption Tegelik tundide arv
+
+	@property time_to_cust type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@caption Tundide arv kliendile
 
 @property summary type=textarea cols=60 rows=30 table=planner field=description
 @caption Kokkuvõte

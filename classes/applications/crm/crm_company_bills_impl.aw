@@ -380,11 +380,13 @@ class crm_company_bills_impl extends class_base
 			$pop->begin_menu("bill_".$bill->id());
 			$pop->add_item(Array(
 				"text" => t("Prindi arve"),
-				"link" => $this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $bill->id(), "group" => "preview"), CL_CRM_BILL)
+				"link" => "#",
+				"oncl" => "onClick='window.open(\"".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $bill->id(), "group" => "preview"), CL_CRM_BILL)."\",\"billprint\",\"width=100,height=100\");'"
 			));
 			$pop->add_item(Array(
 				"text" => t("Prindi arve lisa"),
-				"link" => $this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $bill->id(), "group" => "preview_add"), CL_CRM_BILL)
+				"link" => "#",
+				"oncl" => "onClick='window.open(\"".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $bill->id(), "group" => "preview_add"), CL_CRM_BILL)."\",\"billprintadd\",\"width=100,height=100\");'"
 			));
 			$t->define_data(array(
 				"bill_no" => html::get_change_url($bill->id(), array("return_url" => get_ru()), parse_obj_name($bill->prop("bill_no"))),
@@ -694,10 +696,12 @@ class crm_company_bills_impl extends class_base
 				//$ri[] = $idx;	// TEST (artikli kood) 
 				//$ri[] = $row["code"];
 				$code = "";
+				$acct = "";
 				if ($this->can("view", $row["prod"]))
 				{
 					$prod = obj($row["prod"]);
 					$code = $prod->name();
+					$acct = $prod->prop("tax_rate.acct");
 				}
 				$ri[] = $code;
 				$ri[] = $row["amt"];	//33 (kogus) 
@@ -705,7 +709,7 @@ class crm_company_bills_impl extends class_base
 				$ri[] = str_replace(".", ",", $row["price"]);	// 555,00 (ühiku hind) 
 				$ri[] = str_replace(".", ",", $row["sum"]);	// 16300,35 (rea summa km-ta) 
 				$ri[] = str_replace(".", ",", $b->prop("disc")); //11,0 (ale%) 
-				$ri[] = 3100;		// (konto)    
+				$ri[] = $acct;		// (konto)    
 				$ri[] = "";
 				$ri[] = "";
 				$ri[] = "";

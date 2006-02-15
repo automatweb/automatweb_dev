@@ -743,6 +743,16 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>stats_s_show</name>
+            <table>kliendibaas_isik</table>
+            <group>my_stats</group>
+            <type>submit</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>stats_s_show</field>
+            <caption>N&amp;amp;auml;ita</caption>
+      </property>
+      <property>
             <name>my_stats</name>
             <table>kliendibaas_isik</table>
             <group>my_stats</group>
@@ -755,6 +765,7 @@
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_PERSON</syslog_type>
             <no_status>1</no_status>
+            <confirm_save_data>1</confirm_save_data>
       </classinfo>
       <groupinfo>
             <general2>

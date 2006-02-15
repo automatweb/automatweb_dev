@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_tax_rate.aw,v 1.2 2005/12/29 13:58:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_tax_rate.aw,v 1.3 2006/02/15 13:03:40 kristo Exp $
 // crm_tax_rate.aw - Maksum&auml;&auml;r 
 /*
 
@@ -23,6 +23,9 @@
 
 	@property code type=textbox field=aw_code
 	@caption K&auml;ibemaksukood
+
+	@property acct type=textbox field=aw_acct_no
+	@caption Arve nr
 
 */
 
@@ -70,6 +73,15 @@ class crm_tax_rate extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function do_db_upgrade($table, $field, $q, $err)
+	{
+		if ($table == "aw_crm_tax_rate" && $field == "aw_acct_no")
+		{
+			$this->db_query("alter table aw_crm_tax_rate add aw_acct_no varchar(100)");
+			return true;
+		}
 	}
 }
 ?>

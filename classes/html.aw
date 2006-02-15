@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.97 2006/02/03 11:31:36 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.98 2006/02/15 13:03:39 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -656,7 +656,7 @@ class html extends aw_template
 		return "<span $class $textsize>$content</span>";
 	}
 
-	function obj_change_url($o)
+	function obj_change_url($o, $caption = NULL)
 	{
 		if (is_array($o))
 		{
@@ -679,7 +679,7 @@ class html extends aw_template
 				return "";
 			}
 		}
-		return html::get_change_url($o->id(), array("return_url" => get_ru()), parse_obj_name($o->name()));
+		return html::get_change_url($o->id(), array("return_url" => get_ru()), $caption === null ? parse_obj_name($o->name()) : $caption);
 	}
 
 	function get_change_url($oid, $params = array(), $caption = false, $title=NULL)

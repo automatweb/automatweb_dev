@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.26 2005/11/10 14:16:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.27 2006/02/15 13:03:40 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -730,7 +730,7 @@ class otv_ds_postipoiss extends class_base
 		}
 		$this->flush_cache();
 		$c = get_instance("cache");
-		$c->full_flush();
+		$c->file_clear_pt("html");
 		echo "all done! <br>\n";
 		flush();
 	}

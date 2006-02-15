@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.91 2005/11/07 07:46:13 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.92 2006/02/15 13:03:40 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1996,9 +1996,8 @@ class forum_v2 extends class_base
 			"forum_id" => $arr["id"],
 			"topic_url" => $return_url,
 		));
-                $c = get_instance("cache");
-                $c->full_flush();				
 		return $return_url;
+
 		/*
                 $this->comm_id = $t->submit($emb);
 		unset($arr["class"]);

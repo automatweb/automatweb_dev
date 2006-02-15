@@ -465,6 +465,12 @@ class popup_search extends aw_template
 				$filter[$k] = map("%%%s%%", explode(",", $v));
 			}
 		}
+
+		if (!$_GET["MAX_FILE_SIZE"])
+		{
+			$filter["limit"] = 30;
+		}
+
 		if (count($filter) > 1 || $_GET["MAX_FILE_SIZE"])
 		{
 			// Pre-check checkboxes for relpicker
