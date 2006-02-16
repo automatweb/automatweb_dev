@@ -94,5 +94,40 @@
 			</function>
 		</action>
 
+		<action name="make_prop">
+			<function name="make_property_definitions">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="make_orb">
+			<function name="make_orb_definitions">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="make_msg">
+			<function name="make_message_maps">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="make_ini">
+			<function name="make_ini_file">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="make_all">
+			<function name="make_all">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
