@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.72 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.73 2006/02/16 09:37:37 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -673,7 +673,6 @@ class task extends class_base
 // 				{
 // 					$data["value"] = $this->$co;
 // 				}
-				
 				if (!count($cst))
 				{
 					$data["options"] = array("" => "");
@@ -848,11 +847,17 @@ class task extends class_base
 				break;
 
 			case "customer":
-				$prop["value"] = $_POST["customer"];
+				if (isset($_POST["customer"]))
+				{
+					$prop["value"] = $_POST["customer"];
+				}
 				break;
 
 			case "project":
-				$prop["value"] = $_POST["project"];
+				if (isset($_POST["project"]))
+				{
+					$prop["value"] = $_POST["project"];
+				}
 				// add to proj
 				if (is_oid($prop["value"]) && $this->can("view", $prop["value"]))
 				{
