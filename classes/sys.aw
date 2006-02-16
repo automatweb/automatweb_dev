@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.65 2006/02/09 15:17:31 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.66 2006/02/16 10:49:10 voldemar Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -10,14 +10,14 @@ class sys extends aw_template
 		$this->lc_load("syslog","lc_syslog");
 	}
 
-	/** Genereerib andmebaasi struktuuri väljundi XML-is 
-		
+	/** Genereerib andmebaasi struktuuri väljundi XML-is
+
 		@attrib name=gen_db_struct params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -32,14 +32,14 @@ class sys extends aw_template
 		exit;
 	}
 
-	/** Genereerib andmebaasi tabelite loomise sqli 
-		
+	/** Genereerib andmebaasi tabelite loomise sqli
+
 		@attrib name=gen_create_tbl params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -61,14 +61,14 @@ class sys extends aw_template
 		exit;
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=convimages params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 		Lisab piltidele aliases
 
@@ -113,7 +113,7 @@ class sys extends aw_template
 		}
 		exit;
 	}
-		
+
 
 	////
 	// !Laeb predefined serverist andmebaasi struktuuri, ning kuvab selle, ning kohaliku
@@ -123,7 +123,7 @@ class sys extends aw_template
 	// port(int) - port
 	// url(string) - mida lugeda?
 
-	// njaa, see peaks hakkama üle XML-RPC serveri käima tegelikult. But for now, 
+	// njaa, see peaks hakkama üle XML-RPC serveri käima tegelikult. But for now,
 	// we will do it this way.
 	function db_sync($args = array())
 	{
@@ -143,14 +143,14 @@ class sys extends aw_template
 		$op .= "User-Agent: Autom@tWeb\r\n";
 		$op .= "Host: $server\r\n\r\n";
 
-		if (!fputs($fp, $op, strlen($op))) 
+		if (!fputs($fp, $op, strlen($op)))
 		{
 			$this->errstr=t("Write error");
 			return 0;
 	    }
 		$ipd="";
 
-		while($data=fread($fp, 32768)) 
+		while($data=fread($fp, 32768))
 		{
 			$ipd.=$data;
 		}
@@ -159,19 +159,19 @@ class sys extends aw_template
 		// 1) laeme serverist andmebaasi struktuuri
 		// 2) laeme kohalikust masinast baasi struktuuri
 		// 3) kuvame vordleva tabeli, kuhu saab erinevate kirjete juurde checkboxe panna
-		// 4) teeme muudatused. 
+		// 4) teeme muudatused.
 		// 5) Toome poest uue õlle
 		return $res;
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=dbsync params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -207,7 +207,7 @@ class sys extends aw_template
 			"dragut.dev.struktuur.ee" => "dragut.dev.struktuur.ee",
 			"ee.struktuur.ee" => "ee.struktuur.ee"
 		);
-		
+
 		$this->read_template("compare_db_step1.tpl");
 
 		$this->vars(array(
@@ -217,14 +217,14 @@ class sys extends aw_template
 		return $this->parse();
 	}
 
-	/** Võrdleb kahte gen_db_sync poolt genereeritud andmebaasi definitsiooni 
-		
+	/** Võrdleb kahte gen_db_sync poolt genereeritud andmebaasi definitsiooni
+
 		@attrib name=db_compare_dbs params=name default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 		argumendid:
 		left,right(array) - baaside definitsioonid
@@ -262,7 +262,7 @@ class sys extends aw_template
 	}
 
 	////
-	// !Is called from _db_compare_db-s for each invidual table	
+	// !Is called from _db_compare_db-s for each invidual table
 	function _db_compare_tables($name,$arg1,$arg2)
 	{
 		// koigepealt leiame siis molema tabelidefinitsiooni väljade nimed, ning
@@ -298,7 +298,7 @@ class sys extends aw_template
 
 			// kui koik matchivad, siis pole checkboxi vaja kuvada
 			if ($typematch && $flagmatch && $keymatch)
-			{	
+			{
 				$check = "";
 			}
 			else
@@ -350,7 +350,7 @@ class sys extends aw_template
 			$problems++;
 			$res1 = false;
 		};
- 
+
 		$flags1 = (is_array($field1["flags"])) ? join(",",$field1["flags"]) : "";
 		$flags2 = (is_array($field2["flags"])) ? join(",",$field2["flags"]) : "";
 		$res2 = ( $flags1 == $flags2 );
@@ -368,18 +368,18 @@ class sys extends aw_template
 			$problems++;
 			$res3 = false;
 		};
- 
+
 		return array($res1,$res2,$res3);
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=submit_compare_db params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -432,7 +432,7 @@ class sys extends aw_template
 							$flags = str_replace("auto_increment","",$flags);
 							// primary keys NEED not null
 							if (not(in_array("NOT NULL",$dr["flags"])))
-							{	
+							{
 								$flags .= " NOT NULL";
 							};
 							$autoinc = " PRIMARY KEY";
@@ -570,10 +570,10 @@ class sys extends aw_template
 	}
 
 	/** checks if any objects of the given class exist in the current database
-	
+
 		@attrib name=has_objects nologin=1
 
-		@param clid required type=int 
+		@param clid required type=int
 
 		@comment
 
@@ -675,7 +675,7 @@ class sys extends aw_template
 		echo "------------------STATS <br>\n";
 		flush();
 
-		// slurp in files, count by date and site 
+		// slurp in files, count by date and site
 		for($i = 0; $i < 30; $i++)
 		{
 			$date = mktime(0,0,0, date("m"), date("d")-$i, date("Y"));
@@ -722,7 +722,7 @@ class sys extends aw_template
 
 			arsort($sites);
 			arsort($urls);
-			arsort($page_times);	
+			arsort($page_times);
 			arsort($avg_page_times);
 
 			echo "total pageviews: $total<Br>total time taken: $total_time seconds <br>top sites: <br>";
@@ -858,7 +858,7 @@ class sys extends aw_template
 
 	/**
 		@attrib name=do_test_dump nologin=1
-		
+
 	**/
 	function do_test_dump($arr)
 	{
@@ -890,6 +890,279 @@ class sys extends aw_template
 		$res = `/usr/bin/tar cvfz $fn $fld/*`;
 
 		die(t("$fn"));
+	}
+
+/**
+	@attrib name=make_prop
+**/
+	function make_property_definitions()
+	{
+		if (!headers_sent())
+		{
+			header ("Content-Type: text/plain");
+		}
+
+		if (!aw_ini_get("enable_web_maintenance"))
+		{
+			exit;
+		}
+
+		ini_set ("max_execution_time", "1500");
+		ini_set ("memory_limit", "200");
+		$this->_make_property_definitions();
+		exit;
+	}
+
+	function _make_property_definitions()
+	{
+		$collector = get_instance("analyzer/propcollector");
+		$collector->run();
+	}
+
+/**
+	@attrib name=make_orb
+**/
+	function make_orb_definitions()
+	{
+		if (!headers_sent())
+		{
+			header ("Content-Type: text/plain");
+		}
+
+		if (!aw_ini_get("enable_web_maintenance"))
+		{
+			exit;
+		}
+
+		ini_set ("max_execution_time", "1500");
+		ini_set ("memory_limit", "200");
+		$this->_make_orb_definitions();
+		exit;
+	}
+
+	function _make_orb_definitions()
+	{
+		aw_global_set("no_db_connection", 1);
+		$scanner = get_instance("core/docgen/docgen_orb_gen");
+		$scanner->make_orb_defs_from_doc_comments();
+	}
+
+/**
+	@attrib name=make_msg
+**/
+	function make_message_maps()
+	{
+		if (!headers_sent())
+		{
+			header ("Content-Type: text/plain");
+		}
+
+		if (!aw_ini_get("enable_web_maintenance"))
+		{
+			exit;
+		}
+
+		ini_set ("max_execution_time", "900");
+		ini_set ("memory_limit", "200");
+		$this->_make_message_maps();
+		exit;
+	}
+
+	function _make_message_maps()
+	{
+		aw_global_set("no_db_connection", 1);
+		$scanner = get_instance("core/msg/msg_scanner");
+		$scanner->scan();
+	}
+
+/**
+	@attrib name=make_ini
+**/
+	function make_ini_file()
+	{
+		if (!headers_sent())
+		{
+			header ("Content-Type: text/plain");
+		}
+
+		if (!aw_ini_get("enable_web_maintenance"))
+		{
+			exit;
+		}
+
+		ini_set ("max_execution_time", "300");
+		ini_set ("memory_limit", "100");
+		$this->_make_ini_file();
+		exit;
+	}
+
+	function _make_ini_file()
+	{
+		$basedir = aw_ini_get("basedir");
+		$input_file = $basedir . "/aw.ini.root";
+		$output_file = $basedir . "/aw.ini";
+
+		if (!file_exists($input_file))
+		{
+			exit ("File not found.");
+		}
+
+		$res = $this->_parse_cfg($input_file);
+
+		if ($res === false)
+		{
+			exit ("No config data returned from parser.");
+		}
+		else
+		{
+			$res =
+			"######################################################################\n".
+			"# THIS IS AN AUTOMATICALLY GENERATED FILE!!!                         #\n".
+			"# DO NOT EDIT THIS!!                                                 #\n".
+			"#                                                                    #\n".
+			"# Instead, edit aw.ini.root and/or the files included from it.       #\n".
+			"# after editing, to regenerate this file execute cd \$AWROOT;make ini #\n".
+			"######################################################################\n\n\n" .
+			join ("", $res);
+
+			$fp = fopen ($output_file, "w");
+			fwrite ($fp, $res, strlen ($res));
+			fclose ($fp);
+			exit ("aw.ini successfully written.");
+		}
+	}
+
+	function _parse_cfg($file)
+	{
+		// put result lines in here
+		$res = array();
+
+		$linenum = 0;
+		$fd = file($file);
+		foreach($fd as $line)
+		{
+			$linenum++;
+			$oline = $line;
+			$add = true;
+			// ok, parse line
+			// 1st, strip comments
+			if (($pos = strpos($line,"#")) !== false)
+			{
+				$line = substr($line,0,$pos);
+			}
+			// now, strip all whitespace
+			$line = trim($line);
+
+			if ($line != "")
+			{
+				if (substr($line, 0, strlen("include")) == "include")
+				{
+					// process include
+					$line = preg_replace('/\$\{(.*)\}/e',"aw_ini_get(\"\\1\")",$line);
+					$ifile = trim(substr($line, strlen("include")));
+					if (!file_exists($ifile) || !is_readable($ifile))
+					{
+						echo "Failed to open include file on line $linenum in file $file ($ifile) \n";
+						return false;
+					}
+					$in = $this->_parse_cfg($ifile);
+					if ($in === false)
+					{
+						echo "\tthat was included from line $linenum in file $file \n";
+						return false;
+					}
+					else
+					{
+						foreach($in as $iline)
+						{
+							$res[] = $iline;
+						}
+						$add = false;
+					}
+				}
+				else
+				{
+					// now, config opts are class.variable = value
+					$eqpos = strpos($line," = ");
+					if ($eqpos !== false)
+					{
+						$var = trim(substr($line,0,$eqpos));
+						$varvalue = trim(substr($line,$eqpos+3));
+
+						// now, replace all variables in varvalue
+						$varvalue = preg_replace('/\$\{(.*)\}/e',"aw_ini_get(\"\\1\")",$varvalue);
+						$var = preg_replace('/\$\{(.*)\}/e',"aw_ini_get(\"\\1\")",$var);
+
+						// if the varname contains . split it into class and variable parts
+						// if not, class will be __default
+						if (($dotpos = strpos($var,".")) !== false)
+						{
+							$varclass = substr($var,0,$dotpos);
+							$varname = substr($var,$dotpos+1);
+						}
+						else
+						{
+							$varclass = "__default";
+							$varname = $var;
+						}
+
+						// check if variable is an array
+						if (($bpos = strpos($varname,"[")) !== false)
+						{
+							// ok, do the bad eval version
+							$arrparams = substr($varname,$bpos);
+							$arrname = substr($varname,0,$bpos);
+							if (!is_array($this->make_ini_globals["cfg"][$varclass][$arrname]))
+							{
+								$this->make_ini_globals["cfg"][$varclass][$arrname] = array();
+							}
+							$code = "\$this->make_ini_globals[cfg][\$varclass][\$arrname]".$arrparams." = \"".$varvalue."\";";
+							// echo "evaling $code <br>\n";
+							eval($code);
+						}
+						else
+						{
+							// and stuff the thing in the array
+							$this->make_ini_globals["cfg"][$varclass][$varname] = $varvalue;
+							//echo "setting [$varclass][$varname] to $varvalue <br>";
+						}
+					}
+				}
+			}
+
+			if ($add)
+			{
+				$res[] = $oline;
+			}
+		}
+
+		return $res;
+	}
+
+/**
+	@attrib name=make_all
+**/
+	function make_all()
+	{
+		if (!headers_sent())
+		{
+			header ("Content-Type: text/plain");
+		}
+
+		if (!aw_ini_get("enable_web_maintenance"))
+		{
+			exit;
+		}
+
+		ini_set ("max_execution_time", "4500");
+		ini_set ("memory_limit", "200");
+
+		$this->_make_ini_file();
+		$this->_make_property_definitions();
+		$this->_make_message_maps();
+		$this->_make_orb_definitions();
+
+		exit;
 	}
 };
 ?>
