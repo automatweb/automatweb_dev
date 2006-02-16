@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.13 2006/02/08 11:20:20 kristo Exp $
-// cb_form_chain_entry.aw - Vormiahela sisestus 
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.14 2006/02/16 11:35:47 voldemar Exp $
+// cb_form_chain_entry.aw - Vormiahela sisestus
 /*
 
 @classinfo syslog_type=ST_CB_FORM_CHAIN_ENTRY relationmgr=yes no_comment=1 no_status=1
@@ -10,15 +10,15 @@
 @default group=general
 @default table=aw_cb_form_chain_entries
 
-	@property confirmed type=checkbox ch_value=1 
+	@property confirmed type=checkbox ch_value=1
 	@caption Kinnitatud
 
-	@property cb_form_id type=hidden 
+	@property cb_form_id type=hidden
 	@caption Vormiahela id
 
 @default group=data
 
-	@property data type=releditor reltype=RELTYPE_ENTRY mode=manager props=name
+	@property data type=releditor reltype=RELTYPE_ENTRY mode=manager props=name no_caption=1
 
 @groupinfo data caption="Andmed"
 
@@ -57,7 +57,7 @@ class cb_form_chain_entry extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -229,7 +229,7 @@ class cb_form_chain_entry extends class_base
 				$t->define_data($row);
 			}
 		}
-	
+
 		$ret = $t->draw();
 		return $ret;
 	}
@@ -271,7 +271,7 @@ class cb_form_chain_entry extends class_base
 			}
 			if ($pd["type"] == "releditor")
 			{
-				// file upload, get conn file and 
+				// file upload, get conn file and
 				$o = $d->get_first_obj_by_reltype($pd["reltype"]);
 				if ($o)
 				{
@@ -291,7 +291,7 @@ class cb_form_chain_entry extends class_base
 				"caption" => $pd["caption"],
 				"value" => $val == "" ? "&nbsp;" : $val
 			));
-	
+
 			$ret .= $this->parse("PROPERTY");
 		}
 

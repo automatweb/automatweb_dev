@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.74 2006/02/06 12:37:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.75 2006/02/16 11:35:47 voldemar Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -47,7 +47,7 @@ class releditor extends core
 			'class_name' => t("Klass"),
 		);
 
-		
+
 		// manager is a kind of small aliasmgr, it has a table, rows can be clicked
 		// 	to edit items, new items can be added, existing ones can be deleted
 
@@ -80,7 +80,7 @@ class releditor extends core
 		$edit_id = $arr["request"][$this->elname];
 
 		$found = true;
-		
+
 		$cache_inst = get_instance("cache");
 
 		if (!empty($edit_id) && is_oid($edit_id))
@@ -91,7 +91,7 @@ class releditor extends core
 				"type" => $arr["prop"]["reltype"],
 			));
 
-			
+
 
 			foreach($conns as $conn)
 			{
@@ -177,9 +177,11 @@ class releditor extends core
 			//if (!empty($form_type) && $all_props[$key] && is_array($props) && in_array($key,$props))
 			if ($all_props[$key] && is_array($props) && in_array($key,$props))
 			{
+				// if (!empty($form_type) || $visual != "manager")
 				if (!empty($form_type) || $visual != "manager")
 				{
-					if (1 == $pcount)
+					// if (1 == $pcount)// yksiku elemendi caption releditor property captioniga sama
+					if (1 == $pcount and "manager" != $visual)
 					{
 						$_prop["caption"] = $prop["caption"];
 					};
@@ -192,15 +194,15 @@ class releditor extends core
 		$this->table_props = $props;
 
 		// "someone" has already used cfgform property, but for what purpose or why, is a big f'ing mystery to me,
-		// so i'll just implement something neater 
-		
+		// so i'll just implement something neater
+
 		$cfgform_id = $arr["prop"]["cfgform_id"];
 		if(is_oid($cfgform_id) && $this->can("view", $cfgform_id))
 		{
 			$cfg = get_instance(CL_CFGFORM);
 			$act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
 		}
-	
+
 		if (!empty($prop["choose_default"]))
 		{
 			$this->choose_default = 1;
@@ -219,15 +221,27 @@ class releditor extends core
 
 
 		// "form" does not need a caption
-		if ($visual == "manager" && $form_type == "new")
+		if ($visual == "manager")
 		{
-			$act_props = array($this->elname . "_caption" => array(
-				"name" => $this->elname . "_caption",
-				"type" => "text",
-				"value" => t("Uus"),
-				"subtitle" => 1,
-			)) + $act_props;
-		};
+			if ("new" == $form_type)
+			{
+				$act_props = array($this->elname . "_caption" => array(
+					"name" => $this->elname . "_caption",
+					"type" => "text",
+					"value" => (empty($prop["no_caption"]) ? $prop["caption"] . " - " : "") . t("Uus"),
+					"subtitle" => 1,
+				)) + $act_props;
+			}
+			elseif (empty($prop["no_caption"]))
+			{
+				$act_props = array($this->elname . "_caption" => array(
+					"name" => $this->elname . "_caption",
+					"type" => "text",
+					"value" => $prop["caption"],
+					"subtitle" => 1,
+				)) + $act_props;
+			}
+		}
 
 		$obj_inst = false;
 
@@ -328,8 +342,8 @@ class releditor extends core
 			"name_prefix" => $this->elname,
 			"obj_inst" => $obj_inst,
 		));
-	
-		// add this after parse, otherwise the name will be in form propname[elname], and I do not 
+
+		// add this after parse, otherwise the name will be in form propname[elname], and I do not
 		// want this
 		if ("manager" == $visual)
 		{
@@ -389,10 +403,10 @@ class releditor extends core
 					$this->elname => "new",
 				));
 			}
-			
+
 			$createlinks[] = array('class' => $clid, 'url' => $newurl);
 		}
-		
+
 		$tb = get_instance("vcl/toolbar");
 		if (count($createlinks) > 1)
 		{
@@ -421,7 +435,7 @@ class releditor extends core
 				"url" => $createlinks[0]['url'],
 			));
 		}
-		
+
 		$confirm_test = t("Kustutada valitud objektid?");
 		if (isset($arr['prop']['delete_relations']) && $arr['prop']['delete_relations'])
 		{
@@ -446,7 +460,7 @@ class releditor extends core
 				"url" => "javascript:element = 'check[';len = document.changeform.elements.length;var count = 0;for (i=0; i < len; i++){if (document.changeform.elements[i].checked == true){count++;}}if(count == 1){num=prompt('Mitu objekti kloonida soovid?', '1');document.changeform.releditor_clones.value=num;document.changeform.submit();}else{alert('Sa oled kas liiga vähe või liiga palju objekte kloonimiseks valinud, proovi uuesti')}",
 			));
 		}
-		
+
 		$rv = array(
 			"name" => $this->elname . "_toolbar",
 			"type" => "toolbar",
@@ -540,7 +554,7 @@ class releditor extends core
 						$export_props[$fn] = $value;
 					}
 				}
-				
+
 				$property_list = $target->get_property_list();
 				foreach($property_list as $_pn => $_pd)
 				{
@@ -696,7 +710,7 @@ class releditor extends core
 				"caption" => t("Muuda"),
 				"align" => "center",
 			));
-		
+
 			// aliasmgr uses "check"
 			$awt->define_chooser(array(
 				"field" => "conn_id",
@@ -766,7 +780,7 @@ class releditor extends core
 
 			return PROP_OK;
 		};
-	
+
 		$clinst = get_instance($use_clid);
 
 		$elname = $prop["name"];
@@ -838,7 +852,7 @@ class releditor extends core
 					/*
 					// ok, wtf is that code supposed to do?
 					// - that code is supposed to upload the picture when it's added through another
-					// - class = meaning, DO NOT TOUCH THIS OK? -- ahz 
+					// - class = meaning, DO NOT TOUCH THIS OK? -- ahz
 					*/
 					else
 					{
@@ -852,7 +866,7 @@ class releditor extends core
 							$el_count++;
 						};
 					};
-					
+
 				}
 				else
 				{
@@ -865,11 +879,11 @@ class releditor extends core
 					if ($item["type"] == "checkbox" && !$emb[$item["name"]])
 					{
 						$emb[$item["name"]] = 0;
-					}	
+					}
 				};
 			};
 		};
-		
+
 
 		// TODO: make it give feedback to the user, if an object can not be added
 		if ($el_count > 0)

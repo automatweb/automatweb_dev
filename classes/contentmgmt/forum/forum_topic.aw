@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.16 2005/09/05 10:12:02 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.17 2006/02/16 11:35:47 voldemar Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -28,7 +28,7 @@
 @property image type=releditor reltype=RELTYPE_FORUM_IMAGE rel_id=first use_form=emb field=meta method=serialize
 @caption Pilt
 
-@property subscribers_editor type=releditor store=no mode=manager reltype=RELTYPE_SUBSCRIBER props=mail,name group=subscribers
+@property subscribers_editor type=releditor store=no mode=manager reltype=RELTYPE_SUBSCRIBER props=mail,name group=subscribers no_caption=1
 
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC
 
@@ -54,13 +54,13 @@ class forum_topic extends class_base
 			"clid" => CL_MSGBOARD_TOPIC,
 		));
 	}
-	
+
 	function callback_post_save($arr)
 	{
-		
+
 		if($arr["request"]["answers_to_mail"] && is_email($arr["request"]["author_email"]))
 		{
-			
+
 			$mail_addres = new object(array(
 				"class_id" => CL_ML_MEMBER,
 				"name" => $arr["request"]["author_name"],
@@ -70,14 +70,14 @@ class forum_topic extends class_base
 			$mail_addres->save();
 			$mail_addres->set_prop("mail", $arr["request"]["author_email"]);
 			$mail_addres->save();
-			
+
 			$arr["obj_inst"]->connect(array(
 				"to" => $mail_addres->id(),
 				"reltype" => "RELTYPE_SUBSCRIBER",
 			));
 		}
 	}
-	
+
 	function set_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -118,7 +118,7 @@ class forum_topic extends class_base
 		{
 			$subject = $topic_obj->name();
 		}
-		
+
 		if($forum_obj->prop("mail_address") || $forum_obj->prop("mail_from"))
 		{
 			$from = "From:".$forum_obj->prop("mail_from")."<".$forum_obj->prop("mail_address").">\n";
@@ -127,7 +127,7 @@ class forum_topic extends class_base
 		{
 			$from = "From: automatweb@automatweb.com\n";
 		}
-		
+
 		// composing the message:
 		$message = $args['title']."\n\n";
 		$message .= $args['message']."\n\n";

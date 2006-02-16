@@ -80,6 +80,7 @@
                   <num_0>mail</num_0>
                   <num_1>name</num_1>
             </props>
+            <no_caption>1</no_caption>
             <field>subscribers_editor</field>
       </property>
       <classinfo>

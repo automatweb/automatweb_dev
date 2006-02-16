@@ -25,6 +25,7 @@
             <reltype>RELTYPE_ENTRY</reltype>
             <mode>manager</mode>
             <props>name</props>
+            <no_caption>1</no_caption>
             <store>no</store>
             <field>data</field>
       </property>

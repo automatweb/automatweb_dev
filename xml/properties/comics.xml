@@ -78,6 +78,7 @@
                   <num_1>comment</num_1>
                   <num_2>content</num_2>
             </table_fields>
+            <no_caption>1</no_caption>
             <store>no</store>
       </property>
       <property>

@@ -65,14 +65,6 @@
             <caption>Pildid</caption>
       </property>
       <property>
-            <name>products_caption</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>text</type>
-            <field>products_caption</field>
-            <caption>Tooted</caption>
-      </property>
-      <property>
             <name>products</name>
             <table>objects</table>
             <group>products</group>
@@ -91,14 +83,6 @@
             <direct_links>1</direct_links>
             <store>no</store>
             <caption>Tooted</caption>
-      </property>
-      <property>
-            <name>packets_caption</name>
-            <table>objects</table>
-            <group>products</group>
-            <type>text</type>
-            <field>packets_caption</field>
-            <caption>Toote paketid</caption>
       </property>
       <property>
             <name>packets</name>

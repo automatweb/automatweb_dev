@@ -1,13 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_compare_table.aw,v 1.1 2005/04/28 07:41:09 kristo Exp $
-// crm_offer_compare_table.aw - Pakkumise v&otilde;rdlustabel 
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_compare_table.aw,v 1.2 2006/02/16 11:35:47 voldemar Exp $
+// crm_offer_compare_table.aw - Pakkumise v&otilde;rdlustabel
 /*
 
 @classinfo syslog_type=ST_CRM_OFFER_COMPARE_TABLE relationmgr=yes no_comment=1 no_status=1
 
 @default table=objects
 @default group=general
-@default field=meta 
+@default field=meta
 @default method=serialize
 
 @default group=columns
@@ -18,7 +18,7 @@
 @default group=rows
 
 	@property rows type=releditor reltype=RELTYPE_ROW mode=manager props=name,ord,divs,div_headers table_fields=name,ord,divs,div_headers table_edit_fields=name,ord,divs,div_headers
-	@caption Tulbad
+	@caption Read
 
 @default group=content
 
@@ -79,7 +79,7 @@ class crm_offer_compare_table extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -134,7 +134,7 @@ class crm_offer_compare_table extends class_base
 			}
 		}
 		return $columns;
-	}	
+	}
 
 	function _draw($o, &$t, $content_cb)
 	{
@@ -161,7 +161,7 @@ class crm_offer_compare_table extends class_base
 				{
 					$dat[$col] = $content_cb[0]->$content_cb[1]($o, $i, $col, $data);
 				}
-	
+
 				$t->define_data($dat);
 			}
 		}

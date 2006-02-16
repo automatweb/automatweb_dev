@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer.aw,v 1.3 2005/12/27 21:27:45 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer.aw,v 1.4 2006/02/16 11:35:47 voldemar Exp $
 // crm_special_offer.aw - Organisatsiooni eripakkumine
 // Not related to crm_offer
 /*
@@ -34,14 +34,14 @@
 @groupinfo products caption="Tooted" submit=no
 @default group=products
 
-@property products_caption type=text
-@caption Tooted
+// @property products_caption type=text
+// @caption Tooted
 
 @property products type=releditor reltype=RELTYPE_SHOP_PRODUCT field=meta method=serialize mode=manager props=name,status,price,must_order_num table_fields=name direct_links=1
 @caption Tooted
 
-@property packets_caption type=text
-@caption Toote paketid
+// @property packets_caption type=text
+// @caption Toote paketid
 
 @property packets type=releditor reltype=RELTYPE_SHOP_PACKET field=meta method=serialize mode=manager props=name,price,separate_items table_fields=name direct_links=1
 @caption Toote paketid
@@ -63,7 +63,7 @@ class crm_special_offer extends class_base
 {
 	function crm_special_offer()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
+		// change this to the folder under the templates folder, where this classes templates will be,
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "crm/crm_special_offer",
@@ -94,7 +94,7 @@ class crm_special_offer extends class_base
 
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -130,7 +130,7 @@ class crm_special_offer extends class_base
 			$org_id = $conn->conn['from'];
 		}
 		$this->read_template("show.tpl");
-		
+
 		// Images
 		$images_html = "";
 		if (empty($arr['short']) OR true)

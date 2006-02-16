@@ -1,6 +1,6 @@
-<?php                  
+<?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.109 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.110 2006/02/16 11:35:47 voldemar Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -43,7 +43,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property code type=textbox table=kliendibaas_isik
 @caption Kood
 
-@property gender type=chooser 
+@property gender type=chooser
 @caption Sugu
 
 @property title type=chooser
@@ -63,7 +63,7 @@ caption Msn/yahoo/aol/icq
 
 
 
-@property social_status type=chooser 
+@property social_status type=chooser
 @caption Perekonnaseis
 
 @property spouse type=textbox size=25 maxlength=50 group=relatives
@@ -75,10 +75,10 @@ caption Msn/yahoo/aol/icq
 @property pictureurl type=textbox size=40 maxlength=200
 @caption Pildi/foto url
 
-@property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first props=file 
+@property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first props=file
 @caption Pilt/foto
 
-@property picture2 type=releditor reltype=RELTYPE_PICTURE2 rel_id=first props=file 
+@property picture2 type=releditor reltype=RELTYPE_PICTURE2 rel_id=first props=file
 @caption Pilt suuremana
 
 @property username type=text store=no
@@ -121,21 +121,21 @@ caption Kodused kontaktandmed
 
 @property address type=relpicker reltype=RELTYPE_ADDRESS
 @caption Aadress
-	
-@property email type=relmanager table=objects field=meta method=serialize group=contact reltype=RELTYPE_EMAIL props=mail
+
+@property email type=releditor mode=manager table=objects field=meta method=serialize group=contact reltype=RELTYPE_EMAIL props=mail table_fields=mail choose_default=1
 @caption Meiliaadressid
 
-@property phone type=relmanager table=objects field=meta method=serialize group=contact reltype=RELTYPE_PHONE props=name
+@property phone type=releditor table=objects field=meta method=serialize mode=manager props=name,type table_fields=name,type group=contact reltype=RELTYPE_PHONE choose_default=1
 @caption Telefoninumbrid
 
-@property url type=relmanager table=objects field=meta method=serialize group=contact reltype=RELTYPE_URL props=url
+@property url type=releditor mode=manager table=objects field=meta method=serialize group=contact reltype=RELTYPE_URL props=url table_fields=url choose_default=1
 @caption Veebiaadressid
 
 @property comment type=textarea cols=40 rows=3 table=objects field=comment group=contact
 @caption Kontakt
 
 
-//property email type=textbox store=no 
+//property email type=textbox store=no
 //caption E-post
 @property default_cv type=hidden table=objects field=meta method=serialize
 
@@ -207,13 +207,13 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 @default group=data
 
-	@property server_folder type=textbox table=objects field=meta method=serialize 
+	@property server_folder type=textbox table=objects field=meta method=serialize
 	@caption Kataloog serveris, kus asuvad failid
 
 @property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect
 @caption Keeled
 
-@property udef_ch1 type=chooser multiple=1 
+@property udef_ch1 type=chooser multiple=1
 @caption Kasutajadefineeritud CH1
 
 @property udef_ta1 type=textarea rows=5 cols=50
@@ -233,7 +233,7 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
@@ -243,7 +243,7 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 	@layout docs_lt type=hbox width=20%:80%
 
-		@layout docs_left type=vbox parent=docs_lt 
+		@layout docs_left type=vbox parent=docs_lt
 
 			@property docs_tree type=treeview parent=docs_left no_caption=1
 
@@ -271,7 +271,7 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 				@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
 				@caption T&uuml;hista otsing
-	
+
 
 		@property docs_tbl type=table store=no no_caption=1 parent=docs_lt
 
@@ -347,7 +347,7 @@ CREATE TABLE `kliendibaas_isik` (
   `children` varchar(100) default NULL,
   `personal_contact` int(11) default NULL,
   `work_contact` int(11) default NULL,
-  `rank` int(11) default NULL,  
+  `rank` int(11) default NULL,
   `digitalID` text,
   `notes` text,
   `pictureurl` varchar(200) default NULL,
@@ -401,7 +401,7 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype PROFILE value=14 clid=CL_PROFILE
 @caption Profiil
 
-reltype USER_DATA value=15 
+reltype USER_DATA value=15
 caption Andmed
 
 reltype CV value=19 clid=CL_CV
@@ -417,7 +417,7 @@ caption CV
 //kliendihaldur
 @reltype HANDLER value=22 clid=CL_CRM_COMPANY
 
-@reltype EDUCATION value=23 clid=CL_CRM_PERSON_EDUCATION 
+@reltype EDUCATION value=23 clid=CL_CRM_PERSON_EDUCATION
 @caption Haridus
 
 @reltype DRIVING_LICENSE value=24 clid=CL_CRM_DRIVING_LICENSE
@@ -506,7 +506,7 @@ class crm_person extends class_base
 				if (!empty($form["firstname"]) || !empty($form["lastname"]))
 				{
 					$arr["obj_inst"]->set_name($form["firstname"]." ".$form["lastname"]);
-				}			
+				}
 				break;
 
 		};
@@ -517,7 +517,7 @@ class crm_person extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
-	
+
 		switch($data["name"])
 		{
 			case "stats_s_time_sel":
@@ -568,7 +568,7 @@ class crm_person extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $docs_impl->$fn($arr);
-			
+
 
 			case 'docs_s_name':
 			case 'docs_s_task':
@@ -718,8 +718,8 @@ class crm_person extends class_base
 
 			case "social_status":
 				$data["options"] = array(
-					3 => t("Vallaline"), 
-					1 => t("Abielus"), 	
+					3 => t("Vallaline"),
+					1 => t("Abielus"),
 					2 => t("Vabaabielus")
 				);
 				break;
@@ -748,7 +748,7 @@ class crm_person extends class_base
 
 			case "email":
 				break;
-				
+
 
 			case "org_actions":
 			case "org_calls":
@@ -756,39 +756,39 @@ class crm_person extends class_base
 			case "org_tasks":
 				$this->do_org_actions(&$arr);
 				break;
-                                
+
 			case "skills_listing_tree":
 				$this->do_person_skills_tree($arr);
 			break;
-			
+
 			case "picture":
 				break;
-				
+
 			case "skills_toolbar":
 				$this->do_cv_skills_toolbar(&$data["toolbar"], $arr);
 				break;
-				
+
 			case "skills_table":
 				break;
-				
+
 			case "juhiload":
 				if(!($arr["request"]["skill"]=="driving_licenses"))
 				{
 					return PROP_IGNORE;
 				}
 				break;
-			
+
 			case "submit_driving_licenses":
 				if(!($arr["request"]["skill"]=="driving_licenses"))
 				{
 					return PROP_IGNORE;
 				}
 				break;
-			
-			case "language_list":	
+
+			case "language_list":
 				return PROP_IGNORE;
 				break;
-			
+
 			case "language_skills_table":
 				if($arr["request"]["skill"] =="languages")
 				{
@@ -799,87 +799,87 @@ class crm_person extends class_base
 					return PROP_IGNORE;
 				}
 				break;
-			
+
 			case "tookogemused_edit":
-			
+
 				if($arr["request"]["eoid"])
 				{
-					$data["rel_id"] = $arr["request"]["eoid"]; 		
+					$data["rel_id"] = $arr["request"]["eoid"];
 				}
 				elseif (!$arr["request"]["new_prevjob"])
 				{
 					return PROP_IGNORE;
 				}
-				
+
 				break;
-			
+
 			case "language_levels":
 				return PROP_IGNORE;
 				break;
-			
+
 			case "previous_jobs_table":
 				$this->do_jobs_table($arr);
 				break;
-			
+
 			case "previous_jobs_tb":
 				$this->do_previous_jobs_tb($arr);
 				break;
-			
+
 			case "education_tb":
 				$this->do_education_tb($arr);
 				break;
-			
+
 			case "basic_education_edit":
 				if($arr["request"]["etype"]=="basic_edu")
 				{
-					$data["rel_id"] = $arr["request"]["eoid"];	
+					$data["rel_id"] = $arr["request"]["eoid"];
 				}
 				else
 				{
 					return PROP_IGNORE;
-				}	
-			
+				}
+
 				break;
-			
+
 			case "vocational_education_edit":
 				if($arr["request"]["etype"]=="voc_edu")
 				{
-					$data["rel_id"] = $arr["request"]["eoid"];	
+					$data["rel_id"] = $arr["request"]["eoid"];
 				}
 				else
 				{
 					return PROP_IGNORE;
-				}	
+				}
 				break;
-			
+
 			case "higher_education_edit":
 				if($arr["request"]["etype"]=="higher_edu")
 				{
-					$data["rel_id"] = $arr["request"]["eoid"];	
+					$data["rel_id"] = $arr["request"]["eoid"];
 				}
 				else
 				{
 					return PROP_IGNORE;
-				}	
+				}
 				break;
-			
+
 			case "secondary_education_edit":
 				if($arr["request"]["etype"]=="secondary_edu")
 				{
-					$data["rel_id"] = $arr["request"]["eoid"];	
+					$data["rel_id"] = $arr["request"]["eoid"];
 				}
 				else
 				{
 					return PROP_IGNORE;
 				}
 				break;
-				
+
 			case "education_table":
 				$this->do_education_table($arr);
 				break;
-			
+
 			case "programming_skills":
-				
+
 				if(!($arr["request"]["skill"] == "programming"))
 				{
 					return PROP_IGNORE;
@@ -904,7 +904,7 @@ class crm_person extends class_base
 					$tmp->name()
 				);
 				break;
-			
+
 			case "crm_settings":
 				$u = get_instance(CL_USER);
 				$p = $u->get_current_person();
@@ -918,14 +918,14 @@ class crm_person extends class_base
 					}
 					$ol = new object_list(array(
 						"class_id" => CL_CRM_SETTINGS,
-						"CL_CRM_SETTINGS.RELTYPE_USER" => $user->id() 
+						"CL_CRM_SETTINGS.RELTYPE_USER" => $user->id()
 					));
 					if (!$ol->count())
 					{
 						$ol = new object_list(array(
 							"class_id" => CL_CRM_SETTINGS,
-							"CL_CRM_SETTINGS.RELTYPE_PERSON" => $arr["obj_inst"]->id() 
-						));	
+							"CL_CRM_SETTINGS.RELTYPE_PERSON" => $arr["obj_inst"]->id()
+						));
 					}
 
 					if ($ol->count())
@@ -969,12 +969,12 @@ class crm_person extends class_base
 		$alist = array(
 			array('caption' => t('Organisatsioon'),'class' => 'crm_company', 'reltype' => 6), //RELTYPE_WORK
 		);
-		
+
 		$toolbar->add_menu_button(array(
 			"name" => "add_relation",
 			"tooltip" => t("Uus"),
 		));
-			
+
 
 		$menudata = '';
 		if (is_array($alist))
@@ -1007,11 +1007,11 @@ class crm_person extends class_base
 					));
 				}
 			};
-		
+
 		};
 		*/
-		
-		
+
+
 
 		$action = array(
 			array(
@@ -1083,7 +1083,7 @@ class crm_person extends class_base
 
 	}
 
-	
+
 	function show_isik($args)
 	{
 		$arg2["id"] = $args["obj_inst"]->id();
@@ -1103,7 +1103,7 @@ class crm_person extends class_base
 		// and then I just fetch the latest thingie
 
 		// easy as pie
-		
+
 		$o = new object($arr["id"]);
 		$cal_id = $arr["cal_id"];
 
@@ -1138,7 +1138,7 @@ class crm_person extends class_base
 				"caption" => $url_o->prop("url"),
 			));
 		};
-		
+
 		$conns = $o->connections_from(array(
 			"type" => 11,
 		));
@@ -1157,19 +1157,19 @@ class crm_person extends class_base
 			$ranks[] = $conn->prop("to.name");
 			$ranks_arr[$conn->prop('to')] = $conn->prop('to.name');
 		};
-	
+
 		$conns = $o->connections_from(array(
 			'type' => "RELTYPE_SECTION"
 		));
 		foreach($conns as $conn)
-		{	
+		{
 			$sections_arr[$conn->prop('to')] = $conn->prop('to.name');
 		}
 
 
 		$address = "";
 		$address_d = $o->get_first_obj_by_reltype("RELTYPE_ADDRESS");
-		if ($address_d)	
+		if ($address_d)
 		{
 			$address_a = array();
 			if ($address_d->prop("aadress") != "")
@@ -1188,7 +1188,7 @@ class crm_person extends class_base
 				$tmp = obj($address_d->prop("riik"));
 				$address_a[] = $tmp->name();
 			}
-		
+
 			$address = join(",", $address_a);
 		}
 
@@ -1227,7 +1227,7 @@ class crm_person extends class_base
 				"reltype_org" => 8,
 				"clid" => CL_CRM_MEETING,
 			),CL_PLANNER),
-			
+
 		);
 		return $rv;
 	}
@@ -1330,7 +1330,7 @@ class crm_person extends class_base
 			}
 		}
 
-		
+
 		if (($row['lastname'] == '') &&($row['firstname'] == ''))
 		{
 			$row['firstname'] = $row['name'];
@@ -1451,7 +1451,7 @@ class crm_person extends class_base
 		$arx["alias"]["target"] = $obj->id();
 		return $this->parse_alias($arx);
 	}
-	
+
 	function _get_size($fl)
 	{
 		$fl = basename($fl);
@@ -1460,7 +1460,7 @@ class crm_person extends class_base
 			$fl = aw_ini_get("site_basedir")."/files/".$fl{0}."/".$fl;
 		}
 		$sz = @getimagesize($fl);
-		return array("width" => $sz[0], "height" => $sz[1]); 
+		return array("width" => $sz[0], "height" => $sz[1]);
 	}
 
 	function parse_alias($arr)
@@ -1606,7 +1606,7 @@ class crm_person extends class_base
 		};
 		return $this->parse();
 	}
-	
+
 	/**
 		@attrib name=show_image nologin=1
 		@param id required type=int acl=edit
@@ -1634,7 +1634,7 @@ class crm_person extends class_base
 	////
 	// !Perhaps I can make a single function that returns the latest event (if any)
 	// for each connection?
-	
+
 	function do_org_actions($arr)
 	{
 		$ob = $arr["obj_inst"];
@@ -1648,11 +1648,11 @@ class crm_person extends class_base
 			case "org_calls":
 				$args["type"] = 9; //RELTYPE_PERSON_CALL;
 				break;
-			
+
 			case "org_meetings":
 				$args["type"] = 8; //RELTYPE_PERSON_MEETING;
 				break;
-			
+
 			case "org_tasks":
 				$args["type"] = 10; //RELTYPE_PERSON_TASK;
 				break;
@@ -1687,11 +1687,11 @@ class crm_person extends class_base
 			{
 				continue;
 			};
-			
+
 			$cldat = $classes[$item->class_id()];
 
 			$icon = icons::get_icon_url($item);
-		
+
 			// I need to filter the connections based on whether they write to calendar
 			// or not.
 			$link = $planner->get_event_edit_link(array(
@@ -1725,7 +1725,7 @@ class crm_person extends class_base
 		return $this->overview;
 	}
 
-	
+
 	function on_connect_section_to_person($arr)
 	{
 		$conn = $arr['connection'];
@@ -1737,9 +1737,9 @@ class crm_person extends class_base
 				'reltype' => "RELTYPE_SECTION",
 			));
 		}
-		
+
 	}
-	
+
 
 	// Invoked when a connection is created from organization to person
 	// .. this will then create the opposite connection.
@@ -1770,7 +1770,7 @@ class crm_person extends class_base
 		};
 	}
 
-		
+
 	function on_disconnect_section_from_person($arr)
 	{
 		$conn = $arr["connection"];
@@ -1785,61 +1785,61 @@ class crm_person extends class_base
 			}
 		};
 	}
-	
+
 	function do_cv_skills_toolbar($toolbar, $arr)
 	{
 		$toolbar->add_menu_button(array(
 			'name'=>'add_item',
 			'tooltip'=>t('Uus')
 		));
-		
+
 		$toolbar->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
 			'tooltip' => t('Kustuta valitud tööpakkumised'),
 		));
-		
+
 		$toolbar->add_button(array(
 			'name' => 'save',
 			'img' => 'save.gif',
 			'tooltip' => t('Salvesta'),
 			'action' => 'submit',
 		));
-		
+
 	}
-	
+
 	function do_person_skills_tree($arr)
 	{
 		$tree = &$arr['prop']['vcl_inst'];
-	
+
 		$tree->add_item(0,array(
     		"id" => 1,
     		"name" => t("Arvutioskused"),
     		"url" => $this->mk_my_orb("do_something",array()),
 		));
-		
+
 		$tree->add_item(1,array(
     		"id" => 2,
     		"name" => t("Rakendused"),
     		"url" => $this->mk_my_orb("do_something",array()),
 		));
-		
+
 		$tree->add_item(1,array(
     		"id" => 3,
     		"name" => t("Programmeerimine"),
     		"url" => $this->mk_my_orb("change", array(
-    			"id" => $arr['obj_inst']->id(), 
+    			"id" => $arr['obj_inst']->id(),
     			"group" => $arr['request']['group'],
     			"skill" => "programming",
     			), CL_CRM_PERSON),
 		));
-		
+
 		$tree->add_item(1,array(
     		"id" => 4,
     		"name" => t("Muu"),
     		"url" => $this->mk_my_orb("do_something",array()),
 		));
-		
+
 		if($arr["request"]["skill"] == "languages")
 		{
 			$lang_capt = t("<b>Keeled</b>");
@@ -1848,34 +1848,34 @@ class crm_person extends class_base
 		{
 			$lang_capt = t("Keeled");
 		}
-		
+
 		$tree->add_item(0, array(
     		"id" => 5,
     		"name" => $lang_capt,
     		"url" => $this->mk_my_orb("change", array(
-    			"id" => $arr['obj_inst']->id(), 
+    			"id" => $arr['obj_inst']->id(),
     			"group" => $arr['request']['group'],
     			"skill" => "languages",
     			), CL_CRM_PERSON),
 		));
-		
+
 		$tree->add_item(0, array(
     		"id" => 6,
     		"name" => t("Juhiload"),
     		"url" => $this->mk_my_orb("change", array(
-    			"id" => $arr['obj_inst']->id(), 
+    			"id" => $arr['obj_inst']->id(),
     			"group" => $arr['request']['group'],
     			"skill" => "driving_licenses",
     			), CL_CRM_PERSON),
 		));
-		
+
 	}
-	
-	
+
+
 	function do_previous_jobs_tb(&$arr)
 	{
 		$tb = &$arr["prop"]["toolbar"];
-		
+
 		$tb->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
@@ -1886,7 +1886,7 @@ class crm_person extends class_base
 				"new_prevjob" => true,
 			), CL_CRM_PERSON),
 		));
-		
+
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -1901,8 +1901,8 @@ class crm_person extends class_base
 			"tooltip" => t("Muuda tkogemust"),
 			"action" => "edit_something",
 		));
-		
-		
+
+
 		$tb->add_button(array(
 			"name" => "save",
 			"img" => "save.gif",
@@ -1910,7 +1910,7 @@ class crm_person extends class_base
 			"action" => "submit",
 		));
 	}
-	
+
 	function do_jobs_table($arr)
 	{
 		$table =& $arr["prop"]["vcl_inst"];
@@ -1943,7 +1943,7 @@ class crm_person extends class_base
 			"name" => "sel",
 			"field" => "from",
 		));
-		
+
 		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PREVIOUS_JOB")) as $conn)
 		{
 			$prevjob = $conn->to();
@@ -1958,11 +1958,11 @@ class crm_person extends class_base
 				)),
 				"alates" => get_lc_date($prevjob->prop("date_from")),
 				"ametikoht" => $prevjob->prop("profession"),
-				"kuni" => get_lc_date($prevjob->prop("date_to")), 
+				"kuni" => get_lc_date($prevjob->prop("date_to")),
 				"from" => $conn->id(),
 			));
 		}
-		
+
 	}
 
 	/**
@@ -1977,7 +1977,7 @@ class crm_person extends class_base
 			$obj = $conn->to();
 			$obj->delete();
 		}
-		return  $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), CL_CRM_PERSON); 
+		return  $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), CL_CRM_PERSON);
 	}
 
 	function callback_post_save($arr)
@@ -1987,7 +1987,7 @@ class crm_person extends class_base
 		if ($arr["request"]["is_important"] == 1)
 		{
 			$p->connect(array(
-				"to" => $arr["obj_inst"]->id(), 
+				"to" => $arr["obj_inst"]->id(),
 				"type" => "RELTYPE_IMPORTANT_PERSON"
 			));
 		}
@@ -1996,7 +1996,7 @@ class crm_person extends class_base
 			if ($p->is_connected_to(array("to" => $arr["obj_inst"]->id(), "type" => "RELTYPE_IMPORTANT_PERSON")))
 			{
 				$p->disconnect(array(
-					"from" => $arr["obj_inst"]->id(), 
+					"from" => $arr["obj_inst"]->id(),
 				));
 			}
 		}
@@ -2028,7 +2028,7 @@ class crm_person extends class_base
 			}
 
 		}
-	}	
+	}
 
 	function gen_code($o)
 	{
@@ -2060,14 +2060,14 @@ class crm_person extends class_base
 	}
 
 	function callback_pre_save($arr)
-	{	
+	{
 		if(is_array($arr["request"]["speaking"]))
 		{
 			foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LANGUAGE_SKILL")) as $conn)
 			{
 				$conn->delete();
 			}
-		
+
 			foreach ($arr["request"]["speaking"] as $lang => $level)
 			{
 				$obj = new object(array(
@@ -2075,37 +2075,37 @@ class crm_person extends class_base
 					"parent" => $arr["obj_inst"]->id(),
 				));
 				$obj->save();
-			
+
 				$obj->set_prop("language", $lang);
 				$obj->set_prop("speaking", $arr["request"]["speaking"][$lang]);
 				$obj->set_prop("writing", $arr["request"]["writing"][$lang]);
 				$obj->set_prop("understanding", $arr["request"]["understanding"][$lang]);
 				$obj->set_prop("kogemusi", $arr["request"]["kogemusi"][$lang]);
-			
-			
+
+
 				$lang_obj = &obj($lang);
 				$obj->set_prop("name", $lang_obj->name());
 				$obj->save();
-			
+
 				$arr["obj_inst"]->connect(array(
 					"to" => $obj->id(),
 					"reltype" => "RELTYPE_LANGUAGE_SKILL",
-				));	
+				));
 			}
 		}
 		$arr["obj_inst"]->set_meta("no_create_user_yet", NULL);
 	}
-	
-	
+
+
 	function do_education_tb(&$arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
-		
+
 		$tb->add_menu_button(array(
 			'name'=>'new',
 			'tooltip'=>t('Hariduse lisamine')
 		));
-	
+
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -2120,31 +2120,31 @@ class crm_person extends class_base
 				'link'=> $this->mk_my_orb('change' ,array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["request"]["group"],
-					"etype" => "basic_edu",		
+					"etype" => "basic_edu",
 				), CL_CRM_PERSON),
-	
+
 		));
-			
+
 		$tb->add_menu_item(array(
 				'parent'=>'new',
 				'text'=>t('Keskharidus'),
 				'link'=> $this->mk_my_orb('change' ,array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["request"]["group"],
-					"etype" => "secondary_edu",		
+					"etype" => "secondary_edu",
 				), CL_CRM_PERSON),
 		));
-		
+
 		$tb->add_menu_item(array(
 				'parent'=>'new',
 				'text'=>t('Kõrgharidus'),
 				'link'=>$this->mk_my_orb('change' ,array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => $arr["request"]["group"],
-					"etype" => "higher_edu",		
+					"etype" => "higher_edu",
 				), CL_CRM_PERSON)
 		));
-	
+
 		$tb->add_menu_item(array(
 				'parent'=>'new',
 				'text'=>t('Kutseharidus'),
@@ -2155,17 +2155,17 @@ class crm_person extends class_base
 				),	CL_CRM_PERSON)
 		));
 	}
-	
+
 	function do_education_table(&$arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
-		
+
 		$table->define_field(array(
 			"name" => "school",
 			"caption" => t("Kool"),
 			"sortable" => 1,
 		));
-		
+
 		$table->define_field(array(
 			"name" => "date_from",
 			"caption" => t("Alates"),
@@ -2175,7 +2175,7 @@ class crm_person extends class_base
 			"format" => "d.m.y",
 			"align" => "center",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "date_to",
 			"caption" => t("Kuni"),
@@ -2185,25 +2185,25 @@ class crm_person extends class_base
 			"align" => "center",
 			"sortable" => 1,
 		));
-		
+
 		$table->define_field(array(
 			"name" => "etype",
-			"caption" => t("Haridusliik"),	
+			"caption" => t("Haridusliik"),
 			"sortable" => 1,
 		));
-		
+
 		$table->define_field(array(
 			"name" => "profession",
 			"caption" => t("Eriala"),
 			"sortable" => 1
 		));
-		
+
 		$table->define_chooser(array(
 			"name" => "sel",
 			"field" => "sel",
 		));
-		
-		
+
+
 		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BASIC_EDUCATION")) as $b_edu_conn)
 		{
 			$b_edu = $b_edu_conn->to();
@@ -2216,7 +2216,7 @@ class crm_person extends class_base
 						"eoid" => $b_edu_conn->id(),
 						"etype" => "basic_edu",
 						), CL_CRM_PERSON),
-					"caption" => $b_edu->prop("school"), 
+					"caption" => $b_edu->prop("school"),
 					)),
 				"date_to" => $b_edu->prop("date_to"),
 				"date_from" => $b_edu->prop("date_from"),
@@ -2224,7 +2224,7 @@ class crm_person extends class_base
 				"sel" => $b_edu_conn->id(),
 			));
 		}
-		
+
 		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SECONDARY_EDUCATION")) as $s_edu_conn)
 		{
 			$s_edu = $s_edu_conn->to();
@@ -2236,7 +2236,7 @@ class crm_person extends class_base
 						"eoid" => $s_edu_conn->id(),
 						"etype" => "secondary_edu",
 						), CL_CRM_PERSON),
-					"caption" => $s_edu->prop("school"), 
+					"caption" => $s_edu->prop("school"),
 					)),
 				"date_to" => $s_edu->prop("date_to"),
 				"date_from" => $s_edu->prop("date_from"),
@@ -2244,7 +2244,7 @@ class crm_person extends class_base
 				"sel" => $s_edu_conn->id(),
 			));
 		}
-		
+
 		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_HIGHER_EDUCATION")) as $h_edu_conn)
 		{
 			$h_edu = $h_edu_conn->to();
@@ -2256,7 +2256,7 @@ class crm_person extends class_base
 						"eoid" => $h_edu_conn->id(),
 						"etype" => "higher_edu",
 					), CL_CRM_PERSON),
-					"caption" => $h_edu->prop("school"), 
+					"caption" => $h_edu->prop("school"),
 				)),
 				"date_to" => $h_edu->prop("date_to"),
 				"date_from" => $h_edu->prop("date_from"),
@@ -2265,7 +2265,7 @@ class crm_person extends class_base
 				"sel" => $h_edu_conn->id(),
 			));
 		}
-		
+
 		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VOCATIONAL_EDUCATION")) as $v_edu_conn)
 		{
 			$v_edu = $v_edu_conn->to();
@@ -2277,8 +2277,8 @@ class crm_person extends class_base
 						"etype" => "voc_edu",
 						"eoid" => $v_edu_conn->id(),
 					), CL_CRM_PERSON),
-					"caption" => $v_edu->prop("school"), 
-				)), 
+					"caption" => $v_edu->prop("school"),
+				)),
 				"date_to" => $v_edu->prop("date_to"),
 				"date_from" => $v_edu->prop("date_from"),
 				"profession" => $v_edu->prop("profession"),
@@ -2288,60 +2288,60 @@ class crm_person extends class_base
 		}
 
 	}
-	
+
 	function do_language_skills_table(&$arr)
 	{
 		$classificator = get_instance(CL_CLASSIFICATOR);
-		
+
 		$options = $classificator->get_options_for(array(
 			"name" => "language_list",
 			"clid" => CL_CRM_PERSON,
 		));
-		
+
 		$level_options = $classificator->get_options_for(array(
 			"name" => "language_levels",
 			"clid" => CL_CRM_PERSON,
 		));
-					
+
 		$table = &$arr["prop"]["vcl_inst"] ;
-		
+
 		$table->define_field(array(
 			"name" => "language",
 			"caption" => t("Keel"),
 		));
-		
+
 		$table->define_field(array(
 			"name" => "speaking",
 			"caption" => t("Rääkimine"),
 			"align" => "center",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "writing",
 			"caption" => t("Kirjutamine"),
 			"align" => "center",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "understanding",
 			"caption" => t("Arusaamine"),
 			"align" => "center",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "kogemusi",
 			"caption" => t("Mitu aastat kogemusi"),
 			"align" => "center",
 		));
 
-			
+
 		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LANGUAGE_SKILL")) as $conn)
 		{
 			$obj = $conn->to();
-			$lang_obj[$obj->prop("language")] = $obj; 
+			$lang_obj[$obj->prop("language")] = $obj;
 		}
-	
-		
+
+
 		foreach ($options as $key => $option)
 		{
 			if(is_object($lang_obj[$key]))
@@ -2351,16 +2351,16 @@ class crm_person extends class_base
 				$understanding_val = $lang_obj[$key]->prop("understanding");
 				$writing_val = $lang_obj[$key]->prop("writing");
 			}
-			
+
 			$table->define_data(array(
 				"language" => $option,
-				
+
 				"kogemusi" => html::textbox(array(
 					"name" => "kogemusi[$key]",
 					"value" => $kogemusi_val,
-					"size" => 3, 
+					"size" => 3,
 				)),
-				
+
 				"speaking" => html::select(array(
 					"options" => $level_options,
 					"name" => "speaking[$key]",
@@ -2371,11 +2371,11 @@ class crm_person extends class_base
 					"name" => "understanding[$key]",
 					"value" => $understanding_val,
 				)),
-				
+
 				"writing" => html::select(array(
 					"options" => $level_options,
 					"name" => "writing[$key]",
-					"value" => $writing_val, 
+					"value" => $writing_val,
 				)),
 			));
 		}
@@ -2388,14 +2388,14 @@ class crm_person extends class_base
 		if($arr["sel"])
 		{
 			$eoid = current($arr["sel"]);
-		
+
 			return $this->mk_my_orb("change", array(
-			"id" => $arr["id"], 
-			"group" => $arr["group"], 
+			"id" => $arr["id"],
+			"group" => $arr["group"],
 			"eoid" => $eoid), $arr["class"]);
 		}
 	}
-	
+
 	/** Needed to add link to login menu to change your person obj.
 		@attrib name=edit_my_person_obj is_public=1 caption="Muuda isikuobjekti andmeid"
 	**/
@@ -2452,7 +2452,7 @@ class crm_person extends class_base
 				$data[$conn->prop('from')] = $conn->prop('from.name');
 			}
 		}
-	
+
 		//getting the sections
 		$conns = $obj->connections_to(array(
 			'type' => 1, //crm_section.section
@@ -2500,7 +2500,7 @@ class crm_person extends class_base
 		}
 		return $profile;
 	}
-	
+
 	/** returns a list of company id's that the given person works for
 
 		@param person required
@@ -2519,7 +2519,7 @@ class crm_person extends class_base
 			"to.class_id" => CL_CRM_PERSON,
 			"to" => $person->id()
 		));
-		
+
 		$ret = array();
 		foreach($list as $item)
 		{
@@ -2607,7 +2607,7 @@ class crm_person extends class_base
 		return $this->trans_callback($arr, $this->trans_props);
 	}
 
-	/** 
+	/**
 		@attrib name=get_person_count_by_name
 
 		@param co_name optional
@@ -2663,12 +2663,12 @@ class crm_person extends class_base
 				if ($ol->count())
 				{
 					$link = $this->mk_my_orb("disp_conflict_pop", array("id" => $arr["obj_inst"]->id()),CL_CRM_COMPANY);
-					return "aw_popup_scroll('$link','confl','200','200');"; 
+					return "aw_popup_scroll('$link','confl','200','200');";
 				}
 			}
 			return "";
 		}
-		return 
+		return
 		"function aw_submit_handler() {".
 		"if (document.changeform.firstname.value=='".$arr["obj_inst"]->prop("firstname")."' && document.changeform.lastname.value=='".$arr["obj_inst"]->prop("lastname")."') { return true; }".
 		// fetch list of companies with that name and ask user if count > 0
@@ -2681,7 +2681,7 @@ class crm_person extends class_base
 			var ansa = confirm('Sellise nimega isik on juba olemas. Kas soovite minna selle objekti muutmisele?');
 			if (ansa)
 			{
-				window.location = '".$this->mk_my_orb("go_to_first_person_by_name", array("return_url" => urlencode($arr["request"]["return_url"])))."&co_name=' + document.changeform.firstname.value + ' '+document.changeform.lastname.value; 
+				window.location = '".$this->mk_my_orb("go_to_first_person_by_name", array("return_url" => urlencode($arr["request"]["return_url"])))."&co_name=' + document.changeform.firstname.value + ' '+document.changeform.lastname.value;
 				return false;
 			}
 		}".

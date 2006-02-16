@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.24 2005/11/25 12:27:14 dragut Exp $
-// expp_journal_management.aw - V&auml;ljaannete haldus 
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.25 2006/02/16 11:35:47 voldemar Exp $
+// expp_journal_management.aw - V&auml;ljaannete haldus
 /*
 
 @classinfo syslog_type=ST_EXPP_JOURNAL_MANAGEMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -27,7 +27,7 @@
 	@groupinfo publications_general_info caption="V&auml;ljaannete &uuml;ldinfo" parent=publications
 	@default group=publications_general_info
 
-		@property publications_name type=textbox field=meta method=serialize 
+		@property publications_name type=textbox field=meta method=serialize
 		@caption V&auml;ljaande nimi
 
 		@property publications_description type=textbox field=meta method=serialize
@@ -56,7 +56,7 @@
 
 		@property main_color type=textbox field=meta method=serialize
 		@caption P&otilde;hitoon
-		
+
 		@property choose_design type=chooser field=meta method=serialize
 		@caption Kujundusp&otilde;hi
 
@@ -66,7 +66,7 @@
 	@groupinfo publications_list caption="Alamv&auml;ljaanded" parent=publications
 	@default group=publications_list
 
-		@property publications_table type=releditor reltype=RELTYPE_PUBLICATION field=meta method=serialize mode=manager props=name,comment,description_from_reggy,description
+		@property publications_table type=releditor reltype=RELTYPE_PUBLICATION field=meta method=serialize mode=manager props=name,comment,description_from_reggy,description no_caption=1
 		@caption Alamv&auml;ljaanded
 
 	@groupinfo general_images caption="Pildid" parent=publications
@@ -77,7 +77,7 @@
 
 	@groupinfo general_files caption="Failid" parent=publications
 	@default group=general_files
-	
+
 	        @property general_files type=releditor reltype=RELTYPE_GENERAL_FILE field=meta method=serialize mode=manager props=file,ord,type,comment,newwindow,status table_fields=name,ord table_edit_fields=ord
         	@caption Failid
 
@@ -117,7 +117,7 @@
 	@groupinfo general_forum caption="Foorum" parent=publications
 	@default group=general_forum
 
-		@property general_forum type=text  
+		@property general_forum type=text
 		@caption Foorum
 
 @groupinfo stats caption="Statistika"
@@ -154,7 +154,7 @@
 @caption &Uuml;ldine link
 
 @reltype GENERAL_IMAGE value=10 clid=CL_IMAGE
-@caption &Uuml;ldine pilt 
+@caption &Uuml;ldine pilt
 
 @reltype GENERAL_FORUM value=11 clid=CL_FORUM_V2
 @caption &Uuml;ldine foorum
@@ -179,7 +179,7 @@ class expp_journal_management extends class_base
 {
 	function expp_journal_management()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
+		// change this to the folder under the templates folder, where this classes templates will be,
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/clients/expp/expp_journal_management",
@@ -217,7 +217,7 @@ class expp_journal_management extends class_base
 				{
 					// have to check if there is any documents connected:
 					$connections_to_general_documents = $arr['obj_inst']->connections_from(array(
-						"type" => "RELTYPE_GENERAL_DOCUMENT",	
+						"type" => "RELTYPE_GENERAL_DOCUMENT",
 					));
 					if (count($connections_to_general_documents) <= 0)
 					{
@@ -265,11 +265,11 @@ class expp_journal_management extends class_base
 			case "general_webform":
 			case "publications_homepage":
 				$prop['obj_parent'] = $arr['obj_inst']->id();
-				break;	
+				break;
 
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -319,7 +319,7 @@ class expp_journal_management extends class_base
 */
 	function _get_organisation_logo($arr)
 	{
-		
+
 		$organisation_logo_id = $arr['obj_inst']->meta("organisation_logo_id");
 		if (!empty($organisation_logo_id))
 		{
@@ -357,7 +357,7 @@ class expp_journal_management extends class_base
 			$organisation_logo_connections = $organisation_object->connections_from(array(
 				"type" => 45 // crm_company.logo (organisation's logo)
 			));
-			
+
 			if (!empty($organisation_logo_connections))
 			{
 				// get the first connection:
@@ -395,7 +395,7 @@ class expp_journal_management extends class_base
 				"alias_to" => $arr['obj_inst']->id(),
 				"parent" => $arr['obj_inst']->id(),
 				"reltype" => 14, // expp_journam_management.general_document
-				"return_url" => get_ru(),	
+				"return_url" => get_ru(),
 			), CL_DOCUMENT),
 		));
 
@@ -511,7 +511,7 @@ class expp_journal_management extends class_base
 				"alias_to" => $arr['obj_inst']->id(),
 				"parent" => $arr['obj_inst']->id(),
 				"reltype" => 13, // expp_journam_management.general_poll
-				"return_url" => get_ru(),	
+				"return_url" => get_ru(),
 			), CL_POLL),
 		));
 
@@ -523,7 +523,7 @@ class expp_journal_management extends class_base
 			"confirm" => t("Oled kindel, et soovid valitud kiirk&uuml;sitlused kustutada?"),
 		));
 
-		
+
 
 		return PROP_OK;
 	}
@@ -623,7 +623,7 @@ class expp_journal_management extends class_base
 				"alias_to" => $arr['obj_inst']->id(),
 				"parent" => $arr['obj_inst']->id(),
 				"reltype" => 12, // expp_journam_management.general_webform
-				"return_url" => get_ru(),	
+				"return_url" => get_ru(),
 			), CL_WEBFORM),
 		));
 
@@ -635,7 +635,7 @@ class expp_journal_management extends class_base
 			"confirm" => t("Oled kindel, et soovid valitud veebivormid kustutada?"),
 		));
 
-		
+
 
 		return PROP_OK;
 	}
@@ -753,7 +753,7 @@ class expp_journal_management extends class_base
 				"caption" => t("Lisa foorum"),
 			));
 		}
-		
+
 		return PROP_OK;
 	}
 	/**

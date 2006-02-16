@@ -28,7 +28,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property comment type=textarea cols=65 rows=3 table=objects
 	@caption Kommentaar
 
-	@property extern_id type=hidden table=kliendibaas_firma field=extern_id 
+	@property extern_id type=hidden table=kliendibaas_firma field=extern_id
 
 	@property reg_nr type=textbox size=10 maxlength=20 table=kliendibaas_firma
 	@caption Registri number
@@ -36,16 +36,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property ettevotlusvorm type=relpicker table=kliendibaas_firma automatic=1 reltype=RELTYPE_ETTEVOTLUSVORM
 	@caption Õiguslik vorm
 
-	@property code type=textbox table=kliendibaas_firma 
+	@property code type=textbox table=kliendibaas_firma
 	@caption Kood
 
-	@property tax_nr type=textbox table=kliendibaas_firma 
+	@property tax_nr type=textbox table=kliendibaas_firma
 	@caption KMKohuslase nr
 
-	@property cust_contract_date type=date_select table=kliendibaas_firma 
+	@property cust_contract_date type=date_select table=kliendibaas_firma
 	@caption Kliendisuhte alguskuup&auml;ev
 
-	@property cust_contract_creator type=select table=kliendibaas_firma 
+	@property cust_contract_creator type=select table=kliendibaas_firma
 	@caption Kliendisuhte looja
 
 	@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE
@@ -58,12 +58,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@caption Firmajuht
 
 	@property contact_person type=relpicker table=kliendibaas_firma  editonly=1 reltype
-	@caption Kontaktisik 
+	@caption Kontaktisik
 
-	@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1 
+	@property contact_person2 type=relpicker table=kliendibaas_firma  editonly=1
 	@caption Kontaktisik 2
 
-	@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1 
+	@property contact_person3 type=relpicker table=kliendibaas_firma  editonly=1
 	@caption Kontaktisik 3
 
 	@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1
@@ -72,7 +72,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb store=no
 	@caption Avamisajad
 
-	@property priority type=textbox table=kliendibaas_firma 
+	@property priority type=textbox table=kliendibaas_firma
 	@caption Prioriteet
 
 	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager
@@ -89,7 +89,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@property tooted type=relpicker reltype=RELTYPE_TOOTED automatic=1 method=serialize field=meta table=objects
 	@caption Tooted
-	
+
 	@property pohitegevus type=popup_search clid=CL_CRM_SECTOR table=kliendibaas_firma style=relpicker reltype=RELTYPE_TEGEVUSALAD
 	@caption P&otilde;hitegevus / Tegevusalad
 
@@ -101,7 +101,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	property classif1 type=classificator store=connect reltype=RELTYPE_METAMGR
 	caption Asutuse omadused
-	
+
 	@property userta1 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 	@caption User-defined TA 1
 
@@ -116,7 +116,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 	@property userta5 type=textarea rows=10 cols=50 table=objects field=meta method=serialize
 	@caption User-defined TA 5
-	
+
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
 
@@ -132,19 +132,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 --------------------------------------
 @default group=contacts2
 
-	@layout hbox_toolbar type=hbox 
+	@layout hbox_toolbar type=hbox
 
 		@property contact_toolbar type=toolbar no_caption=1 store=no parent=hbox_toolbar
 		@caption "The Green Button"
 
 	@layout hbox_others type=hbox width=20%:80%
 
-		@layout vbox_contacts_left type=vbox parent=hbox_others 
+		@layout vbox_contacts_left type=vbox parent=hbox_others
 
-			@property unit_listing_tree type=treeview no_caption=1 store=no parent=vbox_contacts_left 
+			@property unit_listing_tree type=treeview no_caption=1 store=no parent=vbox_contacts_left
 			@caption Puu
 
-		@layout vbox_contacts_right type=vbox parent=hbox_others 
+		@layout vbox_contacts_right type=vbox parent=hbox_others
 
 			@property human_resources type=table store=no no_caption=1 parent=vbox_contacts_right
 			@caption Inimesed
@@ -203,35 +203,35 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property telefax_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name
 	@caption Faks
 
-	@property url_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_URL props=name 
+	@property url_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_URL props=name
 	@caption Veebiaadress
 
 	@property email_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_EMAIL props=mail
 	@caption E-posti aadressid
 
-	@property b_acct_desc type=text subtitle=1 store=no
-	@caption Pangaarved
+	// @property b_acct_desc type=text subtitle=1 store=no
+	// @caption Pangaarved
 
 	@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,acct_no,bank table_fields=name,acct_no,bank
-	@caption Pangaarve
+	@caption Pangaarved
 
 @default group=personal_offers
 -------------- PERSONALI PROPERTID ---------------
 
-	@layout personal_toolbar type=hbox 
+	@layout personal_toolbar type=hbox
 		@property personal_offers_toolbar type=toolbar store=no no_caption=1 parent=personal_toolbar
 
 	@layout personal_tree_table type=hbox  width=20%:80%
 
 		@layout personal_hbox_tree type=vbox parent=personal_tree_table
-			@property unit_listing_tree_personal type=treeview no_caption=1 store=no parent=personal_hbox_tree 
+			@property unit_listing_tree_personal type=treeview no_caption=1 store=no parent=personal_hbox_tree
 
 		@layout personal_hbox_table type=vbox parent=personal_tree_table
 			@property personal_offers_table type=table no_caption=1 parent=personal_hbox_table
 
 @default group=personal_candits
 
-	@layout personal_toolbar_cand type=hbox 
+	@layout personal_toolbar_cand type=hbox
 		@property personal_candidates_toolbar type=toolbar store=no no_caption=1 parent=personal_toolbar_cand
 
 	@layout personal_tree_table_cand type=hbox width=20%:80%
@@ -254,7 +254,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 /////start of my_customers
 @default group=relorg_s
 
-	@property my_customers_toolbar type=toolbar no_caption=1 store=no 
+	@property my_customers_toolbar type=toolbar no_caption=1 store=no
 	@caption "Klientide toolbar"
 
 	@layout my_cust_bot type=hbox width=20%:80%
@@ -283,7 +283,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@caption &Otilde;iguslik vorm
 
 			@property customer_search_is_co type=chooser  store=no parent=vbox_customers_left multiple=1 no_caption=1
-			@caption Organisatsioon 
+			@caption Organisatsioon
 
 			@property customer_search_cust_mgr type=text size=25 store=no parent=vbox_customers_left captionside=top
 			@caption Kliendihaldur
@@ -297,7 +297,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 @default group=relorg_t
 
-	@property customer_toolbar type=toolbar no_caption=1 store=no 
+	@property customer_toolbar type=toolbar no_caption=1 store=no
 	@caption "Klientide toolbar"
 
 	@layout relorg_t_l type=hbox group=relorg_t width=20%:80%
@@ -307,7 +307,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 		@property customer_t type=table store=no no_caption=1 parent=relorg_t_l
 		@caption Kliendid
-	
+
 
 /////end of my_customers
 
@@ -318,7 +318,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property special_offers type=releditor reltype=RELTYPE_SPECIAL_OFFERS field=meta method=serialize mode=manager props=name,comment,ord,status,valid_from,valid_to table_fields=name,ord table_edit_fields=ord table=objects direct_links=1 override_parent=this
 	@caption Eripakkumised
 ---------- END ERIPAKKUMISED ---------
-	
+
 ---------- PILDID ---------
 @default group=org_images
 	@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h,new_w_big,new_h_big,comment,cfgform table_fields=name,ord table_edit_fields=ord table=objects
@@ -328,15 +328,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 ------------ ORGANISATSIOONI OBJEKTID ---------
 default group=org_objects
 
-	layout objects_toolbar type=hbox 
-		property objects_listing_toolbar type=toolbar no_caption=1 parent=objects_toolbar 
+	layout objects_toolbar type=hbox
+		property objects_listing_toolbar type=toolbar no_caption=1 parent=objects_toolbar
 
-	layout objects_main type=hbox width=20%:80% 
-		layout objects_tree type=vbox parent=objects_main 
-			property objects_listing_tree type=treeview no_caption=1 parent=objects_tree 
+	layout objects_main type=hbox width=20%:80%
+		layout objects_tree type=vbox parent=objects_main
+			property objects_listing_tree type=treeview no_caption=1 parent=objects_tree
 
-		layout objects_table type=vbox parent=objects_main 
-			property objects_listing_table type=table no_caption=1 parent=objects_table 
+		layout objects_table type=vbox parent=objects_main
+			property objects_listing_table type=table no_caption=1 parent=objects_table
 
 ---------- END ORGANISATSIOONI OBJEKTID ---------
 
@@ -347,8 +347,8 @@ default group=org_objects
 	@property org_proj_tb type=toolbar no_caption=1 group=my_projects
 	@property org_proj_arh_tb type=toolbar no_caption=1 group=org_projects_archive
 
-	@layout projects_main type=hbox width=20%:80% 
-		@layout projects_tree type=vbox parent=projects_main 
+	@layout projects_main type=hbox width=20%:80%
+		@layout projects_tree type=vbox parent=projects_main
 			@property projects_listing_tree type=treeview no_caption=1 parent=projects_tree no_caption=1
 
 			@layout all_proj_search_b type=vbox parent=projects_tree
@@ -375,32 +375,32 @@ default group=org_objects
 
 				@layout all_proj_search_b_dl type=vbox parent=all_proj_search_b
 
-					@property all_proj_search_dl_from type=date_select store=no parent=all_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@property all_proj_search_dl_from type=date_select store=no parent=all_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox
 					@caption T&auml;htaeg alates
 
-					@property all_proj_search_dl_to type=date_select store=no parent=all_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@property all_proj_search_dl_to type=date_select store=no parent=all_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox
 					@caption T&auml;htaeg kuni
 
 				@layout all_proj_search_b_end type=vbox parent=all_proj_search_b
 
-					@property all_proj_search_end_from type=date_select store=no parent=all_proj_search_b_end  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@property all_proj_search_end_from type=date_select store=no parent=all_proj_search_b_end  captionside=top format=day_textbox,month_textbox,year_textbox
 					@caption L&otilde;pp alates
 
-					@property all_proj_search_end_to type=date_select store=no parent=all_proj_search_b_end  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@property all_proj_search_end_to type=date_select store=no parent=all_proj_search_b_end  captionside=top format=day_textbox,month_textbox,year_textbox
 					@caption L&otilde;pp kuni
 
 					@property all_proj_search_state type=select store=no parent=all_proj_search_b  captionside=top
 					@caption Staatus
 
-			@layout all_proj_search_but_row type=hbox parent=projects_tree 
+			@layout all_proj_search_but_row type=hbox parent=projects_tree
 
-				@property all_proj_search_sbt type=submit  parent=all_proj_search_but_row no_caption=1 
+				@property all_proj_search_sbt type=submit  parent=all_proj_search_but_row no_caption=1
 				@caption Otsi
 
 				@property all_proj_search_clear type=submit  parent=all_proj_search_but_row no_caption=1
 				@caption T&uuml;hista otsing
 
-		@layout projects_table type=vbox parent=projects_main 
+		@layout projects_table type=vbox parent=projects_main
 			@property projects_listing_table type=table no_caption=1 parent=projects_table no_caption=1
 
 
@@ -434,24 +434,24 @@ default group=org_objects
 
 				@layout my_proj_search_b_dl type=vbox parent=my_proj_search_b
 
-					@property proj_search_dl_from type=date_select store=no parent=my_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@property proj_search_dl_from type=date_select store=no parent=my_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox
 					@caption T&auml;htaeg alates
 
-					@property proj_search_dl_to type=date_select store=no parent=my_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox 
+					@property proj_search_dl_to type=date_select store=no parent=my_proj_search_b_dl  captionside=top format=day_textbox,month_textbox,year_textbox
 					@caption T&auml;htaeg kuni
 
 			@property proj_search_state type=select store=no parent=my_proj_search_b  captionside=top
 			@caption Staatus
 
-			@layout my_proj_search_but_row type=hbox parent=my_proj_search 
+			@layout my_proj_search_but_row type=hbox parent=my_proj_search
 
-				@property proj_search_sbt type=submit  parent=my_proj_search_but_row no_caption=1 
+				@property proj_search_sbt type=submit  parent=my_proj_search_but_row no_caption=1
 				@caption Otsi
 
 				@property proj_search_clear type=submit  parent=my_proj_search_but_row no_caption=1
 				@caption T&uuml;hista otsing
 
-		@property my_projects type=table no_caption=1 store=no parent=my_proj 
+		@property my_projects type=table no_caption=1 store=no parent=my_proj
 
 @default group=my_reports,all_reports
 
@@ -464,7 +464,7 @@ default group=org_objects
 
 	@layout docs_lt type=hbox width=20%:80%
 
-		@layout docs_left type=vbox parent=docs_lt 
+		@layout docs_left type=vbox parent=docs_lt
 
 			@property docs_tree type=treeview parent=docs_left no_caption=1
 
@@ -492,7 +492,7 @@ default group=org_objects
 
 				@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
 				@caption T&uuml;hista otsing
-	
+
 
 		@property docs_tbl type=table store=no no_caption=1 parent=docs_lt
 
@@ -502,8 +502,8 @@ default group=org_objects
 
 	@layout docs_news_lt type=hbox width=20%:80%
 
-		@layout docs_news_left type=vbox parent=docs_news_lt 
-	
+		@layout docs_news_left type=vbox parent=docs_news_lt
+
 			@property dn_s_name type=textbox size=30 store=no captionside=top parent=docs_news_left
 			@caption Nimi
 
@@ -545,7 +545,7 @@ default group=org_objects
 
 		@layout bills_list_s type=vbox parent=bills_list_box
 
-			otsing Kliendi, arve nr,  esitamise ajavahemiku, 
+			otsing Kliendi, arve nr,  esitamise ajavahemiku,
 			kliendihalduri, koostamisel/makstud/maksmata järgi
 
 
@@ -555,10 +555,10 @@ default group=org_objects
 			@property bill_s_bill_no type=textbox size=30 store=no parent=bills_list_s captionside=top group=bills_list
 			@caption Arve nr
 
-			@property bill_s_from type=date_select store=no parent=bills_list_s captionside=top group=bills_list format=day_textbox,month_textbox,year_textbox 
+			@property bill_s_from type=date_select store=no parent=bills_list_s captionside=top group=bills_list format=day_textbox,month_textbox,year_textbox
 			@caption Esitatud alates
 
-			@property bill_s_to type=date_select store=no parent=bills_list_s captionside=top group=bills_list format=day_textbox,month_textbox,year_textbox 
+			@property bill_s_to type=date_select store=no parent=bills_list_s captionside=top group=bills_list format=day_textbox,month_textbox,year_textbox
 			@caption Esitatud kuni
 
 			@property bill_s_client_mgr type=text store=no parent=bills_list_s captionside=top group=bills_list
@@ -572,7 +572,7 @@ default group=org_objects
 
 		@property bills_list type=table store=no no_caption=1 parent=bills_list_box group=bills_list,bills_monthly
 
-	
+
 
 @default group=my_tasks,meetings,calls,ovrv_offers,all_actions
 
@@ -693,7 +693,7 @@ default group=org_objects
 		@property res_tbl type=table no_caption=1 parent=res_lt
 
 @default group=transl
-	
+
 	@property transl type=callback callback=callback_get_transl store=no
 	@caption T&otilde;lgi
 
@@ -719,7 +719,7 @@ ype=callback callback=callback_gen_forum store=no no_caption=1
 	@groupinfo edit_sects caption="Muuda &uuml;ksuseid" parent=people submit=no save=no
 
 @groupinfo resources caption="Ressursid"  submit=no save=no
-@groupinfo contacts caption="Kontaktid" 
+@groupinfo contacts caption="Kontaktid"
 @groupinfo overview caption="Tegevused" save=no
 
 	@groupinfo all_actions caption="Kõik" parent=overview submit=no save=no
@@ -744,13 +744,13 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	groupinfo org_objects caption="Objektid" submit=no parent=org_objects_main
 
 
-@groupinfo org_images caption="Pildid" submit=yes parent=general 
+@groupinfo org_images caption="Pildid" submit=yes parent=general
 
 groupinfo documents caption="Dokumendid" submit=no
 
 	@groupinfo documents_all caption="Dokumendid" submit=no parent=general save=no
 	@groupinfo documents_news caption="Uudised" submit=no parent=general submit_method=get save=no
-	@groupinfo documents_forum caption="Foorum" submit=no parent=general 
+	@groupinfo documents_forum caption="Foorum" submit=no parent=general
 	@groupinfo documents_lmod caption="Viimati muudetud" submit=no parent=general	save=no
 
 @groupinfo bills caption="Arved" submit=no save=no
@@ -879,7 +879,7 @@ groupinfo documents caption="Dokumendid" submit=no
 
 @reltype DOCS_FOLDER value=40 clid=CL_MENU
 @caption dokumentide kataloog
-		
+
 @reltype REFERAL_TYPE value=41 clid=CL_META
 @caption sissetuleku meetod
 
@@ -1027,7 +1027,7 @@ class crm_company extends class_base
 			'sort_by' => 'to.jrk',
 			'sort_dir' => 'asc',
 		));
-		
+
 		//parent nodes'id actually
 		$this_level_id = $node_id;
 		foreach($conns as $key=>$conn)
@@ -1049,7 +1049,7 @@ class crm_company extends class_base
 				$name='<b>'.$name.'</b>';
 			}
 			$tmp_obj = $conn->to();
-			
+
 			//use the plural unless plural is empty -- this is just for reltype_section
 			if ($this->tree_uses_oid)
 			{
@@ -1143,12 +1143,12 @@ class crm_company extends class_base
 		{
 			$tmp_obj = new object($prof_conn->to());
 			$name = strlen($tmp_obj->prop('name_in_plural'))?$tmp_obj->prop('name_in_plural'):$tmp_obj->prop('name');
-			
+
 			if($tmp_obj->id()==$this->active_node && ($_GET["unit"] == $obj->id()))
 			{
 				$name = '<b>'.$name.'</b>';
 			}
-			
+
 			$url = array();
 			$url = aw_url_change_var(array('cat'=>$prof_conn->prop('to'),$key=>$value));
 			$tree->add_item($this_level_id,
@@ -1160,14 +1160,14 @@ class crm_company extends class_base
 					"class_id" => $tmp_obj->class_id()
 				)
 			);
-		}	
+		}
 	}
-	
+
 	function get_property($arr)
 	{
 		$data = &$arr['prop'];
 		$retval = PROP_OK;
-	
+
 		switch($data['name'])
 		{
 			/// GENERAL TAB
@@ -1338,7 +1338,7 @@ class crm_company extends class_base
 			case "firmajuht":
 				$this->_get_firmajuht($arr);
 				break;
-			
+
 			case "navtoolbar":
 				$this->navtoolbar($arr);
 				break;
@@ -1372,7 +1372,7 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $cust_impl->$fn($arr);
-			
+
 			case "customer_search_name":
 			case "customer_search_reg":
 			case "customer_search_worker":
@@ -1423,7 +1423,7 @@ class crm_company extends class_base
 				if (!isset($arr["request"]["proj_search_state"]))
 				{
 					$data["value"] = PROJ_IN_PROGRESS;
-				}	
+				}
 
 			case "proj_search_cust":
 			case "proj_search_name":
@@ -1579,7 +1579,7 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $people_impl->$fn($arr);
-		
+
 			// contacts search
 			case "contact_search_firstname":
 			case "contact_search_lastname":
@@ -1626,7 +1626,7 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $docs_impl->$fn($arr);
-			
+
 
 			case 'docs_s_name':
 			case 'docs_s_task':
@@ -1702,7 +1702,7 @@ class crm_company extends class_base
 					if ($day == 0)
 					{
 						$day = 6;
-					}	
+					}
 					else
 					{
 						$day--;
@@ -1790,7 +1790,7 @@ class crm_company extends class_base
 						'status' => STAT_ACTIVE,
 					));
 					$oh->save();
-				
+
 					$data['value']['id'] = $oh->id();
 					$arr['request']['openhours']['id'] = $oh->id();
 					// And link it
@@ -1798,7 +1798,7 @@ class crm_company extends class_base
 						'to' => $oh->id(),
 						'reltype' => 'RELTYPE_OPENHOURS',
 					));
-					
+
 				}
 			break;
 			case "name":
@@ -1844,18 +1844,18 @@ class crm_company extends class_base
 			"uid" => aw_global_get("uid"),
 		));
 	}
-	
+
 	function get_all_workers_for_company($obj,&$data,$workers_too=false)
-	{	
+	{
 		//getting all the workers for the $obj
 		$conns = $obj->connections_from(array(
 			"type" => "RELTYPE_WORKERS",
 		));
 		foreach($conns as $conn)
 		{
-			$data[$conn->prop('to')] = $conn->prop('to');	
+			$data[$conn->prop('to')] = $conn->prop('to');
 		}
-		
+
 		if($workers_too)
 		{
 			$conns = $obj->connections_from(array(
@@ -1914,7 +1914,7 @@ class crm_company extends class_base
 				"to" => $conn->prop("from"),
 				"reltype" => "RELTYPE_WORKERS",
 			));
-		
+
 		}
 	}
 
@@ -1979,7 +1979,7 @@ class crm_company extends class_base
 			}
 		}
 	}
-	
+
 	/**
 		@attrib name=delete_selected_objects
 	**/
@@ -1988,16 +1988,16 @@ class crm_company extends class_base
 		foreach ($arr["select"] as $deleted_obj_id)
 		{
 			$deleted_obj = &obj($deleted_obj_id);
-			$deleted_obj->delete();	
+			$deleted_obj->delete();
 		}
 		return $this->mk_my_orb("change", array(
-			"id" => $arr["id"], 
-			"group" => $arr["group"], 
+			"id" => $arr["id"],
+			"group" => $arr["group"],
 			"org_id" => $arr["offers_current_org_id"]),
 			$arr["class"]
 		);
 	}
-	
+
 	/**
 		@attrib name=submit_new_task
 		@param id required type=int acl=view
@@ -2027,7 +2027,7 @@ class crm_company extends class_base
 			'crm_company'
 		);
 	}
-	
+
 	/**
 		@attrib name=search_for_profs
 		@param cat optional type=int
@@ -2046,7 +2046,7 @@ class crm_company extends class_base
 			'crm_company'
 		);
 	}
-	
+
 	/**
 		@attrib name=submit_new_call
 		@param id required type=int acl=view
@@ -2057,7 +2057,7 @@ class crm_company extends class_base
 		$arr['reltype'] = 9; //CL_CRM_PERSON.RELTYPE_PERSON_CALL
 		$this->submit_new_action_to_person(&$arr);
 	}
-	
+
 	/**
 		@attrib name=submit_new_meeting
 		@param id required type=int acl=view
@@ -2087,7 +2087,7 @@ class crm_company extends class_base
 		));
 		$alias_to_org_arr = array();
 		$fake_alias = $arr["id"];
-		
+
 		reset($arr['check']);
 
 		$fake_alias = current($arr['check']);
@@ -2100,7 +2100,7 @@ class crm_company extends class_base
 			"parent" => $arr["id"],
 			"return_url" => urlencode($arr["post_ru"])
 		),$arr['clid']);
-		header('Location: '.$url);	
+		header('Location: '.$url);
 		die();
 	}
 
@@ -2139,7 +2139,7 @@ class crm_company extends class_base
 		}
 	}
 
-	
+
 	////
 	// !Listens to MSG_EVENT_ADD broadcasts and creates
 	// connections between a CRM_PERSON and a CRM_COMPANY
@@ -2185,12 +2185,12 @@ class crm_company extends class_base
 	function submit_delete_relations($arr)
 	{
 		$main_obj = new object($arr['id']);
-		
+
 		if((int)$arr['unit'])
 		{
 			$main_obj = new object($arr['unit']);
 		}
-	
+
 		if (is_array($arr["check"]))
 		{
 			foreach($arr['check'] as $key => $value)
@@ -2273,7 +2273,7 @@ class crm_company extends class_base
 			return $url;
 		}
 		$main_obj = new Object($arr['id']);
-		
+
 		if((int)$arr['category'])
 		{
 			$main_obj = new Object($arr['category']);
@@ -2282,13 +2282,13 @@ class crm_company extends class_base
 		{
 			$main_obj->disconnect(array('from'=>$value));
 		}
-		return $url;		
+		return $url;
 	}
 
 	/*
-	
+
 	*/
-	function callback_on_load($arr)		
+	function callback_on_load($arr)
 	{
 		$this->crm_company_init();
 		if(array_key_exists('request',$arr))
@@ -2355,7 +2355,7 @@ class crm_company extends class_base
 			//the company GETS A REGISTRATION NuMbEr
 			$new_company->set_prop('reg_nr',trim($arr['customer_search_reg']));
 		}
-		
+
 		if(!empty($arr['sector']) && is_oid($arr['sector']) && $this->can("view", $arr['sector']))
 		{
 			$sect = obj($arr['sector']);
@@ -2399,7 +2399,7 @@ class crm_company extends class_base
 			//i'll try to find a matching county, if i find multiple
 			//i'll take the first one, if none is found i'll take no action
 			//atleast for now
-			
+
 			$ol = new object_list(array(
 				'class_id' => CL_CRM_COUNTY,
 				'name'	=> $arr['customer_search_county'],
@@ -2419,7 +2419,7 @@ class crm_company extends class_base
 				'class_id' => CL_CRM_CITY,
 				'name' => $arr['customer_search_city'],
 			));
-			
+
 			if(sizeof($ol->ids()))
 			{
 				list(,$city) = each($ol->ids());
@@ -2446,8 +2446,8 @@ class crm_company extends class_base
 			{
 				$address->set_prop('aadress',$street);
 			}
-	
-		
+
+
 			if($county)
 			{
 				//loome seose
@@ -2505,7 +2505,7 @@ class crm_company extends class_base
 			$arr['args']['prof_search_show_results'] = 1;
 			$arr['args']['prof_search'] = 1;
 		}
-	
+
 		if($arr["request"]["customer_search_submit"])
 		{
 			$arr['args']['customer_search_name'] = urlencode($arr['request']['customer_search_name']);
@@ -2533,7 +2533,7 @@ class crm_company extends class_base
 			$arr["args"]["proj_search_state"] = $arr["request"]["proj_search_state"];
 			$arr["args"]["proj_search_sbt"] = 1;
 			$arr["args"]["do_proj_search"] = 1;
-		}	
+		}
 
 		if ($arr["request"]["all_proj_search_sbt"])
 		{
@@ -2550,7 +2550,7 @@ class crm_company extends class_base
 			$arr["args"]["all_proj_search_state"] = $arr["request"]["all_proj_search_state"];
 			$arr["args"]["search_all_proj"] = 0;
 			$arr["args"]["aps_sbt"] = 1;
-		}	
+		}
 
 		if ($arr["request"]["docs_s_sbt"])
 		{
@@ -2562,7 +2562,7 @@ class crm_company extends class_base
 			$arr["args"]["docs_s_customer"] = $arr["request"]["docs_s_customer"];
 			$arr["args"]["docs_s_sbt"] = $arr["request"]["docs_s_sbt"];
 			$arr["args"]["do_doc_search"] = 1;
-		}	
+		}
 
 		if ($arr["request"]["act_s_sbt"] || $arr["request"]["group"] == "bills_search")
 		{
@@ -2578,7 +2578,7 @@ class crm_company extends class_base
 			$arr["args"]["act_s_print_view"] = $arr["request"]["act_s_print_view"];
 			$arr["args"]["act_s_sbt"] = $arr["request"]["act_s_sbt"];
 			$arr["args"]["act_s_is_is"] = 1;
-		}	
+		}
 		if ($arr["request"]["bill_s_search"] != "")
 		{
 			$arr["args"]["bill_s_cust"] = $arr["request"]["bill_s_cust"];
@@ -2599,7 +2599,7 @@ class crm_company extends class_base
 		{
 			$arr['args']['category'] = $arr['request']['category'];
 		}
-		
+
 		if($arr['request']['cat'])
 		{
 			$arr['args']['cat'] = $arr['request']['cat'];
@@ -2624,12 +2624,12 @@ class crm_company extends class_base
 			else
 			{
 				$obj = new object($arr['id']);
-				$reltype = 8; //crm_company.workers	
+				$reltype = 8; //crm_company.workers
 			}
-			
+
 			$obj->connect(array(
 				'to' => $value,
-				'reltype' => $reltype 
+				'reltype' => $reltype
 			));
 
 			$person = new object($value);
@@ -2667,14 +2667,14 @@ class crm_company extends class_base
 		if (!$category)
 		{
 			$impl = array();
-			$this->get_all_workers_for_company($obj, &$impl);  
+			$this->get_all_workers_for_company($obj, &$impl);
 			$impl[] = $obj->id();
 			// also, add all orderers from projects where the company is implementor
 			$ol = new object_list(array(
 				"class_id" => CL_PROJECT,
 				"CL_PROJECT.RELTYPE_IMPLEMENTOR" => $impl,
 				"lang_id" => array(),
-				"site_id" => array() 
+				"site_id" => array()
 			));
 			foreach($ol->arr() as $o)
 			{
@@ -2722,7 +2722,7 @@ class crm_company extends class_base
 			));
 
 			$projects = array();
-		
+
 			foreach($conns as $conn)
 			{
 				$projects[$conn->prop('to')] = $conn->to();
@@ -2734,14 +2734,14 @@ class crm_company extends class_base
 			return array();
 		}
 	}
-	
+
 	function get_all_org_customer_categories($obj)
 	{
 		static $retval;
 		$conns = $obj->connections_from(array(
 			"type" => "RELTYPE_CATEGORY",
 		));
-		
+
 		foreach($conns as $conn)
 		{
 			$retval[$conn->prop("to")] = $conn->prop("to");
@@ -2750,7 +2750,7 @@ class crm_company extends class_base
 		}
 		return $retval;
 	}
-	
+
 	function get_customers_for_category($cat_id)
 	{
 		if($cat_id)
@@ -2767,7 +2767,7 @@ class crm_company extends class_base
 		}
 		return false;
 	}
-	
+
 	/**
 		@attrib name=create_new_person
 
@@ -2832,7 +2832,7 @@ class crm_company extends class_base
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 		$p->connect(array(
-			"to" => $person->id(), 
+			"to" => $person->id(),
 			"type" => "RELTYPE_IMPORTANT_PERSON"
 		));
 
@@ -2845,12 +2845,12 @@ class crm_company extends class_base
 		{
 			$ru = urlencode($arr["return_url"]);
 		}
-		
+
 		return html::get_change_url($person->id())."&return_url=".$ru;
 	}
-	
 
-	/**	
+
+	/**
 		@attrib name=cut
 	**/
 	function cut($arr)
@@ -2860,12 +2860,12 @@ class crm_company extends class_base
 			"id" => $arr["id"],
 			"group" => $arr["group"]), CL_CRM_COMPANY);
 	}
-	
-	/**	
+
+	/**
 		@attrib name=paste all_args=1
 	**/
 	function paste($arr)
-	{	
+	{
 		foreach ($_SESSION["crm_cut"] as $oid)
 		{
 			$obj = &obj($oid);
@@ -2874,14 +2874,14 @@ class crm_company extends class_base
 		}
 		unset($_SESSION["crm_cut"]);
 		return $this->mk_my_orb("change", array(
-				"id" => $arr["id"], 
+				"id" => $arr["id"],
 				"group" => $arr["group"],
 				"parent" => $arr["parent"],
-			), 
+			),
 			CL_CRM_COMPANY
 		);
 	}
-	
+
 	function get_all_org_sections($obj)
 	{
 		static $retval;
@@ -2891,9 +2891,9 @@ class crm_company extends class_base
 			$section_obj = $section->to();
 			$this->get_all_org_sections($section_obj);
 		}
-		return $retval;	
+		return $retval;
 	}
-	
+
 	/** cuts the selected person objects
 
 		@attrib name=cut_p
@@ -2976,14 +2976,14 @@ class crm_company extends class_base
 					));
 				}
 			}
-			
+
 			// if currently under profession
 			if ($arr["cat"])
 			{
 				// connect to that profession
 				$p->connect(array(
 					"to" => $arr["cat"],
-					"reltype" => 7 
+					"reltype" => 7
 				));
 			}
 
@@ -3014,7 +3014,7 @@ class crm_company extends class_base
 				// connect to that profession
 				$p->connect(array(
 					"to" => $arr["cat"],
-					"reltype" => 7 
+					"reltype" => 7
 				));
 			}
 
@@ -3043,7 +3043,7 @@ class crm_company extends class_base
 	function navtoolbar(&$args)
 	{
 		$RELTYPE_ADDRESS = 3; //crm_company.reltype_address
-		
+
 		$toolbar = &$args["prop"]["toolbar"];
 		$users = get_instance("users");
 
@@ -3067,7 +3067,7 @@ class crm_company extends class_base
 			"name" => "calendar_sub",
 			"text" => $clss[CL_PLANNER]["name"],
 		));
-		
+
 		$toolbar->add_sub_menu(array(
 			"parent" => "main_menu",
 			"name" => "firma_sub",
@@ -3110,7 +3110,7 @@ class crm_company extends class_base
 
 		// basically, I need to create a list of relation types that are of any
 		// interest to me and then get a list of all classes for those
-		
+
 		//$action = array(RELTYPE_DEAL,RELTYPE_KOHTUMINE,RELTYPE_CALL,RELTYPE_TASK);
 		$action = array(/*10,*/ 11, 12, 13);
 		foreach($action as $key => $val)
@@ -3123,7 +3123,7 @@ class crm_company extends class_base
 				{
 					$classinf = $clss[$clid];
 					$url = $this->mk_my_orb('new',array(
-						// alright then. so what do those things to? 
+						// alright then. so what do those things to?
 						// they add a relation between the object created through
 						// the planner and this object
 
@@ -3133,7 +3133,7 @@ class crm_company extends class_base
 
 						// I'm adding an event object to a calendar, how do I know
 						// that I will have to attach it to an organization as well?
-						
+
 						// Maybe I should attach it directly to the organization and
 						// then send a message somehow that it should be put in my
 						// calendar as well .. hm that actually does sound
@@ -3161,7 +3161,7 @@ class crm_company extends class_base
 				};
 			};
 		};
-		
+
 		$ui = get_instance(CL_USER);
 		$my_org_id = $ui->get_current_company();
 		$toolbar->add_menu_item(array(
@@ -3169,13 +3169,13 @@ class crm_company extends class_base
 			"title" => t("Lisa pakkumine"),
 			"text" => t("Lisa pakkumine"),
 			"link" => $this->mk_my_orb("new", array(
-				"alias_to_org" => $args["obj_inst"]->id(), 
+				"alias_to_org" => $args["obj_inst"]->id(),
 				"alias_to" => $my_org_id,
 				"reltype" => 9
 			), CL_CRM_OFFER),
 		));
-		
-		if (!empty($this->cal_id))	
+
+		if (!empty($this->cal_id))
 		{
 			$toolbar->add_button(array(
 				"name" => "user_calendar",
@@ -3190,11 +3190,11 @@ class crm_company extends class_base
 				"class" => "menuButton",
 			));
 		}
-		
+
 	}
 
 	function do_offer_tree_leafs(&$tree,&$obj,$this_level_id,&$node_id)
-	{	
+	{
 		$customers = $this->get_customers_for_category($obj->id());
 		if(is_array($customers))
 		{
@@ -3309,7 +3309,7 @@ class crm_company extends class_base
 			}
 			$ret[] = $c["to"];
 		}
-		
+
 		// get cust conns for co
 		if ($co)
 		{
@@ -3439,7 +3439,7 @@ class crm_company extends class_base
 	**/
 	function create_bill($arr)
 	{
-		// create a bill for all selected tasks 
+		// create a bill for all selected tasks
 		$bill = obj();
 		$bill->set_class_id(CL_CRM_BILL);
 		$bill->set_parent($arr["id"]);
@@ -3528,7 +3528,7 @@ class crm_company extends class_base
 				$br->set_prop("is_oe", $row["is_oe"]);
 				$br->set_prop("has_tax", $row["has_tax"]);
 				$br->set_prop("date", $row["date"]);
-				// get default prod 
+				// get default prod
 
 				if ($sts)
 				{
@@ -3553,21 +3553,21 @@ class crm_company extends class_base
 					"to" => $br->id(),
 					"type" => "RELTYPE_ROW"
 				));
-			
+
 			}
 		}
 
 		return html::get_change_url($bill->id(), array("return_url" => urlencode(aw_url_change_var("proj", NULL, $arr["post_ru"]))));
 	}
 
-	/** 
+	/**
 		@attrib name=add_proj_to_co_as_ord
 	**/
 	function add_proj_to_co_as_ord($arr)
 	{
 		return html::get_new_url(
-				CL_PROJECT, 
-				$arr["id"], 
+				CL_PROJECT,
+				$arr["id"],
 				array(
 					"connect_impl" => reset($arr["check"]),
 					"return_url" => urlencode($arr["post_ru"]),
@@ -3576,14 +3576,14 @@ class crm_company extends class_base
 		);
 	}
 
-	/** 
+	/**
 		@attrib name=add_proj_to_co_as_impl
 	**/
 	function add_proj_to_co_as_impl($arr)
 	{
 		return html::get_new_url(
-				CL_PROJECT, 
-				$arr["id"], 
+				CL_PROJECT,
+				$arr["id"],
 				array(
 					"connect_impl" => $arr["id"],
 					"return_url" => urlencode($arr["post_ru"]),
@@ -3625,7 +3625,7 @@ class crm_company extends class_base
 			'parent' => $arr["id"],
 			'return_url' => urlencode($arr["post_ru"])
 		), CL_TASK);
-		
+
 	}
 
 	/**
@@ -3650,7 +3650,7 @@ class crm_company extends class_base
 			'parent' => $arr["id"],
 			'return_url' => urlencode($arr["post_ru"])
 		));
-		
+
 	}
 
 	/**
@@ -3675,7 +3675,7 @@ class crm_company extends class_base
 			'parent' => $arr["id"],
 			'return_url' => urlencode($arr["post_ru"])
 		));
-		
+
 	}
 
 	/**
@@ -3700,7 +3700,7 @@ class crm_company extends class_base
 			'return_url' => urlencode($arr["post_ru"]),
 			"set_proj" => $proj
 		), CL_TASK);
-		
+
 	}
 
 	/**
@@ -3729,7 +3729,7 @@ class crm_company extends class_base
 			'return_url' => urlencode($arr["post_ru"]),
 			"set_proj" => $proj
 		));
-		
+
 	}
 
 	/**
@@ -3758,14 +3758,14 @@ class crm_company extends class_base
 			'return_url' => urlencode($arr["post_ru"]),
 			"set_proj" => $proj
 		));
-		
+
 	}
 
 	/**
 		@attrib name=mark_p_as_important
 	**/
 	function mark_p_as_important($arr)
-	{	
+	{
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 
@@ -4049,7 +4049,7 @@ class crm_company extends class_base
 		else
 		{
 			return $this->mk_my_orb("change", array(
-				"id" => $arr["id"], 
+				"id" => $arr["id"],
 				"group" => "bills_list",
 				"return_url" => urlencode($arr["post_ru"])
 			));
@@ -4083,7 +4083,7 @@ class crm_company extends class_base
 	function find_crm_field_obj($arr)
 	{
 		$c = obj($arr['oid']);
-		if (!is_object($c) || $c->class_id() != CL_CRM_COMPANY || (empty($arr['type']) && empty($arr['clid'])) ) 
+		if (!is_object($c) || $c->class_id() != CL_CRM_COMPANY || (empty($arr['type']) && empty($arr['clid'])) )
 		{
 			return;
 		}
@@ -4099,7 +4099,7 @@ class crm_company extends class_base
 		{
 			return;
 		}
-		
+
 		// Get first object reltype RELTYPE_FIELD of class CL_CRM_FIELD_ACCOMMODATION
 		$conns = $c->connections_from(array(
 			'type' => 'RELTYPE_FIELD',
@@ -4118,7 +4118,7 @@ class crm_company extends class_base
 		{
 			return $o;
 		}
-	}				
+	}
 
 	/**
 		@attrib name=cut_docs
@@ -4278,7 +4278,7 @@ class crm_company extends class_base
 			$o = obj();
 			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
 			$o->set_name("Kliendisuhe ".$buyer->name()." => ".$seller->name());
-			$o->set_parent($buyer->id()); 
+			$o->set_parent($buyer->id());
 			$o->set_prop("seller", $buyer->id()); // yes this is correct, cause I'm a lazy iduit
 			$o->set_prop("buyer", $seller->id());
 			$o->save();
@@ -4317,7 +4317,7 @@ class crm_company extends class_base
 			if ($co == $arr["obj_inst"]->id())
 			{
 				$arr["caption"] = t("B&uuml;roo");
-			}	
+			}
 		}
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
@@ -4331,7 +4331,7 @@ class crm_company extends class_base
 		return $this->trans_callback($arr, $this->trans_props);
 	}
 
-	/** 
+	/**
 		@attrib name=get_company_count_by_name
 
 		@param co_name optional
@@ -4346,7 +4346,7 @@ class crm_company extends class_base
 		));
 		die($ol->count()."\n");
 	}
-	
+
 	/**
 		@attrib name=go_to_first_co_by_name
 		@param co_name optional
@@ -4412,12 +4412,12 @@ class crm_company extends class_base
 				if ($ol->count())
 				{
 					$link = $this->mk_my_orb("disp_conflict_pop", array("id" => $arr["obj_inst"]->id()));
-					return "aw_popup_scroll('$link','confl','200','200');"; 
+					return "aw_popup_scroll('$link','confl','200','200');";
 				}
 			}
 			return "";
 		}
-		return 
+		return
 		"function aw_submit_handler() {".
 		// fetch list of companies with that name and ask user if count > 0
 		"var url = '".$this->mk_my_orb("get_company_count_by_name")."';".
@@ -4428,7 +4428,7 @@ class crm_company extends class_base
 			var ansa = confirm('Sellise nimega organisatsioon on juba olemas. Kas soovite minna selle objekti muutmisele?');
 			if (ansa)
 			{
-				window.location = '".$this->mk_my_orb("go_to_first_co_by_name", array("return_url" => urlencode($arr["request"]["return_url"])))."&co_name=' + document.changeform.name.value; 
+				window.location = '".$this->mk_my_orb("go_to_first_co_by_name", array("return_url" => urlencode($arr["request"]["return_url"])))."&co_name=' + document.changeform.name.value;
 				return false;
 			}
 			return false;
@@ -4517,7 +4517,7 @@ class crm_company extends class_base
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die(join("\n", $ars)."\n");
 	}
-	
+
 	/**
 		@attrib name=submit_delete_sects
 	**/
@@ -4564,7 +4564,7 @@ class crm_company extends class_base
 			$o->save();
 		}
 	}
-	
+
 	/**
 		@attrib name=save_report
 	**/

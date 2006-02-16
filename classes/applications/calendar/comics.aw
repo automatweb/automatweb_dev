@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/comics.aw,v 1.2 2005/12/16 11:04:41 kristo Exp $
-// comics.aw - Koomiks 
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/comics.aw,v 1.3 2006/02/16 11:35:46 voldemar Exp $
+// comics.aw - Koomiks
 /*
 
 @classinfo syslog_type=ST_COMICS relationmgr=yes no_comment=1 r2=yes
@@ -11,7 +11,7 @@
 @tableinfo planner index=id master_table=objects master_index=brother_of
 @default table=planner
 
-@property start1 type=datetime_select field=start 
+@property start1 type=datetime_select field=start
 @caption Avaldatakse
 
 @property image type=releditor reltype=RELTYPE_PICTURE rel_id=first use_form=emb
@@ -33,7 +33,7 @@
 
 @groupinfo scripts caption="Skriptid"
 
-@property scripts type=releditor reltype=RELTYPE_SCRIPT props=name,comment,content mode=manager field=meta method=serialize table=objects table_fields=name,comment,content group=scripts
+@property scripts type=releditor reltype=RELTYPE_SCRIPT props=name,comment,content mode=manager field=meta method=serialize table=objects table_fields=name,comment,content group=scripts no_caption=1
 
 @groupinfo comments caption="Kommentaarid"
 
@@ -54,7 +54,7 @@ class comics extends class_base
 {
 	function comics()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
+		// change this to the folder under the templates folder, where this classes templates will be,
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/calendar",
@@ -146,7 +146,7 @@ class comics extends class_base
 	}
 
 	/**
-		@attrib name=submit_comment nologin=1 
+		@attrib name=submit_comment nologin=1
 	**/
 	function submit_comment($arr)
 	{

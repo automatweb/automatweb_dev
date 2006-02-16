@@ -159,6 +159,7 @@
                   <num_2>description_from_reggy</num_2>
                   <num_3>description</num_3>
             </props>
+            <no_caption>1</no_caption>
             <store>no</store>
             <caption>Alamv&amp;amp;auml;ljaanded</caption>
       </property>
@@ -425,7 +426,7 @@
             <GENERAL_IMAGE>
                   <value>10</value>
                   <clid>CL_IMAGE</clid>
-                  <caption>&amp;amp;Uuml;ldine pilt </caption>
+                  <caption>&amp;amp;Uuml;ldine pilt</caption>
             </GENERAL_IMAGE>
             <GENERAL_FORUM>
                   <value>11</value>

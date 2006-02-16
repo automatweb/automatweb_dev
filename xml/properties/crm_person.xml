@@ -304,33 +304,51 @@
             <name>email</name>
             <table>objects</table>
             <group>contact</group>
-            <type>relmanager</type>
+            <type>releditor</type>
+            <mode>manager</mode>
             <field>meta</field>
             <method>serialize</method>
             <reltype>RELTYPE_EMAIL</reltype>
             <props>mail</props>
+            <table_fields>mail</table_fields>
+            <choose_default>1</choose_default>
+            <store>no</store>
             <caption>Meiliaadressid</caption>
       </property>
       <property>
             <name>phone</name>
             <table>objects</table>
             <group>contact</group>
-            <type>relmanager</type>
+            <type>releditor</type>
             <field>meta</field>
             <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>type</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>type</num_1>
+            </table_fields>
             <reltype>RELTYPE_PHONE</reltype>
-            <props>name</props>
+            <choose_default>1</choose_default>
+            <store>no</store>
             <caption>Telefoninumbrid</caption>
       </property>
       <property>
             <name>url</name>
             <table>objects</table>
             <group>contact</group>
-            <type>relmanager</type>
+            <type>releditor</type>
+            <mode>manager</mode>
             <field>meta</field>
             <method>serialize</method>
             <reltype>RELTYPE_URL</reltype>
             <props>url</props>
+            <table_fields>url</table_fields>
+            <choose_default>1</choose_default>
+            <store>no</store>
             <caption>Veebiaadressid</caption>
       </property>
       <property>
