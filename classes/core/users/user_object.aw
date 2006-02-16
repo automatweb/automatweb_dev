@@ -7,4 +7,5 @@ class user_object extends _int_object
 		parent::set_prop($k,$v);
 	}
 }
+
 ?>
