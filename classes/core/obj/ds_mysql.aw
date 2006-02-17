@@ -183,7 +183,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if (!$_got_fields[$prop["field"]])
 					{
-						$fields[] = $table.".".$prop["field"]." AS ".$prop["field"];
+						$fields[] = $table.".`".$prop["field"]."` AS ".$prop["field"];
 						$_got_fields[$prop["field"]] = true;
 					}
 				}
@@ -192,53 +192,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
 					{
-					// resolve reltype and do find_connections
-					//$values = array();
-					$_co_reltype = $prop["reltype"];
-					$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
+						$_co_reltype = $prop["reltype"];
+						$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
 
-					/*if ($_co_reltype)
-					{
-						$this->db_query("
-							SELECT 
-								target 
-							FROM 
-								aliases 
-								LEFT JOIN objects ON objects.oid = aliases.target
-							WHERE 
-								source = '".$object_id."' AND 
-								reltype = '$_co_reltype' AND 
-								objects.status != 0
-						");
-						while ($row = $this->db_next())
-						{
-							if ($prop["multiple"] == 1)
-							{
-								$values[$row["target"]] = $row["target"];
-							}
-							else
-							{
-								$values = $row["target"];
-								break;
-							}
-
-						}
-					}*/
-					$conn_prop_fetch[$prop["name"]] = $_co_reltype;
-
-					//$conn_prop_vals[$prop["name"]] = $values;
-					//echo "resolved reltype to ".dbg::dump($_co_reltype)." <br>";
+						$conn_prop_fetch[$prop["name"]] = $_co_reltype;
 					}
 				}
 				else
 				{
-					$fields[] = $table.".".$prop["field"]." AS ".$prop["name"];
+					$fields[] = $table.".`".$prop["field"]."` AS ".$prop["name"];
 				}
 			}
 
 			if (count($fields) > 0)
 			{
-				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$object_id."'";
+				$q = "SELECT ".join(",", $fields)." FROM $table WHERE `".$tableinfo[$table]["index"]."` = '".$object_id."'";
 				
 				if (isset($this->read_properties_data_cache[$object_id]))
 				{
@@ -382,7 +350,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					if (!$_got_fields[$prop["field"]])
 					{
-						$fields[] = $table.".".$prop["field"]." AS ".$prop["field"];
+						$fields[] = $table.".`".$prop["field"]."` AS ".$prop["field"];
 						$_got_fields[$prop["field"]] = true;
 					}
 				}
@@ -404,7 +372,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				else
 				{
-					$fields[] = $table.".".$prop["field"]." AS ".$prop["name"];
+					$fields[] = $table.".`".$prop["field"]."` AS ".$prop["name"];
 				}
 			}
 
@@ -447,7 +415,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				if (count($fields) > 0)
 				{
-					$q .= ",".join(",", $fields)." FROM objects LEFT JOIN $table ON objects.brother_of = ".$table.".".$tableinfo[$table]["index"]." WHERE ";
+					$q .= ",".join(",", $fields)." FROM objects LEFT JOIN $table ON objects.brother_of = ".$table.".`".$tableinfo[$table]["index"]."` WHERE ";
 					$q .= " objects.oid ";
 				}
 				else
@@ -458,7 +426,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			else
 			if (count($fields) > 0)
 			{
-				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"];
+				$q = "SELECT ".join(",", $fields)." FROM $table WHERE `".$tableinfo[$table]["index"]."`";
 			}
 
 			if (!$full)
@@ -634,7 +602,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				foreach($dat["defaults"] as $fd => $vl)
 				{
 					$this->quote($vl);
-					$fds .=",".$fd;
+					$fds .=",`".$fd."`";
 					$vls .=",'".$vl."'";
 				}
 			}
@@ -808,7 +776,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->quote($str);
 				$seta[$field] = $str;
 			}
-			$sets = join(",",map2("%s = '%s'",$seta,0,true));
+			$sets = join(",",map2("`%s` = '%s'",$seta,0,true));
 			if ($sets != "")
 			{
 				$q = "UPDATE $tbl SET $sets WHERE ".$tableinfo[$tbl]["index"]." = '".$objdata["brother_of"]."'";
@@ -1273,7 +1241,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$this->has_data_table_filter = true;
 			}
-			$tf = $tbl.".".$fld;
+			$tf = $tbl.".`".$fld."`";
 
 			if ($this->properties[$key]["store"] == "connect")
 			{
@@ -2135,12 +2103,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					}
 					else
 					{
-						$serialized_fields[$p[$pn]["table"].".".$p[$pn]["field"]][] = substr($pn, 5);
+						$serialized_fields[$p[$pn]["table"].".`".$p[$pn]["field"]."`"][] = substr($pn, 5);
 					}
 				}
 				else
 				{
-					$ret[$pn] = " ".$p[$pn]["table"].".".$p[$pn]["field"]." AS $resn ";
+					$ret[$pn] = " ".$p[$pn]["table"].".`".$p[$pn]["field"]."` AS $resn ";
 				}
 			}
 		}
@@ -2149,7 +2117,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		foreach($serialized_fields as $fld => $stuff)
 		{
 			$fldn = str_replace(".", "_", $fld);
-			$ret[] = " ".$fld." AS ".$fldn." ";
+			$ret[] = $fld." AS ".$fldn." ";
 			$sf[$fldn] = $stuff;
 		}
 
