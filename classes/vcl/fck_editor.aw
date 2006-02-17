@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.3 2006/02/17 15:13:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.4 2006/02/17 15:16:45 ahti Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor
@@ -49,8 +49,11 @@ window.onload = function()
 	';
 	foreach($arr["props"] as $nm)
 	{
+		$nm2 = $nm;
+		$nm = str_replace("[","_",$nm);
+		$nm = str_replace("]","_",$nm);
 		$retval .= '
-		var fck'.$nm.' = new FCKeditor("'.$nm.'");
+		var fck'.$nm.' = new FCKeditor("'.$nm2.'");
 		fck'.$nm.'.BasePath = "js/fckeditor/";
 		fck'.$nm.'.ToolbarSet = "aw";
 		fck'.$nm.'.Width = "800px";
