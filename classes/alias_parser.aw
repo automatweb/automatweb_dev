@@ -7,12 +7,14 @@ class alias_parser extends core
 		$this->init();
 	}
 
-	////
-	// !Parses all embedded objects inside another document
-	// arguments:
-	// oid(int) - document id
-	// source - document content
-	// args[meta][aliases] - optional, if set, result of get_oo_aliases for object $oid
+	/**  Parses all embedded objects inside another document
+		@attrib api=1
+		@comment
+			arguments:
+			oid(int) - document id
+			source - document content
+			args - optional array of arguments, only recognized member is templates that gets passed to the parse_alias methods as the tpls member in the array
+	**/
 	function parse_oo_aliases($oid,&$source,$args = array())
 	{
 		// should eliminate 99% of the texts that don't contain aliases -- ahz
@@ -229,8 +231,10 @@ class alias_parser extends core
 		return $retval;
 	}
 
-	////
-	// Returns the variables created by parse_oo_alias
+	/** Returns the variables created by parse_oo_alias
+
+		@attrib api=1
+	**/
 	function get_vars()
 	{
 		return (is_array($this->tmp_vars)) ? $this->tmp_vars : array();

@@ -1,0 +1,31 @@
+<b>aw_template::read_template($name, $silent = 0)</b>
+
+reads the template whose name is given. The full path to the template is assembled like this:
+
+if on the site side
+the tpldir setting from aw_ini_get(), then the folder given in the constructor to init() and finally, the file name gevn to this method. if the file is not found here, then the path
+basedir from ini file, templates folder, path given in init() and the file name is tested
+
+if in the admin interface
+basedir from ini file, templates folder, path given in init() and the file name is tested
+
+so basically, if on the site side, the site templates folder is checked and then the admin templates folder, so that you can override templates for each site
+
+<b>errors:</b>
+if no template file is found and the silent flag is not set, error is thrown
+
+<b>parameters, passed by position:</b>
+name - the name of the template file to load
+silent - optional - if set to 1, no error is thrown if template is not found, false is returned instead
+
+<b>returns:</b>
+true if no error or silent flag not set, false if no template is found and silent flag is set
+
+Example:
+
+$tpl = new aw_template;
+$tpl->set_parse_method("eval");
+if ($tpl->read_template("aa.tpl", 1) === false)
+{
+echo "no template found!";
+}

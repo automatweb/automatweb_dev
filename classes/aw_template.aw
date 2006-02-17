@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.73 2005/10/31 15:50:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.74 2006/02/17 07:17:05 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -63,12 +63,6 @@ class aw_template extends core
 		$this->use_eval = false;
 	}
 
-	function get_template_dir()
-	{
-		$rv = substr($this->template_dir,strlen($this->cfg["tpldir"])+1);
-		return $rv;
-	}
-
 	function _init_vars()
 	{
 		// this comes from session.
@@ -84,6 +78,10 @@ class aw_template extends core
 		);
 	}
 
+	/** sets the parse method for templates - "" or "eval"
+
+		@attrib api=1
+	**/
 	function set_parse_method($method = "")
 	{
 		if ($method == "eval")
@@ -92,8 +90,9 @@ class aw_template extends core
 		};
 	}
 
-	////
-	// !resets all templates and variables
+	/** resets all templates and variables
+		@attrib api=1
+	**/
 	function reset()
 	{
 		return $this->tpl_reset();
@@ -165,8 +164,10 @@ class aw_template extends core
 		return $this->option_list($active,$array);
 	}
 
-	////
-	// !Loeb template failist
+	/** reads a template from a file
+		@attrib api=1
+
+	**/
 	function read_template($name,$silent = 0)
 	{
 		$this->template_filename = $this->template_dir."/".$name;
@@ -195,14 +196,18 @@ class aw_template extends core
 		return $retval;
 	}
 
+	/** reads a template from the given string
+		@attrib api=1
+	**/
 	function use_template($source)
 	{
 		$slines = explode("\n",$source);
 		return $this->read_tpl($slines);
 	}
 	
-	////
-	// !Loeb template failist
+	/** reads a template from a file from the admin template folder
+		@attrib api=1
+	**/
 	function read_adm_template($name,$silent = 0)
 	{
 		$retval = true;
