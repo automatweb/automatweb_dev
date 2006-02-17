@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.10 2006/02/10 10:47:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.11 2006/02/17 09:42:02 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1820,6 +1820,40 @@ class realestate_search extends class_base
 		### sorting
 		$sort = $search_sort_by ? $search_sort_by . " " . ($search_sort_ord ? $search_sort_ord : "ASC") : NULL;
 
+		### class specific arguments
+		$class_specific_args = array();
+
+		if (
+			in_array(CL_REALESTATE_HOUSE, $search_ci) or
+			in_array(CL_REALESTATE_HOUSEPART, $search_ci) or
+			in_array(CL_REALESTATE_ROWHOUSE, $search_ci) or
+			in_array(CL_REALESTATE_COTTAGE, $search_ci) or
+			in_array(CL_REALESTATE_APARTMENT, $search_ci) or
+			in_array(CL_REALESTATE_COMMERCIAL, $search_ci) or
+			in_array(CL_REALESTATE_GARAGE, $search_ci)
+		)
+		{
+			$class_specific_args["condition"] = $search_c;
+			$class_specific_args["total_floor_area"] = $tfa_constraint;
+
+			if (!in_array(CL_REALESTATE_GARAGE, $search_ci))
+			{
+				$class_specific_args["number_of_rooms"] = (empty ($search_nor) ? NULL : $search_nor);
+			}
+		}
+
+		#### apartment
+		if (in_array(CL_REALESTATE_APARTMENT, $search_ci))
+		{
+			$class_specific_args["is_middle_floor"] = (empty ($search_imf) ? NULL : $search_imf);
+		}
+
+		#### commercial
+		if (in_array(CL_REALESTATE_COMMERCIAL, $search_ci))
+		{
+			$class_specific_args["usage_purpose"] = $search_up;
+		}
+
 		exit_function ("re_search::search - process arguments & constraints");
 		enter_function ("re_search::search - get objlist");
 
@@ -1839,14 +1873,9 @@ class realestate_search extends class_base
 			// $address_constraint,
 			$agent_constraint,
 			"sort_by" => $sort,
-
-			### class specific
-			"total_floor_area" => $tfa_constraint,
-			"condition" => $search_c,
-			"is_middle_floor" => (empty ($search_imf) ? NULL : $search_imf),
-			"number_of_rooms" => (empty ($search_nor) ? NULL : $search_nor),
-			"usage_purpose" => $search_up,
 		);
+
+		$args = $args + $class_specific_args;
 
 		$result_list = new object_list ($args);
 		// $result_list = $result_list->arr ();
