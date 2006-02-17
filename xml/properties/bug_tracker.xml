@@ -13,7 +13,10 @@
       <property>
             <name>bug_tb</name>
             <table>objects</table>
-            <group>bugs</group>
+            <group>
+                  <num_0>bugs</num_0>
+                  <num_1>archive</num_1>
+            </group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -40,7 +43,10 @@
       <property>
             <name>bug_list</name>
             <table>objects</table>
-            <group>bugs</group>
+            <group>
+                  <num_0>bugs</num_0>
+                  <num_1>archive</num_1>
+            </group>
             <type>table</type>
             <parent>bug</parent>
             <no_caption>1</no_caption>
@@ -58,6 +64,10 @@
                   <caption>Bugid</caption>
                   <submit>no</submit>
             </bugs>
+            <archive>
+                  <caption>Arhiiv</caption>
+                  <submit>no</submit>
+            </archive>
       </groupinfo>
       <reltypes>
             <MONITOR>

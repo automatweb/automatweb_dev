@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.18 2006/02/13 13:05:52 sander Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.18 2006/02/13 13:05:52 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.19 2006/02/17 13:23:38 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.19 2006/02/17 13:23:38 sander Exp $
 
 // bug_tracker.aw - BugTrack 
 /*
@@ -16,13 +16,16 @@
 @groupinfo bugs caption="Bugid" submit=no
 @default group=bugs
 
-@property bug_tb type=toolbar no_caption=1
+@property bug_tb type=toolbar no_caption=1 group=bugs,archive
 
 @property cat type=hidden store=no
 
 @layout bug type=hbox width=15%:85%
 	@property bug_tree type=treeview parent=bug no_caption=1
-	@property bug_list type=table parent=bug no_caption=1
+	@property bug_list type=table parent=bug no_caption=1 group=bugs,archive
+
+@groupinfo archive caption="Arhiiv" submit=no
+@default group=archive
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption Jälgija
@@ -178,6 +181,7 @@ class bug_tracker extends class_base
 		$self_ol = new object_list(array(
 			"parent" => $this->self_id,
 			"class_id" => array(CL_BUG, CL_MENU),
+			"bug_status" => new obj_predicate_not(4),
 		));
 		$nimi = "Bug-Tracker";
 		$nimi .= ($self_ol->count() > 0)?" (".$self_ol->count().")":"";
@@ -198,13 +202,14 @@ class bug_tracker extends class_base
 
 	function generate_bug_tree($arr)
 	{
-		$ol = new object_list(array("parent" => $arr["oid"],"class_id" => array(CL_BUG, CL_MENU)));
+		$ol = new object_list(array("parent" => $arr["oid"],"class_id" => array(CL_BUG, CL_MENU),"bug_status" => new obj_predicate_not(4),));
 		$objects = $ol->arr();
 		foreach($objects as $obj_id => $object)
 		{
 			$sub_ol = new object_list(array(
 				"parent" => $obj_id,
 				"class_id" => array(CL_BUG, CL_MENU),
+				"bug_status" => new obj_predicate_not(4),
 			));
 			
 			$nimi = substr($object->name(),0,20);
@@ -282,6 +287,23 @@ class bug_tracker extends class_base
 			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
+
+		$t->define_field(array(
+			"name" => "bug_status",
+			"caption" => t("Staatus"),
+			"sortable" => 1,
+			"callback" => array(&$this, "show_status"),
+			"filter" => array(
+				t("1"),
+				t("2"),
+				t("3"),
+				t("4"),
+				t("5"),
+				t("6"),
+				t("7"),
+			),
+		));
+
 		$t->define_field(array(
 			"name" => "who",
 			"caption" => t("Kellele"),
@@ -317,22 +339,6 @@ class bug_tracker extends class_base
 				t("3"),
 				t("4"),
 				t("5"),
-			),
-		));
-
-		$t->define_field(array(
-			"name" => "bug_status",
-			"caption" => t("Staatus"),
-			"sortable" => 1,
-			"callback" => array(&$this, "show_status"),
-			"filter" => array(
-				t("1"),
-				t("2"),
-				t("3"),
-				t("4"),
-				t("5"),
-				t("6"),
-				t("7"),
 			),
 		));
 
@@ -381,10 +387,29 @@ class bug_tracker extends class_base
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
 		if($this->can("view", $pt))
 		{
-			$ol = new object_list(array(
-				"parent" => $pt,
-				"class_id" => CL_BUG,
-			));
+			if($arr["request"]["group"] == "archive")
+			{
+				$ot = new object_tree(array(
+					"parent" => $pt,
+					"class_id" => array(
+						CL_BUG,CL_MENU,
+					),
+				));
+
+				$ol = new object_list(array(
+					"oid" => $ot->ids(),
+					"class_id" => CL_BUG,
+					"bug_status" => 4,
+				));
+			}
+			else
+			{
+				$ol = new object_list(array(
+					"parent" => $pt,
+					"class_id" => CL_BUG,
+					"bug_status" => new obj_predicate_not(4),
+				));
+			}
 		}
 		else
 		{
@@ -413,7 +438,6 @@ class bug_tracker extends class_base
 				$obj->delete();
 			}
 		}
-		//return html::get_change_url($arr["id"], array("group" => $arr["group"], "cat" => $arr["cat"]));
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "cat" => $arr["cat"], "group" => $arr["group"]), $arr["class"]);
 	}
 }
