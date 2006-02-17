@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.73 2006/02/16 09:37:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.74 2006/02/17 12:08:57 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -331,6 +331,7 @@ class task extends class_base
 						$this->mail_data["content"]);
 					break;
 				}
+				break;
 				
 			case "end":
 				if ($arr["new"])
@@ -460,6 +461,9 @@ class task extends class_base
 							{
 								$rank = obj($rank);
 								$data["value"] = $rank->prop("hr_price");
+								// immediately store this thingie as well so that the user will not have to save the object
+								$arr["obj_inst"]->set_prop("hr_price", $data["value"]);
+								$arr["obj_inst"]->save();
 								break;
 							}
 						}
@@ -1321,8 +1325,8 @@ class task extends class_base
 
 		$u = get_instance(CL_USER);
 		$def_impl = $u->get_current_person();
-		$def_impl = array($def_impl => $def_impl);
-
+		$o_def_impl = array($def_impl => $def_impl);
+		
 		$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW"));
 		$cs[] = NULL;
 		$cs[] = NULL;
@@ -1335,11 +1339,13 @@ class task extends class_base
 			{
 				$idx = $null_idx--;
 				$row = obj();
+				$def_impl = $o_def_impl;
 			}
 			else
 			{
 				$idx = $ro->prop("to");
 				$row = $ro->to();
+				$def_impl = array();
 			}
 			$date_sel = "<A HREF='#'  onClick=\"var cal=new CalendarPopup();cal.select(aw_get_el('rows[$idx][date]'),'anchor".$idx."','dd/MM/yy'); return false;\"
 						   NAME='anchor".$idx."' ID='anchor".$idx."'>".t("vali")."</A>";
@@ -1449,6 +1455,10 @@ class task extends class_base
 
 		$rows = array();
 		//$dat = safe_array($task->meta("rows"));
+		if ($task->brother_of() != $task->id())
+		{
+			$task = obj($task->brother_of());
+		}
 		foreach($task->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
 			$row = $c->to();
@@ -1473,8 +1483,7 @@ class task extends class_base
 				);
 			}
 		}
-
-		if (!count($rows))
+		if (!count($rows) )
 		{
 			// add the main task to the first bill only
 			$add = true;
@@ -1508,7 +1517,7 @@ class task extends class_base
 				);
 			}
 		}
-
+		
 		// add other expenses rows
 		foreach(safe_array($task->meta("other_expenses")) as $idx => $oe)
 		{
@@ -1527,7 +1536,6 @@ class task extends class_base
 			);
 		}
 		
-
 		return $rows;
 	}
 
@@ -1915,6 +1923,7 @@ class task extends class_base
 			$row->set_prop("date", $stopper["start"]);
 			$row->set_prop("impl", array($cp->id() => $cp->id()));
 			$row->set_prop("time_real", $el_hr);
+			$row->set_prop("time_to_cust", $el_hr);
 			$row->set_prop("done", 1);
 			$row->save();
 			$o->connect(array(
@@ -2065,7 +2074,7 @@ class task extends class_base
 				$o->set_prop("content", $e["task"]);
 				$is_mod = true;
 			}
-
+			
 			if ($o->class_id() == CL_CRM_MEETING)
 			{
 				$mti = $o->instance();
