@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.5 2005/12/27 21:27:14 ekke Exp $
-// phone.aw - Telefon 
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.6 2006/02/17 16:56:07 voldemar Exp $
+// phone.aw - Telefon
 /*
 
 @classinfo syslog_type=ST_CRM_PHONE relationmgr=yes
@@ -14,7 +14,7 @@
 @property comment type=textbox
 @caption Kommentaar
 
-@property type type=chooser orient=vertical field=meta method=serialize 
+@property type type=chooser orient=vertical field=meta method=serialize
 @caption Numbri tüüp
 
 @property country type=relpicker reltype=RELTYPE_COUNTRY field=meta method=serialize automatic=1
@@ -28,7 +28,7 @@
 @caption Numbriga seotud objekt
 
 @reltype COUNTRY value=2 clid=CL_CRM_COUNTRY
-@caption Riik 
+@caption Riik
 */
 
 class crm_phone extends class_base
@@ -54,6 +54,7 @@ class crm_phone extends class_base
 					"mobile" => t("mobiil"),
 					"fax" => t("faks"),
 					"skype" => t("skype"),
+					"extension" => t("sisetelefon"),
 				);
 				break;
 		};
@@ -64,7 +65,7 @@ class crm_phone extends class_base
 	// Returns nicer view (formatted, with or without country code)
 	//  oid - id of phone object
 	//  show_area_code - boolean, default true
-	
+
 	function show($arr)
 	{
 		$return = "";
@@ -78,7 +79,7 @@ class crm_phone extends class_base
 		{
 			return;
 		}
-		
+
 		$ccode = true;
 		if (!empty($arr['show_area_code']) && !$arr['show_area_code'])
 		{
@@ -101,6 +102,6 @@ class crm_phone extends class_base
 		$return .= $o->name();
 		return $return;
 	}
-	
+
 };
 ?>
