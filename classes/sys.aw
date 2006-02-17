@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.66 2006/02/16 10:49:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.67 2006/02/17 14:05:17 dragut Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -388,6 +388,7 @@ class sys extends aw_template
 	//	global $donor_struct;
 		$donor_struct = $_SESSION['donor_struct'];
 		$orig = $this->db_get_struct();
+	//	error_reporting(E_ALL);
 		extract($args);
 		if (is_array($check))
 		{
@@ -423,7 +424,7 @@ class sys extends aw_template
 								$flags .= " NOT NULL";
 							};
 						};
-						$line = "ALTER TABLE $table CHANGE $key $key $dr[type] $flags";
+						$line = "ALTER TABLE `$table` CHANGE `$key` `$key` $dr[type] $flags";
 					}
 					else
 					{
@@ -445,13 +446,13 @@ class sys extends aw_template
 
 						if (not(is_array($orig[$table])))
 						{
-							$line = "CREATE table $table ($key $dr[type] $flags $autoinc)";
+							$line = "CREATE table `$table` (`$key` $dr[type] $flags $autoinc)";
 							echo "line = $line <br />";
 							$orig[$table] = array();
 						}
 						else
 						{
-							$line = "ALTER TABLE $table ADD $key $dr[type] $flags $autoinc";
+							$line = "ALTER TABLE `$table` ADD `$key` $dr[type] $flags $autoinc";
 						};
 					};
 
@@ -461,11 +462,11 @@ class sys extends aw_template
 					$line = "";
 					if ( ($dr["key"] == "PRI") && ($prim_key_added == false))
 					{
-						$line = "ALTER TABLE $table ADD PRIMARY KEY ($key)";
+						$line = "ALTER TABLE `$table` ADD PRIMARY KEY (`$key`)";
 					}
 					elseif ($dr["key"] == "MUL")
 					{
-						$line = "ALTER TABLE $table ADD KEY ($key)";
+						$line = "ALTER TABLE `$table` ADD KEY (`$key`)";
 					};
 					if ($line)
 					{
