@@ -83,7 +83,7 @@ FCKConfig.ToolbarSets["aw"] = [
 	['OrderedList','UnorderedList','-','Outdent','Indent'],
 	['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
 	['Link','Unlink','Anchor'],
-	['Image','Table','Rule','Smiley','SpecialChar','PageBreak','UniversalKey'],
+	['Image','Table','Rule','SpecialChar','PageBreak','UniversalKey'],
 	['Style','FontFormat','FontName','FontSize'],
 	['TextColor','BGColor']
 ] ;
