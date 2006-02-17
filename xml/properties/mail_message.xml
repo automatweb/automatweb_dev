@@ -92,7 +92,6 @@
             <type>textarea</type>
             <cols>80</cols>
             <rows>40</rows>
-            <richtext>1</richtext>
             <field>message</field>
             <caption>Sisu</caption>
       </property>
@@ -208,7 +207,6 @@
             <no_status>1</no_status>
             <syslog_type>ST_MAIL_MESSAGE</syslog_type>
             <relationmgr>yes</relationmgr>
-            <allow_rte>2</allow_rte>
       </classinfo>
       <groupinfo>
             <general>

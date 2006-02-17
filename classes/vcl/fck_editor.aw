@@ -1,22 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.2 2006/02/08 10:46:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.3 2006/02/17 15:13:37 ahti Exp $
 // fck_editor.aw - FCKeditor
 
-class fck_editor extends aw_template
+class fck_editor
 {
-	function rte()
-	{
-		$this->init(array(
-			"tpldir" => "rte",
-			"clid" => CL_RTE
-		));
-	}
-	
-
-
 	function get_rte_toolbar($arr)
 	{
-
 		$toolbar = &$arr["toolbar"];
 		$toolbar->add_separator();
 		if($arr["no_rte"] == 1)
@@ -37,35 +26,6 @@ class fck_editor extends aw_template
 				"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
 			));
 		}
-		/*
-		$js_url_prefix = "";
-		if (!empty($arr["target"]))
-		{
-			$js_url_prefix = "parent.contentarea.";
-		};
-
-		$toolbar->add_button(array(
-			"name" => "bold",
-			"tooltip" => t("Bold"),
-			"url" => "javascript:${js_url_prefix}format_selection('bold');",
-			"img" => "rte_bold.gif",
-		));
-
-		$toolbar->add_button(array(
-			"name" => "italic",
-			"tooltip" => t("Italic"),
-			"url" => "javascript:${js_url_prefix}format_selection('italic');",
-			"img" => "rte_italic.gif",
-		));
-
-		$toolbar->add_button(array(
-			"name" => "underline",
-			"tooltip" => t("Underline"),
-			"url" => "javascript:${js_url_prefix}format_selection('underline');",
-			"img" => "rte_underline.gif",
-		));
-		$this->get_styles_from_site();
-		*/
 	}
 
 	function get_styles_from_site($arr = array())
@@ -86,14 +46,20 @@ class fck_editor extends aw_template
 <!--
 window.onload = function()
 {
-	var fck = new FCKeditor("'.$arr["name"].'");
-	fck.BasePath = "js/fckeditor/";
-	fck.ToolbarSet = "aw";
-	//fck.Width = "700px";
-	fck.Height = "500px";
-	fck.Config["AutoDetectLanguage"] = false;
-	fck.Config["DefaultLanguage"] = "et";
-	fck.ReplaceTextarea();
+	';
+	foreach($arr["props"] as $nm)
+	{
+		$retval .= '
+		var fck'.$nm.' = new FCKeditor("'.$nm.'");
+		fck'.$nm.'.BasePath = "js/fckeditor/";
+		fck'.$nm.'.ToolbarSet = "aw";
+		fck'.$nm.'.Width = "800px";
+		fck'.$nm.'.Height = "500px";
+		fck'.$nm.'.Config["AutoDetectLanguage"] = false;
+		fck'.$nm.'.Config["DefaultLanguage"] = "'.(!empty($arr["lang"]) ? $arr["lang"] : "et").'";
+		fck'.$nm.'.ReplaceTextarea();';
+	}
+	$retval .= '
 }
 -->
 </script>

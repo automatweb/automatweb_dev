@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.98 2006/02/15 13:03:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.99 2006/02/17 15:13:37 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -172,11 +172,6 @@ class html extends aw_template
 		{
 			if($rte_type == 2)
 			{
-				$rte = get_instance("vcl/fck_editor");
-				$retval = $rte->draw_editor($args);
-				$disabled = ($disabled ? " disabled" : "");
-				$wrap = isset($wrap) ? $wrap : "soft";
-				$style = isset($style) ? " style='$style' " : "";
 				$retval .= "<textarea $onchange id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style $disabled $textsize>$value</textarea>\n";
 			}
 			else

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.56 2006/02/08 10:46:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.57 2006/02/17 15:13:37 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2410,6 +2410,7 @@ class ml_list extends class_base
 				}
 				elseif($id == "message")
 				{
+					$prop["richtext"] = 1;
 					$filtered_props["legend"] = array(
 						"type" => "text",
 						"name" => "legend",
@@ -2446,6 +2447,7 @@ class ml_list extends class_base
 				"obj_inst" => $msg_obj,
 				"properties" => $filtered_props,
 				"name_prefix" => "emb",
+				"classinfo" => array("allow_rte" => 2),
 			));
 		}
 		if(is_oid($xprops["emb_mfrom"]["value"]))

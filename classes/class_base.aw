@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.459 2006/02/14 10:42:21 ahti Exp $
+// $Id: class_base.aw,v 2.460 2006/02/17 15:13:37 ahti Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2189,6 +2189,14 @@ class class_base extends aw_template
 		{
 			return false;
 		};
+		if(is_array($args["classinfo"]))
+		{
+			foreach($args["classinfo"] as $k => $val)
+			{
+				$this->classinfo[$k] = $val;
+			}
+
+		}
 
 		if (is_object($args["obj_inst"]))
 		{
@@ -2411,8 +2419,6 @@ class class_base extends aw_template
 				$has_rte = true;
 			};
 		}
-
-
 		if ($this->classinfo(array("name" => "allow_rte")) < 1)
 		{
 			$has_rte = false;
@@ -2457,7 +2463,6 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-
 			if ($val["type"] == "textarea" && $has_rte == false)
 			{
 				unset($val["richtext"]);
