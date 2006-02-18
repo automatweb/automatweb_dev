@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.29 2005/07/11 12:53:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.30 2006/02/18 10:49:16 voldemar Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -47,10 +47,10 @@ class pot_scanner extends core
 
 	function _files_from_folder($dir, $ext, &$ret)
 	{
-		if ($dh = @opendir($dir)) 
+		if ($dh = @opendir($dir))
 		{
 			while (false !== ($file = readdir($dh)))
-			{ 
+			{
 				if ($file == "converters.aw")
 				{
 					continue;
@@ -89,7 +89,7 @@ class pot_scanner extends core
 		$meth_name_chars = "\"1234567890qwertyuiopasdfghjklzxcvbnm_QWERTYUIOPASDFGHJKLZXCVBNM";
 
 		$fc = $this->get_file(array("file" => $file_from));
-		
+
 		$len = strlen($fc);
 		$line = 1;
 		for($i = 0; $i < $len; $i++)
@@ -113,12 +113,12 @@ class pot_scanner extends core
 					{
 						$i++;
 					}
-					
+
 					// get separator
 					$sep = $fc{$i};
 					if ($sep != "\"" && $sep != "'")
 					{
-						$i--; 
+						$i--;
 						continue;
 					}
 
@@ -179,7 +179,7 @@ class pot_scanner extends core
 	function scan_file_warn($from_file)
 	{
 		$fc = file($from_file);
-		
+
 		foreach($fc as $ln => $line)
 		{
 			if (preg_match("/\"caption\"(\s*)=>(\s*)['|\"](.*)['|\"]/imsU", $line))
@@ -259,7 +259,7 @@ class pot_scanner extends core
 			"str" => "Klassi ".$clss[clid_for_name(basename($propf, ".xml"))]["name"]." help"
 		);
 
-		// generate strings for 
+		// generate strings for
 		//  1) property captions
 		//  2) property comments
 		//  3) property help
@@ -282,7 +282,7 @@ class pot_scanner extends core
 				"str" => "Omaduse ".$pd["caption"]." ($pn) help",
 			);
 		}
-		
+
 		//  4) group captions
 		$grps = $cu->get_groupinfo();
 		foreach($grps as $gn => $gd)
@@ -326,7 +326,7 @@ class pot_scanner extends core
 
 		foreach($langs as $lang)
 		{
-			echo "scanning language $lang \n";		
+			echo "scanning language $lang \n";
 
 			// get .po files
 			$po_files = array();
@@ -337,7 +337,7 @@ class pot_scanner extends core
 			$aw_files = array();
 			$this->_files_from_folder(aw_ini_get("basedir")."/lang/trans/".$lang."/aw", "aw", $aw_files);
 
-			// compare times 
+			// compare times
 			foreach($po_files as $fn => $tm)
 			{
 				$awfn = aw_ini_get("basedir")."/lang/trans/".$lang."/aw/".basename($fn, ".po").".aw";
@@ -450,7 +450,7 @@ class pot_scanner extends core
 	{
 		$langs = array();
 		$dir = aw_ini_get("basedir")."/lang/trans";
-		if ($dh = @opendir($dir)) 
+		if ($dh = @opendir($dir))
 		{
 			while (false !== ($file = readdir($dh)))
 			{
@@ -552,7 +552,7 @@ class pot_scanner extends core
 		{
 			$tmpf = tempnam(aw_ini_get("server.tmpdir"), "awtrans");
 			$this->_write_file($tmpf, $strings, date("r", mktime(0,0,0,1,1,2020)), $file_from);
-		
+
 			if (md5($this->get_file(array("file" => $tmpf))) != md5($this->get_file(array("file" => $file_to))))
 			{
 				$this->_write_file($file_to, $strings, date("r",mktime(0,0,0,1,1,2020)), $file_from);
@@ -585,54 +585,73 @@ class pot_scanner extends core
 		}
 	}
 
-	function list_untrans_strings()
+	function list_untrans_strings($lang = "", $class = "")
 	{
-		// go over languages
 		$langs = $this->get_langs();
 
-		foreach($langs as $lang)
+		if (in_array($lang, $langs))
 		{
-			echo "scanning language $lang \n";
-			// go over po files
-			$dir = aw_ini_get("basedir")."/lang/trans/$lang/po";
-			$files = array();
-			$this->_files_from_folder($dir, "po", $files);
-
-			foreach($files as $file => $ts)
+			$this->_list_untrans_strings_for_lang($lang, $class);
+		}
+		else
+		{
+			// go over languages
+			foreach($langs as $lang)
 			{
-				if (basename($file) == "register_data.po" || basename($file) == "survey.po" || basename($file) == "calendar_registration_form.po")
-				{
-					continue;
-				}
-				$data = $this->parse_po_file($file);
+				$this->_list_untrans_strings_for_lang($lang, $class);
+			}
+		}
 
-				$first = true;
-				// go over lines
-				foreach($data as $line)
+		exit("\n\nscan completed.");
+	}
+
+	function _list_untrans_strings_for_lang($lang, $class = "")
+	{
+		echo "scanning language $lang ";
+		echo empty($class) ? "\n" : " in class {$class}\n";
+		// go over po files
+		$dir = aw_ini_get("basedir")."/lang/trans/$lang/po";
+		$files = array();
+		$this->_files_from_folder($dir, "po", $files);
+
+		foreach($files as $file => $ts)
+		{
+			if (
+				(basename($file) == "register_data.po" || basename($file) == "survey.po" || basename($file) == "calendar_registration_form.po") or
+				(!empty($class) and (basename($file) != $class . ".po"))
+			)
+			{
+				continue;
+			}
+			$data = $this->parse_po_file($file);
+
+			$first = true;
+			// go over lines
+			foreach($data as $line)
+			{
+				// if msgstr is empty
+				if ($line["msgstr"] == "" && $line["msgid"] != "")
 				{
-					// if msgstr is empty
-					if ($line["msgstr"] == "" && $line["msgid"] != "")
-					{
-						// and the msgid is not for property help/comment
-						if (!$this->_is_prop_help_or_comment($line["msgid"]))
-						{
-							// display it	
-							if ($first)
-							{
-								echo "in file $file: \n";
-							}
-							echo "\tuntranslated msgid $line[msgid] \n";
-							$cnt++;
-						}
-					}
+					// and the msgid is not for property help/comment
 					if (!$this->_is_prop_help_or_comment($line["msgid"]))
 					{
-						$all_cnt++;
+						// display it
+						if ($first)
+						{
+							echo "in file $file: \n";
+						}
+						echo "\tuntranslated msgid $line[msgid] \n";
+						$cnt++;
 					}
 				}
+				if (!$this->_is_prop_help_or_comment($line["msgid"]))
+				{
+					$all_cnt++;
+				}
 			}
-			die(sprintf(t("\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n"), (int)$cnt, (int)$all_cnt));
 		}
+
+		echo sprintf(t("\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n"), (int)$cnt, (int)$all_cnt);
 	}
 
 	function _is_prop_help_or_comment($msgid)
