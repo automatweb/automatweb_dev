@@ -136,5 +136,14 @@
 			</function>
 		</action>
 
+		<action name="list_untrans">
+			<function name="list_missing_translations">
+				<arguments>
+					<optional name="lang" />
+					<optional name="in_class" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
