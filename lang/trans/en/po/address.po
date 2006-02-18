@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/common/address/address.aw:prop_administrative_structure
 msgid "Omaduse Riik/haldusjaotus (administrative_structure) caption"
-msgstr ""
+msgstr "Country/Administrative structure"
 
 #: classes/common/address/address.aw:prop_administrative_structure_comment
 msgid "Omaduse Riik/haldusjaotus (administrative_structure) kommentaar"
@@ -75,7 +75,7 @@ msgstr ""
 
 #: classes/common/address/address.aw:prop_postal_code
 msgid "Omaduse Postiindeks (postal_code) caption"
-msgstr ""
+msgstr "Postal Code"
 
 #: classes/common/address/address.aw:prop_postal_code_comment
 msgid "Omaduse Postiindeks (postal_code) kommentaar"
@@ -87,7 +87,7 @@ msgstr ""
 
 #: classes/common/address/address.aw:prop_street_address
 msgid "Omaduse Maja number (street_address) caption"
-msgstr ""
+msgstr "Street address"
 
 #: classes/common/address/address.aw:prop_street_address_comment
 msgid "Omaduse Maja number (street_address) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/common/address/address.aw:prop_apartment
 msgid "Omaduse Korter/Tuba (apartment) caption"
-msgstr ""
+msgstr "Apartment/Room no."
 
 #: classes/common/address/address.aw:prop_apartment_comment
 msgid "Omaduse Korter/Tuba (apartment) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/common/address/address.aw:prop_po_box
 msgid "Omaduse Postkast (po_box) caption"
-msgstr ""
+msgstr "P.O. Box"
 
 #: classes/common/address/address.aw:prop_po_box_comment
 msgid "Omaduse Postkast (po_box) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/common/address/address.aw:group_grp_address
 msgid "Grupi Aadress (grp_address) pealkiri"
-msgstr ""
+msgstr "Address"
 
 #: classes/common/address/address.aw:group_grp_address_help
 msgid "Grupi Aadress (grp_address) help"
@@ -131,24 +131,24 @@ msgstr ""
 
 #: classes/common/address/address.aw:rel_RELTYPE_ADMINISTRATIVE_STRUCTURE
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
-msgstr ""
+msgstr "Administrative structure"
 
 #: classes/common/address/address.aw:rel_RELTYPE_ADMINISTRATIVE_UNIT
 msgid "Seose Halduspiirkond (RELTYPE_ADMINISTRATIVE_UNIT) tekst"
-msgstr ""
+msgstr "Administrative unit"
 
 #: classes/common/address/address.aw:101
 msgid "Haldusjaotus m‰‰ramata."
-msgstr ""
+msgstr "Administrative structure not defined"
 
 #: classes/common/address/address.aw:216
 msgid "Viga: k6rgem haldusjaotus m22ramata."
-msgstr ""
+msgstr "Error: parent administrative unit not defined"
 
 #: classes/common/address/address.aw:236
 msgid "Viga: valikute taotleja-property m22ramata."
-msgstr ""
+msgstr "Error: options requester not defined"
 
 #: classes/common/address/address.aw:341
 msgid "T‰nav"
-msgstr ""
+msgstr "Street"

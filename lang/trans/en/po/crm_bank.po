@@ -36,5 +36,5 @@ msgstr ""
 
 #: classes/applications/crm/crm_bank.aw:rel_RELTYPE_ADDRESS
 msgid "Seose aadress (RELTYPE_ADDRESS) tekst"
-msgstr ""
+msgstr "Address"
 

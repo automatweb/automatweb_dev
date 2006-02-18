@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_structure.aw:prop_country
 msgid "Omaduse Riik (country) caption"
-msgstr ""
+msgstr "Country"
 
 #: classes/common/country/country_administrative_structure.aw:prop_country_comment
 msgid "Omaduse Riik (country) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_structure.aw:prop_address_admin
 msgid "Omaduse Aadresside administraatori kasutaja uid (address_admin) caption"
-msgstr ""
+msgstr "Address system administrator uid"
 
 #: classes/common/country/country_administrative_structure.aw:prop_address_admin_comment
 msgid ""
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_structure.aw:prop_administrative_structure
 msgid "Omaduse Haldusjaotuse struktuur (administrative_structure) caption"
-msgstr ""
+msgstr "Administrative structure"
 
 #: classes/common/country/country_administrative_structure.aw:prop_administrative_structure_comment
 msgid "Omaduse Haldusjaotuse struktuur (administrative_structure) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_structure.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/common/country/country_administrative_structure.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_structure.aw:group_grp_administrative_structure
 msgid "Grupi Haldusjaotuse struktuur (grp_administrative_structure) pealkiri"
-msgstr ""
+msgstr "Administrative structure"
 
 #: classes/common/country/country_administrative_structure.aw:group_grp_administrative_structure_help
 msgid "Grupi Haldusjaotuse struktuur (grp_administrative_structure) help"
@@ -80,18 +80,18 @@ msgstr ""
 
 #: classes/common/country/country_administrative_structure.aw:rel_RELTYPE_ADMINISTRATIVE_DIVISION
 msgid "Seose Haldus&uuml;ksus (RELTYPE_ADMINISTRATIVE_DIVISION) tekst"
-msgstr ""
+msgstr "Administrative division"
 
 #: classes/common/country/country_administrative_structure.aw:rel_RELTYPE_COUNTRY
 msgid "Seose Riik (RELTYPE_COUNTRY) tekst"
-msgstr ""
+msgstr "Country"
 
 #: classes/common/country/country_administrative_structure.aw:104
 msgid "Riik valimata"
-msgstr ""
+msgstr "Country not selected"
 
 #: classes/common/country/country_administrative_structure.aw:116
 msgid ""
 "%s aadressi kasutab seda haldusjaotust! Muudatuste salvestamisel tekivad "
 "neis aadressides vead."
-msgstr ""
+msgstr "%s addresses are using this administrative structure! Saving changes will break these addresses."

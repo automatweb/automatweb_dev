@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/common/address/address_object.aw:166
 msgid "Postkast"
-msgstr ""
+msgstr "P.O Box"
 
 #: classes/common/address/address_object.aw:652
 msgid ""

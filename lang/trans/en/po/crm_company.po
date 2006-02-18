@@ -164,7 +164,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_firmajuht
 msgid "Omaduse Firmajuht (firmajuht) caption"
-msgstr ""
+msgstr "CEO"
 
 #: classes/crm/crm_company.aw:prop_firmajuht_comment
 msgid "Omaduse Firmajuht (firmajuht) kommentaar"
@@ -176,7 +176,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_contact_person
 msgid "Omaduse Kontaktisik  (contact_person) caption"
-msgstr ""
+msgstr "Contact person"
 
 #: classes/crm/crm_company.aw:prop_contact_person_comment
 msgid "Omaduse Kontaktisik  (contact_person) kommentaar"
@@ -188,7 +188,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_contact_person2
 msgid "Omaduse Kontaktisik 2 (contact_person2) caption"
-msgstr ""
+msgstr "Contact person 2"
 
 #: classes/crm/crm_company.aw:prop_contact_person2_comment
 msgid "Omaduse Kontaktisik 2 (contact_person2) kommentaar"
@@ -200,7 +200,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_contact_person3
 msgid "Omaduse Kontaktisik 3 (contact_person3) caption"
-msgstr ""
+msgstr "Contact person 3"
 
 #: classes/crm/crm_company.aw:prop_contact_person3_comment
 msgid "Omaduse Kontaktisik 3 (contact_person3) kommentaar"
@@ -437,11 +437,11 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_server_folder
 msgid "Omaduse Kataloog serveris, kus asuvad failid (server_folder) caption"
-msgstr ""
+msgstr "Server folder"
 
 #: classes/crm/crm_company.aw:prop_server_folder_comment
 msgid "Omaduse Kataloog serveris, kus asuvad failid (server_folder) kommentaar"
-msgstr ""
+msgstr "Folder in server filesystem where company files are located"
 
 #: classes/crm/crm_company.aw:prop_server_folder_help
 msgid "Omaduse Kataloog serveris, kus asuvad failid (server_folder) help"
@@ -1890,7 +1890,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_act_s_task_name
 msgid "Omaduse Tegevuse nimi (act_s_task_name) caption"
-msgstr ""
+msgstr "Task name"
 
 #: classes/crm/crm_company.aw:prop_act_s_task_name_comment
 msgid "Omaduse Tegevuse nimi (act_s_task_name) kommentaar"
@@ -2262,7 +2262,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
-msgstr ""
+msgstr "Translate"
 
 #: classes/crm/crm_company.aw:prop_transl_comment
 msgid "Omaduse T&otilde;lgi (transl) kommentaar"
@@ -2286,7 +2286,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_general_sub
 msgid "Grupi &Uuml;ldine (general_sub) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/crm/crm_company.aw:group_general_sub_help
 msgid "Grupi &Uuml;ldine (general_sub) help"
@@ -2324,7 +2324,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_user_settings
 msgid "Grupi Seaded (user_settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/crm/crm_company.aw:group_user_settings_help
 msgid "Grupi Seaded (user_settings) help"
@@ -2340,7 +2340,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_people
 msgid "Grupi T&ouml;&ouml;tajad (people) pealkiri"
-msgstr ""
+msgstr "Employees"
 
 #: classes/crm/crm_company.aw:group_people_help
 msgid "Grupi T&ouml;&ouml;tajad (people) help"
@@ -2376,7 +2376,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_edit_sects
 msgid "Grupi Muuda &uuml;ksuseid (edit_sects) pealkiri"
-msgstr ""
+msgstr "Edit sections"
 
 #: classes/crm/crm_company.aw:group_edit_sects_help
 msgid "Grupi Muuda &uuml;ksuseid (edit_sects) help"
@@ -2490,7 +2490,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_all_reports
 msgid "Grupi K&otilde;ik raportid (all_reports) pealkiri"
-msgstr ""
+msgstr "All reports"
 
 #: classes/crm/crm_company.aw:group_all_reports_help
 msgid "Grupi K&otilde;ik raportid (all_reports) help"
@@ -2548,7 +2548,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_documents_forum
 msgid "Grupi Foorum (documents_forum) pealkiri"
-msgstr ""
+msgstr "Forum"
 
 #: classes/crm/crm_company.aw:group_documents_forum_help
 msgid "Grupi Foorum (documents_forum) help"
@@ -2556,7 +2556,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_documents_lmod
 msgid "Grupi Viimati muudetud (documents_lmod) pealkiri"
-msgstr ""
+msgstr "Recently modified"
 
 #: classes/crm/crm_company.aw:group_documents_lmod_help
 msgid "Grupi Viimati muudetud (documents_lmod) help"
@@ -2620,7 +2620,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_transl
 msgid "Grupi T&otilde;lgi (transl) pealkiri"
-msgstr ""
+msgstr "Translate"
 
 #: classes/crm/crm_company.aw:group_transl_help
 msgid "Grupi T&otilde;lgi (transl) help"
@@ -2647,7 +2647,7 @@ msgstr "Products"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_CHILD_ORG
 msgid "Seose T&uuml;tar-organisatsioonid (RELTYPE_CHILD_ORG) tekst"
-msgstr ""
+msgstr "Subsidiaries"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_WORKERS
 msgid "Seose T&ouml;&ouml;tajad (RELTYPE_WORKERS) tekst"
@@ -2744,7 +2744,7 @@ msgstr "Section"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_PROFESSIONS
 msgid "Seose V&otilde;imalikud ametid (RELTYPE_PROFESSIONS) tekst"
-msgstr ""
+msgstr "Available professions"
 
 # classes/crm/crm_company.aw:rel_RELTYPE_CATEGORY
 #: classes/crm/crm_company.aw:rel_RELTYPE_CATEGORY
@@ -2758,7 +2758,7 @@ msgstr "Person to whom the company is a customer"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_SELLER
 msgid "Seose Persoon, kes m&uuml;&uuml;s (RELTYPE_SELLER) tekst"
-msgstr ""
+msgstr "Person acting as seller"
 
 # classes/crm/crm_company.aw:rel_RELTYPE_PROJECT
 #: classes/crm/crm_company.aw:rel_RELTYPE_PROJECT
@@ -2772,11 +2772,11 @@ msgstr "Clent manager"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_SECTION_WEBSIDE
 msgid "Seose &Uuml;ksus veebis (RELTYPE_SECTION_WEBSIDE) tekst"
-msgstr ""
+msgstr "Section webside"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_GROUP
 msgid "Seose Organisatsiooni grupp (RELTYPE_GROUP) tekst"
-msgstr ""
+msgstr "Organisation user group"
 
 # classes/crm/crm_company.aw:rel_RELTYPE_CONTRACT
 #: classes/crm/crm_company.aw:rel_RELTYPE_CONTRACT
@@ -2794,7 +2794,7 @@ msgstr "Daily report"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_DOCS_FOLDER
 msgid "Seose dokumentide kataloog (RELTYPE_DOCS_FOLDER) tekst"
-msgstr ""
+msgstr "Documents folder"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_REFERAL_TYPE
 msgid "Seose sissetuleku meetod (RELTYPE_REFERAL_TYPE) tekst"
@@ -2846,31 +2846,31 @@ msgstr "Resources folder"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_RESOURCE_MGR
 msgid "Seose ressursihalduskeskkond (RELTYPE_RESOURCE_MGR) tekst"
-msgstr ""
+msgstr "Resource manager"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_CONTACT_PERSON
 msgid "Seose Kontaktisik (RELTYPE_CONTACT_PERSON) tekst"
-msgstr ""
+msgstr "Contact person"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_WAREHOUSE
 msgid "Seose Ladu (RELTYPE_WAREHOUSE) tekst"
-msgstr ""
+msgstr "Warehouse"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_DESCRIPTION
 msgid "Seose Lisakirjelduse dokument (RELTYPE_DESCRIPTION) tekst"
-msgstr ""
+msgstr "Additional description"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_NUMBER_SERIES
 msgid "Seose Numbriseeria (RELTYPE_NUMBER_SERIES) tekst"
-msgstr ""
+msgstr "Number series"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_FORUM
 msgid "Seose Foorum (RELTYPE_FORUM) tekst"
-msgstr ""
+msgstr "Forum"
 
 #: classes/crm/crm_company.aw:1255
 msgid "--Vali--"
-msgstr ""
+msgstr "--Select--"
 
 #: classes/crm/crm_company.aw:1272
 msgid "Muuda"
@@ -2948,7 +2948,7 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:4267
 msgid "%s foorum"
-msgstr ""
+msgstr "%s"
 
 #: classes/crm/crm_company.aw:4308
 msgid "%s serveri failid"

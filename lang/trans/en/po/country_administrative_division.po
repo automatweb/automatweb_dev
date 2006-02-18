@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_division.aw:prop_type
 msgid "Omaduse Tüüp (type) caption"
-msgstr ""
+msgstr "Type"
 
 #: classes/common/country/country_administrative_division.aw:prop_type_comment
 msgid "Omaduse Tüüp (type) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_division.aw:prop_parent_division_show
 msgid "Omaduse Kõrgem haldusüksus (parent_division_show) caption"
-msgstr ""
+msgstr "Parent division"
 
 #: classes/common/country/country_administrative_division.aw:prop_parent_division_show_comment
 msgid "Omaduse Kõrgem haldusüksus (parent_division_show) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_division.aw:prop_parent_division
 msgid "Omaduse Kõrgem haldusüksus (parent_division) caption"
-msgstr ""
+msgstr "Parent division"
 
 #: classes/common/country/country_administrative_division.aw:prop_parent_division_comment
 msgid "Omaduse Kõrgem haldusüksus (parent_division) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_division.aw:prop_jrk
 msgid "Omaduse Järjekord (jrk) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/common/country/country_administrative_division.aw:prop_jrk_comment
 msgid "Omaduse Järjekord (jrk) kommentaar"
@@ -76,7 +76,7 @@ msgstr ""
 
 #: classes/common/country/country_administrative_division.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/common/country/country_administrative_division.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -84,17 +84,17 @@ msgstr ""
 
 #: classes/common/country/country_administrative_division.aw:rel_RELTYPE_PARENT_ADMINISTRATIVE_UNIT
 msgid "Seose K&otilde;rgem haldus&uuml;ksus (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
-msgstr ""
+msgstr "Parent administrative division"
 
 #: classes/common/country/country_administrative_division.aw:85
 msgid "Haldusüksus"
-msgstr ""
+msgstr "Administrative division"
 
 #: classes/common/country/country_administrative_division.aw:86
 msgid "Linna tüüpi haldusüksus"
-msgstr ""
+msgstr "Division of City type"
 
 #: classes/common/country/country_administrative_division.aw:87
 msgid "Linnaosa tüüpi haldusüksus"
-msgstr ""
+msgstr "Division of Citypart type"
 

@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_tax_type
 msgid "Omaduse Maksu liik (tax_type) caption"
-msgstr ""
+msgstr "Tax type"
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_tax_type_comment
 msgid "Omaduse Maksu liik (tax_type) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_tax_amt
 msgid "Omaduse Maksum&auml;&auml;r (%) (tax_amt) caption"
-msgstr ""
+msgstr "Rate"
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_tax_amt_comment
 msgid "Omaduse Maksum&auml;&auml;r (%) (tax_amt) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_act_from
 msgid "Omaduse Kehtib alates (act_from) caption"
-msgstr ""
+msgstr "Valid from"
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_act_from_comment
 msgid "Omaduse Kehtib alates (act_from) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_act_to
 msgid "Omaduse Kehtib kuni (act_to) caption"
-msgstr ""
+msgstr "Valid to"
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_act_to_comment
 msgid "Omaduse Kehtib kuni (act_to) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_code
 msgid "Omaduse K&auml;ibemaksukood (code) caption"
-msgstr ""
+msgstr "VAT code"
 
 #: classes/applications/crm/crm_tax_rate.aw:prop_code_comment
 msgid "Omaduse K&auml;ibemaksukood (code) kommentaar"
@@ -76,21 +76,21 @@ msgstr ""
 
 #: classes/applications/crm/crm_tax_rate.aw:39
 msgid "K&auml;ibemaks"
-msgstr ""
+msgstr "VAT"
 
 #: classes/applications/crm/crm_tax_rate.aw:40
 msgid "&Uuml;ksikisiku tulumaks"
-msgstr ""
+msgstr "Personal income tax"
 
 #: classes/applications/crm/crm_tax_rate.aw:41
 msgid "Ettev&otilde;tte tulumaks"
-msgstr ""
+msgstr "Commercial organisation income tax"
 
 #: classes/applications/crm/crm_tax_rate.aw:42
 msgid "Sotsiaalmaks"
-msgstr ""
+msgstr "Social security tax"
 
 #: classes/applications/crm/crm_tax_rate.aw:43
 msgid "T&ouml;&ouml;tuskindlustusmaks"
-msgstr ""
+msgstr "Unemployment insurance tax"
 

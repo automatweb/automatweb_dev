@@ -16,7 +16,7 @@ msgstr ""
 
 #: classes/common/country/country.aw:prop_administrative_structure
 msgid "Omaduse Haldusjaotus (administrative_structure) caption"
-msgstr ""
+msgstr "Administrartive structure"
 
 #: classes/common/country/country.aw:prop_administrative_structure_comment
 msgid "Omaduse Haldusjaotus (administrative_structure) kommentaar"
@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/common/country/country.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/common/country/country.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/common/country/country.aw:group_grp_settings
 msgid "Grupi Seaded (grp_settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/common/country/country.aw:group_grp_settings_help
 msgid "Grupi Seaded (grp_settings) help"
@@ -44,11 +44,11 @@ msgstr ""
 
 #: classes/common/country/country.aw:rel_RELTYPE_ADMINISTRATIVE_STRUCTURE
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
-msgstr ""
+msgstr "Administrartive structure"
 
 #: classes/common/country/country.aw:67
 msgid "%s aadressi kasutab hetkel valitud haldusjaotust! Muudatuste salvestamisel ..."
-msgstr ""
+msgstr "%s addresses using selected administrative structure"
 
 #: classes/common/country/country.aw:91
 msgid "Riigi adminstratiivjaotuse objekt peab asuma riigiobjekti all"

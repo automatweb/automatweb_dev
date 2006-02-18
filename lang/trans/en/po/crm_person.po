@@ -710,7 +710,7 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_languages
 msgid "Omaduse Keeled (languages) caption"
-msgstr ""
+msgstr "Languages"
 
 #: classes/crm/crm_person.aw:prop_languages_comment
 msgid "Omaduse Keeled (languages) kommentaar"
@@ -794,7 +794,7 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_transl
 msgid "Omaduse T&otilde;lgi (transl) caption"
-msgstr ""
+msgstr "Translate"
 
 #: classes/crm/crm_person.aw:prop_transl_comment
 msgid "Omaduse T&otilde;lgi (transl) kommentaar"
@@ -1012,7 +1012,7 @@ msgstr "children"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_WORK
 msgid "Seose t&ouml;&ouml;koht (RELTYPE_WORK) tekst"
-msgstr ""
+msgstr "Employer"
 
 # classes/crm/crm_person.aw:rel_RELTYPE_RANK
 #: classes/crm/crm_person.aw:rel_RELTYPE_RANK
@@ -1026,7 +1026,7 @@ msgstr "meeting"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_PERSON_CALL
 msgid "Seose k&otilde;ne (RELTYPE_PERSON_CALL) tekst"
-msgstr ""
+msgstr "Telephone cal"
 
 # classes/crm/crm_person.aw:rel_RELTYPE_PERSON_TASK
 #: classes/crm/crm_person.aw:rel_RELTYPE_PERSON_TASK
@@ -1060,7 +1060,7 @@ msgstr "order"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_SECTION
 msgid "Seose &Uuml;ksus (RELTYPE_SECTION) tekst"
-msgstr ""
+msgstr "Section"
 
 # classes/crm/crm_person.aw:rel_RELTYPE_HANDLER
 #: classes/crm/crm_person.aw:rel_RELTYPE_HANDLER
@@ -1079,7 +1079,7 @@ msgstr "Drivers licence"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_PREVIOUS_JOB
 msgid "Seose T&ouml;&ouml;kogemus (RELTYPE_PREVIOUS_JOB) tekst"
-msgstr ""
+msgstr "Previous job"
 
 # classes/crm/crm_person.aw:rel_RELTYPE_LANGUAGE_SKILL
 #: classes/crm/crm_person.aw:rel_RELTYPE_LANGUAGE_SKILL
@@ -1098,7 +1098,7 @@ msgstr "description document"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_FRIEND
 msgid "Seose S&otilde;ber (RELTYPE_FRIEND) tekst"
-msgstr ""
+msgstr "Friend"
 
 # classes/crm/crm_person.aw:rel_RELTYPE_FAVOURITE
 #: classes/crm/crm_person.aw:rel_RELTYPE_FAVOURITE
@@ -1130,19 +1130,19 @@ msgstr "Vacation"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_CONTRACT_STOP
 msgid "Seose T&ouml;&ouml;lepingu peatamine (RELTYPE_CONTRACT_STOP) tekst"
-msgstr ""
+msgstr "Job contract termination"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_IMPORTANT_PERSON
 msgid "Seose kontaktisik (RELTYPE_IMPORTANT_PERSON) tekst"
-msgstr ""
+msgstr "Important person"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_CLIENT_MANAGER
 msgid "Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"
-msgstr ""
+msgstr "Client manager"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_LANGUAGE
 msgid "Seose Keel (RELTYPE_LANGUAGE) tekst"
-msgstr ""
+msgstr "Language"
 
 #: classes/crm/crm_person.aw:506 classes/crm/crm_person.aw:537
 #: classes/crm/crm_person.aw:581
@@ -1191,7 +1191,7 @@ msgstr "woman"
 
 #: classes/crm/crm_person.aw:805
 msgid "Muuda kliendibaasi seadeid"
-msgstr ""
+msgstr "Change CRM settings"
 
 #: classes/crm/crm_person.aw:837
 msgid "Organisatsioon"

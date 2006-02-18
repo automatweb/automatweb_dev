@@ -116,7 +116,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_SECTION
 msgid "Seose Alam&uuml;ksus (RELTYPE_SECTION) tekst"
-msgstr ""
+msgstr "Subsection"
 
 # classes/crm/crm_section.aw:rel_RELTYPE_WORKERS
 #: classes/crm/crm_section.aw:rel_RELTYPE_WORKERS
@@ -130,7 +130,7 @@ msgstr "Role"
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_JOB_OFFER
 msgid "Seose T&ouml;&ouml;pakkumine (RELTYPE_JOB_OFFER) tekst"
-msgstr ""
+msgstr "Job offer"
 
 # classes/crm/crm_section.aw:rel_RELTYPE_GROUP
 #: classes/crm/crm_section.aw:rel_RELTYPE_GROUP

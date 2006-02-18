@@ -28,7 +28,7 @@ msgstr ""
 
 #: classes/common/country/country_city.aw:prop_subclass
 msgid "Omaduse Tüüp (subclass) caption"
-msgstr ""
+msgstr "Division"
 
 #: classes/common/country/country_city.aw:prop_subclass_comment
 msgid "Omaduse Tüüp (subclass) kommentaar"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: classes/common/country/country_city.aw:prop_parent
 msgid "Omaduse Kõrgem halduspiirkond (parent) caption"
-msgstr ""
+msgstr "Parent unit"
 
 #: classes/common/country/country_city.aw:prop_parent_comment
 msgid "Omaduse Kõrgem halduspiirkond (parent) kommentaar"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: classes/common/country/country_city.aw:prop_parent_show
 msgid "Omaduse Kõrgem halduspiirkond (parent_show) caption"
-msgstr ""
+msgstr "Parent unit"
 
 #: classes/common/country/country_city.aw:prop_parent_show_comment
 msgid "Omaduse Kõrgem halduspiirkond (parent_show) kommentaar"
@@ -64,7 +64,7 @@ msgstr ""
 
 #: classes/common/country/country_city.aw:prop_parent_select
 msgid "Omaduse Vali kõrgem halduspiirkond (parent_select) caption"
-msgstr ""
+msgstr "Select parent unit"
 
 #: classes/common/country/country_city.aw:prop_parent_select_comment
 msgid "Omaduse Vali kõrgem halduspiirkond (parent_select) kommentaar"
@@ -88,7 +88,7 @@ msgstr ""
 
 #: classes/common/country/country_city.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/common/country/country_city.aw:group_general_help
 msgid "Grupi Üldine (general) help"
@@ -96,5 +96,5 @@ msgstr ""
 
 #: classes/common/country/country_city.aw:rel_RELTYPE_PARENT_ADMINISTRATIVE_UNIT
 msgid "Seose K&otilde;rgem halduspiirkond (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
-msgstr ""
+msgstr "Parent administrative unit"
 
