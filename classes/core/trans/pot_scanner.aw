@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.30 2006/02/18 10:49:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.31 2006/02/18 14:49:30 voldemar Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -578,9 +578,24 @@ class pot_scanner extends core
 			}
 			else
 			{
-				// -U updates file in place, and real men do not need a backup
-				shell_exec("msgmerge -N -U --backup=off $fn $file_to 2>/dev/null");
-				//shell_exec("msgmerge -U --backup=off $fn $file_to -o $fn");
+				$server_platform = aw_ini_get("server.platform");
+
+				switch ($server_platform)
+				{
+					case "unix":
+						// -U updates file in place, and real men do not need a backup
+						shell_exec("msgmerge -N -U --backup=off $fn $file_to 2>/dev/null");
+						//shell_exec("msgmerge -U --backup=off $fn $file_to -o $fn");
+						break;
+
+					case "win32":
+						$fn_win = str_replace("/", "\\", $fn);
+						$file_to_win = str_replace("/", "\\", $file_to);
+						$cmd_string = "msgmerge -N -U --backup=off $fn_win $file_to_win";
+						// exec($cmd_string);
+						`$cmd_string`;
+						break;
+				}
 			}
 		}
 	}
