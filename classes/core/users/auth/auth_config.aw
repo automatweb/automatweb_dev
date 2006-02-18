@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.17 2005/09/14 17:57:17 kristo Exp $
-// auth_config.aw - Autentimise Seaded 
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.18 2006/02/18 13:02:29 voldemar Exp $
+// auth_config.aw - Autentimise Seaded
 /*
 
 @classinfo syslog_type=ST_AUTH_CONFIG relationmgr=yes no_comment=1 no_status=1
@@ -84,7 +84,7 @@ class auth_config extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function mk_activity_table($arr)
 	{
@@ -97,7 +97,7 @@ class auth_config extends class_base
 			"class_id" => CL_AUTH_CONFIG,
 			"site_id" => array(),
 			"lang_id" => array()
-		));	
+		));
 		for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
 		{
 			$actcheck = checked($o->flag(OBJ_FLAG_IS_SELECTED));
@@ -144,7 +144,7 @@ class auth_config extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_servers_tbl($t);
 
-		$clss = aw_ini_get("classes");		
+		$clss = aw_ini_get("classes");
 
 		$data = $arr["obj_inst"]->meta("auth");
 
@@ -238,7 +238,7 @@ class auth_config extends class_base
 			{
 				break;
 			}
-		}	
+		}
 		if ($msg == "")
 		{
 			$msg = "Sellist kasutajat pole!";
@@ -353,21 +353,21 @@ class auth_config extends class_base
 		return true;
 	}
 
-	/** Generates the login form 
-		
+	/** Generates the login form
+
 		@attrib name=show_login params=name nologin="1" default="0"
-		
-		
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
 	function show_login($args = array())
 	{
 		$this->read_adm_template("login.tpl");
-		// remember the uri used before login so that we can 
+		// remember the uri used before login so that we can
 		// redirect the user back there after (and if) he/she has finally
 		// logged in
 		$_SESSION["request_uri_before_auth"] = aw_global_get("REQUEST_URI");
