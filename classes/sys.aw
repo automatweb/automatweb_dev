@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.68 2006/02/18 09:31:57 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.69 2006/02/18 10:48:05 voldemar Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -1193,6 +1193,35 @@ class sys extends aw_template
 		$i->full_scan();
 		flush();
 		$i->make_aw();
+	}
+
+/**
+	@attrib name=list_untrans
+	@param lang optional
+	@param in_class optional
+**/
+	function list_missing_translations($arr = array())
+	{
+		if (!headers_sent())
+		{
+			header ("Content-Type: text/plain");
+		}
+
+		if (!aw_ini_get("enable_web_maintenance"))
+		{
+			exit;
+		}
+
+		ini_set ("max_execution_time", "1500");
+		ini_set ("memory_limit", "200");
+		$this->_list_missing_translations($arr["lang"], $arr["in_class"]);
+		exit;
+	}
+
+	function _list_missing_translations($lang = "", $class = "")
+	{
+		$i = get_instance("core/trans/pot_scanner");
+		$i->list_untrans_strings($lang, $class);
 	}
 }
 
