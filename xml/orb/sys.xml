@@ -129,5 +129,12 @@
 			</function>
 		</action>
 
+		<action name="make_trans">
+			<function name="make_translations">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
