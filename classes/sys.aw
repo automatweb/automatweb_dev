@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.67 2006/02/17 14:05:17 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.68 2006/02/18 09:31:57 voldemar Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -1165,5 +1165,35 @@ class sys extends aw_template
 
 		exit;
 	}
-};
+
+/**
+	@attrib name=make_trans
+**/
+	function make_translations()
+	{
+		if (!headers_sent())
+		{
+			header ("Content-Type: text/plain");
+		}
+
+		if (!aw_ini_get("enable_web_maintenance"))
+		{
+			exit;
+		}
+
+		ini_set ("max_execution_time", "1500");
+		ini_set ("memory_limit", "200");
+		$this->_make_translations();
+		exit;
+	}
+
+	function _make_translations()
+	{
+		$i = get_instance("core/trans/pot_scanner");
+		$i->full_scan();
+		flush();
+		$i->make_aw();
+	}
+}
+
 ?>
