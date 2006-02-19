@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.19 2006/02/17 13:23:38 sander Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.19 2006/02/17 13:23:38 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.20 2006/02/19 15:42:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.20 2006/02/19 15:42:18 tarvo Exp $
 
 // bug_tracker.aw - BugTrack 
 /*
@@ -14,7 +14,12 @@
 @caption Bugi objekti t&uuml;&uuml;p
 
 @groupinfo bugs caption="Bugid" submit=no
-@default group=bugs
+	@groupinfo by_default caption="default" parent=bugs submit=no
+	@groupinfo by_project caption="Projektid" parent=bugs submit=no
+	@groupinfo by_who caption="Kellele" parent=bugs submit=no
+	@groupinfo by_classes caption="Klassid" parent=bugs submit=no
+
+@default group=by_default,by_project,by_who,by_classes
 
 @property bug_tb type=toolbar no_caption=1 group=bugs,archive
 
@@ -22,10 +27,11 @@
 
 @layout bug type=hbox width=15%:85%
 	@property bug_tree type=treeview parent=bug no_caption=1
-	@property bug_list type=table parent=bug no_caption=1 group=bugs,archive
+	@property bug_list type=table parent=bug no_caption=1 group=bugs,archive,by_default,by_project,by_who,by_classes
 
 @groupinfo archive caption="Arhiiv" submit=no
 @default group=archive
+
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption Jälgija
@@ -46,9 +52,26 @@ class bug_tracker extends class_base
 	}
 
 	function get_property($arr)
-	{
+	{		
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		switch($arr["request"]["group"])
+		{
+			case "by_default":
+				$this->sort_type = "parent";
+				aw_session_set("bug_tree_sort",array("name" => "parent"));
+				break;
+			case "by_project":
+				aw_session_set("bug_tree_sort",array("name" => "project", "class" => CL_PROJECT));
+				break;
+			case "by_who":
+				aw_session_set("bug_tree_sort",array("name" => "who", "class" => CL_CRM_PERSON));
+				break;
+			case "by_classes":
+				aw_session_set("bug_tree_sort",array("name" => "classes"));
+				break;
+		}
+
 		switch($prop["name"])
 		{
 			case "bug_tb":
@@ -62,7 +85,7 @@ class bug_tracker extends class_base
 			case "bug_list":
 				$this->_bug_list($arr);
 				break;
-				
+
 			case "cat":
 				if($this->can("view", $arr["request"]["cat"]))
 				{
@@ -168,10 +191,12 @@ class bug_tracker extends class_base
 	{
 		classload("core/icons");
 		$this->tree = get_instance("vcl/treeview");
+		$this->active_group = aw_global_get("request");
+		$this->active_group = $this->active_group["group"];
 
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
-			"root_icon" => "/path/to/some/image",
+			"root_icon" => icons::get_icon_url(CL_BUG_TRACKER),
 			"tree_id" => "ad_folders",
 			"persist_state" => true,
 		));
@@ -189,20 +214,85 @@ class bug_tracker extends class_base
 		$this->tree->add_item(0,array(
 			"id" => $this->self_id,
 			"name" => $nimi,
-			"url" => html::get_change_url($this->self_id, array("group" => "bugs")),
+			"url" => html::get_change_url($this->self_id, array("group" => $this->active_group)),
 		));
-		$this->generate_bug_tree(array(
-			"oid" => $this->self_id,
-		));
+
+		$this->sort_type = aw_global_get("bug_tree_sort");
+
+		if($this->sort_type["name"] == "parent")
+		{
+			$this->gen_tree_default(array(
+				"oid" => $this->self_id,
+			));
+		}
+		
+		if($this->sort_type["name"] == "who" || $this->sort_type["name"] == "project")
+		{
+			$this->gen_tree_other(array(
+				"oid" => $this->self_id,
+			));
+		}
+
+		if($this->sort_type["name"] == "classes")
+		{
+			$this->gen_tree_classes($this->self_id);
+		}
 
 		$arr["prop"]["value"] = $this->tree->finalize_tree();
 		$arr["prop"]["type"] = "text";
 
 	}
 
+	function gen_tree_default($arr)
+	{
+			$this->generate_bug_tree($arr);
+	}
+
+	function gen_tree_classes($arr)
+	{
+		$fld = aw_ini_get("classfolders");
+
+		// cycles trough every classfolder and puts children beneath their parent folder
+		foreach($fld as $m_id => $m_con)
+		{
+			if($m_con["parent"] == ($arr == $this->self_id ? 0 : $arr))
+			{
+				$this->tree->add_item($arr, array(
+					"id" => $m_id,
+					"name" => $m_con["name"],
+					"url" => html::get_change_url($this->self_id, array("group" => $this->active_group ,"cat" => $m_id)),
+				));
+				$this->gen_tree_classes($m_id);
+			}
+		}
+	}
+
+	function gen_tree_other($arr)
+	{
+		$ol = new object_list(array("class_id" => array($this->sort_type["class"])));
+		$objects = $ol->arr();
+		foreach($objects as $obj_id => $object)
+		{
+			$sub_ol = new object_list(array($this->sort_type["name"] => $obj_id, "class_id" => array(CL_BUG, CL_MENU)));
+
+			$nimi = substr($object->name(),0,20);
+			$nimi .= (strlen($object->name()) > 20)?"...":"";
+			$nimi .= ($sub_ol->count() > 0)?" (".$sub_ol->count().")":"";
+
+			$this->tree->add_item($arr["oid"],array(
+				"id" => $obj_id,
+				"name" => $nimi,
+				"iconurl" => icons::get_icon_url($object->class_id()),
+				"url" => html::get_change_url($this->self_id, array("group" => $this->active_group ,"cat" => $obj_id)),
+			));
+			$this->generate_bug_tree(array("oid" => $obj_id));
+		}
+	}
+
 	function generate_bug_tree($arr)
 	{
-		$ol = new object_list(array("parent" => $arr["oid"],"class_id" => array(CL_BUG, CL_MENU),"bug_status" => new obj_predicate_not(4),));
+		$ol = new object_list(array($arr["sub"]?"parent":$this->sort_type["name"] => $arr["oid"],"class_id" => array(CL_BUG, CL_MENU),"bug_status" => new obj_predicate_not(4),));
+
 		$objects = $ol->arr();
 		foreach($objects as $obj_id => $object)
 		{
@@ -211,7 +301,7 @@ class bug_tracker extends class_base
 				"class_id" => array(CL_BUG, CL_MENU),
 				"bug_status" => new obj_predicate_not(4),
 			));
-			
+
 			$nimi = substr($object->name(),0,20);
 			$nimi .= (strlen($object->name()) > 20)?"...":"";
 			$nimi .= ($sub_ol->count() > 0)?" (".$sub_ol->count().")":"";
@@ -219,10 +309,10 @@ class bug_tracker extends class_base
 				"id" => $obj_id,
 				"name" => $nimi,
 				"iconurl" => icons::get_icon_url($object->class_id()),
-				"url" => html::get_change_url($this->self_id, array("group" => "bugs" ,"cat" => $obj_id)),
+				"url" => html::get_change_url($this->self_id, array("group" => $this->active_group,"cat" => $obj_id)),
 			));
 			
-			$this->generate_bug_tree(array("oid" => $obj_id));
+			$this->generate_bug_tree(array("oid" => $obj_id, "sub" => true));
 		}
 	}
 
