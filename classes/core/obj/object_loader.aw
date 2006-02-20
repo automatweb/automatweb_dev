@@ -429,7 +429,8 @@ class _int_object_loader extends core
 	{
 		if (!($max_acl = $this->__aw_acl_cache[$oid]))
 		{
-			if (($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, "acl-".$oid)) == false)
+			$fn = "acl-".$oid."-uid-".$_SESSION["uid"];
+			if (($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, $fn)) == false)
 			{
 				$max_acl = $this->_calc_max_acl($oid);
 				if ($max_acl === false)
@@ -441,7 +442,7 @@ class _int_object_loader extends core
 						"can_admin" => false
 					);
 				}
-				$this->cache->file_set_pt_oid("acl", $oid, "acl-".$oid, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
+				$this->cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
 			}
 			else
 			{

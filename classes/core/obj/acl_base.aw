@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.17 2006/02/20 10:30:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.18 2006/02/20 11:02:10 kristo Exp $
 
 lc_load("definition");
 
@@ -369,11 +369,12 @@ class acl_base extends db_connector
 		$this->save_handle();
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
 		{
-			if (($str_max_acl = $acl_cache->file_get_pt_oid("acl", $oid, "acl-".$oid)) == false)
+			$fn = "acl-".$oid."-uid-".$_SESSION["uid"];
+			if (($str_max_acl = $acl_cache->file_get_pt_oid("acl", $oid, $fn)) == false)
 			{
 				$max_acl = $this->can_aw($access,$oid);
 
-				$acl_cache->file_set_pt_oid("acl", $oid, "acl-".$oid, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
+				$acl_cache->file_set_pt_oid("acl", $oid, $fn, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
 			}
 			else
