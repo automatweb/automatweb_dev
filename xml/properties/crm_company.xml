@@ -2273,7 +2273,7 @@
                   <save>no</save>
             </documents_all>
             <documents_news>
-                  <caption>Uudised</caption>
+                  <caption>Siseuudised</caption>
                   <submit>no</submit>
                   <parent>general</parent>
                   <submit_method>get</submit_method>
@@ -2314,7 +2314,7 @@
             </bills_search>
             <bills_create>
                   <parent>bills</parent>
-                  <caption>Loo arve</caption>
+                  <caption>Maksmata t&amp;amp;ouml;&amp;amp;ouml;d</caption>
                   <submit>no</submit>
                   <save>no</save>
             </bills_create>
@@ -2330,7 +2330,7 @@
             </stats_s>
             <stats_view>
                   <parent>stats</parent>
-                  <caption>Vaata</caption>
+                  <caption>Salvestatud aruanded</caption>
                   <submit>no</submit>
                   <save>no</save>
             </stats_view>

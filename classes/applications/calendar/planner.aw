@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.114 2006/02/20 10:30:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.115 2006/02/20 13:50:21 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2905,6 +2905,22 @@ class planner extends class_base
 				)
 			);
 		}
+	}
+
+	function draw_datetime_edit($name, $tm)
+	{
+		// get user's calendar and draw a datetime editor with settings from that
+		$cal = $this->get_calendar_for_user();
+		$args = array(
+			"name" => $name,
+			"value" => $tm
+		);
+		if ($this->can("view", $cal))
+		{
+			$calo = obj($cal);
+			$args["minute_step"] = $calo->prop("minute_step");
+		}
+		return html::datetime_select($args);
 	}
 };
 ?>

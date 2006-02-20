@@ -298,7 +298,7 @@ class crm_company_bills_impl extends class_base
 		}
 		$t->define_field(array(
 			"name" => "print",
-			"caption" => t("Tr&uuml;ki"),
+			"caption" => t("Prindi"),
 			"sortable" => 1
 		));
 		$t->define_chooser(array(

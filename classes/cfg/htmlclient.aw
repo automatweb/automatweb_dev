@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.138 2006/02/17 15:13:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.139 2006/02/20 13:50:21 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -866,9 +866,9 @@ class htmlclient extends aw_template
 				$bill_url = aw_ini_get("baseurl").aw_url_change_var("group", "bills", aw_url_change_var("proj", NULL));
 				$adds =  $this->picker("", array(
 					"" => t("Lisa"),
-					$job_url => t("Uus t&ouml;&ouml;"),
-					$cust_url => t("Klient"),
-					$cust_url_pri => t("Klient (eraisik)"),
+					$job_url => t("T&ouml;&ouml;"),
+					$cust_url => t("Organisatsioon"),
+					$cust_url_pri => t("Eraisik"),
 					$proj_url => t("Projekt"),
 					$task_url => t("Toimetus"),
 					$bill_url => t("Arve"),

@@ -1122,12 +1122,16 @@ class crm_company_overview_impl extends class_base
 			$task = $task_c->from();
 
 			// if this has a predicate thingie, then check if that is done before showing it here
-			if ($this->can("view", $act->prop("predicate")))
+			$preds = safe_array($act->prop("predicate"));
+			foreach($preds as $pred)
 			{
-				$pred = obj($act->prop("predicate"));
-				if ($pred->prop("is_done") != 1)
+				if ($this->can("view", $pred))
 				{
-					continue;
+					$pred = obj($pred);
+					if ($pred->prop("is_done") != 1)
+					{
+						continue;
+					}
 				}
 			}
 

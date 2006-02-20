@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.38 2006/02/20 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.39 2006/02/20 13:50:22 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -8,7 +8,7 @@
 @default table=planner
 @default group=general
 
-@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=this.parent
 @caption Klient
 
 @property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
@@ -303,6 +303,11 @@ class crm_call extends class_base
 				{
 					$calo = obj($cal);
 					$data["minute_step"] = $calo->prop("minute_step");
+				}
+
+				if ($data["name"] ==  "end" && $arr["new"])
+				{
+					$data["value"] = time() + 900;
 				}
 				break;
 

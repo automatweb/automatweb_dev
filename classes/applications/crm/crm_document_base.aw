@@ -160,7 +160,7 @@ class crm_document_base extends class_base
 
 		$t->define_field(array(
 			"name" => "predicate",
-			"caption" => t("Predicate"),
+			"caption" => t("Eeldustegevus(ed)"),
 			"align" => "center"
 		));
 
@@ -185,6 +185,10 @@ class crm_document_base extends class_base
 		$acts[] = null;
 		$acts[] = null;
 		$null_idx = 0;
+		$cur_numer = 0;
+
+		$calinst = get_instance(CL_PLANNER);
+
 		foreach($acts as $act_c)
 		{
 			if ($act_c === null)
@@ -192,11 +196,13 @@ class crm_document_base extends class_base
 				$idx = $null_idx--;
 				$act = obj();
 				$act->set_class_id(CL_CRM_DOCUMENT_ACTION);
+				$cur_numer++;
 			}
 			else
 			{
 				$idx = $act_c->prop("to");
 				$act = $act_c->to();
+				$cur_numer = $act->prop("ord");
 			}
 
 			$actor = $act->prop_str("actor");
@@ -214,24 +220,24 @@ class crm_document_base extends class_base
 				"id" => $act->id(), 
 				"pn" => "a[$idx][actor]",
 				"clid" => CL_CRM_PERSON
-			), "popup_search");
+			), "crm_participant_search");
 
 			$actor .= " ".html::href(array(
 				"url" => "javascript:aw_popup_scroll(\"$popl\",\"Otsing\",550,500)",
 				"caption" => t("Otsi")
 			));
-			$pred_num = "";
-			if ($this->can("view", $act->prop("predicate")))
+			$pred_num = array();
+			foreach(safe_array($act->prop("predicate")) as $pred)
 			{
-				$predo = obj($act->prop("predicate"));
-				$pred_num = $predo->prop("ord");
+				if ($this->can("view", $pred))
+				{
+					$predo = obj($pred);
+					$pred_num[] = $predo->prop("ord");
+				}
 			}
+
 			$t->define_data(array(
-				"date" => html::textbox(array(
-					"name" => "a[$idx][date]",
-					"size" => 8,
-					"value" => date("d/m/y", ($act->prop("date") > 100 ? $act->prop("date") : time())),
-				)),
+				"date" => $calinst->draw_datetime_edit("a[$idx][date]", ($act->prop("date") > 100 ? $act->prop("date") : time())),
 				"actor" => $actor,
 				"action" => html::textbox(array(
 					"name" => "a[$idx][action]",
@@ -239,12 +245,12 @@ class crm_document_base extends class_base
 				)),
 				"ord" => html::textbox(array(
 					"name" => "a[$idx][ord]",
-					"value" => $act->prop("ord"),
+					"value" => $cur_numer,
 					"size" => 3
 				)),
 				"predicate" => html::textbox(array(
 					"name" => "a[$idx][predicate]",
-					"value" => $pred_num,
+					"value" => join(",", $pred_num),
 					"size" => 3
 				)),
 				"done" => html::checkbox(array(
@@ -285,13 +291,17 @@ class crm_document_base extends class_base
 				}
 			}
 
-			list($d, $m, $y) = explode("/", $row["date"]);
-			$o->set_prop("date", mktime(0,0,0, $m, $d, $y));
+			$o->set_prop("date", date_edit::get_timestamp($row["date"]));
 			$o->set_prop("actor", $row["actor"]);
 			$o->set_prop("aw_action", $row["action"]);
 			$o->set_name($row["action"]);
 			$o->set_prop("ord", $row["ord"]);
-			$o->set_prop("predicate", $this->_find_pred_oid($arr["obj_inst"], $row["predicate"]));
+			$preds = array();
+			foreach(explode(",", trim($row["predicate"])) as $pred)
+			{
+				$preds[] = $this->_find_pred_oid($arr["obj_inst"], $pred);
+			}
+			$o->set_prop("predicate", $preds);
 			$o->set_prop("is_done", $row["done"]);
 			$o->set_prop("document", $arr["obj_inst"]->id());
 			$o->save();

@@ -72,8 +72,28 @@ class crm_data extends class_base
 
 			if (isset($filter["client_mgr"]))
 			{
-				$of["CL_CRM_BILL.customer(CL_CRM_COMPANY).client_manager.name"] = map("%%%s%%", explode(",", $filter["client_mgr"]));
-				$of2["CL_CRM_BILL.customer(CL_CRM_PERSON).client_manager.name"] = map("%%%s%%", explode(",", $filter["client_mgr"]));
+				$relist = new object_list(array(
+					"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
+					"CL_CRM_COMPANY_ROLE_ENTRY.person.name" => map("%%%s%%", explode(",", $filter["client_mgr"]))
+				));
+
+				$rs = array();
+				foreach($relist->arr() as $o)
+				{
+					$rs = $o->prop("client");
+				}
+
+				$ft = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"CL_CRM_BILL.customer(CL_CRM_COMPANY).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
+						"CL_CRM_BILL.customer(CL_CRM_COMPANY).client_manager.name" => map("%%%s%%", explode(",", $filter["client_mgr"])),
+						"oid" => $rs
+					)
+				));
+
+				$of[] = $ft;
+				$of2[] = $ft;
 			}
 
 			if (isset($filter["customer"]))

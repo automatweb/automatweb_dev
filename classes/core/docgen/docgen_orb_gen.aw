@@ -3,7 +3,7 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_orb_gen.aw,v 1.7 2005/11/15 14:41:06 ahti Exp $
+	@cvs $Id: docgen_orb_gen.aw,v 1.8 2006/02/20 13:50:21 kristo Exp $
 
 	@comment 
 	generates orb defs, based on information from docgen_analyzer
@@ -281,23 +281,41 @@ class docgen_orb_gen extends class_base
 				}
 				foreach($cld["classes"] as $class => $cldat)
 				{
-					if (is_array($cldat["functions"]) &&
-						$class != "" &&
-						// so what the ull does this check do?
-						strtolower($class) == strtolower(basename($file, ".aw"))
-						//(count($cldat["functions"]) > 0 || $cldat["extends"] == "class_base")
-						//$cldat["extends"] != "core" 
-
-					)
+					if (is_array($cldat["functions"]) && $class != "" && strtolower($class) == strtolower(basename($file, ".aw")))
 					{
 						// count orb methods
 						$orb_method_count = 0;
 
 						// XXX: figure out what the duke is going on here?
 						$od = $this->_get_orb_defs2($cldat);
-						if (sizeof($od) == 0 && $cldat["extends"] != "class_base")
+
+						if (sizeof($od) == 0)
 						{	
-							continue;
+							// check if parent class has orb actions
+							if ($cldat["extends"] != "")
+							{
+								$orb_i = get_instance("core/orb/orb");
+								$pr_defs = $orb_i->load_xml_orb_def($cldat["extends"]);
+								$has = false;	
+								if (is_array($pr_defs))
+								{
+									foreach($pr_defs[$cldat["extends"]] as $def)
+									{
+										if ($def["function"] != "")
+										{
+											$has = true;
+										}
+									}
+								}
+								if (!$has)
+								{
+									continue;
+								}
+							}
+							else
+							{
+								continue;
+							}
 						};
 						echo "make orb defs for $file\n";
 						$xml = $this->_get_orb_xml($od,$cldat);

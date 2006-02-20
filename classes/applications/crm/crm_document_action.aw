@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document_action.aw,v 1.2 2006/01/19 16:17:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document_action.aw,v 1.3 2006/02/20 13:50:21 kristo Exp $
 // crm_document_action.aw - CRM Dokumendi tegevus 
 /*
 
@@ -21,7 +21,7 @@
 	@property ord type=textbox size=5 table=objects field=jrk
 	@caption Jrk
 
-	@property predicate type=relpicker reltype=RELTYPE_PRED field=aw_predicate
+	@property predicate type=relpicker reltype=RELTYPE_PRED field=aw_predicate multiple=1 store=connect
 	@caption Eeldustegevus
 
 	@property is_done type=checkbox ch_value=1 field=aw_is_done

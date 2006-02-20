@@ -346,11 +346,8 @@ class popup_search extends aw_template
 		return $form_html."<br>".$res_html;
 	}
 
-	function _get_form($arr)
+	function _insert_form_props(&$htmlc, $arr)
 	{
-		$htmlc = get_instance("cfg/htmlclient");
-		$htmlc->start_output();
-
 		$htmlc->add_property(array(
 			"name" => "s[name]",
 			"type" => "textbox",
@@ -358,19 +355,20 @@ class popup_search extends aw_template
 			"caption" => t("Nimi")
 		));
 
-		/*$htmlc->add_property(array(
-			"name" => "s[comment]",
-			"type" => "textbox",
-			"value" => $arr["s"]["comment"],
-			"caption" => t("Kommentaar")
-		));*/
-
 		$htmlc->add_property(array(
 			"name" => "s[oid]",
 			"type" => "textbox",
 			"value" => $arr["s"]["oid"],
 			"caption" => t("Objekti id")
 		));
+	}
+
+	function _get_form($arr)
+	{
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+
+		$this->_insert_form_props($htmlc, $arr);
 
 		$htmlc->add_property(array(
 			"name" => "s[submit]",
@@ -388,7 +386,7 @@ class popup_search extends aw_template
 				"multiple" => $arr["multiple"],
 				"clid" => $arr["clid"],
 				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
-				"orb_class" => "popup_search",
+				"orb_class" => $_GET["class"],
 				"reforb" => 0
 			)
 		));
@@ -396,6 +394,18 @@ class popup_search extends aw_template
 		$html = $htmlc->get_result();
 
 		return $html;
+	}
+
+	function _get_filter_props(&$filter, $arr)
+	{
+		if ($arr["s"]["name"] != "")
+		{
+			$filter["name"] = map("%%%s%%", explode(",", $arr["s"]["name"]));
+		}
+		if ($arr["s"]["oid"] != "")
+		{
+			$filter["oid"] = map("%%%s%%", explode(",", $arr["s"]["oid"]));
+		}
 	}
 
 	function _get_results($arr)
@@ -457,14 +467,7 @@ class popup_search extends aw_template
 			$filter['class_id'] = $arr['clid'];
 		}	
 
-		$awa = new aw_array($arr["s"]);
-		foreach($awa->get() as $k => $v)
-		{
-			if ($v != "")
-			{
-				$filter[$k] = map("%%%s%%", explode(",", $v));
-			}
-		}
+		$this->_get_filter_props($filter, $arr);
 
 		if (!$_GET["MAX_FILE_SIZE"])
 		{
@@ -533,7 +536,7 @@ class popup_search extends aw_template
 				"multiple" => $arr["multiple"],
 				"clid" => $arr["clid"],
 				"append_html" => htmlspecialchars(ifset($arr,"append_html"), ENT_QUOTES),
-			)),
+			), $_GET["class"]),
 			"append" => ifset($arr,"append_html"),
 		));
 

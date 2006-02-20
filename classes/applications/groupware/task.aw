@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.76 2006/02/20 10:49:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.77 2006/02/20 13:50:21 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -8,7 +8,7 @@
 @default table=objects
 @default group=general
 
-@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=this.parent
 @caption Klient
 
 @property code type=text size=5 table=planner field=code

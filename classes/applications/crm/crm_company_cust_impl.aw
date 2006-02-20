@@ -452,7 +452,7 @@ class crm_company_cust_impl extends class_base
 		$tb->add_menu_button(array(
 			'name'=>'save_as_cust',
 			'tooltip'=> t('Salvesta kliendina'),
-			"img" => "save.gif"
+			"img" => "nool1.gif"
 		));
 
 		$link = "#";

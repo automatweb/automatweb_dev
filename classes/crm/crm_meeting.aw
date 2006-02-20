@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.58 2006/02/20 09:23:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.59 2006/02/20 13:50:22 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @default table=objects
 @default group=general
 
-@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=this.parent
 @caption Klient
 
 @property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
@@ -248,6 +248,11 @@ class crm_meeting extends class_base
 				{
 					$calo = obj($cal);
 					$data["minute_step"] = $calo->prop("minute_step");
+				}
+
+				if ($data["name"] == "end" && $arr["new"])
+				{
+					$data["value"] = time() + 900;
 				}
 				break;
 

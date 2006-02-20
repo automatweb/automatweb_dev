@@ -752,7 +752,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 groupinfo documents caption="Dokumendid" submit=no
 
 	@groupinfo documents_all caption="Dokumendid" submit=no parent=general save=no
-	@groupinfo documents_news caption="Uudised" submit=no parent=general submit_method=get save=no
+	@groupinfo documents_news caption="Siseuudised" submit=no parent=general submit_method=get save=no
 	@groupinfo documents_forum caption="Foorum" submit=no parent=general
 	@groupinfo documents_lmod caption="Viimati muudetud" submit=no parent=general	save=no
 
@@ -761,12 +761,12 @@ groupinfo documents caption="Dokumendid" submit=no
 	@groupinfo bills_list parent=bills caption="Nimekiri" submit=no save=no
 	@groupinfo bills_monthly parent=bills caption="Kuuarved" submit=no save=no
 	@groupinfo bills_search parent=bills caption="Otsi toimetusi" submit=no save=no
-	@groupinfo bills_create parent=bills caption="Loo arve" submit=no save=no
+	@groupinfo bills_create parent=bills caption="Maksmata t&ouml;&ouml;d" submit=no save=no
 
 @groupinfo stats caption="Aruanded" save=no
 
 	@groupinfo stats_s parent=stats caption="Otsi" submit_method=get save=no
-	@groupinfo stats_view parent=stats caption="Vaata" submit=no save=no
+	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
 
 @groupinfo quick_view caption="Vaata"  submit=no save=no
 
@@ -3106,7 +3106,7 @@ class crm_company extends class_base
 					$disabled = $has_parent ? false : true;
 					$toolbar->add_menu_item(array(
 						"parent" => "firma_sub",
-						"text" => sprintf(t('Lisa %s'), $classinf["name"]),
+						"text" => $classinf["name"],
 						"link" => $has_parent ? $url : "",
 						"title" => $has_parent ? "" : t("Kataloog määramata"),
 						"disabled" => $has_parent ? false : true,
@@ -3163,7 +3163,7 @@ class crm_company extends class_base
 					$toolbar->add_menu_item(array(
 						"parent" => "calendar_sub",
 						"title" => $has_parent ? "" : t("Kalender või kalendri sündmuste kataloog määramata"),
-						"text" => sprintf(t("Lisa %s"),$classinf["name"]),
+						"text" => $classinf["name"],
 						"disabled" => $has_parent ? false : true,
 						"link" => $has_parent ? $url : "",
 					));
@@ -3175,8 +3175,8 @@ class crm_company extends class_base
 		$my_org_id = $ui->get_current_company();
 		$toolbar->add_menu_item(array(
 			"parent" => "calendar_sub",
-			"title" => t("Lisa pakkumine"),
-			"text" => t("Lisa pakkumine"),
+			"title" => t("Pakkumine"),
+			"text" => t("Pakkumine"),
 			"link" => $this->mk_my_orb("new", array(
 				"alias_to_org" => $args["obj_inst"]->id(),
 				"alias_to" => $my_org_id,

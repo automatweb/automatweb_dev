@@ -160,7 +160,7 @@ class crm_company_people_impl extends class_base
 
 		$tb->add_button(array(
 			"name" => "mark_important",
-			//"img" => "copy.gif",
+			"img" => "important.png",
 			"tooltip" => t("Oluliseks"),
 			"action" => "mark_p_as_important",
 		));

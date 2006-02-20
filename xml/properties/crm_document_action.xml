@@ -41,6 +41,8 @@
             <type>relpicker</type>
             <reltype>RELTYPE_PRED</reltype>
             <field>aw_predicate</field>
+            <multiple>1</multiple>
+            <store>connect</store>
             <caption>Eeldustegevus</caption>
       </property>
       <property>
