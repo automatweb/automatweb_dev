@@ -201,6 +201,7 @@
             <type>text</type>
             <store>no</store>
             <field>username</field>
+            <comment>Kasutajanimes on lubatud ladina t&amp;auml;hestiku suur- ja v&amp;auml;iket&amp;auml;hed, numbrid 0-9 ning m&amp;auml;rgid alakriips ja punkt</comment>
             <caption>Kasutaja</caption>
       </property>
       <property>
