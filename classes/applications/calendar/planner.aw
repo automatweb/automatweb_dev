@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.112 2006/02/14 11:35:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.113 2006/02/20 09:23:27 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2373,7 +2373,7 @@ class planner extends class_base
 		$this->_init_search_res_t($t);
 
 		$hasf = false;
-		$filter = array("class_id" => CL_CRM_PERSON);
+		$filter = array("class_id" => CL_CRM_PERSON, "lang_id" => array(), "site_id" => array());
 		if ($r["search_contact_firstname"] != "")
 		{
 			$filter["firstname"] = "%".$r["search_contact_firstname"]."%";

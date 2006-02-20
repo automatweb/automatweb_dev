@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.47 2006/02/10 11:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.48 2006/02/20 09:23:27 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -227,6 +227,7 @@ class cache extends core
 		$f = fopen($fq, "w");
 		if (!$f)
 		{
+			return;
 			error::raise(array(
 				"id" => "ERR_CACHE_FILE",
 				"msg" => sprintf(t("cache::file_set_pt(%s, %s, %s): could not open file %s for writing!"), $pt, $subf, $fn, $fq)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.16 2005/12/14 12:40:29 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.17 2006/02/20 09:23:27 kristo Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -132,6 +132,7 @@ class forum_comment extends class_base
 			"class_id" => $this->clid,
 			"period" => isset($arr["period"]) ? $arr["period"] : 0,
 			"sort_by" => !empty($arr["sort_by"]) ? $arr["sort_by"] : "created",
+			"site_id" => array()
 		));
 		//arr($clist);
 		$retval = array();

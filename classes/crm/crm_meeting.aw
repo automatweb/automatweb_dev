@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.57 2006/02/20 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.58 2006/02/20 09:23:28 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -560,7 +560,10 @@ class crm_meeting extends class_base
 				break;
 
 			case "project":
-				$data["value"] = $_POST["project"];
+				if (isset($_POST["project"]))
+				{
+					$data["value"] = $_POST["project"];
+				}
 				// add to proj
 				if (is_oid($data["value"]) && $this->can("view", $data["value"]))
 				{
@@ -569,7 +572,10 @@ class crm_meeting extends class_base
 				break;
 
 			case "customer":
-				$data["value"] = $_POST["customer"];
+				if (isset($_POST["customer"]))
+				{
+					$data["value"] = $_POST["customer"];
+				}
 				break;
 
 			case "participants":
