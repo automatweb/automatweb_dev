@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.31 2006/02/01 13:04:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.32 2006/02/20 09:20:34 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -658,6 +658,7 @@ class register_search extends class_base
 		$reg_i = $reg->instance();
 
 		$props = $this->get_props_from_reg($reg);
+		$fdata = $o->meta("fdata");
 
 		if ($reg_flds === null)
 		{
@@ -709,12 +710,29 @@ class register_search extends class_base
 					$filter[$pn] = $request["rsf"][$pn];
 				}
 				else
+				if ($fdata[$pn]["is_num"] == 1)
+				{
+					list($from, $to) = explode("-", trim($request["rsf"][$pn]));
+					if (!$from && !$to)
+					{
+						continue;	
+					}
+					else
+					if ($from && !$to)
+					{
+						$filter[$pn] = $from;
+					}
+					else
+					{
+						$filter[$pn] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $from, $to);
+					}
+				}
+				else
 				{
 					$filter[$pn] = "%".$request["rsf"][$pn]."%";
 				}
 			}
 		}
-
 		$cfgu = get_instance("cfg/cfgutils");
 		$f_props = $cfgu->load_properties(array(
 			"clid" => CL_REGISTER_DATA

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.23 2006/02/14 10:42:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.24 2006/02/20 09:20:34 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1367,7 +1367,7 @@ class cb_form_chain extends class_base
 					"url" => $this->mk_my_orb("show", array("id" => $o->id(), "return_url" => get_ru()), CL_CB_FORM_CHAIN_ENTRY),
 					"caption" => t("Vaata")
 				)) ." | ".html::href(array(
-					"url" => $this->mk_my_orb("show_pdf", array("id" => $o->id(), "return_url" => get_ru()), CL_CB_FORM_CHAIN_ENTRY),
+					"url" => str_replace("/automatweb", "", $this->mk_my_orb("show_pdf", array("id" => $o->id(), "return_url" => get_ru()), CL_CB_FORM_CHAIN_ENTRY)),
 					"caption" => t("PDF")
 				)),
 				"change" => html::href(array(
@@ -1431,7 +1431,7 @@ class cb_form_chain extends class_base
 			{
 				if (count($val))
 				{
-					$ol = new object_list(array("oid" => $val));
+					$ol = new object_list(array("oid" => $val, "lang_id" => array(), "site_id" => array()));
 					$val = join(", ", $ol->names());
 				}
 				else
