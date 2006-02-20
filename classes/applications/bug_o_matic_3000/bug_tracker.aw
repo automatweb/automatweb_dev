@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.20 2006/02/19 15:42:18 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.20 2006/02/19 15:42:18 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.21 2006/02/20 13:01:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.21 2006/02/20 13:01:28 tarvo Exp $
 
 // bug_tracker.aw - BugTrack 
 /*
@@ -21,7 +21,7 @@
 
 @default group=by_default,by_project,by_who,by_classes
 
-@property bug_tb type=toolbar no_caption=1 group=bugs,archive
+@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who,by_classes
 
 @property cat type=hidden store=no
 
@@ -55,6 +55,11 @@ class bug_tracker extends class_base
 	{		
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		if($arr["request"]["group"] == "bugs")
+		{
+			$arr["request"]["group"] = "by_default";
+		}
+				
 		switch($arr["request"]["group"])
 		{
 			case "by_default":
@@ -273,7 +278,7 @@ class bug_tracker extends class_base
 		$objects = $ol->arr();
 		foreach($objects as $obj_id => $object)
 		{
-			$sub_ol = new object_list(array($this->sort_type["name"] => $obj_id, "class_id" => array(CL_BUG, CL_MENU)));
+			$sub_ol = new object_list(array($this->sort_type["name"] => $obj_id, "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(4)));
 
 			$nimi = substr($object->name(),0,20);
 			$nimi .= (strlen($object->name()) > 20)?"...":"";
@@ -283,7 +288,7 @@ class bug_tracker extends class_base
 				"id" => $obj_id,
 				"name" => $nimi,
 				"iconurl" => icons::get_icon_url($object->class_id()),
-				"url" => html::get_change_url($this->self_id, array("group" => $this->active_group ,"cat" => $obj_id)),
+				"url" => html::get_change_url($this->self_id, array("group" => $this->active_group , "u_id" => $obj_id)),
 			));
 			$this->generate_bug_tree(array("oid" => $obj_id));
 		}
@@ -291,7 +296,7 @@ class bug_tracker extends class_base
 
 	function generate_bug_tree($arr)
 	{
-		$ol = new object_list(array($arr["sub"]?"parent":$this->sort_type["name"] => $arr["oid"],"class_id" => array(CL_BUG, CL_MENU),"bug_status" => new obj_predicate_not(4),));
+		$ol = new object_list(array($arr["sub"]?"parent":$this->sort_type["name"] => $arr["oid"],"class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(4),));
 
 		$objects = $ol->arr();
 		foreach($objects as $obj_id => $object)
@@ -499,6 +504,16 @@ class bug_tracker extends class_base
 					"class_id" => CL_BUG,
 					"bug_status" => new obj_predicate_not(4),
 				));
+
+				$glob = aw_global_get("request");
+				if(strlen($glob["u_id"]))
+				{
+					$ol->filter(array(
+						"who" => $glob["u_id"],
+						"class_id" => CL_BUG,
+						"bug_status" => new obj_predicate_not(4),
+					));
+				}
 			}
 		}
 		else

@@ -15,7 +15,10 @@
             <table>objects</table>
             <group>
                   <num_0>bugs</num_0>
-                  <num_1>archive</num_1>
+                  <num_1>by_default</num_1>
+                  <num_2>by_project</num_2>
+                  <num_3>by_who</num_3>
+                  <num_4>by_classes</num_4>
             </group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
@@ -25,7 +28,12 @@
       <property>
             <name>cat</name>
             <table>objects</table>
-            <group>bugs</group>
+            <group>
+                  <num_0>by_default</num_0>
+                  <num_1>by_project</num_1>
+                  <num_2>by_who</num_2>
+                  <num_3>by_classes</num_3>
+            </group>
             <type>hidden</type>
             <store>no</store>
             <field>cat</field>
@@ -33,7 +41,12 @@
       <property>
             <name>bug_tree</name>
             <table>objects</table>
-            <group>bugs</group>
+            <group>
+                  <num_0>by_default</num_0>
+                  <num_1>by_project</num_1>
+                  <num_2>by_who</num_2>
+                  <num_3>by_classes</num_3>
+            </group>
             <type>treeview</type>
             <parent>bug</parent>
             <no_caption>1</no_caption>
@@ -46,6 +59,10 @@
             <group>
                   <num_0>bugs</num_0>
                   <num_1>archive</num_1>
+                  <num_2>by_default</num_2>
+                  <num_3>by_project</num_3>
+                  <num_4>by_who</num_4>
+                  <num_5>by_classes</num_5>
             </group>
             <type>table</type>
             <parent>bug</parent>
@@ -64,6 +81,26 @@
                   <caption>Bugid</caption>
                   <submit>no</submit>
             </bugs>
+            <by_default>
+                  <caption>default</caption>
+                  <parent>bugs</parent>
+                  <submit>no</submit>
+            </by_default>
+            <by_project>
+                  <caption>Projektid</caption>
+                  <parent>bugs</parent>
+                  <submit>no</submit>
+            </by_project>
+            <by_who>
+                  <caption>Kellele</caption>
+                  <parent>bugs</parent>
+                  <submit>no</submit>
+            </by_who>
+            <by_classes>
+                  <caption>Klassid</caption>
+                  <parent>bugs</parent>
+                  <submit>no</submit>
+            </by_classes>
             <archive>
                   <caption>Arhiiv</caption>
                   <submit>no</submit>
@@ -85,7 +122,12 @@
             <bug>
                   <type>hbox</type>
                   <width>15%:85%</width>
-                  <group>bugs</group>
+                  <group>
+                        <num_0>by_default</num_0>
+                        <num_1>by_project</num_1>
+                        <num_2>by_who</num_2>
+                        <num_3>by_classes</num_3>
+                  </group>
             </bug>
       </layout>
 </properties>
