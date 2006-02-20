@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.110 2006/02/16 11:35:47 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.111 2006/02/20 19:40:11 voldemar Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -82,6 +82,7 @@ caption Msn/yahoo/aol/icq
 @caption Pilt suuremana
 
 @property username type=text store=no
+@comment Kasutajanimes on lubatud ladina tähestiku suur- ja väiketähed, numbrid 0-9 ning märgid alakriips ja punkt
 @caption Kasutaja
 
 @property password type=password table=objects field=meta method=serialize
@@ -498,6 +499,49 @@ class crm_person extends class_base
 
 		switch($prop["name"])
 		{
+			case "firstname":
+				if (($arr["new"] || !($tmp = $this->has_user($arr["obj_inst"]))))
+				{
+					$arr["obj_inst"]->set_meta("no_create_user_yet", true);
+
+					if (strlen(trim($prop["value"])) and !strlen(trim($form["username"])))
+					{
+						$cl_user_creator = get_instance("crm/crm_user_creator");
+						$errors = $cl_user_creator->get_uid_for_person($arr["obj_inst"], true);
+
+						if ($errors)
+						{
+							$prop["error"] = $errors . t(' Palun sisestage nimi loodava kasutaja jaoks lahtrisse "Kasutaja"');
+							return PROP_ERROR;
+						}
+						else
+						{
+							$arr["obj_inst"]->set_meta("no_create_user_yet", NULL);
+						}
+					}
+				}
+				break;
+
+			case "username":
+				if (($arr["new"] || !($tmp = $this->has_user($arr["obj_inst"]))) and strlen(trim($prop["value"])))
+				{
+					$arr["obj_inst"]->set_meta("no_create_user_yet", true);
+					$arr["obj_inst"]->set_meta("tmp_crm_person_username", $prop["value"]);
+					$cl_user_creator = get_instance("crm/crm_user_creator");
+					$errors = $cl_user_creator->get_uid_for_person($arr["obj_inst"], true);
+
+					if ($errors)
+					{
+						$prop["error"] = $errors;
+						return PROP_ERROR;
+					}
+					else
+					{
+						$arr["obj_inst"]->set_meta("no_create_user_yet", NULL);
+					}
+				}
+				break;
+
 			case "transl":
 				$this->trans_save($arr, $this->trans_props);
 				break;
@@ -896,13 +940,16 @@ class crm_person extends class_base
 			case "username":
 				if ($arr["new"] || !($tmp = $this->has_user($arr["obj_inst"])))
 				{
-					return PROP_IGNORE;
+					$data["type"] = "textbox";
 				}
-				$data["value"] = html::get_change_url(
-					$tmp->id(),
-					array("return_url" => get_ru()),
-					$tmp->name()
-				);
+				else
+				{
+					$data["value"] = html::get_change_url(
+						$tmp->id(),
+						array("return_url" => get_ru()),
+						$tmp->name()
+					);
+				}
 				break;
 
 			case "crm_settings":

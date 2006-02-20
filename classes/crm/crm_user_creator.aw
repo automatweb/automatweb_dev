@@ -15,6 +15,7 @@ class crm_user_creator extends core
 	function on_save_person($arr)
 	{
 		$person = obj($arr["oid"]);
+
 		if ($person->meta("no_create_user_yet") == true)
 		{
 			return;
@@ -26,6 +27,15 @@ class crm_user_creator extends core
 		// if the company has the create users flag
 		if ($co && $co->prop("do_create_users"))
 		{
+			$uid = $this->get_uid_for_person($person);
+
+			if (false === $uid)
+			{
+				return;
+			}
+
+			$person->set_meta("tmp_crm_person_username", $uid);
+
 			// find all proffessions and units
 			// for each check if it's parents already has a group
 			// if not, create them
@@ -66,11 +76,11 @@ class crm_user_creator extends core
 		// find all proffessions and units
 		// for each check if it's parents already has a group
 		// if not, create them
-		
+
 		// relations are from company, to crm_section/crm_proffession
 		// then from section to subsection/proffession
 		// so, start from company and go from there
-		
+
 		// get company group
 		$co_grp = $this->_check_company_group($co);
 
@@ -127,7 +137,7 @@ class crm_user_creator extends core
 			'can_view' => 1,
 			'can_add' => 1,
 		));
-		
+
 		return $grp;
 	}
 
@@ -175,7 +185,7 @@ class crm_user_creator extends core
 					"to" => $grp->id(),
 					"reltype" => "RELTYPE_GROUP"
 				));
-				
+
 			}
 			else
 			{
@@ -221,29 +231,14 @@ class crm_user_creator extends core
 		else
 		{
 			// create user
-			$us = get_instance(CL_USER);
-
-			$uid = htmlentities($pers->prop("firstname").( strlen($pers->prop("lastname")) ?".":"").$pers->prop("lastname"));
-
-			$uid = str_replace("&Auml;", "A", $uid);
-			$uid = str_replace("&auml;", "a", $uid);
-			$uid = str_replace("&Uuml;", "U", $uid);
-			$uid = str_replace("&uuml;", "u", $uid);
-			$uid = str_replace("&Ouml;", "O", $uid);
-			$uid = str_replace("&ouml;", "a", $uid);
-			$uid = str_replace("&Otilde;", "O", $uid);
-			$uid = str_replace("&otilde;", "o", $uid);
-			$uid = str_replace(" ", "_", $uid);
-
-			$o_uid = $uid;
-
-			while ($us->username_is_taken($uid))
+			if (!is_object($this->cl_user))
 			{
-				$uid = $o_uid.".".sprintf("%03d", ++$cnt);
+				$this->cl_user = get_instance(CL_USER);
 			}
 
+			$uid = $pers->meta("tmp_crm_person_username");
 			$pwd = isset($_POST["password"]) ? $_POST["password"] : $pers->prop("password");
-			$uo = $us->add_user(array(
+			$uo = $this->cl_user->add_user(array(
 				"uid" => $uid,
 				"password" => $pwd
 			));
@@ -265,14 +260,14 @@ class crm_user_creator extends core
 		{
 			$o = $c->to();
 			// get grp
-	
+
 			$grp = $o->get_first_obj_by_reltype("RELTYPE_GROUP");
 			if ($grp)
 			{
 				$g->add_user_to_group($user, $grp);
 			}
 		}
-		
+
 		// get user's workplace's group, add user to that too
 		$co = $this->get_co_for_person($pers->id());
 		if ($co && $co->prop("do_create_users"))
@@ -282,6 +277,62 @@ class crm_user_creator extends core
 			{
 				$g->add_user_to_group($user, $grp);
 			}
+		}
+	}
+
+	function get_uid_for_person($person, $validate_only = false)
+	{
+		$allowed_chars = array_merge(range("A","Z"), range("a","z"), range(0,9), array("_", "."));
+		$errors = array();
+
+		if (!is_object($this->cl_user))
+		{
+			$this->cl_user = get_instance(CL_USER);
+		}
+
+		if (strlen($person->meta("tmp_crm_person_username")))
+		{
+			$uid = $person->meta("tmp_crm_person_username");
+		}
+		else
+		{
+			$uid = htmlentities($person->prop("firstname") . (strlen($person->prop("lastname")) ? "." : "") . $person->prop("lastname"), ENT_NOQUOTES);
+			$uid = str_replace("'", "", $uid);
+			$uid = preg_replace("/\&([A-z])[A-z]{1,7}\;/U", "$1", $uid);
+		}
+
+		$uid_chars = preg_split('//', $uid, -1, PREG_SPLIT_NO_EMPTY);
+		$invalid_chars = array_diff($uid_chars, $allowed_chars);
+
+		if (count($invalid_chars))
+		{
+			$invalid_chars = join(",", $invalid_chars);
+			$errors[] = sprintf(t("Nimes sisaldunud tähemärgid [%s] pole kasutajanimedes lubatud."), $invalid_chars);
+		}
+
+		if ($this->cl_user->username_is_taken($uid))
+		{
+			$errors[] = sprintf(t("Valitud kasutajanimi [%s] on juba kasutusel."), $uid);
+		}
+
+		if (count($errors))
+		{
+			if ($validate_only)
+			{
+				return join(" ", $errors);
+			}
+			else
+			{
+				return false;
+			}
+		}
+		elseif ($validate_only)
+		{
+			return false;
+		}
+		else
+		{
+			return $uid;
 		}
 	}
 }
