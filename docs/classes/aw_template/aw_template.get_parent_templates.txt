@@ -1,0 +1,32 @@
+<b>aw_template::get_parent_template($tpl)</b>
+
+returns an array of names of the parent SUB's of the given SUB. this can return several names if there are several SUB's with the same name under different parents
+
+<b>errors:</b>
+none
+
+<b>parameters, passed by position:</b>
+tpl - the SUB whose parent SUB's you want
+
+<b>returns:</b>
+name if the parent SUB's of the given SUB, null if the given SUB has no parent or no such SUB exists
+
+Example:
+
+-- template foo.tpl
+<!-- SUB: BAR -->
+	<!-- SUB: FOO -->
+	<!-- END SUB: FOO -->
+<!-- END SUB: BAR -->
+
+<!-- SUB: BAZ -->
+	<!-- SUB: FOO -->
+	<!-- END SUB: FOO -->
+<!-- END SUB: BAZ -->
+
+-- code
+$tpl = new aw_template;
+
+$tpl->read_any_template("foo.tpl");
+
+$res = $tpl->get_parent_templates("FOO"); // returns array("BAR", "BAZ")

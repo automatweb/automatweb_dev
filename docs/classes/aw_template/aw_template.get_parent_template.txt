@@ -1,0 +1,28 @@
+<b>aw_template::get_parent_template($tpl)</b>
+
+returns the name if the immediate parent SUB of the given SUB
+
+<b>errors:</b>
+none
+
+<b>parameters, passed by position:</b>
+tpl - the SUB whose parent SUB you want
+
+<b>returns:</b>
+name if the parent SUB of the given SUB, null if the given SUB has no parent or no such SUB exists
+
+Example:
+
+-- template foo.tpl
+<!-- SUB: BAR -->
+
+<!-- SUB: FOO -->
+<!-- END SUB: FOO -->
+<!-- END SUB: BAR -->
+
+-- code
+$tpl = new aw_template;
+
+$tpl->read_any_template("foo.tpl");
+
+echo $tpl->get_parent_template("FOO"); // returns BAR

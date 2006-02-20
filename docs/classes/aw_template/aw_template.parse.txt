@@ -1,0 +1,34 @@
+<b>aw_template::parse($object = "MAIN")</b>
+
+replaces variables with their values and returns the content of the given sub as parsed text
+
+<b>errors:</b>
+none
+
+<b>parameters, passed by position:</b>
+object - optional, defaults to the main sub - name of the SUB to parse
+
+<b>returns:</b>
+text of the sub, with variables replaced by their assigned values
+
+Example:
+
+-- template foo.tpl
+
+<!-- SUB: BOO -->
+{VAR:allah}
+<!-- END SUB: BOO -->
+
+-- code
+$tpl = new aw_template;
+
+$tpl->read_any_template("foo.tpl");
+
+$tpl->vars(array(
+	"allah" => "akhbar"
+));
+
+$tpl->vars(array(
+	"BOO" => $tpl->parse("BOO")
+));
+echo $tpl->parse(); // prints akhbar

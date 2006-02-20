@@ -1,0 +1,31 @@
+<b>aw_template::get_subtemplates_regex($regex)</b>
+
+Retrieves a list of SUB's matching a regexp
+don't forget to add braces () to the regex or you won't get any results
+
+
+<b>errors:</b>
+none
+
+<b>parameters, passed by position:</b>
+regex - perl-compatible regular expression to match with SUB names
+
+<b>returns:</b>
+array of the names of the SUB's matching the regex
+
+Example:
+
+-- template foo.tpl
+
+<!-- SUB: BOO_FOO -->
+{VAR:allah}
+<!-- END SUB: BOO_FOO -->
+
+-- code
+$tpl = new aw_template;
+
+$tpl->read_any_template("foo.tpl");
+
+$tpls = $tpl->get_subtemplates_regex("BOO_(\w*)"; // returns array("FOO")
+$tpls = $tpl->get_subtemplates_regex("(BOO_\w*)"; // returns array("BOO_FOO")
+

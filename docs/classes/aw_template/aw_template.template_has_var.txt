@@ -1,0 +1,28 @@
+<b>aw_template::template_has_var($varname,$tplname = "MAIN")</b>
+
+checks if the currently loaded template's given SUB contains a VAR with the name given
+
+
+<b>errors:</b>
+none
+
+<b>parameters, passed by position:</b>
+varname - name of the VAR to check for
+tplname - optional, defaults to MAIN - the SUB to check for the VAR
+
+<b>returns:</b>
+true if the VAR is in the given SUB, false if no template is loaded or no such VAR exists
+
+Example:
+
+$tpl = new aw_template;
+
+$tpl->read_any_template("foo.tpl");
+
+if ($this->template_has_var("allah"))
+{
+	$this->vars(array(
+		"allah" => "akhbar"
+	));
+}
+

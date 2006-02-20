@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.74 2006/02/17 07:17:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.75 2006/02/20 08:56:30 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -231,8 +231,9 @@ class aw_template extends core
 		return $retval;
 	}
 
-	////
-	// !reads the template from the site folder, even if we are in the admin interface
+	/**  reads the template from the site folder, even if we are in the admin interface
+		@attrib api=1
+	**/
 	function read_site_template($name,$silent = 0)
 	{
 		$retval = true;
@@ -256,6 +257,9 @@ class aw_template extends core
 		return $retval;
 	}
 
+	/** reads template from site folder and if not found there, admin folder
+		@attrib api=1
+	**/
 	function read_any_template($name, $silent = false)
 	{
 		$this->template_filename = $this->site_template_dir."/".$name;
@@ -287,22 +291,26 @@ class aw_template extends core
 		return $retval;
 	}
 
-	////
-	// !Saab kysida, kas sellise nimega template on registreeritud
+	/** checks if a SUB with the name given exits in the currently loaded template
+		@attrib api=1
+	**/
 	function is_template($name)
 	{
 		$retval = isset($this->v2_name_map[$name]);
 		return $retval;
 	}
 
-	////
-	// !Checks whether a template contains a variable placeholder or not
-	// useful to avoid executing unneccessary code
+	/** Checks whether a template contains a variable placeholder or not
+		@attrib api=1
+	**/
 	function template_has_var($varname,$tplname = "MAIN")
 	{
 		return strpos($this->v2_templates[$tplname],"{VAR:" . $varname . "}") !== false; 
 	}
 
+	/** checks if the template contains the given variable. checks the complete template. slow
+		@attrib api=1
+	**/
 	function template_has_var_full($varname)
 	{
 		static $tmp = "";
@@ -313,6 +321,9 @@ class aw_template extends core
 		return strpos($tmp,"{VAR:" . $varname . "}") !== false; 
 	}
 
+	/** checks if the SUB $parent is a parent of the SUB $tpl 
+		@attrib api=1
+	**/
 	function is_parent_tpl($tpl,$parent)
 	{
 		if (!isset($this->v2_parent_map[$tpl]))
@@ -325,14 +336,17 @@ class aw_template extends core
 		}
 	}
 
+	/** returns the name if the immediate parent SUB of the given SUB
+		@attrib api=1
+	**/
 	function get_parent_template($tpl)
 	{
 		return $this->v2_parent_map[$tpl];
 	}
 
-	////
-	// !the difference between this and get_parent_template is
-	// that this might return several, if the name is not fully qualified. 
+	/** returns an array of parent SUB names for the given SUB
+		@attrib api=1
+	**/
 	function get_parent_templates($tpl)
 	{
 		$ret = array();
@@ -353,6 +367,9 @@ class aw_template extends core
 		return $ret;
 	}
 
+	/** checks if the sub TPL is a child SUB of the $parent SUB. checks the full chain pf SUB's
+		@attrib api=1
+	**/
 	function is_in_parents_tpl($tpl, $parent)
 	{
 		$fp = $this->v2_name_map[$tpl];
@@ -363,14 +380,17 @@ class aw_template extends core
 		return true;
 	}
 
-	////
-	// !Impordib muutujad templatesse, seejuures kirjutatakse juba eksisteerivad
-	// muutujad yle
+	/** imports variables into the current template, overwriting the previous variables of the same name
+		@attrib api=1
+	**/
 	function vars($params)
 	{
 		$this->vars = array_merge($this->vars,$params);
 	}
 
+	/** imports variables into the current template, appending to the previous variables of the same name
+		@attrib api=1
+	**/
 	function vars_merge($params)
 	{
 		while(list($k,$v) = each($params))
@@ -379,8 +399,9 @@ class aw_template extends core
 		}
 	}
 
-	////
-	// !This is where all the magic takes place
+	/** replaces variables with their values and returns the content of the given sub as parsed text
+		@attrib api=1
+	**/
 	function parse($object = "MAIN") 
 	{
 		$tmp = isset($this->v2_name_map[$object]) ? $this->v2_name_map[$object] : "";
@@ -500,12 +521,9 @@ class aw_template extends core
 		return;
 	}
 
-	////
-	// !Retrieves a list of subtemplates matching a regexp
-	// ex: $this->get_subtemplates_regex("plugins\.(\w*)" returns 
-	// things like plugins.add_comment, plugins.add_link, etc
-	// 
-	// don't forget to add braces () to the regex or you won't get any results
+	/** Retrieves a list of SUB's matching a regexp
+		@attrib api=1
+	**/
 	function get_subtemplates_regex($regex)
 	{
 		$tpls = array_keys($this->v2_name_map);
@@ -520,15 +538,9 @@ class aw_template extends core
 		return array_unique($res);
 	}
 
-	////
-	// !Returns a list of template files in current template_dir
-	function get_template_files()
-	{
-		return $this->get_directory(array(
-			"dir" => $this->template_dir,
-		));
-	}
-
+	/** returns the un-parsed content of the given SUB 
+		@attrib api=1
+	**/
 	function get_template_string($name)
 	{
 		$tmp = isset($this->v2_name_map[$name]) ? $this->v2_name_map[$name] : "";
