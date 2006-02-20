@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.16 2006/01/31 15:25:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.17 2006/02/20 10:30:55 kristo Exp $
 
 lc_load("definition");
 
@@ -272,10 +272,7 @@ class acl_base extends db_connector
 		$max_acl = $GLOBALS["cfg"]["acl"]["default"];
 		$max_acl["acl_rel_id"] = "666";
 		$cnt = 0;
-		if ($GLOBALS["acl_dbg"] == 1)
-		{
-			echo "canaw for $acess => $oid <br>";
-		}
+
 		// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
 		while ($oid > 0)
 		{
@@ -284,10 +281,6 @@ class acl_base extends db_connector
 			{
 				$tacl = $_t;
 				$parent = $_t["parent"];
-				if ($GLOBALS["acl_dbg"] == 1)
-				{
-					echo "got acl from cache for oid $oid tacl = ".dbg::dump($tacl)." <br>";
-				}
 				if (!isset($tacl["oid"]))
 				{
 					// if we are on any level and we get back no object, return no access
@@ -299,11 +292,6 @@ class acl_base extends db_connector
 			{
 				$tacl = $this->get_acl_for_oid($oid);
 
-				if ($GLOBALS["acl_dbg"] == 1)
-				{
-					echo "got acl from dfatabase for oid $oid tacl = ".dbg::dump($tacl)." <br>";
-				}				
-		
 				if (!isset($tacl["oid"]))
 				{
 					// if we are on any level and we get back no object, return no access
@@ -344,13 +332,6 @@ class acl_base extends db_connector
 			$oid = $parent;
 		}
 
-		//$this->restore_handle();
-	
-		if ($GLOBALS["acl_dbg"] == 1)
-		{
-			echo "final acl = ".dbg::dump($max_acl)." <br>";
-		}
-
 		// if the max_acl does not contain view and no user is logged, return default
 		if (!isset($max_acl["can_view"]) && aw_global_get("uid") == "")
 		{
@@ -379,38 +360,25 @@ class acl_base extends db_connector
 			return $GLOBALS["object_loader"]->can($access, $oid);
 		}
 
-		$this->save_handle();
-		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)) || $GLOBALS["acl_dbg"])
+		static $acl_cache;
+		if (!$acl_cache)
 		{
-			// try for file cache
-			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
-			$sub = substr($oid, -1, 1);
-			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/acl/".$sub."/".$fn;
-			if (file_exists($fqfn) && !$GLOBALS["acl_dbg"])
+			$acl_cache = get_instance("cache");
+		}
+
+		$this->save_handle();
+		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
+		{
+			if (($str_max_acl = $acl_cache->file_get_pt_oid("acl", $oid, "acl-".$oid)) == false)
 			{
-				include($fqfn);
+				$max_acl = $this->can_aw($access,$oid);
+
+				$acl_cache->file_set_pt_oid("acl", $oid, "acl-".$oid, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
-				if ($GLOBALS["acl_dbg"] == 1)
-				{
-					echo "acl for $access, $oid , got from file cache , mac_acl = ".dbg::dump($max_acl)." <br>";
-				}
 			}
 			else
 			{
-				$max_acl = $this->can_aw($access,$oid);
-				if ($GLOBALS["cfg"]["cache"]["page_cache"] != "")
-				{
-					$str = "<?php\n";
-					$str .= aw_serialize($max_acl, SERIALIZE_PHP_FILE, array("arr_name" => "max_acl"));
-					$str .= "?>";
-
-					$fp = fopen($fqfn, "w");
-					fwrite($fp, $str);
-					fclose($fp);
-					@chmod($fqfn, 0666);
-				}
-
-				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+				$max_acl = aw_unserialize($str_max_acl);
 			}
 		}
 

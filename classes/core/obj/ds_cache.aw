@@ -25,7 +25,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "objdata-$oid";
 
-		$ret = $this->cache->file_get_incl_pt_oid(
+		$ret = $this->cache->file_get_pt_oid(
 			"storage_object_data",
 			$oid,
 			$c_fn
@@ -34,7 +34,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->get_objdata($oid, $param);
-			$this->cache->file_set_incl_pt_oid(
+			$this->cache->file_set_pt_oid(
 				"storage_object_data",
 				$oid,
 				$c_fn,
@@ -61,7 +61,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "properties-$oid";
 
-		$ret = $this->cache->file_get_incl_pt_oid(
+		$ret = $this->cache->file_get_pt_oid(
 			"storage_object_data",
 			$oid,
 			$c_fn
@@ -70,7 +70,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->read_properties($arr);
-			$this->cache->file_set_incl_pt_oid(
+			$this->cache->file_set_pt_oid(
 				"storage_object_data",
 				$oid,
 				$c_fn,
@@ -133,7 +133,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "connection-$id";
 
-		$ret = $this->cache->file_get_incl_pt_oid(
+		$ret = $this->cache->file_get_pt_oid(
 			"storage_object_data",
 			$id,
 			$c_fn
@@ -142,7 +142,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->read_connection($id);
-			$this->cache->file_set_incl_pt_oid(
+			$this->cache->file_set_pt_oid(
 				"storage_object_data",
 				$id,
 				$c_fn,
@@ -198,7 +198,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "conn_find-$query_hash";
 
-		$ret = $this->cache->file_get_incl_pt(
+		$ret = $this->cache->file_get_pt(
 			"storage_search",
 			$query_hash[0],
 			$c_fn
@@ -207,7 +207,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->find_connections($arr);
-			$this->cache->file_set_incl_pt(
+			$this->cache->file_set_pt(
 				"storage_search",
 				$query_hash[0],
 				$c_fn,
@@ -252,7 +252,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "obj_find-$query_hash";
 
-		$ret = $this->cache->file_get_incl_pt(
+		$ret = $this->cache->file_get_pt(
 			"storage_search",
 			$query_hash[0],
 			$c_fn
@@ -261,7 +261,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->search($params, $to_fetch);
-			$this->cache->file_set_incl_pt(
+			$this->cache->file_set_pt(
 				"storage_search",
 				$query_hash[0],
 				$c_fn,
@@ -282,7 +282,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "obj_fetch-$query_hash";
 
-		$ret = $this->cache->file_get_incl_pt(
+		$ret = $this->cache->file_get_pt(
 			"storage_search",
 			$query_hash[0],
 			$c_fn
@@ -291,7 +291,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		if (!is_array($ret))
 		{
 			$ret = $this->contained->fetch_list($param);
-			$this->cache->file_set_incl_pt(
+			$this->cache->file_set_pt(
 				"storage_search",
 				$query_hash[0],
 				$c_fn,

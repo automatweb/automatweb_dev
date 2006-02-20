@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.113 2006/02/20 09:23:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.114 2006/02/20 10:30:55 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1636,6 +1636,7 @@ class planner extends class_base
 			),
 			"site_id" => array(),
 		));
+
 		exit_function("gen-tasklist-1");
 
 		if (0 == $tasklist->count())

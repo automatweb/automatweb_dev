@@ -427,31 +427,9 @@ class _int_object_loader extends core
 
 	function can($acl_name, $oid, $dbg = false)
 	{
-		// we get the acl from read_objdata
-		//enter_function("object_loader::can");
-
 		if (!($max_acl = $this->__aw_acl_cache[$oid]))
 		{
-			if ($GLOBALS["acl_dbg"] == 1)
-			{
-				echo "cache MISS for $acl_name / $oid <br>";
-				$GLOBALS["INTENSE_DUKE"] = 1;
-			}
-
-			// try for file cache
-			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
-			$hash = substr($oid, -1, 1);
-			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/acl/".$hash."/".$fn;
-			if (file_exists($fqfn))
-			{
-				include($fqfn);
-				$this->__aw_acl_cache[$oid] = $max_acl;
-				if ($GLOBALS["acl_dbg"] == 1)
-				{
-					echo "acl for $access, $oid , got from file cache , mac_acl = ".dbg::dump($max_acl)." <br>";
-				}
-			}
-			else
+			if (($str_max_acl = $this->cache->file_get_pt_oid("acl", $oid, "acl-".$oid)) == false)
 			{
 				$max_acl = $this->_calc_max_acl($oid);
 				if ($max_acl === false)
@@ -463,41 +441,21 @@ class _int_object_loader extends core
 						"can_admin" => false
 					);
 				}
-
-				if ($GLOBALS["cfg"]["cache"]["page_cache"] != "")
-				{
-					$str = "<?php\n";
-					$str .= aw_serialize($max_acl, SERIALIZE_PHP_FILE, array("arr_name" => "max_acl"));
-					$str .= "?>";
-
-					$fp = fopen($fqfn, "w");
-					fwrite($fp, $str);
-					fclose($fp);
-					@chmod($fqfn, 0666);
-				}
+				$this->cache->file_set_pt_oid("acl", $oid, "acl-".$oid, aw_serialize($max_acl, SERIALIZE_PHP_FILE));
 			}
+			else
+			{
+				$max_acl = aw_unserialize($str_max_acl);
+			}
+
 			$this->__aw_acl_cache[$oid] = $max_acl;
-			if ($GLOBALS["acl_dbg"] == 1)
-			{
-				$GLOBALS["INTENSE_DUKE"] = 0;
-			}
-		}
-		else
-		{
-			if ($GLOBALS["acl_dbg"] == 1)
-			{
-				echo "cache hit for $acl_name / $oid <br>";
-			}
 		}
 
-		//exit_function("object_loader::can");
-		if (!isset($max_acl["can_view"]) && aw_global_get("uid") == "")
+		if (!isset($max_acl["can_view"]) && $_SESSION["uid"] == "")
 		{
 			return $GLOBALS["cfg"]["acl"]["default"];
 		}
 
-		//echo "------- return ".((int)$max_acl["can_".$acl_name])." for $acl_name on object $oid <br>\n";
-		// and now return the highest found
 		return (int)$max_acl["can_".$acl_name];
 	}
 
