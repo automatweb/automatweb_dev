@@ -3,9 +3,9 @@
       <property>
             <name>image</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>releditor</type>
             <reltype>RELTYPE_IMAGE</reltype>
             <use_form>emb</use_form>
@@ -16,9 +16,9 @@
       <property>
             <name>caption</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>textarea</type>
             <rows>3</rows>
             <cols>20</cols>
@@ -27,66 +27,76 @@
       <property>
             <name>author</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>textbox</type>
             <caption>Autor</caption>
       </property>
       <property>
             <name>origin</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>textbox</type>
             <caption>Allikas</caption>
       </property>
       <property>
             <name>origin_url</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>textbox</type>
             <caption>Allika URL</caption>
       </property>
       <property>
             <name>date</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>date_select</type>
             <caption>Kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>src_rp</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>textbox</type>
             <caption>URL (RealPlayer)</caption>
       </property>
       <property>
             <name>src_wm</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>textbox</type>
             <caption>URL (Windows Media)</caption>
       </property>
       <property>
             <name>trans</name>
             <table>objects</table>
-            <group>trans</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>trans</group>
             <type>translator</type>
             <props>name</props>
             <caption>T&amp;amp;otilde;ge</caption>
+      </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <classinfo>
             <syslog_type>ST_VIDEO</syslog_type>
@@ -98,6 +108,9 @@
             <trans>
                   <caption>T&amp;amp;otilde;lkimine</caption>
             </trans>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <IMAGE>

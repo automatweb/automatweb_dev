@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.6 2005/10/04 10:42:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.7 2006/02/20 11:32:23 kristo Exp $
 // video.aw - Video 
 /*
 
@@ -7,45 +7,49 @@
 
 
 @default table=objects
-@default group=general
-
 @default field=meta
 @default method=serialize
 
-@property image type=releditor reltype=RELTYPE_IMAGE use_form=emb rel_id=first
-@caption Pilt
 
-@property caption type=textarea rows=3 cols=20
-@caption Allkiri
+@default group=general
 
-@property author type=textbox
-@caption Autor
+	@property image type=releditor reltype=RELTYPE_IMAGE use_form=emb rel_id=first
+	@caption Pilt
 
-@property origin type=textbox
-@caption Allikas
+	@property caption type=textarea rows=3 cols=20
+	@caption Allkiri
 
-@property origin_url type=textbox
-@caption Allika URL
+	@property author type=textbox
+	@caption Autor
 
-@property date type=date_select
-@caption Kuup&auml;ev
+	@property origin type=textbox
+	@caption Allikas
 
-@property src_rp type=textbox
-@caption URL (RealPlayer)
+	@property origin_url type=textbox
+	@caption Allika URL
 
-property capt_rp type=textbox
-caption Lingi tekst (RealPlayer)
+	@property date type=date_select
+	@caption Kuup&auml;ev
 
-@property src_wm type=textbox
-@caption URL (Windows Media)
+	@property src_rp type=textbox
+	@caption URL (RealPlayer)
 
-property capt_wm type=textbox
-caption Lingi tekst (Windows Media)
+	@property src_wm type=textbox
+	@caption URL (Windows Media)
 
-@property trans type=translator group=trans props=name
-@caption T&otilde;ge
+@default group=trans
+
+	@property trans type=translator group=trans props=name
+	@caption T&otilde;ge
+
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi
+
 
 @groupinfo trans caption="T&otilde;lkimine"
+@groupinfo transl caption=T&otilde;lgi
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption Video pilt
@@ -61,6 +65,10 @@ class video extends class_base
 			"tpldir" => "contentmgmt/video",
 			"clid" => CL_VIDEO
 		));
+
+		$this->trans_props = array(
+			"name", "caption", "origin"
+		);
 	}
 
 	function get_property($arr)
@@ -80,7 +88,9 @@ class video extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 		}
 		return $retval;
 	}	
@@ -139,6 +149,25 @@ class video extends class_base
 		$this->read_template("autoplay.tpl");
 		$this->vars($o->properties());
 		die($this->parse());
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		else
+		if ($arr["id"] == "trans" && aw_ini_get("user_interface.content_trans") == 1)
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 ?>
