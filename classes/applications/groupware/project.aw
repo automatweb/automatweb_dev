@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.77 2006/02/20 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.78 2006/02/20 14:46:29 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -279,6 +279,9 @@
 
 @reltype SIDE value=15 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption konkurent
+
+@reltype PREPAYMENT_BILL value=16 clid=CL_CRM_BILL
+@caption Arve
 */
 
 class project extends class_base
@@ -521,6 +524,24 @@ class project extends class_base
 
 			case "goals_gantt":
 				$data["value"] = $this->_goals_gantt($arr);
+				break;
+
+			case "prepayment":
+				$bill = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_PREPAYMENT_BILL");
+				if ($bill)
+				{
+					$data["post_append_text"] = " ".html::obj_change_url($bill);
+				}
+				else
+				{
+					$data["post_append_text"] = " ".html::href(array(
+						"url" => $this->mk_my_orb("do_create_prepayment_bill", array(
+							"id" => $arr["obj_inst"]->id(),
+							"ru" => get_ru()
+						)),
+						"caption" => t("Loo arve")
+					));
+				}
 				break;
 		}
 		return $retval;
@@ -3698,6 +3719,62 @@ class project extends class_base
 			}
 		}
 		$this->_lv--;
+	}
+
+	/**
+		@attrib name=do_create_prepayment_bill
+		@param id required type=int acl=view
+		@param ru required
+	**/
+	function do_create_prepayment_bill($arr)
+	{
+		$arr["obj_inst"] = obj($arr["id"]);
+
+		$bill = obj();
+		$bill->set_class_id(CL_CRM_BILL);
+		$bill->set_parent($arr["id"]);
+		$bill->save();
+
+		$ser = get_instance(CL_CRM_NUMBER_SERIES);
+		$bno = $ser->find_series_and_get_next(CL_CRM_BILL);
+		if (!$bno)
+		{
+			$bno = $bill->id();
+		}
+		$bill->set_prop("bill_no", $bno);
+		$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
+
+		$cust = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_ORDERER");
+		$impl = $arr["obj_inst"]->prop("orderer");
+		if (is_array($impl))
+		{
+			$impl = reset($impl);
+		}
+		$bill->set_prop("customer", $impl);
+		$bill->set_prop("impl", $arr["obj_inst"]->prop("implementor"));
+		$bill->save();
+
+
+		$arr["obj_inst"]->connect(array(
+			"to" => $bill->id(),
+			"type" => "RELTYPE_PREPAYMENT_BILL"
+		));
+
+		$br = obj();
+		$br->set_class_id(CL_CRM_BILL_ROW);
+		$br->set_parent($bill->id());
+		$br->set_prop("name", sprintf(t("%s ettemaks"), $arr["obj_inst"]->name()));
+		$br->set_prop("amt", 1);
+		$br->set_prop("price", $arr["obj_inst"]->prop("prepayment"));
+		$br->set_prop("date", time());
+		$br->save();
+
+		$bill->connect(array(
+			"to" => $br->id(),
+			"type" => "RELTYPE_ROW"
+		));
+
+		return $this->mk_my_orb("change", array("id" => $bill->id(), "return_url" => urlencode($arr["ru"])), CL_CRM_BILL);
 	}
 };
 ?>

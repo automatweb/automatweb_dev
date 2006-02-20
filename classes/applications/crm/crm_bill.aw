@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.24 2006/02/15 13:03:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.25 2006/02/20 14:46:29 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1123,6 +1123,64 @@ class crm_bill extends class_base
 		));
 
 		return $arr["retu"];
+	}
+
+	/**
+		@attrib name=create_bill
+	**/
+	function create_bill($arr)
+	{
+		$bill = obj($arr["id"]);
+		$seti = get_instance(CL_CRM_SETTINGS);
+		$sts = $seti->get_current_settings();
+		$ti = get_instance(CL_TASK);
+		foreach(safe_array($arr["sel"]) as $task_id)
+		{
+			// add all rows that are not yet billed
+			foreach($ti->get_task_bill_rows(obj($task_id)) as $row)
+			{
+				$br = obj();
+				$br->set_class_id(CL_CRM_BILL_ROW);
+				$br->set_parent($bill->id());
+				$br->set_prop("name", $row["name"]);
+				$br->set_prop("amt", $row["amt"]);
+				$br->set_prop("prod", $row["prod"]);
+				$br->set_prop("price", $row["price"]);
+				$br->set_prop("unit", $row["unit"]);
+				$br->set_prop("is_oe", $row["is_oe"]);
+				$br->set_prop("has_tax", $row["has_tax"]);
+				$br->set_prop("date", $row["date"]);
+				// get default prod
+
+				if ($sts)
+				{
+					$br->set_prop("prod", $sts->prop("bill_def_prod"));
+				}
+				$br->save();
+
+				$br->connect(array(
+					"to" => $task_id,
+					"type" => "RELTYPE_TASK"
+				));
+
+				if ($row["row_oid"])
+				{
+					$br->connect(array(
+						"to" => $row["row_oid"],
+						"type" => "RELTYPE_TASK_ROW"
+					));
+					$tr = obj($row["row_oid"]);
+					$tr->set_prop("bill_id", $bill->id());
+					$tr->save();
+				}
+
+				$bill->connect(array(
+					"to" => $br->id(),
+					"type" => "RELTYPE_ROW"
+				));
+			}
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

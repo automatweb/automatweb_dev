@@ -678,6 +678,11 @@
                   </clid>
                   <caption>konkurent</caption>
             </SIDE>
+            <PREPAYMENT_BILL>
+                  <value>16</value>
+                  <clid>CL_CRM_BILL</clid>
+                  <caption>Arve</caption>
+            </PREPAYMENT_BILL>
       </reltypes>
       <layout>
             <parts>

@@ -10,7 +10,7 @@ class crm_company_bills_impl extends class_base
 	function _init_bill_proj_list_t(&$t)
 	{
 		$t->define_field(array(
-			"caption" => t("Loo arve"),
+			"caption" => t("Ava"),
 			"name" => "open",
 			"align" => "center",
 			"sortable" => 1
@@ -115,7 +115,7 @@ class crm_company_bills_impl extends class_base
 				"name" => html::obj_change_url($po),
 				"open" => html::href(array(
 					"url" => aw_url_change_var("proj", $p),
-					"caption" => t("Loo arve")
+					"caption" => t("Ava")
 				)),
 				"cust" => html::obj_change_url(reset($po->prop("orderer"))),
 				"sum" => number_format($sum, 2)

@@ -7,6 +7,7 @@
             <type>relpicker</type>
             <field>customer</field>
             <reltype>RELTYPE_CUSTOMER</reltype>
+            <parent>this.parent</parent>
             <caption>Klient</caption>
       </property>
       <property>

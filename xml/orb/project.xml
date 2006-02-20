@@ -67,5 +67,14 @@
 			</function>
 		</action>
 
+		<action name="do_create_prepayment_bill">
+			<function name="do_create_prepayment_bill">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="ru" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
