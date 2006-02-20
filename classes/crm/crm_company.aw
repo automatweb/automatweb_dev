@@ -288,6 +288,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@property customer_search_cust_mgr type=text size=25 store=no parent=vbox_customers_left captionside=top
 			@caption Kliendihaldur
 
+			@property customer_search_cust_grp type=select store=no parent=vbox_customers_left captionside=top
+			@caption Kliendigrupp
+
 			@property customer_search_submit type=submit size=15 store=no parent=vbox_customers_left no_caption=1
 			@caption Otsi
 
@@ -1346,6 +1349,7 @@ class crm_company extends class_base
 			/// CUSTOMER tab
 			case "my_projects":
 			case "customer_search_cust_mgr":
+			case "customer_search_cust_grp":
 			case "customer_search_is_co":
 			case "my_customers_toolbar":
 			case "my_customers_listing_tree":
@@ -1382,7 +1386,9 @@ class crm_company extends class_base
 			case "customer_search_ev":
 			case "customer_search_submit":
 			case "customer_search":
-				$data['value'] = $arr['request'][$data["name"]];
+				$s = $arr['request'][$data["name"]];
+				$this->dequote(&$s);
+				$data['value'] = $s;
 				break;
 
 			case "proj_search_dl_from":
@@ -1550,7 +1556,9 @@ class crm_company extends class_base
 			case "act_s_task_name":
 			case "act_s_proj_name":
 			case "act_s_sbt":
-				$data['value'] = $arr['request'][$data["name"]];
+				$s = $arr['request'][$data["name"]];
+				$this->dequote(&$s);
+				$data['value'] = $s;
 				break;
 
 			case "act_s_print_view":
@@ -2512,6 +2520,7 @@ class crm_company extends class_base
 			$arr['args']['customer_search_worker'] = urlencode($arr['request']['customer_search_worker']);
 			$arr['args']['customer_search_ev'] = urlencode($arr['request']['customer_search_ev']);
 			$arr['args']['customer_search_cust_mgr'] = urlencode($arr['request']['customer_search_cust_mgr']);
+			$arr['args']['customer_search_cust_grp'] = urlencode($arr['request']['customer_search_cust_grp']);
 			$arr['args']['customer_search_reg'] = urlencode($arr['request']['customer_search_reg']);
 			$arr['args']['customer_search_address'] = urlencode($arr['request']['customer_search_address']);
 			$arr['args']['customer_search_city'] = urlencode($arr['request']['customer_search_city']);

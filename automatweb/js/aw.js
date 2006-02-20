@@ -297,3 +297,16 @@ function aw_do_xmlhttprequest(url, finish_callb)
 		}
 	}
 }
+
+function aw_clear_list(list)
+{
+	var listlen = list.length;
+
+	for(i=0; i < listlen; i++)
+		list.options[0] = null;
+}
+
+function aw_add_list_el(list, value, text)
+{
+	list.options[list.options.length] = new Option(text,""+value,false,false);
+}

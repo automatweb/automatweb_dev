@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.37 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.38 2006/02/20 09:21:01 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -28,6 +28,23 @@
 
 @property end type=datetime_select field=end 
 @caption Lõpp
+
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
+@caption Saata arve
+
+@property bill_no type=text table=planner 
+@caption Arve number
+
+@layout num_hrs type=hbox 
+
+	@property time_guess type=textbox size=5 field=meta method=serialize parent=num_hrs table=objects
+	@caption Prognoositav tundide arv 	
+
+	@property time_real type=textbox size=5 field=meta method=serialize parent=num_hrs table=objects
+	@caption Tegelik tundide arv
+
+	@property time_to_cust type=textbox size=5 field=meta method=serialize parent=num_hrs table=objects
+	@caption Tundide arv kliendile
 
 @property content type=textarea cols=60 rows=30 field=description
 @caption Sisu

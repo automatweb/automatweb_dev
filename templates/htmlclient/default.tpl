@@ -185,7 +185,7 @@ function generic_loader()
 		}
 		else
 		{
-			els[i].setAttribute("onChange","set_changed();");
+			els[i].setAttribute("onChange",els[i].getAttribute("onChange")+ ";set_changed();");
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.76 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.77 2006/02/20 09:21:01 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -3098,6 +3098,17 @@ class project extends class_base
 
 		$p = get_instance(CL_CRM_PERSON);
 
+		$from = $arr["obj_inst"]->prop("implementor");
+		if (is_array($from))
+		{
+			$from = reset($from);
+		}
+		$to = $arr["obj_inst"]->prop("orderer");
+		if (is_array($to))
+		{
+			$to = reset($to);
+		}
+
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT")) as $c)
 		{
 			$o = $c->to();
@@ -3130,13 +3141,44 @@ class project extends class_base
 			{
 				continue;
 			}
+
+			$role_url = $this->mk_my_orb("change", array(
+				"from_org" => $from,
+				"to_org" => $to,
+				"to_project" => $arr["obj_inst"]->id()
+			), "crm_role_manager");
+	
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"company" => $from,
+				"client" => $to, 
+				"project" => $arr["obj_inst"]->id(),
+				"person" => $o->id()
+			));
+			
+
+			$rs = array();
+			foreach($ol->arr() as $role_entry)
+			{
+				$tmp = html::obj_change_url($role_entry->prop("role"));
+				$tmp = html::obj_change_url($role_entry->prop("unit")).($tmp != "" ? " / " : "").$tmp;
+				$rs[] = $tmp;
+			}
 			$t->define_data(array(
 				"person" => html::obj_change_url($o),
 				"co" => join(", ", $co_s),
 				"rank" => html::obj_change_url($o->prop("rank")),
 				"phone" => $o->prop_str("phone"),
 				"mail" => $o->prop_str("email"),
-				"roles" => "",
+				"roles" => join("<br>", $rs)."<br>".html::popup(array(
+					"url" => $role_url,
+					'caption' => t('Rollid'),
+					"width" => 800,
+					"height" => 600,
+					"scrollbars" => "auto"
+				)),
 				"oid" => $o->id()
 			));
 		}

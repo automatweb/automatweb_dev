@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.56 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.57 2006/02/20 09:21:01 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -77,6 +77,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property content type=textarea cols=60 rows=30 table=documents
 @caption Sisu
+
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
+@caption Saata arve
 
 @property bill_no type=text table=planner 
 @caption Arve number

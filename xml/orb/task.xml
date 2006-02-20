@@ -62,9 +62,10 @@
 			</function>
 		</action>
 
-		<action name="add_meeting_as_row">
-			<function name="add_meeting_as_row">
+		<action name="get_proj_for_cust">
+			<function name="get_proj_for_cust">
 				<arguments>
+					<optional name="cust" />
 				</arguments>
 			</function>
 		</action>

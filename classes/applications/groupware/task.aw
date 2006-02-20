@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.74 2006/02/17 12:08:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.75 2006/02/20 09:21:01 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2199,14 +2199,80 @@ class task extends class_base
 		$this->_lv--;
 	}
 
+	/**
+		@attrib name=get_proj_for_cust
+		@param cust optional
+	**/
+	function get_proj_for_cust($arr)
+	{
+		if (!$arr["cust"])
+		{
+			$i = get_instance(CL_CRM_COMPANY);
+			$prj = $i->get_my_projects();
+			if (!count($prj))
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list(array("oid" => $prj, "lang_id" => array(), "site_id" => array()));
+			}
+		}
+		else
+		{
+			$filt = array(
+				"class_id" => CL_PROJECT,
+				"CL_PROJECT.RELTYPE_ORDERER" => $arr["cust"],
+			);
+			$ol = new object_list($filt);
+		}
+		header("Content-type: text/xml");
+		$xml = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\" standalone=\"yes\"?>\n<response>\n";
+	
+		foreach($ol->names() as $id => $n)
+		{
+			$xml .= "<item><value>$id</value><text>$n</text></item>";
+		}
+		$xml .= "</response>";
+		die($xml);
+	}
+	
 	function callback_generate_scripts($arr)
 	{
-		return "
+		$url = $this->mk_my_orb("get_proj_for_cust");
+		return '
 			function upd_proj_list()
 			{
-				alert(\"uhaa\");
+				set_changed();
+				aw_do_xmlhttprequest("'.$url.'&cust="+document.changeform.customer.options[document.changeform.customer.selectedIndex].value, proj_fetch_callb);
 			}
-		";
+
+			function proj_fetch_callb()
+			{
+				if (req.readyState == 4)
+				{
+					// only if "OK"
+					if (req.status == 200) 
+					{
+						response = req.responseXML.documentElement;
+						items = response.getElementsByTagName("item");
+						aw_clear_list(document.changeform.project);
+						aw_add_list_el(document.changeform.project, "", "'.t("--vali--").'");
+
+						for(i = 0; i < items.length; i++)
+						{
+							value = items[i].childNodes[0].firstChild.data;
+							text = items[i].childNodes[1].firstChild.data;
+							aw_add_list_el(document.changeform.project, value, text);
+						}
+					} 
+					else 
+					{
+						alert("There was a problem retrieving the XML data:\n" + req.statusText);
+					}
+				}
+			}
+		';
 	}
 }
 ?>

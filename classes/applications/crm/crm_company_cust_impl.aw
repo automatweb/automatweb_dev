@@ -1376,6 +1376,32 @@ class crm_company_cust_impl extends class_base
 			$ret["CL_CRM_COMPANY.ettevotlusvorm.name"] = "%".$r["customer_search_ev"]."%";
 		}
 
+		if ($r["customer_search_cust_grp"] != "")
+		{
+			// get all customers for group and stick into oid list
+			$sectlist = array();
+			$this->_req_get_sects(obj($r["customer_search_cust_grp"]), $sectlist);
+			$s_from = array_keys($sectlist);
+			$s_from[] = $r["customer_search_cust_grp"];
+			$c = new connection();
+			$co_conns = $c->find(array(
+				"from" => $s_from,
+				"from.class_id" => CL_CRM_CATEGORY,
+				"type" => "RELTYPE_CUSTOMER"
+			));
+
+			$oids = array();
+			foreach($co_conns as $co_con)
+			{
+				$oids[] = $co_con["to"];
+			}
+			if (count($oids) == 0)
+			{
+				$oids = -1;
+			}
+			$ret["oid"] = $oids;
+		}
+
 		if (empty($r["customer_search_is_co"]["is_co"]) && !empty($r["customer_search_is_co"]["is_person"]))
 		{
 			$ret["class_id"] = CL_CRM_PERSON;
@@ -1773,6 +1799,25 @@ class crm_company_cust_impl extends class_base
 			"obj_inst" => obj($arr["co_id"]),
 			"node_id" => $arr["fetch_branch"]
 		));
+	}
+
+	function _get_customer_search_cust_grp($arr)
+	{
+		$dat = array();
+		$this->_req_get_sects($arr["obj_inst"], $dat);
+		$arr["prop"]["options"] = array("" => "") + $dat;
+		$arr["prop"]["value"] = $arr["request"]["customer_search_cust_grp"];
+	}
+
+	function _req_get_sects($o, &$dat)
+	{
+		$this->_sect_l ++;
+		foreach($o->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
+		{
+			$dat[$c->prop("to")] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_sect_l) . $c->prop("to.name");
+			$this->_req_get_sects($c->to(), $dat);
+		}
+		$this->_sect_l --;
 	}
 }
 ?>

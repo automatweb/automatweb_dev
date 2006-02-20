@@ -64,6 +64,56 @@
             <caption>L&amp;otilde;pp</caption>
       </property>
       <property>
+            <name>send_bill</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>send_bill</field>
+            <caption>Saata arve</caption>
+      </property>
+      <property>
+            <name>bill_no</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>text</type>
+            <field>bill_no</field>
+            <caption>Arve number</caption>
+      </property>
+      <property>
+            <name>time_guess</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>num_hrs</parent>
+            <caption>Prognoositav tundide arv 	</caption>
+      </property>
+      <property>
+            <name>time_real</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>num_hrs</parent>
+            <caption>Tegelik tundide arv</caption>
+      </property>
+      <property>
+            <name>time_to_cust</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>num_hrs</parent>
+            <caption>Tundide arv kliendile</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>planner</table>
             <group>general</group>
@@ -271,5 +321,11 @@
                   <caption>Projekt</caption>
             </PROJECT>
       </reltypes>
+      <layout>
+            <num_hrs>
+                  <type>hbox</type>
+                  <group>general</group>
+            </num_hrs>
+      </layout>
 </properties>
 

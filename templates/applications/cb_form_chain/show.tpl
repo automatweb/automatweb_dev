@@ -1,11 +1,11 @@
 {VAR:forms}
 
 <!-- SUB: FORM -->
-<table border="1">
+<table class="cb_form_chain">
 	<!-- SUB: PROPERTY -->
 		<tr>
-			<td>{VAR:caption}</td>
-			<td>{VAR:value}</td>
+			<td class="caption">{VAR:caption}</td>
+			<td class="value">{VAR:value}</td>
 		</tr>
 	<!-- END SUB: PROPERTY -->
 </table>

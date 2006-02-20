@@ -1,6 +1,6 @@
 <?php
 
-class object_test extends UnitTestCase
+class object_test2 extends UnitTestCase
 {
 	function object_test($name)
 	{

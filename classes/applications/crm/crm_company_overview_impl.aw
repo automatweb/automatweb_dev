@@ -635,32 +635,33 @@ class crm_company_overview_impl extends class_base
 	
 		if ($r["act_s_cust"] != "")
 		{
+			$str_filt = $this->_get_string_filt($r["act_s_cust"]);
 			if ($clid == CL_CRM_DOCUMENT_ACTION)
 			{
 				$res[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						$def.".document(CL_CRM_DEAL).customer.name" => "%".$r["act_s_cust"]."%",
-						$def.".document(CL_CRM_MEMO).customer.name" => "%".$r["act_s_cust"]."%"	
+						$def.".document(CL_CRM_DEAL).customer.name" => $str_filt,
+						$def.".document(CL_CRM_MEMO).customer.name" => $str_filt	
 					)
 				));
-				//$res[$def.".document(CL_CRM_DEAL).customer.name"] = "%".$r["act_s_cust"]."%";
 			}
 			else
 			{
-				$res[$def.".customer(CL_CRM_COMPANY).name"] = "%".$r["act_s_cust"]."%";
+				$res[$def.".customer(CL_CRM_COMPANY).name"] = $str_filt;
 			}
 		}
 		if ($r["act_s_part"] != "")
 		{
+			$str_filt = $this->_get_string_filt($r["act_s_part"]);
 			if ($clid == CL_CRM_DOCUMENT_ACTION)
 			{
-				$res[$def.".actor.name"] = map("%%%s%%", explode(",", $r["act_s_part"]));
+				$res[$def.".actor.name"] = $str_filt;//map("%%%s%%", explode(",", $r["act_s_part"]));
 			}
 			else
 			if ($clid == CL_CRM_OFFER)
 			{
-				$res["CL_CRM_OFFER.RELTYPE_SALESMAN.name"] = map("%%%s%%", explode(",", $r["act_s_part"]));
+				$res["CL_CRM_OFFER.RELTYPE_SALESMAN.name"] = $str_filt; //map("%%%s%%", explode(",", $r["act_s_part"]));
 			}
 			else
 			{
@@ -670,7 +671,7 @@ class crm_company_overview_impl extends class_base
 				// get the person(s) typed
 				$persons = new object_list(array(
 					"class_id" => CL_CRM_PERSON,
-					"name" => map("%%%s%%", explode(",", $r["act_s_part"])),
+					"name" => $str_filt, //map("%%%s%%", explode(",", $r["act_s_part"])),
 					"lang_id" => array(),
 					"site_id" => array()
 				));
@@ -711,7 +712,7 @@ class crm_company_overview_impl extends class_base
 					"logic" => "OR",
 					"conditions" => array(
 						"oid" => $_res["oid"],
-						$def.".RELTYPE_RESOURCE.name" => map("%%%s%%", explode(",", $r["act_s_part"]))	
+						$def.".RELTYPE_RESOURCE.name" => $str_filt //map("%%%s%%", explode(",", $r["act_s_part"]))	
 					)
 				));
 			}
@@ -719,45 +720,49 @@ class crm_company_overview_impl extends class_base
 
 		if ($r["act_s_task_name"] != "")
 		{
+			$str_filt = $this->_get_string_filt($r["act_s_task_name"]);
 			if ($clid == CL_CRM_DOCUMENT_ACTION)
 			{
 				$res[] = new object_list_filter(array(
 					"logic" => "OR",
 					"conditions" => array(
-						"name" =>  "%".$r["act_s_task_name"]."%",
-						"CL_CRM_DOCUMENT_ACTION.document.name" =>  "%".$r["act_s_task_name"]."%",
+						"name" =>  $str_filt, //"%".$r["act_s_task_name"]."%",
+						"CL_CRM_DOCUMENT_ACTION.document.name" => $str_filt // "%".$r["act_s_task_name"]."%",
 					)	
 				));
 			}
 			else
 			{
-				$res["name"] = "%".$r["act_s_task_name"]."%";
+				$res["name"] = $str_filt; //"%".$r["act_s_task_name"]."%";
 			}
 		}
 		if ($r["act_s_task_content"] != "")
 		{
+			$str_filt = $this->_get_string_filt($r["act_s_task_content"]);
 			$res[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
-					"content" => "%".$r["act_s_task_content"]."%",
-					"summary" => "%".$r["act_s_task_content"]."%",
-					"CL_TASK.RELTYPE_ROW.content" => "%".$r["act_s_task_content"]."%"
+					"content" => $str_filt, //"%".$r["act_s_task_content"]."%",
+					"summary" => $str_filt, //"%".$r["act_s_task_content"]."%",
+					"CL_TASK.RELTYPE_ROW.content" => $str_filt //"%".$r["act_s_task_content"]."%"
 				)
 			));
 		}
 		if ($r["act_s_code"] != "")
 		{
-			$res["code"] = "%".$r["act_s_code"]."%";
+			$str_filt = $this->_get_string_filt($r["act_s_code"]);
+			$res["code"] = $str_filt; //"%".$r["act_s_code"]."%";
 		}
 		if ($r["act_s_proj_name"] != "")
 		{
+			$str_filt = $this->_get_string_filt($r["act_s_proj_name"]);
 			if ($clid == CL_CRM_DOCUMENT_ACTION)
 			{
-				$res[$def.".document.project.name"] = "%".$r["act_s_proj_name"]."%";
+				$res[$def.".document.project.name"] = $str_filt; //"%".$r["act_s_proj_name"]."%";
 			}
 			else
 			{
-				$res[$def.".project(CL_PROJECT).name"] = "%".$r["act_s_proj_name"]."%";
+				$res[$def.".project(CL_PROJECT).name"] = $str_filt;  //"%".$r["act_s_proj_name"]."%";
 			}
 		}
 
@@ -1228,19 +1233,41 @@ class crm_company_overview_impl extends class_base
 		}
 	}
 
-	function _parse_search_string($str)
+	function _get_string_filt($s)
 	{
-		// split string by "
-		if (strpos($str, "\"") !== false)
+		$this->dequote(&$s);
+		// separated by commas delimited by "
+		$p = array();
+		$len = strlen($s);
+		for ($i = 0; $i < $len; $i++)
 		{
-			$len = strlen($str);
-			
+			if ($s[$i] == "\"" && $in_q)
+			{
+				// end of quoted string
+				$p[] = $cur_str;
+				$in_q = false;
+			}
+			else
+			if ($s[$i] == "\"" && !$in_q)
+			{
+				$cur_str = "";
+				$in_q = true;
+			}
+			else
+			if ($s[$i] == "," && !$in_q)
+			{
+				$p[] = $cur_str;
+				$cur_str = "";
+			}
+			else
+			{
+				$cur_str .= $s[$i];
+			}
 		}
-		else
-		{
-			$parts = explode(",", $str);
-		}
-		return "%".$str."%";
+		$p[] = $cur_str;
+		$p = array_unique($p);
+
+		return map("%%%s%%", $p);
 	}
 }
 ?>
