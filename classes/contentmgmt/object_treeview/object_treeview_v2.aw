@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.96 2005/12/30 10:10:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.97 2006/02/20 08:59:38 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -759,7 +759,8 @@ class object_treeview_v2 extends class_base
 			// the controller have to be connected 
 			if (!empty($controller_value) && $ih_ob->is_connected_to(array("to" => $controller_value)))
 			{
-				if ($view_controller_inst->check_property(null, $controller_value, array()) == PROP_IGNORE)
+				$null = null;
+				if ($view_controller_inst->check_property($null, $controller_value, array()) == PROP_IGNORE)
 				{
 					unset($sel_cols[$controller_key]);
 				}
