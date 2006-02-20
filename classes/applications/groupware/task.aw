@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.75 2006/02/20 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.76 2006/02/20 10:49:21 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -462,8 +462,11 @@ class task extends class_base
 								$rank = obj($rank);
 								$data["value"] = $rank->prop("hr_price");
 								// immediately store this thingie as well so that the user will not have to save the object
-								$arr["obj_inst"]->set_prop("hr_price", $data["value"]);
-								$arr["obj_inst"]->save();
+								if ($arr["obj_inst"]->prop("hr_price") != $data["value"])
+								{
+									$arr["obj_inst"]->set_prop("hr_price", $data["value"]);
+									$arr["obj_inst"]->save();
+								}
 								break;
 							}
 						}
