@@ -137,7 +137,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @property aclwizard_a type=text store=no
 @caption 
 
-@property ui_language type=select table=objects field=meta method=serialize
+@property set_ui_lang type=select store=no
 @caption Liidese keel
 
 @groupinfo userdef caption="User-defined"
@@ -307,9 +307,10 @@ class user extends class_base
 				}
 				break;
 
-			case "ui_language":
+			case "set_ui_lang":
 				$i = get_instance("core/trans/pot_scanner");
 				$prop["options"] = array("" => "") + $i->get_langs();
+				$prop["value"] = aw_ini_get("user_interface.default_language");
 				break;
 		}
 		return PROP_OK;
@@ -416,20 +417,6 @@ class user extends class_base
 					}
 				}
 				$prop["value"] = $arr["request"]["aclwizard"];
-				break;
-
-			case "ui_language":
-				if ($arr["obj_inst"]->prop("uid") == aw_global_get("uid"))
-				{
-					if ($prop["value"] == "")
-					{
-						aw_session_del("user_adm_ui_lc");
-					}
-					else
-					{
-						aw_session_set("user_adm_ui_lc", $prop["value"]);
-					}
-				}
 				break;
 
 			case "jdata":
@@ -932,6 +919,8 @@ class user extends class_base
 		{
 			$arr["args"]["edit_acl"] = $arr["request"]["edit_acl"];
 		}
+
+		$arr["args"]["set_ui_lang"] = $arr["request"]["set_ui_lang"];
 	}
 
 	function get_acls($arr)

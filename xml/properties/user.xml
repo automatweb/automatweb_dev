@@ -294,12 +294,12 @@
             <caption></caption>
       </property>
       <property>
-            <name>ui_language</name>
-            <table>objects</table>
+            <name>set_ui_lang</name>
+            <table>users</table>
             <group>aclwizard</group>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <store>no</store>
+            <field>set_ui_lang</field>
             <caption>Liidese keel</caption>
       </property>
       <property>
