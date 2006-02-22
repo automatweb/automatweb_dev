@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.143 2006/01/18 16:25:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.144 2006/02/22 12:17:56 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1557,6 +1557,10 @@ class menu extends class_base
 	{
 		$str = array();
 		$sect = obj(aw_global_get("section"));
+		if ($sect->class_id() != CL_MENU)
+		{
+			$sect = obj($sect->parent());
+		}
 		$sad_opts = $sect->meta("sad_opts");
 		foreach($sect->connections_from(array("type" => "RELTYPE_SEEALSO_DOC")) as $c)
 		{
