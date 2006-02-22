@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.77 2006/02/20 13:50:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.78 2006/02/22 09:48:58 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -8,7 +8,7 @@
 @default table=objects
 @default group=general
 
-@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=this.parent
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER 
 @caption Klient
 
 @property code type=text size=5 table=planner field=code
@@ -49,15 +49,15 @@
 @property priority type=textbox size=5 table=planner field=priority
 @caption Prioriteet
 
-@layout num_hrs type=hbox 
+layout num_hrs type=hbox 
 
-	@property num_hrs_guess type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@property num_hrs_guess type=textbox size=5 field=meta method=serialize 
 	@caption Prognoositav tundide arv 	
 
-	@property num_hrs_real type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@property num_hrs_real type=textbox size=5 field=meta method=serialize 
 	@caption Tegelik tundide arv
 
-	@property num_hrs_to_cust type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@property num_hrs_to_cust type=textbox size=5 field=meta method=serialize
 	@caption Tundide arv kliendile
 
 @property hr_price type=textbox size=5 field=meta method=serialize 
@@ -1657,17 +1657,6 @@ class task extends class_base
 	function _get_possible_participants($o, $proj_only = false, $sel = array())
 	{
 		$opts = array();
-		if(is_object($o) && is_oid($o->id()))
-		{
-			$conns = $o->connections_to(array(
-				'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
-			));
-			foreach($conns as $conn)
-			{
-				$obj = $conn->from();
-				$opts[$obj->id()] = $obj->name();
-			}
-		}
 		// also add all workers for my company
 		$u = get_instance(CL_USER);
 		$co = $u->get_current_company();
@@ -1700,6 +1689,18 @@ class task extends class_base
 						unset($opts[$k]);
 					}
 				}
+			}
+		}
+
+		if(is_object($o) && is_oid($o->id()))
+		{
+			$conns = $o->connections_to(array(
+				'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
+			));
+			foreach($conns as $conn)
+			{
+				$obj = $conn->from();
+				$opts[$obj->id()] = $obj->name();
 			}
 		}
 
