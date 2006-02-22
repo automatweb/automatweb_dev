@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_tax_rate.aw,v 1.3 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_tax_rate.aw,v 1.4 2006/02/22 15:18:29 kristo Exp $
 // crm_tax_rate.aw - Maksum&auml;&auml;r 
 /*
 
@@ -25,7 +25,7 @@
 	@caption K&auml;ibemaksukood
 
 	@property acct type=textbox field=aw_acct_no
-	@caption Arve nr
+	@caption Kontonumber
 
 */
 

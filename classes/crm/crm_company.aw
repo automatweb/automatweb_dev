@@ -126,7 +126,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property do_create_users type=checkbox ch_value=1 table=objects field=meta method=serialize group=user_settings
 	@caption Kas isikud on kasutajad
 
-	@property server_folder type=textbox table=objects field=meta method=serialize group=user_settings
+	@property server_folder type=server_folder_selector table=objects field=meta method=serialize group=user_settings
 	@caption Kataloog serveris, kus asuvad failid
 
 --------------------------------------

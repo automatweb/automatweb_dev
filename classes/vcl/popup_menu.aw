@@ -6,7 +6,7 @@ class popup_menu extends aw_template
 
 	function popup_menu()
 	{
-		$this->init("automatweb/menuedit");
+		$this->init("vcl/popup_menu");
 		$this->items = array();
 	}
 

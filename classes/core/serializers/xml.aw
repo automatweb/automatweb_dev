@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/serializers/xml.aw,v 1.1 2005/09/10 12:39:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/serializers/xml.aw,v 1.2 2006/02/22 15:18:29 kristo Exp $
 // xml.aw - xml serializer
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml 
@@ -199,7 +199,7 @@ class xml
 		$source = $args["source"];
 		$retval = array();
 		$ckeys = array();
-		
+
 		// parsimist enam kiiremaks ei saa, see toimub enivei PHP siseselt
 		$parser = xml_parser_create();
 		
@@ -208,6 +208,11 @@ class xml
 
 		// kui tahad aru saada mida see funktsioon ja järgnevad read teevad, siis debuukimise ajal
 		xml_parse_into_struct($parser,$source,&$keys,&$values);
+		/*{
+			echo "error! <br>";
+echo xml_error_string(xml_get_error_code($parser))."<br>";
+echo "line = ".xml_get_current_line_number($parser);
+		}*/
 		// void siin teha midagi sellist: print_r($keys), print_r($values);
 
 		// Good parser. Now go back where you came from

@@ -41,6 +41,16 @@
             <caption>T&amp;amp;ouml;&amp;amp;ouml;kaaslaste seadete vorm </caption>
       </property>
       <property>
+            <name>customer_employer_cfgform</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kliendi t&amp;amp;ouml;&amp;amp;ouml;taja seadete vorm</caption>
+      </property>
+      <property>
             <name>bill_def_prod</name>
             <table>objects</table>
             <group>general</group>

@@ -47,7 +47,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>aw_acct_no</field>
-            <caption>Arve nr</caption>
+            <caption>Kontonumber</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_TAX_RATE</syslog_type>

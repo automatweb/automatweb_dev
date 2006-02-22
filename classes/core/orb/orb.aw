@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.13 2005/11/15 08:51:58 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.14 2006/02/22 15:18:29 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -204,7 +204,7 @@ class orb extends aw_template
 		{
 			$required = $orb_defs[$class][$action]["required"];
 			// first check, whether all required arguments are set
-			$_params = $GLOBALS["HTTP_GET_VARS"];
+			$_params = $_GET;
 			foreach($required as $key => $val)
 			{
 				if (!isset($_params[$key]))

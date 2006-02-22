@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.8 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.9 2006/02/22 15:18:29 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded 
 /*
 
@@ -21,6 +21,9 @@
 
 	@property coworker_cfgform type=relpicker reltype=RELTYPE_CFGFORM table=objects field=meta method=serialize
 	@caption T&ouml;&ouml;kaaslaste seadete vorm 
+
+	@property customer_employer_cfgform type=relpicker reltype=RELTYPE_CFGFORM table=objects field=meta method=serialize
+	@caption Kliendi t&ouml;&ouml;taja seadete vorm
 
 	@property bill_def_prod type=relpicker reltype=RELTYPE_PROD table=objects field=meta method=serialize
 	@caption Vaikimisi toode arve ridadel

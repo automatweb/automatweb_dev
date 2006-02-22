@@ -340,7 +340,7 @@
             <name>server_folder</name>
             <table>objects</table>
             <group>user_settings</group>
-            <type>textbox</type>
+            <type>server_folder_selector</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>Kataloog serveris, kus asuvad failid</caption>

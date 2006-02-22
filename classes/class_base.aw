@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.460 2006/02/17 15:13:37 ahti Exp $
+// $Id: class_base.aw,v 2.461 2006/02/22 15:18:28 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -125,6 +125,7 @@ class class_base extends aw_template
 			"table" => "vcl/table",
 			"object_table" => "vcl/object_table",
 			"relationmgr" => "vcl/relationmgr",
+			"server_folder_selector" => "vcl/server_folder_selector",
 		);
 
 		// XXX: this is temporary

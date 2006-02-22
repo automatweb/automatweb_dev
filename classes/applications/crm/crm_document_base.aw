@@ -235,6 +235,11 @@ class crm_document_base extends class_base
 					$pred_num[] = $predo->prop("ord");
 				}
 			}
+			if (count($pred_num) == 0 && $prev_idx != "")
+			{
+				$pred_num[] = $prev_idx;
+			}
+			$prev_idx = $cur_numer;
 
 			$t->define_data(array(
 				"date" => $calinst->draw_datetime_edit("a[$idx][date]", ($act->prop("date") > 100 ? $act->prop("date") : time())),

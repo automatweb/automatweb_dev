@@ -1,0 +1,14 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="server_folder_selector" folder="vcl" extends="core">
+		<action name="select_folder">
+			<function name="select_folder">
+				<arguments>
+					<required name="pn" />
+					<optional name="fld" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
