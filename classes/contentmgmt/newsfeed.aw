@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.11 2005/07/08 13:52:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.12 2006/02/22 12:06:19 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -215,8 +215,11 @@ class newsfeed extends class_base
 			$parse_embed = $feedobj->prop("parse_embed");
 			foreach($ol->arr() as $o)
 			{
-				//$mod_date = $o->modified();
 				$mod_date = $o->prop("doc_modified");
+				if ($mod_date < 300)
+				{
+					$mod_date = $o->modified();
+				}
 				if ($first == 0)
 				{
 					$first = $mod_date;
