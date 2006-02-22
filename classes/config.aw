@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.73 2006/02/10 11:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.74 2006/02/22 11:56:58 kristo Exp $
 
 class config extends aw_template
 {
@@ -194,6 +194,7 @@ class config extends aw_template
 				$es = $this->get_simple_config("login_grp_redirect");
 			}
 		}
+		$this->dequote(&$es);
 		return aw_unserialize($es);
 	}
 
