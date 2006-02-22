@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.78 2006/02/20 14:46:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.79 2006/02/22 09:50:50 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -3191,8 +3191,8 @@ class project extends class_base
 				"person" => html::obj_change_url($o),
 				"co" => join(", ", $co_s),
 				"rank" => html::obj_change_url($o->prop("rank")),
-				"phone" => $o->prop_str("phone"),
-				"mail" => $o->prop_str("email"),
+				"phone" => html::obj_change_url($o->prop("phone")),
+				"mail" => html::obj_change_url($o->prop("email")),
 				"roles" => join("<br>", $rs)."<br>".html::popup(array(
 					"url" => $role_url,
 					'caption' => t('Rollid'),
