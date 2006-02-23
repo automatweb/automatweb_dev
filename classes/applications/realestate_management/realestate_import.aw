@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.10 2006/02/06 11:54:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.11 2006/02/23 12:41:45 voldemar Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -1992,6 +1992,22 @@ class realestate_import extends class_base
 		$property->set_prop ($arr["client_type"], $client->id ());
 		$property->save ();
 		return true;
+	}
+
+/**
+	@attrib name=city24xml nologin=1
+	@param id required type=int
+**/
+	function city24_xml ($arr)
+	{
+		$this_object = obj ($arr["id"]);
+		$import_url = $this_object->prop ("city24_import_url");
+		// $import_url = "http://erivaldused:erivaldused@maakler.city24.ee/broker/city24broker/xml?lang=EST&search_count=10000";
+		// $import_url = "/www/dev/voldemar/test.xml";
+		// $fp = fopen ($import_url, "r");
+		$xml = file_get_contents ($import_url);
+		echo $xml;
+		exit;
 	}
 }
 ?>
