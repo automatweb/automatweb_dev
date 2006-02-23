@@ -3244,7 +3244,7 @@ class crm_company extends class_base
 	{
 		if (is_array($arr["sel"]) && count($arr["sel"]))
 		{
-			$ol = new object_list(array("oid" => $arr["sel"]));
+			$ol = new object_list(array("site_id" => array(), "lang_id" => array(), "oid" => $arr["sel"]));
 			$ol->foreach_o(array("func" => "set_prop", "params" => array("is_done", OBJ_IS_DONE), "save" => true));
 		}
 		return $arr["post_ru"];
@@ -3353,7 +3353,20 @@ class crm_company extends class_base
 			"from.class_id" => CL_CRM_PERSON,
 			"type" => "RELTYPE_PERSON_TASK",
 		));
-		$ret = array();
+		$ids = array();
+		foreach($cs as $c)
+		{
+			$ids[] = $c["to"];
+		}
+		$ol = new object_list(array(
+			"oid" => $ids, 
+			"site_id" => array(), 
+			"lang_id" => array(),
+			"class_id" => CL_TASK,
+			"is_done" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
+		));
+		return $ol->ids();
+		/*$ret = array();
 		foreach($cs as $c)
 		{
 			$task = obj($c["to"]);
@@ -3362,7 +3375,7 @@ class crm_company extends class_base
 				$ret[] = $c["to"];
 			}
 		}
-		return $ret;
+		return $ret;*/
 	}
 
 	function get_my_meetings()

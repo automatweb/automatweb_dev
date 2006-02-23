@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.59 2006/02/20 13:50:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.60 2006/02/23 08:51:53 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @default table=objects
 @default group=general
 
-@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=this.parent
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER 
 @caption Klient
 
 @property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
@@ -89,13 +89,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @layout num_hrs type=hbox 
 
-	@property time_guess type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@property time_guess type=textbox size=5 field=meta method=serialize 
 	@caption Prognoositav tundide arv 	
 
-	@property time_real type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@property time_real type=textbox size=5 field=meta method=serialize 
 	@caption Tegelik tundide arv
 
-	@property time_to_cust type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@property time_to_cust type=textbox size=5 field=meta method=serialize 
 	@caption Tundide arv kliendile
 
 @property summary type=textarea cols=60 rows=30 table=planner field=description

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.39 2006/02/20 13:50:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.40 2006/02/23 08:51:53 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -8,7 +8,7 @@
 @default table=planner
 @default group=general
 
-@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER parent=this.parent
+@property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER 
 @caption Klient
 
 @property project type=relpicker table=planner field=project reltype=RELTYPE_PROJECT
@@ -37,13 +37,13 @@
 
 @layout num_hrs type=hbox 
 
-	@property time_guess type=textbox size=5 field=meta method=serialize parent=num_hrs table=objects
+	@property time_guess type=textbox size=5 field=meta method=serialize table=objects
 	@caption Prognoositav tundide arv 	
 
-	@property time_real type=textbox size=5 field=meta method=serialize parent=num_hrs table=objects
+	@property time_real type=textbox size=5 field=meta method=serialize  table=objects
 	@caption Tegelik tundide arv
 
-	@property time_to_cust type=textbox size=5 field=meta method=serialize parent=num_hrs table=objects
+	@property time_to_cust type=textbox size=5 field=meta method=serialize  table=objects
 	@caption Tundide arv kliendile
 
 @property content type=textarea cols=60 rows=30 field=description
