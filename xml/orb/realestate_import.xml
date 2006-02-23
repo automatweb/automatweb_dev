@@ -25,5 +25,13 @@
 			</function>
 		</action>
 
+		<action name="city24xml" nologin="1">
+			<function name="city24_xml">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
