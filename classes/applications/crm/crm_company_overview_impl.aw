@@ -413,6 +413,11 @@ class crm_company_overview_impl extends class_base
 		}
 		$pm = get_instance("vcl/popup_menu");
 
+		// make task2person list
+		$task2person = $this->_get_participant_list_for_tasks($ol->ids());
+
+		$task2recur = $this->_get_recur_list_for_tasks($ol->ids());
+
 		$table_data = array();
 		foreach($ol->ids() as $task_id)
 		{
@@ -453,14 +458,10 @@ class crm_company_overview_impl extends class_base
 				$col = "#f3f27e";
 			}
 
-			$p_cs = $task->connections_to(array(
-				'from.class_id' => CL_CRM_PERSON
-			));
 			$ns = array();
-			foreach($p_cs as $p_c)
+			foreach(safe_array($task2person[$task->id()]) as $p_oid)
 			{
-				$part = $p_c->from();
-				$ns[] = html::get_change_url($part->id(), array("return_url" => get_ru()), $part->name());
+				$ns[] = html::obj_change_url($p_oid);
 			}
 
 			$t_id = $task->id();
@@ -526,10 +527,10 @@ class crm_company_overview_impl extends class_base
 			
 			// if this thing has recurrences attached, then stick those in there
 			$recurs = array();
-			foreach($task->connections_from(array("type" => "RELTYPE_RECURRENCE")) as $c)
+			foreach(safe_array($task2recur[$task->id()]) as $recur_id)
 			{
 				// get all times for this one from the recurrence table
-				$this->db_query("SELECT recur_start, recur_end from recurrence where recur_id = ".$c->prop("to"));
+				$this->db_query("SELECT recur_start, recur_end from recurrence where recur_id = ".$recur_id);
 				while ($row = $this->db_next())
 				{
 					$table_data[] = array(
@@ -971,13 +972,31 @@ class crm_company_overview_impl extends class_base
 				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
 				break;
 			case "meetings":
-				$tasks = $i->get_my_meetings();
+				$tasksi = $i->get_my_meetings();
 				$clid = CL_CRM_MEETING;
+				$tasks = array();
+				 foreach($tasksi as $t_id)
+                                        {
+                                                $o = obj($t_id);
+                                                if (!($o->flags() & OBJ_IS_DONE))
+                                                {
+                                                        $tasks[$o->id()] = $o->id();
+                                                }
+                                        }
 				break;
 
 			case "calls":
-				$tasks = $i->get_my_calls();
+				$tasksi = $i->get_my_calls();
 				$clid = CL_CRM_CALL;
+				$tasks = array();
+				 foreach($tasksi as $t_id)
+                                        {
+                                                $o = obj($t_id);
+                                                if (!($o->flags() & OBJ_IS_DONE))
+                                                {
+                                                        $tasks[$o->id()] = $o->id();
+                                                }
+                                        }
 				break;
 
 			case "ovrv_offers":
@@ -1000,13 +1019,19 @@ class crm_company_overview_impl extends class_base
 				{
 					$tasks = array();
 					$tg = $i->get_my_actions();
-					foreach($tg as $t_id)
+					if (!count($tg))
 					{
-						$o = obj($t_id);
-						if (!($o->flags() & OBJ_IS_DONE))
-						{
-							$tasks[$o->id()] = $o->id();
-						}
+						$tasks = array();
+					}
+					else
+					{
+						$ol = new object_list(array(
+							"oid" => $tg,
+							"site_id" => array(),
+							"lang_id" => array(),
+							"flags" => array("mask" => OBJ_IS_DONE, "flags" => 0)
+						));
+						$tasks = $this->make_keys($ol->ids());
 					}
 				}
 				else
@@ -1035,18 +1060,26 @@ class crm_company_overview_impl extends class_base
 			$p = $this->_get_tasks_search_filt($arr["request"], $param, $clid);
 			$p["lang_id"] = array();
 			$p["site_id"] = array();
+			$p["brother_of"] = new obj_predicate_prop("id");
 			$ol = new object_list($p);
+			return $ol;
 		}
 		else
 		{
 			if (!count($tasks))
 			{
 				$ol = new object_list();
+				return $ol;
 			}
 			else
 			{
-				$ol = new object_list();
-				$ol->add($tasks);
+				$ol = new object_list(array(
+					"oid" => $tasks,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"brother_of" => new obj_predicate_prop("id")
+				));
+				return $ol;
 			}
 		}
 
@@ -1272,6 +1305,41 @@ class crm_company_overview_impl extends class_base
 		$p = array_unique($p);
 
 		return map("%%%s%%", $p);
+	}
+
+	function _get_participant_list_for_tasks($tasks)
+	{
+		$c = new connection();
+		$conns = $c->find(array(
+			"from.class_id" => CL_CRM_PERSON,
+			"to" => $tasks
+		));
+		$ret = array();
+		$plist = array();
+		foreach($conns as $conn)
+		{
+			$ret[$conn["to"]][$conn["from"]] = $conn["from"];
+			$plist[$conn["from"]] = $conn["from"];
+		}
+		// warm cache
+		$ol = new object_list(array("oid" => $plist, "site_id" => array(), "lang_id" => array()));
+		$ol->arr();
+		return $ret;
+	}
+
+	function _get_recur_list_for_tasks($tasks)
+	{
+		$c = new connection();
+		$conns = $c->find(array(
+			"from" => $tasks,
+			"to.class_id" => CL_RECURRENCE
+		));
+		$ret = array();
+		foreach($conns as $conn)
+		{
+			$ret[$conn["from"]][$conn["to"]] = $conn["to"];
+		}
+		return $ret;
 	}
 }
 ?>
