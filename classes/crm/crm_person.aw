@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.111 2006/02/20 19:40:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.112 2006/02/24 09:59:05 voldemar Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -34,7 +34,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property personal_id type=textbox size=13 maxlength=11
 @caption Isikukood
 
-@property ext_id type=textbox table=objects field=subclass
+@property ext_id type=textbox table=objects field=subclass maxlength=11
+@caption Numbriline sidussüsteemi ID
+
+@property ext_id_alphanumeric type=textbox table=kliendibaas_isik field=ext_id_alphanumeric maxlength=25
 @caption Sidussüsteemi ID
 
 @property is_customer type=checkbox ch_value=1 table=kliendibaas_isik field=aw_is_customer
@@ -352,6 +355,7 @@ CREATE TABLE `kliendibaas_isik` (
   `digitalID` text,
   `notes` text,
   `pictureurl` varchar(200) default NULL,
+  `ext_id_alphanumeric` varchar(25) default NULL,
   `picture` blob,
   PRIMARY KEY  (`oid`),
   UNIQUE KEY `oid` (`oid`)
