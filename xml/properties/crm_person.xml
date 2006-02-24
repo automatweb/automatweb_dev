@@ -67,6 +67,16 @@
             <group>general2</group>
             <type>textbox</type>
             <field>subclass</field>
+            <maxlength>11</maxlength>
+            <caption>Numbriline siduss&amp;uuml;steemi ID</caption>
+      </property>
+      <property>
+            <name>ext_id_alphanumeric</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>ext_id_alphanumeric</field>
+            <maxlength>25</maxlength>
             <caption>Siduss&amp;uuml;steemi ID</caption>
       </property>
       <property>
