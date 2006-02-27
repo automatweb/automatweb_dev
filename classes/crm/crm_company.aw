@@ -159,6 +159,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@property contact_search_code type=textbox size=30 store=no parent=vbox_contacts_right
 			@caption Isikukood
 
+			@property contact_search_ext_id_alphanum type=textbox size=30 store=no parent=vbox_contacts_right
+			@caption Siduss&uuml;steemi ID
+
+			@property contact_search_ext_id type=textbox size=30 store=no parent=vbox_contacts_right
+			@caption Numbriline sidussüsteemi ID
+
 			@property contact_search type=hidden store=no no_caption=1 parent=vbox_contacts_right value=1
 			@caption contact_search
 
@@ -1592,6 +1598,8 @@ class crm_company extends class_base
 			case "contact_search_firstname":
 			case "contact_search_lastname":
 			case "contact_search_code":
+			case "contact_search_ext_id":
+			case "contact_search_ext_id_alphanum":
 			case "contact_search":
 			case "contact_search_submit":
 				if(!$arr['request']['contact_search'])
@@ -2504,6 +2512,8 @@ class crm_company extends class_base
 			$arr['args']['contact_search_firstname'] = urlencode($arr['request']['contact_search_firstname']);
 			$arr['args']['contact_search_lastname'] = urlencode($arr['request']['contact_search_lastname']);
 			$arr['args']['contact_search_code'] = urlencode($arr['request']['contact_search_code']);
+			$arr['args']['contact_search_ext_id_alphanum'] = urlencode($arr['request']['contact_search_ext_id_alphanum']);
+			$arr['args']['contact_search_ext_id'] = urlencode($arr['request']['contact_search_ext_id']);
 			$arr['args']['contact_search'] = $this->do_search;
 			$arr['args']['contacts_search_show_results'] = 1;
 		}
@@ -4613,4 +4623,5 @@ class crm_company extends class_base
 		return html::get_change_url($o->id(), array("return_url" => urlencode($arr["post_ru"])));
 	}
 }
+
 ?>

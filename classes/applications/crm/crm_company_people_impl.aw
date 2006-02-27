@@ -9,7 +9,7 @@ class crm_company_people_impl extends class_base
 	{
 		$this->init();
 	}
-	
+
 	function _get_contact_toolbar($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -18,9 +18,9 @@ class crm_company_people_impl extends class_base
 			'name'=>'add_item',
 			'tooltip'=> t('Uus')
 		));
-		
+
 		$alias_to = $arr['obj_inst']->id();
-		
+
 		if((int)$arr['request']['unit'])
 		{
 			$alias_to = $arr['request']['unit'];
@@ -39,7 +39,7 @@ class crm_company_people_impl extends class_base
 				"profession" => $arr["request"]["cat"] == CRM_ALL_PERSONS_CAT ? 0 : $arr["request"]["cat"]
 			))
 		));
-		
+
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
 			'text' => t('Üksus'),
@@ -52,7 +52,7 @@ class crm_company_people_impl extends class_base
 				'crm_section'
 			)
 		));
-		
+
 		$tb->add_menu_item(array(
 			'parent'=>'add_item',
 			'text' => t('Ametinimetus'),
@@ -65,7 +65,7 @@ class crm_company_people_impl extends class_base
 				'crm_profession'
 			)
 		));
-	
+
 		//delete button
 		$tb->add_button(array(
 			'name' => 'del',
@@ -74,7 +74,7 @@ class crm_company_people_impl extends class_base
 			"confirm" => t("Oled kindel et soovid kustutada valitud t&ouml;&ouml;tajad?"),
 			'action' => 'submit_delete_relations',
 		));
-	
+
 		//uus kõne
 		$tb->add_button(array(
 			'name' => 'Kone',
@@ -265,12 +265,12 @@ class crm_company_people_impl extends class_base
 		classload("core/icons");
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_human_resources_table($t);
-					 
+
 		$crmp = get_instance(CL_CRM_PERSON);
 
 		// http://intranet.automatweb.com/automatweb/orb.aw?class=planner&action=change&alias_to_org=87521&reltype_org=RELTYPE_ISIK_KOHTUMINE&id=46394&clid=224&group=add_event&title=Kohtumine:%20Anti%20Veeranna&parent=46398
 
-		// to get those adding links work, I need 
+		// to get those adding links work, I need
 		// 1. id of my calendar
 		// 2. relation type
 		// alias_to_org oleks isiku id
@@ -299,7 +299,7 @@ class crm_company_people_impl extends class_base
 				$professions[$conn->prop('to')] = $conn->prop('to.name');
 			}
 		}
-	
+
 		if(is_oid($arr['request']['cat']) && $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT)
 		{
 			$professions = array();
@@ -358,7 +358,7 @@ class crm_company_people_impl extends class_base
 		{
 			$persons[] = $conn->prop('to');
 		}
-		
+
 		if (isset($arr["person_filter"]) && is_array($arr["person_filter"]))
 		{
 			$tmp = array();
@@ -429,7 +429,7 @@ class crm_company_people_impl extends class_base
 				$ol = new object_list($person->connections_from(array("type" => "RELTYPE_RANK")));
 				$pdat["rank"] = html::obj_change_url($ol->ids());
 			}
-			
+
 			$sections_professions = array();
 			$section = '';
 			foreach($pdat['sections_arr'] as $key=>$value)
@@ -449,8 +449,8 @@ class crm_company_people_impl extends class_base
 			}
 
 			//kui amet kuulub $pdat['sections_arr'] olevasse sektsiooni ja persoon on seotud
-			//selle ametiga, siis seda näidata kujul 
-			
+			//selle ametiga, siis seda näidata kujul
+
 			$ccp = (isset($_SESSION["crm_copy_p"][$person->id()]) || isset($_SESSION["crm_cut_p"][$person->id()]) ? "#E2E2DB" : "");
 			$cal = "";
 			if ($pers2cal[$person->id()])
@@ -543,7 +543,17 @@ class crm_company_people_impl extends class_base
 		{
 			$search_params['personal_id'] = '%'.urldecode($arr['request']['contact_search_code']).'%';
 		}
-	
+
+		if($arr['request']['contact_search_ext_id_alphanum'])
+		{
+			$search_params['ext_id_alphanumeric'] = "%" . urldecode($arr['request']['contact_search_ext_id_alphanum']) . "%";
+		}
+
+		if($arr['request']['contact_search_ext_id'])
+		{
+			$search_params['ext_id'] = (int) urldecode($arr['request']['contact_search_ext_id']);
+		}
+
 		//let's try to get certain fields
 		$search_params['sort_by'] = 'name';
 
@@ -633,7 +643,7 @@ class crm_company_people_impl extends class_base
 		{
 			$search_params['personal_id'] = '%'.urldecode($arr['request']['contact_search_code']).'%';
 		}
-	
+
 		//let's try to get certain fields
 		$search_params['sort_by'] = 'name';
 
@@ -670,7 +680,7 @@ class crm_company_people_impl extends class_base
 			'name'=>'add_item',
 			'tooltip'=>t('Uus')
 		));
-		
+
 		$toolbar->add_button(array(
 			'name' => 'del',
 			'img' => 'delete.gif',
@@ -689,7 +699,7 @@ class crm_company_people_impl extends class_base
 			$alias_to = $arr["obj_inst"]->id();
 			$reltype = 19;
 		}
-		
+
 		$toolbar->add_menu_item(array(
 			'parent'=>'add_item',
 			'text'=> t('Tööpakkumine'),
@@ -726,25 +736,25 @@ class crm_company_people_impl extends class_base
 	function _get_personal_offers_table($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
-	
+
 		$table->define_field(array(
 			"name" => "osakond",
 			"caption" => t("Osakond"),
 			"sortable" => "1",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "ametinimi",
 			"caption" => t("Ametinimi"),
 			"sortable" => "1",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "comments",
 			"caption" => t("Kommentaar"),
 			"sortable" => "1",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "kehtiv_alates",
 			"caption" => t("Kehtiv alates"),
@@ -755,7 +765,7 @@ class crm_company_people_impl extends class_base
 			"format" => "d.m.y",
 			"align" => "center",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "kehtiv_kuni",
 			"caption" => t("Kehtiv kuni"),
@@ -766,7 +776,7 @@ class crm_company_people_impl extends class_base
 			"format" => "d.m.y",
 			"align" => "center",
 		));
-		
+
 		$table->define_chooser(array(
 			"name" => "select",
 			"field" => "job_id",
@@ -774,9 +784,9 @@ class crm_company_people_impl extends class_base
 			"width" => 20,
 			"align" => "center"
 		));
-		
-		$section_cl = get_instance(CL_CRM_SECTION);	
-		
+
+		$section_cl = get_instance(CL_CRM_SECTION);
+
 		if(is_oid($arr['request']['unit']))
 		{
 			$jobs_ids = $section_cl->get_section_job_ids_recursive($arr['request']['unit']);
@@ -786,7 +796,7 @@ class crm_company_people_impl extends class_base
 			$jobs_ids = $section_cl->get_all_org_job_ids($arr["obj_inst"]->id());
 			$professions = $section_cl->get_all_org_proffessions($arr["obj_inst"]->id(), true);
 		}
-			
+
 		if(!$jobs_ids)
 		{
 			return;
@@ -804,16 +814,16 @@ class crm_company_people_impl extends class_base
 			{
 				$professions = $section_cl->get_professions($arr['request']['unit'], true);
 			}
-			
+
 			if(!$professions[$job->prop("profession")])
 			{
 				$professin_cap = t("Määramata");
 			}
 			else
 			{
-				$professin_cap = $professions[$job->prop("profession")];					
+				$professin_cap = $professions[$job->prop("profession")];
 			}
-			
+
 			$table->define_data(array(
 				"osakond" => $jobs_ids[$job->id()],
 				"kehtiv_kuni" => $job->prop("deadline"),
@@ -824,7 +834,7 @@ class crm_company_people_impl extends class_base
 				"kehtiv_alates" => $job->prop("beginning"),
 				"job_id" => $job->id(),
 				"comments" => $job->prop("comment"),
-			));				
+			));
 		}
 	}
 
@@ -844,7 +854,7 @@ class crm_company_people_impl extends class_base
 		$node_id = 0;
 		$i = get_instance(CL_CRM_COMPANY);
 		$i->active_node = (int)$arr['request']['unit'];
-			
+
 		$i->generate_tree(array(
 			'tree_inst' => &$tree_inst,
 			'obj_inst' => $arr['obj_inst'],
@@ -858,27 +868,27 @@ class crm_company_people_impl extends class_base
 	function _get_personal_candidates_table($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
-		
+
 		$table->define_field(array(
 			"name" => "person_name",
 			"caption" => t("Kandideerija nimi"),
 			"sortable" => "1",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "ametikoht",
 			"caption" => t("Ametikoht"),
 			"sortable" => "1",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "osakond",
 			"caption" => t("Osakond"),
 			"sortable" => "1",
 		));
-	
-		$section_cl = get_instance(CL_CRM_SECTION);	
-		
+
+		$section_cl = get_instance(CL_CRM_SECTION);
+
 		if(is_oid($arr['request']['unit']))
 		{
 			$jobs_ids = $section_cl->get_section_job_ids_recursive($arr['request']['unit']);
@@ -888,28 +898,28 @@ class crm_company_people_impl extends class_base
 			$jobs_ids = $section_cl->get_all_org_job_ids($arr["obj_inst"]->id());
 			$professions = $section_cl->get_all_org_proffessions($arr["obj_inst"]->id(), true);
 		}
-			
+
 		if(!$jobs_ids)
 		{
 			return;
 		}
-		
+
 		$candidate_conns = new connection();
 		$candidate_conns = $candidate_conns->find(array(
         	"from" => array_keys($jobs_ids),
         	"to.class_id" => CL_CRM_PERSON,
         	"reltype" => 66666, //RELTYPE_CANDIDATE
 		));
-		
+
 		$professions = $section_cl->get_all_org_proffessions($arr["obj_inst"]->id(), true);
-	
+
 		foreach ($candidate_conns as $candidate_conn)
-		{				
+		{
 			$table->define_data(array(
 				"person_name" => html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $candidate_conn['to']), CL_CRM_PERSON),
 					"caption" => $candidate_conn['to.name'],
-				)),	
+				)),
 				"ametikoht" => $candidate_conn['from.name'],
 				"osakond" => $jobs_ids[$candidate_conn['from']],
 			));
@@ -924,7 +934,7 @@ class crm_company_people_impl extends class_base
 	function _get_calendars_for_persons($persons)
 	{
 		$ret = array();
-		
+
 		$c = new connection();
 		$cs = $c->find(array(
 			"from.class_id" => CL_USER,
