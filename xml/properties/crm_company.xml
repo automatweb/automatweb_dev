@@ -412,6 +412,28 @@
             <caption>Isikukood</caption>
       </property>
       <property>
+            <name>contact_search_ext_id_alphanum</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>contact_search_ext_id_alphanum</field>
+            <caption>Siduss&amp;amp;uuml;steemi ID</caption>
+      </property>
+      <property>
+            <name>contact_search_ext_id</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>contact_search_ext_id</field>
+            <caption>Numbriline siduss&amp;uuml;steemi ID</caption>
+      </property>
+      <property>
             <name>contact_search</name>
             <table>objects</table>
             <group>contacts2</group>
@@ -2634,6 +2656,11 @@
                   <clid>CL_FORUM_V2</clid>
                   <caption>Foorum</caption>
             </FORUM>
+            <HEADER_CONTROLLER>
+                  <value>59</value>
+                  <clid>CL_CFG_VIEW_CONTROLLER</clid>
+                  <caption>P&amp;amp;auml;ise kontroller</caption>
+            </HEADER_CONTROLLER>
       </reltypes>
       <layout>
             <hbox_toolbar>
