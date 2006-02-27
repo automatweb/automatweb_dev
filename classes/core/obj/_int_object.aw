@@ -1094,6 +1094,7 @@ class _int_object
 			case "relpicker": 
 			case "classificator":
 			case "popup_search":
+			case "releditor":
 				if ($pd["store"] == "connect")
 				{
 					$rels = new object_list($this->connections_from(array(
@@ -1160,12 +1161,11 @@ class _int_object
 			));
 			return;
 		}
-
 		$prev = $this->_int_get_prop($key);
 		$this->_int_set_prop($key, $val);
 		// if this is a relpicker property, create the relation as well
 		$propi = $GLOBALS["properties"][$this->obj["class_id"]][$key];
-		if (($propi["type"] == "relpicker" || 
+		if (($propi["type"] == "relpicker" || $propi["type"] == "releditor" ||
 			 $propi["type"] == "relmanager" || 
 			($propi["type"] == "classificator" && $propi["store"] == "connect") ||
 			($propi["type"] == "popup_search" && $propi["reltype"] != "")
@@ -1962,7 +1962,7 @@ class _int_object
 			{
 				$cur_v = $o->prop($part);
 				$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
-				if (in_array($prop_dat["type"], array("relpicker", "classificator", "popup_search", "relmanager")))
+				if (in_array($prop_dat["type"], array("relpicker", "classificator", "popup_search", "relmanager", "releditor")))
 				{
 					if (!$GLOBALS["object_loader"]->ds->can("view", $cur_v))
 					{

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.461 2006/02/22 15:18:28 kristo Exp $
+// $Id: class_base.aw,v 2.462 2006/02/27 14:45:01 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -5040,6 +5040,7 @@ class class_base extends aw_template
 			case "relpicker": 
 			case "classificator":
 			case "popup_search":
+			case "releditor":
 				if ($pd["store"] == "connect")
 				{
 					$rels = new object_list($obj->connections_from(array(
