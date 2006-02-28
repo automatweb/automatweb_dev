@@ -215,6 +215,14 @@ class crm_company_people_impl extends class_base
 		));
 
 		$t->define_field(array(
+			'name' => 'image',
+			'caption' => t(''),
+			"chgbgcolor" => "cutcopied",
+			"align" => "center",
+			"width" => 1
+		));
+
+		$t->define_field(array(
 			'name' => 'name',
 			'caption' => t('Nimi'),
 			'sortable' => '1',
@@ -466,8 +474,18 @@ class crm_company_people_impl extends class_base
 			}
 
 			list($fn, $ln) = explode(" ", $person->prop('name'));
+	
+			$imgo = $person->get_first_obj_by_reltype("RELTYPE_PICTURE");
+			$img = "";
+			if ($imgo)
+			{
+				$img_i = $imgo->instance();
+				$img = $img_i->make_img_tag_wl($imgo->id());
+			}
+
 			$tdata = array(
 				"name" => $ln." ".$fn,
+				"image" => $img,
 				"cal" => $cal,
 				"id" => $person->id(),
 				"phone" => $pdat["phone"] != "" ? $pdat["phone"] : $arr["obj_inst"]->prop_str("phone_id"),
