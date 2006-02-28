@@ -120,6 +120,26 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
 
+	@property insurance_expires type=date_select table=objects field=meta method=serialize default=-1
+	@caption Kindlustus aegub
+
+	@property insurance_status type=text store=no
+	@caption Kindlustus
+
+	@property insurance_certificate type=releditor reltype=RELTYPE_INSURANCE_CERT_FILE rel_id=first method=serialize field=meta table=objects props=file
+	@caption Lisa kindlustust tõendav dokument
+
+	@property insurance_certificate_view type=releditor reltype=RELTYPE_INSURANCE_CERT_FILE rel_id=first store=no props=filename
+	// @property insurance_certificate_view type=text store=no
+	@caption Kindlustust tõendav dokument
+
+	@property tax_clearance_certificate type=releditor reltype=RELTYPE_TAX_CLEARANCE_FILE rel_id=first method=serialize field=meta table=objects props=file
+	@caption Lisa maksuvõla puudumise tõend
+
+	@property tax_clearance_certificate_view type=releditor reltype=RELTYPE_TAX_CLEARANCE_FILE rel_id=first store=no props=filename
+	// @property tax_clearance_certificate_view type=text store=no
+	@caption Maksuvõla puudumise tõend
+
 ------ Yldine - kasutajate seaded grupp
 @default group=user_settings
 
@@ -963,6 +983,12 @@ groupinfo documents caption="Dokumendid" submit=no
 @reltype FORUM value=58 clid=CL_FORUM_V2
 @caption Foorum
 
+@reltype INSURANCE_CERT_FILE value=59 clid=CL_FILE
+@caption Kindlustusdokumendi fail
+
+@reltype TAX_CLEARANCE_FILE value=60 clid=CL_FILE
+@caption Maksuvõla puudumise tõendi fail
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
@@ -1200,6 +1226,24 @@ class crm_company extends class_base
 		switch($data['name'])
 		{
 			/// GENERAL TAB
+			case "insurance_status":
+				if (1 > $arr["obj_inst"]->prop("insurance_expires"))
+				{
+					# not defined
+					$data["value"] = t("Määramata");
+				}
+				elseif (time() >= $arr["obj_inst"]->prop("insurance_expires"))
+				{
+					# expired
+					$data["value"] = '<span style="color: red;">' . t("Aegunud") . '</span>';
+				}
+				else
+				{
+					# valid
+					$data["value"] = t("Kehtiv");
+				}
+				break;
+
 			case "forum":
 				$forum = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_FORUM");
 				if (!$forum)
@@ -3424,8 +3468,8 @@ class crm_company extends class_base
 			$ids[] = $c["to"];
 		}
 		$ol = new object_list(array(
-			"oid" => $ids, 
-			"site_id" => array(), 
+			"oid" => $ids,
+			"site_id" => array(),
 			"lang_id" => array(),
 			"class_id" => CL_TASK,
 			"is_done" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
