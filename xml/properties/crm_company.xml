@@ -327,6 +327,15 @@
             <caption>Lisakirjelduse dokument</caption>
       </property>
       <property>
+            <name>insurance_title</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <field>insurance_title</field>
+            <caption>Kindlustus</caption>
+      </property>
+      <property>
             <name>insurance_expires</name>
             <table>objects</table>
             <group>add_info</group>
@@ -369,6 +378,34 @@
             <props>filename</props>
             <field>insurance_certificate_view</field>
             <caption>Kindlustust t&amp;otilde;endav dokument</caption>
+      </property>
+      <property>
+            <name>tax_clearance_title</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <field>tax_clearance_title</field>
+            <caption>Maksuinfo</caption>
+      </property>
+      <property>
+            <name>tax_clearance_expires</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <default>-1</default>
+            <caption>Maksuv&amp;otilde;la puudumise t&amp;otilde;end aegub</caption>
+      </property>
+      <property>
+            <name>tax_clearance_status</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>text</type>
+            <store>no</store>
+            <field>tax_clearance_status</field>
+            <caption>Maksuv&amp;otilde;la puudumise t&amp;otilde;endi staatus</caption>
       </property>
       <property>
             <name>tax_clearance_certificate</name>
