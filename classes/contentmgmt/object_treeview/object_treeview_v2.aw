@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.99 2006/02/28 10:41:29 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.100 2006/02/28 11:35:26 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1705,13 +1705,22 @@ class object_treeview_v2 extends class_base
 							static $clsf_opts;
 							if (!$clsf_opts)
 							{
+/*
 								$clsf_opts = $cls_i->get_options_for(array(
 									"name" => basename($clss[$sel_columns_full_prop_info[$colid]["class_id"]]["file"]), 
 									"clid" => $sel_columns_full_prop_info[$colid]["class_id"],
 									"object_type" => $sel_columns_full_prop_info[$colid]["object_type"],
 								));
-							}
+*/
+								$classificator_choices = $cls_i->get_choices(array(
+									'name' => $colid,
+									"clid" => $sel_columns_full_prop_info[$colid]["class_id"],
+									"object_type" => $sel_columns_full_prop_info[$colid]["object_type"],
+								
+								));
+								$clsf_opts = $classificator_choices[4]['list_names'];
 
+							}
 							$content = html::select(array(
 								"name" => "objs[".$arr["id"]."][$colid]",
 								"value" => $content,
