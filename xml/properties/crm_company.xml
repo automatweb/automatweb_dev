@@ -327,6 +327,75 @@
             <caption>Lisakirjelduse dokument</caption>
       </property>
       <property>
+            <name>insurance_expires</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>date_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <default>-1</default>
+            <caption>Kindlustus aegub</caption>
+      </property>
+      <property>
+            <name>insurance_status</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>text</type>
+            <store>no</store>
+            <field>insurance_status</field>
+            <caption>Kindlustus</caption>
+      </property>
+      <property>
+            <name>insurance_certificate</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_INSURANCE_CERT_FILE</reltype>
+            <rel_id>first</rel_id>
+            <method>serialize</method>
+            <field>meta</field>
+            <props>file</props>
+            <store>no</store>
+            <caption>Lisa kindlustust t&amp;otilde;endav dokument</caption>
+      </property>
+      <property>
+            <name>insurance_certificate_view</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_INSURANCE_CERT_FILE</reltype>
+            <rel_id>first</rel_id>
+            <store>no</store>
+            <props>filename</props>
+            <field>insurance_certificate_view</field>
+            <caption>Kindlustust t&amp;otilde;endav dokument</caption>
+      </property>
+      <property>
+            <name>tax_clearance_certificate</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_TAX_CLEARANCE_FILE</reltype>
+            <rel_id>first</rel_id>
+            <method>serialize</method>
+            <field>meta</field>
+            <props>file</props>
+            <store>no</store>
+            <caption>Lisa maksuv&amp;otilde;la puudumise t&amp;otilde;end</caption>
+      </property>
+      <property>
+            <name>tax_clearance_certificate_view</name>
+            <table>objects</table>
+            <group>add_info</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_TAX_CLEARANCE_FILE</reltype>
+            <rel_id>first</rel_id>
+            <store>no</store>
+            <props>filename</props>
+            <field>tax_clearance_certificate_view</field>
+            <caption>Maksuv&amp;otilde;la puudumise t&amp;otilde;end</caption>
+      </property>
+      <property>
             <name>do_create_users</name>
             <table>objects</table>
             <group>user_settings</group>
@@ -2717,11 +2786,16 @@
                   <clid>CL_FORUM_V2</clid>
                   <caption>Foorum</caption>
             </FORUM>
-            <HEADER_CONTROLLER>
+            <INSURANCE_CERT_FILE>
                   <value>59</value>
-                  <clid>CL_CFG_VIEW_CONTROLLER</clid>
-                  <caption>P&amp;amp;auml;ise kontroller</caption>
-            </HEADER_CONTROLLER>
+                  <clid>CL_FILE</clid>
+                  <caption>Kindlustusdokumendi fail</caption>
+            </INSURANCE_CERT_FILE>
+            <TAX_CLEARANCE_FILE>
+                  <value>60</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Maksuv&amp;otilde;la puudumise t&amp;otilde;endi fail</caption>
+            </TAX_CLEARANCE_FILE>
       </reltypes>
       <layout>
             <hbox_toolbar>
