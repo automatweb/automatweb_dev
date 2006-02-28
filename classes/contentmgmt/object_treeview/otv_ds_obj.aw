@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.44 2005/12/30 10:10:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.45 2006/02/28 08:50:48 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -405,6 +405,7 @@ class otv_ds_obj extends class_base
 		foreach($cttt as $c)
 		{
 			$ps = $ot->get_properties($c->to());
+			$to_o = $c->to();
 			foreach($ps as $pn => $pd)
 			{
 				if ($pd["store"] == "no" && !strstr($pn, "userim"))
@@ -414,14 +415,15 @@ class otv_ds_obj extends class_base
 
 				if ($full_props)
 				{
+					$pd["class_id"] = $to_o->subclass();
+					$pd["object_type"] = $to_o->id();
 					$ret[$pn] = $pd;
 				}
 				else
 				{
-		
-
 					$ret[$pn] = $pd["caption"];
 				}
+
 			}
 		}
 
