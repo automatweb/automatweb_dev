@@ -120,6 +120,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property description_doc type=popup_search clid=CL_DOCUMENT style=relpicker store=no reltype=RELTYPE_DESCRIPTION
 	@caption Lisakirjelduse dokument
 
+	@property insurance_title type=text subtitle=1
+	@caption Kindlustus
+
 	@property insurance_expires type=date_select table=objects field=meta method=serialize default=-1
 	@caption Kindlustus aegub
 
@@ -132,6 +135,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property insurance_certificate_view type=releditor reltype=RELTYPE_INSURANCE_CERT_FILE rel_id=first store=no props=filename
 	// @property insurance_certificate_view type=text store=no
 	@caption Kindlustust tõendav dokument
+
+	@property tax_clearance_title type=text subtitle=1
+	@caption Maksuinfo
+
+	@property tax_clearance_expires type=date_select table=objects field=meta method=serialize default=-1
+	@caption Maksuvõla puudumise tõend aegub
+
+	@property tax_clearance_status type=text store=no
+	@caption Maksuvõla puudumise tõendi staatus
 
 	@property tax_clearance_certificate type=releditor reltype=RELTYPE_TAX_CLEARANCE_FILE rel_id=first method=serialize field=meta table=objects props=file
 	@caption Lisa maksuvõla puudumise tõend
@@ -1227,12 +1239,15 @@ class crm_company extends class_base
 		{
 			/// GENERAL TAB
 			case "insurance_status":
-				if (1 > $arr["obj_inst"]->prop("insurance_expires"))
+			case "tax_clearance_status":
+				$prop_prefix = substr($data["name"], 0, -7);
+
+				if (1 > $arr["obj_inst"]->prop($prop_prefix . "_expires"))
 				{
 					# not defined
 					$data["value"] = t("Määramata");
 				}
-				elseif (time() >= $arr["obj_inst"]->prop("insurance_expires"))
+				elseif (time() >= $arr["obj_inst"]->prop($prop_prefix . "_expires"))
 				{
 					# expired
 					$data["value"] = '<span style="color: red;">' . t("Aegunud") . '</span>';
@@ -1240,7 +1255,7 @@ class crm_company extends class_base
 				else
 				{
 					# valid
-					$data["value"] = t("Kehtiv");
+					$data["value"] = '<span style="color: green;">' . t("Kehtiv") . '</span>';
 				}
 				break;
 
