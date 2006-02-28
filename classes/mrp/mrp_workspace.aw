@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.152 2005/12/16 11:04:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.153 2006/02/28 09:23:58 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -61,46 +61,46 @@
 	@property legend type=text store=no no_caption=1
 
 @default group=grp_search_proj
-	@property sp_name type=textbox
+	@property sp_name type=textbox view_element=1
 	@caption Number
 
-	@property sp_comment type=textbox
+	@property sp_comment type=textbox view_element=1
 	@caption Kirjeldus
 
-	@property sp_starttime type=datetime_select
+	@property sp_starttime type=datetime_select view_element=1
 	@caption Alustamisaeg (meterjalide saabumine)
 
-	@property sp_due_date type=datetime_select
+	@property sp_due_date type=datetime_select view_element=1
 	@caption T&auml;htaeg
 
-	@property sp_customer type=textbox
+	@property sp_customer type=textbox view_element=1
 	@caption Klient
 
-	@property sp_status type=chooser multiple=1
+	@property sp_status type=chooser multiple=1 view_element=1
 	@caption Staatus
 
-	@property sp_submit type=submit value=Otsi
+	@property sp_submit type=submit value=Otsi view_element=1
 	@caption Otsi
 
-	@property sp_result type=table no_caption=1
+	@property sp_result type=table no_caption=1 
 
 @default group=grp_search_cust
-	@property cs_name type=textbox
+	@property cs_name type=textbox view_element=1
 	@caption Nimi
 
-	@property cs_firmajuht type=textbox
+	@property cs_firmajuht type=textbox view_element=1
 	@caption Kontaktisik
 
-	@property cs_contact type=textbox
+	@property cs_contact type=textbox view_element=1
 	@caption Aadress
 
-	@property cs_phone type=textbox
+	@property cs_phone type=textbox view_element=1
 	@caption Telefon
 
-	@property cs_reg_nr type=textbox
+	@property cs_reg_nr type=textbox view_element=1
 	@caption Kood
 
-	@property cs_submit type=submit value=Otsi
+	@property cs_submit type=submit value=Otsi view_element=1
 	@caption Otsi
 
 	@property cs_result type=table no_caption=1
@@ -4441,11 +4441,6 @@ if ($_GET['show_thread_data'] == 1)
 
 	function callback_mod_tab($arr)
 	{
-		if ($_GET["action"] == "view" && $arr["id"] == "grp_search")
-		{
-			return false;
-		}
-
 		if ($arr["id"] == "grp_login_select_res")
 		{
 			return false;

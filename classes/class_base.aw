@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.462 2006/02/27 14:45:01 kristo Exp $
+// $Id: class_base.aw,v 2.463 2006/02/28 09:23:58 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1950,7 +1950,7 @@ class class_base extends aw_template
 		// so I can access this later
 		$val["orig_type"] = $val["type"];
 
-		if ($this->view == 1)
+		if ($this->view == 1 && !$val["view_element"])
 		{
 			if ($val["type"] == "date_select")
 			{
@@ -2134,7 +2134,7 @@ class class_base extends aw_template
 		{
 			// I need to implement this in storage .. so that $obj->prop('blag')
 			// gives the correct result .. all connections of that type
-			if ($this->view == 1)
+			if ($this->view == 1 && !$property["view_element"])
 			{
 				$property["value"] = create_email_links($this->obj_inst->prop_str($property["name"]));
 			}
@@ -2509,7 +2509,7 @@ class class_base extends aw_template
 			{
 				$this->get_value(&$val);
 				// fuck me plenty
-				if ($this->view && $val["orig_type"] == "select" && is_oid($val["value"]))
+				if ($this->view && $val["orig_type"] == "select" && is_oid($val["value"]) && !$val["view_element"])
 				{
 					if (!$this->can("view", $val["value"]))
 					{
@@ -2522,7 +2522,7 @@ class class_base extends aw_template
 					}
 				}
 				else
-				if ($this->view && $val["orig_type"] == "select" && is_array($val["value"]) && count($val["value"]) > 0)
+				if ($this->view && $val["orig_type"] == "select" && is_array($val["value"]) && count($val["value"]) > 0 && !$val["view_element"])
 				{
 					$tmp_ol = new object_list(array("oid" => $val["value"]));
 					$val["value"] = join(", ", $tmp_ol->names());
