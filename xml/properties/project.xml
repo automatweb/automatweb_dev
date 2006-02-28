@@ -223,7 +223,6 @@
             <rel_id>first</rel_id>
             <field>meta</field>
             <method>serialize</method>
-            <store>no</store>
             <caption>Pilt</caption>
       </property>
       <property>

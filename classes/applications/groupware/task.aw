@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.78 2006/02/22 09:48:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.79 2006/02/28 10:22:14 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1022,7 +1022,19 @@ class task extends class_base
 		);
 
 		$u = get_instance(CL_USER);
-		$impl = $u->get_current_company();
+		if ($this->can("view", $arr["obj_inst"]->prop("customer")))
+		{
+			$impl = $arr["obj_inst"]->prop("customer");
+			$impl_o = obj($impl);
+			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+			{
+				$impl = $u->get_current_company();
+			}
+		}
+		else
+		{
+			$impl = $u->get_current_company();
+		}
 		if ($this->can("view", $impl))
 		{
 			$implo = obj($impl);
@@ -1312,11 +1324,10 @@ class task extends class_base
 			"align" => "center"
 		));
 
-		/*$t->define_field(array(
-			"name" => "com",
-			"caption" => t("Kommentaar"),
-			"align" => "center"
-		));*/
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
 	}
 
 	function _rows($arr)
@@ -1381,6 +1392,7 @@ class task extends class_base
 				$bo = obj($row->prop("bill_id"));
 				$bno = $bo->prop("bill_no");
 			}
+			$pref = "";
 			if ($row->class_id() == CL_CRM_MEETING)
 			{
 				$date = date("d/m/y",($row->prop("start1") > 100 ? $row->prop("start1") : time()));
@@ -1395,6 +1407,7 @@ class task extends class_base
 				$impls = $pr["options"];
 				$is = $pr["value"];
 				$app = "<br>".html::obj_change_url($row, t("Muuda kohtumist"));
+				$pref = $row->name()." <br>".date("d.m.Y H:i", $row->prop("start1"))." - ".date("d.m.Y H:i", $row->prop("end"))."<br>";
 			}
 			else
 			{
@@ -1402,7 +1415,7 @@ class task extends class_base
 				$app = "";
 			}
 			$t->define_data(array(
-				"task" => "<a name='row_".$idx."'></a>".html::textarea(array(
+				"task" => $pref."<a name='row_".$idx."'></a>".html::textarea(array(
 					"name" => "rows[$idx][task]",
 					"value" => $row->prop("content"),
 					"rows" => 5,
@@ -1444,7 +1457,8 @@ class task extends class_base
 					"value" => 1,
 					"checked" => ($row->class_id() == CL_CRM_MEETING ? $row->meta("on_bill") : $row->prop("on_bill"))
 				))),
-				"comments" => $comments
+				"comments" => $comments,
+				"oid" => $row->id()
 			));
 		}
 		$t->set_sortable(false);
@@ -1607,6 +1621,13 @@ class task extends class_base
 			$b['action'] = 'create_bill_from_task';
 		}
 		$tb->add_button($b);
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta read"),
+			"action" => "delete_task_rows"
+		));
 	}
 
 	/**
@@ -2048,6 +2069,12 @@ class task extends class_base
 			{
 				if ($o->prop("start1") != $_tm)
 				{
+					if ($o->prop("end") < $_tm)
+					{
+						$len = $o->prop("end") - $o->prop("start1");
+						$o->set_prop("end", $_tm + $len);
+					}
+
 					$o->set_prop("start1", $_tm);
 					$is_mod = true;
 				}
@@ -2196,7 +2223,7 @@ class task extends class_base
 		{
 			if ($dat["parent"] === $parent)
 			{
-				$folders[$fldo->id().":".$dat["id"]] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_lv).$dat["name"];
+				$folders[$fldo->id().":".$dat["id"]] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_lv).iconv("utf-8", aw_global_get("charset")."//IGNORE", $dat["name"]);
 				$this->_req_get_s_folders($fld, $fldo, $folders, $dat["id"]);
 			}
 		}
@@ -2277,6 +2304,19 @@ class task extends class_base
 				}
 			}
 		';
+	}
+
+	/**
+		@attrib name=delete_task_rows
+	**/
+	function delete_task_rows($arr)
+	{
+		foreach(safe_array($arr["sel"]) as $s)
+		{
+			$o = obj($s);
+			$o->delete();
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

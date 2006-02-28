@@ -7,7 +7,6 @@
             <type>relpicker</type>
             <field>customer</field>
             <reltype>RELTYPE_CUSTOMER</reltype>
-            <parent>this.parent</parent>
             <caption>Klient</caption>
       </property>
       <property>
@@ -89,7 +88,6 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <parent>num_hrs</parent>
             <caption>Prognoositav tundide arv 	</caption>
       </property>
       <property>
@@ -100,7 +98,6 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <parent>num_hrs</parent>
             <caption>Tegelik tundide arv</caption>
       </property>
       <property>
@@ -111,7 +108,6 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <parent>num_hrs</parent>
             <caption>Tundide arv kliendile</caption>
       </property>
       <property>
@@ -159,7 +155,6 @@
                   <num_1>weekdays</num_1>
                   <num_2>end</num_2>
             </props>
-            <store>no</store>
             <caption>Kordused</caption>
       </property>
       <property>

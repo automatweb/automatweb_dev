@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.24 2006/02/20 09:20:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.25 2006/02/28 10:22:13 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -780,6 +780,11 @@ class cb_form_chain extends class_base
 					}
 				}
 
+				if (is_oid($_eid = $_SESSION["cbfc_data"][$wf_id][$num]["__entry_id"]))
+				{
+					$this->_update_entry_data_obj(obj($wf_id), $_eid, $data);
+					$data["__entry_id"] = $_eid;
+				}
 				$_SESSION["cbfc_data"][$wf_id][$num] = $data;
 			}
 		}
@@ -1055,7 +1060,7 @@ class cb_form_chain extends class_base
 					"parent" => $o->parent(),
 				));
 			}
-			else
+
 			if ($o->is_property($k))
 			{
 				$o->set_prop($k, $v);
@@ -1750,16 +1755,31 @@ class cb_form_chain extends class_base
 		{
 			// show row
 			$col = "";
+			$col_vals = array();
 			foreach($props as $pn => $pd)
 			{
-				if ($dat[$wf->id()][$pn]["show"] == 1)
+				$col_inf = $dat[$wf->id()][$pn];
+				if ($col_inf["show"] == 1)
 				{
-					$this->vars(array(
-						"content" => $this->_value_from_data($pd, $_SESSION["cbfc_data"][$wf->id()][$i][$pn])
-					));
-					$col .= $this->parse("DT_COL");
-					$nprops[$pn] = $pd;
+					if (!isset($col_vals[$col_inf["col_num"]]))
+					{
+						$nprops[$pn] = $pd;
+					}
+					$col_vals[$col_inf["col_num"]] .= 
+						$col_inf["sep_before"].
+						$this->_value_from_data($pd, $_SESSION["cbfc_data"][$wf->id()][$i][$pn]).
+						$col_inf["sep_after"];
+//echo "add to col $col_inf[col_num] prop $pn str ".$this->_value_from_data($pd, $_SESSION["cbfc_data"][$wf->id()][$i][$pn])." <br>";
 				}
+		
+			}
+
+			foreach($col_vals as $col_val)
+			{
+				$this->vars(array(
+					"content" => $col_val
+				));
+				$col .= $this->parse("DT_COL");
 			}
 
 			$cht = $this->is_template("CHANGE_TEXT") ? $this->parse("CHANGE_TEXT") : t("Muuda");
@@ -1846,6 +1866,24 @@ class cb_form_chain extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "col_num",
+			"caption" => t("Mitmes tulp"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sep_before",
+			"caption" => t("Eraldaja enne"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sep_after",
+			"caption" => t("Eraldaja p&auml;rast"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "in_tbl",
 			"caption" => t("N&auml;ita tabelis"),
 			"align" => "center"
@@ -1875,7 +1913,22 @@ class cb_form_chain extends class_base
 								"name" => "t[".$c->prop("to")."][$pn][show]",
 								"value" => 1,
 								"checked" => ($dat[$c->prop("to")][$pn]["show"] == 1)
-							))
+							)),
+							"col_num" => html::textbox(array(
+								"name" => "t[".$c->prop("to")."][$pn][col_num]",
+								"value" => $dat[$c->prop("to")][$pn]["col_num"],
+								"size" => 5
+							)),
+							"sep_before" => html::textbox(array(
+								"name" => "t[".$c->prop("to")."][$pn][sep_before]",
+								"value" => $dat[$c->prop("to")][$pn]["sep_before"],
+								"size" => 5
+							)),
+							"sep_after" => html::textbox(array(
+								"name" => "t[".$c->prop("to")."][$pn][sep_after]",
+								"value" => $dat[$c->prop("to")][$pn]["sep_after"],
+								"size" => 5
+							)),
 						));
 					}
 				}
@@ -1921,6 +1974,7 @@ class cb_form_chain extends class_base
 			$wf_id = $rd->meta("webform_id");
 			$cur_cnt = ((int)$counts_by_wf[$wf_id]++);
 			$_SESSION["cbfc_data"][$wf_id][$cur_cnt] = $rd->properties();
+			$_SESSION["cbfc_data"][$wf_id][$cur_cnt]["__entry_id"] = $rd->id();
 
 			for ($i = 1; $i < 6; $i++)
 			{
@@ -1931,6 +1985,17 @@ class cb_form_chain extends class_base
 					$_SESSION["cbfc_file_data"][$wf_id][$cur_cnt][$pn]["name"] = $fo->name();
 					$_SESSION["cbfc_file_data"][$wf_id][$cur_cnt][$pn]["mtype"] = $fo->prop("type");
 					$_SESSION["cbfc_data"][$wf_id][$cur_cnt][$pn] = $fo->prop("file");
+				}
+
+				$pn = "userdate".$i;
+				$v = $rd->prop($pn);
+				if ($v > 300)
+				{
+					$_SESSION["cbfc_data"][$wf_id][$cur_cnt][$pn] = array(
+						"year" => date("Y", $v),
+						"month" => date("m", $v),
+						"day" => date("d", $v),
+					);
 				}
 			}
 		}
@@ -2210,6 +2275,53 @@ class cb_form_chain extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	function _update_entry_data_obj($wf, $entry_id,  $dat)
+	{
+		$o = obj($entry_id);
+		$o->set_name($this->_get_entry_data_name($wf, $dat));
+
+		$props = $o->get_property_list();
+
+		$metaf = array();
+		$file_ids = array();
+		foreach($dat as $k => $v)
+		{
+			if ($props[$k]["type"] == "date_select")
+			{
+				$v = date_edit::get_timestamp($v);
+			}
+			else
+			if ($props[$k]["type"] == "text")
+			{
+				$metaf[$k] = $v;
+			}
+			else
+			if ($props[$k]["type"] == "releditor" && strpos($k, "userfile") !== false && $_SESSION["cbfc_data"][$wf->id()][0][$k] != "")
+			{
+				// handle file upload save
+				$f = get_instance(CL_FILE);
+				$file_ids[$props[$k]["reltype"]] = $f->save_file(array(
+					"name" => $_SESSION["cbfc_file_data"][$wf->id()][0][$k]["name"],
+					"type" => $_SESSION["cbfc_file_data"][$wf->id()][0][$k]["mtype"],
+					"content" => $this->get_file(array("file" => $_SESSION["cbfc_data"][$wf->id()][0][$k])),
+					"parent" => $o->parent(),
+				));
+			}
+
+			if ($o->is_property($k))
+			{
+				$o->set_prop($k, $v);
+			}
+		}
+		$o->set_meta("metaf", $metaf);
+		$o->save();
+
+		foreach($file_ids as $_rt => $_fid)
+		{
+			$o->connect(array("to" => $_fid, "type" => $_rt));
+		}
 	}
 }
 ?>

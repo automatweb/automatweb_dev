@@ -378,7 +378,10 @@ function lc_init()
 		if (file_exists($trans_fn))
 		{
 			incl_f($trans_fn);
-			require_once($trans_fn);
+			if (file_exists($trans_fn) && is_readable($trans_fn))
+			{
+				require_once($trans_fn);
+			}
 			foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 			{
 				if (($_tmp = t2("Klassi ".$cld["name"]." ($clid) nimi")) != "")
@@ -426,8 +429,6 @@ function aw_config_init_class(&$that)
 // loads localization constants
 function lc_load($file)
 {
-//	enter_function("__global::lc_load",array());
-//	global $LC,$admin_lang_lc;
 	$LC = isset($GLOBALS["__aw_globals"]) ? $GLOBALS["__aw_globals"]["LC"] : "";
 	$admin_lang_lc = isset($GLOBALS["__aw_globals"]) && isset($GLOBALS["__aw_globals"]["admin_lang_lc"]) ? $GLOBALS["__aw_globals"]["admin_lang_lc"] : false;
 	if (!$admin_lang_lc)
@@ -436,8 +437,10 @@ function lc_load($file)
 	}
 	$fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/" . $admin_lang_lc . "/$file.".$GLOBALS["cfg"]["__default"]["ext"];
 	incl_f($fn);
-	@include_once($fn);
-//	exit_function("__global::lc_load");
+	if (file_exists($fn) && is_readable($fn))
+	{
+		include_once($fn);
+	}
 }
 
 // loads localization constants from the site's $site_basedir
@@ -451,7 +454,10 @@ function lc_site_load($file,&$obj)
 	}
 	$fname = $GLOBALS["cfg"]["__default"]["site_basedir"]."/lang/".$LC."/$file.".$GLOBALS["cfg"]["__default"]["ext"];
 	incl_f($fname);
-	@include_once($fname);
+	if (file_exists($fname) && is_readable($fname))
+	{
+		include_once($fname);
+	}
 	if ($obj)
 	{
 		// kui objekt anti kaasa, siis loeme tema template sisse muutuja $lc_$file 
@@ -475,7 +481,10 @@ function aw_classload($args)
 		$lib = str_replace(".","", $lib);
 		$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
 		incl_f($lib);
-		include_once($lib);
+		if (file_exists($lib) && is_readable($lib))
+		{
+			include_once($lib);
+		}
 	};
 //	exit_function("__global::classload");
 }
@@ -518,13 +527,19 @@ function classload($args)
 					if (file_exists($trans_fn))
 					{
 						incl_f($trans_fn);
-						require_once($trans_fn);
+						if (file_exists($trans_fn) && is_readable($trans_fn))
+						{
+							require_once($trans_fn);
+						}
 					}
 				}
 			}
 		}
 		incl_f($lib);
-		include_once($lib);
+		if (file_exists($lib) && is_readable($lib))
+		{
+			include_once($lib);
+		}
 	};
 //	exit_function("__global::classload");
 }
@@ -619,7 +634,10 @@ function get_instance($class,$args = array(), $errors = true)
 		error_reporting(E_PARSE | E_ERROR);
 		$_fn = $classdir."/".str_replace(".","", $class).".".$ext;
 		incl_f($_fn);
-		require_once($_fn);
+		if (file_exists($_fn) && is_readable($_fn))
+		{
+			require_once($_fn);
+		}
 
 		// also load translations
 		if (isset($GLOBALS["cfg"]["user_interface"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
@@ -678,7 +696,7 @@ function load_class_translations($class)
 	}
 	$adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"];
 	$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
-	if (file_exists($trans_fn))
+	if (file_exists($trans_fn) && is_readable($trans_fn))
 	{
 		incl_f($trans_fn);
 		require_once($trans_fn);
@@ -704,7 +722,7 @@ function load_vcl($lib)
 	if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 	{
 		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib).".aw";
-		if (file_exists($trans_fn))
+		if (file_exists($trans_fn) && is_readable($trans_fn))
 		{
 			incl_f($trans_fn);
 			require_once($trans_fn);
@@ -712,7 +730,10 @@ function load_vcl($lib)
 	}
 	$fn = $GLOBALS["cfg"]["__default"]["classdir"]."/vcl/$lib.".$GLOBALS["cfg"]["__default"]["ext"];
 	incl_f($fn);
-	include_once($fn);
+	if (file_exists($fn) && is_readable($fn))
+	{
+		include_once($fn);
+	}
 }
 
 

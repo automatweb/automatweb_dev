@@ -686,6 +686,25 @@ default group=org_objects
 
 	@property stats_list type=table no_caption=1 store=no
 
+@default group=stats_my
+
+	@property my_stats_s_from type=date_select store=no
+	@caption Alates
+
+	@property my_stats_s_to type=date_select store=no
+	@caption Kuni
+
+	@property my_stats_s_time_sel type=select store=no
+	@caption Ajavahemik
+
+	@property my_stats_s_cust type=textbox store=no
+	@caption Klient
+
+	@property my_stats_s_show type=submit no_caption=1
+	@caption N&auml;ita
+
+	@property my_stats type=text store=no no_caption=1
+
 @default group=quick_view
 
 	@property qv_cust_inf type=text store=no no_caption=1
@@ -773,6 +792,7 @@ groupinfo documents caption="Dokumendid" submit=no
 
 	@groupinfo stats_s parent=stats caption="Otsi" submit_method=get save=no
 	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
+	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no
 
 @groupinfo quick_view caption="Vaata"  submit=no save=no
 
@@ -1777,6 +1797,41 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $res_impl->$fn($arr);
+				break;
+
+			// MY STATS tab
+			case "my_stats_s_time_sel":
+				$data["options"] = array(
+					"" => t("--vali--"),
+					"today" => t("T&auml;na"),
+					"yesterday" => t("Eile"),
+					"cur_week" => t("Jooksev n&auml;dal"),
+					"cur_mon" => t("Jooksev kuu"),
+					"last_mon" => t("Eelmine kuu")
+				);
+				$data["value"] = $arr["request"]["my_stats_s_time_sel"];
+				if (!isset($arr["request"]["my_stats_s_time_sel"]))
+				{
+					$data["value"] = "cur_mon";
+				}
+				break;
+
+			case "my_stats_s_from":
+			case "my_stats_s_to":
+				$data["value"] = date_edit::get_timestamp($arr["request"][$data["name"]]);
+				break;
+
+			case "my_stats_s_cust":
+				$data["value"] = $arr["request"]["stats_s_cust"];
+				break;
+
+			case "my_stats":
+				$i = get_instance(CL_CRM_PERSON);
+				$arr["request"]["stats_s_cust"] = $arr["request"]["my_stats_s_cust"];
+				$arr["request"]["stats_s_from"] = $arr["request"]["my_stats_s_from"];
+				$arr["request"]["stats_s_to"] = $arr["request"]["my_stats_s_to"];
+				$arr["request"]["stats_s_time_sel"] = $arr["request"]["my_stats_s_time_sel"];
+				$i->_get_my_stats($arr);
 				break;
 		};
 		return $retval;

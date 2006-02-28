@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.112 2006/02/24 09:59:05 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.113 2006/02/28 10:22:14 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2775,7 +2775,9 @@ class crm_person extends class_base
 			$arr["request"]["MAX_FILE_SIZE"] = 1;
 		}
 		$arr["request"]["stats_s_res_type"] = "pers_det";
-		$arr["request"]["stats_s_worker_sel"] = $this->make_keys(array($arr["obj_inst"]->id()));
+		$u = get_instance(CL_USER);
+		$p = $u->get_current_person();
+		$arr["request"]["stats_s_worker_sel"] = array($p => $p);
 		classload("vcl/table");
 		$t = new vcl_table;
 		$arr["prop"]["vcl_inst"] = $t;

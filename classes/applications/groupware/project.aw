@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.79 2006/02/22 09:50:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.80 2006/02/28 10:22:14 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -3446,6 +3446,16 @@ class project extends class_base
 		{
 			$impl = reset($impl);
 		}
+
+		if ($this->can("view", $impl))
+		{
+			$impl_o = obj($impl);
+			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+			{
+				$impl = $u->get_current_company();
+			}
+		}
+
 		if ($this->can("view", $impl))
 		{
 			$implo = obj($impl);
@@ -3714,7 +3724,7 @@ class project extends class_base
 		{
 			if ($dat["parent"] === $parent)
 			{
-				$folders[$fldo->id().":".$dat["id"]] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_lv).$dat["name"];
+				$folders[$fldo->id().":".$dat["id"]] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_lv).iconv("utf-8", aw_global_get("charset")."//IGNORE", $dat["name"]);
 				$this->_req_get_s_folders($fld, $fldo, $folders, $dat["id"]);
 			}
 		}

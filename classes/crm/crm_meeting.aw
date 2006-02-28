@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.60 2006/02/23 08:51:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.61 2006/02/28 10:22:14 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -87,16 +87,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property participants type=select multiple=1 table=objects field=meta method=serialize
 @caption Osalejad
 
-@layout num_hrs type=hbox 
+@property time_guess type=textbox size=5 field=meta method=serialize 
+@caption Prognoositav tundide arv 	
 
-	@property time_guess type=textbox size=5 field=meta method=serialize 
-	@caption Prognoositav tundide arv 	
+@property time_real type=textbox size=5 field=meta method=serialize 
+@caption Tegelik tundide arv
 
-	@property time_real type=textbox size=5 field=meta method=serialize 
-	@caption Tegelik tundide arv
-
-	@property time_to_cust type=textbox size=5 field=meta method=serialize 
-	@caption Tundide arv kliendile
+@property time_to_cust type=textbox size=5 field=meta method=serialize 
+@caption Tundide arv kliendile
 
 @property summary type=textarea cols=60 rows=30 table=planner field=description
 @caption Kokkuvõte
@@ -849,6 +847,22 @@ class crm_meeting extends class_base
 			$arr["add_to_cal"] = $_GET["add_to_cal"];
 			$arr["alias_to_org"] = $_GET["alias_to_org"];
 			$arr["reltype_org"] = $_GET["reltype_org"];
+		}
+	}
+
+	function callback_pre_save($arr)
+	{
+		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
+		$hrs = floor($len / 900) / 4;
+		
+		// write length to time fields if empty
+		if ($arr["obj_inst"]->prop("time_to_cust") == "")
+		{
+			$arr["obj_inst"]->set_prop("time_to_cust", $hrs);
+		}
+		if ($arr["obj_inst"]->prop("time_real") == "")
+		{
+			$arr["obj_inst"]->set_prop("time_real", $hrs);
 		}
 	}
 }

@@ -2068,6 +2068,61 @@
             <field>stats_list</field>
       </property>
       <property>
+            <name>my_stats_s_from</name>
+            <table>objects</table>
+            <group>stats_my</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>my_stats_s_from</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>my_stats_s_to</name>
+            <table>objects</table>
+            <group>stats_my</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>my_stats_s_to</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>my_stats_s_time_sel</name>
+            <table>objects</table>
+            <group>stats_my</group>
+            <type>select</type>
+            <store>no</store>
+            <field>my_stats_s_time_sel</field>
+            <caption>Ajavahemik</caption>
+      </property>
+      <property>
+            <name>my_stats_s_cust</name>
+            <table>objects</table>
+            <group>stats_my</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>my_stats_s_cust</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>my_stats_s_show</name>
+            <table>objects</table>
+            <group>stats_my</group>
+            <type>submit</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>my_stats_s_show</field>
+            <caption>N&amp;amp;auml;ita</caption>
+      </property>
+      <property>
+            <name>my_stats</name>
+            <table>objects</table>
+            <group>stats_my</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>my_stats</field>
+      </property>
+      <property>
             <name>qv_cust_inf</name>
             <table>objects</table>
             <group>quick_view</group>
@@ -2356,6 +2411,12 @@
                   <submit>no</submit>
                   <save>no</save>
             </stats_view>
+            <stats_my>
+                  <parent>stats</parent>
+                  <caption>Minu statistika</caption>
+                  <submit>no</submit>
+                  <save>no</save>
+            </stats_my>
             <quick_view>
                   <caption>Vaata</caption>
                   <submit>no</submit>
