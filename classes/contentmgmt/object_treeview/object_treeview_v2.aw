@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.98 2006/02/28 08:50:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.99 2006/02/28 10:41:29 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -590,6 +590,9 @@ class object_treeview_v2 extends class_base
 		$params = array(
 			"sproc_params" => $ob->prop("sproc_params")
 		);
+
+		$edit_columns = safe_array($ih_ob->meta("sel_columns_editable"));
+
 		if (($ih_ob->prop("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
 		{
 			$ol = array();
@@ -601,7 +604,7 @@ class object_treeview_v2 extends class_base
 			// if it can, then i pass filter to datasource via get_objects method
 			// if it cannot, i will filter the data here, in otv class (which is 
 			// going to be pretty slow when there is a lot of data to deal with - 
-			// cause it takes place in memory, and everytime, ALL objects will be 
+			// and it takes place in memory, and everytime, ALL objects will be 
 			// queried from datasource, no matter how much of it passes the filtering
 			if ($d_inst->has_feature("filter"))
 			{
@@ -629,7 +632,8 @@ class object_treeview_v2 extends class_base
 						"char" =>  ($_GET['char'] == "all") ? $_GET['char'] : $_GET['char']{0}, 	
 					),
 					"sproc_params" => $ob->prop("sproc_params"),
-					"sel_cols" => $sc
+					"sel_cols" => $sc,
+					'edit_columns' => $edit_columns
 				);
 				$ol = $d_inst->get_objects($d_o, $fld, $_GET['tv_sel'], $params);
 			}
@@ -855,7 +859,10 @@ class object_treeview_v2 extends class_base
 			}
 			$last_o = $odata;
 		}
-		$edit_columns = safe_array($ih_ob->meta("sel_columns_editable"));
+ 	// moved it at the beginning of function, cause i need to pass it to datasource
+	// when requesting objects --dragut
+	//	$edit_columns = safe_array($ih_ob->meta("sel_columns_editable"));
+
 		if (!$has_access_to)
 		{
 			unset($col_list["change"]);

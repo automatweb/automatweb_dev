@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.45 2006/02/28 08:50:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.46 2006/02/28 10:41:29 dragut Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -733,7 +733,6 @@ class otv_ds_obj extends class_base
 			{
 				$_name = parse_obj_name($t->name());
 			}
-
 			$ret[$t->id()] = array(
 				"id" => $t->id(),
 				"parent" => $t->parent(),
@@ -769,12 +768,27 @@ class otv_ds_obj extends class_base
 						{
 							if ($params["sel_cols"][$ff_n] == 1)
 							{
-								$ret[$t->id()][$ff_n] = $this->trans_get_val_str($t, $ff_n); //$t->prop_str($ff_n);
+								if ($params['edit_columns'][$ff_n] == 1)
+								{
+									$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+								}
+								else
+								{
+									$ret[$t->id()][$ff_n] = $this->trans_get_val_str($t, $ff_n); //$t->prop_str($ff_n);
+								}
 							}
 						}
 						else
 						{
-							$ret[$t->id()][$ff_n] = $this->trans_get_val_str($t, $ff_n);//$t->prop_str($ff_n);
+							if ($params['edit_columns'][$ff_n] == 1)
+							{
+								$ret[$t->id()][$ff_n] = $t->prop($ff_n);
+							}
+							else
+							{
+	
+								$ret[$t->id()][$ff_n] = $this->trans_get_val_str($t, $ff_n);//$t->prop_str($ff_n);
+							}
 						}
 					}
 					else
