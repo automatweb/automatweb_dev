@@ -406,7 +406,6 @@ class crm_company_overview_impl extends class_base
 		classload("core/icons");
 
 		$ol = $this->_get_task_list($arr);
-
 		if ($arr["request"]["group"] == "ovrv_offers")
 		{
 			return $this->_get_ovrv_offers($arr, $ol);
@@ -1309,6 +1308,10 @@ class crm_company_overview_impl extends class_base
 
 	function _get_participant_list_for_tasks($tasks)
 	{
+		if (count($tasks) == 0)
+		{
+			return array();
+		}
 		$c = new connection();
 		$conns = $c->find(array(
 			"from.class_id" => CL_CRM_PERSON,
