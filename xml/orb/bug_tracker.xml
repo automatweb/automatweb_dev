@@ -1,6 +1,20 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="bug_tracker" folder="applications/bug_o_matic_3000" extends="class_base">
+		<action name="get_node_other" all_args="1">
+			<function name="get_node_other">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_node" all_args="1">
+			<function name="get_node">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete">
 			<function name="delete">
 				<arguments>

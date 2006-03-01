@@ -18,7 +18,6 @@
                   <num_1>by_default</num_1>
                   <num_2>by_project</num_2>
                   <num_3>by_who</num_3>
-                  <num_4>by_classes</num_4>
             </group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
@@ -32,7 +31,6 @@
                   <num_0>by_default</num_0>
                   <num_1>by_project</num_1>
                   <num_2>by_who</num_2>
-                  <num_3>by_classes</num_3>
             </group>
             <type>hidden</type>
             <store>no</store>
@@ -45,7 +43,6 @@
                   <num_0>by_default</num_0>
                   <num_1>by_project</num_1>
                   <num_2>by_who</num_2>
-                  <num_3>by_classes</num_3>
             </group>
             <type>treeview</type>
             <parent>bug</parent>
@@ -62,7 +59,6 @@
                   <num_2>by_default</num_2>
                   <num_3>by_project</num_3>
                   <num_4>by_who</num_4>
-                  <num_5>by_classes</num_5>
             </group>
             <type>table</type>
             <parent>bug</parent>
@@ -96,11 +92,6 @@
                   <parent>bugs</parent>
                   <submit>no</submit>
             </by_who>
-            <by_classes>
-                  <caption>Klassid</caption>
-                  <parent>bugs</parent>
-                  <submit>no</submit>
-            </by_classes>
             <archive>
                   <caption>Arhiiv</caption>
                   <submit>no</submit>
@@ -126,7 +117,6 @@
                         <num_0>by_default</num_0>
                         <num_1>by_project</num_1>
                         <num_2>by_who</num_2>
-                        <num_3>by_classes</num_3>
                   </group>
             </bug>
       </layout>

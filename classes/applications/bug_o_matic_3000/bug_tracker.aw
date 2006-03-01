@@ -1,8 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.21 2006/02/20 13:01:28 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.21 2006/02/20 13:01:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.22 2006/03/01 08:51:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.22 2006/03/01 08:51:26 tarvo Exp $
 
 // bug_tracker.aw - BugTrack 
+define("MENU_ITEM_LENGTH", 20);
+define("BUG_STATUS_CLOSED", 4);
 /*
 
 @classinfo syslog_type=ST_BUG_TRACKER relationmgr=yes no_comment=1 no_status=1
@@ -17,17 +19,16 @@
 	@groupinfo by_default caption="default" parent=bugs submit=no
 	@groupinfo by_project caption="Projektid" parent=bugs submit=no
 	@groupinfo by_who caption="Kellele" parent=bugs submit=no
-	@groupinfo by_classes caption="Klassid" parent=bugs submit=no
 
-@default group=by_default,by_project,by_who,by_classes
+@default group=by_default,by_project,by_who
 
-@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who,by_classes
+@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who
 
 @property cat type=hidden store=no
 
 @layout bug type=hbox width=15%:85%
 	@property bug_tree type=treeview parent=bug no_caption=1
-	@property bug_list type=table parent=bug no_caption=1 group=bugs,archive,by_default,by_project,by_who,by_classes
+	@property bug_list type=table parent=bug no_caption=1 group=bugs,archive,by_default,by_project,by_who
 
 @groupinfo archive caption="Arhiiv" submit=no
 @default group=archive
@@ -59,7 +60,6 @@ class bug_tracker extends class_base
 		{
 			$arr["request"]["group"] = "by_default";
 		}
-				
 		switch($arr["request"]["group"])
 		{
 			case "by_default":
@@ -67,10 +67,10 @@ class bug_tracker extends class_base
 				aw_session_set("bug_tree_sort",array("name" => "parent"));
 				break;
 			case "by_project":
-				aw_session_set("bug_tree_sort",array("name" => "project", "class" => CL_PROJECT));
+				aw_session_set("bug_tree_sort",array("name" => "project", "class" => CL_PROJECT, "reltype" => RELTYPE_PROJECT));
 				break;
 			case "by_who":
-				aw_session_set("bug_tree_sort",array("name" => "who", "class" => CL_CRM_PERSON));
+				aw_session_set("bug_tree_sort",array("name" => "who", "class" => CL_CRM_PERSON, "reltype" => RELTYPE_MONITOR));
 				break;
 			case "by_classes":
 				aw_session_set("bug_tree_sort",array("name" => "classes"));
@@ -100,7 +100,6 @@ class bug_tracker extends class_base
 		};
 		return $retval;
 	}
-
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -192,55 +191,188 @@ class bug_tracker extends class_base
 		));
 	}
 
+	/** to get subtree for who & projects view
+	    @attrib name=get_node_other all_args=1
+	**/
+	function get_node_other($arr)
+	{
+	    classload("core/icons");
+		$node_tree = get_instance("vcl/treeview");
+		$node_tree->start_tree (array (
+		"type" => TREE_DHTML,
+		));
+	    
+		$obj = new object($arr["parent"]);
+	
+		if($obj->class_id() == CL_BUG_TRACKER)
+		{
+			$ol = new object_list(array("class_id" => CL_BUG, "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)));
+			$c = new connection();
+			$bug2proj = $c->find(array("from.class_id" => CL_BUG, "to.class_id" => $arr["clid"], "type" => $arr["reltype"], "from" => $ol->ids()));
+
+			foreach($bug2proj as $conn)
+			{
+				$to[] = $conn["to"];
+				$bugs[] = $conn["from"];
+				$bug_count[$conn["to"]]++;
+			}
+			$to_unique = array_unique($to);
+			
+			foreach($to_unique as $project)
+			{
+				$obj = new object($project);
+				$node_tree->add_item(0, array(
+					"id" => $obj->id(),
+					"name" => $this->name_cut($obj->name())." (".$bug_count[$obj->id()].")",
+					"iconurl" => icons::get_icon_url($obj->class_id()),
+					"url" => html::get_change_url( $arr["inst_id"], array(
+						"id" => $this->self_id,
+						"group" => $arr["active_group"],
+						"p_id" => $obj->id(),
+					)),
+				));
+
+			}
+			foreach($bugs as $key => $bug)
+			{
+				$sub_obj =  new object($bug);
+				$node_tree->add_item($to[$key] , array(
+					"id" => $sub_obj->id(),
+					"name" => $sub_obj->name(),
+				));
+			}
+		}
+		else
+		{
+			if($obj->class_id() == CL_PROJECT)
+			{
+				$filter = "project";
+			}
+			elseif($obj->class_id() == CL_CRM_PERSON)
+			{
+				$filter = "who";
+			}
+			else
+			{
+				$filter = "parent";
+			}
+
+			$ol = new object_list(array(
+				$filter  => $arr["parent"],
+				"class_id" => array(CL_BUG, CL_MENU),
+				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)
+			));
+
+			$objects = $ol->arr();
+			foreach($objects as $obj_id => $object)
+			{
+				$ol = new object_list(array("parent" => $obj_id, "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(4)));
+				$ol_list = $ol->arr();
+
+				$node_tree->add_item(0 ,array(
+					"id" => $obj_id,
+					"name" => $this->name_cut($object->name()).(count($ol_list)?" (".count($ol_list).")":""),
+					"iconurl" => icons::get_icon_url($object->class_id()),
+					"url" => html::get_change_url($arr["inst_id"], array(
+						"group" => $arr["active_group"],
+						"b_id" => $obj_id,
+					)),
+				));
+				foreach($ol_list as $sub_id => $sub_obj)
+				{
+					$node_tree->add_item( $obj_id, array(
+						"id" => $sub_id,
+						"name" => $sub_obj->name(),
+					));
+				}
+			}
+		}
+		die($node_tree->finalize_tree());
+	}
+	
+	/**  to get subtree for default view
+		@attrib name=get_node all_args=1
+
+	**/
+	function get_node($arr)
+	{
+		classload("core/icons");
+		$node_tree = get_instance("vcl/treeview");
+		$node_tree->start_tree (array (
+			"type" => TREE_DHTML,
+		));
+
+		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
+
+		$objects = $ol->arr();
+		foreach($objects as $obj_id => $object)
+		{
+			$ol = new object_list(array("parent" => $obj_id, "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
+			$ol_list = $ol->arr();
+			$subtree_count = (count($ol_list) > 0)?" (".count($ol_list).")":"";
+
+			$node_tree->add_item(0 ,array(
+				"id" => $obj_id,
+				"name" => $this->name_cut($object->name()).$subtree_count,
+				"iconurl" => icons::get_icon_url($object->class_id()),
+				"url" => html::get_change_url($arr["inst_id"], array(
+					"group" => $arr["active_group"],
+					"b_id" => $obj_id,
+				)),
+			));
+
+			foreach($ol_list as $sub_id => $sub_obj)
+			{
+				$node_tree->add_item( $obj_id, array(
+					"id" => $sub_id,
+					"name" => $sub_obj->name(),
+				));
+			}
+		}
+
+		die($node_tree->finalize_tree());
+	}
+
 	function _bug_tree($arr)
 	{
 		classload("core/icons");
 		$this->tree = get_instance("vcl/treeview");
 		$this->active_group = aw_global_get("request");
 		$this->active_group = $this->active_group["group"];
+		$this->sort_type = aw_global_get("bug_tree_sort");	
+		$this->self_id = $arr["obj_inst"]->id();
+		$this->tree_root_name = "Bug-Tracker";
+		($this->sort_type["name"] == "project" || $this->sort_type["name"] == "who")?$orb_function = "get_node_other":$orb_function = "get_node";
+
+		$root_name = array("by_default" => "Tavaline", "by_project"=> "Projektid", "by_who" => "Teostajad");
 
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
+			"has_root" => 1,
+			"root_name" => $root_name[($this->active_group == "bugs")?"by_default":$this->active_group],
 			"root_icon" => icons::get_icon_url(CL_BUG_TRACKER),
-			"tree_id" => "ad_folders",
-			"persist_state" => true,
+			"get_branch_func" => $this->mk_my_orb($orb_function, array(
+				"type" => $this->sort_type["name"], 
+				"reltype" => $this->sort_type["reltype"], 
+				"clid"=> $this->sort_type["class"], 
+				"inst_id" => $this->self_id,
+				"active_group" => $this->active_group,
+				"parent" => " ",
+			)),
 		));
-
-		$this->self_id = $arr["obj_inst"]->id();
-
-		$self_ol = new object_list(array(
-			"parent" => $this->self_id,
-			"class_id" => array(CL_BUG, CL_MENU),
-			"bug_status" => new obj_predicate_not(4),
-		));
-		$nimi = "Bug-Tracker";
-		$nimi .= ($self_ol->count() > 0)?" (".$self_ol->count().")":"";
-
-		$this->tree->add_item(0,array(
-			"id" => $this->self_id,
-			"name" => $nimi,
-			"url" => html::get_change_url($this->self_id, array("group" => $this->active_group)),
-		));
-
-		$this->sort_type = aw_global_get("bug_tree_sort");
-
+ 
 		if($this->sort_type["name"] == "parent")
 		{
-			$this->gen_tree_default(array(
-				"oid" => $this->self_id,
+			$this->generate_bug_tree(array(
+				"parent" => $this->self_id,
 			));
 		}
-		
+	
 		if($this->sort_type["name"] == "who" || $this->sort_type["name"] == "project")
 		{
 			$this->gen_tree_other(array(
-				"oid" => $this->self_id,
+				"parent" => $this->self_id,
 			));
-		}
-
-		if($this->sort_type["name"] == "classes")
-		{
-			$this->gen_tree_classes($this->self_id);
 		}
 
 		$arr["prop"]["value"] = $this->tree->finalize_tree();
@@ -248,77 +380,56 @@ class bug_tracker extends class_base
 
 	}
 
-	function gen_tree_default($arr)
-	{
-			$this->generate_bug_tree($arr);
-	}
-
-	function gen_tree_classes($arr)
-	{
-		$fld = aw_ini_get("classfolders");
-
-		// cycles trough every classfolder and puts children beneath their parent folder
-		foreach($fld as $m_id => $m_con)
-		{
-			if($m_con["parent"] == ($arr == $this->self_id ? 0 : $arr))
-			{
-				$this->tree->add_item($arr, array(
-					"id" => $m_id,
-					"name" => $m_con["name"],
-					"url" => html::get_change_url($this->self_id, array("group" => $this->active_group ,"cat" => $m_id)),
-				));
-				$this->gen_tree_classes($m_id);
-			}
-		}
-	}
-
 	function gen_tree_other($arr)
 	{
-		$ol = new object_list(array("class_id" => array($this->sort_type["class"])));
-		$objects = $ol->arr();
-		foreach($objects as $obj_id => $object)
+		$c = new connection();
+		$bug2proj = $c->find(array("from.class_id" => CL_BUG, "to.class_id" => $this->sort_type["class"], "type" => $this->sort_type["reltype"]));
+
+		foreach($bug2proj as $conn)
 		{
-			$sub_ol = new object_list(array($this->sort_type["name"] => $obj_id, "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(4)));
+			$projects[] = $conn["to"];
+		}
+		$projects = array_unique($projects);
 
-			$nimi = substr($object->name(),0,20);
-			$nimi .= (strlen($object->name()) > 20)?"...":"";
-			$nimi .= ($sub_ol->count() > 0)?" (".$sub_ol->count().")":"";
-
-			$this->tree->add_item($arr["oid"],array(
-				"id" => $obj_id,
-				"name" => $nimi,
-				"iconurl" => icons::get_icon_url($object->class_id()),
-				"url" => html::get_change_url($this->self_id, array("group" => $this->active_group , "u_id" => $obj_id)),
+		$this->tree->add_item(0,array(
+			"id" => $this->self_id,
+			"name" => $this->tree_root_name." (".count($projects).")",
+		));		
+		
+		foreach($projects as $project)
+		{
+			$obj = new object($project);
+			$this->tree->add_item($arr["parent"],array(
+				"id" => $obj->id(),
+				"name" => $obj->name(),
 			));
-			$this->generate_bug_tree(array("oid" => $obj_id));
 		}
 	}
 
 	function generate_bug_tree($arr)
 	{
-		$ol = new object_list(array($arr["sub"]?"parent":$this->sort_type["name"] => $arr["oid"],"class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(4),));
-
+		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
 		$objects = $ol->arr();
+
+		$this->tree->add_item(0,array(
+				"id" => $this->self_id,
+				"name" => $this->tree_root_name." (".$ol->count().")",
+		));
+		
 		foreach($objects as $obj_id => $object)
 		{
-			$sub_ol = new object_list(array(
-				"parent" => $obj_id,
-				"class_id" => array(CL_BUG, CL_MENU),
-				"bug_status" => new obj_predicate_not(4),
-			));
-
-			$nimi = substr($object->name(),0,20);
-			$nimi .= (strlen($object->name()) > 20)?"...":"";
-			$nimi .= ($sub_ol->count() > 0)?" (".$sub_ol->count().")":"";
-			$this->tree->add_item($arr["oid"],array(
+			$this->tree->add_item($arr["parent"] , array(
 				"id" => $obj_id,
-				"name" => $nimi,
-				"iconurl" => icons::get_icon_url($object->class_id()),
-				"url" => html::get_change_url($this->self_id, array("group" => $this->active_group,"cat" => $obj_id)),
+				"name" => $object->name(),
 			));
-			
-			$this->generate_bug_tree(array("oid" => $obj_id, "sub" => true));
 		}
+	}
+	
+	function name_cut($name)
+	{
+		$pre = substr($name, 0, MENU_ITEM_LENGTH);
+		$suf = (strlen($name) > MENU_ITEM_LENGTH)?"...":"";
+		return $pre.$suf;
 	}
 
 	function callb_who($val)
@@ -403,9 +514,8 @@ class bug_tracker extends class_base
 			"name" => "who",
 			"caption" => t("Kellele"),
 			"sortable" => 1,
-			//"callback" => array(&$this, "callb_who"),
-			//"callback_pass_row" => 1,
 		));
+
 		$t->define_field(array(
 			"name" => "bug_priority",
 			"caption" => t("Prioriteet"),
@@ -460,14 +570,7 @@ class bug_tracker extends class_base
 			"callback" => array(&$this,"comment_callback"),
 			"callb_pass_row" => 1,
 		));
-		/*
-		$t->define_field(array(
-			"name" => "comments",
-			"caption" => t("Kommentaare"),
-			"sortable" => 1,
-			"numeric" => 1,
-		));
-		*/
+
 		$t->define_chooser(array(
 			"field" => "id",
 			"name" => "sel",
@@ -482,6 +585,7 @@ class bug_tracker extends class_base
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
 		if($this->can("view", $pt))
 		{
+			// arhiivi tab
 			if($arr["request"]["group"] == "archive")
 			{
 				$ot = new object_tree(array(
@@ -494,24 +598,32 @@ class bug_tracker extends class_base
 				$ol = new object_list(array(
 					"oid" => $ot->ids(),
 					"class_id" => CL_BUG,
-					"bug_status" => 4,
+					"bug_status" => BUG_STATUS_CLOSED,
 				));
 			}
+			// bugid tab
 			else
 			{
 				$ol = new object_list(array(
 					"parent" => $pt,
 					"class_id" => CL_BUG,
-					"bug_status" => new obj_predicate_not(4),
+					"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
 				));
 
-				$glob = aw_global_get("request");
-				if(strlen($glob["u_id"]))
+				if(strlen($arr["request"]["p_id"]))
 				{
 					$ol->filter(array(
-						"who" => $glob["u_id"],
+						$this->sort_type["name"] => $arr["request"]["p_id"],
 						"class_id" => CL_BUG,
-						"bug_status" => new obj_predicate_not(4),
+						"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
+					));
+				}
+				elseif(strlen($arr["request"]["b_id"]))
+				{
+					$ol->filter(array(
+						"parent" => $arr["request"]["b_id"],
+						"class_id" => CL_BUG,
+						"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
 					));
 				}
 			}
