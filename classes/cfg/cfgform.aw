@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.78 2006/03/01 15:19:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.79 2006/03/01 18:48:33 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1686,9 +1686,20 @@ class cfgform extends class_base
 	{
 		$o = obj($id);
 		$ret = $o->meta("cfg_groups");
+		
+		$has = false;
+		foreach(safe_array($ret) as $k => $v)
+		{
+			if (isset($v["ord"]) && !empty($v["ord"]))
+			{
+				$has = true;
+			}
+		}
 
-		uasort($ret, array(&$this, "__grp_s"));
-
+		if ($has)
+		{
+			uasort($ret, array(&$this, "__grp_s"));
+		}
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("grp_translations");
 		$read_from_trans = true;
