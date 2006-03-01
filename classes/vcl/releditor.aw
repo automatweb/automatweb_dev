@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.77 2006/03/01 13:56:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.78 2006/03/01 16:42:19 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -83,7 +83,7 @@ class releditor extends core
 
 		$cache_inst = get_instance("cache");
 
-		if (!empty($edit_id) && is_oid($edit_id))
+		if (!empty($edit_id) && is_oid($edit_id) && is_oid($arr["obj_inst"]->id()))
 		{
 			// check whether this connection exists
 			$found = false;
@@ -251,7 +251,7 @@ class releditor extends core
 		// a programmaticaly specified relation
 
 		// need to check whether a existing recurrence thing is specifed, if so, add that
-		if ($form_type != "new")
+		if ($form_type != "new" && is_oid($arr["obj_inst"]->id()))
 		{
 			if ($edit_id)
 			{
@@ -496,7 +496,7 @@ class releditor extends core
 		$fdata = array();
 		$conns = array();
 		$filt_props = array();
-		if(!$arr["new"])
+		if(!$arr["new"] && is_oid($arr["obj_inst"]->id()))
 		{
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => $arr["prop"]["reltype"],
@@ -962,7 +962,7 @@ class releditor extends core
 	//	$obj->save();
 
 		$things = $arr["request"][$elname]["_data"];
-		if (sizeof($things) > 0)
+		if (sizeof($things) > 0 && is_oid($obj->id()))
 		{
 			$conns = $obj->connections_from(array(
 				"type" => $arr["prop"]["reltype"],
