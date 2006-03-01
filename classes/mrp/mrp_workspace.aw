@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.153 2006/02/28 09:23:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.154 2006/03/01 14:01:36 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -414,6 +414,7 @@ class mrp_workspace extends class_base
 		"can_start" => "#eff6d5",
 		"can_not_start" => "#ffe1e1",
 		"resource_in_use" => "#ecd995",
+		"search_result" => "#a255ff"
 	);
 
 	function mrp_workspace()
@@ -1001,6 +1002,7 @@ class mrp_workspace extends class_base
 				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("V&otilde;ib alustada")."</span>&nbsp;&nbsp;";
 				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada/t&ouml;&ouml;s")."</span>&nbsp;&nbsp;";
 				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["resource_in_use"]."'>".t("Eeldust&ouml;&ouml; tehtud")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["search_result"]."'>".t("Otsingu tulemus")."</span>&nbsp;&nbsp;";
 				$prop["value"] .= "</td><td align=right>";
 				$prop["value"] .= "<span style='font-size: 11px;'>Projekt: <input size=6 type=text name=do_pv_proj_s>";
 				$prop["value"] .= "<a href='javascript:void(0)' onClick='changed=0;document.changeform.submit()'>Otsi</a></span>";
@@ -3663,27 +3665,79 @@ if ($_GET['show_thread_data'] == 1)
 		// this sort of sucks, but I can't figure out how to do the count in sql..
 		if ($_SESSION["mrp"]["do_pv_proj_s"] != "")
 		{
-			$find_proj = $_SESSION["mrp"]["do_pv_proj_s"];
-			unset($_SESSION["mrp"]["do_pv_proj_s"]);
-			$jobs = $this->get_next_jobs_for_resources(array(
-                                "resources" => $res,
-                          //      "limit" => $limit,
-                                "states" => $states,
-                                "sort_by" => $sby,
-                                "proj_states" => $proj_states
-                        ));
-			$count = 0;
-			foreach($jobs as $job)
+			// this needs to get done abit differently - we need to find all the jobs
+			// that are part of this project for the current resource(s)
+			// and if none are under the current tab, then switch to another tab,
+			// where they can be found
+			// so, list the jobs
+			// but first we need the oid of the project
+			$proj2oid = new object_list(array("name" => $_SESSION["mrp"]["do_pv_proj_s"], "class_id" => CL_MRP_CASE));
+			if ($proj2oid->count())
 			{
-				$count++;
-				$proj = obj($job->prop("project"));
-				if ($proj->name() == $find_proj)
+				$s_proj = $proj2oid->begin();
+
+				$q = "SELECT * FROM mrp_job WHERE
+					project = '".$s_proj->id()."' AND
+					resource IN (".join(",", $res).")";
+				$this->db_query($q);
+				$f_j_state = NULL;
+				$view = null;
+				while ($row = $this->db_next())
 				{
-					$page = floor($count / $per_page);
-					header("Location: ".aw_url_change_var("printer_job_page", $page));
+					if ($f_j_state == NULL)
+					{
+						$f_j_state = $row["state"];
+					}
+					if (in_array($row["state"], $states))
+					{
+						$view = $_GET["group"];
+					}
+				}
+				if ($view == null)
+				{
+					switch($f_j_state)
+					{
+						case MRP_STATUS_DONE:
+							$view = "grp_printer_done";
+							break;
+
+						case MRP_STATUS_ABORTED:
+							$view = "grp_printer_aborted";
+							break;
+
+						default:
+							$view = "grp_printer";
+					}
+				}
+				if ($view != $_GET["group"])
+				{
+					header("Location: ".aw_url_change_var("group", $view));
 					die();
 				}
-			}	
+
+				$find_proj = $_SESSION["mrp"]["do_pv_proj_s"];
+				unset($_SESSION["mrp"]["do_pv_proj_s"]);
+				$_SESSION["mrp"]["pv_s_hgl"] = $s_proj->id();
+				$jobs = $this->get_next_jobs_for_resources(array(
+					"resources" => $res,
+					"states" => $states,
+					"sort_by" => $sby,
+					"proj_states" => $proj_states
+				));
+
+				$count = 0;
+				foreach($jobs as $job)
+				{
+					$count++;
+					$proj = obj($job->prop("project"));
+					if ($proj->name() == $find_proj)
+					{
+						$page = floor($count / $per_page);
+						header("Location: ".aw_url_change_var("printer_job_page", $page));
+						die();
+					}
+				}	
+			}
 		}
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
@@ -3785,6 +3839,11 @@ if ($_GET['show_thread_data'] == 1)
 			if ($arr["request"]["group"] == "grp_printer_notstartable" && ($bgcol == $this->pj_colors["can_start"] || $cnt > 5))
 			{
 				continue;
+			}
+
+			if ($job->prop("project") == $_SESSION["mrp"]["pv_s_hgl"])
+			{
+				$bgcol = $this->pj_colors["search_result"];
 			}
 
 			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';

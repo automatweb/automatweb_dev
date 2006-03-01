@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.2 2005/12/16 11:37:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.3 2006/03/01 14:01:33 kristo Exp $
 // crm_company_customer_data.aw - Kliendi andmed 
 /*
 
@@ -41,6 +41,9 @@
 
 	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=aw_crm_customer_data field=aw_client_manager
 	@caption Kliendihaldur
+
+	@property bill_due_date_days type=textbox size=5  table=aw_crm_customer_data field=aw_bill_due_date_days
+	@caption Arve makset&auml;htaeg (p&auml;evi)
 
 @reltype BUYER value=1 clid=CL_CRM_COMPANY
 @caption Ostja
@@ -130,20 +133,33 @@ class crm_company_customer_data extends class_base
 
 	function do_db_upgrade($tbl, $fld, $q, $err)
 	{
-		$this->db_query("CREATE TABLE `aw_crm_customer_data` (
-  `aw_oid` int(11) NOT NULL default '0',
-  `aw_buyer` int(11) default NULL,
-  `aw_seller` int(11) default NULL,
-  `aw_cust_contract_creator` int(11) default NULL,
-  `aw_cust_contract_date` int(11) default NULL,
-  `aw_contact_person1` int(11) default NULL,
-  `aw_contact_person2` int(11) default NULL,
-  `aw_contact_person3` int(11) default NULL,
-  `aw_priority` int(11) default NULL,
-  `aw_client_manager` int(11) default NULL,
-  `aw_referal_type` int(11) default NULL,
-  PRIMARY KEY  (`aw_oid`)
-) ");
+		switch($fld)
+		{
+			case "":
+				$this->db_query("CREATE TABLE `aw_crm_customer_data` (
+				  `aw_oid` int(11) NOT NULL default '0',
+				  `aw_buyer` int(11) default NULL,
+				  `aw_seller` int(11) default NULL,
+				  `aw_cust_contract_creator` int(11) default NULL,
+				  `aw_cust_contract_date` int(11) default NULL,
+				  `aw_contact_person1` int(11) default NULL,
+				  `aw_contact_person2` int(11) default NULL,
+				  `aw_contact_person3` int(11) default NULL,
+				  `aw_priority` int(11) default NULL,
+				  `aw_client_manager` int(11) default NULL,
+				  `aw_referal_type` int(11) default NULL,
+				  PRIMARY KEY  (`aw_oid`)
+				) ");
+				return true;
+
+			case "bill_due_date_days":
+				$this->db_add_col($tbl, array(
+					"name" => $fld,
+					"type" => "int"
+				));
+				return true;
+		}
+
 	}
 }
 ?>

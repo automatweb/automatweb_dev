@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.25 2006/02/20 14:46:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.26 2006/03/01 14:01:33 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -11,8 +11,20 @@
 
 @default group=general
 
+	@property billp_tb type=toolbar store=no no_caption=1
+	@caption Arve toolbar
+
+	@property name type=textbox table=objects field=name
+	@caption Nimi
+
 	@property bill_no type=textbox table=aw_crm_bill field=aw_bill_no
 	@caption Number
+
+	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON
+	@caption Klient
+
+	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
+	@caption Arve esitaja
 
 	@property bill_date type=date_select table=aw_crm_bill field=aw_date
 	@caption Kuup&auml;ev
@@ -26,32 +38,11 @@
 	@property bill_recieved type=date_select table=aw_crm_bill field=aw_recieved
 	@caption Laekumiskuup&auml;ev
 
-	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON
-	@caption Klient
-
-	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
-	@caption Teostaja
-
 	@property state type=select table=aw_crm_bill field=aw_state
 	@caption Staatus
 
-	@property notes type=textarea rows=5 cols=50 table=aw_crm_bill field=aw_notes
-	@caption M&auml;rkused
-
-	@property monthly_bill type=checkbox ch_value=1 table=aw_crm_bill field=aw_monthly_bill
-	@caption Kuuarve
-
-	@property currency type=text store=no
-	@caption Valuuta
-
-	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE
-	@caption Keel
-
-	@property bill_rows type=text store=no 
-	@caption Arveread 
-
-	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5 
-	@caption Allahindlus (%)
+	@property gen_prod type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_PROD
+	@caption Artikkel
 
 	@property gen_unit type=textbox table=objects field=meta method=serialize size=5
 	@caption &Uuml;hik
@@ -59,12 +50,23 @@
 	@property gen_amt type=textbox table=objects field=meta method=serialize size=5
 	@caption Kogus
 
-	@property gen_prod type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_PROD
-	@caption Toode
+	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5 
+	@caption Allahindlus (%)
 
 	@property sum type=text table=aw_crm_bill field=aw_sum size=5 
 	@caption Summa
 
+	@property notes type=textarea rows=5 cols=50 table=aw_crm_bill field=aw_notes
+	@caption Arve sisu
+
+	@property monthly_bill type=checkbox ch_value=1 table=aw_crm_bill field=aw_monthly_bill
+	@caption Kuuarve
+
+	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE
+	@caption Keel
+
+	@property bill_rows type=text store=no 
+	@caption Arveread 
 
 @default group=preview
 
@@ -134,6 +136,14 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "billp_tb":
+				$this->_bill_tb($arr);
+				break;
+
+			case "gen_prod":
+				$prop["onchange"] = "upd_notes()";
+				break;
+
 			case 'bill_proj_list':
 			case 'bill_task_list':
 			case 'bill_tb':
@@ -150,14 +160,6 @@ class crm_bill extends class_base
 				{
 					$i = get_instance(CL_CRM_NUMBER_SERIES);
 					$prop["value"] = $i->find_series_and_get_next(CL_CRM_BILL);
-				}
-				break;
-
-			case "currency":
-				$prop["value"] = $arr["obj_inst"]->prop("customer.currency.name");
-				if ($prop["value"] == "")
-				{
-					return PROP_IGNORE;
 				}
 				break;
 
@@ -207,15 +209,8 @@ class crm_bill extends class_base
 				break;
 
 			case "sum":
-				$prop["value"].= " / ".html::href(array(
-					"url" => "#",
-					"caption" => t("Prindi arve"),
-					"onClick" => "window.open(\"".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."\",\"billprint\",\"width=100,height=100\")"
-				)). " / ".html::href(array(
-					"url" => "#",
-					"caption" => t("Prindi arve lisa"),
-					"onClick" => "window.open(\"".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."\",\"billprint\",\"width=100,height=100\")"
-				));
+				$prop["value"] = number_format($prop["value"], 2);
+				$prop["value"] .= " ".$arr["obj_inst"]->prop("customer.currency.name");
 				break;
 		};
 		return $retval;
@@ -394,8 +389,14 @@ class crm_bill extends class_base
 					"name" => "rows[$id][prod]",
 					"options" => $prods,
 					"value" => $t_inf["prod"]
-				
+				))." ".html::popup(array(
+					"width" => 800,
+					"height" => 500,
+					"scrollbars" => 1,
+					"url" => $this->mk_my_orb("do_search", array("pn" => "rows[$id][prod]", "clid" => CL_SHOP_PRODUCT), "popup_search"),
+					"caption" => t("Vali")
 				))
+
 			));
 			$sum += $t_inf["sum"];
 		}
@@ -412,10 +413,10 @@ class crm_bill extends class_base
 		}
 
 		$arr["prop"]["value"] = $t->draw();
-		$arr["prop"]["value"] .= html::href(array(
+		/*$arr["prop"]["value"] .= html::href(array(
 			"caption" => t("Lisa rida"),
 			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru()))
-		));
+		));*/
 	}
 
 	function get_sum($bill)
@@ -703,7 +704,13 @@ class crm_bill extends class_base
 
 		if ($_GET["openprintdialog"] == 1)
 		{
-			$res .= "<script language='javascript'>window.print();window.close();</script>";
+			$res .= "<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
+		}
+
+		if ($_GET["openprintdialog_b"] == 1)
+		{
+			$url = aw_url_change_var("group", "preview_add", aw_url_change_var("openprintdialog", 1));
+			$res .= "<script language='javascript'>setTimeout('window.location.href=\"$url\"',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.location.href='$url'; }</script>";
 		}
 		die($res);
 	}
@@ -985,7 +992,7 @@ class crm_bill extends class_base
 
 		if ($_GET["openprintdialog"] == 1)
 		{
-			$res .= "<script language='javascript'>window.print();window.close();</script>";
+			$res .= "<script language='javascript'>setTimeout('window.close()',10000);window.print();window.close();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
 		}
 		die($res);
 	}
@@ -1181,6 +1188,116 @@ class crm_bill extends class_base
 			}
 		}
 		return $arr["post_ru"];
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		$url = $this->mk_my_orb("get_comment_for_prod");
+		return '
+			function upd_notes()
+			{
+				set_changed();
+				aw_do_xmlhttprequest("'.$url.'&prod="+document.changeform.gen_prod.options[document.changeform.gen_prod.selectedIndex].value, notes_fetch_callb);
+			}
+
+			function notes_fetch_callb()
+			{
+				if (req.readyState == 4)
+				{
+					// only if "OK"
+					if (req.status == 200) 
+					{
+						if (req.responseXML)
+						{
+							response = req.responseXML.documentElement;
+							items = response.getElementsByTagName("item");
+
+							if (items.length > 0 && items[0].firstChild != null)
+							{
+								value = items[0].firstChild.data;
+								document.changeform.notes.value = value;
+							}
+						}
+					} 
+					else 
+					{
+						alert("There was a problem retrieving the XML data:\n" + req.statusText);
+					}
+				}
+			}
+		';
+	}
+
+	/**
+		@attrib name=get_comment_for_prod
+		@param prod optional
+	**/
+	function get_comment_for_prod($arr)
+	{
+		header("Content-type: text/xml");
+		$xml = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\" standalone=\"yes\"?>\n<response>\n";
+		
+
+		$empty = $xml."<item></item></response>";
+		if (!$arr["prod"])
+		{
+			die( $empty);
+		}
+
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT,
+			"oid" => $arr["prod"]
+		));
+		if (!$ol->count())
+		{
+			die($empty);
+		}
+
+		foreach($ol->arr() as $o)
+		{
+			$xml .= "<item>".$o->comment()."</item>";
+		}
+		$xml .= "</response>";
+		die($xml);
+	}
+
+	function _bill_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_button(array(
+			"name" => "new",
+			"tooltip" => t("Lisa rida"),
+			"img" => "new.gif",
+			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru()))
+		));
+
+		$tb->add_menu_button(array(
+			"name" => "print",
+			"tooltip" => t("Prindi"),
+			"img" => "print.gif"
+		));
+		
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => "win = window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100,statusbar=yes');",
+			"text" => t("Prindi arve")
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100')",
+			"text" => t("Prindi arve lisa")
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "print",
+			"url" => "#",
+			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100')",
+			"text" => t("Prindi arve koos lisaga")
+		));
 	}
 }
 ?>

@@ -87,6 +87,15 @@
             <field>aw_client_manager</field>
             <caption>Kliendihaldur</caption>
       </property>
+      <property>
+            <name>bill_due_date_days</name>
+            <table>aw_crm_customer_data</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_bill_due_date_days</field>
+            <caption>Arve makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_COMPANY_CUSTOMER_DATA</syslog_type>
             <relationmgr>yes</relationmgr>

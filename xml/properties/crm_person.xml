@@ -188,7 +188,6 @@
             <reltype>RELTYPE_PICTURE</reltype>
             <rel_id>first</rel_id>
             <props>file</props>
-            <store>no</store>
             <field>picture</field>
             <caption>Pilt/foto</caption>
       </property>
@@ -200,7 +199,6 @@
             <reltype>RELTYPE_PICTURE2</reltype>
             <rel_id>first</rel_id>
             <props>file</props>
-            <store>no</store>
             <field>picture2</field>
             <caption>Pilt suuremana</caption>
       </property>
@@ -323,7 +321,6 @@
             <props>mail</props>
             <table_fields>mail</table_fields>
             <choose_default>1</choose_default>
-            <store>no</store>
             <caption>Meiliaadressid</caption>
       </property>
       <property>
@@ -344,7 +341,6 @@
             </table_fields>
             <reltype>RELTYPE_PHONE</reltype>
             <choose_default>1</choose_default>
-            <store>no</store>
             <caption>Telefoninumbrid</caption>
       </property>
       <property>
@@ -359,7 +355,6 @@
             <props>url</props>
             <table_fields>url</table_fields>
             <choose_default>1</choose_default>
-            <store>no</store>
             <caption>Veebiaadressid</caption>
       </property>
       <property>

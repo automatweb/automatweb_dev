@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.9 2006/02/22 15:18:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.10 2006/03/01 14:01:33 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded 
 /*
 
@@ -48,8 +48,13 @@
 	@property everyone type=checkbox ch_value=1 table=objects field=flags
 	@caption K&otilde;ik 
 
+@default group=img
+
+	@property person_img_settings type=relpicker reltype=RELTYPE_GALLERY_CONF field=meta method=serialize
+	@caption Isiku piltide seaded
 
 @groupinfo whom caption="Kellele kehtib"
+@groupinfo img caption="Pildid"
 
 @reltype USER value=1 clid=CL_USER
 @caption Kasutaja
@@ -71,6 +76,9 @@
 
 @reltype PROD value=7 clid=CL_SHOP_PRODUCT
 @caption Toode
+
+@reltype GALLERY_CONF value=8 clid=CL_GALLERY_CONF
+@caption Galerii seaded
 
 */
 

@@ -132,6 +132,25 @@ class crm_company_people_impl extends class_base
 
 		$tb->add_separator();
 
+		if ($_SESSION["crm"]["people_view"] == "edit")
+		{
+			$tb->add_button(array(
+				"name" => "switch_view",
+				"img" => "rte_bul_list.gif",
+				"tooltip" => t("Vaatamise vaade"),
+				"action" => "p_view_switch"
+			));
+		}
+		else
+		{
+			$tb->add_button(array(
+				"name" => "switch_to_edit_view",
+				"img" => "settings.gif",
+				"tooltip" => t("Muutmise vaade"),
+				"action" => "p_view_switch"
+			));
+		}
+
 		$tb->add_button(array(
 			"name" => "cut",
 			"img" => "cut.gif",
@@ -194,6 +213,14 @@ class crm_company_people_impl extends class_base
 				"unit" =>  NULL,
 			))
 		));
+
+		if ($_SESSION["crm"]["people_view"] == "edit")
+		{
+			classload("core/icons");
+			$tree_inst->set_root_name($arr["obj_inst"]->name());
+			$tree_inst->set_root_icon(icons::get_icon_url(CL_CRM_COMPANY));
+			$tree_inst->set_root_url(aw_url_change_var("cat", NULL, aw_url_change_var("unit", NULL)));
+		}
 	}
 
 	function callb_human_name($arr)
@@ -409,31 +436,6 @@ class crm_company_people_impl extends class_base
 
 			if(is_oid($arr['request']['cat']) || is_oid($arr['request']['unit']))
 			{
-				//showing only the professions that the unit AND the person is associated with
-				//in php 4.3 it would be a one-liner with intersect_assoc
-				/*$tmp_arr = array_intersect(array_keys($professions),array_keys($pdat['ranks_arr']));
-				$tmp_arr2 = array();
-				foreach($tmp_arr as $key=>$value)
-				{
-					$tmp_arr2[] = $professions[$value];
-				}
-				//getting the professions that the professions of the person are associated with
-				foreach($pdat['ranks_arr'] as $key=>$rank)
-				{
-					$tmp_obj = new object($key);
-					$conns=$tmp_obj->connections_from(array(
-						'type' => "RELTYPE_SIMILARPROFESSION",
-					));
-					$tmp_arr = array();
-					foreach($conns as $conn)
-					{
-						if(!in_array($conn->prop('to'), array_keys($tmp_arr2)))
-						{
-							$tmp_arr2[$conn->prop('to')] = $conn->prop('to.name');
-						}
-					}
-				}
-				$pdat['rank'] = join(', ',$tmp_arr2);*/
 				$ol = new object_list($person->connections_from(array("type" => "RELTYPE_RANK")));
 				$pdat["rank"] = html::obj_change_url($ol->ids());
 			}
@@ -450,9 +452,7 @@ class crm_company_people_impl extends class_base
 				{
 					$tmp_arr2[] = $pdat['ranks_arr'][$value2];
 				}
-				$section = current($pdat['sections_arr']);//.', '.join(', ',$tmp_arr2);
-				//damn, i'm not sure if a person can have multiple sections?
-				//until then the break stays here
+				$section = current($pdat['sections_arr']);;
 				break;
 			}
 
@@ -473,8 +473,6 @@ class crm_company_people_impl extends class_base
 				));
 			}
 
-			list($fn, $ln) = explode(" ", $person->prop('name'));
-	
 			$imgo = $person->get_first_obj_by_reltype("RELTYPE_PICTURE");
 			$img = "";
 			if ($imgo)
@@ -483,6 +481,7 @@ class crm_company_people_impl extends class_base
 				$img = $img_i->make_img_tag_wl($imgo->id());
 			}
 
+			list($fn, $ln) = explode(" ", $person->prop('name'));
 			$tdata = array(
 				"name" => $ln." ".$fn,
 				"image" => $img,
@@ -499,6 +498,52 @@ class crm_company_people_impl extends class_base
 			);
 			$t->define_data($tdata);
 		};
+
+		// now, if we are in edit mode, then add all professions and categories under the current branch as well
+		if ($_SESSION["crm"]["people_view"] == "edit")
+		{
+			$this->_add_edit_stuff_to_table($arr);
+		}
+	}
+
+	function _add_edit_stuff_to_table($arr)
+	{
+		$parent = $arr["request"]["cat"];
+		if (!$parent)
+		{
+			$parent = $arr["request"]["unit"];
+		}
+
+		if ($parent)
+		{
+			$o = obj($parent);
+		}
+		else
+		{
+			$o = $arr["obj_inst"];
+		}
+
+		foreach($o->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
+		{
+			$ccp = (isset($_SESSION["crm_copy_p"][$c->prop("to")]) || isset($_SESSION["crm_cut_p"][$c->prop("to")]) ? "#E2E2DB" : "");
+			list($fn, $ln) = explode(" ", $c->prop("to.name"));
+			$arr["prop"]["vcl_inst"]->define_data(array(
+				"name" => $ln." ".$fn,
+				"id" => $c->prop("to"),
+				"cutcopied" => $ccp
+			));
+		}
+
+		foreach($o->connections_from(array("type" => "RELTYPE_PROFESSIONS")) as $c)
+		{
+			$ccp = (isset($_SESSION["crm_copy_p"][$c->prop("to")]) || isset($_SESSION["crm_cut_p"][$c->prop("to")]) ? "#E2E2DB" : "");
+			list($fn, $ln) = explode(" ", $c->prop("to.name"));
+			$arr["prop"]["vcl_inst"]->define_data(array(
+				"name" => $ln." ".$fn,
+				"id" => $c->prop("to"),
+				"cutcopied" => $ccp
+			));
+		}
 	}
 
 	function _get_contacts_search_results($arr)
@@ -984,62 +1029,6 @@ class crm_company_people_impl extends class_base
 		return $ret;
 	}
 
-	function _init_sect_edit_t(&$t)
-	{
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi"),
-		));
 
-		$t->define_chooser(array(
-			"field" => "oid",
-			"name" => "sel"
-		));
-	}
-
-	function _get_sect_edit($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_sect_edit_t($t);
-
-		classload("core/icons");
-		$this->_req_draw_sects($arr["obj_inst"], $t);
-		$t->set_sortable(false);
-	}
-
-	function _req_draw_sects($o, &$t)
-	{
-		$this->sect_level++;
-		foreach($o->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
-		{
-			$to = $c->to();
-			$t->define_data(array(
-				"name" => str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $this->sect_level-1).icons::get_icon($to).html::obj_change_url($to),
-				"oid" => $c->prop("to")
-			));
-
-			foreach($to->connections_from(array("type" => "RELTYPE_PROFESSIONS")) as $c)
-			{
-				$t->define_data(array(
-					"name" => str_repeat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", $this->sect_level).icons::get_icon($c->to()).html::obj_change_url($c->to()),
-					"oid" => $c->prop("to")
-				));
-			}
-			$this->_req_draw_sects($to, $t);
-		}
-		$this->sect_level--;
-	}
-
-	function _get_sect_tb($arr)
-	{
-		$tb =& $arr["prop"]["vcl_inst"];
-
-		$tb->add_button(array(
-			'name' => 'del',
-			'img' => 'delete.gif',
-			'tooltip' => t('Kustuta valitud'),
-			'action' => 'submit_delete_sects',
-		));
-	}
 }
 ?>

@@ -380,5 +380,12 @@
 			</function>
 		</action>
 
+		<action name="p_view_switch">
+			<function name="p_view_switch">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

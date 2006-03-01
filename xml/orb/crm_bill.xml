@@ -17,5 +17,13 @@
 			</function>
 		</action>
 
+		<action name="get_comment_for_prod">
+			<function name="get_comment_for_prod">
+				<arguments>
+					<optional name="prod" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

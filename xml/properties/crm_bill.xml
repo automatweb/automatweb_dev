@@ -1,12 +1,53 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>billp_tb</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>billp_tb</field>
+            <caption>Arve toolbar</caption>
+      </property>
+      <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>bill_no</name>
             <table>aw_crm_bill</table>
             <group>general</group>
             <type>textbox</type>
             <field>aw_bill_no</field>
             <caption>Number</caption>
+      </property>
+      <property>
+            <name>customer</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>popup_search</type>
+            <field>aw_customer</field>
+            <reltype>RELTYPE_CUST</reltype>
+            <clid>
+                  <num_0>CL_CRM_COMPANY</num_0>
+                  <num_1>CL_CRM_PERSON</num_1>
+            </clid>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>impl</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>popup_search</type>
+            <style>relpicker</style>
+            <field>aw_impl</field>
+            <reltype>RELTYPE_IMPL</reltype>
+            <caption>Arve esitaja</caption>
       </property>
       <property>
             <name>bill_date</name>
@@ -42,29 +83,6 @@
             <caption>Laekumiskuup&amp;amp;auml;ev</caption>
       </property>
       <property>
-            <name>customer</name>
-            <table>aw_crm_bill</table>
-            <group>general</group>
-            <type>popup_search</type>
-            <field>aw_customer</field>
-            <reltype>RELTYPE_CUST</reltype>
-            <clid>
-                  <num_0>CL_CRM_COMPANY</num_0>
-                  <num_1>CL_CRM_PERSON</num_1>
-            </clid>
-            <caption>Klient</caption>
-      </property>
-      <property>
-            <name>impl</name>
-            <table>aw_crm_bill</table>
-            <group>general</group>
-            <type>popup_search</type>
-            <style>relpicker</style>
-            <field>aw_impl</field>
-            <reltype>RELTYPE_IMPL</reltype>
-            <caption>Teostaja</caption>
-      </property>
-      <property>
             <name>state</name>
             <table>aw_crm_bill</table>
             <group>general</group>
@@ -73,61 +91,14 @@
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>notes</name>
-            <table>aw_crm_bill</table>
-            <group>general</group>
-            <type>textarea</type>
-            <rows>5</rows>
-            <cols>50</cols>
-            <field>aw_notes</field>
-            <caption>M&amp;amp;auml;rkused</caption>
-      </property>
-      <property>
-            <name>monthly_bill</name>
-            <table>aw_crm_bill</table>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aw_monthly_bill</field>
-            <caption>Kuuarve</caption>
-      </property>
-      <property>
-            <name>currency</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>currency</field>
-            <caption>Valuuta</caption>
-      </property>
-      <property>
-            <name>language</name>
+            <name>gen_prod</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
-            <automatic>1</automatic>
             <field>meta</field>
             <method>serialize</method>
-            <reltype>RELTYPE_LANGUAGE</reltype>
-            <caption>Keel</caption>
-      </property>
-      <property>
-            <name>bill_rows</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>bill_rows</field>
-            <caption>Arveread </caption>
-      </property>
-      <property>
-            <name>disc</name>
-            <table>aw_crm_bill</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>aw_discount</field>
-            <size>5</size>
-            <caption>Allahindlus (%)</caption>
+            <reltype>RELTYPE_PROD</reltype>
+            <caption>Artikkel</caption>
       </property>
       <property>
             <name>gen_unit</name>
@@ -150,14 +121,13 @@
             <caption>Kogus</caption>
       </property>
       <property>
-            <name>gen_prod</name>
-            <table>objects</table>
+            <name>disc</name>
+            <table>aw_crm_bill</table>
             <group>general</group>
-            <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_PROD</reltype>
-            <caption>Toode</caption>
+            <type>textbox</type>
+            <field>aw_discount</field>
+            <size>5</size>
+            <caption>Allahindlus (%)</caption>
       </property>
       <property>
             <name>sum</name>
@@ -167,6 +137,45 @@
             <field>aw_sum</field>
             <size>5</size>
             <caption>Summa</caption>
+      </property>
+      <property>
+            <name>notes</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <field>aw_notes</field>
+            <caption>Arve sisu</caption>
+      </property>
+      <property>
+            <name>monthly_bill</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_monthly_bill</field>
+            <caption>Kuuarve</caption>
+      </property>
+      <property>
+            <name>language</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <automatic>1</automatic>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <caption>Keel</caption>
+      </property>
+      <property>
+            <name>bill_rows</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>bill_rows</field>
+            <caption>Arveread </caption>
       </property>
       <property>
             <name>preview</name>

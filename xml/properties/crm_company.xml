@@ -118,7 +118,6 @@
             <rel_id>first</rel_id>
             <method>serialize</method>
             <field>meta</field>
-            <store>no</store>
             <caption>Organisatsiooni logo</caption>
       </property>
       <property>
@@ -255,7 +254,6 @@
                   <num_1>class_name</num_1>
             </table_fields>
             <direct_links>1</direct_links>
-            <store>no</store>
             <field>field_manager</field>
             <caption>Valdkonnad</caption>
       </property>
@@ -364,7 +362,6 @@
             <method>serialize</method>
             <field>meta</field>
             <props>file</props>
-            <store>no</store>
             <caption>Lisa kindlustust t&amp;otilde;endav dokument</caption>
       </property>
       <property>
@@ -417,7 +414,6 @@
             <method>serialize</method>
             <field>meta</field>
             <props>file</props>
-            <store>no</store>
             <caption>Lisa maksuv&amp;otilde;la puudumise t&amp;otilde;end</caption>
       </property>
       <property>
@@ -780,24 +776,6 @@
             <field>personal_candidates_table</field>
       </property>
       <property>
-            <name>sect_tb</name>
-            <table>objects</table>
-            <group>edit_sects</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>sect_tb</field>
-      </property>
-      <property>
-            <name>sect_edit</name>
-            <table>objects</table>
-            <group>edit_sects</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>sect_edit</field>
-      </property>
-      <property>
             <name>my_customers_toolbar</name>
             <table>objects</table>
             <group>relorg_s</group>
@@ -1005,7 +983,6 @@
             <table_edit_fields>ord</table_edit_fields>
             <direct_links>1</direct_links>
             <override_parent>this</override_parent>
-            <store>no</store>
             <caption>Eripakkumised</caption>
       </property>
       <property>
@@ -1035,7 +1012,6 @@
                   <num_1>ord</num_1>
             </table_fields>
             <table_edit_fields>ord</table_edit_fields>
-            <store>no</store>
             <caption>Pildid</caption>
       </property>
       <property>
@@ -2350,12 +2326,6 @@
                   <submit>no</submit>
                   <save>no</save>
             </personal_candits>
-            <edit_sects>
-                  <caption>Muuda &amp;amp;uuml;ksuseid</caption>
-                  <parent>people</parent>
-                  <submit>no</submit>
-                  <save>no</save>
-            </edit_sects>
             <resources>
                   <caption>Ressursid</caption>
                   <submit>no</submit>

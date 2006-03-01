@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.114 2006/02/28 11:12:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.115 2006/03/01 14:01:36 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -557,6 +557,10 @@ class crm_person extends class_base
 				}
 				break;
 
+			case "picture":
+			case "picture2":
+				$this->_resize_img($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -2788,6 +2792,32 @@ class crm_person extends class_base
 		$i->table_sum = true;
 		$i->table_filt = true;
 		$arr["prop"]["value"] = $i->_get_stats_s_res($arr);
+	}
+
+	function _resize_img($arr)
+	{
+		// if image is uploaded
+		$img_o = $arr["obj_inst"]->get_first_obj_by_reltype($arr["prop"]["reltype"]);
+		if (!$img_o)
+		{
+			return;
+		}
+		
+		$s = get_instance(CL_CRM_SETTINGS);
+		$settings = $s->get_current_settings();
+
+		if ($settings)
+		{
+			$gal_conf = $settings->prop("person_img_settings");
+			if ($this->can("view", $gal_conf))
+			{
+				$img_i = $img_o->instance();
+				$img_i->do_resize_image(array(
+					"o" => $img_o,
+					"conf" => obj($gal_conf)
+				));
+			}
+		}
 	}
 }
 ?>

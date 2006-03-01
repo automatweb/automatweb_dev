@@ -250,7 +250,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	// @property b_acct_desc type=text subtitle=1 store=no
 	// @caption Pangaarved
 
-	@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,acct_no,bank table_fields=name,acct_no,bank
+	@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,acct_no,bank table_fields=name,acct_no,bank store=no
 	@caption Pangaarved
 
 @default group=personal_offers
@@ -282,12 +282,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 
 ---------------------------------------------------
-@default group=edit_sects
-
-	@property sect_tb type=toolbar no_caption=1 store=no
-
-	@property sect_edit type=table no_caption=1 store=no
-
 
 /////start of my_customers
 @default group=relorg_s
@@ -776,7 +770,6 @@ ype=callback callback=callback_gen_forum store=no no_caption=1
 	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no save=no
 	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no save=no
 	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no save=no
-	@groupinfo edit_sects caption="Muuda &uuml;ksuseid" parent=people submit=no save=no
 
 @groupinfo resources caption="Ressursid"  submit=no save=no
 @groupinfo contacts caption="Kontaktid"
@@ -1663,8 +1656,6 @@ class crm_company extends class_base
 			case "personal_candidates_toolbar":
 			case "unit_listing_tree_candidates":
 			case "personal_candidates_table":
-			case "sect_edit":
-			case "sect_tb":
 				static $people_impl;
 				if (!$people_impl)
 				{
@@ -2330,13 +2321,9 @@ class crm_company extends class_base
 					$main_obj->disconnect(array('from' => $value));
 				}
 			}
-		};
+		}
 
-		return $this->mk_my_orb("change",array(
-			"id" 	=> $arr["id"],
-			"group"	=> $arr["group"],
-			"unit"	=> $arr["unit"],
-		));
+		return $arr["post_ru"];
 	}
 
 	/**
@@ -3083,51 +3070,110 @@ class crm_company extends class_base
 
 			$p = obj($p_id);
 
-			// if copied from a profession
-			if (is_oid($p_from["proffession"]))
+			
+			switch($p->class_id())
 			{
-				// disconnect from that profession
-				if ($p->is_connected_to(array("to" => $p_from["proffession"], "type" => 7)))
-				{
-					$p->disconnect(array(
-						"from" => $p_from["proffession"],
-						"type" => 7 // crm_person.reltype_rank
-					));
-				}
-			}
-			else
-			// else
-			// if from unit
-			if (is_oid($p_from["unit"]))
-			{
-				// disconnect from that unit
-				if ($p->is_connected_to(array("to" => $p_from["unit"], "type" => 21)))
-				{
-					$p->disconnect(array(
-						"from" => $p_from["unit"],
-						"type" => "RELTYPE_SECTION",
-					));
-				}
-			}
+				case CL_CRM_PERSON:
+					// if copied from a profession
+					if (is_oid($p_from["proffession"]))
+					{
+						// disconnect from that profession
+						if ($p->is_connected_to(array("to" => $p_from["proffession"], "type" => 7)))
+						{
+							$p->disconnect(array(
+								"from" => $p_from["proffession"],
+								"type" => 7 // crm_person.reltype_rank
+							));
+						}
+					}
+					else
+					// else
+					// if from unit
+					if (is_oid($p_from["unit"]))
+					{
+						// disconnect from that unit
+						if ($p->is_connected_to(array("to" => $p_from["unit"])))
+						{
+							$p->disconnect(array(
+								"from" => $p_from["unit"],
+							));
+						}
+					}
 
-			// if currently under profession
-			if ($arr["cat"])
-			{
-				// connect to that profession
-				$p->connect(array(
-					"to" => $arr["cat"],
-					"reltype" => 7
-				));
-			}
+					// if currently under profession
+					if ($arr["cat"])
+					{
+						// connect to that profession
+						$p->connect(array(
+							"to" => $arr["cat"],
+							"reltype" => 7
+						));
+					}
 
-			// if currently under unit
-			if ($arr["unit"])
-			{
-				// connect to that unit
-				$p->connect(array(
-					"to" => $arr["unit"],
-					"reltype" => 21
-				));
+					// if currently under unit
+					if ($arr["unit"])
+					{
+						// connect to that unit
+						$p->connect(array(
+							"to" => $arr["unit"],
+							"reltype" => 21
+						));
+					}
+					break;
+
+				case CL_CRM_PROFESSION:
+					if (is_oid($p_from["unit"]))
+					{
+						// disconnect from that unit
+						$unit = obj($p_from["unit"]);
+						if ($unit->is_connected_to(array("to" => $p->id())))
+						{
+							$unit->disconnect(array(
+								"from" => $p->id(),
+							));
+						}
+					}
+
+					if ($arr["unit"])
+					{
+						$unit = obj($arr["unit"]);
+						$unit->connect(array(
+							"to" => $p->id(),
+							"type" => "RELTYPE_PROFESSIONS"
+						));
+					}
+					break;
+
+				case CL_CRM_SECTION:
+					if (is_oid($p_from["unit"]))
+					{
+						// disconnect from that unit
+						$unit = obj($p_from["unit"]);
+						if ($unit->is_connected_to(array("to" => $p->id())))
+						{
+							$unit->disconnect(array(
+								"from" => $p->id(),
+							));
+						}
+					}
+
+					if ($arr["unit"])
+					{
+						$unit = obj($arr["unit"]);
+						$unit->connect(array(
+							"to" => $p->id(),
+							"type" => "RELTYPE_SECTION"
+						));
+					}
+					else
+					{
+						$co = obj($arr["id"]);
+						$co->connect(array(
+							"to" => $p->id(),
+							"type" => "RELTYPE_SECTION"
+						));
+					}
+					break;
 			}
 		}
 
@@ -3141,24 +3187,62 @@ class crm_company extends class_base
 
 			$p = obj($p_id);
 
-			// if currently under profession
-			if ($arr["cat"])
+			switch($p->class_id())
 			{
-				// connect to that profession
-				$p->connect(array(
-					"to" => $arr["cat"],
-					"reltype" => 7
-				));
-			}
+				case CL_CRM_PERSON:
+					// if currently under profession
+					if ($arr["cat"])
+					{
+						// connect to that profession
+						$p->connect(array(
+							"to" => $arr["cat"],
+							"reltype" => 7
+						));
+					}
 
-			// if currently under unit
-			if ($arr["unit"])
-			{
-				// connect to that unit
-				$p->connect(array(
-					"to" => $arr["unit"],
-					"reltype" => 21
-				));
+					// if currently under unit
+					if ($arr["unit"])
+					{
+						// connect to that unit
+						$p->connect(array(
+							"to" => $arr["unit"],
+							"reltype" => 21
+						));
+					}
+					break;
+
+				case CL_CRM_SECTION:
+					// save the copied section as a new one and connect
+					$p->save_new($p->parent());
+					if ($arr["unit"])
+					{
+						$unit = obj($arr["unit"]);
+						$unit->connect(array(
+							"to" => $p->id(),
+							"type" => "RELTYPE_SECTION"
+						));
+					}
+					else
+					{
+						$co = obj($arr["id"]);
+						$co->connect(array(
+							"to" => $p->id(),
+							"type" => "RELTYPE_SECTION"
+						));
+					}
+					break;
+
+				case CL_CRM_PROFESSION:
+					if ($arr["unit"])
+					{
+						$p->save_new($p->parent());
+						$unit = obj($arr["unit"]);
+						$unit->connect(array(
+							"to" => $p->id(),
+							"type" => "RELTYPE_PROFESSIONS"
+						));
+					}
+					break;
 			}
 		}
 
@@ -4664,18 +4748,6 @@ class crm_company extends class_base
 		die(join("\n", $ars)."\n");
 	}
 
-	/**
-		@attrib name=submit_delete_sects
-	**/
-	function submit_delete_sects($arr)
-	{
-		foreach(safe_array($arr["sel"]) as $oid)
-		{
-			$o = obj($oid);
-			$o->delete();
-		}
-		return $arr["post_ru"];
-	}
 
 	/**
 		@attrib name=save_as_customer
@@ -4735,6 +4807,15 @@ class crm_company extends class_base
 		$o->set_prop("res_type", $arr["stats_s_res_type"]);
 		$o->save();
 		return html::get_change_url($o->id(), array("return_url" => urlencode($arr["post_ru"])));
+	}
+
+	/**
+		@attrib name=p_view_switch
+	**/
+	function p_view_switch($arr)
+	{
+		$_SESSION["crm"]["people_view"] = ($_SESSION["crm"]["people_view"] == "edit" ? "view" : "edit");
+		return $arr["post_ru"];	
 	}
 }
 

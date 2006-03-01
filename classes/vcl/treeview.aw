@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.53 2006/02/07 08:54:47 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.54 2006/03/01 14:01:37 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -246,6 +246,24 @@ class treeview extends class_base
 			$url = $this->cfg["baseurl"] . "/" . $row["oid"];
 		};
 		return $url;
+	}
+
+	function set_root_name($name)
+	{
+		$this->has_root = true;
+		$this->tree_dat["root_name"] = $name;
+	}
+
+	function set_root_icon($name)
+	{
+		$this->has_root = true;
+		$this->tree_dat["root_icon"] = $name;
+	}
+
+	function set_root_url($name)
+	{
+		$this->has_root = true;
+		$this->tree_dat["root_url"] = $name;
 	}
 
 	////
