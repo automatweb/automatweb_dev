@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.25 2006/02/28 10:22:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.26 2006/03/01 14:59:48 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -575,6 +575,7 @@ class cb_form_chain extends class_base
 			$props = $cf->get_props_from_ot(array(
 				"ot" => $ot->id()
 			));
+
 			$this->_apply_view_controllers($props, $wf, $o);
 
 			$this->vars(array(
@@ -1554,6 +1555,7 @@ class cb_form_chain extends class_base
 			));
 			$htmlc = get_instance("cfg/htmlclient");
 			$htmlc->start_output();
+
 			foreach($els as $pn => $pd)
 			{
 				// rewrite file does not exist thingie if it is so

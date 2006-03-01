@@ -87,7 +87,7 @@
 
 	<tr>
 		<td colspan="2" class="note">
-			<b>Selle ressursi kasutamiseks peate olema sisse logitud!</b>
+			<b>You must be logged in to use this resource!</b>
 		</td>
 	</tr>
 	
@@ -100,7 +100,7 @@
 
 	<tr>
 		<td class="caption">
-			Kasutajanimi:
+			Username:
 		</td>
 		<td class="element">
 			<input type="text" name="uid" size="40" class="textbox">
@@ -109,7 +109,7 @@
 
 	<tr>
 		<td class="caption">
-			Parool:
+			Password:
 		</td>
 		<td class="element">
 			<input type="password" name="password" size="40" class="textbox">
@@ -124,14 +124,14 @@
 				<tr>
 					<td  width="50%">
 						{VAR:reforb}
-						<input type="submit" value="Sisene" class="loginbt">
+						<input type="submit" value="Login" class="loginbt">
 						<script language="Javascript">
 							document.login.uid.focus();
 						</script>
 					</td>
 					<td class="lingid" width="50%" align="right">
-						<a href="{VAR:baseurl}?class=users&action=send_hash">Unustasid parooli?</a><br>
-						<a target="new" href="http://support.automatweb.com">Abikeskkond</a>
+						<a href="{VAR:baseurl}?class=users&action=send_hash">Forgot password?</a><br>
+						<a target="new" href="http://support.automatweb.com">Help</a>
 					</td>
 				</tr>
 			</table>
@@ -144,7 +144,7 @@
 	</tr>
 	<tr>
 		<td class="footer" colspan="2">
-			OÜ Struktuur Meedia<br>Aadress: Pärnu mnt. 154, 11317, Tallinn<br>Infotelefon: 655 8336<br>E-mail: <a href="mailto:info@struktuur.ee">info@struktuur.ee</a>
+			OÜ Struktuur Meedia<br>Address: Pärnu mnt. 154, 11317, Tallinn<br>Phone: 655 8336<br>E-mail: <a href="mailto:info@struktuur.ee">info@struktuur.ee</a>
 		</td>
 	</tr>
 

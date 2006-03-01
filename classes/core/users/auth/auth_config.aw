@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.18 2006/02/18 13:02:29 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.19 2006/03/01 14:59:48 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -366,7 +366,12 @@ class auth_config extends class_base
 	**/
 	function show_login($args = array())
 	{
-		$this->read_adm_template("login.tpl");
+		$tpl = "login.tpl";
+		if (aw_ini_get("user_interface.default_language") == "en")
+		{
+			$tpl = "login_en.tpl";
+		}
+		$this->read_adm_template($tpl);
 		// remember the uri used before login so that we can
 		// redirect the user back there after (and if) he/she has finally
 		// logged in
