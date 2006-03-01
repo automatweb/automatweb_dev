@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.77 2006/02/01 14:36:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.78 2006/03/01 15:19:07 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1151,6 +1151,14 @@ class cfgform extends class_base
 				"value" => $item["caption"],
 				"parent" => "b".$key,
 			);
+			$rv["grpord[$key]"] = array(
+				"name" => "grpord[".$key."]",
+				"type" => "textbox",
+				"size" => 5,
+				"caption" => t("J&auml;rjekod"),
+				"value" => $item["ord"],
+				"parent" => "b".$key,
+			);
 			$rv["grpstyle[$key]"] = array(
 				"name" => "grpstyle[$key]",
 				"type" => "select",
@@ -1210,6 +1218,7 @@ class cfgform extends class_base
 				$ctl = $arr["request"]["grpctl"][$key];
 				$grplist[$key]["grpview"] = $view;
 				$grplist[$key]["grpctl"] = $ctl;
+				$grplist[$key]["ord"] = $arr["request"]["grpord"][$key];
 				if (!empty($styl))
 				{
 					$grplist[$key]["grpstyle"] = $styl;
@@ -1664,10 +1673,22 @@ class cfgform extends class_base
 		return $ret;
 	}
 
+	function __grp_s($a, $b)
+	{
+		if ($a["ord"] == $b["ord"])
+		{
+			return 0;
+		}
+		return $a["ord"] > $b["ord"];
+	}
+
 	function get_cfg_groups($id)
 	{
 		$o = obj($id);
 		$ret = $o->meta("cfg_groups");
+
+		uasort($ret, array(&$this, "__grp_s"));
+
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("grp_translations");
 		$read_from_trans = true;
