@@ -405,6 +405,9 @@ default group=org_objects
 					@property all_proj_search_code type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
 					@caption Projekti kood
 
+					@property all_proj_search_arh_code type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
+					@caption Arhiveerimistunnus
+
 					@property all_proj_search_contact_person type=textbox store=no parent=all_proj_search_b_top size=33 captionside=top
 					@caption Projekti kontaktisik
 
@@ -1566,6 +1569,7 @@ class crm_company extends class_base
 			case "all_proj_search_cust":
 			case "all_proj_search_name":
 			case "all_proj_search_code":
+			case "all_proj_search_arh_code":
 			case "all_proj_search_contact_person":
 			case "all_proj_search_task_name":
 			case "all_proj_search_sbt":
@@ -2665,6 +2669,7 @@ class crm_company extends class_base
 			$arr["args"]["all_proj_search_part"] = $arr["request"]["all_proj_search_part"];
 			$arr["args"]["all_proj_search_name"] = $arr["request"]["all_proj_search_name"];
 			$arr["args"]["all_proj_search_code"] = $arr["request"]["all_proj_search_code"];
+			$arr["args"]["all_proj_search_arh_code"] = $arr["request"]["all_proj_search_arh_code"];
 			$arr["args"]["all_proj_search_contact_person"] = $arr["request"]["all_proj_search_contact_person"];
 			$arr["args"]["all_proj_search_task_name"] = $arr["request"]["all_proj_search_task_name"];
 			$arr["args"]["all_proj_search_dl_from"] = $arr["request"]["all_proj_search_dl_from"];

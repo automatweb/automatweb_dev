@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.80 2006/02/28 10:22:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.81 2006/03/02 10:55:08 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -19,6 +19,9 @@
 
 	@property priority type=textbox table=aw_projects field=aw_priority size=5
 	@caption Prioriteet
+
+	@property archive_code type=textbox table=aw_projects field=aw_archive_code size=10
+	@caption Arhiveerimistunnus
 
 	@property state type=select table=aw_projects field=aw_state default=1
 	@caption Staatus
@@ -3785,6 +3788,19 @@ class project extends class_base
 		));
 
 		return $this->mk_my_orb("change", array("id" => $bill->id(), "return_url" => urlencode($arr["ru"])), CL_CRM_BILL);
+	}
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		switch($field)
+		{
+			case "aw_archive_code":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "varchar(50)"
+				));
+				return true;
+		}
 	}
 };
 ?>

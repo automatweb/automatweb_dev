@@ -26,6 +26,15 @@
             <caption>Prioriteet</caption>
       </property>
       <property>
+            <name>archive_code</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>aw_archive_code</field>
+            <size>10</size>
+            <caption>Arhiveerimistunnus</caption>
+      </property>
+      <property>
             <name>state</name>
             <table>aw_projects</table>
             <group>general2</group>

@@ -22,6 +22,13 @@ class crm_company_cust_impl extends class_base
 				"caption" => t("Kood"),
 				"sortable" => 1,
 			));
+
+			$table->define_field(array(
+				"name" => "archive_code",
+				"caption" => t("Arhiveerimistunnus"),
+				"sortable" => 1,
+			));
+
 		}
 
 		if (is_array($data))
@@ -94,15 +101,6 @@ class crm_company_cust_impl extends class_base
 			"filter" => array_unique($filt["project_participants"])
 		));
 		
-		$table->define_field(array(
-			"name" => "project_created",
-			"caption" => t("Loodud"),
-			"sortable" => 1,
-			"type" => "time",
-			"format" => "d.m.Y H:i",
-			"numeric" => 1
-		));
-
 		if (!$skip_sel)
 		{
 			$table->define_field(array(
@@ -808,7 +806,6 @@ class crm_company_cust_impl extends class_base
 	function _get_projects_listing_table($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
-		
 		$this->do_projects_table_header(&$table);
 		
 		if ($arr["request"]["search_all_proj"])
@@ -933,6 +930,7 @@ class crm_company_cust_impl extends class_base
 			$table->define_data(array(
 				"project_name" => html::obj_change_url($project),
 				"project_code" => $project->prop("code"),
+				"archive_code" => $project->prop("archive_code"),
 				"project_participants"	=> $this->_get_linked_names($project->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
 				"project_created" => $project->created(),
 				"roles" => $roles,
@@ -1112,6 +1110,11 @@ class crm_company_cust_impl extends class_base
 		if ($ar[$prefix."proj_search_code"] != "")
 		{
 			$ret["code"] = "%".$ar[$prefix."proj_search_code"]."%";
+		}
+
+		if ($ar[$prefix."proj_search_arh_code"] != "")
+		{
+			$ret["archive_code"] = "%".$ar[$prefix."proj_search_arh_code"]."%";
 		}
 
 		if ($ar[$prefix."proj_search_task_name"] != "")

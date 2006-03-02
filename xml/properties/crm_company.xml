@@ -1100,6 +1100,18 @@
             <caption>Projekti kood</caption>
       </property>
       <property>
+            <name>all_proj_search_arh_code</name>
+            <table>objects</table>
+            <group>org_projects_archive</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>all_proj_search_b_top</parent>
+            <size>33</size>
+            <captionside>top</captionside>
+            <field>all_proj_search_arh_code</field>
+            <caption>Arhiveerimistunnus</caption>
+      </property>
+      <property>
             <name>all_proj_search_contact_person</name>
             <table>objects</table>
             <group>org_projects_archive</group>
