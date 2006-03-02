@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.61 2006/02/28 10:22:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.62 2006/03/02 10:41:41 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -352,6 +352,7 @@ class crm_meeting extends class_base
 				{
 					$arr["obj_inst"]->set_prop("customer", $data["value"]);
 				}
+				$data["onchange"] = "upd_proj_list()";
 				break;
 
 			case "participants":
@@ -864,6 +865,12 @@ class crm_meeting extends class_base
 		{
 			$arr["obj_inst"]->set_prop("time_real", $hrs);
 		}
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		$task = get_instance(CL_TASK);
+		return $task->callback_generate_scripts($arr);
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.144 2006/02/22 12:17:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.145 2006/03/02 10:41:41 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -33,6 +33,7 @@
 
 		@property admin_feature type=select group=general_sub table=menu field=admin_feature
 		@caption Vali programm
+
 
 	@groupinfo advanced_settings caption="Süvaseaded" parent=general
 

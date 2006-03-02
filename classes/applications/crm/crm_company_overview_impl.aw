@@ -974,40 +974,45 @@ class crm_company_overview_impl extends class_base
 				$tasksi = $i->get_my_meetings();
 				$clid = CL_CRM_MEETING;
 				$tasks = array();
-				 foreach($tasksi as $t_id)
-                                        {
-                                                $o = obj($t_id);
-                                                if (!($o->flags() & OBJ_IS_DONE))
-                                                {
-                                                        $tasks[$o->id()] = $o->id();
-                                                }
-                                        }
+				foreach($tasksi as $t_id)
+				{
+					$o = obj($t_id);
+					if (!($o->flags() & OBJ_IS_DONE))
+					{
+						$tasks[$o->id()] = $o->id();
+					}
+				}
 				break;
 
 			case "calls":
 				$tasksi = $i->get_my_calls();
 				$clid = CL_CRM_CALL;
 				$tasks = array();
-				 foreach($tasksi as $t_id)
-                                        {
-                                                $o = obj($t_id);
-                                                if (!($o->flags() & OBJ_IS_DONE))
-                                                {
-                                                        $tasks[$o->id()] = $o->id();
-                                                }
-                                        }
+				foreach($tasksi as $t_id)
+				{
+					$o = obj($t_id);
+					if (!($o->flags() & OBJ_IS_DONE))
+					{
+						$tasks[$o->id()] = $o->id();
+					}
+				}
 				break;
 
 			case "ovrv_offers":
 				/// this tab got turned into docmanagement. whoo
 				$clid = CL_CRM_DOCUMENT_ACTION;
 				// now, find all thingies that I am part of
-				$ol = new object_list(array(
+				$filt = array(
 					"class_id" => CL_CRM_DOCUMENT_ACTION,
 					"site_id" => array(),
 					"lang_id" => array(),
 					"actor" => $u->get_current_person(),
-				));
+				);
+				if (!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1))
+				{
+					$filt["is_done"] = new obj_predicate_not(1);
+				}
+				$ol = new object_list($filt);
 				$tasks = $this->make_keys($ol->ids());
 				break;
 

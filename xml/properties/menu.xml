@@ -535,7 +535,6 @@
                   <num_1>status</num_1>
             </table_edit_fields>
             <group>advanced_ctx</group>
-            <store>no</store>
             <caption>Kontekstid</caption>
       </property>
       <property>

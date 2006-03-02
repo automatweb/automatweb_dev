@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.78 2006/03/01 16:42:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.79 2006/03/02 10:41:42 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -251,7 +251,7 @@ class releditor extends core
 		// a programmaticaly specified relation
 
 		// need to check whether a existing recurrence thing is specifed, if so, add that
-		if ($form_type != "new" && is_oid($arr["obj_inst"]->id()))
+		if ($form_type != "new" && is_object($arr["obj_inst"]) &&  is_oid($arr["obj_inst"]->id()))
 		{
 			if ($edit_id)
 			{

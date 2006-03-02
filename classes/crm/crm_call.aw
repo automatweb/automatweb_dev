@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.40 2006/02/23 08:51:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.41 2006/03/02 10:41:41 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -293,6 +293,7 @@ class crm_call extends class_base
 				{
 					$arr["obj_inst"]->set_prop("customer", $data["value"]);
 				}
+				$data["onchange"] = "upd_proj_list()";
 				break;
 
 			case "start1":
@@ -541,6 +542,12 @@ class crm_call extends class_base
 			$arr["alias_to_org"] = $_GET["alias_to_org"];
 			$arr["reltype_org"] = $_GET["reltype_org"];
 		}
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		$task = get_instance(CL_TASK);
+		return $task->callback_generate_scripts($arr);
 	}
 };
 ?>

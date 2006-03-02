@@ -716,6 +716,15 @@
             <caption>Pangaarved</caption>
       </property>
       <property>
+            <name>bill_due_days</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_bill_due_days</field>
+            <caption>Makset&amp;amp;auml;htaeg p&amp;amp;auml;evades</caption>
+      </property>
+      <property>
             <name>personal_offers_toolbar</name>
             <table>objects</table>
             <group>personal_offers</group>
@@ -2492,6 +2501,7 @@
                   <caption>Minu statistika</caption>
                   <submit>no</submit>
                   <save>no</save>
+                  <submit_method>get</submit_method>
             </stats_my>
             <quick_view>
                   <caption>Vaata</caption>

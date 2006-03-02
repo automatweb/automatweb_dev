@@ -253,6 +253,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,acct_no,bank table_fields=name,acct_no,bank store=no
 	@caption Pangaarved
 
+	@property bill_due_days type=textbox size=5 table=kliendibaas_firma field=aw_bill_due_days
+	@caption Makset&auml;htaeg p&auml;evades
+
 @default group=personal_offers
 -------------- PERSONALI PROPERTID ---------------
 
@@ -817,7 +820,7 @@ groupinfo documents caption="Dokumendid" submit=no
 
 	@groupinfo stats_s parent=stats caption="Otsi" submit_method=get save=no
 	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
-	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no
+	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no submit_method=get 
 
 @groupinfo quick_view caption="Vaata"  submit=no save=no
 
@@ -1303,6 +1306,7 @@ class crm_company extends class_base
 			case "contact_person3":
 				$data["options"] = $this->get_employee_picker($arr["obj_inst"], true);
 
+			case "bill_due_days":
 			case "cust_contract_date":
 			case "referal_type":
 			case "priority":
@@ -3714,6 +3718,25 @@ class crm_company extends class_base
 			$u = get_instance(CL_USER);
 			$bill->set_prop("impl", $u->get_current_company());
 		}
+
+		// if the bill has an impl and customer, then check if they have a customer relation
+		// and if so, then get the due days from that
+		if (is_oid($bill->prop("customer")) && is_oid($bill->prop("impl")))
+		{
+			$cust_rel_list = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_CUSTOMER_DATA,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"buyer" => $bill->prop("customer"),
+				"seller" => $bill->prop("impl")
+			));
+			if ($cust_rel_list->count())
+			{
+				$cust_rel = $cust_rel_list->begin();
+				$bill->set_prop("bill_due_date_days", $cust_rel->prop("bill_due_date_days"));
+			}
+		}
+
 		$bill->save();
 
 		$seti = get_instance(CL_CRM_SETTINGS);
@@ -4816,6 +4839,19 @@ class crm_company extends class_base
 	{
 		$_SESSION["crm"]["people_view"] = ($_SESSION["crm"]["people_view"] == "edit" ? "view" : "edit");
 		return $arr["post_ru"];	
+	}
+
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		switch($field)
+		{
+			case "aw_bill_due_days":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "int"
+				));
+				return true;
+		}
 	}
 }
 

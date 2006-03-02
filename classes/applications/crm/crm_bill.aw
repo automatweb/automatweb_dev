@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.26 2006/03/01 14:01:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.27 2006/03/02 10:41:41 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -343,6 +343,12 @@ class crm_bill extends class_base
 		{
 			$t_inf = $row;
 			$id = $row["id"];
+			$r_prods = $prods;
+			if (!isset($r_prods[$t_inf["prod"]]) && $this->can("view", $t_inf["prod"]))
+			{
+				$prodo = obj($t_inf["prod"]);
+				$r_prods[$t_inf["prod"]] = $prodo->name();
+			}
 			$t->define_data(array(
 				"name" => html::textarea(array(
 					"name" => "rows[$id][name]",
@@ -387,7 +393,7 @@ class crm_bill extends class_base
 				)),
 				"prod" => html::select(array(
 					"name" => "rows[$id][prod]",
-					"options" => $prods,
+					"options" => $r_prods,
 					"value" => $t_inf["prod"]
 				))." ".html::popup(array(
 					"width" => 800,
