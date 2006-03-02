@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.3 2006/03/01 14:01:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.4 2006/03/02 11:36:35 kristo Exp $
 // crm_company_customer_data.aw - Kliendi andmed 
 /*
 
@@ -152,7 +152,7 @@ class crm_company_customer_data extends class_base
 				) ");
 				return true;
 
-			case "bill_due_date_days":
+			case "aw_bill_due_date_days":
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int"
