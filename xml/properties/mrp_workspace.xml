@@ -1335,6 +1335,57 @@
             <store>no</store>
             <caption>Vali kasutatav ressurss</caption>
       </property>
+      <property>
+            <name>ws_resource</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_worksheet</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <store>no</store>
+            <caption>Ressursid</caption>
+      </property>
+      <property>
+            <name>ws_from</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_worksheet</group>
+            <type>date_select</type>
+            <store>no</store>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>ws_to</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_worksheet</group>
+            <type>date_select</type>
+            <store>no</store>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>ws_sbt</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_worksheet</group>
+            <type>submit</type>
+            <store>no</store>
+            <caption>N&amp;amp;auml;ita</caption>
+      </property>
+      <property>
+            <name>ws_tbl</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_worksheet</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -1425,6 +1476,11 @@
                   <caption>Ressursside haldus</caption>
                   <parent>grp_settings</parent>
             </grp_resources>
+            <grp_worksheet>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;lehed</caption>
+                  <parent>grp_settings</parent>
+                  <submit_method>get</submit_method>
+            </grp_worksheet>
             <grp_login_select_res>
                   <caption>Vali kasutatav ressurss</caption>
             </grp_login_select_res>

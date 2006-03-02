@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.85 2006/01/26 13:58:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.86 2006/03/02 09:14:24 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -642,54 +642,59 @@ class mrp_resource extends class_base
 
 		if ($list->count () > 0)
 		{
-			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
+			$this->draw_job_list_table_from_list($table, $list);
+		}
+	}
+
+	function draw_job_list_table_from_list(&$table, $list)
+	{
+		for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
+		{
+			### get project and client name
+			$project = $client = "";
+
+			if (!is_oid ($job->prop ("project")) || !$this->can("view", $job->prop("project")))
 			{
-				### get project and client name
-				$project = $client = "";
+				continue;
+			}
 
-				if (!is_oid ($job->prop ("project")) || !$this->can("view", $job->prop("project")))
-				{
-					continue;
-				}
+			$p = obj($job->prop("project"));
+			$project = html::get_change_url($p->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), ($p->name() . "-" . $job->prop ("exec_order")));
 
-				$p = obj($job->prop("project"));
-				$project = html::get_change_url($p->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), ($p->name() . "-" . $job->prop ("exec_order")));
+			if (is_oid($p->prop("customer")) && $this->can("view", $p->prop("customer")))
+			{
+				$c = obj($p->prop("customer"));
+				$client = html::get_change_url($c->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->name());
+			}
 
-				if (is_oid($p->prop("customer")) && $this->can("view", $p->prop("customer")))
-				{
-					$c = obj($p->prop("customer"));
-					$client = html::get_change_url($c->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->name());
-				}
+			### show only applicable projects' jobs
+			$applicable_states = array (
+				MRP_STATUS_PLANNED,
+				MRP_STATUS_PAUSED,
+				MRP_STATUS_INPROGRESS,
+			);
 
-				### show only applicable projects' jobs
-				$applicable_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_PAUSED,
-					MRP_STATUS_INPROGRESS,
-				);
+			if (in_array ($p->prop ("state"), $applicable_states))
+			{
+				### colour job status
+				$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+				$change_url = html::get_change_url($job->id(), array("return_url" => get_ru()));
 
-				if (in_array ($p->prop ("state"), $applicable_states))
-				{
-					### colour job status
-					$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
-					$change_url = html::get_change_url($job->id(), array("return_url" => get_ru()));
-
-					$table->define_data (array (
-						"modify" => html::href (array (
-							"caption" => t("Ava"),
-							"url" => $change_url,
-							)),
-						"project" => $project,
-						"proj_nr" => $p->name(),
-						"proj_com" => $p->comment(),
-						"state" => $state,
-						"starttime" => $job->prop ("starttime"),
-						"client" => $client,
-						"deadline" => $p->prop("due_date"),
-						"trykiarv" => $p->prop("trykiarv"),
-						"trykiarv_notes" => $p->prop("trykiarv_notes"),
-					));
-				}
+				$table->define_data (array (
+					"modify" => html::href (array (
+						"caption" => t("Ava"),
+						"url" => $change_url,
+						)),
+					"project" => $project,
+					"proj_nr" => $p->name(),
+					"proj_com" => $p->comment(),
+					"state" => $state,
+					"starttime" => $job->prop ("starttime"),
+					"client" => $client,
+					"deadline" => $p->prop("due_date"),
+					"trykiarv" => $p->prop("trykiarv"),
+					"trykiarv_notes" => $p->prop("trykiarv_notes"),
+				));
 			}
 		}
 	}

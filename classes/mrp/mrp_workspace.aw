@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.154 2006/03/01 14:01:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.155 2006/03/02 09:14:24 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -29,6 +29,7 @@
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_settings submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_settings submit=no
 	@groupinfo grp_resources caption="Ressursside haldus" parent=grp_settings
+	@groupinfo grp_worksheet caption="T&ouml;&ouml;lehed" parent=grp_settings submit_method=get
 
 @groupinfo grp_login_select_res caption="Vali kasutatav ressurss"
 
@@ -348,6 +349,22 @@
 
 	@property select_session_resource type=select store=no
 	@caption Vali kasutatav ressurss
+
+@default group=grp_worksheet
+
+	@property ws_resource type=select multiple=1 store=no
+	@caption Ressursid
+
+	@property ws_from type=date_select store=no
+	@caption Alates
+
+	@property ws_to type=date_select store=no
+	@caption Kuni
+
+	@property ws_sbt type=submit store=no
+	@caption N&auml;ita
+
+	@property ws_tbl type=table store=no no_caption=1
 
 // --------------- RELATION TYPES ---------------------
 
@@ -1103,6 +1120,30 @@ class mrp_workspace extends class_base
 					"url" => aw_url_change_var("printer_job_page", $arr["request"]["printer_job_page"]-1),
 					"caption" => t("Eelmine lehek&uuml;lg")
 				));
+				break;
+
+			### worksheets tab
+			case "ws_resource":
+				$res_list = $this->get_cur_printer_resources(array("ws" => $arr["obj_inst"]));
+				if (count($res_list))
+				{
+					$ol = new object_list(array(
+						"oid" => $res_list,
+						"site_id" => array(),
+						"lang_id" => array()
+					));
+					$prop["options"] = $ol->names();
+				}
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+
+			case "ws_from":
+			case "ws_to":
+				$prop["value"] = date_edit::get_timestamp($arr["request"][$prop["name"]]);
+				break;
+
+			case "ws_tbl":
+				$this->_ws_tbl($arr);
 				break;
 		}
 		return $retval;
@@ -2893,7 +2934,14 @@ if ($_GET['show_thread_data'] == 1)
 			aw_global_set("hide_yah", true);
 		}
 
-		$arr["post_ru"] = post_ru();
+		if ($_GET["group"] != "grp_worksheet")
+		{
+			$arr["post_ru"] = post_ru();
+		}
+		if ($_GET["group"] == "grp_worksheet")
+		{
+			$arr["return_url"] = NULL;
+		}
 	}
 
 	/** cuts the selected person objects
@@ -4835,6 +4883,44 @@ if ($_GET['show_thread_data'] == 1)
 		$job = obj($arr["request"]["pj_job"]);
 		$arr["obj_inst"] = obj($job->prop("project"));
 		$case->create_workflow_table($arr);
+	}
+
+	function _ws_tbl($arr)
+	{
+		if (!$arr["request"]["MAX_FILE_SIZE"])
+		{
+			return;
+		}
+
+		$t =& $arr["prop"]["vcl_inst"];
+		$res = get_instance(CL_MRP_RESOURCE);
+		$res->_init_job_list_table($t);
+		$t->define_field(array(
+			"name" => "resource",
+			"caption" => t("Resurss"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->set_default_sortby ("starttime");
+		$t->set_default_sorder ("asc");
+
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+			MRP_STATUS_PAUSED,
+			MRP_STATUS_INPROGRESS,
+		);
+
+		$from = date_edit::get_timestamp($arr["request"]["ws_from"]);
+		$to = date_edit::get_timestamp($arr["request"]["ws_to"]);
+
+		$list = new object_list(array(
+			"class_id" => CL_MRP_JOB,
+			"resource" => $arr["request"]["ws_resource"],
+			"state" => $applicable_states,
+			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $from, $to),
+		));
+
+		$res->draw_job_list_table_from_list($t, $list);
 	}
 }
 
