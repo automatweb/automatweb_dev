@@ -469,6 +469,7 @@ class object
 			));
 		}
 
+		$GLOBALS["object_loader"]->add_acl_group_to_obj($group->prop("gid"), $this->id());
 		$GLOBALS["object_loader"]->save_acl(
 			$this->id(),
 			$group->prop("gid"),
