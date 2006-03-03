@@ -1,14 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="cal_event" folder="calendar" extends="class_base">
-		<action name="repeaters">
-			<function name="repeaters">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="submit_repeaters">
 			<function name="submit_repeaters">
 				<arguments>
@@ -23,14 +15,6 @@
 					<optional name="s_name" />
 					<optional name="s_type" />
 					<optional name="s_comment" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="reminder">
-			<function name="reminder">
-				<arguments>
-					<required name="id" />
 				</arguments>
 			</function>
 		</action>

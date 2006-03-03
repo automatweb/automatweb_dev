@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.24 2005/04/05 13:52:34 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.25 2006/03/03 13:23:14 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -72,6 +72,55 @@ class docgen_viewer extends class_base
 				break;
 		}
 		return PROP_OK;
+	}
+
+	/**
+		@attrib name=intro
+	**/
+	function intro($arr)
+	{
+		$this->read_template("intro.tpl");
+		$fc = file(aw_ini_get("basedir")."/docs/tutorials/overview.txt");
+
+		// parse out descriptions for classes
+		foreach($fc as $line)
+		{
+			$line = trim($line);
+			if ($line[0] == "*")
+			{
+				if ($desc != "")
+				{
+					$classes[$l_path][basename($l_class)] = $desc;
+				}
+				$desc = "";
+				$l_class = trim(substr($line, 1, strlen($line)-2));
+				$l_path = dirname($l_class);
+			}
+			else
+			if ($line != "")
+			{
+				$desc .= $line."\n";
+			}
+		}
+
+		ksort($classes);
+
+		$fc = "";
+		foreach($classes as $path_str => $path)
+		{
+			$fc .= "<div class='folder'>$path_str/</div><table border=0 width='100%' cellpadding=5 cellspacing=20>";
+			foreach($path as $class => $desc)
+			{
+				$cl_url = $this->mk_my_orb("class_info", array("api_only" => 1, "file" => "/".$path_str."/".$class.".".aw_ini_get("ext")));
+				$fc .= "<tr><td class='classdesc'><a href='$cl_url'><b>$class:</b></a><br>$desc</td></tr>";
+			}
+			$fc .="</table>";
+		}
+
+		$this->vars(array(
+			"content" => nl2br($fc)
+		));
+		return $this->parse();
 	}
 
 	/**  
@@ -186,8 +235,8 @@ class docgen_viewer extends class_base
 		$this->read_template("frameset.tpl");
 
 		$this->vars(array(
-			"left" => $this->mk_my_orb("class_list"),
-			"right" => "about:blank",
+			"left" => $this->mk_my_orb("api_class_list"),
+			"right" => $this->mk_my_orb("intro"),
 			"doclist" => $this->mk_my_orb("doclist"),
 			"topf" => $this->mk_my_orb("topf", array("id" => $arr["id"]))
 		));
@@ -1372,8 +1421,6 @@ class aw_language_documenter
 		};
 		return $tmp;
 	}
-
-
 }
 
 

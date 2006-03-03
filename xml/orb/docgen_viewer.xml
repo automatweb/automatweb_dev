@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="docgen_viewer" folder="core/docgen" extends="class_base">
+		<action name="intro">
+			<function name="intro">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="class_list">
 			<function name="class_list">
 				<arguments>

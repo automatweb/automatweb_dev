@@ -1,0 +1,48 @@
+* core/date/date_calc:
+
+contains utility functions to do calculations with dates - get date ranges, check for overlap, subtract dates and others
+
+
+* cfg/cfgform:
+
+contains the class that is responsible for manipulating configuration forms - changing the appearance of classes in the admin interface. contains api functions to create,  edit and read config forms via code
+
+
+* cfg/cfgutils:
+
+contains methods for reading configuration forms, checking if a class has any properties and finding all classes with properties
+
+
+* cfg/classificator:
+
+can be used as a classbase property that presents a listbox with values that can be defined by the user for each class. contains methods to get the list of options from code.
+
+
+* cfg/cfgcontroller:
+
+class for letting the user enter php code that gets run when classbase forms are submitted. contains api method that can be used to run the controller
+
+
+* cfg/cfg_view_controller:
+
+class for letting the user enter php code that gets run when classbase forms are viewed. contains api method that can be used to run the controller
+
+
+* admin/foreach_site:
+
+a class that can be used to call an orb method for all websites that run AW. uses the site list register to get the list of sites and sends a http request with the given orb method to all of them.
+
+
+* install/site_list:
+
+a class for managing the list of websites that run AW. the list is kept in the site register.automatweb.com and cached locally in all sites. the list is automatically updated when new sites are created. has methods to fetch the list of sites and modify it. 
+
+
+* install/su_exec:
+
+can be used to execute shell commands as the superuser on the server. limits the list of commands and might not always be available
+
+
+* install/object_script_interpreter:
+
+interpreter for object scripts (OS). OS are simple text files that contain commands to create new objects in a very compact form and are useful when you need to create a large amount of objects from code.  
