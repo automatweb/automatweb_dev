@@ -615,7 +615,7 @@ default group=org_objects
 
 
 
-@default group=my_tasks,meetings,calls,ovrv_offers,all_actions
+@default group=my_tasks,meetings,calls,ovrv_offers,all_actions,ovrv_mails
 
 	@property my_tasks_tb type=toolbar store=no no_caption=1
 
@@ -637,7 +637,7 @@ default group=org_objects
 			@property act_s_task_content type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Tegevuse sisu
 
-			@property act_s_code type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
+			@property act_s_code type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions
 			@caption Toimetuse kood
 
 			@property act_s_proj_name type=textbox size=33 parent=all_act_search store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
@@ -657,10 +657,10 @@ default group=org_objects
 			@property act_s_print_view type=checkbox parent=all_act_search store=no captionside=top ch_value=1 no_caption=1
 			@caption Printvaade
 
-			@property act_s_sbt type=submit  parent=all_act_search no_caption=1 group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
+			@property act_s_sbt type=submit  parent=all_act_search no_caption=1 group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails
 			@caption Otsi
 
-		@property my_tasks type=table store=no no_caption=1 parent=my_tasks group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
+		@property my_tasks type=table store=no no_caption=1 parent=my_tasks group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search,ovrv_mails
 		@property my_tasks_cal type=calendar store=no no_caption=1 parent=my_tasks
 
 @default group=stats_s
@@ -762,7 +762,9 @@ default group=org_objects
 	@property forum type=text store=no no_caption=1
 	@caption Foorumi sisu
 
-ype=callback callback=callback_gen_forum store=no no_caption=1
+@default group=my_view
+
+	@property my_view type=text store=no no_caption=1
 
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
@@ -786,6 +788,7 @@ ype=callback callback=callback_gen_forum store=no no_caption=1
 	@groupinfo meetings caption="Kohtumised" parent=overview submit=no save=no
 	@groupinfo calls caption="Kõned" parent=overview submit=no save=no
 	@groupinfo ovrv_offers caption="Dokumendihaldus" parent=overview submit=no save=no
+	@groupinfo ovrv_mails caption="Meilid" parent=overview submit=no save=no
 
 @groupinfo projs caption="Projektid" save=no
 	@groupinfo my_projects caption="Projektid" parent=projs submit=no save=no
@@ -825,7 +828,10 @@ groupinfo documents caption="Dokumendid" submit=no
 	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
 	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no submit_method=get 
 
-@groupinfo quick_view caption="Vaata"  submit=no save=no
+@groupinfo qv caption="Vaata"  submit=no save=no
+
+	@groupinfo quick_view caption="Vaata"  submit=no save=no parent=qv
+	@groupinfo my_view caption="Vaata"  submit=no save=no parent=qv
 
 @groupinfo transl caption=T&otilde;lgi
 
@@ -1890,6 +1896,11 @@ class crm_company extends class_base
 				$arr["request"]["stats_s_to"] = $arr["request"]["my_stats_s_to"];
 				$arr["request"]["stats_s_time_sel"] = $arr["request"]["my_stats_s_time_sel"];
 				$i->_get_my_stats($arr);
+				break;
+
+			case "my_view":
+				$i = get_instance("applications/crm/crm_company_my_view");
+				$data["value"] = $i->_get_my_view($arr);
 				break;
 		};
 		return $retval;
@@ -4580,6 +4591,23 @@ class crm_company extends class_base
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;
+		}
+
+		if ($arr["id"] == "ovrv_mails")
+		{
+			$u = get_instance(CL_USER);
+			$co = $u->get_current_company();
+			if ($co == $arr["obj_inst"]->id())
+			{
+				// get messenger for user
+				$m2 = get_instance(CL_MESSENGER_V2);
+				$msg = $m2->get_messenger_for_user();
+				if (!$msg)
+				{
+					return false;
+				}
+				$arr["link"] = html::get_change_url($msg, array("return_url" => get_ru(), "group" => "main_view"));
+			}
 		}
 		return true;
 	}

@@ -359,13 +359,6 @@
 			</function>
 		</action>
 
-		<action name="submit_delete_sects">
-			<function name="submit_delete_sects">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="save_as_customer">
 			<function name="save_as_customer">
 				<arguments>

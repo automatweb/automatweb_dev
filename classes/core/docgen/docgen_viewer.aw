@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.25 2006/03/03 13:23:14 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.26 2006/03/03 15:07:00 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -966,6 +966,12 @@ class docgen_viewer extends class_base
 		$ret = array();
 
 		$ret[] = html::href(array(
+			"url" => $this->mk_my_orb("intro"),
+			"target" => "list",
+			"caption" => t("Klasside &uuml;levaade")
+		));
+
+		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("class_list"),
 			"target" => "classlist",
 			"caption" => t("K&otilde;ik klassid")
@@ -988,7 +994,8 @@ class docgen_viewer extends class_base
 			"target" => "classlist",
 			"caption" => t("Eraldi dokumentatsioon")
 		));
-		
+
+
 		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("proplist",array('id'=>$arr['id'])),
 			"target" => "classlist",

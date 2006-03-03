@@ -1755,6 +1755,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>ovrv_mails</num_5>
             </group>
             <type>toolbar</type>
             <store>no</store>
@@ -1808,6 +1809,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>ovrv_mails</num_5>
             </group>
             <type>textbox</type>
             <size>33</size>
@@ -1826,6 +1828,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>ovrv_mails</num_5>
             </group>
             <type>textbox</type>
             <size>33</size>
@@ -1927,6 +1930,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>ovrv_mails</num_5>
             </group>
             <type>select</type>
             <parent>all_act_search</parent>
@@ -1944,6 +1948,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>ovrv_mails</num_5>
             </group>
             <type>checkbox</type>
             <parent>all_act_search</parent>
@@ -1964,6 +1969,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
+                  <num_6>ovrv_mails</num_6>
             </group>
             <type>submit</type>
             <parent>all_act_search</parent>
@@ -1982,6 +1988,7 @@
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
                   <num_5>bills_search</num_5>
+                  <num_6>ovrv_mails</num_6>
             </group>
             <type>table</type>
             <store>no</store>
@@ -1998,6 +2005,7 @@
                   <num_2>calls</num_2>
                   <num_3>ovrv_offers</num_3>
                   <num_4>all_actions</num_4>
+                  <num_5>ovrv_mails</num_5>
             </group>
             <type>calendar</type>
             <store>no</store>
@@ -2292,6 +2300,15 @@
             <field>forum</field>
             <caption>Foorumi sisu</caption>
       </property>
+      <property>
+            <name>my_view</name>
+            <table>objects</table>
+            <group>my_view</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>my_view</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
@@ -2389,6 +2406,12 @@
                   <submit>no</submit>
                   <save>no</save>
             </ovrv_offers>
+            <ovrv_mails>
+                  <caption>Meilid</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+                  <save>no</save>
+            </ovrv_mails>
             <projs>
                   <caption>Projektid</caption>
                   <save>no</save>
@@ -2515,11 +2538,23 @@
                   <save>no</save>
                   <submit_method>get</submit_method>
             </stats_my>
+            <qv>
+                  <caption>Vaata</caption>
+                  <submit>no</submit>
+                  <save>no</save>
+            </qv>
             <quick_view>
                   <caption>Vaata</caption>
                   <submit>no</submit>
                   <save>no</save>
+                  <parent>qv</parent>
             </quick_view>
+            <my_view>
+                  <caption>Vaata</caption>
+                  <submit>no</submit>
+                  <save>no</save>
+                  <parent>qv</parent>
+            </my_view>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -3018,6 +3053,7 @@
                         <num_2>calls</num_2>
                         <num_3>ovrv_offers</num_3>
                         <num_4>all_actions</num_4>
+                        <num_5>ovrv_mails</num_5>
                   </group>
             </my_tasks>
             <all_act_search>
@@ -3029,6 +3065,7 @@
                         <num_2>calls</num_2>
                         <num_3>ovrv_offers</num_3>
                         <num_4>all_actions</num_4>
+                        <num_5>ovrv_mails</num_5>
                   </group>
             </all_act_search>
             <act_s_dl_layout_top>
@@ -3040,6 +3077,7 @@
                         <num_2>calls</num_2>
                         <num_3>ovrv_offers</num_3>
                         <num_4>all_actions</num_4>
+                        <num_5>ovrv_mails</num_5>
                   </group>
             </act_s_dl_layout_top>
             <act_s_dl_layout>
@@ -3051,6 +3089,7 @@
                         <num_2>calls</num_2>
                         <num_3>ovrv_offers</num_3>
                         <num_4>all_actions</num_4>
+                        <num_5>ovrv_mails</num_5>
                   </group>
             </act_s_dl_layout>
             <res_lt>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.79 2006/03/01 18:48:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.80 2006/03/03 15:07:00 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1230,12 +1230,30 @@ class cfgform extends class_base
 
 	/** returns array of properties defined in the config form given
 
-		@attrib api=1
+		@attrib api=1 params=name 
 
-		@param id required
+		@param id required type=oid
+			the id of the config form object to read the properties from
 
-		@comment
-			id - oid of the config form to return the props for
+	
+		@errors
+			error is thrown if the given config form object does not exist or the user has no view access to it
+
+		@returns array of properties that are included in the config form, 
+			array contains all the property information for each property
+
+		
+		@examples
+
+			$cf = get_instance(CL_CFGFORM);
+			$props = $cf->get_props_for_cfgform(array(
+				"id" => $_GET["cfgform"]
+			));
+			
+			foreach($props as $pn => $pd)
+			{
+				echo "property name = $pd , caption = ".$pd["caption"]." <br>";
+			}
 
 	**/
 	function get_props_from_cfgform($arr)
@@ -1275,13 +1293,19 @@ class cfgform extends class_base
 
 	/** draws a config form from the given object type object
 
-		@attrib api=1
+		@attrib api=1 params=name
 
-		@comment
-			$ot - object type object's id 
-			$reforb - reforb for the config form
-			$errors - array returned from validate_data
-			$values - array of property name => property value pairs
+		@param ot required type=oid
+			object type object's id 
+
+		@param reforb required type=text 
+			the orb action (made by mk_reforb) to submit the form to
+
+		@param errors optional type=array
+			array returned from validate_data, containing errors from submit controllers/set_property
+
+		@param values optional type=array
+			array of property name => property value pairs that will be used when drawing the form
 
 	**/
 	function draw_cfgform_from_ot($arr)

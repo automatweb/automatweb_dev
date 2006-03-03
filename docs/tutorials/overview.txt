@@ -1,3 +1,11 @@
+* class_base:
+
+the base class for all classes that are objects and perhaps some others. draws admin interface and calls methods from your class so that you can override parts of the system. 
+
+* file:
+
+handles file uploads, provides an interface to manage files uploaded by users and use file objects
+
 * core/date/date_calc:
 
 contains utility functions to do calculations with dates - get date ranges, check for overlap, subtract dates and others

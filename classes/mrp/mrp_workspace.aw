@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.155 2006/03/02 09:14:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.156 2006/03/03 15:07:01 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1035,7 +1035,7 @@ class mrp_workspace extends class_base
 					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
 				}
 				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),$res_ol->names());
-				$prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
+				$prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>Vali</a>";
 				
 				$prop["value"] .= "</td></tr></table>";
 				break;

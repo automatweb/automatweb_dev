@@ -411,7 +411,6 @@ class crm_company_overview_impl extends class_base
 			return $this->_get_ovrv_offers($arr, $ol);
 		}
 		$pm = get_instance("vcl/popup_menu");
-
 		// make task2person list
 		$task2person = $this->_get_participant_list_for_tasks($ol->ids());
 
@@ -439,6 +438,11 @@ class crm_company_overview_impl extends class_base
 			}
 
 			$col = "";
+			if ($task->class_id() == CL_CRM_EMAIL)
+			{
+				$dl = $task->prop("date");
+			}
+			else
 			if ($task->class_id() == CL_CRM_MEETING || $task->class_id() == CL_CRM_CALL || $task->class_id() == CL_CRM_OFFER)
 			{
 				$dl = $task->prop("start1");
@@ -447,14 +451,18 @@ class crm_company_overview_impl extends class_base
 			{
 				$dl = $task->prop("deadline");
 			}
-			if ($dl > 100 && time() > $dl)
+
+			if ($task->class_id() != CL_CRM_EMAIL)
 			{
-				$col = "#ff0000";
-			}
-			else
-			if ($dl > 100 && date("d.m.Y") == date("d.m.Y", $dl)) // today
-			{
-				$col = "#f3f27e";
+				if ($dl > 100 && time() > $dl)
+				{
+					$col = "#ff0000";
+				}
+				else
+				if ($dl > 100 && date("d.m.Y") == date("d.m.Y", $dl)) // today
+				{
+					$col = "#f3f27e";
+				}
 			}
 
 			$ns = array();
@@ -739,14 +747,21 @@ class crm_company_overview_impl extends class_base
 		if ($r["act_s_task_content"] != "")
 		{
 			$str_filt = $this->_get_string_filt($r["act_s_task_content"]);
-			$res[] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					"content" => $str_filt, //"%".$r["act_s_task_content"]."%",
-					"summary" => $str_filt, //"%".$r["act_s_task_content"]."%",
-					"CL_TASK.RELTYPE_ROW.content" => $str_filt //"%".$r["act_s_task_content"]."%"
-				)
-			));
+			if ($clid == CL_CRM_EMAIL)
+			{
+				$res["content"] = $str_filt;
+			}
+			else
+			{
+				$res[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"content" => $str_filt, //"%".$r["act_s_task_content"]."%",
+						"summary" => $str_filt, //"%".$r["act_s_task_content"]."%",
+						"CL_TASK.RELTYPE_ROW.content" => $str_filt //"%".$r["act_s_task_content"]."%"
+					)
+				));
+			}
 		}
 		if ($r["act_s_code"] != "")
 		{
@@ -996,6 +1011,25 @@ class crm_company_overview_impl extends class_base
 						$tasks[$o->id()] = $o->id();
 					}
 				}
+				break;
+
+			case "ovrv_mails":
+				if ($co == $arr["obj_inst"]->id())
+				{
+					// my company. show my emails?
+				}
+				else
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_CRM_EMAIL,
+						"lang_id" => array(),
+						"site_id" => array(),
+						"customer" => $arr["obj_inst"]->id()
+					));
+			
+					$tasks = $this->make_keys($ol->ids());
+				}
+				$clid = CL_CRM_EMAIL;
 				break;
 
 			case "ovrv_offers":
@@ -1330,8 +1364,11 @@ class crm_company_overview_impl extends class_base
 			$plist[$conn["from"]] = $conn["from"];
 		}
 		// warm cache
-		$ol = new object_list(array("oid" => $plist, "site_id" => array(), "lang_id" => array()));
-		$ol->arr();
+		if (count($plist))
+		{
+			$ol = new object_list(array("oid" => $plist, "site_id" => array(), "lang_id" => array()));
+			$ol->arr();
+		}
 		return $ret;
 	}
 
