@@ -1,9 +1,52 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.1 2005/12/06 18:20:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/date/date_calc.aw,v 1.2 2006/03/03 13:20:24 kristo Exp $
 
-////
-// !get_date_range
+/** returns timestamps for the beginning and end of the given date range
+
+	@attrib api=1 params=name 
+
+	@param time optional type=int
+		unix timestamp of the time to start from 
+
+	@param date optional type=string
+		date (format: d-m-y) to start from 
+
+	@param range_start optional type=int
+		unix timestamp too start from
+
+	@param type optional type=string
+		defaults to "day", specifies the type of range to return. possible values:
+		"day", "month", "year", "3month", "week", "relative", "last_events"
+
+
+	@errors none
+
+	@returns
+		an array containing the date range, like this:
+		array(
+		"start" => $start_ts,                      - start timestamp for range
+		"end" => $end_ts,                          - end timestamp for range
+		"start_wd" => $start_wd,                   - start weekday for range
+		"end_wd" => $end_wd,                       - end weekday for range
+		"m" => $m,                                 - month for start
+		"y" => $y,                                 - year for start
+		"wd" => $wd,                               - weekday for start
+		"prev" => $prev_d,                         - d-m-Y string for previous range
+		"next" => $next_d,                         - d-m-Y string for next range
+		"timestamp" => $timestamp,                 - timestamp for range
+	);
+
+	@examples
+		classload("core/date/date_calc");
+		$r = get_date_range(array("time" => time(), "type" => "week"));
+		echo date("d.m.Y H:i:s", $r["start"]);	// echoes 00:00:00 the previous monday
+		echo date("d.m.Y H:i:s", $r["end"]);	// echoes 23:59:59 on the next sunday
+		
+
+	@comment
+		oe of the three parameters time, date, range_start must be given
+**/
 function get_date_range($args = array())
 {
 	extract($args);
@@ -249,17 +292,41 @@ function get_date_range($args = array())
 	return $arr;
 }	
 
-////
-// !This is the place we need to modify to support countries where
-// the week starts on sunday.
+/** modifies the day of week returned by date("w") for european standard
+
+	@attrib api=1
+
+	@param daycode required type=int
+		the day number returned by date("w")
+
+	@returns
+		the real day number of the week, assuming that the week starts on monday
+
+	@example
+		echo "day of week currently in estonia: ".convert_wday(date("w"));
+
+**/
 function convert_wday($daycode)
 {
 	return ($daycode == 0) ? 7 : $daycode;
 }
 	
-////
-// Takes 2 timestamps and calculates the difference between them in days
-//	args: time1, time2
+/** Takes 2 timestamps and calculates the difference between them in days
+
+	@attrib api=1 params=pos
+
+	@param time1 required type=int
+		start of range
+
+	@param time2 required type=int
+		end of range
+
+	@returns length of the given range in days
+
+	@example
+
+		echo get_day_diff(time(), time() + 24*3600*5); // echos 5
+**/
 function get_day_diff($time1,$time2)
 {
 	$diff = $time2 - $time1;
@@ -267,7 +334,17 @@ function get_day_diff($time1,$time2)
 	return $days;
 }
 
+
 /** returns the timestamp for 00:00 on the last monday
+
+	@attrib api=1 
+
+	@returns the timestamp for 00:00 on the last monday
+
+	@example
+
+		echo date("d.m.Y", get_week_start()); // echos the date for last monday
+	
 **/
 function get_week_start()
 {
@@ -277,14 +354,35 @@ function get_week_start()
 	return mktime(0,0,0, date("m"), date("d")-$wday, date("Y"));
 }
 
+
 /** returns the timestamp for 00:00 on the 1st of the current month
+
+	@attrib api=1 
+
+	@returns the timestamp for 00:00 on the 1st of the current month
+
+	@example
+
+		echo date("d.m.Y", get_month_start()); // echos the date for 1st of the current month
 **/
 function get_month_start()
 {
 	return mktime(0,0,0, date("m"), 1, date("Y"));
 }
 
-/** returns the timestamp for 00:00 today
+
+/** returns the timestamp for 00:00 the given day
+
+	@attrib api=1 params=name
+
+	@param tm optional type=int 
+		the timestamp for the day to calculate, optional, defaults to the current time
+
+	@returns the timestamp for 00:00 the given day
+
+	@example
+
+		echo date("d.m.Y H:i:s", get_day_start(time() - 24*3600)); // echos the date and time for yesterday 00:00:00
 **/
 function get_day_start($tm = NULL)
 {
@@ -296,6 +394,33 @@ function get_day_start($tm = NULL)
 }
 
 /** returns true if the given timespans ($a_from, $a_to) - ($b_from - $b_to) overlap
+
+	@attrib api=1 params=name
+
+	@param a_from required type=int 
+		the timestamp for the beginning of the first range
+
+	@param a_to required type=int 
+		the timestamp for the end of the first range
+
+	@param b_from required type=int 
+		the timestamp for the beginning of the second range
+
+	@param a_to required type=int 
+		the timestamp for the end of the second range
+	
+
+	@returns true if the given ranges overlap, false if not
+
+	@example
+
+		echos "leopard":
+
+		if (timespans_overlap(time(), time() + 10, time()-100, time() + 100))
+		{
+			echo "leopard!";
+		}
+		
 **/
 function timespans_overlap($a_from, $a_to, $b_from, $b_to)
 {
