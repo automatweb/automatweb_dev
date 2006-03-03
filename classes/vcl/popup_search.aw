@@ -505,10 +505,7 @@ class popup_search extends aw_template
 			{
 				$t->define_data(array(
 					"oid" => $o->id(),
-					"name" => html::href(array(
-						"url" => $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id()),
-						"caption" => $o->name(),
-					)),
+					"name" => html::obj_change_url($o),
 					"parent" => $o->path_str(array("max_len" => 3)),
 					"modifiedby" => $o->modifiedby(),
 					"modified" => $o->modified(),
