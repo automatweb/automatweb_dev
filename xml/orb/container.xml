@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="container" folder="vcl" extends="class_base">
-	</class>
-</orb>

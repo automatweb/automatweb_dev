@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.463 2006/02/28 09:23:58 kristo Exp $
+// $Id: class_base.aw,v 2.464 2006/03/03 10:43:29 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -109,7 +109,6 @@ class class_base extends aw_template
 		$this->vcl_register = array(
 			"classificator" => "cfg/classificator",
 			"comments" => "vcl/comments",
-			"container" => "vcl/container",
 			"relpicker" => "vcl/relpicker",
 			"tabpanel" => "vcl/tabpanel",
 			"reminder" => "vcl/reminder",
