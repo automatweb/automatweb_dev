@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.20 2006/01/05 11:27:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.21 2006/03/03 10:47:34 kristo Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -8,10 +8,10 @@
 @default table=objects
 @default group=general
 
-@property start1 type=date_chooser field=start table=planner
+@property start1 type=datetime_select field=start table=planner
 @caption Algab
 
-@property end type=date_chooser field=end table=planner
+@property end type=datetime_select field=end table=planner
 @caption Lõppeb
 
 @property img type=releditor reltype=RELTYPE_PICTURE use_form=emb rel_id=first

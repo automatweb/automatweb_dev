@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.464 2006/03/03 10:43:29 kristo Exp $
+// $Id: class_base.aw,v 2.465 2006/03/03 10:47:34 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -120,7 +120,6 @@ class class_base extends aw_template
 			"calendar_selector" => "applications/calendar/vcl/calendar_selector",
 			"participant_selector" => "applications/calendar/vcl/participant_selector",
 			"multi_calendar" => "applications/calendar/vcl/multi_calendar",
-			"date_chooser" => "vcl/date_chooser",
 			"table" => "vcl/table",
 			"object_table" => "vcl/object_table",
 			"relationmgr" => "vcl/relationmgr",

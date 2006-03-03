@@ -4,7 +4,7 @@
             <name>start1</name>
             <table>planner</table>
             <group>general</group>
-            <type>date_chooser</type>
+            <type>datetime_select</type>
             <field>start</field>
             <caption>Algab</caption>
       </property>
@@ -12,7 +12,7 @@
             <name>end</name>
             <table>planner</table>
             <group>general</group>
-            <type>date_chooser</type>
+            <type>datetime_select</type>
             <field>end</field>
             <caption>L&amp;otilde;ppeb</caption>
       </property>
@@ -24,7 +24,6 @@
             <reltype>RELTYPE_PICTURE</reltype>
             <use_form>emb</use_form>
             <rel_id>first</rel_id>
-            <store>no</store>
             <field>img</field>
             <caption>Pilt</caption>
       </property>
