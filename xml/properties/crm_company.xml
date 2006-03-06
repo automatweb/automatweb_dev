@@ -2550,7 +2550,7 @@
                   <parent>qv</parent>
             </quick_view>
             <my_view>
-                  <caption>Vaata</caption>
+                  <caption>Minu p&amp;amp;auml;ev</caption>
                   <submit>no</submit>
                   <save>no</save>
                   <parent>qv</parent>

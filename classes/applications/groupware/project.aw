@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.81 2006/03/02 10:55:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.82 2006/03/06 13:34:23 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -299,7 +299,7 @@ class project extends class_base
 		lc_site_load("project",&$this);
 
 		$this->event_entry_classes = array(CL_CALENDAR_EVENT, CL_STAGING, CL_CRM_MEETING, CL_TASK, CL_CRM_CALL, CL_PARTY, CL_COMICS);
-		classload("icons");
+		classload("core/icons");
 
 		$this->states = array(
 			PROJ_IN_PROGRESS => t("T&ouml;&ouml;s"),

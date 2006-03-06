@@ -540,6 +540,13 @@ function classload($args)
 		{
 			include_once($lib);
 		}
+		else
+		{
+			error::raise(array(
+				"id" => "ERR_NO_CLASS",
+				"msg" => sprintf(t("classload(): class %s not found!"), $lib)
+			));
+		}
 	};
 //	exit_function("__global::classload");
 }

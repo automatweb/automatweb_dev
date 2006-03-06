@@ -831,7 +831,7 @@ groupinfo documents caption="Dokumendid" submit=no
 @groupinfo qv caption="Vaata"  submit=no save=no
 
 	@groupinfo quick_view caption="Vaata"  submit=no save=no parent=qv
-	@groupinfo my_view caption="Vaata"  submit=no save=no parent=qv
+	@groupinfo my_view caption="Minu p&auml;ev"  submit=no save=no parent=qv
 
 @groupinfo transl caption=T&otilde;lgi
 

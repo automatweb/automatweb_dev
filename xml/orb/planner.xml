@@ -54,5 +54,12 @@
 			</function>
 		</action>
 
+		<action name="delete_task_rows">
+			<function name="delete_task_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

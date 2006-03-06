@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.115 2006/02/20 13:50:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.116 2006/03/06 13:34:23 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2922,5 +2922,19 @@ class planner extends class_base
 		}
 		return html::datetime_select($args);
 	}
+
+	/**
+		@attrib name=delete_task_rows
+	**/
+	function delete_task_rows($arr)
+	{
+		foreach(safe_array($arr["sel"]) as $s)
+		{
+			$o = obj($s);
+			$o->delete();
+		}
+		return $arr["post_ru"];
+	}
+
 };
 ?>
