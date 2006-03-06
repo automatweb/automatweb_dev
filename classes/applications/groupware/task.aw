@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.79 2006/02/28 10:22:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.80 2006/03/06 09:01:07 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1022,7 +1022,7 @@ class task extends class_base
 		);
 
 		$u = get_instance(CL_USER);
-		if ($this->can("view", $arr["obj_inst"]->prop("customer")))
+		if ($arr["obj_inst"] && $this->can("view", $arr["obj_inst"]->prop("customer")))
 		{
 			$impl = $arr["obj_inst"]->prop("customer");
 			$impl_o = obj($impl);
