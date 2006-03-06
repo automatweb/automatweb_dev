@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.84 2006/03/06 14:31:37 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.85 2006/03/06 14:36:18 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -747,7 +747,6 @@ class event_search extends class_base
 					$search_p1 = true;
 					foreach($sources as $source)
 					{
-						$project_obj = $source->to();
 						$prj_ch1[$source->prop("to")] = $source->prop("to.name");
 						$rn1[] = $source->prop("to");
 					}
