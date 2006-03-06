@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.83 2006/01/05 11:27:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.84 2006/03/06 14:31:37 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -672,7 +672,6 @@ class event_search extends class_base
 			}
 		}
 		// dragut stops hacking
-
 		$p_rn1 = is_array($p_rn1) ? $p_rn1 : array($p_rn1);
 		$p_rn2 = is_array($p_rn2) ? $p_rn2 : array($p_rn2);
 		foreach($p_rn1 as $pkey => $pval)
@@ -682,7 +681,6 @@ class event_search extends class_base
 				unset($p_rn1[$pkey]);
 			}
 		}
-		
 		foreach($p_rn2 as $pkey => $pval)
 		{
 			if(!is_oid($pval) || !$this->can("view", $pval))
@@ -749,6 +747,7 @@ class event_search extends class_base
 					$search_p1 = true;
 					foreach($sources as $source)
 					{
+						$project_obj = $source->to();
 						$prj_ch1[$source->prop("to")] = $source->prop("to.name");
 						$rn1[] = $source->prop("to");
 					}
@@ -875,11 +874,13 @@ class event_search extends class_base
 				$all_projects1 = new object_list(array(
 					"parent" => $p_rn1,
 					"class_id" => array(CL_PROJECT, CL_PLANNER),
+					'lang_id' => array() // get the projects from all languages --dragut
 				));
 				$par1 = $all_projects1->ids();
 				$all_projects2 = new object_list(array(
 					"parent" => $p_rn2,
 					"class_id" => array(CL_PROJECT, CL_PLANNER),
+					'lang_id' => array() // get the projects from all languages --dragut
 				));
 				$par2 = $all_projects2->ids();
 				if (is_oid($arr["project1"]))
@@ -1040,7 +1041,14 @@ class event_search extends class_base
 						"project_selector" => "n/a",
 						"date" => date("d-m-Y", $res->prop("start1")),
 					);
-					$edata[$orig_id] = array_merge($edata[$orig_id], $res->properties());
+			//		$edata[$orig_id] = array_merge($edata[$orig_id], $res->properties());
+				// get the translations from objects, if they are there --dragut
+					foreach ($res->properties() as $property_name => $property_value)
+					{
+						$edata[$orig_id][$property_name] = $this->trans_get_val($res, $property_name);
+					}
+
+
 					$ecount[$orig_id]++;
 				}
 				$this->read_template(($search["oid"] ? "show_event.tpl" : "search_results.tpl"));
@@ -1313,7 +1321,6 @@ class event_search extends class_base
 								}
 							}
 							$val[] = $tabledef[$nms]["sepb"].$v.$tabledef[$nms]["sepa"];
-							
 						}
 						$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
 						$this->vars(array(
@@ -1519,8 +1526,15 @@ class event_search extends class_base
 			"parent" => $parent,
 			"class_id" => array(CL_PROJECT, CL_PLANNER),
 			"sort_by" => "objects.jrk",
+			'lang_id' => array() // get the projects from all languages --dragut
 		));
-		return $ol->names();
+		
+		$ret_val = array();
+		foreach ($ol->arr() as $o)
+		{
+			$ret_val[$o->id()] = $this->trans_get_val($o, 'name');
+		}
+		return $ret_val;
 
 	}
 
