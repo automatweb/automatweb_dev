@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.73 2005/09/28 12:12:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.74 2006/03/06 11:04:59 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -613,9 +613,10 @@ class mrp_job extends class_base
 
 			### log
 			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
 
-			$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
 
 			### all went well, save and say OK
 			aw_disable_acl();
@@ -708,13 +709,14 @@ class mrp_job extends class_base
 
 				### log job change
 				$ws = get_instance (CL_MRP_WORKSPACE);
+				$com_txt = "T&ouml;&ouml; ".$this_object->name() . " staatus muudeti ".$this->states[$this_object->prop("state")];
 				$ws->mrp_log(
 					$this_object->prop ("project"),
 					$this_object->id (),
-					"T&ouml;&ouml; ".$this_object->name() . " staatus muudeti ".$this->states[$this_object->prop("state")],
+					$com_txt,
 					$arr["pj_change_comment"]
 				);
-				$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+				$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
 
 				### finish project if this was the last job
 				$list = new object_list (array (
@@ -848,8 +850,9 @@ class mrp_job extends class_base
 
 				### log event
 				$ws = get_instance(CL_MRP_WORKSPACE);
-				$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
-				$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+				$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
+				$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
+				$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
 
 // /* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
 // /* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
@@ -925,8 +928,9 @@ class mrp_job extends class_base
 
 			### log event
 			$ws = get_instance (CL_MRP_WORKSPACE);
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
-			$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
+			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
 
 			return $return_url;
 		}
@@ -1002,8 +1006,9 @@ class mrp_job extends class_base
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
-			$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
+			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
 
 			return $return_url;
 		}
@@ -1124,8 +1129,9 @@ class mrp_job extends class_base
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
-			$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
+			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
 
 			return $return_url;
 		}
@@ -1188,8 +1194,9 @@ class mrp_job extends class_base
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti Vahetuse l&otilde;pp", $arr["pj_change_comment"]);
-			$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti Vahetuse l&otilde;pp";
+			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
+			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
 
 			### log out user
 			$u = get_instance("users");
