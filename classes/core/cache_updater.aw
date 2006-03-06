@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/cache_updater.aw,v 1.3 2005/04/21 08:22:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/cache_updater.aw,v 1.4 2006/03/06 11:34:43 kristo Exp $
 // cache_updater.aw - Cache uuendamine 
 /*
 
@@ -87,7 +87,10 @@ class cache_updater extends class_base
 	function do_clear($arr)
 	{
 		$mt = get_instance("cache");
-		$mt->full_flush();
+		$mt->file_clear_pt("menu_area_cache");
+		$mt->file_clear_pt("storage_search");
+		$mt->file_clear_pt("storage_object_data");
+		$mt->file_clear_pt("html");
 
 		$this->_add_scheduler(array(obj($arr["id"])));
 	}

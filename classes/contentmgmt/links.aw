@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.12 2006/01/18 18:09:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.13 2006/03/06 11:34:42 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -369,12 +369,10 @@ class links extends class_base
 		}
 		$o = obj($id);
 		aw_disable_acl();
-		obj_set_opt("no_full_flush", 1);
 		$o->set_prop("hits", $o->prop("hits")+1);
 		// this would clear the entire site cache and nothing can possibly change from this, so I'm commenting this out.
 		// does anyone really need this hit count thingie anyway?
 		$o->save();
-		obj_set_opt("no_full_flush", 0);
 		aw_restore_acl();
 
 		$this->_log(ST_EXTLINK, SA_CLICK, $o->name(), $id);

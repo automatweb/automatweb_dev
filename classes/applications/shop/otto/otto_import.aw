@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.40 2006/01/31 15:48:09 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.41 2006/03/06 11:34:42 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2051,7 +2051,11 @@ class otto_import extends class_base
 
 		// clear cache
 		$cache = get_instance("cache");
-		$cache->full_flush();
+ 		$mt->file_clear_pt("menu_area_cache");
+		$mt->file_clear_pt("storage_search");
+		$mt->file_clear_pt("storage_object_data");
+		$mt->file_clear_pt("html");
+		$mt->file_clear_pt("acl");
 
 		$fld = aw_ini_get("site_basedir")."/prod_cache";
 		$cache = get_instance("cache");
