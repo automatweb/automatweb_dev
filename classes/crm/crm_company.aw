@@ -4828,6 +4828,7 @@ class crm_company extends class_base
 
 	function on_create_company($arr)
 	{
+		return false;
 		// make sure all companies added are added under the current user's company
 		$o = obj($arr["oid"]);
 		$u = get_instance(CL_USER);

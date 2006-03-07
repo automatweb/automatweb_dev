@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.7 2005/12/29 22:03:26 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.8 2006/03/07 10:11:29 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -988,6 +988,7 @@ class crm_company_webview extends class_base
 		{
 			return;
 		}
+
 		// Prepare for output
 		$this->vars(array(
 			'company_list_title' => '',
@@ -1199,6 +1200,115 @@ class crm_company_webview extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	/// submenus from object interface methods
+	function get_folders_as_object_list($object, $level, $parent_o)
+	{
+		$this->_webview = $object;
+		$crm_db = obj($object->prop("crm_db"));
+
+		if ($level == 0)
+		{
+			$ret = new object_list(array(
+				"class_id" => CL_CRM_SECTOR,
+				"parent" => $crm_db->prop("dir_tegevusala"),
+			));
+		}		
+		else
+		{
+			$ret = new object_list(array(
+				"class_id" => CL_CRM_SECTOR,
+				"parent" => $parent_o->id(),
+			));
+		}
+		return $ret;
+	}
+
+	function make_menu_link($sect_obj, $ref = NULL)
+	{
+		if ($ref)
+		{
+			$link = $this->mk_my_orb("show_sect", array("section" => $sect_obj->id(), "wv" => $ref->id()));
+		}
+		if ($this->_webview)
+		{
+			$link = $this->mk_my_orb("show_sect", array("section" => $sect_obj->id(), "wv" => $this->_webview->id()));
+		}
+		return $link;
+	}
+	
+	/**
+		@attrib name=show_sect nologin="1"
+		@param section required type=int acl=view
+		@param wv required type=int acl=view
+	**/
+	function show_sect($arr)
+	{
+		$this->sub_merge = 1;
+
+		$o = obj($arr['wv']);
+		if ($o->class_id() != CL_CRM_COMPANY_WEBVIEW)
+		{
+			return;
+		}
+		$tmpl = $o->prop('template');
+		if (!preg_match('/^[^\\\/]+\.tpl$/', $tmpl))
+		{
+			$tmpl = "default.tpl";
+		}
+		
+		$this->read_template($tmpl);
+
+		$list = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"pohitegevus" => $arr["section"]
+		));
+
+		if (!$list->count())
+		{
+			return "&nbsp;";
+		}
+		$ret = $this->_get_companies_list_html(array(
+			"list" => $list->arr(),
+			"do_link" => 1,
+			"url" => $this->mk_my_orb("show_co", array(
+				"section" => $arr["section"],
+				"wv" => $arr["wv"]
+			))."&org="
+		));
+
+		return $ret;
+	}
+
+	/**
+		@attrib name=show_co nologin="1"
+		@param section required type=int acl=view
+		@param wv required type=int acl=view
+		@param org required		
+	**/
+	function show_co($arr)
+	{	
+		$this->sub_merge = 1;
+
+		$o = obj($arr['wv']);
+		if ($o->class_id() != CL_CRM_COMPANY_WEBVIEW)
+		{
+			return;
+		}
+		$tmpl = $o->prop('template');
+		if (!preg_match('/^[^\\\/]+\.tpl$/', $tmpl))
+		{
+			$tmpl = "default.tpl";
+		}
+		
+		$this->read_template($tmpl);
+
+		$ret = $this->_get_company_show_html(array(
+			"company_id" => $arr["org"]
+		));
+
+		return $ret;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.145 2006/03/02 10:41:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.146 2006/03/07 10:11:29 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -337,7 +337,7 @@
 	@reltype IMAGE value=14 clid=CL_IMAGE
 	@caption pilt
 
-	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE
+	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE,CL_CRM_COMPANY_WEBVIEW
 	@caption alammen&uuml;&uuml;d objektist
 
 	@reltype CONTENT_FROM value=17 clid=CL_PROJECT
