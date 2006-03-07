@@ -9,6 +9,11 @@
 				</arguments>
 			</function>
 		</action>
-
+		<action name="get_divisions" nologin="1">
+			<function name="get_divisions">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
