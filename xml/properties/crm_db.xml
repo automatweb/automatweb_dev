@@ -64,6 +64,8 @@
             <method>serialize</method>
             <type>treeview</type>
             <store>no</store>
+            <parent>ta_vbox</parent>
+            <no_caption>1</no_caption>
             <caption>Tegevusalade puu</caption>
       </property>
       <property>
@@ -74,6 +76,8 @@
             <method>serialize</method>
             <type>callback</type>
             <callback>callback_sector_manager</callback>
+            <parent>ta_vbox</parent>
+            <no_caption>1</no_caption>
             <caption>Tegevusalade kataloog</caption>
       </property>
       <property>
@@ -281,5 +285,11 @@
                   <caption>Muutujad</caption>
             </METAMGR>
       </reltypes>
+      <layout>
+            <ta_vbox>
+                  <type>hbox</type>
+                  <group>tegevusalad</group>
+            </ta_vbox>
+      </layout>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.25 2006/01/16 10:25:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.26 2006/03/07 09:35:48 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -34,11 +34,13 @@
 
 	@property tegtoolbar type=toolbar store=no no_caption=1	
 	@caption Tegevusalade toolbar
+
+	@layout ta_vbox type=hbox
 	
-	@property sector_tree type=treeview store=no
+	@property sector_tree type=treeview store=no parent=ta_vbox no_caption=1
 	@caption Tegevusalade puu
 	
-	@property sector_manager type=callback callback=callback_sector_manager
+	@property sector_manager type=callback callback=callback_sector_manager parent=ta_vbox no_caption=1
 	@caption Tegevusalade kataloog
 
 ////////////////////////////////////////////////////////////
@@ -490,6 +492,7 @@ class crm_db extends class_base
 			"type" => "text",
 			"no_caption" => 1,
 			"value" => '<b>'.$yahbar.'</b>'.$t->draw().$firmad,
+			"parent" => "ta_vbox"
 		);
 
 		return $nodes;
