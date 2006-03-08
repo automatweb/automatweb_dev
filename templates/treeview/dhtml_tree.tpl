@@ -6,15 +6,81 @@ var feeding_node;
 
 var show_one_active = {VAR:only_one_level_opened};
 var active_level = 1;
+var level = {VAR:level};
+load_auto = {VAR:load_auto};
+open_nodes = new Array({VAR:open_nodes});
+tree_id = '{VAR:tree_id}';
+from_click = false;
+
+function generic_loader()
+{
+	// on page load
+	if(window.onload && load_auto && level < open_nodes.length)
+	{
+		load_tree_state();
+	}
+}
+function load_beneath()
+{
+	// on iframe load
+	if(load_auto && level < open_nodes.length)
+	{
+		load_tree_state();
+	}
+}
+function load_tree_state()
+{
+	node = false;
+	if((level-1) == open_nodes.length)
+	{
+		load_auto = false;
+	}
+	for(i=level;i < open_nodes.length;i++)
+	{
+		data = false;
+		thisElem = document.getElementById(open_nodes[i]);
+		if(thisElem)
+		{
+			data = thisElem.getAttribute("data_loaded");
+		}
+		if(data && thisElem)
+		{
+			node = open_nodes[i];
+			level = i + 1;
+			break;
+		}	
+	}
+	set_cookie(tree_id + "_level", level);
+	if(node)
+	{
+		toggle_children(node,1);
+	}
+}
+
+function isInt(myNum) {
+	var myMod = myNum % 1;
+	if (myMod == 0)
+	{
+		return true;
+	}
+	return false;
+}
 
 function toggle_children(objref,menu_level) {
-	elemID = objref.getAttribute("attachedsection");
+	if(isInt(objref))
+	{
+		elemID = objref;
+	}
+	else
+	{
+		from_click = true;
+		elemID = objref.getAttribute("attachedsection");
+	}
 	thisElem = document.getElementById(elemID);
 	data_loaded = thisElem.getAttribute("data_loaded");
 	thisDisp = thisElem.style.display;
 	icon = document.getElementById("icon-"+elemID);
 	iconfld = document.getElementById("iconfld-"+elemID);
-
 	if (thisDisp == 'none')
 	{
 		if (get_branch_func != "" && data_loaded == "false")
@@ -69,27 +135,31 @@ function toggle_children(objref,menu_level) {
 function onload_handler(arg)
 {
 	if (window.event)
-                el = window.event.srcElement.id.substr(1);
-        else
-                el = arg;
-        document.getElementById(el).innerHTML = document.getElementById("f"+el).contentWindow.document.body.innerHTML;
+		el = window.event.srcElement.id.substr(1);
+	else
+		el = arg;
+	document.getElementById(el).innerHTML = document.getElementById("f"+el).contentWindow.document.body.innerHTML;
 	document.getElementById(el).setAttribute("data_loaded",true);
+	// if not from nodeclick checks if any nodes need to be auto opened
+	if(!from_click)
+		load_beneath();
+	from_click = false;
 }
 
 function fetch_node(node)
 {
 	//uri = get_branch_func + parseInt(node);
-	uri = get_branch_func + node;
+	uri = get_branch_func + node + '&called_by_js=true&load_auto=' + load_auto;
 	var frame = document.createElement("iframe");
         frame.setAttribute("width",0);
         frame.setAttribute("height",1);
         frame.setAttribute("frameborder",0);
         frame.setAttribute("id","f"+node);
-	frame.setAttribute("src",uri);
-	if (frame.attachEvent)
-                frame.attachEvent('onload',onload_handler);
+		frame.setAttribute("src",uri);
+		if (frame.attachEvent)
+			frame.attachEvent('onload',onload_handler);
         else
-                frame.setAttribute("onload","onload_handler('" + node + "');");
+			frame.setAttribute("onload","onload_handler('" + node + "');");
         document.body.appendChild(frame);
 
 }
@@ -137,8 +207,8 @@ tree_open_fld_icon = "{VAR:baseurl}/automatweb/images/open_folder.gif";
 
 get_branch_func = '{VAR:get_branch_func}';
 persist_state = '{VAR:persist_state}';
-tree_id = '{VAR:tree_id}';
 open_nodes = new Array({VAR:open_nodes});
+tree_id = '{VAR:tree_id}';
 </script>
 <style>
 .iconcontainer {
@@ -183,7 +253,7 @@ if(is_numeric(tmp))
 	attached_sections[{VAR:menu_level}][tmp] = tmp;
 }
 </script>
-<div style="width: 250px">
+<div style="width: 250px" onLoad="tere();">
 <div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children(this,{VAR:menu_level});return false;" href="javascript:void();"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}">{VAR:name}</a>
 <!-- SUB: SUB_NODES -->
 <div id="{VAR:id}" data_loaded="{VAR:data_loaded}" style="padding-left: 16px; display: {VAR:display}; ">

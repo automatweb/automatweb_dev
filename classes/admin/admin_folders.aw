@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.56 2005/12/21 19:50:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.57 2006/03/08 13:43:02 tarvo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -284,7 +284,7 @@ class admin_folders extends aw_template
 		$this->use_empty = true;
 
 		$this->tree->start_tree(array(
-			"type" => !empty($treetype) ? constant($treetype) : TREE_JS,
+			"type" => !empty($treetype) ? constant($treetype) : TREE_DHTML,
 			"url_target" => "list",
 			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"],"period" => $this->period),"admin_menus"),
 			"root_name" => t("<b>AutomatWeb</b>"),

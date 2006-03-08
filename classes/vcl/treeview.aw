@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.54 2006/03/01 14:01:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.55 2006/03/08 13:43:02 tarvo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -34,7 +34,6 @@
 */
 
 define("TREE_HTML", 1);
-define("TREE_JS", 2);
 define("TREE_DHTML", 3);
 define("TREE_DHTML_WITH_CHECKBOXES", 4);
 define("TREE_DHTML_WITH_BUTTONS", 5);
@@ -248,24 +247,6 @@ class treeview extends class_base
 		return $url;
 	}
 
-	function set_root_name($name)
-	{
-		$this->has_root = true;
-		$this->tree_dat["root_name"] = $name;
-	}
-
-	function set_root_icon($name)
-	{
-		$this->has_root = true;
-		$this->tree_dat["root_icon"] = $name;
-	}
-
-	function set_root_url($name)
-	{
-		$this->has_root = true;
-		$this->tree_dat["root_url"] = $name;
-	}
-
 	////
 	// !inits tree
 	// params:
@@ -275,7 +256,7 @@ class treeview extends class_base
 	//   has_root - whether to draw to the root node. trees that load branches on demand don't
 	//		need to draw the rootnode for branches.
 	//   tree_id  - set to an unique id, if you want the tree to persist it's state
-	//	type - TREE_HTML|TREE_JS|TREE_DHTML|TREE_DHTML_WITH_CHECKBOXES|TREE_DHTML_WITH_BUTTONS , defaults to TREE_JS
+	//	type - TREE_HTML|TREE_DHTML|TREE_DHTML_WITH_CHECKBOXES|TREE_DHTML_WITH_BUTTONS 
 	//	persist_state - tries to remember tree state in kuuki
 	// separator - string separator to use for separating checked node id-s, applies when type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS. defaults to ","
 	// checked_nodes - tree node id-s that are checked initially, applies when type is TREE_DHTML_WITH_CHECKBOXES
@@ -283,12 +264,13 @@ class treeview extends class_base
 	function start_tree($arr)
 	{
 		$this->items = array();
-		$this->tree_type = empty($arr["type"]) ? TREE_JS : $arr["type"];
+		$this->tree_type = empty($arr["type"]) ? TREE_DHTML : $arr["type"];
 		$this->tree_dat = $arr;
 		$this->item_name_length = empty($arr["item_name_length"]) ? false : $arr["item_name_length"];
 		$this->has_root = empty($arr["has_root"]) ? false : $arr["has_root"];
 		$this->tree_id = empty($arr["tree_id"]) ? false : $arr["tree_id"];
 		$this->get_branch_func = empty($arr["get_branch_func"]) ? false : $arr["get_branch_func"];
+		$this->branch = empty($arr["branch"]) ? false : true;
 
 		if (($this->tree_type == TREE_DHTML or $this->tree_type == TREE_DHTML_WITH_CHECKBOXES or $this->tree_type == TREE_DHTML_WITH_BUTTONS) && !empty($this->get_branch_func))
 		{
@@ -496,7 +478,7 @@ class treeview extends class_base
 		// now figure out the paths to selected nodse
 
 		// ja nagu sellest veel küllalt poleks .. I can have multiple opened nodes. yees!
-		if ($this->has_feature(PERSIST_STATE))
+		if ($this->has_feature(PERSIST_STATE) && !$this->has_feature(LOAD_ON_DEMAND))
 		{
 			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
 			$r_path = array();
@@ -513,11 +495,15 @@ class treeview extends class_base
 			$this->r_path = $this->r_path + $this->open_nodes;
 		};
 
-
 		$t = get_instance("languages");
+
+		$level = $_REQUEST["called_by_js"]?$_COOKIE[$this->tree_id."_level"]:1;
+
 		$this->vars(array(
 			"target" => $this->tree_dat["url_target"],
-			"open_nodes" => is_array($opened_nodes) ? join(",",map("'%s'",$opened_nodes)) : "",
+			"open_nodes" => is_array(explode("^",$_COOKIE[$this->tree_id])) ? join(",",map("'%s'",explode("^",$_COOKIE[$this->tree_id]))) : "",
+			"level" => !strlen($level)?1:$level,
+			"load_auto" => isset($_REQUEST["load_auto"])?$_REQUEST["load_auto"]:"true",
 			"tree_id" => $this->tree_id,
 			"charset" => $t->get_charset()
 		));
@@ -641,7 +627,7 @@ class treeview extends class_base
 		// now figure out the paths to selected nodes
 
 		// ja nagu sellest veel küllalt poleks .. I can have multiple opened nodes. yees!
-		if ($this->has_feature(PERSIST_STATE))
+		if ($this->has_feature(PERSIST_STATE) && !$this->has_feature(LOAD_ON_DEMAND))
 		{
 			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
 			$r_path = array();

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.23 2006/03/08 12:30:23 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.23 2006/03/08 12:30:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.24 2006/03/08 13:43:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.24 2006/03/08 13:43:02 tarvo Exp $
 
 // bug_tracker.aw - BugTrack 
 define("MENU_ITEM_LENGTH", 20);
@@ -353,7 +353,7 @@ class bug_tracker extends class_base
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
 			"has_root" => 1,
-			"tree_id" => "bug_tree",
+			"tree_id" => $this->sort_type["name"],
 			"persist_state" => 1,
 			"root_name" => $root_name[($this->active_group == "bugs")?"by_default":$this->active_group],
 			"root_icon" => icons::get_icon_url(CL_BUG_TRACKER),
