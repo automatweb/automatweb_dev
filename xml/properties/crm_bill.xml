@@ -91,36 +91,6 @@
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>gen_prod</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <reltype>RELTYPE_PROD</reltype>
-            <caption>Artikkel</caption>
-      </property>
-      <property>
-            <name>gen_unit</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <size>5</size>
-            <caption>&amp;amp;Uuml;hik</caption>
-      </property>
-      <property>
-            <name>gen_amt</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <size>5</size>
-            <caption>Kogus</caption>
-      </property>
-      <property>
             <name>disc</name>
             <table>aw_crm_bill</table>
             <group>general</group>
@@ -137,16 +107,6 @@
             <field>aw_sum</field>
             <size>5</size>
             <caption>Summa</caption>
-      </property>
-      <property>
-            <name>notes</name>
-            <table>aw_crm_bill</table>
-            <group>general</group>
-            <type>textarea</type>
-            <rows>5</rows>
-            <cols>50</cols>
-            <field>aw_notes</field>
-            <caption>Arve sisu</caption>
       </property>
       <property>
             <name>monthly_bill</name>

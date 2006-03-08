@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.211 2006/01/20 14:18:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.212 2006/03/08 14:03:32 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -19,7 +19,7 @@ if (!defined("DEFS"))
 	**/
 	function get_ru()
 	{
-		return urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI"));
+		return aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
 	}
 
 	/** use this to get the correct return_url argument for POST requests

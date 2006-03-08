@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.35 2005/10/10 09:20:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.36 2006/03/08 14:03:32 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -54,6 +54,9 @@
 
 @property use_controller type=checkbox ch_value=1
 @caption N&auml;itamiseks kasuta kontrollerit
+
+@property prods_are_folders type=checkbox ch_value=1
+@caption Veebis tooted on kataloogid
 
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
@@ -541,6 +544,16 @@ class shop_order_center extends class_base
 				"sort_by" => "objects.jrk,objects.created",
 				"status" => STAT_ACTIVE
 			));
+			if (!$ol->count() && $o->prop("prods_are_folders"))
+			{
+				// list prods for this folder instead of folders
+				$ol = new object_list(array(
+					"parent" => $parent->id(),
+					"class_id" => CL_SHOP_PRODUCT,
+					"sort_by" => "objects.jrk,objects.created",
+					"status" => STAT_ACTIVE
+				));
+			}
 		}
 		else
 		{
@@ -629,11 +642,24 @@ class shop_order_center extends class_base
 		$ss->_init_path_vars($tmp);
 		$html = $ss->show_documents($tmp);
 		
-		$pl = $wh->get_packet_list(array(
-			"id" => $wh_id,
-			"parent" => $section,
-			"only_active" => $soc->prop("only_active_items")
-		));
+		$so = obj($section);
+		if ($so->class_id() == CL_SHOP_PRODUCT)
+		{
+			$pl = array($so);
+		}
+		else
+		if ($soc->prop("prods_are_folders"))
+		{
+			$pl = array();
+		}
+		else
+		{
+			$pl = $wh->get_packet_list(array(
+				"id" => $wh_id,
+				"parent" => $section,
+				"only_active" => $soc->prop("only_active_items")
+			));
+		}
 
 		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
 		

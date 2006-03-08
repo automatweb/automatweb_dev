@@ -2618,6 +2618,7 @@ class crm_company extends class_base
 		//have to direct the user to the just created company
 		$url = $this->mk_my_orb('change',array(
 				'id' => $new_company->id(),
+				"return_url" => $arr["post_ru"]
 			),
 			'crm_company'
 		);

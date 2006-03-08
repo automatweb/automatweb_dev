@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.26 2006/03/07 09:35:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.27 2006/03/08 14:03:33 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -342,7 +342,7 @@ class crm_db extends class_base
 		$obj = $args["obj_inst"];
 		$tase = $args['request']['tase'] ? $args['request']['tase'] : 1;
 		$kood = $args['request']['kood'] ? $args['request']['kood'] : '0';
-		$teg_oid = $args['request']['teg_oid'] ? $args['request']['teg_oid'] : 0;
+		$teg_oid = $this->can("view", $args['request']['teg_oid']) ? $args['request']['teg_oid'] : 0;
 		
 		$fpage = $args['request']['tpage'] ? $args['request']['tpage'] : '1';
 		$flimit = 20;
@@ -409,10 +409,9 @@ class crm_db extends class_base
 			'caption' => t('Organisatsioone'),
 		));
 		
-		$t->define_field(array(
+		$t->define_chooser(array(
 			'name' => 'check',
-			'caption' => "<a href='javascript:selall(\"sel\")'>".t("Vali")."</a>",
-			'width'=> 15,
+			"field" => "oid"
 		));
 		
 		
@@ -457,6 +456,7 @@ class crm_db extends class_base
 				'teg_oid' => $val["oid"],
 				)).'">'.$val['name'],'</a>',
 				'fcount' => ($cnn ? ($cnn.' / '):'').$cnt,
+				"oid" => $val["oid"]
 				)
 			);
 		}
@@ -1126,7 +1126,7 @@ class crm_db extends class_base
 								'sector'			=> $args['request']['teg_oid'],
 								'category'		=> $parents[$val['clid']],
 								'create_users'	=> 1,
-								'return_url'	=> urlencode(aw_global_get('REQUEST_URI')),
+								'post_ru'	=> get_ru(),
 							), CL_CRM_COMPANY),
 							'text' => sprintf(t('Lisa %s'),$classinf['name']),
 						));
@@ -1137,8 +1137,8 @@ class crm_db extends class_base
 							"parent" => "add_item",
 							'link' => $this->mk_my_orb('new',array(
 								'class' 	=> basename($classinf["file"]),
-								'reltype'	=> array_key_exists('reltype', $val) ? $val['reltype'] : "",
-								'alias_to'	=> array_key_exists('alias_to', $val) ? $val['alias_to'] : "",
+								//'reltype'	=> array_key_exists('reltype', $val) ? $val['reltype'] : "",
+								//'alias_to'	=> array_key_exists('alias_to', $val) ? $val['alias_to'] : "",
 								'parent'	=> $parents[$val['clid']],
 								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 								
@@ -1238,28 +1238,19 @@ class crm_db extends class_base
 	**/
 	function delete_organizations($arr)
 	{
-		unset($arr["MAX_FILE_SIZE"]);
-		unset($arr["action"]);
-		unset($arr["reforb"]);
-		unset($arr["add_to_selection"]);
-
 		$sel = new aw_array($arr["sel"]);
 		foreach($sel->get() as $obj_id)
 		{
 			$o = new object($obj_id);
 			$o->delete();
 		};
-		unset($arr["sel"]);
-		$tmp = $arr;
-
-		if (is_array($arr["search_form1"]))
+		$sel = new aw_array($arr["check"]);
+		foreach($sel->get() as $obj_id)
 		{
-			$tmp["search_form1"] = $arr["search_form1"];
+			$o = new object($obj_id);
+			$o->delete();
 		};
-		
-		// now I need to redirect back to whatever that url was
-		$rv = $this->mk_my_orb("change",$tmp);
-		return $rv;
+		return urldecode($arr["post_ru"]);
 	}
 	
 	/**  
@@ -1292,6 +1283,11 @@ class crm_db extends class_base
 		// now I need to redirect back to whatever that url was
 		$rv = $this->mk_my_orb("change",$tmp);
 		return $rv;
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
 	}
 
 	function callback_mod_retval($arr)

@@ -561,7 +561,6 @@
             </table_fields>
             <clone_link>1</clone_link>
             <filt_edit_fields>1</filt_edit_fields>
-            <store>no</store>
             <caption>Pakendid</caption>
       </property>
       <property>
@@ -590,7 +589,6 @@
                   <num_1>ord</num_1>
             </table_fields>
             <table_edit_fields>ord</table_edit_fields>
-            <store>no</store>
             <caption>Pildid</caption>
       </property>
       <property>
@@ -611,7 +609,6 @@
                   <num_5>newwindow</num_5>
             </props>
             <table_fields>name</table_fields>
-            <store>no</store>
             <caption>Failid</caption>
       </property>
       <property>
@@ -629,7 +626,6 @@
                   <num_2>content</num_2>
             </props>
             <table_fields>title</table_fields>
-            <store>no</store>
             <caption>Dokumendid</caption>
       </property>
       <property>
@@ -651,7 +647,6 @@
                   <num_1>url</num_1>
                   <num_2>newwindow</num_2>
             </table_fields>
-            <store>no</store>
             <caption>Lingid</caption>
       </property>
       <classinfo>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.27 2006/03/02 10:41:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.28 2006/03/08 14:03:32 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -41,23 +41,11 @@
 	@property state type=select table=aw_crm_bill field=aw_state
 	@caption Staatus
 
-	@property gen_prod type=relpicker table=objects field=meta method=serialize reltype=RELTYPE_PROD
-	@caption Artikkel
-
-	@property gen_unit type=textbox table=objects field=meta method=serialize size=5
-	@caption &Uuml;hik
-
-	@property gen_amt type=textbox table=objects field=meta method=serialize size=5
-	@caption Kogus
-
 	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5 
 	@caption Allahindlus (%)
 
 	@property sum type=text table=aw_crm_bill field=aw_sum size=5 
 	@caption Summa
-
-	@property notes type=textarea rows=5 cols=50 table=aw_crm_bill field=aw_notes
-	@caption Arve sisu
 
 	@property monthly_bill type=checkbox ch_value=1 table=aw_crm_bill field=aw_monthly_bill
 	@caption Kuuarve
@@ -138,10 +126,6 @@ class crm_bill extends class_base
 		{
 			case "billp_tb":
 				$this->_bill_tb($arr);
-				break;
-
-			case "gen_prod":
-				$prop["onchange"] = "upd_notes()";
 				break;
 
 			case 'bill_proj_list':
@@ -419,10 +403,6 @@ class crm_bill extends class_base
 		}
 
 		$arr["prop"]["value"] = $t->draw();
-		/*$arr["prop"]["value"] .= html::href(array(
-			"caption" => t("Lisa rida"),
-			"url" => $this->mk_my_orb("add_row", array("id" => $arr["obj_inst"]->id(), "retu" => get_ru()))
-		));*/
 	}
 
 	function get_sum($bill)
@@ -610,6 +590,9 @@ class crm_bill extends class_base
 		$tax = 0;
 		$sum = 0;
 		$brows = $this->get_bill_rows($b);
+		$grp_rows = array();
+
+		$_no_prod_idx = -1;
 		foreach($brows as $row)
 		{
 			if ($row["is_oe"])
@@ -618,6 +601,11 @@ class crm_bill extends class_base
 			}
 			$cur_tax = 0;
 			$cur_sum = 0;
+
+			if (!$this->can("view", $row["prod"]))
+			{
+				$row["prod"] = --$_no_prod_idx;
+			}
 			
 			if ($row["has_tax"] == 1)
 			{
@@ -634,23 +622,42 @@ class crm_bill extends class_base
 				$cur_pr = $this->num($row["price"]);
 			}
 
+			$grp_rows[$row["prod"]]["sum_wo_tax"] += $cur_sum;
+			$grp_rows[$row["prod"]]["tax"] += $cur_tax;
+			$grp_rows[$row["prod"]]["sum"] += ($cur_tax+$cur_sum);
+			$grp_rows[$row["prod"]]["unit"] = $row["unit"];
+			$grp_rows[$row["prod"]]["tot_amt"] += $row["amt"];
+			$grp_rows[$row["prod"]]["tot_cur_sum"] += $cur_sum;
+			$grp_rows[$row["prod"]]["name"] = $row["name"];
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
-			$unit = $row["unit"];
 			$tot_amt += $row["amt"];
 			$tot_cur_sum += $cur_sum;
 		}
+
 		$fbr = reset($brows);
-		$this->vars(array(
-			"unit" => $unit,
-			"amt" => $tot_amt,
-			"price" => (int)($tot_cur_sum / $tot_amt),
-			"sum" => number_format($tot_cur_sum, 2),
-			"desc" => $b->prop("notes") == "" && count($brows) == 1 ? $fbr["name"] : $b->prop("notes"),
-			"date" => "" 
-		));
-		$rs .= $this->parse("ROW");
+		foreach($grp_rows as $prod => $grp_row)
+		{
+			if ($this->can("view", $prod))
+			{
+				$po = obj($prod);
+				$desc = $po->comment();
+			}
+			else
+			{
+				$desc = $grp_row["name"];
+			}
+			$this->vars(array(
+				"unit" => $grp_row["unit"],
+				"amt" => $grp_row["tot_amt"],
+				"price" => (int)($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),
+				"sum" => number_format($grp_row["tot_cur_sum"], 2),
+				"desc" => $desc,
+				"date" => "" 
+			));
+			$rs .= $this->parse("ROW");
+		}
 
 		foreach($this->get_bill_rows($b) as $row)
 		{
@@ -724,8 +731,22 @@ class crm_bill extends class_base
 	function get_bill_rows($bill)
 	{
 		$inf = array();
+		$cons = $bill->connections_from(array("type" => "RELTYPE_ROW"));
+		if (!count($cons))
+		{
+			// create new empty bill row
+			$br = obj();
+			$br->set_class_id(CL_CRM_BILL_ROW);
+			$br->set_parent($bill->id());
+			$br->save();
+			$bill->connect(array(
+				"to" => $br->id(),
+				"type" => "RELTYPE_ROW"
+			));
+			$cons = $bill->connections_from(array("type" => "RELTYPE_ROW"));
+		}
 		// bill rows are objects connected and get info copied into them from task rows
-		foreach($bill->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+		foreach($cons as $c)
 		{
 			$row = $c->to();
 			$kmk = "";
@@ -1203,7 +1224,7 @@ class crm_bill extends class_base
 			function upd_notes()
 			{
 				set_changed();
-				aw_do_xmlhttprequest("'.$url.'&prod="+document.changeform.gen_prod.options[document.changeform.gen_prod.selectedIndex].value, notes_fetch_callb);
+				//aw_do_xmlhttprequest("'.$url.'&prod="+document.changeform.gen_prod.options[document.changeform.gen_prod.selectedIndex].value, notes_fetch_callb);
 			}
 
 			function notes_fetch_callb()

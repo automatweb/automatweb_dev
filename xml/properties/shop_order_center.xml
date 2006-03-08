@@ -134,6 +134,16 @@
             <caption>N&amp;amp;auml;itamiseks kasuta kontrollerit</caption>
       </property>
       <property>
+            <name>prods_are_folders</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Veebis tooted on kataloogid</caption>
+      </property>
+      <property>
             <name>mail_to_client</name>
             <group>mail_settings_orderer</group>
             <table>objects</table>

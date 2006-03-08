@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.156 2006/03/03 15:07:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.157 2006/03/08 14:03:33 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2122,6 +2122,13 @@ if ($_GET['show_thread_data'] == 1)
 			"name" => "reschedule",
 			"caption" => t("Tagasta planeerimisse"),
 		));
+
+		$table->define_field(array(
+			"name" => "abort_comment",
+			"caption" => t("Katkestamise kommentaar"),
+			"sortable" => 1
+		));
+
 		$table->define_field(array(
 			"name" => "modify",
 			"caption" => t("Ava"),
@@ -2182,6 +2189,7 @@ if ($_GET['show_thread_data'] == 1)
 					"textsize" => "11px",
 					)
 				) . '</span>',
+				"abort_comment" => $this->get_abort_comment_from_job($job)
 			);
 
 			$table->define_data($definition);
@@ -4921,6 +4929,12 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$res->draw_job_list_table_from_list($t, $list);
+	}
+
+	function get_abort_comment_from_job($job)
+	{
+		$hist = safe_array($job->meta("change_comment_history"));
+		return $hist[0]["text"]." (".$hist[0]["uid"].")";
 	}
 }
 

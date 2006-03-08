@@ -864,7 +864,7 @@ class core extends acl_base
 		$this->use_empty = true;
 
 		// flatten is not the correct term!
-		$this->process_orb_args("",$arr);
+		$this->process_orb_args("",$arr, false);
 		$res = "";
 		foreach($this->orb_values as $name => $value)
 		{
@@ -874,7 +874,7 @@ class core extends acl_base
 		return $res;
 	}
 
-	function process_orb_args($prefix,$arr)
+	function process_orb_args($prefix,$arr, $enc = true)
 	{
 		foreach($arr as $name => $value)
 		{
@@ -896,6 +896,10 @@ class core extends acl_base
 				// that gets everything
 				if ((isset($value) && ($value !== "")) || $this->use_empty)
 				//{
+					if ($name != "return_url" && $enc)
+					{
+						$value = urlencode($value);
+					}
 					$this->orb_values[empty($prefix) ? $name : $prefix."[".$name."]"] = $value;
 				//};
 			}

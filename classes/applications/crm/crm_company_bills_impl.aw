@@ -742,10 +742,6 @@ class crm_company_bills_impl extends class_base
 					$sum += str_replace(",", ".", $row["sum"]); 
 				}
 
-				if ($b->prop("gen_amt") != "")
-				{
-					$amt = $b->prop("gen_amt");
-				}
 				$price = $sum / $amt;
 				$ri = array();
 				$ri[] = "1";
