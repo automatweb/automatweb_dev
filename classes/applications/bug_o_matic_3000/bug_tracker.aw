@@ -1,10 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.24 2006/03/08 13:43:02 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.24 2006/03/08 13:43:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.25 2006/03/08 14:25:41 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.25 2006/03/08 14:25:41 sander Exp $
 
 // bug_tracker.aw - BugTrack 
+
 define("MENU_ITEM_LENGTH", 20);
 define("BUG_STATUS_CLOSED", 4);
+
 /*
 
 @classinfo syslog_type=ST_BUG_TRACKER relationmgr=yes no_comment=1 no_status=1
@@ -30,6 +32,28 @@ define("BUG_STATUS_CLOSED", 4);
 	@property bug_tree type=treeview parent=bug no_caption=1
 	@property bug_list type=table parent=bug no_caption=1 group=bugs,archive,by_default,by_project,by_who
 
+//search tab
+@groupinfo search caption="Otsing" submit_method=get submit=no
+
+@default group=search
+
+@property search_tb type=toolbar store=no no_caption=1
+@caption Otsingu toolbar
+
+@property search_form type=callback callback=callback_get_search_form submit_method=get store=no
+@caption Otsinguvorm
+
+@layout date type=hbox width=33%:33%:34%
+@caption Tähtaeg1
+@property deadline type=date_select store=no default=-1 parent=date no_caption=1
+@property separator type=text store=no parent=date no_caption=1 default=" - "
+@property deadlin2 type=date_selected store=no default=-1 parent=date no_caption=1
+
+
+@property search_res type=table store=no no_caption=1
+@caption Otsingu tulemused
+
+//archive tab
 @groupinfo archive caption="Arhiiv" submit=no
 @default group=archive
 
@@ -356,7 +380,6 @@ class bug_tracker extends class_base
 			"tree_id" => $this->sort_type["name"],
 			"persist_state" => 1,
 			"root_name" => $root_name[($this->active_group == "bugs")?"by_default":$this->active_group],
-			"root_icon" => icons::get_icon_url(CL_BUG_TRACKER),
 			"get_branch_func" => $this->mk_my_orb($orb_function, array(
 				"type" => $this->sort_type["name"], 
 				"reltype" => $this->sort_type["reltype"], 
@@ -645,6 +668,66 @@ class bug_tracker extends class_base
 			"field" => "bug_priority",
 			"sorder" => "desc",
 		));
+	}
+
+	function callback_get_search_form($arr)
+	{
+		$cfgu = get_instance("cfg/cfgutils");
+		$props = $cfgu->load_properties(array(
+			"clid" => CL_BUG,
+		));
+		unset(
+			$props["fileupload"], 
+			$props["bug_url"],
+			$props["comms"],
+			$props["bug_mail"],
+			$props["monitors"]
+		);
+		$props["bug_type"]["type"] = "textbox";
+
+		$props["bug_status"]["size"] = 5;
+		$props["bug_status"]["multiple"] = 1;
+		$props["bug_status"]["options"] = array(
+			1 => t("Lahtine"),
+			2 => t("Tegemisel"),
+			3 => t("Valmis"),
+			4 => t("Suletud"),
+			5 => t("Vale teade"),
+			6 => t("Kordamatu"),
+			7 => t("Parandamatu"),
+		);
+
+		$props["customer"]["type"] = "textbox";
+
+		$props["project"]["type"] = "textbox";
+
+		//siia tuleb deadline
+
+		$props["who"]["type"] = "textbox";
+
+		$props["bug_priority"]["size"] = 5;
+		$props["bug_priority"]["multiple"] = 1;
+		foreach(range(5, 1) as $r)
+		{
+			$props["bug_priority"]["options"][$r] = $r;
+		}
+
+		$props["bug_severity"]["size"] = 5;
+		$props["bug_severity"]["multiple"] = 1;
+		foreach(range(5, 1) as $r)
+		{
+			$props["bug_severity"]["options"][$r] = $r;
+		}
+
+		$props["bug_class"]["size"] = 10;
+		$props["bug_class"]["multiple"] = 1;
+		$class_list = new aw_array($cfgu->get_classes_with_properties());
+		$cp = get_class_picker(array("field" => "def"));
+		foreach($class_list->get() as $key => $val)
+		{
+			$props["bug_class"]["options"][$key] = $val;
+		};
+		return $props;
 	}
 
 	/**

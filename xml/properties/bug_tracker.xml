@@ -66,6 +66,72 @@
             <store>no</store>
             <field>bug_list</field>
       </property>
+      <property>
+            <name>search_tb</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_tb</field>
+            <caption>Otsingu toolbar</caption>
+      </property>
+      <property>
+            <name>search_form</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>callback</type>
+            <callback>callback_get_search_form</callback>
+            <submit_method>get</submit_method>
+            <store>no</store>
+            <field>search_form</field>
+            <caption>Otsinguvorm</caption>
+      </property>
+      <property>
+            <name>deadline</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>date_select</type>
+            <store>no</store>
+            <default>-1</default>
+            <parent>date</parent>
+            <no_caption>1</no_caption>
+            <field>deadline</field>
+      </property>
+      <property>
+            <name>separator</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>text</type>
+            <store>no</store>
+            <parent>date</parent>
+            <no_caption>1</no_caption>
+            <default>
+            <![CDATA["]]>
+            </default>
+            <field>separator</field>
+      </property>
+      <property>
+            <name>deadlin2</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>date_selected</type>
+            <store>no</store>
+            <default>-1</default>
+            <parent>date</parent>
+            <no_caption>1</no_caption>
+            <field>deadlin2</field>
+      </property>
+      <property>
+            <name>search_res</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search_res</field>
+            <caption>Otsingu tulemused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -92,6 +158,11 @@
                   <parent>bugs</parent>
                   <submit>no</submit>
             </by_who>
+            <search>
+                  <caption>Otsing</caption>
+                  <submit_method>get</submit_method>
+                  <submit>no</submit>
+            </search>
             <archive>
                   <caption>Arhiiv</caption>
                   <submit>no</submit>
@@ -119,6 +190,12 @@
                         <num_2>by_who</num_2>
                   </group>
             </bug>
+            <date>
+                  <type>hbox</type>
+                  <width>33%:33%:34%</width>
+                  <group>search</group>
+                  <caption>T&amp;auml;htaeg1</caption>
+            </date>
       </layout>
 </properties>
 
