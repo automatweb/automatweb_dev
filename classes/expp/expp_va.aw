@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -451,8 +451,8 @@ class expp_va extends class_base {
 //			$_vad[$_temp_liik]["kampaania"] = $row["kampaania"];
 			switch( $row["hinna_tyyp"] ) {
 				case 0:
-						$_text = 'kuu';
-						$_textn = 'kuud';
+						$_text = t('kuu');
+						$_textn = t('kuud');
 					break;
 				case 3:
 						$_text = ' numbri hind';
@@ -797,8 +797,8 @@ class expp_va extends class_base {
 			$_vad[$_temp_liik]["ht"] += $row["hinna_tyyp"];
 			switch( $row["hinna_tyyp"] ) {
 				case 0:
-						$_text = 'kuu';
-						$_textn = 'kuud';
+						$_text = t('kuu');
+						$_textn = t('kuud');
 					break;
 				case 3:
 						$_text = ' numbri hind';

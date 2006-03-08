@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_korv.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_korv.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
 // expp_korv.aw - Expp tootekorv 
 /*
 

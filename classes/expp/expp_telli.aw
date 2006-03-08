@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_telli.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_telli.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
 // expp_telli.aw - Expp telli 
 /*
 
@@ -267,7 +267,7 @@ class expp_telli extends class_base {
 		if( count( $my_otsek ) && $_leping != 'tel' ) {
 			$_hind = $my_otsek[0]["baashind"];
 			switch( $my_otsek[0]["hinna_tyyp"] ) {
-				case 0: $_periood = $my_otsek[0]["kestus"].($my_otsek[0]["kestus"]>1?" kuud ":" kuu ");
+				case 0: $_periood = $my_otsek[0]["kestus"].($my_otsek[0]["kestus"]>1?t(" kuud "):t(" kuu "));
 					break;
 				case 1:	$_periood = $my_otsek[0]["kestus"]." n&auml;dal";
 					break;
@@ -305,14 +305,14 @@ class expp_telli extends class_base {
 			if( $_temp["hinna_tyyp"] == 3 && $_temp['kestus'] == 1 ) {
 //			if ( strncmp( $_aid, "Eesti Ekspress", 14 ) == 0 ) {
 				for( $in=1;$in<13;$in++) {
-					$_per_options[$_temp["id"]."_$in"] = $in." ".(($in>1)?"kuud":"kuu");
+					$_per_options[$_temp["id"]."_$in"] = $in." ".(($in>1)?t("kuud"):t("kuu"));
 				}
 			} else {
 				for( $in=0;$in<count($my_tavah);$in++) {
 					if( $my_tavah[$in]["id"] == $_pikkus ) $_check = 1;
 					$_kestus = $my_tavah[$in]["kestus"];
 					switch( $my_tavah[$in]["hinna_tyyp"] ) {
-						case 0: $_kestus.= ($my_tavah[$in]["kestus"]>1)?" kuud ":" kuu ";
+						case 0: $_kestus.= ($my_tavah[$in]["kestus"]>1)?t(" kuud "):t(" kuu ");
 							break;
 						case 1:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?" n&auml;dalat ":" n&auml;dal ";
 							break;

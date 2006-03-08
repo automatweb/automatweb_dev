@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_isik.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_isik.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
 // expp_isik.aw - Expp isik 
 /*
 
@@ -448,7 +448,7 @@ var $telliitems =	array (
 		$arv2 = count( $email_a );
 		for( $j = 0; $j < $arv2; $j++ ) {
 			$email_b = trim( $email_a[$j] );
-			$kontroll = '^(([0-9a-z]+)([\._\-]([0-9a-z]+))*@([0-9a-z]+)([\._\-]([0-9a-z]+))*\.([0-9a-zA-Z]){2}([0-9a-zA-Z])?|puudub)$';
+			$kontroll = '^(([0-9a-z]+)([\._\-]([0-9a-z]+))*@([0-9a-z]+)([\._\-]([0-9a-z]+))*\.([0-9a-zA-Z]){2,3}([0-9a-zA-Z])?|puudub)$';
 			if ( !eregi( $kontroll, $email_b ) ) {
 				$error++;
 				$retVal .= ($j>0?';':'').$email_a[$j];
