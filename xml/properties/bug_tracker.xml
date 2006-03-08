@@ -88,41 +88,6 @@
             <caption>Otsinguvorm</caption>
       </property>
       <property>
-            <name>deadline</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>date_select</type>
-            <store>no</store>
-            <default>-1</default>
-            <parent>date</parent>
-            <no_caption>1</no_caption>
-            <field>deadline</field>
-      </property>
-      <property>
-            <name>separator</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>text</type>
-            <store>no</store>
-            <parent>date</parent>
-            <no_caption>1</no_caption>
-            <default>
-            <![CDATA["]]>
-            </default>
-            <field>separator</field>
-      </property>
-      <property>
-            <name>deadlin2</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>date_selected</type>
-            <store>no</store>
-            <default>-1</default>
-            <parent>date</parent>
-            <no_caption>1</no_caption>
-            <field>deadlin2</field>
-      </property>
-      <property>
             <name>search_res</name>
             <table>objects</table>
             <group>search</group>
@@ -190,12 +155,6 @@
                         <num_2>by_who</num_2>
                   </group>
             </bug>
-            <date>
-                  <type>hbox</type>
-                  <width>33%:33%:34%</width>
-                  <group>search</group>
-                  <caption>T&amp;auml;htaeg1</caption>
-            </date>
       </layout>
 </properties>
 

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.25 2006/03/08 14:25:41 sander Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.25 2006/03/08 14:25:41 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.26 2006/03/08 14:33:46 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.26 2006/03/08 14:33:46 sander Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -42,13 +42,6 @@ define("BUG_STATUS_CLOSED", 4);
 
 @property search_form type=callback callback=callback_get_search_form submit_method=get store=no
 @caption Otsinguvorm
-
-@layout date type=hbox width=33%:33%:34%
-@caption Tähtaeg1
-@property deadline type=date_select store=no default=-1 parent=date no_caption=1
-@property separator type=text store=no parent=date no_caption=1 default=" - "
-@property deadlin2 type=date_selected store=no default=-1 parent=date no_caption=1
-
 
 @property search_res type=table store=no no_caption=1
 @caption Otsingu tulemused
@@ -377,7 +370,7 @@ class bug_tracker extends class_base
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
 			"has_root" => 1,
-			"tree_id" => $this->sort_type["name"],
+			"tree_id" => "bug_tree",
 			"persist_state" => 1,
 			"root_name" => $root_name[($this->active_group == "bugs")?"by_default":$this->active_group],
 			"get_branch_func" => $this->mk_my_orb($orb_function, array(
