@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.60 2005/06/20 10:43:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.61 2006/03/08 15:15:04 kristo Exp $
 
 /*
 
@@ -1186,7 +1186,7 @@ class gallery_v2 extends class_base
 				$this->vars(array(
 					"rate_link" => $this->mk_my_orb("rate", array(
 						"oid" => ($pd['img']['id'] ? $pd['img']['id'] : $pd['tn']['id']),
-						"return_url" => urlencode($post_rate_url),
+						"return_url" => $post_rate_url,
 						"rate" => $sci_val
 					), "rate"),
 					"scale_value" => $sci_name

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.15 2005/11/28 08:54:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.16 2006/03/08 15:15:05 kristo Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -240,7 +240,7 @@ class crm_address extends class_base
 					"type" => $arr["request"]["reltype"]
 				));
 			}
-			header("Location: ".html::get_change_url($o->id(), array("return_url" => urlencode($arr["request"]["return_url"]))));
+			header("Location: ".html::get_change_url($o->id(), array("return_url" => $arr["request"]["return_url"])));
 			die();
 		}
 	}

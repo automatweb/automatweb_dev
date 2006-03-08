@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.80 2006/03/06 09:01:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.81 2006/03/08 15:15:03 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -374,7 +374,7 @@ class task extends class_base
 						"id" => $arr["obj_inst"]->id(),
 						"s_action" => "start",
 						"type" => t("Toimetus"),
-						"name" => urlencode($data["value"])
+						"name" => $data["value"]
 					));
 					$data["post_append_text"] = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
 					if ($arr["request"]["stop_pop"] == 1)

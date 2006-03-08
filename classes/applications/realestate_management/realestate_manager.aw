@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.10 2006/02/06 17:30:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.11 2006/03/08 15:15:03 kristo Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -1482,7 +1482,7 @@ class realestate_manager extends class_base
 
 	function _delegate_co($arr, $fun, &$o)
 	{
-		$arr["return_url"] = urlencode($arr["post_ru"]);
+		$arr["return_url"] = ($arr["post_ru"]);
 		if ($o)
 		{
 			$arr["id"] = $o->id();
@@ -1760,7 +1760,7 @@ class realestate_manager extends class_base
 		}
 
 		$properties = is_array ($list) ? $list : $list->arr ();
-		$return_url = urlencode(aw_global_get('REQUEST_URI'));
+		$return_url = get_ru();
 		$all_classes = aw_ini_get("classes");
 		$first = true;
 		$sum_tfa = null;
@@ -2293,7 +2293,7 @@ class realestate_manager extends class_base
 	{
 		$this_object = $arr["obj_inst"];
 		$toolbar =& $arr["prop"]["vcl_inst"];
-		$return_url = urlencode(aw_global_get('REQUEST_URI'));
+		$return_url = get_ru();
 		$table_name = str_replace ("grp_realestate_properties_", "", $arr["request"]["group"]);
 		$table->name = ("grp_realestate_properties" != $table_name) ? $table_name : "all";
 
@@ -2588,7 +2588,7 @@ class realestate_manager extends class_base
 	{
 		$this_object = $arr["obj_inst"];
 		$toolbar =& $arr["prop"]["vcl_inst"];
-		$return_url = urlencode(aw_global_get('REQUEST_URI'));
+		$return_url = get_ru();
 
 		if ($arr["prop"]["name"] == "clients_toolbar")
 		{
@@ -3384,7 +3384,7 @@ class realestate_manager extends class_base
 			{
 				$property_uri = $this->mk_my_orb ("change", array (
 					"id" => $property->id (),
-					"return_url" => urlencode ($arr["return_url"]),
+					"return_url" =>  ($arr["return_url"]),
 					"group" => "grp_main",
 				), "realestate_" . $arr["type"]);
 				return $property_uri;
@@ -3477,7 +3477,6 @@ class realestate_manager extends class_base
 		// 'parent'=>$tmp->id(),
 		// 'alias_to'=>$alias_to,
 		// 'reltype'=> $co->reltype_professions,
-		// 'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
 
 		// crm_profession::new;
 	}

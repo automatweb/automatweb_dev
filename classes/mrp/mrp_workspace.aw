@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.157 2006/03/08 14:03:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.158 2006/03/08 15:15:08 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -753,7 +753,7 @@ class mrp_workspace extends class_base
 							$prop["value"] = html::get_change_url(
 								$tmp->id(),
 								array(
-									"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+									"return_url" => get_ru()
 								),
 								$tmp->name()
 							);
@@ -945,7 +945,7 @@ class mrp_workspace extends class_base
 					return PROP_IGNORE;
 				}
 				$plan_url = $this->mk_my_orb("create", array(
-					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+					"return_url" => get_ru(),
 					"mrp_workspace" => $this_object->id (),
 					"mrp_force_replan" => 1,
 				), "mrp_schedule");
@@ -1453,7 +1453,7 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				$operators[] = html::get_change_url(
 					$person->id(),
-					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					array("return_url" => get_ru()),
 					$person->name()
 				);
 			}
@@ -1461,7 +1461,7 @@ if ($_GET['show_thread_data'] == 1)
 			$table->define_data (array (
 				"name" => html::get_change_url(
 					$resource->id(),
-					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					array("return_url" => get_ru()),
 					$resource->name()
 				),
 				"order" => $resource->ord (),
@@ -1496,13 +1496,13 @@ if ($_GET['show_thread_data'] == 1)
 		}
 
 		$add_resource_url = $this->mk_my_orb("new", array(
-			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+			"return_url" => get_ru(),
 			"mrp_workspace" => $this_object->id (),
 			"mrp_parent" => $parent,
 			"parent" => $parent,
 		), "mrp_resource");
 		$add_category_url = $this->mk_my_orb("new", array(
-			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+			"return_url" => get_ru(),
 			"parent" => $parent,
 		), "menu");
 
@@ -1565,7 +1565,7 @@ if ($_GET['show_thread_data'] == 1)
 		$toolbar =& $arr["prop"]["toolbar"];
 		$this_object =& $arr["obj_inst"];
 		$add_project_url = $this->mk_my_orb("new", array(
-			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+			"return_url" => get_ru(),
 			"mrp_workspace" => $this_object->id (),
 			"parent" => $this_object->prop ("projects_folder"),
 		), "mrp_case");
@@ -1886,7 +1886,7 @@ if ($_GET['show_thread_data'] == 1)
 			}
 			$change_url = $this->mk_my_orb($act, array(
 				"id" => $project_id,
-				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
+				"return_url" => get_ru(),
 				"group" => "grp_case_workflow",
 			), "mrp_case");
 
@@ -2047,18 +2047,18 @@ if ($_GET['show_thread_data'] == 1)
 				"customer" => (is_object ($customer) ? $customer->name () : ""),
 				"project" => html::get_change_url(
 					$project->id(),
-					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					array("return_url" => get_ru()),
 					$project->name ()
 				),
 				"resource" => html::get_change_url(
 					$resource->id(),
-					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					array("return_url" => get_ru()),
 					$resource->name ()
 				),
 				"scheduled_date" => $job->prop ("starttime"),
 				"modify" => html::get_change_url(
 					$job->id(),
-					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					array("return_url" => get_ru()),
 					t("Ava")
 				),
 				"bgcolour_overdue" => $bg_colour,
@@ -2163,18 +2163,18 @@ if ($_GET['show_thread_data'] == 1)
 				"customer" => (is_object ($customer) ? $customer->name () : ""),
 				"project" => html::get_change_url(
 					$project->id(),
-					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					array("return_url" => get_ru()),
 					$project->name ()
 				),
 				"resource" => html::get_change_url(
 					$resource->id(),
-					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					array("return_url" => get_ru()),
 					$resource->name ()
 				),
 				"due_date" => $project->prop ("due_date"),
 				"modify" => html::get_change_url(
 					$job->id(),
-					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					array("return_url" => get_ru()),
 					t("Ava")
 				),
 				"reschedule" => html::checkbox(array(
@@ -2248,7 +2248,7 @@ if ($_GET['show_thread_data'] == 1)
 					"title" => $resource->name(),
 					"uri" => html::get_change_url(
 						$resource->id(),
-						array("return_url" => urlencode(aw_global_get("REQUEST_URI")))
+						array("return_url" => get_ru())
 					)
 				));
 
@@ -2672,7 +2672,7 @@ if ($_GET['show_thread_data'] == 1)
 				"caption" => t("Kaota valik"),
 				"url" => aw_url_change_var ("mrp_hilight", ""),
 			));
-			$change_url = html::get_change_url ($project->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), parse_obj_name($project->name ()));
+			$change_url = html::get_change_url ($project->id(), array("return_url" => get_ru()), parse_obj_name($project->name ()));
 			$navigation .= t(' &nbsp;&nbsp;Valitud projekt: ') . $change_url . ' (' . $deselect . ')';
 		}
 
@@ -2767,7 +2767,7 @@ if ($_GET['show_thread_data'] == 1)
 
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_workspace");
@@ -2928,7 +2928,7 @@ if ($_GET['show_thread_data'] == 1)
 
 		if ($_GET["group"] != "grp_search" && $_GET["group"] != "grp_search_proj" && $_GET["group"] != "grp_search_cust")
 		{
-			$arr['return_url'] = urlencode(aw_global_get('REQUEST_URI'));
+			$arr['return_url'] = get_ru();
 		}
 
 		$arr['cat'] = $_GET["cat"];
@@ -3281,7 +3281,7 @@ if ($_GET['show_thread_data'] == 1)
 			"link" => html::get_new_url(CL_CRM_CATEGORY, $co->id(), array(
 				"alias_to" => ($arr["request"]["cat"] ? $arr["request"]["cat"] : $co->id()),
 				"reltype" => ($arr["request"]["cat"] ? 2 : 30),
-				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+				"return_url" => get_ru()
 			)),
 		));
 
@@ -3293,7 +3293,7 @@ if ($_GET['show_thread_data'] == 1)
 				"link" => html::get_new_url(CL_CRM_COMPANY, $co->id(), array(
 					"alias_to" => ($arr["request"]["cat"] ? $arr["request"]["cat"] : $co->id()),
 					"reltype" => 3,
-					"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					"return_url" => get_ru()
 				))
 			));
 		}
@@ -3417,7 +3417,7 @@ if ($_GET['show_thread_data'] == 1)
 				$cust = $c->to();
 
 				$t->define_data(array(
-					"name" => html::get_change_url($c->prop("to"), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->prop("to.name")),
+					"name" => html::get_change_url($c->prop("to"), array("return_url" => get_ru()), $c->prop("to.name")),
 					"address" => $cust->prop_str("contact"),
 					"phone" => $cust->prop_str("phone_id"),
 					"email" => $cust->prop_str("email_id"),
@@ -3490,7 +3490,7 @@ if ($_GET['show_thread_data'] == 1)
 			foreach($ol->arr() as $case)
 			{
 				$t->define_data(array(
-					"name" => html::get_change_url($case->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $case->name()),
+					"name" => html::get_change_url($case->id(), array("return_url" => get_ru()), $case->name()),
 					"comment" => $case->comment(),
 					"start" => $case->prop("starttime"),
 					"end" => $case->prop("due_date"),
@@ -3846,7 +3846,7 @@ if ($_GET['show_thread_data'] == 1)
 				if ($this->can("edit", $cust->id()))
 				{
 				$custo = html::get_change_url($cust->id(), array(
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						"return_url" => get_ru()
 					),
 					$cust->name()
 				);
@@ -3936,7 +3936,7 @@ if ($_GET['show_thread_data'] == 1)
 			if ($this->can("edit", $res->id()))
 			{
 				$resource_str = html::get_change_url($res->id(), array(
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						"return_url" => get_ru()
 					),
 					$res->name()
 				);
@@ -3971,7 +3971,7 @@ if ($_GET['show_thread_data'] == 1)
 					"caption" => "<span style=\"font-size: 15px;\">".t("Ava")."</span>",
 					"url" => aw_url_change_var(array(
 						"pj_job" =>  $job->id(),
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						"return_url" => get_ru()
 					)),
 				)),
 				"resource" => $resource_str,
@@ -4692,7 +4692,7 @@ if ($_GET['show_thread_data'] == 1)
 			}
 			$csn[$cust->name()] = 1;
 			$t->define_data(array(
-				"name" => html::get_change_url($cust->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $cust->name()),
+				"name" => html::get_change_url($cust->id(), array("return_url" => get_ru()), $cust->name()),
 				"address" => $cust->prop_str("contact"),
 				"phone" => $cust->prop_str("phone_id"),
 				"email" => $cust->prop_str("email_id"),

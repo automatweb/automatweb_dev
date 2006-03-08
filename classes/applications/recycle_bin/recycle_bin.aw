@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.20 2006/02/06 12:37:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.21 2006/03/08 15:15:04 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -265,7 +265,7 @@ class recycle_bin extends class_base
 						"restore_object", 
 						array(
 							"oid" => $row["oid"],
-							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+							"return_url" => get_ru()
 						), 
 						"recycle_bin"
 					),

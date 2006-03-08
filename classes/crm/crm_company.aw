@@ -2236,9 +2236,9 @@ class crm_company extends class_base
 			'add_to_cal' => $cal_id,
 			'alias_to_org'=>$fake_alias,
 			'reltype_org'=> $arr['reltype'],
-			'alias_to_org_arr'=>urlencode(serialize($arr['check'])),
+			'alias_to_org_arr'=>serialize($arr['check']),
 			"parent" => $arr["id"],
-			"return_url" => urlencode($arr["post_ru"])
+			"return_url" => $arr["post_ru"]
 		),$arr['clid']);
 		header('Location: '.$url);
 		die();
@@ -3328,7 +3328,7 @@ class crm_company extends class_base
 						'reltype' => $val,
 						'title' => $classinf["name"].' : '.$args['obj_inst']->name(),
 						'parent' => $parents[$val],
-						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						'return_url' => get_ru(),
 					),$clid);
 
 					$has_parent = isset($parents[$val]) && $parents[$val];
@@ -3383,9 +3383,9 @@ class crm_company extends class_base
 						'group' => 'add_event',
 						'clid' => $clid,
 						'action' => 'change',
-						'title' => urlencode($classinf["name"].': '.$args['obj_inst']->name()),
+						'title' => $classinf["name"].': '.$args['obj_inst']->name(),
 						'parent' => $parents[$reltype],
-						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						'return_url' => get_ru(),
 					));
 					$has_parent = isset($parents[$val]) && $parents[$val];
 					$disabled = $has_parent ? false : true;
@@ -3420,7 +3420,7 @@ class crm_company extends class_base
 				"tooltip" => t("Kasutaja kalender"),
 				"url" => $this->mk_my_orb('change', array(
 						'id' => $this->cal_id,
-						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						'return_url' => get_ru(),
 						"group" => "views"
 					),'planner'),
 				"onClick" => "",
@@ -3827,7 +3827,7 @@ class crm_company extends class_base
 			}
 		}
 
-		return html::get_change_url($bill->id(), array("return_url" => urlencode(aw_url_change_var("proj", NULL, $arr["post_ru"]))));
+		return html::get_change_url($bill->id(), array("return_url" => aw_url_change_var("proj", NULL, $arr["post_ru"])));
 	}
 
 	/**
@@ -3840,7 +3840,7 @@ class crm_company extends class_base
 				$arr["id"],
 				array(
 					"connect_impl" => reset($arr["check"]),
-					"return_url" => urlencode($arr["post_ru"]),
+					"return_url" => $arr["post_ru"],
 					"connect_orderer" => $arr["id"],
 				)
 		);
@@ -3856,7 +3856,7 @@ class crm_company extends class_base
 				$arr["id"],
 				array(
 					"connect_impl" => $arr["id"],
-					"return_url" => urlencode($arr["post_ru"]),
+					"return_url" => $arr["post_ru"],
 					"connect_orderer" => reset($arr["check"]),
 				)
 		);
@@ -3893,7 +3893,7 @@ class crm_company extends class_base
 			'add_to_cal' => $this->cal_id,
 			'title' => t("Toimetus"),
 			'parent' => $arr["id"],
-			'return_url' => urlencode($arr["post_ru"])
+			'return_url' => $arr["post_ru"]
 		), CL_TASK);
 
 	}
@@ -3918,7 +3918,7 @@ class crm_company extends class_base
 			'action' => 'change',
 			'title' => t("Kohtumine"),
 			'parent' => $arr["id"],
-			'return_url' => urlencode($arr["post_ru"])
+			'return_url' => $arr["post_ru"]
 		));
 
 	}
@@ -3943,7 +3943,7 @@ class crm_company extends class_base
 			'action' => 'change',
 			'title' => t("Pakkumine"),
 			'parent' => $arr["id"],
-			'return_url' => urlencode($arr["post_ru"])
+			'return_url' => $arr["post_ru"]
 		));
 
 	}
@@ -3967,7 +3967,7 @@ class crm_company extends class_base
 			'add_to_cal' => $this->cal_id,
 			'title' => t("Toimetus"),
 			'parent' => $arr["id"],
-			'return_url' => urlencode($arr["post_ru"]),
+			'return_url' => $arr["post_ru"],
 			"set_proj" => $proj
 		), CL_TASK);
 
@@ -3996,7 +3996,7 @@ class crm_company extends class_base
 			'action' => 'change',
 			'title' => t("Kohtumine"),
 			'parent' => $arr["id"],
-			'return_url' => urlencode($arr["post_ru"]),
+			'return_url' => $arr["post_ru"],
 			"set_proj" => $proj
 		));
 
@@ -4025,7 +4025,7 @@ class crm_company extends class_base
 			'action' => 'change',
 			'title' => t("Pakkumine"),
 			'parent' => $arr["id"],
-			'return_url' => urlencode($arr["post_ru"]),
+			'return_url' => $arr["post_ru"],
 			"set_proj" => $proj
 		));
 
@@ -4077,7 +4077,7 @@ class crm_company extends class_base
 			"id" => $arr["id"],
 			"group" => "bills",
 			"cust" => reset($arr["check"]),
-			"return_url" => urlencode($arr["post_ru"])
+			"return_url" => $arr["post_ru"]
 		));
 	}
 
@@ -4314,14 +4314,14 @@ class crm_company extends class_base
 
 		if (count(safe_array($arr["sel"])) == 1)
 		{
-			return html::get_change_url($n->id(), array("return_url" => urlencode($arr["post_ru"])));
+			return html::get_change_url($n->id(), array("return_url" => $arr["post_ru"]));
 		}
 		else
 		{
 			return $this->mk_my_orb("change", array(
 				"id" => $arr["id"],
 				"group" => "bills_list",
-				"return_url" => urlencode($arr["post_ru"])
+				"return_url" => $arr["post_ru"]
 			));
 		}
 	}
@@ -4864,7 +4864,7 @@ class crm_company extends class_base
 		$o->set_prop("area", $arr["stats_s_area"]);
 		$o->set_prop("res_type", $arr["stats_s_res_type"]);
 		$o->save();
-		return html::get_change_url($o->id(), array("return_url" => urlencode($arr["post_ru"])));
+		return html::get_change_url($o->id(), array("return_url" => $arr["post_ru"]));
 	}
 
 	/**

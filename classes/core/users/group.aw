@@ -389,7 +389,7 @@ class group extends class_base
 			$row['obj_name'] = html::href(array(
 				'url' => $this->mk_my_orb('change',array(
 					'id' => $row['oid'],
-					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+					'return_url' => get_ru(),
 				), $o->class_id()),
 				'caption' => $row['obj_name'],
 			));

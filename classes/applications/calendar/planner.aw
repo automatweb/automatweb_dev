@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.117 2006/03/06 13:36:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.118 2006/03/08 15:15:02 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2294,10 +2294,10 @@ class planner extends class_base
 			array(
 				'id' => $arr['id'],
 				'group' => $arr['group'],
-				'search_contact_firstname' => urlencode($arr["emb"]['search_contact_firstname']),
-				'search_contact_lastname' => urlencode($arr["emb"]['search_contact_lastname']),
-				'search_contact_code' => urlencode($arr["emb"]['search_contact_code']),
-				'search_contact_company' => urlencode($arr["emb"]['search_contact_company']),
+				'search_contact_firstname' => ($arr["emb"]['search_contact_firstname']),
+				'search_contact_lastname' => ($arr["emb"]['search_contact_lastname']),
+				'search_contact_code' => ($arr["emb"]['search_contact_code']),
+				'search_contact_company' => ($arr["emb"]['search_contact_company']),
 				"event_id" => $arr["event_id"],
 				"cb_group" => $arr["emb"]["cb_group"]
 			),
@@ -2519,10 +2519,10 @@ class planner extends class_base
 		return $this->mk_my_orb("change", array(
 			'id' => $arr['id'],
 			'group' => $arr['group'],
-			'search_contact_firstname' => urlencode($arr["emb"]['search_contact_firstname']),
-			'search_contact_lastname' => urlencode($arr["emb"]['search_contact_lastname']),
-			'search_contact_code' => urlencode($arr["emb"]['search_contact_code']),
-			'search_contact_company' => urlencode($arr["emb"]['search_contact_company']),
+			'search_contact_firstname' => ($arr["emb"]['search_contact_firstname']),
+			'search_contact_lastname' => ($arr["emb"]['search_contact_lastname']),
+			'search_contact_code' => ($arr["emb"]['search_contact_code']),
+			'search_contact_company' => ($arr["emb"]['search_contact_company']),
 			"event_id" => $arr["event_id"],
 			"cb_group" => $arr["emb"]["cb_group"]
 		), $arr["class"]);

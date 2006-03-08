@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.14 2006/02/03 12:01:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.15 2006/03/08 15:15:03 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -495,7 +495,7 @@ class crm_job_entry extends class_base
 						"type" => "RELTYPE_RESOURCE"
 					));
 				}
-				header("Location: ".html::get_change_url($t->id(), array("group" => "rows", "return_url" => urlencode($arr["request"]["return_url"]))));
+				header("Location: ".html::get_change_url($t->id(), array("group" => "rows", "return_url" => $arr["request"]["return_url"])));
 				die();
 				break;
 
@@ -539,7 +539,7 @@ class crm_job_entry extends class_base
 				break;
 		}
 
-		header("Location: ".html::get_change_url($t->id(), array("return_url" => urlencode($arr["request"]["return_url"]))));
+		header("Location: ".html::get_change_url($t->id(), array("return_url" => $arr["request"]["return_url"])));
 		die();
 	}
 

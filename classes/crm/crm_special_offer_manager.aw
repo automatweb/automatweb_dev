@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer_manager.aw,v 1.1 2005/12/14 12:22:35 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_special_offer_manager.aw,v 1.2 2006/03/08 15:15:05 kristo Exp $
 // crm_special_offer_manager.aw - Organisatsiooni eripakkumiste haldus 
 // Valitud eripakkumiste veebi kuvamiseks
 /*
@@ -231,7 +231,7 @@ class crm_special_offer_manager extends class_base
 					'caption' => $co->name(),
 					'url' => $this->mk_my_orb("change", array(
 						'id' => $co->id(),
-						'return_url' => urlencode(aw_global_get("REQUEST_URI")),
+						'return_url' => get_ru(),
 					), CL_CRM_COMPANY),
 				));
 				$company_name = $co->name();
@@ -250,7 +250,7 @@ class crm_special_offer_manager extends class_base
 						'caption' => $s->id() == $selected ? '<b>'.$name.'</b>' : $name,
 						'url' => $this->mk_my_orb("change", array(
 							'id' => $s->id(),
-							'return_url' => urlencode(aw_global_get("REQUEST_URI")),
+							'return_url' => get_ru(),
 						), CL_CRM_SECTOR),
 					));
 				}
@@ -267,7 +267,7 @@ class crm_special_offer_manager extends class_base
 					'caption' => strlen($o->name()) ? $o->name() : '('.t("nimetu").' '.$o->id().')',
 					'url' => $this->mk_my_orb("change", array(
 						'id' => $o->id(),
-						'return_url' => urlencode(aw_global_get("REQUEST_URI")),
+						'return_url' => get_ru(),
 					), CL_CRM_SPECIAL_OFFER),
 				)),
 				'filtervalue-name' => $o->name(),

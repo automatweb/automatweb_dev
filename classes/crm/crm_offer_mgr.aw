@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_mgr.aw,v 1.3 2005/06/02 11:47:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_mgr.aw,v 1.4 2006/03/08 15:15:05 kristo Exp $
 // crm_offer_mgr.aw - Pakkumiste haldus 
 /*
 
@@ -366,7 +366,7 @@ class crm_offer_mgr extends class_base
 		));
 		$this->_rec_copy_objects($o, $n, $ot);
 
-		return html::get_change_url($id, array("return_url" => urlencode($arr["return_url"])));
+		return html::get_change_url($id, array("return_url" => $arr["return_url"]));
 	}
 
 	function _rec_copy_objects($o, $n, $ot)
@@ -454,7 +454,7 @@ class crm_offer_mgr extends class_base
 			"reltype" => "RELTYPE_OFFER"
 		));
 
-		return html::get_change_url($o->id(), array("return_url" => urlencode($arr["ru"])));
+		return html::get_change_url($o->id(), array("return_url" => $arr["ru"]));
 	}
 
 	function get_typical_components($o)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.20 2005/04/01 12:06:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.21 2006/03/08 15:15:04 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -182,7 +182,7 @@ class register extends class_base
 				"link" => $this->mk_my_orb("new", array(
 					"cfgform" => $o->id(),
 					"parent" => $arr["obj_inst"]->prop("data_rootmenu"),
-					"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+					"return_url" => get_ru(),
 					"cfgform" => $cfid,
 					"set_register_id" => $arr["obj_inst"]->id(),
 					"section" => aw_global_get("section")
@@ -317,9 +317,9 @@ class register extends class_base
 					"url" => $this->mk_my_orb("change", array(
 						"section" => aw_global_get("section"), 
 						"id" => $o->id(),
-						"return_url" => urlencode(html::get_change_url($arr["request"]["id"], array(
+						"return_url" => html::get_change_url($arr["request"]["id"], array(
 							"group" => $arr["request"]["group"],
-						))),
+						)),
 					), $o->class_id()),
 					"caption" => t("Muuda")
 				))

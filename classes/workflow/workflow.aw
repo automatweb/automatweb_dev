@@ -576,7 +576,7 @@ class workflow extends class_base
 		}
 		$ru = $this->mk_my_orb("change", array("id" => $data["request"]["id"], "group" => "show_entities", "cb_view" => "show"));
 
-		header("Location: ".$this->mk_my_orb("change", array("id" => $cl_o->id(),"cfgform" => $cfgform->id(), "return_url" => urlencode($ru)), $fl));
+		header("Location: ".$this->mk_my_orb("change", array("id" => $cl_o->id(),"cfgform" => $cfgform->id(), "return_url" => $ru), $fl));
 		die();
 		return;
 	}
@@ -729,7 +729,7 @@ class workflow extends class_base
 		$return_url = $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","b1" => 1));
 		$process_rootmenu_id = $this->cfg_obj->prop("process_rootmenu");
 		$this->vars(array(
-			"add_process_link" => $this->mk_my_orb("new",array("parent" => $process_rootmenu_id,"return_url" => urlencode($return_url)),"process"),
+			"add_process_link" => $this->mk_my_orb("new",array("parent" => $process_rootmenu_id,"return_url" => $return_url),"process"),
 		));
 		$data = array(
 			"value" => $this->parse(),
@@ -746,7 +746,7 @@ class workflow extends class_base
 		$return_url = $this->mk_my_orb("view",array("id" => $args["obj_inst"]->id(),"group" => "show_processes","b1" => 1));
 		$process_rootmenu_id = $this->cfg_obj->prop("process_rootmenu");
 		$this->vars(array(
-			"add_process_link" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"return_url" => urlencode($return_url)),"process"),
+			"add_process_link" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"return_url" => $return_url),"process"),
 		));
 		$data = array(
 			"value" => $this->parse(),
@@ -984,7 +984,7 @@ class workflow extends class_base
 				$fl = "doc";
 			}
 			$name = html::href(array(
-				"url" => $this->mk_my_orb("change", array("id" => $r_o->id(), "return_url" => urlencode(aw_global_get("REQUEST_URI"))), $fl),
+				"url" => $this->mk_my_orb("change", array("id" => $r_o->id(), "return_url" => get_ru()), $fl),
 				"caption" => parse_obj_name($r_o->name())
 			));
 

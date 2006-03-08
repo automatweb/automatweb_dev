@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.93 2006/03/03 10:22:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.94 2006/03/08 15:15:08 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1232,7 +1232,7 @@ class mrp_case extends class_base
 			$table->define_data(array(
 				"name" => $arr["no_edit"] == 1 ? ($this_object->name () . " - " . $resource_name) : html::get_change_url(
 					$job->id(),
-					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+					array("return_url" => get_ru()),
 					$this_object->name () . " - " . $resource_name
 				),
 				"length" => $arr["no_edit"] == 1 ?  $t_length : html::textbox(array(
@@ -1682,7 +1682,7 @@ class mrp_case extends class_base
 
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["oid"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -1788,7 +1788,7 @@ class mrp_case extends class_base
 
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case"); //echo $return_url;
@@ -1964,7 +1964,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -1976,7 +1976,7 @@ class mrp_case extends class_base
 		else
 		{
 			$errors[] = t("Projekti id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
@@ -1993,7 +1993,7 @@ class mrp_case extends class_base
 		### ...
 		if ($errors)
 		{
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 		else
@@ -2023,7 +2023,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2035,7 +2035,7 @@ class mrp_case extends class_base
 		else
 		{
 			$errors[] = t("Projekti id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
@@ -2076,7 +2076,7 @@ class mrp_case extends class_base
 		### ...
 		if ($errors)
 		{
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 		else
@@ -2108,7 +2108,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2120,7 +2120,7 @@ class mrp_case extends class_base
 		else
 		{
 			$errors[] = t("Projekti id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
@@ -2137,7 +2137,7 @@ class mrp_case extends class_base
 		### if no errors, abort project
 		if ($errors)
 		{
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 		else
@@ -2180,7 +2180,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2192,7 +2192,7 @@ class mrp_case extends class_base
 		else
 		{
 			$errors[] = t("Projekti id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
@@ -2209,7 +2209,7 @@ class mrp_case extends class_base
 		### if no errors, archive project
 		if ($errors)
 		{
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 		else
@@ -2241,7 +2241,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2253,7 +2253,7 @@ class mrp_case extends class_base
 		else
 		{
 			$errors[] = t("Projekti id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
@@ -2273,7 +2273,7 @@ class mrp_case extends class_base
 		### if no errors, plan project
 		if ($errors)
 		{
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 		else
@@ -2320,7 +2320,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2332,7 +2332,7 @@ class mrp_case extends class_base
 		else
 		{
 			$errors[] = t("Projekti id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
@@ -2350,7 +2350,7 @@ class mrp_case extends class_base
 		### if no errors, set project on hold
 		if ($errors)
 		{
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 		else

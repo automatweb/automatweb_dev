@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.41 2006/03/02 10:41:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.42 2006/03/08 15:15:05 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -497,10 +497,10 @@ class crm_call extends class_base
 		return $this->mk_my_orb('change',array(
 				'id' => $arr['id'],
 				'group' => $arr['group'],
-				'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
-				'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
-				'search_contact_code' => urlencode($arr['search_contact_code']),
-				'search_contact_company' => urlencode($arr['search_contact_company']),
+				'search_contact_firstname' => $arr['search_contact_firstname'],
+				'search_contact_lastname' => $arr['search_contact_lastname'],
+				'search_contact_code' => $arr['search_contact_code'],
+				'search_contact_company' => $arr['search_contact_company'],
 			),
 			$arr['class']
 		);

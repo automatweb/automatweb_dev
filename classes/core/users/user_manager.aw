@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.4 2005/12/27 21:28:29 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.5 2006/03/08 15:15:05 kristo Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -275,7 +275,7 @@ class user_manager extends class_base
 					'disabled' => !$this->can('edit', $this->parent),
 					'link' =>$this->mk_my_orb("new", array(
 						'parent' => $this->parent,
-						'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						'return_url' => get_ru(),
 					), $clid)
 				));
 			}
@@ -719,7 +719,7 @@ class user_manager extends class_base
 						'caption' => $c->prop('to.name'),
 						'url' => $this->mk_my_orb("change", array(
 							'id' => $c->prop('to'),
-							'return_url' => urlencode(aw_global_get("REQUEST_URI"))
+							'return_url' => get_ru()
 						), CL_CRM_COMPANY),
 					));		
 				}
@@ -728,19 +728,19 @@ class user_manager extends class_base
 			$items = array( // Edit-menu items
 				$this->mk_my_orb("change", array(
 						'id' => $o->id(),
-						'return_url' => urlencode(aw_global_get("REQUEST_URI"))
+						'return_url' => get_ru()
 					), CL_USER) => t("Muuda"),
 				$this->mk_my_orb("block_u", array("oid" => $o->id(), "post_ru" => get_ru())) => $o->prop('blocked') ? t("Blokeering maha") : t("Blokeeri"),
 				$this->mk_my_orb("ob_cut", array("sel_u[".$o->id()."]" => 1, "post_ru" => get_ru())) => t("L&otilde;ika"),
 				$this->mk_my_orb("ob_copy", array("sel_u[".$o->id()."]" => 1, "post_ru" => get_ru())) => t("Kopeeri"),
 				$this->mk_my_orb("change", array(
 						'id' => $o->id(),
-						'return_url' => urlencode(aw_global_get("REQUEST_URI")),
+						'return_url' => get_ru(),
 						'group' => 'chpwd'
 					), CL_USER) => t("Muuda parooli"),
 				$this->mk_my_orb("change", array(
 						'id' => $o->id(),
-						'return_url' => urlencode(aw_global_get("REQUEST_URI")),
+						'return_url' => get_ru(),
 						'group' => 'stat'
 					), CL_USER) => t("Vaata statistikat"),
 			);
@@ -751,7 +751,7 @@ class user_manager extends class_base
 					'caption' => strlen($o->prop('real_name')) ? $o->prop('real_name') : '('.t("nimetu").')',
 					'url' => $this->mk_my_orb("change", array(
 						'id' => $o->id(),
-						'return_url' => urlencode(aw_global_get("REQUEST_URI"))
+						'return_url' => get_ru()
 					), CL_USER),
 				)),
 				'company' => join(', ', $companies),
@@ -912,7 +912,7 @@ class user_manager extends class_base
 			// Deletion url
 			$delurl = $this->mk_my_orb("delete", array(
 				"sel_g[".$o->id()."]" => "1", 
-				'post_ru' => urlencode(get_ru()),
+				'post_ru' => get_ru(),
 			));
 			$delurl = "javascript:if(confirm('".t("Kustutada valitud objekt?")."')){window.location='$delurl';};";
 			
@@ -928,7 +928,7 @@ class user_manager extends class_base
 					"id" => $arr["obj_inst"]->id(),
 					"pn" => "table_groups",
 					"clid" => CL_MENU,
-					"append_html" => urlencode((str_replace(array("'","\n"),"",$html))),
+					"append_html" => (str_replace(array("'","\n"),"",$html))
 				), 'popup_search')
 				."','Vali',550,500)";
 			$html = $this->permissions_form . html::hidden(array(
@@ -939,21 +939,21 @@ class user_manager extends class_base
 						"id" => $arr["obj_inst"]->id(),
 						"pn" => "table_groups",
 						"clid" => 0, // Any class
-						"append_html" => ((urlencode(str_replace("&","%26",str_replace(array("'","\n"),"",($html)))))),
+						"append_html" => (((str_replace("&","%26",str_replace(array("'","\n"),"",($html)))))),
 					), 'popup_search')."','".t("M&auml;&auml;ra &otilde;igused")."',550,500)";
 			
 			// Edit-menu items
 			$items = array( 
 				$this->mk_my_orb("change", array(
 						'id' => $o->id(),
-						'return_url' => urlencode(aw_global_get("REQUEST_URI"))
+						'return_url' => get_ru()
 					), CL_GROUP) => t("Muuda"),
 				$delurl => t("Kustuta"),
 				$this->mk_my_orb("ob_cut", array("sel_g[".$o->id()."]" => 1, "post_ru" => get_ru())) => t("L&otilde;ika"),
 				$this->mk_my_orb("change", array(
 						'id' => $o->id(),
 						'group' => 'import',
-						'return_url' => urlencode(aw_global_get("REQUEST_URI"))
+						'return_url' => get_ru()
 					), CL_GROUP) => t("Impordi"),
 				$url_rootfolder => t("Juurkaust"),
 				$url_objects => t("Objektid"),

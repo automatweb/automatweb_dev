@@ -16,13 +16,13 @@ class server_folder_selector extends core
 				"select_folder", 
 				array(
 					"pn" => $p["name"],
-					"fld" => urlencode($p["value"]),
+					"fld" => $p["value"],
 				)
 			),
 			"caption" => t("Vali")
 		));
 		return array(
-				$p["name"] => $p
+			$p["name"] => $p
 		);
 	}
 
@@ -87,7 +87,7 @@ class server_folder_selector extends core
 			$dd = posix_getpwuid(fileowner($arr["fld"]."/".$file));
 			$t->define_data(array(
 				"name" => html::href(array(
-					"url" => $this->mk_my_orb("select_folder", array("pn" => $arr["pn"], "fld" => urlencode($arr["fld"]."/".$file))),
+					"url" => $this->mk_my_orb("select_folder", array("pn" => $arr["pn"], "fld" => $arr["fld"]."/".$file)),
 					"caption" => $file
 				)),
 				"sel" => html::href(array(

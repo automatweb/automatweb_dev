@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.32 2006/02/20 09:20:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.33 2006/03/08 15:15:04 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -869,7 +869,7 @@ class register_search extends class_base
 				{
 					if ($this->can("delete", $o->id()))
 					{
-						$delurl = $this->mk_my_orb("delete", array("id" => $o->id(), "return_url" => urlencode(aw_global_get("REQUEST_URI"))));
+						$delurl = $this->mk_my_orb("delete", array("id" => $o->id(), "return_url" => get_ru()));
 						$data[$v["name"]] = html::href(array(
 							"url" => "#",
 							"onClick" => "if(confirm(\"".t("Kustutada objekt?")."\")){window.location=\"$delurl\";};",

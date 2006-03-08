@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.9 2006/01/23 08:44:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.10 2006/03/08 15:15:04 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -233,7 +233,7 @@ class server_folder extends class_base
 			move_uploaded_file($_FILES["addf_file"]["tmp_name"], $fqfn);
 		}
 
-		$fid = $id.":".urlencode($_FILES["addf_file"]["name"]);
+		$fid = $id.":".$_FILES["addf_file"]["name"];
 		return $this->mk_my_orb("change_file", array("fid" => $fid, "section" => $section));
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.83 2006/02/15 09:08:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.84 2006/03/08 15:15:04 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -834,9 +834,9 @@ class webform extends class_base
 			"name" => "change",
 			"tooltip" => t("Muuda otsingu seadeid"),
 			"url" => html::get_change_url($register->prop("search_o"), array(
-				"return_url" => urlencode(html::get_change_url($arr["obj_inst"]->id(), array(
+				"return_url" => html::get_change_url($arr["obj_inst"]->id(), array(
 					"group" => $arr["request"]["group"],
-				))),
+				)),
 			)),
 			"img" => "../blue/obj_settings.gif",
 		));
@@ -852,9 +852,9 @@ class webform extends class_base
 			"tooltip" => t("Ekspordi objektid"),
 			"url" => html::get_change_url($object_export->id(), array(
 				"group" => "mktbl",
-				"return_url" => urlencode(html::get_change_url($arr["obj_inst"]->id(), array(
+				"return_url" => html::get_change_url($arr["obj_inst"]->id(), array(
 					"group" => $arr["request"]["group"],
-				))),
+				)),
 			)),
 			"img" => "ftype_xls.gif",
 		));
@@ -2142,7 +2142,7 @@ class webform extends class_base
 				) + $prx);
 				$awm->gen_mail();
 			}
-			return !empty($subaction) ? $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => urlencode($rval)), CL_WEBFORM) : $rval;
+			return !empty($subaction) ? $this->mk_my_orb("show_form", array("id" => $obj_inst->id(), "fid" => $o->id(), "url" => $rval), CL_WEBFORM) : $rval;
 		}
 	}
 	

@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.192 2006/02/17 07:17:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.193 2006/03/08 15:15:01 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -103,7 +103,7 @@ class aliasmgr extends aw_template
 				"reltype" => $reltype,
 				"return_url" => $return_url,
 			),$this->use_class),
-			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id,"reltype" => $reltype,"return_url" => urlencode($return_url)),$this->use_class),
+			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id,"reltype" => $reltype,"return_url" => ($return_url)),$this->use_class),
 			"toolbar" => $tb,
 			"form" => $form,
 			"table" => $search->get_results(),
@@ -665,7 +665,7 @@ class aliasmgr extends aw_template
 	function orb_addalias($args = array())
 	{
 		$this->create_alias($args);
-		return $this->mk_my_orb("list_aliases",array("id" => $args["id"],"return_url" => urlencode($args["return_url"])),$this->use_class);
+		return $this->mk_my_orb("list_aliases",array("id" => $args["id"],"return_url" => ($args["return_url"])),$this->use_class);
 	}
 
 	////

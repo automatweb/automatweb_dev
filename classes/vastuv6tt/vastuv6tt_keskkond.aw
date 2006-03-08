@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_keskkond.aw,v 1.1 2006/01/18 22:29:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_keskkond.aw,v 1.2 2006/03/08 15:15:08 kristo Exp $
 // vastuv6tt_keskkond.aw - Sisseastujate haldus
 /*
 
@@ -326,7 +326,7 @@ class vastuv6tt_keskkond extends class_base
 				{
 					$change_url = $this->mk_my_orb("change", array(
 						"id" => $sisseastuja->id(),
-						"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+						"return_url" => get_ru(),
 						"group" => "grp_sisseastuja_avaldused",
 					), "vastuv6tt_sisseastuja");
 
@@ -562,7 +562,7 @@ class vastuv6tt_keskkond extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["keskkond_return_url"] = urlencode(aw_global_get('REQUEST_URI'));
+		$arr["keskkond_return_url"] = post_ru();
 	}
 
 	function callback_mod_retval($arr)
@@ -660,7 +660,7 @@ class vastuv6tt_keskkond extends class_base
 				{
 					$change_url = $this->mk_my_orb("change", array(
 						"id" => $row["id"],
-						"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+						"return_url" => get_ru(),
 						"group" => "grp_sisseastuja_andmed",
 					), "vastuv6tt_sisseastuja");
 					$change_href = html::href(array(
@@ -714,7 +714,7 @@ class vastuv6tt_keskkond extends class_base
 					$sisseastuja_nimi = $sisseastuja->prop("isik_firstname") . " " . $sisseastuja->prop("isik_lastname");
 					$change_url = $this->mk_my_orb("change", array(
 						"id" => $row["id"],
-						"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+						"return_url" => get_ru(),
 						"group" => "grp_sisseastuja_katsetulemused",
 					), "vastuv6tt_sisseastuja");
 					$change_href = html::href(array(

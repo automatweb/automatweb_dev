@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.4 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/participant_selector.aw,v 1.5 2006/03/08 15:15:03 kristo Exp $
 class participant_selector extends core
 {
 	function participant_selector()
@@ -13,7 +13,7 @@ class participant_selector extends core
 		return html::href(array(
 			"url" => $this->mk_my_orb("change",array(
 				"id" => $arr["id"],
-				"return_url" => urlencode($this->request_uri),
+				"return_url" => $this->request_uri,
 				),CL_CRM_PERSON),
 			"caption" => $arr["name"],
 		));

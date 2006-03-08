@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_tyyp_list.aw,v 1.2 2005/11/27 13:02:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_tyyp_list.aw,v 1.3 2006/03/08 15:15:07 kristo Exp $
 // expp_tyyp_list.aw - Expp tyybi list 
 /*
 
@@ -127,7 +127,7 @@ echo $sql;
 			foreach( $val as $key1 => $val1 ) {
 				$this->vars(array(
 					'link' => aw_ini_get("tell_dir").urlencode( $val1 ),
-//					$this->mk_my_orb( 'show_test', array( 'cid' => 4, 'id' => urlencode($val1) ),'expp_jupp'),
+//					$this->mk_my_orb( 'show_test', array( 'cid' => 4, 'id' => ($val1) ),'expp_jupp'),
 					'nimi' => $val1
 				));
 				$_tmp .= $this->parse('LINE');

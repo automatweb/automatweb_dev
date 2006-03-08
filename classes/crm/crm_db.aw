@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.27 2006/03/08 14:03:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.28 2006/03/08 15:15:05 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -519,7 +519,7 @@ class crm_db extends class_base
 			'fname' => html::href(array(
 				'url' => $this->mk_my_orb('change',array(
 					'id' => $obj->id(),
-					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+					'return_url' => get_ru(),
 				), CL_CRM_COMPANY),
 				'caption' => strlen($obj->prop("name")) ? $obj->prop("name") : t("(nimetu)") ,
 			)),
@@ -531,7 +531,7 @@ class crm_db extends class_base
 			'firmajuht' => 	html::href(array(
 				'url' => $this->mk_my_orb('change',array(
 					'id' => $obj->prop("firmajuht"),
-					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+					'return_url' => get_ru(),
 				), CL_CRM_PERSON),
 				'caption' => $this->_get_name_for_object($obj->prop("firmajuht")),
 			)),
@@ -932,7 +932,7 @@ class crm_db extends class_base
 				$toolbar->add_button(array(
 					"name" => "user_calendar",
 					"tooltip" => t("Kasutaja kalender"),
-					"url" => $this->mk_my_orb('change', array('id' => $cal_id,"group" => "views", 'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
+					"url" => $this->mk_my_orb('change', array('id' => $cal_id,"group" => "views", 'return_url' => get_ru(),),'planner'),
 					"onClick" => "",
 					"img" => "icon_cal_today.gif",
 					"class" => "menuButton",
@@ -1055,7 +1055,7 @@ class crm_db extends class_base
 							'link' => $this->mk_my_orb('new',array(
 								'class' => basename($classinf["file"]),
 								'parent' => $parents[$val['class_id']],
-								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+								'return_url' => get_ru(),
 							)),
 							'text' => $classinf["name"],
 						));
@@ -1140,7 +1140,7 @@ class crm_db extends class_base
 								//'reltype'	=> array_key_exists('reltype', $val) ? $val['reltype'] : "",
 								//'alias_to'	=> array_key_exists('alias_to', $val) ? $val['alias_to'] : "",
 								'parent'	=> $parents[$val['clid']],
-								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+								'return_url' => get_ru(),
 								
 							)),
 							'text' => sprintf(t('Lisa %s'),$classinf['name']),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.75 2006/03/08 11:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.76 2006/03/08 15:15:08 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -276,7 +276,7 @@ class mrp_job extends class_base
 				{
 					$prop["value"] = html::get_change_url(
 						$this->resource->id(),
-						array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
+						array("return_url" => get_ru()),
 						$this->resource->name ()
 					);
 				}
@@ -557,7 +557,7 @@ class mrp_job extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_job");
@@ -569,7 +569,7 @@ class mrp_job extends class_base
 		else
 		{
 			$errors[] = t("Töö id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
@@ -638,7 +638,7 @@ class mrp_job extends class_base
 				"resource" => $this_object->prop("resource"),
 				"job" => $this_object->id (),
 			));
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 		else
@@ -663,7 +663,7 @@ class mrp_job extends class_base
 						"resource" => $this_object->prop("resource"),
 						"job" => $this_object->id (),
 					));
-					$errors = urlencode(serialize($errors));
+					$errors = (serialize($errors));
 					return aw_url_change_var ("errors", $errors, $return_url);
 				}
 			}
@@ -699,7 +699,7 @@ class mrp_job extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_job");
@@ -711,7 +711,7 @@ class mrp_job extends class_base
 		else
 		{
 			$errors[] = t("Töö id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 
@@ -821,7 +821,7 @@ class mrp_job extends class_base
 			}
 		}
 
-		$errors = urlencode(serialize($errors));
+		$errors = (serialize($errors));
 		return aw_url_change_var ("errors", $errors, $return_url);
 	}
 
@@ -834,7 +834,7 @@ class mrp_job extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" => urlencode ($arr["return_url"]),
+			"return_url" =>  ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_job");
@@ -846,7 +846,7 @@ class mrp_job extends class_base
 		else
 		{
 			$errors[] = t("Töö id vale");
-			$errors = urlencode(serialize($errors));
+			$errors = (serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 

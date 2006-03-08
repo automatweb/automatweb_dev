@@ -896,7 +896,7 @@ class core extends acl_base
 				// that gets everything
 				if ((isset($value) && ($value !== "")) || $this->use_empty)
 				//{
-					if ($name != "return_url" && $enc)
+					if ($enc)
 					{
 						$value = urlencode($value);
 					}

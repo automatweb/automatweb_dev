@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.8 2005/03/22 17:04:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/survey/survey_manager.aw,v 1.9 2006/03/08 15:15:04 kristo Exp $
 // survey_manager.aw - Ankeetide haldur 
 /*
 
@@ -219,7 +219,7 @@ class survey_manager extends class_base
 		$ol = new object_list($ol_args);
 
 
-		$return_url = urlencode(aw_global_get("REQUEST_URI"));
+		$return_url = get_ru();
 		foreach($ol->arr() as $survey)
 		{
 			$id = $survey->id();
@@ -270,7 +270,7 @@ class survey_manager extends class_base
 		$rv = "";
 		$csv = $arr["request"]["format"] == "csv";
 
-		$return_url = urlencode(aw_global_get("REQUEST_URI"));
+		$return_url = get_ru();
 
 		foreach($ol->arr() as $survey)
 		{

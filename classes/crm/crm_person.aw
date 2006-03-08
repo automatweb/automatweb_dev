@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.116 2006/03/01 14:59:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.117 2006/03/08 15:15:05 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1056,7 +1056,7 @@ class crm_person extends class_base
 							'reltype' => $val['reltype'],
 							'class' => $val['class'],
 							'parent' => $parents[$val['reltype']],
-							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+							'return_url' => get_ru(),
 						)),
 						'text' => sprintf(t('Lisa %s'),$val['caption']),
 					));
@@ -1084,7 +1084,7 @@ class crm_person extends class_base
 			"tooltip" => t("Uus"),
 		));
 
-		$req = urlencode(aw_global_get("REQUEST_URI"));
+		$req = get_ru();
 
 		$menudata = '';
 		$clss = aw_ini_get("classes");
@@ -1730,7 +1730,7 @@ class crm_person extends class_base
 
 		$classes = aw_ini_get("classes");
 
-		$return_url = urlencode(aw_global_get("REQUEST_URI"));
+		$return_url = get_ru();
 		$planner = get_instance(CL_PLANNER);
 		classload("core/icons");
 		$this->overview = array();
@@ -2739,7 +2739,7 @@ class crm_person extends class_base
 			var ansa = confirm('Sellise nimega isik on juba olemas. Kas soovite minna selle objekti muutmisele?');
 			if (ansa)
 			{
-				window.location = '".$this->mk_my_orb("go_to_first_person_by_name", array("return_url" => urlencode($arr["request"]["return_url"])))."&co_name=' + document.changeform.firstname.value + ' '+document.changeform.lastname.value;
+				window.location = '".$this->mk_my_orb("go_to_first_person_by_name", array("return_url" => $arr["request"]["return_url"]))."&co_name=' + document.changeform.firstname.value + ' '+document.changeform.lastname.value;
 				return false;
 			}
 		}".

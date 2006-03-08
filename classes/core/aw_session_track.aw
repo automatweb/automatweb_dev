@@ -206,7 +206,7 @@ class aw_session_track extends class_base
 			if ($d["aw"]["uid"] != "")
 			{
 				$lo = html::href(array(
-					"url" => $this->mk_my_orb("del_sess", array("sess" => $sess_file, "return_url" => urlencode(aw_global_get("REQUEST_URI")))),
+					"url" => $this->mk_my_orb("del_sess", array("sess" => $sess_file, "return_url" => get_ru())),
 					"caption" => t("Logi v&auml;lja")
 				));
 			}
@@ -229,7 +229,7 @@ class aw_session_track extends class_base
 					"caption" => t("Saada teade"),
 					"onClick" => "u = prompt(\"Teade\");window.location=\"".$this->mk_my_orb("do_msg", array(
 							"sess" => $sess_file,
-							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+							"return_url" => get_ru()
 					))."&msg=\"+u;"
 				)),
 				"redir" => html::href(array(
@@ -237,7 +237,7 @@ class aw_session_track extends class_base
 					"caption" => t("Suuna"),
 					"onClick" => "u = prompt(\"".t("Aadress, kuhu suunata")."\");window.location=\"".$this->mk_my_orb("do_redir", array(
 							"sess" => $sess_file,
-							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+							"return_url" => get_ru()
 					))."&redir_to=\"+u;"
 				)),
 				"logout" => $lo

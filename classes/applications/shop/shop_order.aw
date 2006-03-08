@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.41 2005/10/19 13:05:36 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.42 2006/03/08 15:15:04 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -1509,7 +1509,7 @@ class shop_order extends class_base
 		$obj->set_meta("ord_item_data", $prp_data);
 		$obj->set_meta("ord_content", $prp_count);
 		$obj->save();
-		return html::get_change_url($arr["id"], array("group" => $arr["group"], "return_url" => urlencode($arr["return_url"])));
+		return html::get_change_url($arr["id"], array("group" => $arr["group"], "return_url" => $arr["return_url"]));
 	}
 
 	function __prod_show_sort_gpby($a, $b)

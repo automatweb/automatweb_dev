@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.18 2006/01/26 09:56:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.19 2006/03/08 15:15:02 kristo Exp $
 
 /*
 
@@ -163,7 +163,7 @@ class banner extends class_base
 					'alias_to' => $alias_to,
 					'reltype' => 2, // CL_BANNER.RELTYPE_BANNER_FILE
 					"class" => strlen(strrchr($clss[$clid]['file'], '/')) ?  substr(strrchr($clss[$clid]['file'],'/'), 1) : $clss[$clid]['file'],
-					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+					'return_url' => get_ru(),
 				))
 			));
 		}
@@ -180,7 +180,7 @@ class banner extends class_base
 				'parent' => $arr['obj_inst']->id(),
 				'alias_to' => $alias_to,
 				'reltype' => 1, // CL_BANNER.RELTYPE_LOCATION
-				'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				'return_url' => get_ru(),
 				"class" => "banner_client",
 			))
 		));

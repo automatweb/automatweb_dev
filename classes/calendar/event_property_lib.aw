@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.25 2005/12/06 18:20:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.26 2006/03/08 15:15:04 kristo Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -191,7 +191,7 @@ class event_property_lib extends aw_template
 			return html::href(array(
 			 "url" => $this->mk_my_orb("change",array(
 			    "id" => $arr["id"],
-		    	"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+		    	"return_url" => get_ru(),
 			 ),CL_CRM_PERSON),
 			 "caption" => $arr["name"],
 			));
@@ -312,7 +312,7 @@ class event_property_lib extends aw_template
 						"url" => $this->mk_my_orb("view", array(
 							"id" => $_tmp->id(), 
 							"cfgform" => $_tmp->meta("cfgform"),
-							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+							"return_url" => get_ru()
 						), CL_CALENDAR_REGISTRATION_FORM),
 						"caption" => t("Vaata")
 					));

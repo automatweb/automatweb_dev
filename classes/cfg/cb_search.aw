@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.41 2005/06/20 10:26:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.42 2006/03/08 15:15:04 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -764,7 +764,7 @@ class cb_search extends class_base
 						"caption" => $this->in_results["change_link"]["caption"]
 					));
 					$row["del_link"] = html::href(array(
-						"url" => $this->mk_my_orb("delete_obj", array("id" => $o->id(), "return_url" => urlencode(aw_global_get("REQUEST_URI")))),
+						"url" => $this->mk_my_orb("delete_obj", array("id" => $o->id(), "return_url" => get_ru())),
 						"caption" => $this->in_results["del_link"]["caption"]
 					));
 					$row["oid"] = $o->id();

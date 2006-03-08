@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.5 2005/05/19 14:36:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.6 2006/03/08 15:15:03 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -486,12 +486,12 @@ class class_designer_manager extends class_base
 
 		if (!$ol->count())
 		{
-			return html::get_new_url($arr["clid"], $parent, array("return_url" => urlencode($arr["ru"])));
+			return html::get_new_url($arr["clid"], $parent, array("return_url" => ($arr["ru"])));
 		}
 		else
 		{
 			$o = $ol->begin();
-			return html::get_change_url($o->id(), array("return_url" => urlencode($arr["ru"])));
+			return html::get_change_url($o->id(), array("return_url" => ($arr["ru"])));
 		}
 	}
 
@@ -845,7 +845,7 @@ class class_designer_manager extends class_base
 		$this->_parse_designer_from_class($o, $arr["clid"], $clss[$arr["clid"]]);
 
 
-		return html::get_change_url($o->id(), array("return_url" => urlencode($arr["ru"])));
+		return html::get_change_url($o->id(), array("return_url" => ($arr["ru"])));
 	}
 
 	function _get_obj_parent_by_clid($id, $clid)

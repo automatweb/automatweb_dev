@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.7 2005/03/22 17:04:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessagebox.aw,v 1.8 2006/03/08 15:15:03 kristo Exp $
 // quickmessagebox.aw - Kiirsõnumite haldus 
 /*
 
@@ -107,7 +107,7 @@ class quickmessagebox extends class_base
 							"cuser" => $users->get_uid_for_oid($o->prop("user_from")),
 							"group" => "newmessage",
 							"mid" => $arr["request"]["mid"],
-							"subject" => urlencode("Re: ".$o->prop("subject")),
+							"subject" => "Re: ".$o->prop("subject"),
 						)),
 					));
 					$tb->add_separator();

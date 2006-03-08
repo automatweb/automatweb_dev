@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.343 2006/02/02 13:53:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.344 2006/03/08 15:15:02 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1664,7 +1664,7 @@ class document extends aw_template
 	**/
 	function add($arr)
 	{
-		$arr["return_url"] = urlencode($arr["return_url"]);
+		$arr["return_url"] = $arr["return_url"];
 		$str = $this->mk_my_orb("new", $arr, "doc");
 		return $str;
 	}

@@ -99,7 +99,7 @@ class crm_company_overview_impl extends class_base
 
 		$classes = aw_ini_get("classes");
 
-		$return_url = urlencode(aw_global_get("REQUEST_URI"));
+		$return_url = get_ru();
 		$planner = get_instance(CL_PLANNER);
 
 		$task_ol = $this->_get_task_list($arr);
@@ -474,6 +474,14 @@ class crm_company_overview_impl extends class_base
 			$t_id = $task->id();
 			$pm->begin_menu("task_".$t_id);
 			$pm->add_item(array(
+				"text" => t("Ava read"), 
+				"link" => $this->mk_my_orb("change", array(
+					"id" => $t_id,
+					"group" => "rows",
+					"return_url" => get_ru()
+				), $task->class_id())
+			));
+			$pm->add_item(array(
 				"text" => t("Kustuta"), 
 				"link" => $this->mk_my_orb("delete_tasks", array(
 					"sel" => array($t_id => $t_id),
@@ -501,7 +509,7 @@ class crm_company_overview_impl extends class_base
 					"id" => $t_id,
 					"s_action" => "start",
 					"type" => t("Toimetus"),
-					"name" => urlencode($task->name())
+					"name" => $task->name()
 				),CL_TASK);
 
 				$pm->add_item(array(
@@ -517,7 +525,7 @@ class crm_company_overview_impl extends class_base
 					"id" => $t_id,
 					"s_action" => "stop",
 					"type" => t("Toimetus"),
-					"name" => urlencode($task->name())
+					"name" => $task->name()
 				),CL_TASK);
 
 				$elapsed = $ti->get_stopper_time($task->id());

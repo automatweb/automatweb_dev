@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.465 2006/03/03 10:47:34 kristo Exp $
+// $Id: class_base.aw,v 2.466 2006/03/08 15:15:02 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1485,7 +1485,7 @@ class class_base extends aw_template
 					"list_aliases",
 					array(
 						"id" => $this->id,
-						"return_url" => urlencode($return_url)
+						"return_url" => ($return_url)
 					),
 					$_GET["class"] ? $_GET["class"] : get_class($this->orb_class)
 				);

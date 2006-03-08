@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.82 2006/03/06 13:34:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.83 2006/03/08 15:15:03 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -706,7 +706,7 @@ class project extends class_base
 		//new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
 
 
-		$req = urlencode(aw_global_get("REQUEST_URI"));
+		$req = get_ru();
 		$clss = aw_ini_get("classes");
 
 		foreach($ol->arr() as $o)
@@ -1760,7 +1760,7 @@ class project extends class_base
 							"group" => "change",
 							"cfgform" => $cobj->id(),
 							"clid" => $cobj->subclass(),
-							"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+							"return_url" => get_ru(),
 						),$cobj->subclass()),
 					));
 				};
@@ -3417,7 +3417,7 @@ class project extends class_base
 			));
 		}
 
-		header("Location: ".html::get_change_url($o->id(), array("return_url" => urlencode($arr["request"]["post_ru"]))));
+		header("Location: ".html::get_change_url($o->id(), array("return_url" => $arr["request"]["post_ru"])));
 		die();
 	}
 
@@ -3787,7 +3787,7 @@ class project extends class_base
 			"type" => "RELTYPE_ROW"
 		));
 
-		return $this->mk_my_orb("change", array("id" => $bill->id(), "return_url" => urlencode($arr["ru"])), CL_CRM_BILL);
+		return $this->mk_my_orb("change", array("id" => $bill->id(), "return_url" => $arr["ru"]), CL_CRM_BILL);
 	}
 
 	function do_db_upgrade($tbl, $field, $q, $err)

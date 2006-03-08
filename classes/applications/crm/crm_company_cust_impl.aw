@@ -1494,7 +1494,7 @@ class crm_company_cust_impl extends class_base
 					'parent' => $arr['obj_inst']->id(),
 					'alias_to' => $alias_to,
 					'reltype' => $rt, //RELTYPE_CATEGORY
-					'return_url' => urlencode(aw_global_get('REQUEST_URI'))
+					'return_url' => get_ru()
 				),
 				'crm_category'
 			)	
@@ -1509,7 +1509,7 @@ class crm_company_cust_impl extends class_base
 						'parent' => $arr['obj_inst']->id(),
 						'alias_to' => $alias_to,
 						'reltype' => 3, // crm_category.CUSTOMER,
-						'return_url' => urlencode(aw_global_get('REQUEST_URI'))
+						'return_url' => get_ru()
 					),
 					'crm_company'
 				)

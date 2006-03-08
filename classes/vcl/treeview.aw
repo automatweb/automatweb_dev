@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.56 2006/03/08 13:47:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.57 2006/03/08 15:15:09 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -1163,7 +1163,6 @@ class treeview extends class_base
 		$tv = get_instance(CL_TREEVIEW);
 		$aw_classes = get_class_picker (array ("field" => "def"));
 
-		$req_uri = urlencode(aw_global_get('REQUEST_URI'));
 		if (!isset($target_url))
 		{
 			$target_url = null;
@@ -1176,7 +1175,7 @@ class treeview extends class_base
 		{
 			$tree_opts["root_url"] = $this->mk_my_orb ($node_actions[$class_id], array(
 				"id" => $o->id (),
-				"return_url" => $req_uri,
+				"return_url" => get_ru(),
 			), $class_name);
 		}
 		else
@@ -1191,7 +1190,7 @@ class treeview extends class_base
 		{
 			$url = $this->mk_my_orb ($node_actions[$class_id], array(
 				"id" => $o->id (),
-				"return_url" => $req_uri,
+				"return_url" => get_ru(),
 			), $class_name);
 		}
 		else
@@ -1251,7 +1250,7 @@ class treeview extends class_base
 
 			if ( (is_array ($node_actions)) and ($node_actions[$class_id]) )
 			{
-				$url = html::get_change_url($oid, array("return_url" => $req_uri));
+				$url = html::get_change_url($oid, array("return_url" => get_ru()));
 			}
 			else
 			{

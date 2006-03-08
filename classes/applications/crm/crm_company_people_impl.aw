@@ -34,7 +34,7 @@ class crm_company_people_impl extends class_base
 				'parent' => $arr['obj_inst']->id(),
 				'alias_to' => $alias_to,
 				'reltype' => $arr['request']['unit'] ? 2 : 8,
-				'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				'return_url' => get_ru(),
 				"class" => "crm_company",
 				"profession" => $arr["request"]["cat"] == CRM_ALL_PERSONS_CAT ? 0 : $arr["request"]["cat"]
 			))
@@ -47,7 +47,7 @@ class crm_company_people_impl extends class_base
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
 					'reltype'=> $arr["request"]["unit"] ? 1 : 28,
-					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
+					'return_url'=>get_ru()
 				),
 				'crm_section'
 			)
@@ -60,7 +60,7 @@ class crm_company_people_impl extends class_base
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
 					'reltype'=> (int)$arr['request']['unit'] ? 3 : 29,
-					'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
+					'return_url'=>get_ru()
 				),
 				'crm_profession'
 			)
@@ -770,7 +770,7 @@ class crm_company_people_impl extends class_base
 					'parent'=>$arr['obj_inst']->id(),
 					'alias_to'=>$alias_to,
 					'reltype'=> $reltype,
-					'return_url'=>urlencode(aw_global_get('REQUEST_URI')),
+					'return_url'=>get_ru(),
 					'cat' => $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT ? $arr["request"]["cat"] : NULL,
 					'unit' => $arr["request"]["unit"],
 					'org' => $arr['obj_inst']->id(),

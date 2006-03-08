@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.12 2006/02/10 11:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.13 2006/03/08 15:15:03 kristo Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -951,7 +951,7 @@ class realestate_property extends class_base
 	{
 		$this_object = $arr["obj_inst"];
 		$toolbar =& $arr["prop"]["vcl_inst"];
-		$return_url = urlencode (aw_global_get('REQUEST_URI'));
+		$return_url = get_ru();
 		$classes = aw_ini_get("classes");
 		$class = $classes[$this_object->class_id ()]["file"];
 		$class = explode ("/", $class);
@@ -1185,7 +1185,7 @@ class realestate_property extends class_base
 					"id" => $this_object_id,
 					"contact_type" => "broker",
 					"show_pictures" => 0,
-					"return_url" => urlencode (aw_global_get ("REQUEST_URI")),
+					"return_url" => get_ru(),
 				), $class);
 				break;
 

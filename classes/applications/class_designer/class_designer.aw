@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.31 2005/07/14 09:40:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.32 2006/03/08 15:15:03 kristo Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -901,7 +901,7 @@ class class_designer extends class_base
 				)),
 				"edit" => html::href(array(
 					"caption" => t("Muuda"),
-					"url" => $this->mk_my_orb("change",array("id" => $change_id, "return_url" => urlencode(aw_global_get("REQUEST_URI"))),$real_clid),
+					"url" => $this->mk_my_orb("change",array("id" => $change_id, "return_url" => get_ru()),$real_clid),
 				)),
 			));
 		};
@@ -941,7 +941,7 @@ class class_designer extends class_base
 		$o->set_meta("element_ords", $elo);
 		$o->save();
 
-		return html::get_change_url($g->id(), array("return_url" => urlencode($arr["return_url"])));
+		return html::get_change_url($g->id(), array("return_url" => ($arr["return_url"])));
 	}
 
 	/**
@@ -973,7 +973,7 @@ class class_designer extends class_base
 		$o->set_meta("element_ords", $elo);
 		$o->save();
 
-		return html::get_change_url($g->id(), array("return_url" => urlencode($arr["return_url"])));
+		return html::get_change_url($g->id(), array("return_url" => ($arr["return_url"])));
 	}
 
 	/**
@@ -1008,7 +1008,7 @@ class class_designer extends class_base
 		$o->set_meta("element_ords", $elo);
 		$o->save();
 
-		return html::get_change_url($e->id(), array("return_url" => urlencode($arr["return_url"])));
+		return html::get_change_url($e->id(), array("return_url" => ($arr["return_url"])));
 	}
 
 	/**

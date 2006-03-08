@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_liik_list.aw,v 1.2 2005/11/27 13:02:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_liik_list.aw,v 1.3 2006/03/08 15:15:07 kristo Exp $
 // expp_liik_list.aw - Expp liigi list 
 /*
 
@@ -111,7 +111,7 @@ echo $sql;
 		$i = 0;
 		while ($row = $this->db_next()) {
 			$this->vars(array(
-				'link' => $this->mk_my_orb( 'show_test', array( 'cid' => 4, 'id' => urlencode($row['toote_nimetus']) ),'expp_jupp'),
+				'link' => $this->mk_my_orb( 'show_test', array( 'cid' => 4, 'id' => ($row['toote_nimetus']) ),'expp_jupp'),
 				'nimi' => $row['toote_nimetus']
 			));
 			$htmlArr[$_idx] .= $this->parse('LINE');

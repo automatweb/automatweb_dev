@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.20 2005/09/14 17:57:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.21 2006/03/08 15:15:05 kristo Exp $
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_SELECTION
 @default table=objects
@@ -210,7 +210,7 @@ class crm_selection extends class_base
 			'caption' => $arr['name'],
 			'url' => $this->mk_my_orb('change', array(
 					'id' => $arr["id"],
-					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+					'return_url' => get_ru(),
 				),$arr['clid']),
 		));
 	}

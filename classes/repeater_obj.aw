@@ -111,7 +111,7 @@ class repeater_obj extends cal_event
 
 		return $this->mk_my_orb('change', array(
 			'id' => $id, 
-			'return_url' => urlencode($return_url)
+			'return_url' => ($return_url)
 		));
 	}
 

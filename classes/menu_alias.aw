@@ -1,5 +1,5 @@
 <?php
-// $Id: menu_alias.aw,v 2.13 2005/03/20 16:46:11 kristo Exp $
+// $Id: menu_alias.aw,v 2.14 2006/03/08 15:15:02 kristo Exp $
 // menu_alias.aw - Deals with menu aliases
 class menu_alias extends aw_template
 {
@@ -122,7 +122,7 @@ class menu_alias extends aw_template
 				"to" => $id
 			));
 		}
-		return $this->mk_my_orb("change_alias",array("id" => $id,"return_url" => urlencode($return_url)));
+		return $this->mk_my_orb("change_alias",array("id" => $id,"return_url" => ($return_url)));
 	}
 
 	function create_menu_alias($args = array())

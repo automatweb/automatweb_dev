@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.38 2006/01/25 14:56:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.39 2006/03/08 15:15:04 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -505,7 +505,7 @@ class shop_warehouse extends class_base
 				$lim	
 		";
 		$this->db_query($q);
-		$vars = array("return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")));
+		$vars = array("return_url" => get_ru());
 		//$t->table_header = t("<center>Leiti ".$this->num_rows()." kirjet</center>");
 		$mt = 0;
 		while($w = $this->db_next())
@@ -672,7 +672,7 @@ class shop_warehouse extends class_base
 			"text" => t("Lisa kaust"),
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->prod_tree_root,
-				"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+				"return_url" => get_ru(),
 			), CL_MENU)
 		));
 
@@ -702,7 +702,7 @@ class shop_warehouse extends class_base
 			"tooltip" => t("Lisa uus tootegrupp"),
 			"url" => $this->mk_my_orb("new", array(
 				"parent" => $this->prod_type_fld,
-				"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+				"return_url" => get_ru(),
 				"cfgform" => $this->prod_type_cfgform,
 			), CL_WEBFORM),
 		));
@@ -730,7 +730,7 @@ class shop_warehouse extends class_base
 				"name" => $obj->name(),
 				"change" => html::get_change_url($obj->id(), array(
 					"group" => "form",
-					"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+					"return_url" => get_ru(),
 				), t("Muuda")),
 			));
 		}
@@ -772,7 +772,7 @@ class shop_warehouse extends class_base
 						"parent" => $this->prod_tree_root,
 						"alias_to" => $data["obj_inst"]->id(),
 						"reltype" => 2, //RELTYPE_PRODUCT,
-						"return_url" => urlencode(aw_global_get("REQUEST_URI")),
+						"return_url" => get_ru(),
 						"cfgform" => $o->prop("sp_cfgform"),
 						"object_type" => $o->prop("sp_object_type")
 					), CL_SHOP_PRODUCT)
@@ -910,7 +910,7 @@ class shop_warehouse extends class_base
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						"return_url" => get_ru()
 					), $o->class_id()),
 					"caption" => t("Muuda")
 				)),
@@ -1062,7 +1062,7 @@ class shop_warehouse extends class_base
 				"parent" => $this->pkt_tree_root,
 				"alias_to" => $data["obj_inst"]->id(),
 				"reltype" => 2, //RELTYPE_PACKET,
-				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+				"return_url" => get_ru()
 			), CL_SHOP_PACKET)
 		));
 	}
@@ -1142,7 +1142,7 @@ class shop_warehouse extends class_base
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						"return_url" => get_ru()
 					), CL_SHOP_PACKET),
 					"caption" => t("Muuda")
 				)),
@@ -1392,7 +1392,7 @@ class shop_warehouse extends class_base
 				"parent" => $this->reception_fld,
 				"alias_to" => $data["obj_inst"]->id(),
 				"reltype" => 3, //RELTYPE_STORAGE_INCOME,
-				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+				"return_url" => get_ru()
 			), CL_SHOP_WAREHOUSE_RECEPTION)
 		));
 	}
@@ -1503,7 +1503,7 @@ class shop_warehouse extends class_base
 				"parent" => $this->export_fld,
 				"alias_to" => $data["obj_inst"]->id(),
 				"reltype" => 4, //RELTYPE_STORAGE_EXPORT,
-				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+				"return_url" => get_ru()
 			), CL_SHOP_WAREHOUSE_EXPORT)
 		));
 	}
@@ -1548,10 +1548,10 @@ class shop_warehouse extends class_base
 		return $this->mk_my_orb("change", array(
 			"id" => $e->id(),
 			"group" => "export",
-			"return_url" => urlencode($this->mk_my_orb("change", array(
+			"return_url" => $this->mk_my_orb("change", array(
 				"id" => $o->id(),
 				"group" => "storage_export"
-			)))
+			))
 		), CL_SHOP_WAREHOUSE_EXPORT);
 	}
 
@@ -1595,10 +1595,10 @@ class shop_warehouse extends class_base
 		return $this->mk_my_orb("change", array(
 			"id" => $e->id(),
 			"group" => "income",
-			"return_url" => urlencode($this->mk_my_orb("change", array(
+			"return_url" => $this->mk_my_orb("change", array(
 				"id" => $o->id(),
 				"group" => "storage_income"
-			)))
+			))
 		), CL_SHOP_WAREHOUSE_RECEPTION);
 	}
 
@@ -1618,7 +1618,7 @@ class shop_warehouse extends class_base
 				"parent" => $this->order_fld,
 				"alias_to" => $data["obj_inst"]->id(),
 				"reltype" => 5, //RELTYPE_ORDER,
-				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+				"return_url" => get_ru()
 			), CL_SHOP_ORDER)
 		));
 	}
@@ -1676,7 +1676,7 @@ class shop_warehouse extends class_base
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
 						"group" => "items",
-						"return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
+						"return_url" => get_ru(),
 					), CL_SHOP_ORDER),
 					"caption" => t("Vaata")
 				)),
@@ -1756,7 +1756,7 @@ class shop_warehouse extends class_base
 				"parent" => $this->order_fld,
 				"alias_to" => $data["obj_inst"]->id(),
 				"reltype" => 5, //RELTYPE_ORDER,
-				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+				"return_url" => get_ru()
 			), CL_SHOP_ORDER)
 		));
 	}
@@ -1815,7 +1815,7 @@ class shop_warehouse extends class_base
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
 						"group" => "items",
-						"return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")),
+						"return_url" => get_ru(),
 					), CL_SHOP_ORDER),
 					"caption" => t("Vaata")
 				)),

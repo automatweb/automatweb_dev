@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.79 2006/03/02 10:41:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.80 2006/03/08 15:15:09 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -367,7 +367,7 @@ class releditor extends core
 			return;
 		}
 		$createlinks = array();
-		$return_url = urlencode(aw_global_get("REQUEST_URI"));
+		$return_url = get_ru();
 		// You can set newly created object's parent to be current object
 		if (!empty($arr['prop']['override_parent']) && $arr['prop']['override_parent'] == 'this')
 		{
@@ -502,7 +502,7 @@ class releditor extends core
 				"type" => $arr["prop"]["reltype"],
 			));
 			$name = $arr["prop"]["name"];
-			$return_url = urlencode(aw_global_get("REQUEST_URI"));
+			$return_url = get_ru();
 			foreach($conns as $conn)
 			{
 				$c_to = $conn->prop("to");

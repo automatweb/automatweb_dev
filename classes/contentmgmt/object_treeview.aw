@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.50 2005/12/13 21:16:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.51 2006/03/08 15:15:04 kristo Exp $
 
 /*
 
@@ -299,7 +299,7 @@ class object_treeview extends class_base
 			if ($this->can("delete", $od->id()))
 			{
 				$delete = html::href(array(
-					"url" => $this->mk_my_orb("delete", array("id" => $od->id(), "return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("QUEST_URI")))),
+					"url" => $this->mk_my_orb("delete", array("id" => $od->id(), "return_url" => get_ru())),
 					"caption" => html::img(array(
 						"border" => 0,
 						"url" =>  aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif"
