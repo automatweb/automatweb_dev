@@ -469,6 +469,14 @@ class core extends acl_base
 	// $silent - logida viga, aga jätkata tööd
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
 	{
+		if (!$_SESSION["err_retry"])
+		{
+			$_SESSION["err_retry"] = 1;
+			$c = get_instance("cache");
+			$c->full_flush();
+			header("Location: ".aw_ini_get("baseurl").aw_global_get("REQUEST_URI"));
+			die();
+		}
 		if(aw_ini_get('raise_error.no_email'))
 		{
 			$send_mail = false;
