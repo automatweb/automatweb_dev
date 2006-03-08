@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.22 2006/03/01 08:51:26 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.22 2006/03/01 08:51:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.23 2006/03/08 12:30:23 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.23 2006/03/08 12:30:23 tarvo Exp $
 
 // bug_tracker.aw - BugTrack 
 define("MENU_ITEM_LENGTH", 20);
@@ -199,7 +199,9 @@ class bug_tracker extends class_base
 	    classload("core/icons");
 		$node_tree = get_instance("vcl/treeview");
 		$node_tree->start_tree (array (
-		"type" => TREE_DHTML,
+			"type" => TREE_DHTML,
+			"tree_id" => "bug_tree",
+			"branch" => 1,
 		));
 	    
 		$obj = new object($arr["parent"]);
@@ -300,6 +302,8 @@ class bug_tracker extends class_base
 		$node_tree = get_instance("vcl/treeview");
 		$node_tree->start_tree (array (
 			"type" => TREE_DHTML,
+			"tree_id" => "bug_tree",
+			"branch" => 1,
 		));
 
 		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
@@ -349,6 +353,8 @@ class bug_tracker extends class_base
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
 			"has_root" => 1,
+			"tree_id" => "bug_tree",
+			"persist_state" => 1,
 			"root_name" => $root_name[($this->active_group == "bugs")?"by_default":$this->active_group],
 			"root_icon" => icons::get_icon_url(CL_BUG_TRACKER),
 			"get_branch_func" => $this->mk_my_orb($orb_function, array(
