@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.74 2006/03/06 11:04:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.75 2006/03/08 11:52:15 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -483,6 +483,71 @@ class mrp_job extends class_base
 		));
 	}
 
+	function state_changed($job, $com)
+	{
+		$ws = get_instance(CL_MRP_WORKSPACE);
+		$com_txt = "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$this->states[$job->prop("state")];
+		$ws->mrp_log($job->prop("project"), $job->id(), $com_txt, $com);
+		$this->add_comment($job->id(), $com_txt." ".$com);
+	}
+
+	function stats_start($job)
+	{
+		$case = $job->prop("project");
+		$res = $job->prop("resource");
+		$job_id = $job->id();
+		$uid = aw_global_get("uid");
+		$start = time();
+		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM mrp_stats
+			WHERE
+				case_oid = $case AND
+				resource_oid = $res AND
+				job_oid = $job_id AND
+				uid = '$uid'",
+			"cnt");
+		if ($cnt == 0)
+		{
+			$this->db_query("INSERT INTO mrp_stats(
+				case_oid, resource_oid, job_oid, uid, start, end, length, last_start
+			)
+			VALUES(
+				$case, $res, $job_id, '$uid', $start, NULL, 0, $start
+			)");
+		}
+		else
+		{
+			// start after pause
+			$this->db_query("UPDATE mrp_stats SET
+					last_start = $start
+				WHERE
+					case_oid = $case AND resource_oid = $res AND job_oid = $job_id AND uid = '$uid'");
+		}
+	}
+
+	function stats_done($job)
+	{
+		$case = $job->prop("project");
+		$res = $job->prop("resource");
+		$job_id = $job->id();
+		$uid = aw_global_get("uid");
+		$tm = time();
+		$q = "SELECT * FROM mrp_stats WHERE
+			case_oid = $case AND resource_oid = $res AND job_oid = $job_id AND uid = '$uid'";
+		$row = $this->db_fetch_row($q);
+		if (!$row)
+		{
+			$fp = fopen(aw_ini_get("site_basedir")."/files/mrp_stats.txt", "a");
+			fwrite($fp, date("d.m.Y H:i:s").": stats_done($job_id): no row for $case, $res, $job_id, $uid\n");
+			fclose($fp);
+			return;
+		}
+		$this->db_query("UPDATE mrp_stats SET
+				end = $tm, length = length + ($tm - last_start), last_start = null
+			WHERE
+				case_oid = $case AND resource_oid = $res AND job_oid = $job_id AND uid = '$uid'");
+	}
+
+
 /**
 	@attrib name=start
 	@param id required type=int
@@ -612,11 +677,8 @@ class mrp_job extends class_base
 			$this_object->set_prop ("started", time ());
 
 			### log
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
-
-			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
+			$this->state_changed($this_object, $arr["pj_change_comment"]);
+			$this->stats_start($this_object);
 
 			### all went well, save and say OK
 			aw_disable_acl();
@@ -708,15 +770,8 @@ class mrp_job extends class_base
 				}
 
 				### log job change
-				$ws = get_instance (CL_MRP_WORKSPACE);
-				$com_txt = "T&ouml;&ouml; ".$this_object->name() . " staatus muudeti ".$this->states[$this_object->prop("state")];
-				$ws->mrp_log(
-					$this_object->prop ("project"),
-					$this_object->id (),
-					$com_txt,
-					$arr["pj_change_comment"]
-				);
-				$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
+				$this->state_changed($this_object, $arr["pj_change_comment"]);
+				$this->stats_done($this_object);
 
 				### finish project if this was the last job
 				$list = new object_list (array (
@@ -849,10 +904,8 @@ class mrp_job extends class_base
 				}
 
 				### log event
-				$ws = get_instance(CL_MRP_WORKSPACE);
-				$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
-				$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
-				$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
+				$this->state_changed($this_object, $arr["pj_change_comment"]);
+				$this->stats_done($this_object);
 
 // /* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
 // /* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
@@ -927,10 +980,8 @@ class mrp_job extends class_base
 			aw_restore_acl();
 
 			### log event
-			$ws = get_instance (CL_MRP_WORKSPACE);
-			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
-			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
+			$this->state_changed($this_object, $arr["pj_change_comment"]);
+			$this->stats_done($this_object);
 
 			return $return_url;
 		}
@@ -1005,10 +1056,8 @@ class mrp_job extends class_base
 			aw_restore_acl();
 
 			### log event
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
-			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
+			$this->state_changed($this_object, $arr["pj_change_comment"]);
+			$this->stats_start($this_object);
 
 			return $return_url;
 		}
@@ -1128,10 +1177,8 @@ class mrp_job extends class_base
 			aw_restore_acl();
 
 			### log event
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")];
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
-			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
+			$this->state_changed($this_object, $arr["pj_change_comment"]);
+			$this->stats_start($this_object);
 
 			return $return_url;
 		}
@@ -1193,10 +1240,8 @@ class mrp_job extends class_base
 			aw_restore_acl();
 
 			### log event
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$com_txt = "T&ouml;&ouml; ".$this_object->name()." staatus muudeti Vahetuse l&otilde;pp";
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), $com_txt, $arr["pj_change_comment"]);
-			$this->add_comment($this_object->id(), $com_txt." ".$arr["pj_change_comment"]);
+			$this->state_changed($this_object, $arr["pj_change_comment"]);
+			$this->stats_done($this_object);
 
 			### log out user
 			$u = get_instance("users");
