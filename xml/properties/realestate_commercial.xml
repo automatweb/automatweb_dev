@@ -91,7 +91,6 @@
                   <num_4>po_box</num_4>
                   <num_5>apartment</num_5>
             </props>
-            <store>no</store>
             <field>address_connection</field>
             <caption>Aadress</caption>
       </property>
@@ -214,7 +213,6 @@
                   <num_7>comment</num_7>
                   <num_8>notes</num_8>
             </props>
-            <store>no</store>
             <field>seller</field>
       </property>
       <property>
@@ -264,7 +262,6 @@
                   <num_7>comment</num_7>
                   <num_8>notes</num_8>
             </props>
-            <store>no</store>
             <field>buyer</field>
       </property>
       <property>
@@ -484,7 +481,6 @@
             </table_fields>
             <field>meta</field>
             <method>serialize</method>
-            <store>no</store>
             <caption>Pildid</caption>
       </property>
       <property>

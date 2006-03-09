@@ -4683,6 +4683,18 @@ class crm_company extends class_base
 	{
 		if (!$arr["new"])
 		{
+			$sc = "
+				function bg_mark_task_done(link, eln, ns)
+				{	
+					resetButton(activeButton);
+					// fetch the url to mark it done
+					aw_get_url_contents(link);
+
+					// change icon
+					el = document.getElementById(eln);
+					el.src = ns;
+				}
+			";
 			if ($arr["request"]["warn_conflicts"] == 1)
 			{
 				// get conflicts list and warn user if there are any
@@ -4699,10 +4711,10 @@ class crm_company extends class_base
 				if ($ol->count())
 				{
 					$link = $this->mk_my_orb("disp_conflict_pop", array("id" => $arr["obj_inst"]->id()));
-					return "aw_popup_scroll('$link','confl','200','200');";
+					return "aw_popup_scroll('$link','confl','200','200');".$sc;
 				}
 			}
-			return "";
+			return $sc;
 		}
 		return
 		"function aw_submit_handler() {".

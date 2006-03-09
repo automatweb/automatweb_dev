@@ -416,9 +416,11 @@ class crm_company_overview_impl extends class_base
 
 		$task2recur = $this->_get_recur_list_for_tasks($ol->ids());
 
+		$task_nr = 0;
 		$table_data = array();
 		foreach($ol->ids() as $task_id)
 		{
+			$task_nr++;
 			$task = obj($task_id);
 
 			$cust = $task->prop("customer");
@@ -483,17 +485,22 @@ class crm_company_overview_impl extends class_base
 			));
 			$pm->add_item(array(
 				"text" => t("Kustuta"), 
-				"link" => $this->mk_my_orb("delete_tasks", array(
+				"oncl" => "onClick=\"if(!confirm('".t("Olete kindel et soovide toimetust kustutada?")."')) { return false; } else {window.location = '".$this->mk_my_orb("delete_tasks", array(
 					"sel" => array($t_id => $t_id),
 					"post_ru" => get_ru()
-				), CL_CRM_COMPANY)
+				), CL_CRM_COMPANY)."'}\"",
+				"link" => "#"
 			));
+			$link = $this->mk_my_orb("mark_tasks_done", array(
+					"sel" => array($t_id => $t_id),
+					"post_ru" => get_ru()
+				), CL_CRM_COMPANY);
+
+			$done_ic_url = aw_ini_get("baseurl")."/automatweb/images/icons/class_".$task->class_id()."_done.gif";
 			$pm->add_item(array(
 				"text" => t("M&auml;rgi tehtuks"), 
-				"link" => $this->mk_my_orb("mark_tasks_done", array(
-					"sel" => array($t_id => $t_id),
-					"post_ru" => get_ru()
-				), CL_CRM_COMPANY)
+				"oncl" => "onClick=\"bg_mark_task_done('$link', 'task$task_nr', '$done_ic_url')\"",
+				"link" => "#"
 			));
 			$pm->add_item(array(
 				"text" => t("Koosta arve"), 
@@ -544,12 +551,16 @@ class crm_company_overview_impl extends class_base
 			$recurs = array();
 			foreach(safe_array($task2recur[$task->id()]) as $recur_id)
 			{
+				$task_nr++;
 				// get all times for this one from the recurrence table
 				$this->db_query("SELECT recur_start, recur_end from recurrence where recur_id = ".$recur_id);
 				while ($row = $this->db_next())
 				{
 					$table_data[] = array(
-						"icon" => html::img(array("url" => icons::get_icon_url($task))),
+						"icon" => html::img(array(
+							"url" => icons::get_icon_url($task),
+							"id" => "task$task_nr"
+						)),
 						"customer" => $cust_str,
 						"proj_name" => $proj_str,
 						"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($task->name())),
@@ -568,7 +579,10 @@ class crm_company_overview_impl extends class_base
 			}
 
 			$table_data[] = array(
-				"icon" => html::img(array("url" => icons::get_icon_url($task))),
+				"icon" => html::img(array(
+					"url" => icons::get_icon_url($task),
+					"id" => "task$task_nr"
+				)),
 				"customer" => $cust_str,
 				"proj_name" => $proj_str,
 				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($task->name())),

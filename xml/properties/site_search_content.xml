@@ -138,7 +138,6 @@
             <reltype>RELTYPE_REPEATER</reltype>
             <use_form>emb</use_form>
             <rel_id>first</rel_id>
-            <store>no</store>
             <caption>Seos</caption>
       </property>
       <property>
