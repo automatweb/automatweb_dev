@@ -82,7 +82,6 @@
             <rel_id>first</rel_id>
             <field>meta</field>
             <method>serialize</method>
-            <store>no</store>
             <caption>Logo</caption>
       </property>
       <property>
@@ -95,7 +94,6 @@
             <rel_id>first</rel_id>
             <field>meta</field>
             <method>serialize</method>
-            <store>no</store>
             <caption>Esikaane pilt</caption>
       </property>
       <property>
@@ -145,103 +143,83 @@
             <caption>Dokument</caption>
       </property>
       <property>
+            <name>publications_toolbar</name>
+            <table>objects</table>
+            <group>publications_list</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>publications_toolbar</field>
+            <caption>Alamv&amp;amp;auml;ljaannete t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
             <name>publications_table</name>
             <table>objects</table>
             <group>publications_list</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_PUBLICATION</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>comment</num_1>
-                  <num_2>description_from_reggy</num_2>
-                  <num_3>description</num_3>
-            </props>
+            <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Alamv&amp;amp;auml;ljaanded</caption>
+            <field>publications_table</field>
+            <caption>Almav&amp;amp;auml;ljaanded</caption>
       </property>
       <property>
-            <name>general_images</name>
+            <name>general_images_toolbar</name>
             <table>objects</table>
             <group>general_images</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_GENERAL_IMAGE</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>ord</num_1>
-                  <num_2>status</num_2>
-                  <num_3>file</num_3>
-                  <num_4>dimensions</num_4>
-                  <num_5>comment</num_5>
-                  <num_6>author</num_6>
-                  <num_7>alt</num_7>
-                  <num_8>link</num_8>
-                  <num_9>file_show</num_9>
-            </props>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>ord</num_1>
-            </table_fields>
-            <table_edit_fields>ord</table_edit_fields>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
+            <field>general_images_toolbar</field>
+            <caption>Piltide t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>general_images_table</name>
+            <table>objects</table>
+            <group>general_images</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>general_images_table</field>
             <caption>Pildid</caption>
       </property>
       <property>
-            <name>general_files</name>
+            <name>general_files_toolbar</name>
             <table>objects</table>
             <group>general_files</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_GENERAL_FILE</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>file</num_0>
-                  <num_1>ord</num_1>
-                  <num_2>type</num_2>
-                  <num_3>comment</num_3>
-                  <num_4>newwindow</num_4>
-                  <num_5>status</num_5>
-            </props>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>ord</num_1>
-            </table_fields>
-            <table_edit_fields>ord</table_edit_fields>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
+            <field>general_files_toolbar</field>
+            <caption>Failide t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>general_files_table</name>
+            <table>objects</table>
+            <group>general_files</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>general_files_table</field>
             <caption>Failid</caption>
       </property>
       <property>
-            <name>general_links</name>
+            <name>general_links_toolbar</name>
             <table>objects</table>
             <group>general_links</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_GENERAL_LINK</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>url</num_1>
-                  <num_2>ord</num_2>
-                  <num_3>docid</num_3>
-                  <num_4>hits</num_4>
-                  <num_5>alt</num_5>
-                  <num_6>newwindow</num_6>
-            </props>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>ord</num_1>
-            </table_fields>
-            <table_edit_fields>ord</table_edit_fields>
-            <parent>self</parent>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
+            <field>general_links_toolbar</field>
+            <caption>Linkide t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>general_links_table</name>
+            <table>objects</table>
+            <group>general_links</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>general_links_table</field>
             <caption>Lingid</caption>
       </property>
       <property>
@@ -426,7 +404,7 @@
             <GENERAL_IMAGE>
                   <value>10</value>
                   <clid>CL_IMAGE</clid>
-                  <caption>&amp;amp;Uuml;ldine pilt</caption>
+                  <caption>&amp;amp;Uuml;ldine pilt </caption>
             </GENERAL_IMAGE>
             <GENERAL_FORUM>
                   <value>11</value>
