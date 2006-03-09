@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.25 2006/02/16 11:35:47 voldemar Exp $
-// expp_journal_management.aw - V&auml;ljaannete haldus
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.26 2006/03/09 23:57:04 dragut Exp $
+// expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
 @classinfo syslog_type=ST_EXPP_JOURNAL_MANAGEMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -27,7 +27,7 @@
 	@groupinfo publications_general_info caption="V&auml;ljaannete &uuml;ldinfo" parent=publications
 	@default group=publications_general_info
 
-		@property publications_name type=textbox field=meta method=serialize
+		@property publications_name type=textbox field=meta method=serialize 
 		@caption V&auml;ljaande nimi
 
 		@property publications_description type=textbox field=meta method=serialize
@@ -56,7 +56,7 @@
 
 		@property main_color type=textbox field=meta method=serialize
 		@caption P&otilde;hitoon
-
+		
 		@property choose_design type=chooser field=meta method=serialize
 		@caption Kujundusp&otilde;hi
 
@@ -66,25 +66,37 @@
 	@groupinfo publications_list caption="Alamv&auml;ljaanded" parent=publications
 	@default group=publications_list
 
-		@property publications_table type=releditor reltype=RELTYPE_PUBLICATION field=meta method=serialize mode=manager props=name,comment,description_from_reggy,description no_caption=1
-		@caption Alamv&auml;ljaanded
+		@property publications_toolbar type=toolbar no_caption=1
+		@caption Alamv&auml;ljaannete t&ouml;&ouml;riistariba
+
+		@property publications_table type=table no_caption=1
+		@caption Almav&auml;ljaanded
 
 	@groupinfo general_images caption="Pildid" parent=publications
 	@default group=general_images
 
-		@property general_images type=releditor reltype=RELTYPE_GENERAL_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,dimensions,comment,author,alt,link,file_show table_fields=name,ord table_edit_fields=ord
+		@property general_images_toolbar type=toolbar no_caption=1
+		@caption Piltide t&ouml;&ouml;riistariba
+
+		@property general_images_table type=table no_caption=1
 		@caption Pildid
 
 	@groupinfo general_files caption="Failid" parent=publications
 	@default group=general_files
+	
+		@property general_files_toolbar type=toolbar no_caption=1
+		@caption Failide t&ouml;&ouml;riistariba
 
-	        @property general_files type=releditor reltype=RELTYPE_GENERAL_FILE field=meta method=serialize mode=manager props=file,ord,type,comment,newwindow,status table_fields=name,ord table_edit_fields=ord
-        	@caption Failid
+		@property general_files_table type=table no_caption=1
+		@caption Failid
 
 	@groupinfo general_links caption="Lingid" parent=publications
 	@default group=general_links
 
-		@property general_links type=releditor reltype=RELTYPE_GENERAL_LINK field=meta method=serialize mode=manager props=name,url,ord,docid,hits,alt,newwindow table_fields=name,ord table_edit_fields=ord parent=self
+		@property general_links_toolbar type=toolbar no_caption=1
+		@caption Linkide t&ouml;&ouml;riistariba
+
+		@property general_links_table type=table no_caption=1
 		@caption Lingid
 
         @groupinfo general_documents caption="Dokumendid" parent=publications
@@ -117,7 +129,7 @@
 	@groupinfo general_forum caption="Foorum" parent=publications
 	@default group=general_forum
 
-		@property general_forum type=text
+		@property general_forum type=text  
 		@caption Foorum
 
 @groupinfo stats caption="Statistika"
@@ -125,7 +137,7 @@
 
 	@property stats type=text
 	@caption Statistika
-
+	
 @reltype ORGANISATION value=1 clid=CL_CRM_COMPANY
 @caption Organisatsioon
 
@@ -154,7 +166,7 @@
 @caption &Uuml;ldine link
 
 @reltype GENERAL_IMAGE value=10 clid=CL_IMAGE
-@caption &Uuml;ldine pilt
+@caption &Uuml;ldine pilt 
 
 @reltype GENERAL_FORUM value=11 clid=CL_FORUM_V2
 @caption &Uuml;ldine foorum
@@ -179,7 +191,7 @@ class expp_journal_management extends class_base
 {
 	function expp_journal_management()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be,
+		// change this to the folder under the templates folder, where this classes templates will be, 
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/clients/expp/expp_journal_management",
@@ -217,7 +229,7 @@ class expp_journal_management extends class_base
 				{
 					// have to check if there is any documents connected:
 					$connections_to_general_documents = $arr['obj_inst']->connections_from(array(
-						"type" => "RELTYPE_GENERAL_DOCUMENT",
+						"type" => "RELTYPE_GENERAL_DOCUMENT",	
 					));
 					if (count($connections_to_general_documents) <= 0)
 					{
@@ -225,6 +237,7 @@ class expp_journal_management extends class_base
 						$new_document->set_class_id(CL_DOCUMENT);
 						$new_document->set_parent($arr['obj_inst']->id());
 						$new_document->set_name($arr['obj_inst']->name()." kujundus");
+						$new_document->set_prop("content", "#site#");
 						$new_document->save();
 						$arr['obj_inst']->connect(array(
 							"to" => $new_document,
@@ -235,6 +248,8 @@ class expp_journal_management extends class_base
 				}
 				break;
 			case "publications_name":
+				$prop['value'] = $arr['obj_inst']->meta("publications_name_value");
+				$prop['type'] = "text";
 			case "publications_description":
 				$prop['type'] = "text";
 			//	$prop['value'] = t("V&auml;&auml;rtus tuleb Reggy-st, ei ole v&otilde;imalik muuta");
@@ -265,11 +280,10 @@ class expp_journal_management extends class_base
 			case "general_webform":
 			case "publications_homepage":
 				$prop['obj_parent'] = $arr['obj_inst']->id();
-				break;
-
+				break;	
 		}
 		return $retval;
-	}
+	}	
 
 	function callback_mod_reforb($arr)
 	{
@@ -305,21 +319,24 @@ class expp_journal_management extends class_base
 		));
 		return $this->parse();
 	}
-/*
+
 // i use it to make any kind of conversions or some other custom stuff, can be deleted once the expp system
 // is up and running
 	function _get_code($arr)
 	{
 		if ($_GET['dragut'])
 		{
-			$arr['prop']['value'] = str_replace("%", "#", urlencode($arr['obj_inst']->name()));
+	//		$arr['prop']['value'] = str_replace("%", "#", urlencode($arr['obj_inst']->name()));
+			$arr['obj_inst']->set_meta("publications_name_value", "test nimi");
+			$arr['obj_inst']->save();
+			arr($arr['obj_inst']->prop("publications_name"));
 		}
 	}
 
-*/
+
 	function _get_organisation_logo($arr)
 	{
-
+		
 		$organisation_logo_id = $arr['obj_inst']->meta("organisation_logo_id");
 		if (!empty($organisation_logo_id))
 		{
@@ -357,7 +374,7 @@ class expp_journal_management extends class_base
 			$organisation_logo_connections = $organisation_object->connections_from(array(
 				"type" => 45 // crm_company.logo (organisation's logo)
 			));
-
+			
 			if (!empty($organisation_logo_connections))
 			{
 				// get the first connection:
@@ -384,6 +401,505 @@ class expp_journal_management extends class_base
 		return PROP_OK;
 	}
 
+	function _get_publications_toolbar($arr)
+	{
+		$t = &$arr['prop']['toolbar'];
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus v&auml;ljaanne"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr['obj_inst']->id(),
+				"parent" => $arr['obj_inst']->id(),
+				"reltype" => 5, // expp_journam_management.publication
+				"return_url" => get_ru(),
+			), CL_EXPP_PUBLICATION),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "_delete_objects",
+			"confirm" => t("Oled kindel, et soovid valitud v&auml;ljaanded kustutada?"),
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_publications_table($arr)
+	{
+
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			"name" => "publication_id",
+			"caption" => t("ID"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Aktiivsus"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center",
+			"width" => "5%",
+		));
+		$connections_to_publications = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_PUBLICATION",
+		));
+		foreach ($connections_to_publications as $connection_to_publication)
+		{
+			$publication_id = $connection_to_publication->prop("to");
+			$publication_object = $connection_to_publication->to();
+			$t->define_data(array(
+				"publication_id" => $publication_id,
+				"name" => $connection_to_publication->prop("to.name"),
+				"status" => html::checkbox(array(
+					"name" => "status[".$publication_id."]",
+					"value" => $publication_id,
+					"checked" => ($publication_object->status() == STAT_ACTIVE) ? true : false,
+				)),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $publication_id,
+						"return_url" => get_ru(),
+						), CL_EXPP_PUBLICATION),
+					"caption" => t("Muuda"),
+				)),
+				"select" => html::checkbox(array(
+					"name" => "selected_ids[".$publication_id."]",
+					"value" => $publication_id,
+				)),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _set_publications_table($arr)
+	{
+		$connections_to_publications = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_PUBLICATION",
+		));
+		foreach ($connections_to_publications as $connection_to_publication)
+		{
+			$publication_id = $connection_to_publication->prop("to");
+			if (is_oid($publication_id) && $this->can("edit", $publication_id))
+			{
+				$publication_object = new object($publication_id);
+				if (in_array($publication_id, $arr['request']['status']))
+				{
+					$publication_object->set_status(STAT_ACTIVE);
+				}
+				else
+				{
+					$publication_object->set_status(STAT_NOTACTIVE);
+				}
+				$publication_object->save();
+			}
+		}
+		return PROP_OK;
+	}
+
+	function _get_general_images_toolbar($arr)
+	{
+		$t = &$arr['prop']['toolbar'];
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus pilt"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr['obj_inst']->id(),
+				"parent" => $arr['obj_inst']->id(),
+				"reltype" => 10, // expp_journal_management.general_image
+				"return_url" => get_ru(),
+			), CL_IMAGE),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "_delete_objects",
+			"confirm" => t("Oled kindel, et soovid valitud pildid kustutada?"),
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_general_images_table($arr)
+	{
+
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			"name" => "image_id",
+			"caption" => t("ID"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Aktiivsus"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center",
+			"width" => "5%",
+		));
+		$connections_to_images = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_IMAGE",
+		));
+		foreach ($connections_to_images as $connection_to_image)
+		{
+			$image_id = $connection_to_image->prop("to");
+			$image_object = $connection_to_image->to();
+			$t->define_data(array(
+				"image_id" => $image_id,
+				"name" => $connection_to_image->prop("to.name"),
+				"status" => html::checkbox(array(
+					"name" => "status[".$image_id."]",
+					"value" => $image_id,
+					"checked" => ($image_object->status() == STAT_ACTIVE) ? true : false,
+				)),
+				"order" => html::textbox(array(
+					"name" => "order[".$image_id."]",
+					"value" => $image_object->ord(),
+					"size" => 3
+				)),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $image_id,
+						"return_url" => get_ru(),
+						), CL_IMAGE),
+					"caption" => t("Muuda"),
+				)),
+				"select" => html::checkbox(array(
+					"name" => "selected_ids[".$image_id."]",
+					"value" => $image_id,
+				)),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _set_general_images_table($arr)
+	{
+		$connections_to_images = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_IMAGE",
+		));
+		foreach ($connections_to_images as $connection_to_image)
+		{
+			$image_id = $connection_to_image->prop("to");
+			if (is_oid($image_id) && $this->can("edit", $image_id))
+			{
+				$image_object = new object($image_id);
+				if (in_array($image_id, $arr['request']['status']))
+				{
+					$image_object->set_status(STAT_ACTIVE);
+				}
+				else
+				{
+					$image_object->set_status(STAT_NOTACTIVE);
+				}
+				$image_object->set_ord((int)$arr['request']['order'][$image_id]);
+				$image_object->save();
+			}
+		}
+		return PROP_OK;
+	}
+
+	function _get_general_files_toolbar($arr)
+	{
+		$t = &$arr['prop']['toolbar'];
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus fail"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr['obj_inst']->id(),
+				"parent" => $arr['obj_inst']->id(),
+				"reltype" => 8, // expp_journal_management.general_file
+				"return_url" => get_ru(),
+			), CL_FILE),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "_delete_objects",
+			"confirm" => t("Oled kindel, et soovid valitud failid kustutada?"),
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_general_files_table($arr)
+	{
+
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			"name" => "file_id",
+			"caption" => t("ID"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Aktiivsus"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center",
+			"width" => "5%",
+		));
+		$connections_to_files = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_FILE",
+		));
+		foreach ($connections_to_files as $connection_to_file)
+		{
+			$file_id = $connection_to_file->prop("to");
+			$file_object = $connection_to_file->to();
+			$t->define_data(array(
+				"file_id" => $file_id,
+				"name" => $connection_to_file->prop("to.name"),
+				"status" => html::checkbox(array(
+					"name" => "status[".$file_id."]",
+					"value" => $file_id,
+					"checked" => ($file_object->status() == STAT_ACTIVE) ? true : false,
+				)),
+				"order" => html::textbox(array(
+					"name" => "order[".$file_id."]",
+					"value" => $file_object->ord(),
+					"size" => 3
+				)),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $file_id,
+						"return_url" => get_ru(),
+						), CL_FILE),
+					"caption" => t("Muuda"),
+				)),
+				"select" => html::checkbox(array(
+					"name" => "selected_ids[".$file_id."]",
+					"value" => $file_id,
+				)),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _set_general_files_table($arr)
+	{
+		$connections_to_files = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_FILE",
+		));
+		foreach ($connections_to_files as $connection_to_file)
+		{
+			$file_id = $connection_to_file->prop("to");
+			if (is_oid($file_id) && $this->can("edit", $file_id))
+			{
+				$file_object = new object($file_id);
+				if (in_array($file_id, $arr['request']['status']))
+				{
+					$file_object->set_status(STAT_ACTIVE);
+				}
+				else
+				{
+					$file_object->set_status(STAT_NOTACTIVE);
+				}
+				$file_object->set_ord((int)$arr['request']['order'][$file_id]);
+				$file_object->save();
+			}
+		}
+		return PROP_OK;
+	}
+
+	function _get_general_links_toolbar($arr)
+	{
+		$t = &$arr['prop']['toolbar'];
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus link"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr['obj_inst']->id(),
+				"parent" => $arr['obj_inst']->id(),
+				"reltype" => 9, // expp_journal_management.general_link
+				"return_url" => get_ru(),
+			), CL_EXTLINK),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "_delete_objects",
+			"confirm" => t("Oled kindel, et soovid valitud lingid kustutada?"),
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_general_links_table($arr)
+	{
+
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			"name" => "link_id",
+			"caption" => t("ID"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Aktiivsus"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "order",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center",
+			"width" => "5%",
+		));
+		$connections_to_links = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_LINK",
+		));
+		foreach ($connections_to_links as $connection_to_link)
+		{
+			$link_id = $connection_to_link->prop("to");
+			$link_object = $connection_to_link->to();
+			$t->define_data(array(
+				"link_id" => $link_id,
+				"name" => $connection_to_link->prop("to.name"),
+				"status" => html::checkbox(array(
+					"name" => "status[".$link_id."]",
+					"value" => $link_id,
+					"checked" => ($link_object->status() == STAT_ACTIVE) ? true : false,
+				)),
+				"order" => html::textbox(array(
+					"name" => "order[".$link_id."]",
+					"value" => $link_object->ord(),
+					"size" => 3
+				)),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $link_id,
+						"return_url" => get_ru(),
+						), CL_EXTLINK),
+					"caption" => t("Muuda"),
+				)),
+				"select" => html::checkbox(array(
+					"name" => "selected_ids[".$link_id."]",
+					"value" => $link_id,
+				)),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _set_general_links_table($arr)
+	{
+		$connections_to_links = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_LINK",
+		));
+		foreach ($connections_to_links as $connection_to_link)
+		{
+			$link_id = $connection_to_link->prop("to");
+			if (is_oid($link_id) && $this->can("edit", $link_id))
+			{
+				$link_object = new object($link_id);
+				if (in_array($link_id, $arr['request']['status']))
+				{
+					$link_object->set_status(STAT_ACTIVE);
+				}
+				else
+				{
+					$link_object->set_status(STAT_NOTACTIVE);
+				}
+				$link_object->set_ord((int)$arr['request']['order'][$link_id]);
+				$link_object->save();
+			}
+		}
+		return PROP_OK;
+	}
+
+
+
+
 	function _get_general_documents_toolbar($arr)
 	{
 		$t = &$arr['prop']['toolbar'];
@@ -395,7 +911,7 @@ class expp_journal_management extends class_base
 				"alias_to" => $arr['obj_inst']->id(),
 				"parent" => $arr['obj_inst']->id(),
 				"reltype" => 14, // expp_journam_management.general_document
-				"return_url" => get_ru(),
+				"return_url" => get_ru(),	
 			), CL_DOCUMENT),
 		));
 
@@ -416,13 +932,19 @@ class expp_journal_management extends class_base
 		$t = &$arr['prop']['vcl_inst'];
 		$t->define_field(array(
 			"name" => "document_id",
-			"caption" => t("Dokumendi id"),
+			"caption" => t("ID"),
 			"align" => "center",
 			"width" => "10%",
 		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Aktiivsus"),
+			"align" => "center",
+			"width" => "10%",
 		));
 		$t->define_field(array(
 			"name" => "as_link",
@@ -452,6 +974,11 @@ class expp_journal_management extends class_base
 			$t->define_data(array(
 				"document_id" => $document_id,
 				"name" => $connection_to_document->prop("to.name"),
+				"status" => html::checkbox(array(
+					"name" => "status[".$document_id."]",
+					"value" => $document_id,
+					"checked" => ($document_object->status() == STAT_ACTIVE) ? true : false,
+				)),
 				"as_link" => html::checkbox(array(
 					"name" => "as_link[".$document_id."]",
 					"value" => $document_id,
@@ -485,6 +1012,8 @@ class expp_journal_management extends class_base
 			if (is_oid($document_id) && $this->can("edit", $document_id))
 			{
 				$document_object = new object($document_id);
+
+				// to show document as link or not
 				if (in_array($document_id, $arr['request']['as_link']))
 				{
 					$document_object->set_prop("ucheck1", true);
@@ -493,6 +1022,17 @@ class expp_journal_management extends class_base
 				{
 					$document_object->set_prop("ucheck1", false);
 				}
+
+				// set documents status
+				if (in_array($document_id, $arr['request']['status']))
+				{
+					$document_object->set_status(STAT_ACTIVE);
+				}
+				else
+				{
+					$document_object->set_status(STAT_NOTACTIVE);
+				}
+
 				$document_object->save();
 			}
 		}
@@ -511,7 +1051,7 @@ class expp_journal_management extends class_base
 				"alias_to" => $arr['obj_inst']->id(),
 				"parent" => $arr['obj_inst']->id(),
 				"reltype" => 13, // expp_journam_management.general_poll
-				"return_url" => get_ru(),
+				"return_url" => get_ru(),	
 			), CL_POLL),
 		));
 
@@ -523,7 +1063,7 @@ class expp_journal_management extends class_base
 			"confirm" => t("Oled kindel, et soovid valitud kiirk&uuml;sitlused kustutada?"),
 		));
 
-
+		
 
 		return PROP_OK;
 	}
@@ -533,15 +1073,22 @@ class expp_journal_management extends class_base
 
 		$t = &$arr['prop']['vcl_inst'];
 		$t->define_field(array(
-			"name" => "activity",
-			"caption" => t("Aktiivsus"),
-			"align" => "center",
-			"width" => "10%",
+			'name' => 'poll_id',
+			'caption' => t('ID'),
+			'align' => 'center',
+			'width' => '10%',
 		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
+		$t->define_field(array(
+			"name" => "activity",
+			"caption" => t("Aktiivsus"),
+			"align" => "center",
+			"width" => "10%",
+		));
+
 		$t->define_field(array(
 			"name" => "change",
 			"caption" => t("Muuda"),
@@ -563,12 +1110,13 @@ class expp_journal_management extends class_base
 		{
 			$poll_id = $connection_to_poll->prop("to");
 			$t->define_data(array(
+				'poll_id' => $poll_id,
+				"name" => $connection_to_poll->prop("to.name"),
 				"activity" => html::radiobutton(array(
 					"name" => "activity",
 					"value" => $poll_id,
 					"checked" => ($connection_to_poll->prop("to.status") == STAT_ACTIVE) ? true : false,
 				)),
-				"name" => $connection_to_poll->prop("to.name"),
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $poll_id,
@@ -622,8 +1170,8 @@ class expp_journal_management extends class_base
 			"url" => $this->mk_my_orb("new", array(
 				"alias_to" => $arr['obj_inst']->id(),
 				"parent" => $arr['obj_inst']->id(),
-				"reltype" => 12, // expp_journam_management.general_webform
-				"return_url" => get_ru(),
+				"reltype" => 12, // expp_journal_management.general_webform
+				"return_url" => get_ru(),	
 			), CL_WEBFORM),
 		));
 
@@ -635,7 +1183,7 @@ class expp_journal_management extends class_base
 			"confirm" => t("Oled kindel, et soovid valitud veebivormid kustutada?"),
 		));
 
-
+		
 
 		return PROP_OK;
 	}
@@ -645,14 +1193,20 @@ class expp_journal_management extends class_base
 
 		$t = &$arr['prop']['vcl_inst'];
 		$t->define_field(array(
-			"name" => "activity",
-			"caption" => t("Aktiivsus"),
-			"align" => "center",
-			"width" => "10%",
+			'name' => 'webform_id',
+			'caption' => t('ID'),
+			'align' => 'center',
+			'width' => '10%',
 		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "activity",
+			"caption" => t("Aktiivsus"),
+			"align" => "center",
+			"width" => "10%",
 		));
 		$t->define_field(array(
 			"name" => "change",
@@ -675,12 +1229,13 @@ class expp_journal_management extends class_base
 		{
 			$webform_id = $connection_to_webform->prop("to");
 			$t->define_data(array(
+				'webform_id' => $webform_id,
+				"name" => $connection_to_webform->prop("to.name"),
 				"activity" => html::radiobutton(array(
 					"name" => "activity",
 					"value" => $webform_id,
 					"checked" => ($connection_to_webform->prop("to.status") == STAT_ACTIVE) ? true : false,
 				)),
-				"name" => $connection_to_webform->prop("to.name"),
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $webform_id,
@@ -738,7 +1293,7 @@ class expp_journal_management extends class_base
 					"id" => $forum_object_id,
 					"return_url" => get_ru(),
 				), "forum_v2"),
-				"caption" => t("Link foorumile"),
+				"caption" => t("Link foorumile")." &quot;".$forum_object->name()."&quot;",
 			));
 		}
 		else
@@ -753,7 +1308,7 @@ class expp_journal_management extends class_base
 				"caption" => t("Lisa foorum"),
 			));
 		}
-
+		
 		return PROP_OK;
 	}
 	/**
