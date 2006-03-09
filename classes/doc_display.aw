@@ -57,6 +57,7 @@ class doc_display extends aw_template
 			"channel" => $doc->prop("channel"),
 			"docid" => $doc->id(),
 			"date_est" => locale::get_lc_date($_date, LC_DATE_FORMAT_LONG),
+			"print_date_est" => locale::get_lc_date(time(), LC_DATE_FORMAT_LONG),
 			"modified" => date("d.m.Y", $doc->modified()),
 			"parent_id" => $doc->parent(),
 			"parent_name" => $doc_parent->name(),
