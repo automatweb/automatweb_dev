@@ -24,7 +24,7 @@ class run_in_background extends class_base
 
 		$this->stop_file = aw_ini_get("server.tmpdir")."/bg_run_".get_class($this).".stop";
 
-		$this->bg_checkpoint_steps = 100;
+		$this->bg_checkpoint_steps = 100 ;
 
 		$this->bg_log_steps = 5;
 
@@ -173,7 +173,6 @@ class run_in_background extends class_base
 		@param ru optional
 
 	**/
-
 	function bg_control($arr)
 
 	{
@@ -259,7 +258,6 @@ class run_in_background extends class_base
 
 
 	**/
-
 	function bg_check_scheduler($arr)
 
 	{
@@ -427,7 +425,6 @@ class run_in_background extends class_base
 		@param id required type=int
 
 	**/
-
 	function bg_run($arr)
 
 	{

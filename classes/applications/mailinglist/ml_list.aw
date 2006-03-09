@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.57 2006/02/17 15:13:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.58 2006/03/09 15:48:55 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -33,6 +33,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property redir_obj type=relpicker reltype=RELTYPE_REDIR_OBJECT rel=1
 @caption Dokument millele suunata
+
+@property redir_unsubscribe_obj type=relpicker reltype=RELTYPE_REDIR_OBJECT rel=1
+@caption Dokument millele suunata lahkujad
 
 @property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
 @caption Listi liikmete seadetevorm
@@ -270,11 +273,9 @@ class ml_list extends class_base
 		}
 	}
 
-
 	/** saadab teate $id listidesse $targets(array stringidest :listinimi:grupinimi)
 		
 		@attrib name=post_message
-		
 		@param id required 
 		@param targets optional 
 		
@@ -334,10 +335,7 @@ class ml_list extends class_base
 	}
 
 	/** See händleb juba õiget postitust, siis kui on valitud saatmise ajavahemikud
-		
 		@attrib name=submit_post_message
-		
-		
 	**/
 	function submit_post_message($args)
 	{
@@ -373,14 +371,29 @@ class ml_list extends class_base
 		
 		$this->db_query("INSERT INTO ml_queue (qid,lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
 			VALUES ('$qid','$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
-
-		$mlq = get_instance("applications/mailinglist/ml_queue");
-		$mlq->preprocess_messages(array(
+		
+		$mail_obj = obj($id);
+		$mail_obj -> set_meta("mail_data" , array(
 			"mail_id" => $id,
 			"list_id" => $list_id,
 			"qid" => $qid,
 			"mfrom" => $mfrom,
 		));
+		$mlq = get_instance("applications/mailinglist/ml_mail_gen");
+//		$mlq = get_instance("applications/mailinglist/ml_queue");
+		
+		
+		if (!isset($this->d))
+		{
+			$this->d = get_instance(CL_MESSAGE);
+		};
+		$mlq->bg_control(array("id" => $id, "do" => "start",));
+//		$mlq->preprocess_messages(array(
+ //			"mail_id" => $id,
+ //			"list_id" => $list_id,
+ //			"qid" => $qid,
+ //			"mfrom" => $mfrom,
+ //		));
 
 		// now I should mark the queue as "ready to send" or 0
 		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
@@ -391,12 +404,9 @@ class ml_list extends class_base
 	}
 
 	/** (un)subscribe an address from(to) a list 
-		
 		@attrib name=subscribe nologin="1" 
-		
 		@param id required type=int 
 		@param rel_id required type=int 
-		
 	**/
 	function subscribe($args = array())
 	{
@@ -905,7 +915,6 @@ class ml_list extends class_base
 				$event = reset($exp);
 				$prop["value"] = date("d.m.Y H:i", $event["time"]);
 				break;
-			
 		//	case "write_mail":
 		//	break;
 			
@@ -1121,7 +1130,41 @@ class ml_list extends class_base
 		}
 		return true;
 	}
+	
+	////
+	// !Returns redir_unsubscribe_obj if defined ... section, if not
 
+	/** unsubscribe
+		@attrib name=unsubscribe
+		@param usr required type=int
+		@param list_source required
+		@param list required type=int
+	**/
+	function unsubscribe($arr)
+	{
+		$ml_object = obj($arr["list"]);
+		$ml_member = get_instance(CL_ML_MEMBER);
+		if(is_oid($arr["usr"]) && $this->can("view", $arr["usr"]))
+		{
+			$member = obj($arr["usr"]);
+			$email = $member->prop("mail");
+		}		
+		$retval = $ml_member->unsubscribe_member_from_list(array(
+			"email" => $email,
+			"list_id" => $arr["list"],
+			"ret_status" => true,
+			"use_folders" => $arr["list_source"],
+		));
+		if(is_oid($ml_object->prop("redir_unsubscribe_obj")) && $this->can("view", $ml_object->prop("redir_unsubscribe_obj")))
+		{
+			return aw_ini_get("baseurl")."/".$ml_object->prop("redir_unsubscribe_obj");
+		}
+		else
+		{
+			return $retval;
+		}
+	}
+	
 	////
 	// !Mass unsubscribe of addresses
 	function mass_unsubscribe($arr)
@@ -2420,9 +2463,12 @@ class ml_list extends class_base
 							#name# - Listi liikme nimi<br />
 							#subject# - Kirja teema<br />
 							#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />
-							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br /><br />
+							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br />
+							#lahkumine# - link, millel klikkides inimene saab listist lahkuda<br />
+							<br />
 							Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi lõppu #traceid#
-							Näiteks: http://www.struktuur.ee/aw#traceid#"),
+							Näiteks: http://www.struktuur.ee/aw#traceid#
+							"),
 					);
 				}
 				$filtered_props[$id] = $prop;

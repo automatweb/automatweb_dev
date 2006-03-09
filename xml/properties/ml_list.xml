@@ -74,6 +74,17 @@
             <caption>Dokument millele suunata</caption>
       </property>
       <property>
+            <name>redir_unsubscribe_obj</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_REDIR_OBJECT</reltype>
+            <rel>1</rel>
+            <caption>Dokument millele suunata lahkujad</caption>
+      </property>
+      <property>
             <name>member_config</name>
             <table>objects</table>
             <field>meta</field>

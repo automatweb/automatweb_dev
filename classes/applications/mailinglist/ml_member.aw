@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.18 2006/01/16 10:35:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.19 2006/03/09 15:48:55 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -139,7 +139,6 @@ class ml_member extends class_base
 			"mail" => $email,
 			"parent" => $folder,
 		));
-
 		$rv = $ol->count() > 0 ? $ol->begin() : false;
 		return $rv;
 	}
@@ -301,31 +300,47 @@ class ml_member extends class_base
 	// !Removes a member from list
 	// email - email addy
 	// list_id - id of the list to unsubscribe from
+	// use_folders - removes user from folders...
+	// if not an array - removes member from all folders in the mailinglist
 	function unsubscribe_member_from_list($args = array())
 	{
 		$this->quote($args);
-		$email = $args["email"];
-		$list_id = $args["list_id"];
-
+		extract($args);
 		$list_obj = new object($list_id);
-
 		$section = aw_global_get("section");
-
-		$user_folder = $list_obj->prop("def_user_folder");
-		if (empty($user_folder))
+		if((!(sizeof($use_folders) > 0)) && (!($use_folders > 0)))
+		{
+			$use_folders = $list_obj->prop("def_user_folder");
+		}
+		if (empty($use_folders))
 		{
 			return $this->cfg["baseurl"] . "/" . $section;
 		};
-		$check = $this->check_member(array(
-			"email" => $args["email"],
-			"folder" => $user_folder,
-		));
-
-		if (is_object($check))
+		if(is_array($use_folders))
 		{
-			$check->delete();
-		};
-
+			foreach($use_folders as $folder)
+			{
+				$check = $this->check_member(array(
+					"email" => $args["email"],
+					"folder" => $folder,
+				));
+				if (is_object($check))
+				{
+					$check->delete();
+				};
+			}
+		}
+		else
+		{
+			$check = $this->check_member(array(
+				"email" => $args["email"],
+				"folder" => $folder,
+			));
+			if (is_object($check))
+			{
+				$check->delete();
+			};
+		}
 		// fuck me plenty
 		return isset($args["ret_status"]) ? $check : $this->cfg["baseurl"] . "/" . $section;
 	}
