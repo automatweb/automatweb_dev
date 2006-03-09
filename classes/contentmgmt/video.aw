@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.8 2006/02/20 11:36:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.9 2006/03/09 13:42:25 kristo Exp $
 // video.aw - Video 
 /*
 
@@ -30,6 +30,15 @@
 
 	@property date type=date_select
 	@caption Kuup&auml;ev
+
+	@property show_right_away type=checkbox ch_value=1
+	@caption N&auml;ita kohe
+
+	@property width type=textbox size=5
+	@caption Laius
+
+	@property height type=textbox size=5
+	@caption K&otilde;rgus
 
 	@property src_rp type=textbox
 	@caption URL (RealPlayer)
@@ -103,7 +112,21 @@ class video extends class_base
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
+		if ($ob->prop("show_right_away"))
+		{
+			$this->read_template("show_right_away.tpl");
+			$this->Vars(array(
+				"mpeg_url" => $ob->prop("src_wm"),
+				"mpeg_fn" => basename($ob->prop("src_wm")),
+				"width" => $ob->prop("width"),
+				"height" => $ob->prop("height")
+			));
+			return $this->parse();
+		}
+		else
+		{
+			$this->read_template("show.tpl");
+		}
 
 		$im = get_instance(CL_IMAGE);
 
