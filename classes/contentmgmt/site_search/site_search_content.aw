@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.60 2006/02/15 12:51:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.61 2006/03/09 10:41:24 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -859,7 +859,7 @@ class site_search_content extends class_base
 		$this->quote($str);
 		$sql = "
 			SELECT 
-				d.docid as docid, 
+				o.oid as docid, 
 				d.title as title, 
 				o.modified as modified,
 				d.lead as lead,
