@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.76 2006/03/08 15:15:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.77 2006/03/09 11:46:21 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -498,6 +498,10 @@ class mrp_job extends class_base
 		$job_id = $job->id();
 		$uid = aw_global_get("uid");
 		$start = time();
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+		$person_name = $p->name();
+
 		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM mrp_stats
 			WHERE
 				case_oid = $case AND
@@ -508,10 +512,10 @@ class mrp_job extends class_base
 		if ($cnt == 0)
 		{
 			$this->db_query("INSERT INTO mrp_stats(
-				case_oid, resource_oid, job_oid, uid, start, end, length, last_start
+				case_oid, resource_oid, job_oid, uid, start, end, length, last_start, person_name
 			)
 			VALUES(
-				$case, $res, $job_id, '$uid', $start, NULL, 0, $start
+				$case, $res, $job_id, '$uid', $start, NULL, 0, $start, '$person_name'
 			)");
 		}
 		else

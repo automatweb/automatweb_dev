@@ -410,6 +410,16 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>case_view</name>
+            <group>grp_case_view</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_CASE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -428,6 +438,9 @@
             <grp_case_workflow>
                   <caption>Ressursid ja t&amp;ouml;&amp;ouml;voog</caption>
             </grp_case_workflow>
+            <grp_case_view>
+                  <caption>Vaatleja t&amp;amp;ouml;&amp;amp;ouml;laud</caption>
+            </grp_case_view>
             <grp_case_schedule>
                   <caption>Kalender</caption>
                   <submit>no</submit>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.94 2006/03/08 15:15:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.95 2006/03/09 11:46:21 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -17,6 +17,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @groupinfo grp_case_data caption="Projekti andmed" parent=general
 groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_workflow caption="Ressursid ja töövoog"
+@groupinfo grp_case_view caption="Vaatleja t&ouml;&ouml;laud"
 @groupinfo grp_case_schedule caption="Kalender" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
@@ -167,6 +168,9 @@ default group=grp_case_material
 @default group=grp_case_log
 	@property log type=table store=no no_caption=1
 
+@default group=grp_case_view
+
+	@property case_view type=table no_caption=1 store=no
 
 
 // --------------- RELATION TYPES ---------------------
@@ -454,6 +458,10 @@ class mrp_case extends class_base
 
 			case "chart_navigation":
 				$prop["value"] = $this->create_chart_navigation ($arr);
+				break;
+
+			case "case_view":
+				$this->_case_view($arr);
 				break;
 		}
 
@@ -2420,6 +2428,133 @@ class mrp_case extends class_base
 		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
 		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
 		return (float) ("{$int}.{$dec}");
+	}
+
+	function _init_case_view_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("Jrk"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "pred",
+			"caption" => t("Eeldust&ouml;&ouml;d"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "resource",
+			"caption" => t("Ressurss"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "state",
+			"caption" => t("Staatus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "planned_length",
+			"caption" => t("Planeeritud ketvus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "real_len",
+			"caption" => t("Tegelik ketvus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "start",
+			"caption" => t("Algus"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "end",
+			"caption" => t("L&otilde;pp"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "employee",
+			"caption" => t("T&ouml;&ouml;taja"),
+			"align" => "center"
+		));
+	}
+
+	function _case_view($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_case_view_t($t);
+
+		$this_object = $arr["obj_inst"];
+		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
+
+		foreach ($connections as $connection)
+		{
+			$job = $connection->to ();
+			$job_id = $job->id ();
+			$resource_id = $job->prop ("resource");
+			$resource = obj ($resource_id);
+
+			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+
+			### translate prerequisites from object id-s to execution orders
+			$prerequisites = $job->prop ("prerequisites");
+			$prerequisites = empty ($prerequisites) ? array () : explode (",", $prerequisites);
+			$prerequisites_translated = array ();
+
+			foreach ($prerequisites as $oid)
+			{
+				if (is_oid ($oid) and $this->can("view", $oid))
+				{
+					$prerequisite_job = obj ($oid);
+					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
+				}
+				else
+				{
+					error::raise(array(
+						"msg" => sprintf (t("Eeldust\xf6\xf6 pole objekti id v\xf5i puudub sellele objektile vaatamis\xf5igus, mis siin peaks kindlasti olemas olema (oid: %s, prerequisites: %s)."), $oid, $job->prop ("prerequisites")),
+						"fatal" => false,
+						"show" => false,
+					));
+				}
+			}
+
+			$prerequisites = implode (",", $prerequisites_translated);
+
+			### get & process field values
+			$resource_name = $resource->name () ? $resource->name () : "...";
+
+			$this->db_query("SELECT * FROM mrp_stats WHERE job_oid = ".$job->id());
+			$real_len = 0;
+			$real_start = 0;
+			$real_end = 0;
+			$real_empl = "";
+			while ($row = $this->db_next())
+			{
+				$real_len += $row["length"];
+				$real_start = $real_start == 0 ? $row["start"] : min($row["start"], $real_start);
+				$real_end = $real_end == 0 ? $row["end"] : max($row["end"], $real_end);
+				$real_empl = $row["person_name"];
+			}
+
+			$t->define_data(array(
+				"ord" => $job->prop("exec_order"),
+				"pred" => $prerequisites,
+				"resource" => $resource_name,
+				"state" => $state,
+				"planned_length" => round($job->prop("planned_length") / 3600.0, 2),
+				"real_len" => round($real_len / 3600.0, 2),
+				"start" => $real_start,
+				"end" => $real_end,
+				"employee" => $real_empl
+			));
+		}
+		$t->set_numeric_field("ord");
+		$t->set_default_sortby("ord");
+		$t->sort_by();
 	}
 }
 
