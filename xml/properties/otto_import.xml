@@ -167,6 +167,16 @@
             <caption>Soodustoodete faili asukoht</caption>
       </property>
       <property>
+            <name>discount_products_parents</name>
+            <table>objects</table>
+            <group>discount_products</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>60</size>
+            <caption>Kausta id, kus all soodustooted asuvad</caption>
+      </property>
+      <property>
             <name>discount_products_count</name>
             <table>objects</table>
             <group>discount_products</group>
