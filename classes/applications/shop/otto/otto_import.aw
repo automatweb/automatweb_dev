@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.41 2006/03/06 11:34:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.42 2006/03/09 20:55:39 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -70,6 +70,9 @@
 
 	@property discount_products_file type=textbox size=60 group=discount_products field=meta method=serialize
 	@caption Soodustoodete faili asukoht
+		
+	@property discount_products_parents type=textbox size=60 group=discount_products field=meta method=serialize
+	@caption Kausta id, kus all soodustooted asuvad
 
 	@property discount_products_count type=text store=no group=discount_products
 	@caption Ridu tabelis
@@ -224,7 +227,7 @@ class otto_import extends class_base
 
 			case "clear_discount_products":
 				$prop['value'] = html::href(array(
-					"caption" => t("T&uuml;hjenda soodustoodete tabel"),
+					"caption" => t("T&uuml;hjenda soodustoodete tabel ( olenemata keelest! )"),
 					"url" => $this->mk_my_orb("clear_discount_products", array(
 						"id" => $arr['obj_inst']->id(),
 					)),
@@ -232,7 +235,9 @@ class otto_import extends class_base
 				break;
 
 			case "discount_products_count":
-				$prop['value'] = $this->db_fetch_field("select count(*) as count from bp_discount_products", "count");
+				$all_products_count = $this->db_fetch_field("select count(*) as count from bp_discount_products", "count");
+				$products_count = $this->db_fetch_field("select count(*) as count from bp_discount_products where lang_id=".aw_global_get('lang_id'), "count");
+				$prop['value'] = $products_count." / ".$all_products_count;
 				break;
 
 			case "foldernames":
@@ -555,8 +560,9 @@ class otto_import extends class_base
 			if (aw_ini_get("site_id") == 276 || aw_ini_get("site_id") == 277)
 			{
 				$this->bonprix_picture_import(array(
-					"pcode" => $pcode,
-					"import_obj" => $import_obj,
+					'pcode' => $pcode,
+					'import_obj' => $import_obj,
+					'start_time' => $start_time,
 				));
 			}
 			else
@@ -763,15 +769,19 @@ class otto_import extends class_base
 	function bonprix_picture_import($arr)
 	{
 		$pcode = $arr['pcode'];
+		$params = array(
+			'pcode' => $arr['pcode'],
+			'start_time' => $arr['start_time']
+		);
 		// so, here should i check which will be the first site to check for pictures
 		$first_site = $arr['import_obj']->prop("first_site_to_search_images");
 		switch ($first_site)
 		{
 			case "bp_de":
 				// if set so, search images from German Bonprix first
-				if ($this->bonprix_picture_import_de(array("pcode" => $pcode)) === false)
+				if ($this->bonprix_picture_import_de($params) === false)
 				{
-					if ($this->bonprix_picture_import_pl(array("pcode" => $pcode)) === false)
+					if ($this->bonprix_picture_import_pl($params) === false)
 					{
 						echo "Toodet ei leitud! <br>";
 					}
@@ -779,180 +789,15 @@ class otto_import extends class_base
 				break;
 			default:
 				// by default we search images from Polish Bonprix first
-				if ($this->bonprix_picture_import_pl(array("pcode" => $pcode)) === false)
+				if ($this->bonprix_picture_import_pl($params) === false)
 				{
-					if ($this->bonprix_picture_import_de(array("pcode" => $pcode)) === false)
+					if ($this->bonprix_picture_import_de($params) === false)
 					{
 						echo "Toodet ei leitud!<br>";
 					}
 				}
 		}
 		
-/*	
-		$url = "http://www.bonprix.pl/katalog.php?ss=".$pcode;
-		$html = $this->file_get_contents($url);
-
-		if (strpos($html, "Niestety, ale nie ma") === false)
-		{
-			echo "[ BONPRIX POOLA ]<br>";
-			echo "-- Leidsin toote <trong>[ $pcode ]</strong><br />";
-			preg_match_all("/images\/all\/(\d+)\/(.*).jpg/", $html, $mt, PREG_PATTERN_ORDER);
-			$num = 0;
-			foreach($mt[2] as $idx => $nr)
-			{
-				$im = $mt[1][$idx]."/".$nr;
-				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$num' AND pcode = '$pcode'", "pcode");
-				echo "---- Otsin baasist pilti [$im] numbriga [$num] ja tootekoodiga [$pcode] <br>";
-				if (!$imnr)
-				{
-					echo "------ image not found, insert new image $im <br>\n";
-					flush();
-
-					$q = ("
-						INSERT INTO 
-							otto_prod_img(pcode, nr,imnr, server_id) 
-							values('$pcode','$num','$im', 7)
-						");
-						//echo "q = $q <br>";
-						$this->db_query($q);
-						$this->added_images[] = $im;
-				}
-				$num++;
-			}
-		}
-		else
-		{
-			// poola saidilt toodet ei leitud, nii et otsime siis saksa saidilt:
-			$url = "http://www.bonprix-shop.de/bp/search.htm?id=188035177146052928-0&nv=0%7C0%7C1&sc=0&pAnfrage=".$pcode;
-			$html = $this->file_get_contents($url);
-
-			if (strpos($html, "Leider konnten wir") === false)
-			{
-				echo "[ BONPRIX SAKSA ]<br>";
-				echo "-- Leidsin toote <strong>[ $pcode ]</strong> <br />";
-				// found prod, read images
-				if (preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var1\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var1";
-				}
-				else
-				if (preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var2\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var2";
-				}
-				else // paistab et saksa saidilt on http: pildi urli eest ära võetud
-				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var1\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var1";
-				}
-				else // paistab et saksa saidil on http: pildi urlilt eest ära võetud
-				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var2\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var2";
-				}
-				else 
-				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var3\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var3";
-				}
-				else 
-				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/gross\/var4\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var4";
-				}
-				else
-				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var1\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var1";
-				}
-				else
-				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var2\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var2";
-				}
-				else
-				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var3\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var3";
-				}
-				else
-				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var4\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var4";
-				}
-				else
-				if (preg_match("/\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var5\/(.*).jpg/imsU", $html, $mt))
-				{
-					$first_im = $mt[1]."_var5";
-				}
-				else
-				{
-					echo "<span style='color:red'>&Uuml;heltki aadressilt pilte ei leitud !!!</span><br />";
-					flush();
-				}
-	
-				echo "---- Kontrollin baasist pilti [ $first_im ] <br>\n";
-				flush();
-				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
-				echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
-				flush();
-				if (!$imnr && $first_im)
-				{	
-					echo "";
-					echo "------ insert new image [ $first_im ]<br>\n";
-					flush();
-	
-					$nr = $first_im{strlen($first_im)-1};
-					$q = ("
-						INSERT INTO 
-							otto_prod_img(pcode, nr,imnr, server_id) 
-							values('$pcode','$nr','$first_im', 6)
-					");
-					//echo "q = $q <br>";
-					$this->db_query($q);
-					$this->added_images[] = $first_im;
-				}
-	
-				// get other images
-				list($r_i) = explode("_", $first_im);
-				echo "---- Otsin teisi pilte: <br>";
-				if (!preg_match_all("/http:\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER))
-				{
-					preg_match_all("/\/\/image01\.otto\.de\/bonprixbilder\/shopposiklein\/7er\/klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER);
-				}
-				$otherim = $mt[1];
-				foreach($otherim as $nr)
-				{
-					$im = $r_i."_".$nr;
-					$nr = $nr{strlen($nr)-1};
-					echo "---- Kontrollin baasist pilti [ $im ] <br>\n";
-					flush();
-					$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "pcode");
-					echo "---- Sellele pildile vastab tootekood [ $imnr ]<br>\n";
-					flush();
-					if (!$imnr)
-					{
-						echo "------ insert new image [ $im ]<br>\n";
-						flush();
-						$q = ("
-							INSERT INTO 
-								otto_prod_img(pcode, nr,imnr, server_id) 
-								values('$pcode','$nr','$im', 6)
-						");
-						//echo "q = $q <br>";
-						$this->db_query($q);
-						$this->added_images[] = $im;
-					}
-				}
-
-			}
-			else
-			{
-				// kui ka saksa saidilt pilti ei leitud:
-				echo "<span style='color:red'>Tundub et toodet <b>[$pcode]</b> ei leitud ei Saksa ega Poola saidilt!</span><br>";
-			}
-		}
-*/
 	}
 
 	////
@@ -965,15 +810,17 @@ class otto_import extends class_base
 	function bonprix_picture_import_pl($arr)
 	{
 		$pcode = $arr['pcode'];
+		$start_time = $arr['start_time'];
 		$url = "http://www.bonprix.pl/katalog.php?ss=".$pcode;
 		$html = $this->file_get_contents($url);
 
 		if (strpos($html, "Niestety, ale nie ma") === false)
 		{
 			echo "[ BONPRIX POOLA ]<br>";
-			echo "-- Leidsin toote <trong>[ $pcode ]</strong><br />";
+			echo "-- Leidsin toote <strong>[ $pcode ]</strong><br />";
 			preg_match_all("/images\/all\/(\d+)\/(.*).jpg/", $html, $mt, PREG_PATTERN_ORDER);
 			$num = 0;
+
 			foreach($mt[2] as $idx => $nr)
 			{
 				$im = $mt[1][$idx]."/".$nr;
@@ -986,12 +833,17 @@ class otto_import extends class_base
 
 					$q = ("
 						INSERT INTO 
-							otto_prod_img(pcode, nr,imnr, server_id) 
-							values('$pcode','$num','$im', 7)
+							otto_prod_img(pcode, nr,imnr, server_id, mod_time) 
+							values('$pcode','$num','$im', 7, $start_time)
 						");
 						//echo "q = $q <br>";
 						$this->db_query($q);
 						$this->added_images[] = $im;
+				}
+				else
+				{
+					echo "------ found image, update mod_time to $start_time (".date("d.m.Y H:m:s", $start_time).")<br>\n";
+					$this->db_query("UPDATE otto_prod_img SET mod_time=$start_time WHERE imnr = '$im' AND nr = '$num' AND pcode = '$pcode'");	
 				}
 				$num++;
 			}
@@ -1015,6 +867,7 @@ class otto_import extends class_base
 	function bonprix_picture_import_de($arr)
 	{
 		$pcode = $arr['pcode'];
+		$start_time = $arr['start_time'];
 		$url = "http://www.bonprix-shop.de/bp/search.htm?id=188035177146052928-0&nv=0%7C0%7C1&sc=0&pAnfrage=".$pcode;
 		$html = $this->file_get_contents($url);
 
@@ -1047,18 +900,23 @@ class otto_import extends class_base
 			if (!$imnr && $first_im)
 			{	
 				echo "";
-				echo "------ insert new image [ $first_im ]<br>\n";
+				echo "------ insert new first image [ $first_im ]<br>\n";
 				flush();
 	
 				$nr = $first_im{strlen($first_im)-1};
 				$q = ("
 					INSERT INTO 
-						otto_prod_img(pcode, nr,imnr, server_id) 
-						values('$pcode','$nr','$first_im', 6)
+						otto_prod_img(pcode, nr,imnr, server_id, mod_time) 
+						values('$pcode','$nr','$first_im', 6, $start_time)
 				");
 				//echo "q = $q <br>";
 				$this->db_query($q);
 				$this->added_images[] = $first_im;
+			}
+			else
+			{
+				echo "------ found first image, update mod_time $start_time (".date("d.m.Y H:m:s", $start_time).")<br>\n";
+				$this->db_query("UPDATE otto_prod_img SET mod_time=$start_time WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'");
 			}
 	
 			// get other images
@@ -1084,12 +942,18 @@ class otto_import extends class_base
 					flush();
 					$q = ("
 						INSERT INTO 
-							otto_prod_img(pcode, nr,imnr, server_id) 
-							values('$pcode','$nr','$im', 6)
+							otto_prod_img(pcode, nr,imnr, server_id, mod_time) 
+							values('$pcode','$nr','$im', 6, $start_time)
 					");
 					//echo "q = $q <br>";
 					$this->db_query($q);
 					$this->added_images[] = $im;
+				}
+				else
+				{
+					echo "------ found image, update mod_time $start_time (".date("d.m.Y H:m:s", $start_time).")<br>\n";
+
+					$this->db_query("UPDATE otto_prod_img SET mod_time=$start_time WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'");
 				}
 			}
 		}
@@ -1656,17 +1520,11 @@ class otto_import extends class_base
 			if (!empty($row['extrafld']))
 			{
 
-				/**
-					after the following thing i have to delete all rows, which are created using this page(or file)
-					and which import time doesn't match the current one, cause they were not updated from the file
-					so they should be deleted from there ... actually i think, that to check page is irrelevant ...
-					i'l implement it later --dragut
-				**/
 				$this->save_handle();
 				$categories = explode(',', $row['extrafld']);
 				foreach ($categories as $category)
 				{
-					$prod_to_cat_id = $this->db_fetch_field("SELECT id FROM otto_imp_t_prod_to_cat WHERE product_code='".$row['code']."' AND category='$category'", "id");
+					$prod_to_cat_id = $this->db_fetch_field("SELECT id FROM otto_imp_t_prod_to_cat WHERE product_code='".$row['code']."' AND category='".$category."' AND lang_id=".aw_global_get('lang_id')." ", "id");
 					if (empty($prod_to_cat_id))
 					{
 						$this->db_query("
@@ -2798,6 +2656,11 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 			'name' => 'image_url',
 			'caption' => t('Pildi aadress'),
 		));
+
+		$t->define_field(array(
+			'name' => 'title',
+			'caption' => t('Nimetus'),
+		));
 /*
 		// maybe it would be nice to make the image upload here
 		// but where can i upload those images, so they will be 
@@ -2812,7 +2675,7 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 */
 		$count = 0;
 		$saved_data = $args['obj_inst']->meta('bubble_pictures');
-		foreach (safe_array($saved_data) as $category => $image_url)
+		foreach (safe_array($saved_data) as $category => $data)
 		{
 			$t->define_data(array(
 				'category' => html::textbox(array(
@@ -2821,7 +2684,11 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 				)),
 				'image_url' => html::textbox(array(
 					'name' => 'bubble_data['.$count.'][image_url]',
-					'value' => $image_url
+					'value' => $data['image_url']
+				)),
+				'title' => html::textbox(array(
+					'name' => 'bubble_data['.$count.'][title]',
+					'value' => $data['title']
 				)),
 /*
 				'image_upload' => html::fileupload(array(
@@ -2838,20 +2705,24 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 			'image_url' => html::textbox(array(
 				'name' => 'bubble_data['.$count.'][image_url]'
 			)),
+			'title' => html::textbox(array(
+				'name' => 'bubble_data['.$count.'][title]',
+			)),
 		));
 		return PROP_OK;
 	}
 
 	function _set_bubble_pictures($args)
 	{
-		// proovib selle failide uploadimise ka siis ära teha ...
-		
 		$valid_data = array();
 		foreach (safe_array($args['request']['bubble_data']) as $data)
 		{
 			if (!empty($data['category']) && !empty($data['image_url']))
 			{
-				$valid_data[$data['category']] = $data['image_url'];
+				$valid_data[$data['category']] = array(
+					'image_url' => $data['image_url'], 
+					'title' => $data['title']
+				);
 			}
 		}
 		$args['obj_inst']->set_meta('bubble_pictures', $valid_data);
@@ -2871,10 +2742,14 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 			'name' => 'image_url',
 			'caption' => t('Pildi aadress'),
 		));
+		$t->define_field(array(
+			'name' => 'title',
+			'caption' => t('Nimetus'),
+		));
 		$count = 0;
 		$saved_data = $args['obj_inst']->meta('firm_pictures');
-	
-		foreach (safe_array($saved_data) as $category => $image_url)
+
+		foreach (safe_array($saved_data) as $category => $data)
 		{
 			$t->define_data(array(
 				'category' => html::textbox(array(
@@ -2883,8 +2758,12 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 				)),
 				'image_url' => html::textbox(array(
 					'name' => 'firm_data['.$count.'][image_url]',
-					'value' => $image_url
-				)),			
+					'value' => $data['image_url']
+				)),
+				'title' => html::textbox(array(
+					'name' => 'firm_data['.$count.'][title]',
+					'value' => $data['title']
+				)),
 			));
 			$count++;
 		}
@@ -2895,6 +2774,9 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 			)),
 			'image_url' => html::textbox(array(
 				'name' => 'firm_data['.$count.'][image_url]'
+			)),
+			'title' => html::textbox(array(
+				'name' => 'firm_data['.$count.'][title]'
 			)),
 		));
 		return PROP_OK;
@@ -2907,7 +2789,10 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		{
 			if (!empty($data['category']) && !empty($data['image_url']))
 			{
-				$valid_data[$data['category']] = $data['image_url'];
+				$valid_data[$data['category']] = array(
+					'image_url' => $data['image_url'],
+					'title' => $data['title']
+				);
 			}
 		}
 		$args['obj_inst']->set_meta('firm_pictures', $valid_data);
@@ -3223,6 +3108,11 @@ arr("<b>".$first_im."</b>");
 
 	function _do_del_prods($prods)
 	{
+		set_time_limit(0);
+//		error_reporting(E_ALL);
+//////////////////////////////
+
+///////////////////////
 		$ol = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT,
 			"user20" => $prods
@@ -3230,16 +3120,20 @@ arr("<b>".$first_im."</b>");
 
 		if (!$ol->count())
 		{
+			echo "Tooteid ei leitud:<br>";
+			arr($prods);
 			return;
 		}
-
+// selles koodis see vist hetkel ei tööta --dragut 03.02.2006
+//		aw_global_set("no_cache_flush", 1);
 		foreach($ol->arr() as $o)
 		{
 			$pkol = new object_list($o->connections_from(array("type" => "RELTYPE_PACKAGING")));
 			echo "kusututan pakendid ".join(",", $pkol->names())." <br>";
-			$pkol->delete(true);
+			$pkol->delete();
+			echo "kustutamine 6nnestus<br>";
+			flush();
 		}
-
 		// get all packagings that have the prods
 		$c = new connection();
 		$list = $c->find(array(
@@ -3249,6 +3143,7 @@ arr("<b>".$first_im."</b>");
 		));
 
 		echo "kusututan tooted ".join(",", $ol->names())." <br>";
+		flush();
 		$ol->delete(true);
 
 		// go over packets and see if some have no prods
@@ -3260,6 +3155,7 @@ arr("<b>".$first_im."</b>");
 				if (count($pkt->connections_from(array("type" => 1))) == 0)
 				{
 					echo "kustutan paketi ".$pkt->name()." <br>";
+					flush();
 					$pkt->delete(true);
 				}
 			}
@@ -3300,27 +3196,58 @@ arr("<b>".$first_im."</b>");
 		if (!empty($file_url))
 		{
 			$rows = file($file_url);
+
+			// fucking mackintosh
+			if (count($rows) == 1)
+			{
+				$lines = $this->mk_file($file_url, "\t");
+				if (count($lines) > 1)
+				{
+					$tmpf = tempnam("/tmp", "aw-ott-imp-5");
+					$fp = fopen($tmpf,"w");
+					fwrite($fp, join("\n", $lines));
+					fclose($fp);
+					$file_url = $tmpf;
+				}
+			}
+			
+			$rows = file($file_url);
+
+
+
+
 			if ($rows !== false)
 			{
 				// unset the firs row:
 				unset($rows[0]);
-				// empty yhe table
-				$this->db_query("delete from bp_discount_products");
+				// first of all, empty the table
+				$this->db_query("delete from bp_discount_products where lang_id=".aw_global_get('lang_id'));
 			//	echo "importing ".count($rows)." products<br>";
 				foreach($rows as $row)
 				{
 					$fields = explode("\t", $row);
+					
+					// fields 5 & 6 contain price-s, and they should not contain
+					// any spaces or commas or double quotas:
+					$fields[5] = str_replace(" ", "", $fields[5]);
+					$fields[5] = str_replace(",", "", $fields[5]);
+					$fields[5] = str_replace('"', "", $fields[5]);
+
+
+					$fields[6] = str_replace(" ", "", $fields[6]);
+					$fields[6] = str_replace(",", "", $fields[6]);
+					$fields[6] = str_replace('"', "", $fields[6]);
 
 					$sql = "insert into bp_discount_products set ";
-					$sql .= "prom=".$fields[0].",";
+					$sql .= "prom='".$fields[0]."',";
 					$sql .= "product_code='".$fields[1]."',";
-					$sql .= "size='".$fields[2]."',";
-					$sql .= "name='".$fields[3]."',";
-					// in the fields[4], size is second time
-					$sql .= "amount=".$fields[5].",";
-					$sql .= "old_price=".$fields[6].",";
-					$sql .= "new_price=".$fields[7].",";
-					$sql .= "category='".$fields[8]."';";
+					$sql .= "name='".$fields[2]."',";
+					$sql .= "size='".$fields[3]."',";
+					$sql .= "amount=".(int)$fields[4].",";
+					$sql .= "old_price=".(int)$fields[5].",";
+					$sql .= "new_price=".(int)$fields[6].",";
+					$sql .= "category='".$fields[7]."',";
+					$sql .= "lang_id=".aw_global_get('lang_id')." ;";
 
 					$this->db_query($sql);
 				}
