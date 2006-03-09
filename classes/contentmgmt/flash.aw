@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.6 2005/10/26 06:34:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.7 2006/03/09 17:28:22 sven Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -61,7 +61,7 @@ class flash extends class_base
 		return $retval;
 	}
 	
-
+ 
 	function set_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -69,7 +69,7 @@ class flash extends class_base
 		if ($prop["name"] == "file")
 		{
 			$fdata = $_FILES["file"];
-			if ($fdata["type"] == "application/x-shockwave-flash" && is_uploaded_file($fdata["tmp_name"]))
+			if (($fdata["type"] == "application/x-shockwave-flash" || $fdata["type"] == "application/x-director")  && is_uploaded_file($fdata["tmp_name"]))
 			{
 				$awf = get_instance(CL_FILE);
 				$final_name = $awf->generate_file_path(array(
