@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.8 2005/12/05 11:45:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.9 2006/03/10 14:49:11 kristo Exp $
 // cfgcontroller.aw - Kontroller(Classbase) 
 /*
 
@@ -31,18 +31,12 @@ class cfgcontroller extends class_base
 {
 	function cfgcontroller()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "cfg/cfgcontroller",
 			"clid" => CL_CFGCONTROLLER
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
-	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -56,7 +50,42 @@ class cfgcontroller extends class_base
 	}
 	
 	
-	//function check_property($arr)
+	/** runs the controller given
+		@attrib api=1
+
+		@param controller_oid required type=int
+			OID of the controller to run
+
+		@param obj_id required type=int
+			OID of the object to run the controller for
+
+		@param prop required type=array
+			Data for the property to check
+
+		@param request required type=array
+			Array of name=>value pairs that come from the http request currently in progress
+
+		@param entry required type=array
+			Data to pass to the controller
+
+		@param obj_inst required type=object
+			The object the controller should be run on
+
+		@errors
+			error is thrown if the controller object given does not exist
+	
+		@returns
+			the value that the controller sets to the variable $retval
+
+		@examples
+			$ctr = obj(59);	
+			$object_to_run_on = obj(100);
+			$ctr_instance = $crt->instance();
+			$prop = array("name" => "whatever");
+			echo "the controller said ".$ctr_instance->check_property($ctr->id(), $object_to_run_on->id(), $prop, $_GET, array("a" => "b"), $object_to_run_on);
+
+			// prints whatever the controller assigned to $retval
+	**/
 	function check_property($controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst)
 	{
 		// $controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst
@@ -69,43 +98,6 @@ class cfgcontroller extends class_base
 		$controller_inst = &obj($controller_oid);
 		eval($controller_inst->prop("formula"));
 		return $retval;
-	}
-	/*
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-
-		}
-		return $retval;
-	}	
-	*/
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
 	}
 }
 ?>

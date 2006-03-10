@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.7 2006/03/10 14:43:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.8 2006/03/10 14:49:11 kristo Exp $
 // cfg_view_controller.aw - NÃ&auml;itamise kontroller 
 /*
 
@@ -21,8 +21,6 @@ class cfg_view_controller extends class_base
 {
 	function cfg_view_controller()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "cfg/cfg_view_controller",
 			"clid" => CL_CFG_VIEW_CONTROLLER
