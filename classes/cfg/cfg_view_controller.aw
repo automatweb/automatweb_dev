@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.6 2006/02/14 10:42:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.7 2006/03/10 14:43:38 kristo Exp $
 // cfg_view_controller.aw - NÃ&auml;itamise kontroller 
 /*
 
@@ -30,7 +30,32 @@ class cfg_view_controller extends class_base
 	}
 	
 		
-	//function check_property($arr)
+	/** runs the controller given
+		@attrib api=1
+
+		@param prop required type=array
+			Data for the property to check
+
+		@param controller_oid required type=int
+			OID of the controller to run
+
+		@param arr required type=array
+			Misc data that you can pass to the controller
+
+		@errors
+			error is thrown if the controller object given does not exist
+	
+		@returns
+			the value that the controller sets to the variable $retval
+
+		@examples
+			$ctr = find_controller_object();	
+			$ctr_instance = $crt->instance();
+			$prop = array("name" => "whatever");
+			echo "the controller said ".$ctr_instance->check_property($prop, $ctr->id(), array("a" => "b"));
+
+			// prints whatever the controller assigned to $retval
+	**/
 	function check_property(&$prop, $controller_oid, $arr)
 	{
 		// $prop, $controller_oid, $arr
