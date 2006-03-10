@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.13 2006/02/10 09:50:54 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.14 2006/03/10 11:03:45 sander Exp $
 // bug.aw - Bugi 
+
+define("BUG_STATUS_CLOSED", 5);
+
 /*
 
 @classinfo syslog_type=ST_BUG relationmgr=yes no_comment=1 no_status=1 r2=yes
@@ -148,10 +151,11 @@ class bug extends class_base
 					1 => t("Lahtine"),
 					2 => t("Tegemisel"),
 					3 => t("Valmis"),
-					4 => t("Suletud"),
-					5 => t("Vale teade"),
-					6 => t("Kordamatu"),
-					7 => t("Parandamatu"),
+					4 => t("Testitud"),
+					5 => t("Suletud"),
+					6 => t("Vale teade"),
+					7 => t("Kordamatu"),
+					8 => t("Parandamatu"),
 				);
 				break;
 
@@ -289,7 +293,7 @@ class bug extends class_base
 				break;
 				
 			case "bug_status":
-				if($prop["value"] == 4 && !$arr["new"])
+				if($prop["value"] == BUG_STATUS_CLOSED && !$arr["new"])
 				{
 					if(aw_global_get("uid") != $arr["obj_inst"]->createdby())
 					{

@@ -106,7 +106,6 @@
             <reltype>RELTYPE_FILE</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
-            <store>no</store>
             <field>fileupload</field>
             <caption>Fail</caption>
       </property>

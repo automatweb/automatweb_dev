@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.26 2006/03/08 14:33:46 sander Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.26 2006/03/08 14:33:46 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.27 2006/03/10 11:03:45 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.27 2006/03/10 11:03:45 sander Exp $
 
 // bug_tracker.aw - BugTrack 
 
 define("MENU_ITEM_LENGTH", 20);
-define("BUG_STATUS_CLOSED", 4);
+define("BUG_STATUS_CLOSED", 5);
 
 /*
 
@@ -491,10 +491,11 @@ class bug_tracker extends class_base
 			1 => t("Lahtine"),
 			2 => t("Tegemisel"),
 			3 => t("Valmis"),
-			4 => t("Suletud"),
-			5 => t("Vale teade"),
-			6 => t("Kordamatu"),
-			7 => t("Parandamatu"),
+			4 => t("Testitud"),
+			5 => t("Suletud"),
+			6 => t("Vale teade"),
+			7 => t("Kordamatu"),
+			8 => t("Parandamatu"),
 		);
 		return $values[$_val];
 	}
@@ -529,6 +530,7 @@ class bug_tracker extends class_base
 				t("5"),
 				t("6"),
 				t("7"),
+				t("8"),
 			),
 		));
 
@@ -684,10 +686,11 @@ class bug_tracker extends class_base
 			1 => t("Lahtine"),
 			2 => t("Tegemisel"),
 			3 => t("Valmis"),
-			4 => t("Suletud"),
-			5 => t("Vale teade"),
-			6 => t("Kordamatu"),
-			7 => t("Parandamatu"),
+			4 => t("Testitud"),
+			5 => t("Suletud"),
+			6 => t("Vale teade"),
+			7 => t("Kordamatu"),
+			8 => t("Parandamatu"),
 		);
 
 		$props["customer"]["type"] = "textbox";
