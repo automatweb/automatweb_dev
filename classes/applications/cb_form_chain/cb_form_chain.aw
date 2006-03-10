@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.26 2006/03/01 14:59:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.27 2006/03/10 14:32:32 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1359,7 +1359,9 @@ class cb_form_chain extends class_base
 		$ol = new object_list(array(
 			"parent" => $this->_get_parent($arr["obj_inst"]),
 			"class_id" => CL_CB_FORM_CHAIN_ENTRY,
-			"confirmed" => $arr["request"]["group"] == "entries_con" ? 1 : new obj_predicate_not(1)
+			"confirmed" => $arr["request"]["group"] == "entries_con" ? 1 : new obj_predicate_not(1),
+			"site_id" => array(),
+			"lang_id" => array()
 		));
 //		$t->data_from_ol($ol, array("change_col" => "name"));
 		foreach($ol->arr() as $o)
