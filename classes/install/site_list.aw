@@ -460,10 +460,21 @@ class site_list extends class_base
 
 	/** returns the id of the site that has the url $url 
 		
-		@attrib name=get_site_id_by_url params=name all_args="1" default="0"
+		@attrib name=get_site_id_by_url params=name all_args="1" default="0" api=1
 		
-		@param url required
+		@param url required type=string
+			The url to get the site id for
+
+		@errors
+			none
 		
+		@returns
+			the id of the site that runs on the url given or null if no such site exists
+
+		@examples
+			$si = get_instance("install/site_list");
+			echo $si->get_site_id_by_url(array("url" => "http://www.struktuur.ee"));
+			// prints 18
 	**/
 	function get_site_id_by_url($arr)
 	{
@@ -473,14 +484,29 @@ class site_list extends class_base
 
 	/** returns all data that we have on the site 
 		
-		@attrib name=get_site_data params=name default="0"
+		@attrib name=get_site_data params=name default="0" api=1
 		
-		@param site_id required
+		@param site_id required type=int
+			The id of the site for which you want the data
 		
-		@comment
-		parameters:
-		site_id - the id of the site whose data is returned
+		@errors
+			none
 
+		@returns
+			array with the site's data:
+				id - the id of the site, integer
+				name - the name of the site, string
+				url - the address the site is running on
+				server_id - the id of the server the site is running on
+				ip - the ip address of the site
+				site_used - for this method, since it lists only active sites, this is always one
+				code_branch - unique identifier identifying the aw code version this site is running on
+				basedir - the folder the site is running in in it's server
+				
+		@examples
+			$si = get_instance("install/site_list");
+			$dat = $si->get_site_data(array("site_id" => 100));
+			echo "url = $dat[url] <br>";	// prints "url = http://www.ttw.ee"
 	**/
 	function get_site_data($arr)
 	{
@@ -646,18 +672,26 @@ class site_list extends class_base
 
 	/** returns data about the current site 
 
-		@attrib name=get_site_info params=name
+		@attrib name=get_site_info params=name api=1
 
-		@comment
-			
+		@errors
+			none
+
+		@returns 
 			returns an array with the current site's data:
 
 				server => ip of the server it is running on
 				code_path => the path of the aw installation it is running on
 				site_path => the path of the site installation it is running on
 				url => the url the site is accessible from
+
+		@examples
+			$sl = get_instance("install/site_list");
+			$data = $sl->get_site_info();
+	
+			echo "server = $data[server] , code_path = $data[code_path] <br>";
 	**/
-	function get_site_info($arr)
+	function get_site_info($arr = array())
 	{
 		list($servname) = explode("/",str_replace("http://", "", str_replace("https://", "", aw_ini_get("baseurl"))));
 		
@@ -807,6 +841,20 @@ class site_list extends class_base
 
 		@attrib api=1
 
+		@param id required type=int
+			The id of the site to get_the url for
+
+		@errors
+			none
+			
+		@returns
+			The url of the site whose id is given
+
+		@examples
+			$sl = get_instance("install/site_list");
+			echo "url for site 100 is: ".$sl->get_url_for_site(100);
+			
+			// prints http://www.ttw.ee
 	**/
 	function get_url_for_site($id)
 	{
@@ -872,6 +920,27 @@ class site_list extends class_base
 
 		@attrib api=1
 
+		@errors
+			none
+
+		@returns
+			The list of websites running AW that are marked as active. Fetches the list from the register if it is too old. 
+			The returned array contains a list of sites, each of which is an array with keys:
+				id - the id of the site, integer
+				name - the name of the site, string
+				url - the address the site is running on
+				server_id - the id of the server the site is running on
+				ip - the ip address of the site
+				site_used - for this method, since it lists only active sites, this is always one
+				code_branch - unique identifier identifying the aw code version this site is running on
+				basedir - the folder the site is running in in it's server
+
+		@examples
+			$sl = get_instance("install/site_list");
+			foreach($sl->get_local_list() as $site)
+			{
+				echo "site with id $site[id] is running at $site[url] <br>";
+			}
 	**/
 	function get_local_list()
 	{
