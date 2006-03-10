@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.193 2006/03/08 15:15:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.194 2006/03/10 12:27:20 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -443,7 +443,6 @@ class aliasmgr extends aw_template
 		$toolbar = $this->mk_toolbar($args['s']['class_id']);
 		$this->read_template("lists_new.tpl");
 
-		$return_url = urlencode($return_url);
 
 		//$this->recover_idx_enumeration($id);
 
