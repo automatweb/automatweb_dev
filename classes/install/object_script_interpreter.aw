@@ -16,12 +16,54 @@ class object_script_interpreter extends class_base
 		$this->init();
 	}
 
-	/** executes the script given in the file $file
+	/** executes the object script given in the file $file
 
-		@attrib name=exec_file
+		@attrib name=exec_file api=1
 	
-		@param file required
+		@param file required type=string
+			The file containing the script to execute
 
+		@param vars optional type=array
+			Array of name=>value pairs that will be set as variables in the script
+
+		@errors
+			error is thrown if the file to execute does not exist
+			error is thrown if a syntax error is in the file or it contains undefined symbols
+
+		@returns
+			an array with keys:
+				"created_objects" => array of oids of the objects that the script created
+				"ini_settings" => array of name => value pairs of ini settings that the script created
+				"vars" => array of name => value pairs of the variables that were in the script
+
+		@comment
+			Description of the format of object scripts is in 
+			$AW_ROOT/docs/tutorials/object_script_interpreter/usage.txt
+
+		@examples:
+			-- script.ojs --
+			$users = obj { class_id=CL_MENU, parent=${parent}, name="Kasutajad", type=MN_CLIENT, status=STAT_ACTIVE }
+			ini { menu.num_menu_images = 3 }
+			--- end file --
+
+			-- code --
+			$osi = get_instance("install/object_script_interpreter");
+			$rv = $osi->exec_file(array(
+				"file" => "script.ojs",
+				"vars" => array(
+					"parent" => 666
+				)
+			));
+
+			// echos array(menu.num_menu_images => 3)
+			echo "ini settings = ".dbg::dump($rv["ini_settings"])." <br>";
+
+			// echos array(parent => 666, users => oid_of_the_new_object
+			echo "vars = ".dbg::dump($rv["vars"])." <br>";
+
+			// echos array(oid_of_the_new_object)
+			echo "created_objects = ".dbg::dump($rv["created_objects"])." <br>";
+			
 	**/
 	function exec_file($arr)
 	{
@@ -40,9 +82,48 @@ class object_script_interpreter extends class_base
 
 	/** executes the script given in $script
 
-		@param script required
-		@param vars optional
+		@attrib name=exec api=1
+	
+		@param script required type=string
+			The script to execute in a string
 
+		@param vars optional type=array
+			Array of name=>value pairs that will be set as variables in the script
+
+		@errors
+			error is thrown if a syntax error is in the file or it contains undefined symbols
+
+		@returns
+			an array with keys:
+				"created_objects" => array of oids of the objects that the script created
+				"ini_settings" => array of name => value pairs of ini settings that the script created
+				"vars" => array of name => value pairs of the variables that were in the script
+
+		@comment
+			Description of the format of object scripts is in 
+			$AW_ROOT/docs/tutorials/object_script_interpreter/usage.txt
+
+		@examples:
+			$script = "\$users = obj { class_id=CL_MENU, parent=\${parent}, name=\"Kasutajad\", type=MN_CLIENT, status=STAT_ACTIVE }\nini { menu.num_menu_images = 3 }\n";
+
+			-- code --
+			$osi = get_instance("install/object_script_interpreter");
+			$rv = $osi->exec(array(
+				"script" => $script,
+				"vars" => array(
+					"parent" => 666
+				)
+			));
+
+			// echos array(menu.num_menu_images => 3)
+			echo "ini settings = ".dbg::dump($rv["ini_settings"])." <br>";
+
+			// echos array(parent => 666, users => oid_of_the_new_object
+			echo "vars = ".dbg::dump($rv["vars"])." <br>";
+
+			// echos array(oid_of_the_new_object)
+			echo "created_objects = ".dbg::dump($rv["created_objects"])." <br>";
+			
 	**/
 	function exec($arr)
 	{
@@ -375,6 +456,7 @@ class object_script_interpreter extends class_base
 			}
 
 			$o->save();
+			$this->created_objs[] = $o->id();
 
 			if ($start == 1)
 			{
