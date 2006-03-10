@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.466 2006/03/08 15:15:02 kristo Exp $
+// $Id: class_base.aw,v 2.467 2006/03/10 10:11:59 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -995,7 +995,7 @@ class class_base extends aw_template
 				$args["XUL"] = 1;
 			};
 			// now, before we make the url to redir to, we must urlencode the return_url address, cause this is an url
-			$args["return_url"] = urlencode($real_return_url);
+			$args["return_url"] = $real_return_url;
 			if ($this->new && isset($_POST["cfgform"]))
 			{
 				$args["cfgform"] = $_POST["cfgform"];
