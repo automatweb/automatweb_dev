@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.13 2005/04/27 09:47:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.14 2006/03/10 13:11:08 kristo Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 
@@ -158,8 +158,7 @@ class crm_org_search extends class_base
 		{
 			$filter["ettevotlusvorm"] = $req["ettevotlusvorm"];
 		};
-
-		if (sizeof($req["ceo"]) || sizeof($xfilter['firmajuht']))
+		if (!empty($req["ceo"]) || !empty($xfilter['firmajuht']))
 		{
 			// search by ceo name? first create a list of all crm_persons
 			// that match the search criteria and after that create a list
@@ -277,7 +276,8 @@ class crm_org_search extends class_base
 		
 		$filter['class_id'] = CL_CRM_COMPANY;
 		$filter['limit'] = 100;
-		
+		$filter["site_id"] = array();
+		$filter["lang_id"] = array();
 		$results = new object_list($filter);
 		$count = 0;
 
