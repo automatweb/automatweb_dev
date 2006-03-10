@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/Attic/image_resizer.aw,v 1.3 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/Attic/image_resizer.aw,v 1.4 2006/03/10 11:40:15 ahti Exp $
 // image_resizer.aw - Piltide muutja 
 
 /*
@@ -31,7 +31,7 @@
 @default group=status
 
 @property message type=hidden store=no
-@captoin Staatus
+@caption Staatus
 
 @property from_folder_contents type=table store=no no_caption=1
 @caption Info table

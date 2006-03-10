@@ -54,6 +54,7 @@
             <type>hidden</type>
             <store>no</store>
             <field>message</field>
+            <caption>Staatus</caption>
       </property>
       <property>
             <name>from_folder_contents</name>
