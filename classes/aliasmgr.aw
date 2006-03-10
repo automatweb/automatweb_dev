@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.194 2006/03/10 12:27:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.195 2006/03/10 14:13:14 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -600,7 +600,6 @@ class aliasmgr extends aw_template
 			}
 		}
 
-
 		$this->vars(array(
 			"HAS_DEF_FOLDER" => $def_str,
 			"class_ids" => $clids,
@@ -609,7 +608,7 @@ class aliasmgr extends aw_template
 			"parent" => $_a_parent,
 			"reforb" => $reforb,
 			"toolbar" => $toolbar,
-			"return_url" => $return_url,
+			"return_url" => urlencode($return_url),
 			"period" => $period,
 			"search_url" => $this->mk_my_orb("search_aliases",array(
 				"id" => $this->id,

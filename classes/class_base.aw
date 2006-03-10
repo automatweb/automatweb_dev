@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.467 2006/03/10 10:11:59 kristo Exp $
+// $Id: class_base.aw,v 2.468 2006/03/10 14:13:14 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -583,7 +583,7 @@ class class_base extends aw_template
 			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
 			"show_help" => aw_ini_get("class_base.show_help"),
-			"add_txt" => aw_ini_get("site_id") == 288
+			"add_txt" => aw_ini_get("site_id") == 288 || aw_ini_get("crm.add_txt")
 		));
 		$cli->rte_type = $this->classinfo(array("name" => "allow_rte"));
 
@@ -994,7 +994,6 @@ class class_base extends aw_template
 			{
 				$args["XUL"] = 1;
 			};
-			// now, before we make the url to redir to, we must urlencode the return_url address, cause this is an url
 			$args["return_url"] = $real_return_url;
 			if ($this->new && isset($_POST["cfgform"]))
 			{
@@ -1344,7 +1343,7 @@ class class_base extends aw_template
 		$link_args = new aw_array(array(
 			"id" => isset($this->id) ? $this->id : false,
 			"group" => "",
-			"return_url" => urlencode($return_url),
+			"return_url" => ($return_url),
 		));
 
 		// so .. what .. do I add tabs as well now?
@@ -2973,7 +2972,7 @@ class class_base extends aw_template
 		};
 
 		$return_url = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
-		$search_return_url = urlencode($args["return_url"]);
+		$search_return_url = $args["return_url"];
 
 		$gen = $almgr->list_aliases(array(
 			"id" => $id,
