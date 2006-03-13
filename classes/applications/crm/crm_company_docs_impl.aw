@@ -300,7 +300,8 @@ class crm_company_docs_impl extends class_base
 		else
 		{
 			$ol = new object_list(array(
-				"parent" => is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $fld->id()
+				"parent" => is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $fld->id(),
+				"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER)
 			));
 		}
 
