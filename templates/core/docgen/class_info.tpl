@@ -21,16 +21,12 @@ p {
 	margin-left: 30px;
 }
 
-pre.raw_comment {
-	margin-left: 30px;
-}
-/* table styles can surely be merged !!!*/
 table {
 	font-size: inherit;
 }
 
 table.class_info {
-	width: 25%;
+	width: 50%;
 	border-collapse: collapse;
 	margin-left: 30px;
 }
@@ -194,12 +190,14 @@ table.class_info th {
 							<th>Name</th>
 							<th>Required</th>
 							<th>Type</th>
+							<th>Comment</th>
 						</tr>
 					<!-- SUB: PARAM -->
 						<tr>
 							<td>{VAR:param_name}</td>
 							<td>{VAR:param_required}</td>
 							<td>{VAR:param_type}</td>
+							<td>{VAR:param_comment}</td>
 						</tr>
 					<!-- END SUB: PARAM -->
 					</table>
@@ -210,8 +208,6 @@ table.class_info th {
 					<p class="errors">{VAR:errors}</p>
 					<strong>Examples:</strong>
 					<p class="examples">{VAR:examples}</p>
-					<strong>Raw comment:</strong>
-					<pre class="raw_comment">{VAR:doc_comment}</pre>
 				</td>
 			</tr>
 			<tr>

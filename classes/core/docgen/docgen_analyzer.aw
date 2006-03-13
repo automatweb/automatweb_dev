@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.23 2006/03/13 08:04:58 dragut Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.24 2006/03/13 09:50:15 dragut Exp $
 
 	@comment
 	analyses aw code
@@ -549,6 +549,21 @@ class docgen_analyzer extends class_base
 					die(sprintf(t("error: do_parse_parameters failed for string %s <br>\n"), $_pm));
 				}
 				$data["params"][$pdat["name"]] = $pdat;
+				while (list(, $line) = each($lines))
+				{
+					$line = trim($line);
+					if ($line{0} == "@")
+					{
+						prev($lines);
+						break;
+					}
+					else
+					if (substr($line, 0, 3) == "**/")
+					{
+						break;
+					}
+					$data['params'][$pdat['name']]['comment'] .= "\n".$line;
+				}
 			}
 			else
 			if (substr($line, 0, strlen("@returns")) == "@returns")
