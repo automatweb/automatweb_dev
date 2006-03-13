@@ -388,7 +388,7 @@ class crm_company_cust_impl extends class_base
 		));
 		$link = $this->mk_my_orb('new',array(
 				'parent' => $arr['obj_inst']->id(),
-				'alias_to' => "%s",
+				'alias_to' => $arr["obj_inst"]->id(),
 				'reltype' => 3, // crm_company.CUSTOMER,
 				'return_url' => get_ru()
 			),
@@ -398,7 +398,7 @@ class crm_company_cust_impl extends class_base
 
 		$link = $this->mk_my_orb('new',array(
 				'parent' => $arr['obj_inst']->id(),
-				'alias_to' => "%s",
+				'alias_to' => $arr['obj_inst']->id(),
 				'reltype' => 3, // crm_company.CUSTOMER,
 				'return_url' => get_ru()
 			),
