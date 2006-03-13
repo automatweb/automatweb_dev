@@ -1,14 +1,51 @@
 <style type="text/css">
+
 .text {
-font-family:  Verdana, Arial, sans-serif;
-font-size: 11px;
-color: #000000;
-line-height: 18px;
-text-decoration: none;
+	font-family:  Verdana, Arial, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	line-height: 18px;
+	text-decoration: none;
 }
-.text a {color: #058AC1; text-decoration:underline;}
-.text a:hover {color: #000000; text-decoration:underline;}
+
+.text a {
+	color: #058AC1; 
+	text-decoration:underline;
+}
+
+.text a:hover {
+	color: #000000; 
+	text-decoration: underline;
+}
+p {
+	margin-left: 30px;
+}
+
+pre.raw_comment {
+	margin-left: 30px;
+}
+/* table styles can surely be merged !!!*/
+table {
+	font-size: inherit;
+}
+
+table.class_info {
+	width: 25%;
+	border-collapse: collapse;
+	margin-left: 30px;
+}
+
+table.class_info td {
+	border: 1px solid silver;
+	padding: 2px;
+}
+
+table.class_info th {
+	border: 1px solid silver;
+	background-color: silver;
+}
 </style>
+
 <a href="{VAR:view_class}">class source</a>
 
 <table border="0" width="100%" cellpadding="2" cellspacing="0">
@@ -138,7 +175,43 @@ text-decoration: none;
 			<tr>
 				<td class="text">
 					<i>{VAR:short_comment}</i><br>
-					<pre>{VAR:doc_comment}</pre>
+					<strong>Attributes:</strong>
+					<table class="class_info">
+						<tr>
+							<th>Name</th>
+							<th>Value</th>
+						</tr>
+					<!-- SUB: ATTRIB -->
+						<tr>
+							<td>{VAR:attrib_name}</td>
+							<td>{VAR:attrib_value}</td>
+						</tr>
+					<!-- END SUB: ATTRIB -->
+					</table>
+					<strong>Parameters:</strong>
+					<table class="class_info">
+						<tr>
+							<th>Name</th>
+							<th>Required</th>
+							<th>Type</th>
+						</tr>
+					<!-- SUB: PARAM -->
+						<tr>
+							<td>{VAR:param_name}</td>
+							<td>{VAR:param_required}</td>
+							<td>{VAR:param_type}</td>
+						</tr>
+					<!-- END SUB: PARAM -->
+					</table>
+
+					<strong>Returns:</strong>
+					<p class="returns">{VAR:returns}</p>
+					<strong>Errors:</strong>
+					<p class="errors">{VAR:errors}</p>
+					<strong>Examples:</strong>
+					<p class="examples">{VAR:examples}</p>
+					<strong>Raw comment:</strong>
+					<pre class="raw_comment">{VAR:doc_comment}</pre>
 				</td>
 			</tr>
 			<tr>

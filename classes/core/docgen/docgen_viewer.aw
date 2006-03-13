@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.26 2006/03/03 15:07:00 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.27 2006/03/13 08:04:58 dragut Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -270,6 +270,27 @@ class docgen_viewer extends class_base
 				$arg .= $this->parse("ARG");
 			}
 
+			$attribs = "";
+			foreach (safe_array($f_data['doc_comment']['attribs']) as $attrib_name => $attrib_value)
+			{
+				$this->vars(array(
+					'attrib_name' => $attrib_name,
+					'attrib_value' => $attrib_value
+				));
+				$attribs .= $this->parse('ATTRIB');
+			}
+
+			$params = "";
+			foreach (safe_array($f_data['doc_comment']['params']) as $param_name => $param_data)
+			{
+				$this->vars(array(
+					'param_name' => $param_name,
+					'param_required' => $param_data['req'],
+					'param_type' => $param_data['type']
+				));
+				$params .= $this->parse('PARAM');
+			}
+
 			$doc_file = dirname($cur_file)."/".basename($cur_file, ".aw")."/".$data["name"].".".$func.".txt";
 			$this->vars(array(
 				"proto" => "function $func()",
@@ -280,6 +301,11 @@ class docgen_viewer extends class_base
 				"returns_ref" => ($f_data["returns_ref"] ? "X" : "&nbsp;"),
 				"ARG" => $arg,
 				"short_comment" => ($f_data["doc_comment"]["short_comment"] == "" ? "" : $f_data["doc_comment"]["short_comment"]."<Br>"),
+				'ATTRIB' => $attribs,
+				'PARAM' => $params,
+				'returns' => (empty($f_data['doc_comment']['returns'])) ? t('nothing') : nl2br($f_data['doc_comment']['returns']),
+				'errors' => (empty($f_data['doc_comment']['errors'])) ? t('none') : nl2br($f_data['doc_comment']['errors']),
+				'examples' => (empty($f_data['doc_comment']['examples'])) ? t('none') : highlight_string("<?php \n".$f_data['doc_comment']['examples']."\n?>", true),
 				"doc_comment" => htmlspecialchars($f_data["doc_comment_str"]),
 				"view_source" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
 				"view_usage" => $this->mk_my_orb("view_usage", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),

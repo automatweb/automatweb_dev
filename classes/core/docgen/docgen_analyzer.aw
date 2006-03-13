@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.22 2005/09/28 21:39:49 voldemar Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.23 2006/03/13 08:04:58 dragut Exp $
 
 	@comment
 	analyses aw code
@@ -338,9 +338,7 @@ class docgen_analyzer extends class_base
 		$this->data["classes"][$this->current_class]["functions"][$f_name]["name"] = $f_name;
 		$this->data["classes"][$this->current_class]["functions"][$f_name]["start_line"] = $this->get_line();
 		$this->data["classes"][$this->current_class]["functions"][$f_name]["returns_ref"] = $return_ref;
-
 		$this->data["classes"][$this->current_class]["functions"][$f_name]["doc_comment"] = $this->parse_doc_comment($this->last_comment);
-
 		if ($this->data["classes"][$this->current_class]["functions"][$f_name]["doc_comment"] != false)
 		{
 			$this->data["classes"][$this->current_class]["functions"][$f_name]["doc_comment_str"] = $this->last_comment;
@@ -525,7 +523,6 @@ class docgen_analyzer extends class_base
 		{
 			return false;
 		}
-
 		$lines = explode("\n", $str);
 
 		$data = array();
@@ -596,6 +593,56 @@ class docgen_analyzer extends class_base
 					$data["comment"] .= "\n".$line;
 				}
 				$data["comment"] = trim($data["comment"]);
+			}
+			else
+			if (substr($line, 0, strlen('@errors')) == '@errors')
+			{
+				$data['errors'] = trim(substr($line, strlen('@errors')));
+				// now loop, until we find the end or next parameter
+				while (list(, $line) = each($lines))
+				{
+					$line = trim($line);
+					if ($line{0} == "@")
+					{
+						prev($lines);
+						break;
+					}
+					else
+					if (substr($line, 0, 3) == "**/")
+					{
+						break;
+					}
+					$data["errors"] .= "\n".$line;
+				}
+				$data["errors"] = trim($data["errors"]);
+	
+			}
+			else
+			if (substr($line, 0, strlen('@examples')) == '@examples')
+			{
+				$data['examples'] = trim(substr($line, strlen('@examples')));
+				// now loop, until we find the end or next parameter
+				while (list(, $line) = each($lines))
+				{
+				// it removes the indenting too :(
+				//	$line = trim($line);
+					if ($line{0} == "@")
+					{
+						prev($lines);
+						break;
+					}
+					else
+					if (substr($line, 0, 3) == "**/")
+					{
+						break;
+					}
+					$data["examples"] .= "\n".$line;
+				}
+			
+				$data["examples"] = trim($data["examples"]);
+			//	$data["examples"] = $data["examples"];
+
+				
 			}
 		}
 		return $data;
@@ -1252,5 +1299,6 @@ class docgen_analyzer extends class_base
 			}
 		}
 	}
+	
 }
 ?>
