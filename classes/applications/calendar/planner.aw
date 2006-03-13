@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.118 2006/03/08 15:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.119 2006/03/13 13:49:05 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2933,6 +2933,15 @@ class planner extends class_base
 		{
 			$o = obj($s);
 			$o->delete();
+		}
+		if (!$arr["post_ru"])
+		{
+			$arr["post_ru"] = $this->mk_my_orb("change", array(
+				"id" => $arr["id"],
+				"group" => "add_event",
+				"event_id" => $arr["event_id"],
+				"cb_group" => "rows"
+			));
 		}
 		return $arr["post_ru"];
 	}

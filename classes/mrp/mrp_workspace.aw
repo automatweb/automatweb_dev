@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.158 2006/03/08 15:15:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.159 2006/03/13 13:49:05 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2371,7 +2371,7 @@ if ($_GET['show_thread_data'] == 1)
 			"WHERE " .
 				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
 				"o.status > 0 AND " .
-				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
+				"o.parent = '" . $this_object->prop ("jobs_folder") . "' AND " .
 				"((!(job.started < {$range_start})) OR ((job.state = " . MRP_STATUS_DONE . " AND job.finished > {$range_start}) OR (job.state != " . MRP_STATUS_DONE . " AND {$time} > {$range_start}))) AND " .
 				"job.started < {$range_end} AND " .
 				"job.project > 0 AND " .
@@ -2475,7 +2475,7 @@ if ($_GET['show_thread_data'] == 1)
 			"WHERE " .
 				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
 				"o.status > 0 AND " .
-				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
+				"o.parent = '" . $this_object->prop ("jobs_folder") . "' AND " .
 				"schedule.starttime < {$range_end} AND " .
 				"schedule.starttime > {$time} AND " .
 				"((!(schedule.starttime < {$range_start})) OR ((schedule.starttime + schedule.planned_length) > {$range_start})) AND " .
@@ -3490,7 +3490,7 @@ if ($_GET['show_thread_data'] == 1)
 			foreach($ol->arr() as $case)
 			{
 				$t->define_data(array(
-					"name" => html::get_change_url($case->id(), array("return_url" => get_ru()), $case->name()),
+					"name" => html::get_change_url($case->id(), array("return_url" => get_ru()), parse_obj_name($case->name())),
 					"comment" => $case->comment(),
 					"start" => $case->prop("starttime"),
 					"end" => $case->prop("due_date"),

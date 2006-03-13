@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.114 2006/02/07 13:55:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.115 2006/03/13 13:49:04 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -219,7 +219,7 @@ class admin_menus extends aw_template
 	function get_popup_data($args = array())
 	{
 		extract($args);
-
+		
 		if (!is_object($obj))
 		{
 			$obj = obj($id);

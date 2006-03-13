@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.57 2006/03/08 13:43:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.58 2006/03/13 13:49:04 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -127,6 +127,7 @@ class admin_folders extends aw_template
 		$this->read_template("folders.tpl");
 		enter_function("gfn::list1");
 		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
+
 		$this->tree = get_instance("vcl/treeview");
 		$this->period = $period;
 		$this->tree->start_tree(array(
