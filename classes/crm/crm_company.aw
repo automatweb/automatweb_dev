@@ -235,16 +235,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property currency type=relpicker reltype=RELTYPE_CURRENCY table=kliendibaas_firma field=aw_currency
 	@caption Valuuta
 
-	@property phone_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_PHONE props=name
+	@property phone_id type=releditor mode=manager props=name,type table_fields=name,type choose_default=1 always_show_add=1 table=kliendibaas_firma reltype=RELTYPE_PHONE
 	@caption Telefon
 
-	@property telefax_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name
+	@property telefax_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name choose_default=1 always_show_add=1
 	@caption Faks
 
-	@property url_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_URL props=name
+	@property url_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_URL props=name choose_default=1 always_show_add=1
 	@caption Veebiaadress
 
-	@property email_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_EMAIL props=mail
+	@property email_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_EMAIL props=mail choose_default=1 always_show_add=1
 	@caption E-posti aadressid
 
 	// @property b_acct_desc type=text subtitle=1 store=no
@@ -829,7 +829,7 @@ groupinfo documents caption="Dokumendid" submit=no
 
 	@groupinfo stats_s parent=stats caption="Otsi" submit_method=get save=no
 	@groupinfo stats_view parent=stats caption="Salvestatud aruanded" submit=no save=no
-	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no submit_method=get 
+	@groupinfo stats_my parent=stats caption="Minu statistika" submit=no save=no submit_method=get
 
 @groupinfo qv caption="Vaata"  submit=no save=no
 
@@ -3130,7 +3130,7 @@ class crm_company extends class_base
 
 			$p = obj($p_id);
 
-			
+
 			switch($p->class_id())
 			{
 				case CL_CRM_PERSON:
@@ -4732,7 +4732,7 @@ class crm_company extends class_base
 		{
 			$sc = "
 				function bg_mark_task_done(link, eln, ns)
-				{	
+				{
 					resetButton(activeButton);
 					// fetch the url to mark it done
 					aw_get_url_contents(link);
@@ -4933,7 +4933,7 @@ class crm_company extends class_base
 	function p_view_switch($arr)
 	{
 		$_SESSION["crm"]["people_view"] = ($_SESSION["crm"]["people_view"] == "edit" ? "view" : "edit");
-		return $arr["post_ru"];	
+		return $arr["post_ru"];
 	}
 
 	function do_db_upgrade($tbl, $field, $q, $err)
