@@ -1109,6 +1109,10 @@ class crm_company_overview_impl extends class_base
 					));
 					$ol->add($ol2);
 					$tasks = $this->make_keys($ol->ids());
+					if (!count($tasks))
+					{
+						$tasks = array(-1);
+					}
 				}
 				break;
 		}
@@ -1154,6 +1158,29 @@ class crm_company_overview_impl extends class_base
 				"lang_id" => array(),
 				"site_id" => array()
 			));
+		}
+
+		if ($arr["request"]["group"] == "bills_search")
+		{
+			// filter out all tasks that can not get bills
+			$res = new object_list();
+			$ti = get_instance(CL_TASK);
+			foreach($ol->arr() as $o)
+			{
+				$has = false;
+				foreach($ti->get_task_bill_rows($o) as $row)
+				{
+					if ($row["on_bill"] == 1 && $row["amt"] > 0 && !is_oid($row["on_bill"]))
+					{
+						$has = true;
+					}
+				}
+				if ($has)
+				{
+					$res->add($o);
+				}		
+			}
+			$ol = $res;
 		}
 		return $ol;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.16 2006/03/08 15:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.17 2006/03/13 13:42:14 kristo Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -90,6 +90,11 @@ class crm_address extends class_base
 
 		switch($data["name"])
 		{
+			case "postiindeks":
+				$oncl = "window.open('http://www.post.ee/?id=1069&op=sihtnumbriotsing&tanav='+document.changeform.aadress.value.replace(/[0-9]+/, '')+'&linn='+document.changeform.linn.options[document.changeform.linn.selectedIndex].text+'&x=30&y=6');";
+				$data["post_append_text"] = sprintf(" <a href='#' onClick=\"$oncl\">%s</a>", t("Otsi postiindeksit"));
+
+				break;
 		};
 		return $retval;
 	}

@@ -116,12 +116,10 @@ class crm_company_docs_impl extends class_base
 		{
 			return PROP_IGNORE;
 		}
-
-		if (!$arr["request"]["tf"] && !$arr["request"]["files_from_fld"])
+		if (!$arr["request"]["tf"] && $arr["request"]["files_from_fld"] == "")
 		{
 			$arr["request"]["files_from_fld"] = "/";
 		}
-
 		$fld = $this->_init_docs_fld($arr["obj_inst"]);
 
 		classload("core/icons");
@@ -157,7 +155,11 @@ class crm_company_docs_impl extends class_base
 			foreach($fld as $item)
 			{
 				$item["name"] = iconv("utf-8", aw_global_get("charset"), $item["name"]);
-				$item["url"] = aw_url_change_var("files_from_fld", $item["id"]);
+				if ($arr["request"]["files_from_fld"] == $item["id"])
+				{
+					$item["name"] = "<b>".$item["name"]."</b>";
+				}
+				$item["url"] = aw_url_change_var("files_from_fld", urlencode($item["id"]));
 				$t->add_item($item["parent"] === 0 ? $sf->id() : $item["parent"], $item);
 			}
 		}

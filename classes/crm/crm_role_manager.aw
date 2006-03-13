@@ -93,6 +93,10 @@ class crm_role_manager extends class_base
 			"class_id" => CL_CRM_COMPANY_ROLE_ENTRY
 		);
 
+		if (!$r["cat"] && !$r["unit"])
+		{
+			return;
+		}
 		if ($r["to_project"])
 		{
 			// get to org from project as orderer

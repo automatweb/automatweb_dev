@@ -11,15 +11,16 @@ class server_folder_selector extends core
 	{
 		$p = $arr["prop"];
 		$p["type"] = "textbox";
-		$p["post_append_text"] = " ".html::popup(array(
-			"url" => $this->mk_my_orb(
-				"select_folder", 
-				array(
-					"pn" => $p["name"],
-					"fld" => $p["value"],
-				)
-			),
-			"caption" => t("Vali")
+		$url = $this->mk_my_orb(
+			"select_folder",
+			array(
+				"pn" => $p["name"],
+			)
+		);
+		$p["post_append_text"] = " ".html::href(array(
+			"url" => "#",
+			"caption" => t("Vali"),
+			"onClick" => "aw_popup_scroll(\"$url&fld=\"+document.changeform.$p[name].value, \"selfold\", 400, 400);"
 		));
 		return array(
 			$p["name"] => $p
@@ -87,8 +88,8 @@ class server_folder_selector extends core
 			$dd = posix_getpwuid(fileowner($arr["fld"]."/".$file));
 			$t->define_data(array(
 				"name" => html::href(array(
-					"url" => $this->mk_my_orb("select_folder", array("pn" => $arr["pn"], "fld" => $arr["fld"]."/".$file)),
-					"caption" => $file
+					"url" => $this->mk_my_orb("select_folder", array("pn" => $arr["pn"], "fld" => urlencode($arr["fld"]."/".$file))),
+					"caption" => iconv("utf-8", aw_global_get("charset")."//IGNORE",$file)
 				)),
 				"sel" => html::href(array(
 					"url" => "#",
@@ -101,7 +102,9 @@ class server_folder_selector extends core
 			$has = true;
 		}
 
-		return $arr["fld"]."<br><br>".$t->draw();
+		$t->set_default_sortby("name");
+		$t->sort_by();
+		return iconv("utf-8", aw_global_get("charset")."//IGNORE", $arr["fld"])."<br><br>".$t->draw();
 	}
 }
 ?>

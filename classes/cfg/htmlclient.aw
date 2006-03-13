@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.140 2006/02/28 10:13:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.141 2006/03/13 13:42:13 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -755,7 +755,12 @@ class htmlclient extends aw_template
 					"SHOW_HELP" => $tp->parse("SHOW_HELP"),
 				));
 			};
-			if ($this->config["add_txt"])
+			$ro = obj();
+			if ($_REQUEST["id"])
+			{
+				$ro = obj($_REQUEST["id"]);
+			}
+			if ($this->config["add_txt"] && $ro->class_id() == CL_CRM_COMPANY)
 			{
 				$cust_url = $this->mk_my_orb('new',array(
 						'parent' => $_REQUEST["id"],

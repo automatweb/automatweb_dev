@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.16 2006/03/13 12:27:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.17 2006/03/13 13:42:14 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -154,7 +154,7 @@ class crm_job_entry extends class_base
 				break;
 
 			case "post_index":
-				$oncl = "window.open('http://www.post.ee/?id=1069&op=sihtnumbriotsing&tanav='+document.changeform.addr.value.replace(/[0-9]/, '')+'&linn='+document.changeform.addr_linn.value+'&x=30&y=6');";
+				$oncl = "window.open('http://www.post.ee/?id=1069&op=sihtnumbriotsing&tanav='+document.changeform.addr.value.replace(/[0-9]+/, '')+'&linn='+document.changeform.addr_linn.value+'&x=30&y=6');";
 				$prop["post_append_text"] = sprintf(" <a href='#' onClick=\"$oncl\">%s</a>", t("Otsi postiindeksit"));
 				break;
 
@@ -255,7 +255,7 @@ class crm_job_entry extends class_base
 		switch($prop["name"])
 		{
 			case "sel_cust":
-				if (!$prop["value"] && $arr["request"]["cust_n"] == "" && $arr["request"]["custp_fn"] == "" && $arr["request"]["custp_ln"] == "")
+				if (!$prop["value"] && $arr["request"]["cust_n"] == "" && $arr["request"]["custp_fn"] == "" && $arr["request"]["custp_ln"] == "" && $arr["request"]["sel_cust_p"] == "")
 				{
 					$prop["error"] = t("Kliendi nimi peab olema t&auml;idetud v&otilde;i olemasolev klient peab olema valitud");
 					return PROP_FATAL_ERROR;
@@ -374,6 +374,7 @@ class crm_job_entry extends class_base
 
 			if ($c->class_id() == CL_CRM_PERSON)
 			{
+				$c_i->gen_code($c);
 				$c->set_name($arr["request"]["custp_fn"]." ".$arr["request"]["custp_ln"]);
 				$c->set_prop("firstname", $arr["request"]["custp_fn"]);
 				$c->set_prop("lastname", $arr["request"]["custp_ln"]);

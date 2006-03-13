@@ -91,6 +91,9 @@ class crm_company_qv_impl extends class_base
 		}
 		$pi = get_instance(CL_PROJECT);
 		$t_i = get_instance(CL_TASK);
+		$r = array();
+		$r["stats_s_from"] = date_edit::get_timestamp($arr["request"]["stats_s_from"]);
+		$r["stats_s_to"] = date_edit::get_timestamp($arr["request"]["stats_s_to"]);
 		foreach($ol->arr() as $o)
 		{
 			$parts = array();
@@ -106,12 +109,17 @@ class crm_company_qv_impl extends class_base
 				"class_id" => CL_TASK,
 				"lang_id" => array(),
 				"site_id" => array(),
-				"project" => $o->id()
+				"project" => $o->id(),
+				"brother_of" => new obj_predicate_prop("id")
 			));
 			foreach($t_ol->arr() as $task)
 			{
-				foreach($t_i->get_task_bill_rows($task) as $row)
+				foreach($t_i->get_task_bill_rows($task, false) as $row)
 				{
+					if ($row["date"] < $r["stats_s_from"] || ($row["date"] > $r["stats_s_to"] && $row["stats_s_to"] > 100))
+					{
+						continue;
+					}
 					$sum += $row["sum"];
 					$hrs += $row["amt"];
 				}
@@ -138,7 +146,6 @@ class crm_company_qv_impl extends class_base
 			));
 		}
 		
-
 		// tasks
 		if (isset($arr["tasks"]))
 		{

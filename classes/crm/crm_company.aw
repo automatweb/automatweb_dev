@@ -1509,9 +1509,9 @@ class crm_company extends class_base
 				break;
 
 			case "proj_search_dl_from":
-				if (!isset($arr["request"]["proj_search_dl_from"]))
+				if (!isset($arr["request"]["proj_search_sbt"]))
 				{
-					$data["value"] = mktime(0,0,0, date("m"), date("d"), date("Y")-1);
+					$data["value"] = -1; //mktime(0,0,0, date("m"), date("d"), date("Y")-1);
 				}
 				else
 				if ($arr["request"]["proj_search_dl_from"]["year"] > 1)
@@ -1525,9 +1525,9 @@ class crm_company extends class_base
 				break;
 
 			case "proj_search_dl_to":
-				if (!isset($arr["request"]["proj_search_dl_to"]))
+				if (!isset($arr["request"]["proj_search_sbt"]))
 				{
-					$data["value"] = mktime(0,0,0, date("m"), date("d"), date("Y")+1);
+					$data["value"] = -1; //mktime(0,0,0, date("m"), date("d"), date("Y")+1);
 				}
 				else
 				if ($arr["request"]["proj_search_dl_to"]["year"] > 1)
@@ -1925,6 +1925,13 @@ class crm_company extends class_base
 				$arr["request"]["stats_s_to"] = $arr["request"]["my_stats_s_to"];
 				$arr["request"]["stats_s_time_sel"] = $arr["request"]["my_stats_s_time_sel"];
 				$i->_get_my_stats($arr);
+				break;
+
+			case "server_folder":
+				if ($prop["value"] == "")
+				{
+					$prop["value"] = reset(aw_ini_get("server.name_mappings"));
+				}
 				break;
 
 			case "my_view":
@@ -3732,7 +3739,6 @@ class crm_company extends class_base
 		$bill = obj();
 		$bill->set_class_id(CL_CRM_BILL);
 		$bill->set_parent($arr["id"]);
-		$bill->save();
 
 		$ser = get_instance(CL_CRM_NUMBER_SERIES);
 		$bno = $ser->find_series_and_get_next(CL_CRM_BILL);
@@ -3747,12 +3753,15 @@ class crm_company extends class_base
 		{
 			$proj = obj($arr["proj"]);
 			$cust = $proj->get_first_obj_by_reltype("RELTYPE_ORDERER");
-			$impl = $proj->prop("orderer");
+			$impl = $proj->prop("implementor");
 			if (is_array($impl))
 			{
 				$impl = reset($impl);
 			}
-			$bill->set_prop("customer", $impl);
+			if ($cust)
+			{
+				$bill->set_prop("customer", $cust->id());
+			}
 			$bill->set_prop("impl", $proj->prop("implementor"));
 		}
 
