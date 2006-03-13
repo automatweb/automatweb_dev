@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.69 2005/11/11 13:24:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.70 2006/03/13 12:27:42 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -99,9 +99,31 @@ class aw_table extends aw_template
 			// if exists value filtervalue-[rowname] use that for filtering (good for linked values etc)
 			$value = $row[(isset($row['filtervalue-'.$field_name]) ? 'filtervalue-' : '') . $field_name];
 
-			if (!empty($filter_txtvalue) && stristr($value, $filter_txtvalue) === false)
+			if (!empty($filter_txtvalue))
 			{
-				return false;
+				if (isset($this->filter_comparators[$field_name]))
+				{
+					$fc = $this->filter_comparators[$field_name];
+					if (is_array($fc))
+					{
+						if ($fc[0]->$fc[1]($field_name, $filter_txtvalue, $row) === false)
+						{
+							return false;
+						}
+					}
+					else
+					{
+						if ($this->filter_comparators[$field_name]($field_name, $filter_txtvalue, $row) === false)
+						{
+							return false;
+						}
+					}
+				}
+				else
+				if (stristr($value, $filter_txtvalue) === false)
+				{
+					return false;
+				}
 			}
 		}
 
@@ -1343,6 +1365,7 @@ class aw_table extends aw_template
 			$this->filters_updated = true;
 		}
 
+		$this->filter_comparators[$args["name"]] = $args["filter_compare"];
 		$this->rowdefs[] = $args;
 		if (isset($args["numeric"]))
 		{

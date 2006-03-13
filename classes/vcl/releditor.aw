@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.80 2006/03/08 15:15:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.81 2006/03/13 12:27:42 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -160,6 +160,10 @@ class releditor extends core
 		};
 
 		$form_type = $arr["request"][$this->elname];
+		if (($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id)))
+		{
+			$form_type = "new";
+		}
 		$this->form_type = $form_type;
 
 		#$this->all_props = $act_props;
@@ -223,7 +227,7 @@ class releditor extends core
 		// "form" does not need a caption
 		if ($visual == "manager")
 		{
-			if ("new" == $form_type)
+			if ("new" == $form_type || ($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id)))
 			{
 				$act_props = array($this->elname . "_caption" => array(
 					"name" => $this->elname . "_caption",
@@ -298,7 +302,7 @@ class releditor extends core
 		};
 
 
-		if (($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
+		if (($visual == "manager" && (is_object($obj_inst) || ($form_type == "new" || ($arr["prop"]["always_show_add"] == 1 && !is_oid($edit_id))))))
 		//if ($visual == "form" || ($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
 		{
 			// I might not want a submit button, eh?

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.28 2006/03/08 14:03:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.29 2006/03/13 12:27:40 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -68,7 +68,6 @@
 
 	@property bill_tb type=toolbar store=no no_caption=1
 
-	@property bill_proj_list type=table store=no no_caption=1
 	@property bill_task_list type=table store=no no_caption=1
 
 
@@ -128,16 +127,13 @@ class crm_bill extends class_base
 				$this->_bill_tb($arr);
 				break;
 
-			case 'bill_proj_list':
 			case 'bill_task_list':
+				$this->_bill_task_list($arr);
+				break;
+
 			case 'bill_tb':
-				static $bills_impl;
-				if (!$bills_impl)
-				{
-					$bills_impl = get_instance("applications/crm/crm_company_bills_impl");
-				}
-				$fn = "_get_".$prop["name"];
-				return $bills_impl->$fn($arr);
+				$this->_billt_tb($arr);
+				break;
 		
 			case "bill_no":
 				if ($prop["value"] == "")
@@ -383,7 +379,7 @@ class crm_bill extends class_base
 					"width" => 800,
 					"height" => 500,
 					"scrollbars" => 1,
-					"url" => $this->mk_my_orb("do_search", array("pn" => "rows[$id][prod]", "clid" => CL_SHOP_PRODUCT), "popup_search"),
+					"url" => $this->mk_my_orb("do_search", array("pn" => "rows[$id][prod]", "clid" => CL_SHOP_PRODUCT, "tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
 					"caption" => t("Vali")
 				))
 
@@ -466,7 +462,11 @@ class crm_bill extends class_base
 		if ($this->can("view", $b->prop("customer")))
 		{
 			$ord = obj($b->prop("customer"));
-			$_ord_ct = $ord->prop("firmajuht");
+			$_ord_ct = $ord->prop("contact_person");
+			if (!$_ord_ct)
+			{
+				$_ord_ct = $ord->prop("firmajuht");
+			}
 			$ord_ct = "";
 			if ($this->can("view", $_ord_ct))
 			{
@@ -590,6 +590,7 @@ class crm_bill extends class_base
 		$tax = 0;
 		$sum = 0;
 		$brows = $this->get_bill_rows($b);
+
 		$grp_rows = array();
 
 		$_no_prod_idx = -1;
@@ -622,13 +623,14 @@ class crm_bill extends class_base
 				$cur_pr = $this->num($row["price"]);
 			}
 
-			$grp_rows[$row["prod"]]["sum_wo_tax"] += $cur_sum;
-			$grp_rows[$row["prod"]]["tax"] += $cur_tax;
-			$grp_rows[$row["prod"]]["sum"] += ($cur_tax+$cur_sum);
-			$grp_rows[$row["prod"]]["unit"] = $row["unit"];
-			$grp_rows[$row["prod"]]["tot_amt"] += $row["amt"];
-			$grp_rows[$row["prod"]]["tot_cur_sum"] += $cur_sum;
-			$grp_rows[$row["prod"]]["name"] = $row["name"];
+			$unp = $row["price"];
+			$grp_rows[$row["prod"]][$unp]["sum_wo_tax"] += $cur_sum;
+			$grp_rows[$row["prod"]][$unp]["tax"] += $cur_tax;
+			$grp_rows[$row["prod"]][$unp]["sum"] += ($cur_tax+$cur_sum);
+			$grp_rows[$row["prod"]][$unp]["unit"] = $row["unit"];
+			$grp_rows[$row["prod"]][$unp]["tot_amt"] += $row["amt"];
+			$grp_rows[$row["prod"]][$unp]["tot_cur_sum"] += $cur_sum;
+			$grp_rows[$row["prod"]][$unp]["name"] = $row["name"];
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
@@ -637,26 +639,29 @@ class crm_bill extends class_base
 		}
 
 		$fbr = reset($brows);
-		foreach($grp_rows as $prod => $grp_row)
+		foreach($grp_rows as $prod => $grp_rowa)
 		{
-			if ($this->can("view", $prod))
+			foreach($grp_rowa as $grp_row)
 			{
-				$po = obj($prod);
-				$desc = $po->comment();
+				if ($this->can("view", $prod))
+				{
+					$po = obj($prod);
+					$desc = $po->comment();
+				}
+				else
+				{
+					$desc = $grp_row["name"];
+				}
+				$this->vars(array(
+					"unit" => $grp_row["unit"],
+					"amt" => $grp_row["tot_amt"],
+					"price" => (int)($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),
+					"sum" => number_format($grp_row["tot_cur_sum"], 2),
+					"desc" => $desc,
+					"date" => "" 
+				));
+				$rs .= $this->parse("ROW");
 			}
-			else
-			{
-				$desc = $grp_row["name"];
-			}
-			$this->vars(array(
-				"unit" => $grp_row["unit"],
-				"amt" => $grp_row["tot_amt"],
-				"price" => (int)($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),
-				"sum" => number_format($grp_row["tot_cur_sum"], 2),
-				"desc" => $desc,
-				"date" => "" 
-			));
-			$rs .= $this->parse("ROW");
 		}
 
 		foreach($this->get_bill_rows($b) as $row)
@@ -1325,6 +1330,67 @@ class crm_bill extends class_base
 			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100')",
 			"text" => t("Prindi arve koos lisaga")
 		));
+	}
+
+	function _init_bill_task_list(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Toimetus"),
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "hrs",
+			"caption" => t("Tunde"),
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"sortable" => 1
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _bill_task_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_bill_task_list($t);
+
+		$ol = new object_list(array(
+			"class_id" => CL_TASK,
+			"customer" => $arr["obj_inst"]->prop("customer"),
+			"CL_TASK.RELTYPE_ROW.done" => 1,
+			"CL_TASK.RELTYPE_ROW.on_bill" => 1,
+			"CL_TASK.RELTYPE_ROW.bill_id" => 0,
+		));
+		$ti = get_instance(CL_TASK);
+		foreach($ol->arr() as $task)
+		{
+			$rows = $ti->get_task_bill_rows($task);
+			$hrs = $price = 0;
+			foreach($rows as $row)
+			{
+				$hrs += $row["amt"];
+				$price += $row["sum"];
+			}
+			$t->define_data(array(
+				"name" => html::obj_change_url($task),
+				"hrs" => number_format($hrs, 2), 
+				"price" => number_format($price, 2),
+				"oid" => $task->id()
+			));
+		}
+	}
+
+	function _billt_tb($arr)
+	{
+		
 	}
 }
 ?>

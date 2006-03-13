@@ -355,6 +355,7 @@
 			<function name="name_autocomplete_source">
 				<arguments>
 					<optional name="name" />
+					<optional name="stats_s_cust" />
 				</arguments>
 			</function>
 		</action>

@@ -49,7 +49,7 @@
 		<action name="get_site_id_by_url" all_args="1">
 			<function name="get_site_id_by_url">
 				<arguments>
-					<required name="url" />
+					<required name="url" type="string" />
 				</arguments>
 			</function>
 		</action>
@@ -57,7 +57,7 @@
 		<action name="get_site_data">
 			<function name="get_site_data">
 				<arguments>
-					<required name="site_id" />
+					<required name="site_id" type="int" />
 				</arguments>
 			</function>
 		</action>

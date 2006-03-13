@@ -500,7 +500,7 @@ class crm_company_overview_impl extends class_base
 			$pm->add_item(array(
 				"text" => t("M&auml;rgi tehtuks"), 
 				"oncl" => "onClick=\"bg_mark_task_done('$link', 'task$task_nr', '$done_ic_url')\"",
-				"link" => "#"
+				"link" => "javascript:void(0)"
 			));
 			$pm->add_item(array(
 				"text" => t("Koosta arve"), 
@@ -738,13 +738,16 @@ class crm_company_overview_impl extends class_base
 				}
 
 				// also search from connected resources
-				$res[] = new object_list_filter(array(
-					"logic" => "OR",
-					"conditions" => array(
-						"oid" => $_res["oid"],
-						$def.".RELTYPE_RESOURCE.name" => $str_filt //map("%%%s%%", explode(",", $r["act_s_part"]))	
-					)
-				));
+				if ($clid != CL_CRM_CALL)
+				{
+					$res[] = new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"oid" => $_res["oid"],
+							$def.".RELTYPE_RESOURCE.name" => $str_filt //map("%%%s%%", explode(",", $r["act_s_part"]))	
+						)
+					));
+				}
 			}
 		}
 

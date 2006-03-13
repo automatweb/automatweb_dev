@@ -15,6 +15,13 @@ class popup_search extends aw_template
 
 	function init_vcl_property($arr)
 	{
+		if ($arr["request"]["action"] == "view")
+		{
+			$p = $arr["prop"];
+			$p["type"] = "text";
+			$p["value"] = html::obj_change_url($p["value"]);
+			return array($p["name"] => $p);
+		}
 		$style = isset($arr['property']['style']) ? $arr['property']['style'] : 'default'; // Options: default, relpicker
 		$reltype = "";
 	
@@ -332,6 +339,7 @@ class popup_search extends aw_template
 		@param clid optional 
 		@param s optional
 		@param append_html optional
+		@param tbl_props optional 
 
 		@comment
 			clid - not filtered by, if clid == 0
@@ -422,35 +430,58 @@ class popup_search extends aw_template
 			"caption" => t("")
 		));
 
-		$t->define_field(array(
-			"name" => "oid",
-			"caption" => t("OID"),
-			"sortable" => 1,
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"sortable" => 1,
-			"caption" => t("Nimi")
-		));
+		if (is_array($arr["tbl_props"]))
+		{
+			$clid = $arr["clid"];
+			if (is_array($clid))
+			{
+				$clid = reset($clid);
+			}
+			$tmpo = obj();
+			$tmpo->set_class_id($clid);
+			$proplist = $tmpo->get_property_list();
+			foreach($arr["tbl_props"] as $pn)
+			{
+				$t->define_field(array(
+					"name" => $pn,
+					"caption" => $proplist[$pn]["caption"],
+					"sortable" => 1
+				));
+			}
+		}
+		else
+		{
+			$t->define_field(array(
+				"name" => "oid",
+				"caption" => t("OID"),
+				"sortable" => 1,
+			));
 
-		$t->define_field(array(
-			"name" => "parent",
-			"sortable" => 1,
-			"caption" => t("Asukoht")
-		));
+			$t->define_field(array(
+				"name" => "name",
+				"sortable" => 1,
+				"caption" => t("Nimi")
+			));
 
-		$t->define_field(array(
-			"name" => "modifiedby",
-			"sortable" => 1,
-			"caption" => t("Muutja")
-		));
-		$t->define_field(array(
-			"name" => "modified",
-			"caption" => t("Muudetud"),
-			"sortable" => 1,
-			"format" => "d.m.Y H:i",
-			"type" => "time"
-		));
+			$t->define_field(array(
+				"name" => "parent",
+				"sortable" => 1,
+				"caption" => t("Asukoht")
+			));
+
+			$t->define_field(array(
+				"name" => "modifiedby",
+				"sortable" => 1,
+				"caption" => t("Muutja")
+			));
+			$t->define_field(array(
+				"name" => "modified",
+				"caption" => t("Muudetud"),
+				"sortable" => 1,
+				"format" => "d.m.Y H:i",
+				"type" => "time"
+			));
+		}
 		$t->define_field(array(
 			"name" => "select_this",
 			"caption" => t("Vali"),
@@ -503,7 +534,7 @@ class popup_search extends aw_template
 			classload("core/icons");
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
-				$t->define_data(array(
+				$dat = array(
 					"oid" => $o->id(),
 					"name" => html::obj_change_url($o),
 					"parent" => $o->path_str(array("max_len" => 3)),
@@ -520,7 +551,15 @@ class popup_search extends aw_template
 						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;window.opener.document.changeform.submit();window.close()"
 					)),
 					"icon" => html::img(array("url" => icons::get_icon_url($o->class_id())))
-				));
+				);
+				if (is_array($arr["tbl_props"]))
+				{
+					foreach($arr["tbl_props"] as $pn)
+					{
+						$dat[$pn] = $o->prop_str($pn);
+					}
+				}
+				$t->define_data($dat);
 			}
 		}
 

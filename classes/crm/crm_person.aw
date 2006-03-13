@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.117 2006/03/08 15:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.118 2006/03/13 12:27:42 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -126,13 +126,13 @@ caption Kodused kontaktandmed
 @property address type=relpicker reltype=RELTYPE_ADDRESS
 @caption Aadress
 
-@property email type=releditor mode=manager table=objects field=meta method=serialize group=contact reltype=RELTYPE_EMAIL props=mail table_fields=mail choose_default=1
+@property email type=releditor mode=manager table=objects field=meta method=serialize group=contact reltype=RELTYPE_EMAIL props=mail table_fields=mail choose_default=1 always_show_add=1
 @caption Meiliaadressid
 
-@property phone type=releditor table=objects field=meta method=serialize mode=manager props=name,type table_fields=name,type group=contact reltype=RELTYPE_PHONE choose_default=1
+@property phone type=releditor table=objects field=meta method=serialize mode=manager props=name,type table_fields=name,type group=contact reltype=RELTYPE_PHONE choose_default=1 always_show_add=1
 @caption Telefoninumbrid
 
-@property url type=releditor mode=manager table=objects field=meta method=serialize group=contact reltype=RELTYPE_URL props=url table_fields=url choose_default=1
+@property url type=releditor mode=manager table=objects field=meta method=serialize group=contact reltype=RELTYPE_URL props=url table_fields=url choose_default=1 always_show_add=1
 @caption Veebiaadressid
 
 @property comment type=textarea cols=40 rows=3 table=objects field=comment group=contact
@@ -211,7 +211,7 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 
 @default group=data
 
-	@property server_folder type=textbox table=objects field=meta method=serialize
+	@property server_folder type=server_folder_selector table=objects field=meta method=serialize
 	@caption Kataloog serveris, kus asuvad failid
 
 @property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect

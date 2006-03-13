@@ -165,15 +165,6 @@
             <field>bill_tb</field>
       </property>
       <property>
-            <name>bill_proj_list</name>
-            <table>objects</table>
-            <group>tasks</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>bill_proj_list</field>
-      </property>
-      <property>
             <name>bill_task_list</name>
             <table>objects</table>
             <group>tasks</group>

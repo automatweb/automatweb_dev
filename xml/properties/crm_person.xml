@@ -321,6 +321,7 @@
             <props>mail</props>
             <table_fields>mail</table_fields>
             <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
             <caption>Meiliaadressid</caption>
       </property>
       <property>
@@ -341,6 +342,7 @@
             </table_fields>
             <reltype>RELTYPE_PHONE</reltype>
             <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
             <caption>Telefoninumbrid</caption>
       </property>
       <property>
@@ -355,6 +357,7 @@
             <props>url</props>
             <table_fields>url</table_fields>
             <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
             <caption>Veebiaadressid</caption>
       </property>
       <property>
@@ -525,7 +528,7 @@
             <name>server_folder</name>
             <table>objects</table>
             <group>data</group>
-            <type>textbox</type>
+            <type>server_folder_selector</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>Kataloog serveris, kus asuvad failid</caption>

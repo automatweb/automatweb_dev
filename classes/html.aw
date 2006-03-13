@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.100 2006/03/09 13:46:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.101 2006/03/13 12:27:40 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -694,7 +694,7 @@ class html extends aw_template
 		}
 		$obj = &obj($oid);
 		$params["id"] = $obj->id();
-		if ($this->can("edit", $oid))
+		if ($_GET["action"] != "view" && $this->can("edit", $oid))
 		{
 			$act = "change";
 		}

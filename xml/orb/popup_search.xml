@@ -20,6 +20,7 @@
 					<optional name="clid" />
 					<optional name="s" />
 					<optional name="append_html" />
+					<optional name="tbl_props" />
 				</arguments>
 			</function>
 		</action>

@@ -388,6 +388,12 @@ class crm_company_bills_impl extends class_base
 				"link" => "#",
 				"oncl" => "onClick='window.open(\"".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $bill->id(), "group" => "preview_add"), CL_CRM_BILL)."\",\"billprintadd\",\"width=100,height=100\");'"
 			));
+			$pop->add_item(array(
+				"text" => t("Prindi arve koos lisaga"),
+				"link" => "#",
+				"oncl" => "onClick='window.open(\"".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $bill->id(), "group" => "preview"), CL_CRM_BILL)."\",\"billprintadd\",\"width=100,height=100\");'"
+			));
+
 			$t->define_data(array(
 				"bill_no" => html::get_change_url($bill->id(), array("return_url" => get_ru()), parse_obj_name($bill->prop("bill_no"))),
 				"create_new" => html::href(array(

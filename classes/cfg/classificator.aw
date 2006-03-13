@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.17 2006/01/18 17:07:58 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.18 2006/03/13 12:27:41 kristo Exp $
 
 /*
 
@@ -230,6 +230,43 @@ class classificator extends class_base
 	
 	}
 
+	/** returns a list of classificator objects for the given property
+		@attrib api=1
+		
+		@param object_type_id optional type=int 
+			The oid of the object type object from what to read the classificatrs from 
+
+		@param clid optional type=int
+			The class id to return the classificators for. Either this or object_type_id must be specified
+		
+		@param name required type=string
+			Name of the property to return the classificators for
+
+		@param sort_by optional type=string
+			The database field to sort the returned classificators by, defaults to objects.jrk
+
+		@errors
+			none
+
+		@returns
+			array:
+				0 => object_list of classificator objects
+				1 => classificator manager name
+				2 => type of the classificator element (mselect, select, checkboxes, radiobuttons) 
+				3 => default classificator
+				4 => array(
+					"list" => oid's of the classificator objects
+					"list_names" => array(oid => name) pairs for classificators
+				)
+
+		@examples
+			$cl = get_instance(CL_CLASSIFICATOR);
+			$opts = $cl->get_choices(array(
+				"clid" => CL_REGISTER_DATA,
+				"name" => "uservar1"
+			));
+			echo dbg::dump($opts[4]["list_names"]); // prints the options for the given property
+	**/
 	function get_choices($arr)
 	{
 		// needs clid

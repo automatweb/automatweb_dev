@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.57 2006/03/08 15:15:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.58 2006/03/13 12:27:42 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -325,6 +325,11 @@ class treeview extends class_base
 		}
 	}
 
+	function set_feature($feat, $val = 1)
+	{
+		$this->features[$feat] = $val;
+	}
+
 	function has_feature($feature)
 	{
 		return isset($this->features[$feature]) ? 1 : 0;
@@ -496,7 +501,7 @@ class treeview extends class_base
 		// now figure out the paths to selected nodse
 
 		// ja nagu sellest veel küllalt poleks .. I can have multiple opened nodes. yees!
-		if ($this->has_feature(PERSIST_STATE) && !$this->has_feature(LOAD_ON_DEMAND))
+		if ($this->has_feature(PERSIST_STATE) /*&& !$this->has_feature(LOAD_ON_DEMAND)*/)
 		{
 			$opened_nodes = explode("^",$_COOKIE[$this->tree_id]);
 			$r_path = array();

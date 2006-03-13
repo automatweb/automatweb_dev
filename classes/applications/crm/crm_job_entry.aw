@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.15 2006/03/08 15:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.16 2006/03/13 12:27:41 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -129,6 +129,17 @@ class crm_job_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "task_start":
+			case "task_end":
+				$p = get_instance(CL_PLANNER);
+				$cal = $p->get_calendar_for_user();
+				if ($cal)
+				{
+					$calo = obj($cal);
+					$prop["minute_step"] = $calo->prop("minute_step");
+				}
+				break;
+
 			case "cust_mgr":
 				$u = get_instance(CL_USER);
 				$c = get_instance(CL_CRM_COMPANY);

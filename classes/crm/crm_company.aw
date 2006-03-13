@@ -326,6 +326,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@property customer_search_cust_grp type=select store=no parent=vbox_customers_left captionside=top
 			@caption Kliendigrupp
 
+			@property customer_search_print_view type=checkbox parent=vbox_customers_left store=no captionside=top ch_value=1 no_caption=1
+			@caption Printvaade
+
 			@property customer_search_submit type=submit size=15 store=no parent=vbox_customers_left no_caption=1
 			@caption Otsi
 
@@ -682,10 +685,10 @@ default group=org_objects
 	@property stats_s_worker_sel type=select multiple=1 store=no
 	@caption T&ouml;&ouml;taja
 
-	@property stats_s_from type=date_select store=no
+	@property stats_s_from type=date_select store=no format=day_textbox,month_textbox,year_textbox
 	@caption Alates
 
-	@property stats_s_to type=date_select store=no
+	@property stats_s_to type=date_select store=no format=day_textbox,month_textbox,year_textbox
 	@caption Kuni
 
 	@property stats_s_time_sel type=select store=no
@@ -1120,6 +1123,7 @@ class crm_company extends class_base
 			{
 				$name='<b>'.$name.'</b>';
 			}
+
 			$tmp_obj = $conn->to();
 
 			//use the plural unless plural is empty -- this is just for reltype_section
@@ -1131,6 +1135,22 @@ class crm_company extends class_base
 			{
 				++$node_id;
 			}
+
+			if ($arr["edit_mode"])
+			{
+				$popm = get_instance("vcl/popup_menu");
+				$popm->begin_menu("cst_".$node_id);
+				$popm->add_item(array(
+					"link" => html::obj_change_url($conn->prop("to")),
+					"text" => t("Muuda")
+				));
+				$popm->add_item(array(
+					"link" => $this->mk_my_orb("delete_node", array("id" => $conn->prop("to"), "post_ru" => get_ru())),
+					"text" => t("Kustuta")
+				));
+				$name = $name." ".$popm->get_menu();
+			}
+
 			$tree_node_info = array(
 				'id'=>$node_id,
 				'name'=>$name,
@@ -1179,6 +1199,7 @@ class crm_company extends class_base
 						'skip' => &$skip,
 						'attrib' => &$attrib,
 						'leafs' => $leafs,
+						"edit_mode" => $edit_mode
 			));
 		}
 		//if leafs
@@ -1482,6 +1503,11 @@ class crm_company extends class_base
 				$data['value'] = $s;
 				break;
 
+			case "customer_search_print_view":
+				$data['value'] = $arr['request'][$data["name"]];
+				$data["onclick"] = "document.changeform.target=\"_blank\"";
+				break;
+
 			case "proj_search_dl_from":
 				if (!isset($arr["request"]["proj_search_dl_from"]))
 				{
@@ -1540,7 +1566,7 @@ class crm_company extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				if (!$arr['request'][$data["name"]])
+				if (!$arr['request']["aps_sbt"])
 				{
 					$data["value"] = PROJ_DONE;
 				}
@@ -1812,6 +1838,9 @@ class crm_company extends class_base
 				break;
 
 			case "stats_s_cust":
+				$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
+				$data["autocomplete_params"] = array("stats_s_cust");
+
 			case "stats_s_proj":
 			case "stats_s_worker":
 			case "stats_s_only_billable":
@@ -1886,7 +1915,7 @@ class crm_company extends class_base
 				break;
 
 			case "my_stats_s_cust":
-				$data["value"] = $arr["request"]["stats_s_cust"];
+				$data["value"] = $arr["request"]["my_stats_s_cust"];
 				break;
 
 			case "my_stats":
@@ -2397,16 +2426,9 @@ class crm_company extends class_base
 	**/
 	function submit_delete_customer_relations($arr)
 	{
-		$url = $this->mk_my_orb('change',array(
-				'id' => $arr['id'],
-				'group'=>'relorg',
-				'category'=>$arr['category']
-			),
-			CL_CRM_COMPANY
-		);
 		if(!is_array($arr['check']))
 		{
-			return $url;
+			return $arr["post_ru"];
 		}
 		$main_obj = new Object($arr['id']);
 
@@ -2416,9 +2438,17 @@ class crm_company extends class_base
 		}
 		foreach($arr['check'] as $key=>$value)
 		{
-			$main_obj->disconnect(array('from'=>$value));
+			$vo = obj($value);
+			if ($vo->class_id() == CL_CRM_SECTION)
+			{
+				$vo->delete();
+			}
+			else
+			{
+				$main_obj->disconnect(array('from'=>$value));
+			}
 		}
-		return $url;
+		return $arr["post_ru"];
 	}
 
 	/*
@@ -2630,11 +2660,11 @@ class crm_company extends class_base
 	{
 		if($this->do_search)
 		{
-			$arr['args']['contact_search_firstname'] = urlencode($arr['request']['contact_search_firstname']);
-			$arr['args']['contact_search_lastname'] = urlencode($arr['request']['contact_search_lastname']);
-			$arr['args']['contact_search_code'] = urlencode($arr['request']['contact_search_code']);
-			$arr['args']['contact_search_ext_id_alphanum'] = urlencode($arr['request']['contact_search_ext_id_alphanum']);
-			$arr['args']['contact_search_ext_id'] = urlencode($arr['request']['contact_search_ext_id']);
+			$arr['args']['contact_search_firstname'] = ($arr['request']['contact_search_firstname']);
+			$arr['args']['contact_search_lastname'] = ($arr['request']['contact_search_lastname']);
+			$arr['args']['contact_search_code'] = ($arr['request']['contact_search_code']);
+			$arr['args']['contact_search_ext_id_alphanum'] = ($arr['request']['contact_search_ext_id_alphanum']);
+			$arr['args']['contact_search_ext_id'] = ($arr['request']['contact_search_ext_id']);
 			$arr['args']['contact_search'] = $this->do_search;
 			$arr['args']['contacts_search_show_results'] = 1;
 		}
@@ -2647,17 +2677,18 @@ class crm_company extends class_base
 
 		if($arr["request"]["customer_search_submit"])
 		{
-			$arr['args']['customer_search_name'] = urlencode($arr['request']['customer_search_name']);
-			$arr['args']['customer_search_worker'] = urlencode($arr['request']['customer_search_worker']);
-			$arr['args']['customer_search_ev'] = urlencode($arr['request']['customer_search_ev']);
-			$arr['args']['customer_search_cust_mgr'] = urlencode($arr['request']['customer_search_cust_mgr']);
-			$arr['args']['customer_search_cust_grp'] = urlencode($arr['request']['customer_search_cust_grp']);
-			$arr['args']['customer_search_reg'] = urlencode($arr['request']['customer_search_reg']);
-			$arr['args']['customer_search_address'] = urlencode($arr['request']['customer_search_address']);
-			$arr['args']['customer_search_city'] = urlencode($arr['request']['customer_search_city']);
-			$arr['args']['customer_search_county'] = urlencode($arr['request']['customer_search_county']);
+			$arr['args']['customer_search_name'] = ($arr['request']['customer_search_name']);
+			$arr['args']['customer_search_worker'] = ($arr['request']['customer_search_worker']);
+			$arr['args']['customer_search_ev'] = ($arr['request']['customer_search_ev']);
+			$arr['args']['customer_search_cust_mgr'] = ($arr['request']['customer_search_cust_mgr']);
+			$arr['args']['customer_search_cust_grp'] = ($arr['request']['customer_search_cust_grp']);
+			$arr['args']['customer_search_reg'] = ($arr['request']['customer_search_reg']);
+			$arr['args']['customer_search_address'] = ($arr['request']['customer_search_address']);
+			$arr['args']['customer_search_city'] = ($arr['request']['customer_search_city']);
+			$arr['args']['customer_search_county'] = ($arr['request']['customer_search_county']);
 			$arr['args']['customer_search_submit'] = $arr['request']['customer_search_submit'];
 			$arr['args']['customer_search_is_co'] = $arr['request']['customer_search_is_co'];
+			$arr["args"]["customer_search_print_view"] = $arr["request"]["customer_search_print_view"];
 		}
 
 		if ($arr["request"]["proj_search_sbt"])
@@ -2898,7 +2929,8 @@ class crm_company extends class_base
 		{
 			$cat_obj = &obj($cat_id);
 			$conns = $cat_obj->connections_from(array(
-				"type" => "RELTYPE_CUSTOMER"
+				"type" => "RELTYPE_CUSTOMER",
+				"sort_by" => "to.name"
 			));
 			foreach ($conns as $conn)
 			{
@@ -3276,6 +3308,10 @@ class crm_company extends class_base
 	function _get_firmajuht($arr)
 	{
 		$arr["prop"]["options"] = $this->get_employee_picker($arr["obj_inst"]);
+		if ($arr["request"]["action"] == "view")
+		{
+			$arr["prop"]["value"] = html::obj_change_url($arr["prop"]["value"]);
+		}
 	}
 
 	function navtoolbar(&$args)
@@ -3433,6 +3469,10 @@ class crm_company extends class_base
 
 	function do_offer_tree_leafs(&$tree,&$obj,$this_level_id,&$node_id)
 	{
+		if ($obj->class_id() == CL_CRM_COMPANY)
+		{
+			return;
+		}
 		$customers = $this->get_customers_for_category($obj->id());
 		if(is_array($customers))
 		{
@@ -3443,9 +3483,7 @@ class crm_company extends class_base
 					'id' => ++$node_id,
 					'iconurl' => icons::get_icon_url($cobj->class_id()),
 					'name' => $cobj->id()==$_GET["org_id"]?"<b>".$cobj->name()."</b>":$cobj->name(),
-					'url' => aw_url_change_var(array(
-							"org_id" => $cobj->id()
-					)),
+					'url' => aw_url_change_var("org_id", $cobj->id(), $_GET["real_url"]),
 				));
 			}
 		}
@@ -3784,7 +3822,7 @@ class crm_company extends class_base
 			$task_o->save();
 
 			// now, get all rows from task and convert to bill rows
-			$task_i = $task_o->instance();
+			$task_i = get_instance(CL_TASK);
 			foreach($task_i->get_task_bill_rows($task_o, true, $bill->prop("bill_id")) as $row)
 			{
 				$br = obj();
@@ -4799,20 +4837,21 @@ class crm_company extends class_base
 	/**
 		@attrib name=name_autocomplete_source
 		@param name optional
+		@param stats_s_cust optional
 	**/
 	function name_autocomplete_source($arr)
 	{
+		if (!$arr["name"] && $arr["stats_s_cust"])
+		{
+			$arr["name"] = $arr["stats_s_cust"];
+		}
 		$ol = new object_list(array(
-			"class_id" => CL_CRM_COMPANY,
+			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
 			"name" => $arr["name"]."%",
 			"lang_id" => array(),
 			"site_id" => array()
 		));
 		$ars = $ol->names();
-		/*foreach($ol->names() as $name)
-		{
-			$ars[] = $name."=>".$name;
-		}*/
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die(join("\n", $ars)."\n");
 	}

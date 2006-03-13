@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.10 2005/10/31 15:50:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.11 2006/03/13 12:27:42 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -212,6 +212,8 @@ class toolbar extends aw_template
 						$val["tooltip"] = "";
 					};
 
+
+					$val["url_q"] = str_replace("'", "\\'", $val["url"]);
 					$disabled = !empty($val["disabled"]) ? "_disabled" : "";
 
 					$this->vars($val);

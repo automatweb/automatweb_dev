@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.81 2006/03/08 15:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.82 2006/03/13 12:27:41 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1268,7 +1268,7 @@ class task extends class_base
 		return $arr["post_ru"];
 	}
 
-	function _init_rows_t(&$t)
+	function _init_rows_t(&$t, $impl_filt = NULL)
 	{
 		$t->define_field(array(
 			"name" => "task",
@@ -1285,16 +1285,18 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "impl",
 			"caption" => t("Teostaja"),
-			"align" => "center"
+			"align" => "center",
+			"filter" => $impl_filt,
+			"filter_compare" => array(&$this, "__impl_filt_comp")
 		));
 
 		$t->define_field(array(
-			"name" => "time_guess",
-			"caption" => t("Prognoositud tunde"),
-			"align" => "center"
+			"name" => "time",
+			"caption" => t("Tunde"),
+			"align" => "left"
 		));
 
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "time_real",
 			"caption" => t("Kulunud tunde"),
 			"align" => "center"
@@ -1304,24 +1306,39 @@ class task extends class_base
 			"name" => "time_to_cust",
 			"caption" => t("Tunde kliendile"),
 			"align" => "center"
-		));
+		));*/
 
 		$t->define_field(array(
 			"name" => "done",
 			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"done\")'>Tehtud</a>"),
-			"align" => "center"
+			"align" => "center",
+			"filter" => array(
+				t("Jah"),
+				t("Ei")
+			),
+			"filter_compare" => array(&$this, "__done_filt_comp")
 		));
 
 		$t->define_field(array(
 			"name" => "on_bill",
 			"caption" => t("<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"on_bill\")'>Arvele</a>"),
-			"align" => "center"
+			"align" => "center",
+			"filter" => array(
+				t("Jah"),
+				t("Ei")
+			),
+			"filter_compare" => array(&$this, "__done_filt_comp")
 		));
 
 		$t->define_field(array(
 			"name" => "comments",
-			"caption" => t("Kommentaarid"),
-			"align" => "center"
+			"caption" => html::img(array("url" => aw_ini_get("baseurl")."/automatweb/images/forum_add_new.gif", "border" => 0)),
+			"align" => "center",
+			"filter" => array(
+				t("Jah"),
+				t("Ei")
+			),
+			"filter_compare" => array(&$this, "__com_filt_comp")
 		));
 
 		$t->define_chooser(array(
@@ -1330,12 +1347,74 @@ class task extends class_base
 		));
 	}
 
+	function __bill_filt_comp($key, $str, $row)
+	{
+		if (!is_oid($row["oid"]))
+		{
+			return true;
+		}
+		if ($str == t("Jah") && !$row["bill_val"])
+		{
+			return false;
+		}
+		if ($str == t("Ei") && $row["bill_val"])
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function __com_filt_comp($key, $str, $row)
+	{
+		if (!is_oid($row["oid"]))
+		{
+			return true;
+		}
+		if ($str == t("Jah") && !$row["comments_cnt"])
+		{
+			return false;
+		}
+		if ($str == t("Ei") && $row["comments_cnt"])
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function __done_filt_comp($key, $str, $row)
+	{
+		if (!is_oid($row["oid"]))
+		{
+			return true;
+		}
+		if ($str == t("Jah") && !$row["done_val"])
+		{
+			return false;
+		}
+		if ($str == t("Ei") && $row["done_val"])
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function __impl_filt_comp($key, $str, $row)
+	{
+		if (!is_oid($row["oid"]))
+		{
+			return true;
+		}
+		return in_array($str, $row["impl_val"]);
+	}
+
 	function _rows($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_rows_t($t);
 
 		$impls = $this->_get_possible_participants($arr["obj_inst"], true, $arr["obj_inst"]->prop("participants"));
+
+		$this->_init_rows_t($t, array_values($impls));
+
 
 		$u = get_instance(CL_USER);
 		$def_impl = $u->get_current_person();
@@ -1365,26 +1444,29 @@ class task extends class_base
 						   NAME='anchor".$idx."' ID='anchor".$idx."'>".t("vali")."</A>";
 
 			$comments = "";
+			$comments_cnt = 0;
 			if (is_oid($idx))
 			{
-
+				$comments_cnt = $comm->get_comment_count(array("parent" => $idx));
 				$comments = html::popup(array(
 					"width" => 800,
 					"height" => 500,
 					"scrollbars" => 1,
 					"url" => html::get_change_url($idx, array("group" => "comments")),
-					"caption" => sprintf(t("Kommentaarid (%s)"), $comm->get_comment_count(array("parent" => $idx)))
+					"caption" => sprintf(t("%s (%s)"), html::img(array("url" => aw_ini_get("baseurl")."/automatweb/images/forum_add_new.gif", "border" => 0)), $comments_cnt)
 				));
 			}
 
 			$is = (is_array($row->prop("impl")) && count($row->prop("impl"))) ? $row->prop("impl") : $def_impl;
+			$is_str = array();
 			foreach(safe_array($is) as $is_id)
 			{
+				$iso = obj($is_id);
 				if (!isset($impls[$is_id]))
 				{
-					$iso = obj($is_id);
 					$impls[$is_id] = $iso->name();
 				}
+				$is_str[] = $iso->name();
 			}
 			$bno = "";
 			if ($row->prop("bill_id"))
@@ -1404,10 +1486,9 @@ class task extends class_base
 					"prop" => &$pr
 				);
 				$i->get_property($argb);
-				$impls = $pr["options"];
+				//$impls = $pr["options"];
 				$is = $pr["value"];
-				$app = "<br>".html::obj_change_url($row, t("Muuda kohtumist"));
-				$pref = $row->name()." <br>".date("d.m.Y H:i", $row->prop("start1"))." - ".date("d.m.Y H:i", $row->prop("end"))."<br>";
+				$pref = html::obj_change_url($row->id())." <br>".date("d.m.Y H:i", $row->prop("start1"))." - ".date("d.m.Y H:i", $row->prop("end"))."<br>";
 			}
 			else
 			{
@@ -1432,32 +1513,36 @@ class task extends class_base
 					"value" => $is,
 					"multiple" => 1
 				)),
-				"time_guess" => html::textbox(array(
+				"impl_val" => $is_str,
+				"time" => html::textbox(array(
 					"name" => "rows[$idx][time_guess]",
 					"value" => $row->prop("time_guess"),
 					"size" => 5
-				)),
-				"time_real" => html::textbox(array(
+				))." - Prognoos<br>".
+				html::textbox(array(
 					"name" => "rows[$idx][time_real]",
 					"value" => $row->prop("time_real"),
 					"size" => 5
-				)),
-				"time_to_cust" => html::textbox(array(
+				))." - Kulunud<br>".
+				html::textbox(array(
 					"name" => "rows[$idx][time_to_cust]",
 					"value" => $row->prop("time_to_cust"),
 					"size" => 5
-				)),
+				))." - Kliendile<br>",
 				"done" => html::checkbox(array(
 					"name" => "rows[$idx][done]",
 					"value" => 1,
 					"checked" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done")
 				)),
+				"done_val" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done"),
 				"on_bill" => ($row->prop("bill_id") ? sprintf(t("Arve nr %s"), $bno) : html::checkbox(array(
 					"name" => "rows[$idx][on_bill]",
 					"value" => 1,
 					"checked" => ($row->class_id() == CL_CRM_MEETING ? $row->meta("on_bill") : $row->prop("on_bill"))
 				))),
+				"bill_val" => ($row->class_id() == CL_CRM_MEETING ? $row->meta("on_bill") : $row->prop("on_bill")),
 				"comments" => $comments,
+				"comments_cnt" => $comments_cnt,
 				"oid" => $row->id()
 			));
 		}
@@ -1600,7 +1685,9 @@ class task extends class_base
 					"parent" => $arr["obj_inst"]->parent(),
 					"return_url" => get_ru(),
 					"alias_to" => $arr["obj_inst"]->id(),
-					"reltype" => 7
+					"reltype" => 7,
+					"alias_to_org" => $arr["obj_inst"]->prop("customer"),
+					"set_proj" => $arr["obj_inst"]->prop("project")
 				),
 				CL_CRM_MEETING
 			)
@@ -1608,7 +1695,7 @@ class task extends class_base
 
 		$b = array(
 			'name' => 'create_bill',
-			'img' => 'save.gif',
+			'img' => 'create_bill.jpg',
 			'tooltip' => t('Loo arve'),
 		);
 
@@ -2067,7 +2154,7 @@ class task extends class_base
 			$_tm = mktime(0,0,0, $m, $d, $y);
 			if ($o->class_id() == CL_CRM_MEETING)
 			{
-				if ($o->prop("start1") != $_tm)
+				if (date("d.m.Y", $o->prop("start1")) != date("d.m.Y", $_tm))
 				{
 					if ($o->prop("end") < $_tm)
 					{
@@ -2153,7 +2240,8 @@ class task extends class_base
 
 			if ($o->class_id() == CL_CRM_MEETING)
 			{
-				$o->set_prop("is_done", $e["done"]);
+				$o->set_prop("is_done", $e["done"] ? 8 : 0);
+				$is_mod = true;
 			}	
 			else
 			{
@@ -2253,7 +2341,7 @@ class task extends class_base
 		{
 			$filt = array(
 				"class_id" => CL_PROJECT,
-				"CL_PROJECT.RELTYPE_ORDERER" => $arr["cust"],
+				"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["cust"],
 			);
 			$ol = new object_list($filt);
 		}

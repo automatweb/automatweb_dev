@@ -4,7 +4,17 @@
 		<action name="exec_file">
 			<function name="exec_file">
 				<arguments>
-					<required name="file" />
+					<required name="file" type="string" />
+					<optional name="vars" type="array" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="exec">
+			<function name="exec">
+				<arguments>
+					<required name="script" type="string" />
+					<optional name="vars" type="array" />
 				</arguments>
 			</function>
 		</action>

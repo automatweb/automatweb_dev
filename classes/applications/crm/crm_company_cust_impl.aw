@@ -121,50 +121,38 @@ class crm_company_cust_impl extends class_base
 		$table = &$arr["prop"]["vcl_inst"];
 		
 		$i = get_instance(CL_CRM_COMPANY);
+
+		// if this is my co, then list all projects where my co is implementor
 		$u = get_instance(CL_USER);
-		$cur_co = $u->get_current_company();
-		if ($cur_co != $arr["obj_inst"]->id())
+		$my_co = obj($u->get_current_company());
+		if ($my_co->id() == $arr["obj_inst"]->id())
 		{
-			// get all projects that are ordered by THAT company
-			$ol = new object_list(array(
-				"class_id" => CL_PROJECT,
-				"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->id()
-			));
-			$prj = $ol->ids();
-		}
-		else
-		{
-			if (!is_array($arr["prj"]))
+			// get list via search
+			if ($arr["request"]["do_proj_search"] != 1)
 			{
-				$prj = $i->get_my_projects();
+				$u = get_instance(CL_USER);
+				$p = obj($u->get_current_person());
+				$arr["request"]["proj_search_part"] = $p->name();
+				$arr["request"]["proj_search_state"] = 1;
 			}
-			else
-			{
-				$prj = $arr["prj"];
-			}
-		}
-		if (!count($prj))
-		{
-			$conns_ol = new object_list();
-		}
-		else
-		{
-			$conns_ol = new object_list(array("oid" => $prj));
-			if ($conns_ol->count())
-			{
-				$conns_ol = new object_list(array(
-					"oid" => $conns_ol->ids(),
-					"class_id" => CL_PROJECT,
-					"state" => new obj_predicate_not(PROJ_DONE),
-					"lang_id" => array()
-				));
-			}
-		}
-		
-		if ($arr["request"]["do_proj_search"] && $conns_ol->count() )
-		{
-			$filt = $this->_get_my_proj_search_filt($arr["request"], $conns_ol->ids());
+			$filt = $this->_get_my_proj_search_filt($arr["request"], null);
 			$conns_ol = new object_list($filt);
+		}
+		else
+		{
+			// else list all projs where the requested co is orderer
+			$conns_ol = new object_list(array(
+				"class_id" => CL_PROJECT,
+				"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"state" => $arr["request"]["do_proj_search"] == 1 ? null : 1
+			));
+			if ($arr["request"]["do_proj_search"] == 1)
+			{
+				$filt = $this->_get_my_proj_search_filt($arr["request"], $conns_ol->ids());
+				$conns_ol = new object_list($filt);
+			}
 		}
 
 		foreach ($conns_ol->arr() as $project_obj)
@@ -332,8 +320,23 @@ class crm_company_cust_impl extends class_base
 				}
 			}
 		}
-
+	
 		$this->_finish_org_tbl($arr, $orglist);
+
+		if ($arr["request"]["customer_search_print_view"] == 1)
+		{
+			$sf = new aw_template;
+			$sf->db_init();
+			$sf->tpl_init("automatweb");
+			$sf->read_template("index.tpl");
+			$sf->vars(array(
+				"content"	=> $arr["prop"]["vcl_inst"]->draw(),
+				"uid" => aw_global_get("uid"),
+				"charset" => aw_global_get("charset")
+			));
+			die($sf->parse());
+		}
+
 	}
 
 	function _get_role_html($arr)
@@ -474,6 +477,7 @@ class crm_company_cust_impl extends class_base
 			'attrib' => 'category',
 			'leafs' => 'false',
 			'style' => 'nodetextbuttonlike',
+			"edit_mode" => 1
 		));
 				
 		//need to delete every category of the tree that the person doesn't
@@ -595,6 +599,12 @@ class crm_company_cust_impl extends class_base
 		$tree = &$arr["prop"]["vcl_inst"];
 		$node_id = (int)$arr["node_id"];
 
+		$tree->start_tree(array(
+			"type" => TREE_DHTML,
+			"tree_id" => "arhp_t",
+			"persist_state" => 1
+		));
+
 		$i = get_instance(CL_CRM_COMPANY);
 		$i->active_node = (int)$arr['request']['category'];
 		$i->tree_uses_oid = true;
@@ -620,6 +630,7 @@ class crm_company_cust_impl extends class_base
 			'name' => t('Kõik organisatsioonid'),
 			'url' => '',
 		));
+		$tree->set_feature(PERSIST_STATE);
 	
 		if ($arr["node_id"] == -1)
 		{
@@ -646,7 +657,16 @@ class crm_company_cust_impl extends class_base
 			));
 		}
 		
-		$tree->set_branch_func($this->mk_my_orb("get_offers_tree_branch",array("co_id" => $arr["obj_inst"]->id()))."&fetch_branch=");
+		$tree->set_branch_func(
+			$this->mk_my_orb(
+				"get_offers_tree_branch",
+				array(
+					"co_id" => $arr["obj_inst"]->id(),
+					"real_url" => get_ru(),
+					"org_id" => $arr["request"]["org_id"]
+				)
+			)."&fetch_branch="
+		);
 		$tree->tree_type = TREE_DHTML;
 		if ($arr["node_id"] == -1)
 		{
@@ -807,87 +827,49 @@ class crm_company_cust_impl extends class_base
 	{
 		$table = &$arr["prop"]["vcl_inst"];
 		$this->do_projects_table_header(&$table);
-		
-		if ($arr["request"]["search_all_proj"])
-		{
-			$project_conns = new connection();
-		
-			if(!$arr["request"]["org_id"])
-			{
-				$i = get_instance(CL_CRM_COMPANY);
-				$cust = array();
-				$i->get_customers_for_company($arr["obj_inst"], &$cust);
 
-				$project_conns = $project_conns->find(array(
-					"to" => $cust,
-					"reltype" => 10,
-					"from.class_id" => CL_PROJECT
-				));
-			}
-			else
-			{
-				$project_conns = $project_conns->find(array(
-					"to" => $arr["request"]["org_id"],
-					"reltype" => 10,
-					"from.class_id" => CL_PROJECT
-				));
-			}
-		}
-		else
+		// if this is my co, then list all projects where my co is implementor
+		$u = get_instance(CL_USER);
+		$my_co = obj($u->get_current_company());
+
+		if ($arr["request"]["search_all_proj"] == 1 && $arr["request"]["org_id"])
 		{
-			// get all customers, then get all projs for those
-			$i = get_instance(CL_CRM_COMPANY);
-			$cust = array();
-			$i->get_customers_for_company($arr["obj_inst"], &$cust);
-			$c = new connection();
-			$project_conns = $c->find(array(
-				"to" => $cust,
-				"reltype" => array(10,9),
-				"from.class_id" => CL_PROJECT
+			$ol = new object_list(array(
+				"class_id" => CL_PROJECT,
+				"CL_PROJECT.RELTYPE_ORDERER" => $arr["request"]["org_id"],
+				"lang_id" => array(),
+				"site_id" => array(),
 			));
 		}
-
-		if(count($project_conns) == 0)
+		else
+		if ($my_co->id() == $arr["obj_inst"]->id())
 		{
-			return 0;
-		}
-		
-		foreach ($project_conns as $conn)
-		{
-			$tmp_ids[] = $conn["from"];
-		}
-	 	
-		$ol = new object_list(array(
-			"oid" => $tmp_ids,
-		));
-		if (!$arr["request"]["search_all_proj"] /*&& $ol->count()*/)
-		{
-			if (!$arr["request"]["aps_sbt"])
+			// get list via search
+			if ($arr["request"]["aps_sbt"] != 1)
 			{
 				$u = get_instance(CL_USER);
 				$p = obj($u->get_current_person());
 				$arr["request"]["all_proj_search_part"] = $p->name();
-				$arr["request"]["all_proj_search_state"] = PROJ_DONE;
+				$arr["request"]["all_proj_search_state"] = 2;
 			}
-			$filt = $this->_get_my_proj_search_filt($arr["request"], /*$ol->ids()*/ null, "all_");
+			$filt = $this->_get_my_proj_search_filt($arr["request"], null, "all_");
 			$ol = new object_list($filt);
 		}
 		else
-		if ($ol->count())
 		{
-			/*$ol = new object_list(array(
-				"oid" => $ol->ids(),
+			// else list all projs where the requested co is orderer
+			$ol = new object_list(array(
 				"class_id" => CL_PROJECT,
-				"state" => $arr["request"]["group"] == "org_projects_archive" ? PROJ_DONE : new obj_predicate_not(PROJ_DONE)
+				"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->id(),
+				"lang_id" => array(),
+				"site_id" => array(),
+				"state" => $arr["request"]["aps_sbt"] == 1 ? null : 2
 			));
-			*/
-			$u = get_instance(CL_USER);
-			$ps = obj($u->get_current_person());
-			$arr["request"] = array(
-				"all_proj_search_part" => $ps->name(),
-			);
-			$filt = $this->_get_my_proj_search_filt($arr["request"], /*$ol->ids()*/ null, "all_");
-			$ol = new object_list($filt);
+			if ($arr["request"]["aps_sbt"] == 1)
+			{
+				$filt = $this->_get_my_proj_search_filt($arr["request"], $ol->ids(), "all_");
+				$ol = new object_list($filt);
+			}
 		}
 
 		$rs_by_co = array();
@@ -1714,9 +1696,9 @@ class crm_company_cust_impl extends class_base
 				"phone" => $phone,
 				"url" => $url,
 				"email" => $mail,
-				'rollid' => $roles,
+				'rollid' => $o->class_id() == CL_CRM_CATEGORY ? "" : $roles,
 				'client_manager' => html::obj_change_url($o->prop("client_manager")),
-				"pop" => $pm->get_menu()
+				"pop" => $o->class_id() == CL_CRM_CATEGORY ? "" : $pm->get_menu()
 			));
 		}
 
@@ -1753,6 +1735,19 @@ class crm_company_cust_impl extends class_base
 			$orglist[$org->prop("to")] = $org->prop("to");
 		}
 
+		// add the sections from the selected section to edit
+		if ($arr["request"]["category"])
+		{
+			$from = obj($arr["request"]["category"]);
+		}
+		else
+		{
+			$from = $arr["obj_inst"];
+		}
+		foreach($from->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
+		{
+			$orglist[] = $c->prop("to");
+		}
 		$this->_finish_org_tbl($arr, $orglist);
 	}
 
