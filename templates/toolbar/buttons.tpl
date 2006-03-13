@@ -10,7 +10,7 @@
 <!-- END SUB: start -->
 
 <!-- SUB: button -->
- 	<td nowrap class="aw04toolbarbutton" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover';{VAR:onClick};window.location='{VAR:url_q}';" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" ><img src="{VAR:imgbase}/{VAR:img}" border="0"></a></td>
+ 	<td nowrap class="aw04toolbarbutton" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"></a></td>
 <!-- END SUB: button -->
 
 <!-- SUB: button_disabled -->
@@ -24,7 +24,7 @@
 <!-- END SUB: button_disabled -->
 
 <!-- SUB: menu_button -->
-	<td nowrap class="aw04toolbarbutton" valign="middle" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover';{VAR:onClick}" title="{VAR:tooltip}" alt="{VAR:tooltip}">
+	<td nowrap class="aw04toolbarbutton" valign="middle" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}">
 		<table cellpadding=0 cellspacing=0>
 			<tr>
 				<td valign='bottom'>
@@ -39,7 +39,7 @@
 <!-- END SUB: menu_button -->
 
 <!-- SUB: text_button -->
- <td class="aw04toolbarbutton" valign="middle" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover';{VAR:onClick};window.location='{VAR:url_q}';" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" style="text-decoration: none; white-space: nowrap;">{VAR:tooltip}</a></td>
+ <td class="aw04toolbarbutton" valign="middle" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none; white-space: nowrap;">{VAR:tooltip}</a></td>
 <!-- END SUB: text_button -->
 
 <!-- SUB: text_button_disabled -->
