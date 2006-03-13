@@ -658,9 +658,19 @@
             <name>phone_id</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
-            <type>relmanager</type>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>type</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>type</num_1>
+            </table_fields>
+            <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
             <reltype>RELTYPE_PHONE</reltype>
-            <props>name</props>
             <field>phone_id</field>
             <caption>Telefon</caption>
       </property>
@@ -668,9 +678,12 @@
             <name>telefax_id</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
-            <type>relmanager</type>
+            <type>releditor</type>
+            <mode>manager</mode>
             <reltype>RELTYPE_TELEFAX</reltype>
             <props>name</props>
+            <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
             <field>telefax_id</field>
             <caption>Faks</caption>
       </property>
@@ -678,9 +691,12 @@
             <name>url_id</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
-            <type>relmanager</type>
+            <type>releditor</type>
+            <mode>manager</mode>
             <reltype>RELTYPE_URL</reltype>
             <props>name</props>
+            <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
             <field>url_id</field>
             <caption>Veebiaadress</caption>
       </property>
@@ -688,9 +704,12 @@
             <name>email_id</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>
-            <type>relmanager</type>
+            <type>releditor</type>
+            <mode>manager</mode>
             <reltype>RELTYPE_EMAIL</reltype>
             <props>mail</props>
+            <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
             <field>email_id</field>
             <caption>E-posti aadressid</caption>
       </property>
