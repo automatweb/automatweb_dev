@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.17 2006/03/13 13:42:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.18 2006/03/13 13:59:57 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -474,6 +474,7 @@ class crm_job_entry extends class_base
 			$t->set_prop("customer", $c->id());
 			$t->set_prop("project", $p->id());
 		}
+
 		$t->save();
 
 		// add participants to task from project
@@ -507,6 +508,24 @@ class crm_job_entry extends class_base
 						"type" => "RELTYPE_RESOURCE"
 					));
 				}
+
+				$conns = $t->connections_to(array());
+				foreach($conns as $conn)
+				{
+					if($conn->prop('from.class_id')==CL_CRM_PERSON)
+					{
+						$pers = $conn->from();
+						// get profession
+						$rank = $pers->prop("rank");
+						if (is_oid($rank) && $this->can("view", $rank))
+						{
+							$rank = obj($rank);
+							$t->set_prop("hr_price",$rank->prop("hr_price"));
+							$t->save();
+						}
+					}
+				}
+
 				header("Location: ".html::get_change_url($t->id(), array("group" => "rows", "return_url" => $arr["request"]["return_url"])));
 				die();
 				break;
