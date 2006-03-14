@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.42 2006/03/09 20:55:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.43 2006/03/14 14:53:33 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -64,7 +64,12 @@
 	@groupinfo files_order caption="Failide j&auml;rjekord" parent=files
 
 		@property files_order type=table group=files_order
-		@caption Failide n&auml;itamise j&auml;rjekord	
+		@caption Failide n&auml;itamise j&auml;rjekord
+	
+	@groupinfo file_suffix caption="Failide suffiksid" parent=files
+
+		@property file_suffix type=table group=file_suffix
+		@caption Failide suffiksid
 
 @groupinfo discount_products caption="Soodustooted"
 
@@ -2529,6 +2534,65 @@ if ($_SERVER["REMOTE_ADDR"] == "82.131.23.210")
 		}
 		return PROP_OK;
 	}
+
+	function _get_file_suffix($args)
+	{
+		$t = &$args['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+		$t->define_field(array(
+			'name' => 'file',
+			'caption' => t('Fail'),
+		));
+		$t->define_field(array(
+			'name' => 'suffix',
+			'caption' => t('Suffiks'),	
+		));
+
+		$count = 0;
+		$saved_data = $args['obj_inst']->meta('file_suffix');
+		foreach (safe_array($saved_data) as $file => $suffix)
+		{
+			$t->define_data(array(
+				'file' => html::textbox(array(
+					'name' => 'file_suffix['.$count.'][file]',
+					'value' => $file,
+					'size' => '10'
+				)),
+				'suffix' => html::textbox(array(
+					'name' => 'file_suffix['.$count.'][suffix]',
+					'value' => $suffix
+				)),
+			));
+			$count++;
+		}
+
+		$t->define_data(array(
+			'file' => html::textbox(array(
+				'name' => 'file_suffix['.$count.'][file]',
+				'size' => '10'
+			)),
+			'suffix' => html::textbox(array(
+				'name' => 'file_suffix['.$count.'][suffix]'
+			)),
+		));
+		return PROP_OK;
+	}
+
+	function _set_file_suffix($args)
+	{
+		$valid_data = array();
+		foreach (safe_array($args['request']['file_suffix']) as $data)
+		{
+			if (!empty($data['file']) && !empty($data['suffix']))
+			{
+				$valid_data[$data['file']] = $data['suffix'];
+			}
+		}
+		$args['obj_inst']->set_meta('file_suffix', $valid_data);
+		return PROP_OK;
+	}
+
 
 	function _get_categories($args)
 	{
