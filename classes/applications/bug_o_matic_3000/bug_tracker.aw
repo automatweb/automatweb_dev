@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.27 2006/03/10 11:03:45 sander Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.27 2006/03/10 11:03:45 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.28 2006/03/14 14:27:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.28 2006/03/14 14:27:33 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -332,9 +332,14 @@ class bug_tracker extends class_base
 			$ol_list = $ol->arr();
 			$subtree_count = (count($ol_list) > 0)?" (".count($ol_list).")":"";
 
+			$nm = $this->name_cut($object->name()).$subtree_count;
+			if ($_GET["b_id"] == $obj_id)
+			{
+				$nm = "<b>".$nm."</b>";
+			}
 			$node_tree->add_item(0 ,array(
 				"id" => $obj_id,
-				"name" => $this->name_cut($object->name()).$subtree_count,
+				"name" => $nm,
 				"iconurl" => icons::get_icon_url($object->class_id()),
 				"url" => html::get_change_url($arr["inst_id"], array(
 					"group" => $arr["active_group"],

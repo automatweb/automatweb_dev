@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.82 2006/03/13 12:27:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.83 2006/03/14 14:27:33 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2008,8 +2008,6 @@ class task extends class_base
 		{
 			// stop timer and write row to task
 			$stopper = $_SESSION["crm_stoppers"][$arr["id"]];
-			$u = get_instance(CL_USER);
-			$cp = obj($u->get_current_person());
 			$elapsed = (time() - $stopper["start"]) + $stopper["base"];
 			$el_hr = (int)($elapsed / 3600);
 			$el_min = (int)(($elapsed - $el_hr * 3600) / 60);
@@ -2028,19 +2026,11 @@ class task extends class_base
 				$el_hr += 0.75;
 			}
 			$o = obj($arr["id"]);
-			$row = obj();
-			$row->set_parent($o->id());
-			$row->set_class_id(CL_TASK_ROW);
-			$row->set_prop("content", $arr["desc"]);
-			$row->set_prop("date", $stopper["start"]);
-			$row->set_prop("impl", array($cp->id() => $cp->id()));
-			$row->set_prop("time_real", $el_hr);
-			$row->set_prop("time_to_cust", $el_hr);
-			$row->set_prop("done", 1);
-			$row->save();
-			$o->connect(array(
-				"to" => $row->id(),
-				"type" => "RELTYPE_ROW"
+			$i = $o->instance();
+			$i->handle_stopper_stop($o, array(
+				"desc" => $arr["desc"],
+				"start" => $stopper["start"],
+				"hours" => $el_hr
 			));
 			unset($_SESSION["crm_stoppers"][$arr["id"]]);
 		}
@@ -2405,6 +2395,27 @@ class task extends class_base
 			$o->delete();
 		}
 		return $arr["post_ru"];
+	}
+
+	function handle_stopper_stop($o, $inf)
+	{
+		$u = get_instance(CL_USER);
+		$cp = obj($u->get_current_person());
+
+		$row = obj();
+		$row->set_parent($o->id());
+		$row->set_class_id(CL_TASK_ROW);
+		$row->set_prop("content", $inf["desc"]);
+		$row->set_prop("date", $inf["start"]);
+		$row->set_prop("impl", array($cp->id() => $cp->id()));
+		$row->set_prop("time_real", $inf["hours"]);
+		$row->set_prop("time_to_cust", $inf["hours"]);
+		$row->set_prop("done", 1);
+		$row->save();
+		$o->connect(array(
+			"to" => $row->id(),
+			"type" => "RELTYPE_ROW"
+		));
 	}
 }
 ?>
