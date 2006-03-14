@@ -1,0 +1,36 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>candidate_toolbar</name>
+            <group>candidate</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>candidate_table</name>
+            <group>candidate</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PERSONNEL_MANAGEMENT_CANDIDATE</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <r2>yes</r2>
+            <no_comment>1</no_comment>
+      </classinfo>
+      <groupinfo>
+            <candidate>
+                  <caption>Kandideerimised</caption>
+                  <submit>no</submit>
+            </candidate>
+      </groupinfo>
+</properties>
+
