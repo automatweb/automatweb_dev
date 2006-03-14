@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.160 2006/03/14 07:55:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.161 2006/03/14 07:59:03 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -4919,7 +4919,7 @@ if ($_GET['show_thread_data'] == 1)
 		);
 
 		$from = date_edit::get_timestamp($arr["request"]["ws_from"]);
-		$to = date_edit::get_timestamp($arr["request"]["ws_to"]);
+		$to = date_edit::get_timestamp($arr["request"]["ws_to"]) + 24 * 3600;
 
 		$list = new object_list(array(
 			"class_id" => CL_MRP_JOB,
