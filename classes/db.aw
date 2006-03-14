@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.25 2005/03/22 15:32:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.26 2006/03/14 13:25:07 markop Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -87,16 +87,39 @@ class db_connector
 		$this->init($args);
 	}
 
-	////
-	// !Creates a connection to a data source
-	// host, base, user, pass are self-explanatory
-	// driver is the type of the SQL driver to use
-	// cid is the connetion id, defaults to $this->default_cid
+	/**
+	@attrib api=1 params=name
+	
+	@param driver required type=string
+	the type of the SQL driver to use
+	@param server required type=string
+	@param base required type=string
+	@param username required type=string
+	@param password required type=string
+	@param cid optional type=oid default=$this->default_cid
+	connetion id
+	
+	@errors
+		die(t("this driver is not supported")) - if that driver doesn't exist
+	
+	@returns db connection object
+	
+	@comment 
+		Creates a connection to a data source
+	
+	@examples
+		$db->db_connect(array(
+			'driver' => 'mysql',
+			'server' => aw_ini_get('install.mysql_host'),
+			'base' => 'mysql',
+			'username' => aw_ini_get('install.mysql_user'),
+			'password' => aw_ini_get('install.mysql_pass')
+		));
+	**/
 	function db_connect($args = array())
 	{
 		extract($args);
 		// FIXME: validate arguments
-
 		// dc is not an object if the $driver class had a syntax error
 		$dc = get_instance("db_drivers/".$driver);
 		if (!is_object($dc))
@@ -115,11 +138,24 @@ class db_connector
 		}
 
 		$this->dc[$cid] = $dc;
-
 		return $dc;
 	}
 
 	// route all functions to default/primary driver
+	/**
+	@attrib api=1 params=pos
+	
+	@param qtext required type=string
+	@param errors optional type=bool default=true
+	
+	@returns true - if query was successful, else returns DB error
+	
+	@comment Makes a DB query
+	
+	@examples
+		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
+		$this->db_query($q);
+	**/
 	function db_query($qtext,$errors = true)
 	{
 		$retval = $this->dc[$this->default_cid]->db_query($qtext,$errors);
@@ -129,7 +165,24 @@ class db_connector
 		};
 		return $retval;
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+	
+	@param qtext required type=string
+	@param limit required type=int default=0
+	@param count optional type=int default=0
+	
+	@returns true - if query was successful, else returns DB error
+	
+	@comment Changes a query text a little
+	
+	@examples
+			$per_page = 100;
+			$page = 12;
+			$q = 'SELECT * FROM '.$db_table.');
+			$db->db_query_lim($q, ($page*$per_page),($per_page));
+	**/
 	function db_query_lim($qtext,$limit,$count = 0)
 	{
 		$retval = $this->dc[$this->default_cid]->db_query_lim($qtext,$limit, $count);
@@ -139,94 +192,282 @@ class db_connector
 		};
 		return $retval;
 	}
-
+	/**
+	@attrib api=1 params=pos
+	
+	@param dec optional type=bool default=true
+		it is useless.....
+	@returns next row of a query result
+	
+	@examples
+		$q = "SELECT * FROM table";
+		$data = array();
+		$this->db_query($q);
+		while($w = $this->db_next())
+		{
+			$data[] = $w["column"];
+		}
+	**/
 	function db_next($dec = true)
 	{
 		return $this->dc[$this->default_cid]->db_next($dec);
 	}
-
+	
+	/**
+	@attrib api=1
+	
+	@returns oid
+	
+	@examples
+	$oid = $this->db_last_insert_id();
+	**/	
 	function db_last_insert_id()
 	{
 		return $this->dc[$this->default_cid]->db_last_insert_id();
 	}
 
+	/**
+	@attrib params=pos api=1
+	
+	@param sql optional type=string default=""
+	
+	@returns row of a query result
+	
+	@comment 
+		makes a query and returns a row
+	
+	@examples
+		$row = $this->db_fetch_row("SELECT * FROM my_table WHERE status = "kopp ees");
+	**/	
 	function db_fetch_row($sql = "")
 	{
 		return $this->dc[$this->default_cid]->db_fetch_row($sql);
 	}
-
+	
+	/**
+	@attrib params=pos api=1
+	
+	@param qtext optional type=string default=""
+	@param field optional type=string default=""
+	
+	@returns field of a DB query row
+	
+	@comment 
+		makes a query and returns a row
+	
+	@examples
+		$id = $this->db_fetch_field("SELECT id FROM forms WHERE id = '$row[oid]'", "id");
+	**/
 	function db_fetch_field($qtext,$field)
 	{
 		return $this->dc[$this->default_cid]->db_fetch_field($qtext,$field);
 	}
 
+	/**
+	@attrib params=pos api=1
+	
+	@param $qtext optional type=string default=""
+	if not set tries to fetch from previous db_query
+	
+	@returns array
+	
+	@comment fetch all rows from db_query result
+	
+	@examples
+		$arr = $this->db_fetch_array('select id , name , parent from users');
+	**/
 	function db_fetch_array($qtext="") 
 	{
 		return $this->dc[$this->default_cid]->db_fetch_array($qtext);
 	}
 
+	/**
+	@attrib params=pos api=1
+	
+	@param arr required type=string/array
+	
+	@returns string/array
+	
+	@comment
+		Quote string or stings in array with slashes
+	**/
 	function quote(&$arr)
 	{
 		return $this->dc[$this->default_cid]->quote($arr);
 	}
 
+	/**
+	@attrib params=pos api=1
+	
+	@param arr required type=string/array
+	
+	@returns string/array
+	
+	@comment
+		Un-quote quoted string
+	**/
 	function dequote(&$arr)
 	{
 		return $this->dc[$this->default_cid]->dequote($arr);
 	}
-
+	
+	/**
+	@attrib api=1
+	
+	@returns int , number of rows
+	**/
 	function num_rows()
 	{
 		return $this->dc[$this->default_cid]->num_rows();
 	}
 
+	/**
+	@attrib api=1
+	
+	@comment
+		Retrieves a list of table names from a database.($this->tID)
+		Retrieves the number of rows from a result set ($this->tablecount)
+	**/
 	function db_list_tables()
 	{
 		return $this->dc[$this->default_cid]->db_list_tables();
 	}
-
+	//------------------------------------------------------------------------------------
+	/**
+	@attrib api=1
+	
+	@returns String , table name of a field
+	**/
 	function db_next_table()
 	{
 		return $this->dc[$this->default_cid]->db_next_table();
 	}
+	
+	/**
+	@attrib api=1
 
+	@returns an array of objects containing field information.
+	**/
 	function db_get_fields()
 	{
 		return $this->dc[$this->default_cid]->db_get_fields();
 	}
 
+	/**
+	@attrib params=pos api=1
+	
+	@param $name required type=string
+	table name
+	
+	@returns array - the properties of table $name or false if it doesn't exist
+	properties are returned as array $tablename => $tableprops
+	where $tableprops is an array("name" => $table_name, "fields" => $fieldprops)
+	where $fieldprops is an array of $fieldname => $cur_props
+	where $cur_props is an array("name" => $field_name, "length" => $field_length, "type" => $field_type, "flags" => $field_flags)
+	
+	@examples
+	CREATE TABLE tbl (id int, content text)
+	db_get_table("tbl") returns:
+	array("name" => "tbl",
+		"fields" => array("id" => array("name" => "id", "length" => 10, "type" => "int", "flags" => ""),
+		"content" => array("name" => "content", "length" => "65535", "type" => "text", "flags" => "")
+		))
+	**/
 	function db_get_table($name)
 	{
 		return $this->dc[$this->default_cid]->db_get_table($name);
 	}
+	
+	/**
+	@attrib params=pos api=1
+	
+	@param $name required type=string
+	table name
 
+	@returns field "create table" of a query result
+	
+	@comment makes query SHOW CREATE TABLE $name and returns field "create table" of a result
+	**/
 	function db_show_create_table($name)
 	{
 		return $this->dc[$this->default_cid]->db_show_create_table($name);
 	}
 
+	/**
+	@attrib params=pos api=1
+	
+	@param $source required type=array
+	table array representation
+	@param $dest required type=string
+	destination table name
+
+	@comment syncs the tables, creates all fields in $dest that are not in $dest, but are in $source
+
+	**/
 	function db_sync_tables($source,$dest)
 	{
 		return $this->dc[$this->default_cid]->db_sync_tables($source,$dest);
 	}
 
+	/**
+	@attrib params=pos api=1
+	
+	@param $type required type=string
+	@param $length required type=int
+
+	@comment this returns the sql for creating the field
+
+	@examples 
+		if driver is mysql
+		$str = $this->mk_field_len(varchar , 100);
+		($str = "VARCHAR(100)")
+	**/
 	function mk_field_len($type,$length)
 	{
 		return $this->dc[$this->default_cid]->mk_field_len($type,$length);
 	}
 
-	function db_print_table($arg)
+	/**
+	@attrib params=name api=1
+	
+	@param name required type=string
+	@param fields optional type=array
+		array('name' = .. , 'type' = .. , 'length' => .. , flags => ..)
+	
+	@returns string 
+	
+	@comment
+	this creates a nice string from the results of db_get_table
+	**/	
+	function db_print_table($args)
 	{
 		return $this->dc[$this->default_cid]->db_print_table($args);
 	}
-
+	
+	/**
+	@attrib api=1
+	
+	@returns array
+	
+	@comment
+	Reads and returns the structure of the database
+	
+	**/	
 	function db_get_struct()
 	{
 		return $this->dc[$this->default_cid]->db_get_struct();
 	}
 
-	////
-	// !Returns current query handle
+	/**
+	@attrib api=1
+	
+	@comment
+	saves query handle in the internal stack
+	it's your task to make sure you call those functions in correct
+	order, otherwise weird things could happen	
+	
+	@examples ${restore_handle}
+	**/
 	function save_handle()
 	{
 		return $this->dc[$this->default_cid]->save_handle();
@@ -234,6 +475,19 @@ class db_connector
 
 	////
 	// !Sets current query handle
+	/**
+	@attrib api=1
+	
+	@comment restores query handle from internal check
+	
+	@examples
+	function mark_queue_locked($qid)
+	{
+		$this->save_handle();
+		$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
+		$this->restore_handlE();
+	}
+	**/
 	function restore_handle()
 	{
 		return $this->dc[$this->default_cid]->restore_handle();
@@ -241,6 +495,19 @@ class db_connector
 
 	////
 	// !fetchib kirje suvalisest tabelist
+	/**
+	@attrib params=pos api=1
+	
+	@param table required type=string
+	@param field required type=string
+	@param selector required type=string
+	@param fields optional type=array default="*"
+	
+	@returns array 
+	
+	@comment
+		fetch record from table
+	**/	
 	function get_record($table,$field,$selector,$fields = array())
 	{
 		if (sizeof($fields) > 0)
@@ -256,15 +523,31 @@ class db_connector
 		return $this->db_fetch_row();
 	}
 
-	////
-	// !selects a list of databases from the server, the list can be retrieved by calling db_next_database()
+	/**
+	@attrib api=1
+	
+	@comment
+	selects a list of databases from the server, the list can be retrieved by calling db_next_database()
+	
+	@examples
+	$dbi->db_list_databases();
+	while ($db = $dbi->db_next_database())
+	{
+		echo $db['name']
+	}
+	**/
 	function db_list_databases()
 	{
 		return $this->dc[$this->default_cid]->db_list_databases();
 	}
 
-	////
-	// !returns the next database from the list created by db_list_databases()
+	/**
+	@attrib api=1
+	
+	@return array - the next database from the list created by db_list_databases()
+	
+	@examples ${db_list_databases}
+	**/
 	function db_next_database()
 	{
 		return $this->dc[$this->default_cid]->db_next_database();
@@ -277,6 +560,20 @@ class db_connector
 	//   user - the user that will get access to the database
 	//   host - the host from where the access will be granted
 	//   pass - the password for the database
+	/**
+	@attrib params=name api=1
+	
+	@param foo [optional|required] type=[int|var|oid|object|string|float] default="foo"
+	
+	@errors 
+	
+	@returns 
+	
+	@comment
+	
+	@examples
+
+	**/	
 	function db_create_database($arr)
 	{
 		return $this->dc[$this->default_cid]->db_create_database($arr);
