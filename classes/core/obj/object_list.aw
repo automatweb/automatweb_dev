@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.52 2006/02/20 10:30:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.53 2006/03/14 08:12:39 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -355,6 +355,42 @@ class object_list extends _int_obj_container_base
 	function count()
 	{
 		return count($this->list);
+	}
+	
+	// static
+	function iterate_list($oids, $func, $param1 = null, $param2 = null, $param3 = null)
+	{
+		if (!is_array($oids) || !count($oids))
+		{
+			return;
+		}
+		$ol = new object_list(array(
+			"oid" => $oids,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			if ($param1 === null)
+			{
+				$o->$func();
+			}
+			else
+			if ($param2 === null)
+			{
+				$o->$func($param1);
+			}
+			else
+			if ($param3 === null)
+			{
+				$o->$func($param1, $param2);
+			}
+			else
+			{
+				$o->$func($param1, $param2, $param3);
+			}
+			$o->save();
+		}
 	}
 
 	///////////////////////////////////////
