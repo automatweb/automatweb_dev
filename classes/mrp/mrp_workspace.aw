@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.159 2006/03/13 13:49:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.160 2006/03/14 07:55:10 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -224,7 +224,7 @@
 
 @default group=grp_printer_current,grp_printer_done,grp_printer_aborted,grp_printer_in_progress,grp_printer_startable,grp_printer_notstartable
 
-	@property printer_legend type=text
+	@property printer_legend type=text no_caption=1
 	@caption Legend
 
 	@property printer_jobs_prev_link type=text store=no no_caption=1
@@ -1024,7 +1024,7 @@ class mrp_workspace extends class_base
 				$prop["value"] .= "<span style='font-size: 11px;'>Projekt: <input size=6 type=text name=do_pv_proj_s>";
 				$prop["value"] .= "<a href='javascript:void(0)' onClick='changed=0;document.changeform.submit()'>Otsi</a></span>";
 				$prop["value"] .= "</td><td align=right>";
-				$prop["value"] .= "<span style='font-size: 11px;'>Vali ressurss: <select name=pj_use_resource>";
+				$prop["value"] .= "<span style='font-size: 11px;'>Vali ressurss: <select onChange='submit_changeform(\"\");' name=pj_use_resource>";
 				$resids = $this->get_cur_printer_resources(array(
 					"ws" => $arr["obj_inst"],
 					"ign_glob" => true
@@ -1035,7 +1035,7 @@ class mrp_workspace extends class_base
 					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
 				}
 				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),$res_ol->names());
-				$prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>Vali</a>";
+				$prop["value"] .= "</select><!-- <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>Vali</a>-->";
 				
 				$prop["value"] .= "</td></tr></table>";
 				break;

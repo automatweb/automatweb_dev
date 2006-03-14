@@ -699,6 +699,7 @@
                   <num_5>grp_printer_notstartable</num_5>
             </group>
             <type>text</type>
+            <no_caption>1</no_caption>
             <caption>Legend</caption>
       </property>
       <property>
