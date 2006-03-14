@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.468 2006/03/10 14:13:14 kristo Exp $
+// $Id: class_base.aw,v 2.469 2006/03/14 09:52:13 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3982,7 +3982,9 @@ class class_base extends aw_template
 				{
 					$altp = $alias_to_prop ? $alias_to_prop : $rawdata["alias_to_prop"];
 					$curpv = $_to->prop($altp);
-					if (is_array($altp))
+					$property_info = $_to->get_property_list();
+					
+					if ($property_info[$altp]["multiple"] == 1 || is_array($curpv))
 					{
 						$curpv[$this->obj_inst->id()] = $this->obj_inst->id();
 					}
