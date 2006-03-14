@@ -1,10 +1,20 @@
 <?php
-// $Id: tabpanel.aw,v 1.15 2005/12/02 05:50:27 ahti Exp $
+// $Id: tabpanel.aw,v 1.16 2006/03/14 13:13:17 tarvo Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
 	////
 	// !Initializes a tabpanel object
+	/**
+		@attrib params=name api=1
+		@param tpl optional type=string
+		Uses given template file
+		@errors
+		- in case of a missing template file, a raise_error will be called
+		@comment
+		Initializes tabpanel
+		@examples
+	**/
 	function tabpanel($args = array())
 	{
 		$this->init("tabpanel");
@@ -14,18 +24,49 @@ class tabpanel extends aw_template
 		$this->tabcount = array();
 		$this->hide_one_tab = 0;
 	}
+	
+	/**
+		@attrib params=name api=1
+		
+		@param active optional type=bool
+		Whether to use the "selected" subtemplate for this tab.
+		
+		@param caption optional type=string
+		Text to display as caption
+		
+		@param link optional type=string
+		Url to where it links to
+		
+		@param tabgroup optional type=string
+		If set, uses that template for showing tab
 
-	////
-	// !Adds a new tab to the panel
-	// active(bool) - whether to use the "selected" subtemplate for this tab
-	// caption(string) - text to display as caption
-	// link(string)
+		@param disabled optional type=bool
+		True sets the tab disabled(gray, non-clickable etc)
+
+		@param level optional type=int
+		Sets the tabs depth level, level 2 items are lower than level 1 tabs etc. Default is 1 
+		
+		@comment
+		Adds a new tab to the panel.
+		@example
+		$tp = get_instance("vcl/tabpanel");
+		// creates tab
+		$tp->add_tab(array(
+			"active" => true,					// uses selected template
+			"caption" => t("first"),			// set's caption
+			"link" => "http://www.automatweb.com",	// sets url
+		));
+		// adds a second tab beneath first, which is disabled
+		$tp->add_tab(array(
+			"caption" => t("second"),
+			"level" => 2,
+			"disabled" => true,
+		));
+	**/
 	function add_tab($args = array())
 	{
 		$tab_prefix = isset($args["tabgroup"]) ? $args["tabgroup"] . "_" : "";
-		// 1. I'll add one optional argument - tabgroup
-		// 2. I'll prepare a different subtemplate in the tabpanel template
-		// 3. If no such template exists, then I ignore the tabgroup key
+
 		if (isset($args["active"]) && $args["active"])
 		{
 			$subtpl = "sel_tab";
@@ -118,7 +159,7 @@ class tabpanel extends aw_template
 
 
 	}
-
+	
 	function get_html()
 	{
 		// this thing has to return generated html from the component
@@ -126,6 +167,17 @@ class tabpanel extends aw_template
 
 	}
 
+	/**
+		@attrib params=name api=1
+		@param logo_image optional type=string
+		To set logo image.
+		@param background_image optional type=string
+		To set background image. 
+		@comment
+		Allows to set background & logo image. Tabpanel style must be set to 'with_logo' with set_style() method
+		@examples
+
+	**/
 	function configure($arr)
 	{
 		if (isset($arr["logo_image"]))
@@ -142,7 +194,18 @@ class tabpanel extends aw_template
 			));
 		};
 	}
-
+	/**
+		@attrib params=pos api=1
+		@comment
+		Allows to set template that uses logo
+		@param style_name optional type=string
+		If param is with_logo, the template is changed.
+		@examples
+		// set new template that uses logo and background
+		$tp->set_style("with_logo");
+		// set logo and background image file url's
+		$tp->configure(array("logo_image" => "image_file.gif", "background_image" => "background.gif"));
+	**/
 	function set_style($style_name)
 	{
 		if ($style_name == "with_logo")
@@ -152,9 +215,25 @@ class tabpanel extends aw_template
 	}
 	
 
-	////
-	// !Generates and returns the tabpanel
-	// content(string) - contents of active panel
+	/**
+		@attrib params=name api=1
+		@comment
+		makes html code from given tabpanel object
+		@param panels_only optinal type=bool
+		Returns somesort of array including tabpanel in arr[][0]
+		@param toolbar optinal type=string
+		Puts the given text on top of the tabpanel???
+		@returns
+		Returns html code for that tabpanel
+		@examples
+		$tp = get_instance("vcl/tabpanel");
+		$tp->add_tab(array(
+			"caption" => t("first"),
+		));
+
+		//echos the tabpanel.
+		print $tp->get_tabpanel();
+	**/
 	function get_tabpanel($args = array())
 	{
 		$tabs = "";
@@ -209,23 +288,32 @@ class tabpanel extends aw_template
 		));
 		return $this->parse();
 	}
-
-	////
-	// !returns an instance of tabpanel, with the given tabs loaded.
-	// usage:
-	//	$tb = tabpanel::simple_tabpanel(array(
-	//		"panel_props" => array("tpl" => "headeronly"),
-	//		"var" => "cool_tab",
-	//		"default" => "entities",
-	//		"opts" => array(
-	//			"entities" => "Olemid",
-	//			"processes" => "Protsessid
-	//		)
-	//	));
-	//	this will create a tabpanel with two tabs, active is derived from the "cool_tab" variable in the url
-	//	links are made using aw_url_change_var($var, key_for_tab)
-	//	the default tab is in the "default" parameter
-	//	the tabpanel is created, using the options in the "panel_props" parameter
+	
+	/**
+		@attrib params=name api=1
+		@comment
+		Makes a tabpanel from given tabs. Links are made using aw_url_change_var($var, key_for_tab).
+		@param panel_props optional type=array
+		Tabpanel initializing parameters('tlp')
+		@param var required type=string
+		Variable name with what to pass the selection to url
+		@param default optional type=string
+		Sets the default tab
+		@param opts optional type=array
+		Array of tabs:
+		array ("tab_key" => "caption")
+		@returns
+		Returns an instance of tabpanel, with the given tabs added.
+		@examples
+		$tp = tabpanel::simple_tabpanel(array(
+			"panel_props" => array("tpl" => "headeronly"),
+			"var" => "cool_tab",
+			"default" => "entities",
+			"opts" => array("entities" => "Olemid", "processes" => "Protsessid")
+		));
+		print $tp->get_tabpanel();
+		//this will create a tabpanel with two tabs, active is derived from the "cool_tab" variable in the url
+	**/
 	function simple_tabpanel($arr)
 	{
 		if (!isset($_GET[$arr["var"]]) || empty($_GET[$arr["var"]]))
@@ -242,7 +330,6 @@ class tabpanel extends aw_template
 				"active" => ($_GET[$arr["var"]] == $k)
 			));
 		}
-
 		return $tb;
 	}
 };
