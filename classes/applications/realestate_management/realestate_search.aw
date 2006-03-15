@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.11 2006/02/17 09:42:02 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.12 2006/03/15 08:59:19 kristo Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1663,7 +1663,7 @@ class realestate_search extends class_base
 			}
 		}
 
-		if (!empty ($search_agent))
+		if (!empty ($search_agent) && $search_agent > 0)
 		{
 			// ### freetext agent search
 			// $agents_list = new object_list (array (
@@ -1864,7 +1864,6 @@ class realestate_search extends class_base
 			"created" => new obj_predicate_compare (OBJ_COMP_GREATER, $search_fd),
 			"site_id" => array (),
 			"lang_id" => array (),
-			"city24_object_id" => $search_c24id,
 			"transaction_type" => $search_tt,
 			"transaction_price" => $tp_constraint,
 			"special_status" => $search_ss,
@@ -1874,6 +1873,11 @@ class realestate_search extends class_base
 			$agent_constraint,
 			"sort_by" => $sort,
 		);
+
+		if ($search_c24id)
+		{
+			$args["city24_object_id"] = $search_c24id;
+		}
 
 		$args = $args + $class_specific_args;
 

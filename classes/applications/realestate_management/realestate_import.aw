@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.11 2006/02/23 12:41:45 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.12 2006/03/15 08:59:19 kristo Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -429,6 +429,8 @@ class realestate_import extends class_base
 			"class_id" => $realestate_classes,
 			"parent" => $realestate_folders,
 			"city24_object_id" => new obj_predicate_prop (OBJ_COMP_GREATER, 0),
+			"lang_id" => array(),
+			"site_id" => array()
 		));
 		$list = $list->arr ();
 
@@ -438,11 +440,19 @@ class realestate_import extends class_base
 		{
 			if ((int) $property->prop ("city24_object_id"))
 			{
-				$imported_object_ids[(int) $property->prop ("city24_object_id")] = (int) $property->id ();
+				$city_id = (int) $property->prop ("city24_object_id");
+				if (isset($imported_object_ids[$city_id]))
+				{
+					$duplicates[] = $city_id;
+				}
+				else
+				{
+					$imported_object_ids[(int) $property->prop ("city24_object_id")] = (int) $property->id ();
+				}
 			}
 		}
 
-		$duplicates = array ();
+		/*$duplicates = array ();
 		$tmp = array ();
 
 		foreach ($imported_object_ids as $city24_id => $aw_oid)
@@ -455,7 +465,7 @@ class realestate_import extends class_base
 			{
 				$tmp[] = $city24_id;
 			}
-		}
+		}*/
 
 		if (count ($duplicates) and (1 != $arr["quiet"]))
 		{
