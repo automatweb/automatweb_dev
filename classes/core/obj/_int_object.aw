@@ -1165,7 +1165,7 @@ class _int_object
 		$this->_int_set_prop($key, $val);
 		// if this is a relpicker property, create the relation as well
 		$propi = $GLOBALS["properties"][$this->obj["class_id"]][$key];
-		if ((($propi["type"] == "relpicker" && $propi["store"] == "connect" ) || ($propi["type"] == "releditor" && $propi["store"] == "connect") ||
+		if ((($propi["type"] == "relpicker" ) || ($propi["type"] == "releditor" && $propi["store"] == "connect") ||
 			 $propi["type"] == "relmanager" || 
 			($propi["type"] == "classificator" && $propi["store"] == "connect") ||
 			($propi["type"] == "popup_search" && $propi["reltype"] != "")
@@ -1176,7 +1176,7 @@ class _int_object
 			{
 				// get all old connections
 				// remove the ones that are not selected
-				if (is_oid($this->id()))
+				if (is_oid($this->id()) && ($propi["type"] != "relpicker" || $prop["store"] == "connect"))
 				{
 					foreach($this->connections_from(array("type" => $_rt)) as $c)
 					{
