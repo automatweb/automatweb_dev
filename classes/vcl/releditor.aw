@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.81 2006/03/13 12:27:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.82 2006/03/15 12:27:35 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -359,6 +359,17 @@ class releditor extends core
 				"value" => "",
 			);
 		};
+
+		if ($prop["parent"] != "")
+		{
+			$tmp = array();
+			foreach($xprops as $pn => $pd)
+			{
+				$pd["parent"] = $prop["parent"];
+				$tmp[$pn] = $pd;
+			}
+			$xprops = $tmp;
+		}
 
 		exit_function("init-rel-editor");
 		return $xprops;
