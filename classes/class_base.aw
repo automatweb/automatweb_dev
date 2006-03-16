@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.469 2006/03/14 09:52:13 kristo Exp $
+// $Id: class_base.aw,v 2.470 2006/03/16 15:15:42 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -113,6 +113,7 @@ class class_base extends aw_template
 			"tabpanel" => "vcl/tabpanel",
 			"reminder" => "vcl/reminder",
 			"popup_search" => "vcl/popup_search",
+			"crm_participant_search" => "applications/crm/crm_participant_search",
 			"treeview" => "vcl/treeview",
 			"toolbar" => "vcl/toolbar",
 			"translator" => "vcl/translator",
@@ -131,6 +132,7 @@ class class_base extends aw_template
 			"comments" => 1,
 			"popup_search" => 1,
 			"relationmgr" => 1,
+			"crm_participant_search" => 1
 		);
 
 		// XXX: this is also temporary
@@ -214,6 +216,14 @@ class class_base extends aw_template
 	function change($args = array())
 	{
 		global $awt;
+
+		foreach($args as $k => $v)
+		{
+			if (!is_array($v))
+			{
+				$args[$k] = urldecode($v);
+			}
+		}
 
 		$args["return_url"] = $_GET["return_url"];
 

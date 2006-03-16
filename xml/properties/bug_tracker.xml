@@ -11,6 +11,16 @@
             <caption>Bugi objekti t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
+            <name>bug_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Bugide kataloog</caption>
+      </property>
+      <property>
             <name>bug_tb</name>
             <table>objects</table>
             <group>
@@ -31,6 +41,8 @@
                   <num_0>by_default</num_0>
                   <num_1>by_project</num_1>
                   <num_2>by_who</num_2>
+                  <num_3>by_class</num_3>
+                  <num_4>by_cust</num_4>
             </group>
             <type>hidden</type>
             <store>no</store>
@@ -43,6 +55,8 @@
                   <num_0>by_default</num_0>
                   <num_1>by_project</num_1>
                   <num_2>by_who</num_2>
+                  <num_3>by_class</num_3>
+                  <num_4>by_cust</num_4>
             </group>
             <type>treeview</type>
             <parent>bug</parent>
@@ -59,6 +73,8 @@
                   <num_2>by_default</num_2>
                   <num_3>by_project</num_3>
                   <num_4>by_who</num_4>
+                  <num_5>by_class</num_5>
+                  <num_6>by_cust</num_6>
             </group>
             <type>table</type>
             <parent>bug</parent>
@@ -77,15 +93,160 @@
             <caption>Otsingu toolbar</caption>
       </property>
       <property>
-            <name>search_form</name>
+            <name>s_name</name>
             <table>objects</table>
             <group>search</group>
-            <type>callback</type>
-            <callback>callback_get_search_form</callback>
-            <submit_method>get</submit_method>
+            <type>textbox</type>
             <store>no</store>
-            <field>search_form</field>
-            <caption>Otsinguvorm</caption>
+            <field>s_name</field>
+            <caption>L&amp;uuml;hikirjeldus</caption>
+      </property>
+      <property>
+            <name>s_bug_status</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>select</type>
+            <store>no</store>
+            <field>s_bug_status</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>s_bug_priority</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>select</type>
+            <store>no</store>
+            <field>s_bug_priority</field>
+            <caption>Prioriteet</caption>
+      </property>
+      <property>
+            <name>s_who</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>s_who</field>
+            <caption>Kellele</caption>
+      </property>
+      <property>
+            <name>s_bug_type</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>s_bug_type</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>s_bug_class</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>select</type>
+            <store>no</store>
+            <field>s_bug_class</field>
+            <caption>Klass</caption>
+      </property>
+      <property>
+            <name>s_bug_severity</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>select</type>
+            <store>no</store>
+            <field>s_bug_severity</field>
+            <caption>T&amp;amp;ouml;sidus</caption>
+      </property>
+      <property>
+            <name>s_monitors</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>s_monitors</field>
+            <caption>J&amp;amp;auml;lgijad</caption>
+      </property>
+      <property>
+            <name>s_deadline</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>date_select</type>
+            <default>-1</default>
+            <store>no</store>
+            <field>s_deadline</field>
+            <caption>T&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>s_bug_url</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <size>100</size>
+            <store>no</store>
+            <field>s_bug_url</field>
+            <caption>URL</caption>
+      </property>
+      <property>
+            <name>s_bug_content</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>s_bug_content</field>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>s_customer</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>s_customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>s_project</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>s_project</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>s_bug_component</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>s_bug_component</field>
+            <caption>Komponent</caption>
+      </property>
+      <property>
+            <name>s_bug_mail</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>s_bug_mail</field>
+            <caption>Bugmail CC</caption>
+      </property>
+      <property>
+            <name>s_find_parens</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>s_find_parens</field>
+            <caption>Leia ka buge, millel on alambuge</caption>
+      </property>
+      <property>
+            <name>s_sbt</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>s_sbt</field>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>search_res</name>
@@ -96,6 +257,24 @@
             <no_caption>1</no_caption>
             <field>search_res</field>
             <caption>Otsingu tulemused</caption>
+      </property>
+      <property>
+            <name>saved_searches</name>
+            <table>objects</table>
+            <group>search_list</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>saved_searches</field>
+      </property>
+      <property>
+            <name>delete_saved</name>
+            <table>objects</table>
+            <group>search_list</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>delete_saved</field>
+            <caption>Kustuta</caption>
       </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
@@ -123,11 +302,31 @@
                   <parent>bugs</parent>
                   <submit>no</submit>
             </by_who>
+            <by_class>
+                  <caption>Klasside puu</caption>
+                  <parent>bugs</parent>
+                  <submit>no</submit>
+            </by_class>
+            <by_cust>
+                  <caption>Kliendid</caption>
+                  <parent>bugs</parent>
+                  <submit>no</submit>
+            </by_cust>
+            <search_t>
+                  <caption>Otsing</caption>
+                  <submit_method>get</submit_method>
+                  <save>no</save>
+            </search_t>
             <search>
                   <caption>Otsing</caption>
                   <submit_method>get</submit_method>
-                  <submit>no</submit>
+                  <save>no</save>
+                  <parent>search_t</parent>
             </search>
+            <search_list>
+                  <caption>Salvestatud otsingud</caption>
+                  <parent>search_t</parent>
+            </search_list>
             <archive>
                   <caption>Arhiiv</caption>
                   <submit>no</submit>
@@ -144,6 +343,11 @@
                   <clid>CL_OBJECT_TYPE</clid>
                   <caption>Objekti t&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </OBJECT_TYPE>
+            <FOLDER>
+                  <value>3</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Kataloog</caption>
+            </FOLDER>
       </reltypes>
       <layout>
             <bug>
@@ -153,6 +357,8 @@
                         <num_0>by_default</num_0>
                         <num_1>by_project</num_1>
                         <num_2>by_who</num_2>
+                        <num_3>by_class</num_3>
+                        <num_4>by_cust</num_4>
                   </group>
             </bug>
       </layout>

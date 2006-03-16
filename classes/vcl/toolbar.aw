@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.11 2006/03/13 12:27:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.12 2006/03/16 15:15:44 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -15,6 +15,7 @@ class toolbar extends aw_template
 			$imgbase = "/automatweb/images/icons";
 		};
 
+		$this->imgbase = $this->cfg["baseurl"] . $imgbase;
 		$this->vars(array(
 			"imgbase" => $this->cfg["baseurl"] . $imgbase,
 		));
@@ -215,6 +216,7 @@ class toolbar extends aw_template
 
 					$val["url_q"] = str_replace("'", "\\'", $val["url"]);
 					$disabled = !empty($val["disabled"]) ? "_disabled" : "";
+					$val["img_url"] = substr($val["img"], 0, 4) == "http" ? $val["img"] : $this->imgbase."/".$val["img"];
 
 					$this->vars($val);
 					$tpl = $val["type"] . $disabled;

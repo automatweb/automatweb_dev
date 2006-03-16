@@ -4,8 +4,9 @@
             <name>orderer</name>
             <table>aw_crm_offer</table>
             <group>general</group>
-            <type>select</type>
+            <type>relpicker</type>
             <datatype>int</datatype>
+            <reltype>RELTYPE_ORDERER</reltype>
             <field>orderer</field>
             <caption>Tellija</caption>
       </property>

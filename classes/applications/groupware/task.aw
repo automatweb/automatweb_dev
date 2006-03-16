@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.83 2006/03/14 14:27:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.84 2006/03/16 15:15:42 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1085,10 +1085,14 @@ class task extends class_base
 					$ff = $o;
 				}
 				$fi = $ff->instance();
-				$fu = html::href(array(
-					"url" => $fi->get_url($ff->id(), $ff->name()),
-					"caption" => $ff->name()
-				));
+				$fu = "";
+				if (method_exists($fi, "get_url"))
+				{
+					$fu = html::href(array(
+						"url" => $fi->get_url($ff->id(), $ff->name()),
+						"caption" => $ff->name()
+					));
+				}
 				$data[] = array(
 					"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),
 					"file" => $fu,
@@ -1218,8 +1222,15 @@ class task extends class_base
 					if ($entry["type"] != CL_FILE)
 					{
 						$o->set_prop("project", $t->prop("project"));
-						$o->set_prop("task", $t->id());
-						$o->set_prop("customer", $t->prop("customer"));
+						if ($o->class_id() != CL_CRM_OFFER)
+						{
+							$o->set_prop("task", $t->id());
+							$o->set_prop("customer", $t->prop("customer"));
+						}
+						else
+						{
+							$o->set_prop("orderer", $t->prop("customer"));
+						}
 
 						if ($entry["type"] == CL_CRM_DEAL)
 						{

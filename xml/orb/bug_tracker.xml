@@ -1,6 +1,20 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="bug_tracker" folder="applications/bug_o_matic_3000" extends="class_base">
+		<action name="get_node_cust" all_args="1">
+			<function name="get_node_cust">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_node_class" all_args="1">
+			<function name="get_node_class">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="get_node_other" all_args="1">
 			<function name="get_node_other">
 				<arguments>
@@ -19,6 +33,44 @@
 			<function name="delete">
 				<arguments>
 					<optional name="cat" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="assign_bugs">
+			<function name="assign_bugs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cut_b">
+			<function name="cut_b">
+				<arguments>
+					<optional name="sel" />
+					<optional name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_b">
+			<function name="paste_b">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="fetch_structure_in_xml">
+			<function name="fetch_structure_in_xml">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_search" all_args="1">
+			<function name="save_search">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

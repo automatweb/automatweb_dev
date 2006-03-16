@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.14 2006/03/10 11:03:45 sander Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.15 2006/03/16 15:15:43 kristo Exp $
 // bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -11,67 +11,87 @@ define("BUG_STATUS_CLOSED", 5);
 @tableinfo aw_bugs index=aw_id master_index=brother_of master_table=objects
 
 @default group=general
+@default table=aw_bugs
 
 @property name type=textbox table=objects
 @caption Lühikirjeldus
 
-@default table=aw_bugs
-@property bug_content type=textarea rows=10 cols=80
-@caption Sisu
+@layout settings type=hbox
+@caption Määrangud
 
-@property bug_type type=classificator store=connect
-@caption T&uuml;&uuml;p
+	@layout settings_col1 type=vbox parent=settings
+		@property bug_status type=select parent=settings_col1 captionside=top
+		@caption Staatus
 
-@property bug_status type=select
-@caption Staatus
+		@property bug_priority type=select parent=settings_col1 captionside=top
+		@caption Prioriteet
 
-@property customer type=relpicker reltype=RELTYPE_CUSTOMER store=connect
-@caption Klient
+		@property who type=crm_participant_search style=relpicker reltype=RELTYPE_MONITOR table=aw_bugs field=who parent=settings_col1 captionside=top
+		@caption Kellele
 
-@property project type=relpicker reltype=RELTYPE_PROJECT store=connect
-@caption Projekt
 
-@property deadline type=date_select default=-1
-@caption T&auml;htaeg
+	@layout settings_col2 type=vbox parent=settings
 
-@property who type=relpicker reltype=RELTYPE_MONITOR store=connect
-@caption Kellele
 
-@property bug_priority type=select
-@caption Prioriteet
+		@property bug_type type=classificator store=connect reltype=RELTYPE_BUGTYPE parent=settings_col2 captionside=top
+		@caption T&uuml;&uuml;p
 
-@property bug_severity type=select
-@caption T&ouml;sidus
+		@property bug_class type=select parent=settings_col2 captionside=top
+		@caption Klass
 
-//////// inf 
-property reporter_browser type=classificator
-caption Brauser
+		@property bug_severity type=select parent=settings_col2 captionside=top
+		@caption T&ouml;sidus
 
-property reporter_os type=classificator
-caption OS
 
-@property bug_class type=select
-@caption Klass
+	
+	@layout settings_col3 type=vbox parent=settings
 
-@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb
-@caption Fail
+		@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=4 store=connect parent=settings_col3 captionside=top
+		@caption J&auml;lgijad
 
-@property bug_component type=textbox 
-@caption Komponent
+		@property deadline type=date_select default=-1 parent=settings_col3 captionside=top
+		@caption T&auml;htaeg
 
-@property bug_url type=textbox size=100
+@property bug_url type=textbox size=100 
 @caption URL
 
-@property bug_mail type=textbox size=60
-@caption Bugmail CC
+@layout content type=hbox width=20%:80%
+@caption Sisu
 
-@property monitors type=relpicker reltype=RELTYPE_MONITOR multiple=1 size=5 store=connect
-@caption J&auml;lgijad
+	@layout bc type=vbox parent=content
 
-@property comms type=comments group=comments store=no
-@caption Kommentaarid
+		@property bug_content type=textarea rows=23 cols=80 parent=bc
+		@caption Sisu
 
-@groupinfo comments caption="Kommentaarid"
+		@property bug_content_comm type=textarea rows=10 cols=80 parent=bc store=no editonly=1
+		@caption Lisa kommentaar
+
+	@layout data type=vbox parent=content
+
+		@property num_hrs_guess type=textbox size=5 parent=data captionside=top
+		@caption Prognoositav tundide arv 	
+
+		@property num_hrs_real type=textbox size=5 parent=data captionside=top
+		@caption Tegelik tundide arv
+
+		@property num_hrs_to_cust type=textbox size=5 parent=data captionside=top
+		@caption Tundide arv kliendile
+
+		@property customer type=relpicker reltype=RELTYPE_CUSTOMER store=connect parent=data captionside=top
+		@caption Klient
+
+		@property project type=relpicker reltype=RELTYPE_PROJECT store=connect parent=data captionside=top
+		@caption Projekt
+
+		@property bug_component type=textbox parent=data captionside=top
+		@caption Komponent
+
+		@property bug_mail type=textbox parent=data captionside=top
+		@caption Bugmail CC
+	
+		@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb parent=data captionside=top
+		@caption Fail
+	
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption Jälgija
@@ -84,7 +104,24 @@ caption OS
 
 @reltype PROJECT value=4 clid=CL_PROJECT
 @caption Projekt
+
+@reltype BUGTYPE value=5 clid=CL_META
+@caption Bugi t&uuml;&uuml;p
+
+@reltype COMMENT value=6 clid=CL_BUG_COMMENT
+@caption Kommentaar
 */
+
+define("BUG_OPEN", 1);
+define("BUG_INPROGRESS", 2);
+define("BUG_DONE", 3);
+define("BUG_TESTED", 4);
+define("BUG_CLOSED", 5);
+define("BUG_INCORRECT", 6);
+define("BUG_NOTREPEATABLE", 7);
+define("BUG_NOTFIXABLE", 8);
+define("BUG_WONTFIX", 9);
+define("BUG_FEEDBACK", 10);
 
 class bug extends class_base
 {
@@ -94,6 +131,19 @@ class bug extends class_base
 			"tpldir" => "applications/bug_o_matic_3000/bug",
 			"clid" => CL_BUG
 		));
+
+		$this->bug_statuses = array(
+			BUG_OPEN => t("Lahtine"),
+			BUG_INPROGRESS => t("Tegemisel"),
+			BUG_DONE => t("Valmis"),
+			BUG_TESTED => t("Testitud"),
+			BUG_CLOSED => t("Suletud"),
+			BUG_INCORRECT => t("Vale teade"),
+			BUG_NOTREPEATABLE => t("Kordamatu"),
+			BUG_NOTFIXABLE => t("Parandamatu"),
+			BUG_WONTFIX => t("Ei paranda"),
+			BUG_FEEDBACK => t("Vajab tagasisidet")
+		);
 	}
 
 	function callback_on_load($arr)
@@ -114,15 +164,12 @@ class bug extends class_base
 			foreach($els as $el)
 			{
 				$this->parent_options[$el] = array();
-				if($this->can("view", $props[$el]))
+				$objs = $parent->connections_from(array(
+					"type" => $cx_props[$el]["reltype"],
+				));
+				foreach($objs as $obj)
 				{
-					$objs = $parent->connections_from(array(
-						"type" => $cx_props[$el]["reltype"],
-					));
-					foreach($objs as $obj)
-					{
-						$this->parent_options[$el][$obj->prop("to")] = $obj->prop("to.name");
-					}
+					$this->parent_options[$el][$obj->prop("to")] = $obj->prop("to.name");
 				}
 			}
 			$this->parent_data = array(
@@ -146,48 +193,47 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "bug_content":
+				if (!$arr["new"])
+				{
+					$prop["value"] = "<br>".$this->_get_comment_list($arr["obj_inst"])."<br>";
+					$prop["type"] = "text";
+				}
+				break;
+
 			case "bug_status":	
-				$prop["options"] = array(
-					1 => t("Lahtine"),
-					2 => t("Tegemisel"),
-					3 => t("Valmis"),
-					4 => t("Testitud"),
-					5 => t("Suletud"),
-					6 => t("Vale teade"),
-					7 => t("Kordamatu"),
-					8 => t("Parandamatu"),
-				);
+				$prop["options"] = $this->bug_statuses;
 				break;
 
 			case "bug_priority":
 			case "bug_severity":
-				foreach(range(5, 1) as $r)
-				{
-					$prop["options"][$r] = $r;
-				}
+				$prop["options"] = $this->get_priority_list();
 				break;
 				
 			case "who":
 			case "monitors":
 				if($arr["new"])
 				{
-					foreach($this->parent_options["who"] as $key => $val)
+					foreach($this->parent_options[$prop["name"]] as $key => $val)
 					{
-						$prop["options"][$key] = $val;
+						$tmp[$key] = $val;
 					}
+					// also, the current person
+					$u = get_instance(CL_USER);
+					$p = obj($u->get_current_person());
+					$tmp[$p->id()] = $p->name();
+					if ($prop["multiple"] == 1)
+					{
+						$prop["value"] = $this->make_keys(array_keys($tmp));
+					}
+					$prop["options"] = array("" => t("--vali--")) + $tmp;
 				}
 				break;
 
 			case "bug_class":
-				$class_list = new aw_array($this->cx->get_classes_with_properties());
-				$cp = get_class_picker(array("field" => "def"));
-				
-				$prop["options"][0] = "";
-				foreach($class_list->get() as $key => $val)
-				{
-					$prop["options"][$key] = $val;
-				};
+				$prop["options"] = array("" => "") + $this->get_class_list();
 				break;
+
 			case "project":
 				if (is_object($arr["obj_inst"]) && $this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
@@ -277,6 +323,20 @@ class bug extends class_base
 					}
 				}
 				break;
+
+			case "num_hrs_real":
+				$url = $this->mk_my_orb("stopper_pop", array(
+					"id" => $arr["obj_inst"]->id(),
+					"s_action" => "start",
+					"type" => t("Bug"),
+					"name" => $arr["obj_inst"]->name()
+				), CL_TASK);
+				$prop["post_append_text"] = " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
+				break;
+
+			case "bug_url":
+				$prop["post_append_text"] = "<a href='javascript:void(0)' onClick='window.location=document.changeform.bug_url.value'>Ava</a>";
+				break;
 		};
 		return $retval;
 	}
@@ -287,9 +347,19 @@ class bug extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "comms":
-				// email any persons interested in status changes of that bug
-				$this->notify_monitors($arr);
+			case "bug_content":
+				if (!$arr["new"])
+				{
+					$prop["value"] = $arr["obj_inst"]->prop("bug_content");
+				}
+				break;
+
+			case "bug_content_comm":
+				if (trim($prop["value"]) != "")
+				{
+					// save comment
+					$this->_add_comment($arr["obj_inst"], $prop["value"]);
+				}
 				break;
 				
 			case "bug_status":
@@ -301,19 +371,52 @@ class bug extends class_base
 						$prop["error"] = t("Puuduvad õigused bugi sulgeda!");
 					}
 				}
+
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
+				{
+					$com = sprintf(t("Staatus muudeti %s => %s"), $this->bug_statuses[$old], $this->bug_statuses[$prop["value"]]);
+					$this->_add_comment($arr["obj_inst"], $com);
+				}
+				break;
+
+			case "bug_priority":
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
+				{
+					$com = sprintf(t("Prioriteet muudeti %s => %s"), $old, $prop["value"]);
+					$this->_add_comment($arr["obj_inst"], $com);
+				}
+				break;
+
+			case "who":
+				$nv = "";
+				if ($this->can("view", $prop["value"]))
+				{
+					$nvo = obj($prop["value"]);
+					$nv = $nvo->name();
+				}
+
+				if (($old = $arr["obj_inst"]->prop_str($prop["name"])) != $nv)
+				{
+					$com = sprintf(t("Kellele muudeti %s => %s"), $old, $nv);
+					$this->_add_comment($arr["obj_inst"], $com);
+				}
+				break;
+
+			case "bug_class":
+				$clss = aw_ini_get("classes");
+				if (($old = $clss[$arr["obj_inst"]->prop($prop["name"])]["name"]) != ($nv = $clss[$prop["value"]]["name"]))
+				{
+					$com = sprintf(t("Klass muudeti %s => %s"), $old, $nv);
+					$this->_add_comment($arr["obj_inst"], $com);
+				}
 				break;
 		}
 		return $retval;
 	}	
 
-	function notify_monitors($arr)
+	function notify_monitors($bug, $comment)
 	{
-		$monitors = $arr["obj_inst"]->prop("monitors");
-		/*
-		$monitors = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_MONITOR",
-		));
-		*/
+		$monitors = $bug->prop("monitors");
 		// I should add a way to send CC-s to arbitraty e-mail addresses as well
 		foreach($monitors as $person)
 		{
@@ -321,8 +424,13 @@ class bug extends class_base
 			{
 				continue;
 			}
-			//$person_obj = $person->to();
 			$person_obj = obj($person); 
+			// don't send to the current user, cause, well, he knows he's just done it. 
+			$u = get_instance(CL_USER);
+			if ($person == $u->get_current_person())
+			{
+				continue;
+			}
 			$email = $person_obj->prop("email");
 			$notify_addresses = array();
 			if (is_oid($email))
@@ -336,7 +444,7 @@ class bug extends class_base
 			};
 		};
 
-		$addrs = explode(",",$arr["obj_inst"]->prop("bug_mail"));
+		$addrs = explode(",",$bug->prop("bug_mail"));
 		foreach($addrs as $addr)
 		{
 			if (is_email($addr))
@@ -351,33 +459,126 @@ class bug extends class_base
 
 		$notify_list = join(",",$notify_addresses);
 
-		$oid = $arr["obj_inst"]->id();
-		$name = $arr["obj_inst"]->name();
+		$oid = $bug->id();
+		$name = $bug->name();
 		$uid = aw_global_get("uid");
 
 		$msgtxt = t("Bug") . ": " . $oid . "\n";
 		$msgtxt .= t("Summary") . ": " . $name . "\n";
 		$msgtxt .= t("URL") . ": " . $this->mk_my_orb("change",array("id" => $oid)) . "\n";
 		$msgtxt .= "-------------\n\nNew comment from " . $uid . " at " . date("Y-m-d H:i") . "\n";
-		$msgtxt .= $arr["request"]["comms"]["comment"];
+		$msgtxt .= $comment."\n";
+		$msgtxt .= strip_tags($this->_get_comment_list($bug, "desc"));
 
 		send_mail($notify_list,"Bug #" . $oid . ": " . $name . " : " . $uid . " lisas kommentaari",$msgtxt,"From: automatweb@automatweb.com");
 	}
-/*
-	function parse_alias($arr)
+
+	function get_sort_priority($bug)
 	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
+		$sp_lut = array(
+			BUG_OPEN => 100,
+			BUG_INPROGRESS => 110,
+			BUG_DONE => 70,
+			BUG_TESTED => 60,
+			BUG_CLOSED => 50,
+			BUG_INCORRECT => 40,
+			BUG_NOTREPEATABLE => 40,
+			BUG_NOTFIXABLE => 40
+		);
+		return $sp_lut[$bug->prop("bug_status")] + $bug->prop("bug_priority");
 	}
 
-	function show($arr)
+	function handle_stopper_stop($bug, $inf)
 	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
+		$bug->set_prop("num_hrs_real", $bug->prop("num_hrs_real") + $inf["hours"]);
+		$bug->save();
+
+		if (trim($inf["desc"]) != "")
+		{
+			$this->_add_comment($bug, $inf["desc"]);
+		}
+	}
+
+	function _get_comment_list($o, $so = "asc")
+	{
+		$this->read_template("comment_list.tpl");
+
+		$ol = new object_list(array(
+			"class_id" => CL_BUG_COMMENT,
+			"parent" => $o->id(),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.created $so"
+		));
+		$com_str = "";
+		foreach($ol->arr() as $com)
+		{
+			$this->vars(array(
+				"com_adder" => $com->createdby(),
+				"com_date" => date("d.m.Y H:i", $com->created()),
+				"com_text" => $com->comment()
+			));
+			$com_str .= $this->parse("COMMENT");
+		}
+
+		$main_c = nl2br($o->prop("bug_content"));
 		$this->vars(array(
-			"name" => $ob->prop("name"),
+			"main_text" => $so == "asc" ? $main_c : "",
+			"main_text_after" => $so == "asc" ? "" : $main_c,
+			"COMMENT" => $com_str
 		));
 		return $this->parse();
 	}
-	*/
+
+	function _add_comment($bug, $comment)
+	{
+		if (!is_oid($bug->id()))
+		{
+			return;
+		}
+		// email any persons interested in status changes of that bug
+		$this->notify_monitors($bug, $comment);
+
+		$o = obj();
+		$o->set_parent($bug->id());
+		$o->set_class_id(CL_BUG_COMMENT);
+		$o->set_comment(trim($comment));
+		$o->save();
+
+		$bug->connect(array(
+			"to" => $o->id(),
+			"type" => "RELTYPE_COMMENT"
+		));
+	}
+
+	function get_priority_list()
+	{
+		$res = array();
+		foreach(range(1, 5) as $r)
+		{
+			$res[$r] = $r;
+		}
+		return $res;
+	}
+
+	function get_status_list()
+	{
+		return $this->bug_statuses;
+	}
+
+	function get_class_list()
+	{
+		$ret = array();
+		$this->cx = get_instance("cfg/cfgutils");
+		$class_list = new aw_array($this->cx->get_classes_with_properties());
+		$cp = get_class_picker(array("field" => "def"));
+				
+		$prop["options"][0] = "";
+		foreach($class_list->get() as $key => $val)
+		{
+			$ret[$key] = $val;
+		};
+		return $ret;
+	}
 }
 ?>

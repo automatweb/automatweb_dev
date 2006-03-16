@@ -3,20 +3,42 @@
       <property>
             <name>name</name>
             <group>general</group>
-            <type>textbox</type>
             <table>objects</table>
+            <type>textbox</type>
             <field>name</field>
             <caption>L&amp;uuml;hikirjeldus</caption>
       </property>
       <property>
-            <name>bug_content</name>
+            <name>bug_status</name>
             <group>general</group>
             <table>aw_bugs</table>
-            <type>textarea</type>
-            <rows>10</rows>
-            <cols>80</cols>
-            <field>bug_content</field>
-            <caption>Sisu</caption>
+            <type>select</type>
+            <parent>settings_col1</parent>
+            <captionside>top</captionside>
+            <field>bug_status</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>bug_priority</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>select</type>
+            <parent>settings_col1</parent>
+            <captionside>top</captionside>
+            <field>bug_priority</field>
+            <caption>Prioriteet</caption>
+      </property>
+      <property>
+            <name>who</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>crm_participant_search</type>
+            <style>relpicker</style>
+            <reltype>RELTYPE_MONITOR</reltype>
+            <field>who</field>
+            <parent>settings_col1</parent>
+            <captionside>top</captionside>
+            <caption>Kellele</caption>
       </property>
       <property>
             <name>bug_type</name>
@@ -24,36 +46,45 @@
             <table>aw_bugs</table>
             <type>classificator</type>
             <store>connect</store>
+            <reltype>RELTYPE_BUGTYPE</reltype>
+            <parent>settings_col2</parent>
+            <captionside>top</captionside>
             <field>bug_type</field>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
-            <name>bug_status</name>
+            <name>bug_class</name>
             <group>general</group>
             <table>aw_bugs</table>
             <type>select</type>
-            <field>bug_status</field>
-            <caption>Staatus</caption>
+            <parent>settings_col2</parent>
+            <captionside>top</captionside>
+            <field>bug_class</field>
+            <caption>Klass</caption>
       </property>
       <property>
-            <name>customer</name>
+            <name>bug_severity</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>select</type>
+            <parent>settings_col2</parent>
+            <captionside>top</captionside>
+            <field>bug_severity</field>
+            <caption>T&amp;amp;ouml;sidus</caption>
+      </property>
+      <property>
+            <name>monitors</name>
             <group>general</group>
             <table>aw_bugs</table>
             <type>relpicker</type>
-            <reltype>RELTYPE_CUSTOMER</reltype>
+            <reltype>RELTYPE_MONITOR</reltype>
+            <multiple>1</multiple>
+            <size>4</size>
             <store>connect</store>
-            <field>customer</field>
-            <caption>Klient</caption>
-      </property>
-      <property>
-            <name>project</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PROJECT</reltype>
-            <store>connect</store>
-            <field>project</field>
-            <caption>Projekt</caption>
+            <parent>settings_col3</parent>
+            <captionside>top</captionside>
+            <field>monitors</field>
+            <caption>J&amp;amp;auml;lgijad</caption>
       </property>
       <property>
             <name>deadline</name>
@@ -61,61 +92,10 @@
             <table>aw_bugs</table>
             <type>date_select</type>
             <default>-1</default>
+            <parent>settings_col3</parent>
+            <captionside>top</captionside>
             <field>deadline</field>
             <caption>T&amp;amp;auml;htaeg</caption>
-      </property>
-      <property>
-            <name>who</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MONITOR</reltype>
-            <store>connect</store>
-            <field>who</field>
-            <caption>Kellele</caption>
-      </property>
-      <property>
-            <name>bug_priority</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>select</type>
-            <field>bug_priority</field>
-            <caption>Prioriteet</caption>
-      </property>
-      <property>
-            <name>bug_severity</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>select</type>
-            <field>bug_severity</field>
-            <caption>T&amp;amp;ouml;sidus</caption>
-      </property>
-      <property>
-            <name>bug_class</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>select</type>
-            <field>bug_class</field>
-            <caption>Klass</caption>
-      </property>
-      <property>
-            <name>fileupload</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>releditor</type>
-            <reltype>RELTYPE_FILE</reltype>
-            <rel_id>first</rel_id>
-            <use_form>emb</use_form>
-            <field>fileupload</field>
-            <caption>Fail</caption>
-      </property>
-      <property>
-            <name>bug_component</name>
-            <group>general</group>
-            <table>aw_bugs</table>
-            <type>textbox</type>
-            <field>bug_component</field>
-            <caption>Komponent</caption>
       </property>
       <property>
             <name>bug_url</name>
@@ -127,34 +107,118 @@
             <caption>URL</caption>
       </property>
       <property>
+            <name>bug_content</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textarea</type>
+            <rows>23</rows>
+            <cols>80</cols>
+            <parent>bc</parent>
+            <field>bug_content</field>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>bug_content_comm</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>80</cols>
+            <parent>bc</parent>
+            <store>no</store>
+            <editonly>1</editonly>
+            <field>bug_content_comm</field>
+            <caption>Lisa kommentaar</caption>
+      </property>
+      <property>
+            <name>num_hrs_guess</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>num_hrs_guess</field>
+            <caption>Prognoositav tundide arv 	</caption>
+      </property>
+      <property>
+            <name>num_hrs_real</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>num_hrs_real</field>
+            <caption>Tegelik tundide arv</caption>
+      </property>
+      <property>
+            <name>num_hrs_to_cust</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>num_hrs_to_cust</field>
+            <caption>Tundide arv kliendile</caption>
+      </property>
+      <property>
+            <name>customer</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUSTOMER</reltype>
+            <store>connect</store>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>project</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROJECT</reltype>
+            <store>connect</store>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>project</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>bug_component</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>bug_component</field>
+            <caption>Komponent</caption>
+      </property>
+      <property>
             <name>bug_mail</name>
             <group>general</group>
             <table>aw_bugs</table>
             <type>textbox</type>
-            <size>60</size>
+            <parent>data</parent>
+            <captionside>top</captionside>
             <field>bug_mail</field>
             <caption>Bugmail CC</caption>
       </property>
       <property>
-            <name>monitors</name>
+            <name>fileupload</name>
             <group>general</group>
             <table>aw_bugs</table>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MONITOR</reltype>
-            <multiple>1</multiple>
-            <size>5</size>
-            <store>connect</store>
-            <field>monitors</field>
-            <caption>J&amp;amp;auml;lgijad</caption>
-      </property>
-      <property>
-            <name>comms</name>
-            <group>comments</group>
-            <table>aw_bugs</table>
-            <type>comments</type>
-            <store>no</store>
-            <field>comms</field>
-            <caption>Kommentaarid</caption>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>fileupload</field>
+            <caption>Fail</caption>
       </property>
       <classinfo>
             <syslog_type>ST_BUG</syslog_type>
@@ -163,11 +227,6 @@
             <no_status>1</no_status>
             <r2>yes</r2>
       </classinfo>
-      <groupinfo>
-            <comments>
-                  <caption>Kommentaarid</caption>
-            </comments>
-      </groupinfo>
       <tableinfo>
             <aw_bugs>
                   <index>aw_id</index>
@@ -199,6 +258,54 @@
                   <clid>CL_PROJECT</clid>
                   <caption>Projekt</caption>
             </PROJECT>
+            <BUGTYPE>
+                  <value>5</value>
+                  <clid>CL_META</clid>
+                  <caption>Bugi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            </BUGTYPE>
+            <COMMENT>
+                  <value>6</value>
+                  <clid>CL_BUG_COMMENT</clid>
+                  <caption>Kommentaar</caption>
+            </COMMENT>
       </reltypes>
+      <layout>
+            <settings>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <caption>M&amp;auml;&amp;auml;rangud</caption>
+            </settings>
+            <settings_col1>
+                  <type>vbox</type>
+                  <parent>settings</parent>
+                  <group>general</group>
+            </settings_col1>
+            <settings_col2>
+                  <type>vbox</type>
+                  <parent>settings</parent>
+                  <group>general</group>
+            </settings_col2>
+            <settings_col3>
+                  <type>vbox</type>
+                  <parent>settings</parent>
+                  <group>general</group>
+            </settings_col3>
+            <content>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>general</group>
+                  <caption>Sisu</caption>
+            </content>
+            <bc>
+                  <type>vbox</type>
+                  <parent>content</parent>
+                  <group>general</group>
+            </bc>
+            <data>
+                  <type>vbox</type>
+                  <parent>content</parent>
+                  <group>general</group>
+            </data>
+      </layout>
 </properties>
 

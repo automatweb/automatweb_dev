@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.46 2006/01/19 22:41:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.47 2006/03/16 15:15:44 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -12,7 +12,7 @@
 
 @default group=general
 
-	@property orderer type=select table=aw_crm_offer datatype=int
+	@property orderer type=relpicker table=aw_crm_offer datatype=int reltype=RELTYPE_ORDERER
 	@caption Tellija
 
 	@property project type=relpicker table=aw_crm_offer datatype=int reltype=RELTYPE_PROJECT

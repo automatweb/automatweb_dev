@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.30 2006/02/17 15:13:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.31 2006/03/16 15:15:43 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -686,6 +686,92 @@ class mail_message extends class_base
 			}
 		}
 
+		if ($arr["request"]["msgrid"])
+		{
+			$msgr = obj($arr["request"]["msgrid"]);
+			$bt = $msgr->get_first_obj_by_reltype("RELTYPE_BUGTRACKER");
+			if ($bt)
+			{
+				classload("core/icons");
+				/*$tb->add_button(array(
+					"name" => "add_bug",
+					"tooltip" => t("Lisa bugiks"),
+					"img" => icons::get_icon_url(CL_BUG),
+					"url" => $this->mk_my_orb(
+						"pick_bug_cat",
+						array(
+							"msgid" => $arr["request"]["msgid"],
+							"msgrid" => $arr["request"]["msgrid"]
+						)
+					)
+				));*/
+
+
+				$url = $this->mk_my_orb(
+					"fetch_structure_in_xml", 
+					array(
+						"id" => $bt->id()
+					),
+					CL_BUG_TRACKER
+				);
+				$html = "
+					<script language=javascript>
+					var bug_parents_picked = 0;
+					function load_bug_parents()
+					{
+						if (bug_parents_picked)
+						{
+							return;
+						}
+						bug_parents_picked = 1;
+						aw_do_xmlhttprequest('$url', handle_bug_parent_retrieve);
+					}
+
+					
+					function handle_bug_parent_retrieve()
+					{
+						response = req.responseXML.documentElement;
+						items = response.getElementsByTagName(\"item\");
+						list = document.getElementById(\"pick_bug_parent\");
+
+						aw_clear_list(list);
+						aw_add_list_el(list, '', '');						
+
+						for(i = 0; i < items.length; i++)
+						{
+							value = items[i].childNodes[0].firstChild.data;
+							text = items[i].childNodes[1].firstChild.data;
+							//value = value.replace(/a/g, ' ');
+							//text = text.replace(/a/g, '&nbsp;');
+							aw_add_list_el(list, value, text);						
+						}
+					}
+
+					function show_pop()
+					{
+						el = document.getElementById('bs_span');
+						el.style.visibility='visible';
+						load_bug_parents();
+					}
+
+					function do_create_bug_submit()
+					{
+						submit_changeform('create_bug_from_mail');
+					}
+					</script>
+				";
+				$html .= "<span id='bs_span' style='visibility: hidden;'><select onChange='do_create_bug_submit()' id=pick_bug_parent name=pick_bug_parent></select></span>";
+
+				$tb->add_button(array(
+					"name" => "add_bug",
+					"img" => icons::get_icon_url(CL_BUG),
+					"tooltip" => t("Lisa bugiks"),
+					"onClick" => "show_pop();return false;",
+				));
+				$tb->add_cdata($html);
+			}
+		}
+
 		$tb->add_separator();
 
 		$tb->add_menu_button(array(
@@ -1254,5 +1340,28 @@ class mail_message extends class_base
 		return $row;
 	}
 
+	/**
+		@attrib name=create_bug_from_mail
+	**/
+	function create_bug_from_mail($arr)
+	{
+		$msgdata = $this->fetch_message(array(
+			"mailbox" => $arr["mailbox"],
+			"msgrid" => $arr["msgrid"],
+			"msgid" => $arr["msgid"],
+		));
+
+		$o = obj();
+		$o->set_class_id(CL_BUG);
+		$o->set_parent($arr["pick_bug_parent"]);
+		$o->set_name($msgdata["subject"]);
+		$o->set_prop("bug_content", $msgdata["content"]);
+		$o->save();
+
+		$msgr = obj($arr["msgrid"]);
+		$bt = $msgr->get_first_obj_by_reltype("RELTYPE_BUGTRACKER");
+		$retu = html::get_change_url($bt->id(), array("group" => "bugs", "b_id" => $arr["pick_bug_parent"]));
+		return html::get_change_url($o->id(), array("return_url" => $retu));
+	}
 };
 ?>

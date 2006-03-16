@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.28 2006/03/14 14:27:33 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.28 2006/03/14 14:27:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.29 2006/03/16 15:15:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.29 2006/03/16 15:15:43 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -14,41 +14,102 @@ define("BUG_STATUS_CLOSED", 5);
 @default table=objects
 @default group=general
 
-@property object_type type=relpicker reltype=RELTYPE_OBJECT_TYPE table=objects field=meta method=serialize
-@caption Bugi objekti t&uuml;&uuml;p
+	@property object_type type=relpicker reltype=RELTYPE_OBJECT_TYPE table=objects field=meta method=serialize
+	@caption Bugi objekti t&uuml;&uuml;p
+
+	@property bug_folder type=relpicker reltype=RELTYPE_FOLDER table=objects field=meta method=serialize
+	@caption Bugide kataloog
+
+
+@default group=by_default,by_project,by_who,by_class,by_cust
+
+	@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who
+
+	@property cat type=hidden store=no
+
+	@layout bug type=hbox width=15%:85%
+		@property bug_tree type=treeview parent=bug no_caption=1
+		@property bug_list type=table parent=bug no_caption=1 group=bugs,archive,by_default,by_project,by_who,by_class,by_cust
+
+
+@default group=search
+
+	@property search_tb type=toolbar store=no no_caption=1
+	@caption Otsingu toolbar
+
+	@property s_name type=textbox store=no
+	@caption Lühikirjeldus
+
+	@property s_bug_status type=select store=no
+	@caption Staatus
+
+	@property s_bug_priority type=select store=no
+	@caption Prioriteet
+
+	@property s_who type=textbox store=no
+	@caption Kellele
+
+	@property s_bug_type type=textbox store=no
+	@caption T&uuml;&uuml;p
+
+	@property s_bug_class type=select store=no
+	@caption Klass
+
+	@property s_bug_severity type=select store=no
+	@caption T&ouml;sidus
+
+	@property s_monitors type=textbox store=no
+	@caption J&auml;lgijad
+
+	@property s_deadline type=date_select default=-1 store=no
+	@caption T&auml;htaeg
+
+	@property s_bug_url type=textbox size=100  store=no
+	@caption URL
+
+	@property s_bug_content type=textbox store=no
+	@caption Sisu
+
+	@property s_customer type=textbox store=no
+	@caption Klient
+
+	@property s_project type=textbox store=no
+	@caption Projekt
+
+	@property s_bug_component type=textbox store=no
+	@caption Komponent
+
+	@property s_bug_mail type=textbox store=no
+	@caption Bugmail CC
+	
+	@property s_find_parens type=checkbox ch_value=1 store=no
+	@caption Leia ka buge, millel on alambuge
+	
+	@property s_sbt type=submit store=no
+	@caption Otsi
+	
+	@property search_res type=table store=no no_caption=1
+	@caption Otsingu tulemused
+
+@default group=search_list
+
+	@property saved_searches type=table store=no no_caption=1
+	
+	@property delete_saved type=submit 
+	@caption Kustuta
 
 @groupinfo bugs caption="Bugid" submit=no
 	@groupinfo by_default caption="default" parent=bugs submit=no
 	@groupinfo by_project caption="Projektid" parent=bugs submit=no
 	@groupinfo by_who caption="Kellele" parent=bugs submit=no
+	@groupinfo by_class caption="Klasside puu" parent=bugs submit=no
+	@groupinfo by_cust caption="Kliendid" parent=bugs submit=no
 
-@default group=by_default,by_project,by_who
+@groupinfo search_t caption="Otsing" submit_method=get save=no
+	@groupinfo search caption="Otsing" submit_method=get save=no parent=search_t
+	@groupinfo search_list caption="Salvestatud otsingud" parent=search_t
 
-@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who
-
-@property cat type=hidden store=no
-
-@layout bug type=hbox width=15%:85%
-	@property bug_tree type=treeview parent=bug no_caption=1
-	@property bug_list type=table parent=bug no_caption=1 group=bugs,archive,by_default,by_project,by_who
-
-//search tab
-@groupinfo search caption="Otsing" submit_method=get submit=no
-
-@default group=search
-
-@property search_tb type=toolbar store=no no_caption=1
-@caption Otsingu toolbar
-
-@property search_form type=callback callback=callback_get_search_form submit_method=get store=no
-@caption Otsinguvorm
-
-@property search_res type=table store=no no_caption=1
-@caption Otsingu tulemused
-
-//archive tab
 @groupinfo archive caption="Arhiiv" submit=no
-@default group=archive
 
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
@@ -57,8 +118,12 @@ define("BUG_STATUS_CLOSED", 5);
 @reltype OBJECT_TYPE value=2 clid=CL_OBJECT_TYPE
 @caption Objekti t&uuml;&uuml;p
 
+@reltype FOLDER value=3 clid=CL_MENU
+@caption Kataloog
+
 */
 
+classload("applications/bug_o_matic_3000/bug");
 class bug_tracker extends class_base
 {
 	function bug_tracker()
@@ -89,9 +154,17 @@ class bug_tracker extends class_base
 			case "by_who":
 				aw_session_set("bug_tree_sort",array("name" => "who", "class" => CL_CRM_PERSON, "reltype" => RELTYPE_MONITOR));
 				break;
-			case "by_classes":
+			case "by_class":
 				aw_session_set("bug_tree_sort",array("name" => "classes"));
 				break;
+			case "by_cust":
+				aw_session_set("bug_tree_sort",array("name" => "cust"));
+				break;
+		}
+
+		if ($prop["name"][0] == "s" && $prop["name"][1] == "_")
+		{
+			$prop["value"] = $arr["request"][$prop["name"]];
 		}
 
 		switch($prop["name"])
@@ -113,6 +186,34 @@ class bug_tracker extends class_base
 				{
 					$prop["value"] = $arr["request"]["cat"];
 				}
+				break;
+
+			case "search_res":
+				$this->_search_res($arr);
+				break;
+
+			case "s_bug_priority":
+			case "s_bug_severity":
+				$i = get_instance(CL_BUG);
+				$prop["options"] = array("" => "") + $i->get_priority_list();
+				break;
+
+			case "s_bug_status":
+				$i = get_instance(CL_BUG);
+				$prop["options"] = array("" => "") + $i->get_status_list();
+				break;
+
+			case "s_bug_class":
+				$i = get_instance(CL_BUG);
+				$prop["options"] = array("" => "") + $i->get_class_list();
+				break;
+
+			case "search_tb":
+				$this->_search_tb($arr);
+				break;
+
+			case "saved_searches":
+				$this->_saved_searches($arr);
 				break;
 		};
 		return $retval;
@@ -143,35 +244,27 @@ class bug_tracker extends class_base
 					}
 				}
 				break;
+
+			case "saved_searches":
+				$ss = safe_array($arr["obj_inst"]->meta("saved_searches"));
+				foreach($ss as $idx => $search)
+				{
+					if (isset($arr["request"]["sel"][$idx]))
+					{
+						unset($ss[$idx]);
+					}
+				}
+				$arr["obj_inst"]->set_meta("saved_searches", $ss);
+				break;
 		}
 		return $retval;
 	}	
 
-	/*
-
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-	////////////////// property handlers
-	*/
-	
 	function _bug_toolbar($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 
-		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
+		$pt = !empty($arr["request"]["b_id"]) ? $arr["request"]["b_id"] : $this->get_bugs_parent($arr["obj_inst"]);
 
 		$tb->add_menu_button(array(
 			"name" => "add_bug",
@@ -180,19 +273,19 @@ class bug_tracker extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "add_bug",
-			"text" => t("Lisa bugi"),
+			"text" => t("Bugi"),
 			"link" => html::get_new_url(CL_BUG, $pt, array(
 				"return_url" => get_ru(),
 			))
 		));
 
-		$tb->add_menu_item(array(
+		/*$tb->add_menu_item(array(
 			"parent" => "add_bug",
-			"text" => t("Lisa kategooria"),
+			"text" => t("Kategooria"),
 			"link" => html::get_new_url(CL_MENU, $pt, array(
 				"return_url" => get_ru(),
 			))
-		));
+		));*/
 		$tb->add_button(array(
 			"name" => "save",
 			"tooltip" => t("Salvesta"),
@@ -206,6 +299,213 @@ class bug_tracker extends class_base
 			"action" => "delete",
 			"confirm" => t("Oled kindel, et soovid bugi kustutada?"),
 		));
+
+		$base = $this->mk_my_orb("cut_b");
+
+		$cut_js = "
+			url = '$base';
+			len = document.changeform.elements.length;
+			cnt = 0;
+			for(i = 0; i < len; i++)
+			{
+				if (document.changeform.elements[i].name.indexOf('sel') != -1 && document.changeform.elements[i].checked)
+				{
+					url += '&sel[]='+document.changeform.elements[i].value;
+					document.changeform.elements[i].checked=false;
+					cnt++;
+				}
+			}
+			if (cnt > 0)
+			{
+				aw_get_url_contents(url);
+				//window.location=url;
+				paste_button = document.getElementById('paste_button');
+				paste_button.style.visibility='visible';
+			}
+			else
+			{
+				paste_button = document.getElementById('paste_button');
+				paste_button.style.visibility='hidden';
+			}
+			return false;
+		";
+
+		$tb->add_button(array(
+			"name" => "cut",
+			"tooltip" => t("L&otilde;ika"),
+			"img" => "cut.gif",
+			"onClick" => $cut_js,
+			"action" => "cut_b",
+		));
+
+		$vis = "hidden;";
+		if (is_array($_SESSION["bt"]["cut_bugs"]) && count($_SESSION["bt"]["cut_bugs"]))
+		{
+			$vis = "visible;";
+		}
+		$tb->add_button(array(
+			"name" => "paste",
+			"tooltip" => t("Kleebi"),
+			"img" => "paste.gif",
+			"action" => "paste_b",
+			"surround_start" => "<span id='paste_button' style='visibility: $vis;'>",
+			"surround_end" => "</span>"
+		));
+
+		$tb->add_separator();
+
+		$tb->add_menu_button(array(
+			"name" => "assign",
+			"tooltip" => t("M&auml;&auml;ra"),
+			"img" => "class_38.gif"
+		));
+
+		// list all people to assign to
+		// list all my co-workers who are important to me, from crm
+		$dat = get_instance("applications/crm/crm_data");
+		$ppl = $dat->get_employee_picker();
+		foreach($ppl as $p_oid => $p_name)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "assign",
+				"text" => $p_name,
+				"link" => "#",
+				"onClick" => "document.changeform.assign_to.value=$p_oid;submit_changeform('assign_bugs')"
+			));
+		}
+	}
+
+	/**
+		@attrib name=get_node_cust all_args=1
+	**/
+	function get_node_cust($arr)
+	{	
+	    classload("core/icons");
+		$node_tree = get_instance("vcl/treeview");
+		$node_tree->start_tree (array (
+			"type" => TREE_DHTML,
+			"tree_id" => "bug_tree",
+			"branch" => 1,
+		));
+
+				$node_tree->add_item(($dat["parent"] && $dat["parent"] != $pt ? "fld_".$dat["parent"] : 0), array(
+					"id" => "fld_".$id,
+					"name" => $nm,
+					"iconurl" => icons::get_icon_url(CL_MENU),
+					"url" => html::get_change_url( $arr["inst_id"], array(
+						"id" => $this->self_id,
+						"group" => $arr["active_group"],
+						"p_fld_id" => $id,
+						"p_cls_id" => null
+					)),
+				));
+
+		die($node_tree->finalize_tree());
+	}
+
+	/**
+		@attrib name=get_node_class all_args=1
+	**/
+	function get_node_class($arr)
+	{	
+	    classload("core/icons");
+		$node_tree = get_instance("vcl/treeview");
+		$node_tree->start_tree (array (
+			"type" => TREE_DHTML,
+			"tree_id" => "bug_tree",
+			"branch" => 1,
+		));
+
+		$f = aw_ini_get("classfolders");
+		if (is_oid($arr["parent"]))
+		{
+			$pt = 0;
+		}
+		else
+		{
+			list(,$pt) = explode("_", $arr["parent"]);
+		}
+
+		foreach($f as $id => $dat)
+		{
+			if ($dat["parent"] == $pt || $f[$dat["parent"]]["parent"] == $pt)
+			{
+				$nm = $this->name_cut($dat["name"]);
+				if ($_GET["p_fld_id"] == $id)
+				{
+					$nm = "<b>".$nm."</b>";
+				}
+				$node_tree->add_item(($dat["parent"] && $dat["parent"] != $pt ? "fld_".$dat["parent"] : 0), array(
+					"id" => "fld_".$id,
+					"name" => $nm,
+					"iconurl" => icons::get_icon_url(CL_MENU),
+					"url" => html::get_change_url( $arr["inst_id"], array(
+						"id" => $this->self_id,
+						"group" => $arr["active_group"],
+						"p_fld_id" => $id,
+						"p_cls_id" => null
+					)),
+				));
+
+				$c = aw_ini_get("classes");
+				foreach($c as $clid => $dat)
+				{
+					$parents = explode(",", $dat["parents"]);
+					foreach($parents as $parent)
+					{
+						if ($parent == $id)
+						{
+							$nm = $this->name_cut($dat["name"]);
+							if ($_GET["p_cls_id"] == $clid)
+							{
+								$nm = "<b>".$nm."</b>";
+							}
+							$node_tree->add_item("fld_".$id, array(
+								"id" => "cls_".$clid,
+								"name" => $nm,
+								"iconurl" => icons::get_icon_url(CL_OBJECT_TYPE),
+								"url" => html::get_change_url( $arr["inst_id"], array(
+									"id" => $this->self_id,
+									"group" => $arr["active_group"],
+									"p_cls_id" => $clid,
+									"p_fld_id" => null
+								)),
+							));
+						}
+					}
+				}
+			}
+		}
+
+		$c = aw_ini_get("classes");
+		foreach($c as $clid => $dat)
+		{
+			$parents = explode(",", $dat["parents"]);
+			foreach($parents as $parent)
+			{
+				if ($parent == $pt)
+				{
+					$nm = $this->name_cut($dat["name"]);
+					if ($_GET["p_cls_id"] == $clid)
+					{
+						$nm = "<b>".$nm."</b>";
+					}
+					$node_tree->add_item(0, array(
+						"id" => "cls_".$clid,
+						"name" => $nm,
+						"iconurl" => icons::get_icon_url(CL_OBJECT_TYPE),
+						"url" => html::get_change_url( $arr["inst_id"], array(
+							"id" => $this->self_id,
+							"group" => $arr["active_group"],
+							"p_cls_id" => $clid,
+							"p_fld_id" => null
+						)),
+					));
+				}
+			}
+		}
+
+		die($node_tree->finalize_tree());
 	}
 
 	/** to get subtree for who & projects view
@@ -250,7 +550,6 @@ class bug_tracker extends class_base
 						"p_id" => $obj->id(),
 					)),
 				));
-
 			}
 			foreach($bugs as $key => $bug)
 			{
@@ -339,7 +638,7 @@ class bug_tracker extends class_base
 			}
 			$node_tree->add_item(0 ,array(
 				"id" => $obj_id,
-				"name" => $nm,
+				"name" => $nm."  (".html::get_change_url($obj_id, array("return_url" => get_ru()), t("<span style='font-size: 8px;'>Muuda</span>")).")",
 				"iconurl" => icons::get_icon_url($object->class_id()),
 				"url" => html::get_change_url($arr["inst_id"], array(
 					"group" => $arr["active_group"],
@@ -351,7 +650,7 @@ class bug_tracker extends class_base
 			{
 				$node_tree->add_item( $obj_id, array(
 					"id" => $sub_id,
-					"name" => $sub_obj->name(),
+					"name" => $sub_obj->name()." (".html::get_change_url($sub_id, array("return_url" => get_ru()), t("<span style='font-size: 8px;'>Muuda</span>")).")",
 				));
 			}
 		}
@@ -363,14 +662,52 @@ class bug_tracker extends class_base
 	{
 		classload("core/icons");
 		$this->tree = get_instance("vcl/treeview");
-		$this->active_group = aw_global_get("request");
-		$this->active_group = $this->active_group["group"];
+		$this->active_group = $arr["request"]["group"];
 		$this->sort_type = aw_global_get("bug_tree_sort");	
 		$this->self_id = $arr["obj_inst"]->id();
 		$this->tree_root_name = "Bug-Tracker";
-		($this->sort_type["name"] == "project" || $this->sort_type["name"] == "who")?$orb_function = "get_node_other":$orb_function = "get_node";
+		switch($this->sort_type["name"])
+		{
+			case "classes":
+				$orb_function = "get_node_class";
+				break;
 
-		$root_name = array("by_default" => "Tavaline", "by_project"=> "Projektid", "by_who" => "Teostajad");
+			case "cust":
+				$i = get_instance(CL_CRM_COMPANY);
+				$i->active_node = (int)$arr['request']['category'];
+
+				$u = get_instance(CL_USER);
+				$co = obj($u->get_current_company());
+	
+				$node_id = 0;
+				$i->generate_tree(array(
+					'tree_inst' => &$arr["prop"]["vcl_inst"],
+					'obj_inst' => $co,
+					'node_id' => &$node_id,
+					'conn_type' => 'RELTYPE_CATEGORY',
+					'attrib' => 'category',
+					'leafs' => 'true',
+					'style' => 'nodetextbuttonlike',
+				));
+				return;
+
+			case "project":
+			case "who":
+				$orb_function = "get_node_other";
+				break;
+
+			default:
+				$orb_function = "get_node";
+				break;
+		}
+
+		$root_name = array(
+			"by_default" => t("Tavaline"), 
+			"by_project"=> t("Projektid"), 
+			"by_who" => t("Teostajad"),
+			"by_class" => t("Klassid"),
+			"by_cust" => t("Kliendid"),
+		);
 
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
@@ -378,12 +715,17 @@ class bug_tracker extends class_base
 			"tree_id" => "bug_tree",
 			"persist_state" => 1,
 			"root_name" => $root_name[($this->active_group == "bugs")?"by_default":$this->active_group],
+			"root_url" => aw_url_change_var("b_id", null),
 			"get_branch_func" => $this->mk_my_orb($orb_function, array(
 				"type" => $this->sort_type["name"], 
 				"reltype" => $this->sort_type["reltype"], 
 				"clid"=> $this->sort_type["class"], 
 				"inst_id" => $this->self_id,
 				"active_group" => $this->active_group,
+				"b_id" => $arr["request"]["b_id"],
+				"p_fld_id" => $arr["request"]["p_fld_id"],
+				"p_cls_id" => $arr["request"]["p_cls_id"],
+				"p_cust_id" => $arr["request"]["p_cust_id"],
 				"parent" => " ",
 			)),
 		));
@@ -391,7 +733,21 @@ class bug_tracker extends class_base
 		if($this->sort_type["name"] == "parent")
 		{
 			$this->generate_bug_tree(array(
-				"parent" => $this->self_id,
+				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
+			));
+		}
+	
+		if($this->sort_type["name"] == "classes")
+		{
+			$this->generate_class_bug_tree(array(
+				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
+			));
+		}
+
+		if($this->sort_type["name"] == "cust")
+		{
+			$this->generate_cust_bug_tree(array(
+				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
 			));
 		}
 	
@@ -405,6 +761,61 @@ class bug_tracker extends class_base
 		$arr["prop"]["value"] = $this->tree->finalize_tree();
 		$arr["prop"]["type"] = "text";
 
+	}
+
+	function generate_cust_bug_tree($arr)
+	{
+		$this->tree->add_item(0,array(
+			"id" => $this->self_id,
+			"name" => $this->tree_root_name,
+		));		
+
+		$i = get_instance(CL_CRM_COMPANY);
+		$i->active_node = (int)$arr['request']['category'];
+
+		$i->generate_tree(array(
+			'tree_inst' => &$this->tree,
+			'obj_inst' => $arr['obj_inst'],
+			'node_id' => &$node_id,
+			'conn_type' => 'RELTYPE_CATEGORY',
+			'skip' => array(CL_CRM_COMPANY),
+			'attrib' => 'category',
+			'leafs' => 'false',
+			'style' => 'nodetextbuttonlike',
+			"edit_mode" => 1
+		));
+		
+	/*	$f = aw_ini_get("classfolders");
+		foreach($f as $id => $dat)
+		{
+			if (!$dat["parent"])
+			{
+				$this->tree->add_item($arr["parent"],array(
+					"id" => "fld_".$id,
+					"name" => $dat["name"],
+				));
+			}
+		}*/
+	}
+
+	function generate_class_bug_tree($arr)
+	{
+		$this->tree->add_item(0,array(
+			"id" => $this->self_id,
+			"name" => $this->tree_root_name,
+		));		
+		
+		$f = aw_ini_get("classfolders");
+		foreach($f as $id => $dat)
+		{
+			if (!$dat["parent"])
+			{
+				$this->tree->add_item($arr["parent"],array(
+					"id" => "fld_".$id,
+					"name" => $dat["name"],
+				));
+			}
+		}
 	}
 
 	function gen_tree_other($arr)
@@ -438,16 +849,27 @@ class bug_tracker extends class_base
 		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
 		$objects = $ol->arr();
 
+		$nm = $this->tree_root_name." (".$ol->count().")";
+		if (!$_GET["b_id"])
+		{
+			$nm = "<b>".$nm."</b>";
+		}
 		$this->tree->add_item(0,array(
 				"id" => $this->self_id,
-				"name" => $this->tree_root_name." (".$ol->count().")",
+				"name" => $nm,
+				"url" => aw_url_change_var("b_id", null)
 		));
 		
 		foreach($objects as $obj_id => $object)
 		{
+			$nm = $object->name();
+			if ($_GET["b_id"] == $obj_id)
+			{
+				$nm = "<b>".$nm."</b>";
+			}
 			$this->tree->add_item($arr["parent"] , array(
 				"id" => $obj_id,
-				"name" => $object->name(),
+				"name" => $nm." ".html::get_change_url($obj_id, array("return_url" => get_ru()), t("Muuda")),
 			));
 		}
 	}
@@ -472,6 +894,10 @@ class bug_tracker extends class_base
 	
 	function show_priority($_param)
 	{
+		if ($_param["obj"]->class_id() == CL_MENU)
+		{
+			return "";
+		}
 		$return = html::textbox(array(
 			"name" => "bug_priority[".$_param["oid"]."]",
 			"size" => 2,
@@ -482,6 +908,10 @@ class bug_tracker extends class_base
 
 	function show_severity($_param)
 	{
+		if ($_param["obj"]->class_id() == CL_MENU)
+		{
+			return "";
+		}
 		$return = html::textbox(array(
 			"name" => "bug_severity[".$_param["oid"]."]",
 			"size" => 2,
@@ -492,6 +922,10 @@ class bug_tracker extends class_base
 
 	function show_status($_val)
 	{
+		if ($_val["obj"]->class_id() == CL_MENU)
+		{
+			return "";
+		}
 		$values = array(
 			1 => t("Lahtine"),
 			2 => t("Tegemisel"),
@@ -502,20 +936,31 @@ class bug_tracker extends class_base
 			7 => t("Kordamatu"),
 			8 => t("Parandamatu"),
 		);
-		return $values[$_val];
+		return $values[$_val["bug_status"]];
 	}
 	
 	function comment_callback($arr)
 	{
+		if ($arr["obj"]->class_id() == CL_MENU)
+		{
+			return "";
+		}
 		$ol = new object_list(array(
 			"parent" => $arr["oid"],
-			"class_id" => CL_COMMENT,
+			"class_id" => CL_BUG_COMMENT,
+			"lang_id" => array(),
+			"site_id" => array()
 		));
 		return html::get_change_url($arr["oid"] , array("group" => "comments" , "return_url" => get_ru()), $ol->count());
 	}
 
 	function _init_bug_list_tbl(&$t)
 	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t(""),
+		));
+
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
@@ -527,6 +972,7 @@ class bug_tracker extends class_base
 			"caption" => t("Staatus"),
 			"sortable" => 1,
 			"callback" => array(&$this, "show_status"),
+			"callb_pass_row" => 1,
 			"filter" => array(
 				t("1"),
 				t("2"),
@@ -633,102 +1079,87 @@ class bug_tracker extends class_base
 			// bugid tab
 			else
 			{
-				$ol = new object_list(array(
+				$filt = array(
 					"parent" => $pt,
-					"class_id" => CL_BUG,
+					"class_id" => array(CL_BUG,CL_MENU),
 					"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
-				));
+				);
 
 				if(strlen($arr["request"]["p_id"]))
 				{
-					$ol->filter(array(
-						$this->sort_type["name"] => $arr["request"]["p_id"],
-						"class_id" => CL_BUG,
-						"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
-					));
+					$filt[$this->sort_type["name"]] = $arr["request"]["p_id"];
 				}
 				elseif(strlen($arr["request"]["b_id"]))
 				{
-					$ol->filter(array(
-						"parent" => $arr["request"]["b_id"],
-						"class_id" => CL_BUG,
-						"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
-					));
+					$filt["parent"] = $arr["request"]["b_id"];
 				}
+				else
+				if ($arr["request"]["p_fld_id"])	// class folder
+				{
+					// list classes for that folder
+					$clss = aw_ini_get("classes");
+					$c = array();
+					foreach($clss as $clid => $dat)
+					{
+						foreach(explode(",", $dat["parents"]) as $parent)
+						{
+							if ($parent == $arr["request"]["p_fld_id"])
+							{
+								$c[] = $clid;
+							}
+						}
+					}
+					$filt["bug_class"] = $c;
+				}
+				else
+				if ($arr["request"]["p_cls_id"])	// class 
+				{
+					$filt["bug_class"] = $arr["request"]["p_cls_id"];
+				}
+
+				$ol = new object_list($filt);
 			}
 		}
 		else
 		{
 			$ol = new object_list();
 		}
-		$t->data_from_ol($ol, array(
-			"change_col" => "name"
-		));
-		$t->sort_by(array(
-			"field" => "bug_priority",
-			"sorder" => "desc",
-		));
+
+		$this->populate_bug_list_table_from_list($t, $ol);		
 	}
 
-	function callback_get_search_form($arr)
+	function populate_bug_list_table_from_list(&$t, $ol)
 	{
-		$cfgu = get_instance("cfg/cfgutils");
-		$props = $cfgu->load_properties(array(
-			"clid" => CL_BUG,
-		));
-		unset(
-			$props["fileupload"], 
-			$props["bug_url"],
-			$props["comms"],
-			$props["bug_mail"],
-			$props["monitors"]
-		);
-		$props["bug_type"]["type"] = "textbox";
-
-		$props["bug_status"]["size"] = 5;
-		$props["bug_status"]["multiple"] = 1;
-		$props["bug_status"]["options"] = array(
-			1 => t("Lahtine"),
-			2 => t("Tegemisel"),
-			3 => t("Valmis"),
-			4 => t("Testitud"),
-			5 => t("Suletud"),
-			6 => t("Vale teade"),
-			7 => t("Kordamatu"),
-			8 => t("Parandamatu"),
-		);
-
-		$props["customer"]["type"] = "textbox";
-
-		$props["project"]["type"] = "textbox";
-
-		//siia tuleb deadline
-
-		$props["who"]["type"] = "textbox";
-
-		$props["bug_priority"]["size"] = 5;
-		$props["bug_priority"]["multiple"] = 1;
-		foreach(range(5, 1) as $r)
+		classload("core/icons");
+		$u = get_instance(CL_USER);
+		$us = get_instance("users");
+		$bug_i = get_instance(CL_BUG);
+		foreach($ol->arr() as $bug)
 		{
-			$props["bug_priority"]["options"][$r] = $r;
+			$crea = $bug->createdby();
+			$p = obj($u->get_person_for_user(obj($us->get_oid_for_uid($crea))));
+
+			$t->define_data(array(
+				"name" => html::obj_change_url($bug)." (".html::href(array(
+					"url" => aw_url_change_var("b_id", $bug->id()),
+					"caption" => t("Ava")
+				)).")",
+				"bug_status" => $bug->prop("bug_status"),
+				"who" => $bug->prop_str("who"),
+				"bug_priority" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_priority"),
+				"bug_severity" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_severity"),
+				"createdby" => $p->name(),
+				"created" => $bug->created(),
+				"id" => $bug->id(),
+				"oid" => $bug->id(),
+				"sort_priority" => $bug_i->get_sort_priority($bug),
+				"icon" => icons::get_icon($bug),
+				"obj" => $bug
+			));
 		}
-
-		$props["bug_severity"]["size"] = 5;
-		$props["bug_severity"]["multiple"] = 1;
-		foreach(range(5, 1) as $r)
-		{
-			$props["bug_severity"]["options"][$r] = $r;
-		}
-
-		$props["bug_class"]["size"] = 10;
-		$props["bug_class"]["multiple"] = 1;
-		$class_list = new aw_array($cfgu->get_classes_with_properties());
-		$cp = get_class_picker(array("field" => "def"));
-		foreach($class_list->get() as $key => $val)
-		{
-			$props["bug_class"]["options"][$key] = $val;
-		};
-		return $props;
+		$t->set_numeric_field("sort_priority");
+		$t->set_default_sortby("sort_priority");
+		$t->set_default_sorder("desc");
 	}
 
 	/**
@@ -745,7 +1176,296 @@ class bug_tracker extends class_base
 				$obj->delete();
 			}
 		}
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "cat" => $arr["cat"], "group" => $arr["group"]), $arr["class"]);
+		return $arr["post_ru"];
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["assign_to"] = 0;
+		$arr["b_id"] = $_GET["b_id"];
+		$arr["save_search_name"] = "";
+		$arr["post_ru"] = aw_url_change_var("post_ru", null, post_ru());
+	}
+
+	/**
+		@attrib name=assign_bugs 
+	**/
+	function assign_bugs($arr)
+	{
+		if ($arr["assign_to"])
+		{
+			object_list::iterate_list($arr["sel"],"set_prop", "who", $arr["assign_to"]);
+		}
+		return $arr["post_ru"];
+	}
+
+	/** 
+		@attrib name=cut_b 
+		@param sel optional
+		@param post_ru optional
+	**/
+	function cut_b($arr)
+	{
+		$_SESSION["bt"]["cut_bugs"] = array();
+		foreach(safe_array($arr["sel"]) as $bug_id)
+		{
+			$_SESSION["bt"]["cut_bugs"][$bug_id] = $bug_id;
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=paste_b
+	**/
+	function paste_b($arr)
+	{
+		object_list::iterate_list($_SESSION["bt"]["cut_bugs"], "set_parent", $arr["b_id"] ? $arr["b_id"] : $arr["id"]);
+		$_SESSION["bt"]["cut_bugs"] = null;
+		return $arr["post_ru"];
+	}
+
+	function get_bugs_parent($tracker)
+	{
+		if ($this->can("view", $ret = $tracker->prop("bug_folder")))
+		{
+			return $ret;
+		}
+		return $tracker->id();
+	}
+
+	/**
+		@attrib name=fetch_structure_in_xml
+		@param id required type=int acl=view
+	**/
+	function fetch_structure_in_xml($arr)
+	{
+		header("Content-type: text/xml");
+		$xml = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\" standalone=\"yes\"?>\n<response>\n";
+
+		$bt = obj($arr["id"]);	
+		$pt = $this->get_bugs_parent($bt);
+
+		$ot = new object_tree(array(
+			"class_id" => array(CL_MENU,CL_BUG),
+			"parent" => $pt
+		));
+
+		$this->_req_get_struct_xml($pt, $ot, $xml);
+
+		$xml .= "</response>";
+		die($xml);
+	}
+
+	function _req_get_struct_xml($parent, $ot, &$xml)
+	{
+		$this->_req_get_struct_xml_level++;
+		foreach($ot->level($parent) as $obj)
+		{
+			$xml .= "<item><value>".$obj->id()."</value><text>".str_repeat("__", $this->_req_get_struct_xml_level).$obj->name()."</text></item>";
+			$this->_req_get_struct_xml($obj->id(), $ot, $xml);
+		}
+		$this->_req_get_struct_xml_level--;
+	}
+
+	function _search_res($arr)
+	{
+		if (!$arr["request"]["MAX_FILE_SIZE"])
+		{
+			return;
+		}
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_bug_list_tbl($t);
+
+		$search_filt = $this->_get_bug_search_filt($arr["request"]);
+		$ol = new object_list($search_filt);
+
+		if ($arr["request"]["s_find_parens"] != 1)
+		{
+			$bugs = $ol->arr();
+
+			// now, filter out all bugs that have sub-bugs
+			$sub_bugs = new object_list(array(
+				"class_id" => CL_BUG,
+				"parent" => $ol->ids()
+			));
+
+			foreach($sub_bugs->arr() as $sub_bug)
+			{
+				unset($bugs[$sub_bug->parent()]);
+			}
+			$ol = new object_list();
+			$ol->add(array_keys($bugs));
+		}
+		$this->populate_bug_list_table_from_list($t, $ol);
+	}
+
+	function _get_bug_search_filt($r)
+	{
+		$res = array(
+			"class_id" => CL_BUG,
+			"lang_id" => array(),
+			"site_id" => array()
+		);
+
+		$txtf = array("name", "bug_url", "bug_content", "bug_component", "bug_mail");
+		foreach($txtf as $field)
+		{
+			if (trim($r["s_".$field]) != "")
+			{
+				$res[$field] = $this->_get_string_filt($r["s_".$field]);
+			}
+		}
+
+		$sf = array("bug_status", "bug_class", "bug_severity", "bug_priority");
+		foreach($sf as $field)
+		{
+			if (trim($r["s_".$field]) != "")
+			{
+				$res[$field] = $r["s_".$field];
+			}
+		}
+
+		$cplx = array("who", "bug_type", "monitors", "customer", "project");
+		foreach($cplx as $field)
+		{
+			if (trim($r["s_".$field]) != "")
+			{
+				$res["CL_BUG.".$field.".name"] = $this->_get_string_filt($r["s_".$field]);
+			}
+		}
+	
+		if (trim($r["s_bug_content"]) != "")
+		{
+			$res["CL_BUG.RELTYPE_COMMENT.name"] = $this->_get_string_filt($r["s_bug_content"]);
+		}
+		
+		return $res;
+	}
+
+	function _get_string_filt($s)
+	{
+		$this->dequote(&$s);
+		// separated by commas delimited by "
+		$p = array();
+		$len = strlen($s);
+		for ($i = 0; $i < $len; $i++)
+		{
+			if ($s[$i] == "\"" && $in_q)
+			{
+				// end of quoted string
+				$p[] = $cur_str;
+				$in_q = false;
+			}
+			else
+			if ($s[$i] == "\"" && !$in_q)
+			{
+				$cur_str = "";
+				$in_q = true;
+			}
+			else
+			if ($s[$i] == "," && !$in_q)
+			{
+				$p[] = $cur_str;
+				$cur_str = "";
+			}
+			else
+			{
+				$cur_str .= $s[$i];
+			}
+		}
+		$p[] = $cur_str;
+		$p = array_unique($p);
+
+		return map("%%%s%%", $p);
+	}
+
+	function _search_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		// save search
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta otsing"),
+			"action" => "save_search",
+			"onClick" => "document.changeform.save_search_name.value=prompt('Sisesta nimi');",
+			"img" => "save.gif",
+		));
+
+		// pick saved searches
+		$s = safe_array($arr["obj_inst"]->meta("saved_searches"));
+		$ss = array("" => "");
+		foreach($s as $idx => $search)
+		{
+			$opr = $search["params"];
+			$opr["id"] = $arr["obj_inst"]->id();
+			$opr["group"] = "search";
+			$opr["MAX_FILE_SIZE"] = 100000000;
+			$url = $this->mk_my_orb("change", $opr);
+			$ss[$url] = $search["name"];
+		}
+		$html = html::select(array(
+			"options" => $ss,
+			"onchange" => "el=document.changeform.go_to_saved_search;window.location=el.options[el.selectedIndex].value",
+			"name" => "go_to_saved_search",
+			"value" => get_ru()
+		));
+		$tb->add_cdata($html);
+	}	
+
+	/**
+		@attrib name=save_search all_args=1
+	**/
+	function save_search($arr)
+	{
+		$search_params = array();
+		foreach($arr as $k => $v)
+		{
+			if ($k[0] == "s" && $k[1] == "_")
+			{
+				$search_params[$k] = $v;
+			}
+		}
+
+		$o = obj($arr["id"]);
+		$ss = safe_array($o->meta("saved_searches"));
+		$ss[count($ss)+1] = array(
+			"name" => $arr["save_search_name"],
+			"params" => $search_params
+		);
+		$o->set_meta("saved_searches", $ss);
+		$o->save();
+
+		return $arr["post_ru"];
+	}
+
+	function _init_saved_searches(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "idx"
+		));
+	}
+
+	function _saved_searches($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_saved_searches(&$t);
+
+		$ss = safe_array($arr["obj_inst"]->meta("saved_searches"));
+		foreach($ss as $idx => $search)
+		{
+			$t->define_data(array(
+				"name" => $search["name"],
+				"idx" => $idx
+			));
+		}
 	}
 }
 ?>

@@ -303,13 +303,16 @@ class crm_company_docs_impl extends class_base
 		{
 			$ol = new object_list(array(
 				"parent" => is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $fld->id(),
-				"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER)
+				"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER),
 			));
 		}
 
 		$t->data_from_ol($ol, array(
 			"change_col" => "name"
 		));
+
+		$t->set_default_sortby("created");
+		$t->set_default_sorder("desc");
 	}
 
 	function _get_docs_s_type($arr)

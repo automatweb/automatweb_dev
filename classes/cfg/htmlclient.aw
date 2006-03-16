@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.141 2006/03/13 13:42:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.142 2006/03/16 15:15:42 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1149,7 +1149,6 @@ class htmlclient extends aw_template
 	{
 		$type = isset($item["type"]) ? $item["type"] : "";
 		$item["html"] = "";
-
 		if ($type == "iframe")
 		{
 			$src = $item["src"];

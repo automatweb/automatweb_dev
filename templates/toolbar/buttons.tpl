@@ -10,14 +10,14 @@
 <!-- END SUB: start -->
 
 <!-- SUB: button -->
- 	<td nowrap class="aw04toolbarbutton" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"></a></td>
+ 	<td nowrap class="aw04toolbarbutton" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}">{VAR:surround_start}<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" border="0"></a>{VAR:surround_end}</td>
 <!-- END SUB: button -->
 
 <!-- SUB: button_disabled -->
   	<td nowrap class="aw04toolbarbutton">
 		<table border="0" cellpadding="0" cellspacing="0">
 			<tr>
-				<td><span style="position: relative; width: 100%; height: 100%;"><img src="{VAR:imgbase}/{VAR:img}" border="0"><span style="position: absolute;  top: 0px; left: 0px; background: transparent url('{VAR:imgbase}/disabled_background.gif'); width: 100%; height: 100%; font-size: 2px;">&nbsp;</span></span></td>
+				<td><span style="position: relative; width: 100%; height: 100%;"><img src="{VAR:img_url}" border="0"><span style="position: absolute;  top: 0px; left: 0px; background: transparent url('{VAR:imgbase}/disabled_background.gif'); width: 100%; height: 100%; font-size: 2px;">&nbsp;</span></span></td>
 			</tr>
 		</table>
 	</td>
@@ -28,7 +28,7 @@
 		<table cellpadding=0 cellspacing=0>
 			<tr>
 				<td valign='bottom'>
-				<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"></a>
+				<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:img_url}" border="0"></a>
 				</td>
 				<td valign='bottom'>
 					<a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>

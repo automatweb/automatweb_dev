@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.17 2006/01/30 15:35:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.18 2006/03/16 15:15:43 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -119,6 +119,9 @@ comment Minutites
 
 @reltype FROMNAME value=8 clid=CL_ML_MEMBER
 @caption Saatja
+                        
+@reltype BUGTRACKER value=9 clid=CL_BUG_TRACKER
+@caption Bugtrack
                         
 */
 

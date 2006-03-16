@@ -195,6 +195,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$_co_reltype = $prop["reltype"];
 						$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
 
+						if ($_co_reltype == "")
+						{
+							error::raise(array(
+								"id" => "ERR_NO_RT",
+								"msg" => sprintf(t("ds_mysql::read_properties(): no reltype for prop %s (%s)"), $prop["name"], $prop["reltype"])
+							));
+						}
+
 						$conn_prop_fetch[$prop["name"]] = $_co_reltype;
 					}
 				}
@@ -247,7 +255,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (count($conn_prop_fetch))
 		{
-			$this->db_query("
+			$q = "
 				SELECT 
 					target,
 					reltype
@@ -258,7 +266,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					source = '".$object_id."' AND 
 					reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
 					objects.status != 0
-			");
+			";
+			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$prop_name = array_search($row["reltype"], $conn_prop_fetch);
@@ -266,7 +275,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					error::raise(array(
 						"id" => "ERR_NO_PROP",
-						"msg" => sprintf(t("ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch!"), $row["reltype"])
+						"msg" => sprintf(t("ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch! q = %s"), $row["reltype"], $q)
 					));
 				}
 
@@ -1886,6 +1895,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						case "relmanager":
 						case "classificator":
 						case "popup_search":
+						case "crm_participant_search":
 							$new_clid = false;
 
 							$relt_s = $cur_prop["reltype"];

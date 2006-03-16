@@ -276,12 +276,27 @@ function aw_get_url_contents(url)
 	return req.responseText;
 }
 
+var aw_xmlhttpr_cb;
+
+function aw_handle_xml_data()
+{
+	if (req.readyState == 4)
+	{
+		// only if "OK"
+		if (req.status == 200) 
+		{
+			aw_xmlhttpr_cb();
+		}
+	}
+}
+
 function aw_do_xmlhttprequest(url, finish_callb)
 {
+	aw_xmlhttpr_cb = finish_callb;
 	if (window.XMLHttpRequest) 
 	{
         req = new XMLHttpRequest();
-        req.onreadystatechange = finish_callb;
+        req.onreadystatechange = aw_handle_xml_data;
         req.open("GET", url, true);
         req.send(null);
 	} 
@@ -291,12 +306,13 @@ function aw_do_xmlhttprequest(url, finish_callb)
 		req = new ActiveXObject("Microsoft.XMLHTTP");
 		if (req) 
 		{
-            req.onreadystatechange = finish_callb;
+            req.onreadystatechange = aw_handle_xml_data;
 			req.open("GET", url, true);
 			req.send();
 		}
 	}
 }
+
 
 function aw_clear_list(list)
 {

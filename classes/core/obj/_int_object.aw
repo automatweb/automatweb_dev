@@ -1094,6 +1094,7 @@ class _int_object
 			case "relpicker": 
 			case "classificator":
 			case "popup_search":
+			case "crm_participant_search":
 			case "releditor":
 				if ($pd["store"] == "connect")
 				{

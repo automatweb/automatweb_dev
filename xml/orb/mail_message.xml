@@ -82,5 +82,12 @@
 			</function>
 		</action>
 
+		<action name="create_bug_from_mail">
+			<function name="create_bug_from_mail">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

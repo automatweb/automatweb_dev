@@ -418,6 +418,33 @@ class planner_model extends core
 				}
 			}
 		}
+
+		// list bugs as well
+		$owner = $obj->get_first_obj_by_reltype("RELTYPE_CALENDAR_OWNERSHIP");
+		if ($owner)
+		{
+			$u = $owner->instance();
+			$owner = $u->get_person_for_user($owner);
+			obj_set_opt("no_cache", 1);
+			$GLOBALS["DUKE"] = 1;
+			$ol = new object_list(array(
+				"class_id" => CL_BUG,
+				"who" => $owner,
+				"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, 300),
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			obj_set_opt("no_cache", 0);
+			$GLOBALS["DUKE"] = 0;
+			foreach($ol->arr() as $bug)
+			{
+				$rv[$bug->id()] = array(
+					"id" => $bug->id(),
+					"start" => $bug->prop("deadline") - ($bug->prop("num_hrs_guess") * 3600),
+					"end" => $bug->prop("deadline"),
+				);
+			}
+		}
 		return $rv;
 	}
 

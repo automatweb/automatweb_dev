@@ -189,5 +189,18 @@ class crm_data extends class_base
 
 		return $c->prop("to");
 	}
+
+
+	//////////// people
+	function get_employee_picker($co = NULL, $add_empty = false, $important_only = true)
+	{
+		if ($co === NULL)
+		{
+			$u = get_instance(CL_USER);
+			$co = obj($u->get_current_company());
+		}
+		$i = get_instance(CL_CRM_COMPANY);
+		return $i->get_employee_picker($co, $add_empty, $important_only);
+	}
 }
 ?>

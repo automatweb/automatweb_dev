@@ -187,7 +187,6 @@
                   <num_3>password</num_3>
                   <num_4>use_ssl</num_4>
             </props>
-            <store>no</store>
             <caption>IMAP</caption>
       </property>
       <property>
@@ -219,7 +218,6 @@
                   <num_2>target_folder</num_2>
                   <num_3>on_server</num_3>
             </props>
-            <store>no</store>
             <caption>Reeglid</caption>
       </property>
       <classinfo>
@@ -304,6 +302,11 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>Saatja</caption>
             </FROMNAME>
+            <BUGTRACKER>
+                  <value>9</value>
+                  <clid>CL_BUG_TRACKER</clid>
+                  <caption>Bugtrack</caption>
+            </BUGTRACKER>
       </reltypes>
       <layout>
             <message_view>
