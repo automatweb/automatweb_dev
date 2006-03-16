@@ -19,68 +19,120 @@ class ml_mail_gen extends run_in_background
 		$this->init();
 	}
 	
+	function bg_run_get_log_entry($o)
+	{
+		;
+	}
+	
 	function bg_checkpoint($o)
 	{
 		$o->set_meta("checkpointed_var", $this->state);
 	}
 	
 	function bg_run_step($o)
-	{
+	{//if (rand(1,20) < 5) {arr("die....!"); die(); }
 		// process step
-		$this->preprocess_messages($o);
-	
-		//	if ($this->should_run_more_steps())
-		//	{
-		//	return BG_OK;
-		//	}
-		return BG_DONE;
+		if(!(is_array($this->mails_to_gen)))
+		{
+			$this->make_send_list($o);
+		}
+		$arr = $o->meta("mail_data");
+		extract($arr);
+		if(!(sizeof($this->mails_to_gen) > 0))
+		{
+			$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
+			$this->db_query($q);
+			return BG_DONE;
+		}
+		$tmp = array_shift($this->mails_to_gen);
+		if (!isset($this->d))
+		{
+			$this->d = get_instance(CL_MESSAGE);
+		};
+		$ml_list_inst = get_instance(CL_ML_LIST);
+		$list_obj = new object($arr["list_id"]);
+		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
+
+		$this->preprocess_one_message(array(
+			"name" => $tmp["name"],
+			"mail" => $tmp["mail"],
+			"mail_id" => $arr["mail_id"],
+			"list_id" => $arr["list_id"],
+			"member_id" => $tmp["member_id"],
+			"msg" => $msg,
+			"qid" => $arr["qid"],
+		));
+		return BG_OK;
 	}
 
-	function bg_run_continue($o)
+	function make_send_list($o)
 	{
-		// restore variables from stored checkpoint
-		$this->state = $o->meta("checkpointed_var");
-	}
-	
-	function preprocess_messages($o)
-	{
+		$this->mails_to_gen = array();
 		$arr = $o->meta("mail_data");
 		if (!isset($this->d))
 		{
 			$this->d = get_instance(CL_MESSAGE);
 		};
-
-		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
-
-		if($arr["mfrom"])
-		{
-			$msg["mfrom"] = $arr["mfrom"];
-		}
 		$ml_list_inst = get_instance(CL_ML_LIST);
 		$list_obj = new object($arr["list_id"]);
-		$member_list = $ml_list_inst->get_members_ol($msg);
+		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
+		$members = $ml_list_inst->get_members_ol($msg);
+		$member_list = $members["objects"];
+		$from_file = $members["from_file"];
 		set_time_limit(0);
-//		$ret = "";
-		$sents = array();
+	print 'already generated mails:';arr($this->made_mails);
 		foreach($member_list->arr() as $member)
 		{
-			// skip used addresses
-			if(in_array($member->prop("mail"), $sents))
+		//arr($member->prop("mail"));arr($this->mails_to_gen);
+			if(in_array($member->prop("mail"), $this->made_mails))
 			{
 				continue;
 			}
-			$sents[] = $member->prop("mail");
-			$this->preprocess_one_message(array(
+			//võiks ju kontrollida, et siis ei peaks uuesti üht elementi üle kirjutama saadetavate mailide nimekirjas, kuid noh, aega võtab vähem vast vähem... või minesatea....
+/*			if(array_key_exists($member->prop("mail"), $this->mails_to_gen))
+			{
+				continue;
+			}*/
+			$this->mails_to_gen[$member->prop("mail")] = array(
 				"name" => $member->prop("name"),
 				"mail" => $member->prop("mail"),
-				"mail_id" => $arr["mail_id"],
 				"member_id" => $member->id(),
-				"list_id" => $arr["list_id"],
-				"msg" => $msg,
-				"qid" => $arr["qid"],
-			));
-//			$ret .= $this->parse("item");
-		};
+			);
+		}
+		foreach($from_file as $member)
+		{
+		//arr($member["mail"]);arr($this->mails_to_gen);
+			if(in_array($member["mail"], $this->made_mails))
+			{
+				continue;
+			}
+// 			if(array_key_exists($member["mail"], $this->mails_to_gen))
+// 			{
+// 				continue;
+// 			}
+			$this->mails_to_gen[$member["mail"]] = array(
+				"name" => $member["name"],
+				"mail" => $member["mail"],
+				"member_id" => "",
+			);
+		}
+	}
+
+	function bg_run_continue($o)
+	{
+		// restore variables from stored checkpoint
+		$this->made_mails = array();
+		$arr = $o->meta("mail_data");
+		extract($arr);
+		$q = "SELECT target FROM ml_sent_mails WHERE lid = '$list_id' AND mail = '$mail_id' AND qid = '$qid'";
+		$this->db_query($q);
+		while($w = $this->db_next())
+		{
+			$addr = explode("<" , $w["target"]);
+			$address = explode(">" , $addr[1]);
+			$this->made_mails[] = $address[0];
+		}
+		$this->make_send_list($o);
 	}
 
 	function preprocess_one_message($arr)
@@ -100,11 +152,14 @@ class ml_mail_gen extends run_in_background
 			"traceid" => "?t=$vars",
 		);
 		$this->used_variables = array();
-		$obj = obj($arr["member_id"]);
-		$user = reset($obj->connections_to(array(
-			"type" => 6,
-			"from.class_id" => CL_USER,
-		)));
+		if(is_oid($arr["member_id"]))
+		{
+			$obj = obj($arr["member_id"]);
+			$user = reset($obj->connections_to(array(
+				"type" => 6,
+				"from.class_id" => CL_USER,
+			)));
+		}
 		if(is_object($user))
 		{
 			$data["username"] = $user->prop("from.name");
@@ -131,9 +186,14 @@ class ml_mail_gen extends run_in_background
 		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $arr["msg"]["message"]);
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = str_replace("#lahkumine#" , $html_mail_unsubscribe[0].$unsubscribe_link.$html_mail_unsubscribe[1] , $message);
+		
+		//parse stuff
+		$parser = get_instance("alias_parser");
+		$parser->parse_oo_aliases($arr["mail_id"], $message);
+		
 		$message = $this->replace_tags($message, $data);
 		$subject = $this->replace_tags($arr["msg"]["subject"], $data);
-		$from = $address = $arr["msg"]["mfrom"];
+		$from = $address = $arr["msg"]["meta"]["mail_data"]["mfrom"];
 		if(is_oid($from) && $this->can("view", $from))
 		{
 			$adr = obj($from);
@@ -156,13 +216,11 @@ class ml_mail_gen extends run_in_background
 		$qid = $arr["qid"];
 		$target = $arr["name"] . " <" . $arr["mail"] . ">";
 		$this->quote($target);
-
 		$mid = $arr["mail_id"];
 		// there is an additional field mail_sent in that table with a default value of 0
 		$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom,qid,target) VALUES ('$mid','$member','".aw_global_get("uid")."','$lid','".time()."','$vars','$message','$subject','$mailfrom','$qid','$target')");
-		//arr($mid.' '.$member.' '.aw_global_get("uid").' '.$lid.' '.time().' '.$vars.' '.$message.' '.$subject.' '.$mailfrom.' '.$qid.' '.$target);
-		// 3) process queue then only retrieves messages from that table where mail_sent is set
-		// to 0
+		//3) process queue then only retrieves messages from that table where mail_sent is 
+		//set to 0
 	}
 	
 	function replace_tags($text,$data)

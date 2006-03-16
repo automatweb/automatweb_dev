@@ -96,38 +96,16 @@
             <caption>Listi liikmete seadetevorm</caption>
       </property>
       <property>
-            <name>member_list_tb</name>
+            <name>admin_subscribe_folders</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>member_list</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Listi staatuse toolbar</caption>
-      </property>
-      <property>
-            <name>def_user_folder</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>member_list</group>
+            <group>subscribing</group>
             <type>relpicker</type>
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <multiple>1</multiple>
-            <caption>Listi liikmete allikas</caption>
-      </property>
-      <property>
-            <name>member_list</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>member_list</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <caption>Liikmed</caption>
+            <caption>Kaustad, kuhu liituda</caption>
       </property>
       <property>
             <name>confirm_subscribe</name>
@@ -172,6 +150,18 @@
             <comment>Iga aadress eraldi real, nimi ja aadress komaga eraldatud</comment>
       </property>
       <property>
+            <name>admin_unsubscribe_folders</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>unsubscribing</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MEMBER_PARENT</reltype>
+            <editonly>1</editonly>
+            <multiple>1</multiple>
+            <caption>Kaustad, kust lahkuda</caption>
+      </property>
+      <property>
             <name>confirm_unsubscribe</name>
             <table>objects</table>
             <field>meta</field>
@@ -211,6 +201,40 @@
             <rows>25</rows>
             <store>no</store>
             <caption>Massiline kustutamine</caption>
+      </property>
+      <property>
+            <name>member_list_tb</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>member_list</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Listi staatuse toolbar</caption>
+      </property>
+      <property>
+            <name>def_user_folder</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>member_list</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MEMBER_PARENT</reltype>
+            <editonly>1</editonly>
+            <multiple>1</multiple>
+            <caption>Listi liikmete allikas</caption>
+      </property>
+      <property>
+            <name>member_list</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>member_list</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Liikmed</caption>
       </property>
       <property>
             <name>export_type</name>
@@ -353,6 +377,18 @@
             <caption>Maili kirjutamine</caption>
       </property>
       <property>
+            <name>aliasmgr</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>relationmgr</group>
+            <type>aliasmgr</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <trans>1</trans>
+            <caption>Aliastehaldur</caption>
+      </property>
+      <property>
             <name>mail_subject</name>
             <table>objects</table>
             <field>meta</field>
@@ -454,11 +490,6 @@
             <membership>
                   <caption>Liikmed</caption>
             </membership>
-            <member_list>
-                  <caption>Nimekiri</caption>
-                  <submit>no</submit>
-                  <parent>membership</parent>
-            </member_list>
             <subscribing>
                   <caption>Liitumine</caption>
                   <parent>membership</parent>
@@ -467,6 +498,11 @@
                   <caption>Lahkumine</caption>
                   <parent>membership</parent>
             </unsubscribing>
+            <member_list>
+                  <caption>Nimekiri</caption>
+                  <submit>no</submit>
+                  <parent>membership</parent>
+            </member_list>
             <export_members>
                   <caption>Eksport</caption>
                   <parent>membership</parent>
@@ -510,6 +546,7 @@
                         <num_0>CL_MENU</num_0>
                         <num_1>CL_GROUP</num_1>
                         <num_2>CL_USER</num_2>
+                        <num_3>CL_FILE</num_3>
                   </clid>
                   <caption>Listi liikmete allikas</caption>
             </MEMBER_PARENT>

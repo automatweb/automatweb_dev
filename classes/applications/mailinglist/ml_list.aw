@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.58 2006/03/09 15:48:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.59 2006/03/16 15:24:16 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -44,22 +44,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @groupinfo membership caption=Liikmed 
 ------------------------------------------------------------------------
 
-@groupinfo member_list caption=Nimekiri submit=no parent=membership
-@default group=member_list
-
-@property member_list_tb type=toolbar no_caption=1
-@caption Listi staatuse toolbar
-
-@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
-@caption Listi liikmete allikas
-
-@property member_list type=table store=no no_caption=1
-@caption Liikmed
-
-------------------------------------------------------------------------
-
 @groupinfo subscribing caption=Liitumine parent=membership
 @default group=subscribing
+
+@property admin_subscribe_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@caption Kaustad, kuhu liituda
 
 @property confirm_subscribe type=checkbox ch_value=1 
 @caption Liitumiseks on vaja kinnitust
@@ -79,6 +68,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @groupinfo unsubscribing caption=Lahkumine parent=membership
 @default group=unsubscribing
 
+@property admin_unsubscribe_folders type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@caption Kaustad, kust lahkuda
+
 @property confirm_unsubscribe type=checkbox ch_value=1 
 @caption Lahkumiseks on vaja kinnitust
 
@@ -90,6 +82,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property mass_unsubscribe type=textarea rows=25 store=no 
 @caption Massiline kustutamine
+------------------------------------------------------------------------
+
+@groupinfo member_list caption=Nimekiri submit=no parent=membership
+@default group=member_list
+
+@property member_list_tb type=toolbar no_caption=1
+@caption Listi staatuse toolbar
+
+@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@caption Listi liikmete allikas
+
+@property member_list type=table store=no no_caption=1
+@caption Liikmed
 
 ------------------------------------------------------------------------
 
@@ -122,6 +127,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 ------------------------------------------------------------------------
 
 @groupinfo raports caption=Kirjad
+
 @groupinfo list_status caption="Saadetud kirjad" parent=raports submit=no
 
 @default group=list_status
@@ -157,6 +163,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
 @caption Maili kirjutamine
 
+@property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
+@caption Aliastehaldur
 ------------------------------------------------------------------------
 
 @groupinfo mail_report caption="Kirja raport" parent=raports submit=no
@@ -195,7 +203,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 ------------------------------------------------------------------------
 
-@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER
+@reltype MEMBER_PARENT value=1 clid=CL_MENU,CL_GROUP,CL_USER,CL_FILE
 @caption Listi liikmete allikas
 
 @reltype REDIR_OBJECT value=2 clid=CL_DOCUMENT
@@ -353,25 +361,24 @@ class ml_list extends class_base
 		//$count = $this->get_member_count($list_id, $id);
 		$total++;
 		// mark the queue as "processing" - 5
-		$qid = $this->db_fetch_field("SELECT max(qid) as qid FROM ml_queue", "qid")+1;
-		
+//		$qid = $this->db_fetch_field("SELECT max(qid) as qid FROM ml_queue", "qid")+1;
 		$count = 0;
 		$_members = $this->send_mail_members($list_id , $id);
-		$member_count = 0;
 		$temp_member_arr = array();
 		foreach($_members as $member => $id2)
 		{
-			if(!in_array($id2["name"] , $temp_member_arr))
+			$addr = explode("&lt;" , $id2["name"]);
+			$addr2 = explode("&gt;" , $addr[1]);
+			$address = $addr2[0];
+			if(!in_array($address , $temp_member_arr))
 			{
-				$member_count++;
-				$temp_member_arr[] = $id2["name"];
+				$count++;
+				$temp_member_arr[] = $address;
 			}
-		}	
-		$count = $member_count;	
-		
-		$this->db_query("INSERT INTO ml_queue (qid,lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
-			VALUES ('$qid','$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
-		
+		}
+		$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
+			VALUES ('$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
+		$qid = $this->db_fetch_field("SELECT max(qid) as qid FROM ml_queue", "qid");
 		$mail_obj = obj($id);
 		$mail_obj -> set_meta("mail_data" , array(
 			"mail_id" => $id,
@@ -383,21 +390,20 @@ class ml_list extends class_base
 //		$mlq = get_instance("applications/mailinglist/ml_queue");
 		
 		
-		if (!isset($this->d))
+/*		if (!isset($this->d))
 		{
 			$this->d = get_instance(CL_MESSAGE);
 		};
-		$mlq->bg_control(array("id" => $id, "do" => "start",));
+*/		$mlq->bg_control(array("id" => $id, "do" => "start",));
 //		$mlq->preprocess_messages(array(
  //			"mail_id" => $id,
  //			"list_id" => $list_id,
  //			"qid" => $qid,
  //			"mfrom" => $mfrom,
  //		));
-
 		// now I should mark the queue as "ready to send" or 0
-		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
-		$this->db_query($q);
+// 		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
+// 		$this->db_query($q);
 		
 		$this->_log(ST_MAILINGLIST, SA_SEND, sprintf(t("saatis meili %s listi %s:%s"),$id, $v["name"], $gname) ,$lid);
 		return aw_global_get("route_back");
@@ -410,7 +416,6 @@ class ml_list extends class_base
 	**/
 	function subscribe($args = array())
 	{
-
 		$list_id = $args["id"];
 		$rel_id = $args["rel_id"];
 
@@ -503,7 +508,6 @@ class ml_list extends class_base
 								}			
 							}
 						}						
-						
 						foreach($conns as $conn)
 						{
 							$temp_use_folders[] = $conn->prop("to");
@@ -547,7 +551,7 @@ class ml_list extends class_base
 	
 		$erx = array();
 		
-		if(in_array($args["mail"], $members) || in_array($args["email"], $members) ||  count($use_folders) < 1)
+		if(count($use_folders) < 1)
 		{
 			$allow = false;
 			$erx["XXX"]["msg"] = t("Sellise aadressiga inimene on juba valitud listidega liitunud");
@@ -1049,7 +1053,7 @@ class ml_list extends class_base
 		aw_global_set("no_cache_flush", 1);
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
-		$fld = new aw_array($list_obj->prop("def_user_folder"));
+		$fld = new aw_array($list_obj->prop("admin_subscribe_folders"));
 		foreach($fld->get() as $fold)
 		{
 			if(!is_oid($fold) || !$this->can("add", $fold))
@@ -1062,8 +1066,6 @@ class ml_list extends class_base
 				continue;
 			}
 			$is_fold = true;
-//			$use_folders[] = $fold;
-//			break;
 
 			if(!$is_fold)
 			{
@@ -1077,6 +1079,7 @@ class ml_list extends class_base
 			$cnt = 0;
 			if (sizeof($lines) > 0)
 			{
+				obj_set_opt("no_cache", 1);
 				foreach($lines as $line)
 				{
 					$line = trim($line);
@@ -1111,7 +1114,7 @@ class ml_list extends class_base
 							"list_id" => $list_obj->id(),
 							"use_folders" => $fold,
 						));
-						usleep(500000);
+//						usleep(500000);
 						$members[] = $addr;
 					}
 					elseif(in_array($addr, $members))
@@ -1125,6 +1128,10 @@ class ml_list extends class_base
 						flush();
 					}
 				}
+				$c = get_instance("cache");
+				$c->file_clear_pt("menu_area_cache");
+				$c->file_clear_pt("storage_search");
+				$c->file_clear_pt("storage_object_data");
 			}
 			print "Importisin $cnt aadressi<br>";
 		}
@@ -1171,7 +1178,7 @@ class ml_list extends class_base
 	{
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
-		$fold = new aw_array($list_obj->prop("def_user_folder"));
+		$fold = new aw_array($list_obj->prop("admin_unsubscribe_folders"));
 		foreach($fold->get() as $fld)
 		{
 			if(!is_oid($fld) || !$this->can("add", $fld))
@@ -1186,11 +1193,6 @@ class ml_list extends class_base
 			$is_fold = true;
 			//break;
 			
-			
-			if(!$is_fold)
-			{
-				return false;
-			}
 			$name = $fld_obj->name();
 			echo "Kustutan kasutajaid kataloogist $fld / $name... <br />";
 			set_time_limit(0);
@@ -1200,7 +1202,7 @@ class ml_list extends class_base
 			{
 				foreach($lines as $line)
 				{
-					if (strlen($line) == 0)
+					if (strlen($line) < 5)
 					{
 						continue;
 					}
@@ -1214,7 +1216,7 @@ class ml_list extends class_base
 							"email" => $addr,
 							"list_id" => $list_obj->id(),
 							"ret_status" => true,
-							"use_folders" => $fold,
+							"use_folders" => $fld,
 						));
 						if ($retval)
 						{
@@ -1345,6 +1347,10 @@ class ml_list extends class_base
 		$imported = array();
 		foreach($members as $key => $val)
 		{
+			if($val["file_name"]){
+				;
+				continue;
+			}
 			list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
 				"lid" => $arr["id"],
 				"member" => $val["oid"],
@@ -1489,8 +1495,21 @@ class ml_list extends class_base
 		if (is_array($ml_list_members))
 		{
 			foreach($ml_list_members as $key => $val)
-
 			{
+				if($val["file_name"])
+				{
+					$memberdata["name"] = $val["name"];
+					$parent_name = $val["file_name"];
+					$tabledata = array(
+						"email" => $val["mail"],
+						"source" =>  $parent_name,
+						"name" =>  $memberdata["name"],
+						"joined" => "",
+					);
+					$t->define_data($tabledata);
+					continue;
+				}
+				
 				list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
 					"lid" => $arr["obj_inst"]->id(),
 					"member" => $val["oid"],
@@ -1810,8 +1829,41 @@ class ml_list extends class_base
 					$objects->add($tmp);
 				}
 			}
+			elseif($source_obj->class_id() == CL_FILE)
+			{
+				$data_from_file = $this->get_members_from_file(array("id" => $source_obj->id() , "ret" => $ret , "cnt" => $cnt));
+				$file = $data_from_file["ret"];
+//				$cnt = $data_from_file["cnt"];
+			}		
 		}
-		return $objects;
+		return array("objects" => $objects, "from_file" => $file);
+	}
+	
+	function get_members_from_file($args)
+	{
+		extract($args);
+		$file = get_instance(CL_FILE);
+		$file_data = $file->get_file_by_id($id);
+		$rows = explode("\n" , $file_data["content"]);
+		foreach($rows as $row)
+		{
+			$column = explode("," , $row);
+			if(!(strlen($column[0]) > 0) || !(strlen($column[1]) > 5)) continue;
+			$name = trim($column[0]);
+			if($comb)
+			{
+				$name = "".trim($column[0])." &lt;".trim($column[1])."&gt;";
+			}
+			$ret[]  = array(
+				"name" => $name,
+				"mail" => trim($column[1]),
+				"file_name" => $file_data["name"],
+				"parent" => $file_data["id"],
+			);
+			$cnt++;
+			
+		}
+		return array("ret" => $ret, "cnt" => $cnt);
 	}
 	
 	function get_members($id, $from = 0, $to = 0)
@@ -1905,6 +1957,12 @@ class ml_list extends class_base
 					);
 					$cnt++;
 				}
+			}
+			elseif($source_obj->class_id() == CL_FILE)
+			{
+				$data_from_file = $this->get_members_from_file(array("id" => $source_obj->id() , "ret" => $ret , "cnt" => $cnt));
+				$ret = $data_from_file["ret"];
+				$cnt = $data_from_file["cnt"];
 			}
 		}
 		$this->member_count = $cnt;
@@ -2009,10 +2067,14 @@ class ml_list extends class_base
 					$cnt++;
 				}
 			}
+			elseif($source_obj->class_id() == CL_FILE)
+			{
+				$data_from_file = $this->get_members_from_file(array("id" => $source_obj->id() , "ret" => $ret , "cnt" => $cnt , "comb" =>1,));
+				$ret = $data_from_file["ret"];
+				$cnt = $data_from_file["cnt"];
+			}
 		}
-		
 		$this->get_member_count = $cnt;
-		
 		return $ret;
 	}	
 
@@ -2020,7 +2082,6 @@ class ml_list extends class_base
 	function get_member_count($id, $mail_id)
 	{
 		return count($this->send_mail_members($id, $mail_id));
-	
 	}
 
 
@@ -2292,22 +2353,26 @@ class ml_list extends class_base
 		// how many members does this list have?
 		$list_id = $arr["obj_inst"]->id();
 		$mail_id = $arr["request"]["mail_id"];
-		$_members = $this->send_mail_members($list_id , $mail_id);
 		$member_count = 0;
+		$count = 0;
+		$_members = $this->send_mail_members($list_id , $mail_id);
 		$temp_member_arr = array();
-		foreach($_members as $member => $id)
+		foreach($_members as $member => $id2)
 		{
-			if(!in_array($id["name"] , $temp_member_arr))
+			$addr = explode("&lt;" , $id2["name"]);
+			$addr2 = explode("&gt;" , $addr[1]);
+			$address = $addr2[0];
+			if(!in_array($address , $temp_member_arr))
 			{
-				$member_count++;
-				$temp_member_arr[] = $id["name"];
+				$count++;
+				$temp_member_arr[] = $address;
 			}
 		}
+		$member_count = $count;
 		$mail_obj = new object($mail_id);
 		$name = $mail_obj->name();
 		// how many members have been served?	
 		$row = $this->db_fetch_row("SELECT count(*) AS cnt FROM ml_sent_mails WHERE lid = '$list_id' AND mail = '$mail_id'");
-		
 		$q = "SELECT * FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'";
 		
 		$this->db_query($q);
@@ -2316,8 +2381,6 @@ class ml_list extends class_base
 		
 		$q2 = "SELECT * FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'";
 		$row2 = $this->db_fetch_row("SELECT * FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");
-		
-
 		$served_count = $row2["position"];
 		$url = $_SERVER["REQUEST_URI"];
 
@@ -2514,9 +2577,6 @@ class ml_list extends class_base
 		$msg_data["mto"] = $arr["obj_inst"]->id();
 		$folder = $arr["obj_inst"]->prop("msg_folder");
 		$mail_id = $msg_data["id"];
-		
-
-
 
 		if(!is_oid($msg_data["id"]) || !$this->can("view", $msg_data["id"]))
 		{

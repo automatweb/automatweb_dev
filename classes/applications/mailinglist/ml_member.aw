@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.19 2006/03/09 15:48:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.20 2006/03/16 15:24:16 markop Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -291,9 +291,7 @@ class ml_member extends class_base
 				),
 			));
 		}
-
 		return $this->cfg["baseurl"] . "/" . $section;
-
 	}
 
 	////
@@ -301,27 +299,28 @@ class ml_member extends class_base
 	// email - email addy
 	// list_id - id of the list to unsubscribe from
 	// use_folders - removes user from folders...
-	// if not an array - removes member from all folders in the mailinglist
+	// if not an array - removes member from one folder
+	// if not defined , removes from all folders in the mailinglist
 	function unsubscribe_member_from_list($args = array())
 	{
 		$this->quote($args);
 		extract($args);
-		$list_obj = new object($list_id);
 		$section = aw_global_get("section");
-		if((!(sizeof($use_folders) > 0)) && (!($use_folders > 0)))
+		if((!$use_folders) && is_oid($list_id))
 		{
+			$list_obj = new object($list_id);
 			$use_folders = $list_obj->prop("def_user_folder");
 		}
-		if (empty($use_folders))
-		{
-			return $this->cfg["baseurl"] . "/" . $section;
-		};
 		if(is_array($use_folders))
 		{
+			if (empty($use_folders))
+			{
+				return $this->cfg["baseurl"] . "/" . $section;
+			};
 			foreach($use_folders as $folder)
 			{
 				$check = $this->check_member(array(
-					"email" => $args["email"],
+					"email" => $email,
 					"folder" => $folder,
 				));
 				if (is_object($check))
@@ -330,18 +329,17 @@ class ml_member extends class_base
 				};
 			}
 		}
-		else
+		else 
 		{
 			$check = $this->check_member(array(
-				"email" => $args["email"],
-				"folder" => $folder,
+				"email" => $email,
+				"folder" => $use_folders,
 			));
 			if (is_object($check))
 			{
 				$check->delete();
 			};
-		}
-		// fuck me plenty
+		}	
 		return isset($args["ret_status"]) ? $check : $this->cfg["baseurl"] . "/" . $section;
 	}
 
