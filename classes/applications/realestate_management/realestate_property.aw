@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.13 2006/03/08 15:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.14 2006/03/16 06:42:54 kristo Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -1501,13 +1501,29 @@ class realestate_property extends class_base
 			)));
 			$pictures = $pictures->arr ();
 
+			$picture1_url = "";
 			foreach ($pictures as $picture)
 			{
+				$cur_pic_url = $cl_image->get_url_by_id ($picture->id ());
+				if ($picture1_url == "")
+				{
+					$picture1_url = $cur_pic_url;
+				}
 				$vars = array (
-					"picture_url" => $cl_image->get_url_by_id ($picture->id ()),
+					"picture_url" => $cur_pic_url,
 				);
 				$this->vars ($vars);
 				$data["pictures"] .= $this->parse ("pictures");
+			}
+
+			if ($picture1_url != "")
+			{
+				$this->vars(array(
+					"picture1_url" => $picture1_url
+				));
+				$this->vars(array(
+					"HAS_PICTURE1" => $this->parse("HAS_PICTURE1")
+				));
 			}
 		}
 
