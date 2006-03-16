@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.58 2006/03/13 13:49:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.59 2006/03/16 09:45:41 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -163,7 +163,7 @@ class admin_folders extends aw_template
 				$rn = reset($rn);
 			}
 		}
-		$ol = new object_list(array(
+		$filt = array(
 			"class_id" => array(CL_MENU, CL_BROTHER, CL_GROUP),
 			"parent" => $rn,
 			"CL_MENU.type" => new obj_predicate_not(array(MN_FORM_ELEMENT, MN_HOME_FOLDER)),
@@ -175,8 +175,10 @@ class admin_folders extends aw_template
 				)
 			)),
 			"site_id" => array(),
+			"lang_id" => array(),
 			"sort_by" => "objects.parent,objects.jrk,objects.created"
-		));
+		);
+		$ol = new object_list($filt);
 		exit_function("gfn::list1");
 
 		enter_function("gfn::insert1");
