@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.195 2006/03/10 14:13:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.196 2006/03/16 14:56:00 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -593,7 +593,7 @@ class aliasmgr extends aw_template
 					"parent" => $def_val,
 					"period" => $period,
 					"id" => $id,
-					"return_url" => $return_url,
+					"return_url" => urlencode($return_url),
 					"def_fld_clid" => $def_clid
 				));
 				$def_str .= $this->parse("HAS_DEF_FOLDER");
