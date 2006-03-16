@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.43 2006/03/14 14:53:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.44 2006/03/16 16:39:58 dragut Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -161,6 +161,12 @@
 	@property del_prods type=textarea rows=10 cols=50 store=no group=delete
 	@caption Kustuta tooted koodidega (komaga eraldatud)
 
+	@property del_prods_by_filename type=textbox field=meta method=serialize group=delete
+	@caption Kustuta tooted vastavalt failikoodile
+
+	@property del_prods_by_filename_info type=text store=no group=delete
+	@caption Info
+
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
 
@@ -248,6 +254,49 @@ class otto_import extends class_base
 			case "foldernames":
 				$this->_foldernames($arr);
 				break;
+			case "del_prods_by_filename_info":
+				$prop['value'] = t("Failinimest v&otilde;ib kirjutada ka ainult alguse v&otilde;i l&otilde;pu, puuduvat osa t&auml;histab sel juhul '%' m&auml;rk <br />");
+				$prop['value'] .= t("N&auml;iteks k&otilde;ik 'G'-ga algavad t&auml;hised oleks: 'G%'. K&otilde;ik 'H0' algusega oleks 'H0%'. '%' m&auml;rgi v&otilde;ib ka &auml;ra j&auml;tta, sel juhul otsitakse t&auml;pselt selle j&auml;rgi, mis tekstikastis on. ")."<br />";
+
+				$prop['value'] .= t("Peale salvestamist kuvatakse teile tekstikastis olevale stringile vastavad lehed, mille alusel hakatakse tooteid kustutama. Muutes stringi tekstikastis ja uuesti salvastades, saate veenduda, et &otilde;igete t&auml;histe j&rgi hakatakse tooteid otsima.")."<br />";
+				$prop['value'] .= t("Selleks, et tooted kustutataks, m&auml;rkige &auml;ra l&otilde;ppu tekkiv m&auml;rkeruut ja salvestage. Peale seda kustutakse k&auml;ik tooted ja sellega seonduvad hinnad/suurused, mille juures on vastavalt tekstikasti sisestatud otsingustringile vastav t&auml;his (lehe nimetus).")."<br />";
+				$prop['value'] .= "<strong>".t("Tooted ja nendega seonduv info kustutatakse s&uuml;steemist l&otilde;plikult!!!")."</strong><br />";
+			
+
+				$tmp = $arr['obj_inst']->prop('del_prods_by_filename');
+				$lang_id = $arr['obj_inst']->lang_id();
+				if ( !empty( $tmp ) )
+				{
+					$prop['value'] .= t('Kustutan j&auml;rgnevate t&auml;histega failides olevad tooted: ').'<br />';
+					
+					$this->db_query("
+						select
+							distinct(user18) as pg
+						from
+							aw_shop_products
+							left join objects on objects.brother_of = aw_shop_products.aw_oid
+						where
+							aw_shop_products.user18 like '$tmp' AND
+							objects.lang_id = $lang_id AND 
+							objects.status > 0
+						
+					");
+					$show_confirm = false;
+					while ($row = $this->db_next())
+					{
+						$show_confirm = true;
+						$prop['value'] .= '- '.$row['pg'].' <br />';
+					}
+					if ($show_confirm)
+					{
+						$prop['value'] .= '<span style="color: red;">'.t('Kustuta?').'</span>';
+						$prop['value'] .= html::checkbox(array(
+							'name' => 'confirm_del_prods_by_filename',
+							'value' => 1
+						));
+					}
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -300,6 +349,14 @@ class otto_import extends class_base
 						$product_codes[$key] = str_replace(" ", "", $product_code);
 					}
 					$this->_do_del_prods($product_codes);
+				}
+				break;
+
+			case "del_prods_by_filename":
+
+				if ($arr['request']['confirm_del_prods_by_filename'] == 1 && !empty($arr['request']['del_prods_by_filename']))
+				{
+					$this->_do_del_prods(array(), $arr['request']['del_prods_by_filename']);
 				}
 				break;
 
@@ -1011,6 +1068,7 @@ class otto_import extends class_base
 	function update_csv_db($o)
 	{
 		set_time_limit(0);
+		$otto_import_lang_id = $o->lang_id();
 		echo "- START UPDATE CSV DB -<br>";
 //		if ($o->prop("restart_pict_i"))
 		if ($this->restart_pictures_import)
@@ -1501,7 +1559,7 @@ class otto_import extends class_base
 			}
 
 			// try find correct folder
-			$try_fld = $this->db_fetch_field("SELECT fld FROM otto_imp_t_p2p WHERE pg = '$row[pg]' and lang_id = ".aw_global_get("lang_id"), "fld");
+			$try_fld = $this->db_fetch_field("SELECT fld FROM otto_imp_t_p2p WHERE pg = '$row[pg]' and lang_id = ".$otto_import_lang_id, "fld");
 			if ($try_fld)
 			{
 				echo "------ found parent for prod as $try_fld <br>\n";
@@ -1524,12 +1582,12 @@ class otto_import extends class_base
 			// i need to add those categories or extraflds to the 'otto_imp_t_prod_to_cat' table too
 			if (!empty($row['extrafld']))
 			{
-
+				
 				$this->save_handle();
 				$categories = explode(',', $row['extrafld']);
 				foreach ($categories as $category)
 				{
-					$prod_to_cat_id = $this->db_fetch_field("SELECT id FROM otto_imp_t_prod_to_cat WHERE product_code='".$row['code']."' AND category='".$category."' AND lang_id=".aw_global_get('lang_id')." ", "id");
+					$prod_to_cat_id = $this->db_fetch_field("SELECT id FROM otto_imp_t_prod_to_cat WHERE product_code='".$row['code']."' AND category='".$category."' AND lang_id=".$otto_import_lang_id." ", "id");
 					if (empty($prod_to_cat_id))
 					{
 						$this->db_query("
@@ -1540,7 +1598,7 @@ class otto_import extends class_base
 								category = '".$category."',
 								page = '".$row['pg']."',
 								import_time = ".$import_time.",
-								lang_id = '".aw_global_get('lang_id')."'
+								lang_id = '".$otto_import_lang_id."'
 						");
 					}
 					else
@@ -1553,7 +1611,7 @@ class otto_import extends class_base
 								category = '".$category."',
 								page = '".$row['pg']."',
 								import_time = ".$import_time.",
-								lang_id = '".aw_global_get('lang_id')."'
+								lang_id = '".$otto_import_lang_id."'
 							WHERE
 								id = ".$prod_to_cat_id."
 						");
@@ -1566,7 +1624,7 @@ class otto_import extends class_base
 					WHERE 
 						import_time < $import_time
 						AND page = '".$row['pg']."'
-						AND lang_id = '".aw_global_get('lang_id')."'
+						AND lang_id = '".$otto_import_lang_id."'
 			
 				");
 				$this->restore_handle();
@@ -3170,60 +3228,149 @@ arr("<b>".$first_im."</b>");
 		return "";
 	}
 
-	function _do_del_prods($prods)
+	function _do_del_prods($prods, $page_pattern = "")
 	{
 		set_time_limit(0);
-//		error_reporting(E_ALL);
-//////////////////////////////
 
-///////////////////////
-		$ol = new object_list(array(
-			"class_id" => CL_SHOP_PRODUCT,
-			"user20" => $prods
-		));
-
-		if (!$ol->count())
+		// lets convert this stuff to direct sql	
+		$sql_params = "
+			objects.status > 0 AND
+			objects.site_id = ".aw_ini_get('site_id')." AND
+			objects.lang_id = ".aw_global_get('lang_id')."
+		";
+		if (!empty($prods))
 		{
-			echo "Tooteid ei leitud:<br>";
-			arr($prods);
-			return;
+			$product_codes_str = implode(',', map("'%s'", $prods ));
+			$sql_params .= " AND user20 IN ($product_codes_str)";
 		}
-// selles koodis see vist hetkel ei tööta --dragut 03.02.2006
-//		aw_global_set("no_cache_flush", 1);
-		foreach($ol->arr() as $o)
+		if (!empty($page_pattern))
 		{
-			$pkol = new object_list($o->connections_from(array("type" => "RELTYPE_PACKAGING")));
-			echo "kusututan pakendid ".join(",", $pkol->names())." <br>";
-			$pkol->delete();
-			echo "kustutamine 6nnestus<br>";
+			$sql_params .= " AND user18 LIKE '$page_pattern'";
+		}
+		
+		$this->db_query("
+			select 
+				*
+			from 
+				aw_shop_products
+				left join objects on objects.brother_of = aw_shop_products.aw_oid
+			where
+				$sql_params 
+		");
+
+	
+		echo "Leidsin tooted: <br />\n";
+		flush();
+		$found_any_products = false;
+		$product_ids = array();
+		while ($row = $this->db_next())
+		{
+			$found_any_products = true;
+			$product_ids[$row['oid']] = $row['oid'];
+			echo $row['oid']." -- ".$row['name']." -- ".$row['user20']."<br />\n";
 			flush();
 		}
-		// get all packagings that have the prods
-		$c = new connection();
-		$list = $c->find(array(
-			"from.class_id" => CL_SHOP_PACKET,
-			"type" => 1,
-			"to.oid" => $ol->ids()
-		));
 
-		echo "kusututan tooted ".join(",", $ol->names())." <br>";
-		flush();
-		$ol->delete(true);
-
-		// go over packets and see if some have no prods
-		foreach($list as $conn)
+		if ($found_any_products === false)
 		{
-			if ($this->can("view", $conn["from"]))
-			{
-				$pkt = obj($conn["from"]);
-				if (count($pkt->connections_from(array("type" => 1))) == 0)
-				{
-					echo "kustutan paketi ".$pkt->name()." <br>";
-					flush();
-					$pkt->delete(true);
-				}
-			}
+			echo "Tooteid ei leitud:<br>\n";
+			arr($prods);
+			arr($page_pattern);
+			return;
 		}
+		
+		$product_ids_str = implode(',', $product_ids);
+		$this->db_query("
+			select
+				target 
+			from
+				aliases
+			where
+				source in($product_ids_str)
+		");
+		
+		while ($row = $this->db_next())
+		{
+			$packaging_ids[$row['target']] = $row['target'];
+		}
+		$packaging_ids_str = implode(',', $packaging_ids);
+
+		// now i will find the packets too
+		$this->db_query("
+			select
+				objects.oid as id
+			from
+				aliases
+				left join objects on objects.oid = aliases.source
+			where
+				objects.class_id = ".CL_SHOP_PACKET." AND
+				aliases.reltype = 1 AND
+				aliases.target IN ($product_ids_str)
+		");
+		while ($row = $this->db_next())
+		{
+			$packet_ids[$row['id']] = $row['id'];	
+		}
+		
+
+		/**
+			DELETING
+				-- products (colors)
+				-- packagings (prices/sizes)
+		**/
+		if (!empty($product_ids_str))
+		{
+			$this->db_query("delete from objects where oid in ($product_ids_str)");
+			$this->db_query("delete from aw_shop_products where aw_oid in ($product_ids_str)");
+			$this->db_query("delete from aliases where source in ($product_ids_str)");
+			echo "Kustutasin <strong>".count($product_ids)."</strong> toodet (v&auml;rvid)<br />\n";
+		}
+		if (!empty($packaging_ids_str))
+		{
+			$this->db_query("delete from objects where oid in ($packaging_ids_str)");
+			$this->db_query("delete from aw_shop_packaging where id in ($packaging_ids_str)");
+			$this->db_query("delete from aliases where source in ($packaging_ids_str)");
+			echo "Kustutasin <strong>".count($packaging_ids)."</strong> pakendit (suurused/hinnad)<br />\n";
+
+		}
+
+		/**
+			PACKETS SCANNING:
+		**/
+		$packets_to_del = array();
+		foreach (safe_array($packet_ids) as $packet_id)
+		{
+			$conns = $this->db_fetch_array("
+				select
+					*
+				from
+					aliases
+				where 
+					source = $packet_id AND
+					reltype = 1
+					
+			");
+			if (empty($conns))
+			{
+				$packets_to_del[$packet_id] = $packet_id;
+			}
+			
+		}
+		
+		
+		if (!empty($packets_to_del))
+		{
+			echo "Paketid mis l&auml;hevad kustutamisele: <br /> \n";
+			arr($packets_to_del);
+			$packets_to_del_str = implode(',', $packets_to_del);
+			$this->db_query("delete from objects where oid in ($packets_to_del_str)");
+			$this->db_query("delete from aw_shop_packets where aw_oid in ($packets_to_del_str)");
+			$this->db_query("delete from aliases where source in ($packets_to_del_str)");
+			echo "Kustutasin <strong>".count($packets_to_del_str)."</strong> paketti (tooteid (v&auml;rve) koondav obj)<br />\n";
+	
+		}
+		flush();
+
 		echo "valmis! <br>";
 	}
 

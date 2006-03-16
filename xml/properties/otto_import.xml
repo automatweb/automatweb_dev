@@ -392,6 +392,25 @@
             <caption>Kustuta tooted koodidega (komaga eraldatud)</caption>
       </property>
       <property>
+            <name>del_prods_by_filename</name>
+            <table>objects</table>
+            <group>delete</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kustuta tooted vastavalt failikoodile</caption>
+      </property>
+      <property>
+            <name>del_prods_by_filename_info</name>
+            <table>objects</table>
+            <group>delete</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>Info</caption>
+      </property>
+      <property>
             <name>do_fixes</name>
             <table>objects</table>
             <group>post_import_fix</group>
