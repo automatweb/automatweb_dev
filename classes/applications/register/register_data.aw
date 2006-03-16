@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.34 2005/06/17 09:45:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.35 2006/03/16 15:51:39 markop Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -819,6 +819,51 @@
 
 @property userim5 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 5
+
+@property userim6 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 6
+
+@property userim7 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 7
+
+@property userim8 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 8
+
+@property userim9 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 9
+
+@property userim10 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 10
+
+@property userim11 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 11
+
+@property userim12 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 12
+
+@property userim13 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 13
+
+@property userim14 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 14
+
+@property userim15 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 15
+
+@property userim16 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 16
+
+@property userim17 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 17
+
+@property userim19 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 18
+
+@property userim19 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 19
+
+@property userim20 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 20
 
 --------------- failiupload ------------
 
