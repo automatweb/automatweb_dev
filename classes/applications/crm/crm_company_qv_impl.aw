@@ -101,7 +101,7 @@ class crm_company_qv_impl extends class_base
 			{
 				$parts[] = html::obj_change_url($_p);
 			}
-			
+
 			$sum = 0;
 			$hrs = 0;
 			// get all tasks for that project and calc sum and hrs
@@ -145,7 +145,7 @@ class crm_company_qv_impl extends class_base
 				"grp_num" => 3,
 			));
 		}
-		
+
 		// tasks
 		if (isset($arr["tasks"]))
 		{
@@ -319,7 +319,7 @@ class crm_company_qv_impl extends class_base
 				"grp_num" => 3,
 			));
 		}
-		
+
 		$t->sort_by(array(
 			"rgroupby" => array("grp_num" => "grp_desc"),
 			"sorder" => "asc",
@@ -367,10 +367,15 @@ class crm_company_qv_impl extends class_base
 			$ev = $ev->prop("shortname");
 		}
 
+		if (!class_exists("vcl_table"))
+		{
+			classload("vcl/table");
+		}
+
 		$this->_get_qv_t(array(
 			"prop" => array(
 				"vcl_inst" => new vcl_table(),
-				
+
 			),
 			"proj" => $arr["proj"],
 			"obj_inst" => $arr["obj_inst"],
