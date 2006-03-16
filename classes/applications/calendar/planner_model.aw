@@ -425,8 +425,6 @@ class planner_model extends core
 		{
 			$u = $owner->instance();
 			$owner = $u->get_person_for_user($owner);
-			obj_set_opt("no_cache", 1);
-			$GLOBALS["DUKE"] = 1;
 			$ol = new object_list(array(
 				"class_id" => CL_BUG,
 				"who" => $owner,
@@ -434,8 +432,6 @@ class planner_model extends core
 				"lang_id" => array(),
 				"site_id" => array()
 			));
-			obj_set_opt("no_cache", 0);
-			$GLOBALS["DUKE"] = 0;
 			foreach($ol->arr() as $bug)
 			{
 				$rv[$bug->id()] = array(
