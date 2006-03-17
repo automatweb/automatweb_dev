@@ -1,4 +1,4 @@
-how to add table columns to the database and make sure that they will be careated in all databases.
+how to add table columns to the database and make sure that they will be created in all databases.
 
 
 
