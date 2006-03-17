@@ -6,7 +6,7 @@ classload("defs");
 classload("aw_template");
 aw_global_set("no_db_connection", true);
 
-$anal = get_instance("core/docgen/docgen_analyzer");
+$anal = get_instance("core/aw_code_analyzer/aw_code_analyzer");
 
 $fn_c = <<<EOD
 	function %s(\$args)
