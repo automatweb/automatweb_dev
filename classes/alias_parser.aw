@@ -7,13 +7,34 @@ class alias_parser extends core
 		$this->init();
 	}
 
-	/**  Parses all embedded objects inside another document
+	/**  Finds aw aliases in the given string and replaces them with their output
 		@attrib api=1
-		@comment
-			arguments:
-			oid(int) - document id
-			source - document content
-			args - optional array of arguments, only recognized member is templates that gets passed to the parse_alias methods as the tpls member in the array
+
+		@param oid required type=int acl=view
+			the object to which the text belongs to. the aliases in the text must be connected to this object, it is used to resolve the aliases to real objects
+		
+		@param source required type=string
+			the text containing the aliases to be parsed. the text is modified so, that aliases are replaced with the output of their objects' parse_alias methods
+
+		@param args required type=array
+			array of other parameters:
+				$templates - gets passed to the parse_alias method of the handler class as the parameter $tpls as a reference
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+
+			$document = object($document_id);
+			$content = $document->prop("lead")."&lt;br&gt;".$document->prop("content");
+
+			$alp = get_instance("alias_parser");
+			$alp->parse_oo_aliases($document->id(), $content);
+
+			echo $content; // displays document with aliases parsed
 	**/
 	function parse_oo_aliases($oid,&$source,$args = array())
 	{
@@ -231,9 +252,29 @@ class alias_parser extends core
 		return $retval;
 	}
 
-	/** Returns the variables created by parse_oo_alias
+	/** returns the variables that should be inserted into the current template and that were created by the aliases parsed. each class can return from it's parse_alias method, an array that contains the variables that get added to this list. 
 
 		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			array of variables that should be passed to $this->vars() 
+
+		@examples
+			$this->read_template("plain.tpl");
+
+			$document = object($document_id);
+			$content = $document->prop("lead")."&lt;br&gt;".$document->prop("content");
+
+			$alp = get_instance("alias_parser");
+			$alp->parse_oo_aliases($document->id(), $content);
+
+			$this->vars(array("content" => $content));
+			$this->vars($alp->get_vars());
+
+			echo $this->parse(); // displays document with aliases parsed
 	**/
 	function get_vars()
 	{
