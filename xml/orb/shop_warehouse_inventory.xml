@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="shop_warehouse_inventory" folder="applications/shop" extends="class_base">
+		<action name="_delete_objects">
+			<function name="_delete_objects">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
