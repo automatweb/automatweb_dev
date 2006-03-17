@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.24 2006/03/13 09:50:15 dragut Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.25 2006/03/17 10:38:17 dragut Exp $
 
 	@comment
 	analyses aw code
@@ -641,23 +641,28 @@ class docgen_analyzer extends class_base
 				{
 				// it removes the indenting too :(
 				//	$line = trim($line);
-					if ($line{0} == "@")
+					// trim() lines only when there are certain substrings present, 
+					// can't trim every line here, cause i lose indentation then too :(
+					if ( (strpos($line, '@') !== false) || (strpos($line, '**/') !== false) )
 					{
-						prev($lines);
-						break;
-					}
-					else
-					if (substr($line, 0, 3) == "**/")
-					{
-						break;
-					}
+						$line = trim($line);
+						if ($line{0} == "@")
+						{
+							prev($lines);
+							break;
+						}
+						else
+						if (substr($line, 0, 3) == "**/")
+						{
+							break;
+						}
+					}	
+
+		
 					$data["examples"] .= "\n".$line;
 				}
 			
 				$data["examples"] = trim($data["examples"]);
-			//	$data["examples"] = $data["examples"];
-
-				
 			}
 		}
 		return $data;
