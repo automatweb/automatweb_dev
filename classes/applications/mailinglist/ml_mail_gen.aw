@@ -39,7 +39,7 @@ class ml_mail_gen extends run_in_background
 		$arr = $o->meta("mail_data");
 		extract($arr);
 		if(!(sizeof($this->mails_to_gen) > 0))
-		{
+		{// now I should mark the queue as "ready to send" or 0
 			$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
 			$this->db_query($q);
 			return BG_DONE;
@@ -75,45 +75,25 @@ class ml_mail_gen extends run_in_background
 		};
 		$ml_list_inst = get_instance(CL_ML_LIST);
 		$list_obj = new object($arr["list_id"]);
+
 		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
-		$members = $ml_list_inst->get_members_ol($msg);
+		$members = $ml_list_inst->get_members($msg);
+		
 		$member_list = $members["objects"];
 		$from_file = $members["from_file"];
 		set_time_limit(0);
 	print 'already generated mails:';arr($this->made_mails);
-		foreach($member_list->arr() as $member)
-		{
-		//arr($member->prop("mail"));arr($this->mails_to_gen);
-			if(in_array($member->prop("mail"), $this->made_mails))
-			{
-				continue;
-			}
-			//võiks ju kontrollida, et siis ei peaks uuesti üht elementi üle kirjutama saadetavate mailide nimekirjas, kuid noh, aega võtab vähem vast vähem... või minesatea....
-/*			if(array_key_exists($member->prop("mail"), $this->mails_to_gen))
-			{
-				continue;
-			}*/
-			$this->mails_to_gen[$member->prop("mail")] = array(
-				"name" => $member->prop("name"),
-				"mail" => $member->prop("mail"),
-				"member_id" => $member->id(),
-			);
-		}
-		foreach($from_file as $member)
-		{
-		//arr($member["mail"]);arr($this->mails_to_gen);
+		
+		foreach($members as $member)
+		{//arr($member->prop("mail"));arr($this->mails_to_gen);
 			if(in_array($member["mail"], $this->made_mails))
 			{
 				continue;
 			}
-// 			if(array_key_exists($member["mail"], $this->mails_to_gen))
-// 			{
-// 				continue;
-// 			}
 			$this->mails_to_gen[$member["mail"]] = array(
 				"name" => $member["name"],
 				"mail" => $member["mail"],
-				"member_id" => "",
+				"member_id" => $member["oid"],
 			);
 		}
 	}
