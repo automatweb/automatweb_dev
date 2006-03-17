@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.75 2006/02/20 08:56:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.76 2006/03/17 11:56:41 kristo Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -81,6 +81,27 @@ class aw_template extends core
 	/** sets the parse method for templates - "" or "eval"
 
 		@attrib api=1
+
+		@param method optional type=string
+			defaults to ""
+
+		@comment
+			sets the template parsing method used by the current instance of the template parser. 
+			the available methods are:
+			"" - the default - uses regular expressions to parse the template
+			"eval" - uses php's eval() function to parse the template - this is faster, but slightly incompatible with the default
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			$tpl = new aw_template;
+			$tpl->set_parse_method("eval");
+			$tpl->read_template("aa.tpl");
+			echo $tpl->parse(); // this is now slightly faster 
 	**/
 	function set_parse_method($method = "")
 	{
@@ -90,8 +111,21 @@ class aw_template extends core
 		};
 	}
 
-	/** resets all templates and variables
+	/** resets the template parser to the default state - clears all variables and loaded templates
 		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			$tpl = new aw_template;
+			$tpl->set_parse_method("eval");
+			$tpl->read_template("aa.tpl");
+			echo $tpl->parse(); 
+			$tpl->reset(); // now no variables are defined nor any template loaded
 	**/
 	function reset()
 	{
@@ -164,9 +198,39 @@ class aw_template extends core
 		return $this->option_list($active,$array);
 	}
 
-	/** reads a template from a file
+	/** reads the template whose name is given. 
 		@attrib api=1
 
+		@param name required type=string
+			the name of the template file to load
+
+		@param silent optional
+			if set to 1, no error is thrown if template is not found, false is returned instead
+
+		@comment
+			The full path to the template is assembled like this:
+			if on the site side
+			the tpldir setting from aw_ini_get(), then the folder given in the constructor to init() and finally, the file name gevn to this method. if the file is not found here, then the path
+			basedir from ini file, templates folder, path given in init() and the file name is tested
+
+			if in the admin interface
+			basedir from ini file, templates folder, path given in init() and the file name is tested
+
+			so basically, if on the site side, the site templates folder is checked and then the admin templates folder, so that you can override templates for each site
+
+		@errors
+			if no template file is found and the silent flag is not set, error is thrown
+
+		@returns
+			true if no error or silent flag not set, false if no template is found and silent flag is set
+
+		@examples
+			$tpl = new aw_template;
+			$tpl->set_parse_method("eval");
+			if ($tpl->read_template("aa.tpl", 1) === false)
+			{
+				echo "no template found!";
+			}
 	**/
 	function read_template($name,$silent = 0)
 	{
@@ -198,6 +262,24 @@ class aw_template extends core
 
 	/** reads a template from the given string
 		@attrib api=1
+
+		@param source required
+			the template content
+
+		@errors
+			none
+
+		@returns
+			true
+
+		@examples
+			$tpl = new aw_template;
+			$str = "{VAR:foo} is here";
+			$tpl->us_template($str);
+			$tpl->vars(array(
+				"foo" => "Mr. T"
+			));
+			echo $tpl->parse();
 	**/
 	function use_template($source)
 	{
@@ -207,6 +289,26 @@ class aw_template extends core
 	
 	/** reads a template from a file from the admin template folder
 		@attrib api=1
+
+		@param name required type=string
+			name of the file to load
+
+		@param silent optional
+			optional - is set to 1, no errors are thrown, instead false is returned on error
+
+		@errors
+			if file is not found, error is thrown
+
+		@returns
+			false if silent == 1 and file is not found, else true
+
+		@examples
+			$tpl = new aw_template;
+			$tpl->read_adm_template("foo.tpl");
+			$tpl->vars(array(
+				"foo" => "Mr. T"
+			));
+			echo $tpl->parse();	
 	**/
 	function read_adm_template($name,$silent = 0)
 	{
@@ -231,8 +333,28 @@ class aw_template extends core
 		return $retval;
 	}
 
-	/**  reads the template from the site folder, even if we are in the admin interface
+	/**  reads the given template from the site's template folder even if the user is in the admin interface
 		@attrib api=1
+
+		@param name required type=string
+			name of the file to load
+
+		@param silent optional 
+			if set to 1, no errors are thrown, instead false is returned on error
+		
+		@errors
+			if file is not found, error is thrown, unless silent flag is given
+
+		@returns
+			false if silent == 1 and file is not found, else true
+
+		@example
+			$tpl = new aw_template;
+			$tpl->read_site_template("foo.tpl");
+			$tpl->vars(array(
+				"foo" => "Mr. T"
+			));
+			echo $tpl->parse();
 	**/
 	function read_site_template($name,$silent = 0)
 	{
@@ -257,8 +379,27 @@ class aw_template extends core
 		return $retval;
 	}
 
-	/** reads template from site folder and if not found there, admin folder
+	/** tries to read the given template from the site's template folder even if the user is in the admin interface and if not found in the site folder, tries to read it from the admin templates folder
 		@attrib api=1
+
+		@param name required type=string
+			name of the file to load
+		@param silent optional
+			if set to 1, no errors are thrown, instead false is returned on error
+		
+		@errors
+			if file is not found, error is thrown, unless silent flag is given
+
+		@returns
+			false if silent == 1 and file is not found, else true
+
+		@xamples
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			$tpl->vars(array(
+				"foo" => "Mr. T"
+			));
+			echo $tpl->parse();	
 	**/
 	function read_any_template($name, $silent = false)
 	{
@@ -293,6 +434,23 @@ class aw_template extends core
 
 	/** checks if a SUB with the name given exits in the currently loaded template
 		@attrib api=1
+
+		@param name required type=string
+			name of the SUB to check for
+
+		@errors
+			none
+
+		@returns
+			true if the SUB is in the current template, false if no template is loaded or no such SUB exists
+
+		@examples
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			if ($this->is_template("FOO"))
+			{
+				echo $this->parse("FOO");
+			}
 	**/
 	function is_template($name)
 	{
@@ -300,8 +458,30 @@ class aw_template extends core
 		return $retval;
 	}
 
-	/** Checks whether a template contains a variable placeholder or not
+	/** checks if the currently loaded template's given SUB contains a VAR with the name given
 		@attrib api=1
+
+		@param varname required type=string
+			name of the VAR to check for
+
+		@param tplname optional type=string
+			defaults to MAIN - the SUB to check for the VAR
+
+		@errors
+			none
+
+		@returns
+			true if the VAR is in the given SUB, false if no template is loaded or no such VAR exists
+
+		@examples
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			if ($this->template_has_var("allah"))
+			{
+				$this->vars(array(
+					"allah" => "akhbar"
+				));
+			}
 	**/
 	function template_has_var($varname,$tplname = "MAIN")
 	{
@@ -310,6 +490,28 @@ class aw_template extends core
 
 	/** checks if the template contains the given variable. checks the complete template. slow
 		@attrib api=1
+
+		@param varname required type=string
+			name of the VAR to check for
+
+		@comment
+			<b>PERFORMANCE WARNING: this is quite slow, do not use often </b>
+
+		@errors
+			none
+
+		@returns
+			true if the VAR is in the current template, false if no template is loaded or no such VAR exists
+
+		@examples
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			if ($this->template_has_var_full("allah"))
+			{
+				$this->vars(array(
+					"allah" => "akhbar"
+				));
+			}
 	**/
 	function template_has_var_full($varname)
 	{
@@ -321,8 +523,42 @@ class aw_template extends core
 		return strpos($tmp,"{VAR:" . $varname . "}") !== false; 
 	}
 
-	/** checks if the SUB $parent is a parent of the SUB $tpl 
+	/** checks if the SUB $parent is the immediate parent of the SUB $tpl 
 		@attrib api=1
+
+		@param tpl required type=string
+			the SUB whose parent SUB you want to check for
+
+		@param parent required type=string
+			the name of the SUB that should be the parent of the SUB $tpl
+
+		@errors
+			none
+
+		@returns
+			true if $parent is parent SUB pf $tpl SUB, false if not
+
+		@examples
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			if ($this->is_parent_tpl("FOO", "BUJAKA"))
+			{
+				$this->vars(array(
+					"FOO" => $this->parse("BUJAKA.FOO")
+				));
+				$this->vars(array(
+					"BUJAKA" => $this->parse("BUJAKA")
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"BUJAKA" => $this->parse("FOO.BUJAKA")
+				));
+				$this->vars(array(
+					"FOO" => $this->parse("FOO")
+				));
+			}	
 	**/
 	function is_parent_tpl($tpl,$parent)
 	{
@@ -338,14 +574,66 @@ class aw_template extends core
 
 	/** returns the name if the immediate parent SUB of the given SUB
 		@attrib api=1
+
+		@errors
+			none
+
+		@param tpl required type=string
+			the SUB whose parent SUB you want
+
+		@returns
+			name if the parent SUB of the given SUB, null if the given SUB has no parent or no such SUB exists
+
+		@examples
+			-- template foo.tpl
+			<!-- SUB: BAR -->
+
+			<!-- SUB: FOO -->
+			<!-- END SUB: FOO -->
+			<!-- END SUB: BAR -->
+
+		-- code
+			$tpl = new aw_template;
+
+			$tpl->read_any_template("foo.tpl");
+
+			echo $tpl->get_parent_template("FOO"); // returns BAR
 	**/
 	function get_parent_template($tpl)
 	{
 		return $this->v2_parent_map[$tpl];
 	}
 
-	/** returns an array of parent SUB names for the given SUB
+	/** returns an array of names of the parent SUB's of the given SUB. this can return several names if there are several SUB's with the same name under different parents
 		@attrib api=1
+
+		@errors
+			none
+
+		@param tpl required type=string
+			the SUB whose parent SUB's you want
+
+		@returns
+			name if the parent SUB's of the given SUB, null if the given SUB has no parent or no such SUB exists
+
+		@examples
+			-- template foo.tpl
+			<!-- SUB: BAR -->
+				<!-- SUB: FOO -->
+				<!-- END SUB: FOO -->
+			<!-- END SUB: BAR -->
+
+			<!-- SUB: BAZ -->
+				<!-- SUB: FOO -->
+				<!-- END SUB: FOO -->
+			<!-- END SUB: BAZ -->
+
+			-- code
+			$tpl = new aw_template;
+
+			$tpl->read_any_template("foo.tpl");
+
+			$res = $tpl->get_parent_templates("FOO"); // returns array("BAR", "BAZ")
 	**/
 	function get_parent_templates($tpl)
 	{
@@ -367,8 +655,34 @@ class aw_template extends core
 		return $ret;
 	}
 
-	/** checks if the sub TPL is a child SUB of the $parent SUB. checks the full chain pf SUB's
+	/** checks if the SUB $tpl is a child SUB of the $parent SUB. checks the full chain of SUB's
 		@attrib api=1
+
+		@param tpl required type=string
+			the SUB whose parent SUB's you want to check
+
+		@param parent required type=string
+			the name of the parent SUB to check
+
+		@errors
+			none
+
+		@returns
+			true if the $tpl SUB has a parent SUB by the name $parent
+
+		@examples
+			-- template foo.tpl
+			<!-- SUB: AHH -->
+				<!-- SUB: BAR -->
+					<!-- SUB: FOO -->
+					<!-- END SUB: FOO -->
+				<!-- END SUB: BAR -->
+			<!-- END SUB: AHH -->
+
+			-- code
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			$res = $tpl->is_in_parents_tpl("FOO", "AHH"); // returns true
 	**/
 	function is_in_parents_tpl($tpl, $parent)
 	{
@@ -382,6 +696,27 @@ class aw_template extends core
 
 	/** imports variables into the current template, overwriting the previous variables of the same name
 		@attrib api=1
+
+		@param params required type=array
+			array of name => value pairs that are used as variable name => variable value
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			-- template foo.tpl
+			{VAR:allah}
+		
+			-- code
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			$tpl->vars(array(
+				"allah" => "akhbar"
+			));
+			echo $tpl->parse(); // prints akhbar
 	**/
 	function vars($params)
 	{
@@ -390,6 +725,30 @@ class aw_template extends core
 
 	/** imports variables into the current template, appending to the previous variables of the same name
 		@attrib api=1
+
+		@param params required type=array
+			array of name => value pairs that are used as variable name => variable value
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			-- template foo.tpl
+			{VAR:allah}
+
+			-- code
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			$tpl->vars(array(
+				"allah" => "allah"
+			));
+			$tpl->vars_merge(array(
+				"allah" => " akhbar"
+			));
+			echo $tpl->parse(); // prints allah akhbar
 	**/
 	function vars_merge($params)
 	{
@@ -401,6 +760,32 @@ class aw_template extends core
 
 	/** replaces variables with their values and returns the content of the given sub as parsed text
 		@attrib api=1
+
+		@param object optional type=string
+			optional, defaults to the main sub - name of the SUB to parse
+
+		@errors
+			none
+
+		@returns
+			text of the sub, with variables replaced by their assigned values
+
+		@examples
+			-- template foo.tpl
+			<!-- SUB: BOO -->
+				{VAR:allah}
+			<!-- END SUB: BOO -->
+
+			-- code
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			$tpl->vars(array(
+				"allah" => "akhbar"
+			));
+			$tpl->vars(array(
+				"BOO" => $tpl->parse("BOO")
+			));
+			echo $tpl->parse(); // prints akhbar
 	**/
 	function parse($object = "MAIN") 
 	{
@@ -523,6 +908,33 @@ class aw_template extends core
 
 	/** Retrieves a list of SUB's matching a regexp
 		@attrib api=1
+
+		@param regex required type=string
+			perl-compatible regular expression to match with SUB names
+
+		@comment
+			don't forget to add braces () to the regex or you won't get any results
+
+		@errors
+			none
+
+		@returns
+			array of the names of the SUB's matching the regex
+
+		@examples
+			-- template foo.tpl
+
+			<!-- SUB: BOO_FOO -->
+				{VAR:allah}
+			<!-- END SUB: BOO_FOO -->
+
+			-- code
+			$tpl = new aw_template;
+
+			$tpl->read_any_template("foo.tpl");
+
+			$tpls = $tpl->get_subtemplates_regex("BOO_(\w*)"; // returns array("FOO")
+			$tpls = $tpl->get_subtemplates_regex("(BOO_\w*)"; // returns array("BOO_FOO")
 	**/
 	function get_subtemplates_regex($regex)
 	{
@@ -540,6 +952,26 @@ class aw_template extends core
 
 	/** returns the un-parsed content of the given SUB 
 		@attrib api=1
+
+		@param name required type=string
+			name of the SUB whose content to return
+
+		@errors
+			none
+
+		@returns
+			the un-parsed content of the given SUB 
+
+		@examples
+			-- template foo.tpl
+			<!-- SUB: BOO_FOO -->
+				{VAR:allah}
+			<!-- END SUB: BOO_FOO -->
+
+			-- code
+			$tpl = new aw_template;
+			$tpl->read_any_template("foo.tpl");
+			$str = $tpl->get_template_string("BOO_FOO"); // returns "{VAR:allah}"
 	**/
 	function get_template_string($name)
 	{
