@@ -33,12 +33,13 @@ table.class_info {
 
 table.class_info td {
 	border: 1px solid silver;
-	padding: 2px;
+	padding: 3px;
 }
 
 table.class_info th {
 	border: 1px solid silver;
-	background-color: silver;
+	background-color: rgb(255, 255, 169);
+	padding: 3px;
 }
 </style>
 
