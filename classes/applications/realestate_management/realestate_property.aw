@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.14 2006/03/16 06:42:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.15 2006/03/17 11:02:52 kristo Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -1099,12 +1099,11 @@ class realestate_property extends class_base
 	function view ($arr)
 	{
 		enter_function("re_property::view");
-
 		if (is_object ($arr["this"]))
 		{
 			$this_object = $arr["this"];
 		}
-		elseif (is_oid ($arr["this"]))
+		elseif ($this->can("view", $arr["this"]))
 		{
 			$this_object = obj ($arr["this"]);
 		}
