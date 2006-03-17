@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="docgen_viewer" folder="core/docgen" extends="class_base">
+	<class name="docgen_viewer" folder="applications/docgen" extends="class_base">
 		<action name="intro">
 			<function name="intro">
 				<arguments>
