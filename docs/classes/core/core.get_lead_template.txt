@@ -1,8 +1,0 @@
-function get_lead_template($section)
-
-Returns the document template filename for document lists under the specified folder.
-
-<i>Parameters:</i>
-
-$section - 
-The folder for what to return the template. If no template is specified for that menu, the parent's template is returned. If no template is specified anywhere, defaults to "lead.tpl"

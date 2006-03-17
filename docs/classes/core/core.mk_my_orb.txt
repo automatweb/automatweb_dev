@@ -1,3 +1,0 @@
-function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&")</b>
-
-This function is documented in the orb specification. 

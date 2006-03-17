@@ -1,8 +1,0 @@
-function serialize($arr)
-
-Serializes the given object and returns it's text representation. 
-
-<i>Parameters:</i>
-
-- $oid
-The oid if the object to serialize. 

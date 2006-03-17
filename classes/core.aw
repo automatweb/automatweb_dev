@@ -59,15 +59,37 @@ class core extends acl_base
 		return $this->$key;
 	}
 
-	////
-	// !write to syslog.
-	// params:
-	// type - int, defined in syslog.types, log entry type (class name/pageview)
-	// action - int, defined in syslog.actions, log entry action (add obj, change obj)
-	// text - text for log entry
-	// oid - object that the action was performed on
-	// example usage:
-	//   $this->_log(ST_DOCUMENT, SA_ADD, "Added document $name", $docid);
+	/** This function writes an entry to the aw syslog table. This is automatically called for most actions, via classbase, but if you perform any special actions in your class, that should be logged, then use this function to log the action. 
+
+		@attrib api=1
+
+		@param type required type=int
+			Log entry type. The types are defined in the ini file, in the syslog.types array. The type specifies the class in most cases. The prefix for syslog type define's is ST_, for instance ST_DOCUMENT
+
+		@param action required type=int
+			Log action type. The actions are defined in the ini file, in the syslog.actions array. The action specifies, what was done - for instance, change/add/delete. The prefix for syslog actions is SA_, for instance SA_ADD
+
+		@param text required type=string
+			the text of the log message. 
+
+		@param oid optional type=int 
+			defaults to 0 The object id of the object this action is about. 
+
+		@param honor_ini optional type=bool
+			if set to true, the disable logging ini setting will be ignored. 
+	
+		@comment
+			The logging can be disabled by the ini setting logging_disabled
+
+		@errors
+			none
+
+		@returns 
+			none
+
+		@examples
+			$this->_log(ST_DOCUMENT, SA_ADD, "Added document $name", $docid);
+	**/
 	function _log($type,$action,$text,$oid = 0,$honor_ini = true)
 	{
 		if(aw_ini_get('logging_disabled') && $honor_ini)
@@ -128,10 +150,15 @@ class core extends acl_base
 		}
 	}
 
-	////
-	// !Tagastab formaaditud timestambi
-	// Tekalt voiks defineerida mingid konstandid nende numbrite asemele
-	// See parandaks loetavust
+	/** Converts the given timestamp to text format. 
+		@attrib api=1
+
+		@param timestamp required
+			The unix timestamp to convert to text format. 
+
+		@param format optional
+			The date format string identifier, from the ini file. These are defined in config.date_formats
+	**/
 	function time2date($timestamp = "",$format = 0)
 	{
 		if ($format != 0)
@@ -462,11 +489,25 @@ class core extends acl_base
 		};
 	}
 
-	////
-	// !Veateade
-	// $msg - teate tekst
-	// $fatal - katkestada töö?
-	// $silent - logida viga, aga jätkata tööd
+	/** Signals an error condition, displays it to the user if specified, sends an e-mail to the vead@struktuur.ee mailinglists and registers the error in the aw.struktuur.ee bugtrack. All relavant variables and a backtrace are displayed. If specified, also halts execution. 
+		@attrib api=1
+
+		@param err_type required
+			The type of the error to throw. Error types are registered in the ini file, errors array. 
+
+		@param msg required
+			The error message. 
+
+		@param fatal optional
+			If true, execution is halted after the error is displayed. Defaults to false. 
+
+		@param silent optional 
+			If true, error is not displayed to the user. It is still sent to the list and reported to the error server. Defaults to false. 
+
+		@param oid optional
+			If set, must contain the oid of the object that the error is about. 
+
+	**/
 	function raise_error($err_type,$msg, $fatal = false, $silent = false, $oid = 0, $send_mail = true)
 	{
 		/*if (!$_SESSION["err_retry"])
@@ -755,15 +796,20 @@ class core extends acl_base
 		));
 	}
 
-	////
-	// !orb link maker
-	// the idea is this that it determines itself whether we go through the site (index.aw)
-	// or the orb (orb.aw) - for the admin interface
-	// you can force it to point to the admin interface
-	// this function also handles array arguments!
-	// crap, I hate this but I gotta do it - shoulda used array arguments or something -
-	// if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
-	// directly, without drawing menus and stuff
+	/** Creates orb links
+		@attrib api=1
+
+		@comment
+			This function is documented in the orb specification. 
+
+			the idea is this that it determines itself whether we go through the site (index.aw)
+			or the orb (orb.aw) - for the admin interface
+			you can force it to point to the admin interface
+			this function also handles array arguments!
+			crap, I hate this but I gotta do it - shoulda used array arguments or something -
+			if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
+			directly, without drawing menus and stuff
+	**/
 	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&",$honor_r_orb = true)
 	{
 		// resolve to name
@@ -847,8 +893,12 @@ class core extends acl_base
 		return substr($res,0,-1);
 	}
 
-	////
-	// !creates the necessary hidden elements to put in a form that tell the orb which function to call
+	/** creates the necessary hidden elements to put in a form that tell the orb which function to call
+		@attrib api=1
+
+		@comment
+			This function is documented in the orb specification. 
+	**/
 	function mk_reforb($fun,$arr = array(),$cl_name = "")
 	{
 
@@ -921,10 +971,14 @@ class core extends acl_base
 		return $this->mk_my_orb($fun,$arr,$cl_name);
 	}
 
-	////
-	// Tekitab lingi. duh. 
-	// params(array) - key/value paarid elementidest, mida lingi tekitamisel kasutada
-	// skip_empty makes us ignore keys with no values
+	/** Creates a link from the $args array and returns it. 
+
+		@param args optional type=array
+			An array of key => value pairs. These are inserted as key => value pairs in the result url. 
+
+		@param skip_empty optional type=bool
+			If true, empty values are not inserted into the result url.
+	**/
 	function mk_link($args = array(),$skip_empty = false)
 	{
 		$retval = array();
@@ -983,11 +1037,18 @@ class core extends acl_base
 		return $path;
 	}
 
-	////
-	// !fread wrapper
-	// hiljem voib siia turvakontrolli kylge ehitada
-	// See funktsioon EI ANNA veateadet, kui faili ei leitud
-	// caller peab seda ise kontrollima. (result == false)
+	/** Returns the contents of the given file. If file is not found, false is returned. 
+		@attrib api=1
+
+		@param file required type=string
+			The full path of the file whose contents must be returned. 
+
+		@errors 
+			none
+
+		@examples
+			echo $this->get_file(array("file" => aw_ini_get("basedir")."/init.aw"));
+	**/
 	function get_file($arr)
 	{
 		if (!$arr["file"])
@@ -1015,10 +1076,27 @@ class core extends acl_base
 		return $retval;
 	}
 
-	////
-	// !fwrite wrapper - args:
-	// file - file name to write
-	// content - file contents to write
+	/** Writes a file. 
+		@attrib api=1
+
+		@param file required type=string
+			The full path of the file to write to. 
+
+		@param content requires type=string
+			The content of the file. 
+
+		@errors
+			error is thrown if no file is given or file cannot be written to
+
+		@returns 
+			true if file was written
+
+		@examplex
+			$this->put_file(array(
+				"file" => "/www/foo",
+				"content" => "allah"
+			));
+	**/
 	function put_file($arr)
 	{
 		if (not($arr["file"]))
@@ -1048,10 +1126,15 @@ class core extends acl_base
 		return true;
 	}
 
-	////
-	// !Retrieves a list of files in a directory
-	// dir - full path to directory
-	// XXX: add security checks
+	/** Retrieves a list of files in a directory
+		@attrib api=1
+
+		@param dir required type=string
+			The directory on the server whose contents to return.
+
+		@errors
+			none
+	**/
 	function get_directory($args = array())
 	{
 		extract($args);
@@ -1070,8 +1153,22 @@ class core extends acl_base
 		return $files;
 	}
 
-	////
-	// !converts all characters of string $str to their hex representation and returns the resulting string
+	/** converts all characters of string $str to their hex representation and returns the resulting string
+		@attrib api=1
+
+		@param str required type=string
+			The string to convert. 
+
+		@errors
+			none
+
+		@returns
+			the given string, in hex character codes
+		
+		@examples
+			echo $this->binhex("abx"); // echos 616263
+			echo $this->hexbin($this->binhex("abc"));	// echos abc
+	**/
 	function binhex($str)
 	{
 		$l = strlen($str);
@@ -1091,8 +1188,22 @@ class core extends acl_base
 		return $ret;
 	}
 
-	////
-	// !opposite of binhex, decodes a string of hex numbers to their values and creates a string from them
+	/** opposite of binhex, decodes a string of hex numbers to their values and creates a string from them
+		@attrib api=1
+
+		@param str required type=string
+			The string to convert. 
+
+		@errors
+			none
+
+		@returns
+			the given string, converted back to the original text
+		
+		@examples
+			echo $this->binhex("abx"); // echos 616263
+			echo $this->hexbin($this->binhex("abc"));	// echos abc
+	**/
 	function hexbin($str)
 	{
 		$l = strlen($str);
@@ -1316,18 +1427,31 @@ class core extends acl_base
 		return $this->tt;
 	}
 
-	////
-	// !executes an orb function call and returns the data that the function returns
-	// params:
-	// required:
-	//	action - orb action to exec
-	// optional
-	//  class - class for the action - default the current class
-	//  params - params to the action 
-	//  method - the method to use when doing the function call - possible values: local / xmlrpc / (soap - not implemented yet) 
-	//  server - if doing a rpc call, the server where to connect
-	//  login_obj - if we must log in to a serverm the id of the CL_AW_LOGIN that will be used to login to the server
-	//              if this is set, then server will be ignored
+	/** executes an orb function call and returns the data that the function returns
+
+		@attrib api=1
+
+		@param action required type=string
+			orb action to exec
+
+		@param class optional type=string
+			class for the action - default the current class
+
+		@param params optional type=array
+			params to the action 
+
+		@param method optional type=string
+			the method to use when doing the function call - possible values: local / xmlrpc / (soap - not implemented yet) 
+
+		@param server optional type=string
+			if doing a rpc call, the server where to connect
+
+		@param login_obj optional type=int
+			if we must log in to a server the id of the CL_AW_LOGIN that will be used to login to the server. if this is set, then server will be ignored
+
+		@comment
+			Further information can be found in the orb specification
+	**/
 	function do_orb_method_call($arr)
 	{
 		extract($arr);
@@ -1341,9 +1465,25 @@ class core extends acl_base
 		return $ob->do_method_call($arr);
 	}
 
-	////
-	// !this takes an array and goes through it and makes another array that has as keys the values of the given array and also
-	// tha velues of the given array
+	/** this takes an array and goes through it and makes another array that has as keys the values of the given array and also the velues of the given array
+		@attrib api=1
+
+		@param arr required type=array
+			The array to convert. 
+
+		@examples
+			$arr = array("a", "b", "c");
+			echo dbg::dump($arr);	
+			// echos:
+			array(3) {
+			  [0]=>
+			  string(1) "a"
+			  [1]=>
+			  string(1) "b"
+			  [2]=>
+			  string(1) "c"
+			}	
+	**/
 	function make_keys($arr)
 	{
 		$ret = array();

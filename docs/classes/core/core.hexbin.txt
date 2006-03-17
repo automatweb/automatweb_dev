@@ -1,8 +1,0 @@
-function hexbin($str)
-
-The exact reverse of the binhex() function. Takes a string that consists of hex codes and returns a string that consists of characters whose codes are the hex codes. 
-
-<i>Parameters:</i>
-
-$str - 
-The hex string. 

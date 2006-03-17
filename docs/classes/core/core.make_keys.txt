@@ -1,8 +1,0 @@
-function make_keys($arr)
-
-Takes an array and returns a new arry, so that the new array's keys are the old array's values and the new array's values are the old array's values as well. 
-
-<i>Parameters:</i>
-
-- $arr
-The array to convert. 

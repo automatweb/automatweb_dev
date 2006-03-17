@@ -1,3 +1,0 @@
-function do_orb_method_call($arr)
-
-This function is documented in the orb specification. 

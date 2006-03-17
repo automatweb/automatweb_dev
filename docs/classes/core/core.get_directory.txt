@@ -1,8 +1,0 @@
-function get_directory($args = array())
-
-Returns a list of files in the specified directory. 
-
-<i>Parameters:</i>
-
-- $dir
-The directory on the server whose contents to return.

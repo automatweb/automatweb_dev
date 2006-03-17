@@ -1,8 +1,0 @@
-function get_file($arr)
-
-Returns the contents of the given file. If file is not found, false is returned. 
-
-<i>Parameters:</i>
-
-$file - 
-The full path of the file whose contents must be returned. 

@@ -1,3 +1,0 @@
-function mk_reforb($fun,$arr = array(),$cl_name = "")
-
-This function is documented in the orb specification. 
