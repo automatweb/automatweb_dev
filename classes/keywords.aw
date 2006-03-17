@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.64 2005/06/29 07:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.65 2006/03/17 14:34:12 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -1119,19 +1119,16 @@ class keywords extends class_base
 	// !returns an array of keywords suitable for feeding to a multiple select box
 	function get_keyword_picker()
 	{
-		$kwds = array();
-		$this->db_query("SELECT distinct(keyword) as keyword,objects.parent,objects.oid as oid FROM keywords LEFT JOIN objects ON objects.oid = keywords.oid");
-		while ($row = $this->db_next())
-		{
-			$kwds[$row["oid"]] = $row;
-		}
-
-		$menus = $this->get_menu_list();
+		$kwds = new object_list(array(
+			"class_id" => CL_KEYWORD,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
 
 		$ret = array();
-		foreach($kwds as $kid => $kdata)
+		foreach($kwds->arr() as $kid => $kdata)
 		{
-			$ret[$kid] = $menus[$kdata["parent"]]."/".$kdata["keyword"];
+			$ret[$kid] = $kdata->path_str();
 		}
 		return $ret;
 	}

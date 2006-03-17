@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.146 2006/03/07 10:11:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.147 2006/03/17 14:34:12 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -984,7 +984,7 @@ class menu extends class_base
 			// grkeywords just triggers an action, nothing should
 			// be saved into the objects table
 			case "grkeywords":
-				if (!$ob->id())
+				if ($ob->id())
 				{
 					$this->save_menu_keywords($data["value"],$ob->id());
 				};

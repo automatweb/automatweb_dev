@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.158 2006/01/30 11:13:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.159 2006/03/17 14:34:13 kristo Exp $
 
 /*
 
@@ -526,17 +526,50 @@ class site_show extends class_base
 		// if any keywords for the menu are set, we must show all the documents that match those keywords under the menu
 		if ($obj->meta("has_kwd_rels"))
 		{
+			// list all documents that have the same kwywords as this menu.
+			// so first, get this menus keywords
+			$m = get_instance(CL_MENU);
+			$kwlist = $m->get_menu_keywords($obj->id());
+			$c = new connection();
+			$doclist = $c->find(array(
+				"to" => $kwlist,
+			));
 			$docid = array();
-
-			$q = "
-				SELECT distinct(keywordrelations.id) as id FROM keyword2menu
-				LEFT JOIN keywordrelations ON keywordrelations.keyword_id = keyword2menu.keyword_id
-				LEFT JOIN objects ON keywordrelations.id = objects.oid
-				WHERE keyword2menu.menu_id = '".$obj->id()."' AND objects.status = 2";
-			$this->db_query($q);
-			while ($row = $this->db_next())
+			$non_docid = array();
+			foreach($doclist as $con)
 			{
-				$docid[] = $row["id"];
+				if ($con["from.class_id"] == CL_DOCUMENT)
+				{
+					if ($con["from.status"] == STAT_ACTIVE)
+					{
+						$docid[$con["from"]] = $con["from"];
+					}
+				}
+				else
+				{
+					$non_docid[$con["from"]] = $con["from"];
+				}
+			}
+
+			if (count($non_docid))
+			{
+				// fetch docs connected to THOSE
+				$doclist = $c->find(array(
+					"from.class_id" => CL_DOCUMENT,
+					"to" => $non_docid
+				));
+				foreach($doclist as $con)
+				{
+					if ($con["from.status"] == STAT_ACTIVE)
+					{
+						$docid[$con["from"]] = $con["from"];
+					}
+				}
+			}
+
+			if (count($docid) == 1)
+			{
+				$docid = reset($docid);
 			}
 			return $docid;
 		}
