@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.6 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.7 2006/03/17 15:06:30 ahti Exp $
 // personnel_management_cv_search.aw - CV Otsing 
 /*
 
@@ -8,26 +8,45 @@
 @default table=objects
 @default group=general
 @default form=cv_search
+@default store=no
 
+@property s_cv_name type=textbox
+@caption Nimi
 
+@property s_cv_company type=textbox
+@caption Ettevõte
 
-@property s_cv_ametinimetus type=textbox
+@property s_cv_job type=textbox
 @caption Ametinimetus
 
-@property s_cv_palgasoov type=textbox
+@layout pay type=vbox
+
+@property s_cv_paywish type=textbox parent=pay
 @caption Palk alates
+
+@property s_cv_paywish2 type=textbox parent=pay
+@caption Palk kuni
 
 @property s_cv_valdkond type=classificator mode=checkboxes multiple=1 orient=vertical reltype=RELTYPE_TEGEVUSVALDKOND
 @caption Tegevusala
 
 @property s_cv_liik type=classificator multiple=1 mode=checkboxes
-@caption T&ouml;&ouml; liik
+@caption Töö liik
 
 @property s_cv_asukoht type=objpicker multiple=1 clid=CL_CRM_CITY orient=vertical
-@caption Ttamise piirkond
+@caption Töötamise piirkond
 
 @property s_cv_koormus type=classificator multiple=1 orient=vertical mode=checkboxes
-@caption T&ouml;&ouml; koormus
+@caption Töökoormus
+
+@property personality type=textarea
+@caption Isikuomadused
+
+@property comments type=textarea
+@caption Kommentaarid
+
+@property recommenders type=textarea
+@caption Soovitajad
 
 @property cv_search_button type=submit value=Otsi
 @caption Otsi
@@ -329,7 +348,7 @@ class personnel_management_cv_search extends class_base
 			
 				$t->define_data(array(
 					"name" => html::href(array(
-						"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $o->id()), CL_PERSONNEL_MANAGEMENT_CV, true, true)."\",\"cv1\",800,600)",
+						"url" => $this->mk_my_orb("change", array("id" => $o->id()), CL_PERSONNEL_MANAGEMENT_CV, true, true),
 						"caption" => $o->name()
 					))
 				));

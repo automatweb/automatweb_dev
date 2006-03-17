@@ -1,422 +1,250 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>my_manager_profile_persons_tb</name>
-            <table>objects</table>
-            <group>manager_profile_persons</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>my_manager_profile_persons_tb</field>
-      </property>
-      <property>
-            <name>my_manager_profile_orgs_tb</name>
-            <table>objects</table>
-            <group>manager_profile_orgs</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>my_manager_profile_orgs_tb</field>
-      </property>
-      <property>
-            <name>my_profile_mycvs_tb</name>
-            <table>objects</table>
-            <group>my_profile_mycvs</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>my_profile_mycvs_tb</field>
-      </property>
-      <property>
-            <name>my_profile_candits_tb</name>
-            <table>objects</table>
-            <group>my_profile_candits</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>my_profile_candits_tb</field>
-      </property>
-      <property>
-            <name>my_profile_cvtable</name>
-            <table>objects</table>
-            <group>my_profile_mycvs</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>my_profile_cvtable</field>
-      </property>
-      <property>
-            <name>my_profile_candits_table</name>
-            <table>objects</table>
-            <group>my_profile_candits</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>my_profile_candits_table</field>
-      </property>
-      <property>
-            <name>org_profile_jobs_tb</name>
-            <table>objects</table>
-            <group>org_profile_jobs</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>org_profile_jobs_tb</field>
-      </property>
-      <property>
-            <name>org_profile_jobs_candits_tb</name>
-            <table>objects</table>
-            <group>org_profile_candits</group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>org_profile_jobs_candits_tb</field>
-      </property>
-      <property>
-            <name>org_profile_jobtable</name>
-            <table>objects</table>
-            <group>org_profile_jobs</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>org_profile_jobtable</field>
-      </property>
-      <property>
-            <name>org_profile_candits</name>
-            <table>objects</table>
-            <group>org_profile_candits</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>org_profile_candits</field>
-      </property>
-      <property>
-            <name>my_join_worker</name>
-            <table>objects</table>
-            <group>
-                  <num_0>my_join_worker</num_0>
-                  <num_1>my_profile_personal</num_1>
-            </group>
-            <type>callback</type>
-            <callback>callback_get_join_worker</callback>
-            <store>no</store>
-            <field>my_join_worker</field>
-      </property>
-      <property>
-            <name>my_join_offerer</name>
-            <table>objects</table>
-            <group>
-                  <num_0>my_join_offerer</num_0>
-                  <num_1>org_profile_info</num_1>
-            </group>
-            <type>callback</type>
-            <callback>callback_get_join_offerer</callback>
-            <store>no</store>
-            <field>my_join_offerer</field>
-      </property>
-      <property>
-            <name>treeview_person</name>
-            <table>objects</table>
-            <group>employee</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>treeview_person</field>
-      </property>
-      <property>
-            <name>personlist</name>
-            <table>objects</table>
-            <group>employee</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>personlist</field>
-      </property>
-      <property>
-            <name>treeview</name>
-            <table>objects</table>
-            <group>employers</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>treeview</field>
-      </property>
-      <property>
-            <name>joblist</name>
-            <table>objects</table>
-            <group>employers</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>joblist</field>
-      </property>
-      <property>
-            <name>cv_acitvity_prop</name>
-            <table>objects</table>
-            <group>env_setings</group>
-            <type>chooser</type>
-            <orient>vertical</orient>
-            <store>no</store>
-            <field>cv_acitvity_prop</field>
-            <caption>CVde aktiivsus</caption>
-      </property>
-      <property>
-            <name>max_active_cv</name>
-            <table>objects</table>
-            <group>env_setings</group>
-            <type>textbox</type>
-            <size>3</size>
-            <store>no</store>
-            <field>max_active_cv</field>
-            <caption>CV maksimaalselt aktiivne(p&amp;auml;evades)</caption>
-      </property>
-      <property>
-            <name>max_active_cv_def</name>
-            <table>objects</table>
-            <group>env_setings</group>
-            <type>textbox</type>
-            <size>3</size>
-            <store>no</store>
-            <field>max_active_cv_def</field>
-            <caption>CV maksimaalselt aktiivne(p&amp;auml;evades)</caption>
-      </property>
-      <property>
-            <name>max_active_job</name>
-            <table>objects</table>
-            <group>env_setings</group>
-            <type>textbox</type>
-            <size>3</size>
-            <store>no</store>
-            <field>max_active_job</field>
-            <caption>T&amp;ouml;&amp;ouml;pakkumine maksimaalselt aktiivne(p&amp;auml;evades) </caption>
-      </property>
-      <property>
-            <name>education_types</name>
-            <table>objects</table>
-            <group>education_setings</group>
-            <type>text</type>
-            <store>no</store>
-            <subtitle>1</subtitle>
-            <field>education_types</field>
-            <caption>Vali milliseid hariduse liike saab lisada</caption>
-      </property>
-      <property>
-            <name>list_of_education_cfgform</name>
-            <table>objects</table>
-            <group>education_setings</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>list_of_education_cfgform</field>
-      </property>
-      <property>
-            <name>additional_edu</name>
-            <table>objects</table>
-            <group>education_setings</group>
-            <type>select</type>
-            <store>no</store>
-            <field>additional_edu</field>
-            <caption>T&amp;auml;ienduskoolituse vorm</caption>
-      </property>
-      <property>
             <name>orgs</name>
+            <group>general</group>
             <table>objects</table>
-            <group>dir_setings</group>
-            <type>relpicker</type>
-            <method>serialize</method>
             <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
             <reltype>RELTYPE_MENU</reltype>
             <caption>Organisatsioonide kaust</caption>
       </property>
       <property>
             <name>persons</name>
+            <group>general</group>
             <table>objects</table>
-            <group>dir_setings</group>
-            <type>relpicker</type>
-            <method>serialize</method>
             <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
             <reltype>RELTYPE_MENU</reltype>
             <caption>Isikute kaust</caption>
       </property>
       <property>
-            <name>cvparent</name>
-            <table>objects</table>
-            <group>dir_setings</group>
-            <type>relpicker</type>
-            <method>serialize</method>
-            <field>meta</field>
-            <reltype>RELTYPE_MENU</reltype>
-            <caption>CV-de kaust</caption>
-      </property>
-      <property>
             <name>offers</name>
+            <group>general</group>
             <table>objects</table>
-            <group>dir_setings</group>
-            <type>relpicker</type>
-            <method>serialize</method>
             <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
             <reltype>RELTYPE_MENU</reltype>
             <caption>T&amp;ouml;&amp;ouml;pakkumiste kaust</caption>
       </property>
       <property>
             <name>tegevusvaldkonnad</name>
+            <group>general</group>
             <table>objects</table>
-            <group>dir_setings</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SECTORS</reltype>
-            <method>serialize</method>
-            <field>meta</field>
-            <caption>Tegevusvaldkondade kaust</caption>
+            <caption>Tegevusvaldkonnad</caption>
       </property>
       <property>
-            <name>join_obj_worker</name>
+            <name>person_ot</name>
+            <group>general</group>
             <table>objects</table>
-            <group>layout_setings</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_JOIN_OBJ</reltype>
-            <method>serialize</method>
-            <field>meta</field>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;taja liitumisvorm</caption>
+            <reltype>RELTYPE_PERSON_OT</reltype>
+            <caption>Isikute objektit&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
-            <name>join_obj_offerer</name>
+            <name>crmdb</name>
+            <group>general</group>
             <table>objects</table>
-            <group>layout_setings</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_JOIN_OBJ</reltype>
-            <method>serialize</method>
-            <field>meta</field>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkuja liitumisvorm</caption>
+            <reltype>RELTYPE_CRM_DB</reltype>
+            <caption>Kliendibaas</caption>
       </property>
       <property>
-            <name>locations</name>
+            <name>owner_org</name>
+            <group>general</group>
             <table>objects</table>
-            <group>layout_setings</group>
-            <type>callback</type>
-            <callback>callback_get_locations</callback>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Asukohad</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OWNER_ORG</reltype>
+            <caption>Omanikorganisatsioon</caption>
+      </property>
+      <property>
+            <name>search_save</name>
+            <group>employee_search</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SEARCH_SAVE</reltype>
+            <caption>Varasem otsing</caption>
       </property>
       <property>
             <name>search_cv</name>
+            <group>employee_search</group>
             <table>objects</table>
-            <group>search_cv</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>form</type>
             <sclass>applications/personnel_management/personnel_management_cv_search</sclass>
             <sform>cv_search</sform>
             <store>no</store>
-            <field>search_cv</field>
             <caption>Otsi CV-sid</caption>
+      </property>
+      <property>
+            <name>employee_list_toolbar</name>
+            <group>employee_list</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>employee_list_tree</name>
+            <group>employee_list</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>employee_list</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>employee_list_table</name>
+            <group>employee_list</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>employee_list</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>candidate_toolbar</name>
+            <group>candidate</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>candidate_tree</name>
+            <group>candidate</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>candidate</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>candidate_table</name>
+            <group>candidate</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>candidate</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>offers_toolbar</name>
+            <group>offers</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>offers_tree</name>
+            <group>offers</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>offers</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>joblist</name>
+            <group>offers</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>offers</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>treeview3</name>
+            <group>actions</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <default>asd</default>
+      </property>
+      <property>
+            <name>treeview4</name>
+            <group>clients</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <default>asd</default>
       </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT</syslog_type>
             <relationmgr>yes</relationmgr>
+            <r2>yes</r2>
             <no_status>1</no_status>
+            <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
-            <my_profile>
-                  <caption>Minu profiil</caption>
-                  <tabgroup>navi</tabgroup>
-            </my_profile>
-            <org_profile>
-                  <caption>T&amp;ouml;&amp;ouml;pakkuja profiil</caption>
-                  <submit>no</submit>
-            </org_profile>
             <employee>
                   <caption>T&amp;ouml;&amp;ouml;otsijad</caption>
                   <submit>no</submit>
             </employee>
-            <employers>
-                  <caption>T&amp;ouml;&amp;ouml;pakkumised</caption>
+            <employee_search>
+                  <caption>Otsing</caption>
+                  <parent>employee</parent>
+            </employee_search>
+            <employee_list>
+                  <caption>Nimekiri</caption>
+                  <parent>employee</parent>
                   <submit>no</submit>
-            </employers>
-            <managers>
-                  <caption>Halduri profiil</caption>
-            </managers>
-            <my_profile_mycvs>
-                  <caption>Minu CV-d</caption>
-                  <parent>my_profile</parent>
-                  <submit>no</submit>
-                  <tabgroup>navi</tabgroup>
-            </my_profile_mycvs>
-            <my_profile_candits>
-                  <caption>Kandideerin</caption>
-                  <parent>my_profile</parent>
-                  <submit>no</submit>
-                  <tabgroup>navi</tabgroup>
-            </my_profile_candits>
-            <my_profile_personal>
-                  <caption>Minu andmed</caption>
-                  <parent>my_profile</parent>
-                  <tabgroup>navi</tabgroup>
-            </my_profile_personal>
-            <org_profile_jobs>
-                  <caption>T&amp;ouml;&amp;ouml;pakkumised</caption>
-                  <parent>org_profile</parent>
-                  <submit>no</submit>
-            </org_profile_jobs>
-            <org_profile_candits>
+            </employee_list>
+            <candidate>
                   <caption>Kandideerijad</caption>
-                  <parent>org_profile</parent>
-            </org_profile_candits>
-            <org_profile_info>
-                  <caption>T&amp;ouml;&amp;ouml;pakkuja andmed</caption>
-                  <parent>org_profile</parent>
-            </org_profile_info>
-            <all_setings>
-                  <caption>Seadistused</caption>
-            </all_setings>
-            <dir_setings>
-                  <caption>Kaustade seaded</caption>
-                  <parent>all_setings</parent>
-            </dir_setings>
-            <layout_setings>
-                  <caption>Seaded</caption>
-                  <parent>all_setings</parent>
-            </layout_setings>
-            <env_setings>
-                  <caption>Keskkonna seaded</caption>
-                  <parent>all_setings</parent>
-            </env_setings>
-            <education_setings>
-                  <caption>Haridus seaded</caption>
-                  <parent>all_setings</parent>
-            </education_setings>
-            <my_join>
-                  <caption>Registreeru</caption>
-                  <tabgroup>left</tabgroup>
-            </my_join>
-            <my_join_worker>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;otsija</caption>
-                  <parent>my_join</parent>
-                  <tabgroup>left</tabgroup>
-            </my_join_worker>
-            <my_join_offerer>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;pakkuja</caption>
-                  <parent>my_join</parent>
-                  <tabgroup>left</tabgroup>
-            </my_join_offerer>
-            <manager_profile>
-                  <caption>Halduri profiil</caption>
-            </manager_profile>
-            <manager_profile_persons>
-                  <caption>T&amp;ouml;&amp;ouml;otsijad</caption>
-                  <parent>manager_profile</parent>
-            </manager_profile_persons>
-            <manager_profile_orgs>
-                  <caption>T&amp;ouml;&amp;ouml;pakkujad</caption>
-                  <parent>manager_profile</parent>
-            </manager_profile_orgs>
-            <search>
-                  <caption>Otsi</caption>
-            </search>
-            <search_cv>
-                  <caption>Otsi CV'sid</caption>
-            </search_cv>
-            <search_offer>
-                  <caption>Otsi pakkumisi</caption>
-            </search_offer>
+                  <submit>no</submit>
+            </candidate>
+            <offers>
+                  <caption>T&amp;ouml;&amp;ouml;pakkumised</caption>
+                  <submit>no</submit>
+            </offers>
+            <actions>
+                  <caption>Tegevused</caption>
+                  <submit>no</submit>
+            </actions>
+            <clients>
+                  <caption>Kliendid</caption>
+                  <submit>no</submit>
+            </clients>
       </groupinfo>
       <reltypes>
             <MENU>
@@ -424,35 +252,48 @@
                   <clid>CL_MENU</clid>
                   <caption>Kaust</caption>
             </MENU>
+            <CRM_DB>
+                  <value>2</value>
+                  <clid>CL_CRM_DB</clid>
+                  <caption>Kliendibaas</caption>
+            </CRM_DB>
             <SECTORS>
-                  <value>20</value>
-                  <clid>CL_META</clid>
+                  <value>3</value>
+                  <clid>CL_METAMGR</clid>
                   <caption>Tegevusvaldkonnad</caption>
             </SECTORS>
-            <JOIN_OBJ>
-                  <value>21</value>
-                  <clid>CL_JOIN_SITE</clid>
-                  <caption>liitumisvorm</caption>
-            </JOIN_OBJ>
-            <CONTENT>
-                  <value>22</value>
-                  <clid>
-                        <num_0>CL_MENU_AREA</num_0>
-                        <num_1>CL_POLL</num_1>
-                        <num_2>CL_PROMO</num_2>
-                  </clid>
-                  <caption>Sisuelement</caption>
-            </CONTENT>
-            <LAYOUT_BACKGROUND>
-                  <value>23</value>
-                  <clid>CL_IMAGE</clid>
-                  <caption>Kujunduse taustapilt</caption>
-            </LAYOUT_BACKGROUND>
-            <LAYOUT_LOGO>
-                  <value>24</value>
-                  <clid>CL_IMAGE</clid>
-                  <caption>Kujunduse logo</caption>
-            </LAYOUT_LOGO>
+            <PERSON_OT>
+                  <value>4</value>
+                  <clid>CL_OBJECT_TYPE</clid>
+                  <caption>Objektit&amp;uuml;&amp;uuml;p</caption>
+            </PERSON_OT>
+            <OWNER_ORG>
+                  <value>5</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Omanikorganisatsioon</caption>
+            </OWNER_ORG>
+            <SEARCH_SAVE>
+                  <value>6</value>
+                  <clid>CL_BLAH</clid>
+                  <caption>Otsingu salvestus</caption>
+            </SEARCH_SAVE>
       </reltypes>
+      <layout>
+            <employee_list>
+                  <type>hbox</type>
+                  <width>15%:85%</width>
+                  <group>employee_list</group>
+            </employee_list>
+            <candidate>
+                  <type>hbox</type>
+                  <width>15%:85%</width>
+                  <group>candidate</group>
+            </candidate>
+            <offers>
+                  <type>hbox</type>
+                  <width>15%:85%</width>
+                  <group>offers</group>
+            </offers>
+      </layout>
 </properties>
 

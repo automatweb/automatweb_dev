@@ -1,48 +1,191 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>profession</name>
-            <table>personnel_management_job</table>
+            <name>company</name>
+            <table>objects</table>
             <group>general</group>
-            <type>select</type>
-            <datatype>int</datatype>
-            <field>profession</field>
-            <caption>Ametikoht</caption>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORG</reltype>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>contact</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT</reltype>
+            <caption>Kontaktisik</caption>
       </property>
       <property>
             <name>deadline</name>
-            <table>personnel_management_job</table>
+            <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
-            <field>deadline</field>
             <caption>Konkursi t&amp;auml;htaeg</caption>
       </property>
       <property>
             <name>beginning</name>
-            <table>personnel_management_job</table>
+            <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
-            <field>beginning</field>
             <caption>Konkursi algusaeg</caption>
+      </property>
+      <property>
+            <name>profession</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PROFESSION</reltype>
+            <caption>Ametikoht</caption>
+      </property>
+      <property>
+            <name>location</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LOCATION</reltype>
+            <caption>Asukoht</caption>
+      </property>
+      <property>
+            <name>tests</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_TEST</reltype>
+            <caption>Testid</caption>
+      </property>
+      <property>
+            <name>workinfo</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>T&amp;ouml;&amp;ouml; sisu</caption>
+      </property>
+      <property>
+            <name>requirements</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>N&amp;otilde;udmised kandidaadile</caption>
+      </property>
+      <property>
+            <name>suplementary</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Kasuks tuleb</caption>
+      </property>
+      <property>
+            <name>weoffer</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Omalt poolt pakume</caption>
+      </property>
+      <property>
+            <name>info</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Lisainfo</caption>
+      </property>
+      <property>
+            <name>candidate_toolbar</name>
+            <table>objects</table>
+            <group>candidate</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>candidate_table</name>
+            <table>objects</table>
+            <group>candidate</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>info4</name>
+            <table>objects</table>
+            <group>preview</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <caption>Lisainfo</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
-            <no_yah>1</no_yah>
+            <r2>yes</r2>
+            <no_comment>1</no_comment>
       </classinfo>
-      <tableinfo>
-            <personnel_management_job>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </personnel_management_job>
-      </tableinfo>
+      <groupinfo>
+            <candidate>
+                  <caption>Kandideerimised</caption>
+                  <submit>no</submit>
+            </candidate>
+            <preview>
+                  <caption>Eelvaade</caption>
+                  <submit>no</submit>
+            </preview>
+      </groupinfo>
       <reltypes>
-            <SECTION>
-                  <value>9</value>
-                  <clid>CL_CRM_SECTION</clid>
-                  <caption>&amp;Uuml;ksus</caption>
-            </SECTION>
+            <TEST>
+                  <value>1</value>
+                  <clid>CL_TEST</clid>
+                  <caption>Test</caption>
+            </TEST>
+            <ORG>
+                  <value>2</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Organisatsioon</caption>
+            </ORG>
+            <LOCATION>
+                  <value>3</value>
+                  <clid>CL_CRM_LOCATION</clid>
+                  <caption>Asukoht</caption>
+            </LOCATION>
+            <CONTACT>
+                  <value>4</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kontaktisik</caption>
+            </CONTACT>
+            <CANDIDATE>
+                  <value>5</value>
+                  <clid>CL_PERSONNEL_MANAGEMENT_CANDIDATE</clid>
+                  <caption>Kandidatuur</caption>
+            </CANDIDATE>
       </reltypes>
 </properties>
 

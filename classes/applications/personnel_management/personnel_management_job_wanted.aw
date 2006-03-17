@@ -1,50 +1,54 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.3 2005/04/21 08:48:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.4 2006/03/17 15:06:30 ahti Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_WANTED relationmgr=yes
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_WANTED relationmgr=yes r2=yes no_comment=1
+
 @tableinfo personnel_management_job_wanted master_table=objects master_index=oid index=oid
 
 @default table=personnel_management_job_wanted
 @default group=general
+@default table=objects
+@default field=meta
+@default method=serialize
 
-@property name type=textbox table=objects
-@caption Ametinimetus
-
-@property palgasoov type=textbox size=5 datatype=int
-@caption Palgasoov
-
-@property valdkond type=classificator multiple=1 orient=vertical store=connect reltype=RELTYPE_TEGEVUSVALDKOND field=meta method=serialize table=objects
+@property field type=classificator multiple=1 orient=vertical store=connect field=meta method=serialize table=objects
 @caption Tegevusala
 
-@property liik type=classificator multiple=1 method=serialize store=connect reltype=RELTYPE_LIIK field=meta method=serialize table=objects
-@caption T&ouml;&ouml; liik
+@property professions type=textarea table=objects field=comment
+@caption Soovitavad ametid
 
-@property asukoht type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LINN orient=vertical store=connect field=meta method=serialize table=objects
-@caption T&ouml;&ouml;tamise piirkond
+@property load type=classificator multiple=1 orient=vertical store=connect field=meta method=serialize table=objects
+@caption Töö koormus
 
-@property koormus type=classificator multiple=1 orient=vertical store=connect reltype=RELTYPE_KOORMUS field=meta method=serialize table=objects
-@caption T&ouml;&ouml; koormus
+@layout pay type=hbox width=15%:15%:70%
 
-@property lisainfo type=textarea
-@caption Lisainfo soovitava t&ouml;&ouml; kohta
+@property pay type=textbox size=5 datatype=int parent=pay
+@caption Palgasoov alates-kuni
+
+@property pay2 type=textbox size=5 datatype=int parent=pay no_caption=1
+
+@property location type=relpicker multiple=1 automatic=1 orient=vertical store=connect field=meta method=serialize table=objects
+@caption Töö asukoht
+
+@property addinfo type=textarea
+@caption Lisainfo soovitava töö kohta
 
 @property sbutton type=submit store=no
 @caption Lisa
 
+@groupinfo candidate caption="Kandideerimised" submit=no
+@default group=candidate
+
+@property candidate_toolbar type=toolbar no_caption=1
+
+@property candidate_table type=table no_caption=1
+
 ------------SEOSED-------------------
-@reltype LINN value=1 clid=CL_CRM_CITY
-@caption Linn
 
-@reltype LIIK value=2 clid=CL_META
-@caption liik
-
-@reltype TEGEVUSVALDKOND value=3 clid=CL_META
-@caption Tegevusala
-
-@reltype KOORMUS value=4 clid=CL_META
-@caption Koormus
+@reltype CANDIDATE value=3 clid=CL_PERSONNEL_MANAGEMENT_CANDIDATE
+@caption Kandideerimine
 
 */
 
@@ -71,7 +75,24 @@ class personnel_management_job_wanted extends class_base
 					$prop["caption"] = "Muuda";
 				}
 			break;
-			
+
+			case "candidate_toolbar":
+				$prop["vcl_inst"]->add_button(array(
+					"name" => "add",
+					"caption" => t("Lisa"),
+					"img" => "new.gif",
+				));
+				break;
+
+			case "candidate_table":
+				$prop["vcl_inst"]->define_field(array(
+					"name" => "name",
+					"caption" => t("Nimi"),
+				));
+				$prop["vcl_inst"]->define_data(array(
+					"name" => "test",
+				));
+				break;
 		}
 	}
 	function set_property($arr = array())

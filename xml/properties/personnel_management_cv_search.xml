@@ -1,28 +1,63 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>s_cv_ametinimetus</name>
+            <name>s_cv_name</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
+            <store>no</store>
             <type>textbox</type>
-            <field>s_cv_ametinimetus</field>
+            <field>s_cv_name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>s_cv_company</name>
+            <table>objects</table>
+            <group>general</group>
+            <form>cv_search</form>
+            <store>no</store>
+            <type>textbox</type>
+            <field>s_cv_company</field>
+            <caption>Ettev&amp;otilde;te</caption>
+      </property>
+      <property>
+            <name>s_cv_job</name>
+            <table>objects</table>
+            <group>general</group>
+            <form>cv_search</form>
+            <store>no</store>
+            <type>textbox</type>
+            <field>s_cv_job</field>
             <caption>Ametinimetus</caption>
       </property>
       <property>
-            <name>s_cv_palgasoov</name>
+            <name>s_cv_paywish</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
+            <store>no</store>
             <type>textbox</type>
-            <field>s_cv_palgasoov</field>
+            <parent>pay</parent>
+            <field>s_cv_paywish</field>
             <caption>Palk alates</caption>
+      </property>
+      <property>
+            <name>s_cv_paywish2</name>
+            <table>objects</table>
+            <group>general</group>
+            <form>cv_search</form>
+            <store>no</store>
+            <type>textbox</type>
+            <parent>pay</parent>
+            <field>s_cv_paywish2</field>
+            <caption>Palk kuni</caption>
       </property>
       <property>
             <name>s_cv_valdkond</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
+            <store>no</store>
             <type>classificator</type>
             <mode>checkboxes</mode>
             <multiple>1</multiple>
@@ -36,44 +71,77 @@
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
+            <store>no</store>
             <type>classificator</type>
             <multiple>1</multiple>
             <mode>checkboxes</mode>
             <field>s_cv_liik</field>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml; liik</caption>
+            <caption>T&amp;ouml;&amp;ouml; liik</caption>
       </property>
       <property>
             <name>s_cv_asukoht</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
+            <store>no</store>
             <type>objpicker</type>
             <multiple>1</multiple>
             <clid>CL_CRM_CITY</clid>
             <orient>vertical</orient>
             <field>s_cv_asukoht</field>
-            <caption>Ttamise piirkond</caption>
+            <caption>T&amp;ouml;&amp;ouml;tamise piirkond</caption>
       </property>
       <property>
             <name>s_cv_koormus</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
+            <store>no</store>
             <type>classificator</type>
             <multiple>1</multiple>
             <orient>vertical</orient>
             <mode>checkboxes</mode>
             <field>s_cv_koormus</field>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml; koormus</caption>
+            <caption>T&amp;ouml;&amp;ouml;koormus</caption>
+      </property>
+      <property>
+            <name>personality</name>
+            <table>objects</table>
+            <group>general</group>
+            <form>cv_search</form>
+            <store>no</store>
+            <type>textarea</type>
+            <field>personality</field>
+            <caption>Isikuomadused</caption>
+      </property>
+      <property>
+            <name>comments</name>
+            <table>objects</table>
+            <group>general</group>
+            <form>cv_search</form>
+            <store>no</store>
+            <type>textarea</type>
+            <field>comments</field>
+            <caption>Kommentaarid</caption>
+      </property>
+      <property>
+            <name>recommenders</name>
+            <table>objects</table>
+            <group>general</group>
+            <form>cv_search</form>
+            <store>no</store>
+            <type>textarea</type>
+            <field>recommenders</field>
+            <caption>Soovitajad</caption>
       </property>
       <property>
             <name>cv_search_button</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
+            <store>no</store>
             <type>submit</type>
             <value>Otsi</value>
-            <store>no</store>
             <field>cv_search_button</field>
             <caption>Otsi</caption>
       </property>
@@ -82,9 +150,9 @@
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
+            <store>no</store>
             <type>table</type>
             <no_caption>1</no_caption>
-            <store>no</store>
             <field>cv_search_results</field>
             <caption>Otsingutulemused </caption>
       </property>
@@ -93,6 +161,7 @@
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
+            <store>no</store>
             <type>hidden</type>
             <value>1</value>
             <field>no_reforb</field>
@@ -113,6 +182,12 @@
                   <caption>Linn</caption>
             </LINN>
       </reltypes>
+      <layout>
+            <pay>
+                  <type>vbox</type>
+                  <group>general</group>
+            </pay>
+      </layout>
       <forminfo>
             <cv_search>
                   <onload>init_search</onload>
