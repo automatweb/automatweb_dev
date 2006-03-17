@@ -16,7 +16,7 @@ class msg_scanner extends class_base
 	function scan()
 	{
 		// generate list of all class files in aw
-		$parser = get_instance("core/docgen/parser");
+		$parser = get_instance("core/aw_code_analyzer/parser");
 		$files = array();
 		$parser->_get_class_list(&$files, $this->cfg["classdir"]);
 

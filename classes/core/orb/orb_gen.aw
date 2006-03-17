@@ -3,15 +3,15 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_orb_gen.aw,v 1.8 2006/02/20 13:50:21 kristo Exp $
+	@cvs $Id: orb_gen.aw,v 1.1 2006/03/17 13:11:59 dragut Exp $
 
 	@comment 
 	generates orb defs, based on information from docgen_analyzer
 **/
 
-class docgen_orb_gen extends class_base
+class orb_gen extends class_base
 {
-	function docgen_orb_gen()
+	function orb_gen()
 	{
 		$this->init("core/docgen");
 	}
@@ -253,7 +253,7 @@ class docgen_orb_gen extends class_base
 	
 	function make_orb_defs_from_doc_comments()
 	{
-		$p = get_instance("core/docgen/parser");
+		$p = get_instance("core/aw_code_analyzer/parser");
 		$files = array();
 		$p->_get_class_list(&$files, $this->cfg["basedir"]."/classes");
 
@@ -272,7 +272,7 @@ class docgen_orb_gen extends class_base
 
 			if ($clmod >= $xmlmod)
 			{
-				$da = get_instance("core/docgen/docgen_analyzer");
+				$da = get_instance("core/aw_code_analyzer/aw_code_analyzer");
 				$cld = $da->analyze_file($file, true);
 				// if there are no classes in the file then it gets ignored
 				if (!is_array($cld["classes"]) || count($cld["classes"]) < 1)

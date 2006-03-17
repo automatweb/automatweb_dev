@@ -3,17 +3,17 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.25 2006/03/17 10:38:17 dragut Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.1 2006/03/17 13:11:59 dragut Exp $
 
 	@comment
 	analyses aw code
 **/
 
-class docgen_analyzer extends class_base
+class aw_code_analyzer extends class_base
 {
-	function docgen_analyzer()
+	function aw_code_analyzer()
 	{
-		$this->init("core/docgen");
+		$this->init("core/aw_code_analyzer");
 	}
 
 	function analyze_file($file, $is_fp = false)
