@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.344 2006/03/08 15:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.345 2006/03/20 12:45:20 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2899,6 +2899,15 @@ class document extends aw_template
 		{
 			$file = $alias->to();
 			$ext = $mime_registry->ext_for_type($file->prop("type"));
+			if ($ext == "")
+			{
+				$pos = strrpos($file->name(),".");
+				if ($pos)
+				{
+					$ext = substr($file->name(), $pos+1);
+				}
+			}
+
 			if ($ext != "" && $ext != "html")
 			{
 				$this->vars(array(
