@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.147 2006/03/17 14:34:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.148 2006/03/20 10:54:50 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -269,6 +269,8 @@
 
 	@groupinfo keywords caption=Võtmesõnad parent=menus
 
+		@property kw_tb type=toolbar no_caption=1 store=no group=keywords
+
 		@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
 		@caption AW Märksõnad
 
@@ -429,6 +431,10 @@ class menu extends class_base
 		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
+			case "kw_tb":
+				$this->kw_tb($arr);
+				break;
+
 			case "left_pane":
 			case "right_pane":
 				$retval = PROP_IGNORE;
@@ -1684,6 +1690,18 @@ class menu extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	function kw_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		
+		$tb->add_button(array(
+			"name" => "new_kw",
+			"tooltip" => t("M&auml;rks&otilde;na"),
+			"url" => html::get_new_url(CL_KEYWORD, $arr["obj_inst"]->id(), array("return_url" => get_ru())),
+			"img" => "new.gif",
+		));
 	}
 };
 ?>

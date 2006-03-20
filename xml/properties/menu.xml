@@ -657,6 +657,15 @@
             <caption>Mitu viimast perioodi</caption>
       </property>
       <property>
+            <name>kw_tb</name>
+            <table>objects</table>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <group>keywords</group>
+            <field>kw_tb</field>
+      </property>
+      <property>
             <name>grkeywords</name>
             <table>objects</table>
             <type>select</type>
