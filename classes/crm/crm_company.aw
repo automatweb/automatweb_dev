@@ -4774,7 +4774,7 @@ class crm_company extends class_base
 			var ansa = confirm('Sellise nimega organisatsioon on juba olemas. Kas soovite minna selle objekti muutmisele?');
 			if (ansa)
 			{
-				window.location = '".$this->mk_my_orb("go_to_first_co_by_name", array("return_url" => urlencode($arr["request"]["return_url"])))."&co_name=' + document.changeform.name.value;
+				window.location = '".$this->mk_my_orb("go_to_first_co_by_name", array("return_url" => $arr["request"]["return_url"]))."&co_name=' + document.changeform.name.value;
 				return false;
 			}
 			return false;
