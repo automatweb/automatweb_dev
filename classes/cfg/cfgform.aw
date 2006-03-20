@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.80 2006/03/03 15:07:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.81 2006/03/20 08:55:53 ahti Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1155,7 +1155,7 @@ class cfgform extends class_base
 				"name" => "grpord[".$key."]",
 				"type" => "textbox",
 				"size" => 5,
-				"caption" => t("J&auml;rjekod"),
+				"caption" => t("J&auml;rjekord"),
 				"value" => $item["ord"],
 				"parent" => "b".$key,
 			);
@@ -1187,7 +1187,7 @@ class cfgform extends class_base
 				"name" => "b".$key,
 				"type" => "layout",
 				"rtype" => "hbox",
-				"no_caption" => 1,
+				"caption" => $key,
 			);
 			/*
 			$items = array(

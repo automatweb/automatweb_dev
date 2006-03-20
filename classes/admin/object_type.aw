@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.19 2006/02/07 13:55:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.20 2006/03/20 08:55:53 ahti Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -192,7 +192,8 @@ class object_type extends class_base
 		{
 			$rv["c".$key] = array(
 				"name" => "c".$key,
-				"type" => "text",
+				"type" => "layout",
+				"rtype" => "hbox",
 				"caption" => $key,
 			);
 
