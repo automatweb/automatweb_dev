@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.7 2005/03/20 15:39:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.8 2006/03/21 14:55:37 kristo Exp $
 /*
 
 	@classinfo syslog_type=ST_CAL_CONTENT
@@ -74,13 +74,16 @@ class cal_content extends class_base
 			/// XXX: I need to check whether that class really has
 			// content interface and whether that method really is a
 			// content provider -- duke
-			$retval = $this->do_orb_method_call(array(
-				"class" => $pf,
-				"action" => $pm,
-				"params" => array(
-					"count" => $meta["show_count"],
-				),
-			));
+			if ($pm != "")
+			{
+				$retval = $this->do_orb_method_call(array(
+					"class" => $pf,
+					"action" => $pm,
+					"params" => array(
+						"count" => $meta["show_count"],
+					),
+				));
+			}
 		}
 		else
 		{
