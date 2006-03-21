@@ -26,6 +26,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
+            <editonly>1</editonly>
             <caption></caption>
       </property>
 </properties>

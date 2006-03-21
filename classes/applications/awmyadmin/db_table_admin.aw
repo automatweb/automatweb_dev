@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.5 2005/12/09 07:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.6 2006/03/21 13:23:00 kristo Exp $
 
 /*
 
@@ -14,7 +14,7 @@
 	@property db_table type=select 
 	@caption Vali tabel
 
-	@property adminlink type=text
+	@property adminlink type=text editonly=1
 	@caption 
 
 */
@@ -49,7 +49,7 @@ class db_table_admin extends class_base
 			
 			case 'adminlink':
 				$args['prop']['value'] = html::href(array(
-					'url' => $this->mk_my_orb('admin', array('id' => $args['obj']['oid'])),
+					'url' => $this->mk_my_orb('admin', array('id' => $args['obj_inst']->id())),
 					'caption' => 'Administreeri'
 				));
 				break;
