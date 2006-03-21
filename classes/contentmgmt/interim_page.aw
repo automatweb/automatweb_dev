@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.3 2006/02/09 14:38:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.4 2006/03/21 10:10:39 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -137,7 +137,7 @@ class interim_page extends class_base
 		lc_site_load("interim_page", &$this);
 		$connections = $targ->connections_from();
 		$register_id = $targ->prop("register_data");
-	
+		
 		if(is_oid($register_id))
 		{
 			$register_obj = obj($register_id);
@@ -154,7 +154,7 @@ class interim_page extends class_base
 			//tekitab userim muutujad ja annab neile väärtuseks pildiurlid:
 			$img_props = array();//siia paigutab miski hulk piltide properteid .. hiljem läheb vaja
 			$x = 1;
-			while($x < 6)
+			while($x < 21)
 			{
 				$img_props[] = "userim".$x;
 				$image = $register_obj->get_first_obj_by_reltype("RELTYPE_IMAGE".$x);
@@ -167,7 +167,10 @@ class interim_page extends class_base
 				$x++;
 			}
 			//järgnev on subide väljapraakimiseks group järgi, et noh, kui miski grupi propertitel väärtusi pole, siis templades sellenimelise SUBi koodi näha ei ole
-			foreach($register_obj->get_group_list() as $sub => $data)
+			
+			$grps = safe_array($form_obj->meta("cfg_groups"));
+
+			foreach($grps as $sub => $data)
 			{
 				if ($this->is_template($sub))
 				{
