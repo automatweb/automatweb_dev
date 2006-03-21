@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.5 2005/12/09 07:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.6 2006/03/21 14:37:40 kristo Exp $
 
 /*
 	@classinfo syslog_type=ST_DB_SERVER_EXPLORER relationmgr=yes no_status=1 no_comment=1
@@ -70,6 +70,10 @@ class db_server_explorer extends class_base
 		
 		$db_inst = get_instance(CL_DB_LOGIN);
 		$cfg_inst = get_instance(CL_DB_VIEW_CONF);
+		if (!$this->can("view", $ob->prop("conf")))
+		{
+			return;
+		}
 		$servers = $cfg_inst->get_servers($ob->prop('conf'));
 		$databases = $cfg_inst->get_databases_by_server($ob->prop('conf'));
 
