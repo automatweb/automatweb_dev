@@ -3632,14 +3632,18 @@ class crm_company extends class_base
 		{
 			$ids[] = $c["to"];
 		}
-		$ol = new object_list(array(
-			"oid" => $ids,
-			"site_id" => array(),
-			"lang_id" => array(),
-			"class_id" => CL_TASK,
-			"is_done" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
-		));
-		return $ol->ids();
+		if(!empty($ids))
+		{
+			$ol = new object_list(array(
+				"oid" => $ids,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"class_id" => CL_TASK,
+				"is_done" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
+			));
+			return $ol->ids();
+		}
+		return array();
 		/*$ret = array();
 		foreach($cs as $c)
 		{
