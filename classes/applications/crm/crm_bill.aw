@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.30 2006/03/21 08:16:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.31 2006/03/21 14:41:43 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -741,6 +741,10 @@ class crm_bill extends class_base
 
 	function get_bill_rows($bill)
 	{
+		if (!is_oid($bill->id()))
+		{
+			return array();
+		}
 		$inf = array();
 		$cons = $bill->connections_from(array("type" => "RELTYPE_ROW"));
 		if (!count($cons))
