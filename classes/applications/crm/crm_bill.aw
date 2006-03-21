@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.29 2006/03/13 12:27:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.30 2006/03/21 08:16:05 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
-@classinfo syslog_type=ST_CRM_BILL relationmgr=yes no_comment=1 no_status=1 prop_cb=1 confirm_save_data=1
+@classinfo syslog_type=ST_CRM_BILL relationmgr=yes no_status=1 prop_cb=1 confirm_save_data=1
 
 @default table=objects
 
@@ -16,6 +16,12 @@
 
 	@property name type=textbox table=objects field=name
 	@caption Nimi
+
+	@property comment type=textbox table=objects field=comment
+	@caption Kommentaar lisale
+
+	@property time_spent_desc type=textbox table=aw_crm_bill field=aw_time_spent_desc
+	@caption Kulunud aeg tekstina
 
 	@property bill_no type=textbox table=aw_crm_bill field=aw_bill_no
 	@caption Number
@@ -917,6 +923,8 @@ class crm_bill extends class_base
 			"impl_fax" => $impl->prop_str("telefax_id"),
 			"impl_email" => $impl_mail,
 			"impl_url" => $impl->prop_str("url_id"),
+			"comment" => $b->comment(),
+			"time_spent_desc" => $b->prop("time_spent_desc")
 		));		
 
 
@@ -1009,7 +1017,8 @@ class crm_bill extends class_base
 			"total_wo_tax" => number_format($sum_wo_tax, 2),
 			"tax" => number_format($tax, 2),
 			"total" => number_format($sum, 2),
-			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc)
+			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc),
+			"tot_amt" => number_format($tot_amt, 2)
 		));
 
 		$res =  $this->parse();
@@ -1391,6 +1400,19 @@ class crm_bill extends class_base
 	function _billt_tb($arr)
 	{
 		
+	}
+
+	function do_db_upgrade($table, $field, $q, $err)
+	{
+		switch($field)
+		{
+			case "aw_time_spent_desc":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "varchar(255)"
+				));
+				return true;
+		}
 	}
 }
 ?>

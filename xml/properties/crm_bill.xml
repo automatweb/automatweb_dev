@@ -19,6 +19,22 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>comment</field>
+            <caption>Kommentaar lisale</caption>
+      </property>
+      <property>
+            <name>time_spent_desc</name>
+            <table>aw_crm_bill</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>aw_time_spent_desc</field>
+            <caption>Kulunud aeg tekstina</caption>
+      </property>
+      <property>
             <name>bill_no</name>
             <table>aw_crm_bill</table>
             <group>general</group>
@@ -176,7 +192,6 @@
       <classinfo>
             <syslog_type>ST_CRM_BILL</syslog_type>
             <relationmgr>yes</relationmgr>
-            <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
             <confirm_save_data>1</confirm_save_data>
