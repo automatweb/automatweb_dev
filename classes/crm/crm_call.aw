@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.42 2006/03/08 15:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.43 2006/03/21 14:52:10 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -501,6 +501,7 @@ class crm_call extends class_base
 				'search_contact_lastname' => $arr['search_contact_lastname'],
 				'search_contact_code' => $arr['search_contact_code'],
 				'search_contact_company' => $arr['search_contact_company'],
+				"return_url" => $arr["return_url"]
 			),
 			$arr['class']
 		);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.62 2006/03/02 10:41:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.63 2006/03/21 14:52:10 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -729,10 +729,11 @@ class crm_meeting extends class_base
 		return $this->mk_my_orb('change',array(
 				'id' => $arr['id'],
 				'group' => $arr['group'],
-				'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
-				'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
-				'search_contact_code' => urlencode($arr['search_contact_code']),
-				'search_contact_company' => urlencode($arr['search_contact_company']),
+				'search_contact_firstname' => ($arr['search_contact_firstname']),
+				'search_contact_lastname' => ($arr['search_contact_lastname']),
+				'search_contact_code' => ($arr['search_contact_code']),
+				'search_contact_company' => ($arr['search_contact_company']),
+				"return_url" => $arr["return_url"]
 			),
 			$arr['class']
 		);

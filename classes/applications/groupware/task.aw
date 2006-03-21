@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.84 2006/03/16 15:15:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.85 2006/03/21 14:52:10 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2085,10 +2085,11 @@ class task extends class_base
 		return $this->mk_my_orb('change',array(
 				'id' => $arr['id'],
 				'group' => $arr['group'],
-				'search_contact_company' => urlencode($arr['search_contact_company']),
-				'search_contact_firstname' => urlencode($arr['search_contact_firstname']),
-				'search_contact_lastname' => urlencode($arr['search_contact_lastname']),
-				'search_contact_code' => urlencode($arr['search_contact_code']),
+				'search_contact_company' => ($arr['search_contact_company']),
+				'search_contact_firstname' => ($arr['search_contact_firstname']),
+				'search_contact_lastname' => ($arr['search_contact_lastname']),
+				'search_contact_code' => ($arr['search_contact_code']),
+				"return_url" => $arr["return_url"]
 			),
 			$arr['class']
 		);
