@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.8 2006/01/15 17:08:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.9 2006/03/21 12:16:37 kristo Exp $
 // address.aw - Aadress v2
 /*
 
@@ -107,6 +107,22 @@ class address extends class_base
 		}
 
 		return $retval;
+	}
+
+	function set_property($arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop["name"])
+		{
+			case "administrative_structure":
+				if (!$this->can("view", $prop["value"]))
+				{
+					$prop["error"] = t("Riik/haldusjaotus peab olema valitud!");
+					return PROP_FATAL_ERROR;
+				}
+				break;
+		}
+		return PROP_OK;
 	}
 
 	function callback_mod_reforb($arr)
