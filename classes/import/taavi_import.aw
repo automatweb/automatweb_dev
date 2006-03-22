@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.5 2006/03/22 09:27:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.6 2006/03/22 09:31:26 ahti Exp $
 // taavi_import.aw - Taavi import 
 /*
 
@@ -72,8 +72,8 @@ class taavi_import extends class_base
 	}
 
 	/**	
-		@attrib name=import params=name default="0" nologin="1"
-		@param id optional
+		@attrib name=import params=name default=0
+		@param id required
 		@returns
 		@comment
 
@@ -87,8 +87,8 @@ class taavi_import extends class_base
 	}
 
 	/**	
-		@attrib name=get_raw params=name default="0"
-		@param id optional
+		@attrib name=get_raw params=name
+		@param id required
 		@returns
 		@comment
 
