@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.13 2006/03/22 14:39:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.14 2006/03/22 14:53:05 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -261,7 +261,7 @@ class newsfeed extends class_base
 				"description" => $feedobj->comment(),
 				"language" => $feedobj->lang(),
 				"LastBuildDate" => date("r",$first),
-			),
+			), 
 			"items" => $items,
 		);
 		switch($feedobj->prop("feedtype"))
