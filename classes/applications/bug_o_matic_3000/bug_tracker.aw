@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.31 2006/03/22 13:50:44 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.31 2006/03/22 13:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.32 2006/03/22 22:51:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.32 2006/03/22 22:51:31 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -957,13 +957,7 @@ class bug_tracker extends class_base
 		{
 			return "";
 		}
-		$ol = new object_list(array(
-			"parent" => $arr["oid"],
-			"class_id" => CL_BUG_COMMENT,
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		return html::get_change_url($arr["oid"] , array("group" => "comments" , "return_url" => get_ru()), $ol->count());
+		return html::get_change_url($arr["oid"] , array("group" => "comments" , "return_url" => get_ru()), $arr["comment_count"]);
 	}
 
 	function _init_bug_list_tbl(&$t)
@@ -1247,10 +1241,49 @@ class bug_tracker extends class_base
 		$u = get_instance(CL_USER);
 		$us = get_instance("users");
 		$bug_i = get_instance(CL_BUG);
-		foreach($ol->arr() as $bug)
+		$bug_list = $ol->arr();
+		$user_list = array();
+		foreach($bug_list as $bug)
+		{
+			$user_list[] = $bug->createdby();
+		}
+		$u2p = array();
+		if (count($user_list))
+		{
+			$oid_list = array_flip($us->get_oid_for_uid_list($user_list));
+			$c = new connection();
+			$u2p_conns = $c->find(array(
+				"from.class_id" => CL_USER,
+				"from" => array_keys($oid_list),
+				"type" => "RELTYPE_PERSON"
+			));
+			$person_oids = array();
+			foreach($u2p_conns as $con)
+			{
+				$person_oids[] = $con["to"];
+				$u2p[$oid_list[$con["from"]]] = $con["to"];
+			}
+
+			$person_ol = new object_list(array("class_id" => CL_CRM_PERSON, "oid" => $person_oids, "lang_id" => array(), "site_id" => array()));
+			$person_ol->arr();
+		}
+
+		$comment_ol = new object_list(array(
+			"parent" => $ol->ids(),
+			"class_id" => CL_BUG_COMMENT,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$comments_by_bug = array();
+		foreach($comment_ol->arr() as $comm)
+		{
+			$comments_by_bug[$comm->parent()]++;
+		}
+
+		foreach($bug_list as $bug)
 		{
 			$crea = $bug->createdby();
-			$p = obj($u->get_person_for_user(obj($us->get_oid_for_uid($crea))));
+			$p = obj($u2p[$crea]);
 		
 			$nl = html::obj_change_url($bug);
 			if ($params["path"])
@@ -1275,7 +1308,8 @@ class bug_tracker extends class_base
 				"oid" => $bug->id(),
 				"sort_priority" => $bug_i->get_sort_priority($bug),
 				"icon" => icons::get_icon($bug),
-				"obj" => $bug
+				"obj" => $bug,
+				"comment_count" => (int)$comments_by_bug[$bug->id()]
 			));
 		}
 		$t->set_numeric_field("sort_priority");
@@ -1666,7 +1700,10 @@ class bug_tracker extends class_base
 			"obj_inst" => obj($arr["id"]),
 		));
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
-		die($p["value"]);
+
+		echo ($p["value"]);
+		aw_shutdown();
+		die();
 	}
 }
 ?>

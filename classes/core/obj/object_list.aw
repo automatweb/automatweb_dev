@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.53 2006/03/14 08:12:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.54 2006/03/22 22:51:31 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -624,7 +624,6 @@ class object_list extends _int_obj_container_base
 				$to_fetch[$oid] = $this->list_objdata[$oid]["class_id"];
 			}
 		}
-
 		$data = $GLOBALS["object_loader"]->ds->fetch_list($to_fetch);
 	}
 }

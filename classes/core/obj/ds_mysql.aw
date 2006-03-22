@@ -255,20 +255,33 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (count($conn_prop_fetch))
 		{
-			$q = "
-				SELECT 
-					target,
-					reltype
-				FROM 
-					aliases 
-				LEFT JOIN objects ON objects.oid = aliases.target
-				WHERE 
-					source = '".$object_id."' AND 
-					reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
-					objects.status != 0
-			";
-			$this->db_query($q);
-			while ($row = $this->db_next())
+			$cpf_dat = array();
+			if (isset($this->read_properties_data_cache_conn[$object_id]))
+			{
+				$cfp_dat = $this->read_properties_data_cache_conn[$object_id];
+			}
+			else
+			{
+				$q = "
+					SELECT 
+						target,
+						reltype
+					FROM 
+						aliases 
+					LEFT JOIN objects ON objects.oid = aliases.target
+					WHERE 
+						source = '".$object_id."' AND 
+						reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
+						objects.status != 0
+				";
+				$this->db_query($q);
+				while ($row = $this->db_next())
+				{
+					$cfp_dat[] = $row;
+				}
+			}
+
+			foreach($cfp_dat as $row)
 			{
 				$prop_name = array_search($row["reltype"], $conn_prop_fetch);
 				if (!$prop_name)
@@ -454,15 +467,24 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if (count($conn_prop_fetch))
 		{
+			if (is_array($object_id))
+			{
+				$source = "source IN (".join(",", map("'%s'", $object_id)).")";
+			}
+			else
+			{
+				$source  = "source = '".$object_id."'";
+			}
 			$q2 = "
 				SELECT 
+					source,
 					target,
 					reltype
 				FROM 
 					aliases 
 				LEFT JOIN objects ON objects.oid = aliases.target
 				WHERE 
-					source = '".$object_id."' AND 
+					$source AND 
 					reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
 					objects.status != 0
 			";
@@ -2036,6 +2058,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->_do_add_class_id($clids);
 
 		$ret = array();
+		$ret2 = array();
 
 		// do joins on the data objects for those
 		$joins = array();
@@ -2053,12 +2076,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				aw_cache_set("storage::get_read_properties_sql",$clid,$sql);
 				//echo "sql = ".dbg::dump($sql)." <br>";
 			}
-		
+			if ($sql["q"] == "")
+			{
+				// just ot fetch
+				$sql["q"] = "SELECT * FROM objects WHERE status > 0 AND oid ";
+			}
+
 			if ($sql["q"] != "")
 			{
 				$sql["q"] .= " IN (".join(",", $cl2obj[$clid]).")";
 			}
-			if ($sql["q"] != "" && $sql["q2"] == "")
+			if ($sql["q"] != "")
 			{
 				// query
 				$this->db_query($sql["q"]);
@@ -2068,10 +2096,18 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$ret[] = $row;
 				}
 			}
-			
+			if ($sql["q2"] != "")
+			{
+				$this->db_query($sql["q2"]);
+				while ($row = $this->db_next())
+				{
+					$this->read_properties_data_cache_conn[$row["source"]][] = $row;
+					$ret2[] = $row;
+				}
+			}			
 		}
 
-		return $ret;
+		return array($ret, $ret2);
 	}
 
 	/*function quote(&$str)

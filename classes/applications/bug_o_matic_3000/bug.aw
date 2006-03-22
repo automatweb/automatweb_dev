@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.18 2006/03/22 14:14:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.19 2006/03/22 22:51:31 kristo Exp $
 // bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -305,7 +305,7 @@ class bug extends class_base
 					$data["options"] = array("" => "") + $ol->names();
 				}
 
-				if (is_object($arr["obj_inst"]) && !$arr["new"])
+				if (is_object($arr["obj_inst"]) && !$arr["new"] && is_oid($arr["obj_inst"]->id()))
 				{
 					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 					{
@@ -625,12 +625,20 @@ class bug extends class_base
 		@attrib name=handle_commit nologin=1
 		@param bugno required type=int 
 		@param msg optional
+		@param set_fixed optional
 	**/
 	function handle_commit($arr)
 	{
 		aw_disable_acl();
 		$bug = obj($arr["bugno"]);
-		$this->_add_comment($bug, nl2br($this->hexbin($arr["msg"])));
+		$msg = trim($this->hexbin($arr["msg"]));
+		if ($arr["set_fixed"] == 1)
+		{
+			$msg .= "\nStaatus muudeti ".$this->bug_statuses[$bug->prop("bug_status")]." => ".$this->bug_statuses[BUG_DONE]."\n";
+			$bug->set_prop("bug_status", BUG_DONE);
+			$bug->save();
+		}
+		$this->_add_comment($bug, nl2br($msg));
 		aw_restore_acl();
 		die(sprintf(t("Added comment to bug %s"), $arr[bugno]));
 	}

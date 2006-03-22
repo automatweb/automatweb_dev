@@ -25,11 +25,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "objdata-$oid";
 
-		$ret = $this->cache->file_get_pt_oid(
+		$ret = aw_unserialize($this->cache->file_get_pt_oid(
 			"storage_object_data",
 			$oid,
 			$c_fn
-		);
+		));
 
 		if (!is_array($ret))
 		{
@@ -38,7 +38,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 				"storage_object_data",
 				$oid,
 				$c_fn,
-				$ret
+				aw_serialize($ret, SERIALIZE_PHP_FILE)
 			);
 		}
 		return $ret;
@@ -61,11 +61,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "properties-$oid";
 
-		$ret = $this->cache->file_get_pt_oid(
+		$ret = aw_unserialize($this->cache->file_get_pt_oid(
 			"storage_object_data",
 			$oid,
 			$c_fn
-		);
+		));
 
 		if (!is_array($ret))
 		{
@@ -74,7 +74,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 				"storage_object_data",
 				$oid,
 				$c_fn,
-				$ret
+				aw_serialize($ret, SERIALIZE_PHP_FILE)
 			);
 		}
 		return $ret;
@@ -133,11 +133,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "connection-$id";
 
-		$ret = $this->cache->file_get_pt_oid(
+		$ret = aw_unserialize($this->cache->file_get_pt_oid(
 			"storage_object_data",
 			$id,
 			$c_fn
-		);
+		));
 
 		if (!is_array($ret))
 		{
@@ -146,7 +146,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 				"storage_object_data",
 				$id,
 				$c_fn,
-				$ret
+				aw_serialize($ret, SERIALIZE_PHP_FILE)
 			);
 		}
 		return $ret;
@@ -198,11 +198,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "conn_find-$query_hash";
 
-		$ret = $this->cache->file_get_pt(
+		$ret = aw_unserialize($this->cache->file_get_pt(
 			"storage_search",
 			$query_hash[0],
 			$c_fn
-		);
+		));
 
 		if (!is_array($ret))
 		{
@@ -211,7 +211,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 				"storage_search",
 				$query_hash[0],
 				$c_fn,
-				$ret
+				aw_serialize($ret, SERIALIZE_PHP_FILE)
 			);
 		}
 		return $ret;
@@ -252,11 +252,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "obj_find-$query_hash";
 
-		$ret = $this->cache->file_get_pt(
+		$ret = aw_unserialize($this->cache->file_get_pt(
 			"storage_search",
 			$query_hash[0],
 			$c_fn
-		);
+		));
 
 		if (!is_array($ret))
 		{
@@ -265,7 +265,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 				"storage_search",
 				$query_hash[0],
 				$c_fn,
-				$ret
+				aw_serialize($ret, SERIALIZE_PHP_FILE)
 			);
 		}
 		return $ret;
@@ -282,11 +282,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 		$c_fn = "obj_fetch-$query_hash";
 
-		$ret = $this->cache->file_get_pt(
+		$ret = aw_unserialize($this->cache->file_get_pt(
 			"storage_search",
 			$query_hash[0],
 			$c_fn
-		);
+		));
 
 		if (!is_array($ret))
 		{
@@ -295,14 +295,18 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 				"storage_search",
 				$query_hash[0],
 				$c_fn,
-				$ret
+				aw_serialize($ret, SERIALIZE_PHP_FILE)
 			);
 		}
 		else
 		{
-			foreach($ret as $row)
+			foreach($ret[0] as $row)
 			{
 				$this->contained->read_properties_data_cache[$row["oid"]] = $row;
+			}
+			foreach($ret[1] as $row)
+			{
+				$this->contained->read_properties_data_cache_conn[$row["oid"]] = $row;
 			}
 		}
 		return $ret;
