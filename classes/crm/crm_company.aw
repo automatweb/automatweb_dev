@@ -1429,25 +1429,26 @@ class crm_company extends class_base
 				break;
 
 			case 'contact':
+				// kuna relpickeril on nyydseks change nupp siis change link captionist eemaldatud [voldemar 2006/3/22]
 				//hägish, panen nime kõrval html lingi ka
-				if(sizeof($data['options']) > 1)
-				{
-					$url = $this->mk_my_orb('change',array(
-						'id' => max(array_keys($data['options'])),
-						"return_url" => get_ru(),
-					),CL_CRM_ADDRESS);
-					$data['caption'] .= '<br><a href="'.$url.'">'.t("Muuda").'</a>';
-				}
-				else
-				{
-					$url = $this->mk_my_orb('new',array(
-						'alias_to' => $arr['obj_inst']->id(),
-						'parent' => $arr['obj_inst']->id(),
-						'reltype' => 3, //crm_company.reltype_address
-						"return_url" => get_ru(),
-					),CL_CRM_ADDRESS);
-					$data['caption'] .= '<br><a href="'.$url.'">'.t("Lisa").'</a>';
-				}
+				// if(sizeof($data['options']) > 1)
+				// {
+					// $url = $this->mk_my_orb('change',array(
+						// 'id' => max(array_keys($data['options'])),
+						// "return_url" => get_ru(),
+					// ),CL_CRM_ADDRESS);
+					// $data['caption'] .= '<br><a href="'.$url.'">'.t("Muuda").'</a>';
+				// }
+				// else
+				// {
+					// $url = $this->mk_my_orb('new',array(
+						// 'alias_to' => $arr['obj_inst']->id(),
+						// 'parent' => $arr['obj_inst']->id(),
+						// 'reltype' => 3, //crm_company.reltype_address
+						// "return_url" => get_ru(),
+					// ),CL_CRM_ADDRESS);
+					// $data['caption'] .= '<br><a href="'.$url.'">'.t("Lisa").'</a>';
+				// }
 				break;
 
 			case "firmajuht":
