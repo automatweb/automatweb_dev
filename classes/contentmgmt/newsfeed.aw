@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.12 2006/02/22 12:06:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.13 2006/03/22 14:39:21 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -250,7 +250,7 @@ class newsfeed extends class_base
 					"art_lead" => $art_lead,
 					"description" => $description,
 					"guid" => $baseurl . "/" . $oid,
-					"pubDate" => date("r",$o->prop("doc_modified")),
+					"pubDate" => date("r",$mod_date),
 				);	
 			};
 		};
