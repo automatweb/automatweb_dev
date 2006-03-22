@@ -133,6 +133,20 @@ msgstr ""
 msgid "Omaduse Kliendihaldur (client_manager) help"
 msgstr ""
 
+#: classes/applications/crm/crm_company_customer_data.aw:prop_bill_due_date_days
+msgid ""
+"Omaduse Arve makset&auml;htaeg (p&auml;evi) (bill_due_date_days) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_bill_due_date_days_comment
+msgid ""
+"Omaduse Arve makset&auml;htaeg (p&auml;evi) (bill_due_date_days) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_bill_due_date_days_help
+msgid "Omaduse Arve makset&auml;htaeg (p&auml;evi) (bill_due_date_days) help"
+msgstr ""
+
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_BUYER
 msgid "Seose Ostja (RELTYPE_BUYER) tekst"
 msgstr ""
@@ -153,6 +167,6 @@ msgstr ""
 msgid "Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:87
+#: classes/applications/crm/crm_company_customer_data.aw:90
 msgid "--vali--"
 msgstr ""

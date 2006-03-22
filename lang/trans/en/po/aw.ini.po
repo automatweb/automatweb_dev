@@ -386,11 +386,6 @@ msgstr "Country"
 msgid "Klassi Õiguslik vorm (135) nimi"
 msgstr "Corporate type"
 
-# aw.ini:class_136
-#: aw.ini:class_136
-msgid "Klassi Raamistus (136) nimi"
-msgstr "Frameset"
-
 # aw.ini:class_137
 #: aw.ini:class_137
 msgid "Klassi Puu (137) nimi"
@@ -405,11 +400,6 @@ msgstr "Town"
 #: aw.ini:class_140
 msgid "Klassi Maakond (140) nimi"
 msgstr "County"
-
-# aw.ini:class_141
-#: aw.ini:class_141
-msgid "Klassi Lehek&uuml;lg (141) nimi"
-msgstr "Page"
 
 # aw.ini:class_145
 #: aw.ini:class_145
@@ -2192,6 +2182,38 @@ msgstr ""
 msgid "Klassi Kliendibaasi otsingu grupp (1049) nimi"
 msgstr ""
 
+#: aw.ini:class_1050
+msgid "Klassi Toimetuse rida (1050) nimi"
+msgstr ""
+
+#: aw.ini:class_1051
+msgid "Klassi CRM Dokumendi tegevus (1051) nimi"
+msgstr ""
+
+#: aw.ini:class_1052
+msgid "Klassi Aruanne (1052) nimi"
+msgstr ""
+
+#: aw.ini:class_1053
+msgid "Klassi Vaheleht (1053) nimi"
+msgstr ""
+
+#: aw.ini:class_1054
+msgid "Klassi Arve rida (1054) nimi"
+msgstr ""
+
+#: aw.ini:class_1055
+msgid "Klassi Kliendihaldus (1055) nimi"
+msgstr ""
+
+#: aw.ini:class_1056
+msgid "Klassi Kinnisvaraobjekti lisamine (1056) nimi"
+msgstr ""
+
+#: aw.ini:class_1057
+msgid "Klassi CRM Meil (1057) nimi"
+msgstr ""
+
 # aw.ini:classfolder_29
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
@@ -2486,6 +2508,14 @@ msgstr "Bug-o-matic 3000"
 #: aw.ini:classfolder_60
 msgid "Klassi kataloogi Kinnisvarahaldus (60) nimi"
 msgstr ""
+
+# aw.ini:class_136
+#~ msgid "Klassi Raamistus (136) nimi"
+#~ msgstr "Frameset"
+
+# aw.ini:class_141
+#~ msgid "Klassi Lehek&uuml;lg (141) nimi"
+#~ msgstr "Page"
 
 # aw.ini:class_28
 #~ msgid "Klassi Graafik (vana) (28) nimi"

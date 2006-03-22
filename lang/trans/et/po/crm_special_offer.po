@@ -61,18 +61,6 @@ msgstr ""
 msgid "Omaduse Pildid (images) help"
 msgstr ""
 
-#: classes/crm/crm_special_offer.aw:prop_products_caption
-msgid "Omaduse Tooted (products_caption) caption"
-msgstr ""
-
-#: classes/crm/crm_special_offer.aw:prop_products_caption_comment
-msgid "Omaduse Tooted (products_caption) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_special_offer.aw:prop_products_caption_help
-msgid "Omaduse Tooted (products_caption) help"
-msgstr ""
-
 #: classes/crm/crm_special_offer.aw:prop_products
 msgid "Omaduse Tooted (products) caption"
 msgstr ""
@@ -83,18 +71,6 @@ msgstr ""
 
 #: classes/crm/crm_special_offer.aw:prop_products_help
 msgid "Omaduse Tooted (products) help"
-msgstr ""
-
-#: classes/crm/crm_special_offer.aw:prop_packets_caption
-msgid "Omaduse Toote paketid (packets_caption) caption"
-msgstr ""
-
-#: classes/crm/crm_special_offer.aw:prop_packets_caption_comment
-msgid "Omaduse Toote paketid (packets_caption) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_special_offer.aw:prop_packets_caption_help
-msgid "Omaduse Toote paketid (packets_caption) help"
 msgstr ""
 
 #: classes/crm/crm_special_offer.aw:prop_packets

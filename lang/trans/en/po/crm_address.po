@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 19:14+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 # classes/crm/crm_address.aw:class_146_help
 #: classes/crm/crm_address.aw:class_146_help
@@ -87,14 +87,6 @@ msgstr ""
 msgid "Omaduse Riik (riik) help"
 msgstr ""
 
-#: classes/crm/crm_address.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
-
-#: classes/crm/crm_address.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/crm/crm_address.aw:group_settings
 #: classes/crm/crm_address.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
@@ -129,3 +121,5 @@ msgstr "belongs to"
 msgid "tel:"
 msgstr "phone:"
 
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"

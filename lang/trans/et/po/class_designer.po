@@ -531,14 +531,6 @@ msgstr ""
 msgid "Omaduse temp (temp2) help"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/class_designer/class_designer.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/class_designer/class_designer.aw:group_general_sub
 #: classes/applications/class_designer/class_designer.aw:group_general_sub
 msgid "Grupi Üldine (general_sub) pealkiri"

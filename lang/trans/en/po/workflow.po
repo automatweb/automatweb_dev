@@ -10,142 +10,177 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/workflow/workflow.aw:class_176_help
+#: classes/workflow/workflow.aw:class_176_help
 msgid "Klassi Protsessivaade help"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_config
+#: classes/workflow/workflow.aw:prop_config
 msgid "Omaduse Konfiguratsioon (config) caption"
 msgstr "Configuration"
 
 # classes/workflow/workflow.aw:prop_config_comment
+#: classes/workflow/workflow.aw:prop_config_comment
 msgid "Omaduse Konfiguratsioon (config) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_config_help
+#: classes/workflow/workflow.aw:prop_config_help
 msgid "Omaduse Konfiguratsioon (config) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_id
+#: classes/workflow/workflow.aw:prop_id
 msgid "Omaduse  (id) caption"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_id_comment
+#: classes/workflow/workflow.aw:prop_id_comment
 msgid "Omaduse  (id) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_id_help
+#: classes/workflow/workflow.aw:prop_id_help
 msgid "Omaduse  (id) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_entities
+#: classes/workflow/workflow.aw:prop_show_entities
 msgid "Omaduse Juhtumid (show_entities) caption"
 msgstr "Entities"
 
 # classes/workflow/workflow.aw:prop_show_entities_comment
+#: classes/workflow/workflow.aw:prop_show_entities_comment
 msgid "Omaduse Juhtumid (show_entities) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_entities_help
+#: classes/workflow/workflow.aw:prop_show_entities_help
 msgid "Omaduse Juhtumid (show_entities) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_actions
+#: classes/workflow/workflow.aw:prop_show_actions
 msgid "Omaduse Tegevused (show_actions) caption"
 msgstr "Actions"
 
 # classes/workflow/workflow.aw:prop_show_actions_comment
+#: classes/workflow/workflow.aw:prop_show_actions_comment
 msgid "Omaduse Tegevused (show_actions) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_actions_help
+#: classes/workflow/workflow.aw:prop_show_actions_help
 msgid "Omaduse Tegevused (show_actions) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_processes
+#: classes/workflow/workflow.aw:prop_show_processes
 msgid "Omaduse Protsessid (show_processes) caption"
 msgstr "Processes"
 
 # classes/workflow/workflow.aw:prop_show_processes_comment
+#: classes/workflow/workflow.aw:prop_show_processes_comment
 msgid "Omaduse Protsessid (show_processes) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_processes_help
+#: classes/workflow/workflow.aw:prop_show_processes_help
 msgid "Omaduse Protsessid (show_processes) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_actors
+#: classes/workflow/workflow.aw:prop_show_actors
 msgid "Omaduse Tegijad (show_actors) caption"
 msgstr "Actors"
 
 # classes/workflow/workflow.aw:prop_show_actors_comment
+#: classes/workflow/workflow.aw:prop_show_actors_comment
 msgid "Omaduse Tegijad (show_actors) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_actors_help
+#: classes/workflow/workflow.aw:prop_show_actors_help
 msgid "Omaduse Tegijad (show_actors) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_documentation
+#: classes/workflow/workflow.aw:prop_show_documentation
 msgid "Omaduse Juhendmaterjalid (show_documentation) caption"
 msgstr "Documentation"
 
 # classes/workflow/workflow.aw:prop_show_documentation_comment
+#: classes/workflow/workflow.aw:prop_show_documentation_comment
 msgid "Omaduse Juhendmaterjalid (show_documentation) kommentaar"
 msgstr ""
 
 # classes/workflow/workflow.aw:prop_show_documentation_help
+#: classes/workflow/workflow.aw:prop_show_documentation_help
 msgid "Omaduse Juhendmaterjalid (show_documentation) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:group_general
+#: classes/workflow/workflow.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 # classes/workflow/workflow.aw:group_general_help
+#: classes/workflow/workflow.aw:group_general_help
 msgid "Grupi Üldine (general) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:group_show_entities
+#: classes/workflow/workflow.aw:group_show_entities
 msgid "Grupi Juhtumid (show_entities) pealkiri"
 msgstr "Entities"
 
 # classes/workflow/workflow.aw:group_show_entities_help
+#: classes/workflow/workflow.aw:group_show_entities_help
 msgid "Grupi Juhtumid (show_entities) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:group_show_processes
+#: classes/workflow/workflow.aw:group_show_processes
 msgid "Grupi Protessid (show_processes) pealkiri"
 msgstr "Processes"
 
 # classes/workflow/workflow.aw:group_show_processes_help
+#: classes/workflow/workflow.aw:group_show_processes_help
 msgid "Grupi Protessid (show_processes) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:group_show_actions
+#: classes/workflow/workflow.aw:group_show_actions
 msgid "Grupi Tegevused (show_actions) pealkiri"
 msgstr "Actions"
 
 # classes/workflow/workflow.aw:group_show_actions_help
+#: classes/workflow/workflow.aw:group_show_actions_help
 msgid "Grupi Tegevused (show_actions) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:group_show_actors
+#: classes/workflow/workflow.aw:group_show_actors
 msgid "Grupi Tegijad (show_actors) pealkiri"
 msgstr "Actors"
 
 # classes/workflow/workflow.aw:group_show_actors_help
+#: classes/workflow/workflow.aw:group_show_actors_help
 msgid "Grupi Tegijad (show_actors) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:group_show_documentation
+#: classes/workflow/workflow.aw:group_show_documentation
 msgid "Grupi Juhendmaterjalid (show_documentation) pealkiri"
 msgstr "Documentation"
 
 # classes/workflow/workflow.aw:group_show_documentation_help
+#: classes/workflow/workflow.aw:group_show_documentation_help
 msgid "Grupi Juhendmaterjalid (show_documentation) help"
 msgstr ""
 
 # classes/workflow/workflow.aw:rel_RELTYPE_WORKFLOW_CONFIG
+#: classes/workflow/workflow.aw:rel_RELTYPE_WORKFLOW_CONFIG
 msgid "Seose Konfiguratsioon  (RELTYPE_WORKFLOW_CONFIG) tekst"
 msgstr "Configuration"
 

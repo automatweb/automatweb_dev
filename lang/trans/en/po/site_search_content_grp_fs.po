@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:class_976_help
 msgid "Klassi Otsingu failis&uuml;steemi indekseerija help"
 msgstr ""
@@ -146,14 +145,6 @@ msgstr ""
 msgid "Omaduse Automaatse impordi seadistamine (recur_edit) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:group_regex
 msgid "Grupi Regulaarvaldised (regex) pealkiri"
 msgstr ""
@@ -179,7 +170,9 @@ msgid "Seose metaandmete kontroller (RELTYPE_META_CTR) tekst"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:215
-msgid "Indekseerija k&auml;ivitati %s, l&otilde;petas edukalt %s.\nIndekseeriti %s lehte, mis sialdasid %s baiti teksti."
+msgid ""
+"Indekseerija k&auml;ivitati %s, l&otilde;petas edukalt %s.\n"
+"Indekseeriti %s lehte, mis sialdasid %s baiti teksti."
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:230
@@ -205,4 +198,3 @@ msgstr ""
 #: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:348
 msgid "Sellist faili ei ole!"
 msgstr ""
-

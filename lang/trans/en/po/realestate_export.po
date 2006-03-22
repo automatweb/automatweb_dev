@@ -92,6 +92,58 @@ msgstr ""
 msgid "Omaduse Viimasel ekspordil esinenud vead (last_city24export_error) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_export.aw:prop_box
+msgid "Omaduse  (box) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:prop_box_comment
+msgid "Omaduse  (box) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:prop_box_help
+msgid "Omaduse  (box) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:prop_user_names_definition_tree
+msgid "Omaduse  (user_names_definition_tree) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:prop_user_names_definition_tree_comment
+msgid "Omaduse  (user_names_definition_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:prop_user_names_definition_tree_help
+msgid "Omaduse  (user_names_definition_tree) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:prop_user_names_definition_table
+msgid "Omaduse  (user_names_definition_table) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:prop_user_names_definition_table_comment
+msgid "Omaduse  (user_names_definition_table) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:prop_user_names_definition_table_help
+msgid "Omaduse  (user_names_definition_table) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:group_grp_settings
+msgid "Grupi Seaded (grp_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:group_grp_settings_help
+msgid "Grupi Seaded (grp_settings) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:group_grp_users
+msgid "Grupi Kasutajanimed (grp_users) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:group_grp_users_help
+msgid "Grupi Kasutajanimed (grp_users) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_export.aw:rel_RELTYPE_OWNER
 msgid "Seose Kinnisvaraobjektide halduskeskkond (RELTYPE_OWNER) tekst"
 msgstr ""
@@ -100,11 +152,19 @@ msgstr ""
 msgid "Seose Aadresside vastavuskoodid (RELTYPE_ENCODING) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:84
+#: classes/applications/realestate_management/realestate_export.aw:90
 msgid "Kinnisvarahalduskeskkond m22ramata v6i puudub juurdep22su6igus.\n"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_export.aw:188
+#: classes/applications/realestate_management/realestate_export.aw:131
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:137
+msgid "Kasutajanimi City24 süsteemis"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_export.aw:368
 msgid ""
 "Viga objekti ekspordil. AW id: %s.\n"
 "<blockquote>%s</blockquote>"

@@ -145,18 +145,6 @@ msgstr ""
 msgid "Omaduse Aadress (address_connection) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_housepart.aw:prop_address_text
-msgid "Omaduse  (address_text) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_housepart.aw:prop_address_text_comment
-msgid "Omaduse  (address_text) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_housepart.aw:prop_address_text_help
-msgid "Omaduse  (address_text) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_housepart.aw:prop_title2
 msgid "Omaduse Tehingu andmed (title2) caption"
 msgstr ""
@@ -597,18 +585,6 @@ msgstr ""
 msgid "Omaduse M&auml;rks&otilde;nad (keywords_et) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_housepart.aw:prop_translation
-msgid "Omaduse  (translation) caption"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_housepart.aw:prop_translation_comment
-msgid "Omaduse  (translation) kommentaar"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_housepart.aw:prop_translation_help
-msgid "Omaduse  (translation) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_housepart.aw:prop_pictures
 msgid "Omaduse Pildid (pictures) caption"
 msgstr ""
@@ -621,16 +597,40 @@ msgstr ""
 msgid "Omaduse Pildid (pictures) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_housepart.aw:prop_picture_icon_city24
+msgid "Omaduse  (picture_icon_city24) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_housepart.aw:prop_picture_icon_city24_comment
+msgid "Omaduse  (picture_icon_city24) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_housepart.aw:prop_picture_icon_city24_help
+msgid "Omaduse  (picture_icon_city24) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_housepart.aw:prop_picture_icon
-msgid "Omaduse Väike pilt (picture_icon) caption"
+msgid "Omaduse  (picture_icon) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:prop_picture_icon_comment
-msgid "Omaduse Väike pilt (picture_icon) kommentaar"
+msgid "Omaduse  (picture_icon) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:prop_picture_icon_help
-msgid "Omaduse Väike pilt (picture_icon) help"
+msgid "Omaduse  (picture_icon) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_housepart.aw:prop_picture_icon_image
+msgid "Omaduse Väike pilt (picture_icon_image) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_housepart.aw:prop_picture_icon_image_comment
+msgid "Omaduse Väike pilt (picture_icon_image) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_housepart.aw:prop_picture_icon_image_help
+msgid "Omaduse Väike pilt (picture_icon_image) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:prop_map_create
@@ -2072,20 +2072,12 @@ msgstr ""
 msgid "Omaduse Valmidus (finishing_condition) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_housepart.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_housepart.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_housepart.aw:group_grp_main
-msgid "Grupi Üldandmed ja asukoht (grp_main) pealkiri"
+msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) pealkiri"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:group_grp_main_help
-msgid "Grupi Üldandmed ja asukoht (grp_main) help"
+msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:group_grp_detailed
@@ -2146,6 +2138,10 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:rel_RELTYPE_REALESTATE_PICTURE
 msgid "Seose Pilt (RELTYPE_REALESTATE_PICTURE) tekst"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_housepart.aw:rel_RELTYPE_REALESTATE_PICTUREICON
+msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_housepart.aw:391

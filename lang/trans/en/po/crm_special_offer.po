@@ -62,18 +62,6 @@ msgstr ""
 msgid "Omaduse Pildid (images) help"
 msgstr ""
 
-#: classes/crm/crm_special_offer.aw:prop_products_caption
-msgid "Omaduse Tooted (products_caption) caption"
-msgstr "Products"
-
-#: classes/crm/crm_special_offer.aw:prop_products_caption_comment
-msgid "Omaduse Tooted (products_caption) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_special_offer.aw:prop_products_caption_help
-msgid "Omaduse Tooted (products_caption) help"
-msgstr ""
-
 #: classes/crm/crm_special_offer.aw:prop_products
 msgid "Omaduse Tooted (products) caption"
 msgstr "Products"
@@ -84,18 +72,6 @@ msgstr ""
 
 #: classes/crm/crm_special_offer.aw:prop_products_help
 msgid "Omaduse Tooted (products) help"
-msgstr ""
-
-#: classes/crm/crm_special_offer.aw:prop_packets_caption
-msgid "Omaduse Toote paketid (packets_caption) caption"
-msgstr "Packets"
-
-#: classes/crm/crm_special_offer.aw:prop_packets_caption_comment
-msgid "Omaduse Toote paketid (packets_caption) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_special_offer.aw:prop_packets_caption_help
-msgid "Omaduse Toote paketid (packets_caption) help"
 msgstr ""
 
 #: classes/crm/crm_special_offer.aw:prop_packets
@@ -141,6 +117,12 @@ msgstr ""
 #: classes/crm/crm_special_offer.aw:166
 msgid "Asutuse juurde"
 msgstr ""
+
+#~ msgid "Omaduse Tooted (products_caption) caption"
+#~ msgstr "Products"
+
+#~ msgid "Omaduse Toote paketid (packets_caption) caption"
+#~ msgstr "Packets"
 
 #~ msgid "Grupi Üldine (general) pealkiri"
 #~ msgstr "General"

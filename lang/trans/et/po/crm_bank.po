@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_bank.aw:class_1023_help
 msgid "Klassi CRM Pank help"
 msgstr ""
@@ -26,15 +25,6 @@ msgstr ""
 msgid "Omaduse Aadress (address) help"
 msgstr ""
 
-#: classes/applications/crm/crm_bank.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/crm/crm_bank.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/crm/crm_bank.aw:rel_RELTYPE_ADDRESS
 msgid "Seose aadress (RELTYPE_ADDRESS) tekst"
 msgstr ""
-

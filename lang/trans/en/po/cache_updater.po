@@ -10,21 +10,26 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/core/cache_updater.aw:class_891_help
+#: classes/core/cache_updater.aw:class_891_help
 msgid "Klassi Cache uuendamine help"
 msgstr ""
 
 # classes/core/cache_updater.aw:prop_repeater
+#: classes/core/cache_updater.aw:prop_repeater
 msgid "Omaduse Kordus (repeater) caption"
 msgstr "Recurrence"
 
 # classes/core/cache_updater.aw:prop_repeater_comment
+#: classes/core/cache_updater.aw:prop_repeater_comment
 msgid "Omaduse Kordus (repeater) kommentaar"
 msgstr ""
 
 # classes/core/cache_updater.aw:prop_repeater_help
+#: classes/core/cache_updater.aw:prop_repeater_help
 msgid "Omaduse Kordus (repeater) help"
 msgstr ""
 
 # classes/core/cache_updater.aw:rel_RELTYPE_REPEATER
+#: classes/core/cache_updater.aw:rel_RELTYPE_REPEATER
 msgid "Seose kordus (RELTYPE_REPEATER) tekst"
 msgstr "recurrence"

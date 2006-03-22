@@ -29,6 +29,18 @@ msgstr ""
 msgid "Omaduse IP Aadress (addr) help"
 msgstr ""
 
+#: classes/syslog/ipaddress.aw:prop_range
+msgid "Omaduse Vahemik (range) caption"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_range_comment
+msgid "Omaduse Vahemik (range) kommentaar"
+msgstr ""
+
+#: classes/syslog/ipaddress.aw:prop_range_help
+msgid "Omaduse Vahemik (range) help"
+msgstr ""
+
 # classes/syslog/ipaddress.aw:group_general
 #: classes/syslog/ipaddress.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
@@ -39,7 +51,7 @@ msgstr ""
 msgid "Grupi Üldine (general) help"
 msgstr ""
 
-#: classes/syslog/ipaddress.aw:134
+#: classes/syslog/ipaddress.aw:154
 msgid ""
 "ipaddress::match(%s, %s): the second parameter must be a complete ip "
 "address, it can not be a mask!"

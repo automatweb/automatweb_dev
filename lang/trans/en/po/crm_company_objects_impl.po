@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 19:40+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 #: classes/applications/crm/crm_company_objects_impl.aw:45
 msgid "Uus"
@@ -37,4 +37,3 @@ msgstr "Modified"
 #: classes/applications/crm/crm_company_objects_impl.aw:134
 msgid "Tüüp"
 msgstr "Type"
-

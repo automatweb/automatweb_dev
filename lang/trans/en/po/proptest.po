@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/cfg/proptest.aw:class_1027_help
 msgid "Klassi Property Test help"
 msgstr ""
@@ -63,27 +62,39 @@ msgid "Omaduse Callback element (cb) help"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_ignore
-msgid "Omaduse This should be blocked by get_property (get_property_prop_ignore) caption"
+msgid ""
+"Omaduse This should be blocked by get_property (get_property_prop_ignore) "
+"caption"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_ignore_comment
-msgid "Omaduse This should be blocked by get_property (get_property_prop_ignore) kommentaar"
+msgid ""
+"Omaduse This should be blocked by get_property (get_property_prop_ignore) "
+"kommentaar"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_ignore_help
-msgid "Omaduse This should be blocked by get_property (get_property_prop_ignore) help"
+msgid ""
+"Omaduse This should be blocked by get_property (get_property_prop_ignore) "
+"help"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_error
-msgid "Omaduse This should be flagged as error by get_property (get_property_prop_error) caption"
+msgid ""
+"Omaduse This should be flagged as error by get_property "
+"(get_property_prop_error) caption"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_error_comment
-msgid "Omaduse This should be flagged as error by get_property (get_property_prop_error) kommentaar"
+msgid ""
+"Omaduse This should be flagged as error by get_property "
+"(get_property_prop_error) kommentaar"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_get_property_prop_error_help
-msgid "Omaduse This should be flagged as error by get_property (get_property_prop_error) help"
+msgid ""
+"Omaduse This should be flagged as error by get_property "
+"(get_property_prop_error) help"
 msgstr ""
 
 #: classes/cfg/proptest.aw:prop_dummy
@@ -96,14 +107,6 @@ msgstr ""
 
 #: classes/cfg/proptest.aw:prop_dummy_help
 msgid "Omaduse A property on a hidden tab (dummy) help"
-msgstr ""
-
-#: classes/cfg/proptest.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/cfg/proptest.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/cfg/proptest.aw:group_parentgroup1
@@ -165,4 +168,3 @@ msgstr ""
 #: classes/cfg/proptest.aw:111
 msgid "CB2"
 msgstr ""
-

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/country/country.aw:class_949_help
 msgid "Klassi Riik v2 help"
 msgstr ""
@@ -26,12 +25,16 @@ msgstr ""
 msgid "Omaduse Haldusjaotus (administrative_structure) help"
 msgstr ""
 
-#: classes/common/country/country.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/common/country/country.aw:prop_code
+msgid "Omaduse Kood (code) caption"
 msgstr ""
 
-#: classes/common/country/country.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/common/country/country.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/common/country/country.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
 msgstr ""
 
 #: classes/common/country/country.aw:group_grp_settings
@@ -46,11 +49,12 @@ msgstr ""
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr ""
 
-#: classes/common/country/country.aw:67
-msgid "%s aadressi kasutab hetkel valitud haldusjaotust! Muudatuste salvestamisel ..."
+#: classes/common/country/country.aw:71
+msgid ""
+"%s aadressi kasutab hetkel valitud haldusjaotust! Muudatuste "
+"salvestamisel ..."
 msgstr ""
 
-#: classes/common/country/country.aw:91
+#: classes/common/country/country.aw:95
 msgid "Riigi adminstratiivjaotuse objekt peab asuma riigiobjekti all"
 msgstr ""
-

@@ -18,7 +18,7 @@ msgid "Klass"
 msgstr ""
 
 #: classes/vcl/releditor.aw:64 classes/vcl/releditor.aw:74
-#: classes/vcl/releditor.aw:113
+#: classes/vcl/releditor.aw:110
 msgid " "
 msgstr ""
 
@@ -30,51 +30,51 @@ msgstr ""
 msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 msgstr ""
 
-#: classes/vcl/releditor.aw:114
+#: classes/vcl/releditor.aw:111
 msgid "Seda seost ei saa redigeerida!"
 msgstr ""
 
-#: classes/vcl/releditor.aw:230 classes/vcl/releditor.aw:404
-#: classes/vcl/releditor.aw:423
+#: classes/vcl/releditor.aw:231 classes/vcl/releditor.aw:415
+#: classes/vcl/releditor.aw:434
 msgid "Uus"
 msgstr ""
 
-#: classes/vcl/releditor.aw:297
+#: classes/vcl/releditor.aw:308
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/releditor.aw:412
+#: classes/vcl/releditor.aw:423
 msgid "Uus "
 msgstr ""
 
-#: classes/vcl/releditor.aw:413
+#: classes/vcl/releditor.aw:424
 msgid "Lisa %s"
 msgstr ""
 
-#: classes/vcl/releditor.aw:428
+#: classes/vcl/releditor.aw:439
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/vcl/releditor.aw:431
+#: classes/vcl/releditor.aw:442
 msgid "Kustutada valitud seosed?"
 msgstr ""
 
-#: classes/vcl/releditor.aw:448
+#: classes/vcl/releditor.aw:459
 msgid "Klooni valitud objektid"
 msgstr ""
 
-#: classes/vcl/releditor.aw:517 classes/vcl/releditor.aw:699
+#: classes/vcl/releditor.aw:528 classes/vcl/releditor.aw:710
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/releditor.aw:639
+#: classes/vcl/releditor.aw:650
 msgid "Vali üks"
 msgstr ""
 
-#: classes/vcl/releditor.aw:648 classes/vcl/releditor.aw:686
+#: classes/vcl/releditor.aw:659 classes/vcl/releditor.aw:697
 msgid "ID"
 msgstr ""
 
-#: classes/vcl/releditor.aw:691
+#: classes/vcl/releditor.aw:702
 msgid "Nimi"
 msgstr ""

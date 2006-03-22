@@ -9,16 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/place.aw:class_1000_help
 msgid "Klassi Koht help"
 msgstr ""
-
-#: classes/common/place.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/common/place.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-

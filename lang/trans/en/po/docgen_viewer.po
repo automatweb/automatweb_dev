@@ -10,66 +10,82 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/core/docgen/docgen_viewer.aw:class_323_help
+#: classes/core/docgen/docgen_viewer.aw:class_323_help
 msgid "Klassi AWDocGen help"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_foorum
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum
 msgid "Omaduse  (foorum) caption"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_foorum_comment
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum_comment
 msgid "Omaduse  (foorum) kommentaar"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_foorum_help
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum_help
 msgid "Omaduse  (foorum) help"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_view
+#: classes/core/docgen/docgen_viewer.aw:prop_view
 msgid "Omaduse  (view) caption"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_view_comment
+#: classes/core/docgen/docgen_viewer.aw:prop_view_comment
 msgid "Omaduse  (view) kommentaar"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_view_help
+#: classes/core/docgen/docgen_viewer.aw:prop_view_help
 msgid "Omaduse  (view) help"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_refresh_text
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text
 msgid "Omaduse Uuenda (refresh_text) caption"
 msgstr "Refresh"
 
 # classes/core/docgen/docgen_viewer.aw:prop_refresh_text_comment
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_comment
 msgid "Omaduse Uuenda (refresh_text) kommentaar"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_refresh_text_help
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_help
 msgid "Omaduse Uuenda (refresh_text) help"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_refresh_properties
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties
 msgid "Omaduse Uuenda (refresh_properties) caption"
 msgstr "Refresh"
 
 # classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_comment
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_comment
 msgid "Omaduse Uuenda (refresh_properties) kommentaar"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_help
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_help
 msgid "Omaduse Uuenda (refresh_properties) help"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:group_more_options
+#: classes/core/docgen/docgen_viewer.aw:group_more_options
 msgid "Grupi Seaded (more_options) pealkiri"
 msgstr "Options"
 
 # classes/core/docgen/docgen_viewer.aw:group_more_options_help
+#: classes/core/docgen/docgen_viewer.aw:group_more_options_help
 msgid "Grupi Seaded (more_options) help"
 msgstr ""
 
 # classes/core/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
+#: classes/core/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
 msgid "Seose foorum (RELTYPE_FORUM) tekst"
 msgstr "forum"
 
@@ -77,43 +93,47 @@ msgstr "forum"
 msgid "Open DocGen"
 msgstr "Open DocGen"
 
-#: classes/core/docgen/docgen_viewer.aw:98
-#: classes/core/docgen/docgen_viewer.aw:647
-#: classes/core/docgen/docgen_viewer.aw:716
-#: classes/core/docgen/docgen_viewer.aw:989
-#: classes/core/docgen/docgen_viewer.aw:1059
-#: classes/core/docgen/docgen_viewer.aw:1157
+#: classes/core/docgen/docgen_viewer.aw:147
+#: classes/core/docgen/docgen_viewer.aw:696
+#: classes/core/docgen/docgen_viewer.aw:765
+#: classes/core/docgen/docgen_viewer.aw:1045
+#: classes/core/docgen/docgen_viewer.aw:1115
+#: classes/core/docgen/docgen_viewer.aw:1213
 msgid "Classes"
 msgstr "Classes"
 
-#: classes/core/docgen/docgen_viewer.aw:860
+#: classes/core/docgen/docgen_viewer.aw:909
 msgid "ALL DONE"
 msgstr "ALL DONE"
 
-#: classes/core/docgen/docgen_viewer.aw:922
+#: classes/core/docgen/docgen_viewer.aw:971
+msgid "Klasside &uuml;levaade"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:977
 msgid "K&otilde;ik klassid"
 msgstr "All classes"
 
-#: classes/core/docgen/docgen_viewer.aw:928
+#: classes/core/docgen/docgen_viewer.aw:983
 msgid "Dokumenteeritud klassid"
 msgstr "Documented classes"
 
-#: classes/core/docgen/docgen_viewer.aw:934
+#: classes/core/docgen/docgen_viewer.aw:989
 msgid "API klassid"
 msgstr "API classes"
 
-#: classes/core/docgen/docgen_viewer.aw:940
+#: classes/core/docgen/docgen_viewer.aw:995
 msgid "Eraldi dokumentatsioon"
 msgstr "Seprate documentation"
 
-#: classes/core/docgen/docgen_viewer.aw:946
+#: classes/core/docgen/docgen_viewer.aw:1002
 msgid "Classbase tagid"
 msgstr "Classbase tags"
 
-#: classes/core/docgen/docgen_viewer.aw:952
+#: classes/core/docgen/docgen_viewer.aw:1008
 msgid "Uuenda API andmebaas"
 msgstr "Renew API database"
 
-#: classes/core/docgen/docgen_viewer.aw:963
+#: classes/core/docgen/docgen_viewer.aw:1019
 msgid "Foorum"
 msgstr "Forum"

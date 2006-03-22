@@ -13,11 +13,3 @@ msgstr ""
 #: classes/applications/shop/otto/otto_prod_search.aw:class_798_help
 msgid "Klassi Otto toodete otsing help"
 msgstr ""
-
-#: classes/applications/shop/otto/otto_prod_search.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_prod_search.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""

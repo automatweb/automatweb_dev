@@ -903,6 +903,6 @@ msgstr ""
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2222
+#: classes/contentmgmt/webform.aw:2220
 msgid "Liigu edasi &raquo;"
 msgstr ""

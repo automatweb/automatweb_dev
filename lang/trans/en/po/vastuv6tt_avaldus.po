@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 01 Jan 2020 00:00:00 +0000\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,45 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vastuv6tt/vastuv6tt_avaldus.aw:class_337_help
-msgid "Klassi Application help"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_name
-msgid "Omaduse Name (name) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_name_comment
-msgid "Omaduse Name (name) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_name_help
-msgid "Omaduse Name (name) help"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_comment
-msgid "Omaduse Comment (comment) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_comment_comment
-msgid "Omaduse Comment (comment) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_comment_help
-msgid "Omaduse Comment (comment) help"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_status
-msgid "Omaduse Status (status) caption"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_status_comment
-msgid "Omaduse Status (status) kommentaar"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_status_help
-msgid "Omaduse Status (status) help"
+msgid "Klassi Avaldus help"
 msgstr ""
 
 #: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eriala_b
@@ -229,4 +192,3 @@ msgstr ""
 #: classes/vastuv6tt/vastuv6tt_avaldus.aw:prop_eelistus_help
 msgid "Omaduse Kas eelistuseks on antud eriala? (eelistus) help"
 msgstr ""
-

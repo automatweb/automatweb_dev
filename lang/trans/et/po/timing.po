@@ -10,102 +10,127 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/contentmgmt/timing.aw:class_858_help
+#: classes/contentmgmt/timing.aw:class_858_help
 msgid "Klassi Ajaline aktiivsus help"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_activate
+#: classes/contentmgmt/timing.aw:prop_activate
 msgid "Omaduse Aktiveerida (activate) caption"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_activate_comment
+#: classes/contentmgmt/timing.aw:prop_activate_comment
 msgid "Omaduse Aktiveerida (activate) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_activate_help
+#: classes/contentmgmt/timing.aw:prop_activate_help
 msgid "Omaduse Aktiveerida (activate) help"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_deactivate
+#: classes/contentmgmt/timing.aw:prop_deactivate
 msgid "Omaduse Deaktiveerida (deactivate) caption"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_deactivate_comment
+#: classes/contentmgmt/timing.aw:prop_deactivate_comment
 msgid "Omaduse Deaktiveerida (deactivate) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_deactivate_help
+#: classes/contentmgmt/timing.aw:prop_deactivate_help
 msgid "Omaduse Deaktiveerida (deactivate) help"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_archive_time
+#: classes/contentmgmt/timing.aw:prop_archive_time
 msgid "Omaduse Arhiveerimise aeg (archive_time) caption"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_archive_time_comment
+#: classes/contentmgmt/timing.aw:prop_archive_time_comment
 msgid "Omaduse Arhiveerimise aeg (archive_time) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_archive_time_help
+#: classes/contentmgmt/timing.aw:prop_archive_time_help
 msgid "Omaduse Arhiveerimise aeg (archive_time) help"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_archive_folder
+#: classes/contentmgmt/timing.aw:prop_archive_folder
 msgid "Omaduse Arhiivi kaust (archive_folder) caption"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_archive_folder_comment
+#: classes/contentmgmt/timing.aw:prop_archive_folder_comment
 msgid "Omaduse Arhiivi kaust (archive_folder) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_archive_folder_help
+#: classes/contentmgmt/timing.aw:prop_archive_folder_help
 msgid "Omaduse Arhiivi kaust (archive_folder) help"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_delete_object
+#: classes/contentmgmt/timing.aw:prop_delete_object
 msgid "Omaduse Kustuta objekt (delete_object) caption"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_delete_object_comment
+#: classes/contentmgmt/timing.aw:prop_delete_object_comment
 msgid "Omaduse Kustuta objekt (delete_object) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_delete_object_help
+#: classes/contentmgmt/timing.aw:prop_delete_object_help
 msgid "Omaduse Kustuta objekt (delete_object) help"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_objects_toolbar
+#: classes/contentmgmt/timing.aw:prop_objects_toolbar
 msgid "Omaduse Objektide toolbar (objects_toolbar) caption"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_objects_toolbar_comment
+#: classes/contentmgmt/timing.aw:prop_objects_toolbar_comment
 msgid "Omaduse Objektide toolbar (objects_toolbar) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_objects_toolbar_help
+#: classes/contentmgmt/timing.aw:prop_objects_toolbar_help
 msgid "Omaduse Objektide toolbar (objects_toolbar) help"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_objects
+#: classes/contentmgmt/timing.aw:prop_objects
 msgid "Omaduse Seotud objektid (objects) caption"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_objects_comment
+#: classes/contentmgmt/timing.aw:prop_objects_comment
 msgid "Omaduse Seotud objektid (objects) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:prop_objects_help
+#: classes/contentmgmt/timing.aw:prop_objects_help
 msgid "Omaduse Seotud objektid (objects) help"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:group_objects
+#: classes/contentmgmt/timing.aw:group_objects
 msgid "Grupi Seotud objektid (objects) pealkiri"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:group_objects_help
+#: classes/contentmgmt/timing.aw:group_objects_help
 msgid "Grupi Seotud objektid (objects) help"
 msgstr ""
 
 # classes/contentmgmt/timing.aw:rel_RELTYPE_TIMING_OBJECT
+#: classes/contentmgmt/timing.aw:rel_RELTYPE_TIMING_OBJECT
 msgid "Seose Seotud objekt (RELTYPE_TIMING_OBJECT) tekst"
 msgstr ""
 

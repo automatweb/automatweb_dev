@@ -9,35 +9,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/install/object_script_interpreter.aw:32
+#: classes/install/object_script_interpreter.aw:74
 msgid "object_script_interpreter::exec_file(%s): file does not exist!"
 msgstr ""
 
-#: classes/install/object_script_interpreter.aw:124
+#: classes/install/object_script_interpreter.aw:205
 msgid ""
 "object_script_interpreter::_get_sym(%s): no variable by the name %s defined "
 "on line %s!"
 msgstr ""
 
-#: classes/install/object_script_interpreter.aw:186
+#: classes/install/object_script_interpreter.aw:267
 msgid ""
 "object_script_interpreter::_tokenize_line(%s): parse error - unrecognized "
 "command on line %s!"
 msgstr ""
 
-#: classes/install/object_script_interpreter.aw:194
+#: classes/install/object_script_interpreter.aw:275
 msgid ""
 "object_script_interpreter::_tokenize_line(%s): parse error no opening brace "
 "after command on line %s!"
 msgstr ""
 
-#: classes/install/object_script_interpreter.aw:199
+#: classes/install/object_script_interpreter.aw:280
 msgid ""
 "object_script_interpreter::_tokenize_line(%s): parse error no closing brace "
 "on line %s!"
 msgstr ""
 
-#: classes/install/object_script_interpreter.aw:406
+#: classes/install/object_script_interpreter.aw:488
 msgid ""
 "object_script_interpreter::_exec_toks(): relation must have both ends "
 "defined!"

@@ -10,54 +10,67 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/applications/clients/ut/xml_import/datasource.aw:class_98_help
+#: classes/applications/clients/ut/xml_import/datasource.aw:class_98_help
 msgid "Klassi Datasource help"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_subclass
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_subclass
 msgid "Omaduse Andmete tüüp (subclass) caption"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_subclass_comment
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_subclass_comment
 msgid "Omaduse Andmete tüüp (subclass) kommentaar"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_subclass_help
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_subclass_help
 msgid "Omaduse Andmete tüüp (subclass) help"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_type
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_type
 msgid "Omaduse Source tüüp (type) caption"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_type_comment
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_type_comment
 msgid "Omaduse Source tüüp (type) kommentaar"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_type_help
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_type_help
 msgid "Omaduse Source tüüp (type) help"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_fullpath
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_fullpath
 msgid "Omaduse Faili asukoht (fullpath) caption"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_fullpath_comment
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_fullpath_comment
 msgid "Omaduse Faili asukoht (fullpath) kommentaar"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_fullpath_help
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_fullpath_help
 msgid "Omaduse Faili asukoht (fullpath) help"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_url
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_url
 msgid "Omaduse Faili url (url) caption"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_url_comment
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_url_comment
 msgid "Omaduse Faili url (url) kommentaar"
 msgstr ""
 
 # classes/applications/clients/ut/xml_import/datasource.aw:prop_url_help
+#: classes/applications/clients/ut/xml_import/datasource.aw:prop_url_help
 msgid "Omaduse Faili url (url) help"
 msgstr ""
 

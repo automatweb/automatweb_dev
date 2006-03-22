@@ -9,8 +9,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/import/taavi_import.aw:class_1047_help
 msgid "Klassi Taavi import help"
 msgstr ""
 
+#: classes/import/taavi_import.aw:prop_url
+msgid "Omaduse Url (url) caption"
+msgstr ""
+
+#: classes/import/taavi_import.aw:prop_url_comment
+msgid "Omaduse Url (url) kommentaar"
+msgstr ""
+
+#: classes/import/taavi_import.aw:prop_url_help
+msgid "Omaduse Url (url) help"
+msgstr ""
+
+#: classes/import/taavi_import.aw:prop_port
+msgid "Omaduse Port (port) caption"
+msgstr ""
+
+#: classes/import/taavi_import.aw:prop_port_comment
+msgid "Omaduse Port (port) kommentaar"
+msgstr ""
+
+#: classes/import/taavi_import.aw:prop_port_help
+msgid "Omaduse Port (port) help"
+msgstr ""
+
+#: classes/import/taavi_import.aw:prop_impordi
+msgid "Omaduse Impordi (impordi) caption"
+msgstr ""
+
+#: classes/import/taavi_import.aw:prop_impordi_comment
+msgid "Omaduse Impordi (impordi) kommentaar"
+msgstr ""
+
+#: classes/import/taavi_import.aw:prop_impordi_help
+msgid "Omaduse Impordi (impordi) help"
+msgstr ""
+
+#: classes/import/taavi_import.aw:52
+msgid "Impordi"
+msgstr ""

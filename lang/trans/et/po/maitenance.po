@@ -10,5 +10,6 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/core/maitenance.aw:class_218_help
+#: classes/core/maitenance.aw:class_218_help
 msgid "Klassi Saidi hooldus help"
 msgstr ""

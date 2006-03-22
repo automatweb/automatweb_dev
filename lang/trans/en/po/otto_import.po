@@ -241,6 +241,19 @@ msgid ""
 "Omaduse Esimene leht kust pilte otsitakse (first_site_to_search_images) help"
 msgstr ""
 
+#: classes/applications/shop/otto/otto_import.aw:prop_files_order
+msgid "Omaduse Failide n&auml;itamise j&auml;rjekord\t (files_order) caption"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_files_order_comment
+msgid ""
+"Omaduse Failide n&auml;itamise j&auml;rjekord\t (files_order) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_files_order_help
+msgid "Omaduse Failide n&auml;itamise j&auml;rjekord\t (files_order) help"
+msgstr ""
+
 #: classes/applications/shop/otto/otto_import.aw:prop_discount_products_file
 msgid "Omaduse Soodustoodete faili asukoht (discount_products_file) caption"
 msgstr ""
@@ -251,6 +264,24 @@ msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_discount_products_file_help
 msgid "Omaduse Soodustoodete faili asukoht (discount_products_file) help"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_discount_products_parents
+msgid ""
+"Omaduse Kausta id, kus all soodustooted asuvad (discount_products_parents) "
+"caption"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_discount_products_parents_comment
+msgid ""
+"Omaduse Kausta id, kus all soodustooted asuvad (discount_products_parents) "
+"kommentaar"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_discount_products_parents_help
+msgid ""
+"Omaduse Kausta id, kus all soodustooted asuvad (discount_products_parents) "
+"help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_discount_products_count
@@ -287,6 +318,57 @@ msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_clear_discount_products_help
 msgid "Omaduse &nbsp; (clear_discount_products) help"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_categories
+msgid "Omaduse Kategooriad (categories) caption"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_categories_comment
+msgid "Omaduse Kategooriad (categories) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_categories_help
+msgid "Omaduse Kategooriad (categories) help"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_bubble_pictures
+msgid "Omaduse Mullipildid (bubble_pictures) caption"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_bubble_pictures_comment
+msgid "Omaduse Mullipildid (bubble_pictures) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_bubble_pictures_help
+msgid "Omaduse Mullipildid (bubble_pictures) help"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_firm_pictures
+msgid "Omaduse Firmapildid (firm_pictures) caption"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_firm_pictures_comment
+msgid "Omaduse Firmapildid (firm_pictures) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:prop_firm_pictures_help
+msgid "Omaduse Firmapildid (firm_pictures) help"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:prop_sideways_pages
+#: classes/applications/shop/otto/otto_import.aw:prop_sideways_pages
+msgid "Omaduse Landscape vaatega lehed (sideways_pages) caption"
+msgstr "Pages with landscape view"
+
+# classes/applications/shop/otto/otto_import.aw:prop_sideways_pages_comment
+#: classes/applications/shop/otto/otto_import.aw:prop_sideways_pages_comment
+msgid "Omaduse Landscape vaatega lehed (sideways_pages) kommentaar"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:prop_sideways_pages_help
+#: classes/applications/shop/otto/otto_import.aw:prop_sideways_pages_help
+msgid "Omaduse Landscape vaatega lehed (sideways_pages) help"
 msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_folders
@@ -334,21 +416,6 @@ msgstr ""
 msgid "Omaduse T&auml;htede prioriteedid (foldpri) help"
 msgstr ""
 
-# classes/applications/shop/otto/otto_import.aw:prop_sideways_pages
-#: classes/applications/shop/otto/otto_import.aw:prop_sideways_pages
-msgid "Omaduse Landscape vaatega lehed (sideways_pages) caption"
-msgstr "Pages with landscape view"
-
-# classes/applications/shop/otto/otto_import.aw:prop_sideways_pages_comment
-#: classes/applications/shop/otto/otto_import.aw:prop_sideways_pages_comment
-msgid "Omaduse Landscape vaatega lehed (sideways_pages) kommentaar"
-msgstr ""
-
-# classes/applications/shop/otto/otto_import.aw:prop_sideways_pages_help
-#: classes/applications/shop/otto/otto_import.aw:prop_sideways_pages_help
-msgid "Omaduse Landscape vaatega lehed (sideways_pages) help"
-msgstr ""
-
 #: classes/applications/shop/otto/otto_import.aw:prop_foldernames
 msgid "Omaduse Kaustade nimed impordi jaoks (foldernames) caption"
 msgstr ""
@@ -359,18 +426,6 @@ msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:prop_foldernames_help
 msgid "Omaduse Kaustade nimed impordi jaoks (foldernames) help"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_import.aw:prop_categories
-msgid "Omaduse Kategooriad (categories) caption"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_import.aw:prop_categories_comment
-msgid "Omaduse Kategooriad (categories) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_import.aw:prop_categories_help
-msgid "Omaduse Kategooriad (categories) help"
 msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_7_view
@@ -448,18 +503,6 @@ msgstr ""
 # classes/applications/shop/otto/otto_import.aw:prop_force_no_side_view_help
 #: classes/applications/shop/otto/otto_import.aw:prop_force_no_side_view_help
 msgid "Omaduse Ilma detailvaate lisapiltideta lehed (force_no_side_view) help"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_import.aw:prop_force_7_view_for_trends
-msgid "Omaduse 7 pildiga trendide lehed (force_7_view_for_trends) caption"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_import.aw:prop_force_7_view_for_trends_comment
-msgid "Omaduse 7 pildiga trendide lehed (force_7_view_for_trends) kommentaar"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_import.aw:prop_force_7_view_for_trends_help
-msgid "Omaduse 7 pildiga trendide lehed (force_7_view_for_trends) help"
 msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_jm_clothes
@@ -558,6 +601,22 @@ msgstr "Files"
 msgid "Grupi Failid (files) help"
 msgstr ""
 
+#: classes/applications/shop/otto/otto_import.aw:group_files_import
+msgid "Grupi Imporditavad failid (files_import) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:group_files_import_help
+msgid "Grupi Imporditavad failid (files_import) help"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:group_files_order
+msgid "Grupi Failide j&auml;rjekord (files_order) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:group_files_order_help
+msgid "Grupi Failide j&auml;rjekord (files_order) help"
+msgstr ""
+
 #: classes/applications/shop/otto/otto_import.aw:group_discount_products
 msgid "Grupi Soodustooted (discount_products) pealkiri"
 msgstr ""
@@ -576,6 +635,22 @@ msgstr "Folders"
 msgid "Grupi Kataloogid (foldersa) help"
 msgstr ""
 
+#: classes/applications/shop/otto/otto_import.aw:group_categories
+msgid "Grupi Kategooriad (categories) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:group_categories_help
+msgid "Grupi Kategooriad (categories) help"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:group_category_settings
+msgid "Grupi Kategooriate seaded (category_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:group_category_settings_help
+msgid "Grupi Kategooriate seaded (category_settings) help"
+msgstr ""
+
 #: classes/applications/shop/otto/otto_import.aw:group_folders
 msgid "Grupi Kataloogid (deprecated) (folders) pealkiri"
 msgstr ""
@@ -584,13 +659,13 @@ msgstr ""
 msgid "Grupi Kataloogid (deprecated) (folders) help"
 msgstr ""
 
-# classes/applications/shop/otto/otto_import.aw:group_folderspri
 #: classes/applications/shop/otto/otto_import.aw:group_folderspri
-msgid "Grupi Kataloogide m&auml;&auml;rangud (folderspri) pealkiri"
-msgstr "Folder settings"
+msgid ""
+"Grupi Kataloogide m&auml;&auml;rangud (deprecated) (folderspri) pealkiri"
+msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:group_folderspri_help
-msgid "Grupi Kataloogide m&auml;&auml;rangud (folderspri) help"
+msgid "Grupi Kataloogide m&auml;&auml;rangud (deprecated) (folderspri) help"
 msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:group_foldersnames
@@ -599,14 +674,6 @@ msgstr ""
 
 #: classes/applications/shop/otto/otto_import.aw:group_foldersnames_help
 msgid "Grupi Kaustade nimed (deprecated) (foldersnames) help"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_import.aw:group_categories
-msgid "Grupi Kategooriad (categories) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/otto/otto_import.aw:group_categories_help
-msgid "Grupi Kategooriad (categories) help"
 msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:group_views
@@ -653,39 +720,74 @@ msgstr ""
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr "folder"
 
-#: classes/applications/shop/otto/otto_import.aw:202
+#: classes/applications/shop/otto/otto_import.aw:221
 msgid "Impordi soodustooted"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:211
-msgid "T&uuml;hjenda soodustoodete tabel"
+#: classes/applications/shop/otto/otto_import.aw:230
+msgid "T&uuml;hjenda soodustoodete tabel ( olenemata keelest! )"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:299
+#: classes/applications/shop/otto/otto_import.aw:337
 msgid "Kategooria nimi"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:304
-#: classes/applications/shop/otto/otto_import.aw:2481
-#: classes/applications/shop/otto/otto_import.aw:2547
+#: classes/applications/shop/otto/otto_import.aw:342
+#: classes/applications/shop/otto/otto_import.aw:2399
+#: classes/applications/shop/otto/otto_import.aw:2545
 msgid "AW Kataloogi ID"
 msgstr "AW Folder ID"
 
-#: classes/applications/shop/otto/otto_import.aw:695
+#: classes/applications/shop/otto/otto_import.aw:734
 msgid "otto_import::images(): could not fetch html for url %s!"
 msgstr "otto_import::images(): could not fetch html for url %s!"
 
-#: classes/applications/shop/otto/otto_import.aw:2011
+#: classes/applications/shop/otto/otto_import.aw:1928
 msgid "all done! <br>"
 msgstr "All done! <br>"
 
-#: classes/applications/shop/otto/otto_import.aw:2475
+#: classes/applications/shop/otto/otto_import.aw:2393
 msgid "Lehed komaga eraldatult"
 msgstr "Pages separated with commas"
 
-#: classes/applications/shop/otto/otto_import.aw:2552
+#: classes/applications/shop/otto/otto_import.aw:2466
+msgid "Fail"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:2470
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:2540
+msgid "Jrk"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:2550
 msgid "Kategooriad"
 msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:2653
+#: classes/applications/shop/otto/otto_import.aw:2739
+msgid "Kategooria"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:2657
+#: classes/applications/shop/otto/otto_import.aw:2743
+msgid "Pildi aadress"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:2662
+#: classes/applications/shop/otto/otto_import.aw:2747
+msgid "Nimetus"
+msgstr ""
+
+#: classes/applications/shop/otto/otto_import.aw:2673
+msgid "Pildi &uuml;leslaadimine"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:group_folderspri
+#~ msgid "Grupi Kataloogide m&auml;&auml;rangud (folderspri) pealkiri"
+#~ msgstr "Folder settings"
 
 # classes/applications/shop/otto/otto_import.aw:group_folders
 #~ msgid "Grupi Kataloogid (folders) pealkiri"

@@ -179,14 +179,6 @@ msgstr ""
 msgid "Omaduse Summa (sum) help"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/shop_order.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/shop/shop_order.aw:group_items
 #: classes/applications/shop/shop_order.aw:group_items
 msgid "Grupi Tellimuse sisu (items) pealkiri"

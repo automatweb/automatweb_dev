@@ -9,16 +9,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/expp/expp_telli.aw:class_1016_help
 msgid "Klassi Expp telli help"
 msgstr ""
 
-#: classes/expp/expp_telli.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/expp/expp_telli.aw:270 classes/expp/expp_telli.aw:315
+msgid " kuud "
 msgstr ""
 
-#: classes/expp/expp_telli.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/expp/expp_telli.aw:270 classes/expp/expp_telli.aw:315
+msgid " kuu "
 msgstr ""
 
+#: classes/expp/expp_telli.aw:308
+msgid "kuud"
+msgstr ""
+
+#: classes/expp/expp_telli.aw:308
+msgid "kuu"
+msgstr ""

@@ -89,19 +89,28 @@ msgstr ""
 msgid "Omaduse Isikukood (personal_id) help"
 msgstr ""
 
-# classes/crm/crm_person.aw:prop_ext_id
 #: classes/crm/crm_person.aw:prop_ext_id
-msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
+msgid "Omaduse Numbriline sidussüsteemi ID (ext_id) caption"
 msgstr ""
 
-# classes/crm/crm_person.aw:prop_ext_id_comment
 #: classes/crm/crm_person.aw:prop_ext_id_comment
-msgid "Omaduse Sidussüsteemi ID (ext_id) kommentaar"
+msgid "Omaduse Numbriline sidussüsteemi ID (ext_id) kommentaar"
 msgstr ""
 
-# classes/crm/crm_person.aw:prop_ext_id_help
 #: classes/crm/crm_person.aw:prop_ext_id_help
-msgid "Omaduse Sidussüsteemi ID (ext_id) help"
+msgid "Omaduse Numbriline sidussüsteemi ID (ext_id) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_ext_id_alphanumeric
+msgid "Omaduse Sidussüsteemi ID (ext_id_alphanumeric) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_ext_id_alphanumeric_comment
+msgid "Omaduse Sidussüsteemi ID (ext_id_alphanumeric) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_ext_id_alphanumeric_help
+msgid "Omaduse Sidussüsteemi ID (ext_id_alphanumeric) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:prop_is_customer
@@ -345,6 +354,18 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_is_important_help
 msgid "Omaduse Oluline (is_important) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_crm_settings
+msgid "Omaduse CRM Seaded (crm_settings) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_crm_settings_comment
+msgid "Omaduse CRM Seaded (crm_settings) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_crm_settings_help
+msgid "Omaduse CRM Seaded (crm_settings) help"
 msgstr ""
 
 # classes/crm/crm_person.aw:prop_notes
@@ -707,6 +728,18 @@ msgstr ""
 msgid "Omaduse  (add_edu_editor) help"
 msgstr ""
 
+#: classes/crm/crm_person.aw:prop_server_folder
+msgid "Omaduse Kataloog serveris, kus asuvad failid (server_folder) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_server_folder_comment
+msgid "Omaduse Kataloog serveris, kus asuvad failid (server_folder) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_server_folder_help
+msgid "Omaduse Kataloog serveris, kus asuvad failid (server_folder) help"
+msgstr ""
+
 #: classes/crm/crm_person.aw:prop_languages
 msgid "Omaduse Keeled (languages) caption"
 msgstr ""
@@ -803,6 +836,126 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/crm/crm_person.aw:prop_docs_tb
+msgid "Omaduse  (docs_tb) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_tb_comment
+msgid "Omaduse  (docs_tb) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_tb_help
+msgid "Omaduse  (docs_tb) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_tree
+msgid "Omaduse  (docs_tree) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_tree_comment
+msgid "Omaduse  (docs_tree) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_tree_help
+msgid "Omaduse  (docs_tree) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_name
+msgid "Omaduse Nimetus (docs_s_name) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_name_comment
+msgid "Omaduse Nimetus (docs_s_name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_name_help
+msgid "Omaduse Nimetus (docs_s_name) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_type
+msgid "Omaduse Liik (docs_s_type) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_type_comment
+msgid "Omaduse Liik (docs_s_type) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_type_help
+msgid "Omaduse Liik (docs_s_type) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_task
+msgid "Omaduse Toimetus (docs_s_task) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_task_comment
+msgid "Omaduse Toimetus (docs_s_task) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_task_help
+msgid "Omaduse Toimetus (docs_s_task) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_user
+msgid "Omaduse Tegija (docs_s_user) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_user_comment
+msgid "Omaduse Tegija (docs_s_user) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_user_help
+msgid "Omaduse Tegija (docs_s_user) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_customer
+msgid "Omaduse Klient (docs_s_customer) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_customer_comment
+msgid "Omaduse Klient (docs_s_customer) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_customer_help
+msgid "Omaduse Klient (docs_s_customer) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_sbt
+msgid "Omaduse Otsi (docs_s_sbt) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_sbt_comment
+msgid "Omaduse Otsi (docs_s_sbt) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_sbt_help
+msgid "Omaduse Otsi (docs_s_sbt) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_clear
+msgid "Omaduse T&uuml;hista otsing (docs_s_clear) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_clear_comment
+msgid "Omaduse T&uuml;hista otsing (docs_s_clear) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_s_clear_help
+msgid "Omaduse T&uuml;hista otsing (docs_s_clear) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_tbl
+msgid "Omaduse  (docs_tbl) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_tbl_comment
+msgid "Omaduse  (docs_tbl) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_docs_tbl_help
+msgid "Omaduse  (docs_tbl) help"
+msgstr ""
+
 # classes/crm/crm_person.aw:prop_templates
 #: classes/crm/crm_person.aw:prop_templates
 msgid "Omaduse Väljund (templates) caption"
@@ -816,6 +969,78 @@ msgstr ""
 # classes/crm/crm_person.aw:prop_templates_help
 #: classes/crm/crm_person.aw:prop_templates_help
 msgid "Omaduse Väljund (templates) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_from
+msgid "Omaduse Alates (stats_s_from) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_from_comment
+msgid "Omaduse Alates (stats_s_from) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_from_help
+msgid "Omaduse Alates (stats_s_from) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_to
+msgid "Omaduse Kuni (stats_s_to) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_to_comment
+msgid "Omaduse Kuni (stats_s_to) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_to_help
+msgid "Omaduse Kuni (stats_s_to) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_time_sel
+msgid "Omaduse Ajavahemik (stats_s_time_sel) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_time_sel_comment
+msgid "Omaduse Ajavahemik (stats_s_time_sel) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_time_sel_help
+msgid "Omaduse Ajavahemik (stats_s_time_sel) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_cust
+msgid "Omaduse Klient (stats_s_cust) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_cust_comment
+msgid "Omaduse Klient (stats_s_cust) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_cust_help
+msgid "Omaduse Klient (stats_s_cust) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_show
+msgid "Omaduse N&auml;ita (stats_s_show) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_show_comment
+msgid "Omaduse N&auml;ita (stats_s_show) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_stats_s_show_help
+msgid "Omaduse N&auml;ita (stats_s_show) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_my_stats
+msgid "Omaduse  (my_stats) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_my_stats_comment
+msgid "Omaduse  (my_stats) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_my_stats_help
+msgid "Omaduse  (my_stats) help"
 msgstr ""
 
 # classes/crm/crm_person.aw:group_general2
@@ -846,6 +1071,22 @@ msgstr ""
 # classes/crm/crm_person.aw:group_relatives_help
 #: classes/crm/crm_person.aw:group_relatives_help
 msgid "Grupi Sugulased (relatives) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_documents_all
+msgid "Grupi Dokumendid (documents_all) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_documents_all_help
+msgid "Grupi Dokumendid (documents_all) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_my_stats
+msgid "Grupi Minu statistika (my_stats) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_my_stats_help
+msgid "Grupi Minu statistika (my_stats) help"
 msgstr ""
 
 # classes/crm/crm_person.aw:group_contact
@@ -928,14 +1169,6 @@ msgstr ""
 msgid "Grupi Elulugu (cv) help"
 msgstr ""
 
-#: classes/crm/crm_person.aw:group_data
-msgid "Grupi Andmed (data) pealkiri"
-msgstr ""
-
-#: classes/crm/crm_person.aw:group_data_help
-msgid "Grupi Andmed (data) help"
-msgstr ""
-
 # classes/crm/crm_person.aw:group_education
 #: classes/crm/crm_person.aw:group_education
 msgid "Grupi Hariduskäik (education) pealkiri"
@@ -974,6 +1207,14 @@ msgstr ""
 # classes/crm/crm_person.aw:group_recommends_help
 #: classes/crm/crm_person.aw:group_recommends_help
 msgid "Grupi Soovitajad (recommends) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_data
+msgid "Grupi Andmed (data) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_data_help
+msgid "Grupi Andmed (data) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:group_transl
@@ -1143,201 +1384,233 @@ msgstr ""
 msgid "Seose Keel (RELTYPE_LANGUAGE) tekst"
 msgstr ""
 
-#: classes/crm/crm_person.aw:506 classes/crm/crm_person.aw:537
-#: classes/crm/crm_person.aw:581
+#: classes/crm/crm_person.aw:rel_RELTYPE_DOCS_FOLDER
+msgid "Seose Dokumentide kataloog (RELTYPE_DOCS_FOLDER) tekst"
+msgstr ""
+
+#: classes/crm/crm_person.aw:rel_RELTYPE_SERVER_FILES
+msgid "Seose Failide kataloog serveris (RELTYPE_SERVER_FILES) tekst"
+msgstr ""
+
+#: classes/crm/crm_person.aw:518
+msgid " Palun sisestage nimi loodava kasutaja jaoks lahtrisse \"Kasutaja\""
+msgstr ""
+
+#: classes/crm/crm_person.aw:577 classes/crm/crm_person.aw:683
+#: classes/crm/crm_person.aw:714 classes/crm/crm_person.aw:759
 msgid "--vali--"
 msgstr ""
 
-#: classes/crm/crm_person.aw:587
+#: classes/crm/crm_person.aw:578
+msgid "T&auml;na"
+msgstr ""
+
+#: classes/crm/crm_person.aw:579
+msgid "Eile"
+msgstr ""
+
+#: classes/crm/crm_person.aw:580
+msgid "Jooksev n&auml;dal"
+msgstr ""
+
+#: classes/crm/crm_person.aw:581
+msgid "Jooksev kuu"
+msgstr ""
+
+#: classes/crm/crm_person.aw:582
+msgid "Eelmine kuu"
+msgstr ""
+
+#: classes/crm/crm_person.aw:765
 msgid "Härra"
 msgstr ""
 
-#: classes/crm/crm_person.aw:588
+#: classes/crm/crm_person.aw:766
 msgid "Proua"
 msgstr ""
 
-#: classes/crm/crm_person.aw:589
+#: classes/crm/crm_person.aw:767
 msgid "Preili"
 msgstr ""
 
-#: classes/crm/crm_person.aw:595
+#: classes/crm/crm_person.aw:773
 msgid "Vallaline"
 msgstr ""
 
-#: classes/crm/crm_person.aw:596
+#: classes/crm/crm_person.aw:774
 msgid "Abielus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:597
+#: classes/crm/crm_person.aw:775
 msgid "Vabaabielus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:603
+#: classes/crm/crm_person.aw:781
 msgid "Pilt, kontakt, artiklid"
 msgstr ""
 
-#: classes/crm/crm_person.aw:604
+#: classes/crm/crm_person.aw:782
 msgid "kontakt"
 msgstr ""
 
-#: classes/crm/crm_person.aw:618
+#: classes/crm/crm_person.aw:796
 msgid "mees"
 msgstr ""
 
-#: classes/crm/crm_person.aw:619
+#: classes/crm/crm_person.aw:797
 msgid "naine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:805
-msgid "Muuda kliendibaasi seadeid"
+#: classes/crm/crm_person.aw:991
+msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_person.aw:837
+#: classes/crm/crm_person.aw:1025
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/crm/crm_person.aw:842 classes/crm/crm_person.aw:896
-#: classes/crm/crm_person.aw:1660
+#: classes/crm/crm_person.aw:1030 classes/crm/crm_person.aw:1084
+#: classes/crm/crm_person.aw:1848
 msgid "Uus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:855 classes/crm/crm_person.aw:912
+#: classes/crm/crm_person.aw:1043 classes/crm/crm_person.aw:1100
 msgid "Kalender määramata"
 msgstr ""
 
-#: classes/crm/crm_person.aw:856 classes/crm/crm_person.aw:873
-#: classes/crm/crm_person.aw:913
+#: classes/crm/crm_person.aw:1044 classes/crm/crm_person.aw:1061
+#: classes/crm/crm_person.aw:1101
 msgid "Lisa %s"
 msgstr ""
 
-#: classes/crm/crm_person.aw:933
+#: classes/crm/crm_person.aw:1121
 msgid "Lisa "
 msgstr ""
 
-#: classes/crm/crm_person.aw:942
+#: classes/crm/crm_person.aw:1130
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1666
+#: classes/crm/crm_person.aw:1854
 msgid "Kustuta valitud tööpakkumised"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1672 classes/crm/crm_person.aw:1776
+#: classes/crm/crm_person.aw:1860 classes/crm/crm_person.aw:1964
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1684
+#: classes/crm/crm_person.aw:1872
 msgid "Arvutioskused"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1690
+#: classes/crm/crm_person.aw:1878
 msgid "Rakendused"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1696
+#: classes/crm/crm_person.aw:1884
 msgid "Programmeerimine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1706
+#: classes/crm/crm_person.aw:1894
 msgid "Muu"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1712
+#: classes/crm/crm_person.aw:1900
 msgid "<b>Keeled</b>"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1716
+#: classes/crm/crm_person.aw:1904
 msgid "Keeled"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1731
+#: classes/crm/crm_person.aw:1919
 msgid "Juhiload"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1749
+#: classes/crm/crm_person.aw:1937
 msgid "Lisa uus töökogemus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1760
+#: classes/crm/crm_person.aw:1948
 msgid "Kustuta töökogemused"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1762 classes/crm/crm_person.aw:1952
+#: classes/crm/crm_person.aw:1950 classes/crm/crm_person.aw:2169
 msgid "Oled kindel, et kustutada?"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1768
+#: classes/crm/crm_person.aw:1956
 msgid "Muuda tkogemust"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1787
+#: classes/crm/crm_person.aw:1975
 msgid "Asutus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1793
+#: classes/crm/crm_person.aw:1981
 msgid "Ametikoht"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1799 classes/crm/crm_person.aw:2009
+#: classes/crm/crm_person.aw:1987 classes/crm/crm_person.aw:2226
 msgid "Alates"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1805 classes/crm/crm_person.aw:2019
+#: classes/crm/crm_person.aw:1993 classes/crm/crm_person.aw:2236
 msgid "Kuni"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1944
+#: classes/crm/crm_person.aw:2161
 msgid "Hariduse lisamine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1950
+#: classes/crm/crm_person.aw:2167
 msgid "Kustuta haridus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1957
+#: classes/crm/crm_person.aw:2174
 msgid "Põhiharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1968 classes/crm/crm_person.aw:2081
+#: classes/crm/crm_person.aw:2185 classes/crm/crm_person.aw:2298
 msgid "Keskharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1978 classes/crm/crm_person.aw:2102
+#: classes/crm/crm_person.aw:2195 classes/crm/crm_person.aw:2319
 msgid "Kõrgharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1988 classes/crm/crm_person.aw:2123
+#: classes/crm/crm_person.aw:2205 classes/crm/crm_person.aw:2340
 msgid "Kutseharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:2003
+#: classes/crm/crm_person.aw:2220
 msgid "Kool"
 msgstr ""
 
-#: classes/crm/crm_person.aw:2029
+#: classes/crm/crm_person.aw:2246
 msgid "Haridusliik"
 msgstr ""
 
-#: classes/crm/crm_person.aw:2035
+#: classes/crm/crm_person.aw:2252
 msgid "Eriala"
 msgstr ""
 
-#: classes/crm/crm_person.aw:2148
+#: classes/crm/crm_person.aw:2365
 msgid "Keel"
 msgstr ""
 
-#: classes/crm/crm_person.aw:2153
+#: classes/crm/crm_person.aw:2370
 msgid "Rääkimine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:2159
+#: classes/crm/crm_person.aw:2376
 msgid "Kirjutamine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:2165
+#: classes/crm/crm_person.aw:2382
 msgid "Arusaamine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:2171
+#: classes/crm/crm_person.aw:2388
 msgid "Mitu aastat kogemusi"
 msgstr ""

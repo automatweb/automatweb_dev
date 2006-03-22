@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/country/country_administrative_unit.aw:class_953_help
 msgid "Klassi Halduspiirkond v2 help"
 msgstr ""
@@ -74,15 +73,10 @@ msgstr ""
 msgid "Omaduse Vali kõrgem halduspiirkond (parent_select) help"
 msgstr ""
 
-#: classes/common/country/country_administrative_unit.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
-
-#: classes/common/country/country_administrative_unit.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/common/country/country_administrative_unit.aw:rel_RELTYPE_PARENT_ADMINISTRATIVE_UNIT
-msgid "Seose K&otilde;rgem halduspiirkond (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
+msgid ""
+"Seose K&otilde;rgem halduspiirkond (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"
 msgstr "Parent administrative unit"
 
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"

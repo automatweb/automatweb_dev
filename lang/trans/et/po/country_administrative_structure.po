@@ -62,14 +62,6 @@ msgstr ""
 msgid "Omaduse  (administrative_structure_data) help"
 msgstr ""
 
-#: classes/common/country/country_administrative_structure.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/common/country/country_administrative_structure.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/common/country/country_administrative_structure.aw:group_grp_administrative_structure
 msgid "Grupi Haldusjaotuse struktuur (grp_administrative_structure) pealkiri"
 msgstr ""

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/clients/expp/expp_journal_management.aw:class_1010_help
 msgid "Klassi V&auml;ljaannete haldus help"
 msgstr ""
@@ -99,15 +98,21 @@ msgid "Omaduse Tellimistingimused (ordering_terms) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_order_composition_information
-msgid "Omaduse Tellimuse vormistamise informatsioon (order_composition_information) caption"
+msgid ""
+"Omaduse Tellimuse vormistamise informatsioon (order_composition_information) "
+"caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_order_composition_information_comment
-msgid "Omaduse Tellimuse vormistamise informatsioon (order_composition_information) kommentaar"
+msgid ""
+"Omaduse Tellimuse vormistamise informatsioon (order_composition_information) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_order_composition_information_help
-msgid "Omaduse Tellimuse vormistamise informatsioon (order_composition_information) help"
+msgid ""
+"Omaduse Tellimuse vormistamise informatsioon (order_composition_information) "
+"help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_design_image
@@ -194,64 +199,127 @@ msgstr ""
 msgid "Omaduse Dokument (custom_design_document) help"
 msgstr ""
 
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_toolbar
+msgid ""
+"Omaduse Alamv&auml;ljaannete t&ouml;&ouml;riistariba (publications_toolbar) "
+"caption"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_toolbar_comment
+msgid ""
+"Omaduse Alamv&auml;ljaannete t&ouml;&ouml;riistariba (publications_toolbar) "
+"kommentaar"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_toolbar_help
+msgid ""
+"Omaduse Alamv&auml;ljaannete t&ouml;&ouml;riistariba (publications_toolbar) "
+"help"
+msgstr ""
+
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_table
-msgid "Omaduse Alamv&auml;ljaanded (publications_table) caption"
+msgid "Omaduse Almav&auml;ljaanded (publications_table) caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_table_comment
-msgid "Omaduse Alamv&auml;ljaanded (publications_table) kommentaar"
+msgid "Omaduse Almav&auml;ljaanded (publications_table) kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_publications_table_help
-msgid "Omaduse Alamv&auml;ljaanded (publications_table) help"
+msgid "Omaduse Almav&auml;ljaanded (publications_table) help"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images
-msgid "Omaduse Pildid (general_images) caption"
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_toolbar
+msgid ""
+"Omaduse Piltide t&ouml;&ouml;riistariba (general_images_toolbar) caption"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_comment
-msgid "Omaduse Pildid (general_images) kommentaar"
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_toolbar_comment
+msgid ""
+"Omaduse Piltide t&ouml;&ouml;riistariba (general_images_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_help
-msgid "Omaduse Pildid (general_images) help"
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_toolbar_help
+msgid "Omaduse Piltide t&ouml;&ouml;riistariba (general_images_toolbar) help"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files
-msgid "Omaduse Failid (general_files) caption"
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_table
+msgid "Omaduse Pildid (general_images_table) caption"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_comment
-msgid "Omaduse Failid (general_files) kommentaar"
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_table_comment
+msgid "Omaduse Pildid (general_images_table) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_help
-msgid "Omaduse Failid (general_files) help"
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_images_table_help
+msgid "Omaduse Pildid (general_images_table) help"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links
-msgid "Omaduse Lingid (general_links) caption"
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_toolbar
+msgid "Omaduse Failide t&ouml;&ouml;riistariba (general_files_toolbar) caption"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_comment
-msgid "Omaduse Lingid (general_links) kommentaar"
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_toolbar_comment
+msgid ""
+"Omaduse Failide t&ouml;&ouml;riistariba (general_files_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_help
-msgid "Omaduse Lingid (general_links) help"
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_toolbar_help
+msgid "Omaduse Failide t&ouml;&ouml;riistariba (general_files_toolbar) help"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_table
+msgid "Omaduse Failid (general_files_table) caption"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_table_comment
+msgid "Omaduse Failid (general_files_table) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_files_table_help
+msgid "Omaduse Failid (general_files_table) help"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_toolbar
+msgid "Omaduse Linkide t&ouml;&ouml;riistariba (general_links_toolbar) caption"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_toolbar_comment
+msgid ""
+"Omaduse Linkide t&ouml;&ouml;riistariba (general_links_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_toolbar_help
+msgid "Omaduse Linkide t&ouml;&ouml;riistariba (general_links_toolbar) help"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_table
+msgid "Omaduse Lingid (general_links_table) caption"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_table_comment
+msgid "Omaduse Lingid (general_links_table) kommentaar"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:prop_general_links_table_help
+msgid "Omaduse Lingid (general_links_table) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_documents_toolbar
-msgid "Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) caption"
+msgid ""
+"Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) "
+"caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_documents_toolbar_comment
-msgid "Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) kommentaar"
+msgid ""
+"Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_documents_toolbar_help
-msgid "Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) help"
+msgid ""
+"Omaduse Dokumentide t&ouml;&ouml;riistariba (general_documents_toolbar) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_documents_table
@@ -267,15 +335,21 @@ msgid "Omaduse Dokumendid (general_documents_table) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_polls_toolbar
-msgid "Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) caption"
+msgid ""
+"Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) "
+"caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_polls_toolbar_comment
-msgid "Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) kommentaar"
+msgid ""
+"Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_polls_toolbar_help
-msgid "Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) help"
+msgid ""
+"Omaduse Kiirk&uuml;sitluste t&ouml;&ouml;riistariba (general_polls_toolbar) "
+"help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_polls_table
@@ -291,15 +365,20 @@ msgid "Omaduse Kiirk&uumlsitlused (general_polls_table) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_webforms_toolbar
-msgid "Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) caption"
+msgid ""
+"Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) "
+"caption"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_webforms_toolbar_comment
-msgid "Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) kommentaar"
+msgid ""
+"Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_webforms_toolbar_help
-msgid "Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) help"
+msgid ""
+"Omaduse Veebivormide t&ouml;&ouml;riistariba (general_webforms_toolbar) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:prop_general_webforms_table
@@ -338,44 +417,40 @@ msgstr ""
 msgid "Omaduse Statistika (stats) help"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/clients/expp/expp_journal_management.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/clients/expp/expp_journal_management.aw:group_organisation_general_information
-msgid "Grupi Ettevõtte üldandmed (organisation_general_information) pealkiri"
+msgid ""
+"Grupi Ettev&otilde;tte &uuml;ldandmed (organisation_general_information) "
+"pealkiri"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_organisation_general_information_help
-msgid "Grupi Ettevõtte üldandmed (organisation_general_information) help"
+msgid ""
+"Grupi Ettev&otilde;tte &uuml;ldandmed (organisation_general_information) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_publications
-msgid "Grupi Väljaanded (publications) pealkiri"
+msgid "Grupi V&auml;ljaanded (publications) pealkiri"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_publications_help
-msgid "Grupi Väljaanded (publications) help"
+msgid "Grupi V&auml;ljaanded (publications) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_publications_general_info
-msgid "Grupi Väljaannete üldinfo (publications_general_info) pealkiri"
+msgid ""
+"Grupi V&auml;ljaannete &uuml;ldinfo (publications_general_info) pealkiri"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_publications_general_info_help
-msgid "Grupi Väljaannete üldinfo (publications_general_info) help"
+msgid "Grupi V&auml;ljaannete &uuml;ldinfo (publications_general_info) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_publications_list
-msgid "Grupi Alamväljaanded (publications_list) pealkiri"
+msgid "Grupi Alamv&auml;ljaanded (publications_list) pealkiri"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_publications_list_help
-msgid "Grupi Alamväljaanded (publications_list) help"
+msgid "Grupi Alamv&auml;ljaanded (publications_list) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_general_images
@@ -411,11 +486,11 @@ msgid "Grupi Dokumendid (general_documents) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_general_polls
-msgid "Grupi Kiirküsitlused (general_polls) pealkiri"
+msgid "Grupi Kiirk&uuml;sitlused (general_polls) pealkiri"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_general_polls_help
-msgid "Grupi Kiirküsitlused (general_polls) help"
+msgid "Grupi Kiirk&uuml;sitlused (general_polls) help"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:group_general_webforms
@@ -491,7 +566,8 @@ msgid "Seose &amp;Uuml;ldine veebivorm (RELTYPE_GENERAL_WEBFORM) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_POLL
-msgid "Seose &amp;Uuml;ldine kiirk&amp;uuml;sitlus (RELTYPE_GENERAL_POLL) tekst"
+msgid ""
+"Seose &amp;Uuml;ldine kiirk&amp;uuml;sitlus (RELTYPE_GENERAL_POLL) tekst"
 msgstr ""
 
 #: classes/applications/clients/expp/expp_journal_management.aw:rel_RELTYPE_GENERAL_DOCUMENT
@@ -506,91 +582,171 @@ msgstr ""
 msgid "Seose Tellimistingimused (RELTYPE_ORDERING_TERMS) tekst"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:206
+#: classes/applications/clients/expp/expp_journal_management.aw:218
 msgid "Kasutan etteantud p&otilde;hja"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:207
+#: classes/applications/clients/expp/expp_journal_management.aw:219
 msgid "Soovin ise kujundada"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:240
+#: classes/applications/clients/expp/expp_journal_management.aw:255
 msgid "V&auml;&auml;rtus tuleb Reggy-st, ei ole v&otilde;imalik muuta"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:243
+#: classes/applications/clients/expp/expp_journal_management.aw:258
 msgid "Siia tuleb statistika"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:332
+#: classes/applications/clients/expp/expp_journal_management.aw:349
 msgid "Organisatsiooni juurde ei ole logo m&auml;&auml;ratud"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:350
+#: classes/applications/clients/expp/expp_journal_management.aw:367
 msgid "Muuda organisatsiooni andmeid"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:380
+#: classes/applications/clients/expp/expp_journal_management.aw:397
 msgid "Lisa organisatsioon"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:393
-msgid "Uus dokument"
+#: classes/applications/clients/expp/expp_journal_management.aw:410
+msgid "Uus v&auml;ljaanne"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:405 classes/applications/clients/expp/expp_journal_management.aw:521 classes/applications/clients/expp/expp_journal_management.aw:633
+#: classes/applications/clients/expp/expp_journal_management.aw:422
+#: classes/applications/clients/expp/expp_journal_management.aw:537
+#: classes/applications/clients/expp/expp_journal_management.aw:664
+#: classes/applications/clients/expp/expp_journal_management.aw:791
+#: classes/applications/clients/expp/expp_journal_management.aw:921
+#: classes/applications/clients/expp/expp_journal_management.aw:1061
+#: classes/applications/clients/expp/expp_journal_management.aw:1181
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:407
-msgid "Oled kindel, et soovid valitud dokumendid kustutada?"
+#: classes/applications/clients/expp/expp_journal_management.aw:424
+msgid "Oled kindel, et soovid valitud v&auml;ljaanded kustutada?"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:419
-msgid "Dokumendi id"
+#: classes/applications/clients/expp/expp_journal_management.aw:436
+#: classes/applications/clients/expp/expp_journal_management.aw:551
+#: classes/applications/clients/expp/expp_journal_management.aw:678
+#: classes/applications/clients/expp/expp_journal_management.aw:805
+#: classes/applications/clients/expp/expp_journal_management.aw:935
+#: classes/applications/clients/expp/expp_journal_management.aw:1077
+#: classes/applications/clients/expp/expp_journal_management.aw:1197
+msgid "ID"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:425 classes/applications/clients/expp/expp_journal_management.aw:543 classes/applications/clients/expp/expp_journal_management.aw:655
+#: classes/applications/clients/expp/expp_journal_management.aw:442
+#: classes/applications/clients/expp/expp_journal_management.aw:557
+#: classes/applications/clients/expp/expp_journal_management.aw:684
+#: classes/applications/clients/expp/expp_journal_management.aw:811
+#: classes/applications/clients/expp/expp_journal_management.aw:941
+#: classes/applications/clients/expp/expp_journal_management.aw:1083
+#: classes/applications/clients/expp/expp_journal_management.aw:1203
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:429
-msgid "N&auml;ita lingina"
-msgstr ""
-
-#: classes/applications/clients/expp/expp_journal_management.aw:435 classes/applications/clients/expp/expp_journal_management.aw:465 classes/applications/clients/expp/expp_journal_management.aw:547 classes/applications/clients/expp/expp_journal_management.aw:577 classes/applications/clients/expp/expp_journal_management.aw:659 classes/applications/clients/expp/expp_journal_management.aw:689
-msgid "Muuda"
-msgstr ""
-
-#: classes/applications/clients/expp/expp_journal_management.aw:441 classes/applications/clients/expp/expp_journal_management.aw:553 classes/applications/clients/expp/expp_journal_management.aw:665
-msgid "Vali"
-msgstr ""
-
-#: classes/applications/clients/expp/expp_journal_management.aw:509
-msgid "Uus kiirk&uuml;sitlus"
-msgstr ""
-
-#: classes/applications/clients/expp/expp_journal_management.aw:523
-msgid "Oled kindel, et soovid valitud kiirk&uuml;sitlused kustutada?"
-msgstr ""
-
-#: classes/applications/clients/expp/expp_journal_management.aw:537 classes/applications/clients/expp/expp_journal_management.aw:649
+#: classes/applications/clients/expp/expp_journal_management.aw:446
+#: classes/applications/clients/expp/expp_journal_management.aw:561
+#: classes/applications/clients/expp/expp_journal_management.aw:688
+#: classes/applications/clients/expp/expp_journal_management.aw:815
+#: classes/applications/clients/expp/expp_journal_management.aw:945
+#: classes/applications/clients/expp/expp_journal_management.aw:1087
+#: classes/applications/clients/expp/expp_journal_management.aw:1207
 msgid "Aktiivsus"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:621
+#: classes/applications/clients/expp/expp_journal_management.aw:452
+#: classes/applications/clients/expp/expp_journal_management.aw:482
+#: classes/applications/clients/expp/expp_journal_management.aw:573
+#: classes/applications/clients/expp/expp_journal_management.aw:608
+#: classes/applications/clients/expp/expp_journal_management.aw:700
+#: classes/applications/clients/expp/expp_journal_management.aw:735
+#: classes/applications/clients/expp/expp_journal_management.aw:827
+#: classes/applications/clients/expp/expp_journal_management.aw:862
+#: classes/applications/clients/expp/expp_journal_management.aw:957
+#: classes/applications/clients/expp/expp_journal_management.aw:992
+#: classes/applications/clients/expp/expp_journal_management.aw:1094
+#: classes/applications/clients/expp/expp_journal_management.aw:1125
+#: classes/applications/clients/expp/expp_journal_management.aw:1213
+#: classes/applications/clients/expp/expp_journal_management.aw:1244
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:458
+#: classes/applications/clients/expp/expp_journal_management.aw:579
+#: classes/applications/clients/expp/expp_journal_management.aw:706
+#: classes/applications/clients/expp/expp_journal_management.aw:833
+#: classes/applications/clients/expp/expp_journal_management.aw:963
+#: classes/applications/clients/expp/expp_journal_management.aw:1100
+#: classes/applications/clients/expp/expp_journal_management.aw:1219
+msgid "Vali"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:525
+msgid "Uus pilt"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:539
+msgid "Oled kindel, et soovid valitud pildid kustutada?"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:567
+#: classes/applications/clients/expp/expp_journal_management.aw:694
+#: classes/applications/clients/expp/expp_journal_management.aw:821
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:652
+msgid "Uus fail"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:666
+msgid "Oled kindel, et soovid valitud failid kustutada?"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:779
+msgid "Uus link"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:793
+msgid "Oled kindel, et soovid valitud lingid kustutada?"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:909
+msgid "Uus dokument"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:923
+msgid "Oled kindel, et soovid valitud dokumendid kustutada?"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:951
+msgid "N&auml;ita lingina"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:1049
+msgid "Uus kiirk&uuml;sitlus"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:1063
+msgid "Oled kindel, et soovid valitud kiirk&uuml;sitlused kustutada?"
+msgstr ""
+
+#: classes/applications/clients/expp/expp_journal_management.aw:1169
 msgid "Uus veebivorm"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:635
+#: classes/applications/clients/expp/expp_journal_management.aw:1183
 msgid "Oled kindel, et soovid valitud veebivormid kustutada?"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:741
+#: classes/applications/clients/expp/expp_journal_management.aw:1296
 msgid "Link foorumile"
 msgstr ""
 
-#: classes/applications/clients/expp/expp_journal_management.aw:753
+#: classes/applications/clients/expp/expp_journal_management.aw:1308
 msgid "Lisa foorum"
 msgstr ""
-

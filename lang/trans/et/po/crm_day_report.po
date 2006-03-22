@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_day_report.aw:class_1006_help
 msgid "Klassi P&auml;eva raport help"
 msgstr ""
@@ -61,12 +60,3 @@ msgstr ""
 #: classes/applications/crm/crm_day_report.aw:prop_num_hrs_help
 msgid "Omaduse T&ouml;&ouml;tundide arv (num_hrs) help"
 msgstr ""
-
-#: classes/applications/crm/crm_day_report.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/crm/crm_day_report.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-

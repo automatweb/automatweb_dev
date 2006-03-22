@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Sisu (bug_content) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_type
+msgid "Omaduse T&uuml;&uuml;p (bug_type) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_type_comment
+msgid "Omaduse T&uuml;&uuml;p (bug_type) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_type_help
+msgid "Omaduse T&uuml;&uuml;p (bug_type) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_status
 msgid "Omaduse Staatus (bug_status) caption"
 msgstr ""
@@ -48,6 +60,54 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_status_help
 msgid "Omaduse Staatus (bug_status) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_project
+msgid "Omaduse Projekt (project) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_project_comment
+msgid "Omaduse Projekt (project) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_project_help
+msgid "Omaduse Projekt (project) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_deadline
+msgid "Omaduse T&auml;htaeg (deadline) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_deadline_comment
+msgid "Omaduse T&auml;htaeg (deadline) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_deadline_help
+msgid "Omaduse T&auml;htaeg (deadline) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_who
+msgid "Omaduse Kellele (who) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_who_comment
+msgid "Omaduse Kellele (who) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_who_help
+msgid "Omaduse Kellele (who) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_priority
@@ -89,6 +149,18 @@ msgstr ""
 msgid "Omaduse Klass (bug_class) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_fileupload
+msgid "Omaduse Fail (fileupload) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_fileupload_comment
+msgid "Omaduse Fail (fileupload) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_fileupload_help
+msgid "Omaduse Fail (fileupload) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_component
 msgid "Omaduse Komponent (bug_component) caption"
 msgstr ""
@@ -125,6 +197,18 @@ msgstr ""
 msgid "Omaduse Bugmail CC (bug_mail) help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_monitors
+msgid "Omaduse J&auml;lgijad (monitors) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_monitors_comment
+msgid "Omaduse J&auml;lgijad (monitors) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:prop_monitors_help
+msgid "Omaduse J&auml;lgijad (monitors) help"
+msgstr ""
+
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_comms
 msgid "Omaduse Kommentaarid (comms) caption"
 msgstr ""
@@ -135,14 +219,6 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_comms_help
 msgid "Omaduse Kommentaarid (comms) help"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/bug_o_matic_3000/bug.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:group_comments
@@ -157,15 +233,63 @@ msgstr ""
 msgid "Seose J&auml;lgija (RELTYPE_MONITOR) tekst"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:136
+#: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_FILE
+msgid "Seose Fail (RELTYPE_FILE) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_CUSTOMER
+msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:rel_RELTYPE_PROJECT
+msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:151
+msgid "Lahtine"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:152
+msgid "Tegemisel"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:153
+msgid "Valmis"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:154
+msgid "Testitud"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:155
+msgid "Suletud"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:156
+msgid "Vale teade"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:157
+msgid "Kordamatu"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:158
+msgid "Parandamatu"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:301
+msgid "Puuduvad õigused bugi sulgeda!"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:358
 msgid "Bug"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:137
+#: classes/applications/bug_o_matic_3000/bug.aw:359
 msgid "Summary"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:138
+#: classes/applications/bug_o_matic_3000/bug.aw:360
 msgid "URL"
 msgstr ""
 

@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/common/address/address_street.aw:class_960_help
 msgid "Klassi Tänav v2 help"
 msgstr ""
@@ -26,11 +25,5 @@ msgstr ""
 msgid "Omaduse  (administrative_structure_oid) help"
 msgstr ""
 
-#: classes/common/address/address_street.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
-
-#: classes/common/address/address_street.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"

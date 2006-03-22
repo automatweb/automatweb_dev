@@ -37,50 +37,59 @@ msgstr "Not active"
 msgid "Vali"
 msgstr "Select"
 
-#: classes/cfg/htmlclient.aw:423 classes/cfg/htmlclient.aw:563
+#: classes/cfg/htmlclient.aw:423 classes/cfg/htmlclient.aw:564
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/cfg/htmlclient.aw:792 classes/cfg/htmlclient.aw:869
+#: classes/cfg/htmlclient.aw:802 classes/cfg/htmlclient.aw:872
 msgid "Toimetus"
 msgstr "Task"
 
-#: classes/cfg/htmlclient.aw:813 classes/cfg/htmlclient.aw:871
+#: classes/cfg/htmlclient.aw:820 classes/cfg/htmlclient.aw:874
 msgid "K&otilde;ne"
 msgstr "Call"
 
-#: classes/cfg/htmlclient.aw:825 classes/cfg/htmlclient.aw:872
+#: classes/cfg/htmlclient.aw:830 classes/cfg/htmlclient.aw:875
 msgid "Kohtumine"
 msgstr "Meeting"
 
-#: classes/cfg/htmlclient.aw:846 classes/cfg/htmlclient.aw:873
+#: classes/cfg/htmlclient.aw:849 classes/cfg/htmlclient.aw:876
 msgid "Pakkumine"
 msgstr "Offer"
 
-#: classes/cfg/htmlclient.aw:864
+#: classes/cfg/htmlclient.aw:867
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/cfg/htmlclient.aw:865
-msgid "Uus t&ouml;&ouml;"
-msgstr "New case"
-
-#: classes/cfg/htmlclient.aw:866
-msgid "Klient"
-msgstr "Customer"
-
-#: classes/cfg/htmlclient.aw:867
-msgid "Klient (eraisik)"
-msgstr "Customer (Person)"
-
 #: classes/cfg/htmlclient.aw:868
+msgid "T&ouml;&ouml;"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:869
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:870
+msgid "Eraisik"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:871
 msgid "Projekt"
 msgstr "Project"
 
-#: classes/cfg/htmlclient.aw:870
+#: classes/cfg/htmlclient.aw:873
 msgid "Arve"
 msgstr "Invoice"
 
-#: classes/cfg/htmlclient.aw:874
+#: classes/cfg/htmlclient.aw:877
 msgid "Logi v&auml;lja"
 msgstr "Log out"
+
+#~ msgid "Uus t&ouml;&ouml;"
+#~ msgstr "New case"
+
+#~ msgid "Klient"
+#~ msgstr "Customer"
+
+#~ msgid "Klient (eraisik)"
+#~ msgstr "Customer (Person)"

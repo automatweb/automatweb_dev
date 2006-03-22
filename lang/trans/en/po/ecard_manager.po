@@ -122,8 +122,8 @@ msgid "Kaart salvestatud"
 msgstr "Card saved"
 
 #: classes/applications/ecard/ecard_manager.aw:345
-msgid "Väli peab olema täidetud"
-msgstr "Field must be filled in"
+msgid "V�li peab olema t�idetud"
+msgstr ""
 
 #: classes/applications/ecard/ecard_manager.aw:360
 msgid "Teie e-posti aadress vigane"
@@ -134,8 +134,8 @@ msgid "Saaja e-posti aadress vigane"
 msgstr "Error in e-mail address of recipient"
 
 #: classes/applications/ecard/ecard_manager.aw:371
-msgid "Kuupäev vigane"
-msgstr "Error in date"
+msgid "Kuup�ev vigane"
+msgstr ""
 
 #: classes/applications/ecard/ecard_manager.aw:382
 msgid "Saada"
@@ -144,3 +144,9 @@ msgstr "Send"
 #: classes/applications/ecard/ecard_manager.aw:384
 msgid "Tagasi"
 msgstr "Back"
+
+#~ msgid "Väli peab olema täidetud"
+#~ msgstr "Field must be filled in"
+
+#~ msgid "Kuupäev vigane"
+#~ msgstr "Error in date"
