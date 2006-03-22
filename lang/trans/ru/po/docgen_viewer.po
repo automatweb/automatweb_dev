@@ -1,0 +1,120 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/core/docgen/docgen_viewer.aw:class_323_help
+msgid "Klassi AWDocGen help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum
+msgid "Omaduse  (foorum) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum_comment
+msgid "Omaduse  (foorum) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum_help
+msgid "Omaduse  (foorum) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_view
+msgid "Omaduse  (view) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_view_comment
+msgid "Omaduse  (view) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_view_help
+msgid "Omaduse  (view) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text
+msgid "Omaduse Uuenda (refresh_text) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_comment
+msgid "Omaduse Uuenda (refresh_text) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_help
+msgid "Omaduse Uuenda (refresh_text) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties
+msgid "Omaduse Uuenda (refresh_properties) caption"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_comment
+msgid "Omaduse Uuenda (refresh_properties) kommentaar"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_help
+msgid "Omaduse Uuenda (refresh_properties) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:group_more_options
+msgid "Grupi Seaded (more_options) pealkiri"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:group_more_options_help
+msgid "Grupi Seaded (more_options) help"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
+msgid "Seose foorum (RELTYPE_FORUM) tekst"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:70
+msgid "Open DocGen"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:147 classes/core/docgen/docgen_viewer.aw:696 classes/core/docgen/docgen_viewer.aw:765 classes/core/docgen/docgen_viewer.aw:1045 classes/core/docgen/docgen_viewer.aw:1115 classes/core/docgen/docgen_viewer.aw:1213
+msgid "Classes"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:909
+msgid "ALL DONE"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:971
+msgid "Klasside &uuml;levaade"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:977
+msgid "K&otilde;ik klassid"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:983
+msgid "Dokumenteeritud klassid"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:989
+msgid "API klassid"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:995
+msgid "Eraldi dokumentatsioon"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:1002
+msgid "Classbase tagid"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:1008
+msgid "Uuenda API andmebaas"
+msgstr ""
+
+#: classes/core/docgen/docgen_viewer.aw:1019
+msgid "Foorum"
+msgstr ""
+

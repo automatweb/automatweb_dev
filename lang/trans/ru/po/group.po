@@ -1,0 +1,377 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/core/users/group.aw:class_38_help
+msgid "Klassi Kasutaja1 help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gid
+msgid "Omaduse Grupi ID (gid) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gid_comment
+msgid "Omaduse Grupi ID (gid) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gid_help
+msgid "Omaduse Grupi ID (gid) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_priority
+msgid "Omaduse Prioriteet (priority) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_priority_comment
+msgid "Omaduse Prioriteet (priority) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_priority_help
+msgid "Omaduse Prioriteet (priority) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_modified
+msgid "Omaduse Muudetud (modified) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_modified_comment
+msgid "Omaduse Muudetud (modified) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_modified_help
+msgid "Omaduse Muudetud (modified) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_mmodifiedby
+msgid "Omaduse Kes muutis (mmodifiedby) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_mmodifiedby_comment
+msgid "Omaduse Kes muutis (mmodifiedby) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_mmodifiedby_help
+msgid "Omaduse Kes muutis (mmodifiedby) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_created
+msgid "Omaduse Loodud (created) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_created_comment
+msgid "Omaduse Loodud (created) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_created_help
+msgid "Omaduse Loodud (created) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_mcreatedby
+msgid "Omaduse Kes l&otilde;i (mcreatedby) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_mcreatedby_comment
+msgid "Omaduse Kes l&otilde;i (mcreatedby) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_mcreatedby_help
+msgid "Omaduse Kes l&otilde;i (mcreatedby) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_type
+msgid "Omaduse T&uuml;&uuml;p (type) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_type_comment
+msgid "Omaduse T&uuml;&uuml;p (type) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_type_help
+msgid "Omaduse T&uuml;&uuml;p (type) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_search_form
+msgid "Omaduse Otsinguvorm (search_form) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_search_form_comment
+msgid "Omaduse Otsinguvorm (search_form) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_search_form_help
+msgid "Omaduse Otsinguvorm (search_form) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_grp_frontpage
+msgid "Omaduse Esileht (grp_frontpage) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_grp_frontpage_comment
+msgid "Omaduse Esileht (grp_frontpage) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_grp_frontpage_help
+msgid "Omaduse Esileht (grp_frontpage) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_admin_interface
+msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_admin_interface_comment
+msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_can_admin_interface_help
+msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_require_change_pass
+msgid "Omaduse N&otilde;ua parooli vahetust esimesel logimisel (require_change_pass) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_require_change_pass_comment
+msgid "Omaduse N&otilde;ua parooli vahetust esimesel logimisel (require_change_pass) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_require_change_pass_help
+msgid "Omaduse N&otilde;ua parooli vahetust esimesel logimisel (require_change_pass) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_default_acl
+msgid "Omaduse Default ACL (default_acl) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_default_acl_comment
+msgid "Omaduse Default ACL (default_acl) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_default_acl_help
+msgid "Omaduse Default ACL (default_acl) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_data
+msgid "Omaduse  (data) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_data_comment
+msgid "Omaduse  (data) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_data_help
+msgid "Omaduse  (data) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_import
+msgid "Omaduse Impordi kasutajaid (import) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_import_comment
+msgid "Omaduse Impordi kasutajaid (import) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_import_help
+msgid "Omaduse Impordi kasutajaid (import) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_import_desc
+msgid "Omaduse  (import_desc) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_import_desc_comment
+msgid "Omaduse  (import_desc) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_import_desc_help
+msgid "Omaduse  (import_desc) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_objects
+msgid "Omaduse Objektid (objects) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_objects_comment
+msgid "Omaduse Objektid (objects) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_objects_help
+msgid "Omaduse Objektid (objects) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_obj_acl
+msgid "Omaduse  (obj_acl) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_obj_acl_comment
+msgid "Omaduse  (obj_acl) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_obj_acl_help
+msgid "Omaduse  (obj_acl) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gp_parent
+msgid "Omaduse  (gp_parent) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gp_parent_comment
+msgid "Omaduse  (gp_parent) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gp_parent_help
+msgid "Omaduse  (gp_parent) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gp_gid
+msgid "Omaduse  (gp_gid) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gp_gid_comment
+msgid "Omaduse  (gp_gid) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_gp_gid_help
+msgid "Omaduse  (gp_gid) help"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_admin_rootmenu2
+msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_admin_rootmenu2_comment
+msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_admin_rootmenu2_help
+msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) help"
+msgstr ""
+
+#: classes/core/users/group.aw:group_dyn_search
+msgid "Grupi Otsing (dyn_search) pealkiri"
+msgstr ""
+
+#: classes/core/users/group.aw:group_dyn_search_help
+msgid "Grupi Otsing (dyn_search) help"
+msgstr ""
+
+#: classes/core/users/group.aw:group_import
+msgid "Grupi Import (import) pealkiri"
+msgstr ""
+
+#: classes/core/users/group.aw:group_import_help
+msgid "Grupi Import (import) help"
+msgstr ""
+
+#: classes/core/users/group.aw:group_objects
+msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
+msgstr ""
+
+#: classes/core/users/group.aw:group_objects_help
+msgid "Grupi Objektid ja &Otilde;igused (objects) help"
+msgstr ""
+
+#: classes/core/users/group.aw:group_admin_rm
+msgid "Grupi Admin rootmen&uuml;&uuml; (admin_rm) pealkiri"
+msgstr ""
+
+#: classes/core/users/group.aw:group_admin_rm_help
+msgid "Grupi Admin rootmen&uuml;&uuml; (admin_rm) help"
+msgstr ""
+
+#: classes/core/users/group.aw:rel_RELTYPE_SEARCHFORM
+msgid "Seose otsinguvorm (RELTYPE_SEARCHFORM) tekst"
+msgstr ""
+
+#: classes/core/users/group.aw:rel_RELTYPE_MEMBER
+msgid "Seose liige (RELTYPE_MEMBER) tekst"
+msgstr ""
+
+#: classes/core/users/group.aw:rel_RELTYPE_ACL
+msgid "Seose acl (RELTYPE_ACL) tekst"
+msgstr ""
+
+#: classes/core/users/group.aw:rel_RELTYPE_ADMIN_ROOT
+msgid "Seose rootmen&amp;uuml;&amp;uuml; (RELTYPE_ADMIN_ROOT) tekst"
+msgstr ""
+
+#: classes/core/users/group.aw:rel_RELTYPE_ADD_TREE
+msgid "Seose lisamise puu (RELTYPE_ADD_TREE) tekst"
+msgstr ""
+
+#: classes/core/users/group.aw:178
+msgid "Tavaline"
+msgstr ""
+
+#: classes/core/users/group.aw:179
+msgid "D&uuml;naamiline"
+msgstr ""
+
+#: classes/core/users/group.aw:188
+msgid "
+					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
+					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
+					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
+					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\\"http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html\\">siin</a> <br />
+					n&auml;ide: <br />
+					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
+					<br />
+					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />
+				"
+msgstr ""
+
+#: classes/core/users/group.aw:235
+msgid "Impordin kasutajaid ... <br />"
+msgstr ""
+
+#: classes/core/users/group.aw:389
+msgid "Muuda"
+msgstr ""
+
+#: classes/core/users/group.aw:418
+msgid "Objekti Nimi"
+msgstr ""
+
+#: classes/core/users/group.aw:427
+msgid "Objekti Asukoht"
+msgstr ""
+
+#: classes/core/users/group.aw:436
+msgid "Grupi Nimi"
+msgstr ""
+
+#: classes/core/users/group.aw:445
+msgid "&Otilde;igused"
+msgstr ""
+
+#: classes/core/users/group.aw:465
+msgid "Muuda objekti %s &otilde;igusi"
+msgstr ""
+
+#: classes/core/users/group.aw:560
+msgid "--vali--"
+msgstr ""
+
+#: classes/core/users/group.aw:581
+msgid "Administreerimisliidese juurkaust (%s)"
+msgstr ""
+
+#: classes/core/users/group.aw:607
+msgid "Esileht (%s)"
+msgstr ""
+
+#: classes/core/users/group.aw:798
+msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
+msgstr ""
+
+#: classes/core/users/group.aw:844
+msgid "Default &otilde;igused seose loomisel"
+msgstr ""
+

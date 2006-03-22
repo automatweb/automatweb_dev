@@ -1,0 +1,164 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/realestate_management/realestate_add.aw:class_1056_help
+msgid "Klassi Kinnisvaraobjekti lisamine help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_realestate_type
+msgid "Omaduse Kinnisvaraobjekti tüüp  (realestate_type) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_realestate_type_comment
+msgid "Omaduse Kinnisvaraobjekti tüüp  (realestate_type) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_realestate_type_help
+msgid "Omaduse Kinnisvaraobjekti tüüp  (realestate_type) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_realestate_environment
+msgid "Omaduse Kinnisvarahalduse keskkond (realestate_environment) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_realestate_environment_comment
+msgid "Omaduse Kinnisvarahalduse keskkond (realestate_environment) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_realestate_environment_help
+msgid "Omaduse Kinnisvarahalduse keskkond (realestate_environment) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_redir_object
+msgid "Omaduse Dokument millele suunata (redir_object) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_redir_object_comment
+msgid "Omaduse Dokument millele suunata (redir_object) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_redir_object_help
+msgid "Omaduse Dokument millele suunata (redir_object) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_required_fields
+msgid "Omaduse väljad (required_fields) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_required_fields_comment
+msgid "Omaduse väljad (required_fields) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_required_fields_help
+msgid "Omaduse väljad (required_fields) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_levels
+msgid "Omaduse Tasemed (levels) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_levels_comment
+msgid "Omaduse Tasemed (levels) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_levels_help
+msgid "Omaduse Tasemed (levels) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_help
+msgid "Omaduse Abi: (help) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_help_comment
+msgid "Omaduse Abi: (help) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:prop_help_help
+msgid "Omaduse Abi: (help) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:group_required_fields
+msgid "Grupi Kohustuslikud väljad (required_fields) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:group_required_fields_help
+msgid "Grupi Kohustuslikud väljad (required_fields) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:group_levels
+msgid "Grupi Tasemed (levels) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:group_levels_help
+msgid "Grupi Tasemed (levels) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:rel_RELTYPE_MANEGER
+msgid "Seose Saatja (RELTYPE_MANEGER) tekst"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:rel_RELTYPE_REDIR_OBJECT
+msgid "Seose &uuml;mbersuunamine (RELTYPE_REDIR_OBJECT) tekst"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:67
+msgid ""
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:68
+msgid "Maja"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:69
+msgid "Ridaelamu"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:70
+msgid "Suvila"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:71
+msgid "Majaosa"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:72
+msgid "Korter"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:73
+msgid "Äripind"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:74
+msgid "Garaaz"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:75
+msgid "Maa"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:215
+msgid "Tase"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:220
+msgid "Etapi nimi"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:224
+msgid "Template"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_add.aw:338
+msgid "väli '"
+msgstr ""
+

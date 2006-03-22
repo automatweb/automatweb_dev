@@ -1,0 +1,376 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_company_webview.aw:class_1013_help
+msgid "Klassi Organisatsioonid veebis help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_show_title
+msgid "Omaduse Kuva pealkirja (show_title) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_show_title_comment
+msgid "Omaduse Kuva pealkirja (show_title) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_show_title_help
+msgid "Omaduse Kuva pealkirja (show_title) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_crm_db
+msgid "Omaduse Andmebaas, mille organisatsioone kuvatakse (crm_db) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_crm_db_comment
+msgid "Omaduse Andmebaas, mille organisatsioone kuvatakse (crm_db) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_crm_db_help
+msgid "Omaduse Andmebaas, mille organisatsioone kuvatakse (crm_db) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_limit_sector
+msgid "Omaduse Tegevusala piirang (limit_sector) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_limit_sector_comment
+msgid "Omaduse Tegevusala piirang (limit_sector) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_limit_sector_help
+msgid "Omaduse Tegevusala piirang (limit_sector) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_limit_city
+msgid "Omaduse Linna piirang (limit_city) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_limit_city_comment
+msgid "Omaduse Linna piirang (limit_city) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_limit_city_help
+msgid "Omaduse Linna piirang (limit_city) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_limit_county
+msgid "Omaduse Maakonna piirang (limit_county) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_limit_county_comment
+msgid "Omaduse Maakonna piirang (limit_county) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_limit_county_help
+msgid "Omaduse Maakonna piirang (limit_county) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_template
+msgid "Omaduse Template (template) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_template_comment
+msgid "Omaduse Template (template) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_template_help
+msgid "Omaduse Template (template) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_ord1
+msgid "Omaduse J&auml;rjestamisprintsiip 1 (ord1) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_ord1_comment
+msgid "Omaduse J&auml;rjestamisprintsiip 1 (ord1) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_ord1_help
+msgid "Omaduse J&auml;rjestamisprintsiip 1 (ord1) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_ord2
+msgid "Omaduse J&auml;rjestamisprintsiip 2 (ord2) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_ord2_comment
+msgid "Omaduse J&auml;rjestamisprintsiip 2 (ord2) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_ord2_help
+msgid "Omaduse J&auml;rjestamisprintsiip 2 (ord2) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_ord3
+msgid "Omaduse J&auml;rjestamisprintsiip 3 (ord3) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_ord3_comment
+msgid "Omaduse J&auml;rjestamisprintsiip 3 (ord3) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_ord3_help
+msgid "Omaduse J&auml;rjestamisprintsiip 3 (ord3) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_clickable
+msgid "Omaduse Organistatsioonide nimed on klikitavad (clickable) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_clickable_comment
+msgid "Omaduse Organistatsioonide nimed on klikitavad (clickable) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_clickable_help
+msgid "Omaduse Organistatsioonide nimed on klikitavad (clickable) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_field
+msgid "Omaduse Tegevusala (field) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_field_comment
+msgid "Omaduse Tegevusala (field) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_field_help
+msgid "Omaduse Tegevusala (field) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:rel_RELTYPE_LIMIT_SECTOR
+msgid "Seose Tegevusala piirang (RELTYPE_LIMIT_SECTOR) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:rel_RELTYPE_LIMIT_CITY
+msgid "Seose Linna piirang (RELTYPE_LIMIT_CITY) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:rel_RELTYPE_LIMIT_COUNTY
+msgid "Seose Maakonna piirang (RELTYPE_LIMIT_COUNTY) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:rel_RELTYPE_CRM_DB
+msgid "Seose Organisatsioonide andmebaas (RELTYPE_CRM_DB) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:100
+msgid "V&auml;listav"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:109
+msgid "Vaikimisi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:120
+msgid "J&auml;rjekorranr"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:121
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:122
+msgid "Maakond"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:123
+msgid "Linn"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:129 classes/applications/crm/crm_company_webview.aw:146
+msgid "K&otilde;ik"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:280 classes/applications/crm/crm_company_webview.aw:997
+msgid "Aadress"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:281 classes/applications/crm/crm_company_webview.aw:334 classes/applications/crm/crm_company_webview.aw:998
+msgid "Tel"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:282 classes/applications/crm/crm_company_webview.aw:999
+msgid "Faks"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:283 classes/applications/crm/crm_company_webview.aw:1000
+msgid "Avatud"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:284 classes/applications/crm/crm_company_webview.aw:336 classes/applications/crm/crm_company_webview.aw:1001
+msgid "E-post"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:285
+msgid "Tegevusalad"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:286
+msgid "Asutatud"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:287 classes/applications/crm/crm_company_webview.aw:288
+msgid "Eripakkumised"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:289
+msgid "Lisav&otilde;imalused"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:290
+msgid "Kohti"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:291
+msgid "Toad"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:292
+msgid "Hinnad"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:293
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:296
+msgid "Majutusinfo"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:297
+msgid "Toitlustusinfo"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:299
+msgid "Konverentsiinfo"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:310
+msgid "Kesklinnas"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:311
+msgid "V&auml;ljaspool kesklinna"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:312
+msgid "V&auml;ljaspool linna"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:316
+msgid "Hotell"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:317
+msgid "Motell"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:318
+msgid "K&uuml;lalistemaja"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:319
+msgid "Hostel"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:320
+msgid "Puhkek&uuml;la ja -laager"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:321
+msgid "Puhkemaja"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:322
+msgid "K&uuml;laliskorter"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:323
+msgid "Kodumajutus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:326
+msgid "Eesti"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:327
+msgid "Vene"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:328
+msgid "Gruusia"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:329
+msgid "Hiina"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:330
+msgid "Itaalia"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:331
+msgid "Tai"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:335
+msgid "Fax"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:426
+msgid "Veel lisainfot"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:637
+msgid "Teised tegevusalad"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:638
+msgid "N&auml;ita k&otilde;iki tegevusalasid"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:790
+msgid "Asutusele antud hinnangud"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:813 classes/applications/crm/crm_company_webview.aw:814
+msgid "Hinda"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:1002
+msgid "Koduleht"
+msgstr ""
+
+#: classes/applications/crm/crm_company_webview.aw:1046
+msgid "Muuda"
+msgstr ""
+

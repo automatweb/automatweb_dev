@@ -1,0 +1,332 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/realestate_management/realestate_import.aw:class_982_help
+msgid "Klassi Kinnisvaraobjektide Import help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_realestate_mgr
+msgid "Omaduse Kinnisvarahalduskeskkond (realestate_mgr) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_realestate_mgr_comment
+msgid "Omaduse Kinnisvarahalduskeskkond (realestate_mgr) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_realestate_mgr_help
+msgid "Omaduse Kinnisvarahalduskeskkond (realestate_mgr) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_administrative_structure
+msgid "Omaduse Riik/haldusjaotus (administrative_structure) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_administrative_structure_comment
+msgid "Omaduse Riik/haldusjaotus (administrative_structure) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_administrative_structure_help
+msgid "Omaduse Riik/haldusjaotus (administrative_structure) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_company
+msgid "Omaduse Organisatsioon (company) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_company_comment
+msgid "Omaduse Organisatsioon (company) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_company_help
+msgid "Omaduse Organisatsioon (company) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_county
+msgid "Omaduse Maakond haldusjaotuses (city24_county) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_county_comment
+msgid "Omaduse Maakond haldusjaotuses (city24_county) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_county_help
+msgid "Omaduse Maakond haldusjaotuses (city24_county) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_city
+msgid "Omaduse Linn haldusjaotuses (city24_city) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_city_comment
+msgid "Omaduse Linn haldusjaotuses (city24_city) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_city_help
+msgid "Omaduse Linn haldusjaotuses (city24_city) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_citypart
+msgid "Omaduse Linnaosa haldusjaotuses (city24_citypart) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_citypart_comment
+msgid "Omaduse Linnaosa haldusjaotuses (city24_citypart) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_citypart_help
+msgid "Omaduse Linnaosa haldusjaotuses (city24_citypart) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_parish
+msgid "Omaduse Vald haldusjaotuses (city24_parish) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_parish_comment
+msgid "Omaduse Vald haldusjaotuses (city24_parish) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_parish_help
+msgid "Omaduse Vald haldusjaotuses (city24_parish) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_settlement
+msgid "Omaduse Asula haldusjaotuses (city24_settlement) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_settlement_comment
+msgid "Omaduse Asula haldusjaotuses (city24_settlement) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_settlement_help
+msgid "Omaduse Asula haldusjaotuses (city24_settlement) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_import_url
+msgid "Omaduse URL (city24_import_url) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_import_url_comment
+msgid "Omaduse URL (city24_import_url) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_import_url_help
+msgid "Omaduse URL (city24_import_url) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_import
+msgid "Omaduse City24 Importimine (city24_import) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_import_comment
+msgid "Omaduse City24 Importimine (city24_import) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_import_help
+msgid "Omaduse City24 Importimine (city24_import) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_last_city24import
+msgid "Omaduse  (last_city24import) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_last_city24import_comment
+msgid "Omaduse  (last_city24import) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_last_city24import_help
+msgid "Omaduse  (last_city24import) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_log_table
+msgid "Omaduse  (city24_log_table) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_log_table_comment
+msgid "Omaduse  (city24_log_table) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:prop_city24_log_table_help
+msgid "Omaduse  (city24_log_table) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:group_grp_city24
+msgid "Grupi City24 (grp_city24) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:group_grp_city24_help
+msgid "Grupi City24 (grp_city24) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:group_grp_city24_general
+msgid "Grupi Seaded (grp_city24_general) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:group_grp_city24_general_help
+msgid "Grupi Seaded (grp_city24_general) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:group_grp_city24_log
+msgid "Grupi Logid (grp_city24_log) pealkiri"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:group_grp_city24_log_help
+msgid "Grupi Logid (grp_city24_log) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:rel_RELTYPE_OWNER
+msgid "Seose Kinnisvaraobjektide halduskeskkond (RELTYPE_OWNER) tekst"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:rel_RELTYPE_ADMINISTRATIVE_STRUCTURE
+msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:rel_RELTYPE_COMPANY
+msgid "Seose Organisatsioon (RELTYPE_COMPANY) tekst"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:rel_RELTYPE_ADMIN_DIVISION
+msgid "Seose Haldusjaotis (RELTYPE_ADMIN_DIVISION) tekst"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:136
+msgid "Haldusjaotus valimata"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:148
+msgid "Impordi"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:164 classes/applications/realestate_management/realestate_import.aw:201
+msgid "Kinnisvarahalduskeskkond defineerimata"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:219
+msgid "Logi - "
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:243
+msgid "Import CITY24 xml allikast:"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:270
+msgid "Viga: halduskeskond defineerimata."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:342
+msgid "Viga: administratiivjaotuse vasted määramata."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:463
+msgid "NB! Loetletud City24 id-ga objekte on AW objektisüsteemis rohkem kui üks:"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:481
+msgid "Locales (%s, %s, %s, %s) not supported in this system."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:502
+msgid "Objekt city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:513
+msgid "Viga objekti city24 id-ga %s impordil. Veastaatus: %s"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:706
+msgid "Viga importides objekti city24 id-ga %s. Maakleri nimele [%s] ei vastanud süsteemis ühkti kasutajat."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:732
+msgid "Importides objekti city24 id-ga %s ilmnes: maakleril puudub üksus."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:764
+msgid "Viga importides objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot jääb salvestamata."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:777
+msgid "Viga importides objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot jääb salvestamata."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:800
+msgid "Viga importides objekti city24 id-ga %s: maakler puudub."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:822
+msgid "Loodud objekt aw oid: %s. (City24 id: %s)"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:827
+msgid "Viga importides objekti city24 id-ga %s. Objekti loomine ei tagastanud aw objekti id-d."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:858
+msgid "Viga importides objekti city24 id-ga %s. Objekt (oid: %s) loodi ilma aadressita."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1027
+msgid "Vali see klient"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1033
+msgid "Importides objekti city24 id-ga %s ilmnes: antud nimega kliente on rohkem kui üks. Ei tea millist valida. AW oid: %s. Leitud kliendid: "
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1141
+msgid "väike pilt"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1197
+msgid " pilt "
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1672
+msgid "Lisainfo (%s) objektile city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1684
+msgid "Viga objekti city24 id-ga %s lisainfo (%s) impordil. Veastaatus: %s"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1732
+msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: vastavat aw objekti ei leitud."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1749
+msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s. Objektil puudub maakler."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1784
+msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmetes on viga. Osa infot jääb salvestamata."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1797
+msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: maakleri kasutajaandmeid ei leitud. Osa infot jääb salvestamata."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1819
+msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s: maakler puudub."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1849
+msgid "Viga importides lisainfot (%s) objekti city24 id-ga %s ilmnes: keeleobjekti ei leitud."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1899
+msgid "Import tehtud."
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_import.aw:1935
+msgid "Viga: muutuja %s klassil id-ga %s defineerimata."
+msgstr ""
+

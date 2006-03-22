@@ -1,0 +1,48 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_document_base.aw:124
+msgid "Lisa isik"
+msgstr ""
+
+#: classes/applications/crm/crm_document_base.aw:130
+msgid "Eemalda isik"
+msgstr ""
+
+#: classes/applications/crm/crm_document_base.aw:139
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/crm/crm_document_base.aw:145
+msgid "Tegija"
+msgstr ""
+
+#: classes/applications/crm/crm_document_base.aw:151
+msgid "Tegevus"
+msgstr ""
+
+#: classes/applications/crm/crm_document_base.aw:157
+msgid "Jrk"
+msgstr ""
+
+#: classes/applications/crm/crm_document_base.aw:163
+msgid "Eeldustegevus(ed)"
+msgstr ""
+
+#: classes/applications/crm/crm_document_base.aw:169
+msgid "Tehtud"
+msgstr ""
+
+#: classes/applications/crm/crm_document_base.aw:227
+msgid "Otsi"
+msgstr ""
+

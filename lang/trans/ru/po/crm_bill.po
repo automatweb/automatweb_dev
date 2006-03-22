@@ -1,0 +1,380 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/crm/crm_bill.aw:class_1009_help
+msgid "Klassi Arve help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_billp_tb
+msgid "Omaduse Arve toolbar (billp_tb) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_billp_tb_comment
+msgid "Omaduse Arve toolbar (billp_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_billp_tb_help
+msgid "Omaduse Arve toolbar (billp_tb) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_no
+msgid "Omaduse Number (bill_no) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_no_comment
+msgid "Omaduse Number (bill_no) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_no_help
+msgid "Omaduse Number (bill_no) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_customer
+msgid "Omaduse Klient (customer) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_customer_comment
+msgid "Omaduse Klient (customer) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_customer_help
+msgid "Omaduse Klient (customer) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_impl
+msgid "Omaduse Arve esitaja (impl) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_impl_comment
+msgid "Omaduse Arve esitaja (impl) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_impl_help
+msgid "Omaduse Arve esitaja (impl) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_date
+msgid "Omaduse Kuup&auml;ev (bill_date) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_date_comment
+msgid "Omaduse Kuup&auml;ev (bill_date) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_date_help
+msgid "Omaduse Kuup&auml;ev (bill_date) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_due_date_days
+msgid "Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_due_date_days_comment
+msgid "Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_due_date_days_help
+msgid "Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_due_date
+msgid "Omaduse Tasumise kuup&auml;ev (bill_due_date) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_due_date_comment
+msgid "Omaduse Tasumise kuup&auml;ev (bill_due_date) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_due_date_help
+msgid "Omaduse Tasumise kuup&auml;ev (bill_due_date) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_recieved
+msgid "Omaduse Laekumiskuup&auml;ev (bill_recieved) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_recieved_comment
+msgid "Omaduse Laekumiskuup&auml;ev (bill_recieved) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_recieved_help
+msgid "Omaduse Laekumiskuup&auml;ev (bill_recieved) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_state
+msgid "Omaduse Staatus (state) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_state_comment
+msgid "Omaduse Staatus (state) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_state_help
+msgid "Omaduse Staatus (state) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_disc
+msgid "Omaduse Allahindlus (%) (disc) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_disc_comment
+msgid "Omaduse Allahindlus (%) (disc) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_disc_help
+msgid "Omaduse Allahindlus (%) (disc) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_sum
+msgid "Omaduse Summa (sum) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_sum_comment
+msgid "Omaduse Summa (sum) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_sum_help
+msgid "Omaduse Summa (sum) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_monthly_bill
+msgid "Omaduse Kuuarve (monthly_bill) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_monthly_bill_comment
+msgid "Omaduse Kuuarve (monthly_bill) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_monthly_bill_help
+msgid "Omaduse Kuuarve (monthly_bill) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_language
+msgid "Omaduse Keel (language) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_language_comment
+msgid "Omaduse Keel (language) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_language_help
+msgid "Omaduse Keel (language) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_rows
+msgid "Omaduse Arveread  (bill_rows) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_rows_comment
+msgid "Omaduse Arveread  (bill_rows) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_rows_help
+msgid "Omaduse Arveread  (bill_rows) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_preview
+msgid "Omaduse  (preview) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_preview_comment
+msgid "Omaduse  (preview) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_preview_help
+msgid "Omaduse  (preview) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_preview_add
+msgid "Omaduse  (preview_add) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_preview_add_comment
+msgid "Omaduse  (preview_add) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_preview_add_help
+msgid "Omaduse  (preview_add) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_tb
+msgid "Omaduse  (bill_tb) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_tb_comment
+msgid "Omaduse  (bill_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_tb_help
+msgid "Omaduse  (bill_tb) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_proj_list
+msgid "Omaduse  (bill_proj_list) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_proj_list_comment
+msgid "Omaduse  (bill_proj_list) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_proj_list_help
+msgid "Omaduse  (bill_proj_list) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_task_list
+msgid "Omaduse  (bill_task_list) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_task_list_comment
+msgid "Omaduse  (bill_task_list) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:prop_bill_task_list_help
+msgid "Omaduse  (bill_task_list) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:group_tasks
+msgid "Grupi Toimetused (tasks) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:group_tasks_help
+msgid "Grupi Toimetused (tasks) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:group_preview
+msgid "Grupi Eelvaade (preview) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:group_preview_help
+msgid "Grupi Eelvaade (preview) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:group_preview_add
+msgid "Grupi Arve Lisa (preview_add) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:group_preview_add_help
+msgid "Grupi Arve Lisa (preview_add) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_TASK
+msgid "Seose &amp;Uuml;lesanne (RELTYPE_TASK) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_CUST
+msgid "Seose Klient (RELTYPE_CUST) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_IMPL
+msgid "Seose Teostaja (RELTYPE_IMPL) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_LANGUAGE
+msgid "Seose Keel (RELTYPE_LANGUAGE) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_ROW
+msgid "Seose Rida (RELTYPE_ROW) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:rel_RELTYPE_PROD
+msgid "Seose Toode (RELTYPE_PROD) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:115
+msgid "Koostamisel"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:116
+msgid "Saadetud"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:117
+msgid "Makstud"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:160 classes/applications/crm/crm_bill.aw:309
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:222
+msgid "Sellise numberiga arve on juba olemas!"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:229
+msgid "Number ei ole seerias!"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:256
+msgid "Nimetus"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:261
+msgid "Kood"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:266
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:271
+msgid "&Uuml;hik"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:276
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:281
+msgid "Kogus"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:286
+msgid "Summa"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:291
+msgid "Artikkel"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:295
+msgid "Lisandub k&auml;ibemaks?"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:387
+msgid "Vali"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:713 classes/applications/crm/crm_bill.aw:1015
+msgid "Prinditav arve"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1297
+msgid "Lisa rida"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1304
+msgid "Prindi"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1312
+msgid "Prindi arve"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1319
+msgid "Prindi arve lisa"
+msgstr ""
+
+#: classes/applications/crm/crm_bill.aw:1326
+msgid "Prindi arve koos lisaga"
+msgstr ""
+
