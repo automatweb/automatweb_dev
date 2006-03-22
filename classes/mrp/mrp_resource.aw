@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.87 2006/03/08 15:15:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.88 2006/03/22 11:54:16 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -269,8 +269,8 @@ class mrp_resource extends class_base
 				break;
 
 			case "state":
-				$prop["value"] = empty($prop["value"]) ? 0 : (int) $prop["value"];
-				$prop["value"] = $this->resource_states[$prop["value"]];
+				list($prop["value"], $num_jobs) = $this->get_resource_state($arr["obj_inst"]);
+				$prop["value"] = $this->resource_states[$prop["value"]]." (".$num_jobs.")";
 				break;
 
 			case "out_of_service":
@@ -306,6 +306,31 @@ class mrp_resource extends class_base
 		}
 
 		return $retval;
+	}
+
+	function get_resource_state($resource)
+	{
+		if ($resource->prop("state") == MRP_STATUS_RESOURCE_OUTOFSERVICE)
+		{
+			return array(MRP_STATUS_RESOURCE_OUTOFSERVICE, 0);
+		}
+		$max_jobs = max(1, count($resource->prop("thread_data")));
+		$cur_jobs = $this->db_fetch_field("
+			SELECT
+				count(j.oid) AS cnt
+			FROM
+				mrp_job j
+				LEFT JOIN objects o ON o.oid = j.oid
+			WHERE
+				j.resource = ".$resource->id()." AND
+				o.status > 0 AND
+				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.")
+		", "cnt");
+		if ($cur_jobs >= $max_jobs)
+		{
+			return array(MRP_STATUS_RESOURCE_INUSE, $cur_jobs);
+		}
+		return array(MRP_STATUS_RESOURCE_AVAILABLE, $cur_jobs);
 	}
 
 	function callback_mod_reforb ($arr)
