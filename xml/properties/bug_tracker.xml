@@ -125,8 +125,20 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
+            <parent>s_who_l</parent>
+            <no_caption>1</no_caption>
             <field>s_who</field>
-            <caption>Kellele</caption>
+      </property>
+      <property>
+            <name>s_who_empty</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>s_who_l</parent>
+            <field>s_who_empty</field>
+            <caption>T&amp;amp;uuml;hi</caption>
       </property>
       <property>
             <name>s_bug_type</name>
@@ -361,6 +373,11 @@
                         <num_4>by_cust</num_4>
                   </group>
             </bug>
+            <s_who_l>
+                  <type>hbox</type>
+                  <group>search</group>
+                  <caption>Kellele</caption>
+            </s_who_l>
       </layout>
 </properties>
 

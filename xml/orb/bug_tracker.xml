@@ -40,6 +40,9 @@
 		<action name="assign_bugs">
 			<function name="assign_bugs">
 				<arguments>
+					<optional name="sel" />
+					<optional name="post_ru" />
+					<optional name="assign_to" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="bug" folder="applications/bug_o_matic_3000" extends="class_base">
+		<action name="handle_commit" nologin="1">
+			<function name="handle_commit">
+				<arguments>
+					<required name="bugno" type="int" />
+					<optional name="msg" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.29 2006/03/16 15:15:43 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.29 2006/03/16 15:15:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.30 2006/03/22 11:19:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.30 2006/03/22 11:19:07 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -46,8 +46,13 @@ define("BUG_STATUS_CLOSED", 5);
 	@property s_bug_priority type=select store=no
 	@caption Prioriteet
 
-	@property s_who type=textbox store=no
+	@layout s_who_l type=hbox
 	@caption Kellele
+
+		@property s_who type=textbox store=no parent=s_who_l no_caption=1
+
+		@property s_who_empty type=checkbox ch_value=1 store=no parent=s_who_l 
+		@caption T&uuml;hi
 
 	@property s_bug_type type=textbox store=no
 	@caption T&uuml;&uuml;p
@@ -132,6 +137,7 @@ class bug_tracker extends class_base
 			"tpldir" => "applications/bug_o_matic_3000/bug_tracker",
 			"clid" => CL_BUG_TRACKER
 		));
+		$this->bug_i = get_instance(CL_BUG);
 	}
 
 	function get_property($arr)
@@ -878,7 +884,7 @@ class bug_tracker extends class_base
 	{
 		$pre = substr($name, 0, MENU_ITEM_LENGTH);
 		$suf = (strlen($name) > MENU_ITEM_LENGTH)?"...":"";
-		return $pre.$suf;
+		return strip_tags($pre.$suf);
 	}
 
 	function callb_who($val)
@@ -926,16 +932,17 @@ class bug_tracker extends class_base
 		{
 			return "";
 		}
-		$values = array(
-			1 => t("Lahtine"),
-			2 => t("Tegemisel"),
-			3 => t("Valmis"),
-			4 => t("Testitud"),
-			5 => t("Suletud"),
-			6 => t("Vale teade"),
-			7 => t("Kordamatu"),
-			8 => t("Parandamatu"),
-		);
+		$values = $this->bug_i->get_status_list();
+		return $values[$_val["bug_status"]];
+	}
+	
+	function show_status_no_edit($_val)
+	{
+		if ($_val["obj"]->class_id() == CL_MENU)
+		{
+			return "";
+		}
+		$values = $this->bug_i->get_status_list();
 		return $values[$_val["bug_status"]];
 	}
 	
@@ -1052,6 +1059,100 @@ class bug_tracker extends class_base
 		));
 	}
 
+	function _init_bug_list_tbl_no_edit(&$t)
+	{
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t(""),
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "bug_status",
+			"caption" => t("Staatus"),
+			"sortable" => 1,
+			"callback" => array(&$this, "show_status_no_edit"),
+			"callb_pass_row" => 1,
+			"filter" => array(
+				t("1"),
+				t("2"),
+				t("3"),
+				t("4"),
+				t("5"),
+				t("6"),
+				t("7"),
+				t("8"),
+			),
+		));
+
+		$t->define_field(array(
+			"name" => "who",
+			"caption" => t("Kellele"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "bug_priority",
+			"caption" => t("Prioriteet"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"filter" => array(
+				t("1"),
+				t("2"),
+				t("3"),
+				t("4"),
+				t("5"),
+			),
+		));
+		$t->define_field(array(
+			"name" => "bug_severity",
+			"caption" => t("T&ouml;sidus"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"filter" => array(
+				t("1"),
+				t("2"),
+				t("3"),
+				t("4"),
+				t("5"),
+			),
+		));
+
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Looja"),
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Loodud"),
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y / H:i"
+		));
+
+		$t->define_field(array(
+			"name" => "comment",
+			"caption" => t("Kommentaare"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"callback" => array(&$this,"comment_callback"),
+			"callb_pass_row" => 1,
+		));
+
+		$t->define_chooser(array(
+			"field" => "id",
+			"name" => "sel",
+		));
+	}
+
 	function _bug_list($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -1128,7 +1229,7 @@ class bug_tracker extends class_base
 		$this->populate_bug_list_table_from_list($t, $ol);		
 	}
 
-	function populate_bug_list_table_from_list(&$t, $ol)
+	function populate_bug_list_table_from_list(&$t, $ol, $params = array())
 	{
 		classload("core/icons");
 		$u = get_instance(CL_USER);
@@ -1138,9 +1239,17 @@ class bug_tracker extends class_base
 		{
 			$crea = $bug->createdby();
 			$p = obj($u->get_person_for_user(obj($us->get_oid_for_uid($crea))));
-
+		
+			$nl = html::obj_change_url($bug);
+			if ($params["path"])
+			{
+				$nl = $bug->path_str(array(
+					"to" => $params["bt"]->id(),
+					"path_only" => true
+				))." / ".$nl;
+			}
 			$t->define_data(array(
-				"name" => html::obj_change_url($bug)." (".html::href(array(
+				"name" => $nl." (".html::href(array(
 					"url" => aw_url_change_var("b_id", $bug->id()),
 					"caption" => t("Ava")
 				)).")",
@@ -1189,6 +1298,9 @@ class bug_tracker extends class_base
 
 	/**
 		@attrib name=assign_bugs 
+		@param sel optional
+		@param post_ru optional
+		@param assign_to optional
 	**/
 	function assign_bugs($arr)
 	{
@@ -1274,7 +1386,7 @@ class bug_tracker extends class_base
 			return;
 		}
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_bug_list_tbl($t);
+		$this->_init_bug_list_tbl_no_edit($t);
 
 		$search_filt = $this->_get_bug_search_filt($arr["request"]);
 		$ol = new object_list($search_filt);
@@ -1296,7 +1408,10 @@ class bug_tracker extends class_base
 			$ol = new object_list();
 			$ol->add(array_keys($bugs));
 		}
-		$this->populate_bug_list_table_from_list($t, $ol);
+		$this->populate_bug_list_table_from_list($t, $ol, array(
+			"path" => true, 
+			"bt" => $arr["obj_inst"]
+		));
 	}
 
 	function _get_bug_search_filt($r)
@@ -1332,6 +1447,12 @@ class bug_tracker extends class_base
 			{
 				$res["CL_BUG.".$field.".name"] = $this->_get_string_filt($r["s_".$field]);
 			}
+		}
+
+		if ($r["s_who_empty"] == 1)
+		{
+			$res["who"] = new obj_predicate_compare(OBJ_COMP_EQUAL, "");
+			unset($res["CL_BUG.who.name"]);
 		}
 	
 		if (trim($r["s_bug_content"]) != "")
@@ -1411,6 +1532,26 @@ class bug_tracker extends class_base
 			"value" => get_ru()
 		));
 		$tb->add_cdata($html);
+
+		$tb->add_menu_button(array(
+			"name" => "assign",
+			"tooltip" => t("M&auml;&auml;ra"),
+			"img" => "class_38.gif"
+		));
+
+		// list all people to assign to
+		// list all my co-workers who are important to me, from crm
+		$dat = get_instance("applications/crm/crm_data");
+		$ppl = $dat->get_employee_picker();
+		foreach($ppl as $p_oid => $p_name)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "assign",
+				"text" => $p_name,
+				"link" => "#",
+				"onClick" => "document.changeform.assign_to.value=$p_oid;submit_changeform('assign_bugs')"
+			));
+		}
 	}	
 
 	/**

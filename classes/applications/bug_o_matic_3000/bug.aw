@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.15 2006/03/16 15:15:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.16 2006/03/22 11:19:07 kristo Exp $
 // bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -193,6 +193,10 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "name":
+				$prop["post_append_text"] = " #".$arr["obj_inst"]->id();
+				break;
+
 			case "bug_content":
 				if (!$arr["new"])
 				{
@@ -227,6 +231,11 @@ class bug extends class_base
 						$prop["value"] = $this->make_keys(array_keys($tmp));
 					}
 					$prop["options"] = array("" => t("--vali--")) + $tmp;
+				}
+				if ($this->can("view", $prop["value"]) && !isset($prop["options"][$prop["value"]]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
 				}
 				break;
 
@@ -404,7 +413,9 @@ class bug extends class_base
 
 			case "bug_class":
 				$clss = aw_ini_get("classes");
-				if (($old = $clss[$arr["obj_inst"]->prop($prop["name"])]["name"]) != ($nv = $clss[$prop["value"]]["name"]))
+				$old = $clss[(int)$arr["obj_inst"]->prop($prop["name"])]["name"];
+				$nv = $clss[(int)$prop["value"]]["name"];
+				if ($old != $nv)
 				{
 					$com = sprintf(t("Klass muudeti %s => %s"), $old, $nv);
 					$this->_add_comment($arr["obj_inst"], $com);
@@ -417,8 +428,26 @@ class bug extends class_base
 	function notify_monitors($bug, $comment)
 	{
 		$monitors = $bug->prop("monitors");
+
+		// if the status is right, then add the creator of the bug to the list
+		$states = array(
+			BUG_TESTED,
+			BUG_INCORRECT,
+			BUG_NOTREPEATABLE,
+			BUG_NOTFIXABLE,
+			BUG_WONTFIX,
+			BUG_FEEDBACK
+		);
+		$u = get_instance(CL_USER);
+		$us = get_instance("users");
+		if (in_array($bug->prop("bug_status"), $states))
+		{
+			$crea = $bug->createdby();
+			$monitors[] = $u->get_person_for_user(obj($us->get_oid_for_uid($crea)));
+		}
+
 		// I should add a way to send CC-s to arbitraty e-mail addresses as well
-		foreach($monitors as $person)
+		foreach(array_unique($monitors) as $person)
 		{
 			if(!$this->can("view", $person))
 			{
@@ -426,7 +455,6 @@ class bug extends class_base
 			}
 			$person_obj = obj($person); 
 			// don't send to the current user, cause, well, he knows he's just done it. 
-			$u = get_instance(CL_USER);
 			if ($person == $u->get_current_person())
 			{
 				continue;
@@ -467,7 +495,7 @@ class bug extends class_base
 		$msgtxt .= t("Summary") . ": " . $name . "\n";
 		$msgtxt .= t("URL") . ": " . $this->mk_my_orb("change",array("id" => $oid)) . "\n";
 		$msgtxt .= "-------------\n\nNew comment from " . $uid . " at " . date("Y-m-d H:i") . "\n";
-		$msgtxt .= $comment."\n";
+		$msgtxt .= strip_tags($comment)."\n";
 		$msgtxt .= strip_tags($this->_get_comment_list($bug, "desc"));
 
 		send_mail($notify_list,"Bug #" . $oid . ": " . $name . " : " . $uid . " lisas kommentaari",$msgtxt,"From: automatweb@automatweb.com");
@@ -579,6 +607,28 @@ class bug extends class_base
 			$ret[$key] = $val;
 		};
 		return $ret;
+	}
+
+	function callback_post_save($arr)
+	{
+		if ($arr["new"])
+		{
+			$this->notify_monitors($arr["obj_inst"], $arr["obj_inst"]->prop("bug_content"));
+		}
+	}
+
+	/**
+		@attrib name=handle_commit nologin=1
+		@param bugno required type=int 
+		@param msg optional
+	**/
+	function handle_commit($arr)
+	{
+		aw_disable_acl();
+		$bug = obj($arr["bugno"]);
+		$this->_add_comment($bug, nl2br($this->hexbin($arr["msg"])));
+		aw_restore_acl();
+		die(sprintf(t("Added comment to bug %s"), $arr[bugno]));
 	}
 }
 ?>
