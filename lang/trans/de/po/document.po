@@ -1,0 +1,56 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/document.aw:418
+msgid "Viimati muudetud:"
+msgstr ""
+
+#: classes/document.aw:633
+msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
+msgstr ""
+
+#: classes/document.aw:657
+msgid "Loe edasi"
+msgstr ""
+
+#: classes/document.aw:1060 classes/document.aw:1109
+msgid "Vaata lisaks:"
+msgstr ""
+
+#: classes/document.aw:1065 classes/document.aw:1114
+msgid "Samal teemal:"
+msgstr ""
+
+#: classes/document.aw:2305
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/document.aw:2312
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/document.aw:2320
+msgid "Autor"
+msgstr ""
+
+#: classes/document.aw:2843
+msgid "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n"
+msgstr ""
+
+#: classes/document.aw:2873
+msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
+msgstr ""
+
+#: classes/document.aw:2875
+msgid "tagasi dokumendi muutmise juurde"
+msgstr ""
+

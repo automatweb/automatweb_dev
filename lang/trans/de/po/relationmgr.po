@@ -1,0 +1,140 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/vcl/relationmgr.aw:120
+msgid "Objekti tüüp"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:178 classes/vcl/relationmgr.aw:292 classes/vcl/relationmgr.aw:676
+msgid "Nimi"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:184
+msgid "Kommentaar"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:192
+msgid "OID"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:198 classes/vcl/relationmgr.aw:320
+msgid "Looja"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:204 classes/vcl/relationmgr.aw:332 classes/vcl/relationmgr.aw:721
+msgid "Muutja"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:210
+msgid "Staatus"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:212
+msgid "Kõik"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:213
+msgid "Aktiivsed"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:214
+msgid "Deaktiivsed"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:224 classes/vcl/relationmgr.aw:297 classes/vcl/relationmgr.aw:682
+msgid "Keel"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:234
+msgid "Otsi vendi"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:245 classes/vcl/relationmgr.aw:571 classes/vcl/relationmgr.aw:580
+msgid "Otsi"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:281
+msgid "ID"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:287 classes/vcl/relationmgr.aw:668
+msgid ""
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:303 classes/vcl/relationmgr.aw:740
+msgid "Tüüp"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:308
+msgid "Asukoht"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:313
+msgid "Loodud"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:325 classes/vcl/relationmgr.aw:729
+msgid "Muudetud"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:338
+msgid "<a href='javascript:selall(\\"sel\\")'>Vali</a>"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:347
+msgid "Vali"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:564
+msgid "Lisa uus objekt"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:591
+msgid "Tõlgi"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:602
+msgid "Uuenda"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:612
+msgid "Loo seos(ed)"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:623
+msgid "Salvesta"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:630
+msgid "Kustuta seos(ed)"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:689
+msgid "Muu info"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:695
+msgid "Alias"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:703
+msgid "Link"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:712
+msgid "Cache"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:748
+msgid "Seose tüüp"
+msgstr ""
+

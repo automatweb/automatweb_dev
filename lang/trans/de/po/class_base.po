@@ -1,0 +1,132 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/class_base.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/class_base.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/class_base.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/class_base.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/class_base.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/class_base.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/class_base.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/class_base.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/class_base.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/class_base.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/class_base.aw:prop_needs_translation
+msgid "Omaduse Vajab tõlget (needs_translation) caption"
+msgstr ""
+
+#: classes/class_base.aw:prop_needs_translation_comment
+msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgstr ""
+
+#: classes/class_base.aw:prop_needs_translation_help
+msgid "Omaduse Vajab tõlget (needs_translation) help"
+msgstr ""
+
+#: classes/class_base.aw:prop_is_translated
+msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
+msgstr ""
+
+#: classes/class_base.aw:prop_is_translated_comment
+msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
+msgstr ""
+
+#: classes/class_base.aw:prop_is_translated_help
+msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgstr ""
+
+#: classes/class_base.aw:group_general
+msgid "Grupi &Uuml;ldine (general) pealkiri"
+msgstr ""
+
+#: classes/class_base.aw:group_general_help
+msgid "Grupi &Uuml;ldine (general) help"
+msgstr ""
+
+#: classes/class_base.aw:580
+msgid "Rohkem infot"
+msgstr ""
+
+#: classes/class_base.aw:581
+msgid "Tõlgi"
+msgstr ""
+
+#: classes/class_base.aw:582
+msgid "Peida ära"
+msgstr ""
+
+#: classes/class_base.aw:583
+msgid "Abiinfo"
+msgstr ""
+
+#: classes/class_base.aw:629
+msgid "tab panel"
+msgstr ""
+
+#: classes/class_base.aw:1274
+msgid "Muuda"
+msgstr ""
+
+#: classes/class_base.aw:1282
+msgid "Uus"
+msgstr ""
+
+#: classes/class_base.aw:1309
+msgid "Tagasi"
+msgstr ""
+
+#: classes/class_base.aw:1499 classes/class_base.aw:4746 classes/class_base.aw:4757
+msgid "Seostehaldur"
+msgstr ""
+
+#: classes/class_base.aw:3300
+msgid "See väli ei tohi olla tühi!"
+msgstr ""
+
+#: classes/class_base.aw:3309
+msgid "See pole korrektne e-posti aadress!"
+msgstr ""
+
+#: classes/class_base.aw:4643
+msgid "%s is not a valid configuration form!"
+msgstr ""
+
