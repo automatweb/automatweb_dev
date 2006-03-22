@@ -3,7 +3,7 @@
 <html>
 <head>
 <title>Expresspost</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1251">
 <link href="/css/expp_style.css" rel="stylesheet" type="text/css">
 </head>
 
