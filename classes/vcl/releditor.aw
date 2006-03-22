@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.82 2006/03/15 12:27:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.83 2006/03/22 12:28:12 ahti Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -168,6 +168,15 @@ class releditor extends core
 
 		#$this->all_props = $act_props;
 		$pcount = sizeof($props);
+		
+		// the toolbar should be before the props, because otherwise it
+		// would look freakish when adding new or changing -- ahz
+		if($visual == "manager")
+		{
+			// insert the toolbar into property array
+			$tbdef = $this->init_rel_toolbar($arr);
+			$act_props[$tbdef["name"]] = $tbdef;
+		}
 
 		// act_props needs to contain properties, if
 		// 1) visual is form and form_type is empty, if a single relation (rel_id=first) is being edited
@@ -204,7 +213,7 @@ class releditor extends core
 		if(is_oid($cfgform_id) && $this->can("view", $cfgform_id))
 		{
 			$cfg = get_instance(CL_CFGFORM);
-			$act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
+			$act_props = $act_props + $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
 		}
 
 		if (!empty($prop["choose_default"]))
@@ -214,15 +223,10 @@ class releditor extends core
 
 		if ($visual == "manager")
 		{
-			// insert the toolbar into property array
-			$tbdef = $this->init_rel_toolbar($arr);
-			$act_props[$tbdef["name"]] = $tbdef;
-
 			// insert the table into property array
 			$tabledef = $this->init_rel_table($arr);
 			$act_props[$tabledef["name"]] = $tabledef;
 		};
-
 
 		// "form" does not need a caption
 		if ($visual == "manager")
@@ -306,11 +310,13 @@ class releditor extends core
 		//if ($visual == "form" || ($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
 		{
 			// I might not want a submit button, eh?
+			// exactly my point: i don't want it, so the save button will be on toolbar -- ahz
+			/*
 			$act_props["sbt"] = array(
 				"type" => "submit",
 				"name" => "sbt",
 				"value" => t("Salvesta"),
-			);
+			);*/
 
 			if ($arr["prop"]["cfgform"])
 			{
@@ -466,11 +472,20 @@ class releditor extends core
 			"url" => "javascript:if(confirm('${confirm_test}')){el=document.getElementsByName('${act_input}');el[0].value='delete';document.changeform.submit();};",
 			//"action" => "submit_list",
 		));
+
+		// because it sucks to have both toolbar and a save button, we'll put the save on toolbar -- ahz
+		$tb->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"tooltip" => t("Salvesta"),
+			"action" => "",
+		));
+
 		if($arr["prop"]["clone_link"] == 1)
 		{
 			$tb->add_button(array(
 				"name" => "clone",
-				"img" => "save.gif",
+				"img" => "copy.gif",
 				"tooltip" => t("Klooni valitud objektid"),
 				"url" => "javascript:element = 'check[';len = document.changeform.elements.length;var count = 0;for (i=0; i < len; i++){if (document.changeform.elements[i].checked == true){count++;}}if(count == 1){num=prompt('Mitu objekti kloonida soovid?', '1');document.changeform.releditor_clones.value=num;document.changeform.submit();}else{alert('Sa oled kas liiga vähe või liiga palju objekte kloonimiseks valinud, proovi uuesti')}",
 			));
