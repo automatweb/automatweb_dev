@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.36 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.37 2006/03/22 15:12:14 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -749,10 +749,14 @@ class mysql
 			if (!preg_match("/Unknown column '(.*)\.(.*)'/imsU" , $errstr, $mt))
 			{
 				preg_match("/Unknown column '(.*)' in 'field list'/imsU" , $errstr, $mt);
-				preg_match("/UPDATE (.*) SET/imsU", $q, $mt_a);
+				if (!preg_match("/UPDATE (.*) SET/imsU", $q, $mt_a))
+				{
+					preg_match("/INSERT INTO (.+) \(/ims", $q, $mt_a);
+				}
 				$mt[2] = $mt[1];
 				$mt[1] = $mt_a[1];
 			}
+
 			if ($this->db_proc_error_last_fn == $mt[2])
 			{
 				return false; // if we get the same error as last time, the upgrader did not create the correct field, so error out

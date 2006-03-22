@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.4 2006/03/02 11:36:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.5 2006/03/22 15:12:15 kristo Exp $
 // crm_company_customer_data.aw - Kliendi andmed 
 /*
 
@@ -96,6 +96,10 @@ class crm_company_customer_data extends class_base
 			case "contact_person":
 			case "contact_person2":
 			case "contact_person3":
+				if (!$this->can("view", $arr["obj_inst"]->prop("buyer")))
+				{
+					return PROP_IGNORE;
+				}
 				$i = get_instance(CL_CRM_COMPANY);
 				$arr["prop"]["options"] = $i->get_employee_picker(obj($arr["obj_inst"]->prop("buyer")), true);
 
