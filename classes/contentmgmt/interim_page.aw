@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.4 2006/03/21 10:10:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.5 2006/03/22 14:49:34 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -142,15 +142,16 @@ class interim_page extends class_base
 		{
 			$register_obj = obj($register_id);
 			$property_values = $register_obj->properties();
-			$this->vars($property_values);
-			$form_obj = obj($register_obj->meta("cfgform_id"));
-			$property_list = $form_obj->properties();
 			$parser = get_instance("alias_parser");
 			foreach ($property_values as $key => $val)
 			{
 				$parser->parse_oo_aliases($register_id, $property_values[$key]);
 			}
-			
+						
+			$this->vars($property_values);
+			$form_obj = obj($register_obj->meta("cfgform_id"));
+			$property_list = $form_obj->properties();
+
 			//tekitab userim muutujad ja annab neile väärtuseks pildiurlid:
 			$img_props = array();//siia paigutab miski hulk piltide properteid .. hiljem läheb vaja
 			$x = 1;
