@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.22 2006/03/22 11:22:34 kristo Exp $
-// register.aw - Registeri 
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.23 2006/03/22 11:24:04 kristo Exp $
+// register.aw - Register 
 /*
 
 @classinfo syslog_type=ST_REGISTER relationmgr=yes no_status=1 
