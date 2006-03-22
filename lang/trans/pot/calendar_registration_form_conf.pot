@@ -194,14 +194,6 @@ msgstr ""
 msgid "Omaduse Maili sisu (mail_content) help"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/calendar/calendar_registration_form_conf.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/calendar/calendar_registration_form_conf.aw:group_emails
 msgid "Grupi E-mailid (emails) pealkiri"
 msgstr ""

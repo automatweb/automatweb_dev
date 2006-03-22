@@ -124,11 +124,11 @@ msgstr ""
 msgid "radiobuttons"
 msgstr ""
 
-#: classes/admin/object_type.aw:203
+#: classes/admin/object_type.aw:204
 msgid "Oks"
 msgstr ""
 
-#: classes/admin/object_type.aw:211
+#: classes/admin/object_type.aw:212
 msgid "Tüüp"
 msgstr ""
 

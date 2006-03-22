@@ -9,6 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/table.aw:2035
+#: classes/vcl/table.aw:2058
 msgid "K&otilde;ik"
 msgstr ""

@@ -29,14 +29,6 @@ msgstr ""
 msgid "Omaduse  (sel) help"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/admin/add_tree_conf.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/admin/add_tree_conf.aw:68
 msgid "Nimi"
 msgstr ""

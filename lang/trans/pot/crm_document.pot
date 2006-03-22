@@ -146,12 +146,28 @@ msgstr ""
 msgid "Omaduse Failid (files) help"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/applications/crm/crm_document.aw:prop_parts_tb
+msgid "Omaduse  (parts_tb) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_document.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/applications/crm/crm_document.aw:prop_parts_tb_comment
+msgid "Omaduse  (parts_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_parts_tb_help
+msgid "Omaduse  (parts_tb) help"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_acts
+msgid "Omaduse Tegevused (acts) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_acts_comment
+msgid "Omaduse Tegevused (acts) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:prop_acts_help
+msgid "Omaduse Tegevused (acts) help"
 msgstr ""
 
 #: classes/applications/crm/crm_document.aw:group_files
@@ -160,6 +176,14 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:group_files_help
 msgid "Grupi Failid (files) help"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:group_parts
+msgid "Grupi Osalejad (parts) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:group_parts_help
+msgid "Grupi Osalejad (parts) help"
 msgstr ""
 
 #: classes/applications/crm/crm_document.aw:rel_RELTYPE_FILE
@@ -172,5 +196,9 @@ msgstr ""
 
 #: classes/applications/crm/crm_document.aw:rel_RELTYPE_READER
 msgid "Seose lugeja (RELTYPE_READER) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_document.aw:rel_RELTYPE_ACTION
+msgid "Seose Tegevus (RELTYPE_ACTION) tekst"
 msgstr ""
 

@@ -9,8 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/core/docgen/docgen_analyzer_simple_db_writer.aw:class__help
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:class__help
 msgid "Klassi  help"
 msgstr ""
 
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:group__help
+msgid "Grupi  () help"
+msgstr ""

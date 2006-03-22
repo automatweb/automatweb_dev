@@ -14,14 +14,6 @@ msgstr ""
 msgid "Klassi expp_site_content (nimi) help"
 msgstr ""
 
-#: classes/expp/expp_site_content.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/expp/expp_site_content.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/expp/expp_site_content.aw:324
 msgid "Andmete muutmine"
 msgstr ""

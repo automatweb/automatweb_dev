@@ -26,14 +26,6 @@ msgstr ""
 msgid "Omaduse  (client_ids) help"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_client_selection.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/realestate_management/realestate_client_selection.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/realestate_management/realestate_client_selection.aw:rel_RELTYPE_MAILINGLIST
 msgid "Seose Valimi meililist (RELTYPE_MAILINGLIST) tekst"
 msgstr ""

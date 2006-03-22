@@ -182,14 +182,6 @@ msgstr ""
 msgid "Omaduse Grupid, kes saavad m&auml;&auml;ranguid muuta (admin_grps) help"
 msgstr ""
 
-#: classes/applications/recycle_bin/recycle_bin.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/recycle_bin/recycle_bin.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/recycle_bin/recycle_bin.aw:group_recycle
 msgid "Grupi Prügikast (recycle) pealkiri"
 msgstr ""
@@ -215,11 +207,11 @@ msgid "Grupi Otsing (recycle_search) help"
 msgstr ""
 
 #: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_settings
-msgid "Grupi Määrangud (recycle_settings) pealkiri"
+msgid "Grupi M&auml;&auml;rangud (recycle_settings) pealkiri"
 msgstr ""
 
 #: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_settings_help
-msgid "Grupi Määrangud (recycle_settings) help"
+msgid "Grupi M&auml;&auml;rangud (recycle_settings) help"
 msgstr ""
 
 #: classes/applications/recycle_bin/recycle_bin.aw:rel_RELTYPE_DEL_GRP

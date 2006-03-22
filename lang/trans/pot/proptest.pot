@@ -98,14 +98,6 @@ msgstr ""
 msgid "Omaduse A property on a hidden tab (dummy) help"
 msgstr ""
 
-#: classes/cfg/proptest.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/cfg/proptest.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/cfg/proptest.aw:group_parentgroup1
 msgid "Grupi Parent Group 1 (parentgroup1) pealkiri"
 msgstr ""

@@ -38,11 +38,3 @@ msgstr ""
 msgid "Omaduse Valem (formula) help"
 msgstr ""
 
-#: classes/cfg/cfg_view_controller.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/cfg/cfg_view_controller.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-

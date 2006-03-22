@@ -18,11 +18,11 @@ msgstr ""
 msgid "Postkast"
 msgstr ""
 
-#: classes/common/address/address_object.aw:652
+#: classes/common/address/address_object.aw:654
 msgid "address::as_load_structure(): administrative_structure not defined for object (%s)!"
 msgstr ""
 
-#: classes/common/address/address_object.aw:666
+#: classes/common/address/address_object.aw:668
 msgid "address::as_load_country(): country not defined for administrative structure of object (%s)!"
 msgstr ""
 

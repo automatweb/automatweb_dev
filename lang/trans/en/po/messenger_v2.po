@@ -418,78 +418,106 @@ msgstr ""
 msgid "Seose Saatja (RELTYPE_FROMNAME) tekst"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:154
+#: classes/applications/messenger/messenger_v2.aw:rel_RELTYPE_BUGTRACKER
+msgid "Seose Bugtrack (RELTYPE_BUGTRACKER) tekst"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:157
 msgid "kulla mees, sa pole omale default messengeri ju valinud?"
 msgstr "dear fellow, you have not selected a messenger!"
 
-#: classes/applications/messenger/messenger_v2.aw:251
+#: classes/applications/messenger/messenger_v2.aw:254
 msgid "Kustutada?"
 msgstr "Delete?"
 
-#: classes/applications/messenger/messenger_v2.aw:252
-#: classes/applications/messenger/messenger_v2.aw:655
+#: classes/applications/messenger/messenger_v2.aw:255
+#: classes/applications/messenger/messenger_v2.aw:710
 msgid "Kustuta märgitud kirjad"
 msgstr "Delete marked messages"
 
-#: classes/applications/messenger/messenger_v2.aw:296
+#: classes/applications/messenger/messenger_v2.aw:299
 msgid "IMAP extension not available"
 msgstr "IMAP extension not available"
 
-#: classes/applications/messenger/messenger_v2.aw:308
+#: classes/applications/messenger/messenger_v2.aw:311
 msgid "IMAP sissepääs on konfigureerimata"
 msgstr "IMAP login is not configured"
 
-#: classes/applications/messenger/messenger_v2.aw:359
-#: classes/applications/messenger/messenger_v2.aw:603
+#: classes/applications/messenger/messenger_v2.aw:357
+msgid "Vast."
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:366
+msgid "A"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:374
+msgid "Kellelt"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:381
+msgid "Teema"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:387
+msgid "Kuup&auml;ev"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:398
+msgid "KB"
+msgstr ""
+
+#: classes/applications/messenger/messenger_v2.aw:420
+#: classes/applications/messenger/messenger_v2.aw:658
 msgid ""
 "Login failed, check whether server name, user and password are correct.<br>"
 msgstr ""
 "Login failed, check whether server name, user and password are correct.<br>"
 
-#: classes/applications/messenger/messenger_v2.aw:473
+#: classes/applications/messenger/messenger_v2.aw:528
 msgid "ei"
 msgstr "no"
 
-#: classes/applications/messenger/messenger_v2.aw:473
+#: classes/applications/messenger/messenger_v2.aw:528
 msgid "jah"
 msgstr "yes"
 
-#: classes/applications/messenger/messenger_v2.aw:613
+#: classes/applications/messenger/messenger_v2.aw:668
 msgid "Uus kiri"
 msgstr "New message"
 
-#: classes/applications/messenger/messenger_v2.aw:628
+#: classes/applications/messenger/messenger_v2.aw:683
 msgid "Vii kirjad"
 msgstr "Move messages"
 
-#: classes/applications/messenger/messenger_v2.aw:642
+#: classes/applications/messenger/messenger_v2.aw:697
 msgid "Vii valitud kirjad kataloogi"
 msgstr "Move messages to folder"
 
-#: classes/applications/messenger/messenger_v2.aw:656
+#: classes/applications/messenger/messenger_v2.aw:711
 msgid "Kustutada märgitud kirjad?"
 msgstr "Delete marked messages?"
 
-#: classes/applications/messenger/messenger_v2.aw:739
+#: classes/applications/messenger/messenger_v2.aw:794
 msgid "ükski kiri INBOXis ei matchinud ühegi ruuliga<br>"
 msgstr "no messages in INBOX matched any rule"
 
-#: classes/applications/messenger/messenger_v2.aw:756
+#: classes/applications/messenger/messenger_v2.aw:811
 msgid "ühtegi ruuli pole seostatud"
 msgstr "no rule connected"
 
-#: classes/applications/messenger/messenger_v2.aw:838
-#: classes/applications/messenger/messenger_v2.aw:851
+#: classes/applications/messenger/messenger_v2.aw:893
+#: classes/applications/messenger/messenger_v2.aw:906
 msgid "<strong>message with subject: %s</strong><br>"
 msgstr "<strong>message with subject: %s</strong><br>"
 
-#: classes/applications/messenger/messenger_v2.aw:840
+#: classes/applications/messenger/messenger_v2.aw:895
 msgid ""
 " &nbsp; &nbsp; uid = %s, matches subject rule %s, moving to %s folder<br>"
 msgstr ""
 " &nbsp; &nbsp; uid = %s, matches subject rule %s, moving to %s folder<br>"
 
-#: classes/applications/messenger/messenger_v2.aw:853
+#: classes/applications/messenger/messenger_v2.aw:908
 msgid " &nbsp; &nbsp; matches from rule %s, moving to %s folder<br>"
 msgstr " &nbsp; &nbsp; matches from rule %s, moving to %s folder<br>"
 

@@ -75,15 +75,15 @@ msgid "Omaduse Uus laius (new_width) help"
 msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_message
-msgid "Omaduse  (message) caption"
+msgid "Omaduse Staatus (message) caption"
 msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_message_comment
-msgid "Omaduse  (message) kommentaar"
+msgid "Omaduse Staatus (message) kommentaar"
 msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_message_help
-msgid "Omaduse  (message) help"
+msgid "Omaduse Staatus (message) help"
 msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_from_folder_contents

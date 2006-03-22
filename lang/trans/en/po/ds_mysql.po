@@ -9,23 +9,25 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/obj/ds_mysql.aw:75
+#: classes/core/obj/ds_mysql.aw:67
 msgid "object::load(%s): no such object!"
 msgstr "object::load(%s): no such object!"
 
-#: classes/core/obj/ds_mysql.aw:309
+#: classes/core/obj/ds_mysql.aw:202
+msgid "ds_mysql::read_properties(): no reltype for prop %s (%s)"
+msgstr ""
+
+#: classes/core/obj/ds_mysql.aw:278
 msgid ""
 "ds_mysql::read_properties(): no prop name for reltype %s in store=connect "
-"fetch!"
+"fetch! q = %s"
 msgstr ""
-"ds_mysql::read_properties(): no prop name for reltype %s in store=connect "
-"fetch!"
 
-#: classes/core/obj/ds_mysql.aw:1153
+#: classes/core/obj/ds_mysql.aw:1143
 msgid "ds_mysql::final_delete_object(%s): no suct object exists!"
 msgstr "ds_mysql::final_delete_object(%s): no suct object exists!"
 
-#: classes/core/obj/ds_mysql.aw:1252
+#: classes/core/obj/ds_mysql.aw:1243
 msgid ""
 "filter cannot contain properties (%s) that are in serialized fields other "
 "than metadata!"
@@ -33,7 +35,7 @@ msgstr ""
 "filter cannot contain properties (%s) that are in serialized fields other "
 "than metadata!"
 
-#: classes/core/obj/ds_mysql.aw:1393
+#: classes/core/obj/ds_mysql.aw:1389
 msgid ""
 "obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,"
 "OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value "
@@ -43,11 +45,11 @@ msgstr ""
 "OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value "
 "supplied, was: %s!"
 
-#: classes/core/obj/ds_mysql.aw:1445
+#: classes/core/obj/ds_mysql.aw:1441
 msgid "OBJ_COMP_BETWEEN does not make sense with obj_predicate_prop!"
 msgstr "OBJ_COMP_BETWEEN does not make sense with obj_predicate_prop!"
 
-#: classes/core/obj/ds_mysql.aw:1619
+#: classes/core/obj/ds_mysql.aw:1617
 msgid ""
 "ds_mysql::do_proc_complex_param(%s, %s): if a complex join parameter is "
 "given without a class id as the first element, the class_id parameter must "
@@ -57,15 +59,15 @@ msgstr ""
 "given without a class id as the first element, the class_id parameter must "
 "be set!"
 
-#: classes/core/obj/ds_mysql.aw:1817
+#: classes/core/obj/ds_mysql.aw:1815
 msgid "ds_mysql::_req_do_pcp(): no relation from class %s named %s"
 msgstr "ds_mysql::_req_do_pcp(): no relation from class %s named %s"
 
-#: classes/core/obj/ds_mysql.aw:1864
+#: classes/core/obj/ds_mysql.aw:1862
 msgid "ds_mysql::_req_do_pcp(): no property %s in class %s "
 msgstr "ds_mysql::_req_do_pcp(): no property %s in class %s "
 
-#: classes/core/obj/ds_mysql.aw:1876
+#: classes/core/obj/ds_mysql.aw:1874
 msgid ""
 "ds_mysql::_req_do_pcp(): currently join properties can only be of type "
 "relpicker - can't figure out the class id of the object-to-join otherwise"
@@ -73,7 +75,7 @@ msgstr ""
 "ds_mysql::_req_do_pcp(): currently join properties can only be of type "
 "relpicker - can't figure out the class id of the object-to-join otherwise"
 
-#: classes/core/obj/ds_mysql.aw:1881
+#: classes/core/obj/ds_mysql.aw:1879
 msgid ""
 "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property "
 "%s in class %s)"
@@ -81,14 +83,21 @@ msgstr ""
 "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property "
 "%s in class %s)"
 
-#: classes/core/obj/ds_mysql.aw:1889 classes/core/obj/ds_mysql.aw:1925
+#: classes/core/obj/ds_mysql.aw:1887 classes/core/obj/ds_mysql.aw:1924
 msgid "ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"
 msgstr "ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"
 
-#: classes/core/obj/ds_mysql.aw:1912
+#: classes/core/obj/ds_mysql.aw:1911
 msgid ""
 "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from "
 "relpicker property %s"
 msgstr ""
 "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from "
 "relpicker property %s"
+
+#~ msgid ""
+#~ "ds_mysql::read_properties(): no prop name for reltype %s in store=connect "
+#~ "fetch!"
+#~ msgstr ""
+#~ "ds_mysql::read_properties(): no prop name for reltype %s in store=connect "
+#~ "fetch!"

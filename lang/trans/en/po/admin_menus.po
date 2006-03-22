@@ -13,15 +13,15 @@ msgstr ""
 msgid "Ava"
 msgstr "Open"
 
-#: classes/admin/admin_menus.aw:253 classes/admin/admin_menus.aw:1432
+#: classes/admin/admin_menus.aw:253 classes/admin/admin_menus.aw:1428
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/admin/admin_menus.aw:261 classes/admin/admin_menus.aw:1401
+#: classes/admin/admin_menus.aw:261 classes/admin/admin_menus.aw:1397
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/admin/admin_menus.aw:270 classes/admin/admin_menus.aw:1408
+#: classes/admin/admin_menus.aw:270 classes/admin/admin_menus.aw:1404
 msgid "Kopeeri"
 msgstr "Copy"
 
@@ -29,7 +29,7 @@ msgstr "Copy"
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/admin/admin_menus.aw:282 classes/admin/admin_menus.aw:1425
+#: classes/admin/admin_menus.aw:282 classes/admin/admin_menus.aw:1421
 msgid "Kustuta"
 msgstr "Delete"
 
@@ -37,94 +37,94 @@ msgstr "Delete"
 msgid "Vali kuidas objekte kopeerida"
 msgstr "Select object copying method"
 
-#: classes/admin/admin_menus.aw:730
+#: classes/admin/admin_menus.aw:717
 msgid "Menyyde importimisel tekkis viga real %s "
 msgstr "Error on line %s in the menu import file"
 
-#: classes/admin/admin_menus.aw:747
+#: classes/admin/admin_menus.aw:734
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s "
 msgstr "Could not find parent menu on line %s of the menu import file"
 
-#: classes/admin/admin_menus.aw:1203
+#: classes/admin/admin_menus.aw:1199
 msgid "Link"
 msgstr "Link"
 
-#: classes/admin/admin_menus.aw:1218
+#: classes/admin/admin_menus.aw:1214
 msgid "Mitteaktiivne"
 msgstr "Not active"
 
-#: classes/admin/admin_menus.aw:1218 classes/admin/admin_menus.aw:1666
+#: classes/admin/admin_menus.aw:1214 classes/admin/admin_menus.aw:1662
 msgid "Aktiivne"
 msgstr "Active"
 
-#: classes/admin/admin_menus.aw:1324
+#: classes/admin/admin_menus.aw:1320
 msgid "Uus"
 msgstr "New"
 
-#: classes/admin/admin_menus.aw:1384
+#: classes/admin/admin_menus.aw:1380
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/admin/admin_menus.aw:1392
+#: classes/admin/admin_menus.aw:1388
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/admin/admin_menus.aw:1417
+#: classes/admin/admin_menus.aw:1413
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/admin/admin_menus.aw:1440
+#: classes/admin/admin_menus.aw:1436
 msgid "Uuenda"
 msgstr "Refresh"
 
-#: classes/admin/admin_menus.aw:1447
+#: classes/admin/admin_menus.aw:1443
 msgid "Impordi"
 msgstr "Import"
 
-#: classes/admin/admin_menus.aw:1453
+#: classes/admin/admin_menus.aw:1449
 msgid "Suured ikoonid"
 msgstr "Big icons"
 
-#: classes/admin/admin_menus.aw:1454
+#: classes/admin/admin_menus.aw:1450
 msgid "Väiksed ikoonid"
 msgstr "Small icons"
 
-#: classes/admin/admin_menus.aw:1455
+#: classes/admin/admin_menus.aw:1451
 msgid "Detailne vaade"
 msgstr "Detail view"
 
-#: classes/admin/admin_menus.aw:1460
+#: classes/admin/admin_menus.aw:1456
 msgid "Eelvaade"
 msgstr "Preview"
 
-#: classes/admin/admin_menus.aw:1574
+#: classes/admin/admin_menus.aw:1570
 msgid "Valitud pole &uuml;htegi objekti!"
 msgstr "No objects selected!"
 
-#: classes/admin/admin_menus.aw:1651
+#: classes/admin/admin_menus.aw:1647
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/admin/admin_menus.aw:1660
+#: classes/admin/admin_menus.aw:1656
 msgid "Jrk"
 msgstr "Ord"
 
-#: classes/admin/admin_menus.aw:1675
+#: classes/admin/admin_menus.aw:1671
 msgid "Muutja"
 msgstr "Modifiedby"
 
-#: classes/admin/admin_menus.aw:1685
+#: classes/admin/admin_menus.aw:1681
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/admin/admin_menus.aw:1698
+#: classes/admin/admin_menus.aw:1694
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/admin/admin_menus.aw:1708
+#: classes/admin/admin_menus.aw:1704
 msgid "Tegevus"
 msgstr "Action"
 
-#: classes/admin/admin_menus.aw:1717
+#: classes/admin/admin_menus.aw:1713
 msgid "<a href='javascript:selall()'>Vali</a>"
 msgstr "<a href='javascript:selall()'>Select&nbsp;all</a>"

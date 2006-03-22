@@ -59,14 +59,6 @@ msgstr ""
 msgid "Omaduse  (content) help"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/awmyadmin/db_server_explorer.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/awmyadmin/db_server_explorer.aw:group_explorer
 #: classes/applications/awmyadmin/db_server_explorer.aw:group_explorer
 msgid "Grupi Explorer (explorer) pealkiri"
@@ -82,8 +74,8 @@ msgstr ""
 msgid "Seose konfiguratsioon (RELTYPE_CONF) tekst"
 msgstr "configuration"
 
-#: classes/applications/awmyadmin/db_server_explorer.aw:383
-#: classes/applications/awmyadmin/db_server_explorer.aw:411
-#: classes/applications/awmyadmin/db_server_explorer.aw:597
+#: classes/applications/awmyadmin/db_server_explorer.aw:387
+#: classes/applications/awmyadmin/db_server_explorer.aw:415
+#: classes/applications/awmyadmin/db_server_explorer.aw:601
 msgid "Salvesta"
 msgstr ""

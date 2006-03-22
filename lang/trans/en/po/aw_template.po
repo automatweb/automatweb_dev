@@ -9,14 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/aw_template.aw:192
+#: classes/aw_template.aw:257
 msgid "Template '%s/%s' not found"
 msgstr "Template '%s/%s' not found"
 
-#: classes/aw_template.aw:223 classes/aw_template.aw:248
+#: classes/aw_template.aw:330 classes/aw_template.aw:376
 msgid "Template '%s' not found"
 msgstr "Template '%s' not found"
 
-#: classes/aw_template.aw:278
+#: classes/aw_template.aw:428
 msgid "Template '%s' not found in admin or site folder"
 msgstr "Template '%s' not found in admin or site folder"

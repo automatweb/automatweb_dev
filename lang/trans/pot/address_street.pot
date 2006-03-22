@@ -26,11 +26,3 @@ msgstr ""
 msgid "Omaduse  (administrative_structure_oid) help"
 msgstr ""
 
-#: classes/common/address/address_street.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/common/address/address_street.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-

@@ -62,6 +62,30 @@ msgstr ""
 msgid "Omaduse T&ouml;&ouml;kaaslaste seadete vorm  (coworker_cfgform) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_customer_employer_cfgform
+msgid "Omaduse Kliendi t&ouml;&ouml;taja seadete vorm (customer_employer_cfgform) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_customer_employer_cfgform_comment
+msgid "Omaduse Kliendi t&ouml;&ouml;taja seadete vorm (customer_employer_cfgform) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_customer_employer_cfgform_help
+msgid "Omaduse Kliendi t&ouml;&ouml;taja seadete vorm (customer_employer_cfgform) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_def_prod
+msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_def_prod_comment
+msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_bill_def_prod_help
+msgid "Omaduse Vaikimisi toode arve ridadel (bill_def_prod) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:prop_users
 msgid "Omaduse Kasutajad (users) caption"
 msgstr ""
@@ -134,12 +158,32 @@ msgstr ""
 msgid "Omaduse K&otilde;ik  (everyone) help"
 msgstr ""
 
+#: classes/applications/crm/crm_settings.aw:prop_person_img_settings
+msgid "Omaduse Isiku piltide seaded (person_img_settings) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_person_img_settings_comment
+msgid "Omaduse Isiku piltide seaded (person_img_settings) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:prop_person_img_settings_help
+msgid "Omaduse Isiku piltide seaded (person_img_settings) help"
+msgstr ""
+
 #: classes/applications/crm/crm_settings.aw:group_whom
 msgid "Grupi Kellele kehtib (whom) pealkiri"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:group_whom_help
 msgid "Grupi Kellele kehtib (whom) help"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:group_img
+msgid "Grupi Pildid (img) pealkiri"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:group_img_help
+msgid "Grupi Pildid (img) help"
 msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_USER
@@ -164,5 +208,13 @@ msgstr ""
 
 #: classes/applications/crm/crm_settings.aw:rel_RELTYPE_PROFESSION
 msgid "Seose Ametinimetus (RELTYPE_PROFESSION) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:rel_RELTYPE_PROD
+msgid "Seose Toode (RELTYPE_PROD) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_settings.aw:rel_RELTYPE_GALLERY_CONF
+msgid "Seose Galerii seaded (RELTYPE_GALLERY_CONF) tekst"
 msgstr ""
 

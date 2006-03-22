@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/calendar/planner_model.aw:169
+#: classes/applications/calendar/planner_model.aw:173
 msgid "%s s&uuml;nnip&auml;ev!"
 msgstr ""
 

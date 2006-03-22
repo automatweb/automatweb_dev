@@ -9,18 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/admin/admin_folders.aw:136 classes/admin/admin_folders.aw:290
+#: classes/admin/admin_folders.aw:137 classes/admin/admin_folders.aw:293
 msgid "<b>AutomatWeb</b>"
 msgstr "<b>AutomatWeb</b>"
 
-#: classes/admin/admin_folders.aw:533 classes/admin/admin_folders.aw:952
+#: classes/admin/admin_folders.aw:536 classes/admin/admin_folders.aw:955
 msgid "Mitteperioodilised"
 msgstr "Non-periodic"
 
-#: classes/admin/admin_folders.aw:543 classes/admin/admin_folders.aw:962
+#: classes/admin/admin_folders.aw:546 classes/admin/admin_folders.aw:965
 msgid "Reload"
 msgstr "Refresh"
 
-#: classes/admin/admin_folders.aw:549 classes/admin/admin_folders.aw:968
+#: classes/admin/admin_folders.aw:552 classes/admin/admin_folders.aw:971
 msgid "Logi v&auml;lja"
 msgstr "Log out"

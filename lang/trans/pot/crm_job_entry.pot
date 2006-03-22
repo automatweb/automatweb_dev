@@ -26,6 +26,18 @@ msgstr ""
 msgid "Omaduse Kliendi andmed (cust_d) help"
 msgstr ""
 
+#: classes/applications/crm/crm_job_entry.aw:prop_cust_type
+msgid "Omaduse Kliendi t&uuml;&uuml;p (cust_type) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_cust_type_comment
+msgid "Omaduse Kliendi t&uuml;&uuml;p (cust_type) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_cust_type_help
+msgid "Omaduse Kliendi t&uuml;&uuml;p (cust_type) help"
+msgstr ""
+
 #: classes/applications/crm/crm_job_entry.aw:prop_sel_cust
 msgid "Omaduse Vali olemasolev klient (sel_cust) caption"
 msgstr ""
@@ -36,6 +48,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_sel_cust_help
 msgid "Omaduse Vali olemasolev klient (sel_cust) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_ettevotlusvorm
+msgid "Omaduse &Otilde;iguslik vorm (ettevotlusvorm) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_ettevotlusvorm_comment
+msgid "Omaduse &Otilde;iguslik vorm (ettevotlusvorm) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_ettevotlusvorm_help
+msgid "Omaduse &Otilde;iguslik vorm (ettevotlusvorm) help"
 msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_cust_n
@@ -50,16 +74,64 @@ msgstr ""
 msgid "Omaduse Nimetus (cust_n) help"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:prop_ettevotlusvorm
-msgid "Omaduse &Otilde;iguslik vorm (ettevotlusvorm) caption"
+#: classes/applications/crm/crm_job_entry.aw:prop_sel_cust_p
+msgid "Omaduse Vali olemasolev klient (sel_cust_p) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:prop_ettevotlusvorm_comment
-msgid "Omaduse &Otilde;iguslik vorm (ettevotlusvorm) kommentaar"
+#: classes/applications/crm/crm_job_entry.aw:prop_sel_cust_p_comment
+msgid "Omaduse Vali olemasolev klient (sel_cust_p) kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:prop_ettevotlusvorm_help
-msgid "Omaduse &Otilde;iguslik vorm (ettevotlusvorm) help"
+#: classes/applications/crm/crm_job_entry.aw:prop_sel_cust_p_help
+msgid "Omaduse Vali olemasolev klient (sel_cust_p) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_fn
+msgid "Omaduse Eesnimi (custp_fn) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_fn_comment
+msgid "Omaduse Eesnimi (custp_fn) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_fn_help
+msgid "Omaduse Eesnimi (custp_fn) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_ln
+msgid "Omaduse Perenimi (custp_ln) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_ln_comment
+msgid "Omaduse Perenimi (custp_ln) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_ln_help
+msgid "Omaduse Perenimi (custp_ln) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_phone
+msgid "Omaduse Telefon (custp_phone) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_phone_comment
+msgid "Omaduse Telefon (custp_phone) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_phone_help
+msgid "Omaduse Telefon (custp_phone) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_email
+msgid "Omaduse E-post (custp_email) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_email_comment
+msgid "Omaduse E-post (custp_email) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_custp_email_help
+msgid "Omaduse E-post (custp_email) help"
 msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_addr
@@ -86,6 +158,18 @@ msgstr ""
 msgid "Omaduse Linn (addr_linn) help"
 msgstr ""
 
+#: classes/applications/crm/crm_job_entry.aw:prop_post_index
+msgid "Omaduse Postiindeks (post_index) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_post_index_comment
+msgid "Omaduse Postiindeks (post_index) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_post_index_help
+msgid "Omaduse Postiindeks (post_index) help"
+msgstr ""
+
 #: classes/applications/crm/crm_job_entry.aw:prop_maakond
 msgid "Omaduse Maakond (maakond) caption"
 msgstr ""
@@ -108,6 +192,18 @@ msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_riik_help
 msgid "Omaduse Riik  (riik) help"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_cust_mgr
+msgid "Omaduse Kliendihaldur (cust_mgr) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_cust_mgr_comment
+msgid "Omaduse Kliendihaldur (cust_mgr) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_cust_mgr_help
+msgid "Omaduse Kliendihaldur (cust_mgr) help"
 msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_cont_d
@@ -218,6 +314,18 @@ msgstr ""
 msgid "Omaduse Osalejad (proj_parts) help"
 msgstr ""
 
+#: classes/applications/crm/crm_job_entry.aw:prop_proj_type
+msgid "Omaduse Liik (proj_type) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_proj_type_comment
+msgid "Omaduse Liik (proj_type) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:prop_proj_type_help
+msgid "Omaduse Liik (proj_type) help"
+msgstr ""
+
 #: classes/applications/crm/crm_job_entry.aw:prop_task_desc
 msgid "Omaduse Tegevuse andmed (task_desc) caption"
 msgstr ""
@@ -302,7 +410,27 @@ msgstr ""
 msgid "Omaduse Ressursid (resource_sel) help"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:114 classes/applications/crm/crm_job_entry.aw:123 classes/applications/crm/crm_job_entry.aw:132
+#: classes/applications/crm/crm_job_entry.aw:158
+msgid "Otsi postiindeksit"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:162
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:162
+msgid "Isik"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:190 classes/applications/crm/crm_job_entry.aw:201 classes/applications/crm/crm_job_entry.aw:210 classes/applications/crm/crm_job_entry.aw:219
 msgid "--Vali--"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:260
+msgid "Kliendi nimi peab olema t&auml;idetud v&otilde;i olemasolev klient peab olema valitud"
+msgstr ""
+
+#: classes/applications/crm/crm_job_entry.aw:268
+msgid "Projekti nimi peab olema t&auml;idetud"
 msgstr ""
 

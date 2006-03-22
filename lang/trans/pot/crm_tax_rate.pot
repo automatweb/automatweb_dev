@@ -74,23 +74,35 @@ msgstr ""
 msgid "Omaduse K&auml;ibemaksukood (code) help"
 msgstr ""
 
-#: classes/applications/crm/crm_tax_rate.aw:39
-msgid "K&auml;ibemaks"
+#: classes/applications/crm/crm_tax_rate.aw:prop_acct
+msgid "Omaduse Kontonumber (acct) caption"
 msgstr ""
 
-#: classes/applications/crm/crm_tax_rate.aw:40
-msgid "&Uuml;ksikisiku tulumaks"
+#: classes/applications/crm/crm_tax_rate.aw:prop_acct_comment
+msgid "Omaduse Kontonumber (acct) kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_tax_rate.aw:41
-msgid "Ettev&otilde;tte tulumaks"
+#: classes/applications/crm/crm_tax_rate.aw:prop_acct_help
+msgid "Omaduse Kontonumber (acct) help"
 msgstr ""
 
 #: classes/applications/crm/crm_tax_rate.aw:42
-msgid "Sotsiaalmaks"
+msgid "K&auml;ibemaks"
 msgstr ""
 
 #: classes/applications/crm/crm_tax_rate.aw:43
+msgid "&Uuml;ksikisiku tulumaks"
+msgstr ""
+
+#: classes/applications/crm/crm_tax_rate.aw:44
+msgid "Ettev&otilde;tte tulumaks"
+msgstr ""
+
+#: classes/applications/crm/crm_tax_rate.aw:45
+msgid "Sotsiaalmaks"
+msgstr ""
+
+#: classes/applications/crm/crm_tax_rate.aw:46
 msgid "T&ouml;&ouml;tuskindlustusmaks"
 msgstr ""
 

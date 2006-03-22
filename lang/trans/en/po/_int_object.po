@@ -141,39 +141,39 @@ msgstr "object::set_flag(%s, %s): flag must be integer!"
 msgid "object::set_flag(%s, %s): value must be integer!"
 msgstr "object::set_flag(%s, %s): value must be integer!"
 
-#: classes/core/obj/_int_object.aw:1159
+#: classes/core/obj/_int_object.aw:1161
 msgid "object::set_prop(%s, %s): no property %s defined for current object!"
 msgstr "object::set_prop(%s, %s): no property %s defined for current object!"
 
-#: classes/core/obj/_int_object.aw:1291
+#: classes/core/obj/_int_object.aw:1292
 msgid "object::set_cache_dirty(%s): parameter must be integer or boolean!"
 msgstr "object::set_cache_dirty(%s): parameter must be integer or boolean!"
 
-#: classes/core/obj/_int_object.aw:1321
+#: classes/core/obj/_int_object.aw:1322
 msgid "object::instance(): no object loaded or class id not set!"
 msgstr "object::instance(): no object loaded or class id not set!"
 
-#: classes/core/obj/_int_object.aw:1335
+#: classes/core/obj/_int_object.aw:1336
 msgid "object::create_brother(%s): no object loaded!"
 msgstr "object::create_brother(%s): no object loaded!"
 
-#: classes/core/obj/_int_object.aw:1344
+#: classes/core/obj/_int_object.aw:1345
 msgid "object::create_brother(%s): no parent!"
 msgstr "object::create_brother(%s): no parent!"
 
-#: classes/core/obj/_int_object.aw:1422
+#: classes/core/obj/_int_object.aw:1423
 msgid "object::load(%s): no view access for object %s!"
 msgstr "object::load(%s): no view access for object %s!"
 
-#: classes/core/obj/_int_object.aw:1746
+#: classes/core/obj/_int_object.aw:1747
 msgid "object::path(%s): error in object hierarchy, infinite loop!"
 msgstr "object::path(%s): error in object hierarchy, infinite loop!"
 
-#: classes/core/obj/_int_object.aw:1795
+#: classes/core/obj/_int_object.aw:1796
 msgid "object::save(): no acess to save object %s under %s !"
 msgstr "object::save(): no acess to save object %s under %s !"
 
-#: classes/core/obj/_int_object.aw:1810
+#: classes/core/obj/_int_object.aw:1811
 msgid "object::save(): no access to add object under folder %s (gidlist = %s)!"
 msgstr ""
 "object::save(): no access to add object under folder %s (gidlist = %s)!"

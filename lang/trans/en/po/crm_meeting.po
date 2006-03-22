@@ -351,6 +351,18 @@ msgstr ""
 msgid "Omaduse Sisu (content) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_send_bill
+msgid "Omaduse Saata arve (send_bill) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_send_bill_comment
+msgid "Omaduse Saata arve (send_bill) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_send_bill_help
+msgid "Omaduse Saata arve (send_bill) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_bill_no
 msgid "Omaduse Arve number (bill_no) caption"
 msgstr "Invoice no"
@@ -373,6 +385,42 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_participants_help
 msgid "Omaduse Osalejad (participants) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_time_guess
+msgid "Omaduse Prognoositav tundide arv \t (time_guess) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_time_guess_comment
+msgid "Omaduse Prognoositav tundide arv \t (time_guess) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_time_guess_help
+msgid "Omaduse Prognoositav tundide arv \t (time_guess) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_time_real
+msgid "Omaduse Tegelik tundide arv (time_real) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_time_real_comment
+msgid "Omaduse Tegelik tundide arv (time_real) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_time_real_help
+msgid "Omaduse Tegelik tundide arv (time_real) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_time_to_cust
+msgid "Omaduse Tundide arv kliendile (time_to_cust) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_time_to_cust_comment
+msgid "Omaduse Tundide arv kliendile (time_to_cust) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_time_to_cust_help
+msgid "Omaduse Tundide arv kliendile (time_to_cust) help"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:prop_summary
@@ -705,27 +753,35 @@ msgstr ""
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr "Recurrence"
 
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_CUSTOMER
+msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_PROJECT
+msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:rel_RELTYPE_RESOURCE
 msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:347
+#: classes/crm/crm_meeting.aw:396
 msgid "--Vali--"
 msgstr "--Select--"
 
-#: classes/crm/crm_meeting.aw:426
+#: classes/crm/crm_meeting.aw:475
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/crm/crm_meeting.aw:428
+#: classes/crm/crm_meeting.aw:477
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr "Are you sure you want to remove the selected participants?"
 
-#: classes/crm/crm_meeting.aw:436
+#: classes/crm/crm_meeting.aw:485
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/crm/crm_meeting.aw:445
+#: classes/crm/crm_meeting.aw:494
 msgid "Salvesta"
 msgstr "Save"
 

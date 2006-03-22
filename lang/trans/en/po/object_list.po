@@ -73,13 +73,13 @@ msgstr "object_list::foreach_cb(): callback function %s does not exist!"
 msgid "object_list::from_arr(): parameter must be an array!"
 msgstr "object_list::from_arr(): parameter must be an array!"
 
-#: classes/core/obj/object_list.aw:399
+#: classes/core/obj/object_list.aw:435
 msgid ""
 "object_list::filter(%s => %s): can not complex searches on metadata fields!"
 msgstr ""
 "object_list::filter(%s => %s): can not complex searches on metadata fields!"
 
-#: classes/core/obj/object_list.aw:406
+#: classes/core/obj/object_list.aw:442
 msgid ""
 "object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"
 msgstr ""

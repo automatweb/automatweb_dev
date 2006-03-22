@@ -146,14 +146,6 @@ msgstr ""
 msgid "Omaduse Automaatse impordi seadistamine (recur_edit) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/contentmgmt/site_search/site_search_content_grp_fs.aw:group_regex
 msgid "Grupi Regulaarvaldised (regex) pealkiri"
 msgstr ""

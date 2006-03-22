@@ -611,10 +611,9 @@ msgstr "Action table"
 msgid "Klassi Kalendri sisu (192) nimi"
 msgstr "Calendar contents"
 
-# aw.ini:class_193
 #: aw.ini:class_193
-msgid "Klassi Pilootobjekt (193) nimi"
-msgstr "Pilot object"
+msgid "Klassi  (193) nimi"
+msgstr ""
 
 # aw.ini:class_194
 #: aw.ini:class_194
@@ -899,11 +898,6 @@ msgstr "Language"
 #: aw.ini:class_275
 msgid "Klassi Personalikeskkond (275) nimi"
 msgstr "Personnell center"
-
-# aw.ini:class_276
-#: aw.ini:class_276
-msgid "Klassi CV (276) nimi"
-msgstr "CV"
 
 # aw.ini:class_285
 #: aw.ini:class_285
@@ -1340,25 +1334,10 @@ msgstr "Object list Road info datasource"
 msgid "Klassi Tehnoloogia (770) nimi"
 msgstr "Technology"
 
-# aw.ini:class_771
-#: aw.ini:class_771
-msgid "Klassi Programmeerimisoskus (771) nimi"
-msgstr "Programming skill"
-
-# aw.ini:class_775
-#: aw.ini:class_775
-msgid "Klassi Tööpakkumiste nimekiri (775) nimi"
-msgstr "Job offer list"
-
 # aw.ini:class_798
 #: aw.ini:class_798
 msgid "Klassi Otto toodete otsing (798) nimi"
 msgstr "Otto product search"
-
-# aw.ini:class_801
-#: aw.ini:class_801
-msgid "Klassi Minu kandideerimised (801) nimi"
-msgstr "My applications"
 
 # aw.ini:class_802
 #: aw.ini:class_802
@@ -2102,6 +2081,10 @@ msgstr ""
 msgid "Klassi Expp arve (1018) nimi"
 msgstr ""
 
+#: aw.ini:class_1019
+msgid "Klassi Audio (1019) nimi"
+msgstr ""
+
 #: aw.ini:class_1020
 msgid "Klassi Expp site_logo (1020) nimi"
 msgstr ""
@@ -2166,6 +2149,42 @@ msgstr ""
 msgid "Klassi Kliendibaasi seaded (1036) nimi"
 msgstr ""
 
+#: aw.ini:class_1037
+msgid "Klassi Ostu-saateleht (1037) nimi"
+msgstr ""
+
+#: aw.ini:class_1038
+msgid "Klassi Ostu arve (1038) nimi"
+msgstr ""
+
+#: aw.ini:class_1039
+msgid "Klassi Müügi-saateleht (1039) nimi"
+msgstr ""
+
+#: aw.ini:class_1040
+msgid "Klassi Ostutellimus (1040) nimi"
+msgstr ""
+
+#: aw.ini:class_1041
+msgid "Klassi Müügitellimus (1041) nimi"
+msgstr ""
+
+#: aw.ini:class_1042
+msgid "Klassi Soodustus (1042) nimi"
+msgstr ""
+
+#: aw.ini:class_1043
+msgid "Klassi Isikutunnistus (1043) nimi"
+msgstr ""
+
+#: aw.ini:class_1044
+msgid "Klassi Inventuur (1044) nimi"
+msgstr ""
+
+#: aw.ini:class_1045
+msgid "Klassi Tootegrupp (1045) nimi"
+msgstr ""
+
 #: aw.ini:class_1046
 msgid "Klassi Maksum&auml;&auml;r (1046) nimi"
 msgstr ""
@@ -2212,6 +2231,10 @@ msgstr ""
 
 #: aw.ini:class_1057
 msgid "Klassi CRM Meil (1057) nimi"
+msgstr ""
+
+#: aw.ini:class_1058
+msgid "Klassi Bugi kommentaar (1058) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29
@@ -2508,6 +2531,26 @@ msgstr "Bug-o-matic 3000"
 #: aw.ini:classfolder_60
 msgid "Klassi kataloogi Kinnisvarahaldus (60) nimi"
 msgstr ""
+
+# aw.ini:class_193
+#~ msgid "Klassi Pilootobjekt (193) nimi"
+#~ msgstr "Pilot object"
+
+# aw.ini:class_276
+#~ msgid "Klassi CV (276) nimi"
+#~ msgstr "CV"
+
+# aw.ini:class_771
+#~ msgid "Klassi Programmeerimisoskus (771) nimi"
+#~ msgstr "Programming skill"
+
+# aw.ini:class_775
+#~ msgid "Klassi Tööpakkumiste nimekiri (775) nimi"
+#~ msgstr "Job offer list"
+
+# aw.ini:class_801
+#~ msgid "Klassi Minu kandideerimised (801) nimi"
+#~ msgstr "My applications"
 
 # aw.ini:class_136
 #~ msgid "Klassi Raamistus (136) nimi"

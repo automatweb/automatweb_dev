@@ -59,14 +59,6 @@ msgstr ""
 msgid "Omaduse  (adminlink) help"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_table_admin.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/awmyadmin/db_table_admin.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/awmyadmin/db_table_admin.aw:131
 #: classes/applications/awmyadmin/db_table_admin.aw:395
 msgid "Salvesta"

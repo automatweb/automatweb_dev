@@ -547,7 +547,7 @@ msgid "Seose Juhiluba (RELTYPE_JUHILUBA) tekst"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:rel_RELTYPE_JOBWANTED
-msgid "Seose Töösoov (RELTYPE_JOBWANTED) tekst"
+msgid "Seose T&ouml;&ouml;soov (RELTYPE_JOBWANTED) tekst"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:202
@@ -566,7 +566,7 @@ msgstr ""
 msgid "Muuda töösoovi"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv.aw:409 classes/applications/personnel_management/personnel_management_cv.aw:1192
+#: classes/applications/personnel_management/personnel_management_cv.aw:409 classes/applications/personnel_management/personnel_management_cv.aw:1196
 msgid "Genereeri pdf"
 msgstr ""
 
@@ -678,11 +678,11 @@ msgstr ""
 msgid "Oskus"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv.aw:1217
+#: classes/applications/personnel_management/personnel_management_cv.aw:1221
 msgid "Kes vaatas:"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv.aw:1223
+#: classes/applications/personnel_management/personnel_management_cv.aw:1227
 msgid "Vaatamisi"
 msgstr ""
 

@@ -10,42 +10,52 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/calendar/cal_content.aw:class_192_help
+#: classes/calendar/cal_content.aw:class_192_help
 msgid "Klassi Kalendri sisu help"
 msgstr ""
 
 # classes/calendar/cal_content.aw:prop_show_class
+#: classes/calendar/cal_content.aw:prop_show_class
 msgid "Omaduse Vali klass (show_class) caption"
 msgstr "Select class"
 
 # classes/calendar/cal_content.aw:prop_show_class_comment
+#: classes/calendar/cal_content.aw:prop_show_class_comment
 msgid "Omaduse Vali klass (show_class) kommentaar"
 msgstr ""
 
 # classes/calendar/cal_content.aw:prop_show_class_help
+#: classes/calendar/cal_content.aw:prop_show_class_help
 msgid "Omaduse Vali klass (show_class) help"
 msgstr ""
 
 # classes/calendar/cal_content.aw:prop_show_count
+#: classes/calendar/cal_content.aw:prop_show_count
 msgid "Omaduse Mitu (show_count) caption"
 msgstr "How many"
 
 # classes/calendar/cal_content.aw:prop_show_count_comment
+#: classes/calendar/cal_content.aw:prop_show_count_comment
 msgid "Omaduse Mitu (show_count) kommentaar"
 msgstr ""
 
 # classes/calendar/cal_content.aw:prop_show_count_help
+#: classes/calendar/cal_content.aw:prop_show_count_help
 msgid "Omaduse Mitu (show_count) help"
 msgstr ""
 
 # classes/calendar/cal_content.aw:prop_preview
+#: classes/calendar/cal_content.aw:prop_preview
 msgid "Omaduse Eelvaade (preview) caption"
 msgstr "Preview"
 
 # classes/calendar/cal_content.aw:prop_preview_comment
+#: classes/calendar/cal_content.aw:prop_preview_comment
 msgid "Omaduse Eelvaade (preview) kommentaar"
 msgstr ""
 
 # classes/calendar/cal_content.aw:prop_preview_help
+#: classes/calendar/cal_content.aw:prop_preview_help
 msgid "Omaduse Eelvaade (preview) help"
 msgstr ""
 
@@ -57,6 +67,6 @@ msgstr "Preview"
 msgid "/ Vaata"
 msgstr "/ View"
 
-#: classes/calendar/cal_content.aw:87
+#: classes/calendar/cal_content.aw:90
 msgid "Klass on valimata, midagi pole näidata"
 msgstr "Class not selected, nothing to show"

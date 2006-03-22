@@ -159,7 +159,7 @@ msgid "Seose Seadete vorm (RELTYPE_SURVEY_CFGFORM) tekst"
 msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:rel_RELTYPE_REDIRECT_TO
-msgid "Seose Kuhu peale täitmist suunata (RELTYPE_REDIRECT_TO) tekst"
+msgid "Seose Kuhu peale t&auml;itmist suunata (RELTYPE_REDIRECT_TO) tekst"
 msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:125 classes/applications/survey/survey_manager.aw:142

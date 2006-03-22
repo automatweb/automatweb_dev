@@ -14,19 +14,19 @@ msgstr ""
 msgid "AW Saitide list"
 msgstr ""
 
-#: classes/install/site_list.aw:33 classes/install/site_list.aw:231 classes/install/site_list.aw:520
+#: classes/install/site_list.aw:33 classes/install/site_list.aw:231 classes/install/site_list.aw:546
 msgid "ID"
 msgstr ""
 
-#: classes/install/site_list.aw:39 classes/install/site_list.aw:238 classes/install/site_list.aw:527
+#: classes/install/site_list.aw:39 classes/install/site_list.aw:238 classes/install/site_list.aw:553
 msgid "Nimi"
 msgstr ""
 
-#: classes/install/site_list.aw:44 classes/install/site_list.aw:535
+#: classes/install/site_list.aw:44 classes/install/site_list.aw:561
 msgid "URL"
 msgstr ""
 
-#: classes/install/site_list.aw:49 classes/install/site_list.aw:164 classes/install/site_list.aw:543
+#: classes/install/site_list.aw:49 classes/install/site_list.aw:164 classes/install/site_list.aw:569
 msgid "Server"
 msgstr ""
 
@@ -86,7 +86,7 @@ msgstr ""
 msgid "Koodiversioon"
 msgstr ""
 
-#: classes/install/site_list.aw:223 classes/install/site_list.aw:623
+#: classes/install/site_list.aw:223 classes/install/site_list.aw:649
 msgid "AW Serverite list"
 msgstr ""
 
@@ -94,27 +94,27 @@ msgstr ""
 msgid "IP aadress"
 msgstr ""
 
-#: classes/install/site_list.aw:551
+#: classes/install/site_list.aw:577
 msgid "Used?"
 msgstr ""
 
-#: classes/install/site_list.aw:559
+#: classes/install/site_list.aw:585
 msgid "Code branch"
 msgstr ""
 
-#: classes/install/site_list.aw:566
+#: classes/install/site_list.aw:592
 msgid "Basedir"
 msgstr ""
 
-#: classes/install/site_list.aw:573
+#: classes/install/site_list.aw:599
 msgid "Updater"
 msgstr ""
 
-#: classes/install/site_list.aw:580
+#: classes/install/site_list.aw:606
 msgid "Last update"
 msgstr ""
 
-#: classes/install/site_list.aw:624
+#: classes/install/site_list.aw:650
 msgid " / Muuda serverit "
 msgstr ""
 

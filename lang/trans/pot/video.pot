@@ -86,6 +86,42 @@ msgstr ""
 msgid "Omaduse Kuup&auml;ev (date) help"
 msgstr ""
 
+#: classes/contentmgmt/video.aw:prop_show_right_away
+msgid "Omaduse N&auml;ita kohe (show_right_away) caption"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:prop_show_right_away_comment
+msgid "Omaduse N&auml;ita kohe (show_right_away) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:prop_show_right_away_help
+msgid "Omaduse N&auml;ita kohe (show_right_away) help"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:prop_width
+msgid "Omaduse Laius (width) caption"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:prop_width_comment
+msgid "Omaduse Laius (width) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:prop_width_help
+msgid "Omaduse Laius (width) help"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:prop_height
+msgid "Omaduse K&otilde;rgus (height) caption"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:prop_height_comment
+msgid "Omaduse K&otilde;rgus (height) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:prop_height_help
+msgid "Omaduse K&otilde;rgus (height) help"
+msgstr ""
+
 #: classes/contentmgmt/video.aw:prop_src_rp
 msgid "Omaduse URL (RealPlayer) (src_rp) caption"
 msgstr ""
@@ -122,20 +158,32 @@ msgstr ""
 msgid "Omaduse T&otilde;ge (trans) help"
 msgstr ""
 
-#: classes/contentmgmt/video.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/contentmgmt/video.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
 msgstr ""
 
-#: classes/contentmgmt/video.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/contentmgmt/video.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/contentmgmt/video.aw:group_trans
-msgid "Grupi Tõlkimine (trans) pealkiri"
+msgid "Grupi T&otilde;lkimine (trans) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/video.aw:group_trans_help
-msgid "Grupi Tõlkimine (trans) help"
+msgid "Grupi T&otilde;lkimine (trans) help"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/contentmgmt/video.aw:rel_RELTYPE_IMAGE

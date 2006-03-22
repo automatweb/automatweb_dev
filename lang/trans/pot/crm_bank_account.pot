@@ -50,14 +50,6 @@ msgstr ""
 msgid "Omaduse Pank (bank) help"
 msgstr ""
 
-#: classes/applications/crm/crm_bank_account.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/crm/crm_bank_account.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/crm/crm_bank_account.aw:rel_RELTYPE_BANK
 msgid "Seose pank (RELTYPE_BANK) tekst"
 msgstr ""

@@ -235,7 +235,7 @@ msgid "Grupi Tulemuste salvestamine (submit_after) help"
 msgstr ""
 
 #: classes/cfg/cb_search.aw:rel_RELTYPE_SYN
-msgid "Seose s&uuml;non&uuml;mid (RELTYPE_SYN) tekst"
+msgid "Seose s&amp;uuml;non&amp;uuml;mid (RELTYPE_SYN) tekst"
 msgstr ""
 
 #: classes/cfg/cb_search.aw:rel_RELTYPE_PARENT
@@ -259,7 +259,7 @@ msgid "Seose otsingu valideerimise kontroller (RELTYPE_SEARCH_VALID_CTR) tekst"
 msgstr ""
 
 #: classes/cfg/cb_search.aw:rel_RELTYPE_ADDITIONAL_OBJECT_TYPE
-msgid "Seose lisaks leitav objektit&uuml;&uuml;p (RELTYPE_ADDITIONAL_OBJECT_TYPE) tekst"
+msgid "Seose lisaks leitav objektit&amp;uuml;&amp;uuml;p (RELTYPE_ADDITIONAL_OBJECT_TYPE) tekst"
 msgstr ""
 
 #: classes/cfg/cb_search.aw:180

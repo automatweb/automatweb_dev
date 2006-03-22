@@ -27,15 +27,15 @@ msgid "Omaduse Tulbad (columns) help"
 msgstr ""
 
 #: classes/crm/crm_offer_compare_table.aw:prop_rows
-msgid "Omaduse Tulbad (rows) caption"
+msgid "Omaduse Read (rows) caption"
 msgstr ""
 
 #: classes/crm/crm_offer_compare_table.aw:prop_rows_comment
-msgid "Omaduse Tulbad (rows) kommentaar"
+msgid "Omaduse Read (rows) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_offer_compare_table.aw:prop_rows_help
-msgid "Omaduse Tulbad (rows) help"
+msgid "Omaduse Read (rows) help"
 msgstr ""
 
 #: classes/crm/crm_offer_compare_table.aw:prop_content

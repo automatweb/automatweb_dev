@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/class_base.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -82,51 +81,51 @@ msgstr ""
 msgid "Grupi &Uuml;ldine (general) help"
 msgstr ""
 
-#: classes/class_base.aw:580
+#: classes/class_base.aw:590
 msgid "Rohkem infot"
 msgstr ""
 
-#: classes/class_base.aw:581
+#: classes/class_base.aw:591
 msgid "Tõlgi"
 msgstr ""
 
-#: classes/class_base.aw:582
+#: classes/class_base.aw:592
 msgid "Peida ära"
 msgstr ""
 
-#: classes/class_base.aw:583
+#: classes/class_base.aw:593
 msgid "Abiinfo"
 msgstr ""
 
-#: classes/class_base.aw:629
+#: classes/class_base.aw:639
 msgid "tab panel"
 msgstr ""
 
-#: classes/class_base.aw:1274
+#: classes/class_base.aw:1284
 msgid "Muuda"
 msgstr ""
 
-#: classes/class_base.aw:1282
+#: classes/class_base.aw:1292
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1309
+#: classes/class_base.aw:1319
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1499 classes/class_base.aw:4746 classes/class_base.aw:4757
+#: classes/class_base.aw:1509 classes/class_base.aw:4758
+#: classes/class_base.aw:4769
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:3300
+#: classes/class_base.aw:3310
 msgid "See väli ei tohi olla tühi!"
 msgstr ""
 
-#: classes/class_base.aw:3309
+#: classes/class_base.aw:3319
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4643
+#: classes/class_base.aw:4655
 msgid "%s is not a valid configuration form!"
 msgstr ""
-

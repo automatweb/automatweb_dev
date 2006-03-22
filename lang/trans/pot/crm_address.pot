@@ -74,14 +74,6 @@ msgstr ""
 msgid "Omaduse Riik (riik) help"
 msgstr ""
 
-#: classes/crm/crm_address.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/crm/crm_address.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/crm/crm_address.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr ""
@@ -106,7 +98,11 @@ msgstr ""
 msgid "Seose Seosobjekt (RELTYPE_BELONGTO) tekst"
 msgstr ""
 
-#: classes/crm/crm_address.aw:136
+#: classes/crm/crm_address.aw:95
+msgid "Otsi postiindeksit"
+msgstr ""
+
+#: classes/crm/crm_address.aw:141
 msgid "tel:"
 msgstr ""
 

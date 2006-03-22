@@ -254,14 +254,6 @@ msgstr ""
 msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) help"
 msgstr ""
 
-#: classes/core/users/group.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/core/users/group.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/core/users/group.aw:group_dyn_search
 msgid "Grupi Otsing (dyn_search) pealkiri"
 msgstr ""
@@ -279,19 +271,19 @@ msgid "Grupi Import (import) help"
 msgstr ""
 
 #: classes/core/users/group.aw:group_objects
-msgid "Grupi Objektid ja Õigused (objects) pealkiri"
+msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
 msgstr ""
 
 #: classes/core/users/group.aw:group_objects_help
-msgid "Grupi Objektid ja Õigused (objects) help"
+msgid "Grupi Objektid ja &Otilde;igused (objects) help"
 msgstr ""
 
 #: classes/core/users/group.aw:group_admin_rm
-msgid "Grupi Admin rootmenüü (admin_rm) pealkiri"
+msgid "Grupi Admin rootmen&uuml;&uuml; (admin_rm) pealkiri"
 msgstr ""
 
 #: classes/core/users/group.aw:group_admin_rm_help
-msgid "Grupi Admin rootmenüü (admin_rm) help"
+msgid "Grupi Admin rootmen&uuml;&uuml; (admin_rm) help"
 msgstr ""
 
 #: classes/core/users/group.aw:rel_RELTYPE_SEARCHFORM
@@ -363,19 +355,23 @@ msgstr ""
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:569
+#: classes/core/users/group.aw:560
+msgid "--vali--"
+msgstr ""
+
+#: classes/core/users/group.aw:581
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:594
+#: classes/core/users/group.aw:607
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:785
+#: classes/core/users/group.aw:798
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:831
+#: classes/core/users/group.aw:844
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 

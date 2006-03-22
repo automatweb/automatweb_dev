@@ -324,22 +324,22 @@ msgstr ""
 msgid "siit"
 msgstr ""
 
-#: classes/core/language.aw:251
+#: classes/core/language.aw:255
 msgid "Keel"
 msgstr ""
 
-#: classes/core/language.aw:256
+#: classes/core/language.aw:260
 msgid "Staatus"
 msgstr ""
 
-#: classes/core/language.aw:261
+#: classes/core/language.aw:265
 msgid "Valitud"
 msgstr ""
 
-#: classes/core/language.aw:305
+#: classes/core/language.aw:309
 msgid "Muutuja nimi"
 msgstr ""
 
-#: classes/core/language.aw:310
+#: classes/core/language.aw:314
 msgid "Muutuja v&auml;&auml;rtus"
 msgstr ""

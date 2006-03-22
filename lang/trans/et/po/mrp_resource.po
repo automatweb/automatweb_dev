@@ -364,7 +364,7 @@ msgstr ""
 msgid "Suletud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:159 classes/mrp/mrp_resource.aw:1429
+#: classes/mrp/mrp_resource.aw:159 classes/mrp/mrp_resource.aw:1454
 msgid "Uus"
 msgstr ""
 
@@ -432,70 +432,70 @@ msgstr ""
 msgid "Ressurss on allhange"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:430
+#: classes/mrp/mrp_resource.aw:455
 msgid "Seda tüüpi kordust ei saa kasutada. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:446
+#: classes/mrp/mrp_resource.aw:471
 msgid "Viga kellaaja määrangus. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:459
+#: classes/mrp/mrp_resource.aw:484
 msgid "Pikkus ei saa olla suurem kui korduse periood. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:464
+#: classes/mrp/mrp_resource.aw:489
 msgid "Pikkus ei saa olla null. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:472
+#: classes/mrp/mrp_resource.aw:497
 msgid "'Alates' peab olema varasem aeg kui 'Kuni'. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:490
+#: classes/mrp/mrp_resource.aw:515
 msgid "Ressurss on kasutusel. Ei saa hooldusse panna. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:548 classes/mrp/mrp_resource.aw:685
+#: classes/mrp/mrp_resource.aw:573 classes/mrp/mrp_resource.aw:710
 msgid "Ava"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:553
+#: classes/mrp/mrp_resource.aw:578
 msgid "Staatus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:559
+#: classes/mrp/mrp_resource.aw:584
 msgid "Projekti nr."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:566
+#: classes/mrp/mrp_resource.aw:591
 msgid "Klient"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:573
+#: classes/mrp/mrp_resource.aw:598
 msgid "Projekti nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:580
+#: classes/mrp/mrp_resource.aw:605
 msgid "Tr&uuml;kitud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:590
+#: classes/mrp/mrp_resource.aw:615
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:600
+#: classes/mrp/mrp_resource.aw:625
 msgid "Tr&uuml;kiarv"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:609
+#: classes/mrp/mrp_resource.aw:634
 msgid "Tr&uuml;kiarv Notes"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1370
+#: classes/mrp/mrp_resource.aw:1395
 msgid "Ressurss on valitud aegadel kasutuses:<br>"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1389 classes/mrp/mrp_resource.aw:1408
+#: classes/mrp/mrp_resource.aw:1414 classes/mrp/mrp_resource.aw:1433
 msgid "Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>"
 msgstr ""

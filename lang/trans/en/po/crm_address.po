@@ -117,7 +117,11 @@ msgstr "County"
 msgid "Seose Seosobjekt (RELTYPE_BELONGTO) tekst"
 msgstr "belongs to"
 
-#: classes/crm/crm_address.aw:136
+#: classes/crm/crm_address.aw:95
+msgid "Otsi postiindeksit"
+msgstr ""
+
+#: classes/crm/crm_address.aw:141
 msgid "tel:"
 msgstr "phone:"
 

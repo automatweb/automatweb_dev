@@ -170,14 +170,6 @@ msgstr ""
 msgid "Omaduse  (search_res) help"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/register/register_search.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/register/register_search.aw:group_mkfrm
 msgid "Grupi Koosta otsinguvorm (mkfrm) pealkiri"
 msgstr ""
@@ -258,19 +250,19 @@ msgstr ""
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:821
+#: classes/applications/register/register_search.aw:850
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:835
+#: classes/applications/register/register_search.aw:864
 msgid "Vaata"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:846
+#: classes/applications/register/register_search.aw:875
 msgid "Kustutada objekt?"
 msgstr ""
 
-#: classes/applications/register/register_search.aw:847
+#: classes/applications/register/register_search.aw:876
 msgid "Kustuta"
 msgstr ""
 

@@ -291,22 +291,22 @@ msgstr "image"
 msgid "siit"
 msgstr "here"
 
-#: classes/core/language.aw:251
+#: classes/core/language.aw:255
 msgid "Keel"
 msgstr "Language"
 
-#: classes/core/language.aw:256
+#: classes/core/language.aw:260
 msgid "Staatus"
 msgstr "Status"
 
-#: classes/core/language.aw:261
+#: classes/core/language.aw:265
 msgid "Valitud"
 msgstr "Selected"
 
-#: classes/core/language.aw:305
+#: classes/core/language.aw:309
 msgid "Muutuja nimi"
 msgstr "Variable name"
 
-#: classes/core/language.aw:310
+#: classes/core/language.aw:314
 msgid "Muutuja v&auml;&auml;rtus"
 msgstr "Variable value"

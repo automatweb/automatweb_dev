@@ -14,11 +14,3 @@ msgstr ""
 msgid "Klassi Expp liigi list help"
 msgstr ""
 
-#: classes/expp/expp_liik_list.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/expp/expp_liik_list.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
