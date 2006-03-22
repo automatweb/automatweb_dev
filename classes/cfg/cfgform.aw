@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.81 2006/03/20 08:55:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.82 2006/03/22 09:26:10 ahti Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -114,8 +114,8 @@
 	@reltype PROP_GROUP value=1 clid=CL_MENU
 	@caption omaduste kataloog
 
-	@reltype ELEMENT value=2 clid=CL_RTE
-	@caption element
+	reltype ELEMENT value=2 clid=CL_RTE
+	caption element
 
 	@reltype CONTROLLER value=3 clid=CL_CFGCONTROLLER
 	@caption Salvestamise kontroller

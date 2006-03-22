@@ -406,11 +406,6 @@
                   <clid>CL_MENU</clid>
                   <caption>omaduste kataloog</caption>
             </PROP_GROUP>
-            <ELEMENT>
-                  <value>2</value>
-                  <clid>CL_RTE</clid>
-                  <caption>element</caption>
-            </ELEMENT>
             <CONTROLLER>
                   <value>3</value>
                   <clid>CL_CFGCONTROLLER</clid>
