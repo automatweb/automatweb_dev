@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.17 2006/03/22 13:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.18 2006/03/22 14:14:08 kristo Exp $
 // bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -585,10 +585,11 @@ class bug extends class_base
 	function get_priority_list()
 	{
 		$res = array();
-		foreach(range(1, 5) as $r)
-		{
-			$res[$r] = $r;
-		}
+		$res[1] = "1 (Madalaim)";
+		$res[2] = "2";
+		$res[3] = "3";
+		$res[4] = "4";
+		$res[5] = "5 (K&otilde;rgeim)";
 		return $res;
 	}
 
