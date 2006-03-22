@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.12 2006/03/16 15:15:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.13 2006/03/22 13:50:44 kristo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -70,13 +70,19 @@ class toolbar extends aw_template
 			$arr["url"] = "javascript:submit_changeform('$arr[action]');";
 		};
 
+		$id = "";
+		if (!empty($arr["href_id"]))
+		{
+			$id = "id='$arr[href_id]'";
+		}
+
 		if (empty($arr["disabled"]))
 		{
-			$rv ='<a class="menuItem" href="'.$arr["url"].'" '.$arr["onClick"].'>'.$arr["text"]."</a>\n";
+			$rv ='<a '.$id.' class="menuItem" href="'.$arr["url"].'" '.$arr["onClick"].'>'.$arr["text"]."</a>\n";
 		}
 		else
 		{
-			$rv = '<a class="menuItem" href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
+			$rv = '<a '.$id.' class="menuItem" href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
 		}
 		$this->menus[$arr["parent"]] .= $rv;
 	}

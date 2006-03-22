@@ -78,5 +78,12 @@
 			</function>
 		</action>
 
+		<action name="list_only_fetch" all_args="1">
+			<function name="list_only_fetch">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

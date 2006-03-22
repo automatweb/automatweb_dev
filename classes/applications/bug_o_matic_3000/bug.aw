@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.16 2006/03/22 11:19:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.17 2006/03/22 13:50:44 kristo Exp $
 // bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -541,10 +541,13 @@ class bug extends class_base
 		$com_str = "";
 		foreach($ol->arr() as $com)
 		{
+			$comt = $com->comment();
+			$comt = preg_replace("/(http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<]*)/ims", "<a href='\\1'>Diff</a>", $comt);
+
 			$this->vars(array(
 				"com_adder" => $com->createdby(),
 				"com_date" => date("d.m.Y H:i", $com->created()),
-				"com_text" => $com->comment()
+				"com_text" => $comt
 			));
 			$com_str .= $this->parse("COMMENT");
 		}

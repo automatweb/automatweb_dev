@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.59 2006/03/16 15:15:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.60 2006/03/22 13:50:44 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -727,7 +727,6 @@ class treeview extends class_base
 
 		$this->level++;
 		$result = "";
-
 		foreach($data as $item)
 		{
 			$subres = $this->draw_dhtml_tree($item["id"]);
@@ -757,12 +756,18 @@ class treeview extends class_base
 				$name = "<strong>$name</strong>";
 			};
 
+			$oncl = "";
+			if ($item["onClick"] != "")
+			{
+				$oncl="onClick=\"".$item["onClick"]."\"";
+			}
 			$url_target = !isset($item["url_target"]) ? $this->tree_dat["url_target"] : $item["url_target"];
 			$this->vars(array(
 				"name" => $name,
 				"id" => $item["id"],
 				"iconurl" => $iconurl,
 				"url" => $item["url"],
+				"onClick" => $oncl,
 				// spacer is only used for purely aesthetic reasons - to make
 				// source of the page look better
 				"spacer" => str_repeat("    ",$this->level),

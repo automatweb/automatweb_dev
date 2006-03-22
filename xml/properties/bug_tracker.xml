@@ -76,10 +76,9 @@
                   <num_5>by_class</num_5>
                   <num_6>by_cust</num_6>
             </group>
-            <type>table</type>
+            <type>text</type>
             <parent>bug</parent>
             <no_caption>1</no_caption>
-            <store>no</store>
             <field>bug_list</field>
       </property>
       <property>

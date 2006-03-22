@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.30 2006/03/22 11:19:07 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.30 2006/03/22 11:19:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.31 2006/03/22 13:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.31 2006/03/22 13:50:44 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -29,7 +29,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@layout bug type=hbox width=15%:85%
 		@property bug_tree type=treeview parent=bug no_caption=1
-		@property bug_list type=table parent=bug no_caption=1 group=bugs,archive,by_default,by_project,by_who,by_class,by_cust
+		@property bug_list type=text parent=bug no_caption=1 group=bugs,archive,by_default,by_project,by_who,by_class,by_cust
 
 
 @default group=search
@@ -282,7 +282,8 @@ class bug_tracker extends class_base
 			"text" => t("Bugi"),
 			"link" => html::get_new_url(CL_BUG, $pt, array(
 				"return_url" => get_ru(),
-			))
+			)),
+			"href_id" => "add_bug_href"
 		));
 
 		/*$tb->add_menu_item(array(
@@ -638,10 +639,11 @@ class bug_tracker extends class_base
 			$subtree_count = (count($ol_list) > 0)?" (".count($ol_list).")":"";
 
 			$nm = $this->name_cut($object->name()).$subtree_count;
-			if ($_GET["b_id"] == $obj_id)
+			if (false && $_GET["b_id"] == $obj_id)
 			{
 				$nm = "<b>".$nm."</b>";
 			}
+
 			$node_tree->add_item(0 ,array(
 				"id" => $obj_id,
 				"name" => $nm."  (".html::get_change_url($obj_id, array("return_url" => get_ru()), t("<span style='font-size: 8px;'>Muuda</span>")).")",
@@ -650,6 +652,7 @@ class bug_tracker extends class_base
 					"group" => $arr["active_group"],
 					"b_id" => $obj_id,
 				)),
+				"onClick" => "do_bt_table_switch($obj_id, this);return false;"
 			));
 
 			foreach($ol_list as $sub_id => $sub_obj)
@@ -657,6 +660,7 @@ class bug_tracker extends class_base
 				$node_tree->add_item( $obj_id, array(
 					"id" => $sub_id,
 					"name" => $sub_obj->name()." (".html::get_change_url($sub_id, array("return_url" => get_ru()), t("<span style='font-size: 8px;'>Muuda</span>")).")",
+					"onClick" => "do_bt_table_switch($sub_id, this);return false;"
 				));
 			}
 		}
@@ -876,6 +880,7 @@ class bug_tracker extends class_base
 			$this->tree->add_item($arr["parent"] , array(
 				"id" => $obj_id,
 				"name" => $nm." ".html::get_change_url($obj_id, array("return_url" => get_ru()), t("Muuda")),
+				"onClick" => "do_bt_table_switch($obj_id);return false;"
 			));
 		}
 	}
@@ -1155,7 +1160,8 @@ class bug_tracker extends class_base
 
 	function _bug_list($arr)
 	{
-		$t =& $arr["prop"]["vcl_inst"];
+		classload("vcl/table");
+		$t = new vcl_table;
 		$this->_init_bug_list_tbl($t);
 
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
@@ -1227,6 +1233,12 @@ class bug_tracker extends class_base
 		}
 
 		$this->populate_bug_list_table_from_list($t, $ol);		
+		$t->sort_by();
+		$arr["prop"]["value"] = "<span id=\"bug_table\">".$t->draw()."</table>";
+		if ($arr["request"]["tb_only"] == 1)
+		{
+			die($t->draw());
+		}
 	}
 
 	function populate_bug_list_table_from_list(&$t, $ol, $params = array())
@@ -1607,6 +1619,54 @@ class bug_tracker extends class_base
 				"idx" => $idx
 			));
 		}
+	}
+
+	function callback_generate_scripts($arr)
+	{
+		unset($arr["request"]["class"]);
+		unset($arr["request"]["action"]);
+		$url = $this->mk_my_orb("list_only_fetch", $arr["request"]);
+
+		$new_url = $this->mk_my_orb("new", array(
+			"return_url" => get_ru()
+		), CL_BUG);
+
+		return "
+		var last_bold_node;
+		var last_bold_node_cont;
+		function do_bt_table_switch(bugid, that) 
+		{ 
+			url = '$url&b_id='+bugid;
+			el = document.getElementById('bug_table');
+			el.innerHTML=aw_get_url_contents(url);
+			document.changeform.b_id.value=bugid;
+			new_el = document.getElementById('add_bug_href');
+			new_el.href = '$new_url&parent='+bugid;
+
+			if (last_bold_node)
+			{
+				last_bold_node.innerHTML=last_bold_node_cont;
+			}
+
+			last_bold_node = that;
+			last_bold_node_cont = that.innerHTML;
+			that.innerHTML= '<b>'+that.innerHTML+'</b>';
+		}";
+	}
+
+	/**
+		@attrib name=list_only_fetch all_args=1
+	**/
+	function list_only_fetch($arr)
+	{
+		$p = array();
+		$val = $this->_bug_list(array(
+			"prop" => &$p,
+			"request" => $arr,
+			"obj_inst" => obj($arr["id"]),
+		));
+		header("Content-type: text/html; charset=".aw_global_get("charset"));
+		die($p["value"]);
 	}
 }
 ?>
