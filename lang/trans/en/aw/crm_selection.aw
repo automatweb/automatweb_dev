@@ -3,7 +3,6 @@ $GLOBALS["TRANS"]["Omaduse Näitamise template (template) caption"] = "Diaply tem
 $GLOBALS["TRANS"]["Omaduse Tagasiside vormid (forms) caption"] = "Feedback forms";
 $GLOBALS["TRANS"]["Omaduse Objektide toolbar (selection_toolbar) caption"] = "Objects toolbar";
 $GLOBALS["TRANS"]["Omaduse Objektid (selection_objects) caption"] = "Objects";
-$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Objektid (contents) pealkiri"] = "Objects";
 $GLOBALS["TRANS"]["Grupi Näita (preview) pealkiri"] = "Display";
 $GLOBALS["TRANS"]["Seose Tagasisidevorm (RELTYPE_BACKFORMS2) tekst"] = "Feedback form";

@@ -1,21 +1,17 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Number (bill_no) caption"] = "Invoice no";
+$GLOBALS["TRANS"]["Omaduse Klient (customer) caption"] = "Customer";
 $GLOBALS["TRANS"]["Omaduse Kuup&auml;ev (bill_date) caption"] = "Date";
 $GLOBALS["TRANS"]["Omaduse Makset&auml;htaeg (p&auml;evi) (bill_due_date_days) caption"] = "Due days";
 $GLOBALS["TRANS"]["Omaduse Tasumise kuup&auml;ev (bill_due_date) caption"] = "Due date";
 $GLOBALS["TRANS"]["Omaduse Laekumiskuup&auml;ev (bill_recieved) caption"] = "Date of payment";
-$GLOBALS["TRANS"]["Omaduse Klient (customer) caption"] = "Customer";
-$GLOBALS["TRANS"]["Omaduse Teostaja (impl) caption"] = "Implementor";
 $GLOBALS["TRANS"]["Omaduse Staatus (state) caption"] = "Status";
-$GLOBALS["TRANS"]["Omaduse M&auml;rkused (notes) caption"] = "Notes";
-$GLOBALS["TRANS"]["Omaduse Kuuarve (monthly_bill) caption"] = "Monthly Invoice";
-$GLOBALS["TRANS"]["Omaduse Valuuta (currency) caption"] = "Currency";
-$GLOBALS["TRANS"]["Omaduse Keel (language) caption"] = "Language";
-$GLOBALS["TRANS"]["Omaduse Arveread  (bill_rows) caption"] = "Invoice rows";
 $GLOBALS["TRANS"]["Omaduse Allahindlus (%) (disc) caption"] = "Discount (%)";
 $GLOBALS["TRANS"]["Omaduse Summa (sum) caption"] = "Sum";
+$GLOBALS["TRANS"]["Omaduse Kuuarve (monthly_bill) caption"] = "Monthly Invoice";
+$GLOBALS["TRANS"]["Omaduse Keel (language) caption"] = "Language";
+$GLOBALS["TRANS"]["Omaduse Arveread  (bill_rows) caption"] = "Invoice rows";
 $GLOBALS["TRANS"]["Omaduse  (preview) caption"] = "Preview";
-$GLOBALS["TRANS"]["Omaduse  (task_list) caption"] = "Task list";
 $GLOBALS["TRANS"]["Grupi Toimetused (tasks) pealkiri"] = "Tasks";
 $GLOBALS["TRANS"]["Grupi Toimetused (tasks) help"] = "Tasks";
 $GLOBALS["TRANS"]["Grupi Eelvaade (preview) pealkiri"] = "Preview";

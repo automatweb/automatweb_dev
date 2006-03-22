@@ -1,12 +1,11 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Ametikoht (profession) caption"] = "Profession";
 $GLOBALS["TRANS"]["Omaduse Konkursi tähtaeg (deadline) caption"] = "Deadline";
 $GLOBALS["TRANS"]["Omaduse Konkursi algusaeg (beginning) caption"] = "Start time";
-$GLOBALS["TRANS"]["Seose Üksus (RELTYPE_SECTION) tekst"] = "Section";
+$GLOBALS["TRANS"]["Omaduse Ametikoht (profession) caption"] = "Profession";
+$GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Kustuta fail"] = "Delete file";
 $GLOBALS["TRANS"]["Salvesta hinded"] = "Save grades";
 $GLOBALS["TRANS"]["Kustuta kandieerijad"] = "Delete applicants";
-$GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Kuupäev"] = "Date";
 $GLOBALS["TRANS"]["Kaaskiri"] = "Additional letter";
 $GLOBALS["TRANS"]["Hinne"] = "Grade";

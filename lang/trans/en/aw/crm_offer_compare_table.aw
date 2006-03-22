@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Tulbad (columns) caption"] = "Columns";
-$GLOBALS["TRANS"]["Omaduse Tulbad (rows) caption"] = "Columns";
 $GLOBALS["TRANS"]["Grupi Tulbad (columns) pealkiri"] = "Columns";
 $GLOBALS["TRANS"]["Grupi Read (rows) pealkiri"] = "Rows";
 $GLOBALS["TRANS"]["Grupi Sisu (content) pealkiri"] = "Content";

@@ -12,6 +12,7 @@ $GLOBALS["TRANS"]["Omaduse Aktiivse keele pilt (lang_img_act) caption"] = "Activ
 $GLOBALS["TRANS"]["Omaduse Esilehe nimi (fp_text) caption"] = "Frontpage name";
 $GLOBALS["TRANS"]["Omaduse Ajutine AW-v&auml;line aadress sisse logimata kasutajatele (temp_redir_url) caption"] = "Temporary address for not logged in users";
 $GLOBALS["TRANS"]["Omaduse Keeled (langs) caption"] = "Languages";
+$GLOBALS["TRANS"]["Grupi K&otilde;ik keeled (langs) pealkiri"] = "All languages";
 $GLOBALS["TRANS"]["Grupi Tekstid (texts) pealkiri"] = "Texts";
 $GLOBALS["TRANS"]["Seose pilt (RELTYPE_IMAGE) tekst"] = "image";
 $GLOBALS["TRANS"]["siit"] = "here";

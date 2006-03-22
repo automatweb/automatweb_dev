@@ -13,10 +13,8 @@ $GLOBALS["TRANS"]["Edasi eelvaatele"] = "Proceed to preview";
 $GLOBALS["TRANS"]["Viga"] = "Error";
 $GLOBALS["TRANS"]["Kaart saadetud"] = "Card sent";
 $GLOBALS["TRANS"]["Kaart salvestatud"] = "Card saved";
-$GLOBALS["TRANS"]["Väli peab olema täidetud"] = "Field must be filled in";
 $GLOBALS["TRANS"]["Teie e-posti aadress vigane"] = "Error in your e-mail address";
 $GLOBALS["TRANS"]["Saaja e-posti aadress vigane"] = "Error in e-mail address of recipient";
-$GLOBALS["TRANS"]["Kuupäev vigane"] = "Error in date";
 $GLOBALS["TRANS"]["Saada"] = "Send";
 $GLOBALS["TRANS"]["Tagasi"] = "Back";
 ?>

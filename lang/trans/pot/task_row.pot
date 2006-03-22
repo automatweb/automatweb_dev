@@ -1,0 +1,152 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/groupware/task_row.aw:class_1050_help
+msgid "Klassi Toimetuse rida help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_content
+msgid "Omaduse Sisu (content) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_content_comment
+msgid "Omaduse Sisu (content) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_content_help
+msgid "Omaduse Sisu (content) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_date
+msgid "Omaduse Kuup&auml;ev (date) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_date_comment
+msgid "Omaduse Kuup&auml;ev (date) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_date_help
+msgid "Omaduse Kuup&auml;ev (date) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_impl
+msgid "Omaduse Teostaja (impl) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_impl_comment
+msgid "Omaduse Teostaja (impl) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_impl_help
+msgid "Omaduse Teostaja (impl) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_guess
+msgid "Omaduse Prognoositud tunde (time_guess) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_guess_comment
+msgid "Omaduse Prognoositud tunde (time_guess) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_guess_help
+msgid "Omaduse Prognoositud tunde (time_guess) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_real
+msgid "Omaduse Kulunud tunde (time_real) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_real_comment
+msgid "Omaduse Kulunud tunde (time_real) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_real_help
+msgid "Omaduse Kulunud tunde (time_real) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_to_cust
+msgid "Omaduse Tunde kliendile (time_to_cust) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_to_cust_comment
+msgid "Omaduse Tunde kliendile (time_to_cust) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_to_cust_help
+msgid "Omaduse Tunde kliendile (time_to_cust) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_done
+msgid "Omaduse Tehtud (done) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_done_comment
+msgid "Omaduse Tehtud (done) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_done_help
+msgid "Omaduse Tehtud (done) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_on_bill
+msgid "Omaduse Arvele (on_bill) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_on_bill_comment
+msgid "Omaduse Arvele (on_bill) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_on_bill_help
+msgid "Omaduse Arvele (on_bill) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_bill_id
+msgid "Omaduse Arve (bill_id) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_bill_id_comment
+msgid "Omaduse Arve (bill_id) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_bill_id_help
+msgid "Omaduse Arve (bill_id) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_comments
+msgid "Omaduse Kommentaarid (comments) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_comments_comment
+msgid "Omaduse Kommentaarid (comments) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_comments_help
+msgid "Omaduse Kommentaarid (comments) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:rel_RELTYPE_BILL
+msgid "Seose Arve (RELTYPE_BILL) tekst"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:rel_RELTYPE_IMPL
+msgid "Seose Teostaja (RELTYPE_IMPL) tekst"
+msgstr ""
+

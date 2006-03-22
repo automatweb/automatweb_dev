@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/mrp/mrp_resource.aw:class_825_help
 msgid "Klassi Ressurss help"
 msgstr ""
@@ -183,27 +182,41 @@ msgid "Omaduse Kinnised ajad (unavailable_recur) help"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:prop_unavailable_weekends
-msgid "Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) caption"
+msgid ""
+"Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) "
+"caption"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:prop_unavailable_weekends_comment
-msgid "Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) kommentaar"
+msgid ""
+"Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) "
+"kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:prop_unavailable_weekends_help
-msgid "Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) help"
+msgid ""
+"Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) help"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:prop_unavailable_dates
-msgid "Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /> ...) (unavailable_dates) caption"
+msgid ""
+"Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, "
+"h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - "
+"p.k, h:m;</span><br /> ...) (unavailable_dates) caption"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:prop_unavailable_dates_comment
-msgid "Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /> ...) (unavailable_dates) kommentaar"
+msgid ""
+"Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, "
+"h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - "
+"p.k, h:m;</span><br /> ...) (unavailable_dates) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:prop_unavailable_dates_help
-msgid "Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - p.k, h:m;</span><br /> ...) (unavailable_dates) help"
+msgid ""
+"Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, "
+"h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - "
+"p.k, h:m;</span><br /> ...) (unavailable_dates) help"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:group_grp_resource_schedule
@@ -290,7 +303,7 @@ msgstr ""
 msgid "Suletud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:159 classes/mrp/mrp_resource.aw:1429
+#: classes/mrp/mrp_resource.aw:159 classes/mrp/mrp_resource.aw:1454
 msgid "Uus"
 msgstr ""
 
@@ -358,71 +371,70 @@ msgstr ""
 msgid "Ressurss on allhange"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:430
+#: classes/mrp/mrp_resource.aw:455
 msgid "Seda tüüpi kordust ei saa kasutada. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:446
+#: classes/mrp/mrp_resource.aw:471
 msgid "Viga kellaaja määrangus. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:459
+#: classes/mrp/mrp_resource.aw:484
 msgid "Pikkus ei saa olla suurem kui korduse periood. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:464
+#: classes/mrp/mrp_resource.aw:489
 msgid "Pikkus ei saa olla null. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:472
+#: classes/mrp/mrp_resource.aw:497
 msgid "'Alates' peab olema varasem aeg kui 'Kuni'. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:490
+#: classes/mrp/mrp_resource.aw:515
 msgid "Ressurss on kasutusel. Ei saa hooldusse panna. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:548 classes/mrp/mrp_resource.aw:685
+#: classes/mrp/mrp_resource.aw:573 classes/mrp/mrp_resource.aw:710
 msgid "Ava"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:553
+#: classes/mrp/mrp_resource.aw:578
 msgid "Staatus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:559
+#: classes/mrp/mrp_resource.aw:584
 msgid "Projekti nr."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:566
+#: classes/mrp/mrp_resource.aw:591
 msgid "Klient"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:573
+#: classes/mrp/mrp_resource.aw:598
 msgid "Projekti nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:580
+#: classes/mrp/mrp_resource.aw:605
 msgid "Tr&uuml;kitud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:590
+#: classes/mrp/mrp_resource.aw:615
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:600
+#: classes/mrp/mrp_resource.aw:625
 msgid "Tr&uuml;kiarv"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:609
+#: classes/mrp/mrp_resource.aw:634
 msgid "Tr&uuml;kiarv Notes"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1370
+#: classes/mrp/mrp_resource.aw:1395
 msgid "Ressurss on valitud aegadel kasutuses:<br>"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1389 classes/mrp/mrp_resource.aw:1408
+#: classes/mrp/mrp_resource.aw:1414 classes/mrp/mrp_resource.aw:1433
 msgid "Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>"
 msgstr ""
-

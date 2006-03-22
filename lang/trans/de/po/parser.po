@@ -1,0 +1,32 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/core/aw_code_analyzer/parser.aw:174
+msgid "class count = %s <br />\nfunction count = %s <br />\nMaximum brace depth = %s \n<br />max level in file %s on line %s <br />\n"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/parser.aw:327
+msgid "error - end of file after class in line %s <br />"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/parser.aw:584
+msgid "error in p_get_string (line: %s , pos = %s ) , called without string start <br />\n"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/parser.aw:610
+msgid "error in line %s file ended with open string! <br />\n"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/parser.aw:661 classes/core/aw_code_analyzer/parser.aw:715
+msgid "copy of %s to %s failed, stopping <br />\n"
+msgstr ""
+

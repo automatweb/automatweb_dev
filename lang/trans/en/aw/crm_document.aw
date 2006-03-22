@@ -10,5 +10,4 @@ $GLOBALS["TRANS"]["Omaduse Koostamise kuup&auml;ev (make_date) caption"] = "Crea
 $GLOBALS["TRANS"]["Omaduse Registreerimisnumber (reg_nr) caption"] = "Registration no";
 $GLOBALS["TRANS"]["Omaduse Kirjeldus (comment) caption"] = "Description";
 $GLOBALS["TRANS"]["Omaduse Failid (files) caption"] = "Files";
-$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 ?>

@@ -13,7 +13,6 @@ $GLOBALS["TRANS"]["Grupi Nimekiri (survey_list) pealkiri"] = "List";
 $GLOBALS["TRANS"]["Grupi Otsing (survey_search) pealkiri"] = "Search";
 $GLOBALS["TRANS"]["Seose Kataloog (RELTYPE_SURVEY_FOLDER) tekst"] = "Folder";
 $GLOBALS["TRANS"]["Seose Seadete vorm (RELTYPE_SURVEY_CFGFORM) tekst"] = "Configuration form";
-$GLOBALS["TRANS"]["Seose Kuhu peale täitmist suunata (RELTYPE_REDIRECT_TO) tekst"] = "Redirect after";
 $GLOBALS["TRANS"]["Kustuta valitud ankeedid"] = "Delete selected surveys";
 $GLOBALS["TRANS"]["Kustutada valitud ankeedid?"] = "Delete selected surveys?";
 $GLOBALS["TRANS"]["Ekspordi ankeedid"] = "Export surveys";

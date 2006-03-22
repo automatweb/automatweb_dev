@@ -4,7 +4,6 @@ $GLOBALS["TRANS"]["Omaduse Postiindeks (postiindeks) caption"] = "Postal code";
 $GLOBALS["TRANS"]["Omaduse Linn/Vald/Alev (linn) caption"] = "City/State/Village";
 $GLOBALS["TRANS"]["Omaduse Maakond (maakond) caption"] = "County";
 $GLOBALS["TRANS"]["Omaduse Riik (riik) caption"] = "State";
-$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Seadistused (settings) pealkiri"] = "Settings";
 $GLOBALS["TRANS"]["Seose Linn (RELTYPE_LINN) tekst"] = "City";
 $GLOBALS["TRANS"]["Seose Riik (RELTYPE_RIIK) tekst"] = "State";

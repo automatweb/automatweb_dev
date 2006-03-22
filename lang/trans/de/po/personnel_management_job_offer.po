@@ -1,0 +1,280 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:class_285_help
+msgid "Klassi Tööpakkumine help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_company
+msgid "Omaduse Organisatsioon (company) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_company_comment
+msgid "Omaduse Organisatsioon (company) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_company_help
+msgid "Omaduse Organisatsioon (company) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_contact
+msgid "Omaduse Kontaktisik (contact) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_contact_comment
+msgid "Omaduse Kontaktisik (contact) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_contact_help
+msgid "Omaduse Kontaktisik (contact) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline
+msgid "Omaduse Konkursi tähtaeg (deadline) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline_comment
+msgid "Omaduse Konkursi tähtaeg (deadline) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline_help
+msgid "Omaduse Konkursi tähtaeg (deadline) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning
+msgid "Omaduse Konkursi algusaeg (beginning) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning_comment
+msgid "Omaduse Konkursi algusaeg (beginning) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning_help
+msgid "Omaduse Konkursi algusaeg (beginning) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession
+msgid "Omaduse Ametikoht (profession) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession_comment
+msgid "Omaduse Ametikoht (profession) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession_help
+msgid "Omaduse Ametikoht (profession) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_location
+msgid "Omaduse Asukoht (location) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_location_comment
+msgid "Omaduse Asukoht (location) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_location_help
+msgid "Omaduse Asukoht (location) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_tests
+msgid "Omaduse Testid (tests) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_tests_comment
+msgid "Omaduse Testid (tests) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_tests_help
+msgid "Omaduse Testid (tests) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_workinfo
+msgid "Omaduse Töö sisu (workinfo) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_workinfo_comment
+msgid "Omaduse Töö sisu (workinfo) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_workinfo_help
+msgid "Omaduse Töö sisu (workinfo) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_requirements
+msgid "Omaduse Nõudmised kandidaadile (requirements) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_requirements_comment
+msgid "Omaduse Nõudmised kandidaadile (requirements) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_requirements_help
+msgid "Omaduse Nõudmised kandidaadile (requirements) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_suplementary
+msgid "Omaduse Kasuks tuleb (suplementary) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_suplementary_comment
+msgid "Omaduse Kasuks tuleb (suplementary) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_suplementary_help
+msgid "Omaduse Kasuks tuleb (suplementary) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_weoffer
+msgid "Omaduse Omalt poolt pakume (weoffer) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_weoffer_comment
+msgid "Omaduse Omalt poolt pakume (weoffer) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_weoffer_help
+msgid "Omaduse Omalt poolt pakume (weoffer) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_info
+msgid "Omaduse Lisainfo (info) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_info_comment
+msgid "Omaduse Lisainfo (info) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_info_help
+msgid "Omaduse Lisainfo (info) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_candidate_toolbar
+msgid "Omaduse  (candidate_toolbar) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_candidate_toolbar_comment
+msgid "Omaduse  (candidate_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_candidate_toolbar_help
+msgid "Omaduse  (candidate_toolbar) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_candidate_table
+msgid "Omaduse  (candidate_table) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_candidate_table_comment
+msgid "Omaduse  (candidate_table) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_candidate_table_help
+msgid "Omaduse  (candidate_table) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_info4
+msgid "Omaduse Lisainfo (info4) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_info4_comment
+msgid "Omaduse Lisainfo (info4) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_info4_help
+msgid "Omaduse Lisainfo (info4) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:group_candidate
+msgid "Grupi Kandideerimised (candidate) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:group_candidate_help
+msgid "Grupi Kandideerimised (candidate) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:group_preview
+msgid "Grupi Eelvaade (preview) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:group_preview_help
+msgid "Grupi Eelvaade (preview) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_TEST
+msgid "Seose Test (RELTYPE_TEST) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_ORG
+msgid "Seose Organisatsioon (RELTYPE_ORG) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_LOCATION
+msgid "Seose Asukoht (RELTYPE_LOCATION) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_CONTACT
+msgid "Seose Kontaktisik (RELTYPE_CONTACT) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_CANDIDATE
+msgid "Seose Kandidatuur (RELTYPE_CANDIDATE) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:215
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:223 classes/applications/personnel_management/personnel_management_job_offer.aw:394 classes/applications/personnel_management/personnel_management_job_offer.aw:582
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:312
+msgid "Kustuta fail"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:371
+msgid "Salvesta hinded"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:378
+msgid "Kustuta kandieerijad"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:401
+msgid "Kuupäev"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:407
+msgid "Kaaskiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:413
+msgid "Hinne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:449
+msgid "kaaskiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:455
+msgid "Puudub"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:495
+msgid "Genereeri pdf"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:588
+msgid "Vaatamisi"
+msgstr ""
+

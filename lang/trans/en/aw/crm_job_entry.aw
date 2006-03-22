@@ -1,8 +1,8 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Kliendi andmed (cust_d) caption"] = "Customer data";
 $GLOBALS["TRANS"]["Omaduse Vali olemasolev klient (sel_cust) caption"] = "Select customer";
-$GLOBALS["TRANS"]["Omaduse Nimetus (cust_n) caption"] = "Customer name";
 $GLOBALS["TRANS"]["Omaduse &Otilde;iguslik vorm (ettevotlusvorm) caption"] = "Legal form";
+$GLOBALS["TRANS"]["Omaduse Nimetus (cust_n) caption"] = "Customer name";
 $GLOBALS["TRANS"]["Omaduse Aadress (addr) caption"] = "Address";
 $GLOBALS["TRANS"]["Omaduse Linn (addr_linn) caption"] = "City";
 $GLOBALS["TRANS"]["Omaduse Maakond (maakond) caption"] = "County";

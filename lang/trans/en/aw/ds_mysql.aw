@@ -1,6 +1,5 @@
 <?php
 $GLOBALS["TRANS"]["object::load(%s): no such object!"] = "object::load(%s): no such object!";
-$GLOBALS["TRANS"]["ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch!"] = "ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch!";
 $GLOBALS["TRANS"]["ds_mysql::final_delete_object(%s): no suct object exists!"] = "ds_mysql::final_delete_object(%s): no suct object exists!";
 $GLOBALS["TRANS"]["filter cannot contain properties (%s) that are in serialized fields other than metadata!"] = "filter cannot contain properties (%s) that are in serialized fields other than metadata!";
 $GLOBALS["TRANS"]["obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value supplied, was: %s!"] = "obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value supplied, was: %s!";

@@ -2,7 +2,6 @@
 $GLOBALS["TRANS"]["Omaduse Riik (country) caption"] = "Country";
 $GLOBALS["TRANS"]["Omaduse Aadresside administraatori kasutaja uid (address_admin) caption"] = "Address system administrator uid";
 $GLOBALS["TRANS"]["Omaduse Haldusjaotuse struktuur (administrative_structure) caption"] = "Administrative structure";
-$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Haldusjaotuse struktuur (grp_administrative_structure) pealkiri"] = "Administrative structure";
 $GLOBALS["TRANS"]["Seose Haldus&uuml;ksus (RELTYPE_ADMINISTRATIVE_DIVISION) tekst"] = "Administrative division";
 $GLOBALS["TRANS"]["Seose Riik (RELTYPE_COUNTRY) tekst"] = "Country";

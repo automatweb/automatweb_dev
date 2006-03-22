@@ -18,7 +18,6 @@ $GLOBALS["TRANS"]["Grupi Koosta tulemuste tabel (mktbl) pealkiri"] = "Create res
 $GLOBALS["TRANS"]["Grupi Kataloogid (parents) pealkiri"] = "Folders";
 $GLOBALS["TRANS"]["Grupi Otsi (search) pealkiri"] = "Search";
 $GLOBALS["TRANS"]["Grupi Tulemuste salvestamine (submit_after) pealkiri"] = "Result saving";
-$GLOBALS["TRANS"]["Seose s&uuml;non&uuml;mid (RELTYPE_SYN) tekst"] = "synonyms";
 $GLOBALS["TRANS"]["Seose kataloog, kust otsida (RELTYPE_PARENT) tekst"] = "folder to search";
 $GLOBALS["TRANS"]["Seose tulemuste kontroller (RELTYPE_RESULT_CONTROLLER) tekst"] = "result controller";
 $GLOBALS["TRANS"]["Seose rea kontroller (RELTYPE_ROW_CONTROLLER) tekst"] = "row controller";

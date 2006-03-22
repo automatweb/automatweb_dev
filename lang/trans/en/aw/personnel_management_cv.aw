@@ -28,7 +28,6 @@ $GLOBALS["TRANS"]["Seose Keeleoskus (RELTYPE_LANG) tekst"] = "Language skill";
 $GLOBALS["TRANS"]["Seose Arvutioskus (RELTYPE_ARVUTIOSKUS) tekst"] = "Computer skill";
 $GLOBALS["TRANS"]["Seose Kogemus (RELTYPE_KOGEMUS) tekst"] = "Experience";
 $GLOBALS["TRANS"]["Seose Juhiluba (RELTYPE_JUHILUBA) tekst"] = "Driver's licence";
-$GLOBALS["TRANS"]["Seose Töösoov (RELTYPE_JOBWANTED) tekst"] = "Job wanted";
 $GLOBALS["TRANS"]["Teised arvutioskused"] = "Other computer skills";
 $GLOBALS["TRANS"]["Arvutioskuse muutmine"] = "Change computer skills";
 $GLOBALS["TRANS"]["Mõni muu keel"] = "Some other language";

@@ -31,6 +31,7 @@ $GLOBALS["TRANS"]["Omaduse Vali millised elemendid tellimuse andmete vormis vast
 $GLOBALS["TRANS"]["Omaduse Vali millised elemendid tellimuse andmete vormis vastavad firma andmetele (orgfieldmap) caption"] = "Select elements that match company data fields in data form";
 $GLOBALS["TRANS"]["Grupi Meiliseaded (mail_settings) pealkiri"] = "E-mail settings";
 $GLOBALS["TRANS"]["Grupi Makseviisid (payment) pealkiri"] = "Payment types";
+$GLOBALS["TRANS"]["Grupi N&auml;itamine (appear) pealkiri"] = "Display settings";
 $GLOBALS["TRANS"]["Grupi Isukuandmete kaart (psfieldmap) pealkiri"] = "Person field map";
 $GLOBALS["TRANS"]["Grupi Firma andmete kaart (orgfieldmap) pealkiri"] = "Company field map";
 $GLOBALS["TRANS"]["Seose ladu (RELTYPE_WAREHOUSE) tekst"] = "warehouse";

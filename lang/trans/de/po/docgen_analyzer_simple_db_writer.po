@@ -1,0 +1,36 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/core/aw_code_analyzer/docgen_analyzer_simple_db_writer.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+

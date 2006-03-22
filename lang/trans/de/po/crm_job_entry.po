@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_job_entry.aw:class_1035_help
 msgid "Klassi T88 kirje help"
 msgstr ""
@@ -410,27 +409,31 @@ msgstr ""
 msgid "Omaduse Ressursid (resource_sel) help"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:147
+#: classes/applications/crm/crm_job_entry.aw:158
 msgid "Otsi postiindeksit"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:151
+#: classes/applications/crm/crm_job_entry.aw:162
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:151
+#: classes/applications/crm/crm_job_entry.aw:162
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:179 classes/applications/crm/crm_job_entry.aw:190 classes/applications/crm/crm_job_entry.aw:199 classes/applications/crm/crm_job_entry.aw:208
+#: classes/applications/crm/crm_job_entry.aw:190
+#: classes/applications/crm/crm_job_entry.aw:201
+#: classes/applications/crm/crm_job_entry.aw:210
+#: classes/applications/crm/crm_job_entry.aw:219
 msgid "--Vali--"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:249
-msgid "Kliendi nimi peab olema t&auml;idetud v&otilde;i olemasolev klient peab olema valitud"
+#: classes/applications/crm/crm_job_entry.aw:260
+msgid ""
+"Kliendi nimi peab olema t&auml;idetud v&otilde;i olemasolev klient peab "
+"olema valitud"
 msgstr ""
 
-#: classes/applications/crm/crm_job_entry.aw:257
+#: classes/applications/crm/crm_job_entry.aw:268
 msgid "Projekti nimi peab olema t&auml;idetud"
 msgstr ""
-

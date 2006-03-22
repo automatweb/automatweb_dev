@@ -1,0 +1,496 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/personnel_management/personnel_management.aw:class_275_help
+msgid "Klassi Personalikeskkond help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_orgs
+msgid "Omaduse Organisatsioonide kaust (orgs) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_orgs_comment
+msgid "Omaduse Organisatsioonide kaust (orgs) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_orgs_help
+msgid "Omaduse Organisatsioonide kaust (orgs) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_persons
+msgid "Omaduse Isikute kaust (persons) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_persons_comment
+msgid "Omaduse Isikute kaust (persons) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_persons_help
+msgid "Omaduse Isikute kaust (persons) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_offers
+msgid "Omaduse Tööpakkumiste kaust (offers) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_offers_comment
+msgid "Omaduse Tööpakkumiste kaust (offers) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_offers_help
+msgid "Omaduse Tööpakkumiste kaust (offers) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_tegevusvaldkonnad
+msgid "Omaduse Tegevusvaldkonnad (tegevusvaldkonnad) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_tegevusvaldkonnad_comment
+msgid "Omaduse Tegevusvaldkonnad (tegevusvaldkonnad) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_tegevusvaldkonnad_help
+msgid "Omaduse Tegevusvaldkonnad (tegevusvaldkonnad) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_person_ot
+msgid "Omaduse Isikute objektitüüp (person_ot) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_person_ot_comment
+msgid "Omaduse Isikute objektitüüp (person_ot) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_person_ot_help
+msgid "Omaduse Isikute objektitüüp (person_ot) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_crmdb
+msgid "Omaduse Kliendibaas (crmdb) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_crmdb_comment
+msgid "Omaduse Kliendibaas (crmdb) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_crmdb_help
+msgid "Omaduse Kliendibaas (crmdb) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_owner_org
+msgid "Omaduse Omanikorganisatsioon (owner_org) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_owner_org_comment
+msgid "Omaduse Omanikorganisatsioon (owner_org) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_owner_org_help
+msgid "Omaduse Omanikorganisatsioon (owner_org) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_search_save
+msgid "Omaduse Varasem otsing (search_save) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_search_save_comment
+msgid "Omaduse Varasem otsing (search_save) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_search_save_help
+msgid "Omaduse Varasem otsing (search_save) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_search_cv
+msgid "Omaduse Otsi CV-sid (search_cv) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_search_cv_comment
+msgid "Omaduse Otsi CV-sid (search_cv) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_search_cv_help
+msgid "Omaduse Otsi CV-sid (search_cv) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_employee_list_toolbar
+msgid "Omaduse  (employee_list_toolbar) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_employee_list_toolbar_comment
+msgid "Omaduse  (employee_list_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_employee_list_toolbar_help
+msgid "Omaduse  (employee_list_toolbar) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_employee_list_tree
+msgid "Omaduse  (employee_list_tree) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_employee_list_tree_comment
+msgid "Omaduse  (employee_list_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_employee_list_tree_help
+msgid "Omaduse  (employee_list_tree) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_employee_list_table
+msgid "Omaduse  (employee_list_table) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_employee_list_table_comment
+msgid "Omaduse  (employee_list_table) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_employee_list_table_help
+msgid "Omaduse  (employee_list_table) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_candidate_toolbar
+msgid "Omaduse  (candidate_toolbar) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_candidate_toolbar_comment
+msgid "Omaduse  (candidate_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_candidate_toolbar_help
+msgid "Omaduse  (candidate_toolbar) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_candidate_tree
+msgid "Omaduse  (candidate_tree) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_candidate_tree_comment
+msgid "Omaduse  (candidate_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_candidate_tree_help
+msgid "Omaduse  (candidate_tree) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_candidate_table
+msgid "Omaduse  (candidate_table) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_candidate_table_comment
+msgid "Omaduse  (candidate_table) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_candidate_table_help
+msgid "Omaduse  (candidate_table) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_offers_toolbar
+msgid "Omaduse  (offers_toolbar) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_offers_toolbar_comment
+msgid "Omaduse  (offers_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_offers_toolbar_help
+msgid "Omaduse  (offers_toolbar) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_offers_tree
+msgid "Omaduse  (offers_tree) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_offers_tree_comment
+msgid "Omaduse  (offers_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_offers_tree_help
+msgid "Omaduse  (offers_tree) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_joblist
+msgid "Omaduse  (joblist) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_joblist_comment
+msgid "Omaduse  (joblist) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_joblist_help
+msgid "Omaduse  (joblist) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_treeview3
+msgid "Omaduse  (treeview3) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_treeview3_comment
+msgid "Omaduse  (treeview3) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_treeview3_help
+msgid "Omaduse  (treeview3) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_treeview4
+msgid "Omaduse  (treeview4) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_treeview4_comment
+msgid "Omaduse  (treeview4) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:prop_treeview4_help
+msgid "Omaduse  (treeview4) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_employee
+msgid "Grupi Tööotsijad (employee) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_employee_help
+msgid "Grupi Tööotsijad (employee) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_employee_search
+msgid "Grupi Otsing (employee_search) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_employee_search_help
+msgid "Grupi Otsing (employee_search) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_employee_list
+msgid "Grupi Nimekiri (employee_list) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_employee_list_help
+msgid "Grupi Nimekiri (employee_list) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_candidate
+msgid "Grupi Kandideerijad (candidate) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_candidate_help
+msgid "Grupi Kandideerijad (candidate) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_offers
+msgid "Grupi Tööpakkumised (offers) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_offers_help
+msgid "Grupi Tööpakkumised (offers) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_actions
+msgid "Grupi Tegevused (actions) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_actions_help
+msgid "Grupi Tegevused (actions) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_clients
+msgid "Grupi Kliendid (clients) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_clients_help
+msgid "Grupi Kliendid (clients) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_MENU
+msgid "Seose Kaust (RELTYPE_MENU) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_CRM_DB
+msgid "Seose Kliendibaas (RELTYPE_CRM_DB) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_SECTORS
+msgid "Seose Tegevusvaldkonnad (RELTYPE_SECTORS) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_PERSON_OT
+msgid "Seose Objektit&uuml;&uuml;p (RELTYPE_PERSON_OT) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_OWNER_ORG
+msgid "Seose Omanikorganisatsioon (RELTYPE_OWNER_ORG) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_SEARCH_SAVE
+msgid "Seose Otsingu salvestus (RELTYPE_SEARCH_SAVE) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:173
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:182 classes/applications/personnel_management/personnel_management.aw:320 classes/applications/personnel_management/personnel_management.aw:877 classes/applications/personnel_management/personnel_management.aw:947
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:194
+msgid "Element"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:239
+msgid "Tööotsija saab CV tähtaega ise määrata"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:239
+msgid "Tööotsija ei saa CV tähtaega ise määrata"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:305 classes/applications/personnel_management/personnel_management.aw:834
+msgid "Kustuta kandidaadid"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:316
+msgid "Kood"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:333 classes/applications/personnel_management/personnel_management.aw:890
+msgid "Muudetud"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:339
+msgid "Sündinud"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:510
+msgid "Haridusliik"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:516
+msgid "X"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:546
+msgid "Ametinimetus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:552
+msgid "Tööpakkuja"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:558
+msgid "Asukoht"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:565 classes/applications/personnel_management/personnel_management.aw:1151
+msgid "Tähtaeg"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:649
+msgid "Määramata"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:782
+msgid "AutomatWeb"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:847
+msgid "Uus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:852 classes/applications/personnel_management/personnel_management.aw:853 classes/applications/personnel_management/personnel_management.aw:953
+msgid "Tööpakkumine"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:860
+msgid "Kustuta tööpakkumised"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:872
+msgid "Default cv"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:883
+msgid "Aktiivne kuni"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:959
+msgid "Kuupäev"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:965
+msgid "Kaaskiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:971
+msgid "Hinne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1003
+msgid "kaaskiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1044
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1050 classes/applications/personnel_management/personnel_management.aw:1145
+msgid "Ametikoht"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1056
+msgid "Kandideerimise lõpptähtaeg"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1099
+msgid "Uus CV"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1105 classes/applications/personnel_management/personnel_management.aw:1133
+msgid "Kustuta CV-d"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1107 classes/applications/personnel_management/personnel_management.aw:1135
+msgid "Kas soovid valitud objektid kustutada?"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1113
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1119 classes/applications/personnel_management/personnel_management.aw:1120
+msgid "CV"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1158
+msgid "Kandidaate"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1165
+msgid "Staatus"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1191
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1191
+msgid "Mitteaktiivne"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1365 classes/applications/personnel_management/personnel_management.aw:1395
+msgid "Liitu!"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:1373 classes/applications/personnel_management/personnel_management.aw:1403
+msgid "Uuenda andmed!"
+msgstr ""
+

@@ -9,24 +9,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/vcl/server_folder_selector.aw:22 classes/vcl/server_folder_selector.aw:60
+#: classes/vcl/server_folder_selector.aw:22
+#: classes/vcl/server_folder_selector.aw:61
 msgid "Vali"
 msgstr ""
 
-#: classes/vcl/server_folder_selector.aw:39
+#: classes/vcl/server_folder_selector.aw:40
 msgid "Kataloog"
 msgstr ""
 
-#: classes/vcl/server_folder_selector.aw:44
+#: classes/vcl/server_folder_selector.aw:45
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/server_folder_selector.aw:50
+#: classes/vcl/server_folder_selector.aw:51
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/server_folder_selector.aw:96
+#: classes/vcl/server_folder_selector.aw:97
 msgid "Vali see"
 msgstr ""
-

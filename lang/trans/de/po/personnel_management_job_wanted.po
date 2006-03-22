@@ -1,0 +1,156 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:class_351_help
+msgid "Klassi T&ouml;&ouml; soov help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_field
+msgid "Omaduse Tegevusala (field) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_field_comment
+msgid "Omaduse Tegevusala (field) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_field_help
+msgid "Omaduse Tegevusala (field) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_professions
+msgid "Omaduse Soovitavad ametid (professions) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_professions_comment
+msgid "Omaduse Soovitavad ametid (professions) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_professions_help
+msgid "Omaduse Soovitavad ametid (professions) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_load
+msgid "Omaduse Töö koormus (load) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_load_comment
+msgid "Omaduse Töö koormus (load) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_load_help
+msgid "Omaduse Töö koormus (load) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay
+msgid "Omaduse Palgasoov alates-kuni (pay) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay_comment
+msgid "Omaduse Palgasoov alates-kuni (pay) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay_help
+msgid "Omaduse Palgasoov alates-kuni (pay) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay2
+msgid "Omaduse  (pay2) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay2_comment
+msgid "Omaduse  (pay2) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_pay2_help
+msgid "Omaduse  (pay2) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_location
+msgid "Omaduse Töö asukoht (location) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_location_comment
+msgid "Omaduse Töö asukoht (location) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_location_help
+msgid "Omaduse Töö asukoht (location) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_addinfo
+msgid "Omaduse Lisainfo soovitava töö kohta (addinfo) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_addinfo_comment
+msgid "Omaduse Lisainfo soovitava töö kohta (addinfo) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_addinfo_help
+msgid "Omaduse Lisainfo soovitava töö kohta (addinfo) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_sbutton
+msgid "Omaduse Lisa (sbutton) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_sbutton_comment
+msgid "Omaduse Lisa (sbutton) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_sbutton_help
+msgid "Omaduse Lisa (sbutton) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_candidate_toolbar
+msgid "Omaduse  (candidate_toolbar) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_candidate_toolbar_comment
+msgid "Omaduse  (candidate_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_candidate_toolbar_help
+msgid "Omaduse  (candidate_toolbar) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_candidate_table
+msgid "Omaduse  (candidate_table) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_candidate_table_comment
+msgid "Omaduse  (candidate_table) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_candidate_table_help
+msgid "Omaduse  (candidate_table) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:group_candidate
+msgid "Grupi Kandideerimised (candidate) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:group_candidate_help
+msgid "Grupi Kandideerimised (candidate) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:rel_RELTYPE_CANDIDATE
+msgid "Seose Kandideerimine (RELTYPE_CANDIDATE) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:82
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_job_wanted.aw:90
+msgid "Nimi"
+msgstr ""
+

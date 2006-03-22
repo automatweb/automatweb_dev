@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_address.aw:class_146_help
 msgid "Klassi Aadress help"
 msgstr ""
@@ -98,7 +97,10 @@ msgstr ""
 msgid "Seose Seosobjekt (RELTYPE_BELONGTO) tekst"
 msgstr ""
 
-#: classes/crm/crm_address.aw:136
-msgid "tel:"
+#: classes/crm/crm_address.aw:95
+msgid "Otsi postiindeksit"
 msgstr ""
 
+#: classes/crm/crm_address.aw:141
+msgid "tel:"
+msgstr ""

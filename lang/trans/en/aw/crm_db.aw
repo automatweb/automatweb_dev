@@ -34,7 +34,6 @@ $GLOBALS["TRANS"]["Seose Sisestusvormid (RELTYPE_FORMS) tekst"] = "Entry forms";
 $GLOBALS["TRANS"]["Seose Muutujad (RELTYPE_METAMGR) tekst"] = "Variables";
 $GLOBALS["TRANS"]["Tegevusala"] = "Activity";
 $GLOBALS["TRANS"]["Organisatsioone"] = "Organisation";
-$GLOBALS["TRANS"]["Vali"] = "Select";
 $GLOBALS["TRANS"]["Organisatsioon"] = "Organisation";
 $GLOBALS["TRANS"]["Reg nr."] = "Registry number";
 $GLOBALS["TRANS"]["Põhitegevus"] = "Main activity";

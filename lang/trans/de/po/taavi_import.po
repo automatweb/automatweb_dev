@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/import/taavi_import.aw:class_1047_help
 msgid "Klassi Taavi import help"
 msgstr ""
@@ -50,7 +49,6 @@ msgstr ""
 msgid "Omaduse Impordi (impordi) help"
 msgstr ""
 
-#: classes/import/taavi_import.aw:52
+#: classes/import/taavi_import.aw:50
 msgid "Impordi"
 msgstr ""
-
