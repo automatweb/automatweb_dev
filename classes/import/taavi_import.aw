@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.4 2006/01/25 13:05:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/taavi_import.aw,v 1.5 2006/03/22 09:27:49 ahti Exp $
 // taavi_import.aw - Taavi import 
 /*
 
@@ -39,8 +39,6 @@ class taavi_import extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
-	
 			case "impordi":
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb(
@@ -50,12 +48,6 @@ class taavi_import extends class_base
 						),
 						"taavi_import"),
 					"caption" => t("Impordi"),
-						/*$this->mk_my_orb(
-						"import",
-						array(
-							"oid" => $arr["obj_inst"]->id(),
-							"return_url" => get_ru()),
-						"admin_menus")*/
 				));
 				break;		
 
@@ -64,20 +56,12 @@ class taavi_import extends class_base
 		return $retval;
 	}
 
-//	function get_port($arr)
-//	{
-//		return $arr["obj_inst"]->prop("port");
-//	}
-
-
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
-
 		}
 		return $retval;
 	}	
@@ -102,7 +86,33 @@ class taavi_import extends class_base
 		die();
 	}
 
-//leiab 
+	/**	
+		@attrib name=get_raw params=name default="0"
+		@param id optional
+		@returns
+		@comment
+
+	**/
+	function get_raw($arr)
+	{
+		include(aw_ini_get("basedir")."/classes/protocols/xmlrpc/xmlrpc_lib.aw");
+		$import_obj = obj($arr["id"]);
+		$port = $import_obj->prop("port");
+		$url = $import_obj->prop("url");
+		$remove = array("http://" , "ftp://");
+		$url = str_replace($remove, "", $url);
+		$pos = strpos($url, '/');
+		$domain = substr($url , 0 , $pos);
+		$path = substr($url , $pos ,strlen($url));
+		$client = new IXR_Client($domain, $path, $port);
+		$client->query("server.getinfo");
+		$data = $client->getResponse();
+		echo "<pre>";
+		print_r($data);
+		echo "</pre>";
+		die();
+	}
+
 	function find_asula($arr)
 	{
 		$ret = ''; $asula = '';
@@ -504,11 +514,7 @@ class taavi_import extends class_base
 		}
 		$all_xml = $all_xml.'</tootajad>';
 		$all_xml = iconv("ISO-8859-4","UTF-8", $all_xml);
-	//	$all_xml = str_replace($changechar , $code , $all_xml);
-	//	$all_xml = htmlentities(htmlentities($all_xml));
-	//	$all_xml = htmlspecialchars($all_xml, ENT_NOQUOTES);
 		return $all_xml;
 	}
-//-- methods --//
 }
 ?>

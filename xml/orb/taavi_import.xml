@@ -9,5 +9,13 @@
 			</function>
 		</action>
 
+		<action name="get_raw">
+			<function name="get_raw">
+				<arguments>
+					<optional name="id" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
