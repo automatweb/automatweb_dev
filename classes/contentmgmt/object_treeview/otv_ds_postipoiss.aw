@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.27 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.28 2006/03/23 12:38:52 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -168,6 +168,11 @@ class otv_ds_postipoiss extends class_base
 		$t->define_data(array(
 			"name" => t("<b>Kataloogid</b>")
 		));
+
+		if (!file_exists($arr["obj_inst"]->prop("subj_xml")))
+		{
+			return;
+		}
 
 		foreach($this->get_folders($arr["obj_inst"]) as $fld)
 		{
