@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.5 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site_rule.aw,v 1.6 2006/03/23 11:55:31 kristo Exp $
 // join_site_rule.aw - Liitumise Reegel 
 /*
 
@@ -38,7 +38,10 @@ class join_site_rule extends class_base
 		switch($data["name"])
 		{
 			case "rules_add":
-				$data["value"] = $this->_do_change_rule($arr);
+				if (is_oid($arr["obj_inst"]->id()))
+				{
+					$data["value"] = $this->_do_change_rule($arr);
+				}
 				break;
 		};
 		return $retval;
@@ -46,6 +49,10 @@ class join_site_rule extends class_base
 
 	function _do_change_rule($arr)
 	{
+		if (!$this->can("view", $arr["obj_inst"]->prop("join_conf")))
+		{
+			return "";
+		}
 		$js = get_instance(CL_JOIN_SITE);
 
 		$js->read_template("add_rule.tpl");
