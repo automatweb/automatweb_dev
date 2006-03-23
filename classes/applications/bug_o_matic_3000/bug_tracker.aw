@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.32 2006/03/22 22:51:31 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.32 2006/03/22 22:51:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.33 2006/03/23 12:33:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.33 2006/03/23 12:33:59 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1226,7 +1226,7 @@ class bug_tracker extends class_base
 			$ol = new object_list();
 		}
 
-		$this->populate_bug_list_table_from_list($t, $ol);		
+		$this->populate_bug_list_table_from_list($t, $ol, array("bt" => $arr["obj_inst"]));		
 		$t->sort_by();
 		$arr["prop"]["value"] = "<span id=\"bug_table\">".$t->draw()."</table>";
 		if ($arr["request"]["tb_only"] == 1)
@@ -1284,8 +1284,20 @@ class bug_tracker extends class_base
 		{
 			$crea = $bug->createdby();
 			$p = obj($u2p[$crea]);
-		
-			$nl = html::obj_change_url($bug);
+
+			if ($_GET["action"] == "list_only_fetch")
+			{
+				$nl = html::href(array(
+					"url" => html::get_change_url($bug->id(), array(
+						"return_url" => $this->mk_my_orb("change", array("id" => $params["bt"]->id(), "group" => "by_default", "b_id" => $bug->parent()), "bug_tracker"),
+					)),
+					"caption" => parse_obj_name($bug->name())
+				));
+			}
+			else
+			{
+				$nl = html::obj_change_url($bug);
+			}
 			if ($params["path"])
 			{
 				$nl = $bug->path_str(array(

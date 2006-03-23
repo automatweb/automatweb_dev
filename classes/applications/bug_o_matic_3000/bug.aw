@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.19 2006/03/22 22:51:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.20 2006/03/23 12:33:59 kristo Exp $
 // bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -92,6 +92,8 @@ define("BUG_STATUS_CLOSED", 5);
 		@property fileupload type=releditor reltype=RELTYPE_FILE rel_id=first use_form=emb parent=data captionside=top
 		@caption Fail
 	
+		@property bug_property type=select parent=data captionside=top field=aw_bug_property
+		@caption Klassi omadus
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption Jälgija
@@ -345,6 +347,13 @@ class bug extends class_base
 
 			case "bug_url":
 				$prop["post_append_text"] = "<a href='javascript:void(0)' onClick='window.location=document.changeform.bug_url.value'>Ava</a>";
+				break;
+
+			case "bug_property":
+				if ($arr["obj_inst"]->prop("bug_class"))
+				{
+					$prop["options"] = $this->_get_property_picker($arr["obj_inst"]->prop("bug_class"));
+				}
 				break;
 		};
 		return $retval;
@@ -641,6 +650,40 @@ class bug extends class_base
 		$this->_add_comment($bug, nl2br($msg));
 		aw_restore_acl();
 		die(sprintf(t("Added comment to bug %s"), $arr[bugno]));
+	}
+
+	function do_db_upgrade($tbl, $f)
+	{
+		switch($f)
+		{
+			case "aw_bug_property":
+				$this->db_add_col($tbl, array(
+					"name" => $f,
+					"type" => "varchar",
+					"length" => 255
+				));
+				break;
+		}
+	}
+
+	function _get_property_picker($clid)
+	{
+		$o = obj();
+		$o->set_class_id($clid);
+		$ret = array("" => "");
+		$props = $o->get_property_list();
+		foreach($o->get_group_list() as $gn => $gc)
+		{
+			$ret["grp_".$gn] = $gc["caption"];
+			foreach($props as $pn => $pd)
+			{
+				if ($pd["group"] == $gn)
+				{
+					$ret["prop_".$pn] = "&nbsp;&nbsp;&nbsp;".$pd["caption"];
+				}
+			}
+		}
+		return $ret;
 	}
 }
 ?>
