@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.72 2005/12/30 12:14:33 kristo Exp $
+// $Id: cfgutils.aw,v 1.73 2006/03/23 11:56:51 tarvo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -96,8 +96,10 @@ class cfgutils extends aw_template
 	// file(string) - name of the class
 	// clid(int) - class_id
 	// filter(string) - filter the properties based on a attribute
+	// load_trans - whater to load translated props or not
 	function load_class_properties($args = array())
 	{
+		$args["load_trans"] = isset($args["load_trans"])?$args["load_trans"]:1;
 		enter_function("load_class_properties");
 		extract($args);
 		if (empty($args['source']) && !$file && !$this->clist_init_done)
@@ -105,7 +107,6 @@ class cfgutils extends aw_template
 			$this->_init_clist();
 			$file = $this->clist[$clid];
 		};
-
 		$system = isset($args["system"]) ? 1 : 0;
 
 		// if system is set, then no captions/translations/etc will be loaded,
@@ -125,7 +126,6 @@ class cfgutils extends aw_template
 				load_class_translations($file);
 			};
 		}
-
 		$from_cache = false;
 
 		if (empty($args['source']) && file_exists($cachename) && (filemtime($cachename) > filemtime($fqfn)))
@@ -297,7 +297,7 @@ class cfgutils extends aw_template
 			}
 		}
 		// translate
-		if (true || !$system)
+		if($args["load_trans"] == 1)
 		{
 			foreach($properties as $k => $d)
 			{
@@ -388,7 +388,6 @@ class cfgutils extends aw_template
 			$this->groupinfo = $groupinfo;
 		};
 		$tmp = array();
-
 		if (is_array($relinfo))
 		{
 			foreach($relinfo as $key => $val)
@@ -512,9 +511,10 @@ class cfgutils extends aw_template
 		exit_function("load_class_properties");
 		return $res;
 	}
-
+	// load_trans - wheater to load translated properties or not(by default it loads)
 	function load_properties($args = array())
 	{
+		$args["load_trans"] = isset($args["load_trans"])?$args["load_trans"]:1;
 		enter_function("load-properties");
 		extract($args);
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
@@ -536,6 +536,7 @@ class cfgutils extends aw_template
 		}
 		$this->groupinfo = array();
 		$coreprops = $this->load_class_properties(array(
+			"load_trans" => $args["load_trans"],
 			"file" => "class_base",
 			"filter" => $filter,
 			"system" => $args["system"],
@@ -566,6 +567,7 @@ class cfgutils extends aw_template
 		else
 		{
 			$objprops = $this->load_class_properties(array(
+				"load_trans" => $args["load_trans"],
 				"file" => $file,
 				"filter" => $filter,
 				"system" => $args["system"],
