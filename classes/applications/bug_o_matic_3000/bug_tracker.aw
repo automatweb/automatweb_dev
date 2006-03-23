@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.33 2006/03/23 12:33:59 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.33 2006/03/23 12:33:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.34 2006/03/23 13:55:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.34 2006/03/23 13:55:59 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1045,7 +1045,7 @@ class bug_tracker extends class_base
 
 		$t->define_field(array(
 			"name" => "comment",
-			"caption" => t("Kommentaare"),
+			"caption" => t("K"),
 			"sortable" => 1,
 			"numeric" => 1,
 			"callback" => array(&$this,"comment_callback"),
@@ -1139,7 +1139,7 @@ class bug_tracker extends class_base
 
 		$t->define_field(array(
 			"name" => "comment",
-			"caption" => t("Kommentaare"),
+			"caption" => t("K"),
 			"sortable" => 1,
 			"numeric" => 1,
 			"callback" => array(&$this,"comment_callback"),
