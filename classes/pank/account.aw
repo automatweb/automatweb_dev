@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.6 2005/03/24 10:04:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/account.aw,v 1.7 2006/03/23 11:50:04 kristo Exp $
 // account.aw - Konto 
 /*
 @tableinfo pank_account index=oid master_table=objects master_index=oid
@@ -285,7 +285,7 @@ class account extends class_base
 	function callback_mod_tab($arr)
 	{
 		$suffix = 'ülevaade';
-		if($arr['id'] == 'other_account_overview')
+		if($arr['id'] == 'other_account_overview' && $_GET["action"] == "change")
 		{
 			$account = $this->get_the_other_account(&$arr['obj_inst']);
 			$arr['caption'] = $account->name().' '.$suffix;
@@ -321,6 +321,17 @@ class account extends class_base
 		else
 		{
 			return $pank->get_tax_account_for_obj($account->parent());
+		}
+	}
+
+	function do_db_upgrade($tbl, $f)
+	{
+		switch($f)
+		{
+			case "account_balance_outgoing":
+				$this->db_query("ALTER TABLE pank_account ADD account_balance_outgoing double");
+				return true;
+				break;
 		}
 	}
 }
