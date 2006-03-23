@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.20 2006/03/23 12:33:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.21 2006/03/23 15:25:03 kristo Exp $
 // bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -77,10 +77,10 @@ define("BUG_STATUS_CLOSED", 5);
 		@property num_hrs_to_cust type=textbox size=5 parent=data captionside=top
 		@caption Tundide arv kliendile
 
-		@property customer type=relpicker reltype=RELTYPE_CUSTOMER store=connect parent=data captionside=top
+		@property customer type=relpicker reltype=RELTYPE_CUSTOMER parent=data captionside=top
 		@caption Klient
 
-		@property project type=relpicker reltype=RELTYPE_PROJECT store=connect parent=data captionside=top
+		@property project type=relpicker reltype=RELTYPE_PROJECT  parent=data captionside=top
 		@caption Projekt
 
 		@property bug_component type=textbox parent=data captionside=top
@@ -268,23 +268,14 @@ class bug extends class_base
 					}
 				}
 
-				$data["options"] = array("" => "") + $ol->names();
+				$prop["options"] = array("" => t("--vali--")) + $ol->names();
 
-				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
-					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PROJECT")) as $c)
-					{
-						$data["options"][$c->prop("to")] = $c->prop("to.name");
-					}
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
 				}
 
-				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
-				{
-					$tmp = obj($data["value"]);
-					$data["options"][$tmp->id()] = $tmp->name();
-				}
-
-				asort($data["options"]);
 				if($arr["new"])
 				{
 					foreach($this->parent_options[$prop["name"]] as $key => $val)
@@ -299,33 +290,20 @@ class bug extends class_base
 				$cst = $i->get_my_customers();
 				if (!count($cst))
 				{
-					$data["options"] = array("" => "");
+					$prop["options"] = array("" => t("--vali--"));
 				}
 				else
 				{
 					$ol = new object_list(array("oid" => $cst));
-					$data["options"] = array("" => "") + $ol->names();
+					$prop["options"] = array("" => t("--vali--")) + $ol->names();
 				}
 
-				if (is_object($arr["obj_inst"]) && !$arr["new"] && is_oid($arr["obj_inst"]->id()))
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
-					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
-					{
-						$data["options"][$c->prop("to")] = $c->prop("to.name");
-					}
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
 				}
 
-				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
-				{
-					$tmp = obj($data["value"]);
-					$data["options"][$tmp->id()] = $tmp->name();
-				}
-
-				asort($data["options"]);
-				if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->class_id() == CL_TASK)
-				{
-					$arr["obj_inst"]->set_prop("customer", $data["value"]);
-				}
 				if($arr["new"])
 				{
 					foreach($this->parent_options[$prop["name"]] as $key => $val)

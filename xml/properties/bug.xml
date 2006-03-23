@@ -169,7 +169,6 @@
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_CUSTOMER</reltype>
-            <store>connect</store>
             <parent>data</parent>
             <captionside>top</captionside>
             <field>customer</field>
@@ -181,7 +180,6 @@
             <table>aw_bugs</table>
             <type>relpicker</type>
             <reltype>RELTYPE_PROJECT</reltype>
-            <store>connect</store>
             <parent>data</parent>
             <captionside>top</captionside>
             <field>project</field>
@@ -219,6 +217,16 @@
             <captionside>top</captionside>
             <field>fileupload</field>
             <caption>Fail</caption>
+      </property>
+      <property>
+            <name>bug_property</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>select</type>
+            <parent>data</parent>
+            <captionside>top</captionside>
+            <field>aw_bug_property</field>
+            <caption>Klassi omadus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_BUG</syslog_type>
