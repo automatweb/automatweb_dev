@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.21 2006/03/08 15:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.22 2006/03/23 14:27:38 kristo Exp $
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_SELECTION
 @default table=objects
@@ -558,7 +558,7 @@ class crm_selection extends class_base
 			return t('templiit määramata');
 		}
 
-		$this->tpl_init($this->tpldir . "/selection/templs");
+		$this->tpl_init("selection/templs");
 		$this->read_template($obj->prop("template"));
 
 		$str = "";
