@@ -2079,7 +2079,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ($sql["q"] == "")
 			{
 				// just ot fetch
-				$sql["q"] = "SELECT * FROM objects WHERE status > 0 AND oid ";
+				//$sql["q"] = "SELECT * FROM objects WHERE status > 0 AND oid ";
 			}
 
 			if ($sql["q"] != "")
@@ -2107,7 +2107,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}			
 		}
 
-		return array($ret, $ret2);
+		return $ret;
 	}
 
 	/*function quote(&$str)

@@ -288,7 +288,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			$c_fn
 		));
 
-		if (!is_array($ret))
+		if (true || !is_array($ret))
 		{
 			$ret = $this->contained->fetch_list($param);
 			$this->cache->file_set_pt(
