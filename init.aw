@@ -138,17 +138,21 @@ function parse_config($file)
 							$code = substr($code, 0, $i)."\"".substr($code, $i);
 						}
 					}
+					$code2 = "\$res".substr($code,28);
+					eval($code2);
 					eval($code);
 				}
 				else
 				{
 					// and stuff the thing in the array
 					$GLOBALS["cfg"][$varclass][$varname] = $varvalue;
+					$res[$varname] = $varvalue;
 					//echo "setting [$varclass][$varname] to $varvalue <br>";
 				}
 			}
 		}
 	}
+	return $res;
 }
 
 ////
