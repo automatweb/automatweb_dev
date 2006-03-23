@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.34 2006/03/23 13:55:59 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.34 2006/03/23 13:55:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.35 2006/03/23 15:14:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.35 2006/03/23 15:14:16 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1673,9 +1673,7 @@ class bug_tracker extends class_base
 		unset($arr["request"]["action"]);
 		$url = $this->mk_my_orb("list_only_fetch", $arr["request"]);
 
-		$new_url = $this->mk_my_orb("new", array(
-			"return_url" => get_ru()
-		), CL_BUG);
+		$new_url = $this->mk_my_orb("new", array(), CL_BUG);
 
 		return "
 		var last_bold_node;
@@ -1687,7 +1685,7 @@ class bug_tracker extends class_base
 			el.innerHTML=aw_get_url_contents(url);
 			document.changeform.b_id.value=bugid;
 			new_el = document.getElementById('add_bug_href');
-			new_el.href = '$new_url&parent='+bugid;
+			new_el.href = '$new_url&parent='+bugid+'&return_url='+encodeURIComponent(document.location.href);
 
 			if (last_bold_node)
 			{
