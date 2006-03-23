@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.18 2006/01/25 13:06:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.19 2006/03/23 14:24:55 kristo Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -1402,6 +1402,7 @@ class persona_import extends class_base
 							"file" => $fn,
 							"content" => $pilt_data
 						));
+						$ti->do_apply_gal_conf($img_o);
 
 						// n
 						print $t->name();
