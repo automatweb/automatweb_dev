@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.35 2006/03/23 15:14:16 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.35 2006/03/23 15:14:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.36 2006/03/23 15:47:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.36 2006/03/23 15:47:03 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1035,8 +1035,8 @@ class bug_tracker extends class_base
 		));
 
 		$t->define_field(array(
-			"name" => "created",
-			"caption" => t("Loodud"),
+			"name" => "deadline",
+			"caption" => t("T&auml;htaeg"),
 			"sortable" => 1,
 			"type" => "time",
 			"numeric" => 1,
@@ -1129,8 +1129,9 @@ class bug_tracker extends class_base
 		));
 
 		$t->define_field(array(
-			"name" => "created",
-			"caption" => t("Loodud"),
+			"name" => "deadline",
+			"caption" => t("T&auml;htaeg"),
+			"chgbgcolor" => "col",
 			"sortable" => 1,
 			"type" => "time",
 			"numeric" => 1,
@@ -1305,6 +1306,19 @@ class bug_tracker extends class_base
 					"path_only" => true
 				))." / ".$nl;
 			}
+
+			$col = "";
+			$dl = $bug->prop("deadline");
+			if ($dl > 100 && time() > $dl)
+			{
+				$col = "#ff0000";
+			}
+			else
+			if ($dl > 100 && date("d.m.Y") == date("d.m.Y", $dl)) // today
+			{
+				$col = "#f3f27e";
+			}
+
 			$t->define_data(array(
 				"name" => $nl." (".html::href(array(
 					"url" => aw_url_change_var("b_id", $bug->id()),
@@ -1316,12 +1330,14 @@ class bug_tracker extends class_base
 				"bug_severity" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_severity"),
 				"createdby" => $p->name(),
 				"created" => $bug->created(),
+				"deadline" => $bug->prop("deadline"),
 				"id" => $bug->id(),
 				"oid" => $bug->id(),
 				"sort_priority" => $bug_i->get_sort_priority($bug),
 				"icon" => icons::get_icon($bug),
 				"obj" => $bug,
-				"comment_count" => (int)$comments_by_bug[$bug->id()]
+				"comment_count" => (int)$comments_by_bug[$bug->id()],
+				"col" => $col
 			));
 		}
 		$t->set_numeric_field("sort_priority");
