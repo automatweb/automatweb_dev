@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj_inherit_props_conf.aw,v 1.4 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj_inherit_props_conf.aw,v 1.5 2006/03/23 12:46:31 kristo Exp $
 // obj_inherit_props_conf.aw - Objekti omaduste p&auml;rimine 
 /*
 
@@ -477,6 +477,10 @@ class obj_inherit_props_conf extends class_base
 
 	function do_inherit_from($arr)
 	{
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_inherit_from($t);
 
