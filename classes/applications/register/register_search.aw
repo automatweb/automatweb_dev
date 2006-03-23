@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.33 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.34 2006/03/23 12:41:26 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -557,6 +557,10 @@ class register_search extends class_base
 			}
 		}
 
+		if (!$clid)
+		{
+			return array();
+		}
 		$i = get_instance($clid);
 		$xp = $i->parse_properties(array(
 			"object_type_id" => $ot,
