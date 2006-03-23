@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.9 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.10 2006/03/23 13:33:46 kristo Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -82,6 +82,10 @@ class crm_section_webside extends class_base
 			break;
 			
 			case "section_picker":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
 				$org = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_ORG');
 				if($org && aw_global_get("uid") == "sven")
 				{
