@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.18 2005/06/13 11:16:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.19 2006/03/23 13:49:40 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -122,7 +122,10 @@ class orders_order extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		
-		$person = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_PERSON');
+		if (is_oid($arr["obj_inst"]->id()))
+		{
+			$person = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_PERSON');
+		}
 		switch($prop["name"])
 		{
 			case "forward":
