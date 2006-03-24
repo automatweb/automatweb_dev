@@ -1,3 +1,0 @@
-<b>aw_array::next()</b>
-
-returns the next array(key, value) from the array. Only one iteration per aw_array instance can be active at one time. if there are no more members, false is returned
