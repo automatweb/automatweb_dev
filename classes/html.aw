@@ -1,16 +1,27 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.101 2006/03/13 12:27:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.102 2006/03/24 14:47:04 markop Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
-	////
-	// !html select
-	// name(string)
-	// options(array)
-	// selected(int)
-	// onchange(string)
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		selection name
+	@param options optional type=array
+		selection options array(value => text)
+	@param selected optional type=int
+		already selected options
+	@param onchange optional type=string
+		action starts if selection changes
+	@param disabled optional type=bool
+		if true, selection is disabled
+	@param textsize optional type=string
+		font size . examples: "10px", "0.7em", "smaller"
+	@returns string / html select
+
+	@comment creates html select
+	**/
 	function select($args = array())
 	{
 		extract($args);
@@ -80,18 +91,34 @@ class html extends aw_template
 		return "<select name=\"$name\" $cl id=\"$name\" $sz $mz $onc $disabled $textsize>\n$optstr</select>$post_append_text\n";
 	}
 
-	////
-	// !html text input
-	// name(string)
-	// value(string)
-	// content(string) -- text visible to user when $option_is_tuple is set to TRUE.
-	// size(int)
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
-	// autocomplete_source (string) -- relative (to web root -- it seems that certain browsers don't allow javascript http connections to absolute paths) URL that refers to source of autocomplete options. See documentation for argument $option_is_tuple about options data format.
-	// autocomplete_params (array) -- array of form element names whose values will be posted to orb method giving autocomplete options
-	// option_is_tuple (bool) -- indicates whether autocomplete options are values (FALSE) or names associated with values (TRUE) iow autocomplete options are key/value pairs. If set to TRUE, $content should be set to what the user will see in the textbox. Autocomplete options are expected as strings separated by newline characters (\n). If set to TRUE then the expected format is: key=>value ($key will be posted as property value) and the value returned by POST request under property name is $key if an autocomplete option was selected, $value if new value was entered.
-	// onkeypress (string)
+	/**
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		textbox name
+	@param value optional type=string
+		textbox value
+	@param contenr optional type=string
+		text visible to user when $option_is_tuple is set to TRUE.
+	@param size optional type=int
+		textbox size
+	@param disabled optional type=bool
+		if true, textbox is disabled
+	@param textsize optional type=string
+		font size . examples: "10px", "0.7em", "smaller"
+	@param autocompleate_source  optional type=string
+		relative (to web root -- it seems that certain browsers don't allow javascript http connections to absolute paths) URL that refers to source of autocomplete options. See documentation for argument $option_is_tuple about options data format.
+	@param autocompleate_params optional type=array
+		array of form element names whose values will be posted to orb method giving autocomplete options
+	@param option_is_tuple optional type=bool
+		indicates whether autocomplete options are values (FALSE) or names associated with values (TRUE) iow autocomplete options are key/value pairs. If set to TRUE, $content should be set to what the user will see in the textbox. Autocomplete options are expected as strings separated by newline characters (\n). If set to TRUE then the expected format is: key=>value ($key will be posted as property value) and the value returned by POST request under property name is $key if an autocomplete option was selected, $value if new value was entered.
+	@param onkeypress optional type=string
+		if set, then onkeypress=$onkeypress
+	
+	@returns string / html textbox
+
+	@comment creates html textbox
+	**/
 	function textbox($args = array())
 	{
 		extract($args);
@@ -147,15 +174,28 @@ class html extends aw_template
 		}
 	}
 
-	////
-	// !html textarea
-	// name(string)
-	// value(string)
-	// cols(int)
-	// rows(int)
-	// wrap(string)
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		textarea name
+	@param value optional type=string
+		textarea value
+	@param cols optional type=int
+		number of columns
+	@param rows optional type=int
+		number of rows
+	@param wrap optional type=string
+		if set, wrap='$wrap'
+	@param disabled optional type=bool
+		if true, textarea is disabled
+	@param textsize optional type=string
+		font size . examples: "10px", "0.7em", "smaller"
+	
+	@returns string / html textarea
+
+	@comment creates html textarea
+	**/
 	function textarea($args = array())
 	{
 		extract($args);
@@ -194,24 +234,40 @@ class html extends aw_template
 		return $retval;
 	}
 
-	////
-	//draws nice border around html content and put cute label on it, not all browsers support this
-	//caption
-	//content
+	/**
+	@attrib api=1 params=name
+		
+	@param caption optional type=string
+		legend
+	@param content optional type=string
+		html content
+	@returns string
+
+	@comment draws nice border around html content and put cute label on it, not all browsers support this
+	**/
 	function fieldset($args = array())
 	{
 		extract($args);
 		$caption = isset($caption) ? '<legend>'.$caption.'</legend>' : '';
-
 		return '<fieldset>'.$caption.$content.'</fieldset>';
 	}
 
-	////
-	// !html iframe
-	// name(string)
-	// width(string)
-	// height(integer)
-	// src(string)  - url
+	/**
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		iframe name
+	@param width optional type=integer default=300
+		iframe width
+	@param height optional type=integer default=200
+		iframe height
+	@param src optional type=string
+		url
+	
+	@returns string/html iframe
+
+	@comment draws html iframe
+	**/
 	function iframe($args = array())
 	{
 		extract($args);
@@ -220,12 +276,22 @@ class html extends aw_template
 		return "<iframe src='$src' name='$name' width='$width' height='$height'></iframe>\n";
 	}
 
-	////
-	// !html password input
-	// name(string)
-	// value(string)
-	// size(int)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		password input name
+	@param value optional type=string
+		password input value
+	@param size optional type=int
+		number of html password input
+	@param textsize optional type=string
+		font size . examples: "10px", "0.7em", "smaller"
+	
+	@returns string /html password input
+
+	@comment creates html password input
+	**/
 	function password($args = array())
 	{
 		extract($args);
