@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.4 2006/03/24 13:32:38 dragut Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.5 2006/03/24 14:53:50 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -1009,12 +1009,6 @@ class docgen_viewer extends class_base
 		));
 
 		$ret[] = html::href(array(
-			"url" => $this->mk_my_orb("doc_class_list"),
-			"target" => "classlist",
-			"caption" => t("Dokumenteeritud klassid")
-		));
-
-		$ret[] = html::href(array(
 			"url" => $this->mk_my_orb("api_class_list"),
 			"target" => "classlist",
 			"caption" => t("API klassid")
@@ -1126,104 +1120,6 @@ class docgen_viewer extends class_base
 				'target' => 'propinfo',
 			));
 		}
-	}
-
-	/**
-
-		@attrib name=doc_class_list
-
-	**/
-	function doc_class_list($arr)
-	{
-		$this->read_template("classlist.tpl");
-
-		$tv = get_instance(CL_TREEVIEW);
-		
-		$tv->start_tree(array(
-			"type" => TREE_DHTML,
-			"tree_id" => "dcgclsss",
-			"persist_state" => true,
-			"root_name" => t("Classes"),
-			"url_target" => "list"
-		));
-
-		$this->ic = get_instance("core/icons");
-		$this->_req_mk_clf_doc_tree($tv, $this->cfg["classdir"]);
-
-		$this->vars(array(
-			"list" => $tv->finalize_tree(array(
-				"rootnode" => $this->cfg["classdir"],
-			))
-		));
-
-		return $this->parse();
-	}
-
-	function _req_mk_clf_doc_tree(&$tv, $path)
-	{
-		$dc = array();
-		$fc = array();
-		$dh = opendir($path);
-		while (($file = readdir($dh)) !== false)
-		{
-			$fp = $path."/".$file;
-			if ($file != "." && $file != ".." && $file != "CVS" && substr($file, 0,2) != ".#")
-			{
-				if (is_dir($fp))
-				{
-					$dc[] = $file;
-				}
-				else
-				{
-					$fc[] = $file;
-				}
-			}
-		}
-		closedir($dh);
-
-		sort($dc);
-		sort($fc);
-
-		$hasf = false;
-		foreach($dc as $file)
-		{
-			$fp = $path."/".$file;
-			$_hasf = $this->_req_mk_clf_doc_tree($tv, $fp);
-
-			if ($_hasf)
-			{
-				$tv->add_item($path, array(
-					"name" => $file,
-					"id" => $fp,
-					"url" => "#",
-				));
-				$hasf = true;
-			}
-		}
-
-		foreach($fc as $file)
-		{
-			$fp = $path."/".$file;
-			$awpath = str_replace($this->cfg["classdir"], "", $fp);
-
-			// check if documentation exists
-			$doc_file = $this->cfg["basedir"]."/docs/classes/".dirname($awpath)."/".basename($awpath, ".aw")."/_has_docs";
-			if (!file_exists($doc_file))
-			{
-				continue;
-			}
-			
-			$tv->add_item($path, array(
-				"name" => $file,
-				"id" => $fp,
-				"url" => $this->mk_my_orb("class_info", array("file" => $awpath)),
-				"iconurl" => $this->ic->get_icon_url(CL_OBJECT_TYPE,""),
-				"target" => "classinfo"
-			));
-			$hasf = true;
-		}
-
-		return $hasf;
 	}
 
 	/**
