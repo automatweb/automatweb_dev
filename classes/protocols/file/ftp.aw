@@ -45,14 +45,39 @@ class ftp extends class_base
 		return extension_loaded("ftp");
 	}
 
-	/** creates connection to ftp server
-		@attrib api=1
-		@param host required
-		@param user required
-		@param pass required
-		@param timeout optional
+	
+	/**
+	@attrib api=1 params=name
+		
+	@param host required type=string
+		The FTP server address.
+		This parameter shouldn't have any trailing slashes and shouldn't be prefixed with ftp://
+	@param user required type=string
+	@param pass required type=string
+	@param timeout optional type=int default=10;
+		it does nothing
+	
+	@returns 
+		FTP_ERR_CONNECT - if cant connect
+		FTP_ERR_LOGIN - if cant login
 
-		@comment timeout defaults to 10 seconds
+	@examples
+		$ftp_inst = get_instance("protocols/file/ftp");
+		$ftp_inst->connect(array(
+			"host" => "media.struktuur.ee",
+			"user" => "keegi",
+			"pass" => "kalakala",
+		));
+		$files = $ftp_inst->dir_list("files/);
+		foreach($files as $file)
+		{
+			$fdat = $ftp_inst->get_file($file);
+			$ftp_inst->delete($file);
+		}
+		if ($ftp_inst->cd(array("path" => "cool_files/") == true) echo 'this folder really does exist';
+		$ftp_inst->disconnect();
+	
+	@comment creates connection to ftp server
 	**/
 	function connect($arr)
 	{
@@ -88,8 +113,11 @@ class ftp extends class_base
 		};
 	}
 
-	/** closes FTP connection 
-		@attrib api=1
+	/**
+	@attrib api=1
+	@comment closes FTP connection
+	
+	@examples ${connect}
 	**/
 	function disconnect()
 	{
@@ -100,9 +128,19 @@ class ftp extends class_base
 		ftp_close($this->handle);
 	}
 
-	/** returns a list of files in the current server in folder $folder
-		@attrib api=1
-		@param folder required
+	/**
+	@attrib api=1 params=pos
+		
+	@param folder required
+		The directory to be listed.
+		This parameter can also include arguments, eg. ftp_nlist($conn_id, "-la /your/dir");
+		Note that this parameter isn't escaped so there may be some issues with filenames 
+		containing spaces and other characters
+	
+	@returns an array of filenames in the current server in folder $folder on success
+		FTP_ERR_NOTCONNECTED if not connected
+
+	@examples ${connect}
 	**/
 	function dir_list($folder)
 	{
@@ -117,11 +155,17 @@ class ftp extends class_base
 		return $arr->get();
 	}
 
-	/** returns the contents of file $file in the current server
+	/**
+	@attrib api=1 params=pos
 		
-		@attrib api=1
-		@param file required
-
+	@param file required type=string
+		The remote file path
+	@returns 
+		contents of file $file in the current server
+		FTP_ERR_NOTCONNECTED - if not connected
+		FALSE if there is no file with that name
+	
+	@examples ${connect}
 	**/
 	function get_file($file)
 	{
@@ -149,13 +193,22 @@ class ftp extends class_base
 		};
 
 	}
-
-	/** uploads $content to $remote_file on the current server
-
-		@attrib api=1
-		@param file required
-		@param content required
-
+	
+	/**
+	@attrib api=1 params=pos
+		
+	@param remote_file required type=string
+		The remote file path
+	@param file required type=string
+		The local file
+	@returns 
+		FTP_ERR_NOTCONNECTED - if not connected
+		TRUE on success
+		FALSE on failure.
+	
+	@examples
+	@comments 
+		puts file to the current server
 	**/
 	function put_file($remote_file,$content)
 	{
@@ -174,9 +227,19 @@ class ftp extends class_base
 		return $res;
 	}
 	
-	/** deletes $file on the current server
-		@attrib api=1
-		@param file required
+	/**
+	@attrib api=1 params=name
+		
+	@param file required type=string
+		The file to delete
+	@returns
+		FTP_ERR_NOTCONNECTED - if not connected
+		TRUE on success
+		FALSE on failure
+	
+	@comments
+		deletes $file on the current server
+	@examples ${connect}
 	**/
 	function delete($arr)
 	{
@@ -191,9 +254,19 @@ class ftp extends class_base
 		return false;
 	}
 
-	/** changes the directory on the current server to $path
-		@attrib api=1
-		@param path required
+	/**
+	@attrib api=1 params=name
+		
+	@param path required type=string
+		The target directory
+	@returns
+		FTP_ERR_NOTCONNECTED - if not connected
+		TRUE on success
+		FALSE on failure
+	
+	@comments
+		changes the directory on the current server to $path
+	@examples ${connect}
 	**/
 	function cd($arr)
 	{
@@ -207,13 +280,34 @@ class ftp extends class_base
 		}
 		return false;
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+		
+	@param url required type=string
+		The target directory
+	@returns
+		string / contents of file
+		FALSE on failure
+	
+	@comments
+		Reads entire file into a string
+	**/
 	function get($url)
 	{
 		$this->last_url = $url;
 		return file_get_contents($url);
 	}
-
+	
+	/**
+	@attrib api=1
+	
+	@returns string / file type
+		FALSE , if there is no info for this extension
+	
+	@comments
+		returns type of file last used with function get()
+	**/
 	function get_type()
 	{
 		$mt = get_instance("core/aw_mime_types");
