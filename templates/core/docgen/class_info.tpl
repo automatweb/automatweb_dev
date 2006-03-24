@@ -207,6 +207,8 @@ table.class_info th {
 					<p class="returns">{VAR:returns}</p>
 					<strong>Errors:</strong>
 					<p class="errors">{VAR:errors}</p>
+					<strong>Comment</strong>
+					<p class="comment">{VAR:comment}</p>
 					<strong>Examples:</strong>
 					<p class="examples">{VAR:examples}</p>
 				</td>

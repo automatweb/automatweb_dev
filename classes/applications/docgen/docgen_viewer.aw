@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.5 2006/03/24 14:53:50 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.6 2006/03/24 20:38:53 dragut Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -293,6 +293,7 @@ class docgen_viewer extends class_base
 			}
 
 			$doc_file = dirname($cur_file)."/".basename($cur_file, ".aw")."/".$data["name"].".".$func.".txt";
+
 			$this->vars(array(
 				"proto" => "function $func()",
 				"name" => $func,
@@ -306,6 +307,7 @@ class docgen_viewer extends class_base
 				'PARAM' => $params,
 				'returns' => (empty($f_data['doc_comment']['returns'])) ? t('nothing') : nl2br($f_data['doc_comment']['returns']),
 				'errors' => (empty($f_data['doc_comment']['errors'])) ? t('none') : nl2br($f_data['doc_comment']['errors']),
+				'comment' => nl2br($f_data['doc_comment']['comment']),
 				'examples' => (empty($f_data['doc_comment']['examples'])) ? t('none') : highlight_string("<?php \n".$f_data['doc_comment']['examples']."\n?>", true),
 				"view_source" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
 				"view_usage" => $this->mk_my_orb("view_usage", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
