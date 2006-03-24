@@ -1,9 +1,0 @@
-scheduler::add($arr)
-adds the specified event to the scheduler 
-arguments are passed in an array:
-<STRONG>event - </STRONG><EM>required</EM><BR>the url that will get called at the right time
-<STRONG>time</STRONG> - <EM>optional<BR></EM>the time when the event will be executed - if this is omitted, then rep_id must be specified
-<STRONG>rep_id</STRONG> - <EM>optional</EM><BR>the id of the aw repeater for controlling when the event will take place
-<STRONG>uid</STRONG> - <EM>optional</EM><BR>if specified, the event will get excecuted as that user
-<STRONG>sessid</STRONG> - <EM>optional</EM> if specified, the event will get called with the session id given - can be used to restart events with the same uid as the current user
-<STRONG>password</STRONG> - <EM>optional</EM><BR>the password of the user uid

@@ -1,16 +1,56 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.36 2005/08/02 14:20:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.37 2006/03/24 14:38:59 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
+	/** 
+		@attrib api=1
+
+		@comment
+			The scheduler can be used to schedule events to happen at certain times.
+			An event is an orb function call that will get called at the time specified. 
+			You can specify a certain time or an aw repeater when the event will take place.
+
+			The fields in the event array are:
+			time - the time that the event is scheduled for - unix timestamp
+			event - the full url of the page that will be requested
+			uid - the username as who the event will be executed
+			password - the password for the account in uid
+			rep_id - the id of the repeater that generated this event
+ 
+			The fields in the log entry array are:
+			time - the time that the event was actually executed
+			event - the event array for the event that took place
+			response - the text that was returned from the HTTP request including headers
+ 	**/
 	function scheduler()
 	{
 		$this->init("scheduler");
 		$this->file = get_instance(CL_FILE);
 	}
 
-	////
-	// !adds an event to the schedule - complete description @ http://aw.struktuur.ee/41441
+	/** adds the specified event to the scheduler 
+		@attrib api=1 params=name
+	
+		@param event required type=string
+			the url that will get called at the right time
+		
+		@param time optional type=int
+			the time when the event will be executed - if this is omitted, then rep_id must be specified
+
+		@param rep_id optional type=oid
+			the id of the aw repeater for controlling when the event will take place
+
+		@param uid optional type=string
+			if specified, the event will get excecuted as that user
+
+		@param sessid optional type=string
+			 if specified, the event will get called with the session id given - can be used to restart events with the same uid as the current user
+
+		@param password optional type=string
+			the password of the user uid
+
+	**/
 	function add($arr)
 	{
 		extract($arr);
@@ -420,8 +460,9 @@ class scheduler extends aw_template
 		ob_end_flush();
 	}
 
-	////
-	// !removes all the events that match the filter in $evnt
+	/** removes events from the queue that match the mask - the mask can contain any fields in the event description and only the ones that are specified are used in matching
+		@attrib api=1
+	**/
 	function remove($evnt)
 	{
 		$this->open_session();
@@ -521,8 +562,9 @@ class scheduler extends aw_template
 		$this->close_log_session(true);
 	}
 
-	////
-	// !returns the log entries for the events that match mask
+	/** returns the log entries for the events that match mask
+		@attrib api=1
+	**/
 	function get_log_for_events($mask)
 	{
 		// read log
@@ -541,6 +583,9 @@ class scheduler extends aw_template
 		return $ret;
 	}
 
+	/** removes entries from the event log that are for events that match the mask
+		@attrib api=1
+	**/
 	function remove_log_events($mask)
 	{
 		$this->open_log_session();

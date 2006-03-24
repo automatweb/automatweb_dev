@@ -1,3 +1,0 @@
-scheduler::remove($mask)
-
-removes events from the queue that match the mask - the mask can contain any fields in the event description and only the ones that are specified are used in matching

@@ -1,3 +1,0 @@
-scheduler::remove_log_events($mask)
-
-removes entries from the event log that are for events that match the mask
