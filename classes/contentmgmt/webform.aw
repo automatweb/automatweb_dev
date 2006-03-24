@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.84 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.85 2006/03/24 15:01:07 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -39,7 +39,7 @@
 
 
 ------------- form -------------
-@groupinfo form caption="Vorm" submit=no
+@groupinfo form caption="Vorm" 
 
 @property navtoolbar type=toolbar group=form no_caption=1
 @caption Toolbar
