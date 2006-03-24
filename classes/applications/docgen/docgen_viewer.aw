@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.3 2006/03/24 11:46:05 dragut Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.4 2006/03/24 13:32:38 dragut Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -287,7 +287,7 @@ class docgen_viewer extends class_base
 					'param_name' => $param_name,
 					'param_required' => $param_data['req'],
 					'param_type' => $param_data['type'],
-					'param_comment' => nl2br($param_data['comment'])
+					'param_comment' => nl2br(trim($param_data['comment']))
 				));
 				$params .= $this->parse('PARAM');
 			}
