@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.15 2006/03/17 11:02:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.16 2006/03/24 14:40:51 kristo Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -1329,6 +1329,10 @@ class realestate_property extends class_base
 	function print_view ($arr)
 	{
 		### init
+		if (!$this->can("view", $arr["id"]))
+		{
+			return "";
+		}
 		$this_object = obj ($arr["id"]);
 		$view_type = isset ($arr["view_type"]) ? $arr["view_type"] : "printview";
 		$show_pictures = isset ($arr["show_pictures"]) ? (boolean) $arr["show_pictures"] : false;

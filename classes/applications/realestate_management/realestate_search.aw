@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.12 2006/03/15 08:59:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.13 2006/03/24 14:40:51 kristo Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -2065,7 +2065,7 @@ class realestate_search extends class_base
 
 	function show_property ($arr)
 	{
-		if (!is_oid ($_GET["realestate_show_property"]))
+		if (!$this->can ("view", $_GET["realestate_show_property"]))
 		{
 			return false;
 		}
