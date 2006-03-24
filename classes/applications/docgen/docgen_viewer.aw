@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.1 2006/03/17 13:21:27 dragut Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.2 2006/03/24 10:59:03 dragut Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -844,13 +844,15 @@ class docgen_viewer extends class_base
 	{
 		extract($arr);
 		$files = array();
-		$p = get_instance("core/docgen/parser");
+		$p = get_instance("core/aw_code_analyzer/parser");
 		$p->_get_class_list($files,$this->cfg["classdir"]);
 
 		foreach($files as $file)
 		{
+
 			$da = get_instance("core/aw_code_analyzer/docgen_analyzer_simple_db_writer");
 			$data = $da->analyze_file($file, true);
+
 			$rel_file = str_replace(aw_ini_get("basedir"), "",$file);
 			foreach($data["classes"] as $class => $c_data)
 			{
@@ -885,6 +887,7 @@ class docgen_viewer extends class_base
 		}
 
 		$this->db_query("DELETE FROM aw_da_callers");
+
 		foreach($files as $file)
 		{
 			$da = get_instance("core/aw_code_analyzer/aw_code_analyzer");
@@ -933,6 +936,7 @@ class docgen_viewer extends class_base
 				}
 			}
 		}
+
 		die(t("ALL DONE"));
 	}
 

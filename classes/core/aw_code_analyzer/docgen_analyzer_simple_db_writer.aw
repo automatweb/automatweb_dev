@@ -8,8 +8,8 @@
 		and writes these to the database
 
 **/
-classload("core/docgen/docgen_analyzer");
-class docgen_analyzer_simple_db_writer extends docgen_analyzer
+classload("core/aw_code_analyzer/aw_code_analyzer");
+class docgen_analyzer_simple_db_writer extends aw_code_analyzer
 {
 	function docgen_analyzer_simple_db_writer()
 	{
