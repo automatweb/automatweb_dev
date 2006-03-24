@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.26 2006/03/14 13:25:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db.aw,v 2.27 2006/03/24 11:17:11 markop Exp $
 // this is the class that allows us to connect to multiple datasources at once
 // it replaces the mysql class which was used up to now, but still routes all
 // db functions to it so that everything stays working and it also provides
@@ -89,24 +89,21 @@ class db_connector
 
 	/**
 	@attrib api=1 params=name
-	
 	@param driver required type=string
-	the type of the SQL driver to use
+		the type of the SQL driver to use
 	@param server required type=string
+		SQL server location
 	@param base required type=string
+		SQL base
 	@param username required type=string
 	@param password required type=string
 	@param cid optional type=oid default=$this->default_cid
-	connetion id
-	
+		connetion id
 	@errors
 		die(t("this driver is not supported")) - if that driver doesn't exist
-	
 	@returns db connection object
-	
 	@comment 
 		Creates a connection to a data source
-	
 	@examples
 		$db->db_connect(array(
 			'driver' => 'mysql',
@@ -144,14 +141,12 @@ class db_connector
 	// route all functions to default/primary driver
 	/**
 	@attrib api=1 params=pos
-	
 	@param qtext required type=string
+		SQL query
 	@param errors optional type=bool default=true
-	
+		if you dont want to see errors, then it should be false
 	@returns true - if query was successful, else returns DB error
-	
 	@comment Makes a DB query
-	
 	@examples
 		$q = "UPDATE ml_queue SET status = 0 WHERE qid = '$qid'";
 		$this->db_query($q);
@@ -168,15 +163,14 @@ class db_connector
 	
 	/**
 	@attrib api=1 params=pos
-	
 	@param qtext required type=string
+		SQL query
 	@param limit required type=int default=0
+		Retrieve rows starting limit
 	@param count optional type=int default=0
-	
+		if > 0 ,Retrieve that many rows
 	@returns true - if query was successful, else returns DB error
-	
 	@comment Changes a query text a little
-	
 	@examples
 			$per_page = 100;
 			$page = 12;
@@ -194,11 +188,9 @@ class db_connector
 	}
 	/**
 	@attrib api=1 params=pos
-	
 	@param dec optional type=bool default=true
 		it is useless.....
 	@returns next row of a query result
-	
 	@examples
 		$q = "SELECT * FROM table";
 		$data = array();
@@ -215,7 +207,6 @@ class db_connector
 	
 	/**
 	@attrib api=1
-	
 	@returns oid
 	
 	@examples
@@ -228,11 +219,9 @@ class db_connector
 
 	/**
 	@attrib params=pos api=1
-	
 	@param sql optional type=string default=""
-	
+		SQL query	
 	@returns row of a query result
-	
 	@comment 
 		makes a query and returns a row
 	
@@ -248,13 +237,13 @@ class db_connector
 	@attrib params=pos api=1
 	
 	@param qtext optional type=string default=""
+		QSL query
 	@param field optional type=string default=""
-	
+		field name
 	@returns field of a DB query row
 	
 	@comment 
-		makes a query and returns a row
-	
+		makes a query and returns a field
 	@examples
 		$id = $this->db_fetch_field("SELECT id FROM forms WHERE id = '$row[oid]'", "id");
 	**/
@@ -267,12 +256,10 @@ class db_connector
 	@attrib params=pos api=1
 	
 	@param $qtext optional type=string default=""
-	if not set tries to fetch from previous db_query
-	
+		SQL query... if not set, tries to fetch from previous db_query
 	@returns array
 	
 	@comment fetch all rows from db_query result
-	
 	@examples
 		$arr = $this->db_fetch_array('select id , name , parent from users');
 	**/
@@ -285,7 +272,7 @@ class db_connector
 	@attrib params=pos api=1
 	
 	@param arr required type=string/array
-	
+		string/array of strings , you want to quote
 	@returns string/array
 	
 	@comment
@@ -300,7 +287,7 @@ class db_connector
 	@attrib params=pos api=1
 	
 	@param arr required type=string/array
-	
+		string/array of strings , you want to unquote
 	@returns string/array
 	
 	@comment
@@ -357,8 +344,7 @@ class db_connector
 	@attrib params=pos api=1
 	
 	@param $name required type=string
-	table name
-	
+		table name
 	@returns array - the properties of table $name or false if it doesn't exist
 	properties are returned as array $tablename => $tableprops
 	where $tableprops is an array("name" => $table_name, "fields" => $fieldprops)
@@ -382,8 +368,7 @@ class db_connector
 	@attrib params=pos api=1
 	
 	@param $name required type=string
-	table name
-
+		table name
 	@returns field "create table" of a query result
 	
 	@comment makes query SHOW CREATE TABLE $name and returns field "create table" of a result
@@ -397,12 +382,11 @@ class db_connector
 	@attrib params=pos api=1
 	
 	@param $source required type=array
-	table array representation
+		table array representation
 	@param $dest required type=string
-	destination table name
+		destination table name
 
 	@comment syncs the tables, creates all fields in $dest that are not in $dest, but are in $source
-
 	**/
 	function db_sync_tables($source,$dest)
 	{
@@ -413,8 +397,9 @@ class db_connector
 	@attrib params=pos api=1
 	
 	@param $type required type=string
+		type of field you want to qreate
 	@param $length required type=int
-
+		length of field you want to create
 	@comment this returns the sql for creating the field
 
 	@examples 
@@ -431,9 +416,9 @@ class db_connector
 	@attrib params=name api=1
 	
 	@param name required type=string
+		table name
 	@param fields optional type=array
-		array('name' = .. , 'type' = .. , 'length' => .. , flags => ..)
-	
+		field info : array('name' = .. , 'type' = .. , 'length' => .. , flags => ..)
 	@returns string 
 	
 	@comment
@@ -499,10 +484,13 @@ class db_connector
 	@attrib params=pos api=1
 	
 	@param table required type=string
+		table name
 	@param field required type=string
+		field name - the one you want to check
 	@param selector required type=string
+		field value - value , you are looking for
 	@param fields optional type=array default="*"
-	
+		fields you want to see in query result
 	@returns array 
 	
 	@comment
@@ -553,34 +541,34 @@ class db_connector
 		return $this->dc[$this->default_cid]->db_next_database();
 	}
 
-	////
-	// !tries to create the database in the server
-	// parameters:
-	//   name - the name of the database
-	//   user - the user that will get access to the database
-	//   host - the host from where the access will be granted
-	//   pass - the password for the database
 	/**
 	@attrib params=name api=1
 	
-	@param foo [optional|required] type=[int|var|oid|object|string|float] default="foo"
-	
-	@errors 
-	
-	@returns 
-	
+	@param name required type=string
+		the name of the database
+	@param user required type=string
+		the user that will get access to the database
+	@param host required type=string
+		the host from where the access will be granted
+	@param pass required type=string
+		the password for the database
 	@comment
-	
-	@examples
-
+		tries to create the database in the server
 	**/	
 	function db_create_database($arr)
 	{
 		return $this->dc[$this->default_cid]->db_create_database($arr);
 	}
 
-	////
-	// !returns a list of all available database drivers on the system
+	/**
+	@attrib api=1
+	@return array()
+	
+	@comment
+		returns a list of all available database drivers on the system
+	@examples
+		$args['prop']['options'] = $this->list_db_drivers();
+	**/
 	function list_db_drivers()
 	{
 		$ret = array();
@@ -593,127 +581,228 @@ class db_connector
 					$cln = basename($file,".".$this->cfg["ext"]);
 					$ret[$cln] = $cln;
 				}
-			}  
+			}
 			closedir($dir);
 		}
 		asort($ret);
 		return $ret;
 	}
 
-	////
-	// !returns server status - the fields returned are server-specific
+	/**
+	@attrib api=1
+	@return array('Server_version' => .. , 'Protocol_version' => .. , 'Host_info' => .. , Variables => values , 'Queries_per_sec' => ..)
+	
+	@comment
+		returns server status - the fields returned are server-specific
+	@examples
+		$stat = $server->db_server_status();
+	**/
 	function db_server_status()
 	{
 		return $this->dc[$this->default_cid]->db_server_status();
 	}
 
-	////
-	// !returns information about the specified table - the fields returned are server specific
+	/**
+	@attrib params=pos api=1
+	
+	@param tbl required type=string
+		the name of the table
+	@return array()
+	
+	@comment
+		returns information about the specified table - the fields returned are server specific
+	**/
 	function db_get_table_info($tbl)
 	{
 		return $this->dc[$this->default_cid]->db_get_table_info($tbl);
 	}
 
+	/**
+	@attrib api=1
+	@return  array('' => '', 'AUTO_INCREMENT' => 'AUTO_INCREMENT');
+	
+	@comment
+		returns array of database flags	
+	**/
 	function db_list_flags()
 	{
 		return $this->dc[$this->default_cid]->db_list_flags();
 	}
 
+	/**
+	@attrib api=1
+	
+	@return array()
+	
+	@comment
+		returns array of database field types
+	**/
 	function db_list_field_types()
 	{
 		return $this->dc[$this->default_cid]->db_list_field_types();
 	}
 
-	////
-	// !adds a column to table $tbl
-	// params
-	//   tbl - the table to add to
-	//   coldat - new column properties array(name, type, length, null, default, extra)
+	/**
+	@attrib params=pos api=1
+	
+	@param tbl required type=string
+		the table to add to
+	@param coldat required type=array
+		coldat - new column properties array(name, type, length, null, default, extra)
+	
+	@comment
+		adds a column to table $tbl
+	**/
 	function db_add_col($tbl,$coldat)
 	{
 		return $this->dc[$this->default_cid]->db_add_col($tbl,$coldat);
 	}
 
-	////
-	// !change a column in table $tbl
-	// params
-	//   tbl - the table where the column is
-	//   col - the column to change
-	//   coldat - new column properties array(name, type, length, null, default, extra)
+	/**
+	@attrib params=pos api=1
+	
+	@param tbl required type=string
+		the table where the column is
+	@param col required type=string
+		the column to change
+	@param newdat required type=array
+		new column properties array(name, type, length, null, default, extra)
+	@comment
+		change a column in table
+	**/
 	function db_change_col($tbl, $col, $newdat)
 	{
 		return $this->dc[$this->default_cid]->db_change_col($tbl, $col, $newdat);
 	}
 
-	////
-	// !drops column $col from table $tbl 
+	/**
+	@attrib params=pos api=1
+	
+	@param tbl required type=string
+		the table where the column is
+	@param col required type=string
+		the column to drop
+	@comment
+		drops column $col from table $tbl
+	**/
 	function db_drop_col($tbl,$col)
 	{
 		return $this->dc[$this->default_cid]->db_drop_col($tbl,$col);
 	}
 
-	////
-	// !lists indexes for table $tbl
+	/**
+	@attrib params=pos api=1
+	
+	@param tbl required type=string
+		the table name
+	@comment
+		lists indexes for table $tbl
+	**/
 	function db_list_indexes($tbl)
 	{
 		return $this->dc[$this->default_cid]->db_list_indexes($tbl);
 	}
 
-	////
-	// !fetches next index from list created by db_list_indexes
-	// returns:
-	//  array - 
-	//		index_name - the name of the index
-	//		col_name - the name of the column that the index is created on
-	//		unique - if true, values in index must be unique
+	/**
+	@attrib api=1
+	
+	@returns:array - index_name - the name of the index
+			col_name - the name of the column that the index is created on
+			unique - if true, values in index must be unique
+	@comment
+		fetches next index from list created by db_list_indexes
+	**/
 	function db_next_index()
 	{
 		return $this->dc[$this->default_cid]->db_next_index();
 	}
 
-	////
-	// !adds an index to table $tbl
-	// idx_dat must be an array that defines index properties - 
-	//   name - the name of the index
-	//   col - the column on what to create the index
+	/**
+	@attrib params=pos api=1
+	
+	@param tbl required type=string
+		the table name
+	@param $idx_dat required type=array
+		an array that defines index properties - 
+			name - the name of the index
+			col - the column on what to create the index
+	@comment
+		adds an index to table $tbl
+	**/
 	function db_add_index($tbl, $idx_dat)
 	{
 		return $this->dc[$this->default_cid]->db_add_index($tbl, $idx_dat);
 	}
 
-	////
-	// !drops index $name from table $tbl
+	/**
+	@attrib params=pos api=1
+	
+	@param tbl required type=string
+		the table name
+	@param name required type=string
+		index name
+	@comment
+		drops index $name from table $tbl
+	**/
 	function db_drop_index($tbl, $name)
 	{
 		return $this->dc[$this->default_cid]->db_drop_index($tbl, $name);
 	}
 
-	////
-	// !if no error has occurred, returns false
-	// otherwise, returns array -
-	//  error_cmd - the query that produced the error
-	//  error_code - the db-specific error code 
-	//	error_string - the error string returned by the database
+	/**
+	@attrib api=1
+	@returns false - if no error has occurred
+		otherwise - array -
+		error_cmd - the query that produced the error
+		error_code - the db-specific error code 
+		error_string - the error string returned by the database
+	@comment
+		returns last occurred error 
+	**/
 	function db_get_last_error()
 	{
 		return $this->dc[$this->default_cid]->db_get_last_error();
 	}
 
-	////
-	// !returns true if the specified table exists in the database
+	/**
+	@attrib params=pos api=1
+	
+	@param tbl required type=string
+		the table name
+	@returns true if the specified table exists in the database
+	
+	@comment
+		checks if the table exists
+	**/
 	function db_table_exists($tbl)
 	{
 		return $this->dc[$this->default_cid]->db_table_exists($tbl);
 	}
 
-	/** escapes a database table field name based on the db driver
-	**/
+	/**
+	@attrib params=pos api=1
+	
+	@param fn required type=string
+		database table field name
+	@returns string
+	
+	@comment
+		escapes a database table field name based on the db driver
+	**/	
 	function db_fn($fn)
 	{
 		return $this->dc[$this->default_cid]->db_fn($fn);
 	}
 
-	/** returns the type of the table, as one of the DB_TABLE_TYPE constants
+	/**
+	@attrib params=pos api=1
+	
+	@param tbl required type=string
+		the table name
+	@returns type of the table, as one of the DB_TABLE_TYPE constants
+
+	@comment
+		gets the table type
 	**/
 	function db_get_table_type($tbl)
 	{
