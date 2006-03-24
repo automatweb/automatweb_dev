@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.1 2006/03/17 13:11:59 dragut Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.2 2006/03/24 13:33:08 dragut Exp $
 
 	@comment
 	analyses aw code
@@ -16,6 +16,31 @@ class aw_code_analyzer extends class_base
 		$this->init("core/aw_code_analyzer");
 	}
 
+	/**
+		@attrib api=1 params=pos 
+
+		@param file required type=string
+			Path to aw classfile.
+		@param is_fp optional type=bool default=false
+			If file parameter contains full path to classfile or not.
+		@errors none
+
+		@returns 
+			Associative array with classinfo.
+		@comment
+			If 'file' parameter doesn't contain full path to file, the root is classes folder
+			and 'file' parameter must begin with '/' (slash).
+			If 'file' parameter contains full path to file, then second parameter has to be set true.
+		@examples
+			$analyzer = get_instance("core/aw_code_analyzer/aw_code_analyzer");
+
+			$filename_fp = '/www/automatweb_new/classes/db.aw';
+			$filename = '/vcl/calendar.aw';
+
+			$db_class_info = $analyzer->analyze_file($filename_fp, true);
+			$cal_class_info = $analyzer->analyze_file($filename);
+
+	**/
 	function analyze_file($file, $is_fp = false)
 	{
 		if (!$is_fp)
@@ -26,6 +51,7 @@ class aw_code_analyzer extends class_base
 		{
 			$fp = $file;
 		}
+
 		$this->tokens = token_get_all(file_get_contents($fp));
 
 		$this->data = array();
