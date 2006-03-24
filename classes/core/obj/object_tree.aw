@@ -9,6 +9,31 @@ class object_tree extends _int_obj_container_base
 	////////////////////////////////////////////
 	// public functions
 
+	/** constructs and optionally initializes the object tree. the tree always contains folders and if you don't filter them out, also other objects under the folders
+		@attrib api=1
+
+		@param param optional type=array
+			array of properties that are used as a filter when creating the tree. the parent 
+			  member is required in the filter, if it is not present, tree will not be initialized.
+
+		@comment
+			in addition to the member functions described here, this class also implements all the object class mutator functions, only in this case they apply for all objects in the tree, for instance #php# $ot->set_name("fish"); #/php# will change all the objects names in the tree to "fish". you must also call #php# $ot->save() #/php# to save the objects, because they are not saved automatically
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			// creates a tree that contains all folders below object 666, the tree will contain 
+			// all folders below it
+			// and all objects in those folders
+			$ot = new object_tree(array(
+				"parent" => 666, 
+				"class_id" => CL_FILE
+			));
+	**/
 	function object_tree($param = NULL)
 	{
 		if ($param != NULL && !is_array($param))
@@ -27,10 +52,38 @@ class object_tree extends _int_obj_container_base
 		}
 	}
 
-	/** 
-
+	/** filters the object tree, or creates a new tree from the filter
 		@attrib api=1
 
+		@param filter required type=array
+			- array of filter parameters, according to which to filter the object tree
+			filter parameters are documented in $AWROOT/docs/tutorials/object_list.txt
+
+		@param new optional type=bool
+			if set to true, new tree is made, if false, current tree is filtered, defaults to true
+
+		@errors
+			- if creating a new tree, no parent parameter is passed, error is thrown
+
+		@returns
+			none
+
+		@examples
+			$ot = new object_tree(array(
+				"parent" => 5,
+				"name" => "%foo%",
+				"class_id" => CL_BAR,
+				"cool_property" => true
+			));
+
+			$ot->filter(array(
+				"status" => STAT_ACTIVE
+			)), false); // filters the current tree for all objects that are active
+
+			$ot->filter(array(
+				"parent" => 90,
+				"status" => STAT_ACTIVE
+				)), true); // creates a new tree of all the objects below folder 90 that are active
 	**/
 	function filter($filter, $new = true)
 	{
@@ -52,6 +105,24 @@ class object_tree extends _int_obj_container_base
 		}
 	}
 
+	/** returns an object_list instance that contains all the objects in the current tree
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			object list instance that contains all the objects in the current tree
+
+		@examples
+			$ot = new object_tree(array(
+				"parent" => 5,
+				"name" => "%foo%",
+				"class" => CL_BAR,
+				"cool_property" => true
+			));
+			$ol = $ot->to_list();
+	**/
 	function to_list()
 	{
 		$ol = new object_list();
@@ -65,6 +136,37 @@ class object_tree extends _int_obj_container_base
 		return $ol;
 	}
 
+	/** iterates over all objects in the tree and calls the specified object member function for each object in the tree with the specified parameters.
+		@attrib api=1 params=name
+
+		@param func required type=text
+			object class function name to call for each object in the tree
+			
+		@param params optional 
+			array of parameters to pass to the member function
+
+		@param save optional type=bool
+			whether to also call the save method on all objects, optional, defaults true
+
+		@errors
+			- error is thrown if no member function with the specified name exists in the object class
+			- acl error is thrown if the user has no change access for any object in the tree
+
+
+		@returns
+			none
+
+		@examples
+			$ot = new object_tree(array(
+				"parent" => 90,
+				"status" => STAT_ACTIVE
+			));
+			$ot->foreach_o(array(
+				"func" => "set_name",
+				"params" => array("kala"),
+				"save" => true
+			));
+	**/
 	function foreach_o($param)
 	{
 		if (!is_array($param))
@@ -115,6 +217,38 @@ class object_tree extends _int_obj_container_base
 		return $cnt;
 	}
 
+	/** iterates over the tree, calling the specified user function with each object as the parameter
+		@attrib api=1 params=name
+
+		@param func required 
+			 the name of the function to call, the function gets the object reference as the parameter
+			type: text (global function name) , array (array(&$this, "func") - class member function name)
+
+		@param param optional
+			single param that can optionally passed to the function, optional, type: any
+
+		@param save optional type=bool
+			 - whether to also call the save method on all objects, optional, defaults to false
+
+		@errors
+			- error is thrown, if the specified user function does not exist
+			- acl error is thrown if the user has no change access for any object in the tree
+
+		@returns
+			none
+
+		@examples
+			function ot_cb(&$o, $parent)
+			{
+				$o->set_parent($parent);
+			}
+
+			$ot->foreach_cb(array(
+				"func" => "ot_cb",
+				"param" => 666,
+				"save" => true
+			));
+	**/
 	function foreach_cb($param)
 	{
 		if (!is_array($param))
@@ -176,6 +310,33 @@ class object_tree extends _int_obj_container_base
 		return $cnt;
 	}
 
+	/** returns an array of objects under a certain object in the tree
+		@attrib api=1
+
+		@param param required
+			parent oid, required
+			type: oid / string / object instance
+
+		@errors
+			none
+
+		@returns
+			array, key is object id, value is object class instance
+
+		@examples
+			function walker(&$ot, $parent)
+			{
+				foreach($ot->level($parent) as $o)
+				{
+					echo "o = ".$o->name()."\n";
+					walker($ot, $o->parent());
+				}
+			}
+			$ot = new object_tree(array(
+				"parent" => 1
+			));
+			walker($ot, 1); // prints out the names of all the objects in the list #/php#
+	**/
 	function level($param)
 	{
 		$oid = $GLOBALS["object_loader"]->param_to_oid($param);
@@ -188,12 +349,53 @@ class object_tree extends _int_obj_container_base
 		return $ret;
 	}
 
+	/** returns an instance of the object tree class that contains a subtree of the current tree, starting at the specified level
+		@attrib api=1
+
+		@param param required 
+			- parent object oid, to start the tree from
+			type: oid / string / object instance
+	
+		@errors
+			none
+
+		@returns
+			instance of the object_tree class that contains the subtree starting at the specified parent
+
+		@examples
+			$ot = new object_tree(array(
+				"parent" => 9
+			));
+			$ot2 = $ot->subtree(90);
+	**/
 	function subtree($param)
 	{
 		$oid = $GLOBALS["object_loader"]->param_to_oid($param);
 		return $this->_int_subtree($oid);
 	}
 
+	/** adds an object or objects to the tree.
+		@attrib api=1
+
+		@param param required 
+			object to add, required.
+			type: integer (object id), string (object alias), object instance, object_list instance, object_tree instance
+
+		@errors
+			none
+
+		@returns
+			number of objects actually inserted in the tree
+
+		@examples
+			$ot = new object_tree(array(
+				"parent" => 90,
+				"name" => "tunafish",
+				));
+				$ot->add(new object_list(array("status" => STAT_ACTIVE)));
+
+			//now ot contains all objects that are under folder 90 and are named tunafish or are active
+	**/
 	function add($param)
 	{
 		$cnt = 0;
@@ -207,6 +409,51 @@ class object_tree extends _int_obj_container_base
 		return $cnt;
 	}
 
+	/** deletes all objects in the tree and clears the tree
+		@attrib api=1
+
+		@errors
+			- acl error is thrown if user has no delete access for any object in the tree
+
+		@returns
+			the number of objects deleted
+
+		@examples
+			$ot = new object_tree(array(
+				"parent" => 90,
+				"name" => "tunafish",
+			));
+			$ot->delete();
+	**/
+	function delete()
+	{
+		return parent::delete();
+	}
+
+	/** removes the specified object(s) from the tree and all objects under those
+		@attrib api=1
+
+		@param param required 
+			object to remove
+			type: integer (object id), string (object alias), object instance, object_list instance, object_tree instance
+
+		@errors
+			none
+
+		@returns
+			the actual number of objects removed
+
+		@examples
+			$ot = new object_tree(array(
+				"parent" => 90,
+				"name" => "tunafish",
+			));
+			$ot->remove(new object_list(array(
+				"status" => STAT_ACTIVE
+			)));
+
+			//now the tree contains all objects that are under folder 90 are named "tunafish" and are not active 
+	**/
 	function remove($param)
 	{
 		$cnt = 0;
@@ -219,11 +466,66 @@ class object_tree extends _int_obj_container_base
 		return $cnt;
 	}
 
+	/** calls the save method on all the members of the tree
+		@attrib api=1
+
+		@errors
+			- throws acl error, if user has no write access to any object in the tree
+
+		@returns
+			count of objects saved
+
+		@examples
+			$ot = new object_tree(array(
+				"parent" => 90
+			));
+			$ot->foreach_o(array(
+				"func" => "set_name",
+				"params" => array("automatweb"),
+				"save" => false
+			));
+			$ot->save();
+	**/
+	function save()
+	{
+		return parent::save();
+	}
+
+	/** removes all objects from the tree
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			$ot = new object_tree(array(
+				"parent" => "90"
+			));
+			$ot->remove_all();
+	**/
 	function remove_all()
 	{
 		$this->_int_init_empty();
 	}
 
+	/** returns all object id's in the current tree
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			array of oid's that are currently in the tree
+
+		@examples
+			$ot = new object_tree(array(
+            	"parent" => 90
+		));
+		$ids = $ot->ids();
+	**/
 	function ids()
 	{
 		$ret = array();
