@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.82 2006/01/30 12:30:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.83 2006/03/24 08:22:11 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -566,6 +566,10 @@ class promo extends class_base
 	{
 		$alias = $args["alias"];
 		$ob =& obj($alias["target"]);
+		if ($ob->prop("ndocs") == -1)
+		{
+			return "";
+		}
 
 		// if there is another promo dok template, then use that
 		if ($ob->prop("promo_tpl") != "")
