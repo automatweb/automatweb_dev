@@ -36,7 +36,7 @@ for($i = 2; $i < $argc; $i++)
 	else
 	{
 		// get files from folder
-		$p = get_instance("core/docgen/parser");
+		$p = get_instance("core/aw_code_analyzer/parser");
 		$files = array();
 		$p->_get_class_list($files, $path);
 	}
