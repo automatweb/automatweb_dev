@@ -1,8 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.76 2005/12/13 21:16:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.77 2006/03/24 10:41:40 tarvo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
+	/**
+		@attrib params=name api=1
+		@param tpldir optional type=string
+		Sets the alternate template directory
+		@comment
+		Initlializes template class
+		@examples
+		$vcal = new vcalendar(array(
+			"tpldir" => "alternate_template_dir",
+		));
+	**/
 	function vcalendar($arr = array())
 	{
 		// calendar_view class needs templates from its own directory
@@ -16,7 +27,16 @@ class vcalendar extends aw_template
 		$this->output_initialized = false;
 		lc_site_load("vcl_calendar", &$this);
 	}
-
+	
+	/**
+		@attrib params=pos api=1
+		@param feature required
+		Features name to check [first_image|project_media].
+		@comment
+		Checks if current instance has desired feature
+		@returns
+		Boolean value depending on the features existance
+	**/
 	function has_feature($feature)
 	{
 		$retval = false;
@@ -40,6 +60,18 @@ class vcalendar extends aw_template
 
 	}
 
+	/**
+		@attrib params=name api=1
+		@param event_template optional type=string
+		Sets event template to given one. There are 3 default templates, forweek and relative viewtpes + everything else.
+		@comment
+		Sets the vcalendars events template.
+		@examples
+		$vcal = new vcalendar();
+		$vcal->init_output(array("event_template" => "my_new_templ.tpl"));
+		print $vcal->get_html();
+		// shows the calendar with new event template
+	**/
 	function init_output($arr)
 	{
 		$this->evt_tpl = get_instance("aw_template");
@@ -67,7 +99,7 @@ class vcalendar extends aw_template
 		lc_site_load("vcl_calendar", &$this->evt_tpl);
 		$this->output_initialized = true;
 	}
-
+	// whats for is that here ??(taiu)
 	function init_calendar($arr)
 	{
 		// this is the place where I need to calculate the range
@@ -75,15 +107,96 @@ class vcalendar extends aw_template
 		$this->overview_items = array();
 	}
 
-	////
-	// !Configures the calendar view
-	// overview_func -> a function that is used to define the presence of the quick navigator
-	// day_start - array (hour,minute) of day start
-	// day_end - array (hour,minute) of day end
+	/**
+		@attrib params=name api=1
+		
+		@param tasklist_func optional type=array
+		array contents:
+		array(class_inst, method_name);
+		Where 'method_name' is the methods name in class instance 'class_inst' which returns tasklist.
+
+		@param overview_func optional type=array
+		array(class_inst, method_name)
+		Where 'method_name' is the methods name in class instance 'class_inst' which returns overview events. Method is used to define the precence of the quick navigator.
+
+		@param overview_range optional type=int
+		If overview function is set, sets time period for overview. Can be 1(shows one month) or 3(shows prev and next month also). Default is 3.
+
+		@param container_template optional type=string
+		Overwrites container template filename. Default is set during initsialization.
+
+		@param show_days_with_events optional type=int
+		if set to 1, week and month show only the days with events in it.
+
+		@param skip_empty optional type=int
+		If set to 1, week view shows only days with events in it.
+		By default isn't set.
+
+		@param full_weeks optional type=int
+		If set to 1, whole week is shown (including weekend:))
+		By default isn't set.
+
+		@param target_section optional type=string
+		Adds an url parameter named section valued with 'target_section' into overview mini-calendars day link.
+
+		@param day_start optional type=array
+		array(start_hour, start_minute), where both start_hour && start_minute are integers.
+		Defines start of a day.
+
+		@param day_end optional type=array
+		array(end_hour, end_minute), where both end_hour && end_minute are integers.
+		Defines end of a day.
+
+		@param filt_views optional type=array
+		array(viewtype[,viewtype]...)
+		Filters out viewtypes that don't exist in 'filt_views' array. Options are[today|day|week|month|relative]. If not set, all viewtypes will be displayed
+
+		@param fix_links optional type=int
+		If set to 1 and $this->event_sources has any events in it(set from somewhere outside world) does something:). Used in bonbon site, shows only events in a specific way.
+
+		@param month_week optional type=int
+		If set to 1, shows month viewtype like week's viewtype, just weeks below eachother.
+		By default not set.
+		
+		@comment
+		Configures the calendar view in all possible and non-possible ways.
+
+		@examples
+		$cal = get_instance("vcl/calendar");
+		$cal = new vcalendar();
+		// initialize calendar
+		$conf = array(
+			"overview_func" => array(&$this, "_get_overview"),
+			// sets overview function, if that function returns zip(nothing).. then just draws a calendar overview.
+			// If function returns events, then these are displayed on that minicalendar
+			"overview_range" => 3,
+			// sets the overiview calendar to show 3 months (prev, active, next)
+			"show_days_with_events" => 1,
+			// main calendar shows only the days which have events in int.
+			"full_weeks" => 1,
+			// main calendar shows saturday and sunday also
+			"month_week" => 1,
+			// the month is shown as series of weeks below eachother
+		);
+		$cal->add_item(array(
+			"item_start" => time(),
+			"data"=>array(
+				"comment" => "commentaarium",
+				"utextarea1" => "blahh",
+			)
+		));
+		$cal->get_range();
+		// calculates the calendar timeperiod (viewtype is set to month by default)
+		$cal->configure($conf);
+		// configure items are set
+		print $cal->get_html();
+		// echoes a calendar with month viewtype(shown as weeks below eachother), shows only one day(has event in it) and even if it's a weekend day.
+		// overview mini-calendar shows previous and next month also(in a regular month viewtype).
+		
+	**/
 	function configure($arr = array())
 	{
-		$attribs = array("tasklist_func", "overview_func", "overview_range", "container_template", "show_days_with_events", "skip_empty", "full_weeks", "target_section", "day_start", "day_end", "show_ec", "filt_views", "fix_links", "month_week");
-
+		$attribs = array("tasklist_func", "overview_func", "overview_range", "container_template", "show_days_with_events", "skip_empty", "full_weeks", "target_section", "day_start", "day_end", "filt_views", "fix_links", "month_week");
 		foreach($attribs as $attrib)
 		{
 			if (!empty($arr[$attrib]))
@@ -91,16 +204,29 @@ class vcalendar extends aw_template
 				$this->$attrib = $arr[$attrib];
 			};
 		};
-
-		// fact is, event list and overview should use different functions,
-		// cause they need different kinds of data. It should be faster with
-		// different functions
 	}
 
-	////
-	// date - timestamp
+	/**
+		@attrib params=name api=1
+		@param viewtype optional type=string
+		Sets the timeperiod to be shown.Options are [today|day|week|month|relative].
+		By default month is set.
+		Doesn't check if set to viewtype which was filtered out by configure methods filt_views param (forces selected viewtype, even it was filtered out).
+		@param date optional type=int
+		@comment
+		Calculates the dates between based on the viewtype.
+		Default is current time.
+		@returns
+		Array in format : array(start,end,start_wd,m,y,wd,prev,next,timestamp,viewtype,overview_start,overview_end);
+		@examples
+		$cal = get_instance("vcl/calendar");
+		$cal = new vcalendar();
+		$range = $cal->get_range(array("viewtype"=>"month");
+		// $range contains calculated timeperiod. From current monday to sunday.
+	**/
 	function get_range($arr = array())
 	{
+		arr($this->overview_range."b");
 		// called from get_property to determine the range of events to be shown
 		$viewtype = !empty($arr["viewtype"]) ? $arr["viewtype"] : "month";
 		classload("core/date/date_calc");
@@ -168,6 +294,29 @@ class vcalendar extends aw_template
 	// I need methods for adding item AND for drawing
 	// timestamp 
 	// data - arr
+	/**
+		@attrib params=name api=1
+		@param item_start optional type=int
+		Event start time(unix timestamp). Default is current time
+		@param item_end optional type=int
+		Event end time(unix timestamp).
+		@param data required type=array
+		Data for the event, array elements:
+		- id
+		- comment (comment about event)
+		- utextarea1 (text about event)
+		@comment
+		For adding events into calendar.
+		@examples
+		$vcal->add_item(array(
+			"item_start" => time(),
+			"data"=>array(
+				"id" => integer
+				"comment" => "commentaarium",
+				"utextarea1" => "blahh",
+			)
+		));
+	**/
 	function add_item($arr)
 	{
 		if ($_GET["DD"] == 1)
@@ -222,7 +371,6 @@ class vcalendar extends aw_template
 		$data["id"] = $arr["data"]["id"];
 		$data["comment"] = $arr["data"]["comment"];
 		$data["utextarea1"] = nl2br($data["utextarea1"]);
-
 
 		if ($end_tm > $start_tm)
 		{
@@ -303,7 +451,21 @@ class vcalendar extends aw_template
 		
 
 	}
-
+	/**
+		@attrib params=name api=1
+		@param timestamp required type=int
+		Unix timestamp for the event.
+		@param url optional type=string
+		Special url for that event.
+		@comment
+		Adds an overview item to specified time.
+		@examples
+		$vcal->add_overview_item(array(
+			"timestamp"=>time()+86400,
+			"url"=> "http://www.neti.ee",
+		));
+		// Adds an event to overview mini-calendar's next day which links to Estonians most popular search engine.
+	**/
 	function add_overview_item($arr)
 	{
 		$use_date = date("Ymd",$arr["timestamp"]);
@@ -318,7 +480,54 @@ class vcalendar extends aw_template
 			$this->overview_urls[$use_date] = $arr["url"];
 		};
 	}
+	/**
+		@attrib params=name api=1
+		@param style optional type=array
+		array elements(passed by name):
+			-minical_day_with_events (by default 'minical_cellact')
+			-minical_day_without_events (by default 'minical_cell')
+			-minical_day_active (by default 'minical_cellselected')
+			-minical_day_deactive (by default 'minical_cell_deact')
+			-minical_day_today (by default 'minical_cell_today')
+			-minical_title (by default 'minical_table')
+			-minical_background (by default 'minical_table')
 
+			All these can have common values(styles):
+			
+			[minical_cell] : usual cell with no events - day_without_events
+			[minical_cellact] : usual cell with events - day_with_events 
+			[minical_cellselected] : selected (active) cell - day_active
+			[minical_cell_today] : day_today
+			[minical_cell_deact] : deactiv (outside teh current range) - day_deactive
+			[minical_table] : minical_title's and minical_background's default style
+
+		@param text optional type=string
+		An already generated calendar content from draw_[month|day|MY_OWN_FUNC etc...] function
+
+		@comment
+		Finalizes the calendar and returns html source
+		@returns
+		HTML source of the calendar
+		@examples
+		print $cal->get_html(array(
+			"style" => array(
+				"minical_day_with_events" => "minical_cell",
+				// sets days's with events style like it hasn't any event.
+				"minical_background" => "minical_cell_today",
+				// sets overview calendars background to one of the day's style.
+				// Actually that style wasn't ment for that, but it produces pretty nice green calendar(check out yourself:)). 
+			)
+		));
+		// finalises and prints the calendar to the page
+		
+		$cal = get_instance("vcl/calendar");
+		$cal = new vcalendar();		
+		print $cal->get_html(array(
+			"text" => $cal->MY_OWN_VIEW_FUNC(); // can be calendars own draw_month() etc..
+		));
+		// finalizes and prints the calendar to the page with specified view-type function content.
+
+	**/
 	function get_html($arr = array())
 	{
 		global $awt;
@@ -402,7 +611,6 @@ class vcalendar extends aw_template
 		enter_function("vcl/calendar::get_html::overview");
 		if ($this->overview_func)
 		{
-
 			$ostart = $this->range["overview_start"];
 			$oend = $this->range["overview_end"];
 
@@ -487,7 +695,6 @@ class vcalendar extends aw_template
 		{
 			$funcs = array_keys($types);
 		}
-
 		foreach($types as $type => $name)
 		{
 			if(!in_array($type, $funcs))
@@ -568,6 +775,7 @@ class vcalendar extends aw_template
 			"date" => $this->range["next"],
 			"section" => $this->target_section,
 		));
+
 		if(!empty($this->show_days_with_events) && !empty($this->event_sources) && $this->fix_links == 1)
 		{
 			enter_function("vcalendar::show_days_with_events");
@@ -694,7 +902,6 @@ class vcalendar extends aw_template
 	////
 	// !How to I make overview work. It's longer than the usual span ..
 	// so I need some way to do define additonal items for the navigator.
-
 	function draw_month()
 	{
 		$tpl = "month_view.tpl";
@@ -766,6 +973,7 @@ class vcalendar extends aw_template
 					if(!$this->first_event)
 					{
 						$this->first_event = reset($events);
+						
 					}
 					foreach($events as $event)
 					{
@@ -866,7 +1074,7 @@ class vcalendar extends aw_template
 	
 	function draw_year()
 	{
-		$this->read_template("year_view.tpl");
+		$this->read_template("year.tpl");
 		//$rv = "";
 
 		$header = "";
