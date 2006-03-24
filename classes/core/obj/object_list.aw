@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.54 2006/03/22 22:51:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.55 2006/03/24 13:27:04 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -7,6 +7,43 @@ class object_list extends _int_obj_container_base
 	var $list = array();	// array of objects in the current list
 	var $list_names = array(); 
 
+	/** creates the object list, can also initialize it with objects
+		@attrib api=1
+
+		@param param optional type=array
+			array of filter parameters, by what the object list is filtered. if class is 
+			specified in the filter, the filter can also include properties, otherwise properties 
+			are ignored, only object table parameters are used, optional
+
+		@comment
+		In addition to the member functions described here, this class also implements all the  object class mutator functions, only in this case they apply fot all objects in the list, for instance #php# $ol->set_name("fish"); #/php# will change all the objects names in the list to "fish". You must also call $ol->save() to save the objects, because they are not saved automatically
+
+		@errors
+			constructors return no errors
+
+		@returns
+			none
+
+		@examples
+			$ol = new object_list;
+			$ol2 = new object_list(array(
+				"name" => "%foo%",
+				"class_id" => CL_BAR,
+				"cool_property" => true
+			));
+
+			// it is possible to add sorting rules to object_list parameters
+			// they should be "table_name.field_name ASC|DESC"
+
+			// limit is used as in mysql queries, so refer to mysql manual how this should be used
+
+			$ol3 = new object_list(array(
+				"name" => "%foo%",
+				"class_id" => CL_BAR,
+				"sort_by" => "objects.created DESC",
+				"limit" => "2,6" 
+			));
+	**/
 	function object_list($param = NULL)
 	{
 		if ($param != NULL)
@@ -15,6 +52,36 @@ class object_list extends _int_obj_container_base
 		}
 	}
 
+	/** creates a new list from the filter, basically same as the constructor
+		@attrib api=1
+
+		@errors
+			none
+
+		@comment
+			- array of filter parameters, according to which to filter the object list, required
+			filter parameters for bitmask properties/fields can be array("mask" => OBJ_FLAG_ALL, "flags" => OBJ_NEEDS_TRANSLATION)
+			mask specifies the mask to compare against and flags specify the flags that must be present or not
+			after the mask is applied to the bits
+			parameters are documented in $AWROOT/docs/tutorials/object_list.txt
+
+		@returns
+			number of objects in the list after filtering
+
+		@examples
+			// creates a list of objects that are of type CL_BAR, name ontains foo and cool_property equals true
+			$ol = new object_list(array(
+				"name" => "%foo%",
+				"class" => CL_BAR,
+				"cool_property" => true
+			));
+
+			// creates a list of all objects in the system, that have status = STAT_ACTIVE, the previous list is discarded
+			$ol->filter(array(
+				"status" => STAT_ACTIVE
+			)); 
+			// returns all active objects in the system
+	**/
 	function filter($param)
 	{
 		if ($GLOBALS["OBJ_TRACE"])
@@ -65,26 +132,173 @@ class object_list extends _int_obj_container_base
 		$this->_int_filter($param);
 	}
 
+	/** Deletes all objects that are in the current list and removes them from the list
+		@attrib api=1
+
+		@errors
+			- acl error is thrown if the user has no delete access for any of the objects in the list
+
+		@returns
+			number of objects deleted
+
+		@examples
+			$ol = new object_list(array(
+				"status" => STAT_ACTIVE
+			));
+			$ol->delete();
+	**/
+	function delete()
+	{
+		return parent::delete();
+	}
+
+	/** adds the specified object to the current list
+		@attrib api=1
+
+		@param param required type=oid
+			the object(s) to add to the list. type: integer (object id), string (object alias), object class instance, object list instance
+		
+		@errors
+			- acl error is raised if the user has no view access to the object specified
+
+		@returns
+			the number of object in the list after addition
+		
+		@examples
+			$ol = new object_list();
+			$ol->add(obj(56));
+			$ol->add("alias/foo");
+			$ol->add(67);
+
+			$ol2 = new object_list(array("name" => "foo"));
+			$ol->add($ol2);
+	**/
 	function add($param)
 	{
 		$this->_int_add_to_list($GLOBALS["object_loader"]->param_to_oid_list($param));
 	}
 
+	/** removes the specified object(s) from the current list
+		@attrib api=1
+
+		@param param required 
+			the objects to remove from the list
+			type: integer (object id), string (alias), object class instance, object list instance
+
+		@errors
+			none
+
+		@returns
+			the number of objects in the list after the specified objects are removed
+
+		@examples
+			$ol = new object_list();
+			$ol->add(67);
+			$ol->remove(67);
+	**/
 	function remove($param)
 	{
 		$this->_int_remove_from_list($GLOBALS["object_loader"]->param_to_oid_list($param));
 	}
 
+	/** removes all objects from the list
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			$ol = new object_list(array(
+				"name" => "%"
+			));
+			$ol->remove_all();
+	**/
 	function remove_all()
 	{
 		$this->_int_remove_from_list($this->ids());
 	}
 
+	/** returns the object at the specified index
+		@attrib api=1
+
+		@param param required type=oid
+			the oid of the object to return, required.
+
+		@errors
+			none
+
+		@returns
+			the object instance at the specified position, or NULL if none is found in the list
+
+		@examples
+			$ol = new object_list(array(
+				"id" => "90"
+			));
+			$ob_90 = $ol->get_at(90);
+	**/
 	function get_at($param)
 	{
 		return $this->_int_get_at($GLOBALS["object_loader"]->param_to_oid($param));
 	}
 
+	/** calls the save method on all the members of the list
+		@attrib api=1
+
+		@errors
+			- throws acl error, if user has no write access to any object in the list
+
+		@returns
+			count of objects saved
+
+		@examples
+			$ol = new object_list(array(
+				"class" => CL_FILE
+			));
+			$ol->foreach_o(array(
+				"func" => "set_parent",
+				"params" => array(888),
+				"save" => false,
+			));
+			$ol->save();
+	**/
+	function save()
+	{
+		return parent::save();
+	}
+
+	/** sorts the object list by the specified property
+		@attrib api=1 params=name
+
+		@errors
+			none
+
+		@param prop required 
+			the property to sort by
+			type: string (list is sorted by that property only), array (list is sorted by each property in the array)
+
+		@param order optional 
+			the order to sort by, optional, defaults to "asc"
+			type: string (asc/dec), array (each entry corresponds to the order to sort by in the sortable properties array)
+
+		@returns
+			none
+
+		@examples
+			$ol = new object_list(array(
+				"name" => "foo%"
+			));
+			$ol->sort_by(array(
+				"prop" => "ord",
+				"order" => "desc"
+			));
+			$ol->sort_by(array(
+				"prop" => array("ord", "modified"),
+				"order" => array("asc", "desc")
+			));
+	**/
 	function sort_by($param)
 	{
 		if (!is_array($param))
@@ -135,6 +349,25 @@ class object_list extends _int_obj_container_base
 		return $this->_int_get_at(end(array_keys($this->list)));
 	}
 
+	/** resets the internal iterator to the beginning of the list
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			first object in the object list
+
+		@examples
+			$ol = new object_list(array(
+				"status" => STAT_ACTIVE
+			));
+			for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next();)
+			{
+				$o->set_name("kala");
+				$o->save();
+			}
+	**/
 	function begin()
  	{
 		$this->_int_fetch_full_list();
@@ -150,6 +383,26 @@ class object_list extends _int_obj_container_base
 		return $this->_int_get_at($this->iter_lut[$this->iter_index]);
 	}
 
+	/** Returns the object at the current internal ioterator position and increments the current internal iterator by one
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			instance at the object at the current iterator position, or NULL if iterator is
+			after the last element in the list
+
+		@examples
+			$ol = new object_list(array(
+				"status" => STAT_ACTIVE
+			));
+			for ($o = $ol->begin(); !$ol->end(); $o =& $ol->next();)
+			{
+				$o->set_name("kala");
+				$o->save();
+			}
+	**/
 	function next()
 	{
 		$this->iter_index++;
@@ -166,11 +419,62 @@ class object_list extends _int_obj_container_base
 		return $this->_int_get_at($this->iter_lut[$this->iter_index+1]);
 	}
 
+	/** returns true if the internal iterator is at the end of the list
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			true if the internal iterator is past the end of the list, false if the internal iterator is not past the end of the list
+
+		@examples
+			$ol = new object_list(array(
+				"status" => STAT_ACTIVE
+			));
+			$ol->begin();
+
+			while (!$ol->end())
+			{
+				$o = $ol->next();
+				$o->set_name("foo");
+				$o->save();
+			}
+	**/
 	function end()
 	{
 		return (($this->iter_index) == ($this->iter_lut_count));
 	}
 
+	/** iterates over all objects in the list and calls the specified object member function for each object in the list with the specified parameters. this also resets the internal pointer of the list.
+		@attrib api=1 params=name
+
+		@param func required type=string
+			object class function name to call for each object in the list, required
+		
+		@param params optional  
+			array of parameters to pass to the member function
+
+		@param save optional type=bool
+			whether to also call the save method on all objects, optional, defaults to true
+
+		@errors
+			- error is thrown if no member function with the specified name exists in the object class
+			- acl error is thrown if the user has no change access for any object in the list
+
+		@returns
+			the count of the objects in the list
+
+		@examples
+			$ol = new object_list(array(
+				"status" => STAT_ACTIVE
+			));
+			$ol->foreach_o(array(
+				"func" => "set_name",
+				"params" => array("kala"),
+				"save" => true
+			));
+	**/
 	function foreach_o($param)
 	{
 		if (!is_array($param))
@@ -223,6 +527,38 @@ class object_list extends _int_obj_container_base
 		return $cnt;
 	}
 
+	/** iterates over the list, calling the specified user function with each object as the parameter
+		@attrib api=1
+
+		@param func required 
+			the name of the function to call, required. the function gets the object reference as the parameter
+			type: text (global function name) , array (array(&$this, "func") - class member function name)
+
+		@param param optional type=any
+			single param that can optionally passed to the function
+
+		@param save optional type=bool
+			 whether to also call the save method on all objects, optional, defaults to false
+
+		@errors
+			- error is thrown, if the specified user function does not exist
+			- acl error is thrown if the user has no change access for any object in the list
+
+		@returns
+			the count of objects in the list
+
+		@examples
+			function ol_cb(&$o, $parent)
+			{
+				$o->set_parent($parent);
+			}
+
+			$ol->foreach_cb(array(
+				"func" => "ol_cb",
+				"param" => 666,
+				"save" => true
+			));
+	**/
 	function foreach_cb($param)
 	{
 		if (!is_array($param))
@@ -278,6 +614,21 @@ class object_list extends _int_obj_container_base
 		return $cnt;
 	}
 
+	/** returns an array of all the objects in the list
+		@attrib api=
+
+		@errors
+			none
+
+		@returns
+			array of objects in the list, array key is object id, value is object instance
+
+		@examples
+			$ol = new object_list(array(
+				"class" => CL_FILE
+			));
+			$files = $ol->arr();
+	**/
 	function arr()
 	{
 		$ret = array();
@@ -288,6 +639,25 @@ class object_list extends _int_obj_container_base
 		return $ret;
 	}
 
+	/** creates a new object list from an array and returns the new instance
+		@attrib api=1
+
+		@param param required type=array
+			array, key is object id, value is object instance or array to create object instance from
+
+		@errors
+			none
+
+		@returns
+			instance of object list, with the passed objects inserted in the list
+
+		@examples
+			$ol = new object_list(array(
+				"class" => CL_FILE
+			));
+			$files = $ol->arr();
+			$ol2 = object_list::from_arr($arr);
+	**/		
 	function from_arr($param)
 	{
 		if (!is_array($param))
@@ -324,7 +694,21 @@ class object_list extends _int_obj_container_base
 		}
 	}
 
-	// returns all object id's in the current list
+	/** returns all object id's in the current list
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			array of object id's in the current list
+
+		@examples
+			$ol = new object_list(array(
+				"name" => "%aa%"
+			));
+			$ids = $ol->ids();
+	**/
 	function ids()
 	{
 		$tmp = array_keys($this->list);
@@ -351,7 +735,21 @@ class object_list extends _int_obj_container_base
 		return $ret;
 	}
 
-	
+	/** returns number of objects in the current list
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			number of objects in the current list
+
+		@examples
+			$ol = new object_list(array(
+				"status" => STAT_ACTIVE
+			));
+			echo $ol->count()." deleted objects in system ";
+	**/
 	function count()
 	{
 		return count($this->list);
