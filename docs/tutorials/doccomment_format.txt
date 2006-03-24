@@ -14,7 +14,7 @@ complete format:
 
 		@attrib name=orb_name params=[name|pos] default="0" nologin="1" api=1 all_args=1 caption="foo" is_public=1
 
-		@param foo [optional|required] type=[int|var|oid|object|string|float] acl=[view;edit;add] default="foo" 
+		@param foo [optional|required] type=[int|var|oid|object|string|float|bool|array] acl=[view;edit;add] default="foo" 
 
 		@errors multiline text
 				continued
@@ -62,7 +62,7 @@ foo - name of the parameter
 
 [optional|required] - whether the parameter is an optional or a required parameter
 
-type: type of the parameter, can be one of: int, string, float, oid, object (object instance), var (any type)
+type: type of the parameter, can be one of: bool, int, string, float, oid, array, object (object instance), var (any type)
 
 acl: optional, for orb methods, if this is set, then the parameter is assumed to contan an object oid and acl will be checked for this object. 
 acl definitions are separated by ;, for example: acl=view;edit demands that te user has both the add and edit accesses for the object, acl=view only demands view access
