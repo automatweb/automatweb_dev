@@ -231,6 +231,78 @@ class crm_company_bills_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_bill_task_list_t($t);
 
+		// list all task rows that are not billed yet
+		$rows = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"on_bill" => 1,
+			"done" => 1
+		));
+		$tasks = new object_list();
+		$sum2task = array();
+		$hr2task = array();
+		if ($rows->count())
+		{
+			$c = new connection();
+			$t2row = $c->find(array(
+				"from.class_id" => CL_TASK,
+				"to" => $rows->ids(),
+				"type" => "RELTYPE_ROW"
+			));
+			foreach($t2row as $conn)
+			{
+				$task = obj($conn["from"]);
+				$row = obj($conn["to"]);
+				if ($task->prop("project") == $arr["request"]["proj"])
+				{
+					$sum2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
+					$hr2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust"));
+					$tasks->add($conn["from"]);
+				}
+			}
+		}
+
+		foreach($tasks->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"oid" => $o->id(),
+				"hrs" => number_format($hr2task[$o->id()], 2),
+				"hr_price" => number_format($o->prop("hr_price"),2),
+				"sum" => number_format($sum2task[$o->id()],2)
+			));
+		}
+
+		// list all meetings that are not billed yet
+		$meetings = new object_list(array(
+			"class_id" => CL_CRM_MEETING,
+			"send_bill" => 1,
+			"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"is_done" => 1
+		));
+		foreach($meetings->arr() as $row)
+		{
+			$projs[$row->prop("project")] = $row->prop("project");
+			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
+		}
+
+
+		foreach($projs as $p)
+		{
+			$po = obj($p);
+			$ord = $po->prop("orderer");
+			$t->define_data(array(
+				"name" => html::obj_change_url($po),
+				"open" => html::href(array(
+					"url" => aw_url_change_var("proj", $p),
+					"caption" => t("Ava")
+				)),
+				"cust" => html::obj_change_url(reset($ord)),
+				"sum" => number_format($sum2proj[$p], 2)
+			));
+		}
+
+		return;
 		if ($arr["request"]["cust"])
 		{
 			$i = get_instance(CL_CRM_COMPANY);
