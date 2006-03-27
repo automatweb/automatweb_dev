@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.5 2005/05/26 07:34:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.6 2006/03/27 11:57:58 kristo Exp $
 // scheduler.aw - Scheduler
 
 // okey, objektid mida käima tõmmatakse, defineeritakse seostega. Metainfos salvestatud
@@ -90,7 +90,7 @@ class scheduler_obj extends class_base
 				$sch = get_instance("scheduler");
 				$event_url = $this->mk_my_orb("invoke",array("id" => $target_id),$target_obj->class_id());
 				$sch->add(array(
-					"event" => $event_url,
+					"event" => str_replace("/automatweb", "", $event_url),
 					"rep_id" => $rep_id,
 					"uid" => $arr["obj_inst"]->prop("login_uid"),
 					"password" => $arr["obj_inst"]->prop("login_password"),
