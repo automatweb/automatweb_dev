@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.63 2006/03/21 14:52:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.64 2006/03/27 13:21:01 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -95,6 +95,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property time_to_cust type=textbox size=5 field=meta method=serialize 
 @caption Tundide arv kliendile
+
+@property hr_price type=textbox size=5 field=meta method=serialize 
+@caption Tunni hind
 
 @property summary type=textarea cols=60 rows=30 table=planner field=description
 @caption Kokkuvõte
@@ -520,6 +523,36 @@ class crm_meeting extends class_base
 			case "search_contact_results":
 				$p = get_instance(CL_PLANNER);
 				$data["value"] = $p->do_search_contact_results_tbl($arr["request"]);
+				break;
+
+			case "hr_price":
+				// get first person connected as participant and read their hr price
+				if ($data["value"] == "" && is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+				{
+					$conns = $arr['obj_inst']->connections_to(array());
+					foreach($conns as $conn)
+					{
+						if($conn->prop('from.class_id')==CL_CRM_PERSON)
+						{
+							$pers = $conn->from();
+							// get profession
+							$rank = $pers->prop("rank");
+							if (is_oid($rank) && $this->can("view", $rank))
+							{
+								$rank = obj($rank);
+								$data["value"] = $rank->prop("hr_price");
+								// immediately store this thingie as well so that the user will not have to save the object
+								if ($arr["obj_inst"]->prop("hr_price") != $data["value"])
+								{
+									$arr["obj_inst"]->set_prop("hr_price", $data["value"]);
+									$arr["obj_inst"]->save();
+								}
+								break;
+							}
+						}
+					}
+
+				}
 				break;
 		}
 	}

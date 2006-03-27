@@ -28,7 +28,6 @@
             <reltype>RELTYPE_RECURRENCE</reltype>
             <use_form>emb</use_form>
             <mode>manager</mode>
-            <store>no</store>
             <caption>Kordused</caption>
       </property>
       <classinfo>

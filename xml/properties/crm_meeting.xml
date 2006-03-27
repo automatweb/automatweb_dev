@@ -282,6 +282,16 @@
             <caption>Tundide arv kliendile</caption>
       </property>
       <property>
+            <name>hr_price</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tunni hind</caption>
+      </property>
+      <property>
             <name>summary</name>
             <table>planner</table>
             <group>general</group>

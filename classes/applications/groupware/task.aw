@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.85 2006/03/21 14:52:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.86 2006/03/27 13:21:00 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1592,7 +1592,8 @@ class task extends class_base
 					"on_bill" => 1,
 					"bill_id" => $row->prop("bill_id"),
 					"impl" => $row->prop("impl"),
-					"row_oid" => $row->id()
+					"row_oid" => $row->id(),
+					"is_done" => $row->prop("done")
 				);
 			}
 		}

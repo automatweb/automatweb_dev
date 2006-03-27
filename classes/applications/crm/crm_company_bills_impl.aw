@@ -48,6 +48,69 @@ class crm_company_bills_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_bill_proj_list_t($t);
 
+		// list all task rows that are not billed yet
+		$rows = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"on_bill" => 1,
+			"done" => 1
+		));
+		$tasks = new object_list();
+		$sum2proj = array();
+		if ($rows->count())
+		{
+			$c = new connection();
+			$t2row = $c->find(array(
+				"from.class_id" => CL_TASK,
+				"to" => $rows->ids(),
+				"type" => "RELTYPE_ROW"
+			));
+			foreach($t2row as $conn)
+			{
+				$task = obj($conn["from"]);
+				$row = obj($conn["to"]);
+				$sum2proj[$task->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
+				$tasks->add($conn["from"]);
+			}
+		}
+
+		// get all projects from the lists
+		$projs = array();
+		foreach($tasks->arr() as $row)
+		{
+			$projs[$row->prop("project")] = $row->prop("project");
+		}
+
+		// list all meetings that are not billed yet
+		$meetings = new object_list(array(
+			"class_id" => CL_CRM_MEETING,
+			"send_bill" => 1,
+			"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+			"is_done" => 1
+		));
+		foreach($meetings->arr() as $row)
+		{
+			$projs[$row->prop("project")] = $row->prop("project");
+			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
+		}
+
+
+		foreach($projs as $p)
+		{
+			$po = obj($p);
+			$ord = $po->prop("orderer");
+			$t->define_data(array(
+				"name" => html::obj_change_url($po),
+				"open" => html::href(array(
+					"url" => aw_url_change_var("proj", $p),
+					"caption" => t("Ava")
+				)),
+				"cust" => html::obj_change_url(reset($ord)),
+				"sum" => number_format($sum2proj[$p], 2)
+			));
+		}
+		return;
+
 		// get all open tasks
 		$i = get_instance(CL_CRM_COMPANY);
 		//$proj = $i->get_my_projects();
@@ -200,20 +263,23 @@ class crm_company_bills_impl extends class_base
 					$rows = $task_i->get_task_bill_rows($o);
 					foreach($rows as $row)
 					{
-						if (!$row["bill_id"])
+						if (!$row["bill_id"] && $row["is_done"])
 						{
 							$sum += $row["sum"];
 							$hrs += $row["amt"];
 						}
 					}
 
-					$t->define_data(array(
-						"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), parse_obj_name($o->name())),
-						"oid" => $o->id(),
-						"hrs" => $hrs,
-						"hr_price" => number_format($o->prop("hr_price"),2),
-						"sum" => number_format($sum,2)
-					));
+					if ($sum > 0)
+					{
+						$t->define_data(array(
+							"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), parse_obj_name($o->name())),
+							"oid" => $o->id(),
+							"hrs" => $hrs,
+							"hr_price" => number_format($o->prop("hr_price"),2),
+							"sum" => number_format($sum,2)
+						));
+					}
 				}
 			}
 		}
