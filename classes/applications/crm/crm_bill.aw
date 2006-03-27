@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.31 2006/03/21 14:41:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.32 2006/03/27 12:35:16 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -325,6 +325,12 @@ class crm_bill extends class_base
 			}
 		}
 		$rows = $this->get_bill_rows($arr["obj_inst"]);
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			$rows[] = array(
+				"id" => -1
+			);
+		}
 		foreach($rows as $row)
 		{
 			$t_inf = $row;
@@ -1127,29 +1133,51 @@ class crm_bill extends class_base
 	{
 		foreach(safe_array($arr["request"]["rows"]) as $oid => $row)
 		{
-			if ($this->can("edit", $oid))
+			$new = false;
+			if (!$this->can("edit", $oid))
+			{
+				$o = obj();
+				$pt = $arr["obj_inst"]->id();
+				if (!is_oid($pt))
+				{
+					$u = get_instance(CL_USER);
+					$pt = $u->get_current_company();
+				}
+				$o->set_parent($pt);
+				$o->set_class_id(CL_CRM_BILL_ROW);
+				$new = true;
+			}
+			else
 			{
 				$o = obj($oid);
-				$o->set_prop("name", $row["name"]);
+			}
+			$o->set_prop("name", $row["name"]);
 
-				if (trim($row["date"]) == "")
-				{
-					$row["date"] = -1;
-				}
-				else
-				{
-					list($d,$m,$y) = explode("/", $row["date"]);
-					$row["date"] = mktime(0,0,0, $m, $d, $y);
-				}
+			if (trim($row["date"]) == "")
+			{
+				$row["date"] = -1;
+			}
+			else
+			{
+				list($d,$m,$y) = explode("/", $row["date"]);
+				$row["date"] = mktime(0,0,0, $m, $d, $y);
+			}
 
-				$o->set_prop("date", $row["date"]);
-				$o->set_prop("unit", $row["unit"]);
-				$o->set_prop("price", $row["price"]);
-				$o->set_prop("amt", $row["amt"]);
-				$o->set_prop("sum", $row["sum"]);
-				$o->set_prop("prod", $row["prod"]);
-				$o->set_prop("has_tax", $row["has_tax"]);
-				$o->save();
+			$o->set_prop("date", $row["date"]);
+			$o->set_prop("unit", $row["unit"]);
+			$o->set_prop("price", $row["price"]);
+			$o->set_prop("amt", $row["amt"]);
+			$o->set_prop("sum", $row["sum"]);
+			$o->set_prop("prod", $row["prod"]);
+			$o->set_prop("has_tax", $row["has_tax"]);
+			$o->save();
+
+			if ($new)
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $o->id(),
+					"type" => "RELTYPE_ROW"
+				));
 			}
 		}
 	}

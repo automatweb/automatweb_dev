@@ -221,19 +221,24 @@ class crm_company_bills_impl extends class_base
 
 	function _get_bill_tb($arr)
 	{
-		if (!$arr["request"]["proj"])
-		{
-			return PROP_IGNORE;
-		}
-
 		$tb =& $arr["prop"]["vcl_inst"];
 
 		$tb->add_button(array(
-			"name" => "create_bill",
-			"img" => "save.gif",
-			"tooltip" => t("Koosta arve"),
-			"action" => "create_bill"
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Lisa'),
+			'url' => html::get_new_url(CL_CRM_BILL, $arr["obj_inst"]->id(), array("return_url" => get_ru()))
 		));
+
+		if ($arr["request"]["proj"])
+		{
+			$tb->add_button(array(
+				"name" => "create_bill",
+				"img" => "save.gif",
+				"tooltip" => t("Koosta arve"),
+				"action" => "create_bill"
+			));
+		}
 	}
 
 	function _init_bills_list_t(&$t, $r)
@@ -465,6 +470,13 @@ class crm_company_bills_impl extends class_base
 	function _get_bills_tb($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Lisa'),
+			'url' => html::get_new_url(CL_CRM_BILL, $arr["obj_inst"]->id(), array("return_url" => get_ru()))
+		));
+
 		$tb->add_button(array(
 			'name' => 'save',
 			'img' => 'save.gif',
