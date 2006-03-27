@@ -94,9 +94,12 @@ class crm_company_bills_impl extends class_base
 			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
 		}
 
-
 		foreach($projs as $p)
 		{
+			if (!$this->can("view", $p))
+			{
+				continue;
+			}
 			$po = obj($p);
 			$ord = $po->prop("orderer");
 			$t->define_data(array(
