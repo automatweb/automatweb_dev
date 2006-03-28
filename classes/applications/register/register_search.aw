@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.36 2006/03/28 14:54:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.37 2006/03/28 15:06:07 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -384,6 +384,11 @@ class register_search extends class_base
 		$htmlc->start_output();
 		foreach($props as $pn => $pd)
 		{
+			if (substr($pn, 0, 11) == "rsf_uservar")
+			{
+				$pd["type"] = "select";
+				$pd["multiple"] = 1;
+			}
 			$htmlc->add_property($pd);
 		}
 		$htmlc->finish_output();
