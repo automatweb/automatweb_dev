@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.87 2006/03/28 09:42:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.88 2006/03/28 15:25:31 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -100,24 +100,25 @@
 @groupinfo show_entries caption="Sisestused" submit=no
 
 
+------------- search -------------
+@groupinfo search caption="Otsing" parent=show_entries submit_method=get submit=no
+@default group=search
+
+@property entries_toolbar type=toolbar group=search,entries no_caption=1
+@caption Sisestuste toolbar
+
+@property search type=text no_caption=1
+@caption Otsing
+------------- end: search -------------
+
 ------------- entries -------------
 @groupinfo entries caption="N&auml;ita sisestusi" submit=no parent=show_entries
-
-@property entries_toolbar type=toolbar group=entries,search no_caption=1
-@caption Sisestuste toolbar
 
 @property entries type=table group=entries no_caption=1
 @caption Sisestused
 ------------- end: entries -------------
 
 
-------------- search -------------
-@groupinfo search caption="Otsing" parent=show_entries submit_method=get submit=no
-@default group=search
-
-@property search type=text no_caption=1
-@caption Otsing
-------------- end: search -------------
 
 
 @groupinfo controllers caption="Kontrollerid" submit=no
@@ -317,6 +318,7 @@ class webform extends class_base
 			case "search":
 				$register = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_REGISTER");
 				$s = get_instance(CL_REGISTER_SEARCH);
+				$GLOBALS["search_butt"] = 1;
 				$prop["value"] = $s->show(array(
 					"id" => $register->prop("search_o"),
 					"no_form" => 1,

@@ -209,8 +209,8 @@
             <name>entries_toolbar</name>
             <table>objects</table>
             <group>
-                  <num_0>entries</num_0>
-                  <num_1>search</num_1>
+                  <num_0>search</num_0>
+                  <num_1>entries</num_1>
             </group>
             <method>serialize</method>
             <field>meta</field>
@@ -218,6 +218,16 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Sisestuste toolbar</caption>
+      </property>
+      <property>
+            <name>search</name>
+            <table>objects</table>
+            <group>search</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <caption>Otsing</caption>
       </property>
       <property>
             <name>entries</name>
@@ -229,16 +239,6 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Sisestused</caption>
-      </property>
-      <property>
-            <name>search</name>
-            <table>objects</table>
-            <group>search</group>
-            <method>serialize</method>
-            <field>meta</field>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <caption>Otsing</caption>
       </property>
       <property>
             <name>set_controller_folder</name>
@@ -306,17 +306,17 @@
                   <caption>Sisestused</caption>
                   <submit>no</submit>
             </show_entries>
-            <entries>
-                  <caption>N&amp;amp;auml;ita sisestusi</caption>
-                  <submit>no</submit>
-                  <parent>show_entries</parent>
-            </entries>
             <search>
                   <caption>Otsing</caption>
                   <parent>show_entries</parent>
                   <submit_method>get</submit_method>
                   <submit>no</submit>
             </search>
+            <entries>
+                  <caption>N&amp;amp;auml;ita sisestusi</caption>
+                  <submit>no</submit>
+                  <parent>show_entries</parent>
+            </entries>
             <controllers>
                   <caption>Kontrollerid</caption>
                   <submit>no</submit>

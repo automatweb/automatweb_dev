@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.37 2006/03/28 15:06:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.38 2006/03/28 15:25:36 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -771,7 +771,7 @@ class register_search extends class_base
 		enter_function("register_search::show::dsrt::gsr::loop");
 		foreach($props as $pn => $pd)
 		{
-			if ($pd["type"] == "datetime_select" || $pd["type"] == "date_select")
+			if (($pd["type"] == "datetime_select" || $pd["type"] == "date_select") && (isset($request["rsf"][$pn."_from"]) || isset($request["rsf"][$pn."_to"])))
 			{
 				$ts_f = date_edit::get_timestamp($request["rsf"][$pn."_from"]);
 				$ts_t = date_edit::get_timestamp($request["rsf"][$pn."_to"]);
@@ -884,7 +884,6 @@ class register_search extends class_base
 		{
 			$filter["sort_by"] = "objects.name ASC ";
 		}
-
 		if ((!empty($request["search_butt"]) || !empty($request["MAX_FILE_SIZE"])) || $o->prop("show_all_right_away") == 1)
 		{
 			$ol_cnt = new object_list($filter);
