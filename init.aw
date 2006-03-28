@@ -1112,7 +1112,7 @@ function incl_f($lib)
 	}
 	$f[$lib] = 1;
 	echo "$lib ";
-	//echo shbt()." <Br>";
+	echo shbt()." <Br>";
 }
 
 		function shbt()
