@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.69 2006/02/18 10:48:05 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.70 2006/03/28 12:00:07 ahti Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -898,18 +898,15 @@ class sys extends aw_template
 **/
 	function make_property_definitions()
 	{
+		
 		if (!headers_sent())
 		{
 			header ("Content-Type: text/plain");
 		}
-
 		if (!aw_ini_get("enable_web_maintenance"))
 		{
 			exit;
 		}
-
-		ini_set ("max_execution_time", "1500");
-		ini_set ("memory_limit", "200");
 		$this->_make_property_definitions();
 		exit;
 	}
@@ -934,9 +931,6 @@ class sys extends aw_template
 		{
 			exit;
 		}
-
-		ini_set ("max_execution_time", "1500");
-		ini_set ("memory_limit", "200");
 		$this->_make_orb_definitions();
 		exit;
 	}
@@ -962,9 +956,6 @@ class sys extends aw_template
 		{
 			exit;
 		}
-
-		ini_set ("max_execution_time", "900");
-		ini_set ("memory_limit", "200");
 		$this->_make_message_maps();
 		exit;
 	}
@@ -990,9 +981,6 @@ class sys extends aw_template
 		{
 			exit;
 		}
-
-		ini_set ("max_execution_time", "300");
-		ini_set ("memory_limit", "100");
 		$this->_make_ini_file();
 		exit;
 	}
@@ -1155,9 +1143,6 @@ class sys extends aw_template
 			exit;
 		}
 
-		ini_set ("max_execution_time", "4500");
-		ini_set ("memory_limit", "200");
-
 		$this->_make_ini_file();
 		$this->_make_property_definitions();
 		$this->_make_message_maps();
@@ -1180,9 +1165,6 @@ class sys extends aw_template
 		{
 			exit;
 		}
-
-		ini_set ("max_execution_time", "1500");
-		ini_set ("memory_limit", "200");
 		$this->_make_translations();
 		exit;
 	}
@@ -1211,9 +1193,6 @@ class sys extends aw_template
 		{
 			exit;
 		}
-
-		ini_set ("max_execution_time", "1500");
-		ini_set ("memory_limit", "200");
 		$this->_list_missing_translations($arr["lang"], $arr["in_class"]);
 		exit;
 	}
