@@ -860,7 +860,7 @@ class site_list extends class_base
 	{
 		// get the record from the local list
 		$row = $this->db_fetch_row("SELECT * FROM aw_site_list WHERE id = '$id'");
-		if ($row["last_update"] < (time()-24*3600))
+		if ($row["last_update"] < (time()-24*3600*30))
 		{
 			$this->_do_update_list_cache();
 			$row = $this->db_fetch_row("SELECT * FROM aw_site_list WHERE id = '$id'");
