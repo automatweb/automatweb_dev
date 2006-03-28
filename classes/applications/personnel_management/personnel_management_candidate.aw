@@ -1,21 +1,29 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.1 2006/03/14 12:28:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_candidate.aw,v 1.2 2006/03/28 11:52:05 ahti Exp $
 // personnel_management_candidate.aw - Kandidatuur
 /*
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_CANDIDATE relationmgr=yes r2=yes no_comment=1
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_CANDIDATE relationmgr=yes r2=yes no_comment=1 no_status=1 allow_rte=2
 
 @default group=general
 @default table=objects
 @default field=meta
-@default method=serialize
 
-@groupinfo candidate caption="Kandideerimised" submit=no
-@default group=candidate
+@property person type=relpicker reltype=RELTYPE_PERSON method=serialize
+@caption Isik
 
-@property candidate_toolbar type=toolbar no_caption=1
+@property intro_file type=releditor reltype=RELTYPE_FILE rel_id=first props=file,filename method=serialize
+@caption Kaaskiri failina
 
-@property candidate_table type=table no_caption=1
+@property intro type=textarea field=comment cols=80 rows=40 richtext=1
+@caption Kaaskiri tekstina
+
+@reltype PERSON value=1 clid=CL_CRM_PERSON
+@caption Kandideerja
+
+@reltype FILE value=2 clid=CL_FILE
+@caption Kaaskiri failina
+
 */
 
 class personnel_management_candidate extends class_base
@@ -47,6 +55,21 @@ class personnel_management_candidate extends class_base
 		{
 		};
 		return $retval;
+	}
+
+	/**
+		@attrib name=view_intro
+		@param id required type=int
+	**/
+	function view_intro($arr)
+	{
+		$obj = obj($arr["id"]);
+		$intro = $obj->prop("intro");
+		if(!empty($intro))
+		{
+			return $intro;
+		}
+		return "kaaskiri puudub";
 	}
 }
 ?>

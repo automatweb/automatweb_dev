@@ -1,8 +1,8 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="personnel_management" folder="applications/personnel_management" extends="class_base">
-		<action name="delete_rels">
-			<function name="delete_rels">
+		<action name="get_offers_node" all_args="1">
+			<function name="get_offers_node">
 				<arguments>
 				</arguments>
 			</function>

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.118 2006/03/13 12:27:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.119 2006/03/28 11:52:05 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -13,12 +13,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 
 @default table=objects
+------------------------------------------------------------------
+
+@groupinfo general2 caption="Üldine" parent=general
 @default group=general2
-
-@property navtoolbar type=toolbar store=no no_caption=1 group=general,overview editonly=1
-
-@property friend_groups type=classificator reltype=RELTYPE_FRIEND_GROUPS store=no group=general
-@caption Sõbragrupid
 
 @property name type=text
 @caption Nimi
@@ -31,20 +29,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property lastname type=textbox size=15 maxlength=50
 @caption Perekonnanimi
 
+@property nickname type=textbox size=10 maxlength=20
+@caption Hüüdnimi
+
 @property personal_id type=textbox size=13 maxlength=11
 @caption Isikukood
 
-@property ext_id type=textbox table=objects field=subclass maxlength=11
-@caption Numbriline sidussüsteemi ID
-
-@property ext_id_alphanumeric type=textbox table=kliendibaas_isik field=ext_id_alphanumeric maxlength=25
-@caption Sidussüsteemi ID
-
-@property is_customer type=checkbox ch_value=1 table=kliendibaas_isik field=aw_is_customer
-@caption Lisa kliendina
-
-@property code type=textbox table=kliendibaas_isik
-@caption Kood
+@property birthday type=date_select year_from=1930 year_to=2010 default=-1
+@caption Sünnipäev
 
 @property gender type=chooser
 @caption Sugu
@@ -52,28 +44,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 @property title type=chooser
 @caption Tiitel
 
-@property nickname type=textbox size=10 maxlength=20
-@caption Hüüdnimi
-
-property messenger type=textbox size=30 maxlength=200
-caption Msn/yahoo/aol/icq
-
-@property birthday type=date_select year_from=1930 year_to=2010 default=-1
-@caption Sünnipäev
-
-@property education type=relpicker reltype=RELTYPE_EDUCATION automatic=1
-@caption Haridus
-
-
-
 @property social_status type=chooser
 @caption Perekonnaseis
 
-@property spouse type=textbox size=25 maxlength=50 group=relatives
+@property spouse type=textbox size=25 maxlength=50
 @caption Abikaasa
 
-@property children type=relpicker reltype=RELTYPE_CHILDREN group=relatives
-@caption Lapsed
+@property children1 type=select table=objects field=meta method=serialize
+@caption Lapsi
 
 @property pictureurl type=textbox size=40 maxlength=200
 @caption Pildi/foto url
@@ -84,6 +62,18 @@ caption Msn/yahoo/aol/icq
 @property picture2 type=releditor reltype=RELTYPE_PICTURE2 rel_id=first props=file
 @caption Pilt suuremana
 
+@property ext_id type=textbox table=objects field=subclass maxlength=11
+@caption Numbriline sidussüsteemi ID
+
+@property ext_id_alphanumeric type=textbox maxlength=25
+@caption Sidussüsteemi ID
+
+@property code type=textbox
+@caption Kood
+
+property messenger type=textbox size=30 maxlength=200
+caption Msn/yahoo/aol/icq
+
 @property username type=text store=no
 @comment Kasutajanimes on lubatud ladina tähestiku suur- ja väiketähed, numbrid 0-9 ning märgid alakriips ja punkt
 @caption Kasutaja
@@ -91,59 +81,226 @@ caption Msn/yahoo/aol/icq
 @property password type=password table=objects field=meta method=serialize
 @caption Parool
 
-	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_isik field=client_manager
-	@caption Kliendihaldur
+@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER
+@caption Kliendihaldur
 
-	@property is_important type=checkbox ch_value=1 store=no
-	@caption Oluline
+@property is_customer type=checkbox ch_value=1 field=aw_is_customer
+@caption Lisa kliendina
 
-	@property crm_settings type=text store=no
-	@caption CRM Seaded
+@property is_important type=checkbox ch_value=1 store=no
+@caption Oluline
 
-//@property profession type=select store=no edit_only=1
-//@caption Ametinimetus
+@property crm_settings type=text store=no
+@caption CRM Seaded
 
-@property notes type=textarea cols=60 rows=10 group=description
-@caption Vabas vormis tekst
+@property cvactive type=checkbox ch_value=1 table=objects field=meta method=serialize
+@caption CV aktiivne
 
-@property aliasmgr type=aliasmgr group=description no_caption=1 store=no
-@caption Seostehaldur
+------------------------------------------------------------------
 
-@property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik group=contact
+@groupinfo contact caption="Kontaktandmed" parent=general
+@default group=contact
+
+@property work_contact type=relpicker reltype=RELTYPE_WORK
 @caption Organisatsioon
 
-@property org_section type=relpicker reltype=RELTYPE_SECTION multiple=1 table=objects field=meta method=serialize group=contact store=connect
+@property org_section type=relpicker reltype=RELTYPE_SECTION multiple=1 table=objects field=meta method=serialize store=connect
 @caption Osakond
 
-@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
+@property rank type=relpicker reltype=RELTYPE_RANK automatic=1
 @caption Ametinimetus
 
-property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_isik
+property personal_contact type=relpicker reltype=RELTYPE_ADDRESS
 caption Kodused kontaktandmed
-
-@default group=contact
 
 @property address type=relpicker reltype=RELTYPE_ADDRESS
 @caption Aadress
 
-@property email type=releditor mode=manager table=objects field=meta method=serialize group=contact reltype=RELTYPE_EMAIL props=mail table_fields=mail choose_default=1 always_show_add=1
+@property email type=releditor mode=manager table=objects field=meta method=serialize reltype=RELTYPE_EMAIL props=mail table_fields=mail choose_default=1 always_show_add=1
 @caption Meiliaadressid
 
-@property phone type=releditor table=objects field=meta method=serialize mode=manager props=name,type table_fields=name,type group=contact reltype=RELTYPE_PHONE choose_default=1 always_show_add=1
+@property phone type=releditor table=objects field=meta method=serialize mode=manager props=name,type table_fields=name,type reltype=RELTYPE_PHONE choose_default=1 always_show_add=1
 @caption Telefoninumbrid
 
-@property url type=releditor mode=manager table=objects field=meta method=serialize group=contact reltype=RELTYPE_URL props=url table_fields=url choose_default=1 always_show_add=1
+@property url type=releditor mode=manager table=objects field=meta method=serialize reltype=RELTYPE_URL props=url table_fields=url choose_default=1 always_show_add=1
 @caption Veebiaadressid
 
-@property comment type=textarea cols=40 rows=3 table=objects field=comment group=contact
+@property comment type=textarea cols=40 rows=3 table=objects field=comment
 @caption Kontakt
 
+------------------------------------------------------------------
+@groupinfo description caption="Kirjeldus" parent=general
+@default group=description
 
-//property email type=textbox store=no
-//caption E-post
-@property default_cv type=hidden table=objects field=meta method=serialize
+@property notes type=textarea cols=60 rows=10
+@caption Vabas vormis tekst
 
-@default group=overview
+@property aliasmgr type=aliasmgr no_caption=1 store=no
+@caption Seostehaldur
+
+------------------------------------------------------------------
+
+@groupinfo documents_all caption="Dokumendid" submit=no parent=general
+@default group=documents_all
+
+@property docs_tb type=toolbar no_caption=1
+
+@layout docs_lt type=hbox width=20%:80%
+
+@layout docs_left type=vbox parent=docs_lt
+
+@property docs_tree type=treeview parent=docs_left no_caption=1
+
+@layout docs_search type=vbox parent=docs_left
+
+@property docs_s_name type=textbox size=30 store=no captionside=top parent=docs_search
+@caption Nimetus
+
+@property docs_s_type type=select store=no captionside=top parent=docs_search
+@caption Liik
+
+@property docs_s_task type=textbox size=30 store=no captionside=top parent=docs_search
+@caption Toimetus
+
+@property docs_s_user type=textbox size=30 store=no captionside=top parent=docs_search
+@caption Tegija
+
+@property docs_s_customer type=textbox size=30 store=no captionside=top parent=docs_search
+@caption Klient
+
+@layout docs_s_but_row type=hbox parent=docs_left
+
+@property docs_s_sbt type=submit store=no no_caption=1 parent=docs_s_but_row
+@caption Otsi
+
+@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
+@caption T&uuml;hista otsing
+
+@property docs_tbl type=table store=no no_caption=1 parent=docs_lt
+
+------------------------------------------------------------------
+
+@groupinfo settings caption="Muud seaded" parent=general
+@default group=settings
+
+@property templates type=select table=objects field=meta method=serialize
+@caption Väljund
+
+@property server_folder type=server_folder_selector table=objects field=meta method=serialize
+@caption Kataloog serveris, kus asuvad failid
+
+@property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect
+@caption Keeled
+
+------------------------------------------------------------------
+@groupinfo cv caption="Elulugu"
+
+@groupinfo education caption="Hariduskäik" parent=cv submit=no
+@default group=education
+
+@property edulevel type=select table=objects field=meta method=serialize
+@caption Haridustase
+
+@property education_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,field,speciality,start,end table_fields=school,field,speciality,start,end table=objects field=meta method=serialize
+
+------------------------------------------------------------------
+
+@groupinfo add_edu caption="Täienduskoolitus" parent=cv submit=no
+
+@property add_edu_edit type=releditor store=no mode=manager reltype=RELTYPE_ADD_EDUCATION props=org,field,time,length table_fields=org,field,time,length group=add_edu
+------------------------------------------------------------------
+
+@groupinfo orgs caption="Organisatoorne kuuluvus" parent=cv submit=no
+
+@property org_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to group=orgs
+
+------------------------------------------------------------------
+
+@groupinfo recommends caption="Soovitajad" parent=cv submit=no
+
+@property recommends_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to group=recommends
+
+------------------------------------------------------------------
+
+@groupinfo addinfo caption="Muud oskused" parent=cv
+@default group=addinfo
+@default table=objects
+@default field=meta
+@default method=serialize
+
+@property language type=text subtitle=1
+@caption Keeleoskus
+
+@property langlevel type=classificator store=no
+@caption Keeleoskus
+
+@property mlang type=classificator store=no
+@caption Emakeel
+
+@property lang_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to
+Keel	Valik või tekstikast / Räägin	Valik / Saan aru	Valik / Kirjutan	Valik
+
+@property compskills type=text subtitle=1
+@caption Arvutioskus
+
+@property compskills_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to
+Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
+
+@property drivers_license type=text subtitle=1
+@caption Autojuhiload
+
+@property dl_cat type=classificator store=no
+@caption Kategooria
+
+@property dl_since type=select
+@caption Alates
+
+@property dl_can_use type=checkbox ch_value=1
+@caption Kas võimalik kasutada tööeesmärkidel
+
+@property addinfo type=textarea
+@caption Muud oskused
+
+------------------------------------------------------------------
+
+@groupinfo work caption="Töö"
+
+@groupinfo experiences caption="Töökogemus" parent=work submit=no
+@default group=experiences
+
+@property tookogemused_edit type=releditor reltype=RELTYPE_EDUCATION props=organisation,profession,date_from,date_to,duties store=no
+@property previous_jobs_tb type=toolbar no_caption=1 store=no
+@property previous_jobs_table type=table store=no no_caption=1
+
+------------------------------------------------------------------
+
+@groupinfo work_wanted caption="Soovitud töö" parent=work submit=no
+@default group=work_wanted
+
+@property jobs_wanted_tb type=toolbar no_caption=1 store=no
+
+@property jobs_wanted_table type=table no_caption=1
+
+@property jobs_wanted type=releditor reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no
+
+------------------------------------------------------------------
+ 
+@groupinfo candidate caption="Kandideerimised" parent=work submit=no
+@default group=candidate
+
+@property candidate_tb type=toolbar no_caption=1 store=no
+
+@property candidate_table type=table no_caption=1
+
+@property candidate type=releditor reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no
+
+------------------------------------------------------------------
+
+@groupinfo overview caption="Tegevused"
+@groupinfo all_actions caption="Kõik" parent=overview submit=no
+@groupinfo calls caption="Kõned" parent=overview submit=no
+@groupinfo meetings caption="Kohtumised" parent=overview submit=no
+@groupinfo tasks caption="Toimetused" parent=overview submit=no
 
 @property org_actions type=calendar no_caption=1 group=all_actions viewtype=relative
 @caption org_actions
@@ -157,65 +314,10 @@ caption Kodused kontaktandmed
 @property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
 @caption Toimetused
 
----------------CV PROPERTID-------------------
+------------------------------------------------------------------
 
----- OSKUSED
-
-layout toolbar_hbox_toolbar type=hbox group=skills
-layout skills_main type=hbox group=skills width=20%:80%
-layout skills_hbox_tree type=vbox  group=skills parent=skills_main
-layout skills_hbox_table type=vbox group=skills parent=skills_main
-
-property skills_toolbar type=toolbar store=no no_caption=1 wrapchildren=1 group=skills parent=toolbar_hbox_toolbar
-property skills_listing_tree type=treeview no_caption=1 store=no parent=skills_hbox_tree group=skills
-property skills_table type=table store=no group=skills no_caption=1 parent=skills_hbox_table
-
-property language_list type=classificator group=skills parent=skills_hbox_table store=no
-caption Keelesoskus
-
-property language_levels type=classificator group=skills parent=skills_hbox_table store=no
-caption Keelesoskus
-
-property language_skills_table type=table store=no parent=skills_hbox_table no_caption=1 group=skills
-
-property juhiload type=classificator field=meta table=objects method=serialize group=skills store=connect parent=skills_hbox_table reltype=RELTYPE_DRIVING_LICENSE
-caption Juhiload
-
-property submit_driving_licenses type=submit store=no parent=skills_hbox_table group=skills
-caption Salvesta
-
-property programming_skills type=releditor rel_id=first reltype=RELTYPE_PROGRAMMING_SKILLS group=skills props=php,c,charp,cplus,java,python,vb,perl,pascal,delphi,foxpro parent=skills_hbox_table
-
-----Muu
-
-@property education_main type=table no_caption=1 store=no group=education
-@property job_experiences type=table store=no group=experiences no_caption=1
-
-
-----Töökogemused
-@property previous_jobs_tb type=toolbar no_caption=1 store=no group=experiences
-@property previous_jobs_table type=table store=no no_caption=1 group=experiences
-
-@property tookogemused_edit type=releditor reltype=RELTYPE_PREVIOUS_JOB props=organisation,profession,date_from,date_to,duties group=experiences store=no
-
-----Haridus
-@property education_tb type=toolbar no_caption=1 store=no group=education
-@property education_table type=table store=no no_caption=1 group=education
-
-@property add_edu_table type=table no_caption=1 store=no group=add_edu
-@property add_edu_editor type=releditor store=no group=add_edu mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to
-
-property cv_view_tb type=toolbar no_caption=1 store=no wrapchildren=1 group=cv_view
-property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
-
-
+@groupinfo data caption="Andmed"
 @default group=data
-
-	@property server_folder type=server_folder_selector table=objects field=meta method=serialize
-	@caption Kataloog serveris, kus asuvad failid
-
-@property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect
-@caption Keeled
 
 @property udef_ch1 type=chooser multiple=1
 @caption Kasutajadefineeritud CH1
@@ -235,101 +337,46 @@ property cv_view type=text store=no wrapchildren=1 group=cv_view no_caption=1
 @property udef_ta5 type=textarea rows=5 cols=50
 @caption Kasutajadefineeritud TA5
 
+------------------------------------------------------------------
 
-@default group=transl
-
-	@property transl type=callback callback=callback_get_transl store=no
-	@caption T&otilde;lgi
-
-@default group=documents_all
-
-	@property docs_tb type=toolbar no_caption=1
-
-	@layout docs_lt type=hbox width=20%:80%
-
-		@layout docs_left type=vbox parent=docs_lt
-
-			@property docs_tree type=treeview parent=docs_left no_caption=1
-
-			@layout docs_search type=vbox parent=docs_left
-
-				@property docs_s_name type=textbox size=30 store=no captionside=top parent=docs_search
-				@caption Nimetus
-
-				@property docs_s_type type=select store=no captionside=top parent=docs_search
-				@caption Liik
-
-				@property docs_s_task type=textbox size=30 store=no captionside=top parent=docs_search
-				@caption Toimetus
-
-				@property docs_s_user type=textbox size=30 store=no captionside=top parent=docs_search
-				@caption Tegija
-
-				@property docs_s_customer type=textbox size=30 store=no captionside=top parent=docs_search
-				@caption Klient
-
-			@layout docs_s_but_row type=hbox parent=docs_left
-
-				@property docs_s_sbt type=submit store=no no_caption=1 parent=docs_s_but_row
-				@caption Otsi
-
-				@property docs_s_clear type=submit store=no no_caption=1 parent=docs_s_but_row
-				@caption T&uuml;hista otsing
-
-
-		@property docs_tbl type=table store=no no_caption=1 parent=docs_lt
-
-@default group=forms
-
-	@property templates type=select table=objects field=meta method=serialize
-	@caption Väljund
-
+@groupinfo my_stats caption="Minu statistika" submit=no submit_method=get
 @default group=my_stats
 
-	@property stats_s_from type=date_select store=no
-	@caption Alates
+@property stats_s_from type=date_select store=no
+@caption Alates
 
-	@property stats_s_to type=date_select store=no
-	@caption Kuni
+@property stats_s_to type=date_select store=no
+@caption Kuni
 
-	@property stats_s_time_sel type=select store=no
-	@caption Ajavahemik
+@property stats_s_time_sel type=select store=no
+@caption Ajavahemik
 
-	@property stats_s_cust type=textbox store=no
-	@caption Klient
+@property stats_s_cust type=textbox store=no
+@caption Klient
 
-	@property stats_s_show type=submit no_caption=1
-	@caption N&auml;ita
+@property stats_s_show type=submit no_caption=1
+@caption N&auml;ita
 
-	@property my_stats type=text store=no no_caption=1
+@property my_stats type=text store=no no_caption=1
+
+------------------------------------------------------------------
+
+@groupinfo transl caption="T&otilde;lgi"
+@default group=transl
+
+@property transl type=callback callback=callback_get_transl store=no
+@caption T&otilde;lgi
+
+------------------------------------------------------------------
+
+@groupinfo cv_view caption="CV vaade" submit=no
+@default group=cv_view
+
+@property cv_view_tb type=toolbar no_caption=1 store=no
+
+@property cv_view type=text no_caption=1 store=no
 
 ----------------------------------------------
-@groupinfo general2 caption="Üldine" parent=general
-@groupinfo description caption="Kirjeldus" parent=general
-@groupinfo relatives caption="Sugulased" parent=general
-@groupinfo documents_all caption="Dokumendid" submit=no parent=general
-@groupinfo my_stats caption="Minu statistika" submit=no parent=general submit_method=get
-
-@groupinfo contact caption="Kontaktandmed"
-@groupinfo overview caption=Tegevused
-	@groupinfo all_actions caption="Kõik" parent=overview submit=no
-	@groupinfo calls caption="Kõned" parent=overview submit=no
-	@groupinfo meetings caption="Kohtumised" parent=overview submit=no
-	@groupinfo tasks caption="Toimetused" parent=overview submit=no
-
-@groupinfo forms caption=Väljundid
-@groupinfo cv caption="Elulugu"
-	@groupinfo education caption="Hariduskäik" parent=cv
-	@groupinfo add_edu caption="Täienduskoolitus" parent=cv
-	@groupinfo experiences caption="Töökogemused" parent=cv
-	@groupinfo recommends caption="Soovitajad" parent=cv
-	groupinfo cv_view caption="CV vaade" parent=cv
-
-@groupinfo data caption="Andmed"
-
-@groupinfo transl caption=T&otilde;lgi
-
-
 
 */
 
@@ -365,34 +412,36 @@ CREATE TABLE `kliendibaas_isik` (
 
 /*
 @reltype ADDRESS value=1 clid=CL_CRM_ADDRESS
-@caption aadressid
+@caption Aadressid
 
 @reltype PICTURE2 value=2 clid=CL_IMAGE
-@caption pilt2
+@caption Pilt 2
 
 @reltype PICTURE value=3 clid=CL_IMAGE
-@caption pilt
+@caption Pilt
 
-@reltype BACKFORMS value=4 clid=CL_PILOT
-@caption tagasiside vorm
 
-@reltype CHILDREN value=5 clid=CL_CRM_PERSON
-@caption lapsed
+
+reltype BACKFORMS value=4 clid=CL_PILOT
+caption Tagasiside vorm
+
+reltype CHILDREN value=5 clid=CL_CRM_PERSON
+caption Lapsed
 
 @reltype WORK value=6 clid=CL_CRM_COMPANY
-@caption töökoht
+@caption Töökoht
 
 @reltype RANK value=7 clid=CL_CRM_PROFESSION
-@caption ametinimetus
+@caption Ametinimetus
 
 @reltype PERSON_MEETING value=8 clid=CL_CRM_MEETING
-@caption kohtumine
+@caption Kohtumine
 
 @reltype PERSON_CALL value=9 clid=CL_CRM_CALL
-@caption kõne
+@caption Kõne
 
 @reltype PERSON_TASK value=10 clid=CL_TASK
-@caption toimetus
+@caption Toimetus
 
 @reltype EMAIL value=11 clid=CL_ML_MEMBER
 @caption E-post
@@ -403,17 +452,14 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype PHONE value=13 clid=CL_CRM_PHONE
 @caption Telefon
 
-@reltype PROFILE value=14 clid=CL_PROFILE
-@caption Profiil
+reltype PROFILE value=14 clid=CL_PROFILE
+caption Profiil
 
 reltype USER_DATA value=15
 caption Andmed
 
-reltype CV value=19 clid=CL_CV
-caption CV
-
 @reltype ORDER value=20 clid=CL_SHOP_ORDER
-@caption tellimus
+@caption Tellimus
 
 @reltype SECTION value=21 clid=CL_CRM_SECTION
 @caption Üksus
@@ -425,8 +471,8 @@ caption CV
 @reltype EDUCATION value=23 clid=CL_CRM_PERSON_EDUCATION
 @caption Haridus
 
-@reltype DRIVING_LICENSE value=24 clid=CL_CRM_DRIVING_LICENSE
-@caption Juhiluba
+@reltype ADD_EDUCATION value=24 clid=CL_CRM_PERSON_ADD_EDUCATION
+@caption Täiendkoolitus
 
 @reltype PREVIOUS_JOB value=26 clid=CL_CRM_PERSON_PREVIOUS_JOB
 @caption Töökogemus
@@ -434,29 +480,26 @@ caption CV
 @reltype LANGUAGE_SKILL value=27 clid=CL_CRM_PERSON_LANGUAGE
 @caption Keeleoskus
 
-@reltype PROGRAMMING_SKILLS value=33 clid=CL_CRM_PERSON_PROGRAMMING_SKILLS
-@caption Programmeerimisoskus
-
 @reltype DESCRIPTION_DOC value=34 clid=CL_DOCUMENT,CL_MENU
-@caption kirjelduse dokument
+@caption Kirjelduse dokument
 
-@reltype FRIEND value=35 clid=CL_CRM_PERSON
-@caption Sõber
+reltype FRIEND value=35 clid=CL_CRM_PERSON
+caption Sõber
 
-@reltype FAVOURITE value=36 clid=CL_CRM_PERSON
-@caption Lemmik
+reltype FAVOURITE value=36 clid=CL_CRM_PERSON
+caption Lemmik
 
-@reltype MATCH value=37 clid=CL_CRM_PERSON
-@caption Väljavalitu
+reltype MATCH value=37 clid=CL_CRM_PERSON
+caption Väljavalitu
 
-@reltype BLOCKED value=38 clid=CL_CRM_PERSON
-@caption blokeeritud
+reltype BLOCKED value=38 clid=CL_CRM_PERSON
+caption blokeeritud
 
-@reltype IGNORED value=39 clid=CL_CRM_PERSON
-@caption ignoreeritud
+reltype IGNORED value=39 clid=CL_CRM_PERSON
+caption ignoreeritud
 
-@reltype FRIEND_GROUPS value=40 clid=CL_META
-@caption Sõbragrupid
+reltype FRIEND_GROUPS value=40 clid=CL_META
+caption Sõbragrupid
 
 @reltype VACATION value=41 clid=CL_CRM_VACATION
 @caption Puhkus
@@ -465,7 +508,7 @@ caption CV
 @caption Töölepingu peatamine
 
 @reltype IMPORTANT_PERSON value=43 clid=CL_CRM_PERSON
-@caption kontaktisik
+@caption Kontaktisik
 
 @reltype CLIENT_MANAGER value=44 clid=CL_CRM_PERSON
 @caption Kliendihaldur
@@ -500,7 +543,6 @@ class crm_person extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$form = &$arr["request"];
-
 		switch($prop["name"])
 		{
 			case "firstname":
@@ -559,8 +601,12 @@ class crm_person extends class_base
 
 			case "picture":
 			case "picture2":
-				$this->_resize_img($arr);
+				if(!$arr["new"])
+				{
+					$this->_resize_img($arr);
+				}
 				break;
+
 		};
 		return $retval;
 	}
@@ -572,6 +618,35 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case "edulevel":
+				$data["options"] = array(
+					0 => t("-- vali --"),
+					1 => t("põhi"),
+					2 => t("kesk"),
+					3 => t("kesk-eri"),
+					4 => t("kõrgem"),
+				);
+				break;
+
+			case "cv_view_tb":
+				$arr["prop"]["toolbar"]->add_button(array(
+					"name" => "delete",
+					"img" => "pdf_upload.gif",
+					"tooltip" => t("Genereeri pdf"),
+					"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id()))
+				));
+				break;
+			case "dl_since":
+				for($i=date("Y"); $i>date("Y") - 80; $i--)
+				{
+					$data["options"][$i]=$i;
+				}
+				break;
+
+			case "children1":
+				$data["options"] = $this->make_keys(range(0, 10));
+				break;
+
 			case "stats_s_time_sel":
 				$data["options"] = array(
 					"" => t("--vali--"),
@@ -2827,6 +2902,220 @@ class crm_person extends class_base
 				));
 			}
 		}
+	}
+
+	/**
+		@attrib name=gen_job_pdf nologin="1"
+		@param id required type=int
+	**/
+	function gen_job_pdf($arr)
+	{
+		$job = &obj($arr["id"]);
+		$pdf_gen = get_instance("core/converters/html2pdf");
+		session_cache_limiter("public");
+		die($pdf_gen->gen_pdf(array(
+			"filename" => $arr["id"],
+			"source" => $this->show_cv(array(
+				"id" => $arr["id"]
+			))
+		)));
+	}
+
+	function show_cv($arr)
+	{
+		$ob = new object($arr["id"]);
+		$person_obj = current($ob->connections_to(/*array("from.class_id" => CL_CRM_PERSON)*/));
+		if(!is_object($person_obj))
+		{
+			return false;
+		}
+		$person_obj = &obj($person_obj->prop("from"));
+
+		$email_obj = &obj($person_obj->prop("email"));
+		$phone_obj = &obj($person_obj->prop("phone"));
+
+
+		$this->read_template("show.tpl");
+
+		if($person_obj->prop("gender") == 1)
+		{
+			$gender ="Mees";
+		}
+		else
+		{
+			$gender ="Naine";
+		}
+		
+		foreach ($ob->connections_from(array("type" => "RELTYPE_KOGEMUS")) as $kogemus)
+		{
+			$kogemus = $kogemus->to();
+
+			$this->vars(array(
+				"company" => $kogemus->prop("asutus"),
+				"period" => get_lc_date($kogemus->prop("algus"))." - ".get_lc_date($kogemus->prop("kuni")),
+				"profession" => $kogemus->prop("ametikoht"),
+				"duties" => $kogemus->prop("tasks"),
+			));
+			$kogemused_temp .= $this->parse("work_experiences");
+		}
+		
+		//Valdkondade nimekiri
+		foreach ($ob->connections_from(array("type" => "RELTYPE_TEGEVUSVALDKOND")) as $sector)
+		{
+			$this->vars(array(
+				"sector" => $sector->prop("to.name"),
+			));
+			$tmp_sectors.=$this->parse("sectors");
+		}
+		
+		
+		//Hariduste nimekiri
+		foreach ($ob->connections_from(array("type" => "RELTYPE_EDUCATION")) as $haridus)
+		{
+			$haridus = $haridus->to();
+			$haridus->prop("algusaasta");
+			$period = $haridus->prop("algusaasta")." - ". $haridus->prop("loppaasta");
+			
+			
+			$eriala = array_pop($haridus->connections_from(array("type" => "RELTYPE_ERIALA")));
+			if (is_object($eriala))
+			{
+				$ename = $eriala->prop("to.name");
+			}
+			
+			$this->vars(array(
+				"oppevorm" => 	$haridus->prop("oppevorm"),
+				"oppeaste" => 	$haridus->prop("oppeaste"),
+				"oppekava" => 	$haridus->prop("oppekava"),
+				"teaduskond" => $haridus->prop("teaduskond"),
+				"eriala" =>		$ename,
+				"school_name" =>$haridus->prop("kool"),
+				"period" => 	$period,
+				"addional_info" => $haridus->prop("lisainfo_edu"),
+				"kogemused_list" => $kogemused_temp,
+			));
+			
+			$temp_edu.= $this->parse("education");
+		}
+		
+		foreach ($ob->connections_from(array("type" => "RELTYPE_JUHILUBA")) as $driving_license)
+		{
+			$driving_licenses.= ",".$driving_license->prop("to.name");
+		}
+		
+		$ck = "";
+		foreach($ob->connections_from(array("type" => "RELTYPE_ARVUTIOSKUS")) as $c)
+		{
+			$to = $c->to();
+			$oskus = $to->prop("oskus");
+			if ($oskus)
+			{
+				$oo = obj($oskus);
+				$this->vars(array(
+					"skill_name" => $oo->name()
+				));
+			}
+			$tase = $to->prop("tase");
+			if ($tase)
+			{
+				$oo = obj($tase);
+				$this->vars(array(
+					"skill_skill" => $oo->name()
+				));
+			}
+			$ck .= $this->parse("COMP_SKILL");
+		}
+
+		$lsk = "";
+		foreach($ob->connections_from(array("type" => "RELTYPE_LANG")) as $c)
+		{
+			$to = $c->to();
+			$oskus = $to->prop("keel");
+			if ($oskus)
+			{
+				$oo = obj($oskus);
+				$this->vars(array(
+					"skill_name" => $oo->name()
+				));
+			}
+			$tase = $to->prop("tase");
+			if ($tase)
+			{
+				$oo = obj($tase);
+				$this->vars(array(
+					"skill_skill" => $oo->name()
+				));
+			}
+			$lsk .= $this->parse("LANG_SKILL");
+		}
+
+		$dsk = array();
+		foreach($ob->connections_from(array("type" => "RELTYPE_JUHILUBA")) as $c)
+		{
+			$this->vars(array(
+				"skill_name" => $c->prop("to.name"),
+				"driving_since" => $ob->prop("driving_since")
+			));
+			$dsk[] = $this->parse("DRIVE_SKILL");
+		}
+
+		$ed = "";
+		foreach($ob->connections_from(array("type" => "RELTYPE_EDUCATION")) as $c)
+		{
+			$to = $c->to();
+			$d_from = $to->prop("algusaasta");
+			if ($to->prop("date_from") > 100)
+			{
+				$d_from = get_lc_date($to->prop("date_from"),LC_DATE_FORMAT_LONG_FULLYEAR);
+			}
+			$d_to = $to->prop("loppaasta");
+			if ($to->prop("date_to") > 100)
+			{
+				$d_to = get_lc_date($to->prop("date_to"),LC_DATE_FORMAT_LONG_FULLYEAR);
+			}
+			$this->vars(array(
+				"from" => $d_from,
+				"to" => $d_to,
+				"where" => $to->prop("kool"),
+				"extra" => nl2br($to->prop("lisainfo_edu"))
+			));
+			$ed .= $this->parse("ED");
+		}
+
+		$gidlist = aw_global_get("gidlist_oid");
+
+		if(array_search(aw_ini_get("personnel_management.unloged_users") , $gidlist))
+		{
+			$personname = $person_obj->id();
+		}
+		else
+		{
+			$personname = $person_obj->name();
+		}
+
+		$this->vars(array(
+			"COMP_SKILL" => $ck,
+			"LANG_SKILL" => $lsk,
+			"DRIVE_SKILL" => join(",", $dsk),
+			"ED" => $ed,
+			"recommenders" => nl2br($ob->prop("soovitajad")),
+			"name" => $personname,
+			"modified" => get_lc_date($ob->modified()),
+			"birthday" => date("d.m.Y", $person_obj->prop("birthday")),
+			"social_status" => $person_obj->prop("social_status"),
+			"mail" => html::href(array(
+				"url" => "mailto:" . $email_obj->prop("mail"),
+				"caption" => $email_obj->prop("mail"),
+			)),
+			"phone" => $phone_obj->name(),
+			"sectors" => $tmp_sectors,
+			"education" => $temp_edu,
+			"driving_licenses" => $driving_licenses,
+			"addional_info" => $ob->prop("job_addinfo"),
+			"gender" => $gender,
+		));
+
+		return $this->parse();
 	}
 }
 ?>

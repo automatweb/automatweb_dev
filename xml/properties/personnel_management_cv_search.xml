@@ -1,98 +1,94 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>s_cv_name</name>
+            <name>cv_name</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>textbox</type>
-            <field>s_cv_name</field>
+            <field>cv_name</field>
             <caption>Nimi</caption>
       </property>
       <property>
-            <name>s_cv_company</name>
+            <name>cv_company</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>textbox</type>
-            <field>s_cv_company</field>
+            <field>cv_company</field>
             <caption>Ettev&amp;otilde;te</caption>
       </property>
       <property>
-            <name>s_cv_job</name>
+            <name>cv_job</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>textbox</type>
-            <field>s_cv_job</field>
+            <field>cv_job</field>
             <caption>Ametinimetus</caption>
       </property>
       <property>
-            <name>s_cv_paywish</name>
+            <name>cv_paywish</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>textbox</type>
             <parent>pay</parent>
-            <field>s_cv_paywish</field>
+            <field>cv_paywish</field>
             <caption>Palk alates</caption>
       </property>
       <property>
-            <name>s_cv_paywish2</name>
+            <name>cv_paywish2</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>textbox</type>
             <parent>pay</parent>
-            <field>s_cv_paywish2</field>
+            <field>cv_paywish2</field>
             <caption>Palk kuni</caption>
       </property>
       <property>
-            <name>s_cv_valdkond</name>
+            <name>cv_field</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>classificator</type>
-            <mode>checkboxes</mode>
             <multiple>1</multiple>
             <orient>vertical</orient>
-            <reltype>RELTYPE_TEGEVUSVALDKOND</reltype>
-            <field>s_cv_valdkond</field>
+            <field>cv_field</field>
             <caption>Tegevusala</caption>
       </property>
       <property>
-            <name>s_cv_liik</name>
+            <name>cv_type</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>classificator</type>
             <multiple>1</multiple>
-            <mode>checkboxes</mode>
-            <field>s_cv_liik</field>
+            <field>cv_type</field>
             <caption>T&amp;ouml;&amp;ouml; liik</caption>
       </property>
       <property>
-            <name>s_cv_asukoht</name>
+            <name>cv_location</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
-            <type>objpicker</type>
+            <type>relpicker</type>
             <multiple>1</multiple>
-            <clid>CL_CRM_CITY</clid>
             <orient>vertical</orient>
-            <field>s_cv_asukoht</field>
+            <field>cv_location</field>
             <caption>T&amp;ouml;&amp;ouml;tamise piirkond</caption>
       </property>
       <property>
-            <name>s_cv_koormus</name>
+            <name>cv_load</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
@@ -100,38 +96,37 @@
             <type>classificator</type>
             <multiple>1</multiple>
             <orient>vertical</orient>
-            <mode>checkboxes</mode>
-            <field>s_cv_koormus</field>
+            <field>cv_load</field>
             <caption>T&amp;ouml;&amp;ouml;koormus</caption>
       </property>
       <property>
-            <name>personality</name>
+            <name>cv_personality</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>textarea</type>
-            <field>personality</field>
+            <field>cv_personality</field>
             <caption>Isikuomadused</caption>
       </property>
       <property>
-            <name>comments</name>
+            <name>cv_comments</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>textarea</type>
-            <field>comments</field>
+            <field>cv_comments</field>
             <caption>Kommentaarid</caption>
       </property>
       <property>
-            <name>recommenders</name>
+            <name>cv_recommenders</name>
             <table>objects</table>
             <group>general</group>
             <form>cv_search</form>
             <store>no</store>
             <type>textarea</type>
-            <field>recommenders</field>
+            <field>cv_recommenders</field>
             <caption>Soovitajad</caption>
       </property>
       <property>
@@ -169,29 +164,20 @@
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_CV_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>
+            <r2>yes</r2>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
       </classinfo>
-      <reltypes>
-            <TEGEVUSVALDKOND>
-                  <value>6</value>
-                  <clid>CL_META</clid>
-                  <caption>Tegevusala</caption>
-            </TEGEVUSVALDKOND>
-            <LINN>
-                  <value>5</value>
-                  <clid>CL_CRM_CITY</clid>
-                  <caption>Linn</caption>
-            </LINN>
-      </reltypes>
       <layout>
             <pay>
-                  <type>vbox</type>
+                  <type>hbox</type>
                   <group>general</group>
             </pay>
       </layout>
       <forminfo>
             <cv_search>
                   <onload>init_search</onload>
-                  <onsubmit>test</onsubmit>
+                  <onsubmit>do_search</onsubmit>
                   <method>get</method>
             </cv_search>
       </forminfo>

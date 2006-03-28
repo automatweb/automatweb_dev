@@ -1,6 +1,31 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>toolbar</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>toolbar</field>
+      </property>
+      <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>status</type>
+            <field>status</field>
+            <caption>Aktiivne</caption>
+      </property>
+      <property>
             <name>company</name>
             <table>objects</table>
             <group>general</group>
@@ -21,22 +46,22 @@
             <caption>Kontaktisik</caption>
       </property>
       <property>
-            <name>deadline</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>date_select</type>
-            <caption>Konkursi t&amp;auml;htaeg</caption>
-      </property>
-      <property>
-            <name>beginning</name>
+            <name>start</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
             <caption>Konkursi algusaeg</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <caption>Konkursi t&amp;auml;htaeg</caption>
       </property>
       <property>
             <name>profession</name>
@@ -49,6 +74,15 @@
             <caption>Ametikoht</caption>
       </property>
       <property>
+            <name>field</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption>Valdkond</caption>
+      </property>
+      <property>
             <name>location</name>
             <table>objects</table>
             <group>general</group>
@@ -59,23 +93,14 @@
             <caption>Asukoht</caption>
       </property>
       <property>
-            <name>tests</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <reltype>RELTYPE_TEST</reltype>
-            <caption>Testid</caption>
-      </property>
-      <property>
             <name>workinfo</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
+            <rows>15</rows>
+            <cols>60</cols>
             <caption>T&amp;ouml;&amp;ouml; sisu</caption>
       </property>
       <property>
@@ -85,6 +110,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
+            <rows>15</rows>
+            <cols>60</cols>
             <caption>N&amp;otilde;udmised kandidaadile</caption>
       </property>
       <property>
@@ -94,6 +121,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
+            <rows>15</rows>
+            <cols>60</cols>
             <caption>Kasuks tuleb</caption>
       </property>
       <property>
@@ -103,6 +132,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
+            <rows>15</rows>
+            <cols>60</cols>
             <caption>Omalt poolt pakume</caption>
       </property>
       <property>
@@ -112,6 +143,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
+            <rows>15</rows>
+            <cols>60</cols>
             <caption>Lisainfo</caption>
       </property>
       <property>
@@ -134,16 +167,6 @@
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
-      <property>
-            <name>info4</name>
-            <table>objects</table>
-            <group>preview</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <caption>Lisainfo</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_PERSONNEL_MANAGEMENT_JOB_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -155,37 +178,37 @@
                   <caption>Kandideerimised</caption>
                   <submit>no</submit>
             </candidate>
-            <preview>
-                  <caption>Eelvaade</caption>
-                  <submit>no</submit>
-            </preview>
       </groupinfo>
       <reltypes>
-            <TEST>
+            <CANDIDATE>
                   <value>1</value>
-                  <clid>CL_TEST</clid>
-                  <caption>Test</caption>
-            </TEST>
+                  <clid>CL_PERSONNEL_MANAGEMENT_CANDIDATE</clid>
+                  <caption>Kandidatuur</caption>
+            </CANDIDATE>
             <ORG>
                   <value>2</value>
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Organisatsioon</caption>
             </ORG>
-            <LOCATION>
-                  <value>3</value>
-                  <clid>CL_CRM_LOCATION</clid>
-                  <caption>Asukoht</caption>
-            </LOCATION>
             <CONTACT>
-                  <value>4</value>
+                  <value>3</value>
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Kontaktisik</caption>
             </CONTACT>
-            <CANDIDATE>
+            <PROFESSION>
+                  <value>4</value>
+                  <clid>CL_CRM_PROFESSION</clid>
+                  <caption>Ametikoht</caption>
+            </PROFESSION>
+            <LOCATION>
                   <value>5</value>
-                  <clid>CL_PERSONNEL_MANAGEMENT_CANDIDATE</clid>
-                  <caption>Kandidatuur</caption>
-            </CANDIDATE>
+                  <clid>
+                        <num_0>CL_CRM_COUNTY</num_0>
+                        <num_1>CL_CRM_COUNTRY</num_1>
+                        <num_2>CL_CRM_CITY</num_2>
+                  </clid>
+                  <caption>Asukoht</caption>
+            </LOCATION>
       </reltypes>
 </properties>
 

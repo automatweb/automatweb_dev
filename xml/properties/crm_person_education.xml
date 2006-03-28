@@ -1,8 +1,70 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>school</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Kool</caption>
+      </property>
+      <property>
+            <name>field</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <caption>Valdkond</caption>
+      </property>
+      <property>
+            <name>speciality</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Eriala</caption>
+      </property>
+      <property>
+            <name>start</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <format>
+                  <num_0>month</num_0>
+                  <num_1>year</num_1>
+            </format>
+            <parent>time</parent>
+            <caption>Algus</caption>
+      </property>
+      <property>
+            <name>end</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <format>
+                  <num_0>month</num_0>
+                  <num_1>year</num_1>
+            </format>
+            <parent>time</parent>
+            <caption>L&amp;otilde;pp</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_PERSON_EDUCATION</syslog_type>
-            <relationmgr>yes</relationmgr>
+            <no_name>1</no_name>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
       </classinfo>
+      <layout>
+            <time>
+                  <type>hbox</type>
+                  <group>general</group>
+            </time>
+      </layout>
 </properties>
 

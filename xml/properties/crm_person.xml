@@ -1,29 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>navtoolbar</name>
-            <table>objects</table>
-            <group>
-                  <num_0>general</num_0>
-                  <num_1>overview</num_1>
-            </group>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <editonly>1</editonly>
-            <field>navtoolbar</field>
-      </property>
-      <property>
-            <name>friend_groups</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>classificator</type>
-            <reltype>RELTYPE_FRIEND_GROUPS</reltype>
-            <store>no</store>
-            <field>friend_groups</field>
-            <caption>S&amp;otilde;bragrupid</caption>
-      </property>
-      <property>
             <name>name</name>
             <table>objects</table>
             <group>general2</group>
@@ -52,6 +29,16 @@
             <caption>Perekonnanimi</caption>
       </property>
       <property>
+            <name>nickname</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <size>10</size>
+            <maxlength>20</maxlength>
+            <field>nickname</field>
+            <caption>H&amp;uuml;&amp;uuml;dnimi</caption>
+      </property>
+      <property>
             <name>personal_id</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -62,39 +49,15 @@
             <caption>Isikukood</caption>
       </property>
       <property>
-            <name>ext_id</name>
-            <table>objects</table>
-            <group>general2</group>
-            <type>textbox</type>
-            <field>subclass</field>
-            <maxlength>11</maxlength>
-            <caption>Numbriline siduss&amp;uuml;steemi ID</caption>
-      </property>
-      <property>
-            <name>ext_id_alphanumeric</name>
+            <name>birthday</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
-            <type>textbox</type>
-            <field>ext_id_alphanumeric</field>
-            <maxlength>25</maxlength>
-            <caption>Siduss&amp;uuml;steemi ID</caption>
-      </property>
-      <property>
-            <name>is_customer</name>
-            <table>kliendibaas_isik</table>
-            <group>general2</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>aw_is_customer</field>
-            <caption>Lisa kliendina</caption>
-      </property>
-      <property>
-            <name>code</name>
-            <table>kliendibaas_isik</table>
-            <group>general2</group>
-            <type>textbox</type>
-            <field>code</field>
-            <caption>Kood</caption>
+            <type>date_select</type>
+            <year_from>1930</year_from>
+            <year_to>2010</year_to>
+            <default>-1</default>
+            <field>birthday</field>
+            <caption>S&amp;uuml;nnip&amp;auml;ev</caption>
       </property>
       <property>
             <name>gender</name>
@@ -113,37 +76,6 @@
             <caption>Tiitel</caption>
       </property>
       <property>
-            <name>nickname</name>
-            <table>kliendibaas_isik</table>
-            <group>general2</group>
-            <type>textbox</type>
-            <size>10</size>
-            <maxlength>20</maxlength>
-            <field>nickname</field>
-            <caption>H&amp;uuml;&amp;uuml;dnimi</caption>
-      </property>
-      <property>
-            <name>birthday</name>
-            <table>kliendibaas_isik</table>
-            <group>general2</group>
-            <type>date_select</type>
-            <year_from>1930</year_from>
-            <year_to>2010</year_to>
-            <default>-1</default>
-            <field>birthday</field>
-            <caption>S&amp;uuml;nnip&amp;auml;ev</caption>
-      </property>
-      <property>
-            <name>education</name>
-            <table>kliendibaas_isik</table>
-            <group>general2</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_EDUCATION</reltype>
-            <automatic>1</automatic>
-            <field>education</field>
-            <caption>Haridus</caption>
-      </property>
-      <property>
             <name>social_status</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -154,7 +86,7 @@
       <property>
             <name>spouse</name>
             <table>kliendibaas_isik</table>
-            <group>relatives</group>
+            <group>general2</group>
             <type>textbox</type>
             <size>25</size>
             <maxlength>50</maxlength>
@@ -162,13 +94,13 @@
             <caption>Abikaasa</caption>
       </property>
       <property>
-            <name>children</name>
-            <table>kliendibaas_isik</table>
-            <group>relatives</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CHILDREN</reltype>
-            <field>children</field>
-            <caption>Lapsed</caption>
+            <name>children1</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Lapsi</caption>
       </property>
       <property>
             <name>pictureurl</name>
@@ -203,6 +135,32 @@
             <caption>Pilt suuremana</caption>
       </property>
       <property>
+            <name>ext_id</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>subclass</field>
+            <maxlength>11</maxlength>
+            <caption>Numbriline siduss&amp;uuml;steemi ID</caption>
+      </property>
+      <property>
+            <name>ext_id_alphanumeric</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <maxlength>25</maxlength>
+            <field>ext_id_alphanumeric</field>
+            <caption>Siduss&amp;uuml;steemi ID</caption>
+      </property>
+      <property>
+            <name>code</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>code</field>
+            <caption>Kood</caption>
+      </property>
+      <property>
             <name>username</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -231,6 +189,15 @@
             <caption>Kliendihaldur</caption>
       </property>
       <property>
+            <name>is_customer</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_is_customer</field>
+            <caption>Lisa kliendina</caption>
+      </property>
+      <property>
             <name>is_important</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -250,24 +217,14 @@
             <caption>CRM Seaded</caption>
       </property>
       <property>
-            <name>notes</name>
-            <table>kliendibaas_isik</table>
-            <group>description</group>
-            <type>textarea</type>
-            <cols>60</cols>
-            <rows>10</rows>
-            <field>notes</field>
-            <caption>Vabas vormis tekst</caption>
-      </property>
-      <property>
-            <name>aliasmgr</name>
-            <table>kliendibaas_isik</table>
-            <group>description</group>
-            <type>aliasmgr</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>aliasmgr</field>
-            <caption>Seostehaldur</caption>
+            <name>cvactive</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>CV aktiivne</caption>
       </property>
       <property>
             <name>work_contact</name>
@@ -371,248 +328,24 @@
             <caption>Kontakt</caption>
       </property>
       <property>
-            <name>default_cv</name>
-            <table>objects</table>
-            <group>contact</group>
-            <type>hidden</type>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>org_actions</name>
+            <name>notes</name>
             <table>kliendibaas_isik</table>
-            <group>all_actions</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <viewtype>relative</viewtype>
-            <store>no</store>
-            <field>org_actions</field>
-            <caption>org_actions</caption>
-      </property>
-      <property>
-            <name>org_calls</name>
-            <table>kliendibaas_isik</table>
-            <group>calls</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <viewtype>relative</viewtype>
-            <store>no</store>
-            <field>org_calls</field>
-            <caption>K&amp;otilde;ned</caption>
-      </property>
-      <property>
-            <name>org_meetings</name>
-            <table>kliendibaas_isik</table>
-            <group>meetings</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <viewtype>relative</viewtype>
-            <store>no</store>
-            <field>org_meetings</field>
-            <caption>Kohtumised</caption>
-      </property>
-      <property>
-            <name>org_tasks</name>
-            <table>kliendibaas_isik</table>
-            <group>tasks</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <viewtype>relative</viewtype>
-            <store>no</store>
-            <field>org_tasks</field>
-            <caption>Toimetused</caption>
-      </property>
-      <property>
-            <name>education_main</name>
-            <table>kliendibaas_isik</table>
-            <group>education</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>education_main</field>
-      </property>
-      <property>
-            <name>job_experiences</name>
-            <table>kliendibaas_isik</table>
-            <group>experiences</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>job_experiences</field>
-      </property>
-      <property>
-            <name>previous_jobs_tb</name>
-            <table>kliendibaas_isik</table>
-            <group>experiences</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>previous_jobs_tb</field>
-      </property>
-      <property>
-            <name>previous_jobs_table</name>
-            <table>kliendibaas_isik</table>
-            <group>experiences</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>previous_jobs_table</field>
-      </property>
-      <property>
-            <name>tookogemused_edit</name>
-            <table>kliendibaas_isik</table>
-            <group>experiences</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_PREVIOUS_JOB</reltype>
-            <props>
-                  <num_0>organisation</num_0>
-                  <num_1>profession</num_1>
-                  <num_2>date_from</num_2>
-                  <num_3>date_to</num_3>
-                  <num_4>duties</num_4>
-            </props>
-            <store>no</store>
-            <field>tookogemused_edit</field>
-      </property>
-      <property>
-            <name>education_tb</name>
-            <table>kliendibaas_isik</table>
-            <group>education</group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>education_tb</field>
-      </property>
-      <property>
-            <name>education_table</name>
-            <table>kliendibaas_isik</table>
-            <group>education</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>education_table</field>
-      </property>
-      <property>
-            <name>add_edu_table</name>
-            <table>kliendibaas_isik</table>
-            <group>add_edu</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>add_edu_table</field>
-      </property>
-      <property>
-            <name>add_edu_editor</name>
-            <table>kliendibaas_isik</table>
-            <group>add_edu</group>
-            <type>releditor</type>
-            <store>no</store>
-            <mode>manager</mode>
-            <reltype>RELTYPE_EDUCATION</reltype>
-            <props>
-                  <num_0>school</num_0>
-                  <num_1>date_from</num_1>
-                  <num_2>date_to</num_2>
-                  <num_3>additonal_info</num_3>
-                  <num_4>subject</num_4>
-            </props>
-            <table_fields>
-                  <num_0>school</num_0>
-                  <num_1>subject</num_1>
-                  <num_2>date_from</num_2>
-                  <num_3>date_to</num_3>
-            </table_fields>
-            <field>add_edu_editor</field>
-      </property>
-      <property>
-            <name>server_folder</name>
-            <table>objects</table>
-            <group>data</group>
-            <type>server_folder_selector</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kataloog serveris, kus asuvad failid</caption>
-      </property>
-      <property>
-            <name>languages</name>
-            <table>kliendibaas_isik</table>
-            <group>data</group>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <automatic>1</automatic>
-            <reltype>RELTYPE_LANGUAGE</reltype>
-            <store>connect</store>
-            <field>languages</field>
-            <caption>Keeled</caption>
-      </property>
-      <property>
-            <name>udef_ch1</name>
-            <table>kliendibaas_isik</table>
-            <group>data</group>
-            <type>chooser</type>
-            <multiple>1</multiple>
-            <field>udef_ch1</field>
-            <caption>Kasutajadefineeritud CH1</caption>
-      </property>
-      <property>
-            <name>udef_ta1</name>
-            <table>kliendibaas_isik</table>
-            <group>data</group>
+            <group>description</group>
             <type>textarea</type>
-            <rows>5</rows>
-            <cols>50</cols>
-            <field>udef_ta1</field>
-            <caption>Kasutajadefineeritud TA1</caption>
+            <cols>60</cols>
+            <rows>10</rows>
+            <field>notes</field>
+            <caption>Vabas vormis tekst</caption>
       </property>
       <property>
-            <name>udef_ta2</name>
+            <name>aliasmgr</name>
             <table>kliendibaas_isik</table>
-            <group>data</group>
-            <type>textarea</type>
-            <rows>5</rows>
-            <cols>50</cols>
-            <field>udef_ta2</field>
-            <caption>Kasutajadefineeritud TA2</caption>
-      </property>
-      <property>
-            <name>udef_ta3</name>
-            <table>kliendibaas_isik</table>
-            <group>data</group>
-            <type>textarea</type>
-            <rows>5</rows>
-            <cols>50</cols>
-            <field>udef_ta3</field>
-            <caption>Kasutajadefineeritud TA3</caption>
-      </property>
-      <property>
-            <name>udef_ta4</name>
-            <table>kliendibaas_isik</table>
-            <group>data</group>
-            <type>textarea</type>
-            <rows>5</rows>
-            <cols>50</cols>
-            <field>udef_ta4</field>
-            <caption>Kasutajadefineeritud TA4</caption>
-      </property>
-      <property>
-            <name>udef_ta5</name>
-            <table>kliendibaas_isik</table>
-            <group>data</group>
-            <type>textarea</type>
-            <rows>5</rows>
-            <cols>50</cols>
-            <field>udef_ta5</field>
-            <caption>Kasutajadefineeritud TA5</caption>
-      </property>
-      <property>
-            <name>transl</name>
-            <table>kliendibaas_isik</table>
-            <group>transl</group>
-            <type>callback</type>
-            <callback>callback_get_transl</callback>
+            <group>description</group>
+            <type>aliasmgr</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <field>transl</field>
-            <caption>T&amp;amp;otilde;lgi</caption>
+            <field>aliasmgr</field>
+            <caption>Seostehaldur</caption>
       </property>
       <property>
             <name>docs_tb</name>
@@ -727,66 +460,592 @@
       <property>
             <name>templates</name>
             <table>objects</table>
-            <group>forms</group>
+            <group>settings</group>
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>V&amp;auml;ljund</caption>
       </property>
       <property>
-            <name>stats_s_from</name>
+            <name>server_folder</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>server_folder_selector</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kataloog serveris, kus asuvad failid</caption>
+      </property>
+      <property>
+            <name>languages</name>
             <table>kliendibaas_isik</table>
+            <group>settings</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <automatic>1</automatic>
+            <reltype>RELTYPE_LANGUAGE</reltype>
+            <store>connect</store>
+            <field>languages</field>
+            <caption>Keeled</caption>
+      </property>
+      <property>
+            <name>edulevel</name>
+            <table>objects</table>
+            <group>education</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Haridustase</caption>
+      </property>
+      <property>
+            <name>education_edit</name>
+            <table>objects</table>
+            <group>education</group>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager</mode>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>field</num_1>
+                  <num_2>speciality</num_2>
+                  <num_3>start</num_3>
+                  <num_4>end</num_4>
+            </props>
+            <table_fields>
+                  <num_0>school</num_0>
+                  <num_1>field</num_1>
+                  <num_2>speciality</num_2>
+                  <num_3>start</num_3>
+                  <num_4>end</num_4>
+            </table_fields>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>add_edu_edit</name>
+            <table>kliendibaas_isik</table>
+            <group>add_edu</group>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager</mode>
+            <reltype>RELTYPE_ADD_EDUCATION</reltype>
+            <props>
+                  <num_0>org</num_0>
+                  <num_1>field</num_1>
+                  <num_2>time</num_2>
+                  <num_3>length</num_3>
+            </props>
+            <table_fields>
+                  <num_0>org</num_0>
+                  <num_1>field</num_1>
+                  <num_2>time</num_2>
+                  <num_3>length</num_3>
+            </table_fields>
+            <field>add_edu_edit</field>
+      </property>
+      <property>
+            <name>org_edit</name>
+            <table>kliendibaas_isik</table>
+            <group>orgs</group>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager</mode>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>date_from</num_1>
+                  <num_2>date_to</num_2>
+                  <num_3>additonal_info</num_3>
+                  <num_4>subject</num_4>
+            </props>
+            <table_fields>
+                  <num_0>school</num_0>
+                  <num_1>subject</num_1>
+                  <num_2>date_from</num_2>
+                  <num_3>date_to</num_3>
+            </table_fields>
+            <field>org_edit</field>
+      </property>
+      <property>
+            <name>recommends_edit</name>
+            <table>kliendibaas_isik</table>
+            <group>recommends</group>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager</mode>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>date_from</num_1>
+                  <num_2>date_to</num_2>
+                  <num_3>additonal_info</num_3>
+                  <num_4>subject</num_4>
+            </props>
+            <table_fields>
+                  <num_0>school</num_0>
+                  <num_1>subject</num_1>
+                  <num_2>date_from</num_2>
+                  <num_3>date_to</num_3>
+            </table_fields>
+            <field>recommends_edit</field>
+      </property>
+      <property>
+            <name>language</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <caption>Keeleoskus</caption>
+      </property>
+      <property>
+            <name>langlevel</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <store>no</store>
+            <caption>Keeleoskus</caption>
+      </property>
+      <property>
+            <name>mlang</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <store>no</store>
+            <caption>Emakeel</caption>
+      </property>
+      <property>
+            <name>lang_edit</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager</mode>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>date_from</num_1>
+                  <num_2>date_to</num_2>
+                  <num_3>additonal_info</num_3>
+                  <num_4>subject</num_4>
+            </props>
+            <table_fields>
+                  <num_0>school</num_0>
+                  <num_1>subject</num_1>
+                  <num_2>date_from</num_2>
+                  <num_3>date_to</num_3>
+            </table_fields>
+      </property>
+      <property>
+            <name>compskills</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <caption>Arvutioskus</caption>
+      </property>
+      <property>
+            <name>compskills_edit</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <store>no</store>
+            <mode>manager</mode>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>school</num_0>
+                  <num_1>date_from</num_1>
+                  <num_2>date_to</num_2>
+                  <num_3>additonal_info</num_3>
+                  <num_4>subject</num_4>
+            </props>
+            <table_fields>
+                  <num_0>school</num_0>
+                  <num_1>subject</num_1>
+                  <num_2>date_from</num_2>
+                  <num_3>date_to</num_3>
+            </table_fields>
+      </property>
+      <property>
+            <name>drivers_license</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <caption>Autojuhiload</caption>
+      </property>
+      <property>
+            <name>dl_cat</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>classificator</type>
+            <store>no</store>
+            <caption>Kategooria</caption>
+      </property>
+      <property>
+            <name>dl_since</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>dl_can_use</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kas v&amp;otilde;imalik kasutada t&amp;ouml;&amp;ouml;eesm&amp;auml;rkidel</caption>
+      </property>
+      <property>
+            <name>addinfo</name>
+            <table>objects</table>
+            <group>addinfo</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <caption>Muud oskused</caption>
+      </property>
+      <property>
+            <name>tookogemused_edit</name>
+            <table>objects</table>
+            <group>experiences</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>organisation</num_0>
+                  <num_1>profession</num_1>
+                  <num_2>date_from</num_2>
+                  <num_3>date_to</num_3>
+                  <num_4>duties</num_4>
+            </props>
+            <store>no</store>
+      </property>
+      <property>
+            <name>previous_jobs_tb</name>
+            <table>objects</table>
+            <group>experiences</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>previous_jobs_table</name>
+            <table>objects</table>
+            <group>experiences</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>jobs_wanted_tb</name>
+            <table>objects</table>
+            <group>work_wanted</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>jobs_wanted_table</name>
+            <table>objects</table>
+            <group>work_wanted</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>jobs_wanted</name>
+            <table>objects</table>
+            <group>work_wanted</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>palgasoov</num_1>
+                  <num_2>valdkond</num_2>
+                  <num_3>liik</num_3>
+                  <num_4>asukoht</num_4>
+                  <num_5>koormus</num_5>
+                  <num_6>lisainfo</num_6>
+                  <num_7>sbutton</num_7>
+            </props>
+            <store>no</store>
+      </property>
+      <property>
+            <name>candidate_tb</name>
+            <table>objects</table>
+            <group>candidate</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>candidate_table</name>
+            <table>objects</table>
+            <group>candidate</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>candidate</name>
+            <table>objects</table>
+            <group>candidate</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_EDUCATION</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>palgasoov</num_1>
+                  <num_2>valdkond</num_2>
+                  <num_3>liik</num_3>
+                  <num_4>asukoht</num_4>
+                  <num_5>koormus</num_5>
+                  <num_6>lisainfo</num_6>
+                  <num_7>sbutton</num_7>
+            </props>
+            <store>no</store>
+      </property>
+      <property>
+            <name>org_actions</name>
+            <table>objects</table>
+            <group>all_actions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <caption>org_actions</caption>
+      </property>
+      <property>
+            <name>org_calls</name>
+            <table>objects</table>
+            <group>calls</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <caption>K&amp;otilde;ned</caption>
+      </property>
+      <property>
+            <name>org_meetings</name>
+            <table>objects</table>
+            <group>meetings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <caption>Kohtumised</caption>
+      </property>
+      <property>
+            <name>org_tasks</name>
+            <table>objects</table>
+            <group>tasks</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>calendar</type>
+            <no_caption>1</no_caption>
+            <viewtype>relative</viewtype>
+            <store>no</store>
+            <caption>Toimetused</caption>
+      </property>
+      <property>
+            <name>udef_ch1</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>Kasutajadefineeritud CH1</caption>
+      </property>
+      <property>
+            <name>udef_ta1</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <caption>Kasutajadefineeritud TA1</caption>
+      </property>
+      <property>
+            <name>udef_ta2</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <caption>Kasutajadefineeritud TA2</caption>
+      </property>
+      <property>
+            <name>udef_ta3</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <caption>Kasutajadefineeritud TA3</caption>
+      </property>
+      <property>
+            <name>udef_ta4</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <caption>Kasutajadefineeritud TA4</caption>
+      </property>
+      <property>
+            <name>udef_ta5</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <caption>Kasutajadefineeritud TA5</caption>
+      </property>
+      <property>
+            <name>stats_s_from</name>
+            <table>objects</table>
             <group>my_stats</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
             <store>no</store>
-            <field>stats_s_from</field>
             <caption>Alates</caption>
       </property>
       <property>
             <name>stats_s_to</name>
-            <table>kliendibaas_isik</table>
+            <table>objects</table>
             <group>my_stats</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>date_select</type>
             <store>no</store>
-            <field>stats_s_to</field>
             <caption>Kuni</caption>
       </property>
       <property>
             <name>stats_s_time_sel</name>
-            <table>kliendibaas_isik</table>
+            <table>objects</table>
             <group>my_stats</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>select</type>
             <store>no</store>
-            <field>stats_s_time_sel</field>
             <caption>Ajavahemik</caption>
       </property>
       <property>
             <name>stats_s_cust</name>
-            <table>kliendibaas_isik</table>
+            <table>objects</table>
             <group>my_stats</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>textbox</type>
             <store>no</store>
-            <field>stats_s_cust</field>
             <caption>Klient</caption>
       </property>
       <property>
             <name>stats_s_show</name>
-            <table>kliendibaas_isik</table>
+            <table>objects</table>
             <group>my_stats</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>submit</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>stats_s_show</field>
             <caption>N&amp;amp;auml;ita</caption>
       </property>
       <property>
             <name>my_stats</name>
-            <table>kliendibaas_isik</table>
+            <table>objects</table>
             <group>my_stats</group>
+            <field>meta</field>
+            <method>serialize</method>
             <type>text</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <field>my_stats</field>
+      </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
+      <property>
+            <name>cv_view_tb</name>
+            <table>objects</table>
+            <group>cv_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cv_view</name>
+            <table>objects</table>
+            <group>cv_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -799,28 +1058,68 @@
                   <caption>&amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </general2>
+            <contact>
+                  <caption>Kontaktandmed</caption>
+                  <parent>general</parent>
+            </contact>
             <description>
                   <caption>Kirjeldus</caption>
                   <parent>general</parent>
             </description>
-            <relatives>
-                  <caption>Sugulased</caption>
-                  <parent>general</parent>
-            </relatives>
             <documents_all>
                   <caption>Dokumendid</caption>
                   <submit>no</submit>
                   <parent>general</parent>
             </documents_all>
-            <my_stats>
-                  <caption>Minu statistika</caption>
-                  <submit>no</submit>
+            <settings>
+                  <caption>Muud seaded</caption>
                   <parent>general</parent>
-                  <submit_method>get</submit_method>
-            </my_stats>
-            <contact>
-                  <caption>Kontaktandmed</caption>
-            </contact>
+            </settings>
+            <cv>
+                  <caption>Elulugu</caption>
+            </cv>
+            <education>
+                  <caption>Haridusk&amp;auml;ik</caption>
+                  <parent>cv</parent>
+                  <submit>no</submit>
+            </education>
+            <add_edu>
+                  <caption>T&amp;auml;ienduskoolitus</caption>
+                  <parent>cv</parent>
+                  <submit>no</submit>
+            </add_edu>
+            <orgs>
+                  <caption>Organisatoorne kuuluvus</caption>
+                  <parent>cv</parent>
+                  <submit>no</submit>
+            </orgs>
+            <recommends>
+                  <caption>Soovitajad</caption>
+                  <parent>cv</parent>
+                  <submit>no</submit>
+            </recommends>
+            <addinfo>
+                  <caption>Muud oskused</caption>
+                  <parent>cv</parent>
+            </addinfo>
+            <work>
+                  <caption>T&amp;ouml;&amp;ouml;</caption>
+            </work>
+            <experiences>
+                  <caption>T&amp;ouml;&amp;ouml;kogemus</caption>
+                  <parent>work</parent>
+                  <submit>no</submit>
+            </experiences>
+            <work_wanted>
+                  <caption>Soovitud t&amp;ouml;&amp;ouml;</caption>
+                  <parent>work</parent>
+                  <submit>no</submit>
+            </work_wanted>
+            <candidate>
+                  <caption>Kandideerimised</caption>
+                  <parent>work</parent>
+                  <submit>no</submit>
+            </candidate>
             <overview>
                   <caption>Tegevused</caption>
             </overview>
@@ -844,34 +1143,21 @@
                   <parent>overview</parent>
                   <submit>no</submit>
             </tasks>
-            <forms>
-                  <caption>V&amp;auml;ljundid</caption>
-            </forms>
-            <cv>
-                  <caption>Elulugu</caption>
-            </cv>
-            <education>
-                  <caption>Haridusk&amp;auml;ik</caption>
-                  <parent>cv</parent>
-            </education>
-            <add_edu>
-                  <caption>T&amp;auml;ienduskoolitus</caption>
-                  <parent>cv</parent>
-            </add_edu>
-            <experiences>
-                  <caption>T&amp;ouml;&amp;ouml;kogemused</caption>
-                  <parent>cv</parent>
-            </experiences>
-            <recommends>
-                  <caption>Soovitajad</caption>
-                  <parent>cv</parent>
-            </recommends>
             <data>
                   <caption>Andmed</caption>
             </data>
+            <my_stats>
+                  <caption>Minu statistika</caption>
+                  <submit>no</submit>
+                  <submit_method>get</submit_method>
+            </my_stats>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
+            <cv_view>
+                  <caption>CV vaade</caption>
+                  <submit>no</submit>
+            </cv_view>
       </groupinfo>
       <tableinfo>
             <kliendibaas_isik>
@@ -884,52 +1170,42 @@
             <ADDRESS>
                   <value>1</value>
                   <clid>CL_CRM_ADDRESS</clid>
-                  <caption>aadressid</caption>
+                  <caption>Aadressid</caption>
             </ADDRESS>
             <PICTURE2>
                   <value>2</value>
                   <clid>CL_IMAGE</clid>
-                  <caption>pilt2</caption>
+                  <caption>Pilt 2</caption>
             </PICTURE2>
             <PICTURE>
                   <value>3</value>
                   <clid>CL_IMAGE</clid>
-                  <caption>pilt</caption>
+                  <caption>Pilt</caption>
             </PICTURE>
-            <BACKFORMS>
-                  <value>4</value>
-                  <clid>CL_PILOT</clid>
-                  <caption>tagasiside vorm</caption>
-            </BACKFORMS>
-            <CHILDREN>
-                  <value>5</value>
-                  <clid>CL_CRM_PERSON</clid>
-                  <caption>lapsed</caption>
-            </CHILDREN>
             <WORK>
                   <value>6</value>
                   <clid>CL_CRM_COMPANY</clid>
-                  <caption>t&amp;ouml;&amp;ouml;koht</caption>
+                  <caption>T&amp;ouml;&amp;ouml;koht</caption>
             </WORK>
             <RANK>
                   <value>7</value>
                   <clid>CL_CRM_PROFESSION</clid>
-                  <caption>ametinimetus</caption>
+                  <caption>Ametinimetus</caption>
             </RANK>
             <PERSON_MEETING>
                   <value>8</value>
                   <clid>CL_CRM_MEETING</clid>
-                  <caption>kohtumine</caption>
+                  <caption>Kohtumine</caption>
             </PERSON_MEETING>
             <PERSON_CALL>
                   <value>9</value>
                   <clid>CL_CRM_CALL</clid>
-                  <caption>k&amp;otilde;ne</caption>
+                  <caption>K&amp;otilde;ne</caption>
             </PERSON_CALL>
             <PERSON_TASK>
                   <value>10</value>
                   <clid>CL_TASK</clid>
-                  <caption>toimetus</caption>
+                  <caption>Toimetus</caption>
             </PERSON_TASK>
             <EMAIL>
                   <value>11</value>
@@ -946,15 +1222,10 @@
                   <clid>CL_CRM_PHONE</clid>
                   <caption>Telefon</caption>
             </PHONE>
-            <PROFILE>
-                  <value>14</value>
-                  <clid>CL_PROFILE</clid>
-                  <caption>Profiil</caption>
-            </PROFILE>
             <ORDER>
                   <value>20</value>
                   <clid>CL_SHOP_ORDER</clid>
-                  <caption>tellimus</caption>
+                  <caption>Tellimus</caption>
             </ORDER>
             <SECTION>
                   <value>21</value>
@@ -970,11 +1241,11 @@
                   <clid>CL_CRM_PERSON_EDUCATION</clid>
                   <caption>Haridus</caption>
             </EDUCATION>
-            <DRIVING_LICENSE>
+            <ADD_EDUCATION>
                   <value>24</value>
-                  <clid>CL_CRM_DRIVING_LICENSE</clid>
-                  <caption>Juhiluba</caption>
-            </DRIVING_LICENSE>
+                  <clid>CL_CRM_PERSON_ADD_EDUCATION</clid>
+                  <caption>T&amp;auml;iendkoolitus</caption>
+            </ADD_EDUCATION>
             <PREVIOUS_JOB>
                   <value>26</value>
                   <clid>CL_CRM_PERSON_PREVIOUS_JOB</clid>
@@ -985,49 +1256,14 @@
                   <clid>CL_CRM_PERSON_LANGUAGE</clid>
                   <caption>Keeleoskus</caption>
             </LANGUAGE_SKILL>
-            <PROGRAMMING_SKILLS>
-                  <value>33</value>
-                  <clid>CL_CRM_PERSON_PROGRAMMING_SKILLS</clid>
-                  <caption>Programmeerimisoskus</caption>
-            </PROGRAMMING_SKILLS>
             <DESCRIPTION_DOC>
                   <value>34</value>
                   <clid>
                         <num_0>CL_DOCUMENT</num_0>
                         <num_1>CL_MENU</num_1>
                   </clid>
-                  <caption>kirjelduse dokument</caption>
+                  <caption>Kirjelduse dokument</caption>
             </DESCRIPTION_DOC>
-            <FRIEND>
-                  <value>35</value>
-                  <clid>CL_CRM_PERSON</clid>
-                  <caption>S&amp;otilde;ber</caption>
-            </FRIEND>
-            <FAVOURITE>
-                  <value>36</value>
-                  <clid>CL_CRM_PERSON</clid>
-                  <caption>Lemmik</caption>
-            </FAVOURITE>
-            <MATCH>
-                  <value>37</value>
-                  <clid>CL_CRM_PERSON</clid>
-                  <caption>V&amp;auml;ljavalitu</caption>
-            </MATCH>
-            <BLOCKED>
-                  <value>38</value>
-                  <clid>CL_CRM_PERSON</clid>
-                  <caption>blokeeritud</caption>
-            </BLOCKED>
-            <IGNORED>
-                  <value>39</value>
-                  <clid>CL_CRM_PERSON</clid>
-                  <caption>ignoreeritud</caption>
-            </IGNORED>
-            <FRIEND_GROUPS>
-                  <value>40</value>
-                  <clid>CL_META</clid>
-                  <caption>S&amp;otilde;bragrupid</caption>
-            </FRIEND_GROUPS>
             <VACATION>
                   <value>41</value>
                   <clid>CL_CRM_VACATION</clid>
@@ -1041,7 +1277,7 @@
             <IMPORTANT_PERSON>
                   <value>43</value>
                   <clid>CL_CRM_PERSON</clid>
-                  <caption>kontaktisik</caption>
+                  <caption>Kontaktisik</caption>
             </IMPORTANT_PERSON>
             <CLIENT_MANAGER>
                   <value>44</value>

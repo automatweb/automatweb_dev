@@ -1,17 +1,7 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>orgs</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MENU</reltype>
-            <caption>Organisatsioonide kaust</caption>
-      </property>
-      <property>
-            <name>persons</name>
+            <name>persons_fld</name>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
@@ -21,7 +11,7 @@
             <caption>Isikute kaust</caption>
       </property>
       <property>
-            <name>offers</name>
+            <name>offers_fld</name>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
@@ -31,7 +21,7 @@
             <caption>T&amp;ouml;&amp;ouml;pakkumiste kaust</caption>
       </property>
       <property>
-            <name>tegevusvaldkonnad</name>
+            <name>fields</name>
             <group>general</group>
             <table>objects</table>
             <field>meta</field>
@@ -178,7 +168,7 @@
             <store>no</store>
       </property>
       <property>
-            <name>joblist</name>
+            <name>offers_table</name>
             <group>offers</group>
             <table>objects</table>
             <field>meta</field>
