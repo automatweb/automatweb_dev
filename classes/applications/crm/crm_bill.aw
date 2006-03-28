@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.32 2006/03/27 12:35:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.33 2006/03/28 10:17:09 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -328,7 +328,10 @@ class crm_bill extends class_base
 		if (!is_oid($arr["obj_inst"]->id()))
 		{
 			$rows[] = array(
-				"id" => -1
+				"id" => -1,
+				"date" => time(),
+				"amt" => 0,
+				"sum" => 0
 			);
 		}
 		foreach($rows as $row)
