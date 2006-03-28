@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.21 2006/03/23 15:25:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.22 2006/03/28 10:50:54 kristo Exp $
 // bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -500,7 +500,25 @@ class bug extends class_base
 			BUG_NOTREPEATABLE => 40,
 			BUG_NOTFIXABLE => 40
 		);
-		return $sp_lut[$bug->prop("bug_status")] + $bug->prop("bug_priority");
+		$rv = $sp_lut[$bug->prop("bug_status")] + $bug->prop("bug_priority");
+		// also, if the bug has a deadline, then we need to up the priority as the deadline comes closer
+		if (($dl = $bug->prop("deadline")) > 200)
+		{
+			// deadline in the next 24 hrs = +3
+			if ($dl < (time() - 24*3600))
+			{
+				$rv++;
+			}
+			// deadline in the next 48 hrs +2
+			if ($dl < (time() - 48*3600))
+			{
+				$rv++;
+			}
+			// has deadline = +1
+			$rv++;
+		}
+		
+		return $rv;
 	}
 
 	function handle_stopper_stop($bug, $inf)
