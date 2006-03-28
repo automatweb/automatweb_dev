@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.8 2006/03/07 10:11:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.9 2006/03/28 07:24:28 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -273,6 +273,7 @@ class crm_company_webview extends class_base
 			'description' => 'tegevuse_kirjeldus',
 			'type' => '',
 			'moreinfo_link' => '',
+			'logo' => 'logo'
 		);
 		
 		// Name is not obligatory - will go to template as {VAR:key}
@@ -291,6 +292,7 @@ class crm_company_webview extends class_base
 			'num_rooms' => t("Toad"),
 			'prices' => t("Hinnad"),
 			'type' => t("T&uuml;&uuml;p"),
+			'logo' => t("Logo")
 		);
 		$crm_field_titles = array(
 			CL_CRM_FIELD_ACCOMMODATION => t("Majutusinfo"),
@@ -361,6 +363,15 @@ class crm_company_webview extends class_base
 			$key = $value = $reltype = "";
 			switch ($item)
 			{
+				case 'logo':
+					$logoo = $c->get_first_obj_by_reltype("RELTYPE_ORGANISATION_LOGO");
+					if ($logoo)
+					{
+						$img_i = $logoo->instance();
+						$value = $img_i->make_img_tag_wl($logoo->id());
+					}
+					break;
+
 				case 'phone': // Display all phone numbers, not selected one
 					$reltype = 'RELTYPE_PHONE';
 				case 'fax':
@@ -731,7 +742,7 @@ class crm_company_webview extends class_base
 			{
 				$value = join(', ', $value);
 			}
-			
+
 			if (!empty($value))
 			{
 				$this->vars(array(
@@ -1017,6 +1028,7 @@ class crm_company_webview extends class_base
 			'email' => 'email_id',
 			'web' => 'url_id',
 			'images' => '',
+			'logo' => ''
 		);
 
 		if (!empty($arr['url']))
@@ -1100,6 +1112,16 @@ class crm_company_webview extends class_base
 						if (strlen($idx) && strpos($value, $idx) === FALSE)
 						{
 							$value .= ", $idx";
+						}
+					}
+					elseif ($item == 'logo')
+					{
+						$value = "";
+						$logoo = $o->get_first_obj_by_reltype("RELTYPE_ORGANISATION_LOGO");
+						if ($logoo)
+						{
+							$img_i = $logoo->instance();
+							$value = $img_i->make_img_tag_wl($logoo->id());
 						}
 					}
 					elseif ($item == 'images')
