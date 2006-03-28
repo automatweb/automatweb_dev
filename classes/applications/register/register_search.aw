@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.35 2006/03/28 11:44:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.36 2006/03/28 14:54:25 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -918,6 +918,9 @@ class register_search extends class_base
 
 		$tdata = $arr["obj_inst"]->meta("tdata");
 
+		$reg = obj($arr["obj_inst"]->prop("register"));
+		$props = $this->get_props_from_reg($reg);
+
 		$can_change = false;
 		$can_delete = false;
 
@@ -930,6 +933,31 @@ class register_search extends class_base
 			$data = array();
 			foreach($t->rowdefs as $k => $v)
 			{
+				if (substr($v["name"], 0, 6) == "userim")
+				{
+					// link to img
+					$imgo = $o->get_first_obj_by_reltype("RELTYPE_IMAGE".substr($v["name"], 6));
+					if ($imgo)
+					{
+						$imgi = $imgo->instance();
+						$data[$v["name"]] = $imgi->make_img_tag_wl($imgo->id());
+					}
+				}
+				else
+				if (substr($v["name"], 0, 8) == "userfile")
+				{
+					// link to file
+					$fileo = $o->get_first_obj_by_reltype("RELTYPE_FILE".substr($v["name"], 8));
+					if ($fileo)
+					{
+						$filei = $fileo->instance();
+						$data[$v["name"]] = html::href(array(
+							"url" => $filei->get_url($fileo->id(), $fileo->name()),
+							"caption" => $fileo->name()
+						));
+					}
+				}
+				else
 				if ($v["name"] == "change_link")
 				{
 					if ($this->can("edit", $o->id()))
