@@ -70,6 +70,16 @@
             <store>no</store>
             <caption>Kaustade seaded</caption>
       </property>
+      <property>
+            <name>kw</name>
+            <table>objects</table>
+            <group>kw</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Milliste m&amp;amp;auml;rk&amp;amp;otilde;nadega dokumente n&amp;amp;auml;idata</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_NEWSFEED</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -78,6 +88,9 @@
             <folders>
                   <caption>Kaustad</caption>
             </folders>
+            <kw>
+                  <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+            </kw>
       </groupinfo>
       <reltypes>
             <FEED_SOURCE>

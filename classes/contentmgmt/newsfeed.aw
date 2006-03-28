@@ -1,39 +1,49 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.15 2006/03/22 14:54:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.16 2006/03/28 10:14:05 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
 @classinfo syslog_type=ST_NEWSFEED relationmgr=yes
 
 @default table=objects
+
+
 @default group=general
 
-@property alias type=textbox
-@caption Alias
-@comment Selle abil saab fiidile otse ligi
+	@property alias type=textbox
+	@caption Alias
+	@comment Selle abil saab fiidile otse ligi
 
 @default field=meta
 @default method=serialize
 
-@property feedtype type=chooser orient=vertical
-@caption Tüüp
+	@property feedtype type=chooser orient=vertical
+	@caption Tüüp
 
-@property limittype type=chooser orient=vertical
-@caption Milliseid uudiseid näidata?
+	@property limittype type=chooser orient=vertical
+	@caption Milliseid uudiseid näidata?
 
-@property count type=textbox size=2
-@caption Mitu viimast
+	@property count type=textbox size=2
+	@caption Mitu viimast
 
-@property days type=textbox size=2
-@caption Mitme viimase päeva omad
+	@property days type=textbox size=2
+	@caption Mitme viimase päeva omad
 
-@property parse_embed type=checkbox ch_value=1 default=1
-@caption Näita ka lisatud objekte
+	@property parse_embed type=checkbox ch_value=1 default=1
+	@caption Näita ka lisatud objekte
 
-@property folders type=table store=no group=folders 
-@caption Kaustade seaded
+@default group=folders
+
+	@property folders type=table store=no 
+	@caption Kaustade seaded
+
+@default group=kw
+
+	@property kw type=table store=no
+	@caption Milliste m&auml;rk&otilde;nadega dokumente n&auml;idata
 
 @groupinfo folders caption="Kaustad"
+@groupinfo kw caption="M&auml;rks&otilde;nad"
 
 @reltype FEED_SOURCE value=1 clid=CL_MENU
 @caption Materjalide kaust
@@ -59,6 +69,10 @@ class newsfeed extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "kw":
+				$this->_kw($arr);
+				break;
+
 			case "feedtype":
 				$prop["options"] = array(
 					"rss20" => t("RSS 2.0"),
@@ -136,6 +150,9 @@ class newsfeed extends class_base
 				$this->save_folders($arr);
 				break;
 
+			case "kw":
+				$this->_save_kw($arr);
+				break;
 		}
 		return $retval;
 	}	
@@ -185,18 +202,38 @@ class newsfeed extends class_base
 
 		$limittype = $feedobj->prop("limittype") == "days" ? "days" : "last";
 
-		if (sizeof($parents) > 0)
+		$use_kws = safe_array($feedobj->meta("use_kws"));
+
+		if (sizeof($parents) > 0 || count($use_kws) > 0)
 		{
 			$count = $feedobj->prop("count");
 			if ($count < 1 || $count > 20)
 			{
 				$count = 20;
 			};
+
+			$kwlist = array();
+			if (count($use_kws))
+			{
+				$kw_ol = new object_list(array(
+					"oid" => array_keys($use_kws),
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$kwlist = $kw_ol->names();
+			}
+
 			$ol_args = array(
 				"class_id" => $classes,
-				"parent" => $parents,
 				"status" => STAT_ACTIVE,
 				"sort_by" => "objects.modified DESC",
+				new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array(
+						"parent" => $parents,
+						"CL_DOCUMENT.RELTYPE.name" => $kwlist
+					)
+				))
 			);
 			if ($limittype == "last")
 			{
@@ -208,7 +245,9 @@ class newsfeed extends class_base
 				$start = strtotime("-${days} days");
 				$ol_args["CL_DOCUMENT.doc_modified"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start);
 			};
+
 			$ol = new object_list($ol_args);
+
 			$first = 0;
 			$source = aw_ini_get("newsfeed.source");
 			$baseurl = aw_ini_get("baseurl");
@@ -321,6 +360,51 @@ class newsfeed extends class_base
 	function _encode_rss_string($src)
 	{
 		return "<![CDATA[" . nl2br($src) . "]]>";
+	}
+
+	function _init_kw_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "kw",
+			"caption" => t("M&auml;rks&otilde;na"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "use",
+			"caption" => t("Vali"),
+			"align" => "center"
+		));
+	}
+
+	function _kw($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_kw_t($t);
+
+		$use = $arr["obj_inst"]->meta("use_kws");
+
+		$kws = new object_list(array(
+			"class_id" => CL_KEYWORD,
+		));
+		foreach($kws->arr() as $kwid => $kw)
+		{
+			$t->define_data(array(
+				"kw" => html::obj_change_url($kw),
+				"use" => html::checkbox(array(
+					"name" => "use[$kwid]",
+					"value" => 1,
+					"checked" => $use[$kwid] == 1
+				))
+			));
+		}
+		$t->set_default_sortby("kw");
+		$t->sort_by();
+	}
+
+	function _save_kw($arr)
+	{
+		$arr["obj_inst"]->set_meta("use_kws", safe_array($arr["request"]["use"]));
 	}
 }
 ?>

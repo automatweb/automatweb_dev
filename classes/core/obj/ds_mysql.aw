@@ -1828,11 +1828,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// else, if it is property for cur class - via property
 		// else - throw up
 
-		if (substr($pp, 0, 8) == "RELTYPE_")
+		if (substr($pp, 0, 7) == "RELTYPE")
 		{
 			$this->_do_add_class_id($cur_clid);
 			$reltype_id = $GLOBALS["relinfo"][$cur_clid][$pp]["value"];
-			error::raise_if(!$reltype_id, array(
+			error::raise_if(!$reltype_id && $pp != "RELTYPE", array(
 				"id" => ERR_OBJ_NO_RELATION,
 				"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no relation from class %s named %s"), $cur_clid, $pp)
 			));
