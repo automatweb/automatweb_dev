@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.85 2006/03/24 15:01:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.86 2006/03/28 08:58:50 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1845,7 +1845,7 @@ class webform extends class_base
 				{
 					$val["parent"] = "submitx";
 					$tmpx[$key] = $val;
-					unset($els[$key]);
+					//unset($els[$key]);
 				}
 				elseif($all_props[$key]["type"] == "reset")
 				{
