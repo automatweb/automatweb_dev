@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.77 2006/03/24 10:41:40 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.78 2006/03/28 07:29:46 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -226,7 +226,6 @@ class vcalendar extends aw_template
 	**/
 	function get_range($arr = array())
 	{
-		arr($this->overview_range."b");
 		// called from get_property to determine the range of events to be shown
 		$viewtype = !empty($arr["viewtype"]) ? $arr["viewtype"] : "month";
 		classload("core/date/date_calc");
