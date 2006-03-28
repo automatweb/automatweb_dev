@@ -18,6 +18,15 @@
             <caption>IBAN kood</caption>
       </property>
       <property>
+            <name>sort_code</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kodukontori kood</caption>
+      </property>
+      <property>
             <name>bank</name>
             <table>aw_crm_bank_account</table>
             <group>general</group>
