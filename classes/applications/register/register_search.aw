@@ -1,61 +1,65 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.34 2006/03/23 12:41:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.35 2006/03/28 11:44:49 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
 @classinfo syslog_type=ST_REGISTER_SEARCH relationmgr=yes no_status=1 no_comment=1
 
 @default table=objects
-@default group=general
 @default field=meta 
 @default method=serialize
 
-@property register type=relpicker reltype=RELTYPE_REGISTER 
-@caption Register, millest otsida
 
-@property per_page type=textbox size=5
-@caption Mitu kirjet lehel
+@default group=general
 
-@property show_all_in_empty_search type=checkbox ch_value=1
-@caption T&uuml;hi otsing n&auml;itab k&otilde;iki
+	@property register type=relpicker reltype=RELTYPE_REGISTER 
+	@caption Register, millest otsida
 
-@property show_only_act type=checkbox ch_value=1
-@caption N&auml;ita ainult aktiivseid objekte
+	@property per_page type=textbox size=5
+	@caption Mitu kirjet lehel
 
-@property show_all_right_away type=checkbox ch_value=1
-@caption Otsingus n&auml;idatakse ilma otsimata k&otilde;iki
+	@property show_all_in_empty_search type=checkbox ch_value=1
+	@caption T&uuml;hi otsing n&auml;itab k&otilde;iki
 
-@property notfound_text type=textarea rows=5 cols=40
-@caption Mida n&auml;idatakse kui midagi ei leita (%s on otsing)
+	@property show_only_act type=checkbox ch_value=1
+	@caption N&auml;ita ainult aktiivseid objekte
 
-@property show_date type=checkbox ch_value=1
-@caption Tulemuste all on kuup&auml;ev
+	@property show_all_right_away type=checkbox ch_value=1
+	@caption Otsingus n&auml;idatakse ilma otsimata k&otilde;iki
 
-@property results_from_all_langs type=checkbox ch_value=1
-@caption Tulemused k&otilde;ikidest keeltest
+	@property notfound_text type=textarea rows=5 cols=40
+	@caption Mida n&auml;idatakse kui midagi ei leita (%s on otsing)
 
-/////////
-@groupinfo mkfrm caption="Koosta otsinguvorm"
+	@property show_date type=checkbox ch_value=1
+	@caption Tulemuste all on kuup&auml;ev
+
+	@property results_from_all_langs type=checkbox ch_value=1
+	@caption Tulemused k&otilde;ikidest keeltest
+
+
 @default group=mkfrm
 
-@property sform_frm type=table store=no no_caption=1
+	@property sform_frm type=table store=no no_caption=1
 
-@property butt_text type=textbox 
-@caption Otsi nupu tekst
+	@property butt_text type=textbox 
+	@caption Otsi nupu tekst
 
-////////
-@groupinfo mktbl caption="Koosta tulemuste tabel"
+
 @default group=mktbl
 
-@property sform_tbl type=table store=no no_caption=1 
+	@property sform_tbl type=table store=no no_caption=1 
 
 
-////////
-@groupinfo search caption="Otsi" submit_method=get
 @default group=search
 
-@property search type=callback store=no callback=callback_get_sform no_caption=1
-@property search_res type=table store=no no_caption=1
+	@property search type=callback store=no callback=callback_get_sform no_caption=1
+	@property search_res type=table store=no no_caption=1
+
+
+@groupinfo mkfrm caption="Koosta otsinguvorm"
+@groupinfo mktbl caption="Koosta tulemuste tabel"
+@groupinfo search caption="Otsi" submit_method=get
+
 
 @reltype REGISTER value=1 clid=CL_REGISTER
 @caption register millest otsida
@@ -183,6 +187,10 @@ class register_search extends class_base
 		$props = $this->get_props_from_reg($reg);
 
 		$props[$this->fts_name]["caption"] = t("T&auml;istekstiotsing");
+		/*$props["created"]["caption"] = t("Loodud");
+		$props["modified"]["caption"] = t("Muudetud");
+		$props["createdby"]["caption"] = t("Looja");
+		$props["modifiedby"]["caption"] = t("Muutja");*/
 		foreach($props as $pn => $pd)
 		{
 			if (!is_array($fdata[$pn]) || $fdata[$pn]["caption"] == "")
@@ -466,6 +474,27 @@ class register_search extends class_base
 				}
 			}
 		}
+
+		$properties["created"] = array(
+			"caption" => t("Loodud"),
+			"type" => "datetime_select",
+			"name" => "created"
+		);
+		$properties["createdby"] = array(
+			"caption" => t("Looja"),
+			"type" => "textbox",
+			"name" => "createdby" 
+		);
+		$properties["modified"] = array(
+			"caption" => t("Muudetud"),
+			"type" => "datetime_select",
+			"name" => "modified"
+		);
+		$properties["modifiedby"] = array(
+			"caption" => t("Muutja"),
+			"type" => "textbox",
+			"name" => "modifiedby"
+		);
 		return $properties;
 	}
 
@@ -513,6 +542,7 @@ class register_search extends class_base
 	{
 		$reg = obj($o->prop("register"));
 		$props = $this->get_props_from_reg($reg);
+
 		$clid = $this->get_clid_from_reg($reg);
 		$fdata = $o->meta("fdata");
 		$ot = $this->get_ot_from_reg($reg);
@@ -531,14 +561,48 @@ class register_search extends class_base
 				continue;
 			}
 
-			$tmp[$pn] = $pd + $f_props[$pn];
-			$tmp[$pn]["value"] = $request["rsf"][$pn];
-			$tmp[$pn]["caption"] = $fdata[$pn]["caption"];
-
-			// if is_chooser , make list of all possible options and insert into options.
-			if ($fdata[$pn]["is_chooser"] == 1)
+			if ($pd["type"] == "date_select" || $pd["type"] == "datetime_select")
 			{
-				$this->mod_chooser_prop($tmp, $pn, $reg);
+				$de = new date_edit();
+				if ($pd["type"] == "datetime_select")
+				{
+					$de->configure(array(
+						"day" => 1,
+						"month" => 1,
+						"year" => 1,
+						"hour" => 1,
+						"minute" => 1
+					));
+				}
+				else
+				{			
+					$de->configure(array(
+						"day" => 1,
+						"month" => 1,
+						"year" => 1,
+					));
+				}
+				$content = 	$de->gen_edit_form("rsf[".$pn."_from]", date_edit::get_timestamp($request["rsf"][$pn."_from"]), date("Y")-10, date("Y")+10, true)." - ".
+							$de->gen_edit_form("rsf[".$pn."_to]", date_edit::get_timestamp($request["rsf"][$pn."_to"]), date("Y")-10, date("Y")+10, true);
+				
+				$tmp[$pn] = array(
+					"name" => $pn,
+					"type" => "text",
+					"caption" => $fdata[$pn]["caption"],
+					"value" => $content
+				);
+			}
+			else
+			{
+				$tmp[$pn] = $pd + (array)$f_props[$pn];
+				$tmp[$pn]["value"] = $request["rsf"][$pn];
+				$tmp[$pn]["caption"] = $fdata[$pn]["caption"];
+
+				// if is_chooser , make list of all possible options and insert into options.
+				if ($fdata[$pn]["is_chooser"] == 1)
+				{
+					$this->mod_chooser_prop($tmp, $pn, $reg);
+				}
 			}
 		}
 
@@ -624,7 +688,7 @@ class register_search extends class_base
 					"sortable" => $tdata[$pn]["sortable"],
 					"width" => ((int)(100 / $np))."%"
 				);
-				if ($f_props[$pn]["type"] == "date_select")
+				if ($f_props[$pn]["type"] == "date_select" || $pd["type"] == "datetime_select")
 				{
 					$fd["type"] = "time";
 					$fd["format"] = "Y-m-d";
@@ -652,7 +716,7 @@ class register_search extends class_base
 	function get_search_results($o, $request, $reg_flds = false)
 	{
 		// return immediately if nothing is to be done
-		if (empty($request["search_butt"]) && !$o->prop("show_all_right_away"))
+		if (empty($request["search_butt"]) && !$o->prop("show_all_right_away") && empty($request["MAX_FILE_SIZE"]))
 		{
 			return array(new object_list(), new object_list());
 		}
@@ -702,6 +766,26 @@ class register_search extends class_base
 		enter_function("register_search::show::dsrt::gsr::loop");
 		foreach($props as $pn => $pd)
 		{
+			if ($pd["type"] == "datetime_select" || $pd["type"] == "date_select")
+			{
+				$ts_f = date_edit::get_timestamp($request["rsf"][$pn."_from"]);
+				$ts_t = date_edit::get_timestamp($request["rsf"][$pn."_to"]);
+				if ($ts_f != -1 && $ts_t != -1)
+				{
+					$filter[$pn] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $ts_f, $ts_t);
+				}
+				else
+				if ($ts_f != -1)
+				{
+					$filter[$pn] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $ts_f);
+				}
+				else
+				if ($ts_t != -1)
+				{
+					$filter[$pn] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $ts_t);
+				}
+			}
+			else
 			if ($request["rsf"][$pn] != "")
 			{
 				if (is_array($request["rsf"][$pn]))
@@ -768,6 +852,7 @@ class register_search extends class_base
 				"conditions" => $tmp
 			));
 		}
+		$filter[] = new object_list_filter(array("non_filter_classes" => CL_REGISTER_DATA));
 		exit_function("register_search::show::dsrt::gsr::loop");
 
 		enter_function("register_search::show::dsrt::gsr::finit");
@@ -795,7 +880,7 @@ class register_search extends class_base
 			$filter["sort_by"] = "objects.name ASC ";
 		}
 
-		if (!empty($request["search_butt"]) || $o->prop("show_all_right_away") == 1)
+		if ((!empty($request["search_butt"]) || !empty($request["MAX_FILE_SIZE"])) || $o->prop("show_all_right_away") == 1)
 		{
 			$ol_cnt = new object_list($filter);
 			if (($ppg = $o->prop("per_page")))
