@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.86 2006/03/28 08:58:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.87 2006/03/28 09:42:06 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -494,6 +494,10 @@ class webform extends class_base
 		{
 			if($prplist[$key])
 			{
+				if (!isset($val["nextto"]))
+				{
+					$val["nextto"] = 0;
+				}
 				foreach($val as $key2 => $val2)
 				{
 					if($key2 == "defaultx" && is_array($val2))
@@ -518,6 +522,7 @@ class webform extends class_base
 				unset($clf_type[$key]);
 			}
 		}
+
 		foreach(safe_array($arr["request"]["prp_metas"]) as $key => $val)
 		{
 			$prps = explode(";", $val);
