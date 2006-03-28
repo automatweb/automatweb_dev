@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.33 2006/01/05 11:08:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.34 2006/03/28 06:44:39 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -217,7 +217,7 @@ class period extends class_base
 		$oid = $this->oid;
 		$sufix = ($arc_only > -1) ? " AND status = 2 " : " AND status != 0 ";
 		$valid_period = 0;
-		if ($this->oid)
+		if ($this->can("view", $this->oid))
 		{
 			$tmp = obj($this->oid);
 			$ochain = array_reverse($tmp->path());

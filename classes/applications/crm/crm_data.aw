@@ -197,7 +197,12 @@ class crm_data extends class_base
 		if ($co === NULL)
 		{
 			$u = get_instance(CL_USER);
-			$co = obj($u->get_current_company());
+			$cco_id = $u->get_current_company();
+			if (!$this->can("view", $cco_id))
+			{
+				return array();
+			}
+			$co = obj($cco_id);
 		}
 		$i = get_instance(CL_CRM_COMPANY);
 		return $i->get_employee_picker($co, $add_empty, $important_only);

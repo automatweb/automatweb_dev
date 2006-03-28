@@ -8,19 +8,5 @@
 			</function>
 		</action>
 
-		<action name="set_default_cv">
-			<function name="set_default_cv">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit" nologin="1">
-			<function name="submit">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

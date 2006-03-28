@@ -1473,6 +1473,7 @@ class user extends class_base
 	function get_person_for_user($u)
 	{
 		obj_set_opt("no_cache", 1);
+		aw_disable_acl();
 		$person_c = $u->connections_from(array(
 			"type" => "RELTYPE_PERSON",
 		));
@@ -1513,16 +1514,19 @@ class user extends class_base
 				"to" => $p->id(),
 				"reltype" => 2
 			));
+			aw_restore_acl();
 			return $p->id();
 		}
 		else
 		{
+			aw_restore_acl();
 			return $person_c->prop("to");
 		}
 	}
 
 	function get_company_for_person($person)
 	{
+		aw_disable_acl();
 		obj_set_opt("no_cache", 1);
 		$p_o = obj($person);
 		$cons = $p_o->connections_from(array(
@@ -1546,9 +1550,11 @@ class user extends class_base
 				"to" => $p->id(),
 				"reltype" => "RELTYPE_WORK" // from crm_person
 			));
+			aw_restore_acl();
 			return $p->id();
 		}
 
+		aw_restore_acl();
 		return $org_c->prop("to");
 	}
 

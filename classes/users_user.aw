@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.121 2006/02/08 11:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.122 2006/03/28 06:44:39 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1102,6 +1102,21 @@ class users_user extends aw_template
 		{
 			$ret = $this->db_fetch_field("SELECT oid FROM users WHERE uid = '$uid'", "oid");
 			aw_cache_set("get_oid_for_uid", $uid, $ret);
+		}
+		return $ret;
+	}
+
+	function get_oid_for_uid_list($uids)
+	{
+		if (!($ret = aw_cache_get("get_oid_for_uids", $uids)))
+		{
+			$this->db_query("SELECT oid, uid FROM users WHERE uid IN (".join(",", map("'%s'", $uids)).")", "oid");
+			$ret = array();
+			while ($row = $this->db_next())
+			{
+				$ret[$row["uid"]] = $row["oid"];
+			}
+			aw_cache_set("get_oid_for_uids", $uids, $ret);
 		}
 		return $ret;
 	}

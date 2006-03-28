@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="bugno" type="int" />
 					<optional name="msg" />
+					<optional name="set_fixed" />
 				</arguments>
 			</function>
 		</action>
