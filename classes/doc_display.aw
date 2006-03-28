@@ -65,12 +65,15 @@ class doc_display extends aw_template
 			"user2" => $doc->prop("user2"),
 			"user3" => $doc->prop("user3"),
 			"user4" => $doc->prop("user4"),
+			"user5" => $doc->prop("user5"),
+			"user6" => $doc->prop("user6"),
 			"userta2" => $doc->prop("userta2"),
 			"userta3" => $doc->prop("userta3"),
 			"userta4" => $doc->prop("userta4"),
 			"userta5" => $doc->prop("userta5"),
 			"userta6" => $doc->prop("userta6"),
-			"page_title" => strip_tags($doc->prop("title")),
+			"link_text" => $doc->prop("link_text"),
+			"page_title" => strip_tags($doc->prop("title")),			
 			"date" => $_date
 		));
 
