@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.470 2006/03/16 15:15:42 kristo Exp $
+// $Id: class_base.aw,v 2.471 2006/03/28 11:58:43 ahti Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2456,6 +2456,11 @@ class class_base extends aw_template
 		foreach($properties as $key => $val)
 		{
 			if ($val["name"] == "tabpanel" && $this->view)
+			{
+				continue;
+			};
+
+			if ($val["name"] == "name" && $this->classinfo["no_name"] == 1)
 			{
 				continue;
 			};
