@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.23 2006/01/03 13:37:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.24 2006/03/28 13:37:51 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -17,7 +17,6 @@ define("ML_QUEUE_PROCESSING",5);
 
 	@property q_status type=textbox
 	@caption Staatus
-
 
 */
 
@@ -140,9 +139,10 @@ class ml_queue extends aw_template
 		$lists = $ml->get_lists_and_groups(array());//võta kõik listide & gruppide nimed, et polex vaja iga kord queryda
 
 		$q = "SELECT * FROM ml_queue $filt";
+		echo $q;
 		$this->db_query($q);
 		while ($row = $this->db_next())
-		{
+		{arr($row);
 			//("<pre>");print_r($row);echo("</pre>");//dbg
 			$listname = $lists[$row["lid"].":0"];
 			$groupids=explode("|",$row["gid"]);
@@ -160,9 +160,10 @@ class ml_queue extends aw_template
 			{
 				$row["lid"] .= ":".join(",",$gnames);
 			};
-
+echo "SELECT name FROM objects WHERE oid='".$row["mid"]."'";
 			$this->save_handle();
 			$row["mid"] = $this->db_fetch_field("SELECT name FROM objects WHERE oid='".$row["mid"]."'","name")."(".$row["mid"].")";
+arr($row["mid"]);			
 			$this->restore_handle();
 			if (!$row["patch_size"])
 			{
@@ -223,7 +224,7 @@ class ml_queue extends aw_template
 		extract($arr);
 		$this->db_query("SELECT * FROM ml_queue WHERE qid='$id'");
 		$r=$this->db_next();
-
+echo "SELECT * FROM ml_queue WHERE qid='$id'";arr($r);
 		$this->read_template("queue_change.tpl");
 		if ($r["status"]==2)
 		{
@@ -302,7 +303,7 @@ class ml_queue extends aw_template
 		};
 		$delay*=60;
 		$this->db_query("UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qid='$id'");
-
+echo "UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qid='$id'";
 		$GLOBALS["reforb"]=0;// see on selleks, et ta ei hakkaks kuhugi suunama vaid prindiks skripti välja
 		die("<script ".
 			"language='JavaScript'>opener.history.go(0);window.close();</script>");
@@ -312,9 +313,7 @@ class ml_queue extends aw_template
 		
 		@attrib name=queue_delete params=name 
 		
-		
 		@returns
-		
 		
 		@comment
 		! Kustutab queue itemi $id
@@ -331,7 +330,7 @@ class ml_queue extends aw_template
 				$q.=($q?",":"")."'".(int)$v."'";
 			};
 			$this->db_query("DELETE FROM ml_queue WHERE qid IN ($q)");
-		};
+		};echo "DELETE FROM ml_queue WHERE qid IN ($q)";
 		if ($from_mlm)
 		{
 			return $this->mk_my_orb("change", array("id" => $id), "ml_list_status");
@@ -351,9 +350,7 @@ class ml_queue extends aw_template
 		
 		@attrib name=queue_send_now params=name 
 		
-		
 		@returns
-		
 		
 		@comment
 		! Märgib itemi $id kohe saatmiseks
@@ -371,8 +368,8 @@ class ml_queue extends aw_template
 			};
 			$delta=time()-2;
 			$w="UPDATE ml_queue SET start_at=$delta-delay WHERE qid IN ($q) AND status=0";
-			$this->db_query($w);
-			$w="UPDATE ml_queue SET last_sent=$delta-delay WHERE qid IN ($q) AND status!=0";
+			$this->db_query($w);echo $w;
+			$w="UPDATE ml_queue SET last_sent=$delta-delay WHERE qid IN ($q) AND status!=0";echo '<br>'.$w;
 			$this->db_query($w);
 		};
 		if ($from_mlm)
@@ -424,9 +421,7 @@ class ml_queue extends aw_template
 		
 		@attrib name=process_queue params=name nologin="1" 
 		
-		
 		@returns
-		
 		
 		@comment
 		! Processes all active mailing list queues
@@ -450,7 +445,7 @@ class ml_queue extends aw_template
 		$old = time() - 2 * 60;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
 		$this->db_query("SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)");
-		echo "select <br />\n";
+		echo "select <br />\n";echo "SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)";
 		flush();
 		while ($r = $this->db_next())
 		{
@@ -512,7 +507,7 @@ flush();
 						// yo, increase the counter
 						$tm = time();
 						$q = "UPDATE ml_queue SET position=position+1, last_sent='$tm' WHERE qid='$qid'";
-						$this->db_query($q);
+						$this->db_query($q);echo $q;
 						$this->restore_handle();
 					};
 					$c++;
@@ -520,8 +515,9 @@ flush();
 
 
 				$q = "SELECT total-position AS remaining FROM ml_queue WHERE qid = '$qid'";
+				echo $q;
 				$this->db_query($q);
-				$row = $this->db_next();
+				$row = $this->db_next();arr($row);
 				if ($row["remaining"] == 0)
 				{
 					$stat = 2/*ML_QUEUE_READY*/;
@@ -548,7 +544,7 @@ flush();
 				{
 					// unlock it
 					$this->db_query("UPDATE ml_queue SET status = $stat WHERE qid = '$qid'");
-					//$pos="";
+					echo "UPDATE ml_queue SET status = $stat WHERE qid = '$qid'";//$pos="";
 				};
 
 				$this->restore_handle();
@@ -562,7 +558,7 @@ flush();
 	//! Protsessib queue itemist 		echo $mailfrom;$r järgmise liikme
 	function do_queue_item($msg)
 	{
-	
+
 echo "queue item: ".dbg::dump($msg)." <br>";
 		$this->awm->clean();
 		if (!is_oid($msg["mail"]) || !$this->can("view", $msg["mail"]))
@@ -576,10 +572,10 @@ echo "queue item: ".dbg::dump($msg)." <br>";
 		//$is_html=$msg["type"] & MSG_HTML;
 		$subject = $msg["subject"];
 		$message = $msg["message"];
-		if($is_html) // && strpos("<br />" ,$message) !== true && strpos("<br>", $message) !== true)
-		{
-			$message = nl2br($message);
-		}
+//		if($is_html) // && strpos("<br />" ,$message) !== true && strpos("<br>", $message) !== true)
+//		{
+//			$message = nl2br($message);
+//		}
 
 		$c_title = $msg_obj->prop("msg_contener_title");
 		$c_content = $msg_obj->prop("msg_contener_content");
@@ -647,24 +643,8 @@ echo dbg::dump($msg);
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
 		$this->db_query($q);
-
+echo $q;
 		return ML_QUEUE_IN_PROGRESS;
-	}
-
-	function replace_tags($text,$data)
-	{
-		$nohtml = $text;
-		preg_match_all("/#(.+?)#/e", $nohtml, $matches);
-		if (is_array($matches) && is_array($matches[1]))
-		{
-			foreach($matches[1] as $v)
-			{
-				$this->used_variables[$v] = 1;
-				$text = preg_replace("/#$v#/", $data[$v] ? $data[$v] : "", $text);
-				//decho("matced $v<br />");
-			};
-		};
-		return $text;
 	}
 
 	////
@@ -674,138 +654,18 @@ echo dbg::dump($msg);
 		//tee awm objekt
 	}
 
-	function preprocess_messages($arr)
-	{
-		// 1) retrieves the messase
-		// I need mid (mail_id)
-		// I need lid (list_id)
-		if (!isset($this->d))
-		{
-			$this->d = get_instance(CL_MESSAGE);
-		};
-		
-
-		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
-
-		if($arr["mfrom"])
-		{
-			$msg["mfrom"] = $arr["mfrom"];
-		}
-		$ml_list_inst = get_instance(CL_ML_LIST);
-		$list_obj = new object($arr["list_id"]);
-		$member_list = $ml_list_inst->get_members_ol($msg);
-		$this->read_template("send_mail.tpl");
-		// 3) calls preprocess_one_message for each one
-		set_time_limit(0);
-		$ret = "";
-		$sents = array();
-		foreach($member_list->arr() as $member)
-		{
-			// skip used addresses
-			if(in_array($member->prop("mail"), $sents))
-			{
-				continue;
-			}
-			$sents[] = $member->prop("mail");
-			$this->vars(array(
-				"name" => $member->prop("name"),
-				"mail" => $member->prop("mail"),
-			));
-			$this->preprocess_one_message(array(
-				"name" => $member->prop("name"),
-				"mail" => $member->prop("mail"),
-				"mail_id" => $arr["mail_id"],
-				"member_id" => $member->id(),
-				"list_id" => $arr["list_id"],
-				"msg" => $msg,
-				"qid" => $arr["qid"],
-			));
-			$ret .= $this->parse("item");
-		};
-		$this->vars(array(
-			"item" => $ret,
-		));
-		echo $this->parse();
-	}
-
-	function preprocess_one_message($arr)
-	{
-		$users = get_instance("users");
-		// 1) replaces variables in the message
-		// 2) store to ml_sent_mails (which has a default value of '0' in mail_sent values
-		// use all variables. 
-		//print "<tr><td>".$arr["name"]."</td><td>".$arr["mail"]."</td></tr>\n";
-		$vars = md5(uniqid(rand(), true));
-		$data = array(
-			"name" => $arr["name"],
-			"mail" => $arr["mail"],
-			"member_id" => $arr["member_id"],
-			"mail_id" => $arr["mail_id"],
-			"subject" => $arr["msg"]["subject"],
-			"traceid" => "?t=$vars",
-		);
-		$this->used_variables = array();
-		$obj = obj($arr["member_id"]);
-		$user = reset($obj->connections_to(array(
-			"type" => 6,
-			"from.class_id" => CL_USER,
-		)));
-		if(is_object($user))
-		{
-			$data["username"] = $user->prop("from.name");
-			$uo = $user->from();
-			$data["name"] = $uo->prop("real_name");
-		}
-		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $arr["msg"]["message"]);
-		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
-		$message = $this->replace_tags($message, $data);
-		$subject = $this->replace_tags($arr["msg"]["subject"], $data);
-		$from = $address = $arr["msg"]["mfrom"];
-		if(is_oid($from) && $this->can("view", $from))
-		{
-			$adr = obj($from);
-			$address = $adr->prop("mail");
-		}
-		
-		//$mailfrom = $this->replace_tags($address, $data);
-		$mailfrom = trim($address);
-		$subject = trim($subject);
-		$mailfrom = $arr["msg"]["meta"]["mfrom_name"] . ' <' . $mailfrom . '>';
-		//$used_vars = array_keys($this->used_variables);
-		$mid = $arr["mail_id"];
-		$member_id = $arr["member_id"];
-		$lid = $arr["list_id"];
-		
-		$this->quote($message);
-		$this->quote($subject);
-		//$vars = join(",", $used_vars);
-		//$this->quote($vars);
-		$qid = $arr["qid"];
-		$target = $arr["name"] . " <" . $arr["mail"] . ">";
-		$this->quote($target);
-
-		$mid = $arr["mail_id"];
-		// there is an additional field mail_sent in that table with a default value of 0
-		$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom,qid,target) VALUES ('$mid','$member','".aw_global_get("uid")."','$lid','".time()."','$vars','$message','$subject','$mailfrom','$qid','$target')");
-
-		// 3) process queue then only retrieves messages from that table where mail_sent is set
-		// to 0
-
-
-	}
-
 	function mark_queue_finished($qid)
 	{
 		$this->save_handle();
 		$this->db_query("UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'");
-		$this->restore_handle();
+		$this->restore_handle();echo "UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'";
 	}
 
 	function mark_queue_locked($qid)
 	{
 		$this->save_handle();
 		$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
-		$this->restore_handlE();
+		$this->restore_handlE();echo "UPDATE ml_queue SET status = 3 WHERE qid = '$qid'";
 	}
 		
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.60 2006/03/17 15:24:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.61 2006/03/28 13:37:51 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -647,12 +647,14 @@ class ml_list extends class_base
 	{
 		extract($arr);
 		$msg_obj = new object($arr["msg_id"]);
-		$message = nl2br($msg_obj->prop("message"));
+		$message = $msg_obj->prop("message");
+		if(!$msg_obj->prop("html_mail")) $message = nl2br($message);
 		$al = get_instance("aliasmgr");
 		$al->parse_oo_aliases($msg_obj->id(), &$message);
 		
 		$c_title = $msg_obj->prop("msg_contener_title");
-		$c_content = nl2br($msg_obj->prop("msg_contener_content"));
+		$c_content = $msg_obj->prop("msg_contener_content");
+		if(!$msg_obj->prop("html_mail")) $c_content = nl2br($c_content);
 		
 		$message = str_replace("#username#", t("Kasutajanimi"), $message);
 		$message = str_replace("#name#", t("Nimi Perenimi"), $message);
@@ -2214,7 +2216,7 @@ class ml_list extends class_base
 		}
 		if ($arr["id"] == "mail_report")
 		{
-			$arr["link"] .= "&mail_id=" . $arr["request"]["mail_id"];
+			$arr["link"] .= "&mail_id=" . $arr["request"]["mail_id"].'&qid='.$arr["request"]["qid"];
 		}
 		if ($arr["id"] == "write_mail" && $arr["request"]["group"] != "write_mail")
 		{
