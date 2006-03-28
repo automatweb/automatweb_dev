@@ -122,7 +122,7 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_bugs
 msgid "Grupi Bugid (bugs) pealkiri"
-msgstr "Bugs t"
+msgstr "Bugs tester"
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:group_bugs_help
 msgid "Grupi Bugid (bugs) help"
