@@ -1,0 +1,49 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>org</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Ettev&amp;otilde;te</caption>
+      </property>
+      <property>
+            <name>field</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>comment</field>
+            <caption>Teema</caption>
+      </property>
+      <property>
+            <name>time</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <format>
+                  <num_0>month</num_0>
+                  <num_1>year</num_1>
+            </format>
+            <caption>Aeg</caption>
+      </property>
+      <property>
+            <name>length</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Kestvus p&amp;auml;evades</caption>
+            <comment>&amp;Uuml;le kuuajalise koolituse puhul kestvus kuudes</comment>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CRM_PERSON_ADD_EDUCATION</syslog_type>
+            <no_name>1</no_name>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+</properties>
+

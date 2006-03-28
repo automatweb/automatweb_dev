@@ -57,5 +57,13 @@
 			</function>
 		</action>
 
+		<action name="gen_job_pdf" nologin="1">
+			<function name="gen_job_pdf">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
