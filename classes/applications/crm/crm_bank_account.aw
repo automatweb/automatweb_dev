@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank_account.aw,v 1.2 2005/11/07 13:21:21 kristo Exp $
-// crm_bank_account.aw - CRM Pangakonto 
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bank_account.aw,v 1.3 2006/03/28 16:24:30 voldemar Exp $
+// crm_bank_account.aw - CRM Pangakonto
 /*
 
 @classinfo syslog_type=ST_CRM_BANK_ACCOUNT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
@@ -15,6 +15,9 @@
 
 	@property iban_code type=textbox table=objects field=meta method=serialize
 	@caption IBAN kood
+
+	@property sort_code type=textbox table=objects field=meta method=serialize
+	@caption Kodukontori kood
 
 	@property bank type=relpicker reltype=RELTYPE_BANK automatic=1 table=aw_crm_bank_account field=aw_bank
 	@caption Pank
@@ -52,7 +55,7 @@ class crm_bank_account extends class_base
 		{
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
