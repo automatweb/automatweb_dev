@@ -108,13 +108,6 @@
 			</function>
 		</action>
 
-		<action name="doc_class_list">
-			<function name="doc_class_list">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="api_class_list">
 			<function name="api_class_list">
 				<arguments>
