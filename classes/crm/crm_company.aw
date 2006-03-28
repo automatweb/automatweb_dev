@@ -3744,16 +3744,17 @@ class crm_company extends class_base
 		$bill = obj();
 		$bill->set_class_id(CL_CRM_BILL);
 		$bill->set_parent($arr["id"]);
-
+		$bill->save();
+	
 		$ser = get_instance(CL_CRM_NUMBER_SERIES);
 		$bno = $ser->find_series_and_get_next(CL_CRM_BILL);
 		if (!$bno)
 		{
 			$bno = $bill->id();
 		}
+		
 		$bill->set_prop("bill_no", $bno);
 		$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
-
 		if (is_oid($arr["proj"]))
 		{
 			$proj = obj($arr["proj"]);
@@ -3767,7 +3768,7 @@ class crm_company extends class_base
 			{
 				$bill->set_prop("customer", $cust->id());
 			}
-			$bill->set_prop("impl", $proj->prop("implementor"));
+			$bill->set_prop("impl", $impl);
 		}
 
 		if (is_oid($arr["cust"]))
@@ -3780,6 +3781,17 @@ class crm_company extends class_base
 		if ($cust)
 		{
 			$bill->set_prop("customer", $cust->id());
+		}
+
+		if (!$bill->prop("customer") && $arr["sel"])
+		{
+			$c_r_t = $arr["sel"];
+			if (is_array($c_r_t))
+			{
+				$c_r_t = reset($c_r_t);
+			}
+			$c_r_t_o = obj($c_r_t);
+			$bill->set_prop("customer", $c_r_t_o->prop("customer"));
 		}
 
 		if (!$bill->prop("impl"))
@@ -3810,7 +3822,6 @@ class crm_company extends class_base
 
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
-
 		foreach(safe_array($arr["sel"]) as $task)
 		{
 			$bill->connect(array(
@@ -3829,7 +3840,7 @@ class crm_company extends class_base
 				$row = $c->to();
 				if (!$row->prop("bill_id") && $row->prop("on_bill"))
 				{
-					$row->set_prop("bill_id", $bill->prop("bill_id"));
+					$row->set_prop("bill_id", $bill->prop("bill_no"));
 					$row->save();
 				}
 			}
