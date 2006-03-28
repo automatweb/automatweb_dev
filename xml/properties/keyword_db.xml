@@ -1,0 +1,31 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>keyw_cats</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <rows>20</rows>
+            <store>no</store>
+            <field>keyw_cats</field>
+            <caption>Kataloogid, mille alt v&amp;otilde;tmes&amp;otilde;nad kuuluvad sellesse baasi</caption>
+      </property>
+      <property>
+            <name>bro_cats</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <rows>20</rows>
+            <store>no</store>
+            <field>bro_cats</field>
+            <caption>Kataloogid, mille alla saab selle baasi v&amp;otilde;tmes&amp;otilde;nu vennastada</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_KEYWORD_DB</syslog_type>
+            <no_status>1</no_status>
+            <no_comment>1</no_comment>
+      </classinfo>
+</properties>
+
