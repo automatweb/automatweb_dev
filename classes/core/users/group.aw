@@ -24,6 +24,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @groupinfo import caption=Import
 @groupinfo objects caption="Objektid ja &Otilde;igused"
 @groupinfo admin_rm caption="Admin rootmen&uuml;&uuml;"
+@groupinfo img caption="Pilt"
 
 @tableinfo groups index=oid master_table=objects master_index=oid
 
@@ -97,20 +98,28 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 	@property admin_rootmenu2 type=callback callback=get_admin_rootmenus field=meta method=serialize table=objects
 	@caption Administreerimisliidese juurkaust
 
+@default group=img
+
+	@property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first props=file field=meta method=serialize table=objects
+	@caption Pilt/foto
+
 @reltype SEARCHFORM value=1 clid=CL_FORM
-@caption otsinguvorm
+@caption Otsinguvorm
 
 @reltype MEMBER value=2 clid=CL_USER
-@caption liige
+@caption Liige
 
 @reltype ACL value=3 clid=CL_ACL
-@caption acl
+@caption Acl
 
 @reltype ADMIN_ROOT value=4 clid=CL_MENU
-@caption rootmen&uuml;&uuml;
+@caption Rootmen&uuml;&uuml;
 
 @reltype ADD_TREE value=5 clid=CL_ADD_TREE_CONF
-@caption lisamise puu
+@caption Lisamise puu
+
+@reltype PICTURE value=6 clid=CL_IMAGE
+@caption Pilt
 
 
 */
