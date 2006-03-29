@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.37 2006/03/28 10:50:54 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.37 2006/03/28 10:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.38 2006/03/29 08:28:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.38 2006/03/29 08:28:37 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1501,7 +1501,7 @@ class bug_tracker extends class_base
 			"site_id" => array()
 		);
 
-		$txtf = array("name", "bug_url", "bug_content", "bug_component", "bug_mail");
+		$txtf = array("name", "bug_url", "bug_component", "bug_mail");
 		foreach($txtf as $field)
 		{
 			if (trim($r["s_".$field]) != "")
@@ -1536,9 +1536,14 @@ class bug_tracker extends class_base
 	
 		if (trim($r["s_bug_content"]) != "")
 		{
-			$res["CL_BUG.RELTYPE_COMMENT.name"] = $this->_get_string_filt($r["s_bug_content"]);
+			$res[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"CL_BUG.RELTYPE_COMMENT.comment" => $this->_get_string_filt($r["s_bug_content"]),
+					"bug_content" => $this->_get_string_filt($r["s_bug_content"]),
+				)
+			));
 		}
-		
 		return $res;
 	}
 
