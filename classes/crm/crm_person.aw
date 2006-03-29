@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.119 2006/03/28 11:52:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.120 2006/03/29 08:13:09 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -601,7 +601,7 @@ class crm_person extends class_base
 
 			case "picture":
 			case "picture2":
-				if(!$arr["new"])
+				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 				{
 					$this->_resize_img($arr);
 				}
