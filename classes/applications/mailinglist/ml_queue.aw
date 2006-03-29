@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.24 2006/03/28 13:37:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.25 2006/03/29 11:58:11 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -23,8 +23,6 @@ define("ML_QUEUE_PROCESSING",5);
 // see aid, mida siin pruugitakse on ml_avoidmids tabeli kirje id
 class ml_queue extends aw_template
 {
-	////
-	//! Konstruktor
 	function ml_queue()
 	{
 		$this->init("automatweb/mlist");
@@ -36,22 +34,16 @@ class ml_queue extends aw_template
 			ML_QUEUE_IN_PROGRESS => "pooleli",
 			ML_QUEUE_READY => "valmis",
 			ML_QUEUE_SENDING => "hetkel saadab",
-			ML_QUEUE_STOPPED => "peatatud"
+			ML_QUEUE_STOPPED => "peatatud",
+			ML_QUEUE_PROCESSING => "maili genereeritakse",
 		);
 	}
 
-
 	/**  
-		
 		@attrib name=submit_manager params=name 
-		
-		
 		@returns
-		
-		
 		@comment
 		! Händlib "vasakus puus oleva proge" submitti
-
 	**/
 	function orb_submit_manager($arr)
 	{
@@ -61,9 +53,7 @@ class ml_queue extends aw_template
 		return $this->mk_my_orb("queue",array("manager"=>1));
 	}
 
-
 	/**  
-		
 		@attrib name=queue params=name 
 		
 		@param id optional
@@ -75,13 +65,11 @@ class ml_queue extends aw_template
 		
 		@returns
 		
-		
 		@comment
 		! Näitab queuet
 		kui manager=1 siis näitab ka mänegeri
 		kui show on "list" siis näitab ainult listiga $fid seotud itemeid
 		kui show on "mail" siis näitab ainult meiliga $fid seotud itemeid
-
 	**/
 	function orb_queue($arr)
 	{
@@ -160,10 +148,10 @@ class ml_queue extends aw_template
 			{
 				$row["lid"] .= ":".join(",",$gnames);
 			};
-echo "SELECT name FROM objects WHERE oid='".$row["mid"]."'";
+		echo "SELECT name FROM objects WHERE oid='".$row["mid"]."'";
 			$this->save_handle();
 			$row["mid"] = $this->db_fetch_field("SELECT name FROM objects WHERE oid='".$row["mid"]."'","name")."(".$row["mid"].")";
-arr($row["mid"]);			
+		arr($row["mid"]);			
 			$this->restore_handle();
 			if (!$row["patch_size"])
 			{
@@ -207,24 +195,21 @@ arr($row["mid"]);
 	}
 
 	/**  
-		
 		@attrib name=queue_change params=name 
 		
 		@param id required
 		
 		@returns
 		
-		
 		@comment
 		! Näitab queue itemi $id muutmist (reschedulemist)
-
 	**/
 	function orb_queue_change($arr)
 	{
 		extract($arr);
 		$this->db_query("SELECT * FROM ml_queue WHERE qid='$id'");
 		$r=$this->db_next();
-echo "SELECT * FROM ml_queue WHERE qid='$id'";arr($r);
+	echo "SELECT * FROM ml_queue WHERE qid='$id'";arr($r);
 		$this->read_template("queue_change.tpl");
 		if ($r["status"]==2)
 		{
@@ -263,16 +248,12 @@ echo "SELECT * FROM ml_queue WHERE qid='$id'";arr($r);
 	}
 
 	/**  
-		
 		@attrib name=submit_queue_change params=name 
-		
 		
 		@returns
 		
-		
 		@comment
 		! Händleb queue itemi reschedulemist
-
 	**/
 	function orb_submit_queue_change($arr)
 	{
@@ -303,21 +284,19 @@ echo "SELECT * FROM ml_queue WHERE qid='$id'";arr($r);
 		};
 		$delay*=60;
 		$this->db_query("UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qid='$id'");
-echo "UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qid='$id'";
+	echo "UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qid='$id'";
 		$GLOBALS["reforb"]=0;// see on selleks, et ta ei hakkaks kuhugi suunama vaid prindiks skripti välja
 		die("<script ".
 			"language='JavaScript'>opener.history.go(0);window.close();</script>");
 	}
 
 	/**  
-		
 		@attrib name=queue_delete params=name 
 		
 		@returns
 		
 		@comment
 		! Kustutab queue itemi $id
-
 	**/
 	function orb_queue_delete($arr)
 	{
@@ -347,14 +326,12 @@ echo "UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qi
 	}
 
 	/**  
-		
 		@attrib name=queue_send_now params=name 
 		
 		@returns
 		
 		@comment
 		! Märgib itemi $id kohe saatmiseks
-
 	**/
 	function orb_queue_send_now($arr)
 	{
@@ -387,7 +364,6 @@ echo "UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qi
 		}
 	}
 
-	////
 	//! teeb progress bari
 	// tegelt saax seda pitidega teha a siis tekib iga progress bari kohta oma query <img src=
 	// see olex overkill kui on palju queue itemeid
@@ -418,7 +394,6 @@ echo "UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qi
 	}
 
 	/**  
-		
 		@attrib name=process_queue params=name nologin="1" 
 		
 		@returns
@@ -426,11 +401,9 @@ echo "UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qi
 		@comment
 		! Processes all active mailing list queues
 		Invoked from the scheduler
-
 	**/
 	function process_queue($arr)
 	{
-			
 		set_time_limit(0);
 		$sched = get_instance("scheduler");
 		$sched->add(array(
@@ -449,8 +422,8 @@ echo "UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qi
 		flush();
 		while ($r = $this->db_next())
 		{
-echo "row = ".dbg::dump($r)." <br>\n";
-flush();
+	echo "row = ".dbg::dump($r)." <br>\n";
+			flush();
 			$qid = (int)$r["qid"];
 			$lid = (int)$r["lid"];
 			//decho("doing item $qid<br />");flush();//dbg
@@ -558,8 +531,7 @@ flush();
 	//! Protsessib queue itemist 		echo $mailfrom;$r järgmise liikme
 	function do_queue_item($msg)
 	{
-
-echo "queue item: ".dbg::dump($msg)." <br>";
+	echo "queue item: ".dbg::dump($msg)." <br>";
 		$this->awm->clean();
 		if (!is_oid($msg["mail"]) || !$this->can("view", $msg["mail"]))
 		{
@@ -576,7 +548,6 @@ echo "queue item: ".dbg::dump($msg)." <br>";
 //		{
 //			$message = nl2br($message);
 //		}
-
 		$c_title = $msg_obj->prop("msg_contener_title");
 		$c_content = $msg_obj->prop("msg_contener_content");
 		$al = get_instance("aliasmgr");
@@ -599,7 +570,7 @@ echo "queue item: ".dbg::dump($msg)." <br>";
 		// compatiblity with old messenger .. yikes
 		echo "from = {$msg["mailfrom"]}  <br />\n";
 		flush();
-echo dbg::dump($msg);
+	echo dbg::dump($msg);
 		$this->awm->create_message(array(
 
 			"froma" => $msg["mailfrom"],
@@ -609,7 +580,6 @@ echo dbg::dump($msg);
 			"body" => $message,
 			//"body" => $is_html ? strip_tags(strtr($message,array("<br />" => "\r\n", "<br />" => "\r\n", "</p>" => "\r\n", "</p>" => "\r\n"))) : $message,
 		));
-
 		if ($is_html)
 		{
 			$this->awm->htmlbodyattach(array(
@@ -643,7 +613,7 @@ echo dbg::dump($msg);
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
 		$this->db_query($q);
-echo $q;
+	echo $q;
 		return ML_QUEUE_IN_PROGRESS;
 	}
 
@@ -667,7 +637,6 @@ echo $q;
 		$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
 		$this->restore_handlE();echo "UPDATE ml_queue SET status = 3 WHERE qid = '$qid'";
 	}
-		
 
 };
 ?>

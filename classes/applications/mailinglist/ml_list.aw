@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.61 2006/03/28 13:37:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.62 2006/03/29 11:58:11 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1472,19 +1472,6 @@ class ml_list extends class_base
 				{
 					$is_oid = 1;
 				}
-				if($val["file_name"])
-				{
-					$memberdata["name"] = $val["name"];
-					$parent_name = $val["file_name"];
-					$tabledata = array(
-						"email" => $val["mail"],
-						"source" =>  $parent_name,
-						"name" =>  $memberdata["name"],
-						"joined" => "",
-					);
-					$t->define_data($tabledata);
-					continue;
-				}
 				if(!(strlen($val["name"]) > 0))
 				{
 					$val["name"] = "(nimetu)";
@@ -1884,11 +1871,15 @@ class ml_list extends class_base
 					{
 						continue;
 					}
-					if(!(in_array($data["email"] , $already_found)))
+					if($email->prop("name")) $name = $email->prop("name");
+					else $name = $member->name();
+					if(!(in_array($email->prop("mail") , $already_found)))
 					{
 						$ret[] = array(
-							"oid" 		=> $email->id(),
-							"parent"	=> $email->parent(),
+							"oid" 		=> $member->id(),
+							"parent"	=> $source_obj->id(),
+							"name"		=> $name,
+							"mail"		=> $email->prop("mail"),
 						);
 						$cnt++;
 					if(!$all) $already_found[] = $data["email"];
@@ -1899,11 +1890,13 @@ class ml_list extends class_base
 			{
 				if($email = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 				{
-					if(!(in_array($data["email"] , $already_found)))
+					if(!(in_array($email->prop("mail") , $already_found)))
 					{
 						$ret[] = array(
-							"oid" => $email->id(),
-							"parent" => $email->parent(),
+							"oid" => $source_obj->id(),
+							"parent" => $source_obj->parent(),
+							"name"		=> $name,
+							"mail"		=> $email->prop("mail"),
 						);
 						$cnt++;
 					if(!$all) $already_found[] = $data["email"];
