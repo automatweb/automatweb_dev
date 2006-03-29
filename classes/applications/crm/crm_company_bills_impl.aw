@@ -108,7 +108,7 @@ class crm_company_bills_impl extends class_base
 					"url" => aw_url_change_var("proj", $p),
 					"caption" => t("Ava")
 				)),
-				"cust" => html::obj_change_url(reset($ord)),
+				"cust" => html::obj_change_url(is_array($ord) ? reset($ord) : $ord),
 				"sum" => number_format($sum2proj[$p], 2)
 			));
 		}
