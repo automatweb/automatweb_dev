@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.60 2006/03/22 13:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.61 2006/03/29 08:00:41 tarvo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -43,6 +43,9 @@ define("LOAD_ON_DEMAND",1);
 
 // does this tree type support persist state (using cookies)
 define("PERSIST_STATE",2);
+
+// for load on demand, to show that subelemenets are loaded and no load-on-demand is used anymore
+define("DATA_IN_PLACE",3);
 
 class treeview extends class_base
 {
@@ -279,8 +282,10 @@ class treeview extends class_base
 	// separator - string separator to use for separating checked node id-s, applies when type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS. defaults to ","
 	// checked_nodes - tree node id-s that are checked initially, applies when type is TREE_DHTML_WITH_CHECKBOXES
 	// checkbox_data_var - name for variable that will contain posted data of what was checked/unchecked. applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS. defaults to tree_id
+	// data_in_place - for load on demand tree, if this is set(to '1'), no load on demand is used this point forward for that branch
 	function start_tree($arr)
 	{
+		$this->auto_open = (is_array($arr["open_path"]) && count($arr["open_path"]))?$arr["open_path"]:false;
 		$this->items = array();
 		$this->tree_type = empty($arr["type"]) ? TREE_DHTML : $arr["type"];
 		$this->tree_dat = $arr;
@@ -289,7 +294,11 @@ class treeview extends class_base
 		$this->tree_id = empty($arr["tree_id"]) ? false : $arr["tree_id"];
 		$this->get_branch_func = empty($arr["get_branch_func"]) ? false : $arr["get_branch_func"];
 		$this->branch = empty($arr["branch"]) ? false : true;
-
+		$this->root_id = trim($arr["root_id"]);
+		if(($this->tree_type == TREE_DHTML) && !empty($this->get_branch_func) && $arr["data_in_place"]== "1")
+		{
+			$this->set_feature(DATA_IN_PLACE);
+		}
 		if (($this->tree_type == TREE_DHTML or $this->tree_type == TREE_DHTML_WITH_CHECKBOXES or $this->tree_type == TREE_DHTML_WITH_BUTTONS) && !empty($this->get_branch_func))
 		{
 			$this->features[LOAD_ON_DEMAND] = 1;
@@ -521,10 +530,21 @@ class treeview extends class_base
 		$t = get_instance("languages");
 
 		$level = $_REQUEST["called_by_js"]?$_COOKIE[$this->tree_id."_level"]:1;
-
+		if(!strlen($this->auto_open))
+		{
+			$this->auto_open = is_array(explode("^",$_COOKIE[$this->tree_id])) ? join(",",map("'%s'",explode("^",$_COOKIE[$this->tree_id]))) : "";
+		}
+		else
+		{
+			foreach($this->auto_open as $item)
+			{
+				$this->auto_open_tmp .= ",'".$item."'";
+			}
+			$this->auto_open = "''".$this->auto_open_tmp;
+		}
 		$this->vars(array(
 			"target" => $this->tree_dat["url_target"],
-			"open_nodes" => is_array(explode("^",$_COOKIE[$this->tree_id])) ? join(",",map("'%s'",explode("^",$_COOKIE[$this->tree_id]))) : "",
+			"open_nodes" => $this->auto_open,
 			"level" => !strlen($level)?1:$level,
 			"load_auto" => isset($_REQUEST["load_auto"])?$_REQUEST["load_auto"]:"true",
 			"tree_id" => $this->tree_id,
@@ -541,12 +561,14 @@ class treeview extends class_base
 				"rooturl" => $this->tree_dat["root_url"],
 				"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
 			));
+
 			if ($this->get_branch_func)
 			{
 				$this->vars(array(
 					"get_branch_func" => $this->get_branch_func,
 				));
 			};
+
 			$root .= $this->parse("HAS_ROOT");
 		};
 
@@ -556,6 +578,7 @@ class treeview extends class_base
 
 		// so, how do I figure out the path to the root node .. and if I do, then that's the
 		// same thing I'll have to give as an argument when using the on-demand feature
+		
 
 		$this->vars(array(
 			"TREE_NODE" => $rv,
@@ -565,6 +588,22 @@ class treeview extends class_base
 		));
 
 		return $this->parse();
+	}
+
+	function _req_add_loaded_flag($items, $arr = array())
+	{
+		foreach($items as $parent => $item)
+		{
+			if(strlen($item["name"]) && strlen($item["id"]))
+			{
+				$arr[] = $item["id"];
+			}
+			else
+			{
+				$arr = $this->_req_add_loaded_flag($item, $arr);
+			}
+		}
+		return $arr;
 	}
 
 	function dhtml_checkboxes_finalize_tree ()
@@ -727,6 +766,7 @@ class treeview extends class_base
 
 		$this->level++;
 		$result = "";
+
 		foreach($data as $item)
 		{
 			$subres = $this->draw_dhtml_tree($item["id"]);
@@ -756,18 +796,19 @@ class treeview extends class_base
 				$name = "<strong>$name</strong>";
 			};
 
-			$oncl = "";
-			if ($item["onClick"] != "")
-			{
-				$oncl="onClick=\"".$item["onClick"]."\"";
-			}
 			$url_target = !isset($item["url_target"]) ? $this->tree_dat["url_target"] : $item["url_target"];
+			
+			$has_data = "0";
+			if($this->has_feature(DATA_IN_PLACE) == 1)
+			{
+				$has_data = "1";
+			}
 			$this->vars(array(
 				"name" => $name,
 				"id" => $item["id"],
+				"has_data" => $has_data,
 				"iconurl" => $iconurl,
 				"url" => $item["url"],
-				"onClick" => $oncl,
 				// spacer is only used for purely aesthetic reasons - to make
 				// source of the page look better
 				"spacer" => str_repeat("    ",$this->level),

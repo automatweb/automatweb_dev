@@ -57,7 +57,8 @@ function load_tree_state()
 	}
 }
 
-function isInt(myNum) {
+function isInt(myNum)
+{
 	var myMod = myNum % 1;
 	if (myMod == 0)
 	{
@@ -66,24 +67,34 @@ function isInt(myNum) {
 	return false;
 }
 
+function in_array(needle, haystack) {
+    for (var i = 0; i < haystack.length; i++) {
+        if (haystack[i] == needle) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function toggle_children(objref,menu_level) {
-	if(isInt(objref))
-	{
-		elemID = objref;
-	}
-	else
+	if(objref == 'javascript:void();')
 	{
 		from_click = true;
 		elemID = objref.getAttribute("attachedsection");
 	}
+	else
+	{
+		elemID = objref;
+	}
 	thisElem = document.getElementById(elemID);
+	has_data = thisElem.getAttribute("has_data");
 	data_loaded = thisElem.getAttribute("data_loaded");
 	thisDisp = thisElem.style.display;
 	icon = document.getElementById("icon-"+elemID);
 	iconfld = document.getElementById("iconfld-"+elemID);
 	if (thisDisp == 'none')
 	{
-		if (get_branch_func != "" && data_loaded == "false")
+		if (get_branch_func != "" && data_loaded == "false" && has_data == "0")
 		{
 			thisElem.innerHTML = '<span style="color: #CCC; margin-left: 20px;">loading....</span>';
 			// fire treeloader
@@ -148,7 +159,6 @@ function onload_handler(arg)
 
 function fetch_node(node)
 {
-	//uri = get_branch_func + parseInt(node);
 	uri = get_branch_func + node + '&called_by_js=true&load_auto=' + load_auto;
 	var frame = document.createElement("iframe");
         frame.setAttribute("width",0);
@@ -197,7 +207,6 @@ function fetch_node(node)
 	}
 
 // would be nice to have those generated for me
-
 // so, how do I call javascript for those
 tree_expandMeHTML = '<img src="{VAR:baseurl}/automatweb/images/plusnode.gif" border="0" style="vertical-align: middle;">';
 tree_collapseMeHTML = '<img src="{VAR:baseurl}/automatweb/images/minusnode.gif" border="0" style="vertical-align:middle;">';
@@ -209,6 +218,7 @@ get_branch_func = '{VAR:get_branch_func}';
 persist_state = '{VAR:persist_state}';
 open_nodes = new Array({VAR:open_nodes});
 tree_id = '{VAR:tree_id}';
+
 </script>
 <style>
 .iconcontainer {
@@ -253,10 +263,10 @@ if(is_numeric(tmp))
 	attached_sections[{VAR:menu_level}][tmp] = tmp;
 }
 </script>
-<div style="width: 250px" onLoad="tere();">
-<div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children(this,{VAR:menu_level});return false;" href="javascript:void();"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}" {VAR:onClick}>{VAR:name}</a>
+<div style="width: 250px">
+<div class="nodetext"><a attachedsection="{VAR:id}" id="{VAR:id}treenode" onClick="toggle_children(this,{VAR:menu_level});return false;" href="javascript:void();"><span id="icon-{VAR:id}" class="iconcontainer"><img src="{VAR:node_image}" border="0" style="vertical-align:middle;"></span><span><img id="iconfld-{VAR:id}" src="{VAR:iconurl}" border="0" style="vertical-align:middle;"></span></a>&nbsp;<a href="{VAR:url}" target="{VAR:target}">{VAR:name}</a>
 <!-- SUB: SUB_NODES -->
-<div id="{VAR:id}" data_loaded="{VAR:data_loaded}" style="padding-left: 16px; display: {VAR:display}; ">
+<div id="{VAR:id}" has_data="{VAR:has_data}" data_loaded="{VAR:data_loaded}" style="padding-left: 16px; display: {VAR:display}; ">
 <!-- SUB: SINGLE_NODE -->
 <div class="nodetext"><span class="iconcontainer"><img src="{VAR:iconurl}" border="0" style="vertical-align:middle; margin-left: 16px;"></span>&nbsp;<a target="{VAR:target}" href="{VAR:url}" {VAR:onClick}>{VAR:name}</a></div>
 <!-- END SUB: SINGLE_NODE -->
