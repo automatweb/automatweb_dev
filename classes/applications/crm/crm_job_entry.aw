@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.19 2006/03/29 07:58:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.20 2006/03/29 09:23:07 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -345,6 +345,10 @@ class crm_job_entry extends class_base
 				$c->set_prop("ettevotlusvorm", $arr["request"]["ettevotlusvorm"]);
 			}
 			$c->set_prop("client_manager", $arr["request"]["cust_mgr"]);
+			if ($c->class_id() == CL_CRM_COMPANY)
+			{
+				$c->set_prop("cust_contract_date", time());
+			}
 			$c->save();
 
 			// create address
