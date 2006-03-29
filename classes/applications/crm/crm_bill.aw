@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.33 2006/03/28 10:17:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.34 2006/03/29 09:11:56 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -618,16 +618,27 @@ class crm_bill extends class_base
 			$cur_tax = 0;
 			$cur_sum = 0;
 
+			$tax_rate = 0;
+			if (!$this->can("view", $row["prod"]) && $row["has_tax"] == 1)
+			{
+				$tax_rate = 0.18;
+			}
+			else
+			if ($this->can("view", $row["prod"]))
+			{
+				$prod_o = obj($row["prod"]);
+				$tax_rate = (double)$prod_o->prop("tax_rate.tax_amt") / 100.0;
+			}
+
 			if (!$this->can("view", $row["prod"]))
 			{
 				$row["prod"] = --$_no_prod_idx;
 			}
-			
-			if ($row["has_tax"] == 1)
+			if ($tax_rate > 0)
 			{
 				// tax needs to be added
 				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * 0.18);
+				$cur_tax = ($row["sum"] * $tax_rate);
 				$cur_pr = $this->num($row["price"]);
 			}	
 			else
@@ -652,7 +663,7 @@ class crm_bill extends class_base
 			$tot_amt += $row["amt"];
 			$tot_cur_sum += $cur_sum;
 		}
-
+		
 		$fbr = reset($brows);
 		foreach($grp_rows as $prod => $grp_rowa)
 		{
@@ -687,12 +698,24 @@ class crm_bill extends class_base
 			}
 			$cur_tax = 0;
 			$cur_sum = 0;
-			
-			if ($row["has_tax"] == 1)
+
+			$tax_rate = 0;
+			if (!$this->can("view", $row["prod"]) && $row["has_tax"] == 1)
+			{
+                                $tax_rate = 0.18;
+                        }
+                        else
+                        if ($this->can("view", $row["prod"]))
+                        {
+                                $prod_o = obj($row["prod"]);
+                                $tax_rate = (double)$prod_o->prop("tax_rate.tax_amt") / 100.0;
+                        }
+		
+			if ($tax_rate > 0)
 			{
 				// tax needs to be added
 				$cur_sum = $row["sum"];
-				$cur_tax = ($row["sum"] * 0.18);
+				$cur_tax = ($row["sum"] * $tax_rate);
 				$cur_pr = $this->num($row["price"]);
 			}	
 			else
