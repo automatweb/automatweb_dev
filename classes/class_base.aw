@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.471 2006/03/28 11:58:43 ahti Exp $
+// $Id: class_base.aw,v 2.472 2006/03/29 09:11:14 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -584,11 +584,15 @@ class class_base extends aw_template
 
 		$this->cli = &$cli;
 		// aga mis siis, kui see on sama aken?
+		$translate_url = html::href(array(
+			"url" => "javascript:void(0);",
+			"caption" => t("Tõlgi"),
+			"onClick" => "window.open(\"".$this->mk_my_orb("editor",array("clid" => $this->clid),"cb_translate")."\",\"awtrans\",\"width=600,height=400,resizable=1,scrollbars=1\");",
+		));
 		$cli->configure(array(
 			"help_url" => $this->mk_my_orb("browser",array("clid" => $this->clid),"help"),
-			"translate_url" => $this->mk_my_orb("editor",array("clid" => $this->clid),"cb_translate"),
+			"translate_url" => aw_ini_get("class_base.show_trans")?$translate_url." | ":"",
 			"more_help_text" => t("Rohkem infot"),
-			"translate_text" => t("Tõlgi"),
 			"close_help_text" => t("Peida ära"),
 			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
