@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.86 2006/03/27 13:21:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.87 2006/03/29 08:08:57 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1480,7 +1480,7 @@ class task extends class_base
 				$is_str[] = $iso->name();
 			}
 			$bno = "";
-			if ($row->prop("bill_id"))
+			if ($this->can("view", $row->prop("bill_id")))
 			{
 				$bo = obj($row->prop("bill_id"));
 				$bno = $bo->prop("bill_no");

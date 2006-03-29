@@ -3840,7 +3840,7 @@ class crm_company extends class_base
 				$row = $c->to();
 				if (!$row->prop("bill_id") && $row->prop("on_bill"))
 				{
-					$row->set_prop("bill_id", $bill->prop("bill_no"));
+					$row->set_prop("bill_id", $bill->id());
 					$row->save();
 				}
 			}
