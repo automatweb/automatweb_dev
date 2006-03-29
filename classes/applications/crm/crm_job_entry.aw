@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.18 2006/03/13 13:59:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.19 2006/03/29 07:58:45 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -154,7 +154,7 @@ class crm_job_entry extends class_base
 				break;
 
 			case "post_index":
-				$oncl = "window.open('http://www.post.ee/?id=1069&op=sihtnumbriotsing&tanav='+document.changeform.addr.value.replace(/[0-9]+/, '')+'&linn='+document.changeform.addr_linn.value+'&x=30&y=6');";
+				$oncl = "window.open('http://www.post.ee/?id=1069&op=sihtnumbriotsing&tanav='+document.changeform.addr.value.replace(/[-0-9]+/, '')+'&linn='+document.changeform.addr_linn.value+'&x=30&y=6');";
 				$prop["post_append_text"] = sprintf(" <a href='#' onClick=\"$oncl\">%s</a>", t("Otsi postiindeksit"));
 				break;
 
