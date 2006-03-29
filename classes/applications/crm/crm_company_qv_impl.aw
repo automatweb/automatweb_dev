@@ -224,6 +224,13 @@ class crm_company_qv_impl extends class_base
 				$this->hrs_total += $row["amt"];
 				$this->sum += $row["sum"];
 			}
+			if ($o->class_id() != CL_TASK)
+			{
+				$hrs += $o->prop("time_real");
+				$this->hrs_total += $row["amt"];
+				$this->sum += str_replace(",",".", $o->prop("time_real")) * $o->prop("hr_price");
+				$sum += str_replace(",",".", $o->prop("time_real")) * $o->prop("hr_price"); 
+			}
 			$end = "";
 			if ($o->prop("end") > $o->prop("start1"))
 			{
