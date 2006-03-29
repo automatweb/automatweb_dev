@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.31 2006/02/18 14:49:30 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.32 2006/03/29 12:45:28 tarvo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -376,12 +376,13 @@ class pot_scanner extends core
 			}
 			fwrite($fp, "?>");
 			fclose($fp);
-			echo "wrote file $to_file \n";
+			//echo "wrote file $to_file \n";
 		}
 	}
 
 	function parse_po_file($from_file)
 	{
+		//clearstatcache();
 		$lines = file($from_file);
 		$cnt = count($lines);
 		$first_msg = true;
@@ -389,6 +390,12 @@ class pot_scanner extends core
 		for($i = 0; $i < $cnt;  $i++)
 		{
 			$line = $lines[$i];
+			
+			if(substr($line, 0, 1) == "#")
+			{
+				$entry_header[] = $line;
+			}
+			else
 			if (substr($line, 0, 5) == "msgid")
 			{
 				$msgid = substr($line, 7, strlen($line)-9);
@@ -426,9 +433,12 @@ class pot_scanner extends core
 						$str = substr($str, 0, strlen($str)-1);
 					}
 					$f[] = array(
+						"headers" => $entry_header,
 						"msgid" => $msgid,
 						"msgstr" => $str
 					);
+
+					unset($entry_header);
 				}
 				else
 				{
@@ -439,6 +449,62 @@ class pot_scanner extends core
 		}
 
 		return $f;
+	}
+	
+	// arr(location,data => array(msgid => translated_text))
+	function write_aw_lang_file($arr)
+	{
+		$begin = "<?php";
+		$end = "?>";
+		$tpl = "\$GLOBALS[\"TRANS\"][\"".$msgid."\"] = \"".addslashes($translated_text)."\";";
+		$contents[] = $begin;
+		foreach($arr["data"] as $msgid => $translated_text)
+		{
+			$contents[] = sprintf("\$GLOBALS[\"TRANS\"][\"%s\"] = \"%s\";", $msgid, addslashes($translated_text));
+		}
+		$contents[] = $end;
+		//arr($contents);
+		chmod($arr["location"], 0777);
+		$fp = fopen($arr["location"], "w");
+		foreach($contents as $line)
+		{
+			fwrite($fp, $line."\n");
+		}
+		fclose($fp);
+
+	}
+	// arr(location, contents)
+	function write_po_file($arr)
+	{
+		$header[] = "msgid \"\"\n";
+		$header[] = "msgstr \"\"\n";
+		$header[] = "\"Project-Id-Version: Automatweb 2.0\\n\"\n";
+		$header[] = "\"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\\n\"\n";
+		$header[] = "\"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\\n\"\n";
+		$header[] = "\"Last-Translator: FULL NAME <EMAIL@ADDRESS>\\n\"\n";
+		$header[] = "\"MIME-Version: 1.0\\n\"\n";
+		$header[] = "\"Content-Type: text/plain; charset=ISO-8859-1\\n\"\n";
+		$header[] = "\"Content-Transfer-Encoding: 8bit\\n\"\n";
+		$header[] = "\"Generated-By: AutomatWeb POT Scanner\\n\"\n";
+		$header[] = "\n\n";
+		foreach($arr["contents"] as $entry)
+		{
+			foreach($entry["headers"] as $ent_header)
+			{
+				$contents[] = trim($ent_header)."\n";
+			}
+			$contents[] = "msgid \"".str_replace("\"","\\\"", $entry["msgid"])."\"\n";
+			$contents[] = "msgstr \"".str_replace("\"","\\\"", $entry["msgstr"])."\"\n\n";
+		}
+		$contents = array_merge($header, $contents);
+		
+		chmod($arr["location"], 0777);
+		$fp = fopen($arr["location"], "w");
+		foreach($contents as $line)
+		{
+			fwrite($fp, $line);
+		}
+		fclose($fp);
 	}
 
 	function _code_quote($str)

@@ -1,9 +1,10 @@
+
 <html>
 <head>
 <title>{VAR:browser_caption}</title>
 <link REL="icon" HREF="{VAR:baseurl}/automatweb/images/icons/favicon.ico" TYPE="image/x-icon">
 </head>
-<body style="background-color: #E1E1E1; margin: 0px;">
+<body style="background-color: #E1E1E1; margin: 0px;" onLoad="generic_loader();">
 <div style="background-color: #91DA52; font-weight: bold; font-size: 13px; color: #fff; font-family: Arial,helvetica; padding: 5px;">
 {VAR:help_caption}
 </div>
