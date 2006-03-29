@@ -207,9 +207,19 @@ class crm_company_qv_impl extends class_base
 		foreach($ol->arr() as $o)
 		{
 			$parts = array();
-			foreach((array)$o->prop("participants") as $_p)
+			if ($o->class_id() == CL_CRM_MEETING)
 			{
-				$parts[] = html::obj_change_url($_p);
+				foreach($o->connections_to(array("from.class_id" => CL_CRM_PERSON)) as $c)
+				{
+					$parts[] =  html::obj_change_url($c->from());
+				}
+			}
+			else
+			{
+				foreach((array)$o->prop("participants") as $_p)
+				{
+					$parts[] = html::obj_change_url($_p);
+				}
 			}
 			$sum = 0;
 			$hrs = 0;
