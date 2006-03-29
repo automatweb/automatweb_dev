@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.62 2006/03/29 11:58:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.63 2006/03/29 15:31:54 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1779,6 +1779,14 @@ class ml_list extends class_base
 		return $ret;
 	}
 
+	function un_format_name($arr)
+	{
+		$data = explode('&lt;' , $arr["name"]);arr($data);
+		if($arr["result"] == "name") return trim($data[0]);
+		if($arr["result"] == "email") return trim($data[1], "&gt;");
+		
+	}
+
 	/**
 	@attrib api=1 params=name
 	@param id required type=oid
@@ -1808,7 +1816,6 @@ class ml_list extends class_base
 	**/
 	function get_members($args)
 	{	
-		//$id, $from = 0, $to = 0
 		extract($args);
 		$ret = array();
 		$cnt = 0;
@@ -1832,26 +1839,28 @@ class ml_list extends class_base
 			$source_obj = obj($folder_id);
 			if($source_obj->class_id() == CL_MENU)
 			{
-				if ($from > 0 && $to > 0)
+				if ($to > 0)
 				{
-					$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, CL_ML_MEMBER, $from, $to);
+					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, $from, ($to - $from));
+					$q_count = sprintf("SELECT COUNT(*) as cnt FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0" , $folder_id);
+					$cnt_all = $this->db_fetch_field($q_count , "cnt");
+					if(($cnt_all - $from) < $to) $cnt_all = $cnt_all + ($to - ($cnt_all - $from));
+					$cnt = $cnt + $cnt_all - $to;
 				}
 				else
 				{
-					$q = sprintf("SELECT oid,parent,metadata FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC", $folder_id, CL_ML_MEMBER);
+					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC" , $folder_id);
 				}
-				
 				$this->db_query($q);
 				while($row = $this->db_next())
 				{
-					$data = aw_unserialize($row["metadata"]);
-					if(!(in_array($data["email"] , $already_found)))
+					if(!(in_array($row["mail"] , $already_found)))
 					{
 						$ret[] = array(
 							"oid" 		=> $row["oid"],
-							"parent"	=> $row["parent"],
-							"name"		=> $data["name"],
-							"mail"		=> $data["email"],
+							"parent"	=> $folder_id,
+							"name"		=> $row["name"],
+							"mail"		=> $row["mail"]
 						);
 						$cnt++;
 					if(!$all) $already_found[] = $data["email"];
@@ -1877,7 +1886,7 @@ class ml_list extends class_base
 					{
 						$ret[] = array(
 							"oid" 		=> $member->id(),
-							"parent"	=> $source_obj->id(),
+							"parent"	=> $folder_id,
 							"name"		=> $name,
 							"mail"		=> $email->prop("mail"),
 						);
@@ -1893,8 +1902,8 @@ class ml_list extends class_base
 					if(!(in_array($email->prop("mail") , $already_found)))
 					{
 						$ret[] = array(
-							"oid" => $source_obj->id(),
-							"parent" => $source_obj->parent(),
+							"oid" 		=> $folder_id,
+							"parent" 	=> $folder_id,
 							"name"		=> $name,
 							"mail"		=> $email->prop("mail"),
 						);
