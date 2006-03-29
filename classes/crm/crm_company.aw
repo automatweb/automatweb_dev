@@ -3838,9 +3838,16 @@ class crm_company extends class_base
 			foreach($task_o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 			{
 				$row = $c->to();
-				if (!$row->prop("bill_id") && $row->prop("on_bill"))
+				if (!$row->prop("bill_id") && ($row->prop("on_bill") || $row->prop("send_bill")))
 				{
-					$row->set_prop("bill_id", $bill->id());
+					if ($row->is_property("bill_id"))
+					{
+						$row->set_prop("bill_id", $bill->id());
+					}
+					else
+					{
+						$row->set_prop("bill_no", $bill->id());
+					}
 					$row->save();
 				}
 			}

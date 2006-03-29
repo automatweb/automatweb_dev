@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.87 2006/03/29 08:08:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.88 2006/03/29 08:54:34 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1549,9 +1549,9 @@ class task extends class_base
 				"on_bill" => ($row->prop("bill_id") ? sprintf(t("Arve nr %s"), $bno) : html::checkbox(array(
 					"name" => "rows[$idx][on_bill]",
 					"value" => 1,
-					"checked" => ($row->class_id() == CL_CRM_MEETING ? $row->meta("on_bill") : $row->prop("on_bill"))
+					"checked" => ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill"))
 				))),
-				"bill_val" => ($row->class_id() == CL_CRM_MEETING ? $row->meta("on_bill") : $row->prop("on_bill")),
+				"bill_val" => ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill")),
 				"comments" => $comments,
 				"comments_cnt" => $comments_cnt,
 				"oid" => $row->id()
@@ -1576,13 +1576,13 @@ class task extends class_base
 		{
 			$row = $c->to();
 			$idx = $row->id();
-			if (($row->prop("on_bill") == 1 || !$only_on_bill) && ($bill_id === null || $row->prop("bill_id") == $bill_id))
+			if (($row->prop("send_bill") || $row->prop("on_bill") == 1 || !$only_on_bill) && ($bill_id === null || $row->prop("bill_id") == $bill_id || $row->prop("bill_no") == $bill_id))
 			{
 				$id = $task->id()."_".$idx;
 				$rows[$id] = array(
 					"name" => $row->prop("content"),
 					"unit" => t("tund"),
-					"date" => $row->prop("date"),
+					"date" => $row->class_id() == CL_CRM_MEETING ? $row->prop("start1") : $row->prop("date"),
 					"price" => $task->prop("hr_price"),
 					"amt" => $row->prop("time_to_cust"),
 					"amt_real" => $row->prop("time_real"),
@@ -1590,10 +1590,10 @@ class task extends class_base
 					"sum" => str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price"),
 					"has_tax" => 1,
 					"on_bill" => 1,
-					"bill_id" => $row->prop("bill_id"),
+					"bill_id" => $row->prop("bill_id") ? $row->prop("bill_id") : $row->prop("bill_no"),
 					"impl" => $row->prop("impl"),
 					"row_oid" => $row->id(),
-					"is_done" => $row->prop("done")
+					"is_done" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done")
 				);
 			}
 		}
@@ -2266,6 +2266,7 @@ class task extends class_base
 			else
 			{
 				$o->set_meta("on_bill", (int)$e["on_bill"]);
+				$o->set_prop("send_bill", (int)$e["on_bill"]);
 			}
 
 			if ($is_mod)

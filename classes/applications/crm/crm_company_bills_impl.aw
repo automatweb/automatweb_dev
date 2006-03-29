@@ -86,7 +86,7 @@ class crm_company_bills_impl extends class_base
 			"class_id" => CL_CRM_MEETING,
 			"send_bill" => 1,
 			"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
-			"is_done" => 1
+			"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
 		));
 		foreach($meetings->arr() as $row)
 		{
@@ -236,10 +236,30 @@ class crm_company_bills_impl extends class_base
 
 		// list all task rows that are not billed yet
 		$rows = new object_list(array(
-			"class_id" => CL_TASK_ROW,
-			"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
-			"on_bill" => 1,
-			"done" => 1
+			"class_id" => array(CL_TASK_ROW,CL_CRM_MEETING),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
+							"class_id" => CL_TASK_ROW,
+							"bill_id" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+							"on_bill" => 1,
+							"done" => 1
+						)
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
+							"class_id" => CL_CRM_MEETING,
+							"send_bill" => 1,
+							"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
+							"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
+						)
+					))
+				)
+			))
 		));
 		$tasks = new object_list();
 		$sum2task = array();
@@ -264,6 +284,7 @@ class crm_company_bills_impl extends class_base
 				}
 			}
 		}
+
 
 		foreach($tasks->arr() as $o)
 		{
