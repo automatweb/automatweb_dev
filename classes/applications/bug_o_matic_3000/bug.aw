@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.23 2006/03/30 10:25:46 kristo Exp $
-// bug.aw - Bugi 
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.24 2006/03/30 10:27:18 kristo Exp $
+//  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
 
@@ -647,7 +647,7 @@ class bug extends class_base
 			$bug->set_prop("bug_status", BUG_DONE);
 			$bug->save();
 		}
-		$this->_add_comment($bug, nl2br($msg));
+		$this->_add_comment($bug, $msg);
 		aw_restore_acl();
 		die(sprintf(t("Added comment to bug %s"), $arr[bugno]));
 	}
