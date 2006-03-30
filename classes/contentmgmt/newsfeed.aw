@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.16 2006/03/28 10:14:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.17 2006/03/30 10:41:07 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -221,18 +221,59 @@ class newsfeed extends class_base
 					"site_id" => array()
 				));
 				$kwlist = $kw_ol->names();
+
+				$c = new connection();
+				$doclist = $c->find(array(
+					"to" => $kw_ol->ids(),
+				));
+				$docid = array();
+				$non_docid = array();
+				foreach($doclist as $con)
+				{
+					if ($con["from.class_id"] == CL_DOCUMENT)
+					{
+						if ($con["from.status"] == STAT_ACTIVE)
+						{
+							$docid[$con["from"]] = $con["from"];
+						}
+					}	
+					else
+					{
+						$non_docid[$con["from"]] = $con["from"];
+					}
+				}
+
+				if (count($non_docid))
+				{
+					// fetch docs connected to THOSE
+					$doclist = $c->find(array(
+						"from.class_id" => CL_DOCUMENT,
+						"to" => $non_docid
+					));
+					foreach($doclist as $con)
+					{
+						if ($con["from.status"] == STAT_ACTIVE)
+						{
+							$docid[$con["from"]] = $con["from"];
+						}
+					}
+				}
 			}
 
+			$cond = array(
+				"parent" => $parents,
+			);
+			if (count($docid))
+			{
+				$cond["oid"] = $docid;
+			}
 			$ol_args = array(
 				"class_id" => $classes,
 				"status" => STAT_ACTIVE,
 				"sort_by" => "objects.modified DESC",
 				new object_list_filter(array(
 					"logic" => "OR",
-					"conditions" => array(
-						"parent" => $parents,
-						"CL_DOCUMENT.RELTYPE.name" => $kwlist
-					)
+					"conditions" => $cond
 				))
 			);
 			if ($limittype == "last")
