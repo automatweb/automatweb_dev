@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.153 2005/12/29 22:08:34 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.154 2006/03/30 12:38:55 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -353,8 +353,13 @@ class image extends class_base
 						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td align=\"center\"><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr><tr><td align=\"center\" class=\"imagecomment\">&nbsp;%s%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"], $authortxt);
 					}
 					else
+					if ($vars["align"] != "")
 					{
 						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
+					}
+					else
+					{
+						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt' class='$use_style'></a>", $idata["link"], $vars["target"], $idata["url"]);
 					}
 				};
 			}
