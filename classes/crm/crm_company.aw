@@ -93,6 +93,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property pohitegevus type=popup_search clid=CL_CRM_SECTOR table=kliendibaas_firma style=relpicker reltype=RELTYPE_TEGEVUSALAD
 	@caption P&otilde;hitegevus / Tegevusalad
 
+	@property activity_keywords type=textarea cols=65 rows=3 table=kliendibaas_firma
+	@comment Komade või semikoolonitega eraldatud
+	@caption M&auml;rks&otilde;nad
+
 ------ Yldine - Lisainfo grupp----------
 @default group=add_info
 
@@ -1018,6 +1022,7 @@ CREATE TABLE `kliendibaas_firma` (
   `ettevotlusvorm` int(11) default NULL,
   `pohitegevus` int(11) default NULL,
   `tegevuse_kirjeldus` text,
+  `activity_keywords` text,
   `contact` int(11) default NULL,
   `firmajuht` int(11) default NULL,
   `korvaltegevused` text,
@@ -1027,6 +1032,9 @@ CREATE TABLE `kliendibaas_firma` (
   UNIQUE KEY `oid` (`oid`),
   KEY `teg_i` (`pohitegevus`)
 ) TYPE=MyISAM;
+
+
+ALTER TABLE `kliendibaas_firma` ADD `activity_keywords` TEXT AFTER `tegevuse_kirjeldus`;
 */
 
 
@@ -4961,14 +4969,24 @@ class crm_company extends class_base
 
 	function do_db_upgrade($tbl, $field, $q, $err)
 	{
-		switch($field)
+		if ("kliendibaas_firma" == $tbl)
 		{
-			case "aw_bill_due_days":
-				$this->db_add_col($tbl, array(
-					"name" => $field,
-					"type" => "int"
-				));
-				return true;
+			switch($field)
+			{
+				case "aw_bill_due_days":
+					$this->db_add_col($tbl, array(
+						"name" => $field,
+						"type" => "int"
+					));
+					return true;
+
+				case "activity_keywords":
+					$this->db_add_col($tbl, array(
+						"name" => $field,
+						"type" => "TEXT"
+					));
+					return true;
+			}
 		}
 	}
 }
