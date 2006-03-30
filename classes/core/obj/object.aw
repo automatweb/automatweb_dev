@@ -1796,6 +1796,28 @@ class object
 		);
 	}
 
+	/** returns a list of all the current acl connections for this object
+		@attrib api=1
+
+		@returns 
+			array of group_id => array of acls
+			for each acl relation that this object has
+
+		@errors
+			error is thrown if no current object is loaded
+
+		@examples
+			$o = obj(6);
+			foreach($o->acl_get() as $gid => $acl)
+			{
+				echo "group $gid  has acls ".dbg::dump($acl);
+			}	
+	**/
+	function acl_get()
+	{
+		return $GLOBALS["object_loader"]->get_acl_groups_for_obj($this->oid);
+	}
+
 	function acl_del($g_oid)
 	{
 	}

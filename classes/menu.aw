@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.148 2006/03/20 10:54:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.149 2006/03/30 07:10:27 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -271,7 +271,10 @@
 
 		@property kw_tb type=toolbar no_caption=1 store=no group=keywords
 
-		@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
+		property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
+		caption AW Märksõnad
+
+		@property grkeywords2 type=keyword_selector field=meta method=serialize group=keywords
 		@caption AW Märksõnad
 
 		@property keywords type=textbox field=meta method=serialize group=keywords
@@ -286,6 +289,12 @@
 	
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
+
+@groupinfo acl caption=&Otilde;igused
+@default group=acl
+	
+	@property acl type=acl_manager store=no
+	@caption &Otilde;igused
 
 
 	@classinfo relationmgr=yes
@@ -431,6 +440,35 @@ class menu extends class_base
 		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
+			case "jrk":
+				if ($arr["new"] && $this->can("view", $arr["request"]["ord_after"]))
+				{
+					$oa = obj($arr["request"]["ord_after"]);
+					$mlp = new object_list(array(
+						"class_id" => CL_MENU,
+						"parent" => $oa->parent(),
+						"sort_by" => "jrk"
+					));
+					foreach($mlp->arr() as $id => $menu)
+					{
+						if ($get_next)
+						{
+							$next_ord = $menu->ord();
+							$get_next = false;
+						}
+						if ($id == $oa->id())
+						{
+							$get_next = true;
+						}
+					}
+					if (!isset($next_ord))
+					{
+						$next_ord = $oa->ord() + 100;
+					}
+					$data["value"] = ($oa->ord() + $next_ord) / 2;
+				}
+				break;
+
 			case "kw_tb":
 				$this->kw_tb($arr);
 				break;
@@ -1307,6 +1345,10 @@ class menu extends class_base
 
 	function get_menu_keywords($id)
 	{
+		$m = obj($id);
+		$kws = new object_list($m->connections_from(array("to.class_id" => CL_KEYWORD)));
+		return $this->make_keys($kws->ids());
+
 		$ret = array();
 		$id = (int)$id;
 		$this->db_query("SELECT * FROM keyword2menu WHERE menu_id = $id");

@@ -536,6 +536,81 @@
             <caption>Kasutaja defineeritud checkbox 1</caption>
       </property>
       <property>
+            <name>ucheck2</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>ucheck2</field>
+            <caption>Kasutaja defineeritud checkbox 2</caption>
+      </property>
+      <property>
+            <name>ucheck3</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>ucheck3</field>
+            <caption>Kasutaja defineeritud checkbox 3</caption>
+      </property>
+      <property>
+            <name>ucheck4</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>ucheck4</field>
+            <caption>Kasutaja defineeritud checkbox 4</caption>
+      </property>
+      <property>
+            <name>ucheck5</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>ucheck5</field>
+            <caption>Kasutaja defineeritud checkbox 5</caption>
+      </property>
+      <property>
+            <name>ucheck6</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>ucheck6</field>
+            <caption>Kasutaja defineeritud checkbox 6</caption>
+      </property>
+      <property>
+            <name>uservar1</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>classificator</type>
+            <field>aw_varuser1</field>
+            <reltype>RELTYPE_VARUSER1</reltype>
+            <store>connect</store>
+            <caption>User-defined var 1</caption>
+      </property>
+      <property>
+            <name>uservar2</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>classificator</type>
+            <field>aw_varuser2</field>
+            <reltype>RELTYPE_VARUSER2</reltype>
+            <store>connect</store>
+            <caption>User-defined var 2</caption>
+      </property>
+      <property>
+            <name>uservar3</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>classificator</type>
+            <field>aw_varuser3</field>
+            <reltype>RELTYPE_VARUSER3</reltype>
+            <store>connect</store>
+            <caption>User-defined var 3</caption>
+      </property>
+      <property>
             <name>language</name>
             <table>documents</table>
             <group>general</group>
@@ -655,6 +730,15 @@
             <method>serialize</method>
             <caption>Kasuta siseraami</caption>
       </property>
+      <property>
+            <name>kws</name>
+            <table>documents</table>
+            <group>kws</group>
+            <type>keyword_selector</type>
+            <store>no</store>
+            <field>kws</field>
+            <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <no_comment>1</no_comment>
@@ -672,6 +756,9 @@
                   <caption>Seadistused</caption>
                   <icon>archive.gif</icon>
             </settings>
+            <kws>
+                  <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+            </kws>
             <relationmgr>
                   <caption>Seostehaldur</caption>
                   <submit>no</submit>
@@ -705,6 +792,21 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Keeleseos</caption>
             </LANG_REL>
+            <VARUSER1>
+                  <value>23</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 1</caption>
+            </VARUSER1>
+            <VARUSER2>
+                  <value>24</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 2</caption>
+            </VARUSER2>
+            <VARUSER3>
+                  <value>25</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 3</caption>
+            </VARUSER3>
       </reltypes>
 </properties>
 

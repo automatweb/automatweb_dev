@@ -666,11 +666,9 @@
             <field>kw_tb</field>
       </property>
       <property>
-            <name>grkeywords</name>
+            <name>grkeywords2</name>
             <table>objects</table>
-            <type>select</type>
-            <size>10</size>
-            <multiple>1</multiple>
+            <type>keyword_selector</type>
             <field>meta</field>
             <method>serialize</method>
             <group>keywords</group>
@@ -702,6 +700,15 @@
             <callback>callback_get_transl</callback>
             <field>transl</field>
             <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
+      <property>
+            <name>acl</name>
+            <table>objects</table>
+            <group>acl</group>
+            <type>acl_manager</type>
+            <store>no</store>
+            <field>acl</field>
+            <caption>&amp;amp;Otilde;igused</caption>
       </property>
       <classinfo>
             <trans>1</trans>
@@ -800,6 +807,9 @@
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
+            <acl>
+                  <caption>&amp;amp;Otilde;igused</caption>
+            </acl>
       </groupinfo>
       <tableinfo>
             <menu>

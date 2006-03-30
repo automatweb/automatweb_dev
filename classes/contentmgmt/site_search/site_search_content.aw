@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.61 2006/03/09 10:41:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.62 2006/03/30 07:10:27 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1457,8 +1457,14 @@ class site_search_content extends class_base
 
 		load_vcl("date_edit");
 
-		$arr["date"]["from"] = date_edit::get_timestamp($arr["s_date"]["from"]);
-		$arr["date"]["to"] = date_edit::get_timestamp($arr["s_date"]["to"]);
+		if (isset($arr["s_date"]["from"]))
+		{
+			$arr["date"]["from"] = date_edit::get_timestamp($arr["s_date"]["from"]);
+		}
+		if (isset($arr["s_date"]["to"]))
+		{
+			$arr["date"]["to"] = date_edit::get_timestamp($arr["s_date"]["to"]);
+		}
 
 		if ($arr["date"]["from"] < 1)
 		{

@@ -21,14 +21,6 @@ var FCKLanguageManager = new Object() ;
 
 FCKLanguageManager.AvailableLanguages = 
 {
-	'ar'		: 'Arabic',
-	'bg'		: 'Bulgarian',
-	'bs'		: 'Bosnian',
-	'ca'		: 'Catalan',
-	'cs'		: 'Czech',
-	'da'		: 'Danish',
-	'de'		: 'German',
-	'el'		: 'Greek',
 	'en'		: 'English',
 	'en-au'		: 'English (Australia)',
 	'en-uk'		: 'English (United Kingdom)',

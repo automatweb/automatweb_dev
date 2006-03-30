@@ -74,7 +74,8 @@ class doc_display extends aw_template
 			"userta6" => $doc->prop("userta6"),
 			"link_text" => $doc->prop("link_text"),
 			"page_title" => strip_tags($doc->prop("title")),			
-			"date" => $_date
+			"date" => $_date,
+			"edit_doc" => $this->_get_edit_menu($doc)
 		));
 
 		$ablock = "";
@@ -258,5 +259,43 @@ class doc_display extends aw_template
 				"UCHECK1_UNCHECKED" => $this->parse("UCHECK1_UNCHECKED")
 			));
 		}
+	}
+	
+	function _get_edit_menu($menu)
+	{
+		if (!$this->prog_acl())
+		{
+			return;
+		}
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu("site_edit_".$menu->id());
+		$url = $this->mk_my_orb("new", array("parent" => $menu->parent(), "ord_after" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_DOCUMENT, true);
+		$pm->add_item(array(
+			"text" => t("Lisa uus"),
+			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',800, 600)\"",
+			"link" => "javascript:void(0)"
+		));
+		$url = $this->mk_my_orb("change", array("id" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_DOCUMENT, true);
+		$pm->add_item(array(
+			"text" => t("Muuda"),
+			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',800, 600)\"",
+			"link" => "javascript:void(0)"
+		));
+		$pm->add_item(array(
+			"text" => t("Peida"),
+			"link" => $this->mk_my_orb("hide_doc", array("id" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
+		));
+		$pm->add_item(array(
+			"text" => t("L&otilde;ika"),
+			"link" => $this->mk_my_orb("cut_doc", array("id" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
+		));
+		if ($this->can("view", $_SESSION["site_admin"]["cut_doc"]))
+		{
+			$pm->add_item(array(
+				"text" => t("Kleebi"),
+				"link" => $this->mk_my_orb("paste_doc", array("after" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
+			));
+		}
+		return $pm->get_menu();
 	}
 }

@@ -16,4 +16,6 @@ oncontextmenu="return buttonClick(event, '{VAR:menu_id}');" alt="{VAR:alt}" titl
 <div id="{VAR:menu_id}" class="menu" onmouseover="menuMouseover(event)">
 <!-- SUB: MENU_ITEM -->
 <a class="menuItem" href="{VAR:link}">{VAR:text}</a>
-<!-- END SUB: MENU_ITEM --></div>
+<!-- END SUB: MENU_ITEM -->
+</div>
+</span>

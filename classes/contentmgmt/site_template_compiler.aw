@@ -1026,6 +1026,8 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"link\" => ".$inst_name."->".$fun_name."($o_name),\n";
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
 		$ret .= $this->_gi()."\"section\" => ".$o_name."->".$this->id_func."(),\n";
+		$ret .= $this->_gi()."\"menu_edit\" => \$this->__helper_menu_edit(".$o_name."),\n";
+
 		if ($arr["level"] > 1)
 		{
 			$ret .= $this->_gi()."\"parent_section\" => is_object(\$o_".$arr["a_parent"]."_".($arr["level"]-1).") ? \$o_".$arr["a_parent"]."_".($arr["level"]-1)."->".$this->id_func."() : ".$o_name."->parent(),\n";

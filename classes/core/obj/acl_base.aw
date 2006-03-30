@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.18 2006/02/20 11:02:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.19 2006/03/30 07:10:29 kristo Exp $
 
 lc_load("definition");
 
@@ -41,15 +41,25 @@ class acl_base extends db_connector
 
 	function get_acl_groups_for_obj($oid)
 	{
+		if (aw_ini_get("acl.use_new_acl"))
+		{
+			return safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
+		}
 		$ret = array();
+		$acls = aw_ini_get("acl.names");
 		$q = "SELECT *,groups.name as name,".$this->sql_unpack_string()."
 					FROM acl LEFT JOIN groups ON groups.gid = acl.gid
 					WHERE acl.oid = $oid";
-
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
-			$ret[$row["gid"]] = $row;
+			//$ret[$row["gid"]] = $row;
+			$inf = array();
+			foreach($acls as $id => $nm)
+			{
+				$inf[$id] = $row[$id];
+			}
+			$ret[$row["oid"]] = $inf;
 		}
 
 		return $ret;
@@ -452,12 +462,7 @@ class acl_base extends db_connector
 			$aclarr[$k] = $GLOBALS["cfg"]["acl"]["denied"];
 		}
 
-		// so we wouldn't add the group twice
-		$grplist = $this->get_acl_groups_for_obj($oid);
-		if (!is_array($grplist[$all_users_grp]))
-		{
-			$this->add_acl_group_to_obj($all_users_grp, $oid, array(), false);
-		}
+		$this->add_acl_group_to_obj($all_users_grp, $oid, array(), false);
 		
 		// we don't need to flush caches here, because the user that was just created can't have an acl cache anyway
 		$this->save_acl($oid,$all_users_grp, $aclarr, false);		// give no access to all users
@@ -483,7 +488,7 @@ class acl_base extends db_connector
 
 	////
 	// !checks if the user has the $right for program $progid
-	function prog_acl($right,$progid)
+	function prog_acl($right = "",$progid = PRG_MENUEDIT)
 	{
 		if (aw_global_get("uid") == "")
 		{

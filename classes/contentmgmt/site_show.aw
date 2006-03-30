@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.159 2006/03/17 14:34:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.160 2006/03/30 07:10:27 kristo Exp $
 
 /*
 
@@ -1064,6 +1064,10 @@ class site_show extends class_base
 			return $docc;
 		}
 
+		if ($docc == "")
+		{
+			$docc = $this->_get_empty_doc_menu();
+		}
 		$this->vars(array(
 			"doc_content" => $docc
 		));
@@ -2692,6 +2696,77 @@ class site_show extends class_base
 				));
 			}
 		}
+	}
+
+	function __helper_menu_edit($menu, $area, $level)
+	{
+		if (!$this->prog_acl())
+		{
+			return;
+		}
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu("site_edit_".$menu->id());
+		$url = $this->mk_my_orb("new", array("parent" => $menu->parent(), "ord_after" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
+		$pm->add_item(array(
+			"text" => t("Lisa uus k&otilde;rvale"),
+			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
+			"link" => "javascript:void(0)"
+		));
+
+		$url = $this->mk_my_orb("new", array("parent" => $menu->id(), "ord_after" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
+		$pm->add_item(array(
+			"text" => t("Lisa uus alamkaust"),
+			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
+			"link" => "javascript:void(0)"
+		));
+
+		$url = $this->mk_my_orb("change", array("id" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
+		$pm->add_item(array(
+			"text" => t("Muuda"),
+			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
+			"link" => "javascript:void(0)"
+		));
+		$pm->add_item(array(
+			"text" => t("Peida"),
+			"link" => $this->mk_my_orb("hide_menu", array("id" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
+		));
+		$pm->add_item(array(
+			"text" => t("L&otilde;ika"),
+			"link" => $this->mk_my_orb("cut_menu", array("id" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
+		));
+		if ($this->can("view", $_SESSION["site_admin"]["cut_menu"]))
+		{
+			$pm->add_item(array(
+				"text" => t("Kleebi"),
+				"link" => $this->mk_my_orb("paste_menu", array("after" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
+			));
+		}
+		return $pm->get_menu();
+	}
+
+	function _get_empty_doc_menu()
+	{
+		if (!$this->prog_acl())
+		{
+			return;
+		}
+		$pm = get_instance("vcl/popup_menu");
+		$pm->begin_menu("site_edit_new");
+		$url = $this->mk_my_orb("new", array("parent" => $this->sel_section, "return_url" => get_ru(), "is_sa" => 1), CL_DOCUMENT, true);
+		$pm->add_item(array(
+			"text" => t("Lisa uus"),
+			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',800, 600)\"",
+			"link" => "javascript:void(0)"
+		));
+		if ($this->can("view", $_SESSION["site_admin"]["cut_doc"]))
+		{
+			$pm->add_item(array(
+				"text" => t("Kleebi"),
+				"link" => $this->mk_my_orb("paste_doc", array("ru" => get_ru()), "menu_site_admin")
+			));
+		}
+		return $pm->get_menu();
+		
 	}
 }
 ?>

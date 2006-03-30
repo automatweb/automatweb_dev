@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.472 2006/03/29 09:11:14 tarvo Exp $
+// $Id: class_base.aw,v 2.473 2006/03/30 07:10:26 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -125,6 +125,8 @@ class class_base extends aw_template
 			"object_table" => "vcl/object_table",
 			"relationmgr" => "vcl/relationmgr",
 			"server_folder_selector" => "vcl/server_folder_selector",
+			"keyword_selector" => "vcl/keyword_selector",
+			"acl_manager" => "vcl/acl_manager"
 		);
 
 		// XXX: this is temporary
@@ -754,11 +756,23 @@ class class_base extends aw_template
 			$argblock["no_rte"] = 1;
 		};
 
+		if ($args["is_sa"] == 1)
+		{
+			$argblock["is_sa"] = 1;
+		}
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
 			$this->inst->callback_mod_reforb(&$argblock,$this->request);
 
 		};
+
+		if (is_array($this->_do_call_vcl_mod_reforbs))
+		{
+			foreach($this->_do_call_vcl_mod_reforbs as $vcl_mro)
+			{
+				$vcl_mro[0]->$vcl_mro[1](&$argblock, $this->request);
+			}
+		}
 
 		$submit_action = "submit";
 
@@ -825,7 +839,8 @@ class class_base extends aw_template
 			// should be focused by the output client
 			"focus" => $gdata["focus"],
 			"help" => "Siin tuleb üldine info selle tabi (grupi) kohta, aga seda pole veel kirjutatud. Proovi klikkida omaduste esitähtedel.",
-			"scripts" => $scripts
+			"scripts" => $scripts,
+			"is_sa_changed" => $this->request["is_sa_changed"]
 		));
 
 		extract($args);
@@ -969,6 +984,11 @@ class class_base extends aw_template
 			// logging should be defined by the form info
 			$this->log_obj_change();
 			// as well as this
+			if ($request["is_sa"] == 1)
+			{
+				$args["is_sa"] = 1;
+				$args["is_sa_changed"] = 1;
+			}
 			if (method_exists($this->inst,"callback_mod_retval"))
 			{
 				$this->inst->callback_mod_retval(array(
@@ -985,6 +1005,20 @@ class class_base extends aw_template
 					return $args["goto"];
 				};
 			};
+			if (is_array($this->_do_call_vcl_mod_retvals))
+			{
+				foreach($this->_do_call_vcl_mod_retvals as $vcl_mro)
+				{
+					$vcl_mro[0]->$vcl_mro[1](array(
+						"action" => &$action,
+						"args" => &$args,
+						"request" => &$request,
+						"orb_class" => &$orb_class,
+						"clid" => $this->clid,
+						"new" => $this->new,
+					));
+				}
+			}
 		};
 
 		// and I need a workaround for this id_only thingie!!!
@@ -2365,6 +2399,10 @@ class class_base extends aw_template
 						};
 					};
 				};
+				if (is_callable(array($ot, "callback_mod_reforb")))
+				{
+					$this->_do_call_vcl_mod_reforbs[] = array($ot, "callback_mod_reforb");
+				}
 			}
 			elseif ($val["type"] == "form")
 			{
@@ -3774,6 +3812,10 @@ class class_base extends aw_template
 						return false;
 					};
 				};
+				if (is_callable(array($ot, "callback_mod_retval")))
+				{
+					$this->_do_call_vcl_mod_retvals[] = array($ot, "callback_mod_retval");
+				}
 			};
 
 			if (isset($property["store"]) && $property["store"] == "no")

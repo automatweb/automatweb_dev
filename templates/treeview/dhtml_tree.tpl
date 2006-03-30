@@ -49,11 +49,11 @@ function load_tree_state()
 			level = i + 1;
 			break;
 		}	
-	}
-	set_cookie(tree_id + "_level", level);
-	if(node)
-	{
-		toggle_children(node,1);
+		set_cookie(tree_id + "_level", level);
+		if(node)
+		{
+			toggle_children(node,1);
+		}
 	}
 }
 

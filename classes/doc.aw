@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.112 2005/12/05 12:31:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.113 2006/03/30 07:10:26 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -165,6 +165,30 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @property ucheck1 type=checkbox ch_value=1 table=objects field=meta method=serialize group=general
 @caption Kasutaja defineeritud checkbox 1
 
+@property ucheck2 type=checkbox ch_value=1 table=documents field=ucheck2 group=general
+@caption Kasutaja defineeritud checkbox 2
+
+@property ucheck3 type=checkbox ch_value=1 table=documents field=ucheck3 group=general
+@caption Kasutaja defineeritud checkbox 3
+
+@property ucheck4 type=checkbox ch_value=1 table=documents field=ucheck4 group=general
+@caption Kasutaja defineeritud checkbox 4
+
+@property ucheck5 type=checkbox ch_value=1 table=documents field=ucheck5 group=general
+@caption Kasutaja defineeritud checkbox 5
+
+@property ucheck6 type=checkbox ch_value=1 table=documents field=ucheck6 group=general
+@caption Kasutaja defineeritud checkbox 6
+
+@property uservar1 type=classificator field=aw_varuser1 reltype=RELTYPE_VARUSER1 store=connect
+@caption User-defined var 1
+
+@property uservar2 type=classificator field=aw_varuser2 reltype=RELTYPE_VARUSER2 store=connect
+@caption User-defined var 2
+
+@property uservar3 type=classificator field=aw_varuser3 reltype=RELTYPE_VARUSER3 store=connect
+@caption User-defined var 3
+
 @property language type=text group=general type=text store=no trans=1
 @caption Keel
 
@@ -199,10 +223,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @property show_in_iframe type=checkbox ch_value=1 group=settings table=objects field=meta method=serialize
 @caption Kasuta siseraami
 
+@default group=kws
+
+	@property kws type=keyword_selector store=no 
+	@caption M&auml;rks&otilde;nad
 
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
 @groupinfo settings caption=Seadistused icon=archive.gif
+@groupinfo kws caption="M&auml;rks&otilde;nad" 
 @groupinfo relationmgr caption=Seostehaldur submit=no
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
@@ -216,6 +245,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 @reltype LANG_REL value=22 clid=CL_DOCUMENT
 @caption Keeleseos
+
+
+@reltype VARUSER1 value=23 clid=CL_META
+@caption kasutajadefineeritud muutuja 1
+
+@reltype VARUSER2 value=24 clid=CL_META
+@caption kasutajadefineeritud muutuja 2
+
+@reltype VARUSER3 value=25 clid=CL_META
+@caption kasutajadefineeritud muutuja 3
 
 */
 

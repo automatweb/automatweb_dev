@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/acl/Attic/acl_class.aw,v 1.2 2005/03/24 10:02:23 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/acl/Attic/acl_class.aw,v 1.3 2006/03/30 07:10:28 kristo Exp $
 /* 
 
 @classinfo syslog_type=ST_ACL relationmgr=yes
@@ -53,6 +53,10 @@ class acl_class extends class_base
 			return false;	
 		};
 
+		error::raise(array(
+			"id" => "ERR_NOIMPL",
+			"msg" => t("This function needs updating (get_acl_groups_for_obj)")
+		));
 		$meta = $o->meta();
 
 		$oc = get_instance(CL_OBJECT_CHAIN);

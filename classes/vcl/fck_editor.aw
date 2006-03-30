@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.4 2006/02/17 15:16:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.5 2006/03/30 07:10:30 kristo Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor
@@ -56,7 +56,7 @@ window.onload = function()
 		var fck'.$nm.' = new FCKeditor("'.$nm2.'");
 		fck'.$nm.'.BasePath = "js/fckeditor/";
 		fck'.$nm.'.ToolbarSet = "aw";
-		fck'.$nm.'.Width = "800px";
+		fck'.$nm.'.Width = "600px";
 		fck'.$nm.'.Height = "500px";
 		fck'.$nm.'.Config["AutoDetectLanguage"] = false;
 		fck'.$nm.'.Config["DefaultLanguage"] = "'.(!empty($arr["lang"]) ? $arr["lang"] : "et").'";

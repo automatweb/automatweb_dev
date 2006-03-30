@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.345 2006/03/20 12:45:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.346 2006/03/30 07:10:26 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1701,7 +1701,8 @@ class document extends aw_template
 		return $this->mk_my_orb("change",array(
 			"id" => $oob["oid"], 
 			"section" => $_GET["section"],
-			"period" => $arr["period"]
+			"period" => $arr["period"],
+			"is_sa" => $_GET["is_sa"]
 		),"doc");
 	}
 
@@ -3255,6 +3256,24 @@ class document extends aw_template
 				$o->save();
 				aw_restore_acl();
 			}
+		}
+
+		switch($field)
+		{
+			case "ucheck2":
+			case "ucheck3":
+			case "ucheck4":
+			case "ucheck5":
+			case "ucheck6":
+			case "aw_varuser1":
+			case "aw_varuser2":
+			case "aw_varuser3":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => int
+				));
+				return true;
+				break;
 		}
 		return false;
 	}

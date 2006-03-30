@@ -991,7 +991,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				else
 				{
-					$sql .= " AND o_t.".substr($k, 3)." = '$v' ";
+					if (strpos($v, "%") !== false)
+					{
+						$sql .= " AND o_t.".substr($k, 3)." LIKE '$v' ";
+					}
+					else
+					{
+						$sql .= " AND o_t.".substr($k, 3)." = '$v' ";
+					}
 				};
 			}
 			if (substr($k, 0, 5) == "from.")
@@ -1002,7 +1009,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				else
 				{
-					$sql .= " AND o_s.".substr($k, 5)." = '$v' ";
+					if (strpos($v, "%") !== false)
+					{
+						$sql .= " AND o_s.".substr($k, 5)." LIKE '$v' ";
+					}
+					else
+					{
+						$sql .= " AND o_s.".substr($k, 5)." = '$v' ";
+					}
 				};
 			}
 		}

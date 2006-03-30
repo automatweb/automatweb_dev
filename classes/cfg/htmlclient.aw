@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.142 2006/03/16 15:15:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.143 2006/03/30 07:10:27 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -651,6 +651,11 @@ class htmlclient extends aw_template
 		if (!empty($arr["focus"]))
 		{
 			$scripts .= "if (typeof(document.changeform['" . $arr["focus"] ."'].focus) != \"undefined\") { document.changeform['" . $arr["focus"] ."'].focus();\n}";
+		}
+
+		if ($is_sa_changed == 1)
+		{
+			$scripts .= "if (window.opener) { window.opener.location.reload(); }\n";
 		}
 
 		$fn = basename($_SERVER["SCRIPT_FILENAME"],".aw");
