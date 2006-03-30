@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.2 2006/03/07 13:34:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.3 2006/03/30 12:31:26 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -90,7 +90,8 @@ class realestate_add extends class_base
 				break;		
 			case "help":
 				$template_dir = $this->site_template_dir;
-				$prop["value"] = nl2br(htmlentities("peab olema määratud nii template faili nimi, kui ka taseme nimi.
+				$prop["value"] = nl2br(htmlentities("
+				peab olema määratud nii template faili nimi, kui ka taseme nimi.
 				Template fail peab asuma kataloogis :".$template_dir.".
 				Kui tahad templates näha valmis tehtud property't koos õigete valikutega jne, siis kasuta templates muutujuat {VAR:property}, kui vaja läheb vaid property väärtust , kasuta muutujat {VAR:property_value} (property asemele siis vastava property nimi, mille saab Kohustuslike väljade alt...sulgudes olev tekst).
 				Kui miski property kohta märkida, et see on kohustluslik, siis töötab asi nii, et juhul , kui mingisse teplate'i kirjutatakse vastava property nimi, siis sealt edasi ei lasta , enne kui ta miski väärtuse kaasa saab.
@@ -104,7 +105,17 @@ class realestate_add extends class_base
 				Kasutuses veel (vajalikud xmlrewquest jaoks): 
 				{VAR:url}
 				{VAR:admin_structure_id} ,Riigi haldusjaotuse ID
-				{VAR:div0}-{VAR:div4}, vastavalt siis maakonna, linna, linnaosa, valla ja asula/küla haldusüksuse IDd"));
+				{VAR:div0}-{VAR:div4}, vastavalt siis maakonna, linna, linnaosa, valla ja asula/küla haldusüksuse IDd
+				
+				miski suvalise kasutaja lisatud kinnisvaraobjektide nimekirja genereerimiseks peab olema õiges kaustas fail list.tpl
+				muutujad:
+				name - kinnisvaraobjekti nimi
+				id - objekti id... kui see urliks panna, siis näitab objekti andmeid
+				change - url, millelt saab antud kinnisvaraobjekti muuta
+				
+				kui objekt on lisatud saidilt miski dokumendi kaudu mis siiamaani eksisteerib, siis muutmisel kasutatakse sama dokumenti... kui seda pole, siis on vajalik default_change.tpl nimeline fail
+				
+				"));
 				break;
 		};
 		return $retval;
@@ -281,15 +292,6 @@ class realestate_add extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-
 	function type_name($clid)
 	{
 		switch ($clid)
@@ -346,77 +348,116 @@ class realestate_add extends class_base
 		return $ret;
 	}
 
+	function get_address_props($parent)
+	{
+		$realestate_environment_obj = obj($parent);
+		$address_props = array(
+			"county"	=> $realestate_environment_obj->prop("address_equivalent_1"),
+			"city"		=> $realestate_environment_obj->prop("address_equivalent_2"),
+			"citypart"	=> $realestate_environment_obj->prop("address_equivalent_3"),
+			"vald"		=> $realestate_environment_obj->prop("address_equivalent_4"),
+			"settlement"	=> $realestate_environment_obj->prop("address_equivalent_5"),
+			"street"	=> "street",
+			"street_address"=> 0,
+			"apartment"	=> 0,
+		);
+		return $address_props;
+	}
+
+	function fill_session($args)
+	{
+		extract($args);
+		$realestate_obj = obj($id);
+		$props = $realestate_obj->get_property_list();
+		foreach($props as $key => $val)
+		{
+			if($realestate_obj->prop($key))
+			{
+				$_SESSION["realestate_input_data"][$key] = $realestate_obj->prop($key);
+			}
+		}
+		$address_props = $this->get_address_props($parent);
+		$address = $realestate_obj->get_first_obj_by_reltype("RELTYPE_REALESTATE_ADDRESS");
+		$tmp_address_data = $address->prop("address_data");
+		$address_data = array();
+		foreach ($tmp_address_data as $key => $val)
+		{
+			$address_data[$val["division"]] = $val["id"];
+		}
+		foreach($address_props as $key => $val)
+		{
+			if(($key == "street_address") || ($key == "apartment"))
+			{
+				$_SESSION["realestate_input_data"][$key] = $address->prop ($key, $val);
+			}
+			else
+			{
+				$_SESSION["realestate_input_data"][$key] = $address_data[$val];
+			}
+		}
+		$_SESSION["realestate_input_data"]["realestate_id"] = $id;
+		$_SESSION["realestate_input_data"]["filled_level"] = 256;//lihtsalt miski suur number
+	}
+	
+	/** Change the realestate object info.
+		
+		@attrib name=parse_alias is_public="1" caption="Change"
+	
+	**/
 	function parse_alias($arr)
 	{
+		global $level, $id, $default;
 		$targ = obj($arr["alias"]["target"]);
 		enter_function("realestate_add::parse_alias");
 		$clid = $targ->prop("realestate_type");
 		$levels = $targ->meta("levels");
 		$fields = $targ->meta("required_fields");
 		$parent = $targ->prop("realestate_environment");
-		global $level;
-		if(!$level)
+		if(!$level)//kui levelit pole määratud, siis on tegu uue sisestusega, et siis oleks abiks kui miski vana sesioon tühjaks teha
 		{
 			$level = 1;
 			$_SESSION["realestate_input_data"] = NULL;
 		}
+		if($id)//see siis tähendab, et muudetakse juba olemasolevat.... st vaja sessioon infot täis toppida jne
+		{
+			$realest_obj = obj($id);
+			$clid = $realest_obj->class_id();
+			$parent = $realest_obj->prop("realestate_manager");
+			$this->fill_session(array("id" => $id , "parent" => $parent));
+			$id = null;
+		}
+		$realestate_environment_obj = obj($parent);
+		
 		$data = $_SESSION["realestate_input_data"];
 		$data["level"] = NULL;
+		$this->vars(array("url" => $this->mk_my_orb("get_divisions", array())));
 		
-		if($this->not_filled(array("data" => $data , "fields" => $fields,)))
+		if(!$default)
 		{
-			$level = $level-1;
-		}
-		else 
-		{
-			if($level > $_SESSION["realestate_input_data"]["filled_level"])
+			if($this->not_filled(array("data" => $data , "fields" => $fields,)) && !$id)
 			{
-				$_SESSION["realestate_input_data"]["filled_level"] = $level-1;
+				$level = $level-1;
 			}
+			else 
+			{
+				if($level > $_SESSION["realestate_input_data"]["filled_level"])
+				{
+					$_SESSION["realestate_input_data"]["filled_level"] = $level-1;
+				}
+			}
+			$tpl = $levels[($level-1)]["template"];
+			$tpl2 = $levels[$level]["template"];
+			$_SESSION["realestate_input_data"]["level"] = $level+1;	
 		}
-		$tpl = $levels[($level-1)]["template"];
-		$tpl2 = $levels[$level]["template"];
-		$_SESSION["realestate_input_data"]["level"] = $level+1;	
+		else  //muudetaval kinnisvaraobjektil pole teada kuda teda sisestati.... st muutmiseks läheb käiku miski default template... antud juhul "default_change.tpl", sinna soovitaks muutmist võimaldada vaid propertytele, mis kõigil erinevatel kinnisvaraobjekti tüüpidel olemas, muidu ... minupärast võib ju, kuid ei soovitaks..
+		{
+			$tpl = "default_change.tpl";
+		}
 		$this->read_template($tpl);
 		lc_site_load("realestate_add", &$this);
-
 		//tekitab muutujad erinevate tasemete nimede ja linkidega		
-		$this->vars(array("url" => $this->mk_my_orb("get_divisions", array())));
-		if ($this->is_template("LINKS"))
-		{
-			$c = "";
-			foreach($levels as $key => $data)
-			{
-				$key++;
-				$u .= "";
-				if(($_SESSION["realestate_input_data"]["filled_level"]+2) > $key)
-				{
-					if($this->is_template("URL"))
-					{
-						$level_url = aw_url_change_var("level", ($key) , post_ru());
-						$this->vars(array(
-							"level_url" => $level_url,
-						));
-						$u .= $this->parse("URL");
-						$this->vars(array(
-							"URL" => $u,
-						));
-					}
-				}
-				else {
-					$this->vars(array(
-						"URL" => NULL,
-					));
-				}
-				$this->vars(array(
-					"level_name" 	=> $data["name"],
-				));
-				$c .= $this->parse("LINKS");				
-			}
-			$this->vars(array(
-				"LINKS" => $c,
-			));
-		}
+		$this->level_vars(array("levels" => $levels , "data" => $data));		
+		
 		//juhul , kui template faile rohkem ei ole, siis läheb edasi objekti salvestama
 		if(!$tpl2)
 		{
@@ -432,11 +473,11 @@ class realestate_add extends class_base
 				"parent"	=> $parent,
 				"type"		=> $this->type_name($clid),
 				"clid"		=> $clid,
+				"default"	=> $default,
 			)),
 		));
 		//property tervenisti saatmine... valmisjoonistatud kujul
 		$props_html = $this->get_props_for_site(array(
-			"alias_id"	=> $arr["alias"]["target"],
 			"clid"		=> $clid,
 			"parent"	=> $parent,
 		));
@@ -450,8 +491,6 @@ class realestate_add extends class_base
 		$this->vars($data_value);	
 
 		$subs = array("county", "city" ,"citypart", "vald" , "settlement");
-		$add_realestate_obj = obj($arr["alias"]["target"]);
-		$realestate_environment_obj = obj($add_realestate_obj->prop("realestate_environment"));
 		$admin_structure_id = $realestate_environment_obj->prop("administrative_structure");
 		$division = array(
 			$realestate_environment_obj->prop("address_equivalent_1") ,
@@ -484,10 +523,50 @@ class realestate_add extends class_base
 		return $this->parse();
 	}
 
+	function level_vars($args)
+	{
+		extract($args);
+		if ($this->is_template("LINKS"))
+		{
+			$c = "";
+			foreach($levels as $key => $data)
+			{
+				$key++;
+				$u .= "";
+				if(($_SESSION["realestate_input_data"]["filled_level"]+2) > $key)
+				{
+					if($this->is_template("URL"))
+					{
+						$level_url = aw_url_change_var("level", ($key) , post_ru());
+						$level_url = aw_url_change_var("id", null , $level_url);
+						$this->vars(array(
+							"level_url" => $level_url,
+						));
+						$u .= $this->parse("URL");
+						$this->vars(array(
+							"URL" => $u,
+						));
+					}
+				}
+				else {
+					$this->vars(array(
+						"URL" => NULL,
+					));
+				}
+				$this->vars(array(
+					"level_name" 	=> $data["name"],
+				));
+				$c .= $this->parse("LINKS");
+			}
+			$this->vars(array(
+				"LINKS" => $c,
+			));
+		}
+	}
+
 	/** get_divisions
 		@attrib name=get_divisions nologin="1" 
 	**/
-	
 	function get_divisions($arr)
 	{
 		global $site , $admin_structure_id , $parent , $division;
@@ -511,7 +590,7 @@ class realestate_add extends class_base
 			header("Content-type: text/xml");
 			$xml = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\" standalone=\"yes\"?>\n<response>\n";
 			if(is_array($unit_objlist->arr()) && is_oid($arr["parent"]))
-			{				
+			{
 				foreach($unit_objlist->arr() as $key => $obj)
 				{
 					$xml .= "<item><value>".$obj->id()."</value><text>".$obj->name()."</text></item>";
@@ -620,6 +699,71 @@ class realestate_add extends class_base
 	//	$html["address_connection"] = $t->draw();
 		return $html;
 	}
+	
+	/** Generate a list of realestate objects added by user 
+		
+		@attrib name=my_realestate_list is_public="1" caption="Minu kinnisvaraobjektid"
+	
+	**/
+	function my_realestate_list($args)
+	{
+		$uid = aw_global_get("uid");
+		$types = array(CL_REALESTATE_HOUSE, CL_REALESTATE_ROWHOUSE ,
+				CL_REALESTATE_COTTAGE ,CL_REALESTATE_HOUSEPART ,
+				CL_REALESTATE_APARTMENT , CL_REALESTATE_COMMERCIAL,
+				CL_REALESTATE_GARAGE , CL_REALESTATE_LAND,
+		);
+		
+		$all_objects = array();
+		foreach($types as $type)
+		{
+			$obj_list = new object_list(array(
+				"class_id" => $type,
+				"createdby" => $uid,
+			));
+			$all_objects = array_merge($all_objects,$obj_list->arr());
+		}
+		
+		$tpl = "list.tpl";
+		$this->read_template($tpl);
+		if ($this->is_template("LIST"))
+		{
+			$c = "";
+			foreach($all_objects as $key => $rlst_object)
+			{
+				if(is_oid($rlst_object->meta("added_from"))) $change = $rlst_object->meta("added_from")."?id=".$rlst_object->id();
+				else $change = $this->mk_my_orb("parse_alias", array("id" => $rlst_object->id(), "default" => 1));
+				$this->vars(array(
+					"name" 	 => $rlst_object->name(),
+					"id"	 => $rlst_object->id(),
+					"change" => $change,
+				));
+				$c .= $this->parse("LIST");
+			}
+			$this->vars(array(
+				"LIST" => $c,
+			));
+		}		
+		return $this->parse();
+	}
+
+	function gen_name()
+	{
+		$ret = "";
+		$data = $_SESSION["realestate_input_data"];
+		$ol = new object_list(array("oid" => $data));
+		$names = $ol->names();
+		if($names[$data["county"]])	$ret .= $names[$data["county"]];
+		if($names[$data["city"]])	$ret .= ', '.$names[$data["city"]];
+		if($names[$data["citypart"]])	$ret .= ', '.$names[$data["citypart"]];
+		if($names[$data["vald"]])	$ret .= ', '.$names[$data["vald"]];
+		if($names[$data["settlement"]])	$ret .= ', '.$names[$data["settlement"]];
+		if($data["place_name"])		$ret .= ', '.$data["place_name"];
+		if($data["street"])		$ret .= ', '.$data["street"];
+		if($data["street_address"])	$ret .= ' '.$data["street_address"];
+		if($data["apartment"])		$ret .= ' - '.$data["apartment"];
+		return $ret;
+	}
 
 	function show($arr)
 	{
@@ -653,6 +797,7 @@ class realestate_add extends class_base
 			$realestate_obj = obj($realestate_obj_id);
 			$realestate_obj->set_name($_SESSION["realestate_input_data"]["name"]);
 			$_SESSION["realestate_input_data"]["realestate_id"] = $realestate_obj_id;
+			$realestate_obj->set_meta("added_from" ,aw_global_get("section"));
 		}
 		else
 		{
@@ -663,19 +808,9 @@ class realestate_add extends class_base
 			$_SESSION["realestate_input_data"][$key] = $val;
 		}
 		$props = $realestate_obj->get_property_list();
-		$realestate_environment_obj = obj($args["parent"]);
-		$address_props = array(
-			"county"	=> $realestate_environment_obj->prop("address_equivalent_1"),
-			"city"		=> $realestate_environment_obj->prop("address_equivalent_2"),
-			"citypart"	=> $realestate_environment_obj->prop("address_equivalent_3"),
-			"vald"		=> $realestate_environment_obj->prop("address_equivalent_4"),
-			"settlement"	=> $realestate_environment_obj->prop("address_equivalent_5"),
-			"place_name"	=> $realestate_environment_obj->prop("address_equivalent_5"),
-			"street"	=> "street",
-			"street_address"=> 0,
-			"apartment"	=> 0,
-		);
+		$address_props = $this->get_address_props($args["parent"]);
 		$address = $realestate_obj->get_first_obj_by_reltype("RELTYPE_REALESTATE_ADDRESS");
+		$_SESSION["realestate_input_data"]["name"] = $this->gen_name();
 		foreach($_SESSION["realestate_input_data"] as $key => $val)
 		{
 			if(array_key_exists($key , $props))
@@ -721,14 +856,18 @@ class realestate_add extends class_base
 			$address->save();
 		}
 		$realestate_obj->save();
-		$main_obj = obj($args["id"]);		
+		$main_obj = obj($args["id"]);
+		if($args["default"])
+		{
+			return $args["return_to"];
+		}
 		if($args["do"] == "submit" )
 		{
 			return aw_ini_get("baseurl")."/".$main_obj->prop("redir_object");		
 		}
 		else
 		{
-			return aw_url_change_var("level", $level , $args["return_to"]);	
+			return aw_url_change_var("level", $level , aw_url_change_var("id", null , $args["return_to"]));
 		}
 	}
 }
