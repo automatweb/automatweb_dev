@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.24 2006/03/30 10:27:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.25 2006/03/30 11:44:55 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -354,7 +354,8 @@ class bug extends class_base
 				if (trim($prop["value"]) != "")
 				{
 					// save comment
-					$this->_add_comment($arr["obj_inst"], $prop["value"]);
+					//$this->_add_comment($arr["obj_inst"], $prop["value"]);
+					$this->add_comments[] = $prop["value"];
 				}
 				break;
 				
@@ -371,7 +372,8 @@ class bug extends class_base
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
 					$com = sprintf(t("Staatus muudeti %s => %s"), $this->bug_statuses[$old], $this->bug_statuses[$prop["value"]]);
-					$this->_add_comment($arr["obj_inst"], $com);
+					//$this->_add_comment($arr["obj_inst"], $com);
+					$this->add_comments[] = $com;
 				}
 				break;
 
@@ -379,7 +381,8 @@ class bug extends class_base
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
 					$com = sprintf(t("Prioriteet muudeti %s => %s"), $old, $prop["value"]);
-					$this->_add_comment($arr["obj_inst"], $com);
+					//$this->_add_comment($arr["obj_inst"], $com);
+					$this->add_comments[] = $com;
 				}
 				break;
 
@@ -394,7 +397,8 @@ class bug extends class_base
 				if (($old = $arr["obj_inst"]->prop_str($prop["name"])) != $nv)
 				{
 					$com = sprintf(t("Kellele muudeti %s => %s"), $old, $nv);
-					$this->_add_comment($arr["obj_inst"], $com);
+					//$this->_add_comment($arr["obj_inst"], $com);
+					$this->add_comments[] = $com;
 				}
 				break;
 
@@ -405,7 +409,8 @@ class bug extends class_base
 				if ($old != $nv)
 				{
 					$com = sprintf(t("Klass muudeti %s => %s"), $old, $nv);
-					$this->_add_comment($arr["obj_inst"], $com);
+					//$this->_add_comment($arr["obj_inst"], $com);
+					$this->add_comments[] = $com;
 				}
 				break;
 		}
@@ -622,6 +627,14 @@ class bug extends class_base
 		return $ret;
 	}
 
+	function callback_pre_save($arr)
+	{
+		if (is_array($this->add_comments) && count($this->add_comments))
+		{
+			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments));
+		}
+	}
+	
 	function callback_post_save($arr)
 	{
 		if ($arr["new"])

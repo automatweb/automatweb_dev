@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.38 2006/03/29 08:28:37 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.38 2006/03/29 08:28:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.39 2006/03/30 11:44:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.39 2006/03/30 11:44:55 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -631,6 +631,8 @@ class bug_tracker extends class_base
 
 		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
 
+		$arr["set_retu"] = aw_url_change_var("b_id", $arr["parent"], $arr["set_retu"]);
+
 		$objects = $ol->arr();
 		foreach($objects as $obj_id => $object)
 		{
@@ -646,7 +648,7 @@ class bug_tracker extends class_base
 
 			$node_tree->add_item(0 ,array(
 				"id" => $obj_id,
-				"name" => $nm."  (".html::get_change_url($obj_id, array("return_url" => get_ru()), t("<span style='font-size: 8px;'>Muuda</span>")).")",
+				"name" => $nm."  (".html::get_change_url($obj_id, array("return_url" => $arr["set_retu"]), t("<span style='font-size: 8px;'>Muuda</span>")).")",
 				"iconurl" => icons::get_icon_url($object->class_id()),
 				"url" => html::get_change_url($arr["inst_id"], array(
 					"group" => $arr["active_group"],
@@ -659,7 +661,7 @@ class bug_tracker extends class_base
 			{
 				$node_tree->add_item( $obj_id, array(
 					"id" => $sub_id,
-					"name" => $sub_obj->name()." (".html::get_change_url($sub_id, array("return_url" => get_ru()), t("<span style='font-size: 8px;'>Muuda</span>")).")",
+					"name" => $sub_obj->name()." (".html::get_change_url($sub_id, array("return_url" => $arr["set_retu"]), t("<span style='font-size: 8px;'>Muuda</span>")).")",
 					"onClick" => "do_bt_table_switch($sub_id, this);return false;"
 				));
 			}
@@ -736,6 +738,7 @@ class bug_tracker extends class_base
 				"p_fld_id" => $arr["request"]["p_fld_id"],
 				"p_cls_id" => $arr["request"]["p_cls_id"],
 				"p_cust_id" => $arr["request"]["p_cust_id"],
+				"set_retu" => get_ru(),
 				"parent" => " ",
 			)),
 		));
