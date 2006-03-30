@@ -21,7 +21,7 @@
 <tr>
 <td width="200" valign="top" style="background-color: #fff;">{VAR:editor_content_tree}</td>
 <td valign="top" style="background-color: #fff;">
-<iframe src="about:blank" name="editorcontent" frameborder="0" width="100%" height="100%">
+<iframe src="{VAR:editor_content}" name="editorcontent" frameborder="0" width="100%" height="100%">
 </iframe>
 </td>
 </tr>

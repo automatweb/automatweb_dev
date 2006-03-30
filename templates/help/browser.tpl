@@ -12,7 +12,7 @@
 <tr>
 <td width="200" valign="top" style="background-color: #fff;">{VAR:help_content_tree}</td>
 <td valign="top" style="background-color: #fff;">
-<iframe src="about:blank" name="helpcontent" frameborder="0" width="100%" height="100%">
+<iframe src="{VAR:help_content}" name="helpcontent" frameborder="0" width="100%" height="100%">
 </iframe>
 </td>
 </tr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.5 2006/03/29 12:45:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.6 2006/03/30 13:32:02 tarvo Exp $
 
 // more ideas --- I might want to keep the help open when switching between tabs... for this I need to 
 // set a cookie
@@ -179,8 +179,9 @@ class help extends aw_template
 			"help_content_tree" => $tree->finalize_tree(),
 			"retrieve_help_func" => $this->mk_my_orb("grouphelp",array(),"help"),
 			"browser_caption" => t("AW abiinfo"),
+			"help_content" => $this->mk_my_orb("classhelp", array("clid" => $arr["clid"])),
 		));
-		die($this->parse());
+		return $this->parse();
 	}
 
 	/** 
