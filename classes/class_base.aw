@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.473 2006/03/30 07:10:26 kristo Exp $
+// $Id: class_base.aw,v 2.474 2006/03/30 12:50:55 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -829,6 +829,28 @@ class class_base extends aw_template
 			));
 		}
 		$awt->start("final-bit");
+		
+		// find help data for current tab
+		$cls = aw_ini_get("classes");
+		foreach($cls as $clid => $cl)
+		{
+			if(basename($cl["file"]) == $argblock["orb_class"])
+			{
+				$current_clid = $clid;
+				break;
+			}
+		}
+		$po_loc = aw_ini_get("basedir")."/lang/trans/".aw_global_get("LC")."/po/".$argblock["orb_class"].".po";
+		$cfgu = get_instance("cfg/cfgutils");
+		$props = $cfgu->load_properties(array(
+			"clid" => $current_clid,
+			"load_trans" => 0,
+		));
+		$groups = $cfgu->get_groupinfo();
+		$msgid = "Grupi ".$groups[$argblock["group"]]["caption"]." (".$argblock["group"].") comment";
+		$help = strlen(t2($msgid))?"<div>".t($msgid)."</div>":t("Lisainfo grupi kohta puudub");
+		//
+		
 		$cli->finish_output(array(
 			"method" => $method,
 			"action" => $submit_action,
@@ -838,7 +860,7 @@ class class_base extends aw_template
 			// focus contains the name of the property that
 			// should be focused by the output client
 			"focus" => $gdata["focus"],
-			"help" => "Siin tuleb üldine info selle tabi (grupi) kohta, aga seda pole veel kirjutatud. Proovi klikkida omaduste esitähtedel.",
+			"help" => $help,
 			"scripts" => $scripts,
 			"is_sa_changed" => $this->request["is_sa_changed"]
 		));
