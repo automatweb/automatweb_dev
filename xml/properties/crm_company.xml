@@ -239,6 +239,17 @@
             <caption>P&amp;amp;otilde;hitegevus / Tegevusalad</caption>
       </property>
       <property>
+            <name>activity_keywords</name>
+            <table>kliendibaas_firma</table>
+            <group>org_sections</group>
+            <type>textarea</type>
+            <cols>65</cols>
+            <rows>3</rows>
+            <field>activity_keywords</field>
+            <comment>Komade v&amp;otilde;i semikoolonitega eraldatud</comment>
+            <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+      </property>
+      <property>
             <name>field_manager</name>
             <table>objects</table>
             <group>add_info</group>
