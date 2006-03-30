@@ -10,7 +10,7 @@
             <reltype>RELTYPE_MEMBER_PARENT</reltype>
             <editonly>1</editonly>
             <multiple>1</multiple>
-            <caption>vali kaustad millega liituda</caption>
+            <caption>Kaustad millega liituda</caption>
       </property>
       <property>
             <name>choose_languages</name>
@@ -20,7 +20,7 @@
             <group>general</group>
             <type>select</type>
             <multiple>1</multiple>
-            <caption>vali keeled millega v&amp;otilde;ib liituda</caption>
+            <caption>Keeled millega v&amp;otilde;ib liituda</caption>
       </property>
       <property>
             <name>multiple_folders</name>
@@ -146,8 +146,8 @@
             <type>textarea</type>
             <rows>25</rows>
             <store>no</store>
-            <caption>Massiline liitmine</caption>
-            <comment>Iga aadress eraldi real, nimi ja aadress komaga eraldatud</comment>
+            <caption>Massiline liitumine &amp;lt;br&amp;gt;(Iga liituja eraldi real, nimi ja aadress komaga eraldatud)</caption>
+            <comment>Iga liituja eraldi real, nimi ja aadress komaga eraldatud</comment>
       </property>
       <property>
             <name>admin_unsubscribe_folders</name>

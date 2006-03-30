@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.63 2006/03/29 15:31:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.64 2006/03/30 12:43:05 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -14,10 +14,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 ------------------------------------------------------------------------
 
 @property choose_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
-@caption vali kaustad millega liituda
+@caption Kaustad millega liituda
 
 @property choose_languages type=select multiple=1 field=meta method=serialize
-@caption vali keeled millega võib liituda
+@caption Keeled millega võib liituda
 
 @property multiple_folders type=checkbox ch_value=1
 @caption Lase liitumisel kausta valida
@@ -60,8 +60,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Impordi liikmed tekstifailist
 
 @property mass_subscribe type=textarea rows=25 store=no
-@caption Massiline liitmine
-@comment Iga aadress eraldi real, nimi ja aadress komaga eraldatud
+@caption Massiline liitumine <br>(Iga liituja eraldi real, nimi ja aadress komaga eraldatud)
+@comment Iga liituja eraldi real, nimi ja aadress komaga eraldatud
 
 ------------------------------------------------------------------------
 
@@ -829,13 +829,12 @@ class ml_list extends class_base
 
 			case "member_list_tb":
 				$tb = &$prop["vcl_inst"];
-				$mem = reset(safe_array($arr["obj_inst"]->prop("def_user_folder")));
 				$tb->add_button(array(
 					"name" => "new",
 					"img" => "new.gif",
 					"tooltip" => t("Lisa uus"),
-					"url" => html::get_new_url(CL_ML_MEMBER, ($this->can("add", $mem) ? $mem : $arr["obj_inst"]->parent()), array("return_url" => get_ru())),
-				));
+					"url" => aw_url_change_var("group", "subscribing" , $args["return_to"]),
+							));
 				$tb->add_button(array(
 					"name" => "save",
 					"img" => "save.gif",
@@ -1031,14 +1030,10 @@ class ml_list extends class_base
 			$fld_obj = new object($fold);
 			if($fld_obj->class_id() != CL_MENU)
 			{
+				echo "Liituda saab ainult kaustadesse... ".$fld_obj->name()." ei ole kaust<br />";
 				continue;
 			}
-			$is_fold = true;
 
-			if(!$is_fold)
-			{
-				return false;
-			}
 			$members = $this->get_all_members($fold);
 			$name = $fld_obj->name();
 			echo "Impordin kasutajaid kataloogi $fold / $name... <br />";
@@ -1764,6 +1759,7 @@ class ml_list extends class_base
 			}
 			if(!(in_array(trim($column[1]) , $already_found)))
 			{
+				if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
 				$ret[]  = array(
 					"parent" => $file_data["id"],
 					"name" => $name,
@@ -1839,13 +1835,19 @@ class ml_list extends class_base
 			$source_obj = obj($folder_id);
 			if($source_obj->class_id() == CL_MENU)
 			{
-				if ($to > 0)
+				if($to > 1)
 				{
-					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, $from, ($to - $from));
+					if(($from - $cnt) < 0) $from_q = 0;
+					else $from_q = $from - $cnt;
+					if(($to - $from_q - $cnt) < 0) $to_q = 0;
+					else $to_q = $to - $from_q - $cnt;
+					$q = sprintf("SELECT ml_users.name , ml_users.mail , objects.oid FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, $from_q, $to_q);
 					$q_count = sprintf("SELECT COUNT(*) as cnt FROM ml_users LEFT JOIN objects ON (ml_users.id=objects.oid) where objects.parent = %d AND objects.status !=0" , $folder_id);
 					$cnt_all = $this->db_fetch_field($q_count , "cnt");
-					if(($cnt_all - $from) < $to) $cnt_all = $cnt_all + ($to - ($cnt_all - $from));
-					$cnt = $cnt + $cnt_all - $to;
+				//	if(($cnt_all - $from) < $to){
+				//		$cnt_all = $cnt_all + ($to - ($cnt_all - $from));
+				//	}
+					$cnt = $cnt + $cnt_all;
 				}
 				else
 				{
@@ -1862,7 +1864,7 @@ class ml_list extends class_base
 							"name"		=> $row["name"],
 							"mail"		=> $row["mail"]
 						);
-						$cnt++;
+						if(!$to > 1)$cnt++;
 					if(!$all) $already_found[] = $data["email"];
 					}
 				}
@@ -1884,6 +1886,7 @@ class ml_list extends class_base
 					else $name = $member->name();
 					if(!(in_array($email->prop("mail") , $already_found)))
 					{
+						if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
 						$ret[] = array(
 							"oid" 		=> $member->id(),
 							"parent"	=> $folder_id,
@@ -1901,6 +1904,7 @@ class ml_list extends class_base
 				{
 					if(!(in_array($email->prop("mail") , $already_found)))
 					{
+						if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
 						$ret[] = array(
 							"oid" 		=> $folder_id,
 							"parent" 	=> $folder_id,
@@ -1915,7 +1919,7 @@ class ml_list extends class_base
 			}
 			elseif($source_obj->class_id() == CL_FILE)
 			{
-				$ret = $this->get_members_from_file(array("id" => $source_obj->id() , "ret" => $ret , "cnt" => $cnt , "all" => $all , "already_found" => $aready_found));
+				$ret = $this->get_members_from_file(array("id" => $source_obj->id() , "ret" => $ret , "cnt" => $cnt , "all" => $all , "already_found" => $aready_found , "from" => $from , "to" => $to));
 				$cnt = $this->member_count;
 				$already_found = $this->already_found;
 			}
