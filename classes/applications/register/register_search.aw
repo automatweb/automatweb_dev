@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.38 2006/03/28 15:25:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.39 2006/03/30 08:58:57 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -587,8 +587,18 @@ class register_search extends class_base
 						"year" => 1,
 					));
 				}
-				$content = 	$de->gen_edit_form("rsf[".$pn."_from]", date_edit::get_timestamp($request["rsf"][$pn."_from"]), date("Y")-10, date("Y")+10, true)." - ".
-							$de->gen_edit_form("rsf[".$pn."_to]", date_edit::get_timestamp($request["rsf"][$pn."_to"]), date("Y")-10, date("Y")+10, true);
+				$ts_from = -1;
+				if ($request["rsf"][$pn."_from"])
+				{
+					$ts_from = date_edit::get_timestamp($request["rsf"][$pn."_from"]);
+				}
+				$ts_to = -1;
+				if ($request["rsf"][$pn."_to"])
+				{
+					$ts_to = date_edit::get_timestamp($request["rsf"][$pn."_to"]);
+				}
+				$content = 	$de->gen_edit_form("rsf[".$pn."_from]", $ts_from, $pd["year_from"], $pd["year_to"], true)." - ".
+							$de->gen_edit_form("rsf[".$pn."_to]", $ts_to, $pd["year_from"], $pd["year_to"], true);
 				
 				$tmp[$pn] = array(
 					"name" => $pn,
