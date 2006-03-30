@@ -1,38 +1,41 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.12 2005/03/10 12:37:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.13 2006/03/30 10:23:35 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
 @classinfo syslog_type=ST_OBJECT_EXPORT relationmgr=yes no_comment=1 no_status=1
 
 @default table=objects
-@default group=general
 @default field=meta
 @default method=serialize
 
-@property object_type type=relpicker reltype=RELTYPE_OBJECT_TYPE
-@caption Objektit&uuml;&uuml;p mida eksportida
+@default group=general
+	@property object_type type=relpicker reltype=RELTYPE_OBJECT_TYPE
+	@caption Objektit&uuml;&uuml;p mida eksportida
 
-@property root_folder type=relpicker reltype=RELTYPE_FOLDER
-@caption Kaust, kust objektid v&otilde;tta
+	@property root_folder type=relpicker reltype=RELTYPE_FOLDER
+	@caption Kaust, kust objektid v&otilde;tta
 
-@property csv_separator type=textbox size=1
-@caption CSV Faili tulpade eraldaja
+	@property csv_separator type=textbox size=1
+	@caption CSV Faili tulpade eraldaja
 
-@groupinfo mktbl caption="Koosta tabel"
 @default group=mktbl
 
-@property mktbl type=table store=no no_caption=1
+	@property mktbl type=table store=no no_caption=1
 
-@groupinfo export caption="Ekspordi" submit=no
 @default group=export
 
-@property export_link type=text store=no
+	@property export_link type=text store=no
 
-@property export_link2 type=text store=no
+	@property export_link2 type=text store=no
 
-@property export_table type=table store=no 
-@caption Esimesed 10 rida
+	@property export_table type=table store=no 
+	@caption Esimesed 10 rida
+
+
+@groupinfo mktbl caption="Koosta tabel"
+@groupinfo export caption="Ekspordi" submit=no
+
 
 @reltype OBJECT_TYPE value=1 clid=CL_OBJECT_TYPE
 @caption objektit&uuml;&uuml;p
@@ -134,23 +137,33 @@ class object_export extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Element")
+			"caption" => t("Element"),
+			"align" => "right",
 		));
 
 		$t->define_field(array(
 			"name" => "jrk",
-			"caption" => t("J&auml;rjekord")
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+
+
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => t("Tulba pealkiri"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "exp_vals",
+			"caption" => t("Ekspordi v&auml;&auml;rtus"),
+			"align" => "center"
 		));
 
 		$t->define_chooser(array(
 			"field" => "vs",
 			"name" => "visible",
 			"caption" => t("Eksporditav"),
-		));
-
-		$t->define_field(array(
-			"name" => "caption",
-			"caption" => t("Tulba pealkiri")
 		));
 
 		$t->set_sortable(false);
@@ -185,12 +198,11 @@ class object_export extends class_base
 				)),
 				"visible" => $dat[$pn]["visible"],
 				"vs" => $pn,
-				/*"visible" => html::checkbox(array(
-					"name" => "dat[$pn][visible]",
+				"exp_vals" => html::checkbox(array(
+					"name" => "dat[$pn][exp_vals]",
 					"value" => 1,
-					"checked" => ($dat[$pn]["visible"] == 1)
+					"checked" => ($dat[$pn]["exp_vals"] == 1)
 				)),
-				*/
 				"caption" => html::textbox(array(
 					"name" => "dat[$pn][caption]",
 					"value" => $dat[$pn]["caption"]
@@ -212,7 +224,6 @@ class object_export extends class_base
 			list($ret) = $GLOBALS["object_loader"]->load_properties(array(
 				"clid" => $clid
 			));
-			
 			if ($ot->prop("use_cfgform"))
 			{
 				$tmp = array();
@@ -228,6 +239,7 @@ class object_export extends class_base
 				{
 					$tmp[$pn] = $ret[$pn];
 					$tmp[$pn]["caption"] = $pd["caption"];
+					$tmp[$pn]["type"] = $ret[$pn]["type"];
 				}
 				$ret = $tmp;
 			}
@@ -235,10 +247,8 @@ class object_export extends class_base
 		return $ret;
 	}
 
-	function _init_exp_table(&$t, $o)
+	function _init_exp_table(&$t, $o, $awa, $props)
 	{
-		$props = $this->get_properties_from_obj($o);
-		$awa = new aw_array($o->meta("dat"));
 		foreach($awa->get() as $pn => $pd)
 		{
 			if ($pd["visible"])
@@ -268,7 +278,12 @@ class object_export extends class_base
 	{
 		$sep = $arr["obj_inst"]->prop("csv_separator");
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_exp_table($t, $arr["obj_inst"]);
+
+		$props = $this->get_properties_from_obj($arr["obj_inst"]);
+		$awa = new aw_array($arr["obj_inst"]->meta("dat"));
+		$settings = $awa->get();
+
+		$this->_init_exp_table($t, $arr["obj_inst"], $awa, $props);
 
 		if (!$arr["obj_inst"]->prop("object_type"))
 		{
@@ -290,7 +305,50 @@ class object_export extends class_base
 			$filt["limit"] = 10;
 		}
 		$ol = new object_list($filt);
-		$t->data_from_ol($ol);
+		foreach($ol->arr() as $o)
+		{
+			$dat = array();
+			foreach($props as $pn => $pd)
+			{
+				if ($settings[$pn]["exp_vals"] == 1 && $pd["type"] == "classificator")
+				{
+					$rt = $pd["reltype"];
+					$val= array();
+					foreach($o->connections_from(array("type" => $rt)) as $c)
+					{
+						$clsf = $c->to();
+						$val[] = $clsf->comment();
+					}
+					$dat[$pn] = join(", ", $val);
+				}
+				else
+				if (substr($pn, 0, 6) == "userim")
+				{
+					$imgo = $o->get_first_obj_by_reltype("RELTYPE_IMAGE".substr($pn, 6));
+					if ($imgo)
+					{
+						$imgi = $imgo->instance();
+						$dat[$pn] = $imgi->get_url_by_id($imgo->id());
+					}
+				}
+				else
+				if (substr($pn, 0, 8) == "userfile")
+				{
+					// link to file
+					$fileo = $o->get_first_obj_by_reltype("RELTYPE_FILE".substr($pn, 8));
+					if ($fileo)
+					{
+						$filei = $fileo->instance();
+						$dat[$pn] = $filei->get_url($fileo->id(), $fileo->name());
+					}
+				}
+				else
+				{
+					$dat[$pn] = $o->prop_str($pn);
+				}
+			}
+			$t->define_data($dat);
+		}
 
 		if ($arr["request"]["do_exp"] == 1)
 		{
