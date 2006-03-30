@@ -265,7 +265,7 @@ class date_edit
 		{
 			return -1;
 		}
-		$tmp =  mktime($var["hour"], $var["minute"], $var["second"], $var["month"], !isset($var["day"]) ? 1 : $var["day"], $var["year"]);
+		$tmp =  mktime($var["hour"], $var["minute"], $var["second"], $var["month"], $var["day"], $var["year"]);
 		return $tmp;
 	}
 }; // end class
