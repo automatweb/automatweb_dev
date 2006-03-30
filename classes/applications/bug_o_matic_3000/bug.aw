@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.22 2006/03/28 10:50:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.23 2006/03/30 10:25:46 kristo Exp $
 // bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -478,12 +478,12 @@ class bug extends class_base
 		$name = $bug->name();
 		$uid = aw_global_get("uid");
 
-		$msgtxt = t("Bug") . ": " . $oid . "\n";
+		$msgtxt = t("Bug") . ": " . $this->mk_my_orb("change",array("id" => $oid)) . "\n";
 		$msgtxt .= t("Summary") . ": " . $name . "\n";
-		$msgtxt .= t("URL") . ": " . $this->mk_my_orb("change",array("id" => $oid)) . "\n";
+		$msgtxt .= t("URL") . ": " . $bug->prop("bug_url") . "\n";
 		$msgtxt .= "-------------\n\nNew comment from " . $uid . " at " . date("Y-m-d H:i") . "\n";
 		$msgtxt .= strip_tags($comment)."\n";
-		$msgtxt .= strip_tags($this->_get_comment_list($bug, "desc"));
+		$msgtxt .= strip_tags($this->_get_comment_list($bug, "desc", false));
 
 		send_mail($notify_list,"Bug #" . $oid . ": " . $name . " : " . $uid . " lisas kommentaari",$msgtxt,"From: automatweb@automatweb.com");
 	}
@@ -532,7 +532,7 @@ class bug extends class_base
 		}
 	}
 
-	function _get_comment_list($o, $so = "asc")
+	function _get_comment_list($o, $so = "asc", $nl2br = true)
 	{
 		$this->read_template("comment_list.tpl");
 
@@ -549,6 +549,10 @@ class bug extends class_base
 			$comt = $com->comment();
 			$comt = preg_replace("/(http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<]*)/ims", "<a href='\\1'>Diff</a>", $comt);
 
+			if ($nl2br)
+			{
+				$comt = nl2br($comt);
+			}
 			$this->vars(array(
 				"com_adder" => $com->createdby(),
 				"com_date" => date("d.m.Y H:i", $com->created()),
