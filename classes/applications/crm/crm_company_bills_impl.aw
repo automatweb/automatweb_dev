@@ -507,7 +507,10 @@ class crm_company_bills_impl extends class_base
 					"from" => date_edit::get_timestamp($arr["request"]["bill_s_from"]),
 					"to" => date_edit::get_timestamp($arr["request"]["bill_s_to"])
 				);
-				$filt["client_mgr"] = "%".$arr["request"]["bill_s_client_mgr"]."%";
+				if ($arr["request"]["bill_s_client_mgr"] != "")
+				{
+					$filt["client_mgr"] = "%".$arr["request"]["bill_s_client_mgr"]."%";
+				}
 				$filt["state"] = $arr["request"]["bill_s_status"];
 			}
 			$bills = $d->get_bills_by_co($arr["obj_inst"], $filt);
