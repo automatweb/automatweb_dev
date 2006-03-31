@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.39 2006/03/30 11:44:55 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.39 2006/03/30 11:44:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.40 2006/03/31 11:24:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.40 2006/03/31 11:24:28 tarvo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -682,9 +682,11 @@ class bug_tracker extends class_base
 		{
 			case "classes":
 				$orb_function = "get_node_class";
+				$tid = "_cls";
 				break;
 
 			case "cust":
+				$tid = "_cst";
 				$i = get_instance(CL_CRM_COMPANY);
 				$i->active_node = (int)$arr['request']['category'];
 
@@ -704,11 +706,14 @@ class bug_tracker extends class_base
 				return;
 
 			case "project":
+				$tid = "_prj";
 			case "who":
+				$tid = "_who";
 				$orb_function = "get_node_other";
 				break;
 
 			default:
+				$tid = "_def";
 				$orb_function = "get_node";
 				break;
 		}
@@ -724,7 +729,7 @@ class bug_tracker extends class_base
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
 			"has_root" => 1,
-			"tree_id" => "bug_tree",
+			"tree_id" => "bug_tree".$tid,
 			"persist_state" => 1,
 			"root_name" => $root_name[($this->active_group == "bugs")?"by_default":$this->active_group],
 			"root_url" => aw_url_change_var("b_id", null),
