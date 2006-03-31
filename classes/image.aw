@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.154 2006/03/30 12:38:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.155 2006/03/31 11:03:39 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -32,6 +32,9 @@
 
 	@property can_comment type=checkbox table=objects field=flags method=bitmask ch_value=1
 	@caption K&otilde;ikjal kommenteeritav
+
+	@property no_apply_gal_conf type=checkbox table=objects field=meta method=serialize ch_value=1
+	@caption &Auml;ra kasuta galerri seadeid
 
 	/@property file_show type=text store=no editonly=1
 	/@caption Eelvaade 
@@ -1300,6 +1303,10 @@ class image extends class_base
 
 	function do_apply_gal_conf($o)
 	{
+		if ($o->prop("no_apply_gal_conf"))
+		{
+			return;
+		}
 		$conf = $this->_get_conf_for_folder($o->parent(), true);
 		if ($conf)
 		{

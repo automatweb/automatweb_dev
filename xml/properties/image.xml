@@ -76,6 +76,16 @@
             <caption>K&amp;amp;otilde;ikjal kommenteeritav</caption>
       </property>
       <property>
+            <name>no_apply_gal_conf</name>
+            <group>general</group>
+            <type>checkbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <ch_value>1</ch_value>
+            <caption>&amp;amp;Auml;ra kasuta galerri seadeid</caption>
+      </property>
+      <property>
             <name>show_conditions</name>
             <group>show</group>
             <type>chooser</type>
