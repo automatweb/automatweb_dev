@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.25 2006/03/30 11:44:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.26 2006/03/31 07:36:36 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -552,7 +552,7 @@ class bug extends class_base
 		foreach($ol->arr() as $com)
 		{
 			$comt = $com->comment();
-			$comt = preg_replace("/(http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<]*)/ims", "<a href='\\1'>Diff</a>", $comt);
+			$comt = preg_replace("/(http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<\n]*)/ims", "<a href='\\1'>Diff</a>", $comt);
 
 			if ($nl2br)
 			{
