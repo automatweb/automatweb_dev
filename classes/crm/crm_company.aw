@@ -3828,6 +3828,15 @@ class crm_company extends class_base
 				$cust_rel = $cust_rel_list->begin();
 				$bill->set_prop("bill_due_date_days", $cust_rel->prop("bill_due_date_days"));
 			}
+			else
+			{
+				$bill->set_prop("bill_due_date_days", $bill->prop("customer.bill_due_days"));
+			}
+
+			$bt = time();
+			$bill->set_prop("bill_due_date", 
+				mktime(3,3,3, date("m", $bt), date("d", $bt) + $bill->prop("bill_due_date_days"), date("Y", $bt))
+			);
 		}
 
 		$bill->save();
