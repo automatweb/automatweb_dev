@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.347 2006/03/31 12:03:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.348 2006/03/31 12:48:24 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2618,7 +2618,7 @@ class document extends aw_template
 	function feedback($arr)
 	{
 		extract($arr);
-		$feedback = get_instance("feedback");
+		$feedback = get_instance("contentmgmt/feedback");
 		$inf = $this->fetch($section);
 		$this->read_template("feedback.tpl");
 		if ($e == 1)
@@ -2691,7 +2691,7 @@ class document extends aw_template
 	{
 		extract($arr);
 		$inf = $this->fetch($docid);
-		$feedback = get_instance("feedback");
+		$feedback = get_instance("contentmgmt/feedback");
 		$arr["title"] = $inf["title"];
 		$feedback->add_feedback($arr);
 		$this->_log(ST_DOCUMENT, SA_SEND, "$eesnimi $perenimi , email:$mail saatis feedbacki", $docid);
