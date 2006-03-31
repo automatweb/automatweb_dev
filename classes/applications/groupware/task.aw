@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.88 2006/03/29 08:54:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.89 2006/03/31 07:21:51 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1437,6 +1437,7 @@ class task extends class_base
 		$cs[] = NULL;
 		$null_idx = 0;
 		$comm = get_instance(CL_COMMENT);
+		$ank_idx = 1;
 		foreach($cs as $ro)
 		{
 			if ($ro === null)
@@ -1451,8 +1452,9 @@ class task extends class_base
 				$row = $ro->to();
 				$def_impl = array();
 			}
-			$date_sel = "<A HREF='#'  onClick=\"var cal=new CalendarPopup();cal.select(aw_get_el('rows[$idx][date]'),'anchor".$idx."','dd/MM/yy'); return false;\"
-						   NAME='anchor".$idx."' ID='anchor".$idx."'>".t("vali")."</A>";
+			$ank_idx++;
+			$date_sel = "<A HREF='#'  onClick=\"var cal=new CalendarPopup();cal.select(aw_get_el('rows[$idx][date]'),'anchor".$ank_idx."','dd/MM/yy'); return false;\"
+						   NAME='anchor".$idx."' ID='anchor".$ank_idx."'>".t("vali")."</A>";
 
 			$comments = "";
 			$comments_cnt = 0;
