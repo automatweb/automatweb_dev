@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.346 2006/03/30 07:10:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.347 2006/03/31 12:03:25 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -561,13 +561,6 @@ class document extends aw_template
 		{
 			$this->mk_ns4_compat(&$doc["lead"]);
 			$this->mk_ns4_compat(&$doc["content"]);
-		}
-
-		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
-		if (!(strpos($doc["content"], "#telekava_") === false))
-		{
-			$t = get_instance("tvkavad");
-			return $t->kanalid_list($doc["content"]);
 		}
 
 		$doc["content"] = str_replace("#nool#", '<IMG SRC="{VAR:baseurl}/img/icon_nool.gif" WIDTH="21" HEIGHT="9" BORDER=0 ALT="">', $doc["content"]);
