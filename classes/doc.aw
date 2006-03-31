@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.113 2006/03/30 07:10:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.114 2006/03/31 12:45:40 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -902,35 +902,6 @@ class doc extends class_base
 			};
 		};
 		return $retval;
-	}
-
-	////
-	// !Blergh, I really hate to integrate all that stuff into here
-	// and .. I think I should subclass that shit anyway
-	function set_calendars($args = array())
-	{
-		$cal_list = join(",",$args);
-		// first I have to check whether this calendar has been told to
-		// get it's calendar relations from somewhere else
-		$q = "SELECT target FROM aliases
-			LEFT JOIN objects ON (aliases.target = objects.oid)
-			WHERE source IN ($cal_list) AND reltype = 5";
-		///
-		$other = $this->db_fetch_row($q);
-		if (isset($other["target"]))
-		{
-			$cal_list = $other["target"];
-		};
-		$q = "SELECT source,target,relobj_id,objects.name FROM aliases
-			LEFT JOIN objects ON (aliases.target = objects.oid)
-			WHERE source IN ($cal_list) AND reltype = 4";
-		$this->db_query($q);
-		$this->calendar_list = array("" => "");
-		while($row = $this->db_next())
-		{
-			$this->calendar_list[$row["relobj_id"]] = parse_obj_name($row["name"]);
-		};
-
 	}
 
 	////
