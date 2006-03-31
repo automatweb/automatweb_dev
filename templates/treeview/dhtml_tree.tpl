@@ -43,17 +43,20 @@ function load_tree_state()
 		{
 			data = thisElem.getAttribute("data_loaded");
 		}
-		if(data && thisElem)
+		if(data == 'true' && thisElem)
 		{
 			node = open_nodes[i];
 			level = i + 1;
-			break;
-		}	
+			continue;
+		}
+		node = open_nodes[i];
+		level = i + 1;
 		set_cookie(tree_id + "_level", level);
 		if(node)
 		{
 			toggle_children(node,1);
 		}
+		break;
 	}
 }
 
