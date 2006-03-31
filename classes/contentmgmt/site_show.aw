@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.161 2006/03/31 07:47:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.162 2006/03/31 11:48:41 kristo Exp $
 
 /*
 
@@ -2753,7 +2753,7 @@ class site_show extends class_base
 
 	function _get_empty_doc_menu()
 	{
-		if (!$this->prog_acl())
+		if (!$this->prog_acl() || !aw_ini_get("config.site_editing"))
 		{
 			return;
 		}
