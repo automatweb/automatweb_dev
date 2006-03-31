@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.474 2006/03/30 12:50:55 tarvo Exp $
+// $Id: class_base.aw,v 2.475 2006/03/31 12:11:02 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -106,28 +106,11 @@ class class_base extends aw_template
 		$this->cfg_debug = false;
 
 		// surely there is a better way to implement vcl register?
-		$this->vcl_register = array(
-			"classificator" => "cfg/classificator",
-			"comments" => "vcl/comments",
-			"relpicker" => "vcl/relpicker",
-			"tabpanel" => "vcl/tabpanel",
-			"reminder" => "vcl/reminder",
-			"popup_search" => "vcl/popup_search",
-			"crm_participant_search" => "applications/crm/crm_participant_search",
-			"treeview" => "vcl/treeview",
-			"toolbar" => "vcl/toolbar",
-			"translator" => "vcl/translator",
-			"project_selector" => "applications/groupware/vcl/project_selector",
-			"calendar_selector" => "applications/calendar/vcl/calendar_selector",
-			"participant_selector" => "applications/calendar/vcl/participant_selector",
-			"multi_calendar" => "applications/calendar/vcl/multi_calendar",
-			"table" => "vcl/table",
-			"object_table" => "vcl/object_table",
-			"relationmgr" => "vcl/relationmgr",
-			"server_folder_selector" => "vcl/server_folder_selector",
-			"keyword_selector" => "vcl/keyword_selector",
-			"acl_manager" => "vcl/acl_manager"
-		);
+		$this->vcl_register = array();
+		foreach(aw_ini_get("class_base.vcl_register") as $vcl_class)
+		{
+			$this->vcl_register[basename($vcl_class)] = $vcl_class;
+		}
 
 		// XXX: this is temporary
 		$this->vcl_delayed_init = array(
