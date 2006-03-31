@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.34 2006/03/29 09:11:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.35 2006/03/31 07:10:10 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -196,7 +196,8 @@ class crm_bill extends class_base
 
 			case "sum":
 				$prop["value"] = number_format($prop["value"], 2);
-				$prop["value"] .= " ".$arr["obj_inst"]->prop("customer.currency.name");
+				$curn = $arr["obj_inst"]->prop("customer.currency.name");
+				$prop["value"] .= " ".($curn == "" ? "EEK" : $curn);
 				break;
 		};
 		return $retval;
@@ -578,7 +579,7 @@ class crm_bill extends class_base
 		$this->vars(array(
 			"orderer_name" => $ord->name(),
 			"orderer_code" => $cust_no,
-			"ord_currency_name" => $ord->prop_str("currency"),
+			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
 			"bill_no" => $b->prop("bill_no"),
@@ -940,7 +941,7 @@ class crm_bill extends class_base
 
 		$this->vars(array(
 			"orderer_name" => $ord->name(),
-			"ord_currency_name" => $ord->prop_str("currency"),
+			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
 			"bill_no" => $b->prop("bill_no"),
@@ -1076,7 +1077,7 @@ class crm_bill extends class_base
 
 	function get_bill_currency($b)
 	{
-		return $b->prop("customer.currency.name");
+		return $b->prop("customer.currency.name") == "" ? "EEK" : $b->prop("customer.currency.name");
 	}
 
 	function get_bill_sum($b, $type = BILL_SUM)
