@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.73 2006/03/23 11:56:51 tarvo Exp $
+// $Id: cfgutils.aw,v 1.74 2006/03/31 11:23:54 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -37,18 +37,40 @@ class cfgutils extends aw_template
 		
 		$this->clist_init_done = true;
 	}
-	////
-	// !Checks whether a class has any properties
-	// file(string) - name of the class
-	// clid(int) - id of the class
-	// here we can add different checks later on.
+
+	/** Checks whether a class has any properties
+		@attrib api=1 params=name
+
+		@param file optional type=string
+			name of the class
+
+		@param clid optional type=int
+			id of the class
+
+		@comment
+			One of the parameters must be given
+
+		@errors
+			none
+
+		@returns
+			true if the given class has properties, false if not
+
+		@examples
+			$cu = get_instance("cfg/cfgutils");
+			if ($cu->has_properties(array("clid" => CL_IMAGE)))
+			{
+				echo "image class has properties!";
+			}
+	**/
 	function has_properties($args = array())
 	{
 		if ($args['file'])
 		{
 			$fname = basename($args['file']);
 		}
-		elseif ($args['clid'])
+		else
+		if ($args['clid'])
 		{
 			$cldat = aw_ini_get("classes");
 			$fname = basename($cldat[$args['clid']]["file"]);
@@ -67,11 +89,22 @@ class cfgutils extends aw_template
 		return $retval;
 	}
 
-	////
-	// !I also need to generate a list of all class id's, which have
-	// any properties defined.
-	// value(string) - contents of that field are used as values
-	// in the returned list
+	/** Returns a list of classes that have properties
+		@attrib api=1
+
+		@errors
+			none
+
+		@returns
+			array with class id as the key and the class name as the value
+
+		@examples
+			$cu = get_instance("cfg/cfgutils");
+			echo html::select(array(
+				"name" => "class_select",
+				"options" => $cu->get_classes_with_properties()
+			));
+	**/
 	function get_classes_with_properties($args = array())
 	{
 		$result = array();
@@ -90,7 +123,7 @@ class cfgutils extends aw_template
 		return $result;
 	}
 
-	////
+	//
 	// !Loads, unserializes and returns properties for a single class,
 	// optionally also caches them
 	// file(string) - name of the class
@@ -511,7 +544,33 @@ class cfgutils extends aw_template
 		exit_function("load_class_properties");
 		return $res;
 	}
-	// load_trans - wheater to load translated properties or not(by default it loads)
+
+	/** Loads class properties
+		@attrib api=1
+
+		@param load_trans optional type=bool
+			wheater to load translated properties or not(by default it loads)
+
+		@param filter optional type=array
+			array of filters to filter the properties by. for instance group => general
+			returns only the properties whose group is general
+
+		@param file optional type=string
+			The file whose properties to load, no path
+
+		@param clid optional type=int
+			The class id whose properties to load
+
+		@errors 
+			none
+
+		@comment
+			One of file or clid must be given
+
+		@returns
+			array of properties, with the property name as the key and property data 
+			as the value
+	**/
 	function load_properties($args = array())
 	{
 		$args["load_trans"] = isset($args["load_trans"])?$args["load_trans"]:1;
@@ -642,31 +701,78 @@ class cfgutils extends aw_template
 		}
 	}
 
+	/** Returns the content of the classinfo tag for the last loaded class
+		@attrib api=1
+
+		@returns
+			array of key=>value pairs for the @classinfo tag of the last class loaded via load_properties
+	**/
 	function get_classinfo()
 	{
 		return $this->classinfo;
 	}
 
+	/** Returns the layouts for the last loaded class
+		@attrib api=1
+
+		@returns
+			array of layouts for the class last loaded via load_properties
+			array key is layout name, array value is array of layout key=>value pairs
+	**/
 	function get_layoutinfo()
 	{
 		return isset($this->propdef["layout"]) ? $this->propdef["layout"] : array();
 	}
 
+	/** Returns relation type info for the last loaded class
+		@attrib api=1
+
+		@returns
+			array of relation data for the last loaded class
+			array contains three entries for each relation type. 
+			for each type, there are keys:
+				RELTYPE_FOO
+				FOO
+				51
+
+			in other words, the complete reltype name, short reltype name and reltype value. 
+			for each of these, the array value is an array of (value, clid, caption)
+	**/
 	function get_relinfo()
 	{
 		return is_array($this->relinfo) ? $this->relinfo : array();
 	}
 	
+	/** Returns the content of the forminfo tag for the last loaded class
+		@attrib api=1
+
+		@returns
+			array of key=>value pairs for the @forminfo tag of the last class loaded via load_properties
+	**/
 	function get_forminfo()
 	{
 		return isset($this->propdef["forminfo"]) ? $this->propdef["forminfo"] : array();
 	}
 	
+	/** Returns the content of the tableinfo tags for the last loaded class
+		@attrib api=1
+
+		@returns
+			array with entries for each @tableinfo tag in the last loaded class
+			key is table name, value is array(index,master_table,master_index)
+	**/
 	function get_tableinfo()
 	{
 		return isset($this->propdef["tableinfo"]) ? $this->propdef["tableinfo"] : array();
 	}
 
+	/** Returns the content of the groupinfo tags for the last loaded class
+		@attrib api=1
+
+		@returns
+			array with entries for each @groupinfo tag in the last loaded class
+			key is group name, value is array of key=>value pairs for the groupinfo
+	**/
 	function get_groupinfo()
 	{
 		return $this->groupinfo;

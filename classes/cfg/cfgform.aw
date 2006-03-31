@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.82 2006/03/22 09:26:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.83 2006/03/31 11:23:54 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1307,6 +1307,16 @@ class cfgform extends class_base
 		@param values optional type=array
 			array of property name => property value pairs that will be used when drawing the form
 
+		@returns
+			The html containing the form, including the <form tag. form is submitted to the reforb argument given
+
+		@examples
+			$cff = get_instance(CL_CFGFORM);
+			$html = $cff->draw_cfgform_from_ot(array(
+				"ot" => $object_type_id,
+				"reforb" => $this->mk_reforb("handle_form_submit")
+			));
+			echo $html; // displays the form
 	**/
 	function draw_cfgform_from_ot($arr)
 	{
@@ -1367,12 +1377,29 @@ class cfgform extends class_base
 
 		@attrib api=1
 
-		@comment
-			$ot - object type object's id 
-			$values - array of property name => property value pairs
-			$for_show - if true, classificator values are resolved
-			$site_lang - if true, translations are read from site language, not admin
+		@param ot required type=oid
+			object type object's id 
 		
+		@param values optional type=array
+			array of property name => property value pairs
+
+		@param for_show optional type=bool
+			if true, classificator values are resolved
+
+		@param site_lang optional type=bool
+			if true, translations are read from site language, not admin
+		
+		@returns
+			array of properties from the config form selected in the object type. 
+			array key is property name, value is property data
+
+		@examples
+			$cff = get_instance(CL_CFGFORM);
+			$props = $cff->get_props_from_ot(array("ot" => $object_type_id));
+			foreach($props as $property_name => $property_data)
+			{
+				echo "prop = $property_name , caption = $property_data[caption] \n";
+			}
 	**/
 	function get_props_from_ot($arr)
 	{
@@ -1519,15 +1546,21 @@ class cfgform extends class_base
 		$form->save();
 	}
 
-	/**
-
+	/** Initializes given cfgform object to contain all groups and props from the given class
 		@attrib api=1
 
-		@comment
-			Initializes given cfgform object to contain all groups and props from the given class
+		@param o required type=object
+			cfgform object
 
-			$o - cfgform object
-			$clid - class id to init from
+		@param clid required type=int
+			class id to init from
+
+		@examples
+			$cff = get_instance(CL_CFGFORM);
+			$cf_obj = obj($config_form_id);
+			$cff->cff_init_from_class($cf_obj, CL_MENU);
+			$cff->cff_add_prop($cf_obj, "bujaka", array("caption" => t("Bujaka"), "group" => "general"));
+			$cf_obj->save();
 	**/
 	function cff_init_from_class($o, $clid)
 	{
@@ -1600,30 +1633,42 @@ class cfgform extends class_base
 		};
 	}
 
-	/**
-
+	/** Removes all properties from the given config form
 		@attrib api=1
 
-		@comment
-			Removes all properties from the given config form
+		@param o required type=object
+			cfgform object
 
-			$o - cfgform object
+		@examples
+			$cff = get_instance(CL_CFGFORM);
+			$cf_obj = obj($config_form_id);
+			$cff->cff_remove_all_props();
+			$cff->cff_add_prop($cf_obj, "bujaka", array("caption" => t("Bujaka"), "group" => "general"));
+			$cf_obj->save();
 	**/
 	function cff_remove_all_props($o)
 	{
 		$o->set_meta("cfg_proplist", array());
 	}
 
-	/**
-
+	/** Adds the given property to the given config form object
 		@attrib api=1
 
-		@comment
-			Adds the given property to the given config form object
+		@param o required type=object
+			cfgform object
 
-			$o - cfgform object
-			$pn - name of property to add
-			$pd - array(caption, group, ord) for the property
+		@param pn required type=string
+			name of property to add
+
+		@param pd required type=array
+			array(caption, group, ord) for the property
+
+		@examples
+			$cff = get_instance(CL_CFGFORM);
+			$cf_obj = obj($config_form_id);
+			$cff->cff_init_from_class($cf_obj, CL_MENU);
+			$cff->cff_add_prop($cf_obj, "bujaka", array("caption" => t("Bujaka"), "group" => "general"));
+			$cf_obj->save();
 	**/
 	function cff_add_prop($o, $pn, $pd)
 	{
@@ -1639,6 +1684,22 @@ class cfgform extends class_base
 		$o->set_meta("cfg_proplist", $pl);
 	}
 
+	/** Returns the properties for the config form
+		@attrib api=1
+
+		@param id required type=oid
+			The oid if the config form to load the props from
+
+		@returns
+			array of property info for the config form
+
+		@examples
+			$cff = get_instance(CL_CFGFORM);
+			foreach($cff->get_cfg_proplist($cfgform_oid) as $pn => $pd)
+			{
+				echo "prop = $pn , caption = $pd[caption] \n";
+			}
+	**/
 	function get_cfg_proplist($id)
 	{
 		$o = obj($id);
@@ -1706,6 +1767,22 @@ class cfgform extends class_base
 		return $a["ord"] > $b["ord"];
 	}
 
+	/** Returns the groups defined in the config form
+		@attrib api=1
+
+		@param id required type=oid
+			The oid of the config form to load
+
+		@returns
+			array of group data for the config form
+
+		@examples
+			$cff = get_instance(CL_CFGFORM);
+			foreach($cff->get_cfg_groups($cfgform_oid) as $group_name => $group_data)
+			{
+				echo "prop = $group_name , caption = $group_data[caption] \n";
+			}
+	**/
 	function get_cfg_groups($id)
 	{
 		$o = obj($id);
@@ -1757,6 +1834,22 @@ class cfgform extends class_base
 		return $ret;
 	}
 
+	/** Returns the site-wide default config form for the given class
+		@attrib api=1 params=name
+
+		@param clid required type=int
+			The class id to return the default form for
+
+		@returns
+			The oid of the system default config form for the class or false if no form exists
+
+		@examples
+			$cf = get_instance(CL_CFGFORM);
+			if (($form_oid = $cf->get_sysdefault(array("clid" => CL_MENU))) !== false)
+			{
+				echo "default cfgorm for CL_MENU is ".$form_oid."<br>";
+			}
+	**/
 	function get_sysdefault($arr = array())
 	{
 		// 2 passes, because I need to know which element is active before 
