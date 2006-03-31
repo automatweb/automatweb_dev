@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.102 2006/03/24 14:47:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.103 2006/03/31 13:58:26 markop Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -300,27 +300,39 @@ class html extends aw_template
 		return "<input type='password' id='$name' name='$name' size='$size' value='$value' maxlength='$maxlength' $textsize />\n";
 	}
 
-	////
-	// !Simple text
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**Simple text
+	@attrib api=1 params=name
+		
+	@param value required type=string
+		text
+	@param textsize optional type=string
+		text size - examples: "10px", "0.7em", "smaller".
+	@returns string/html text
+
+	@comment draws simple html text with given textsize
+	**/	
 	function text($args = array())
 	{
-		if ($textsize)
+		if ($args["textsize"])
 		{
-			$element = '<span style="font-size: ' . $textsize . ';">' . $args["value"] . '</span>';
+			$element = '<span style="font-size: ' . $args["textsize"] . ';">' . $args["value"] . '</span>';
 		}
 		else
 		{
 			$element = $args["value"];
 		}
-
 		return $element;
 	}
 
-	////
-	// !Hidden field
-	// name(string)
-	// value(string)
+	/**Hidden field
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		hidden field name
+	@param value optional type=string
+		hidden field value
+	@returns string/html Hidden field
+	**/
 	function hidden($args = array())
 	{
 		extract($args);
@@ -328,32 +340,53 @@ class html extends aw_template
 		return "<input type='hidden' id='$name' name='$name' value='$value' />\n";
 	}
 
-	////
-	// !File upload
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**File upload
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		fileupload name
+	@param textsize optional type=string
+		examples: "10px", "0.7em", "smaller".
+	@param disabled optional type=bool
+		if set, fileupload is disabled
+	@param value optional type=string
+		if set, then all that stuff appears last row before the file upload
+	@returns strng/html fileupload
+	**/
 	function fileupload($args = array())
 	{
 		extract($args);
 		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
 		$disabled = ($disabled ? " disabled" : "");
 		$rv = "";
-
 		if (!empty($value))
 		{
 			$rv = $value . "<br />";
 		}
-
 		return $rv . "<input type='file' id='$name' name='$name' $disabled $textsize />\n";
 	}
 
-	////
-	// !Checkbox
-	// name(string)
-	// value(string)
-	// checked(bool)
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**Checkbox
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		Checkbox name
+	@param value optional type=string
+		Checkbox value
+	@param checked optional type=bool
+		If set, the checkbox is checked
+	@param disabled optional type=bool
+		If set, the checkbox is disabled
+	@param textsize optional type=string
+		Examples: "10px", "0.7em", "smaller"
+	@param label optional type=string
+		Checkbox label
+	@param caption optional type=string
+		Checkbox caption
+	@param onclick optional type=string
+		stuff what will happen if you click on checkbox - javascript
+	@returns string/html checkbox
+	**/
 	function checkbox($args = array())
 	{
 		extract($args);
@@ -385,13 +418,25 @@ class html extends aw_template
 		return $rv;
 	}
 
-	////
-	// !Radiobutton
-	// name(string)
-	// value(string)
-	// checked(bool)
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**Radiobutton
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		button's name
+	@param value optional type=string
+		button's value
+	@param checked optional type=bool
+		If set, the radiobutton is checked
+	@param disabled optional type=bool
+		If set, the radiobutton is disabled
+	@param textsize optional type=string
+		Examples: "10px", "0.7em", "smaller"
+	@param caption optional type=string
+		button's caption
+	@param onclick optional type=string
+		stuff what will happen if you click the radiobutton - javascript
+	@returns string/html radiobutton
+	**/
 	function radiobutton($args = array())
 	{
 		extract($args);
@@ -406,10 +451,21 @@ class html extends aw_template
 		return "<input type='radio' name='$name' value='$value' $checked onClick='$onclick' $disabled />\n $caption";
 	}
 
-	////
-	// !Submit button
-	// value(string)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**Submit button
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		button name
+	@param value optional type=string
+		button value
+	@param class optional type=string
+		style class name
+	@param textsize optional type=string
+		Examples: "10px", "0.7em", "smaller"
+	@param onclick optional type=string
+		stuff what will happen if you click the button - javascript
+	@returns string/html submit button
+	**/
 	function submit($args = array())
 	{
 		extract($args);
@@ -423,12 +479,23 @@ class html extends aw_template
 		return "<input id='cbsubmit' type='submit' name='$name' value='$value' class='$class' $onclick $textsize />\n";
 	}
 
-	////
-	// !Simple button
-	// value(string)
-	// onclick(string)
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**Simple button
+	@attrib api=1 params=name
+		
+	@param type optional type=string
+		button type
+	@param value optional type=string
+		button value
+	@param class optional type=string
+		style class name
+	@param textsize optional type=string
+		Examples: "10px", "0.7em", "smaller"
+	@param disabled optional type=bool
+		If set, the button is disabled
+	@param onclick optional type=string
+		stuff what will happen if you click the button - javascript
+	@returns string/html submit button
+	**/
 	function button($args = array())
 	{
 		extract($args);
@@ -437,10 +504,24 @@ class html extends aw_template
 		return "<input type='".($type ? $type : "button")."' class='$class' value='$value' onClick=\"".$onclick."\" $disabled $textsize />\n";
 	}
 
-	////
-	// !Time selector
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**Time selector
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		Time selector name
+	@param minute_step optional type=int default=1
+		Time selector minute step
+	@param textsize optional type=string
+		Examples: "10px", "0.7em", "smaller"
+	@param disabled optional type=bool
+		If set, the time selector is disabled
+	@param value optional type=array
+		array("hour" - the number of the hour, "minute" - the number of the minute)
+	@returns string/html time selector
+	
+	@comments
+		draws several selectboxes , can be used for selecting time
+	**/
 	function time_select($args = array())
 	{
 		load_vcl("date_edit");
@@ -472,10 +553,30 @@ class html extends aw_template
 		return $selector->gen_edit_form($name, $val);
 	}
 
-	////
-	// !Datetime selector
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**Date & time selector
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		Datetime selector name
+	@param minute_step optional type=int default=1
+		Datetime selector minute step
+	@param day optional type=string
+		if day = "text" then day is shown as textbox, not selectbox
+	@param month optional type=string
+		if month = "text" then month is shown as textbox, not selectbox
+	@param value optional type=array/int/string
+		array("hour" - the number of the hour, "minute" - the number of the minute, "month" - the number of the month, "year"  - The number of the year, may be a two or four digit value, with values between 0-69 mapping to 2000-2069 and 70-100 to 1970-2000. On systems where time_t is a 32bit signed integer, as most common today, the valid range for year is somewhere between 1901 and 2038)
+		if not an array , value should be Unix timestamp or if value = "+24h" or "+48h", 24 or 48 hours will be add to timestamp
+	@param disabled optional type=bool
+		If set, the datetime selector is disabled
+	@param textsize optional type=string
+		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled	
+
+	@returns string/html datetime selector
+	
+	@comments
+		draws several selectboxes (with textboxes) , can be used for selecting time and date
+	**/
 	function datetime_select($args = array())
 	{
 		load_vcl("date_edit");
@@ -501,11 +602,6 @@ class html extends aw_template
 		$set["year"] = 1;
 		$set["hour"] = 1;
 		$set["minute"] = 1;
-		/*	unset($set["day"]);
-			"year" =>1,
-			"hour" => 1,
-			"minute" => 1,
-			*/
 
 		$selector->configure($set);
 		if (is_array($args['value']))
@@ -539,10 +635,36 @@ class html extends aw_template
 		return $selector->gen_edit_form($name, $val, 2003, 2010, true);
 	}
 
-	////
-	// !Date selector
-	// disabled(bool)
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**Date selector
+	@attrib api=1 params=name
+		
+	@param name optional type=string
+		Date selector name
+	@param format optional type=string
+		if day = "text" then day is shown as textbox, not selectbox
+	@param mon_for optional type=string
+		if set, 0 appears before every month's signifier witch has value < 10
+	@param value optional type=array/int/string
+		array("day" - the number of the day, "month" - the number of the month, "year"  - The number of the year, may be a two or four digit value, with values between 0-69 mapping to 2000-2069 and 70-100 to 1970-2000. On systems where time_t is a 32bit signed integer, as most common today, the valid range for year is somewhere between 1901 and 2038)
+		if not an array , value should be Unix timestamp or if value = "+24h" or "+48h", 24 or 48 hours will be add to timestamp
+	@param default optional type=int
+		if value is not set, timestamp = default // it is meaningless
+	@param year_from optional type=int default=current year - 5
+		the number where year counting starts
+	@param year_to optional type=int default=current year + 5
+		the number where year counting ends
+	@param post_append_text optional type=string
+		any text or html code you want to see after date selector // meaningless
+	@param disabled optional type=bool
+		If set, the date selector is disabled
+	@param textsize optional type=string
+		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled	
+
+	@returns string/html date selector
+	
+	@comments
+		draws several selectboxes , can be used for selecting time and date
+	**/
 	function date_select($args = array())
 	{
 		load_vcl("date_edit");
@@ -609,6 +731,31 @@ class html extends aw_template
 		return $res;
 	}
 
+	/**Image
+	@attrib api=1 params=name
+		
+	@param url optional type=string
+		image url
+	@param width optional type=int
+		image width
+	@param height optional type=int
+		image height
+	@param border optional type=int
+		border size
+	@param alt optional type=string
+		text you can see when you scroll over the image
+	@param title optional type=string
+		image title
+	@param class optional type=string
+		style class name
+	@param id optional type=string
+		image id
+
+	@returns string/html image
+	
+	@comments
+		draws html image tag
+	**/
 	function img($args = array())
 	{
 		extract($args);
@@ -637,7 +784,6 @@ class html extends aw_template
 		{
 			$ret.=" class='$class'";
 		}
-
 		if(isset($id))
 		{
 			$ret.=" id='$id'";
@@ -645,17 +791,31 @@ class html extends aw_template
 		return $ret.">";
 	}
 
-	/*
-		$args
-			url - url, kuhu peale klikki peaks browser suuna võtma
-			target - kus freimis peax avanema
-			onClick - onClick aktsioon
-			title - Kui mouse hoverib peal, siis mis info juttu näidata
-			caption - tekst mida näeb kasutaja
-			textsize(string) -- examples: "10px", "0.7em", "smaller".
-			class(string) - style class name
-			id(string) - element id (for css mainly)
-	*/
+	/**Link
+	@attrib api=1 params=name
+		
+	@param onclick optional type=string
+		stuff that will happen , if you press the link - javascript
+	@param textsize optional type=string
+		examples: "10px", "0.7em", "smaller"
+	@param target optional type=int
+		frame name where stuff should open
+	@param title optional type=int
+		you can see this text when scrolling over the link
+	@param class optional type=string
+		style class name
+	@param tabindex optional type=string
+		tab index
+	@param id optional type=string
+		element id (for css mainly)
+	@param caption optional type=string
+		the text user can see
+	
+	@returns string/html href
+	
+	@comments
+		draws html href tag
+	**/
 	function href($args = array())
 	{
 		extract($args);
@@ -673,10 +833,40 @@ class html extends aw_template
 		return "<a href='{$url}'" . $target . $title . $onClick . $ti . $textsize . $class . $id . ">{$caption}</a>";
 	}
 
-	////
-	//
-	//
-	//
+	/**Popup
+	@attrib api=1 params=name
+		
+	@param quote optional type=string default = '"'
+		Quotation mark
+	@param url optional type=string
+		A string containing the URL of the document to open in the new window. If no URL is specified, an empty window will be created
+	@param target optional type=string
+		A string containing the name of the new window. This can be used as the 'target' attribute of a <FORM> or <A> tag to point to the new window.
+	@param toolbar optional type=string default=no
+		When set to yes the new window will have the standard browser tool bar (Back, Forward, etc.).
+	@param directories optional type=string default = no
+		When set to yes, the new browser window has the standard directory buttons.
+	@param status optional type=string  type=string default = no
+		When set to yes, the new window will have the standard browser status bar at the bottom.
+	@param location optional type=string  type=string default = no
+		When set to yes, this creates the standard Location entry feild in the new browser window.
+	@param resizable optional type=string  type=string default = no
+		When set to yes this allows the resizing of the new window by the user.
+	@param scrollbars  optional type=string default = no
+		When set to yes the new window is created with the standard horizontal and vertical scrollbars, where needed
+	@param menubar optional  type=string default = no
+		When set to yes, this creates a new browser window with the standard menu bar (File, Edit, View, etc.).
+	@param height optional type=int default=400
+		This sets the height of the new window in pixels.
+	@param width optional type=int default=400
+		This sets the width of the new window in pixels.
+	@param no_link optional type=bool
+		If set, returns javascritp text instead of the href html tag
+	@returns string/html popup
+	
+	@comments
+		draws html pupup link href tag or javascript text
+	**/
 	function popup($arr = array())
 	{
 		extract($arr);
@@ -698,22 +888,40 @@ class html extends aw_template
 		}
 		return html::href($arr);
 	}
-	////
-	// !html form,
-	// params:
-	// method - form method
-	// action - form action
-	// name - form name
-	// content - html to insert between form tags
+	
+	/**HTML form
+	@attrib api=1 params=name
+		
+	@param action optional type=string default = '"'
+		form action
+	@param method optional type=string
+		form method
+	@param name optional type=int default=400
+		form name
+	@param content optional type=bool
+		html to insert between form tags
+	@returns string/html form
+	**/
 	function form($args = array())
 	{
 		extract($args);
 		return '<form action="'.$action.'" method="'.$method.'" name="'.$name.'">'.$content.'</form>';
 	}
 
-	////
-	// !html <span class='$class'>$content</span>
-	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	/**Link
+	@attrib api=1 params=name
+		
+	@param class optional type=string
+		style class name
+	@param textsize optional type=string
+		examples: "10px", "0.7em", "smaller"
+	@param content optional type=int
+		fhtml to insert between span tags
+	@returns string/html
+	
+	@comments
+		draws <span class='$class'>$content</span>
+	**/
 	function span($args = array())
 	{
 		extract($args);
@@ -721,7 +929,21 @@ class html extends aw_template
 		$class = ($class ? 'class="' . $class . '"' : "");
 		return "<span $class $textsize>$content</span>";
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+		
+	@param o required type=object
+		object to be changed
+	@param caption optional type=string
+		the text user can see,(objects name, or "(nimetu)" if the object has no name) if set, returns html href tags.
+	@returns string/url or string/html href
+	
+	@comments
+		returns the url where can change the given object in AW
+	@example
+		$url = html::get_change_url($object);
+	**/
 	function obj_change_url($o, $caption = NULL)
 	{
 		if (is_array($o))
@@ -747,7 +969,25 @@ class html extends aw_template
 		}
 		return html::get_change_url($o->id(), array("return_url" => get_ru()), $caption === null ? parse_obj_name($o->name()) : $caption);
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+		
+	@param oid required type=oid
+		objects oid witch is going to be changed
+	@param params optional type=array
+		url parameters: array("parameter name" - "parameter value", ...)
+	@param caption optional type=string
+		the text user can see, if set, returns html href tags
+	@param title optional type=string
+		you can see this text when scrolling over the link
+	@returns string/url or string/html href
+	
+	@comments
+		returns the url where can change the given object in AW
+	@example
+		$url = html::get_change_url($val["oid"], array("return_url" => get_ru()), $val["name"];
+	**/
 	function get_change_url($oid, $params = array(), $caption = false, $title=NULL)
 	{
 		if (!$this->can("view", $oid))
@@ -779,7 +1019,25 @@ class html extends aw_template
 		}
 		return $retval;
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+		
+	@param class_id required type=clid
+		new object class id
+	@param parent optional type=oid
+		new object parent oid
+	@param caption optional type=bool
+		the text user can see, if caption is set, returns html href
+	@param params optional type=array
+		url parameters: array("parameter name" - "parameter value", ...)
+	@returns string/url or string/html href
+	
+	@comments
+		returns the url where can make a new object with given class_id
+	@example 
+		$url = html::get_change_url($arr["class_id"] , $arr["parent_id"] , array("do" => "die" , "message" => "RIP")));
+	**/
 	function get_new_url($class_id, $parent, $params = array(), $caption = false)
 	{
 		$params = array("parent" => $parent) + $params;
