@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.3 2006/03/30 12:31:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.4 2006/03/31 10:54:24 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -97,9 +97,12 @@ class realestate_add extends class_base
 				Kui miski property kohta märkida, et see on kohustluslik, siis töötab asi nii, et juhul , kui mingisse teplate'i kirjutatakse vastava property nimi, siis sealt edasi ei lasta , enne kui ta miski väärtuse kaasa saab.
 				
 				Et saaks erinevatele tasemetele tagasi minna, siis tuleks kasutada template'is miskit taolist asja:
-				<!-- SUB: LINKS --><!-- SUB: URL -->
-				<a href=\"{VAR:level_url}\"><!-- END SUB: URL -->
-				{VAR:level_name}</a><!-- END SUB: LINKS -->
+				<!-- SUB: ACT_LEVEL -->
+				<a href={VAR:level_url}>{VAR:level_name}</a>
+				<!-- END SUB: ACT_LEVEL -->
+				<!-- SUB: LEVEL -->
+				{VAR:level_name}
+				<!-- END SUB: LEVEL -->
 				kus siis {VAR:level_name} asemele tekkivad kõik tasemete nimed ja {VAR:level_url} asemele tasemete urlid... vaid juhul kui vastavale tasemele pääsemiseks on vajalikud väljad juba täidetud. {VAR:reforb} oleks ka kasulik kuskile formi sisse panna
 				
 				Kasutuses veel (vajalikud xmlrewquest jaoks): 
@@ -499,6 +502,7 @@ class realestate_add extends class_base
 			$realestate_environment_obj->prop("address_equivalent_4") ,
 			$realestate_environment_obj->prop("address_equivalent_5")
 		);
+		$this->picture_props($arr);
 		//muutujad div0 - div4 vastavalt haldusüksuste IDd
 		foreach ($division as $key => $div)
 		{
@@ -523,7 +527,16 @@ class realestate_add extends class_base
 		return $this->parse();
 	}
 
-	function level_vars($args)
+	function picture_props($arr)
+	{
+		$x = 0;
+		while($x<5)
+		{$x++;
+		;	//$this->vars(array("picture".$x."upload" => html::fileupload(array())));
+		}
+	}
+
+/*	function level_vars($args)
 	{
 		extract($args);
 		if ($this->is_template("LINKS"))
@@ -562,6 +575,46 @@ class realestate_add extends class_base
 				"LINKS" => $c,
 			));
 		}
+	}
+*/
+	function level_vars($args)
+	{
+		extract($args);
+		$c = "";
+		$c_act = "";
+		foreach($levels as $key => $data)
+		{
+			$key++;
+			if(($_SESSION["realestate_input_data"]["filled_level"]+2) > $key)
+			{
+				if($this->is_template("ACT_LEVEL"))
+				{
+					$level_url = aw_url_change_var("level", ($key) , post_ru());
+					$level_url = aw_url_change_var("id", null , $level_url);
+					$this->vars(array(
+						"level_name" => $data["name"],
+						"level_url" => $level_url,
+					));
+					$c_act .= $this->parse("ACT_LEVEL");
+				}
+			}
+			else
+			{
+				if($this->is_template("LEVEL"))
+				{
+					$this->vars(array(
+						"level_name" => $data["name"],
+					));
+					$c .= $this->parse("LEVEL");
+				}
+			}
+		}
+		$this->vars(array(
+			"ACT_LEVEL" => $c_act,
+		));
+		$this->vars(array(
+			"LEVEL" => $c,
+		));
 	}
 
 	/** get_divisions
@@ -697,6 +750,7 @@ class realestate_add extends class_base
 	//	$i->get_property(array("prop" => &$prop, "request" => $request));
 	//	$t->sort_by();
 	//	$html["address_connection"] = $t->draw();
+	//	arr($html);
 		return $html;
 	}
 	
@@ -783,6 +837,16 @@ class realestate_add extends class_base
 	function subscribe($args = array())
 	{
 		$level = $_SESSION["realestate_input_data"]["level"];		
+		$x = 0;
+		while($x<10)
+		{
+			if(array_key_exists("picture".$x , $args))
+			{
+				$image_inst = get_instance(CL_IMAGE);
+				$upload_image = $image_inst->add_upload_image($args["picture".$x], $_SESSION["realestate_input_data"]["realestate_id"]); 
+			}
+			$x++;
+		}
 		if(!$_SESSION["realestate_input_data"]["realestate_id"])
 		{
 			$clss = aw_ini_get("classes");
