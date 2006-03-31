@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.35 2006/03/31 07:10:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.36 2006/03/31 07:47:15 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -468,8 +468,8 @@ class crm_bill extends class_base
 		{
 			$lo = obj($b->prop("language"));
 			$lc = $lo->prop("lang_acceptlang");
-			$tpl .= "_".$lc;
 		}
+		$tpl .= "_".$lc;
 
 		$this->read_site_template($tpl.".tpl");
 
@@ -579,6 +579,7 @@ class crm_bill extends class_base
 		$this->vars(array(
 			"orderer_name" => $ord->name(),
 			"orderer_code" => $cust_no,
+			"ord_penalty_pct" => number_format($ord->prop("bill_penalty_pct"), 2),
 			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
@@ -836,8 +837,8 @@ class crm_bill extends class_base
 		{
 			$lo = obj($b->prop("language"));
 			$lc = $lo->prop("lang_acceptlang");
-			$tpl .= "_".$lc;
 		}
+		$tpl .= "_".$lc;
 
 		$this->read_site_template($tpl.".tpl");
 
@@ -942,6 +943,7 @@ class crm_bill extends class_base
 		$this->vars(array(
 			"orderer_name" => $ord->name(),
 			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
+			"ord_penalty_pct" => number_format($ord->prop("bill_penalty_pct"), 2),
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
 			"bill_no" => $b->prop("bill_no"),

@@ -188,6 +188,15 @@
             <caption>Prioriteet</caption>
       </property>
       <property>
+            <name>bill_penalty_pct</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>bill_penalty_pct</field>
+            <caption>Arve viivise %</caption>
+      </property>
+      <property>
             <name>client_manager</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>

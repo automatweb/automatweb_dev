@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.5 2006/03/22 15:12:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.6 2006/03/31 07:47:15 kristo Exp $
 // crm_company_customer_data.aw - Kliendi andmed 
 /*
 
@@ -44,6 +44,9 @@
 
 	@property bill_due_date_days type=textbox size=5  table=aw_crm_customer_data field=aw_bill_due_date_days
 	@caption Arve makset&auml;htaeg (p&auml;evi)
+
+	@property bill_penalty_pct type=textbox size=5  table=aw_crm_customer_data field=aw_bill_penalty_pct
+	@caption Arve viivise %
 
 @reltype BUYER value=1 clid=CL_CRM_COMPANY
 @caption Ostja
@@ -160,6 +163,13 @@ class crm_company_customer_data extends class_base
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int"
+				));
+				return true;
+
+			case "aw_bill_penalty_pct":
+				$this->db_add_col($tbl, array(
+					"name" => $fld,
+					"type" => "double"
 				));
 				return true;
 		}

@@ -75,6 +75,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property priority type=textbox table=kliendibaas_firma
 	@caption Prioriteet
 
+	@property bill_penalty_pct type=textbox table=kliendibaas_firma size=5
+	@caption Arve viivise %
+
 	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager
 	@caption Kliendihaldur
 
@@ -1348,6 +1351,7 @@ class crm_company extends class_base
 			case "cust_contract_date":
 			case "referal_type":
 			case "priority":
+			case "bill_penalty_pct":
 				// read from rel
 				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
 				{
@@ -4977,6 +4981,13 @@ class crm_company extends class_base
 					$this->db_add_col($tbl, array(
 						"name" => $field,
 						"type" => "int"
+					));
+					return true;
+
+				case "bill_penalty_pct":
+					$this->db_add_col($tbl, array(
+						"name" => $field,
+						"type" => "double"
 					));
 					return true;
 

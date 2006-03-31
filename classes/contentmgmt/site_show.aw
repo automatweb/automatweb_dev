@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.160 2006/03/30 07:10:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.161 2006/03/31 07:47:16 kristo Exp $
 
 /*
 
@@ -2724,6 +2724,13 @@ class site_show extends class_base
 		$pm->add_item(array(
 			"text" => t("Muuda"),
 			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
+			"link" => "javascript:void(0)"
+		));
+
+		$url = $this->mk_my_orb("disp_manager", array("id" => $menu->id()), "acl_manager", true);
+		$pm->add_item(array(
+			"text" => t("Muuda &otilde;igusi"),
+			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit_acl',800, 500)\"",
 			"link" => "javascript:void(0)"
 		));
 		$pm->add_item(array(
