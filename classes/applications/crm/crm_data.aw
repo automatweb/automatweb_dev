@@ -63,7 +63,7 @@ class crm_data extends class_base
 					$of["bill_date"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["to"]);
 				}
 			}
-			if (isset($filter["state"]))
+			if (isset($filter["state"]) && $filter["state"] != -1)
 			{
 				$of["CL_CRM_BILL.state"] = $filter["state"];
 			}
