@@ -90,7 +90,7 @@ class date_edit
 		If set tu true, adds an '---' item  and selects it(adds for everythind.. selects only for year)
 		Default is false. If this is set range1 and range2 must be manually set.
 		@comment
-		Generates the date select html code accorndig to options
+		Generates the date edit html code accorndig to options
 		@returns
 		The form elements html code to be printed on page
 	**/
