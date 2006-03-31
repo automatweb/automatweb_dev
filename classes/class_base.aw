@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.475 2006/03/31 12:11:02 kristo Exp $
+// $Id: class_base.aw,v 2.476 2006/03/31 12:14:27 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -112,13 +112,11 @@ class class_base extends aw_template
 			$this->vcl_register[basename($vcl_class)] = $vcl_class;
 		}
 
-		// XXX: this is temporary
-		$this->vcl_delayed_init = array(
-			"comments" => 1,
-			"popup_search" => 1,
-			"relationmgr" => 1,
-			"crm_participant_search" => 1
-		);
+		$this->vcl_delayed_init = array();
+		foreach(aw_ini_get("class_base.vcl_delayed_init") as $delin_class)
+		{
+			$this->vcl_delayed_init[$delin_class] = 1;
+		}
 
 		// XXX: this is also temporary
 		$this->vcl_has_getter = array(
