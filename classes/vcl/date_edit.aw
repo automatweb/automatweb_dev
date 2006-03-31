@@ -9,6 +9,7 @@ class date_edit
 
 	// kui aega ette ei anta, siis kuvame selleks kuupäeva
 	// ööpäev hiljem dokumendi avamisest. See on üsna suvaline muidugi
+
 	function date_edit($varname = "", $timestamp = "+24h")
 	{
 		$this->init($varname, $timestamp);
@@ -22,6 +23,7 @@ class date_edit
 		));
 	}
 
+	// well, you can set these but they aren't used <-- taiu
 	function set($field, $value)
 	{
 		$this->$field = $value;
@@ -43,11 +45,18 @@ class date_edit
 	// !Sets the layout of the date editor
 	// default is to show a select element
 	// set_layout(array("year" => "textbox")) makes it a textbox instead
+	
+	// sets the layout flag but this isn't used in anywhere.. therefore isn't  api function <-- taiu
 	function set_layout($args = array())
 	{
 		$this->layout = $args;
 	}
 
+	/**
+		@attrib params=name api=1
+		@param classid optional type=int
+		@comment
+	**/
 	function configure($fields)
 	{
 		// millised väljad ja millises järjekorras kuvame
@@ -66,6 +75,25 @@ class date_edit
 		$this->fields = $fields;
 	}
 
+	/**
+		@attrib params=pos api=1
+		@param varname
+		Sets the varname for the date form that is posted.
+		varname[year],varname[month],varname[day],varname[hour],varname[minute]
+		@param timestamp optional type=int
+		Sets the time to be selected(unix timestamp). Default is current time +24h
+		@param range1 optional type=int
+		Sets the start year(default is 2003)
+		@param range2 optional type=int
+		Sets the end year(default is 2010)
+		@add_empty optional type=bool
+		If set tu true, adds an '---' item  and selects it(adds for everythind.. selects only for year)
+		Default is false. If this is set range1 and range2 must be manually set.
+		@comment
+		Generates the date select html code accorndig to options
+		@returns
+		The form elements html code to be printed on page
+	**/
 	function gen_edit_form($varname, $timestamp, $range1 = 2003, $range2 = 2010, $add_empty = false)
 	{
 		if (is_array ($varname))
@@ -258,7 +286,26 @@ class date_edit
 
 		return $retval;
 	} // end gen_edit_form
-
+	
+	/**
+		@attrib params=name api=1
+		@param year required type=int
+		sets the year
+		@param month required type=int
+		sets the month
+		@param day required type=int
+		sets the day
+		@param hour required type=int
+		sets the hour
+		@param minute required type=int
+		sets the minute
+		@param second required type=int
+		sets the second
+		@comment
+		Generates unix timestamp according to given values
+		@returns
+		Returns Unix timestamp
+	**/
 	function get_timestamp($var)
 	{
 		if ($var['month'] == '---' || $var['day'] == '---' || $var['year'] == '---')
