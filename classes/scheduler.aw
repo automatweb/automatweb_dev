@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.37 2006/03/24 14:38:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.38 2006/04/03 09:53:39 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -138,7 +138,6 @@ class scheduler extends aw_template
 			
 		$cs = $o->connections_to(array("from.class_id" => CL_SCHEDULER));
 		$c = reset($cs);
-
 		// recur_id refers to a single CL_RECURRENCE object, conventional connections method is not used
 		// because it would add too much overhead, too much redundant data. There can literally be
 		// thousands of records in the recurrence table for a single recurrence object and every little
@@ -158,7 +157,7 @@ class scheduler extends aw_template
 				//foreach($o->connections_from(array("type" => 1)) as $c)
 				// see 1 annab target objekti .. aga kõik need probleemid ju tulenevad
 				// sellest, et sihtobjektil võib olla olla seos hoopid scheduleriga
-				foreach($o->connections_from(array("to.class_id" => CL_RECURRENCE)) as $c)
+				foreach($o->connections_from(array("type" => "RELTYPE_TARGET_OBJ")) as $c)
 				{
 					$event = str_replace("automatweb/", "", $this->mk_my_orb("invoke",array("id" => $c->prop("to")),$c->prop('to.class_id')));
 					$re = $event."&ts=".$row["recur_start"];
@@ -329,7 +328,7 @@ class scheduler extends aw_template
 	function do_events($arr)
 	{
 		extract($arr);
-		set_time_limit(0);
+		set_time_limit(14400);
 
 
 		// read in all events
