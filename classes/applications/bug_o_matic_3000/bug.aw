@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.26 2006/03/31 07:36:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.27 2006/04/03 11:05:48 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -697,6 +697,12 @@ class bug extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	function request_execute($o)
+	{
+		header("Location: ".$this->mk_my_orb("change", array("id" => $o->id()), "bug", true));
+		die();
 	}
 }
 ?>
