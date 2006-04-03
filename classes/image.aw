@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.155 2006/03/31 11:03:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.156 2006/04/03 07:15:41 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -34,7 +34,7 @@
 	@caption K&otilde;ikjal kommenteeritav
 
 	@property no_apply_gal_conf type=checkbox table=objects field=meta method=serialize ch_value=1
-	@caption &Auml;ra kasuta galerri seadeid
+	@caption &Auml;ra kasuta galerii seadeid
 
 	/@property file_show type=text store=no editonly=1
 	/@caption Eelvaade 

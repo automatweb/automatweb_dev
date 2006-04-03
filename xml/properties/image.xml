@@ -83,7 +83,7 @@
             <field>meta</field>
             <method>serialize</method>
             <ch_value>1</ch_value>
-            <caption>&amp;amp;Auml;ra kasuta galerri seadeid</caption>
+            <caption>&amp;amp;Auml;ra kasuta galerii seadeid</caption>
       </property>
       <property>
             <name>show_conditions</name>
