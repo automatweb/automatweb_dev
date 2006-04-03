@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.28 2006/03/08 15:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.29 2006/04/03 10:44:45 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -196,6 +196,7 @@ class crm_db extends class_base
 				$menu_tree = new object_tree(array(
 					"parent" => $args["obj_inst"]->prop("dir_tegevusala"),
 					"class_id" => CL_CRM_SECTOR,
+					"sort_by" => "objects.name"
 				));
 				$sectors_list = $menu_tree->to_list();
 				foreach ($sectors_list->list as $oid => $sect)
@@ -439,6 +440,15 @@ class crm_db extends class_base
 		if (is_array($arr))
 		foreach($arr as $val)
 		{
+			if (!$this->can("view", $val["oid"]))
+			{
+				continue;
+			}
+			$o = obj($val["oid"]);
+			if ($o->brother_of() != $o->id())
+			{
+				continue;
+			}
 			$code = $val['kood'];
 			$cnt = $this->db_fetch_field('select count(*) as cnt from aliases as t1 left join objects as t2 on t1.target=t2.oid 
 				left join objects as t3 on t1.source=t3.oid		
@@ -456,10 +466,13 @@ class crm_db extends class_base
 				'teg_oid' => $val["oid"],
 				)).'">'.$val['name'],'</a>',
 				'fcount' => ($cnn ? ($cnn.' / '):'').$cnt,
-				"oid" => $val["oid"]
+				"oid" => $val["oid"],
+				"teg_name" => $val["name"]
 				)
 			);
 		}
+		$t->set_default_sortby("teg_name");
+		$t->sort_by();
 		
 		// right, I have a teg_obj, now I need to create a list of connected objects
 		if (!empty($teg_oid))
