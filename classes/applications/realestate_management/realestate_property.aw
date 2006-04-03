@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.16 2006/03/24 14:40:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.17 2006/04/03 10:12:50 kristo Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -1763,6 +1763,7 @@ class realestate_property extends class_base
 			$property_values = $this_object->properties ();
 		}
 
+		$img_i = get_instance("image");
 		### add local properties
 		foreach ($properties as $name => $data)
 		{
@@ -1799,6 +1800,11 @@ class realestate_property extends class_base
 			$properties[$name]["value"] = $value;
 			$properties[$name]["caption"] = $data["caption"];
 
+			if ($name == "picture_icon")
+			{
+				$properties[$name]["strvalue"] = image::check_url($this_object->prop_str ($name));
+			}
+			else
 			if (in_array ($name, $this->re_float_types))
 			{
 				$properties[$name]["strvalue"] = number_format ($value, REALESTATE_NF_DEC, REALESTATE_NF_POINT,
@@ -1809,7 +1815,6 @@ REALESTATE_NF_SEP);
 				$properties[$name]["strvalue"] = $this_object->prop_str ($name);
 			}
 		}
-
 		exit_function("re_property::get_property_data - std props");
 
 		if (!$arr["no_address_data"])
@@ -2336,7 +2341,6 @@ REALESTATE_NF_SEP);
 				$i++;
 			}
 		}
-
 		exit_function("re_property::get_property_data");
 		return $properties;
 	}
