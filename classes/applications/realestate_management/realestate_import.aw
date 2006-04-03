@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.12 2006/03/15 08:59:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.13 2006/04/03 07:27:31 kristo Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -384,7 +384,6 @@ class realestate_import extends class_base
 				$employees[$oid] =join (" ", $name_parsed);
 			}
 		}
-
 /* dbg */ if (1 == $_GET["re_import_dbg"]){ arr($employees); }
 
 		### initialize log
@@ -919,7 +918,9 @@ class realestate_import extends class_base
 
 				$address->set_prop ("street_address", $maja_nr);
 				$address->set_prop ("apartment", $korteri_nr);
+				aw_disable_acl();
 				$address->save ();
+				aw_restore_acl();
 
 				$address_text = $address->prop ("address_array");
 				unset ($address_text[ADDRESS_COUNTRY_TYPE]);
@@ -1872,19 +1873,22 @@ class realestate_import extends class_base
 		}
 
 		### set is_visible to false for objects not found in city24 xml
-		$oid_constraint = new obj_predicate_not ($imported_properties);
-		$realestate_objects = new object_list (array (
-			"oid" => $oid_constraint,
-			"class_id" => $realestate_classes,
-			"parent" => $realestate_folders,
-			"modified" => new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $last_import),
-			"is_archived" => 0,
-			"is_visible" => 1,
-			"site_id" => array (),
-			"lang_id" => array (),
-		));
-		$realestate_objects->set_prop ("is_visible", 0);
-		$realestate_objects->save ();
+		if (count($imported_properties))
+		{
+			$oid_constraint = new obj_predicate_not ($imported_properties);
+			$realestate_objects = new object_list (array (
+				"oid" => $oid_constraint,
+				"class_id" => $realestate_classes,
+				"parent" => $realestate_folders,
+				"modified" => new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $last_import),
+				"is_archived" => 0,
+				"is_visible" => 1,
+				"site_id" => array (),
+				"lang_id" => array (),
+			));
+			$realestate_objects->set_prop ("is_visible", 0);
+			$realestate_objects->save ();
+		}
 
 		### save log
 		$logs = (array) $this_object->meta ("city24_log");
