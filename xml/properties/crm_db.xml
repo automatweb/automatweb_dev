@@ -11,17 +11,117 @@
             <caption>Vaikimisi valim</caption>
       </property>
       <property>
+            <name>dir_firma</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FIRMA_CAT</reltype>
+            <caption>Ettev&amp;otilde;tete kaust</caption>
+      </property>
+      <property>
+            <name>folder_person</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ISIK_CAT</reltype>
+            <caption>T&amp;ouml;&amp;ouml;tajate kaust</caption>
+      </property>
+      <property>
+            <name>dir_address</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS_CAT</reltype>
+            <caption>Aadresside kaust</caption>
+      </property>
+      <property>
+            <name>dir_ettevotlusvorm</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ETTEVOTLUSVORM_CAT</reltype>
+            <caption>&amp;Otilde;iguslike vormide kaust</caption>
+      </property>
+      <property>
+            <name>dir_linn</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LINN_CAT</reltype>
+            <caption>Linnade kaust</caption>
+      </property>
+      <property>
+            <name>dir_maakond</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAAKOND_CAT</reltype>
+            <caption>Maakondade kaust</caption>
+      </property>
+      <property>
+            <name>dir_tegevusala</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TEGEVUSALA_CAT</reltype>
+            <caption>Tegevusalade kaust</caption>
+      </property>
+      <property>
+            <name>dir_toode</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TOODE_CAT</reltype>
+            <caption>Toodete kaust</caption>
+      </property>
+      <property>
+            <name>dir_default</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_GENERAL_CAT</reltype>
+            <caption>Kaust, kui m&amp;otilde;ni eelnevatest pole m&amp;auml;&amp;auml;ratud, siis kasutatakse seda</caption>
+      </property>
+      <property>
+            <name>flimit</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kirjeid &amp;uuml;hel lehel</caption>
+      </property>
+      <property>
             <name>orgtoolbar</name>
             <table>objects</table>
             <group>
                   <num_0>firmad</num_0>
                   <num_1>f2</num_1>
+                  <num_2>tegevusalad</num_2>
             </group>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
-            <store>no</store>
             <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Org. toolbar</caption>
       </property>
       <property>
@@ -33,28 +133,18 @@
             <type>form</type>
             <sclass>crm/crm_org_search</sclass>
             <sform>crm_search</sform>
+            <parent>org</parent>
             <caption>Compound search</caption>
       </property>
       <property>
-            <name>manageri</name>
+            <name>company_table</name>
             <table>objects</table>
             <group>firmad</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
-            <callback>firma_manager</callback>
-            <caption>Firmade nimekiri</caption>
-      </property>
-      <property>
-            <name>tegtoolbar</name>
-            <table>objects</table>
-            <group>tegevusalad</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
+            <type>table</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <no_caption>1	</no_caption>
-            <caption>Tegevusalade toolbar</caption>
       </property>
       <property>
             <name>sector_tree</name>
@@ -63,135 +153,29 @@
             <field>meta</field>
             <method>serialize</method>
             <type>treeview</type>
-            <store>no</store>
-            <parent>ta_vbox</parent>
+            <parent>ta</parent>
             <no_caption>1</no_caption>
-            <caption>Tegevusalade puu</caption>
+            <store>no</store>
       </property>
       <property>
-            <name>sector_manager</name>
+            <name>sector_table</name>
             <table>objects</table>
             <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>callback_sector_manager</callback>
-            <parent>ta_vbox</parent>
+            <type>table</type>
+            <parent>ta</parent>
             <no_caption>1</no_caption>
-            <caption>Tegevusalade kataloog</caption>
-      </property>
-      <property>
-            <name>dir_firma</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_FIRMA_CAT</reltype>
-            <caption>Vaikimisi firmade kaust</caption>
-      </property>
-      <property>
-            <name>folder_person</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ISIK_CAT</reltype>
-            <caption>Vaikimisi t&amp;ouml;&amp;ouml;tajate kaust</caption>
-      </property>
-      <property>
-            <name>dir_address</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADDRESS_CAT</reltype>
-            <caption>Vaikimisi aadresside kaust</caption>
-      </property>
-      <property>
-            <name>dir_ettevotlusvorm</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ETTEVOTLUSVORM_CAT</reltype>
-            <caption>Vaikimisi &amp;otilde;iguslike vormide kaust</caption>
-      </property>
-      <property>
-            <name>dir_linn</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_LINN_CAT</reltype>
-            <caption>Vaikimisi linnade kaust</caption>
-      </property>
-      <property>
-            <name>dir_maakond</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_MAAKOND_CAT</reltype>
-            <caption>Vaikimisi maakondade kaust</caption>
-      </property>
-      <property>
-            <name>dir_tegevusala</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TEGEVUSALA_CAT</reltype>
-            <caption>Vaikimisi tegevusalade kaust</caption>
-      </property>
-      <property>
-            <name>dir_toode</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TOODE_CAT</reltype>
-            <caption>Vaikimisi toodete kaust</caption>
-      </property>
-      <property>
-            <name>dir_default</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_GENERAL_CAT</reltype>
-            <caption>Vaikimisi kaust, kui m&amp;otilde;ni eelnevatest pole m&amp;auml;&amp;auml;ratud, siis kasutatakse seda</caption>
-      </property>
-      <property>
-            <name>flimit</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Kirjeid &amp;uuml;hel lehel</caption>
-      </property>
-      <property>
-            <name>active_selection</name>
-            <table>objects</table>
-            <group>firmad</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
+            <store>no</store>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_DB</syslog_type>
       </classinfo>
       <groupinfo>
+            <org>
+                  <caption>Organisatsioonid</caption>
+            </org>
             <f2>
                   <submit>no</submit>
                   <caption>Otsing</caption>
@@ -202,16 +186,11 @@
                   <caption>Nimekiri</caption>
                   <parent>org</parent>
             </firmad>
-            <org>
-                  <caption>Organisatsioonid</caption>
-            </org>
             <tegevusalad>
                   <submit>no</submit>
                   <caption>Tegevusalad</caption>
+                  <parent>org</parent>
             </tegevusalad>
-            <settings>
-                  <caption>Seaded</caption>
-            </settings>
       </groupinfo>
       <reltypes>
             <SELECTIONS>
@@ -286,10 +265,16 @@
             </METAMGR>
       </reltypes>
       <layout>
-            <ta_vbox>
+            <org>
                   <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>f2</group>
+            </org>
+            <ta>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
                   <group>tegevusalad</group>
-            </ta_vbox>
+            </ta>
       </layout>
 </properties>
 
