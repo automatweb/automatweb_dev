@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.65 2006/03/17 14:34:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.66 2006/04/04 09:44:26 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -48,6 +48,7 @@ class keywords extends class_base
 			break;
 		}
 	}
+
 
 	/**
 		@attrib name=show_documents nologin=1
@@ -1132,21 +1133,38 @@ class keywords extends class_base
 		}
 		return $ret;
 	}
-	/*
+
 	function set_property($arr)
 	{
-		
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
-			case "name":
-				
-			break;
+			case "keyword":
+				// list other kws with the same name
+				$ol = new object_list(array(
+					"class_id" => CL_KEYWORD,
+					"keyword" => $prop["value"],
+					"oid" => new obj_predicate_not($arr["obj_inst"]->id())
+				));
+				if ($ol->count() > 0)
+				{
+					$o = $ol->begin();
+					$prop["error"] = sprintf(t("Selline v&otilde;tmes&otilde;na on juba olemas (%s)!"), html::get_change_url($o->id(), array(
+						"return_url" => $arr["request"]["post_ru"]
+					), $o->name()));
+					return PROP_FATAL_ERROR;
+				}
+				break;
 		};
 		return $retval;
-	}*/
+	}
 	
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
+
 	function callback_pre_save($arr)
 	{
 		$arr["obj_inst"]->set_prop("name", $arr["request"]["keyword"]);
