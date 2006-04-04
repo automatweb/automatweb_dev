@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <comment>creates html password input</comment>
+            <comment>draws simple html text with given textsize</comment>
       </property>
 </properties>
 
