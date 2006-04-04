@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.40 2006/03/31 11:24:28 tarvo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.40 2006/03/31 11:24:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.41 2006/04/04 04:59:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.41 2006/04/04 04:59:36 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -103,6 +103,16 @@ define("BUG_STATUS_CLOSED", 5);
 	@property delete_saved type=submit 
 	@caption Kustuta
 
+@default group=charts
+
+	@property gantt_p type=text store=no 
+	@caption Kelle buge n&auml;idata
+
+	@property gantt type=text store=no no_caption=1
+
+	@property gantt_summary type=text store=no
+	@caption Kokkuv&otilde;te
+
 @groupinfo bugs caption="Bugid" submit=no
 	@groupinfo by_default caption="default" parent=bugs submit=no
 	@groupinfo by_project caption="Projektid" parent=bugs submit=no
@@ -115,6 +125,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@groupinfo search_list caption="Salvestatud otsingud" parent=search_t
 
 @groupinfo archive caption="Arhiiv" submit=no
+@groupinfo charts caption="Kaardid" submit=no
 
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
@@ -220,6 +231,41 @@ class bug_tracker extends class_base
 
 			case "saved_searches":
 				$this->_saved_searches($arr);
+				break;
+
+			case "gantt":
+				$this->_gantt($arr);
+				break;
+
+			case "gantt_p":
+				if ($this->can("view", $arr["request"]["filt_p"]))
+				{
+					$p = obj($arr["request"]["filt_p"]);
+				}
+				else
+				{
+					$u = get_instance(CL_USER);
+					$p = obj($u->get_current_person());
+				}
+				$co = get_instance(CL_CRM_COMPANY);
+				$c = get_instance("vcl/popup_menu");
+				$c->begin_menu("bt_g");
+				foreach($co->get_employee_picker(null, false, true) as $p_id => $p_n)
+				{
+					$c->add_item(array(
+						"text" => $p_n,
+						"link" => aw_url_change_var("filt_p", $p_id)
+					));
+				}
+				$prop["value"] = html::obj_change_url($p)." ".$c->get_menu();
+				break;
+
+			case "gantt_summary":
+				$prop["value"] = sprintf(t("T&ouml;id kokku: %s, tunde %s.<Br>Viimase t&ouml;&ouml; l&otilde;ppt&auml;htaeg %s."), 
+					$this->job_count,
+					$this->job_hrs / 3600,
+					date("d.m.Y H:i", $this->job_end)
+				);
 				break;
 		};
 		return $retval;
@@ -1552,6 +1598,7 @@ class bug_tracker extends class_base
 				)
 			));
 		}
+echo dbg::dump($res);
 		return $res;
 	}
 
@@ -1748,6 +1795,184 @@ class bug_tracker extends class_base
 		echo ($p["value"]);
 		aw_shutdown();
 		die();
+	}
+
+	function __gantt_sort($a, $b)
+	{
+		$a_pri = $this->bug_i->get_sort_priority($a);
+		$b_pri = $this->bug_i->get_sort_priority($b);
+		return $a_pri == $b_pri ? 0 : ($a_pri > $b_pri ? -1 : 1);
+	}
+
+	function _gantt($arr)
+	{
+		$chart = get_instance ("vcl/gantt_chart");
+
+		$columns = 7;
+
+		if ($this->can("view", $arr["request"]["filt_p"]))
+		{
+			$p = obj($arr["request"]["filt_p"]);
+		}
+		else
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+		}
+		// get all goals/tasks
+		$ot = new object_tree(array(
+			"class_id" => CL_BUG,
+			"bug_status" => BUG_OPEN,
+			"CL_BUG.who.name" => $p->name(),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$gt_list = $ot->to_list();
+
+		$bugs = $gt_list->arr();
+
+		// now, filter out all bugs that have sub-bugs
+		$sub_bugs = new object_list(array(
+			"class_id" => CL_BUG,
+			"parent" => $gt_list->ids()
+		));
+
+		foreach($sub_bugs->arr() as $sub_bug)
+		{
+			unset($bugs[$sub_bug->parent()]);
+		}
+		$gt_list = new object_list();
+		$gt_list->add(array_keys($bugs));
+		$gt_list->sort_by_cb(array(
+			&$this, "__gantt_sort"
+		));
+
+		classload("core/date/date_calc");
+		$range_start = get_day_start();
+		$range_end = time() + 24*3600*14;
+
+		$subdivisions = 1;
+
+		foreach($gt_list->arr() as $gt)
+		{
+			$chart->add_row (array (
+				"name" => $gt->id(),
+				"title" => $gt->name(),
+				"uri" => html::get_change_url(
+					$gt->id(),
+					array("return_url" => get_ru())
+				)
+			));
+		}
+
+		$start = time();
+		if (date("H", $start) > 17)
+		{
+			$start = mktime(9, 0, 0, date("m"), date("d")+1, date("Y"));
+		}
+		$this->job_count = $gt_list->count();
+		foreach ($gt_list->arr() as $gt)
+		{
+			if (date("H", $start) < 9)
+			{
+				$start = mktime(9, 0, 0, date("m", $start), date("d", $start), date("Y", $start));
+			}
+			if (date("H", $start) > 17)
+			{
+				$start = mktime(9, 0, 0, date("m", $start), date("d", $start)+1, date("Y", $start));
+			}
+			$length = max($gt->prop("num_hrs_guess") * 3600, 7200);
+			$this->job_hrs += $length;
+			if (date("H", $start+$length) > 17 || ($length > (3600 * 7)))
+			{
+				// split into parts
+				$wd_end = mktime(17, 0, 0, date("m", $start), date("d", $start), date("Y", $start));
+				$tot_len = $length;
+				$length = $wd_end - $start;
+				$remaining_len = $tot_len - $length;
+				$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
+
+				$bar = array (
+					"id" => $gt->id (),
+					"row" => $gt->id (),
+					"start" => $start,
+					"length" => $length,
+					"title" => $title,
+				);
+
+				$chart->add_bar ($bar);
+				$start += $length;
+
+				while($remaining_len > 0)
+				{
+					$length = min($remaining_len, 8*3600);
+					$remaining_len -= $length;
+					$start = mktime(9, 0, 0, date("m", $start), date("d", $start)+1, date("Y", $start));
+					$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
+
+					$bar = array (
+						"id" => $gt->id (),
+						"row" => $gt->id (),
+						"start" => $start,
+						"length" => $length,
+						"title" => $title,
+					);
+
+					$chart->add_bar ($bar);
+					$start += $length;
+				}
+			}
+			else
+			{
+				$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
+
+				$bar = array (
+					"id" => $gt->id (),
+					"row" => $gt->id (),
+					"start" => $start,
+					"length" => $length,
+					"title" => $title,
+				);
+
+				$chart->add_bar ($bar);
+				$start += $length;
+			}
+		}
+		$this->job_end = $start;
+
+		$chart->configure_chart (array (
+			"chart_id" => "bt_gantt",
+			"style" => "aw",
+			"start" => $range_start,
+			"end" => $range_end,
+			"columns" => $columns,
+			"subdivisions" => $subdivisions,
+			"timespans" => $subdivisions,
+			"width" => 850,
+			"row_height" => 10,
+		));
+
+		### define columns
+		$i = 0;
+		$days = array ("P", "E", "T", "K", "N", "R", "L");
+
+		while ($i < $columns)
+		{
+			$day_start = (get_day_start() + ($i * 86400));
+			$day = date ("w", $day_start);
+			$date = date ("j/m/Y", $day_start);
+			$uri = aw_url_change_var ("mrp_chart_length", 1);
+			$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
+			$chart->define_column (array (
+				"col" => ($i + 1),
+				"title" => $days[$day] . " - " . $date,
+				"uri" => $uri,
+			));
+			$i++;
+		}
+
+		$arr["prop"]["value"] = $chart->draw_chart ();
+		
 	}
 }
 ?>
