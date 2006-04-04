@@ -2712,6 +2712,126 @@
             <caption>Pildiupload 20</caption>
       </property>
       <property>
+            <name>userim21</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 21</caption>
+      </property>
+      <property>
+            <name>userim22</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 22</caption>
+      </property>
+      <property>
+            <name>userim23</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 23</caption>
+      </property>
+      <property>
+            <name>userim24</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 24</caption>
+      </property>
+      <property>
+            <name>userim25</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 25</caption>
+      </property>
+      <property>
+            <name>userim26</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 26</caption>
+      </property>
+      <property>
+            <name>userim27</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 27</caption>
+      </property>
+      <property>
+            <name>userim28</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 28</caption>
+      </property>
+      <property>
+            <name>userim29</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 29</caption>
+      </property>
+      <property>
+            <name>userim30</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <caption>Pildiupload 30</caption>
+      </property>
+      <property>
             <name>userfile1</name>
             <group>texts</group>
             <table>objects</table>

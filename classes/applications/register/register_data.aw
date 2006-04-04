@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.35 2006/03/16 15:51:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.36 2006/04/04 11:27:11 markop Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -864,6 +864,36 @@
 
 @property userim20 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 20
+
+@property userim21 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 21
+
+@property userim22 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 22
+
+@property userim23 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 23
+
+@property userim24 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 24
+
+@property userim25 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 25
+
+@property userim26 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 26
+
+@property userim27 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 27
+
+@property userim28 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 28
+
+@property userim29 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 29
+
+@property userim30 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 30
 
 --------------- failiupload ------------
 
