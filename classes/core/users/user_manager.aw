@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.5 2006/03/08 15:15:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.6 2006/04/04 09:23:41 kristo Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
@@ -927,7 +927,6 @@ class user_manager extends class_base
 				$this->mk_my_orb("do_search", array(
 					"id" => $arr["obj_inst"]->id(),
 					"pn" => "table_groups",
-					"clid" => CL_MENU,
 					"append_html" => (str_replace(array("'","\n"),"",$html))
 				), 'popup_search')
 				."','Vali',550,500)";
