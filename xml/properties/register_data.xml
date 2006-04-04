@@ -2903,6 +2903,24 @@
             <use_form>emb</use_form>
             <caption>Failiupload 5</caption>
       </property>
+      <property>
+            <name>aliasmgr</name>
+            <group>
+                  <num_0>data</num_0>
+                  <num_1>classificators</num_1>
+                  <num_2>textboxes</num_2>
+                  <num_3>textareas</num_3>
+                  <num_4>texts</num_4>
+            </group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>aliasmgr</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <trans>1</trans>
+            <caption>Aliastehaldur</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_REGISTER_DATA</syslog_type>
             <relationmgr>yes</relationmgr>

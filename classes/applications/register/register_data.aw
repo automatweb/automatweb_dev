@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.38 2006/04/04 13:01:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.39 2006/04/04 14:00:26 markop Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1264,6 +1264,9 @@
 
 @reltype FILE5 value=90 clid=CL_FILE
 @caption fail5
+
+@property aliasmgr type=aliasmgr store=no editonly=1 group=data,classificators,textboxes,textareas,texts trans=1
+@caption Aliastehaldur
 
 */
 
