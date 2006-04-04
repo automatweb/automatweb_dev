@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.37 2006/04/03 09:12:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.38 2006/04/04 09:33:49 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -576,11 +576,16 @@ class crm_bill extends class_base
 
 		}
 
+		$bpct = $ord->prop("bill_penalty_pct");
+		if (!$bpct)
+		{
+			$bpct = $impl->prop("bill_penalty_pct");
+		}
 		$this->vars(array(
 			"orderer_name" => $ord->name(),
 			"orderer_code" => $cust_no,
 			"orderer_corpform" => $ord->prop("ettevotlusvorm.shortname"),
-			"ord_penalty_pct" => number_format($ord->prop("bill_penalty_pct"), 2),
+			"ord_penalty_pct" => number_format($bpct, 2),
 			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
@@ -685,7 +690,7 @@ class crm_bill extends class_base
 					"unit" => $grp_row["unit"],
 					"amt" => $grp_row["tot_amt"],
 					"price" => (int)($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),
-					"sum" => number_format($grp_row["tot_cur_sum"], 2),
+					"sum" => number_format($grp_row["tot_cur_sum"], 2, ".", " "),
 					"desc" => $desc,
 					"date" => "" 
 				));
@@ -731,8 +736,8 @@ class crm_bill extends class_base
 			$this->vars(array(
 				"unit" => $row["unit"],
 				"amt" => $row["amt"],
-				"price" => number_format($cur_pr, 2),
-				"sum" => number_format($cur_sum, 2),
+				"price" => number_format($cur_pr, 2, ".", " "),
+				"sum" => number_format($cur_sum, 2, ".",  " "),
 				"desc" => $row["name"],
 				"date" => $row["date"] > 100 ? date("d.m.Y", $row["date"]) : "" 
 			));
@@ -745,9 +750,9 @@ class crm_bill extends class_base
 
 		$this->vars(array(
 			"ROW" => $rs,
-			"total_wo_tax" => number_format($sum_wo_tax, 2),
-			"tax" => number_format($tax, 2),
-			"total" => number_format($sum, 2),
+			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
+			"tax" => number_format($tax, 2,".", " "),
+			"total" => number_format($sum, 2, ".", " "),
 			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc)
 		));
 
@@ -941,11 +946,17 @@ class crm_bill extends class_base
 
 		}
 
+		$bpct = $ord->prop("bill_penalty_pct");
+		if (!$bpct)
+		{
+			$bpct = $impl->prop("bill_penalty_pct");
+		}
+
 		$this->vars(array(
 			"orderer_name" => $ord->name(),
 			"orderer_corpform" => $ord->prop("ettevotlusvorm.shortname"),
 			"ord_currency_name" => $ord->prop_str("currency") == "" ? "EEK" : $ord->prop_str("currency"),
-			"ord_penalty_pct" => number_format($ord->prop("bill_penalty_pct"), 2),
+			"ord_penalty_pct" => number_format($bpct, 2),
 			"orderer_addr" => $ord_addr,
 			"orderer_kmk_nr" => $ord->prop("tax_nr"),
 			"bill_no" => $b->prop("bill_no"),
@@ -999,9 +1010,9 @@ class crm_bill extends class_base
 
 			$this->vars(array(
 				"unit" => $row["unit"],
-				"amt" => $row["amt"],
-				"price" => number_format($row["price"], 2),
-				"sum" => number_format($cur_sum, 2),
+				"amt" => number_format($row["amt"],2), 
+				"price" => number_format($row["price"], 2,".", " "),
+				"sum" => number_format($cur_sum, 2,"."),
 				"desc" => $row["name"],
 				"date" => $row["date"] > 1000 ? date("d.m.Y", $row["date"]) : "" 
 			));
@@ -1040,9 +1051,9 @@ class crm_bill extends class_base
 			}
 			$this->vars(array(
 				"unit" => $row["unit"],
-				"amt" => $row["amt"],
-				"price" => number_format($cur_pr, 2),
-				"sum" => number_format($cur_sum, 2),
+				"amt" => number_format($row["amt"],2),
+				"price" => number_format($cur_pr, 2,".", " "),
+				"sum" => number_format($cur_sum, 2, ".", " "),
 				"desc" => $row["name"],
 				"date" => $row["date"] > 100 ? date("d.m.Y", $row["date"]) : "" 
 			));
@@ -1055,11 +1066,11 @@ class crm_bill extends class_base
 
 		$this->vars(array(
 			"ROW" => $rs,
-			"total_wo_tax" => number_format($sum_wo_tax, 2),
-			"tax" => number_format($tax, 2),
-			"total" => number_format($sum, 2),
+			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
+			"tax" => number_format($tax, 2,"." , " "),
+			"total" => number_format($sum, 2,".", " "),
 			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc),
-			"tot_amt" => number_format($tot_amt, 2)
+			"tot_amt" => number_format($tot_amt, 2,".", " ")
 		));
 
 		$res =  $this->parse();
@@ -1454,7 +1465,7 @@ class crm_bill extends class_base
 			$t->define_data(array(
 				"name" => html::obj_change_url($task),
 				"hrs" => number_format($hrs, 2), 
-				"price" => number_format($price, 2),
+				"price" => number_format($price, 2,".", " "),
 				"oid" => $task->id()
 			));
 		}
