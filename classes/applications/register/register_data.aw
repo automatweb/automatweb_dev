@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.36 2006/04/04 11:27:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.37 2006/04/04 12:52:08 markop Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -819,80 +819,79 @@
 
 @property userim5 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 5
-
-@property userim6 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim6 type=releditor reltype=RELTYPE_IMAGE6 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 6
 
-@property userim7 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim7 type=releditor reltype=RELTYPE_IMAGE7 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 7
 
-@property userim8 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim8 type=releditor reltype=RELTYPE_IMAGE8 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 8
 
-@property userim9 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim9 type=releditor reltype=RELTYPE_IMAGE9 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 9
 
-@property userim10 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim10 type=releditor reltype=RELTYPE_IMAGE10 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 10
 
-@property userim11 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim11 type=releditor reltype=RELTYPE_IMAGE11 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 11
 
-@property userim12 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim12 type=releditor reltype=RELTYPE_IMAGE12 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 12
 
-@property userim13 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim13 type=releditor reltype=RELTYPE_IMAGE13 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 13
 
-@property userim14 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim14 type=releditor reltype=RELTYPE_IMAGE14 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 14
 
-@property userim15 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim15 type=releditor reltype=RELTYPE_IMAGE15 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 15
 
-@property userim16 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim16 type=releditor reltype=RELTYPE_IMAGE16 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 16
 
-@property userim17 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim17 type=releditor reltype=RELTYPE_IMAGE17 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 17
 
-@property userim19 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim18 type=releditor reltype=RELTYPE_IMAGE18 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 18
 
-@property userim19 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim19 type=releditor reltype=RELTYPE_IMAGE19 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 19
 
-@property userim20 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim20 type=releditor reltype=RELTYPE_IMAGE20 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 20
 
-@property userim21 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim21 type=releditor reltype=RELTYPE_IMAGE21 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 21
 
-@property userim22 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim22 type=releditor reltype=RELTYPE_IMAGE22 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 22
 
-@property userim23 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim23 type=releditor reltype=RELTYPE_IMAGE23 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 23
 
-@property userim24 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim24 type=releditor reltype=RELTYPE_IMAGE24 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 24
 
-@property userim25 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim25 type=releditor reltype=RELTYPE_IMAGE25 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 25
 
-@property userim26 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim26 type=releditor reltype=RELTYPE_IMAGE26 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 26
 
-@property userim27 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim27 type=releditor reltype=RELTYPE_IMAGE27 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 27
 
-@property userim28 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim28 type=releditor reltype=RELTYPE_IMAGE28 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 28
 
-@property userim29 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim29 type=releditor reltype=RELTYPE_IMAGE29 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 29
 
-@property userim30 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@property userim30 type=releditor reltype=RELTYPE_IMAGE30 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 30
 
 --------------- failiupload ------------
@@ -1168,6 +1167,84 @@
 
 @reltype IMAGE4 value=85 clid=CL_IMAGE
 @caption pilt4
+
+@reltype IMAGE5 value=85 clid=CL_IMAGE
+@caption pilt5
+
+@reltype IMAGE6 value=86 clid=CL_IMAGE
+@caption pilt6
+
+@reltype IMAGE7 value=87 clid=CL_IMAGE
+@caption pilt7
+
+@reltype IMAGE8 value=88 clid=CL_IMAGE
+@caption pilt8
+
+@reltype IMAGE9 value=89 clid=CL_IMAGE
+@caption pilt9
+
+@reltype IMAGE10 value=90 clid=CL_IMAGE
+@caption pilt10
+
+@reltype IMAGE11 value=91 clid=CL_IMAGE
+@caption pilt11
+
+@reltype IMAGE12 value=92 clid=CL_IMAGE
+@caption pilt12
+
+@reltype IMAGE13 value=93 clid=CL_IMAGE
+@caption pilt13
+
+@reltype IMAGE14 value=94 clid=CL_IMAGE
+@caption pilt14
+
+@reltype IMAGE15 value=95 clid=CL_IMAGE
+@caption pilt15
+
+@reltype IMAGE16 value=96 clid=CL_IMAGE
+@caption pilt16
+
+@reltype IMAGE17 value=97 clid=CL_IMAGE
+@caption pilt17
+
+@reltype IMAGE18 value=98 clid=CL_IMAGE
+@caption pilt18
+
+@reltype IMAGE19 value=99 clid=CL_IMAGE
+@caption pilt19
+
+@reltype IMAGE20 value=100 clid=CL_IMAGE
+@caption pilt20
+
+@reltype IMAGE21 value=101 clid=CL_IMAGE
+@caption pilt21
+
+@reltype IMAGE22 value=102 clid=CL_IMAGE
+@caption pilt22
+
+@reltype IMAGE23 value=103 clid=CL_IMAGE
+@caption pilt23
+
+@reltype IMAGE24 value=104 clid=CL_IMAGE
+@caption pilt24
+
+@reltype IMAGE25 value=105 clid=CL_IMAGE
+@caption pilt25
+
+@reltype IMAGE26 value=106 clid=CL_IMAGE
+@caption pilt26
+
+@reltype IMAGE27 value=107 clid=CL_IMAGE
+@caption pilt27
+
+@reltype IMAGE28 value=108 clid=CL_IMAGE
+@caption pilt28
+
+@reltype IMAGE29 value=109 clid=CL_IMAGE
+@caption pilt29
+
+@reltype IMAGE30 value=110 clid=CL_IMAGE
+@caption pilt30
 
 @reltype IMAGE5 value=85 clid=CL_IMAGE
 @caption pilt5
