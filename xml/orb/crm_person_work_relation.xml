@@ -3,4 +3,3 @@
 	<class name="crm_person_work_relation" folder="applications/crm" extends="class_base">
 	</class>
 </orb>
-		

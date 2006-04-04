@@ -1,6 +1,27 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="realestate_add" folder="applications/realestate_management" extends="class_base">
+		<action name="parse_alias" is_public="1" caption="Change">
+			<function name="parse_alias">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_divisions" nologin="1">
+			<function name="get_divisions">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="my_realestate_list" is_public="1" caption="Minu kinnisvaraobjektid">
+			<function name="my_realestate_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="subscribe" nologin="1">
 			<function name="subscribe">
 				<arguments>
@@ -9,11 +30,6 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="get_divisions" nologin="1">
-			<function name="get_divisions">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
+
 	</class>
 </orb>

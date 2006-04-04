@@ -4,7 +4,39 @@
 		<action name="editor">
 			<function name="editor">
 				<arguments>
-					<required name="clid" type="int" />
+					<required name="clid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_node" all_args="1">
+			<function name="get_node">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="lineeditor">
+			<function name="lineeditor">
+				<arguments>
+					<required name="clid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="releditor">
+			<function name="releditor">
+				<arguments>
+					<required name="reltype" />
+					<required name="clid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="classeditor">
+			<function name="classeditor">
+				<arguments>
+					<required name="clid" />
 				</arguments>
 			</function>
 		</action>
@@ -14,6 +46,44 @@
 				<arguments>
 					<required name="clid" type="int" />
 					<required name="grpid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="proptrans">
+			<function name="proptrans">
+				<arguments>
+					<required name="clid" />
+					<required name="propid" />
+					<required name="grpid" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="show_changes">
+			<function name="show_changes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="actual_commit">
+			<function name="actual_commit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="commit_changes">
+			<function name="commit_changes">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="apply_changes">
+			<function name="apply_changes">
+				<arguments>
 				</arguments>
 			</function>
 		</action>

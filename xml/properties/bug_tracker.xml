@@ -287,6 +287,33 @@
             <field>delete_saved</field>
             <caption>Kustuta</caption>
       </property>
+      <property>
+            <name>gantt_p</name>
+            <table>objects</table>
+            <group>charts</group>
+            <type>text</type>
+            <store>no</store>
+            <field>gantt_p</field>
+            <caption>Kelle buge n&amp;amp;auml;idata</caption>
+      </property>
+      <property>
+            <name>gantt</name>
+            <table>objects</table>
+            <group>charts</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>gantt</field>
+      </property>
+      <property>
+            <name>gantt_summary</name>
+            <table>objects</table>
+            <group>charts</group>
+            <type>text</type>
+            <store>no</store>
+            <field>gantt_summary</field>
+            <caption>Kokkuv&amp;amp;otilde;te</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -342,6 +369,10 @@
                   <caption>Arhiiv</caption>
                   <submit>no</submit>
             </archive>
+            <charts>
+                  <caption>Kaardid</caption>
+                  <submit>no</submit>
+            </charts>
       </groupinfo>
       <reltypes>
             <MONITOR>

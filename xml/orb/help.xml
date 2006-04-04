@@ -4,7 +4,7 @@
 		<action name="browser" default="1">
 			<function name="browser">
 				<arguments>
-					<required name="clid" type="int" />
+					<required name="clid" />
 				</arguments>
 			</function>
 		</action>
@@ -12,6 +12,14 @@
 		<action name="get_node" all_args="1">
 			<function name="get_node">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="classhelp">
+			<function name="classhelp">
+				<arguments>
+					<required name="clid" />
 				</arguments>
 			</function>
 		</action>
