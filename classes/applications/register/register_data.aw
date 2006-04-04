@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.37 2006/04/04 12:52:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.38 2006/04/04 13:01:58 markop Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -819,6 +819,7 @@
 
 @property userim5 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 5
+
 @property userim6 type=releditor reltype=RELTYPE_IMAGE6 rel_id=first use_form=emb field=meta method=serialize
 @caption Pildiupload 6
 
@@ -1165,7 +1166,7 @@
 @reltype IMAGE3 value=83 clid=CL_IMAGE
 @caption pilt3
 
-@reltype IMAGE4 value=85 clid=CL_IMAGE
+@reltype IMAGE4 value=84 clid=CL_IMAGE
 @caption pilt4
 
 @reltype IMAGE5 value=85 clid=CL_IMAGE
