@@ -550,19 +550,18 @@
             <type>releditor</type>
             <store>no</store>
             <mode>manager</mode>
-            <reltype>RELTYPE_EDUCATION</reltype>
+            <reltype>RELTYPE_ORG_RELATION</reltype>
             <props>
-                  <num_0>school</num_0>
-                  <num_1>date_from</num_1>
-                  <num_2>date_to</num_2>
-                  <num_3>additonal_info</num_3>
-                  <num_4>subject</num_4>
+                  <num_0>org</num_0>
+                  <num_1>profession</num_1>
+                  <num_2>start</num_2>
+                  <num_3>end</num_3>
             </props>
             <table_fields>
-                  <num_0>school</num_0>
-                  <num_1>subject</num_1>
-                  <num_2>date_from</num_2>
-                  <num_3>date_to</num_3>
+                  <num_0>org</num_0>
+                  <num_1>profession</num_1>
+                  <num_2>start</num_2>
+                  <num_3>end</num_3>
             </table_fields>
             <field>org_edit</field>
       </property>
@@ -573,19 +572,20 @@
             <type>releditor</type>
             <store>no</store>
             <mode>manager</mode>
-            <reltype>RELTYPE_EDUCATION</reltype>
+            <reltype>RELTYPE_RECOMMENDS</reltype>
             <props>
-                  <num_0>school</num_0>
-                  <num_1>date_from</num_1>
-                  <num_2>date_to</num_2>
-                  <num_3>additonal_info</num_3>
-                  <num_4>subject</num_4>
+                  <num_0>firstname</num_0>
+                  <num_1>lastname</num_1>
+                  <num_2>rank</num_2>
+                  <num_3>work_contact</num_3>
+                  <num_4>comment</num_4>
             </props>
             <table_fields>
-                  <num_0>school</num_0>
-                  <num_1>subject</num_1>
-                  <num_2>date_from</num_2>
-                  <num_3>date_to</num_3>
+                  <num_0>firstname</num_0>
+                  <num_1>lastname</num_1>
+                  <num_2>rank</num_2>
+                  <num_3>work_contact</num_3>
+                  <num_4>comment</num_4>
             </table_fields>
             <field>recommends_edit</field>
       </property>
@@ -1222,6 +1222,16 @@
                   <clid>CL_CRM_PHONE</clid>
                   <caption>Telefon</caption>
             </PHONE>
+            <ORG_RELATION>
+                  <value>16</value>
+                  <clid>CL_CRM_PERSON_WORK_RELATION</clid>
+                  <caption>Organisatoorne kuuluvus</caption>
+            </ORG_RELATION>
+            <RECOMMENDS>
+                  <value>17</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Soovitaja</caption>
+            </RECOMMENDS>
             <ORDER>
                   <value>20</value>
                   <clid>CL_SHOP_ORDER</clid>

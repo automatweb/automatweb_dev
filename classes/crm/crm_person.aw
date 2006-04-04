@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.120 2006/03/29 08:13:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.121 2006/04/04 11:44:25 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -212,13 +212,13 @@ caption Kodused kontaktandmed
 
 @groupinfo orgs caption="Organisatoorne kuuluvus" parent=cv submit=no
 
-@property org_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to group=orgs
+@property org_edit type=releditor store=no mode=manager reltype=RELTYPE_ORG_RELATION props=org,profession,start,end table_fields=org,profession,start,end group=orgs
 
 ------------------------------------------------------------------
 
 @groupinfo recommends caption="Soovitajad" parent=cv submit=no
 
-@property recommends_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to group=recommends
+@property recommends_edit type=releditor store=no mode=manager reltype=RELTYPE_RECOMMENDS props=firstname,lastname,rank,work_contact,comment table_fields=firstname,lastname,rank,work_contact,comment group=recommends
 
 ------------------------------------------------------------------
 
@@ -420,8 +420,6 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype PICTURE value=3 clid=CL_IMAGE
 @caption Pilt
 
-
-
 reltype BACKFORMS value=4 clid=CL_PILOT
 caption Tagasiside vorm
 
@@ -457,6 +455,12 @@ caption Profiil
 
 reltype USER_DATA value=15
 caption Andmed
+
+@reltype ORG_RELATION value=16 clid=CL_CRM_PERSON_WORK_RELATION
+@caption Organisatoorne kuuluvus
+
+@reltype RECOMMENDS value=17 clid=CL_CRM_PERSON
+@caption Soovitaja
 
 @reltype ORDER value=20 clid=CL_SHOP_ORDER
 @caption Tellimus
@@ -601,7 +605,7 @@ class crm_person extends class_base
 
 			case "picture":
 			case "picture2":
-				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+				if(!$arr["new"])
 				{
 					$this->_resize_img($arr);
 				}
@@ -784,7 +788,10 @@ class crm_person extends class_base
 				//through sections, relpicker obviously doesn't cover that
 				//maybe i made design flaw and should have done what i did
 				//a bit differently?
-				$company = $this->get_work_contacts($arr);
+				if($this->can("view", $arr["obj_inst"]->id()))
+				{
+					$company = $this->get_work_contacts($arr);
+				}
 				$data['options'] = $company;
 				$data['options'][0] = t('--vali--');
 				$data['options'] = array_reverse($data['options'], true);

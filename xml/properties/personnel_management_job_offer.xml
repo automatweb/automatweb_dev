@@ -80,6 +80,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>classificator</type>
+            <reltype>RELTYPE_FIELD</reltype>
+            <store>connect</store>
             <caption>Valdkond</caption>
       </property>
       <property>
@@ -209,6 +211,11 @@
                   </clid>
                   <caption>Asukoht</caption>
             </LOCATION>
+            <FIELD>
+                  <value>6</value>
+                  <clid>CL_META</clid>
+                  <caption>Valdkond</caption>
+            </FIELD>
       </reltypes>
 </properties>
 

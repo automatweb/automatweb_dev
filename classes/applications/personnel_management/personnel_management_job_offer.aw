@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.11 2006/03/28 11:52:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.12 2006/04/04 11:44:26 ahti Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 
@@ -37,7 +37,7 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 @property profession type=relpicker reltype=RELTYPE_PROFESSION
 @caption Ametikoht
 
-@property field type=classificator
+@property field type=classificator reltype=RELTYPE_FIELD store=connect
 @caption Valdkond
 
 @property location type=relpicker reltype=RELTYPE_LOCATION
@@ -79,6 +79,9 @@ tableinfo personnel_management_job index=oid master_table=objects master_index=o
 
 @reltype LOCATION value=5 clid=CL_CRM_COUNTY,CL_CRM_COUNTRY,CL_CRM_CITY
 @caption Asukoht
+
+@reltype FIELD value=6 clid=CL_META
+@caption Valdkond
 
 */
 

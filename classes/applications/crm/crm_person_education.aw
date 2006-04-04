@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.3 2006/03/28 11:56:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.4 2006/04/04 11:44:26 ahti Exp $
 // crm_person_education.aw - Haridus 
 /*
 
@@ -14,7 +14,7 @@
 @default field=meta
 @default method=serialize
 
-@property field type=classificator
+@property field type=classificator reltype=RELTYPE_FIELD store=connect
 @caption Valdkond
 
 @property speciality type=textbox
@@ -27,6 +27,9 @@
 
 @property end type=date_select format=month,year parent=time
 @caption Lõpp
+
+@reltype FIELD value=1 clid=CL_META
+@caption Valdkond
 
 */
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.83 2006/03/22 12:28:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.84 2006/04/04 11:44:25 ahti Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -621,9 +621,9 @@ class releditor extends core
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
 					}
-					if ($_pd["type"] == "relpicker" && is_oid($prop["value"]))
+					if (($_pd["type"] == "relpicker" || $_pd["type"] == "classificator") && $this->can("view", $prop["value"]))
 					{
-						$_tmp = new object($prop["value"]);
+						$_tmp = obj($prop["value"]);
 						$prop["value"] = $_tmp->name();
 					}
 					else

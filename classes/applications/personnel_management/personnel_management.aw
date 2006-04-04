@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.13 2006/03/28 11:52:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.14 2006/04/04 11:44:26 ahti Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -228,127 +228,40 @@ class personnel_management extends class_base
 
 	function offers_tree($arr)
 	{
-		$fld = $this->offers_fld;
-		if($this->can("view", $arr["request"]["offer_fld"]))
-		{
-			$fld = $arr["request"]["offer_fld"];
-		}
-		classload("core/icons");
-		$this->tree = get_instance("vcl/treeview");
-		$this->active_group = $arr["request"]["group"];
-		$this->tree_root_name = "Bug-Tracker";
-
-		$this->tree->start_tree(array(
-			"type" => TREE_DHTML,
-			//"has_root" => 1,
-			"tree_id" => "offers_tree",
-			"persist_state" => 1,
-			//"root_name" => t("Tööpakkumised"),
-			"root_url" => aw_url_change_var("b_id", null),
-			"get_branch_func" => $this->mk_my_orb("get_offers_node", array(
-				"inst_id" => $this->self_id,
-				"active_group" => $this->active_group,
-				"b_id" => $arr["request"]["b_id"],
-				"p_fld_id" => $arr["request"]["p_fld_id"],
-				"p_cls_id" => $arr["request"]["p_cls_id"],
-				"p_cust_id" => $arr["request"]["p_cust_id"],
-				"parent" => " ",
-			)),
-		));
-		$this->generate_offers_tree(array(
-			"parent" => $fld,
-		));
-		$arr["prop"]["value"] = $this->tree->finalize_tree();
-		$arr["prop"]["type"] = "text";
-	}
-
-	function generate_offers_tree($arr)
-	{
-		$ol = new object_list(array(
-			"parent" => $arr["parent"],
+		$t = &$arr["prop"]["vcl_inst"];
+		$objs = new object_tree(array(
+			"parent" => $this->offers_fld,
 			"class_id" => CL_MENU,
+			"sort_by" => "objects.name",
 		));
-		$objects = $ol->arr();
-
-		$nm = t("Tööpakkumised")."(".$ol->count().")";
-		if (!$_GET["b_id"])
-		{
-			$nm = "<b>".$nm."</b>";
-		}
-		$this->tree->add_item(0,array(
-				"id" => $this->offers_fld,
-				"name" => $nm,
-				"url" => aw_url_change_var("b_id", null)
+		$obj = obj($this->offers_fld);
+		$childs = new object_list(array(
+			"parent" => $this->offers_fld,
+			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
 		));
-		
-		foreach($objects as $obj_id => $object)
+		$cnt = $childs->count();
+		$str = $cnt > 0 ? " ($cnt)" : "";
+		$obx = $objs->to_list();
+		$t->add_item(0, array(
+			"id" => $this->offers_fld,
+			"name" => $obj->name().$str,
+			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "fld_id" => $this->offers_fld)),
+		));
+		foreach($obx->arr() as $ob)
 		{
-			$nm = $object->name();
-			if ($_GET["b_id"] == $obj_id)
-			{
-				$nm = "<b>".$nm."</b>";
-			}
-			$this->tree->add_item($arr["parent"] , array(
-				"id" => $obj_id,
-				"name" => $nm,
+			$id = $ob->id();
+			$childs = new object_list(array(
+				"parent" => $id,
+				"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+			));
+			$cnt = $childs->count();
+			$str = $cnt > 0 ? " ($cnt)" : "";
+			$t->add_item($ob->parent(), array(
+				"id" => $id,
+				"name" => $ob->name().$str,
+				"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "fld_id" => $id)),
 			));
 		}
-	}
-
-	/**
-		@attrib name=get_offers_node all_args=1
-	**/
-	function get_offers_node($arr)
-	{
-		classload("core/icons");
-		$node_tree = get_instance("vcl/treeview");
-		$node_tree->start_tree (array (
-			"type" => TREE_DHTML,
-			"tree_id" => "offers_tree",
-			"branch" => 1,
-		));
-
-		$ol = new object_list(array(
-			"parent" => $arr["parent"],
-			"class_id" => CL_MENU,
-		));
-
-		$objects = $ol->arr();
-		foreach($objects as $obj_id => $object)
-		{
-			$ol = new object_list(array(
-				"parent" => $obj_id,
-				"class_id" => CL_MENU,
-			));
-			$ol_list = $ol->arr();
-			$subtree_count = (count($ol_list) > 0)?" (".count($ol_list).")":"";
-
-			$nm = $object->name();
-			if (false && $_GET["b_id"] == $obj_id)
-			{
-				$nm = "<b>".$nm."</b>";
-			}
-
-			$node_tree->add_item(0 ,array(
-				"id" => $obj_id,
-				"name" => $nm,
-				"iconurl" => icons::get_icon_url($object->class_id()),
-				"url" => html::get_change_url($arr["inst_id"], array(
-					"group" => $arr["active_group"],
-					"b_id" => $obj_id,
-				)),
-			));
-
-			foreach($ol_list as $sub_id => $sub_obj)
-			{
-				$node_tree->add_item( $obj_id, array(
-					"id" => $sub_id,
-					"name" => $sub_obj->name()." (".html::get_change_url($sub_id, array("return_url" => get_ru()), t("<span style='font-size: 8px;'>Muuda</span>")).")",
-				));
-			}
-		}
-
-		die($node_tree->finalize_tree());
 	}
 
 	function employee_list_toolbar($arr)
@@ -481,15 +394,11 @@ class personnel_management extends class_base
 		$toopakkujad_ids = array();
 		$toopakkujad = array();
 
-		$fld = $this->offers_fld;
-		if($this->can("view", $arr["request"]["offer_fld"]))
-		{
-			$fld = $arr["request"]["offer_fld"];
-		}
+		$fld_id = $this->can("view", $arr["request"]["fld_id"]) ? $arr["request"]["fld_id"] : $this->offers_fld; 
 
 		$objs = new object_list(array(
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
-			"parent" => $fld,
+			"parent" => $fld_id,
 		));
         foreach ($objs->arr() as $obj)
 		{
