@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.41 2006/04/04 04:59:36 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.41 2006/04/04 04:59:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.42 2006/04/05 09:19:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.42 2006/04/05 09:19:47 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -40,7 +40,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@property s_name type=textbox store=no
 	@caption Lühikirjeldus
 
-	@property s_bug_status type=select store=no
+	@property s_bug_status type=select store=no multiple=1
 	@caption Staatus
 
 	@property s_bug_priority type=select store=no
@@ -368,6 +368,7 @@ class bug_tracker extends class_base
 					cnt++;
 				}
 			}
+
 			if (cnt > 0)
 			{
 				aw_get_url_contents(url);
@@ -387,7 +388,7 @@ class bug_tracker extends class_base
 			"name" => "cut",
 			"tooltip" => t("L&otilde;ika"),
 			"img" => "cut.gif",
-			"onClick" => $cut_js,
+//			"onClick" => $cut_js,
 			"action" => "cut_b",
 		));
 
@@ -395,15 +396,18 @@ class bug_tracker extends class_base
 		if (is_array($_SESSION["bt"]["cut_bugs"]) && count($_SESSION["bt"]["cut_bugs"]))
 		{
 			$vis = "visible;";
+			$tb->add_button(array(
+				"name" => "paste",
+				"tooltip" => t("Kleebi"),
+				"img" => "paste.gif",
+				"action" => "paste_b",
+//			"surround_start" => "<span id='paste_button' style='visibility: $vis;'>",
+//			"surround_end" => "</span>"
+			));
 		}
-		$tb->add_button(array(
-			"name" => "paste",
-			"tooltip" => t("Kleebi"),
-			"img" => "paste.gif",
-			"action" => "paste_b",
-			"surround_start" => "<span id='paste_button' style='visibility: $vis;'>",
-			"surround_end" => "</span>"
-		));
+		if ($vis == "visible")
+		{
+		}
 
 		$tb->add_separator();
 
@@ -675,7 +679,12 @@ class bug_tracker extends class_base
 			"branch" => 1,
 		));
 
-		$ol = new object_list(array("parent" => $arr["parent"], "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),));
+		$ol = new object_list(array(
+			"parent" => $arr["parent"], 
+			"class_id" => array(CL_BUG, CL_MENU), 
+			"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
+			"sort_by" => "objects.name"
+		));
 
 		$arr["set_retu"] = aw_url_change_var("b_id", $arr["parent"], $arr["set_retu"]);
 
@@ -1148,11 +1157,11 @@ class bug_tracker extends class_base
 			"caption" => t("Kellele"),
 			"sortable" => 1,
 		));
-		/*$t->define_field(array(
+		$t->define_field(array(
 			"name" => "sort_priority",
 			"caption" => t("SP"),
 			"sortable" => 1,
-		));*/
+		));
 
 		$t->define_field(array(
 			"name" => "bug_priority",
@@ -1598,7 +1607,6 @@ class bug_tracker extends class_base
 				)
 			));
 		}
-echo dbg::dump($res);
 		return $res;
 	}
 
@@ -1822,7 +1830,7 @@ echo dbg::dump($res);
 		// get all goals/tasks
 		$ot = new object_tree(array(
 			"class_id" => CL_BUG,
-			"bug_status" => BUG_OPEN,
+			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS),
 			"CL_BUG.who.name" => $p->name(),
 			"lang_id" => array(),
 			"site_id" => array()
@@ -1881,6 +1889,14 @@ echo dbg::dump($res);
 			{
 				$start = mktime(9, 0, 0, date("m", $start), date("d", $start)+1, date("Y", $start));
 			}
+			if (date("w", $start) == 0) // sunday
+			{
+				$start += 24*3600;
+			}
+			if (date("w", $start) == 6) // saturday
+			{
+				$start += 24*3600*2;
+			}
 			$length = max($gt->prop("num_hrs_guess") * 3600, 7200);
 			$this->job_hrs += $length;
 			if (date("H", $start+$length) > 17 || ($length > (3600 * 7)))
@@ -1908,6 +1924,14 @@ echo dbg::dump($res);
 					$length = min($remaining_len, 8*3600);
 					$remaining_len -= $length;
 					$start = mktime(9, 0, 0, date("m", $start), date("d", $start)+1, date("Y", $start));
+					if (date("w", $start) == 0) // sunday
+					{
+						$start += 24*3600;
+					}
+					if (date("w", $start) == 6) // saturday
+					{
+						$start += 24*3600*2;
+					}
 					$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
 
 					$bar = array (

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.27 2006/04/03 11:05:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.28 2006/04/05 09:19:47 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -180,7 +180,7 @@ class bug extends class_base
 				"monitors" => $props["monitors"],
 				"project" => $props["project"],
 				"customer" => $props["customer"],
-				"deadline" => $props["deadline"],
+//				"deadline" => $props["deadline"],
 			);
 		}
 	}
@@ -196,7 +196,7 @@ class bug extends class_base
 		switch($prop["name"])
 		{
 			case "name":
-				$prop["post_append_text"] = " #".$arr["obj_inst"]->id();
+				$prop["post_append_text"] = " #".$arr["obj_inst"]->id()." ".sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"));
 				break;
 
 			case "bug_content":
@@ -386,6 +386,14 @@ class bug extends class_base
 				}
 				break;
 
+			case "num_hrs_real":
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
+				{
+					$com = sprintf(t("Tegelik tundide arv muudeti %s => %s"), $old, $prop["value"]);
+					$this->add_comments[] = $com;
+				}
+				break;
+
 			case "who":
 				$nv = "";
 				if ($this->can("view", $prop["value"]))
@@ -522,12 +530,17 @@ class bug extends class_base
 			// has deadline = +1
 			$rv++;
 		}
-		
+
+
+		$rv += (double)1.0/((double)10000.0 - (double)$bug->id());		
+
 		return $rv;
 	}
 
 	function handle_stopper_stop($bug, $inf)
 	{
+		$inf["desc"] .= sprintf(t("\nTegelik tundide arv muudeti %s => %s"), $bug->prop("num_hrs_real"), $bug->prop("num_hrs_real")+$inf["hours"]);
+
 		$bug->set_prop("num_hrs_real", $bug->prop("num_hrs_real") + $inf["hours"]);
 		$bug->save();
 
@@ -648,6 +661,7 @@ class bug extends class_base
 		@param bugno required type=int 
 		@param msg optional
 		@param set_fixed optional
+		@param time_add optional
 	**/
 	function handle_commit($arr)
 	{
@@ -658,8 +672,33 @@ class bug extends class_base
 		{
 			$msg .= "\nStaatus muudeti ".$this->bug_statuses[$bug->prop("bug_status")]." => ".$this->bug_statuses[BUG_DONE]."\n";
 			$bug->set_prop("bug_status", BUG_DONE);
+			$save = true;
+		}
+
+		if ($arr["time_add"])
+		{
+			$ta = $arr["time_add"];
+			// parse time
+			$hrs = 0;
+			if ($ta[strlen($ta)-1] == "m")
+			{
+				$hrs = ((double)$ta) / 60.0;
+			}
+			else
+			{
+				$hrs = (double)$ta;
+			}
+			// round to 0.25
+			$hrs = floor($hrs * 4.0+0.5)/4.0;
+			$msg .= sprintf(t("\nTegelik tundide arv muudeti %s => %s"), $bug->prop("num_hrs_real"), $bug->prop("num_hrs_real")+$hrs);
+			$bug->set_prop("num_hrs_real", $bug->prop("num_hrs_real") + $hrs);
+			$save = true;
+		}
+		if ($save)
+		{
 			$bug->save();
 		}
+
 		$this->_add_comment($bug, $msg);
 		aw_restore_acl();
 		die(sprintf(t("Added comment to bug %s"), $arr[bugno]));
