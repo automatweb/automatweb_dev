@@ -1,5 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="crm_person_language" folder="crm" extends="class_base">
+	<class name="crm_person_language" folder="applications/crm" extends="class_base">
 	</class>
 </orb>
