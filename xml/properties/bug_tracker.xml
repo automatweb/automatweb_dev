@@ -106,6 +106,7 @@
             <group>search</group>
             <type>select</type>
             <store>no</store>
+            <multiple>1</multiple>
             <field>s_bug_status</field>
             <caption>Staatus</caption>
       </property>

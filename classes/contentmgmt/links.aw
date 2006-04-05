@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.13 2006/03/06 11:34:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.14 2006/04/05 11:09:28 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -79,7 +79,13 @@
 	@property transl type=callback callback=callback_get_transl
 	@caption T&otilde;lgi
 
+@default group=kws
+
+	@property kws type=keyword_selector store=no
+	@caption V&otilde;tmes&otilde;nad
+
 @groupinfo transl caption=T&otilde;lgi
+@groupinfo kws caption=V&otilde;tmes&otilde;nad
 
 
 */

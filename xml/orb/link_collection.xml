@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="link_collection" folder="contentmgmt" extends="class_base">
+	</class>
+</orb>
+		

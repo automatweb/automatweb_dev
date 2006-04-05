@@ -204,6 +204,14 @@
             <field>transl</field>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
+      <property>
+            <name>kws</name>
+            <group>kws</group>
+            <type>keyword_selector</type>
+            <store>no</store>
+            <field>kws</field>
+            <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
+      </property>
       <classinfo>
             <no_status>1</no_status>
             <syslog_type>ST_LINKS</syslog_type>
@@ -219,6 +227,9 @@
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
+            <kws>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad</caption>
+            </kws>
       </groupinfo>
       <tableinfo>
             <extlinks>
