@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.38 2006/04/04 09:33:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.39 2006/04/05 13:01:26 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1211,7 +1211,7 @@ class crm_bill extends class_base
 			$o->set_prop("amt", $row["amt"]);
 			$o->set_prop("sum", $row["sum"]);
 			$o->set_prop("prod", $row["prod"]);
-			$o->set_prop("has_tax", $row["has_tax"]);
+			$o->set_prop("has_tax", (int)$row["has_tax"]);
 			$o->save();
 
 			if ($new)
