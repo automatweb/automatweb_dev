@@ -69,6 +69,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 	@property require_change_pass type=checkbox ch_value=1 field=meta table=objects method=serialize
 	@caption N&otilde;ua parooli vahetust esimesel logimisel
 
+	@property for_not_logged_on_users type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Sisselogimata kasutajatele
+
 	@property default_acl type=callback callback=callback_get_default_acl store=no rel=1
 	@caption Default ACL
 

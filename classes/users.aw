@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.154 2005/12/09 09:57:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.155 2006/04/05 12:39:22 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1071,10 +1071,33 @@ class users extends users_user
 				$gd = $_SESSION["non_logged_in_users_group"]["gd"];
 			}
 
+			if ($this->can("view", $_GET["set_group"]))
+			{
+				// fetch thegroup and check if non logged users can switch to it
+				$setg_o = obj($_GET["set_group"]);
+				if ($setg_o->prop("for_not_logged_on_users") == 1)
+				{
+					$_SESSION["nliug"] = $_GET["set_group"];
+				}
+			}
+			if ($_GET["clear_group"] == 1)
+			{
+				unset($_SESSION["nliug"]);
+			}
+
 			$gidlist = array($nlg => $nlg);
 			$gidlist_pri = array($nlg => $gd["priority"]);
 			$gidlist_oid = array($gd["oid"] => $gd["oid"]);
 			$gidlist_pri_oid[(int)$gd["oid"]] = (int)$gd["priority"];
+			if ($_SESSION["nliug"])
+			{
+				// get gid for oid
+				$nliug_o = obj($_SESSION["nliug"]);
+				$gidlist[$nliug_o->prop("gid")] = $nliug_o->prop("gid");
+				$gidlist_pri[$nliug_o->prop("gid")] = $nliug_o->prop("priority");
+				$gidlist_oid[$nliug_o->id()] = $nliug_o->id();
+				$gidlist_pri_oid[(int)$nliug_o->id()] = (int)$nliug_o->prop("priority");
+			}
 
 			aw_global_set("gidlist", $gidlist);
 			aw_global_set("gidlist_pri", $gidlist_pri);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.31 2006/01/26 09:56:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.32 2006/04/05 12:39:22 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -148,6 +148,10 @@ class site_cache extends aw_template
 
 		$cp[] = aw_global_get("act_per_id");
 		$cp[] = aw_global_get("lang_id");
+		if ($_SESSION["nliug"])
+		{
+			$cp[] = $_SESSION["nliug"];
+		}
 		if (is_array($_SESSION["menu_context"]))
 		{
 			$cp[] = join(",", $_SESSION["menu_context"]);

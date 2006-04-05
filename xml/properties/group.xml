@@ -109,6 +109,16 @@
             <caption>N&amp;amp;otilde;ua parooli vahetust esimesel logimisel</caption>
       </property>
       <property>
+            <name>for_not_logged_on_users</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Sisselogimata kasutajatele</caption>
+      </property>
+      <property>
             <name>default_acl</name>
             <table>groups</table>
             <group>general</group>
