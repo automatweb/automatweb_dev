@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.6 2005/10/20 09:27:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.7 2006/04/05 13:02:56 ahti Exp $
 // mail_rule.aw - Maili ruul 
 /*
 @classinfo syslog_type=ST_MAIL_RULE relationmgr=yes
@@ -63,11 +63,12 @@ class mail_rule extends class_base
 			case "target_folder":
 				$tmp = array();
 				$folders = array();
-				$msgr_id = $this->get_owner(array(
-					"obj_inst" => $arr["obj_inst"],
-				));
-
-
+				if(!$arr["new"])
+				{
+					$msgr_id = $this->get_owner(array(
+						"obj_inst" => $arr["obj_inst"],
+					));
+				}
 				if (!empty($msgr_id))
 				{
 					$msgr_obj = new object($msgr_id);
