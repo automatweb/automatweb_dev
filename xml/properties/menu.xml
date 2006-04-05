@@ -496,6 +496,16 @@
             <caption>Kasuta alammen&amp;amp;uuml;&amp;amp;uuml;de n&amp;amp;auml;itamiseks objektide nimekirja</caption>
       </property>
       <property>
+            <name>use_target_audience</name>
+            <table>objects</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>menus_sub</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasuta sihtr&amp;amp;uuml;hmap&amp;amp;otilde;hist kuvamist</caption>
+      </property>
+      <property>
             <name>has_ctx</name>
             <table>objects</table>
             <type>checkbox</type>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.114 2006/03/31 12:45:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.115 2006/04/05 12:13:56 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -12,216 +12,225 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @default table=documents
 @default group=general
 
-@property navtoolbar type=toolbar no_caption=1 store=no trans=1
-@caption Toolbar
+	@property navtoolbar type=toolbar no_caption=1 store=no trans=1
+	@caption Toolbar
 
-@property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize trans=1
-@caption Pluginad
+	@property plugins type=callback callback=callback_get_doc_plugins table=objects field=meta method=serialize trans=1
+	@caption Pluginad
 
-@property title type=textbox size=60 trans=1
-@caption Pealkiri
+	@property title type=textbox size=60 trans=1
+	@caption Pealkiri
 
-@property subtitle type=textbox size=60 trans=1
-@caption Alapealkiri
+	@property subtitle type=textbox size=60 trans=1
+	@caption Alapealkiri
 
-@property alias type=textbox size=60 table=objects field=alias
-@caption Alias
+	@property alias type=textbox size=60 table=objects field=alias
+	@caption Alias
 
-@property author type=textbox size=60 trans=1
-@caption Autor
+	@property author type=textbox size=60 trans=1
+	@caption Autor
 
-@property photos type=textbox size=60 trans=1
-@caption Fotode autor
+	@property photos type=textbox size=60 trans=1
+	@caption Fotode autor
 
-@property keywords type=textbox size=60 trans=1
-@caption V&otilde;tmes&otilde;nad
+	@property keywords type=textbox size=60 trans=1
+	@caption V&otilde;tmes&otilde;nad
 
-@property names type=textbox size=60 trans=1
-@caption Nimed
+	@property names type=textbox size=60 trans=1
+	@caption Nimed
 
-@property lead type=textarea richtext=1 cols=60 rows=10 trans=1
-@caption Lead
+	@property lead type=textarea richtext=1 cols=60 rows=10 trans=1
+	@caption Lead
 
-@property content type=textarea richtext=1 cols=60 rows=30 trans=1
-@caption Sisu
+	@property content type=textarea richtext=1 cols=60 rows=30 trans=1
+	@caption Sisu
 
-@property moreinfo type=textarea richtext=1 cols=60 rows=5 trans=1
-@caption Lisainfo
+	@property moreinfo type=textarea richtext=1 cols=60 rows=5 trans=1
+	@caption Lisainfo
 
-@property link_text type=textbox size=60 trans=1
-@caption URL
+	@property link_text type=textbox size=60 trans=1
+	@caption URL
 
-@property is_forum type=checkbox ch_value=1 trans=1
-@caption Foorum
+	@property is_forum type=checkbox ch_value=1 trans=1
+	@caption Foorum
 
-@property showlead type=checkbox ch_value=1 default=1 trans=1
-@caption N&auml;ita leadi
+	@property showlead type=checkbox ch_value=1 default=1 trans=1
+	@caption N&auml;ita leadi
 
-@property show_modified type=checkbox ch_value=1 trans=1 default=1
-@caption N&auml;ita muutmise kuup&auml;eva
+	@property show_modified type=checkbox ch_value=1 trans=1 default=1
+	@caption N&auml;ita muutmise kuup&auml;eva
 
-@property doc_modified type=hidden table=documents field=modified trans=1
-@caption Dok. modified
+	@property doc_modified type=hidden table=documents field=modified trans=1
+	@caption Dok. modified
 
-//---------------
-@property no_right_pane type=checkbox ch_value=1 group=settings trans=1
-@caption Ilma parema paanita
+	@property clear_styles type=checkbox ch_value=1 store=no trans=1
+	@caption T&uuml;hista stiilid
 
-@property no_left_pane type=checkbox ch_value=1 group=settings trans=1
-@caption Ilma vasaku paanita
+	@property link_keywords type=checkbox ch_value=1 store=no trans=1
+	@caption Lingi v&otilde;tmes&otilde;nad
 
-@property title_clickable type=checkbox ch_value=1 group=settings trans=1 default=1
-@caption Pealkiri klikitav
+	@property link_keywords2 type=checkbox ch_value=1 field=meta method=serialize table=objects default=1
+	@caption V&otilde;tmes&otilde;nad lingina
 
-@property clear_styles type=checkbox ch_value=1 store=no trans=1
-@caption T&uuml;hista stiilid
+	@property frontpage_left type=checkbox ch_value=1 trans=1
+	@caption Esilehel tulbas
 
-@property link_keywords type=checkbox ch_value=1 store=no trans=1
-@caption Lingi v&otilde;tmes&otilde;nad
+	@property dcache type=checkbox store=no trans=1
+	@caption Cache otsingu jaoks
 
-@property link_keywords2 type=checkbox ch_value=1 field=meta method=serialize table=objects default=1
-@caption V&otilde;tmes&otilde;nad lingina
+	@property dcache_content type=hidden field=dcache 
+	@property rating type=hidden 
+	@property num_ratings type=hidden 
 
-@property esilehel type=checkbox ch_value=1 group=settings trans=1
-@caption Esilehel
+	@property show_title type=checkbox ch_value=1 default=1 trans=1
+	@caption N&auml;ita pealkirja
 
-@property frontpage_left type=checkbox ch_value=1 trans=1
-@caption Esilehel tulbas
+	@property no_search type=checkbox ch_value=1 trans=1
+	@caption J&auml;ta otsingust v&auml;lja
 
-@property dcache type=checkbox store=no trans=1
-@caption Cache otsingu jaoks
+	@property cite type=textarea cols=60 rows=10 trans=1
+	@caption Tsitaat
 
-@property dcache_save type=checkbox ch_value=1 group=settings table=objects field=meta method=serialize trans=1
-@caption Cache otsingu jaoks (salvestub)
+	@property tm type=textbox size=20 trans=1
+	@caption Kuup&auml;ev
 
-@property dcache_content type=hidden field=dcache 
-@property rating type=hidden 
-@property num_ratings type=hidden 
+	@property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1 trans=1
+	@caption 'Prindi' nupp
 
+	@property createdby table=objects field=createdby type=text trans=1
+	@caption Kes tegi
 
-@property show_title type=checkbox ch_value=1 default=1 trans=1
-@caption N&auml;ita pealkirja
+	@property user1 table=documents type=textbox size=60 trans=1
+	@caption Kasutaja defineeritud 1
 
-@property no_search type=checkbox ch_value=1 trans=1
-@caption J&auml;ta otsingust v&auml;lja
+	@property user2 table=documents type=textarea rows=2 cols=60 trans=1
+	@caption Kasutaja defineeritud 2
 
-@property cite type=textarea cols=60 rows=10 trans=1
-@caption Tsitaat
+	@property user3 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 3
 
-@property tm type=textbox size=20 trans=1
-@caption Kuup&auml;ev
+	@property user4 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 4
 
-@property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1 trans=1
-@caption 'Prindi' nupp
+	@property user5 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 5
 
-@property sections type=select multiple=1 size=20 group=vennastamine store=no trans=1
-@caption Sektsioonid
+	@property user6 table=documents type=textbox trans=1
+	@caption Kasutaja defineeritud 6
 
-@property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
-@caption Aliastehaldur
+	@property userta2 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@caption Kasutaja defineeritud textarea 2
 
-@property start type=date_select table=planner group=calendar trans=1
-@caption Algab (kp)
+	@property userta3 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@caption Kasutaja defineeritud textarea 3
 
-@property start1 type=datetime_select field=start table=planner group=calendar trans=1
-@caption Algab 
+	@property userta4 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@caption Kasutaja defineeritud textarea 4
 
-@property createdby table=objects field=createdby group=general type=text trans=1
-@caption Kes tegi
+	@property userta5 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@caption Kasutaja defineeritud textarea 5
 
-@property user1 table=documents group=general type=textbox size=60 trans=1
-@caption Kasutaja defineeritud 1
+	@property userta6 table=objects field=meta method=serialize type=textarea rows=10 cols=60 trans=1
+	@caption Kasutaja defineeritud textarea 6
 
-@property user2 table=documents group=general type=textarea rows=2 cols=60 trans=1
-@caption Kasutaja defineeritud 2
+	@property ucheck1 type=checkbox ch_value=1 table=objects field=meta method=serialize 
+	@caption Kasutaja defineeritud checkbox 1
 
-@property user3 table=documents group=general type=textbox trans=1
-@caption Kasutaja defineeritud 3
+	@property ucheck2 type=checkbox ch_value=1 table=documents field=ucheck2 
+	@caption Kasutaja defineeritud checkbox 2
 
-@property user4 table=documents group=general type=textbox trans=1
-@caption Kasutaja defineeritud 4
+	@property ucheck3 type=checkbox ch_value=1 table=documents field=ucheck3 
+	@caption Kasutaja defineeritud checkbox 3
 
-@property user5 table=documents group=general type=textbox trans=1
-@caption Kasutaja defineeritud 5
+	@property ucheck4 type=checkbox ch_value=1 table=documents field=ucheck4 
+	@caption Kasutaja defineeritud checkbox 4
 
-@property user6 table=documents group=general type=textbox trans=1
-@caption Kasutaja defineeritud 6
+	@property ucheck5 type=checkbox ch_value=1 table=documents field=ucheck5 
+	@caption Kasutaja defineeritud checkbox 5
+	
+	@property ucheck6 type=checkbox ch_value=1 table=documents field=ucheck6 
+	@caption Kasutaja defineeritud checkbox 6
 
-@property userta2 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
-@caption Kasutaja defineeritud textarea 2
+	@property uservar1 type=classificator field=aw_varuser1 reltype=RELTYPE_VARUSER1 store=connect
+	@caption User-defined var 1
 
-@property userta3 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
-@caption Kasutaja defineeritud textarea 3
+	@property uservar2 type=classificator field=aw_varuser2 reltype=RELTYPE_VARUSER2 store=connect
+	@caption User-defined var 2
 
-@property userta4 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
-@caption Kasutaja defineeritud textarea 4
+	@property uservar3 type=classificator field=aw_varuser3 reltype=RELTYPE_VARUSER3 store=connect
+	@caption User-defined var 3
 
-@property userta5 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
-@caption Kasutaja defineeritud textarea 5
+	@property language type=text type=text store=no trans=1
+	@caption Keel
 
-@property userta6 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
-@caption Kasutaja defineeritud textarea 6
+	@property calendar_relation type=select field=meta method=serialize table=objects trans=1
+	@caption P&otilde;hikalender
 
-@property ucheck1 type=checkbox ch_value=1 table=objects field=meta method=serialize group=general
-@caption Kasutaja defineeritud checkbox 1
+	@property gen_static type=checkbox store=no trans=1
+	@caption Genereeri staatiline
 
-@property ucheck2 type=checkbox ch_value=1 table=documents field=ucheck2 group=general
-@caption Kasutaja defineeritud checkbox 2
+	@property sbt type=submit value=Salvesta store=no trans=1
 
-@property ucheck3 type=checkbox ch_value=1 table=documents field=ucheck3 group=general
-@caption Kasutaja defineeritud checkbox 3
+	@property cb_part type=hidden value=1 group=general,settings store=no
+	@caption cb_part
 
-@property ucheck4 type=checkbox ch_value=1 table=documents field=ucheck4 group=general
-@caption Kasutaja defineeritud checkbox 4
+	@property nobreaks type=hidden table=documents
 
-@property ucheck5 type=checkbox ch_value=1 table=documents field=ucheck5 group=general
-@caption Kasutaja defineeritud checkbox 5
+	@property no_topic_links type=checkbox table=objects field=meta method=serialize ch_value=1
+	@caption &Auml;ra tee Samal teemal linke
 
-@property ucheck6 type=checkbox ch_value=1 table=documents field=ucheck6 group=general
-@caption Kasutaja defineeritud checkbox 6
+@default group=settings
 
-@property uservar1 type=classificator field=aw_varuser1 reltype=RELTYPE_VARUSER1 store=connect
-@caption User-defined var 1
+	@property no_right_pane type=checkbox ch_value=1 trans=1
+	@caption Ilma parema paanita
 
-@property uservar2 type=classificator field=aw_varuser2 reltype=RELTYPE_VARUSER2 store=connect
-@caption User-defined var 2
+	@property no_left_pane type=checkbox ch_value=1 trans=1
+	@caption Ilma vasaku paanita
 
-@property uservar3 type=classificator field=aw_varuser3 reltype=RELTYPE_VARUSER3 store=connect
-@caption User-defined var 3
+	@property title_clickable type=checkbox ch_value=1 trans=1 default=1
+	@caption Pealkiri klikitav
 
-@property language type=text group=general type=text store=no trans=1
-@caption Keel
+	@property esilehel type=checkbox ch_value=1 trans=1
+	@caption Esilehel
 
-@property duration type=time_select field=end table=planner group=calendar trans=1
-@caption Kestab
+	@property dcache_save type=checkbox ch_value=1 table=objects field=meta method=serialize trans=1
+	@caption Cache otsingu jaoks (salvestub)
 
-@property calendar_relation type=select field=meta method=serialize group=general table=objects trans=1
-@caption P&otilde;hikalender
+	@property no_last type=checkbox ch_value=1 trans=1
+	@caption &Auml;ra arvesta muutmist
 
-@property gen_static type=checkbox store=no trans=1
-@caption Genereeri staatiline
+	@property show_last_changed type=checkbox ch_value=1 trans=1 table=objects field=meta method=serialize
+	@caption Muutmise kuupaev dokumendi sees
 
-@property sbt type=submit value=Salvesta store=no trans=1
+	@property no_show_in_promo type=checkbox ch_value=1 trans=1 table=documents field=no_show_in_promo method=
+	@caption &Auml;ra n&auml;ita konteineris
 
-@property cb_part type=hidden value=1 group=general,settings store=no
-@caption cb_part
+	@property show_in_iframe type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption Kasuta siseraami
 
-@property nobreaks type=hidden table=documents
+	@property target_audience type=relpicker reltype=RELTYPE_TARGET_AUDIENCE table=documents field=aw_target_audience
+	@caption Sihtr&uuml;hm
 
-@property no_topic_links type=checkbox table=objects field=meta method=serialize ch_value=1
-@caption &Auml;ra tee Samal teemal linke
+@default group=vennastamine
 
-@property no_last type=checkbox ch_value=1 group=settings trans=1
-@caption &Auml;ra arvesta muutmist
+	@property sections type=select multiple=1 size=20 store=no trans=1
+	@caption Sektsioonid
 
-@property show_last_changed type=checkbox ch_value=1 group=settings trans=1 table=objects field=meta method=serialize
-@caption Muutmise kuupaev dokumendi sees
+@default group=relationmgr
 
-@property no_show_in_promo type=checkbox ch_value=1 group=settings trans=1 table=documents field=no_show_in_promo method=
-@caption &Auml;ra n&auml;ita konteineris
+	@property aliasmgr type=aliasmgr store=no editonly=1 trans=1
+	@caption Aliastehaldur
 
-@property show_in_iframe type=checkbox ch_value=1 group=settings table=objects field=meta method=serialize
-@caption Kasuta siseraami
+@default group=calendar
+
+	@property start type=date_select table=planner trans=1
+	@caption Algab (kp)
+
+	@property start1 type=datetime_select field=start table=planner trans=1
+	@caption Algab 
+
+	@property duration type=time_select field=end table=planner trans=1
+	@caption Kestab
 
 @default group=kws
 
@@ -255,6 +264,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 @reltype VARUSER3 value=25 clid=CL_META
 @caption kasutajadefineeritud muutuja 3
+
+@reltype TARGET_AUDIENCE value=26 clid=CL_TARGET_AUDIENCE
+@caption Sihtr&uuml;hm
 
 */
 

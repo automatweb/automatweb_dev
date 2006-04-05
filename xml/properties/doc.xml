@@ -179,37 +179,6 @@
             <caption>Dok. modified</caption>
       </property>
       <property>
-            <name>no_right_pane</name>
-            <table>documents</table>
-            <group>settings</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <trans>1</trans>
-            <field>no_right_pane</field>
-            <caption>Ilma parema paanita</caption>
-      </property>
-      <property>
-            <name>no_left_pane</name>
-            <table>documents</table>
-            <group>settings</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <trans>1</trans>
-            <field>no_left_pane</field>
-            <caption>Ilma vasaku paanita</caption>
-      </property>
-      <property>
-            <name>title_clickable</name>
-            <table>documents</table>
-            <group>settings</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <trans>1</trans>
-            <default>1</default>
-            <field>title_clickable</field>
-            <caption>Pealkiri klikitav</caption>
-      </property>
-      <property>
             <name>clear_styles</name>
             <table>documents</table>
             <group>general</group>
@@ -243,16 +212,6 @@
             <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;nad lingina</caption>
       </property>
       <property>
-            <name>esilehel</name>
-            <table>documents</table>
-            <group>settings</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <trans>1</trans>
-            <field>esilehel</field>
-            <caption>Esilehel</caption>
-      </property>
-      <property>
             <name>frontpage_left</name>
             <table>documents</table>
             <group>general</group>
@@ -271,17 +230,6 @@
             <trans>1</trans>
             <field>dcache</field>
             <caption>Cache otsingu jaoks</caption>
-      </property>
-      <property>
-            <name>dcache_save</name>
-            <table>objects</table>
-            <group>settings</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
-            <trans>1</trans>
-            <caption>Cache otsingu jaoks (salvestub)</caption>
       </property>
       <property>
             <name>dcache_content</name>
@@ -357,47 +305,6 @@
             <default>1</default>
             <trans>1</trans>
             <caption>'Prindi' nupp</caption>
-      </property>
-      <property>
-            <name>sections</name>
-            <table>documents</table>
-            <group>vennastamine</group>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>20</size>
-            <store>no</store>
-            <trans>1</trans>
-            <field>sections</field>
-            <caption>Sektsioonid</caption>
-      </property>
-      <property>
-            <name>aliasmgr</name>
-            <table>documents</table>
-            <group>relationmgr</group>
-            <type>aliasmgr</type>
-            <store>no</store>
-            <editonly>1</editonly>
-            <trans>1</trans>
-            <field>aliasmgr</field>
-            <caption>Aliastehaldur</caption>
-      </property>
-      <property>
-            <name>start</name>
-            <table>planner</table>
-            <group>calendar</group>
-            <type>date_select</type>
-            <trans>1</trans>
-            <field>start</field>
-            <caption>Algab (kp)</caption>
-      </property>
-      <property>
-            <name>start1</name>
-            <table>planner</table>
-            <group>calendar</group>
-            <type>datetime_select</type>
-            <field>start</field>
-            <trans>1</trans>
-            <caption>Algab </caption>
       </property>
       <property>
             <name>createdby</name>
@@ -621,15 +528,6 @@
             <caption>Keel</caption>
       </property>
       <property>
-            <name>duration</name>
-            <table>planner</table>
-            <group>calendar</group>
-            <type>time_select</type>
-            <field>end</field>
-            <trans>1</trans>
-            <caption>Kestab</caption>
-      </property>
-      <property>
             <name>calendar_relation</name>
             <table>objects</table>
             <group>general</group>
@@ -690,6 +588,58 @@
             <caption>&amp;amp;Auml;ra tee Samal teemal linke</caption>
       </property>
       <property>
+            <name>no_right_pane</name>
+            <table>documents</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <trans>1</trans>
+            <field>no_right_pane</field>
+            <caption>Ilma parema paanita</caption>
+      </property>
+      <property>
+            <name>no_left_pane</name>
+            <table>documents</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <trans>1</trans>
+            <field>no_left_pane</field>
+            <caption>Ilma vasaku paanita</caption>
+      </property>
+      <property>
+            <name>title_clickable</name>
+            <table>documents</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <trans>1</trans>
+            <default>1</default>
+            <field>title_clickable</field>
+            <caption>Pealkiri klikitav</caption>
+      </property>
+      <property>
+            <name>esilehel</name>
+            <table>documents</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <trans>1</trans>
+            <field>esilehel</field>
+            <caption>Esilehel</caption>
+      </property>
+      <property>
+            <name>dcache_save</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <trans>1</trans>
+            <caption>Cache otsingu jaoks (salvestub)</caption>
+      </property>
+      <property>
             <name>no_last</name>
             <table>documents</table>
             <group>settings</group>
@@ -729,6 +679,65 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kasuta siseraami</caption>
+      </property>
+      <property>
+            <name>target_audience</name>
+            <table>documents</table>
+            <group>settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TARGET_AUDIENCE</reltype>
+            <field>aw_target_audience</field>
+            <caption>Sihtr&amp;amp;uuml;hm</caption>
+      </property>
+      <property>
+            <name>sections</name>
+            <table>documents</table>
+            <group>vennastamine</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>20</size>
+            <store>no</store>
+            <trans>1</trans>
+            <field>sections</field>
+            <caption>Sektsioonid</caption>
+      </property>
+      <property>
+            <name>aliasmgr</name>
+            <table>documents</table>
+            <group>relationmgr</group>
+            <type>aliasmgr</type>
+            <store>no</store>
+            <editonly>1</editonly>
+            <trans>1</trans>
+            <field>aliasmgr</field>
+            <caption>Aliastehaldur</caption>
+      </property>
+      <property>
+            <name>start</name>
+            <table>planner</table>
+            <group>calendar</group>
+            <type>date_select</type>
+            <trans>1</trans>
+            <field>start</field>
+            <caption>Algab (kp)</caption>
+      </property>
+      <property>
+            <name>start1</name>
+            <table>planner</table>
+            <group>calendar</group>
+            <type>datetime_select</type>
+            <field>start</field>
+            <trans>1</trans>
+            <caption>Algab </caption>
+      </property>
+      <property>
+            <name>duration</name>
+            <table>planner</table>
+            <group>calendar</group>
+            <type>time_select</type>
+            <field>end</field>
+            <trans>1</trans>
+            <caption>Kestab</caption>
       </property>
       <property>
             <name>kws</name>
@@ -807,6 +816,11 @@
                   <clid>CL_META</clid>
                   <caption>kasutajadefineeritud muutuja 3</caption>
             </VARUSER3>
+            <TARGET_AUDIENCE>
+                  <value>26</value>
+                  <clid>CL_TARGET_AUDIENCE</clid>
+                  <caption>Sihtr&amp;amp;uuml;hm</caption>
+            </TARGET_AUDIENCE>
       </reltypes>
 </properties>
 

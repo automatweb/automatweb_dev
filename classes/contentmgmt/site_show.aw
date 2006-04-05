@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.162 2006/03/31 11:48:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.163 2006/04/05 12:13:58 kristo Exp $
 
 /*
 
@@ -769,6 +769,22 @@ class site_show extends class_base
 			$filter["lang_id"] = $filt_lang_id;
 			$filter["sort_by"] = $ordby;
 			$filter["site_id"] = array();
+
+			// if target audience is to be used, then limid docs by that
+			if ($obj->prop("use_target_audience") == 1)
+			{
+				// get all current target audiences
+				$ta_list = new object_list(array(
+					"class_id" => CL_TARGET_AUDIENCE,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"ugroup" => aw_global_get("gidlist_oid")
+				));
+				if ($ta_list->count())
+				{
+					$filter["target_audience"] = $ta_list->ids();
+				}
+			}
 
 			if ($arr["all_langs"])
 			{
