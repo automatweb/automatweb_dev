@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.4 2006/03/17 15:06:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.5 2006/04/05 13:06:24 ahti Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 
@@ -95,6 +95,7 @@ class personnel_management_job_wanted extends class_base
 				break;
 		}
 	}
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];

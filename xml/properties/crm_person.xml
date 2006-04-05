@@ -600,23 +600,13 @@
             <caption>Keeleoskus</caption>
       </property>
       <property>
-            <name>langlevel</name>
-            <table>objects</table>
-            <group>addinfo</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>classificator</type>
-            <store>no</store>
-            <caption>Keeleoskus</caption>
-      </property>
-      <property>
             <name>mlang</name>
             <table>objects</table>
             <group>addinfo</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>classificator</type>
-            <store>no</store>
+            <type>relpicker</type>
+            <reltype>RELTYPE_LANGUAGE_SKILL</reltype>
             <caption>Emakeel</caption>
       </property>
       <property>
@@ -626,21 +616,19 @@
             <field>meta</field>
             <method>serialize</method>
             <type>releditor</type>
-            <store>no</store>
             <mode>manager</mode>
-            <reltype>RELTYPE_EDUCATION</reltype>
+            <reltype>RELTYPE_LANGUAGE_SKILL</reltype>
             <props>
-                  <num_0>school</num_0>
-                  <num_1>date_from</num_1>
-                  <num_2>date_to</num_2>
-                  <num_3>additonal_info</num_3>
-                  <num_4>subject</num_4>
+                  <num_0>language</num_0>
+                  <num_1>talk</num_1>
+                  <num_2>understand</num_2>
+                  <num_3>write</num_3>
             </props>
             <table_fields>
-                  <num_0>school</num_0>
-                  <num_1>subject</num_1>
-                  <num_2>date_from</num_2>
-                  <num_3>date_to</num_3>
+                  <num_0>language</num_0>
+                  <num_1>talk</num_1>
+                  <num_2>understand</num_2>
+                  <num_3>write</num_3>
             </table_fields>
       </property>
       <property>
@@ -1256,11 +1244,6 @@
                   <clid>CL_CRM_PERSON_ADD_EDUCATION</clid>
                   <caption>T&amp;auml;iendkoolitus</caption>
             </ADD_EDUCATION>
-            <PREVIOUS_JOB>
-                  <value>26</value>
-                  <clid>CL_CRM_PERSON_PREVIOUS_JOB</clid>
-                  <caption>T&amp;ouml;&amp;ouml;kogemus</caption>
-            </PREVIOUS_JOB>
             <LANGUAGE_SKILL>
                   <value>27</value>
                   <clid>CL_CRM_PERSON_LANGUAGE</clid>

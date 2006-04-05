@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.121 2006/04/04 11:44:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.122 2006/04/05 13:06:23 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -231,14 +231,10 @@ caption Kodused kontaktandmed
 @property language type=text subtitle=1
 @caption Keeleoskus
 
-@property langlevel type=classificator store=no
-@caption Keeleoskus
-
-@property mlang type=classificator store=no
+@property mlang type=relpicker reltype=RELTYPE_LANGUAGE_SKILL table=objects field=meta method=serialize
 @caption Emakeel
 
-@property lang_edit type=releditor store=no mode=manager reltype=RELTYPE_EDUCATION props=school,date_from,date_to,additonal_info,subject table_fields=school,subject,date_from,date_to
-Keel	Valik või tekstikast / Räägin	Valik / Saan aru	Valik / Kirjutan	Valik
+@property lang_edit type=releditor mode=manager reltype=RELTYPE_LANGUAGE_SKILL props=language,talk,understand,write table_fields=language,talk,understand,write
 
 @property compskills type=text subtitle=1
 @caption Arvutioskus
@@ -477,9 +473,6 @@ caption Andmed
 
 @reltype ADD_EDUCATION value=24 clid=CL_CRM_PERSON_ADD_EDUCATION
 @caption Täiendkoolitus
-
-@reltype PREVIOUS_JOB value=26 clid=CL_CRM_PERSON_PREVIOUS_JOB
-@caption Töökogemus
 
 @reltype LANGUAGE_SKILL value=27 clid=CL_CRM_PERSON_LANGUAGE
 @caption Keeleoskus
