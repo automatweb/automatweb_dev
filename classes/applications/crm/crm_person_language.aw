@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.1 2006/04/05 13:06:22 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_language.aw,v 1.2 2006/04/05 13:44:43 ahti Exp $
 // crm_person_language.aw - Keeleoskus
 /*
 
@@ -8,28 +8,20 @@
 @default table=objects
 @default group=general
 
-@property school type=textbox field=name
-@caption Kool
+@property language type=textbox field=name
+@caption Keel
 
 @default field=meta
 @default method=serialize
 
-@property field type=classificator reltype=RELTYPE_FIELD store=connect
-@caption Valdkond
+@property talk type=select
+@caption Räägin
 
-@property speciality type=textbox
-@caption Eriala
+@property understand type=select
+@caption Saan aru
 
-@layout time type=hbox
-
-@property start type=date_select format=month,year parent=time
-@caption Algus
-
-@property end type=date_select format=month,year parent=time
-@caption Lõpp
-
-@reltype FIELD value=1 clid=CL_META
-@caption Valdkond
+@property write type=select
+@caption Kirjutan
 
 */
 
@@ -40,6 +32,28 @@ class crm_person_language extends class_base
 		$this->init(array(
 			"clid" => CL_CRM_PERSON_LANGUAGE
 		));
+	}
+
+	function get_property($arr)
+	{
+		$prop = &$arr["prop"];
+		$retval = PROP_OK;
+		switch($prop["name"])
+		{
+			case "talk":
+			case "understand":
+			case "write":
+				$prop["options"] = array(
+					0 => t("-- vali --"),
+					1 => t("ei oska"),
+					2 => t("napp"),
+					3 => t("keskmine"),
+					4 => t("hea"),
+					5 => t("väga hea"),
+				);
+				break;
+		}
+		return $retval;
 	}
 };
 ?>
