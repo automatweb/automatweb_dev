@@ -7,6 +7,7 @@ define("OBJ_COMP_GREATER_OR_EQ", 8);
 define("OBJ_COMP_BETWEEN", 16);
 define("OBJ_COMP_EQUAL", 32);
 define("OBJ_COMP_BETWEEN_INCLUDING", 64);
+define("OBJ_COMP_NULL", 128);
 
 class obj_predicate_compare
 {

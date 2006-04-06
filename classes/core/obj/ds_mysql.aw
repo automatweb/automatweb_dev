@@ -1419,6 +1419,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$v_data = $val->data2;
 							break;
 
+						case OBJ_COMP_NULL:
+							$comparator = " IS NULL ";
+							$v_data = "";
+							break;
+
 						default:
 							error::raise(array(
 								"id" => ERR_OBJ_COMPARATOR,
@@ -1426,6 +1431,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							));
 					}
 
+					if ($val->comparator == OBJ_COMP_NULL)
+					{
+						$sql[] = $tf." IS NULL ";
+					}
+					else
 					if (is_array($v_data))
 					{
 						$tmp = array();
