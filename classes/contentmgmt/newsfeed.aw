@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.17 2006/03/30 10:41:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.18 2006/04/06 10:00:27 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -309,6 +309,14 @@ class newsfeed extends class_base
 				$description = $o->prop("content");
 				if (1 == $parse_embed)
 				{
+					$si = __get_site_instance();
+					if ($si)
+					{
+						$si->parse_document_new($o);
+						$art_lead = $o->prop("lead");
+						$description = $o->prop("content");
+					}
+
 					$al->parse_oo_aliases($oid,$art_lead);
 					$al->parse_oo_aliases($oid,$description);
 				}
@@ -316,6 +324,9 @@ class newsfeed extends class_base
 				{
 					$art_lead = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$art_lead);
 					$description = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$description);
+
+					$art_lead = preg_replace("/#d#(.*)#\/d#/imsU","\\1",$art_lead);
+					$description = preg_replace("/#d#(.*)#\/d#/imsU","\\1",$description);
 
 				};
 				$items[] = array(
