@@ -4234,8 +4234,13 @@ class crm_company extends class_base
 		}
 	}
 
-	function get_employee_picker($co, $add_empty = false, $important_only = false)
+	function get_employee_picker($co = null, $add_empty = false, $important_only = false)
 	{
+		if (!$co)
+		{
+			$u = get_instance(CL_USER);
+			$co = obj($u->get_current_company());
+		}
 		if ($add_empty)
 		{
 			$res = array("" => t("--vali--"));
@@ -4671,15 +4676,6 @@ class crm_company extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if ($arr["id"] == "general")
-		{
-			$u = get_instance(CL_USER);
-			$co = $u->get_current_company();
-			if ($co == $arr["obj_inst"]->id())
-			{
-				$arr["caption"] = t("B&uuml;roo");
-			}
-		}
 		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
 		{
 			return false;
