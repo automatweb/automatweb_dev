@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.121 2006/03/23 09:16:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.122 2006/04/06 11:04:20 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -760,6 +760,7 @@ class file extends class_base
 		{
 			$fc["type"] = $tmp;
 		}
+		header("Accept-Ranges: bytes");
 		header("Content-Length: ".strlen($fc["content"]));
 		header("Content-type: ".$fc["type"]);
 		header("Cache-control: public");
