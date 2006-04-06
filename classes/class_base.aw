@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.476 2006/03/31 12:14:27 kristo Exp $
+// $Id: class_base.aw,v 2.477 2006/04/06 11:08:26 dragut Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -4047,7 +4047,7 @@ class class_base extends aw_template
 					$altp = $alias_to_prop ? $alias_to_prop : $rawdata["alias_to_prop"];
 					$curpv = $_to->prop($altp);
 					$property_info = $_to->get_property_list();
-					
+
 					if ($property_info[$altp]["multiple"] == 1 || is_array($curpv))
 					{
 						$curpv[$this->obj_inst->id()] = $this->obj_inst->id();
@@ -4056,7 +4056,21 @@ class class_base extends aw_template
 					{
 						$curpv = $this->obj_inst->id();
 					}
-					$_to->set_prop($altp, $curpv);
+					/**
+					 check, if the property, where the connected objects id should be saved
+					 really exist or not, save it only when it exist.
+					 why it is needed?
+					because, when i create relpicker properties somewhere in callback method
+					and give it names like foo[$someid], then such property does not exist
+					and i am not 100% that this is the place to check this thing, but right now
+					let it be, until some further investigation and some other opinions
+						--dragut
+					**/
+					if ( $_to->is_property($altp) )
+					{
+						$_to->set_prop($altp, $curpv);
+					}
+
 					$_to->save();
 				}
 			};
@@ -5087,7 +5101,6 @@ class class_base extends aw_template
 				$val = $trs[$cur_lid][$prop];
 			}
 		}
-
 		return $val;	
 	}
 
