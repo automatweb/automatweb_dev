@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.42 2006/04/05 09:19:47 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.42 2006/04/05 09:19:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.43 2006/04/06 11:00:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.43 2006/04/06 11:00:18 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1157,11 +1157,12 @@ class bug_tracker extends class_base
 			"caption" => t("Kellele"),
 			"sortable" => 1,
 		));
+		/*
 		$t->define_field(array(
 			"name" => "sort_priority",
 			"caption" => t("SP"),
 			"sortable" => 1,
-		));
+		));*/
 
 		$t->define_field(array(
 			"name" => "bug_priority",

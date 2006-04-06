@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.28 2006/04/05 09:19:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.29 2006/04/06 11:00:17 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -564,13 +564,16 @@ class bug extends class_base
 		$com_str = "";
 		foreach($ol->arr() as $com)
 		{
-			$comt = $com->comment();
-			$comt = preg_replace("/(http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<\n]*)/ims", "<a href='\\1'>Diff</a>", $comt);
+			$comt = create_links($com->comment());
+			$comt = preg_replace("/(>http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<\n]*)/ims", ">Diff", $comt);
 
 			if ($nl2br)
 			{
 				$comt = nl2br($comt);
 			}
+
+			$comt = $this->_split_long_words($comt);
+
 			$this->vars(array(
 				"com_adder" => $com->createdby(),
 				"com_date" => date("d.m.Y H:i", $com->created()),
@@ -579,13 +582,40 @@ class bug extends class_base
 			$com_str .= $this->parse("COMMENT");
 		}
 
-		$main_c = nl2br($o->prop("bug_content"));
+		$main_c = $this->_split_long_words(nl2br(create_links($o->prop("bug_content"))));
 		$this->vars(array(
 			"main_text" => $so == "asc" ? $main_c : "",
 			"main_text_after" => $so == "asc" ? "" : $main_c,
 			"COMMENT" => $com_str
 		));
 		return $this->parse();
+	}
+
+	function _split_long_words($comt)
+	{
+		// split words and check for > 100 chars
+		$words = preg_split("/\s+/", strip_tags(trim($comt)));
+		foreach($words as $word)
+		{
+			if (strlen($word) > 100)
+			{
+				$o_w = $word;
+				$n_w = "";
+				$l = strlen($word);
+				for ($i = 0; $i < $l; $i++)
+				{
+					if (($i % 100 == 0) && $i > 1)
+					{
+						$n_w .= "<br>";
+					}
+					$n_w .= $word[$i];
+				}
+				$comt = str_replace($o_w, $n_w, $comt);
+				$comt = str_replace("\"".$n_w, "\"".$o_w, $comt);
+			}
+		}
+
+		return $comt;
 	}
 
 	function _add_comment($bug, $comment)
