@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.32 2006/03/29 12:45:28 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.33 2006/04/07 13:18:02 tarvo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -494,7 +494,7 @@ class pot_scanner extends core
 				$contents[] = trim($ent_header)."\n";
 			}
 			$contents[] = "msgid \"".str_replace("\"","\\\"", $entry["msgid"])."\"\n";
-			$contents[] = "msgstr \"".str_replace("\"","\\\"", $entry["msgstr"])."\"\n\n";
+			$contents[] = "msgstr \"".str_replace("\"","&quot;",$entry["msgstr"])."\"\n\n";
 		}
 		$contents = array_merge($header, $contents);
 		
