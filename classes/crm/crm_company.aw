@@ -1016,6 +1016,9 @@ groupinfo documents caption="Dokumendid" submit=no
 @reltype TAX_CLEARANCE_FILE value=60 clid=CL_FILE
 @caption Maksuvõla puudumise tõendi fail
 
+@reltype SHOP_WAREHOUSE_PURCHASE_BILL value=61 clid=CL_SHOP_WAREHOUSE_PURCHASE_BILL
+@caption Ostu arve
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (

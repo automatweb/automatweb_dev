@@ -2922,6 +2922,11 @@
                   <clid>CL_FILE</clid>
                   <caption>Maksuv&amp;otilde;la puudumise t&amp;otilde;endi fail</caption>
             </TAX_CLEARANCE_FILE>
+            <SHOP_WAREHOUSE_PURCHASE_BILL>
+                  <value>61</value>
+                  <clid>CL_SHOP_WAREHOUSE_PURCHASE_BILL</clid>
+                  <caption>Ostu arve</caption>
+            </SHOP_WAREHOUSE_PURCHASE_BILL>
       </reltypes>
       <layout>
             <hbox_toolbar>
