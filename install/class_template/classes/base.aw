@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.23 2005/09/06 07:52:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.24 2006/04/07 10:57:32 kristo Exp $
 // __classname.aw - __name 
 /*
 
@@ -14,16 +14,12 @@ class __classname extends class_base
 {
 	function __classname()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "__tplfolder",
 			"clid" => __classdef
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -42,7 +38,6 @@ class __classname extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
-
 		}
 		return $retval;
 	}	
@@ -56,17 +51,7 @@ class __classname extends class_base
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
 
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
