@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.48 2006/02/20 09:23:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.49 2006/04/07 13:40:25 dragut Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -21,6 +21,33 @@ class cache extends core
 	// $content - cachetav asi
 	// $clear_flag - kui see on false, siis ei clearita cache_dirty flagi sellele objektile
 	//               idee on selles, et siis saab yhele objektile ka mitu cachet teha.
+	/**
+		@attrib params=pos 
+
+		@param oid required type=string
+			Object id, which is cached.
+		@param arr required type=array
+			Array containing parameters identifying object ('period' for example), which is used to compose filename in cache.
+		@param content required type=string
+			Data which is cached.
+		@param clear_flag optional type=bool default=true
+			If the value is false, then cache_dirty flag is not cleared for this object. The idea is, that in that way, i can make multiple caches for one object.
+			NOTE: cache_dirty flag is a field in objects table, which value may be [1|0]. When it is 1, then http://www.site.ee/object_id comes from cache, othervise not.
+		@param real_section optional type=oid default=NULL
+			[xxx] If this is set, then oid parameter will be overwritten by this parameter. Seems that oid parameters value may not always be valid object id, so it is possible to supply correct object id via real_section parameter.
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			Writes data into cache.
+
+		@examples
+			none
+	**/
 	function set($oid,$arr,$content,$clear_flag = true, $real_section = NULL)
 	{
 		if ($real_section === NULL)
@@ -88,13 +115,34 @@ class cache extends core
 			return false;
 		}
 	}
+	
+	/**
+		@attrib params=pos api=1
 
+		@param key required type=string
+			String that is used to compose the path and filename which holds the cached data.
+
+		@param value required type=string	
+			Cached data.
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			Not recommended to use.
+
+		@examples
+			$cache = get_instance('cache');
+			$cache->file_set('foo', 'bar'	
+	**/
 	function file_set($key,$value)
 	{
 		if ($this->cfg["page_cache"] != "")
 		{
 			$fname = $this->cfg["page_cache"];
-
 			$hash = md5($key);
 			// make 3-level folder structure
 			$fname .= "/".$hash{0};
@@ -110,6 +158,28 @@ class cache extends core
 		}
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param key required type=string
+			String that is used to set the filename in cache. 
+
+		@errors
+			none
+
+		@returns
+			Contents of the file in cache.	
+			false if page_cache is not set in aw.ini
+	
+		@comment
+			Not recommended to use.
+
+		@examples
+			$cache = get_instance('cache');
+			$cache->file_set('foo', 'bar');
+			echo $cache->file_get('foo'); // prints 'bar'
+	
+	**/
 	function file_get($key)
 	{
 		if ($this->cfg["page_cache"] == "")
@@ -136,6 +206,38 @@ class cache extends core
 		}
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param key required type=string
+			String that is used to set the filename in cache. 
+
+		@param ts required type=int
+			Timestamp
+
+		@errors
+			none
+
+		@returns
+			Contents of the file in cache.	
+			false 
+				if page_cache is not set in aw.ini
+				if supplied timestamp has newer time than the file's modification time
+	
+		@comment
+			Checks, if the file in cache modification time is older than the time supplied via parameter. If it is older, then returns false, else filecontent.
+			Not recommended to use.
+
+		@examples
+			$cache = get_instance('cache');
+			$cache->file_set('foo', 'bar');
+			sleep(5);
+			// file in cache is newer than supplied timestamp, so file's content is returned
+			var_dump($cache->file_get_ts('foo', time() - 3600));
+			// file in cache is older than supplide timestamp, so false is returned
+			var_dump($cache->file_get_ts('foo', time()));
+		
+	**/
 	function file_get_ts($key, $ts)
 	{
 		if ($this->cfg["page_cache"] == "")
@@ -151,6 +253,30 @@ class cache extends core
 		return $this->get_file(array("file" => $fqfn));
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param key required type=string
+			String that is used to set the filename in cache. 
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			Deletes the file from cache
+			Not recommended to use.
+
+		@examples
+			$cache = get_instance('cache');
+			$cache->file_set('foo', 'bar');
+			var_dump($cache->file_get('foo')); // prints 'bar'
+			$cache->file_invalidate('foo');
+			var_dump($cache->file_get('foo')); // prints false
+		
+	**/
 	function file_invalidate($key)
 	{
 		if ($this->cfg["page_cache"] != "")
@@ -159,6 +285,22 @@ class cache extends core
 		}
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param pt required type=string
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			Not recommended to use, because include() seems to be slower than eval().
+		@examples
+			none		
+	**/
 	function file_get_incl_pt_oid($pt, $oid, $fn)
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".substr($oid, -1, 1)."/".$fn;
@@ -170,6 +312,22 @@ class cache extends core
 		return $arr;
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param pt required type=string
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			Not recommended to use, because include() seems to be slower than eval().
+		@examples
+			none		
+	**/
 	function file_get_incl_pt($pt, $subf, $fn)
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
@@ -181,6 +339,22 @@ class cache extends core
 		return $arr;
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param pt required type=string
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			Not recommended to use, because include() seems to be slower than eval().
+		@examples
+			none		
+	**/
 	function file_set_incl_pt_oid($pt, $oid, $fn, $dat)
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".substr($oid, -1, 1)."/".$fn;
@@ -192,6 +366,22 @@ class cache extends core
 		return $this->file_set_pt($pt, substr($oid, -1, 1), $fn, $str);
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param pt required type=string
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			Not recommended to use, because include() seems to be slower than eval().
+		@examples
+			none		
+	**/
 	function file_set_incl_pt($pt, $subf, $fn, $dat)
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
@@ -203,24 +393,100 @@ class cache extends core
 		return $this->file_set_pt($pt, $subf, $fn, $str);
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none
+
+		@examples
+			$cache = get_instance('cache');
+
+	**/
 	function file_set_pt_oid($pt, $oid, $fn, $cont)
 	{
 		//echo "file_set_pt_oid pt = $pt ,oid =  $oid, fn = $fn <br>";
 		return $this->file_set_pt($pt, substr($oid, -1, 1), $fn, $cont);
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none
+
+		@examples
+			$cache = get_instance('cache');
+	
+	**/
 	function file_get_pt_oid($pt, $oid, $fn)
 	{
 		//echo "file_get_pt_oid pt = $pt ,oid =  $oid, fn = $fn <br>";
 		return $this->file_get_pt($pt, substr($oid, -1, 1), $fn);
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none
+
+		@examples
+			$cache = get_instance('cache');
+	
+	**/
 	function file_get_pt_oid_ts($pt, $oid, $fn, $ts)
 	{
 		//echo "file_get_pt_oid_ts pt = $pt ,oid =  $oid, fn = $fn, ts = $ts <br>";
 		return $this->file_get_pt_ts($pt, substr($oid, -1, 1), $fn, $ts);
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none
+
+		@examples
+			$cache = get_instance('cache');
+		
+	**/
 	function file_set_pt($pt, $subf, $fn, $cont)
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
@@ -238,6 +504,25 @@ class cache extends core
 		@chmod($fname, 0666);
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none
+
+		@examples
+			$cache = get_instance('cache');
+	
+	**/
 	function file_get_pt($pt, $subf, $fn)
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
@@ -251,6 +536,25 @@ class cache extends core
 		return $ret;
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none
+
+		@examples
+			$cache = get_instance('cache');
+		
+	**/
 	function file_get_pt_ts($pt, $subf, $fn, $ts)
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf."/".$fn;
@@ -270,6 +574,25 @@ class cache extends core
 		return $ret;
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none	
+
+		@examples
+			$cache = get_instance('cache');
+
+	**/
 	function file_clear_pt($pt)
 	{
 		// now, this is where the magic happens. 
@@ -281,6 +604,25 @@ class cache extends core
 		$this->_crea_fld($pt);
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none
+
+		@examples
+			$cache = get_instance('cache');
+			
+	**/
 	function file_clear_pt_oid($pt, $oid)
 	{
 		$of = substr($oid, -1, 1);
@@ -300,6 +642,25 @@ class cache extends core
 		chmod($fq, 0777);
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none
+
+		@examples
+			$cache = get_instance('cache');
+		
+	**/
 	function file_clear_pt_oid_fn($pt, $oid, $fn)
 	{
 		$of = substr($oid, -1, 1);
@@ -309,6 +670,25 @@ class cache extends core
 		@unlink($fq);
 	}
 
+	/**
+		@attrib params=pos api=1
+
+		@param param1 required type=string
+			comment
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			none
+
+		@examples
+			$cache = get_instance('cache');
+			
+	**/
 	function file_clear_pt_sub($pt, $subf)
 	{
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$subf;
@@ -340,8 +720,28 @@ class cache extends core
 		}
 	}
 
-	// fname = fully qualified file name minus basedir
-	// unserializer = reference in form of array("classname","function") to the unserializer function
+	/**
+		@attrib params=name api=1
+
+		@param fname required type=string
+			Fully qualified file name minus basedir.
+
+		@param unserializer required type=array
+			Reference in form of array("classname","function") to the unserializer function.
+
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+		
+
+		@examples
+			$cache = get_instance('cache');
+		
+	**/
 	function get_cached_file($args = array())
 	{
 		extract($args);
@@ -467,10 +867,21 @@ class cache extends core
 	}
 
 
-	/** returns the timestamp of the last modified object. caches it as well.
-
+	/**
 		@attrib api=1
 
+		@errors
+			none
+
+		@returns
+			Returns the timestamp of the last modified object.
+	
+		@comment
+			If the method is called first time and there is no objlastmod file in cache, then last modified object is taken (from the objects table by the field modified) and it will be cached into objlastmod file in cache. If site_show.objlastmod_only_menu aw.ini setting is set (for example to 1), then last modified menu object is taken (class_id = CL_MENU)
+
+		@examples
+			$cache = get_instance('cache');
+			echo date("d.m.Y H:m:s", $cache->get_objlastmod());
 	**/
 	function get_objlastmod()
 	{
@@ -491,9 +902,24 @@ class cache extends core
 		return $last_mod;
 	}
 
-	/** completely clears the cache
+	/**
+		@attrib params=pos api=1
 
-		@attrib api=1
+		@errors
+			none
+
+		@returns
+			none
+	
+		@comment
+			Completely clears the cache.
+
+		@examples
+			$cache = get_instance('cache');
+			$cache->file_set('foo', 'bar');
+			echo $cache->file_get('foo'); // prints 'bar'
+			$cache->full_flush();
+			echo $cache->file_get('foo'); // prints nothing
 
 	**/
 	function full_flush()
