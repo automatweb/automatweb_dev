@@ -133,6 +133,56 @@
             <caption>User-defined checkbox 5</caption>
       </property>
       <property>
+            <name>userch6</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch6</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 6</caption>
+      </property>
+      <property>
+            <name>userch7</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch7</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 7</caption>
+      </property>
+      <property>
+            <name>userch8</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch8</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 8</caption>
+      </property>
+      <property>
+            <name>userch9</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch9</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 9</caption>
+      </property>
+      <property>
+            <name>userch10</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>userch10</field>
+            <datatype>int</datatype>
+            <caption>User-defined checkbox 10</caption>
+      </property>
+      <property>
             <name>user1</name>
             <table>aw_shop_products</table>
             <group>data</group>
