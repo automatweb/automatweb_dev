@@ -24,7 +24,6 @@
             <reltype>RELTYPE_FLYER</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
-            <store>no</store>
             <field>image</field>
             <caption>Flyer</caption>
       </property>

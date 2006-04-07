@@ -10,7 +10,6 @@
                   <num_0>file</num_0>
                   <num_1>file_show</num_1>
             </props>
-            <store>no</store>
             <field>img_upload</field>
             <caption>Pilt</caption>
       </property>

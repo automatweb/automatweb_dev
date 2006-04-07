@@ -61,7 +61,6 @@
                   <num_1>ord</num_1>
             </table_fields>
             <table_edit_fields>ord</table_edit_fields>
-            <store>no</store>
             <caption>Pildid</caption>
       </property>
       <property>
@@ -81,7 +80,6 @@
             </props>
             <table_fields>name</table_fields>
             <direct_links>1</direct_links>
-            <store>no</store>
             <caption>Tooted</caption>
       </property>
       <property>
@@ -100,7 +98,6 @@
             </props>
             <table_fields>name</table_fields>
             <direct_links>1</direct_links>
-            <store>no</store>
             <caption>Toote paketid</caption>
       </property>
       <classinfo>

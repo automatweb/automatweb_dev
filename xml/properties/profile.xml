@@ -28,7 +28,6 @@
             <use_form>emb</use_form>
             <method>serialize</method>
             <field>meta</field>
-            <store>no</store>
             <caption>Avatar</caption>
       </property>
       <property>

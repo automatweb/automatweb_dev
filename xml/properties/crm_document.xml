@@ -105,7 +105,6 @@
                   <num_5>newwindow</num_5>
             </props>
             <table_fields>name</table_fields>
-            <store>no</store>
             <caption>Failid</caption>
       </property>
       <property>

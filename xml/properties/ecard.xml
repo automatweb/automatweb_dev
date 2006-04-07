@@ -64,7 +64,6 @@
             <mode>form</mode>
             <rel_id>first</rel_id>
             <props>file</props>
-            <store>no</store>
             <caption>Pilt</caption>
       </property>
       <property>

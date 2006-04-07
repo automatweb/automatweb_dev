@@ -21,7 +21,6 @@
             <no_caption>1</no_caption>
             <mode>manager</mode>
             <table_edit_fields>ord</table_edit_fields>
-            <store>no</store>
       </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TOOLBAR</syslog_type>

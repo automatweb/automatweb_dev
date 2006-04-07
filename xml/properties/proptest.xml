@@ -16,7 +16,6 @@
             <type>releditor</type>
             <reltype>RELTYPE_IMAGE</reltype>
             <use_form>emb</use_form>
-            <store>no</store>
             <field>img1</field>
             <caption>Image 1</caption>
       </property>
@@ -30,7 +29,6 @@
                   <num_0>file</num_0>
                   <num_1>comment</num_1>
             </props>
-            <store>no</store>
             <field>img2</field>
             <caption>Image 2</caption>
       </property>

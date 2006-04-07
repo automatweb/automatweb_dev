@@ -303,7 +303,6 @@
             <table_edit_fields>ord</table_edit_fields>
             <override_parent>this</override_parent>
             <direct_links>1</direct_links>
-            <store>no</store>
             <caption>Pildid</caption>
       </property>
       <classinfo>

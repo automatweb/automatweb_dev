@@ -16,7 +16,6 @@
             <reltype>RELTYPE_PICTURE</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
-            <store>no</store>
             <field>image</field>
             <caption>Pilt</caption>
       </property>
@@ -79,7 +78,6 @@
                   <num_2>content</num_2>
             </table_fields>
             <no_caption>1</no_caption>
-            <store>no</store>
       </property>
       <property>
             <name>com_edit</name>

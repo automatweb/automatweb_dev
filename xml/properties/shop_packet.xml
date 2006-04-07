@@ -178,7 +178,6 @@
                   <num_1>ord</num_1>
             </table_fields>
             <table_edit_fields>ord</table_edit_fields>
-            <store>no</store>
             <caption>Pildid</caption>
       </property>
       <classinfo>
