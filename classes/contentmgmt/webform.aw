@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.88 2006/03/28 15:25:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.89 2006/04/07 09:51:17 markop Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -499,6 +499,10 @@ class webform extends class_base
 				if (!isset($val["nextto"]))
 				{
 					$val["nextto"] = 0;
+				}
+				if (!isset($val["invisible"]))
+				{
+					$val["invisible"] = 0;
 				}
 				foreach($val as $key2 => $val2)
 				{
@@ -1210,6 +1214,7 @@ class webform extends class_base
 					)),
 					"nextto" => (int)$property["nextto"] ? "checked" : "",
 					"space" => $property["space"],
+					"invisible" => (int)$property["invisible"] ? "checked" : "",
 				));
 				if($prpdata["type"] == "classificator")
 				{
@@ -1639,6 +1644,7 @@ class webform extends class_base
 		$chk_prps = array("default" => "defaultx", "year_from" => "year_from", "year_to" => "year_to", "mon_for" => "mon_for");
 		foreach($els as $pn => $pd)
 		{
+			if($pd["invisible"]) continue;
 			if($pd["type"] == "releditor")
 			{
 				$nms[$pn] = $pd["caption"];
