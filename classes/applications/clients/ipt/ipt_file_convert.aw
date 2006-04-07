@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ipt/ipt_file_convert.aw,v 1.1 2006/04/04 13:50:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ipt/ipt_file_convert.aw,v 1.2 2006/04/07 09:40:30 kristo Exp $
 // ipt_file_convert.aw - IPT Failide konvertimine 
 /*
 
@@ -179,6 +179,11 @@ class ipt_file_convert extends class_base
 		$files = array();
 		foreach($d as $nr => $inf)
 		{
+			// rewrite date
+			$d = $inf["XY"][3][0].$inf["XY"][3][1];
+			$m = $inf["XY"][3][2].$inf["XY"][3][3];
+			$y = $inf["XY"][3][6].$inf["XY"][3][7];
+			$inf["XY"][3] = $d."/".$m."/".$y;
 			$file = array(
 				"fld" => $inf["TY"][0],
 				"lines" => array()
@@ -217,7 +222,7 @@ class ipt_file_convert extends class_base
 						$inf["XY"][3]
 					);
 					$file["lines"][2] = array(
-						"001", "013", "113", "016"
+						"001", "113", "016", "013"
 					);
 					break;
 
@@ -261,15 +266,15 @@ class ipt_file_convert extends class_base
 			$d = array();
 			foreach($inf["data"] as $dat_row)
 			{
-				$j = ceil((double)$dat_row[0]);
+				$j = ceil((double)$dat_row[0])+1.0;
 				$parand = 1.0-(0.015*($j-1));
-				$calc = (((63.5+(0.56*0.56*6*$j))/(63.5+$j*6))*(((double)$dat_row[1])/(0.2*100.0))*(63.5*50.0*100.0)/16.0)/9.81;
+				$calc = (((63.5+(0.56*0.56*6.0*$j))/(63.5+$j*6.0))*(((double)$dat_row[1])/(0.2*100.0))*(63.5*0.5*100.0)/16.0)/9.81;
 				$d = "";
 				switch($inf["TT"][0])
 				{
 					case "PA":
 						$d = array(
-							$dat_row[0],
+							number_format(round($dat_row[0], 2), 2, ".", ""),
 							$dat_row[2],
 							$dat_row[1]
 						);
@@ -277,9 +282,9 @@ class ipt_file_convert extends class_base
 
 					case "HE":
 						$d = array(
-							$dat_row[0],
-							((double)$dat_row[1])*$parand,
-							$calc,
+							number_format(round($dat_row[0], 2), 2, ".", ""),
+							floor(((double)$dat_row[1])*$parand),
+							round($calc, 1),
 							$dat_row[1]
 						);
 						break;		
@@ -288,11 +293,11 @@ class ipt_file_convert extends class_base
 						if ($dat_row[3] == "H")
 						{
 							$d = array(
-								$dat_row[0],
+								number_format(round($dat_row[0], 2), 2, ".", ""),
 								"-",
 								$dat_row[2],
-								((double)$dat_row[1])*$parand,
-								$calc,
+								floor(((double)$dat_row[1])*$parand),
+								number_format(round($calc, 1), 1, ".", ""),
 								$dat_row[1],
 							);
 						}
@@ -300,8 +305,8 @@ class ipt_file_convert extends class_base
 						if ($dat_row[3] == "P")
 						{
 							$d = array(
-								$dat_row[0],
-								$dat_row[1],
+								number_format(round($dat_row[0], 2), 2, ".", ""),
+								number_format(round($dat_row[1], 2), 2, ".", ""),
 								$dat_row[2],
 								"-",
 								"-",
@@ -316,7 +321,7 @@ class ipt_file_convert extends class_base
 
 					default:
 						$d = array(
-							$dat_row[0]
+							number_format(round($dat_row[0],2), 2, ".", "")
 						);
 						break;
 				}
@@ -343,7 +348,7 @@ class ipt_file_convert extends class_base
 			$str = "";
 			foreach($file["lines"] as $line)
 			{
-				$str.=join(" ", $line)."\n";
+				$str.=join(" ", $line)."\r\n";
 			}
 			$fn = $pt."/".$file["name"];
 			//echo "creating file $fn <br>";
