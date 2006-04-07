@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.39 2006/03/30 08:58:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.40 2006/04/07 10:44:56 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -743,7 +743,7 @@ class register_search extends class_base
 		$props = $this->get_props_from_reg($reg);
 		$fdata = $o->meta("fdata");
 
-		if ($reg_flds === null)
+		if ($reg_flds === false)
 		{
 			$reg_flds = $reg_i->_get_reg_folders($reg);
 			foreach($o->connections_from(array("type" => "RELTYPE_SEARCH_FOLDER")) as $c)
