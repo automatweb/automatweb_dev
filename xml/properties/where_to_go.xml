@@ -4,7 +4,7 @@
             <name>show_season_from</name>
             <table>objects</table>
             <group>general</group>
-            <type>date_chooser</type>
+            <type>date_select</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>Kuvatav hooaeg alates</caption>
@@ -13,7 +13,7 @@
             <name>show_season_to</name>
             <table>objects</table>
             <group>general</group>
-            <type>date_chooser</type>
+            <type>date_select</type>
             <field>meta</field>
             <method>serialize</method>
             <caption>Kuvatav hooaeg kuni</caption>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/where_to_go/where_to_go.aw,v 1.1 2006/03/28 16:07:09 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/where_to_go/where_to_go.aw,v 1.2 2006/04/07 06:49:05 dragut Exp $
 // where_to_go.aw - Kuhu minna 
 /*
 
@@ -9,10 +9,10 @@
 
 @default group=general
 
-	@property show_season_from type=date_chooser field=meta method=serialize
+	@property show_season_from type=date_select field=meta method=serialize
 	@caption Kuvatav hooaeg alates
 
-	@property show_season_to type=date_chooser field=meta method=serialize
+	@property show_season_to type=date_select field=meta method=serialize
 	@caption Kuvatav hooaeg kuni
 
 @groupinfo settings caption="Seaded"
