@@ -111,7 +111,6 @@
             <reltype>RELTYPE_RECURRENCE</reltype>
             <use_form>emb</use_form>
             <rel_id>first</rel_id>
-            <store>no</store>
             <caption>Automaatse impordi seadistamine</caption>
       </property>
       <classinfo>

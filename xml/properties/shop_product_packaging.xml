@@ -243,7 +243,6 @@
                   <num_2>status</num_2>
                   <num_3>file</num_3>
             </props>
-            <store>no</store>
             <caption>Pildid</caption>
       </property>
       <property>
@@ -264,7 +263,6 @@
                   <num_5>newwindow</num_5>
             </props>
             <table_fields>name</table_fields>
-            <store>no</store>
             <caption>Failid</caption>
       </property>
       <property>

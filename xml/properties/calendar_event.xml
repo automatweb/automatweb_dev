@@ -264,7 +264,6 @@
             <reltype>RELTYPE_PICTURE</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
-            <store>no</store>
       </property>
       <property>
             <name>seealso</name>
@@ -295,7 +294,6 @@
                   <num_7>interval_yearly</num_7>
                   <num_8></num_8>
             </props>
-            <store>no</store>
             <caption>Kordused</caption>
       </property>
       <classinfo>
