@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.70 2006/03/28 12:00:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.71 2006/04/07 06:48:19 voldemar Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -938,7 +938,7 @@ class sys extends aw_template
 	function _make_orb_definitions()
 	{
 		aw_global_set("no_db_connection", 1);
-		$scanner = get_instance("core/docgen/docgen_orb_gen");
+		$scanner = get_instance("core/orb/orb_gen");
 		$scanner->make_orb_defs_from_doc_comments();
 	}
 
