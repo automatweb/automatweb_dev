@@ -24,6 +24,16 @@
             <field>price</field>
             <size>10</size>
             <caption>Hind</caption>
+            <comment>M&amp;amp;uuml;&amp;amp;uuml;gi hind</comment>
+      </property>
+      <property>
+            <name>purchase_price</name>
+            <table>aw_shop_products</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>purchase_price</field>
+            <size>10</size>
+            <caption>Ostu hind</caption>
       </property>
       <property>
             <name>must_order_num</name>
@@ -55,6 +65,22 @@
             <method>serialize</method>
             <reltype>RELTYPE_TAX_RATE</reltype>
             <caption>Maksum&amp;amp;auml;&amp;amp;auml;r</caption>
+      </property>
+      <property>
+            <name>code</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>code</field>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>barcode</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>textbox</type>
+            <field>barcode</field>
+            <caption>Ribakood</caption>
       </property>
       <property>
             <name>userch1</name>
