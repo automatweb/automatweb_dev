@@ -1,6 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.104 2006/04/07 11:45:59 voldemar Exp $
-// html.aw - helper functions for generating HTML
+
 class html extends aw_template
 {
 	/**
@@ -135,7 +134,7 @@ class html extends aw_template
 
 		### compose autocompletes source url
 		if ($autocomplete_source)
-		{arr($args);
+		{
 			$autocomplete_params = count ($autocomplete_params) ? "new Array ('" . implode ("','", $autocomplete_params) . "')" : "new Array ()";
 			$is_tuple = $option_is_tuple ? "true" : "false";
 
@@ -144,7 +143,7 @@ class html extends aw_template
 			$select_autocomplete = "{$event}=\"selectAutoCompleteOption (this);\"";
 
 			### compose autocompletes html
-			if (in_array ($name, $autocomplete_params))//!!! milleks see on? == kui prop on iseendale autocmpl argumendiks ilmselt. midagi siin teisiti kui muidu.kui iseendale arg siis on livesuggest
+			if (in_array ($name, $args["autocomplete_params"]))//kui prop on iseendale autocmpl argumendiks ilmselt. midagi siin teisiti kui muidu.kui iseendale arg siis on livesuggest
 			{
 				$get_autocomplete = "";
 				$autocomplete_init = "<script type=\"text/javascript\">new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, '{$autocomplete_source}', {$autocomplete_params});</script>\n";
