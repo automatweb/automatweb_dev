@@ -29,11 +29,11 @@
 <img src="{VAR:baseurl}/automatweb/images/icons/forum_admin.gif" alt="Administrator" title="Administrator ---- ">
 <!-- END SUB: ADMIN_TOPIC -->
 </td>
-	<td valign="top" class="{VAR:style_comment_count}"><strong>{VAR:name}</strong><p>{VAR:comment}</td>
+	<td valign="top" class="{VAR:style_comment_count}"><strong>{VAR:name}</strong><p>{VAR:comment}{VAR:topic_image1}</td>
 </tr>
 <!-- SUB: COMMENT -->
 <tr>
-	<td align="center" width="20%" class="{VAR:style_comment_time}"><div class="{VAR:style_comment_user}">{VAR:uname}</div><div class="">{VAR:date}</div>
+	<td align="center" width="20%" class="{VAR:style_comment_time}"><div class="{VAR:style_comment_user}">{VAR:uname} -- {VAR:uemail}</div><div class="">{VAR:date}</div>
 <!-- SUB: ADMIN_POST -->
 <img src="{VAR:baseurl}/automatweb/images/icons/forum_admin.gif" alt="Administrator" title="Administrator">
 <!-- END SUB: ADMIN_POST -->
@@ -45,7 +45,7 @@
 		<input type="checkbox" name="del[]" value="{VAR:id}" />
 		</div>
 		<!-- END SUB: ADMIN_BLOCK -->
-	<strong>{VAR:name}</strong><p>{VAR:commtext}
+	<strong>{VAR:name}</strong><p>{VAR:commtext}{VAR:comment_image1}
 	</td>
 </tr>
 <!-- END SUB: COMMENT -->
