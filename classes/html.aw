@@ -1,11 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.103 2006/03/31 13:58:26 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.104 2006/04/07 11:45:59 voldemar Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
 	/**
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		selection name
 	@param options optional type=array
@@ -93,7 +93,7 @@ class html extends aw_template
 
 	/**
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		textbox name
 	@param value optional type=string
@@ -106,15 +106,15 @@ class html extends aw_template
 		if true, textbox is disabled
 	@param textsize optional type=string
 		font size . examples: "10px", "0.7em", "smaller"
-	@param autocompleate_source  optional type=string
+	@param autocomplete_source  optional type=string
 		relative (to web root -- it seems that certain browsers don't allow javascript http connections to absolute paths) URL that refers to source of autocomplete options. See documentation for argument $option_is_tuple about options data format.
-	@param autocompleate_params optional type=array
+	@param autocomplete_params optional type=array
 		array of form element names whose values will be posted to orb method giving autocomplete options
 	@param option_is_tuple optional type=bool
 		indicates whether autocomplete options are values (FALSE) or names associated with values (TRUE) iow autocomplete options are key/value pairs. If set to TRUE, $content should be set to what the user will see in the textbox. Autocomplete options are expected as strings separated by newline characters (\n). If set to TRUE then the expected format is: key=>value ($key will be posted as property value) and the value returned by POST request under property name is $key if an autocomplete option was selected, $value if new value was entered.
 	@param onkeypress optional type=string
 		if set, then onkeypress=$onkeypress
-	
+
 	@returns string / html textbox
 
 	@comment creates html textbox
@@ -135,7 +135,7 @@ class html extends aw_template
 
 		### compose autocompletes source url
 		if ($autocomplete_source)
-		{
+		{arr($args);
 			$autocomplete_params = count ($autocomplete_params) ? "new Array ('" . implode ("','", $autocomplete_params) . "')" : "new Array ()";
 			$is_tuple = $option_is_tuple ? "true" : "false";
 
@@ -144,9 +144,9 @@ class html extends aw_template
 			$select_autocomplete = "{$event}=\"selectAutoCompleteOption (this);\"";
 
 			### compose autocompletes html
-			if (in_array ($name, $autocomplete_params))//!!! milleks see on? == kui prop on iseendale autocmpl argumendiks ilmselt. midagi siin teisiti kui muidu.
+			if (in_array ($name, $autocomplete_params))//!!! milleks see on? == kui prop on iseendale autocmpl argumendiks ilmselt. midagi siin teisiti kui muidu.kui iseendale arg siis on livesuggest
 			{
-				$get_autocomplete = "";//!!!?
+				$get_autocomplete = "";
 				$autocomplete_init = "<script type=\"text/javascript\">new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, '{$autocomplete_source}', {$autocomplete_params});</script>\n";
 			}
 			else
@@ -176,7 +176,7 @@ class html extends aw_template
 
 	/**
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		textarea name
 	@param value optional type=string
@@ -191,7 +191,7 @@ class html extends aw_template
 		if true, textarea is disabled
 	@param textsize optional type=string
 		font size . examples: "10px", "0.7em", "smaller"
-	
+
 	@returns string / html textarea
 
 	@comment creates html textarea
@@ -236,7 +236,7 @@ class html extends aw_template
 
 	/**
 	@attrib api=1 params=name
-		
+
 	@param caption optional type=string
 		legend
 	@param content optional type=string
@@ -254,7 +254,7 @@ class html extends aw_template
 
 	/**
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		iframe name
 	@param width optional type=integer default=300
@@ -263,7 +263,7 @@ class html extends aw_template
 		iframe height
 	@param src optional type=string
 		url
-	
+
 	@returns string/html iframe
 
 	@comment draws html iframe
@@ -278,7 +278,7 @@ class html extends aw_template
 
 	/**
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		password input name
 	@param value optional type=string
@@ -287,7 +287,7 @@ class html extends aw_template
 		number of html password input
 	@param textsize optional type=string
 		font size . examples: "10px", "0.7em", "smaller"
-	
+
 	@returns string /html password input
 
 	@comment creates html password input
@@ -302,7 +302,7 @@ class html extends aw_template
 
 	/**Simple text
 	@attrib api=1 params=name
-		
+
 	@param value required type=string
 		text
 	@param textsize optional type=string
@@ -310,7 +310,7 @@ class html extends aw_template
 	@returns string/html text
 
 	@comment draws simple html text with given textsize
-	**/	
+	**/
 	function text($args = array())
 	{
 		if ($args["textsize"])
@@ -326,7 +326,7 @@ class html extends aw_template
 
 	/**Hidden field
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		hidden field name
 	@param value optional type=string
@@ -342,7 +342,7 @@ class html extends aw_template
 
 	/**File upload
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		fileupload name
 	@param textsize optional type=string
@@ -368,7 +368,7 @@ class html extends aw_template
 
 	/**Checkbox
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		Checkbox name
 	@param value optional type=string
@@ -420,7 +420,7 @@ class html extends aw_template
 
 	/**Radiobutton
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		button's name
 	@param value optional type=string
@@ -453,7 +453,7 @@ class html extends aw_template
 
 	/**Submit button
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		button name
 	@param value optional type=string
@@ -481,7 +481,7 @@ class html extends aw_template
 
 	/**Simple button
 	@attrib api=1 params=name
-		
+
 	@param type optional type=string
 		button type
 	@param value optional type=string
@@ -506,7 +506,7 @@ class html extends aw_template
 
 	/**Time selector
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		Time selector name
 	@param minute_step optional type=int default=1
@@ -518,7 +518,7 @@ class html extends aw_template
 	@param value optional type=array
 		array("hour" - the number of the hour, "minute" - the number of the minute)
 	@returns string/html time selector
-	
+
 	@comments
 		draws several selectboxes , can be used for selecting time
 	**/
@@ -555,7 +555,7 @@ class html extends aw_template
 
 	/**Date & time selector
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		Datetime selector name
 	@param minute_step optional type=int default=1
@@ -570,10 +570,10 @@ class html extends aw_template
 	@param disabled optional type=bool
 		If set, the datetime selector is disabled
 	@param textsize optional type=string
-		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled	
+		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled
 
 	@returns string/html datetime selector
-	
+
 	@comments
 		draws several selectboxes (with textboxes) , can be used for selecting time and date
 	**/
@@ -637,7 +637,7 @@ class html extends aw_template
 
 	/**Date selector
 	@attrib api=1 params=name
-		
+
 	@param name optional type=string
 		Date selector name
 	@param format optional type=string
@@ -658,10 +658,10 @@ class html extends aw_template
 	@param disabled optional type=bool
 		If set, the date selector is disabled
 	@param textsize optional type=string
-		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled	
+		Examples: "10px", "0.7em", "smaller". If set, the datetime selector is disabled
 
 	@returns string/html date selector
-	
+
 	@comments
 		draws several selectboxes , can be used for selecting time and date
 	**/
@@ -733,7 +733,7 @@ class html extends aw_template
 
 	/**Image
 	@attrib api=1 params=name
-		
+
 	@param url optional type=string
 		image url
 	@param width optional type=int
@@ -752,7 +752,7 @@ class html extends aw_template
 		image id
 
 	@returns string/html image
-	
+
 	@comments
 		draws html image tag
 	**/
@@ -793,7 +793,7 @@ class html extends aw_template
 
 	/**Link
 	@attrib api=1 params=name
-		
+
 	@param onclick optional type=string
 		stuff that will happen , if you press the link - javascript
 	@param textsize optional type=string
@@ -810,9 +810,9 @@ class html extends aw_template
 		element id (for css mainly)
 	@param caption optional type=string
 		the text user can see
-	
+
 	@returns string/html href
-	
+
 	@comments
 		draws html href tag
 	**/
@@ -835,7 +835,7 @@ class html extends aw_template
 
 	/**Popup
 	@attrib api=1 params=name
-		
+
 	@param quote optional type=string default = '"'
 		Quotation mark
 	@param url optional type=string
@@ -863,7 +863,7 @@ class html extends aw_template
 	@param no_link optional type=bool
 		If set, returns javascritp text instead of the href html tag
 	@returns string/html popup
-	
+
 	@comments
 		draws html pupup link href tag or javascript text
 	**/
@@ -888,10 +888,10 @@ class html extends aw_template
 		}
 		return html::href($arr);
 	}
-	
+
 	/**HTML form
 	@attrib api=1 params=name
-		
+
 	@param action optional type=string default = '"'
 		form action
 	@param method optional type=string
@@ -910,7 +910,7 @@ class html extends aw_template
 
 	/**Link
 	@attrib api=1 params=name
-		
+
 	@param class optional type=string
 		style class name
 	@param textsize optional type=string
@@ -918,7 +918,7 @@ class html extends aw_template
 	@param content optional type=int
 		fhtml to insert between span tags
 	@returns string/html
-	
+
 	@comments
 		draws <span class='$class'>$content</span>
 	**/
@@ -929,16 +929,16 @@ class html extends aw_template
 		$class = ($class ? 'class="' . $class . '"' : "");
 		return "<span $class $textsize>$content</span>";
 	}
-	
+
 	/**
 	@attrib api=1 params=pos
-		
+
 	@param o required type=object
 		object to be changed
 	@param caption optional type=string
 		the text user can see,(objects name, or "(nimetu)" if the object has no name) if set, returns html href tags.
 	@returns string/url or string/html href
-	
+
 	@comments
 		returns the url where can change the given object in AW
 	@example
@@ -969,10 +969,10 @@ class html extends aw_template
 		}
 		return html::get_change_url($o->id(), array("return_url" => get_ru()), $caption === null ? parse_obj_name($o->name()) : $caption);
 	}
-	
+
 	/**
 	@attrib api=1 params=pos
-		
+
 	@param oid required type=oid
 		objects oid witch is going to be changed
 	@param params optional type=array
@@ -982,7 +982,7 @@ class html extends aw_template
 	@param title optional type=string
 		you can see this text when scrolling over the link
 	@returns string/url or string/html href
-	
+
 	@comments
 		returns the url where can change the given object in AW
 	@example
@@ -1019,10 +1019,10 @@ class html extends aw_template
 		}
 		return $retval;
 	}
-	
+
 	/**
 	@attrib api=1 params=pos
-		
+
 	@param class_id required type=clid
 		new object class id
 	@param parent optional type=oid
@@ -1032,10 +1032,10 @@ class html extends aw_template
 	@param params optional type=array
 		url parameters: array("parameter name" - "parameter value", ...)
 	@returns string/url or string/html href
-	
+
 	@comments
 		returns the url where can make a new object with given class_id
-	@example 
+	@example
 		$url = html::get_change_url($arr["class_id"] , $arr["parent_id"] , array("do" => "die" , "message" => "RIP")));
 	**/
 	function get_new_url($class_id, $parent, $params = array(), $caption = false)
