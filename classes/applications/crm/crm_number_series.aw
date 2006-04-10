@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.1 2005/12/29 13:58:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.2 2006/04/10 13:00:49 kristo Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -168,13 +168,16 @@ class crm_number_series extends class_base
 		// get all series
 		$ser = safe_array($series->meta("series"));
 		$nums = safe_array($series->meta("ser_vals"));
-
 		// filter by class and time
 		foreach($ser as $idx => $row)
 		{
 			if ($row["class"] == $class && $row["from"] <= time() && $row["to"] > time())
 			{
 				$num = $nums[$idx];
+				if ($num > $row["end"])
+				{
+					$num = 0;
+				}
 				if ($num < $row["start"])
 				{
 					$num = $row["start"];
