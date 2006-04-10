@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.122 2006/03/28 06:44:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.123 2006/04/10 12:33:33 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -85,7 +85,7 @@ class users_user extends aw_template
 		}
 
 		$this->msg = $msg;
-	
+
 		// all checks complete, result in $success, process it
 		if (!$success)
 		{
@@ -94,6 +94,12 @@ class users_user extends aw_template
 			session_unregister("uid");
 			aw_global_set("uid", "");
 			$uid = "";
+
+			if ($_POST["remote_auth"] == 1)
+			{
+				die(t("0"));
+			}	
+
 			// suck. 
 			global $verbosity;
 			if ($verbosity = 1)
@@ -181,6 +187,11 @@ class users_user extends aw_template
 
 		// notify listeners
 		post_message("MSG_USER_LOGIN", array("uid" => $uid));
+
+		if ($params["remote_auth"] == 1)
+		{
+			die(t("1"));
+		}	
 
 		// now that we got the whether he can log in bit cleared, try to find an url to redirect to
 		// 1st is the url that was requested before the user was forced to login.

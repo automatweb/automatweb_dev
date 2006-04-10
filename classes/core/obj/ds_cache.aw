@@ -12,6 +12,11 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function get_objdata($oid, $param = array())
 	{
+		if (!empty($GLOBALS["object2version"][$oid]) && $GLOBALS["object2version"][$oid] != "_act")
+		{
+			return $this->contained->get_objdata($oid, $param);
+		}
+
 		// check if it is in the cache
 		if (isset($this->contained->read_properties_data_cache[$oid]))
 		{
@@ -47,6 +52,10 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function read_properties($arr)
 	{
 		$oid = $arr["objdata"]["oid"];
+		if (!empty($GLOBALS["object2version"][$oid]) && $GLOBALS["object2version"][$oid] != "_act")
+		{
+			return $this->contained->read_properties($arr);
+		}
 
 		// check if it is in the cache
 		if (isset($this->contained->read_properties_data_cache[$oid]))

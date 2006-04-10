@@ -1470,6 +1470,13 @@ class user extends class_base
 		return $this->get_person_for_user($u);
 	}
 
+	function get_person_for_uid($uid)
+	{
+		$u = get_instance("users");
+		$oid = $u->get_oid_for_uid($uid);
+		return obj($this->get_person_for_user(obj($oid)));
+	}
+
 	function get_person_for_user($u)
 	{
 		obj_set_opt("no_cache", 1);
@@ -2031,6 +2038,18 @@ class user extends class_base
 			"err_return_url" => aw_ini_get("baseurl").aw_global_get("REQUEST_URI"),
 			"uid" => $arr["obj_inst"]->prop("uid")
 		));
+	}
+
+	function add_rating($uid, $rating)
+	{
+		$this->db_query("INSERT INTO user2rating(uid, rating, crea_by, crea) 
+			VALUES('$uid', '$rating', '".aw_global_get("uid")."', ".time().")
+		");
+	}
+
+	function get_rating($uid)
+	{
+		return  $this->db_fetch_field("SELECT AVG(rating) as r FROM user2rating WHERE uid = '$uid'", "r");
 	}
 }
 ?>

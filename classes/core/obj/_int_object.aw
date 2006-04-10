@@ -1383,6 +1383,22 @@ class _int_object
 		return false;
 	}
 
+	function set_create_new_version()
+	{
+		$this->_create_new_version = 1;
+	}
+
+	function load_version($v)
+	{
+		$GLOBALS["object2version"][$this->obj["oid"]] = $v;
+		$this->_int_load($this->obj["oid"]);
+	}
+
+	function set_save_version($v)
+	{
+		$GLOBALS["object2version"][$this->obj["oid"]] = $v;
+	}
+
 	/////////////////////////////////////////////////////////////////
 	// private functions
 	
@@ -1577,7 +1593,8 @@ class _int_object
 				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
 				"propvalues" => $this->obj["properties"],
 				"ot_modified" => $this->ot_modified,
-				"props_modified" => $this->props_modified
+				"props_modified" => $this->props_modified,
+				"create_new_version" => $this->_create_new_version
 			));
 
 			$this->ot_modified = array("modified" => 1);

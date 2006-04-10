@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ipt/ipt_file_convert.aw,v 1.2 2006/04/07 09:40:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ipt/ipt_file_convert.aw,v 1.3 2006/04/10 12:33:34 kristo Exp $
 // ipt_file_convert.aw - IPT Failide konvertimine 
 /*
 
@@ -240,7 +240,7 @@ class ipt_file_convert extends class_base
 						$inf["XY"][3]
 					);
 					$file["lines"][2] = array(
-						"001", "005", "060", "113", "016", "013"
+						"001", "005", "072", "113", "016", "013"
 					);
 					break;
 
@@ -263,8 +263,8 @@ class ipt_file_convert extends class_base
 					break;
 			}
 
-			$d = array();
-			foreach($inf["data"] as $dat_row)
+				$d = array();
+			foreach($inf["data"] as $idx => $dat_row)
 			{
 				$j = ceil((double)$dat_row[0])+1.0;
 				$parand = 1.0-(0.015*($j-1));
@@ -278,6 +278,31 @@ class ipt_file_convert extends class_base
 							$dat_row[2],
 							$dat_row[1]
 						);
+
+						/*if (count($file["lines"])-1 == 2)
+						{
+							$d[0] = "0.00";
+						}
+						else
+						{
+							$file["lines"][count($file["lines"])-1][0] = (count($file["lines"])-1) == 3 ? "0.00" : number_format(round($dat_row[0], 2), 2, ".", "");
+							$file["lines"][count($file["lines"])-1][1] = $dat_row[2];
+							$file["lines"][count($file["lines"])-1][2] = $dat_row[1];
+						}*/
+						// 1st row is 0, first row data
+						if ((count($file["lines"])-1) == 2)
+						{
+							$d[0] = "0.00";
+							$d[1] = $dat_row[2];
+							$d[2] = $dat_row[1];
+						}						
+						else
+						{
+							// prev row depth, cur row data
+							$d[0] = number_format(round($inf["data"][$idx-1][0], 2), 2, ".", "");
+							$d[1] = $dat_row[2];
+							$d[2] = $dat_row[1];
+						}
 						break;		
 
 					case "HE":
@@ -287,6 +312,17 @@ class ipt_file_convert extends class_base
 							round($calc, 1),
 							$dat_row[1]
 						);
+						if (count($file["lines"])-1 == 2)
+						{
+							$d[0] = "0.00";
+						}
+						else
+						{
+							$file["lines"][count($file["lines"])-1][1] = number_format(round($dat_row[0], 2), 2, ".", "");
+							$file["lines"][count($file["lines"])-1][1] = floor(((double)$dat_row[1])*$parand);
+							$file["lines"][count($file["lines"])-1][2] = round($calc, 1);
+							$file["lines"][count($file["lines"])-1][3] = $dat_row[1];
+						}
 						break;		
 
 					case "HP":
@@ -300,6 +336,9 @@ class ipt_file_convert extends class_base
 								number_format(round($calc, 1), 1, ".", ""),
 								$dat_row[1],
 							);
+							$file["lines"][count($file["lines"])-1][3] = floor(((double)$dat_row[1])*$parand);
+							$file["lines"][count($file["lines"])-1][4] = number_format(round($calc, 1), 1, ".", "");
+							$file["lines"][count($file["lines"])-1][5] = $dat_row[1];
 						}
 						else
 						if ($dat_row[3] == "P")
@@ -325,6 +364,11 @@ class ipt_file_convert extends class_base
 						);
 						break;
 				}
+				$file["lines"][] = $d;
+			}
+			if ($inf["TT"][0] == "PA")
+			{
+				$d[0] = number_format(round($inf["data"][$idx][0], 2), 2, ".", "");
 				$file["lines"][] = $d;
 			}
 			$files[] = $file;

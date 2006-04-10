@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/link_collection.aw,v 1.1 2006/04/05 11:09:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/link_collection.aw,v 1.2 2006/04/10 12:33:34 kristo Exp $
 // link_collection.aw - Lingikogu 
 /*
 
@@ -89,10 +89,6 @@ class link_collection extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
-	}
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
 	function show($arr)

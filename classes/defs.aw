@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.214 2006/03/24 14:28:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.215 2006/04/10 12:33:33 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -32,6 +32,7 @@ if (!defined("DEFS"))
 		return aw_url_change_var("post_ru", NULL, aw_ini_get("baseurl").aw_global_get("REQUEST_URI"));
 	}
 
+	// oh sweet lord what crappy ideas one has when time is short
 	function convert_unicode($source)
 	{
 		$retval = str_replace(chr(195).chr(181), "&otilde;", $source);
@@ -68,17 +69,44 @@ if (!defined("DEFS"))
 		return $retval;
 	}
 
+	/** returns a list of class id's that are "container" classes 
+		@attrib api=1
+
+		@comment
+			container classes are classes that in the admin interface, when you
+			click on them, you go beneath them, not to their edit interface
+
+		@returns
+			array of class_id's
+	**/
 	function get_container_classes()
 	{
 		// classes listed here will be handled as containers where applicable
 		return array(CL_MENU,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
 	}
 
+	/** returns a link to the given object
+		@attrib api=1
+
+		@param oid required type=oid
+
+		@comment
+			when you need to present the user with a link that displays an object
+			then give this function the oid and you get the link
+	**/
 	function obj_link($oid)
 	{
 		return aw_ini_get("baseurl")."/".$oid;
 	}
 
+	/** creates links from e-mail addresses in the given text
+		@attrib api=1
+	
+		@param str required type=string
+
+		@returns
+			the given string, with e-mail aadresses replaced with <a href='mailto:address'>address</a>
+	**/
 	function create_email_links($str)
 	{
 		if (!aw_ini_get("menuedit.protect_emails"))
@@ -88,6 +116,23 @@ if (!defined("DEFS"))
 		return preg_replace("/((\s|^))((http(s?):\/\/)|(www\.))([a-zA-Z0-9\.\-\/_]+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $str); 
 	}
 
+	/** posts an AW message
+		@attrib api=1
+
+		@param msg required type=int
+			The message to post
+
+		@param params required type=any
+			The parameters to pass to the message handler
+
+		@comment
+			The complete documentation regarding AW messages can be found at
+			$AW_ROOT/docs/tutorials/components/aw_messaging
+
+		@examples
+			post_message(MSG_USER_LOGIN, array("uid" => $uid));
+			// now all handlers that are subscribed to the message just got called
+	**/
 	function post_message($msg, $params)
 	{
 		if (aw_global_get("__in_post_message") > 0 && !aw_global_get("__allow_rec_msg"))
@@ -106,21 +151,63 @@ if (!defined("DEFS"))
 		aw_restore_messages();
 	}
 	
+	/** disables aw message sending
+		@attrib api=1
+
+		@comment
+			When messages are disabled, calls to post_message and post_message_with_param do nothing.
+			The calls to disable_messages / restore_messages can be nested
+	**/
 	function aw_disable_messages()
 	{
 		aw_global_set("__in_post_message", aw_global_get("__in_post_message")+1);
 	}
 
+	/** restores the previous aw message sending status
+		@attrib api=1
+
+		@comment
+			Restores the previous state of the message sending flag. 
+
+		@examples
+			aw_disable_messages();
+			aw_disable_messages();
+			post_message(MSG_USER_LOGIN, array());	// this will not get sent
+			aw_restore_messages();
+			post_message(MSG_USER_LOGIN, array());	// this will not get sent either
+			aw_restore_messages();
+			post_message(MSG_USER_LOGIN, array());	// this WILL get sent 
+	**/
 	function aw_restore_messages()
 	{
 		aw_global_set("__in_post_message", aw_global_get("__in_post_message")-1);
 	}
 
+	/** enables sending recursive messages
+		@attrib api=1
+
+		@comment
+			The default behaviour for aw messages is such, that when a message
+			gets posted, while the execution is already inside a message handler, then 
+			the message is ignored. 
+
+			Using this function you can enable messages get posted from message handlers. 
+			The reason for theis behaviour is, that it is VERY easy to create message handlers
+			that will trigger loops, so use this very carefully.
+
+			The calls to aw_allow_recursive_messages() / aw_restore_recursive_messages() can be restored
+	**/
 	function aw_allow_recursive_messages()
 	{
 		aw_global_set("__allow_rec_msg", aw_global_get("__allow_rec_msg")+1);
 	}
 
+	/** restores the previous setting regarding recursive message sending
+		@attrib api=1
+
+		@comment
+			Read the comment for the aw_allow_recursive_messages() function
+	**/
 	function aw_restore_recursive_messages()
 	{
 		aw_global_set("__allow_rec_msg", aw_global_get("__allow_rec_msg")-1);
@@ -135,7 +222,27 @@ if (!defined("DEFS"))
 		}	
 		return $inst->get_lc_date($time, $format);
 	}
-	
+
+	/** posts an AW message with a message parameter
+		@attrib api=1
+
+		@param msg required type=int
+			The message to post
+
+		@param param required type=int
+			The class id to pass as the message parameter
+
+		@param params required type=any
+			The parameters to pass to the message handler
+
+		@comment
+			The complete documentation regarding AW messages can be found at
+			$AW_ROOT/docs/tutorials/components/aw_messaging
+
+		@examples
+			post_message_with_param(MSG_USER_LOGIN, array("uid" => $uid));
+			// now all handlers that are subscribed to the message just got called
+	**/
 	function post_message_with_param($msg, $param, $params)
 	{
 		if (aw_global_get("__in_post_message") > 0 && !aw_global_get("__allow_rec_msg"))
@@ -155,6 +262,31 @@ if (!defined("DEFS"))
 		aw_restore_messages();
 	}
 
+	/** sends e-mail 
+		@attrib api=1
+
+		@param to required type=string
+			The address to send to
+
+		@param subject required type=string
+			The subject of the e-mail
+
+		@param msg required type=string
+			The content of the e-mail
+
+		@param headers optional type=string
+			The headers to add to the message
+
+		@param arguments optional type=string
+			The arguments to pass to sendmail
+
+		@comment
+			Replacement for php's mail(), so that we can always add headers of parameters to sendmail for every message sent via aw. 
+			So use this instead of mail()
+
+		@examples
+			send_mail("example@example.com", "example", "foo!");
+	**/
 	function send_mail($to,$subject,$msg,$headers="",$arguments="")
 	{
 		if (!is_email($to))
@@ -178,10 +310,24 @@ if (!defined("DEFS"))
 		};
 	}
 	
-	////
-	// !returns an array of all classes defined in the system, index is class id, value is class name and path
-	//  addempty - if true, empty element in front
-	//	only_addable - if true, only classes that have can_add = 1 are listed
+	/** returns an array of all classes defined in the system
+		@attrib api=1 params=name
+
+		@param addempty optional type=bool
+			Whether to add and empty element to the returned array or not. defaults to false.
+
+		@param only_addable optional type=boool
+			If true, only classes that can be added by the user are listed, if false, all classes. defaults to false
+
+		@returns
+			returns an array of all classes defined in the system, index is class id, value is class name and path
+
+		@examples
+			html::select(array(
+				"name" => "select_class",
+				"options" => get_class_picker(array("addempty" => true, "only_addable" => true))
+			));
+	**/
 	function get_class_picker($arr = array())
 	{
 		extract($arr);
@@ -228,8 +374,28 @@ if (!defined("DEFS"))
 		return $ret;
 	}
 
-	////
-	// !adds or changes a variable in the current url
+	/** adds or changes a variable in the current or given url
+		@attrib api=1
+
+		@returns 
+			the url with variables changed as the parameters indicate
+
+		@comment
+			This function is probably the most versatile function ever in terms of the parameters it accepts. 
+
+		@examples
+			$url = aw_url_change_var("a", "b"); // reads the current url and changes variable a to have value b 
+			$url = aw_url_change_var("c", "d", $url); // changes the value for variable d to d in the url in the variable $url
+			$url = aw_url_change_var(array(
+				"e" => "f",
+				"g" => NULL
+			)); // changes the variable e to f and removes the variable g from the current url and returns it
+			$url = aw_url_change_var(array(
+				"h" => "i", 
+				"j" => "k"
+			), false, $url); // changes h to value j j to value k in the url in variable $url
+
+	**/
 	function aw_url_change_var($arg1, $arg2 = false, $url = false)
 	{
 		$arg_list = func_get_args();
@@ -255,8 +421,16 @@ if (!defined("DEFS"))
 		return $url;
 	}
 
-	////
-	// !generates a password with length $length
+	/** generates a password with length $length
+		@attrib api=1 params=name
+
+		@param length optional type=int
+			The length of the password to generate
+
+		@returns
+			The generated password. It can contain lower/uppercase letters, numbers and -_ chars
+
+	**/	
 	function generate_password($arr = array())
 	{
 		extract($arr);
@@ -281,8 +455,17 @@ if (!defined("DEFS"))
 		return $src;
 	}
 
-	////
-	// !places <a href tags around urls and e-mail addresses in text $src
+	/** places <a href tags around urls and e-mail addresses in text $src
+		@attrib api=1
+
+		@param src required type=text
+			The text to create the links in
+
+		@returns
+			The given text with http://www.ee replaced with <a href="http://www.ee">http://www.ee</a> and
+			foo@mail.ee replaced with <a href='mailto:foo@mail.ee'>foo@mail.ee</a>
+
+	**/
 	function create_links($src)
 	{
 		$src = preg_replace("/((\W|^))((http(s?):\/\/)|(www\.))(\S+)/im", "$2<a href=\"http$5://$6$7\" target=\"_blank\">$4$6$7</a>", $src);
@@ -305,11 +488,19 @@ if (!defined("DEFS"))
 		return @preg_replace("/{INI:(.+?)}/e","aw_ini_get(\"\\1\")",$src);
 	}
 
-	//// 
-	// !Parsib XML formaadis datat, s.t. laseb selle läbi PHP xml_parse_into_struct funktsiooni
-	// ja tagastab $values ja $keys arrayd
-	// Parameetrid:
-	// xml - data
+	/** gives the given string to xml_parse_into_struct and returns the result
+		@attrib api=1 params=name
+
+		@param xml required type=string
+			The xml to parse
+
+		@returns
+			array of the values and tags given by the xml parser
+
+		@examples
+			list($values, $tags) = parse_xml_def(array("xml" => $xml));
+
+	**/
 	function parse_xml_def($args)
 	{
 		// loome parseri
@@ -324,22 +515,15 @@ if (!defined("DEFS"))
 		return array($values,$tags);
 	};
 
-	////
-	// !tagastab lokaliseeritud kuunime numbri järgi
 	function get_lc_month($id)
 	{
 		if (aw_global_get("LC") == "et")
 		{
-			return get_est_month($id);
+			$mnames = explode("|","jaanuar|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
+			return $mnames[(int)$id-1];
 		}
 		$mnames = explode("|",LC_MONTH);
 		return $mnames[(int)$id];
-	}
-
-	function get_est_month($id)
-	{
-		$mnames = explode("|","jaanuar|veebruar|märts|aprill|mai|juuni|juuli|august|september|oktoober|november|detsember");
-		return $mnames[(int)$id-1];
 	}
 
 	////
@@ -349,10 +533,22 @@ if (!defined("DEFS"))
 		return locale::get_lc_weekday($id);
 	}
 
-	////
-	// !creates html linebreaks in text
-	// the difference with nl2br is, that nl2br inserts html tags before linebreaks
-	// but this replaces linebreaks with html tags
+	/** creates html linebreaks in text
+		@attrib api=1
+
+		@param text required type=string
+			The text to format
+
+		@comment
+			the difference with nl2br is, that nl2br inserts html tags before linebreaks
+			but this replaces linebreaks with html tags
+
+		@returns
+			The formatted text
+
+		@examples
+			echo format_text("a\nb\n\nc"); // prints a<br />b<p>c
+	**/
 	function format_text($text)
 	{
 		$text = str_replace("\n\n","<p>",$text);
@@ -360,36 +556,58 @@ if (!defined("DEFS"))
 		return $text;
 	}
 
-	////
-	// !checks if the parameter is an oid
+	/** checks if the parameter is an oid
+		@attrib api=1
+
+		@param oid required type=any
+			The value to check if it is a valid oid
+
+		@comment
+			This does NOT check if the object actually exists, it just checks if the parameter could be an object id.
+			Valid object id's are integers that are greater than 0
+
+		@returns
+			true if the given value is a valid oid, false if not
+	**/
 	function is_oid($oid)
 	{
 		return is_numeric($oid) && $oid > 0;
 	}
 
-	//// 
-	// !checks if the parameter is a valid class_id
+	/** checks if the parameter is a valid class_id
+		@attrib api=1
+
+		@param clid required type=int
+			The value to check for a valid class_id 
+
+		@returns
+			true if the parameter is a valid class id
+			false if not
+	**/
 	function is_class_id($clid)
 	{
 		if (!is_numeric($clid))
 		{
 			return false;
 		}
-
-		$clss = aw_ini_get("classes");
-		if (!isset($clss[$clid]))
-		{
-			// XXX: perse küll!
-			//return false;
-		}
-
 		return true;
 	}
 
-	////
-	// !checks if the string $string is a valid $set
-	// the currently supported sets are password and uid
-	// usage: if (is_valid("password",$pass_entered_in_a_form))
+	/** checks if the string $string is a valid $set
+		@attrib api=1
+
+		@param set required type=string
+			The type of string to check for - one of "password", "url", "uid"
+
+		@param string required type=string
+			The string to check for validity
+
+		@returns 
+			true if the string is a valid string for the given set, false if not
+
+		@examples
+			if (is_valid("password",$pass_entered_in_a_form))
+	**/
 	function is_valid($set,$string)
 	{
 		$sets = array(
@@ -462,9 +680,9 @@ if (!defined("DEFS"))
 		}
 	}
 
-	////
+	/** check if the parameter is an e-mail address
 	// !Kas argument on e-maili aadress?
-	// Courtesy of martin@linuxator.com ;)
+	// Courtesy of martin@linuxator.com ;)**/
 	function is_email ($address = "") 
 	{
 		return preg_match('/([a-z0-9-]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',$address);

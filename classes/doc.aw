@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.115 2006/04/05 12:13:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.116 2006/04/10 12:33:33 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -179,6 +179,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property no_topic_links type=checkbox table=objects field=meta method=serialize ch_value=1
 	@caption &Auml;ra tee Samal teemal linke
 
+	@property create_new_version type=checkbox ch_value=1 store=no
+	@caption Loo uus versioon
+
+	@property edit_version type=select store=no
+	@caption Vali versioon, mida muuta
+
 @default group=settings
 
 	@property no_right_pane type=checkbox ch_value=1 trans=1
@@ -237,10 +243,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property kws type=keyword_selector store=no 
 	@caption M&auml;rks&otilde;nad
 
+@default group=versions
+
+	@property versions_tb type=toolbar store=no no_caption=1
+	@property versions type=table store=no no_caption=1
+
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
 @groupinfo settings caption=Seadistused icon=archive.gif
 @groupinfo kws caption="M&auml;rks&otilde;nad" 
+@groupinfo versions caption="Versioonid" 
 @groupinfo relationmgr caption=Seostehaldur submit=no
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
@@ -401,6 +413,20 @@ class doc extends class_base
 				$data["value"] = $lang_list[$lang_id];
 				*/
 				break;
+
+			case "edit_version":
+				$data["options"] = $this->get_version_list($arr["obj_inst"]->id());
+				$data["value"] = aw_url_change_var("edit_version", $arr["request"]["edit_version"]);
+				$data["onchange"] = "window.location = this.options[this.selectedIndex].value;";
+				break;
+
+			case "versions":
+				$this->_versions($arr);
+				break;
+
+			case "versions_tb":
+				$this->_versions_tb($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -411,6 +437,10 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "create_new_version":
+				
+				break;
+
 			case "sections":
 				$this->update_brothers(array(
 					"id" => $args["obj_inst"]->id(),
@@ -575,6 +605,9 @@ class doc extends class_base
 				};
 				break;
 
+			case "versions":
+				$this->_save_versions = true;
+				break;
 		};
 		return $retval;
 	}
@@ -619,6 +652,20 @@ class doc extends class_base
 			$obj_inst->set_prop("tm",date("d.m.y",$obj_inst->prop("modified")));
 		};
 
+		if ($args["request"]["create_new_version"] == 1)
+		{
+			$obj_inst->set_create_new_version();
+		}
+		else
+		if ($args["request"]["edit_version"])
+		{
+			$out = array();
+			parse_str($args["request"]["edit_version"], $out);
+			if ($out["edit_version"] != "")
+			{
+				$obj_inst->set_save_version($out["edit_version"]);
+			}
+		}
 	}
 
 	function callback_post_save($args = array())
@@ -642,6 +689,11 @@ class doc extends class_base
 			}
 			$args["obj_inst"]->set_prop("dcache_content", $res);
 			$args["obj_inst"]->save();
+		}
+
+		if ($this->_save_versions)
+		{
+			$this->_save_versions($args);
 		}
 
 		$this->flush_cache();
@@ -670,11 +722,16 @@ class doc extends class_base
 	
 		if (is_object($arr["obj_inst"]) && $arr["obj_inst"]->id())
 		{
+			$url = obj_link($arr["obj_inst"]->id());
+			if ($arr["request"]["edit_version"] != "")
+			{
+				$url = aw_url_change_var("docversion", $arr["request"]["edit_version"], $url);
+			}
 			$toolbar->add_button(array(
 				"name" => "preview",
 				"tooltip" => t("Eelvaade"),
 				"target" => "_blank",
-				"url" => aw_global_get("baseurl") . "/" . $arr["obj_inst"]->id(),
+				"url" => $url,
 				"img" => "preview.gif",
 			));
 
@@ -868,7 +925,17 @@ class doc extends class_base
 		{
 			$args["no_rte"] = 1;
 		};
-		
+		if (!empty($request["edit_version"]))
+		{
+			$out = array();
+			parse_str($request["edit_version"], $out);
+			$args["edit_version"] = $out["edit_version"];
+		};
+		if ($request["create_new_version"] == 1)
+		{
+			// set edit version to new one
+			$args["edit_version"] = $this->db_fetch_field("SELECT version_id FROM documents_versions ORDER BY vers_crea DESC LIMIT 1", "version_id");
+		}
 	}
 
 	function callback_mod_reforb($args = array())
@@ -1093,6 +1160,207 @@ class doc extends class_base
 			"to" => $arr["connection"]->prop("from"),
 			"type" => "RELTYPE_LANG_REL"
 		));
+	}
+
+	function get_version_list($did)
+	{
+		$ret = array(aw_url_change_var("edit_version", NULL) => t("Aktiivne"));
+		$this->db_query("SELECT version_id, vers_crea, vers_crea_by FROM documents_versions WHERE docid = '$did'");
+		$u = get_instance(CL_USER);
+		while ($row = $this->db_next())
+		{
+			$pers = $u->get_person_for_uid($row["vers_crea_by"]);
+			$ret[aw_url_change_var("edit_version", $row["version_id"])] = $pers->name()." ".date("d.m.Y H:i", $row["vers_crea"]);
+		}
+		return $ret;
+	}
+
+	function callback_on_load($p)
+	{
+		if (!empty($p["request"]["edit_version"]))
+		{
+			$out = array();
+			parse_str($p["request"]["edit_version"], $out);
+			if (!$out["id"])
+			{
+				$o = obj($p["request"]["id"]);
+				$o->load_version($p["request"]["edit_version"]);
+			}
+			else
+			if ($out["edit_version"] != "")
+			{
+				$o = obj($p["request"]["id"]);
+				$o->load_version($out["edit_version"]);
+			}
+			
+		}
+	}
+
+	function _init_versions_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "ver",
+			"caption" => t("Versioon"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "rating",
+			"caption" => t("Hinne"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "rate",
+			"caption" => t("Hinda"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "active",
+			"caption" => t("M&auml;&auml;ra aktiivseks"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "delete",
+			"caption" => t("Vali"),
+			"align" => "center"
+		));
+	}
+
+	function _versions($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_versions_t($t);
+
+		$u = get_instance(CL_USER);
+		$rs = get_instance(CL_RATE_SCALE);
+		$my = $arr["obj_inst"]->modifiedby();
+
+
+		$pers = $u->get_person_for_uid($my);
+		$capt = $pers->name()." ".date("d.m.Y H:i", $arr["obj_inst"]->modified())." ".t("Aktiivne");
+		$t->define_data(array(
+			"ver" => html::href(array("url" => obj_link($arr["obj_inst"]->id()), "caption" => $capt)),
+			"active" => "",
+			"delete" => "",
+			"rating" => $u->get_rating($my),
+			"rate" => html::select(array(
+				"name" => "set_rating[".$row["version_id"]."]",
+				"options" => array("" => t("--Vali--")) + $rs->_get_scale(aw_ini_get("config.object_rate_scale"))
+			))
+		));
+		$u = get_instance(CL_USER);
+		$this->db_query("SELECT version_id, vers_crea, vers_crea_by FROM documents_versions WHERE docid = '".$arr["obj_inst"]->id()."'");
+		while ($row = $this->db_next())
+		{
+			$pers = $u->get_person_for_uid($row["vers_crea_by"]);
+			$capt = $pers->name()." ".date("d.m.Y H:i", $row["vers_crea"]);
+			$t->define_data(array(
+				"ver" => html::href(array("url" => aw_url_change_var("docversion", $row["version_id"], obj_link($arr["obj_inst"]->id())), "caption" => $capt)),
+				"active" => html::radiobutton(array(
+					"name" => "set_act_ver",
+					"value" => $row["version_id"]
+				)),
+				"delete" => html::checkbox(array(
+					"name" => "del_version[]",
+					"value" => $row["version_id"]
+				)),
+				"rating" => $u->get_rating($row["vers_crea_by"]),
+				"rate" => html::select(array(
+					"name" => "set_rating[".$row["version_id"]."]",
+					"options" => array("" => t("--Vali--")) + $rs->_get_scale(aw_ini_get("config.object_rate_scale"))
+				))
+			));
+		}
+	}
+
+	function _save_versions($arr)
+	{
+		// delete selected
+		foreach(safe_array($arr["request"]["del_version"]) as $v)
+		{
+			$this->quote(&$v);
+			$this->db_query("DELETE FROM documents_versions WHERE docid = '".$arr["obj_inst"]->id()."' AND version_id = '$v'");
+		}
+
+		$o = obj($arr["request"]["id"]);
+		$o->load_version("");
+
+		$u = get_instance(CL_USER);
+		foreach(safe_array($arr["request"]["set_rating"]) as $version_id => $rating)
+		{
+			if ($rating !== "")
+			{
+				// get creator for version
+				if ($version_id == "")
+				{
+					$u->add_rating($o->modifiedby(), $rating);
+				}
+				else
+				{
+					$crea = $this->db_fetch_field("SELECT vers_crea_by FROM documents_versions WHERE docid = '".$o->id()."' AND version_id = '$version_id'", "vers_crea_by");
+					if ($crea)
+					{
+						$u->add_rating($crea, $rating);
+					}
+				}
+			}
+		}
+
+		// set active
+		// copy from _versions table do real table and flush cache
+		if ($arr["request"]["set_act_ver"] != "")
+		{
+			$sav = $arr["request"]["set_act_ver"];
+			$this->quote(&$sav);
+			$data = $this->db_fetch_row("SELECT * FROM documents_versions WHERE docid = '".$arr["obj_inst"]->id()."' AND version_id = '$sav'");
+			if ($data)
+			{
+				// switch old and new versions
+				$old_o = $this->db_fetch_row("SELECT * FROM objects WHERE oid = '".$arr["obj_inst"]->id()."'");
+				$old_d = $this->db_fetch_row("SELECT * FROM documents WHERE docid = '".$arr["obj_inst"]->id()."'");
+
+				// write old version to versions table as new version
+				$o->set_create_new_version();
+				$o->save();
+
+
+				// write version to objtable
+				$this->quote(&$data);
+				$id = $arr["obj_inst"]->id();
+				$this->db_query("DESCRIBE documents");
+				$sets = array();
+				while ($row = $this->db_next())
+				{
+					$sets[$row["Field"]] = $data[$row["Field"]];
+				}
+				$q = "UPDATE objects SET name = '$data[title]'  WHERE oid = $id";
+				$this->db_query($q);
+				$q = "UPDATE documents SET ".join(",", map2("`%s` = '%s'", $sets))."  WHERE docid = $id";
+				$this->db_query($q);
+				$this->db_query("DELETE FROM documents_versions WHERE docid = '".$arr["obj_inst"]->id()."' AND version_id = '$sav'");
+
+				
+				$c = get_instance("cache");
+				$c->file_clear_pt("storage_object_data");
+				$c->file_clear_pt("storage_search");
+				$c->file_clear_pt("html");
+			}
+		}
+	}
+
+	function _versions_tb($arr)
+	{
+		$toolbar = &$arr["prop"]["vcl_inst"];
+		$toolbar->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Kustuta"),
+			"url" => "javascript:submit_changeform();",
+			"img" => "delete.gif",
+		));
+		$toolbar->closed = 1;
 	}
 };
 ?>

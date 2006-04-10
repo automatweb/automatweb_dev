@@ -1891,6 +1891,21 @@ class object
 		$oid = $i->unser($xml, $parent);
 		return new object($oid);
 	}
+
+	function set_create_new_version()
+	{
+		return $GLOBALS["objects"][$this->oid]->set_create_new_version();
+	}
+
+	function load_version($v)
+	{
+		return $GLOBALS["objects"][$this->oid]->load_version($v);
+	}
+
+	function set_save_version($v)
+	{
+		return $GLOBALS["objects"][$this->oid]->set_save_version($v);
+	}
 }
 
 function &obj($param = NULL)

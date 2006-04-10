@@ -21,6 +21,12 @@ class doc_display extends aw_template
 	function gen_preview($arr)
 	{
 		$doc = obj($arr["docid"]);
+
+		if (aw_ini_get("config.object_versioning") == 1 && $_GET["docversion"] != "")
+		{
+			$doc->load_version($_GET["docversion"]);
+		}
+
 		$doc_parent = obj($doc->parent());
 		$this->tpl_reset();
 		$this->tpl_init("automatweb/documents");

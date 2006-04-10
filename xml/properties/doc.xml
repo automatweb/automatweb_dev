@@ -588,6 +588,25 @@
             <caption>&amp;amp;Auml;ra tee Samal teemal linke</caption>
       </property>
       <property>
+            <name>create_new_version</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>create_new_version</field>
+            <caption>Loo uus versioon</caption>
+      </property>
+      <property>
+            <name>edit_version</name>
+            <table>documents</table>
+            <group>general</group>
+            <type>select</type>
+            <store>no</store>
+            <field>edit_version</field>
+            <caption>Vali versioon, mida muuta</caption>
+      </property>
+      <property>
             <name>no_right_pane</name>
             <table>documents</table>
             <group>settings</group>
@@ -748,6 +767,24 @@
             <field>kws</field>
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
       </property>
+      <property>
+            <name>versions_tb</name>
+            <table>documents</table>
+            <group>versions</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>versions_tb</field>
+      </property>
+      <property>
+            <name>versions</name>
+            <table>documents</table>
+            <group>versions</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>versions</field>
+      </property>
       <classinfo>
             <trans>1</trans>
             <no_comment>1</no_comment>
@@ -768,6 +805,9 @@
             <kws>
                   <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
             </kws>
+            <versions>
+                  <caption>Versioonid</caption>
+            </versions>
             <relationmgr>
                   <caption>Seostehaldur</caption>
                   <submit>no</submit>

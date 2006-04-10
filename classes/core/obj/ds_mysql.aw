@@ -40,6 +40,18 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function get_objdata($oid, $param = array())
 	{
+		if (!empty($GLOBALS["object2version"][$oid]) && $GLOBALS["object2version"][$oid] != "_act")
+		{
+			$v = $GLOBALS["object2version"][$oid];
+			$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = '$oid' AND status != 0");
+			$ret2 = $this->db_fetch_row("SELECT o_alias, o_jrk, o_metadata FROM documents_versions WHERE docid = '$oid' AND version_id = '$v'");
+			$ret["alias"] = $ret2["o_alias"];
+			$ret["jrk"] = $ret2["o_jrk"];
+			$ret["metadata"] = $ret2["o_metadata"];
+			$rv =  $this->_get_objdata_proc($ret, $param, $oid);
+			return $rv;
+		}
+
 		if (isset($this->read_properties_data_cache[$oid]))
 		{
 			$ret = $this->_get_objdata_proc($this->read_properties_data_cache[$oid], $param, $oid);
@@ -103,7 +115,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function read_properties($arr)
 	{
 		extract($arr);
-
+		if (!empty($GLOBALS["object2version"][$objdata["oid"]]) && $GLOBALS["object2version"][$objdata["oid"]] != "_act")
+		{
+			$arr["objdata"]["load_version"] = $GLOBALS["object2version"][$objdata["oid"]];
+			return $this->load_version_properties($arr);
+		}
 		$ret = array();
 
 		// then read the properties from the db
@@ -665,6 +681,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function save_properties($arr)
 	{
 		extract($arr);
+
+		if ($arr["create_new_version"] == 1)
+		{
+			return $this->save_properties_new_version($arr);
+		}
+		if ($GLOBALS["object2version"][$arr["objdata"]["oid"]] != "")
+		{
+			$arr["objdata"]["version_id"] = $GLOBALS["object2version"][$arr["objdata"]["oid"]];
+			return $this->save_properties_new_version($arr);
+		}
 
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote(&$metadata);
@@ -2193,6 +2219,354 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		$res =  join(",", $ret);
 		return array($res, array_keys($ret), $sf);
+	}
+
+	function save_properties_new_version($arr)
+	{
+		extract($arr);
+
+		$metadata = aw_serialize($objdata["meta"]);
+		$this->quote(&$metadata);
+		$this->quote(&$objdata);
+		$objdata["metadata"] = $metadata;
+
+		if ($objdata["brother_of"] == 0)
+		{
+			$objdata["brother_of"] = $objdata["oid"];
+		}
+
+		if (!$arr["objdata"]["version_id"])
+		{
+			// insert new record & get id
+			$version_id = gen_uniq_id();
+			$this->db_query("INSERT INTO documents_versions (version_id, docid, vers_crea, vers_crea_by) values('$version_id', $objdata[oid], ".time().", '".aw_global_get("uid")."')");
+		}
+		else
+		{
+			$version_id = $arr["objdata"]["version_id"];
+			$this->db_query("UPDATE documents_versions SET vers_crea = ".time().", vers_crea_by = '".aw_global_get("uid")."' WHERE docid = $objdata[oid] AND version_id = '$version_id'");
+		}
+
+		$ot_sets = array();
+		$arr["ot_modified"] = $GLOBALS["object_loader"]->all_ot_flds;
+		foreach(safe_array($arr["ot_modified"]) as $_field => $one)
+		{
+			$ot_sets[] = " o_".$_field." = '".$objdata[$_field]."' ";
+		}
+
+		$ot_sets = join(" , ", $ot_sets);
+
+		$q = "UPDATE documents_versions SET
+			$ot_sets
+			WHERE version_id = '".$version_id."'
+		";
+
+//		echo "q = <pre>". htmlentities($q)."</pre> <br />";
+		$this->db_query($q);
+
+		// now save all properties
+
+
+		// divide all properties into tables
+		$tbls = array();
+		foreach($properties as $prop => $data)
+		{
+			if ($data["store"] != "no" && $data["store"] != "connect")
+			{
+				$tbls[$data["table"]][] = $data;
+			}
+		}
+
+		// now save all props to tables.
+		foreach($tbls as $tbl => $tbld)
+		{
+			if ($tbl == "")
+			{
+				continue;
+			}
+
+			if ($tbl == "objects")
+			{
+				continue;
+				$tableinfo[$tbl]["index"] = "oid";
+				$serfs["metadata"] = $objdata["meta"];
+			}
+			else
+			{
+				$serfs = array();
+			};
+			$seta = array();
+			foreach($tbld as $prop)
+			{
+				// this check is here, so that we won't overwrite default values, that are saved in create_new_object
+				if (isset($propvalues[$prop['name']]))
+				{
+					if ($prop['method'] == "serialize")
+					{
+						if ($prop['field'] == "meta" && $prop["table"] == "objects")
+						{
+							$prop['field'] = "metadata";
+						}
+						// since serialized properites can be several for each field, gather them together first
+						$serfs[$prop['field']][$prop['name']] = $propvalues[$prop['name']];
+					}
+					else
+					if ($prop['method'] == "bitmask")
+					{
+						$val = $propvalues[$prop["name"]];
+	
+						if (!isset($seta[$prop["field"]]))
+						{	
+							// jost objects.flags support for now
+							$seta[$prop["field"]] = $objdata["flags"];
+						}
+
+						// make mask for the flag - mask value is the previous field value with the
+						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]	
+						$mask = $seta[$prop["field"]] & (~((int)$prop["ch_value"]));
+						// add the value
+						$mask |= $val;
+						
+						$seta[$prop["field"]] = $mask;;
+					}
+					else
+					{
+						$str = $propvalues[$prop["name"]];
+						$this->quote(&$str);
+						$seta[$prop["field"]] = $str;
+					}
+
+					if ($prop["datatype"] == "int" && $seta[$prop["field"]] == "")
+					{
+						$seta[$prop["field"]] = "0";
+					}
+				}
+			}
+
+			foreach($serfs as $field => $dat)
+			{
+				$str = aw_serialize($dat);
+				$this->quote($str);
+				$seta[$field] = $str;
+			}
+			$sets = join(",",map2("`%s` = '%s'",$seta,0,true));
+			if ($sets != "")
+			{
+				$tbl .= "_versions";
+				$q = "UPDATE $tbl SET $sets WHERE version_id = '".$version_id."'";
+//echo "q = $q <br>";
+				$this->db_query($q);
+			}
+		}
+
+		unset($GLOBALS["__obj_sys_objd_memc"][$objdata["brother_of"]]);
+		unset($GLOBALS["__obj_sys_objd_memc"][$objdata["oid"]]);
+
+		unset($this->read_properties_data_cache[$objdata["oid"]]);
+		unset($this->read_properties_data_cache[$objdata["brother_of"]]);
+
+		$this->cache->file_clear_pt("html");
+	}
+
+	function load_version_properties($arr)
+	{
+		extract($arr);
+		$ret = array();
+
+		// then read the properties from the db
+		// find all the tables that the properties are in
+		$tables = array();
+		$tbl2prop = array();
+		$objtblprops = array();
+		foreach($properties as $prop => $data)
+		{
+			if ($data["store"] == "no")
+			{
+				continue;
+			}
+
+			if ($data["table"] == "")
+			{
+				$data["table"] = "objects";
+			}
+
+			if ($data["table"] != "objects")
+			{
+				$tables[$data["table"]] = $data["table"];
+				if ($data["store"] != "no")
+				{
+					$tbl2prop[$data["table"]][] = $data;
+				}
+			}
+			else
+			{
+				$objtblprops[] = $data;
+			}
+		}
+
+		// import object table properties in the props array
+		foreach($objtblprops as $prop)
+		{
+			if ($prop["method"] == "serialize")
+			{
+				// metadata is unserialized in read_objprops
+				$ret[$prop["name"]] = isset($objdata[$prop['field']]) && isset($objdata[$prop["field"]][$prop["name"]]) ? $objdata[$prop["field"]][$prop["name"]] : "";
+			}
+			else
+			if ($prop["method"] == "bitmask")
+			{
+				$ret[$prop["name"]] = ((int)$objdata[$prop["field"]]) & ((int)$prop["ch_value"]);
+			}
+			else
+			{
+				$ret[$prop["name"]] = $objdata[$prop["field"]];
+			}
+
+			if (isset($prop["datatype"]) && $prop["datatype"] == "int" && $ret[$prop["name"]] == "")
+			{
+				$ret[$prop["name"]] = "0";
+			}
+		}
+
+		// fix old broken databases where brother_of may be 0 for non-brother objects
+		$object_id = ($objdata["brother_of"] ? $objdata["brother_of"] : $objdata["oid"]);
+
+		$conn_prop_vals = array();
+		$conn_prop_fetch = array();
+
+		// do a query for each table
+		foreach($tables as $table)
+		{
+			$fields = array();
+			$_got_fields = array();
+			foreach($tbl2prop[$table] as $prop)
+			{
+				if ($prop['field'] == "meta" && $prop["table"] == "objects")
+				{
+					$prop['field'] = "metadata";
+				}
+
+				if ($prop["method"] == "serialize")
+				{
+					if (!$_got_fields[$prop["field"]])
+					{
+						$fields[] = $table."_versions.`".$prop["field"]."` AS `".$prop["field"]."`";
+						$_got_fields[$prop["field"]] = true;
+					}
+				}
+				else
+				if ($prop["store"] == "connect")
+				{
+					if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
+					{
+						$_co_reltype = $prop["reltype"];
+						$_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
+
+						if ($_co_reltype == "")
+						{
+							error::raise(array(
+								"id" => "ERR_NO_RT",
+								"msg" => sprintf(t("ds_mysql::read_properties(): no reltype for prop %s (%s)"), $prop["name"], $prop["reltype"])
+							));
+						}
+
+						$conn_prop_fetch[$prop["name"]] = $_co_reltype;
+					}
+				}
+				else
+				{
+					$fields[] = $table."_versions.`".$prop["field"]."` AS `".$prop["name"]."`";
+				}
+			}
+
+			if (count($fields) > 0)
+			{
+				$q = "SELECT ".join(",", $fields)." FROM ".$table."_versions WHERE `version_id` = '".$arr["objdata"]["load_version"]."'";
+				
+				$data = $this->db_fetch_row($q);
+				if (is_array($data))
+				{
+					$ret += $data;
+				}
+
+				foreach($tbl2prop[$table] as $prop)
+				{
+					if ($prop["method"] == "serialize")
+					{
+						if ($prop['field'] == "meta" && $prop["table"] == "objects")
+						{
+							$prop['field'] = "metadata";
+						}
+
+						//echo "unser for prop ".dbg::dump($prop)." <br>";
+						$unser = aw_unserialize($ret[$prop["field"]]);
+						//echo "unser = ".dbg::dump($unser)." <br>";
+						$ret[$prop["name"]] = $unser[$prop["name"]];
+					}
+
+					if (isset($prop["datatype"]) && $prop["datatype"] == "int" && $ret[$prop["name"]] == "")
+					{
+						$ret[$prop["name"]] = "0";
+					}
+				}
+			}
+		}
+
+
+		if (count($conn_prop_fetch))
+		{
+			$cpf_dat = array();
+			if (isset($this->read_properties_data_cache_conn[$object_id]))
+			{
+				$cfp_dat = $this->read_properties_data_cache_conn[$object_id];
+			}
+			else
+			{
+				$q = "
+					SELECT 
+						target,
+						reltype
+					FROM 
+						aliases 
+					LEFT JOIN objects ON objects.oid = aliases.target
+					WHERE 
+						source = '".$object_id."' AND 
+						reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
+						objects.status != 0
+				";
+				$this->db_query($q);
+				while ($row = $this->db_next())
+				{
+					$cfp_dat[] = $row;
+				}
+			}
+
+			foreach($cfp_dat as $row)
+			{
+				$prop_name = array_search($row["reltype"], $conn_prop_fetch);
+				if (!$prop_name)
+				{
+					error::raise(array(
+						"id" => "ERR_NO_PROP",
+						"msg" => sprintf(t("ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch! q = %s"), $row["reltype"], $q)
+					));
+				}
+
+				$prop = $properties[$prop_name];
+				if ($prop["multiple"] == 1)
+				{
+					$ret[$prop_name][$row["target"]] = $row["target"];
+				}
+				else
+				{
+					if (!isset($ret[$prop_name])) // just the first one
+					{
+						$ret[$prop_name] = $row["target"];
+					}
+				}
+			}
+		}
+		return $ret;
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.155 2006/04/05 12:39:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.156 2006/04/10 12:33:33 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1078,11 +1078,18 @@ class users extends users_user
 				if ($setg_o->prop("for_not_logged_on_users") == 1)
 				{
 					$_SESSION["nliug"] = $_GET["set_group"];
+					$_COOKIE["nliug"] = $_GET["set_group"];
 				}
 			}
 			if ($_GET["clear_group"] == 1)
 			{
 				unset($_SESSION["nliug"]);
+				unset($_COOKIE["nliug"]);
+			}
+
+			if ($_COOKIE["nliug"] != $_SESSION["nliug"])
+			{
+				$_SESSION["nliug"] = $_COOKIE["nliug"];
 			}
 
 			$gidlist = array($nlg => $nlg);
@@ -1299,6 +1306,7 @@ class users extends users_user
 		@param return optional
 		@param hash optional
 		@param server optional
+		@param remote_auth optional
 		
 		@returns
 		

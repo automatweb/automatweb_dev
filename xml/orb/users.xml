@@ -108,6 +108,7 @@
 					<optional name="return" />
 					<optional name="hash" />
 					<optional name="server" />
+					<optional name="remote_auth" />
 				</arguments>
 			</function>
 		</action>

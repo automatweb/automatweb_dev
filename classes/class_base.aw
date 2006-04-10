@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.477 2006/04/06 11:08:26 dragut Exp $
+// $Id: class_base.aw,v 2.478 2006/04/10 12:33:33 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2810,7 +2810,7 @@ class class_base extends aw_template
 
 					// if we are using rte, then add RTE buttons to the toolbar
 					//if (1 == $this->has_feature("has_rte"))
-					if ($has_rte || $this->no_rte == 1)
+					if (($has_rte || $this->no_rte == 1) && !$val["vcl_inst"]->closed )
 					{
 						if($this->classinfo(array("name" => "allow_rte")) == 2)
 						{
