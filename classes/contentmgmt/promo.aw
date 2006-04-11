@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.83 2006/03/24 08:22:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.84 2006/04/11 10:13:30 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -797,7 +797,7 @@ class promo extends class_base
 		// figure out if this document is to be shown in any promo in the system
 		// to do that
 		// make a list of all promo boxes
-		$ol = new object_list(array(
+		$boxes = new object_list(array(
 			"class_id" => CL_PROMO,
 			"lang_id" => array(),
 			"site_id" => array()
@@ -805,7 +805,7 @@ class promo extends class_base
 
 		$path = $o->path();
 
-		foreach($ol->arr() as $box)
+		foreach($boxes->arr() as $box)
 		{
 			$add_to_list = false;
 
