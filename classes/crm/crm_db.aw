@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.30 2006/04/04 11:01:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.31 2006/04/11 10:23:10 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -367,7 +367,7 @@ class crm_db extends class_base
 		$tb->add_menu_item(array(
 			"parent" => "create_event",
 			"text" => t("Lisa organisatsioon"),
-			"url" => $this->mk_my_orb("new", array("parent" => $arr["obj_inst"]->prop("dir_firma"),"return_url" => get_ru()), CL_CRM_COMPANY),
+			"url" => $this->mk_my_orb("new", array("parent" => $arr["obj_inst"]->prop("dir_firma"),"return_url" => get_ru(), "sector" => $arr["request"]["teg_oid"]), CL_CRM_COMPANY),
 		));
 		if($arr["request"]["group"] == "tegevusalad")
 		{

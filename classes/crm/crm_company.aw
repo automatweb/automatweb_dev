@@ -1427,17 +1427,18 @@ class crm_company extends class_base
 				}
 				break;*/
 
-			/* new code allows selection from all connected sectors
+			/* new code allows selection from all connected sectors */
 			case "pohitegevus":
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_SECTOR,
 				));
-				if ($ol->count() < 30)
+				$data["options"] = array("" => t("--Vali--")) + $ol->names();
+				if ($arr["new"] && $arr["request"]["sector"])
 				{
-					$data["options"] = array("" => t("--Vali--")) + $ol->names();
+					$data["value"] = $arr["request"]["sector"];
 				}
 				break;
-			*/
+
 			case "year_founded":
 				$data["year_from"] = date("Y");
 				$data["year_to"] = 1800;
