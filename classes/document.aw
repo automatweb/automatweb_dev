@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.350 2006/04/11 07:21:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.351 2006/04/11 12:45:36 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3259,6 +3259,7 @@ class document extends aw_template
 			case "ucheck4":
 			case "ucheck5":
 			case "ucheck6":
+			case "image":
 			case "aw_varuser1":
 			case "aw_varuser2":
 			case "aw_varuser3":
