@@ -3816,6 +3816,8 @@ class crm_company extends class_base
 			$bill->set_prop("impl", $u->get_current_company());
 		}
 
+		$bill->set_prop("bill_date", time());
+
 		// if the bill has an impl and customer, then check if they have a customer relation
 		// and if so, then get the due days from that
 		if (is_oid($bill->prop("customer")) && is_oid($bill->prop("impl")))
