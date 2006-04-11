@@ -1188,7 +1188,7 @@ class _int_object
 					}
 				}
 				// connect to all selected ones
-				foreach(safe_array($val) as $connect_to)
+				foreach(safe_array($val) as $_idx => $connect_to)
 				{
 					if (is_oid($connect_to) && $GLOBALS["object_loader"]->ds->can("view", $connect_to))
 					{
@@ -1196,6 +1196,10 @@ class _int_object
 							"to" => $connect_to,
 							"reltype" => $_rt
 						));
+					}
+					else
+					{
+						unset($val[$_idx]);
 					}
 				}
 			}
