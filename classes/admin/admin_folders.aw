@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.59 2006/03/16 09:45:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.60 2006/04/11 10:55:21 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -130,10 +130,15 @@ class admin_folders extends aw_template
 
 		$this->tree = get_instance("vcl/treeview");
 		$this->period = $period;
+		$admrm = $this->cfg["admin_rootmenu2"];
+		if (is_array($admrm))
+		{
+			$admrm = reset($admrm);
+		}
 		$this->tree->start_tree(array(
 			"type" => TREE_DHTML,
 			"url_target" => "list",
-			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"],"period" => $this->period),"admin_menus"),
+			"root_url" => $this->mk_my_orb("right_frame", array("parent" => $admrm,"period" => $this->period),"admin_menus"),
 			"root_name" => t("<b>AutomatWeb</b>"),
 			"has_root" => empty($this->use_parent) ? true : false,
 			"tree_id" => "ad_folders",
