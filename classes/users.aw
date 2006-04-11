@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.156 2006/04/10 12:33:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.157 2006/04/11 16:19:32 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1292,7 +1292,136 @@ class users extends users_user
 			send_mail($jsa,$c->get_simple_config("join_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		}
 	}
+	
+	/**
+		@attrib params=pos
+		@param first required type=string
+		@param last required type=string
+		@comment
+		finds first available uid in format firstname.lastname[.###]
+		etc: 'john.smith','johm.smith.051' ... 
+	**/
+	function _find_username($first, $last)
+	{
+		$first = strtolower($first);
+		$last = strtolower($last);
+		$suffix = "";
+		$count = 0;
+		$user = get_instance("core/users/user");
+		while(true)
+		{
+			$uid = $first.".".$last.$suffix;
+			if(!$user->username_is_taken($uid))
+			{
+				return $uid;
+			}
+			$count++;
+			$suffix = ".".str_pad ($count, 3, "0", STR_PAD_LEFT);
+			if($count > 999)
+			{
+				return false;
+			}
+		}
+	}
 
+	/**
+		@attrib name=id_pre_login params=name nologin=1
+		@comment
+		Logs user in with id-card over ssl.
+	**/
+	function id_pre_login($arr)
+	{
+		// here should be user's certification OSCP check
+
+		$arr["firstname"] = $_SERVER["SSL_CLIENT_S_DN_GN"];
+		$arr["lastname"] = $_SERVER["SSL_CLIENT_S_DN_SN"];
+		$arr["ik"] = $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"];
+		$arr["gender"] = ($_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 1 || $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 3 || $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 5)?1:2;
+//tst
+/*
+		$arr["firstname"] = "jobu";
+		$arr["lastname"] = "kakk";
+		$arr["ik"] = "38501010021";
+		$arr["gender"] = 1;
+		
+		$arr["uid"] = $this->_find_username("jobu","kakk");
+*/
+		$arr["uid"] = $this->_find_username($arr["firstname"],$arr["lastname"]);
+		
+		$password = substr(gen_uniq_id(),0,8);
+		$ol = new object_list(array("class_id" => 145, "personal_id" => $arr["ik"]));
+		if($ol->count() < 1)
+		{
+			$person_obj = new object();
+			$person_obj->set_class_id(145);
+			$person_obj->set_parent(2);
+			$person_obj->set_name($arr["uid"]);
+			$person_obj->set_prop("personal_id",$arr["ik"]);
+			$person_obj->set_prop("firstname",$arr["firstname"]);
+			$person_obj->set_prop("lastname",$arr["lastname"]);
+			$person_obj->set_prop("gender",$arr["gender"]);
+			$person_id = $person_obj->save_new();
+			
+			$user = get_instance("core/users/user");
+			aw_disable_acl();
+			
+			$u_obj = $user->add_user(array(
+				"uid" => $arr["uid"],
+				"password" => $password,
+				"real_name" => $arr["firstname"]." ".$arr["lastname"],
+			));
+			aw_restore_acl();
+
+			$o = new object($u_obj->id());
+			$o->connect(array(
+				"to" => $person_id,
+				"type" => 2,
+			));
+			$o->save();
+		}
+		else
+		{
+			$c = new connection();
+			$conns = $c->find(array("from.class_id" => CL_USER, "to" => $ol->ids()));
+			if(count($conns) < 1)
+			{
+				// võtab object listist esimese isiku id(tglt peax ju niiolema,
+				// et rohkem neid seal ei tohikski olla kuna isikukood ei tohiks korduda).
+				// äki peaks mingi lisakontrolli ikkagi tegema:S
+
+				$person_id = current($ol->ids());
+				$user = get_instance("core/users/user");
+				aw_disable_acl();
+				$u_obj = $user->add_user(array(
+					"uid" => $arr["uid"],
+					"password" => $password,
+					"real_name" => $arr["firstname"]." ".$arr["lastname"],
+				));
+				aw_restore_acl();
+
+				$o = new object($u_obj->id());
+				$o->connect(array(
+					"to" => $person_id,
+					"type" => 2,
+				));
+				$o->save();
+			}
+			else
+			{
+				$conn = current($conns);
+				$obj = new object($conn["from"]);
+				$arr["uid"] = $obj->prop("name");
+				//arr($obj);
+			}
+		}
+		/*
+			whatta hell aim gonna du with $arr["uid"] && $password ???
+		*/
+		$hash = gen_uniq_id();
+		$q = "INSERT INTO user_hashes (hash, hash_time, uid) VALUES('".$hash."','".(time()+60)."','".$arr["uid"]."')";
+		$res = $this->db_query($q);
+		return $this->login(array("hash" => $hash ,"uid" => $arr["uid"]));
+	}
 
 	/** login
 		
@@ -1350,6 +1479,7 @@ class users extends users_user
 
 				// remove stale hash table entries
 				$this->db_query("DELETE FROM user_hashes WHERE hash_time < ".(time() - 60*24*3600));
+				//return (substr(aw_ini_get("baseurl"),0,5) == "https")?str_replace("http","https",aw_ini_get("baseurl")):aw_ini_get("baseurl");
 				return;
 			}
 		}
