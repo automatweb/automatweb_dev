@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.118 2006/04/11 07:21:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.119 2006/04/11 09:10:40 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -669,7 +669,7 @@ class doc extends class_base
 			$obj_inst->set_create_new_version();
 		}
 		else
-		if (aw_global_get("uid") != $modby)
+		if (aw_global_get("uid") != $modby && !$this->_save_versions)
 		{
 			// if the user is different, then create new version
 			$obj_inst->set_create_new_version();
@@ -1264,8 +1264,15 @@ class doc extends class_base
 		$my = $arr["obj_inst"]->modifiedby();
 
 
-		$pers = $u->get_person_for_uid($my);
-		$capt = $pers->name()." ".date("d.m.Y H:i", $arr["obj_inst"]->modified())." ".t("Aktiivne");
+		if ($my != "")
+		{
+			$pers = $u->get_person_for_uid($my);
+			$capt = $pers->name()." ".date("d.m.Y H:i", $arr["obj_inst"]->modified())." ".t("Aktiivne");
+		}
+		else
+		{
+			$capt = $my." ".date("d.m.Y H:i", $arr["obj_inst"]->modified())." ".t("Aktiivne");
+		}
 		$t->define_data(array(
 			"ver" => html::href(array("target" => "_blank", "url" => obj_link($arr["obj_inst"]->id()), "caption" => $capt)),
 			"active" => "",
@@ -1360,8 +1367,12 @@ class doc extends class_base
 				$old_d = $this->db_fetch_row("SELECT * FROM documents WHERE docid = '".$arr["obj_inst"]->id()."'");
 
 				// write old version to versions table as new version
+				$o->set_no_modify(true);
 				$o->set_create_new_version();
 				$o->save();
+				// update the modified date and modifier to point to the old modifier, because it really is HIS version
+				$new_ver = $this->db_fetch_field("SELECT version_id FROM documents_versions ORDER BY vers_crea DESC LIMIT 1", "version_id");
+				$this->db_query("UPDATE documents_versions SET vers_crea = $old_o[modified], vers_crea_by = '$old_o[modifiedby]' WHERE version_id = '$new_ver'");
 
 
 				// write version to objtable
@@ -1373,7 +1384,7 @@ class doc extends class_base
 				{
 					$sets[$row["Field"]] = $data[$row["Field"]];
 				}
-				$q = "UPDATE objects SET name = '$data[title]'  WHERE oid = $id";
+				$q = "UPDATE objects SET name = '$data[title]',modified = '$data[vers_crea]', modifiedby = '$data[vers_crea_by]'  WHERE oid = $id";
 				$this->db_query($q);
 				$q = "UPDATE documents SET ".join(",", map2("`%s` = '%s'", $sets))."  WHERE docid = $id";
 				$this->db_query($q);

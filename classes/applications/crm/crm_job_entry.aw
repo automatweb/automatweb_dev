@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.20 2006/03/29 09:23:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.21 2006/04/11 09:10:44 kristo Exp $
 // crm_job_entry.aw - T88 kirje 
 /*
 
@@ -416,6 +416,8 @@ class crm_job_entry extends class_base
 					"to" => $pers->id(),
 					"type" => "RELTYPE_WORKERS"
 				));
+				$c->set_prop("contact_person", $pers->id());
+				$c->save();
 
 				// add as important person for me
 				$u = get_instance(CL_USER);
