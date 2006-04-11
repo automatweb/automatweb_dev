@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.6 2006/04/11 10:51:19 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -96,7 +96,6 @@ class expp_va extends class_base {
 			));
 
 		$_tmp = $this->cp->pidpos;
-
 		$retHTML =& $this->showLiikList();
 		if ( !empty( $retHTML )) return $retHTML;
 		$this->cp->pidpos = $_tmp;
@@ -214,7 +213,6 @@ class expp_va extends class_base {
 	function showLiikList() {
 
 		global $lc_expp;
-
 		$retHTML = '';
 
 		$_liik = $this->cp->nextPid();
@@ -402,9 +400,9 @@ class expp_va extends class_base {
 		$_cache_name = urlencode( $this->lang.'_va_valjaanne_'.$__aid );
 		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
+
 			return $retHTML;
 		}
-
 		$sql = "SELECT v.pindeks, h.id, h.hinna_tyyp, h.kestus, h.baashind, h.juurdekasv, h.hinna_liik, h.hinna_kirjeldus"
 			." FROM expp_valjaanne v, expp_hind h"
 			." WHERE v.pindeks = h.pindeks"
@@ -416,8 +414,8 @@ class expp_va extends class_base {
 			." AND h.hinna_liik in ( 'OKHIND', 'AVALIK_OKHIND', 'TAVAHIND', 'AVALIK_TAVAHIND' )"
 			." ORDER BY v.valjaande_nimetus ASC, h.hinna_liik ASC, h.kestus ASC";
 		$this->db_query( $sql );
-		if( $this->num_rows() == 0 ) return $retHTML;
 
+		if( $this->num_rows() == 0 ) return $retHTML;
 /*
 		if( $this->lang != 'et' ) {
 			$_laid = reset( $_vanne );
@@ -438,7 +436,6 @@ class expp_va extends class_base {
 		while ( $row = $this->db_next()) {
 			$_kamp = str_replace( array('OKHIND','TAVAHIND', '_'), '', $row["hinna_liik"] );
 			$_temp_liik = $row["pindeks"].'_'.$_kamp;
-
 			$row['baashind']  = sprintf( "%1.0f", $row['baashind'] );
 			if( !isset( $_vad[$_temp_liik]))	{
 				$_vad[$_temp_liik] = array();
@@ -455,8 +452,8 @@ class expp_va extends class_base {
 						$_textn = t('kuud');
 					break;
 				case 3:
-						$_text = ' numbri hind';
-						$_textn = ' numbri hind';
+						$_text = t(' numbri hind');
+						$_textn = t(' numbri hind');
 					break;
 				default:
 					echo $row["hinna_tyyp"];
@@ -469,7 +466,7 @@ class expp_va extends class_base {
 					$_vad[$_temp_liik]['hinnad'][0] = array(
 							'h' => $row["baashind"],
 							'id' => $row["id"],
-							'head' => 'otsekorraldus'
+							'head' => t('otsekorraldus')
 						);
 					break;
 /*
@@ -575,6 +572,7 @@ class expp_va extends class_base {
 			'DESC' => $_desc,
 		));
 		$preview = $this->parse();
+
 		if( empty( $preview )) return $preview;
 
 		$_preview = '';
@@ -585,6 +583,7 @@ class expp_va extends class_base {
 			"lang_id" => array(),
 			"site_id" => array(),
 		));
+
 		if( $cl->count() > 0 ) {
 			$cd = $cl->begin();
 			$dcx = get_instance("doc_display");
@@ -611,6 +610,7 @@ class expp_va extends class_base {
 			}
 		}
 /**/
+
 		$retHTML = ( empty( $_preview )? $preview : $_preview );
 		$this->ch->file_set( $_cache_name, $retHTML );
 		return $retHTML;
@@ -629,6 +629,7 @@ class expp_va extends class_base {
 
 		$_cache_name = urlencode( $this->lang.'_va_liigid' );
 		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+
 		if( !empty( $retHTML )) {
 			return $retHTML;
 		}
@@ -655,24 +656,35 @@ class expp_va extends class_base {
 					} else {
 						$_tyyp_wnimi = $lastTyyp;
 					}
+
 					$this->vars(array(
 						'VAHE' => ($isCount == 0?'':$this->parse('VAHE')),
 						'text' => $_tyyp_wnimi
 					));
 					$retTyyp .= $this->parse('TYYP');
+
 					$this->vars(array(
 						'LINE' => $tempLiik
 					));
+
 					$retLiik .= $this->parse('SISU');
 					$isCount++;
 				}
 				$lastTyyp = $row['tyyp'];
 				$tempLiik = '';
 			}
-
+			if ( $this->lang != 'et' ) {
+				$_lc_key = 'LC_EXPP_DB_'.strtoupper($row['liik']);
+				$_lc_key = str_replace(' ', '', $_lc_key);
+				$_lc_key = htmlentities($_lc_key);
+				$_liik_wnimi = ( isset( $lc_expp[$_lc_key] ) ) ? $lc_expp[$_lc_key] : $row['liik'];
+			} else {
+				$_liik_wnimi = $row['liik'];
+			}
 			$this->vars(array(
 				'url' => $myURL.urlencode($row['tyyp']).'/'.urlencode($row['liik']),
-				'text' => $row['liik']
+			//	'text' => $row['liik']
+				'text' => $_liik_wnimi
 			));
 			$tempLiik .= $this->parse('LINE');
 		}
@@ -693,6 +705,7 @@ class expp_va extends class_base {
 			));
 			$retLiik .= $this->parse('SISU');
 		}
+
 		$this->vars(array(
 			'TYYP' => $retTyyp,
 			'SISU' => $retLiik

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.26 2006/03/09 23:57:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.27 2006/04/11 10:46:39 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -21,6 +21,9 @@
 	@property organisation_link type=text
 	@caption Organisatsioon
 
+	@property show_organisations_publications type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kuva selle v&auml;ljaandja teisi v&auml;ljaandeid
+
 @groupinfo publications caption="V&auml;ljaanded"
 @default group=publications
 
@@ -36,7 +39,13 @@
 		@property publications_homepage type=relpicker reltype=RELTYPE_PUBLICATION_HOMEPAGE field=meta method=serialize
 		@caption V&auml;ljaande koduleht
 
-		@property ordering_terms type=relpicker reltype=RELTYPE_ORDERING_TERMS field=meta method=serialize
+		property ordering_terms type=relpicker reltype=RELTYPE_ORDERING_TERMS field=meta method=serialize
+		caption Tellimistingimused
+
+		property ordering_terms_rus type=relpicker reltype=RELTYPE_ORDERING_TERMS field=meta method=serialize
+		caption Tellimistingimused (vene keeles)
+
+		@property ordering_terms type=callback callback=callback_get_ordering_terms field=meta method=serialize
 		@caption Tellimistingimused
 
 		@property order_composition_information type=textarea field=meta method=serialize
@@ -137,6 +146,12 @@
 
 	@property stats type=text
 	@caption Statistika
+
+@groupinfo transl caption="T&otilde;lkimine"
+@default group=transl
+	
+	@property transl type=callback callback=callback_get_transl
+	@caption T&otilde;lgi	
 	
 @reltype ORGANISATION value=1 clid=CL_CRM_COMPANY
 @caption Organisatsioon
@@ -197,6 +212,12 @@ class expp_journal_management extends class_base
 			"tpldir" => "applications/clients/expp/expp_journal_management",
 			"clid" => CL_EXPP_JOURNAL_MANAGEMENT
 		));
+
+		// translation:
+		$this->trans_props = array(
+			'name',
+			'order_composition_information'	
+		);
 	}
 
 	//////
@@ -218,6 +239,10 @@ class expp_journal_management extends class_base
 					"default_design" => t("Kasutan etteantud p&otilde;hja"),
 					"custom_design" => t("Soovin ise kujundada"),
 				);
+				if (empty($prop['value']))
+				{
+					$prop['value'] = 'default_design';
+				}
 				break;
 			case "custom_design_document":
 				$choose_design = $arr['obj_inst']->prop("choose_design");
@@ -280,7 +305,10 @@ class expp_journal_management extends class_base
 			case "general_webform":
 			case "publications_homepage":
 				$prop['obj_parent'] = $arr['obj_inst']->id();
-				break;	
+				break;
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 		}
 		return $retval;
 	}	
@@ -295,6 +323,38 @@ class expp_journal_management extends class_base
                 $cache_inst = get_instance("cache");
                 $cache_inst->file_invalidate($arr['obj_inst']->prop("code").".cache");
         }
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	function callback_get_ordering_terms($arr)
+	{
+		$ret = array();
+		$lang_inst = get_instance("languages");
+		$lang_list = $lang_inst->get_list();
+		$meta = $arr["obj_inst"]->meta();
+
+		foreach($lang_list as $lang_id => $lang_name)
+		{
+
+			$ret["ordering_terms[$lang_id]"] = array(
+				"name" => "ordering_terms[$lang_id]",
+				"type" => "relpicker",
+				"group" => "publications_general_info",
+				"table" => "objects",
+				"field" => "meta",
+				"method" => "serialize",
+				"caption" => sprintf(t("Tellimistingimused (%s)"), $lang_name),
+				"value" => $meta["ordering_terms"][$lang_id],
+				"reltype" => "RELTYPE_ORDERING_TERMS",
+				'store' => 'no'
+			);
+		}		
+		return $ret;
+	}
+
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
@@ -327,9 +387,11 @@ class expp_journal_management extends class_base
 		if ($_GET['dragut'])
 		{
 	//		$arr['prop']['value'] = str_replace("%", "#", urlencode($arr['obj_inst']->name()));
-			$arr['obj_inst']->set_meta("publications_name_value", "test nimi");
-			$arr['obj_inst']->save();
-			arr($arr['obj_inst']->prop("publications_name"));
+	//		$arr['obj_inst']->set_meta("publications_name_value", "test nimi");
+	//		$arr['obj_inst']->save();
+	//		arr($arr['obj_inst']->prop("publications_name"));
+			
+			
 		}
 	}
 
@@ -1311,6 +1373,7 @@ class expp_journal_management extends class_base
 		
 		return PROP_OK;
 	}
+
 	/**
 		@attrib name=_delete_objects
 	**/
@@ -1328,6 +1391,5 @@ class expp_journal_management extends class_base
 
 		return $arr['post_ru'];
 	}
-
 }
 ?>

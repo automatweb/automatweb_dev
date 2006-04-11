@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.4 2005/11/27 13:02:44 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.5 2006/04/11 10:47:55 dragut Exp $
 // expp_site_content.aw - expp_site_content (nimi) 
 /*
 
@@ -18,8 +18,7 @@ class expp_site_content extends class_base
 	var $text_color = "";
 	var $frame_color = "";
 	var $order_composition_information = "";
-	var $ordering_terms_document = "";
-//	var $document_content_id = 0;
+	var $ordering_terms_document_id = 0;
 
 	var $connections_to_documents = array();
 	var $connections_to_links = array();
@@ -32,7 +31,8 @@ class expp_site_content extends class_base
 	var $forum_object = "";
 	var $custom_design_document_object = "";
 	var $publication_homepage_link_object = "";
-	
+
+
 	function expp_site_content()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be, 
@@ -49,6 +49,7 @@ class expp_site_content extends class_base
 			$ol = new object_list(array(
 				"class_id" => CL_EXPP_JOURNAL_MANAGEMENT,
 				"code" => $GLOBALS['expp_site'],
+				'lang_id' => array(),
 			));
 			if ($ol->count() > 0)
 			{
@@ -60,6 +61,7 @@ class expp_site_content extends class_base
 					$image_inst = get_instance(CL_IMAGE);
 					$this->image_tag = $image_inst->make_img_tag_wl($image_obj->id());
 				}
+
 				// kas kasutaja tahab ise lehte kujundada:
 				$choose_design = $o->prop("choose_design");
 				
@@ -74,25 +76,36 @@ class expp_site_content extends class_base
 						$this->custom_design_document_object = new object($custom_design_document_id);
 					}
 				}
-				// igatahes, kui dokut ülalt kätte ei saand, siis anyway näitame defaulti
+				// kui dokut ülalt kätte ei saand, siis n2itame defaulti
 				if (empty($this->custom_design_document_object))
 				{
+					// organisation info
+					$organisation_obj = $o->get_first_obj_by_reltype('RELTYPE_ORGANISATION');
+					if ( !empty($organisation_obj) )
+					{
+						// organisatsiooni juurde ei saa praegu logo panna, sest vastav v2li on maha keeratud
+					}
+			
 					$this->connections_to_links = $o->connections_from(array(
 						"type" => "RELTYPE_GENERAL_LINK",
+						'to.status' => STAT_ACTIVE
 					));
 					
 					$this->connections_to_documents = $o->connections_from(array(
 						"type" => "RELTYPE_GENERAL_DOCUMENT",
+						'to.status' => STAT_ACTIVE
 					));
 	
 					$this->connections_to_images = $o->connections_from(array(
 						"type" => "RELTYPE_GENERAL_IMAGE",
+						'to.status' => STAT_ACTIVE,
 						"sort_by_num" => "to.jrk",
 						"sort_dir" => "asc",
 					));
 
 					$this->connections_to_files = $o->connections_from(array(
 						"type" => "RELTYPE_GENERAL_FILE",
+						'to.status' => STAT_ACTIVE,
 						"sort_by_num" => "to.jrk",
 						"sort_dir" => "asc",
 					));
@@ -102,9 +115,7 @@ class expp_site_content extends class_base
 						"type" => "RELTYPE_GENERAL_POLL",
 						"to.status" => STAT_ACTIVE,
 					));
-					// i assume, that there is only one active poll, so how can i get the first one?
-					// php fn. reset() resets the internal pointer of array to the beginning and returns
-					// the first element of the array. Returns false if array is empty. nice :)
+					// i assume, that there is only one active poll 
 					$connection_to_active_poll = reset($connections_to_polls);
 					if ($connection_to_active_poll)
 					{
@@ -121,9 +132,10 @@ class expp_site_content extends class_base
 					{
 						$this->webform_object = $connection_to_active_webform->to();
 					}
-
+				
+					// get the forum obj
 					$this->forum_object = $o->get_first_obj_by_reltype("RELTYPE_GENERAL_FORUM");
-//					$this->publication_homepage_link_object = $o->get_first_obj_by_reltype("RELTYPE_PUBLICATION_HOMEPAGE");
+
 					$publications_homepage_oid = $o->prop("publications_homepage");
 					if ($this->can("view", $publications_homepage_oid))
 					{
@@ -141,8 +153,10 @@ class expp_site_content extends class_base
 					$this->main_color = $o->prop("main_color");
 					$this->text_color = $o->prop("text_color");
 					$this->frame_color = $o->prop("frame_color");
-					$this->order_composition_information = $o->prop("order_composition_information");
-					$this->ordering_terms_document_id = $o->prop("ordering_terms");
+					$this->order_composition_information = $this->trans_get_val($o, 'order_composition_information');
+					// here i need to get the correct ordering form document according to the active language
+					$ordering_terms = $o->prop('ordering_terms');
+					$this->ordering_terms_document_id = $ordering_terms[aw_global_get('lang_id')];
 				}
 			}
 			
@@ -152,7 +166,7 @@ class expp_site_content extends class_base
 
 	function on_get_subtemplate_content($arr) {
 		$this->show();
-	
+
 	/*
 		if (empty($this->image_tag) && empty($this->document_content) && empty($this->connections_to_links))
 		{
@@ -169,14 +183,17 @@ class expp_site_content extends class_base
 			- poll
 		*/
 		$show_links_table = false;
+		$document_inst = get_instance(CL_DOCUMENT);
 
 		if (!empty($this->custom_design_document_object))
 		{
 			$document_inst = get_instance(CL_DOCUMENT);
+			$document_content = $document_inst->gen_preview(array(
+				"docid" => $this->custom_design_document_object->id(),
+			));
+
 			$this->vars(array(
-				"content" => $document_inst->gen_preview(array(
-					"docid" => $this->custom_design_document_object->id(),
-				)),
+				"content" => $document_content
 			));
 			
 			$this->vars(array(
@@ -186,7 +203,6 @@ class expp_site_content extends class_base
 		}
 		else
 		{
-			
 			/* DOKUMENTIDE PARSIMINE */
 	
 			$dokumendid = "";
@@ -195,8 +211,11 @@ class expp_site_content extends class_base
 			{
 				$document_object = $connection_to_document->to();
 				$document_id = $document_object->id();
-				$document_title = $document_object->prop("title");
-				$document_content = $document_object->prop("content");
+			//	$document_title = $document_object->prop("title");
+				$document_title = $this->trans_get_val($document_object, 'title');
+			//	$document_content = $document_object->prop("content");
+				$document_content = $this->trans_get_val($document_object, 'content');
+
 				
 				$this->vars(array(
 					"DOCUMENT_ID" => $document_id,
@@ -215,6 +234,13 @@ class expp_site_content extends class_base
 				}
 				else
 				{
+					// ???
+					// vbla ma peaks alias_parseri abil lihtsalt doc_contenti stringist aliased v2lja parsima
+					// ja mitte kasutama seda gen_preview()-d ? --dragut
+					$document_content = $document_inst->gen_preview(array(
+						'docid' => $document_id
+					));
+
 					$this->vars(array(
 						"DOCUMENT_CONTENT" => $document_content,
 					));
@@ -225,7 +251,6 @@ class expp_site_content extends class_base
 					$dokumendid .= $this->parse("GENERAL_DOCUMENTS");
 				}
 				
-	
 			}
 	
 			/* PILTIDE PARSIMINE */
@@ -233,14 +258,19 @@ class expp_site_content extends class_base
 			foreach ($this->connections_to_images as $connection_to_image)
 			{
 				$image_inst = get_instance(CL_IMAGE);
-				
+				$image_object = $connection_to_image->to();
 				$this->vars(array(
-					"GENERAL_IMAGE_TAG" => $image_inst->make_img_tag_wl($connection_to_image->prop("to")),
+					"GENERAL_IMAGE_TAG" => $image_inst->make_img_tag_wl($image_object->id()),
+					'GENERAL_IMAGE_COMMENT' => $this->trans_get_val($image_object, 'comment'),
 				));
 	
 				$pildid .= $this->parse("GENERAL_IMAGES");
 	
 			}
+
+			/* ORGANISATSIOONI PILT (LOGO) */
+
+			
 	
 			/* LINKIDE PARSIMINE */
 			$lingid = "";
@@ -250,11 +280,19 @@ class expp_site_content extends class_base
 				$target = "";
 				if ($link_object->prop("newwindow") > 0)
 				{
-					$target = "_blank";
+					$target = "target=\"_blank\"";
 				}
+
+				$link_url = $link_object->prop('url');
+				$link_name = $link_object->name();
+				if ( empty($link_name) )
+				{
+					$link_name = $link_url;
+				}
+
 				$this->vars(array(
-					"GENERAL_LINK_URL" => $link_object->prop("url"),
-					"GENERAL_LINK_NAME" => $link_object->name(),
+					"GENERAL_LINK_URL" => $link_url,
+					"GENERAL_LINK_NAME" => $link_name,
 					"GENERAL_LINK_TARGET" => $target,
 				));
 	
@@ -277,10 +315,19 @@ class expp_site_content extends class_base
 				$file_object = $connection_to_file->to();
 				$filename = $file_object->name();
 				$file_id = $file_object->id();
+			//	$file_comment = $file_object->prop('comment');
+				$file_comment = $this->trans_get_val($file_object, 'comment');
+				$target = "";
+				if ( $file_object->prop('newwindow') > 0 )
+				{
+					$target = "target=\"_blank\"";
+				}
 				
 				$this->vars(array(
 					"GENERAL_FILE_URL" => $file_inst->get_url($file_id, $file_name),
 					"GENERAL_FILE_NAME" => $filename,
+					'GENERAL_FILE_COMMENT' => $file_comment,
+					'GENERAL_FILE_TARGET' => $target
 				));
 	
 				$failid .= $this->parse("GENERAL_FILE");
@@ -332,8 +379,8 @@ class expp_site_content extends class_base
 			if (!empty($this->forum_object))
 			{
 				$this->vars(array(
-					"link_to_forum_name" => $this->forum_object->name(),
-					"link_to_forum_url" => aw_ini_get("baseurl")."/section=".$this->forum_object->id()."&tel_tpl=1",
+					"LINK_TO_FORUM_NAME" => $this->forum_object->name(),
+					"LINK_TO_FORUM_URL" => aw_ini_get("baseurl")."/section=".$this->forum_object->id()."&tel_tpl=1",
 
 				));
 				$link_to_forum = $this->parse("LINK_TO_FORUM");
@@ -343,11 +390,9 @@ class expp_site_content extends class_base
 			/* LINK VEEBIVORMILE */
 			if (!empty($this->webform_object))
 			{
-	//			$link_to_webform_name = $this->webform_object->name();
-	//			$link_to_webform_url = aw_ini_get("baseurl")."/section=".$this->webform_object->id()."&tel_tpl=1";
 				$this->vars(array(
-					"link_to_webform_name" => $this->webform_object->name(),
-					"link_to_webform_url" => aw_ini_get("baseurl")."/section=".$this->webform_object->id()."&tel_tpl=1",
+					"LINK_TO_WEBFORM_NAME" => $this->webform_object->name(),
+					"LINK_TO_WEBFORM_URL" => aw_ini_get("baseurl")."/section=".$this->webform_object->id()."&tel_tpl=1",
 				));
 				$link_to_webform = $this->parse("LINK_TO_WEBFORM");
 				$show_links_table = true;
@@ -385,14 +430,10 @@ class expp_site_content extends class_base
 			
 			$this->vars(array(
 				"DOC_IMAGE" => $this->image_tag,
-			//	"GENERAL_LINKS" => $lingid,
 				"GENERAL_DOCUMENTS" => $dokumendid,
 				"GENERAL_DOCUMENTS_AS_LINKS" => $dokumendid_lingina,
 				"GENERAL_IMAGES" => $pildid,
 				"GENERAL_FILES" => $failid,
-			//	"GENERAL_POLL" => $general_poll,
-			//	"LINK_TO_FORUM" => $link_to_forum,
-			//	"LINK_TO_WEBFORM" => $link_to_webform,
 				"LINKS_TABLE" => $links_table,
 				"LINK_TO_MANAGEMENT" => $link_to_management,
 				"LINK_TO_PUBLICATION_HOMEPAGE" => $link_to_publication_homepage,
