@@ -759,6 +759,15 @@
             <caption>Kestab</caption>
       </property>
       <property>
+            <name>kw_tb</name>
+            <table>documents</table>
+            <group>keywords</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>kw_tb</field>
+      </property>
+      <property>
             <name>kws</name>
             <table>documents</table>
             <group>kws</group>

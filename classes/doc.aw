@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.119 2006/04/11 09:10:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.120 2006/04/11 15:09:27 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -240,6 +240,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 @default group=kws
 
+	@property kw_tb type=toolbar no_caption=1 store=no group=keywords
+
 	@property kws type=keyword_selector store=no 
 	@caption M&auml;rks&otilde;nad
 
@@ -310,6 +312,10 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "kw_tb":
+				$this->kw_tb($arr);
+				break;
+
 			case "lead":
 				$val = $data["value"];
 				if ($data["richtext"] == 1)
@@ -1409,6 +1415,23 @@ class doc extends class_base
 			"img" => "delete.gif",
 		));
 		$toolbar->closed = 1;
+	}
+
+	function kw_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		
+		$pt = $arr["obj_inst"]->id();
+		if (aw_ini_get("config.keyword_folder"))
+		{
+			$pt = aw_ini_get("config.keyword_folder");
+		}
+		$tb->add_button(array(
+			"name" => "new_kw",
+			"tooltip" => t("M&auml;rks&otilde;na"),
+			"url" => html::get_new_url(CL_KEYWORD, $pt, array("return_url" => get_ru())),
+			"img" => "new.gif",
+		));
 	}
 };
 ?>
