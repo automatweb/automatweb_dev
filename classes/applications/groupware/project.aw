@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.83 2006/03/08 15:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.84 2006/04/11 09:58:54 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -705,6 +705,12 @@ class project extends class_base
 		));
 		//new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
 
+		$ol2 = new object_list(array(
+			"class_id" => CL_BUG,
+			"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start),
+			"project" => $arr["obj_inst"]->id()
+		));
+		$ol->add($ol2);
 
 		$req = get_ru();
 		$clss = aw_ini_get("classes");
@@ -719,8 +725,16 @@ class project extends class_base
 			//};
 
 
-			$start = $o->prop("start1");
-			$end = $o->prop("end");
+			if ($o->class_id() == CL_BUG)
+			{
+				$start = $o->prop("deadline") - ($o->prop("num_hrs_guess")*3600);
+				$end = $o->prop("deadline");
+			}
+			else
+			{
+				$start = $o->prop("start1");
+				$end = $o->prop("end");
+			}
 			$clid = $o->class_id();
 			
 			$clinf = $clss[$clid];
