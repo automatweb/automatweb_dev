@@ -33,7 +33,10 @@ class keyword_selector extends class_base
 	{
 		$data = safe_array($arr["request"]["kw_sel_".$arr["prop"]["name"]]);
 		$filt = $arr["request"]["kw_sel_filt"];
-
+		if (empty($filt))
+		{
+			$filt = "A";
+		}
 		$cf_p = array("to.class_id" => CL_KEYWORD);
 		if ($filt != "")
 		{
@@ -90,7 +93,11 @@ class keyword_selector extends class_base
 		$filt = array(
 			"class_id" => CL_KEYWORD
 		);
-		if ($arr["request"]["kw_sel_filt"] != "")
+		if (empty($arr["request"]["kw_sel_filt"]))
+		{
+			$arr["request"]["kw_sel_filt"] = "A";
+		}
+		if ($arr["request"]["kw_sel_filt"] != "_all")
 		{
 			$filt["name"] = $arr["request"]["kw_sel_filt"]."%";
 		}
@@ -116,6 +123,10 @@ class keyword_selector extends class_base
 
 	function _get_alpha_list($r)
 	{
+		if (empty($r["kw_sel_filt"]))
+		{
+			$r["kw_sel_filt"] = "A";
+		}
 		$list = array();
 		for($i = ord('A'); $i <= ord('Z'); $i++)
 		{
@@ -132,7 +143,8 @@ class keyword_selector extends class_base
 			}
 		}
 
-		if (empty($r["kw_sel_filt"]))
+
+		if ($r["kw_sel_filt"] == "_all")
 		{
 			$list[] = t("K&otilde;ik");
 		}
@@ -140,7 +152,7 @@ class keyword_selector extends class_base
 		{
 			$list[] = html::href(array(
 				"caption" => t("K&otilde;ik"),
-				"url" => aw_url_change_var("kw_sel_filt", null)	
+				"url" => aw_url_change_var("kw_sel_filt", "_all")	
 			));
 		}
 		return join(" ", $list);
