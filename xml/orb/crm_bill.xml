@@ -25,5 +25,12 @@
 			</function>
 		</action>
 
+		<action name="reconcile_rows">
+			<function name="reconcile_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

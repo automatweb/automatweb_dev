@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.39 2006/04/05 13:01:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.40 2006/04/11 09:35:35 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -297,6 +297,11 @@ class crm_bill extends class_base
 			"name" => "has_tax",
 			"caption" => t("Lisandub k&auml;ibemaks?"),
 		));
+
+		$t->define_field(array(
+			"name" => "sel",
+			"caption" => t("Vali"),
+		));
 	}
 
 	function _bill_rows($arr)
@@ -397,8 +402,11 @@ class crm_bill extends class_base
 					"scrollbars" => 1,
 					"url" => $this->mk_my_orb("do_search", array("pn" => "rows[$id][prod]", "clid" => CL_SHOP_PRODUCT, "tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
 					"caption" => t("Vali")
+				)),
+				"sel" => html::checkbox(array(
+					"name" => "sel_rows[]",
+					"value" => $id
 				))
-
 			));
 			$sum += $t_inf["sum"];
 		}
@@ -1413,6 +1421,12 @@ class crm_bill extends class_base
 			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100')",
 			"text" => t("Prindi arve koos lisaga")
 		));
+
+		$tb->add_button(array(
+			"name" => "reconcile",
+			"tooltip" => t("Koonda read"),
+			"action" => "reconcile_rows"
+		));
 	}
 
 	function _init_bill_task_list(&$t)
@@ -1487,6 +1501,27 @@ class crm_bill extends class_base
 				));
 				return true;
 		}
+	}
+
+	/**
+		@attrib name=reconcile_rows
+	**/
+	function reconcile_rows($arr)
+	{
+		// go over the $sel_rows and add the numbers to the first selected one
+		if (is_array($arr["sel_rows"]) && count($arr["sel_rows"]) > 1)
+		{
+			$frow = obj($arr["sel_rows"][0]);
+			for($i = 1; $i < count($arr["sel_rows"]); $i++)
+			{
+				$row_o = obj($arr["sel_rows"][$i]);
+				$frow->set_prop("amt", $frow->prop("amt") + $row_o->prop("amt"));
+				$frow->set_prop("sum", $frow->prop("sum") + $row_o->prop("sum"));
+				$row_o->delete();
+			}
+			$frow->save();
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>
