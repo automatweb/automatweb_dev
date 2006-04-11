@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jupp.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jupp.aw,v 1.6 2006/04/11 10:58:06 dragut Exp $
 // expp_jupp.aw - Expp Jupp 
 /*
 
@@ -56,6 +56,7 @@ class expp_jupp extends class_base
 			"pank"			=> "pank"
 		);
 
+		var $to_replace = array( "\t", "\r", "\n", "\0", "\x0B" );
 		var $lang;
 	function expp_jupp()
 	{
@@ -119,7 +120,7 @@ class expp_jupp extends class_base
 					else {
 						$my_head.= "\t";
 					}
-					$my_head.= $row[$val];
+					$my_head.= trim( str_replace( $this->to_replace, " ", $row[$val] ));
 				}
 				$my_head	.= "\n";
 				$my_write += 1;

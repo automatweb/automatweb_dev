@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_isik.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_isik.aw,v 1.6 2006/04/11 10:56:17 dragut Exp $
 // expp_isik.aw - Expp isik 
 /*
 
@@ -298,16 +298,28 @@ var $telliitems =	array (
 			default:
 				$_ck = 'ok_ari';
 		}
+/*
+		$_dir =  $this->cfg["site_basedir"].'/failid/';
+		$fname	= "isik.txt";
+		$fp = fopen( $_dir.$fname, "a");
+*/
 		foreach( $this->telliitems as $key => $val ) {
 			$in = $GLOBALS['HTTP_POST_VARS'][$key];
+/*
+			fwrite ( $fp, $key."=>".$in."=>".preg_match( '/&#\d{4};/', $in )."\n" );
+*/
 			if( empty( $in )) {
 				if( $val[$_ck] ) {
 					$this->post_errors[] = $lc_expp[$val['error']];
 				}
+			} else if( preg_match( '/&#\d{4};/', $in )) { // Vene keele filter ???
+				$this->post_errors['LC_EXPP_ERR_CHARS'] = $lc_expp['LC_EXPP_ERR_CHARS'];
 			} else {
 				$this->post_arr[$key] = $in;
 			}
 		}
+		fclose( $fp );
+
 		$this->specialChecks();
 		if( !empty( $this->post_errors )) {
 			return;
