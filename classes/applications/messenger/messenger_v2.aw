@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.18 2006/03/16 15:15:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.19 2006/04/11 13:18:48 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -1051,7 +1051,7 @@ class messenger_v2 extends class_base
 			$rv[$frm] = $frm->prop("mail");
 		}
 		$conns = $msgrobj->connections_from(array(
-			"type" => "RELTYPE_MAIL_IDENTITY",
+			"type" => "RELTYPE_FROMNAME",
 		));	
 		foreach($conns as $conn)
 		{
