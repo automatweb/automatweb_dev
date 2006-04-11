@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_liik_list.aw,v 1.3 2006/03/08 15:15:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_liik_list.aw,v 1.4 2006/04/11 11:05:46 dragut Exp $
 // expp_liik_list.aw - Expp liigi list 
+// vana kood!
 /*
 
 @classinfo syslog_type=ST_EXPP_LIIK_LIST relationmgr=yes no_comment=1 no_status=1
@@ -12,15 +13,8 @@
 
 class expp_liik_list extends class_base
 {
-	var $colspan = 4;
 	function expp_liik_list()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
-		$this->init(array(
-			"tpldir" => "expp",
-			"clid" => CL_EXPP_LIIK_LIST
-		));
 	}
 
 	//////
