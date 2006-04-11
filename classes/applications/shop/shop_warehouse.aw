@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.39 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.40 2006/04/11 11:58:44 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -842,7 +842,7 @@ class shop_warehouse extends class_base
 		{
 			$ot = new object_list(array(
 				"parent" => $_GET["tree_filter"],
-				"class_id" => CL_SHOP_PRODUCT,
+				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
 				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 			));
 		}
