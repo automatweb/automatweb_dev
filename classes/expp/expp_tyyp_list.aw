@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_tyyp_list.aw,v 1.3 2006/03/08 15:15:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_tyyp_list.aw,v 1.4 2006/04/11 11:16:06 dragut Exp $
 // expp_tyyp_list.aw - Expp tyybi list 
+// vana kood!
 /*
 
 @classinfo syslog_type=ST_EXPP_TYYP_LIST relationmgr=yes no_comment=1 no_status=1
@@ -12,59 +13,8 @@
 
 class expp_tyyp_list extends class_base
 {
-	var $colspan = 3;
-
 	function expp_tyyp_list()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
-		$this->init(array(
-			"tpldir" => "expp",
-			"clid" => CL_EXPP_TYYP_LIST
-		));
-	}
-
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-	function get_property($arr)
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- get_property --//
-		};
-		return $retval;
-	}
-
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-			//-- set_property --//
-
-		}
-		return $retval;
-	}	
-
-	function callback_mod_reforb($arr)
-	{
-		$arr["post_ru"] = post_ru();
-	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
 	function show($arr)

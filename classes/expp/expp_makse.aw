@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.6 2006/04/11 11:12:54 dragut Exp $
 // expp_makse.aw - Expp makse 
 /*
 
@@ -426,7 +426,8 @@ var $pangad = array(
 			'image'	=> "/img/logo_seb.gif",
 			'alt'		=> $lc_expp['LC_EXPP_ALT_SEB'],
 			'pank'	=> $lc_expp['LC_EXPP_PANK_SEB'],
-			'link'	=> "https://unet.eyp.ee/cgi-bin/unet3.sh/un3min.r",
+//			'link'	=> "https://unet.eyp.ee/cgi-bin/unet3.sh/un3min.r",
+			'link'	=> "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r",
 		));
 		return $this->parse();
 	}
