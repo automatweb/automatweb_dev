@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.64 2006/03/27 13:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.65 2006/04/11 10:04:07 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -411,18 +411,12 @@ class crm_meeting extends class_base
 					{
 						$obj = $conn->from();
 						//isik
-						$data['value'].= html::href(array(
-							'url' => html::get_change_url($obj->id()),
-							'caption' => $obj->name(),
-						));
+						$data['value'].= html::obj_change_url($obj->id()); 
 						//isiku default firma
 						if(is_oid($obj->prop('work_contact')))
 						{
 							$company = new object($obj->prop('work_contact'));
-							$data['value'] .= " ".html::href(array(
-								'url' => html::get_change_url($company->id()),
-								'caption' => $company->name(),
-							));
+							$data['value'] .= " ".html::obj_change_url($company->id());
 						}
 						//isiku ametinimetused...
 						$conns2 = $obj->connections_from(array(
