@@ -98,7 +98,7 @@ class relpicker extends  core
 		}
 
 		if ( $val["type"] == "select" && is_object($this->obj) && ((is_oid($val["value"]) && $this->can("edit", $val["value"])) || 
-			(is_object($this->obj) && $this->obj->is_property($val["name"]) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"]))) ))
+			(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"]))) ))
 		{
 			$val["post_append_text"] .= " ".html::href(array(
 				"url" => html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru())),
