@@ -1906,6 +1906,11 @@ class object
 	{
 		return $GLOBALS["objects"][$this->oid]->set_save_version($v);
 	}
+
+	function set_no_modify($arg)
+	{
+		return $GLOBALS["objects"][$this->oid]->set_no_modify($arg);
+	}
 }
 
 function &obj($param = NULL)

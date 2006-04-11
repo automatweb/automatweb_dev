@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.117 2006/04/11 05:09:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.118 2006/04/11 07:21:28 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -607,6 +607,7 @@ class doc extends class_base
 
 			case "versions":
 				$this->_save_versions = true;
+				$args["obj_inst"]->set_no_modify(true);
 				break;
 		};
 		return $retval;
@@ -652,9 +653,27 @@ class doc extends class_base
 			$obj_inst->set_prop("tm",date("d.m.y",$obj_inst->prop("modified")));
 		};
 
+		$modby = $obj_inst->modifiedby();
+		if ($args["request"]["edit_version"])
+		{
+			$out = array();
+			parse_str($args["request"]["edit_version"], $out);
+			if ($out["edit_version"] != "")
+			{
+				$modby = $this->db_fetch_field("SELECT vers_crea_by FROM documents_versions WHERE docid = ".$obj_inst->id()." AND version_id = '".$out["edit_version"]."'", "vers_crea_by");
+			}
+		}
+
 		if ($args["request"]["create_new_version"] == 1)
 		{
 			$obj_inst->set_create_new_version();
+		}
+		else
+		if (aw_global_get("uid") != $modby)
+		{
+			// if the user is different, then create new version
+			$obj_inst->set_create_new_version();
+			$this->force_new_version = true;
 		}
 		else
 		if ($args["request"]["edit_version"])
@@ -931,7 +950,7 @@ class doc extends class_base
 			parse_str($request["edit_version"], $out);
 			$args["edit_version"] = $out["edit_version"];
 		};
-		if ($request["create_new_version"] == 1)
+		if ($request["create_new_version"] == 1 || $this->force_new_version)
 		{
 			// set edit version to new one
 			$args["edit_version"] = $this->db_fetch_field("SELECT version_id FROM documents_versions ORDER BY vers_crea DESC LIMIT 1", "version_id");
@@ -1205,6 +1224,12 @@ class doc extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "mod",
+			"caption" => t("Muuda"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "rating",
 			"caption" => t("Hinne"),
 			"align" => "center"
@@ -1242,13 +1267,18 @@ class doc extends class_base
 		$pers = $u->get_person_for_uid($my);
 		$capt = $pers->name()." ".date("d.m.Y H:i", $arr["obj_inst"]->modified())." ".t("Aktiivne");
 		$t->define_data(array(
-			"ver" => html::href(array("url" => obj_link($arr["obj_inst"]->id()), "caption" => $capt)),
+			"ver" => html::href(array("target" => "_blank", "url" => obj_link($arr["obj_inst"]->id()), "caption" => $capt)),
 			"active" => "",
 			"delete" => "",
 			"rating" => $u->get_rating($my),
 			"rate" => html::select(array(
 				"name" => "set_rating[".$row["version_id"]."]",
 				"options" => array("" => t("--Vali--")) + $rs->_get_scale(aw_ini_get("config.object_rate_scale"))
+			)),
+			"mod" => html::href(array(
+				"target" => "_blank",
+				"url" => html::get_change_url($arr["obj_inst"]->id(), array("return_url" => get_ru())),
+				"caption" => t("Muuda")
 			))
 		));
 		$u = get_instance(CL_USER);
@@ -1258,7 +1288,7 @@ class doc extends class_base
 			$pers = $u->get_person_for_uid($row["vers_crea_by"]);
 			$capt = $pers->name()." ".date("d.m.Y H:i", $row["vers_crea"]);
 			$t->define_data(array(
-				"ver" => html::href(array("url" => aw_url_change_var("docversion", $row["version_id"], obj_link($arr["obj_inst"]->id())), "caption" => $capt)),
+				"ver" => html::href(array("target" => "_blank", "url" => aw_url_change_var("docversion", $row["version_id"], obj_link($arr["obj_inst"]->id())), "caption" => $capt)),
 				"active" => html::radiobutton(array(
 					"name" => "set_act_ver",
 					"value" => $row["version_id"]
@@ -1271,6 +1301,11 @@ class doc extends class_base
 				"rate" => html::select(array(
 					"name" => "set_rating[".$row["version_id"]."]",
 					"options" => array("" => t("--Vali--")) + $rs->_get_scale(aw_ini_get("config.object_rate_scale"))
+				)),
+				"mod" => html::href(array(
+					"target" => "_blank",
+					"url" => html::get_change_url($arr["obj_inst"]->id(), array("return_url" => get_ru(), "edit_version" => $row["version_id"])),
+					"caption" => t("Muuda")
 				))
 			));
 		}
@@ -1278,6 +1313,8 @@ class doc extends class_base
 
 	function _save_versions($arr)
 	{
+		$arr["obj_inst"]->set_no_modify(true);
+
 		// delete selected
 		foreach(safe_array($arr["request"]["del_version"]) as $v)
 		{

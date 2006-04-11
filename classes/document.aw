@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.349 2006/04/05 12:13:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.350 2006/04/11 07:21:28 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1695,7 +1695,8 @@ class document extends aw_template
 			"id" => $oob["oid"], 
 			"section" => $_GET["section"],
 			"period" => $arr["period"],
-			"is_sa" => $_GET["is_sa"]
+			"is_sa" => $_GET["is_sa"],
+			"edit_version" => $_GET["edit_version"]
 		),"doc");
 	}
 

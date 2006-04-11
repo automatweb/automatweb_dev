@@ -1399,6 +1399,11 @@ class _int_object
 		$GLOBALS["object2version"][$this->obj["oid"]] = $v;
 	}
 
+	function set_no_modify($arg)
+	{
+		$this->no_modify = $arg;
+	}
+
 	/////////////////////////////////////////////////////////////////
 	// private functions
 	
@@ -1554,8 +1559,11 @@ class _int_object
 	{
 		// first, update modifier fields
 		
-		$this->_int_set_of_value("modified", time());
-		$this->_int_set_of_value("modifiedby", aw_global_get("uid"));
+		if (!$this->no_modify)
+		{
+			$this->_int_set_of_value("modified", time());
+			$this->_int_set_of_value("modifiedby", aw_global_get("uid"));
+		}
 
 
 
