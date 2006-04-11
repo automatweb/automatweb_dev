@@ -121,7 +121,6 @@ class crm_company_cust_impl extends class_base
 		$table = &$arr["prop"]["vcl_inst"];
 		
 		$i = get_instance(CL_CRM_COMPANY);
-
 		// if this is my co, then list all projects where my co is implementor
 		$u = get_instance(CL_USER);
 		$my_co = obj($u->get_current_company());

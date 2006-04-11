@@ -70,7 +70,7 @@ class crm_data extends class_base
 
 			$of2 = $of;
 
-			if (isset($filter["client_mgr"]))
+			if (!empty($filter["client_mgr"]))
 			{
 				$relist = new object_list(array(
 					"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
