@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.120 2006/04/11 15:09:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.121 2006/04/12 10:45:12 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -675,7 +675,7 @@ class doc extends class_base
 			$obj_inst->set_create_new_version();
 		}
 		else
-		if (aw_global_get("uid") != $modby && !$this->_save_versions)
+		if (aw_global_get("uid") != $modby && !$this->_save_versions && is_oid($obj_inst->id()))
 		{
 			// if the user is different, then create new version
 			$obj_inst->set_create_new_version();
@@ -1432,6 +1432,7 @@ class doc extends class_base
 			"url" => html::get_new_url(CL_KEYWORD, $pt, array("return_url" => get_ru())),
 			"img" => "new.gif",
 		));
+		$tb->closed = 1;
 	}
 };
 ?>
