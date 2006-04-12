@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.40 2006/04/07 10:44:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.41 2006/04/12 13:18:45 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -596,6 +596,14 @@ class register_search extends class_base
 				if ($request["rsf"][$pn."_to"])
 				{
 					$ts_to = date_edit::get_timestamp($request["rsf"][$pn."_to"]);
+				}
+				if (!$pd["year_from"])
+				{
+					$pd["year_from"] = date("Y")-10;
+				}
+				if (!$pd["year_to"])
+				{
+					$pd["year_to"] = date("Y")+10;
 				}
 				$content = 	$de->gen_edit_form("rsf[".$pn."_from]", $ts_from, $pd["year_from"], $pd["year_to"], true)." - ".
 							$de->gen_edit_form("rsf[".$pn."_to]", $ts_to, $pd["year_from"], $pd["year_to"], true);
