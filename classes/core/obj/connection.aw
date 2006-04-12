@@ -239,8 +239,8 @@ class connection
 		$rv = array();
 		foreach($retval as $k => $v)
 		{
-			if ($GLOBALS["object_loader"]->can("view", $v["to"]) && 
-			    $GLOBALS["object_loader"]->can("view", $v["from"]))
+			if ($GLOBALS["object_loader"]->ds->can("view", $v["to"]) && 
+			    $GLOBALS["object_loader"]->ds->can("view", $v["from"]))
 			{
 				$rv[$k] = $v;
 			}

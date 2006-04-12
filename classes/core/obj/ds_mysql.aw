@@ -946,7 +946,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_t.status as `to.status`,
 				o_s.status as `from.status`,
 				o_t.parent as `to.parent`,
-				o_s.parent as `from.parent`
+				o_s.parent as `from.parent`,
+				o_t.comment as `to.comment`,
+				o_s.comment as `from.comment`
 		";
 
 		if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
