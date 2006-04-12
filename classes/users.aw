@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.159 2006/04/12 09:19:49 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.160 2006/04/12 11:19:34 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1338,17 +1338,19 @@ class users extends users_user
 		$arr["ik"] = $arr["ik"][2];
 		$arr["gender"] = ($_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 1 || $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 3 || $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 5)?1:2;
 //tst
-/*
-		$arr["firstname"] = "jobu";
-		$arr["lastname"] = "kakk";
-		$arr["ik"] = "38501010021";
-		$arr["gender"] = 1;
-		
-		$arr["uid"] = $this->_find_username("jobu","kakk");
-*/
 		$arr["uid"] = $this->_find_username($arr["firstname"],$arr["lastname"]);
 		$password = substr(gen_uniq_id(),0,8);
-		$ol = new object_list(array("class_id" => 145, "personal_id" => $arr["ik"]));
+		aw_disable_acl();
+		$ol = new object_list(array(
+			"class_id" => 145, 
+			"personal_id" => $arr["ik"],
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		if($ol->count() < 1 && aw_ini_get("users.id_only_existing") == "1")
+		{
+			return aw_ini_get("baseurl");
+		}
 		if($ol->count() < 1)
 		{
 			$person_obj = new object();
@@ -1362,14 +1364,12 @@ class users extends users_user
 			$person_id = $person_obj->save_new();
 			
 			$user = get_instance("core/users/user");
-			aw_disable_acl();
 			
 			$u_obj = $user->add_user(array(
 				"uid" => $arr["uid"],
 				"password" => $password,
 				"real_name" => $arr["firstname"]." ".$arr["lastname"],
 			));
-			aw_restore_acl();
 
 			$o = new object($u_obj->id());
 			$o->connect(array(
@@ -1377,26 +1377,29 @@ class users extends users_user
 				"type" => 2,
 			));
 			$o->save();
+			$c = get_instance("cache");
+			$c->file_clear_pt("storage_object_data");
+			$c->file_clear_pt("storage_search");
+			$c->file_clear_pt("acl");
 		}
 		else
 		{
+			//obj_set_opt("no_cache", 1);
+			//$GLOBALS["DUKE"] = 1; 
 			$c = new connection();
-			$conns = $c->find(array("from.class_id" => CL_USER, "to" => $ol->ids()));
+			$conns = $c->find(array(
+				"from.class_id" => CL_USER,
+				"to" => $ol->ids()
+			));
 			if(count($conns) < 1)
 			{
-				// võtab object listist esimese isiku id(tglt peax ju niiolema,
-				// et rohkem neid seal ei tohikski olla kuna isikukood ei tohiks korduda).
-				// äki peaks mingi lisakontrolli ikkagi tegema:S
-
 				$person_id = current($ol->ids());
 				$user = get_instance("core/users/user");
-				aw_disable_acl();
 				$u_obj = $user->add_user(array(
 					"uid" => $arr["uid"],
 					"password" => $password,
 					"real_name" => $arr["firstname"]." ".$arr["lastname"],
 				));
-				aw_restore_acl();
 
 				$o = new object($u_obj->id());
 				$o->connect(array(
@@ -1404,6 +1407,10 @@ class users extends users_user
 					"type" => 2,
 				));
 				$o->save();
+				$c = get_instance("cache");
+				$c->file_clear_pt("storage_object_data");
+				$c->file_clear_pt("storage_search");
+				$c->file_clear_pt("acl");
 			}
 			else
 			{
@@ -1413,9 +1420,7 @@ class users extends users_user
 				//arr($obj);
 			}
 		}
-		/*
-			whatta hell aim gonna du with $arr["uid"] && $password ???
-		*/
+		aw_restore_acl();
 		$hash = gen_uniq_id();
 		$q = "INSERT INTO user_hashes (hash, hash_time, uid) VALUES('".$hash."','".(time()+60)."','".$arr["uid"]."')";
 		$res = $this->db_query($q);
