@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.157 2006/04/11 16:19:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.158 2006/04/12 09:17:54 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1332,10 +1332,10 @@ class users extends users_user
 	function id_pre_login($arr)
 	{
 		// here should be user's certification OSCP check
-
-		$arr["firstname"] = $_SERVER["SSL_CLIENT_S_DN_GN"];
-		$arr["lastname"] = $_SERVER["SSL_CLIENT_S_DN_SN"];
-		$arr["ik"] = $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"];
+		$arr["firstname"] = $_SERVER["SSL_CLIENT_S_DN_G"];
+		$arr["lastname"] = $_SERVER["SSL_CLIENT_S_DN_S"];
+		$arr["ik"] = split("[,]", $_SERVER["SSL_CLIENT_S_DN_CN"]);
+		$arr["ik"] = $arr["ik"][2];
 		$arr["gender"] = ($_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 1 || $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 3 || $_SERVER["SSL_CLIENT_S_DN_SERIALNUMBER"] == 5)?1:2;
 //tst
 /*
@@ -1347,9 +1347,10 @@ class users extends users_user
 		$arr["uid"] = $this->_find_username("jobu","kakk");
 */
 		$arr["uid"] = $this->_find_username($arr["firstname"],$arr["lastname"]);
-		
 		$password = substr(gen_uniq_id(),0,8);
 		$ol = new object_list(array("class_id" => 145, "personal_id" => $arr["ik"]));
+		arr($arr);
+		arr($ol->arr());
 		if($ol->count() < 1)
 		{
 			$person_obj = new object();
@@ -1414,6 +1415,8 @@ class users extends users_user
 				//arr($obj);
 			}
 		}
+		arr("person:".$person_id);
+		arr($arr);
 		/*
 			whatta hell aim gonna du with $arr["uid"] && $password ???
 		*/
@@ -1480,7 +1483,7 @@ class users extends users_user
 				// remove stale hash table entries
 				$this->db_query("DELETE FROM user_hashes WHERE hash_time < ".(time() - 60*24*3600));
 				//return (substr(aw_ini_get("baseurl"),0,5) == "https")?str_replace("http","https",aw_ini_get("baseurl")):aw_ini_get("baseurl");
-				return;
+				return aw_ini_get("baseurl");
 			}
 		}
 		return parent::login($arr);
