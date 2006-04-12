@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.5 2006/03/22 14:49:34 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/interim_page.aw,v 1.6 2006/04/12 14:33:39 markop Exp $
 // interim_page.aw - Intermim page 
 /*
 
@@ -79,7 +79,17 @@ class interim_page extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				break;		
+				$register_list = new object_list(array(
+					"class_id" => CL_REGISTER_DATA,
+				));
+				foreach($register_list->arr() as $mem)
+				{
+					if($mem->meta("cfgform_id") == $arr["obj_inst"]->prop("cfg_form"))
+					{
+						$prop["options"][$mem->id()] = $mem->name();
+					}
+				}
+				break;
 			case "cfg_form":
 				$mem_list = new object_list(array(
 					"class_id" => CL_CFGFORM,
@@ -92,7 +102,7 @@ class interim_page extends class_base
 					$member_list[$mem->id()] = $mem->name();
 				}
 				$prop["options"] = $prop["options"] + $member_list;
-				break;				
+				break;
 		};
 		return $retval;
 	}
