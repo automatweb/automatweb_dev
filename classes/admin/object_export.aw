@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.13 2006/03/30 10:23:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.14 2006/04/12 13:12:25 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -317,7 +317,10 @@ class object_export extends class_base
 					foreach($o->connections_from(array("type" => $rt)) as $c)
 					{
 						$clsf = $c->to();
-						$val[] = $clsf->comment();
+						if (($cval = $clsf->comment()) != "")
+						{
+							$val[] = $clsf->comment();
+						}
 					}
 					$dat[$pn] = join(", ", $val);
 				}
