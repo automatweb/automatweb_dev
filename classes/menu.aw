@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.150 2006/04/05 12:13:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.151 2006/04/12 13:31:14 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -687,6 +687,7 @@ class menu extends class_base
 					'objects.modified' => t("Muutmise kuup&auml;eva j&auml;rgi"),
 					'documents.modified' => t("Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"),
 					'planner.start' => t("Kalendris valitud aja j&auml;rgi"),
+					'RAND()' => t("Random"),
 				);
 				break;
 

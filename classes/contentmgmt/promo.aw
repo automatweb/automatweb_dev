@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.84 2006/04/11 10:13:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.85 2006/04/12 13:31:14 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -238,6 +238,7 @@ class promo extends class_base
 					'documents.modified' => t("Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"),
 					'objects.name' => t("Objekti nime j&auml;rgi"),
 					'planner.start' => t("Kalendris valitud aja j&auml;rgi"),
+					'RAND()' => t("Random"),
 				);
 				break;
 
