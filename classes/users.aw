@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.160 2006/04/12 11:19:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.161 2006/04/12 12:38:09 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1331,6 +1331,10 @@ class users extends users_user
 	**/
 	function id_pre_login($arr)
 	{
+		if($_SERVER["HTTPS"] != "on")
+		{
+			return aw_ini_get("baseurl");
+		}
 		// here should be user's certification OSCP check
 		$arr["firstname"] = $_SERVER["SSL_CLIENT_S_DN_G"];
 		$arr["lastname"] = $_SERVER["SSL_CLIENT_S_DN_S"];
@@ -1417,7 +1421,6 @@ class users extends users_user
 				$conn = current($conns);
 				$obj = new object($conn["from"]);
 				$arr["uid"] = $obj->prop("name");
-				//arr($obj);
 			}
 		}
 		aw_restore_acl();
