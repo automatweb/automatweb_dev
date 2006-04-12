@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.158 2006/04/12 09:17:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.159 2006/04/12 09:19:49 tarvo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1349,8 +1349,6 @@ class users extends users_user
 		$arr["uid"] = $this->_find_username($arr["firstname"],$arr["lastname"]);
 		$password = substr(gen_uniq_id(),0,8);
 		$ol = new object_list(array("class_id" => 145, "personal_id" => $arr["ik"]));
-		arr($arr);
-		arr($ol->arr());
 		if($ol->count() < 1)
 		{
 			$person_obj = new object();
@@ -1415,8 +1413,6 @@ class users extends users_user
 				//arr($obj);
 			}
 		}
-		arr("person:".$person_id);
-		arr($arr);
 		/*
 			whatta hell aim gonna du with $arr["uid"] && $password ???
 		*/
