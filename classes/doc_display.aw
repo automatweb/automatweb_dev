@@ -269,7 +269,7 @@ class doc_display extends aw_template
 	
 	function _get_edit_menu($menu)
 	{
-		if (!$this->prog_acl())
+		if (!$this->prog_acl() || $_SESSION["no_display_site_editing"])
 		{
 			return;
 		}

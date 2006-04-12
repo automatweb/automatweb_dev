@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.163 2006/04/05 12:13:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.164 2006/04/12 13:39:28 kristo Exp $
 
 /*
 
@@ -2716,7 +2716,7 @@ class site_show extends class_base
 
 	function __helper_menu_edit($menu, $area, $level)
 	{
-		if (!$this->prog_acl())
+		if (!$this->prog_acl() || $_SESSION["no_display_site_editing"])
 		{
 			return;
 		}
@@ -2769,7 +2769,7 @@ class site_show extends class_base
 
 	function _get_empty_doc_menu()
 	{
-		if (!$this->prog_acl() || !aw_ini_get("config.site_editing"))
+		if (!$this->prog_acl() || !aw_ini_get("config.site_editing") || $_SESSION["no_display_site_editing"])
 		{
 			return;
 		}

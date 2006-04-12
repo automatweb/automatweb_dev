@@ -25,5 +25,12 @@
 			</function>
 		</action>
 
+		<action name="toggle_site_editing" is_public="1" caption="N&amp;auml;ita &amp;auml;ra n&amp;auml;ita saidi muutmise linke">
+			<function name="toggle_site_editing">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

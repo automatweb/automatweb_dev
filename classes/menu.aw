@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.151 2006/04/12 13:31:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.152 2006/04/12 13:39:26 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1748,6 +1748,15 @@ class menu extends class_base
 			"url" => html::get_new_url(CL_KEYWORD, $arr["obj_inst"]->id(), array("return_url" => get_ru())),
 			"img" => "new.gif",
 		));
+	}
+
+	/** toggles site editing display
+		@attrib name=toggle_site_editing is_public=1 caption="N&auml;ita &auml;ra n&auml;ita saidi muutmise linke"
+	**/
+	function toggle_site_editing($arr)
+	{
+		$_SESSION["no_display_site_editing"] = !$_SESSION["no_display_site_editing"];
+		return aw_ini_get("baseurl");
 	}
 };
 ?>
