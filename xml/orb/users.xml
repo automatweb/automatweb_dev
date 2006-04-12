@@ -97,6 +97,13 @@
 			</function>
 		</action>
 
+		<action name="id_pre_login" nologin="1">
+			<function name="id_pre_login">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="login" nologin="1" is_public="1" caption="Logi sisse">
 			<function name="login">
 				<arguments>
