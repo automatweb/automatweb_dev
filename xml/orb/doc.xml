@@ -32,5 +32,12 @@
 			</function>
 		</action>
 
+		<action name="delete_versions">
+			<function name="delete_versions">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

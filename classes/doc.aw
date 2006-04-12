@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.121 2006/04/12 10:45:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.122 2006/04/12 12:04:46 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -969,6 +969,7 @@ class doc extends class_base
 		{
 			$args["cb_part"] = $_REQUEST["cb_part"];
 		};
+		$args["post_ru"] = post_ru();
 	}
 
 	/** Shows the pic1 element. Well, I think I could use a generic solution for displaying different 
@@ -1328,13 +1329,6 @@ class doc extends class_base
 	{
 		$arr["obj_inst"]->set_no_modify(true);
 
-		// delete selected
-		foreach(safe_array($arr["request"]["del_version"]) as $v)
-		{
-			$this->quote(&$v);
-			$this->db_query("DELETE FROM documents_versions WHERE docid = '".$arr["obj_inst"]->id()."' AND version_id = '$v'");
-		}
-
 		$o = obj($arr["request"]["id"]);
 		$o->load_version("");
 
@@ -1411,7 +1405,7 @@ class doc extends class_base
 		$toolbar->add_button(array(
 			"name" => "delete",
 			"tooltip" => t("Kustuta"),
-			"url" => "javascript:submit_changeform();",
+			"action" => "delete_versions",
 			"img" => "delete.gif",
 		));
 		$toolbar->closed = 1;
@@ -1433,6 +1427,22 @@ class doc extends class_base
 			"img" => "new.gif",
 		));
 		$tb->closed = 1;
+	}
+
+	/**
+		@attrib name=delete_versions
+	**/
+	function delete_versions($arr)
+	{
+		// delete selected
+		$o = obj($arr["id"]);
+		foreach(safe_array($arr["del_version"]) as $v)
+		{
+			$this->quote(&$v);
+			$this->db_query("DELETE FROM documents_versions WHERE docid = '".$o->id()."' AND version_id = '$v'");
+		}
+
+		return $arr["post_ru"];
 	}
 };
 ?>
