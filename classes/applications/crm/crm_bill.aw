@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.40 2006/04/11 09:35:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.41 2006/04/12 11:48:49 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -250,6 +250,7 @@ class crm_bill extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["reconcile_price"] = -1;
 	}
 
 	function _init_bill_rows_t(&$t)
@@ -1425,7 +1426,9 @@ class crm_bill extends class_base
 		$tb->add_button(array(
 			"name" => "reconcile",
 			"tooltip" => t("Koonda read"),
-			"action" => "reconcile_rows"
+			"action" => "reconcile_rows",
+			// get all checked rows and check their prices, if they are different, ask the user for a new price
+			"onClick" => "nfound=0;curp=-1;form=document.changeform;len = form.elements.length;for(i = 0; i < len; i++){if (form.elements[i].name.indexOf('sel_rows') != -1 && form.elements[i].checked)	{nfound++; neln = 'rows_'+form.elements[i].value+'__price_';nel = document.getElementById(neln); if (nfound == 1) { curp = nel.value; } else if(curp != nel.value) {price_diff = 1;}}}; if (price_diff) {v=prompt('Valitud ridade hinnad on erinevad, sisesta palun koondatud rea hind'); if (v) { document.changeform.reconcile_price.value = v;return true; } else {return false;} }"
 		));
 	}
 
@@ -1515,8 +1518,12 @@ class crm_bill extends class_base
 			for($i = 1; $i < count($arr["sel_rows"]); $i++)
 			{
 				$row_o = obj($arr["sel_rows"][$i]);
+				if ($arr["reconcile_price"] != -1)
+				{
+					$frow->set_prop("price", $arr["reconcile_price"]);
+				}
 				$frow->set_prop("amt", $frow->prop("amt") + $row_o->prop("amt"));
-				$frow->set_prop("sum", $frow->prop("sum") + $row_o->prop("sum"));
+				$frow->set_prop("sum", $frow->prop("amt") * $frow->prop("price"));
 				$row_o->delete();
 			}
 			$frow->save();
