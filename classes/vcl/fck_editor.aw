@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.5 2006/03/30 07:10:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.6 2006/04/12 14:07:14 kristo Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor
@@ -49,6 +49,12 @@ window.onload = function()
 	';
 	foreach($arr["props"] as $nm)
 	{
+		$w = 600;
+		$h = 500;
+		if ($nm == "lead")
+		{
+			$h = 200;
+		}
 		$nm2 = $nm;
 		$nm = str_replace("[","_",$nm);
 		$nm = str_replace("]","_",$nm);
@@ -56,8 +62,8 @@ window.onload = function()
 		var fck'.$nm.' = new FCKeditor("'.$nm2.'");
 		fck'.$nm.'.BasePath = "js/fckeditor/";
 		fck'.$nm.'.ToolbarSet = "aw";
-		fck'.$nm.'.Width = "600px";
-		fck'.$nm.'.Height = "500px";
+		fck'.$nm.'.Width = "'.$w.'px";
+		fck'.$nm.'.Height = "'.$h.'px";
 		fck'.$nm.'.Config["AutoDetectLanguage"] = false;
 		fck'.$nm.'.Config["DefaultLanguage"] = "'.(!empty($arr["lang"]) ? $arr["lang"] : "et").'";
 		fck'.$nm.'.ReplaceTextarea();';
