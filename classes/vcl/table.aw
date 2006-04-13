@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.70 2006/03/13 12:27:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.71 2006/04/13 10:15:12 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -45,6 +45,7 @@ class aw_table extends aw_template
 
 		// initsialiseerime muutujad
 		$this->rowdefs = array();
+		$this->rowdefs_key_index = array();
 		$this->data = array();
 		$this->actions = array();
 		$this->col_styles = array();
@@ -53,6 +54,7 @@ class aw_table extends aw_template
 		$this->selected_filters = array();
 		$this->filter_index = array();
 		$this->sortable = true;
+		$this->rowdefs_ordered = false;
 
 		// esimene kord andmeid sisestada?
 		// seda on vaja selleks, et m‰‰rata default sort order.
@@ -535,6 +537,18 @@ class aw_table extends aw_template
 		}
 	}
 
+	function _sort_by_field_order($a, $b)
+	{
+		if ($a["order"] == $b["order"])
+		{
+			return 0;
+		}
+		else
+		{
+		   return ($a["order"] < $b["order"]) ? -1 : 1;
+		}
+	}
+
 	function draw($arr = array())
 	{
 		// v‰ljastab tabeli
@@ -542,6 +556,11 @@ class aw_table extends aw_template
 		{
 			print "Don't know what to do";
 			return;
+		}
+
+		if ($this->rowdefs_ordered)
+		{
+			usort($this->rowdefs, array(&$this, "_sort_by_field_order"));
 		}
 
 		if ($this->rgroupby && !$arr["rgroupby"])
@@ -1366,7 +1385,10 @@ class aw_table extends aw_template
 		}
 
 		$this->filter_comparators[$args["name"]] = $args["filter_compare"];
+		$this->rowdefs_key_index[$args["name"]] = count($this->rowdefs);
 		$this->rowdefs[] = $args;
+		$this->rowdefs_ordered = isset($args["order"]);
+
 		if (isset($args["numeric"]))
 		{
 			$this->nfields[$args["name"]] = 1;
@@ -1411,13 +1433,29 @@ class aw_table extends aw_template
 	function remove_field($name)
 	{
 		unset ($this->filters[$name]);
-		$tmp = $this->rowdefs;
-		foreach($tmp as $k => $v)
+		unset($this->rowdefs[$this->rowdefs_key_index[$name]]);
+		$this->rowdefs_ordered = false;
+
+		foreach ($this->rowdefs as $def)
 		{
-			if ($v["name"] == $name)
+			if (isset($def["order"]))
 			{
-				unset($this->rowdefs[$k]);
+				$this->rowdefs_ordered = true;
+				break;
 			}
+		}
+	}
+
+	// same arguments as for define_field(), "name" is required
+	// exceptions:
+	// filter updating not implemented
+	// additional argument "order" explicitly defined here also applies to define_field()
+	function update_field($args)
+	{
+		if (is_array($args) and array_key_exists($args["name"], $this->rowdefs_key_index))
+		{
+			$this->rowdefs_ordered = isset($args["order"]);
+			$this->rowdefs[$this->rowdefs_key_index[$args["name"]]] = $args + $this->rowdefs[$this->rowdefs_key_index[$args["name"]]];
 		}
 	}
 
