@@ -97,7 +97,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@caption P&otilde;hitegevus / Tegevusalad
 
 	@property activity_keywords type=textarea cols=65 rows=3 table=kliendibaas_firma
-	@comment Komade või semikoolonitega eraldatud
+	@comment Komadega eraldatud
 	@caption M&auml;rks&otilde;nad
 
 ------ Yldine - Lisainfo grupp----------
@@ -323,6 +323,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
 			@property customer_search_ev type=textbox size=30 store=no parent=vbox_customers_left captionside=top
 			@caption &Otilde;iguslik vorm
+
+			@property customer_search_keywords type=textbox size=30 store=no parent=vbox_customers_left captionside=top
+			@caption M&auml;rks&otilde;nad
 
 			@property customer_search_is_co type=chooser  store=no parent=vbox_customers_left multiple=1 no_caption=1
 			@caption Organisatsioon
@@ -1047,6 +1050,9 @@ ALTER TABLE `kliendibaas_firma` ADD `activity_keywords` TEXT AFTER `tegevuse_kir
 define("CRM_TASK_VIEW_TABLE", 0);
 define("CRM_TASK_VIEW_CAL", 1);
 
+define("CRM_COMPANY_USECASE_CLIENT", "s");
+define("CRM_COMPANY_USECASE_EMPLOYER", "work");
+
 class crm_company extends class_base
 {
 	var $unit = 0;
@@ -1475,6 +1481,10 @@ class crm_company extends class_base
 				$this->navtoolbar($arr);
 				break;
 
+			case "activity_keywords":
+				$data["value"] = trim($data["value"]) ? substr($data["value"], 1) : "";
+				break;
+
 			/// CUSTOMER tab
 			case "my_projects":
 			case "customer_search_cust_mgr":
@@ -1505,6 +1515,10 @@ class crm_company extends class_base
 				}
 				$fn = "_get_".$data["name"];
 				return $cust_impl->$fn($arr);
+
+			case "customer_search_keywords":
+				$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=keywords_autocomplete_source";
+				$data["autocomplete_params"] = array("customer_search_keywords");
 
 			case "customer_search_name":
 			case "customer_search_reg":
@@ -1964,6 +1978,23 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "activity_keywords":
+				$keywords_tmp = explode(",", $data["value"]);
+				$keywords = array();
+
+				foreach ($keywords_tmp as $key => $keyword)
+				{
+					$keyword = trim($keyword);
+
+					if ($keyword)
+					{
+						$keywords[] = $keyword;
+					}
+				}
+
+				$data["value"] = count ($keywords) ? "," . implode (",", $keywords) : "";
+				break;
+
 			case "server_folder":
 				$this->_proc_server_folder($arr);
 				break;
@@ -2713,6 +2744,7 @@ class crm_company extends class_base
 			$arr['args']['customer_search_submit'] = $arr['request']['customer_search_submit'];
 			$arr['args']['customer_search_is_co'] = $arr['request']['customer_search_is_co'];
 			$arr["args"]["customer_search_print_view"] = $arr["request"]["customer_search_print_view"];
+			$arr["args"]["customer_search_keywords"] = $arr["request"]["customer_search_keywords"];
 		}
 
 		if ($arr["request"]["proj_search_sbt"])
@@ -3761,14 +3793,14 @@ class crm_company extends class_base
 		$bill->set_class_id(CL_CRM_BILL);
 		$bill->set_parent($arr["id"]);
 		$bill->save();
-	
+
 		$ser = get_instance(CL_CRM_NUMBER_SERIES);
 		$bno = $ser->find_series_and_get_next(CL_CRM_BILL);
 		if (!$bno)
 		{
 			$bno = $bill->id();
 		}
-		
+
 		$bill->set_prop("bill_no", $bno);
 		$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
 		if (is_oid($arr["proj"]))
@@ -3840,7 +3872,7 @@ class crm_company extends class_base
 			}
 
 			$bt = time();
-			$bill->set_prop("bill_due_date", 
+			$bill->set_prop("bill_due_date",
 				mktime(3,3,3, date("m", $bt), date("d", $bt) + $bill->prop("bill_due_date_days"), date("Y", $bt))
 			);
 		}
@@ -4581,6 +4613,26 @@ class crm_company extends class_base
 		return $ret;
 	}
 
+	function get_current_usecase($arr)
+	{
+		$usecase = false;
+
+		// if this is the current users employer
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+
+		if ($co == $arr["obj_inst"]->id())
+		{
+			$usecase = CRM_COMPANY_USECASE_EMPLOYER;
+		}
+		else
+		{
+			$usecase = CRM_COMPANY_USECASE_CLIENT;
+		}
+
+		return $usecase;
+	}
+
 	function callback_get_cfgform($arr)
 	{
 		// if this is the current users employer, do nothing
@@ -4909,6 +4961,59 @@ class crm_company extends class_base
 		$ars = $ol->names();
 		header("Content-type: text/html; charset=".aw_global_get("charset"));
 		die(join("\n", $ars)."\n");
+	}
+
+	/**
+		@attrib name=keywords_autocomplete_source
+		@param customer_search_keywords optional
+	**/
+	function keywords_autocomplete_source($arr)
+	{
+		if (!trim($arr["customer_search_keywords"]))
+		{
+			exit;
+		}
+
+		$word = strstr($arr["customer_search_keywords"], ",") ? substr(strrchr($arr["customer_search_keywords"], ","), 1) : trim($arr["customer_search_keywords"]);
+		// $prev_words = strstr($arr["customer_search_keywords"], ",") ? trim(substr($arr["customer_search_keywords"], 0, strrpos($arr["customer_search_keywords"], ","))) : "";
+		$keywords= explode(",", $arr["customer_search_keywords"]);
+		$args = array(
+			"class_id" => array(CL_CRM_COMPANY),
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => "0,500",
+		);
+
+		foreach ($keywords as $keyword)
+		{
+			$keyword = trim($keyword);
+
+			if ($keyword)
+			{
+				$args[] = new object_list_filter(array(
+					"logic" => "OR",
+					"conditions" => array("activity_keywords" => "%," . $keyword . "%")
+				));
+			}
+		}
+
+		$ol = new object_list($args);
+		$keywords = array();
+
+		foreach ($ol->arr() as $o)
+		{
+			preg_match_all("/,({$word}[^,]*)/i", $o->prop("activity_keywords"), $matches);
+
+			if (count($matches[1]))
+			{
+				$keywords = array_merge($keywords, $matches[1]);
+			}
+		}
+
+		$keywords = array_unique($keywords);
+
+		header("Content-type: text/plain; charset=".aw_global_get("charset"));
+		exit(join("\n", $keywords));
 	}
 
 

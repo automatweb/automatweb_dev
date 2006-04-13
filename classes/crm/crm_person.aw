@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.122 2006/04/05 13:06:23 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.123 2006/04/13 10:11:38 voldemar Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -280,7 +280,7 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 @property jobs_wanted type=releditor reltype=RELTYPE_EDUCATION props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton store=no
 
 ------------------------------------------------------------------
- 
+
 @groupinfo candidate caption="Kandideerimised" parent=work submit=no
 @default group=candidate
 
@@ -520,6 +520,10 @@ caption Sõbragrupid
 @caption Failide kataloog serveris
 
 */
+
+define("CRM_PERSON_USECASE_COWORKER", "coworker");
+define("CRM_PERSON_USECASE_CLIENT", "s_p");
+define("CRM_PERSON_USECASE_CLIENT_EMPLOYEE", "customer_employer");
 
 class crm_person extends class_base
 {
@@ -2821,6 +2825,34 @@ class crm_person extends class_base
 		"return true;}";
 	}
 
+	// args:
+	// obj_inst
+	function get_current_usecase($arr)
+	{
+		$usecase = false;
+
+		// if this is the current users employer, do nothing
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		if ($co == $arr["obj_inst"]->prop("work_contact"))
+		{
+			$usecase = CRM_PERSON_USECASE_COWORKER;
+		}
+		else
+		if ($arr["obj_inst"]->prop("is_customer") == 1)
+		{
+			$usecase = CRM_PERSON_USECASE_CLIENT;
+		}
+		else
+		if ($this->can("view", $arr["obj_inst"]->prop("work_contact")))
+		{
+			// customer employee
+			$usecase = CRM_PERSON_USECASE_CLIENT_EMPLOYEE;
+		}
+
+		return $usecase;
+	}
+
 	function callback_get_cfgform($arr)
 	{
 		// if this is the current users employer, do nothing
@@ -2886,7 +2918,7 @@ class crm_person extends class_base
 		{
 			return;
 		}
-		
+
 		$s = get_instance(CL_CRM_SETTINGS);
 		$settings = $s->get_current_settings();
 
@@ -2945,7 +2977,7 @@ class crm_person extends class_base
 		{
 			$gender ="Naine";
 		}
-		
+
 		foreach ($ob->connections_from(array("type" => "RELTYPE_KOGEMUS")) as $kogemus)
 		{
 			$kogemus = $kogemus->to();
@@ -2958,7 +2990,7 @@ class crm_person extends class_base
 			));
 			$kogemused_temp .= $this->parse("work_experiences");
 		}
-		
+
 		//Valdkondade nimekiri
 		foreach ($ob->connections_from(array("type" => "RELTYPE_TEGEVUSVALDKOND")) as $sector)
 		{
@@ -2967,22 +2999,22 @@ class crm_person extends class_base
 			));
 			$tmp_sectors.=$this->parse("sectors");
 		}
-		
-		
+
+
 		//Hariduste nimekiri
 		foreach ($ob->connections_from(array("type" => "RELTYPE_EDUCATION")) as $haridus)
 		{
 			$haridus = $haridus->to();
 			$haridus->prop("algusaasta");
 			$period = $haridus->prop("algusaasta")." - ". $haridus->prop("loppaasta");
-			
-			
+
+
 			$eriala = array_pop($haridus->connections_from(array("type" => "RELTYPE_ERIALA")));
 			if (is_object($eriala))
 			{
 				$ename = $eriala->prop("to.name");
 			}
-			
+
 			$this->vars(array(
 				"oppevorm" => 	$haridus->prop("oppevorm"),
 				"oppeaste" => 	$haridus->prop("oppeaste"),
@@ -2994,15 +3026,15 @@ class crm_person extends class_base
 				"addional_info" => $haridus->prop("lisainfo_edu"),
 				"kogemused_list" => $kogemused_temp,
 			));
-			
+
 			$temp_edu.= $this->parse("education");
 		}
-		
+
 		foreach ($ob->connections_from(array("type" => "RELTYPE_JUHILUBA")) as $driving_license)
 		{
 			$driving_licenses.= ",".$driving_license->prop("to.name");
 		}
-		
+
 		$ck = "";
 		foreach($ob->connections_from(array("type" => "RELTYPE_ARVUTIOSKUS")) as $c)
 		{

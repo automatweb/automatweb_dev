@@ -72,7 +72,7 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 			"filter" => array_unique($filt["project_impl"])
 		));
-		
+
 		$table->define_field(array(
 			"name" => "project_deadline",
 			"caption" => t("T&auml;htaeg"),
@@ -81,7 +81,7 @@ class crm_company_cust_impl extends class_base
 			"numeric" => 1,
 			"format" => "d.m.Y"
 		));
-		
+
 		if ($_GET["group"] == "org_projects_archive")
 		{
 			$table->define_field(array(
@@ -93,14 +93,14 @@ class crm_company_cust_impl extends class_base
 				"format" => "d.m.Y"
 			));
 		}
-		
+
 		$table->define_field(array(
 			"name" => "project_participants",
 			"caption" => t("Osalejad"),
 			"sortable" => 1,
 			"filter" => array_unique($filt["project_participants"])
 		));
-		
+
 		if (!$skip_sel)
 		{
 			$table->define_field(array(
@@ -119,7 +119,7 @@ class crm_company_cust_impl extends class_base
 	function _get_my_projects($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
-		
+
 		$i = get_instance(CL_CRM_COMPANY);
 		// if this is my co, then list all projects where my co is implementor
 		$u = get_instance(CL_USER);
@@ -176,7 +176,7 @@ class crm_company_cust_impl extends class_base
 				"oid" => $project_obj->id()
 			);
 		}
-	
+
 		$this->do_projects_table_header($table, $data, isset($arr["prj"]));
 		foreach($data as $row)
 		{
@@ -249,7 +249,7 @@ class crm_company_cust_impl extends class_base
 			"caption" => t("Juht"),
 			"sortable" => 1,
 		));
-		
+
 		$tf->define_field(array(
 			"name" => "rollid",
 			"caption" => t("Rollid"),
@@ -286,7 +286,7 @@ class crm_company_cust_impl extends class_base
 		}
 		else
 		{
-			// different for customer vs my co. 
+			// different for customer vs my co.
 			$u = get_instance(CL_USER);
 			$co = $u->get_current_company();
 			if ($arr["obj_inst"]->id() == $co)
@@ -319,7 +319,7 @@ class crm_company_cust_impl extends class_base
 				}
 			}
 		}
-	
+
 		$this->_finish_org_tbl($arr, $orglist);
 
 		if ($arr["request"]["customer_search_print_view"] == 1)
@@ -348,7 +348,7 @@ class crm_company_cust_impl extends class_base
 		), "crm_role_manager");
 
 		$roles = array();
-			
+
 		$iter = safe_array($rc_by_co[$to_org]);
 		if (!empty($to_project))
 		{
@@ -370,7 +370,7 @@ class crm_company_cust_impl extends class_base
 		));
 		return $roles;
 	}
-	
+
 	function _get_my_customers_toolbar($arr)
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
@@ -461,7 +461,7 @@ class crm_company_cust_impl extends class_base
 
 	function _get_my_customers_listing_tree($arr)
 	{
-		$tree_inst = &$arr['prop']['vcl_inst'];	
+		$tree_inst = &$arr['prop']['vcl_inst'];
 		$node_id = 0;
 
 		$i = get_instance(CL_CRM_COMPANY);
@@ -478,7 +478,7 @@ class crm_company_cust_impl extends class_base
 			'style' => 'nodetextbuttonlike',
 			"edit_mode" => 1
 		));
-				
+
 		//need to delete every category of the tree that the person doesn't
 		//have a relation with
 		$my_data = array();
@@ -487,7 +487,7 @@ class crm_company_cust_impl extends class_base
 		$conns = $person->connections_from(array(
 			'type' => "RELTYPE_HANDLER",
 		));
-				
+
 		foreach($conns as $conn)
 		{
 			$my_data[$conn->prop('to')] = $conn->prop('to');
@@ -553,12 +553,12 @@ class crm_company_cust_impl extends class_base
 	function _get_offers_listing_toolbar($arr)
 	{
 		$tb = &$arr["prop"]["vcl_inst"];
-		
+
 		$tb->add_menu_button(array(
 			'name'=>'add_item',
 			'tooltip'=> t('Uus')
 		));
-		
+
 		$params = array(
 			'alias_to'=> $arr['obj_inst']->id(),
 			'reltype'=> 9, //RELTYPE_OFFER,
@@ -566,14 +566,14 @@ class crm_company_cust_impl extends class_base
 			'alias_to_org' => $arr['request']['org_id'],
 			"return_url" => get_ru()
 		);
-		
+
 		$tb->add_menu_item(array(
 				'disabled' => $arr['request']['org_id']? false : true,
 				'parent'=>'add_item',
 				'text'=>t('Pakkumine'),
 				'url' => html::get_new_url(CL_CRM_OFFER, $arr['obj_inst']->id(), $params),
 		));
-		
+
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -581,7 +581,7 @@ class crm_company_cust_impl extends class_base
 			"confirm" => t("Kas oled kindel, et soovid valitud pakkumise(d) kustutada?"),
 			"tooltip" => t("Kustuta")
 		));
-	}	
+	}
 
 	function _get_offers_listing_tree($arr)
 	{
@@ -630,13 +630,13 @@ class crm_company_cust_impl extends class_base
 			'url' => '',
 		));
 		$tree->set_feature(PERSIST_STATE);
-	
+
 		if ($arr["node_id"] == -1)
 		{
 			$tree->items = array();
 		}
 		$all_org_parent = $node_id;
-		
+
 		$data = array();
 		$i->get_customers_for_company($arr["obj_inst"], &$data);
 
@@ -655,7 +655,7 @@ class crm_company_cust_impl extends class_base
 				'url' => aw_url_change_var(array('org_id' => $obj->id())),
 			));
 		}
-		
+
 		$tree->set_branch_func(
 			$this->mk_my_orb(
 				"get_offers_tree_branch",
@@ -678,7 +678,7 @@ class crm_company_cust_impl extends class_base
 	function _get_offers_listing_table($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
-		
+
 		if(!$arr["request"]["org_id"])
 		{
 			$table->define_field(array(
@@ -688,21 +688,21 @@ class crm_company_cust_impl extends class_base
 				"align" => "center",
 			));
 		}
-		
+
 		$table->define_field(array(
 			"name" => "offer_name",
 			"caption" => t("Nimi"),
 			"sortable" => "1",
 			"align" => "center",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "salesman",
 			"caption" => t("Koostaja"),
 			"sortable" => "1",
 			"align" => "center",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "offer_made",
 			"caption" => t("Lisatud"),
@@ -712,27 +712,27 @@ class crm_company_cust_impl extends class_base
 			"format" => "d.m.y",
 			"align" => "center",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "offer_sum",
 			"caption" => t("Summa"),
 			"sortable" => "1",
 			"align" => "center",
 		));
-		
+
 		$table->define_field(array(
 			"name" => "offer_status",
 			"caption" => t("Staatus"),
 			"sortable" => "1",
 			"align" => "center",
 		));
-		
+
 		$table->define_chooser(array(
 			"name" => "select",
 			"field" => "select",
 			"caption" => t("X"),
 		));
-		
+
 		$offer_inst = get_instance(CL_CRM_OFFER);
 		if($arr["request"]["org_id"])
 		{
@@ -745,7 +745,7 @@ class crm_company_cust_impl extends class_base
 				"offer_status" => array(0,1,2),
 				"class_id" => CL_CRM_OFFER,
 			);
-			
+
 			if(is_oid($arr["request"]["category"]))
 			{
 				$cat = &obj($arr["request"]["category"]);
@@ -771,16 +771,16 @@ class crm_company_cust_impl extends class_base
 				$offers = new object_list($params);
 			}
 		}
-		
+
 		if(is_object($offers))
 		{
 			if($offers->count() > 0)
 			{
 				$statuses = array(
-					t("Koostamisel"), 
-					t("Saadetud"), 
-					t("Esitletud"), 
-					t("Tagasilükatud"), 
+					t("Koostamisel"),
+					t("Saadetud"),
+					t("Esitletud"),
+					t("Tagasilükatud"),
 					t("Positiivelt lõppenud")
 				);
 				foreach ($offers->arr() as $offer)
@@ -881,24 +881,24 @@ class crm_company_cust_impl extends class_base
 		foreach($role_entry_list->arr() as $role_entry)
 		{
 			$rc_by_co[$role_entry->prop("client")][$role_entry->prop("project")][$role_entry->prop("person")][] = html::get_change_url(
-					$arr["request"]["id"], 
+					$arr["request"]["id"],
 					array(
 						"group" => "contacts2",
 						"unit" => $role_entry->prop("unit"),
-					), 
+					),
 					parse_obj_name($role_entry->prop_str("unit"))
 				)
 				."/".
 				html::get_change_url(
-					$arr["request"]["id"], 
+					$arr["request"]["id"],
 					array(
 						"group" => "contacts2",
 						"cat" => $role_entry->prop("role")
-					), 
+					),
 					parse_obj_name($role_entry->prop_str("role"))
 				);
 		}
-		
+
 		foreach ($ol->arr() as $project)
 		{
 			$roles = $this->_get_role_html(array(
@@ -944,8 +944,8 @@ class crm_company_cust_impl extends class_base
 			'parent' => 'new',
 			"text" => t("Projekt teostajana"),
 			'link' => html::get_new_url(
-				CL_PROJECT, 
-				$arr["obj_inst"]->id(), 
+				CL_PROJECT,
+				$arr["obj_inst"]->id(),
 				array(
 					"connect_impl" => $arr["obj_inst"]->id(),
 					"return_url" => get_ru(),
@@ -958,8 +958,8 @@ class crm_company_cust_impl extends class_base
 			'parent' => 'new',
 			"text" => t("Projekt tellijana"),
 			'link' => html::get_new_url(
-				CL_PROJECT, 
-				$arr["obj_inst"]->id(), 
+				CL_PROJECT,
+				$arr["obj_inst"]->id(),
 				array(
 					"connect_orderer" => $arr["obj_inst"]->id(),
 					"return_url" => get_ru(),
@@ -972,8 +972,8 @@ class crm_company_cust_impl extends class_base
 			'parent' => 'new',
 			"text" => t("P&auml;eva raport"),
 			'link' => html::get_new_url(
-				CL_CRM_DAY_REPORT, 
-				$arr["obj_inst"]->id(), 
+				CL_CRM_DAY_REPORT,
+				$arr["obj_inst"]->id(),
 				array(
 					"alias_to" => $arr["obj_inst"]->id(),
 					"reltype" => 39,
@@ -1053,7 +1053,7 @@ class crm_company_cust_impl extends class_base
 			$res[] = html::href(array(
 				"url" => html::get_change_url($conn->prop("to"), array("return_url" => get_ru())),
 				"caption" => $conn->prop("to.name"),
-			)); 
+			));
 		}
 		return join(", ", $res);
 	}
@@ -1360,6 +1360,24 @@ class crm_company_cust_impl extends class_base
 			$ret["CL_CRM_COMPANY.ettevotlusvorm.name"] = "%".$r["customer_search_ev"]."%";
 		}
 
+		if (trim($r["customer_search_keywords"]))
+		{
+			$keywords= explode(",", $r["customer_search_keywords"]);
+
+			foreach ($keywords as $keyword)
+			{
+				$keyword = trim($keyword);
+
+				if ($keyword)
+				{
+					$ret[] = new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array("activity_keywords" => "%," . $keyword . "%")
+					));
+				}
+			}
+		}
+
 		if ($r["customer_search_cust_grp"] != "")
 		{
 			// get all customers for group and stick into oid list
@@ -1478,7 +1496,7 @@ class crm_company_cust_impl extends class_base
 					'return_url' => get_ru()
 				),
 				'crm_category'
-			)	
+			)
 		));
 
 		if (is_oid($arr["request"]["category"]))
@@ -1554,6 +1572,14 @@ class crm_company_cust_impl extends class_base
 		$tf = &$arr["prop"]["vcl_inst"];
 		$this->_org_table_header(&$tf);
 
+		$cl_crm_settings = get_instance(CL_CRM_SETTINGS);
+		if ($o = $cl_crm_settings->get_current_settings())
+		{
+			$cl_crm_company = get_instance(CL_CRM_COMPANY);
+			$usecase = $cl_crm_company->get_current_usecase($arr);//$arr["obj_inst"] peab olemas olema.
+			$cl_crm_settings->apply_table_cfg($o, $usecase, $arr["prop"]["name"], &$tf);
+		}
+
 		$rs_by_co = array();
 		$role_entry_list = new object_list(array(
 			"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
@@ -1564,20 +1590,20 @@ class crm_company_cust_impl extends class_base
 		foreach($role_entry_list->arr() as $role_entry)
 		{
 			$rc_by_co[$role_entry->prop("client")][$role_entry->prop("person")][] = html::get_change_url(
-					$arr["request"]["id"], 
+					$arr["request"]["id"],
 					array(
 						"group" => "contacts2",
 						"unit" => $role_entry->prop("unit"),
-					), 
+					),
 					parse_obj_name($role_entry->prop_str("unit"))
 				)
 				."/".
 				html::get_change_url(
-					$arr["request"]["id"], 
+					$arr["request"]["id"],
 					array(
 						"group" => "contacts2",
 						"cat" => $role_entry->prop("role")
-					), 
+					),
 					parse_obj_name($role_entry->prop_str("role"))
 				);
 		}
@@ -1684,6 +1710,7 @@ class crm_company_cust_impl extends class_base
 				"link" => html::get_change_url($o->id(), array("return_url" => get_ru()))
 			));
 
+			//!!! todo: define and get data only for fields configured to be shown in current crm settings.
 			$tf->define_data(array(
 				"id" => $o->id(),
 				"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()." ".$vorm),
@@ -1782,7 +1809,7 @@ class crm_company_cust_impl extends class_base
 		}
 		return $cnt;
 	}
-	
+
 	/**
 		@attrib name=get_offers_tree_branch all_args=1
 	**/
