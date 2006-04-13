@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.478 2006/04/10 12:33:33 kristo Exp $
+// $Id: class_base.aw,v 2.479 2006/04/13 09:40:10 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3329,7 +3329,13 @@ class class_base extends aw_template
 			$props = &$arr["props"];
 		};
 
-		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
+		if (!$arr["cfgform_id"] && is_object($arr["obj_inst"]) && $arr["obj_inst"]->class_id() == CL_DOCUMENT && aw_ini_get("document.default_cfgform"))
+		{
+			$arr["cfgform_id"] = aw_ini_get("document.default_cfgform");
+		}
+		
+
+		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]) )
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
 			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
@@ -3552,6 +3558,7 @@ class class_base extends aw_template
 			"request" => $args,
 			"cfgform_id" => $args["cfgform"],
 			"props" => &$properties,
+			"obj_inst" => &$o
 		));
 
 		$pvalues = array();
