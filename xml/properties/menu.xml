@@ -506,6 +506,16 @@
             <caption>Kasuta sihtr&amp;amp;uuml;hmap&amp;amp;otilde;hist kuvamist</caption>
       </property>
       <property>
+            <name>content_all_langs</name>
+            <table>objects</table>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>menus_sub</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Sisu k&amp;amp;otilde;ikidest keeltest</caption>
+      </property>
+      <property>
             <name>has_ctx</name>
             <table>objects</table>
             <type>checkbox</type>

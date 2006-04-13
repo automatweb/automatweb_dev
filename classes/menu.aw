@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.152 2006/04/12 13:39:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.153 2006/04/13 10:31:57 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -211,6 +211,9 @@
 
 		@property use_target_audience type=checkbox ch_value=1 group=menus_sub field=meta method=serialize table=objects
 		@caption Kasuta sihtr&uuml;hmap&otilde;hist kuvamist
+
+		@property content_all_langs type=checkbox ch_value=1 group=menus_sub field=meta method=serialize table=objects
+		@caption Sisu k&otilde;ikidest keeltest
 
 	@groupinfo advanced_ctx caption=Kontekst parent=menus
 

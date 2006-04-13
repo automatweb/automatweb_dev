@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.165 2006/04/13 09:15:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.166 2006/04/13 10:31:58 kristo Exp $
 
 /*
 
@@ -600,15 +600,16 @@ class site_show extends class_base
 		// no default, show list
 		if ($docid < 1)	
 		{
+			if ($obj->prop("content_all_langs"))
+			{
+				$filt_lang_id = array();
+			}
+
 			if ($obj->class_id() == CL_PROMO)
 			{
 				if ($obj->prop("show_inact") == 1)
 				{
 					$get_inact = true;
-				}
-				if ($obj->prop("content_all_langs"))
-				{
-					$filt_lang_id = array();
 				}
 				$skipfirst = $obj->prop("start_ndocs");
 				$lm = $obj->meta("last_menus");
