@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.164 2006/04/12 13:39:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.165 2006/04/13 09:15:43 kristo Exp $
 
 /*
 
@@ -678,6 +678,7 @@ class site_show extends class_base
 			}
 
 			$filter = array();
+			$has_rand = false;
 
 			if (is_array($sections) && ($sections[0] !== 0) && count($sections) > 0)
 			{
@@ -704,6 +705,10 @@ class site_show extends class_base
 				if ($obj->meta("sort_by") != "")
 				{
 					$ordby = $obj->meta("sort_by");
+					if ($obj->meta("sort_by") == "RAND()")
+					{
+						$has_rand = true;
+					}
 					if ($obj->meta("sort_ord") != "")
 					{
 						$ordby .= " ".$obj->meta("sort_ord");
@@ -720,6 +725,10 @@ class site_show extends class_base
 
 				if ($obj->meta("sort_by2") != "")
 				{
+					if ($obj->meta("sort_by2") == "RAND()")
+					{
+						$has_rand = true;
+					}
 					$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by2");
 					if ($obj->meta("sort_ord2") != "")
 					{
@@ -733,6 +742,10 @@ class site_show extends class_base
 
 				if ($obj->meta("sort_by3") != "")
 				{
+					if ($obj->meta("sort_by3") == "RAND()")
+					{
+						$has_rand = true;
+					}
 					$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by3");
 					if ($obj->meta("sort_ord3") != "")
 					{
@@ -801,7 +814,15 @@ class site_show extends class_base
 				$filter["period"] = aw_global_get("act_per_id");
 			}
 
+			if ($has_rand)
+			{
+				obj_set_opt("no_cache", 1);
+			}
 			$documents = new object_list($filter);
+			if ($has_rand)
+			{
+				obj_set_opt("no_cache", 0);
+			}
 
 			$rsid = aw_ini_get("site_id");
 			

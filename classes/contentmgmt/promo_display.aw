@@ -189,7 +189,14 @@ class promo_display
 					obj_set_opt("no_cache", 1);
 				}
 
-				if ($o->meta("version") == 2 && (aw_ini_get("promo.version") == 2))
+				// right, here we need to check if the container does not order docs by random, cause if it does, we need to not rely on the saved docs list
+				$has_rand = false;
+				if ($o->prop("sort_by") == "RAND()" || $o->prop("sort_by2") == "RAND()" || $o->prop("sort_by3") == "RAND()")
+				{
+					$has_rand = true;
+				}
+			
+				if (!$has_rand && $o->meta("version") == 2 && (aw_ini_get("promo.version") == 2))
 				{
 					enter_function("mainc-contentmgmt/promo-read_docs");
 					$docid = array_values(safe_array($o->meta("content_documents")));
