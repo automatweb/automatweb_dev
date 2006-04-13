@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.122 2006/04/12 12:04:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.123 2006/04/13 08:01:08 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -950,16 +950,20 @@ class doc extends class_base
 		{
 			$args["no_rte"] = 1;
 		};
-		if (!empty($request["edit_version"]))
+
+		if (aw_ini_get("config.object_versioning") == 1)
 		{
-			$out = array();
-			parse_str($request["edit_version"], $out);
-			$args["edit_version"] = $out["edit_version"];
-		};
-		if ($request["create_new_version"] == 1 || $this->force_new_version)
-		{
-			// set edit version to new one
-			$args["edit_version"] = $this->db_fetch_field("SELECT version_id FROM documents_versions ORDER BY vers_crea DESC LIMIT 1", "version_id");
+			if (!empty($request["edit_version"]))
+			{
+				$out = array();
+				parse_str($request["edit_version"], $out);
+				$args["edit_version"] = $out["edit_version"];
+			};
+			if ($request["create_new_version"] == 1 || $this->force_new_version)
+			{
+				// set edit version to new one
+				$args["edit_version"] = $this->db_fetch_field("SELECT version_id FROM documents_versions ORDER BY vers_crea DESC LIMIT 1", "version_id");
+			}
 		}
 	}
 
