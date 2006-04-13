@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.123 2006/04/13 08:01:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.124 2006/04/13 09:31:02 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -214,7 +214,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property show_in_iframe type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption Kasuta siseraami
 
-	@property target_audience type=relpicker reltype=RELTYPE_TARGET_AUDIENCE table=documents field=aw_target_audience
+	@property target_audience type=chooser  store=connect multiple=1 reltype=RELTYPE_TARGET_AUDIENCE table=documents field=aw_target_audience
 	@caption Sihtr&uuml;hm
 
 @default group=vennastamine
@@ -312,6 +312,11 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "target_audience":
+				$ol = new object_list(array("class_id" => CL_TARGET_AUDIENCE, "lang_id" => array(), "site_id" => array()));
+				$data["options"] = $ol->names();
+				break;
+
 			case "kw_tb":
 				$this->kw_tb($arr);
 				break;

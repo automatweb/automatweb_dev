@@ -703,7 +703,9 @@
             <name>target_audience</name>
             <table>documents</table>
             <group>settings</group>
-            <type>relpicker</type>
+            <type>chooser</type>
+            <store>connect</store>
+            <multiple>1</multiple>
             <reltype>RELTYPE_TARGET_AUDIENCE</reltype>
             <field>aw_target_audience</field>
             <caption>Sihtr&amp;amp;uuml;hm</caption>
