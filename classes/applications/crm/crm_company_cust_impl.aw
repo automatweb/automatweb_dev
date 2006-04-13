@@ -239,10 +239,15 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 		));
 
-		/*$tf->define_field(array(
+		$tf->define_field(array(
 			"name" => "phone",
 			"caption" => t('Telefon'),
-		));*/
+		));
+
+		$tf->define_field(array(
+			"name" => "fax",
+			"caption" => t('Faks'),
+		));
 
 		$tf->define_field(array(
 			"name" => "ceo",
@@ -1571,6 +1576,7 @@ class crm_company_cust_impl extends class_base
 	{
 		$tf = &$arr["prop"]["vcl_inst"];
 		$this->_org_table_header(&$tf);
+		$visible_fields = false;
 
 		$cl_crm_settings = get_instance(CL_CRM_SETTINGS);
 		if ($o = $cl_crm_settings->get_current_settings())
@@ -1578,6 +1584,7 @@ class crm_company_cust_impl extends class_base
 			$cl_crm_company = get_instance(CL_CRM_COMPANY);
 			$usecase = $cl_crm_company->get_current_usecase($arr);//$arr["obj_inst"] peab olemas olema.
 			$cl_crm_settings->apply_table_cfg($o, $usecase, $arr["prop"]["name"], &$tf);
+			$visible_fields = $cl_crm_settings->get_visible_fields($o, $usecase, $arr["prop"]["name"]);
 		}
 
 		$rs_by_co = array();
@@ -1619,7 +1626,7 @@ class crm_company_cust_impl extends class_base
 			}
 			$o = obj($org);
 			// aga ülejäänud on kõik seosed!
-			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $url = $mail = "";
+			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $fax = $url = $mail = "";
 			if (is_oid($o->prop("ettevotlusvorm")))
 			{
 				$tmp = new object($o->prop("ettevotlusvorm"));
@@ -1639,7 +1646,6 @@ class crm_company_cust_impl extends class_base
 				$juht = $tmp->name();
 			}
 
-			$phone = "";
 			$ceo = "";
 			if ($o->class_id() == CL_CRM_COMPANY)
 			{
@@ -1699,6 +1705,16 @@ class crm_company_cust_impl extends class_base
 				}
 			}*/
 
+			if ((!is_array($visible_fields) or in_array("phone", $visible_fields)) and $this->can("view", $o->prop("phone_id")))
+			{
+				$phone = obj($o->prop("phone_id"));
+			}
+
+			if ((!is_array($visible_fields) or in_array("fax", $visible_fields)) and $this->can("view", $o->prop("telefax_id")))
+			{
+				$fax = obj($o->prop("telefax_id"));
+			}
+
 			$pm = get_instance("vcl/popup_menu");
 			$pm->begin_menu("org".$o->id());
 			$pm->add_item(array(
@@ -1720,6 +1736,7 @@ class crm_company_cust_impl extends class_base
 				"address" => $o->class_id() == CL_CRM_COMPANY ? $o->prop_str("contact") : $o->prop_str("address"),
 				"ceo" => $ceo,
 				"phone" => $phone,
+				"fax" => $fax,
 				"url" => $url,
 				"email" => $mail,
 				'rollid' => $o->class_id() == CL_CRM_CATEGORY ? "" : $roles,
