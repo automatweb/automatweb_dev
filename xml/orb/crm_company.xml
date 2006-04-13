@@ -360,6 +360,14 @@
 			</function>
 		</action>
 
+		<action name="keywords_autocomplete_source">
+			<function name="keywords_autocomplete_source">
+				<arguments>
+					<optional name="customer_search_keywords" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="save_as_customer">
 			<function name="save_as_customer">
 				<arguments>

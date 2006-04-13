@@ -8,7 +8,7 @@
             <reltype>RELTYPE_CFGFORM</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Kliendi seadete vorm </caption>
+            <caption>Kliendi seadete vorm</caption>
       </property>
       <property>
             <name>s_p_cfgform</name>
@@ -18,7 +18,7 @@
             <reltype>RELTYPE_CFGFORM</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Eraisikust kliendi seadete vorm </caption>
+            <caption>Eraisikust kliendi seadete vorm</caption>
       </property>
       <property>
             <name>work_cfgform</name>
@@ -38,7 +38,7 @@
             <reltype>RELTYPE_CFGFORM</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml;kaaslaste seadete vorm </caption>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;kaaslaste seadete vorm</caption>
       </property>
       <property>
             <name>customer_employer_cfgform</name>
@@ -59,6 +59,36 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Vaikimisi toode arve ridadel</caption>
+      </property>
+      <property>
+            <name>tables_toolbar</name>
+            <table>objects</table>
+            <group>tables</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>tables_toolbar</field>
+      </property>
+      <property>
+            <name>tables_treemenu</name>
+            <table>objects</table>
+            <group>tables</group>
+            <type>treeview</type>
+            <store>no</store>
+            <parent>vsplitbox</parent>
+            <no_caption>1</no_caption>
+            <field>tables_treemenu</field>
+            <caption>Tabelite valik</caption>
+      </property>
+      <property>
+            <name>table_cfg</name>
+            <table>objects</table>
+            <group>tables</group>
+            <type>table</type>
+            <store>no</store>
+            <parent>vsplitbox</parent>
+            <field>table_cfg</field>
+            <caption>Tabeli konfiguratsioon</caption>
       </property>
       <property>
             <name>users</name>
@@ -127,7 +157,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>flags</field>
-            <caption>K&amp;amp;otilde;ik </caption>
+            <caption>K&amp;amp;otilde;ik</caption>
       </property>
       <property>
             <name>person_img_settings</name>
@@ -147,6 +177,9 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <tables>
+                  <caption>Tabelid</caption>
+            </tables>
             <whom>
                   <caption>Kellele kehtib</caption>
             </whom>
@@ -196,5 +229,12 @@
                   <caption>Galerii seaded</caption>
             </GALLERY_CONF>
       </reltypes>
+      <layout>
+            <vsplitbox>
+                  <type>hbox</type>
+                  <no_caption>1</no_caption>
+                  <group>tables</group>
+            </vsplitbox>
+      </layout>
 </properties>
 
