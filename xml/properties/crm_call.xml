@@ -115,7 +115,7 @@
             <table>planner</table>
             <group>general</group>
             <type>textarea</type>
-            <cols>60</cols>
+            <cols>80</cols>
             <rows>30</rows>
             <field>description</field>
             <caption>Sisu</caption>
@@ -261,6 +261,26 @@
             <no_caption>1</no_caption>
             <caption>Tulemuste tabel</caption>
       </property>
+      <property>
+            <name>other_calls</name>
+            <table>objects</table>
+            <group>other_calls</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>new_call_date</name>
+            <table>objects</table>
+            <group>other_calls</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>datetime_select</type>
+            <store>no</store>
+            <caption>Uue k&amp;amp;otilde;ne aeg</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_CALL</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -284,6 +304,9 @@
                   <caption>Osalejad</caption>
                   <submit>no</submit>
             </participants>
+            <other_calls>
+                  <caption>Eelmised k&amp;amp;otilde;ned</caption>
+            </other_calls>
       </groupinfo>
       <tableinfo>
             <planner>

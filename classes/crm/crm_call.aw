@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.43 2006/03/21 14:52:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.44 2006/04/13 12:07:27 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -46,7 +46,7 @@
 	@property time_to_cust type=textbox size=5 field=meta method=serialize  table=objects
 	@caption Tundide arv kliendile
 
-@property content type=textarea cols=60 rows=30 field=description
+@property content type=textarea cols=80 rows=30 field=description
 @caption Sisu
 
 @property aliasmgr type=aliasmgr no_caption=1 store=no
@@ -92,11 +92,19 @@
 @property search_contact_results type=table store=no group=participants no_caption=1
 @caption Tulemuste tabel
 
+@default group=other_calls
+
+	@property other_calls type=table store=no no_caption=1
+
+	@property new_call_date type=datetime_select store=no
+	@caption Uue k&otilde;ne aeg
+
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
 @groupinfo participants caption=Osalejad submit=no
+@groupinfo other_calls caption="Eelmised k&otilde;ned" 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -174,6 +182,14 @@ class crm_call extends class_base
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
+			case "new_call_date":
+				$data["value"] = -1;
+				break;
+
+			case "other_calls":
+				$this->_other_calls($arr);
+				break;
+
 			case "name":	
 				if($this->mail_data)
 				{
@@ -451,9 +467,27 @@ class crm_call extends class_base
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
-
-			switch($data["name"])
+		switch($data["name"])
 		{
+			case "new_call_date":
+				$v = date_edit::get_timestamp($data["value"]);
+				if ($v > 600)
+				{
+					// create a new call from the current one
+					$i = get_instance(CL_CRM_CALL);
+					$dat = array(
+						"class" => "crm_call",
+						"action" => "new",
+						"parent" => $arr["obj_inst"]->parent(),
+					);
+					foreach($arr["obj_inst"]->properties() as $pn => $pv)
+					{
+						$dat[$pn] = $pv;
+					}
+					$dat["start1"] = $v;
+					$i->submit($dat);
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -549,6 +583,50 @@ class crm_call extends class_base
 	{
 		$task = get_instance(CL_TASK);
 		return $task->callback_generate_scripts($arr);
+	}
+
+	function _init_other_class_t(&$t)
+	{	
+		$t->define_field(array(
+			"name" => "when",
+			"caption" => t("Millal"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "content",
+			"caption" => t("Sisu"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "ed",
+			"caption" => t("Vaata"),
+			"align" => "center"
+		));
+	}
+
+	function _other_calls($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_other_class_t($t);
+
+		// get all previous calls to the same customer
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_CALL,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"customer" => $arr["obj_inst"]->prop("customer")
+		));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"when" => $o->prop("start1"),
+				"content" => nl2br($o->prop("content")),
+				"ed" => html::obj_change_url($o)
+			));
+		}
+		$t->set_default_sortby("when");
 	}
 };
 ?>
