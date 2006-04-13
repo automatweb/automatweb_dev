@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.11 2006/04/13 10:11:37 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.12 2006/04/13 10:55:11 voldemar Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -172,7 +172,6 @@ class crm_settings extends class_base
 			"name" => "save",
 			"img" => "save.gif",
 			"tooltip" => t("Salvesta tabeli seaded"),
-			"confirm" => t("Kustutada kõik valitud tööd?"),
 			"action" => "submit",
 		));
 
