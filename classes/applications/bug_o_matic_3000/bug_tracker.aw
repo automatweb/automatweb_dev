@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.43 2006/04/06 11:00:18 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.43 2006/04/06 11:00:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.44 2006/04/13 12:30:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.44 2006/04/13 12:30:58 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1583,7 +1583,12 @@ class bug_tracker extends class_base
 			}
 		}
 
-		$cplx = array("who", "bug_type", "monitors", "customer", "project");
+		if (trim($r["s_monitors"]) != "")
+		{
+			$res["CL_BUG.RELTYPE_MONITOR.name"] = $this->_get_string_filt($r["s_monitors"]);
+		}
+
+		$cplx = array("who", "bug_type", "customer", "project");
 		foreach($cplx as $field)
 		{
 			if (trim($r["s_".$field]) != "")

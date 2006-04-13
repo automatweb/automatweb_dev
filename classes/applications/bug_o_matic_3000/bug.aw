@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.29 2006/04/06 11:00:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.30 2006/04/13 12:30:58 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -573,6 +573,9 @@ class bug extends class_base
 			}
 
 			$comt = $this->_split_long_words($comt);
+
+			// replace #675656 with link to bug
+			$comt = preg_replace("/#([0-9]+)/ims", "<a href='http://intranet.automatweb.com/\\1'>#\\1</a>", $comt);
 
 			$this->vars(array(
 				"com_adder" => $com->createdby(),
