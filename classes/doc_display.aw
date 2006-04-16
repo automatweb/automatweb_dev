@@ -65,6 +65,7 @@ class doc_display extends aw_template
 			"date_est" => locale::get_lc_date($_date, LC_DATE_FORMAT_LONG),
 			"print_date_est" => locale::get_lc_date(time(), LC_DATE_FORMAT_LONG),
 			"modified" => date("d.m.Y", $doc->modified()),
+			"modifiedby" => $doc->modifiedby(),
 			"parent_id" => $doc->parent(),
 			"parent_name" => $doc_parent->name(),
 			"user1" => $doc->prop("user1"),
