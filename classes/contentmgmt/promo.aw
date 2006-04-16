@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.85 2006/04/12 13:31:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.86 2006/04/16 09:25:40 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -137,6 +137,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 	@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize group=menus
 	@caption Sisu ei cacheta
 
+	@property kw_tb type=toolbar store=no group=menus no_caption=1
+
+	@property kws type=keyword_selector store=no group=menus
+	@caption M&auml;rks&otilde;nad
+
 
 
 
@@ -180,6 +185,10 @@ class promo extends class_base
 		$retval = PROP_OK; 
 		switch($prop["name"])
 		{
+			case "kw_tb":
+				$this->kw_tb($arr);
+				break;
+
 			case "promo_tpl":
 				$tm = get_instance("templatemgr");
 				$prop["options"] = $tm->template_picker(array(
@@ -1024,6 +1033,24 @@ class promo extends class_base
 				$box->save();
 			}
 		}
+	}
+
+	function kw_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		
+		$pt = $arr["obj_inst"]->id();
+		if (aw_ini_get("config.keyword_folder"))
+		{
+			$pt = aw_ini_get("config.keyword_folder");
+		}
+		$tb->add_button(array(
+			"name" => "new_kw",
+			"tooltip" => t("M&auml;rks&otilde;na"),
+			"url" => html::get_new_url(CL_KEYWORD, $pt, array("return_url" => get_ru())),
+			"img" => "new.gif",
+		));
+		$tb->closed = 1;
 	}
 }
 ?>

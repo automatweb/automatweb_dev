@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.15 2005/05/23 09:39:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.16 2006/04/16 09:25:40 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
@@ -8,136 +8,141 @@
 @groupinfo logo caption=Lisapilt
 
 @default table=objects
-@default group=general
 @default field=meta
 @default method=serialize
 
-@property conf_folders type=relpicker reltype=RELTYPE_FOLDER multiple=1
-@caption Kataloogid, kus konf kehtib
+@default group=general
 
-@property conf_ratings type=relpicker reltype=RELTYPE_RATE multiple=1
-@caption Hindamisobjektid
+	@property conf_folders type=relpicker reltype=RELTYPE_FOLDER multiple=1
+	@caption Kataloogid, kus konf kehtib
 
-@property images_folder type=relpicker reltype=RELTYPE_IMAGES_FOLDER
-@caption Piltide asukoht
+	@property conf_ratings type=relpicker reltype=RELTYPE_RATE multiple=1
+	@caption Hindamisobjektid
 
-@property def_layout type=relpicker reltype=RELTYPE_LAYOUT
-@caption Default layout:
+	@property images_folder type=relpicker reltype=RELTYPE_IMAGES_FOLDER
+	@caption Piltide asukoht
 
-@property apply_image type=checkbox ch_value=1 
-@caption Kehtib ka pildiobjektidele
+	@property def_layout type=relpicker reltype=RELTYPE_LAYOUT
+	@caption Default layout:
 
-@property send_from_addr type=textbox
-@caption Meili From aadress
+	@property apply_image type=checkbox ch_value=1 
+	@caption Kehtib ka pildiobjektidele
+
+	@property send_from_addr type=textbox
+	@caption Meili From aadress
+
+	@property controller type=relpicker reltype=RELTYPE_CONTROLLER
+	@caption Pildi muundamise kontroller
 
 @default group=imgsize
 
-@property resize_before_crop type=checkbox ch_value=1 
-@caption Muuda suurust enne kadreerimist
+	@property resize_before_crop type=checkbox ch_value=1 
+	@caption Muuda suurust enne kadreerimist
 
-@property img_vert 
-@caption Kui pilt on k&otilde;rgem kui laiem
+	@property img_vert 
+	@caption Kui pilt on k&otilde;rgem kui laiem
 
-@property v_tn_subimage type=checkbox ch_value=1 
-@caption Kas v&auml;ike pilt on kadreeritud
+	@property v_tn_subimage type=checkbox ch_value=1 
+	@caption Kas v&auml;ike pilt on kadreeritud
 
-@property v_tn_subimage_left type=textbox size=5 
-@caption Mitu pikslit vasakult kaader algab
+	@property v_tn_subimage_left type=textbox size=5 
+	@caption Mitu pikslit vasakult kaader algab
 
-@property v_tn_subimage_top type=textbox size=5 
-@caption Mitu pikslit &uuml;levalt kaader algab
+	@property v_tn_subimage_top type=textbox size=5 
+	@caption Mitu pikslit &uuml;levalt kaader algab
 
-@property v_tn_subimage_width type=textbox size=5 
-@caption Kaadri laius
+	@property v_tn_subimage_width type=textbox size=5 
+	@caption Kaadri laius
 
-@property v_tn_subimage_height type=textbox size=5
-@caption Kaadri k&otilde;rgus
+	@property v_tn_subimage_height type=textbox size=5
+	@caption Kaadri k&otilde;rgus
 
-@property v_tn_width type=textbox size=5 
-@caption V&auml;ikese pildi laius
+	@property v_tn_width type=textbox size=5 
+	@caption V&auml;ikese pildi laius
 
-@property v_tn_height type=textbox size=5 
-@caption V&auml;ikese pildi k&otilde;rgus
+	@property v_tn_height type=textbox size=5 
+	@caption V&auml;ikese pildi k&otilde;rgus
 
-@property v_width type=textbox size=5 
-@caption Suure pildi laius
+	@property v_width type=textbox size=5 
+	@caption Suure pildi laius
 
-@property v_height type=textbox size=5 
-@caption Suure pildi k&otilde;rgus
+	@property v_height type=textbox size=5 
+	@caption Suure pildi k&otilde;rgus
 
-@property img_horiz 
-@caption Kui pilt on laiem kui k&otilde;rgem 
+	@property img_horiz 
+	@caption Kui pilt on laiem kui k&otilde;rgem 
 
-@property h_tn_subimage type=checkbox ch_value=1
-@caption Kas v&auml;ike pilt on kadreeritud
+	@property h_tn_subimage type=checkbox ch_value=1
+	@caption Kas v&auml;ike pilt on kadreeritud
 
-@property h_tn_subimage_left type=textbox size=5 
-@caption Mitu pikslit vasakult kaader algab
+	@property h_tn_subimage_left type=textbox size=5 
+	@caption Mitu pikslit vasakult kaader algab
 
-@property h_tn_subimage_top type=textbox size=5 
-@caption Mitu pikslit &uuml;levalt kaader algab
+	@property h_tn_subimage_top type=textbox size=5 
+	@caption Mitu pikslit &uuml;levalt kaader algab
 
-@property h_tn_subimage_width type=textbox size=5 
-@caption Kaadri laius
+	@property h_tn_subimage_width type=textbox size=5 
+	@caption Kaadri laius
 
-@property h_tn_subimage_height type=textbox size=5 
-@caption Kaadri k&otilde;rgus
+	@property h_tn_subimage_height type=textbox size=5 
+	@caption Kaadri k&otilde;rgus
 
-@property h_tn_width type=textbox size=5 
-@caption V&auml;ikese pildi laius
+	@property h_tn_width type=textbox size=5 
+	@caption V&auml;ikese pildi laius
 
-@property h_tn_height type=textbox size=5 
-@caption V&auml;ikese pildi k&otilde;rgus
+	@property h_tn_height type=textbox size=5 
+	@caption V&auml;ikese pildi k&otilde;rgus
 
-@property h_width type=textbox size=5 
-@caption Suure pildi laius
+	@property h_width type=textbox size=5 
+	@caption Suure pildi laius
 
-@property h_height type=textbox size=5 
-@caption Suure pildi k&otilde;rgus
+	@property h_height type=textbox size=5 
+	@caption Suure pildi k&otilde;rgus
 
 @default group=logo
 
-@property insert_logo type=checkbox ch_value=1
-@caption Kas suurele pildile kleepida lisapilt
+	@property insert_logo type=checkbox ch_value=1
+	@caption Kas suurele pildile kleepida lisapilt
 
-@property logo_img type=relpicker reltype=RELTYPE_LOGO
-@caption Lisapilt
+	@property logo_img type=relpicker reltype=RELTYPE_LOGO
+	@caption Lisapilt
 
-@property logo_corner type=select 
-@caption Mis nurgas
+	@property logo_corner type=select 
+	@caption Mis nurgas
 
-@property logo_dist_x type=textbox size=5 
-@caption Mitu pikslit vertikaalsest servast
+	@property logo_dist_x type=textbox size=5 
+	@caption Mitu pikslit vertikaalsest servast
 
-@property logo_dist_y type=textbox size=5 
-@caption Mitu pikslit horisontaalsest servast
+	@property logo_dist_y type=textbox size=5 
+	@caption Mitu pikslit horisontaalsest servast
 
-@property logo_transparency type=textbox size=5 
-@caption Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;bipaistev)
+	@property logo_transparency type=textbox size=5 
+	@caption Lisapildi l&auml;bipaistvus, 0-100 (0 -0 t&auml;iesti l&auml;bipaistev)
 
-@property logo_text type=textbox 
-@caption Lisapildi tekst (%nimi% asendatakse galerii nimega)
+	@property logo_text type=textbox 
+	@caption Lisapildi tekst (%nimi% asendatakse galerii nimega)
 
-@property tn_insert_logo type=checkbox ch_value=1
-@caption Kas v&auml;ikesele pildile kleepida lisapilt
+	@property tn_insert_logo type=checkbox ch_value=1
+	@caption Kas v&auml;ikesele pildile kleepida lisapilt
 
-@property tn_logo_img type=relpicker reltype=RELTYPE_LOGO
-@caption Lisapilt
+	@property tn_logo_img type=relpicker reltype=RELTYPE_LOGO
+	@caption Lisapilt
 
-@property tn_logo_corner type=select 
-@caption Mis nurgas
+	@property tn_logo_corner type=select 
+	@caption Mis nurgas
 
-@property tn_logo_dist_x type=textbox size=5 
-@caption Mitu pikslit vertikaalsest servast
+	@property tn_logo_dist_x type=textbox size=5 
+	@caption Mitu pikslit vertikaalsest servast
 
-@property tn_logo_dist_y type=textbox size=5 
-@caption Mitu pikslit horisontaalsest servast
+	@property tn_logo_dist_y type=textbox size=5 
+	@caption Mitu pikslit horisontaalsest servast
 
-@property tn_logo_transparency type=textbox size=5 
-@caption Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev)
+	@property tn_logo_transparency type=textbox size=5 
+	@caption Lisapildi l&auml;bipaistvus, 1-100 (1-t&auml;iesti l&auml;bipaistev)
 
-@property tn_logo_text type=textbox 
-@caption Lisapildi tekst (%nimi% asendatakse galerii nimega)
+	@property tn_logo_text type=textbox 
+	@caption Lisapildi tekst (%nimi% asendatakse galerii nimega)
+
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption hallatav kataloog

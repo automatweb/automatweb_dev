@@ -293,6 +293,22 @@
             <group>menus</group>
             <caption>Sisu ei cacheta</caption>
       </property>
+      <property>
+            <name>kw_tb</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <group>menus</group>
+            <no_caption>1</no_caption>
+            <field>kw_tb</field>
+      </property>
+      <property>
+            <name>kws</name>
+            <type>keyword_selector</type>
+            <store>no</store>
+            <group>menus</group>
+            <field>kws</field>
+            <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>

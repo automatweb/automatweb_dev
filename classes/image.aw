@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.156 2006/04/03 07:15:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.157 2006/04/16 09:25:39 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1377,6 +1377,13 @@ class image extends class_base
 		if ($smallf)
 		{
 			$this->do_resize_file_in_fs($smallf, $conf, "tn_");
+			// if controller is set, let it do it's thing
+			if ($this->can("view", $conf->prop("controller")))
+			{
+				$ctr = obj($conf->prop("controller"));
+				$ctr_i = $ctr->instance();
+				$ctr_i->eval_controller_ref($ctr->id(), $conf, $smallf, $smallf);
+			}
 		}
 	}
 

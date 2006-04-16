@@ -26,6 +26,16 @@
             <caption>Organisatsioon</caption>
       </property>
       <property>
+            <name>show_organisations_publications</name>
+            <table>objects</table>
+            <group>organisation_general_information</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva selle v&amp;amp;auml;ljaandja teisi v&amp;amp;auml;ljaandeid</caption>
+      </property>
+      <property>
             <name>publications_name</name>
             <table>objects</table>
             <group>publications_general_info</group>
@@ -57,8 +67,8 @@
             <name>ordering_terms</name>
             <table>objects</table>
             <group>publications_general_info</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ORDERING_TERMS</reltype>
+            <type>callback</type>
+            <callback>callback_get_ordering_terms</callback>
             <field>meta</field>
             <method>serialize</method>
             <caption>Tellimistingimused</caption>
@@ -298,6 +308,15 @@
             <field>stats</field>
             <caption>Statistika</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi	</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_EXPP_JOURNAL_MANAGEMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -351,6 +370,9 @@
             <stats>
                   <caption>Statistika</caption>
             </stats>
+            <transl>
+                  <caption>T&amp;amp;otilde;lkimine</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <ORGANISATION>

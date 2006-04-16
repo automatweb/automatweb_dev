@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.166 2006/04/13 10:31:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.167 2006/04/16 09:25:40 kristo Exp $
 
 /*
 
@@ -524,7 +524,7 @@ class site_show extends class_base
 
 
 		// if any keywords for the menu are set, we must show all the documents that match those keywords under the menu
-		if ($obj->meta("has_kwd_rels"))
+		if ($obj->class_id() != CL_PROMO && $obj->meta("has_kwd_rels"))
 		{
 			// list all documents that have the same kwywords as this menu.
 			// so first, get this menus keywords
@@ -597,6 +597,7 @@ class site_show extends class_base
 		$no_in_promo = false;
 
 		$filt_lang_id = aw_global_get("lang_id");
+		$filter = array();
 		// no default, show list
 		if ($docid < 1)	
 		{
@@ -644,6 +645,19 @@ class site_show extends class_base
 					$sections = array($obj->id());
 				};
 				$no_in_promo = 1;
+
+				// get kws from promo 
+				$promo_kws = $obj->connections_from(array("to.class_id" => CL_KEYWORD));
+				if (count($promo_kws))
+				{
+					// limit by objs with those kws
+					$kwns = array();
+					foreach($promo_kws as $promo_kw)
+					{
+						$kwns[] = $promo_kw->prop("to.name");
+					}
+					$filter["CL_DOCUMENT.RELTYPE.name"] = $kwns;
+				}
 			}
 			else
 			{
@@ -678,7 +692,6 @@ class site_show extends class_base
 				$periods = $obj->meta("pers");
 			}
 
-			$filter = array();
 			$has_rand = false;
 
 			if (is_array($sections) && ($sections[0] !== 0) && count($sections) > 0)
@@ -809,12 +822,11 @@ class site_show extends class_base
 			{
 				$filter["no_show_in_promo"] = new obj_predicate_not(1);
 			}
-
+echo dbg::dump($filter);
 			if ($obj->prop("auto_period") == 1)
 			{
 				$filter["period"] = aw_global_get("act_per_id");
 			}
-
 			if ($has_rand)
 			{
 				obj_set_opt("no_cache", 1);

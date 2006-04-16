@@ -3,9 +3,9 @@
       <property>
             <name>conf_folders</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_FOLDER</reltype>
             <multiple>1</multiple>
@@ -14,9 +14,9 @@
       <property>
             <name>conf_ratings</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_RATE</reltype>
             <multiple>1</multiple>
@@ -25,9 +25,9 @@
       <property>
             <name>images_folder</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_IMAGES_FOLDER</reltype>
             <caption>Piltide asukoht</caption>
@@ -35,9 +35,9 @@
       <property>
             <name>def_layout</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_LAYOUT</reltype>
             <caption>Default layout:</caption>
@@ -45,9 +45,9 @@
       <property>
             <name>apply_image</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Kehtib ka pildiobjektidele</caption>
@@ -55,18 +55,28 @@
       <property>
             <name>send_from_addr</name>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
             <type>textbox</type>
             <caption>Meili From aadress</caption>
       </property>
       <property>
-            <name>resize_before_crop</name>
+            <name>controller</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <caption>Pildi muundamise kontroller</caption>
+      </property>
+      <property>
+            <name>resize_before_crop</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>imgsize</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Muuda suurust enne kadreerimist</caption>
@@ -74,17 +84,17 @@
       <property>
             <name>img_vert</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <caption>Kui pilt on k&amp;amp;otilde;rgem kui laiem</caption>
       </property>
       <property>
             <name>v_tn_subimage</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Kas v&amp;amp;auml;ike pilt on kadreeritud</caption>
@@ -92,9 +102,9 @@
       <property>
             <name>v_tn_subimage_left</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu pikslit vasakult kaader algab</caption>
@@ -102,9 +112,9 @@
       <property>
             <name>v_tn_subimage_top</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu pikslit &amp;amp;uuml;levalt kaader algab</caption>
@@ -112,9 +122,9 @@
       <property>
             <name>v_tn_subimage_width</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Kaadri laius</caption>
@@ -122,9 +132,9 @@
       <property>
             <name>v_tn_subimage_height</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Kaadri k&amp;amp;otilde;rgus</caption>
@@ -132,9 +142,9 @@
       <property>
             <name>v_tn_width</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>V&amp;amp;auml;ikese pildi laius</caption>
@@ -142,9 +152,9 @@
       <property>
             <name>v_tn_height</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>V&amp;amp;auml;ikese pildi k&amp;amp;otilde;rgus</caption>
@@ -152,9 +162,9 @@
       <property>
             <name>v_width</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Suure pildi laius</caption>
@@ -162,9 +172,9 @@
       <property>
             <name>v_height</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Suure pildi k&amp;amp;otilde;rgus</caption>
@@ -172,17 +182,17 @@
       <property>
             <name>img_horiz</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <caption>Kui pilt on laiem kui k&amp;amp;otilde;rgem </caption>
       </property>
       <property>
             <name>h_tn_subimage</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Kas v&amp;amp;auml;ike pilt on kadreeritud</caption>
@@ -190,9 +200,9 @@
       <property>
             <name>h_tn_subimage_left</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu pikslit vasakult kaader algab</caption>
@@ -200,9 +210,9 @@
       <property>
             <name>h_tn_subimage_top</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu pikslit &amp;amp;uuml;levalt kaader algab</caption>
@@ -210,9 +220,9 @@
       <property>
             <name>h_tn_subimage_width</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Kaadri laius</caption>
@@ -220,9 +230,9 @@
       <property>
             <name>h_tn_subimage_height</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Kaadri k&amp;amp;otilde;rgus</caption>
@@ -230,9 +240,9 @@
       <property>
             <name>h_tn_width</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>V&amp;amp;auml;ikese pildi laius</caption>
@@ -240,9 +250,9 @@
       <property>
             <name>h_tn_height</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>V&amp;amp;auml;ikese pildi k&amp;amp;otilde;rgus</caption>
@@ -250,9 +260,9 @@
       <property>
             <name>h_width</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Suure pildi laius</caption>
@@ -260,9 +270,9 @@
       <property>
             <name>h_height</name>
             <table>objects</table>
-            <group>imgsize</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>imgsize</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Suure pildi k&amp;amp;otilde;rgus</caption>
@@ -270,9 +280,9 @@
       <property>
             <name>insert_logo</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Kas suurele pildile kleepida lisapilt</caption>
@@ -280,9 +290,9 @@
       <property>
             <name>logo_img</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>relpicker</type>
             <reltype>RELTYPE_LOGO</reltype>
             <caption>Lisapilt</caption>
@@ -290,18 +300,18 @@
       <property>
             <name>logo_corner</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>select</type>
             <caption>Mis nurgas</caption>
       </property>
       <property>
             <name>logo_dist_x</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu pikslit vertikaalsest servast</caption>
@@ -309,9 +319,9 @@
       <property>
             <name>logo_dist_y</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu pikslit horisontaalsest servast</caption>
@@ -319,9 +329,9 @@
       <property>
             <name>logo_transparency</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Lisapildi l&amp;amp;auml;bipaistvus, 0-100 (0 -0 t&amp;amp;auml;iesti l&amp;amp;auml;bipaistev)</caption>
@@ -329,18 +339,18 @@
       <property>
             <name>logo_text</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>textbox</type>
             <caption>Lisapildi tekst (%nimi% asendatakse galerii nimega)</caption>
       </property>
       <property>
             <name>tn_insert_logo</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Kas v&amp;amp;auml;ikesele pildile kleepida lisapilt</caption>
@@ -348,9 +358,9 @@
       <property>
             <name>tn_logo_img</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>relpicker</type>
             <reltype>RELTYPE_LOGO</reltype>
             <caption>Lisapilt</caption>
@@ -358,18 +368,18 @@
       <property>
             <name>tn_logo_corner</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>select</type>
             <caption>Mis nurgas</caption>
       </property>
       <property>
             <name>tn_logo_dist_x</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu pikslit vertikaalsest servast</caption>
@@ -377,9 +387,9 @@
       <property>
             <name>tn_logo_dist_y</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu pikslit horisontaalsest servast</caption>
@@ -387,9 +397,9 @@
       <property>
             <name>tn_logo_transparency</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>textbox</type>
             <size>5</size>
             <caption>Lisapildi l&amp;amp;auml;bipaistvus, 1-100 (1-t&amp;amp;auml;iesti l&amp;amp;auml;bipaistev)</caption>
@@ -397,9 +407,9 @@
       <property>
             <name>tn_logo_text</name>
             <table>objects</table>
-            <group>logo</group>
             <field>meta</field>
             <method>serialize</method>
+            <group>logo</group>
             <type>textbox</type>
             <caption>Lisapildi tekst (%nimi% asendatakse galerii nimega)</caption>
       </property>
