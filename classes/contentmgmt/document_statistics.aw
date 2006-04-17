@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.19 2005/12/06 18:20:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.20 2006/04/17 13:47:38 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -551,6 +551,26 @@ class document_statistics extends class_base
 				$awm->gen_mail();
 			}
 		}
+	}
+
+	function get_all_doc_stats()
+	{
+		// gather stats from the last 3 months
+		for($i = 0; $i < 3; $i++)
+		{
+			$fn = aw_ini_get("site_basedir")."/files/docstats/".date("Y-m", mktime(4,4,4, date("m")-$i, date("d"), date("Y"))).".txt";
+			$fc = explode("\n", $this->get_file(array("file" => $fn)));
+			foreach($fc as $line)
+			{
+				if ($line == "")
+				{
+					continue;
+				}
+				list($did, $hc) = explode(",", $line);
+				$ds_arr[$did] += $hc;
+			}
+		}
+		return $ds_arr;
 	}
 }
 ?>

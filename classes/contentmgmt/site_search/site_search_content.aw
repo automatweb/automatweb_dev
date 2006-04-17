@@ -1,6 +1,6 @@
 
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.63 2006/04/17 10:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.64 2006/04/17 13:47:39 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -140,6 +140,7 @@ define("S_ORD_TITLE", 2);
 define("S_ORD_CONTENT", 3);
 define("S_ORD_TIME_ASC", 4);
 define("S_ORD_MATCH", 5);
+define("S_ORD_POPULARITY", 6);
 
 define("S_OPT_ANY_WORD", 1);
 define("S_OPT_ALL_WORDS", 2);
@@ -183,6 +184,7 @@ class site_search_content extends class_base
 					S_ORD_TITLE => t("Pealkirja j&auml;rgi"),
 					S_ORD_CONTENT => t("Sisu j&auml;rgi"),
 					S_ORD_MATCH => t("T&auml;psuse j&auml;rgi"),
+					S_ORD_POPULARITY => t("Populaarsuse j&auml;rgi"),
 					
 				);
 				break;
@@ -355,7 +357,8 @@ class site_search_content extends class_base
 			S_ORD_TIME_ASC => t("Kuupäeva järgi (vanem enne)"),
 			S_ORD_TITLE => t("Pealkirja j&auml;rgi"),
 			S_ORD_CONTENT => t("Sisu j&auml;rgi"),
-			S_ORD_MATCH => t("T&auml;psuse j&auml;rgi")
+			S_ORD_MATCH => t("T&auml;psuse j&auml;rgi"),
+			S_ORD_POPULARITY => t("Populaarsuse j&auml;rgi")
 		);
 
 		foreach($conns as $conn)
@@ -908,6 +911,7 @@ class site_search_content extends class_base
 				"doc_modified" => $row["doc_modified"],
 				"user1" => $row["user1"],
 				"user4" => $row["user4"],
+				"docid" => $row["docid"],
 				"target" => ($row["site_id"] != $this->site_id ? "target=\"_blank\"" : "")
 			);
 		}
@@ -1130,6 +1134,11 @@ class site_search_content extends class_base
 		return strcmp($a["content"], $b["content"]);
 	}
 
+	function _sort_popularity($a, $b)
+	{
+		return $this->_pops[$b["docid"]] - $this->_pops[$a["docid"]];
+	}
+
 	////
 	// !sorts the search results
 	// params:
@@ -1150,6 +1159,13 @@ class site_search_content extends class_base
 			
 			case S_ORD_TIME_ASC:
 				usort($arr["results"], array(&$this, "_sort_time_asc"));
+				break;
+
+			case S_ORD_POPULARITY:
+				// init popularity table
+				$stats = get_instance(CL_DOCUMENT_STATISTICS);
+				$this->_pops = $stats->get_all_doc_stats();
+				usort($arr["results"], array(&$this, "_sort_popularity"));
 				break;
 
 			case S_ORD_TIME:
@@ -1178,9 +1194,10 @@ class site_search_content extends class_base
 		$params3["sort_by"] = S_ORD_CONTENT;
 
 		$this->vars(array(
-			"sort_modified" => $this->mk_my_orb("do_search", $params1),
-			"sort_title" => $this->mk_my_orb("do_search", $params2),
-			"sort_content" => $this->mk_my_orb("do_search", $params3),
+			"sort_modified" => aw_url_change_var("sort_by", S_ORD_TIME),
+			"sort_title" => aw_url_change_var("sort_by", S_ORD_TITLE),
+			"sort_content" => aw_url_change_var("sort_by", S_ORD_CONTENT),
+			"sort_popularity" => aw_url_change_var("sort_by", S_ORD_POPULARITY),
 		));
 
 		$so_mod = "";
@@ -1212,6 +1229,16 @@ class site_search_content extends class_base
 		{
 			$so_ct = $this->parse("SORT_CONTENT");
 		}
+
+		$so_pl = "";
+		if ($params["sort_by"] == S_ORD_POPULARITY)
+		{
+			$so_pl = $this->parse("SORT_POPULARITY_SEL");
+		}
+		else
+		{
+			$so_pl = $this->parse("SORT_POPULARITY");
+		}
 		$this->vars(array(
 			"SORT_MODIFIED" => $so_mod,
 			"SORT_MODIFIED_SEL" => "",
@@ -1219,6 +1246,8 @@ class site_search_content extends class_base
 			"SORT_CONTENT_SEL" => "",
 			"SORT_TITLE" => $so_title,
 			"SORT_TITLE_SEL" => "",
+			"SORT_POPULARITY" => $so_pl,
+			"SORT_POPULARITY_SEL" => "",
 		));
 		exit_function("site_search_content::display_sorting_links");
 	}
@@ -1438,7 +1467,6 @@ class site_search_content extends class_base
 		{
 			$arr["group"] = $o->meta("default_grp");
 		}
-
 		if (empty($arr["sort_by"]))
 		{
 			$arr["sort_by"] = $o->meta("default_order");
@@ -1612,7 +1640,7 @@ class site_search_content extends class_base
 					$cid = $conn->prop("to");
 
 					$grp_sort_by = $sort_by;
-					if (!empty($grpcfg["sorder"][$cid]))
+					if (!empty($grpcfg["sorder"][$cid]) && empty($sort_by))
 					{
 						$grp_sort_by = $grpcfg["sorder"][$cid];
 					};
@@ -1973,7 +2001,8 @@ class site_search_content extends class_base
 				S_ORD_TIME_ASC => "modified",
 				S_ORD_MATCH => "num_reps",
 				S_ORD_TITLE => "title",
-				S_ORD_CONTENT => "title"
+				S_ORD_CONTENT => "title",
+				S_ORD_POPULARITY => "pop"
 			);
 			$sort_by = $s_lut[$arr["obj_inst"]->prop("default_order")];
 		}
