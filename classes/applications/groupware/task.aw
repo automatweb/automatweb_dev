@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.89 2006/03/31 07:21:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.90 2006/04/17 09:01:45 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -63,7 +63,7 @@ layout num_hrs type=hbox
 @property hr_price type=textbox size=5 field=meta method=serialize 
 @caption Tunni hind
 
-@property content type=textarea cols=70 rows=30 field=description table=planner
+@property content type=textarea cols=80 rows=30 field=description table=planner
 @caption Sisu
 
 @property client_remind type=checkbox ch_value=1 table=objects field=meta method=serialize
@@ -488,7 +488,7 @@ class task extends class_base
 					$data["value"] = "";
 				}
 
-				if (!$arr["new"] && is_object($arr["obj_inst"]))
+				if (is_oid($arr["obj_inst"]->id()) && is_object($arr["obj_inst"]))
 				{
 					$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL"));
 					if (!count($cs))
@@ -703,7 +703,7 @@ class task extends class_base
 					}
 				}
 
-				if (is_object($arr["obj_inst"]) && !$arr["new"])
+				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 				{
 					foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
 					{
