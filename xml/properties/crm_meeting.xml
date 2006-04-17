@@ -219,7 +219,7 @@
             <table>documents</table>
             <group>general</group>
             <type>textarea</type>
-            <cols>60</cols>
+            <cols>80</cols>
             <rows>30</rows>
             <field>content</field>
             <caption>Sisu</caption>
@@ -296,7 +296,7 @@
             <table>planner</table>
             <group>general</group>
             <type>textarea</type>
-            <cols>60</cols>
+            <cols>80</cols>
             <rows>30</rows>
             <field>description</field>
             <caption>Kokkuv&amp;otilde;te</caption>
