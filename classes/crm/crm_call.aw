@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.44 2006/04/13 12:07:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.45 2006/04/17 13:06:31 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -94,10 +94,10 @@
 
 @default group=other_calls
 
-	@property other_calls type=table store=no no_caption=1
-
 	@property new_call_date type=datetime_select store=no
 	@caption Uue k&otilde;ne aeg
+
+	@property other_calls type=table store=no no_caption=1
 
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
@@ -485,6 +485,7 @@ class crm_call extends class_base
 						$dat[$pn] = $pv;
 					}
 					$dat["start1"] = $v;
+					$dat["is_done"] = 0;
 					$i->submit($dat);
 				}
 				break;
@@ -610,6 +611,11 @@ class crm_call extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_other_class_t($t);
+
+		if (!$arr["obj_inst"]->prop("customer"))
+		{
+			return;
+		}
 
 		// get all previous calls to the same customer
 		$ol = new object_list(array(

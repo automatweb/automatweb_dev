@@ -262,16 +262,6 @@
             <caption>Tulemuste tabel</caption>
       </property>
       <property>
-            <name>other_calls</name>
-            <table>objects</table>
-            <group>other_calls</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
             <name>new_call_date</name>
             <table>objects</table>
             <group>other_calls</group>
@@ -280,6 +270,16 @@
             <type>datetime_select</type>
             <store>no</store>
             <caption>Uue k&amp;amp;otilde;ne aeg</caption>
+      </property>
+      <property>
+            <name>other_calls</name>
+            <table>objects</table>
+            <group>other_calls</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_CALL</syslog_type>
