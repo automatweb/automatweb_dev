@@ -309,6 +309,26 @@
             <field>kws</field>
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
       </property>
+      <property>
+            <name>use_menu_keywords</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>menus</group>
+            <table>objects</table>
+            <caption>Kasuta aktiivse kausta m&amp;amp;auml;rks&amp;amp;otilde;nu</caption>
+      </property>
+      <property>
+            <name>use_doc_content_type</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>menus</group>
+            <table>objects</table>
+            <caption>Kasuta dokumendi sisu t&amp;amp;uuml;&amp;amp;uuml;bi m&amp;amp;auml;&amp;amp;auml;rangut</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>

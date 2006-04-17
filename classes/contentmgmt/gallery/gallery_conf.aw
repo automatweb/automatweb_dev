@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.16 2006/04/16 09:25:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.17 2006/04/17 10:13:21 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
@@ -158,6 +158,9 @@
 
 @reltype LAYOUT value=5 clid=CL_LAYOUT
 @caption galerii lehe layout
+
+@reltype CONTROLLER value=6 clid=CL_FORM_CONTROLLER
+@caption Kontroller
 
 
 */

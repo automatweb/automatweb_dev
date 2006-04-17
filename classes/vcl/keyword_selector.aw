@@ -35,7 +35,7 @@ class keyword_selector extends class_base
 		$filt = $arr["request"]["kw_sel_filt"];
 		if (empty($filt))
 		{
-			$filt = "_all";
+			$filt = "A";
 		}
 		$cf_p = array("to.class_id" => CL_KEYWORD);
 		if ($filt != "_all")

@@ -516,6 +516,14 @@
             <caption>Sisu k&amp;amp;otilde;ikidest keeltest</caption>
       </property>
       <property>
+            <name>set_doc_content_type</name>
+            <table>menu</table>
+            <type>chooser</type>
+            <group>menus_sub</group>
+            <field>set_doc_content_type</field>
+            <caption>M&amp;amp;auml;&amp;amp;auml;ra sisu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>has_ctx</name>
             <table>objects</table>
             <type>checkbox</type>

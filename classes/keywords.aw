@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.66 2006/04/04 09:44:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.67 2006/04/17 10:13:21 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -824,7 +824,16 @@ class keywords extends class_base
 		return $res;
 	}
 
-	function parse_aliases($args = array())
+	function show($arr)
+	{
+		$ob = new object($arr["id"]);
+		return html::href(array(
+			"url" => aw_url_change_var("set_kw", $arr["id"], obj_link(aw_ini_get("keywords.alias_folder"))),
+			"caption" => $ob->name()
+		));
+	}
+
+	/*function parse_aliases($args = array())
 	{
 		extract($args);
 		$retval = "";
@@ -844,7 +853,7 @@ class keywords extends class_base
 			$retval = $this->show_categories(array("after" => $maat[1]));
 		};
 		return $retval;
-	}
+	}*/
 
 	function show_interests_form($beg = "",$section = 0)
 	{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.86 2006/04/16 09:25:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.87 2006/04/17 10:13:21 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -142,6 +142,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 	@property kws type=keyword_selector store=no group=menus
 	@caption M&auml;rks&otilde;nad
 
+	@property use_menu_keywords type=checkbox ch_value=1 field=meta method=serialize group=menus table=objects
+	@caption Kasuta aktiivse kausta m&auml;rks&otilde;nu
+
+	@property use_doc_content_type type=checkbox ch_value=1 field=meta method=serialize group=menus table=objects
+	@caption Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut
 
 
 
@@ -633,6 +638,10 @@ class promo extends class_base
 			$def = new aw_array(array_slice($def->get(), 0, $ndocs));
 		}
 
+		if ($def->count() < 1)
+		{
+			return "";
+		}
 		$content = "";
 		$doc = get_instance(CL_DOCUMENT);
 

@@ -21,7 +21,6 @@ class doc_display extends aw_template
 	function gen_preview($arr)
 	{
 		$doc = obj($arr["docid"]);
-
 		if (aw_ini_get("config.object_versioning") == 1 && $_GET["docversion"] != "")
 		{
 			$doc->load_version($_GET["docversion"]);
@@ -53,8 +52,16 @@ class doc_display extends aw_template
 
 		lc_site_load("document",$this);
 		
+		$this->vars(array("image_inplace" => ""));
 		$this->vars($al->get_vars());
 		$_date = $doc->prop("doc_modified") > 1 ? $doc->prop("doc_modified") : $doc->modified();
+		$modf = $doc->modifiedby();
+		if ($modf != "")
+		{
+			$u = get_instance(CL_USER);
+			$p = $u->get_person_for_uid($modf);
+			$modf = $p->name();
+		}
 
 		$this->vars(array(
 			"text" => $text,
@@ -65,7 +72,7 @@ class doc_display extends aw_template
 			"date_est" => locale::get_lc_date($_date, LC_DATE_FORMAT_LONG),
 			"print_date_est" => locale::get_lc_date(time(), LC_DATE_FORMAT_LONG),
 			"modified" => date("d.m.Y", $doc->modified()),
-			"modifiedby" => $doc->modifiedby(),
+			"modifiedby" => $modf,
 			"parent_id" => $doc->parent(),
 			"parent_name" => $doc_parent->name(),
 			"user1" => $doc->prop("user1"),
@@ -82,7 +89,7 @@ class doc_display extends aw_template
 			"link_text" => $doc->prop("link_text"),
 			"page_title" => strip_tags($doc->prop("title")),			
 			"date" => $_date,
-			"edit_doc" => $this->_get_edit_menu($doc)
+			"edit_doc" => $this->_get_edit_menu($doc),
 		));
 
 		$ablock = "";
@@ -132,6 +139,7 @@ class doc_display extends aw_template
 		));
 
 		$str = $this->parse();
+		$this->vars(array("image_inplace" => ""));
 		return $str;
 	}
 

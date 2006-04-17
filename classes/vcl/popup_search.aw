@@ -412,7 +412,7 @@ class popup_search extends aw_template
 		}
 		if ($arr["s"]["oid"] != "")
 		{
-			$filter["oid"] = map("%%%s%%", explode(",", $arr["s"]["oid"]));
+			$filter["oid"] = map("%s", explode(",", $arr["s"]["oid"]));
 		}
 	}
 

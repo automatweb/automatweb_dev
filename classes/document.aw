@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.351 2006/04/11 12:45:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.352 2006/04/17 10:13:20 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2600,6 +2600,11 @@ class document extends aw_template
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $section ","name");
 		$this->_log(ST_DOCUMENT, SA_SEND, "$from_name  $from saatis dokumendi <a href='".$this->cfg["baseurl"]."/?section=".$section."'>$name</a> $to_name $to  'le",$section);
 
+		$si = __get_site_instance();
+		if (method_exists($si, "handle_send_to_friend_redirect"))
+		{
+			return $si->handle_send_to_friend_redirect();
+		}
 		return $this->cfg["baseurl"]."/?section=".$section;
 	}
 

@@ -451,6 +451,11 @@
                   <clid>CL_LAYOUT</clid>
                   <caption>galerii lehe layout</caption>
             </LAYOUT>
+            <CONTROLLER>
+                  <value>6</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CONTROLLER>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.161 2006/04/12 12:38:09 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.162 2006/04/17 10:13:21 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1086,8 +1086,7 @@ class users extends users_user
 				unset($_SESSION["nliug"]);
 				unset($_COOKIE["nliug"]);
 			}
-
-			if ($_COOKIE["nliug"] != $_SESSION["nliug"])
+			if ($_COOKIE["nliug"] != $_SESSION["nliug"] && $_COOKIE["nliug"])
 			{
 				$_SESSION["nliug"] = $_COOKIE["nliug"];
 			}

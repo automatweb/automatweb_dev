@@ -173,10 +173,6 @@ class promo_display
 			// now, how do I figure out whether the promo box is actually in my path?
 			if ($show_promo)
 			{
-				if ($_GET["PROMO_DBG"] == 1)
-				{
-					echo "showing promo ".$o->name()." (".$o->id().")  type = ".$o->meta("type")."<br>";
-				}
 				enter_function("show_promo::".$o->name());
 				// visible. so show it
 				// get list of documents in this promo box
@@ -243,14 +239,23 @@ class promo_display
 				}
 				$awt->stop("def-doc");
 
+				if (!$docid)
+				{
+					continue;
+				}
 				if (!is_array($docid))
 				{
 					$docid = array($docid);
 				}
 
+				if ($_GET["PROMO_DBG"] == 1)
+				{
+					echo "showing promo ".$o->name()." (".$o->id().")  type = ".$o->meta("type")." docs = ".join(", ", $docid)."<br>";
+				}
+
 				$d_cnt = 0;
 				$d_total = count($docid);
-				aw_global_set("in_promo_display", 1);
+				aw_global_set("in_promo_display", $o->id());
 				enter_function("mainc-contentmgmt/promo-show-docs");
 				foreach($docid as $d)
 				{

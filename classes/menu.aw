@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.153 2006/04/13 10:31:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.154 2006/04/17 10:13:21 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -215,6 +215,9 @@
 		@property content_all_langs type=checkbox ch_value=1 group=menus_sub field=meta method=serialize table=objects
 		@caption Sisu k&otilde;ikidest keeltest
 
+		@property set_doc_content_type type=chooser group=menus_sub table=menu field=set_doc_content_type
+		@caption M&auml;&auml;ra sisu t&uuml;&uuml;p
+
 	@groupinfo advanced_ctx caption=Kontekst parent=menus
 
 		@property has_ctx type=checkbox ch_value=1 table=objects field=meta method=serialize group=advanced_ctx
@@ -374,7 +377,6 @@
 
 	@reltype LANG_REL value=22 clid=CL_MENU
 	@caption Keeleseos
-
 */
 
 define("IP_ALLOWED", 1);
@@ -446,6 +448,11 @@ class menu extends class_base
 		$ob = $arr["obj_inst"];
 		switch($data["name"])
 		{
+			case "set_doc_content_type":
+				$ol = new object_list(array("class_id" => CL_DOCUMENT_CONTENT_TYPE, "lang_id" => array(), "site_id" => array()));
+				$data["options"] = array("" => t("Vali t&uuml;hjaks")) + $ol->names();
+				break;
+
 			case "jrk":
 				if ($arr["new"] && $this->can("view", $arr["request"]["ord_after"]))
 				{
@@ -1760,6 +1767,17 @@ class menu extends class_base
 	{
 		$_SESSION["no_display_site_editing"] = !$_SESSION["no_display_site_editing"];
 		return aw_ini_get("baseurl");
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "set_doc_content_type":
+				$this->db_query("ALTER TABLE menu add set_doc_content_type int");
+				return true;
+				break;
+		}
 	}
 };
 ?>

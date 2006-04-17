@@ -6,7 +6,14 @@ if (!empty($class)  || !empty($reforb))
 else
 {
 	// if no orb call, do a normal pageview
-	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
+	if (file_exists(aw_ini_get("site_basedir")."/public/site_header.aw"))
+	{
+		include(aw_ini_get("site_basedir")."/public/site_header.aw");
+	}
+	else
+	{
+		include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
+	}
 }
 
 enter_function("index_impl::after_init");

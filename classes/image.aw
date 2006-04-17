@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.157 2006/04/16 09:25:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.158 2006/04/17 10:13:21 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -368,14 +368,14 @@ class image extends class_base
 			}
 			else
 			{
-				if ($tpls["image_inplace"] && !$this->image_inplace_used)
+				if ($tpls["image_inplace"] && !$GLOBALS["image_inplace_used"])
 				{
 					$tpl = "image_inplace";
 					$inplace = $tpl;
 					// mix seda lauset vaja on?
 					// sellep2rast et kui on 2 pilti pandud - siis esimese jaoks kasutatakse image_inplace subi ja j2rgmiste jaoks
 					// tavalist image subi juba - terryf
-					$this->image_inplace_used = true;
+					$GLOBALS["image_inplace_used"] = true;
 				}
 				else
 				{

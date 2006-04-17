@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.124 2006/04/13 09:31:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.125 2006/04/17 10:13:20 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -217,6 +217,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 	@property target_audience type=chooser  store=connect multiple=1 reltype=RELTYPE_TARGET_AUDIENCE table=documents field=aw_target_audience
 	@caption Sihtr&uuml;hm
 
+	@property doc_content_type type=chooser  store=connect multiple=1 reltype=RELTYPE_DOC_CONTENT_TYPE table=documents field=aw_doc_content_type
+	@caption Dokumendi sisu t&uuml;&uuml;p
+
 @default group=vennastamine
 
 	@property sections type=select multiple=1 size=20 store=no trans=1
@@ -282,6 +285,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @reltype TARGET_AUDIENCE value=26 clid=CL_TARGET_AUDIENCE
 @caption Sihtr&uuml;hm
 
+@reltype DOC_CONTENT_TYPE value=27 clid=CL_DOCUMENT_CONTENT_TYPE
+@caption Dokumendi sisu t&uuml;&uuml;p
+
 */
 
 define(RELTYPE_COMMENT,1);
@@ -312,9 +318,18 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "doc_content_type":
+				$ol = new object_list(array("class_id" => CL_DOCUMENT_CONTENT_TYPE, "lang_id" => array(), "site_id" => array()));
+				$data["options"] = $ol->names();
+				break;
+
 			case "target_audience":
 				$ol = new object_list(array("class_id" => CL_TARGET_AUDIENCE, "lang_id" => array(), "site_id" => array()));
 				$data["options"] = $ol->names();
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					$data["value"] = $this->make_keys(array_keys($data["options"]));
+				}
 				break;
 
 			case "kw_tb":
@@ -1200,7 +1215,7 @@ class doc extends class_base
 	function get_version_list($did)
 	{
 		$ret = array(aw_url_change_var("edit_version", NULL) => t("Aktiivne"));
-		$this->db_query("SELECT version_id, vers_crea, vers_crea_by FROM documents_versions WHERE docid = '$did'");
+		$this->db_query("SELECT version_id, vers_crea, vers_crea_by FROM documents_versions WHERE docid = '$did' order by vers_crea desc");
 		$u = get_instance(CL_USER);
 		while ($row = $this->db_next())
 		{
@@ -1302,7 +1317,8 @@ class doc extends class_base
 				"target" => "_blank",
 				"url" => html::get_change_url($arr["obj_inst"]->id(), array("return_url" => get_ru())),
 				"caption" => t("Muuda")
-			))
+			)),
+			"sby" => time() + 24*3600*100
 		));
 		$u = get_instance(CL_USER);
 		$this->db_query("SELECT version_id, vers_crea, vers_crea_by FROM documents_versions WHERE docid = '".$arr["obj_inst"]->id()."'");
@@ -1329,9 +1345,12 @@ class doc extends class_base
 					"target" => "_blank",
 					"url" => html::get_change_url($arr["obj_inst"]->id(), array("return_url" => get_ru(), "edit_version" => $row["version_id"])),
 					"caption" => t("Muuda")
-				))
+				)),
+				"sby" => $row["vers_crea"]
 			));
 		}
+		$t->set_default_sortby("sby");
+		$t->set_default_sorder("desc");
 	}
 
 	function _save_versions($arr)

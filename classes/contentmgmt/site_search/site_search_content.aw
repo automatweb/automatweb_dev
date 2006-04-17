@@ -1,5 +1,6 @@
+
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.62 2006/03/30 07:10:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.63 2006/04/17 10:13:21 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -365,7 +366,7 @@ class site_search_content extends class_base
 				$act = html::checkbox(array(
 					"name" => "defaultgrp[${cid}]",
 					"value" => $cid,
-					"checked" => ($def == $cid),
+					"checked" => ($def[$cid] == $cid),
 				));
 			}
 			else
@@ -1421,7 +1422,9 @@ class site_search_content extends class_base
 		));
 
 		exit_function("site_search_content::display_results");
-		return $this->parse();
+		$ret =  $this->parse();
+		$ret .= $this->parse("GROUP_SEPARATOR");
+		return $ret;
 	}
 
 	//// 
@@ -1544,10 +1547,18 @@ class site_search_content extends class_base
 					"type" => "RELTYPE_SEARCH_GRP",
 				));
 
+				if (!is_array($group))
+				{
+					$group = array($group => $group);
+				}
 				$grpcfg = $o->meta("grpcfg");
 				$has_res = false;
 				foreach($conns as $_idx => $conn)
 				{
+					if (count($group) > 0 && !isset($group[$conn->prop("to")]))
+					{
+						continue;
+					}
 					$cid = $conn->prop("to");
 					if ($conn->prop("to.class_id") == CL_EVENT_SEARCH)
 					{
@@ -1593,6 +1604,10 @@ class site_search_content extends class_base
 
 				foreach($conns as $_idx => $conn)
 				{
+					if (count($group) > 0 && !isset($group[$conn->prop("to")]))
+					{
+						continue;
+					}
 					$results = $results_arr[$_idx];
 					$cid = $conn->prop("to");
 
@@ -1618,7 +1633,7 @@ class site_search_content extends class_base
 							"results" => $results,
 							"obj" => $o, 
 							"str" => $str, 
-							"group" => $group,
+							"group" => reset($group),
 							"sort_by" => $grp_sort_by,
 							"str" => $str,
 							"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
@@ -1626,7 +1641,7 @@ class site_search_content extends class_base
 								"id" => $id, 
 								"str" => $str, 
 								"sort_by" => $sort_by, 
-								"group" => $group, 
+								"group" => reset($group), 
 								"section" => aw_global_get("section"),
 								"sdate" => $arr["s_date"],
 								"opts" => $arr["opts"]
@@ -1635,6 +1650,7 @@ class site_search_content extends class_base
 							"multigroups" => $has_res
 						));
 					}
+
 					$search = true;
 					if (!$has_res)
 					{

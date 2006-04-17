@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.167 2006/04/16 09:25:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.168 2006/04/17 10:13:21 kristo Exp $
 
 /*
 
@@ -59,6 +59,14 @@ class site_show extends class_base
 			return $this->_show_type($arr);
 		}
 
+		if ($_GET["set_doc_content_type"])
+		{
+			$_SESSION["doc_content_type"] = $_GET["set_doc_content_type"];
+		}
+		if ($_GET["clear_doc_content_type"])
+		{
+			unset($_SESSION["doc_content_type"]);
+		}
 		global $awt;
 
 		// init left pane/right pane
@@ -496,7 +504,6 @@ class site_show extends class_base
 		{
 			return $arr["docid"];
 		}
-
 		if (isset($arr["obj"]))
 		{
 			$obj = $arr["obj"];
@@ -522,14 +529,20 @@ class site_show extends class_base
 			$obj = $obj->get_original();
 		}
 
-
 		// if any keywords for the menu are set, we must show all the documents that match those keywords under the menu
-		if ($obj->class_id() != CL_PROMO && $obj->meta("has_kwd_rels"))
+		if ($obj->class_id() != CL_PROMO && ($obj->meta("has_kwd_rels") || $_GET["set_kw"]))
 		{
 			// list all documents that have the same kwywords as this menu.
 			// so first, get this menus keywords
 			$m = get_instance(CL_MENU);
-			$kwlist = $m->get_menu_keywords($obj->id());
+			if ($_GET["set_kw"])
+			{
+				$kwlist = array($_GET["set_kw"]);
+			}
+			else
+			{
+				$kwlist = $m->get_menu_keywords($obj->id());
+			}
 			$c = new connection();
 			$doclist = $c->find(array(
 				"to" => $kwlist,
@@ -564,6 +577,41 @@ class site_show extends class_base
 					{
 						$docid[$con["from"]] = $con["from"];
 					}
+				}
+			}
+
+			// if we have doc ct type set, then filter by that as well16.04.2006
+			if ($_SESSION["doc_content_type"] && count($docid) > 0)
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_DOCUMENT,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"oid" => $docid,
+					"doc_content_type" => $_SESSION["doc_content_type"]
+				));
+				$docid = $this->make_keys($ol->ids());
+			}
+
+			if (true || $obj->prop("use_target_audience") == 1)
+			{
+				// get all current target audiences
+				$ta_list = new object_list(array(
+					"class_id" => CL_TARGET_AUDIENCE,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"ugroup" => aw_global_get("gidlist_oid")
+				));
+				if ($ta_list->count() && count($docid))
+				{
+					$ol = new object_list(array(
+						"class_id" => CL_DOCUMENT,
+						"lang_id" => array(),
+						"site_id" => array(),
+						"oid" => $docid,
+						"target_audience" => $ta_list->ids()
+					));
+					$docid = $this->make_keys($ol->ids());
 				}
 			}
 
@@ -647,7 +695,20 @@ class site_show extends class_base
 				$no_in_promo = 1;
 
 				// get kws from promo 
-				$promo_kws = $obj->connections_from(array("to.class_id" => CL_KEYWORD));
+				if ($_GET["set_kw"])
+				{
+					$kwo = obj($_GET["set_kw"]);
+					$filter["CL_DOCUMENT.RELTYPE.name"] = $kwo->name();
+				}
+				else
+				if ($obj->prop("use_menu_keywords") && $this->sel_section_obj)
+				{
+					$promo_kws = $this->sel_section_obj->connections_from(array("to.class_id" => CL_KEYWORD));
+				}
+				else
+				{
+					$promo_kws = $obj->connections_from(array("to.class_id" => CL_KEYWORD));
+				}
 				if (count($promo_kws))
 				{
 					// limit by objs with those kws
@@ -658,6 +719,11 @@ class site_show extends class_base
 					}
 					$filter["CL_DOCUMENT.RELTYPE.name"] = $kwns;
 				}
+
+				if ($obj->prop("use_doc_content_type") && $_SESSION["doc_content_type"])
+				{
+					$filter["doc_content_type"] = $_SESSION["doc_content_type"]; 
+				}
 			}
 			else
 			{
@@ -665,6 +731,12 @@ class site_show extends class_base
 				$gm_c = $obj->connections_from(array(
 					"type" => "RELTYPE_DOCS_FROM_MENU",
 				));
+
+				if ($_SESSION["doc_content_type"])
+				{
+					$filter["doc_content_type"] = $_SESSION["doc_content_type"]; 
+				}
+
 				foreach($gm_c as $gm)
 				{
 					$gm_id = $gm->prop("to");
@@ -798,7 +870,7 @@ class site_show extends class_base
 			$filter["site_id"] = array();
 
 			// if target audience is to be used, then limid docs by that
-			if ($obj->prop("use_target_audience") == 1)
+			if (true || $obj->prop("use_target_audience") == 1)
 			{
 				// get all current target audiences
 				$ta_list = new object_list(array(
@@ -822,7 +894,6 @@ class site_show extends class_base
 			{
 				$filter["no_show_in_promo"] = new obj_predicate_not(1);
 			}
-echo dbg::dump($filter);
 			if ($obj->prop("auto_period") == 1)
 			{
 				$filter["period"] = aw_global_get("act_per_id");
@@ -875,7 +946,6 @@ echo dbg::dump($filter);
 					}
 				}
 			}
-
 			if ($cnt > 1)
 			{
 				// a list of documents
@@ -892,7 +962,6 @@ echo dbg::dump($filter);
 				return false;
 			}
 		}
-
 		return $docid;
 	}
 
@@ -2423,6 +2492,14 @@ echo dbg::dump($filter);
 					}
 				}
 			}
+		}
+
+		$sdct = $o->prop("set_doc_content_type");
+		if ($this->can("view", $sdct))
+		{
+			$su = (aw_ini_get("frontpage") == aw_global_get("section") ? $link : aw_global_get("REQUEST_URI"));
+			$su = aw_url_change_var("clear_doc_content_type", null, $su);
+			$link = aw_url_change_var("set_doc_content_type", $sdct, $su);
 		}
 		return $link;
 	}

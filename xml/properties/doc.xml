@@ -711,6 +711,17 @@
             <caption>Sihtr&amp;amp;uuml;hm</caption>
       </property>
       <property>
+            <name>doc_content_type</name>
+            <table>documents</table>
+            <group>settings</group>
+            <type>chooser</type>
+            <store>connect</store>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_DOC_CONTENT_TYPE</reltype>
+            <field>aw_doc_content_type</field>
+            <caption>Dokumendi sisu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>sections</name>
             <table>documents</table>
             <group>vennastamine</group>
@@ -872,6 +883,11 @@
                   <clid>CL_TARGET_AUDIENCE</clid>
                   <caption>Sihtr&amp;amp;uuml;hm</caption>
             </TARGET_AUDIENCE>
+            <DOC_CONTENT_TYPE>
+                  <value>27</value>
+                  <clid>CL_DOCUMENT_CONTENT_TYPE</clid>
+                  <caption>Dokumendi sisu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+            </DOC_CONTENT_TYPE>
       </reltypes>
 </properties>
 
