@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.168 2006/04/17 10:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.169 2006/04/17 12:21:52 kristo Exp $
 
 /*
 
@@ -442,7 +442,7 @@ class site_show extends class_base
 				{
 					if (method_exists($si, "get_sub_callbacks_after"))
 					{
-						$sub_callbacks = $si->get_sub_callbacks_after();
+						$sub_callbacks = $si->get_sub_callbacks_after($this);
 					}
 				}
 			}
