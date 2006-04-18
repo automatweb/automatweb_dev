@@ -20,17 +20,6 @@
             <caption>Kinnisvarahalduse keskkond</caption>
       </property>
       <property>
-            <name>redir_object</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_REDIR_OBJECT</reltype>
-            <rel>1</rel>
-            <caption>Dokument millele suunata</caption>
-      </property>
-      <property>
             <name>required_fields</name>
             <table>objects</table>
             <group>required_fields</group>
@@ -62,6 +51,27 @@
             <type>text</type>
             <caption>Abi:</caption>
       </property>
+      <property>
+            <name>bank</name>
+            <table>objects</table>
+            <group>bank</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_bank</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>import</name>
+            <table>objects</table>
+            <group>import</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <store>no</store>
+            <caption>see tuleb arvatavasti iga uue impordiga &amp;uuml;mber progeda, et momendil t&amp;ouml;&amp;ouml;tab juhul kui tabel on kujul (misiganes	Asula_nimi		Asula_t&amp;uuml;&amp;uuml;p(5-v&amp;auml;ikelinn , 6-linnaosa)	misiganes	parent parent_nimi	maakond	maakonna_nimi) ja esimestes kahes reas kasulikku infor pole</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_REALESTATE_ADD</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -76,6 +86,12 @@
             <levels>
                   <caption>Tasemed</caption>
             </levels>
+            <bank>
+                  <caption>Pankade info</caption>
+            </bank>
+            <import>
+                  <caption>Import</caption>
+            </import>
       </groupinfo>
       <reltypes>
             <MANEGER>
@@ -83,11 +99,6 @@
                   <clid>CL_REALESTATE_MANAGER</clid>
                   <caption>Saatja</caption>
             </MANEGER>
-            <REDIR_OBJECT>
-                  <value>2</value>
-                  <clid>CL_DOCUMENT</clid>
-                  <caption>&amp;uuml;mbersuunamine</caption>
-            </REDIR_OBJECT>
       </reltypes>
 </properties>
 
