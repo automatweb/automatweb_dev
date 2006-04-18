@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.154 2006/04/17 10:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.155 2006/04/18 12:04:23 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -167,8 +167,14 @@
 		@property tpl_view type=select group=templates table=menu
 		@caption Template dokumendi näitamiseks (pikk)
 
+		@property tpl_view_no_inherit type=checkbox group=templates table=menu ch_value=1
+		@caption Ei ole p&auml;ritav
+
 		@property tpl_lead type=select group=templates table=menu
 		@caption Template dokumendi näitamiseks (lühike)
+
+		@property tpl_lead_no_inherit type=checkbox group=templates table=menu ch_value=1
+		@caption Ei ole p&auml;ritav
 
 		@property show_layout type=relpicker reltype=RELTYPE_SHOW_AS_LAYOUT group=templates field=meta method=serialize table=objects
 		@caption Kasuta n&auml;itamiseks layouti
@@ -1774,7 +1780,9 @@ class menu extends class_base
 		switch($f)
 		{
 			case "set_doc_content_type":
-				$this->db_query("ALTER TABLE menu add set_doc_content_type int");
+			case "tpl_view_no_inherit":
+			case "tpl_lead_no_inherit":
+				$this->db_query("ALTER TABLE menu add $f int");
 				return true;
 				break;
 		}

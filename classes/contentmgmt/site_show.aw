@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.170 2006/04/18 10:52:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.171 2006/04/18 12:04:24 kristo Exp $
 
 /*
 
@@ -229,6 +229,22 @@ class site_show extends class_base
 						{
 							$this->properties["images"][$imn] = $im[$imn]["image_id"];
 						}
+					}
+				}
+				else
+				if ($key == "tpl_view")
+				{
+					if ($i == 0 || !$obj->prop("tpl_view_no_inherit"))
+					{
+						$this->properties[$key] = $obj->prop($key);
+					}
+				}
+				else
+				if ($key == "tpl_lead")
+				{
+					if ($i == 0 || !$obj->prop("tpl_lead_no_inherit"))
+					{
+						$this->properties[$key] = $obj->prop($key);
 					}
 				}
 				else

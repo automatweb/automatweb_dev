@@ -379,12 +379,30 @@
             <caption>Template dokumendi n&amp;auml;itamiseks (pikk)</caption>
       </property>
       <property>
+            <name>tpl_view_no_inherit</name>
+            <table>menu</table>
+            <type>checkbox</type>
+            <group>templates</group>
+            <ch_value>1</ch_value>
+            <field>tpl_view_no_inherit</field>
+            <caption>Ei ole p&amp;amp;auml;ritav</caption>
+      </property>
+      <property>
             <name>tpl_lead</name>
             <table>menu</table>
             <type>select</type>
             <group>templates</group>
             <field>tpl_lead</field>
             <caption>Template dokumendi n&amp;auml;itamiseks (l&amp;uuml;hike)</caption>
+      </property>
+      <property>
+            <name>tpl_lead_no_inherit</name>
+            <table>menu</table>
+            <type>checkbox</type>
+            <group>templates</group>
+            <ch_value>1</ch_value>
+            <field>tpl_lead_no_inherit</field>
+            <caption>Ei ole p&amp;amp;auml;ritav</caption>
       </property>
       <property>
             <name>show_layout</name>
