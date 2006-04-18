@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.83 2006/03/31 11:23:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.84 2006/04/18 14:34:55 markop Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -944,6 +944,22 @@ class cfgform extends class_base
 			"size" => "20",
 		)));
 		
+		$toolbar->add_cdata(t("<small>Millise tab'i alla:</small>"));
+		$tabs = array();
+		$tabs[""] = t("");	
+		if (is_array($this->grplist))
+		{
+			foreach($this->grplist as $key => $grpdata)
+			{
+				$tabs[$key] = $grpdata["caption"];
+			};
+		}
+		
+		$toolbar->add_cdata(html::select(array(
+			"options" => $tabs,
+			"name" => "target",
+		)));
+	
 		$toolbar->add_button(array(
 			"name" => "addgrp",
 			"tooltip" => t("Lisa grupp"),
@@ -1048,6 +1064,7 @@ class cfgform extends class_base
 					$grplist = $this->grplist;
 					$grplist[$grpid] = array(
 						"caption" => $newgrpname,
+						"parent"  => $arr["request"]["target"],
 					);
 					$this->cfg_groups = $grplist;
 				};
