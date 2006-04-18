@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.479 2006/04/13 09:40:10 kristo Exp $
+// $Id: class_base.aw,v 2.480 2006/04/18 11:16:20 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -3907,6 +3907,7 @@ class class_base extends aw_template
 					}
 				} 
 				else
+				if ($type != "releditor")	// cause it submits CRAP
 				{
 					$this->obj_inst->set_prop($name,$property["value"]);
 				};

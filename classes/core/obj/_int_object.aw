@@ -1177,20 +1177,25 @@ class _int_object
 			$_rt = $GLOBALS["relinfo"][$this->obj["class_id"]][$propi["reltype"]]["value"];
 			if ($propi["multiple"] == 1 || is_array($val))
 			{
+				$tval = $val;
+				if (!is_array($tval))
+				{
+					$tval = array($tval => $tval);
+				}
 				// get all old connections
 				// remove the ones that are not selected
 				if (is_oid($this->id()) && ($propi["type"] != "relpicker" || $prop["store"] == "connect"))
 				{
 					foreach($this->connections_from(array("type" => $_rt)) as $c)
 					{
-						if (!in_array($c->prop("to"), $val))
+						if (!in_array($c->prop("to"), $tval))
 						{
 							$this->disconnect(array("from" => $c->prop("to"), "type" => $_rt));
 						}
 					}
 				}
 				// connect to all selected ones
-				foreach(safe_array($val) as $_idx => $connect_to)
+				foreach(safe_array($tval) as $_idx => $connect_to)
 				{
 					if (is_oid($connect_to) && $GLOBALS["object_loader"]->ds->can("view", $connect_to))
 					{
@@ -1201,7 +1206,7 @@ class _int_object
 					}
 					else
 					{
-						unset($val[$_idx]);
+						unset($tval[$_idx]);
 					}
 				}
 			}
