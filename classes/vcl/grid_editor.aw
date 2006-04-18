@@ -338,6 +338,44 @@ class grid_editor extends class_base
 		}
 	}
 
+	function _delete_rc($data)
+	{
+		$cdelete = array();
+		$rdelete = array();
+		foreach(explode("dc_", $data["cols"]) as $k => $v)
+		{
+			if ($v === "")
+			{
+				continue;
+			}
+			$cdelete[$v] = $v;
+		}
+
+		foreach(explode("dr_", $data["rows"]) as $k => $v)
+		{
+			if ($v === "")
+			{
+				continue;
+			}
+			$rdelete[$v] = $v;
+		}
+
+		// kustutame tagant-ettepoole, niiet numbrid ei muutuks
+		krsort($cdelete,SORT_NUMERIC);
+		krsort($rdelete,SORT_NUMERIC);
+
+		foreach($cdelete as $k => $v)
+		{
+			$this->_del_col(array("col" => $v));
+		}
+
+		foreach($rdelete as $k => $v)
+		{
+			$this->_del_row(array("row" => $v));
+		}
+	}
+	
+
 	function _add_col($arr)
 	{
 		extract($arr);
@@ -1560,6 +1598,12 @@ class grid_editor extends class_base
 			'tooltip' => 'Split paremale',
 			'url' => 'javascript:exec_cmd(\'split_right\')',
 			'img' => 'merge_right.png'
+		));
+		$tb->add_button(array(
+			'name' => 'delete_rc',
+			'tooltip' => 'Kustuta read/tulbad',
+			'url' => 'javascript:exec_cmd(\'delete_rc\')',
+			'img' => 'delete.gif'
 		));
 
 		$this->vars(array(
