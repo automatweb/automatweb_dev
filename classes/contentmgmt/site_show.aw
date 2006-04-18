@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.169 2006/04/17 12:21:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.170 2006/04/18 10:52:03 kristo Exp $
 
 /*
 
@@ -1245,6 +1245,7 @@ class site_show extends class_base
 			}
 		}
 
+		$sius = array();
 		if ($imgs)
 		{
 			$imgar = $o->meta("menu_images");
@@ -1272,6 +1273,7 @@ class site_show extends class_base
 						"sel_menu_image_".$nr."_url" => $dat["url"]
 					));
 				}
+				$sius[$nr] = $dat["url"];
 			}
 		}
 		$smn = $this->sel_section_obj->name();
@@ -1306,6 +1308,22 @@ class site_show extends class_base
 			"sel_menu_o_img_url" => $sel_menu_o_img_url,
 			"sel_menu_timing" => $sel_menu_timing
 		));
+
+		for($i = 0; $i < aw_ini_get("menuedit.num_menu_images"); $i++)
+		{
+			if ($sius[$i+1] != "")
+			{
+				$this->vars(array(
+					"HAS_SEL_MENU_IMAGE_URL_".($i+1) => $this->parse("HAS_SEL_MENU_IMAGE_URL_".($i+1))
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"NO_SEL_MENU_IMAGE_URL_".($i+1) => $this->parse("NO_SEL_MENU_IMAGE_URL_".($i+1))
+				));
+			}
+		}
 
 		$has_smu = $no_smu;
 		if ($sel_image_url != "")
