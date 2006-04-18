@@ -548,7 +548,7 @@ class popup_search extends aw_template
 					"select_this" => html::href(array(
 						"url" => "javascript:void(0)",
 						"caption" => t("Vali see"),
-						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;window.opener.document.changeform.submit();window.close()"
+						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);if (el.options) {sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;} else {el.value = ".$o->id().";} window.opener.document.changeform.submit();window.close()"
 					)),
 					"icon" => html::img(array("url" => icons::get_icon_url($o->class_id())))
 				);
@@ -587,47 +587,51 @@ class popup_search extends aw_template
 	function final_submit($arr)
 	{
 		// available options are in metadata, selected option value of the property
-		$o = obj($arr["id"]);
-		$o->set_meta("popup_search[".$arr["pn"]."]", $this->make_keys($arr["sel"]));
-		if (is_array($arr["sel"]) && count($arr["sel"]) == 1)
+		if ($this->can("view", $arr["id"]))
 		{
-			$o->set_prop($arr["pn"], $arr["sel"][0]);
-		}
-		$o->save();
-		
-		// if relpicker, define relations
-		$props = $o->get_property_list();
-		$prop = $props[$arr['pn']];
-		if (isset($prop['style']) && $prop['style'] == 'relpicker' && isset($prop['reltype']))
-		{
-			$reltype = $prop['reltype'];
-			foreach($o->connections_from(array("type" => $reltype)) as $c)
+			$o = obj($arr["id"]);
+			$o->set_meta("popup_search[".$arr["pn"]."]", $this->make_keys($arr["sel"]));
+			if (is_array($arr["sel"]) && count($arr["sel"]) == 1)
 			{
-				$c->delete();
+				$o->set_prop($arr["pn"], $arr["sel"][0]);
 			}
-			if (isset($arr['sel']) && is_array($arr['sel']))
+			$o->save();
+		
+			// if relpicker, define relations
+			$props = $o->get_property_list();
+			$prop = $props[$arr['pn']];
+			if (isset($prop['style']) && $prop['style'] == 'relpicker' && isset($prop['reltype']))
 			{
-				foreach($arr['sel'] as $i => $id)
+				$reltype = $prop['reltype'];
+				foreach($o->connections_from(array("type" => $reltype)) as $c)
 				{
-					if (is_oid($id) && $this->can("view", $id))
+					$c->delete();
+				}
+				if (isset($arr['sel']) && is_array($arr['sel']))
+				{
+					foreach($arr['sel'] as $i => $id)
 					{
-						$object = obj($id);
-						$o->connect(array(
-							"to" => $object->id(),
-							"reltype" => $reltype,
-						));
+						if (is_oid($id) && $this->can("view", $id))
+						{
+							$object = obj($id);
+							$o->connect(array(
+								"to" => $object->id(),
+								"reltype" => $reltype,
+							));
+						}
 					}
 				}
 			}
-		}
 		
-		// emit message so objects can update crap
-		post_message_with_param(MSG_POPUP_SEARCH_CHANGE, $o->class_id(), array(
-			"oid" => $o->id(),
-			"prop" => $arr["pn"],
-			"options" => $this->make_keys($arr["sel"]),
-			"arr" => $arr,
-		));
+			// emit message so objects can update crap
+			post_message_with_param(MSG_POPUP_SEARCH_CHANGE, $o->class_id(), array(
+				"oid" => $o->id(),
+				"prop" => $arr["pn"],
+				"options" => $this->make_keys($arr["sel"]),
+				"arr" => $arr,
+			));
+		}
+
 		if ($arr["multiple"] == 1)
 		{
 			$str = "
@@ -650,6 +654,8 @@ function aw_get_el(name,form)
 
 					el = aw_get_el('".$arr["pn"]."[]', window.opener.document.changeform);
 					//el.selectedIndex = 0;
+					if (el.options)
+					{
 			";
 			foreach(safe_array($arr["sel"]) as $idx => $val)
 			{
@@ -657,7 +663,18 @@ function aw_get_el(name,form)
 				$str .= "el.options.length=sz+1;";
 				$str .= "el.options[sz].value = $val;el.options[sz].selected = 1;";
 			}
-			$str .= "window.opener.document.changeform.submit();
+			$str .= "
+					}
+					else
+					{
+			";
+//			foreach(safe_array($arr["sel"]) as $idx => $val)
+//			{
+				$str .= "el.value = '".join(",", $arr["sel"])."';"; //$val;";
+//			}
+
+			$str .= "		}
+					window.opener.document.changeform.submit();
 					window.close()
 				</script></body></html>
 			";
@@ -669,8 +686,15 @@ function aw_get_el(name,form)
 				<html><body><script language='javascript'>
 				if(window.opener.document.changeform.".$arr["pn"].")
 				{
-					window.opener.document.changeform.".$arr["pn"].".selectedIndex=0;
-					window.opener.document.changeform.".$arr["pn"].".options[0].value=\"".$arr["sel"][0]."\";
+					if (window.opener.document.changeform.".$arr["pn"].".options)
+					{
+						window.opener.document.changeform.".$arr["pn"].".selectedIndex=0;
+						window.opener.document.changeform.".$arr["pn"].".options[0].value=\"".$arr["sel"][0]."\";
+					}
+					else
+					{
+						window.opener.document.changeform.".$arr["pn"].".value = '".join(",", $arr["sel"])."';
+					}
 				}	
 					window.opener.document.changeform.submit();
 					window.close()

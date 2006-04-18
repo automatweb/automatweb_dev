@@ -244,6 +244,8 @@
             <clid>CL_CRM_SECTOR</clid>
             <style>relpicker</style>
             <reltype>RELTYPE_TEGEVUSALAD</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
             <field>pohitegevus</field>
             <caption>P&amp;amp;otilde;hitegevus / Tegevusalad</caption>
       </property>
@@ -490,24 +492,14 @@
             <caption>Puu</caption>
       </property>
       <property>
-            <name>human_resources</name>
-            <table>objects</table>
-            <group>contacts2</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>vbox_contacts_right</parent>
-            <field>human_resources</field>
-            <caption>Inimesed</caption>
-      </property>
-      <property>
             <name>contact_search_firstname</name>
             <table>objects</table>
             <group>contacts2</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_contacts_right</parent>
+            <parent>vbox_contacts_left</parent>
+            <captionside>top</captionside>
             <field>contact_search_firstname</field>
             <caption>Eesnimi</caption>
       </property>
@@ -518,7 +510,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_contacts_right</parent>
+            <parent>vbox_contacts_left</parent>
+            <captionside>top</captionside>
             <field>contact_search_lastname</field>
             <caption>Perenimi</caption>
       </property>
@@ -529,7 +522,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_contacts_right</parent>
+            <parent>vbox_contacts_left</parent>
+            <captionside>top</captionside>
             <field>contact_search_code</field>
             <caption>Isikukood</caption>
       </property>
@@ -540,7 +534,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_contacts_right</parent>
+            <parent>vbox_contacts_left</parent>
+            <captionside>top</captionside>
             <field>contact_search_ext_id_alphanum</field>
             <caption>Siduss&amp;amp;uuml;steemi ID</caption>
       </property>
@@ -551,7 +546,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_contacts_right</parent>
+            <parent>vbox_contacts_left</parent>
+            <captionside>top</captionside>
             <field>contact_search_ext_id</field>
             <caption>Numbriline siduss&amp;uuml;steemi ID</caption>
       </property>
@@ -562,8 +558,9 @@
             <type>hidden</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vbox_contacts_right</parent>
+            <parent>vbox_contacts_left</parent>
             <value>1</value>
+            <captionside>top</captionside>
             <field>contact_search</field>
             <caption>contact_search</caption>
       </property>
@@ -573,10 +570,22 @@
             <group>contacts2</group>
             <type>submit</type>
             <store>no</store>
-            <parent>vbox_contacts_right</parent>
+            <parent>vbox_contacts_left</parent>
             <no_caption>1</no_caption>
+            <captionside>top</captionside>
             <field>contact_search_submit</field>
             <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>human_resources</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_contacts_right</parent>
+            <field>human_resources</field>
+            <caption>Inimesed</caption>
       </property>
       <property>
             <name>contacts_search_results</name>
@@ -590,71 +599,33 @@
             <caption>Otsingutulemused</caption>
       </property>
       <property>
-            <name>prof_search_firstname</name>
+            <name>cedit_tb</name>
             <table>objects</table>
-            <group>contacts2</group>
-            <type>textbox</type>
-            <size>30</size>
-            <store>no</store>
-            <parent>vbox_contacts_right</parent>
-            <field>prof_search_firstname</field>
-            <caption>Eesnimi</caption>
-      </property>
-      <property>
-            <name>prof_search_lastname</name>
-            <table>objects</table>
-            <group>contacts2</group>
-            <type>textbox</type>
-            <size>30</size>
-            <store>no</store>
-            <parent>vbox_contacts_right</parent>
-            <field>prof_search_lastname</field>
-            <caption>Perenimi</caption>
-      </property>
-      <property>
-            <name>prof_search_code</name>
-            <table>objects</table>
-            <group>contacts2</group>
-            <type>textbox</type>
-            <size>30</size>
-            <store>no</store>
-            <parent>vbox_contacts_right</parent>
-            <field>prof_search_code</field>
-            <caption>Isikukood</caption>
-      </property>
-      <property>
-            <name>prof_search</name>
-            <table>objects</table>
-            <group>contacts2</group>
-            <type>hidden</type>
-            <store>no</store>
+            <group>contacts_edit</group>
+            <type>toolbar</type>
             <no_caption>1</no_caption>
-            <parent>vbox_contacts_right</parent>
-            <value>1</value>
-            <field>prof_search</field>
-            <caption>prof_search</caption>
-      </property>
-      <property>
-            <name>prof_search_submit</name>
-            <table>objects</table>
-            <group>contacts2</group>
-            <type>submit</type>
             <store>no</store>
-            <parent>vbox_contacts_right</parent>
-            <no_caption>1</no_caption>
-            <field>prof_search_submit</field>
-            <caption>Otsi</caption>
+            <field>cedit_tb</field>
       </property>
       <property>
-            <name>prof_search_results</name>
+            <name>cedit_tree</name>
             <table>objects</table>
-            <group>contacts2</group>
+            <group>contacts_edit</group>
+            <type>treeview</type>
+            <store>no</store>
+            <parent>contacts_edit</parent>
+            <no_caption>1</no_caption>
+            <field>cedit_tree</field>
+      </property>
+      <property>
+            <name>cedit_table</name>
+            <table>objects</table>
+            <group>contacts_edit</group>
             <type>table</type>
             <store>no</store>
+            <parent>contacts_edit</parent>
             <no_caption>1</no_caption>
-            <parent>vbox_contacts_right</parent>
-            <field>prof_search_results</field>
-            <caption>Otsingutulemused</caption>
+            <field>cedit_table</field>
       </property>
       <property>
             <name>contact</name>
@@ -2438,6 +2409,11 @@
                   <submit>no</submit>
                   <save>no</save>
             </personal_candits>
+            <contacts_edit>
+                  <caption>Toimeta isikuid</caption>
+                  <parent>people</parent>
+                  <submit>no</submit>
+            </contacts_edit>
             <resources>
                   <caption>Ressursid</caption>
                   <submit>no</submit>
@@ -2960,6 +2936,10 @@
                   <parent>hbox_others</parent>
                   <group>contacts2</group>
             </vbox_contacts_right>
+            <contacts_edit>
+                  <type>hbox</type>
+                  <group>contacts_edit</group>
+            </contacts_edit>
             <personal_toolbar>
                   <type>hbox</type>
                   <group>personal_offers</group>

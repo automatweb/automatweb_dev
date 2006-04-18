@@ -93,7 +93,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property tooted type=relpicker reltype=RELTYPE_TOOTED automatic=1 method=serialize field=meta table=objects
 	@caption Tooted
 
-	@property pohitegevus type=popup_search clid=CL_CRM_SECTOR table=kliendibaas_firma style=relpicker reltype=RELTYPE_TEGEVUSALAD
+	@property pohitegevus type=popup_search clid=CL_CRM_SECTOR table=kliendibaas_firma style=relpicker reltype=RELTYPE_TEGEVUSALAD multiple=1 store=connect
 	@caption P&otilde;hitegevus / Tegevusalad
 
 	@property activity_keywords type=textarea cols=65 rows=3 table=kliendibaas_firma
@@ -183,55 +183,46 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 			@property unit_listing_tree type=treeview no_caption=1 store=no parent=vbox_contacts_left
 			@caption Puu
 
+			///////////// contact search
+			@property contact_search_firstname type=textbox size=30 store=no parent=vbox_contacts_left captionside=top
+			@caption Eesnimi
+
+			@property contact_search_lastname type=textbox size=30 store=no parent=vbox_contacts_left captionside=top
+			@caption Perenimi
+
+			@property contact_search_code type=textbox size=30 store=no parent=vbox_contacts_left captionside=top
+			@caption Isikukood
+
+			@property contact_search_ext_id_alphanum type=textbox size=30 store=no parent=vbox_contacts_left captionside=top
+			@caption Siduss&uuml;steemi ID
+
+			@property contact_search_ext_id type=textbox size=30 store=no parent=vbox_contacts_left captionside=top
+			@caption Numbriline sidussüsteemi ID
+
+			@property contact_search type=hidden store=no no_caption=1 parent=vbox_contacts_left value=1 captionside=top
+			@caption contact_search
+
+			@property contact_search_submit type=submit store=no parent=vbox_contacts_left no_caption=1 captionside=top
+			@caption Otsi
+
+
 		@layout vbox_contacts_right type=vbox parent=hbox_others
 
 			@property human_resources type=table store=no no_caption=1 parent=vbox_contacts_right
 			@caption Inimesed
 
-			///////////// contact search
-			@property contact_search_firstname type=textbox size=30 store=no parent=vbox_contacts_right
-			@caption Eesnimi
-
-			@property contact_search_lastname type=textbox size=30 store=no parent=vbox_contacts_right
-			@caption Perenimi
-
-			@property contact_search_code type=textbox size=30 store=no parent=vbox_contacts_right
-			@caption Isikukood
-
-			@property contact_search_ext_id_alphanum type=textbox size=30 store=no parent=vbox_contacts_right
-			@caption Siduss&uuml;steemi ID
-
-			@property contact_search_ext_id type=textbox size=30 store=no parent=vbox_contacts_right
-			@caption Numbriline sidussüsteemi ID
-
-			@property contact_search type=hidden store=no no_caption=1 parent=vbox_contacts_right value=1
-			@caption contact_search
-
-			@property contact_search_submit type=submit store=no parent=vbox_contacts_right no_caption=1
-			@caption Otsi
-
 			@property contacts_search_results type=table store=no no_caption=1 parent=vbox_contacts_right
 			@caption Otsingutulemused
 
-			///////////// profession search
-			@property prof_search_firstname type=textbox size=30 store=no parent=vbox_contacts_right
-			@caption Eesnimi
 
-			@property prof_search_lastname type=textbox size=30 store=no parent=vbox_contacts_right
-			@caption Perenimi
+@default group=contacts_edit
 
-			@property prof_search_code type=textbox size=30 store=no parent=vbox_contacts_right
-			@caption Isikukood
+	@property cedit_tb type=toolbar no_caption=1 store=no
 
-			@property prof_search type=hidden store=no no_caption=1 parent=vbox_contacts_right value=1
-			@caption prof_search
+	@layout contacts_edit type=hbox
 
-			@property prof_search_submit type=submit store=no parent=vbox_contacts_right no_caption=1
-			@caption Otsi
-
-			@property prof_search_results type=table store=no no_caption=1 parent=vbox_contacts_right
-			@caption Otsingutulemused
-
+		@property cedit_tree type=treeview store=no parent=contacts_edit no_caption=1
+		@property cedit_table type=table store=no parent=contacts_edit no_caption=1
 
 
 @default group=cedit
@@ -791,6 +782,7 @@ default group=org_objects
 	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no save=no
 	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no save=no
 	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no save=no
+	@groupinfo contacts_edit caption="Toimeta isikuid" parent=people submit=no 
 
 @groupinfo resources caption="Ressursid"  submit=no save=no
 @groupinfo contacts caption="Kontaktid"
@@ -1720,13 +1712,15 @@ class crm_company extends class_base
 			case "unit_listing_tree":
 			case "human_resources":
 			case 'contacts_search_results':
-			case "prof_search_results":
 			case "personal_offers_toolbar":
 			case "unit_listing_tree_personal":
 			case "personal_offers_table":
 			case "personal_candidates_toolbar":
 			case "unit_listing_tree_candidates":
 			case "personal_candidates_table":
+			case "cedit_tb":
+			case "cedit_tree":
+			case "cedit_table":
 				static $people_impl;
 				if (!$people_impl)
 				{
@@ -1744,22 +1738,6 @@ class crm_company extends class_base
 			case "contact_search":
 			case "contact_search_submit":
 				if(!$arr['request']['contact_search'])
-				{
-					return PROP_IGNORE;
-				}
-				else
-				{
-					$data['value'] = $arr['request'][$data["name"]];
-				}
-				break;
-
-			// profession search
-			case "prof_search_firstname":
-			case "prof_search_lastname":
-			case "prof_search_code":
-			case "prof_search":
-			case 'prof_search_submit':
-				if(!$arr['request']['prof_search'])
 				{
 					return PROP_IGNORE;
 				}
@@ -1978,6 +1956,30 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "cedit_table":
+				if ($arr["request"]["sbt_data"])
+				{
+					$dat = explode(",",$arr["request"]["sbt_data"]); 
+					// add these people to the section 
+					$r = $arr["request"];
+					$r["check"] = $dat;
+					$this->save_search_results($r);
+				}
+				if ($arr["request"]["sbt_data2"] && $arr["request"]["unit"])
+				{
+					$dat = explode(",",$arr["request"]["sbt_data2"]); 
+					// add the professions to the current unit
+					$unit = obj($arr["request"]["unit"]);
+					foreach($dat as $prof)
+					{
+						$unit->connect(array(
+							"type" => "RELTYPE_PROFESSIONS",
+							"to" => $prof
+						));
+					}
+				}
+				break;
+
 			case "activity_keywords":
 				$keywords_tmp = explode(",", $data["value"]);
 				$keywords = array();
@@ -2253,25 +2255,6 @@ class crm_company extends class_base
 	}
 
 	/**
-		@attrib name=search_for_profs
-		@param cat optional type=int
-		@param unit optional type=int
-	**/
-	function search_for_profs($arr)
-	{
-		return $this->mk_my_orb(
-			'change',array(
-				'id' => $arr['id'],
-				'group' => $arr['group'],
-				'prof_search' => true,
-				'unit' => $arr['unit'],
-				'cat' => $arr['cat'],
-			),
-			'crm_company'
-		);
-	}
-
-	/**
 		@attrib name=submit_new_call
 		@param id required type=int acl=view
 	**/
@@ -2515,12 +2498,10 @@ class crm_company extends class_base
 		if(array_key_exists('request',$arr))
 		{
 			$this->do_search = $arr['request']['contact_search'];
-			$this->do_search_prof = $arr['request']['prof_search'];
 		}
 		else
 		{
 			$this->do_search = $arr['contact_search'];
-			$this->do_search_prof = $arr['prof_search'];
 		}
 
 		if(is_oid($arr['request']['cat']))
@@ -2544,6 +2525,8 @@ class crm_company extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["tf"] = $_GET["tf"];
 		$arr["cust_cat"] = 1;
+		$arr["sbt_data"] = 0;
+		$arr["sbt_data2"] = 0;
 	}
 
 	/**
@@ -2722,12 +2705,6 @@ class crm_company extends class_base
 			$arr['args']['contact_search_ext_id'] = ($arr['request']['contact_search_ext_id']);
 			$arr['args']['contact_search'] = $this->do_search;
 			$arr['args']['contacts_search_show_results'] = 1;
-		}
-
-		if ($this->do_search_prof)
-		{
-			$arr['args']['prof_search_show_results'] = 1;
-			$arr['args']['prof_search'] = 1;
 		}
 
 		if($arr["request"]["customer_search_submit"])
