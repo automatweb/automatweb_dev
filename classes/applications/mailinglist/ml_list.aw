@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.65 2006/04/04 10:31:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.66 2006/04/18 13:39:48 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1777,7 +1777,7 @@ class ml_list extends class_base
 
 	function un_format_name($arr)
 	{
-		$data = explode('&lt;' , $arr["name"]);arr($data);
+		$data = explode('&lt;' , $arr["name"]);
 		if($arr["result"] == "name") return trim($data[0]);
 		if($arr["result"] == "email") return trim($data[1], "&gt;");
 		
@@ -2352,7 +2352,22 @@ class ml_list extends class_base
 				$filtered_props[$id] = $prop;
 			}
 		}
-
+		if ((sizeof($templates) > 0) && (!strlen($msg_obj->prop("message")) > 0))
+		{
+			$options = array(0 => t(" - vali - "));
+			foreach($templates as $template)
+			{
+				$options[$template->prop("to")] = $template->prop("to.name");
+			}
+			$filtered_props["copy_template"] = array(
+				"type" => "select",
+				"name" => "copy_template",
+				"options" => $options,
+				"caption" => t("Vali template mille sisusse kopeerida"),
+				"value" => $msg_obj->meta("copy_template"),
+			);
+		}
+		
 		$filtered_props["id"] = array(
 			"name" => "id",
 			"type" => "hidden",
@@ -2392,7 +2407,6 @@ class ml_list extends class_base
 		$msg_data["mto"] = $arr["obj_inst"]->id();
 		$folder = $arr["obj_inst"]->prop("msg_folder");
 		$mail_id = $msg_data["id"];
-
 		if(!is_oid($msg_data["id"]) || !$this->can("view", $msg_data["id"]))
 		{
 			$msg_obj = obj();
@@ -2406,15 +2420,18 @@ class ml_list extends class_base
 			$msg_obj = obj($msg_data["id"]);
 		}
 		$tpl = $msg_data["template_selector"];
-		//if ($msg_data["send_away"] == 1)
-		//{
 		$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("write_user_folder"));
-		//}
+		if((!strlen($msg_data["message"]) > 0 ) && (is_oid($msg_data["copy_template"])))
+		{
+			$template_obj = obj($msg_data["copy_template"]);
+			$msg_data["message"] = $template_obj->prop("content");
+		}
 		$msg_data["return"] = "id";
 	
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		$message_id = $writer->submit($msg_data);
+		
 		
 		$sender = $msg_obj->prop("mfrom");
 		
