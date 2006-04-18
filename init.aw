@@ -902,6 +902,10 @@ function exit_function($name,$ret = "")
 
 function __init_aw_session_track()
 {
+	if ($_SERVER["REQUEST_METHOD"] != "GET")
+	{
+		return;
+	}
 	if (!empty($_SESSION["aw_session_track"]["aw"]["do_redir"]))
 	{
 		$tmp = $_SESSION["aw_session_track"]["aw"]["do_redir"];
