@@ -1,6 +1,5 @@
-
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.65 2006/04/19 08:22:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.66 2006/04/19 10:23:56 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
