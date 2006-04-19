@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.67 2006/04/19 11:41:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.68 2006/04/19 11:47:34 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1766,7 +1766,7 @@ class site_search_content extends class_base
 			return "1=1";
 		}
 		$words = explode(" ", $str);
-		if ((aw_ini_get("site_search_content.has_fulltext_index") == 1 || true) && $static)
+		if ((aw_ini_get("site_search_content.has_fulltext_index") == 1) && $static)
 		{
 			$fld = $field;
 			if ($fld == "content")

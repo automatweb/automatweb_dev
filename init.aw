@@ -811,10 +811,6 @@ function aw_startup()
 // !called just before the very end
 function aw_shutdown()
 {
-	if (aw_global_get("uid") != "kix")
-	{
-		return;
-	}
 	global $awt;
 	if (is_object($awt))
 	{
