@@ -184,6 +184,10 @@ class doc_display extends aw_template
 			if ($doc->prop("showlead") || $arr["showlead"])
 			{
 				$lead = $doc->prop("lead");
+				if (trim(strtolower($lead)) == "<br>")
+				{
+					$lead = "";
+				}
 				if (aw_ini_get("document.boldlead"))
 				{
 					$lead = "<b>".$lead."</b>";

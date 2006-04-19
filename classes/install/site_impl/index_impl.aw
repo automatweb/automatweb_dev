@@ -1,4 +1,15 @@
 <?php
+/*
+if (empty($class) && !empty($alias))
+{
+	//$class = $alias;
+}
+*/
+
+// nii, kuidas ma saan selle asja tööle niimoodi et klass ka vormi sees töötaks?
+// võti on selles alias argumendis ... mille tõttu ma dokumendist välja satun.
+// mille tõttu kutsutakse välja orb_impl_exec ja mitte site_header
+
 if (!empty($class)  || !empty($reforb))
 {
 	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/orb_impl_exec.".aw_ini_get("ext"));

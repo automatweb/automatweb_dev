@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.102 2006/02/28 15:42:50 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.103 2006/04/19 11:41:28 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -552,7 +552,7 @@ class object_treeview_v2 extends class_base
 		}
 		enter_function("otv2::show");
 		$ob = obj($id);
-
+		$this->set_parse_method("eval");
 		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
 		{
 			$ih_ob = obj($ob->prop("inherit_view_props_from"));
@@ -1085,6 +1085,7 @@ class object_treeview_v2 extends class_base
 		{
 			return $res;
 		}
+		exit_function("otv2::show");
 		return create_email_links($res);
 
 		return $res;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.10 2005/12/09 07:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.11 2006/04/19 11:41:27 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -486,9 +486,11 @@ class db_table_contents extends class_base
 			return array();
 		}
 
+		enter_function("db_table_contents::get_objects");
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($o->prop('db_base'));
 
+		enter_function("db_table_contents::get_objects::query");
 		if ($db->db_get_table_type($o->prop('db_table')) == DB_TABLE_TYPE_STORED_PROC)
 		{
 			$q = $o->prop('db_table')." ".(!isset($params["sproc_params"]) ? $o->prop("sproc_params") : $params["sproc_params"]);
@@ -499,6 +501,7 @@ class db_table_contents extends class_base
 			$q = 'SELECT * FROM '.$o->prop('db_table');
 			$db->db_query($q);
 		}
+		exit_function("db_table_contents::get_objects::query");
 
 		$ret = array();
 		while ($row = $db->db_next())
@@ -513,6 +516,7 @@ class db_table_contents extends class_base
 			$tr_i->transform($tr, $ret);
 		}
 
+		exit_function("db_table_contents::get_objects");
 		return $ret;
 	}
 

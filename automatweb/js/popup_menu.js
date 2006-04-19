@@ -158,7 +158,10 @@ function depressButton(button) {
   x = getPageOffsetLeft(button);
 	if (pp_browser.isIE)
 	{
-	  y = getPageOffsetTop(button)/2 + button.offsetHeight*3;
+	  /* y = getPageOffsetTop(button)/2 + button.offsetHeight*3;
+          bug fix by hannes
+         */
+          y = getPageOffsetTop(button) + button.offsetHeight + 10 ;
 	}
 	else
 	{

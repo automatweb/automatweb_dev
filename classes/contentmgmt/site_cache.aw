@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.33 2006/04/17 10:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.34 2006/04/19 11:41:27 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -229,7 +229,6 @@ class site_cache extends aw_template
 		}
 		$so = obj(aw_global_get("section"));
 		$this->path = $so->path();
-
 		$last_menu = 0;
 		$cnt = count($this->path);
 		$has_ctx = false;
@@ -267,6 +266,11 @@ class site_cache extends aw_template
 			"class_id" => CL_HTML_POPUP,
 			"site_id" => array(),
 		));
+
+		if (count($pl->ids()) > 0)
+		{
+			$t = get_instance(CL_HTML_POPUP);
+		};
 		foreach($pl->arr() as $o)
 		{
 			$o_id = $o->id();

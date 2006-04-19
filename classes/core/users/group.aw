@@ -969,7 +969,7 @@ class group extends class_base
 		if (count($user->connections_from(array("to" => $group->id()))) > 0)
 		{
 			$user->disconnect(array(
-				"from" => $group->id()
+				"to" => $group->id()
 			));
 		}
 

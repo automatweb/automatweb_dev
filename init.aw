@@ -551,6 +551,10 @@ function classload($args)
 				"msg" => sprintf(t("classload(): class %s not found!"), $lib)
 			));
 		}
+		if (file_exists($lib) && is_readable($lib))
+		{
+			include_once($lib);
+		}
 	};
 //	exit_function("__global::classload");
 }
@@ -807,6 +811,10 @@ function aw_startup()
 // !called just before the very end
 function aw_shutdown()
 {
+	if (aw_global_get("uid") != "kix")
+	{
+		return;
+	}
 	global $awt;
 	if (is_object($awt))
 	{
@@ -1065,6 +1073,7 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 
 function log_pv($mt)
 {
+	return;
 	//list($usec, $sec) = explode(" ", $mt);
 	$start = $mt ;//((float)$usec + (float)$sec);
 

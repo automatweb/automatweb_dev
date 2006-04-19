@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.21 2006/02/09 14:59:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.22 2006/04/19 11:41:27 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -100,8 +100,16 @@ class mini_gallery extends class_base
 		));
 
 		$img_c = $images->count();
-		$rows = $ob->prop("rows") ? $ob->prop("rows") : $img_c / $ob->prop("cols");
-		$cols = $ob->prop("cols");
+		if ($ob->prop("cols") == 0)
+		{
+			$rows = $img_c;
+			$cols = 1;
+		}
+		else
+		{
+			$rows = $img_c / $ob->prop("cols");
+			$cols = $ob->prop("cols");
+		}
 		$img = $images->begin(); 
 
 		if ($ob->prop("rows"))

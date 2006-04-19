@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.361 2006/03/03 08:00:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.362 2006/04/19 11:41:26 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -513,7 +513,8 @@ class menuedit extends aw_template
 			// mingi kontroll, et kui sektsioon ei eksisteeri, siis n?tame esilehte
 			if (!$this->can("view", $section))
 			{
-				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section), $section);
+				$ns = $_SERVER["REQUEST_URI"];
+				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$ns), $section);
 				if ($show_errors)
 				{
 					if (aw_ini_get("menuedit.login_on_no_access") == 1)
@@ -624,7 +625,7 @@ class menuedit extends aw_template
 			}
 		}
 
-		$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$section), $section);
+		$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$_SERVER["REQUEST_URI"]), $section);
 		// neat :), kui objekti ei leita, siis saadame 404 koodi
 		$r404 = $this->cfg["404redir"];
 		if (is_array($r404))

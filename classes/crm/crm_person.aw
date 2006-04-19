@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.123 2006/04/13 10:11:38 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.124 2006/04/19 11:41:28 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2712,11 +2712,21 @@ class crm_person extends class_base
 
 			case "udef_ch1":
 			case "picture2":
+			case "client_manager":
+			case "aw_is_customer":
+			case "address":
 				$this->db_add_col($tbl, array(
 					"name" => $field,
 					"type" => "int",
 				));
 				return true;
+
+			case "code":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "varchar(255)"
+				));
+				break;
 		}
 		return false;
 	}

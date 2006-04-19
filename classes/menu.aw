@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.155 2006/04/18 12:04:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.156 2006/04/19 11:41:26 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1598,7 +1598,7 @@ class menu extends class_base
 		{
 			$link = $this->cfg["baseurl"]."/".$target["to"];
 		}
-												  
+
 		$ltarget = "";
 		if ($o->prop("target"))
 		{

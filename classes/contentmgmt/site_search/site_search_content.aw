@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.66 2006/04/19 10:23:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.67 2006/04/19 11:41:28 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -588,6 +588,7 @@ class site_search_content extends class_base
 	function show($arr)
 	{
 		enter_function("site_search_content::show");
+		$arr["str"] = str_replace("'", "", $arr["str"]);
 		extract($arr);
 		$ob = new object($id);
 		if ($ob->prop("show_admin_if") == 1)
@@ -634,7 +635,7 @@ class site_search_content extends class_base
 		$this->vars(array(
 			"GROUP" => $s_gr,
 			"reforb" => $this->mk_reforb("do_search", array("id" => $id, "no_reforb" => 1, "section" => aw_global_get("section"))),
-			"str" => (isset($str) ? $str : ""),
+			"str" => htmlspecialchars((isset($str) ? $str : "")),
 			"str_opts" => $this->picker($opts["str"], $this->search_opts),
 			"date_from" => $de->gen_edit_form("s_date[from]", $date["from"], date("Y")-3, date("Y"), true),
 			"date_to" => $de->gen_edit_form("s_date[to]", $date["to"], date("Y")-3, date("Y"), true),
@@ -1379,6 +1380,7 @@ class site_search_content extends class_base
 			{
 				$si->parse_document($results[$i]);
 			}
+			$results[$i]["url"] = preg_replace("/\&set_lang_id=\d+/imsU", "", str_replace("/index.aw?section=", "/", $results[$i]["url"]));
 			$this->vars(array(
 				"link" => $results[$i]["url"],
 				"title" => $results[$i]["title"],
@@ -1764,7 +1766,7 @@ class site_search_content extends class_base
 			return "1=1";
 		}
 		$words = explode(" ", $str);
-		if ((aw_ini_get("site_search_content.has_fulltext_index") == 1 ) && $static)
+		if ((aw_ini_get("site_search_content.has_fulltext_index") == 1 || true) && $static)
 		{
 			$fld = $field;
 			if ($fld == "content")

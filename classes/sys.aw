@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.71 2006/04/07 06:48:19 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.72 2006/04/19 11:41:26 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -178,6 +178,8 @@ class sys extends aw_template
 	function db_compare_choose_donor($args = array())
 	{
 		$files = array(
+			"www.just.ee" => "www.just.ee",
+			"envir.struktuur.ee" => "envir.struktuur.ee",
 			"tarvo.dev.struktuur.ee" => "tarvo.dev.struktuur.ee",
 			"sander.dev.struktuur.ee" => "sander.dev.struktuur.ee",
 			"voldemar.dev.struktuur.ee" => "voldemar.dev.struktuur.ee",
@@ -758,10 +760,14 @@ class sys extends aw_template
 				}
 			}
 
-			echo "<br>top 20 longest pages by average: <br>";
+			echo "<br>top 20 longest pages by average, cnt > 1: <br>";
 			$num = 0;
 			foreach($avg_page_times as $url => $time)
 			{
+				if ($urls[$url] < 2)
+				{
+					continue;
+				}
 				echo "page $url took $time seconds on average (count = ".$urls[$url].")<br>";
 				if (++$num > 20)
 				{

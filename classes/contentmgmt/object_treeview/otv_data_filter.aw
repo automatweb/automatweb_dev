@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.8 2005/12/30 10:10:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.9 2006/04/19 11:41:28 kristo Exp $
 // otv_data_filter.aw - Andmeallika andmete muundaja 
 /*
 
@@ -198,7 +198,14 @@ class otv_data_filter extends class_base
 		foreach($dat2 as $row)
 		{
 			$from = join(".", map("chr(%s)", explode(",", $row["from"])));
-			$to = join(".", map("chr(%s)", explode(",", $row["to"])));
+			if ($row["to_str"] != "")
+			{
+				$to = $this->_code_escape($row["to_str"]);
+			}
+			else
+			{
+				$to = join(".", map("chr(%s)", explode(",", $row["to"])));
+			}
 			$repl .= "str_replace($from, $to,"; 
 		}
 

@@ -206,7 +206,7 @@ class languages extends aw_template
 
 	function get_charset()
 	{
-		$a = $this->fetch(aw_global_get("lang_id"));
+		$a = $this->fetch(aw_global_get("lang_id"), true);
 		return $a["charset"];
 	}
 
@@ -314,7 +314,7 @@ class languages extends aw_template
 			else
 			{
 				// if a language is active, we must check if perhaps someone kas de-activated it in the mean time
-				$la = $this->fetch($lang_id);
+				$la = $this->fetch($lang_id, true);
 				if (!($la["status"] == 2 || ($la["status"] == 1 && aw_global_get("uid") != "")))
 				{
 					// if so, try to come up with a better one.

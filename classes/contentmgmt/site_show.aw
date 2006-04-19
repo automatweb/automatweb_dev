@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.171 2006/04/18 12:04:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.172 2006/04/19 11:41:27 kristo Exp $
 
 /*
 
@@ -1443,6 +1443,7 @@ class site_show extends class_base
 			$this->vars(array(
 				"link" => $link,
 				"text" => str_replace("&nbsp;"," ",strip_tags($ref->name())),
+				"comment" =>  str_replace("&nbsp;"," ",strip_tags($ref->comment())),
 				"ysection" => $ref->id()
 			));
 
@@ -1608,7 +1609,8 @@ class site_show extends class_base
 
 		if (!$sel_lang)
 		{
-			$sel_lang = $langs->fetch($lang_id);
+			$ll = get_instance("languages");
+			$sel_lang = $ll->fetch(aw_global_get("lang_id"),true);
 		}
 
 		foreach($l as $_grp => $_l)
@@ -1911,7 +1913,10 @@ class site_show extends class_base
 		}
 
 		enter_function("site_show::do_draw_menus");
-		include_once($this->compiled_filename);
+		if (file_exists($this->compiled_filename))
+		{
+			include_once($this->compiled_filename);
+		}
 		exit_function("site_show::do_draw_menus");
 
 		if (aw_ini_get("config.menus_not_translated"))
