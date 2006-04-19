@@ -1455,18 +1455,11 @@ class user extends class_base
 	**/
 	function get_current_person()
 	{
-		if (aw_global_get("uid") == "")
+		if (aw_global_get("uid_oid") == "")
 		{
 			return false;
 		}
-
-		$oid = $this->users->get_oid_for_uid(aw_global_get("uid"));
-		if (!$oid)
-		{
-			return false;
-		}
-
-		$u = obj($oid);
+		$u = obj(aw_global_get("uid_oid"));
 		return $this->get_person_for_user($u);
 	}
 
