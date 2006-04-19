@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.215 2006/04/10 12:33:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.216 2006/04/19 09:27:10 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -11,6 +11,24 @@ if (!defined("DEFS"))
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
 	define("SERIALIZE_PHP_FILE",6);
+
+	/** returns the object of the currently active person
+		@attrib api=1
+	**/
+	function get_current_person()
+	{
+		$i = get_instance(CL_USER);
+		return obj($i->get_current_person());
+	}
+
+	/** returns the object of the currently active company
+		@attrib api=1
+	**/
+	function get_current_company()
+	{
+		$i = get_instance(CL_USER);
+		return obj($i->get_current_company());
+	}
 
 	/** use this to get the correct return_url argument for GET requests
 
