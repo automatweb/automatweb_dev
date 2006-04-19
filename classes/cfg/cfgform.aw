@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.84 2006/04/18 14:34:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.85 2006/04/19 10:14:32 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -464,6 +464,14 @@ class cfgform extends class_base
 		$this->grplist = safe_array($obj->meta("cfg_groups"));
 		$this->prplist = safe_array($obj->meta("cfg_proplist"));
 
+		foreach($this->grplist as $gn => $gd)
+		{
+			$this->grplist[$gn]["caption"] = urldecode($gd["caption"]);
+		}
+		foreach($this->prplist as $gn => $gd)
+		{
+			$this->prplist[$gn]["caption"] = urldecode($gd["caption"]);
+		}
 	}
 
 	function _init_properties($class_id)
@@ -691,12 +699,17 @@ class cfgform extends class_base
 				{
 					unset($val["default"]);
 				};
+				$val["caption"] = urldecode($val["caption"]);
 				$this->cfg_proplist[$key] = $val;
 			};
 			$obj_inst->set_meta("cfg_proplist",$this->cfg_proplist);
 		};
 		if (isset($this->cfg_groups))
 		{
+			foreach($this->cfg_groups as $gn => $gd)
+			{
+				$this->cfg_groups[$gn]["caption"] = urldecode($gd["caption"]);
+			}
 			$obj_inst->set_meta("cfg_groups",$this->cfg_groups);
 		};
 		return true;
