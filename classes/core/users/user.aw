@@ -1459,7 +1459,9 @@ class user extends class_base
 		{
 			return false;
 		}
+		aw_disable_acl();
 		$u = obj(aw_global_get("uid_oid"));
+		aw_restore_acl();
 		return $this->get_person_for_user($u);
 	}
 
