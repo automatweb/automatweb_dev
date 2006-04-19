@@ -1,6 +1,6 @@
 
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.64 2006/04/17 13:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.65 2006/04/19 08:22:55 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1450,9 +1450,12 @@ class site_search_content extends class_base
 			"per_page" => $per_page
 		));
 
+		$this->vars(array(
+		 	"GROUP_SEPARATOR" => $this->parse("GROUP_SEPARATOR")
+		));
+
 		exit_function("site_search_content::display_results");
 		$ret =  $this->parse();
-		$ret .= $this->parse("GROUP_SEPARATOR");
 		return $ret;
 	}
 
