@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.216 2006/04/19 09:27:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.217 2006/04/19 09:33:21 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -17,8 +17,13 @@ if (!defined("DEFS"))
 	**/
 	function get_current_person()
 	{
-		$i = get_instance(CL_USER);
-		return obj($i->get_current_person());
+		static $curp;
+		if (!$curp)
+		{
+			$i = get_instance(CL_USER);
+			$curp = obj($i->get_current_person());
+		}
+		return $curp;
 	}
 
 	/** returns the object of the currently active company
@@ -26,8 +31,13 @@ if (!defined("DEFS"))
 	**/
 	function get_current_company()
 	{
-		$i = get_instance(CL_USER);
-		return obj($i->get_current_company());
+		static $curc;
+		if (!$curc)
+		{
+			$i = get_instance(CL_USER);
+			$curc = obj($i->get_current_company());
+		}
+		return $curc;
 	}
 
 	/** use this to get the correct return_url argument for GET requests
