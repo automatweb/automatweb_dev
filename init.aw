@@ -811,6 +811,42 @@ function aw_startup()
 // !called just before the very end
 function aw_shutdown()
 {
+	// whotta fook, this messenger thingie goes here then?:S
+	if($_SESSION["current_user_has_messenger"] && (time() - $_SESSION["current_user_last_m_check"]) > (5 * 60) && aw_ini_get("mail.notify_new"))
+	{
+		$mv2 = get_instance("applications/messenger/messenger_v2");
+		$drv_inst = get_instance("protocols/mail/imap");
+		$drv_inst->set_opt("use_mailbox", "INBOX");
+		
+		$inst = new object($_SESSION["current_user_has_messenger"]);
+		$conns = $inst->connections_from(array("type" => "RELTYPE_MAIL_SOURCE"));
+		list(,$_sdat) = each($conns);
+		$sdat = new object($_sdat->to());
+
+		$drv_inst->connect_server(array("obj_inst" => $_sdat->to()));
+		$emails = $drv_inst->get_folder_contents(array(
+			"from" => 0,
+			"to" => "*",
+		));
+		foreach($emails as $mail_id => $data)
+		{
+			if($data["seen"] == 0)
+			{
+				$new[] = $data["fromn"];
+			}
+		}
+		$count = count($new);
+		$new = join(", ", $new);
+		if(strlen($new))
+		{
+			$sisu = sprintf(t("Sul on %s lugemata kirja! (saatjad: %s)"), $count, $new);
+			$_SESSION["aw_session_track"]["aw"]["do_message"] = $sisu;
+		}
+		$_SESSION["current_user_last_m_check"] = time();
+	}
+	// end of that messenger new mail notifiaction crap
+
+
 	global $awt;
 	if (is_object($awt))
 	{

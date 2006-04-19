@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.19 2006/04/11 13:18:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.20 2006/04/19 15:13:46 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
+HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
 
 @classinfo syslog_type=ST_MESSENGER relationmgr=yes
 
@@ -161,6 +162,18 @@ class messenger_v2 extends class_base
 		return $this->change($arr);
 
 
+	}
+
+	/**
+		@attrib params=name
+		@param uid required type=string
+		@comment
+		gets called on user login and checks if user has messenger
+	**/
+	function on_user_login($arr)
+	{
+		$tmp = $this->get_messenger_for_user($arr)?$this->get_messenger_for_user($arr):"false";
+		$_SESSION["current_user_has_messenger"] = $tmp;
 	}
 
 	function get_messenger_for_user($arr = array())
