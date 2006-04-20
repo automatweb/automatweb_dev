@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.68 2006/04/19 11:47:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.69 2006/04/20 13:39:25 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1384,7 +1384,7 @@ class site_search_content extends class_base
 			$this->vars(array(
 				"link" => $results[$i]["url"],
 				"title" => $results[$i]["title"],
-				"modified" => date("d.m.Y", $results[$i]["modified"]),
+				"modified" => date("d.m.Y", ($results[$i]["doc_modified"] ? $results[$i]["doc_modified"] : $results[$i]["modified"])),
 				"content" => $this->_get_content($results[$i]["content"]),
 				"lead" => preg_replace("/#(.*)#/","",$results[$i]["lead"]),
 				"tm" => ($results[$i]["tm"] != "" ? $results[$i]["tm"] : date("d.m.Y", $results[$i]["modified"])),
