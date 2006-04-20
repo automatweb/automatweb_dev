@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.124 2006/04/19 11:41:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.125 2006/04/20 08:46:51 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2116,22 +2116,25 @@ class crm_person extends class_base
 
 	function callback_post_save($arr)
 	{
-		$u = get_instance(CL_USER);
-		$p = obj($u->get_current_person());
-		if ($arr["request"]["is_important"] == 1)
+		if (aw_global_get("uid") != "")
 		{
-			$p->connect(array(
-				"to" => $arr["obj_inst"]->id(),
-				"type" => "RELTYPE_IMPORTANT_PERSON"
-			));
-		}
-		else
-		{
-			if ($p->is_connected_to(array("to" => $arr["obj_inst"]->id(), "type" => "RELTYPE_IMPORTANT_PERSON")))
-			{
-				$p->disconnect(array(
-					"from" => $arr["obj_inst"]->id(),
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+			if ($arr["request"]["is_important"] == 1)
+			{	
+				$p->connect(array(
+					"to" => $arr["obj_inst"]->id(),
+					"type" => "RELTYPE_IMPORTANT_PERSON"
 				));
+			}
+			else
+			{
+				if ($p->is_connected_to(array("to" => $arr["obj_inst"]->id(), "type" => "RELTYPE_IMPORTANT_PERSON")))
+				{
+					$p->disconnect(array(
+						"from" => $arr["obj_inst"]->id(),
+					));
+				}
 			}
 		}
 
