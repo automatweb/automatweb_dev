@@ -286,8 +286,6 @@ class cb_translate extends aw_template
 		$tree->start_tree (array (
 			"type" => TREE_DHTML,
 			"url_target" => "editorcontent",
-			"root_id" => $arr["parent"],
-			// vbla peaks see get_branc_func olema igal pool node juures .. oh geez.
 		));
 
 		classload("core/icons");
@@ -1080,6 +1078,8 @@ class cb_translate extends aw_template
 	**/
 	function submit_editor($arr)
 	{
+		$arr["caption"] = htmlentities($arr["caption"], ENT_COMPAT, "UTF-8");
+		//die(arr($arr));
 		$langs_info = aw_ini_get("languages.list");
 		if(strlen(trim($arr["propid"])))
 		{
@@ -1457,7 +1457,6 @@ class cb_translate extends aw_template
 					}
 					$change_log[$change_nr]["msgid"] = $msgid;
 					$change_log[$change_nr]["headers"] = array($header);
-
 					$file[] = array(
 						"headers" => $change_log[$change_nr]["headers"],
 						"msgid" => $change_log[$change_nr]["msgid"],
