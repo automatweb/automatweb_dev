@@ -56,11 +56,13 @@ class doc_display extends aw_template
 		$this->vars($al->get_vars());
 		$_date = $doc->prop("doc_modified") > 1 ? $doc->prop("doc_modified") : $doc->modified();
 		$modf = $doc->modifiedby();
+		$modf_eml = "";
 		if ($modf != "")
 		{
 			$u = get_instance(CL_USER);
 			$p = $u->get_person_for_uid($modf);
 			$modf = $p->name();
+			$modf_eml = $p->prop("email.mail");
 		}
 
 		$doc_link = obj_link($doc->id());
@@ -78,6 +80,7 @@ class doc_display extends aw_template
 			"print_date_est" => locale::get_lc_date(time(), LC_DATE_FORMAT_LONG),
 			"modified" => date("d.m.Y", $doc->modified()),
 			"modifiedby" => $modf,
+			"modifiedby_email" => $modf_eml,
 			"parent_id" => $doc->parent(),
 			"parent_name" => $doc_parent->name(),
 			"user1" => $doc->prop("user1"),
