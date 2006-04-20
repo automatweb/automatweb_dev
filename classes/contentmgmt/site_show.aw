@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.174 2006/04/20 10:09:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.175 2006/04/20 11:10:14 kristo Exp $
 
 /*
 
@@ -609,7 +609,7 @@ class site_show extends class_base
 				$docid = $this->make_keys($ol->ids());
 			}
 
-			if (true || $obj->prop("use_target_audience") == 1)
+			if ($obj->prop("use_target_audience") == 1)
 			{
 				// get all current target audiences
 				$ta_list = new object_list(array(
@@ -731,15 +731,16 @@ class site_show extends class_base
 					$kwns = array();
 					foreach($promo_kws as $promo_kw)
 					{
-						$kwns[] = $promo_kw->prop("to.name");
+						$kwns[] = $promo_kw->prop("to");
 					}
-					$filter["CL_DOCUMENT.RELTYPE.name"] = $kwns;
+					$filter["CL_DOCUMENT.RELTYPE"] = $kwns;
 				}
 
 				if ($obj->prop("use_doc_content_type") && $_SESSION["doc_content_type"])
 				{
 					$filter["doc_content_type"] = $_SESSION["doc_content_type"]; 
 				}
+
 			}
 			else
 			{
@@ -886,7 +887,7 @@ class site_show extends class_base
 			$filter["site_id"] = array();
 
 			// if target audience is to be used, then limid docs by that
-			if (true || $obj->prop("use_target_audience") == 1)
+			if ($obj->prop("use_target_audience") == 1)
 			{
 				// get all current target audiences
 				$ta_list = new object_list(array(
@@ -919,6 +920,7 @@ class site_show extends class_base
 				obj_set_opt("no_cache", 1);
 			}
 			$documents = new object_list($filter);
+
 			if ($has_rand)
 			{
 				obj_set_opt("no_cache", 0);
