@@ -63,6 +63,11 @@ class doc_display extends aw_template
 			$modf = $p->name();
 		}
 
+		$doc_link = obj_link($doc->id());
+		if (aw_ini_get("document.links_to_same_section"))
+		{
+			$doc_link = aw_url_change_var("docid", $doc->id(), obj_link(aw_global_get("section")));
+		}
 		$this->vars(array(
 			"text" => $text,
 			"title" => $doc->prop("title"),
@@ -90,6 +95,7 @@ class doc_display extends aw_template
 			"page_title" => strip_tags($doc->prop("title")),			
 			"date" => $_date,
 			"edit_doc" => $this->_get_edit_menu($doc),
+			"doc_link" => $doc_link
 		));
 
 		$ablock = "";

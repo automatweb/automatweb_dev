@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.103 2006/04/19 11:41:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.104 2006/04/20 10:09:39 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1720,7 +1720,7 @@ class object_treeview_v2 extends class_base
 								"value" => $content,
 								"options" =>  array(
 									"0" => t("--Vali--")
-								) + $clsf_opts,
+								) + safe_array($clsf_opts),
 							));
 							break;
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.173 2006/04/19 11:44:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.174 2006/04/20 10:09:38 kristo Exp $
 
 /*
 
@@ -1151,7 +1151,6 @@ class site_show extends class_base
 		{
 			$docid = $arr["docid"];
 		}
-
 		return $this->_int_show_documents($docid);
 	}
 
@@ -1203,6 +1202,7 @@ class site_show extends class_base
 		{
 			$docc = $this->_get_empty_doc_menu();
 		}
+
 		$this->vars(array(
 			"doc_content" => $docc
 		));
