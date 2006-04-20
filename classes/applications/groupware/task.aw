@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.90 2006/04/17 09:01:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.91 2006/04/20 10:44:55 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -488,7 +488,7 @@ class task extends class_base
 					$data["value"] = "";
 				}
 
-				if (is_oid($arr["obj_inst"]->id()) && is_object($arr["obj_inst"]))
+				if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 				{
 					$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_BILL"));
 					if (!count($cs))
