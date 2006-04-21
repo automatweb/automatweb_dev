@@ -214,6 +214,15 @@
             <caption>Listi staatuse toolbar</caption>
       </property>
       <property>
+            <name>file_separator</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>member_list</group>
+            <type>textbox</type>
+            <caption>Failis nime ja mailiaadressi eraldaja</caption>
+      </property>
+      <property>
             <name>def_user_folder</name>
             <table>objects</table>
             <field>meta</field>

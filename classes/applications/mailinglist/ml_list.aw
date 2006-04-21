@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.66 2006/04/18 13:39:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.67 2006/04/21 12:30:39 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -89,6 +89,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property member_list_tb type=toolbar no_caption=1
 @caption Listi staatuse toolbar
+
+@property file_separator type=textbox 
+@caption Failis nime ja mailiaadressi eraldaja
 
 @property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Listi liikmete allikas
@@ -356,7 +359,6 @@ class ml_list extends class_base
 		$count = 0;
 		$this->get_members(array("id" => $id));
 		$count = $this->member_count;
-		
 		// mark the queue as "processing" - 5
 		$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
 			VALUES ('$list_id','$id','$gid','".aw_global_get("uid")."','$aid','5','$_start_at','0','$_patch_size','$_delay','0','$count')");
@@ -1748,9 +1750,15 @@ class ml_list extends class_base
 		$file = get_instance(CL_FILE);
 		$file_data = $file->get_file_by_id($id);
 		$rows = explode("\n" , $file_data["content"]);
+		if(is_oid($this->list_id))
+		{
+			$list_obj = obj($this->list_id);
+			$separator = $list_obj->prop("file_separator");
+		}
+		if(!$separator) $separator=",";
 		foreach($rows as $row)
 		{
-			$column = explode("," , $row);
+			$column = explode($separator , $row);
 			if(!(strlen($column[0]) > 0) || !(strlen($column[1]) > 5)) continue;
 			$name = trim($column[0]);
 			if($comb)
@@ -1811,19 +1819,22 @@ class ml_list extends class_base
 		))
 	**/
 	function get_members($args)
-	{	
+	{
 		extract($args);
 		$ret = array();
 		$cnt = 0;
 		$obj = obj($id);
 		$already_found = array();
-		if($obj->class_id = CL_MAIL_MESSAGE)
-		{	
+		if($obj->class_id == CL_MAIL_MESSAGE)
+		{
 			$src = $obj->meta("list_source");
+			$m_data = $obj->meta("mail_data");
+			$this->list_id = $m_data["list_id"];
 		}
 		if(!(sizeof($src) > 0))
 		{
 			$src = $obj->prop("def_user_folder");
+			$this->list_id = $id;
 		}
 		$fld = new aw_array($src);
 		foreach($fld->get() as $folder_id)
@@ -2427,7 +2438,14 @@ class ml_list extends class_base
 			$msg_data["message"] = $template_obj->prop("content");
 		}
 		$msg_data["return"] = "id";
-	
+		//uhh......minuarust on selle kõigega ikka miski jama
+		if((!$msg_obj->prop("html_mail")) && $msg_data["send_away"])
+		{
+			//$msg_data["message"] = str_replace("\n", "", $msg_data["message"]);
+			$msg_data["message"] = str_replace("<br />", "\n", $msg_data["message"]);
+			$msg_data["message"] = strip_tags($msg_data["message"]);
+			$msg_data["message"] = html_entity_decode($msg_data["message"]);
+		}
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		$message_id = $writer->submit($msg_data);
