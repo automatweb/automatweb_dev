@@ -1445,13 +1445,25 @@ class user extends class_base
 		}
 		return NULL;
 	}
-
+	
+	/**
+		@attrib api=1
+		@comment
+		Returns current users uid
+		@returns
+		Current users uid
+	**/
 	function get_current_user()
 	{
 		return $this->users->get_oid_for_uid(aw_global_get("uid"));
 	}
 
 	/** returns the oid of the CL_CRM_PERSON object that's attached to the current user
+		@attrib api=1
+		@comment
+		Returns current person
+		@returns
+		Current persons oid
 	**/
 	function get_current_person()
 	{
@@ -1465,6 +1477,15 @@ class user extends class_base
 		return $this->get_person_for_user($u);
 	}
 
+	/**
+		@attrib params=pos api=1
+		@param u required type=int
+		User id
+		@comment
+		Gets person attached to the given user.
+		@returns
+		Persons oid
+	**/
 	function get_person_for_uid($uid)
 	{
 		$u = get_instance("users");
@@ -1526,6 +1547,15 @@ class user extends class_base
 		}
 	}
 
+	/**
+		@attrib params=pos api=1
+		@param person required type=oid
+		Person id
+		@comment
+		Gets the company attached to the person
+		@returns
+		The company id
+	**/
 	function get_company_for_person($person)
 	{
 		aw_disable_acl();
@@ -1561,6 +1591,11 @@ class user extends class_base
 	}
 
 	/** returns the CL_CRM_COMPANY that is connected to the current logged in user
+		@attrib api=1
+		@comment
+		Gets the company attached to the current user
+		@returns
+		The company id
 	**/ 
 	function get_current_company()
 	{
@@ -1573,11 +1608,19 @@ class user extends class_base
 	}
 
 	/** creates a new user object and returns the object
-
-		@param uid required
-		@param email optional
-		@param password optional
-		@param real_name optional
+		@attrib params=name api=1
+		@param uid required type=int
+		User id
+		@param email optional type=string
+		Users email
+		@param password optional type=string
+		Users password
+		@param real_name optional type=string
+		Users name
+		@comment
+		Creates new user object
+		@returns
+		New users object
 	**/
 	function add_user($arr)
 	{
@@ -1844,10 +1887,13 @@ class user extends class_base
 	
 	/**
 
-		@attrib api=1
-
+		@attrib params=pos api=1
+		@param uid required type=int
+		User id
 		@comment
-			This returns object list of group objects that $uid belongs to
+		Gets object list of group objects that $uid belongs to
+		@returns
+		Object list
 	**/
 	function get_groups_for_user($uid)
 	{
@@ -1869,7 +1915,15 @@ class user extends class_base
 		return $grups_list;
 	}
 	
-	//This returns group object whith highest priority $uid belongs to
+	/**
+		@attrib params=pos api=1
+		@param uid required type=int
+		User id
+		@comment
+		Gets the group object with highest priority that uid belongs to
+		@returns
+		User group object
+	**/
 	function get_highest_pri_grp_for_user($uid)
 	{
 		$groups = &$this->get_groups_for_user($uid);
@@ -1884,6 +1938,15 @@ class user extends class_base
     	return $groups->begin();
 	}
 
+	/**
+		@attrib params=pos api=1
+		@param uid required type=int
+		User id
+		@comment
+		Checks wheather the user id is taken or not
+		@returns
+		returns true if is taken, false otherwise
+	**/
 	function username_is_taken($uid)
 	{
 		if (trim($this->db_fetch_field("SELECT uid FROM users WHERE uid LIKE '$uid'", "uid")) != "")
@@ -1916,8 +1979,12 @@ class user extends class_base
 		}
 	}
 
-	/** handler for user delete. does the delete itself and deletes all other needed objects as well.
-		all in all, a very final function. 
+	/**
+		@attrib params=name api=1
+		@param oid required type=oid
+		@comment
+		Handler for user delete. does the delete itself and deletes all other needed objects as well.
+		All in all, a very final function.
 	**/
 	function on_delete_user($arr)
 	{
