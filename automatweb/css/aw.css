@@ -1,9 +1,9 @@
 BODY{
-	scrollbar-face-color : #A4A4A4; 
-	scrollbar-shadow-color : #A4A4A4; 
-	scrollbar-highlight-color : #FFFFFF; 
-	scrollbar-3dlight-color : #000000; 
-	scrollbar-darkshadow-color : #000000; 
+	scrollbar-face-color : #A4A4A4;
+	scrollbar-shadow-color : #A4A4A4;
+	scrollbar-highlight-color : #FFFFFF;
+	scrollbar-3dlight-color : #000000;
+	scrollbar-darkshadow-color : #000000;
 	scrollbar-arrow-color : #FFFFFF;
 	margin:0px;
 }
@@ -224,7 +224,7 @@ background: #DBE8EE;
 
 
 .formselect {
-font-family: Verdana, Arial, Helvetica, sans-serif; 
+font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 10px;
 color: #001A8B;
 font-weight: bold;
@@ -237,7 +237,7 @@ border-color: #000000;
 }
 
 .formselect2 {
-font-family: Verdana, Arial, Helvetica, sans-serif; 
+font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 11px;
 color: #000000;
 text-decoration: none;
@@ -374,13 +374,13 @@ border-width: 1px;
 	font-size: 0.6em;
 	background: #FFCCCC;
 };
-.fform { 
+.fform {
         font-family: Verdana,Arial,Helvetica,sans-serif;
         font-size: 8pt;
         color:black;
         background: #FFFFFF;
 }
-.hele_hall_taust { 
+.hele_hall_taust {
         font-family: Verdana,Arial,Helvetica,sans-serif;
         font-size: 8pt;
         color:black;
@@ -482,27 +482,27 @@ BACKGROUND: #1c629d; COLOR: black; FONT-FAMILY: Verdana,Arial,Helvetica,sans-ser
 BACKGROUND: #1c629d; COLOR: #e0e7f0; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; TEXT-DECORATION: none
 }
 
-.fgtitle_button { 
+.fgtitle_button {
 color: #e0e7f0;
-background-color: #1c629d; 
+background-color: #1c629d;
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 7pt;
 font-weight: bold;
 }
 
-.fgtitlebutton { 
+.fgtitlebutton {
 color: #e0e7f0;
-background-color: #1c629d; 
+background-color: #1c629d;
 font-family: Verdana, Arial, Helvetica, sans-serif;
 font-size: 7pt;
 font-weight: bold;
 }
 
 .fgtitle_link {
- COLOR: #e0e7f0; 
+ COLOR: #e0e7f0;
 }
 .fgtitle_link:hover {
- COLOR: #FFFFFF; 
+ COLOR: #FFFFFF;
 }
 
 
@@ -554,9 +554,9 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	background-color: #FFFFFF; 
-	border: #CCCCCC solid; 
-	border-width: 1px 1px 1px 1px; 
+	background-color: #FFFFFF;
+	border: #CCCCCC solid;
+	border-width: 1px 1px 1px 1px;
 	margin-left: 0px;
 	padding-left: 3px;
 	padding-top: 3px;
@@ -567,17 +567,17 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	background-color: #CCCCCC; 
-	border: #CCCCCC solid; 
-	border-width: 1px 1px 1px 1px; 
+	background-color: #CCCCCC;
+	border: #CCCCCC solid;
+	border-width: 1px 1px 1px 1px;
 }
 .tekstikast_n
 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 11px;
-	background-color: #F5F5F5; 
-	border: #CCCCCC solid; 
-	border-width: 0px 0px 0px 0px; 
+	background-color: #F5F5F5;
+	border: #CCCCCC solid;
+	border-width: 0px 0px 0px 0px;
 }
 
 
@@ -943,7 +943,7 @@ color:#000000;
         border-width: 1px;
         border-style: solid;
         border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
-} 
+}
 
 /* TAB 2 BIGGER ONES */
 
@@ -1389,11 +1389,11 @@ text-decoration:underline;
 
 /* END KALENDER */
 
-.reallysmall { 
+.reallysmall {
 	font-family: Arial,Helvetica,sans-serif;
 	font-size: 10px;
 
-} 
+}
 
 .awmenuedittableframeclass {
 background-color: #E2E2DB
@@ -1520,42 +1520,27 @@ text-decoration:underline;
 
 
 /****** AUTOCOMPLETE ********/
- .suggestion_list
- {
-	 background: window;
-	 border: 1px solid;
-	 padding: 4px;
-	font-size: 11px;
- }
+	table.awActbOptionList
+	{
+		background-color: window;
+		border: 1px solid windowtext;
+		font-family : 'arial narrow', Arial, Helvetica, Verdana, Geneva, sans-serif;
+	}
 
- .suggestion_list ul
- {
-	 padding: 0;
-	 margin: 0;
-	 list-style-type: none;
- }
+	td.awActbOption
+	{
+			/*c.align='center';**/
+		background-color: window;
+		color: windowtext;
+	}
 
- .suggestion_list a
- {
-	text-decoration: none;
-	color: windowtext;
-	font-size: 11px;
- }
+	td.awActbActiveOption
+	{
+		background-color: highlight;
+		color: highlighttext;
+	}
 
- .suggestion_list .selected
- {
-	 background: windowtext;
-	 color: window;
- }
-
- .suggestion_list .selected a
- {
-	 background: windowtext;
-	 color: window;
- }
-
- #awAutoComplete
- {
-	 display: none;
- }
+	span.awActbTypedTextMatch
+	{
+	}
 /**** END AUTOCOMPLETE *******/
