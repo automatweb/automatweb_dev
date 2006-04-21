@@ -326,20 +326,21 @@
             <editonly>1</editonly>
             <props>
                   <num_0>search_class_id</num_0>
-                  <num_1>search_transaction_type</num_1>
-                  <num_2>search_transaction_price_min</num_2>
-                  <num_3>search_transaction_price_max</num_3>
-                  <num_4>search_total_floor_area_min</num_4>
-                  <num_5>search_total_floor_area_max</num_5>
-                  <num_6>search_number_of_rooms</num_6>
-                  <num_7>searchparam_address1</num_7>
-                  <num_8>searchparam_address2</num_8>
-                  <num_9>searchparam_address3</num_9>
-                  <num_10>searchparam_fromdate</num_10>
-                  <num_11>search_usage_purpose</num_11>
-                  <num_12>search_condition</num_12>
-                  <num_13>search_is_middle_floor</num_13>
-                  <num_14>searchparam_onlywithpictures</num_14>
+                  <num_1>search_city24_id</num_1>
+                  <num_2>search_transaction_type</num_2>
+                  <num_3>search_transaction_price_min</num_3>
+                  <num_4>search_transaction_price_max</num_4>
+                  <num_5>search_total_floor_area_min</num_5>
+                  <num_6>search_total_floor_area_max</num_6>
+                  <num_7>search_number_of_rooms</num_7>
+                  <num_8>searchparam_address1</num_8>
+                  <num_9>searchparam_address2</num_9>
+                  <num_10>searchparam_address3</num_10>
+                  <num_11>searchparam_fromdate</num_11>
+                  <num_12>search_usage_purpose</num_12>
+                  <num_13>search_condition</num_13>
+                  <num_14>search_is_middle_floor</num_14>
+                  <num_15>searchparam_onlywithpictures</num_15>
             </props>
             <caption>Otsing</caption>
       </property>
@@ -788,7 +789,7 @@
             <method>serialize</method>
             <group>grp_settings</group>
             <type>textbox</type>
-            <default>50</default>
+            <default>25</default>
             <comment>Objektide arv lehel kinnisvarahalduskeskkonna objektide vaates</comment>
             <caption>Objekte lehel</caption>
       </property>
