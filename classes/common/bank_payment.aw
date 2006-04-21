@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.2 2006/04/11 11:01:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.3 2006/04/21 11:28:17 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -26,8 +26,8 @@ class bank_payment extends class_base
 	);
 
 	var $bank_props = array(
-			"sender_id"	=> "Kaupmehe ID",
-			"stamp"		=> "Arvenumber"
+		"sender_id"	=> "Kaupmehe ID",
+		"stamp"		=> "Arvenumber"
 	);
 
 	function bank_payment()
@@ -66,6 +66,75 @@ class bank_payment extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 	
+	/**
+	@attrib api=1 params=name
+	@param bank_id required type=string
+		bank id. possible choices: "seb", "hansapank" , "sampopank", "nordeapank" , "krediidipank" 
+	@param service optional type=int default=1002
+		Number of service. Length=4
+	@param version optional type=int default=008
+		Encryption algorithm used. Length=3	
+	@param sender_id optional type=string
+		ID of compiler of query (merchant's ID). Max length=10
+	@param stamp optional type=string
+		Query ID. Max length=20
+	@param amount optional type=int
+		Amount to be paid. Max length=17
+	@param currency optional type=string default="EEK"
+		Name of currency: EEK/DEM/FIM etc. Length=3
+	@param reference_nr optional type=int
+		Reference number of payment order. Max length=19
+	@param expl optional type=string
+		Explanation of payment order. Max length=70
+	@param return_url optional type=string default=aw_ini_get("baseurl")."/automatweb/bank_return.aw"
+		URL to which response is sent in performing the transaction. Max length=60. If it is not set, you must set $_SESSION["bank_payment"]["url"].
+	@param cancel_url optional type=string default=$return_url
+		URL to which response is sent when the transaction is unsuccessful. Max length=60
+	@param lang optional type=string default="EEK"
+		Preferred language of communication. Length=3
+	@param priv_key optional type=string
+		Query compiler's private key (merchant's private key)
+	@param form optional type=int
+		If form is set, function returns html form, else returns to bank site.
+	@param test optional type=int
+		If test is set, the function uses the bank test site if it exists
+	
+	@returns bank web page, or string/html form
+	
+	@comment
+		calculates the reference number and digital signature VK_MAC
+		Returns the bank payment site or correct form.
+		sender_id, stamp, amount, reference_nr, stamp , amount and msg must be set and have to have private key for correct form.
+		Have to set $_SESSION["bank_payment"]["url"] if you want to get response from the bank, return_url is only for url with no parameters.
+	
+	@example
+		$bank_payment = get_instance(CL_BANK_PAYMENT);
+		$_SESSION["bank_payment"]["url"] = post_ru();
+		return $bank_payment->do_payment(array(
+			"form"		=> 1,
+			"test"		=> 1,
+			"bank_id"	=> "seb",
+			"sender_id"	=> "EXPRPOST",
+			"stamp"		=> row["arvenr"],
+			"amount"	=> $data["amount"],
+			"reference_nr"	=> 123456,
+			"expl"		=> "Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
+		));
+		//returns something like : 
+		//	"<form name="postform" id="postform" method="post" action=https://unet.eyp.ee/cgi-bin/dv.sh/un3min.r>
+		//	<input type="hidden" name=VK_SERVICE value=1002>
+		//	<input type="hidden" name=VK_VERSION value=008>
+		//	<input type="hidden" name=VK_SND_ID value=EXPRPOST>
+		//	<input type="hidden" name=VK_STAMP value=10002050618003>
+		//	<input type="hidden" name=VK_AMOUNT value=10000000>
+		//	<input type="hidden" name=VK_CURR value=EEK>
+		//	<input type="hidden" name=VK_REF value=1234561>
+		//	<input type="hidden" name=VK_MSG value=Ajakirjade tellimus. Arve nr. 10002050618003>
+		//	<input type="hidden" name=VK_MAC value=kKltfBDS9lZqN+I54diEpbr/3G5VXrkrm9I2kKxE+6qH26Fb6fTuOTgNl93mUrjo3yeR4m2QweGN5bliI0/o1Jw/hbFYuqLTREcr1s5uYuortqa/T2ChavRpU0kw/QnFZPqlAgntfFfFeDS5EPi5qXN6Yl6eeaMPxn/V1HU+66o=>
+		//	<input type="hidden" name=VK_RETURN value=http://vesta.struktuur.ee/automatweb/bank_return.aw>
+		//	<input type="hidden" name=VK_CANCEL value=http://vesta.struktuur.ee/automatweb/bank_return.aw>
+		//	<input type="hidden" name=VK_LANG value=EST>"
+	**/	
 	function do_payment($arr)
 	{
 		switch($arr["bank_id"]) {
@@ -105,7 +174,7 @@ class bank_payment extends class_base
 			$arr["priv_key"] = fread($fp, 8192);
 			fclose($fp);
 		}
-		$arr["viitenumber"].= (string)$this->viitenr_kontroll_731($arr["viitenumber"]);
+		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		return($arr);
 	}
@@ -150,7 +219,7 @@ class bank_payment extends class_base
 		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
 		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
 		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
-		$VK_message.= sprintf("%03d",strlen($viitenumber)).$viitenumber;
+		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
 		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
 		$VK_signature = "";
 		$pkeyid = openssl_get_privatekey($priv_key);
@@ -168,7 +237,7 @@ class bank_payment extends class_base
 			"VK_STAMP"	=> $stamp,	//row["arvenr"]
 			"VK_AMOUNT"	=> $amount,	//$row["summa"];
 			"VK_CURR"	=> $currency,	//"EEK"
-			"VK_REF"	=> $viitenumber,
+			"VK_REF"	=> $reference_nr,
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
@@ -189,7 +258,7 @@ class bank_payment extends class_base
 		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
 		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
 		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
-		$VK_message.= sprintf("%03d",strlen($viitenumber)).$viitenumber;
+		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
 		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
 		$VK_signature = "";
 		$pkeyid = openssl_get_privatekey($priv_key);
@@ -207,7 +276,7 @@ class bank_payment extends class_base
 			"VK_STAMP"	=> $stamp,	//row["arvenr"]
 			"VK_AMOUNT"	=> $amount,	//$row["summa"];
 			"VK_CURR"	=> $curr,	//"EEK"
-			"VK_REF"	=> $viitenumber,
+			"VK_REF"	=> $reference_nr,
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
@@ -227,7 +296,7 @@ class bank_payment extends class_base
 		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
 		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
 		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
-		$VK_message.= sprintf("%03d",strlen($viitenumber)).$viitenumber;
+		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
 		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
 		$VK_signature = "";
 		$pkeyid = openssl_get_privatekey($priv_key);
@@ -245,7 +314,7 @@ class bank_payment extends class_base
 			"VK_STAMP"	=> $stamp,	//row["arvenr"]
 			"VK_AMOUNT"	=> $amount,	//$row["summa"];
 			"VK_CURR"	=> $curr,	//"EEK"
-			"VK_REF"	=> $viitenumber,
+			"VK_REF"	=> $reference_nr,
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
@@ -280,7 +349,7 @@ class bank_payment extends class_base
 		$VK_message       .= $stamp.'&';
 		$VK_message       .= $SOLOPMT_RCV_ID.'&';
 		$VK_message       .= $amount.'&';
-		$VK_message       .= $viitenumber.'&';
+		$VK_message       .= $reference_nr.'&';
 		$VK_message       .= $SOLOPMT_DATE.'&';
 		$VK_message       .= $currency.'&';
 		$VK_message       .= ''.'&';
@@ -297,7 +366,7 @@ class bank_payment extends class_base
 			"SOLOPMT_RCV_NAME"    => $recieve_name,//5.    Service Provider's Name    SOLOPMT-RCV_NAME  Other than the default name   AN 30    O 
 			"SOLOPMT_LANGUAGE"    => $lang,// 6.    Payment Language  SOLOPMT_LANGUAGE  1 = Finnish 2 = Swedish 3 = English    N 1   O 
 			"SOLOPMT_AMOUNT"      => $amount,// 7.    Payment Amount    SOLOPMT_AMOUNT    E.g. 990.00    AN 19    M 
-			"SOLOPMT_REF"         => $viitenumber,// 8.    Payment Reference Number   SOLOPMT_REF    Standard reference number  AN 20    M 
+			"SOLOPMT_REF"         => $reference_nr,// 8.    Payment Reference Number   SOLOPMT_REF    Standard reference number  AN 20    M 
 			"SOLOPMT_DATE"        => $date,// 9.    Payment Due Date  SOLOPMT_DATE   "EXPRESS" or "DD.MM.YYYY"  AN 10    M 
 			"SOLOPMT_MSG"         => $expl,// 10.   Payment Message   SOLOPMT_MSG    Service user's message  AN 234   O 
 			"SOLOPMT_RETURN"      => $return_url,// 11.   Return Address    SOLOPMT_RETURN    Return address following payment    AN 60    M 
@@ -322,7 +391,7 @@ class bank_payment extends class_base
 		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
 		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
 		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
-		$VK_message.= sprintf("%03d",strlen($viitenumber)).$viitenumber;
+		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
 		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
 		$VK_signature = "";
 		$pkeyid = openssl_get_privatekey($priv_key);
@@ -340,7 +409,7 @@ class bank_payment extends class_base
 			"VK_STAMP"	=> $stamp,	//row["arvenr"]
 			"VK_AMOUNT"	=> $ammount,	//$row["summa"];
 			"VK_CURR"	=> $curr,	//"EEK"
-			"VK_REF"	=> $viitenumber,
+			"VK_REF"	=> $reference_nr,
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
 			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
@@ -368,10 +437,53 @@ class bank_payment extends class_base
 		return (10 - ($sum%10))%10;
 	}
 	
-	/** Change the realestate object info.
-		
-		@attrib name=pay_site is_public="1" caption="Change" no_login=1
+	/**
+	@attrib name=pay_site is_public="1" caption="Change" no_login=1 api=1
 	
+	@returns string/html
+	@comment
+		makes a list of supported banks with correct forms
+		before calling this function you should fill $_SESSION["bank_payment"]
+	@example
+		$targ = obj($arr["alias"]["target"]);
+		$_SESSION["bank_payment"] = array(
+			"data"		=> $targ->meta("bank")// Array(
+						//	[amount] //Amount to be paid. Max length=17
+						//	[expl] //Explanation of payment order. Max length=70
+						//	[bank_id] => Array//bank id. possible choices: "seb", "hansapank" , "sampopank", "nordeapank" , "krediidipank"
+						//	(
+						//		[sender_id]//ID of compiler of query (merchant's ID). Max length=10
+						//		[stamp]//Query ID. Max length=20
+						//	)
+						//	[bank_id2] => Array
+						//	(
+						//		[sender_id]
+						//		[stamp]
+						//	))
+			"reference_nr"	=> $_SESSION["realestate_input_data"]["realestate_id"],//Reference number of payment order. Max length=19
+			"url" 		=> post_ru(),//optional
+			"cancel"	=> post_ru(),//optional 
+		);
+		$bank_payment = get_instance(CL_BANK_PAYMENT);
+		$ret.= '<a href="';
+		$ret.= $bank_payment->mk_my_orb("pay_site", array());
+		$ret.= '"> Maksma </a>';
+	
+		//returned url forwards to site contains something like:"
+		//	<img src="http://vesta.struktuur.ee/automatweb/images/pank/seb_pay.gif"><form name="postform" id="postform" method="post" action=https://unet.eyp.ee/cgi-bin/dv.sh/un3min.r>
+		//	<input type="hidden" name=VK_SERVICE value=1002>
+		//	<input type="hidden" name=VK_VERSION value=008>
+		//	<input type="hidden" name=VK_SND_ID value=testvpos>
+		//	<input type="hidden" name=VK_STAMP value=10002050618003>
+		//	<input type="hidden" name=VK_AMOUNT value=616>
+		//	<input type="hidden" name=VK_CURR value=EEK>
+		//	<input type="hidden" name=VK_REF value=176332>
+		//	<input type="hidden" name=VK_MSG value=616>
+		//	<input type="hidden" name=VK_MAC value=Yz4FzXyX8ek76Tb68ejOF4rZH9BFRl1GmW4IxTGgq7bQaFz4wkYzX7JVcEI9We/gvxMdwBaB811Ltvd7Iu9ubDZpTFpXFuwoGH+fJNzidgHBGRZXtF+kPS3xV2SqmpwEaquogs5vbCTh1b+SM4omCB11WA9olDzv3tc09uUZOPc=>
+		//	<input type="hidden" name=VK_RETURN value=http://vesta.struktuur.ee/automatweb/bank_return.aw>
+		//	<input type="hidden" name=VK_CANCEL value=http://vesta.struktuur.ee/automatweb/bank_return.aw>
+		//	<input type="hidden" name=VK_LANG value=EST>
+		//	<br><input type="submit" value="maksma"></form>
 	**/
 	function pay_site($args)
 	{
@@ -397,7 +509,7 @@ class bank_payment extends class_base
 					"sender_id"	=> $data[$bank]["sender_id"],
 					"stamp"		=> $data[$bank]["stamp"],
 					"amount"	=> $data["amount"],
-					"viitenumber"	=> $viitenumber,
+					"reference_nr"	=> $reference_nr,
 					"expl"		=> $data["expl"],
 				));
 				$ret.= '<br><input type="submit" value="maksma"></form>';
