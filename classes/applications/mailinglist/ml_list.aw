@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.70 2006/04/21 14:02:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.71 2006/04/21 15:07:53 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -91,7 +91,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Listi staatuse toolbar
 
 @property file_separator type=textbox 
-@caption Failis nime ja mailiaadressi eraldaja (tab = /t)
+@caption Failis nime ja mailiaadressi eraldaja (tab=/t)
 
 @property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Listi liikmete allikas
@@ -357,6 +357,7 @@ class ml_list extends class_base
 		$_delay = $delay * 60;
 		$_patch_size = $patch_size;
 		$count = 0;
+		$this->list_id = $list_id;
 		$this->get_members(array("id" => $id));
 		$count = $this->member_count;
 		// mark the queue as "processing" - 5
@@ -1830,15 +1831,15 @@ class ml_list extends class_base
 		$obj = obj($id);
 		$already_found = array();
 		if($obj->class_id() == CL_MESSAGE)
-		{
+		{;
 			$src = $obj->meta("list_source");
 			$m_data = $obj->meta("mail_data");
-			$this->list_id = $m_data["list_id"];
+			if(!$this->list_id) $this->list_id = $m_data["list_id"];
 		}
 		if(!(sizeof($src) > 0))
 		{
 			$src = $obj->prop("def_user_folder");
-			$this->list_id = $id;
+			if(!$this->list_id) $this->list_id = $id;
 		}
 		$fld = new aw_array($src);
 		foreach($fld->get() as $folder_id)
