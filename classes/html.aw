@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.106 2006/04/20 09:10:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.107 2006/04/21 09:24:57 voldemar Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -106,24 +106,57 @@ class html extends aw_template
 		if true, textbox is disabled
 	@param textsize optional type=string
 		font size . examples: "10px", "0.7em", "smaller"
-	@param autocompleate_source  optional type=string
-		relative (to web root -- it seems that certain browsers don't allow javascript http connections to absolute paths) URL that refers to source of autocomplete options. See documentation for argument $option_is_tuple about options data format.
-	@param autocompleate_params optional type=array
-		array of form element names whose values will be posted to orb method giving autocomplete options
-	@param option_is_tuple optional type=bool
-		indicates whether autocomplete options are values (FALSE) or names associated with values (TRUE) iow autocomplete options are key/value pairs. If set to TRUE, $content should be set to what the user will see in the textbox. Autocomplete options are expected as strings separated by newline characters (\n). If set to TRUE then the expected format is: key=>value ($key will be posted as property value) and the value returned by POST request under property name is $key if an autocomplete option was selected, $value if new value was entered.
+
 	@param onkeypress optional type=string
-		if set, then onkeypress=$onkeypress
+		If set, then onkeypress=$onkeypress. Not allowed if autocomplete used.
+
+	@param autocomplete_source optional type=string
+		Relative (to web root -- it seems that certain browsers don't allow javascript http connections to absolute paths) http URL that refers to source of autocomplete options. Response expected in JSON format (http://www.json.org/)(classes/protocols/data/aw_json). Response is an array:
+		array(
+			"error" => boolean,// recommended
+			"errorstring" => error string description,// optional
+			"options" => array(value1 => text1, ...),// required
+			"limited" => boolean,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		)
+
+	@param autocomplete_source_method optional type=string
+		Alternative to $autocomplete_source parameter. AW ORB method to be called to get options.
+
+	@param autocomplete_source_class optional type=string
+		AW class to look for autocomplete_source_method. default is the class that requests the textbox.
+
+	@param autocomplete_params optional type=array
+		Array of form element names whose values will be arguments to autocomplete_source. If self form element name included, real time autocomplete options retrieving enabled (i.e. for each key typed, if not in cache).
+
+	@param autocomplete_limit optional type=int
+		Number of options autocomplete can show (-1: no limit). Default 20.
+
+	@param autocomplete_match_anywhere optional type=bool
+		Should the auto complete match input with options from first char or anywhere in an option? Default FALSE.
+
+	@param autocomplete_delimiters optional type=array
+		Delimiter strings for multiple part autocomplete (autocomplete options given again after typing text after a delimiter string). Default empty.
+
+	@param options optional type=array
+		Initial autocomplete options. If $option_is_tuple then associative. Default empty.
+
+	@param content optional type=string
+		Text visible to user when $option_is_tuple is set to TRUE.
+
+	@param option_is_tuple optional type=bool
+		Indicates whether autocomplete options are values (FALSE) or names associated with values (TRUE) iow autocomplete options are key/value pairs. If set to TRUE, $content should be set to what the user will see in the textbox. If set to TRUE then the value returned by POST request under property name is $key if an autocomplete option was selected, $value if new value was entered. Note that user may type an option without selecting it from autocomplete list in which case posted value will not be $key.
+
 	
 	@returns string / html textbox
 
 	@comment creates html textbox
 	**/
+
 	function textbox($args = array())
 	{
 		extract($args);
 		$disabled = ($disabled ? " disabled" : "");
-		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
+		$textsize = ($textsize ? ' style="font-size: ' . $textsize . ';"' : "");
 		$size = isset($size) ? $size : 40;
 		$maxlength = isset($maxlength) ? $maxlength : "";
 		$id = str_replace("[","_",$name);
@@ -132,46 +165,98 @@ class html extends aw_template
 		$value = str_replace('"' , '&quot;',$value);
 		settype ($option_is_tuple, "boolean");
 		$onkeypress = isset($onkeypress) ? ' onkeypress="'.$onkeypress.'"' : "";
+		$autocomplete = "";
+		$js_name = str_replace(array("[", "]", "-"), "_", $name);
 
 		### compose autocompletes source url
-		if ($autocomplete_source)
+		if ($autocomplete_source or is_array($options) or $autocomplete_source_method)
 		{
-			$autocomplete_params = count ($autocomplete_params) ? "new Array ('" . implode ("','", $autocomplete_params) . "')" : "new Array ()";
-			$is_tuple = $option_is_tuple ? "true" : "false";
-
-			$ie = (boolean) (preg_match ("/MSIE [0-9]/U", aw_global_get("HTTP_USER_AGENT")) or preg_match ("/microsoft/Ui", aw_global_get("HTTP_USER_AGENT")));
-			$event = $ie ? "onfocusout" : "onchange";
-			$select_autocomplete = "{$event}=\"selectAutoCompleteOption (this);\"";
-
-			### compose autocompletes html
-			if (in_array ($name, $autocomplete_params))//!!! milleks see on? == kui prop on iseendale autocmpl argumendiks ilmselt. midagi siin teisiti kui muidu.
+			if (!defined("AW_AUTOCOMPLETE_INITIALIZED"))
 			{
-				$get_autocomplete = "";//!!!?
-				$autocomplete_init = "<script type=\"text/javascript\">new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, '{$autocomplete_source}', {$autocomplete_params});</script>\n";
+				$baseurl = aw_ini_get("baseurl") . "/automatweb/js/";
+				$autocomplete = '<script type="text/javascript" src="' . $baseurl . 'autocomplete_lib.js"></script><script type="text/javascript" src="' . $baseurl . 'autocomplete.js"></script>';
+				define("AW_AUTOCOMPLETE_INITIALIZED", 1);
 			}
-			else
-			{
-				$get_autocomplete = "getAutoCompleteOptions (this, '{$autocomplete_source}', {$autocomplete_params}, {$is_tuple});";
-				$autocomplete_init = "<script type=\"text/javascript\">new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, false, false);</script>\n";
-			}
-		}
 
-		if ($autocomplete_source)
-		{
+			$autocomplete .= '<script type="text/javascript">';
+
 			if ($option_is_tuple)
 			{
-				// return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"{$name}-awAutoCompleteTextbox\" size=\"40\" value=\"$content\" onfocus=\"{$get_autocomplete}\" onchange=\"{$select_autocomplete}\" $disabled $textsize />\n<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n" . $autocomplete_init;//IE6-s viga -- onchange ei esine kui programmaatiliselt elem. sisu muudetakse
-				return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"{$name}-awAutoCompleteTextbox\" size=\"{$size}\" value=\"{$content}\" onfocus=\"{$get_autocomplete}\" {$select_autocomplete} $onkeypress $disabled $textsize />\n<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n" . $autocomplete_init;
+				$autocomplete .= "var awAc_{$js_name} = new awActb(document.getElementsByName('{$name}_awAutoCompleteTextbox')[0], document.getElementsByName('{$name}')[0]);\n";
 			}
 			else
 			{
-				return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" onfocus=\"{$get_autocomplete}\" $onkeypress $disabled $textsize />\n" . $autocomplete_init;
+				$autocomplete .= "var awAc_{$js_name} = new awActb(document.getElementsByName('{$name}')[0]);\n";
+			}
+
+			if (is_array($options))
+			{
+				$autocomplete .= "var awAc_{$js_name}Opts = new Array();\n";
+
+				foreach ($options as $key => $value)
+				{
+					$autocomplete .= "awAc_{$js_name}Opts['{$key}'] = '" . str_replace("'", "\\'", $value) . "';\n";
+				}
+
+				$autocomplete .= "awAc_{$js_name}.actb_setOptions(awAc_{$js_name}Opts);\n";
+			}
+			else
+			{
+				if ($autocomplete_source_method)
+				{
+					$autocomplete_source_class = $autocomplete_source_class ? $autocomplete_source_class : $_GET["class"];
+					$params = array(
+						"id" => $_GET["id"],
+						"action" => $_GET["action"],
+					);
+					$autocomplete_source = $this->mk_my_orb($autocomplete_source_method, $params, $autocomplete_source_class, false, true);
+					$autocomplete_source = parse_url ($autocomplete_source);
+					$autocomplete_source = $autocomplete_source["path"] . "?" . $autocomplete_source["query"];
+				}
+
+				$autocomplete .= "awAc_{$js_name}.actb_optionURL = '{$autocomplete_source}';\n";
+				$autocomplete .= "awAc_{$js_name}.actb_setParams(" . (count ($autocomplete_params) ? "new Array ('" . implode ("','", $autocomplete_params) . "')" : "new Array ()") . ");\n";
+			}
+
+			if ($textsize)
+			{
+				$autocomplete .= "awAc_{$js_name}.actb_fontSize = '{$textsize}';\n";
+			}
+
+			if ($autocomplete_limit)
+			{
+				$autocomplete .= "awAc_{$js_name}.actb_lim = {$autocomplete_limit};\n";
+			}
+
+			if ($autocomplete_match_anywhere)
+			{
+				$autocomplete .= "awAc_{$js_name}.actb_firstText = false;\n";
+			}
+
+			if (is_array($autocomplete_delimiters) and count($autocomplete_delimiters))
+			{
+				$autocomplete .= "awAc_{$js_name}.actb_delimiter = new Array ('" . implode ("','", $autocomplete_delimiters) . "');\n";
+			}
+
+			$autocomplete .= '</script>';
+		}
+
+		$value_elem = "";
+
+		if ($autocomplete)
+		{
+			$onkeypress = "";
+
+			if ($option_is_tuple)
+			{
+				$value_elem = "<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n";
+				$id .= "AWAutoCompleteTextbox";
+				$name .= "_awAutoCompleteTextbox";
+				$value = $content;
 			}
 		}
-		else
-		{
-			return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" $onkeypress $disabled $textsize />$post_append_text\n";
-		}
+
+		return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$disabled}{$textsize} />$post_append_text\n{$value_elem}{$autocomplete}";
 	}
 
 	/**

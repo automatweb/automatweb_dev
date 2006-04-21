@@ -4925,6 +4925,20 @@ class crm_company extends class_base
 	**/
 	function name_autocomplete_source($arr)
 	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
 		if (!$arr["name"] && $arr["stats_s_cust"])
 		{
 			$arr["name"] = $arr["stats_s_cust"];
@@ -4935,9 +4949,8 @@ class crm_company extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-		$ars = $ol->names();
-		header("Content-type: text/html; charset=".aw_global_get("charset"));
-		die(join("\n", $ars)."\n");
+		$autocomplete_options = $ol->names();
+		exit ($cl_json->encode($option_data));
 	}
 
 	/**
@@ -4946,9 +4959,23 @@ class crm_company extends class_base
 	**/
 	function keywords_autocomplete_source($arr)
 	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$keywords = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
 		if (!trim($arr["customer_search_keywords"]))
 		{
-			exit;
+			exit ($cl_json->encode($option_data));
 		}
 
 		$word = strstr($arr["customer_search_keywords"], ",") ? substr(strrchr($arr["customer_search_keywords"], ","), 1) : trim($arr["customer_search_keywords"]);
@@ -4989,8 +5016,7 @@ class crm_company extends class_base
 
 		$keywords = array_unique($keywords);
 
-		header("Content-type: text/plain; charset=".aw_global_get("charset"));
-		exit(join("\n", $keywords));
+		exit ($cl_json->encode($option_data));
 	}
 
 

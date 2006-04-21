@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.21 2006/04/11 09:10:44 kristo Exp $
-// crm_job_entry.aw - T88 kirje 
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.22 2006/04/21 09:24:56 voldemar Exp $
+// crm_job_entry.aw - T88 kirje
 /*
 
 @classinfo syslog_type=ST_CRM_JOB_ENTRY no_comment=1 no_status=1 prop_cb=1
@@ -13,7 +13,7 @@
 @property cust_d type=text subtitle=1
 @caption Kliendi andmed
 
-@property cust_type type=select 
+@property cust_type type=select
 @caption Kliendi t&uuml;&uuml;p
 
 @property sel_cust type=select
@@ -22,30 +22,30 @@
 @property ettevotlusvorm type=select
 @caption &Otilde;iguslik vorm
 
-@property cust_n type=textbox 
+@property cust_n type=textbox
 @caption Nimetus
 
 
 @property sel_cust_p type=select
 @caption Vali olemasolev klient
 
-@property custp_fn type=textbox 
+@property custp_fn type=textbox
 @caption Eesnimi
 
-@property custp_ln type=textbox 
+@property custp_ln type=textbox
 @caption Perenimi
 
-@property custp_phone type=textbox 
+@property custp_phone type=textbox
 @caption Telefon
 
-@property custp_email type=textbox 
+@property custp_email type=textbox
 @caption E-post
 
 
-@property addr type=textbox 
+@property addr type=textbox
 @caption Aadress
 
-@property addr_linn type=textbox 
+@property addr_linn type=textbox
 @caption Linn
 
 @property post_index type=textbox size=8
@@ -55,7 +55,7 @@
 @caption Maakond
 
 @property riik type=textbox default=Eesti
-@caption Riik 
+@caption Riik
 
 @property cust_mgr type=select
 @caption Kliendihaldur
@@ -63,16 +63,16 @@
 @property cont_d type=text subtitle=1
 @caption Kontaktisiku andmed
 
-@property ct_fn type=textbox 
+@property ct_fn type=textbox
 @caption Eesnimi
 
-@property ct_ln type=textbox 
+@property ct_ln type=textbox
 @caption Perenimi
 
-@property ct_phone type=textbox 
+@property ct_phone type=textbox
 @caption Telefon
 
-@property ct_email type=textbox 
+@property ct_email type=textbox
 @caption E-post
 
 
@@ -91,22 +91,22 @@
 @property proj_type type=select multiple=1
 @caption Liik
 
-@property task_desc type=text subtitle=1 
+@property task_desc type=text subtitle=1
 @caption Tegevuse andmed
 
-@property task_type type=select 
+@property task_type type=select
 @caption Liik
 
-@property task_start type=datetime_select 
+@property task_start type=datetime_select
 @caption Algus
 
-@property task_end type=datetime_select 
+@property task_end type=datetime_select
 @caption L&otilde;pp
 
 @property task_content type=textarea rows=10 cols=50
 @caption Sisu
 
-@property res_desc type=text subtitle=1 
+@property res_desc type=text subtitle=1
 @caption Ressursid
 
 @property resource_sel type=chooser multiple=1
@@ -160,7 +160,7 @@ class crm_job_entry extends class_base
 
 			case "cust_type":
 				$prop["options"] = array(CL_CRM_COMPANY => t("Organisatsioon"), CL_CRM_PERSON => t("Isik"));
-				$prop["onchange"] = "if (navigator.userAgent.toLowerCase().indexOf('msie')>=0){d = 'block';} else { d = 'table-row';} if (this.selectedIndex == 1) {document.getElementById('cont_d').parentNode.parentNode.style.display = 'none';document.getElementById('ettevotlusvorm').parentNode.parentNode.style.display = 'none';document.getElementById('sel_cust').parentNode.parentNode.style.display = 'none';document.getElementById('cust_nawAutoCompleteTextbox').parentNode.parentNode.style.display = 'none';document.getElementById('ct_fn').parentNode.parentNode.style.display = 'none';document.getElementById('ct_ln').parentNode.parentNode.style.display = 'none';document.getElementById('ct_phone').parentNode.parentNode.style.display = 'none';document.getElementById('ct_email').parentNode.parentNode.style.display = 'none';document.getElementById('sel_cust_p').parentNode.parentNode.style.display = d;document.getElementById('custp_fn').parentNode.parentNode.style.display = d; document.getElementById('custp_ln').parentNode.parentNode.style.display = d;document.getElementById('custp_phone').parentNode.parentNode.style.display = d;document.getElementById('custp_email').parentNode.parentNode.style.display = d; } else { document.getElementById('ettevotlusvorm').parentNode.parentNode.style.display = d;document.getElementById('sel_cust').parentNode.parentNode.style.display = d;document.getElementById('cust_nawAutoCompleteTextbox').parentNode.parentNode.style.display = d;document.getElementById('ct_fn').parentNode.parentNode.style.display = d;document.getElementById('cont_d').parentNode.parentNode.style.display = d;document.getElementById('ct_ln').parentNode.parentNode.style.display = d;document.getElementById('ct_phone').parentNode.parentNode.style.display = d;document.getElementById('ct_email').parentNode.parentNode.style.display = d;document.getElementById('sel_cust_p').parentNode.parentNode.style.display = 'none';document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none'; document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';document.getElementById('custp_phone').parentNode.parentNode.style.display = 'none';document.getElementById('custp_email').parentNode.parentNode.style.display = 'none';}";
+				$prop["onchange"] = "if (navigator.userAgent.toLowerCase().indexOf('msie')>=0){d = 'block';} else { d = 'table-row';} if (this.selectedIndex == 1) {document.getElementById('cont_d').parentNode.parentNode.style.display = 'none';document.getElementById('ettevotlusvorm').parentNode.parentNode.style.display = 'none';document.getElementById('sel_cust').parentNode.parentNode.style.display = 'none';document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = 'none';document.getElementById('ct_fn').parentNode.parentNode.style.display = 'none';document.getElementById('ct_ln').parentNode.parentNode.style.display = 'none';document.getElementById('ct_phone').parentNode.parentNode.style.display = 'none';document.getElementById('ct_email').parentNode.parentNode.style.display = 'none';document.getElementById('sel_cust_p').parentNode.parentNode.style.display = d;document.getElementById('custp_fn').parentNode.parentNode.style.display = d; document.getElementById('custp_ln').parentNode.parentNode.style.display = d;document.getElementById('custp_phone').parentNode.parentNode.style.display = d;document.getElementById('custp_email').parentNode.parentNode.style.display = d; } else { document.getElementById('ettevotlusvorm').parentNode.parentNode.style.display = d;document.getElementById('sel_cust').parentNode.parentNode.style.display = d;document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;document.getElementById('ct_fn').parentNode.parentNode.style.display = d;document.getElementById('cont_d').parentNode.parentNode.style.display = d;document.getElementById('ct_ln').parentNode.parentNode.style.display = d;document.getElementById('ct_phone').parentNode.parentNode.style.display = d;document.getElementById('ct_email').parentNode.parentNode.style.display = d;document.getElementById('sel_cust_p').parentNode.parentNode.style.display = 'none';document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none'; document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';document.getElementById('custp_phone').parentNode.parentNode.style.display = 'none';document.getElementById('custp_email').parentNode.parentNode.style.display = 'none';}";
 				break;
 
 			case "proj_type":
@@ -261,7 +261,7 @@ class crm_job_entry extends class_base
 					return PROP_FATAL_ERROR;
 				}
 				break;
-			
+
 			case "proj_name":
 				if ($prop["value"] == "")
 				{
@@ -290,7 +290,7 @@ class crm_job_entry extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -361,14 +361,14 @@ class crm_job_entry extends class_base
 			$this->set_by_n($addr, "linn", $arr["request"]["addr_linn"], CL_CRM_CITY, $addr->id());
 			$addr->set_prop("maakond", $arr["request"]["maakond"]);
 			$this->set_by_n($addr, "riik", $arr["request"]["riik"], CL_CRM_COUNTRY, $addr->id());
-			$name = array();	
+			$name = array();
 			$form = $arr["request"];
 			$name[] = $form['addr'];
 			$name[] = $form['addr_linn'];
 			$name[] = $form['maakond'];
 			$addr->set_name(join(",  ", $name));
 			$addr->save();
-			
+
 			$c->set_prop($c->class_id() == CL_CRM_COMPANY ? "contact" : "address", $addr->id());
 			$c_i = $c->instance();
 			if ($c->class_id() == CL_CRM_COMPANY)
@@ -609,7 +609,7 @@ class crm_job_entry extends class_base
 
 	function callback_generate_scripts()
 	{
-		return "if (navigator.userAgent.toLowerCase().indexOf('msie')>=0){d = 'block';} else { d = 'table-row';} document.getElementById('ettevotlusvorm').parentNode.parentNode.style.display = d;document.getElementById('sel_cust').parentNode.parentNode.style.display = d;document.getElementById('cust_nawAutoCompleteTextbox').parentNode.parentNode.style.display = d;document.getElementById('ct_fn').parentNode.parentNode.style.display = d;document.getElementById('ct_ln').parentNode.parentNode.style.display = d;document.getElementById('ct_phone').parentNode.parentNode.style.display = d;document.getElementById('ct_email').parentNode.parentNode.style.display = d;document.getElementById('sel_cust_p').parentNode.parentNode.style.display = 'none';document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none'; document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';document.getElementById('custp_phone').parentNode.parentNode.style.display = 'none';document.getElementById('custp_email').parentNode.parentNode.style.display = 'none';";
+		return "if (navigator.userAgent.toLowerCase().indexOf('msie')>=0){d = 'block';} else { d = 'table-row';} document.getElementById('ettevotlusvorm').parentNode.parentNode.style.display = d;document.getElementById('sel_cust').parentNode.parentNode.style.display = d;document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;document.getElementById('ct_fn').parentNode.parentNode.style.display = d;document.getElementById('ct_ln').parentNode.parentNode.style.display = d;document.getElementById('ct_phone').parentNode.parentNode.style.display = d;document.getElementById('ct_email').parentNode.parentNode.style.display = d;document.getElementById('sel_cust_p').parentNode.parentNode.style.display = 'none';document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none'; document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';document.getElementById('custp_phone').parentNode.parentNode.style.display = 'none';document.getElementById('custp_email').parentNode.parentNode.style.display = 'none';";
 	}
 }
 ?>

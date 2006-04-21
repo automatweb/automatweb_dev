@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.9 2006/03/21 12:16:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/address/address.aw,v 1.10 2006/04/21 09:24:56 voldemar Exp $
 // address.aw - Aadress v2
 /*
 
@@ -189,11 +189,24 @@ class address extends class_base
 /**
     @attrib name=location_autocomplete all_args=1
 	@param id required type=int
-	@returns List of autocomplete options separated by newline (\n). Void on error.
+	@returns Array of autocomplete options in JSON format. Void on error.
 **/
 	function location_autocomplete ($arr)
 	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
 		$this_object = obj ($arr["id"]);
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
 
 		### get administrative structure
 		$this->administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
@@ -225,11 +238,11 @@ class address extends class_base
 			$parent = $this->administrative_structure->id ();
 		}
 
-		define ("AC_ERROR_PREFIX", ">>>AC-error>>>");
-
 		if (empty ($parent))
 		{
-			exit (AC_ERROR_PREFIX . t("Viga: k6rgem haldusjaotus m22ramata."));//!!! teha autocomplete-i js-i veateate n2itamine
+			$errorstring = t("Viga: k6rgem haldusjaotus m22ramata. ");
+			$error = true;
+			exit ($cl_json->encode($option_data));
 		}
 
 		### get subclass/class of requesting property
@@ -249,35 +262,24 @@ class address extends class_base
 		}
 		else
 		{
-			exit (AC_ERROR_PREFIX . t("Viga: valikute taotleja-property m22ramata."));//!!! teha autocomplete-i js-i veateate n2itamine
+			$errorstring = t("Valikute taotleja-property m22ramata.");
+			$error = true;
+			exit ($cl_json->encode($option_data));
 		}
 
-		### get options
-		$args = array (
-			"class_id" => $class_id,
-			"subclass" => $subclass,
-			"parent" => $parent,
-		);
-		$list = new object_list ($args);
-
-// /* dbg */ arr ($args);
-// /* dbg */ arr ($list->count());
-
-		$administrative_units = $list->arr ();
-
-		### parse units to autocomplete options
-		$autocomplete_options = array ();
-
-		foreach ($administrative_units as $unit)
+		if (!$errors)
 		{
-			$autocomplete_options[] = $unit->id () . "=>" . $unit->name ();
+			### get options
+			$args = array (
+				"class_id" => $class_id,
+				"subclass" => $subclass,
+				"parent" => $parent,
+			);
+			$list = new object_list ($args);
+			$autocomplete_options = $list->names ();
 		}
 
-		$autocomplete_options = implode ("\n", $autocomplete_options);
-		$charset = aw_global_get("charset");
-		header ("Content-Type: text/html; charset=" . $charset);
-		echo $autocomplete_options;
-		exit;
+		exit ($cl_json->encode($option_data));
 	}
 /* END public methods */
 
