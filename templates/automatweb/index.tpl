@@ -70,7 +70,6 @@ function check_generic_unloader()
 </script>
 </head>
 <body link="#0000ff" vlink="#0000ff" onBeforeUnLoad="check_generic_unloader();" onLoad="create_objects(); check_generic_loader();">
- <div id="awAutoComplete" style="display: none;"><ul></ul></div>
 	<!-- SUB: LANG_STRING -->
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>
