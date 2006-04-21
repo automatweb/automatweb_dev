@@ -214,6 +214,15 @@
             <caption>Listi staatuse toolbar</caption>
       </property>
       <property>
+            <name>separator_legend</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>member_list</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>file_separator</name>
             <table>objects</table>
             <field>meta</field>

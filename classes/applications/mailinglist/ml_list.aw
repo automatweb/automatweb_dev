@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.67 2006/04/21 12:30:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.68 2006/04/21 13:02:13 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -89,6 +89,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @property member_list_tb type=toolbar no_caption=1
 @caption Listi staatuse toolbar
+
+@property separator_legend type=text no_caption=1
 
 @property file_separator type=textbox 
 @caption Failis nime ja mailiaadressi eraldaja
@@ -728,6 +730,9 @@ class ml_list extends class_base
 				$this->gen_member_list($arr);
 				break;
 	
+			case "separator_legend":
+				$prop["value"] = "tab'i eraldajana kasutamiseks märgi tekstikasti /t";
+				break;
 			case "list_status_table":
 				$this->gen_list_status_table($arr);
 				break;
@@ -1756,6 +1761,7 @@ class ml_list extends class_base
 			$separator = $list_obj->prop("file_separator");
 		}
 		if(!$separator) $separator=",";
+		if($separator[0] == "/") $separator = str_replace("/t", "\t" ,$separator);
 		foreach($rows as $row)
 		{
 			$column = explode($separator , $row);
