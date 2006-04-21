@@ -65,8 +65,17 @@ class server_folder_selector extends core
 
 	/**
 		@attrib name=select_folder
-		@param pn required
-		@param fld optional
+		@param pn required type=String
+		Changeform's input field.
+		@param fld optional type=string
+		Folder address to show at first.
+		@comments
+		Shows selected folders contents(a table). Usually used in popup window to select a folder for some form.
+		Table has 4 fields:
+		*dir/file name, last changed by, last changed when, select link
+		Select link fills changeform's input field named $pn, submits form and closes window itself.
+		@returns
+		The table's html code.
 	**/
 	function select_folder($arr)
 	{
