@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.11 2006/03/08 15:15:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.12 2006/04/21 11:41:39 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -82,7 +82,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 		@caption Otsi
 
 @default group=grp_realestate_properties_search
-	@property property_search type=releditor reltype=RELTYPE_PROPERTY_SEARCH rel_id=first editonly=1 props=search_class_id,search_transaction_type,search_transaction_price_min,search_transaction_price_max,search_total_floor_area_min,search_total_floor_area_max,search_number_of_rooms,searchparam_address1,searchparam_address2,searchparam_address3,searchparam_fromdate,search_usage_purpose,search_condition,search_is_middle_floor,searchparam_onlywithpictures
+	@property property_search type=releditor reltype=RELTYPE_PROPERTY_SEARCH rel_id=first editonly=1 props=search_class_id,search_city24_id,search_transaction_type,search_transaction_price_min,search_transaction_price_max,search_total_floor_area_min,search_total_floor_area_max,search_number_of_rooms,searchparam_address1,searchparam_address2,searchparam_address3,searchparam_fromdate,search_usage_purpose,search_condition,search_is_middle_floor,searchparam_onlywithpictures
 	@caption Otsing
 
 	@property button2 type=submit store=no
@@ -209,7 +209,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@property default_date_format type=textbox default=jmYHi
 	@caption Kuupäevaformaat
 
-	@property properties_list_perpage type=textbox default=50
+	@property properties_list_perpage type=textbox default=25
 	@comment Objektide arv lehel kinnisvarahalduskeskkonna objektide vaates
 	@caption Objekte lehel
 
@@ -461,6 +461,7 @@ class realestate_manager extends class_base
 			case "mail_body":
 			case "mail_body":
 
+			### settings tab
 			case "available_variables_names":
 				$prop["value"] = t("
 					Kõik klassi propertyd kujul <i>property_name</i> ning nende nimed kujul <i>property_name_caption</i>.  <br />
@@ -513,7 +514,7 @@ class realestate_manager extends class_base
 					"name" => "appreciation_note_type",
 				);
 				list ($options, $name, $use_type) = $this->cl_classificator->get_choices($prop_args);
-				$prop["options"] = $options->names();
+				$prop["options"] = is_object($options) ? $options->names() : array();
 				$prop["value"] = (is_object ($this->re_client_selection) and $this->re_client_selection->meta ("realestate_" . $prop["name"])) ? $this->re_client_selection->meta ("realestate_" . $prop["name"]) : (aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : "");
 				break;
 
@@ -557,6 +558,7 @@ class realestate_manager extends class_base
 			case "proplist_filter_modifiedafter":
 			case "proplist_filter_createdafter":
 			case "proplist_filter_closedafter":
+			case "proplist_filter_closedbefore":
 				$prop["value"] = aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : -1;
 				break;
 
@@ -566,7 +568,6 @@ class realestate_manager extends class_base
 
 			case "proplist_filter_modifiedbefore":
 			case "proplist_filter_createdbefore":
-			case "proplist_filter_closedbefore":
 				$prop["value"] = aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : (time () + 86400);
 				break;
 
@@ -586,7 +587,7 @@ class realestate_manager extends class_base
 					"name" => "legal_status",
 				);
 				list ($options, $name, $use_type) = $this->cl_classificator->get_choices($prop_args);
-				$prop["options"] = $options->names();
+				$prop["options"] = is_object($options) ? $options->names() : array();
 				$prop["value"] = aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : "";
 				break;
 
@@ -596,7 +597,7 @@ class realestate_manager extends class_base
 					"name" => "quality_class",
 				);
 				list ($options, $name, $use_type) = $this->cl_classificator->get_choices($prop_args);
-				$prop["options"] = $options->names();
+				$prop["options"] = is_object($options) ? $options->names() : array();
 				$prop["value"] = aw_global_get ("realestate_" . $prop["name"]) ? aw_global_get ("realestate_" . $prop["name"]) : "";
 				break;
 
@@ -798,6 +799,15 @@ class realestate_manager extends class_base
 
 		switch($prop["name"])
 		{
+			### settings tab
+			case "administrative_structure":
+				if (!is_oid ($prop["value"]))
+				{
+					$prop["error"] = t("Kohustuslik väli");
+					return PROP_FATAL_ERROR;
+				}
+				break;
+
 			### properties tab
 			case "properties_list";
 				$this->save_realestate_properties ($arr);
@@ -1016,6 +1026,7 @@ class realestate_manager extends class_base
 				"tfamin" => $arr["request"]["property_search"]["search_total_floor_area_min"],
 				"tfamax" => $arr["request"]["property_search"]["search_total_floor_area_max"],
 				"nor" => $arr["request"]["property_search"]["search_number_of_rooms"],
+				"c24id" => $arr["request"]["property_search"]["search_city24_id"],
 				"a1" => $arr["request"]["property_search"]["searchparam_address1"],
 				"a2" => $arr["request"]["property_search"]["searchparam_address2"],
 				"a3" => $arr["request"]["property_search"]["searchparam_address3"],
@@ -1121,6 +1132,8 @@ class realestate_manager extends class_base
 		$tb->remove_button("Kohtumine");
 		$tb->remove_button("Toimetus");
 		$tb->remove_button("Search");
+		$tb->remove_button("mark_important");
+		$tb->remove_button("switch_view");
 
 		$arr["obj_inst"] = $tmp;
 	}
@@ -1248,7 +1261,17 @@ class realestate_manager extends class_base
 			}
 		}
 
-		if (is_oid ($arr["request"]["company"]))
+		$tree->set_only_one_level_opened (false);
+
+		if (is_oid ($arr["request"]["cat"]))
+		{
+			$tree->set_selected_item ($arr["request"]["cat"]);
+		}
+		elseif (is_oid ($arr["request"]["unit"]))
+		{
+			$tree->set_selected_item ($arr["request"]["unit"]);
+		}
+		elseif (is_oid ($arr["request"]["company"]))
 		{
 			$tree->set_selected_item ($arr["request"]["company"]);
 		}
@@ -1691,15 +1714,15 @@ class realestate_manager extends class_base
 			$closed_after = aw_global_get ("realestate_proplist_filter_closedafter");
 			$closed_before = aw_global_get ("realestate_proplist_filter_closedbefore");
 
-			if ($closed_after and $closed_before)
+			if ((0 < $closed_after) and (0 < $closed_before))
 			{
 				$closed_constraint = new obj_predicate_compare (OBJ_COMP_BETWEEN, $closed_after, $closed_before);
 			}
-			elseif ($closed_after)
+			elseif (0 < $closed_after)
 			{
 				$closed_constraint = new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $closed_after);
 			}
-			elseif ($closed_before)
+			elseif (0 < $closed_before)
 			{
 				$closed_constraint = new obj_predicate_compare (OBJ_COMP_LESS_OR_EQ, $closed_before);
 			}
@@ -1754,7 +1777,8 @@ class realestate_manager extends class_base
 			$this->properties_result_count = $list->count ();
 
 			### limit
-			$limit = ((int) $_GET["ft_page"] * $this_object->prop ("properties_list_perpage")) . "," . $this_object->prop ("properties_list_perpage");
+			$per_page = strlen(trim($this_object->prop ("properties_list_perpage"))) ? $this_object->prop ("properties_list_perpage") : 25;
+			$limit = ((int) $_GET["ft_page"] * $per_page) . "," . $per_page;
 			$args["limit"] = $limit;
 			$list->filter ($args);
 		}
@@ -2285,7 +2309,7 @@ class realestate_manager extends class_base
 		$table->define_pageselector (array (
 			"type" => "text",
 			"d_row_cnt" => $this->properties_result_count,
-			"records_per_page" => ($this_object->prop ("properties_list_perpage") ? $this_object->prop ("properties_list_perpage") : 50),
+			"records_per_page" => (strlen(trim($this_object->prop ("properties_list_perpage"))) ? $this_object->prop ("properties_list_perpage") : 25),
 		));
 	}
 
@@ -2929,7 +2953,7 @@ class realestate_manager extends class_base
 			"name" => "appreciation_note_type",
 		);
 		list ($options, $name, $use_type) = $this->cl_classificator->get_choices($prop_args);
-		$appreciation_note_type_filter = $options->names();
+		$appreciation_note_type_filter = is_object($options) ? $options->names() : array();
 
 		### table definition
 		$table->define_field(array(
@@ -3175,6 +3199,15 @@ class realestate_manager extends class_base
 		$this->_delegate_co ($arr, "submit_delete_relations", $company);
 		return urldecode($arr["return_url"]);
 	}
+
+	// /** switch view type
+		// @attrib name=p_view_switch
+	// **/
+	// function p_view_switch($arr)
+	// {
+		// arr($arr);
+		// return $this->_delegate_co($arr, "cut_p", $company);
+	// }
 
 	/** cuts the selected person objects
 		@attrib name=cut_p

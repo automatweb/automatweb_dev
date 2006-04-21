@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.13 2006/04/03 07:27:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.14 2006/04/21 11:41:39 voldemar Exp $
 // realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
@@ -309,7 +309,7 @@ class realestate_import extends class_base
 				"name" => "special_status",
 			);
 			list ($options, $NULL, $NULL) = $cl_classificator->get_choices($prop_args);
-			$special_statuses = $options->names();
+			$special_statuses = $options->names();//!!! teha . kui puudub view 6igus klassifikaatorile siis tagastatakse false.
 			$this->changed_special_statuses = false;
 		}
 		//!!! END vaja?
@@ -2014,12 +2014,14 @@ class realestate_import extends class_base
 **/
 	function city24_xml ($arr)
 	{
+		$out_charset = "ISO-8859-4";
 		$this_object = obj ($arr["id"]);
 		$import_url = $this_object->prop ("city24_import_url");
-		// $import_url = "http://erivaldused:erivaldused@maakler.city24.ee/broker/city24broker/xml?lang=EST&search_count=10000";
-		// $import_url = "/www/dev/voldemar/test.xml";
-		// $fp = fopen ($import_url, "r");
 		$xml = file_get_contents ($import_url);
+		// $xml = iconv ("UTF-8", $out_charset, $xml);
+		// $xml = preg_replace ('/encoding\=\"UTF\-8\"/Ui', 'encoding="' . $out_charset . '"', $xml, 1);
+
+		header ("Content-Type: application/xml");
 		echo $xml;
 		exit;
 	}

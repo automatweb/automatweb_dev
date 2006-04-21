@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.17 2006/04/03 10:12:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.18 2006/04/21 11:41:39 voldemar Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -62,10 +62,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property transaction_down_payment type=textbox field=meta method=serialize
 		@caption Ettemaks
 
-		@property transaction_date type=date_select field=meta method=serialize default=-1
+		@property transaction_date type=date_select table=realestate_property default=-1
 		@caption Tehingu kuupäev
 
-		@property transaction_closed type=checkbox field=meta method=serialize ch_value=1
+		@property transaction_closed type=checkbox table=realestate_property ch_value=1
 		@caption Tehing sõlmitud
 
 
@@ -278,6 +278,7 @@ ALTER TABLE `realestate_property` ADD `is_visible` BIT NOT NULL DEFAULT '0';
 ALTER TABLE `realestate_property` ADD `is_archived` BIT NOT NULL DEFAULT '0';
 ALTER TABLE `realestate_property` ADD `city24_object_id` INT(11) UNSIGNED;
 ALTER TABLE `realestate_property` ADD `picture_icon` CHAR(255);
+ALTER TABLE `realestate_property` ADD `transaction_date` INT(10);
 
 */
 
@@ -2492,6 +2493,69 @@ REALESTATE_NF_SEP);
 		}
 
 		exit_function("re_property::load_agent_data");
+	}
+
+	function do_db_upgrade($table, $field, $q, $err)
+	{
+		if ($table == "realestate_property")
+		{
+			$realestate_classes = array (
+				CL_REALESTATE_PROPERTY,
+				CL_REALESTATE_HOUSE,
+				CL_REALESTATE_ROWHOUSE,
+				CL_REALESTATE_COTTAGE,
+				CL_REALESTATE_HOUSEPART,
+				CL_REALESTATE_APARTMENT,
+				CL_REALESTATE_COMMERCIAL,
+				CL_REALESTATE_GARAGE,
+				CL_REALESTATE_LAND,
+			);
+			ini_set("ignore_user_abort", "1");
+
+
+			switch($field)
+			{
+				case "transaction_closed":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(1) UNSIGNED"
+					));
+
+					$list = new object_list(array(
+						"class_id" => $realestate_classes,
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					$list->foreach_cb(array(
+						"func" => array(&$this, "move_meta"),
+						"param" => $field,
+						"save" => true,
+					));
+					return true;
+
+				case "transaction_date":
+					$this->db_add_col($table, array(
+						"name" => $field,
+						"type" => "INT(10)"
+					));
+					$list = new object_list(array(
+						"class_id" => $realestate_classes,
+						"lang_id" => array(),
+						"site_id" => array(),
+					));
+					$list->foreach_cb(array(
+						"func" => array(&$this, "move_meta"),
+						"param" => $field,
+						"save" => true,
+					));
+					return true;
+			}
+		}
+	}
+
+	function move_meta($o, $param)
+	{
+		$o->set_prop($param , $o->meta($param));
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.13 2006/03/24 14:40:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.14 2006/04/21 11:41:39 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -275,7 +275,7 @@ class realestate_search extends class_base
 				);
 				list ($options, $name, $use_type) = $this->classificator->get_choices($prop_args);
 				// $prop["options"] = array("" => "") + $options->names();
-				$prop["options"] = $options->names();
+				$prop["options"] = is_object($options) ? $options->names() : array();
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["tt"];
 				break;
 
@@ -347,7 +347,7 @@ class realestate_search extends class_base
 				);
 				list ($options, $name, $use_type) = $this->classificator->get_choices($prop_args);
 				// $prop["options"] = array("" => "") + $options->names();
-				$prop["options"] = $options->names();
+				$prop["options"] = is_object($options) ? $options->names() : array();
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["c"];
 				break;
 
@@ -358,7 +358,7 @@ class realestate_search extends class_base
 				);
 				list ($options, $name, $use_type) = $this->classificator->get_choices($prop_args);
 				// $prop["options"] = array("" => "") + $options->names();
-				$prop["options"] = $options->names();
+				$prop["options"] = is_object($options) ? $options->names() : array();
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["up"];
 				break;
 
@@ -368,7 +368,7 @@ class realestate_search extends class_base
 					"name" => "special_status",
 				);
 				list ($options, $name, $use_type) = $this->classificator->get_choices($prop_args);
-				$prop["options"] = array("" => "") + $options->names();
+				$prop["options"] = is_object($options) ? array("" => "") + $options->names() : array();
 				// $prop["options"] = $options->names();
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["ss"];
 				break;
@@ -1421,8 +1421,8 @@ class realestate_search extends class_base
 			$search_tpmax = (float) $arr["tpmax"];
 			$search_tfamin = (float) $arr["tfamin"];
 			$search_tfamax = (float) $arr["tfamax"];
-			$search_nor = strlen(trim($arr["nor"])) ? (int) $arr["nor"] : NULL;
-			$search_c24id = strlen(trim($arr["c24id"])) ? (int) $arr["c24id"] : NULL;
+			$search_nor = trim($arr["nor"]) ? (int) $arr["nor"] : NULL;
+			$search_c24id = trim($arr["c24id"]) ? (int) $arr["c24id"] : NULL;
 
 			$arr["a1"] = ($arr["a1"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["a1"];
 			$search_a1 = (array) $arr["a1"];
