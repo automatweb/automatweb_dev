@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.5 2006/04/18 14:52:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.6 2006/04/21 11:27:30 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -628,7 +628,7 @@ class realestate_add extends class_base
 		$targ = obj($arr["alias"]["target"]);
 		$_SESSION["bank_payment"] = array(
 			"data"		=> $targ->meta("bank"),
-			"viitenumber"	=> $_SESSION["realestate_input_data"]["realestate_id"],
+			"reference_nr"	=> $_SESSION["realestate_input_data"]["realestate_id"],
 			"test"		=> 1,
 			"url" 		=> post_ru(),
 			"cancel"	=> post_ru(),
@@ -1020,9 +1020,9 @@ class realestate_add extends class_base
 			$c = "";
 			foreach($all_objects as $key => $rlst_object)
 			{
+				if($rlst_object->is_brother()) continue;//ignoreerib miskiseid brothereid
 				if(is_oid($rlst_object->meta("added_from"))) $change = $rlst_object->meta("added_from")."?id=".$rlst_object->id();
 				else $change = $this->mk_my_orb("parse_alias", array("id" => $rlst_object->id(), "default" => 1));
-				if($rlst_object->name() == "...") continue;//ignoreerib miskiseid brothereid
 				$this->vars(array(
 					"name" 	 => $rlst_object->name(),
 					"id"	 => $rlst_object->id(),
