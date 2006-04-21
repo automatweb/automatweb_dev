@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.10 2006/04/21 07:57:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.11 2006/04/21 12:45:38 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -273,6 +273,7 @@ class crm_company_webview extends class_base
 			'description' => 'tegevuse_kirjeldus',
 			'type' => '',
 			'moreinfo_link' => '',
+			'userta1' => '',
 			'logo' => 'logo'
 		);
 		
@@ -695,6 +696,9 @@ class crm_company_webview extends class_base
 						}
 					}
 				break;
+				case "userta1":
+					$value = $c->prop("userta1");
+					break;
 				default:
 					$oid = $c->prop($mapped);
 					if (is_oid($oid) && ($o_item = obj($oid)) && is_object($o_item) && is_numeric($o_item->id()) )
