@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.68 2006/04/21 13:02:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.69 2006/04/21 13:42:13 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -90,10 +90,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property member_list_tb type=toolbar no_caption=1
 @caption Listi staatuse toolbar
 
-@property separator_legend type=text no_caption=1
-
 @property file_separator type=textbox 
-@caption Failis nime ja mailiaadressi eraldaja
+@caption Failis nime ja mailiaadressi eraldaja (tab = /t)
 
 @property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Listi liikmete allikas
