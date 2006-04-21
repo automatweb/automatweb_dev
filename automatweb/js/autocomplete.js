@@ -31,7 +31,7 @@ function awActb(obj, valueObj)
 	var actb_limited = true;
 	var actb_httpDisplayError = true;
 	var actb_urlParams = new Array();
-	var actb_urlTimeOut = 5000;// ms
+	var actb_urlWaitRealtime = 400;// ms
 	var actb_delimwords = new Array();
 	var actb_cdelimword = 0;
 	var actb_delimchar = new Array();
@@ -95,7 +95,7 @@ function awActb(obj, valueObj)
 	addEvent(actb_curr,"focus",actb_setup);
 	function actb_setup()
 	{
-		if ("dynamic" == actb_mode)
+		if ("dynamic" == actb_mode || "realtime" == actb_mode)
 		{
 			actb_loadOptions();
 		}
@@ -741,11 +741,11 @@ function awActb(obj, valueObj)
 				if ("realtime" == actb_mode && actb_curr.value.length)
 				{
 					actb_loadOptions();
-					setTimeout(function(){actb_tocomplete(a)},500);
+					setTimeout(function(){actb_tocomplete(a)}, actb_urlWaitRealtime);
 				}
 				else
 				{
-					setTimeout(function(){actb_tocomplete(a)},50);
+					setTimeout(function(){actb_tocomplete(a)}, 50);
 				}
 				break;
 		}
