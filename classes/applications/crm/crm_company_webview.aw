@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.9 2006/03/28 07:24:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.10 2006/04/21 07:57:07 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -345,7 +345,6 @@ class crm_company_webview extends class_base
 		}	
 		$extrainfo_ignorefields = array('name', 'comment', 'status', 'type', 'price_txt'); // crm_field_ properties which are not displayed automatically if set
 		
-
 
 		$extrainfo = array(); // crm_field_{type} objects in type => array('o'=>obj,'p'=>properties)  array (type is class id) (see reltype FIELD on crm_company)
 		$used_fields = $this->v2_name_map;
@@ -710,6 +709,7 @@ class crm_company_webview extends class_base
 						elseif ($item == 'url')
 						{
 							$value = $o_item->name();
+							$this->vars(array("company_web_url" => $value));
 							$value = html::href(array(
 								'url' => $value,
 								'caption' => $value,
@@ -1088,6 +1088,7 @@ class crm_company_webview extends class_base
 					elseif ($item == 'web')
 					{
 						$value = $o_item->name();
+						$this->vars(array("company_web_url" => $value));
 						$value = html::href(array(
 							'url' => $value,
 							'caption' => $value,
