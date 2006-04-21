@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.69 2006/04/21 13:42:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.70 2006/04/21 14:02:07 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1829,7 +1829,7 @@ class ml_list extends class_base
 		$cnt = 0;
 		$obj = obj($id);
 		$already_found = array();
-		if($obj->class_id == CL_MAIL_MESSAGE)
+		if($obj->class_id() == CL_MESSAGE)
 		{
 			$src = $obj->meta("list_source");
 			$m_data = $obj->meta("mail_data");
