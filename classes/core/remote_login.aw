@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/remote_login.aw,v 1.2 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/remote_login.aw,v 1.3 2006/04/24 09:18:15 kristo Exp $
 // remote_login.aw - AW remote login
 
 /*
@@ -68,6 +68,11 @@ class remote_login extends class_base
 	**/
 	function getcookie($arr)
 	{
+		$ma = -1;
+		session_cache_limiter("must-revalidate, max-age=".$ma);
+		header("Cache-Control: must-revalidate, max-age=".$ma);
+		header("Expires: ".gmdate("D, d M Y H:i:s",time()+$ma)." GMT");
+				
 		die(t("Relax, take a cookie."));
 	}
 };
