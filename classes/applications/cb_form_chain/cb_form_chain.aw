@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.27 2006/03/10 14:32:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.28 2006/04/24 12:37:07 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1415,7 +1415,9 @@ class cb_form_chain extends class_base
 		if (is_array($arr["sel"]) && count($arr["sel"]))
 		{
 			$ol = new object_list(array(
-				"oid" => $arr["sel"]
+				"oid" => $arr["sel"],
+				"lang_id" => array(),
+				"site_id" => array()
 			));
 			$ol->delete();
 		}
