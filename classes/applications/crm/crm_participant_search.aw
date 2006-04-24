@@ -12,6 +12,12 @@ class crm_participant_search extends popup_search
 	{
 		parent::_insert_form_props($htmlc, $arr);
 		$htmlc->add_property(array(
+			"name" => "s[search_co]",
+			"type" => "textbox",
+			"value" => $arr["s"]["search_co"],
+			"caption" => t("Organisatsioon"),
+		));
+		$htmlc->add_property(array(
 			"name" => "s[show_vals]",
 			"type" => "chooser",
 			"value" => isset($_GET["MAX_FILE_SIZE"]) ? $arr["s"]["show_vals"] : array("cur_co" => 1),
@@ -29,6 +35,16 @@ class crm_participant_search extends popup_search
 	function _get_filter_props(&$filter, $arr)
 	{
 		parent::_get_filter_props($filter, $arr);
+
+		if (!$_GET["MAX_FILE_SIZE"])
+		{
+			$arr["s"]["show_vals"]["cur_co"] = 1;
+		}
+
+		if ($arr["s"]["search_co"] != "")
+		{
+			$filter["CL_CRM_PERSON.work_contact.name"] = map("%%%s%%", array_filter(explode(",", $arr["s"]["search_co"]), create_function('$a','return $a != "";')));
+		}
 
 		if (is_array($arr["s"]["show_vals"]))
 		{
