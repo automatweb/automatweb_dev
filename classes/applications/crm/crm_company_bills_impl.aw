@@ -7,7 +7,7 @@ class crm_company_bills_impl extends class_base
 		$this->init();
 	}
 
-	function _init_bill_proj_list_t(&$t)
+	function _init_bill_proj_list_t(&$t, $custs)
 	{
 		$t->define_field(array(
 			"caption" => t("Ava"),
@@ -30,7 +30,8 @@ class crm_company_bills_impl extends class_base
 			"name" => "cust",
 			"align" => "center",
 			"sortable" => 1,
-			"valign" => "top"
+			"valign" => "top",
+			"filter" => $custs
 		));
 
 		$t->define_field(array(
@@ -51,7 +52,6 @@ class crm_company_bills_impl extends class_base
 		}
 
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_bill_proj_list_t($t);
 
 		// list all task rows that are not billed yet
 		$rows = new object_list(array(
@@ -99,6 +99,7 @@ class crm_company_bills_impl extends class_base
 			$sum2proj[$row->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $row->prop("hr_price");
 		}
 
+		$custs = array();
 		foreach($projs as $p)
 		{
 			if (!$this->can("view", $p))
@@ -107,11 +108,12 @@ class crm_company_bills_impl extends class_base
 			}
 			$po = obj($p);
 			$ord = $po->prop("orderer");
-
+			$ord = is_array($ord) ? reset($ord) : $ord;
 
 			$lister = "<span id='cust".$po->id()."' style='display: none;'>";
 
 			$table = new vcl_table;
+			$table->name = "cust".$po->id();
 			$params = array(
 				"request" => array("proj" => $po->id(), "cust" => $ord),
 				"prop" => array(
@@ -123,16 +125,26 @@ class crm_company_bills_impl extends class_base
 			$lister .= $table->draw();
 			$lister .= "</span>";
 
-			$t->define_data(array(
+			$dat[] = array(
 				"name" => html::obj_change_url($po),
 				"open" => html::href(array(
 					"url" => "#", //aw_url_change_var("proj", $p),
-					"onClick" => "el=document.getElementById(\"cust".$po->id()."\"); if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){d = \"block\";} else { d = \"table-row\";}  el.style.display=d;",
+					"onClick" => "el=document.getElementById(\"cust".$po->id()."\"); if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){if (el.style.display == \"block\") { d = \"none\";} else { d = \"block\";} } else { if (el.style.display == \"table-row\") {  d = \"none\"; } else {d = \"table-row\";} }  el.style.display=d;",
 					"caption" => t("Ava")
 				)),
-				"cust" => html::obj_change_url(is_array($ord) ? reset($ord) : $ord),
+				"cust" => html::obj_change_url($ord),
 				"sum" => number_format($sum2proj[$p], 2).$lister
-			));
+			);
+			if ($this->can("view", $ord))
+			{
+				$ordo = obj($ord);
+				$custs[] = $ordo->name();
+			}
+		}
+		$this->_init_bill_proj_list_t($t, array_unique($custs));
+		foreach($dat as $dr)
+		{
+			$t->define_data($dr);
 		}
 		return;
 
