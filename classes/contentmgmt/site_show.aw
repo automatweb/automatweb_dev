@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.175 2006/04/20 11:10:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.176 2006/04/24 06:33:15 kristo Exp $
 
 /*
 
@@ -1152,6 +1152,12 @@ class site_show extends class_base
 		else
 		{
 			$docid = $arr["docid"];
+		}
+
+		$si = __get_site_instance();
+		if (method_exists($si, "handle_default_document_list"))
+		{
+			$si->handle_default_document_list($docid);
 		}
 		return $this->_int_show_documents($docid);
 	}
