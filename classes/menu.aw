@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.157 2006/04/24 12:17:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.158 2006/04/24 13:19:22 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1273,12 +1273,6 @@ class menu extends class_base
 					"type" => "RELTYPE_IMAGE"
 				));
 				$img[$nm] = $imd["id"];
-			}
-			else
-			if (substr($name, 0, 4) == "mimg")
-			{
-				$nm = substr($name, 5);
-				$img[$nm] = $imgar[$nm]["image_id"];
 			}
 		}
 		$num_menu_images = $this->cfg["num_menu_images"];
