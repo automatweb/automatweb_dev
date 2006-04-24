@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.9 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.10 2006/04/24 08:21:54 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -229,6 +229,18 @@ class menu_tree extends class_base
 	
 		$nsuo = (aw_global_get("uid") == "" && aw_ini_get("menuedit.no_show_users_only"));
 
+		// go over parents and see if they have sfo settings
+		foreach($parents as $parent)
+		{
+			$po = obj($parent);
+			if ($this->can("view", $po->prop("submenus_from_obj")))
+			{
+				$sfo = obj($po->prop("submenus_from_obj"));
+				$sfo_i = $sfo->instance();
+				$this->_req_sfo($po, $sfo, $sfo_i);
+			}
+		}
+
 		$filt = array(
 			"class_id" => CL_MENU,
 			"parent" => $parents,
@@ -274,6 +286,13 @@ class menu_tree extends class_base
 			{
 				$_parents[] = $o->id();
 				$this->object_list[$o->parent()][$o->id()] = $o;
+				// if this menu has get subs, then incluse those
+				if ($this->can("view", $o->prop("submenus_from_obj")))
+				{
+					$sfo = obj($o->prop("submenus_from_obj"));
+					$sfo_i = $sfo->instance();
+					$this->_req_sfo($o, $sfo, $sfo_i);
+				}
 			}
 		};
 		if (sizeof($_parents) > 0)
@@ -281,6 +300,19 @@ class menu_tree extends class_base
 			$this->_gen_rec_list($_parents);
 		};
 		$this->restore_handle();
+	}
+
+	function _req_sfo($o, $sfo, $sfo_i)
+	{
+		$this->_sfo_level++;
+		$folders = $sfo_i->get_folders_as_object_list($sfo, $this->_sfo_level, $o);
+		foreach($folders->arr() as $fld)
+		{
+			$this->object_list[$o->id()][$fld->id()] = $fld;
+			$this->_req_sfo($fld, $sfo, $sfo_i);
+			$this->sfo_ids[$fld->id()] = $sfo;
+		}
+		$this->_sfo_level--;
 	}
 	
 	/////
@@ -377,6 +409,12 @@ class menu_tree extends class_base
 				$id = $url;
 			}
 
+			if ($this->sfo_ids[$v->id()])
+			{
+				$sfo_i = $this->sfo_ids[$v->id()]->instance();
+				$url = $sfo_i->make_menu_link($v, $this->sfo_ids[$v->id()]);
+			}
+			else
 			if (!is_oid($v->prop("submenus_from_obj")))
 			{
 				$pt = array_reverse($v->path());

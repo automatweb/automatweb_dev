@@ -2,7 +2,7 @@
 <ul>
 <!-- END SUB: START -->
 <!-- SUB: ITEM -->
-<li><a href="{VAR:oid}">{VAR:name}</a>
+<li><a href="{VAR:url}">{VAR:name}</a>
 <!-- END SUB: ITEM -->
 <!-- SUB: END -->
 </ul>
