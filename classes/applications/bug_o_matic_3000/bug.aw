@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.30 2006/04/13 12:30:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.31 2006/04/24 10:48:47 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -196,7 +196,13 @@ class bug extends class_base
 		switch($prop["name"])
 		{
 			case "name":
-				$prop["post_append_text"] = " #".$arr["obj_inst"]->id()." ".sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"));
+				if (is_oid($arr["obj_inst"]->id()))
+				{
+					$u = get_instance(CL_USER);
+					$p = $u->get_person_for_uid($arr["obj_inst"]->createdby());
+					$crea = sprintf(t("Looja: %s"), $p->name());\
+				}
+				$prop["post_append_text"] = " #".$arr["obj_inst"]->id()." ".sprintf(t("Vaade avatud: %s"), date("d.m.Y H:i"))." ".$crea;
 				break;
 
 			case "bug_content":
@@ -564,7 +570,7 @@ class bug extends class_base
 		$com_str = "";
 		foreach($ol->arr() as $com)
 		{
-			$comt = create_links($com->comment());
+			$comt = create_links(htmlspecialchars($com->comment()));
 			$comt = preg_replace("/(>http:\/\/dev.struktuur.ee\/cgi-bin\/viewcvs\.cgi\/[^<\n]*)/ims", ">Diff", $comt);
 
 			if ($nl2br)
@@ -585,7 +591,7 @@ class bug extends class_base
 			$com_str .= $this->parse("COMMENT");
 		}
 
-		$main_c = $this->_split_long_words(nl2br(create_links($o->prop("bug_content"))));
+		$main_c = $this->_split_long_words(nl2br(create_links(htmlspecialchars($o->prop("bug_content")))));
 		$this->vars(array(
 			"main_text" => $so == "asc" ? $main_c : "",
 			"main_text_after" => $so == "asc" ? "" : $main_c,
