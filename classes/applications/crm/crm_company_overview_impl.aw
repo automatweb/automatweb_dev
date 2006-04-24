@@ -819,19 +819,49 @@ class crm_company_overview_impl extends class_base
 		{
 			$dl = "date";
 		}
-		if ($r["act_s_dl_from"] > 1 && $r["act_s_dl_to"] > 1)
+
+		if (is_array($clid))
 		{
-			$res[$dl] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $r["act_s_dl_from"], $r["act_s_dl_to"]);
+			$dls = array("deadline", "start1");
+			$cond = array();
+			foreach($dls as $dl)
+			{
+				if ($r["act_s_dl_from"] > 1 && $r["act_s_dl_to"] > 1)
+				{
+					$cond[$dl] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $r["act_s_dl_from"], $r["act_s_dl_to"]);
+				}
+				else
+				if ($r["act_s_dl_from"] > 1)
+				{
+					$cond[$dl] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["act_s_dl_from"]);
+				}
+				else
+				if ($r["act_s_dl_to"] > 1)
+				{
+					$cond[$dl] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["act_s_dl_to"]);
+				}
+			}
+			$res[] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => $cond
+			));
 		}
 		else
-		if ($r["act_s_dl_from"] > 1)
 		{
-			$res[$dl] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["act_s_dl_from"]);
-		}
-		else
-		if ($r["act_s_dl_to"] > 1)
-		{
-			$res[$dl] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["act_s_dl_to"]);
+			if ($r["act_s_dl_from"] > 1 && $r["act_s_dl_to"] > 1)
+			{
+				$res[$dl] = new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $r["act_s_dl_from"], $r["act_s_dl_to"]);
+			}
+			else
+			if ($r["act_s_dl_from"] > 1)
+			{
+				$res[$dl] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $r["act_s_dl_from"]);
+			}
+			else
+			if ($r["act_s_dl_to"] > 1)
+			{
+				$res[$dl] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["act_s_dl_to"]);
+			}
 		}
 
 		if ($r["act_s_status"] > 0 && $r["act_s_status"] < 3)
