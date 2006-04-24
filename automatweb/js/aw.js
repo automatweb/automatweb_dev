@@ -121,11 +121,28 @@ function awlib_addevent(o,e,f)
 		eval("o.on"+e+"="+f)
 };
 
-var chk_status;
+var chk_status_nms = new Array();
+var chk_status_sets = new Array();
 
 function aw_sel_chb(form,elname)
 {
-	chs = !chk_status;
+	found = false;
+	for(i = 0; i < chk_status_nms.length;i++)
+	{
+		if (chk_status_nms[i] == elname)
+		{
+			found = true;
+			break;
+		}
+	}
+	if (!found)
+	{
+		chk_status_nms.length++;
+		chk_status_nms[chk_status_nms.length-1] = elname;
+		i = chk_status_nms.length-1;
+	}
+	chs = !chk_status_sets[i];
+	chk_status_sets[i] = chs ? true : false;
 
 	len = form.elements.length;
 	for(i = 0; i < len; i++)
