@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.69 2006/04/20 13:39:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.70 2006/04/24 13:40:20 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1276,7 +1276,7 @@ class site_search_content extends class_base
 		for ($i=0; $i < $num_pages; $i++)
 		{
 			$params["page"] = $i;
-			if ($arr["link_type"] == 1)
+			if (true || $arr["link_type"] == 1)
 			{
 				$link = aw_url_change_var("page", $i);
 			}
@@ -1358,7 +1358,6 @@ class site_search_content extends class_base
 		// calc the offsets in the array 
 		$from = $page * $per_page;
 		$to = ($page+1) * $per_page;
-
 		$res = "";
 
 		$tr = array();
