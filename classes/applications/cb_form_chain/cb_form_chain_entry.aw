@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.14 2006/02/16 11:35:47 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.15 2006/04/24 06:44:12 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus
 /*
 
@@ -299,6 +299,16 @@ class cb_form_chain_entry extends class_base
 			"PROPERTY" => $ret
 		));
 		return $this->parse("FORM");
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "data":
+				$this->db_query("ALTER TABLE $t ADD $f int");
+				return true;
+		}
 	}
 }
 ?>
