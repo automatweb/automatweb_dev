@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.156 2006/04/19 11:41:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.157 2006/04/24 12:17:41 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -856,7 +856,7 @@ class menu extends class_base
 			// image preview
 			$url = "";
 			$imi = get_instance(CL_IMAGE);
-			if ($imdata[$i]["image_id"])
+			if (true || $imdata[$i]["image_id"])
 			{
 				$url = $imi->get_url_by_id($imdata[$i]["image_id"]);
 				if ($url)
@@ -905,12 +905,12 @@ class menu extends class_base
 			"talign" => "center",
 			"align" => "center",
 		));
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("J&auml;rjekord"),
 			"talign" => "center",
 			"align" => "center",
-		));
+		));*/
 		$t->define_field(array(
 			"name" => "preview",
 			"caption" => t("Eelvaade"),
@@ -1274,14 +1274,19 @@ class menu extends class_base
 				));
 				$img[$nm] = $imd["id"];
 			}
+			else
+			if (substr($name, 0, 4) == "mimg")
+			{
+				$nm = substr($name, 5);
+				$img[$nm] = $imgar[$nm]["image_id"];
+			}
 		}
-
 		$num_menu_images = $this->cfg["num_menu_images"];
 		$t = get_instance(CL_IMAGE);
 
 		for ($i=0; $i < $num_menu_images; $i++)
 		{
-			if ($img_del[$i] == 1 || !$img[$i])
+			if ($img_del[$i] == 1)
 			{
 				unset($imgar[$i]);
 			}
@@ -1296,14 +1301,14 @@ class menu extends class_base
 		$cnt = 0;
 		for ($i=0; $i < $num_menu_images; $i++)
 		{
-			if ($imgar[$i]["id"] || $imgar[$i]["ord"] || $imgar[$i]["image_id"])
+			if (true || $imgar[$i]["id"] || $imgar[$i]["ord"] || $imgar[$i]["image_id"])
 			{
 				$timgar[$cnt++] = $imgar[$i];
 			}
 		}
 
 		// now sort the image array
-		usort($timgar,array($this,"_menu_img_cmp"));
+		//usort($timgar,array($this,"_menu_img_cmp"));
 		return $timgar;
 	}
 
