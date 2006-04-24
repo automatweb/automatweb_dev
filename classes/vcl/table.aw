@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.71 2006/04/13 10:15:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.72 2006/04/24 11:46:07 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -17,7 +17,6 @@ class aw_table extends aw_template
 	function aw_table($data = array())
 	{
 		$this->id = uniqid('table_');
-
 		if (file_exists(aw_ini_get("site_basedir")."/public/img/up.gif"))
 		{
 			$this->imgurl = aw_ini_get("baseurl")."/img";
