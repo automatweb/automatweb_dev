@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.41 2006/04/12 11:48:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.42 2006/04/24 11:47:08 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -41,7 +41,7 @@
 	@property bill_due_date type=date_select table=aw_crm_bill field=aw_due_date
 	@caption Tasumise kuup&auml;ev
 
-	@property bill_recieved type=date_select table=aw_crm_bill field=aw_recieved
+	@property bill_recieved type=date_select table=aw_crm_bill field=aw_recieved default=-1
 	@caption Laekumiskuup&auml;ev
 
 	@property state type=select table=aw_crm_bill field=aw_state
@@ -237,6 +237,18 @@ class crm_bill extends class_base
 
 			case "bill_rows":
 				$this->_save_rows($arr);
+				break;
+
+			case "state":
+				// if state is set to paid and payment date is -1 or same as bill date 
+				if ($prop["value"] == 2 && 
+					($arr["obj_inst"]->prop("bill_date") == $arr["obj_inst"]->prop("bill_recieved") ||
+					 $arr["obj_inst"]->prop("bill_recieved") < 300
+					)
+				)
+				{
+					$this->_set_recv_date = time();
+				}
 				break;
 		}
 		return $retval;
@@ -455,6 +467,11 @@ class crm_bill extends class_base
 		$arr["obj_inst"]->set_prop("bill_due_date", 
 			mktime(3,3,3, date("m", $bt), date("d", $bt) + $arr["obj_inst"]->prop("bill_due_date_days"), date("Y", $bt))
 		);
+
+		if ($this->_set_recv_date)
+		{
+			$arr["obj_inst"]->set_prop("bill_recieved", $this->_set_recv_date);
+		}
 	}
 
 	function _preview($arr)
