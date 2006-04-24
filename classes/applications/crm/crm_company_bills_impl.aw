@@ -13,28 +13,33 @@ class crm_company_bills_impl extends class_base
 			"caption" => t("Ava"),
 			"name" => "open",
 			"align" => "center",
-			"sortable" => 1
+			"sortable" => 1,
+			"valign" => "top"
 		));
 
 		$t->define_field(array(
 			"caption" => t("Projekt"),
 			"name" => "name",
 			"align" => "center",
-			"sortable" => 1
+			"sortable" => 1,
+			"valign" => "top"
 		));
 
 		$t->define_field(array(
 			"caption" => t("Klient"),
 			"name" => "cust",
 			"align" => "center",
-			"sortable" => 1
+			"sortable" => 1,
+			"valign" => "top"
 		));
 
 		$t->define_field(array(
 			"caption" => t("Summa"),
 			"name" => "sum",
 			"align" => "right",
-			"sortable" => 1
+			"sortable" => 1,
+			"valign" => "top",
+			"width" => "50%"
 		));
 	}
 
@@ -102,14 +107,31 @@ class crm_company_bills_impl extends class_base
 			}
 			$po = obj($p);
 			$ord = $po->prop("orderer");
+
+
+			$lister = "<span id='cust".$po->id()."' style='display: none;'>";
+
+			$table = new vcl_table;
+			$params = array(
+				"request" => array("proj" => $po->id(), "cust" => $ord),
+				"prop" => array(
+					"vcl_inst" => &$table
+				)
+			);			
+			$this->_get_bill_task_list($params);
+
+			$lister .= $table->draw();
+			$lister .= "</span>";
+
 			$t->define_data(array(
 				"name" => html::obj_change_url($po),
 				"open" => html::href(array(
-					"url" => aw_url_change_var("proj", $p),
+					"url" => "#", //aw_url_change_var("proj", $p),
+					"onClick" => "el=document.getElementById(\"cust".$po->id()."\"); if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0){d = \"block\";} else { d = \"table-row\";}  el.style.display=d;",
 					"caption" => t("Ava")
 				)),
 				"cust" => html::obj_change_url(is_array($ord) ? reset($ord) : $ord),
-				"sum" => number_format($sum2proj[$p], 2)
+				"sum" => number_format($sum2proj[$p], 2).$lister
 			));
 		}
 		return;
@@ -392,15 +414,15 @@ class crm_company_bills_impl extends class_base
 			'url' => html::get_new_url(CL_CRM_BILL, $arr["obj_inst"]->id(), array("return_url" => get_ru()))
 		));
 
-		if ($arr["request"]["proj"])
-		{
+		//if ($arr["request"]["proj"])
+		//{
 			$tb->add_button(array(
 				"name" => "create_bill",
 				"img" => "save.gif",
 				"tooltip" => t("Koosta arve"),
 				"action" => "create_bill"
 			));
-		}
+		//}
 	}
 
 	function _init_bills_list_t(&$t, $r)
