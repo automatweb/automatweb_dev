@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.178 2006/04/25 12:32:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.179 2006/04/25 13:01:21 kristo Exp $
 
 /*
 
@@ -1352,19 +1352,18 @@ class site_show extends class_base
 				"NO_SEL_MENU_COMMENT" => ""
 			));
 		}
-
 		for($i = 0; $i < aw_ini_get("menuedit.num_menu_images"); $i++)
 		{
-			if ($sius[$i+1] != "")
+			if ($sius[$i] != "")
 			{
 				$this->vars(array(
-					"HAS_SEL_MENU_IMAGE_URL_".($i+1) => $this->parse("HAS_SEL_MENU_IMAGE_URL_".($i+1))
+					"HAS_SEL_MENU_IMAGE_URL_".($i) => $this->parse("HAS_SEL_MENU_IMAGE_URL_".($i))
 				));
 			}
 			else
 			{
 				$this->vars(array(
-					"NO_SEL_MENU_IMAGE_URL_".($i+1) => $this->parse("NO_SEL_MENU_IMAGE_URL_".($i+1))
+					"NO_SEL_MENU_IMAGE_URL_".($i) => $this->parse("NO_SEL_MENU_IMAGE_URL_".($i))
 				));
 			}
 		}
