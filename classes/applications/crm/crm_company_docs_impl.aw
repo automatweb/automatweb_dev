@@ -133,6 +133,7 @@ class crm_company_docs_impl extends class_base
 			"ot" => new object_tree(array(
 				"class_id" => array(CL_MENU),
 				"parent" => $fld->id(),
+				"sort_by" => "objects.jrk"
 			)),
 			"var" => "tf",
 			"icon" => icons::get_icon_url(CL_MENU)
@@ -235,10 +236,10 @@ class crm_company_docs_impl extends class_base
 
 	function _get_docs_tbl($arr)
 	{
-		if (!$arr["request"]["tf"] && !$arr["request"]["files_from_fld"])
+		/*if (!$arr["request"]["tf"] && !$arr["request"]["files_from_fld"])
 		{
 			$arr["request"]["files_from_fld"] = "/";
-		}
+		}*/
 
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_docs_tbl($t, $arr["request"]);
@@ -285,7 +286,6 @@ class crm_company_docs_impl extends class_base
 		}
 
 		$fld = $this->_init_docs_fld($arr["obj_inst"]);
-
 
 		if ($arr["request"]["do_doc_search"])
 		{
