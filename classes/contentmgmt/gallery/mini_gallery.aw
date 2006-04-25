@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.23 2006/04/25 11:46:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.24 2006/04/25 13:16:14 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -104,6 +104,12 @@ class mini_gallery extends class_base
 		{
 			$rows = $img_c;
 			$cols = 1;
+		}
+		else
+		if ($ob->prop("rows"))
+		{
+			$rows = $ob->prop("rows");
+			$cols = $ob->prop("cols");
 		}
 		else
 		{
