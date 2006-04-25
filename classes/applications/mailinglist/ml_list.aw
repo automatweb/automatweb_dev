@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.72 2006/04/25 13:04:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.73 2006/04/25 14:22:14 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1689,6 +1689,7 @@ class ml_list extends class_base
 			$row["subject"] = html::get_change_url($arr["obj_inst"]->id(), array(
 				"group" => "write_mail",
 				"msg_id" => $mail_obj->id(),
+				"status" => $row["status"],
 			), $mail_obj->name());
 			//$row["mid"] = $mail_obj->name();
 			if (!$row["patch_size"])
@@ -1696,7 +1697,6 @@ class ml_list extends class_base
 				$row["patch_size"] = t("kõik");
 			};
 			$row["delay"]/=60;
-			
 			$row["status"] = html::href(array(
 				"url" => $this->mk_my_orb("change", array(
 					"group" => "mail_report", 
@@ -2298,7 +2298,6 @@ class ml_list extends class_base
 		));
 		if (is_oid($arr["request"]["msg_id"]))
 		{
-
 			$msg_obj = new object($arr["request"]["msg_id"]);
 			$arr["obj_inst"]->set_prop("write_user_folder", $msg_obj->meta("list_source"));
 		}
@@ -2439,17 +2438,22 @@ class ml_list extends class_base
 		$msg_data["mto"] = $arr["obj_inst"]->id();
 		$folder = $arr["obj_inst"]->prop("msg_folder");
 		$mail_id = $msg_data["id"];
-		if(!is_oid($msg_data["id"]) || !$this->can("view", $msg_data["id"]))
+		if(is_oid($msg_data["id"]) && $this->can("view", $msg_data["id"]))
+		{
+			$status = $this->db_fetch_row("SELECT status FROM ml_queue WHERE lid = ".$arr["obj_inst"]->id()." ANd mid = ".$msg_data["id"]);
+			if(!$status["status"])
+			{
+				$msg_obj = obj($msg_data["id"]);
+				$new = 1;
+			}
+		}
+		if(!$new)
 		{
 			$msg_obj = obj();
 			$msg_obj->set_parent((!empty($folder) ? $folder : $arr["obj_inst"]->parent()));
 			$msg_obj->set_class_id(CL_MESSAGE);
 			$msg_obj->save();
 			$msg_data["id"] = $msg_obj->id();
-		}
-		else
-		{
-			$msg_obj = obj($msg_data["id"]);
 		}
 		$tpl = $msg_data["template_selector"];
 		$msg_obj->set_meta("list_source", $arr["obj_inst"]->prop("write_user_folder"));
@@ -2470,7 +2474,6 @@ class ml_list extends class_base
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		$message_id = $writer->submit($msg_data);
-		
 		
 		$sender = $msg_obj->prop("mfrom");
 		
