@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.11 2006/04/21 12:45:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.12 2006/04/25 06:35:21 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -746,7 +746,6 @@ class crm_company_webview extends class_base
 			{
 				$value = join(', ', $value);
 			}
-
 			if (!empty($value))
 			{
 				$this->vars(array(

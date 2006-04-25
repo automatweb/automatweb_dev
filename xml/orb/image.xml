@@ -43,5 +43,13 @@
 			</function>
 		</action>
 
+		<action name="fetch_image_tag_for_doc">
+			<function name="fetch_image_tag_for_doc">
+				<arguments>
+					<required name="id" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

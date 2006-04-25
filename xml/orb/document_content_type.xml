@@ -3,4 +3,3 @@
 	<class name="document_content_type" folder="contentmgmt" extends="class_base">
 	</class>
 </orb>
-		

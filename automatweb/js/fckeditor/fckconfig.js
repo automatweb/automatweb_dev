@@ -75,6 +75,10 @@ FCKConfig.IgnoreEmptyParagraphValue = true ;
 FCKConfig.PreserveSessionOnFileBrowser = false ;
 FCKConfig.FloatingPanelsZIndex = 10000 ;
 
+
+FCKConfig.Plugins.Add( 'awfileupload', 'en' ) ;
+FCKConfig.Plugins.Add( 'awimageupload', 'en' ) ;
+
 FCKConfig.ToolbarSets["aw"] = [
        ['Cut','Copy','Paste','PasteText','PasteWord'],
        ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],
@@ -82,7 +86,7 @@ FCKConfig.ToolbarSets["aw"] = [
        ['OrderedList','UnorderedList','-','Outdent','Indent'],
        ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
        ['Link','Unlink','Anchor'],
-       ['Image','Table'],
+       ['awimageupload','Table'],
        ['Style']
 ] ;
 

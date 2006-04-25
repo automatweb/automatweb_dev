@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.158 2006/04/17 10:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.159 2006/04/25 06:35:18 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -734,8 +734,6 @@ class image extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
-
 			case "newwindow":
 			case "no_print":
 				$retval = PROP_IGNORE;
@@ -784,6 +782,11 @@ class image extends class_base
 
 			case "file":
 				$prop["value"] = image::make_img_tag_wl($arr["obj_inst"]->id());
+				if (is_oid($arr["obj_inst"]->id()))
+				{
+					$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
+					$prop["value"] .= "&nbsp;&nbsp;<a href='#' onClick='ct=aw_get_url_contents(\"$url\");FCK=window.parent.opener.FCK;FCK.Focus();FCK.InsertHtml(ct);'>Paiguta dokumenti</a>";
+				}
 				break;
 			case "file2":
 				$url = $this->get_url($arr["obj_inst"]->prop($prop["name"]));
@@ -829,7 +832,6 @@ class image extends class_base
 					$retval = PROP_IGNORE;
 				};
 				break;
-
 		};
 
 		return $retval;
@@ -1553,6 +1555,16 @@ class image extends class_base
 	{
 		$ret = basename($fn);
 		return aw_ini_get("site_basedir")."/files/".$ret{0}."/".$ret;
+	}
+
+	/**
+		@attrib name=fetch_image_tag_for_doc
+		@param id required
+	**/
+	function fetch_image_tag_for_doc($arr)
+	{
+		$s = $this->parse_alias(array("alias" => array("target" => $arr["id"])));
+		die($s["replacement"]);
 	}
 }
 ?>
