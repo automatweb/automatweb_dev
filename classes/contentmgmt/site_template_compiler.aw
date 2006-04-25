@@ -176,6 +176,16 @@ class site_template_compiler extends aw_template
 				$this->menu_areas[$area]["levels"][$level]["no_image_tpl"] = 1;
 			}
 
+			if ($this->is_parent_tpl("HAS_COMMENT", $tpl) || $this->is_template($tpl.".HAS_COMMENT"))
+			{
+				$this->menu_areas[$area]["levels"][$level]["has_comment_tpl"] = 1;
+			}
+			if ($this->is_parent_tpl("NO_COMMENT", $tpl) || $this->is_template($tpl.".NO_COMMENT"))
+			{
+				$this->menu_areas[$area]["levels"][$level]["no_comment_tpl"] = 1;
+			}
+
+
 			if ($this->is_parent_tpl("HAS_LUGU", $tpl) || $this->is_template($tpl.".HAS_LUGU"))
 			{
 				$this->menu_areas[$area]["levels"][$level]["has_lugu"] = 1;
@@ -611,6 +621,8 @@ class site_template_compiler extends aw_template
 						"params" => array(
 							"tpl" => $cur_tpl_fqn,
 							"has_image_tpl" => $ldat["has_image_tpl"],
+							"has_comment_tpl" => $ldat["has_comment_tpl"],
+							"no_comment_tpl" => $ldat["no_comment_tpl"],
 							"no_image_tpl" => $ldat["no_image_tpl"],
 						)
 					);
@@ -622,6 +634,8 @@ class site_template_compiler extends aw_template
 						"tpl" => $cur_tpl_fqn,
 						"has_image_tpl" => $ldat["has_image_tpl"],
 						"no_image_tpl" => $ldat["no_image_tpl"],
+						"has_comment_tpl" => $ldat["has_comment_tpl"],
+						"no_comment_tpl" => $ldat["no_comment_tpl"],
 						"a_parent" => $adat["parent"],
 						"level" => $level,
 						"has_prev_link" => $ldat["has_prev_link"],
@@ -672,6 +686,8 @@ class site_template_compiler extends aw_template
 						"tpl" => $cur_tpl_fqn,
 						"has_image_tpl" => $ldat["has_image_tpl"],
 						"no_image_tpl" => $ldat["no_image_tpl"],
+						"has_comment_tpl" => $ldat["has_comment_tpl"],
+						"no_comment_tpl" => $ldat["no_comment_tpl"],
 						"grp_p" => $grp_p
 					)
 				);
@@ -1128,6 +1144,55 @@ class site_template_compiler extends aw_template
 			$ret .= $this->_gi()."\$this->vars(array(\n";
 			$this->brace_level++;
 			$ret .= $this->_gi()."\"NO_IMAGE\" => \"\"\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+		}
+
+
+		if ($arr["has_comment_tpl"])
+		{
+			$ret .= $this->_gi()."if (".$o_name."->comment() != \"\")\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\"HAS_COMMENT\" => \$this->parse(\"".$arr["tpl"].".HAS_COMMENT\")\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+			$ret .= $this->_gi()."else\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\"HAS_COMMENT\" => \"\"\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+		}
+
+		if ($arr["no_comment_tpl"])
+		{
+			$ret .= $this->_gi()."if (".$o_name."->comment() == \"\")\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\"NO_COMMENT\" => \$this->parse(\"".$arr["tpl"].".NO_COMMENT\")\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+			$ret .= $this->_gi()."else\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\"NO_COMMENT\" => \"\"\n";
 			$this->brace_level--;
 			$ret .= $this->_gi()."));\n";
 			$this->brace_level--;
