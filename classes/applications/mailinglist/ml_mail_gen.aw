@@ -17,6 +17,8 @@ class ml_mail_gen extends run_in_background
 	function ml_mail_gen()
 	{
 		$this->init();
+		$this->bg_checkpoint_steps = 1000 ;
+		$this->bg_log_steps = 50;
 	}
 	
 	function bg_run_get_log_entry($o)
@@ -78,15 +80,15 @@ class ml_mail_gen extends run_in_background
 
 		$msg = $this->d->msg_get(array("id" => $arr["mail_id"]));
 		$members = $ml_list_inst->get_members($msg);
-		
+		arr($members);
 		$member_list = $members["objects"];
 		$from_file = $members["from_file"];
 		set_time_limit(0);
 	print 'already generated mails:';arr($this->made_mails);
 		
 		foreach($members as $member)
-		{//arr($member->prop("mail"));arr($this->mails_to_gen);
-			if(in_array($member["mail"], $this->made_mails))
+		{arr($member["mail"]);
+			if(array_key_exists($member["mail"], $this->made_mails))
 			{
 				continue;
 			}
@@ -110,7 +112,7 @@ class ml_mail_gen extends run_in_background
 		{
 			$addr = explode("<" , $w["target"]);
 			$address = explode(">" , $addr[1]);
-			$this->made_mails[] = $address[0];
+			$this->made_mails[$address[0]] = $address[0];
 		}
 		$this->make_send_list($o);
 	}
@@ -196,6 +198,7 @@ class ml_mail_gen extends run_in_background
 		$qid = $arr["qid"];
 		$target = $arr["name"] . " <" . $arr["mail"] . ">";
 		$this->quote($target);
+	print $target;
 		$mid = $arr["mail_id"];
 		// there is an additional field mail_sent in that table with a default value of 0
 		$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom,qid,target) VALUES ('$mid','$member','".aw_global_get("uid")."','$lid','".time()."','$vars','$message','$subject','$mailfrom','$qid','$target')");

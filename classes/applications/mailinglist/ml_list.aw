@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.71 2006/04/21 15:07:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.72 2006/04/25 13:04:07 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -358,7 +358,7 @@ class ml_list extends class_base
 		$_patch_size = $patch_size;
 		$count = 0;
 		$this->list_id = $list_id;
-		$this->get_members(array("id" => $id));
+		$this->get_members(array("id" => $id, "no_return" => 1));
 		$count = $this->member_count;
 		// mark the queue as "processing" - 5
 		$this->db_query("INSERT INTO ml_queue (lid,mid,gid,uid,aid,status,start_at,last_sent,patch_size,delay,position,total)
@@ -1765,26 +1765,34 @@ class ml_list extends class_base
 		{
 			$column = explode($separator , $row);
 			if(!(strlen($column[0]) > 0) || !(strlen($column[1]) > 5)) continue;
-			$name = trim($column[0]);
-			if($comb)
+			$mail = trim($column[1]);
+			if(!$no_return)
 			{
-				$name = "".trim($column[0])." &lt;".trim($column[1])."&gt;";
+				if(!(array_key_exists($mail , $already_found)))
+				{
+					if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
+					{
+						$name = trim($column[0]);
+						if($comb)
+						{
+							$name = "".$name." &lt;".$mail."&gt;";
+						}
+						$ret[]  = array(
+							"parent" => $file_data["id"],
+							"name" => $name,
+							"mail" => $mail,
+							"parent_name" => $file_data["name"],
+						);
+					}
+					$cnt++;
+//					if(!$all) $already_found[] = $mail;
+				}
 			}
-			if(!(in_array(trim($column[1]) , $already_found)))
-			{
-				if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
-				$ret[]  = array(
-					"parent" => $file_data["id"],
-					"name" => $name,
-					"mail" => trim($column[1]),
-					"parent_name" => $file_data["name"],
-				);
-				$cnt++;
-				if(!$all) $already_found[] = trim($column[1]);
-			}			
+			if(!$all) $already_found[$mail] = $mail;
 		}
 		$this->already_found = $already_found;
-		$this->member_count= $cnt;
+		if(!$all)$this->member_count = sizeof($already_found);
+		else $this->member_count= $cnt;
 		return $ret;
 	}
 
@@ -1793,7 +1801,6 @@ class ml_list extends class_base
 		$data = explode('&lt;' , $arr["name"]);
 		if($arr["result"] == "name") return trim($data[0]);
 		if($arr["result"] == "email") return trim($data[1], "&gt;");
-		
 	}
 
 	/**
@@ -1802,6 +1809,8 @@ class ml_list extends class_base
 		message oid or mailinglist oid
 	@param all optional type=int
 		if 1, then return all member dublicates also
+	@param no_return optional type=int
+		if 1, then returns nothing... if you need only a number of members
 	@returns array
 	@comment
 		if the source is file, then parent_name is set
@@ -1872,7 +1881,7 @@ class ml_list extends class_base
 				$this->db_query($q);
 				while($row = $this->db_next())
 				{
-					if(!(in_array($row["mail"] , $already_found)))
+					if(!(array_key_exists($row["mail"] , $already_found)))
 					{
 						$ret[] = array(
 							"oid" 		=> $row["oid"],
@@ -1881,8 +1890,8 @@ class ml_list extends class_base
 							"mail"		=> $row["mail"]
 						);
 						if(!($to > 1))$cnt++;
-					if(!$all) $already_found[] = $data["email"];
 					}
+					if(!$all) $already_found[$row["mail"]] = $row["mail"];
 				}
 			}
 			elseif ($source_obj->class_id() == CL_GROUP)
@@ -1900,7 +1909,7 @@ class ml_list extends class_base
 					}
 					if($email->prop("name")) $name = $email->prop("name");
 					else $name = $member->name();
-					if(!(in_array($email->prop("mail") , $already_found)))
+					if(!(array_key_exists($email->prop("mail") , $already_found)))
 					{
 						if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
 						$ret[] = array(
@@ -1910,15 +1919,15 @@ class ml_list extends class_base
 							"mail"		=> $email->prop("mail"),
 						);
 						$cnt++;
-					if(!$all) $already_found[] = $data["email"];
-					}				
+					}
+					if(!$all) $already_found[$email->prop("mail")] = $email->prop("mail");
 				}
 			}
 			elseif($source_obj->class_id() == CL_USER)
 			{
 				if($email = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 				{
-					if(!(in_array($email->prop("mail") , $already_found)))
+					if(!(array_key_exists($email->prop("mail") , $already_found)))
 					{
 						if(!($to > 1) || (!($cnt < $from) && ($to > $cnt)))
 						$ret[] = array(
@@ -1928,18 +1937,25 @@ class ml_list extends class_base
 							"mail"		=> $email->prop("mail"),
 						);
 						$cnt++;
-					if(!$all) $already_found[] = $data["email"];
-					}				
-				
+					}
+					if(!$all) $already_found[$email->prop("mail")] = $email->prop("mail");
 				}
 			}
 			elseif($source_obj->class_id() == CL_FILE)
 			{
-				$ret = $this->get_members_from_file(array("id" => $source_obj->id() , "ret" => $ret , "cnt" => $cnt , "all" => $all , "already_found" => $aready_found , "from" => $from , "to" => $to));
+				$ret = $this->get_members_from_file(array("id" => $source_obj->id() ,
+					"ret" => $ret ,
+					"cnt" => $cnt ,
+					"all" => $all ,
+					"already_found" => $aready_found ,
+					"from" => $from ,
+					"to" => $to,
+					"no_return" => $no_return));
 				$cnt = $this->member_count;
 				$already_found = $this->already_found;
 			}
 		}
+		if(!$all)$cnt = sizeof($already_found);
 		$this->member_count = $cnt;
 		return $ret;
 	}
