@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.22 2006/04/19 11:41:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.23 2006/04/25 11:46:28 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -107,7 +107,7 @@ class mini_gallery extends class_base
 		}
 		else
 		{
-			$rows = $img_c / $ob->prop("cols");
+			$rows = (int)($img_c / $ob->prop("cols"));
 			$cols = $ob->prop("cols");
 		}
 		$img = $images->begin(); 
@@ -289,7 +289,8 @@ class mini_gallery extends class_base
 
 	function _do_pageselector($ob, $img_c, $rows, $cols)
 	{
-		if ($rows * $cols >= $img_c)
+		$rows = (int)$rows;
+		if ((int)$rows * $cols >= $img_c)
 		{
 			return;
 		}
