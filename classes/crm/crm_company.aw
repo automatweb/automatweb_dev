@@ -782,7 +782,7 @@ default group=org_objects
 	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no save=no
 	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no save=no
 	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no save=no
-	@groupinfo contacts_edit caption="Toimeta isikuid" parent=people submit=no 
+	@groupinfo contacts_edit caption="Toimeta isikuid" parent=people submit=no
 
 @groupinfo resources caption="Ressursid"  submit=no save=no
 @groupinfo contacts caption="Kontaktid"
@@ -1509,8 +1509,9 @@ class crm_company extends class_base
 				return $cust_impl->$fn($arr);
 
 			case "customer_search_keywords":
-				$data["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=keywords_autocomplete_source";
+				$data["autocomplete_source_method"] = "keywords_autocomplete_source";
 				$data["autocomplete_params"] = array("customer_search_keywords");
+				$data["autocomplete_delimiters"] = array(",");
 
 			case "customer_search_name":
 			case "customer_search_reg":
@@ -1959,15 +1960,15 @@ class crm_company extends class_base
 			case "cedit_table":
 				if ($arr["request"]["sbt_data"])
 				{
-					$dat = explode(",",$arr["request"]["sbt_data"]); 
-					// add these people to the section 
+					$dat = explode(",",$arr["request"]["sbt_data"]);
+					// add these people to the section
 					$r = $arr["request"];
 					$r["check"] = $dat;
 					$this->save_search_results($r);
 				}
 				if ($arr["request"]["sbt_data2"] && $arr["request"]["unit"])
 				{
-					$dat = explode(",",$arr["request"]["sbt_data2"]); 
+					$dat = explode(",",$arr["request"]["sbt_data2"]);
 					// add the professions to the current unit
 					$unit = obj($arr["request"]["unit"]);
 					foreach($dat as $prof)
@@ -4969,7 +4970,7 @@ class crm_company extends class_base
 		$option_data = array(
 			"error" => &$error,// recommended
 			"errorstring" => &$errorstring,// optional
-			"options" => &$autocomplete_options,// required
+			"options" => &$keywords,// required
 			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
 		);
 
