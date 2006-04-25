@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.177 2006/04/25 06:29:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.178 2006/04/25 12:32:12 kristo Exp $
 
 /*
 
@@ -1279,6 +1279,11 @@ class site_show extends class_base
 				if ($dat["image_id"])
 				{
 					$dat["url"] = $this->image->get_url_by_id($dat["image_id"]);
+				}
+
+				if ($dat["url"] == "")
+				{
+					continue;
 				}
 
 				if ($smi == "")
