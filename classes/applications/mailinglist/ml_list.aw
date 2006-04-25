@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.73 2006/04/25 14:22:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.74 2006/04/25 14:43:29 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2404,7 +2404,14 @@ class ml_list extends class_base
 			"type" => "hidden",
 			"value" => $msg_obj->id(),
 		);
-
+		
+		$filtered_props["save_as_new"] = array(
+			"name" => "save_as_new",
+			"type" => "checkbox",
+			"ch_value" => 1,
+			"caption" => t("Salvesta uue kirjana"),
+		);
+		
 		$filtered_props["aliasmgr"] = array(
 			"name" => "aliasmgr",
 			"type" => "aliasmgr",
@@ -2440,11 +2447,14 @@ class ml_list extends class_base
 		$mail_id = $msg_data["id"];
 		if(is_oid($msg_data["id"]) && $this->can("view", $msg_data["id"]))
 		{
-			$status = $this->db_fetch_row("SELECT status FROM ml_queue WHERE lid = ".$arr["obj_inst"]->id()." ANd mid = ".$msg_data["id"]);
-			if(!$status["status"])
+			if(!$arr["request"]["emb"]["save_as_new"])
 			{
-				$msg_obj = obj($msg_data["id"]);
-				$new = 1;
+				$status = $this->db_fetch_row("SELECT status FROM ml_queue WHERE lid = ".$arr["obj_inst"]->id()." ANd mid = ".$msg_data["id"]);
+				if(!$status["status"])
+				{
+					$msg_obj = obj($msg_data["id"]);
+					$new = 1;
+				}
 			}
 		}
 		if(!$new)
