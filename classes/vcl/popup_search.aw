@@ -527,9 +527,11 @@ class popup_search extends aw_template
 			$ol = new object_list($filter);
 
 			$elname = $arr["pn"];
+			$elname_n = $arr["pn"];
 			if ($arr["multiple"] == 1)
 			{
 				$elname .= "[]";
+				$elname_n .= "][]";
 			}
 			classload("core/icons");
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
@@ -548,7 +550,7 @@ class popup_search extends aw_template
 					"select_this" => html::href(array(
 						"url" => "javascript:void(0)",
 						"caption" => t("Vali see"),
-						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);if (el.options) {sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;} else {el.value = ".$o->id().";} window.opener.document.changeform.submit();window.close()"
+						"onClick" => "el=aw_get_el(\"$elname\",window.opener.document.changeform);if (!el) { el=aw_get_el(\"$elname_n\", window.opener.document.changeform);} if (el.options) {sz= el.options.length;el.options.length=sz+1;el.options[sz].value=".$o->id().";el.options[sz].selected = 1;} else {el.value = ".$o->id().";} window.opener.document.changeform.submit();window.close()"
 					)),
 					"icon" => html::img(array("url" => icons::get_icon_url($o->class_id())))
 				);
