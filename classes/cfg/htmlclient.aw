@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.145 2006/04/27 11:05:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.146 2006/04/27 11:08:28 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -918,7 +918,7 @@ $s = '
 
            for (i=0;i<pwd.length;i++) {
               if (taste == pwd.charCodeAt(i)) {
-				aw_popup_scroll("'.$url.'", "quick_task_entry", 500,400);
+				aw_popup_scroll("'.$url.'", "quick_task_entry", 600,600);
 		         break;
               }
            }
