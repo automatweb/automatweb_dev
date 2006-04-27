@@ -8,7 +8,6 @@
             <reltype>RELTYPE_IMG_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
-            <parent>this.parent</parent>
             <caption>Piltide kataloog</caption>
       </property>
       <property>
@@ -61,6 +60,24 @@
             <field>zip_file</field>
             <caption>Uploadi ZIP fail</caption>
       </property>
+      <property>
+            <name>mg_tb</name>
+            <table>objects</table>
+            <group>manage</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mg_tb</field>
+      </property>
+      <property>
+            <name>mg_table</name>
+            <table>objects</table>
+            <group>manage</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>mg_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_MINI_GALLERY</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -70,6 +87,10 @@
             <import>
                   <caption>Import</caption>
             </import>
+            <manage>
+                  <caption>Halda pilte</caption>
+                  <submit>no</submit>
+            </manage>
       </groupinfo>
       <reltypes>
             <IMG_FOLDER>

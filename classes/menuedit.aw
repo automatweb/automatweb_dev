@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.362 2006/04/19 11:41:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.363 2006/04/27 08:14:37 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -319,7 +319,19 @@ class menuedit extends aw_template
 			}
 			else
 			{
-				$set_lang_id = $_obj->lang_id();
+				if ($class_id == CL_DOCUMENT)
+				{
+					$pt = obj($_obj->parent());
+					if (!($pt->prop("content_all_langs") && $pt->prop("type") == MN_CLIENT))
+					{
+						$set_lang_id = $_obj->lang_id();
+					}
+				}
+				else
+				{
+					$set_lang_id = $_obj->lang_id();
+				}
+
 				// we do document hit count logging here, because
 				// we know if it's a document or not here
 				if (1 == aw_ini_get("document_statistics.use") && $realsect != aw_ini_get("frontpage") && ($class_id == CL_DOCUMENT || $class_id == CL_BROTHER_DOCUMENT || $class_id == CL_PERIODIC_SECTION))

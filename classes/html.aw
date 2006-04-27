@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.108 2006/04/25 09:58:20 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.109 2006/04/27 08:14:37 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -1026,7 +1026,7 @@ class html extends aw_template
 	@comments
 		returns the url where can change the given object in AW
 	@example
-		$url = html::get_change_url($object);
+		$url = html::obj_change_url($object);
 	**/
 	function obj_change_url($o, $caption = NULL)
 	{
@@ -1054,6 +1054,47 @@ class html extends aw_template
 		return html::get_change_url($o->id(), array("return_url" => get_ru()), $caption === null ? parse_obj_name($o->name()) : $caption);
 	}
 
+	/**
+	@attrib api=1 params=pos
+		
+	@param o required type=object
+		object to be changed
+	@param caption optional type=string
+		the text user can see,(objects name, or "(nimetu)" if the object has no name) if set, returns html href tags.
+	@returns string/url or string/html href
+	
+	@comments
+		returns the url where can change the given object in AW
+	@example
+		$url = html::obj_view_url($object);
+	**/
+	function obj_view_url($o, $caption = NULL)
+	{
+		if (is_array($o))
+		{
+			$res = array();
+			foreach($o as $id)
+			{
+				$res[] = html::obj_change_url($id);
+			}
+			return join(", ", $res);
+		}
+
+		if (!is_object($o))
+		{
+			if ($this->can("view", $o))
+			{
+				$o = obj($o);
+			}
+			else
+			{
+				return "";
+			}
+		}
+		return html::get_change_url($o->id(), array("action" => "view", "return_url" => get_ru()), $caption === null ? parse_obj_name($o->name()) : $caption);
+	}
+
+	
 	/**
 	@attrib api=1 params=pos
 

@@ -136,7 +136,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <default>Eesti</default>
-            <caption>Riik </caption>
+            <caption>Riik</caption>
       </property>
       <property>
             <name>cust_mgr</name>

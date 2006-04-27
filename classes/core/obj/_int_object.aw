@@ -1372,7 +1372,6 @@ class _int_object
 			"parent" => $parent,
 			"brother_of" => $this->obj["oid"],
 			"site_id" => array(),
-			"lang_id" => array()
 		));
 		if ($ol->count() > 0)
 		{

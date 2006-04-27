@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.72 2006/04/24 11:46:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.73 2006/04/27 08:14:38 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -2166,7 +2166,7 @@ class vcl_table extends aw_table
 	function data_from_ol($ol, $args = array())
 	{
 		$clss = aw_ini_get("classes");
-
+		$u = get_instance(CL_USER);
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$data = array("oid" => $o->id());
@@ -2182,9 +2182,31 @@ class vcl_table extends aw_table
 					$val = $o->createdby();
 				}
 				else
+				if ($v["name"] == "createdby_person")
+				{
+					$val = $o->createdby();
+					// get person for user
+					if ($val != "")
+					{
+						$val = $u->get_person_for_uid($val);
+						$val = $val->name();
+					}
+				}
+				else
 				if ($v["name"] == "modifiedby")
 				{
 					$val = $o->modifiedby();
+				}
+				else
+				if ($v["name"] == "modifiedby_person")
+				{
+					$val = $o->modifiedby();
+					// get person for user
+					if ($val != "")
+					{
+						$val = $u->get_person_for_uid($val);
+						$val = $val->name();
+					}
 				}
 				else
 				if ($v["name"] == "created")

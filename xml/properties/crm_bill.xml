@@ -96,6 +96,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_recieved</field>
+            <default>-1</default>
             <caption>Laekumiskuup&amp;amp;auml;ev</caption>
       </property>
       <property>

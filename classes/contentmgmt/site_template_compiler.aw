@@ -83,7 +83,7 @@ class site_template_compiler extends aw_template
 			29 => "OP_LIST_INIT_END"
 		);
 
-		$this->id_func = (aw_ini_get("menuedit.show_real_location") == 1 ? "brother_of" : "id");
+		$this->id_func = (aw_ini_get("menuedit.show_real_location") != 1 ? "brother_of" : "id");
 	}
 
 	function compile($path, $tpl, $mdefs = NULL, $no_cache = false)

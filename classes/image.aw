@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.159 2006/04/25 06:35:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.160 2006/04/27 08:14:37 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1357,7 +1357,7 @@ class image extends class_base
 				$this->do_resize_file_in_fs($bigf, $conf, "");
 			}
 		}
-	
+
 		// now small
 		$smallf = $o->prop("file");
 		if (!$smallf)
@@ -1387,6 +1387,7 @@ class image extends class_base
 				$ctr_i->eval_controller_ref($ctr->id(), $conf, $smallf, $smallf);
 			}
 		}
+
 	}
 
 	function do_resize_file_in_fs($file, $conf, $prefix)
@@ -1404,6 +1405,7 @@ class image extends class_base
 			"w" => $i_width, 
 			"h" => $i_height
 		));
+
 		if ($xyd["is_subimage"] && $xyd["si_width"] && $xyd["si_height"])
 		{
 			if ($conf->prop("resize_before_crop"))

@@ -157,22 +157,20 @@
       </property>
       <property>
             <name>transaction_date</name>
-            <table>objects</table>
+            <table>realestate_property</table>
             <group>grp_main</group>
             <type>date_select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <default>-1</default>
+            <field>transaction_date</field>
             <caption>Tehingu kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>transaction_closed</name>
-            <table>objects</table>
+            <table>realestate_property</table>
             <group>grp_main</group>
             <type>checkbox</type>
-            <field>meta</field>
-            <method>serialize</method>
             <ch_value>1</ch_value>
+            <field>transaction_closed</field>
             <caption>Tehing s&amp;otilde;lmitud</caption>
       </property>
       <property>

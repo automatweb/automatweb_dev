@@ -1,33 +1,43 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.24 2006/04/25 13:16:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.25 2006/04/27 08:14:38 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
 @classinfo syslog_type=ST_MINI_GALLERY relationmgr=yes no_status=1
 
 @default table=objects
+
 @default group=general
 
-@property folder type=relpicker reltype=RELTYPE_IMG_FOLDER field=meta method=serialize parent=this.parent
-@caption Piltide kataloog
+	@property folder type=relpicker reltype=RELTYPE_IMG_FOLDER field=meta method=serialize 
+	@caption Piltide kataloog
 
-@property cols type=textbox size=5 field=meta method=serialize default=2
-@caption Tulpi
+	@property cols type=textbox size=5 field=meta method=serialize default=2
+	@caption Tulpi
 
-@property rows type=textbox size=5 field=meta method=serialize
-@caption Ridu
+	@property rows type=textbox size=5 field=meta method=serialize
+	@caption Ridu
 
-@property comments type=checkbox field=flags method=bitmask ch_value=1
-@caption Pildid kommenteeritavad
+	@property comments type=checkbox field=flags method=bitmask ch_value=1
+	@caption Pildid kommenteeritavad
 
-@property style type=relpicker reltype=RELTYPE_STYLE field=meta method=serialize
-@caption Piltide stiil
+	@property style type=relpicker reltype=RELTYPE_STYLE field=meta method=serialize
+	@caption Piltide stiil
 
-@groupinfo import caption="Import"
 @default group=import
 
-@property zip_file type=fileupload store=no
-@caption Uploadi ZIP fail
+	@property zip_file type=fileupload store=no
+	@caption Uploadi ZIP fail
+
+@default group=manage
+
+	@property mg_tb type=toolbar no_caption=1 store=no
+
+	@property mg_table type=table no_caption=1 store=no
+
+@groupinfo import caption="Import"
+@groupinfo manage caption="Halda pilte" submit=no
+
 
 @reltype IMG_FOLDER value=1 clid=CL_MENU
 @caption Piltide kataloog
@@ -53,6 +63,13 @@ class mini_gallery extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "mg_tb":
+				$this->_mg_tb($arr);
+				break;
+
+			case "mg_table":
+				$this->_mg_table($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -98,6 +115,11 @@ class mini_gallery extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
+
+		if (!$images->count())
+		{
+			return;
+		}
 
 		$img_c = $images->count();
 		if ($ob->prop("cols") == 0)
@@ -356,4 +378,133 @@ class mini_gallery extends class_base
 			$arr["obj_inst"]->save();
 		}
 	}
-}?>
+
+	function _mg_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Lisa uus pilt'),
+			'url' => html::get_new_url(CL_IMAGE, $arr["obj_inst"]->prop("folder"), array("return_url" => get_ru()))
+		));
+		$tb->add_button(array(
+			'name' => 'save',
+			'img' => 'save.gif',
+			'tooltip' => t('Salvesta pildid'),
+			'action' => 'save_image_list',
+		));
+		$tb->add_button(array(
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta valitud pildid'),
+			'action' => 'delete_images',
+			'confirm' => t("Kas oled kindel et soovid valitud pildid kustudada?")
+		));
+	}
+
+	function _init_mg_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => t("Muutja"),
+			"align" => "center",
+		));
+
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"align" => "center",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _mg_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_mg_table($t);
+
+		$images = new object_list(array(
+			"class_id" => CL_IMAGE,
+			"parent" => $arr["obj_inst"]->prop("folder"),
+			"sort_by" => "objects.jrk",
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($images->arr() as $im)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($im),
+				"ord" => html::textbox(array(
+					"name" => "ord[".$im->id()."]",
+					"value" => $im->ord(),
+					"size" => 5
+				)),
+				"modifiedby" => $im->modifiedby(),
+				"modified" => $im->modified(),
+				"oid" => $im->id(),
+				"h_ord" => $im->ord()
+			));
+		}
+		$t->set_sortable(false);
+	}
+
+	/**
+		@attrib name=save_image_list
+	**/
+	function save_image_list($arr)
+	{
+		$o = obj($arr["id"]);
+		$images = new object_list(array(
+			"class_id" => CL_IMAGE,
+			"parent" => $o->prop("folder"),
+			"sort_by" => "objects.jrk",
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($images->arr() as $im)
+		{
+			if ($arr["ord"][$im->id()] != $im->ord())
+			{
+				$im->set_ord($arr["ord"][$im->id()]);
+				$im->save();
+			}
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=delete_images
+	**/
+	function delete_images($arr)
+	{
+		object_list::iterate_list($arr["sel"], "delete");
+		return $arr["post_ru"];
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
+
+}
+?>

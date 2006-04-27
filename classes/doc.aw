@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.125 2006/04/17 10:13:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.126 2006/04/27 08:14:37 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -695,7 +695,7 @@ class doc extends class_base
 			$obj_inst->set_create_new_version();
 		}
 		else
-		if (aw_global_get("uid") != $modby && !$this->_save_versions && is_oid($obj_inst->id()))
+		if (aw_global_get("uid") != $modby && !$this->_save_versions && is_oid($obj_inst->id()) && aw_ini_get("config.object_versioning") == 1)
 		{
 			// if the user is different, then create new version
 			$obj_inst->set_create_new_version();

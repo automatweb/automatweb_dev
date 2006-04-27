@@ -4,8 +4,8 @@
 		<action name="select_folder">
 			<function name="select_folder">
 				<arguments>
-					<required name="pn" />
-					<optional name="fld" />
+					<required name="pn" type="String" />
+					<optional name="fld" type="string" />
 				</arguments>
 			</function>
 		</action>
