@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.6 2006/04/21 11:27:30 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.7 2006/04/27 11:16:05 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -1134,6 +1134,11 @@ class realestate_add extends class_base
 						"to" => $upload_image['id'],
 						"reltype" => "RELTYPE_REALESTATE_PICTURE",
 					));
+					if($x == 0)
+					{
+						$this->make_icon(array("upload_image" => $upload_image));
+						$realestate_obj->set_prop("picture_icon", $upload_image["id"]);
+					}
 					if(is_oid($existing_pics[$x]))
 					{
 						$realestate_obj->disconnect(array(
@@ -1215,5 +1220,20 @@ class realestate_add extends class_base
 			return aw_url_change_var("level", $level , aw_url_change_var("id", null , $args["return_to"]));
 		}
 	}
+	
+	function make_icon($args)
+	{
+		extract($args);
+		$o = obj($upload_image["id"]);
+		$o->img = get_instance("core/converters/image_convert");
+		$o->img->load_from_file($o->prop("file"));
+		$o->img->resize_simple(100, 100);
+		$image_cl = get_instance(CL_IMAGE);
+		$image_cl->put_file(array(
+			'file' => $o->prop("file"),
+			"content" => $o->img->get(IMAGE_JPEG)
+		));
+	}
+
 }
 ?>

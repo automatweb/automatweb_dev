@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.18 2006/04/21 11:41:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.19 2006/04/27 11:16:05 markop Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -1154,7 +1154,6 @@ class realestate_property extends class_base
 
 				### pictures
 				$i = 1;
-
 				while (isset ($properties["picture" . $i . "_url"]))
 				{
 					$picture = array (
@@ -1296,13 +1295,17 @@ class realestate_property extends class_base
 		$data["docid"] = $this_object_id;
 		$data["extras"] = implode (", ", $extras);
 
+		// "/" oli kuskile vahelt kadunud....
+		$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
+		$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
+		$data["picture_icon_value"] = str_replace("//", "/" , $data["picture_icon_value"]);
+		$data["picture_icon"] = str_replace("//", "/" , $data["picture_icon"]);
+		
 		### parse
 		$this->vars ($data);
 		$res = $this->parse();
 		$this->template_dir = $tmp;
-
 		exit_function("re_property::view");
-
 		return $res;
 	}
 
