@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.46 2006/04/27 12:04:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.47 2006/04/27 12:16:08 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -492,7 +492,7 @@ class crm_call extends class_base
 		{
 			case "new_call_date":
 				$v = date_edit::get_timestamp($data["value"]);
-				if ($v > 600)
+				if ($v > time())
 				{
 					// create a new call from the current one
 					$i = get_instance(CL_CRM_CALL);
