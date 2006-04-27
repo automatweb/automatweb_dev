@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.91 2006/04/20 10:44:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.92 2006/04/27 12:04:37 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -576,6 +576,27 @@ class task extends class_base
 						}						
 						$data['value'].='<br>';
 					}
+
+					$u = get_instance(CL_USER);
+					$cur_co = obj($u->get_current_company());
+					$prms = array(
+						"id" => $arr["obj_inst"]->id(),
+						"pn" => "participants",
+						"clid" => CL_CRM_PERSON,
+						"multiple" => 1,
+					);
+					if ($arr["obj_inst"]->prop("customer.name") != "" || $cur_co->name() != "")
+					{
+						$prms["MAX_FILE_SIZE"] = 1;
+						$prms["s"] = array("search_co" => $arr["obj_inst"]->prop("customer.name").",".$cur_co->name());
+					}
+
+					$url = $this->mk_my_orb("do_search", $prms, "crm_participant_search");
+					$data["value"] .= html::href(array(
+						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+						"title" => t("Otsi")
+					));
 				}
 			break;
 

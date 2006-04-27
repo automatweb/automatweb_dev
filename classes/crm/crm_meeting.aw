@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.65 2006/04/11 10:04:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.66 2006/04/27 12:04:36 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -75,7 +75,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property udefta3 type=textarea user=1 field=meta method=serialize
 @caption User-defined textarea 3
 
-@property content type=textarea cols=60 rows=30 table=documents
+@property content type=textarea cols=80 rows=30 table=documents
 @caption Sisu
 
 @property send_bill type=checkbox ch_value=1 table=planner field=send_bill 
@@ -99,7 +99,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property hr_price type=textbox size=5 field=meta method=serialize 
 @caption Tunni hind
 
-@property summary type=textarea cols=60 rows=30 table=planner field=description
+@property summary type=textarea cols=80 rows=30 table=planner field=description
 @caption Kokkuvõte
 
 @property aliasmgr type=aliasmgr no_caption=1 store=no
@@ -460,8 +460,28 @@ class crm_meeting extends class_base
 						}						
 						$data['value'].='<br>';
 					}
+					$u = get_instance(CL_USER);
+					$cur_co = obj($u->get_current_company());
+					$prms = array(
+						"id" => $arr["obj_inst"]->id(),
+						"pn" => "participants",
+						"clid" => CL_CRM_PERSON,
+						"multiple" => 1,
+					);
+					if ($arr["obj_inst"]->prop("customer.name") != "" || $cur_co->name() != "")
+					{
+						$prms["MAX_FILE_SIZE"] = 1;
+						$prms["s"] = array("search_co" => $arr["obj_inst"]->prop("customer.name").",".$cur_co->name());
+					}
+
+					$url = $this->mk_my_orb("do_search", $prms, "crm_participant_search");
+					$data["value"] .= html::href(array(
+						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+						"title" => t("Otsi")
+					));
 				}
-         break;
+			break;
 
 			case 'task_toolbar' :
 			{

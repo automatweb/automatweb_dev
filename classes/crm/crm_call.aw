@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.45 2006/04/17 13:06:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.46 2006/04/27 12:04:36 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -402,6 +402,27 @@ class crm_call extends class_base
 						}
 						$data['value'].='<br>';
 					}
+
+					$u = get_instance(CL_USER);
+					$cur_co = obj($u->get_current_company());
+					$prms = array(
+						"id" => $arr["obj_inst"]->id(),
+						"pn" => "participants",
+						"clid" => CL_CRM_PERSON,
+						"multiple" => 1,
+					);
+					if ($arr["obj_inst"]->prop("customer.name") != "" || $cur_co->name() != "")
+					{
+						$prms["MAX_FILE_SIZE"] = 1;
+						$prms["s"] = array("search_co" => $arr["obj_inst"]->prop("customer.name").",".$cur_co->name());
+					}
+
+					$url = $this->mk_my_orb("do_search", $prms, "crm_participant_search");
+					$data["value"] .= html::href(array(
+						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+						"title" => t("Otsi")
+					));
 				}
 			break;
 
@@ -507,10 +528,34 @@ class crm_call extends class_base
 			));
 		}
 
+		foreach(explode(",", $_POST["participants"]) as $person)
+		{
+			if ($this->can("view", $person))
+			{
+				$this->add_participant($arr["obj_inst"], obj($person));
+			}
+		}
+
 		$pl = get_instance(CL_PLANNER);
 		$pl->post_submit_event($arr["obj_inst"]);
+
 	}
 
+
+	function add_participant($task, $person)
+	{
+		$pl = get_instance(CL_PLANNER);
+		$person->connect(array(
+			"to" => $task->id(),
+			"reltype" => "RELTYPE_PERSON_CALL"
+		));
+
+		// also add to their calendar
+		if (($cal = $pl->get_calendar_for_person($person)))
+		{
+			$pl->add_event_to_calendar(obj($cal), $task);
+		}
+	}
 
 	function cb_participant_selector($arr)
 	{
@@ -572,6 +617,7 @@ class crm_call extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["participants"] = 0;
 		if ($_GET["action"] == "new")
 		{
 			$arr["add_to_cal"] = $_GET["add_to_cal"];
