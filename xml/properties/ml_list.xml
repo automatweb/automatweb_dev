@@ -220,7 +220,7 @@
             <method>serialize</method>
             <group>member_list</group>
             <type>textbox</type>
-            <caption>Failis nime ja mailiaadressi eraldaja (tab = /t)</caption>
+            <caption>Failis nime ja mailiaadressi eraldaja (tab=/t)</caption>
       </property>
       <property>
             <name>def_user_folder</name>

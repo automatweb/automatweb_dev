@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.144 2006/04/25 06:35:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.145 2006/04/27 11:05:33 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -887,45 +887,19 @@ class htmlclient extends aw_template
 					aw_ini_get("baseurl")."/orb.aw?class=users&action=logout" => t("Logi v&auml;lja")
 				));
 
-/*$s = "   <script>  
-if( document.captureEvents && Event.KEYUP ) { document.captureEvents( Event.KEYUP ); }
-document.onkeyup = kpress;
 
-     function kpress(e){
-	if (!e)
-	{
-		e = window.event;
-	}
+$url = html::get_new_url(CL_TASK_QUICK_ENTRY, $_GET["id"]);
+$s = '
 
-
-if( typeof( e.keyCode ) == 'number'  ) {
-    e = e.keyCode;
-  } else if( typeof( e.which ) == 'number' ) {
-    e = e.which;
-  } else if( typeof( e.charCode ) == 'number'  ) {
-    e = e.charCode;
-  } else {
-    return;
-  }
-
-		key2 = String.fromCharCode( e );
-     if (key2==\"x\"){
-			alert(\"X\");
-   }
-   } </script>";
-
-$s = "<span style='display: none;'><input type='button' accesskey='x' onClick='window.location=\"http://www.ee\";'></span>";*/
-
-
-/*
 
 <script language="JavaScript">
 <!--
-        var keyCount = 0, pwd = "qQ";
+        var keyCount = 0, pwd = "xX";
         var naObj = new Array("text","file","password");
 
         function keyCheck(e) {
           var obj = (document.all) ? window.event.srcElement : e.target;
+          //var e = (document.all) ? window.event : e;
           var qOk = true;
           if (obj.type) {
             for (i=0;i<naObj.length;i++) {
@@ -939,18 +913,13 @@ $s = "<span style='display: none;'><input type='button' accesskey='x' onClick='w
         }
 
         function winTrigger(taste) {
+
+
+
            for (i=0;i<pwd.length;i++) {
               if (taste == pwd.charCodeAt(i)) {
-                         if(window.location.protocol == "https:")
-        {
-         window.location="https://www.quelle-international.com/ee/q2r/aktuelles/angebotdesmonats/?EMBPERL_UID=:64f7a7e7e31487c99835a952bbd60710"
-        }
-        else
-        {
-         window.location="http://www.quelle-international.com/ee/q2r/aktuelles/angebotdesmonats/?EMBPERL_UID=:64f7a7e7e31487c99835a952bbd60710"
-        }
-
-                 break;
+				aw_popup_scroll("'.$url.'", "quick_task_entry", 500,400);
+		         break;
               }
            }
         }
@@ -960,13 +929,12 @@ $s = "<span style='display: none;'><input type='button' accesskey='x' onClick='w
         } else {
            document.onkeydown = keyCheck;
         }
-	setTimeout("window.focus()",1000);
 	// -->
 
 
 </script>
 
-*/
+';
 
 				$tp->vars(array(
 					"adds" => $adds
