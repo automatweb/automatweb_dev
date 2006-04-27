@@ -12,8 +12,8 @@ class keyword_selector extends class_base
 		$tp = $arr["prop"];
 		$tp["type"] = "text";
 		
-		$content = $this->_draw_alphabet($arr);
-		$content .= $this->_draw_existing_kws($arr);
+		$content = $this->_draw_existing_kws($arr)."<br><br><br>";
+		$content .= $this->_draw_alphabet($arr);
 
 		$tp["value"] = $content;
 		return array($tp["name"] => $tp);
@@ -74,7 +74,7 @@ class keyword_selector extends class_base
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
-			"align" => "center"
+			"align" => "right"
 		));
 
 		$t->define_field(array(
@@ -86,7 +86,7 @@ class keyword_selector extends class_base
 		$t->define_field(array(
 			"name" => "name_2",
 			"caption" => t("Nimi"),
-			"align" => "center"
+			"align" => "right"
 		));
 
 		$t->define_field(array(
@@ -98,7 +98,7 @@ class keyword_selector extends class_base
 		$t->define_field(array(
 			"name" => "name_3",
 			"caption" => t("Nimi"),
-			"align" => "center"
+			"align" => "right"
 		));
 
 		$t->define_field(array(
@@ -119,7 +119,7 @@ class keyword_selector extends class_base
 		);
 		if (empty($arr["request"]["kw_sel_filt"]))
 		{
-			$arr["request"]["kw_sel_filt"] = "A";
+			$arr["request"]["kw_sel_filt"] = "_all";
 		}
 		if ($arr["request"]["kw_sel_filt"] != "_all")
 		{
@@ -186,7 +186,7 @@ class keyword_selector extends class_base
 	{
 		if (empty($r["kw_sel_filt"]))
 		{
-			$r["kw_sel_filt"] = "A";
+			$r["kw_sel_filt"] = "_all";
 		}
 		$list = array();
 		for($i = ord('A'); $i <= ord('Z'); $i++)
