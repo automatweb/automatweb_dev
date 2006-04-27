@@ -82,6 +82,30 @@ class keyword_selector extends class_base
 			"caption" => t("Vali"),
 			"align" => "center"
 		));
+
+		$t->define_field(array(
+			"name" => "name_2",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sel_2",
+			"caption" => t("Vali"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "name_3",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sel_3",
+			"caption" => t("Vali"),
+			"align" => "center"
+		));
 	}
 
 	function _draw_alphabet($arr)
@@ -101,22 +125,59 @@ class keyword_selector extends class_base
 		{
 			$filt["name"] = $arr["request"]["kw_sel_filt"]."%";
 		}
+		$filt["sort_by"] = "objects.name";
 		$ol = new object_list($filt);
 		$used_kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD)));
 		$used_kws = $this->make_keys($used_kws->ids());
-		foreach($ol->arr() as $kw)
+		$data = array_values($ol->arr());
+		$rows = count($data) / 3;
+
+		$cnt = 0;
+		for($i = 0; $i < $rows; $i++)
 		{
-			$t->define_data(array(
-				"name" => html::obj_change_url($kw),
+			$kw1 = $data[$cnt++];
+			$rowd[$i] = array(
+				"name" => html::obj_change_url($kw1),
 				"sel" => html::checkbox(array(
-					"name" => "kw_sel_".$arr["prop"]["name"]."[".$kw->id()."]",
+					"name" => "kw_sel_".$arr["prop"]["name"]."[".$kw1->id()."]",
 					"value" => 1,
-					"checked" => isset($used_kws[$kw->id()])
+					"checked" => isset($used_kws[$kw1->id()])
 				))
+			);
+		}
+		for($i = 0; $i < $rows; $i++)
+		{
+			$kw1 = $data[$cnt++];
+			if (!$kw1)
+			{
+				continue;
+			}
+			$rowd[$i]["name_2"] = html::obj_change_url($kw1);
+			$rowd[$i]["sel_2"] = html::checkbox(array(
+				"name" => "kw_sel_".$arr["prop"]["name"]."[".$kw1->id()."]",
+				"value" => 1,
+				"checked" => isset($used_kws[$kw1->id()])
 			));
 		}
-		$t->set_default_sortby("name");
-		$t->sort_by();
+		for($i = 0; $i < $rows; $i++)
+		{
+			$kw1 = $data[$cnt++];
+			if (!$kw1)
+			{
+				continue;
+			}
+			$rowd[$i]["name_3"] = html::obj_change_url($kw1);
+			$rowd[$i]["sel_3"] = html::checkbox(array(
+				"name" => "kw_sel_".$arr["prop"]["name"]."[".$kw1->id()."]",
+				"value" => 1,
+				"checked" => isset($used_kws[$kw1->id()])
+			));
+		}
+
+		foreach($rowd as $row)
+		{
+			$t->define_data($row);
+		}
 		$t->set_header($this->_get_alpha_list($arr["request"]));
 		return $t->draw();
 	}
