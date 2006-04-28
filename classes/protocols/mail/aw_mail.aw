@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.7 2006/01/25 13:10:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.8 2006/04/28 14:10:27 markop Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -34,9 +34,14 @@ class aw_mail {
 		define('CHARSET',$ll->get_charset());
 		return $this->clean($args);
 	}
-
-	////
-	// !Resets the object
+	
+	/**Resets the object
+	@attrib api=1 params=name
+	@param method optional type=string
+		by default php mail function
+	@comment 
+		resets the mail object
+	**/
 	function clean($args = array())
 	{
 		$this->message = array();
@@ -47,10 +52,12 @@ class aw_mail {
 		$this->method = ($args["method"]) ? $args["method"] : "sendmail";
 	}
 
-	////
-	// !Returns a decoded MIME part
-	// argumendid:
-	// part - osa number voi nimi
+	/**
+	@attrib api=1 params=name
+	@param part required type=string
+		number of part
+	@return array/decoded MIME part
+	**/
 	function get_part($args = array())
 	{
 		extract($args);
@@ -87,11 +94,15 @@ class aw_mail {
 		return $block;
 	}
 
-	////
-	// !Parses a MIME formatted data block (e.g. email message)
-	// arguments:
-	// data(string) - body of the message
-	// returns the number of attaches found
+	/**
+	@attrib api=1 params=name
+	@param data required type=string
+		body of the message
+	@return int/the number of attaches found
+	
+	@comments
+		Parses a MIME formatted data block (e.g. email message)
+	**/
 	function parse_message($args = array())
 	{
 		// First we pass the whole message through our parser
@@ -263,15 +274,28 @@ class aw_mail {
 
 		return $result;
 	}
-	////
-	// !Selle funktsiooni abil loome uue teate
-	// argumendid
-	// froma(string) - kellelt (aadress)
-	// fromn(string) - kellelt, nimi
-	// to(string) - kellele
-	// cc(string) - kellele
-	// subject(string) - kirja teema
-	// headers(array) - additional headers
+
+	/**
+	@attrib api=1 params=name
+	@param froma optional type=string
+		sender's address
+	@param fromn optional type=string
+		sender's name
+	@param to required type=string
+		mail to (adresses)
+	@param cc optional type=string
+		mail to (adresses)
+	@param subject optional type=string
+		mail subject
+	@param headers required type=array
+		additional headers
+	@param body optional type=string
+		mail body
+	@param X-Mailer optional type=string default="AW Mail 2.0"
+		mail version
+	@comments
+		Creates a new message
+	**/
 	function create_message($args = array())
 	{
 		
@@ -313,14 +337,23 @@ class aw_mail {
 		};
 	}
 
-	////
-	// Attaches an object to our message
-	// argumendid
-	// data(data) - suvaline data
-	// description(contenttype) - asja kirjeldus
-	// encoding(string) 
-	// contenttype(string)
-	// disp(string)
+	/**
+	@attrib api=1 params=name
+	@param data required type=string
+		random data
+	@param description optional type=string
+		Content-Description
+	@param encoding optional type=string default="base64"
+		text encoding
+	@param contenttype optional type=string default="application/octet-stream"
+		specifies the HTTP content type for the response.
+	@param disp optional type=string
+		Content-Disposition
+	@return false, if $data is empty
+		else number of mimeparts
+	@comments
+		Attaches an object to our message
+	**/
 	function attach($args = array())
 	{
 		extract($args);
@@ -392,18 +425,27 @@ class aw_mail {
 	}
 
 	// lauri muudetud 01.09.2001 -->
-	////
-	// !Generates html stuff around html body
+	/**
+	@attrib api=1 params=pos
+	@param body optional type=string
+		html body
+	@return string/html
+	@comments
+		Generates html stuff around html body
+	**/
 	function gen_htmlbody($body)
 	{
 		return (substr($body,0,6)=="<html>")?$body:
 			"<html><head><title></title></head><body>$body</body></html>";
 	}
 
-	////
-	// !Defines an alternative html body
-	// argumendid:
-	// data(string) html data
+	/**
+	@attrib api=1 params=name
+	@param data required type=string
+		html data
+	@comments
+		Defines an alternative html body
+	**/
 	function htmlbodyattach($args=array())
 	{
 		extract($args);
@@ -431,6 +473,13 @@ class aw_mail {
 		unset($this->body);
 	}
 
+	/**
+	@attrib api=1 params=pos
+	@param erc optional type=string
+		data , where you want to replace stuff
+	@comments
+		replace html stuff with not html stuff
+	**/
 	function strip_html($src)
 	{
 		$search = array (	"'<script[^>]*?>.*?</script>'si",  // Strip out javascript
@@ -463,24 +512,38 @@ class aw_mail {
 		return $text;
 	}
 
+	/**
+	@attrib api=1 params=pos
+	@param args optional type=array
+		array("stuff you need to replace" => "stuff to replace with",)
+	@comment 
+		its useful to do before you generate mail
+	**/
 	function body_replace($args = array())
 	{
 		$this->body_replacements = $args;
 	}
 
-	// <--
-	
-	////
-	// !Attaches a file to the message
-	// argumendid:
-	// path(string) - teekond failini
-	// content(string) - if set, path is ignored
-	// filename(string) - if content is set, this must too
-	// description(string) - kirjeldus
-	// contenttype(string) - sisu tyyp
-	// encoding(string) - encoding. DUH.
-	// disp(string) content-disposition
-	// name(string) string, mida kasutatakse faili nimena
+	/**
+	@attrib api=1 params=name
+	@param path required type=string
+		path to file
+	@param content optional type=string
+		if set, path is ignored
+	@param description optional type=string
+		Content-Description
+	@param contenttype optional type=string default="application/octet-stream"
+		file content type
+	@param encoding optional type=string default="base64"
+		file encoding
+	@param disp optional type=string
+		content-disposition
+	@param name optional type=string
+		string, used as file name, if content is set, this must be set too
+	@return int/number of mimeparts
+	@comment 
+		Attaches a file to the message
+	**/	
 	function fattach($args = array())
 	{
 		extract($args);
@@ -603,6 +666,7 @@ class aw_mail {
 	{
 		$this->headers[$name] = $value;
 	}
+	
 
 	function gen_mail()
 	{
@@ -640,9 +704,6 @@ class aw_mail {
 		};
 		$this->bodytext = $email;
 		send_mail($to,$subject,$email,$headers);
-		
 	}
-	
-
 };
 ?>
