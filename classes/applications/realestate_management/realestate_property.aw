@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.19 2006/04/27 11:16:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.20 2006/04/28 10:57:45 markop Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -1298,8 +1298,6 @@ class realestate_property extends class_base
 		// "/" oli kuskile vahelt kadunud....
 		$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
 		$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
-		$data["picture_icon_value"] = str_replace("//", "/" , $data["picture_icon_value"]);
-		$data["picture_icon"] = str_replace("//", "/" , $data["picture_icon"]);
 		
 		### parse
 		$this->vars ($data);
