@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.480 2006/04/18 11:16:20 kristo Exp $
+// $Id: class_base.aw,v 2.481 2006/04/28 09:53:08 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -572,6 +572,15 @@ class class_base extends aw_template
 			"caption" => t("Tõlgi"),
 			"onClick" => "window.open(\"".$this->mk_my_orb("editor",array("clid" => $this->clid),"cb_translate")."\",\"awtrans\",\"width=600,height=400,resizable=1,scrollbars=1\");",
 		));
+
+		$add_txt = "";
+		if (method_exists($this->inst,"callback_get_add_txt"))
+		{
+			$add_txt = $this->inst->callback_get_add_txt(array(
+				"request" => $args,
+			));
+		}
+		
 		$cli->configure(array(
 			"help_url" => $this->mk_my_orb("browser",array("clid" => $this->clid),"help"),
 			"translate_url" => aw_ini_get("class_base.show_trans")?$translate_url." | ":"",
@@ -580,7 +589,7 @@ class class_base extends aw_template
 			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
 			"show_help" => aw_ini_get("class_base.show_help"),
-			"add_txt" => aw_ini_get("site_id") == 288 || aw_ini_get("crm.add_txt")
+			"add_txt" => $add_txt
 		));
 		$cli->rte_type = $this->classinfo(array("name" => "allow_rte"));
 

@@ -5120,6 +5120,202 @@ class crm_company extends class_base
 			}
 		}
 	}
+
+	function callback_get_add_txt($arr)
+	{
+		$cust_url = $this->mk_my_orb('new',array(
+			'parent' => $arr["request"]["id"],
+			'alias_to' => $arr["request"]["id"],
+			'reltype' => 22, // crm_company.CUSTOMER,
+			'return_url' => get_ru()
+			),
+			'crm_company'
+		);
+		$cust_url_pri = $this->mk_my_orb('new',array(
+				'parent' => $arr["request"]["id"],
+				'alias_to' => $arr["request"]["id"],
+				'reltype' => 22, // crm_company.CUSTOMER,
+				'return_url' => get_ru()
+			),
+			CL_CRM_PERSON
+		);
+		$proj_url = html::get_new_url(
+			CL_PROJECT, 
+			$arr["request"]["id"], 
+			array(
+				"return_url" => get_ru(),
+				"connect_impl" => $arr["request"]["id"],
+			)
+		);
+		if ($arr["request"]["group"] == "relorg")
+		{
+			$proj_url = 'submit_changeform("add_proj_to_co_as_impl");';
+		}
+
+		$u = get_instance(CL_USER);
+		$cur_co = $u->get_current_company();
+
+		$pl = get_instance(CL_PLANNER);
+		$this->cal_id = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
+		$task_url = $this->mk_my_orb('new',array(
+			'alias_to_org' => $arr["request"]["id"] == $cur_co ? null : $arr["request"]["id"],
+			'reltype_org' => 13,
+			'class' => 'task',
+			'add_to_cal' => $this->cal_id,
+			'clid' => CL_TASK,
+			'title' => t("Toimetus"),
+			'parent' => $arr["request"]["id"],
+			'return_url' => get_ru()
+		));
+		if ($arr["request"]["group"] == "projs" || $arr["request"]["group"] == "my_projects")
+		{
+			$task_url = "submit_changeform(\"add_task_to_proj\");";
+		}
+		else
+		if ($arr["request"]["group"] == "relorg")
+		{
+			$task_url = "submit_changeform(\"add_task_to_co\");";
+		}
+		$call_url = $this->mk_my_orb('new',array(
+			'alias_to_org' => $arr["request"]["id"] == $cur_co ? null : $arr["request"]["id"],
+			'reltype_org' => 12,
+			'class' => 'crm_call',
+			'add_to_cal' => $this->cal_id,
+			'title' => t("K&otilde;ne"),
+			'parent' => $arr["request"]["id"],
+			'return_url' => get_ru()
+		));
+		$meeting_url = $this->mk_my_orb('new',array(
+			'alias_to_org' => $arr["request"]["id"] == $cur_co ? null : $arr["request"]["id"],
+			'reltype_org' => 11,
+			'class' => 'crm_meeting',
+			'add_to_cal' => $this->cal_id,
+			'clid' => CL_CRM_MEETING,
+			'title' => t("Kohtumine"),
+			'parent' => $arr["request"]["id"],
+			'return_url' => get_ru()
+		));
+		if ($arr["request"]["group"] == "projs" || $arr["request"]["group"] == "my_projects")
+		{
+			$meeting_url = "submit_changeform(\"add_meeting_to_proj\");";
+		}
+		else
+		if ($arr["request"]["group"] == "relorg")
+		{
+			$meeting_url = "submit_changeform(\"add_meeting_to_co\");";
+		}
+		$offer_url = $this->mk_my_orb('new',array(
+			'alias_to_org' => $arr["request"]["id"],
+			'reltype_org' => 9,
+			'class' => 'crm_offer',
+			'add_to_cal' => $this->cal_id,
+			'clid' => CL_CRM_OFFER,
+			'title' => t("Pakkumine"),
+			'parent' => $arr["request"]["id"],
+			'return_url' => get_ru()
+		));
+		if ($arr["request"]["group"] == "projs" || $arr["request"]["group"] == "my_projects")
+		{
+			$offer_url = "submit_changeform(\"add_offer_to_proj\");";
+		}
+		else
+		if ($arr["request"]["group"] == "relorg")
+		{
+			$offer_url = "submit_changeform(\"add_offer_to_co\");";
+		}
+
+		$job_url = html::get_new_url(CL_CRM_JOB_ENTRY, $arr["request"]["id"], array("return_url" => get_ru()));
+
+		$bill_url = aw_ini_get("baseurl").aw_url_change_var("group", "bills", aw_url_change_var("proj", NULL));
+		$adds =  $this->picker("", array(
+			"" => t("Lisa"),
+			$job_url => t("T&ouml;&ouml;"),
+			$cust_url => t("Organisatsioon"),
+			$cust_url_pri => t("Eraisik"),
+			$proj_url => t("Projekt"),
+			$task_url => t("Toimetus"),
+			$bill_url => t("Arve"),
+			$call_url => t("K&otilde;ne"),
+			$meeting_url => t("Kohtumine"),
+			$offer_url => t("Pakkumine"),
+			aw_ini_get("baseurl")."/orb.aw?class=users&action=logout" => t("Logi v&auml;lja")
+		));
+
+		$url = html::get_new_url(CL_TASK_QUICK_ENTRY, $arr["request"]["id"]);
+		$s = '
+			<script language="JavaScript">
+			<!--
+		        var keyCount = 0, pwd = "xX";
+		        var naObj = new Array("text","file","password");
+		        function keyCheck(e) 
+				{
+					var obj = (document.all) ? window.event.srcElement : e.target;
+					var qOk = true;
+					if (obj.type) 
+					{
+						for (i=0;i<naObj.length;i++) 
+						{
+							if (qOk) qOk = (obj.type.toLowerCase() != naObj[i]);
+						}
+						if (!qOk && obj.tagName && obj.tagName.toLowerCase() != "input") 
+						{
+							qOk = true;
+						}
+					}
+					if (obj.type == "textarea") 
+					{
+						qOk = false;
+					}
+					if (qOk) 
+					{
+						winTrigger(((document.all) ? window.event.keyCode : e.which));
+					}
+				}
+				function winTrigger(taste) 
+				{
+					for (i=0;i<pwd.length;i++) 
+					{
+						if (taste == pwd.charCodeAt(i)) 
+						{
+							aw_popup_scroll("'.$url.'", "quick_task_entry", 600,600);
+							break;
+						}
+					}
+				}
+				if (document.layers) 
+				{
+					window.captureEvents(Event.KEYPRESS);
+					window.onkeypress = keyCheck;
+				} 
+				else 
+				{
+					document.onkeydown = keyCheck;
+				}
+				// -->
+
+			</script>
+		';
+
+		return "
+			<script language=\"javascript\">
+			function select_this(s)
+			{
+				var d = s.options[s.selectedIndex].value;
+				if (d.indexOf('http') == -1 && d != \"_\")
+				{
+					eval(d);
+					return true;
+				}
+				if (d != \"_\")
+				{
+					location.href=d;
+				}
+			}
+			</script>
+		  <select name=\"foo\" onChange='select_this(this)'>$adds</select></span>$s";
+	}
 }
 
 ?>

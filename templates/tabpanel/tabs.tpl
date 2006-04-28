@@ -45,24 +45,7 @@
 
 <!-- SUB: ADDITIONAL_TEXT -->
   <td valign="right" align="center" class="tabpanelheaderstyle">
-<script language="javascript">
-
-function select_this(s){
-	var d = s.options[s.selectedIndex].value;
-	if (d.indexOf('http') == -1 && d != "_")
-	{
-		eval(d);
-		return true;
-	}
-
-	if (d != "_")
-	{
-		location.href=d;
-	}
-}
-</script>
-
-  <select name="foo" onChange='select_this(this)'>{VAR:adds}</select></span>
+	{VAR:addt_content}
   </td>
 <!-- END SUB: ADDITIONAL_TEXT -->
 

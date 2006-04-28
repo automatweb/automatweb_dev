@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.146 2006/04/27 11:08:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.147 2006/04/28 09:53:09 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -760,188 +760,13 @@ class htmlclient extends aw_template
 					"SHOW_HELP" => $tp->parse("SHOW_HELP"),
 				));
 			};
-			$ro = obj();
-			if ($_REQUEST["id"])
+			if ($this->config["add_txt"] != "")
 			{
-				$ro = obj($_REQUEST["id"]);
-			}
-			if ($this->config["add_txt"] && $ro->class_id() == CL_CRM_COMPANY)
-			{
-				$cust_url = $this->mk_my_orb('new',array(
-						'parent' => $_REQUEST["id"],
-						'alias_to' => $_REQUEST["id"],
-						'reltype' => 22, // crm_company.CUSTOMER,
-						'return_url' => get_ru()
-					),
-					'crm_company'
-				);
-				$cust_url_pri = $this->mk_my_orb('new',array(
-						'parent' => $_REQUEST["id"],
-						'alias_to' => $_REQUEST["id"],
-						'reltype' => 22, // crm_company.CUSTOMER,
-						'return_url' => get_ru()
-					),
-					CL_CRM_PERSON
-				);
-				$proj_url = html::get_new_url(
-						CL_PROJECT, 
-						$_REQUEST["id"], 
-						array(
-							"return_url" => get_ru(),
-							"connect_impl" => $_REQUEST["id"],
-						)
-				);
-				if ($_GET["group"] == "relorg")
-				{
-					$proj_url = 'submit_changeform("add_proj_to_co_as_impl");';
-				}
-
-				$u = get_instance(CL_USER);
-				$cur_co = $u->get_current_company();
-
-				$pl = get_instance(CL_PLANNER);
-				$this->cal_id = $pl->get_calendar_for_user(array(
-					"uid" => aw_global_get("uid"),
-				));
-				$task_url = $this->mk_my_orb('new',array(
-					'alias_to_org' => $_REQUEST["id"] == $cur_co ? null : $_REQUEST["id"],
-					'reltype_org' => 13,
-					'class' => 'task',
-					'add_to_cal' => $this->cal_id,
-					'clid' => CL_TASK,
-					'title' => t("Toimetus"),
-					'parent' => $_REQUEST["id"],
-					'return_url' => get_ru()
-				));
-				if ($_GET["group"] == "projs" || $_GET["group"] == "my_projects")
-				{
-					$task_url = "submit_changeform(\"add_task_to_proj\");";
-				}
-				else
-				if ($_GET["group"] == "relorg")
-				{
-					$task_url = "submit_changeform(\"add_task_to_co\");";
-				}
-				$call_url = $this->mk_my_orb('new',array(
-					'alias_to_org' => $_REQUEST["id"] == $cur_co ? null : $_REQUEST["id"],
-					'reltype_org' => 12,
-					'class' => 'crm_call',
-					'add_to_cal' => $this->cal_id,
-					'title' => t("K&otilde;ne"),
-					'parent' => $_REQUEST["id"],
-					'return_url' => get_ru()
-				));
-				$meeting_url = $this->mk_my_orb('new',array(
-					'alias_to_org' => $_REQUEST["id"] == $cur_co ? null : $_REQUEST["id"],
-					'reltype_org' => 11,
-					'class' => 'crm_meeting',
-					'add_to_cal' => $this->cal_id,
-					'clid' => CL_CRM_MEETING,
-					'title' => t("Kohtumine"),
-					'parent' => $_REQUEST["id"],
-					'return_url' => get_ru()
-				));
-				if ($_GET["group"] == "projs" || $_GET["group"] == "my_projects")
-				{
-					$meeting_url = "submit_changeform(\"add_meeting_to_proj\");";
-				}
-				else
-				if ($_GET["group"] == "relorg")
-				{
-					$meeting_url = "submit_changeform(\"add_meeting_to_co\");";
-				}
-				$offer_url = $this->mk_my_orb('new',array(
-					'alias_to_org' => $_REQUEST["id"],
-					'reltype_org' => 9,
-					'class' => 'crm_offer',
-					'add_to_cal' => $this->cal_id,
-					'clid' => CL_CRM_OFFER,
-					'title' => t("Pakkumine"),
-					'parent' => $_REQUEST["id"],
-					'return_url' => get_ru()
-				));
-				if ($_GET["group"] == "projs" || $_GET["group"] == "my_projects")
-				{
-					$offer_url = "submit_changeform(\"add_offer_to_proj\");";
-				}
-				else
-				if ($_GET["group"] == "relorg")
-				{
-					$offer_url = "submit_changeform(\"add_offer_to_co\");";
-				}
-
-				$job_url = html::get_new_url(CL_CRM_JOB_ENTRY, $_GET["id"], array("return_url" => get_ru()));
-
-				$bill_url = aw_ini_get("baseurl").aw_url_change_var("group", "bills", aw_url_change_var("proj", NULL));
-				$adds =  $this->picker("", array(
-					"" => t("Lisa"),
-					$job_url => t("T&ouml;&ouml;"),
-					$cust_url => t("Organisatsioon"),
-					$cust_url_pri => t("Eraisik"),
-					$proj_url => t("Projekt"),
-					$task_url => t("Toimetus"),
-					$bill_url => t("Arve"),
-					$call_url => t("K&otilde;ne"),
-					$meeting_url => t("Kohtumine"),
-					$offer_url => t("Pakkumine"),
-					aw_ini_get("baseurl")."/orb.aw?class=users&action=logout" => t("Logi v&auml;lja")
-				));
-
-
-$url = html::get_new_url(CL_TASK_QUICK_ENTRY, $_GET["id"]);
-$s = '
-
-
-<script language="JavaScript">
-<!--
-        var keyCount = 0, pwd = "xX";
-        var naObj = new Array("text","file","password");
-
-        function keyCheck(e) {
-          var obj = (document.all) ? window.event.srcElement : e.target;
-          //var e = (document.all) ? window.event : e;
-          var qOk = true;
-          if (obj.type) {
-            for (i=0;i<naObj.length;i++) {
-              if (qOk) qOk = (obj.type.toLowerCase() != naObj[i]);
-            }
-            if (!qOk && obj.tagName && obj.tagName.toLowerCase() != "input") qOk = true;
-          }
-          if (obj.type == "textarea") qOk = false;
-
-          if (qOk) winTrigger(((document.all) ? window.event.keyCode : e.which));
-        }
-
-        function winTrigger(taste) {
-
-
-
-           for (i=0;i<pwd.length;i++) {
-              if (taste == pwd.charCodeAt(i)) {
-				aw_popup_scroll("'.$url.'", "quick_task_entry", 600,600);
-		         break;
-              }
-           }
-        }
-        if (document.layers) {
-           window.captureEvents(Event.KEYPRESS);
-           window.onkeypress = keyCheck;
-        } else {
-           document.onkeydown = keyCheck;
-        }
-	// -->
-
-
-</script>
-
-';
-
 				$tp->vars(array(
-					"adds" => $adds
+					"addt_content" => $this->config["add_txt"]
 				));
-				//Klient (jaguneb eraklient/organisatsioon), Projekt, Ülesanne, Arve
 				$tp->vars(array(
-					"ADDITIONAL_TEXT" => $tp->parse("ADDITIONAL_TEXT").$s,
+					"ADDITIONAL_TEXT" => $tp->parse("ADDITIONAL_TEXT")
 				));
 			}
 			if ($this->form_layout != "boxed")
