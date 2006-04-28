@@ -39,6 +39,17 @@
             <caption>Impordi</caption>
       </property>
       <property>
+            <name>di_cfgform</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CFGFORM</reltype>
+            <fielt>meta</fielt>
+            <method>serialize</method>
+            <field>di_cfgform</field>
+            <caption>Seadete vorm</caption>
+      </property>
+      <property>
             <name>location_tags</name>
             <table>objects</table>
             <group>settings</group>
@@ -68,7 +79,7 @@
       <property>
             <name>content_transform</name>
             <table>objects</table>
-            <group>general</group>
+            <group>settings</group>
             <type>generated</type>
             <generator>generate_tag_fields</generator>
             <field>content_transform</field>
@@ -88,6 +99,11 @@
                   <clid>CL_PERIOD</clid>
                   <caption>Periood</caption>
             </DOCIMP_PERIOD>
+            <CFGFORM>
+                  <value>2</value>
+                  <clid>CL_CFGFORM</clid>
+                  <caption>Seadete vorm</caption>
+            </CFGFORM>
       </reltypes>
 </properties>
 

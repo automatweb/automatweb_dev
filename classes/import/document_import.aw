@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.6 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/document_import.aw,v 1.7 2006/04/28 10:46:08 kristo Exp $
 // document_import.aw - Dokumentide import 
 /*
 
@@ -8,33 +8,42 @@
 @default table=objects
 @default group=general
 
-@property file type=fileupload store=no
-@caption XML Fail
+	@property file type=fileupload store=no
+	@caption XML Fail
 
-@property d_period type=relpicker reltype=RELTYPE_DOCIMP_PERIOD field=meta method=serialize
-@caption Periood
+	@property d_period type=relpicker reltype=RELTYPE_DOCIMP_PERIOD field=meta method=serialize
+	@caption Periood
 
-@property found type=text store=no
-@caption Leitud dokumendid
+	@property found type=text store=no
+	@caption Leitud dokumendid
 
-@property do_import type=checkbox store=no ch_value=1
-@caption Impordi
+	@property do_import type=checkbox store=no ch_value=1
+	@caption Impordi
+
+@default group=settings
+
+	@property di_cfgform type=relpicker reltype=RELTYPE_CFGFORM fielt=meta method=serialize
+	@caption Seadete vorm
+
+	@property location_tags type=textbox field=meta method=serialize 
+	@caption Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)
+
+	@property field_tags type=textbox field=meta method=serialize 
+	@caption Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)
+
+	@property end_tag type=textbox field=meta method=serialize 
+	@caption dokumenti l&otilde;petav tag
+
+	@property content_transform type=generated generator=generate_tag_fields
 
 @groupinfo settings caption="Seaded"
 
-@property location_tags type=textbox field=meta method=serialize group=settings
-@caption Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)
-
-@property field_tags type=textbox field=meta method=serialize group=settings
-@caption Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900)
-
-@property end_tag type=textbox field=meta method=serialize group=settings
-@caption dokumenti l&otilde;petav tag
-
-@property content_transform type=generated generator=generate_tag_fields
 
 @reltype DOCIMP_PERIOD value=1 clid=CL_PERIOD
 @caption Periood
+
+@reltype CFGFORM value=2 clid=CL_CFGFORM
+@caption Seadete vorm
 
 */
 
@@ -238,7 +247,7 @@ class document_import extends class_base
 			$o->set_status(STAT_ACTIVE);
 			$o->set_ord($doc["jrk"]);
 			$o->set_site_id(aw_ini_get("site_id"));
-			$o->set_meta("cfgform_id", aw_ini_get("document_import.cfgform_id"));
+			$o->set_meta("cfgform_id", $obj->prop("di_cfgform"));
 			$o->set_meta("show_print", 1);
 			$props = $o->get_property_list();
 			foreach($props as $prop)
