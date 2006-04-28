@@ -112,7 +112,7 @@
  *  @TODO       Add CFB.
  *
  *  @package    Crypt_Xtea
- *  @version    $Revision: 1.1 $
+ *  @version    $Revision: 1.2 $
  *  @access     public
  *  @author     Jeroen Derks <jeroen@derks.it>
  */
@@ -148,13 +148,14 @@ class xtea
 
     /**
      *  Set the number of iterations to use.
-     *
-     *  @param  integer $n_iter Number of iterations to use.
+	@attrib api=1 params=pos
+     *  @param n_iter required type=intege
+     		Number of iterations to use.
      *
      *  @access public
      *  @author         Jeroen Derks <jeroen@derks.it>
      *  @see            $n_iter, getIter()
-     */
+     **/
     function setIter($n_iter)
     {
         $this->n_iter = $n_iter;
@@ -165,13 +166,13 @@ class xtea
 
     /**
      *  Get the number of iterations to use.
-     *
+	@attrib api=1 params=pos
      *  @return integer Number of iterations to use.
      *
      *  @access public
      *  @author         Jeroen Derks <jeroen@derks.it>
      *  @see            $n_iter, setIter()
-     */
+     **/
     function getIter()
     {
         return $this->n_iter;
@@ -182,16 +183,36 @@ class xtea
 
     /**
      *  Encrypt a string using a specific key.
-     *
-     *  @param  string  $data   Data to encrypt.
-     *  @param  string  $key    Key to encrypt data with (binary string).
+	@attrib api=1 params=pos
+     *  @param $data required type=string 
+     		Data to encrypt.
+     *  @param $key required type=string 
+     		Key to encrypt data with (binary string).
      *
      *  @return string          Binary encrypted character string.
      *
      *  @access public
      *  @author         Jeroen Derks <jeroen@derks.it>
      *  @see            decrypt(), _encipherLong(), _resize(), _str2long()
-     */
+	@example
+		$data = array(
+			"id" => aw_ini_get("site_id"),
+			"site_basedir" => aw_ini_get("site_basedir"),
+			"code" => aw_ini_get("basedir"),
+			"uid" => aw_global_get("uid"),
+		);
+		$key = $this->do_orb_method_call(array(
+			"server" => "http://register.automatweb.com",
+			"params" => array(
+				"site_id" => aw_ini_get("site_id")
+			),
+			"no_errors" => true
+		));
+		$data = aw_serialize($data, SERIALIZE_XML);
+		$this->set_cval("site_list_xtea_session_key".aw_ini_get("site_id"), $key);
+		$i = get_instance("protocols/crypt/xtea");
+		return $i->encrypt($data, $key); 
+	**/
     function encrypt($data, $key)
     {
         // resize data to 32 bits (4 bytes)
@@ -249,16 +270,21 @@ class xtea
 
     /**
      *  Decrypt an encrypted string using a specific key.
-     *
-     *  @param  string  $data   Encrypted data to decrypt.
-     *  @param  string  $key    Key to decrypt encrypted data with (binary string).
+	@attrib api=1 params=pos
+     *  @param $data type=string
+     	     Encrypted data to decrypt.
+     *  @param $key type=string 
+     	     Key to decrypt encrypted data with (binary string).
      *
      *  @return string          Binary decrypted character string.
      *
      *  @access public
      *  @author         Jeroen Derks <jeroen@derks.it>
      *  @see            _encipherLong(), encrypt(), _resize(), _str2long()
-     */
+     @example 
+     	$i = get_instance("protocols/crypt/xtea");
+	return $i->decrypt(base64_decode($arr["data"]), $row["session_key"]);
+     **/
     function decrypt($enc_data, $key)
     {
         // convert data to long
