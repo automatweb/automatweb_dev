@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.12 2006/04/13 10:55:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.13 2006/04/30 10:33:30 voldemar Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -123,7 +123,10 @@ class crm_settings extends class_base
 					"fields_class" => "applications/crm/crm_company_cust_impl",
 					"fields_method" => "_org_table_header",
 				),
-				// "customer_t",
+				"customer_t" => array(
+					"fields_class" => "applications/crm/crm_company_cust_impl",
+					"fields_method" => "_org_table_header",
+				),
 				// "projects_listing_table",
 				// "my_projects",
 				// "report_list",
