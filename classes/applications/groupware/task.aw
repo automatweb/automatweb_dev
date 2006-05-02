@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.92 2006/04/27 12:04:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.93 2006/05/02 13:34:48 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -596,6 +596,34 @@ class task extends class_base
 						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
 						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
 						"title" => t("Otsi")
+					));
+
+					$pm = get_instance("vcl/popup_menu");
+					$pm->begin_menu("call_add_p");
+					if ($this->can("view", $arr["obj_inst"]->prop("customer")))
+					{	
+						$pm->add_item(array(
+							"text" => sprintf(t("Lisa isik organisatsiooni %s"), $arr["obj_inst"]->prop("customer.name")),
+							"link" => html::get_new_url(CL_CRM_PERSON, $arr["obj_inst"]->prop("customer"), array(
+								"return_url" => get_ru(), 
+								"add_to_task" => $arr["obj_inst"]->id(),
+								"add_to_co" => $arr["obj_inst"]->prop("customer"),
+							))
+						));
+					}
+
+					$cur_co = get_current_company();
+					$pm->add_item(array(
+						"text" => sprintf(t("Lisa isik organisatsiooni %s"), $cur_co->name()),
+						"link" => html::get_new_url(CL_CRM_PERSON, $cur_co->id(), array(
+							"return_url" => get_ru(), 
+							"add_to_task" => $arr["obj_inst"]->id(),
+							"add_to_co" => $cur_co->id()
+						))
+					));
+
+					$data["value"] .= $pm->get_menu(array(
+						"icon" => "new.gif"
 					));
 				}
 			break;

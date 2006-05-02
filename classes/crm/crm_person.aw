@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.126 2006/04/28 10:10:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.127 2006/05/02 13:34:45 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2128,6 +2128,7 @@ class crm_person extends class_base
 				));
 			}
 			else
+			if (is_oid($p->id()))
 			{
 				if (is_oid($p->id()) && $p->is_connected_to(array("to" => $arr["obj_inst"]->id(), "type" => "RELTYPE_IMPORTANT_PERSON")))
 				{
@@ -2135,6 +2136,19 @@ class crm_person extends class_base
 						"from" => $arr["obj_inst"]->id(),
 					));
 				}
+			}
+
+			if ($this->can("view", $arr["request"]["add_to_task"]))
+			{
+				$task = obj($arr["request"]["add_to_task"]);
+				$cc = $task->instance();
+				$cc->add_participant($task, $arr["obj_inst"]);
+			}
+
+			if ($this->can("view", $arr["request"]["add_to_co"]))
+			{
+				$arr["obj_inst"]->set_prop("work_contact", $arr["request"]["add_to_co"]);
+				$arr["obj_inst"]->save();
 			}
 		}
 
@@ -2732,6 +2746,12 @@ class crm_person extends class_base
 				break;
 		}
 		return false;
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["add_to_task"] = $_GET["add_to_task"];
+		$arr["add_to_co"] = $_GET["add_to_co"];
 	}
 
 	function callback_mod_tab($arr)
