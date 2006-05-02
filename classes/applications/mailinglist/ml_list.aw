@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.75 2006/05/02 12:12:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.76 2006/05/02 14:02:04 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1832,8 +1832,6 @@ class ml_list extends class_base
 	**/
 	function get_members($args)
 	{
-
-	
 		extract($args);
 		$ret = array();
 		$cnt = 0;
@@ -1947,7 +1945,7 @@ class ml_list extends class_base
 					"ret" => $ret ,
 					"cnt" => $cnt ,
 					"all" => $all ,
-					"already_found" => $aready_found ,
+					"already_found" => $already_found ,
 					"from" => $from ,
 					"to" => $to,
 					"no_return" => $no_return));
