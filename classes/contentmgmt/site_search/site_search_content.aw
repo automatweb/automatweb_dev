@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.70 2006/04/24 13:40:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.71 2006/05/02 14:16:50 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1298,14 +1298,12 @@ class site_search_content extends class_base
 				$pg.=$this->parse("PAGE");
 			}
 		}
-		$params["page"] = max((int)$page-1,0);
 		$this->vars(array(
-			"prev" => $this->mk_my_orb("do_search", $params)
+			"prev" => aw_url_change_var("page", max((int)$page-1,0))
 		));
 
-		$params["page"] = min((int)$page+1,$num_pages-1);
 		$this->vars(array(
-			"next" => $this->mk_my_orb("do_search", $params)
+			"next" => aw_url_change_var("page", min((int)$page+1,$num_pages-1))
 		));
 		if ($page > 0)
 		{
