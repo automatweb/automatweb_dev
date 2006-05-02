@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.34 2006/03/28 06:44:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.35 2006/05/02 12:35:49 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -524,6 +524,7 @@ class period extends class_base
 		$arr["inst"]->vars(array(
 			"per_string" => $_t["name"],
 			"act_per_id" => $_t["id"],
+			"per_comment" => $_t["comment"],
 			"def_per_id" => $this->get_active_period(),
 			"per_img_url" => image::check_url($imdata["url"]),
 			"per_img_tag" => image::make_img_tag(image::check_url($imdata["url"])),
