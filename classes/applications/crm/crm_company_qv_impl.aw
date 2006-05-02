@@ -61,6 +61,8 @@ class crm_company_qv_impl extends class_base
 		$this->hrs_on_bill = 0;
 		$this->sum = 0;
 		$this->bills_sum = 0;
+		$this->done_sum = 0;
+		$this->bills_paid_sum = 0;
 
 		// projs
 		if (!empty($arr["proj"]))
@@ -233,6 +235,7 @@ class crm_company_qv_impl extends class_base
 				$hrs += $row["amt"];
 				$this->hrs_total += $row["amt"];
 				$this->sum += $row["sum"];
+				$this->done_sum += $row["sum"];
 			}
 			if ($o->class_id() != CL_TASK)
 			{
@@ -325,6 +328,10 @@ class crm_company_qv_impl extends class_base
 			));
 			$this->bills_sum += str_replace(",", "", $sum);
 			$this->hrs_on_bill += $hrs;
+			if ($o->prop("state") == 2)
+			{
+				$this->bills_paid_sum += $sum;
+			}
 		}
 		if ($ol->count() == 0)
 		{
