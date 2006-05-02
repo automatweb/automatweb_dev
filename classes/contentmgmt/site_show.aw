@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.179 2006/04/25 13:01:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.180 2006/05/02 12:07:25 kristo Exp $
 
 /*
 
@@ -719,11 +719,11 @@ class site_show extends class_base
 				else
 				if ($obj->prop("use_menu_keywords") && $this->sel_section_obj)
 				{
-					$promo_kws = $this->sel_section_obj->connections_from(array("to.class_id" => CL_KEYWORD));
+					$promo_kws = $this->sel_section_obj->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD"));
 				}
 				else
 				{
-					$promo_kws = $obj->connections_from(array("to.class_id" => CL_KEYWORD));
+					$promo_kws = $obj->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD"));
 				}
 				if (count($promo_kws))
 				{

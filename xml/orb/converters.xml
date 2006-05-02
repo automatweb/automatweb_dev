@@ -221,5 +221,12 @@
 			</function>
 		</action>
 
+		<action name="kw_to_reltype">
+			<function name="kw_to_reltype">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -718,6 +718,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>keywords</group>
+            <reltype>RELTYPE_KEYWORD</reltype>
             <caption>AW M&amp;auml;rks&amp;otilde;nad</caption>
       </property>
       <property>
@@ -979,6 +980,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Keeleseos</caption>
             </LANG_REL>
+            <KEYWORD>
+                  <value>23</value>
+                  <clid>CL_KEYWORD</clid>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
+            </KEYWORD>
       </reltypes>
 </properties>
 

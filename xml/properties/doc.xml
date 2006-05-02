@@ -786,6 +786,7 @@
             <group>kws</group>
             <type>keyword_selector</type>
             <store>no</store>
+            <reltype>RELTYPE_KEYWORD</reltype>
             <field>kws</field>
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
       </property>
@@ -888,6 +889,11 @@
                   <clid>CL_DOCUMENT_CONTENT_TYPE</clid>
                   <caption>Dokumendi sisu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </DOC_CONTENT_TYPE>
+            <KEYWORD>
+                  <value>28</value>
+                  <clid>CL_KEYWORD</clid>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
+            </KEYWORD>
       </reltypes>
 </properties>
 

@@ -306,6 +306,7 @@
             <type>keyword_selector</type>
             <store>no</store>
             <group>menus</group>
+            <reltype>RELTYPE_KEYWORD</reltype>
             <field>kws</field>
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
       </property>
@@ -401,6 +402,11 @@
                   <clid>CL_MENU</clid>
                   <caption>&amp;amp;auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures</caption>
             </NO_SHOW_MENU>
+            <KEYWORD>
+                  <value>5</value>
+                  <clid>CL_KEYWORD</clid>
+                  <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
+            </KEYWORD>
       </reltypes>
 </properties>
 

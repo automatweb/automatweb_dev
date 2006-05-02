@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.158 2006/04/24 13:19:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.159 2006/05/02 12:07:25 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -289,7 +289,7 @@
 		property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
 		caption AW Märksõnad
 
-		@property grkeywords2 type=keyword_selector field=meta method=serialize group=keywords
+		@property grkeywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
 		@caption AW Märksõnad
 
 		@property keywords type=textbox field=meta method=serialize group=keywords
@@ -383,6 +383,9 @@
 
 	@reltype LANG_REL value=22 clid=CL_MENU
 	@caption Keeleseos
+
+	@reltype KEYWORD value=23 clid=CL_KEYWORD
+	@caption V&otilde;tmes&otilde;na
 */
 
 define("IP_ALLOWED", 1);

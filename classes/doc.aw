@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.127 2006/05/02 09:57:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.128 2006/05/02 12:07:25 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -245,7 +245,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 	@property kw_tb type=toolbar no_caption=1 store=no group=keywords
 
-	@property kws type=keyword_selector store=no 
+	@property kws type=keyword_selector store=no reltype=RELTYPE_KEYWORD
 	@caption M&auml;rks&otilde;nad
 
 @default group=versions
@@ -287,6 +287,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 
 @reltype DOC_CONTENT_TYPE value=27 clid=CL_DOCUMENT_CONTENT_TYPE
 @caption Dokumendi sisu t&uuml;&uuml;p
+
+@reltype KEYWORD value=28 clid=CL_KEYWORD
+@caption V&otilde;tmes&otilde;na
 
 */
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.62 2006/02/10 11:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.63 2006/05/02 12:07:25 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1920,6 +1920,29 @@ class converters extends aw_template
 			}
 			$bill->set_meta("bill_inf", null);
 			$bill->save();
+		}
+		die("all done");
+	}
+
+	/**
+		@attrib name=kw_to_reltype
+	**/
+	function kw_to_reltype($arr)
+	{
+		$c = new connection();
+$GLOBALS["DUKE"] = 1;
+		foreach($c->find(array("to.class_id" => CL_KEYWORD, "from.class_id" => array(CL_MENU, CL_DOCUMENT))) as $con)
+		{
+			$c2 = new connection($con["id"]);
+			if ($con["from.class_id"] == CL_MENU)
+			{
+				$c2->change(array("reltype"  => 23));
+			}
+			else
+			{
+				$c2->change(array("reltype"  => 28));
+			}
+echo "mod ".$con["to.name"]."<br>";
 		}
 		die("all done");
 	}

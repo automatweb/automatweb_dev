@@ -37,7 +37,7 @@ class keyword_selector extends class_base
 		{
 			$filt = "A";
 		}
-		$cf_p = array("to.class_id" => CL_KEYWORD);
+		$cf_p = array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD");
 		if ($filt != "_all")
 		{
 			$cf_p["to.name"] = $filt."%";
@@ -59,7 +59,7 @@ class keyword_selector extends class_base
 			$arr["obj_inst"]->connect(array("to" => $kwid));
 		}
 
-		if (count($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD))))
+		if (count($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD"))))
 		{
 			$arr["obj_inst"]->set_meta("has_kwd_rels", 1);
 		}
@@ -127,7 +127,7 @@ class keyword_selector extends class_base
 		}
 		$filt["sort_by"] = "objects.name";
 		$ol = new object_list($filt);
-		$used_kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD)));
+		$used_kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD")));
 		$used_kws = $this->make_keys($used_kws->ids());
 		$data = array_values($ol->arr());
 		$rows = count($data) / 3;
@@ -221,7 +221,7 @@ class keyword_selector extends class_base
 
 	function _draw_existing_kws($arr)
 	{
-		$kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD)));
+		$kws = new object_list($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD, "type" => $arr["prop"]["reltype"])));
 		return t("Valitud:")." ".html::obj_change_url($kws->arr());
 	}
 }
