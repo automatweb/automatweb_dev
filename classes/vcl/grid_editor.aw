@@ -1354,7 +1354,7 @@ class grid_editor extends class_base
 				
 				$style_icon = "";
 				$st = $this->_get_cell_style_id($i, $a, $scell);
-				if ($st)
+				if ($this->can("view", $st))
 				{
 					$td_style = "colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\"";
 					active_page_data::add_site_css_style($st);
