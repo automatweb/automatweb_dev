@@ -1,5 +1,15 @@
 <?xml version='1.0'?>
 <properties>
+  <property>
+            <name>date</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>date</field>
+            <caption>Aeg</caption>
+      </property>
+
       <property>
             <name>customer</name>
             <table>objects</table>
@@ -26,15 +36,6 @@
             <store>no</store>
             <field>task</field>
             <caption>Toimetus</caption>
-      </property>
-      <property>
-            <name>date</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>date_select</type>
-            <store>no</store>
-            <field>date</field>
-            <caption>Aeg</caption>
       </property>
       <property>
             <name>duration</name>

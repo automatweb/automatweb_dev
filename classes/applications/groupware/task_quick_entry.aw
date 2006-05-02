@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.1 2006/04/27 11:05:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.2 2006/05/02 08:20:19 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+@property date type=date_select store=no
+@caption Aeg
 
 @property customer type=textbox store=no
 @caption Klient
@@ -70,6 +73,11 @@ class task_quick_entry extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		if ($prop["value"] == "")
+		{
+			$prop["error"] = t("K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!");
+			return PROP_FATAL_ERROR;
+		}
 		switch($prop["name"])
 		{
 		}
@@ -108,11 +116,15 @@ class task_quick_entry extends class_base
 
 		$ol = new object_list(array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-			"name" => $arr["customer"]."%",
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"lang_id" => array(),
 			"site_id" => array()
 		));
 		$autocomplete_options = $ol->names();
+		foreach($autocomplete_options as $k => $v)
+		{
+			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", $v);
+		}
 		exit ($cl_json->encode($option_data));
 	}
 
@@ -139,12 +151,18 @@ class task_quick_entry extends class_base
 
 		$ol = new object_list(array(
 			"class_id" => array(CL_PROJECT),
-			"name" => $arr["project"]."%",
-			"CL_PROJECT.RELTYPE_ORDERER.name" => $arr["customer"]."%",
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["project"])."%",
+			"CL_PROJECT.RELTYPE_ORDERER.name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"lang_id" => array(),
 			"site_id" => array()
 		));
 		$autocomplete_options = $ol->names();
+             $autocomplete_options = $ol->names();
+                foreach($autocomplete_options as $k => $v)
+                {
+                        $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", $v);
+                }
+
 		exit ($cl_json->encode($option_data));
 	}
 
@@ -172,13 +190,22 @@ class task_quick_entry extends class_base
 
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
-			"CL_TASK.project.name" => $arr["project"]."%",
-			"CL_TASK.customer.name" => $arr["customer"]."%",
+			"CL_TASK.project.name" => iconv("UTF-8", aw_global_get("charset"), $arr["project"])."%",
+			"CL_TASK.customer.name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"name" => $arr["task"]."%",
 			"lang_id" => array(),
 			"site_id" => array()
 		));
 		$autocomplete_options = $ol->names();
+             $autocomplete_options = array(); //$ol->names();
+                foreach($ol->names() as $k => $v)
+                {
+			$v = iconv(aw_global_get("charset"), "UTF-8", $v);
+			if (!in_array($v, $autocomplete_options))
+			{
+                        	$autocomplete_options[$k] = $v;
+                	}
+		}
 		exit ($cl_json->encode($option_data));
 	}
 
@@ -260,6 +287,19 @@ class task_quick_entry extends class_base
 
 			$t_i = $t->instance();
 			$t_i->add_participant($t, $cur_p);
+ $r = obj();
+                        $r->set_class_id(CL_TASK_ROW);
+                        $r->set_parent($t->id());
+                        $r->set_prop("content", $arr["request"]["content"]);
+                        $r->set_prop("date", date_edit::get_timestamp($arr["request"]["date"]));
+                        $r->set_prop("time_guess", $arr["request"]["duration"]);
+                        $r->set_prop("impl", $cur_p->id());
+                        $r->save();
+
+                        $t->connect(array(
+                                "to" => $r->id(),
+                                "type" => "RELTYPE_ROW"
+			));
 
 			header("Location: ".html::get_change_url($t->id(), array("return_url" => $arr["request"]["post_ru"])));
 			die();
