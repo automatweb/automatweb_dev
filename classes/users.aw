@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.162 2006/04/17 10:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.163 2006/05/02 12:26:38 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -954,6 +954,17 @@ class users extends users_user
 				aw_global_set("current_user_group", $gd);
 			}	
 		}
+
+		if ($_SESSION["nliug"] && !is_admin())
+		{
+			// get gid for oid
+			$nliug_o = obj($_SESSION["nliug"]);
+			$gidlist[$nliug_o->prop("gid")] = $nliug_o->prop("gid");
+			$gidlist_pri[$nliug_o->prop("gid")] = $nliug_o->prop("priority");
+			$gidlist_oid[$nliug_o->id()] = $nliug_o->id();
+			$gidlist_pri_oid[(int)$nliug_o->id()] = (int)$nliug_o->prop("priority");
+		}
+
 		aw_global_set("gidlist", $gidlist);
 		aw_global_set("gidlist_pri", $gidlist_pri);
 		aw_global_set("gidlist_pri_oid", $gidlist_pri_oid);
@@ -962,6 +973,27 @@ class users extends users_user
 
 	function request_startup()
 	{
+		if ($this->can("view", $_GET["set_group"]))
+		{
+			// fetch thegroup and check if non logged users can switch to it
+			$setg_o = obj($_GET["set_group"]);
+			if ($setg_o->prop("for_not_logged_on_users") == 1)
+			{
+				$_SESSION["nliug"] = $_GET["set_group"];
+				$_COOKIE["nliug"] = $_GET["set_group"];
+			}
+		}
+		if ($_GET["clear_group"] == 1)
+		{
+			unset($_SESSION["nliug"]);
+			unset($_COOKIE["nliug"]);
+		}
+		if ($_COOKIE["nliug"] != $_SESSION["nliug"] && $_COOKIE["nliug"])
+		{
+			$_SESSION["nliug"] = $_COOKIE["nliug"];
+		}
+
+
 		if (($uid = aw_global_get("uid")) != "")
 		{
 			$this->create_gidlists($uid);
@@ -1069,26 +1101,6 @@ class users extends users_user
 			{
 				$nlg = $_SESSION["non_logged_in_users_group"]["nlg"];
 				$gd = $_SESSION["non_logged_in_users_group"]["gd"];
-			}
-
-			if ($this->can("view", $_GET["set_group"]))
-			{
-				// fetch thegroup and check if non logged users can switch to it
-				$setg_o = obj($_GET["set_group"]);
-				if ($setg_o->prop("for_not_logged_on_users") == 1)
-				{
-					$_SESSION["nliug"] = $_GET["set_group"];
-					$_COOKIE["nliug"] = $_GET["set_group"];
-				}
-			}
-			if ($_GET["clear_group"] == 1)
-			{
-				unset($_SESSION["nliug"]);
-				unset($_COOKIE["nliug"]);
-			}
-			if ($_COOKIE["nliug"] != $_SESSION["nliug"] && $_COOKIE["nliug"])
-			{
-				$_SESSION["nliug"] = $_COOKIE["nliug"];
 			}
 
 			$gidlist = array($nlg => $nlg);
