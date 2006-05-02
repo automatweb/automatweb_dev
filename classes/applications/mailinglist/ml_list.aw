@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.74 2006/04/25 14:43:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.75 2006/05/02 12:12:17 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -871,7 +871,8 @@ class ml_list extends class_base
 				$prop["options"] = $lg->get_list();
 				break;
 
-
+// 			case "write_mail":
+// 				break;
 
 			case "show_mail_subject":
 			case "show_mail_from":
@@ -892,9 +893,6 @@ class ml_list extends class_base
 				$event = reset($exp);
 				$prop["value"] = date("d.m.Y H:i", $event["time"]);
 				break;
-		//	case "write_mail":
-		//	break;
-			
 		}
 		return $retval;
 	}
@@ -1834,6 +1832,8 @@ class ml_list extends class_base
 	**/
 	function get_members($args)
 	{
+
+	
 		extract($args);
 		$ret = array();
 		$cnt = 0;
@@ -2181,7 +2181,6 @@ class ml_list extends class_base
 		$id = $arr["obj_inst"]->id();
 		$q1 = "SELECT COUNT(*) as cnt FROM ml_sent_mails WHERE lid = '$id' AND mail='$_mid' AND qid = '$qid' AND mail_sent = 1";
 		$cnt = $this->db_fetch_field($q1, "cnt");
-		
 		$q = "SELECT target, tm, subject, id, vars 
 			FROM ml_sent_mails
 			WHERE lid = '$id' AND mail = '$_mid' AND qid = '$qid' AND mail_sent = 1 ORDER BY tm DESC LIMIT ".(100*$arr["request"]["ft_page"]).", 100";
@@ -2201,6 +2200,15 @@ class ml_list extends class_base
 			$row["clicked"] = ($row["vars"] == 1 ? t("jah") : t("ei"));
 			$t->define_data($row);
 		}
+// 		$q = "SELECT target 
+// 			FROM ml_sent_mails
+// 			WHERE lid = '$id' AND mail = '$_mid' AND qid = '$qid' AND mail_sent = 1";
+// 		$this->db_query($q);		
+// 		while ($row = $this->db_next())
+// 		{
+// 			echo $row["target"].'<br>';
+// 		}
+		
 		$t->d_row_cnt = $cnt;
 		$t->table_header = $t->draw_text_pageselector(array(
 			"records_per_page" => $perpage,
@@ -2221,7 +2229,7 @@ class ml_list extends class_base
 		$mail_id = $arr["request"]["mail_id"];
 		
 		// how many members does this list have?
-		$row = $this->db_fetch_row("SELECT total,qid FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");	
+		$row = $this->db_fetch_row("SELECT total,qid FROM ml_queue WHERE lid = '$list_id' AND mid = '$mail_id'");
 		$member_count = $row["total"];
 		$qid = $row["qid"];
 		
@@ -2310,7 +2318,6 @@ class ml_list extends class_base
 			$msg_obj->set_parent((!empty($folder) ? $folder : $arr["obj_inst"]->parent()));
 			//$msg_obj->save();
 		};
-
 		$templates = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_TEMPLATE",
 		));
@@ -2427,13 +2434,13 @@ class ml_list extends class_base
 				"classinfo" => array("allow_rte" => 2),
 			));
 		}
-		if(is_oid($xprops["emb_mfrom"]["value"]))
+/*		if(is_oid($xprops["emb_mfrom"]["value"]))
 		{
 		$email_obj = obj($xprops["emb_mfrom"]["value"]);
 		$mailto = $email_obj->prop("mail");
-		$xprops["emb_mfrom"]["value"] = $mailto;
+		//$xprops["emb_mfrom"]["value"] = $mailto;
 		}
-		return $xprops;
+*/		return $xprops;
 	}
 
 	function submit_write_mail($arr)
@@ -2484,9 +2491,7 @@ class ml_list extends class_base
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		$message_id = $writer->submit($msg_data);
-		
 		$sender = $msg_obj->prop("mfrom");
-		
 		// if you send from this address a mail once, you send from it again,
 		// without needance to use that relpickah search -- ahz
 		if($this->can("view", $sender))

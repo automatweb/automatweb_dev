@@ -69,8 +69,18 @@ class ml_mail_gen extends run_in_background
 
 	function make_send_list($o)
 	{
-		$this->mails_to_gen = array();
+		$this->made_mails = array();
 		$arr = $o->meta("mail_data");
+		extract($arr);
+		$q = "SELECT target FROM ml_sent_mails WHERE lid = '$list_id' AND mail = '$mail_id' AND qid = '$qid'";
+		$this->db_query($q);
+		while($w = $this->db_next())
+		{
+			$addr = explode("<" , $w["target"]);
+			$address = explode(">" , $addr[1]);
+			$this->made_mails[$address[0]] = $address[0];
+		}
+		$this->mails_to_gen = array();
 		if (!isset($this->d))
 		{
 			$this->d = get_instance(CL_MESSAGE);
@@ -103,7 +113,7 @@ class ml_mail_gen extends run_in_background
 	function bg_run_continue($o)
 	{
 		// restore variables from stored checkpoint
-		$this->made_mails = array();
+/*		$this->made_mails = array();
 		$arr = $o->meta("mail_data");
 		extract($arr);
 		$q = "SELECT target FROM ml_sent_mails WHERE lid = '$list_id' AND mail = '$mail_id' AND qid = '$qid'";
@@ -113,7 +123,7 @@ class ml_mail_gen extends run_in_background
 			$addr = explode("<" , $w["target"]);
 			$address = explode(">" , $addr[1]);
 			$this->made_mails[$address[0]] = $address[0];
-		}
+		}*/
 		$this->make_send_list($o);
 	}
 
