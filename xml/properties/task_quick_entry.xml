@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <properties>
-  <property>
+      <property>
             <name>date</name>
             <table>objects</table>
             <group>general</group>
@@ -9,7 +9,6 @@
             <field>date</field>
             <caption>Aeg</caption>
       </property>
-
       <property>
             <name>customer</name>
             <table>objects</table>
@@ -58,11 +57,37 @@
             <field>content</field>
             <caption>Sisu</caption>
       </property>
+      <property>
+            <name>submit_but</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>submit_but</field>
+            <caption>Salvesta</caption>
+      </property>
+      <property>
+            <name>submit_and_add</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>submit_and_add</field>
+            <caption>Salvesta ja lisa uus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK_QUICK_ENTRY</syslog_type>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <default>1</default>
+                  <icon>edit</icon>
+                  <focus>customer</focus>
+            </general>
+      </groupinfo>
 </properties>
 

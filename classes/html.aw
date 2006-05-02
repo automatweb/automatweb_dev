@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.109 2006/04/27 08:14:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.110 2006/05/02 09:57:49 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -242,10 +242,11 @@ class html extends aw_template
 
 		$value_elem = "";
 
+		$ac_off = "";
 		if ($autocomplete)
 		{
 			$onkeypress = "";
-
+			$ac_off = "autocomplete=\"off\"";
 			if ($option_is_tuple)
 			{
 				$value_elem = "<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n";
@@ -255,7 +256,7 @@ class html extends aw_template
 			}
 		}
 
-		return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$disabled}{$textsize} />$post_append_text\n{$value_elem}{$autocomplete}";
+		return "<input type=\"text\" id=\"$id\" $ac_off name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"{$onkeypress}{$disabled}{$textsize} />$post_append_text\n{$value_elem}{$autocomplete}";
 	}
 
 	/**

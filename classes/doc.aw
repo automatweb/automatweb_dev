@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.126 2006/04/27 08:14:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.127 2006/05/02 09:57:49 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1437,6 +1437,25 @@ class doc extends class_base
 			"img" => "delete.gif",
 		));
 		$toolbar->closed = 1;
+	}
+
+	/**
+		@attrib name=set_act_ver
+		@param docid required type=int
+		@param ver required
+		@param retu required
+	**/
+	function set_act_ver($arr)
+	{
+		$o = obj($arr["docid"]);
+		$this->_save_versions(array(
+			"obj_inst" => $o,
+			"request" => array(
+				"id" => $arr["docid"],
+				"set_act_ver" => $arr["ver"]
+			)
+		));	
+		return $arr["retu"];
 	}
 
 	function kw_tb($arr)

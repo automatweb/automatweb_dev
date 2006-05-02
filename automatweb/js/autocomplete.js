@@ -1,3 +1,4 @@
+var last_key = '';
 function awActb(obj, valueObj)
 {
 	/* ---- Public Variables ---- */
@@ -6,7 +7,7 @@ function awActb(obj, valueObj)
 	this.actb_firstText = true; // should the auto complete be limited to the beginning of keyword?
 	this.actb_mouse = true; // Enable Mouse Support
 	this.actb_delimiter = new Array();  // Delimiter strings for multiple part autocomplete. Set it to empty array for single autocomplete
-	this.actb_startcheck = 1; // Show widget only after this number of characters is typed in.
+	this.actb_startcheck = 0; // Show widget only after this number of characters is typed in.
 	this.actb_setOptions = actb_setOptions;// Initial options. If valueObj then associative.
 	this.actb_optionURL = false;// http URL to retrieve options from. Response expected in JSON format (http://www.json.org/)(classes/protocols/data/aw_json). Response is an array:
 	/*
@@ -97,7 +98,7 @@ function awActb(obj, valueObj)
 	{
 		if ("dynamic" == actb_mode || "realtime" == actb_mode)
 		{
-			actb_loadOptions();
+		  //			actb_loadOptions();
 		}
 
 		addEvent(document,"keydown",actb_checkkey);
@@ -282,7 +283,7 @@ function awActb(obj, valueObj)
 					eval("tmp = " + awHttpRequest.responseText);
 					actb_options = tmp["options"];
 					actb_limited = tmp["limited"];
-
+					actb_tocomplete(last_key);
 					if (tmp["error"])
 					{
 						error = "Autocomplete: server error. Description: " + tmp["errorstring"] + ". Property: " + actb_curr.name;
@@ -705,56 +706,77 @@ function awActb(obj, valueObj)
 		a = evt.keyCode;
 		caret_pos_start = getCaretStart(actb_curr);
 		actb_caretmove = 0;
-
+		rv = null;
 		switch (a)
 		{
 			case 38:// up arrow
 				actb_goup();
 				actb_caretmove = 1;
-				return false;
+				rv = false;
 				break;
 
 			case 40:// down arrow
 				actb_godown();
 				actb_caretmove = 1;
-				return false;
+				rv = false;
+				if (!actb_display)
+				  {
+					actb_loadOptions();
+					last_key = 0;
+				  }
 				break;
 
 			case 9:// tab
 				actb_mouse_on_list = 0;
+				actb_removedisp();
 				break;
+
+			case 27:
+				actb_removedisp();
+				break;
+
+			case 8:
+				setTimeout(function(){
+					actb_loadOptions();
+					last_key = 0;
+				}, 40);
+				return true;
 
 			case 13:// enter
 				if (actb_display)
 				{
 					actb_caretmove = 1;
 					actb_penter();
-					return false;
+					rv = false;
 				}
 				else
 				{
-					return true;
+					rv = true;
 				}
 				break;
 
 			default:
-				if ("realtime" == actb_mode && actb_curr.value.length)
+			  if (true || "realtime" == actb_mode /*&& actb_curr.value.length*/)
 				{
 					actb_loadOptions();
-					setTimeout(function(){actb_tocomplete(a)}, actb_urlWaitRealtime);
+					last_key = a;
 				}
 				else
 				{
-					setTimeout(function(){actb_tocomplete(a)}, 50);
+					last_key = a;
+				  //					setTimeout(function(){actb_tocomplete(a)}, 50);
 				}
 				break;
 		}
+
+		return rv;
 	}
 
 	function actb_tocomplete(kc)
 	{
 		if (kc == 38 || kc == 40 || kc == 13 || kc == 9) return;
 		var i;
+
 
 		if (actb_display)
 		{
@@ -779,7 +801,7 @@ function awActb(obj, valueObj)
 			actb_pre = -1;
 		}
 
-		if (actb_curr.value == '')
+		if (false && actb_curr.value == '')
 		{
 			actb_mouse_on_list = 0;
 			actb_removedisp();

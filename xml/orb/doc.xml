@@ -32,6 +32,16 @@
 			</function>
 		</action>
 
+		<action name="set_act_ver">
+			<function name="set_act_ver">
+				<arguments>
+					<required name="docid" type="int" />
+					<required name="ver" />
+					<required name="retu" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_versions">
 			<function name="delete_versions">
 				<arguments>

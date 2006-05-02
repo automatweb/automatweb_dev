@@ -331,10 +331,9 @@ class form_controller extends form_base
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
 		dbg::p2("controller id $id: evaling $eq <br />");
-
 		if (aw_ini_get("site_id") == 139)
 		{
-			@eval($eq);
+			eval($eq);
 		}
 		else
 		{

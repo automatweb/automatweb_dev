@@ -334,7 +334,6 @@ function AutoComplete(elem, elemSuggestions, isTuple, autocompleteSource, autoco
 	elem.onkeydown = function(ev)
 	{
 		var key = me.getKeyCode(ev);
-
 		switch(key)
 		{
 			case TAB:
@@ -381,7 +380,7 @@ function AutoComplete(elem, elemSuggestions, isTuple, autocompleteSource, autoco
 				return;
 
 			default:
-				if (this.value != me.inputText && this.value.length > 0)
+			  if (this.value != me.inputText && this.value.length > 0)
 				{
 					me.inputText = this.value;
 					me.getEligible();

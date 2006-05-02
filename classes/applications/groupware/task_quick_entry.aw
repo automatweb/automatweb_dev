@@ -1,9 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.2 2006/05/02 08:20:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.3 2006/05/02 09:57:50 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
 @classinfo syslog_type=ST_TASK_QUICK_ENTRY no_comment=1 no_status=1 prop_cb=1
+
+@groupinfo general caption=&Uuml;ldine default=1 icon=edit focus=customer
 
 @default table=objects
 @default group=general
@@ -28,6 +30,12 @@
 
 @property content type=textarea store=no rows=10 cols=50
 @caption Sisu
+
+@property submit_but type=submit 
+@caption Salvesta
+
+@property submit_and_add type=submit
+@caption Salvesta ja lisa uus
 
 
 */
@@ -73,13 +81,18 @@ class task_quick_entry extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		if ($prop["value"] == "")
-		{
-			$prop["error"] = t("K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!");
-			return PROP_FATAL_ERROR;
-		}
 		switch($prop["name"])
 		{
+			case "customer":
+			case "project":
+			case "task":
+			case "content":
+			case "duration":
+				if ($prop["value"] == "")
+				{
+					$prop["error"] = t("K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!");
+					return PROP_FATAL_ERROR;
+				}
 		}
 		return $retval;
 	}	
@@ -98,11 +111,6 @@ class task_quick_entry extends class_base
 		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
 		$cl_json = get_instance("protocols/data/json");
 
-		if ($arr["customer"] == "")
-		{
-			die();
-		}
-
 		$errorstring = "";
 		$error = false;
 		$autocomplete_options = array();
@@ -118,7 +126,7 @@ class task_quick_entry extends class_base
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
 			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
 		));
 		$autocomplete_options = $ol->names();
 		foreach($autocomplete_options as $k => $v)
@@ -217,6 +225,11 @@ class task_quick_entry extends class_base
 		$cur_co = get_current_company();
 		$cur_p = get_current_person();
 
+		$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["customer"]);
+		$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["project"]);
+		$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["task"]);
+		$arr["request"]["content"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["content"]);
+
 		$ol = new object_list(array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
 			"name" => $arr["request"]["customer"],
@@ -300,9 +313,6 @@ class task_quick_entry extends class_base
                                 "to" => $r->id(),
                                 "type" => "RELTYPE_ROW"
 			));
-
-			header("Location: ".html::get_change_url($t->id(), array("return_url" => $arr["request"]["post_ru"])));
-			die();
 		}
 		else
 		{
@@ -322,6 +332,15 @@ class task_quick_entry extends class_base
 				"to" => $r->id(),
 				"type" => "RELTYPE_ROW"
 			));
+		}
+
+		if ($arr["request"]["submit_and_add"] != "")
+		{
+			header("Location: ".$arr["request"]["post_ru"]);
+			die();
+		}
+		else
+		{
 			header("Location: ".html::get_change_url($t->id(), array("group" => "rows", "return_url" => $arr["request"]["post_ru"])));
 			die();
 		}
@@ -361,7 +380,7 @@ class task_quick_entry extends class_base
 		// if customer exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-			"name" => $arr["c"],
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["c"]),
 			"lang_id" => array(),
 			"site_id" => array()
 		));
@@ -373,7 +392,7 @@ class task_quick_entry extends class_base
 		// if project exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_PROJECT),
-			"name" => $arr["p"],
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["p"]),
 			"lang_id" => array(),
 			"site_id" => array()
 		));
@@ -385,7 +404,7 @@ class task_quick_entry extends class_base
 		// if task exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
-			"name" => $arr["t"],
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["t"]),
 			"lang_id" => array(),
 			"site_id" => array()
 		));
