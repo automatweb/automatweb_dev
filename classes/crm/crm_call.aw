@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.48 2006/05/02 13:34:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.49 2006/05/02 14:07:02 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -535,6 +535,12 @@ class crm_call extends class_base
 					$dat["start1"] = $v;
 					$dat["is_done"] = 0;
 					$i->submit($dat);
+				}
+				else
+				if ($v > 300)
+				{
+					$data["error"] = t("Uee k&otilde;ne aeg ei tohi olla minevikus!");
+					return PROP_FATAL_ERROR;
 				}
 				break;
 		};
