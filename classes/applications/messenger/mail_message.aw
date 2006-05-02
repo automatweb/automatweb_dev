@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.31 2006/03/16 15:15:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.32 2006/05/02 12:00:28 markop Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -16,7 +16,7 @@
 	@property mfrom_name type=hidden table=objects field=meta method=serialize
 	@caption Kellelt nimi
 
-	@property mfrom type=relpicker reltype=RELTYPE_MAIL_ADDRESS no_sel=1 store=connect
+	@property mfrom type=relpicker reltype=RELTYPE_MAIL_ADDRESS no_sel=1
 	@caption Kellelt
 	
 	@property mto type=textbox size=80
