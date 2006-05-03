@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.7 2006/04/27 11:16:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.8 2006/05/03 14:50:58 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -601,6 +601,10 @@ class realestate_add extends class_base
 			else
 			{
 				$_SESSION["realestate_input_data"][$key] = $address_data[$val];
+				if($key == "street" && is_oid($address_data[$val])){
+					$street_obj = obj($address_data[$val]);
+					$_SESSION["realestate_input_data"][$key] = $street_obj->name();
+				}
 			}
 		}
 		$_SESSION["realestate_input_data"]["realestate_id"] = $id;
@@ -621,6 +625,7 @@ class realestate_add extends class_base
 					$realest_obj = obj($obj_id);
 					$realest_obj->set_prop("show_on_webpage" , "1");
 					$ret.= "maksmine õnnestus, pakkumine nüüd leheküljel nähtav";
+					$realest_obj->save();
 				}
 			}
 			$_SESSION["bank_return"]["data"] = null;
@@ -637,7 +642,6 @@ class realestate_add extends class_base
 		if (!$realest_obj) $realest_obj = obj($_SESSION["realestate_input_data"]["realestate_id"]);
 		$prop_obj = get_instance(CL_REALESTATE_PROPERTY);
 		$ret.= $prop_obj->request_execute($realest_obj);
-		
 		$ret.= '<br><br><a href="';
 		$ret.= $realest_obj->meta("added_from")."?id=".$realest_obj->id();
 		$ret.= '"> Tagasi muutmisesse</a><a href="';
@@ -684,7 +688,6 @@ class realestate_add extends class_base
 		$data = $_SESSION["realestate_input_data"];
 		$data["level"] = NULL;
 		$this->vars(array("url" => $this->mk_my_orb("get_divisions", array())));
-		
 		if(!$default)
 		{
 			if($this->not_filled(array("data" => $data , "fields" => $fields,)) && !$id)
@@ -741,6 +744,13 @@ class realestate_add extends class_base
 		{
 			$data_value[$key.'_value'] = $value;
 		}
+		//see pole tegelt kõige õigem lahendus vist...a noh, toimib vähemalt
+		if(substr_count($data_value["transaction_price_value"] , "e+") > 0)
+		{
+			$asd = explode("e+" , $data_value["transaction_price_value"]);
+			$data_value["transaction_price_value"] = (double)$asd[0] * pow(10 , (int)$asd[1]);
+		}
+		
 		$this->vars($data_value);	
 
 		$subs = array("county", "city" ,"citypart", "vald" , "settlement");
@@ -1033,7 +1043,7 @@ class realestate_add extends class_base
 			$this->vars(array(
 				"LIST" => $c,
 			));
-		}		
+		}
 		return $this->parse();
 	}
 
@@ -1090,12 +1100,12 @@ class realestate_add extends class_base
 			$_SESSION["realestate_input_data"]["realestate_id"] = $realestate_obj_id;
 			$realestate_obj->set_meta("added_from" ,aw_global_get("section"));
 			$realestate_obj->set_prop("show_on_webpage" , "0");//muidu tahab sinna 1 tekkida
+			$realestate_obj->set_prop("is_visible" , "1");
 		}
 		else
 		{
 			$realestate_obj = obj($_SESSION["realestate_input_data"]["realestate_id"]);
 		}
-		
 		$pictures = new object_list($realestate_obj->connections_from (array (
 			"type" => "RELTYPE_REALESTATE_PICTURE",
 			"class_id" => CL_IMAGE,
@@ -1137,7 +1147,11 @@ class realestate_add extends class_base
 					if($x == 0)
 					{
 						$this->make_icon(array("upload_image" => $upload_image));
-						$realestate_obj->set_prop("picture_icon", $upload_image["id"]);
+						$realestate_obj->set_prop("picture_icon", $upload_image['id']);
+						$realestate_obj->connect(array(
+							"to" => $upload_image['id'],
+							"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
+						));
 					}
 					if(is_oid($existing_pics[$x]))
 					{
