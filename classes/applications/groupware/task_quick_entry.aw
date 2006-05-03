@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.5 2006/05/03 14:04:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.6 2006/05/03 14:19:59 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -327,18 +327,22 @@ class task_quick_entry extends class_base
 
 			$t_i = $t->instance();
 			$t_i->add_participant($t, $cur_p);
- $r = obj();
-                        $r->set_class_id(CL_TASK_ROW);
-                        $r->set_parent($t->id());
-                        $r->set_prop("content", $arr["request"]["content"]);
-                        $r->set_prop("date", date_edit::get_timestamp($arr["request"]["date"]));
-                        $r->set_prop("time_guess", $arr["request"]["duration"]);
-                        $r->set_prop("impl", $cur_p->id());
-                        $r->save();
+			$r = obj();
+			$r->set_class_id(CL_TASK_ROW);
+			$r->set_parent($t->id());
+			$r->set_prop("content", $arr["request"]["content"]);
+			$r->set_prop("date", date_edit::get_timestamp($arr["request"]["date"]));
+			$r->set_prop("time_guess", $arr["request"]["duration"]);
+			$r->set_prop("time_real", $arr["request"]["duration"]);
+			$r->set_prop("time_to_cust", $arr["request"]["duration"]);
+			$r->set_prop("done", 1);
+			$r->set_prop("on_bill", 1);
+			$r->set_prop("impl", $cur_p->id());
+			$r->save();
 
-                        $t->connect(array(
-                                "to" => $r->id(),
-                                "type" => "RELTYPE_ROW"
+			$t->connect(array(
+				"to" => $r->id(),
+				"type" => "RELTYPE_ROW"
 			));
 		}
 		else
@@ -352,6 +356,10 @@ class task_quick_entry extends class_base
 			$r->set_prop("content", $arr["request"]["content"]);
 			$r->set_prop("date", date_edit::get_timestamp($arr["request"]["date"]));
 			$r->set_prop("time_guess", $arr["request"]["duration"]);
+			$r->set_prop("time_real", $arr["request"]["duration"]);
+			$r->set_prop("time_to_cust", $arr["request"]["duration"]);
+			$r->set_prop("done", 1);
+			$r->set_prop("on_bill", 1);
 			$r->set_prop("impl", $cur_p->id());
 			$r->save();
 
