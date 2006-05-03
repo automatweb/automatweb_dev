@@ -1576,7 +1576,7 @@ class crm_company_cust_impl extends class_base
 	{
 		$tf = &$arr["prop"]["vcl_inst"];
 		$this->_org_table_header(&$tf);
-		$visible_fields = false;
+		$default_cfg = true;
 
 		$cl_crm_settings = get_instance(CL_CRM_SETTINGS);
 		if ($o = $cl_crm_settings->get_current_settings())
@@ -1585,36 +1585,46 @@ class crm_company_cust_impl extends class_base
 			$usecase = $cl_crm_company->get_current_usecase($arr);//$arr["obj_inst"] peab olemas olema.
 			$cl_crm_settings->apply_table_cfg($o, $usecase, $arr["prop"]["name"], &$tf);
 			$visible_fields = $cl_crm_settings->get_visible_fields($o, $usecase, $arr["prop"]["name"]);
+
+			if (!empty($visible_fields))
+			{
+				$default_cfg = false;
+			}
 		}
 
-		$rs_by_co = array();
-		$role_entry_list = new object_list(array(
-			"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
-			"company" => $arr["request"]["id"],
-			"client" => $orglist,
-			"project" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
-		));
-		foreach($role_entry_list->arr() as $role_entry)
+		# some helper data for roles
+		if ($default_cfg or in_array("rollid", $visible_fields))
 		{
-			$rc_by_co[$role_entry->prop("client")][$role_entry->prop("person")][] = html::get_change_url(
-					$arr["request"]["id"],
-					array(
-						"group" => "contacts2",
-						"unit" => $role_entry->prop("unit"),
-					),
-					parse_obj_name($role_entry->prop_str("unit"))
-				)
-				."/".
-				html::get_change_url(
-					$arr["request"]["id"],
-					array(
-						"group" => "contacts2",
-						"cat" => $role_entry->prop("role")
-					),
-					parse_obj_name($role_entry->prop_str("role"))
-				);
+			$rc_by_co = array();
+			$role_entry_list = new object_list(array(
+				"class_id" => CL_CRM_COMPANY_ROLE_ENTRY,
+				"company" => $arr["request"]["id"],
+				"client" => $orglist,
+				"project" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
+			));
+			foreach($role_entry_list->arr() as $role_entry)
+			{
+				$rc_by_co[$role_entry->prop("client")][$role_entry->prop("person")][] = html::get_change_url(
+						$arr["request"]["id"],
+						array(
+							"group" => "contacts2",
+							"unit" => $role_entry->prop("unit"),
+						),
+						parse_obj_name($role_entry->prop_str("unit"))
+					)
+					."/".
+					html::get_change_url(
+						$arr["request"]["id"],
+						array(
+							"group" => "contacts2",
+							"cat" => $role_entry->prop("role")
+						),
+						parse_obj_name($role_entry->prop_str("role"))
+					);
+			}
 		}
 
+		# table contents
 		foreach($orglist as $org)
 		{
 			if($filter)
@@ -1624,54 +1634,65 @@ class crm_company_cust_impl extends class_base
 					continue;
 				}
 			}
+
 			$o = obj($org);
 			// aga ülejäänud on kõik seosed!
-			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $fax = $url = $mail = "";
+			$name = $client_manager = $pm = $vorm = $tegevus = $contact = $juht = $juht_id = $phone = $fax = $url = $mail = $ceo = "";
+
 			if (is_oid($o->prop("ettevotlusvorm")))
 			{
 				$tmp = new object($o->prop("ettevotlusvorm"));
 				$vorm = $tmp->prop('shortname');
 			};
 
-			$roles = $this->_get_role_html(array(
-				"from_org" => $arr["request"]["id"],
-				"to_org" => $o->id(),
-				"rc_by_co" => $rc_by_co
-			));
-
-			$juht = "";
-			if (is_oid($o->prop("firmajuht")) && $this->can("view", $o->prop("firmajuht")))
+			# rollid
+			if ($default_cfg or in_array("rollid", $visible_fields))
 			{
-				$tmp = obj($o->prop("firmajuht"));
-				$juht = $tmp->name();
+				$roles = $this->_get_role_html(array(
+					"from_org" => $arr["request"]["id"],
+					"to_org" => $o->id(),
+					"rc_by_co" => $rc_by_co
+				));
 			}
 
-			$ceo = "";
+
 			if ($o->class_id() == CL_CRM_COMPANY)
 			{
-				$ceo = html::href(array(
-					"url" => $this->mk_my_orb("change",array(
-						"id" => $o->prop("firmajuht"),
-					),CL_CRM_PERSON),
-					"caption" => $juht,
-				));
-				$mail = "";
-				if (is_oid($o->prop("email_id")) && $this->can("view", $o->prop("email_id")))
+				# ceo
+				if ($default_cfg or in_array("ceo", $visible_fields))
+				{
+					if ($this->can("view", $o->prop("firmajuht")))
+					{
+						$tmp = obj($o->prop("firmajuht"));
+						$juht = $tmp->name();
+					}
+
+					$ceo = html::href(array(
+						"url" => $this->mk_my_orb("change",array(
+							"id" => $o->prop("firmajuht"),
+						),CL_CRM_PERSON),
+						"caption" => $juht,
+					));
+				}
+
+				# email
+				if (($default_cfg or in_array("email", $visible_fields)) and ($this->can("view", $o->prop("email_id"))))
 				{
 					$mail_obj = new object($o->prop("email_id"));
-					$mail .= html::href(array(
+					$mail = html::href(array(
 						"url" => "mailto:" . $mail_obj->prop("mail"),
 						"caption" => $mail_obj->prop("mail"),
 					));
-				};
-				if (is_oid($o->prop("url_id")))
+				}
+
+				# url
+				if (($default_cfg or in_array("url", $visible_fields)) and ($this->can("view", $o->prop("url_id"))))
 				{
 					$url = html::href(array(
 						"url" => $o->prop_str("url_id"),
 						"caption" => $o->prop_str("url_id"),
 					));
 				}
-				$mail = $o->prop_str("phone_id")." ".$mail;
 			}
 			/*else
 			{
@@ -1705,34 +1726,55 @@ class crm_company_cust_impl extends class_base
 				}
 			}*/
 
-			if ((!is_array($visible_fields) or in_array("phone", $visible_fields)) and $this->can("view", $o->prop("phone_id")))
+			# phone
+			if (($default_cfg or in_array("phone", $visible_fields)) and $this->can("view", $o->prop("phone_id")))
 			{
 				$phone = obj($o->prop("phone_id"));
+				$phone = $phone->name();
 			}
 
-			if ((!is_array($visible_fields) or in_array("fax", $visible_fields)) and $this->can("view", $o->prop("telefax_id")))
+			# fax
+			if (($default_cfg or  in_array("fax", $visible_fields)) and $this->can("view", $o->prop("telefax_id")))
 			{
 				$fax = obj($o->prop("telefax_id"));
+				$fax = $fax->name();
 			}
 
-			$pm = get_instance("vcl/popup_menu");
-			$pm->begin_menu("org".$o->id());
-			$pm->add_item(array(
-				"text" => t("Vaata"),
-				"link" => $this->mk_my_orb("change", array("id" => $o->id(), "return_url" => get_ru(), "group" => "quick_view"), CL_CRM_COMPANY)
-			));
-			$pm->add_item(array(
-				"text" => t("Muuda"),
-				"link" => html::get_change_url($o->id(), array("return_url" => get_ru()))
-			));
+			# client_manager
+			if ($default_cfg or in_array("client_manager", $visible_fields))
+			{
+				$client_manager = html::obj_change_url($o->prop("client_manager"));
+			}
+
+			# pop
+			if ($default_cfg or in_array("pop", $visible_fields))
+			{
+				$pm = get_instance("vcl/popup_menu");
+				$pm->begin_menu("org".$o->id());
+				$pm->add_item(array(
+					"text" => t("Vaata"),
+					"link" => $this->mk_my_orb("change", array("id" => $o->id(), "return_url" => get_ru(), "group" => "quick_view"), CL_CRM_COMPANY)
+				));
+				$pm->add_item(array(
+					"text" => t("Muuda"),
+					"link" => html::get_change_url($o->id(), array("return_url" => get_ru()))
+				));
+				$pm = $pm->get_menu();
+			}
+
+			# name
+			if ($default_cfg or in_array("name", $visible_fields))
+			{
+				$name = html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()." ".$vorm);
+			}
 
 			//!!! todo: define and get data only for fields configured to be shown in current crm settings.
 			$tf->define_data(array(
 				"id" => $o->id(),
-				"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()." ".$vorm),
+				"name" => $name,
 				"reg_nr" => $o->prop("reg_nr"),
-				"pohitegevus" => $o->prop_str("pohitegevus"),
-				"corpform" => $vorm,
+				// "pohitegevus" => $o->prop_str("pohitegevus"),
+				// "corpform" => $vorm,
 				"address" => $o->class_id() == CL_CRM_COMPANY ? $o->prop_str("contact") : $o->prop_str("address"),
 				"ceo" => $ceo,
 				"phone" => $phone,
@@ -1740,8 +1782,8 @@ class crm_company_cust_impl extends class_base
 				"url" => $url,
 				"email" => $mail,
 				'rollid' => $o->class_id() == CL_CRM_CATEGORY ? "" : $roles,
-				'client_manager' => html::obj_change_url($o->prop("client_manager")),
-				"pop" => $o->class_id() == CL_CRM_CATEGORY ? "" : $pm->get_menu()
+				'client_manager' => $client_manager,
+				"pop" => $o->class_id() == CL_CRM_CATEGORY ? "" : $pm,
 			));
 		}
 
