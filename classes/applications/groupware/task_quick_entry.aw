@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.4 2006/05/03 07:14:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.5 2006/05/03 14:04:00 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -94,7 +94,6 @@ class task_quick_entry extends class_base
 		{
 			case "customer":
 			case "project":
-			case "task":
 			case "content":
 			case "duration":
 				if ($prop["value"] == "")
@@ -102,6 +101,7 @@ class task_quick_entry extends class_base
 					$prop["error"] = t("K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!");
 					return PROP_FATAL_ERROR;
 				}
+				break;
 		}
 		return $retval;
 	}	
@@ -137,11 +137,18 @@ class task_quick_entry extends class_base
 			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"lang_id" => array(),
 			"site_id" => array(),
+			new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					"class_id" => CL_CRM_COMPANY,
+					"is_customer" => 1
+				)
+			))
 		));
 		$autocomplete_options = $ol->names();
 		foreach($autocomplete_options as $k => $v)
 		{
-			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", $v);
+			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
 		}
 		exit ($cl_json->encode($option_data));
 	}
@@ -172,13 +179,14 @@ class task_quick_entry extends class_base
 			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["project"])."%",
 			"CL_PROJECT.RELTYPE_ORDERER.name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"state" => new obj_predicate_not(PROJ_DONE)
 		));
 		$autocomplete_options = $ol->names();
              $autocomplete_options = $ol->names();
                 foreach($autocomplete_options as $k => $v)
                 {
-                        $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", $v);
+                        $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
                 }
 
 		exit ($cl_json->encode($option_data));
@@ -212,7 +220,9 @@ class task_quick_entry extends class_base
 			"CL_TASK.customer.name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"name" => $arr["task"]."%",
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"is_done" => new obj_predicate_not(8),
+			"brother_of" => new obj_predicate_prop("id")
 		));
 		$autocomplete_options = $ol->names();
              $autocomplete_options = array(); //$ol->names();
@@ -221,7 +231,7 @@ class task_quick_entry extends class_base
 			$v = iconv(aw_global_get("charset"), "UTF-8", $v);
 			if (!in_array($v, $autocomplete_options))
 			{
-                        	$autocomplete_options[$k] = $v;
+                        	$autocomplete_options[$k] = parse_obj_name($v);
                 	}
 		}
 		exit ($cl_json->encode($option_data));
@@ -234,10 +244,15 @@ class task_quick_entry extends class_base
 		$cur_co = get_current_company();
 		$cur_p = get_current_person();
 
-		$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["customer"]);
+		/*$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["customer"]);
 		$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["project"]);
-		$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["task"]);
-		$arr["request"]["content"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["content"]);
+		$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["task"]);*/
+		if ($arr["request"]["task"] == "")
+		{
+			$arr["request"]["task"] = $arr["request"]["project"];
+		}
+		//$arr["request"]["content"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["content"]);
+		$arr["request"]["duration"] = str_replace(",", ".", $arr["request"]["duration"]);
 
 		$ol = new object_list(array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
@@ -268,7 +283,8 @@ class task_quick_entry extends class_base
 			"name" => $arr["request"]["project"],
 			"CL_PROJECT.RELTYPE_ORDERER.name" => $arr["request"]["customer"]."%",
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"state" => new obj_predicate_not(PROJ_DONE)
 		));
 		if (!$ol->count())
 		{
@@ -291,7 +307,9 @@ class task_quick_entry extends class_base
 			"CL_TASK.project.name" => $arr["request"]["project"]."%",
 			"CL_TASK.customer.name" => $arr["request"]["customer"]."%",
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"is_done" => new obj_predicate_not(8),
+			"brother_of" => new obj_predicate_prop("id")
 		));
 		if (!$ol->count())
 		{
@@ -351,8 +369,8 @@ class task_quick_entry extends class_base
 		}
 		else
 		{
-			header("Location: ".html::get_change_url($t->id(), array("group" => "rows", "return_url" => $arr["request"]["post_ru"])));
-			die();
+			die(
+"<script language=javascript>window.opener.location='".html::get_change_url($t->id(), array("group" => "rows", "return_url" => $arr["request"]["post_ru"]))."';window.close();</script>");
 		}
 	}
 
@@ -405,7 +423,8 @@ class task_quick_entry extends class_base
 			"class_id" => array(CL_PROJECT),
 			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["p"]),
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"state" => new obj_predicate_not(PROJ_DONE)
 		));
 		if (!$ol->count())
 		{
@@ -417,7 +436,9 @@ class task_quick_entry extends class_base
 			"class_id" => array(CL_TASK),
 			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["t"]),
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"is_done" => new obj_predicate_not(8),
+			"brother_of" => new obj_predicate_prop("id")
 		));
 		if (!$ol->count())
 		{

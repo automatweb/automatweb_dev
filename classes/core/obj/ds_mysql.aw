@@ -1338,6 +1338,30 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$sql[] = $tf." & ".$val["mask"]." = ".((int)$val["flags"]);
 			}
 			else
+			if (($this->properties[$key]["method"] == "bitmask") && !is_array($val) && $this->properties[$key]["ch_value"] > 0)
+			{
+				if (is_object($val))
+				{
+					switch(get_class($val))
+					{
+						case "obj_predicate_not":
+							$sql[] = $tf." & ".((int)$this->properties[$key]["ch_value"])." != ".((int)$this->properties[$key]["ch_value"]);
+							break;
+
+						default:
+							error::raise(array(
+								"id" => "OBJ_BF_NOTSUPPORTED",	
+								"msg" => sprintf(t("complex compares of this type (%s) are not yet supported on bitfields (%s)!"), get_class($val), $key)
+							));
+							return;
+					}
+				}
+				else
+				{
+					$sql[] = $tf." & ".((int)$this->properties[$key]["ch_value"])." = ".((int)$this->properties[$key]["ch_value"]);
+				}
+			}
+			else
 			if (is_object($val))
 			{
 				$class_name = get_class($val);
