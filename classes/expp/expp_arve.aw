@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_arve.aw,v 1.5 2006/03/08 12:03:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_arve.aw,v 1.6 2006/05/03 16:35:51 dragut Exp $
 // expp_arve.aw - Expp arve 
 /*
 
@@ -425,15 +425,15 @@ class expp_arve extends class_base {
 					$algus		= mktime(0,0,0,(int)substr( $row["algus"],4,2),1,(int)substr( $row["algus"],0,4));
 					$lopp		= mktime(0,0,0,(int)substr( $row["algus"],4,2)+$my_m,$my_d,(int)substr( $row["algus"],0,4)+$my_y);
 					$lisarida	= "";
+//				} else if ( $row["hinna_tyyp"] == 3 && $row['kestus'] > 1 ) {
 				} else {	// Eesti ekspress jpt.
-
 					$algus		= mktime(0,0,0,(int)substr( $row["algus"],4,2),1,(int)substr( $row["algus"],0,4));
-					$sql = "select UNIX_TIMESTAMP( ilmumiskpv ) as kuup from expp_ilmumisgraafik where valjaanne = '".$row['valjaanne']."' AND ilmumiskpv >= '".date('Y-m-d', $algus)."' ORDER BY ilmumiskpv ASC LIMIT ".($row["kogus"]-1).",1";
+					$sql = "select UNIX_TIMESTAMP( ilmumiskpv ) as kuup from expp_ilmumisgraafik where valjaanne = '".$row['valjaanne']."' AND ilmumiskpv >= '".date('Y-m-d', $algus)."' ORDER BY ilmumiskpv ASC LIMIT ".(($row["kogus"]*$row['kestus'])-1).",1";
 					$this->save_handle();
 					$row1 =& $this->db_fetch_row( $sql );
 					$lopp = $row1['kuup'];
 					$this->restore_handle();
-					$lisarida	= "<b>".$row["kogus"]."</b> $lisarida";
+					$lisarida	= "<b>".($row["kogus"]*$row['kestus'])."</b> $lisarida";
 				}
 /*
 				} else if ( $row["pindeks"] != "69830" ) {
