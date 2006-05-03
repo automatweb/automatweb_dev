@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.6 2006/02/17 16:56:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.7 2006/05/03 12:08:04 voldemar Exp $
 // phone.aw - Telefon
 /*
 
@@ -52,7 +52,7 @@ class crm_phone extends class_base
 					"home" => t("kodus"),
 					"short" => t("lühinumber"),
 					"mobile" => t("mobiil"),
-					"fax" => t("faks"),
+					// "fax" => t("faks"),
 					"skype" => t("skype"),
 					"extension" => t("sisetelefon"),
 				);
