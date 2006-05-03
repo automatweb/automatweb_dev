@@ -225,6 +225,26 @@
             <caption>Linnaosa</caption>
       </property>
       <property>
+            <name>searchparam_address4</name>
+            <table>objects</table>
+            <group>grp_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Vald</caption>
+      </property>
+      <property>
+            <name>searchparam_address5</name>
+            <table>objects</table>
+            <group>grp_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Asula</caption>
+      </property>
+      <property>
             <name>search_condition</name>
             <table>objects</table>
             <group>grp_search</group>

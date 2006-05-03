@@ -721,9 +721,19 @@
                   <num_0>name</num_0>
                   <num_1>acct_no</num_1>
                   <num_2>bank</num_2>
+                  <num_3>sort_code</num_3>
             </table_fields>
             <store>no</store>
             <caption>Pangaarved</caption>
+      </property>
+      <property>
+            <name>receptionist_name</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Telefoni v&amp;amp;otilde;tab vastu</caption>
       </property>
       <property>
             <name>bill_due_days</name>
