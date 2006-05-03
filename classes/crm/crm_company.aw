@@ -248,8 +248,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	// @property b_acct_desc type=text subtitle=1 store=no
 	// @caption Pangaarved
 
-	@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,acct_no,bank table_fields=name,acct_no,bank store=no
+	@property bank_account type=releditor mode=manager reltype=RELTYPE_BANK_ACCOUNT table=kliendibaas_firma field=aw_bank_account props=name,acct_no,bank table_fields=name,acct_no,bank,sort_code store=no
 	@caption Pangaarved
+
+	@property receptionist_name type=textbox field=meta method=serialize
+	@caption Telefoni v&otilde;tab vastu
 
 	@property bill_due_days type=textbox size=5 table=kliendibaas_firma field=aw_bill_due_days
 	@caption Makset&auml;htaeg p&auml;evades
@@ -5140,8 +5143,8 @@ class crm_company extends class_base
 			CL_CRM_PERSON
 		);
 		$proj_url = html::get_new_url(
-			CL_PROJECT, 
-			$arr["request"]["id"], 
+			CL_PROJECT,
+			$arr["request"]["id"],
 			array(
 				"return_url" => get_ru(),
 				"connect_impl" => $arr["request"]["id"],
@@ -5249,47 +5252,47 @@ class crm_company extends class_base
 			<!--
 		        var keyCount = 0, pwd = "xX";
 		        var naObj = new Array("text","file","password");
-		        function keyCheck(e) 
+		        function keyCheck(e)
 				{
 					var obj = (document.all) ? window.event.srcElement : e.target;
 					var qOk = true;
-					if (obj.type) 
+					if (obj.type)
 					{
-						for (i=0;i<naObj.length;i++) 
+						for (i=0;i<naObj.length;i++)
 						{
 							if (qOk) qOk = (obj.type.toLowerCase() != naObj[i]);
 						}
-						if (!qOk && obj.tagName && obj.tagName.toLowerCase() != "input") 
+						if (!qOk && obj.tagName && obj.tagName.toLowerCase() != "input")
 						{
 							qOk = true;
 						}
 					}
-					if (obj.type == "textarea") 
+					if (obj.type == "textarea")
 					{
 						qOk = false;
 					}
-					if (qOk) 
+					if (qOk)
 					{
 						winTrigger(((document.all) ? window.event.keyCode : e.which));
 					}
 				}
-				function winTrigger(taste) 
+				function winTrigger(taste)
 				{
-					for (i=0;i<pwd.length;i++) 
+					for (i=0;i<pwd.length;i++)
 					{
-						if (taste == pwd.charCodeAt(i)) 
+						if (taste == pwd.charCodeAt(i))
 						{
 							aw_popup_scroll("'.$url.'", "quick_task_entry", 600,600);
 							break;
 						}
 					}
 				}
-				if (document.layers) 
+				if (document.layers)
 				{
 					window.captureEvents(Event.KEYPRESS);
 					window.onkeypress = keyCheck;
-				} 
-				else 
+				}
+				else
 				{
 					document.onkeydown = keyCheck;
 				}
