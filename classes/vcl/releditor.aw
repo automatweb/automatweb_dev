@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.85 2006/04/18 11:16:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.86 2006/05/03 12:05:14 voldemar Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -168,7 +168,7 @@ class releditor extends core
 
 		#$this->all_props = $act_props;
 		$pcount = sizeof($props);
-		
+
 		// the toolbar should be before the props, because otherwise it
 		// would look freakish when adding new or changing -- ahz
 		if($visual == "manager")
@@ -768,9 +768,9 @@ class releditor extends core
 
 	function process_releditor($arr)
 	{
-
 		$prop = &$arr["prop"];
 		$obj = $arr["obj_inst"];
+		$set_default_relation = false;
 
 		$clid = $arr["prop"]["clid"][0];
 
@@ -794,9 +794,17 @@ class releditor extends core
 		{
 			// XXX: this will fail, if there are multiple releditors on one page
 			$to_delete = new aw_array($arr["request"]["check"]);
+			$delete_default = false;
+
 			foreach($to_delete->get() as $alias_id)
 			{
 				$c = new connection($alias_id);
+
+				if ("manager" == $prop["mode"] and $c->prop("to") == $obj->prop($prop["name"]))
+				{
+					$delete_default = true;
+				}
+
 				if ($prop['delete_relations'] == '1')
 				{
 					$c->delete();
@@ -806,10 +814,24 @@ class releditor extends core
 					$target = $c->to();
 					$target->delete();
 				}
-			};
+			}
+
+			if ($delete_default)
+			{
+				# old default deleted, set first found to be default
+				$conns = $obj->connections_from(array(
+					"type" => $arr["prop"]["reltype"],
+				));
+				$first_conn = reset($conns);
+
+				if (is_object($first_conn))
+				{
+					$obj->set_prop($arr["prop"]["name"], $first_conn->prop("to"));
+				}
+			}
 
 			return PROP_OK;
-		};
+		}
 
 		$clinst = get_instance($use_clid);
 
@@ -818,8 +840,6 @@ class releditor extends core
 		$emb = $arr["request"][$elname];
 		// _data is used to edit multiple connections at once
 		unset($emb["_data"]);
-
-		$set_default_relation = false;
 
 		if (is_oid($emb["_default"]))
 		{
@@ -904,15 +924,15 @@ class releditor extends core
 					if ($emb[$item["name"]] && $item["type"] != "datetime_select" && $item["name"] != "status")
 					{
 						$el_count++;
-					};
+					}
 
 					if ($item["type"] == "checkbox" && !$emb[$item["name"]])
 					{
 						$emb[$item["name"]] = 0;
 					}
-				};
-			};
-		};
+				}
+			}
+		}
 
 
 		// TODO: make it give feedback to the user, if an object can not be added
@@ -980,10 +1000,20 @@ class releditor extends core
 						"to" => $obj_id,
 						"reltype" => $arr["prop"]["reltype"],
 					));
-					$obj->set_prop($arr["prop"]["name"], $obj_id);
+
+					if (!$obj->prop($arr["prop"]["name"]))
+					{
+						$set_default_relation = $obj_id;
+					}
 				};
 			};
-		};
+		}
+
+		if ($set_default_relation)
+		{
+			$obj->set_prop($arr["prop"]["name"], $set_default_relation);
+		}
+
 		// is this save() here really needed?  --dragut
 		// it seems that, in some cases it saves an object which has releditor
 		// although it shouldn't be saved cause some PROP_FATAL_ERROR appearance.
