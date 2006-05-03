@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.161 2006/05/02 12:32:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.162 2006/05/03 13:49:55 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -785,7 +785,7 @@ class image extends class_base
 				if (is_oid($arr["obj_inst"]->id()))
 				{
 					$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
-					$prop["value"] .= "&nbsp;&nbsp;<a href='#' onClick='ct=aw_get_url_contents(\"$url\");FCK=window.parent.opener.FCK;FCK.Focus();FCK.InsertHtml(ct);'>Paiguta dokumenti</a>";
+					//$prop["value"] .= "&nbsp;&nbsp;<a href='#' onClick='ct=aw_get_url_contents(\"$url\");FCK=window.parent.opener.FCK;FCK.Focus();FCK.InsertHtml(ct);'>Paiguta dokumenti</a>";
 				}
 				break;
 			case "file2":
