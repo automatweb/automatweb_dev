@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.14 2006/04/21 11:41:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.15 2006/05/03 12:44:45 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -82,6 +82,12 @@
 
 	@property searchparam_address3 type=select multiple=1
 	@caption Linnaosa
+
+	@property searchparam_address4 type=select multiple=1
+	@caption Vald
+
+	@property searchparam_address5 type=select multiple=1
+	@caption Asula
 
 	// @property search_address_text type=textbox
 	// @caption Aadress vabatekstina
@@ -336,6 +342,26 @@ class realestate_search extends class_base
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["a3"];
 				break;
 
+			case "searchparam_address4":
+				$list =& $this->administrative_structure->prop (array (
+					"prop" => "units_by_division",
+					"division" => $this->realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_4"),
+				));
+				$options = is_object ($list) ? $list->names () : array (); ### vald
+				$prop["options"] = $options;
+				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["a4"];
+				break;
+
+			case "searchparam_address5":
+				$list =& $this->administrative_structure->prop (array (
+					"prop" => "units_by_division",
+					"division" => $this->realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_5"),
+				));
+				$options = is_object ($list) ? $list->names () : array (); ### asula
+				$prop["options"] = $options;
+				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["a5"];
+				break;
+
 			case "searchparam_fromdate":
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : isset ($_GET["realestate_search"]["fd"]) ? mktime (0, 0, 0, (int) $_GET["realestate_search"]["fd"]["month"], (int) $_GET["realestate_search"]["fd"]["day"], (int) $_GET["realestate_search"]["fd"]["year"]) : (time () - 60*86400);
 				break;
@@ -473,6 +499,8 @@ class realestate_search extends class_base
 					"searchparam_address1",
 					"searchparam_address2",
 					"searchparam_address3",
+					"searchparam_address4",
+					"searchparam_address5",
 					"search_condition",
 					"searchparam_fromdate",
 					"search_usage_purpose",
@@ -638,6 +666,8 @@ class realestate_search extends class_base
 				"a1" => $this_object->prop ("searchparam_address1"),
 				"a2" => $this_object->prop ("searchparam_address2"),
 				"a3" => $this_object->prop ("searchparam_address3"),
+				"a4" => $this_object->prop ("searchparam_address4"),
+				"a5" => $this_object->prop ("searchparam_address5"),
 				"at" => $this_object->prop ("searchparam_addresstext"),
 				"fd" => $this_object->prop ("searchparam_fromdate"),
 				"up" => $this_object->prop ("search_usage_purpose"),
@@ -666,6 +696,8 @@ class realestate_search extends class_base
 				"a1" => $_GET["realestate_a1"],
 				"a2" => $_GET["realestate_a2"],
 				"a3" => $_GET["realestate_a3"],
+				"a4" => $_GET["realestate_a4"],
+				"a5" => $_GET["realestate_a5"],
 				"at" => $_GET["realestate_at"],
 				"fd" => $_GET["realestate_fd"],
 				"up" => $_GET["realestate_up"],
@@ -808,6 +840,16 @@ class realestate_search extends class_base
 					$a2_division_id = $this->division2->id ();
 				}
 
+				if (in_array ("searchparam_address4", $visible_formelements))
+				{
+					if (!is_object ($this->division4))
+					{
+						$this->division4 = $this->realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_4");
+					}
+
+					$a4_division_id = $this->division4->id ();
+				}
+
 				$form_elements["a1"]["caption"] = $properties["searchparam_address1"]["caption"];
 				$form_elements["a1"]["element"] = html::select(array(
 					"name" => "realestate_a1",
@@ -871,6 +913,61 @@ class realestate_search extends class_base
 					"size" => $select_size,
 					"options" => $options,
 					"value" => ($saved_search and is_array ($search["a3"])) ? NULL : $search["a3"],
+				));
+			}
+
+			if (in_array ("searchparam_address4", $visible_formelements))
+			{
+				if (in_array ("searchparam_address1", $visible_formelements))
+				{
+					$options = array(REALESTATE_SEARCH_ALL => t("Kõik vallad"));
+					$options = !empty ($search["a4"]) ? array (reset ($search["a4"]) => $this->options_a4[reset ($search["a4"])]) + $options : $options;
+				}
+				else
+				{
+					$options = $this->options_a4;
+				}
+
+				if (in_array ("searchparam_address5", $visible_formelements))
+				{
+					if (!is_object ($this->division5))
+					{
+						$this->division5 = $this->realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_5");
+					}
+
+					$a5_division_id = $this->division5->id ();
+				}
+
+				$form_elements["a4"]["caption"] = $properties["searchparam_address4"]["caption"];
+				$form_elements["a4"]["element"] = html::select(array(
+					"name" => "realestate_a4",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $options,
+					"value" => ($saved_search and is_array ($search["a4"])) ? NULL : $search["a4"],
+					"onchange" => (in_array ("searchparam_address5", $visible_formelements) ? "reChangeSelection(this, false, 'realestate_a5', '{$a5_division_id}');" : NULL),
+				));
+			}
+
+			if (in_array ("searchparam_address5", $visible_formelements))
+			{
+				if (in_array ("searchparam_address4", $visible_formelements))
+				{
+					$options = array(REALESTATE_SEARCH_ALL => t("Kõik asulad"));
+					$options = !empty ($search["a5"]) ? array (reset ($search["a5"]) => $this->options_a5[reset ($search["a5"])]) + $options : $options;
+				}
+				else
+				{
+					$options = $this->options_a5;
+				}
+
+				$form_elements["a5"]["caption"] = $properties["searchparam_address5"]["caption"];
+				$form_elements["a5"]["element"] = html::select(array(
+					"name" => "realestate_a5",
+					"multiple" => $select_size,
+					"size" => $select_size,
+					"options" => $options,
+					"value" => ($saved_search and is_array ($search["a5"])) ? NULL : $search["a5"],
 				));
 			}
 
@@ -1149,8 +1246,12 @@ class realestate_search extends class_base
 				"a1_element_id" => "realestate_a1",
 				"a2_element_id" => "realestate_a2",
 				"a3_element_id" => "realestate_a3",
+				"a4_element_id" => "realestate_a4",
+				"a5_element_id" => "realestate_a5",
 				"a2_division" => $a2_division_id,
 				"a3_division" => $a3_division_id,
+				"a4_division" => $a4_division_id,
+				"a5_division" => $a5_division_id,
 			));
 			$form = $this->parse ("RE_SEARCHFORM");
 
@@ -1289,6 +1390,29 @@ class realestate_search extends class_base
 		$this->options_a3 = is_object ($list) ? $list->names () : array (); // linnaosa;
 		natcasesort ($this->options_a3);
 		$this->options_a3 = array(REALESTATE_SEARCH_ALL => t("Kõik linnaosad")) + $this->options_a3;
+
+		### address4
+		$list =& $this->administrative_structure->prop (array (
+			"prop" => "units_by_division",
+			"division" => $this->realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_4"),
+		));
+		$this->options_a4 = is_object ($list) ? $list->names () : array (); // vald;
+		natcasesort ($this->options_a4);
+		$this->options_a4 = array(REALESTATE_SEARCH_ALL => t("Kõik vallad")) + $this->options_a4;
+
+		### address5
+		if (!is_object ($this->division5))
+		{
+			$this->division5 = $this->realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_5");
+		}
+
+		$list =& $this->administrative_structure->prop (array (
+			"prop" => "units_by_division",
+			"division" => $this->division5,
+		));
+		$this->options_a5 = is_object ($list) ? $list->names () : array (); // asula;
+		natcasesort ($this->options_a5);
+		$this->options_a5 = array(REALESTATE_SEARCH_ALL => t("Kõik asulad")) + $this->options_a5;
 
 		### condition
 		$prop_args = array (
@@ -1463,6 +1587,32 @@ class realestate_search extends class_base
 				}
 			}
 
+			$arr["a4"] = ($arr["a4"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["a4"];
+			$search_a4 = (array) $arr["a4"];
+			unset ($search_a4[REALESTATE_SEARCH_ALL]);
+
+			foreach ($search_a4 as $value)
+			{
+				if (!isset ($this->options_a4[$value]))
+				{
+					$search_a4 = NULL;
+					break;
+				}
+			}
+
+			$arr["a5"] = ($arr["a5"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["a5"];
+			$search_a5 = (array) $arr["a5"];
+			unset ($search_a5[REALESTATE_SEARCH_ALL]);
+
+			foreach ($search_a5 as $value)
+			{
+				if (!isset ($this->options_a5[$value]))
+				{
+					$search_a5 = NULL;
+					break;
+				}
+			}
+
 			$search_at = str_pad ($arr["at"], 200);
 			$search_fd = mktime (0, 0, 0, (int) $arr["fd"]["month"], (int) $arr["fd"]["day"], (int) $arr["fd"]["year"]);
 
@@ -1549,6 +1699,8 @@ class realestate_search extends class_base
 			"a1" => $search_a1,
 			"a2" => $search_a2,
 			"a3" => $search_a3,
+			"a4" => $search_a4,
+			"a5" => $search_a5,
 			"at" => $search_at,
 			"fd" => $search_fd,
 			"up" => $search_up,
@@ -1584,6 +1736,8 @@ class realestate_search extends class_base
 		$search_a1 = $arr["search"]["a1"];
 		$search_a2 = $arr["search"]["a2"];
 		$search_a3 = $arr["search"]["a3"];
+		$search_a4 = $arr["search"]["a4"];
+		$search_a5 = $arr["search"]["a5"];
 		$search_at = $arr["search"]["at"];
 		$search_owp = $arr["search"]["owp"];
 		$search_imf = $arr["search"]["imf"];
@@ -1725,7 +1879,15 @@ class realestate_search extends class_base
 		}
 
 		### get address constraint
-		if (count ($search_a3))
+		if (count ($search_a5))
+		{
+			$search_admin_units = $search_a5;
+		}
+		elseif (count ($search_a4))
+		{
+			$search_admin_units = $search_a4;
+		}
+		elseif (count ($search_a3))
 		{
 			$search_admin_units = $search_a3;
 		}
