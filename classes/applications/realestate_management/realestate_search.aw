@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.15 2006/05/03 12:44:45 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.16 2006/05/03 13:19:36 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -249,15 +249,27 @@ class realestate_search extends class_base
 		switch($prop["name"])
 		{
 			case "template":
-				$prop["options"] = array (
-					"search1" => "search1",
-				);
+				$prop["caption"] .=
+				'<br />'.t("valik kataloogist:").' '.wordwrap($this->site_template_dir, 47, "<br />\n",1);
+				
+				$prop["options"] = array("" => "");
+				$files = array();
+				if ($handle = opendir($this->site_template_dir)) {
+					while (false !== ($file = readdir($handle))) {
+						if(substr_count($file, '.tpl') == 1) $prop["options"][substr($file, 0, -4)] = substr($file, 0, -4);
+					}
+				}
 				break;
 
 			case "result_format":
-				$prop["options"] = array (
-					"format1" => t("V1"),
-				);
+				$prop["caption"] .= '<br />'.t("valik kataloogist:").' '.wordwrap($this->site_template_dir, 47, "<br />\n",1);
+				$prop["options"] = array("format1" => "format1");
+				$files = array();
+				if ($handle = opendir($this->site_template_dir)) {
+					while (false !== ($file = readdir($handle))) {
+						if(substr_count($file, '.tpl') == 1) $prop["options"][substr($file, 0, -4)] = substr($file, 0, -4);
+					}
+				}
 				break;
 
 			case "search_class_id":
