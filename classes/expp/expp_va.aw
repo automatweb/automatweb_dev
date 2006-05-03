@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.6 2006/04/11 10:51:19 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.7 2006/05/03 14:24:50 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -448,12 +448,22 @@ class expp_va extends class_base {
 //			$_vad[$_temp_liik]["kampaania"] = $row["kampaania"];
 			switch( $row["hinna_tyyp"] ) {
 				case 0:
-						$_text = t('kuu');
-						$_textn = t('kuud');
+						if ( $this->lang != 'et' ) {
+							$_text = $lc_expp['LC_EXPP_VA_KUU'];
+							$_textn = $lc_expp['LC_EXPP_VA_KUUD'];
+						} else {
+							$_text = 'kuu';
+							$_textn = 'kuud';
+						}
 					break;
 				case 3:
-						$_text = t(' numbri hind');
-						$_textn = t(' numbri hind');
+						if ( $this->lang != 'et' ) {
+							$_text = $lc_expp['LC_EXPP_VA_NUMBRI_HIND'];
+							$_textn = $lc_expp['LC_EXPP_VA_NUMBRI_HIND'];
+						} else {
+							$_text = ' numbri hind';
+							$_textn = ' numbri hind';
+						}
 					break;
 				default:
 					echo $row["hinna_tyyp"];
@@ -463,10 +473,15 @@ class expp_va extends class_base {
 				case 'OKHIND':
 				case 'AVALIK_OKHIND':
 				case 'SALAJANE_OKHIND':
+					if ( $this->lang != 'et' ) {
+						$lc_otsekorraldus = $lc_expp['LC_EXPP_VA_OTSEKORRALDUS'];
+					} else {
+						$lc_otsekooraldus = 'otsekorraldus';
+					}
 					$_vad[$_temp_liik]['hinnad'][0] = array(
 							'h' => $row["baashind"],
 							'id' => $row["id"],
-							'head' => t('otsekorraldus')
+							'head' => $lc_otsekorraldus
 						);
 					break;
 /*
@@ -675,7 +690,7 @@ class expp_va extends class_base {
 			}
 			if ( $this->lang != 'et' ) {
 				$_lc_key = 'LC_EXPP_DB_'.strtoupper($row['liik']);
-				$_lc_key = str_replace(' ', '', $_lc_key);
+				$_lc_key = str_replace(' ', '_', $_lc_key);
 				$_lc_key = htmlentities($_lc_key);
 				$_liik_wnimi = ( isset( $lc_expp[$_lc_key] ) ) ? $lc_expp[$_lc_key] : $row['liik'];
 			} else {
