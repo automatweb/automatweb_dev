@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.3 2006/05/02 09:57:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.4 2006/05/03 07:14:34 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -34,8 +34,8 @@
 @property submit_but type=submit 
 @caption Salvesta
 
-@property submit_and_add type=submit
-@caption Salvesta ja lisa uus
+@property submit_and_add type=text 
+@caption &nbsp;
 
 
 */
@@ -56,6 +56,15 @@ class task_quick_entry extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "submit_and_add":
+				$prop["value"] = html::submit(array(
+					"name" => "submit_and_add",
+					"value" => t("Salvesta ja lisa uus"),
+					"class" => "aw04formbutton",
+					"onclick" => "document.changeform.button_p.value=1;submit_changeform('');"
+				));
+				break;
+
 			case "name":
 				return PROP_IGNORE;
 
@@ -100,6 +109,7 @@ class task_quick_entry extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["button_p"] = 0;
 	}
 
 	/**
@@ -221,7 +231,6 @@ class task_quick_entry extends class_base
 	{
 		// find the task referenced and add row to it.
 		// if needed add customer/project/task
-
 		$cur_co = get_current_company();
 		$cur_p = get_current_person();
 
@@ -334,6 +343,7 @@ class task_quick_entry extends class_base
 			));
 		}
 
+
 		if ($arr["request"]["submit_and_add"] != "")
 		{
 			header("Location: ".$arr["request"]["post_ru"]);
@@ -350,6 +360,7 @@ class task_quick_entry extends class_base
 	{
 		return
 		"function aw_submit_handler() {".
+		"".
 		// fetch list of companies with that name and ask user if count > 0
 		"var url = '".$this->mk_my_orb("check_existing")."';".
 		"url = url + '&c=' + document.changeform.customer.value;".

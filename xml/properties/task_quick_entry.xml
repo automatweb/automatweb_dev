@@ -70,10 +70,9 @@
             <name>submit_and_add</name>
             <table>objects</table>
             <group>general</group>
-            <type>submit</type>
-            <store>no</store>
+            <type>text</type>
             <field>submit_and_add</field>
-            <caption>Salvesta ja lisa uus</caption>
+            <caption>&amp;amp;nbsp;</caption>
       </property>
       <classinfo>
             <syslog_type>ST_TASK_QUICK_ENTRY</syslog_type>
