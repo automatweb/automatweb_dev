@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.17 2006/05/03 13:30:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.18 2006/05/03 13:33:45 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1197,7 +1197,7 @@ class realestate_search extends class_base
 		enter_function("re_search::show - parse");
 
 		### style
-		if (file_exists($this->site_template_dir.'/'.prop("template").".css"))
+		if (file_exists($this->site_template_dir.'/'.$this_object->prop("template").".css"))
 		{		
 			$template = $this_object->prop ("template") . ".css";
 			$this->read_template($template);
