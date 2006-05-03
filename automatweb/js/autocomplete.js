@@ -9,7 +9,7 @@ function awActb(obj, valueObj)
 	this.actb_delimiter = new Array();  // Delimiter strings for multiple part autocomplete. Set it to empty array for single autocomplete
 	this.actb_startcheck = 0; // Show widget only after this number of characters is typed in.
 	this.actb_setOptions = actb_setOptions;// Initial options. If valueObj then associative.
-	this.actb_optionURL = false;// http URL to retrieve options from. Response expected in JSON format (http://www.json.org/)(classes/protocols/data/aw_json). Response is an array:
+	this.actb_setOptionUrl = actb_setOptionUrl;// http URL to retrieve options from. Response expected in JSON format (http://www.json.org/)(classes/protocols/data/aw_json). Response is an array:
 	/*
 	array(
 		"error" => boolean,// recommended
@@ -31,6 +31,7 @@ function awActb(obj, valueObj)
 	var actb_options = new Array();
 	var actb_limited = true;
 	var actb_httpDisplayError = true;
+	var actb_optionUrl = false;
 	var actb_urlParams = new Array();
 	var actb_urlWaitRealtime = 400;// ms
 	var actb_delimwords = new Array();
@@ -52,7 +53,7 @@ function awActb(obj, valueObj)
 	var actb_caretmove = false;
 	var actb_form = obj.form;
 	var actb_input = "";
-	var actb_mode = "";// realtime|static|dynamic
+	var actb_mode = "";// realtime|static|dynamic|monocarpic
 	var actb_optionCache = new awActbOptionCache();
 	var actb_valueCache = new Array();
 	/* ---- Private Variables---- */
@@ -93,10 +94,20 @@ function awActb(obj, valueObj)
 		actb_urlParams = params;
 	}
 
+	function actb_setOptionUrl(url)
+	{
+		if ("dynamic" != actb_mode && "realtime" != actb_mode)
+		{
+			actb_mode = "monocarpic";
+		}
+
+		actb_optionUrl = url;
+	}
+
 	addEvent(actb_curr,"focus",actb_setup);
 	function actb_setup()
 	{
-		if ("dynamic" == actb_mode || "realtime" == actb_mode)
+		if ("dynamic" == actb_mode)
 		{
 		  //			actb_loadOptions();
 		}
@@ -220,7 +231,7 @@ function awActb(obj, valueObj)
 		requestSeparator = '';
 		paramSeparator = '&';
 
-		if (actb_self.actb_optionURL.indexOf('?') < 0)
+		if (actb_optionUrl.indexOf('?') < 0)
 		{
 			requestSeparator = '?';
 			paramSeparator = '';
@@ -242,7 +253,7 @@ function awActb(obj, valueObj)
 			requestParams += '&' + name + '=' + awUriEncode(params[name]);
 		}
 
-		url = actb_self.actb_optionURL + requestSeparator + requestParams;
+		url = actb_optionUrl + requestSeparator + requestParams;
 
 //~ /* dbg */ dbgdiv = document.getElementById("help_layer"); dbgdiv.style.display = "block"; dbgdiv.innerHTML = url;
 
