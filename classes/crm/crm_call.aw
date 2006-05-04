@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.49 2006/05/02 14:07:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.50 2006/05/04 11:31:02 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -701,7 +701,8 @@ class crm_call extends class_base
 			"class_id" => CL_CRM_CALL,
 			"lang_id" => array(),
 			"site_id" => array(),
-			"customer" => $arr["obj_inst"]->prop("customer")
+			"customer" => $arr["obj_inst"]->prop("customer"),
+			"brother_of" => new obj_predicate_prop("id")
 		));
 		foreach($ol->arr() as $o)
 		{
