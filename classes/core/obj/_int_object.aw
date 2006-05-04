@@ -2000,6 +2000,10 @@ class _int_object
 				$prop_dat = $GLOBALS["properties"][$o->class_id()][$part];
 				if (in_array($prop_dat["type"], array("relpicker", "classificator", "popup_search", "relmanager", "releditor")))
 				{
+					if (is_array($cur_v) && count($cur_v) == 1)
+					{
+						$cur_v = reset($cur_v);
+					}
 					if (!$GLOBALS["object_loader"]->ds->can("view", $cur_v))
 					{
 						return null;
