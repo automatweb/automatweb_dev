@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.7 2006/05/03 14:24:50 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.8 2006/05/04 13:20:31 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -476,7 +476,7 @@ class expp_va extends class_base {
 					if ( $this->lang != 'et' ) {
 						$lc_otsekorraldus = $lc_expp['LC_EXPP_VA_OTSEKORRALDUS'];
 					} else {
-						$lc_otsekooraldus = 'otsekorraldus';
+						$lc_otsekorraldus = 'otsekorraldus';
 					}
 					$_vad[$_temp_liik]['hinnad'][0] = array(
 							'h' => $row["baashind"],
