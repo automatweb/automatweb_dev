@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.352 2006/04/17 10:13:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.353 2006/05/04 09:28:44 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -147,6 +147,65 @@ class document extends aw_template
 		{
 			$lm = "LIMIT ".$row->prop("ndocs");
 		};
+
+		if ($ordby == "")
+		{
+			$obj = obj($parent);
+			if ($obj->meta("sort_by") != "")
+			{
+				$ordby = $obj->meta("sort_by");
+				if ($obj->meta("sort_by") == "RAND()")
+				{
+					$has_rand = true;
+				}
+				if ($obj->meta("sort_ord") != "")
+				{
+					$ordby .= " ".$obj->meta("sort_ord");
+				}
+				if ($obj->meta("sort_by") == "documents.modified")
+				{
+					$ordby .= ", objects.created DESC";
+				};
+			}
+			else
+			{
+				$ordby = aw_ini_get("menuedit.document_list_order_by");
+			}
+
+			if ($obj->meta("sort_by2") != "")
+			{
+				if ($obj->meta("sort_by2") == "RAND()")
+				{
+					$has_rand = true;
+				}
+				$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by2");
+				if ($obj->meta("sort_ord2") != "")
+				{
+					$ordby .= " ".$obj->meta("sort_ord2");
+				}
+				if ($obj->meta("sort_by2") == "documents.modified")
+				{
+					$ordby .= ", objects.created DESC";
+				};
+			}
+
+			if ($obj->meta("sort_by3") != "")
+			{
+				if ($obj->meta("sort_by3") == "RAND()")
+				{
+					$has_rand = true;
+				}
+				$ordby .= ($ordby != "" ? " , " : " ").$obj->meta("sort_by3");
+				if ($obj->meta("sort_ord3") != "")
+				{
+					$ordby .= " ".$obj->meta("sort_ord3");
+				}
+				if ($obj->meta("sort_by3") == "documents.modified")
+				{
+					$ordby .= ", objects.created DESC";
+				};
+			}
+		}
 
 		if ($ordby == "")
 		{
