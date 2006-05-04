@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.180 2006/05/02 12:07:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.181 2006/05/04 08:54:37 kristo Exp $
 
 /*
 
@@ -569,7 +569,7 @@ class site_show extends class_base
 			{
 				if ($con["from.class_id"] == CL_DOCUMENT)
 				{
-					if ($con["from.status"] == STAT_ACTIVE)
+					if ($con["from.status"] == STAT_ACTIVE && $con["reltype"] == 28)
 					{
 						$docid[$con["from"]] = $con["from"];
 					}
@@ -733,7 +733,7 @@ class site_show extends class_base
 					{
 						$kwns[] = $promo_kw->prop("to");
 					}
-					$filter["CL_DOCUMENT.RELTYPE"] = $kwns;
+					$filter["CL_DOCUMENT.RELTYPE_KEYWORD"] = $kwns;
 				}
 
 				if ($obj->prop("use_doc_content_type") && $_SESSION["doc_content_type"])
