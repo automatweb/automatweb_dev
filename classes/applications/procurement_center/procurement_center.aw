@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.1 2006/04/27 08:14:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.2 2006/05/04 13:47:40 kristo Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -19,6 +19,9 @@
 		@property p_tbl type=table no_caption=1 store=no parent=p_l
 
 @groupinfo p caption="Hanked" submit=no
+
+@reltype MANAGER_CO value=1 clid=CL_CRM_COMPANY
+@caption Haldaja firma
 */
 
 class procurement_center extends class_base

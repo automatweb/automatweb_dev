@@ -49,6 +49,13 @@
                   <master_table>objects</master_table>
             </aw_procurement_implementor_centers>
       </tableinfo>
+      <reltypes>
+            <MANAGER_CO>
+                  <value>1</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Haldaja firma</caption>
+            </MANAGER_CO>
+      </reltypes>
       <layout>
             <p_l>
                   <type>hbox</type>

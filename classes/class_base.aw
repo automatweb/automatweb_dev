@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.481 2006/04/28 09:53:08 kristo Exp $
+// $Id: class_base.aw,v 2.482 2006/05/04 13:47:39 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -750,6 +750,12 @@ class class_base extends aw_template
 		{
 			$argblock["is_sa"] = 1;
 		}
+
+		if ($_GET["pseh"] != "")
+		{
+			$argblock["pseh"] = $_GET["pseh"];
+		}
+
 		if (method_exists($this->inst,"callback_mod_reforb"))
 		{
 			$this->inst->callback_mod_reforb(&$argblock,$this->request);
@@ -4106,6 +4112,14 @@ class class_base extends aw_template
 				"obj_inst" => &$this->obj_inst,
 				"new" => $new,
 			));
+		}
+
+		if ($_POST["pseh"] != "" && isset($_SESSION["ps_event_handlers"][$_POST["pseh"]]) && $_SESSION["ps_event_handlers"][$_POST["pseh"]][3] == $this->obj_inst->class_id())
+		{
+			$pseh_dat = $_SESSION["ps_event_handlers"][$_POST["pseh"]];
+			$pseh_i = get_instance($pseh_dat[0]);
+			$pseh_i->$pseh_dat[1]($this->obj_inst, $pseh_dat[2]);
+			unset($_SESSION["ps_event_handlers"][$_POST["pseh"]]);
 		}
 
 		return true;

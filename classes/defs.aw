@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.217 2006/04/19 09:33:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.218 2006/05/04 13:47:40 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -11,6 +11,14 @@ if (!defined("DEFS"))
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
 	define("SERIALIZE_PHP_FILE",6);
+
+	function aw_register_ps_event_handler($class, $method, $params, $to_class)
+	{
+		$inf = array($class, $method, $params, $to_class);
+		$id = md5(serialize($inf));
+		$_SESSION["ps_event_handlers"][$id] = $inf;
+		return $id;
+	}
 
 	/** returns the object of the currently active person
 		@attrib api=1
@@ -446,6 +454,10 @@ if (!defined("DEFS"))
 			};
 		};
 		$url = str_replace('&&','&',$url);
+		if ($url[strlen($url)-1] == "&")
+		{
+			$url = substr($url, 0, strlen($url)-1);
+		}
 		return $url;
 	}
 

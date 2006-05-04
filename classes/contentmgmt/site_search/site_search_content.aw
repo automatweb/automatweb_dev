@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.71 2006/05/02 14:16:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.72 2006/05/04 13:47:40 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1267,8 +1267,8 @@ class site_search_content extends class_base
 		$per_page = $arr["per_page"];
 		$params = $arr["params"];
 
-		$num_pages = ($cnt / $per_page);
-
+		$num_pages = ceil(($cnt / $per_page));
+		$page = (int)$page;
 		$pg = "";
 		$prev = "";
 		$nxt = "";
@@ -1299,7 +1299,7 @@ class site_search_content extends class_base
 			}
 		}
 		$this->vars(array(
-			"prev" => aw_url_change_var("page", max((int)$page-1,0))
+			"prev" => aw_url_change_var("page", (string)max((int)$page-1,0))
 		));
 
 		$this->vars(array(
@@ -1310,7 +1310,7 @@ class site_search_content extends class_base
 			$prev = $this->parse("PREVIOUS");
 		}
 		
-		if (((int)$page) < ($num_pages-1))
+		if (((int)$page) < (((int)$num_pages)-1))
 		{
 			$nxt = $this->parse("NEXT");
 		}
