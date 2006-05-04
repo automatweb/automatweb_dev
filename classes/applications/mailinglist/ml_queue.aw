@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.25 2006/03/29 11:58:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.26 2006/05/04 10:39:21 markop Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -53,7 +53,7 @@ class ml_queue extends aw_template
 		return $this->mk_my_orb("queue",array("manager"=>1));
 	}
 
-	/**  
+	/**
 		@attrib name=queue params=name 
 		
 		@param id optional
@@ -127,10 +127,9 @@ class ml_queue extends aw_template
 		$lists = $ml->get_lists_and_groups(array());//võta kõik listide & gruppide nimed, et polex vaja iga kord queryda
 
 		$q = "SELECT * FROM ml_queue $filt";
-		echo $q;
 		$this->db_query($q);
 		while ($row = $this->db_next())
-		{arr($row);
+		{
 			//("<pre>");print_r($row);echo("</pre>");//dbg
 			$listname = $lists[$row["lid"].":0"];
 			$groupids=explode("|",$row["gid"]);
@@ -148,10 +147,8 @@ class ml_queue extends aw_template
 			{
 				$row["lid"] .= ":".join(",",$gnames);
 			};
-		echo "SELECT name FROM objects WHERE oid='".$row["mid"]."'";
 			$this->save_handle();
 			$row["mid"] = $this->db_fetch_field("SELECT name FROM objects WHERE oid='".$row["mid"]."'","name")."(".$row["mid"].")";
-		arr($row["mid"]);			
 			$this->restore_handle();
 			if (!$row["patch_size"])
 			{
@@ -284,10 +281,9 @@ class ml_queue extends aw_template
 		};
 		$delay*=60;
 		$this->db_query("UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qid='$id'");
-	echo "UPDATE ml_queue SET delay='$delay', patch_size='$patch_size' $sls WHERE qid='$id'";
 		$GLOBALS["reforb"]=0;// see on selleks, et ta ei hakkaks kuhugi suunama vaid prindiks skripti välja
-		die("<script ".
-			"language='JavaScript'>opener.history.go(0);window.close();</script>");
+        die("<script ".
+           "language='JavaScript'>opener.history.go(0);window.close();</script>");
 	}
 
 	/**  
@@ -418,17 +414,27 @@ class ml_queue extends aw_template
 		$old = time() - 2 * 60;
 		// võta need, mida pole veel üldse saadetud või on veel saata & aeg on alustada
 		$this->db_query("SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)");
-		echo "select <br />\n";echo "SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)";
+		echo "select <br />\n";
+//		echo "SELECT * FROM ml_queue WHERE (status IN (0,1) AND start_at <= '$tm') OR (status = 3 AND position < total AND last_sent < $old)";
 		flush();
-		while ($r = $this->db_next())
+
+
+		// enne kõik queued massiivi ära... miskipärast on tunne, et muidu hakkavad päringud üksteist segama
+		$queue_rows = array();
+		while ($queue_row = $this->db_next())
 		{
-	echo "row = ".dbg::dump($r)." <br>\n";
-			flush();
+			$queue_rows[] = $queue_row;
+		}
+
+		foreach ($queue_rows as $r)
+		{
+	//echo "queue = ".dbg::dump($r)." <br>\n";
+	//		flush();
 			$qid = (int)$r["qid"];
 			$lid = (int)$r["lid"];
-			//decho("doing item $qid<br />");flush();//dbg
+			echo("doing item $qid<br />");
+			flush();//dbg
 			// vaata kas see item on ikka lahti (ntx seda skripti võib kogemata 2 tk korraga joosta)
-
 			// so here I need to detect whether the last run was interrupted?
 			// how do I do that? some kind of cache?
 			$this->save_handle();
@@ -437,23 +443,35 @@ class ml_queue extends aw_template
 
 			$all_at_once = false;
 
-			if ($r["delay"] && $patch_size)
-			{
-
-			}
-			else
+			if (!($r["delay"] && $patch_size))
 			{
 				// everything at once
 				$patch_size = $r["total"];
 				$all_at_once = true;
 			};
 
+			//kontrollib, et 'kki vahepeal mõni teine queue on otsa jooksnud ja konkreetset maili juba saatma hakanud.... siis on admed muutunud ju... lukusatatud ju pole... ja alguses kõik ära lukustada pole ka hea mõte... 
+			$test_qid = $r["qid"];
+			$test_q = $this->db_fetch_row("SELECT * FROM ml_queue WHERE qid = '$test_qid'");
+			arr($test_q);
+			if(
+			   !($test_q["status"] == 1)
+			&& !($test_q["status"] == 0)
+			&& !($test_q["status"] == 3
+				&& $test_q["position"] < $test_q["total"]
+				&& $test_q["last_sent"] < $old
+				)
+			)
+			continue;
+
 			$tm = time();
+			$old = time() - 2 * 60;
 			// 
 			// vaata, kas on aeg saata
 			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
 			{
-				echo("saadan  meili<br />");flush();//dbg
+				echo("saadan  meili<br />");
+				flush();//dbg
 				$this->save_handle();
 				//lukusta queue item
 				$this->mark_queue_locked($qid);
@@ -464,6 +482,7 @@ class ml_queue extends aw_template
 				$c = 0;
 				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND (mail_sent IS NULL OR mail_sent = 0)";
 				echo "qx = $qx <br>";
+				flush();
 				$this->db_query($qx);
 				$msg_data = true;
 				while ($c < $patch_size && $stat == ML_QUEUE_IN_PROGRESS && $msg_data)
@@ -486,12 +505,11 @@ class ml_queue extends aw_template
 					$c++;
 				};
 
-
 				$q = "SELECT total-position AS remaining FROM ml_queue WHERE qid = '$qid'";
 				echo $q;
 				$this->db_query($q);
-				$row = $this->db_next();arr($row);
-				if ($row["remaining"] == 0)
+				$row = $this->db_next();
+				if ($row["remaining"] <= 0)
 				{
 					$stat = 2/*ML_QUEUE_READY*/;
 				}
@@ -570,7 +588,7 @@ class ml_queue extends aw_template
 		// compatiblity with old messenger .. yikes
 		echo "from = {$msg["mailfrom"]}  <br />\n";
 		flush();
-	echo dbg::dump($msg);
+		echo dbg::dump($msg);
 		$this->awm->create_message(array(
 
 			"froma" => $msg["mailfrom"],
@@ -608,12 +626,11 @@ class ml_queue extends aw_template
 		echo "abuut to gen mail <br>\n";
 		flush();
 		$this->awm->gen_mail();
-		echo "<b>SENT!</b><br />\n";
-		flush();
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
 		$this->db_query($q);
-	echo $q;
+		echo "<b>SENT!</b><br />\n";
+		flush();	
 		return ML_QUEUE_IN_PROGRESS;
 	}
 
@@ -628,14 +645,16 @@ class ml_queue extends aw_template
 	{
 		$this->save_handle();
 		$this->db_query("UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'");
-		$this->restore_handle();echo "UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'";
+		$this->restore_handle();
+		echo "UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'";
 	}
 
 	function mark_queue_locked($qid)
 	{
 		$this->save_handle();
 		$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
-		$this->restore_handlE();echo "UPDATE ml_queue SET status = 3 WHERE qid = '$qid'";
+		$this->restore_handle();
+		echo "UPDATE ml_queue SET status = 3 WHERE qid = '$qid'";
 	}
 
 };
