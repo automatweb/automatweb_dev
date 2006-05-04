@@ -35,14 +35,13 @@ class keyword_selector extends class_base
 		$filt = $arr["request"]["kw_sel_filt"];
 		if (empty($filt))
 		{
-			$filt = "A";
+			$filt = "_all";
 		}
 		$cf_p = array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD");
 		if ($filt != "_all")
 		{
 			$cf_p["to.name"] = $filt."%";
 		}
-
 		$conns = $arr["obj_inst"]->connections_from($cf_p);
 		// go over and delete all that do not exist in submit
 		foreach($conns as $con_id => $con)
@@ -56,7 +55,7 @@ class keyword_selector extends class_base
 		// add new
 		foreach($data as $kwid => $one)
 		{
-			$arr["obj_inst"]->connect(array("to" => $kwid));
+			$arr["obj_inst"]->connect(array("to" => $kwid, "type" => "RELTYPE_KEYWORD"));
 		}
 
 		if (count($arr["obj_inst"]->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD"))))
