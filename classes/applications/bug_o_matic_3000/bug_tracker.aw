@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.44 2006/04/13 12:30:58 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.44 2006/04/13 12:30:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.45 2006/05/04 09:04:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.45 2006/05/04 09:04:51 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -428,6 +428,26 @@ class bug_tracker extends class_base
 				"text" => $p_name,
 				"link" => "#",
 				"onClick" => "document.changeform.assign_to.value=$p_oid;submit_changeform('assign_bugs')"
+			));
+		}
+
+		$tb->add_menu_button(array(
+			"name" => "set_status",
+			"tooltip" => t("Staatus"),
+			"img" => "class_".CL_BUG.".gif"
+		));
+
+		// list all people to assign to
+		// list all my co-workers who are important to me, from crm
+		$dat = get_instance(CL_BUG);
+		$ppl = $dat->get_status_list();
+		foreach($ppl as $p_oid => $p_name)
+		{
+			$tb->add_menu_item(array(
+				"parent" => "set_status",
+				"text" => $p_name,
+				"link" => "#",
+				"onClick" => "document.changeform.assign_to.value=$p_oid;submit_changeform('set_bug_status')"
 			));
 		}
 	}
@@ -1450,6 +1470,21 @@ class bug_tracker extends class_base
 		if ($arr["assign_to"])
 		{
 			object_list::iterate_list($arr["sel"],"set_prop", "who", $arr["assign_to"]);
+		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=set_bug_status
+		@param sel optional
+		@param post_ru optional
+		@param assign_to optional
+	**/
+	function set_bug_status($arr)
+	{
+		if ($arr["assign_to"])
+		{
+			object_list::iterate_list($arr["sel"],"set_prop", "bug_status", $arr["assign_to"]);
 		}
 		return $arr["post_ru"];
 	}

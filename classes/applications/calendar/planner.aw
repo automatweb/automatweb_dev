@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.119 2006/03/13 13:49:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.120 2006/05/04 09:04:52 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -731,13 +731,16 @@ class planner extends class_base
 			$this->event_id = $event_id;
 			$clid = $event_obj->class_id();
 			$event_i = $event_obj->instance();
-			$event_cfgform = $event_i->get_cfgform_for_object(array(
-				"obj_inst" => &$event_obj,
-				"action" => "change",
-			));
+			if (method_exists($event_i, "get_cfgform_for_object"))
+			{
+				$event_cfgform = $event_i->get_cfgform_for_object(array(
+					"obj_inst" => &$event_obj,
+					"action" => "change",
+				));
+			}
 			if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
 			{
-				unset($clid);
+				unset($clid);	
 			};
 		}
 		else
@@ -968,6 +971,14 @@ class planner extends class_base
 			$args["event_id"] = $this->event_id;
 		};
 		$arr["post_ru"] = post_ru();
+		if ($args["event_id"])
+		{
+			$evo = obj($args["event_id"]);
+			if ($evo->class_id() == CL_CRM_CALL)
+			{
+				$args["participants"] = 0;
+			}
+		}
 		//$args['return_url'] = aw_global_get('REQUEST_URI');
 	}
 

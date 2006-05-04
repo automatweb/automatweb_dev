@@ -1842,9 +1842,16 @@ class site_template_compiler extends aw_template
 			$this->brace_level--;
 			$ret .= $this->_gi()."}\n";
 			$ret .= $this->_gi()."else\n";
+			$ret .= $this->_gi()."if (\$this->can(\"view\", aw_ini_get(\"rootmenu\")))\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 			$ret .= $this->_gi()."\$parent_obj = new object(aw_ini_get(\"rootmenu\"));\n";
+			$this->brace_level--;
+			$ret .= $this->_gi()."}\n";
+			$ret .= $this->_gi()."else\n";
+			$ret .= $this->_gi()."{\n";
+			$this->brace_level++;
+			$ret .= $this->_gi()."\$parent_obj = new object();\n";
 			$this->brace_level--;
 			$ret .= $this->_gi()."}\n";
 		}

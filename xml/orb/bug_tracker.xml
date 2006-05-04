@@ -47,6 +47,16 @@
 			</function>
 		</action>
 
+		<action name="set_bug_status">
+			<function name="set_bug_status">
+				<arguments>
+					<optional name="sel" />
+					<optional name="post_ru" />
+					<optional name="assign_to" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="cut_b">
 			<function name="cut_b">
 				<arguments>

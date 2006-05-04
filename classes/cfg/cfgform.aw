@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.85 2006/04/19 10:14:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.86 2006/05/04 09:04:50 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -605,7 +605,6 @@ class cfgform extends class_base
 						// nono. It needs to fucking merge those things with classbase 
 						$this->cfg_proplist = $this->cfg_proplist + $proplist;
 						$this->cfg_groups = $this->cfg_groups + $grplist;
-
 
 					};
 				};

@@ -1544,3 +1544,9 @@ text-decoration:underline;
 	{
 	}
 /**** END AUTOCOMPLETE *******/
+
+
+.cb_form_chain {width: 100%; border-collapse: collapse; margin-top: 10px; border-left: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0;}
+.cb_form_chain td { padding: 1px 6px 1px 6px; font-family: verdana, sans-serif; font-size: 11px; text-align: left; background-color: #fcfcf4; border-top: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; line-height: 16px; vertical-align: top; }
+.cb_form_chain td.caption {width: 250px; white-space: nowrap; }
+.cd_form_chain td.value {}
