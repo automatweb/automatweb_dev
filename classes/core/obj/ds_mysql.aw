@@ -1348,6 +1348,81 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$sql[] = $tf." & ".((int)$this->properties[$key]["ch_value"])." != ".((int)$this->properties[$key]["ch_value"]);
 							break;
 
+						case "obj_predicate_compare":
+							$v_data = $val->data;
+							if (is_object($val->data) && get_class($val->data) == "aw_array")
+							{
+								$v_data = $v_data->get();
+							}
+
+							$comparator = "";
+							switch($val->comparator)
+							{
+								case OBJ_COMP_LESS:
+									$comparator = " < ";
+									break;
+
+								case OBJ_COMP_GREATER:
+									$comparator = " > ";
+									break;
+
+								case OBJ_COMP_LESS_OR_EQ:
+									$comparator = " <= ";
+									break;
+
+								case OBJ_COMP_GREATER_OR_EQ:
+									$comparator = " >= ";
+									break;
+
+								case OBJ_COMP_BETWEEN:
+									$comparator = " > ".$v_data." AND $tf < ";
+									$v_data = $val->data2;
+									break;
+
+								case OBJ_COMP_BETWEEN_INCLUDING:
+									$comparator = " >= ".$v_data." AND $tf <= ";
+									$v_data = $val->data2;
+									break;
+
+								case OBJ_COMP_EQUAL:
+									$comparator = " = ";
+									$v_data = $val->data2;
+									break;
+
+								case OBJ_COMP_NULL:
+									$comparator = " IS NULL ";
+									$v_data = "";
+									break;
+
+								default:
+									error::raise(array(
+										"id" => ERR_OBJ_COMPARATOR,
+										"msg" => sprintf(t("obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value supplied, was: %s!"), $val->comparator)
+									));
+							}
+		
+							if ($val->comparator == OBJ_COMP_NULL)
+							{
+								$sql[] = $tf." & ".((int)$this->properties[$key]["ch_value"])." IS NULL ";
+							}
+							else
+							if (is_array($v_data))
+							{
+								$tmp = array();
+								foreach($v_data as $d_k)
+								{
+									$tmp[] = $tf." & ".((int)$d_k)." $comparator ".((int)$d_k)." ";
+								}
+								$sql[] = "(".join(" OR ", $tmp).")";
+							}
+							else
+							{
+								$sql[] = $tf." & ".((int)$v_data)." $comparator ".((int)$v_data)." ";
+							}
+
+//							$sql[] = $tf." & ".((int)$this->properties[$key]["ch_value"])." != ".((int)$this->properties[$key]["ch_value"]);
+							break;
+
 						default:
 							error::raise(array(
 								"id" => "OBJ_BF_NOTSUPPORTED",	
