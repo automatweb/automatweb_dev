@@ -1,54 +1,54 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>contentmgmt/forum/forum_v2</class>
-      <func>on_connect_menu</func>
-      <param>CL_FORUM_V2</param>
+      <class>applications/shop/shop_product</class>
+      <func>on_add_alias</func>
+      <param>CL_SHOP_PRODUCT</param>
 </num_0>
 <num_1>
-      <class>contentmgmt/reminder</class>
-      <func>on_rconnect_from</func>
-      <param>CL_DOCUMENT</param>
-</num_1>
-<num_2>
-      <class>contentmgmt/timing</class>
-      <func>on_tconnect_from</func>
-      <param>CL_DOCUMENT</param>
-</num_2>
-<num_3>
-      <class>contentmgmt/timing</class>
-      <func>on_tconnect_from</func>
-      <param>CL_MENU</param>
-</num_3>
-<num_4>
       <class>crm/crm_company</class>
       <func>on_connect_person_to_org</func>
       <param>CL_CRM_PERSON</param>
-</num_4>
-<num_5>
+</num_1>
+<num_2>
       <class>crm/crm_company</class>
       <func>on_create_customer</func>
       <param>CL_CRM_CATEGORY</param>
-</num_5>
-<num_6>
+</num_2>
+<num_3>
       <class>crm/crm_section</class>
       <func>on_connect_person_to_section</func>
       <param>CL_CRM_PERSON</param>
-</num_6>
-<num_7>
+</num_3>
+<num_4>
       <class>crm/crm_person</class>
       <func>on_connect_org_to_person</func>
       <param>CL_CRM_COMPANY</param>
-</num_7>
-<num_8>
+</num_4>
+<num_5>
       <class>crm/crm_person</class>
       <func>on_connect_section_to_person</func>
       <param>CL_CRM_SECTION</param>
+</num_5>
+<num_6>
+      <class>contentmgmt/reminder</class>
+      <func>on_rconnect_from</func>
+      <param>CL_DOCUMENT</param>
+</num_6>
+<num_7>
+      <class>contentmgmt/timing</class>
+      <func>on_tconnect_from</func>
+      <param>CL_DOCUMENT</param>
+</num_7>
+<num_8>
+      <class>contentmgmt/timing</class>
+      <func>on_tconnect_from</func>
+      <param>CL_MENU</param>
 </num_8>
 <num_9>
-      <class>core/users/user</class>
-      <func>on_add_alias</func>
-      <param>CL_USER</param>
+      <class>contentmgmt/forum/forum_v2</class>
+      <func>on_connect_menu</func>
+      <param>CL_FORUM_V2</param>
 </num_9>
 <num_10>
       <class>core/users/group</class>
@@ -56,13 +56,8 @@
       <param>CL_GROUP</param>
 </num_10>
 <num_11>
-      <class>applications/shop/shop_product</class>
+      <class>core/users/user</class>
       <func>on_add_alias</func>
-      <param>CL_SHOP_PRODUCT</param>
+      <param>CL_USER</param>
 </num_11>
-<num_12>
-      <class>applications/personnel_management/personnel_management_job_offer</class>
-      <func>on_connect_from_sector</func>
-      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
-</num_12>
 </xml>
