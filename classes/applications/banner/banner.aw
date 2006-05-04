@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.19 2006/03/08 15:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.20 2006/05/04 07:23:31 kristo Exp $
 
 /*
 
@@ -599,7 +599,8 @@ class banner extends class_base
 						else
 						{
 							$html = "<a $target href='$url'>".$f->view(array(
-								"id" => $content_o->id()
+								"id" => $content_o->id(),
+								"clickTAG" => $url
 							))."</a>";
 						}
 						break;

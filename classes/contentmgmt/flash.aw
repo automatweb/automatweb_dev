@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.8 2006/03/10 08:46:35 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.9 2006/05/04 07:23:31 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -216,6 +216,11 @@ class flash extends class_base
 		else
 		{
 			$url = $this->get_url($ob->prop("file"));
+		}
+
+		if ($args["clickTAG"] != "")
+		{
+			$url = aw_url_change_var("clickTAG", $args["clickTAG"], $url);
 		}
 
 		$this->vars(array(
