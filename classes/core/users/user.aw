@@ -1490,6 +1490,10 @@ class user extends class_base
 	{
 		$u = get_instance("users");
 		$oid = $u->get_oid_for_uid($uid);
+		if (!$oid)
+		{
+			return obj();
+		}
 		return obj($this->get_person_for_user(obj($oid)));
 	}
 
