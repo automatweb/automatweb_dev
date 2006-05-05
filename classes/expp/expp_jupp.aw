@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jupp.aw,v 1.6 2006/04/11 10:58:06 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_jupp.aw,v 1.7 2006/05/05 11:51:44 dragut Exp $
 // expp_jupp.aw - Expp Jupp 
 /*
 
@@ -70,7 +70,7 @@ class expp_jupp extends class_base
 
 	/**  
 		
-		@attrib name=show is_public="1" caption="Expp" nologin="0" default="1" all_args="1"
+		@attrib name=show is_public="1" caption="Expp" nologin="1" default="1" all_args="1"
 		
 		@param id type=int
 		
