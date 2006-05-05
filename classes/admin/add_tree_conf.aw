@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.35 2006/03/13 12:27:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.36 2006/05/05 13:06:41 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -497,9 +497,6 @@ class add_tree_conf extends class_base
 		}
 		
 		// Kohe tuleb välja jätta järgmiste programmide kasutamise võimalus:
-
-		// Sisuhaldus > Taket
-		$this->adc_set_fld($o, 44, false);
 
 		// Otsingud > Saidi otsing (vist mingi vana objekt)
 		$this->adc_set_class($o, CL_SITE_SEARCH, false, false, false);

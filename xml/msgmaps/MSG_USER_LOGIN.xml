@@ -8,12 +8,4 @@
       <class>install/site_list_updater</class>
       <func>on_login</func>
 </num_1>
-<num_2>
-      <class>taket/taket_ebasket</class>
-      <func>msg_delete_users_ebasket</func>
-</num_2>
-<num_3>
-      <class>taket/taket_users_import</class>
-      <func>update_user_info</func>
-</num_3>
 </xml>

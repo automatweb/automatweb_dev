@@ -51,19 +51,19 @@
       <param>CL_REALESTATE_ROWHOUSE</param>
 </num_9>
 <num_10>
-      <class>crm/crm_company</class>
-      <func>on_save_address</func>
-      <param>CL_CRM_ADDRESS</param>
-</num_10>
-<num_11>
-      <class>crm/crm_company</class>
-      <func>on_create_company</func>
-      <param>CL_CRM_COMPANY</param>
-</num_11>
-<num_12>
       <class>core/users/user_manager</class>
       <func>on_create_group</func>
       <param>CL_GROUP</param>
+</num_10>
+<num_11>
+      <class>crm/crm_company</class>
+      <func>on_save_address</func>
+      <param>CL_CRM_ADDRESS</param>
+</num_11>
+<num_12>
+      <class>crm/crm_company</class>
+      <func>on_create_company</func>
+      <param>CL_CRM_COMPANY</param>
 </num_12>
 <num_13>
       <class>mrp/mrp_case</class>
