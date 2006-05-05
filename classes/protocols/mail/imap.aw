@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.31 2006/01/30 15:35:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.32 2006/05/05 13:38:49 markop Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -57,7 +57,25 @@ class imap extends class_base
 		};
 		return $retval;
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@param obj_inst required type=object
+		Imap object
+	@example 
+		$imap_i = $imap->instance();
+		$imap_i->connect_server(array(
+			"obj_inst" => $imap
+		));
+		echo $imap_i->test_connection(array(
+			"obj_inst" => $imap
+		))."<br>";
+		$fld_c = $imap_i->get_folder_contents(array("from" => 0, "to" => 100000));
+		$ms = $imap_i->fetch_message(array("msgid" => $id));
+	@return string "things seem to be working okey" if there is connection , "stream is dead" if not
+	@comment 
+		Tests if connection is alive
+	**/
 	function test_connection($arr)
 	{
 		$this->use_mailbox = "INBOX";
@@ -104,7 +122,17 @@ class imap extends class_base
 
 	////
 	// !Connects to server
-	
+	/**
+	@attrib api=1 params=name
+	@param obj_inst required type=object
+		Imap object
+	@example ${test_connection}
+	@return string / errors , if there are.
+	@errors 
+		This function returns an array of all of the IMAP error messages generated since the last imap_errors() call, or the beginning of the page.
+	@comment 
+		Connects to server
+	**/
 	function connect_server($arr)
 	{
 		if (!$this->connected)
@@ -144,7 +172,23 @@ class imap extends class_base
 		// when a folder is opened
 		$this->overview_cache_id = "imap" . md5("imap-over".$this->servspec.$user.$this->obj_id);
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@return array / folders.
+	@example
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$this->drv_inst->set_opt("use_mailbox",$this->use_mailbox);
+		$this->drv_inst->set_opt("outbox",$this->outbox);
+		$errors = $this->drv_inst->connect_server(array("obj_inst" => $_sdat->to()));
+		$this->drv_inst->set_opt("messenger_id",$arr["msgr_id"]);
+		$this->mbox = $this->drv_inst->get_opt("mbox");
+		$this->servspec = $this->drv_inst->get_opt("servspec");
+                $this->mboxspec = $this->drv_inst->get_opt("mboxspec");
+		$this->mailboxlist = $this->drv_inst->list_folders();
+	@comment 
+		Returns a list of folders
+	**/
 	function list_folders($arr = array())
 	{
 		$cache = get_instance("cache");
@@ -176,7 +220,18 @@ class imap extends class_base
 		};
 		return $res;
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@param to optional type=int or string "*"
+		"*" if you want to get all contents, if not set, returns empty array
+	@param from optional type=int
+		Needed if $to is an integer
+	@example ${test_connection}
+	@return array/contents
+	@comment 
+		Gets folder contents
+	**/
 	function get_folder_contents($arr)
 	{
 		$cache = get_instance("cache");
@@ -286,6 +341,18 @@ class imap extends class_base
 		return $rv;
 	}
 	
+	/**
+	@attrib api=1 params=pos
+	@param string required type=string
+		criteria
+	@example 
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$matches = $this->drv_inst->search_folder(join(" ",$str));
+	@return array of messages matching the given search criteria
+	@comment
+		the returned array contains UIDs instead of messages sequence numbers
+		$this->mbox must be set
+	**/
 	function search_folder($string)
 	{
 		$results = imap_search($this->mbox,$string,SE_UID);
@@ -297,6 +364,20 @@ class imap extends class_base
 		return (int)($el2["tstamp"] - $el1["tstamp"]);
 	}
 
+	/**
+	@attrib api=1 params=pos
+	@param arr required type=array
+		Array of mail id's
+	@example 
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$this->_connect_server(array(
+			"msgr_id" => $arr["id"],
+		));
+		$this->drv_inst->delete_msgs_from_folder(array_keys($marked));
+	@comment
+		Deletes listed messages.
+		$this->mbox must be set
+	**/
 	function delete_msgs_from_folder($arr)
 	{
 		if (is_array($arr))
@@ -308,7 +389,27 @@ class imap extends class_base
 			imap_expunge($this->mbox);
 		}
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@param id required type=array
+		id is a range not just message numbers
+	@param to required type=string
+		specified mailbox
+	@return string/the full text of the last IMAP error message that occurred on the current page
+	@example 
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$this->_connect_server(array(
+			"msgr_id" => $arr["id"],
+		));
+		$rv = $this->drv_inst->move_messages(array(
+			"id" => array_keys($marked),
+			"to" =>  $arr["move_to_folder"],
+		));
+	@comment
+		Moves mail messages specified by id to specified mailbox to.
+		$this->mbox must be set
+	**/
 	function move_messages($arr)
 	{
 		$rv = "";
@@ -328,9 +429,31 @@ class imap extends class_base
 		return $rv;
 	}
 
-	////
-	// !Fetches a single message from the currently connected mailbox
-
+	/**
+	@attrib api=1 params=name
+	@param msgid required type=int
+		Message id
+	@return Array([from],[reply_to],[to],[subject],[Predev],[cc],[date],[content])
+	@example
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$this->_connect_server(array(
+			"msgr_id" => $arr["id"],
+		));
+		$ms = $this->drv_inst->fetch_message(array("msgid" => $id));
+	@comment
+		Fetches a single message from the currently connected mailbox.
+		$this->mbox must be set
+		returns something like :
+		Array([from] => Anti Veeranna 
+			[reply_to] => predev@struktuur.ee
+			[to] => Anti Veeranna 
+			[subject] => [Predev] Re: cvs commit by markop in	automatweb_dev/classes/applications/mailinglist
+			[cc] => predev@struktuur.ee
+			[date] =>  4-May-2006 19:25:40 +0300
+			[content] =>  18:30 oli meiliserveri järjekorras natuke üle 4000 meili. Huvitav kas sellest?
+			Anti
+		)
+	**/
 	function fetch_message($arr)
 	{
 		// XXX: check whether the message was valid
@@ -405,7 +528,6 @@ class imap extends class_base
 		{
 			$msgdata["attachments"] = $this->attachments;
 		}
-		//arr($structure);
 		return $msgdata;
 	}
 
@@ -460,6 +582,26 @@ class imap extends class_base
 		}
 	}
 
+	/**
+	@attrib api=1 params=name
+	@param msgid required type=int
+		Message id
+	@param arr optional type=bool
+		if set, returns @imap_headerinfo instead of @imap_fetchbody
+	@return stdClass Object/if arr is set return @imap_headerinfo, if not then returns @imap_fetchbody
+	@example
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$this->_connect_server(array(
+			"msgr_id" => $arr["id"],
+		));
+		$message = $this->drv_inst->fetch_headers(array(
+			"msgid" => $msg_uid,
+			"arr" => 1,
+		));
+	@comment
+		This function returns an object of various header elements.
+		If arr is not set, it causes a fetch of a particular section of the body of the specified messages as a text string and returns that text string. The section specification is a string of integers delimited by period which index into a body part list as per the IMAP4 specification. Body parts are not decoded by this function.
+	**/
 	function fetch_headers($arr)
 	{
 		$msg_no = imap_msgno($this->mbox,$arr["msgid"]);
@@ -471,9 +613,15 @@ class imap extends class_base
 		{
 			return @imap_fetchbody($this->mbox,$msg_no,0);
 		};
-		
 	}
-
+	/**
+	@attrib api=1 params=pos
+	@param str required type=string
+		Mail message subject
+	@return string / Subject
+	@comment
+		Parses a mail message subject.
+	**/
 	function _parse_subj($str)
 	{
 		$elements = imap_mime_header_decode($str);
@@ -526,7 +674,23 @@ class imap extends class_base
 		};
 		return $rv;
 	}
-
+	/**
+	@attrib api=1 params=pos
+	@param msgid required type=int
+		Message id
+	@param part required type=int
+	@param return optional type=bool
+		if not set, sets the header and die();
+	@return Array("content-type", "name" , "content") if $return is set
+	@example 
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$this->drv_inst->fetch_part(array(
+			"msgid" => $msgid,
+			"part" => $arr["part"],
+		));
+	@comment
+		This function causes a fetch of the complete, unfiltered RFC2822  format header of the specified message. If $return is not set, 
+	**/
 	function fetch_part($arr) 
 	{
 		$header = imap_fetchheader($this->mbox,$arr["msgid"],FT_UID);
@@ -568,7 +732,32 @@ class imap extends class_base
 			die($part->body);
 		}
 	}
+	/**
+	@attrib api=1 params=pos
+	@param from optional type=string
+		Mail sender's address
+	@param to optional type=string
+		mail to (adresses)
+	@param cc optional type=string
+		mail to (adresses)
+	@param subject optional type=string
+		mail subject
+	@param message optional type=string
+		mail body
 
+	@example 
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$msgr->drv_inst->store_message(array(
+			"from" => $from,
+			"to" => $arr["mto"],
+			"cc" => $arr["cc"],
+			"subject" => $arr["name"],
+			"message" => $this->awm->bodytext,
+		));
+	@comment
+		Appends a message to the specified mailbox.
+		$this->mbox,$this->servspec.$this->outbox must be set
+	**/
 	function store_message($arr)
 	{
 		if(!empty($arr["cc"]))
@@ -601,7 +790,18 @@ class imap extends class_base
 	{
 		return md5($dat->Nmsgs . $dat->Size . "tambovihunt2");
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+	@param arg required type=string
+		sender's name and adress
+	@return array([name] , [addr])
+	@example 
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$addrinf = $this->drv_inst->_extract_address($message->fromaddress);
+	@comment
+		extraxt address string to an array
+	**/
 	function _extract_address($arg)
 	{
 		if (preg_match("/(.*)<(.*)>/",$arg,$m))
@@ -623,6 +823,17 @@ class imap extends class_base
 	
 	////
 	// !Dekodeerib MIME encodingus teate
+	/**
+	@attrib api=1 params=pos
+	@param string required type=string
+		Message you want to decode
+	@return string/decoded message
+	@example 
+		$this->drv_inst = get_instance("protocols/mail/imap");
+		$fromn = $this->drv_inst->MIME_decode($addrinf["name"]);
+	@comment
+		Decodes message with MIME encoding
+	**/
 	function MIME_decode($string)
 	{
 		$pos = strpos($string,'=?');
@@ -637,7 +848,6 @@ class imap extends class_base
 
 		// take out any spaces between multiple encoded words
 		$string = preg_replace('|\?=\s=\?|', '?==?', $string);
-
 		$preceding = substr($string, 0, $pos); // save any preceding text
 
 		$search = substr($string, $pos + 2, 75); // the mime header spec says this is the longest a single encoded word can be
@@ -646,7 +856,6 @@ class imap extends class_base
 		{
 			return $string;
 		}
-
 
 		$charset = substr($string, $pos + 2, $d1);
 		$search = substr($search, $d1 + 1);
@@ -700,6 +909,5 @@ class imap extends class_base
 		$retval = $preceding . $decoded . $this->MIME_decode($rest);
 		return quoted_printable_decode($retval);
 	}
-
 };
 ?>
