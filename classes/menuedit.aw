@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.363 2006/04/27 08:14:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.364 2006/05/05 12:46:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -252,7 +252,7 @@ class menuedit extends aw_template
 			}
 		}
 		else
-		if ($this->cfg["log_pageviews"] == 1)
+		if (aw_ini_get("syslog.log_pageviews") == 1)
 		{
 			$this->_log(ST_MENUEDIT, SA_PAGEVIEW, $log, $section);
 		}

@@ -707,7 +707,6 @@ class export extends aw_template
 			$nm = preg_match_all("/\<!-- PAGE_TITLE (.*) \/PAGE_TITLE -->/U", $fc, $mt_t, PREG_SET_ORDER);
 			$title = strip_tags($mt_t[$nm-1][1]);
 			
-			$url = str_replace(aw_ini_get("baseurl"), aw_ini_get("ut.static_server"), $url);
 			$this->quote(&$title);
 			$this->quote(&$url);
 

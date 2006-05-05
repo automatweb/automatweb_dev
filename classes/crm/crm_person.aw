@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.127 2006/05/02 13:34:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.128 2006/05/05 12:46:24 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3149,14 +3149,7 @@ class crm_person extends class_base
 
 		$gidlist = aw_global_get("gidlist_oid");
 
-		if(array_search(aw_ini_get("personnel_management.unloged_users") , $gidlist))
-		{
-			$personname = $person_obj->id();
-		}
-		else
-		{
-			$personname = $person_obj->name();
-		}
+		$personname = $person_obj->name();
 
 		$this->vars(array(
 			"COMP_SKILL" => $ck,

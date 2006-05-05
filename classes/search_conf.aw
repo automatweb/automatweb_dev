@@ -555,14 +555,6 @@ class search_conf extends aw_template
 					$sec = $mned->make_menu_link($mr);
 				}
 
-				if (aw_ini_get("search.rewrite_urls"))
-				{
-					$exp = get_instance(CL_EXPORT_RULE);
-					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
-					$sec = $exp->rewrite_link($sec);
-					$sec = aw_ini_get("baseurl")."/".$exp->get_hash_for_url($sec,aw_global_get("lang_id"));
-				}
-
 				$this->vars(array(
 					"section" => $sec,
 					"title" => $row["title"],

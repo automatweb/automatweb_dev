@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.353 2006/05/04 09:28:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.354 2006/05/05 12:46:24 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2147,12 +2147,6 @@ class document extends aw_template
 
 		$mned = get_instance("menuedit");
 
-		if (aw_ini_get("search.rewrite_urls"))
-		{
-			$exp = get_instance(CL_EXPORT_RULE);
-			$exp->init_settings();
-		}
-
 		$num = 0;
 		reset($docarr);
 		while (list(,$v) = each($docarr))
@@ -2173,13 +2167,6 @@ class document extends aw_template
 				{
 					// if it is the only document under the menu, make link to the menu instead
 					$sec = $v["parent"];
-				}
-
-				if (aw_ini_get("search.rewrite_urls"))
-				{
-					$sec = $exp->rewrite_link(document::get_link($sec));
-					$sec = $this->cfg["baseurl"]."/".$exp->get_hash_for_url($sec,aw_global_get("lang_id"));
-					$sec = str_replace("_","/",$sec);
 				}
 
 				$this->vars(array("title"			=> strip_tags($v["title"]),

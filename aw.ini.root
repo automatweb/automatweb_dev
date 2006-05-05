@@ -77,3 +77,12 @@ include ${ini_dir}/virus_scanner.ini
 include ${ini_dir}/newsfeed.ini
 include ${ini_dir}/contents.ini
 include ${ini_dir}/core.ini
+include ${ini_dir}/object_import.ini
+include ${ini_dir}/prisma.ini
+include ${ini_dir}/project.ini
+include ${ini_dir}/pspell.ini
+include ${ini_dir}/search.ini
+include ${ini_dir}/shop.ini
+include ${ini_dir}/staging.ini
+include ${ini_dir}/template_compiler.ini
+include ${ini_dir}/timing.ini

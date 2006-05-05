@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.181 2006/05/04 08:54:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.182 2006/05/05 12:46:24 kristo Exp $
 
 /*
 
@@ -2448,7 +2448,7 @@ class site_show extends class_base
 				}
 				else
 				{
-					if (aw_ini_get("menuedit.menuedit.show_real_location"))
+					if (aw_ini_get("menuedit.show_real_location"))
 					{
 						$link .= "index.".$this->cfg["ext"]."?section=".$o->brother_of().$this->add_url;
 					}
@@ -2510,55 +2510,6 @@ class site_show extends class_base
 					$link .= $oid;
 				};
 			};
-		}
-
-		// this here bullshit is so that the static ut site will work
-		// basically, rewrite_links is set if we are doing searching or some other non-static action
-		// it is set in site_header.aw
-		// and we need to make all links go to the static site
-		// and this is where the magic happens
-		// also in document::do_search and search_conf::search
-		if (aw_global_get("rewrite_links"))
-		{
-			$exp = get_instance(CL_EXPORT_RULE);
-			if (!$exp->is_external($link))
-			{
-				$_link = $link;
-				if (strpos($link, $this->cfg["baseurl"]) === false)
-				{
-					$link = $this->cfg["baseurl"].$link;
-				}
-				$exp->fn_type = aw_ini_get("search.rewrite_url_type");
-				$link = $exp->rewrite_link($link);
-				if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
-				{
-					$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
-					$_tl = $link;
-					$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
-				}
-				else
-				{
-					$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
-				};
-				
-				if ($link != $this->cfg["baseurl"]."/index.".$this->cfg["ext"] && 
-						$link != $this->cfg["baseurl"]."/" &&
-						$link != $this->cfg["baseurl"])
-				{
-					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
-					$link = $exp->rewrite_link($link);
-					if (strpos($link, "class=search_conf") === false || strpos($link, "action=search") === false)
-					{
-						$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
-						$_tl = $link;
-						$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
-					}
-					else
-					{
-						$link = str_replace($this->cfg["baseurl"],aw_ini_get("search.baseurl"),$link);
-					}
-				}
-			}
 		}
 
 		$sdct = $o->prop("set_doc_content_type");

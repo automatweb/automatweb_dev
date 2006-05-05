@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.115 2006/03/13 13:49:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.116 2006/05/05 12:46:24 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -883,7 +883,7 @@ class admin_menus extends aw_template
 		$params = $arr;
 		$params["lang_id"] = aw_global_get("lang_id");
 		$params["site_id"] = aw_ini_get("site_id");
-		$params["uid"] = aw_ini_get("uid");
+		$params["uid"] = aw_global_get("uid");
 		$params["ft_page"] = $GLOBALS["ft_page"];
 		if (empty($params["parent"]))
 		{
