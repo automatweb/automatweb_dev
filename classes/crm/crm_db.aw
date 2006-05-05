@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.31 2006/04/11 10:23:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.32 2006/05/05 07:45:04 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -371,10 +371,11 @@ class crm_db extends class_base
 		));
 		if($arr["request"]["group"] == "tegevusalad")
 		{
+			$pt = $arr["request"]["teg_oid"] ?  $arr["request"]["teg_oid"] : $arr["obj_inst"]->prop("dir_tegevusala");
 			$tb->add_menu_item(array(
 				"parent" => "create_event",
 				"text" => t("Lisa tegevusala"),
-				"url" => $this->mk_my_orb("new", array("parent" => $arr["obj_inst"]->prop("dir_tegevusala"),"return_url" => get_ru()), CL_CRM_SECTOR),
+				"url" => $this->mk_my_orb("new", array("parent" => $pt,"return_url" => get_ru()), CL_CRM_SECTOR),
 			));
 		}
 		$pl = get_instance(CL_PLANNER);
