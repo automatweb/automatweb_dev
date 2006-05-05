@@ -910,7 +910,15 @@ class group extends class_base
 	}
 
 	/** adds the user $user to group $group (storage objects)
+		
+		@attrib params=pos api=1
+		@param user required type=object
+		User object to be added into group
+		@param group required type=object
+		Group object to what the user will be added
 
+		@comment
+		Adds the $user to the $group.
 	**/
 	function add_user_to_group($user, $group)
 	{
@@ -947,7 +955,14 @@ class group extends class_base
 
 	/** removes user $user from group $group
 
-		@attrib api=1
+		@attrib params=pos api=1
+		@param user required type=object
+		User object to be removed from $group
+		@param group required type=object
+		The group object from where the user is removed
+
+		@comment
+		Removes the $user from $group.
 
 	**/
 	function remove_user_from_group($user, $group)

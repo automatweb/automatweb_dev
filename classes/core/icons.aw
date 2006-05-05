@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.2 2005/12/06 18:20:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.3 2006/05/05 08:35:25 tarvo Exp $
 
 class icons extends aw_template
 {
@@ -49,11 +49,37 @@ class icons extends aw_template
 		return aw_ini_get("baseurl")."/automatweb/images/icon_aw.gif";
 	}
 	
+	/**
+		@attrib params=pos api=1
+		@param fid required type=int
+		Feature id which icon to search
+
+		@comment
+		Returns url to required features icon
+		@returns
+		url to required icon
+	**/
 	function get_feature_icon_url($fid)
 	{
 		return aw_ini_get("icons.server")."/prog_".$fid.".gif";
 	}
+	
+	/**
+		@attrib params=pos api=1
+		@param clid required type=int
+		The class id which icon you wanna get.
 
+		@comment
+		Locates the correct icon for given class and returns html image tag
+		@returns
+		<img src="corrent iconurl">
+		@examples
+		classload("core/icons");
+		$ic = icons::get_icon(CL_MENU);
+		
+		// $ic conains
+		// <img src='http://_blabla_/automatweb/images/icons/class_1.gif'>
+	**/
 	function get_icon($o)
 	{
 		return html::img(array(
