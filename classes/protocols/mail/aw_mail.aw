@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.8 2006/04/28 14:10:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.9 2006/05/05 09:20:22 markop Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -38,9 +38,10 @@ class aw_mail {
 	/**Resets the object
 	@attrib api=1 params=name
 	@param method optional type=string
-		by default php mail function
+		By default php mail function
+	@example ${gen_mail}
 	@comment 
-		resets the mail object
+		Resets the mail object
 	**/
 	function clean($args = array())
 	{
@@ -109,8 +110,6 @@ class aw_mail {
 		$res = $this->_parse_block(array(
 					"data" => $args["data"],
 					));
-
-		
 		$this->headers = $res["headers"];
 
 		// Do we have a multipart message?
@@ -168,8 +167,8 @@ class aw_mail {
 
 	////
 	// !Mime parser for internal use
-	// arguments:
-	// data(string) - body of the message
+	// @param data type=string
+	//	body of the message
 	function _parse_block($args = array())
 	{
 		extract($args);
@@ -293,6 +292,7 @@ class aw_mail {
 		mail body
 	@param X-Mailer optional type=string default="AW Mail 2.0"
 		mail version
+	@example ${gen_mail}
 	@comments
 		Creates a new message
 	**/
@@ -337,8 +337,8 @@ class aw_mail {
 		};
 	}
 
-	/**
-	@attrib api=1 params=name
+	/**Attaches an object to our message
+	@attrib params=name
 	@param data required type=string
 		random data
 	@param description optional type=string
@@ -351,8 +351,6 @@ class aw_mail {
 		Content-Disposition
 	@return false, if $data is empty
 		else number of mimeparts
-	@comments
-		Attaches an object to our message
 	**/
 	function attach($args = array())
 	{
@@ -425,13 +423,9 @@ class aw_mail {
 	}
 
 	// lauri muudetud 01.09.2001 -->
-	/**
-	@attrib api=1 params=pos
+	/**Generates html stuff around html body
 	@param body optional type=string
-		html body
 	@return string/html
-	@comments
-		Generates html stuff around html body
 	**/
 	function gen_htmlbody($body)
 	{
@@ -443,6 +437,7 @@ class aw_mail {
 	@attrib api=1 params=name
 	@param data required type=string
 		html data
+	@example ${gen_mail}
 	@comments
 		Defines an alternative html body
 	**/
@@ -540,6 +535,7 @@ class aw_mail {
 		content-disposition
 	@param name optional type=string
 		string, used as file name, if content is set, this must be set too
+	@example ${gen_mail}
 	@return int/number of mimeparts
 	@comment 
 		Attaches a file to the message
@@ -600,7 +596,7 @@ class aw_mail {
 		$id = '<AW' . chr(rand(65,91)) . chr(rand(65,91)) . md5(uniqid(rand())) . "@automatweb>";
 		return $id;
 	}
-
+	
 	function build_message($args = array())
 	{
 		$msg = "";
@@ -662,12 +658,48 @@ class aw_mail {
 		return $msg;
 	}
 
+	/**
+	@attrib api=1 params=pos
+	@param name required type=string
+		Headers name
+	@param value required type=string
+		Headers value
+	@comment 
+		Sets a header
+	**/
 	function set_header($name,$value)
 	{
 		$this->headers[$name] = $value;
 	}
 	
-
+	/**
+	@attrib api=1
+	@example
+		$awm = get_instance("protocols/mail/aw_mail");
+		$awm->create_message(array(
+			"froma" => $msg["mailfrom"],
+			"subject" => $msg["subject"],
+			"To" => $msg["target"],
+			//"Sender"=>"bounces@struktuur.ee",
+			"body" => $message,
+		if ($is_html)
+		{
+			$awm->htmlbodyattach(array(
+				"data" => $message,
+			));
+		};
+		$mimeregistry = get_instance("core/aw_mime_types");
+		$awm->fattach(array(
+			"path" => $object->prop("file"),
+			"contenttype"=> $mimeregistry->type_for_file($object->name()),
+			"name" => $object->name(),
+		));
+		$awm->gen_mail();
+		$awm->clean();
+	@comment 
+		Builds and sends mail message
+		$this->headers["To"] must be set
+	**/	
 	function gen_mail()
 	{
 		$email = "";
