@@ -865,6 +865,28 @@ class object
 		return $GLOBALS["objects"][$this->oid]->set_lang($param);
 	}
 
+	/** sets the language id of the object
+		@attrib api=1
+
+		@param param required type=int
+			new language id
+
+		@errors
+			- error is thrown if new language id is not integer
+
+		@returns
+			the old language id of the object
+
+		@examples
+			$o = obj(666);
+			$o->set_implicit_save(true);
+			$o->set_lang_id(3); // vene keele id
+	**/
+	function set_lang_id($param)
+	{
+		return $GLOBALS["objects"][$this->oid]->set_lang_id($param);
+	}
+
 	/** returns the comment of the object
 		@attrib api=1
 

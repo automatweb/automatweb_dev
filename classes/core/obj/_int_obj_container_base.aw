@@ -49,6 +49,11 @@ class _int_obj_container_base
 		return $this->_int_setter("set_lang", $param);
 	}
 
+	function set_lang_id($param)
+	{
+		return $this->_int_setter("set_lang_id", $param);
+	}
+
 	function set_comment($param)
 	{
 		return $this->_int_setter("set_comment", $param);

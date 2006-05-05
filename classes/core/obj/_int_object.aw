@@ -721,6 +721,24 @@ class _int_object
 		return $this->obj["lang_id"];
 	}
 
+	function set_lang_id($param)
+	{
+		$prev = $this->obj['lang_id'];
+		if (!is_numeric($param))
+		{
+			error::raise(array(
+				"id" => "ERR_LANG_ID",
+				"msg" => sprintf(t("object::set_lang_id(%s): lang_id must be integer!"), $param)
+			));
+			return;
+
+		}
+		$this->_int_set_of_value("lang_id", (int)$param);
+		$this->_int_do_implicit_save();
+		return $prev;
+
+	}
+
 	function set_lang($param)
 	{
 		$prev = $this->lang();
