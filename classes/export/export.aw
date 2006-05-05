@@ -659,10 +659,6 @@ class export extends aw_template
 			$fc = substr($fc,0,$begin).$fname.substr($fc,$end);
 		}
 
-		// right, now. this kinda sucks, but that's how it is
-		// el no translado forms
-		$fc = preg_replace("/<form(.*)action=([\"'])__form_action_url__\/(.*)([\"'])(.*)>/isU","<form\\1action=\\2".$this->cfg["form_server"]."\\4\\5>",$fc);
-
 		// and now replace temp links back
 		foreach($temps as $r => $l)
 		{

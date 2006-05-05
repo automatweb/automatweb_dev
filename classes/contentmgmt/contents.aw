@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.5 2005/05/16 07:07:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.6 2006/05/05 09:47:46 kristo Exp $
 // contents.aw - Saidi sisukord
 /*
 
@@ -53,11 +53,6 @@ class contents extends class_base
 			$tpl = $arr["tpl"];
 		}
 		else
-		if (aw_ini_get("contents.template") != "")
-		{
-			$tpl = aw_ini_get("contents.template");
-		}
-		else
 		{
 			$tpl = "show.tpl";
 		}
@@ -72,7 +67,7 @@ class contents extends class_base
 		}
 		
 		$this->count = 0;
-		$this->max_count = isset($arr["max"]) ? $arr["max"] : $this->cfg["show_max"];
+		$this->max_count = $arr["max"];
 		
 		if (!isset($arr["leadonly"]))
 		{

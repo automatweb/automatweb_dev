@@ -155,9 +155,9 @@ class doc_display extends aw_template
 	function _get_template($arr)
 	{
 		// use special template for printing if one is set in the cfg file
-		if (aw_global_get("print") && ($this->cfg["print_tpl"]) )
+		if (aw_global_get("print") && aw_ini_get("document.print_tpl"))
 		{
-			return $this->cfg["print_tpl"];
+			return aw_ini_get("document.print_tpl");
 		}
 
 		if (isset($arr["tpl"]))

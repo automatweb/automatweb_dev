@@ -223,12 +223,6 @@ class export_lite extends aw_template
 			return;
 		}
 
-		// pause for set number of seconds
-/*		if ($this->cfg["sleep_between_pages"])
-		{
-			sleep($this->cfg["sleep_between_pages"]);
-		}*/
-
 		if (function_exists("memory_get_usage"))
 		{
 			echo "current memory usage: ".memory_get_usage()." <br>";

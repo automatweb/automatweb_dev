@@ -118,7 +118,7 @@ class core extends acl_base
 			$this->quote(&$ref);
 			$fields = array("tm","uid","type","action","ip","oid","act_id", "referer");
 			$values = array($t,aw_global_get("uid"),$type,$text,$ip,(int)$oid,$action,$ref);
-			if (aw_ini_get("tafkap"))
+			if (aw_ini_get("users.tafkap"))
 			{
 				$fields[] = "tafkap";
 				$values[] = aw_global_get("tafkap");
@@ -195,11 +195,6 @@ class core extends acl_base
 		if ($oid !== NULL)
 		{
 			$hoid = " AND oid = '$oid'";
-		}
-
-		if ($oid == NULL && aw_ini_get("cache.simple_site"))
-		{
-			$oid = aw_global_get("section");
 		}
 
 		if (aw_ini_get("cache.table_is_sep"))

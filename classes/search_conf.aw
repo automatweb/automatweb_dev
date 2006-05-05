@@ -1159,12 +1159,6 @@ class search_conf extends aw_template
 			$q_cons = " AND ".$q_cons;
 		}
 
-                $srud = aw_ini_get("document.static_search_returns_dyn_urls");
-
-                if ($srud)
-                {
-                        $nou = " AND orig_url != '' ";
-                }
 
 		$q = "SELECT count(*) as cnt FROM export_content WHERE $p_arr_str $nou $q_cons";
 		$cnt = $this->db_fetch_field($q, "cnt");
@@ -1193,21 +1187,6 @@ class search_conf extends aw_template
                         if ($show)
 			{
 				$fn = $row["filename"];
-				if (aw_ini_get("document.static_search_returns_dyn_urls"))
-				{
-					if ($row["orig_url"] != "")
-					{
-						$fn = $row["orig_url"];
-						if (preg_match("/^".str_replace("/","\\/",$this->cfg["baseurl"])."\/index.aw\?section=(\d+)&set_lang_id=(\d+)$/",$fn, $mt))
-						{
-							$fn = $this->cfg["baseurl"]."/".$mt[1];
-						}
-					}
-					else
-					{
-						$fn = aw_ini_get("ut.static_server")."/".$fn;
-					}
-				}
 				$this->vars(array(
 					"section" => $fn,
 					"title" => ($title != "" ? $title : $row["filename"]),
@@ -1221,10 +1200,6 @@ class search_conf extends aw_template
 			"MATCH" => $mat
 		));
 		$ps = $this->do_pageselector($cnt,$arr);
-		if (!aw_ini_get("document.static_search_returns_dyn_urls"))
-		{
-			$ps = str_replace($this->cfg["baseurl"]."/orb.aw", $this->cfg["form_server"], $ps);
-		}
 		$this->vars(array(
 			"PAGESELECTOR" => $ps
 		));
@@ -1241,14 +1216,7 @@ class search_conf extends aw_template
 			));
 		}
 
-		if (!aw_ini_get("document.static_search_returns_dyn_urls"))
-		{
-			return str_replace($this->cfg["baseurl"]."/orb.aw", $this->cfg["form_server"], $this->parse());
-		}
-		else
-		{
-			return $this->parse();
-		}
+		return $this->parse();
 	}
 }
 ?>

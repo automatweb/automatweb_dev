@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.19 2006/03/01 14:59:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.20 2006/05/05 09:47:46 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -423,7 +423,7 @@ class auth_config extends class_base
 	function redir_to_login()
 	{
 		$_SESSION["request_uri_before_auth"] = aw_global_get("REQUEST_URI");
-		header("Location: ".aw_ini_get("baaseurl")."/login.".aw_ini_get("ext"));
+		header("Location: ".aw_ini_get("baseurl")."/login.".aw_ini_get("ext"));
 		die();
 	}
 

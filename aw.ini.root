@@ -75,3 +75,5 @@ include ${ini_dir}/aw_session_track.ini
 include ${ini_dir}/document_statistics.ini
 include ${ini_dir}/virus_scanner.ini
 include ${ini_dir}/newsfeed.ini
+include ${ini_dir}/contents.ini
+include ${ini_dir}/core.ini
