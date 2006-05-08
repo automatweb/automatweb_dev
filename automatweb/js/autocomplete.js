@@ -109,7 +109,7 @@ function awActb(obj, valueObj)
 	{
 		if ("dynamic" == actb_mode)
 		{
-		  //			actb_loadOptions();
+			actb_loadOptions();
 		}
 
 		addEvent(document,"keydown",actb_checkkey);
@@ -294,7 +294,10 @@ function awActb(obj, valueObj)
 					eval("tmp = " + awHttpRequest.responseText);
 					actb_options = tmp["options"];
 					actb_limited = tmp["limited"];
-					actb_tocomplete(last_key);
+					if (last_key != '')
+					{
+						actb_tocomplete(last_key);
+					}
 					if (tmp["error"])
 					{
 						error = "Autocomplete: server error. Description: " + tmp["errorstring"] + ". Property: " + actb_curr.name;
@@ -733,7 +736,7 @@ function awActb(obj, valueObj)
 				if (!actb_display)
 				  {
 					actb_loadOptions();
-					last_key = 0;
+					last_key = -1;
 				  }
 				break;
 
@@ -749,7 +752,7 @@ function awActb(obj, valueObj)
 			case 8:
 				setTimeout(function(){
 					actb_loadOptions();
-					last_key = 0;
+					last_key = -1;
 				}, 40);
 				return true;
 
