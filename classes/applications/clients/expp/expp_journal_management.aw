@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.27 2006/04/11 10:46:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.28 2006/05/08 13:22:25 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -1015,6 +1015,12 @@ class expp_journal_management extends class_base
 			"width" => "10%",
 		));
 		$t->define_field(array(
+			'name' => 'lang',
+			'caption' => t('Keel'),
+			'align' => 'center',
+			'width' => '10%'
+		));
+		$t->define_field(array(
 			"name" => "change",
 			"caption" => t("Muuda"),
 			"align" => "center",
@@ -1029,6 +1035,8 @@ class expp_journal_management extends class_base
 		$connections_to_documents = $arr['obj_inst']->connections_from(array(
 			"type" => "RELTYPE_GENERAL_DOCUMENT",
 		));
+		$lang_inst = get_instance('languages');
+		$lang_list = $lang_inst->get_list();
 		foreach ($connections_to_documents as $connection_to_document)
 		{
 			$document_id = $connection_to_document->prop("to");
@@ -1045,6 +1053,11 @@ class expp_journal_management extends class_base
 					"name" => "as_link[".$document_id."]",
 					"value" => $document_id,
 					"checked" => ($document_object->prop("ucheck1") == 1) ? true : false,
+				)),
+				'lang' => html::select(array(
+					'name' => 'lang['.$document_id.']',
+					'options' => $lang_list,
+					'selected' => $document_object->lang_id()
 				)),
 				"change" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
@@ -1074,7 +1087,7 @@ class expp_journal_management extends class_base
 			if (is_oid($document_id) && $this->can("edit", $document_id))
 			{
 				$document_object = new object($document_id);
-
+				$document_object->set_lang_id($arr['request']['lang'][$document_id]);
 				// to show document as link or not
 				if (in_array($document_id, $arr['request']['as_link']))
 				{

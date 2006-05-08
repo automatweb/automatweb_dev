@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.5 2006/04/11 10:47:55 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.6 2006/05/08 13:22:25 dragut Exp $
 // expp_site_content.aw - expp_site_content (nimi) 
 /*
 
@@ -93,9 +93,10 @@ class expp_site_content extends class_base
 					
 					$this->connections_to_documents = $o->connections_from(array(
 						"type" => "RELTYPE_GENERAL_DOCUMENT",
-						'to.status' => STAT_ACTIVE
+						'to.status' => STAT_ACTIVE,
+						'to.lang_id' => aw_global_get('lang_id')
 					));
-	
+
 					$this->connections_to_images = $o->connections_from(array(
 						"type" => "RELTYPE_GENERAL_IMAGE",
 						'to.status' => STAT_ACTIVE,
@@ -283,8 +284,12 @@ class expp_site_content extends class_base
 					$target = "target=\"_blank\"";
 				}
 
-				$link_url = $link_object->prop('url');
-				$link_name = $link_object->name();
+			//	$link_url = $link_object->prop('url');
+				$link_url = $this->trans_get_val($link_object, 'url');
+			//	$link_name = $link_object->name();
+				$link_name = $this->trans_get_val($link_object, 'name');
+				$link_alt_txt = $this->trans_get_val($link_object, 'alt');
+
 				if ( empty($link_name) )
 				{
 					$link_name = $link_url;
@@ -294,6 +299,7 @@ class expp_site_content extends class_base
 					"GENERAL_LINK_URL" => $link_url,
 					"GENERAL_LINK_NAME" => $link_name,
 					"GENERAL_LINK_TARGET" => $target,
+					"GENERAL_LINK_ALT_TEXT" => $link_alt_txt
 				));
 	
 				$lingid .= $this->parse("GENERAL_LINK");
