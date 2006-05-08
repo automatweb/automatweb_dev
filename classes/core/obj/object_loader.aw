@@ -430,7 +430,7 @@ class _int_object_loader extends core
 		if (!($max_acl = $this->__aw_acl_cache[$oid]))
 		{
 			$fn = "acl-".$oid."-uid-".$_SESSION["uid"];
-			if ($_SESSION["uid"] == "" && $_SESSION["nliug"])
+			if ($_SESSION["nliug"])
 			{
 				$fn .= "-nliug-".$_SESSION["nliug"];
 			}
