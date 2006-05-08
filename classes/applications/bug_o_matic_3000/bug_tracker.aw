@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.45 2006/05/04 09:04:51 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.45 2006/05/04 09:04:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.46 2006/05/08 14:08:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.46 2006/05/08 14:08:44 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -113,6 +113,25 @@ define("BUG_STATUS_CLOSED", 5);
 	@property gantt_summary type=text store=no
 	@caption Kokkuv&otilde;te
 
+@default group=settings_people
+
+	@property sp_tb type=toolbar store=no no_caption=1
+
+	@property sp_table type=table store=no 
+	@caption Valitud isikud
+
+	@property sp_p_name type=textbox store=no
+	@caption Isik
+
+	@property sp_p_co type=textbox store=no
+	@caption Organisatsioon
+
+	@property sp_sbt type=submit
+	@caption Otsi
+
+	@property sp_s_res type=table store=no 
+	@caption Otsingu tulemused
+
 @groupinfo bugs caption="Bugid" submit=no
 	@groupinfo by_default caption="default" parent=bugs submit=no
 	@groupinfo by_project caption="Projektid" parent=bugs submit=no
@@ -126,6 +145,8 @@ define("BUG_STATUS_CLOSED", 5);
 
 @groupinfo archive caption="Arhiiv" submit=no
 @groupinfo charts caption="Kaardid" submit=no
+@groupinfo settings caption="Seaded" submit=no
+	@groupinfo settings_people caption="Bugtracki isikud" submit=no parent=settings
 
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
@@ -136,6 +157,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype FOLDER value=3 clid=CL_MENU
 @caption Kataloog
+
+@reltype IMP_P value=4 clid=CL_CRM_PERSON
+@caption Oluline isik
 
 */
 
@@ -250,7 +274,8 @@ class bug_tracker extends class_base
 				$co = get_instance(CL_CRM_COMPANY);
 				$c = get_instance("vcl/popup_menu");
 				$c->begin_menu("bt_g");
-				foreach($co->get_employee_picker(null, false, true) as $p_id => $p_n)
+				$ppl = $this->get_people_list($arr["obj_inst"]);
+				foreach($ppl as $p_id => $p_n)
 				{
 					$c->add_item(array(
 						"text" => $p_n,
@@ -266,6 +291,25 @@ class bug_tracker extends class_base
 					$this->job_hrs / 3600,
 					date("d.m.Y H:i", $this->job_end)
 				);
+				break;
+
+			case "sp_tb":
+				$this->_sp_tb($arr);
+				break;
+
+			case "sp_table":
+				$this->_sp_table($arr);
+				break;
+
+			case "sp_s_res":
+				$this->_sp_s_res($arr);
+				break;
+		
+			case "sp_p_name":
+			case "sp_p_co":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				$prop["autocomplete_source"] = $this->mk_my_orb($prop["name"] == "sp_p_co" ? "co_autocomplete_source" : "p_autocomplete_source");
+				$prop["autocomplete_params"] = array($prop["name"]);
 				break;
 		};
 		return $retval;
@@ -419,8 +463,7 @@ class bug_tracker extends class_base
 
 		// list all people to assign to
 		// list all my co-workers who are important to me, from crm
-		$dat = get_instance("applications/crm/crm_data");
-		$ppl = $dat->get_employee_picker();
+		$ppl = $this->get_people_list($arr["obj_inst"]);
 		foreach($ppl as $p_oid => $p_name)
 		{
 			$tb->add_menu_item(array(
@@ -1451,6 +1494,12 @@ class bug_tracker extends class_base
 		return $arr["post_ru"];
 	}
 
+	function callback_mod_retval($arr)
+	{
+		$arr["args"]["sp_p_name"] = $arr["request"]["sp_p_name"];
+		$arr["args"]["sp_p_co"] = $arr["request"]["sp_p_co"];
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["assign_to"] = 0;
@@ -1706,12 +1755,15 @@ class bug_tracker extends class_base
 		$ss = array("" => "");
 		foreach($s as $idx => $search)
 		{
-			$opr = $search["params"];
-			$opr["id"] = $arr["obj_inst"]->id();
-			$opr["group"] = "search";
-			$opr["MAX_FILE_SIZE"] = 100000000;
-			$url = $this->mk_my_orb("change", $opr);
-			$ss[$url] = $search["name"];
+			if ($search["creator"] == aw_global_get("uid"))
+			{
+				$opr = $search["params"];
+				$opr["id"] = $arr["obj_inst"]->id();
+				$opr["group"] = "search";
+				$opr["MAX_FILE_SIZE"] = 100000000;
+				$url = $this->mk_my_orb("change", $opr);
+				$ss[$url] = $search["name"];
+			}
 		}
 		$html = html::select(array(
 			"options" => $ss,
@@ -1729,8 +1781,7 @@ class bug_tracker extends class_base
 
 		// list all people to assign to
 		// list all my co-workers who are important to me, from crm
-		$dat = get_instance("applications/crm/crm_data");
-		$ppl = $dat->get_employee_picker();
+		$ppl = $this->get_people_list($arr["obj_inst"]);
 		foreach($ppl as $p_oid => $p_name)
 		{
 			$tb->add_menu_item(array(
@@ -1760,7 +1811,8 @@ class bug_tracker extends class_base
 		$ss = safe_array($o->meta("saved_searches"));
 		$ss[count($ss)+1] = array(
 			"name" => $arr["save_search_name"],
-			"params" => $search_params
+			"params" => $search_params,
+			"creator" => aw_global_get("uid")
 		);
 		$o->set_meta("saved_searches", $ss);
 		$o->save();
@@ -2038,6 +2090,186 @@ class bug_tracker extends class_base
 
 		$arr["prop"]["value"] = $chart->draw_chart ();
 		
+	}
+
+	function _sp_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"action" => "add_s_res_to_p_list",
+			"img" => "save.gif",
+		));
+		$tb->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Kustuta"),
+			"img" => "delete.gif",
+			"action" => "remove_p_from_l_list",
+		));
+	}
+
+	function _init_p_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "co",
+			"caption" => t("Organisatsioon"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "phone",
+			"caption" => t("Telefon"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => t("E-mail"),
+			"align" => "center",
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _sp_table($arr)
+	{	
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_p_tbl($t);
+
+		foreach($this->get_people_list($arr["obj_inst"]) as $p_id => $p_nm)
+		{
+			$p = obj($p_id);
+			$t->define_data(array(
+				"name" => html::obj_change_url($p),
+				"co" => html::obj_change_url($p->prop("work_contact")),
+				"phone" => $p->prop("phone.name"),
+				"email" => $p->prop("email.name"),
+				"oid" => $p->id()
+			));
+		}
+	}
+
+	function _sp_s_res($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_p_tbl($t);
+
+		if ($arr["request"]["sp_p_name"] != "" || $arr["request"]["sp_p_co"] != "")
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CRM_PERSON,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"name" => "%".$arr["request"]["sp_p_name"]."%",
+				"CL_CRM_PERSON.work_contact.name" => "%".$arr["request"]["sp_p_co"]."%"
+			));
+
+			foreach($ol->arr() as $p)
+			{
+				$t->define_data(array(
+					"name" => html::obj_change_url($p),
+					"co" => html::obj_change_url($p->prop("work_contact")),
+					"phone" => $p->prop("phone.name"),
+					"email" => html::href(array("url" => "mailto:".$p->prop("email.mail"),"caption" => $p->prop("email.mail"))),
+					"oid" => $p->id()
+				));
+			}
+		}
+	}
+
+	/**
+		@attrib name=add_s_res_to_p_list
+	**/
+	function add_s_res_to_p_list($arr)
+	{	
+		$o = obj($arr["id"]);
+		$persons = $o->meta("imp_p");
+		foreach(safe_array($arr["sel"]) as $p_id)
+		{
+			$persons[aw_global_get("uid")][$p_id] = $p_id;
+		}
+		$o->set_meta("imp_p", $persons);
+		$o->save();
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=remove_p_from_l_list
+	**/
+	function remove_p_from_l_list($arr)
+	{	
+		$o = obj($arr["id"]);
+		$persons = $o->meta("imp_p");
+		foreach(safe_array($arr["sel"]) as $p_id)
+		{
+			unset($persons[aw_global_get("uid")][$p_id]);
+		}
+		$o->set_meta("imp_p", $persons);
+		$o->save();
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=co_autocomplete_source
+		@param sp_p_co optional
+	**/
+	function co_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_COMPANY,
+			"name" => $arr["sp_p_co"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 100
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
+	/**
+		@attrib name=p_autocomplete_source
+		@param sp_p_p optional
+	**/
+	function p_autocomplete_source($arr)
+	{
+		$ac = get_instance("vcl/autocomplete");
+		$arr = $ac->get_ac_params($arr);
+
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_PERSON,
+			"name" => $arr["sp_p_p"]."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 200
+		));
+		return $ac->finish_ac($ol->names());
+	}
+
+	function get_people_list($bt)
+	{
+		$ret = array();
+		$persons = $bt->meta("imp_p");
+		$persons = safe_array($persons[aw_global_get("uid")]);
+
+		if (!count($persons))
+		{
+			return array();
+		}
+
+		$ol = new object_list(array(
+			"oid" => $persons,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		return $ol->names();
 	}
 }
 ?>

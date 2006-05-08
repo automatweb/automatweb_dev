@@ -315,6 +315,60 @@
             <field>gantt_summary</field>
             <caption>Kokkuv&amp;amp;otilde;te</caption>
       </property>
+      <property>
+            <name>sp_tb</name>
+            <table>objects</table>
+            <group>settings_people</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>sp_tb</field>
+      </property>
+      <property>
+            <name>sp_table</name>
+            <table>objects</table>
+            <group>settings_people</group>
+            <type>table</type>
+            <store>no</store>
+            <field>sp_table</field>
+            <caption>Valitud isikud</caption>
+      </property>
+      <property>
+            <name>sp_p_name</name>
+            <table>objects</table>
+            <group>settings_people</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>sp_p_name</field>
+            <caption>Isik</caption>
+      </property>
+      <property>
+            <name>sp_p_co</name>
+            <table>objects</table>
+            <group>settings_people</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>sp_p_co</field>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>sp_sbt</name>
+            <table>objects</table>
+            <group>settings_people</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>sp_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>sp_s_res</name>
+            <table>objects</table>
+            <group>settings_people</group>
+            <type>table</type>
+            <store>no</store>
+            <field>sp_s_res</field>
+            <caption>Otsingu tulemused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG_TRACKER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -374,6 +428,15 @@
                   <caption>Kaardid</caption>
                   <submit>no</submit>
             </charts>
+            <settings>
+                  <caption>Seaded</caption>
+                  <submit>no</submit>
+            </settings>
+            <settings_people>
+                  <caption>Bugtracki isikud</caption>
+                  <submit>no</submit>
+                  <parent>settings</parent>
+            </settings_people>
       </groupinfo>
       <reltypes>
             <MONITOR>
@@ -391,6 +454,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Kataloog</caption>
             </FOLDER>
+            <IMP_P>
+                  <value>4</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Oluline isik</caption>
+            </IMP_P>
       </reltypes>
       <layout>
             <bug>

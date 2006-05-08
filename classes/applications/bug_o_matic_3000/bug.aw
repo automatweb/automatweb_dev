@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.31 2006/04/24 10:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.32 2006/05/08 14:08:44 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -234,9 +234,25 @@ class bug extends class_base
 					$u = get_instance(CL_USER);
 					$p = obj($u->get_current_person());
 					$tmp[$p->id()] = $p->name();
+
 					if ($prop["multiple"] == 1)
 					{
-						$prop["value"] = $this->make_keys(array_keys($tmp));
+					//	$prop["value"] = $this->make_keys(array_keys($tmp));
+					}
+
+					// find tracker for the bug and get people list from that
+					$po = obj($arr["request"]["parent"]);
+					$pt = $po->path();
+					foreach($pt as $pi)
+					{
+						if ($pi->class_id() == CL_BUG_TRACKER)
+						{
+							$bt = $pi->instance();
+							foreach($bt->get_people_list($pi) as $pid => $pnm)
+							{
+								$tmp[$pid] = $pnm;
+							}
+						}
 					}
 					$prop["options"] = array("" => t("--vali--")) + $tmp;
 				}
