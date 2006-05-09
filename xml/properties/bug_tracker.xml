@@ -97,8 +97,33 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
+            <parent>s_name_lay</parent>
+            <captionside>top</captionside>
             <field>s_name</field>
-            <caption>L&amp;uuml;hikirjeldus</caption>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>s_bug_content</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>s_name_lay</parent>
+            <captionside>top</captionside>
+            <field>s_bug_content</field>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>s_find_parens</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <parent>s_name_lay</parent>
+            <captionside>top</captionside>
+            <field>s_find_parens</field>
+            <caption>Leia ka buge, millel on alambuge</caption>
       </property>
       <property>
             <name>s_bug_status</name>
@@ -107,6 +132,9 @@
             <type>select</type>
             <store>no</store>
             <multiple>1</multiple>
+            <parent>s_status_lay</parent>
+            <captionside>top</captionside>
+            <size>3</size>
             <field>s_bug_status</field>
             <caption>Staatus</caption>
       </property>
@@ -116,8 +144,21 @@
             <group>search</group>
             <type>select</type>
             <store>no</store>
+            <parent>s_status_lay</parent>
+            <captionside>top</captionside>
             <field>s_bug_priority</field>
             <caption>Prioriteet</caption>
+      </property>
+      <property>
+            <name>s_bug_severity</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>s_status_lay</parent>
+            <captionside>top</captionside>
+            <field>s_bug_severity</field>
+            <caption>T&amp;amp;ouml;sidus</caption>
       </property>
       <property>
             <name>s_who</name>
@@ -126,8 +167,9 @@
             <type>textbox</type>
             <store>no</store>
             <parent>s_who_l</parent>
-            <no_caption>1</no_caption>
+            <captionside>top</captionside>
             <field>s_who</field>
+            <caption>Kellele</caption>
       </property>
       <property>
             <name>s_who_empty</name>
@@ -137,8 +179,31 @@
             <ch_value>1</ch_value>
             <store>no</store>
             <parent>s_who_l</parent>
+            <captionside>top</captionside>
             <field>s_who_empty</field>
             <caption>T&amp;amp;uuml;hi</caption>
+      </property>
+      <property>
+            <name>s_monitors</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>s_who_l</parent>
+            <captionside>top</captionside>
+            <field>s_monitors</field>
+            <caption>J&amp;amp;auml;lgijad</caption>
+      </property>
+      <property>
+            <name>s_bug_mail</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>s_who_l</parent>
+            <captionside>top</captionside>
+            <field>s_bug_mail</field>
+            <caption>Bugmail CC</caption>
       </property>
       <property>
             <name>s_bug_type</name>
@@ -146,6 +211,8 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
+            <captionside>top</captionside>
+            <parent>s_type_lay</parent>
             <field>s_bug_type</field>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
@@ -155,55 +222,21 @@
             <group>search</group>
             <type>select</type>
             <store>no</store>
+            <captionside>top</captionside>
+            <parent>s_type_lay</parent>
             <field>s_bug_class</field>
             <caption>Klass</caption>
       </property>
       <property>
-            <name>s_bug_severity</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>select</type>
-            <store>no</store>
-            <field>s_bug_severity</field>
-            <caption>T&amp;amp;ouml;sidus</caption>
-      </property>
-      <property>
-            <name>s_monitors</name>
+            <name>s_bug_component</name>
             <table>objects</table>
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
-            <field>s_monitors</field>
-            <caption>J&amp;amp;auml;lgijad</caption>
-      </property>
-      <property>
-            <name>s_deadline</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>date_select</type>
-            <default>-1</default>
-            <store>no</store>
-            <field>s_deadline</field>
-            <caption>T&amp;amp;auml;htaeg</caption>
-      </property>
-      <property>
-            <name>s_bug_url</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>textbox</type>
-            <size>100</size>
-            <store>no</store>
-            <field>s_bug_url</field>
-            <caption>URL</caption>
-      </property>
-      <property>
-            <name>s_bug_content</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>s_bug_content</field>
-            <caption>Sisu</caption>
+            <captionside>top</captionside>
+            <parent>s_type_lay</parent>
+            <field>s_bug_component</field>
+            <caption>Komponent</caption>
       </property>
       <property>
             <name>s_customer</name>
@@ -211,6 +244,8 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
+            <captionside>top</captionside>
+            <parent>s_cut_lay</parent>
             <field>s_customer</field>
             <caption>Klient</caption>
       </property>
@@ -220,36 +255,22 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
+            <captionside>top</captionside>
+            <parent>s_cut_lay</parent>
             <field>s_project</field>
             <caption>Projekt</caption>
       </property>
       <property>
-            <name>s_bug_component</name>
+            <name>s_deadline</name>
             <table>objects</table>
             <group>search</group>
-            <type>textbox</type>
+            <type>date_select</type>
+            <default>-1</default>
             <store>no</store>
-            <field>s_bug_component</field>
-            <caption>Komponent</caption>
-      </property>
-      <property>
-            <name>s_bug_mail</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>textbox</type>
-            <store>no</store>
-            <field>s_bug_mail</field>
-            <caption>Bugmail CC</caption>
-      </property>
-      <property>
-            <name>s_find_parens</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <store>no</store>
-            <field>s_find_parens</field>
-            <caption>Leia ka buge, millel on alambuge</caption>
+            <captionside>top</captionside>
+            <parent>s_cut_lay</parent>
+            <field>s_deadline</field>
+            <caption>T&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>s_sbt</name>
@@ -472,11 +493,31 @@
                         <num_4>by_cust</num_4>
                   </group>
             </bug>
+            <s_name_lay>
+                  <type>hbox</type>
+                  <group>search</group>
+                  <caption>Nimi</caption>
+            </s_name_lay>
+            <s_status_lay>
+                  <type>hbox</type>
+                  <group>search</group>
+                  <caption>Staatus</caption>
+            </s_status_lay>
             <s_who_l>
                   <type>hbox</type>
                   <group>search</group>
                   <caption>Kellele</caption>
             </s_who_l>
+            <s_type_lay>
+                  <type>hbox</type>
+                  <group>search</group>
+                  <caption>Tyyp</caption>
+            </s_type_lay>
+            <s_cut_lay>
+                  <type>hbox</type>
+                  <group>search</group>
+                  <caption>Klient</caption>
+            </s_cut_lay>
       </layout>
 </properties>
 

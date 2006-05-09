@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.47 2006/05/09 06:41:33 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.47 2006/05/09 06:41:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.48 2006/05/09 07:39:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.48 2006/05/09 07:39:42 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -37,59 +37,69 @@ define("BUG_STATUS_CLOSED", 5);
 	@property search_tb type=toolbar store=no no_caption=1
 	@caption Otsingu toolbar
 
-	@property s_name type=textbox store=no
-	@caption Lühikirjeldus
+	@layout s_name_lay type=hbox
+	@caption Nimi
 
-	@property s_bug_status type=select store=no multiple=1
+		@property s_name type=textbox store=no parent=s_name_lay captionside=top
+		@caption Nimi
+
+		@property s_bug_content type=textbox store=no parent=s_name_lay captionside=top
+		@caption Sisu
+
+		@property s_find_parens type=checkbox ch_value=1 store=no parent=s_name_lay captionside=top
+		@caption Leia ka buge, millel on alambuge
+
+	@layout s_status_lay type=hbox
 	@caption Staatus
 
-	@property s_bug_priority type=select store=no
-	@caption Prioriteet
+		@property s_bug_status type=select store=no multiple=1 parent=s_status_lay captionside=top size=3
+		@caption Staatus
+
+		@property s_bug_priority type=select store=no parent=s_status_lay captionside=top
+		@caption Prioriteet
+
+		@property s_bug_severity type=select store=no parent=s_status_lay captionside=top
+		@caption T&ouml;sidus
 
 	@layout s_who_l type=hbox
 	@caption Kellele
 
-		@property s_who type=textbox store=no parent=s_who_l no_caption=1
+		@property s_who type=textbox store=no parent=s_who_l captionside=top
+		@caption Kellele
 
-		@property s_who_empty type=checkbox ch_value=1 store=no parent=s_who_l 
+		@property s_who_empty type=checkbox ch_value=1 store=no parent=s_who_l captionside=top
 		@caption T&uuml;hi
 
-	@property s_bug_type type=textbox store=no
-	@caption T&uuml;&uuml;p
+		@property s_monitors type=textbox store=no parent=s_who_l captionside=top
+		@caption J&auml;lgijad
 
-	@property s_bug_class type=select store=no
-	@caption Klass
+		@property s_bug_mail type=textbox store=no parent=s_who_l captionside=top
+		@caption Bugmail CC
 
-	@property s_bug_severity type=select store=no
-	@caption T&ouml;sidus
+	@layout s_type_lay type=hbox
+	@caption Tyyp
 
-	@property s_monitors type=textbox store=no
-	@caption J&auml;lgijad
+		@property s_bug_type type=textbox store=no captionside=top parent=s_type_lay
+		@caption T&uuml;&uuml;p
 
-	@property s_deadline type=date_select default=-1 store=no
-	@caption T&auml;htaeg
+		@property s_bug_class type=select store=no captionside=top parent=s_type_lay
+		@caption Klass
 
-	@property s_bug_url type=textbox size=100  store=no
-	@caption URL
+		@property s_bug_component type=textbox store=no captionside=top parent=s_type_lay
+		@caption Komponent
 
-	@property s_bug_content type=textbox store=no
-	@caption Sisu
-
-	@property s_customer type=textbox store=no
+	@layout s_cut_lay type=hbox
 	@caption Klient
 
-	@property s_project type=textbox store=no
-	@caption Projekt
+		@property s_customer type=textbox store=no captionside=top parent=s_cut_lay
+		@caption Klient
 
-	@property s_bug_component type=textbox store=no
-	@caption Komponent
+		@property s_project type=textbox store=no captionside=top parent=s_cut_lay
+		@caption Projekt
 
-	@property s_bug_mail type=textbox store=no
-	@caption Bugmail CC
-	
-	@property s_find_parens type=checkbox ch_value=1 store=no
-	@caption Leia ka buge, millel on alambuge
-	
+		@property s_deadline type=date_select default=-1 store=no captionside=top parent=s_cut_lay
+		@caption T&auml;htaeg
+
 	@property s_sbt type=submit store=no
 	@caption Otsi
 	
@@ -1831,8 +1841,20 @@ class bug_tracker extends class_base
 	function _init_saved_searches(&$t)
 	{
 		$t->define_field(array(
+			"name" => "who",
+			"caption" => t("Kelle otsing"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "params",
+			"caption" => t("Otsingu parameetrid"),
 			"sortable" => 1,
 			"align" => "center"
 		));
@@ -1847,12 +1869,76 @@ class bug_tracker extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_saved_searches(&$t);
 
+		$bug_props = $arr["obj_inst"]->get_property_list();
+		$bugi = get_instance(CL_BUG);
+
+		$u = get_instance(CL_USER);
 		$ss = safe_array($arr["obj_inst"]->meta("saved_searches"));
 		foreach($ss as $idx => $search)
 		{
+			$p = $u->get_person_for_uid($search["creator"]);
+			$ps = array();
+			foreach(safe_array($search["params"]) as $par_nm => $par_val)
+			{
+				if ($par_val != "")
+				{
+					if (is_array($par_val))
+					{
+						if (count($par_val))
+						{
+							if ($par_nm == "s_deadline")
+							{
+								$ts = date_edit::get_timestamp($par_val);
+								if ($ts > 300)
+								{
+									$ps[] = $bug_props[$par_nm]["caption"]." = ".date("d.m.Y", $ts);
+								}
+							}
+							else
+							if ($par_nm == "s_bug_status")
+							{
+								$states = $bugi->get_status_list();
+								$tmp = array();
+								foreach($par_val as $state)
+								{
+									$tmp[] = $states[$state];
+								}
+								$ps[] = $bug_props[$par_nm]["caption"]." = ".join(",", $tmp);
+							}
+							else
+							{
+								$ps[] = $bug_props[$par_nm]["caption"]." = ".join(",", $par_val);
+							}
+						}
+					}
+					else
+					{
+						if ($par_nm == "s_who")
+						{
+							$ps[] = "Kellele = ".$par_val;
+						}
+						else
+						{
+							$ps[] = $bug_props[$par_nm]["caption"]." = ".$par_val;
+						}
+					}
+				}
+			}
+
+			$opr = $search["params"];
+			$opr["id"] = $arr["obj_inst"]->id();
+			$opr["group"] = "search";
+			$opr["MAX_FILE_SIZE"] = 100000000;
+			$url = $this->mk_my_orb("change", $opr);
+
 			$t->define_data(array(
-				"name" => $search["name"],
-				"idx" => $idx
+				"name" => html::href(array(
+					"url" => $url,
+					"caption" => $search["name"]
+				)),
+				"idx" => $idx,
+				"who" => $p->name(),
+				"params" => join("<br>", $ps)
 			));
 		}
 	}
