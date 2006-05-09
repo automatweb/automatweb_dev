@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.53 2006/05/09 11:45:39 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.53 2006/05/09 11:45:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.54 2006/05/09 12:21:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.54 2006/05/09 12:21:43 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1519,6 +1519,11 @@ class bug_tracker extends class_base
 		foreach($comment_ol->arr() as $comm)
 		{
 			$comments_by_bug[$comm->parent()]++;
+		}
+
+		if ($_GET["action"] == "list_only_fetch")
+		{
+			$t->set_request_uri($this->mk_my_orb("change", array("id" => $params["bt"]->id(), "group" => "by_default", "b_id" => $_GET["b_id"]), "bug_tracker"));
 		}
 
 		foreach($bug_list as $bug)

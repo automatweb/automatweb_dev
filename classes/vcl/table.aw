@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.73 2006/04/27 08:14:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.74 2006/05/09 12:21:41 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -548,6 +548,11 @@ class aw_table extends aw_template
 		}
 	}
 
+	function set_request_uri($ru)
+	{
+		$this->REQUEST_URI = $ru;
+	}
+
 	function draw($arr = array())
 	{
 		// väljastab tabeli
@@ -574,7 +579,14 @@ class aw_table extends aw_template
 
 		extract($arr);
 		$PHP_SELF = aw_global_get("PHP_SELF");
-		$REQUEST_URI = aw_global_get("REQUEST_URI");
+		if (isset($this->REQUEST_URI))
+		{
+			$REQUEST_URI = $this->REQUEST_URI;
+		}
+		else
+		{
+			$REQUEST_URI = aw_global_get("REQUEST_URI");
+		}
 		$this->titlebar_under_groups = isset($arr["titlebar_under_groups"]) ? $arr["titlebar_under_groups"] : $this->titlebar_under_groups;
 		$tbl = "";
 
@@ -1911,7 +1923,14 @@ class aw_table extends aw_template
 					$sufix = $_GET["sort_order"] == "desc" ? $this->up_arr : $this->dn_arr;
 					$so = $_GET["sort_order"] == "desc" ? "asc" : "desc";
 				}
-				$url = aw_global_get("REQUEST_URI");
+				if (isset($this->REQUEST_URI))
+				{
+					$url = $this->REQUEST_URI;
+				}
+				else
+				{
+					$url = aw_global_get("REQUEST_URI");
+				}
 				$url = preg_replace("/sortby=[^&$]*/","",$url);
 				$url = preg_replace("/sort_order=[^&$]*/","",$url);
 				$url = preg_replace("/&{2,}/","&",$url);
