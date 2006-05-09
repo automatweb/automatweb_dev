@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.49 2006/05/09 09:03:22 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.49 2006/05/09 09:03:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.50 2006/05/09 09:32:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.50 2006/05/09 09:32:53 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1649,7 +1649,7 @@ class bug_tracker extends class_base
 		$this->_req_get_struct_xml_level++;
 		foreach($ot->level($parent) as $obj)
 		{
-			$xml .= "<item><value>".$obj->id()."</value><text>".str_repeat("__", $this->_req_get_struct_xml_level).$obj->name()."</text></item>";
+			$xml .= "<item><value>".$obj->id()."</value><text>".str_repeat("__", $this->_req_get_struct_xml_level).str_replace("<", "&lt;", str_replace(">", "&gt;", str_replace("&", "&amp;", $obj->name())))."</text></item>\n";
 			$this->_req_get_struct_xml($obj->id(), $ot, $xml);
 		}
 		$this->_req_get_struct_xml_level--;
