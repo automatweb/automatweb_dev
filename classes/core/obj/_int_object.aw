@@ -1202,10 +1202,6 @@ class _int_object
 				}
 				// get all old connections
 				// remove the ones that are not selected
-if ($GLOBALS["SPD"] == 1)
-{
-echo "connsremove tval = ".dbg::dump($propi)." <br>";
-}
 				if (is_oid($this->id()) && ($propi["type"] != "relpicker" || $propi["store"] == "connect"))
 				{
 					foreach($this->connections_from(array("type" => $_rt)) as $c)
