@@ -98,7 +98,8 @@
             <multiple>1</multiple>
             <automatic>1</automatic>
             <reltype>RELTYPE_SHOW_TYPE</reltype>
-            <field>view_ots</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>N&amp;amp;auml;idatavad objektit&amp;amp;uuml;&amp;amp;uuml;bid</caption>
       </property>
       <property>
@@ -109,7 +110,8 @@
             <multiple>1</multiple>
             <automatic>1</automatic>
             <reltype>RELTYPE_ADD_TYPE</reltype>
-            <field>add_ots</field>
+            <field>meta</field>
+            <method>serialize</method>
             <caption>Lisatavad objektit&amp;amp;uuml;&amp;amp;uuml;bid</caption>
       </property>
       <classinfo>

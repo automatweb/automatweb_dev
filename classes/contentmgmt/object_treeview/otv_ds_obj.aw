@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.46 2006/02/28 10:41:29 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.47 2006/05/09 11:26:39 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -40,10 +40,10 @@
 
 @default group=types
 
-	@property view_ots type=relpicker multiple=1 automatic=1 reltype=RELTYPE_SHOW_TYPE
+	@property view_ots type=relpicker multiple=1 automatic=1 reltype=RELTYPE_SHOW_TYPE field=meta method=serialize
 	@caption N&auml;idatavad objektit&uuml;&uuml;bid
 
-	@property add_ots type=relpicker multiple=1 automatic=1 reltype=RELTYPE_ADD_TYPE
+	@property add_ots type=relpicker multiple=1 automatic=1 reltype=RELTYPE_ADD_TYPE field=meta method=serialize
 	@caption Lisatavad objektit&uuml;&uuml;bid
 
 @groupinfo folders caption="Kataloogid"
