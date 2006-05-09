@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.93 2006/05/09 10:57:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.94 2006/05/09 23:23:45 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -170,6 +170,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property show_image_upload_in_add_topic_form type=checkbox ch_value=1
 		@caption N&auml;idata teema lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
+
+		@property show_image_upload_in_add_comment_form type=checkbox ch_value=1
+		@caption N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
 
 		@property comments_on_page type=select
 		@caption Kommentaare lehel
@@ -1365,6 +1368,13 @@ class forum_v2 extends class_base
 				unset($_SESSION['forum_comment_error']);
 			}
 
+			if ( $args['obj_inst']->prop('show_image_upload_in_add_comment_form') == 1 )
+			{
+				$this->vars(array(
+					'IMAGE_UPLOAD_FIELD' => $this->parse('IMAGE_UPLOAD_FIELD'),
+				));
+			}
+
 			$rv .= $this->parse();
 		};
 			
@@ -1374,7 +1384,6 @@ class forum_v2 extends class_base
 			"value" => $rv,
 			"no_caption" => 1,
 		);
-
 		return $retval;
 
 	}
