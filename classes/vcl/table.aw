@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.74 2006/05/09 12:21:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.75 2006/05/09 12:53:45 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -2011,7 +2011,12 @@ class aw_table extends aw_template
 			$tbl2 = "<tr>\n";
 
 			### get filter change url
-			$url = preg_replace("/.{$this->filter_name}=[^&]*/", "", aw_global_get("REQUEST_URI"));
+			$ru = aw_global_get("REQUEST_URI");
+			if (isset($this->REQUEST_URI))
+			{
+				$ru = $this->REQUEST_URI;
+			}
+			$url = preg_replace("/.{$this->filter_name}=[^&]*/", "", $ru);
 			$sep = (strpos($url, "?") === false) ? "?" : "&";
 
 			foreach($this->rowdefs as $k => $v)

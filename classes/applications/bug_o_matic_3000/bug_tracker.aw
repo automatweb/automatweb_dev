@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.55 2006/05/09 12:38:57 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.55 2006/05/09 12:38:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.56 2006/05/09 12:53:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.56 2006/05/09 12:53:46 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1189,23 +1189,14 @@ class bug_tracker extends class_base
 			"caption" => t("Nimi"),
 			"sortable" => 1
 		));
-
+		$bugi = get_instance(CL_BUG);
 		$t->define_field(array(
 			"name" => "bug_status",
 			"caption" => t("Staatus"),
 			"sortable" => 1,
-			"callback" => array(&$this, "show_status"),
-			"callb_pass_row" => 1,
-			"filter" => array(
-				t("1"),
-				t("2"),
-				t("3"),
-				t("4"),
-				t("5"),
-				t("6"),
-				t("7"),
-				t("8"),
-			),
+//			"callback" => array(&$this, "show_status"),
+//			"callb_pass_row" => 1,
+			"filter" => $bugi->get_status_list()
 		));
 
 		$t->define_field(array(
@@ -1288,22 +1279,14 @@ class bug_tracker extends class_base
 			"sortable" => 1
 		));
 
+		$bugi = get_instance(CL_BUG);
 		$t->define_field(array(
 			"name" => "bug_status",
 			"caption" => t("Staatus"),
 			"sortable" => 1,
-			"callback" => array(&$this, "show_status_no_edit"),
-			"callb_pass_row" => 1,
-			"filter" => array(
-				t("1"),
-				t("2"),
-				t("3"),
-				t("4"),
-				t("5"),
-				t("6"),
-				t("7"),
-				t("8"),
-			),
+		/*	"callback" => array(&$this, "show_status_no_edit"),
+			"callb_pass_row" => 1,*/
+			"filter" => $bugi->get_status_list()
 		));
 
 		$t->define_field(array(
@@ -1482,6 +1465,7 @@ class bug_tracker extends class_base
 		$u = get_instance(CL_USER);
 		$us = get_instance("users");
 		$bug_i = get_instance(CL_BUG);
+		$states = $bug_i->get_status_list();
 		$bug_list = $ol->arr();
 		$user_list = array();
 		foreach($bug_list as $bug)
@@ -1571,7 +1555,7 @@ class bug_tracker extends class_base
 					"url" => $opurl,
 					"caption" => t("Sisene")
 				)).")",
-				"bug_status" => $bug->prop("bug_status"),
+				"bug_status" => $states[$bug->prop("bug_status")],
 				"who" => $bug->prop_str("who"),
 				"bug_priority" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_priority"),
 				"bug_severity" => $bug->class_id() == CL_MENU ? "" : $bug->prop("bug_severity"),
