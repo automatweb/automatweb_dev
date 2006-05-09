@@ -172,7 +172,7 @@
             <parent>s_status_lay</parent>
             <captionside>top</captionside>
             <field>s_bug_severity</field>
-            <caption>T&amp;amp;ouml;sidus</caption>
+            <caption>T&amp;amp;otilde;sidus</caption>
       </property>
       <property>
             <name>s_who</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.37 2006/05/09 12:26:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.38 2006/05/09 12:38:57 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -42,7 +42,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@caption Klass
 
 		@property bug_severity type=select parent=settings_col2 captionside=top
-		@caption T&ouml;sidus
+		@caption T&otilde;sidus
 
 
 	

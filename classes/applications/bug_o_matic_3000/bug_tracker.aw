@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.54 2006/05/09 12:21:43 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.54 2006/05/09 12:21:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.55 2006/05/09 12:38:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.55 2006/05/09 12:38:57 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -62,7 +62,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@caption Prioriteet
 
 		@property s_bug_severity type=select store=no parent=s_status_lay captionside=top
-		@caption T&ouml;sidus
+		@caption T&otilde;sidus
 
 	@layout s_who_l type=hbox
 	@caption Kellele
@@ -1231,7 +1231,7 @@ class bug_tracker extends class_base
 		));
 		$t->define_field(array(
 			"name" => "bug_severity",
-			"caption" => t("T&ouml;sidus"),
+			"caption" => t("T&otilde;sidus"),
 			"sortable" => 1,
 			"numeric" => 1,
 			"callback" => array(&$this, "show_severity"),
@@ -1333,7 +1333,7 @@ class bug_tracker extends class_base
 		));
 		$t->define_field(array(
 			"name" => "bug_severity",
-			"caption" => t("T&ouml;sidus"),
+			"caption" => t("T&otilde;sidus"),
 			"sortable" => 1,
 			"numeric" => 1,
 			"filter" => array(

@@ -80,7 +80,7 @@
             <parent>settings_col2</parent>
             <captionside>top</captionside>
             <field>bug_severity</field>
-            <caption>T&amp;amp;ouml;sidus</caption>
+            <caption>T&amp;amp;otilde;sidus</caption>
       </property>
       <property>
             <name>monitors</name>
