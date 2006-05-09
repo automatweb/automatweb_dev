@@ -112,7 +112,7 @@
             <group>general</group>
             <table>aw_bugs</table>
             <type>textbox</type>
-            <size>100</size>
+            <size>80</size>
             <field>bug_url</field>
             <caption>URL</caption>
       </property>
@@ -122,7 +122,7 @@
             <table>aw_bugs</table>
             <type>textarea</type>
             <rows>23</rows>
-            <cols>80</cols>
+            <cols>60</cols>
             <parent>bc</parent>
             <field>bug_content</field>
             <caption>Sisu</caption>
@@ -133,7 +133,7 @@
             <table>aw_bugs</table>
             <type>textarea</type>
             <rows>10</rows>
-            <cols>80</cols>
+            <cols>60</cols>
             <parent>bc</parent>
             <store>no</store>
             <editonly>1</editonly>

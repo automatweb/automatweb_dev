@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.36 2006/05/09 11:39:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.37 2006/05/09 12:26:59 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -54,7 +54,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@property deadline type=date_select default=-1 parent=settings_col3 captionside=top
 		@caption T&auml;htaeg
 
-@property bug_url type=textbox size=100 
+@property bug_url type=textbox size=80
 @caption URL
 
 @layout content type=hbox width=20%:80%
@@ -62,10 +62,10 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@layout bc type=vbox parent=content
 
-		@property bug_content type=textarea rows=23 cols=80 parent=bc
+		@property bug_content type=textarea rows=23 cols=60 parent=bc
 		@caption Sisu
 
-		@property bug_content_comm type=textarea rows=10 cols=80 parent=bc store=no editonly=1
+		@property bug_content_comm type=textarea rows=10 cols=60 parent=bc store=no editonly=1
 		@caption Lisa kommentaar
 
 	@layout data type=vbox parent=content
