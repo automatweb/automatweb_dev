@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.33 2006/05/09 06:50:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.34 2006/05/09 09:13:46 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -686,10 +686,10 @@ class bug extends class_base
 	function get_class_list()
 	{
 		$ret = array();
-		$this->cx = get_instance("cfg/cfgutils");
-		$class_list = new aw_array($this->cx->get_classes_with_properties());
-		$cp = get_class_picker(array("field" => "def"));
-				
+		//$this->cx = get_instance("cfg/cfgutils");
+		//$class_list = new aw_array($this->cx->get_classes_with_properties());
+		$cp = get_class_picker();
+		return $cp;
 		$prop["options"][0] = "";
 		foreach($class_list->get() as $key => $val)
 		{
