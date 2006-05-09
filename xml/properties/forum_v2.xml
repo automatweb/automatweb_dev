@@ -408,6 +408,16 @@
             <caption>N&amp;amp;auml;idata teema lisamise vormis pildi &amp;amp;uuml;leslaadimise v&amp;amp;auml;lja?</caption>
       </property>
       <property>
+            <name>show_image_upload_in_add_comment_form</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;amp;auml;idata kommentaari lisamise vormis pildi &amp;amp;uuml;leslaadimise v&amp;amp;auml;lja?</caption>
+      </property>
+      <property>
             <name>comments_on_page</name>
             <table>objects</table>
             <group>topic_selector</group>
