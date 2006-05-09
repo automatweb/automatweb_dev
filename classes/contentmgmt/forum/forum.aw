@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.5 2005/04/21 09:23:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.6 2006/05/09 10:57:22 kristo Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -794,7 +794,7 @@ topic");
 			$rated = $this->_draw_ratings($meta["rates"],$board_meta);
 		};
 	
-		if (isset($no_comments))
+		if (!empty($no_comments))
 		{
 			$tabs = $this->tabs(array("flat","addcomment","flatcomments","threadedcomments","threadedsubjects","no_response","search","details"),"threadedsubjects");
 			$tpl = "subjects_threaded.tpl";

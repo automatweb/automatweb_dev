@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.92 2006/02/15 13:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.93 2006/05/09 10:57:22 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -2084,7 +2084,14 @@ class forum_v2 extends class_base
 			$uid_oid = users::get_oid_for_uid($arr['uid']);
 			$user_inst = get_instance(CL_USER);
 			$user_groups = $user_inst->get_groups_for_user($arr['uid']);
-			$gids = $this->make_keys($user_groups->ids());
+			if (!$user_groups)
+			{
+				$gids = array();
+			}
+			else
+			{
+				$gids = $this->make_keys($user_groups->ids());
+			}
 
 		}
 
