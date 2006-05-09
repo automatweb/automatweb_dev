@@ -32,10 +32,12 @@
 	<!-- END SUB: a_email_logged -->
 
 </tr>
+<!-- SUB: IMAGE_UPLOAD_FIELD -->
 <tr>
-	<td class="{VAR:style_from_text}">Pilt</td>
+	<td class="{VAR:style_form_text}">Pilt</td>
 	<td><input type="file" name="uimage" class="{VAR:style_form_element}"></td>
 </tr>
+<!-- END SUB: IMAGE_UPLOAD_FIELD -->
 <tr>
 	<td colspan="2" class="{VAR:style_form_text}" nowrap>Kommentaar:</td>
 </tr>
