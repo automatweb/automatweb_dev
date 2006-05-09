@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.50 2006/05/09 09:32:53 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.50 2006/05/09 09:32:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.51 2006/05/09 10:00:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.51 2006/05/09 10:00:09 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -20,10 +20,13 @@ define("BUG_STATUS_CLOSED", 5);
 	@property bug_folder type=relpicker reltype=RELTYPE_FOLDER table=objects field=meta method=serialize
 	@caption Bugide kataloog
 
+	@property bug_by_class_parent type=relpicker reltype=RELTYPE_BUG table=objects field=meta method=serialize
+	@caption Klasside puusse lisatud bugide asukoht
+
 
 @default group=by_default,by_project,by_who,by_class,by_cust,by_monitor
 
-	@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who
+	@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who,by_class
 
 	@property cat type=hidden store=no
 
@@ -171,6 +174,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype IMP_P value=4 clid=CL_CRM_PERSON
 @caption Oluline isik
+
+@reltype BUG value=5 clid=CL_BUG
+@caption Bugi
 
 */
 
@@ -374,7 +380,14 @@ class bug_tracker extends class_base
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 
-		$pt = !empty($arr["request"]["b_id"]) ? $arr["request"]["b_id"] : $this->get_bugs_parent($arr["obj_inst"]);
+		if ($arr["request"]["group"] == "by_class")
+		{
+			$pt = $arr["obj_inst"]->prop("bug_by_class_parent");
+		}
+		else
+		{
+			$pt = !empty($arr["request"]["b_id"]) ? $arr["request"]["b_id"] : $this->get_bugs_parent($arr["obj_inst"]);
+		}
 
 		$tb->add_menu_button(array(
 			"name" => "add_bug",
@@ -1327,7 +1340,10 @@ class bug_tracker extends class_base
 		$this->_init_bug_list_tbl($t);
 
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
-		if($this->can("view", $pt) || $arr["request"]["group"] == "by_monitor")
+		if($this->can("view", $pt) || 
+			$arr["request"]["group"] == "by_monitor" || 
+			$arr["request"]["group"] == "by_class"
+		)
 		{
 			// arhiivi tab
 			if($arr["request"]["group"] == "archive")
@@ -1379,11 +1395,13 @@ class bug_tracker extends class_base
 						}
 					}
 					$filt["bug_class"] = $c;
+					unset($filt["parent"]);
 				}
 				else
 				if ($arr["request"]["p_cls_id"])	// class 
 				{
 					$filt["bug_class"] = $arr["request"]["p_cls_id"];
+					unset($filt["parent"]);
 				}
 
 				if ($arr["request"]["b_stat"])

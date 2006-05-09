@@ -21,6 +21,16 @@
             <caption>Bugide kataloog</caption>
       </property>
       <property>
+            <name>bug_by_class_parent</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BUG</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klasside puusse lisatud bugide asukoht</caption>
+      </property>
+      <property>
             <name>bug_tb</name>
             <table>objects</table>
             <group>
@@ -28,6 +38,7 @@
                   <num_1>by_default</num_1>
                   <num_2>by_project</num_2>
                   <num_3>by_who</num_3>
+                  <num_4>by_class</num_4>
             </group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
@@ -488,6 +499,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Oluline isik</caption>
             </IMP_P>
+            <BUG>
+                  <value>5</value>
+                  <clid>CL_BUG</clid>
+                  <caption>Bugi</caption>
+            </BUG>
       </reltypes>
       <layout>
             <bug>
