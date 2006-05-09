@@ -117,5 +117,20 @@
 			</function>
 		</action>
 
+		<action name="p_autocomplete_source">
+			<function name="p_autocomplete_source">
+				<arguments>
+					<optional name="sp_p_p" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_node_monitor" all_args="1">
+			<function name="get_node_monitor">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

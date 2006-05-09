@@ -43,6 +43,7 @@
                   <num_2>by_who</num_2>
                   <num_3>by_class</num_3>
                   <num_4>by_cust</num_4>
+                  <num_5>by_monitor</num_5>
             </group>
             <type>hidden</type>
             <store>no</store>
@@ -57,6 +58,7 @@
                   <num_2>by_who</num_2>
                   <num_3>by_class</num_3>
                   <num_4>by_cust</num_4>
+                  <num_5>by_monitor</num_5>
             </group>
             <type>treeview</type>
             <parent>bug</parent>
@@ -68,13 +70,14 @@
             <name>bug_list</name>
             <table>objects</table>
             <group>
-                  <num_0>bugs</num_0>
-                  <num_1>archive</num_1>
-                  <num_2>by_default</num_2>
-                  <num_3>by_project</num_3>
-                  <num_4>by_who</num_4>
-                  <num_5>by_class</num_5>
-                  <num_6>by_cust</num_6>
+                  <num_0>by_monitor</num_0>
+                  <num_1>bugs</num_1>
+                  <num_2>archive</num_2>
+                  <num_3>by_default</num_3>
+                  <num_4>by_project</num_4>
+                  <num_5>by_who</num_5>
+                  <num_6>by_class</num_6>
+                  <num_7>by_cust</num_7>
             </group>
             <type>text</type>
             <parent>bug</parent>
@@ -426,6 +429,11 @@
                   <parent>bugs</parent>
                   <submit>no</submit>
             </by_cust>
+            <by_monitor>
+                  <caption>J&amp;amp;auml;lgijad</caption>
+                  <parent>bugs</parent>
+                  <submit>no</submit>
+            </by_monitor>
             <search_t>
                   <caption>Otsing</caption>
                   <submit_method>get</submit_method>
@@ -491,6 +499,7 @@
                         <num_2>by_who</num_2>
                         <num_3>by_class</num_3>
                         <num_4>by_cust</num_4>
+                        <num_5>by_monitor</num_5>
                   </group>
             </bug>
             <s_name_lay>

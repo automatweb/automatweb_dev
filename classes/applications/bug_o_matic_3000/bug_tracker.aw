@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.48 2006/05/09 07:39:42 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.48 2006/05/09 07:39:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.49 2006/05/09 09:03:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.49 2006/05/09 09:03:22 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -21,7 +21,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@caption Bugide kataloog
 
 
-@default group=by_default,by_project,by_who,by_class,by_cust
+@default group=by_default,by_project,by_who,by_class,by_cust,by_monitor
 
 	@property bug_tb type=toolbar no_caption=1 group=bugs,by_default,by_project,by_who
 
@@ -29,7 +29,7 @@ define("BUG_STATUS_CLOSED", 5);
 
 	@layout bug type=hbox width=15%:85%
 		@property bug_tree type=treeview parent=bug no_caption=1
-		@property bug_list type=text parent=bug no_caption=1 group=bugs,archive,by_default,by_project,by_who,by_class,by_cust
+		@property bug_list type=text parent=bug no_caption=1 group=by_monitor,bugs,archive,by_default,by_project,by_who,by_class,by_cust
 
 
 @default group=search
@@ -148,6 +148,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@groupinfo by_who caption="Kellele" parent=bugs submit=no
 	@groupinfo by_class caption="Klasside puu" parent=bugs submit=no
 	@groupinfo by_cust caption="Kliendid" parent=bugs submit=no
+	@groupinfo by_monitor caption="J&auml;lgijad" parent=bugs submit=no
 
 @groupinfo search_t caption="Otsing" submit_method=get save=no
 	@groupinfo search caption="Otsing" submit_method=get save=no parent=search_t
@@ -210,6 +211,9 @@ class bug_tracker extends class_base
 				break;
 			case "by_cust":
 				aw_session_set("bug_tree_sort",array("name" => "cust"));
+				break;
+			case "by_monitor":
+				aw_session_set("bug_tree_sort",array("name" => "monitor"));
 				break;
 		}
 
@@ -846,6 +850,11 @@ class bug_tracker extends class_base
 				$orb_function = "get_node_other";
 				break;
 
+			case "monitor":
+				$tid = "_monitor";
+				$orb_function = "get_node_monitor";
+				break;
+
 			default:
 				$tid = "_def";
 				$orb_function = "get_node";
@@ -858,6 +867,7 @@ class bug_tracker extends class_base
 			"by_who" => t("Teostajad"),
 			"by_class" => t("Klassid"),
 			"by_cust" => t("Kliendid"),
+			"by_monitor" => t("J&auml;lgijad"),
 		);
 
 		$this->tree->start_tree(array(
@@ -877,6 +887,8 @@ class bug_tracker extends class_base
 				"p_fld_id" => $arr["request"]["p_fld_id"],
 				"p_cls_id" => $arr["request"]["p_cls_id"],
 				"p_cust_id" => $arr["request"]["p_cust_id"],
+				"b_mon" => $arr["request"]["b_mon"],
+				"b_stat" => $arr["request"]["b_stat"],
 				"set_retu" => get_ru(),
 				"parent" => " ",
 			)),
@@ -899,6 +911,13 @@ class bug_tracker extends class_base
 		if($this->sort_type["name"] == "cust")
 		{
 			$this->generate_cust_bug_tree(array(
+				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
+			));
+		}
+
+		if($this->sort_type["name"] == "monitor")
+		{
+			$this->generate_mon_bug_tree(array(
 				"parent" => $this->get_bugs_parent($arr["obj_inst"]),
 			));
 		}
@@ -1308,7 +1327,7 @@ class bug_tracker extends class_base
 		$this->_init_bug_list_tbl($t);
 
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
-		if($this->can("view", $pt))
+		if($this->can("view", $pt) || $arr["request"]["group"] == "by_monitor")
 		{
 			// arhiivi tab
 			if($arr["request"]["group"] == "archive")
@@ -1365,6 +1384,18 @@ class bug_tracker extends class_base
 				if ($arr["request"]["p_cls_id"])	// class 
 				{
 					$filt["bug_class"] = $arr["request"]["p_cls_id"];
+				}
+
+				if ($arr["request"]["b_stat"])
+				{
+					$filt["bug_status"] = $arr["request"]["b_stat"];
+					unset($filt["parent"]);
+				}
+
+				if ($arr["request"]["b_mon"])
+				{
+					$filt["monitors"] = $arr["request"]["b_mon"];
+					unset($filt["parent"]);
 				}
 
 				$ol = new object_list($filt);
@@ -2364,6 +2395,129 @@ class bug_tracker extends class_base
 			"site_id" => array()
 		));
 		return $ol->names();
+	}
+
+	function generate_mon_bug_tree($arr)
+	{
+		$this->tree->add_item(0,array(
+			"id" => $this->self_id,
+			"name" => $this->tree_root_name,
+		));	
+
+		// list all monitors
+		$c = new connection();
+		$conns = $c->find(array(
+			"from.class_id" => CL_BUG,
+			"type" => "RELTYPE_MONITOR"
+		));	
+		foreach($conns as $con)
+		{
+			$this->tree->add_item($this->self_id, array(
+				"id" => $con["to"],
+				"name" => $con["to.name"]
+			));
+		}
+	}
+
+	/**
+		@attrib name=get_node_monitor all_args=1
+	**/
+	function get_node_monitor($arr)
+	{	
+	    classload("core/icons");
+		$node_tree = get_instance("vcl/treeview");
+		$node_tree->start_tree (array (
+			"type" => TREE_DHTML,
+			"tree_id" => "bug_tree",
+			"branch" => 1,
+		));
+		$bugi = get_instance(CL_BUG);
+
+		$po = obj();
+		if ($this->can("view", $arr["parent"]))
+		{
+			$po = obj($arr["parent"]);
+		}
+
+		if ($po->class_id() == CL_CRM_PERSON)
+		{
+			// only statuses
+			foreach($bugi->get_status_list() as $sid => $sn)
+			{
+				if ($arr["b_stat"] == $sid)
+				{
+					$sn = "<b>".$sn."</b>";
+				}
+				$node_tree->add_item(0, array(
+					"id" => $arr["b_mon"]."_".$sid,
+					"name" => $sn,
+					"url" => html::get_change_url(
+						$arr["inst_id"],
+						array(
+							"group" => "by_monitor",
+							"b_stat" => $sid,
+							"b_mon" => $arr["b_mon"]
+						)
+					)
+				));
+			}
+			die($node_tree->finalize_tree());
+		}
+
+		// list all monitors
+		$c = new connection();
+		$conns = $c->find(array(
+			"from.class_id" => CL_BUG,
+			"type" => "RELTYPE_MONITOR"
+		));	
+		$mons = array();
+		foreach($conns as $con)
+		{
+			$mons[$con["to"]] = $con["to.name"];
+		}
+		foreach($mons as $_to => $_to_name)
+		{
+			if ($_to == $arr["b_mon"])
+			{
+				$_to_name = "<b>".$_to_name."</b>";
+			}
+			$node_tree->add_item(0, array(
+				"id" => $_to,
+				"name" => $_to_name,
+				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
+				"url" => html::get_change_url(
+					$arr["inst_id"],
+					array(
+						"group" => "by_monitor",
+						"b_mon" => $_to
+					)
+				)
+			));
+
+			// add statuses under ppl
+			
+			foreach($bugi->get_status_list() as $sid => $sn)
+			{
+				if ($arr["b_stat"] == $sid && $_to == $arr["b_mon"])
+				{
+					$sn = "<b>".$sn."</b>";
+				}
+				$node_tree->add_item($_to, array(
+					"id" => $_to."_".$sid,
+					"name" => $sn,
+					"url" => html::get_change_url(
+						$arr["inst_id"],
+						array(
+							"group" => "by_monitor",
+							"b_stat" => $sid,
+							"b_mon" => $_to
+						)
+					)
+				));
+			}
+		}
+
+		die($node_tree->finalize_tree());
 	}
 }
 ?>
