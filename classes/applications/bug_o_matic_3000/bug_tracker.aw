@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.51 2006/05/09 10:00:09 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.51 2006/05/09 10:00:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.52 2006/05/09 11:39:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.52 2006/05/09 11:39:04 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -678,12 +678,31 @@ class bug_tracker extends class_base
 			$ol = new object_list(array("class_id" => CL_BUG, "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)));
 			$c = new connection();
 			$bug2proj = $c->find(array("from.class_id" => CL_BUG, "to.class_id" => $arr["clid"], "type" => $arr["reltype"], "from" => $ol->ids()));
-
 			foreach($bug2proj as $conn)
 			{
 				$to[] = $conn["to"];
 				$bugs[] = $conn["from"];
 				$bug_count[$conn["to"]]++;
+			}
+
+			$buglist = new object_list(array(
+				"class_id" => CL_BUG,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"oid" => $bugs,
+				"bug_status" => new obj_predicate_not(5)
+			));
+
+			if ($arr["reltype"] == 1)
+			{
+				$bug_count = array();
+				$bugs = array();
+				$bug_data = $buglist->arr();
+				$prop = "who";
+				foreach($bug_data as $bug_obj)
+				{
+					$bug_count[$bug_obj->prop($prop)]++;
+				}
 			}
 			$to_unique = array_unique($to);
 			
@@ -692,7 +711,7 @@ class bug_tracker extends class_base
 				$obj = new object($project);
 				$node_tree->add_item(0, array(
 					"id" => $obj->id(),
-					"name" => $this->name_cut($obj->name())." (".$bug_count[$obj->id()].")",
+					"name" => $this->name_cut($obj->name())." (".$bug_count[$project].")",
 					"iconurl" => icons::get_icon_url($obj->class_id()),
 					"url" => html::get_change_url( $arr["inst_id"], array(
 						"id" => $this->self_id,
@@ -702,13 +721,30 @@ class bug_tracker extends class_base
 					"alt" => $obj->name()
 				));
 			}
-			foreach($bugs as $key => $bug)
+			if ($arr["reltype"] == 1)
 			{
-				$sub_obj =  new object($bug);
-				$node_tree->add_item($to[$key] , array(
-					"id" => $sub_obj->id(),
-					"name" => $sub_obj->name(),
-				));
+				foreach($bug_data as $sub_obj)
+				{
+					if (!$this->can("view", $sub_obj->prop("who")))
+					{
+						continue;
+					}
+					$node_tree->add_item($sub_obj->prop("who") , array(
+						"id" => $sub_obj->id(),
+						"name" => $sub_obj->name(),
+					));
+				}
+			}
+			else
+			{
+				foreach($bugs as $key => $bug)
+				{
+					$sub_obj =  new object($bug);
+					$node_tree->add_item($to[$key] , array(
+						"id" => $sub_obj->id(),
+						"name" => $sub_obj->name(),
+					));
+				}
 			}
 		}
 		else
@@ -726,16 +762,23 @@ class bug_tracker extends class_base
 				$filter = "parent";
 			}
 
-			$ol = new object_list(array(
-				$filter  => $arr["parent"],
-				"class_id" => array(CL_BUG, CL_MENU),
-				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)
-			));
-
+			$filt = array(
+				$filter  => $obj->id(),
+				"class_id" => CL_BUG,
+				"lang_id" => array(),
+				"site_id" => array()
+				//"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)
+			);
+			$ol = new object_list($filt);
 			$objects = $ol->arr();
 			foreach($objects as $obj_id => $object)
 			{
-				$ol = new object_list(array("parent" => $obj_id, "class_id" => array(CL_BUG, CL_MENU), "bug_status" => new obj_predicate_not(4)));
+				$ol = new object_list(array(
+					"parent" => $obj_id, 
+					"class_id" => CL_BUG,
+					"lang_id" => array(),
+					"site_id" => array(),
+					/*, "bug_status" => new obj_predicate_not(5)*/));
 				$ol_list = $ol->arr();
 
 				$node_tree->add_item(0 ,array(

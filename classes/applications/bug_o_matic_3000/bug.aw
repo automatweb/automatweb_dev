@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.35 2006/05/09 09:43:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.36 2006/05/09 11:39:04 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -226,7 +226,7 @@ class bug extends class_base
 				
 			case "who":
 			case "monitors":
-				if($arr["new"])
+				if ($arr["new"])
 				{
 					foreach($this->parent_options[$prop["name"]] as $key => $val)
 					{
