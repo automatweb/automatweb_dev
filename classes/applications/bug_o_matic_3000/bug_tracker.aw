@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.46 2006/05/08 14:08:44 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.46 2006/05/08 14:08:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.47 2006/05/09 06:41:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.47 2006/05/09 06:41:33 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -565,6 +565,7 @@ class bug_tracker extends class_base
 						"p_fld_id" => $id,
 						"p_cls_id" => null
 					)),
+					"alt" => $dat["name"]
 				));
 
 				$c = aw_ini_get("classes");
@@ -590,6 +591,7 @@ class bug_tracker extends class_base
 									"p_cls_id" => $clid,
 									"p_fld_id" => null
 								)),
+								"alt" => $dat["name"]
 							));
 						}
 					}
@@ -620,6 +622,7 @@ class bug_tracker extends class_base
 							"p_cls_id" => $clid,
 							"p_fld_id" => null
 						)),
+						"alt" => $dat["name"]
 					));
 				}
 			}
@@ -669,6 +672,7 @@ class bug_tracker extends class_base
 						"group" => $arr["active_group"],
 						"p_id" => $obj->id(),
 					)),
+					"alt" => $obj->name()
 				));
 			}
 			foreach($bugs as $key => $bug)
@@ -715,6 +719,7 @@ class bug_tracker extends class_base
 						"group" => $arr["active_group"],
 						"b_id" => $obj_id,
 					)),
+					"alt" => $object->name()
 				));
 				foreach($ol_list as $sub_id => $sub_obj)
 				{
@@ -772,7 +777,8 @@ class bug_tracker extends class_base
 					"group" => $arr["active_group"],
 					"b_id" => $obj_id,
 				)),
-				"onClick" => "do_bt_table_switch($obj_id, this);return false;"
+				"onClick" => "do_bt_table_switch($obj_id, this);return false;",
+				"alt" => $object->name()
 			));
 
 			foreach($ol_list as $sub_id => $sub_obj)
@@ -1426,10 +1432,12 @@ class bug_tracker extends class_base
 					)),
 					"caption" => parse_obj_name($bug->name())
 				));
+				$opurl = $this->mk_my_orb("change", array("id" => $params["bt"]->id(), "group" => "by_default", "b_id" => $bug->id()), "bug_tracker");
 			}
 			else
 			{
 				$nl = html::obj_change_url($bug);
+				$opurl = aw_url_change_var("b_id", $bug->id());
 			}
 			if ($params["path"])
 			{
@@ -1453,7 +1461,7 @@ class bug_tracker extends class_base
 
 			$t->define_data(array(
 				"name" => $nl." (".html::href(array(
-					"url" => aw_url_change_var("b_id", $bug->id()),
+					"url" => $opurl,
 					"caption" => t("Ava")
 				)).")",
 				"bug_status" => $bug->prop("bug_status"),

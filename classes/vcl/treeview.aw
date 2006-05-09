@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.63 2006/04/04 05:12:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.64 2006/05/09 06:41:31 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -820,6 +820,7 @@ class treeview extends class_base
 				"spacer" => str_repeat("    ",$this->level),
 				"menu_level" => $this->level,
 				"target" => $url_target,
+				"alt" => $item["alt"]
 			));
 
 
