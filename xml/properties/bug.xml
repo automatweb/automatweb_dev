@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>bug_tb</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <save>no</save>
+            <store>no</store>
+            <field>bug_tb</field>
+      </property>
+      <property>
             <name>name</name>
             <group>general</group>
             <table>objects</table>

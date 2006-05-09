@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.34 2006/05/09 09:13:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.35 2006/05/09 09:43:05 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -12,6 +12,8 @@ define("BUG_STATUS_CLOSED", 5);
 
 @default group=general
 @default table=aw_bugs
+
+@property bug_tb type=toolbar no_caption=1 save=no
 
 @property name type=textbox table=objects
 @caption Lühikirjeldus
@@ -354,6 +356,10 @@ class bug extends class_base
 				{
 					$prop["options"] = $this->_get_property_picker($arr["obj_inst"]->prop("bug_class"));
 				}
+				break;
+
+			case "bug_tb":
+				$this->_bug_tb($arr);
 				break;
 		};
 		return $retval;
@@ -800,6 +806,23 @@ class bug extends class_base
 	{
 		header("Location: ".$this->mk_my_orb("change", array("id" => $o->id()), "bug", true));
 		die();
+	}
+
+	function _bug_tb($arr)
+	{
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		// save search
+		$tb->add_button(array(
+			"name" => "new",
+			"tooltip" => t("Lisa alambugi"),
+			"url" => html::get_new_url(CL_BUG, $arr["obj_inst"]->id(), array("return_url" => $arr["request"]["return_url"])),
+			"img" => "new.gif",
+		));
 	}
 }
 ?>
