@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.52 2006/05/09 11:39:04 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.52 2006/05/09 11:39:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.53 2006/05/09 11:45:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.53 2006/05/09 11:45:39 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1564,7 +1564,7 @@ class bug_tracker extends class_base
 			$t->define_data(array(
 				"name" => $nl." (".html::href(array(
 					"url" => $opurl,
-					"caption" => t("Ava")
+					"caption" => t("Sisene")
 				)).")",
 				"bug_status" => $bug->prop("bug_status"),
 				"who" => $bug->prop_str("who"),
