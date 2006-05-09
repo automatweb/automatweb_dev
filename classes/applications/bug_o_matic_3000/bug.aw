@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.32 2006/05/08 14:08:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.33 2006/05/09 06:50:31 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -467,6 +467,9 @@ class bug extends class_base
 			$crea = $bug->createdby();
 			$monitors[] = $u->get_person_for_user(obj($us->get_oid_for_uid($crea)));
 		}
+
+		// add who to the list of mail recievers
+		$monitors[] = $bug->prop("who");
 
 		// I should add a way to send CC-s to arbitraty e-mail addresses as well
 		foreach(array_unique($monitors) as $person)
