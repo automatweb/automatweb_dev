@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.12 2006/04/25 06:35:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.13 2006/05/10 14:05:27 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -914,6 +914,11 @@ class crm_company_webview extends class_base
 			'parent' => $dir,
 			'lang_id' => array(),
 		);
+		if ($arr["pohitegevus"])
+		{
+			$filt["pohitegevus"] = $arr["pohitegevus"];
+			unset($filt["parent"]);
+		}
 		if (isset($limit_sector) && is_array($limit_sector) && count($limit_sector))
 		{
 			$filt["CL_CRM_COMPANY.RELTYPE_TEGEVUSALAD"] = $limit_sector;
@@ -992,7 +997,7 @@ class crm_company_webview extends class_base
 				$title = $this->trans_get_val($ob, "name");
 			}
 	
-			$orgs = $this->_list_companies(array('id' => $arr['id']));
+			$orgs = $this->_list_companies(array('id' => $arr['id'], "pohitegevus" => $arr["pohitegevus"]));
 		}
 		elseif (!empty($arr['list']) && is_array($arr['list']))
 		{
@@ -1286,17 +1291,9 @@ class crm_company_webview extends class_base
 		
 		$this->read_template($tmpl);
 
-		$list = new object_list(array(
-			"class_id" => CL_CRM_COMPANY,
-			"pohitegevus" => $arr["section"]
-		));
-
-		if (!$list->count())
-		{
-			return "&nbsp;";
-		}
 		$ret = $this->_get_companies_list_html(array(
-			"list" => $list->arr(),
+			"id" => $o->id(),
+			"pohitegevus" => $arr["section"],
 			"do_link" => 1,
 			"url" => $this->mk_my_orb("show_co", array(
 				"section" => $arr["section"],
