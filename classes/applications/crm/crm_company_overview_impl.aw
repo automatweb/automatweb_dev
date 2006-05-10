@@ -578,6 +578,58 @@ class crm_company_overview_impl extends class_base
 				}
 			}
 
+			$url = $this->mk_my_orb("get_task_row_table", array("id" => $task_id));
+			$namp = " (<a id='tnr$task_nr' href='javascript:void(0)' onClick='
+				if ((trel = document.getElementById(\"trows$task_nr\")))
+				{
+					if (trel.style.display == \"none\")
+					{
+						if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0)
+						{
+							trel.style.display= \"block\";
+						}
+						else
+						{
+							trel.style.display= \"table-row\";
+						}
+					}
+					else
+					{
+						trel.style.display=\"none\";
+					}
+					return false;
+				}
+				el=document.getElementById(\"tnr$task_nr\");
+				td = el.parentNode;
+				tr = td.parentNode;
+
+				tbl = tr;
+				while(tbl.tagName.toLowerCase() != \"table\")
+				{
+					tbl = tbl.parentNode;
+				}
+				p_row = tbl.insertRow(tr.rowIndex+1);
+				p_row.className=\"awmenuedittablerow\";
+				p_row.id=\"trows$task_nr\";
+				n_td = p_row.insertCell(-1);
+				n_td.className=\"awmenuedittabletext\";
+				n_td.innerHTML=\"&nbsp;\";
+				n_td = p_row.insertCell(-1);
+				n_td.className=\"awmenuedittabletext\";
+				n_td.innerHTML=\"&nbsp;\";
+				n_td = p_row.insertCell(-1);
+				n_td.className=\"awmenuedittabletext\";
+				n_td.innerHTML=aw_get_url_contents(\"$url\");
+				n_td.colSpan=9;
+			'>".t("Read")."</a>) ";
+
+/*
+				ntr = tr;
+				do {
+				ntr = ntr.nextSibling;
+				} while(\"\"+ntr != \"\"+tr);
+				ntr.style.display=\"none\";
+*/
 			$table_data[] = array(
 				"icon" => html::img(array(
 					"url" => icons::get_icon_url($task),
@@ -585,7 +637,7 @@ class crm_company_overview_impl extends class_base
 				)),
 				"customer" => $cust_str,
 				"proj_name" => $proj_str,
-				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($task->name())),
+				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($task->name())).$namp,
 				"deadline" => $dl,
 				"end" => $task->prop("end"),
 				"oid" => $task->id(),
@@ -1467,6 +1519,61 @@ class crm_company_overview_impl extends class_base
 			$ret[$conn["from"]][$conn["to"]] = $conn["to"];
 		}
 		return $ret;
+	}
+
+	function _init_task_row_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "who",
+			"caption" => t("Teostaja"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "when",
+			"caption" => t("Millal"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+			"align" => "center"
+		));
+	}
+
+	/**
+		@attrib name=get_task_row_table
+		@param id required
+	**/
+	function get_task_row_table($arr)
+	{
+		classload("vcl/table");
+		$t = new vcl_table();
+		$this->_init_task_row_table($t);
+		$task = obj($arr["id"]);
+		foreach($task->connections_from(array("type" => "RELTYPE_ROW")) as $c)
+		{
+			$row = $c->to();
+			$url = $this->mk_my_orb("stopper_pop", array(
+				"id" => $row->id(),
+				"s_action" => "start",
+				"type" => t("Toimetuse rida"),
+				"name" => $row->prop("content")
+			), CL_TASK);
+			$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
+
+			$t->define_data(array(
+				"name" => $row->prop("content"),
+				"who" => html::obj_change_url($row->prop("impl")),
+				"when" => date("d.m.Y", $row->prop("date")),
+				"time" => $row->prop("time_real")."<br>".$stopper
+			));
+		}
+		die($t->draw());
 	}
 }
 ?>
