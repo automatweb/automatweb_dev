@@ -100,7 +100,6 @@ function awActb(obj, valueObj)
 		{
 			actb_mode = "monocarpic";
 		}
-
 		actb_optionUrl = url;
 	}
 
@@ -230,7 +229,6 @@ function awActb(obj, valueObj)
 		// compose options source url
 		requestSeparator = '';
 		paramSeparator = '&';
-
 		if (actb_optionUrl.indexOf('?') < 0)
 		{
 			requestSeparator = '?';

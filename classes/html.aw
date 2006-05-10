@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.110 2006/05/02 09:57:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.111 2006/05/10 10:27:45 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -213,7 +213,7 @@ class html extends aw_template
 					$autocomplete_source = $autocomplete_source["path"] . "?" . $autocomplete_source["query"];
 				}
 
-				$autocomplete .= "awAc_{$js_name}.actb_optionURL = '{$autocomplete_source}';\n";
+				$autocomplete .= "awAc_{$js_name}.actb_setOptionUrl('{$autocomplete_source}');\n";
 				$autocomplete .= "awAc_{$js_name}.actb_setParams(" . (count ($autocomplete_params) ? "new Array ('" . implode ("','", $autocomplete_params) . "')" : "new Array ()") . ");\n";
 			}
 
