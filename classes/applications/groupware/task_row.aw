@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.2 2006/01/19 22:32:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.3 2006/05/10 10:02:15 kristo Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -85,6 +85,18 @@ class task_row extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function handle_stopper_stop($o, $data)
+	{
+		$o->set_prop("time_real", $o->prop("time_real") + $data["hours"]);
+		if ($data["desc"] != "")
+		{
+			$o->set_prop("content", $data["desc"]);
+		}
+		$o->save();
+
+		return 1;
 	}
 }
 ?>

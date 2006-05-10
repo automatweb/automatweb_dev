@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.94 2006/05/10 09:13:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.95 2006/05/10 10:02:15 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -203,13 +203,23 @@ class task extends class_base
 	function stopper_pop($arr)
 	{
 		$this->read_template("stopper_pop.tpl");
-		$this->_proc_stop_act($arr);
+		if ($this->_proc_stop_act($arr) == 1)
+		{
+			$post = "<script language='javascript'>window.opener.reload();</script>";
+		}
 
 		$s = "";
 		$num = 0;
 		if (count(safe_array($_SESSION["crm_stoppers"])) < 1)
 		{
-			header("Location: ".aw_ini_get("baseurl")."/automatweb/closewin_no_r.html");
+			if ($post != "")
+			{
+				header("Location: ".aw_ini_get("baseurl")."/automatweb/closewin.html");
+			}
+			else
+			{
+				header("Location: ".aw_ini_get("baseurl")."/automatweb/closewin_no_r.html");
+			}
 			die();
 		}
 		$this->vars(array(
@@ -288,7 +298,7 @@ class task extends class_base
 			"STOPPER" => $s
 		));
 
-		return $this->parse();
+		return $this->parse().$post;
 	}
 	
 	function callback_on_load($arr)
@@ -1575,6 +1585,19 @@ class task extends class_base
 				$date = date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : time()));
 				$app = "";
 			}
+
+			$stopper = "";
+			if ($idx > 0)
+			{
+				$url = $this->mk_my_orb("stopper_pop", array(
+					"id" => $idx,
+					"s_action" => "start",
+					"type" => t("Toimetus"),
+					"name" => $data["value"]
+				));
+				$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
+			}
+
 			$t->define_data(array(
 				"task" => $pref."<a name='row_".$idx."'></a>".html::textarea(array(
 					"name" => "rows[$idx][task]",
@@ -1608,7 +1631,7 @@ class task extends class_base
 					"name" => "rows[$idx][time_to_cust]",
 					"value" => $row->prop("time_to_cust"),
 					"size" => 5
-				))." - Kliendile<br>",
+				))." - Kliendile<br>".$stopper,
 				"done" => html::checkbox(array(
 					"name" => "rows[$idx][done]",
 					"value" => 1,
@@ -2108,7 +2131,7 @@ class task extends class_base
 			}
 			$o = obj($arr["id"]);
 			$i = $o->instance();
-			$i->handle_stopper_stop($o, array(
+			$rv = $i->handle_stopper_stop($o, array(
 				"desc" => $arr["desc"],
 				"start" => $stopper["start"],
 				"hours" => $el_hr
@@ -2145,6 +2168,7 @@ class task extends class_base
 			}
 			$_SESSION["crm_stoppers"][$k]["state"] = "running";
 		}
+		return $rv;
 	}
 
 	/**
