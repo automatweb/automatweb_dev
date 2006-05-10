@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.6 2006/05/03 14:19:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.7 2006/05/10 13:27:35 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -378,7 +378,7 @@ class task_quick_entry extends class_base
 		else
 		{
 			die(
-"<script language=javascript>window.opener.location='".html::get_change_url($t->id(), array("group" => "rows", "return_url" => $arr["request"]["post_ru"]))."';window.close();</script>");
+"<script language=javascript>window.opener.location='".html::get_change_url($t->id(), array("group" => "rows"))."';window.close();</script>");
 		}
 	}
 
@@ -417,7 +417,7 @@ class task_quick_entry extends class_base
 		// if customer exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["c"]),
+			"name" => $arr["c"],
 			"lang_id" => array(),
 			"site_id" => array()
 		));
@@ -429,7 +429,7 @@ class task_quick_entry extends class_base
 		// if project exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_PROJECT),
-			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["p"]),
+			"name" => $arr["p"],
 			"lang_id" => array(),
 			"site_id" => array(),
 			"state" => new obj_predicate_not(PROJ_DONE)
@@ -442,7 +442,7 @@ class task_quick_entry extends class_base
 		// if task exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
-			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["t"]),
+			"name" => $arr["t"],
 			"lang_id" => array(),
 			"site_id" => array(),
 			"is_done" => new obj_predicate_not(8),
@@ -453,7 +453,7 @@ class task_quick_entry extends class_base
 			$ret .= sprintf(t("Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["t"]);
 		}
 
-		die($ret);
+		die(iconv(aw_global_get("charset"), "UTF-8", $ret));
 	}
 }
 ?>
