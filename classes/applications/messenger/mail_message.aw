@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.32 2006/05/02 12:00:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.33 2006/05/10 14:16:20 tarvo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -443,7 +443,6 @@ class mail_message extends class_base
 			case "mto":
 				// check whether the messenger object has any connections to 
 				// a list object
-
 				// XXX: this kind of lock-down is bad, ok?
 				$msgr = get_instance(CL_MESSENGER_V2);
 				$opts = array();
@@ -467,9 +466,9 @@ class mail_message extends class_base
 				else
 				{
 					$prop["type"] == "textbox";
-					//$prop["value"] = $this->msgdata["to"];
+					$prop["autocomplete_source"] = $this->mk_my_orb ("get_autocomplete");
+					$prop["autocomplete_params"] = array("mto");
 				};
-
 				break;
 
 			case "mfrom":
@@ -571,7 +570,45 @@ class mail_message extends class_base
 
 
 	}
-	
+
+	/**
+		@attrib name=get_autocomplete
+		@comment
+		for mail-address autocomplete
+	**/
+	function get_autocomplete()
+	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
+		$m = get_instance(CL_MESSENGER_V2);
+		$cl = get_instance(CL_CONTACT_LIST);
+		$cls = $cl->get_contact_lists_for_messenger($m->get_messenger_for_user());
+		$ol = new object_list(array(
+			"class_id" => CL_ML_MEMBER,
+			"parent"=> $cls,
+		));
+		foreach($ol->arr() as $oid => $el)
+		{
+			$obj = new object($oid);
+			$autocomplete_options[$oid] = $obj->name();
+		}
+
+		exit($cl_json->encode($option_data));
+	}
+
+
 	function edit_toolbar($arr)
 	{
 		$tb = &$arr["toolbar"];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.218 2006/05/04 13:47:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.219 2006/05/10 14:16:20 tarvo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1026,6 +1026,18 @@ if (!defined("DEFS"))
 		};
 
 		$GLOBALS["__aw_globals_inited"] = true;
+	}
+
+	/**
+		@attrib params=pos
+		@param time
+		time in seconds
+		@comment
+		sets the reload time for current page(in seconds)
+	**/
+	function set_page_reload($arg)
+	{
+		header("Refresh: ".$arg);
 	}
 
 	////

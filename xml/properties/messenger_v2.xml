@@ -100,6 +100,16 @@
             <caption>Mustandite kataloog</caption>
       </property>
       <property>
+            <name>page_reload</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Kirjade v&amp;auml;rskendamine (sekundites)</caption>
+      </property>
+      <property>
             <name>num_attachments</name>
             <table>objects</table>
             <group>advanced</group>
@@ -220,6 +230,68 @@
             </props>
             <caption>Reeglid</caption>
       </property>
+      <property>
+            <name>add_rule</name>
+            <table>objects</table>
+            <group>rules_add</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <reltype>RELTYPE_RULE</reltype>
+            <table_fields>
+                  <num_0>id</num_0>
+                  <num_1>rule_from</num_1>
+                  <num_2>rule_subject</num_2>
+            </table_fields>
+            <props>
+                  <num_0>rule_from</num_0>
+                  <num_1>rule_subject</num_1>
+                  <num_2>target_folder</num_2>
+                  <num_3>on_server</num_3>
+            </props>
+            <caption>Lisa reegel</caption>
+      </property>
+      <property>
+            <name>contact_lists</name>
+            <table>objects</table>
+            <group>book_add</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <caption>Aadressiraamat</caption>
+      </property>
+      <property>
+            <name>contact_name</name>
+            <table>objects</table>
+            <group>book_add</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>contact_mail</name>
+            <table>objects</table>
+            <group>book_add</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>E-Mail</caption>
+      </property>
+      <property>
+            <name>contact_list</name>
+            <table>objects</table>
+            <group>book_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Aadressiraamat</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MESSENGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -251,15 +323,30 @@
                   <caption>Reeglid</caption>
                   <submit>no</submit>
             </rules>
+            <rules_add>
+                  <caption>Lisa reegel</caption>
+                  <parent>rules</parent>
+            </rules_add>
             <rules_editor>
-                  <caption>Reeglite defineerimine</caption>
+                  <caption>Reeglid</caption>
                   <submit>no</submit>
                   <parent>rules</parent>
             </rules_editor>
             <rules_settings>
                   <caption>Seaded</caption>
-                  <parent>rules</parent>
             </rules_settings>
+            <a_book>
+                  <caption>Aadressiraamat</caption>
+            </a_book>
+            <book_add>
+                  <caption>Lisa</caption>
+                  <parent>a_book</parent>
+            </book_add>
+            <book_view>
+                  <caption>Aadressid</caption>
+                  <parent>a_book</parent>
+                  <submit>no</submit>
+            </book_view>
       </groupinfo>
       <reltypes>
             <MAIL_IDENTITY>
@@ -307,10 +394,16 @@
                   <clid>CL_BUG_TRACKER</clid>
                   <caption>Bugtrack</caption>
             </BUGTRACKER>
+            <CONTACT_LIST>
+                  <value>10</value>
+                  <clid>CL_CONTACT_LIST</clid>
+                  <caption>Aadressiraamat</caption>
+            </CONTACT_LIST>
       </reltypes>
       <layout>
             <message_view>
                   <type>hbox</type>
+                  <width>15%:85%</width>
                   <group>main_view</group>
             </message_view>
       </layout>

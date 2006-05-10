@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.7 2005/04/01 11:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.8 2006/05/10 14:16:20 tarvo Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -16,6 +16,14 @@
 
 @property contact_list type=table group=contact_list no_caption=1
 @caption Aadressiraamat
+
+@groupinfo test caption="test"
+
+@property new_name type=textbox group=test
+@caption Nimi
+
+@property new_mail type=textbox group=test
+@caption E-mail
 
 
 //@groupinfo search caption="Otsing"
@@ -58,8 +66,8 @@ class contact_list extends class_base
 		switch($prop["name"])
 		{
 			case "contact_list_toolbar":
-				//$tb = &;
-				/*
+				$tb = & $prop["vcl_inst"];
+				
 				$tb->add_button(array(
             		"name" => "add",
             		"tooltip" => t("Lisa aadressiraamatusse"),
@@ -67,16 +75,17 @@ class contact_list extends class_base
             		"url" => $this->mk_my_orb(
 						"change", array("group" => "addnew", "id" => $arr["obj_inst"]->id()), CL_CONTACT_LIST),
         		));
+				
 				$tb->add_separator();
 				$tb->add_button(array(
 					"name" => "search",
-				"tooltip" => t("Otsi kontakte"),
+					"tooltip" => t("Otsi kontakte"),
             		"img" => "search.gif",
             		"action" => "",
         		));
 				$tb->add_separator();
-				*/
-				$prop["vcl_inst"]->add_button(array(
+				
+				$tb->add_button(array(
             		"name" => "delete",
             		"tooltip" => t("Kustuta kontakte"),
             		"img" => "delete.gif",
@@ -85,22 +94,77 @@ class contact_list extends class_base
         		));
 				break;
 			case "contact_list":
-				$q = new object_list(array(
-					"class_id" => CL_COMMUNE,
+
+				$prop["vcl_inst"]->define_field(array(
+					"name" => "name",
+					"caption" => t("Nimi"),
 				));
-				//arr($q);
-				$a = $q->begin();
-				$vars = array(
-					"obj_inst" => &$arr["obj_inst"],
-					"commune" => $a->id(),
-					"vcl_inst" => &$arr["prop"]["vcl_inst"],
-				);
-				$this->show_contact_list($vars);
+				$prop["vcl_inst"]->define_field(array(
+					"name" => "email",
+					"caption" => t("E-Mail"),
+				));
+				
+				$adds = $this->get_addresses($arr["obj_inst"]->id());
+				foreach($adds as $add)
+				{
+					$prop["vcl_inst"]->define_data(array(
+						"name" => $add["name"],
+						"email" => $add["mail"],
+					));
+				}
+				$this->show_contact_list($arr);
 				break;
 		};
 		return $retval;
 	}
 	
+	/**
+		@param oid required type=int
+		messenger's id
+		@comment
+		finds contact_lists connected to given messenger
+		@returns
+		array of connections from messenger to any contact list
+	**/
+	function get_contact_lists_for_messenger($arr)
+	{
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"from" => $arr,
+			"to.class_id" => CL_CONTACT_LIST,
+		));
+		foreach($conns as $con)
+			$ret[] = $con["to"];
+		return count($ret)?$ret:false;
+	}
+
+	/**
+		@attrib api=1
+
+		@comment
+		finds email objects connected to that contact list
+		@returns
+		array(
+			email,
+			name,
+		)
+	**/
+	function get_addresses($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_ML_MEMBER,
+			"parent"=> $arr,
+		));
+		foreach($ol->arr() as $oid => $el)
+		{
+			$obj = new object($oid);
+			$tmp["name"] = $obj->prop("name");
+			$tmp["mail"] = $obj->prop("mail");
+			$ret[] = $tmp;
+		}
+		return $ret;
+	}
+
 	function show_contact_list($arr)
 	{
 		/*
@@ -109,8 +173,10 @@ class contact_list extends class_base
 		arr($asd);
 		*/
 		//arr($arr["obj_inst"]);
+/*
 		$contacts = array();
 		$owner = &$arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_LIST_OWNER");
+
 		$u = get_instance("users");
 		if(is_object($owner))
 		{
@@ -222,6 +288,7 @@ class contact_list extends class_base
 				)),
 			));
 		}
+		*/
 	}
 	
 	/**	
@@ -261,16 +328,34 @@ class contact_list extends class_base
 	}
 	
 	
-	/*
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
+		if(strlen($prop["value"]));
+		//arr($prop);
 		switch($prop["name"])
 		{
 		}
 		return $retval;
 	}
-	*/
+
+	function callback_pre_save($arr)
+	{
+		$request = $arr["request"];
+		if(strlen($request["new_mail"]))
+		{
+			/*
+				siia peaks nüüd see tsekk tulema kas messengeriga on contact_list ühendatud, kui pole siis tuleb tekitada... vist?:S
+			*/
+			$mail = new object();
+			$mail->set_parent($arr["id"]);
+			$mail->set_class_id(CL_ML_MEMBER);
+			$mail->set_prop("name", $request["new_name"]);
+			$mail->set_prop("mail", $request["new_mail"]);
+			$mail->save_new();
+		}
+	}		
+	
 }
 ?>

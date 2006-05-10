@@ -52,6 +52,13 @@
 			</function>
 		</action>
 
+		<action name="quicksearch">
+			<function name="quicksearch">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="get_mailbox_js">
 			<function name="get_mailbox_js">
 				<arguments>

@@ -812,9 +812,9 @@ function aw_startup()
 function aw_shutdown()
 {
 	// whotta fook, this messenger thingie goes here then?:S
-	if($_SESSION["current_user_has_messenger"] && (time() - $_SESSION["current_user_last_m_check"]) > (5 * 60) && aw_ini_get("mail.notify_new"))
+	$cur_usr = new object($_SESSION["uid_oid"]);
+	if($_SESSION["current_user_has_messenger"] && (time() - $_SESSION["current_user_last_m_check"]) > (5 * 60) && $cur_usr->prop("notify") == 1)
 	{
-		$mv2 = get_instance("applications/messenger/messenger_v2");
 		$drv_inst = get_instance("protocols/mail/imap");
 		$drv_inst->set_opt("use_mailbox", "INBOX");
 		

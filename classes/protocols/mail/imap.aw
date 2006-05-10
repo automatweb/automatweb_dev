@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.32 2006/05/05 13:38:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.33 2006/05/10 14:16:20 tarvo Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -281,11 +281,7 @@ class imap extends class_base
 					$hdrinfo = @imap_headerinfo($this->mbox,$msg_uid);
 					$overview = imap_fetch_overview($this->mbox,$msg_uid,FT_UID);
 					$str = imap_fetchstructure($this->mbox,$msg_uid,FT_UID);
-					//arr($str);
-					//arr($hdrinfo);
-					//arr($overview);
-					//print "fetch done, processing<br>";
-					//flush();
+
 					$message = $overview[0];
 					$addrinf = $this->_extract_address($message->from);
 					$rkey = $message->uid;
@@ -338,6 +334,14 @@ class imap extends class_base
 			}
 		};
 		$rv = $mbox_over["contents"];
+		if(strlen($arr["from_filter"]))
+		{
+			foreach($rv as $k => $v)
+			{
+				if(!strstr($v["from"], $arr["from_filter"]))
+					unset($rv[$k]);
+			}
+		}
 		return $rv;
 	}
 	
