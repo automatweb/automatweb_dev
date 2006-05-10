@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.84 2006/04/11 09:58:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.85 2006/05/10 09:13:38 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -171,6 +171,9 @@
 	@property userclassif1 type=classificator reltype=RELTYPE_CLF1 table=aw_projects field=aw_userclf1
 	@caption User-defined classificator 1
 
+	@property controller_disp type=text store=no 
+	@caption Kontrolleri v&auml;ljund
+
 @default group=team
 
 	@property team_tb type=toolbar no_caption=1 store=no
@@ -317,6 +320,21 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "controller_disp":
+				$cs = get_instance(CL_CRM_SETTINGS);
+				$pc = $cs->get_project_controller($cs->get_current_settings());
+				if ($this->can("view", $pc))
+				{
+					$pco = obj($pc);
+					$pci = $pco->instance();
+					$data["value"] = $pci->eval_controller($pc, $arr["obj_inst"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "proj_type":
 				if ($arr["new"])
 				{

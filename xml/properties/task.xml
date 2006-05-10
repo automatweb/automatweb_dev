@@ -208,6 +208,15 @@
             <caption>Osalejad</caption>
       </property>
       <property>
+            <name>controller_disp</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>controller_disp</field>
+            <caption>Kontrolleri v&amp;amp;auml;ljund</caption>
+      </property>
+      <property>
             <name>aliasmgr</name>
             <table>objects</table>
             <group>general</group>

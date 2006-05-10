@@ -61,6 +61,36 @@
             <caption>Vaikimisi toode arve ridadel</caption>
       </property>
       <property>
+            <name>controller_proj</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CTR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Projekti kontroller</caption>
+      </property>
+      <property>
+            <name>controller_task</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CTR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Toimetuse kontroller</caption>
+      </property>
+      <property>
+            <name>controller_meeting</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CTR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kohtumise kontroller</caption>
+      </property>
+      <property>
             <name>tables_toolbar</name>
             <table>objects</table>
             <group>tables</group>
@@ -228,6 +258,11 @@
                   <clid>CL_GALLERY_CONF</clid>
                   <caption>Galerii seaded</caption>
             </GALLERY_CONF>
+            <CTR>
+                  <value>9</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CTR>
       </reltypes>
       <layout>
             <vsplitbox>

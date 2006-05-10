@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.67 2006/05/02 13:34:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.68 2006/05/10 09:13:39 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -101,6 +101,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @property summary type=textarea cols=80 rows=30 table=planner field=description
 @caption Kokkuvõte
+
+@property controller_disp type=text store=no 
+@caption Kontrolleri v&auml;ljund
 
 @property aliasmgr type=aliasmgr no_caption=1 store=no
 @caption Aliastehaldur
@@ -223,6 +226,21 @@ class crm_meeting extends class_base
 		$data = &$arr['prop'];
 		switch($data['name'])
 		{
+			case "controller_disp":
+				$cs = get_instance(CL_CRM_SETTINGS);
+				$pc = $cs->get_meeting_controller($cs->get_current_settings());
+				if ($this->can("view", $pc))
+				{
+					$pco = obj($pc);
+					$pci = $pco->instance();
+					$prop["value"] = $pci->eval_controller($pc, $arr["obj_inst"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "name":
 				if($this->mail_data)
 				{

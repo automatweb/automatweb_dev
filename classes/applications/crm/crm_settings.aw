@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.13 2006/04/30 10:33:30 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_settings.aw,v 1.14 2006/05/10 09:13:37 kristo Exp $
 // crm_settings.aw - Kliendibaasi seaded
 /*
 
@@ -27,6 +27,17 @@
 	@property bill_def_prod type=relpicker reltype=RELTYPE_PROD table=objects field=meta method=serialize
 	@caption Vaikimisi toode arve ridadel
 
+	@property controller_proj type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize
+	@caption Projekti kontroller
+
+	@property controller_proj type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize
+	@caption Projekti kontroller
+
+	@property controller_task type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize
+	@caption Toimetuse kontroller
+
+	@property controller_meeting type=relpicker reltype=RELTYPE_CTR table=objects field=meta method=serialize
+	@caption Kohtumise kontroller
 
 @default group=tables
 	@property tables_toolbar type=toolbar store=no no_caption=1
@@ -95,6 +106,9 @@
 
 @reltype GALLERY_CONF value=8 clid=CL_GALLERY_CONF
 @caption Galerii seaded
+
+@reltype CTR value=9 clid=CL_FORM_CONTROLLER
+@caption Kontroller
 
 */
 
@@ -489,6 +503,33 @@ class crm_settings extends class_base
 		{
 			$arr["tables_treemenu_item"] = $request["tables_treemenu_item"];
 		}
+	}
+
+	function get_project_controller($settings)
+	{
+		if ($settings == null)
+		{
+			return false;
+		}
+		return $settings->prop("controller_proj");
+	}
+
+	function get_task_controller($settings)
+	{
+		if ($settings == null)
+		{
+			return false;
+		}
+		return $settings->prop("task_proj");
+	}
+
+	function get_meeting_controller($settings)
+	{
+		if ($settings == null)
+		{
+			return false;
+		}
+		return $settings->prop("meeting_proj");
 	}
 
 	function get_current_settings()

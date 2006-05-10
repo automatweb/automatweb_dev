@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.93 2006/05/02 13:34:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.94 2006/05/10 09:13:38 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -77,6 +77,9 @@ layout num_hrs type=hbox
 
 @property participants type=popup_search multiple=1 table=objects field=meta method=serialize clid=CL_CRM_PERSON
 @caption Osalejad
+
+@property controller_disp type=text store=no 
+@caption Kontrolleri v&auml;ljund
 
 @property aliasmgr type=aliasmgr store=no
 @caption Seostehaldur
@@ -319,6 +322,21 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "controller_disp":
+				$cs = get_instance(CL_CRM_SETTINGS);
+				$pc = $cs->get_task_controller($cs->get_current_settings());
+				if ($this->can("view", $pc))
+				{
+					$pco = obj($pc);
+					$pci = $pco->instance();
+					$prop["value"] = $pci->eval_controller($pc, $arr["obj_inst"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case "content":
 				if($this->mail_data)
 				{

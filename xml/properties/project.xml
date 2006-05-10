@@ -413,6 +413,15 @@
             <caption>User-defined classificator 1</caption>
       </property>
       <property>
+            <name>controller_disp</name>
+            <table>objects</table>
+            <group>userdefined</group>
+            <type>text</type>
+            <store>no</store>
+            <field>controller_disp</field>
+            <caption>Kontrolleri v&amp;amp;auml;ljund</caption>
+      </property>
+      <property>
             <name>team_tb</name>
             <table>objects</table>
             <group>team</group>
