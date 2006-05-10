@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.13 2006/05/10 14:05:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_webview.aw,v 1.14 2006/05/10 14:07:21 kristo Exp $
 // crm_company_webview.aw - Organisatsioonid veebis 
 /*
 
@@ -1244,6 +1244,7 @@ class crm_company_webview extends class_base
 			$ret = new object_list(array(
 				"class_id" => CL_CRM_SECTOR,
 				"parent" => $crm_db->prop("dir_tegevusala"),
+				"sort_by" => "objects.jrk,objects.name"
 			));
 		}		
 		else
@@ -1251,6 +1252,7 @@ class crm_company_webview extends class_base
 			$ret = new object_list(array(
 				"class_id" => CL_CRM_SECTOR,
 				"parent" => $parent_o->id(),
+				"sort_by" => "objects.jrk,objects.name"
 			));
 		}
 		return $ret;
