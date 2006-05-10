@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.32 2006/05/05 07:45:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.33 2006/05/10 14:15:54 kristo Exp $
 // crm_db.aw - CRM database
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -167,10 +167,11 @@ class crm_db extends class_base
 			"sort_by" => "objects.name",
 		));
 		$sectors_list = $menu_tree->to_list();
-		foreach($sectors_list->list as $oid => $sect)
+		$ids = $this->make_keys($sectors_list->ids());
+		foreach($sectors_list->arr() as $oid => $sect)
 		{
 			$id = $sect->id();
-			$parent = isset($sectors_list->list[$sect->parent()]) ? $sect->parent() : 0 ;
+			$parent = isset($ids[$sect->parent()]) ? $sect->parent() : 0 ;
 			$name = $sect->name();
 			$pm = get_instance("vcl/popup_menu");
 			$pm->begin_menu("site_edit_".$id);
@@ -184,7 +185,7 @@ class crm_db extends class_base
 				"text" => t("Kustuta"),
 				"link" => $this->mk_my_orb("delete_organizations", array("id" => $arr["obj_inst"]->id(), "sel[$id]" => $id, "post_ru" => get_ru())),
 			));
-			$name = $name." ".$pm->get_menu();
+			$name = $name;//." ".$pm->get_menu();
 			$t->add_item($parent, array(
 				"id" => $id,
 				"name" => $name,//strlen($name) > 20 ? substr($name, 0, 20).".." : $name,
@@ -301,6 +302,7 @@ class crm_db extends class_base
 		
 		elseif($arr["request"]["group"] == "tegevusalad" && !$this->can("view", $arr["request"]["teg_oid"]))
 		{
+			return;
 			$vars["CL_CRM_COMPANY.pohitegevus(CL_CRM_SECTOR).name"] = new obj_predicate_compare(OBJ_COMP_NULL); 
 		}
 		
