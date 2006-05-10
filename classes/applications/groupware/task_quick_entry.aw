@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.7 2006/05/10 13:27:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.8 2006/05/10 13:54:49 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -378,7 +378,7 @@ class task_quick_entry extends class_base
 		else
 		{
 			die(
-"<script language=javascript>window.opener.location='".html::get_change_url($t->id(), array("group" => "rows"))."';window.close();</script>");
+"<script language=javascript>window.opener.location='".html::get_change_url($t->id(), array("group" => "rows", "return_url" => "javascript:history.go(-1)"))."';window.close();</script>");
 		}
 	}
 
