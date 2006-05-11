@@ -31,5 +31,19 @@
 			</function>
 		</action>
 
+		<action name="extend">
+			<function name="extend">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="expire" is_public="1">
+			<function name="expire">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

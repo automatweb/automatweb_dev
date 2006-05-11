@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.8 2006/05/03 14:50:58 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.9 2006/05/11 15:11:10 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -621,18 +621,24 @@ class realestate_add extends class_base
 			{
 				$obj_id = substr($_SESSION["bank_return"]["data"]["VK_REF"], 0, (strlen($_SESSION["bank_return"]["data"]["VK_REF"])-1));
 				if(is_oid($obj_id))
-				{
-					$realest_obj = obj($obj_id);
+				{	
+					$realest_obj = obj($obj_id);	
+					$valid_for = $realest_obj->prop("weeks_valid_for");
 					$realest_obj->set_prop("show_on_webpage" , "1");
-					$ret.= "maksmine õnnestus, pakkumine nüüd leheküljel nähtav";
+					if(!$realest_obj->prop("expire") || (time() > $realest_obj->prop("expire"))) $expire = time();
+					else $expire = $realest_obj->prop("expire");
+					$realest_obj->set_prop("expire" , $expire + 604800 * $valid_for);
+					$ret.= "maksmine õnnestus, pakkumine nüüd leheküljel nähtav ".$valid_for." nädalat";
 					$realest_obj->save();
 				}
 			}
 			$_SESSION["bank_return"]["data"] = null;
 		}
 		$targ = obj($arr["alias"]["target"]);
+		$bank_meta = $targ->meta("bank");
+		$bank_meta["amount"] = $bank_meta["amount"]*$targ->prop("weeks_valid_for");
 		$_SESSION["bank_payment"] = array(
-			"data"		=> $targ->meta("bank"),
+			"data"		=> $bank_meta,
 			"reference_nr"	=> $_SESSION["realestate_input_data"]["realestate_id"],
 			"test"		=> 1,
 			"url" 		=> post_ru(),
@@ -1033,10 +1039,21 @@ class realestate_add extends class_base
 				if($rlst_object->is_brother()) continue;//ignoreerib miskiseid brothereid
 				if(is_oid($rlst_object->meta("added_from"))) $change = $rlst_object->meta("added_from")."?id=".$rlst_object->id();
 				else $change = $this->mk_my_orb("parse_alias", array("id" => $rlst_object->id(), "default" => 1));
+				$time = time();
+				$expire = (int)(($rlst_object->prop("expire") - $time)/604800);
+				$expire = t("Nähtav")." ".$expire." ".t("nädalat");
+				if($expire<0) $expire = t("Aegunud");
+				if(!$rlst_object->prop("expire")) $expire = t("Maksmata");
+				if($expire == t("Aegunud")) $extend = t("Pikenda");
+				elseif($expire == t("Maksmata")) $extend = t("Maksa");
+				else $extend = t("");
 				$this->vars(array(
-					"name" 	 => $rlst_object->name(),
-					"id"	 => $rlst_object->id(),
-					"change" => $change,
+					"name" 	 	=> $rlst_object->name(),
+					"id"	 	=> $rlst_object->id(),
+					"change" 	=> $change,
+					"extend_url"	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
+					"expire"	=> $expire,
+					"extend"	=> $extend,
 				));
 				$c .= $this->parse("LIST");
 			}
@@ -1146,11 +1163,9 @@ class realestate_add extends class_base
 					));
 					if($x == 0)
 					{
-						$this->make_icon(array("upload_image" => $upload_image));
-						$realestate_obj->set_prop("picture_icon", $upload_image['id']);
-						$realestate_obj->connect(array(
-							"to" => $upload_image['id'],
-							"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
+						$this->make_icon(array(
+							"upload_image" => "picture".$x."upload", 
+							"realestate_obj" => &$realestate_obj,
 						));
 					}
 					if(is_oid($existing_pics[$x]))
@@ -1174,6 +1189,7 @@ class realestate_add extends class_base
 		$address_props = $this->get_address_props($args["parent"]);
 		$address = $realestate_obj->get_first_obj_by_reltype("RELTYPE_REALESTATE_ADDRESS");
 		$_SESSION["realestate_input_data"]["name"] = $this->gen_name();
+		$picture_icon = $realestate_obj->prop("picture_icon");//ei tea miks, a järgmise tsükliga kaob miskipärast ära see property väärtus
 		foreach($_SESSION["realestate_input_data"] as $key => $val)
 		{
 			if(array_key_exists($key , $props))
@@ -1218,6 +1234,7 @@ class realestate_add extends class_base
 			}
 			$address->save();
 		}
+		$realestate_obj->set_prop("picture_icon" , $picture_icon);
 		$realestate_obj->save();
 		$main_obj = obj($args["id"]);
 		if($args["default"])
@@ -1238,16 +1255,155 @@ class realestate_add extends class_base
 	function make_icon($args)
 	{
 		extract($args);
+		$image_inst = get_instance(CL_IMAGE);
+		$upload_image = $image_inst->add_upload_image("picture0upload", $_SESSION["realestate_input_data"]["realestate_id"]);
 		$o = obj($upload_image["id"]);
 		$o->img = get_instance("core/converters/image_convert");
 		$o->img->load_from_file($o->prop("file"));
-		$o->img->resize_simple(100, 100);
+		$o->img->resize_simple(100,(int)($upload_image["sz"][1]/($upload_image["sz"][0]/100)));
 		$image_cl = get_instance(CL_IMAGE);
 		$image_cl->put_file(array(
 			'file' => $o->prop("file"),
 			"content" => $o->img->get(IMAGE_JPEG)
 		));
+		$conns_from = $realestate_obj->connections_from(array (
+			"type" => "RELTYPE_REALESTATE_PICTUREICON",
+		));
+		$ids = array();
+		foreach($conns_from as $conn)
+		{	
+			$ids[] = $conn->prop("to");
+		}
+		$realestate_obj->disconnect(array("from" => $ids));
+		$realestate_obj->connect(array(
+			"to" => $upload_image['id'],
+			"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
+		));
+		$realestate_obj->set_prop("picture_icon", $upload_image['id']);
+		$realestate_obj->save();
 	}
 
+	/** extend offer 
+		@attrib name=extend
+	**/
+	function extend($args)
+	{
+		extract($args);
+		global $id,$extend;
+		$ret = "";
+		if(!is_oid($id))
+		{
+			return "sellist pakkumist pole";
+		}
+		$url = $this->mk_my_orb("extend", array(
+			"id" => $id,
+		), CL_REALESTATE_ADD);
+		
+		$offer = obj($id);
+		if(is_oid($offer->meta("added_from"))) $targ = obj($offer->meta("added_from"));
+		$list = new object_list($targ->connections_from (array (
+			"class_id" => CL_REALESTATE_ADD,
+		)));
+		foreach($list->arr() as $mem)
+		{
+			$targ = $mem;
+		}
+		$ret = '<FORM METHOD=POST action="">
+		'.t("Mitu nädalat").'?
+		<br><INPUT type="TEXT" NAME="extend" size="2" value="'.$extend.'">
+		<BR><INPUT TYPE="submit" value="'.t("pikendan").'">
+		</FORM>
+		';
+		
+		$ret_url = $this->mk_my_orb("parse_alias", array(), CL_REALESTATE_ADD);
+		$ret_url = $ret_url.'&end=1';
+		if($extend)
+		{
+			$offer->set_prop("weeks_valid_for", $extend);
+			$offer->save();
+			$bank_meta = $targ->meta("bank");
+			$bank_meta["amount"] = $bank_meta["amount"]*$offer->prop("weeks_valid_for");
+			$_SESSION["bank_payment"] = array(
+				"data"		=> $bank_meta,
+				"reference_nr"	=> $offer->id(),
+				"test"		=> 1,
+				"url" 		=> $ret_url,
+				"cancel"	=> $ret_url,
+			);
+			$bank_payment = get_instance(CL_BANK_PAYMENT);	
+			$ret.= '<a href="';
+			$ret.= $bank_payment->mk_my_orb("pay_site", array());
+			$ret.= '"> Maksma </a>';
+		}
+		else
+		{
+			;
+		}
+		return $ret;
+	}
+	
+	/** Check expired objects 
+		@attrib name=expire is_public="1"
+	**/
+	function expire()
+	{
+		$classes = array(
+			CL_REALESTATE_HOUSE => t("Maja"),
+			CL_REALESTATE_ROWHOUSE => t("Ridaelamu"),
+			CL_REALESTATE_COTTAGE => t("Suvila"),
+			CL_REALESTATE_HOUSEPART => t("Majaosa"),
+			CL_REALESTATE_APARTMENT => t("Korter"),
+			CL_REALESTATE_COMMERCIAL => t("Äripind"),
+			CL_REALESTATE_GARAGE => t("Garaaz"),
+			CL_REALESTATE_LAND =>  t("Maa"),
+		);
+		foreach ($classes as $class => $val)
+		{
+			$realestate_list = new object_list(array(
+				"class_id" => $class,
+			));
+			foreach($realestate_list->arr() as $mem)
+			{
+				if(!$mem->prop("expire"))
+				{
+					$ret.= 'pole makstud - '.$mem->id().'<br>';
+					continue;
+				}
+				if($mem->prop("expire") < time())
+				{
+					$ret.= 'aegunud - '.$mem->id().'<br>';
+					$mem->set_prop("show_on_webpage" , "0");
+				}
+				if($mem->prop("expire") > time() && !($mem->prop("expire") > (time()+86400)))
+				{
+ 					$u = get_instance("users");
+					$oid = $u->get_oid_for_uid($mem->prop("createdby"));
+					if(is_oid($oid))
+					{
+						$user = obj($oid);
+						if(!$user->prop("email")) continue;
+					}
+					$message = "Kuulutus hakkab aeguma.\n Uuesti nähtavale tuua leheküljel saab minnes aadressile:";
+ 					$message .= $this->mk_my_orb("extend", array("id" => $mem->id()));
+ 					$message .= " ja makstes uute nädalate eest";
+ 					$awm = get_instance("protocols/mail/aw_mail");
+ 					$awm->create_message(array(
+ 						"froma" => "",
+ 						"subject" => "kuulutuse aegumine",
+ 						"To" => $user->prop("email"),
+ 						//"Sender"=>"bounces@struktuur.ee",
+ 						"body" => $message,
+					));
+					$awm->gen_mail();
+					$ret.= 'hakkab aeguma - '.$mem->id().'<br>';
+				}
+				else
+				{
+					$ret.= 'nähtav veel üle 1 päeva - '.$mem->id().'<br>';
+				}
+			}
+		}
+		return $ret;	
+	}
 }
 ?>
