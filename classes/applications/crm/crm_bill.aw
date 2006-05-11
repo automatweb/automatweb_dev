@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.45 2006/05/11 13:53:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.46 2006/05/11 13:56:59 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -831,11 +831,6 @@ class crm_bill extends class_base
 			$res .= "<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
 		}
 
-		if ($_GET["openprintdialog_b"] == 1)
-		{
-			$url = aw_url_change_var("group", "preview_add", aw_url_change_var("openprintdialog", 1));
-			$res .= "<script language='javascript'>setTimeout('window.location.href=\"$url\"',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.location.href='$url'; }</script>";
-		}
 		die($res);
 	}
 
@@ -1146,6 +1141,12 @@ class crm_bill extends class_base
 		if ($_GET["openprintdialog"] == 1)
 		{
 			$res .= "<script language='javascript'>setTimeout('window.close()',10000);window.print();window.close();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
+		}
+
+		if ($_GET["openprintdialog_b"] == 1)
+		{
+			$url = aw_url_change_var("group", "preview", aw_url_change_var("openprintdialog", 1));
+			$res .= "<script language='javascript'>setTimeout('window.location.href=\"$url\"',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.location.href='$url'; }</script>";
 		}
 		die($res);
 	}
@@ -1470,7 +1471,7 @@ class crm_bill extends class_base
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview"), CL_CRM_BILL)."','billprint','width=100,height=100')",
+			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100')",
 			"text" => t("Prindi arve koos lisaga")
 		));
 
