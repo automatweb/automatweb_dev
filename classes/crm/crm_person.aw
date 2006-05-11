@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.128 2006/05/05 12:46:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.129 2006/05/11 11:11:47 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -191,6 +191,14 @@ caption Kodused kontaktandmed
 
 @property languages type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LANGUAGE store=connect
 @caption Keeled
+
+-----------------------
+@groupinfo work_hrs caption="T&ouml;&ouml;ajad" parent=general
+@default group=work_hrs
+
+	@property work_hrs type=textarea rows=7 cols=20 table=objects field=meta method=serialize
+	@caption T&ouml;&ouml;ajad
+	@comment Formaat: E: 9-17\nT: 14-19
 
 ------------------------------------------------------------------
 @groupinfo cv caption="Elulugu"

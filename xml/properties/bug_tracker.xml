@@ -96,6 +96,15 @@
             <field>bug_list</field>
       </property>
       <property>
+            <name>unset_table</name>
+            <table>objects</table>
+            <group>unestimated_bugs</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>unset_table</field>
+      </property>
+      <property>
             <name>search_tb</name>
             <table>objects</table>
             <group>search</group>
@@ -445,6 +454,10 @@
                   <parent>bugs</parent>
                   <submit>no</submit>
             </by_monitor>
+            <unestimated_bugs>
+                  <caption>Ennustamata bugid</caption>
+                  <parent>bugs</parent>
+            </unestimated_bugs>
             <search_t>
                   <caption>Otsing</caption>
                   <submit_method>get</submit_method>

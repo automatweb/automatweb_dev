@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.56 2006/05/09 12:53:46 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.56 2006/05/09 12:53:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.57 2006/05/11 11:11:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.57 2006/05/11 11:11:47 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -34,6 +34,10 @@ define("BUG_STATUS_CLOSED", 5);
 		@property bug_tree type=treeview parent=bug no_caption=1
 		@property bug_list type=text parent=bug no_caption=1 group=by_monitor,bugs,archive,by_default,by_project,by_who,by_class,by_cust
 
+
+@default group=unestimated_bugs
+
+	@property unset_table type=table store=no no_caption=1
 
 @default group=search
 
@@ -152,6 +156,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@groupinfo by_class caption="Klasside puu" parent=bugs submit=no
 	@groupinfo by_cust caption="Kliendid" parent=bugs submit=no
 	@groupinfo by_monitor caption="J&auml;lgijad" parent=bugs submit=no
+	@groupinfo unestimated_bugs caption="Ennustamata bugid" parent=bugs 
 
 @groupinfo search_t caption="Otsing" submit_method=get save=no
 	@groupinfo search caption="Otsing" submit_method=get save=no parent=search_t
@@ -230,6 +235,10 @@ class bug_tracker extends class_base
 
 		switch($prop["name"])
 		{
+			case "unset_table":
+				$this->_unestimated_table($arr);
+				break;
+
 			case "bug_tb":
 				$this->_bug_toolbar($arr);
 				break;
@@ -340,6 +349,10 @@ class bug_tracker extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "unset_table":
+				$this->_save_estimates($arr);
+				break;
+
 			case "bug_list":
 				foreach($arr["request"]["bug_priority"] as $bug_id => $bug_val)
 				{
@@ -2080,6 +2093,21 @@ class bug_tracker extends class_base
 		return $a_pri == $b_pri ? 0 : ($a_pri > $b_pri ? -1 : 1);
 	}
 
+	function get_estimated_end_time_for_bug($bug)
+	{
+		$p = $bug->prop("who");
+		if (!$p)
+		{
+			return null;
+		}
+		return $this->_gantt(array(
+			"request" =>  array(
+				"filt_p" => $p,
+			),
+			"ret_b_time" => $bug->id()
+		));
+	}
+
 	function _gantt($arr)
 	{
 		$chart = get_instance ("vcl/gantt_chart");
@@ -2095,33 +2123,6 @@ class bug_tracker extends class_base
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
 		}
-		// get all goals/tasks
-		$ot = new object_tree(array(
-			"class_id" => CL_BUG,
-			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS),
-			"CL_BUG.who.name" => $p->name(),
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		$gt_list = $ot->to_list();
-
-		$bugs = $gt_list->arr();
-
-		// now, filter out all bugs that have sub-bugs
-		$sub_bugs = new object_list(array(
-			"class_id" => CL_BUG,
-			"parent" => $gt_list->ids()
-		));
-
-		foreach($sub_bugs->arr() as $sub_bug)
-		{
-			unset($bugs[$sub_bug->parent()]);
-		}
-		$gt_list = new object_list();
-		$gt_list->add(array_keys($bugs));
-		$gt_list->sort_by_cb(array(
-			&$this, "__gantt_sort"
-		));
 
 		classload("core/date/date_calc");
 		$range_start = get_day_start();
@@ -2129,7 +2130,8 @@ class bug_tracker extends class_base
 
 		$subdivisions = 1;
 
-		foreach($gt_list->arr() as $gt)
+		$gt_list = $this->get_undone_bugs_by_p($p);
+		foreach($gt_list as $gt)
 		{
 			$chart->add_row (array (
 				"name" => $gt->id(),
@@ -2141,36 +2143,24 @@ class bug_tracker extends class_base
 			));
 		}
 
-		$start = time();
-		if (date("H", $start) > 17)
+		$day2wh = $this->get_person_whs($p);
+
+		$start = $this->get_next_avail_time_from(time(), $day2wh);
+
+		$this->job_count = count($gt_list);
+		foreach ($gt_list as $gt)
 		{
-			$start = mktime(9, 0, 0, date("m"), date("d")+1, date("Y"));
-		}
-		$this->job_count = $gt_list->count();
-		foreach ($gt_list->arr() as $gt)
-		{
-			if (date("H", $start) < 9)
-			{
-				$start = mktime(9, 0, 0, date("m", $start), date("d", $start), date("Y", $start));
-			}
-			if (date("H", $start) > 17)
-			{
-				$start = mktime(9, 0, 0, date("m", $start), date("d", $start)+1, date("Y", $start));
-			}
-			if (date("w", $start) == 0) // sunday
-			{
-				$start += 24*3600;
-			}
-			if (date("w", $start) == 6) // saturday
-			{
-				$start += 24*3600*2;
-			}
+			$start = $this->get_next_avail_time_from($start, $day2wh);
 			$length = max($gt->prop("num_hrs_guess") * 3600, 7200);
 			$this->job_hrs += $length;
-			if (date("H", $start+$length) > 17 || ($length > (3600 * 7)))
+			$day_info = $day2wh[date("w", $start)];
+			$day_start = $day_info[0];
+			$day_end = $day_info[1];
+
+			if (date("H", $start+$length) > $day_end || ($length > (3600 * 7)))
 			{
 				// split into parts
-				$wd_end = mktime(17, 0, 0, date("m", $start), date("d", $start), date("Y", $start));
+				$wd_end = mktime($day_end, 0, 0, date("m", $start), date("d", $start), date("Y", $start));
 				$tot_len = $length;
 				$length = $wd_end - $start;
 				$remaining_len = $tot_len - $length;
@@ -2191,15 +2181,8 @@ class bug_tracker extends class_base
 				{
 					$length = min($remaining_len, 8*3600);
 					$remaining_len -= $length;
-					$start = mktime(9, 0, 0, date("m", $start), date("d", $start)+1, date("Y", $start));
-					if (date("w", $start) == 0) // sunday
-					{
-						$start += 24*3600;
-					}
-					if (date("w", $start) == 6) // saturday
-					{
-						$start += 24*3600*2;
-					}
+					$start = $this->get_next_avail_time_from($start, $day2wh);
+
 					$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
 
 					$bar = array (
@@ -2228,6 +2211,10 @@ class bug_tracker extends class_base
 
 				$chart->add_bar ($bar);
 				$start += $length;
+			}
+			if ($gt->id() == $arr["ret_b_time"])
+			{
+				return $start;
 			}
 		}
 		$this->job_end = $start;
@@ -2568,6 +2555,227 @@ class bug_tracker extends class_base
 		}
 
 		die($node_tree->finalize_tree());
+	}
+
+	function get_person_whs($p)
+	{
+		$whs = $p->prop("work_hrs");
+		$ret = array();
+		if ($whs == "")
+		{
+			return array(
+				0 => array(0,0),
+				1 => array(9, 17),
+				2 => array(9, 17),
+				3 => array(9, 17),
+				4 => array(9, 17),
+				5 => array(9, 17),
+				6 => array(0, 0),
+			);
+		}
+		else
+		{
+			$lines = explode("\n", $whs);
+			$lut = array(
+				"E" => 1,
+				"T" => 2,
+				"K" => 3,
+				"N" => 4,
+				"R" => 5,
+				"L" => 6,
+				"P" => 0
+			);
+			foreach($lines as $l)
+			{
+				$l = trim($l);
+				if ($l == "")
+				{
+					continue;
+				}
+				list($d, $hrs) = explode(":", $l);
+				$ret[$lut[$d]] = explode("-", trim($hrs));
+			}
+		}
+		return $ret;
+	}
+
+	function get_next_avail_time_from($tm, $day2wh)
+	{
+		if ($this->_rq_lev > 7)
+		{
+			error::raise(array(
+				"id" => "ERR_TIME_LOOP",
+				"msg" => t("bug_tracker::get_next_avail_time_from(): time is in loop!")
+			));
+			die();
+		}
+		$this->_rq_lev++;
+		$hr = date("H", $tm);
+		$day = date("w", $tm);
+		$day_start = $day2wh[$day][0];
+		$day_end = $day2wh[$day][1];
+		if ($day_start == $day_end || $hr >= $day_end)
+		{
+			$rv = $this->get_next_avail_time_from(mktime(0,0,0, date("m", $tm), date("d", $tm)+1, date("Y", $tm)), $day2wh);
+			$this->_rq_lev--;
+			return $rv;
+		}
+
+		if ($hr < $day_start)
+		{
+			$this->_rq_lev--;
+			return mktime($day_start, 0, 0, date("m", $tm), date("d", $tm), date("Y", $tm));
+		}
+		$this->_rq_lev--;
+		return $tm;
+	}
+
+	function get_undone_bugs_by_p($p)
+	{
+		// get all goals/tasks
+		$ft = array(
+			"class_id" => CL_BUG,
+			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS),
+			"CL_BUG.who.name" => $p->name(),
+			"lang_id" => array(),
+			"site_id" => array()
+		);
+		$ot = new object_tree($ft);
+		$gt_list = $ot->to_list();
+
+		$bugs = $gt_list->arr();
+
+		// now, filter out all bugs that have sub-bugs
+		$sub_bugs = new object_list(array(
+			"class_id" => CL_BUG,
+			"parent" => $gt_list->ids(),
+			"lang_id" => array(),
+			"site_id" => array()	
+		));
+
+		foreach($sub_bugs->arr() as $sub_bug)
+		{
+			unset($bugs[$sub_bug->parent()]);
+		}
+		$gt_list = new object_list();
+		$gt_list->add(array_keys($bugs));
+		$gt_list->sort_by_cb(array(
+			&$this, "__gantt_sort"
+		));
+
+		return $gt_list->arr();		
+	}
+
+	/**
+		@attrib name=nag_about_unestimated_bugs nologin=1
+	**/
+	function nag_about_unestimated_bugs($arr)
+	{
+		// auth as me
+		aw_switch_user(array("uid" => "kix"));
+
+		// get list of all users to whom bugs are assigned
+		$c = new connection();
+		$users = array();
+		foreach($c->find(array("from.class_id" => CL_BUG, "type" => "RELTYPE_MONITOR")) as $c)
+		{
+			$users[$c["to"]] = $c["to"];
+		}
+
+		$us = array();		
+		foreach($users as $user)
+		{
+			// list&sort bugs for that user
+			// get first 10 and nag him about their estimated lengths
+			$p = obj($user);
+			$us[$p->name()] = $p;
+		}
+
+		foreach($us as $p)
+		{
+			echo "user ".$p->name()." <br>";
+
+			$nag_about = $this->get_unestimated_bugs_by_p($p);
+
+			if (count($nag_about) > 0)
+			{
+				$mail = sprintf(t("Tere!\nMina olen AW Bugtrack. Sul (%s) on prognoositavad ajad m22ramata nendele bugidele, palun tee seda kohe!\n\n"), $p->name());
+				foreach($nag_about as $nb)
+				{
+					$mail .= $nb->name()." ".obj_link($nb->id())."\n";
+				}
+				$mail .= "\n\nLihtsalt saad seda teha siit:\n";
+				$mail .= "http://intranet.automatweb.com/automatweb/orb.aw?class=bug_tracker&action=change&id=142821&group=unestimated_bugs";
+				echo "send to ".$p->prop("email.mail")."<br>".nl2br($mail)." <br><br><br><br>";
+				//send_mail($p->prop("email.mail"), t("Bugtracki M22ramata ajad"), $mail);
+			}
+		}
+		die(t("all done"));
+	}
+
+	function get_unestimated_bugs_by_p($p)
+	{
+		$bugs = $this->get_undone_bugs_by_p($p);
+		$cnt = 0;
+		$nag_about = array();
+		foreach($bugs as $bug)
+		{
+			if ($cnt > 9)
+			{
+				break;
+			}
+
+			if ($bug->prop("num_hrs_guess") == 0)
+			{
+				$cnt++;
+				$nag_about[] = $bug;
+			}
+		}
+
+		return $nag_about;
+	}
+
+	function _init_unestimated_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Bugi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Prognoositud aeg"),
+			"align" => "center"
+		));
+	}
+
+	function _unestimated_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_unestimated_table($t);
+
+		foreach($this->get_unestimated_bugs_by_p(get_current_person()) as $bug)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($bug),
+				"time" => html::textbox(array(
+					"name" => "bugs[".$bug->id()."]",
+					"value" => $bug->prop("num_hrs_guess"),
+					"size" => 5
+				))
+			));
+		}
+		$t->set_sortable(false);
+	}
+
+	function _save_estimates($arr)
+	{
+		foreach(safe_array($arr["request"]["bugs"]) as $bid => $est)
+		{
+			$bo = obj($bid);
+			$bo->set_prop("num_hrs_guess", $est);
+			$bo->save();
+		}
 	}
 }
 ?>

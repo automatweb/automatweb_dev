@@ -132,5 +132,12 @@
 			</function>
 		</action>
 
+		<action name="nag_about_unestimated_bugs" nologin="1">
+			<function name="nag_about_unestimated_bugs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

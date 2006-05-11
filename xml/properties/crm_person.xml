@@ -488,6 +488,18 @@
             <caption>Keeled</caption>
       </property>
       <property>
+            <name>work_hrs</name>
+            <table>objects</table>
+            <group>work_hrs</group>
+            <type>textarea</type>
+            <rows>7</rows>
+            <cols>20</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>T&amp;amp;ouml;&amp;amp;ouml;ajad</caption>
+            <comment>Formaat: E: 9-17\nT: 14-19</comment>
+      </property>
+      <property>
             <name>edulevel</name>
             <table>objects</table>
             <group>education</group>
@@ -1063,6 +1075,10 @@
                   <caption>Muud seaded</caption>
                   <parent>general</parent>
             </settings>
+            <work_hrs>
+                  <caption>T&amp;amp;ouml;&amp;amp;ouml;ajad</caption>
+                  <parent>general</parent>
+            </work_hrs>
             <cv>
                   <caption>Elulugu</caption>
             </cv>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.68 2006/05/10 09:13:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.69 2006/05/11 11:11:47 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -525,6 +525,24 @@ class crm_meeting extends class_base
 
 					$data["value"] .= $pm->get_menu(array(
 						"icon" => "new.gif"
+					));
+				}
+				else
+				{
+					$u = get_instance(CL_USER);
+					$cur_co = obj($u->get_current_company());
+					$prms = array(
+						"id" => 0,
+						"pn" => "participants",
+						"clid" => CL_CRM_PERSON,
+						"multiple" => 1,
+					);
+
+					$url = $this->mk_my_orb("do_search", $prms, "crm_participant_search");
+					$data["value"] .= html::href(array(
+						"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+						"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+						"title" => t("Otsi")
 					));
 				}
 			break;

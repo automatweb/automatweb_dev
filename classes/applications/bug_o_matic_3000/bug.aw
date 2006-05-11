@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.38 2006/05/09 12:38:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.39 2006/05/11 11:11:47 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -371,6 +371,30 @@ class bug extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "name":
+				$ev = date_edit::get_timestamp($arr["request"]["deadline"]);
+				if ($ev == $arr["obj_inst"]->prop("deadline"))
+				{
+					return PROP_OK;
+				}
+				$bt = get_instance(CL_BUG_TRACKER);
+				$opv = $arr["obj_inst"]->prop("deadline");
+				$opri = $arr["obj_inst"]->prop("bug_priority");
+				$osev = $arr["obj_inst"]->prop("bug_severity");
+				$arr["obj_inst"]->set_prop("deadline", $ev);
+				$arr["obj_inst"]->set_prop("bug_priority", $arr["request"]["bug_priority"]);
+				$arr["obj_inst"]->set_prop("bug_severity", $arr["request"]["bug_severity"]);
+				$estend = $bt->get_estimated_end_time_for_bug($arr["obj_inst"]);
+				$arr["obj_inst"]->set_prop("deadline", $opv);
+				$arr["obj_inst"]->set_prop("bug_priority", $opri);
+				$arr["obj_inst"]->set_prop("bug_severity", $osevri);
+				if ($estend > ($ev+24*3600))
+				{
+					$prop["error"] = sprintf(t("Bugi ei ole v&otilde;imalik valmis saada enne %s!"), date("d.m.Y H:i", $estend));
+					return PROP_FATAL_ERROR;
+				}
+				break;
+
 			case "bug_content":
 				if (!$arr["new"])
 				{
@@ -418,6 +442,14 @@ class bug extends class_base
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
 					$com = sprintf(t("Tegelik tundide arv muudeti %s => %s"), $old, $prop["value"]);
+					$this->add_comments[] = $com;
+				}
+				break;
+
+			case "num_hrs_gues":
+				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
+				{
+					$com = sprintf(t("Prognoositud tundide arv muudeti %s => %s"), $old, $prop["value"]);
 					$this->add_comments[] = $com;
 				}
 				break;
