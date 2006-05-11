@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.43 2006/05/11 13:31:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.44 2006/05/11 13:34:50 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -785,7 +785,7 @@ class crm_bill extends class_base
 			if ($tax_rate > 0 || true)
 			{
 				$this->vars(array(
-					"tax_rate" => number_format($tax_rate, 2),
+					"tax_rate" => floor($tax_rate*100.0),
 					"tax" => number_format($tax_amt, 2)
 				));
 				$tax_rows_str .= $this->parse("TAX_ROW");
