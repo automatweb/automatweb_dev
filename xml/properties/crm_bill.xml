@@ -173,6 +173,15 @@
             <field>preview_add</field>
       </property>
       <property>
+            <name>preview_w_rows</name>
+            <table>objects</table>
+            <group>preview_w_rows</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>preview_w_rows</field>
+      </property>
+      <property>
             <name>bill_tb</name>
             <table>objects</table>
             <group>tasks</group>
@@ -208,6 +217,9 @@
             <preview_add>
                   <caption>Arve Lisa</caption>
             </preview_add>
+            <preview_w_rows>
+                  <caption>Eelvaade ridadega</caption>
+            </preview_w_rows>
       </groupinfo>
       <tableinfo>
             <aw_crm_bill>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.44 2006/05/11 13:34:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.45 2006/05/11 13:53:21 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -70,6 +70,10 @@
 
 	@property preview_add type=text store=no no_caption=1
 
+@default group=preview_w_rows
+
+	@property preview_w_rows type=text store=no no_caption=1
+
 @default group=tasks
 
 	@property bill_tb type=toolbar store=no no_caption=1
@@ -80,6 +84,7 @@
 @groupinfo tasks caption="Toimetused" submit=no
 @groupinfo preview caption="Eelvaade"
 @groupinfo preview_add caption="Arve Lisa"
+@groupinfo preview_w_rows caption="Eelvaade ridadega"
 
 
 
@@ -163,6 +168,11 @@ class crm_bill extends class_base
 				break;
 
 			case "preview":
+				$this->_preview($arr);
+				break;
+
+			case "preview_w_rows":
+				$arr["all_rows"] = 1;
 				$this->_preview($arr);
 				break;
 
@@ -476,7 +486,7 @@ class crm_bill extends class_base
 
 	function _preview($arr)
 	{
-		$arr["prop"]["value"] = $this->show(array("id" => $arr["obj_inst"]->id()));
+		$arr["prop"]["value"] = $this->show(array("id" => $arr["obj_inst"]->id(), "all_rows" => $arr["all_rows"]));
 	}
 
 	function _preview_add($arr)
@@ -683,6 +693,11 @@ class crm_bill extends class_base
 				$cur_sum = $row["sum"];
 				$cur_tax = 0;
 				$cur_pr = $this->num($row["price"]);
+			}
+
+			if ($arr["all_rows"] == 1)
+			{
+				$row["prod"] = gen_uniq_id();
 			}
 
 			$tax_rows["$tax_rate"] += $cur_tax;
