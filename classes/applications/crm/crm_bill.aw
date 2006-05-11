@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.42 2006/04/24 11:47:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.43 2006/05/11 13:31:32 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -642,6 +642,8 @@ class crm_bill extends class_base
 
 		$grp_rows = array();
 
+		$tax_rows = array();
+
 		$_no_prod_idx = -1;
 		foreach($brows as $row)
 		{
@@ -683,6 +685,7 @@ class crm_bill extends class_base
 				$cur_pr = $this->num($row["price"]);
 			}
 
+			$tax_rows["$tax_rate"] += $cur_tax;
 			$unp = $row["price"];
 			$grp_rows[$row["prod"]][$unp]["sum_wo_tax"] += $cur_sum;
 			$grp_rows[$row["prod"]][$unp]["tax"] += $cur_tax;
@@ -736,14 +739,14 @@ class crm_bill extends class_base
 			$tax_rate = 0;
 			if (!$this->can("view", $row["prod"]) && $row["has_tax"] == 1)
 			{
-                                $tax_rate = 0.18;
-                        }
-                        else
-                        if ($this->can("view", $row["prod"]))
-                        {
-                                $prod_o = obj($row["prod"]);
-                                $tax_rate = (double)$prod_o->prop("tax_rate.tax_amt") / 100.0;
-                        }
+				$tax_rate = 0.18;
+			}
+			else
+			if ($this->can("view", $row["prod"]))
+			{
+				$prod_o = obj($row["prod"]);
+				$tax_rate = (double)$prod_o->prop("tax_rate.tax_amt") / 100.0;
+			}
 		
 			if ($tax_rate > 0)
 			{
@@ -759,6 +762,8 @@ class crm_bill extends class_base
 				$cur_tax = 0;
 				$cur_pr = $this->num($row["price"]);
 			}
+			$tax_rows[$tax_rate] += $cur_tax;
+
 			$this->vars(array(
 				"unit" => $row["unit"],
 				"amt" => $row["amt"],
@@ -774,7 +779,21 @@ class crm_bill extends class_base
 			$sum += ($cur_tax+$cur_sum);
 		}
 
+		$tax_rows_str = "";
+		foreach($tax_rows as $tax_rate => $tax_amt)
+		{
+			if ($tax_rate > 0 || true)
+			{
+				$this->vars(array(
+					"tax_rate" => number_format($tax_rate, 2),
+					"tax" => number_format($tax_amt, 2)
+				));
+				$tax_rows_str .= $this->parse("TAX_ROW");
+			}
+		}
+
 		$this->vars(array(
+			"TAX_ROW" => $tax_rows_str,
 			"ROW" => $rs,
 			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
 			"tax" => number_format($tax, 2,".", " "),
