@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.46 2006/05/11 13:56:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.47 2006/05/11 14:20:03 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -374,7 +374,11 @@ class crm_bill extends class_base
 				$r_prods[$t_inf["prod"]] = $prodo->name();
 			}
 			$t->define_data(array(
-				"name" => html::textarea(array(
+				"name" => html::textbox(array(
+					"name" => "rows[$id][comment]",
+					"value" => $t_inf["comment"],
+					"size" => 45
+				))."<br>".html::textarea(array(
 					"name" => "rows[$id][name]",
 					"value" => $t_inf["name"],
 					"rows" => 5,
@@ -709,6 +713,10 @@ class crm_bill extends class_base
 			$grp_rows[$row["prod"]][$unp]["tot_amt"] += $row["amt"];
 			$grp_rows[$row["prod"]][$unp]["tot_cur_sum"] += $cur_sum;
 			$grp_rows[$row["prod"]][$unp]["name"] = $row["name"];
+			if (empty($grp_rows[$row["prod"]][$unp]["comment"]))
+			{
+				$grp_rows[$row["prod"]][$unp]["comment"] = $row["comment"];
+			}
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
@@ -721,6 +729,11 @@ class crm_bill extends class_base
 		{
 			foreach($grp_rowa as $grp_row)
 			{
+				if (!empty($grp_row["comment"]))
+				{
+					$desc = $grp_row["comment"];
+				}
+				else
 				if ($this->can("view", $prod))
 				{
 					$po = obj($prod);
@@ -874,6 +887,7 @@ class crm_bill extends class_base
 				"amt" => $row->prop("amt"),
 				"prod" => $row->prop("prod"),
 				"name" => $row->prop("name"),
+				"comment" => $row->prop("comment"),
 				"price" => $row->prop("price"),
 				"sum" => str_replace(",", ".", $row->prop("amt")) * str_replace(",", ".", $row->prop("price")),
 				"km_code" => $kmk,
@@ -1255,6 +1269,7 @@ class crm_bill extends class_base
 				$o = obj($oid);
 			}
 			$o->set_prop("name", $row["name"]);
+			$o->set_prop("comment", $row["comment"]);
 
 			if (trim($row["date"]) == "")
 			{

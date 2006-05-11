@@ -11,6 +11,14 @@
             <caption>Nimi</caption>
       </property>
       <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>comment</field>
+            <caption>Tekst arvel</caption>
+      </property>
+      <property>
             <name>amt</name>
             <table>aw_crm_bill_rows</table>
             <group>general</group>

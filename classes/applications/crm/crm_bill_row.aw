@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.1 2006/02/10 11:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.2 2006/05/11 14:20:03 kristo Exp $
 // crm_bill_row.aw - Arve rida 
 /*
 
@@ -12,6 +12,9 @@
 
 @property name type=textarea rows=5 cols=40 table=objects field=name
 @caption Nimi
+
+@property comment type=textbox table=objects field=comment
+@caption Tekst arvel
 
 @property amt type=textbox size=5 field=aw_amt
 @caption Kogus
