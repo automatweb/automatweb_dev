@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.8 2006/05/10 13:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.9 2006/05/11 12:12:29 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -293,6 +293,8 @@ class task_quick_entry extends class_base
 			$p->set_parent($cur_co->parent());
 			$p->set_name($arr["request"]["project"]);
 			$p->set_prop("orderer", array($c->id(), $c->id()));
+			$p->set_prop("implementor", $cur_co->id());
+			$p->set_prop("participants", array($cur_p->id() => $cur_p->id()));
 			$p->save();
 		}
 		else
@@ -327,6 +329,14 @@ class task_quick_entry extends class_base
 
 			$t_i = $t->instance();
 			$t_i->add_participant($t, $cur_p);
+
+			$t_i->get_property(array(
+				"prop" => array(
+					"name" => "hr_price",
+				),
+				"obj_inst" => $t
+			));
+
 			$r = obj();
 			$r->set_class_id(CL_TASK_ROW);
 			$r->set_parent($t->id());
