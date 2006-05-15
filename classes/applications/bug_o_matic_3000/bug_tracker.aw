@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.57 2006/05/11 11:11:47 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.57 2006/05/11 11:11:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.58 2006/05/15 06:58:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.58 2006/05/15 06:58:23 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -2151,7 +2151,14 @@ class bug_tracker extends class_base
 		foreach ($gt_list as $gt)
 		{
 			$start = $this->get_next_avail_time_from($start, $day2wh);
-			$length = max($gt->prop("num_hrs_guess") * 3600, 7200);
+			if ($gt->prop("num_hrs_guess") > 0)
+			{
+				$length = $gt->prop("num_hrs_guess") * 3600;
+			}
+			else
+			{
+				$length = 7200;
+			}
 			$this->job_hrs += $length;
 			$day_info = $day2wh[date("w", $start)];
 			$day_start = $day_info[0];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.39 2006/05/11 11:11:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.40 2006/05/15 06:58:23 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -240,6 +240,7 @@ class bug extends class_base
 					if ($prop["multiple"] == 1)
 					{
 					//	$prop["value"] = $this->make_keys(array_keys($tmp));
+						$prop["value"] = array($p->id(), $p->id());
 					}
 
 					// find tracker for the bug and get people list from that
@@ -373,7 +374,7 @@ class bug extends class_base
 		{
 			case "name":
 				$ev = date_edit::get_timestamp($arr["request"]["deadline"]);
-				if ($ev == $arr["obj_inst"]->prop("deadline"))
+				if ($ev == $arr["obj_inst"]->prop("deadline") || $ev < 300)
 				{
 					return PROP_OK;
 				}
@@ -446,7 +447,7 @@ class bug extends class_base
 				}
 				break;
 
-			case "num_hrs_gues":
+			case "num_hrs_guess":
 				if (($old = $arr["obj_inst"]->prop($prop["name"])) != $prop["value"])
 				{
 					$com = sprintf(t("Prognoositud tundide arv muudeti %s => %s"), $old, $prop["value"]);
