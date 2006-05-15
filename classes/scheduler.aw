@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.38 2006/04/03 09:53:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.39 2006/05/15 08:10:55 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -50,6 +50,8 @@ class scheduler extends aw_template
 		@param password optional type=string
 			the password of the user uid
 
+		@param auth_as_local_user type=bool
+			if set to true, the current logged on user is given a temporary password and that is written to the scheduler xml file, so that the scheduled action will be run as the current user
 	**/
 	function add($arr)
 	{
