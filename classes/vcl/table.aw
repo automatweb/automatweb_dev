@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.75 2006/05/09 12:53:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.76 2006/05/15 09:06:34 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -273,6 +273,7 @@ class aw_table extends aw_template
 		if($arr["d_row_cnt"])
 		{
 			$this->d_row_cnt = $arr["d_row_cnt"];
+			$this->no_recount = 1;
 		}
 		if($arr["no_recount"])
 		{
