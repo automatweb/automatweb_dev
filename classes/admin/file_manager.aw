@@ -1,10 +1,10 @@
 <?php
 
-class image_manager extends aw_template
+class file_manager extends aw_template
 {
-	function image_manager()
+	function file_manager()
 	{
-		$this->init("admin/image_manager");
+		$this->init("admin/file_manager");
 	}
 
 	/**
@@ -22,7 +22,7 @@ class image_manager extends aw_template
 		{
 			// now get image by file name
 			$image_list = new object_list(array(
-				"class_id" => CL_IMAGE,
+				"class_id" => CL_FILE,
 				"lang_id" => array(),
 				"site_id" => array(),
 				"file" => "%".trim($imgname)
@@ -40,14 +40,14 @@ class image_manager extends aw_template
 		}
 		else
 		{
-			$parent = aw_ini_get("image.default_folder");
+			$parent = aw_ini_get("file.default_folder");
 			parse_str($arr["doc"], $params);
 			$doc = obj($params["id"]);
 			if (!$parent)
 			{
 				$parent = $doc->parent();
 			}
-			$image_url = html::get_new_url(CL_IMAGE, $parent);
+			$image_url = html::get_new_url(CL_FILE, $parent);
 		}
 		
 		$this->read_template("manage.tpl");
@@ -66,7 +66,7 @@ class image_manager extends aw_template
 	function topf($arr)
 	{
 		$this->read_template("top_frame.tpl");
-		$parent = aw_ini_get("image.default_folder");
+		$parent = aw_ini_get("file.default_folder");
 		parse_str($arr["doc"], $params);
 		$doc = obj($params["id"]);
 		if (!$parent)
@@ -74,7 +74,7 @@ class image_manager extends aw_template
 			$parent = $doc->parent();
 		}
 		$this->vars(array(
-			"img_new" => html::get_new_url(CL_IMAGE, $parent),
+			"img_new" => html::get_new_url(CL_FILE, $parent),
 			"img_mgr" => $this->mk_my_orb("manager", array("docid" => $doc->id()))
 		));
 		return $this->parse();
@@ -84,7 +84,7 @@ class image_manager extends aw_template
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Pilt"),
+			"caption" => t("Fail"),
 			"sortable" => 1
 		));
 		$t->define_field(array(
@@ -104,15 +104,15 @@ class image_manager extends aw_template
 		$this->_init_t($t);
 
 		$ol = new object_list(array(
-			"class_id" => CL_IMAGE,
+			"class_id" => CL_FILE,
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-		$ii = get_instance(CL_IMAGE);
+		$ii = get_instance(CL_FILE);
 		foreach($ol->arr() as $o)
 		{
-			$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $o->id()), CL_IMAGE);
-			$image_url = $ii->get_url_by_id($o->id());
+			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $o->id()), CL_FILE);
+			$image_url = $ii->get_url($o->id(), $o->name());
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
 				"sel" => html::href(array(

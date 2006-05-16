@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.162 2006/05/03 13:49:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.163 2006/05/16 08:55:35 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -785,7 +785,15 @@ class image extends class_base
 				if (is_oid($arr["obj_inst"]->id()))
 				{
 					$url = $this->mk_my_orb("fetch_image_tag_for_doc", array("id" => $arr["obj_inst"]->id()));
-					//$prop["value"] .= "&nbsp;&nbsp;<a href='#' onClick='ct=aw_get_url_contents(\"$url\");FCK=window.parent.opener.FCK;FCK.Focus();FCK.InsertHtml(ct);'>Paiguta dokumenti</a>";
+					$image_url = $this->get_url_by_id($arr["obj_inst"]->id());
+					$prop["value"] .= "&nbsp;&nbsp;
+						<script language=\"javascript\">
+						if (window.parent.name == \"InsertAWImageCommand\")
+						{
+							document.write(\"<a href='#' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.GetSelectedElement() ;if (\\\"\\\"+eSelected == \\\"HTMLImageElement\\\") { eSelected.src=\\\"$image_url\\\"; } else { ct=aw_get_url_contents(\\\"$url\\\"); FCK.InsertHtml(ct); } window.parent.close();'>Paiguta dokumenti</a>\");
+						}
+					</script>
+					";
 				}
 				break;
 			case "file2":

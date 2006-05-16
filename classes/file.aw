@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.122 2006/04/06 11:04:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.123 2006/05/16 08:55:35 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -1092,6 +1092,18 @@ class file extends class_base
 	function callback_get_transl($arr)
 	{
 		return $this->trans_callback($arr, $this->trans_props);
+	}
+
+	/**
+		@attrib name=fetch_file_tag_for_doc
+		@param id required
+	**/
+	function fetch_file_tag_for_doc($arr)
+	{
+		$o = obj($arr["id"]);
+		$i = $o->instance();
+		$s = $i->parse_alias(array("alias" => array("target" => $arr["id"])));
+		die($s);
 	}
 };
 ?>

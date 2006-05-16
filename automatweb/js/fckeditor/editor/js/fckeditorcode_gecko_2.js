@@ -57,13 +57,48 @@ FCKContextMenuItem.prototype.SetVisible=function(A){this._Row.style.display=A?''
 FCKContextMenuItem.prototype.RefreshState=function(){switch (this.Command.GetState()){case FCK_TRISTATE_ON:case FCK_TRISTATE_OFF:this._Row.className='CM_Option';break;default:this._Row.className='CM_Disabled';break;};};
 var FCKContextMenuSeparator=function(){};FCKContextMenuSeparator.prototype.CreateTableRow=function(A){this._Row=A.insertRow(-1);this._Row.className='CM_Separator';var B=this._Row.insertCell(-1);B.className='CM_Icon';var C=A.ownerDocument||A.document;B=this._Row.insertCell(-1);B.className='CM_Label';B.appendChild(C.createElement('DIV')).className='CM_Separator_Line';};FCKContextMenuSeparator.prototype.SetVisible=function(A){this._Row.style.display=A?'':'none';};FCKContextMenuSeparator.prototype.RefreshState=function(){};
 var FCKContextMenuGroup=function(A,B,C,D,E){this.IsVisible=true;this.Items=new Array();if (A) this.Add(new FCKContextMenuSeparator());if (B&&C&&D) this.Add(new FCKContextMenuItem(B,C,D,E));this.ValidationFunction=null;};FCKContextMenuGroup.prototype.Add=function(A){this.Items[this.Items.length]=A;};FCKContextMenuGroup.prototype.CreateTableRows=function(A){for (var i=0;i<this.Items.length;i++){this.Items[i].CreateTableRow(A);};};FCKContextMenuGroup.prototype.SetVisible=function(A){for (var i=0;i<this.Items.length;i++){this.Items[i].SetVisible(A);};this.IsVisible=A;};FCKContextMenuGroup.prototype.RefreshState=function(){if (!this.IsVisible) return;for (var i=0;i<this.Items.length;i++){this.Items[i].RefreshState();};}
-var FCKContextMenu=new Object();FCKContextMenu._Panel=new FCKPanel(FCKBrowserInfo.IsIE?window:window.parent);FCKContextMenu._Panel.PanelDiv.className='CM_ContextMenu';FCKContextMenu._Panel.AppendStyleSheet(FCKConfig.SkinPath+'fck_contextmenu.css');FCKContextMenu._Panel.IsContextMenu=true;FCKContextMenu._Document=FCKContextMenu._Panel.Document;FCKContextMenu._IsLoaded=false;FCKContextMenu.Show=function(x,y){if (!this._IsLoaded) this.Reload();this.RefreshState();if (!FCKBrowserInfo.IsIE){var A=FCKTools.GetElementPosition(FCK.EditorWindow.frameElement,this._Panel._Window);x+=A.X;y+=A.Y;};this._Panel.Show(x,y);};FCKContextMenu.Hide=function(){this._Panel.Hide();};FCKContextMenu.Reload=function(){var A=this._Document.createElement('TABLE');A.cellSpacing=0;A.cellPadding=0;this._Panel.PanelDiv.appendChild(A);this.Groups=new Object();for (var i=0;i<FCKConfig.ContextMenu.length;i++){var B=FCKConfig.ContextMenu[i];this.Groups[B]=this._GetGroup(B);this.Groups[B].CreateTableRows(A);};FCKTools.DisableSelection(this._Panel.Document.body);this._IsLoaded=true;};FCKContextMenu._GetGroup=function(A){var B;switch (A){case 'Generic':B=new FCKContextMenuGroup();B.Add(new FCKContextMenuItem(this,'Cut',FCKLang.Cut,true));B.Add(new FCKContextMenuItem(this,'Copy',FCKLang.Copy,true));B.Add(new FCKContextMenuItem(this,'Paste',FCKLang.Paste,true));break;case 'Link':B=new FCKContextMenuGroup();B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'Link',FCKLang.EditLink,true));B.Add(new FCKContextMenuItem(this,'Unlink',FCKLang.RemoveLink,true));break;case 'TableCell':B=new FCKContextMenuGroup();B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableInsertRow',FCKLang.InsertRow,true));B.Add(new FCKContextMenuItem(this,'TableDeleteRows',FCKLang.DeleteRows,true));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableInsertColumn',FCKLang.InsertColumn,true));B.Add(new FCKContextMenuItem(this,'TableDeleteColumns',FCKLang.DeleteColumns,true));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableInsertCell',FCKLang.InsertCell,true));B.Add(new FCKContextMenuItem(this,'TableDeleteCells',FCKLang.DeleteCells,true));B.Add(new FCKContextMenuItem(this,'TableMergeCells',FCKLang.MergeCells,true));B.Add(new FCKContextMenuItem(this,'TableSplitCell',FCKLang.SplitCell,true));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableDelete',FCKLang.TableDelete,false));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableCellProp',FCKLang.CellProperties,true));B.Add(new FCKContextMenuItem(this,'TableProp',FCKLang.TableProperties,true));break;case 'Table':B=new FCKContextMenuGroup();B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableDelete',FCKLang.TableDelete,false));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'Table',FCKLang.TableProperties,true));break;case 'Image':
+var FCKContextMenu=new Object();FCKContextMenu._Panel=new FCKPanel(FCKBrowserInfo.IsIE?window:window.parent);FCKContextMenu._Panel.PanelDiv.className='CM_ContextMenu';FCKContextMenu._Panel.AppendStyleSheet(FCKConfig.SkinPath+'fck_contextmenu.css');FCKContextMenu._Panel.IsContextMenu=true;FCKContextMenu._Document=FCKContextMenu._Panel.Document;FCKContextMenu._IsLoaded=false;
+
+FCKContextMenu.Show=function(x,y)
+{if (!this._IsLoaded) this.Reload();this.RefreshState();if (!FCKBrowserInfo.IsIE){var A=FCKTools.GetElementPosition(FCK.EditorWindow.frameElement,this._Panel._Window);x+=A.X;y+=A.Y;};this._Panel.Show(x,y);};FCKContextMenu.Hide=function(){this._Panel.Hide();};
+
+
+FCKContextMenu.Reload=function()
+{var A=this._Document.createElement('TABLE');A.cellSpacing=0;A.cellPadding=0;this._Panel.PanelDiv.appendChild(A);this.Groups=new Object();for (var i=0;i<FCKConfig.ContextMenu.length;i++){var B=FCKConfig.ContextMenu[i];this.Groups[B]=this._GetGroup(B);this.Groups[B].CreateTableRows(A);};FCKTools.DisableSelection(this._Panel.Document.body);this._IsLoaded=true;};
+
+FCKContextMenu._GetGroup=function(A){var B;switch (A){
+
+case 'Generic':B=new FCKContextMenuGroup();B.Add(new FCKContextMenuItem(this,'Cut',FCKLang.Cut,true));B.Add(new FCKContextMenuItem(this,'Copy',FCKLang.Copy,true));B.Add(new FCKContextMenuItem(this,'Paste',FCKLang.Paste,true));break;
+case 'Link':
+
+var InsertAWLupCommand=function(){};
+ InsertAWLupCommand.Name = "awlup";
+InsertAWLupCommand.prototype.Execute=function(){}
+InsertAWLupCommand.GetState=function() { return FCK_TRISTATE_OFF; }
+InsertAWLupCommand.Execute=function() {
+
+
+
+  window.open('/automatweb/orb.aw?class=link_manager&doc='+escape(window.parent.location.href), 
+					'InsertAWFupCommand', 'width=500,height=400,scrollbars=no,scrolling=no,location=no,toolbar=no');
+}
+FCKCommands.RegisterCommand('awlup', InsertAWLupCommand ); 
+
+
+
+B=new FCKContextMenuGroup();B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'awlup',FCKLang.EditLink,true));B.Add(new FCKContextMenuItem(this,'Unlink',FCKLang.RemoveLink,true));
+break;
+
+case 'TableCell':B=new FCKContextMenuGroup();B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableInsertRow',FCKLang.InsertRow,true));B.Add(new FCKContextMenuItem(this,'TableDeleteRows',FCKLang.DeleteRows,true));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableInsertColumn',FCKLang.InsertColumn,true));B.Add(new FCKContextMenuItem(this,'TableDeleteColumns',FCKLang.DeleteColumns,true));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableInsertCell',FCKLang.InsertCell,true));B.Add(new FCKContextMenuItem(this,'TableDeleteCells',FCKLang.DeleteCells,true));B.Add(new FCKContextMenuItem(this,'TableMergeCells',FCKLang.MergeCells,true));B.Add(new FCKContextMenuItem(this,'TableSplitCell',FCKLang.SplitCell,true));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableDelete',FCKLang.TableDelete,false));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableCellProp',FCKLang.CellProperties,true));B.Add(new FCKContextMenuItem(this,'TableProp',FCKLang.TableProperties,true));break;
+
+case 'Table':B=new FCKContextMenuGroup();B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'TableDelete',FCKLang.TableDelete,false));B.Add(new FCKContextMenuSeparator());B.Add(new FCKContextMenuItem(this,'Table',FCKLang.TableProperties,true));break;
+case 'Image':
 var InsertAWImageCommand=function(){};
 InsertAWImageCommand.prototype.Execute=function(){}
 InsertAWImageCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWImageCommand.Name='Image';
 InsertAWImageCommand.Execute=function() {
-  window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href), 
+  window.open('/automatweb/orb.aw?class=image_manager&doc='+escape(window.parent.location.href)+"&imgsrc="+escape(FCK.Selection.GetSelectedElement().src), 
 					'InsertAWImageCommand', 'width=500,height=400,scrollbars=no,scrolling=no,location=no,toolbar=no');
 }
 FCKCommands.RegisterCommand('awimageupload', InsertAWImageCommand ); 

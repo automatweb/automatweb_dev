@@ -76,7 +76,8 @@ FCKConfig.PreserveSessionOnFileBrowser = false ;
 FCKConfig.FloatingPanelsZIndex = 10000 ;
 
 
-FCKConfig.Plugins.Add( 'awfileupload', 'en' ) ;
+FCKConfig.Plugins.Add( 'awlup', 'en' ) ;
+FCKConfig.Plugins.Add( 'awfup', 'en' ) ;
 FCKConfig.Plugins.Add( 'awimageupload', 'en' ) ;
 
 FCKConfig.ToolbarSets["aw"] = [
@@ -85,8 +86,8 @@ FCKConfig.ToolbarSets["aw"] = [
        ['Bold','Italic','Underline','StrikeThrough','-'],
        ['OrderedList','UnorderedList','-','Outdent','Indent'],
        ['JustifyLeft','JustifyCenter','JustifyRight','JustifyFull'],
-       ['Link','Unlink','Anchor'],
-       ['awimageupload','Table'],
+       ['awlup','Unlink','Anchor'],
+       ['awimageupload','awfup','Table'],
        ['Style']
 ] ;
 
