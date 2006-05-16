@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_citydistrict.aw,v 1.3 2005/11/21 09:04:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_citydistrict.aw,v 1.4 2006/05/16 14:57:40 markop Exp $
 // country_citydistrict.aw - Linnaosa
 /*
 
@@ -24,7 +24,7 @@ if (!defined ("ADDRESS_SYSTEM"))
 	define ("ADDRESS_COUNTRY_TYPE", "country"); # used in many places. also in autocomplete javascript -- caution when changing.
 	define ("ADDRESS_DBG_FLAG", "address_dbg");
 }
-
+classload("common/country/country_administrative_unit");
 class country_citydistrict extends country_administrative_unit
 {
 	function country_citydistrict ()

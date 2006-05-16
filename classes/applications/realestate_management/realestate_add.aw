@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.9 2006/05/11 15:11:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.10 2006/05/16 14:57:41 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -636,7 +636,8 @@ class realestate_add extends class_base
 		}
 		$targ = obj($arr["alias"]["target"]);
 		$bank_meta = $targ->meta("bank");
-		$bank_meta["amount"] = $bank_meta["amount"]*$targ->prop("weeks_valid_for");
+		if (!$realest_obj) $realest_obj = obj($_SESSION["realestate_input_data"]["realestate_id"]);
+		$bank_meta["amount"] = $bank_meta["amount"]*$realest_obj->prop("weeks_valid_for");
 		$_SESSION["bank_payment"] = array(
 			"data"		=> $bank_meta,
 			"reference_nr"	=> $_SESSION["realestate_input_data"]["realestate_id"],
@@ -645,7 +646,6 @@ class realestate_add extends class_base
 			"cancel"	=> post_ru(),
 		);
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
-		if (!$realest_obj) $realest_obj = obj($_SESSION["realestate_input_data"]["realestate_id"]);
 		$prop_obj = get_instance(CL_REALESTATE_PROPERTY);
 		$ret.= $prop_obj->request_execute($realest_obj);
 		$ret.= '<br><br><a href="';
@@ -1017,7 +1017,7 @@ class realestate_add extends class_base
 				CL_REALESTATE_APARTMENT , CL_REALESTATE_COMMERCIAL,
 				CL_REALESTATE_GARAGE , CL_REALESTATE_LAND,
 		);
-		
+
 		$all_objects = array();
 		foreach($types as $type)
 		{
@@ -1030,6 +1030,7 @@ class realestate_add extends class_base
 		
 		$tpl = "list.tpl";
 		$this->read_template($tpl);
+		$html = get_instance("html");
 		if(sizeof($all_objects) == 0) $this->vars(array("nothing" => "Pakkumised puuduvad"));
 		if ($this->is_template("LIST"))
 		{
@@ -1041,12 +1042,13 @@ class realestate_add extends class_base
 				else $change = $this->mk_my_orb("parse_alias", array("id" => $rlst_object->id(), "default" => 1));
 				$time = time();
 				$expire = (int)(($rlst_object->prop("expire") - $time)/604800);
-				$expire = t("Nähtav")." ".$expire." ".t("nädalat");
-				if($expire<0) $expire = t("Aegunud");
+				if($rlst_object->prop("expire") - $time<1) $expire = t("Aegunud");
+				else $expire = t("Nähtav")." ".$expire." ".t("nädalat");
 				if(!$rlst_object->prop("expire")) $expire = t("Maksmata");
 				if($expire == t("Aegunud")) $extend = t("Pikenda");
 				elseif($expire == t("Maksmata")) $extend = t("Maksa");
 				else $extend = t("");
+			
 				$this->vars(array(
 					"name" 	 	=> $rlst_object->name(),
 					"id"	 	=> $rlst_object->id(),
@@ -1054,6 +1056,16 @@ class realestate_add extends class_base
 					"extend_url"	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
 					"expire"	=> $expire,
 					"extend"	=> $extend,
+					"extend_popup"	=> $html->popup(array(
+						"url" 	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
+						"no_link" => 1,
+					)),
+/*					"regio"		=> $html->form(array(
+						"action" => "http://www.regio.ee/?op=body&id=24",
+						"method" => "POST",
+						"name"	 => "sfa",
+						"content" => $html->hidden(array("name" => "sfa", "value"=> $rlst_object->name())).$html->submit(array("name" => "regio", "value" => "regio")),
+					)),*/
 				));
 				$c .= $this->parse("LIST");
 			}
@@ -1123,6 +1135,16 @@ class realestate_add extends class_base
 		{
 			$realestate_obj = obj($_SESSION["realestate_input_data"]["realestate_id"]);
 		}
+		$uid = aw_global_get("uid_oid");
+		if(is_oid($uid))
+		{
+			$realestate_obj->connect(array(
+				"to" => $uid,
+				"reltype" => "RELTYPE_REALESTATE_AGENT",
+			));
+			$realestate_obj->set_prop("realestate_agent1" , $uid);
+		}
+		
 		$pictures = new object_list($realestate_obj->connections_from (array (
 			"type" => "RELTYPE_REALESTATE_PICTURE",
 			"class_id" => CL_IMAGE,
@@ -1298,7 +1320,6 @@ class realestate_add extends class_base
 		$url = $this->mk_my_orb("extend", array(
 			"id" => $id,
 		), CL_REALESTATE_ADD);
-		
 		$offer = obj($id);
 		if(is_oid($offer->meta("added_from"))) $targ = obj($offer->meta("added_from"));
 		$list = new object_list($targ->connections_from (array (
@@ -1332,14 +1353,14 @@ class realestate_add extends class_base
 			);
 			$bank_payment = get_instance(CL_BANK_PAYMENT);	
 			$ret.= '<a href="';
-			$ret.= $bank_payment->mk_my_orb("pay_site", array());
+			$ret.= $bank_payment->mk_my_orb("pay_site", array("die" => 1));
 			$ret.= '"> Maksma </a>';
 		}
 		else
 		{
 			;
 		}
-		return $ret;
+		die($ret);
 	}
 	
 	/** Check expired objects 
@@ -1364,18 +1385,35 @@ class realestate_add extends class_base
 			));
 			foreach($realestate_list->arr() as $mem)
 			{
+				$ret.= $mem->prop("show_on_webpage");
 				if(!$mem->prop("expire"))
 				{
 					$ret.= 'pole makstud - '.$mem->id().'<br>';
+					if($mem->prop("show_on_webpage"))
+					{
+						$mem->set_prop("show_on_webpage" , "0");
+						$mem->save();
+					}
 					continue;
 				}
 				if($mem->prop("expire") < time())
 				{
 					$ret.= 'aegunud - '.$mem->id().'<br>';
-					$mem->set_prop("show_on_webpage" , "0");
+					if($mem->prop("show_on_webpage"))
+					{
+						$mem->set_prop("show_on_webpage" , "0");
+						$mem->save();
+					}
+					continue;
 				}
 				if($mem->prop("expire") > time() && !($mem->prop("expire") > (time()+86400)))
 				{
+					if(!$mem->prop("show_on_webpage"))
+					{
+						$mem->set_prop("show_on_webpage" , "1");
+						$mem->save();
+					}
+					$ret.= 'hakkab aeguma - '.$mem->id().'<br>';
  					$u = get_instance("users");
 					$oid = $u->get_oid_for_uid($mem->prop("createdby"));
 					if(is_oid($oid))
@@ -1383,7 +1421,7 @@ class realestate_add extends class_base
 						$user = obj($oid);
 						if(!$user->prop("email")) continue;
 					}
-					$message = "Kuulutus hakkab aeguma.\n Uuesti nähtavale tuua leheküljel saab minnes aadressile:";
+					$message = "Kuulutus hakkab aeguma.\n Uuesti leheküljel nähtavale tuua saab minnes aadressile:\n";
  					$message .= $this->mk_my_orb("extend", array("id" => $mem->id()));
  					$message .= " ja makstes uute nädalate eest";
  					$awm = get_instance("protocols/mail/aw_mail");
@@ -1395,11 +1433,15 @@ class realestate_add extends class_base
  						"body" => $message,
 					));
 					$awm->gen_mail();
-					$ret.= 'hakkab aeguma - '.$mem->id().'<br>';
-				}
+					}
 				else
 				{
 					$ret.= 'nähtav veel üle 1 päeva - '.$mem->id().'<br>';
+					if(!$mem->prop("show_on_webpage"))
+					{
+						$mem->set_prop("show_on_webpage" , "1");
+						$mem->save();
+					}
 				}
 			}
 		}
