@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.20 2005/09/07 11:45:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.21 2006/05/16 05:47:56 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -804,7 +804,7 @@ class join_site extends class_base
 
 		if (aw_global_get("uid") != "")
 		{
-			$add = 0;
+			return $this->change_data(obj($arr["id"]));
 		}
 		
 		aw_global_set("no_cache", 1);
