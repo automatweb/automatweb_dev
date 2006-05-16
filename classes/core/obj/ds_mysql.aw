@@ -628,7 +628,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				else
 				{
-					$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
+					if ($data["method"] != "serialize")
+					{
+						$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
+					}
+					else
+					{
+						$_field_val = aw_unserialize($tbls[$data["table"]]["defaults"][$data["field"]]);
+						$_field_val[$prop] = $data["default"];
+						$tbls[$data["table"]]["defaults"][$data["field"]] = aw_serialize($_field_val);
+					}
 				}
 
 				if ($data["datatype"] == "int" && $tbls[$data["table"]]["defaults"][$data["field"]] == "")
@@ -637,7 +646,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 		}
-
 
 		foreach($tbls as $tbl => $dat)
 		{
