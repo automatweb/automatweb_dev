@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.8 2006/05/04 13:20:31 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.9 2006/05/16 09:22:13 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 

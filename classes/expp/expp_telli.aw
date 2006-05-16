@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_telli.aw,v 1.5 2006/03/08 12:03:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_telli.aw,v 1.6 2006/05/16 09:22:13 dragut Exp $
 // expp_telli.aw - Expp telli 
 /*
 
@@ -212,7 +212,7 @@ class expp_telli extends class_base {
 			$year = date("Y",$ajut);
 			$month = date("m",$ajut);
 			$_value = date("Ym",$ajut);
-			$_text = get_lc_month(intval($month))." $year";
+			$_text = locale::get_lc_month(intval($month))." $year";
 			$_kuup_options[$_value] = $_text;
 		}	// for
 		$_kuupaev = html::select( array(
@@ -314,15 +314,15 @@ class expp_telli extends class_base {
 					switch( $my_tavah[$in]["hinna_tyyp"] ) {
 						case 0: $_kestus.= ($my_tavah[$in]["kestus"]>1)?t(" kuud "):t(" kuu ");
 							break;
-						case 1:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?" n&auml;dalat ":" n&auml;dal ";
+						case 1:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?t(" n&auml;dalat "):t(" n&auml;dal ");
 							break;
-						case 2:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?" p&auml;eva ":" p&auml;ev ";
+						case 2:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?t(" p&auml;eva "):t(" p&auml;ev ");
 							break;
-						case 3:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?" numbrit ":" number ";
+						case 3:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?t(" numbrit "):t(" number ");
 							break;
-						case 4:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?" aastat ":" aasta ";
+						case 4:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?t(" aastat "):t(" aasta ");
 							break;
-						case 5:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?" poolkuud ":" poolkuu ";
+						case 5:	$_kestus.= ($my_tavah[$in]["kestus"]>1)?t(" poolkuud "):t(" poolkuu ");
 					}	// switch
 					$_kestus.= $my_tavah[$in]["baashind"];
 					$_per_options[$my_tavah[$in]["id"]] = $_kestus;
@@ -425,7 +425,7 @@ class expp_telli extends class_base {
 			$_temp = explode( '_', $_pikkus );
 			$_pikkus = intval( $_temp[0] );
 			$_ptemp = intval( $_temp[1] );
-			$sql = "select h.hinna_tyyp, v.valjaanne, v.toimetus, v.toimtunnus, v.valjaande_nimetus from expp_hind h, expp_valjaanne v where h.id = '{$_pikkus}' AND h.pindeks = '{$_rid}' AND h.lubatud = 'jah' AND v.pindeks = h.pindeks";
+			$sql = "select h.hinna_tyyp, h.kestus, v.valjaanne, v.toimetus, v.toimtunnus, v.valjaande_nimetus from expp_hind h, expp_valjaanne v where h.id = '{$_pikkus}' AND h.pindeks = '{$_rid}' AND h.lubatud = 'jah' AND v.pindeks = h.pindeks";
 			$row = $this->db_fetch_row($sql);
 			$_va = $row['valjaande_nimetus'];
 			$_tt = $row['toimetus'];

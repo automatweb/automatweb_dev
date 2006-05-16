@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_arve.aw,v 1.6 2006/05/03 16:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_arve.aw,v 1.7 2006/05/16 09:22:13 dragut Exp $
 // expp_arve.aw - Expp arve 
 /*
 
@@ -45,7 +45,7 @@ class expp_arve extends class_base {
 		}
 		$_action = $this->cp->addYah( array(
 				'link' => 'arve',
-				'text' => 'Arve koostamine',
+				'text' => t('Arve koostamine'),
 			));
 
 		$sql = "SELECT * FROM expp_tellija WHERE session='".session_id()."' AND staatus='tellija' ORDER BY time DESC LIMIT 1";
@@ -59,7 +59,7 @@ class expp_arve extends class_base {
 		$_kood	= ($row['tyyp']=="firma")?"Registri nr. <b>".$row["isikukood"]."</b>":"Isikukood <b>".$row["isikukood"]."</b>";
 		$_isik1	= $this->getIsik( $row );
 		$this->vars( array(
-			'PEALKIRI' => 'Tellija andmed:',
+			'PEALKIRI' => t('Tellija andmed:'),
 			'SISU' => $_isik1,
 		));
 		$_isik = $this->parse( 'ISIK' );
@@ -74,7 +74,7 @@ class expp_arve extends class_base {
 			$_isik1 = $this->getIsik( $row );
 		}
 		$this->vars( array(
-			'PEALKIRI' => 'Saaja andmed:',
+			'PEALKIRI' => t('Saaja andmed:'),
 			'SISU' => $_isik1,
 		));
 		$_isik .= $this->parse( 'ISIK' );
@@ -105,7 +105,7 @@ class expp_arve extends class_base {
 		$_sum_rows = array();
 		while ($row = $this->db_next()) {
 			$_toode = stripslashes( $row["valjaande_nimetus"] );
-			$_algus = ($row["algus"] == "ASAP")?$lc_expp['LC_EXPP_ASAP']."<br />": (($row["algus"] == "CONT")?$lc_expp['LC_EXPP_CONT']."<br />" :	get_lc_month(intval(substr( $row["algus"],4,2)))." ".substr( $row["algus"],0,4));
+			$_algus = ($row["algus"] == "ASAP")?$lc_expp['LC_EXPP_ASAP']."<br />": (($row["algus"] == "CONT")?$lc_expp['LC_EXPP_CONT']."<br />" :	locale::get_lc_month(intval(substr( $row["algus"],4,2)))." ".substr( $row["algus"],0,4));
 			if (!isset( $_out_rows[$row["leping"]]))		$_out_rows[$row["leping"]] = "";
 			$_eksemplar	= intval( $row["eksemplar"] );
 			$_kogus		= intval( $row["kogus"] );
@@ -119,17 +119,17 @@ class expp_arve extends class_base {
 				$_sum_rows[$row["leping"]]+= $_hind;
 			$_kestus = $_kogus* $_kestus;
 			switch( $row["hinna_tyyp"] ) {
-				case 0: $_hinnatyyp=( $_kestus== 1 ?"kuu":"kuud");
+				case 0: $_hinnatyyp=( $_kestus== 1 ?t("kuu"):t("kuud"));
 					break;
-				case 1:	$_hinnatyyp=( $_kestus== 1 ?"n&auml;dal":"n&auml;dalat");
+				case 1:	$_hinnatyyp=( $_kestus== 1 ?t("n&auml;dal"):t("n&auml;dalat"));
 					break;
-				case 2:	$_hinnatyyp=( $_kestus== 1 ?"p&auml;ev":"p&auml;eva");
+				case 2:	$_hinnatyyp=( $_kestus== 1 ?t("p&auml;ev"):t("p&auml;eva"));
 					break;
-				case 3:	$_hinnatyyp=( $_kestus== 1 ?"number":"numbrit");
+				case 3:	$_hinnatyyp=( $_kestus== 1 ?t("number"):t("numbrit"));
 					break;
-				case 4:	$_hinnatyyp=( $_kestus== 1 ?"aasta":"aastat");
+				case 4:	$_hinnatyyp=( $_kestus== 1 ?t("aasta"):t("aastat"));
 					break;
-	 			case 5:	$_hinnatyyp=( $_kestus== 1 ?"poolkuu":"poolkuud");
+	 			case 5:	$_hinnatyyp=( $_kestus== 1 ?t("poolkuu"):t("poolkuud"));
 			}
 			$_hind = sprintf( "%1.0d", $_hind );
 			$this->vars(array(
@@ -170,10 +170,10 @@ class expp_arve extends class_base {
 		$content = '';
 		if ( $row['tyyp'] == "firma" )	$content.=stripslashes( $row["firmanimi"])."<br>\n";
 		$content.=stripslashes( $row["eesnimi"]." ".$row["perenimi"])."<br>\n";
-		if ( !empty( $row["email"] ))	$content.="e-post: ".stripslashes( $row["email"])."<br>\n";
-		if ( !empty( $row["telefon"] ))	$content.="tel: ".stripslashes( $row["telefon"])."<br>\n";
-		if ( !empty( $row["mobiil"] ))	$content.="mobiil: ".stripslashes( $row["mobiil"])."<br>\n";
-		if ( !empty( $row["faks"] ))	$content.="faks: ".stripslashes( $row["faks"])."<br>\n";
+		if ( !empty( $row["email"] ))	$content.=t("e-post: ").stripslashes( $row["email"])."<br>\n";
+		if ( !empty( $row["telefon"] ))	$content.=t("tel: ").stripslashes( $row["telefon"])."<br>\n";
+		if ( !empty( $row["mobiil"] ))	$content.=t("mobiil: ").stripslashes( $row["mobiil"])."<br>\n";
+		if ( !empty( $row["faks"] ))	$content.=t("faks: ").stripslashes( $row["faks"])."<br>\n";
 		$content.="<br>";
 		if ( !empty( $row["tanav"] ))	$content.=stripslashes( $row["tanav"]);
 		if ( !empty( $row["maja"] ))	$content.=" ".stripslashes( $row["maja"]);

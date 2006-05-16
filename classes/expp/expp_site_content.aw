@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.6 2006/05/08 13:22:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_site_content.aw,v 1.7 2006/05/16 09:22:13 dragut Exp $
 // expp_site_content.aw - expp_site_content (nimi) 
 /*
 

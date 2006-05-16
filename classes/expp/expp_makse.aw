@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.6 2006/04/11 11:12:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_makse.aw,v 1.7 2006/05/16 09:22:13 dragut Exp $
 // expp_makse.aw - Expp makse 
 /*
 
@@ -73,6 +73,7 @@ var $pangad = array(
 			"tpldir" => "expp",
 			"clid" => CL_EXPP_MAKSE
 		));
+		$this->lang = aw_global_get("admin_lang_lc");
 		$this->cy = get_instance( CL_EXPP_JAH );
 		$this->cp = get_instance( CL_EXPP_PARSE );
 		lc_site_load( "expp", $this );
@@ -160,7 +161,7 @@ var $pangad = array(
 					'OKLEPINGUNR'	=> $row["arvenr"],
 					'OKVIITENR'		=> $row["viitenumber"],
 					'TOODE'			=> stripslashes($row["valjaande_nimetus"]),
-					'LEPING'			=> ($row["algus"]==date("d.m.Y")?"<b>".$row["lisarida"]."</b>":"alates <b>".$row["algus"]."</b>"),
+					'LEPING'			=> ($row["algus"]==date("d.m.Y")?"<b>".$row["lisarida"]."</b>":t("alates")." <b>".$row["algus"]."</b>"),
 					'HIND'			=> $row["maksumus"],
 					'INPUT'			=> ($_ok_count > 1 ? 'radio' : 'hidden' ),
 				));
@@ -177,7 +178,7 @@ var $pangad = array(
 				));
 				$_oklink .= $this->parse( 'OKLINK' );
 			}
-			$this->vars(array(
+			$this->vars(array('options' => ($this->lang != 'et') ? $lc_expp['LC_EXPP_PANGAD'] : $this->pangad,
 				'HANSACASE'	=> $_hansacase,
 				'OKLINE'		=> $_okline,
 				'OKLINK'		=> $_oklink,
@@ -229,7 +230,8 @@ var $pangad = array(
 			}
 			$_pangad = html::select(array(
 						'name' => 'maksan',
-						'options' => $this->pangad,
+					//	'options' => $this->pangad,
+						'options' => ($this->lang != 'et') ? $lc_expp['LC_EXPP_PANGAD'] : $this->pangad,
 						'selected' => '',
 						'class' => 'formElement',
 					));
@@ -658,7 +660,7 @@ var $pangad = array(
 					'OKLEPINGUNR'	=> $row["arvenr"],
 					'OKVIITENR'		=> $row["viitenumber"],
 					'TOODE'			=> stripslashes($row["valjaande_nimetus"]),
-					'LEPING'			=> ($row["algus"]==date("d.m.Y")?"<b>".$row["lisarida"]."</b>":"alates <b>".$row["algus"]."</b>"),
+					'LEPING'			=> ($row["algus"]==date("d.m.Y")?"<b>".$row["lisarida"]."</b>":t("alates")." <b>".$row["algus"]."</b>"),
 					'HIND'			=> $row["maksumus"],
 					'INPUT'			=> ($_ok_count > 1 ? 'radio' : 'hidden' ),
 				));

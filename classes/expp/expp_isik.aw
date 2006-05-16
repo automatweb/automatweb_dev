@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_isik.aw,v 1.6 2006/04/11 10:56:17 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_isik.aw,v 1.7 2006/05/16 09:22:13 dragut Exp $
 // expp_isik.aw - Expp isik 
 /*
 
@@ -163,7 +163,8 @@ var $telliitems =	array (
 
 		$myURL = $this->cp->addYah( array(
 				'link' => $_tellija,
-				'text' => ucfirst( $_tellija )." andmed"
+			//	'text' => ucfirst( $_tellija )." andmed"
+				'text' => $lc_expp['LC_EXPP_'.strtoupper($_tellija).'_ANDMED']
 			));
 
 // ----------------------------------------
