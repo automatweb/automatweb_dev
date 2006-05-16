@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.21 2006/05/16 05:47:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.22 2006/05/16 12:20:08 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -67,12 +67,14 @@
 
 @property preview type=text store=no no_caption=1 group=preview
 
-@groupinfo joinmail caption="Meil"
+@groupinfo mails caption="Meilid"
+
+@groupinfo joinmail caption="Meil liitujale" parent=mails
 
 	@property joinmail_legend type=text store=no group=joinmail
 	@caption Meili legend
 
-@groupinfo confirm_mail caption="Kinnitamine"
+@groupinfo confirm_mail caption="Kinnitamine" parent=mails
 
 	@property join_requires_confirm type=checkbox ch_value=1 group=confirm_mail field=meta method=serialize
 	@caption Liitumine n&otilde;uab kinnitust
@@ -95,6 +97,26 @@
 	@property confirm_redir type=textbox group=confirm_mail field=meta method=serialize
 	@caption Kuhu suunata p&auml;rast liitumist
 
+@groupinfo notify_mail caption="Meil administraatorile" parent=mails
+@default group=notify_mail
+
+	@property mf_mail_from_addr type=textbox field=meta method=serialize
+	@caption From aadress
+
+	@property mf_mail_from_name type=textbox field=meta method=serialize
+	@caption From nimi
+
+	@property mf_mail_to type=relpicker reltype=RELTYPE_MAILADDR field=meta method=serialize multiple=1
+	@caption Kellele saata
+
+	@property mf_mail_subj type=textbox  field=meta method=serialize
+	@caption Meili teema
+
+	@property mf_mail type=textarea rows=10 cols=50  field=meta method=serialize
+	@caption Meili sisu
+
+	@property mf_mail_legend type=text rows=10 cols=50  field=meta method=serialize
+	@caption Legend
 
 @property jm_texts type=callback callback=callback_get_jm_texts group=joinmail store=no
 
@@ -113,6 +135,8 @@
 @reltype REL_OBJ value=5 clid=CL_CRM_USER,CL_USER,CL_CRM_COMPANY
 @caption default seoste objektid
 
+@reltype MAILADDR value=6 clid=CL_ML_MEMBER
+@caption Kellele
 */
 
 class join_site extends class_base
@@ -142,6 +166,10 @@ class join_site extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "mf_mail_legend":
+				$data["value"] = t("#edit_link# - link kasutajale");
+				break;
+
 			case "confirm_mail_legend":
 				$data["value"] = "#confirm# - kasutaja kinnitamise link";
 				break;
@@ -645,6 +673,9 @@ class join_site extends class_base
 
 		$clss = aw_ini_get("classes");
 
+			$htmlc = get_instance("cfg/htmlclient");
+			$htmlc->start_output();
+			$klomp = array();
 		// for each cfgform related
 		foreach($this->_get_clids($ob) as $clid)
 		{
@@ -695,8 +726,6 @@ class join_site extends class_base
 
 			$cf_sd = $sessd[$wn];
 
-			$htmlc = get_instance("cfg/htmlclient");
-			$htmlc->start_output();
 			foreach($xp as $xprop)
 			{
 				$oldn = str_replace($wn."[", "", str_replace("]", "", $xprop["name"]));
@@ -733,15 +762,20 @@ class join_site extends class_base
 				{
 					$xprop["caption"] = $propn[$clid][$oldn];
 				}
+				$klomp[$oldn] = $xprop;
+			}
+		}
+
+			$this->_do_final_sort_props($ob, $klomp);
+			foreach($klomp as $xprop)
+			{
 				$htmlc->add_property($xprop);
 			}
-
 			$htmlc->finish_output(array());
 
 			$html .= $htmlc->get_result(array(
 				"raw_output" => 1
 			));
-		}
 
 		if ($ob->prop("join_sep_pages"))
 		{
@@ -909,14 +943,14 @@ class join_site extends class_base
 			if ($us->can_add(array("a_uid" => $n_uid, "pass" => $n_pass, "pass2" => $n_pass2)))
 			{
 				$join_done = true;
-
 				// add the user
 				$cu = get_instance(CL_USER);
 				$u_oid = $cu->add_user(array(
 					"uid" => $n_uid,
 					"email" => $n_email,
 					"password" => $n_pass,
-					"join_grp" => $obj->id()
+					"join_grp" => $obj->id(),
+					"real_name" => $sessd["typo_".CL_CRM_PERSON]["firstname"]." ".$sessd["typo_".CL_CRM_PERSON]["lastname"]
 				));
 	
 				// also, create all the objects and do the relations and crap
@@ -972,6 +1006,31 @@ class join_site extends class_base
 						"email" => $n_email,
 						"data" => $sessd
 					));
+				}
+
+				$mfmt = $obj->prop("mf_mail_to");
+				if (is_array($mfmt) && count($mfmt))
+				{
+					$from = $obj->prop("mf_mail_from_addr");
+					if ($obj->prop("mf_mail_from_name") != "")
+					{
+						$from = $obj->prop("mf_mail_from_addr")." <$from>";
+					}
+					foreach($mfmt as $mft)
+					{
+						$to = obj($mft);
+						$tom = $to->prop("mail");
+						if ($to->prop("name") != "")
+						{
+							$tom = $to->prop("name")." <$tom>";
+						}
+						send_mail(
+							$tom, 
+							$obj->prop("mf_mail_subj"),
+							str_replace("#edit_link#", html::get_change_url($u_oid->id()), $obj->prop("mf_mail")),
+							"From: ".$from."\n"
+						);
+					}
 				}
 
 				// we also gots to clear out all the join data
@@ -1144,7 +1203,6 @@ class join_site extends class_base
 		$visible = $ob->meta("visible");
 		$required = $ob->meta("required");
 		$propn = $ob->meta("propn");
-
 		$je = aw_global_get("join_err");
 
 		$cfgu = get_instance("cfg/cfgutils");
@@ -1311,6 +1369,17 @@ class join_site extends class_base
 
 					$pid = "typo_".$clid."[".$oldn."]";
 					$prop["name"] = $pid;
+					if ($propn[$clid][$oldn] != "")
+					{
+						$prop["caption"] = $propn[$clid][$oldn];
+					}
+					$prop["comment"] = "";
+					if ($oldn == "comment" && $clid == CL_USER)
+					{
+						$prop["type"] = "textarea";
+						$prop["rows"] = 5;
+						$prop["cols"] = 30;
+					}
 					$tp[$pid] = $prop;
 				}
 			}

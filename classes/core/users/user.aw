@@ -201,9 +201,6 @@ class user extends class_base
 			case "name":
 				return PROP_IGNORE;
 
-			case "comment":
-				return PROP_IGNORE;
-			
 			case "lastaction";
 				$prop["value"] = $this->db_fetch_field("SELECT lastaction FROM users WHERE uid = '".$arr["obj_inst"]->prop("uid")."'", "lastaction");
 				$prop['value'] = $this->time2date($prop['value'],2);

@@ -216,6 +216,66 @@
             <caption>Kuhu suunata p&amp;amp;auml;rast liitumist</caption>
       </property>
       <property>
+            <name>mf_mail_from_addr</name>
+            <table>objects</table>
+            <group>notify_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>From aadress</caption>
+      </property>
+      <property>
+            <name>mf_mail_from_name</name>
+            <table>objects</table>
+            <group>notify_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>From nimi</caption>
+      </property>
+      <property>
+            <name>mf_mail_to</name>
+            <table>objects</table>
+            <group>notify_mail</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAILADDR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <multiple>1</multiple>
+            <caption>Kellele saata</caption>
+      </property>
+      <property>
+            <name>mf_mail_subj</name>
+            <table>objects</table>
+            <group>notify_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili teema</caption>
+      </property>
+      <property>
+            <name>mf_mail</name>
+            <table>objects</table>
+            <group>notify_mail</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili sisu</caption>
+      </property>
+      <property>
+            <name>mf_mail_legend</name>
+            <table>objects</table>
+            <group>notify_mail</group>
+            <type>text</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Legend</caption>
+      </property>
+      <property>
             <name>jm_texts</name>
             <table>objects</table>
             <group>joinmail</group>
@@ -264,12 +324,21 @@
             <preview>
                   <caption>Eelvaade</caption>
             </preview>
+            <mails>
+                  <caption>Meilid</caption>
+            </mails>
             <joinmail>
-                  <caption>Meil</caption>
+                  <caption>Meil liitujale</caption>
+                  <parent>mails</parent>
             </joinmail>
             <confirm_mail>
                   <caption>Kinnitamine</caption>
+                  <parent>mails</parent>
             </confirm_mail>
+            <notify_mail>
+                  <caption>Meil administraatorile</caption>
+                  <parent>mails</parent>
+            </notify_mail>
       </groupinfo>
       <reltypes>
             <JOIN_CLASS>
@@ -301,6 +370,11 @@
                   </clid>
                   <caption>default seoste objektid</caption>
             </REL_OBJ>
+            <MAILADDR>
+                  <value>6</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>Kellele</caption>
+            </MAILADDR>
       </reltypes>
 </properties>
 
