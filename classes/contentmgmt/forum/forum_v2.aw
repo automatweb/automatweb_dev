@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.94 2006/05/09 23:23:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.95 2006/05/16 14:06:49 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1156,6 +1156,23 @@ class forum_v2 extends class_base
 					"uid" => $comment['createdby'],
 				)))
 				{
+					$user_inst = get_instance(CL_USER);
+					$post_creator_groups = $user_inst->get_groups_for_user($comment['createdby']);
+					foreach ($post_creator_groups->arr() as $post_creator_group)
+					{
+						$group_picture = $post_creator_group->get_first_obj_by_reltype("RELTYPE_PICTURE");
+						if (!empty($group_picture))
+						{
+							$image_inst  = get_instance(CL_IMAGE);
+							$this->vars(array(
+								'image_url' => $image_inst->get_url_by_id($group_picture->id()),
+							));
+							$this->vars(array(
+								'IMAGE' => $this->parse('IMAGE')
+							));
+							break;
+						}
+					}				
 					$this->vars(array(
 						"ADMIN_POST" => $this->parse("ADMIN_POST"),
 					));
@@ -1270,11 +1287,29 @@ class forum_v2 extends class_base
 		$this->vars(array(
 			"ADMIN_TOPIC" => "",
 		));
+		$topic_creator = $topic_obj->createdby();
 		if ($this->_can_admin(array(
 			"forum_id" => $oid,
-			"uid" => $topic_obj->createdby(),
+			"uid" => $topic_creator
 		)))
 		{
+			$user_inst = get_instance(CL_USER);
+			$topic_creator_groups = $user_inst->get_groups_for_user($topic_creator);
+
+			foreach ($topic_creator_groups->arr() as $topic_creator_group)
+			{
+				$group_picture = $topic_creator_group->get_first_obj_by_reltype("RELTYPE_PICTURE");
+				if (!empty($group_picture))
+				{
+					$image_inst  =get_instance(CL_IMAGE);
+					$this->vars(array(
+						'image_url' => $image_inst->get_url_by_id($group_picture->id()),
+					));
+					$this->vars(array(
+						'IMAGE' => $this->parse('IMAGE')
+					));
+				}
+			}
 			$this->vars(array(
 				"ADMIN_TOPIC" => $this->parse("ADMIN_TOPIC"),
 			));
