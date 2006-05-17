@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.20 2006/04/28 10:57:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.21 2006/05/17 11:49:50 voldemar Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -282,7 +282,7 @@ ALTER TABLE `realestate_property` ADD `transaction_date` INT(10);
 
 */
 
-define ("REALESTATE_NF_DEC", 2);
+define ("REALESTATE_NF_DEC", 1);
 define ("REALESTATE_NF_POINT", ",");
 define ("REALESTATE_NF_SEP", " ");
 define ("NEWLINE", "<br />\n");
@@ -312,6 +312,24 @@ class realestate_property extends class_base
 		"transaction_broker_fee",
 		"heatable_area",
 		"kitchen_area",
+	);
+
+	var $re_price_types = array (
+		"transaction_price",
+		"transaction_price2",
+		"transaction_down_payment",
+		"transaction_rent",
+		"estate_price_sqmeter",
+		"transaction_sqmeter_price",
+		"transaction_rent_sqmeter",
+		"montlhy_expenses",
+		"transaction_price_total",
+		"transaction_selling_price",
+		"transaction_rent_total",
+		"estate_price_total",
+		"transaction_additional_costs",
+		"transaction_monthly_rent",
+		"transaction_broker_fee",
 	);
 
 	var $re_propnames_starting_with_acronym = array (
@@ -1298,7 +1316,7 @@ class realestate_property extends class_base
 		// "/" oli kuskile vahelt kadunud....
 		$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
 		$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
-		
+
 		### parse
 		$this->vars ($data);
 		$res = $this->parse();
@@ -1806,11 +1824,16 @@ class realestate_property extends class_base
 			{
 				$properties[$name]["strvalue"] = image::check_url($this_object->prop_str ($name));
 			}
-			else
-			if (in_array ($name, $this->re_float_types))
+			elseif (in_array ($name, $this->re_float_types))
 			{
-				$properties[$name]["strvalue"] = number_format ($value, REALESTATE_NF_DEC, REALESTATE_NF_POINT,
-REALESTATE_NF_SEP);
+				if (in_array ($name, $this->re_price_types))
+				{
+					$properties[$name]["strvalue"] = number_format ($value, REALESTATE_NF_DEC, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
+				}
+				else
+				{
+					$properties[$name]["strvalue"] = number_format ($value, 0, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
+				}
 			}
 			else
 			{
