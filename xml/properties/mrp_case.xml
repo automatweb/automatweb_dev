@@ -123,6 +123,24 @@
             <caption>Planeeritud valmimisaeg</caption>
       </property>
       <property>
+            <name>finished</name>
+            <group>grp_general</group>
+            <table>mrp_case</table>
+            <type>text</type>
+            <editonly>1</editonly>
+            <field>finished</field>
+            <caption>L&amp;otilde;petatud</caption>
+      </property>
+      <property>
+            <name>archived</name>
+            <group>grp_general</group>
+            <table>mrp_case</table>
+            <type>text</type>
+            <editonly>1</editonly>
+            <field>archived</field>
+            <caption>Arhiveeritud</caption>
+      </property>
+      <property>
             <name>sales_priority</name>
             <group>grp_general</group>
             <table>objects</table>

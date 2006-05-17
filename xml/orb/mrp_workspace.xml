@@ -151,5 +151,23 @@
 			</function>
 		</action>
 
+		<action name="archive_projects">
+			<function name="archive_projects">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_projects_subtree">
+			<function name="get_projects_subtree">
+				<arguments>
+					<required name="id" type="int" />
+					<required name="parent" />
+					<required name="url" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

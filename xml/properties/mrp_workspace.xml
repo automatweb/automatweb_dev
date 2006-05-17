@@ -531,7 +531,21 @@
             <method>serialize</method>
             <group>grp_settings_def</group>
             <type>textbox</type>
+            <default>30</default>
+            <datatype>int</datatype>
             <caption>Operaatori vaates t&amp;amp;ouml;id lehel</caption>
+      </property>
+      <property>
+            <name>projects_list_objects_perpage</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>textbox</type>
+            <default>30</default>
+            <datatype>int</datatype>
+            <comment>Projektide vaates objekte lehel</comment>
+            <caption>Projekte lehel</caption>
       </property>
       <property>
             <name>max_subcontractor_timediff</name>
@@ -543,6 +557,28 @@
             <default>1</default>
             <comment>Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettej&amp;otilde;udmise piires.</comment>
             <caption>Allhanke suurim ajanihe (h)</caption>
+      </property>
+      <property>
+            <name>automatic_archiving_period</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>textbox</type>
+            <no_caption>1</no_caption>
+            <parent>box1</parent>
+            <datatype>int</datatype>
+      </property>
+      <property>
+            <name>automatic_archiving_period_unit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <parent>box1</parent>
+            <store>no</store>
       </property>
       <property>
             <name>title_sceduler_parameters</name>
@@ -1524,6 +1560,11 @@
                         <num_4>grp_users_mgr</num_4>
                   </group>
             </vsplitbox>
+            <box1>
+                  <type>vbox</type>
+                  <group>grp_settings_def</group>
+                  <caption>Automaatne arhiveerimine</caption>
+            </box1>
             <comment_hbox>
                   <type>hbox</type>
                   <width>40%:60%</width>
