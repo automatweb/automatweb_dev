@@ -1,5 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.19 2006/03/30 07:10:29 kristo Exp $
 
 lc_load("definition");
 

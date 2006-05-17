@@ -18,17 +18,21 @@ if (!isset($AW_GET_VARS) || !is_array($AW_GET_VARS))
 	$AW_GET_VARS = array();
 };
 $vars = $_GET + $_POST + $AW_GET_VARS;
+if ($vars["class"])
+{
+	$class = $vars["class"];
+}
 
-
-$class = $vars["class"];
 // I'll burn in hell for this
 if (!$class)
 {
 	$class = $vars["alias"];
 };
 
-
-$action = $vars["action"];
+if ($vars["action"])
+{
+	$action = $vars["action"];
+}
 
 if (isset($vars['fastcall']) && $vars["fastcall"] == 1)
 {

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.104 2005/10/19 14:21:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.105 2006/05/17 12:36:44 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -60,7 +60,6 @@ if (strlen($QUERY_STRING) > 1)
 };
 
 $_SERVER["REQUEST_URI"] = isset($_SERVER['REQUEST_URI']) ? preg_replace("/\?automatweb=[^&]*/","", $_SERVER["REQUEST_URI"]) : "";
-
 if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
 {
 	if ($_SERVER["REQUEST_URI"] != "")
@@ -69,7 +68,7 @@ if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "A
 		$pi = str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $pi))));
 	}
 }
-
+$pi = preg_replace("/\?automatweb=[^&]*/ims", "", $pi);
 if ($pi) 
 {
 	// if $pi contains & or = 
@@ -81,6 +80,7 @@ if ($pi)
 		parse_str(str_replace("?","&",str_replace("/","&",$pi)),$HTTP_GET_VARS);
 //		echo "gv = <pre>", var_dump($HTTP_GET_VARS),"</pre> <br>";
 		extract($HTTP_GET_VARS);
+		$AW_GET_VARS = $HTTP_GET_VARS;
 		$GLOBALS["fastcall"] = array_key_exists("fastcall", $HTTP_GET_VARS) ? $HTTP_GET_VARS["fastcall"] : null;
 	} 
 

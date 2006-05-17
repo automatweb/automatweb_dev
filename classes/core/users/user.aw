@@ -337,7 +337,6 @@ class user extends class_base
 
 			case "admin_lang":
 				$t = get_instance("languages");
-
 				$admin_lang = $prop['value'];
 				$admin_lang_lc = $t->get_langid($admin_lang);
 				setcookie("admin_lang",$admin_lang,time()+24*3600*1000,"/");

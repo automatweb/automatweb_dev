@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.163 2006/05/16 08:55:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.164 2006/05/17 12:36:45 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -591,7 +591,6 @@ class image extends class_base
 					$passed = true;
 				}
 			}
-
 			if ($passed)
 			{
 				if ($this->is_flash($file))
@@ -1010,9 +1009,7 @@ class image extends class_base
 		$fn = basename($im[$file]);
 		$fn = $this->cfg["site_basedir"]."/files/".$fn{0}."/".$fn;
 		$img->load_from_file($fn);
-
 		list($i_width, $i_height) = $img->size();
-
 		$width = $arr['width'];
 		$height = $arr['height'];
 

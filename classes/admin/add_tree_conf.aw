@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.36 2006/05/05 13:06:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.37 2006/05/17 12:36:45 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -235,7 +235,7 @@ class add_tree_conf extends class_base
 		{
 			foreach($gidlist_oid as $g_oid)
 			{
-				if (!is_oid($g_oid))
+				if (!is_oid($g_oid) || !$this->can("view", $g_oid))
 				{
 					continue;
 				};

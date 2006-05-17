@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.124 2006/05/05 09:47:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.125 2006/05/17 12:36:45 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -198,6 +198,8 @@ class users_user extends aw_template
 		// 2nd try to find the group based url and if that fails, then the everyone's url and then just the baseurl.
 		// wow. is this graceful degradation or what!
 		$this->url = aw_global_get("request_uri_before_auth");
+
+
 		if (!$this->url)
 		{
 			$this->url = $this->find_group_login_redirect($uid);
@@ -219,6 +221,13 @@ class users_user extends aw_template
 		{
 			$this->url = $this->cfg["baseurl"].$this->url;
 		}
+
+		if ($this->url == "")
+		{
+			$this->url = aw_ini_get("baseurl");
+		}
+
+//		echo "return ".$this->url." <br>";
 
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si, "on_login"))

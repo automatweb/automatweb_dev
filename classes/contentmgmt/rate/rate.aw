@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.26 2005/12/27 21:29:51 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.27 2006/05/17 12:36:45 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -152,7 +152,10 @@ class rate extends class_base
 			);
 			$ob->set_meta("__ratings",$rts);
 			aw_disable_acl();
-			$ob->save();
+			if ($ob->parent() && $ob->class_id())
+			{
+				$ob->save();
+			}
 			aw_restore_acl();
 		}
 		if ($type == RATING_AVERAGE)

@@ -1806,7 +1806,7 @@ class object
 		{
 			$this->connect(array(
 				"to" => $group->id(),
-				"reltype" => RELTYPE_ACL,
+				"reltype" => RELTYPE_ACL
 			));
 		}
 

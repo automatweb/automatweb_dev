@@ -2979,6 +2979,10 @@ class site_content extends menuedit
 	
 		while($parent)
 		{
+			if (!$this->can("view", $parent))
+			{
+				break;
+			}
 			$obj = new object($parent);
 			// only use metadata from menus
 			$is_menu = ($obj->prop("class_id") == CL_MENU);
