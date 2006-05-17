@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.355 2006/05/08 16:56:24 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.356 2006/05/17 09:25:23 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -300,6 +300,7 @@ class document extends aw_template
 			print "</pre>";*/
 			
 		};
+		$retval["title"] = $docobj->name(); // fix condition when brother has a different name
 		return $retval;
 	}
 
