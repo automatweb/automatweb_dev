@@ -214,6 +214,7 @@ class doc_display extends aw_template
 		if (!($doc->prop("nobreaks") || $cb_nb["content"]))	
 		{
 			$text = str_replace("\r\n","<br />",$text);
+			$text = str_replace("</li><br />", "</li>", $text);
 		}
 
 		// if show in iframe is set, just return the iframe
