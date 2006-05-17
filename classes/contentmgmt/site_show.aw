@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.182 2006/05/05 12:46:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.183 2006/05/17 10:45:58 kristo Exp $
 
 /*
 
@@ -711,28 +711,29 @@ class site_show extends class_base
 				$no_in_promo = 1;
 
 				// get kws from promo 
-				if ($_GET["set_kw"])
+				if ($this->can("view", $_GET["set_kw"]))
 				{
-					$kwo = obj($_GET["set_kw"]);
-					$filter["CL_DOCUMENT.RELTYPE.name"] = $kwo->name();
+					$filter["CL_DOCUMENT.RELTYPE_KEYWORD"] = $_GET["set_kw"];
 				}
 				else
 				if ($obj->prop("use_menu_keywords") && $this->sel_section_obj)
 				{
-					$promo_kws = $this->sel_section_obj->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD"));
+					//$promo_kws = $this->sel_section_obj->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD"));
+					$mi = get_instance(CL_MENU);
+					$kwns = $mi->get_menu_keywords($this->sel_section_obj->id());
 				}
 				else
 				{
 					$promo_kws = $obj->connections_from(array("to.class_id" => CL_KEYWORD, "type" => "RELTYPE_KEYWORD"));
-				}
-				if (count($promo_kws))
-				{
-					// limit by objs with those kws
 					$kwns = array();
 					foreach($promo_kws as $promo_kw)
 					{
 						$kwns[] = $promo_kw->prop("to");
 					}
+				}
+				if (count($kwns))
+				{
+					// limit by objs with those kws
 					$filter["CL_DOCUMENT.RELTYPE_KEYWORD"] = $kwns;
 				}
 

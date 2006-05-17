@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.159 2006/05/02 12:07:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.160 2006/05/17 10:45:57 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1367,16 +1367,25 @@ class menu extends class_base
 
 	function get_menu_keywords($id)
 	{
-		$m = obj($id);
-		$kws = new object_list($m->connections_from(array("to.class_id" => CL_KEYWORD)));
-		return $this->make_keys($kws->ids());
+		// get menu and all submenus and all kw rels from those
+		$ot = new object_tree(array(
+			"class_id" => CL_MENU,
+			"parent" => $id,
+			"status" => STAT_ACTIVE
+		));
+		$ids = $ot->ids();
+		$ids[] = $id;
 
+		$c = new connection();
+		$conns = $c->find(array(
+			"from" => $ids,
+			"from.class_id" => CL_MENU,
+			"type" => "RELTYPE_KEYWORD"
+		));
 		$ret = array();
-		$id = (int)$id;
-		$this->db_query("SELECT * FROM keyword2menu WHERE menu_id = $id");
-		while ($row = $this->db_next())
+		foreach($conns as $con)
 		{
-			$ret[$row["keyword_id"]] = $row["keyword_id"];
+			$ret[$con["to"]] = $con["to"];
 		}
 		return $ret;
 	}
