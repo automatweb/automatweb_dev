@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.121 2006/05/09 10:00:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.122 2006/05/17 11:25:38 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -482,6 +482,16 @@ class planner extends class_base
 				break;
 				
 			case "event_search_tb":
+				if (is_oid($arr["request"]["add_part_to_events"]))
+				{
+					$this->do_add_parts_to_events($arr);
+					header("Location: ".aw_url_change_var(array(
+						"add_part_to_events" => null,
+						"sel" => null
+					)));
+					die();
+				}
+
 				if(!$arr["request"]["event_search_name"] && !$arr["request"]["event_search_content"] && !$arr["request"]["event_search_type"])
 				{
 					return PROP_IGNORE;
@@ -503,6 +513,8 @@ class planner extends class_base
 						"class" => "menuButton",
 					));
 				}
+
+				$this->_event_search_tb($arr);
 				break;
 				
 			case "search":
@@ -554,7 +566,6 @@ class planner extends class_base
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-
 		switch($prop["name"])
 		{
 			case "add_event":
@@ -593,6 +604,9 @@ class planner extends class_base
 				};
 
 				break;
+
+			case "event_search_tb":
+				die(dbg::dump($arr["request"]));
 
 		}
 		return $retval;
@@ -2957,5 +2971,34 @@ class planner extends class_base
 		return $arr["post_ru"];
 	}
 
+	function _event_search_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$assign = t("Lisa valitud s&uuml;ndmustele osalejaks: ");
+		$assign .= html::select(array(
+			"name" => "add_part_to_events",
+		));
+		$pop = get_instance("vcl/popup_search");
+		$assign .= $pop->get_popup_search_link(array(
+			"pn" => "add_part_to_events",
+			"clid" => CL_CRM_PERSON
+		));
+
+		$tb->add_cdata($assign);
+	}
+
+	function do_add_parts_to_events($arr)
+	{
+		if (is_array($arr["request"]["sel"]) && count($arr["request"]["sel"]))
+		{
+			foreach($arr["request"]["sel"] as $event)
+			{
+				$evo = obj($event);
+				$evi = $evo->instance();
+				$evi->add_participant($evo, obj($arr["request"]["add_part_to_events"]));
+			}
+		}
+	}
 };
 ?>

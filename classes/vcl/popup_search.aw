@@ -731,5 +731,27 @@ function aw_get_el(name,form)
 		}
 		$arr["obj"]->save();
 	}
+
+	/** Returns the html that displays search button for the user
+		@attrib api=1
+
+		@param pn required type=string
+			The html element name to stick the search results to
+
+		@param multiple optional type=bool
+			If the element is a multiple select
+
+		@param clid optional type=array
+			The class id to search
+	**/
+	function get_popup_search_link($arr)
+	{
+		$url = $this->mk_my_orb("do_search", $arr);
+		return html::href(array(
+			"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+			"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
+			"title" => t("Otsi")
+		));
+	}
 }
 ?>
