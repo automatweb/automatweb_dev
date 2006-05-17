@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.130 2006/01/18 18:09:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.131 2006/05/17 07:12:26 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -159,55 +159,100 @@ class mrp_schedule extends class_base
 		$this->scheduling_time = time ();
 
 		### get parameters
-		$schedule_length = $workspace->prop ("parameter_schedule_length");
-		$this->schedule_length = (int) empty ($schedule_length) ? $this->schedule_length : $schedule_length;
-		$this->schedule_length = (int) $this->schedule_length * 31536000;
-		define ("MRP_INF", $this->schedule_length * 10);
-
-		$schedule_start = $workspace->prop ("parameter_schedule_start");
-		$this->schedule_start = $this->scheduling_time + ((int) empty ($schedule_start) ? $this->schedule_start : $schedule_start);
-
-		$this->scheduling_day_end = mktime (23, 59, 59, date ("m", $this->scheduling_time), date ("d", $this->scheduling_time), date("Y", $this->scheduling_time));
-
-		$min_planning_jobstart = $workspace->prop ("parameter_min_planning_jobstart");
-		$this->min_planning_jobstart = $this->scheduling_time + ((int) empty ($min_planning_jobstart) ? $this->min_planning_jobstart : $min_planning_jobstart);
-
-		### define timerange scale
-		$range_scale = $workspace->prop ("parameter_timescale");
-		$range_scale_unit = (int) $workspace->prop ("parameter_timescale_unit");
-
-		if ($range_scale)
+		if (!$this->use_default_parameters)
 		{
+			$schedule_length = $workspace->prop ("parameter_schedule_length");
+			if (strlen(trim($schedule_length)))
+			{
+				$this->schedule_length = $this->safe_settype_float($schedule_length);
+			}
+
+			$schedule_start = $workspace->prop ("parameter_schedule_start");
+			if (strlen(trim($schedule_start)))
+			{
+				$this->schedule_start = (int) $schedule_start;
+			}
+
+			$min_planning_jobstart = $workspace->prop ("parameter_min_planning_jobstart");
+			if (strlen(trim($min_planning_jobstart)))
+			{
+				$this->min_planning_jobstart = (int) $min_planning_jobstart;
+			}
+
+			### define timerange scale
+			$range_scale = $workspace->prop ("parameter_timescale");
 			$range_scale = explode (",", $range_scale);
 
-			foreach ($range_scale as $key => $value)
+			if (count($range_scale))
 			{
-				$range_scale[$key] = ceil ($value * $range_scale_unit);
+				$range_scale_unit = (int) $workspace->prop ("parameter_timescale_unit");
+
+				foreach ($range_scale as $key => $value)
+				{
+					$range_scale[$key] = ceil ($value * $range_scale_unit);
+				}
+
+				if (reset ($range_scale))
+				{
+					### prepend range starting at 0
+					array_unshift ($range_scale, 0);
+				}
+
+				sort ($range_scale, SORT_NUMERIC);
+				$this->range_scale = $range_scale;
+			}
+
+			### get combined_priority parameters
+			$parameter_due_date_overdue_slope = $workspace->prop ("parameter_due_date_overdue_slope");
+			if (strlen(trim($parameter_due_date_overdue_slope)))
+			{
+				$this->parameter_due_date_overdue_slope = $this->safe_settype_float($parameter_due_date_overdue_slope);
+			}
+
+			$parameter_due_date_overdue_intercept = $workspace->prop ("parameter_due_date_overdue_intercept");
+			if (strlen(trim($parameter_due_date_overdue_intercept)))
+			{
+				$this->parameter_due_date_overdue_intercept = $this->safe_settype_float($parameter_due_date_overdue_intercept);
+			}
+
+			$parameter_due_date_decay = $workspace->prop ("parameter_due_date_decay");
+			if (strlen(trim($parameter_due_date_decay)))
+			{
+				$this->parameter_due_date_decay = $this->safe_settype_float($parameter_due_date_decay);
+			}
+
+			$parameter_due_date_intercept = $workspace->prop ("parameter_due_date_intercept");
+			if (strlen(trim($parameter_due_date_intercept)))
+			{
+				$this->parameter_due_date_intercept = $this->safe_settype_float($parameter_due_date_intercept);
+			}
+
+			$parameter_priority_slope = $workspace->prop ("parameter_priority_slope");
+			if (strlen(trim($parameter_priority_slope)))
+			{
+				$this->parameter_priority_slope = $this->safe_settype_float($parameter_priority_slope);
+			}
+
+
+			### ...
+			$parameter_start_priority = $workspace->prop ("parameter_start_priority");
+			if (strlen(trim($parameter_start_priority)))
+			{
+				$this->parameter_start_priority = abs($this->safe_settype_float($schedule_length));
+			}
+
+			$parameter_length_priority = $workspace->prop ("parameter_length_priority");
+			if (strlen(trim($parameter_length_priority)))
+			{
+				$this->parameter_length_priority = abs($this->safe_settype_float($parameter_length_priority));
 			}
 		}
 
-		if (reset ($range_scale))
-		{
-			### prepend range starting at 0
-			array_unshift ($range_scale, 0);
-		}
-
-		sort ($range_scale, SORT_NUMERIC);
-
-		### get parameters
-		if (!$this->use_default_parameters)
-		{
-			### get combined_priority parameters
-			$this->parameter_due_date_overdue_slope = (float) $workspace->prop ("parameter_due_date_overdue_slope");
-			$this->parameter_due_date_overdue_intercept = (float) $workspace->prop ("parameter_due_date_overdue_intercept");
-			$this->parameter_due_date_decay = (float) $workspace->prop ("parameter_due_date_decay");
-			$this->parameter_due_date_intercept = (float) $workspace->prop ("parameter_due_date_intercept");
-			$this->parameter_priority_slope = (float) $workspace->prop ("parameter_priority_slope");
-
-			$this->parameter_start_priority = abs ((float) $workspace->prop ("parameter_start_priority"));
-			$this->parameter_length_priority = abs ((float) $workspace->prop ("parameter_length_priority"));
-			$this->range_scale = $range_scale;
-		}
+		$this->schedule_length = $this->schedule_length * 31536000;
+		define ("MRP_INF", $this->schedule_length * 10);
+		$this->schedule_start = $this->scheduling_time + $this->schedule_start;
+		$this->min_planning_jobstart = $this->scheduling_time + $this->min_planning_jobstart;
+		$this->scheduling_day_end = mktime (23, 59, 59, date ("m", $this->scheduling_time), date ("d", $this->scheduling_time), date("Y", $this->scheduling_time));
 
 		### get schedulable resources
 		#### shcedulable resource types
@@ -1967,6 +2012,14 @@ class mrp_schedule extends class_base
 		}
 
 		return $this->unavailable_times;
+	}
+
+	function safe_settype_float ($value)
+	{
+		$separators = ".,";
+		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
+		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
+		return (float) ("{$int}.{$dec}");
 	}
 }
 
