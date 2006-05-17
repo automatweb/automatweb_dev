@@ -70,6 +70,12 @@ class doc_display extends aw_template
 		{
 			$doc_link = aw_url_change_var("docid", $doc->id(), obj_link(aw_global_get("section")));
 		}
+
+		if ($this->template_has_var_full("edit_doc"))
+		{
+			$em = $this->_get_edit_menu($doc);
+		}
+
 		$this->vars(array(
 			"text" => $text,
 			"title" => $doc->prop("title"),
@@ -97,7 +103,7 @@ class doc_display extends aw_template
 			"link_text" => $doc->prop("link_text"),
 			"page_title" => strip_tags($doc->prop("title")),			
 			"date" => $_date,
-			"edit_doc" => $this->_get_edit_menu($doc),
+			"edit_doc" => $em,
 			"doc_link" => $doc_link
 		));
 

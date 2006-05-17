@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.183 2006/05/17 10:45:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.184 2006/05/17 13:54:00 kristo Exp $
 
 /*
 
@@ -920,6 +920,7 @@ class site_show extends class_base
 			{
 				obj_set_opt("no_cache", 1);
 			}
+
 			$documents = new object_list($filter);
 
 			if ($has_rand)
@@ -1165,6 +1166,19 @@ class site_show extends class_base
 
 	function do_show_documents(&$arr)
 	{
+		$disp = ($GLOBALS["real_no_menus"] == 1) || ($_REQUEST["only_document_content"]) || ($this->sel_section_obj->prop("no_menus") == 1 || $GLOBALS["print"] || 1 == $arr["content_only"]);
+
+		if (!$disp)
+		{
+			enter_function("tpl_has_var_full");
+			$disp |= $this->template_has_var_full("doc_content");
+			exit_function("tpl_has_var_full");
+		}
+
+		if (!$disp)
+		{
+			return;
+		}
 		if ($this->sel_section_obj->prop("periodic") && $arr["text"] == "")
 		{
 			$docc = $this->show_periodic_documents($arr);
@@ -2586,11 +2600,15 @@ class site_show extends class_base
 		// import language constants
 		lc_site_load("menuedit",$this);
 
+		enter_function("do_sub_callbacks");
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
+		exit_function("do_sub_callbacks");
 
 		$awt->start("do-show-template");
+
 		if (($docc = $this->do_show_documents($arr)) != "")
 		{
+			$awt->stop("do-show-template");
 			return $docc;
 		}
 

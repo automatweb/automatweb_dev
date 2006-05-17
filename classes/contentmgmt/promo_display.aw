@@ -257,6 +257,7 @@ class promo_display
 				$d_total = count($docid);
 				aw_global_set("in_promo_display", $o->id());
 				enter_function("mainc-contentmgmt/promo-show-docs");
+
 				foreach($docid as $d)
 				{
 					if (($d_cnt % 2)  == 1)

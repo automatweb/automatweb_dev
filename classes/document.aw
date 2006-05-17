@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.356 2006/05/17 09:25:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.357 2006/05/17 13:53:59 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -940,6 +940,7 @@ class document extends aw_template
 
 		$awt->start("almgr-parse-oo-aliases");
 		$awt->count("almgr-parse-oo-aliases");
+		$al = get_instance("alias_parser");
 		$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
 
 		$awt->stop("almgr-parse-oo-aliases");
