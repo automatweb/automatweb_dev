@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.3 2006/05/05 08:35:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/icons.aw,v 1.4 2006/05/17 14:14:45 kristo Exp $
 
 class icons extends aw_template
 {
@@ -33,7 +33,7 @@ class icons extends aw_template
 		if ($clid == CL_FILE)
 		{
 			$pi = pathinfo($name);
-			return aw_ini_get("icons.server")."/ftype_".$pi["extension"].".gif";
+			return aw_ini_get("icons.server")."/ftype_".strtolower($pi["extension"]).".gif";
 		}
 		else
 		if (in_array($clid,array("promo_box","brother","conf_icon_other","conf_icon_programs","conf_icon_classes","conf_icon_ftypes","conf_icons","conf_jf","conf_users","conf_icon_import","conf_icon_db","homefolder","hf_groups")))
