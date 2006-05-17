@@ -215,6 +215,8 @@ class doc_display extends aw_template
 		{
 			$text = str_replace("\r\n","<br />",$text);
 			$text = str_replace("</li><br />", "</li>", $text);
+			$text = str_replace("<br /><ul><br />", "<ul>", $text);
+			$text = str_replace("</ul><br />", "</ul>", $text);
 		}
 
 		// if show in iframe is set, just return the iframe
