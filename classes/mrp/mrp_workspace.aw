@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.161 2006/03/14 07:59:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.162 2006/05/17 07:25:49 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -83,7 +83,7 @@
 	@property sp_submit type=submit value=Otsi view_element=1
 	@caption Otsi
 
-	@property sp_result type=table no_caption=1 
+	@property sp_result type=table no_caption=1
 
 @default group=grp_search_cust
 	@property cs_name type=textbox view_element=1
@@ -167,12 +167,22 @@
 	@property case_header_controller type=relpicker reltype=RELTYPE_MRP_HEADER_CONTROLLER
 	@caption Projekti headeri kontroller
 
-	@property pv_per_page type=textbox
+	@property pv_per_page type=textbox default=30 datatype=int
 	@caption Operaatori vaates t&ouml;id lehel
+
+	@property projects_list_objects_perpage type=textbox default=30 datatype=int
+	@comment Projektide vaates objekte lehel
+	@caption Projekte lehel
 
 	@property max_subcontractor_timediff type=textbox default=1
 	@comment Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettejõudmise piires.
 	@caption Allhanke suurim ajanihe (h)
+
+	@layout box1 type=vbox
+	@comment Kui on määratud (nullist suurem) ajavahemik, arhiveeritakse automaatselt projektid, mille Valmissaamisest on möödunud see ajavahemik. Positiivne täisarv.
+	@caption Automaatne arhiveerimine
+	@property automatic_archiving_period type=textbox no_caption=1 parent=box1 datatype=int
+	@property automatic_archiving_period_unit type=text no_caption=1 parent=box1 store=no
 
 	// @property default_global_buffer type=textbox default=4
 	// @comment Uutele loodavatele ressurssidele vaikimisi pandav päeva üldpuhver.
@@ -182,45 +192,44 @@
 
 	@property title_sceduler_parameters type=text store=no subtitle=1
 	@caption Planeerija parameetrid
+		@property parameter_due_date_overdue_slope type=textbox default=0.5
+		@caption Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise suurenemise suunas
 
-	@property parameter_due_date_overdue_slope type=textbox default=0.5
-	@caption Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise suurenemise suunas
+		@property parameter_due_date_overdue_intercept type=textbox default=10
+		@caption Just tähtaja ületanud projekti tähtsus
 
-	@property parameter_due_date_overdue_intercept type=textbox default=10
-	@caption Just tähtaja ületanud projekti tähtsus
+		@property parameter_due_date_decay type=textbox default=0.05
+		@caption Projekti tähtsuse langus tähtaja kaugenemise suunas
 
-	@property parameter_due_date_decay type=textbox default=0.05
-	@caption Projekti tähtsuse langus tähtaja kaugenemise suunas
+		@property parameter_due_date_intercept type=textbox default=0.1
+		@caption Planeerimise hetkega võrdse tähtajaga projekti tähtsus
 
-	@property parameter_due_date_intercept type=textbox default=0.1
-	@caption Planeerimise hetkega võrdse tähtajaga projekti tähtsus
+		@property parameter_priority_slope type=textbox default=0.8
+		@caption Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga
 
-	@property parameter_priority_slope type=textbox default=0.8
-	@caption Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga
+		@property separator type=text store=no no_caption=1
 
-	@property separator type=text store=no no_caption=1
+		@property parameter_schedule_length type=textbox default=2
+		@caption Ajaplaani ulatus (a)
 
-	@property parameter_schedule_length type=textbox default=2
-	@caption Ajaplaani ulatus (a)
+		@property parameter_min_planning_jobstart type=textbox default=300
+		@caption Ajavahemik planeerimise alguse hetkest milles algavaid t&ouml;id ei planeerita (s)
 
-	@property parameter_min_planning_jobstart type=textbox default=300
-	@caption Ajavahemik planeerimise alguse hetkest milles algavaid t&ouml;id ei planeerita (s)
+		@property parameter_schedule_start type=textbox default=300
+		@caption Ajaplaani alguse vahe planeerimise alguse hetkega (s)
 
-	@property parameter_schedule_start type=textbox default=300
-	@caption Ajaplaani alguse vahe planeerimise alguse hetkega (s)
+		@property parameter_start_priority type=textbox default=1
+		@comment Positiivne reaalarv või 0 kui algusaega ei taheta parima valimisel arvestada. Kasutatakse mitut paralleelset tööd võimaldavate ressursside juures tööle kalendrist parima koha valikul. Koha kaal arvutatakse valemiga: (AlgusajaKaal X ParalleelharuVabaAjaAlgus + PikkuseKaal X ParalleelharuVabaAjaPikkus)/2
+		@caption Töö algusaja kaal
 
-	@property parameter_start_priority type=textbox default=1
-	@comment Positiivne reaalarv või 0 kui algusaega ei taheta parima valimisel arvestada. Kasutatakse mitut paralleelset tööd võimaldavate ressursside juures tööle kalendrist parima koha valikul. Koha kaal arvutatakse valemiga: (AlgusajaKaal X ParalleelharuVabaAjaAlgus + PikkuseKaal X ParalleelharuVabaAjaPikkus)/2
-	@caption Töö algusaja kaal
+		@property parameter_length_priority type=textbox default=1
+		@comment Vt. töö algusaja kaalu selgitust.
+		@caption Töö pikkuse kaal
 
-	@property parameter_length_priority type=textbox default=1
-	@comment Vt. töö algusaja kaalu selgitust.
-	@caption Töö pikkuse kaal
-
-	@property parameter_timescale type=textarea
-	@caption Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.)
-	@property parameter_timescale_unit type=select
-	@caption Skaala ajaühik
+		@property parameter_timescale type=textarea
+		@caption Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.)
+		@property parameter_timescale_unit type=select
+		@caption Skaala ajaühik
 
 @default group=grp_printer_current,grp_printer_done,grp_printer_aborted,grp_printer_in_progress,grp_printer_startable,grp_printer_notstartable
 
@@ -382,6 +391,7 @@
 
 @reltype MRP_HEADER_CONTROLLER clid=CL_FORM_CONTROLLER value=5
 @caption Projekti headeri kontroller
+
 */
 
 ### resource types
@@ -481,89 +491,259 @@ class mrp_workspace extends class_base
 
 		if ($arr["group"] == "grp_projects")
 		{
-			$this->projects_planned = new object_list (array (
+			if (isset($arr["list_request"]))
+			{
+				$this->list_request = $arr["list_request"];
+			}
+			else
+			{
+				$this->list_request = $arr["request"]["mrp_tree_active_item"] ? $arr["request"]["mrp_tree_active_item"] : "planned";
+			}
+
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"state" => MRP_STATUS_PLANNED,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_planned_count = $list->count();
 
-			$this->projects_in_work = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"state" => MRP_STATUS_INPROGRESS,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_in_work_count = $list->count();
 
-			$applicable_states = array (
+			$applicable_states = array ( // also used below for getting limited lists
 				MRP_STATUS_INPROGRESS,
 				MRP_STATUS_PLANNED,
 			);
-			$this->projects_overdue = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
 				"state" => $applicable_states,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_overdue_count = $list->count();
 
-			$this->projects_planned_overdue = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"state" => $applicable_states,
 				"planned_date" => new obj_predicate_prop (OBJ_COMP_GREATER, "due_date"),
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_planned_overdue_count = $list->count();
 
-			$this->projects_new = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"state" => MRP_STATUS_NEW,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_new_count = $list->count();
 
-			$this->projects_done = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"state" => MRP_STATUS_DONE,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_done_count = $list->count();
 
-			$this->projects_aborted = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"state" => MRP_STATUS_ABORTED,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_aborted_count = $list->count();
 
-			$this->projects_onhold = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"state" => MRP_STATUS_ONHOLD,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_onhold_count = $list->count();
 
-			$this->projects_archived = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"state" => MRP_STATUS_ARCHIVED,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_archived_count = $list->count();
 
-			$this->projects_all = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_CASE,
 				"parent" => $this_object->prop ("projects_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->projects_all_count = $list->count();
 
-			$this->jobs_aborted = new object_list (array (
+			$list = new object_list (array (
 				"class_id" => CL_MRP_JOB,
 				"state" => MRP_STATUS_ABORTED,
 				"parent" => $this_object->prop ("jobs_folder"),
 				// "createdby" => aw_global_get('uid'),
 			));
+			$this->jobs_aborted_count = $list->count();
 
-			$this->jobs_subcontracted = $this->_get_subcontract_job_list($this_object);
+			$list = $this->_get_subcontract_job_list($this_object);
+			$this->jobs_subcontracted_count = $list->count();
+
+			### limit
+			$perpage = $this_object->prop ("projects_list_objects_perpage") ? $this_object->prop ("projects_list_objects_perpage") : 30;
+			$limit = ((int) $_GET["ft_page"] * $perpage) . "," . $perpage;
+
+			if (strstr($this->list_request, "archived_"))
+			{
+				$tmp = explode("_", $this->list_request);
+
+				if (3 == count($tmp))
+				{
+					$year = $tmp[1];
+					$month = $tmp[2];
+					$args = array (
+						"class_id" => CL_MRP_CASE,
+						"state" => MRP_STATUS_ARCHIVED,
+						"starttime" => new obj_predicate_compare (
+							OBJ_COMP_BETWEEN,
+							mktime(0,0,0,$month,1,$year),
+							mktime(0,0,0,((12 == $month) ? 1 : ($month + 1)),1,((12 == $month) ? ($year + 1) : $year))
+						),
+						"parent" => $this_object->prop ("projects_folder"),
+					);
+
+					$this->projects_list_objects = new object_list ($args);
+					$this->projects_list_objects_count = $this->projects_list_objects->count();
+					$args["limit"] = $limit;
+					$this->projects_list_objects = new object_list ($args);
+				}
+			}
+
+			switch ($this->list_request)
+			{
+				case "all":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"parent" => $this_object->prop ("projects_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->projects_all_count;
+					break;
+
+				case "planned":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"state" => MRP_STATUS_PLANNED,
+						"parent" => $this_object->prop ("projects_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->projects_planned_count;
+					break;
+
+				case "inwork":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"state" => MRP_STATUS_INPROGRESS,
+						"parent" => $this_object->prop ("projects_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->projects_in_work_count;
+					break;
+
+				case "planned_overdue":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"state" => $applicable_states,
+						"planned_date" => new obj_predicate_prop (OBJ_COMP_GREATER, "due_date"),
+						"parent" => $this_object->prop ("projects_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->projects_planned_overdue_count;
+					break;
+
+				case "overdue":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
+						"state" => $applicable_states,
+						"parent" => $this_object->prop ("projects_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->projects_overdue_count;
+					break;
+
+				case "new":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"state" => MRP_STATUS_NEW,
+						"parent" => $this_object->prop ("projects_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->projects_new_count;
+					break;
+
+				case "done":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"state" => MRP_STATUS_DONE,
+						"parent" => $this_object->prop ("projects_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->projects_done_count;
+					break;
+
+				case "aborted":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"state" => MRP_STATUS_ABORTED,
+						"parent" => $this_object->prop ("projects_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->projects_aborted_count;
+					break;
+
+				case "onhold":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_CASE,
+						"state" => MRP_STATUS_ONHOLD,
+						"parent" => $this_object->prop ("projects_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->projects_onhold_count;
+					break;
+
+				case "aborted_jobs":
+					$this->projects_list_objects = new object_list (array (
+						"class_id" => CL_MRP_JOB,
+						"state" => MRP_STATUS_ABORTED,
+						"parent" => $this_object->prop ("jobs_folder"),
+						// "createdby" => aw_global_get('uid'),
+						"limit" => $limit,
+					));
+					$this->projects_list_objects_count = $this->jobs_aborted_count;
+					break;
+
+				case "subcontracts":
+					$this->projects_list_objects = $this->_get_subcontract_job_list($this_object, $limit);
+					$this->projects_list_objects_count = $this->jobs_subcontracted_count;
+					break;
+			}
 		}
 	}
 
@@ -572,51 +752,6 @@ class mrp_workspace extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object =& $arr["obj_inst"];
-
-/* dbg */ //finish all jobs in progress and set_all_resources_available
-// if ($_GET["mrp_set_all_resources_available"])
-// {
-		// $resources_folder = $this_object->prop ("resources_folder");
-		// $resource_tree = new object_tree(array(
-			// "parent" => $resources_folder,
-			// "class_id" => array(CL_MENU, CL_MRP_RESOURCE),
-			// "sort_by" => "objects.jrk",
-		// ));
-	// $list = new object_list (array (
-		// "class_id" => CL_MRP_JOB,
-		// "state" => MRP_STATUS_INPROGRESS,
-	// ));
-
-	// $jj = $list->arr();
-	// $j = get_instance(CL_MRP_JOB);
-
-	// foreach ($jj as $job_id => $job)
-	// {
-		// echo "job id: " . $job->id() ."<br>";
-		// $arr = array("id"=>$job_id);
-		// $ud = parse_url($j->done($arr));
-		// $pars = array();
-		// parse_str($ud["query"], $pars);
-		// $this->dequote($pars["errors"]);
-		// $errs = unserialize($pars["errors"]);
-		// echo "done: [" . implode(",", $errs) . "]<br><br>";
-	// }
-
-	// $list = $resource_tree->to_list();
-	// $list->filter (array (
-		// "class_id" => CL_MRP_RESOURCE,
-	// ));
-	// $list = $list->arr();
-
-	// foreach ($list as $res_id => $r)
-	// {
-		// echo "res id: " . $res_id ."<br>";
-		// $r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
-		// $r->save();
-		// echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
-	// }
-// }
-// /* dbg */
 
 		### require remaining_length and minstart when job was aborted_jobs
 		if (is_oid (aw_global_get ("mrp_printer_aborted")))
@@ -958,11 +1093,14 @@ class mrp_workspace extends class_base
 				break;
 
 			### settings tab
+			case "automatic_archiving_period_unit":
+				$prop["value"] = t("Päev(a) peale projekti valmimist");
+				break;
+
 			case "parameter_timescale_unit":
 				$prop["options"] = array (
 					"86400" => t("Päev"),
 					"60" => t("Minut"),
-					"1" => t("Sekund"),
 				);
 				break;
 
@@ -1013,8 +1151,8 @@ class mrp_workspace extends class_base
 				{
 					return PROP_IGNORE;
 				}
-			
-				$prop["value"] = "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr><td>";	
+
+				$prop["value"] = "<table border=0 cellpadding=0 cellspacing=0 width=100%><tr><td>";
 				$prop["value"]  .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["done"]."'>".t("Valmis")."</span>&nbsp;&nbsp;";
 				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("V&otilde;ib alustada")."</span>&nbsp;&nbsp;";
 				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada/t&ouml;&ouml;s")."</span>&nbsp;&nbsp;";
@@ -1035,8 +1173,8 @@ class mrp_workspace extends class_base
 					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
 				}
 				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),$res_ol->names());
-				$prop["value"] .= "</select><!-- <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>Vali</a>-->";
-				
+				$prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
+
 				$prop["value"] .= "</td></tr></table>";
 				break;
 
@@ -1170,10 +1308,9 @@ class mrp_workspace extends class_base
 			case "projects_list":
 				$retval = $this->save_custom_form_data ($arr);
 				$applicable_lists = array (
-					"inwork",
+					"planning",
 					"planned_overdue",
 					"overdue",
-					"planned",
 					"subcontracts",
 					"aborted_jobs"
 				);
@@ -1204,6 +1341,40 @@ class mrp_workspace extends class_base
 				// aaaand redirect
 				header("Location: ".$this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => "grp_printer_current")));
 				die();
+				break;
+
+			### settings tab
+			case "automatic_archiving_period":
+				$requested_period = (int) abs($prop["value"]);
+				$saved_period = (int) $this_object->prop("automatic_archiving_period");
+
+				if ($requested_period and !$saved_period)
+				{
+					### add archiving scheduler
+					$scheduler = get_instance("scheduler");
+					$event = $this->mk_my_orb("archive_projects", array("id" => $this_object->id()));
+
+					$scheduler->add(array(
+						"event" => $event,
+						"time" => time() + 86400,
+						// "uid" => "voldemar",//!!! mujalt v6tta
+						// "password" => "lagendik",
+						"auth_as_local_user" => true,
+					));
+				}
+				elseif (!$requested_period and $saved_period)
+				{
+					### delete archiving scheduler
+					$scheduler = get_instance("scheduler");
+					$event = $this->mk_my_orb("archive_projects", array("id" => $this_object->id()));
+					$scheduler->remove(array(
+						"event" => $event,
+					));
+				}
+				break;
+
+			case "max_subcontractor_timediff":
+				$prop["value"] = round ($prop["value"] * 3600);
 				break;
 		}
 
@@ -1588,29 +1759,49 @@ if ($_GET['show_thread_data'] == 1)
 	{
 		$this_object =& $arr["obj_inst"];
 		$projects_folder = $this_object->prop ("projects_folder");
+		$open_path = NULL;
 
-		$count_projects_planned = $this->projects_planned->count ();
-		$count_projects_in_work = $this->projects_in_work->count ();
-		$count_projects_overdue = $this->projects_overdue->count ();
-		$count_projects_planned_overdue = $this->projects_planned_overdue->count ();
-		$count_projects_new = $this->projects_new->count ();
-		$count_projects_done = $this->projects_done->count ();
-		$count_projects_aborted = $this->projects_aborted->count ();
-		$count_projects_onhold = $this->projects_onhold->count ();
-		$count_projects_archived = $this->projects_archived->count();
-		$count_projects_all = $this->projects_all->count();
-		$count_jobs_aborted = $this->jobs_aborted->count ();
-		$count_jobs_subcontracted = $this->jobs_subcontracted->count();
+		if (strstr($arr["request"]["mrp_tree_active_item"], "archived_"))
+		{
+			$tmp = explode("_", $arr["request"]["mrp_tree_active_item"]);
+
+			if (3 == count($tmp))
+			{
+				$open_path = array("archived", "archived_" . $tmp[1], "archived_" . $tmp[1] . "_" . $tmp[2]);
+			}
+		}
 
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree (array (
-				"type" => TREE_DHTML,
-				"tree_id" => "resourcetree",
-				"persist_state" => 1,
+			"type" => TREE_DHTML,
+			"tree_id" => "projecttree",
+			"persist_state" => 1,
+			"has_root" => true,
+			"root_id" => "all",
+			"root_url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "all",
+				"ft_page" => 0
+			)),
+			"root_name" => t("Kõik projektid") . " (" . $this->projects_all_count . ")",
+			"open_path" => $open_path,
+			"get_branch_func" => $this->mk_my_orb("get_projects_subtree", array(
+				"id" => $this_object->id(),
+				"url" => aw_global_get("REQUEST_URI"),
+				"parent" => "",
+			)),
 		));
 
+		// $tree->add_item (0, array (
+			// "name" => t("Planeerimine"),
+			// "id" => "planning",
+			// "url" => aw_url_change_var (array(
+				// "mrp_tree_active_item" => "planning",
+				// "ft_page" => 0
+			// )),
+		// ));
+
 		$tree->add_item (0, array (
-			"name" => t("Plaanisolevad") . " (" . $count_projects_planned . ")",
+			"name" => t("Plaanisolevad") . " (" . $this->projects_planned_count . ")",
 			"id" => "planned",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "planned",
@@ -1619,7 +1810,7 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Hetkel töös") . " (" . $count_projects_in_work . ")",
+			"name" => t("Hetkel töös") . " (" . $this->projects_in_work_count . ")",
 			"id" => "inwork",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "inwork",
@@ -1628,7 +1819,7 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Planeeritud üle tähtaja") . " (" . $count_projects_planned_overdue . ")",
+			"name" => t("Planeeritud üle tähtaja") . " (" . $this->projects_planned_overdue_count . ")",
 			"id" => "planned_overdue",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "planned_overdue",
@@ -1637,7 +1828,7 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Üle tähtaja") . " (" . $count_projects_overdue . ")",
+			"name" => t("Üle tähtaja") . " (" . $this->projects_overdue_count . ")",
 			"id" => "overdue",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "overdue",
@@ -1646,7 +1837,7 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Uued") . " (" . $count_projects_new . ")",
+			"name" => t("Uued") . " (" . $this->projects_new_count . ")",
 			"id" => "new",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "new",
@@ -1655,7 +1846,7 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Katkestatud") . " (" . $count_projects_aborted . ")",
+			"name" => t("Katkestatud") . " (" . $this->projects_aborted_count . ")",
 			"id" => "aborted",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "aborted",
@@ -1664,7 +1855,7 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Plaanist väljas") . " (" . $count_projects_onhold . ")",
+			"name" => t("Plaanist väljas") . " (" . $this->projects_onhold_count . ")",
 			"id" => "onhold",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "onhold",
@@ -1673,7 +1864,7 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Valmis") . " (" . $count_projects_done . ")",
+			"name" => t("Valmis") . " (" . $this->projects_done_count . ")",
 			"id" => "done",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "done",
@@ -1682,25 +1873,23 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Arhiveeritud") . " (" . $count_projects_archived . ")",
+			"name" => t("Arhiveeritud") . " (" . $this->projects_archived_count . ")",
 			"id" => "archived",
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "archived",
-				"ft_page" => 0
-			)),
+			"parent" => 0,
+			"url" => "javascript: void(0);",
+			// "url" => aw_url_change_var (array(
+				// "mrp_tree_active_item" => "archived",
+				// "ft_page" => 0
+			// )),
+		));
+
+		$tree->add_item ("archived", array (
+			"id" => "dummy",
+			"parent" => "archived",
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Kõik projektid") . " (" . $count_projects_all . ")",
-			"id" => "all",
-			"url" => aw_url_change_var (array(
-				"mrp_tree_active_item" => "all",
-				"ft_page" => 0
-			)),
-		));
-
-		$tree->add_item (0, array (
-			"name" => t("Allhanket&ouml;&ouml;d") . " (" . $count_jobs_subcontracted . ")",
+			"name" => t("Allhanket&ouml;&ouml;d") . " (" . $this->jobs_subcontracted_count . ")",
 			"id" => "subcontracts",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "subcontracts",
@@ -1709,7 +1898,7 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Katkestatud t&ouml;&ouml;d") . " (" . $count_jobs_aborted . ")",
+			"name" => t("Katkestatud t&ouml;&ouml;d") . " (" . $this->jobs_aborted_count . ")",
 			"id" => "aborted_jobs",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "aborted_jobs",
@@ -1717,24 +1906,16 @@ if ($_GET['show_thread_data'] == 1)
 			)),
 		));
 
-		$active_node = empty ($arr["request"]["mrp_tree_active_item"]) ? "planned" : $arr["request"]["mrp_tree_active_item"];
+		$active_node = empty ($arr["request"]["mrp_tree_active_item"]) ? "planning" : $arr["request"]["mrp_tree_active_item"];
 		$tree->set_selected_item ($active_node);
-		$arr["prop"]["value"] = $tree->finalize_tree ();
+		$arr["prop"]["value"] = $tree->finalize_tree();
 	}
 
 	function create_projects_list ($arr = array ())
 	{
 		$table =& $arr["prop"]["vcl_inst"];
 		$this_object =& $arr["obj_inst"];
-
-		if (isset($arr["list_request"]))
-		{
-			$list_request = $arr["list_request"];
-		}
-		else
-		{
-			$list_request = $arr["request"]["mrp_tree_active_item"] ? $arr["request"]["mrp_tree_active_item"] : "planned";
-		}
+		$table->name = "projects_list_" . $this->list_request;
 
 		$table->define_field (array (
 			"name" => "customer",
@@ -1750,8 +1931,9 @@ if ($_GET['show_thread_data'] == 1)
 			"numeric" => 1
 		));
 
-		switch ($list_request)
+		switch ($this->list_request)
 		{
+			case "planning":
 			case "inwork":
 			case "planned_overdue":
 			case "overdue":
@@ -1812,7 +1994,7 @@ if ($_GET['show_thread_data'] == 1)
 			"sortable" => 1,
 		));
 
-		if ($list_request != "search")
+		if ($this->list_request != "search")
 		{
 			$table->define_chooser(array(
 				"name" => "selection",
@@ -1820,53 +2002,19 @@ if ($_GET['show_thread_data'] == 1)
 			));
 		}
 
-		$table->set_default_sortby ("due_date");
-		$table->set_default_sorder ("asc");
-		$table->draw_text_pageselector (array (
-			"records_per_page" => 50,
-		));
-
-
-		switch ($list_request)
+		switch ($this->list_request)
 		{
 			case "all":
-				$list = $this->projects_all;
-				break;
-
+			case "planning":
 			case "planned":
-				$list = $this->projects_planned;
-				break;
-
 			case "inwork":
-				$list = $this->projects_in_work;
-				break;
-
 			case "planned_overdue":
-				$list = $this->projects_planned_overdue;
-				break;
-
 			case "overdue":
-				$list = $this->projects_overdue;
-				break;
-
 			case "new":
-				$list = $this->projects_new;
-				break;
-
 			case "done":
-				$list = $this->projects_done;
-				break;
-
-			case "archived":
-				$list = $this->projects_archived;
-				break;
-
 			case "aborted":
-				$list = $this->projects_aborted;
-				break;
-
 			case "onhold":
-				$list = $this->projects_onhold;
+				$list = $this->projects_list_objects;
 				break;
 
 			case "search":
@@ -1874,19 +2022,29 @@ if ($_GET['show_thread_data'] == 1)
 				break;
 		}
 
+		if (strstr($this->list_request, "archived_"))
+		{
+			$list = $this->projects_list_objects;
+		}
+
+		$jobs_folder = $this_object->prop ("jobs_folder");
+		$return_url = get_ru();
+
 		$projects = $list->arr ();
 
 		foreach ($projects as $project_id => $project)
 		{
 			$priority = $project->prop ("project_priority");
 			$act = "change";
+
 			if (!$this->can("edit", $project_id))
 			{
 				$act = "view";
 			}
+
 			$change_url = $this->mk_my_orb($act, array(
 				"id" => $project_id,
-				"return_url" => get_ru(),
+				"return_url" => $return_url,
 				"group" => "grp_case_workflow",
 			), "mrp_case");
 
@@ -1901,7 +2059,7 @@ if ($_GET['show_thread_data'] == 1)
 				$list = new object_list (array (
 					"class_id" => CL_MRP_JOB,
 					"state" => MRP_STATUS_PLANNED,
-					"parent" => $this_object->prop ("jobs_folder"),
+					"parent" => $jobs_folder,
 					"exec_order" => $jobs,
 					"project" => $project_id,
 				));
@@ -1913,7 +2071,7 @@ if ($_GET['show_thread_data'] == 1)
 			$customer = $project->get_first_obj_by_reltype("RELTYPE_MRP_CUSTOMER");
 
 			### do request specific operations
-			switch ($list_request)
+			switch ($this->list_request)
 			{
 				case "planned_overdue":
 				case "overdue":
@@ -1922,6 +2080,7 @@ if ($_GET['show_thread_data'] == 1)
 
 				case "inwork":
 				case "planned":
+				case "planning":
 					### hilight for planned overdue
 					$bg_colour = ($project->prop ("due_date") < $planned_date) ? MRP_COLOUR_PLANNED_OVERDUE : false;
 
@@ -1936,7 +2095,7 @@ if ($_GET['show_thread_data'] == 1)
 			}
 
 			### define data for html table row
-			$definition = array (
+			$data = array (
 				"name" => html::href (array (
 					"caption" => $project->name(),
 					"url" => $change_url,
@@ -1954,15 +2113,18 @@ if ($_GET['show_thread_data'] == 1)
 
 			if (!$bg_colour)
 			{
-				unset ($definition["bgcolour_overdue"]);
+				unset ($data["bgcolour_overdue"]);
 			}
 
-			$table->define_data($definition);
+			$table->define_data($data);
 		}
 
-		$table->define_pageselector(array(
+		$table->set_default_sortby ("due_date");
+		$table->set_default_sorder ("asc");
+		$table->define_pageselector (array (
 			"type" => "text",
-			"records_per_page" => 30
+			"d_row_cnt" => $this->projects_list_objects_count,
+			"records_per_page" => $this_object->prop("projects_list_objects_perpage") ? $this_object->prop("projects_list_objects_perpage") : 30,
 		));
 	}
 
@@ -2010,11 +2172,13 @@ if ($_GET['show_thread_data'] == 1)
 
 		$table->set_default_sortby ("scheduled_date");
 		$table->set_default_sorder ("asc");
-		$table->draw_text_pageselector (array (
-			"records_per_page" => 50,
+		$table->define_pageselector (array (
+			"type" => "text",
+			"d_row_cnt" => $this->projects_list_objects_count,
+			"records_per_page" => $this_object->prop("projects_list_objects_perpage") ? $this_object->prop("projects_list_objects_perpage") : 30,
 		));
 
-		$jobs = $this->jobs_subcontracted->arr();
+		$jobs = $this->projects_list_objects->arr();
 
 		foreach ($jobs as $job_id => $job)
 		{
@@ -2079,11 +2243,6 @@ if ($_GET['show_thread_data'] == 1)
 
 			$table->define_data($definition);
 		}
-
-		$table->define_pageselector(array(
-			"type" => "text",
-			"records_per_page" => 30
-		));
 	}
 
 	function create_aborted_jobs_list ($arr = array ())
@@ -2136,11 +2295,13 @@ if ($_GET['show_thread_data'] == 1)
 
 		$table->set_default_sortby ("due_date");
 		$table->set_default_sorder ("asc");
-		$table->draw_text_pageselector (array (
-			"records_per_page" => 50,
+		$table->define_pageselector (array (
+			"type" => "text",
+			"d_row_cnt" => $this->projects_list_objects_count,
+			"records_per_page" => $this_object->prop("projects_list_objects_perpage") ? $this_object->prop("projects_list_objects_perpage") : 30,
 		));
 
-		$jobs = $this->jobs_aborted->arr ();
+		$jobs = $this->projects_list_objects->arr ();
 
 		foreach ($jobs as $job_id => $job)
 		{
@@ -3662,10 +3823,10 @@ if ($_GET['show_thread_data'] == 1)
 				break;
 
 			case "grp_printer_notstartable":
-                                $default_sortby = "mrp_schedule_826.starttime";
+				$default_sortby = "mrp_schedule_826.starttime";
                                 $states = array(MRP_STATUS_PLANNED,MRP_STATUS_PAUSED);
-                                $proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
-                                $limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
+				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
+				$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
 				break;
 		}
 
@@ -3716,8 +3877,8 @@ if ($_GET['show_thread_data'] == 1)
 		classload("core/date/date_calc");
 
 		// now, if the session contans [mrp][do_pv_proj_s] then we must get a list of all the jobs in the current view
-		// then iterate them until we find a job with the requested project 
-		// and then figure out the page number and finally, redirect the user to that page. 
+		// then iterate them until we find a job with the requested project
+		// and then figure out the page number and finally, redirect the user to that page.
 		// this sort of sucks, but I can't figure out how to do the count in sql..
 		if ($_SESSION["mrp"]["do_pv_proj_s"] != "")
 		{
@@ -3792,7 +3953,7 @@ if ($_GET['show_thread_data'] == 1)
 						header("Location: ".aw_url_change_var("printer_job_page", $page));
 						die();
 					}
-				}	
+				}
 			}
 		}
 		$jobs = $this->get_next_jobs_for_resources(array(
@@ -4571,12 +4732,27 @@ if ($_GET['show_thread_data'] == 1)
 
 	function priority_field_callback ($row)
 	{
-		$cellcontents = html::textbox (array (
-			"name" => "mrp_project_priority-" . $row["project_id"],
-			"size" => "2",
-			"textsize" => "12px",
-			"value" => $row["priority"],
-		));
+		$applicable_lists = array (
+			// "planning",
+			"planned",
+			"planned_overdue",
+			"overdue",
+		);
+
+		if (in_array($this->list_request, $applicable_lists))
+		{
+			$cellcontents = html::textbox (array (
+				"name" => "mrp_project_priority-" . $row["project_id"],
+				"size" => "2",
+				"textsize" => "12px",
+				"value" => $row["priority"],
+			));
+		}
+		else
+		{
+			$cellcontents = $row["priority"];
+		}
+
 		return $cellcontents;
 	}
 
@@ -4729,21 +4905,24 @@ if ($_GET['show_thread_data'] == 1)
 		return '<table cellspacing="4" cellpadding="0">' . $rows . '</table>';
 	}
 
-	function _get_subcontract_job_list($this_object)
+	function _get_subcontract_job_list($this_object, $limit = NULL)
 	{
-		$resource_tree = new object_tree (array (
-			"parent" => $this_object->prop ("resources_folder"),
-			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
-			"sort_by" => "objects.jrk",
-		));
-		$list = $resource_tree->to_list ();
-		$list->filter (array (
-			"class_id" => CL_MRP_RESOURCE,
-			"type" => MRP_RESOURCE_SUBCONTRACTOR,
-		));
-		$subcontractors = $list->ids ();
+		if (empty($this->subcontractor_resource_ids))
+		{
+			$resource_tree = new object_tree (array (
+				"parent" => $this_object->prop ("resources_folder"),
+				"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
+				"sort_by" => "objects.jrk",
+			));
+			$list = $resource_tree->to_list ();
+			$list->filter (array (
+				"class_id" => CL_MRP_RESOURCE,
+				"type" => MRP_RESOURCE_SUBCONTRACTOR,
+			));
+			$this->subcontractor_resource_ids = $list->ids ();
+		}
 
-		if (!empty ($subcontractors))
+		if (!empty ($this->subcontractor_resource_ids))
 		{
 			$applicable_states = array (
 				MRP_STATUS_NEW,
@@ -4753,12 +4932,16 @@ if ($_GET['show_thread_data'] == 1)
 			$list = new object_list (array (
 				"class_id" => CL_MRP_JOB,
 				"state" => $applicable_states,
-				"resource" => $subcontractors,
+				"resource" => $this->subcontractor_resource_ids,
 				"parent" => $this_object->prop ("jobs_folder"),
+				"limit" => $limit,
 			));
 			return $list;
 		}
-		return new object_list();
+		else
+		{
+			return new object_list();
+		}
 	}
 
 	function _chart_search($arr)
@@ -4936,6 +5119,133 @@ if ($_GET['show_thread_data'] == 1)
 		$hist = safe_array($job->meta("change_comment_history"));
 		return $hist[0]["text"]." (".$hist[0]["uid"].")";
 	}
+
+	/**
+		@attrib name=archive_projects
+		@param id required type=int
+	**/
+	function archive_projects($arr)
+	{
+		if (!$this->can("view", $arr["id"]))
+		{
+			exit (1);
+		}
+
+		$this_object = obj($arr["id"]);
+
+		if (!$this_object->prop("automatic_archiving_period"))
+		{
+			exit (2);
+		}
+
+		### archive projects finished before now minus autoarchive period
+		$time = time() -  $this_object->prop("automatic_archiving_period") * 86400;
+
+		$projects = new object_list (array (
+			"class_id" => CL_MRP_CASE,
+			"state" => MRP_STATUS_DONE,
+			"parent" => $this_object->prop ("projects_folder"),
+			"finished" => new obj_predicate_compare(OBJ_COMP_BETWEEN, 1, $time),
+		));
+
+		$projects->set_prop("archived", time());
+		$projects->set_prop("state", MRP_STATUS_ARCHIVED);
+		$projects->save();
+
+		### add next archiving event to scheduler
+		$scheduler = get_instance("scheduler");
+		$event = $this->mk_my_orb("archive_projects", array("id" => $this_object->id()));
+
+		$scheduler->add(array(
+			"event" => $event,
+			"time" => time() + 86400,
+			// "uid" => "voldemar",//!!! mujalt v6tta
+			// "password" => "lagendik",
+			"auth_as_local_user" => true,
+		));
+
+		exit (0);
+	}
+
+	/**
+		@attrib name=get_projects_subtree
+		@param id required type=int
+		@param parent required
+		@param url required
+	**/
+	function get_projects_subtree($arr)
+	{
+		if (strstr($arr["parent"], "archived"))
+		{
+			$period_data = explode("_", $arr["parent"]);
+			$bottom_level = isset($period_data[1]);
+			$this_object = obj($arr["this"]);
+
+			$tree = get_instance("vcl/treeview");
+			$tree->start_tree (array (
+				"type" => TREE_DHTML,
+				"has_root" => false,
+				"get_branch_func" => $this->mk_my_orb("get_projects_subtree", array(
+					"id" => $this_object->id(),
+					"parent" => "",
+				)),
+			));
+
+			# get items
+			if ($bottom_level)
+			{ ## by month
+				$period = 0;
+				$end = 12;
+			}
+			else
+			{ ## by year
+				$period = 2003;
+				$end = date("Y");
+			}
+
+			while (++$period <= $end)
+			{
+				$start_month = $bottom_level ? $period : 1;
+				$start_year = $bottom_level ? $period_data[1] : $period;
+				$end_month = $bottom_level ? ((12 == $start_month) ? 1 : ($start_month + 1)) : 1;
+				$end_year = $bottom_level ? ((12 == $start_month) ? ($start_year + 1) : $start_year) : ($start_year + 1);
+
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => MRP_STATUS_ARCHIVED,
+					"starttime" => new obj_predicate_compare (
+						OBJ_COMP_BETWEEN,
+						mktime(0,0,0,$start_month,1,$start_year),
+						mktime(0,0,0,$end_month,1,$end_year)
+					),
+					"parent" => $this_object->prop ("projects_folder"),
+				));
+				$count = $list->count();
+
+				if ($count)
+				{
+					$id = implode("_", $period_data) . "_" . $period;
+
+					$tree->add_item ($arr["parent"], array (
+						"name" => $period . " ({$count})",
+						"id" => $id,
+						"parent" => $arr["parent"],
+						"url" => $bottom_level ? aw_url_change_var ("mrp_tree_active_item", $id, aw_url_change_var ("ft_page", 0, $arr["url"])) : "javascript: void(0);",
+					));
+
+					if (!$bottom_level)
+					{
+						$tree->add_item ($id, array (
+							"id" => "dummy" . $id,
+							"parent" => $id,
+						));
+					}
+				}
+			}
+
+			return $tree->finalize_tree(array("rootnode" => $arr["parent"]));
+		}
+	}
 }
 
 
@@ -4965,5 +5275,51 @@ if ($_GET['show_thread_data'] == 1)
 // /* dbg */ while ($job = $this->db_next ()) {
 // /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_case_schedule (oid) values ({$job["oid"]})"); $this->restore_handle(); $i++;} echo $i." projekti."; exit;
 // /* dbg */ }
+
+
+/* dbg */ //finish all jobs in progress and set_all_resources_available
+// if ($_GET["mrp_set_all_resources_available"])
+// {
+		// $resources_folder = $this_object->prop ("resources_folder");
+		// $resource_tree = new object_tree(array(
+			// "parent" => $resources_folder,
+			// "class_id" => array(CL_MENU, CL_MRP_RESOURCE),
+			// "sort_by" => "objects.jrk",
+		// ));
+	// $list = new object_list (array (
+		// "class_id" => CL_MRP_JOB,
+		// "state" => MRP_STATUS_INPROGRESS,
+	// ));
+
+	// $jj = $list->arr();
+	// $j = get_instance(CL_MRP_JOB);
+
+	// foreach ($jj as $job_id => $job)
+	// {
+		// echo "job id: " . $job->id() ."<br>";
+		// $arr = array("id"=>$job_id);
+		// $ud = parse_url($j->done($arr));
+		// $pars = array();
+		// parse_str($ud["query"], $pars);
+		// $this->dequote($pars["errors"]);
+		// $errs = unserialize($pars["errors"]);
+		// echo "done: [" . implode(",", $errs) . "]<br><br>";
+	// }
+
+	// $list = $resource_tree->to_list();
+	// $list->filter (array (
+		// "class_id" => CL_MRP_RESOURCE,
+	// ));
+	// $list = $list->arr();
+
+	// foreach ($list as $res_id => $r)
+	// {
+		// echo "res id: " . $res_id ."<br>";
+		// $r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
+		// $r->save();
+		// echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
+	// }
+// }
+// /* dbg */
 
 ?>
