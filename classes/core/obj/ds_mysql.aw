@@ -1142,13 +1142,28 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$datafetch = false;
 			}
 
+			$gpb = "";
+			if ($this->limit != "")
+			{
+				// this is here for a quite complicated, but unfortunately, quite necessary reason:
+				// if you do a search that searches through several relations and several of them match
+				// then you would get several rows for each object
+				// and thus you would get less than the limit amount of objects
+				// which, in the sql sense is quite falid, since joins are cross products on data sets
+				// but in the gimme-a-list-of-objects-with-those-props is not
+				// so we solve this by making sure we only get separate objects in the result set. 
+				// we do this by adding the group by clause here. 
+				// it slows things by quite a bit, but unfortunately, it is the only way to avoid this. 
+				$gpb = "GROUP BY objects.oid";
+			}
+
 			$q = "
 				SELECT 
 					$fetch_sql
 				FROM 
 					$joins 
 				WHERE 
-					$where ".$this->sby." ".$this->limit;
+					$where $gpb ".$this->sby."  ".$this->limit;
 
 			$acldata = array();
 			$parentdata = array();
