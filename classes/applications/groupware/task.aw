@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.95 2006/05/10 10:02:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.96 2006/05/17 14:12:26 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1598,6 +1598,24 @@ class task extends class_base
 				$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
 			}
 
+			$onbill = "";
+			if ($row->prop("bill_id"))
+			{
+				$onbill = sprintf(t("Arve nr %s"), $bno);
+			}
+			else
+			if ($row->prop("bill_no"))
+			{
+				$onbill = sprintf(t("Arve nr %s"), $row->prop("bill_no"));
+			}
+			else
+			{
+				$onbill = html::checkbox(array(
+					"name" => "rows[$idx][on_bill]",
+					"value" => 1,
+					"checked" => ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill"))
+				));
+			}
 			$t->define_data(array(
 				"task" => $pref."<a name='row_".$idx."'></a>".html::textarea(array(
 					"name" => "rows[$idx][task]",
@@ -1638,11 +1656,7 @@ class task extends class_base
 					"checked" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done")
 				)),
 				"done_val" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done"),
-				"on_bill" => ($row->prop("bill_id") ? sprintf(t("Arve nr %s"), $bno) : html::checkbox(array(
-					"name" => "rows[$idx][on_bill]",
-					"value" => 1,
-					"checked" => ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill"))
-				))),
+				"on_bill" => $onbill,
 				"bill_val" => ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill")),
 				"comments" => $comments,
 				"comments_cnt" => $comments_cnt,

@@ -60,6 +60,7 @@ class crm_company_bills_impl extends class_base
 			"on_bill" => 1,
 			"done" => 1
 		));
+
 		$tasks = new object_list();
 		$sum2proj = array();
 		if ($rows->count())
@@ -91,7 +92,7 @@ class crm_company_bills_impl extends class_base
 			"class_id" => CL_CRM_MEETING,
 			"send_bill" => 1,
 			"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ''),
-			"flags" => array("mask" => OBJ_IS_DONE, "flags" => OBJ_IS_DONE)
+			"is_done" => 8
 		));
 		foreach($meetings->arr() as $row)
 		{
@@ -295,6 +296,7 @@ class crm_company_bills_impl extends class_base
 				)
 			))
 		));
+
 		$tasks = new object_list();
 		$sum2task = array();
 		$hr2task = array();
@@ -310,6 +312,7 @@ class crm_company_bills_impl extends class_base
 			{
 				$task = obj($conn["from"]);
 				$row = obj($conn["to"]);
+
 				if ($task->prop("project") == $arr["request"]["proj"])
 				{
 					$sum2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
