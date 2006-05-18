@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.10 2006/04/24 08:21:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.11 2006/05/18 08:15:22 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -340,11 +340,12 @@ class menu_tree extends class_base
 		}
 
 		$this->rec_level++;
-
+		$ss = get_instance("contentmgmt/site_show");
 		$slicesize = sizeof($slice);
 		$slicecounter = 0;
 		while(list($k,$v) = each($slice))
 		{
+			$url = "";
 			$slicecounter++;
 			$id = $v->id();
 			$spacer = str_repeat($this->spacer,$this->level * $this->sq);
@@ -429,6 +430,11 @@ class menu_tree extends class_base
 						break;
 					}
 				}
+			}
+
+			if ($url == "")
+			{
+				$url = $ss->make_menu_link($v);
 			}
 
 			if ($this->children_only && $v->id() == $this->start_from)
