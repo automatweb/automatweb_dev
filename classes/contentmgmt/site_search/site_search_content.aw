@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.72 2006/05/04 13:47:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.73 2006/05/18 08:07:31 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1106,7 +1106,7 @@ class site_search_content extends class_base
 
 	function _sort_title($a, $b)
 	{
-		return strcmp($a["title"], $b["title"]);
+		return strcmp(mb_strtolower($a["title"]), mb_strtolower($b["title"]));
 	}
 
 	function _sort_time($a, $b)
