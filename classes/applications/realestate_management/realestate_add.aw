@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.10 2006/05/16 14:57:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.11 2006/05/18 14:34:09 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -57,6 +57,17 @@ caption ümbersuunamine
 
 class realestate_add extends class_base
 {
+	var $opt = array(
+		CL_REALESTATE_HOUSE => "Maja",
+		CL_REALESTATE_ROWHOUSE => "Ridaelamu",
+		CL_REALESTATE_COTTAGE => "Suvila",
+		CL_REALESTATE_HOUSEPART => "Majaosa",
+		CL_REALESTATE_APARTMENT => "Korter",
+		CL_REALESTATE_COMMERCIAL => "Äripind",
+		CL_REALESTATE_GARAGE => "Garaaz",
+		CL_REALESTATE_LAND => "Maa",
+	);
+	
 	function realestate_add()
 	{
 		// change this to the folder under the templates folder, where this classes templates will be, 
@@ -630,6 +641,10 @@ class realestate_add extends class_base
 					$realest_obj->set_prop("expire" , $expire + 604800 * $valid_for);
 					$ret.= "maksmine õnnestus, pakkumine nüüd leheküljel nähtav ".$valid_for." nädalat";
 					$realest_obj->save();
+					$this->read_template("bank_return.tpl");
+					$this->level_vars(array(
+					));
+					return $this->parse();
 				}
 			}
 			$_SESSION["bank_return"]["data"] = null;
@@ -647,6 +662,20 @@ class realestate_add extends class_base
 		);
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
 		$prop_obj = get_instance(CL_REALESTATE_PROPERTY);
+		$object_view = $prop_obj->request_execute($realest_obj);
+//		if(file_exists($tpl))
+//		{
+			$this->read_template("result.tpl");
+			$this->vars(array(
+				"object_view"	=> $object_view,
+				"change_link" 	=> $realest_obj->meta("added_from")."?id=".$realest_obj->id(),
+				"list_link"	=> $this->mk_my_orb("my_realestate_list", array()),
+				"pay_link"	=> $bank_payment->mk_my_orb("pay_site", array()),
+			));
+			return $this->parse();
+		
+//		}
+		//juhul kui template faili pole, siis annab miski random variandi...
 		$ret.= $prop_obj->request_execute($realest_obj);
 		$ret.= '<br><br><a href="';
 		$ret.= $realest_obj->meta("added_from")."?id=".$realest_obj->id();
@@ -1028,6 +1057,12 @@ class realestate_add extends class_base
 			$all_objects = array_merge($all_objects,$obj_list->arr());
 		}
 		
+		$trans_types = array(
+				301 => t("Müük"),
+				300 => t("Ost"),
+				299 => t("Üürile anda"),
+		);
+		
 		$tpl = "list.tpl";
 		$this->read_template($tpl);
 		$html = get_instance("html");
@@ -1049,6 +1084,7 @@ class realestate_add extends class_base
 				elseif($expire == t("Maksmata")) $extend = t("Maksa");
 				else $extend = t("");
 			
+			
 				$this->vars(array(
 					"name" 	 	=> $rlst_object->name(),
 					"id"	 	=> $rlst_object->id(),
@@ -1060,6 +1096,8 @@ class realestate_add extends class_base
 						"url" 	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
 						"no_link" => 1,
 					)),
+					"type"		=> $this->opt[$rlst_object->class_id()],
+					"action"	=> $trans_types[$rlst_object->prop("transaction_type")],
 /*					"regio"		=> $html->form(array(
 						"action" => "http://www.regio.ee/?op=body&id=24",
 						"method" => "POST",

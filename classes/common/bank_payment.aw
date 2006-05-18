@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.3 2006/04/21 11:28:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.4 2006/05/18 14:34:08 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -438,7 +438,9 @@ class bank_payment extends class_base
 	}
 	
 	/**
-	@attrib name=pay_site is_public="1" caption="Change" no_login=1 api=1
+	@attrib name=pay_site is_public="1" caption="Change" no_login=1 api=1 params=name
+	@param die optional type=bool
+		if set, dies instead of return
 	
 	@returns string/html
 	@comment
@@ -448,18 +450,18 @@ class bank_payment extends class_base
 		$targ = obj($arr["alias"]["target"]);
 		$_SESSION["bank_payment"] = array(
 			"data"		=> $targ->meta("bank")// Array(
-						//	[amount] //Amount to be paid. Max length=17
-						//	[expl] //Explanation of payment order. Max length=70
-						//	[bank_id] => Array//bank id. possible choices: "seb", "hansapank" , "sampopank", "nordeapank" , "krediidipank"
-						//	(
-						//		[sender_id]//ID of compiler of query (merchant's ID). Max length=10
-						//		[stamp]//Query ID. Max length=20
-						//	)
-						//	[bank_id2] => Array
-						//	(
-						//		[sender_id]
-						//		[stamp]
-						//	))
+				//	[amount] //Amount to be paid. Max length=17
+				//	[expl] //Explanation of payment order. Max length=70
+				//	[bank_id] => Array//bank id. possible choices: "seb", "hansapank" , "sampopank", "nordeapank" , "krediidipank"
+				//	(
+				//		[sender_id]//ID of compiler of query (merchant's ID). Max length=10
+				//		[stamp]//Query ID. Max length=20
+				//	)
+				//	[bank_id2] => Array
+				//	(
+				//		[sender_id]
+				//		[stamp]
+				//	))
 			"reference_nr"	=> $_SESSION["realestate_input_data"]["realestate_id"],//Reference number of payment order. Max length=19
 			"url" 		=> post_ru(),//optional
 			"cancel"	=> post_ru(),//optional 
@@ -487,10 +489,12 @@ class bank_payment extends class_base
 	**/
 	function pay_site($args)
 	{
+		global $die;
+		extract($args);
 		if(!$_SESSION["bank_payment"]) return false;
 		extract($_SESSION["bank_payment"]);
 		$tpl = "bank_pay_site.tpl";
-		if($this->read_template($tpl , $silent = 1))
+		if($this->read_template($tpl, $silent=1))
 		{
 			$template_exists = 1;
 		}
@@ -502,7 +506,7 @@ class bank_payment extends class_base
 			&& $data[$bank]["stamp"])
 			{
 				$ret.='<img src="'.aw_ini_get("baseurl").'/automatweb/images/pank/'.$bank.'_pay.gif">';
-				$ret.= $this->do_payment(array(
+				$bank_form = $this->do_payment(array(
 					"form"		=> 1,
 					"test"		=> 1,
 					"bank_id"	=> $bank,
@@ -512,6 +516,14 @@ class bank_payment extends class_base
 					"reference_nr"	=> $reference_nr,
 					"expl"		=> $data["expl"],
 				));
+				
+				if($template_exists)
+				{
+					$this->vars(array(
+						$bank => $bank_form,
+					));
+				}
+				$ret.= $bank_form;
 				$ret.= '<br><input type="submit" value="maksma"></form>';
 			}
 		}
@@ -522,6 +534,7 @@ class bank_payment extends class_base
 			));
 			return $this->parse();
 		}
+		if($die) die($ret);
 		return $ret;
 	}
 }

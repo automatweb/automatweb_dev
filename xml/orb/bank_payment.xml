@@ -4,6 +4,7 @@
 		<action name="pay_site" is_public="1" caption="Change">
 			<function name="pay_site">
 				<arguments>
+					<optional name="die" type="bool" />
 				</arguments>
 			</function>
 		</action>
