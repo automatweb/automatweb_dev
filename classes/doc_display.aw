@@ -38,6 +38,7 @@ class doc_display extends aw_template
 		}
 
 		$text = $this->_get_text($arr, $doc);
+		$text_no_aliases = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$text);
 
 		$al = get_instance("aliasmgr");
 		$mt = $doc->meta();
@@ -78,6 +79,7 @@ class doc_display extends aw_template
 
 		$this->vars(array(
 			"text" => $text,
+			"text_no_aliases" => $text_no_aliases,
 			"title" => $doc->prop("title"),
 			"author" => $doc->prop("author"),
 			"channel" => $doc->prop("channel"),
