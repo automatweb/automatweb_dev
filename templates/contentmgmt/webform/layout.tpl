@@ -31,6 +31,7 @@ function selall()
 		<td width="10">Vahe</td>
 		<td width="30" align="center"><a href="javascript:selall()">Vali</a></td>
 		<td width="30">Ei näita veebis</td>
+		<td width="30">Ei näita nime</td>
 	</tr>
 	<!-- SUB: subt -->
 	<tr bgcolor="{VAR:bgcolor}">
@@ -47,6 +48,7 @@ function selall()
 		<td width="30" align="center"><input type="textbox" id="prp_opts[{VAR:prp_key}][space]" name="prp_opts[{VAR:prp_key}][space]" value="{VAR:space}" size="2"></td>
 		<td width="30" align="center"><input type="checkbox" id="mark[{VAR:prp_key}]" name="mark[{VAR:prp_key}]" value="{VAR:prp_key}"></td>
 		<td width="30" align="center"><input type="checkbox" id="prp_opts[{VAR:prp_key}][invisible]" name="prp_opts[{VAR:prp_key}][invisible]" value="1" {VAR:invisible}></td>
+		<td width="30" align="center"><input type="checkbox" id="prp_opts[{VAR:prp_key}][invisible]" name="prp_opts[{VAR:prp_key}][invisible_name]" value="1" {VAR:invisible_name}></td>
 	</tr>
 	<!-- SUB: CLF5 -->
 	<tr bgcolor="{VAR:bgcolor}">

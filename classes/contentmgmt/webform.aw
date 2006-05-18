@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.89 2006/04/07 09:51:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.90 2006/05/18 15:42:55 markop Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -503,6 +503,10 @@ class webform extends class_base
 				if (!isset($val["invisible"]))
 				{
 					$val["invisible"] = 0;
+				}
+				if (!isset($val["invisible_name"]))
+				{
+					$val["invisible_name"] = 0;
 				}
 				foreach($val as $key2 => $val2)
 				{
@@ -1215,6 +1219,7 @@ class webform extends class_base
 					"nextto" => (int)$property["nextto"] ? "checked" : "",
 					"space" => $property["space"],
 					"invisible" => (int)$property["invisible"] ? "checked" : "",
+					"invisible_name" => (int)$property["invisible_name"] ? "checked" : "",
 				));
 				if($prpdata["type"] == "classificator")
 				{
@@ -1645,6 +1650,7 @@ class webform extends class_base
 		foreach($els as $pn => $pd)
 		{
 			if($pd["invisible"]) continue;
+			if($pd["invisible_name"]) $pd["caption"] = null;
 			if($pd["type"] == "releditor")
 			{
 				$nms[$pn] = $pd["caption"];
@@ -1761,7 +1767,6 @@ class webform extends class_base
 			"properties" => $els,
 			"obj_inst" => $dummy,
 		));
-
 		$def_caption_style = $arr["obj_inst"]->prop("def_caption_style");
 		$def_prop_style = $arr["obj_inst"]->prop("def_prop_style");
 		if(!empty($def_caption_style) or !empty($def_prop_style))
