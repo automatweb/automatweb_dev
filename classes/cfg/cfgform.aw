@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.86 2006/05/04 09:04:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.87 2006/05/18 08:45:56 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1175,7 +1175,7 @@ class cfgform extends class_base
 			$rv["grpcaption[$key]"] = array(
 				"name" => "grpcaption[".$key."]",
 				"type" => "textbox",
-				"size" => 40,
+				"size" => 30,
 				"caption" => t("Pealkiri"),
 				"value" => $item["caption"],
 				"parent" => "b".$key,
@@ -1212,6 +1212,14 @@ class cfgform extends class_base
 				"parent" => "b$key",
 				"options" => array("" => t("--vali--")) + $ctr_list->names()
 			);
+			$rv["grp_d_ctl[$key]"] = array(
+				"name" => "grp_d_ctl[$key]",
+				"type" => "select",
+				"caption" => t("N&auml;itamise kontroller"),
+				"value" => $item["grp_d_ctl"],
+				"parent" => "b$key",
+				"options" => array("" => t("--vali--")) + $ctr_list->names()
+			);
 			$rv["b".$key] = array(
 				"name" => "b".$key,
 				"type" => "layout",
@@ -1245,8 +1253,10 @@ class cfgform extends class_base
 				$styl = $arr["request"]["grpstyle"][$key];
 				$view = $arr["request"]["grpview"][$key];
 				$ctl = $arr["request"]["grpctl"][$key];
+				$v_ctl = $arr["request"]["grp_d_ctl"][$key];
 				$grplist[$key]["grpview"] = $view;
 				$grplist[$key]["grpctl"] = $ctl;
+				$grplist[$key]["grp_d_ctl"] = $v_ctl;
 				$grplist[$key]["ord"] = $arr["request"]["grpord"][$key];
 				if (!empty($styl))
 				{
@@ -1860,6 +1870,21 @@ class cfgform extends class_base
 				}
 			}
 		}
+
+		foreach($ret as $gn => $gd)
+		{
+			if ($this->can("view", $gd["grp_d_ctl"]))
+			{
+				$ctl = obj($gd["grp_d_ctl"]);
+				$ctli = $ctl->instance();
+				$rv = $ctli->check_property($gd, $ctl->id(), $gd);
+				if ($rv == PROP_IGNORE)
+				{
+					unset($ret[$gn]);
+				}
+			}
+		}
+
 		return $ret;
 	}
 
