@@ -82,6 +82,15 @@
             <parent>p_l</parent>
             <field>p_tbl</field>
       </property>
+      <property>
+            <name>rejected_table</name>
+            <table>objects</table>
+            <group>rejected</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>rejected_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PROCUREMENT_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -94,6 +103,10 @@
                   <caption>N&amp;amp;otilde;uded</caption>
                   <submit>no</submit>
             </r>
+            <rejected>
+                  <caption>Tagasi l&amp;amp;uuml;&amp;amp;uuml;katud</caption>
+                  <submit>no</submit>
+            </rejected>
       </groupinfo>
       <tableinfo>
             <aw_procurement_offers>

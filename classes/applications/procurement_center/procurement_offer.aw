@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.1 2006/04/27 08:14:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.2 2006/05/18 11:19:09 kristo Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -38,7 +38,12 @@
 
 		@property p_tbl type=table no_caption=1 store=no parent=p_l
 
+@default group=rejected
+
+	@property rejected_table type=table store=no no_caption=1
+
 @groupinfo r caption="N&otilde;uded" submit=no
+@groupinfo rejected caption="Tagasi l&uuml;&uuml;katud" submit=no
 
 @reltype PROCUREMENT value=1 clid=CL_PROCUREMENT
 @caption Hange
@@ -47,9 +52,6 @@
 @caption Pakkuja
 */
 
-define("PO_IN_BASE", 1);
-define("PO_NEEDS_INSTALL", 2);
-define("PO_NEEDS_DEVELOPMENT", 3);
 
 define("OFFER_STATE_NEW", 0);
 define("OFFER_STATE_PUBLIC", 1);
@@ -87,6 +89,10 @@ class procurement_offer extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "rejected_table":
+				$this->_rejected_table($arr);
+				break;
+
 			case "state":
 				$prop["options"] = $this->get_offer_states();
 				if ($arr["obj_inst"]->prop("state") != OFFER_STATE_NEW)
@@ -158,6 +164,7 @@ class procurement_offer extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["d_id"] = $_GET["d_id"];
 	}
 
 	function do_db_upgrade($t, $f)
@@ -186,11 +193,30 @@ class procurement_offer extends class_base
 	{
 		$tb =& $arr["prop"]["vcl_inst"];
 
+		$parent = $arr["request"]["d_id"];
+		$po = obj($parent);
+		if ($po->class_id() == CL_PROCUREMENT_REQUIREMENT)
+		{
+			$tb->add_button(array(
+				'name' => 'new',
+				'img' => 'new.gif',
+				'tooltip' => t('Lisa'),
+				"url" => html::get_new_url(CL_PROCUREMENT_REQUIREMENT_SOLUTION, $parent, array("return_url" => get_ru()))
+			));
+		}
+
 		$tb->add_button(array(
 			'name' => 'save',
 			'img' => 'save.gif',
 			'tooltip' => t('Salvesta'),
 			"action" => "save_data"
+		));
+
+		$tb->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta'),
+			"action" => "delete_solutions"
 		));
 	}
 
@@ -205,7 +231,7 @@ class procurement_offer extends class_base
 			),
 			"root_item" => obj($arr["obj_inst"]->prop("procurement")),
 			"ot" => new object_tree(array(
-				"class_id" => array(CL_MENU),
+				"class_id" => array(CL_MENU,CL_PROCUREMENT_REQUIREMENT),
 				"parent" => $arr["obj_inst"]->prop("procurement"),
 				"lang_id" => array(),
 				"site_id" => array()
@@ -243,10 +269,20 @@ class procurement_offer extends class_base
 			"sortable" => 1,
 		));
 		$t->define_field(array(
-			"name" => "comment",
+			"name" => "solution",
 			"caption" => t("Kommentaar"),
 			"align" => "center",
 			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "default",
+			"caption" => t("Eelistatud"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
 		));
 	}
 
@@ -261,55 +297,29 @@ class procurement_offer extends class_base
 			return;
 		}
 
-		$data = $arr["obj_inst"]->meta("data");
+		$data = $arr["obj_inst"]->meta("defaults");
+		$default = $data[$parent];
 		$ol = new object_list(array(
-			"class_id" => CL_PROCUREMENT_REQUIREMENT,
+			"class_id" => CL_PROCUREMENT_REQUIREMENT_SOLUTION,
 			"parent" => $parent,
 			"lang_id" => array(),
 			"site_id" => array()
 		));
 		foreach($ol->arr() as $o)
 		{
-			if ($arr["obj_inst"]->prop("state") == OFFER_STATE_NEW)
-			{
-				$t->define_data(array(
-					"name" => html::obj_view_url($o),
-					"readyness" => html::select(array(
-						"options" => $this->readyness_states,
-						"name" => "data[".$o->id()."][readyness]",
-						"value" => $data[$o->id()]["readyness"],
-					)),
-					"price" => html::textbox(array(
-						"name" => "data[".$o->id()."][price]",
-						"value" => $data[$o->id()]["price"],
-						"size" => 5
-					)),
-					"time_to_install" => html::textbox(array(
-						"name" => "data[".$o->id()."][time_to_install]",
-						"value" => $data[$o->id()]["time_to_install"],
-						"size" => 5
-					))." ".t("tundi"),
-					"comment" => html::textarea(array(
-						"name" => "data[".$o->id()."][comment]",
-						"value" => $data[$o->id()]["comment"],
-						"rows" => 4,
-						"cols" => 30
-					)).html::hidden(array(
-						"name" => "data[".$o->id()."][id]",
-						"value" => $o->id(),
-					))
-				));
-			}
-			else
-			{
-				$t->define_data(array(
-					"name" => html::obj_view_url($o),
-					"readyness" => $this->readyness_states[$data[$o->id()]["readyness"]],
-					"price" => number_format($data[$o->id()]["price"], 2),
-					"time_to_install" => $data[$o->id()]["time_to_install"],
-					"comment" => $data[$o->id()]["comment"],
-				));
-			}
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"readyness" => $this->readyness_states[$o->prop("readyness")],
+				"price" => number_format($o->prop("price"), 2),
+				"time_to_install" => $o->prop("time_to_install"),
+				"solution" => $o->prop("solution"),
+				"default" => html::radiobutton(array(
+					"name" => "default",
+					"value" => $o->id(),
+					"checked" => $default == $o->id()
+				)),
+				"oid" => $o->id()
+			));
 		}
 	}
 
@@ -318,11 +328,15 @@ class procurement_offer extends class_base
 		$reqs = $this->model->get_requirements_from_procurement(obj($o->prop("procurement")));
 		$hrs = 0;
 		$pr = 0;
-		$data = $o->meta("data");
+		$data = $o->meta("defaults");
 		foreach($reqs->arr() as $req)
 		{
-			$hrs += $data[$req->id()]["time_to_install"];
-			$pr += $data[$req->id()]["price"];
+			if ($data[$req->id()])
+			{
+				$of = obj($data[$req->id()]);
+				$hrs += $of->prop("time_to_install");
+				$pr += $of->prop("price");
+			}
 		}
 
 		return $pr + ($o->prop("hr_price") * $hrs);
@@ -333,20 +347,56 @@ class procurement_offer extends class_base
 	**/
 	function save_data($arr)
 	{
-		$o = obj($arr["id"]);
-		$d = $o->meta("data");
-		foreach(safe_array($arr["data"]) as $_id => $inf)
+		if ($arr["default"])
 		{
-			$d[$_id] = $inf;
+			$o = obj($arr["id"]);
+			$d = $o->meta("defaults");
+			$d[$arr["d_id"]] = $arr["default"];
+			$o->set_meta("defaults", $d);
+			$o->save();
 		}
-		$o->set_meta("data", $d);
-		$o->save();
 		return $arr["post_ru"];
 	}
 
 	function get_offer_states()
 	{
 		return $this->offer_states;
+	}
+
+	/**
+		@attrib name=delete_solutions
+	**/
+	function delete_solutions($arr)
+	{
+		object_list::iterate_list($arr["sel"], "delete");
+		return $arr["post_ru"];
+	}
+
+	function _init_rejected_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+	}
+
+	function _rejected_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_rejected_table($t);
+
+		$reqs = $this->model->get_requirements_from_procurement(obj($arr["obj_inst"]->prop("procurement")));
+		foreach($reqs->arr() as $req)
+		{
+			$ns = safe_array($req->meta("nonsuitable"));
+			foreach($ns as $n => $tmp)
+			{
+				$t->define_data(array(
+					"name" => html::obj_change_url($n)
+				));
+			}
+		}
 	}
 }
 ?>

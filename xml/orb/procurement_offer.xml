@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="delete_solutions">
+			<function name="delete_solutions">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
