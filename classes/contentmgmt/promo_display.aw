@@ -169,6 +169,12 @@ class promo_display
 			{
 				$show_promo = false;
 			}
+
+			$so = obj(aw_global_get("section"));
+			if ($o->meta("not_in_doc_view") == 1 && $so->class_id() == CL_DOCUMENT)
+			{
+				$show_promo = false;
+			}
 			// this line decides, whether we should show this promo box here or not.
 			// now, how do I figure out whether the promo box is actually in my path?
 			if ($show_promo)

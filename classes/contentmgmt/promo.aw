@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.88 2006/05/02 12:07:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.89 2006/05/18 08:03:27 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -74,6 +74,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 
 		@property not_in_search type=checkbox ch_value=1 table=objects field=meta method=serialize group=container_locations
 		@caption &Auml;ra n&auml;ita otsingu tulemuste lehel
+
+		@property not_in_doc_view type=checkbox ch_value=1 table=objects field=meta method=serialize group=container_locations
+		@caption &Auml;ra n&auml;ita dokumendi pikas vaates
 
 		@property trans_all_langs type=checkbox ch_value=1 table=objects field=meta method=serialize group=container_locations
 		@caption Sisu n&auml;idatakse k&otilde;ikides keeltes
