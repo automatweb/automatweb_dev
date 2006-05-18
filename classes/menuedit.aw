@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.365 2006/05/17 12:23:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.366 2006/05/18 08:29:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -313,8 +313,11 @@ class menuedit extends aw_template
 			// if the section is a menu and has a link, then redirect the user to that link
 			if ($_obj->class_id() == CL_MENU && $_obj->prop("link") != "")
 			{
-				header("Location: ".$_obj->prop("link"));
-				die();
+				if (strpos($_obj->prop("link"), $_obj->id()) === false)
+				{
+					header("Location: ".$_obj->prop("link"));
+					die();
+				}
 			}
 
 			$class_id = $_obj->class_id();
