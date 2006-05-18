@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.22 2006/05/16 12:20:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.23 2006/05/18 07:55:55 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -762,20 +762,27 @@ class join_site extends class_base
 				{
 					$xprop["caption"] = $propn[$clid][$oldn];
 				}
+
+				if ($oldn == "comment" && $clid == CL_USER)
+				{
+					$xprop["type"] = "textarea";
+					$xprop["rows"] = 5;
+					$xprop["cols"] = 30;
+				}
 				$klomp[$oldn] = $xprop;
 			}
 		}
 
-			$this->_do_final_sort_props($ob, $klomp);
-			foreach($klomp as $xprop)
-			{
-				$htmlc->add_property($xprop);
-			}
-			$htmlc->finish_output(array());
+		$this->_do_final_sort_props($ob, $klomp);
+		foreach($klomp as $xprop)
+		{
+			$htmlc->add_property($xprop);
+		}
+		$htmlc->finish_output(array());
 
-			$html .= $htmlc->get_result(array(
-				"raw_output" => 1
-			));
+		$html .= $htmlc->get_result(array(
+			"raw_output" => 1
+		));
 
 		if ($ob->prop("join_sep_pages"))
 		{
