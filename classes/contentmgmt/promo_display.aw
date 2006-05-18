@@ -171,7 +171,7 @@ class promo_display
 			}
 
 			$so = obj(aw_global_get("section"));
-			if ($o->meta("not_in_doc_view") == 1 && $so->class_id() == CL_DOCUMENT)
+			if ($o->meta("not_in_doc_view") == 1 && ($so->class_id() == CL_DOCUMENT || $_GET["docid"]))
 			{
 				$show_promo = false;
 			}
