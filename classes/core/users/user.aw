@@ -2111,7 +2111,7 @@ class user extends class_base
 
 	function get_rating($uid)
 	{
-		return  $this->db_fetch_field("SELECT AVG(rating) as r FROM user2rating WHERE uid = '$uid'", "r");
+		return  $this->db_fetch_field("SELECT SUM(rating) as r FROM user2rating WHERE uid = '$uid'", "r");
 	}
 }
 ?>
