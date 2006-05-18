@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.184 2006/05/17 13:54:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.185 2006/05/18 13:36:12 kristo Exp $
 
 /*
 
@@ -2532,6 +2532,7 @@ class site_show extends class_base
 		{
 			$su = (aw_ini_get("frontpage") == aw_global_get("section") ? $link : aw_global_get("REQUEST_URI"));
 			$su = aw_url_change_var("clear_doc_content_type", null, $su);
+			$su = aw_url_change_var("docid", null, $su);
 			$link = aw_url_change_var("set_doc_content_type", $sdct, $su);
 		}
 		return $link;
