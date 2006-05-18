@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.18 2006/05/03 13:33:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.19 2006/05/18 14:40:27 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -39,6 +39,12 @@
 
 	@property administrative_structure type=relpicker reltype=RELTYPE_ADMINISTRATIVE_STRUCTURE clid=CL_COUNTRY_ADMINISTRATIVE_STRUCTURE automatic=1
 	@caption Haldusjaotus
+
+	@property default_searchparam_sort_by type=select
+	@caption Default järjestus
+
+	@property default_searchparam_sort_order type=select
+	@caption Default järjestuse suund
 
 	@property save_search type=checkbox ch_value=1
 	@caption Salvesta otsingutulemus
@@ -439,6 +445,7 @@ class realestate_search extends class_base
 				}
 				break;
 
+			case "default_searchparam_sort_by":
 			case "searchparam_sort_by":
 			case "formdesign_sort_options":
 				if ($prop["name"] == "formdesign_sort_options")
@@ -472,13 +479,28 @@ class realestate_search extends class_base
 						$options[$prop_name] = $prop_data["caption"];
 					}
 				}
-
+				if ($prop["name"] == "searchparam_sort_by")
+				{
+					$prop["value"] = $this_object->meta("searc_sort_by");
+					if(!$prop["value"])
+					{
+						$prop["value"] = $this_object->prop("default_searchparam_sort_by");
+					}
+				}
 				$prop["options"] = $options;
 				break;
 
 			case "searchparam_sort_order":
 				$prop["options"] = $this->search_sort_orders;
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["sort_ord"];
+				if(!$prop["value"])
+				{
+					$prop["value"] = $this_object->prop("default_searchparam_sort_order");
+				}
+				break;
+
+			case "default_searchparam_sort_order":
+				$prop["options"] = $this->search_sort_orders;
 				break;
 
 			case "searchresult":
@@ -612,10 +634,11 @@ class realestate_search extends class_base
 				elseif ($prop["name"] == "searchparam_sort_by")
 				{
 					$prop["value"] = $this->search_sort_options;
+					$this_object->set_meta("searc_sort_by" , $arr["request"]["searchparam_sort_by"]);
+					$this_object->save();
 				}
 				break;
 		}
-
 		return $retval;
 	}
 
@@ -722,9 +745,13 @@ class realestate_search extends class_base
 				"sort_ord" => $_GET["sort_ord"],
 			);
 		}
-
 		$search = $this->get_search_args ($args, $this_object);
-
+		
+		//äkki teeks nii?
+		if(!$search["sort_by"]) $search["sort_by"]=$this_object->meta("searc_sort_by");
+		if(!$search["sort_by"]) $search["sort_by"]=$this_object->prop("default_searchparam_sort_by");
+		if(!$search["sort_ord"]) $search["sort_ord"]=$this_object->prop("default_searchparam_sort_order");
+		
 		if (!$this_object->prop ("result_no_form"))
 		{
 			### captions
@@ -1114,7 +1141,6 @@ class realestate_search extends class_base
 			$list = new object_list ();
 			$search_requested = false;
 		}
-
 		exit_function("re_search::show - init & generate form & search");
 		enter_function("re_search::show - process searchresults");
 
@@ -1166,7 +1192,6 @@ class realestate_search extends class_base
 							"this" => $property,
 							"view_type" => "short",
 						));
-
 						$data = array (
 							"object" => $object_html,
  						);
@@ -1189,10 +1214,9 @@ class realestate_search extends class_base
 					// }
 					break;
 			}
-
+			$table->sortable=false;
 			$result = $table->get_html ();
 		}
-
 		exit_function("re_search::show - process searchresults");
 		enter_function("re_search::show - parse");
 
@@ -1692,7 +1716,6 @@ class realestate_search extends class_base
 			{
 				$this->search_sort_options = $options;
 			}
-
 			$search_sort_by = array_key_exists ($arr["sort_by"], $this->search_sort_options) ? $this->search_sort_options[$arr["sort_by"]]["table"] . "" . $arr["sort_by"] : NULL;
 			$search_sort_ord = array_key_exists ($arr["sort_ord"], $this->search_sort_orders) ? $arr["sort_ord"] : NULL;
 		}
@@ -1992,13 +2015,11 @@ class realestate_search extends class_base
 				// $address_ids = $list->ids ();
 			// }
 		// }
-
+		//$search_sort_by = "class_id";  $search_sort_ord ="ASC"; //testimiseks
 		### sorting
 		$sort = $search_sort_by ? $search_sort_by . " " . ($search_sort_ord ? $search_sort_ord : "ASC") : NULL;
-
 		### class specific arguments
 		$class_specific_args = array();
-
 		if (
 			in_array(CL_REALESTATE_HOUSE, $search_ci) or
 			in_array(CL_REALESTATE_HOUSEPART, $search_ci) or
@@ -2049,17 +2070,14 @@ class realestate_search extends class_base
 			$agent_constraint,
 			"sort_by" => $sort,
 		);
-
 		if ($search_c24id)
 		{
 			$args["city24_object_id"] = $search_c24id;
 		}
 
 		$args = $args + $class_specific_args;
-
 		$result_list = new object_list ($args);
 		// $result_list = $result_list->arr ();
-
 		exit_function ("re_search::search - get objlist");
 		enter_function ("re_search::search - address");
 
