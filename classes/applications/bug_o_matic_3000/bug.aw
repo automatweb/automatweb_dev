@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.40 2006/05/15 06:58:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.41 2006/05/18 11:21:59 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -581,6 +581,7 @@ class bug extends class_base
 		// also, if the bug has a deadline, then we need to up the priority as the deadline comes closer
 		if (($dl = $bug->prop("deadline")) > 200)
 		{
+
 			// deadline in the next 24 hrs = +3
 			if ($dl < (time() - 24*3600))
 			{

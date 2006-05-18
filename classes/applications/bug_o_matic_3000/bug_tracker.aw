@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.58 2006/05/15 06:58:23 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.58 2006/05/15 06:58:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.59 2006/05/18 11:21:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.59 2006/05/18 11:21:59 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -36,6 +36,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 
 @default group=unestimated_bugs
+
+	@property unset_p type=text store=no 
+	@caption Kelle buge n&auml;idata
 
 	@property unset_table type=table store=no no_caption=1
 
@@ -291,6 +294,7 @@ class bug_tracker extends class_base
 				break;
 
 			case "gantt_p":
+			case "unset_p":
 				if ($this->can("view", $arr["request"]["filt_p"]))
 				{
 					$p = obj($arr["request"]["filt_p"]);
@@ -1307,12 +1311,12 @@ class bug_tracker extends class_base
 			"caption" => t("Kellele"),
 			"sortable" => 1,
 		));
-		/*
+		
 		$t->define_field(array(
 			"name" => "sort_priority",
 			"caption" => t("SP"),
 			"sortable" => 1,
-		));*/
+		));
 
 		$t->define_field(array(
 			"name" => "bug_priority",
@@ -2714,7 +2718,7 @@ class bug_tracker extends class_base
 				$mail .= "\n\nLihtsalt saad seda teha siit:\n";
 				$mail .= "http://intranet.automatweb.com/automatweb/orb.aw?class=bug_tracker&action=change&id=142821&group=unestimated_bugs";
 				echo "send to ".$p->prop("email.mail")."<br>".nl2br($mail)." <br><br><br><br>";
-				//send_mail($p->prop("email.mail"), t("Bugtracki M22ramata ajad"), $mail);
+				send_mail($p->prop("email.mail"), t("Bugtracki M22ramata ajad"), $mail);
 			}
 		}
 		die(t("all done"));
@@ -2760,8 +2764,13 @@ class bug_tracker extends class_base
 	{
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_unestimated_table($t);
+		$p = get_current_person();
+		if ($arr["request"]["filt_p"])
+		{
+			$p = obj($arr["request"]["filt_p"]);
+		}
 
-		foreach($this->get_unestimated_bugs_by_p(get_current_person()) as $bug)
+		foreach($this->get_unestimated_bugs_by_p($p) as $bug)
 		{
 			$t->define_data(array(
 				"name" => html::obj_change_url($bug),
