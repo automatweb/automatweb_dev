@@ -6,7 +6,20 @@ class http
 	{
 		aw_config_init_class(&$this);
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+	@param url required type=string
+		url, with all the data needed for HTTP get request
+	@return array
+		data returned after request
+	@example
+		$http = get_instance("protocols/file/http");
+		$this->content = $http->get($this->url);
+		$this->headers = $http->get_headers();
+	@comment
+		gets requested data from url
+	**/
 	function get($url)
 	{
 		enter_function("http::get");
@@ -46,11 +59,24 @@ class http
 		return $data;
 	}
 
+	/**
+	@attrib api=1
+	@return $this->last_request_headers
+	@example ${get}
+	@comment
+		returns last requested headers
+	**/
 	function get_headers()
 	{
 		return $this->last_request_headers;
 	}
-
+	
+	/**
+	@attrib api=1
+	@return string/content type
+	@comment
+		returns content type, if not in headers, returns "text/html"
+	**/
 	function get_type()
 	{
 		$headers = explode("\n", $this->last_request_headers);
@@ -66,7 +92,40 @@ class http
 
 		return $ct;
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@param host required type=string
+		host URL
+	@param sessid optional type=string
+		sets cookie value to sessid
+	@param silent optional type=bool
+		object id
+	@example
+		$awt = get_instance("protocols/file/http");
+		$awt->handshake(array(
+			"host" => $url,
+			"sessid" => $evnt["sessid"]
+		));
+		if ($evnt["uid"] && $evnt["password"])
+			$awt->login(array(
+				"host" => $url, 
+				"uid" => $evnt["uid"], 
+				"password" => $evnt["password"]
+			));
+		else	$awt->login_hash(array(
+				"host" => $url, 
+				"uid" => $evnt["uid"], 
+				"hash" => $evnt["auth_hash"],
+			));
+		$req = $awt->do_send_request(array(
+			"host" => $url,
+			"req" => substr($ev_url,strlen("http://")+strlen($url)))
+		);
+		$awt->logout(array("host" => $url));
+	
+	@return cookie, if sessid is not set
+	**/
 	function handshake($args = array())
 	{
 		extract($args);
@@ -125,7 +184,15 @@ class http
 		}
 		return $cookie;
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+	@param id required type=oid
+		object id
+	@return array(prop("server") , $this->cookie)
+	@comment 
+		object's props(server, login_uid, login_password, server) must be set
+	**/
 	function login_from_obj($id)
 	{
 		$ob = new object($id);
@@ -143,7 +210,21 @@ class http
 
 		return array($ob->prop("server"),$this->cookie);
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@param host required type=string
+		Server URL
+	@param uid required type=uid
+		User id
+	@param password required type=string
+		password
+	@param silent optional type=bool
+		if not set, prints out the request
+	@example ${handshake}
+	@comment 
+		Sends login request
+	**/
 	function login($args = array())
 	{
 		extract($args);
@@ -185,7 +266,19 @@ class http
 			flush();
 		}
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@param host required type=string
+		Server URL
+	@param uid required type=uid
+		User id
+	@param hash required type=oid
+		hash value
+	@example ${handshake}
+	@comment 
+		Sends login request
+	**/
 	function login_hash($args = array())
 	{
 		extract($args);
@@ -228,6 +321,18 @@ class http
 		}
 	}
 
+	/**
+	@attrib api=1 params=name
+	@param host required type=string
+		Server URL
+	@param req required type=string
+		Request url
+	@return string
+		data returned after request
+	@example ${handshake}
+	@comment 
+		Sends HTTP GET request
+	**/
 	function do_send_request($arr)
 	{
 		extract($arr);
@@ -253,7 +358,17 @@ class http
 
 		return $ipd;
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@param host optional type=string
+		Server URL
+	@param req required type=string
+		Request url
+	@example ${handshake}
+	@comment 
+		Sends HTTP GET request
+	**/
 	function send_request($args = array())
 	{
 		extract($args);
@@ -290,7 +405,16 @@ class http
 		};
 		flush();
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@param host required type=string
+		Server URL
+	@return array(headers,data)
+	@example ${handshake}
+	@comment 
+		Log's out
+	**/
 	function logout($args = array())
 	{
 		extract($args);
@@ -316,12 +440,45 @@ class http
 		list($headers,$data) = explode("\r\n\r\n",$ipd);
 		return array($headers, $data);
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+	@param c required type=string
+		cookie
+	@comment 
+		Sets session cookie
+	**/
 	function set_session_cookie($c)
 	{
 		$this->cookie = $c;
 	}
 
+	/**
+	@attrib api=1 params=pos
+	@param server required type=string
+		Server URL
+	@param handler required type=string
+		POST handler
+	@param params requires type=array
+		Request parameters Array("parameter"=>"value")
+	@param port optional type=int default=80
+		Connection port
+	@example 
+		$http = get_instance("protocols/file/http");
+		return $http->post_request(
+			"https://unet.eyp.ee/cgi-bin/unet3.sh/un3min.r",
+			"https://unet.eyp.ee/cgi-bin/unet3.sh/un3min",
+			array(
+				"VK_SERVICE"	=> "1002",
+				"VK_VERSION"	=> "008",
+				"VK_SND_ID"	=> $sender_id,
+			),
+			$port = 80,
+		);
+	@return string
+	@comment 
+		Initiates a socket connection to the server and generates HTTP POST request
+	**/
 	function post_request($server, $handler, $params, $port = 80)
 	{
 		$fp = fsockopen($server,$port,&$errno, &$errstr, 5);
