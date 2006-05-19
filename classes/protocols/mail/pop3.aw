@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/pop3.aw,v 1.2 2005/03/22 16:20:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/pop3.aw,v 1.3 2006/05/19 10:53:10 markop Exp $
 // pop3.aw - POP3 login 
 /*
 
@@ -103,7 +103,26 @@ class pop3 extends class_base
 		}
 		return false;
 	}
-
+	
+	/**
+	@attrib api=1 params=name
+	@param id required type=oid
+		POP3 id
+	@return array of messages
+		FALSE if some error occurs
+	@errors 
+		ERR_POP3_INVUSER - if the user name is invalid
+		ERR_POP3_INVPWD - it the passwort is invalid
+		ERR_POP3_STAT - somekind of error after command STAT
+		ERR_POP3_UIDL - somekind of error after commant UIDL
+		ERR_POP3_RETR - problem with getting message
+		ERR_POP3_CONNECT - error with connecting
+	@example 
+		$pop3 = get_instance("protocols/mail/pop3");
+		$messages = $pop3->get_messages($pop3_id);
+	@comment 
+		Gets messages
+	**/
 	function get_messages($arr)
 	{
 		$obj = new object($arr["id"]);
@@ -114,7 +133,6 @@ class pop3 extends class_base
 		{
 			return false;
 		}
-
 		$this->read_response();
 		$this->send_command("USER $user");
 		if (!$this->get_status($this->read_response()))
@@ -199,12 +217,12 @@ class pop3 extends class_base
 
 		$this->send_command("QUIT");
 		$this->read_response();
-
 		/*
 		print "<pre>";
 		print_r($msgs);
 		print "</pre>";
 		*/
+		return ($msgs);
 	}
 
 	function get_message($num)

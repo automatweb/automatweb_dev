@@ -28,21 +28,45 @@ class pspell
 		}
 	}
 
+
+
+	/**Find out whether an extension is loaded
+	@attrib api=1
+	@returns TRUE if the extension identified by name  is loaded, FALSE otherwise.
+	**/
 	function is_available()
 	{
 		return extension_loaded("pspell");
 	}
 	
+	/**checks the spelling of a word.
+	@attrib api=1 params=pos
+	@param str required type=string
+		word you want to check
+	@returns TRUE if the spelling is correct, FALSE if not
+	**/
 	function check($str)
 	{
 		return pspell_check($this->driver, $str);
 	}
-
+	
+	/**Suggest spellings of a word
+	@attrib api=1 params=pos
+	@param str required type=string
+		word you want to check
+	@returns array of possible spellings for the given word
+	**/
 	function suggest($str)
 	{
 		return pspell_suggest($this->driver, $str);
 	}
-
+	
+	/**Suggest spellings of many words
+	@attrib api=1 params=pos
+	@param str required type=string
+		words you want to check
+	@returns array of possible spellings for the given words
+	**/
 	function check_str($str)
 	{
 		$ret = array();
