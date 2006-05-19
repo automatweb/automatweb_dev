@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.23 2006/05/18 07:55:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.24 2006/05/19 10:56:00 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -766,6 +766,7 @@ class join_site extends class_base
 				if ($oldn == "comment" && $clid == CL_USER)
 				{
 					$xprop["type"] = "textarea";
+					$xprop["comment"] = "";
 					$xprop["rows"] = 5;
 					$xprop["cols"] = 30;
 				}
