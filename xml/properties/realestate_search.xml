@@ -30,6 +30,16 @@
             <caption>Tulemused otsinguvormita</caption>
       </property>
       <property>
+            <name>result_pageselector_pos</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <comment>Otsingutulemuste tabeli navigatsiooni asukoht. Ei m&amp;otilde;juta admin liidese otsingut.</comment>
+            <caption>Tabeli navigatsiooni asukoht</caption>
+      </property>
+      <property>
             <name>searchform_select_size</name>
             <table>objects</table>
             <group>general</group>
@@ -87,6 +97,24 @@
             <clid>CL_COUNTRY_ADMINISTRATIVE_STRUCTURE</clid>
             <automatic>1</automatic>
             <caption>Haldusjaotus</caption>
+      </property>
+      <property>
+            <name>default_searchparam_sort_by</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Default j&amp;auml;rjestus</caption>
+      </property>
+      <property>
+            <name>default_searchparam_sort_order</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Default j&amp;auml;rjestuse suund</caption>
       </property>
       <property>
             <name>save_search</name>
