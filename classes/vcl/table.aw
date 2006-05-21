@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.76 2006/05/15 09:06:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.77 2006/05/21 07:28:46 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -260,9 +260,22 @@ class aw_table extends aw_template
 
 		@attrib api=1
 
+		@param type required type=string
+			"text" || "buttons" || "lb"
+
+		@param records_per_page required type=int
+			Number of records per page.
+
+		@param d_row_cnt required type=int
+			Number of records in total.
+
+		@param no_recount type=bool
+			?
+
+		@param position type=string
+			Pageselector position in table layout "top" || "bottom" || "both". default is "top".
+
 		@comment
-			type -> "text" || "buttons" || "lb"
-			records_per_page -> number of records per page
 
 	**/
 	function define_pageselector($arr)
@@ -270,11 +283,14 @@ class aw_table extends aw_template
 		$this->has_pages = true;
 		$this->records_per_page = $arr["records_per_page"];
 		$this->pageselector = $arr["type"];
+		$this->pageselector_position = $arr["position"] ? $arr["position"] : "top";
+
 		if($arr["d_row_cnt"])
 		{
 			$this->d_row_cnt = $arr["d_row_cnt"];
 			$this->no_recount = 1;
 		}
+
 		if($arr["no_recount"])
 		{
 			$this->no_recount = 1;
@@ -633,28 +649,35 @@ class aw_table extends aw_template
 			};
 		}
 
+		$pageselector = "";
+
 		if (!empty($this->pageselector))
 		{
 			switch($this->pageselector)
 			{
 				case "text":
-					$tbl .= $this->draw_text_pageselector(array(
+					$pageselector = $this->draw_text_pageselector(array(
 						"records_per_page" => $this->records_per_page
 					));
 					break;
 				case "buttons":
-					$tbl .= $this->draw_button_pageselector(array(
+					$pageselector = $this->draw_button_pageselector(array(
 						"records_per_page" => $this->records_per_page
 					));
 					break;
 				case "lb":
 				default:
-					$tbl .= $this->draw_lb_pageselector(array(
+					$pageselector = $this->draw_lb_pageselector(array(
 						"records_per_page" => $this->records_per_page
 					));
 			}
-		}
 
+			// header pageselector
+			if (empty($this->pageselector_position) or "top" == $this->pageselector_position or "both" == $this->pageselector_position)
+			{
+				$tbl .= $pageselector;
+			}
+		}
 
 
 
@@ -1027,6 +1050,12 @@ class aw_table extends aw_template
 			$tbl .= "</td></tr></table>\n";
 		};
 		*/
+
+		// footer pageselector
+		if (!empty($this->pageselector) and ("bottom" == $this->pageselector_position or "both" == $this->pageselector_position))
+		{
+			$tbl .= $pageselector;
+		}
 
 		// tagastame selle käki
 		return $tbl;
