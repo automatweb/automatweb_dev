@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.85 2006/03/06 14:36:18 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.86 2006/05/21 20:08:25 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -571,7 +571,7 @@ class event_search extends class_base
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
 
                 // if date is set in the url, then try to use that to specify our range.
-		// last condition in this if is probably temporary --dragut
+		// last condition in this if statement is probably temporary --dragut
                 if (isset($arr["date"]) && substr_count($arr["date"],"-") == 2 && empty($arr['sbt']) )
                 {
                         list($_d,$_m,$_y) = explode("-",$arr["date"]);
@@ -580,10 +580,6 @@ class event_search extends class_base
 			$arr["start_date"] = array("day" => $_d, "month" => $_m, "year" => $_y);
 
                 };
-
-
-
-
 
 		$cur_days = cal_days_in_month(CAL_GREGORIAN, date("m"), date("Y"));
 		$show_type = $ob->prop("show_type");
@@ -1450,7 +1446,10 @@ class event_search extends class_base
 					$start_day = $end_day + 1;
 					$end_day = $end_day + 7;
 					$start_month = $s_date["month"];
+					$end_month = $s_date["month"];
 					$start_year = $s_date["year"];
+					$end_year = $s_date["year"];
+
 				}
 				$week_args = array(
 					"section" => aw_global_get("section"),
