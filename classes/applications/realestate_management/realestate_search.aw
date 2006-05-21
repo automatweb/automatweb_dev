@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.19 2006/05/18 14:40:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.20 2006/05/21 07:31:24 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -21,6 +21,10 @@
 	@property result_no_form type=checkbox ch_value=1
 	@comment Näita otsingutulemusi ilma otsinguvormita. Ei mõjuta admin liidese otsingut.
 	@caption Tulemused otsinguvormita
+
+	@property result_pageselector_pos type=select
+	@comment Otsingutulemuste tabeli navigatsiooni asukoht. Ei mõjuta admin liidese otsingut.
+	@caption Tabeli navigatsiooni asukoht
 
 	@property searchform_select_size type=textbox datatype=int
 	@comment [0] - võimalus valida parameetrile vaid üks väärtus, [1 - ...] - võimalus valida mitu.
@@ -257,7 +261,7 @@ class realestate_search extends class_base
 			case "template":
 				$prop["caption"] .=
 				'<br />'.t("valik kataloogist:").' '.wordwrap($this->site_template_dir, 47, "<br />\n",1);
-				
+
 				$prop["options"] = array("" => "");
 				$files = array();
 				if ($handle = opendir($this->site_template_dir)) {
@@ -276,6 +280,14 @@ class realestate_search extends class_base
 						if(substr_count($file, '.tpl') == 1) $prop["options"][substr($file, 0, -4)] = substr($file, 0, -4);
 					}
 				}
+				break;
+
+			case "result_pageselector_pos":
+				$prop["options"] = array (
+					"top" => t("Üleval"),
+					"bottom" => t("All"),
+					"both" => t("Üleval ja all"),
+				);
 				break;
 
 			case "search_class_id":
@@ -1169,6 +1181,7 @@ class realestate_search extends class_base
 							"d_row_cnt" => $this->result_count,
 							"no_recount" => true,
 							"records_per_page" => $this->result_table_recordsperpage,
+							"position" => $this_object->prop("result_pageselector_pos"),
 						));
 					}
 
@@ -1222,7 +1235,7 @@ class realestate_search extends class_base
 
 		### style
 		if (file_exists($this->site_template_dir.'/'.$this_object->prop("template").".css"))
-		{		
+		{
 			$template = $this_object->prop ("template") . ".css";
 			$this->read_template($template);
 			$this->vars (array());
