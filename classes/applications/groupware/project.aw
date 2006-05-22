@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.85 2006/05/10 09:13:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.86 2006/05/22 10:37:25 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -3712,7 +3712,6 @@ class project extends class_base
 	/**
 		@attrib name=del_file_rel
 		@param fid required 
-		@param from required
 		@param return_url optional 
 	**/
 	function del_file_rel($arr)

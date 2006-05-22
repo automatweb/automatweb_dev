@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.96 2006/05/17 14:12:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.97 2006/05/22 10:37:25 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1762,7 +1762,6 @@ class task extends class_base
 	/**
 		@attrib name=del_file_rel
 		@param fid required 
-		@param from required
 		@param return_url optional 
 	**/
 	function del_file_rel($arr)
