@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.105 2006/05/17 12:36:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.106 2006/05/22 10:26:46 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -42,6 +42,13 @@ extract($_GET);
 
 $PATH_INFO = isset($PATH_INFO) ? preg_replace("/\?automatweb=[^&]*/","", $PATH_INFO) : "";
 $QUERY_STRING = isset($QUERY_STRING) ? preg_replace("/\?automatweb=[^&]*/","", $QUERY_STRING) : "";
+
+if (($QUERY_STRING == "" && $PATH_INFO == "") && $REQUEST_URI != "")
+{
+        $QUERY_STRING = $REQUEST_URI;
+        $QUERY_STRING = str_replace("xmlrpc.aw", "", str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $QUERY_STRING)))));
+}
+
 
 if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
 {
