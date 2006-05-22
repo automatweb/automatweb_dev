@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>applications/shop/shop_warehouse</class>
-      <func>on_popup_search_change</func>
-      <param>CL_SHOP_WAREHOUSE</param>
-</num_0>
-<num_1>
       <class>core/users/user_manager</class>
       <func>on_popup_search_change</func>
       <param>CL_USER_MANAGER</param>
+</num_0>
+<num_1>
+      <class>applications/shop/shop_warehouse</class>
+      <func>on_popup_search_change</func>
+      <param>CL_SHOP_WAREHOUSE</param>
 </num_1>
 <num_2>
       <class>mrp/mrp_case</class>

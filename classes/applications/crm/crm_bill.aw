@@ -1,7 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.47 2006/05/11 14:20:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.48 2006/05/22 11:15:49 kristo Exp $
 // crm_bill.aw - Arve 
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
+
 
 @classinfo syslog_type=ST_CRM_BILL relationmgr=yes no_status=1 prop_cb=1 confirm_save_data=1
 
@@ -1596,6 +1599,23 @@ class crm_bill extends class_base
 			$frow->save();
 		}
 		return $arr["post_ru"];
+	}
+
+	function on_delete_bill($arr)
+	{
+		$o = obj($arr["oid"]);
+		// get all task rows from the bill rows and 
+		$ol = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"bill_id" => $o->id()
+		));
+		foreach($ol->arr() as $tr)
+		{
+			$tr->set_prop("bill_id", 0);
+			$tr->save();
+		}
 	}
 }
 ?>
