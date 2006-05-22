@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.25 2006/05/22 08:40:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.26 2006/05/22 08:57:07 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -19,6 +19,9 @@
 
 @property send_join_mail type=checkbox ch_value=1 field=meta method=serialize 
 @caption Kas liitumisel saadetakse meil
+
+@property users_blocked_by_default type=checkbox ch_value=1 field=meta method=serialize 
+@caption Kasutajad vaikimisi blokeeritud
 
 @groupinfo props caption="Vormid"
 
@@ -972,6 +975,12 @@ class join_site extends class_base
 					"reltype" => "RELTYPE_JOIN_SITE"
 				));
 
+				if ($obj->prop("users_blocked_by_default"))
+				{
+					$u_oid->set_prop("blocked", 1);
+					$u_oid->save();
+				}
+
 				aw_restore_acl();
 
 				// if the props say so, log the user in
@@ -1036,10 +1045,11 @@ class join_site extends class_base
 						{
 							$tom = $to->prop("name")." <$tom>";
 						}
+						$link = $this->mk_my_orb("change", array("id" => $u_oid->id()), $u_oid->class_id(), true);
 						send_mail(
 							$tom, 
 							$obj->prop("mf_mail_subj"),
-							str_replace("#edit_link#", html::get_change_url($u_oid->id()), $obj->prop("mf_mail")),
+							str_replace("#edit_link#", $link, $obj->prop("mf_mail")),
 							"From: ".$from."\n"
 						);
 					}

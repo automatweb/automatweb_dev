@@ -40,6 +40,16 @@
             <caption>Kas liitumisel saadetakse meil</caption>
       </property>
       <property>
+            <name>users_blocked_by_default</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajad vaikimisi blokeeritud</caption>
+      </property>
+      <property>
             <name>join_properties</name>
             <table>objects</table>
             <group>sel_props</group>
