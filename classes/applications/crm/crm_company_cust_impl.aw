@@ -1639,7 +1639,7 @@ class crm_company_cust_impl extends class_base
 			// aga ülejäänud on kõik seosed!
 			$name = $client_manager = $pm = $vorm = $tegevus = $contact = $juht = $juht_id = $phone = $fax = $url = $mail = $ceo = "";
 
-			if (is_oid($o->prop("ettevotlusvorm")))
+			if ($this->can("view", $o->prop("ettevotlusvorm")))
 			{
 				$tmp = new object($o->prop("ettevotlusvorm"));
 				$vorm = $tmp->prop('shortname');
