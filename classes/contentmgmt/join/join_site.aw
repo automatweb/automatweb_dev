@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.24 2006/05/19 10:56:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.25 2006/05/22 08:40:27 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1017,6 +1017,10 @@ class join_site extends class_base
 				}
 
 				$mfmt = $obj->prop("mf_mail_to");
+				if ($this->can("view", $mfmt))
+				{
+					$mfmt = array($mfmt => $mfmt);
+				}
 				if (is_array($mfmt) && count($mfmt))
 				{
 					$from = $obj->prop("mf_mail_from_addr");
