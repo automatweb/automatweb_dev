@@ -26,6 +26,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Parool</caption>
+            <comment></comment>
       </property>
       <classinfo>
             <syslog_type>ST_PROTO_POP3</syslog_type>

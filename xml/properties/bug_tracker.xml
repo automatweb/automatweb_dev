@@ -96,6 +96,15 @@
             <field>bug_list</field>
       </property>
       <property>
+            <name>unset_p</name>
+            <table>objects</table>
+            <group>unestimated_bugs</group>
+            <type>text</type>
+            <store>no</store>
+            <field>unset_p</field>
+            <caption>Kelle buge n&amp;amp;auml;idata</caption>
+      </property>
+      <property>
             <name>unset_table</name>
             <table>objects</table>
             <group>unestimated_bugs</group>

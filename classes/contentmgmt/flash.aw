@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.9 2006/05/04 07:23:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/flash.aw,v 1.10 2006/05/22 11:27:54 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -8,10 +8,13 @@
 	@default method=serialize
 
 	@property file type=fileupload field=meta
-    @caption Vali fail
+	@caption Vali fail
 
 	@property file_url type=textbox field=meta method=serialize
-    @caption Sisesta faili aadress
+	@caption Sisesta faili aadress
+
+	@property click_tag type=textbox field=meta method=serialize
+	@caption Link (Click Tag)
 
 	@property width type=textbox size=4 field=meta
 	@caption Laius
@@ -222,6 +225,12 @@ class flash extends class_base
 		{
 			$url = aw_url_change_var("clickTAG", $args["clickTAG"], $url);
 		}
+		else
+		if ($ob->prop("click_tag") != "")
+		{
+			$url = aw_url_change_var("clickTAG", $ob->prop("click_tag"), $url);
+		}
+
 
 		$this->vars(array(
 			"id" => $ob->prop("name"),
