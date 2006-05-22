@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.20 2006/05/05 09:47:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.21 2006/05/22 12:30:57 kristo Exp $
 // auth_config.aw - Autentimise Seaded
 /*
 
@@ -375,6 +375,7 @@ class auth_config extends class_base
 		// remember the uri used before login so that we can
 		// redirect the user back there after (and if) he/she has finally
 		// logged in
+		$_SESSION["auth_redir_post"] = $_POST;
 		$_SESSION["request_uri_before_auth"] = aw_global_get("REQUEST_URI");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("login",array(),'users'),

@@ -479,12 +479,16 @@ class http
 	@comment 
 		Initiates a socket connection to the server and generates HTTP POST request
 	**/
-	function post_request($server, $handler, $params, $port = 80)
+	function post_request($server, $handler, $params, $port = 80, $sessid = NULL)
 	{
 		$fp = fsockopen($server,$port,&$errno, &$errstr, 5);
 		$op = "POST $handler HTTP/1.0\r\n";
 		$op .= "User-Agent: AutomatWeb\r\n";
 		$op .= "Host: $server\r\n";
+		if ($sessid)
+		{
+			$op .= "Cookie: automatweb=$sessid\r\n";
+		}
 		$op .= "Content-Type: application/x-www-form-urlencoded\r\n";
 
 		foreach($params as $key => $val)
@@ -494,7 +498,6 @@ class http
 
 		$op .= "Content-Length: " . strlen($request) . "\r\n\r\n";
 		$op .= $request;
-
 		fputs($fp, $op, strlen($op));
 
 		$str = fread($fp, 10000);

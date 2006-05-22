@@ -4,6 +4,13 @@ ini_set("session.save_handler", "files");
 session_name("automatweb");
 session_start();
 
+if (is_array($_SESSION["auth_redir_post"]))
+{
+	$_POST = $HTTP_POST_VARS = $_SESSION["auth_redir_post"];
+	extract($_POST);
+	$REQUEST_METHOD = "POST";
+}
+
 
 if ($_GET["set_ui_lang"] != "")
 {

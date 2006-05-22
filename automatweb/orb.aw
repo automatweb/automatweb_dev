@@ -1,11 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.22 2005/10/31 10:59:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.23 2006/05/22 12:30:55 kristo Exp $
 if (!ini_get("safe_mode"))
 {
 	set_time_limit(0);
 }
 include("const.aw");
-
 
 //$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS,$_GET,$_POST);
 // _GET, _POST and friends were implemented in php 4.1.0
@@ -33,7 +32,6 @@ if (isset($_AW_GET_VARS) && is_array($_AW_GET_VARS))
 {
 	$vars = $vars + $_AW_GET_VARS;
 };
-
 $class = $vars["class"];
 $action = $vars["action"];
 
@@ -52,6 +50,22 @@ if (array_key_exists("fastcall", $vars) && $vars["fastcall"] == 1)
 	die($inst->$action($vars));
 }
 include("admin_header.".aw_ini_get("ext"));
+
+if (is_array($_SESSION["auth_redir_post"]))
+{
+	$vars = $_SESSION["auth_redir_post"];
+	$_POST = $_SESSION["auth_redir_post"];
+	$HTTP_GET_VARS = $_SESSION["auth_redir_post"];
+	extract($_POST);
+	$class = $vars["class"];
+	$action = $vars["action"];
+
+	if (empty($class) && isset($vars["alias"]))
+	{
+		$class = $vars["alias"];
+	};
+	unset($_SESSION["auth_redir_post"]);
+}
 
 
 classload("defs","core/orb/orb");

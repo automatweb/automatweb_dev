@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.125 2006/05/17 12:36:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.126 2006/05/22 12:30:56 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -192,6 +192,12 @@ class users_user extends aw_template
 		{
 			die(t("1"));
 		}	
+
+		if (is_array($_SESSION["auth_redir_post"]))
+		{
+			header("Location: ".aw_ini_get("baseurl")."/automatweb/orb.aw");
+			die();
+		}
 
 		// now that we got the whether he can log in bit cleared, try to find an url to redirect to
 		// 1st is the url that was requested before the user was forced to login.
