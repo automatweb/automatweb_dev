@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.219 2006/05/10 14:16:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.220 2006/05/23 11:58:58 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1848,7 +1848,13 @@ if (!defined("DEFS"))
 		**/
 		function to_sql()
 		{
-			$str = join(",",array_values($this->arg));
+			$data = array_values($this->arg);
+                        foreach($data as $k => $v)
+                        {
+                                $data[$k] = addslashes($v);
+                        }
+
+			$str = join(",",map("'%s'", $data));
 			if ($str == "")
 			{
 				return "NULL";
