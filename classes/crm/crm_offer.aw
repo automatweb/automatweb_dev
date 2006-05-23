@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.47 2006/03/16 15:15:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.48 2006/05/23 10:31:14 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -102,7 +102,7 @@
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
 
-@reltype ORDERER value=2 clid=CL_CRM_COMPANY
+@reltype ORDERER value=2 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption Tellija
 
 @reltype PREFORMER value=3 clid=CL_CRM_COMPANY
@@ -243,8 +243,11 @@ class crm_offer extends class_base
 				}
 				foreach ($data as $key)
 				{
-					$obj = &obj($key);
-					$options[$key] = $obj->name();
+					if ($this->can("view", $key))
+					{
+						$obj = &obj($key);
+						$options[$key] = $obj->name();
+					}
 				}
 				
 				

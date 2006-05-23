@@ -250,7 +250,10 @@
             </RECURRENCE>
             <ORDERER>
                   <value>2</value>
-                  <clid>CL_CRM_COMPANY</clid>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>Tellija</caption>
             </ORDERER>
             <PREFORMER>
