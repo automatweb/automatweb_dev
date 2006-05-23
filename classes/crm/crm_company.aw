@@ -5105,6 +5105,13 @@ class crm_company extends class_base
 		{
 			switch($field)
 			{
+				case "cust_contract_date":
+				case "cust_contract_creator":
+				case "contact_person":
+				case "contact_person2":
+				case "contact_person3":
+				case "client_manager":
+				case "aw_currency":
 				case "aw_bill_due_days":
 					$this->db_add_col($tbl, array(
 						"name" => $field,
@@ -5125,6 +5132,16 @@ class crm_company extends class_base
 						"type" => "TEXT"
 					));
 					return true;
+
+				case "tax_nr":
+				case "aw_short_name":
+				case "code":
+					$this->db_add_col($tbl, array(
+						"name" => $field,
+						"type" => "varchar(100)"
+					));
+					return true;
+					break;
 			}
 		}
 	}
