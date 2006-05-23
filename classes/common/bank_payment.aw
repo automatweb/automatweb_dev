@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.4 2006/05/18 14:34:08 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.5 2006/05/23 12:18:49 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -11,7 +11,7 @@
 */
 
 class bank_payment extends class_base
-{
+{	//olemasolevad panga
 	var $banks = array (
 		"hansapank"	=> "Hansapank",
 		"seb"		=> "SEB Eesti &Uuml;hispank",
@@ -19,12 +19,12 @@ class bank_payment extends class_base
 		"krediidipank"	=> "Krediidipank",
 		"sampopank"	=> "Sampo Pank",
 	);
-
+	//kõikidele pankadele ühine info
 	var $for_all_banks = array(
 		"amount"	=> "Summa",
 		"expl"		=> "Selgitus",
 	);
-
+	//igal pangal on vaja selliseid asju teada
 	var $bank_props = array(
 		"sender_id"	=> "Kaupmehe ID",
 		"stamp"		=> "Arvenumber"
@@ -517,10 +517,14 @@ class bank_payment extends class_base
 					"expl"		=> $data["expl"],
 				));
 				
-				if($template_exists)
+				if(($template_exists) && ($this->is_template($bank)))
 				{
 					$this->vars(array(
-						$bank => $bank_form,
+						$data => $bank_form,
+					));
+					$c .= $this->parse($bank);
+					$this->vars(array(
+						$bank => $c,
 					));
 				}
 				$ret.= $bank_form;

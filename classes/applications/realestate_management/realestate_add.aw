@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.11 2006/05/18 14:34:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.12 2006/05/23 12:18:48 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -1098,6 +1098,8 @@ class realestate_add extends class_base
 					)),
 					"type"		=> $this->opt[$rlst_object->class_id()],
 					"action"	=> $trans_types[$rlst_object->prop("transaction_type")],
+					"delete"	=>  $this->mk_my_orb("delete_property", array("id" => $rlst_object->id())),
+					"invisible"	=>  $this->mk_my_orb("make_invisible", array("id" => $rlst_object->id())),
 /*					"regio"		=> $html->form(array(
 						"action" => "http://www.regio.ee/?op=body&id=24",
 						"method" => "POST",
@@ -1343,6 +1345,37 @@ class realestate_add extends class_base
 		$realestate_obj->save();
 	}
 
+	/** delete 
+		@attrib name=delete_property
+	**/
+	function delete_property($args)
+	{	
+		$uid = aw_global_get("uid");
+		global $id;
+		if(is_oid($id))
+		{
+			$property = obj($id);
+			if($property->createdby() == $uid)$property->delete();
+		}
+		return $this->mk_my_orb("my_realestate_list", array());
+	}
+	
+	/** extend offer 
+		@attrib name=make_invisible
+	**/
+	function make_invisible($args)
+	{	
+		$uid = aw_global_get("uid");
+		global $id;
+		if(is_oid($id))
+		{
+			$property = obj($id);
+			$property->set_prop("show_on_webpage" , "0");
+			if($property->createdby() == $uid) $property->save();
+		}
+		return $this->mk_my_orb("my_realestate_list", array());
+	}
+	
 	/** extend offer 
 		@attrib name=extend
 	**/
@@ -1446,12 +1479,12 @@ class realestate_add extends class_base
 				}
 				if($mem->prop("expire") > time() && !($mem->prop("expire") > (time()+86400)))
 				{
-					if(!$mem->prop("show_on_webpage"))
+/*					if(!$mem->prop("show_on_webpage"))
 					{
 						$mem->set_prop("show_on_webpage" , "1");
 						$mem->save();
 					}
-					$ret.= 'hakkab aeguma - '.$mem->id().'<br>';
+*/					$ret.= 'hakkab aeguma - '.$mem->id().'<br>';
  					$u = get_instance("users");
 					$oid = $u->get_oid_for_uid($mem->prop("createdby"));
 					if(is_oid($oid))
@@ -1475,15 +1508,15 @@ class realestate_add extends class_base
 				else
 				{
 					$ret.= 'nähtav veel üle 1 päeva - '.$mem->id().'<br>';
-					if(!$mem->prop("show_on_webpage"))
+/*					if(!$mem->prop("show_on_webpage"))
 					{
 						$mem->set_prop("show_on_webpage" , "1");
 						$mem->save();
 					}
-				}
+*/				}
 			}
 		}
-		return $ret;	
+		return $ret;
 	}
 }
 ?>
