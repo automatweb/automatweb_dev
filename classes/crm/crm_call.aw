@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.50 2006/05/04 11:31:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.51 2006/05/23 12:29:33 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -320,8 +320,12 @@ class crm_call extends class_base
 				{
 					$calo = obj($cal);
 					$data["minute_step"] = $calo->prop("minute_step");
+					if ($data["name"] == "end" && (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id())))
+					{
+						$data["value"] = time() + $calo->prop("event_def_len")*60;
+					}
 				}
-
+				else
 				if ($data["name"] ==  "end" && $arr["new"])
 				{
 					$data["value"] = time() + 900;

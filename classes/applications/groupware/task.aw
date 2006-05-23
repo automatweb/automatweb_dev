@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.97 2006/05/22 10:37:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.98 2006/05/23 12:29:35 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -362,6 +362,17 @@ class task extends class_base
 				break;
 				
 			case "end":
+				$p = get_instance(CL_PLANNER);
+				$cal = $p->get_calendar_for_user();
+				if ($cal)
+				{
+					$calo = obj($cal);
+					if ($data["name"] == "end" && (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id())))
+					{
+						$data["value"] = time() + $calo->prop("event_def_len")*60;
+					}
+				}
+				else
 				if ($arr["new"])
 				{
 					$data["value"] = time() + 900;

@@ -79,6 +79,15 @@
             <caption>S&amp;uuml;ndmuse sisestamise minutite t&amp;auml;psus</caption>
       </property>
       <property>
+            <name>event_def_len</name>
+            <table>objects</table>
+            <group>time_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>S&amp;uuml;ndmuse vaikimisi pikkus (min)</caption>
+      </property>
+      <property>
             <name>navigator_visible</name>
             <table>objects</table>
             <group>advanced</group>

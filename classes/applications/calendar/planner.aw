@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.122 2006/05/17 11:25:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.123 2006/05/23 12:29:36 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -41,6 +41,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@property minute_step type=select 
 	@caption Sündmuse sisestamise minutite täpsus
+	
+	@property event_def_len type=select 
+	@caption Sündmuse vaikimisi pikkus (min)
 	
 @default group=advanced
 
@@ -383,6 +386,17 @@ class planner extends class_base
 			case "minute_step":
 				$data["options"] = array(
 					1 => 1,
+					5 => 5,
+					10 => 10,
+					15 => 15,
+					30 => 30,
+					60 => 60,
+				);
+				break;
+
+			case "event_def_len":
+				$data["options"] = array(
+					0 => 0,
 					5 => 5,
 					10 => 10,
 					15 => 15,

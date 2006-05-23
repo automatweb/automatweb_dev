@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.69 2006/05/11 11:11:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.70 2006/05/23 12:29:33 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -267,8 +267,12 @@ class crm_meeting extends class_base
 				{
 					$calo = obj($cal);
 					$data["minute_step"] = $calo->prop("minute_step");
+					if ($data["name"] == "end" && (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id())))
+					{
+						$data["value"] = time() + $calo->prop("event_def_len")*60;
+					}
 				}
-
+				else
 				if ($data["name"] == "end" && $arr["new"])
 				{
 					$data["value"] = time() + 900;
