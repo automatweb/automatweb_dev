@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.87 2006/05/18 08:45:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.88 2006/05/23 15:35:46 markop Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -33,6 +33,9 @@
 
 	@property classinfo_allow_rte_toggle type=checkbox ch_value=1 field=meta method=serialize
 	@caption Näita RTE/HTML nuppu
+
+	@property default_view_is_html type=checkbox ch_value=1 field=meta method=serialize
+	@caption Default vaade HTML
 
 	@property classinfo_disable_relationmgr type=checkbox ch_value=1 field=meta method=serialize
 	@caption Ära kasuta seostehaldurit
@@ -740,6 +743,21 @@ class cfgform extends class_base
 		return true;
 	}
 
+	function sort_grplist()
+	{
+		$order = array();
+		$grps = array();
+		foreach($this->grplist as $key => $item)
+		{
+			$order[$key] = $item["ord"];
+		}
+		asort($order);
+		foreach($order as $key => $val)
+		{
+			$grps[$key] = $this->grplist[$key];
+		}
+		$this->grplist = $grps;
+	}
 	////
 	// !
 	function callback_gen_layout($arr = array())
@@ -749,6 +767,7 @@ class cfgform extends class_base
 
 		if (is_array($this->grplist))
 		{
+			$this->sort_grplist();
 			foreach($this->grplist as $key => $val)
 			{
 				// we should not have numeric group id-s
@@ -1167,9 +1186,21 @@ class cfgform extends class_base
 			"" => t("vaikestiil"),
 			"stacked" => t("pealkiri yleval, sisu all"),
 		);
-
-		$ctr_list = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VIEWCONTROLLER")));
+		$order = array();
+		$grps_array = array();
 		foreach($grps->get() as $key => $item)
+		{
+			$grps_array[$key] = $item;
+			$order[$key] = $item["ord"];
+		}
+		
+		asort($order);
+		foreach($order as $key => $val)
+		{
+			$grps_[$key] = $grps_array[$key];
+		}
+		$ctr_list = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_VIEWCONTROLLER")));
+		foreach($grps_ as $key => $item)
 		{
 			$res = array();
 			$rv["grpcaption[$key]"] = array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.90 2006/05/18 15:42:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.91 2006/05/23 15:35:47 markop Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1115,6 +1115,7 @@ class webform extends class_base
 
 		if (is_array($this->cfgform_i->grplist))
 		{
+			$this->cfgform_i->sort_grplist();
 			foreach($this->cfgform_i->grplist as $key => $val)
 			{
 				if (!is_numeric($key))
@@ -1637,7 +1638,23 @@ class webform extends class_base
 			$arr["site_lang"] = true;
 		}
 		$els = $cfgform_i->get_props_from_ot($arr);
+		//sorteerimine
+		$form = obj($arr["obj_inst"]->prop("use_cfgform"));
 		$cfgform = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CFGFORM");
+		$cfgform_i->_init_cfgform_data($cfgform);
+		$cfgform_i->sort_grplist();
+		if(is_array($cfgform_i->grplist))
+		{
+			$sorted_els = array();
+			foreach($cfgform_i->grplist as $group => $data)
+			{
+				foreach($els as $key => $val)
+				{
+					if(($val["group"]  == $group) || (in_array($group , $val["group"]))) $sorted_els[$key] = $val;
+				}
+			}
+			$els = $sorted_els;
+		}
 		$sel_styles = safe_array($arr["obj_inst"]->meta("xstyles"));
 		$m_styles = safe_array($arr["obj_inst"]->meta("m_styles"));
 		$errs = safe_array($arr["errors"]);
