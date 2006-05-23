@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.34 2006/04/20 15:52:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.35 2006/05/23 12:53:28 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -572,7 +572,7 @@ class pot_scanner extends core
 		foreach($res as $dat)
 		{
 			fwrite($fp, $dat["comment"]."\n");
-			fwrite($fp, "msgid \"".$dat["msgid"]."\"\n");
+			fwrite($fp, "msgid \"".str_replace("\\\\\"", "\\\"", $dat["msgid"])."\"\n");
 			fwrite($fp, "msgstr \"\"\n");
 			fwrite($fp, "\n");
 		}
