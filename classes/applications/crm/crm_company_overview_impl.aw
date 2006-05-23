@@ -800,6 +800,10 @@ class crm_company_overview_impl extends class_base
 						)
 					));
 				}
+				else
+				{
+					$res["oid"] = $_res["oid"];
+				}
 			}
 		}
 
