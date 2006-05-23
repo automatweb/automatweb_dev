@@ -57,12 +57,27 @@
             <comment>Halduspiirkond, millesse k&amp;auml;esolev halduspiirkond kuulub</comment>
             <caption>Vali k&amp;otilde;rgem halduspiirkond</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <store>no</store>
+            <field>transl</field>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_COUNTRY_ADMINISTRATIVE_UNIT</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
+      </groupinfo>
       <reltypes>
             <PARENT_ADMINISTRATIVE_UNIT>
                   <value>1</value>

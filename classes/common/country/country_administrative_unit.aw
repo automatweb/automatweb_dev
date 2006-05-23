@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_unit.aw,v 1.2 2005/11/21 09:04:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_administrative_unit.aw,v 1.3 2006/05/23 10:53:50 kristo Exp $
 // country_administrative_unit.aw - Halduspiirkond
 /*
 
@@ -26,6 +26,12 @@
 	@comment Halduspiirkond, millesse käesolev halduspiirkond kuulub
 	@caption Vali kõrgem halduspiirkond
 
+@groupinfo transl caption="T&otilde;lgi"
+@default group=transl
+
+@property transl type=callback callback=callback_get_transl store=no
+@caption T&otilde;lgi
+
 // --------------- RELATION TYPES ---------------------
 
 @reltype PARENT_ADMINISTRATIVE_UNIT value=1 clid=CL_COUNTRY_ADMINISTRATIVE_UNIT,CL_COUNTRY_CITY,CL_COUNTRY_CITYDISTRICT
@@ -51,6 +57,10 @@ class country_administrative_unit extends class_base
 			"tpldir" => "common/country",
 			"clid" => CL_COUNTRY_ADMINISTRATIVE_UNIT
 		));
+
+		$this->trans_props = array(
+			"name"
+		);
 	}
 
 	function get_property ($arr)
@@ -88,6 +98,10 @@ class country_administrative_unit extends class_base
 
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
+
 			case "parent_select":
 				if (is_oid ($prop["value"]))
 				{
@@ -119,6 +133,19 @@ class country_administrative_unit extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 

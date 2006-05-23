@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/country/country_city.aw,v 1.4 2006/05/16 14:57:41 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/country/country_city.aw,v 1.5 2006/05/23 10:53:50 kristo Exp $
 // country_city.aw - Linn
 /*
 
@@ -12,6 +12,12 @@
 
 	@property subclass type=text
 	@caption Tüüp
+
+@groupinfo transl caption="T&otilde;lgi"
+@default group=transl
+
+@property transl type=callback callback=callback_get_transl store=no
+@caption T&otilde;lgi
 
 */
 
@@ -33,6 +39,9 @@ class country_city extends country_administrative_unit
 			"tpldir" => "common/country",
 			"clid" => CL_COUNTRY_CITY
 		));
+		$this->trans_props = array(
+			"name"
+		);
 	}
 
 	function get_property($arr)
@@ -65,6 +74,9 @@ class country_city extends country_administrative_unit
 
 		switch($prop["name"])
 		{
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+				break;
 		}
 
 		return $retval;
@@ -91,6 +103,19 @@ class country_city extends country_administrative_unit
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 }
 
