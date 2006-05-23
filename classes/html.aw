@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.111 2006/05/10 10:27:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.112 2006/05/23 11:08:01 dragut Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -879,6 +879,8 @@ class html extends aw_template
 	/**Link
 	@attrib api=1 params=name
 
+	@param url optional type=string
+		link's url
 	@param onclick optional type=string
 		stuff that will happen , if you press the link - javascript
 	@param textsize optional type=string
