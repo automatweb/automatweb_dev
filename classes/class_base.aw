@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.482 2006/05/04 13:47:39 kristo Exp $
+// $Id: class_base.aw,v 2.483 2006/05/24 10:24:29 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2870,7 +2870,10 @@ class class_base extends aw_template
 			};
 		}
 
-
+		if (!$this->cfgform_id && $this->clid == CL_DOCUMENT)
+		{
+			$this->cfgform_id =  aw_ini_get("document.default_cfgform");
+		}
 		if($this->cfgform_id && $controllers = $this->get_all_view_controllers($this->cfgform_id))
 		{
 			$this->process_view_controllers(&$resprops, $controllers, $argblock);
