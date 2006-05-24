@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.26 2006/05/22 08:57:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.27 2006/05/24 09:45:16 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -737,22 +737,38 @@ class join_site extends class_base
 				{
 					if ($je["gen"] != "")
 					{
+						$ermsg = "<font color='#FF0000'>".$je["gen"]."</font>";
+						if ($this->is_template("ERROR_MESSAGE"))
+						{
+							$this->vars(array(
+								"msg" => $je["gen"]
+							));
+							$ermsg = $this->parse("ERROR_MESSAGE");
+						}
 						$errp = array(
 							"name" => "err_".$clid."_".$oldn,
 							"type" => "text",
 							"no_caption" => 1,
-							"value" => "<font color='#FF0000'>".$je["gen"]."</font>"
+							"value" => $ermsg
 						);
 						$htmlc->add_property($errp);
 					}
 				}
 				if ($je["prop"][$clid][$oldn])
 				{
+					$ermsg = t("<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>");
+					if ($this->is_template("ERROR_MESSAGE"))
+					{
+						$this->vars(array(
+							"msg" => t("<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>")
+						));
+						$ermsg = $this->parse("ERROR_MESSAGE");
+					}
 					$errp = array(
 						"name" => "err_".$clid."_".$oldn,
 						"type" => "text",
 						"no_caption" => 1,
-						"value" => t("<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>")
+						"value" => $ermsg
 					);
 					$htmlc->add_property($errp);
 				}
@@ -907,7 +923,6 @@ class join_site extends class_base
 	function submit_join_form($arr)
 	{
 		$obj = obj($arr["id"]);
-
 		// update session data in sess[site_join_status]
 		$this->_update_sess_data($arr);
 
@@ -980,7 +995,7 @@ class join_site extends class_base
 					$u_oid->set_prop("blocked", 1);
 					$u_oid->save();
 				}
-
+				
 				aw_restore_acl();
 
 				// if the props say so, log the user in
@@ -1309,21 +1324,37 @@ class join_site extends class_base
 					{
 						if ($je["gen"] != "")
 						{
+							$ermsg = "<font color='#FF0000'>".$je["gen"]."</font>";
+							if ($this->is_template("ERROR_MESSAGE"))
+							{
+								$this->vars(array(
+									"msg" => $je["gen"]
+								));
+								$ermsg = $this->parse("ERROR_MESSAGE");
+							}
 							$tp["err_".$clid."_".$oldn] = array(
 								"name" => "err_".$clid."_".$oldn,
 								"type" => "text",
 								"no_caption" => 1,
-								"value" => "<font color='#FF0000'>".$je["gen"]."</font>"
+								"value" => $ermsg
 							);
 						}
 					}
 					if ($je["prop"][$clid][$pid])
 					{
+						$ermsg = "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>";
+						if ($this->is_template("ERROR_MESSAGE"))
+						{
+							$this->vars(array(
+								"msg" => $je["gen"]
+							));
+							$ermsg = $this->parse("ERROR_MESSAGE");
+						}
 						$tp["err_".$clid."_".$oldn] = array(
 							"name" => "err_".$clid."_".$oldn,
 							"type" => "text",
 							"no_caption" => 1,
-							"value" => "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
+							"value" => $ermsg
 						);
 					}
 
