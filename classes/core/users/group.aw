@@ -147,6 +147,17 @@ class group extends class_base
 			case "name":
 				if ($arr["obj_inst"]->class_id() == CL_RELATION)
 				{
+					$c = new connection();
+					list(, $c_d) = each($c->find(array("relobj_id" => $arr["obj_inst"]->id())));
+					$c = new connection($c_d["id"]);
+
+					if (!$this->can("admin", $c->prop("from")))
+					{
+						error::raise(array(
+							"id" => "ERR_ACL",
+							"msg" => sprintf(t("Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"), $c->prop("from"))
+						));
+					}
 					return PROP_IGNORE;
 				}
 				if ($prop["value"] == "" && $arr["obj_inst"]->name() != "")

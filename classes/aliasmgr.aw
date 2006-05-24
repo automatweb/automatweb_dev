@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.197 2006/03/21 08:39:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.198 2006/05/24 07:30:28 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -456,6 +456,11 @@ class aliasmgr extends aw_template
 
 		$alinks = $obj->meta("aliaslinks");
 
+		$this->reltypes[RELTYPE_ACL] = "&otilde;igus";
+		$this->rel_type_classes[RELTYPE_ACL] = array(
+			CL_GROUP => $tmp[CL_GROUP]["name"]
+		);
+
 		foreach($obj->connections_from() as $alias)
 		{
 			$adat = array(
@@ -539,7 +544,8 @@ class aliasmgr extends aw_template
 				$type_str = "originaal (" . $langinfo[$alias->prop("to.lang_id")] . ")";
 			};
 
-			if ($alias->prop("relobj_id"))
+			if ($alias->prop("relobj_id") && 
+			   ($reltype_id != RELTYPE_ACL || $this->can("admin", $obj->id())))
 			{
 				$adat["reltype"] = html::href(array(
 					"url" => $this->mk_my_orb("change",array("id" => $alias->prop("relobj_id"),"return_url" => $return_url),$classes[$aclid]["file"]),
@@ -842,10 +848,13 @@ class aliasmgr extends aw_template
 			CL_SHOP_PRODUCT_PACKAGING => $tmp[CL_SHOP_PRODUCT_PACKAGING]['name'],
 		);
 
-		$this->reltypes[RELTYPE_ACL] = "&otilde;igus";
-		$this->rel_type_classes[RELTYPE_ACL] = array(
-			CL_GROUP => $tmp[CL_GROUP]["name"]
-		);
+		if ($this->can("admin", $this->id))
+		{
+			$this->reltypes[RELTYPE_ACL] = "&otilde;igus";
+			$this->rel_type_classes[RELTYPE_ACL] = array(
+				CL_GROUP => $tmp[CL_GROUP]["name"]
+			);
+		}
 
 
 		foreach($this->reltypes as $k => $v)

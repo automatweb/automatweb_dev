@@ -13,13 +13,17 @@ class acl_manager extends class_base
 		$tp["type"] = "text";
 		
 		$content = $this->_get_cur_acl_desc($arr["obj_inst"]);
-		$content .= "<br>";
-		$url = $this->mk_my_orb("disp_manager", array("id" => $arr["obj_inst"]->id()));
-		$content .= html::href(array(
-			"caption" => t("Muuda"),
-			"url" => "javascript:void(0)",
-			"onClick" => "aw_popup_scroll(\"$url\", \"acl_manager\", 800, 500);"
-		));
+
+		if ($this->can("admin", $arr["obj_inst"]->id()))
+		{
+			$content .= "<br>";
+			$url = $this->mk_my_orb("disp_manager", array("id" => $arr["obj_inst"]->id()));
+			$content .= html::href(array(
+				"caption" => t("Muuda"),
+				"url" => "javascript:void(0)",
+				"onClick" => "aw_popup_scroll(\"$url\", \"acl_manager\", 800, 500);"
+			));
+		}
 
 		$tp["value"] = $content;
 		return array($tp["name"] => $tp);
@@ -223,6 +227,13 @@ class acl_manager extends class_base
 	function submit_mgr($arr)
 	{
 		$obj = obj($arr["id"]);
+		if (!$this->can("admin", $arr["id"]))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"), $arr["id"])
+			));
+		}
 		$acl = $obj->acl_get();
 		// get a list of all groups shown
 		$pt = isset($arr["grp_id"]) ? $arr["grp_id"] : aw_ini_get("groups.tree_root");
