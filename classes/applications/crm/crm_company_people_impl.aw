@@ -897,12 +897,30 @@ class crm_company_people_impl extends class_base
 		));
 
 		//delete button
-		$tb->add_button(array(
+		$tb->add_menu_button(array(
+			'name'=>'delete_item',
+			'tooltip'=> t('Kustuta'),
+			"img" => "delete.gif"
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "delete_item",
+			"text" => t("Eemalda isikud organisatsioonist"),
 			'name' => 'del',
 			'img' => 'delete.gif',
 			'tooltip' => t('Kustuta valitud'),
 			"confirm" => t("Oled kindel et soovid kustutada valitud t&ouml;&ouml;tajad?"),
 			'action' => 'submit_delete_relations',
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "delete_item",
+			"text" => t("Kustuta isikud s&uuml;steemist"),
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta valitud'),
+			"confirm" => t("Oled kindel et soovid kustutada valitud t&ouml;&ouml;tajad?"),
+			'action' => 'submit_delete_ppl',
 		));
 
 		$tb->add_separator();

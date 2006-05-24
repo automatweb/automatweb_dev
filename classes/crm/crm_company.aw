@@ -2503,6 +2503,24 @@ class crm_company extends class_base
 		}
 	}
 
+	/**
+		@attrib name=submit_delete_ppl
+		@param id required type=int acl=view
+		@param unit optional type=int
+	**/
+	function submit_delete_ppl($arr)
+	{
+		if (is_array($arr["check"]))
+		{
+			foreach($arr['check'] as $key => $value)
+			{
+				$p = obj($value);
+				$p->delete();
+			}
+		}
+
+		return $arr["post_ru"];
+	}
 
 	/**
 		deletes the relations unit -> person || organization -> person
