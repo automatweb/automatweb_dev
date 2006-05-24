@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.187 2006/05/23 09:24:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.188 2006/05/24 09:33:11 kristo Exp $
 
 /*
 
@@ -2533,7 +2533,7 @@ class site_show extends class_base
 		if ($this->can("view", $sdct))
 		{
 			$so = obj(aw_global_get("section"));
-			$su = (aw_ini_get("frontpage") == aw_global_get("section") || $so->class_id() == CL_DOCUMENT ? $link : aw_global_get("REQUEST_URI"));
+			$su = (aw_ini_get("frontpage") == aw_global_get("section") || $so->class_id() == CL_DOCUMENT  ? $link : aw_global_get("REQUEST_URI"));
 			$su = aw_url_change_var("clear_doc_content_type", null, $su);
 			$su = aw_url_change_var("docid", null, $su);
 			$link = aw_url_change_var("set_doc_content_type", $sdct, $su);
@@ -2872,43 +2872,67 @@ class site_show extends class_base
 		{
 			return;
 		}
+		if (!$this->can("admin", $menu->id()) && 
+			!$this->can("add", $menu->id()) &&
+			!$this->can("edit", $menu->id())
+		)
+		{
+			return;
+		}
 		$pm = get_instance("vcl/popup_menu");
 		$pm->begin_menu("site_edit_".$menu->id());
-		$url = $this->mk_my_orb("new", array("parent" => $menu->parent(), "ord_after" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
-		$pm->add_item(array(
-			"text" => t("Lisa uus k&otilde;rvale"),
-			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
-			"link" => "javascript:void(0)"
-		));
+		if ($this->can("add", $menu->parent()))
+		{
+			$url = $this->mk_my_orb("new", array("parent" => $menu->parent(), "ord_after" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
+			$pm->add_item(array(
+				"text" => t("Lisa uus k&otilde;rvale"),
+				"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
+				"link" => "javascript:void(0)"
+			));
+		}
+		
+		if ($this->can("add", $menu->id()))
+		{
+			$url = $this->mk_my_orb("new", array("parent" => $menu->id(), "ord_after" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
+			$pm->add_item(array(
+				"text" => t("Lisa uus alamkaust"),
+				"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
+				"link" => "javascript:void(0)"
+			));
+		}
+		
+		if ($this->can("change", $menu->id()))
+		{
+			$url = $this->mk_my_orb("change", array("id" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
+			$pm->add_item(array(
+				"text" => t("Muuda"),
+				"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
+				"link" => "javascript:void(0)"
+			));
+		}
+		
+		if ($this->can("admin", $menu->id()))
+		{
+			$url = $this->mk_my_orb("disp_manager", array("id" => $menu->id()), "acl_manager", true);
+			$pm->add_item(array(
+				"text" => t("Muuda &otilde;igusi"),
+				"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit_acl',800, 500)\"",
+				"link" => "javascript:void(0)"
+			));
+		}
+		
+		if ($this->can("edit", $menu->id()))
+		{
+			$pm->add_item(array(
+				"text" => t("Peida"),
+				"link" => $this->mk_my_orb("hide_menu", array("id" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
+			));
+			$pm->add_item(array(
+				"text" => t("L&otilde;ika"),
+				"link" => $this->mk_my_orb("cut_menu", array("id" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
+			));
+		}
 
-		$url = $this->mk_my_orb("new", array("parent" => $menu->id(), "ord_after" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
-		$pm->add_item(array(
-			"text" => t("Lisa uus alamkaust"),
-			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
-			"link" => "javascript:void(0)"
-		));
-
-		$url = $this->mk_my_orb("change", array("id" => $menu->id(), "return_url" => get_ru(), "is_sa" => 1), CL_MENU, true);
-		$pm->add_item(array(
-			"text" => t("Muuda"),
-			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',600, 400)\"",
-			"link" => "javascript:void(0)"
-		));
-
-		$url = $this->mk_my_orb("disp_manager", array("id" => $menu->id()), "acl_manager", true);
-		$pm->add_item(array(
-			"text" => t("Muuda &otilde;igusi"),
-			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit_acl',800, 500)\"",
-			"link" => "javascript:void(0)"
-		));
-		$pm->add_item(array(
-			"text" => t("Peida"),
-			"link" => $this->mk_my_orb("hide_menu", array("id" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
-		));
-		$pm->add_item(array(
-			"text" => t("L&otilde;ika"),
-			"link" => $this->mk_my_orb("cut_menu", array("id" => $menu->id(), "ru" => get_ru()), "menu_site_admin")
-		));
 		if ($this->can("view", $_SESSION["site_admin"]["cut_menu"]))
 		{
 			$pm->add_item(array(
@@ -2927,12 +2951,20 @@ class site_show extends class_base
 		}
 		$pm = get_instance("vcl/popup_menu");
 		$pm->begin_menu("site_edit_new");
-		$url = $this->mk_my_orb("new", array("parent" => $this->sel_section, "return_url" => get_ru(), "is_sa" => 1), CL_DOCUMENT, true);
-		$pm->add_item(array(
-			"text" => t("Lisa uus"),
-			"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',800, 600)\"",
-			"link" => "javascript:void(0)"
-		));
+
+		if ($this->can("add", $this->sel_section))
+		{
+			$url = $this->mk_my_orb("new", array("parent" => $this->sel_section, "return_url" => get_ru(), "is_sa" => 1), CL_DOCUMENT, true);
+			$pm->add_item(array(
+				"text" => t("Lisa uus"),
+				"oncl" => "onClick=\"aw_popup_scroll('$url', 'aw_doc_edit',800, 600)\"",
+				"link" => "javascript:void(0)"
+			));
+		}
+		else
+		{
+			return;
+		}
 		if ($this->can("view", $_SESSION["site_admin"]["cut_doc"]))
 		{
 			$pm->add_item(array(
