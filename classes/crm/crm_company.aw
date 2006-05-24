@@ -81,6 +81,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager
 	@caption Kliendihaldur
 
+	@property last_com_type type=text store=no
+	@caption Viimase kommentaari tüüp
+
+	@property com_statistics type=text store=no
+	@caption Kommentaaride statistika
+
 ------ Üldine - Tegevused grupp -----
 @default group=org_sections
 
@@ -773,6 +779,21 @@ default group=org_objects
 
 	@property my_view type=text store=no no_caption=1
 
+@default group=comments
+    @property comment_history type=hidden method=serialize field=meta table=objects
+
+    @property comments_display type=text store=no
+	@caption Sisestatud kommentaarid
+
+    @property comments_title type=text store=no subtitle=1
+	@caption Lisa kommentaar
+
+	@property comment_text type=textarea store=no
+	@caption Kommentaar
+
+    @property comment_type type=chooser store=no
+	@caption Kommentaari tüüp
+
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
@@ -780,6 +801,8 @@ default group=org_objects
 @groupinfo add_info caption="Lisainfo" parent=general
 @groupinfo user_settings caption="Seaded" parent=general
 @groupinfo special_offers caption="Eripakkumised" submit=no parent=general
+@groupinfo comments caption="Kommentaarid" parent=general
+
 @groupinfo people caption="T&ouml;&ouml;tajad" save=no
 
 	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no save=no
@@ -1045,6 +1068,10 @@ ALTER TABLE `kliendibaas_firma` ADD `activity_keywords` TEXT AFTER `tegevuse_kir
 define("CRM_TASK_VIEW_TABLE", 0);
 define("CRM_TASK_VIEW_CAL", 1);
 
+define("CRM_COMMENT_POSITIVE", 1);
+define("CRM_COMMENT_NEUTRAL", 2);
+define("CRM_COMMENT_NEGATIVE", 3);
+
 define("CRM_COMPANY_USECASE_CLIENT", "s");
 define("CRM_COMPANY_USECASE_EMPLOYER", "work");
 
@@ -1278,7 +1305,79 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
+			case "comments_display":
+				$comments = (array) $arr["obj_inst"]->prop("comment_history");
+				$tmp = array();
+
+				foreach ($comments as $t)
+				{
+					if (strlen(trim($t["text"])))
+					{
+						$tmp[] = $t["text"] .
+							"<br /><br /><b>" . t("Tüüp:") . "</b> " . $this->comment_types[$t["type"]] .
+							// "<br /><b>" . t("Aeg:") . "</b> " . date("d. M Y H:i", $t["time"]) .
+							"<br /><b>" . t("Aeg:") . "</b> " . strftime("%d. %b %Y %H:%M", $t["time"]) .
+							"<br /><b>" . t("Autor:") . "</b> " . $t["user"] . "<br />";
+
+					}
+				}
+
+				$data['value'] = implode("<hr />", $tmp);
+				break;
+
 			/// GENERAL TAB
+			case "last_com_type":
+				$tmp = (array) $arr["obj_inst"]->prop("comment_history");
+				$tt = array_pop($tmp);
+				$data["value"] = $tt ? $this->comment_types[$tt["type"]] : t("Kommentaare pole");
+				break;
+
+			case "com_statistics":
+				$tmp = (array) $arr["obj_inst"]->prop("comment_history");
+				$total = count($tmp);
+				$pos = $neutr = $neg = 0;
+
+				if ($total)
+				{
+					foreach ($tmp as $tt)
+					{
+						if (strlen(trim($tt["text"])))
+						{
+							switch ($tt["type"])
+							{
+								case CRM_COMMENT_POSITIVE:
+									$pos++;
+									break;
+
+								case CRM_COMMENT_NEUTRAL:
+									$neutr++;
+									break;
+
+								case CRM_COMMENT_NEGATIVE:
+									$neg++;
+									break;
+
+								default:
+									$total--;
+							}
+						}
+						else
+						{
+							$total--;
+						}
+					}
+
+					$data["value"] = $this->comment_types[CRM_COMMENT_POSITIVE] . ": " . number_format((($pos/$total)*100), 1, ".", "") . "% ({$pos})<br />" .
+						$this->comment_types[CRM_COMMENT_NEUTRAL] . ": " . number_format((($neutr/$total)*100), 1, ".", "") . "% ({$neutr})<br />" .
+						$this->comment_types[CRM_COMMENT_NEGATIVE] . ": " . number_format((($neg/$total)*100), 1, ".", "") . "% ({$neg})<br /><br />" .
+						t("Kokku") . ": " . $total;
+				}
+				else
+				{
+					$data["value"] = t("Kommentaare pole");
+				}
+				break;
+
 			case "insurance_status":
 			case "tax_clearance_status":
 				$prop_prefix = substr($data["name"], 0, -7);
@@ -1379,6 +1478,10 @@ class crm_company extends class_base
 					"sort_by" => "objects.jrk"
 				));
 				$data["options"] = $ol->names();
+				break;
+
+			case "comment_type":
+				$data["options"] = $this->comment_types;
 				break;
 
 			case "bank_account":
@@ -1984,6 +2087,20 @@ class crm_company extends class_base
 				}
 				break;
 
+			case "comment_history":
+				if (strlen(trim($arr['request']['comment_text'])))
+				{
+					$tmp = (array) $data["value"];
+					array_push($tmp, array(
+						"text" => $arr['request']['comment_text'],
+						"type" => $arr['request']['comment_type'],
+						"time" => time(),
+						"user" => aw_global_get("uid"),
+					));
+					$data["value"] = $tmp;
+				}
+				break;
+
 			case "activity_keywords":
 				$keywords_tmp = explode(",", $data["value"]);
 				$keywords = array();
@@ -2498,6 +2615,12 @@ class crm_company extends class_base
 	*/
 	function callback_on_load($arr)
 	{
+		$this->comment_types= array (
+			CRM_COMMENT_POSITIVE => t("Positiivne"),
+			CRM_COMMENT_NEUTRAL => t("Neutraalne"),
+			CRM_COMMENT_NEGATIVE => t("Negatiivne"),
+		);
+
 		$this->crm_company_init();
 		if(array_key_exists('request',$arr))
 		{
