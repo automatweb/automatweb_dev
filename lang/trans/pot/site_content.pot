@@ -10,11 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/contentmgmt/site_content.aw:2074
+#: classes/contentmgmt/site_content.aw:2023
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr ""
 
-#: classes/contentmgmt/site_content.aw:2079
+#: classes/contentmgmt/site_content.aw:2028
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr ""
 

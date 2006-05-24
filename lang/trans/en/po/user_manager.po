@@ -259,7 +259,7 @@ msgid "Uus"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:288
-#: classes/core/users/user_manager.aw:957
+#: classes/core/users/user_manager.aw:956
 msgid "Impordi"
 msgstr ""
 
@@ -273,7 +273,7 @@ msgstr ""
 
 #: classes/core/users/user_manager.aw:328
 #: classes/core/users/user_manager.aw:734
-#: classes/core/users/user_manager.aw:952
+#: classes/core/users/user_manager.aw:951
 msgid "L&otilde;ika"
 msgstr ""
 
@@ -297,7 +297,7 @@ msgstr ""
 #: classes/core/users/user_manager.aw:485
 #: classes/core/users/user_manager.aw:751
 #: classes/core/users/user_manager.aw:855
-#: classes/core/users/user_manager.aw:987
+#: classes/core/users/user_manager.aw:986
 msgid "nimetu"
 msgstr ""
 
@@ -352,7 +352,7 @@ msgid "Mitteaktiivsed kasutajad"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:732
-#: classes/core/users/user_manager.aw:950
+#: classes/core/users/user_manager.aw:949
 msgid "Muuda"
 msgstr ""
 
@@ -373,14 +373,14 @@ msgid "Vaata statistikat"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:760
+#: classes/core/users/user_manager.aw:997
 #: classes/core/users/user_manager.aw:998
-#: classes/core/users/user_manager.aw:999
 msgid "Jah"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:760
+#: classes/core/users/user_manager.aw:997
 #: classes/core/users/user_manager.aw:998
-#: classes/core/users/user_manager.aw:999
 msgid "Ei"
 msgstr ""
 
@@ -425,7 +425,7 @@ msgid "Juurkaustad"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:830
-#: classes/core/users/user_manager.aw:972
+#: classes/core/users/user_manager.aw:971
 msgid "Loginmen&uuml;&uuml;"
 msgstr ""
 
@@ -437,31 +437,31 @@ msgstr ""
 msgid "Kustutada valitud objekt?"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:943
+#: classes/core/users/user_manager.aw:942
 msgid "M&auml;&auml;ra &otilde;igused"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:951
+#: classes/core/users/user_manager.aw:950
 msgid "Kustuta"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:958
+#: classes/core/users/user_manager.aw:957
 msgid "Juurkaust"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:959
+#: classes/core/users/user_manager.aw:958
 msgid "Objektid"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:969
-#: classes/core/users/user_manager.aw:1208
+#: classes/core/users/user_manager.aw:968
+#: classes/core/users/user_manager.aw:1207
 msgid "Vali loginmen&uuml;&uuml;"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:1162
+#: classes/core/users/user_manager.aw:1161
 msgid "Seostamata menyyde juurikas"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:1171
+#: classes/core/users/user_manager.aw:1170
 msgid "Seostamata confiobject"
 msgstr ""

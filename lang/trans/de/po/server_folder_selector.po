@@ -26,6 +26,6 @@ msgstr ""
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/server_folder_selector.aw:97
+#: classes/vcl/server_folder_selector.aw:106
 msgid "Vali see"
 msgstr ""

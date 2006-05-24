@@ -469,62 +469,62 @@ msgstr "Project"
 msgid "--Vali--"
 msgstr "--Select--"
 
-#: classes/crm/crm_offer.aw:430
+#: classes/crm/crm_offer.aw:433
 msgid "Algstaatus"
 msgstr "Starting status"
 
-#: classes/crm/crm_offer.aw:436
+#: classes/crm/crm_offer.aw:439
 msgid "Lõppstaatus"
 msgstr "Final status"
 
-#: classes/crm/crm_offer.aw:442
+#: classes/crm/crm_offer.aw:445
 msgid "Muutuse aeg"
 msgstr "Change time"
 
-#: classes/crm/crm_offer.aw:448
+#: classes/crm/crm_offer.aw:451
 msgid "Muutja"
 msgstr "Modified by"
 
-#: classes/crm/crm_offer.aw:480
+#: classes/crm/crm_offer.aw:483
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/crm/crm_offer.aw:506
+#: classes/crm/crm_offer.aw:509
 msgid "T&uuml;&uuml;pkomponendid"
 msgstr "Typical components"
 
-#: classes/crm/crm_offer.aw:528
+#: classes/crm/crm_offer.aw:531
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/crm/crm_offer.aw:535
+#: classes/crm/crm_offer.aw:538
 msgid "Kustuta valitud osad"
 msgstr "Delete selected parts"
 
-#: classes/crm/crm_offer.aw:536
+#: classes/crm/crm_offer.aw:539
 msgid "Oled kindel et soovid valitud osad kustutada?"
 msgstr "Are you sure you want to delete the selected parts?"
 
-#: classes/crm/crm_offer.aw:594
+#: classes/crm/crm_offer.aw:597
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/crm/crm_offer.aw:602
+#: classes/crm/crm_offer.aw:605
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/crm/crm_offer.aw:608
+#: classes/crm/crm_offer.aw:611
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/crm/crm_offer.aw:614
+#: classes/crm/crm_offer.aw:617
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/crm/crm_offer.aw:657
+#: classes/crm/crm_offer.aw:660
 msgid "Eemalda t&uuml;&uuml;pkomonentide nimekirjast"
 msgstr "Remove from typical component list"
 
-#: classes/crm/crm_offer.aw:668
+#: classes/crm/crm_offer.aw:671
 msgid "Tee t&uuml;&uuml;pkomponendiks"
 msgstr "Mark as typical"

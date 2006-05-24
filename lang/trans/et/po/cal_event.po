@@ -59,50 +59,34 @@ msgstr ""
 msgid "Omaduse Korduste kontroller (repeater_obj) help"
 msgstr ""
 
-#: classes/calendar/cal_event.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/calendar/cal_event.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/calendar/cal_event.aw:42
 msgid "korduste kontroller"
 msgstr ""
 
-#: classes/calendar/cal_event.aw:118
+#: classes/calendar/cal_event.aw:97
 msgid "must"
 msgstr ""
 
-#: classes/calendar/cal_event.aw:119
+#: classes/calendar/cal_event.aw:98
 msgid "punane"
 msgstr ""
 
-#: classes/calendar/cal_event.aw:120
+#: classes/calendar/cal_event.aw:99
 msgid "roheline"
 msgstr ""
 
-#: classes/calendar/cal_event.aw:121
+#: classes/calendar/cal_event.aw:100
 msgid "sinine"
 msgstr ""
 
-#: classes/calendar/cal_event.aw:143
+#: classes/calendar/cal_event.aw:122
 msgid "linki objektile"
 msgstr ""
 
-#: classes/calendar/cal_event.aw:143
+#: classes/calendar/cal_event.aw:122
 msgid "objekti ennast"
 msgstr ""
 
-#: classes/calendar/cal_event.aw:166
+#: classes/calendar/cal_event.aw:145
 msgid "Lisa kalendrisündmus"
-msgstr ""
-
-#: classes/calendar/cal_event.aw:311
-msgid "%s | Muuda kalendrisündmust"
-msgstr ""
-
-#: classes/calendar/cal_event.aw:372
-msgid "Muuda eventit"
 msgstr ""

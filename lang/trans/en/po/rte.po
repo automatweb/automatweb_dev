@@ -9,135 +9,130 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# classes/vcl/rte.aw:class_235_help
-#: classes/vcl/rte.aw:class_235_help
-msgid "Klassi Rich Text Editor help"
+#: classes/vcl/rte.aw:class__help
+msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/rte.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/vcl/rte.aw:87
+msgid "RTE"
 msgstr ""
 
-#: classes/vcl/rte.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
-#: classes/vcl/rte.aw:85
+#: classes/vcl/rte.aw:96
 msgid "Bold"
 msgstr "Bold"
 
-#: classes/vcl/rte.aw:92
+#: classes/vcl/rte.aw:103
 msgid "Italic"
 msgstr "Italic"
 
-#: classes/vcl/rte.aw:99
+#: classes/vcl/rte.aw:110
 msgid "Underline"
 msgstr "Underline"
 
-#: classes/vcl/rte.aw:108
+#: classes/vcl/rte.aw:119
 msgid "Align left"
 msgstr "Align left"
 
-#: classes/vcl/rte.aw:115
+#: classes/vcl/rte.aw:126
 msgid "Align center"
 msgstr "Align center"
 
-#: classes/vcl/rte.aw:122
+#: classes/vcl/rte.aw:133
 msgid "Align right"
 msgstr "Align right"
 
-#: classes/vcl/rte.aw:131
+#: classes/vcl/rte.aw:142
 msgid "Numbered list"
 msgstr "Numbered list"
 
-#: classes/vcl/rte.aw:138
+#: classes/vcl/rte.aw:149
 msgid "Bulleted list"
 msgstr "Bulleted list"
 
-#: classes/vcl/rte.aw:147
+#: classes/vcl/rte.aw:158
 msgid "Outdent"
 msgstr "Outdent"
 
-#: classes/vcl/rte.aw:154
+#: classes/vcl/rte.aw:165
 msgid "Indent"
 msgstr "Indent"
 
-#: classes/vcl/rte.aw:163
+#: classes/vcl/rte.aw:174
 msgid "link"
 msgstr "link"
 
-#: classes/vcl/rte.aw:173
+#: classes/vcl/rte.aw:184
 msgid "Tabel"
 msgstr "Table"
 
-#: classes/vcl/rte.aw:179
+#: classes/vcl/rte.aw:190
 msgid "Lisa tabel"
 msgstr "Add table"
 
-#: classes/vcl/rte.aw:187
+#: classes/vcl/rte.aw:198
 msgid "Lisa tulp"
 msgstr "Add column"
 
-#: classes/vcl/rte.aw:193
+#: classes/vcl/rte.aw:204
 msgid "Lisa rida"
 msgstr "Add row"
 
-#: classes/vcl/rte.aw:201
+#: classes/vcl/rte.aw:212
 msgid "Kustuta tulp"
 msgstr "Delete column"
 
-#: classes/vcl/rte.aw:207
+#: classes/vcl/rte.aw:218
 msgid "Kustuta rida"
 msgstr "Delete row"
 
-#: classes/vcl/rte.aw:215
+#: classes/vcl/rte.aw:226
 msgid "Poolita rida"
 msgstr "Split row"
 
-#: classes/vcl/rte.aw:220
+#: classes/vcl/rte.aw:231
 msgid "Poolita tulp"
 msgstr "Split column"
 
-#: classes/vcl/rte.aw:230
+#: classes/vcl/rte.aw:241
 msgid "HTML"
 msgstr "HTML"
 
-#: classes/vcl/rte.aw:239
+#: classes/vcl/rte.aw:250
 msgid "Päised"
 msgstr "Headings"
 
-#: classes/vcl/rte.aw:245
+#: classes/vcl/rte.aw:256
 msgid "Heading 1"
 msgstr "Heading 1"
 
-#: classes/vcl/rte.aw:251
+#: classes/vcl/rte.aw:262
 msgid "Heading 2"
 msgstr "Heading 2"
 
-#: classes/vcl/rte.aw:257
+#: classes/vcl/rte.aw:268
 msgid "Heading 3"
 msgstr "Heading 3"
 
-#: classes/vcl/rte.aw:263
+#: classes/vcl/rte.aw:274
 msgid "Heading 4"
 msgstr "Heading 4"
 
-#: classes/vcl/rte.aw:269
+#: classes/vcl/rte.aw:280
 msgid "Heading 5"
 msgstr "Heading 5"
 
-#: classes/vcl/rte.aw:275
+#: classes/vcl/rte.aw:286
 msgid "Heading 6"
 msgstr "Heading 6"
 
-#: classes/vcl/rte.aw:281
+#: classes/vcl/rte.aw:292
 msgid "Teksti värv"
 msgstr "Text colour"
 
-#: classes/vcl/rte.aw:287
+#: classes/vcl/rte.aw:298
 msgid "Sinine"
 msgstr "Blue"
 
-#: classes/vcl/rte.aw:293
+#: classes/vcl/rte.aw:304
 msgid "Punane"
 msgstr "Red"

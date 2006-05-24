@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Impordi (do_import) help"
 msgstr ""
 
+#: classes/import/document_import.aw:prop_di_cfgform
+msgid "Omaduse Seadete vorm (di_cfgform) caption"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_di_cfgform_comment
+msgid "Omaduse Seadete vorm (di_cfgform) kommentaar"
+msgstr ""
+
+#: classes/import/document_import.aw:prop_di_cfgform_help
+msgid "Omaduse Seadete vorm (di_cfgform) help"
+msgstr ""
+
 #: classes/import/document_import.aw:prop_location_tags
 msgid "Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (location_tags) caption"
 msgstr ""
@@ -122,27 +134,31 @@ msgstr ""
 msgid "Seose Periood (RELTYPE_DOCIMP_PERIOD) tekst"
 msgstr ""
 
-#: classes/import/document_import.aw:192
+#: classes/import/document_import.aw:rel_RELTYPE_CFGFORM
+msgid "Seose Seadete vorm (RELTYPE_CFGFORM) tekst"
+msgstr ""
+
+#: classes/import/document_import.aw:201
 msgid "Asukoht"
 msgstr ""
 
-#: classes/import/document_import.aw:196
+#: classes/import/document_import.aw:205
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/import/document_import.aw:200
+#: classes/import/document_import.aw:209
 msgid "Autor"
 msgstr ""
 
-#: classes/import/document_import.aw:204
+#: classes/import/document_import.aw:213
 msgid "Sisu"
 msgstr ""
 
-#: classes/import/document_import.aw:268
+#: classes/import/document_import.aw:277
 msgid "Tagi %s sisu ette pane "
 msgstr ""
 
-#: classes/import/document_import.aw:280
+#: classes/import/document_import.aw:289
 msgid "Tagi %s sisu taha pane "
 msgstr ""
 

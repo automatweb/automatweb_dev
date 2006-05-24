@@ -23,7 +23,6 @@ $GLOBALS["TRANS"]["Grupi Reeglid (rules) pealkiri"] = "Rules";
 $GLOBALS["TRANS"]["Grupi Nimekiri reeglitest (rules_show) pealkiri"] = "List of rules";
 $GLOBALS["TRANS"]["Grupi Lisa Reegel (rules_add) pealkiri"] = "Add rule";
 $GLOBALS["TRANS"]["Grupi Eelvaade (preview) pealkiri"] = "Preview";
-$GLOBALS["TRANS"]["Grupi Meil (joinmail) pealkiri"] = "E-mail";
 $GLOBALS["TRANS"]["Seose liitumise vorm (RELTYPE_JOIN_CLASS) tekst"] = "join form";
 $GLOBALS["TRANS"]["Seose gruppi kuuluvuse reegel (RELTYPE_JOIN_RULE) tekst"] = "group membership rule";
 $GLOBALS["TRANS"]["Seose objektide kataloog (RELTYPE_OBJ_FOLDER) tekst"] = "objects folder";

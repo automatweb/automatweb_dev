@@ -14,5 +14,4 @@ $GLOBALS["TRANS"]["Grupi Väljamaksed (account_overview_outgoing) pealkiri"] = "O
 $GLOBALS["TRANS"]["Grupi Konto ülevaade (other_account_overview) pealkiri"] = "Account overview";
 $GLOBALS["TRANS"]["Grupi Sissemaksed (other_account_overview_incoming) pealkiri"] = "Incoming transfers";
 $GLOBALS["TRANS"]["Grupi Väljamaksed (other_account_overview_outgoing) pealkiri"] = "Outgoing transfers";
-$GLOBALS["TRANS"]["Seose Maksu pärg (RELTYPE_TAX_CHAIN) tekst"] = "tax chain";
 ?>

@@ -10,11 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/defs.aw:524
+#: classes/defs.aw:782
 msgid ""
 msgstr ""
 
-#: classes/defs.aw:609 classes/defs.aw:617
+#: classes/defs.aw:867 classes/defs.aw:875
 msgid "(nimetu)"
 msgstr ""
 

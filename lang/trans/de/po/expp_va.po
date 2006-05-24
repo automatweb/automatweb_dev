@@ -9,16 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/expp/expp_va.aw:class_989_help
 msgid "Klassi Expp väljaanne help"
 msgstr ""
 
-#: classes/expp/expp_va.aw:454 classes/expp/expp_va.aw:800
+#: classes/expp/expp_va.aw:828
 msgid "kuu"
 msgstr ""
 
-#: classes/expp/expp_va.aw:455 classes/expp/expp_va.aw:801
+#: classes/expp/expp_va.aw:829
 msgid "kuud"
 msgstr ""
-

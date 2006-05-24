@@ -26,7 +26,7 @@ msgstr ""
 msgid "VIGA, tyhi url!"
 msgstr ""
 
-#: classes/export/export.aw:783
+#: classes/export/export.aw:778
 msgid "VIGA! EI LEIDNUD ext for type %s"
 msgstr ""
 

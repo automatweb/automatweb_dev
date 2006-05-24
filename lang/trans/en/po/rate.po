@@ -175,11 +175,11 @@ msgstr "Lowest rating"
 msgid "V&auml;him vaadatud"
 msgstr "Least viewed"
 
-#: classes/contentmgmt/rate/rate.aw:512
+#: classes/contentmgmt/rate/rate.aw:515
 msgid "H&auml;&auml;leta"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:530
+#: classes/contentmgmt/rate/rate.aw:533
 msgid "Hinda"
 msgstr ""
 

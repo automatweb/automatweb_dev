@@ -268,68 +268,88 @@ msgstr "register to search"
 msgid "Seose kaust millest otsida (RELTYPE_SEARCH_FOLDER) tekst"
 msgstr "folder to search"
 
-#: classes/applications/register/register_search.aw:137
-#: classes/applications/register/register_search.aw:232
+#: classes/applications/register/register_search.aw:141
+#: classes/applications/register/register_search.aw:240
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/applications/register/register_search.aw:144
-#: classes/applications/register/register_search.aw:239
+#: classes/applications/register/register_search.aw:148
+#: classes/applications/register/register_search.aw:247
 msgid "Element"
 msgstr "Element"
 
-#: classes/applications/register/register_search.aw:150
+#: classes/applications/register/register_search.aw:154
 msgid "Otsitav"
 msgstr "Searchable"
 
-#: classes/applications/register/register_search.aw:156
+#: classes/applications/register/register_search.aw:160
 msgid "Numbrite vahemiku otsing"
 msgstr "Number range search"
 
-#: classes/applications/register/register_search.aw:162
+#: classes/applications/register/register_search.aw:166
 msgid "Valik olemasolevatest"
 msgstr "Select from existing"
 
-#: classes/applications/register/register_search.aw:168
+#: classes/applications/register/register_search.aw:172
 msgid "Elemendi tekst"
 msgstr "Element text"
 
-#: classes/applications/register/register_search.aw:185
+#: classes/applications/register/register_search.aw:189
 msgid "T&auml;istekstiotsing"
 msgstr "Fulltext search"
 
-#: classes/applications/register/register_search.aw:245
+#: classes/applications/register/register_search.aw:190
+#: classes/applications/register/register_search.aw:484
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:191
+#: classes/applications/register/register_search.aw:494
+msgid "Muudetud"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:192
+#: classes/applications/register/register_search.aw:489
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:193
+#: classes/applications/register/register_search.aw:499
+msgid "Muutja"
+msgstr ""
+
+#: classes/applications/register/register_search.aw:253
 msgid "Tabelis"
 msgstr "In table"
 
-#: classes/applications/register/register_search.aw:251
+#: classes/applications/register/register_search.aw:259
 msgid "Sorditav"
 msgstr "Sortable"
 
-#: classes/applications/register/register_search.aw:257
+#: classes/applications/register/register_search.aw:265
 msgid "Vaikimisi sort"
 msgstr "Default sort"
 
-#: classes/applications/register/register_search.aw:263
+#: classes/applications/register/register_search.aw:271
 msgid "Vaata tulp"
 msgstr "View column"
 
-#: classes/applications/register/register_search.aw:269
+#: classes/applications/register/register_search.aw:277
 msgid "Tulba pealkiri"
 msgstr "Column title"
 
-#: classes/applications/register/register_search.aw:850
+#: classes/applications/register/register_search.aw:989
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/applications/register/register_search.aw:864
+#: classes/applications/register/register_search.aw:1003
 msgid "Vaata"
 msgstr "View"
 
-#: classes/applications/register/register_search.aw:875
+#: classes/applications/register/register_search.aw:1014
 msgid "Kustutada objekt?"
 msgstr "Delete object?"
 
-#: classes/applications/register/register_search.aw:876
+#: classes/applications/register/register_search.aw:1015
 msgid "Kustuta"
 msgstr "Delete"

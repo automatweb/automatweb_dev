@@ -78,32 +78,28 @@ msgstr ""
 msgid "Open DocGen"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:147 classes/applications/docgen/docgen_viewer.aw:723 classes/applications/docgen/docgen_viewer.aw:792 classes/applications/docgen/docgen_viewer.aw:1072 classes/applications/docgen/docgen_viewer.aw:1142 classes/applications/docgen/docgen_viewer.aw:1240
+#: classes/applications/docgen/docgen_viewer.aw:147 classes/applications/docgen/docgen_viewer.aw:725 classes/applications/docgen/docgen_viewer.aw:794 classes/applications/docgen/docgen_viewer.aw:1072 classes/applications/docgen/docgen_viewer.aw:1142
 msgid "Classes"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:307
+#: classes/applications/docgen/docgen_viewer.aw:308
 msgid "nothing"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:308 classes/applications/docgen/docgen_viewer.aw:309
+#: classes/applications/docgen/docgen_viewer.aw:309 classes/applications/docgen/docgen_viewer.aw:311
 msgid "none"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:936
+#: classes/applications/docgen/docgen_viewer.aw:942
 msgid "ALL DONE"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:998
+#: classes/applications/docgen/docgen_viewer.aw:1004
 msgid "Klasside &uuml;levaade"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1004
-msgid "K&otilde;ik klassid"
-msgstr ""
-
 #: classes/applications/docgen/docgen_viewer.aw:1010
-msgid "Dokumenteeritud klassid"
+msgid "K&otilde;ik klassid"
 msgstr ""
 
 #: classes/applications/docgen/docgen_viewer.aw:1016

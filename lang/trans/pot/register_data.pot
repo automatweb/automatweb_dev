@@ -3302,6 +3302,18 @@ msgstr ""
 msgid "Omaduse Pildiupload 17 (userim17) help"
 msgstr ""
 
+#: classes/applications/register/register_data.aw:prop_userim18
+msgid "Omaduse Pildiupload 18 (userim18) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim18_comment
+msgid "Omaduse Pildiupload 18 (userim18) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim18_help
+msgid "Omaduse Pildiupload 18 (userim18) help"
+msgstr ""
+
 #: classes/applications/register/register_data.aw:prop_userim19
 msgid "Omaduse Pildiupload 19 (userim19) caption"
 msgstr ""
@@ -3324,6 +3336,126 @@ msgstr ""
 
 #: classes/applications/register/register_data.aw:prop_userim20_help
 msgid "Omaduse Pildiupload 20 (userim20) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim21
+msgid "Omaduse Pildiupload 21 (userim21) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim21_comment
+msgid "Omaduse Pildiupload 21 (userim21) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim21_help
+msgid "Omaduse Pildiupload 21 (userim21) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim22
+msgid "Omaduse Pildiupload 22 (userim22) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim22_comment
+msgid "Omaduse Pildiupload 22 (userim22) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim22_help
+msgid "Omaduse Pildiupload 22 (userim22) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim23
+msgid "Omaduse Pildiupload 23 (userim23) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim23_comment
+msgid "Omaduse Pildiupload 23 (userim23) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim23_help
+msgid "Omaduse Pildiupload 23 (userim23) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim24
+msgid "Omaduse Pildiupload 24 (userim24) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim24_comment
+msgid "Omaduse Pildiupload 24 (userim24) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim24_help
+msgid "Omaduse Pildiupload 24 (userim24) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim25
+msgid "Omaduse Pildiupload 25 (userim25) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim25_comment
+msgid "Omaduse Pildiupload 25 (userim25) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim25_help
+msgid "Omaduse Pildiupload 25 (userim25) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim26
+msgid "Omaduse Pildiupload 26 (userim26) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim26_comment
+msgid "Omaduse Pildiupload 26 (userim26) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim26_help
+msgid "Omaduse Pildiupload 26 (userim26) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim27
+msgid "Omaduse Pildiupload 27 (userim27) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim27_comment
+msgid "Omaduse Pildiupload 27 (userim27) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim27_help
+msgid "Omaduse Pildiupload 27 (userim27) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim28
+msgid "Omaduse Pildiupload 28 (userim28) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim28_comment
+msgid "Omaduse Pildiupload 28 (userim28) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim28_help
+msgid "Omaduse Pildiupload 28 (userim28) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim29
+msgid "Omaduse Pildiupload 29 (userim29) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim29_comment
+msgid "Omaduse Pildiupload 29 (userim29) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim29_help
+msgid "Omaduse Pildiupload 29 (userim29) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim30
+msgid "Omaduse Pildiupload 30 (userim30) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim30_comment
+msgid "Omaduse Pildiupload 30 (userim30) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim30_help
+msgid "Omaduse Pildiupload 30 (userim30) help"
 msgstr ""
 
 #: classes/applications/register/register_data.aw:prop_userfile1
@@ -3384,6 +3516,18 @@ msgstr ""
 
 #: classes/applications/register/register_data.aw:prop_userfile5_help
 msgid "Omaduse Failiupload 5 (userfile5) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_aliasmgr
+msgid "Omaduse Aliastehaldur (aliasmgr) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_aliasmgr_comment
+msgid "Omaduse Aliastehaldur (aliasmgr) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_aliasmgr_help
+msgid "Omaduse Aliastehaldur (aliasmgr) help"
 msgstr ""
 
 #: classes/applications/register/register_data.aw:group_data
@@ -3768,6 +3912,106 @@ msgstr ""
 
 #: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE5
 msgid "Seose pilt5 (RELTYPE_IMAGE5) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE6
+msgid "Seose pilt6 (RELTYPE_IMAGE6) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE7
+msgid "Seose pilt7 (RELTYPE_IMAGE7) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE8
+msgid "Seose pilt8 (RELTYPE_IMAGE8) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE9
+msgid "Seose pilt9 (RELTYPE_IMAGE9) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE10
+msgid "Seose pilt10 (RELTYPE_IMAGE10) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE11
+msgid "Seose pilt11 (RELTYPE_IMAGE11) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE12
+msgid "Seose pilt12 (RELTYPE_IMAGE12) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE13
+msgid "Seose pilt13 (RELTYPE_IMAGE13) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE14
+msgid "Seose pilt14 (RELTYPE_IMAGE14) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE15
+msgid "Seose pilt15 (RELTYPE_IMAGE15) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE16
+msgid "Seose pilt16 (RELTYPE_IMAGE16) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE17
+msgid "Seose pilt17 (RELTYPE_IMAGE17) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE18
+msgid "Seose pilt18 (RELTYPE_IMAGE18) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE19
+msgid "Seose pilt19 (RELTYPE_IMAGE19) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE20
+msgid "Seose pilt20 (RELTYPE_IMAGE20) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE21
+msgid "Seose pilt21 (RELTYPE_IMAGE21) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE22
+msgid "Seose pilt22 (RELTYPE_IMAGE22) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE23
+msgid "Seose pilt23 (RELTYPE_IMAGE23) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE24
+msgid "Seose pilt24 (RELTYPE_IMAGE24) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE25
+msgid "Seose pilt25 (RELTYPE_IMAGE25) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE26
+msgid "Seose pilt26 (RELTYPE_IMAGE26) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE27
+msgid "Seose pilt27 (RELTYPE_IMAGE27) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE28
+msgid "Seose pilt28 (RELTYPE_IMAGE28) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE29
+msgid "Seose pilt29 (RELTYPE_IMAGE29) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE30
+msgid "Seose pilt30 (RELTYPE_IMAGE30) tekst"
 msgstr ""
 
 #: classes/applications/register/register_data.aw:rel_RELTYPE_FILE1

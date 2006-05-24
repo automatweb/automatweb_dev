@@ -10,19 +10,35 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/help/help.aw:25 classes/core/help/help.aw:186 classes/core/help/help.aw:380
+#: classes/core/help/help.aw:36 classes/core/help/help.aw:199 classes/core/help/help.aw:432
 msgid "Selle klassil puudub abiinfo"
 msgstr ""
 
-#: classes/core/help/help.aw:166 classes/core/help/help.aw:355
+#: classes/core/help/help.aw:178 classes/core/help/help.aw:340
 msgid "Klassi '%s' abiinfo"
 msgstr ""
 
-#: classes/core/help/help.aw:169 classes/core/help/help.aw:358
+#: classes/core/help/help.aw:181 classes/core/help/help.aw:343
 msgid "AW abiinfo"
 msgstr ""
 
-#: classes/core/help/help.aw:391
+#: classes/core/help/help.aw:441
 msgid "Sellist gruppi pole"
+msgstr ""
+
+#: classes/core/help/help.aw:460 classes/core/help/help.aw:493
+msgid "tõlgitud nimi puudub"
+msgstr ""
+
+#: classes/core/help/help.aw:461 classes/core/help/help.aw:494
+msgid "kommentaar puudub"
+msgstr ""
+
+#: classes/core/help/help.aw:462 classes/core/help/help.aw:495
+msgid "abitekst puudub"
+msgstr ""
+
+#: classes/core/help/help.aw:504
+msgid "Omadused"
 msgstr ""
 

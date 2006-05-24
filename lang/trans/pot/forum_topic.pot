@@ -110,14 +110,6 @@ msgstr ""
 msgid "Omaduse  (subscribers_editor) help"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_topic.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/forum/forum_topic.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/contentmgmt/forum/forum_topic.aw:group_subscribers
 msgid "Grupi Mailinglist (subscribers) pealkiri"
 msgstr ""

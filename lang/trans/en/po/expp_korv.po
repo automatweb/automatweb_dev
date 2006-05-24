@@ -12,3 +12,51 @@ msgstr ""
 #: classes/expp/expp_korv.aw:class_991_help
 msgid "Klassi Expp tootekorv help"
 msgstr ""
+
+#: classes/expp/expp_korv.aw:96
+msgid "kuu"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:96
+msgid "kuud"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:98
+msgid "n&auml;dal"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:98
+msgid "n&auml;dalat"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:100
+msgid "p&auml;ev"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:100
+msgid "p&auml;eva"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:102
+msgid "number"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:102
+msgid "numbrit"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:104
+msgid "aasta"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:104
+msgid "aastat"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:106
+msgid "poolkuu"
+msgstr ""
+
+#: classes/expp/expp_korv.aw:106
+msgid "poolkuud"
+msgstr ""

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:18 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,36 +9,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/core/obj/object_tree.aw:43
+msgid ""
+"object_tree:constructor(): if you specify a parameter, it must be a filter "
+"array!"
+msgstr ""
+"object_tree:constructor(): if you specify a parameter, it must be a filter "
+"array!"
 
-#: classes/core/obj/object_tree.aw:18
-msgid "object_tree:constructor(): if you specify a parameter, it must be a filter array!"
-msgstr "object_tree:constructor(): if you specify a parameter, it must be a filter array!"
-
-#: classes/core/obj/object_tree.aw:41
+#: classes/core/obj/object_tree.aw:94
 msgid "object_tree::filter(): filter parameter must be an array!"
 msgstr "object_tree::filter(): filter parameter must be an array!"
 
-#: classes/core/obj/object_tree.aw:74
+#: classes/core/obj/object_tree.aw:176
 msgid "object_tree::foreach_o(): parameter must be an array"
 msgstr "object_tree::foreach_o(): parameter must be an array"
 
-#: classes/core/obj/object_tree.aw:87
-msgid "object_tree::foreach_o(): %s is not a member function of the object class!"
-msgstr "object_tree::foreach_o(): %s is not a member function of the object class!"
+#: classes/core/obj/object_tree.aw:189
+msgid ""
+"object_tree::foreach_o(): %s is not a member function of the object class!"
+msgstr ""
+"object_tree::foreach_o(): %s is not a member function of the object class!"
 
-#: classes/core/obj/object_tree.aw:124
+#: classes/core/obj/object_tree.aw:258
 msgid "object_tree::foreach_cb(): parameter must be an array!"
 msgstr "object_tree::foreach_cb(): parameter must be an array!"
 
-#: classes/core/obj/object_tree.aw:139
-msgid "object_tree::foreach_cb(): callback method %s does not exist in class %s!"
-msgstr "object_tree::foreach_cb(): callback method %s does not exist in class %s!"
+#: classes/core/obj/object_tree.aw:273
+msgid ""
+"object_tree::foreach_cb(): callback method %s does not exist in class %s!"
+msgstr ""
+"object_tree::foreach_cb(): callback method %s does not exist in class %s!"
 
-#: classes/core/obj/object_tree.aw:148
+#: classes/core/obj/object_tree.aw:282
 msgid "object_tree::foreach_cb(): callback function %s does not exist!"
 msgstr "object_tree::foreach_cb(): callback function %s does not exist!"
 
-#: classes/core/obj/object_tree.aw:256
+#: classes/core/obj/object_tree.aw:558
 msgid "object_tree::filter(): parent filter parameter mut always be passed!"
 msgstr "object_tree::filter(): parent filter parameter mut always be passed!"
-

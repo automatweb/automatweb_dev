@@ -380,6 +380,30 @@ msgstr ""
 msgid "Omaduse Tulemuste tabel (search_contact_results) help"
 msgstr ""
 
+#: classes/crm/crm_call.aw:prop_new_call_date
+msgid "Omaduse Uue k&otilde;ne aeg (new_call_date) caption"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_new_call_date_comment
+msgid "Omaduse Uue k&otilde;ne aeg (new_call_date) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_new_call_date_help
+msgid "Omaduse Uue k&otilde;ne aeg (new_call_date) help"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_other_calls
+msgid "Omaduse  (other_calls) caption"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_other_calls_comment
+msgid "Omaduse  (other_calls) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_other_calls_help
+msgid "Omaduse  (other_calls) help"
+msgstr ""
+
 # classes/crm/crm_call.aw:group_recurrence
 #: classes/crm/crm_call.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
@@ -430,6 +454,14 @@ msgstr ""
 msgid "Grupi Osalejad (participants) help"
 msgstr ""
 
+#: classes/crm/crm_call.aw:group_other_calls
+msgid "Grupi Eelmised k&otilde;ned (other_calls) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_call.aw:group_other_calls_help
+msgid "Grupi Eelmised k&otilde;ned (other_calls) help"
+msgstr ""
+
 # classes/crm/crm_call.aw:rel_RELTYPE_RECURRENCE
 #: classes/crm/crm_call.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
@@ -448,14 +480,34 @@ msgstr ""
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
-#: classes/crm/crm_call.aw:398
-msgid "Kustuta valitud"
-msgstr ""
-
-#: classes/crm/crm_call.aw:407
+#: classes/crm/crm_call.aw:428 classes/crm/crm_call.aw:475
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_call.aw:416
+#: classes/crm/crm_call.aw:435 classes/crm/crm_call.aw:446
+msgid "Lisa isik organisatsiooni %s"
+msgstr ""
+
+#: classes/crm/crm_call.aw:466
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/crm/crm_call.aw:484
 msgid "Salvesta"
+msgstr ""
+
+#: classes/crm/crm_call.aw:546
+msgid "Uee k&otilde;ne aeg ei tohi olla minevikus!"
+msgstr ""
+
+#: classes/crm/crm_call.aw:676
+msgid "Millal"
+msgstr ""
+
+#: classes/crm/crm_call.aw:683
+msgid "Sisu"
+msgstr ""
+
+#: classes/crm/crm_call.aw:688
+msgid "Vaata"
 msgstr ""

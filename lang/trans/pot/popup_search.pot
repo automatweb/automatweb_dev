@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/popup_search.aw:126 classes/vcl/popup_search.aw:385
+#: classes/vcl/popup_search.aw:126 classes/vcl/popup_search.aw:385 classes/vcl/popup_search.aw:753
 msgid "Otsi"
 msgstr ""
 
@@ -67,10 +67,10 @@ msgid "Vali"
 msgstr ""
 
 #: classes/vcl/popup_search.aw:491
-msgid "<a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\\"sel\\")'>Vali</a>"
+msgid "<a href='javascript:void(0)' onClick='aw_sel_chb(document.cf,\"sel\")'>Vali</a>"
 msgstr ""
 
-#: classes/vcl/popup_search.aw:550
+#: classes/vcl/popup_search.aw:553
 msgid "Vali see"
 msgstr ""
 

@@ -85,6 +85,26 @@ msgstr ""
 msgid "Omaduse  (administrative_structure_oid) help"
 msgstr ""
 
+#: classes/common/country/country_city.aw:prop_transl
+msgid "Omaduse T&otilde;lgi (transl) caption"
+msgstr ""
+
+#: classes/common/country/country_city.aw:prop_transl_comment
+msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgstr ""
+
+#: classes/common/country/country_city.aw:prop_transl_help
+msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/common/country/country_city.aw:group_transl
+msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgstr ""
+
+#: classes/common/country/country_city.aw:group_transl_help
+msgid "Grupi T&otilde;lgi (transl) help"
+msgstr ""
+
 #: classes/common/country/country_city.aw:rel_RELTYPE_PARENT_ADMINISTRATIVE_UNIT
 msgid ""
 "Seose K&otilde;rgem halduspiirkond (RELTYPE_PARENT_ADMINISTRATIVE_UNIT) tekst"

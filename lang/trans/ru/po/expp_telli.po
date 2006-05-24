@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/expp/expp_telli.aw:class_1016_help
 msgid "Klassi Expp telli help"
 msgstr ""
@@ -30,3 +29,42 @@ msgstr ""
 msgid "kuu"
 msgstr ""
 
+#: classes/expp/expp_telli.aw:317
+msgid " n&auml;dalat "
+msgstr ""
+
+#: classes/expp/expp_telli.aw:317
+msgid " n&auml;dal "
+msgstr ""
+
+#: classes/expp/expp_telli.aw:319
+msgid " p&auml;eva "
+msgstr ""
+
+#: classes/expp/expp_telli.aw:319
+msgid " p&auml;ev "
+msgstr ""
+
+#: classes/expp/expp_telli.aw:321
+msgid " numbrit "
+msgstr ""
+
+#: classes/expp/expp_telli.aw:321
+msgid " number "
+msgstr ""
+
+#: classes/expp/expp_telli.aw:323
+msgid " aastat "
+msgstr ""
+
+#: classes/expp/expp_telli.aw:323
+msgid " aasta "
+msgstr ""
+
+#: classes/expp/expp_telli.aw:325
+msgid " poolkuud "
+msgstr ""
+
+#: classes/expp/expp_telli.aw:325
+msgid " poolkuu "
+msgstr ""

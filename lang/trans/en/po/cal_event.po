@@ -59,50 +59,40 @@ msgstr ""
 msgid "Omaduse Korduste kontroller (repeater_obj) help"
 msgstr ""
 
-#: classes/calendar/cal_event.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/calendar/cal_event.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/calendar/cal_event.aw:42
 msgid "korduste kontroller"
 msgstr "recurrence controller"
 
-#: classes/calendar/cal_event.aw:118
+#: classes/calendar/cal_event.aw:97
 msgid "must"
 msgstr "black"
 
-#: classes/calendar/cal_event.aw:119
+#: classes/calendar/cal_event.aw:98
 msgid "punane"
 msgstr "red"
 
-#: classes/calendar/cal_event.aw:120
+#: classes/calendar/cal_event.aw:99
 msgid "roheline"
 msgstr "green"
 
-#: classes/calendar/cal_event.aw:121
+#: classes/calendar/cal_event.aw:100
 msgid "sinine"
 msgstr "blue"
 
-#: classes/calendar/cal_event.aw:143
+#: classes/calendar/cal_event.aw:122
 msgid "linki objektile"
 msgstr "link to object"
 
-#: classes/calendar/cal_event.aw:143
+#: classes/calendar/cal_event.aw:122
 msgid "objekti ennast"
 msgstr "object itself"
 
-#: classes/calendar/cal_event.aw:166
+#: classes/calendar/cal_event.aw:145
 msgid "Lisa kalendrisündmus"
 msgstr "Add calendar event"
 
-#: classes/calendar/cal_event.aw:311
-msgid "%s | Muuda kalendrisündmust"
-msgstr "%s | Change calendar event"
+#~ msgid "%s | Muuda kalendrisündmust"
+#~ msgstr "%s | Change calendar event"
 
-#: classes/calendar/cal_event.aw:372
-msgid "Muuda eventit"
-msgstr "Change event"
+#~ msgid "Muuda eventit"
+#~ msgstr "Change event"

@@ -14,19 +14,21 @@ msgstr ""
 msgid "Klassi CV Otsing help"
 msgstr ""
 
-# classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_TEGEVUSVALDKOND
-#: classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_TEGEVUSVALDKOND
-msgid "Seose Tegevusala (RELTYPE_TEGEVUSVALDKOND) tekst"
-msgstr "Area of activity"
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:140
+msgid "je"
+msgstr ""
 
-# classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_LINN
-#: classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_LINN
-msgid "Seose Linn (RELTYPE_LINN) tekst"
-msgstr "Town"
-
-#: classes/applications/personnel_management/personnel_management_cv_search.aw:363
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:149
 msgid "Nimi"
 msgstr "Name"
+
+# classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_TEGEVUSVALDKOND
+#~ msgid "Seose Tegevusala (RELTYPE_TEGEVUSVALDKOND) tekst"
+#~ msgstr "Area of activity"
+
+# classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_LINN
+#~ msgid "Seose Linn (RELTYPE_LINN) tekst"
+#~ msgstr "Town"
 
 # classes/applications/personnel_management/personnel_management_cv_search.aw:group_
 #~ msgid "Grupi  () pealkiri"

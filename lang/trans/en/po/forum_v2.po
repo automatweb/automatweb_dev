@@ -559,6 +559,24 @@ msgid ""
 "lja? (show_image_upload_in_add_topic_form) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form
+msgid ""
+"Omaduse N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise "
+"v&auml;lja? (show_image_upload_in_add_comment_form) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_comment
+msgid ""
+"Omaduse N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise "
+"v&auml;lja? (show_image_upload_in_add_comment_form) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_image_upload_in_add_comment_form_help
+msgid ""
+"Omaduse N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise "
+"v&auml;lja? (show_image_upload_in_add_comment_form) help"
+msgstr ""
+
 # classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page
 #: classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page
 msgid "Omaduse Kommentaare lehel (comments_on_page) caption"
@@ -647,14 +665,6 @@ msgstr ""
 # classes/contentmgmt/forum/forum_v2.aw:prop_show_help
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_help
 msgid "Omaduse Foorumi sisu (show) help"
-msgstr ""
-
-#: classes/contentmgmt/forum/forum_v2.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/forum/forum_v2.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_general_sub
@@ -771,43 +781,43 @@ msgstr "FAW folder"
 msgid "Seose Piltide kaust (RELTYPE_IMAGES_FOLDER) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:264
+#: classes/contentmgmt/forum/forum_v2.aw:267
 msgid "Teemade kaust on valimata"
 msgstr "Topic folder is not selected"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1360
+#: classes/contentmgmt/forum/forum_v2.aw:1398
 msgid "Pealkirja v&otilde;i sisu v&auml;li peab olema t&auml;idetud"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1549
+#: classes/contentmgmt/forum/forum_v2.aw:1593
 msgid "Teema"
 msgstr "Topic"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1554
+#: classes/contentmgmt/forum/forum_v2.aw:1598
 msgid "Jäta välja"
 msgstr "Exclude"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1561
+#: classes/contentmgmt/forum/forum_v2.aw:1605
 msgid "k.a. alamkaustad"
 msgstr "incl. subfolders"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1734
+#: classes/contentmgmt/forum/forum_v2.aw:1778
 msgid "Uus teema"
 msgstr "New topic"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1787
+#: classes/contentmgmt/forum/forum_v2.aw:1831
 msgid "Pilt"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1800
+#: classes/contentmgmt/forum/forum_v2.aw:1844
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/contentmgmt/forum/forum_v2.aw:2156
+#: classes/contentmgmt/forum/forum_v2.aw:2206
 msgid " teemade kaust"
 msgstr " topic folder"
 
-#: classes/contentmgmt/forum/forum_v2.aw:2163
+#: classes/contentmgmt/forum/forum_v2.aw:2213
 msgid " aadresside kaust"
 msgstr " address folder"
 

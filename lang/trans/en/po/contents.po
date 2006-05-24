@@ -10,21 +10,26 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/contentmgmt/contents.aw:class_305_help
+#: classes/contentmgmt/contents.aw:class_305_help
 msgid "Klassi Saidi sisukord help"
 msgstr ""
 
 # classes/contentmgmt/contents.aw:prop_intro_folder
+#: classes/contentmgmt/contents.aw:prop_intro_folder
 msgid "Omaduse Juhtkirja kataloog (intro_folder) caption"
 msgstr "Intro document folder"
 
 # classes/contentmgmt/contents.aw:prop_intro_folder_comment
+#: classes/contentmgmt/contents.aw:prop_intro_folder_comment
 msgid "Omaduse Juhtkirja kataloog (intro_folder) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/contents.aw:prop_intro_folder_help
+#: classes/contentmgmt/contents.aw:prop_intro_folder_help
 msgid "Omaduse Juhtkirja kataloog (intro_folder) help"
 msgstr ""
 
 # classes/contentmgmt/contents.aw:rel_RELTYPE_FOLDER
+#: classes/contentmgmt/contents.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr "folder"

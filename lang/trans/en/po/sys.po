@@ -17,38 +17,38 @@ msgstr "Failed opening connection to server %s"
 msgid "Write error"
 msgstr "Write error"
 
-#: classes/sys.aw:509
+#: classes/sys.aw:516
 msgid "L&otilde;i saidi andmebaasi tabelid"
 msgstr "Created site database tables"
 
-#: classes/sys.aw:565
+#: classes/sys.aw:572
 msgid "all done! "
 msgstr "all done! "
 
-#: classes/sys.aw:611
+#: classes/sys.aw:618
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/sys.aw:615
+#: classes/sys.aw:622
 msgid "Klass"
 msgstr "Class"
 
-#: classes/sys.aw:619
+#: classes/sys.aw:626
 msgid "Muutja"
 msgstr "Modifiedby"
 
-#: classes/sys.aw:623
+#: classes/sys.aw:630
 msgid "Muutmise aeg"
 msgstr "Modified"
 
-#: classes/sys.aw:792
+#: classes/sys.aw:803
 msgid "all done!! database seems to be relatively ok!"
 msgstr "all done!! database seems to be relatively ok!"
 
-#: classes/sys.aw:852
+#: classes/sys.aw:863
 msgid "All done"
 msgstr "All done"
 
-#: classes/sys.aw:888
+#: classes/sys.aw:899
 msgid "$fn"
 msgstr ""

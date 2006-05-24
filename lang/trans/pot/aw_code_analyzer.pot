@@ -10,11 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/core/aw_code_analyzer/aw_code_analyzer.aw:549
+#: classes/core/aw_code_analyzer/aw_code_analyzer.aw:575
 msgid "error: do_parse_parameters failed for string %s <br>\n"
 msgstr ""
 
-#: classes/core/aw_code_analyzer/aw_code_analyzer.aw:1103
+#: classes/core/aw_code_analyzer/aw_code_analyzer.aw:1129
 msgid "horrible parse error!"
 msgstr ""
 

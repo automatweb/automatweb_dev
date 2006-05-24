@@ -12,3 +12,79 @@ msgstr ""
 #: classes/expp/expp_arve.aw:class_1018_help
 msgid "Klassi Expp arve help"
 msgstr ""
+
+#: classes/expp/expp_arve.aw:48
+msgid "Arve koostamine"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:62
+msgid "Tellija andmed:"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:77
+msgid "Saaja andmed:"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:122
+msgid "kuu"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:122
+msgid "kuud"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:124
+msgid "n&auml;dal"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:124
+msgid "n&auml;dalat"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:126
+msgid "p&auml;ev"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:126
+msgid "p&auml;eva"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:128
+msgid "number"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:128
+msgid "numbrit"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:130
+msgid "aasta"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:130
+msgid "aastat"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:132
+msgid "poolkuu"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:132
+msgid "poolkuud"
+msgstr ""
+
+#: classes/expp/expp_arve.aw:173
+msgid "e-post: "
+msgstr ""
+
+#: classes/expp/expp_arve.aw:174
+msgid "tel: "
+msgstr ""
+
+#: classes/expp/expp_arve.aw:175
+msgid "mobiil: "
+msgstr ""
+
+#: classes/expp/expp_arve.aw:176
+msgid "faks: "
+msgstr ""

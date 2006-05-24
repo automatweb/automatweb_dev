@@ -9,6 +9,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/db.aw:103 classes/db.aw:127
+#: classes/db.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/db.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/db.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/db.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/db.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/db.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+
+#: classes/db.aw:103 classes/db.aw:124
 msgid "this driver is not supported"
 msgstr ""

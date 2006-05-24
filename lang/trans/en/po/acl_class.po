@@ -10,77 +10,103 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 # classes/core/acl/acl_class.aw:class_88_help
+#: classes/core/acl/acl_class.aw:class_88_help
 msgid "Klassi Privileeg help"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_chain
+#: classes/core/acl/acl_class.aw:prop_chain
 msgid "Omaduse Vali p&auml;rg (chain) caption"
 msgstr "Select chain"
 
 # classes/core/acl/acl_class.aw:prop_chain_comment
+#: classes/core/acl/acl_class.aw:prop_chain_comment
 msgid "Omaduse Vali p&auml;rg (chain) kommentaar"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_chain_help
+#: classes/core/acl/acl_class.aw:prop_chain_help
 msgid "Omaduse Vali p&auml;rg (chain) help"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_role
+#: classes/core/acl/acl_class.aw:prop_role
 msgid "Omaduse Vali roll (role) caption"
 msgstr "Select role"
 
 # classes/core/acl/acl_class.aw:prop_role_comment
+#: classes/core/acl/acl_class.aw:prop_role_comment
 msgid "Omaduse Vali roll (role) kommentaar"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_role_help
+#: classes/core/acl/acl_class.aw:prop_role_help
 msgid "Omaduse Vali roll (role) help"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_groups
+#: classes/core/acl/acl_class.aw:prop_groups
 msgid "Omaduse Vali grupid (groups) caption"
 msgstr "Select groups"
 
 # classes/core/acl/acl_class.aw:prop_groups_comment
+#: classes/core/acl/acl_class.aw:prop_groups_comment
 msgid "Omaduse Vali grupid (groups) kommentaar"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_groups_help
+#: classes/core/acl/acl_class.aw:prop_groups_help
 msgid "Omaduse Vali grupid (groups) help"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_priority
+#: classes/core/acl/acl_class.aw:prop_priority
 msgid "Omaduse Prioriteet (priority) caption"
 msgstr "Priority"
 
 # classes/core/acl/acl_class.aw:prop_priority_comment
+#: classes/core/acl/acl_class.aw:prop_priority_comment
 msgid "Omaduse Prioriteet (priority) kommentaar"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_priority_help
+#: classes/core/acl/acl_class.aw:prop_priority_help
 msgid "Omaduse Prioriteet (priority) help"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_update_acl
+#: classes/core/acl/acl_class.aw:prop_update_acl
 msgid "Omaduse Uuenda ACL (update_acl) caption"
 msgstr "Update ACL"
 
 # classes/core/acl/acl_class.aw:prop_update_acl_comment
+#: classes/core/acl/acl_class.aw:prop_update_acl_comment
 msgid "Omaduse Uuenda ACL (update_acl) kommentaar"
 msgstr ""
 
 # classes/core/acl/acl_class.aw:prop_update_acl_help
+#: classes/core/acl/acl_class.aw:prop_update_acl_help
 msgid "Omaduse Uuenda ACL (update_acl) help"
 msgstr ""
 
-# classes/core/acl/acl_class.aw:rel_RELTYPE_CHAIN
-msgid "Seose pärg (RELTYPE_CHAIN) tekst"
-msgstr "chain"
+#: classes/core/acl/acl_class.aw:rel_RELTYPE_CHAIN
+msgid "Seose p&auml;rg (RELTYPE_CHAIN) tekst"
+msgstr ""
 
 # classes/core/acl/acl_class.aw:rel_RELTYPE_ROLE
+#: classes/core/acl/acl_class.aw:rel_RELTYPE_ROLE
 msgid "Seose roll (RELTYPE_ROLE) tekst"
 msgstr "role"
 
 # classes/core/acl/acl_class.aw:rel_RELTYPE_GROUP
+#: classes/core/acl/acl_class.aw:rel_RELTYPE_GROUP
 msgid "Seose grupp (RELTYPE_GROUP) tekst"
 msgstr "group"
+
+#: classes/core/acl/acl_class.aw:58
+msgid "This function needs updating (get_acl_groups_for_obj)"
+msgstr ""
+
+# classes/core/acl/acl_class.aw:rel_RELTYPE_CHAIN
+#~ msgid "Seose pärg (RELTYPE_CHAIN) tekst"
+#~ msgstr "chain"

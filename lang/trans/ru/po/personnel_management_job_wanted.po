@@ -9,9 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:class_351_help
-msgid "Klassi T&ouml;&ouml; soov help"
+msgid "Klassi T&ouml;&ouml;soov help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_field
@@ -153,4 +152,3 @@ msgstr ""
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:90
 msgid "Nimi"
 msgstr ""
-

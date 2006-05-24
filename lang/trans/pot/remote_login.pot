@@ -50,7 +50,7 @@ msgstr ""
 msgid "Omaduse Server (server) help"
 msgstr ""
 
-#: classes/core/remote_login.aw:71
+#: classes/core/remote_login.aw:76
 msgid "Relax, take a cookie."
 msgstr ""
 

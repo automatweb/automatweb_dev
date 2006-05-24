@@ -487,6 +487,18 @@ msgstr ""
 msgid "Omaduse Template dokumendi näitamiseks (pikk) (tpl_view) help"
 msgstr ""
 
+#: classes/menu.aw:prop_tpl_view_no_inherit
+msgid "Omaduse Ei ole p&auml;ritav (tpl_view_no_inherit) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_view_no_inherit_comment
+msgid "Omaduse Ei ole p&auml;ritav (tpl_view_no_inherit) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_view_no_inherit_help
+msgid "Omaduse Ei ole p&auml;ritav (tpl_view_no_inherit) help"
+msgstr ""
+
 #: classes/menu.aw:prop_tpl_lead
 msgid "Omaduse Template dokumendi näitamiseks (lühike) (tpl_lead) caption"
 msgstr ""
@@ -497,6 +509,18 @@ msgstr ""
 
 #: classes/menu.aw:prop_tpl_lead_help
 msgid "Omaduse Template dokumendi näitamiseks (lühike) (tpl_lead) help"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_lead_no_inherit
+msgid "Omaduse Ei ole p&auml;ritav (tpl_lead_no_inherit) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_lead_no_inherit_comment
+msgid "Omaduse Ei ole p&auml;ritav (tpl_lead_no_inherit) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_tpl_lead_no_inherit_help
+msgid "Omaduse Ei ole p&auml;ritav (tpl_lead_no_inherit) help"
 msgstr ""
 
 #: classes/menu.aw:prop_show_layout
@@ -643,6 +667,50 @@ msgstr ""
 msgid ""
 "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja "
 "(show_object_tree) help"
+msgstr ""
+
+#: classes/menu.aw:prop_use_target_audience
+msgid ""
+"Omaduse Kasuta sihtr&uuml;hmap&otilde;hist kuvamist (use_target_audience) "
+"caption"
+msgstr ""
+
+#: classes/menu.aw:prop_use_target_audience_comment
+msgid ""
+"Omaduse Kasuta sihtr&uuml;hmap&otilde;hist kuvamist (use_target_audience) "
+"kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_use_target_audience_help
+msgid ""
+"Omaduse Kasuta sihtr&uuml;hmap&otilde;hist kuvamist (use_target_audience) "
+"help"
+msgstr ""
+
+#: classes/menu.aw:prop_content_all_langs
+msgid "Omaduse Sisu k&otilde;ikidest keeltest (content_all_langs) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_content_all_langs_comment
+msgid "Omaduse Sisu k&otilde;ikidest keeltest (content_all_langs) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_content_all_langs_help
+msgid "Omaduse Sisu k&otilde;ikidest keeltest (content_all_langs) help"
+msgstr ""
+
+#: classes/menu.aw:prop_set_doc_content_type
+msgid ""
+"Omaduse M&auml;&auml;ra sisu t&uuml;&uuml;p (set_doc_content_type) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_set_doc_content_type_comment
+msgid ""
+"Omaduse M&auml;&auml;ra sisu t&uuml;&uuml;p (set_doc_content_type) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_set_doc_content_type_help
+msgid "Omaduse M&auml;&auml;ra sisu t&uuml;&uuml;p (set_doc_content_type) help"
 msgstr ""
 
 #: classes/menu.aw:prop_has_ctx
@@ -842,16 +910,16 @@ msgstr ""
 msgid "Omaduse  (kw_tb) help"
 msgstr ""
 
-#: classes/menu.aw:prop_grkeywords
-msgid "Omaduse AW Märksõnad (grkeywords) caption"
+#: classes/menu.aw:prop_grkeywords2
+msgid "Omaduse AW Märksõnad (grkeywords2) caption"
 msgstr ""
 
-#: classes/menu.aw:prop_grkeywords_comment
-msgid "Omaduse AW Märksõnad (grkeywords) kommentaar"
+#: classes/menu.aw:prop_grkeywords2_comment
+msgid "Omaduse AW Märksõnad (grkeywords2) kommentaar"
 msgstr ""
 
-#: classes/menu.aw:prop_grkeywords_help
-msgid "Omaduse AW Märksõnad (grkeywords) help"
+#: classes/menu.aw:prop_grkeywords2_help
+msgid "Omaduse AW Märksõnad (grkeywords2) help"
 msgstr ""
 
 #: classes/menu.aw:prop_keywords
@@ -888,6 +956,18 @@ msgstr ""
 
 #: classes/menu.aw:prop_transl_help
 msgid "Omaduse T&otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/menu.aw:prop_acl
+msgid "Omaduse &Otilde;igused (acl) caption"
+msgstr ""
+
+#: classes/menu.aw:prop_acl_comment
+msgid "Omaduse &Otilde;igused (acl) kommentaar"
+msgstr ""
+
+#: classes/menu.aw:prop_acl_help
+msgid "Omaduse &Otilde;igused (acl) help"
 msgstr ""
 
 #: classes/menu.aw:group_general_sub
@@ -1074,6 +1154,14 @@ msgstr ""
 msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/menu.aw:group_acl
+msgid "Grupi &Otilde;igused (acl) pealkiri"
+msgstr ""
+
+#: classes/menu.aw:group_acl_help
+msgid "Grupi &Otilde;igused (acl) help"
+msgstr ""
+
 #: classes/menu.aw:rel_RELTYPE_PICTURES_MENU
 msgid ""
 "Seose v&otilde;ta pildid men&uuml;&uuml;lt (RELTYPE_PICTURES_MENU) tekst"
@@ -1164,190 +1252,202 @@ msgstr ""
 msgid "Seose Keeleseos (RELTYPE_LANG_REL) tekst"
 msgstr ""
 
-#: classes/menu.aw:445
+#: classes/menu.aw:rel_RELTYPE_KEYWORD
+msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgstr ""
+
+#: classes/menu.aw:462
+msgid "Vali t&uuml;hjaks"
+msgstr ""
+
+#: classes/menu.aw:505
 msgid "Vasak"
 msgstr ""
 
-#: classes/menu.aw:446
+#: classes/menu.aw:506
 msgid "Parem"
 msgstr ""
 
-#: classes/menu.aw:516
+#: classes/menu.aw:576
 msgid "kasuta parenti valikut"
 msgstr ""
 
-#: classes/menu.aw:552
+#: classes/menu.aw:612
 msgid "(no icon set)"
 msgstr ""
 
-#: classes/menu.aw:582
+#: classes/menu.aw:642
 msgid "Väli"
 msgstr ""
 
-#: classes/menu.aw:586
+#: classes/menu.aw:646
 msgid "Järjekord"
 msgstr ""
 
-#: classes/menu.aw:591 classes/menu.aw:644
+#: classes/menu.aw:651 classes/menu.aw:704
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:592 classes/menu.aw:645
+#: classes/menu.aw:652 classes/menu.aw:705
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:593 classes/menu.aw:646
+#: classes/menu.aw:653 classes/menu.aw:706
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:594 classes/menu.aw:647
+#: classes/menu.aw:654 classes/menu.aw:707
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:595 classes/menu.aw:648
+#: classes/menu.aw:655 classes/menu.aw:708
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:596
+#: classes/menu.aw:656
 msgid "Nime j&auml;rgi"
 msgstr ""
 
-#: classes/menu.aw:600 classes/menu.aw:654
+#: classes/menu.aw:660 classes/menu.aw:715
 msgid "Suurem (uuem) enne"
 msgstr ""
 
-#: classes/menu.aw:601 classes/menu.aw:655
+#: classes/menu.aw:661 classes/menu.aw:716
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/menu.aw:663
+#: classes/menu.aw:709
+msgid "Random"
+msgstr ""
+
+#: classes/menu.aw:724
 msgid "OID"
 msgstr ""
 
-#: classes/menu.aw:670 classes/menu.aw:1427 classes/menu.aw:1479
+#: classes/menu.aw:731 classes/menu.aw:1500 classes/menu.aw:1552
 msgid "Nimi"
 msgstr ""
 
-#: classes/menu.aw:690
+#: classes/menu.aw:751
 msgid "IP Nimi"
 msgstr ""
 
-#: classes/menu.aw:696
+#: classes/menu.aw:757
 msgid "IP Aadress"
 msgstr ""
 
-#: classes/menu.aw:702
+#: classes/menu.aw:763
 msgid "Lubatud"
 msgstr ""
 
-#: classes/menu.aw:708
+#: classes/menu.aw:769
 msgid "Keelatud"
 msgstr ""
 
-#: classes/menu.aw:790
+#: classes/menu.aw:851
 msgid "Vali pilt.."
 msgstr ""
 
-#: classes/menu.aw:809
+#: classes/menu.aw:870
 msgid "Muuda"
 msgstr ""
 
-#: classes/menu.aw:846
+#: classes/menu.aw:907
 msgid "Pildi number"
 msgstr ""
 
-#: classes/menu.aw:852
+#: classes/menu.aw:913
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/menu.aw:858
+#: classes/menu.aw:919
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/menu.aw:864
+#: classes/menu.aw:925
 msgid "Vali Pilt"
 msgstr ""
 
-#: classes/menu.aw:870
+#: classes/menu.aw:931
 msgid "Uploadi Pilt"
 msgstr ""
 
-#: classes/menu.aw:876
+#: classes/menu.aw:937
 msgid "Kustuta"
 msgstr ""
 
-#: classes/menu.aw:891
+#: classes/menu.aw:952
 msgid "Vali menüüd"
 msgstr ""
 
-#: classes/menu.aw:901
+#: classes/menu.aw:962
 msgid "Märgi kõik menüüd aktiivseks"
 msgstr ""
 
-#: classes/menu.aw:908
+#: classes/menu.aw:969
 msgid "Ekspordi ikoonid"
 msgstr ""
 
-#: classes/menu.aw:913
+#: classes/menu.aw:974
 msgid "Ekspordi"
 msgstr ""
 
-#: classes/menu.aw:932
+#: classes/menu.aw:993
 msgid "Vali meetod"
 msgstr ""
 
-#: classes/menu.aw:945
+#: classes/menu.aw:1006
 msgid "Vali meetodiga seotud objekt"
 msgstr ""
 
-#: classes/menu.aw:955
+#: classes/menu.aw:1016
 msgid "Vali meetodiga seotud grupp"
 msgstr ""
 
-#: classes/menu.aw:964
+#: classes/menu.aw:1025
 msgid "Meetod viitab adminni"
 msgstr ""
 
-#: classes/menu.aw:972
+#: classes/menu.aw:1033
 msgid "Meetodi väljundi kuvamisel näidatakse menüüsid"
 msgstr ""
 
-#: classes/menu.aw:1164
+#: classes/menu.aw:1225
 msgid "Selline alias on juba olemas!"
 msgstr ""
 
-#: classes/menu.aw:1197
+#: classes/menu.aw:1258
 msgid "-- vali --"
 msgstr ""
 
-#: classes/menu.aw:1285 classes/menu.aw:1305
+#: classes/menu.aw:1345 classes/menu.aw:1365
 msgid "--vali--"
 msgstr ""
 
-#: classes/menu.aw:1419 classes/menu.aw:1471
+#: classes/menu.aw:1492 classes/menu.aw:1544
 msgid "ID"
 msgstr ""
 
-#: classes/menu.aw:1432
+#: classes/menu.aw:1505
 msgid "kustuta"
 msgstr ""
 
-#: classes/menu.aw:1484
+#: classes/menu.aw:1557
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/menu.aw:1636
+#: classes/menu.aw:1709
 msgid "Dokument"
 msgstr ""
 
-#: classes/menu.aw:1643
+#: classes/menu.aw:1716
 msgid "ka alammen&uuml;&uuml;de juures"
 msgstr ""
 
-#: classes/menu.aw:1649
+#: classes/menu.aw:1722
 msgid "Vali asukoht"
 msgstr ""
 
-#: classes/menu.aw:1701
+#: classes/menu.aw:1774
 msgid "M&auml;rks&otilde;na"
 msgstr ""

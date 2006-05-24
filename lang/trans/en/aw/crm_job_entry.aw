@@ -6,7 +6,6 @@ $GLOBALS["TRANS"]["Omaduse Nimetus (cust_n) caption"] = "Customer name";
 $GLOBALS["TRANS"]["Omaduse Aadress (addr) caption"] = "Address";
 $GLOBALS["TRANS"]["Omaduse Linn (addr_linn) caption"] = "City";
 $GLOBALS["TRANS"]["Omaduse Maakond (maakond) caption"] = "County";
-$GLOBALS["TRANS"]["Omaduse Riik  (riik) caption"] = "Country";
 $GLOBALS["TRANS"]["Omaduse Kontaktisiku andmed (cont_d) caption"] = "Contact person";
 $GLOBALS["TRANS"]["Omaduse Eesnimi (ct_fn) caption"] = "First name";
 $GLOBALS["TRANS"]["Omaduse Perenimi (ct_ln) caption"] = "Surname";

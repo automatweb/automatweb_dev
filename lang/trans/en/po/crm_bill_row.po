@@ -9,9 +9,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/crm/crm_bill_row.aw:class_1054_help
 msgid "Klassi Arve rida help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_comment
+msgid "Omaduse Tekst arvel (comment) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_comment_comment
+msgid "Omaduse Tekst arvel (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_comment_help
+msgid "Omaduse Tekst arvel (comment) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_amt
@@ -121,4 +132,3 @@ msgstr ""
 #: classes/applications/crm/crm_bill_row.aw:rel_RELTYPE_TASK
 msgid "Seose Toimetus (RELTYPE_TASK) tekst"
 msgstr ""
-

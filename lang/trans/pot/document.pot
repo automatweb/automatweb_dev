@@ -10,47 +10,47 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/document.aw:418
+#: classes/document.aw:478
 msgid "Viimati muudetud:"
 msgstr ""
 
-#: classes/document.aw:633
+#: classes/document.aw:686
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
 msgstr ""
 
-#: classes/document.aw:657
+#: classes/document.aw:710
 msgid "Loe edasi"
 msgstr ""
 
-#: classes/document.aw:1060 classes/document.aw:1109
+#: classes/document.aw:1114 classes/document.aw:1163
 msgid "Vaata lisaks:"
 msgstr ""
 
-#: classes/document.aw:1065 classes/document.aw:1114
+#: classes/document.aw:1119 classes/document.aw:1168
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2305
+#: classes/document.aw:2350
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2312
+#: classes/document.aw:2357
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2320
+#: classes/document.aw:2365
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:2843
+#: classes/document.aw:2893
 msgid "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n"
 msgstr ""
 
-#: classes/document.aw:2873
+#: classes/document.aw:2923
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:2875
+#: classes/document.aw:2925
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""
 

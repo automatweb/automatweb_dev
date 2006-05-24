@@ -261,11 +261,11 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:128
+#: classes/file.aw:134
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:985
+#: classes/file.aw:1034
 msgid "Need either id or parent"
 msgstr ""
 

@@ -9,39 +9,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/document.aw:418
+#: classes/document.aw:478
 msgid "Viimati muudetud:"
 msgstr "Last modified"
 
-#: classes/document.aw:633
+#: classes/document.aw:686
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
 msgstr "<br /><B>continue reading from the magazine!</b></font>"
 
-#: classes/document.aw:657
+#: classes/document.aw:710
 msgid "Loe edasi"
 msgstr "Read on"
 
-#: classes/document.aw:1060 classes/document.aw:1109
+#: classes/document.aw:1114 classes/document.aw:1163
 msgid "Vaata lisaks:"
 msgstr "See also"
 
-#: classes/document.aw:1065 classes/document.aw:1114
+#: classes/document.aw:1119 classes/document.aw:1168
 msgid "Samal teemal:"
 msgstr "On the same subject:"
 
-#: classes/document.aw:2305
+#: classes/document.aw:2350
 msgid "Pealkiri"
 msgstr "Title"
 
-#: classes/document.aw:2312
+#: classes/document.aw:2357
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/document.aw:2320
+#: classes/document.aw:2365
 msgid "Autor"
 msgstr "Author"
 
-#: classes/document.aw:2843
+#: classes/document.aw:2893
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!"
 "<br /><br />\n"
@@ -51,11 +51,11 @@ msgstr ""
 "><br />\n"
 "\n"
 
-#: classes/document.aw:2873
+#: classes/document.aw:2923
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr "Static pages created"
 
-#: classes/document.aw:2875
+#: classes/document.aw:2925
 msgid "tagasi dokumendi muutmise juurde"
 msgstr "back to document editing"
 

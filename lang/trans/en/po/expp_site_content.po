@@ -13,6 +13,6 @@ msgstr ""
 msgid "Klassi expp_site_content (nimi) help"
 msgstr ""
 
-#: classes/expp/expp_site_content.aw:324
+#: classes/expp/expp_site_content.aw:377
 msgid "Andmete muutmine"
 msgstr ""

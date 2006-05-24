@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse IBAN kood (iban_code) help"
 msgstr ""
 
+#: classes/applications/crm/crm_bank_account.aw:prop_sort_code
+msgid "Omaduse Kodukontori kood (sort_code) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bank_account.aw:prop_sort_code_comment
+msgid "Omaduse Kodukontori kood (sort_code) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bank_account.aw:prop_sort_code_help
+msgid "Omaduse Kodukontori kood (sort_code) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bank_account.aw:prop_bank
 msgid "Omaduse Pank (bank) caption"
 msgstr ""

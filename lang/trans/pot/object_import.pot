@@ -370,67 +370,67 @@ msgstr ""
 msgid "Importi alustati uuesti realt %s"
 msgstr ""
 
-#: classes/admin/object_import.aw:692
+#: classes/admin/object_import.aw:713
 msgid "created uniqueness filter for %s objects. <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:705
+#: classes/admin/object_import.aw:726
 msgid "impordin rida %s... <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:722
+#: classes/admin/object_import.aw:743
 msgid "leidsin juba olemasoleva objekti %s, kasutan olemasolevat objekti <br>"
 msgstr ""
 
-#: classes/admin/object_import.aw:834
+#: classes/admin/object_import.aw:855
 msgid "importisin objekti %s (%s) kataloogi %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:844
+#: classes/admin/object_import.aw:865
 msgid "Imporditud %s objekti"
 msgstr ""
 
-#: classes/admin/object_import.aw:853
+#: classes/admin/object_import.aw:874
 msgid "Valmis! <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:869
+#: classes/admin/object_import.aw:890
 msgid "Import edukalt l&otilde;ppenud"
 msgstr ""
 
-#: classes/admin/object_import.aw:986
+#: classes/admin/object_import.aw:1007
 msgid "create uniq filter for delete <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:992
+#: classes/admin/object_import.aw:1013
 msgid "got filter <Br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1003
+#: classes/admin/object_import.aw:1024
 msgid "unset keys <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1032
+#: classes/admin/object_import.aw:1053
 msgid "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1033
+#: classes/admin/object_import.aw:1054
 msgid "VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"
 msgstr ""
 
-#: classes/admin/object_import.aw:1043
+#: classes/admin/object_import.aw:1064
 msgid "delete object %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1049
+#: classes/admin/object_import.aw:1070
 msgid "delete done. <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:1051
+#: classes/admin/object_import.aw:1072
 msgid "Edukalt kustutatud %s objekti!"
 msgstr ""
 
-#: classes/admin/object_import.aw:1089
+#: classes/admin/object_import.aw:1110
 msgid "Importi alustati "
 msgstr ""
 

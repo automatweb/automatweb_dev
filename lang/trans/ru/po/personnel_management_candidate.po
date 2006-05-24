@@ -9,40 +9,50 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/personnel_management/personnel_management_candidate.aw:class_812_help
 msgid "Klassi Kandidatuur help"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_candidate_toolbar
-msgid "Omaduse  (candidate_toolbar) caption"
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_person
+msgid "Omaduse Isik (person) caption"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_candidate_toolbar_comment
-msgid "Omaduse  (candidate_toolbar) kommentaar"
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_person_comment
+msgid "Omaduse Isik (person) kommentaar"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_candidate_toolbar_help
-msgid "Omaduse  (candidate_toolbar) help"
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_person_help
+msgid "Omaduse Isik (person) help"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_candidate_table
-msgid "Omaduse  (candidate_table) caption"
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_intro_file
+msgid "Omaduse Kaaskiri failina (intro_file) caption"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_candidate_table_comment
-msgid "Omaduse  (candidate_table) kommentaar"
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_intro_file_comment
+msgid "Omaduse Kaaskiri failina (intro_file) kommentaar"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_candidate_table_help
-msgid "Omaduse  (candidate_table) help"
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_intro_file_help
+msgid "Omaduse Kaaskiri failina (intro_file) help"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:group_candidate
-msgid "Grupi Kandideerimised (candidate) pealkiri"
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_intro
+msgid "Omaduse Kaaskiri tekstina (intro) caption"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_candidate.aw:group_candidate_help
-msgid "Grupi Kandideerimised (candidate) help"
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_intro_comment
+msgid "Omaduse Kaaskiri tekstina (intro) kommentaar"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_candidate.aw:prop_intro_help
+msgid "Omaduse Kaaskiri tekstina (intro) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:rel_RELTYPE_PERSON
+msgid "Seose Kandideerja (RELTYPE_PERSON) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_candidate.aw:rel_RELTYPE_FILE
+msgid "Seose Kaaskiri failina (RELTYPE_FILE) tekst"
+msgstr ""

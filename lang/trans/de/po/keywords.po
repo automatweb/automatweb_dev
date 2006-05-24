@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/keywords.aw:class_82_help
 msgid "Klassi V&otilde;tmes&otilde;na help"
 msgstr ""
@@ -38,3 +37,6 @@ msgstr ""
 msgid "Seose Link (RELTYPE_LINK) tekst"
 msgstr ""
 
+#: classes/keywords.aw:1162
+msgid "Selline v&otilde;tmes&otilde;na on juba olemas (%s)!"
+msgstr ""

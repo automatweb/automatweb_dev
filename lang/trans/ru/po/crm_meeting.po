@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/crm/crm_meeting.aw:class_224_help
 msgid "Klassi Kohtumine help"
 msgstr ""
@@ -327,15 +326,15 @@ msgid "Omaduse Osalejad (participants) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_time_guess
-msgid "Omaduse Prognoositav tundide arv 	 (time_guess) caption"
+msgid "Omaduse Prognoositav tundide arv \t (time_guess) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_time_guess_comment
-msgid "Omaduse Prognoositav tundide arv 	 (time_guess) kommentaar"
+msgid "Omaduse Prognoositav tundide arv \t (time_guess) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_time_guess_help
-msgid "Omaduse Prognoositav tundide arv 	 (time_guess) help"
+msgid "Omaduse Prognoositav tundide arv \t (time_guess) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_time_real
@@ -362,6 +361,18 @@ msgstr ""
 msgid "Omaduse Tundide arv kliendile (time_to_cust) help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_hr_price
+msgid "Omaduse Tunni hind (hr_price) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_hr_price_comment
+msgid "Omaduse Tunni hind (hr_price) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_hr_price_help
+msgid "Omaduse Tunni hind (hr_price) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_summary
 msgid "Omaduse Kokkuvõte (summary) caption"
 msgstr ""
@@ -372,6 +383,18 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_summary_help
 msgid "Omaduse Kokkuvõte (summary) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_controller_disp
+msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_controller_disp_comment
+msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_controller_disp_help
+msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_aliasmgr
@@ -646,23 +669,27 @@ msgstr ""
 msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:396
+#: classes/crm/crm_meeting.aw:421
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:475
-msgid "Kustuta valitud"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:477
-msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
-msgstr ""
-
-#: classes/crm/crm_meeting.aw:485
+#: classes/crm/crm_meeting.aw:503 classes/crm/crm_meeting.aw:549
+#: classes/crm/crm_meeting.aw:570
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:494
-msgid "Salvesta"
+#: classes/crm/crm_meeting.aw:511 classes/crm/crm_meeting.aw:522
+msgid "Lisa isik organisatsiooni %s"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:560
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:562
+msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:579
+msgid "Salvesta"
+msgstr ""

@@ -41,49 +41,29 @@ msgstr "Select"
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/cfg/htmlclient.aw:807 classes/cfg/htmlclient.aw:877
-msgid "Toimetus"
-msgstr "Task"
+#~ msgid "Toimetus"
+#~ msgstr "Task"
 
-#: classes/cfg/htmlclient.aw:825 classes/cfg/htmlclient.aw:879
-msgid "K&otilde;ne"
-msgstr "Call"
+#~ msgid "K&otilde;ne"
+#~ msgstr "Call"
 
-#: classes/cfg/htmlclient.aw:835 classes/cfg/htmlclient.aw:880
-msgid "Kohtumine"
-msgstr "Meeting"
+#~ msgid "Kohtumine"
+#~ msgstr "Meeting"
 
-#: classes/cfg/htmlclient.aw:854 classes/cfg/htmlclient.aw:881
-msgid "Pakkumine"
-msgstr "Offer"
+#~ msgid "Pakkumine"
+#~ msgstr "Offer"
 
-#: classes/cfg/htmlclient.aw:872
-msgid "Lisa"
-msgstr "Add"
+#~ msgid "Lisa"
+#~ msgstr "Add"
 
-#: classes/cfg/htmlclient.aw:873
-msgid "T&ouml;&ouml;"
-msgstr ""
+#~ msgid "Projekt"
+#~ msgstr "Project"
 
-#: classes/cfg/htmlclient.aw:874
-msgid "Organisatsioon"
-msgstr ""
+#~ msgid "Arve"
+#~ msgstr "Invoice"
 
-#: classes/cfg/htmlclient.aw:875
-msgid "Eraisik"
-msgstr ""
-
-#: classes/cfg/htmlclient.aw:876
-msgid "Projekt"
-msgstr "Project"
-
-#: classes/cfg/htmlclient.aw:878
-msgid "Arve"
-msgstr "Invoice"
-
-#: classes/cfg/htmlclient.aw:882
-msgid "Logi v&auml;lja"
-msgstr "Log out"
+#~ msgid "Logi v&auml;lja"
+#~ msgstr "Log out"
 
 #~ msgid "Uus t&ouml;&ouml;"
 #~ msgstr "New case"

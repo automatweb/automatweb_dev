@@ -8,7 +8,5 @@ $GLOBALS["TRANS"]["Grupi Aadress (grp_address) pealkiri"] = "Address";
 $GLOBALS["TRANS"]["Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"] = "Administrative structure";
 $GLOBALS["TRANS"]["Seose Halduspiirkond (RELTYPE_ADMINISTRATIVE_UNIT) tekst"] = "Administrative unit";
 $GLOBALS["TRANS"]["Haldusjaotus määramata."] = "Administrative structure not defined";
-$GLOBALS["TRANS"]["Viga: k6rgem haldusjaotus m22ramata."] = "Error: parent administrative unit not defined";
-$GLOBALS["TRANS"]["Viga: valikute taotleja-property m22ramata."] = "Error: options requester not defined";
 $GLOBALS["TRANS"]["Tänav"] = "Street";
 ?>

@@ -33,8 +33,8 @@ $GLOBALS["TRANS"]["Grupi Osalejad (participants) pealkiri"] = "Participants";
 $GLOBALS["TRANS"]["Grupi Ressursid (resources) pealkiri"] = "Resources";
 $GLOBALS["TRANS"]["Seose Kordus (RELTYPE_RECURRENCE) tekst"] = "Recurrence";
 $GLOBALS["TRANS"]["--Vali--"] = "--Select--";
+$GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["Kustuta valitud"] = "Delete selected";
 $GLOBALS["TRANS"]["Oled kindel, et tahad valitud osalejad eemaldada?"] = "Are you sure you want to remove the selected participants?";
-$GLOBALS["TRANS"]["Otsi"] = "Search";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
 ?>

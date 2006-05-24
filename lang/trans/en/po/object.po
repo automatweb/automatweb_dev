@@ -9,6 +9,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/obj/object.aw:69
+#: classes/core/obj/object.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/core/obj/object.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/core/obj/object.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/core/obj/object.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/core/obj/object.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/core/obj/object.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+
+#: classes/core/obj/object.aw:125
 msgid "object loader is not object!!"
 msgstr "object loader is not object!!"

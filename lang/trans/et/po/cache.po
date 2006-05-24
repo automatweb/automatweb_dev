@@ -9,16 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/cache.aw:233
+#: classes/cache.aw:499
 msgid "cache::file_set_pt(%s, %s, %s): could not open file %s for writing!"
 msgstr ""
 
-#: classes/cache.aw:294
+#: classes/cache.aw:636
 msgid "cache::file_clear_pt_oid(%s, %s): could not rename %s to %s!"
 msgstr ""
 
-#: classes/cache.aw:321
+#: classes/cache.aw:701
 msgid "cache::file_clear_pt_sub(%s, %s): could not rename %s to %s!"
 msgstr ""
-

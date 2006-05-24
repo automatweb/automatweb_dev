@@ -278,6 +278,18 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/contentmgmt/links.aw:prop_kws
+msgid "Omaduse V&otilde;tmes&otilde;nad (kws) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_kws_comment
+msgid "Omaduse V&otilde;tmes&otilde;nad (kws) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_kws_help
+msgid "Omaduse V&otilde;tmes&otilde;nad (kws) help"
+msgstr ""
+
 #: classes/contentmgmt/links.aw:group_Javascript
 msgid "Grupi Javascript (Javascript) pealkiri"
 msgstr ""
@@ -302,23 +314,31 @@ msgstr ""
 msgid "Grupi T&otilde;lgi (transl) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:130 classes/contentmgmt/links.aw:178
+#: classes/contentmgmt/links.aw:group_kws
+msgid "Grupi V&otilde;tmes&otilde;nad (kws) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:group_kws_help
+msgid "Grupi V&otilde;tmes&otilde;nad (kws) help"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:136 classes/contentmgmt/links.aw:184
 msgid "Vali see"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:134
+#: classes/contentmgmt/links.aw:140
 msgid "Nimetus"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:139
+#: classes/contentmgmt/links.aw:145
 msgid "Asukoht"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:144
+#: classes/contentmgmt/links.aw:150
 msgid "Looja"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:149
+#: classes/contentmgmt/links.aw:155
 msgid "Viimati muudetud"
 msgstr ""
 

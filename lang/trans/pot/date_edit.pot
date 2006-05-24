@@ -10,51 +10,51 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/date_edit.aw:156
+#: classes/vcl/date_edit.aw:184
 msgid "Jaanuar"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:157
+#: classes/vcl/date_edit.aw:185
 msgid "Veebruar"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:158
+#: classes/vcl/date_edit.aw:186
 msgid "M&auml;rts"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:159
+#: classes/vcl/date_edit.aw:187
 msgid "Aprill"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:160
+#: classes/vcl/date_edit.aw:188
 msgid "Mai"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:161
+#: classes/vcl/date_edit.aw:189
 msgid "Juuni"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:162
+#: classes/vcl/date_edit.aw:190
 msgid "Juuli"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:163
+#: classes/vcl/date_edit.aw:191
 msgid "August"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:164
+#: classes/vcl/date_edit.aw:192
 msgid "September"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:165
+#: classes/vcl/date_edit.aw:193
 msgid "Oktoober"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:166
+#: classes/vcl/date_edit.aw:194
 msgid "November"
 msgstr ""
 
-#: classes/vcl/date_edit.aw:167
+#: classes/vcl/date_edit.aw:195
 msgid "Detsember"
 msgstr ""
 

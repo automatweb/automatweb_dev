@@ -50,6 +50,18 @@ msgstr ""
 msgid "Omaduse Tulemused otsinguvormita (result_no_form) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_search.aw:prop_result_pageselector_pos
+msgid "Omaduse Tabeli navigatsiooni asukoht (result_pageselector_pos) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_result_pageselector_pos_comment
+msgid "Omaduse Tabeli navigatsiooni asukoht (result_pageselector_pos) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_result_pageselector_pos_help
+msgid "Omaduse Tabeli navigatsiooni asukoht (result_pageselector_pos) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchform_select_size
 msgid "Omaduse Otsinguvormi valikuelementide suurus (searchform_select_size) caption"
 msgstr ""
@@ -108,6 +120,30 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_administrative_structure_help
 msgid "Omaduse Haldusjaotus (administrative_structure) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_default_searchparam_sort_by
+msgid "Omaduse Default järjestus (default_searchparam_sort_by) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_default_searchparam_sort_by_comment
+msgid "Omaduse Default järjestus (default_searchparam_sort_by) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_default_searchparam_sort_by_help
+msgid "Omaduse Default järjestus (default_searchparam_sort_by) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_default_searchparam_sort_order
+msgid "Omaduse Default järjestuse suund (default_searchparam_sort_order) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_default_searchparam_sort_order_comment
+msgid "Omaduse Default järjestuse suund (default_searchparam_sort_order) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_default_searchparam_sort_order_help
+msgid "Omaduse Default järjestuse suund (default_searchparam_sort_order) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_save_search
@@ -264,6 +300,30 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address3_help
 msgid "Omaduse Linnaosa (searchparam_address3) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address4
+msgid "Omaduse Vald (searchparam_address4) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address4_comment
+msgid "Omaduse Vald (searchparam_address4) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address4_help
+msgid "Omaduse Vald (searchparam_address4) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address5
+msgid "Omaduse Asula (searchparam_address5) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address5_comment
+msgid "Omaduse Asula (searchparam_address5) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address5_help
+msgid "Omaduse Asula (searchparam_address5) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_condition
@@ -458,183 +518,203 @@ msgstr ""
 msgid "Seose Haldusjaotus (RELTYPE_ADMINISTRATIVE_STRUCTURE) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:173
+#: classes/applications/realestate_management/realestate_search.aw:189
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:174
+#: classes/applications/realestate_management/realestate_search.aw:190
 msgid "Objekti tüüp"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:175
+#: classes/applications/realestate_management/realestate_search.aw:191
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:176 classes/applications/realestate_management/realestate_search.aw:2027
+#: classes/applications/realestate_management/realestate_search.aw:192 classes/applications/realestate_management/realestate_search.aw:2283
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:179
+#: classes/applications/realestate_management/realestate_search.aw:195
 msgid "Kasvav"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:180
+#: classes/applications/realestate_management/realestate_search.aw:196
 msgid "Kahanev"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:219
+#: classes/applications/realestate_management/realestate_search.aw:235
 msgid "Kinnisvarahalduskeskkond määramata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:233
+#: classes/applications/realestate_management/realestate_search.aw:249
 msgid "Haldusjaotus määramata"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:253
-msgid "V1"
+#: classes/applications/realestate_management/realestate_search.aw:263 classes/applications/realestate_management/realestate_search.aw:275
+msgid "valik kataloogist:"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:259 classes/applications/realestate_management/realestate_search.aw:1233
+#: classes/applications/realestate_management/realestate_search.aw:287
+msgid "Üleval"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:288
+msgid "All"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:289
+msgid "Üleval ja all"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:295 classes/applications/realestate_management/realestate_search.aw:1387
 msgid "Maja"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:260 classes/applications/realestate_management/realestate_search.aw:1234
+#: classes/applications/realestate_management/realestate_search.aw:296 classes/applications/realestate_management/realestate_search.aw:1388
 msgid "Ridaelamu"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:261 classes/applications/realestate_management/realestate_search.aw:1235
+#: classes/applications/realestate_management/realestate_search.aw:297 classes/applications/realestate_management/realestate_search.aw:1389
 msgid "Suvila"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:262 classes/applications/realestate_management/realestate_search.aw:1236
+#: classes/applications/realestate_management/realestate_search.aw:298 classes/applications/realestate_management/realestate_search.aw:1390
 msgid "Majaosa"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:263 classes/applications/realestate_management/realestate_search.aw:1237
+#: classes/applications/realestate_management/realestate_search.aw:299 classes/applications/realestate_management/realestate_search.aw:1391
 msgid "Korter"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:264 classes/applications/realestate_management/realestate_search.aw:1238
+#: classes/applications/realestate_management/realestate_search.aw:300 classes/applications/realestate_management/realestate_search.aw:1392
 msgid "Äripind"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:265 classes/applications/realestate_management/realestate_search.aw:1239
+#: classes/applications/realestate_management/realestate_search.aw:301 classes/applications/realestate_management/realestate_search.aw:1393
 msgid "Garaaz"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:266 classes/applications/realestate_management/realestate_search.aw:1240
+#: classes/applications/realestate_management/realestate_search.aw:302 classes/applications/realestate_management/realestate_search.aw:1394
 msgid "Maatükk"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:617
+#: classes/applications/realestate_management/realestate_search.aw:692
 msgid "Kinnisvarahalduskeskkond määramata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:752
+#: classes/applications/realestate_management/realestate_search.aw:835
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:753 classes/applications/realestate_management/realestate_search.aw:783
+#: classes/applications/realestate_management/realestate_search.aw:836 classes/applications/realestate_management/realestate_search.aw:866
 msgid " kuni "
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:782
+#: classes/applications/realestate_management/realestate_search.aw:865
 msgid "Üldpind"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:826 classes/applications/realestate_management/realestate_search.aw:1277 classes/applications/realestate_management/realestate_search.aw:2097
+#: classes/applications/realestate_management/realestate_search.aw:919 classes/applications/realestate_management/realestate_search.aw:1449 classes/applications/realestate_management/realestate_search.aw:2353
 msgid "Kõik linnad"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:859 classes/applications/realestate_management/realestate_search.aw:1291 classes/applications/realestate_management/realestate_search.aw:2097
+#: classes/applications/realestate_management/realestate_search.aw:952 classes/applications/realestate_management/realestate_search.aw:1473 classes/applications/realestate_management/realestate_search.aw:2353
 msgid "Kõik linnaosad"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1105 classes/applications/realestate_management/realestate_search.aw:1166
+#: classes/applications/realestate_management/realestate_search.aw:974 classes/applications/realestate_management/realestate_search.aw:1492
+msgid "Kõik vallad"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:1007 classes/applications/realestate_management/realestate_search.aw:1515
+msgid "Kõik asulad"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_search.aw:1255 classes/applications/realestate_management/realestate_search.aw:1320
 msgid "Otsinguparameetritele vastavaid objekte ei leitud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1105 classes/applications/realestate_management/realestate_search.aw:1166
+#: classes/applications/realestate_management/realestate_search.aw:1255 classes/applications/realestate_management/realestate_search.aw:1320
 msgid "Leitud %s objekti"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1203
+#: classes/applications/realestate_management/realestate_search.aw:1357
 msgid "Kinnisvarahalduskeskkond otsinguobjektil defineerimata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1225
+#: classes/applications/realestate_management/realestate_search.aw:1379
 msgid "Haldusjaotus otsinguobjektil ja kinnisvarahalduskeskkonnas defineerimata."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1243
+#: classes/applications/realestate_management/realestate_search.aw:1397
 msgid "Kõik objektid"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1253
+#: classes/applications/realestate_management/realestate_search.aw:1407
 msgid "Kõik tehingud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1262
+#: classes/applications/realestate_management/realestate_search.aw:1424
 msgid "Kõik maakonnad"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1301
+#: classes/applications/realestate_management/realestate_search.aw:1525
 msgid "Kõik valmidused"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1311
+#: classes/applications/realestate_management/realestate_search.aw:1535
 msgid "Kõik tüübid"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1321
+#: classes/applications/realestate_management/realestate_search.aw:1545
 msgid "Kõik"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1371
+#: classes/applications/realestate_management/realestate_search.aw:1595
 msgid "Kõik maaklerid"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1990
+#: classes/applications/realestate_management/realestate_search.aw:2246
 msgid "Tüüp"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:1995
+#: classes/applications/realestate_management/realestate_search.aw:2251
 msgid "Maa&shy;kond"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2001
+#: classes/applications/realestate_management/realestate_search.aw:2257
 msgid "Linn"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2007
+#: classes/applications/realestate_management/realestate_search.aw:2263
 msgid "Vald"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2013
+#: classes/applications/realestate_management/realestate_search.aw:2269
 msgid "Tehing"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2019
+#: classes/applications/realestate_management/realestate_search.aw:2275
 msgid "Lisatud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2035
+#: classes/applications/realestate_management/realestate_search.aw:2291
 msgid "Omanik"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2041
+#: classes/applications/realestate_management/realestate_search.aw:2297
 msgid "Maakler"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2048
-msgid "<a href='javascript:selall(\\"realestatemgr-is_visible\\")'>Näh&shy;tav</a>"
+#: classes/applications/realestate_management/realestate_search.aw:2304
+msgid "<a href='javascript:selall(\"realestatemgr-is_visible\")'>Näh&shy;tav</a>"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2049
+#: classes/applications/realestate_management/realestate_search.aw:2305
 msgid "Kõik read: vali/kaota valik"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2054
+#: classes/applications/realestate_management/realestate_search.aw:2310
 msgid "Arhi&shy;veeri&shy;tud"
 msgstr ""
 

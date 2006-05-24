@@ -87,7 +87,7 @@ msgid "Muudetud"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:338
-msgid "<a href='javascript:selall(\\"sel\\")'>Vali</a>"
+msgid "<a href='javascript:selall(\"sel\")'>Vali</a>"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:347

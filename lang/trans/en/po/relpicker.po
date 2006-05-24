@@ -18,14 +18,14 @@ msgstr "--select--"
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/vcl/relpicker.aw:104
+#: classes/vcl/relpicker.aw:106
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/relpicker.aw:135
+#: classes/vcl/relpicker.aw:137
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/vcl/relpicker.aw:154
+#: classes/vcl/relpicker.aw:156
 msgid "Lisa uus %s"
 msgstr "Add new %s"

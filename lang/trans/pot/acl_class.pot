@@ -75,7 +75,7 @@ msgid "Omaduse Uuenda ACL (update_acl) help"
 msgstr ""
 
 #: classes/core/acl/acl_class.aw:rel_RELTYPE_CHAIN
-msgid "Seose pärg (RELTYPE_CHAIN) tekst"
+msgid "Seose p&auml;rg (RELTYPE_CHAIN) tekst"
 msgstr ""
 
 #: classes/core/acl/acl_class.aw:rel_RELTYPE_ROLE
@@ -84,5 +84,9 @@ msgstr ""
 
 #: classes/core/acl/acl_class.aw:rel_RELTYPE_GROUP
 msgid "Seose grupp (RELTYPE_GROUP) tekst"
+msgstr ""
+
+#: classes/core/acl/acl_class.aw:58
+msgid "This function needs updating (get_acl_groups_for_obj)"
 msgstr ""
 

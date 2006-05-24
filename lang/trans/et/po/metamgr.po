@@ -119,38 +119,38 @@ msgstr ""
 msgid "Nimi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:164
-msgid "V?rtus"
+#: classes/meta/metamgr.aw:168
+msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/meta/metamgr.aw:171
+#: classes/meta/metamgr.aw:175
 msgid "Jrk"
 msgstr ""
 
-#: classes/meta/metamgr.aw:279
+#: classes/meta/metamgr.aw:283
 msgid "$file_name"
 msgstr ""
 
-#: classes/meta/metamgr.aw:377
+#: classes/meta/metamgr.aw:381
 msgid "Salvesta"
 msgstr ""
 
-#: classes/meta/metamgr.aw:385
+#: classes/meta/metamgr.aw:389
 msgid "Liiguta valitud omadused gruppi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:439
+#: classes/meta/metamgr.aw:443
 msgid "Export"
 msgstr ""
 
-#: classes/meta/metamgr.aw:448
+#: classes/meta/metamgr.aw:452
 msgid "Import"
 msgstr ""
 
-#: classes/meta/metamgr.aw:457
+#: classes/meta/metamgr.aw:461
 msgid "Kustuta valitud muutujad"
 msgstr ""
 
-#: classes/meta/metamgr.aw:458
+#: classes/meta/metamgr.aw:462
 msgid "Kustuta valitud muutujad?"
 msgstr ""

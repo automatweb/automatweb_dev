@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Arve rida help"
 msgstr ""
 
+#: classes/applications/crm/crm_bill_row.aw:prop_comment
+msgid "Omaduse Tekst arvel (comment) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_comment_comment
+msgid "Omaduse Tekst arvel (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_comment_help
+msgid "Omaduse Tekst arvel (comment) help"
+msgstr ""
+
 #: classes/applications/crm/crm_bill_row.aw:prop_amt
 msgid "Omaduse Kogus (amt) caption"
 msgstr ""

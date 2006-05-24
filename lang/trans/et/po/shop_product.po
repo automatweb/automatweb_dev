@@ -59,6 +59,18 @@ msgstr ""
 msgid "Omaduse Hind (price) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:prop_purchase_price
+msgid "Omaduse Ostu hind (purchase_price) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_purchase_price_comment
+msgid "Omaduse Ostu hind (purchase_price) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_purchase_price_help
+msgid "Omaduse Ostu hind (purchase_price) help"
+msgstr ""
+
 # classes/applications/shop/shop_product.aw:prop_must_order_num
 #: classes/applications/shop/shop_product.aw:prop_must_order_num
 msgid "Omaduse Mitu peab korraga tellima (must_order_num) caption"
@@ -99,6 +111,30 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_tax_rate_help
 msgid "Omaduse Maksum&auml;&auml;r (tax_rate) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_code
+msgid "Omaduse Kood (code) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_code_comment
+msgid "Omaduse Kood (code) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_code_help
+msgid "Omaduse Kood (code) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_barcode
+msgid "Omaduse Ribakood (barcode) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_barcode_comment
+msgid "Omaduse Ribakood (barcode) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_barcode_help
+msgid "Omaduse Ribakood (barcode) help"
 msgstr ""
 
 # classes/applications/shop/shop_product.aw:prop_userch1
@@ -174,6 +210,66 @@ msgstr ""
 # classes/applications/shop/shop_product.aw:prop_userch5_help
 #: classes/applications/shop/shop_product.aw:prop_userch5_help
 msgid "Omaduse User-defined checkbox 5 (userch5) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch6
+msgid "Omaduse User-defined checkbox 6 (userch6) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch6_comment
+msgid "Omaduse User-defined checkbox 6 (userch6) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch6_help
+msgid "Omaduse User-defined checkbox 6 (userch6) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch7
+msgid "Omaduse User-defined checkbox 7 (userch7) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch7_comment
+msgid "Omaduse User-defined checkbox 7 (userch7) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch7_help
+msgid "Omaduse User-defined checkbox 7 (userch7) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch8
+msgid "Omaduse User-defined checkbox 8 (userch8) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch8_comment
+msgid "Omaduse User-defined checkbox 8 (userch8) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch8_help
+msgid "Omaduse User-defined checkbox 8 (userch8) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch9
+msgid "Omaduse User-defined checkbox 9 (userch9) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch9_comment
+msgid "Omaduse User-defined checkbox 9 (userch9) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch9_help
+msgid "Omaduse User-defined checkbox 9 (userch9) help"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch10
+msgid "Omaduse User-defined checkbox 10 (userch10) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch10_comment
+msgid "Omaduse User-defined checkbox 10 (userch10) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:prop_userch10_help
+msgid "Omaduse User-defined checkbox 10 (userch10) help"
 msgstr ""
 
 # classes/applications/shop/shop_product.aw:prop_user1
@@ -1141,6 +1237,6 @@ msgstr ""
 msgid "Seose Maksum&amp;auml;&amp;auml;r (RELTYPE_TAX_RATE) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:509
+#: classes/applications/shop/shop_product.aw:534
 msgid "shop_product::draw(): no layout set!"
 msgstr ""

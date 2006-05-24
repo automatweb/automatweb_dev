@@ -134,14 +134,6 @@ msgstr ""
 msgid "Omaduse  (admcontent_addr) help"
 msgstr ""
 
-#: classes/applications/awmyadmin/db_table_contents.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/awmyadmin/db_table_contents.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/applications/awmyadmin/db_table_contents.aw:group_content
 msgid "Grupi Sisu (content) pealkiri"
 msgstr ""

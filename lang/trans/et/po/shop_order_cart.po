@@ -89,14 +89,6 @@ msgstr ""
 msgid "Omaduse Tellimise kontroller (finish_handler) help"
 msgstr ""
 
-#: classes/applications/shop/shop_order_cart.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/shop/shop_order_cart.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_PROD_LAYOUT
 #: classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_PROD_LAYOUT
 msgid "Seose toote kujundus (RELTYPE_PROD_LAYOUT) tekst"

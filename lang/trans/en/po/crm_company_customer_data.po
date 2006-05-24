@@ -148,6 +148,18 @@ msgstr ""
 msgid "Omaduse Arve makset&auml;htaeg (p&auml;evi) (bill_due_date_days) help"
 msgstr ""
 
+#: classes/applications/crm/crm_company_customer_data.aw:prop_bill_penalty_pct
+msgid "Omaduse Arve viivise % (bill_penalty_pct) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_bill_penalty_pct_comment
+msgid "Omaduse Arve viivise % (bill_penalty_pct) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:prop_bill_penalty_pct_help
+msgid "Omaduse Arve viivise % (bill_penalty_pct) help"
+msgstr ""
+
 #: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_BUYER
 msgid "Seose Ostja (RELTYPE_BUYER) tekst"
 msgstr ""
@@ -168,7 +180,7 @@ msgstr ""
 msgid "Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:90
+#: classes/applications/crm/crm_company_customer_data.aw:93
 msgid "--vali--"
 msgstr ""
 

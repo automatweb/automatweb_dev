@@ -14,15 +14,11 @@ msgstr ""
 msgid "Klassi CV Otsing help"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_TEGEVUSVALDKOND
-msgid "Seose Tegevusala (RELTYPE_TEGEVUSVALDKOND) tekst"
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:140
+msgid "je"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_LINN
-msgid "Seose Linn (RELTYPE_LINN) tekst"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management_cv_search.aw:363
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:149
 msgid "Nimi"
 msgstr ""
 

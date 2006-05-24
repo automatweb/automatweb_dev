@@ -9,52 +9,50 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/vcl/date_edit.aw:156
+#: classes/vcl/date_edit.aw:184
 msgid "Jaanuar"
 msgstr "January"
 
-#: classes/vcl/date_edit.aw:157
+#: classes/vcl/date_edit.aw:185
 msgid "Veebruar"
 msgstr "February"
 
-#: classes/vcl/date_edit.aw:158
+#: classes/vcl/date_edit.aw:186
 msgid "M&auml;rts"
 msgstr "March"
 
-#: classes/vcl/date_edit.aw:159
+#: classes/vcl/date_edit.aw:187
 msgid "Aprill"
 msgstr "April"
 
-#: classes/vcl/date_edit.aw:160
+#: classes/vcl/date_edit.aw:188
 msgid "Mai"
 msgstr "May"
 
-#: classes/vcl/date_edit.aw:161
+#: classes/vcl/date_edit.aw:189
 msgid "Juuni"
 msgstr "June"
 
-#: classes/vcl/date_edit.aw:162
+#: classes/vcl/date_edit.aw:190
 msgid "Juuli"
 msgstr "July"
 
-#: classes/vcl/date_edit.aw:163
+#: classes/vcl/date_edit.aw:191
 msgid "August"
 msgstr "August"
 
-#: classes/vcl/date_edit.aw:164
+#: classes/vcl/date_edit.aw:192
 msgid "September"
 msgstr "September"
 
-#: classes/vcl/date_edit.aw:165
+#: classes/vcl/date_edit.aw:193
 msgid "Oktoober"
 msgstr "October"
 
-#: classes/vcl/date_edit.aw:166
+#: classes/vcl/date_edit.aw:194
 msgid "November"
 msgstr "November"
 
-#: classes/vcl/date_edit.aw:167
+#: classes/vcl/date_edit.aw:195
 msgid "Detsember"
 msgstr "December"
-

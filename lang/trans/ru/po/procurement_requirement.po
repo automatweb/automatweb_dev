@@ -1,0 +1,120 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/procurement_center/procurement_requirement.aw:class_1067_help
+msgid "Klassi N&otilde;ue help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_desc
+msgid "Omaduse Kirjeldus (desc) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_desc_comment
+msgid "Omaduse Kirjeldus (desc) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_desc_help
+msgid "Omaduse Kirjeldus (desc) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_offer_t
+msgid "Omaduse  (offer_t) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_offer_t_comment
+msgid "Omaduse  (offer_t) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_offer_t_help
+msgid "Omaduse  (offer_t) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_comments
+msgid "Omaduse  (comments) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_comments_comment
+msgid "Omaduse  (comments) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:prop_comments_help
+msgid "Omaduse  (comments) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:group_offers
+msgid "Grupi Pakkumised (offers) pealkiri"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:group_offers_help
+msgid "Grupi Pakkumised (offers) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:85
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:90
+msgid "Lahendus"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:95
+msgid "Pakkuja"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:100
+msgid "Eelistatud"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:105
+msgid "Hinne"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:110
+msgid "Sobiv"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:115
+msgid "Tagasi l&uuml;katud"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:120
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:125
+msgid "Tundide arv"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:130
+msgid "Valmidus"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:158
+msgid "X"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:158
+msgid ""
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_requirement.aw:188
+msgid "<b>Keskmine:</b>"
+msgstr ""
+

@@ -262,6 +262,6 @@ msgstr ""
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:428
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:430
 msgid "J&auml;rjekord"
 msgstr ""

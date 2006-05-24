@@ -394,14 +394,14 @@ msgstr ""
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
+#: classes/applications/calendar/event_search.aw:820
 #: classes/applications/calendar/event_search.aw:826
-#: classes/applications/calendar/event_search.aw:832
-#: classes/applications/calendar/event_search.aw:833
+#: classes/applications/calendar/event_search.aw:827
+#: classes/applications/calendar/event_search.aw:843
 #: classes/applications/calendar/event_search.aw:849
-#: classes/applications/calendar/event_search.aw:855
 msgid "k&otilde;ik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:862
+#: classes/applications/calendar/event_search.aw:856
 msgid "Otsi"
 msgstr ""

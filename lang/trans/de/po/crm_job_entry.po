@@ -182,15 +182,15 @@ msgid "Omaduse Maakond (maakond) help"
 msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_riik
-msgid "Omaduse Riik  (riik) caption"
+msgid "Omaduse Riik (riik) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_riik_comment
-msgid "Omaduse Riik  (riik) kommentaar"
+msgid "Omaduse Riik (riik) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_riik_help
-msgid "Omaduse Riik  (riik) help"
+msgid "Omaduse Riik (riik) help"
 msgstr ""
 
 #: classes/applications/crm/crm_job_entry.aw:prop_cust_mgr

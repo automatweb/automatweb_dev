@@ -116,12 +116,20 @@ msgstr ""
 msgid "Omaduse Kaustade seaded (folders) help"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/contentmgmt/newsfeed.aw:prop_kw
+msgid ""
+"Omaduse Milliste m&auml;rk&otilde;nadega dokumente n&auml;idata (kw) caption"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/contentmgmt/newsfeed.aw:prop_kw_comment
+msgid ""
+"Omaduse Milliste m&auml;rk&otilde;nadega dokumente n&auml;idata (kw) "
+"kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:prop_kw_help
+msgid ""
+"Omaduse Milliste m&auml;rk&otilde;nadega dokumente n&auml;idata (kw) help"
 msgstr ""
 
 # classes/contentmgmt/newsfeed.aw:group_folders
@@ -134,27 +142,43 @@ msgstr "Folders"
 msgid "Grupi Kaustad (folders) help"
 msgstr ""
 
+#: classes/contentmgmt/newsfeed.aw:group_kw
+msgid "Grupi M&auml;rks&otilde;nad (kw) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:group_kw_help
+msgid "Grupi M&auml;rks&otilde;nad (kw) help"
+msgstr ""
+
 # classes/contentmgmt/newsfeed.aw:rel_RELTYPE_FEED_SOURCE
 #: classes/contentmgmt/newsfeed.aw:rel_RELTYPE_FEED_SOURCE
 msgid "Seose Materjalide kaust (RELTYPE_FEED_SOURCE) tekst"
 msgstr "feed source folder"
 
-#: classes/contentmgmt/newsfeed.aw:64
+#: classes/contentmgmt/newsfeed.aw:78
 msgid "RSS 2.0"
 msgstr "RSS 2.0"
 
-#: classes/contentmgmt/newsfeed.aw:65
+#: classes/contentmgmt/newsfeed.aw:79
 msgid "Atom (implementeerimata)"
 msgstr "Atom (not implemented)"
 
-#: classes/contentmgmt/newsfeed.aw:90
+#: classes/contentmgmt/newsfeed.aw:104
 msgid "ID"
 msgstr "ID"
 
-#: classes/contentmgmt/newsfeed.aw:94
+#: classes/contentmgmt/newsfeed.aw:108
 msgid "Name"
 msgstr "Name"
 
-#: classes/contentmgmt/newsfeed.aw:98
+#: classes/contentmgmt/newsfeed.aw:112
 msgid "Võta alamkaustadest ka"
 msgstr "Include subfolders"
+
+#: classes/contentmgmt/newsfeed.aw:421
+msgid "M&auml;rks&otilde;na"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:427
+msgid "Vali"
+msgstr ""

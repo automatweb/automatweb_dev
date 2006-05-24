@@ -38,6 +38,18 @@ msgstr ""
 msgid "Omaduse Sisesta faili aadress (file_url) help"
 msgstr ""
 
+#: classes/contentmgmt/flash.aw:prop_click_tag
+msgid "Omaduse Link (Click Tag) (click_tag) caption"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:prop_click_tag_comment
+msgid "Omaduse Link (Click Tag) (click_tag) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/flash.aw:prop_click_tag_help
+msgid "Omaduse Link (Click Tag) (click_tag) help"
+msgstr ""
+
 #: classes/contentmgmt/flash.aw:prop_width
 msgid "Omaduse Laius (width) caption"
 msgstr ""

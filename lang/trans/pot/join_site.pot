@@ -62,6 +62,18 @@ msgstr ""
 msgid "Omaduse Kas liitumisel saadetakse meil (send_join_mail) help"
 msgstr ""
 
+#: classes/contentmgmt/join/join_site.aw:prop_users_blocked_by_default
+msgid "Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) caption"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_users_blocked_by_default_comment
+msgid "Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_users_blocked_by_default_help
+msgid "Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) help"
+msgstr ""
+
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties
 msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) caption"
 msgstr ""
@@ -290,6 +302,78 @@ msgstr ""
 msgid "Omaduse Kuhu suunata p&auml;rast liitumist (confirm_redir) help"
 msgstr ""
 
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_addr
+msgid "Omaduse From aadress (mf_mail_from_addr) caption"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_addr_comment
+msgid "Omaduse From aadress (mf_mail_from_addr) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_addr_help
+msgid "Omaduse From aadress (mf_mail_from_addr) help"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_name
+msgid "Omaduse From nimi (mf_mail_from_name) caption"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_name_comment
+msgid "Omaduse From nimi (mf_mail_from_name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_name_help
+msgid "Omaduse From nimi (mf_mail_from_name) help"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_to
+msgid "Omaduse Kellele saata (mf_mail_to) caption"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_to_comment
+msgid "Omaduse Kellele saata (mf_mail_to) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_to_help
+msgid "Omaduse Kellele saata (mf_mail_to) help"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_subj
+msgid "Omaduse Meili teema (mf_mail_subj) caption"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_subj_comment
+msgid "Omaduse Meili teema (mf_mail_subj) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_subj_help
+msgid "Omaduse Meili teema (mf_mail_subj) help"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail
+msgid "Omaduse Meili sisu (mf_mail) caption"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_comment
+msgid "Omaduse Meili sisu (mf_mail) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_help
+msgid "Omaduse Meili sisu (mf_mail) help"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_legend
+msgid "Omaduse Legend (mf_mail_legend) caption"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_legend_comment
+msgid "Omaduse Legend (mf_mail_legend) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:prop_mf_mail_legend_help
+msgid "Omaduse Legend (mf_mail_legend) help"
+msgstr ""
+
 #: classes/contentmgmt/join/join_site.aw:prop_jm_texts
 msgid "Omaduse  (jm_texts) caption"
 msgstr ""
@@ -300,14 +384,6 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_jm_texts_help
 msgid "Omaduse  (jm_texts) help"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:group_general_help
-msgid "Grupi Üldine (general) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_props
@@ -382,12 +458,20 @@ msgstr ""
 msgid "Grupi Eelvaade (preview) help"
 msgstr ""
 
+#: classes/contentmgmt/join/join_site.aw:group_mails
+msgid "Grupi Meilid (mails) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:group_mails_help
+msgid "Grupi Meilid (mails) help"
+msgstr ""
+
 #: classes/contentmgmt/join/join_site.aw:group_joinmail
-msgid "Grupi Meil (joinmail) pealkiri"
+msgid "Grupi Meil liitujale (joinmail) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_joinmail_help
-msgid "Grupi Meil (joinmail) help"
+msgid "Grupi Meil liitujale (joinmail) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_confirm_mail
@@ -396,6 +480,14 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_confirm_mail_help
 msgid "Grupi Kinnitamine (confirm_mail) help"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:group_notify_mail
+msgid "Grupi Meil administraatorile (notify_mail) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:group_notify_mail_help
+msgid "Grupi Meil administraatorile (notify_mail) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:rel_RELTYPE_JOIN_CLASS
@@ -418,83 +510,91 @@ msgstr ""
 msgid "Seose default seoste objektid (RELTYPE_REL_OBJ) tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:180
+#: classes/contentmgmt/join/join_site.aw:rel_RELTYPE_MAILADDR
+msgid "Seose Kellele (RELTYPE_MAILADDR) tekst"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:173
+msgid "#edit_link# - link kasutajale"
+msgstr ""
+
+#: classes/contentmgmt/join/join_site.aw:211
 msgid "E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#)."
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:263
+#: classes/contentmgmt/join/join_site.aw:294
 msgid "Reegel"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:269
+#: classes/contentmgmt/join/join_site.aw:300
 msgid "Grupp"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:275 classes/contentmgmt/join/join_site.aw:296
+#: classes/contentmgmt/join/join_site.aw:306 classes/contentmgmt/join/join_site.aw:327
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:306 classes/contentmgmt/join/join_site.aw:325
+#: classes/contentmgmt/join/join_site.aw:337 classes/contentmgmt/join/join_site.aw:356
 msgid "Omadus"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:310
+#: classes/contentmgmt/join/join_site.aw:341
 msgid "T&auml;idetav"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:315
+#: classes/contentmgmt/join/join_site.aw:346
 msgid "N&otilde;utav"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:329
+#: classes/contentmgmt/join/join_site.aw:360
 msgid "Lehek&uuml;lg"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:334
+#: classes/contentmgmt/join/join_site.aw:365
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:344
+#: classes/contentmgmt/join/join_site.aw:375
 msgid "Sisestatud number"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:349
+#: classes/contentmgmt/join/join_site.aw:380
 msgid "Lehe nimi"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:375
+#: classes/contentmgmt/join/join_site.aw:406
 msgid "Tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:482
+#: classes/contentmgmt/join/join_site.aw:513
 msgid "<b>Vahepealkirjad</b>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:723
+#: classes/contentmgmt/join/join_site.aw:755
 msgid "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:786
+#: classes/contentmgmt/join/join_site.aw:831
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:813
+#: classes/contentmgmt/join/join_site.aw:858
 msgid "Liitun"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1616
+#: classes/contentmgmt/join/join_site.aw:1707
 msgid "Liitumise meili from aadress (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1627
+#: classes/contentmgmt/join/join_site.aw:1718
 msgid "Liitumise meili subjekt (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1640
+#: classes/contentmgmt/join/join_site.aw:1731
 msgid "Liitumise meil (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1708
+#: classes/contentmgmt/join/join_site.aw:1799
 msgid "Sellise koodiga kasutajat pole olemas!"
 msgstr ""
 

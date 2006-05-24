@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/users/user_manager.aw:class_1003_help
 msgid "Klassi Kasutajate haldus help"
 msgstr ""
@@ -27,27 +26,39 @@ msgid "Omaduse Juurkaust/-grupp (root) help"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_default_loginmenu
-msgid "Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) caption"
+msgid ""
+"Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) "
+"caption"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_default_loginmenu_comment
-msgid "Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) kommentaar"
+msgid ""
+"Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) "
+"kommentaar"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_default_loginmenu_help
-msgid "Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) help"
+msgid ""
+"Omaduse Vaikimisi loginmen&uuml;&uuml; uutel gruppidel (default_loginmenu) "
+"help"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_inactive_period
-msgid "Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) caption"
+msgid ""
+"Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) "
+"caption"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_inactive_period_comment
-msgid "Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) kommentaar"
+msgid ""
+"Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) "
+"kommentaar"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_inactive_period_help
-msgid "Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) help"
+msgid ""
+"Omaduse Kasutaja mitteaktiivsuse aeg tabelisse sattumiseks (inactive_period) "
+"help"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:prop_users_tb
@@ -179,11 +190,13 @@ msgid "Seose Juurkaust/-grupp (RELTYPE_ROOT) tekst"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:rel_RELTYPE_LOGIN_ROOT
-msgid "Seose Loginmen&amp;uuml;&amp;uuml;de juurkaust (RELTYPE_LOGIN_ROOT) tekst"
+msgid ""
+"Seose Loginmen&amp;uuml;&amp;uuml;de juurkaust (RELTYPE_LOGIN_ROOT) tekst"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:rel_RELTYPE_LOGIN_CONF
-msgid "Seose Loginmen&amp;uuml;&amp;uuml; seadete objekt  (RELTYPE_LOGIN_CONF) tekst"
+msgid ""
+"Seose Loginmen&amp;uuml;&amp;uuml; seadete objekt  (RELTYPE_LOGIN_CONF) tekst"
 msgstr ""
 
 #: classes/core/users/user_manager.aw:80
@@ -214,7 +227,8 @@ msgstr ""
 msgid "Juurkaust/-grupp valimata"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:144 classes/core/users/user_manager.aw:608
+#: classes/core/users/user_manager.aw:144
+#: classes/core/users/user_manager.aw:608
 msgid "Grupid"
 msgstr ""
 
@@ -230,7 +244,9 @@ msgstr ""
 msgid "kuu"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:188 classes/core/users/user_manager.aw:189 classes/core/users/user_manager.aw:190
+#: classes/core/users/user_manager.aw:188
+#: classes/core/users/user_manager.aw:189
+#: classes/core/users/user_manager.aw:190
 msgid "kuud"
 msgstr ""
 
@@ -242,7 +258,8 @@ msgstr ""
 msgid "Uus"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:288 classes/core/users/user_manager.aw:957
+#: classes/core/users/user_manager.aw:288
+#: classes/core/users/user_manager.aw:956
 msgid "Impordi"
 msgstr ""
 
@@ -254,11 +271,14 @@ msgstr ""
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:328 classes/core/users/user_manager.aw:734 classes/core/users/user_manager.aw:952
+#: classes/core/users/user_manager.aw:328
+#: classes/core/users/user_manager.aw:734
+#: classes/core/users/user_manager.aw:951
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:334 classes/core/users/user_manager.aw:735
+#: classes/core/users/user_manager.aw:334
+#: classes/core/users/user_manager.aw:735
 msgid "Kopeeri"
 msgstr ""
 
@@ -274,11 +294,15 @@ msgstr ""
 msgid "Aseta"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:485 classes/core/users/user_manager.aw:751 classes/core/users/user_manager.aw:855 classes/core/users/user_manager.aw:987
+#: classes/core/users/user_manager.aw:485
+#: classes/core/users/user_manager.aw:751
+#: classes/core/users/user_manager.aw:855
+#: classes/core/users/user_manager.aw:986
 msgid "nimetu"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:518 classes/core/users/user_manager.aw:560
+#: classes/core/users/user_manager.aw:518
+#: classes/core/users/user_manager.aw:560
 msgid "Grupp '%s'"
 msgstr ""
 
@@ -318,7 +342,8 @@ msgstr ""
 msgid "Kasutaja blokeerimine s&uuml;steemist"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:612 classes/core/users/user_manager.aw:834
+#: classes/core/users/user_manager.aw:612
+#: classes/core/users/user_manager.aw:834
 msgid "Tegevus"
 msgstr ""
 
@@ -326,7 +351,8 @@ msgstr ""
 msgid "Mitteaktiivsed kasutajad"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:732 classes/core/users/user_manager.aw:950
+#: classes/core/users/user_manager.aw:732
+#: classes/core/users/user_manager.aw:949
 msgid "Muuda"
 msgstr ""
 
@@ -346,11 +372,15 @@ msgstr ""
 msgid "Vaata statistikat"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:760 classes/core/users/user_manager.aw:998 classes/core/users/user_manager.aw:999
+#: classes/core/users/user_manager.aw:760
+#: classes/core/users/user_manager.aw:997
+#: classes/core/users/user_manager.aw:998
 msgid "Jah"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:760 classes/core/users/user_manager.aw:998 classes/core/users/user_manager.aw:999
+#: classes/core/users/user_manager.aw:760
+#: classes/core/users/user_manager.aw:997
+#: classes/core/users/user_manager.aw:998
 msgid "Ei"
 msgstr ""
 
@@ -394,7 +424,8 @@ msgstr ""
 msgid "Juurkaustad"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:830 classes/core/users/user_manager.aw:972
+#: classes/core/users/user_manager.aw:830
+#: classes/core/users/user_manager.aw:971
 msgid "Loginmen&uuml;&uuml;"
 msgstr ""
 
@@ -406,31 +437,31 @@ msgstr ""
 msgid "Kustutada valitud objekt?"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:943
+#: classes/core/users/user_manager.aw:942
 msgid "M&auml;&auml;ra &otilde;igused"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:951
+#: classes/core/users/user_manager.aw:950
 msgid "Kustuta"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:958
+#: classes/core/users/user_manager.aw:957
 msgid "Juurkaust"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:959
+#: classes/core/users/user_manager.aw:958
 msgid "Objektid"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:969 classes/core/users/user_manager.aw:1208
+#: classes/core/users/user_manager.aw:968
+#: classes/core/users/user_manager.aw:1207
 msgid "Vali loginmen&uuml;&uuml;"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:1162
+#: classes/core/users/user_manager.aw:1161
 msgid "Seostamata menyyde juurikas"
 msgstr ""
 
-#: classes/core/users/user_manager.aw:1171
+#: classes/core/users/user_manager.aw:1170
 msgid "Seostamata confiobject"
 msgstr ""
-

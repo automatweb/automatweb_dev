@@ -39,7 +39,7 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:557
+#: classes/applications/mailinglist/ml_queue.aw:544
 msgid ""
 "done\n"
 "<br>"

@@ -202,6 +202,22 @@ msgid ""
 "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) help"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:prop_not_in_doc_view
+msgid ""
+"Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_not_in_doc_view_comment
+msgid ""
+"Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) "
+"kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_not_in_doc_view_help
+msgid ""
+"Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) help"
+msgstr ""
+
 # classes/contentmgmt/promo.aw:prop_trans_all_langs
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs
 msgid ""
@@ -485,6 +501,65 @@ msgstr ""
 msgid "Omaduse Sisu ei cacheta (is_dyn) help"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:prop_kw_tb
+msgid "Omaduse  (kw_tb) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_kw_tb_comment
+msgid "Omaduse  (kw_tb) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_kw_tb_help
+msgid "Omaduse  (kw_tb) help"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_kws
+msgid "Omaduse M&auml;rks&otilde;nad (kws) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_kws_comment
+msgid "Omaduse M&auml;rks&otilde;nad (kws) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_kws_help
+msgid "Omaduse M&auml;rks&otilde;nad (kws) help"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_use_menu_keywords
+msgid ""
+"Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) "
+"caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_use_menu_keywords_comment
+msgid ""
+"Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) "
+"kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_use_menu_keywords_help
+msgid ""
+"Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) help"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_use_doc_content_type
+msgid ""
+"Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut "
+"(use_doc_content_type) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_use_doc_content_type_comment
+msgid ""
+"Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut "
+"(use_doc_content_type) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_use_doc_content_type_help
+msgid ""
+"Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut "
+"(use_doc_content_type) help"
+msgstr ""
+
 #: classes/contentmgmt/promo.aw:group_general_sub
 msgid "Grupi Üldine (general_sub) pealkiri"
 msgstr ""
@@ -588,83 +663,95 @@ msgid ""
 "tekst"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:196
+#: classes/contentmgmt/promo.aw:rel_RELTYPE_KEYWORD
+msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:216
 msgid "Vali template"
 msgstr "Select template"
 
-#: classes/contentmgmt/promo.aw:213
+#: classes/contentmgmt/promo.aw:233
 msgid "Vasakul"
 msgstr "Left"
 
-#: classes/contentmgmt/promo.aw:214
+#: classes/contentmgmt/promo.aw:234
 msgid "Paremal"
 msgstr "Right"
 
-#: classes/contentmgmt/promo.aw:215
+#: classes/contentmgmt/promo.aw:235
 msgid "Üleval"
 msgstr "Top"
 
-#: classes/contentmgmt/promo.aw:216
+#: classes/contentmgmt/promo.aw:236
 msgid "All"
 msgstr "Bottom"
 
-#: classes/contentmgmt/promo.aw:217
+#: classes/contentmgmt/promo.aw:237
 msgid "Skrolliv"
 msgstr "Scrollable"
 
-#: classes/contentmgmt/promo.aw:235
+#: classes/contentmgmt/promo.aw:255
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr "By order"
 
-#: classes/contentmgmt/promo.aw:236
+#: classes/contentmgmt/promo.aw:256
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr "By created date"
 
-#: classes/contentmgmt/promo.aw:237
+#: classes/contentmgmt/promo.aw:257
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr "By modified date"
 
-#: classes/contentmgmt/promo.aw:238
+#: classes/contentmgmt/promo.aw:258
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr "By document date"
 
-#: classes/contentmgmt/promo.aw:239
+#: classes/contentmgmt/promo.aw:259
 msgid "Objekti nime j&auml;rgi"
 msgstr "By object name"
 
-#: classes/contentmgmt/promo.aw:240
+#: classes/contentmgmt/promo.aw:260
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr "By time selected in calendar"
 
-#: classes/contentmgmt/promo.aw:248
+#: classes/contentmgmt/promo.aw:261
+msgid "Random"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:269
 msgid "Suurem (uuem) enne"
 msgstr "Bigger (newer) first"
 
-#: classes/contentmgmt/promo.aw:249
+#: classes/contentmgmt/promo.aw:270
 msgid "V&auml;iksem (vanem) enne"
 msgstr "Smaller (older) first"
 
-#: classes/contentmgmt/promo.aw:313 classes/contentmgmt/promo.aw:362
-#: classes/contentmgmt/promo.aw:409
+#: classes/contentmgmt/promo.aw:334 classes/contentmgmt/promo.aw:383
+#: classes/contentmgmt/promo.aw:430
 msgid "ID"
 msgstr "ID"
 
-#: classes/contentmgmt/promo.aw:321 classes/contentmgmt/promo.aw:370
-#: classes/contentmgmt/promo.aw:418
+#: classes/contentmgmt/promo.aw:342 classes/contentmgmt/promo.aw:391
+#: classes/contentmgmt/promo.aw:439
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/contentmgmt/promo.aw:326 classes/contentmgmt/promo.aw:375
+#: classes/contentmgmt/promo.aw:347 classes/contentmgmt/promo.aw:396
 msgid "k.a. alammenüüd"
 msgstr "incl. submenus"
 
-#: classes/contentmgmt/promo.aw:425
+#: classes/contentmgmt/promo.aw:446
 msgid "Pane pealkirjaks"
 msgstr "Set as title"
 
-#: classes/contentmgmt/promo.aw:432
+#: classes/contentmgmt/promo.aw:453
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr "incl. submenus"
+
+#: classes/contentmgmt/promo.aw:1064
+msgid "M&auml;rks&otilde;na"
+msgstr ""
 
 # classes/contentmgmt/promo.aw:group_menus
 #~ msgid "Grupi Kaustad (menus) pealkiri"

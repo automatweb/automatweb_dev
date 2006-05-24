@@ -10,6 +10,4 @@ $GLOBALS["TRANS"]["sinine"] = "blue";
 $GLOBALS["TRANS"]["linki objektile"] = "link to object";
 $GLOBALS["TRANS"]["objekti ennast"] = "object itself";
 $GLOBALS["TRANS"]["Lisa kalendrisündmus"] = "Add calendar event";
-$GLOBALS["TRANS"]["%s | Muuda kalendrisündmust"] = "%s | Change calendar event";
-$GLOBALS["TRANS"]["Muuda eventit"] = "Change event";
 ?>

@@ -24,7 +24,7 @@ $GLOBALS["TRANS"]["Grupi Kommentaarid (comments) pealkiri"] = "Comments";
 $GLOBALS["TRANS"]["Grupi Osalejad (participants) pealkiri"] = "Participants";
 $GLOBALS["TRANS"]["Seose Kordus (RELTYPE_RECURRENCE) tekst"] = "Recurrence";
 $GLOBALS["TRANS"]["Seose Helistaja (RELTYPE_CALLER) tekst"] = "Caller";
-$GLOBALS["TRANS"]["Kustuta valitud"] = "Delete selected";
 $GLOBALS["TRANS"]["Otsi"] = "Search";
+$GLOBALS["TRANS"]["Kustuta valitud"] = "Delete selected";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
 ?>

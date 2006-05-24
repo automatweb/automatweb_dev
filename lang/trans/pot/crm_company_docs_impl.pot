@@ -66,43 +66,43 @@ msgstr ""
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:171 classes/applications/crm/crm_company_docs_impl.aw:435 classes/applications/crm/crm_company_docs_impl.aw:556
+#: classes/applications/crm/crm_company_docs_impl.aw:172 classes/applications/crm/crm_company_docs_impl.aw:435 classes/applications/crm/crm_company_docs_impl.aw:556
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:180
+#: classes/applications/crm/crm_company_docs_impl.aw:181
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:188 classes/applications/crm/crm_company_docs_impl.aw:449
+#: classes/applications/crm/crm_company_docs_impl.aw:189 classes/applications/crm/crm_company_docs_impl.aw:449
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:195 classes/applications/crm/crm_company_docs_impl.aw:456
+#: classes/applications/crm/crm_company_docs_impl.aw:196 classes/applications/crm/crm_company_docs_impl.aw:456
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:207 classes/applications/crm/crm_company_docs_impl.aw:466 classes/applications/crm/crm_company_docs_impl.aw:577
+#: classes/applications/crm/crm_company_docs_impl.aw:208 classes/applications/crm/crm_company_docs_impl.aw:466 classes/applications/crm/crm_company_docs_impl.aw:577
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:215 classes/applications/crm/crm_company_docs_impl.aw:473
+#: classes/applications/crm/crm_company_docs_impl.aw:216 classes/applications/crm/crm_company_docs_impl.aw:473
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:225
+#: classes/applications/crm/crm_company_docs_impl.aw:226
 msgid ""
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:261
+#: classes/applications/crm/crm_company_docs_impl.aw:262
 msgid "Ava internetist"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:265
+#: classes/applications/crm/crm_company_docs_impl.aw:266
 msgid "Ava serverist"
 msgstr ""
 
-#: classes/applications/crm/crm_company_docs_impl.aw:269
+#: classes/applications/crm/crm_company_docs_impl.aw:270
 msgid "Laadi uus versioon"
 msgstr ""
 

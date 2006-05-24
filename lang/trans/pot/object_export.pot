@@ -115,34 +115,38 @@ msgid "Grupi Ekspordi (export) help"
 msgstr ""
 
 #: classes/admin/object_export.aw:rel_RELTYPE_OBJECT_TYPE
-msgid "Seose objektit&uuml;&uuml;p (RELTYPE_OBJECT_TYPE) tekst"
+msgid "Seose objektit&amp;uuml;&amp;uuml;p (RELTYPE_OBJECT_TYPE) tekst"
 msgstr ""
 
 #: classes/admin/object_export.aw:rel_RELTYPE_FOLDER
 msgid "Seose kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/admin/object_export.aw:92
+#: classes/admin/object_export.aw:95
 msgid "Ekspordi CSV fail"
 msgstr ""
 
-#: classes/admin/object_export.aw:103
+#: classes/admin/object_export.aw:106
 msgid "Ekspordi XLS fail"
 msgstr ""
 
-#: classes/admin/object_export.aw:137
+#: classes/admin/object_export.aw:140
 msgid "Element"
 msgstr ""
 
-#: classes/admin/object_export.aw:142
+#: classes/admin/object_export.aw:146
 msgid "J&auml;rjekord"
-msgstr ""
-
-#: classes/admin/object_export.aw:148
-msgid "Eksporditav"
 msgstr ""
 
 #: classes/admin/object_export.aw:153
 msgid "Tulba pealkiri"
+msgstr ""
+
+#: classes/admin/object_export.aw:159
+msgid "Ekspordi v&auml;&auml;rtus"
+msgstr ""
+
+#: classes/admin/object_export.aw:166
+msgid "Eksporditav"
 msgstr ""
 

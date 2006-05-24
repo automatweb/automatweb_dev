@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/table.aw:2058
+#: classes/vcl/table.aw:2149
 msgid "K&otilde;ik"
 msgstr ""
 

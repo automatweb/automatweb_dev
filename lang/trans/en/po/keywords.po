@@ -43,3 +43,7 @@ msgstr "File"
 #: classes/keywords.aw:rel_RELTYPE_LINK
 msgid "Seose Link (RELTYPE_LINK) tekst"
 msgstr "Link"
+
+#: classes/keywords.aw:1162
+msgid "Selline v&otilde;tmes&otilde;na on juba olemas (%s)!"
+msgstr ""
