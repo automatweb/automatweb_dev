@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.88 2006/05/23 15:35:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.89 2006/05/24 13:03:38 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -466,15 +466,6 @@ class cfgform extends class_base
 
 		$this->grplist = safe_array($obj->meta("cfg_groups"));
 		$this->prplist = safe_array($obj->meta("cfg_proplist"));
-
-		foreach($this->grplist as $gn => $gd)
-		{
-			$this->grplist[$gn]["caption"] = urldecode($gd["caption"]);
-		}
-		foreach($this->prplist as $gn => $gd)
-		{
-			$this->prplist[$gn]["caption"] = urldecode($gd["caption"]);
-		}
 	}
 
 	function _init_properties($class_id)
@@ -504,7 +495,6 @@ class cfgform extends class_base
 		$data = &$arr["prop"];
 		$o = $arr["obj_inst"];
 		$retval = PROP_OK;
-
 		switch($data["name"])
 		{
 			case "gen_submit_controllers":
@@ -539,6 +529,7 @@ class cfgform extends class_base
 			case "cfg_proplist":
 			
 			case "cfg_groups":
+				$data["value"] = urldecode($data["value"]);
 				if (empty($data["value"]))
 				{
 					$retval = PROP_IGNORE;
@@ -582,7 +573,6 @@ class cfgform extends class_base
 				{
 					// fool around a bit to get the correct data
 					$subclass = $arr["request"]["subclass"];
-
 					// now that's the tricky part ... this thingsbum overrides
 					// all the settings in the document config form
 					$this->_init_properties($subclass);
@@ -701,17 +691,12 @@ class cfgform extends class_base
 				{
 					unset($val["default"]);
 				};
-				$val["caption"] = urldecode($val["caption"]);
 				$this->cfg_proplist[$key] = $val;
 			};
 			$obj_inst->set_meta("cfg_proplist",$this->cfg_proplist);
 		};
 		if (isset($this->cfg_groups))
 		{
-			foreach($this->cfg_groups as $gn => $gd)
-			{
-				$this->cfg_groups[$gn]["caption"] = urldecode($gd["caption"]);
-			}
 			$obj_inst->set_meta("cfg_groups",$this->cfg_groups);
 		};
 		return true;
