@@ -324,7 +324,7 @@ class user extends class_base
 				if ($arr["obj_inst"]->prop("blocked") == 1 && $prop["value"] == 0 && $this->can("view", $arr["obj_inst"]->prop("join_grp")))
 				{
 					$jo = obj($arr["obj_inst"]->prop("join_grp"));
-					if ($jo->prop("send_join_mail") && $jo->prop("users_blocked_by_default"))
+					if (!$jo->prop("send_join_mail") && $jo->prop("users_blocked_by_default"))
 					{
 						$js = get_instance(CL_JOIN_SITE);
 						$js->_do_send_join_mail(array(
