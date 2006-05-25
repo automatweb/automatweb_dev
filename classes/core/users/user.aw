@@ -78,6 +78,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 @property password_hash type=hidden table=users field=config method=serialize
 @property password_hash_timestamp type=hidden table=users field=config method=serialize
+@property join_grp type=hidden table=users field=join_grp
 
 @default group=chpwd
 
@@ -319,6 +320,22 @@ class user extends class_base
 		load_vcl("date_edit");
 		switch($prop['name'])
 		{
+			case "blocked":
+				if ($arr["obj_inst"]->prop("blocked") == 1 && $prop["value"] == 0 && $this->can("view", $arr["obj_inst"]->prop("join_grp")))
+				{
+					$jo = obj($arr["obj_inst"]->prop("join_grp"));
+					if ($jo->prop("send_join_mail") && $jo->prop("users_blocked_by_default"))
+					{
+						$js = get_instance(CL_JOIN_SITE);
+						$js->_do_send_join_mail(array(
+							"obj" => $jo,
+							"uid" => $arr["obj_inst"]->prop("uid"),
+							"email" => $arr["obj_inst"]->prop("email"),
+						));
+					}
+				}
+				break;
+
 			case "uid_entry":
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
@@ -1648,6 +1665,7 @@ class user extends class_base
 		$o->set_prop("password", $password);
 		$o->set_prop("email", $email);
 		$o->set_prop("real_name", $arr["real_name"]);
+		$o->set_prop("join_grp" , $arr["join_grp"]);
 		$o->save();
 
 		$this->users->add(array(

@@ -139,6 +139,13 @@
             <method>serialize</method>
       </property>
       <property>
+            <name>join_grp</name>
+            <table>users</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>join_grp</field>
+      </property>
+      <property>
             <name>passwd</name>
             <table>users</table>
             <group>chpwd</group>
