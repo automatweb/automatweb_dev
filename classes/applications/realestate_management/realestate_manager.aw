@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.12 2006/04/21 11:41:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.13 2006/05/25 08:09:27 voldemar Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -368,7 +368,7 @@ class realestate_manager extends class_base
 		if (
 			// ($arr["request"]["action"] == "submit") and
 			($arr["request"]["group"] == "grp_users_mgr") and
-			is_oid (aw_global_get ("realsestate_usr_mgr_cat"))
+			$this->can ("view", aw_global_get ("realsestate_usr_mgr_cat"))
 		)
 		{
 			$this->usr_mgr_profession = obj (aw_global_get ("realsestate_usr_mgr_cat"));
@@ -1103,39 +1103,34 @@ class realestate_manager extends class_base
 		switch ($unit->class_id ())
 		{
 			case CL_CRM_SECTION:
-				//$o =& $this->find_connection_parent_by_class ($unit->id (), CL_CRM_COMPANY);
 				$o = $this->find_co_by_section($unit);
 				break;
 
 			case CL_CRM_COMPANY:
-				$o =& $unit;
+				$o = $unit;
 				break;
 		}
 
-//terryf
-		if (!$o)
+		if ($o)
 		{
-			return;
+			$tmp = $arr["obj_inst"];
+			$arr["obj_inst"] = $o;
+			$co = $o->instance();
+			$co->callback_on_load($arr);
+
+			$i = get_instance("applications/crm/crm_company_people_impl");
+			$i->_get_cedit_tb($arr);
+
+			$tb =& $arr["prop"]["vcl_inst"];
+			// $tb->remove_button("Kone");
+			// $tb->remove_button("Kohtumine");
+			// $tb->remove_button("Toimetus");
+			$tb->remove_button("copy");
+			$tb->remove_button("mark_important");
+			$tb->remove_button("Search");
+
+			$arr["obj_inst"] = $tmp;
 		}
-//END terryf
-
-		$tmp = $arr["obj_inst"];
-		$arr["obj_inst"] = $o;
-		// $co = $o->instance();
-		// $co->callback_on_load($arr);
-		#$co->do_contact_toolbar($arr["prop"]['toolbar'],$arr);
-		$people_impl = get_instance("applications/crm/crm_company_people_impl");
-		$people_impl->_get_contact_toolbar($arr);
-
-		$tb =& $arr["prop"]["vcl_inst"];
-		$tb->remove_button("Kone");
-		$tb->remove_button("Kohtumine");
-		$tb->remove_button("Toimetus");
-		$tb->remove_button("Search");
-		$tb->remove_button("mark_important");
-		$tb->remove_button("switch_view");
-
-		$arr["obj_inst"] = $tmp;
 	}
 
 //terryf
@@ -1161,49 +1156,6 @@ class realestate_manager extends class_base
 	}
 //END terryf
 
-/*
-	function &find_connection_parent_by_class ($object_id, $parent_class_id)
-	{
-//terryf
-		$used_oids = array();
-//END terryf
-
-		while (is_oid ($object_id))
-		{
-			$object = obj ($object_id);
-			$connections = $object->connections_to ();
-
-//terryf
-			if (!count($connections))
-			{
-				return false;
-			}
-//END terryf
-
-			foreach ($connections as $connection)
-			{
-				$object_id = $connection->prop("from");
-				$parent = obj ($object_id);
-
-//terryf
-				if (isset($used_oids[$object_id]))
-				{
-					return false;
-				}
-				$used_oids[$object_id] = 1;
-//END terryf
-
-				if ($parent->class_id () == $parent_class_id)
-				{
-					return $parent;
-				}
-			}
-		}
-
-		return false;
-	}
-*/
-
 	function _user_list_tree($arr)
 	{
 		$this_object = $arr["obj_inst"];
@@ -1219,13 +1171,16 @@ class realestate_manager extends class_base
 				$tree->add_item(0, array(
 					"name" => $o->name(),
 					"id" => $o->id(),
-					"url" => aw_url_change_var("company", $o->id()),
+					"url" => aw_url_change_var(array(
+						"company" => $o->id(),
+						"unit" => NULL,
+					)),
 				));
 
 				$treeview = get_instance(CL_TREEVIEW);
 				$treeview->init_vcl_property ($arr);
 				$arr["prop"]["vcl_inst"] =& $treeview;
-				$this->_delegate_co_v($arr, "_get_unit_listing_tree", $o);
+				$this->_delegate_co_v($arr, "_get_cedit_tree", $o);
 				$trees[$o->id ()] = $arr["prop"]["vcl_inst"];
 			}
 		}
@@ -1233,6 +1188,8 @@ class realestate_manager extends class_base
 		### merge trees to one
 		foreach ($trees as $id => $subtree)
 		{
+			$subtree->remove_item(CRM_ALL_PERSONS_CAT);
+
 			foreach ($subtree->itemdata as $item)
 			{
 				### find item parent
@@ -1261,7 +1218,7 @@ class realestate_manager extends class_base
 			}
 		}
 
-		$tree->set_only_one_level_opened (false);
+		// $tree->set_only_one_level_opened (false);
 
 		if (is_oid ($arr["request"]["cat"]))
 		{
@@ -1283,8 +1240,6 @@ class realestate_manager extends class_base
 
 	function _user_list($arr)
 	{
-		$this_object = $arr["obj_inst"];
-
 		if (is_oid ($arr["request"]["unit"]))
 		{
 			$unit = obj ($arr["request"]["unit"]);
@@ -1295,14 +1250,21 @@ class realestate_manager extends class_base
 					break;
 
 				case CL_CRM_SECTION:
-					//$o =& $this->find_connection_parent_by_class ($unit->id (), CL_CRM_COMPANY, 28);
 					$o = $this->find_co_by_section($unit);
 
-					if ($o && $this->can("view", $o->id()))
+					if (is_object($o) && $this->can("view", $o->id()))
 					{
-						$this->_delegate_co_v($arr, "_get_human_resources", $o);
+						$this->_delegate_co_v($arr, "_get_cedit_table", $o);
 					}
 					break;
+			}
+		}
+		elseif ($arr["request"]["company"])
+		{
+			if ($this->can("view", $arr["request"]["company"]))
+			{
+				$o = obj($arr["request"]["company"]);
+				$this->_delegate_co_v($arr, "_get_cedit_table", $o);
 			}
 		}
 	}
@@ -1337,6 +1299,8 @@ class realestate_manager extends class_base
 		### merge trees to one
 		foreach ($trees as $id => $subtree)
 		{
+			$subtree->remove_item(CRM_ALL_PERSONS_CAT);
+
 			foreach ($subtree->itemdata as $item)
 			{
 				### find item parent
@@ -1487,28 +1451,28 @@ class realestate_manager extends class_base
 
 	function _delegate_co_v($arr, $fun, &$o)
 	{
-		$tmp = $arr["obj_inst"];
-		$arr["obj_inst"] = $o;
-		// if ($fun == "_get_unit_listing_tree")
-		// {
-			$co = get_instance("applications/crm/crm_company_people_impl");
-		// }
-		// else
-		// {
-			// $co = $o->instance();
-			// $co->callback_on_load($arr);
-		// }
-		$co->$fun($arr);
-		$arr["obj_inst"] = $tmp;
-		unset ($tmp);
+		if ($o)
+		{
+			$tmp = $arr["obj_inst"];
+			$arr["obj_inst"] = $o;
+			$co = $o->instance();
+			$co->callback_on_load($arr);
+
+			$i = get_instance("applications/crm/crm_company_people_impl");
+			$i->$fun($arr);
+			$arr["obj_inst"] = $tmp;
+			unset ($tmp);
+		}
 	}
 
 	function _delegate_co($arr, $fun, &$o)
 	{
-		$arr["return_url"] = ($arr["post_ru"]);
+		$arr["return_url"] = $arr["post_ru"];
+
 		if ($o)
 		{
 			$arr["id"] = $o->id();
+
 			$o = $o->instance();
 			$o->callback_on_load($arr);
 			return $o->$fun($arr);
@@ -3185,6 +3149,32 @@ class realestate_manager extends class_base
 		}
 	}
 
+	function _get_co_for_person($person)
+	{
+		$conns = $person->connections_to(array(
+			"type" => 8, //RELTYPE_WORKERS
+			"from.class_id" => CL_CRM_COMPANY,
+		));
+
+		foreach($conns as $conn)
+		{
+			$company = $conn->from();
+			break;
+		}
+
+		if (!is_object($company))
+		{
+			$parent = obj($person->parent());
+
+			if (CL_CRM_COMPANY == $parent->class_id())
+			{
+				$company = $parent;
+			}
+		}
+
+		return $company;
+	}
+
 	/** handler for person list delete. forwards to crm_company
 		@attrib name=submit_delete_relations
 	**/
@@ -3193,21 +3183,29 @@ class realestate_manager extends class_base
 		if (is_oid (reset ($arr["check"])))
 		{
 			$first_object = obj (reset ($arr["check"]));
-			$company = $first_object->get_first_obj_by_reltype("RELTYPE_WORK");
+			$company = $this->_get_co_for_person($first_object);
+			$this->_delegate_co ($arr, "submit_delete_relations", $company);
 		}
 
-		$this->_delegate_co ($arr, "submit_delete_relations", $company);
-		return urldecode($arr["return_url"]);
+		return $arr["post_ru"];
 	}
 
-	// /** switch view type
-		// @attrib name=p_view_switch
-	// **/
-	// function p_view_switch($arr)
-	// {
-		// arr($arr);
-		// return $this->_delegate_co($arr, "cut_p", $company);
-	// }
+	/** handler for person list delete. forwards to crm_company
+		@attrib name=submit_delete_ppl
+		@param id required type=int acl=view
+		@param unit optional type=int
+	**/
+	function submit_delete_ppl($arr)
+	{
+		if (is_oid (reset ($arr["check"])))
+		{
+			$first_object = obj (reset ($arr["check"]));
+			$company = $this->_get_co_for_person($first_object);
+			$this->_delegate_co ($arr, "submit_delete_ppl", $company);
+		}
+
+		return $arr["post_ru"];
+	}
 
 	/** cuts the selected person objects
 		@attrib name=cut_p
@@ -3217,10 +3215,11 @@ class realestate_manager extends class_base
 		if (is_oid (reset ($arr["check"])))
 		{
 			$first_object = obj (reset ($arr["check"]));
-			$company = $first_object->get_first_obj_by_reltype("RELTYPE_WORK");
+			$company = $this->_get_co_for_person($first_object);
+			$this->_delegate_co($arr, "cut_p", $company);
 		}
 
-		return $this->_delegate_co($arr, "cut_p", $company);
+		return $arr["post_ru"];
 	}
 
 	/** copies the selected person objects
@@ -3231,9 +3230,11 @@ class realestate_manager extends class_base
 		if (is_oid (reset ($arr["check"])))
 		{
 			$first_object = obj (reset ($arr["check"]));
-			$company = $first_object->get_first_obj_by_reltype("RELTYPE_WORK");
+			$company = $this->_get_co_for_person($first_object);
+			$this->_delegate_co($arr, "copy_p", $company);
 		}
-		return $this->_delegate_co($arr, "copy_p", $company);
+
+		return $arr["post_ru"];
 	}
 
 	/** pastes the cut/copied person objects
@@ -3244,10 +3245,11 @@ class realestate_manager extends class_base
 		if (is_oid (reset ($arr["check"])))
 		{
 			$first_object = obj (reset ($arr["check"]));
-			$company = $first_object->get_first_obj_by_reltype("RELTYPE_WORK");
+			$company = $this->_get_co_for_person($first_object);
+			$this->_delegate_co($arr, "paste_p", $company);
 		}
 
-		return $this->_delegate_co($arr, "paste_p", $company);
+		return $arr["post_ru"];
 	}
 
 	/**
