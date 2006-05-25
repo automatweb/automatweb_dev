@@ -425,11 +425,15 @@ class crm_company_people_impl extends class_base
 			$o = $arr["obj_inst"];
 		}
 
+		$section_img = html::img(array("url" => icons::get_icon_url(CL_CRM_SECTION), "border" => "0", "alt" => t("Üksus")));
+		$prof_img = html::img(array("url" => icons::get_icon_url(CL_CRM_PROFESSION), "border" => "0", "alt" => t("Amet")));
+
 		foreach($o->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
 		{
 			$ccp = (isset($_SESSION["crm_copy_p"][$c->prop("to")]) || isset($_SESSION["crm_cut_p"][$c->prop("to")]) ? "#E2E2DB" : "");
 			list($fn, $ln) = explode(" ", $c->prop("to.name"));
 			$arr["prop"]["vcl_inst"]->define_data(array(
+				"image" => $section_img,
 				"name" => $ln." ".$fn,
 				"id" => $c->prop("to"),
 				"cutcopied" => $ccp
@@ -441,6 +445,7 @@ class crm_company_people_impl extends class_base
 			$ccp = (isset($_SESSION["crm_copy_p"][$c->prop("to")]) || isset($_SESSION["crm_cut_p"][$c->prop("to")]) ? "#E2E2DB" : "");
 			list($fn, $ln) = explode(" ", $c->prop("to.name"));
 			$arr["prop"]["vcl_inst"]->define_data(array(
+				"image" => $prof_img,
 				"name" => $ln." ".$fn,
 				"id" => $c->prop("to"),
 				"cutcopied" => $ccp
@@ -1021,7 +1026,7 @@ class crm_company_people_impl extends class_base
 			"tooltip" => t("Oluliseks"),
 			"action" => "mark_p_as_important",
 		));
-		
+
 	}
 
 	function _get_cedit_tree($arr)
