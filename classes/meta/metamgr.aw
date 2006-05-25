@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.12 2006/01/23 10:40:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.13 2006/05/25 15:44:02 markop Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
@@ -65,6 +65,11 @@ class metamgr extends class_base
 		
 	}
 
+/*	function callback_mod_tab($arr)
+	{
+		arr($arr);
+	}
+*/
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -101,8 +106,10 @@ class metamgr extends class_base
 	{	
 		$tree = &$arr["prop"]["vcl_inst"];
 		$obj = $arr["obj_inst"];
+		if($arr["obj_inst"]->prop("transyes")) $object_name = iconv(aw_global_get("charset"), "UTF-8", $obj->name());
+		else $object_name = $obj->name();
 		$tree->add_item(0, array(
-			"name" => $obj->name(),
+			"name" => $object_name,
 			"id" => $obj->id(),
 			"url" => $this->mk_my_orb("change", array(
 				"id" => $obj->id(),
@@ -116,7 +123,7 @@ class metamgr extends class_base
 			{
 				$o = new object($obj_id);
 				$tree->add_item($o->parent(),array(
-					"name" => $o->name(),
+					"name" => $object_name,
 					"id" => $o->id(),
 					"url" => aw_url_change_var(array("meta" => $o->id())),
 				));
@@ -222,12 +229,15 @@ class metamgr extends class_base
 
 		foreach($olist->arr() as $o)
 		{
-			$id = $o->id();$draw_text = $draw_text.
+			$id = $o->id();
+			if($transyes) $var_name = iconv(aw_global_get("charset"), "UTF-8", $o->name());
+			else $var_name = $o->name();
+			$draw_text = $draw_text.
 
 			$trans = array(
 				"is_new" => 0,
 				"id" => $id,
-				"name" => $o->name(),
+				"name" => $var_name,
 				"value" => $o->comment(),
 				"ord" => $o->prop("ord"),
 			);
@@ -247,11 +257,13 @@ class metamgr extends class_base
 
 		// now add the textbox thingies to allow adding of new data
 
+		if($transyes) $obj_name = iconv(aw_global_get("charset"), "UTF-8", $arr["obj_inst"]->name());
+		else $obj_name = $arr["obj_inst"]->name();
 		$pathstr[] = html::href(array(
 			"url" => aw_url_change_var(array(
 				"meta" => "",
 			)),
-			"caption" => $arr["obj_inst"]->name(),
+			"caption" => $obj_name,
 		));
 
 		// I need to calculate the path
@@ -264,11 +276,13 @@ class metamgr extends class_base
 			{
 				if ($po->id() != $stop)
 				{
+					if($transyes) $po_name = iconv(aw_global_get("charset"), "UTF-8", $po->name());
+					else $po_name = $po->name();
 					$pathstr[] = html::href(array(
 						"url" => aw_url_change_var(array(
 							"meta" => $po->id(),
 						)),
-						"caption" => $po->name(),
+						"caption" => $po_name,
 					));
 				};
 			};
@@ -337,6 +351,17 @@ class metamgr extends class_base
 	}
 	function submit_meta($arr = array())
 	{
+		$transyes = $arr["obj_inst"]->prop("transyes");
+		//echo iconv("ISO-8859-1", "UTF-8", "This is a test.");
+		if($transyes)//juhul kui utf'ist salvestamine
+		{
+			foreach($arr["request"]["submeta"] as $key => $val)
+			{
+				$arr["request"]["submeta"][$key]["name"] = iconv("UTF-8", aw_global_get("charset"),  $val["name"]);
+				
+			}
+		}
+		
 		$obj = $arr["obj_inst"];
 		$new = $arr["request"]["submeta"]["new"];
 		if ($new["name"])
@@ -354,7 +379,7 @@ class metamgr extends class_base
 			$no->set_comment($new["value"]);
 			$no->set_name($new["name"]);
 			$no->set_prop("ord",(int)$new["ord"]);
-			$no->set_meta("tolge", $new["tolge"]);
+			if($transyes) $no->set_meta("tolge", $new["tolge"]);
 			$no->save();
 		};	
 		$submeta = $arr["request"]["submeta"];
@@ -367,7 +392,7 @@ class metamgr extends class_base
 				$so->set_name($sval["name"]);
 				$so->set_comment($sval["value"]);
 				$so->set_prop("ord",$sval["ord"]);
-				$so->set_meta("tolge", $sval["tolge"]);
+				if($transyes) $so->set_meta("tolge", $sval["tolge"]);
 				$so->save();
 			};
 		};
@@ -404,12 +429,14 @@ class metamgr extends class_base
 					$parent = "mn_" . $o->parent();
 				};
 				$id = $o->id();
+				if($arr["obj_inst"]->prop("transyes")) $object_name = iconv(aw_global_get("charset"), "UTF-8", $o->name());
+				else $object_name = $o->name();
 				if ($this->rw_tree[$id])
 				{
 					$toolbar->add_sub_menu(array(
 						"name" => "mn_" . $id,
 						"parent" => $parent,
-						"text" => $o->name(),
+						"text" => $object_name,
 						"disabled" => ($id == $arr["request"]["meta"]),
 					));
 
@@ -417,7 +444,7 @@ class metamgr extends class_base
 						"name" => "mnx_" . $id,
 						"parent" => "mn_" . $id,
 						"text" => 
-									"<b>".$o->name()."</b>",
+									"<b>".$object_name."</b>",
 						"url" => "javascript:document.changeform.meta.value='$id';document.changeform.action.value='move_items';document.changeform.submit()",
 						"disabled" => ($id == $arr["request"]["meta"]),
 					));
@@ -427,7 +454,7 @@ class metamgr extends class_base
 					$toolbar->add_menu_item(array(
 						"name" => "mn_" . $id,
 						"parent" => $parent,
-						"text" => $o->name(),
+						"text" => $object_name,
 						"url" => "javascript:document.changeform.meta.value='$id';document.changeform.action.value='move_items';document.changeform.submit()",
 						"disabled" => ($o->parent() == $arr["request"]["meta"]),
 					));
