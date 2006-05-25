@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.20 2006/05/21 07:31:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.21 2006/05/25 10:21:27 voldemar Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -21,6 +21,10 @@
 	@property result_no_form type=checkbox ch_value=1
 	@comment Näita otsingutulemusi ilma otsinguvormita. Ei mõjuta admin liidese otsingut.
 	@caption Tulemused otsinguvormita
+
+	@property search_result_no_redirect type=checkbox ch_value=1
+	@comment Otsingutulemustelt objekti detailvaatele ei suunata. Ei mõjuta admin liidese otsingut.
+	@caption Suunamiseta
 
 	@property result_pageselector_pos type=select
 	@comment Otsingutulemuste tabeli navigatsiooni asukoht. Ei mõjuta admin liidese otsingut.
@@ -672,14 +676,14 @@ class realestate_search extends class_base
 	function show($arr)
 	{
 		enter_function("re_search::show");
+		$this_object = obj ($arr["id"]);
 
-		if (is_oid ($_GET["realestate_show_property"]))
+		if (is_oid ($_GET["realestate_show_property"]) and !$this_object->prop("search_result_no_redirect"))
 		{
 			return $this->show_property ($arr);
 		}
 
 		enter_function("re_search::show - init & generate form & search");
-		$this_object = obj ($arr["id"]);
 		$visible_formelements = (array) $this_object->prop ("formelements");
 		$this->result_table_recordsperpage = (int) $this_object->prop ("searchform_pagesize");
 
@@ -758,12 +762,12 @@ class realestate_search extends class_base
 			);
 		}
 		$search = $this->get_search_args ($args, $this_object);
-		
+
 		//äkki teeks nii?
 		if(!$search["sort_by"]) $search["sort_by"]=$this_object->meta("searc_sort_by");
 		if(!$search["sort_by"]) $search["sort_by"]=$this_object->prop("default_searchparam_sort_by");
 		if(!$search["sort_ord"]) $search["sort_ord"]=$this_object->prop("default_searchparam_sort_order");
-		
+
 		if (!$this_object->prop ("result_no_form"))
 		{
 			### captions
