@@ -30,6 +30,17 @@
             <caption>Tulemused otsinguvormita</caption>
       </property>
       <property>
+            <name>search_result_no_redirect</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <comment>Otsingutulemustelt objekti detailvaatele ei suunata. Ei m&amp;otilde;juta admin liidese otsingut.</comment>
+            <caption>Suunamiseta</caption>
+      </property>
+      <property>
             <name>result_pageselector_pos</name>
             <table>objects</table>
             <group>general</group>
