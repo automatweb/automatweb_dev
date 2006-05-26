@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.19 2005/10/03 10:17:30 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.20 2006/05/26 13:06:06 kristo Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -34,20 +34,60 @@ class gantt_chart extends class_base
 		return array($property["name"] => $property);
 	}
 
-	// Configure chart
-	// Arguments:
-	// string chart_id - ...
-	// unix_timestamp start - Chart start time. defaults to start of week back from current time.
-	// unsigned_int columns - Number of divisions in chart (e.g. 7 days for a chart depicting one week). Default is 7.
-	// unsigned_int subdivisions - Number of subdivisions in column (e.g. 24 hours for a column depicting one day). Default is 1 (meaning subdivision & column coincide).
-	// unsigned_int column_length - Length of one division in seconds. Default is 86400.
-	// unsigned_int width - Chart width in pixels. Default is 1000.
-	// unsigned_int row_height - Row height in pixels. Default is 12.
-	// string row_dfn - Title for row-titles column. Default is "Ressurss".
-	// string style - Style to use (default| ... ).
-	// bool row_anchors - Make hyperlinks of row names ("false" not impl. yet).
-	// bool bar_anchors - Make hyperlinks of bars ("false" not impl. yet).
-	// unsigned_int timespans - Number of time stops at the top.
+	/**  Configure chart
+		@attrib api=1 params=name
+
+		@param chart_id optional type=string
+			Then name of the chart
+
+		@param start optional type=timestamp
+			Chart start time. defaults to start of week back from current time.
+
+		@param columns optional type=int
+			Number of divisions in chart (e.g. 7 days for a chart depicting one week). Default is 7.
+
+		@param subdivisions optional type=int
+			Number of subdivisions in column (e.g. 24 hours for a column depicting one day). Default is 1 (meaning subdivision & column coincide).
+
+		@param column_length optional type=int
+			Length of one division in seconds. Default is 86400.
+
+		@param width optional type=int
+			Chart width in pixels. Default is 1000.
+
+		@param row_height optional type=int
+			Row height in pixels. Default is 12.
+
+		@param row_dfn optional type=string
+			Title for row-titles column. Default is "Ressurss".
+
+		@param style optional type=string
+			Style to use (default| ... ).
+
+		@param row_anchors optional type=bool
+			Make hyperlinks of row names ("false" not impl. yet).
+
+		@param bar_anchors optional type=bool
+			Make hyperlinks of bars ("false" not impl. yet).
+
+		@param timespans optional type=int
+			Number of time stops at the top.
+
+		@errors none
+		@returns none
+
+		@examples
+			$chart = get_instance("vcl/gantt_chart");
+			$chart->configure_chart (array (
+				"chart_id" => "bt_gantt",
+				"style" => "aw",
+				"start" => get_week_start(),
+				"end" => get_week_start() + 7*24*3600,
+				"width" => 850,
+				"row_height" => 10,
+			));
+			
+	**/
 	function configure_chart ($arr)
 	{
 		$this->start = empty ($arr["start"]) ? (time () - 302400) : (int) $arr["start"];
@@ -70,22 +110,56 @@ class gantt_chart extends class_base
 		$this->cell_width = ceil ($this->cell_length / $this->pixel_length);
 	}
 
-	// Configure chart navigation
-	// Arguments:
-	// bool show - If set to "false", navigation won't be shown, default is "true".
+	/** Configure chart navigation
+		@attrib api=1 params=name
+
+		@param show optional type=bool
+			If set to "false", navigation won't be shown, default is "true".
+
+	**/
 	function configure_navigation ($arr)
 	{
 		$this->navigation = (bool) (empty ($arr["show"]) ? true : $arr["show"]);
 	}
 
-	// Adds one row.
-	// Arguments:
-	// string type - Row type data|separator. Default is data.
-	// bool expanded - Whether to initially show consequent rows after separator or not. applicable when row type is "separator". Default is TRUE.
-	// string name - Identifier for the row.
-	// string title - Title for the row.
-	// string uri - URI for row title. Applies if row_anchors property is set to true for chart.
-	// string target - URI target for row title. Applies if row_anchors property is set to true for chart.
+	/** Adds one row.
+		@attrib api=1 params=name
+
+		@param type optional type=string
+			Row type data|separator. Default is data.
+
+		@param expanded optional type=bool
+			Whether to initially show consequent rows after separator or not. applicable when row type is "separator". Default is TRUE.
+
+		@param name required type=string
+			Identifier for the row.
+
+		@param title required type=string
+			Title for the row.
+
+		@param uri optional type=string
+			URI for row title. Applies if row_anchors property is set to true for chart.
+
+		@param target optional type=string
+			URI target for row title. Applies if row_anchors property is set to true for chart.
+
+		@returns none
+		@errors none
+
+		@examples
+			$gt_list = $this->get_undone_bugs_by_p($p);
+			foreach($gt_list as $gt)
+			{
+				$chart->add_row (array (
+					"name" => $gt->id(),
+					"title" => $gt->name(),
+					"uri" => html::get_change_url(
+						$gt->id(),
+						array("return_url" => get_ru())
+					)
+				));
+			}
+	**/
 	function add_row ($arr)
 	{
 		$row_name = $arr["name"];
@@ -106,12 +180,43 @@ class gantt_chart extends class_base
 		);
 	}
 
-	// Defines column. Columns can be defined only after calling configure_chart.
-	// Arguments:
-	// unsigned_int col - Column number from left, 0 is row definitions column.
-	// string title - Title for the column.
-	// string uri - URI for column title.
-	// string target - URI target for column title.
+	/** Defines column. Columns can be defined only after calling configure_chart.
+		@attrib api=1 params=name
+
+		@param col required type=int
+			Column number from left, 0 is row definitions column.
+
+		@param title required type=string
+			Title for the column.
+
+		@param uri required type=string
+			URI for column title.
+
+		@param target optional type=string
+			URI target for column title.
+
+		@errors none
+		@returns none
+
+		@examples
+			$i = 0;
+			$days = array ("P", "E", "T", "K", "N", "R", "L");
+
+			while ($i < $columns)
+			{
+				$day_start = (get_day_start() + ($i * 86400));
+				$day = date ("w", $day_start);
+				$date = date ("j/m/Y", $day_start);
+				$uri = aw_url_change_var ("mrp_chart_length", 1);
+				$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
+				$chart->define_column (array (
+					"col" => ($i + 1),
+					"title" => $days[$day] . " - " . $date,
+					"uri" => $uri,
+				));
+				$i++;
+			}
+	**/
 	function define_column ($arr)
 	{
 		$col = $arr["col"];
@@ -126,17 +231,53 @@ class gantt_chart extends class_base
 		);
 	}
 
-	// Adds one bar/data object to specified row.
-	// Arguments:
-	// string row - Row name to which to add new bar. Required.
-	// unix_timestamp start - Bar starting place on timeline. Required.
-	// unsigned_int length - Bar length in seconds. Required.
-	// int layer - Layer to put the bar on. 0 is default. Layers with larger numbers are shown on top.
-	// string title - Title for the bar.
-	// string colour - CSS colour definition, name or rgb value.  Default is "silver".
-	// bool nostartmark - Don't show bar start mark. Default is false.
-	// string uri - URI for bar hyperlink. Applies if bar_anchors property is set to true for chart.
-	// string target - URI target for bar hyperlink. Applies if bar_anchors property is set to true for chart.
+	/** Adds one bar/data object to specified row.
+		@attrib api=1 params=name
+
+		@param row required type=string
+			Row name to which to add new bar. 
+
+		@param start required type=timestamp
+			Bar starting place on timeline. 
+
+		@param length required type=int
+			Bar length in seconds. 
+
+		@param layer optional type=int 
+			Layer to put the bar on. 0 is default. Layers with larger numbers are shown on top.
+
+		@param title required type=string
+			Title for the bar.
+
+		@param colour optional type=string
+			CSS colour definition, name or rgb value.  Default is "silver".
+
+		@param nostartmark optional type=bool
+			Don't show bar start mark. Default is false.
+
+		@param uri optional type=string
+			URI for bar hyperlink. Applies if bar_anchors property is set to true for chart.
+
+		@param target optional type=string
+			URI target for bar hyperlink. Applies if bar_anchors property is set to true for chart.
+
+		@examples
+			$wd_end = mktime($day_end, 0, 0, date("m", $start), date("d", $start), date("Y", $start));
+			$tot_len = $length;
+			$length = $wd_end - $start;
+			$remaining_len = $tot_len - $length;
+			$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $start + $length)." ) ";
+
+			$bar = array (
+				"id" => $gt->id (),
+				"row" => $gt->id (),
+				"start" => $start,
+				"length" => $length,
+				"title" => $title,
+			);
+
+			$chart->add_bar ($bar);
+	**/
 	function add_bar ($arr)
 	{
 		$row = $arr["row"];
@@ -162,6 +303,14 @@ class gantt_chart extends class_base
 		);
 	}
 
+	/** draws the chart
+		@attrib api=1
+
+		@returns The html for the chart
+
+		@examples
+			simple example to draw a gantt chart can be found in CL_PROJECT::_goals_gantt
+	**/
 	function draw_chart ()
 	{
 		### parse style
