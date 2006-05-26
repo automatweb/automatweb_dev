@@ -66,6 +66,20 @@ class acl_base extends db_connector
 
 	function add_acl_group_to_obj($gid,$oid,$aclarr = array(), $invd = true)
 	{
+		if ($gid < 1 || !is_numeric($gid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::add_acl_group_to_obj(%s, %s,..): the given gid is incorrect"), $gid, $oid)
+			));
+		}
+		if (!is_oid($oid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::add_acl_group_to_obj(%s, %s,..): the given oid is incorrect"), $gid, $oid)
+			));
+		}
 		if (!$this->db_fetch_field("SELECT gid FROM acl WHERE gid = '$gid' AND oid = '$oid'", "gid"))
 		{
 			$this->db_query("insert into acl(gid,oid) values($gid,$oid)");
@@ -87,6 +101,20 @@ class acl_base extends db_connector
 
 	function add_acl_group_to_new_obj($gid,$oid, $aclarr)
 	{
+		if ($gid < 1 || !is_numeric($gid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::add_acl_group_to_new_obj(%s, %s,..): the given gid is incorrect"), $gid, $oid)
+			));
+		}
+		if (!is_oid($oid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::add_acl_group_to_new_obj(%s, %s,..): the given oid is incorrect"), $gid, $oid)
+			));
+		}
 		$acl = $this->get_acl_value($aclarr);
 		$this->db_query("INSERT INTO acl(acl,oid,gid) VALUES($acl,$oid,$gid)");
 
@@ -105,6 +133,20 @@ class acl_base extends db_connector
 
 	function remove_acl_group_from_obj($gid,$oid)
 	{
+		if ($gid < 1 || !is_numeric($gid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::remove_acl_group_from_obj(%s, %s,..): the given gid is incorrect"), $gid, $oid)
+			));
+		}
+		if (!is_oid($oid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::remove_acl_group_from_obj(%s, %s,..): the given oid is incorrect"), $gid, $oid)
+			));
+		}
 		$this->db_query("DELETE FROM acl WHERE gid = $gid AND oid = $oid");
 
 		if (aw_ini_get("acl.use_new_acl"))
@@ -127,6 +169,20 @@ class acl_base extends db_connector
 
 	function save_acl($oid,$gid,$aclarr, $invd = true)
 	{
+		if ($gid < 1 || !is_numeric($gid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::save_acl(%s, %s,..): the given gid is incorrect"), $gid, $oid)
+			));
+		}
+		if (!is_oid($oid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::save_acl(%s, %s,..): the given oid is incorrect"), $gid, $oid)
+			));
+		}
 		$acl = $this->get_acl_value($aclarr);
 		$this->db_query("UPDATE acl SET acl = $acl WHERE oid = $oid AND gid = $gid");
 
@@ -156,6 +212,20 @@ class acl_base extends db_connector
 	// !saves the acl for oid<=>gid relation, but only touches the acls set in mask, leaves others in tact
 	function save_acl_masked($oid,$gid,$aclarr,$mask)
 	{
+		if ($gid < 1 || !is_numeric($gid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::save_acl_masked(%s, %s,..): the given gid is incorrect"), $gid, $oid)
+			));
+		}
+		if (!is_oid($oid))
+		{
+			error::raise(array(
+				"id" => "ERR_ACL",
+				"msg" => sprintf(t("acl_base::save_acl_masked(%s, %s,..): the given oid is incorrect"), $gid, $oid)
+			));
+		}
 		$acl = $this->get_acl_for_oid_gid($oid,$gid);
 
 		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
