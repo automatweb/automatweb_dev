@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.49 2006/04/07 13:40:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.50 2006/05/26 09:44:33 dragut Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -80,7 +80,7 @@ class cache extends core
 	// !tshekib et kas objekt on cachetud ja kas cachemist yldse kasutatakse. 
 	// kui kasutatakse ja objekt on olemas, siis tagastab objekti cache
 	// kui ei, siis false
-	// $oid - objekti id, mille kohta cahet kysitaxe
+	// $oid - objekti id, mille kohta cachet kysitaxe
 	// $arr - array objekti kuju identivatest parameetritest (periood ntx), millest moodustatakse cache faili nimi.
 	function get($oid,$arr, $real_oid = NULL)
 	{
@@ -136,7 +136,7 @@ class cache extends core
 
 		@examples
 			$cache = get_instance('cache');
-			$cache->file_set('foo', 'bar'	
+			$cache->file_set('foo', 'bar');
 	**/
 	function file_set($key,$value)
 	{
@@ -219,10 +219,9 @@ class cache extends core
 			none
 
 		@returns
-			Contents of the file in cache.	
-			false 
-				if page_cache is not set in aw.ini
-				if supplied timestamp has newer time than the file's modification time
+			- Contents of the file in cache.	
+			- false if page_cache is not set in aw.ini
+			- false if supplied timestamp has newer time than the file's modification time
 	
 		@comment
 			Checks, if the file in cache modification time is older than the time supplied via parameter. If it is older, then returns false, else filecontent.
@@ -234,7 +233,7 @@ class cache extends core
 			sleep(5);
 			// file in cache is newer than supplied timestamp, so file's content is returned
 			var_dump($cache->file_get_ts('foo', time() - 3600));
-			// file in cache is older than supplide timestamp, so false is returned
+			// file in cache is older than supplied timestamp, so false is returned
 			var_dump($cache->file_get_ts('foo', time()));
 		
 	**/
@@ -289,12 +288,17 @@ class cache extends core
 		@attrib params=pos api=1
 
 		@param pt required type=string
+			Folder under $site/pagecache
+		@param oid required type=int
+			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
+		@param fn required type=string
+			Filename containing cached data
 
 		@errors
 			none
 
 		@returns
-			none
+			- false if file does not exist in cache
 	
 		@comment
 			Not recommended to use, because include() seems to be slower than eval().
@@ -316,12 +320,17 @@ class cache extends core
 		@attrib params=pos api=1
 
 		@param pt required type=string
+			Folder under $site/pagecache
+		@param oid required type=int
+			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
+		@param fn required type=string
+			Filename containing cached data
 
 		@errors
 			none
 
 		@returns
-			none
+			false if file does not exist in cache
 	
 		@comment
 			Not recommended to use, because include() seems to be slower than eval().
@@ -343,17 +352,27 @@ class cache extends core
 		@attrib params=pos api=1
 
 		@param pt required type=string
+			Folder under $site/pagecache
+		@param oid required type=int
+			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
+		@param fn required type=string
+			Filename containing cached data
+		@param dat required type=string
+			Data to be cached
 
 		@errors
-			none
+			Throws error when file cannot be opened for writing
 
 		@returns
 			none
 	
 		@comment
 			Not recommended to use, because include() seems to be slower than eval().
+
 		@examples
-			none		
+			$cache = get_instance('cache');
+			$cache->file_set_incl_pt_oid('foo', 1234, 'bar', 'Hello World');
+			// creates into folder $site/pagecache/foo/4/ file bar which contains 'Hello World'
 	**/
 	function file_set_incl_pt_oid($pt, $oid, $fn, $dat)
 	{
@@ -370,17 +389,27 @@ class cache extends core
 		@attrib params=pos api=1
 
 		@param pt required type=string
+			Folder under $site/pagecache
+		@param subf required type=string
+			Folder under the folder specified by $pt parameter 
+		@param fn required type=string
+			Filename containing cached data
+		@param dat required type=string
+			Data to be cached
 
 		@errors
-			none
+			Throws error when file cannot be opened for writing
 
 		@returns
 			none
 	
 		@comment
 			Not recommended to use, because include() seems to be slower than eval().
+
 		@examples
-			none		
+			$cache = get_instance('cache');
+			$cache->file_set_incl_pt('foo', 'asd', 'bar', 'Hello World');
+			// creates into folder $site/pagecache/foo/asd/ file bar which contains 'Hello World'
 	**/
 	function file_set_incl_pt($pt, $subf, $fn, $dat)
 	{
@@ -396,11 +425,16 @@ class cache extends core
 	/**
 		@attrib params=pos api=1
 
-		@param param1 required type=string
-			comment
-
+		@param pt required type=string
+			Folder under $site/pagecache
+		@param oid required type=int
+			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
+		@param fn required type=string
+			Filename containing cached data
+		@param cont required type=string
+			Data to be cached
 		@errors
-			none
+			Throws error when file cannot be opened for writing
 
 		@returns
 			none
@@ -410,6 +444,8 @@ class cache extends core
 
 		@examples
 			$cache = get_instance('cache');
+			$cache->file_set_pt_oid('foo', 1234, 'bar', 'Hello World');
+			// creates into folder $site/pagecache/foo/4/ file bar which contains 'Hello World'
 
 	**/
 	function file_set_pt_oid($pt, $oid, $fn, $cont)
@@ -420,22 +456,28 @@ class cache extends core
 
 	/**
 		@attrib params=pos api=1
-
-		@param param1 required type=string
-			comment
+			
+		@param pt required type=string
+			Folder under $site/pagecache
+		@param oid required type=int
+			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
+		@param fn required type=string
+			Filename containing cached data
 
 		@errors
 			none
 
 		@returns
-			none
+			false if file cannot be opened for reading
 	
 		@comment
 			none
 
 		@examples
 			$cache = get_instance('cache');
-	
+			$cache->file_set_pt_oid('foo', 1234, 'bar', 'Hello World');
+			$val = $cache->file_get_pt_oid('foo', 1234, 'bar');
+			echo $val; // prints 'Hello World'
 	**/
 	function file_get_pt_oid($pt, $oid, $fn)
 	{
@@ -446,20 +488,36 @@ class cache extends core
 	/**
 		@attrib params=pos api=1
 
-		@param param1 required type=string
-			comment
-
+		@param pt required type=string
+			Folder under $site/pagecache
+		@param oid required type=int
+			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
+		@param fn required type=string
+			Filename containing cached data
+		@param ts required type=int
+			Timestamp
 		@errors
 			none
 
 		@returns
-			none
-	
+			- file content
+			- false if timestamp is bigger than file modification time
+			- false if file cannot be opened for reading
+
 		@comment
-			none
+			Checks, if the file in cache modification time is older than the time supplied via parameter. If it is older, then returns false, else filecontent.
+
 
 		@examples
 			$cache = get_instance('cache');
+			$cache->file_set_pt_oid('foo', 1234, 'bar', 'Hello World');
+			sleep(5);
+			// file in cache is newer than supplied timestamp, so file's content is returned
+			var_dump($cache->file_get_pt_oid_ts('foo', 1234, 'bar', time() - 3600));
+
+			// file in cache is older than supplied timestamp, so false is returned
+			var_dump($cache->file_get_pt_oid_ts('foo', 1234, 'bar', time()));
+
 	
 	**/
 	function file_get_pt_oid_ts($pt, $oid, $fn, $ts)
@@ -471,11 +529,16 @@ class cache extends core
 	/**
 		@attrib params=pos api=1
 
-		@param param1 required type=string
-			comment
-
+		@param pt required type=string
+			Folder under $site/pagecache
+		@param subf required type=string
+			Folder under the folder specified by $pt parameter 
+		@param fn required type=string
+			Filename containing cached data
+		@param cont required type=string
+			Data to be cached
 		@errors
-			none
+			Throws error when file cannot be opened for writing
 
 		@returns
 			none
@@ -485,7 +548,8 @@ class cache extends core
 
 		@examples
 			$cache = get_instance('cache');
-		
+			$cache->file_set_pt('foo', 'asd', 'bar', 'Hello World');
+			// creates into folder $site/pagecache/foo/asd/ file bar which contains 'Hello World'
 	**/
 	function file_set_pt($pt, $subf, $fn, $cont)
 	{
@@ -507,20 +571,29 @@ class cache extends core
 	/**
 		@attrib params=pos api=1
 
-		@param param1 required type=string
-			comment
+		@param pt required type=string
+			Folder under $site/pagecache
+		@param subf required type=string
+			Folder under the folder specified by $pt parameter 
+		@param fn required type=string
+			Filename containing cached data
 
 		@errors
 			none
 
 		@returns
-			none
+			- file content
+			- false if file does no exist in cache or cannot be opened for reading
+			
 	
 		@comment
 			none
 
 		@examples
 			$cache = get_instance('cache');
+			$cache->file_set_pt('foo', 'asd', 'bar', 'Hello World');
+			$val = $cache->file_get_pt('foo', 'asd', 'bar');
+			echo $val; // prints 'Hello World'
 	
 	**/
 	function file_get_pt($pt, $subf, $fn)
@@ -539,20 +612,36 @@ class cache extends core
 	/**
 		@attrib params=pos api=1
 
-		@param param1 required type=string
-			comment
+		@param pt required type=string
+			Folder under $site/pagecache
+		@param subf required type=string
+			Folder under the folder specified by $pt parameter 
+		@param fn required type=string
+			Filename containing cached data
+		@param ts required type=int
+			Timestamp
 
 		@errors
 			none
 
 		@returns
-			none
+			- file content
+			- false if timestamp is bigger than file modification time
+			- false if file cannot be opened for reading
 	
 		@comment
-			none
+			Checks, if the file in cache modification time is older than the time supplied via parameter. If it is older, then returns false, else filecontent.
 
 		@examples
 			$cache = get_instance('cache');
+			$cache->file_set_pt_oid('foo', 1234, 'bar', 'Hello World');
+			sleep(5);
+			// file in cache is newer than supplied timestamp, so file's content is returned
+			var_dump($cache->file_get_pt_ts('foo', 1234, 'bar', time() - 3600));
+
+			// file in cache is older than supplied timestamp, so false is returned
+			var_dump($cache->file_get_pt_ts('foo', 1234, 'bar', time()));
+
 		
 	**/
 	function file_get_pt_ts($pt, $subf, $fn, $ts)
@@ -577,8 +666,8 @@ class cache extends core
 	/**
 		@attrib params=pos api=1
 
-		@param param1 required type=string
-			comment
+		@param pt required type=string
+			Folder under $site/pagecache
 
 		@errors
 			none
@@ -587,10 +676,11 @@ class cache extends core
 			none
 	
 		@comment
-			none	
+			Clears the cache folder
 
 		@examples
 			$cache = get_instance('cache');
+			$cache->file_clear_pt('foo');
 
 	**/
 	function file_clear_pt($pt)
@@ -607,20 +697,23 @@ class cache extends core
 	/**
 		@attrib params=pos api=1
 
-		@param param1 required type=string
-			comment
+		@param pt required type=string
+			Folder under $site/pagecache
+		@param oid required type=int
+			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
 
 		@errors
-			none
+			throws error if the folder cannot be renamed
 
 		@returns
 			none
 	
 		@comment
-			none
+			
 
 		@examples
 			$cache = get_instance('cache');
+			$cache->file_clear_pt_oid('foo', 1234);
 			
 	**/
 	function file_clear_pt_oid($pt, $oid)
@@ -645,8 +738,12 @@ class cache extends core
 	/**
 		@attrib params=pos api=1
 
-		@param param1 required type=string
-			comment
+		@param pt required type=string
+			Folder under $site/pagecache
+		@param oid required type=int
+			Object id. The last number of the id is used as a folder name created under the folder specified by $pt parameter
+		@param fn required type=string
+			Filename containing cached data
 
 		@errors
 			none
@@ -655,10 +752,11 @@ class cache extends core
 			none
 	
 		@comment
-			none
+			deletes the file from cache
 
 		@examples
 			$cache = get_instance('cache');
+			$cache->file_clear_pt_oid_fn('foo', 1234, 'bar');
 		
 	**/
 	function file_clear_pt_oid_fn($pt, $oid, $fn)
@@ -673,11 +771,13 @@ class cache extends core
 	/**
 		@attrib params=pos api=1
 
-		@param param1 required type=string
-			comment
+		@param pt required type=string
+			Folder under $site/pagecache
+		@param subf required type=string
+			Folder under the folder specified by $pt parameter 
 
 		@errors
-			none
+			Throws error when the folder cannot be renamed.
 
 		@returns
 			none
@@ -687,6 +787,7 @@ class cache extends core
 
 		@examples
 			$cache = get_instance('cache');
+			$cache->file_clear_pt_sub('foo', 'asd');
 			
 	**/
 	function file_clear_pt_sub($pt, $subf)
@@ -733,13 +834,14 @@ class cache extends core
 			none
 
 		@returns
-			none
+			- false if file is not readable
+			- false if valid cache_id could not be calculated
 	
 		@comment
-		
-
+			none
+			
 		@examples
-			$cache = get_instance('cache');
+			none
 		
 	**/
 	function get_cached_file($args = array())
@@ -874,7 +976,7 @@ class cache extends core
 			none
 
 		@returns
-			Returns the timestamp of the last modified object.
+			Timestamp of the last modified object.
 	
 		@comment
 			If the method is called first time and there is no objlastmod file in cache, then last modified object is taken (from the objects table by the field modified) and it will be cached into objlastmod file in cache. If site_show.objlastmod_only_menu aw.ini setting is set (for example to 1), then last modified menu object is taken (class_id = CL_MENU)
