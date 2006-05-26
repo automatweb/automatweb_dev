@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.77 2006/05/21 07:28:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.78 2006/05/26 15:01:09 markop Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -68,19 +68,33 @@ class aw_table extends aw_template
 		// if true and chooser is used, checking chooser checkboxes changes the style of the row as well
 		$this->chooser_hilight = true;
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+	@param arg required type=bool
+		If it is false, the table is not sortable
+	**/
 	function set_sortable($arg)
 	{
 		$this->sortable = $arg;
 	}
 
+	/**
+	@attrib api=1 params=pos
+	@param arg required type=array
+	**/
 	function set_rgroupby($arg)
 	{
 		$this->rgroupby = $arg;
 	}
 
-	/** some users need to put simple plain text above the
-	    table, give them a setter for this
+	/**
+	@attrib api=1 params=pos
+	@param $arr required type=array
+		table header
+	@comments
+		some users need to put simple plain text above the
+		table, give them a setter for this
 	**/
 	function set_header($arr)
 	{
@@ -89,6 +103,15 @@ class aw_table extends aw_template
 
 	////
 	// !sisestame andmed
+	/**
+	@attrib api=1 params=pos
+	@param $row required type=array
+		array(column name => value, column name => value, column name => value , ....)
+	@return False, if filter applying fails, true, if everything is ok.
+	@example ${draw}
+	@comments
+		add's a row to the table
+	**/
 	function define_data($row)
 	{
 		### apply filter
@@ -134,15 +157,29 @@ class aw_table extends aw_template
 		{
 			$this->d_row_cnt++;
 		}
-
 		return true;
 	}
-
+	
+	/**
+	@attrib api=1 params=pos
+	@param $idx required type=int
+		an array key
+	@param $row required type=array
+		array(column name => value, column name => value, column name => value , ....)
+	@comments
+		sets $this->data[$idx] = $row
+	**/
 	function set_data($idx, $row)
 	{
 		$this->data[$idx] = $row;
 	}
 
+	/**
+	@attrib api=1
+	@return array(row id => row data, row id => row data, ....)
+	@comments 
+		returns all data set for the table
+	**/
 	function get_data()
 	{
 		return $this->data;
@@ -150,6 +187,11 @@ class aw_table extends aw_template
 
 	////
 	// !Clear the data
+	/**
+	@attrib api=1
+	@comments 
+		clear the data array
+	**/
 	function clear_data()
 	{
 		$this->data = array();
@@ -158,44 +200,78 @@ class aw_table extends aw_template
 	////
 	// !merge the given data with the last data entered
 	// XXX: does not seem to be used?
+	/**
+	@attrib api=1 params=pos
+	@param $row required type=array
+		Array(column name => value, column name => value, column name => value , ....)
+	@comments 
+		merges $row with last row in data array
+	**/
 	function merge_data($row)
 	{
 		$cnt = sizeof($this->data);
 		$this->data[$cnt-1]  = array_merge($this->data[$cnt-1],$row);
 	}
 
-	////
-	// !here you can add action rows to the table
-	// link - part of the action's link,
-	// field - the field that will be used to complete the action link,
-	// caption - action text
-	// cspan - colspan
-	// rspan - rowspan
-	// remote - if specified, the link will open in a new window and this parameter also must contain the height,width of the popup
-	//
+	/**
+	@attrib api=1 params=name
+	@param link optional type=string
+		Part of the action's link,
+	@param field optional type=string
+		The field that will be used to complete the action link,
+	@param caption optional type=string
+		Action text
+	@param cspan optional type=string
+		Colspan
+	@param rspan optional type=string
+		Rowspan
+	@param remote optional type=string
+		If specified, the link will open in a new window and this parameter also must contain the height,width of the popup
+		)
+	@comments 
+		here you can add action rows to the table
+	**/
 	function define_action($row)
 	{
 		$this->actions[] = $row;
 	}
 
-	////
-	// !Defines a chooser (a column of checkboxes
+	/**
+	@attrib api=1 params=name
+	@param $name required type=string
+		checkbox name
+	@param $field required type=string
+		field name
+	@example ${draw}
+	@comments 
+		Defines a chooser (a column of checkboxes)
+	**/	
 	function define_chooser($arr)
 	{
 		$this->chooser_config = $arr;
 		$this->use_chooser = true;
 	}
-
+	
+	/**
+	@attrib api=1
+	@comments 
+		Removes a chooser
+	**/
 	function remove_chooser()
 	{
 		$this->chooser_config = NULL;
 		$this->use_chooser = false;
 	}
 
-	////
-	// !here you can define additional headers
-	// caption - the caption at the left of the header
-	// links - an array of link => text pairs that will be put in the header
+	/**
+	@attrib api=1 params=pos
+	@param $caption required type=string
+		The caption at the left of the header
+	@param $links optional type=array
+		An array of link => text pairs that will be put in the header
+	@comments 
+		Here you can define additional headers
+	**/
 	function define_header($caption,$links = array())
 	{
 		$this->headerstring = $caption;
@@ -224,59 +300,67 @@ class aw_table extends aw_template
 		$this->headerlinks = join(" | ",$hlinks);
 	}
 
-	////
-	// !this lets you set a field as numeric, so that they will be sorted correctly
+	/**
+	@attrib api=1 params=pos
+	@param $elname required type=string
+		Field name
+	@comments 
+		This lets you set a field as numeric, so that they will be sorted correctly
+	**/
 	function set_numeric_field($elname)
 	{
 		$this->nfields[$elname] = 1;
 	}
 
-	////
-	// !sets the default sorting element(s) for the table
-	// if the sorting function finds that there are no other sorting arrangements made, then it will use
-	// the element(s) specified here.
-	// sortby - a single element or an array of elements.
-	//   sometimes the array can be a bit weird though - namely, the key specifies the column in which the
-	//   element is and that is used when determining if a column is sorted
-	//   but when doing the actual sorting, the value is used and that contains an ordinary element, not a column name
-	//   right now this only applies to form tables
-	//   - so, when setting an array, always have the key and value be the same, unless you really know what you are doing
+	/**
+	@attrib api=1 params=pos
+	@param $sortby required type=string/array
+		The default sorting element(s)
+	@example ${draw}
+	@comments 
+		sets the default sorting element(s) for the table
+		if the sorting function finds that there are no other sorting arrangements made, then it will use
+		the element(s) specified here.
+		sortby - a single element or an array of elements.
+		sometimes the array can be a bit weird though - namely, the key specifies the column in which the
+		element is and that is used when determining if a column is sorted
+		but when doing the actual sorting, the value is used and that contains an ordinary element, not a column name
+		right now this only applies to form tables
+		- so, when setting an array, always have the key and value be the same, unless you really know what you are doing
+		This lets you set a field as numeric, so that they will be sorted correctly
+	**/
 	function set_default_sortby($sortby)
 	{
 		$this->default_order = $sortby;
 	}
 
-	////
-	// !sets the default sorting order
-	// if the sorting function finds that there are no other sorting arrangements made, then it will use
-	// the order specified here.
-	// dir - a string (asc/desc) or an array of strings - it will be linked to the sort element by index
+	/**
+	@attrib api=1 params=pos
+	@param $dir required type=string/array
+		A string (asc/desc) or an array of strings - it will be linked to the sort element by index
+	@example ${draw}
+	@comments 
+		Sets the default sorting order
+		If the sorting function finds that there are no other sorting arrangements made, then it will use
+		The order specified here.
+	**/
 	function set_default_sorder($dir)
 	{
 		$this->default_odir = $dir;
 	}
 
 	/** defines that the table has a pager
-
-		@attrib api=1
-
+		@attrib api=1 params=name
 		@param type required type=string
 			"text" || "buttons" || "lb"
-
 		@param records_per_page required type=int
 			Number of records per page.
-
 		@param d_row_cnt required type=int
 			Number of records in total.
-
 		@param no_recount type=bool
-			?
-
 		@param position type=string
 			Pageselector position in table layout "top" || "bottom" || "both". default is "top".
-
 		@comment
-
 	**/
 	function define_pageselector($arr)
 	{
@@ -297,12 +381,19 @@ class aw_table extends aw_template
 		}
 	}
 
-	////
-	// !sorts the data previously entered
-	// field - optional, what to sort by. you really don't need to specify this, the table can manage it on it's own
-	// sorder - sorting order - asc/desc. you really don't need to specify this, the table can manage it on it's own
-	// rgroupby - an array of elements whose values will be grouped in the table
-	// vgroupby - array of elements that will be vertically grouped
+	/** sorts the data previously entered
+		@attrib api=1 params=name
+		@param field optional type=string
+			what to sort by. you really don't need to specify this, the table can manage it on it's own
+		@param sorder optional type=string
+			sorting order - asc/desc. you really don't need to specify this, the table can manage it on it's own
+		@param rgroupby optional type=array
+			An array of elements whose values will be grouped in the table
+		@param vgroupby optional type=array
+			Array of elements that will be vertically grouped
+		@example ${draw}
+		@return false, if $this->sortable is not true
+	**/
 	function sort_by($params = array())
 	{
 		if (!$this->sortable)
@@ -409,17 +500,13 @@ class aw_table extends aw_template
 		}
 	}
 
-	////
-	// !the sorting function. iow - the tricky bit
-	// it must sort the data correctly, taking into account whether it is numerical or not
-	// then it must sort first by the vgroup element(s), then rgroup element(s), and then the sorting element(s)
 	function sorter($a,$b)
 	{
 		// what the hell is going on here you ask? well.
-		// basically the idea is that we go over the sorted columns until we find two values that are different
-		// and then we can compare them and thus we get to sort the entire array.
-		// why don't we just concatenate the strings together? well, because what if the first is a text element, the next
-		// a number and the 3rd a text element - if we cat them together we lose the ability to do numerical comparisons..
+		//Basically the idea is that we go over the sorted columns until we find two values that are different
+		//and then we can compare them and thus we get to sort the entire array.
+		//why don't we just concatenate the strings together? well, because what if the first is a text element, the next
+		//a number and the 3rd a text element - if we cat them together we lose the ability to do numerical comparisons..
 		$v1=NULL;$v2=NULL;
 		$skip = false;
 
@@ -564,12 +651,63 @@ class aw_table extends aw_template
 		   return ($a["order"] < $b["order"]) ? -1 : 1;
 		}
 	}
-
+	
+	/** sets the REQUEST_URI
+		@attrib api=1 params=pos
+		@param ru required type=string
+			URL
+	**/
 	function set_request_uri($ru)
 	{
 		$this->REQUEST_URI = $ru;
 	}
 
+	/** Draws the table
+	@attrib api=1 params=name
+	@param records_per_page optional type=int
+		How many records per page
+	@param pageselector optional type=string
+		Defines witch page selector to use. Possibilities are text, buttons, lb
+	@param has_pages optional type=bool
+		If this is set, this table has pages
+	@param rgroupby optional type=string
+		If it is set, calculates how many elements are there in each rgroup and puts them in $this->rgroupcounts
+	@return string/html table
+	@example
+		classload("vcl/table");
+		$table = new aw_table(array(
+			"layout" => "generic"
+		));
+		$table->define_field(array(
+			"name" => "modify",
+			"caption" => t("Vaata/Muuda"),
+		));
+		$table->define_field(array(
+			"name" => "sisseastuja_nr",
+			"caption" => t("Sisseastuja Nr."),
+			"sortable" => 1
+		));		
+		$table->define_chooser(array(
+			"name" => "selection",
+			"field" => "sisseastuja_id",
+		));
+		$table->set_default_sortby("sisseastuja_nr");
+		$table->set_default_sorder("desc");
+		$table->sort_by();
+		$table->define_data(array(
+			"modify" => html::href(array(
+				"caption" => t("Muuda"),
+				"url" => $change_url,
+			)),
+			"sisseastuja_nr" => sprintf("%04d", $sisseastuja->prop("sisseastuja_nr")),
+			"sisseastuja_id" => $sisseastuja->id(),
+		));
+		$data = $table->draw(array(
+			"records_per_page" => 100,
+			"pageselector" => "text",
+			"has_pages" => 1
+		));
+	**/
 	function draw($arr = array())
 	{
 		// väljastab tabeli
@@ -1072,6 +1210,20 @@ class aw_table extends aw_template
 	}
 
 	// tagastab csv andmed, kustuda välja draw asemel
+	/**returns cvs data
+		@attrib api=1 params=pos
+		@param sep optional type=string default=;
+			csv separator
+		@return string/csv table
+		@example
+			if ($GLOBALS["get_csv_file"])
+			{
+				header('Content-type: application/octet-stream');
+				header('Content-disposition: root_access; filename="csv_output_'.$id.'.csv"');
+				print $ft->t->get_csv_file();
+				die();
+			};
+	**/
 	function get_csv_file($sep = ";")
 	{
 		//$sep = "\t";
@@ -1390,7 +1542,31 @@ class aw_table extends aw_template
 	}
 
 	var $filters_updated = false;
-
+	
+	/**Defines table field
+		@attrib api=1 params=name
+		@param name optional type=string
+			Field name
+		@param caption optional type=string
+			Field caption
+		@param sortable optional type=bool	
+			If set, the table is sortable
+		@param type optional type=string	
+			Field type
+		@param format optional type=string	
+			Field format
+		@param numeric optional type=bool	
+		
+		@param filter_compare optional
+			
+		@param order optional
+			
+		@param filter optional
+		
+		@param filter_options optional
+		
+		@example ${draw}
+	**/
 	function define_field($args = array())
 	{
 		if (!$this->filters_updated)
