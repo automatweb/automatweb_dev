@@ -10,6 +10,24 @@ class grid_editor extends class_base
 		$this->sub_merge = 1;
 	}
 
+	/** Initializes the grid editor with the data given
+		@attrib api=1 params=pos
+
+		@param data required type=array
+			The grid data
+
+		@errors none
+		@returns none
+
+		@comment 
+			if you pass an empty array as the data, then the grid is initialized to an 1x1 grid with one empty cell.
+		
+		@examples
+			$ge = get_instance("vcl/grid_editor");
+			$ge->_init_table($obj->meta("grid"));
+			$ge->set_cell_content(1,1, t("allah"));
+			$obj->set_meta("$ge->_get_table());
+	**/
 	function _init_table($data)
 	{
 		$this->arr = $data;
@@ -131,6 +149,45 @@ class grid_editor extends class_base
 		}
 	}
 
+	/** displays the main grid editing table
+		@attrib api=1 params=pos
+
+		@param data required type=array 
+			The grid data, returned by the grid editor
+
+		@param oid required type=oid
+			The object id of the object the grid is attached to 
+
+		@param params optional type=array
+			An array of other paramters, can contain:
+				cell_content_callback => array(&$object, "method_name", $parameter_to_method)
+					if this key is set, then for each cell in the grid, this method will be called with 
+					the parameter given, the row and the column of the cell and it must return the html
+					that will be displayed in the editing view in the cell
+		
+		@returns The html for the main grid editing view
+
+		@errors	none
+
+		@comment
+			The main grid editing view is the view where you can merge cells and add/remove columns or rows, you can't edit cell content
+
+		@examples
+			A part of the get_property method from the CL_LAYOUT class:
+			function get_property(&$arr)
+			{
+				$prop = &$arr['prop'];
+				switch($prop["name"])
+				{
+					case "grid":
+						$ge = get_instance("vcl/grid_editor");
+						$prop['value'] = $ge->on_edit($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
+						break;
+				}
+				return PROP_OK;
+			}
+			
+	**/		
 	function on_edit($data, $oid, $params = array())
 	{
 		$this->_init_table($data);
@@ -253,6 +310,39 @@ class grid_editor extends class_base
 		return $this->parse();
 	}
 
+	/** this should be called when the main editing view is submitted, this will handle the submit and return the modified grid data
+		@attrib api=1 params=pos
+		
+		@param data required type=array
+			The grid data
+
+		@param post required type=array
+			The contents of the POST request
+
+		@param params optional type=array
+			An array of other paramters, can contain:
+				cell_content_callback => array(&$object, "method_name", $parameter_to_method)
+					if this key is set, then for each cell in the grid, this method will be called with 
+					the parameter given, the row and the column of the cell and the post data. it must return the data that will be
+					stored in that cell
+
+		@returns The updated grid data, that should be stored somewhere by the caller
+
+		@errors none
+
+		@examples
+			function set_property(&$arr)
+			{
+				$prop = &$arr['prop'];
+				switch($prop["name"])
+				{
+					case "grid":
+						$ge = get_instance("vcl/grid_editor");
+						$prop['value'] = $ge->on_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']);
+						break;
+				}
+			}
+	**/		
 	function on_edit_submit($data, $post, $params = array())
 	{
 		$this->_init_table($data);
@@ -323,6 +413,24 @@ class grid_editor extends class_base
 		return $this->arr;
 	}
 
+	/** modifies the cell content for a cell in the grid
+		@attrib api=1 params=pos
+
+		@param row required type=int
+			The row the cell is in
+
+		@param col required type=int
+			The column the cell is in
+
+		@param str required type=string
+			The content of the cell
+
+		@returns none
+		@errors none
+		@examples
+			Example is in the _init_table documentation
+
+	**/
 	function set_cell_content($row, $col, $str)
 	{
 		$this->arr['aliases'][$row][$col] = $str;
@@ -1097,6 +1205,38 @@ class grid_editor extends class_base
 		$this->arr["map"] = $nm;
 	}
 
+	/** displays the grid content editing table
+		@attrib api=1 params=pos
+
+		@param data required type=array 
+			The grid data, returned by the grid editor
+
+		@param oid required type=oid
+			The object id of the object the grid is attached to 
+
+		@returns The html for the grid content editing view
+
+		@errors	none
+
+		@comment
+			The main grid content editing view is the view where you can edit cell content
+
+		@examples
+			A part of the get_property method from the CL_LAYOUT class:
+			function get_property(&$arr)
+			{
+				$prop = &$arr['prop'];
+				switch($prop["name"])
+				{
+					case "grid_aliases":
+						$ge = get_instance("vcl/grid_editor");
+						$prop['value'] = $ge->on_aliases_edit($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
+						break;
+				}
+				return PROP_OK;
+			}
+			
+	**/		
 	function on_aliases_edit($data, $oid)
 	{
 		$this->_init_table($data);
@@ -1140,6 +1280,32 @@ class grid_editor extends class_base
 		return $this->parse();
 	}
 
+	/** this should be called when the content editing view is submitted, this will handle the submit and return the modified grid data
+		@attrib api=1 params=pos
+		
+		@param data required type=array
+			The grid data
+
+		@param post required type=array
+			The contents of the POST request
+
+		@returns The updated grid data, that should be stored somewhere by the caller
+
+		@errors none
+
+		@examples
+			function set_property(&$arr)
+			{
+				$prop = &$arr['prop'];
+				switch($prop["name"])
+				{
+					case "grid_aliases":
+						$ge = get_instance("vcl/grid_editor");
+						$prop['value'] = $ge->on_aliases_edit_submit($arr['obj_inst']->meta('grid'), $arr['request']);
+						break;
+				}
+			}
+	**/		
 	function on_aliases_edit_submit($data, $post)
 	{
 		$this->_init_table($data);
@@ -1149,6 +1315,29 @@ class grid_editor extends class_base
 		return $this->arr;
 	}
 
+	/** The method to display the grid
+		@attrib api=1 params=pos
+
+		@param data required type=array
+			The grid data
+
+		@param oid required type=oid
+			The object the grid is attached to (used for alias parsing)
+
+		@param tpls optional type=array
+			Array of templates that get passed to alias_parser::parse_oo_aliases
+
+		@errors none
+		
+		@returns 
+			The html containing the grid and any aliases it might contain
+
+		@examples
+			$gr = get_instance("vcl/grid_editor");
+			$gr->_init_table(array());
+			$gr->set_cell_content(1,1, t("allah"));
+			echo $gr->show($gr->_get_table(), $obj->id());		// displays a table with a single cell, that contains the word "allah"
+	**/
 	function show($data, $oid, $tpls = array())
 	{
 		$this->_init_table($data);
@@ -1234,13 +1423,36 @@ class grid_editor extends class_base
 		return $table;
 	}
 
-	////
-	// !shows layout with template
-	// params:
-	//	tpl = template to use
-	//	cell_content_callback - the callback that returns the content for the specified cell, passed as
-	//							array(&calling_class_instance, "member_function_name", array("pass_this_as_argument"))
-	//	ignore_empty - if true, empty cells/columns are not shown
+	/** shows layout with template
+		@attrib api=1 params=pos
+
+		@param data required type=array
+			The grid data
+
+		@param oid required type=oid
+			The object the grid is attached to (used for alias parsing)
+
+		@param params optional type=array
+			An array of other paramters, can contain:
+				cell_content_callback => array(&$object, "method_name", $parameter_to_method)
+					if this key is set, then for each cell in the grid, this method will be called with 
+					the parameter given, the row and the column of the cell and it must return the html
+					that will be displayed in the cell
+				tpl - the name of the template file to use for displaying the grid
+				ignore_empty - true/false - whether to ignore empty cells or not
+
+		@errors 
+			error is thrown if the template given is not found
+
+		@returns 
+			The html for the rendered grid
+
+		@examples
+			$gr = get_instance("vcl/grid_editor");
+			$gr->_init_table(array());
+			$gr->set_cell_content(1,1, t("allah"));
+			echo $gr->show($gr->_get_table(), $obj->id(), array("tpl" => "contentmgmt/layout/pretty_grid.tpl"));		// displays a table with a single cell, that contains the word "allah"
+	**/
 	function show_tpl($data, $oid, $params)
 	{
 		extract($params);
@@ -1298,6 +1510,28 @@ class grid_editor extends class_base
 		return $this->parse();
 	}
 
+	/** sets the style for the given row
+		@attrib api=1 params=pos
+
+		@param row required type=int 
+			The row to set the style for
+
+		@param style required type=oid
+			The style object to set to the row
+
+		@comment
+			Iterates over the cells in the row and sets the style to each cell
+
+		@errors none
+		@returns none
+		
+		@examples
+			$ge = get_instance("vcl/grid_editor");
+			$ge->_init_table($obj->meta("grid"));
+			$ge->set_cell_content(1,1, t("allah"));
+			$ge->set_row_style(1,$style_obj->id());
+			$obj->set_meta("$ge->_get_table());
+	**/			
 	function set_row_style($row, $style)
 	{
 		for($i = 0; $i < $this->arr["cols"]; $i++)
@@ -1306,6 +1540,28 @@ class grid_editor extends class_base
 		}
 	}
 
+	/** sets the style for the given column
+		@attrib api=1 params=pos
+
+		@param col required type=int 
+			The col to set the style for
+
+		@param style required type=oid
+			The style object to set to the column
+
+		@comment
+			Iterates over the cells in the column and sets the style to each cell
+
+		@errors none
+		@returns none
+		
+		@examples
+			$ge = get_instance("vcl/grid_editor");
+			$ge->_init_table($obj->meta("grid"));
+			$ge->set_cell_content(1,1, t("allah"));
+			$ge->set_col_style(1,$style_obj->id());
+			$obj->set_meta("$ge->_get_table());
+	**/			
 	function set_col_style($col, $style)
 	{
 		for($i = 0; $i < $this->arr["rows"]; $i++)
@@ -1314,16 +1570,81 @@ class grid_editor extends class_base
 		}
 	}
 
+	/** sets the style for the given cell
+		@attrib api=1 params=pos
+
+		@param row required type=int 
+			The row the cell is in
+
+		@param col required type=int 
+			The column the cell is in
+
+		@param style required type=oid
+			The style object to set to the cell
+
+		@errors none
+		@returns none
+		
+		@examples
+			$ge = get_instance("vcl/grid_editor");
+			$ge->_init_table($obj->meta("grid"));
+			$ge->set_cell_content(1,1, t("allah"));
+			$ge->set_cell_style(1,1, $style_obj->id());
+			$obj->set_meta("$ge->_get_table());
+	**/			
 	function set_cell_style($row, $col, $style)
 	{
 		$this->arr["styles"][$row][$col]["style"] = $style;
 	}
 
+	/** Returns the grid data for the current grid
+		@attrib api=1 
+
+		@errors none
+		@returns 
+			array, containing the data for the grid
+
+		@examples
+			example in the _init_table documentation
+
+	**/
 	function _get_table()
 	{
 		return $this->arr;
 	}
 
+	/** displays the grid styles editing table
+		@attrib api=1 params=pos
+
+		@param data required type=array 
+			The grid data, returned by the grid editor
+
+		@param oid required type=oid
+			The object id of the object the grid is attached to 
+
+		@returns The html for the grid styles editing view
+
+		@errors	none
+
+		@comment
+			The main grid styles editing view is the view where you can assign styles for grid cells
+
+		@examples
+			A part of the get_property method from the CL_LAYOUT class:
+			function get_property(&$arr)
+			{
+				$prop = &$arr['prop'];
+				switch($prop["name"])
+				{
+					case "grid_styles":
+						$ge = get_instance("vcl/grid_editor");
+						$prop['value'] = $ge->on_styles_edit($arr['obj_inst']->meta('grid'), $arr['obj_inst']->id());
+						break;
+				}
+				return PROP_OK;
+			}
+			
+	**/		
 	function on_styles_edit($data, $oid)
 	{
 		$this->_init_table($data);
@@ -1403,13 +1724,32 @@ class grid_editor extends class_base
 		return $table;
 	}
 
-	function on_styles_edit_submit($data, $oid)
+/*	function on_styles_edit_submit($data, $oid)
 	{
 		$this->_init_table($data);
 
 		return $this->_get_table();
-	}
+	}*/
 
+	/** Sets the number of columns in the grid
+		@attrib api=1 params=pos
+
+		@param num required type=int
+			the number of columns that exist in the grid
+
+		@comment
+			Expands/contracts the grid as needed, new cells are empty
+
+		@returns none
+
+		@examples
+			$ge = get_instance("vcl/grid_editor");
+			$ge->_init_table($obj->meta("grid"));
+			$gr->set_num_cols(3);
+			$ge->set_cell_content(1,1, t("allah"));
+			$ge->set_cell_content(1,2, t("allah2"));
+			$obj->set_meta("$ge->_get_table());
+	**/
 	function set_num_cols($num)
 	{
 		if ($num > $this->arr["cols"])
@@ -1430,6 +1770,25 @@ class grid_editor extends class_base
 		}
 	}
 
+	/** Sets the number of rows in the grid
+		@attrib api=1 params=pos
+
+		@param num required type=int
+			the number of rows that exist in the grid
+
+		@comment
+			Expands/contracts the grid as needed, new cells are empty
+
+		@returns none
+
+		@examples
+			$ge = get_instance("vcl/grid_editor");
+			$ge->_init_table($obj->meta("grid"));
+			$gr->set_num_rows(3);
+			$ge->set_cell_content(1,1, t("allah"));
+			$ge->set_cell_content(2,1, t("allah2"));
+			$obj->set_meta("$ge->_get_table());
+	**/
 	function set_num_rows($num)
 	{
 		if ($num > $this->arr["rows"])
@@ -1450,11 +1809,25 @@ class grid_editor extends class_base
 		}
 	}
 
+	/** returns the current number of rows in the grid
+		@attrib api=1 
+
+		@returns
+			The number of rows in the current grid. this will always be greater than 0
+
+	**/
 	function get_num_rows()
 	{
 		return $this->arr["rows"];
 	}
 
+	/** returns the current number of columns in the grid
+		@attrib api=1 
+
+		@returns
+			The number of columns in the current grid. this will always be greater than 0
+
+	**/
 	function get_num_cols()
 	{
 		return $this->arr["cols"];
@@ -1990,12 +2363,30 @@ class grid_editor extends class_base
 		echo "</table>";
 	}
 
-	////
-	// !imports from csv file
-	// parameters:
-	//	file - file that contains csv data
-	//	sep - separatro betwwen entries
-	//	remove_empty - if true, remove empty lines from end
+	/** imports the grid from a csv file
+		@attrib api=1 params=name
+
+		@param file required type=string
+			file that contains csv data
+
+		@param sep required type=string
+			 column separator in file
+
+		@param remove_empty optional type=bool
+			 if true, remove empty lines from end
+
+		@errors none
+
+		@returns the grid data imported from the csv file
+
+		@examples
+			$ge = get_instance("vcl/grid_editor");
+			$grid = $ge->do_import(array(
+				"file" => "/tmp/file.csv",
+				"sep" => ";",
+				"remove_empty" => true
+			));
+	**/
 	function do_import($arr)
 	{
 		extract($arr);
@@ -2190,21 +2581,77 @@ class grid_editor extends class_base
 		return $linearr;
 	}
 
+	/** sets the column width for the given column
+		@attrib api=1 params=pos
+
+		@param col required type=int
+			The column to set the width for
+
+		@param width required type=int
+			The width of the column in characters
+
+		@examples
+			$ge = get_instance("vcl/grid_editor");
+			$ge->_init_table($arr["obj_inst"]->meta("grid"));
+			for($i = 0; $i < $ge->get_num_cols(); $i++)
+			{
+				$ge->set_col_width($i, $arr["request"]["colw"][$i]);
+			}
+			$arr['obj_inst']->set_meta('grid',$ge->_get_table());
+	**/
 	function set_col_width($col, $width)
 	{
 		$this->arr["col_widths"][$col] = $width;
 	}
 	
+	/** sets the column height for the given column
+		@attrib api=1 params=pos
+
+		@param col required type=int
+			The column to set the width for
+
+		@param height required type=int
+			The height of the column in characters
+
+		@examples
+			$ge = get_instance("vcl/grid_editor");
+			$ge->_init_table($arr["obj_inst"]->meta("grid"));
+			for($i = 0; $i < $ge->get_num_cols(); $i++)
+			{
+				$ge->set_col_height($i, $arr["request"]["colh"][$i]);
+			}
+			$arr['obj_inst']->set_meta('grid',$ge->_get_table());
+	**/
 	function set_col_height($col, $height)
 	{
 		$this->arr["col_heights"][$col] = $height;
 	}
 
+	/** returns the current column width for the given golumn
+		@attrib api=1 params=pos
+
+		@param col required type=int
+			The column to return the width for
+
+		@returns
+			The width of the given column
+
+	**/
 	function get_col_width($col)
 	{
 		return $this->arr["col_widths"][$col];
 	}
 	
+	/** returns the current column height for the given golumn
+		@attrib api=1 params=pos
+
+		@param col required type=int
+			The column to return the height for
+
+		@returns
+			The height of the given column
+
+	**/
 	function get_col_height($col)
 	{
 		return $this->arr["col_heights"][$col];
