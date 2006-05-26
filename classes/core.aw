@@ -1016,6 +1016,11 @@ class core extends acl_base
 			};
 		}
 
+		if((aw_global_get("output_charset") != null) && (aw_global_get("charset") != aw_global_get("output_charset")))
+		{
+			$path = iconv(aw_global_get("charset"), aw_global_get("output_charset"), $path);
+			$text = iconv(aw_global_get("charset"), aw_global_get("output_charset"), $text);
+		}
 		$GLOBALS["site_title"] = $path.$text;
 		// find the bit after / in text
 		$sps = strrpos(strip_tags($text),"/");
