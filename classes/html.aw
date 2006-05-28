@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.112 2006/05/23 11:08:01 dragut Exp $
-// html.aw - helper functions for generating HTML
 class html extends aw_template
 {
 	/**
@@ -8,6 +6,8 @@ class html extends aw_template
 
 	@param name optional type=string
 		selection name
+	@param id optional type=string
+		element id
 	@param options optional type=array
 		selection options array(value => text)
 	@param selected optional type=int
@@ -88,7 +88,12 @@ class html extends aw_template
 			$onc = 'onchange="'.$onchange.'"';
 		}
 
-		return "<select name=\"$name\" $cl id=\"$name\" $sz $mz $onc $disabled $textsize>\n$optstr</select>$post_append_text\n";
+		if (empty($id))
+		{
+			$id = $name;
+		}
+
+		return "<select name=\"$name\" $cl id=\"$id\" $sz $mz $onc $disabled $textsize>\n$optstr</select>$post_append_text\n";
 	}
 
 	/**
@@ -1059,13 +1064,13 @@ class html extends aw_template
 
 	/**
 	@attrib api=1 params=pos
-		
+
 	@param o required type=object
 		object to be changed
 	@param caption optional type=string
 		the text user can see,(objects name, or "(nimetu)" if the object has no name) if set, returns html href tags.
 	@returns string/url or string/html href
-	
+
 	@comments
 		returns the url where can change the given object in AW
 	@example
