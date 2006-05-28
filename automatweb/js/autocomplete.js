@@ -53,6 +53,7 @@ function awActb(obj, valueObj)
 	var actb_caretmove = false;
 	var actb_form = obj.form;
 	var actb_input = "";
+	var actb_lastKey = "";
 	var actb_mode = "";// realtime|static|dynamic|monocarpic
 	var actb_optionCache = new awActbOptionCache();
 	var actb_valueCache = new Array();
@@ -292,10 +293,12 @@ function awActb(obj, valueObj)
 					eval("tmp = " + awHttpRequest.responseText);
 					actb_options = tmp["options"];
 					actb_limited = tmp["limited"];
-					if (last_key != '')
+
+					if ("realtime" == actb_mode && actb_lastKey != '')
 					{
-						actb_tocomplete(last_key);
+						actb_tocomplete(actb_lastKey);
 					}
+
 					if (tmp["error"])
 					{
 						error = "Autocomplete: server error. Description: " + tmp["errorstring"] + ". Property: " + actb_curr.name;
@@ -719,6 +722,7 @@ function awActb(obj, valueObj)
 		caret_pos_start = getCaretStart(actb_curr);
 		actb_caretmove = 0;
 		rv = null;
+
 		switch (a)
 		{
 			case 38:// up arrow
@@ -731,11 +735,12 @@ function awActb(obj, valueObj)
 				actb_godown();
 				actb_caretmove = 1;
 				rv = false;
+
 				if (!actb_display)
-				  {
+				{
 					actb_loadOptions();
-					last_key = -1;
-				  }
+					actb_lastKey = -1;
+				}
 				break;
 
 			case 9:// tab
@@ -750,7 +755,7 @@ function awActb(obj, valueObj)
 			case 8:
 				setTimeout(function(){
 					actb_loadOptions();
-					last_key = -1;
+					actb_lastKey = -1;
 				}, 40);
 				return true;
 
@@ -768,15 +773,15 @@ function awActb(obj, valueObj)
 				break;
 
 			default:
-			  if (true || "realtime" == actb_mode /*&& actb_curr.value.length*/)
+				if ("realtime" == actb_mode /*&& actb_curr.value.length*/)
 				{
 					actb_loadOptions();
-					last_key = a;
+					actb_lastKey = a;
 				}
 				else
 				{
-					last_key = a;
-				  //					setTimeout(function(){actb_tocomplete(a)}, 50);
+					actb_lastKey = a;
+					setTimeout(function(){actb_tocomplete(a)}, 50);
 				}
 				break;
 		}
