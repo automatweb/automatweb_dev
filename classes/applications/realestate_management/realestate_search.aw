@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.22 2006/05/30 10:59:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.23 2006/05/30 15:38:35 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -222,7 +222,7 @@ class realestate_search extends class_base
 	}
 
 	function get_property($arr)
-	{
+	{enter_function("jigaboo");
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object =& $arr["obj_inst"];
@@ -597,7 +597,7 @@ class realestate_search extends class_base
 			case "sort_by_options":
 				return PROP_IGNORE;
 		}
-
+exit_function("jigaboo");
 		return $retval;
 	}
 
@@ -1215,7 +1215,6 @@ class realestate_search extends class_base
 						$table->define_data ($data);
 						$property = $list->next ();
 					}
-
 					// foreach ($list as $property)
 					// {
 						// $cl_instance_var = "cl_property_" . $property->class_id ();
@@ -1426,13 +1425,12 @@ class realestate_search extends class_base
 		}
 		natcasesort ($this->options_a1);
 		$this->options_a1 = array(REALESTATE_SEARCH_ALL => t("Kõik maakonnad")) + $this->options_a1;
-
 		### to save time, get only a minimal set of options for elementary web search
 		if ($arr["get_minimal_set"])
 		{
 			return;
 		}
-
+/*
 		### address2
 		$list =& $this->administrative_structure->prop (array (
 			"prop" => "units_by_division",
@@ -1517,7 +1515,7 @@ class realestate_search extends class_base
 		}
 		natcasesort ($this->options_a5);
 		$this->options_a5 = array(REALESTATE_SEARCH_ALL => t("Kõik asulad")) + $this->options_a5;
-
+*/
 		### condition
 		$prop_args = array (
 			"clid" => CL_REALESTATE_HOUSE,
@@ -1547,7 +1545,6 @@ class realestate_search extends class_base
 		$this->options_ss = $options_ss->names();
 		natcasesort ($this->options_ss);
 		$this->options_ss = array(REALESTATE_SEARCH_ALL => t("Kõik")) + $this->options_ss;
-
 		### agent
 		$sections = $this_object->prop ("agent_sections");
 		$options = array ();
@@ -1579,7 +1576,6 @@ class realestate_search extends class_base
 					{
 						$employee_ids[] = $connection["to"];
 					}
-
 					$employees = new object_list (array (
 						"oid" => $employee_ids,
 						"class_id" => CL_CRM_PERSON,
@@ -1587,7 +1583,6 @@ class realestate_search extends class_base
 						"lang_id" => array (),
 					));
 					// END 2
-
 					$options = $options + $employees->names ();
 				}
 			}
@@ -2235,7 +2230,6 @@ class realestate_search extends class_base
 			$args["limit"] = $limit;
 			$result_list->filter ($args);
 		}
-
 		exit_function ("re_search::search - address");
 		exit_function ("re_search::search");
 
