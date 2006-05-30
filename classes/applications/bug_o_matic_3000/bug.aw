@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.41 2006/05/18 11:21:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.42 2006/05/30 11:10:38 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -379,6 +379,9 @@ class bug extends class_base
 					return PROP_OK;
 				}
 				$bt = get_instance(CL_BUG_TRACKER);
+				$estend = $bt->get_estimated_end_time_for_bug($arr["obj_inst"]);
+				$ovr1 = $bt->get_last_estimation_over_deadline_bugs();
+
 				$opv = $arr["obj_inst"]->prop("deadline");
 				$opri = $arr["obj_inst"]->prop("bug_priority");
 				$osev = $arr["obj_inst"]->prop("bug_severity");
@@ -386,9 +389,32 @@ class bug extends class_base
 				$arr["obj_inst"]->set_prop("bug_priority", $arr["request"]["bug_priority"]);
 				$arr["obj_inst"]->set_prop("bug_severity", $arr["request"]["bug_severity"]);
 				$estend = $bt->get_estimated_end_time_for_bug($arr["obj_inst"]);
+				$ovr2 = $bt->get_last_estimation_over_deadline_bugs();
+
 				$arr["obj_inst"]->set_prop("deadline", $opv);
 				$arr["obj_inst"]->set_prop("bug_priority", $opri);
 				$arr["obj_inst"]->set_prop("bug_severity", $osevri);
+
+				$n_ovr = array();
+				foreach($ovr2 as $item)
+				{
+					if (!isset($ovr1[$item->id()]) && $item->id() != $arr["obj_inst"]->id())
+					{
+						$n_ovr[] = $item;
+					}
+				}
+
+				if (count($n_ovr))
+				{
+					$nms = array();
+					foreach($n_ovr as $item)
+					{
+						$nms[] = html::obj_change_url($item);
+					}
+					$prop["error"] = sprintf(t("Selliste parameetritega ei saa salvestada, kuna see l&uuml;kkaks j&auml;rgnevad bugid &uuml;le t&auml;htaja: %s!"), join("<br>", $nms));
+					return PROP_FATAL_ERROR;
+				}
+
 				if ($estend > ($ev+24*3600))
 				{
 					$prop["error"] = sprintf(t("Bugi ei ole v&otilde;imalik valmis saada enne %s!"), date("d.m.Y H:i", $estend));

@@ -9,6 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 # classes/applications/bug_o_matic_3000/bug.aw:class_868_help
 #: classes/applications/bug_o_matic_3000/bug.aw:class_868_help
 msgid "Klassi Bugi help"
@@ -28,15 +29,15 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_name
 msgid "Omaduse Lühikirjeldus (name) caption"
-msgstr ""
+msgstr "Short description"
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_name_comment
 msgid "Omaduse Lühikirjeldus (name) kommentaar"
-msgstr ""
+msgstr "it is a very short description"
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_name_help
 msgid "Omaduse Lühikirjeldus (name) help"
-msgstr ""
+msgstr "just fill it"
 
 #: classes/applications/bug_o_matic_3000/bug.aw:prop_bug_status
 msgid "Omaduse Staatus (bug_status) caption"
@@ -423,35 +424,3 @@ msgstr ""
 #: classes/applications/bug_o_matic_3000/bug.aw:856
 msgid "Lisa alambugi"
 msgstr ""
-
-# classes/applications/bug_o_matic_3000/bug.aw:prop_status
-#~ msgid "Omaduse Staatus (status) caption"
-#~ msgstr "Status"
-
-# classes/applications/bug_o_matic_3000/bug.aw:prop_priority
-#~ msgid "Omaduse Prioriteet (priority) caption"
-#~ msgstr "Priority"
-
-# classes/applications/bug_o_matic_3000/bug.aw:prop_severity
-#~ msgid "Omaduse T&ouml;sidus (severity) caption"
-#~ msgstr "Severity"
-
-# classes/applications/bug_o_matic_3000/bug.aw:prop_reporter_browser
-#~ msgid "Omaduse Brauser (reporter_browser) caption"
-#~ msgstr "Browser"
-
-# classes/applications/bug_o_matic_3000/bug.aw:prop_reporter_os
-#~ msgid "Omaduse OS (reporter_os) caption"
-#~ msgstr "OS"
-
-# classes/applications/bug_o_matic_3000/bug.aw:prop_component
-#~ msgid "Omaduse Komponent (component) caption"
-#~ msgstr "Component"
-
-# classes/applications/bug_o_matic_3000/bug.aw:prop_url
-#~ msgid "Omaduse URL (url) caption"
-#~ msgstr "URL"
-
-# classes/applications/bug_o_matic_3000/bug.aw:prop_content
-#~ msgid "Omaduse Sisu (content) caption"
-#~ msgstr "Content"

@@ -9,6 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 # aw.ini:class_1
 #: aw.ini:class_1
 msgid "Klassi Kaust (1) nimi"

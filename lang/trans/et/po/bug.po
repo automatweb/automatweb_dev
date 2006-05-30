@@ -9,6 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 # classes/applications/bug_o_matic_3000/bug.aw:class_868_help
 #: classes/applications/bug_o_matic_3000/bug.aw:class_868_help
 msgid "Klassi Bugi help"
@@ -418,6 +419,22 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:802
 msgid "Added comment to bug %s"
+msgstr ""
+
+# classes/applications/bug_o_matic_3000/bug.aw:group_general
+msgid "Omaduse Jälgijad (monitors) caption"
+msgstr "j�lg"
+
+# classes/applications/bug_o_matic_3000/bug.aw:group_general
+msgid "Omaduse Jälgijad (monitors) caption"
+msgstr "j�lg"
+
+# classes/applications/bug_o_matic_3000/bug.aw:group_general
+msgid "Omaduse Tüüp (bug_type) caption"
+msgstr "tere"
+
+# classes/applications/bug_o_matic_3000/bug.aw:group_general
+msgid "Omaduse Kommentaar (comment) caption"
 msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug.aw:856

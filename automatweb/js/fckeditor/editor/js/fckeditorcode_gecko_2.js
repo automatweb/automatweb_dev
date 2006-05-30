@@ -78,9 +78,9 @@ InsertAWLupCommand.GetState=function() { return FCK_TRISTATE_OFF; }
 InsertAWLupCommand.Execute=function() {
 
 
-
-  window.open('/automatweb/orb.aw?class=link_manager&doc='+escape(window.parent.location.href), 
+  window.open('/automatweb/orb.aw?class=link_manager&doc='+escape(window.parent.location.href)+'&link_url='+escape(FCK.Selection.MoveToAncestorNode( 'A' ).href), 
 					'InsertAWFupCommand', 'width=500,height=400,scrollbars=no,scrolling=no,location=no,toolbar=no');
+					
 }
 FCKCommands.RegisterCommand('awlup', InsertAWLupCommand ); 
 

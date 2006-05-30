@@ -55,3 +55,8 @@ msgstr ""
 #: classes/document.aw:2925
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""
+
+# classes/document.aw:group_general
+msgid "Omaduse Nimi (name) caption"
+msgstr "Name"
+

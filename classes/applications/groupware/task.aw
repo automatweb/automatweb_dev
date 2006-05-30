@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.99 2006/05/30 10:59:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.100 2006/05/30 11:10:36 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1628,6 +1628,7 @@ class task extends class_base
 					"checked" => ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill"))
 				));
 			}
+
 			$t->define_data(array(
 				"task" => $pref."<a name='row_".$idx."'></a>".html::textarea(array(
 					"name" => "rows[$idx][task]",

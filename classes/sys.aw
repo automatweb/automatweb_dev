@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.72 2006/04/19 11:41:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.73 2006/05/30 11:10:36 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -633,7 +633,6 @@ class sys extends aw_template
 			"format" => "d.m.Y H:i",
 			"sortable" => 1
 		));
-
 		$ol = new object_list(array(
 			"modified" => new obj_predicate_compare(OBJ_COMP_GREATER, time()-3600*24*3),
 			"lang_id" => array(),
@@ -861,6 +860,58 @@ class sys extends aw_template
 			send_mail("kristo@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
 		}
 		die(t("All done"));
+	}
+
+	/**
+		@attrib name=do_dump 
+	**/
+	function db_dump($arr)
+	{
+		$fld = aw_ini_get("site_basedir")."/files/dumper/";
+		@mkdir($fld, 0777);
+
+		$fn = $fld."dump.sql";
+		@unlink($fn);
+
+
+		$u = aw_ini_get("db.user");
+		$h = aw_ini_get("db.host");
+		$p = aw_ini_get("db.pass");
+		$db = aw_ini_get("db.base");
+		$dump = $fld."db.sql";
+
+		$res = `/usr/local/bin/mysqldump --add-drop-table --quick -u $u -h $h --password=$p $db > $dump`;
+		echo file_get_contents($fn);
+		unlink($fn);
+		die();
+	}
+
+	/**
+		@attrib name=site_gzip
+	**/
+	function site_gzip($arr)
+	{
+		$fld = aw_ini_get("site_basedir")."/files/dumper/";
+		@mkdir($fld, 0777);
+
+
+		$fn = $fld."dump.tar.gz";
+		@unlink($fn);
+
+		$base = aw_ini_get("basedir")."/";
+
+		$res = `cp -r $base/archive $fld`;
+		$res = `cp -r $base/aw.ini $fld`;
+		$res = `cp -r $base/files $fld`;
+		$res = `cp -r $base/img $fld`;
+		$res = `cp -r $base/lang $fld`;
+		$res = `cp -r $base/public $fld`;
+		$res = `cp -r $base/templates $fld`;
+
+		$res = `/usr/bin/tar cvfz $fn $fld/*`;
+
+		echo file_get_contents($fn);
+		die();
 	}
 
 	/**

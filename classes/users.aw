@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.163 2006/05/02 12:26:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.164 2006/05/30 11:10:36 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1003,7 +1003,6 @@ class users extends users_user
 			{
 				$this->kill_user();
 			}
-
 			// get highest priority group
 			$hig = 0;
 			$hig_p = -1;

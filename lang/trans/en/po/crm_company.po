@@ -2,13 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: 2006-02-28 15:33+0200\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
 
 # classes/crm/crm_company.aw:class_129_help
 #: classes/crm/crm_company.aw:class_129_help
@@ -33,7 +33,7 @@ msgstr ""
 # classes/crm/crm_company.aw:prop_name
 #: classes/crm/crm_company.aw:prop_name
 msgid "Omaduse Organisatsiooni nimi (name) caption"
-msgstr "Company name"
+msgstr "Receptionist's name"
 
 # classes/crm/crm_company.aw:prop_name_comment
 #: classes/crm/crm_company.aw:prop_name_comment
@@ -493,13 +493,11 @@ msgid "Omaduse Kindlustus (insurance_status) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate
-msgid ""
-"Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) caption"
+msgid "Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) caption"
 msgstr "Upload insurance certificate"
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_comment
-msgid ""
-"Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) kommentaar"
+msgid "Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_help
@@ -507,13 +505,11 @@ msgid "Omaduse Lisa kindlustust tõendav dokument (insurance_certificate) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_view
-msgid ""
-"Omaduse Kindlustust tõendav dokument (insurance_certificate_view) caption"
+msgid "Omaduse Kindlustust tõendav dokument (insurance_certificate_view) caption"
 msgstr "Insurance certificate"
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_view_comment
-msgid ""
-"Omaduse Kindlustust tõendav dokument (insurance_certificate_view) kommentaar"
+msgid "Omaduse Kindlustust tõendav dokument (insurance_certificate_view) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_insurance_certificate_view_help
@@ -537,8 +533,7 @@ msgid "Omaduse Maksuvõla puudumise tõend aegub (tax_clearance_expires) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_expires_comment
-msgid ""
-"Omaduse Maksuvõla puudumise tõend aegub (tax_clearance_expires) kommentaar"
+msgid "Omaduse Maksuvõla puudumise tõend aegub (tax_clearance_expires) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_expires_help
@@ -546,13 +541,11 @@ msgid "Omaduse Maksuvõla puudumise tõend aegub (tax_clearance_expires) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_status
-msgid ""
-"Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) caption"
+msgid "Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) caption"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_status_comment
-msgid ""
-"Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) kommentaar"
+msgid "Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_status_help
@@ -560,13 +553,11 @@ msgid "Omaduse Maksuvõla puudumise tõendi staatus (tax_clearance_status) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate
-msgid ""
-"Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) caption"
+msgid "Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) caption"
 msgstr "Upload tax clearance certificate"
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_comment
-msgid ""
-"Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) kommentaar"
+msgid "Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_help
@@ -574,13 +565,11 @@ msgid "Omaduse Lisa maksuvõla puudumise tõend (tax_clearance_certificate) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_view
-msgid ""
-"Omaduse Maksuvõla puudumise tõend (tax_clearance_certificate_view) caption"
+msgid "Omaduse Maksuvõla puudumise tõend (tax_clearance_certificate_view) caption"
 msgstr "Tax clearance certificate"
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_view_comment
-msgid ""
-"Omaduse Maksuvõla puudumise tõend (tax_clearance_certificate_view) kommentaar"
+msgid "Omaduse Maksuvõla puudumise tõend (tax_clearance_certificate_view) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_tax_clearance_certificate_view_help
@@ -694,8 +683,7 @@ msgid "Omaduse Siduss&uuml;steemi ID (contact_search_ext_id_alphanum) caption"
 msgstr "External ID"
 
 #: classes/crm/crm_company.aw:prop_contact_search_ext_id_alphanum_comment
-msgid ""
-"Omaduse Siduss&uuml;steemi ID (contact_search_ext_id_alphanum) kommentaar"
+msgid "Omaduse Siduss&uuml;steemi ID (contact_search_ext_id_alphanum) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_contact_search_ext_id_alphanum_help
@@ -1394,8 +1382,7 @@ msgid "Omaduse Projekti kontaktisik (all_proj_search_contact_person) caption"
 msgstr "Projects contact person"
 
 #: classes/crm/crm_company.aw:prop_all_proj_search_contact_person_comment
-msgid ""
-"Omaduse Projekti kontaktisik (all_proj_search_contact_person) kommentaar"
+msgid "Omaduse Projekti kontaktisik (all_proj_search_contact_person) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_company.aw:prop_all_proj_search_contact_person_help
@@ -3233,9 +3220,7 @@ msgid "Seose Kindlustusdokumendi fail (RELTYPE_INSURANCE_CERT_FILE) tekst"
 msgstr "Insurance certificate file"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_TAX_CLEARANCE_FILE
-msgid ""
-"Seose Maksuv&otilde;la puudumise t&otilde;endi fail "
-"(RELTYPE_TAX_CLEARANCE_FILE) tekst"
+msgid "Seose Maksuv&otilde;la puudumise t&otilde;endi fail (RELTYPE_TAX_CLEARANCE_FILE) tekst"
 msgstr "Tax clearance certificate file"
 
 #: classes/crm/crm_company.aw:rel_RELTYPE_SHOP_WAREHOUSE_PURCHASE_BILL
@@ -3365,6 +3350,10 @@ msgstr "Conflicting projects:<br>"
 msgid "%s serveri failid"
 msgstr "%s server files"
 
+# classes/crm/crm_company.aw:group_cedit
+msgid "Omaduse Telefoni v&otilde;tab vastu (receptionist_name) caption"
+msgstr "Receptionist's name"
+
 #: classes/crm/crm_company.aw:5211 classes/crm/crm_company.aw:5265
 msgid "K&otilde;ne"
 msgstr ""
@@ -3389,66 +3378,3 @@ msgstr ""
 msgid "Arve"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5268
-msgid "Logi v&auml;lja"
-msgstr ""
-
-#~ msgid "Omaduse Eesnimi (prof_search_firstname) caption"
-#~ msgstr "First name"
-
-#~ msgid "Omaduse Perenimi (prof_search_lastname) caption"
-#~ msgstr "Surname"
-
-#~ msgid "Omaduse Isikukood (prof_search_code) caption"
-#~ msgstr "Personal ID"
-
-#~ msgid "Omaduse Otsi (prof_search_submit) caption"
-#~ msgstr "Search"
-
-#~ msgid "Omaduse Otsingutulemused (prof_search_results) caption"
-#~ msgstr "Search results"
-
-#~ msgid "B&uuml;roo"
-#~ msgstr "Office"
-
-#~ msgid "Grupi Muuda &uuml;ksuseid (edit_sects) pealkiri"
-#~ msgstr "Edit sections"
-
-#~ msgid "Omaduse Kontaktisik  (contact_person) caption"
-#~ msgstr "Contact person"
-
-#~ msgid "Omaduse Pangaarved (b_acct_desc) caption"
-#~ msgstr "Bank accounts"
-
-#~ msgid "Omaduse Pangaarve (bank_account) caption"
-#~ msgstr "Bank account"
-
-#~ msgid "Omaduse Organisatsioon  (customer_search_is_co) caption"
-#~ msgstr "Organisation"
-
-#~ msgid "Grupi Pakkumised (ovrv_offers) pealkiri"
-#~ msgstr "Offers"
-
-#~ msgid "Grupi Uudised (documents_news) pealkiri"
-#~ msgstr "News"
-
-#~ msgid "Grupi Loo arve (bills_create) pealkiri"
-#~ msgstr "Create invoice"
-
-#~ msgid "Grupi Statistika (stats) pealkiri"
-#~ msgstr "Statistics"
-
-#~ msgid "Lisa %s"
-#~ msgstr "Add %s"
-
-#~ msgid "Lisa pakkumine"
-#~ msgstr "Add offer"
-
-#~ msgid "Omaduse Toimetuse nimi (act_s_task_name) caption"
-#~ msgstr "Task name"
-
-#~ msgid "Grupi Üldine (general) pealkiri"
-#~ msgstr "General"
-
-#~ msgid "Grupi Üldine (general_sub) pealkiri"
-#~ msgstr "General"

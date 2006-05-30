@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.89 2006/05/18 08:03:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.90 2006/05/30 11:10:36 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -668,6 +668,11 @@ class promo extends class_base
 		else
 		{
 			$parms["tpl_auto"] = 1;
+		}
+
+		if ($ob->prop("is_dyn"))
+		{
+			aw_global_set("no_cache", 1);
 		}
 	
 		

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.59 2006/05/18 11:21:59 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.59 2006/05/18 11:21:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.60 2006/05/30 11:10:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.60 2006/05/30 11:10:38 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -2097,8 +2097,14 @@ class bug_tracker extends class_base
 		return $a_pri == $b_pri ? 0 : ($a_pri > $b_pri ? -1 : 1);
 	}
 
+	function get_last_estimation_over_deadline_bugs()
+	{
+		return $this->over_deadline;
+	}
+
 	function get_estimated_end_time_for_bug($bug)
 	{
+		$this->over_deadline = array();
 		$p = $bug->prop("who");
 		if (!$p)
 		{
@@ -2223,13 +2229,18 @@ class bug_tracker extends class_base
 				$chart->add_bar ($bar);
 				$start += $length;
 			}
+
+			if ($gt->prop("deadline") > 300 && $start > $gt->prop("deadline"))
+			{
+				$this->over_deadline[$gt->id()] = $gt;
+			}
+
 			if ($gt->id() == $arr["ret_b_time"])
 			{
 				return $start;
 			}
 		}
 		$this->job_end = $start;
-
 		$chart->configure_chart (array (
 			"chart_id" => "bt_gantt",
 			"style" => "aw",

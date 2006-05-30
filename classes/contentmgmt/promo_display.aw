@@ -191,6 +191,11 @@ class promo_display
 					obj_set_opt("no_cache", 1);
 				}
 
+				if ($o->prop("is_dyn"))
+				{
+					aw_global_set("no_cache", 1);
+				}
+
 				// right, here we need to check if the container does not order docs by random, cause if it does, we need to not rely on the saved docs list
 				$has_rand = false;
 				if ($o->prop("sort_by") == "RAND()" || $o->prop("sort_by2") == "RAND()" || $o->prop("sort_by3") == "RAND()")
