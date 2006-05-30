@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.483 2006/05/24 10:24:29 kristo Exp $
+// $Id: class_base.aw,v 2.484 2006/05/30 15:32:51 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2805,6 +2805,23 @@ class class_base extends aw_template
 							{
 								continue;
 							};
+
+							$has_props = false;
+							// if group is empty, then don't show it. 
+							foreach($this->_cfg_props as $pn => $pd)
+							{
+								if ($pd["group"] == $grp_id)
+								{
+									$has_props = true;
+								}
+							}
+
+
+							if (!$has_props)
+							{
+								continue;
+							}
+
 							$target = "contentarea";
 							$cb_part = 1;
 							if ($no_rte) 
