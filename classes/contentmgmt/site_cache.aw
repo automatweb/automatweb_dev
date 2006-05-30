@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.34 2006/04/19 11:41:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.35 2006/05/30 10:37:26 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -197,6 +197,15 @@ class site_cache extends aw_template
 			$ds = get_instance(CL_DOCUMENT_STATISTICS);
 			$res = preg_replace("/\[document_statistics(\d+)\]/e", "\$ds->show(array('id' => \\1))", $res);
 		};
+
+		// if the template contains php tags, eval it. 
+		if (strpos($res, "<?php") !== false)
+		{
+			ob_start();
+			eval("?>".$res);
+			$res = ob_get_contents();
+			ob_end_clean();
+		}
 
 		// also clear the no_cache flag from session if present
 		// why? well to let the session continue with cached pages. 
