@@ -89,6 +89,17 @@
             <caption>N&amp;auml;ita saidi raamis</caption>
       </property>
       <property>
+            <name>show_icon</name>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>8</default>
+            <caption>N&amp;amp;auml;ita ikooni</caption>
+      </property>
+      <property>
             <name>j_time</name>
             <table>objects</table>
             <group>dates</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.123 2006/05/16 08:55:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.124 2006/05/30 11:50:51 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -62,6 +62,9 @@
 	@property show_framed type=checkbox ch_value=1 
 	@caption Näita saidi raamis
 
+	@property show_icon type=checkbox ch_value=1 default=8
+	@caption N&auml;ita ikooni
+
 @default group=dates
 	@property j_time type=date_select 
 	@caption Jõustumise kuupäev
@@ -115,6 +118,13 @@ class file extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "show_icon":
+				if ($arr["obj_inst"]->prop("show_icon") == 8 || $arr["obj_inst"]->prop("show_icon") === NULL)
+				{
+					$data["value"] = !aw_ini_get("file.no_icon");
+				}
+				break;
+
 			case "name":
 				$retval = PROP_IGNORE;
 				break;
@@ -419,7 +429,13 @@ class file extends class_base
 			}
 			else
 			{
-				if (!aw_ini_get("file.no_icon"))
+				$fo = obj($alias["target"]);
+				$fnoi = $fo->prop("show_icon");
+				if ($fnoi == 8 || $fnoi === NULL)
+				{
+					$fnoi = !aw_ini_get("file.no_icon");
+				}
+				if ($fnoi)
 				{
 					$replacement = html::img(array(
 						"url" => $icon,
