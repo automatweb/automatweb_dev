@@ -10,23 +10,42 @@ class link_manager extends aw_template
 	/**
 		@attrib name=manage default=1
 		@param doc required
-		@param imgsrc optional
+		@param link_url optional
 	**/
 	function manage($arr)
 	{
-		$url = $arr["imgsrc"];
+		$url = $arr["link_url"];
 		$parts = parse_url($url);
 		$path = $parts["path"];
-		$imgname = substr($path, strrpos($path, "=")+1);
+		// if path contains class=file , then redir to file manager
+		if (strpos($path, "class=file") !== false)
+		{
+			header("Location: ".$this->mk_my_orb("manage", $arr, "file_manager"));
+			die();
+		}
+		
+		$imgname = substr($path, 1);
 		if ($imgname != "")
 		{
-			// now get image by file name
-			$image_list = new object_list(array(
-				"class_id" => CL_EXTLINK,
-				"lang_id" => array(),
-				"site_id" => array(),
-				"file" => "%".trim($imgname)
-			));
+			// now, if the ini file says, that links are direct, then find the link by url, else we have the link oid
+			if (aw_ini_get("extlinks.directlink") == 1)
+			{
+				// now get image by file name
+				$image_list = new object_list(array(
+					"class_id" => CL_EXTLINK,
+					"lang_id" => array(),
+					"site_id" => array(),
+					"url" => $arr["link_url"]
+				));
+			}
+			else
+			{
+				$image_list = new object_list(array(
+					"oid" => $imgname,
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+			}
 		}
 		else
 		{
@@ -112,7 +131,15 @@ class link_manager extends aw_template
 		foreach($ol->arr() as $o)
 		{
 			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $o->id()), CL_FILE);
-			$image_url = $o->prop("url");
+			if (aw_ini_get("extlinks.directlink") == 1)
+			{
+				$link_url = $o->prop("url");
+			}
+			else
+			{
+				$link_url = obj_link($o->id());
+			}
+			$link_name = str_replace("\"", "\\\"", $o->name());
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
 				"sel" => html::href(array(
@@ -120,10 +147,11 @@ class link_manager extends aw_template
 					"caption" => t("Vali see"),
 					"onClick" => "
 						FCK=window.parent.opener.FCK;
-						var eSelected = FCK.Selection.GetSelectedElement() ; 
-						if (\"\"+eSelected == \"HTMLImageElement\")
+						var eSelected = FCK.Selection.MoveToAncestorNode(\"A\") ; 
+						if (eSelected)
 						{
-							eSelected.src=\"$image_url\";
+							eSelected.href=\"$link_url\";
+							eSelected.innerHTML=\"$link_name\";
 						}
 						else
 						{

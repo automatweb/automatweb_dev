@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.98 2006/05/23 12:29:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.99 2006/05/30 10:59:45 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -229,7 +229,7 @@ class task extends class_base
 			"p_str" => t("Paus"),
 			"s_str" => t("K&auml;ivita"),
 			"e_str" => t("L&otilde;peta"),
-			"d_str" => t("Kustuta")
+			"d_str" => t("Kustuta"),
 		));
 		foreach(safe_array($_SESSION["crm_stoppers"]) as $_id => $stopper)
 		{
@@ -247,6 +247,7 @@ class task extends class_base
 			$this->vars(array(
 				"task_type" => $stopper["type"],
 				"task_name" => $stopper["name"],
+				"task_name_esc" => str_replace("\"", "\\\"", trim($stopper["name"])),
 				"time" => date("d.m.Y H:i:s", $stopper["start"]),
 				"elapsed" => sprintf("%02d:%02d:%02d",$elapsed_hr,$elapsed_min, $elapsed_sec),
 				"number" => $num++,

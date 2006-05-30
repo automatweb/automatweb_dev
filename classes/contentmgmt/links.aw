@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.14 2006/04/05 11:09:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.15 2006/05/30 10:59:44 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -302,6 +302,25 @@ class links extends class_base
 				{
 					$prop["value"] = "/".$arr["obj_inst"]->prop("docid");
 				}
+
+				if (aw_ini_get("extlinks.directlink") == 1)
+				{
+					$link_url = $arr["obj_inst"]->prop("url");
+				}
+				else
+				{
+					$link_url = obj_link($arr["obj_inst"]->id());
+				}
+
+				$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
+				$prop["post_append_text"] .= "&nbsp;&nbsp;
+					<script language=\"javascript\">
+					if (window.parent.name == \"InsertAWFupCommand\")
+					{
+						document.write(\"<a href='#' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.MoveToAncestorNode(\\\"A\\\");if (eSelected) { eSelected.href=\\\"".$link_url."\\\";eSelected.innerHTML=\\\"".$arr["obj_inst"]->prop("name")."\\\"; } else { FCK.InsertHtml(aw_get_url_contents(\\\"$url\\\")); } '>Paiguta dokumenti</a>\");
+					}
+				</script>
+				";
 				break;
 
 			case "link_image_active_until":

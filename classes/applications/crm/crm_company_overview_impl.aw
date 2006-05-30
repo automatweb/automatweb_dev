@@ -516,7 +516,7 @@ class crm_company_overview_impl extends class_base
 					"id" => $t_id,
 					"s_action" => "start",
 					"type" => t("Toimetus"),
-					"name" => $task->name()
+					"name" => $task->name(),
 				),CL_TASK);
 
 				$pm->add_item(array(
@@ -1566,7 +1566,7 @@ class crm_company_overview_impl extends class_base
 				"id" => $row->id(),
 				"s_action" => "start",
 				"type" => t("Toimetuse rida"),
-				"name" => $row->prop("content")
+				"name" => $row->prop("content"),
 			), CL_TASK);
 			$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
 

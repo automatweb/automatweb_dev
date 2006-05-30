@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.21 2006/05/25 10:21:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.22 2006/05/30 10:59:44 kristo Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1249,6 +1249,8 @@ class realestate_search extends class_base
 		$template = $this_object->prop ("template") . ".tpl";
 		$this->read_template($template);
 
+		lc_site_load("realestate_search",$this);
+
 		if ($this_object->prop ("result_no_form") and $search_requested)
 		{ #### don't show search form
 			$this->vars(array(
@@ -1413,7 +1415,15 @@ class realestate_search extends class_base
 			"prop" => "units_by_division",
 			"division" => $this->realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_1"),
 		));
-		$this->options_a1 = is_object ($list) ? $list->names () : array (); // maakond;
+		$this->options_a1 = array();
+		if (is_object($list))
+		{
+			foreach($list->arr() as $_list_item)
+			{
+				$this->options_a1[$_list_item->id()] = $this->trans_get_val($_list_item, "name");
+			}
+
+		}
 		natcasesort ($this->options_a1);
 		$this->options_a1 = array(REALESTATE_SEARCH_ALL => t("Kõik maakonnad")) + $this->options_a1;
 
@@ -1428,7 +1438,17 @@ class realestate_search extends class_base
 			"prop" => "units_by_division",
 			"division" => $this->realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_2"),
 		));
-		$this->options_a2 = is_object ($list) ? $list->names () : array (); // linn;
+		//$this->options_a2 = is_object ($list) ? $list->names () : array (); // linn;
+		$this->options_a2 = array();
+		if (is_object($list))
+		{
+			foreach($list->arr() as $_list_item)
+			{
+				$this->options_a2[$_list_item->id()] = $this->trans_get_val($_list_item, "name");
+			}
+
+		}
+
 		natcasesort ($this->options_a2);
 		$this->options_a2 = array(REALESTATE_SEARCH_ALL => t("Kõik linnad")) + $this->options_a2;
 
@@ -1442,7 +1462,17 @@ class realestate_search extends class_base
 			"prop" => "units_by_division",
 			"division" => $this->division3,
 		));
-		$this->options_a3 = is_object ($list) ? $list->names () : array (); // linnaosa;
+		//$this->options_a3 = is_object ($list) ? $list->names () : array (); // linnaosa;
+		$this->options_a3 = array();
+		if (is_object($list))
+		{
+			foreach($list->arr() as $_list_item)
+			{
+				$this->options_a3[$_list_item->id()] = $this->trans_get_val($_list_item, "name");
+			}
+
+		}
+
 		natcasesort ($this->options_a3);
 		$this->options_a3 = array(REALESTATE_SEARCH_ALL => t("Kõik linnaosad")) + $this->options_a3;
 
@@ -1451,7 +1481,17 @@ class realestate_search extends class_base
 			"prop" => "units_by_division",
 			"division" => $this->realestate_manager->get_first_obj_by_reltype ("RELTYPE_ADDRESS_EQUIVALENT_4"),
 		));
-		$this->options_a4 = is_object ($list) ? $list->names () : array (); // vald;
+		//$this->options_a4 = is_object ($list) ? $list->names () : array (); // vald;
+		$this->options_a4 = array();
+		if (is_object($list))
+		{
+			foreach($list->arr() as $_list_item)
+			{
+				$this->options_a4[$_list_item->id()] = $this->trans_get_val($_list_item, "name");
+			}
+
+		}
+
 		natcasesort ($this->options_a4);
 		$this->options_a4 = array(REALESTATE_SEARCH_ALL => t("Kõik vallad")) + $this->options_a4;
 
@@ -1465,7 +1505,16 @@ class realestate_search extends class_base
 			"prop" => "units_by_division",
 			"division" => $this->division5,
 		));
-		$this->options_a5 = is_object ($list) ? $list->names () : array (); // asula;
+		//$this->options_a5 = is_object ($list) ? $list->names () : array (); // asula;
+		$this->options_a5 = array();
+		if (is_object($list))
+		{
+			foreach($list->arr() as $_list_item)
+			{
+				$this->options_a5[$_list_item->id()] = $this->trans_get_val($_list_item, "name");
+			}
+
+		}
 		natcasesort ($this->options_a5);
 		$this->options_a5 = array(REALESTATE_SEARCH_ALL => t("Kõik asulad")) + $this->options_a5;
 

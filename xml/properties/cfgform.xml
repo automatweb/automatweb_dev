@@ -79,6 +79,16 @@
             <caption>N&amp;auml;ita RTE/HTML nuppu</caption>
       </property>
       <property>
+            <name>default_view_is_html</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Default vaade HTML</caption>
+      </property>
+      <property>
             <name>classinfo_disable_relationmgr</name>
             <table>objects</table>
             <group>general</group>

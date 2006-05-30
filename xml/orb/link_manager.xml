@@ -5,7 +5,7 @@
 			<function name="manage">
 				<arguments>
 					<required name="doc" />
-					<optional name="imgsrc" />
+					<optional name="link_url" />
 				</arguments>
 			</function>
 		</action>
