@@ -2427,6 +2427,15 @@
             <field>comment_type</field>
             <caption>Kommentaari t&amp;uuml;&amp;uuml;p</caption>
       </property>
+      <property>
+            <name>ext_sys_t</name>
+            <table>objects</table>
+            <group>ext_sys</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>ext_sys_t</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
@@ -2613,6 +2622,10 @@
                   <submit>no</submit>
                   <parent>general	save</parent>
             </documents_lmod>
+            <ext_sys>
+                  <caption>Siduss&amp;amp;uuml;steemid</caption>
+                  <parent>general</parent>
+            </ext_sys>
             <bills>
                   <caption>Arved</caption>
                   <submit>no</submit>

@@ -145,6 +145,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Kliendihaldur</caption>
             </CLIENT_MANAGER>
+            <EXT_SYS_ENTRY>
+                  <value>35</value>
+                  <clid>CL_EXTERNAL_SYSTEM_ENTRY</clid>
+                  <caption>Siduss&amp;amp;uuml;steemi sisestus</caption>
+            </EXT_SYS_ENTRY>
       </reltypes>
 </properties>
 

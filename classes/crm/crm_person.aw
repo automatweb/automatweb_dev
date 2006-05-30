@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.129 2006/05/11 11:11:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.130 2006/05/30 14:34:43 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -382,6 +382,11 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 
 ----------------------------------------------
 
+@groupinfo ext_sys caption="Siduss&uuml;steemid" parent=general
+@default group=ext_sys
+
+	@property ext_sys_t type=table store=no no_caption=1
+
 */
 
 /*
@@ -554,6 +559,10 @@ class crm_person extends class_base
 		$form = &$arr["request"];
 		switch($prop["name"])
 		{
+			case "ext_sys_t":
+				$this->_save_ext_sys_t($arr);
+				break;
+
 			case "firstname":
 				if (($arr["new"] || !($tmp = $this->has_user($arr["obj_inst"]))))
 				{
@@ -627,6 +636,10 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case "ext_sys_t":
+				$this->_ext_sys_t(&$arr);
+				break;
+
 			case "edulevel":
 				$data["options"] = array(
 					0 => t("-- vali --"),
@@ -3182,6 +3195,95 @@ class crm_person extends class_base
 		));
 
 		return $this->parse();
+	}
+
+	function _init_ext_sys_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Siduss&uuml;steem"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "value",
+			"caption" => t("V&auml;&auml;rtus"),
+			"align" => "center"
+		));
+	}
+
+	function _ext_sys_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_ext_sys_t($t);
+
+		$cc = get_instance(CL_CRM_COMPANY);
+		$crel = $cc->get_cust_rel($arr["obj_inst"], true);
+
+		$data = array();
+		foreach($crel->connections_from(array("type" => "RELTYPE_EXT_SYS_ENTRY")) as $c)
+		{
+			$ent = $c->to();
+			$data[$ent->prop("ext_sys_id")] = $ent->prop("value");
+		}
+		// list all ext systems and let the user edit those
+		$ol = new object_list(array(
+			"class_id" => CL_EXTERNAL_SYSTEM,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.jrk"
+		));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"value" => html::textbox(array(
+					"name" => "ext[".$o->id()."]",
+					"value" => $data[$o->id()],
+				))
+			));
+		}
+	}
+
+	function _save_ext_sys_t($arr)
+	{
+		$cc = get_instance(CL_CRM_COMPANY);
+		$crel = $cc->get_cust_rel($arr["obj_inst"], true);
+		$ol = new object_list(array(
+			"class_id" => CL_EXTERNAL_SYSTEM,
+			"lang_id" => array(),
+			"site_id" => array()
+		));	
+		$data = array();
+		foreach($crel->connections_from(array("type" => "RELTYPE_EXT_SYS_ENTRY")) as $c)
+		{
+			$ent = $c->to();
+			$data[$ent->prop("ext_sys_id")] = $ent->id();
+		}
+		foreach($ol->arr() as $o)
+		{
+			if (!isset($data[$o->id()]))
+			{
+				// create new entry obj
+				$ent = obj();
+				$ent->set_name(sprintf(t("Siduss&uuml;steemi %s sisestus objektile %s"), $o->name(), $arr["obj_inst"]->name()));
+				$ent->set_class_id(CL_EXTERNAL_SYSTEM_ENTRY);
+				$ent->set_parent($arr["obj_inst"]->id());
+				$ent->set_prop("ext_sys_id", $o->id());
+				$ent->set_prop("obj", $arr["obj_inst"]->id());
+				$ent->set_prop("value", $arr["request"]["ext"][$o->id()]);
+				$ent->save();
+				$crel->connect(array(
+					"to" => $ent->id(),
+					"type" => "RELTYPE_EXT_SYS_ENTRY"
+				));
+			}
+			else
+			{
+				$ent = obj($data[$o->id()]);
+				$ent->set_prop("value", $arr["request"]["ext"][$o->id()]);
+				$ent->save();
+			}
+		}	
 	}
 }
 ?>

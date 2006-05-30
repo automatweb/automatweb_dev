@@ -794,6 +794,10 @@ default group=org_objects
     @property comment_type type=chooser store=no
 	@caption Kommentaari tüüp
 
+@default group=ext_sys
+
+	@property ext_sys_t type=table store=no no_caption=1
+
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
@@ -839,12 +843,11 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @groupinfo org_images caption="Pildid" submit=yes parent=general
 
-groupinfo documents caption="Dokumendid" submit=no
-
 	@groupinfo documents_all caption="Dokumendid" submit=no parent=general save=no
 	@groupinfo documents_news caption="Siseuudised" submit=no parent=general submit_method=get save=no
 	@groupinfo documents_forum caption="Foorum" submit=no parent=general
 	@groupinfo documents_lmod caption="Viimati muudetud" submit=no parent=general	save=no
+	@groupinfo ext_sys caption="Siduss&uuml;steemid" parent=general
 
 @groupinfo bills caption="Arved" submit=no save=no
 
@@ -1427,6 +1430,10 @@ class crm_company extends class_base
 					"obj_inst" => $forum,
 					"request" => $arr["request"]
 				));
+				break;
+
+			case "ext_sys_t":
+				$this->_ext_sys_t(&$arr);
 				break;
 
 			case "name":
@@ -2063,6 +2070,10 @@ class crm_company extends class_base
 		$data = &$arr['prop'];
 		switch($data["name"])
 		{
+			case "ext_sys_t":
+				$this->_save_ext_sys_t($arr);
+				break;
+
 			case "cedit_table":
 				if ($arr["request"]["sbt_data"])
 				{
@@ -4836,7 +4847,7 @@ class crm_company extends class_base
 		}
 	}
 
-	function get_cust_rel($view_co)
+	function get_cust_rel($view_co, $crea_if_not_exists = false)
 	{
 		if (!is_oid($view_co->id()))
 		{
@@ -4856,6 +4867,19 @@ class crm_company extends class_base
 		if ($ol->count())
 		{
 			return $ol->begin();
+		}
+		else
+		if ($crea_if_not_exists)
+		{
+			$my_co = obj($my_co);
+			$o = obj();
+			$o->set_class_id(CL_CRM_COMPANY_CUSTOMER_DATA);
+			$o->set_name("Kliendisuhe ".$my_co->name()." => ".$view_co->name());
+			$o->set_parent($my_co->id());
+			$o->set_prop("seller", $my_co->id());
+			$o->set_prop("buyer", $view_co->id());
+			$o->save();
+			return $o;
 		}
 	}
 
@@ -5481,6 +5505,93 @@ class crm_company extends class_base
 			}
 			</script>
 		  <select name=\"foo\" onChange='select_this(this)'>$adds</select></span>$s";
+	}
+
+	function _init_ext_sys_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Siduss&uuml;steem"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "value",
+			"caption" => t("V&auml;&auml;rtus"),
+			"align" => "center"
+		));
+	}
+
+	function _ext_sys_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_ext_sys_t($t);
+
+		$crel = $this->get_cust_rel($arr["obj_inst"], true);
+
+		$data = array();
+		foreach($crel->connections_from(array("type" => "RELTYPE_EXT_SYS_ENTRY")) as $c)
+		{
+			$ent = $c->to();
+			$data[$ent->prop("ext_sys_id")] = $ent->prop("value");
+		}
+		// list all ext systems and let the user edit those
+		$ol = new object_list(array(
+			"class_id" => CL_EXTERNAL_SYSTEM,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"sort_by" => "objects.jrk"
+		));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"value" => html::textbox(array(
+					"name" => "ext[".$o->id()."]",
+					"value" => $data[$o->id()],
+				))
+			));
+		}
+	}
+
+	function _save_ext_sys_t($arr)
+	{
+		$crel = $this->get_cust_rel($arr["obj_inst"], true);
+		$ol = new object_list(array(
+			"class_id" => CL_EXTERNAL_SYSTEM,
+			"lang_id" => array(),
+			"site_id" => array()
+		));	
+		$data = array();
+		foreach($crel->connections_from(array("type" => "RELTYPE_EXT_SYS_ENTRY")) as $c)
+		{
+			$ent = $c->to();
+			$data[$ent->prop("ext_sys_id")] = $ent->id();
+		}
+		foreach($ol->arr() as $o)
+		{
+			if (!isset($data[$o->id()]))
+			{
+				// create new entry obj
+				$ent = obj();
+				$ent->set_name(sprintf(t("Siduss&uuml;steemi %s sisestus objektile %s"), $o->name(), $arr["obj_inst"]->name()));
+				$ent->set_class_id(CL_EXTERNAL_SYSTEM_ENTRY);
+				$ent->set_parent($arr["obj_inst"]->id());
+				$ent->set_prop("ext_sys_id", $o->id());
+				$ent->set_prop("obj", $arr["obj_inst"]->id());
+				$ent->set_prop("value", $arr["request"]["ext"][$o->id()]);
+				$ent->save();
+				$crel->connect(array(
+					"to" => $ent->id(),
+					"type" => "RELTYPE_EXT_SYS_ENTRY"
+				));
+			}
+			else
+			{
+				$ent = obj($data[$o->id()]);
+				$ent->set_prop("value", $arr["request"]["ext"][$o->id()]);
+				$ent->save();
+			}
+		}	
 	}
 }
 
