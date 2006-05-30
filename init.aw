@@ -812,43 +812,46 @@ function aw_startup()
 function aw_shutdown()
 {
 	// whotta fook, this messenger thingie goes here then?:S
-	$cur_usr = new object($_SESSION["uid_oid"]);
-	if($_SESSION["current_user_has_messenger"] && (time() - $_SESSION["current_user_last_m_check"]) > (5 * 60) && $cur_usr->prop("notify") == 1)
+	if($_SESSION["current_user_has_messenger"])
 	{
-		$drv_inst = get_instance("protocols/mail/imap");
-		$drv_inst->set_opt("use_mailbox", "INBOX");
+		$cur_usr = new object($_SESSION["uid_oid"]);
+		if ((time() - $_SESSION["current_user_last_m_check"]) > (5 * 60) && $cur_usr->prop("notify") == 1)
+		{
+			$drv_inst = get_instance("protocols/mail/imap");
+			$drv_inst->set_opt("use_mailbox", "INBOX");
 		
-		$inst = new object($_SESSION["current_user_has_messenger"]);
-		$conns = $inst->connections_from(array("type" => "RELTYPE_MAIL_SOURCE"));
-		list(,$_sdat) = each($conns);
-		$sdat = new object($_sdat->to());
+			$inst = new object($_SESSION["current_user_has_messenger"]);
+			$conns = $inst->connections_from(array("type" => "RELTYPE_MAIL_SOURCE"));
+			list(,$_sdat) = each($conns);
+			$sdat = new object($_sdat->to());
 
-		$drv_inst->connect_server(array("obj_inst" => $_sdat->to()));
-		$emails = $drv_inst->get_folder_contents(array(
-			"from" => 0,
-			"to" => "*",
-		));
-		foreach($emails as $mail_id => $data)
-		{
-			if($data["seen"] == 0)
+			$drv_inst->connect_server(array("obj_inst" => $_sdat->to()));
+			$emails = $drv_inst->get_folder_contents(array(
+				"from" => 0,
+				"to" => "*",
+			));
+			foreach($emails as $mail_id => $data)
 			{
-				$new[] = $data["fromn"];
+				if($data["seen"] == 0)
+				{
+					$new[] = $data["fromn"];
+				}
 			}
+			$count = count($new);
+			$new = join(", ", $new);
+			if(strlen($new))
+			{
+				$sisu = sprintf(t("Sul on %s lugemata kirja! (saatjad: %s)"), $count, $new);
+				$_SESSION["aw_session_track"]["aw"]["do_message"] = $sisu;
+			}
+			$_SESSION["current_user_last_m_check"] = time();
 		}
-		$count = count($new);
-		$new = join(", ", $new);
-		if(strlen($new))
-		{
-			$sisu = sprintf(t("Sul on %s lugemata kirja! (saatjad: %s)"), $count, $new);
-			$_SESSION["aw_session_track"]["aw"]["do_message"] = $sisu;
-		}
-		$_SESSION["current_user_last_m_check"] = time();
 	}
 	// end of that messenger new mail notifiaction crap
 
 
 	global $awt;
-	if (is_object($awt))
+	if (is_object($awt) && $GLOBALS["cfg"]["debug"]["profile"] == 1)
 	{
 		$sums = $awt->summaries();
 
@@ -862,7 +865,7 @@ function aw_shutdown()
 	}
 
 	echo "<!--\n";
-	echo function_exists('memory_get_usage') ? ("memory_get_usage = " . memory_get_usage()." \n") : "";
+	//echo function_exists('memory_get_usage') ? ("memory_get_usage = " . memory_get_usage()." \n") : "";
 	echo "enter_function calls = ".$GLOBALS["enter_function_calls"]." \n";
 	echo "exit_function calls = ".$GLOBALS["exit_function_calls"]." \n";
 /*	echo "error handler calls = ".$GLOBALS["error_handler_calls"]." \n";
@@ -913,6 +916,10 @@ function &__get_site_instance()
 
 function enter_function($name,$args = array())
 {
+	if ($GLOBALS["cfg"]["debug"]["profile"] != 1)
+	{
+		return;
+	}
 	global $awt;
 	if(is_object($awt))
 	{
@@ -928,6 +935,10 @@ function enter_function($name,$args = array())
 
 function exit_function($name,$ret = "")
 {
+	if ($GLOBALS["cfg"]["debug"]["profile"] != 1)
+	{
+		return;
+	}
 	global $awt;
 	if(is_object($awt))
 	{

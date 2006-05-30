@@ -86,3 +86,4 @@ include ${ini_dir}/shop.ini
 include ${ini_dir}/staging.ini
 include ${ini_dir}/template_compiler.ini
 include ${ini_dir}/timing.ini
+include ${ini_dir}/debug.ini
