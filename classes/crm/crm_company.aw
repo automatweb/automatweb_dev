@@ -3822,7 +3822,7 @@ class crm_company extends class_base
 				"site_id" => array(),
 				"lang_id" => array(),
 				"class_id" => CL_TASK,
-				"is_done" => new obj_predicate_compare(OBJ_COMP_LESS, 1)
+				"flags" => array("mask" => OBJ_IS_DONE, "flags" => 0)
 			));
 			return $ol->ids();
 		}
