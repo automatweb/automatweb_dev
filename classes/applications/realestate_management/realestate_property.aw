@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.21 2006/05/17 11:49:50 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.22 2006/05/30 13:35:32 markop Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -132,6 +132,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property project type=relpicker reltype=RELTYPE_REALESTATE_PROJECT clid=CL_PROJECT automatic=1 field=meta method=serialize
 		@caption Projekt
 
+		@property expire type=text field=meta method=serialize
+		@caption aegub
 
 @default group=grp_detailed
 
