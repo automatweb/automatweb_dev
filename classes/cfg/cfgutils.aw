@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.74 2006/03/31 11:23:54 kristo Exp $
+// $Id: cfgutils.aw,v 1.75 2006/05/30 16:15:56 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -8,6 +8,7 @@ class cfgutils extends aw_template
 		$this->init("");
 		$this->fbasedir = $this->cfg["basedir"] . "/xml/properties/";
 		$this->clist_init_done = false;
+		$this->cache = get_instance("cache");
 	}
 
 	function _init_clist()
@@ -572,6 +573,59 @@ class cfgutils extends aw_template
 			as the value
 	**/
 	function load_properties($args = array())
+	{
+		$filter = isset($args["filter"]) ? $args["filter"] : array();
+		if (empty($file))
+		{
+			$file = basename($GLOBALS["cfg"]["__default"]["classes"][$clid]["file"]);
+			if ($clid == 7) $file = "doc";
+		}
+
+		if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+		{
+			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($file).".aw";
+			if (file_exists($trans_fn))
+			{
+				require_once($trans_fn);
+			}
+		}
+
+		$ts = filemtime(aw_ini_get("basedir")."/xml/properties/".$file.".xml");
+		$args["adm_ui_lc"] = $adm_ui_lc;
+		$key = md5(serialize($args));
+
+		$res = $this->cache->file_get_ts($key, $ts);
+		if ($res)
+		{
+			$cache_d = aw_unserialize($res);
+		}
+
+		if (is_array($cache_d))
+		{
+			foreach($cache_d as $k => $v)
+			{
+				$this->$k = $v;
+			}
+			$ret = $cache_d["ret"];
+		}
+		else
+		{
+			$ret = $this->load_properties_unc($args);
+			$cache_d = array(
+				"groupinfo" => $this->groupinfo,
+				"tableinfo" => $this->tableinfo,
+				"classinfo" => $this->classinfo,
+				"relinfo" => $this->relinfo,
+				"propdef" => $this->propdef,
+				"ret" => $ret
+			);
+			$this->cache->file_set($key, aw_serialize($cache_d, SERIALIZE_PHP_FILE));
+		}
+		return $ret;
+	}
+
+
+	function load_properties_unc($args)
 	{
 		$args["load_trans"] = isset($args["load_trans"])?$args["load_trans"]:1;
 		enter_function("load-properties");
