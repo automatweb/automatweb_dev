@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.78 2006/03/28 07:29:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.79 2006/05/30 13:46:15 dragut Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1218,7 +1218,7 @@ class vcalendar extends aw_template
 				"lc_weekday" => get_lc_weekday($wn,$reals),
 				"lc_month" => $mn,
 				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$reals))),
-                "date_and_time" => $dt . ". " . $mn2,
+				"date_and_time" => $dt . ". " . $mn2,
 				"day_name" => locale::get_lc_weekday($wn,true),
 				"long_day_name" => locale::get_lc_weekday($wn),
 				"date" => locale::get_lc_date($reals,5),
@@ -1659,7 +1659,6 @@ class vcalendar extends aw_template
 			$this->aliasmgr->parse_oo_aliases($evt["id"], $evt["content"]);
 		}
 		
-
 		$this->evt_tpl->vars($evt);
 
 		$dt = date("d",$evt["start1"]);
@@ -1704,9 +1703,11 @@ class vcalendar extends aw_template
 			$time = "";
 		};
 		$title = sprintf(t("Lisas [%s] %s /  Muutis [%s] %s"), $evt["createdby"], date("d.m.y", $evt["created"]), $evt["modifiedby"], date("d.m.y", $evt["modified"]));
-		
+
 		$this->evt_tpl->vars(array(
 			"title" => $title,
+			'start_timestamp' => $evt['start'],
+			'end_timestamp' => $evt['end'],
 			"odd" => $this->event_counter % 2,
 			"time" => $time,
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
