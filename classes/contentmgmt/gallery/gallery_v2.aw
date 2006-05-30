@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.61 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.62 2006/05/30 12:40:36 kristo Exp $
 
 /*
 
@@ -1450,7 +1450,7 @@ class gallery_v2 extends class_base
 		$_img = $iinst->get_image_by_id($conf_o->meta($p."logo_img"));
 
 		$l_img = get_instance("core/converters/image_convert");
-		$l_img->load_from_file($_img["file"]);
+		$l_img->load_from_file($iinst->_mk_fn($_img["file"]));
 
 		list($img_x, $img_y) = $img->size();
 		list($l_img_x, $l_img_y) = $l_img->size();
