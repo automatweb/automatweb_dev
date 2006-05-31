@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.75 2006/05/30 16:15:56 kristo Exp $
+// $Id: cfgutils.aw,v 1.76 2006/05/31 12:22:58 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -574,13 +574,14 @@ class cfgutils extends aw_template
 	**/
 	function load_properties($args = array())
 	{
+		$clid = $args["clid"];
+		$file = $args["file"];
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
 		if (empty($file))
 		{
 			$file = basename($GLOBALS["cfg"]["__default"]["classes"][$clid]["file"]);
 			if ($clid == 7) $file = "doc";
 		}
-
 		if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 		{
 			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($file).".aw";
@@ -593,7 +594,6 @@ class cfgutils extends aw_template
 		$ts = filemtime(aw_ini_get("basedir")."/xml/properties/".$file.".xml");
 		$args["adm_ui_lc"] = $adm_ui_lc;
 		$key = md5(serialize($args));
-
 		$res = $this->cache->file_get_ts($key, $ts);
 		if ($res)
 		{
