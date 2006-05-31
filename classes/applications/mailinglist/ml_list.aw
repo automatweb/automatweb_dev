@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.76 2006/05/02 14:02:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.77 2006/05/31 14:45:18 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -595,7 +595,6 @@ class ml_list extends class_base
 		
 		if ($args["op"] == 2)
 		{
-			
 			$retval = $ml_member->unsubscribe_member_from_list(array(
 				"email" => $args["email"],
 				"list_id" => $list_obj->id(),
@@ -661,7 +660,7 @@ class ml_list extends class_base
 		
 		$message = str_replace("#username#", t("Kasutajanimi"), $message);
 		$message = str_replace("#name#", t("Nimi Perenimi"), $message);
-		
+		$message = str_replace("#email#", t("e-mail"), $message);
 		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $message);
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = str_replace("#subject#", $msg_obj->name(), $message);
@@ -1730,7 +1729,6 @@ class ml_list extends class_base
 
 	// --------------------------------------------------------------------
 	// messengerist saatmise osa
-
 	////
 	//! Messenger kutsub välja kui on valitud liste targetiteks
 	// vajab targets ja id
@@ -1783,7 +1781,6 @@ class ml_list extends class_base
 						);
 					}
 					$cnt++;
-//					if(!$all) $already_found[] = $mail;
 				}
 			}
 			if(!$all) $already_found[$mail] = $mail;
@@ -1941,7 +1938,8 @@ class ml_list extends class_base
 			}
 			elseif($source_obj->class_id() == CL_FILE)
 			{
-				$ret = $this->get_members_from_file(array("id" => $source_obj->id() ,
+				$ret = $this->get_members_from_file(array(
+					"id" => $source_obj->id(),
 					"ret" => $ret ,
 					"cnt" => $cnt ,
 					"all" => $all ,
@@ -2375,6 +2373,7 @@ class ml_list extends class_base
 						"value" => t("Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
 							#username# - AutomatWebi kasutajanimi<br />
 							#name# - Listi liikme nimi<br />
+							#e-mail# - Listi liikme e-mail<br/>
 							#subject# - Kirja teema<br />
 							#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />
 							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br />
@@ -2582,13 +2581,10 @@ class ml_list extends class_base
 		));
 	}
 
-	/** delete members from list
-		
+	/** delete mails
 		@attrib name=delete_mails 
-		
 		@param id required type=int 
 		@param group optional
-		
 	**/
 	function delete_mails($arr)
 	{
@@ -2607,11 +2603,8 @@ class ml_list extends class_base
 	}
 		
 	/** delete members from list
-		
 		@attrib name=delete_members 
-		
 		@param id required type=int 
-		
 	**/
 	function delete_members($arr)
 	{
