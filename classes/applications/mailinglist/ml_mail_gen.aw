@@ -178,6 +178,7 @@ class ml_mail_gen extends run_in_background
 		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $arr["msg"]["message"]);
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = str_replace("#lahkumine#" , $html_mail_unsubscribe[0].$unsubscribe_link.$html_mail_unsubscribe[1] , $message);
+		$message = str_replace("#e-mail#" , $arr["mail"] , $message);
 		
 		//parse stuff
 		$parser = get_instance("alias_parser");
