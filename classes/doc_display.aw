@@ -40,7 +40,7 @@ class doc_display extends aw_template
 		$text = $this->_get_text($arr, $doc);
 		$text_no_aliases = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$text);
 
-		$al = get_instance("aliasmgr");
+		$al = get_instance("alias_parser");
 		$mt = $doc->meta();
 		$al->parse_oo_aliases(
 			$doc->id(),
@@ -58,7 +58,7 @@ class doc_display extends aw_template
 		$_date = $doc->prop("doc_modified") > 1 ? $doc->prop("doc_modified") : $doc->modified();
 		$modf = $doc->modifiedby();
 		$modf_eml = "";
-		if ($modf != "")
+		if ($modf != "" && $this->template_has_var_full("modifiedby_email"))
 		{
 			$u = get_instance(CL_USER);
 			$p = $u->get_person_for_uid($modf);
