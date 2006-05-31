@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.95 2006/05/16 14:06:49 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.96 2006/05/31 13:29:43 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -198,10 +198,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property show type=callback callback=callback_gen_contents store=no no_caption=1
 		@caption Foorumi sisu
 
-
-
-
-
 	@reltype TOPIC_FOLDER value=1 clid=CL_MENU
 	@caption Teemade kaust
 
@@ -222,6 +218,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 	@reltype IMAGES_FOLDER value=7 clid=CL_MENU
 	@caption Piltide kaust
+
+	@reltype EMAIL value=8 clid=CL_ML_MEMBER
+	@caption Meiliaadress
 
 */
 
@@ -1820,10 +1819,6 @@ class forum_v2 extends class_base
 			$htmlc->add_property($propdata);
 		};
 
-		// XXX by dragut
-		// i'll make this hack here, just to not show the image upload field
-		// when adding topic by default
-		// actually seems that this should be configurable via cfgform
 		if ($this->obj_inst->prop("show_image_upload_in_add_topic_form"))
 		{
 			$htmlc->add_property(array(
@@ -1960,12 +1955,25 @@ class forum_v2 extends class_base
 		if (is_array($cb_values) && sizeof($cb_values) > 0)
 		{
 			return $this->abort_action($arr);
-		};
+		}
 		$arr["topic"] = $this->topic_id;
 		// see bloody finish_action kalab :(
 
 		aw_session_set("no_cache", 1);
-		return $this->finish_action($arr);
+
+		$topic_url = $this->finish_action($arr);
+
+		if ($obj_inst->connections_from(array("type" => "RELTYPE_EMAIL")))
+		{
+			$t->mail_subscribers(array(
+				'forum_id' => $obj_inst->id(),
+				'id' => $arr['id'],
+				'message' => $arr['comment'],
+				'topic_url' => $topic_url
+			));
+		}
+		
+		return $topic_url;
 	}
 	
 	/** Creates a new comment object for a topic 

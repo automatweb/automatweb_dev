@@ -557,6 +557,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Piltide kaust</caption>
             </IMAGES_FOLDER>
+            <EMAIL>
+                  <value>8</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>Meiliaadress</caption>
+            </EMAIL>
       </reltypes>
 </properties>
 

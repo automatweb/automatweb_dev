@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.17 2006/02/16 11:35:47 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.18 2006/05/31 13:29:43 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -110,6 +110,7 @@ class forum_topic extends class_base
 	{
 		$forum_obj = &obj($args["forum_id"]);
 		$topic_obj = &obj($args["id"]);
+
 		if($forum_obj->prop("mail_subject"))
 		{
 			$subject = $forum_obj->prop("mail_subject");
@@ -136,6 +137,9 @@ class forum_topic extends class_base
 		$targets = array();
 		$targets = $topic_obj->connections_from(array(
 			"type" => "RELTYPE_SUBSCRIBER",
+		));
+		$targets += $forum_obj->connections_from(array(
+			'type' => 'RELTYPE_EMAIL'
 		));
 		foreach($targets as $target)
 		{
