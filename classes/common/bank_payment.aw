@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.5 2006/05/23 12:18:49 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.6 2006/05/31 17:03:29 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -27,7 +27,23 @@ class bank_payment extends class_base
 	//igal pangal on vaja selliseid asju teada
 	var $bank_props = array(
 		"sender_id"	=> "Kaupmehe ID",
-		"stamp"		=> "Arvenumber"
+		"stamp"		=> "Arvenumber",
+	);
+
+	//erinevate pankade lingid
+	var $bank_link = array(
+		"hansapank"	=> "https://www.hanza.net/cgi-bin/hanza/pangalink.jsp",
+		"seb"		=> "https://unet.eyp.ee/cgi-bin/unet3.sh/un3min.r",
+	);
+
+	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
+	var $test_link = array(
+		"seb"	=> "https://unet.eyp.ee/cgi-bin/dv.sh/un3min.r",
+	);
+
+	//test keskkonnas läheb üldjuhul miskeid testandmeid vaja
+	var $test_priv_keys = array(
+		"seb"	=> "vesta.key.key",
 	);
 
 	function bank_payment()
@@ -56,7 +72,6 @@ class bank_payment extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
-
 		}
 		return $retval;
 	}	
@@ -167,24 +182,27 @@ class bank_payment extends class_base
 		if(!$arr["version"]) $arr["version"] = "008";
 		if(!$arr["curr"]) $arr["curr"] = "EEK";
 		if(!$arr["lang"]) $arr["lang"] = "EST";
+		if(!$arr["stamp"]) $arr["stamp"] = "XXX";
 		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["priv_key"])
 		{
-			$fp = fopen( $this->cfg["site_basedir"]."/pank/vesta.key.key", "r");
+			if(!$arr["test"]) $file = "privkey.pem";
+			else $file = $this->test_priv_keys[$arr["bank_id"]];
+			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
 			$arr["priv_key"] = fread($fp, 8192);
 			fclose($fp);
 		}
 		$arr["reference_nr"].= (string)$this->viitenr_kontroll_731($arr["reference_nr"]);
-		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		return($arr);
 	}
 		
-	//if form = 1, returns hrml form tag.
+	//if form = 1, returns hrml input tags in form.
 	function submit($args)
 	{
 		extract($args);
 		$return = "";
-		$return.= '<form name="postform" id="postform" method="post" action='.$link.'>
+		if(!$form) $return.= '<form name="postform" id="postform" method="post" action='.$link.'>
 		';
 		foreach($params as $key => $val)
 		{
@@ -236,7 +254,7 @@ class bank_payment extends class_base
 			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST"
 			"VK_STAMP"	=> $stamp,	//row["arvenr"]
 			"VK_AMOUNT"	=> $amount,	//$row["summa"];
-			"VK_CURR"	=> $currency,	//"EEK"
+			"VK_CURR"	=> $curr,	//"EEK"
 			"VK_REF"	=> $reference_nr,
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
@@ -244,7 +262,6 @@ class bank_payment extends class_base
 			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
-		
 		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
@@ -441,11 +458,13 @@ class bank_payment extends class_base
 	@attrib name=pay_site is_public="1" caption="Change" no_login=1 api=1 params=name
 	@param die optional type=bool
 		if set, dies instead of return
-	
 	@returns string/html
 	@comment
 		makes a list of supported banks with correct forms
 		before calling this function you should fill $_SESSION["bank_payment"]
+		uses template file bank_pay_site.tpl, if it exists , then every sub gets vars:
+			"data" - hidden input fields needed in form 
+			"link" - url to banklink
 	@example
 		$targ = obj($arr["alias"]["target"]);
 		$_SESSION["bank_payment"] = array(
@@ -470,22 +489,6 @@ class bank_payment extends class_base
 		$ret.= '<a href="';
 		$ret.= $bank_payment->mk_my_orb("pay_site", array());
 		$ret.= '"> Maksma </a>';
-	
-		//returned url forwards to site contains something like:"
-		//	<img src="http://vesta.struktuur.ee/automatweb/images/pank/seb_pay.gif"><form name="postform" id="postform" method="post" action=https://unet.eyp.ee/cgi-bin/dv.sh/un3min.r>
-		//	<input type="hidden" name=VK_SERVICE value=1002>
-		//	<input type="hidden" name=VK_VERSION value=008>
-		//	<input type="hidden" name=VK_SND_ID value=testvpos>
-		//	<input type="hidden" name=VK_STAMP value=10002050618003>
-		//	<input type="hidden" name=VK_AMOUNT value=616>
-		//	<input type="hidden" name=VK_CURR value=EEK>
-		//	<input type="hidden" name=VK_REF value=176332>
-		//	<input type="hidden" name=VK_MSG value=616>
-		//	<input type="hidden" name=VK_MAC value=Yz4FzXyX8ek76Tb68ejOF4rZH9BFRl1GmW4IxTGgq7bQaFz4wkYzX7JVcEI9We/gvxMdwBaB811Ltvd7Iu9ubDZpTFpXFuwoGH+fJNzidgHBGRZXtF+kPS3xV2SqmpwEaquogs5vbCTh1b+SM4omCB11WA9olDzv3tc09uUZOPc=>
-		//	<input type="hidden" name=VK_RETURN value=http://vesta.struktuur.ee/automatweb/bank_return.aw>
-		//	<input type="hidden" name=VK_CANCEL value=http://vesta.struktuur.ee/automatweb/bank_return.aw>
-		//	<input type="hidden" name=VK_LANG value=EST>
-		//	<br><input type="submit" value="maksma"></form>
 	**/
 	function pay_site($args)
 	{
@@ -501,14 +504,12 @@ class bank_payment extends class_base
 		$ret = "";
 		foreach($this->banks as $bank => $name)
 		{
-			if(array_key_exists($bank , $data) 
-			&& $data[$bank]["sender_id"]
-			&& $data[$bank]["stamp"])
+			if(array_key_exists($bank , $data) && $data[$bank]["sender_id"])
 			{
 				$ret.='<img src="'.aw_ini_get("baseurl").'/automatweb/images/pank/'.$bank.'_pay.gif">';
 				$bank_form = $this->do_payment(array(
 					"form"		=> 1,
-					"test"		=> 1,
+					"test"		=> $test,
 					"bank_id"	=> $bank,
 					"sender_id"	=> $data[$bank]["sender_id"],
 					"stamp"		=> $data[$bank]["stamp"],
@@ -516,16 +517,19 @@ class bank_payment extends class_base
 					"reference_nr"	=> $reference_nr,
 					"expl"		=> $data["expl"],
 				));
-				
 				if(($template_exists) && ($this->is_template($bank)))
 				{
+					if($test)	$link = $this->test_link[$bank];
+					else		$link = $this->bank_link[$bank];
 					$this->vars(array(
-						$data => $bank_form,
+						"data" => $bank_form,
+						"link" => $link,
 					));
 					$c .= $this->parse($bank);
 					$this->vars(array(
 						$bank => $c,
 					));
+					$c = "";
 				}
 				$ret.= $bank_form;
 				$ret.= '<br><input type="submit" value="maksma"></form>';
@@ -540,6 +544,52 @@ class bank_payment extends class_base
 		}
 		if($die) die($ret);
 		return $ret;
+	}
+	
+	/**
+	@attrib name=check_response is_public="1" caption="Change" no_login=1 api=1
+	@returns 1 if the signature is correct, 0 if it is incorrect, and -1 on error
+	@comment
+		checks if the response from a bank is correct
+		reads data from $_SESSION["bank_return"]["data"]
+	**/
+	function check_response()
+	{
+		extract($_SESSION["bank_return"]["data"]);
+		$data = substr("000".strlen($VK_SERVICE),-3).$VK_SERVICE
+		.substr("000".strlen($VK_VERSION),-3).$VK_VERSION
+		.substr("000".strlen($VK_SND_ID),-3).$VK_SND_ID
+		.substr("000".strlen($VK_REC_ID),-3).$VK_REC_ID
+		.substr("000".strlen($VK_STAMP),-3).$VK_STAMP
+		.substr("000".strlen($VK_T_NO),-3).$VK_T_NO
+		.substr("000".strlen($VK_AMOUNT),-3).$VK_AMOUNT
+		.substr("000".strlen($VK_CURR),-3).$VK_CURR
+		.substr("000".strlen($VK_REC_ACC),-3).$VK_REC_ACC
+		.substr("000".strlen($VK_REC_NAME),-3).$VK_REC_NAME
+		.substr("000".strlen($VK_SND_ACC),-3).$VK_SND_ACC
+		.substr("000".strlen($VK_SND_NAME),-3).$VK_SND_NAME
+		.substr("000".strlen($VK_REF),-3).$VK_REF
+		.substr("000".strlen($VK_MSG),-3).$VK_MSG
+		.substr("000".strlen($VK_T_DATE),-3).$VK_T_DATE;
+
+		$signature = base64_decode($VK_MAC);
+
+		$fp = fopen($this->cfg["site_basedir"]."/pank/".$_SESSION["bank_return"]["data"]["VK_SND_ID"]."_pub.pem", "r");
+		$cert = fread($fp, 8192);
+		fclose($fp);
+		
+		$pubkeyid = openssl_get_publickey($cert);
+		$ok = openssl_verify($data, $signature, $pubkeyid);
+		openssl_free_key($pubkeyid);
+		
+		return $ok;
+		if ($ok == 1) {
+		echo "good";
+		} elseif ($ok == 0) {
+		echo "bad";
+		} else {
+		echo "ugly, error checking signature";
+		}	
 	}
 }
 ?>

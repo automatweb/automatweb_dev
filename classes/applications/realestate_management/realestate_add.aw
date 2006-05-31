@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.12 2006/05/23 12:18:48 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.13 2006/05/31 17:03:29 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -625,17 +625,19 @@ class realestate_add extends class_base
 	function result_page($arr)
 	{
 		$ret = "";
+		$bank_payment = get_instance(CL_BANK_PAYMENT);
 		if(sizeof($_SESSION["bank_return"]["data"])>5)
 		{
 			if($_SESSION["bank_return"]["data"]["VK_SERVICE"] == 1901) $ret.= '<br>Maksmine ei õnnestunud<br><br>';
 			if($_SESSION["bank_return"]["data"]["VK_SERVICE"] == 1101)
 			{
+				if(!$bank_payment->check_response()) return "mingi jama";
 				$obj_id = substr($_SESSION["bank_return"]["data"]["VK_REF"], 0, (strlen($_SESSION["bank_return"]["data"]["VK_REF"])-1));
 				if(is_oid($obj_id))
 				{	
 					$realest_obj = obj($obj_id);	
 					$valid_for = $realest_obj->prop("weeks_valid_for");
-					$realest_obj->set_prop("show_on_webpage" , "1");
+					$realest_obj->set_prop("is_visible" , "1");
 					if(!$realest_obj->prop("expire") || (time() > $realest_obj->prop("expire"))) $expire = time();
 					else $expire = $realest_obj->prop("expire");
 					$realest_obj->set_prop("expire" , $expire + 604800 * $valid_for);
@@ -660,7 +662,6 @@ class realestate_add extends class_base
 			"url" 		=> post_ru(),
 			"cancel"	=> post_ru(),
 		);
-		$bank_payment = get_instance(CL_BANK_PAYMENT);
 		$prop_obj = get_instance(CL_REALESTATE_PROPERTY);
 		$object_view = $prop_obj->request_execute($realest_obj);
 //		if(file_exists($tpl))
@@ -682,7 +683,7 @@ class realestate_add extends class_base
 		$ret.= '"> Tagasi muutmisesse</a><a href="';
 		$ret.= $this->mk_my_orb("my_realestate_list", array());
 		$ret.= '"> Kõik sisestatud pakkumised </a>';
-		if(!($realest_obj->prop("show_on_webpage")))
+		if(!($realest_obj->prop("is_visible")))
 		{
 			$ret.= '<a href="';
 			$ret.= $bank_payment->mk_my_orb("pay_site", array());
@@ -698,10 +699,10 @@ class realestate_add extends class_base
 	**/
 	function parse_alias($arr)
 	{
+		enter_function("realestate_add::parse_alias");
 		global $end , $level, $id, $default;
 		if($end) return $this->result_page($arr);//kui templated otsas või tuleb pangamakselt, siis läheb lõpuvaatesse
 		$targ = obj($arr["alias"]["target"]);
-		enter_function("realestate_add::parse_alias");
 		$clid = $targ->prop("realestate_type");
 		$levels = $targ->meta("levels");
 		$fields = $targ->meta("required_fields");
@@ -745,9 +746,10 @@ class realestate_add extends class_base
 			$tpl = "default_change.tpl";
 		}
 		$this->read_template($tpl);
+		
 		lc_site_load("realestate_add", &$this);
-		//tekitab muutujad erinevate tasemete nimede ja linkidega		
-		$this->level_vars(array("levels" => $levels , "data" => $data));		
+		//tekitab muutujad erinevate tasemete nimede ja linkidega
+		$this->level_vars(array("levels" => $levels , "data" => $data));
 		
 		//juhul , kui template faile rohkem ei ole, siis läheb edasi objekti salvestama
 		if(!$tpl2)
@@ -992,7 +994,13 @@ class realestate_add extends class_base
 				"clid" => CL_REALESTATE_PROPERTY,
 			))
 		);
-
+		
+		//tegeleb vaid nende varidega, mis templates olemas on.... äkki teeb veidi kiiremaks
+		foreach($els as $prop=>$val)
+		{
+			if(!$this->template_has_var($prop)) unset($els[$prop]);
+		}
+		
 		$rd->load_defaults();
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
@@ -1040,23 +1048,27 @@ class realestate_add extends class_base
 	**/
 	function my_realestate_list($args)
 	{
+		enter_function ("realestate_add::list");
 		$uid = aw_global_get("uid");
 		$types = array(CL_REALESTATE_HOUSE, CL_REALESTATE_ROWHOUSE ,
 				CL_REALESTATE_COTTAGE ,CL_REALESTATE_HOUSEPART ,
 				CL_REALESTATE_APARTMENT , CL_REALESTATE_COMMERCIAL,
 				CL_REALESTATE_GARAGE , CL_REALESTATE_LAND,
 		);
-
+	
 		$all_objects = array();
 		foreach($types as $type)
 		{
 			$obj_list = new object_list(array(
 				"class_id" => $type,
 				"createdby" => $uid,
+				"brother_of" => new obj_predicate_prop("id"),
 			));
+			enter_function ("array_merge");
 			$all_objects = array_merge($all_objects,$obj_list->arr());
+			exit_function ("array_merge");
 		}
-		
+	
 		$trans_types = array(
 				301 => t("Müük"),
 				300 => t("Ost"),
@@ -1072,7 +1084,7 @@ class realestate_add extends class_base
 			$c = "";
 			foreach($all_objects as $key => $rlst_object)
 			{
-				if($rlst_object->is_brother()) continue;//ignoreerib miskiseid brothereid
+//				if($rlst_object->is_brother()) continue;//ignoreerib miskiseid brothereid
 				if(is_oid($rlst_object->meta("added_from"))) $change = $rlst_object->meta("added_from")."?id=".$rlst_object->id();
 				else $change = $this->mk_my_orb("parse_alias", array("id" => $rlst_object->id(), "default" => 1));
 				$time = time();
@@ -1083,8 +1095,6 @@ class realestate_add extends class_base
 				if($expire == t("Aegunud")) $extend = t("Pikenda");
 				elseif($expire == t("Maksmata")) $extend = t("Maksa");
 				else $extend = t("");
-			
-			
 				$this->vars(array(
 					"name" 	 	=> $rlst_object->name(),
 					"id"	 	=> $rlst_object->id(),
@@ -1113,6 +1123,7 @@ class realestate_add extends class_base
 				"LIST" => $c,
 			));
 		}
+		exit_function ("realestate_add::list");
 		return $this->parse();
 	}
 
@@ -1151,6 +1162,7 @@ class realestate_add extends class_base
 	**/
 	function subscribe($args = array())//tegeleb postitatud infoga
 	{
+		enter_function ("realestate_add::subscribe");
 		$level = $_SESSION["realestate_input_data"]["level"];
 
 		if(!$_SESSION["realestate_input_data"]["realestate_id"])
@@ -1168,8 +1180,8 @@ class realestate_add extends class_base
 			$realestate_obj->set_name($_SESSION["realestate_input_data"]["name"]);
 			$_SESSION["realestate_input_data"]["realestate_id"] = $realestate_obj_id;
 			$realestate_obj->set_meta("added_from" ,aw_global_get("section"));
-			$realestate_obj->set_prop("show_on_webpage" , "0");//muidu tahab sinna 1 tekkida
-			$realestate_obj->set_prop("is_visible" , "1");
+//			$realestate_obj->set_prop("show_on_webpage" , "0");//muidu tahab sinna 1 tekkida
+			$realestate_obj->set_prop("is_visible" , "0");
 		}
 		else
 		{
@@ -1241,7 +1253,7 @@ class realestate_add extends class_base
 			}
 			$x++;
 		}
-		$unwanted_props = array("show_on_webpage");//mida pole hea mõtet sessiooni panna ega salvestada
+		$unwanted_props = array("is_visible");//mida pole hea mõtet sessiooni panna ega salvestada
 		foreach($args as $key => $val)
 		{
 			if(!(in_array($key , $unwanted_props))) $_SESSION["realestate_input_data"][$key] = $val;
@@ -1299,6 +1311,7 @@ class realestate_add extends class_base
 		$realestate_obj->set_prop("picture_icon" , $picture_icon);
 		$realestate_obj->save();
 		$main_obj = obj($args["id"]);
+		exit_function ("realestate_add::subscribe");
 		if($args["default"])
 		{
 			return $args["return_to"];
@@ -1370,7 +1383,7 @@ class realestate_add extends class_base
 		if(is_oid($id))
 		{
 			$property = obj($id);
-			$property->set_prop("show_on_webpage" , "0");
+			$property->set_prop("is_visible" , "0");
 			if($property->createdby() == $uid) $property->save();
 		}
 		return $this->mk_my_orb("my_realestate_list", array());
@@ -1456,13 +1469,13 @@ class realestate_add extends class_base
 			));
 			foreach($realestate_list->arr() as $mem)
 			{
-				$ret.= $mem->prop("show_on_webpage");
+				$ret.= $mem->prop("is_visible");
 				if(!$mem->prop("expire"))
 				{
 					$ret.= 'pole makstud - '.$mem->id().'<br>';
-					if($mem->prop("show_on_webpage"))
+					if($mem->prop("is_visible"))
 					{
-						$mem->set_prop("show_on_webpage" , "0");
+						$mem->set_prop("is_visible" , "0");
 						$mem->save();
 					}
 					continue;
@@ -1470,9 +1483,9 @@ class realestate_add extends class_base
 				if($mem->prop("expire") < time())
 				{
 					$ret.= 'aegunud - '.$mem->id().'<br>';
-					if($mem->prop("show_on_webpage"))
+					if($mem->prop("is_visible"))
 					{
-						$mem->set_prop("show_on_webpage" , "0");
+						$mem->set_prop("is_visible" , "0");
 						$mem->save();
 					}
 					continue;
