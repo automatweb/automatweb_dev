@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.88 2006/03/22 11:54:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.89 2006/05/31 16:20:33 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -560,12 +560,12 @@ class mrp_resource extends class_base
 	function _init_job_list_table(&$table)
 	{
 
-		/*|| 
-			Ava | Staatus | 
-		    Projekti nr. | Klient | 
-			Projekti nimetus | Trükitud (ehk algus ehk esimese töö töösse minek) [dd-kuu-yyyy] | 
-			Tähtaeg [dd-kuu-yyyy] | 
-			Trükiarv: | 
+		/*||
+			Ava | Staatus |
+		    Projekti nr. | Klient |
+			Projekti nimetus | Trükitud (ehk algus ehk esimese töö töösse minek) [dd-kuu-yyyy] |
+			Tähtaeg [dd-kuu-yyyy] |
+			Trükiarv: |
 			Tükiarv Notes: ||*/
 
 		$table->define_field(array(
@@ -643,7 +643,7 @@ class mrp_resource extends class_base
 		$table =& $arr["prop"]["vcl_inst"];
 		$this->_init_job_list_table($table);
 
-	
+
 
 		$table->set_default_sortby ("starttime");
 		$table->set_default_sorder ("asc");
@@ -678,7 +678,7 @@ class mrp_resource extends class_base
 			### get project and client name
 			$project = $client = "";
 
-			if (!is_oid ($job->prop ("project")) || !$this->can("view", $job->prop("project")))
+			if (!$this->can("view", $job->prop("project")))
 			{
 				continue;
 			}
@@ -686,7 +686,7 @@ class mrp_resource extends class_base
 			$p = obj($job->prop("project"));
 			$project = html::get_change_url($p->id(), array("return_url" => get_ru()), ($p->name() . "-" . $job->prop ("exec_order")));
 
-			if (is_oid($p->prop("customer")) && $this->can("view", $p->prop("customer")))
+			if ($this->can("view", $p->prop("customer")))
 			{
 				$c = obj($p->prop("customer"));
 				$client = html::get_change_url($c->id(), array("return_url" => get_ru()), $c->name());
@@ -763,7 +763,7 @@ class mrp_resource extends class_base
 			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
 			{
 /* dbg */ if (!is_oid ($job->prop ("project"))) { echo "project is not an object. job:" . $job->id () . " proj:" . $job->prop ("project") ."<br>"; }
-				if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+				if (!$this->can("view", $job->prop("project")))
 				{
 					continue;
 				}
@@ -1330,7 +1330,7 @@ class mrp_resource extends class_base
 		{
 			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
 			{
-				if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+				if (!$this->can("view", $job->prop("project")))
 				{
 					continue;
 				}
@@ -1375,7 +1375,7 @@ class mrp_resource extends class_base
 				"name" => $task->name()
 			);
 		}
-		
+
 		return $ret;
 	}
 
@@ -1385,8 +1385,8 @@ class mrp_resource extends class_base
 		$evstr = "";
 		$ri = $resource->instance();
 		$events = $ri->get_events_for_range(
-			$resource, 
-			$start, 
+			$resource,
+			$start,
 			$end
 		);
 		if (count($events))
@@ -1403,8 +1403,8 @@ class mrp_resource extends class_base
 		if ($avail)
 		{
 			$una = $ri->get_unavailable_periods(
-				$resource, 
-				$start, 
+				$resource,
+				$start,
 				$end
 			);
 
@@ -1418,13 +1418,13 @@ class mrp_resource extends class_base
 							  date("d.m.Y H:i", $event["end"]).": ".$event["name"];
 				}
 			}
-		}			
+		}
 
 		if ($avail)
 		{
 			$una = $ri->get_recurrent_unavailable_periods(
-				$resource, 
-				$start, 
+				$resource,
+				$start,
 				$end
 			);
 			if (count($una))
@@ -1438,7 +1438,7 @@ class mrp_resource extends class_base
 				}
 			}
 		}
-		
+
 		if ($avail)
 		{
 			return true;

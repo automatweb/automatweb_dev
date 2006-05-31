@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.131 2006/05/17 07:12:26 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.132 2006/05/31 16:20:33 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -290,7 +290,7 @@ class mrp_schedule extends class_base
 
 		$workspace_id = (int) $arr["mrp_workspace"];
 
-		if (is_oid($workspace_id) and $this->can ("view", $workspace_id))
+		if ($this->can ("view", $workspace_id))
 		{
 			$workspace = obj ($workspace_id);
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.162 2006/05/17 07:25:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.163 2006/05/31 16:20:33 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1776,14 +1776,13 @@ if ($_GET['show_thread_data'] == 1)
 			"type" => TREE_DHTML,
 			"tree_id" => "projecttree",
 			"persist_state" => 1,
-			"has_root" => true,
-			"root_id" => "all",
+			"has_root" => 1,
+			"open_path" => $open_path,
 			"root_url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "all",
 				"ft_page" => 0
 			)),
 			"root_name" => t("Kõik projektid") . " (" . $this->projects_all_count . ")",
-			"open_path" => $open_path,
 			"get_branch_func" => $this->mk_my_orb("get_projects_subtree", array(
 				"id" => $this_object->id(),
 				"url" => aw_global_get("REQUEST_URI"),
@@ -1794,6 +1793,7 @@ if ($_GET['show_thread_data'] == 1)
 		// $tree->add_item (0, array (
 			// "name" => t("Planeerimine"),
 			// "id" => "planning",
+			// "parent" => 0,
 			// "url" => aw_url_change_var (array(
 				// "mrp_tree_active_item" => "planning",
 				// "ft_page" => 0
@@ -1803,6 +1803,7 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->add_item (0, array (
 			"name" => t("Plaanisolevad") . " (" . $this->projects_planned_count . ")",
 			"id" => "planned",
+			"parent" => 0,
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "planned",
 				"ft_page" => 0
@@ -1812,6 +1813,7 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->add_item (0, array (
 			"name" => t("Hetkel töös") . " (" . $this->projects_in_work_count . ")",
 			"id" => "inwork",
+			"parent" => 0,
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "inwork",
 				"ft_page" => 0
@@ -1821,6 +1823,7 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->add_item (0, array (
 			"name" => t("Planeeritud üle tähtaja") . " (" . $this->projects_planned_overdue_count . ")",
 			"id" => "planned_overdue",
+			"parent" => 0,
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "planned_overdue",
 				"ft_page" => 0
@@ -1830,6 +1833,7 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->add_item (0, array (
 			"name" => t("Üle tähtaja") . " (" . $this->projects_overdue_count . ")",
 			"id" => "overdue",
+			"parent" => 0,
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "overdue",
 				"ft_page" => 0
@@ -1839,6 +1843,7 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->add_item (0, array (
 			"name" => t("Uued") . " (" . $this->projects_new_count . ")",
 			"id" => "new",
+			"parent" => 0,
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "new",
 				"ft_page" => 0
@@ -1848,6 +1853,7 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->add_item (0, array (
 			"name" => t("Katkestatud") . " (" . $this->projects_aborted_count . ")",
 			"id" => "aborted",
+			"parent" => 0,
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "aborted",
 				"ft_page" => 0
@@ -1857,6 +1863,7 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->add_item (0, array (
 			"name" => t("Plaanist väljas") . " (" . $this->projects_onhold_count . ")",
 			"id" => "onhold",
+			"parent" => 0,
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "onhold",
 				"ft_page" => 0
@@ -1866,6 +1873,7 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->add_item (0, array (
 			"name" => t("Valmis") . " (" . $this->projects_done_count . ")",
 			"id" => "done",
+			"parent" => 0,
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "done",
 				"ft_page" => 0
@@ -1890,6 +1898,7 @@ if ($_GET['show_thread_data'] == 1)
 
 		$tree->add_item (0, array (
 			"name" => t("Allhanket&ouml;&ouml;d") . " (" . $this->jobs_subcontracted_count . ")",
+			"parent" => 0,
 			"id" => "subcontracts",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "subcontracts",
@@ -1899,6 +1908,7 @@ if ($_GET['show_thread_data'] == 1)
 
 		$tree->add_item (0, array (
 			"name" => t("Katkestatud t&ouml;&ouml;d") . " (" . $this->jobs_aborted_count . ")",
+			"parent" => 0,
 			"id" => "aborted_jobs",
 			"url" => aw_url_change_var (array(
 				"mrp_tree_active_item" => "aborted_jobs",
@@ -1906,9 +1916,10 @@ if ($_GET['show_thread_data'] == 1)
 			)),
 		));
 
-		$active_node = empty ($arr["request"]["mrp_tree_active_item"]) ? "planning" : $arr["request"]["mrp_tree_active_item"];
+		$active_node = empty ($arr["request"]["mrp_tree_active_item"]) ? "planned" : $arr["request"]["mrp_tree_active_item"];
+		$active_node = ("all" == $arr["request"]["mrp_tree_active_item"]) ? 0 : $active_node;
 		$tree->set_selected_item ($active_node);
-		$arr["prop"]["value"] = $tree->finalize_tree();
+		$arr["prop"]["value"] = $tree->finalize_tree(0);
 	}
 
 	function create_projects_list ($arr = array ())
@@ -2659,7 +2670,7 @@ if ($_GET['show_thread_data'] == 1)
 
 		foreach ($jobs as $job)
 		{
-			if (!is_oid($job["project"]) || !$this->can("view", $job["project"]))
+			if (!$this->can("view", $job["project"]))
 			{
 				continue;
 			}
@@ -3306,7 +3317,7 @@ if ($_GET['show_thread_data'] == 1)
 	{
 		$arr["return_url"] = urldecode($arr["return_url"]);
 
-		if (!is_oid($arr["unit"]) || !$this->can("view", $arr["unit"]))
+		if (!$this->can("view", $arr["unit"]))
 		{
 			return $arr["return_url"];
 		}
@@ -3972,13 +3983,13 @@ if ($_GET['show_thread_data'] == 1)
 		$cnt = 0;
 		foreach($jobs as $job)
 		{
-			if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+			if (!$this->can("view", $job->prop("project")))
 			{
 				continue;
 			}
 			$cnt++;
 			$res = obj($job->prop("resource"));
-			if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+			if (!$this->can("view", $job->prop("project")))
 			{
 				$proj = obj();
 			}
@@ -4186,7 +4197,7 @@ if ($_GET['show_thread_data'] == 1)
 		$ret = array();
 		foreach($ops->arr() as $op)
 		{
-			if (is_oid($op->prop("resource")) && $this->can("view", $op->prop("resource")))
+			if ($this->can("view", $op->prop("resource")))
 			{
 				$reso = obj($op->prop("resource"));
 				$ret[] = $reso->name();
@@ -4253,7 +4264,7 @@ if ($_GET['show_thread_data'] == 1)
 		$ret = array();
 		foreach($ops->arr() as $op)
 		{
-			if (is_oid($op->prop("resource")) && $this->can("view", $op->prop("resource")))
+			if ($this->can("view", $op->prop("resource")))
 			{
 				$ret[$op->prop("resource")] = $op->prop("resource");
 			}
@@ -4351,7 +4362,7 @@ if ($_GET['show_thread_data'] == 1)
 		$ret = array();
 		foreach($jobs->arr() as $o)
 		{
-			if (is_oid($o->prop("resource")) && $this->can("view", $o->prop("resource")))
+			if ($this->can("view", $o->prop("resource")))
 			{
 				$ret[] = $o;
 			}
@@ -4683,7 +4694,7 @@ if ($_GET['show_thread_data'] == 1)
 	{
 		foreach(safe_array($_SESSION["mrp_workspace"]["cut_resources"]) as $resource)
 		{
-			if (is_oid($resource) && $this->can("edit", $resource))
+			if ($this->can("edit", $resource))
 			{
 				$o = obj($resource);
 				$o->set_parent($arr["mrp_tree_active_item"]);
@@ -4694,7 +4705,7 @@ if ($_GET['show_thread_data'] == 1)
 
 		foreach(safe_array($_SESSION["mrp_workspace"]["copied_resources"]) as $resource)
 		{
-			if (is_oid($resource) && $this->can("view", $resource) && $this->can("add", $arr["mrp_tree_active_item"]))
+			if ($this->can("view", $resource) && $this->can("add", $arr["mrp_tree_active_item"]))
 			{
 				$o = obj($resource);
 				$o->set_parent($arr["mrp_tree_active_item"]);
@@ -5184,11 +5195,9 @@ if ($_GET['show_thread_data'] == 1)
 			$tree = get_instance("vcl/treeview");
 			$tree->start_tree (array (
 				"type" => TREE_DHTML,
+				"tree_id" => "projecttree",
 				"has_root" => false,
-				"get_branch_func" => $this->mk_my_orb("get_projects_subtree", array(
-					"id" => $this_object->id(),
-					"parent" => "",
-				)),
+				"persist_state" => 1,
 			));
 
 			# get items
@@ -5243,7 +5252,14 @@ if ($_GET['show_thread_data'] == 1)
 				}
 			}
 
-			return $tree->finalize_tree(array("rootnode" => $arr["parent"]));
+			preg_match ("/mrp_tree_active_item=([^\&]+)/", $arr["url"], $active_node);
+
+			if ($active_node[1])
+			{
+				$tree->set_selected_item ($active_node[1]);
+			}
+
+			exit ($tree->finalize_tree(array("rootnode" => $arr["parent"])));
 		}
 	}
 }

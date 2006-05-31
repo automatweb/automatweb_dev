@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.96 2006/05/17 07:17:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.97 2006/05/31 16:20:33 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -844,7 +844,7 @@ class mrp_case extends class_base
 
 		foreach ($jobs as $job)
 		{
-			if (!is_oid($job["project"]) || !$this->can("view", $job["project"]))
+			if (!$this->can("view", $job["project"]))
 			{
 				continue;
 			}
@@ -1176,7 +1176,7 @@ class mrp_case extends class_base
 
 	function create_workflow_table ($arr)
 	{
-		$this_object =& $arr["obj_inst"];
+		$this_object = $arr["obj_inst"];
 
 		### init. table
 		$table =& $arr["prop"]["vcl_inst"];
@@ -1245,6 +1245,10 @@ class mrp_case extends class_base
 		{
 			$job = $connection->to ();
 			$job_id = $job->id ();
+
+			unset($GLOBALS["objects"][$job_id]);//!!! ajutine. et peale planeerimist loetaks t88objektid uuesti sisse.
+			$job = obj($job_id);
+
 			$resource_id = $job->prop ("resource");
 			$resource = obj ($resource_id);
 			$disabled = false;
@@ -1267,7 +1271,7 @@ class mrp_case extends class_base
 
 			foreach ($prerequisites as $oid)
 			{
-				if (is_oid ($oid) and $this->can("view", $oid))
+				if ($this->can("view", $oid))
 				{
 					$prerequisite_job = obj ($oid);
 					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
@@ -1631,125 +1635,6 @@ class mrp_case extends class_base
 		}
 	}
 
-	function order_jobs_old ($arr = array ())// unused function
-	{
-		if (is_oid ($arr["oid"]))
-		{
-			$this_object = obj ($arr["oid"]);
-		}
-
-		if (is_object ($arr["obj_inst"]))
-		{
-			$this_object =& $arr["obj_inst"];
-		}
-
-		$connections = $this_object->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
-		$workflow = array ();
-
-		foreach ($connections as $connection)
-		{
-			$job = $connection->to ();
-
-			if ($job->prop ("state") != MRP_STATUS_DELETED)
-			{
-				$job_id = $job->id ();
-				$prerequisites = explode (",", $job->prop ("prerequisites"));
-				$workflow[$job_id] = $prerequisites;
-			}
-		}
-
-		$jobs = $this->workflow2sequence ($workflow);
-
-		foreach ($jobs as $key => $job_id)
-		{
-			if (is_oid ($job_id))
-			{
-				$job = obj ($job_id);
-				$job->set_prop ("exec_order", ($key + 1));
-				aw_disable_acl();
-				$job->save ();
-				aw_restore_acl();
-			}
-			else
-			{
-				veryseriouserror;
-			}
-		}
-	}
-
-	// converts workflow to sequence of jobs. concurrent jobs are ordered as given in Input
-	// Input: $workflow = array (job_id_1 => array (prerequisite_job_id_m, ...), ...)
-	// if job n has no prerequisites then: job_id_n => array (0)
-	// Output: ordered non-associative array of job id-s: array (0 => job_id_1, ...)
-	function workflow2sequence ($workflow_input = array ())// unused function
-	{
-		$workflow = array ();
-
-		foreach ($workflow_input as $job_id => $prerequisites)
-		{
-			if ($prerequisites[0])
-			{
-				foreach ($prerequisites as $value)
-				{
-					if ($value)
-					{
-						$workflow[$job_id][] = trim ($value);
-					}
-				}
-			}
-			else
-			{
-					$workflow[$job_id][] = 0;
-			}
-		}
-
-		$sequence = array ();
-		$current_prerequisites = array (0);
-
-		while ($current_prerequisites !== false)
-		{
-			$new_prerequisites = array ();
-
-			foreach ($current_prerequisites as $current_prerequisite)
-			{
-				foreach ($workflow as $job_id => $prerequisites)
-				{
-					foreach ($workflow[$job_id] as $key => $prerequisite)
-					{
-						if ($prerequisite == $current_prerequisite)
-						{
-							if ( (count ($prerequisites) == 1) or (count ($workflow) == 1) )
-							{
-								if (!in_array ($job_id, $sequence))
-								{
-									$sequence[] = $job_id;
-
-									if (!in_array ($job_id, $new_prerequisites))
-									{
-										$new_prerequisites[] = $job_id;
-									}
-								}
-							}
-
-							unset ($workflow[$job_id][$key]);
-						}
-					}
-				}
-			}
-
-			if (empty ($new_prerequisites))
-			{
-				$current_prerequisites = false;
-			}
-			else
-			{
-				$current_prerequisites = $new_prerequisites;
-			}
-		}
-
-		return $sequence;
-	}
-
 /**
     @attrib name=add_job
 	@param oid required type=int
@@ -2014,7 +1899,7 @@ class mrp_case extends class_base
 
 		if ($ws)
 		{
-			if (is_oid($ws->prop("case_header_controller")) && $this->can("view", $ws->prop("case_header_controller")))
+			if ($this->can("view", $ws->prop("case_header_controller")))
 			{
 				$ctr = obj($ws->prop("case_header_controller"));
 				$i = $ctr->instance();
@@ -2580,7 +2465,7 @@ class mrp_case extends class_base
 
 			foreach ($prerequisites as $oid)
 			{
-				if (is_oid ($oid) and $this->can("view", $oid))
+				if ($this->can("view", $oid))
 				{
 					$prerequisite_job = obj ($oid);
 					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");

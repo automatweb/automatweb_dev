@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.77 2006/03/09 11:46:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.78 2006/05/31 16:20:33 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1275,7 +1275,7 @@ class mrp_job extends class_base
 
 			foreach ($prerequisites as $prerequisite_oid)
 			{
-				if (!is_oid($prerequisite_oid) || !$this->can("view", $prerequisite_oid))
+				if (!$this->can("view", $prerequisite_oid))
 				{
 					continue;
 				}
@@ -1308,7 +1308,7 @@ class mrp_job extends class_base
 		}
 
 		### check if project is ready to go on
-		if (is_oid($job->prop("project")) && $this->can("view", $job->prop("project")))
+		if ($this->can("view", $job->prop("project")))
 		{
 			$project = obj($job->prop("project"));
 		}
