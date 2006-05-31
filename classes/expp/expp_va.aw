@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.11 2006/05/31 17:39:42 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.12 2006/05/31 18:11:35 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -172,7 +172,7 @@ class expp_va extends class_base {
 			$_tmp = '';
 			foreach( $val as $key1 => $val1 ) {
 				if( $this->lang != 'et' ) {
-					$_laid = ( isset( $val1['lang_toode'] ) && !empty( $val1['lang_toode'] ) ? $val1['lang_toode'] : $val1['toote_nimetus'] );
+					$_laid = ( isset( $val1['lang_toode'] ) && !empty( $val1['lang_toode'] ) ? $val1['lang_toode'] : htmlentities($val1['toote_nimetus']) );
 				} else {
 					$_laid = $val1['toote_nimetus'];
 				}
@@ -311,7 +311,7 @@ class expp_va extends class_base {
 		$i = 0;
 		while ($row = $this->db_next()) {
 			if( $this->lang != 'et' ) {
-				$_laid = ( isset( $row['lang_toode'] ) && !empty( $row['lang_toode'] ) ? $row['lang_toode'] : $row['toote_nimetus'] );
+				$_laid = ( isset( $row['lang_toode'] ) && !empty( $row['lang_toode'] ) ? $row['lang_toode'] : htmlentities($row['toote_nimetus']) );
 			} else {
 				$_laid = $row['toote_nimetus'];
 			}
@@ -388,7 +388,7 @@ class expp_va extends class_base {
 
 		if( $this->lang != 'et' ) {
 			$_laid = reset( $_vanne );
-			$_laid = ( isset( $_laid['lang_toode'] ) && !empty( $_laid['lang_toode'] ) ? $_laid['lang_toode'] : $__aid );
+			$_laid = ( isset( $_laid['lang_toode'] ) && !empty( $_laid['lang_toode'] ) ? $_laid['lang_toode'] : htmlentities($__aid) );
 		} else {
 			$_laid = $__aid;
 		}
@@ -528,7 +528,7 @@ class expp_va extends class_base {
 			}
 */
 			$_url = urlencode( $_vanne[$_pindeks]['valjaande_nimetus'] );
-			$_title = ( isset( $_vanne[$_pindeks]['lang_va'] ) && !empty( $_vanne[$_pindeks]['lang_va'] ) ? $_vanne[$_pindeks]['lang_va'] : $_vanne[$_pindeks]['valjaande_nimetus'] );
+			$_title = ( isset( $_vanne[$_pindeks]['lang_va'] ) && !empty( $_vanne[$_pindeks]['lang_va'] ) ? $_vanne[$_pindeks]['lang_va'] : htmlentities($_vanne[$_pindeks]['valjaande_nimetus']) );
 			$_price1 = '';
 			$_price2 = '';
 			if( !empty( $val['hinnad'] )) {
@@ -558,7 +558,7 @@ class expp_va extends class_base {
 			$this->vars(array(
 				'nimi' => $_title,
 //				'kirjeldus' => $_vanne[$_pindeks]['kampaania'],
-				'kirjeldus' => $_kirjeldus,
+				'kirjeldus' => htmlentities($_kirjeldus),
 				$_kamp.'PRICE1' => $_price1,
 				$_kamp.'PRICE2' => $_price2
 			));
