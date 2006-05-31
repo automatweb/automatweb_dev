@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.10 2006/05/31 17:38:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.11 2006/05/31 17:39:42 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -107,7 +107,7 @@ class expp_va extends class_base {
 		$this->cp->log( get_class($this), "show" );
 
 		$_cache_name = urlencode( $this->lang.'_va_tyyplist_'.$_tyyp_nimi );
-//xxx		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
 		if( !empty( $retHTML )) {
 			return $retHTML;
 		}
