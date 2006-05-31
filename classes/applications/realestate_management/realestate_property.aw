@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.22 2006/05/30 13:35:32 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.23 2006/05/31 15:17:24 markop Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -2062,7 +2062,6 @@ class realestate_property extends class_base
 			);
 			$this->load_agent_data ($agent1_oid, $param);
 		}
-
 		if (isset ($this->realestate_agents_data[$agent1_oid]))
 		{
 			if (!$arr["no_extended_agent_data"])
@@ -2473,10 +2472,15 @@ class realestate_property extends class_base
 		{
 			return false;
 		}
-
+		
+		$person = $agent->get_first_obj_by_reltype ("RELTYPE_PERSON");		
+		if (is_object ($person))
+		{
+			$this->realestate_agents_data[$agent_oid]["name"] = $person->name();
+		}
+		else $this->realestate_agents_data[$agent_oid]["rank"] = $rank->name ();
+		
 		$rank = $agent->get_first_obj_by_reltype ("RELTYPE_RANK");
-
-		$this->realestate_agents_data[$agent_oid]["name"] = $agent->name ();
 
 		if (is_object ($rank))
 		{
