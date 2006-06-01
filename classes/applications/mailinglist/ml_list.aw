@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.77 2006/05/31 14:45:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.78 2006/06/01 12:20:55 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -163,6 +163,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @property write_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
 @caption Grupid kellele kiri saata
 
+@property no_fck type=checkbox ch_value=1
+@caption Maili kirjutamine plaintext vaates
+
 @property write_mail type=callback callback=callback_gen_write_mail store=no no_caption=1
 @caption Maili kirjutamine
 
@@ -251,7 +254,7 @@ class ml_list extends class_base
 
 	function callback_pre_edit($arr)
 	{
-		if($arr["group"] == "write_mail")
+		if(($arr["group"] == "write_mail")&&(!$arr["obj_inst"]->prop("no_fck")))
 		{
 			$arr["classinfo"]["allow_rte"] = 2;
 		}
@@ -701,8 +704,11 @@ class ml_list extends class_base
 				}
 				break;
 			*/
+			case "no_fck":
+				if($prop["value"]) $this->set_classinfo(array("allow_rte" => 0));
+				else $this->set_classinfo(array("allow_rte" => 2));
+			
 			case "emb[mfrom]":
-
 				$objs = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_SENDER",
 				));
@@ -915,6 +921,10 @@ class ml_list extends class_base
 				}
 				break;
 			*/
+			case "no_fck":
+				if($prop["value"]) $this->set_classinfo(array("allow_rte" => 0));
+				else $this->set_classinfo(array("allow_rte" => 2));
+			
 			case "import_textfile":
 				$imp = $_FILES["import_textfile"]["tmp_name"];
 				if (!is_uploaded_file($imp))
@@ -949,7 +959,6 @@ class ml_list extends class_base
 				}
 				break;
 				
-
 			case "mass_subscribe":
 				if(!$this->mass_subscribe(array(
 					"list_id" => $arr["obj_inst"]->id(),
@@ -984,8 +993,13 @@ class ml_list extends class_base
 		return $retval;
 	}
 
+
 	function callback_mod_retval($arr)
 	{
+		$object = obj($arr["args"]["id"]);
+		if($object->prop["no_rtf"]) $this->set_classinfo(array("allow_rte" => 0));
+		else $this->set_classinfo(array("allow_rte" => 2));
+
 		if (isset($this->do_export))
 		{
 			$arr["action"] = "export_members";
@@ -2348,6 +2362,8 @@ class ml_list extends class_base
 		// of releditor. So why can't I use _that_ to write a new mail. Eh?
 		
 		// would be nice to have some other and better method to do this
+		
+
 		
 		$prps = array("name", "html_mail", "message", "msg_contener_title", "msg_contener_content" , "mfrom",  "mfrom_name"); 
 		foreach($all_props as $id => $prop)
