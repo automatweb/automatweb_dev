@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.78 2006/05/26 15:01:09 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.79 2006/06/01 08:42:40 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -68,7 +68,7 @@ class aw_table extends aw_template
 		// if true and chooser is used, checking chooser checkboxes changes the style of the row as well
 		$this->chooser_hilight = true;
 	}
-	
+
 	/**
 	@attrib api=1 params=pos
 	@param arg required type=bool
@@ -159,7 +159,7 @@ class aw_table extends aw_template
 		}
 		return true;
 	}
-	
+
 	/**
 	@attrib api=1 params=pos
 	@param $idx required type=int
@@ -177,7 +177,7 @@ class aw_table extends aw_template
 	/**
 	@attrib api=1
 	@return array(row id => row data, row id => row data, ....)
-	@comments 
+	@comments
 		returns all data set for the table
 	**/
 	function get_data()
@@ -189,7 +189,7 @@ class aw_table extends aw_template
 	// !Clear the data
 	/**
 	@attrib api=1
-	@comments 
+	@comments
 		clear the data array
 	**/
 	function clear_data()
@@ -204,7 +204,7 @@ class aw_table extends aw_template
 	@attrib api=1 params=pos
 	@param $row required type=array
 		Array(column name => value, column name => value, column name => value , ....)
-	@comments 
+	@comments
 		merges $row with last row in data array
 	**/
 	function merge_data($row)
@@ -228,7 +228,7 @@ class aw_table extends aw_template
 	@param remote optional type=string
 		If specified, the link will open in a new window and this parameter also must contain the height,width of the popup
 		)
-	@comments 
+	@comments
 		here you can add action rows to the table
 	**/
 	function define_action($row)
@@ -243,18 +243,18 @@ class aw_table extends aw_template
 	@param $field required type=string
 		field name
 	@example ${draw}
-	@comments 
+	@comments
 		Defines a chooser (a column of checkboxes)
-	**/	
+	**/
 	function define_chooser($arr)
 	{
 		$this->chooser_config = $arr;
 		$this->use_chooser = true;
 	}
-	
+
 	/**
 	@attrib api=1
-	@comments 
+	@comments
 		Removes a chooser
 	**/
 	function remove_chooser()
@@ -269,7 +269,7 @@ class aw_table extends aw_template
 		The caption at the left of the header
 	@param $links optional type=array
 		An array of link => text pairs that will be put in the header
-	@comments 
+	@comments
 		Here you can define additional headers
 	**/
 	function define_header($caption,$links = array())
@@ -304,7 +304,7 @@ class aw_table extends aw_template
 	@attrib api=1 params=pos
 	@param $elname required type=string
 		Field name
-	@comments 
+	@comments
 		This lets you set a field as numeric, so that they will be sorted correctly
 	**/
 	function set_numeric_field($elname)
@@ -317,7 +317,7 @@ class aw_table extends aw_template
 	@param $sortby required type=string/array
 		The default sorting element(s)
 	@example ${draw}
-	@comments 
+	@comments
 		sets the default sorting element(s) for the table
 		if the sorting function finds that there are no other sorting arrangements made, then it will use
 		the element(s) specified here.
@@ -339,7 +339,7 @@ class aw_table extends aw_template
 	@param $dir required type=string/array
 		A string (asc/desc) or an array of strings - it will be linked to the sort element by index
 	@example ${draw}
-	@comments 
+	@comments
 		Sets the default sorting order
 		If the sorting function finds that there are no other sorting arrangements made, then it will use
 		The order specified here.
@@ -651,7 +651,7 @@ class aw_table extends aw_template
 		   return ($a["order"] < $b["order"]) ? -1 : 1;
 		}
 	}
-	
+
 	/** sets the REQUEST_URI
 		@attrib api=1 params=pos
 		@param ru required type=string
@@ -686,7 +686,7 @@ class aw_table extends aw_template
 			"name" => "sisseastuja_nr",
 			"caption" => t("Sisseastuja Nr."),
 			"sortable" => 1
-		));		
+		));
 		$table->define_chooser(array(
 			"name" => "selection",
 			"field" => "sisseastuja_id",
@@ -1542,29 +1542,29 @@ class aw_table extends aw_template
 	}
 
 	var $filters_updated = false;
-	
+
 	/**Defines table field
 		@attrib api=1 params=name
 		@param name optional type=string
 			Field name
 		@param caption optional type=string
 			Field caption
-		@param sortable optional type=bool	
+		@param sortable optional type=bool
 			If set, the table is sortable
-		@param type optional type=string	
+		@param type optional type=string
 			Field type
-		@param format optional type=string	
+		@param format optional type=string
 			Field format
-		@param numeric optional type=bool	
-		
+		@param numeric optional type=bool
+
 		@param filter_compare optional
-			
+
 		@param order optional
-			
+
 		@param filter optional
-		
+
 		@param filter_options optional
-		
+
 		@example ${draw}
 	**/
 	function define_field($args = array())
@@ -2074,7 +2074,7 @@ class aw_table extends aw_template
 			}
 
 			$style = false;
-			if (ifset($v,"sortable"))
+			if (isset($v["sortable"]))
 			{
 				if (isset($this->sortby[$v["name"]]))
 				{
@@ -2092,7 +2092,7 @@ class aw_table extends aw_template
 			$style = isset($this->col_styles[$v["name"]][$style_key]) ? $this->col_styles[$v["name"]][$style_key] : "";
 			if (!$style)
 			{
-				$style = (ifset($v,"sortable") ? (isset($this->sortby[$v["name"]]) ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
+				$style = (isset($v["sortable"]) ? (isset($this->sortby[$v["name"]]) ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
 			}
 
 			$sh_cnt = $this->sh_counts_by_parent[$v["name"]];
@@ -2110,7 +2110,7 @@ class aw_table extends aw_template
 			));
 
 			// if the column is sortable, turn it into a link
-			if (ifset($v,"sortable"))
+			if (isset($v["sortable"]))
 			{
 				// by default (the column is not sorted) don't show any arrows
 				$sufix = "";
