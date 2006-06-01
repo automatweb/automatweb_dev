@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.79 2006/06/01 08:42:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.80 2006/06/01 09:06:31 tarvo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -650,6 +650,53 @@ class aw_table extends aw_template
 		{
 		   return ($a["order"] < $b["order"]) ? -1 : 1;
 		}
+	}
+	
+	/**
+		@attrib api=1 params=name
+		@param header required type=array
+			Consists of same type of arrays that the ones define_field() takes. As much such array's you put here, as much fields you get. The array keys set the order of the fields.
+		@param row_01 optional type=array
+			First row's data. Array has the same structure as define_data() parameter.
+		@param row_02 optional type=array
+			Second row's data. Array has the same structure as define_data() parameter.
+		@param finalize optional type=array
+			if this is set to true, html source for the table is returned.
+		
+		@errors
+			if $arg["header"] is not array or hasn't any fields in it... funcion returns false.
+		@comment
+			Reads in an array and makes a table out of it. It generates field's from argument 'header', and sets the data from other rows. It's important to put correct array key's for the data array's.. so that the rows will be in correct order.
+	**/
+	function gen_tbl_from_array($arg)
+	{
+		if($arg["finalize"])
+		{
+			$final = $arg["finalize"];
+		}
+		unset($arg["finalize"]);
+		if(is_array($arg["header"]) && count($arg["header"]))
+		{
+			$header = $arg["header"];
+			unset($arg["header"]);
+		}
+		else
+		{
+			return false;
+		}
+		foreach($header as $field)
+		{
+			$this->define_field($field);
+		}
+		foreach($arg as $data)
+		{
+			$this->define_data($data);
+		}
+		if($final)
+		{
+			return $this->draw();
+		}
+		return true;
 	}
 
 	/** sets the REQUEST_URI
