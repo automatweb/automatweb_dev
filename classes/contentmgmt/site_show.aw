@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.190 2006/05/30 11:10:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.191 2006/06/01 13:17:38 tarvo Exp $
 
 /*
 
@@ -156,6 +156,8 @@ class site_show extends class_base
 
 		$p = get_instance("period");
 		$p->on_site_show_import_vars(array("inst" => &$this));
+		$s = get_instance(CL_SITE_STYLES);
+		$s->on_site_show_import_vars(array("inst" => &$this));
 	}
 	
 	function _get_sel_section($sect)

@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.4 2006/06/01 09:10:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.5 2006/06/01 13:17:38 tarvo Exp $
 // site_styles.aw - Saidi stiilid 
 //
+
 // Usage: Create object, define alias, stylesheet files, default and random option.
 // add to template empty SUB named SITE_STYLES__LOCATION, eg:
 /*
@@ -114,7 +115,7 @@ class site_styles extends class_base
 				asort($store, SORT_NUMERIC);
 
 				// Replace order numbers to sequence
-				$final = array(null);
+				$final = array();
 				foreach ($store as $url => $ord)
 				{
 					$final[] = $url;
@@ -187,7 +188,6 @@ class site_styles extends class_base
 		
 		$styles = $arr["obj_inst"]->meta("styles");
 		$vars = $arr["obj_inst"]->meta("vars");
-
 		$tbl_a["header"][1] = array(
 			"name" => "nr",
 			"caption" => t("Nr"),
@@ -239,8 +239,9 @@ class site_styles extends class_base
 		));
 		$tbl_a["header"]["new"] = array(
 			"name" => "new",
-			"caption" => t("Uus"),
+			"caption" => t("Uus muutuja"),
 		);
+		ksort($tbl_a);
 		$t->set_sortable(false);
 		$t->gen_tbl_from_array($tbl_a);
 	}
@@ -348,7 +349,30 @@ class site_styles extends class_base
 		$styles = $o->meta('styles');
 		return $styles[$ord];
 	}
-
+	
+	/**
+		called from site_show.. to import extra site vars
+	**/
+	function on_site_show_import_vars($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SITE_STYLES,
+			"status" => STAT_ACTIVE,
+		));
+		$ar = $ol->arr();
+		$ss = obj(key($ar));
+		$styles = $ss->meta("styles");
+		$vars = $ss->meta("vars");
+		$sel = $this->selected_style_ord(array(
+			"oid" => key($ar),
+		));
+		foreach($vars as $varname => $values)
+		{
+			$arr["inst"]->vars(array(
+				$varname => $values[$sel],
+			));
+		}
+	}
 	/**
 		Called by message ON_SITE_SHOW_IMPORT_VARS, adds value for template variable {VAR:styles}
 	**/
@@ -410,7 +434,7 @@ class site_styles extends class_base
 			if ($styles != "")
 			{
 				$arr['inst']->vars(array(
-					$name1 => $styles,
+					$name1 => $styles
 				)); 
 			}
 		}
