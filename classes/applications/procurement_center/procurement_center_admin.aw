@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center_admin.aw,v 1.1 2006/05/04 13:48:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center_admin.aw,v 1.2 2006/06/01 15:10:01 kristo Exp $
 // procurement_center_admin.aw - Hangete administreerimiskeskkond 
 /*
 
@@ -194,6 +194,12 @@ class procurement_center_admin extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "center",
+			"caption" => t("T&ouml;&ouml;laud"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "createdby",
 			"caption" => t("Looja"),
 			"align" => "center",
@@ -235,6 +241,20 @@ class procurement_center_admin extends class_base
 		$this->_init_p_tbl($t);
 
 		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->prop("ord_folder");
+		$ccs = new object_list(array(
+			"class_id" => CL_PROCUREMENT_CENTER,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$cd = array();
+		foreach($ccs->arr() as $cc)
+		{
+			$co = $cc->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+			if ($co)
+			{
+				$cd[$co->id()] = $cc;
+			}
+		}
 
 		$ol = new object_list(array(
 			"class_id" => array(CL_MENU, CL_CRM_COMPANY),
@@ -242,7 +262,18 @@ class procurement_center_admin extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-		$t->data_from_ol($ol, array("change_col" => "name"));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"center" => html::obj_change_url($cd[$o->id()]),
+				"createdby" => $o->createdby(),
+				"created" => $o->created(),
+				"modifiedby" => $o->modifiedby(),
+				"modified" => $o->modified(),
+				"oid" => $o->id()
+			));
+		}
 	}
 
 	function _impl_tb($arr)
@@ -314,6 +345,12 @@ class procurement_center_admin extends class_base
 			"sortable" => 1
 		));
 		$t->define_field(array(
+			"name" => "center",
+			"caption" => t("T&ouml;&ouml;laud"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
 			"name" => "createdby",
 			"caption" => t("Looja"),
 			"align" => "center",
@@ -355,6 +392,20 @@ class procurement_center_admin extends class_base
 		$this->_init_impl_tbl($t);
 
 		$parent = $arr["request"]["p_id"] ? $arr["request"]["p_id"] : $arr["obj_inst"]->prop("impl_folder");
+		$ccs = new object_list(array(
+			"class_id" => CL_PROCUREMENT_IMPLEMENTOR_CENTER,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$cd = array();
+		foreach($ccs->arr() as $cc)
+		{
+			$co = $cc->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+			if ($co)
+			{
+				$cd[$co->id()] = $cc;
+			}
+		}
 
 		$ol = new object_list(array(
 			"class_id" => array(CL_FOLDER, CL_CRM_COMPANY),
@@ -362,7 +413,18 @@ class procurement_center_admin extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-		$t->data_from_ol($ol, array("change_col" => "name"));
+		foreach($ol->arr() as $o)
+		{
+			$t->define_data(array(
+				"name" => html::obj_change_url($o),
+				"center" => html::obj_change_url($cd[$o->id()]),
+				"createdby" => $o->createdby(),
+				"created" => $o->created(),
+				"modifiedby" => $o->modifiedby(),
+				"modified" => $o->modified(),
+				"oid" => $o->id()
+			));
+		}
 	}
 
 	/**

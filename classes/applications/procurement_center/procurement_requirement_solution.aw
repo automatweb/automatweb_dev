@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement_solution.aw,v 1.1 2006/05/18 11:19:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement_solution.aw,v 1.2 2006/06/01 15:10:01 kristo Exp $
 // procurement_requirement_solution.aw - N&otilde;ude lahendus 
 /*
 
@@ -28,6 +28,21 @@
 	@property offerer_p type=relpicker reltype=RELTYPE_P field=aw_offerer_p
 	@caption Pakkuja isik
 
+	@property completion_date type=date_select field=aw_completion_date default=-1
+	@caption Valmimiskuup&auml;ev
+
+	@property requirement type=text field=aw_requirement_id
+	@caption N&otilde;ue
+
+	@property offer type=text field=aw_offer_id
+	@caption Pakkumine
+
+@default group=ppl
+
+	@property team_tb type=table store=no no_caption=1
+
+@groupinfo ppl caption="Isikud"
+
 @reltype CO value=1 clid=CL_CRM_COMPANY
 @caption Organisatsioon
 
@@ -54,6 +69,7 @@ class procurement_requirement_solution extends class_base
 			PO_NEEDS_INSTALL => t("Vajab seadistamist"),
 			PO_NEEDS_DEVELOPMENT => t("Uus arendus")
 		);
+		$this->model = get_instance("applications/procurement_center/procurements_model");
 	}
 
 	function get_property($arr)
@@ -62,6 +78,10 @@ class procurement_requirement_solution extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "team_tb":
+				$this->_team_tb($arr);
+				break;
+
 			case "offerer_co":
 				if (!$prop["value"])
 				{
@@ -91,6 +111,34 @@ class procurement_requirement_solution extends class_base
 			case "readyness":
 				$prop["options"] = $this->readyness_states;
 				break;
+
+			case "requirement":
+				if ($arr["request"]["set_requirement"])
+				{
+					$tmp = obj($arr["request"]["set_requirement"]);
+					$prop["value"] = $tmp->name();
+				}
+				else
+				if ($this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["value"] = $tmp->name();
+				}
+				break;
+
+			case "offer":
+				if ($arr["request"]["set_offer"])
+				{
+					$tmp = obj($arr["request"]["set_offer"]);
+					$prop["value"] = $tmp->name();
+				}
+				else
+				if ($this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["value"] = $tmp->name();
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -101,6 +149,23 @@ class procurement_requirement_solution extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "team_tb":
+				$arr["obj_inst"]->set_meta("hrs", $arr["request"]["hrs"]);
+				break;
+
+			case "requirement":
+				if ($arr["request"]["set_requirement"])
+				{
+					$arr["obj_inst"]->set_prop("requirement", $arr["request"]["set_requirement"]);
+				}
+				break;
+
+			case "offer":
+				if ($arr["request"]["set_offer"])
+				{
+					$arr["obj_inst"]->set_prop("offer", $arr["request"]["set_offer"]);
+				}
+				break;
 		}
 		return $retval;
 	}	
@@ -108,6 +173,8 @@ class procurement_requirement_solution extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["set_requirement"] = $_GET["set_requirement"];
+		$arr["set_offer"] = $_GET["set_offer"];
 	}
 
 	function do_db_upgrade($t, $f)
@@ -125,8 +192,105 @@ class procurement_requirement_solution extends class_base
 		{
 			case "aw_offerer_co":
 			case "aw_offerer_p":
+			case "aw_completion_date":
+			case "aw_requirement_id":
+			case "aw_offer_id":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
+		}
+	}
+
+	function _init_team_tb(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+	        	'name' => 'phone',
+			'caption' => t('Telefon'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'email',
+			'caption' => t('E-post'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'section',
+			'caption' => t('Üksus'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'rank',
+			'caption' => t('Ametinimetus'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'price',
+			'caption' => t('Tunnihind'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'hrs',
+			'caption' => t('T&ouml;&ouml;tunnid'),
+			'sortable' => '1',
+		));
+	}
+
+	function _team_tb($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_team_tb($t);
+
+		$offer = obj($arr["obj_inst"]->prop("offer"));
+		if (!$this->can("view", $offer->prop("offerer")))
+		{
+			return;
+		}
+		$offerer = obj($offer->prop("offerer"));
+
+		// get center from offerer and team from that
+		$center = $this->model->get_impl_center_for_co($offerer);
+		if (!$center)
+		{
+			return;
+		}
+
+		$hrs = $arr["obj_inst"]->meta("hrs");
+
+		$team = $this->model->get_team_from_center($center);
+		foreach($team as $member_id => $price)
+		{
+			$p = obj($member_id);
+			$section = $rank = "";
+
+			$conns = $p->connections_to(array(
+				"from.class_id" => CL_CRM_SECTION,
+				"from" => $sections
+			));
+			if (count($conns))
+			{
+				$con = reset($conns);
+				$section = $con->prop("from");
+			}
+
+			$t->define_data(array(
+				"name" => html::obj_change_url($p),
+				"phone" => html::obj_change_url($p->prop("phone")),
+				"email" => html::obj_change_url($p->prop("email")),
+				"section" => html::obj_change_url($section),
+				"rank" => html::obj_change_url($p->get_first_obj_by_reltype("RELTYPE_RANK")),
+				"id" => $p->id(),
+				"hrs" => html::textbox(array(
+					"name" => "hrs[".$p->id()."]",
+					"value" => $hrs[$p->id()],
+					"size" => 5
+				)),
+				"price" => $price
+			));
+			
 		}
 	}
 }

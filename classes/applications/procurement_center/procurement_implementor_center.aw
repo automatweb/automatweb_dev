@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_implementor_center.aw,v 1.2 2006/05/04 13:47:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_implementor_center.aw,v 1.3 2006/06/01 15:10:01 kristo Exp $
 // procurement_implementor_center.aw - Hanngete keskkond pakkujale 
 /*
 
@@ -9,6 +9,9 @@
 
 @default table=objects
 @default group=general
+
+	@property owner type=text store=no 
+	@caption Omanik
 
 @default group=p
 
@@ -20,11 +23,20 @@
 
 		@property p_tbl type=table no_caption=1 store=no parent=p_l
 
+@default group=team
+
+	@property team_tb type=toolbar store=no no_caption=1
+
+	@property team_table type=table store=no no_caption=1
+
 @groupinfo p caption="Hanked" submit=no
+@groupinfo team caption="Meeskond" submit=no
 
 @reltype MANAGER_CO value=1 clid=CL_CRM_COMPANY
 @caption Haldaja firma
 
+@reltype TEAM_MEMBER value=2 clid=CL_CRM_PERSON
+@caption Meeskonna liige
 */
 
 class procurement_implementor_center extends class_base
@@ -45,6 +57,23 @@ class procurement_implementor_center extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "owner":
+				$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+				if (!$o)
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = html::obj_change_url($o);
+				break;
+
+			case "team_tb":
+				$this->_team_tb($arr);
+				break;
+
+			case "team_table":
+				$this->_team_table($arr);
+				break;
+
 			case "p_tb":
 				$this->_p_tb($arr);
 				break;
@@ -66,6 +95,13 @@ class procurement_implementor_center extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "team_tb":
+				if ($this->can("view", $arr["request"]["add_member"]))
+				{
+					$arr["obj_inst"]->connect(array("to" => $arr["request"]["add_member"], "type" => "RELTYPE_TEAM_MEMBER"));
+				}
+				$arr["obj_inst"]->set_meta("team_prices", $arr["request"]["prices"]);
+				break;
 		}
 		return $retval;
 	}	
@@ -73,6 +109,7 @@ class procurement_implementor_center extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["add_member"] = "0";
 	}
 
 	function _p_tb($arr)
@@ -181,6 +218,186 @@ class procurement_implementor_center extends class_base
 			"site_id" => array()
 		));
 		$t->data_from_ol($ol, array("change_col" => "name"));
+	}
+
+	function _team_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+
+		$tb->add_menu_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Lisa isik'),
+		));
+
+		$co = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+		// get sections and jobs from co
+		$this->_crea_team_add_menu($tb, $co, "new");
+
+		$url = $this->mk_my_orb("do_search", array(
+			"clid" => CL_CRM_PERSON,
+			"pn" => "add_member",
+			"s" => array("search_co" => $co->name(), "show_vals" => array("def" => "def"))
+		), "applications/crm/crm_participant_search");
+
+		$tb->add_button(array(
+			'name' => 'search',
+			'img' => 'search.gif',
+			'tooltip' => t('Otsi isikuid isikud meeskonnast'),
+			'url' => "javascript:aw_popup_scroll('$url','Otsing',550,500)"
+		));
+		$tb->add_button(array(
+			'name' => 'save',
+			'img' => 'save.gif',
+			'url' => "javascript:submit_changeform()"
+		));
+		$tb->add_button(array(
+			'name' => 'del',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta isikud meeskonnast'),
+			'action' => 'delete_team_members',
+			'confirm' => t("Kas oled kindel et soovid isikud meeskonnast eemaldada?")
+		));
+		
+	}
+
+	function _crea_team_add_menu(&$tb, $co, $parent)
+	{
+		$cnt = 0;
+		foreach($co->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
+		{
+			$sub_cnt = $this->_crea_team_add_menu($tb, $c->to(), $c->prop("to"));
+			$cnt++;
+
+			if ($sub_cnt)
+			{
+				$tb->add_sub_menu(array(
+					"parent" => $parent,
+					"name" => $c->prop("to"),
+					"text" => $c->prop("to.name")
+				));
+			}
+			else
+			{
+				$link = $this->mk_my_orb("create_new_person", array(
+					"unit" => $c->prop("to"),
+					"parent" => $c->prop("to"),
+					"alias_to" => $c->prop("to"),
+					"reltype" => 2,
+					"return_url" => get_ru()
+				), CL_CRM_COMPANY);
+
+				$tb->add_menu_item(array(
+					"parent" => $parent,
+					"text" => $c->prop("to.name"),
+					"link" => $link,
+					"title" => $c->prop("to.name")
+				));
+			}
+		}
+		foreach($co->connections_from(array("type" => "RELTYPE_PROFESSIONS")) as $c)
+		{
+			$cnt++;
+
+			$link = $this->mk_my_orb("create_new_person", array(
+				"profession" => $c->prop("to"),
+				"unit" => $parent,
+				"cat" => $c->prop("to"),
+				"parent" => $parent,
+				"alias_to" => $parent,
+				"reltype" => 2,
+				"return_url" => get_ru()
+			), CL_CRM_COMPANY);
+
+			$tb->add_menu_item(array(
+				"parent" => $parent,
+				"text" => $c->prop("to.name"),
+				"link" => $link,
+				"title" => $c->prop("to.name")
+			));
+		}
+		return $cnt;
+	}
+
+	function _init_team_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+	        	'name' => 'phone',
+			'caption' => t('Telefon'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'email',
+			'caption' => t('E-post'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'section',
+			'caption' => t('Üksus'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'rank',
+			'caption' => t('Ametinimetus'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'price',
+			'caption' => t('Tunnihind'),
+			'sortable' => '1',
+		));
+
+		$t->define_chooser(array(
+			'name'=>'check',
+			'field'=>'id',
+		));
+		$t->set_default_sortby("name");
+	}
+
+	function _team_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_team_t($t);
+
+		$prices = $arr["obj_inst"]->meta("team_prices");	
+		$co = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+		$cc = get_instance(CL_CRM_COMPANY);
+		$sections = $cc->get_all_org_sections($co);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TEAM_MEMBER")) as $c)
+		{
+			$section = $rank = "";
+			$p = $c->to();
+
+			$conns = $p->connections_to(array(
+				"from.class_id" => CL_CRM_SECTION,
+				"from" => $sections
+			));
+			if (count($conns))
+			{
+				$con = reset($conns);
+				$section = $con->prop("from");
+			}
+
+			$t->define_data(array(
+				"name" => html::obj_change_url($p),
+				"phone" => html::obj_change_url($p->prop("phone")),
+				"email" => html::obj_change_url($p->prop("email")),
+				"section" => html::obj_change_url($section),
+				"rank" => html::obj_change_url($p->get_first_obj_by_reltype("RELTYPE_RANK")),
+				"id" => $p->id(),
+				"price" => html::textbox(array(
+					"name" => "prices[".$p->id()."]",
+					"value" => $prices[$p->id()],
+					"size" => 5
+				))
+			));
+		}
 	}
 }
 ?>

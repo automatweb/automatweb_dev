@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.2 2006/05/04 13:47:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.3 2006/06/01 15:10:01 kristo Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -7,6 +7,9 @@
 
 @default table=objects
 @default group=general
+
+	@property owner type=text store=no 
+	@caption Omanik
 
 @default group=p
 
@@ -18,10 +21,20 @@
 
 		@property p_tbl type=table no_caption=1 store=no parent=p_l
 
+@default group=team
+
+	@property team_tb type=toolbar store=no no_caption=1
+
+	@property team_table type=table store=no no_caption=1
+
 @groupinfo p caption="Hanked" submit=no
+@groupinfo team caption="Meeskond" submit=no
 
 @reltype MANAGER_CO value=1 clid=CL_CRM_COMPANY
 @caption Haldaja firma
+
+@reltype TEAM_MEMBER value=2 clid=CL_CRM_PERSON
+@caption Meeskonna liige
 */
 
 class procurement_center extends class_base
@@ -40,6 +53,15 @@ class procurement_center extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "owner":
+				$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+				if (!$o)
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = html::obj_change_url($o);
+				break;
+
 			case "p_tb":
 				$this->_p_tb($arr);
 				break;
@@ -51,6 +73,16 @@ class procurement_center extends class_base
 			case "p_tbl":
 				$this->_p_tbl($arr);
 				break;
+
+			case "team_tb":
+				$i = get_instance(CL_PROCUREMENT_IMPLEMENTOR_CENTER);
+				$i->_team_tb($arr);
+				break;
+
+			case "team_table":
+				$i = get_instance(CL_PROCUREMENT_IMPLEMENTOR_CENTER);
+				$i->_team_table($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -61,6 +93,13 @@ class procurement_center extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "team_tb":
+				if ($this->can("view", $arr["request"]["add_member"]))
+				{
+					$arr["obj_inst"]->connect(array("to" => $arr["request"]["add_member"], "type" => "RELTYPE_TEAM_MEMBER"));
+				}
+				$arr["obj_inst"]->set_meta("team_prices", $arr["request"]["prices"]);
+				break;
 		}
 		return $retval;
 	}	
@@ -68,6 +107,7 @@ class procurement_center extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["add_member"] = "0";
 	}
 
 	function _p_tb($arr)

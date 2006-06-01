@@ -52,9 +52,10 @@ class procurements_model extends class_base
 			"lang_id" => array(),
 			"site_id" => array()
 		));
+		$pts = $ot->ids() + array($p->id() => $p->id());
 		return new object_list(array(
 			"class_id" => CL_PROCUREMENT_REQUIREMENT,
-			"parent" => $ot->ids(),
+			"parent" => $pts,
 			"lang_id" => array(),
 			"site_id" => array()
 		));
@@ -72,6 +73,104 @@ class procurements_model extends class_base
 			"site_id" => array()
 		));
 		return $ol;
+	}
+
+	/**
+		@attrib api=1
+	**/
+	function get_impl_center_for_co($co)
+	{
+		$conns = $co->connections_to(array(
+			"from.class_id" => CL_PROCUREMENT_IMPLEMENTOR_CENTER,
+			"type" => "RELTYPE_MANAGER_CO"
+		));
+		if (count($conns))
+		{
+			$con = reset($conns);
+			$center = $con->from();
+			return $center;
+		}
+		return false;
+	}
+
+	/**
+		@attrib api=1
+	**/
+	function get_proc_center_for_co($co)
+	{
+		$conns = $co->connections_to(array(
+			"from.class_id" => CL_PROCUREMENT_CENTER,
+			"type" => "RELTYPE_MANAGER_CO"
+		));
+		if (count($conns))
+		{
+			$con = reset($conns);
+			$center = $con->from();
+			return $center;
+		}
+		return false;
+	}
+
+	/**
+		@attrib api=1
+
+		@returns array team member oid => team member price
+	**/
+	function get_team_from_center($center)
+	{
+		$ret = $center->meta("team_prices");
+		foreach($center->connections_from(array("type" => "RELTYPE_TEAM_MEMBER")) as $c)
+		{
+			if (!isset($ret[$c->prop("to")]))
+			{
+				$ret[$c->prop("to")] = 0;
+			}
+		}
+		return $ret;
+	}
+
+	/**
+		@attrib api=1
+	**/
+	function get_pris_for_requirement($req)
+	{	
+		$proc = $this->get_procurement_from_requirement($req);
+		$ret = array();
+		foreach($proc->connections_from(array("type" => "RELTYPE_PRI")) as $c)
+		{
+			$pri = $c->to();
+			$ret[$pri->prop("pri")] = $pri->name();
+		}
+		return $ret;
+	}
+
+	/**
+		@attrib api=1
+	**/
+	function get_procurement_from_requirement($req)
+	{
+		$pt = $req->path();
+		foreach($pt as $pi)
+		{
+			if ($pi->class_id() == CL_PROCUREMENT)
+			{
+				return $pi;
+			}
+		}
+		return false;
+	}
+
+	/**
+		@attrib api=1
+	**/
+	function get_team_from_procurement($proc)
+	{
+		$ret = array();
+		foreach($proc->connections_from(array("type" => "RELTYPE_TEAM_MEMBER")) as $c)
+		{
+			$ret[$c->prop("to")] = $c->prop("to");
+		}
+		return $ret; 
 	}
 }
 ?>

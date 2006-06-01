@@ -29,17 +29,6 @@
             <caption>Pakkujad</caption>
       </property>
       <property>
-            <name>team</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <multiple>1</multiple>
-            <store>connect</store>
-            <reltype>RELTYPE_TEAM_MEMBER</reltype>
-            <field>team</field>
-            <caption>Meeskond</caption>
-      </property>
-      <property>
             <name>winning_offer</name>
             <table>aw_procurements</table>
             <group>general</group>
@@ -106,6 +95,85 @@
             <parent>o_l</parent>
             <field>o_tbl</field>
       </property>
+      <property>
+            <name>publish_date</name>
+            <table>aw_procurements</table>
+            <group>s_general</group>
+            <type>date_select</type>
+            <field>aw_publish_date</field>
+            <default>-1</default>
+            <caption>Avaldamise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>offers_date</name>
+            <table>aw_procurements</table>
+            <group>s_general</group>
+            <type>date_select</type>
+            <field>aw_offers_date</field>
+            <default>-1</default>
+            <caption>Pakkumiste esitamise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>completion_date</name>
+            <table>aw_procurements</table>
+            <group>s_general</group>
+            <type>date_select</type>
+            <field>aw_completion_date</field>
+            <default>-1</default>
+            <caption>Valmimiskuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>compl_date_req</name>
+            <table>objects</table>
+            <group>s_general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_compl_date_req</field>
+            <caption>Lahenduse valmimist&amp;amp;auml;htaeg n&amp;amp;otilde;utud</caption>
+      </property>
+      <property>
+            <name>pri_t</name>
+            <table>objects</table>
+            <group>s_pris</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <reltype>RELTYPE_PRI</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>pri</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>pri</num_1>
+            </table_fields>
+            <table_edit_fields>
+                  <num_0>name</num_0>
+                  <num_1>pri</num_1>
+            </table_edit_fields>
+            <field>pri_t</field>
+            <caption>Prioriteedid</caption>
+      </property>
+      <property>
+            <name>team</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>team</field>
+      </property>
+      <property>
+            <name>crit_t</name>
+            <table>objects</table>
+            <group>crit</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <reltype>RELTYPE_CRITERIA</reltype>
+            <props>name</props>
+            <table_fields>name</table_fields>
+            <field>crit_t</field>
+            <caption>Kriteeriumid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_PROCUREMENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -118,6 +186,26 @@
                   <caption>N&amp;amp;otilde;uded</caption>
                   <submit>no</submit>
             </d>
+            <s>
+                  <caption>M&amp;amp;auml;&amp;amp;auml;rangud</caption>
+            </s>
+            <s_general>
+                  <caption>M&amp;amp;auml;&amp;amp;auml;rangud</caption>
+                  <parent>s</parent>
+            </s_general>
+            <s_pris>
+                  <caption>Prioriteedid</caption>
+                  <parent>s</parent>
+            </s_pris>
+            <team>
+                  <caption>Meeskond</caption>
+                  <parent>s</parent>
+            </team>
+            <crit>
+                  <caption>Kriteeriumid</caption>
+                  <parent>s</parent>
+                  <submit>no</submit>
+            </crit>
             <o>
                   <caption>Pakkumised</caption>
                   <submit>no</submit>
@@ -151,6 +239,16 @@
                   <clid>CL_PROCUREMENT_OFFER</clid>
                   <caption>V&amp;amp;otilde;tnud pakkumine</caption>
             </WINNING_OFFER>
+            <PRI>
+                  <value>5</value>
+                  <clid>CL_PROCUREMENT_PRIORITY</clid>
+                  <caption>Prioriteet</caption>
+            </PRI>
+            <CRITERIA>
+                  <value>6</value>
+                  <clid>CL_PROCUREMENT_CRITERIA</clid>
+                  <caption>Kriteerium</caption>
+            </CRITERIA>
       </reltypes>
       <layout>
             <d_l>

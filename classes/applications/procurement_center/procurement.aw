@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.1 2006/04/27 08:14:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.2 2006/06/01 15:10:01 kristo Exp $
 // procurement.aw - Hange 
 /*
 
@@ -19,9 +19,6 @@
 
 	@property offerers type=relpicker multiple=1 store=connect reltype=RELTYPE_OFFERER
 	@caption Pakkujad
-
-	@property team type=relpicker multiple=1 store=connect reltype=RELTYPE_TEAM_MEMBER
-	@caption Meeskond
 
 	@property winning_offer type=relpicker reltype=RELTYPE_WINNING_OFFER table=aw_procurements field=aw_winning_offer
 	@caption V&otilde;itnud pakkumine
@@ -46,8 +43,41 @@
 
 		@property o_tbl type=table no_caption=1 store=no parent=o_l
 
+@default group=s_general
+
+	@property publish_date type=date_select table=aw_procurements field=aw_publish_date default=-1
+	@caption Avaldamise kuup&auml;ev
+
+	@property offers_date type=date_select table=aw_procurements field=aw_offers_date default=-1
+	@caption Pakkumiste esitamise kuup&auml;ev
+
+	@property completion_date type=date_select table=aw_procurements field=aw_completion_date default=-1
+	@caption Valmimiskuup&auml;ev
+
+	@property compl_date_req type=checkbox ch_value=1 field=aw_compl_date_req
+	@caption Lahenduse valmimist&auml;htaeg n&otilde;utud
+
+@default group=s_pris
+
+	@property pri_t type=releditor mode=manager reltype=RELTYPE_PRI props=name,pri table_fields=name,pri table_edit_fields=name,pri
+	@caption Prioriteedid
+
+@default group=team
+
+	@property team type=table store=no no_caption=1
+
+@default group=crit
+
+	@property crit_t type=releditor mode=manager reltype=RELTYPE_CRITERIA props=name table_fields=name 
+	@caption Kriteeriumid
 
 @groupinfo d caption="N&otilde;uded" submit=no
+@groupinfo s caption="M&auml;&auml;rangud"
+	@groupinfo s_general caption="M&auml;&auml;rangud"  parent=s
+	@groupinfo s_pris caption="Prioriteedid" parent=s
+	@groupinfo team caption="Meeskond" parent=s
+	@groupinfo crit caption="Kriteeriumid" parent=s submit=no
+
 @groupinfo o caption="Pakkumised" submit=no
 
 @reltype OFFERER value=1 clid=CL_CRM_COMPANY
@@ -61,6 +91,12 @@
 
 @reltype WINNING_OFFER value=4 clid=CL_PROCUREMENT_OFFER
 @caption V&otilde;tnud pakkumine
+
+@reltype PRI value=5 clid=CL_PROCUREMENT_PRIORITY
+@caption Prioriteet
+
+@reltype CRITERIA value=6 clid=CL_PROCUREMENT_CRITERIA
+@caption Kriteerium
 
 */
 
@@ -91,6 +127,14 @@ class procurement extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "crit_t":
+				$prop["direct_links"] = 1;
+				break;
+
+			case "team":
+				$this->_team($arr);
+				break;
+
 			case "winning_offer":
 				if ($arr["obj_inst"]->prop("state") < PROCUREMENT_INPROGRESS)
 				{
@@ -148,6 +192,9 @@ class procurement extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "team":
+				$this->_save_team($arr);
+				break;
 		}
 		return $retval;
 	}	
@@ -282,6 +329,10 @@ class procurement extends class_base
 			case "aw_orderer":
 			case "aw_state":
 			case "aw_winning_offer":
+			case "aw_publish_date":
+			case "aw_offers_date":
+			case "aw_completion_date":
+			case "compl_date_req":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
 		}
@@ -315,23 +366,20 @@ class procurement extends class_base
 	{
 		classload("core/icons");
 		$t =& $arr["prop"]["vcl_inst"];
-	
-		$cos = array();
-		$offers = $this->model->get_all_offers_for_procurement($arr["obj_inst"]);
-		foreach($offers->arr() as $offer)
-		{
-			$cos[$offer->prop("offerer")] = $offer->prop("offerer.name");
-		}
 
-		foreach($cos as $co => $co_name)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CRITERIA")) as $c)
 		{
-			$co = obj($co);
 			$t->add_item(0, array(
-				"id" => $co->id(),
-				"name" => $co->name(),
-				"url" => aw_url_change_var("co_id", $co->id()),
+				"id" => $c->prop("to"),
+				"name" => $c->prop("to.name"),
+				"url" => aw_url_change_var("co_id", $c->prop("to")),
 			));
 		}
+		$t->add_item(0, array(
+			"id" => "top",
+			"name" => t("Edetabel"),
+			"url" => aw_url_change_var("co_id", "top"),
+		));
 	}
 
 	function _init_o_tbl(&$t)
@@ -355,6 +403,13 @@ class procurement extends class_base
 			"sortable" => 1,
 			"numeric" => 1,
 		));
+		$t->define_field(array(
+			"name" => "score",
+			"caption" => t("Punktid"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1,
+		));
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel"
@@ -366,19 +421,25 @@ class procurement extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_o_tbl($t);
 
+		if ($arr["request"]["co_id"] == "")
+		{
+			$arr["request"]["co_id"] = "top";
+		}
+
 		$offers = $this->model->get_all_offers_for_procurement($arr["obj_inst"]);
+		$scores = $this->get_scores_for_proc($arr["request"]["co_id"], $offers, $arr["obj_inst"]);
 		foreach($offers->arr() as $offer)
 		{
-			if (!$arr["request"]["co_id"] || $arr["request"]["co_id"] == $offer->prop("offerer"))
-			{
-				$t->define_data(array(
-					"name" => html::obj_change_url($offer),
-					"offerer" => html::obj_change_url($offer->prop("offerer")),
-					"price" => number_format($offer->prop("price"), 2),
-					"oid" => $offer->id()
-				));
-			}
+			$t->define_data(array(
+				"name" => html::obj_change_url($offer),
+				"offerer" => html::obj_change_url($offer->prop("offerer")),
+				"price" => number_format($offer->prop("price"), 2),
+				"oid" => $offer->id(),
+				"score" => $scores[$offer->id()]
+			));
 		}
+		$t->set_default_sortby("score");
+		$t->set_default_sorder("desc");
 	}
 
 	/**
@@ -386,7 +447,6 @@ class procurement extends class_base
 	**/
 	function select_winning_offer($arr)
 	{
-die(dbg::dump($arr));
 		// mark all other offers for this procurement as unaccepted
 		$offers = $this->model->get_all_offers_for_procurement(obj($arr["id"]));
 
@@ -419,6 +479,146 @@ die(dbg::dump($arr));
 	function get_state_list()
 	{
 		return $this->proc_states;
+	}
+
+	function _init_team_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Looja"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Loodud"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => t("Muutja"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.Y H:i"
+		));
+		$t->define_field(array(
+			"name" => "sel",
+			"caption" => t("Vali"),
+			"align" => "center"
+		));
+	}
+
+	function _team($arr)
+	{	
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_team_t($t);
+
+		$members = $this->model->get_team_from_procurement($arr["obj_inst"]);
+		$center = $this->model->get_proc_center_for_co(obj($arr["obj_inst"]->prop("orderer")));
+		$team = $this->model->get_team_from_center($center);
+		foreach($team as $member_id => $price)
+		{
+			$p = obj($member_id);
+			$section = $rank = "";
+
+			$conns = $p->connections_to(array(
+				"from.class_id" => CL_CRM_SECTION,
+				"from" => $sections
+			));
+			if (count($conns))
+			{
+				$con = reset($conns);
+				$section = $con->prop("from");
+			}
+
+			$t->define_data(array(
+				"name" => html::obj_change_url($p),
+				"phone" => html::obj_change_url($p->prop("phone")),
+				"email" => html::obj_change_url($p->prop("email")),
+				"section" => html::obj_change_url($section),
+				"rank" => html::obj_change_url($p->get_first_obj_by_reltype("RELTYPE_RANK")),
+				"id" => $p->id(),
+				"price" => $price,
+				"sel" => html::checkbox(array(
+					"name" => "sel[$member_id]",
+					"value" => $member_id,
+					"checked" => isset($members[$member_id])
+				))
+			));
+		}
+	}
+
+	function _save_team($arr)
+	{
+		$members = $this->model->get_team_from_procurement($arr["obj_inst"]);
+
+		// add new ones
+		foreach(safe_array($arr["request"]["sel"]) as $member)
+		{
+			if (!isset($members[$member]))
+			{
+				$arr["obj_inst"]->connect(array(
+					"to" => $member,
+					"type" => "RELTYPE_TEAM_MEMBER"
+				));
+			}
+		}
+		// remove removed ones
+		foreach($members as $member => $stuff)
+		{
+			if (!isset($arr["request"]["sel"][$member]))
+			{
+				$arr["obj_inst"]->disconnect(array(
+					"from" => $member
+				));
+			}
+		}
+	}
+
+	function get_scores_for_proc($crit, $offer_list, $o)
+	{
+		if ($crit == "top")
+		{
+			$score = array();
+			foreach($o->connections_from(array("type" => "RELTYPE_CRITERIA")) as $c)
+			{
+				$co = $c->to();
+				$ci = $co->instance();
+				$tmp = $ci->get_score_for_crit($co, $offer_list, $o);
+				$pct = $co->prop("pct");
+				foreach($tmp as $id => $val)
+				{
+					$score[$id] += $val * ($pct / 100.0);
+				}
+			}
+			return $score;
+		}
+		else
+		if ($crit)
+		{
+			$co = obj($crit);
+			$ci = $co->instance();
+			return $ci->get_score_for_crit(obj($crit), $offer_list, $o);
+		}
+		return 0;
 	}
 }
 ?>

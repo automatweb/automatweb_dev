@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>pri</name>
+            <table>procuremnent_requirements</table>
+            <group>general</group>
+            <type>select</type>
+            <field>aw_pri</field>
+            <caption>Prioriteet</caption>
+      </property>
+      <property>
             <name>desc</name>
             <table>procuremnent_requirements</table>
             <group>general</group>

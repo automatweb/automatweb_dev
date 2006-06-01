@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.2 2006/05/18 11:19:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.3 2006/06/01 15:10:01 kristo Exp $
 // procurement_requirement.aw - N&otilde;ue 
 /*
 
@@ -9,6 +9,9 @@
 
 @default table=objects
 @default group=general
+
+	@property pri type=select table=procuremnent_requirements field=aw_pri
+	@caption Prioriteet
 
 	@property desc type=textarea rows=20 cols=50 table=procuremnent_requirements field=aw_desc
 	@caption Kirjeldus
@@ -34,6 +37,7 @@ class procurement_requirement extends class_base
 			"tpldir" => "applications/procurement_center/procurement_requirement",
 			"clid" => CL_PROCUREMENT_REQUIREMENT
 		));
+		$this->model = get_instance("applications/procurement_center/procurements_model");
 	}
 
 	function get_property($arr)
@@ -42,6 +46,10 @@ class procurement_requirement extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "pri":
+				$prop["options"] = array("" => t("--vali--")) + $this->model->get_pris_for_requirement($arr["obj_inst"]);
+				break;
+
 			case "offer_t":
 				$this->_offer_t($arr);
 				break;
@@ -75,6 +83,13 @@ class procurement_requirement extends class_base
 		{
 			$this->db_query("CREATE TABLE procuremnent_requirements (aw_oid int primary key, aw_desc text)");
 			return true;
+		}
+
+		switch($f)
+		{
+			case "aw_pri":
+				$this->db_add_col($t, array("name" => $f, "type" => "int"));
+				return true;
 		}
 	}
 
@@ -144,13 +159,28 @@ class procurement_requirement extends class_base
 		$default = $data[$arr["obj_inst"]->id()];
 		$ol = new object_list(array(
 			"class_id" => CL_PROCUREMENT_REQUIREMENT_SOLUTION,
-			"parent" => $arr["obj_inst"]->id(),
+			"requirement" => $arr["obj_inst"]->id(),
 			"lang_id" => array(),
 			"site_id" => array()
 		));
 		$po = get_instance(CL_PROCUREMENT_REQUIREMENT_SOLUTION);
 		foreach($ol->arr() as $o)
 		{
+			$ass_sum += $ass[$o->id()];
+			$price_sum += $o->prop("price");
+			$tti_sum += $o->prop("time_to_install");
+			$ass_cnt++;
+		}
+
+		foreach($ol->arr() as $o)
+		{
+			$prdiff = $o->prop("price") - ($price_sum / $ass_cnt);
+			$prp = (100 * $prdiff) / ($price_sum / $ass_cnt);
+			$prp = $prp > 0 ? "+".number_format($prp, 1) : number_format($prp, 1);
+
+			$hrdiff = $o->prop("time_to_install") - ($tti_sum / $ass_cnt);
+			$hrp = (100 * $hrdiff) / ($tti_sum / $ass_cnt);
+			$hrp = $hrp > 0 ? "+".number_format($hrp, 1) : number_format($hrp, 1);
 			$t->define_data(array(
 				"name" => $o->name(),
 				"solution" => $o->prop("solution"),
@@ -171,15 +201,11 @@ class procurement_requirement extends class_base
 					"value" => 1,
 					"checked" => $nonsuitable[$o->id()]
 				)),
-				"price" => number_format($o->prop("price"), 2),
-				"tti" => $o->prop("time_to_install"),
+				"price" => number_format($o->prop("price"), 2)." (".$prp."%)",
+				"tti" => $o->prop("time_to_install")." (".$hrp."%)",
 				"readyness" => $po->readyness_states[$o->prop("readyness")],
 				"oid" => $o->id()
 			));
-			$ass_sum += $ass[$o->id()];
-			$price_sum += $o->prop("price");
-			$tti_sum += $o->prop("time_to_install");
-			$ass_cnt++;
 		}
 		
 		$t->set_sortable(false);
@@ -191,6 +217,24 @@ class procurement_requirement extends class_base
 			"tti" => number_format($tti_sum / $ass_cnt, 2),
 		));
 		
+	}
+
+	function get_avg_solution_score($req)
+	{
+		$ass = $req->meta("assessments");
+		$ol = new object_list(array(
+			"class_id" => CL_PROCUREMENT_REQUIREMENT_SOLUTION,
+			"requirement" => $req->id(),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$po = get_instance(CL_PROCUREMENT_REQUIREMENT_SOLUTION);
+		foreach($ol->arr() as $o)
+		{
+			$ass_sum += $ass[$o->id()];
+			$ass_cnt++;
+		}
+		return $ass_sum / $ass_cnt;
 	}
 }
 ?>

@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>owner</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>owner</field>
+            <caption>Omanik</caption>
+      </property>
+      <property>
             <name>p_tb</name>
             <table>objects</table>
             <group>p</group>
@@ -29,6 +38,24 @@
             <parent>p_l</parent>
             <field>p_tbl</field>
       </property>
+      <property>
+            <name>team_tb</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>team_tb</field>
+      </property>
+      <property>
+            <name>team_table</name>
+            <table>objects</table>
+            <group>team</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>team_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PROCUREMENT_CENTER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -41,6 +68,10 @@
                   <caption>Hanked</caption>
                   <submit>no</submit>
             </p>
+            <team>
+                  <caption>Meeskond</caption>
+                  <submit>no</submit>
+            </team>
       </groupinfo>
       <reltypes>
             <MANAGER_CO>
@@ -48,6 +79,11 @@
                   <clid>CL_CRM_COMPANY</clid>
                   <caption>Haldaja firma</caption>
             </MANAGER_CO>
+            <TEAM_MEMBER>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Meeskonna liige</caption>
+            </TEAM_MEMBER>
       </reltypes>
       <layout>
             <p_l>

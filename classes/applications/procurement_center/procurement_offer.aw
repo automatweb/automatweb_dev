@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.2 2006/05/18 11:19:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.3 2006/06/01 15:10:01 kristo Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -25,10 +25,13 @@
 	@property price type=textbox size=10 table=aw_procurement_offers field=aw_price
 	@caption Hind
 
+	@property completion_date type=date_select table=aw_procurement_offers field=aw_completion_date
+	@caption Valmimist&auml;htaeg
+
 	@property state type=select table=aw_procurement_offers field=aw_state
 	@caption Staatus
 
-@default group=r
+@default group=r_list
 
 	@property p_tb type=toolbar no_caption=1 store=no
 	
@@ -43,7 +46,8 @@
 	@property rejected_table type=table store=no no_caption=1
 
 @groupinfo r caption="N&otilde;uded" submit=no
-@groupinfo rejected caption="Tagasi l&uuml;&uuml;katud" submit=no
+@groupinfo r_list caption="N&otilde;uete nimekiri" submit=no parent=r
+@groupinfo rejected caption="Tagasi l&uuml;katud" submit=no parent=r
 
 @reltype PROCUREMENT value=1 clid=CL_PROCUREMENT
 @caption Hange
@@ -180,6 +184,7 @@ class procurement_offer extends class_base
 			case "aw_procurement":
 			case "aw_offerer":
 			case "aw_state":
+			case "aw_completion_date":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
 
@@ -201,7 +206,15 @@ class procurement_offer extends class_base
 				'name' => 'new',
 				'img' => 'new.gif',
 				'tooltip' => t('Lisa'),
-				"url" => html::get_new_url(CL_PROCUREMENT_REQUIREMENT_SOLUTION, $parent, array("return_url" => get_ru()))
+				"url" => html::get_new_url(
+					CL_PROCUREMENT_REQUIREMENT_SOLUTION, 
+					$parent, 
+					array(
+						"return_url" => get_ru(),
+						"set_requirement" => $parent,
+						"set_offer" => $arr["request"]["id"]
+					)
+				)
 			));
 		}
 
@@ -301,7 +314,8 @@ class procurement_offer extends class_base
 		$default = $data[$parent];
 		$ol = new object_list(array(
 			"class_id" => CL_PROCUREMENT_REQUIREMENT_SOLUTION,
-			"parent" => $parent,
+			"requirement" => $parent,
+			"offer" => $arr["request"]["id"],
 			"lang_id" => array(),
 			"site_id" => array()
 		));
@@ -397,6 +411,27 @@ class procurement_offer extends class_base
 				));
 			}
 		}
+	}
+
+	function get_avg_score($offer)
+	{
+		// get all prefered solutions in offer and their scores
+		$reqs = $this->model->get_requirements_from_procurement(obj($offer->prop("procurement")));
+		$sum = 0;
+		$cnt = 0;
+		$def = $offer->meta("defaults");
+		foreach($reqs->arr() as $req)
+		{
+			// get the preferred solution for this requirement in this offer
+			$sol = $def[$req->id()];
+			if ($sol)
+			{
+				$ass = $req->meta("assessments");
+				$sum += $ass[$sol];
+			}
+			$cnt++;
+		}
+		return $sum / $cnt;
 	}
 }
 ?>
