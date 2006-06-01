@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.3 2005/12/14 12:36:41 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.4 2006/06/01 09:10:25 tarvo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 // Usage: Create object, define alias, stylesheet files, default and random option.
@@ -29,6 +29,12 @@
 
 @property random type=chooser field=meta method=serialize 
 @caption Juhuslik valik
+
+@property vars type=table group=test
+
+@groupinfo test caption="Muutujad"
+
+
 
 */
 
@@ -67,6 +73,10 @@ class site_styles extends class_base
 					SITE_STYLES_RAND_SESSION => t("Juhuslik sessiooniti"),
 					SITE_STYLES_RAND_REFRESH => t("Juhuslik igal laadimisel"),
 				);
+			break;
+			case "vars":
+				//$arr["prop"]["value"] = $this->_get_styles($arr);
+				$this->_get_styles($arr);
 			break;
 		};
 		return $retval;
@@ -115,6 +125,35 @@ class site_styles extends class_base
 				}
 				$arr['obj_inst']->set_meta('styles', $final);
 			break;
+			case "vars":
+				foreach($arr["request"]["var_name"] as $var_old_name => $var_new_name)
+				{
+					if(!strlen($var_new_name))
+					{
+						unset($arr["request"]["var_val"][$var_old_name]);
+					}
+					else
+					{
+						$tmp[$var_new_name] = $arr["request"]["var_val"][$var_old_name];
+					}
+				}
+				$final = $tmp;
+				if(strlen($arr["request"]["new_name"]) && is_array($arr["request"]["new"]))
+				{
+					foreach($arr["request"]["new"] as $style => $var_val)
+					{
+						$final[$arr["request"]["new_name"]][$style] = $var_val;
+					}
+				}
+				foreach($final as $var_name=>$vars)
+				{
+					if(!strlen($var_name))
+					{
+						unset($final[$var_name]);
+					}
+				}
+				$arr["obj_inst"]->set_meta('vars', $final);
+			break;
 		}
 		return $retval;
 	}	
@@ -139,6 +178,71 @@ class site_styles extends class_base
 		}
 		$html .= '<br />'.t("Lisa").":&nbsp;&nbsp;&nbsp;".$this->_make_stylepicker_row($ord+1, "", ++$i);
 		return $html;
+	}
+
+	function _get_styles(&$arr)
+	{
+
+		$t = &$arr["prop"]["vcl_inst"];
+		
+		$styles = $arr["obj_inst"]->meta("styles");
+		$vars = $arr["obj_inst"]->meta("vars");
+
+		$tbl_a["header"][1] = array(
+			"name" => "nr",
+			"caption" => t("Nr"),
+		);
+		$tbl_a["header"][2] = array(
+			"name" => "css_url",
+			"caption" => t("CSS url"),
+		);
+
+
+		// for var names		
+		foreach($vars as $var_name => $var_values)
+		{
+			$tbl_a[-1]["var_name[".$var_name."]"] = html::textbox(array(
+					"value" => $var_name,
+					"size" => "6",
+					"name" => "var_name[".$var_name."]",
+			));
+		}
+		// for other crap, wery shitty solution indeed..
+		foreach($styles as $style => $css_url)
+		{
+			$tbl_a[$style]["nr"] = $style;
+			$tbl_a[$style]["css_url"] = $css_url;
+			foreach($vars as $var_name => $var_values)
+			{
+				// for var values
+				$tbl_a[$style]["var_name[".$var_name."]"] = html::textbox(array(
+						"value" => $var_values[$style],
+						"size" => 9,
+						"name" => "var_val[".$var_name."][".$style."]",
+				));
+				
+				// for header
+				$tbl_a["header"][$var_name] = array(
+					"name" => "var_name[".$var_name."]",
+					"caption" => $var_name,
+				);
+			}
+			// new var textboxes for each style
+			$tbl_a[$style]["new"] = html::textbox(array(
+				"size" => "7",
+				"name" => "new[".$style."]",
+			));
+		}
+		$tbl_a[-1]["new"] = html::textbox(array(
+			"size" => "7",
+			"name" => "new_name",
+		));
+		$tbl_a["header"]["new"] = array(
+			"name" => "new",
+			"caption" => t("Uus"),
+		);
+		$t->set_sortable(false);
+		$t->gen_tbl_from_array($tbl_a);
 	}
 
 	function _make_stylepicker_row($ord, $url, $idx)
@@ -245,75 +349,75 @@ class site_styles extends class_base
 		return $styles[$ord];
 	}
 
-
 	/**
 		Called by message ON_SITE_SHOW_IMPORT_VARS, adds value for template variable {VAR:styles}
 	**/
-	//function on_site_show($arr)
 	function on_get_subtemplate_content($arr)
 	{
 		$fn = "site_styles::on_get_subtemplate_content";
 		enter_function($fn);
 		$name1 = 'SITE_STYLES__LOCATION';
 		// Double is no trouble
-		if (!$arr['inst']->is_template($name1))
+		if ($arr['inst']->is_template($name1))
+		{
+			$styles = "";
+			$ol = new object_list(array(
+				'class_id' => CL_SITE_STYLES,
+				'status' => STAT_ACTIVE,
+			));
+
+			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+			{
+				$link = '<link href="%s" rel="stylesheet" type="text/css"';
+				$alias = $o->prop('alias');
+				$aoid = array('oid' => $o->id());
+				if (!empty($alias))
+				{
+					$link .= ' id="'.$alias.'"';
+				}	
+				$inst = $o->instance();
+				if (isset($_REQUEST['set_style_'.$alias]))
+				{
+					switch ($_REQUEST['set_style_'.$alias])
+					{
+						case 'next':
+							$inst->select_next($aoid);
+						break;
+						case 'prev':
+							$inst->select_prev($aoid);
+						break;
+						case 'last':
+							$inst->select_last($aoid);
+						break;
+						case 'random':
+							$inst->select_random($aoid);
+						break;
+						default:
+							$inst->select($aoid, $_REQUEST['set_style_'.$alias]);
+						break;
+					}
+				}
+				else
+				{
+					$r = $o->prop('random');
+					if ($r == SITE_STYLES_RAND_REFRESH || ($r == SITE_STYLES_RAND_SESSION && !isset($_SESSION['style_'.$o->id()]) ))
+					{
+						$inst->select_random($aoid);
+					}
+				}
+				$styles .= sprintf($link.">\n", $inst->selected_style_url($aoid));
+			}
+			if ($styles != "")
+			{
+				$arr['inst']->vars(array(
+					$name1 => $styles,
+				)); 
+			}
+		}
+		else
 		{
 			exit_function($fn);
 			return;
-		}
-
-		$styles = "";
-		$ol = new object_list(array(
-			'class_id' => CL_SITE_STYLES,
-			'status' => STAT_ACTIVE,
-		));
-
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
-		{
-			$link = '<link href="%s" rel="stylesheet" type="text/css"';
-			$alias = $o->prop('alias');
-			$aoid = array('oid' => $o->id());
-			if (!empty($alias))
-			{
-				$link .= ' id="'.$alias.'"';
-			}	
-			$inst = $o->instance();
-			if (isset($_REQUEST['set_style_'.$alias]))
-			{
-				switch ($_REQUEST['set_style_'.$alias])
-				{
-					case 'next':
-						$inst->select_next($aoid);
-					break;
-					case 'prev':
-						$inst->select_prev($aoid);
-					break;
-					case 'last':
-						$inst->select_last($aoid);
-					break;
-					case 'random':
-						$inst->select_random($aoid);
-					break;
-					default:
-						$inst->select($aoid, $_REQUEST['set_style_'.$alias]);
-					break;
-				}
-			}
-			else
-			{
-				$r = $o->prop('random');
-				if ($r == SITE_STYLES_RAND_REFRESH || ($r == SITE_STYLES_RAND_SESSION && !isset($_SESSION['style_'.$o->id()]) ))
-				{
-					$inst->select_random($aoid);
-				}
-			}
-			$styles .= sprintf($link.">\n", $inst->selected_style_url($aoid));
-		}
-		if ($styles != "")
-		{
-			$arr['inst']->vars(array(
-				$name1 => $styles, 
-			)); 
 		}
 		exit_function($fn);
 	}
