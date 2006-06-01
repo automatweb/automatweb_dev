@@ -156,7 +156,7 @@
             <group>grp_search_proj</group>
             <type>datetime_select</type>
             <view_element>1</view_element>
-            <caption>T&amp;amp;auml;htaeg</caption>
+            <caption>T&amp;auml;htaeg</caption>
       </property>
       <property>
             <name>sp_customer</name>
@@ -372,7 +372,7 @@
             <group>grp_schedule</group>
             <type>date_select</type>
             <store>no</store>
-            <caption>N&amp;amp;auml;idatava perioodi algus</caption>
+            <caption>N&amp;auml;idatava perioodi algus</caption>
       </property>
       <property>
             <name>chart_submit</name>
@@ -382,7 +382,7 @@
             <group>grp_schedule</group>
             <type>submit</type>
             <store>no</store>
-            <caption>N&amp;amp;auml;ita</caption>
+            <caption>N&amp;auml;ita</caption>
       </property>
       <property>
             <name>user_list_toolbar</name>
@@ -533,7 +533,7 @@
             <type>textbox</type>
             <default>30</default>
             <datatype>int</datatype>
-            <caption>Operaatori vaates t&amp;amp;ouml;id lehel</caption>
+            <caption>Operaatori vaates t&amp;ouml;id lehel</caption>
       </property>
       <property>
             <name>projects_list_objects_perpage</name>
@@ -669,7 +669,7 @@
             <group>grp_settings_def</group>
             <type>textbox</type>
             <default>300</default>
-            <caption>Ajavahemik planeerimise alguse hetkest milles algavaid t&amp;amp;ouml;id ei planeerita (s)</caption>
+            <caption>Ajavahemik planeerimise alguse hetkest milles algavaid t&amp;ouml;id ei planeerita (s)</caption>
       </property>
       <property>
             <name>parameter_schedule_start</name>
@@ -896,7 +896,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml; andmed</caption>
+            <caption>T&amp;ouml;&amp;ouml; andmed</caption>
       </property>
       <property>
             <name>pj_starttime</name>
@@ -1018,7 +1018,7 @@
             <type>text</type>
             <store>no</store>
             <parent>resource_hbox</parent>
-            <caption>T&amp;amp;ouml;&amp;amp;ouml; kommentaar</caption>
+            <caption>T&amp;ouml;&amp;ouml; kommentaar</caption>
       </property>
       <property>
             <name>pj_state</name>
@@ -1121,7 +1121,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Sisu v&amp;amp;auml;rvid</caption>
+            <caption>Sisu v&amp;auml;rvid</caption>
       </property>
       <property>
             <name>pjp_sisu_varvid_notes</name>
@@ -1138,7 +1138,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Sisu v&amp;amp;auml;rvid Notes</caption>
+            <caption>Sisu v&amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>pjp_sisu_lakk_muu</name>
@@ -1172,7 +1172,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Kaane v&amp;amp;auml;rvid</caption>
+            <caption>Kaane v&amp;auml;rvid</caption>
       </property>
       <property>
             <name>pjp_kaane_varvid_notes</name>
@@ -1189,7 +1189,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Kaane v&amp;amp;auml;rvid Notes</caption>
+            <caption>Kaane v&amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>pjp_kaane_lakk_muu</name>
@@ -1257,7 +1257,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Tr&amp;amp;uuml;kiarv</caption>
+            <caption>Tr&amp;uuml;kiarv</caption>
       </property>
       <property>
             <name>pjp_trykise_ehitus</name>
@@ -1274,7 +1274,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>Tr&amp;amp;uuml;kise ehitus</caption>
+            <caption>Tr&amp;uuml;kise ehitus</caption>
       </property>
       <property>
             <name>pjp_kromaliin</name>
@@ -1325,7 +1325,7 @@
             </group>
             <type>text</type>
             <store>no</store>
-            <caption>N&amp;amp;auml;idis</caption>
+            <caption>N&amp;auml;idis</caption>
       </property>
       <property>
             <name>pjp_title_case_wf</name>
@@ -1343,7 +1343,7 @@
             <type>text</type>
             <store>no</store>
             <subtitle>1</subtitle>
-            <caption>Projekti t&amp;amp;ouml;&amp;amp;ouml;voog</caption>
+            <caption>Projekti t&amp;ouml;&amp;ouml;voog</caption>
       </property>
       <property>
             <name>pjp_case_wf</name>
@@ -1411,7 +1411,7 @@
             <group>grp_worksheet</group>
             <type>submit</type>
             <store>no</store>
-            <caption>N&amp;amp;auml;ita</caption>
+            <caption>N&amp;auml;ita</caption>
       </property>
       <property>
             <name>ws_tbl</name>
@@ -1459,32 +1459,32 @@
                   <submit>no</submit>
             </grp_printer>
             <grp_printer_current>
-                  <caption>Jooksvad t&amp;amp;ouml;&amp;amp;ouml;d</caption>
+                  <caption>Jooksvad t&amp;ouml;&amp;ouml;d</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_current>
             <grp_printer_done>
-                  <caption>Tehtud t&amp;amp;ouml;&amp;amp;ouml;d</caption>
+                  <caption>Tehtud t&amp;ouml;&amp;ouml;d</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_done>
             <grp_printer_aborted>
-                  <caption>Katkestatud t&amp;amp;ouml;&amp;amp;ouml;d</caption>
+                  <caption>Katkestatud t&amp;ouml;&amp;ouml;d</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_aborted>
             <grp_printer_in_progress>
-                  <caption>K&amp;amp;otilde;ik t&amp;amp;ouml;&amp;amp;ouml;s olevad</caption>
+                  <caption>K&amp;otilde;ik t&amp;ouml;&amp;ouml;s olevad</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_in_progress>
             <grp_printer_startable>
-                  <caption>K&amp;amp;otilde;ik t&amp;amp;ouml;&amp;amp;ouml;d mida oleks v&amp;amp;otilde;imalik alustada</caption>
+                  <caption>K&amp;otilde;ik t&amp;ouml;&amp;ouml;d mida oleks v&amp;otilde;imalik alustada</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_startable>
             <grp_printer_notstartable>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;d, mida ei ole veel v&amp;amp;otilde;imalik alustada</caption>
+                  <caption>T&amp;ouml;&amp;ouml;d, mida ei ole veel v&amp;otilde;imalik alustada</caption>
                   <parent>grp_printer</parent>
                   <submit>no</submit>
             </grp_printer_notstartable>
@@ -1496,7 +1496,7 @@
                   <parent>grp_settings</parent>
             </grp_settings_def>
             <grp_settings_salesman>
-                  <caption>M&amp;amp;uuml;&amp;amp;uuml;gimehe seaded</caption>
+                  <caption>M&amp;uuml;&amp;uuml;gimehe seaded</caption>
                   <parent>grp_settings</parent>
             </grp_settings_salesman>
             <grp_users_tree>
@@ -1514,7 +1514,7 @@
                   <parent>grp_settings</parent>
             </grp_resources>
             <grp_worksheet>
-                  <caption>T&amp;amp;ouml;&amp;amp;ouml;lehed</caption>
+                  <caption>T&amp;ouml;&amp;ouml;lehed</caption>
                   <parent>grp_settings</parent>
                   <submit_method>get</submit_method>
             </grp_worksheet>

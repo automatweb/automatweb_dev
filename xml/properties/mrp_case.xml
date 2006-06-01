@@ -184,7 +184,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Sisu v&amp;amp;auml;rvid</caption>
+            <caption>Sisu v&amp;auml;rvid</caption>
       </property>
       <property>
             <name>sisu_varvid_notes</name>
@@ -193,7 +193,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Sisu v&amp;amp;auml;rvid Notes</caption>
+            <caption>Sisu v&amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>sisu_lakk_muu</name>
@@ -211,7 +211,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kaane v&amp;amp;auml;rvid</caption>
+            <caption>Kaane v&amp;auml;rvid</caption>
       </property>
       <property>
             <name>kaane_varvid_notes</name>
@@ -220,7 +220,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Kaane v&amp;amp;auml;rvid Notes</caption>
+            <caption>Kaane v&amp;auml;rvid Notes</caption>
       </property>
       <property>
             <name>kaane_lakk_muu</name>
@@ -256,7 +256,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Tr&amp;amp;uuml;kiarv</caption>
+            <caption>Tr&amp;uuml;kiarv</caption>
       </property>
       <property>
             <name>trykise_ehitus</name>
@@ -265,7 +265,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Tr&amp;amp;uuml;kise ehitus</caption>
+            <caption>Tr&amp;uuml;kise ehitus</caption>
       </property>
       <property>
             <name>kromaliin</name>
@@ -292,7 +292,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>N&amp;amp;auml;idis</caption>
+            <caption>N&amp;auml;idis</caption>
       </property>
       <property>
             <name>plaate</name>
@@ -328,7 +328,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>M&amp;amp;auml;rkused</caption>
+            <caption>M&amp;auml;rkused</caption>
       </property>
       <property>
             <name>allahindlus</name>
@@ -355,7 +355,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
-            <caption>M&amp;amp;uuml;&amp;amp;uuml;gi hind</caption>
+            <caption>M&amp;uuml;&amp;uuml;gi hind</caption>
       </property>
       <property>
             <name>user_comments</name>
@@ -446,7 +446,7 @@
       </classinfo>
       <groupinfo>
             <grp_general>
-                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <caption>&amp;Uuml;ldine</caption>
                   <parent>general</parent>
             </grp_general>
             <grp_case_data>
@@ -457,7 +457,7 @@
                   <caption>Ressursid ja t&amp;ouml;&amp;ouml;voog</caption>
             </grp_case_workflow>
             <grp_case_view>
-                  <caption>Vaatleja t&amp;amp;ouml;&amp;amp;ouml;laud</caption>
+                  <caption>Vaatleja t&amp;ouml;&amp;ouml;laud</caption>
             </grp_case_view>
             <grp_case_schedule>
                   <caption>Kalender</caption>
