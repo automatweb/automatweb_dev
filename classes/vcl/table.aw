@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.80 2006/06/01 09:06:31 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.81 2006/06/01 10:43:29 tarvo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1130,7 +1130,7 @@ class aw_table extends aw_template
 						};
 					};
 
-					if (empty($val) && $v1["type"]!="int")
+					if (!strlen($val) && $v1["type"]!="int")
 					{
 						$val = "&nbsp;";
 					};
