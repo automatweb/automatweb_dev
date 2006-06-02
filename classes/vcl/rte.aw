@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.17 2006/02/08 10:46:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.18 2006/06/02 12:47:12 dragut Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -68,7 +68,23 @@ class rte extends aw_template
 		die($this->parse());
 	}
 
+	/** Adds RTE buttons to given toolbar
 
+		@attrib name=get_rte_toolbar params=name api=1
+
+		@param toolbar required type=object
+			Toolbar object
+		@errors 
+			none
+
+		@returns 
+			none
+
+		@comment 
+			none
+		@examples
+			none
+	**/
 	function get_rte_toolbar($arr)
 	{
 
@@ -339,7 +355,24 @@ class rte extends aw_template
 
 
 	}
+	/** Draws the RTE editor
 
+		@attrib name=draw_editor params=name api=1 
+
+		@param name required type=string
+
+		@errors 
+			none
+
+		@returns 
+			none
+
+		@comment 
+			All parameters are set as template variables
+
+		@examples
+			none
+	**/
 	function draw_editor($arr)
 	{
                 // richtext editors are inside a template
@@ -371,5 +404,5 @@ class rte extends aw_template
                 return $retval;
         }
 	
-};
+}
 ?>
