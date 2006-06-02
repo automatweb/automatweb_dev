@@ -4767,6 +4767,7 @@ if ($_GET['show_thread_data'] == 1)
 			"planned",
 			"planned_overdue",
 			"overdue",
+			"inwork",
 		);
 
 		if (in_array($this->list_request, $applicable_lists))
