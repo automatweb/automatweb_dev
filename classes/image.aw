@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.165 2006/06/02 12:15:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.166 2006/06/02 12:35:27 dragut Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1424,7 +1424,7 @@ class image extends class_base
 		@attrib name=get_url_by_id params=pos api=1 
 
 		@param id required type=int
-
+			Image object's id
 		@errors 
 			none
 
@@ -1483,7 +1483,7 @@ class image extends class_base
 
 		@attrib name=do_apply_gal_conf params=pos api=1 
 
-		@param o required type=int
+		@param o required type=object
 			Image object
 		@errors 
 			none
@@ -1518,9 +1518,9 @@ class image extends class_base
 
 		@attrib name=do_resize_image params=name api=1 
 
-		@param o required type=int
+		@param o required type=object
 			Image object
-		@param conf required type=int
+		@param conf required type=object
 			Gallery configuration object
 
 		@errors 
@@ -1603,7 +1603,7 @@ class image extends class_base
 
 		@param file required type=string
 			Image file
-		@param conf required type=int
+		@param conf required type=object
 			Gallery configuration object
 		@param prefix required type=string
 			
@@ -1685,7 +1685,7 @@ class image extends class_base
 		@param id required type=int
 			Image object's id
 		@param alt optional type=string default=NULL
-			Images alterante text
+			Images alternate text
 		@param has_big_alt optional type=string default=NULL
 			If big image is set, then this is the big image's alternate text.	
 	
