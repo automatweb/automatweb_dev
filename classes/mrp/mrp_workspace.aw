@@ -2134,7 +2134,7 @@ if ($_GET['show_thread_data'] == 1)
 			$table->define_data($data);
 		}
 
-		$table->set_default_sortby ("due_date");
+		$table->set_default_sortby ("starttime");
 		$table->set_default_sorder ("asc");
 		$table->define_pageselector (array (
 			"type" => "text",
@@ -3696,18 +3696,33 @@ if ($_GET['show_thread_data'] == 1)
 		die();
 	}
 
-	function _init_printer_jobs_t(&$t)
+	function _init_printer_jobs_t(&$t, $grp)
 	{
-		$t->define_field(array(
-			"name" => "tm",
-			"caption" => t("Algus"),
-			"type" => "time",
-			"align" => "center",
-			"format" => "d.m.Y H:i",
-			"numeric" => 1,
-			"chgbgcolor" => "bgcol",
-			"sortable" => 1
-		));
+		if ("grp_printer_done" == $grp)
+		{
+			$t->define_field(array(
+				"name" => "tm_end",
+				"caption" => t("L&otilde;pp"),
+				"type" => "time",
+				"align" => "center",
+				"format" => "d.m.Y H:i",
+				"numeric" => 1,
+				"chgbgcolor" => "bgcol",
+			));
+		}
+		else
+		{
+			$t->define_field(array(
+				"name" => "tm",
+				"caption" => t("Algus"),
+				"type" => "time",
+				"align" => "center",
+				"format" => "d.m.Y H:i",
+				"numeric" => 1,
+				"chgbgcolor" => "bgcol",
+				"sortable" => 1
+			));
+		}
 
 		$t->define_field(array(
 			"name" => "length",
@@ -3717,16 +3732,6 @@ if ($_GET['show_thread_data'] == 1)
 			"chgbgcolor" => "bgcol",
 			"sortable" => 1
 		));
-
-		/*$t->define_field(array(
-			"name" => "tm_end",
-			"caption" => t("L&otilde;pp"),
-			"type" => "time",
-			"align" => "center",
-			"format" => "d.m.Y H:i",
-			"numeric" => 1,
-			"chgbgcolor" => "bgcol",
-		));*/
 
 		$t->define_field(array(
 			"name" => "status",
@@ -3797,7 +3802,8 @@ if ($_GET['show_thread_data'] == 1)
 	function _printer_jobs($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_printer_jobs_t($t);
+		$grp = $arr["prop"]["group"];
+		$this->_init_printer_jobs_t($t, $grp);
 
 		$res = $this->get_cur_printer_resources(array(
 			"ws" => $arr["obj_inst"]
@@ -4162,7 +4168,16 @@ if ($_GET['show_thread_data'] == 1)
 				"job_comment" => $comment
 			));
 		}
-		$t->set_default_sortby("tm");
+
+		if ("grp_printer_done" == $grp)
+		{
+			$t->set_default_sortby("tm_end");
+		}
+		else
+		{
+			$t->set_default_sortby("tm");
+		}
+
 		$t->sort_by();
 		$t->set_sortable(false);
 	}
