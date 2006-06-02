@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.164 2006/05/17 12:36:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.165 2006/06/02 12:15:15 dragut Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -123,6 +123,28 @@ class image extends class_base
 		);
 	}
 
+	/** 
+
+		@attrib name=get_image_by_id api=1 params=pos
+
+		@param id required type=int
+			id of the image in images database table
+		@errors 
+			none
+
+		@returns 
+			- array with image data
+			- false if the id parameter is array
+			- false if the id parameter is not numeric
+
+		@comment 
+			none
+
+		@examples
+			$image_inst = get_instance(CL_IMAGE);
+			$image_data = $image_inst->get_image_by_id(1234);
+
+	**/
 	function get_image_by_id($id)
 	{
 		// it shouldn't be, but it is an array, if a period is loaded
@@ -172,6 +194,23 @@ class image extends class_base
 		return $row;
 	}
 
+	/** fixes image url
+
+		@attrib name=get_url api=1 params=pos
+
+		@param url required type=string
+			url to be fixed
+		@errors 
+			none
+
+		@returns 
+			If url parameter evaluates false (ie. '', 0) then returns empty value.
+		@comment 
+			none
+
+		@examples
+			none
+	**/
 	function get_url($url) 
 	{
 		if ($url)
@@ -473,6 +512,26 @@ class image extends class_base
 		}
 	}
 
+	/** Checks if the file is shockwave-flash file or not
+
+		@attrib name=is_flash api=1 params=pos
+
+		@param file required type=string
+			path to the imagefile
+		@errors 
+			none
+
+		@returns 
+			true if it is flash file, false othervise
+
+		@comment 
+			none
+
+		@examples
+			$inst = get_instance(CL_IMAGE);
+			$o = new object(1234);
+			var_dump( $inst->is_flash( $o->prop('file') ) );
+	**/
 	function is_flash($file)
 	{
 		$pos = strrpos($file,".");
@@ -487,11 +546,30 @@ class image extends class_base
 		}
 	}
 
-	////
-	// !saves a image that was uploaded in a form to the db
-	// $name - the name of the image input in form
-	// $parent - the parent object of the image
-	// $img_id - if not specified, image will be added, else changed
+	/** Saves a image that was uploaded in a form to the database
+
+		@attrib name=is_flash api=1 params=pos
+
+		@param name required type=string
+			the name of the image input in form
+		@param parent required type=oid
+			the parent object of the image
+		@param img_id optional type=int
+			image id, if not specified, image will be added, else changed
+
+		@errors 
+			none
+
+		@returns 
+			- array of image data (image_id, image url and image size)
+			- false if img_id is set and evaluates to false
+
+		@comment 
+			none
+
+		@examples
+			none
+	**/
 	function add_upload_image($name,$parent,$img_id = 0)
 	{
 		$img_id = (int)$img_id;
@@ -641,17 +719,23 @@ class image extends class_base
 		die();
 	}
 
-	/**  
+	/** Creates HTML image tag
 		
 		@attrib name=view params=name nologin="1" 
 		
 		@param id required type=int
-		
-		@returns
-		
-		
-		@comment
+			image id
+		@param height optional type=int
+			image's height
 
+		@returns
+			HTML image tag
+
+		@comment
+			none
+		
+		@examples
+			none
 	**/
 	function view($args = array())
 	{
@@ -664,11 +748,25 @@ class image extends class_base
 		return $retval;
 	}
 
-	////
-	// !rewrites the image's url to the correct value
-	// removes host name from url
-	// if url is site/img.aw , rewrites to the correct orb fastcall
-	// adds baseurl
+	/** Rewrites the image's url to the correct value
+		
+		@attrib name=view params=name nologin="1" 
+		
+		@param url required type=string
+			URL to be rewritten
+
+		@returns
+			- Rewrote URL
+			- If url parameter is empty, then returns empty value
+
+		@comment
+			removes host name from url
+			if url is site/img.aw , rewrites to the correct orb fastcall
+			adds baseurl
+		
+		@examples
+			none
+	**/
 	function check_url($url)
 	{
 		if ($url == "")
@@ -711,10 +809,27 @@ class image extends class_base
 		return $url;
 	}
 
-	////
-	// !returns an <img tag that refers to the image 
-	// $url - the url of the image in the >img tag
-	// $alt - alt text for the image
+
+	/** Creates HTML image tag
+		@attrib name=make_img_tag params=pos 
+		
+		@param url required type=string
+			URL to the image
+		@param alt optional type=string
+			Alt text of the image
+
+		@returns
+			- Rewrote URL
+			- If url parameter is empty, then returns empty value
+
+		@comment
+			removes host name from url
+			if url is site/img.aw , rewrites to the correct orb fastcall
+			adds baseurl
+		
+		@examples
+			none
+	**/
 	function make_img_tag($url, $alt = "")
 	{
 		if ($url == "")
@@ -950,16 +1065,37 @@ class image extends class_base
 		return $retval;
 	}
 
-	////
-	// !adds an image to the system
-	// parameters:
-	//	from - either "file" or "string" or "url"
-	//	str - if from is string, then this is the file content
-	//	file - if from is file, then this is the filename for file content
-	//	url - if from is url, then this is the url for file, will be downloaded
-	//	orig_name - the original name of the file, used as the object name
-	//	parent - the folder where to save the image
-	//	id - the if of the image to change, optional
+	/** Adds an image to the system
+
+		@attrib name=orb_name params=[name|pos] default="0" nologin="1" api=1 all_args=1 caption="foo" is_public=1
+
+		@param from required type=string 
+			Method how image is passed to the function. Options: [file|string|url]
+		@param str optional type=string
+			if from value is "string", then this is the file content
+		@param file optional type=string
+			if from is file, then this is the filename for file content
+		@param url optional type=string
+			if from is url, then this is the url for file, will be downloaded
+		@param orig_name optional type=string
+			the original name of the file, used as the object name
+		@param parent required type=int
+			the folder where to save the image
+		@param id optional type=int
+			the id of the image to change
+
+		@errors 
+			none			
+
+		@returns 
+			array with image data (image object id, image url and image size)
+
+		@comment 
+			none
+
+		@examples
+			none
+	**/
 	function add_image($arr)
 	{
 		extract($arr);
@@ -1000,6 +1136,31 @@ class image extends class_base
 		return array("id" => $oid,"url" => $this->get_url($fl), "sz" => $sz);
 	}
 
+
+	/** Resizes picture
+
+		@attrib name=resize_picture params=name api=1
+
+		@param id required type=int
+			image id 
+		@param file required type=string
+
+		@param width required type=int
+			new width of the picture
+		@param height required type=int
+			new height of the picture
+		@errors 
+			none
+
+		@returns 
+			none
+
+		@comment 
+			after resizing picture converts all pictures to JPG format!
+		@examples
+			none
+
+	**/
 	function resize_picture(&$arr)
 	{
 		$im = $this->get_image_by_id($arr["id"]);
@@ -1103,18 +1264,15 @@ class image extends class_base
 	}
 
 
-	/**  
+	/** Adding comment 
 		
-		@attrib name=submit_comment params=name nologin="1" 
+		@attrib name=submit_comment params=name nologin="1" api=1
 		
 		@param id required type=int
 		@param comments optional type=int
 		
 		@returns
-		
-		
-		@comment Comment saved and returns to show_big
-
+			URL to the big image view
 	**/
 	function submit_comment($arr)
 	{
@@ -1146,17 +1304,12 @@ class image extends class_base
 		
 	}
 
-	/**  
+	/** Shows the big image 
 		
-		@attrib name=show_big params=name nologin="1" 
+		@attrib name=show_big params=name nologin="1" api=1
 		
 		@param id required type=int
 		@param comments optional type=int
-		
-		@returns
-		
-		
-		@comment
 
 	**/
 	function show_big($arr)
@@ -1265,6 +1418,25 @@ class image extends class_base
 		));
 	}
 
+
+	/** Get image url by image id
+
+		@attrib name=get_url_by_id params=pos api=1 
+
+		@param id required type=int
+
+		@errors 
+			none
+
+		@returns 
+			empty value if the image object has no view access, url to the image othervise
+
+		@comment 
+			none
+
+		@examples
+			none
+	**/
 	function get_url_by_id($id)
 	{
 		if (!$this->can("view", $id))
@@ -1307,7 +1479,24 @@ class image extends class_base
 		return $rv;
 	}
 
+	/** Apply gallery conf to an image
 
+		@attrib name=do_apply_gal_conf params=pos api=1 
+
+		@param o required type=int
+			Image object
+		@errors 
+			none
+
+		@returns 
+			none
+
+		@comment 
+			Applies the gallery configuration to an image. Gallery configuration is set to the image's parent.
+
+		@examples
+			none
+	**/
 	function do_apply_gal_conf($o)
 	{
 		if ($o->prop("no_apply_gal_conf"))
@@ -1325,13 +1514,26 @@ class image extends class_base
 		}
 	}
 
+	/** Resizes images as conf says
 
-	/** resizes images as conf says
+		@attrib name=do_resize_image params=name api=1 
 
-		@comment
-		
-			$o - image object
-			$conf - gallery conf object
+		@param o required type=int
+			Image object
+		@param conf required type=int
+			Gallery configuration object
+
+		@errors 
+			none
+
+		@returns 
+			none
+
+		@comment 
+			Applies the gallery configuration to an image. Gallery configuration is set to the image's parent.
+
+		@examples
+			none
 	**/
 	function do_resize_image($arr)
 	{
@@ -1395,6 +1597,29 @@ class image extends class_base
 
 	}
 
+	/** Resizes images in filesystem
+
+		@attrib name=do_resize_image_in_fs params=pos api=1 
+
+		@param file required type=string
+			Image file
+		@param conf required type=int
+			Gallery configuration object
+		@param prefix required type=string
+			
+	
+		@errors 
+			none
+
+		@returns 
+			none
+
+		@comment 
+			none
+
+		@examples
+			none
+	**/
 	function do_resize_file_in_fs($file, $conf, $prefix)
 	{
 		$img = get_instance("core/converters/image_convert");
@@ -1453,6 +1678,29 @@ class image extends class_base
 		$img->save($file, IMAGE_JPEG);
 	}
 
+	/** Composes img tag with a link to the big image
+
+		@attrib name=make_img_tag_wl params=pos api=1 
+
+		@param id required type=int
+			Image object's id
+		@param alt optional type=string default=NULL
+			Images alterante text
+		@param has_big_alt optional type=string default=NULL
+			If big image is set, then this is the big image's alternate text.	
+	
+		@errors 
+			none
+
+		@returns 
+			HTML image tag, with link when big image is set
+
+		@comment 
+			none
+
+		@examples
+			none
+	**/
 	function make_img_tag_wl($id, $alt = NULL, $has_big_alt = NULL)
 	{
 		$that = get_instance(CL_IMAGE);
@@ -1495,6 +1743,26 @@ class image extends class_base
 		return $imagetag;
 	}
 
+	/** Composes javascript onClick code to open big image in popup window
+
+		@attrib name=get_on_click_js params=pos api=1 
+
+		@param id required type=int
+			Image object's id
+	
+		@errors 
+			none
+
+		@returns 
+			Empty value when big image is not set
+			javascript onclick code to open big image in popup window
+
+		@comment 
+			none
+
+		@examples
+			none
+	**/
 	function get_on_click_js($id)
 	{
 		$o = obj($id);
@@ -1565,8 +1833,9 @@ class image extends class_base
 	}
 
 	/**
-		@attrib name=fetch_image_tag_for_doc
-		@param id required
+		@attrib name=fetch_image_tag_for_doc params=name 
+
+		@param id required type=int
 	**/
 	function fetch_image_tag_for_doc($arr)
 	{
