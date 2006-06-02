@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.78 2006/05/31 16:20:33 voldemar Exp $
-// mrp_job.aw - Tegevus
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)

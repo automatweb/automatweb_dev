@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.89 2006/05/31 16:20:33 voldemar Exp $
-// mrp_resource.aw - Ressurss
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
@@ -12,7 +10,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 @groupinfo grp_resource_settings caption="Seaded"
 @groupinfo grp_resource_maintenance caption="Hooldus"
 @groupinfo grp_resource_unavailable caption="Tööajad"
-	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
+	@groupinfo grp_resource_unavailable_work caption="Tööajad" parent=grp_resource_unavailable
 	@groupinfo grp_resource_unavailable_una caption="Kinnised ajad" parent=grp_resource_unavailable
 
 
@@ -67,7 +65,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 @default group=grp_resource_unavailable_work
 
 	@property work_hrs_recur type=releditor reltype=RELTYPE_RECUR_WRK mode=manager props=name,start,end,time,length table_fields=name,start,end,time,length
-	@caption T&ouml;&ouml;ajad
+	@caption Tööajad
 
 @default group=grp_resource_unavailable_una
 
@@ -75,7 +73,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@caption Kinnised ajad
 
 	@property unavailable_weekends type=checkbox ch_value=1
-	@caption Ei t&ouml;&ouml;ta n&auml;dalavahetustel
+	@caption Ei tööta nädalavahetustel
 
 	@property unavailable_dates type=textarea rows=5 cols=50
 	@comment Formaat: alguskuupäev.kuu, tund:minut - lõppkuupäev.kuu, tund:minut; alguskuupäev.kuu, ...
@@ -93,7 +91,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 @caption Kordus
 
 @reltype RECUR_WRK value=5 clid=CL_RECURRENCE
-@caption T&ouml;&ouml;aja kordus
+@caption Tööaja kordus
 
 */
 

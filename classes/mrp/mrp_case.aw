@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.97 2006/05/31 16:20:33 voldemar Exp $
-// mrp_case.aw - Juhtum/Projekt
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
@@ -13,11 +11,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
 @tableinfo mrp_case_schedule index=oid master_table=objects master_index=oid
 
-@groupinfo grp_general caption="&Uuml;ldine" parent=general
+@groupinfo grp_general caption="Üldine" parent=general
 @groupinfo grp_case_data caption="Projekti andmed" parent=general
 groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_workflow caption="Ressursid ja töövoog"
-@groupinfo grp_case_view caption="Vaatleja t&ouml;&ouml;laud"
+@groupinfo grp_case_view caption="Vaatleja töölaud"
 @groupinfo grp_case_schedule caption="Kalender" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
@@ -85,19 +83,19 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Kaane lk arv
 
 	@property sisu_varvid type=textbox
-	@caption Sisu v&auml;rvid
+	@caption Sisu värvid
 
 	@property sisu_varvid_notes type=textbox
-	@caption Sisu v&auml;rvid Notes
+	@caption Sisu värvid Notes
 
 	@property sisu_lakk_muu type=textbox
 	@caption Sisu lakk/muu
 
 	@property kaane_varvid type=textbox
-	@caption Kaane v&auml;rvid
+	@caption Kaane värvid
 
 	@property kaane_varvid_notes type=textbox
-	@caption Kaane v&auml;rvid Notes
+	@caption Kaane värvid Notes
 
 	@property kaane_lakk_muu type=textbox
 	@caption Kaane lakk/muu
@@ -109,10 +107,10 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Kaane paber
 
 	@property trykiarv type=textbox
-	@caption Tr&uuml;kiarv
+	@caption Trükiarv
 
 	@property trykise_ehitus type=textbox
-	@caption Tr&uuml;kise ehitus
+	@caption Trükise ehitus
 
 	@property kromaliin type=textbox
 	@caption Kromalin
@@ -121,7 +119,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Makett
 
 	@property naidis type=textbox
-	@caption N&auml;idis
+	@caption Näidis
 
 	@property plaate type=textbox
 	@caption Plaate
@@ -133,7 +131,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@caption Soodustus
 
 	@property markused type=textbox
-	@caption M&auml;rkused
+	@caption Märkused
 
 	@property allahindlus type=textbox
 	@caption Allahindlus
@@ -144,7 +142,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 	// @property myygi_hind type=textbox
 	@property myygi_hind type=hidden
-	@caption M&uuml;&uuml;gi hind
+	@caption Müügi hind
 
 
 default group=grp_case_material

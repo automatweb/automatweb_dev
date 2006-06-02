@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.163 2006/05/31 16:20:33 voldemar Exp $
-// mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
 @classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes no_status=1 confirm_save_data=1
@@ -13,23 +11,23 @@
 
 @groupinfo grp_schedule caption="Kalender" submit=no
 @groupinfo grp_printer caption="Operaatori vaade" submit=no
-	@groupinfo grp_printer_current caption="Jooksvad t&ouml;&ouml;d" parent=grp_printer submit=no
-	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
-	@groupinfo grp_printer_done caption="Tehtud t&ouml;&ouml;d" parent=grp_printer submit=no
-	@groupinfo grp_printer_aborted caption="Katkestatud t&ouml;&ouml;d" parent=grp_printer submit=no
+	@groupinfo grp_printer_current caption="Jooksvad tööd" parent=grp_printer submit=no
+	groupinfo grp_printer_old caption="Tegemata tööd" parent=grp_printer submit=no
+	@groupinfo grp_printer_done caption="Tehtud tööd" parent=grp_printer submit=no
+	@groupinfo grp_printer_aborted caption="Katkestatud tööd" parent=grp_printer submit=no
 
-	@groupinfo grp_printer_in_progress caption="K&otilde;ik t&ouml;&ouml;s olevad" parent=grp_printer submit=no
-	@groupinfo grp_printer_startable caption="K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada" parent=grp_printer submit=no
-	@groupinfo grp_printer_notstartable caption="T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada" parent=grp_printer submit=no
+	@groupinfo grp_printer_in_progress caption="Kõik töös olevad" parent=grp_printer submit=no
+	@groupinfo grp_printer_startable caption="Kõik tööd mida oleks võimalik alustada" parent=grp_printer submit=no
+	@groupinfo grp_printer_notstartable caption="Tööd, mida ei ole veel võimalik alustada" parent=grp_printer submit=no
 
 
 @groupinfo grp_settings caption="Seaded"
 	@groupinfo grp_settings_def caption="Seaded" parent=grp_settings
-	@groupinfo grp_settings_salesman caption="M&uuml;&uuml;gimehe seaded" parent=grp_settings
+	@groupinfo grp_settings_salesman caption="Müügimehe seaded" parent=grp_settings
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_settings submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_settings submit=no
 	@groupinfo grp_resources caption="Ressursside haldus" parent=grp_settings
-	@groupinfo grp_worksheet caption="T&ouml;&ouml;lehed" parent=grp_settings submit_method=get
+	@groupinfo grp_worksheet caption="Töölehed" parent=grp_settings submit_method=get
 
 @groupinfo grp_login_select_res caption="Vali kasutatav ressurss"
 
@@ -72,7 +70,7 @@
 	@caption Alustamisaeg (meterjalide saabumine)
 
 	@property sp_due_date type=datetime_select view_element=1
-	@caption T&auml;htaeg
+	@caption Tähtaeg
 
 	@property sp_customer type=textbox view_element=1
 	@caption Klient
@@ -129,10 +127,10 @@
 	@caption Otsi
 
 	@property chart_start_date type=date_select store=no
-	@caption N&auml;idatava perioodi algus
+	@caption Näidatava perioodi algus
 
 	@property chart_submit type=submit store=no
-	@caption N&auml;ita
+	@caption Näita
 
 @default group=grp_users_tree
 	@property user_list_toolbar type=toolbar store=no no_caption=1
@@ -168,7 +166,7 @@
 	@caption Projekti headeri kontroller
 
 	@property pv_per_page type=textbox default=30 datatype=int
-	@caption Operaatori vaates t&ouml;id lehel
+	@caption Operaatori vaates töid lehel
 
 	@property projects_list_objects_perpage type=textbox default=30 datatype=int
 	@comment Projektide vaates objekte lehel
@@ -213,7 +211,7 @@
 		@caption Ajaplaani ulatus (a)
 
 		@property parameter_min_planning_jobstart type=textbox default=300
-		@caption Ajavahemik planeerimise alguse hetkest milles algavaid t&ouml;id ei planeerita (s)
+		@caption Ajavahemik planeerimise alguse hetkest milles algavaid töid ei planeerita (s)
 
 		@property parameter_schedule_start type=textbox default=300
 		@caption Ajaplaani alguse vahe planeerimise alguse hetkega (s)
@@ -263,7 +261,7 @@
 	@property pj_change_comment_history type=text store=no parent=comment_hbox no_caption=1
 
 	@property pj_title_job_data type=text store=no subtitle=1
-	@caption T&ouml;&ouml; andmed
+	@caption Töö andmed
 
 	@property pj_starttime type=text store=no
 	@caption Algus
@@ -293,7 +291,7 @@
 	@caption Ressurss
 
 	@property pj_job_comment type=text store=no parent=resource_hbox
-	@caption T&ouml;&ouml; kommentaar
+	@caption Töö kommentaar
 
 	@property pj_state type=text store=no
 	@caption Staatus
@@ -311,19 +309,19 @@
 	@caption Kaane lk arv
 
 	@property pjp_sisu_varvid type=text store=no
-	@caption Sisu v&auml;rvid
+	@caption Sisu värvid
 
 	@property pjp_sisu_varvid_notes type=text store=no
-	@caption Sisu v&auml;rvid Notes
+	@caption Sisu värvid Notes
 
 	@property pjp_sisu_lakk_muu type=text store=no
 	@caption Sisu lakk/muu
 
 	@property pjp_kaane_varvid type=text store=no
-	@caption Kaane v&auml;rvid
+	@caption Kaane värvid
 
 	@property pjp_kaane_varvid_notes type=text store=no
-	@caption Kaane v&auml;rvid Notes
+	@caption Kaane värvid Notes
 
 	@property pjp_kaane_lakk_muu type=text store=no
 	@caption Kaane lakk/muu
@@ -335,10 +333,10 @@
 	@caption Kaane paber
 
 	@property pjp_trykiarv type=text store=no
-	@caption Tr&uuml;kiarv
+	@caption Trükiarv
 
 	@property pjp_trykise_ehitus type=text store=no
-	@caption Tr&uuml;kise ehitus
+	@caption Trükise ehitus
 
 	@property pjp_kromaliin type=text store=no
 	@caption Kromalin
@@ -347,10 +345,10 @@
 	@caption Makett
 
 	@property pjp_naidis type=text store=no
-	@caption N&auml;idis
+	@caption Näidis
 
 	@property pjp_title_case_wf type=text store=no subtitle=1
-	@caption Projekti t&ouml;&ouml;voog
+	@caption Projekti töövoog
 
 	@property pjp_case_wf type=table store=no no_caption=1
 
@@ -371,7 +369,7 @@
 	@caption Kuni
 
 	@property ws_sbt type=submit store=no
-	@caption N&auml;ita
+	@caption Näita
 
 	@property ws_tbl type=table store=no no_caption=1
 
@@ -488,6 +486,11 @@ class mrp_workspace extends class_base
 	function callback_pre_edit ($arr)
 	{
 		$this_object =& $arr["obj_inst"];
+
+		if ("grp_search" == $arr["group"] or "grp_search_proj" == $arr["group"])
+		{
+			$this->list_request = "search";
+		}
 
 		if ($arr["group"] == "grp_projects")
 		{
@@ -1173,7 +1176,8 @@ class mrp_workspace extends class_base
 					$res_ol = new object_list(array("oid" => $resids,"sort_by" => "objects.name"));
 				}
 				$prop["value"] .= $this->picker(aw_global_get("mrp_operator_use_resource"),$res_ol->names());
-				$prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
+				// $prop["value"] .= "</select> <a href='javascript:void(0)' onClick='changed=0;document.changeform.submit();'>vali</a>";
+				$prop["value"] .= "</select>";
 
 				$prop["value"] .= "</td></tr></table>";
 				break;
