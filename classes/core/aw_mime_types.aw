@@ -102,6 +102,22 @@ class aw_mime_types
 		"application/vnd.sun.xml.calc" => "sxc"
 	);
 
+	/** Returns the MIME type of an extension
+
+		@attrib name=type_for_ext params=pos api=1
+
+		@param ext required type=string
+			File extension
+
+		@returns 
+			MIME type of the extension
+			false, if the MIME type for the extension is unknown
+
+		@examples
+			$mimeregistry = get_instance("core/aw_mime_types");
+			echo $mimeregistry->type_for_ext('rtf'); // prints 'text/rtf'
+
+	**/
 	function type_for_ext($ext)
 	{
 		$ext = strtolower($ext);
@@ -115,12 +131,46 @@ class aw_mime_types
 		return false;
 	}
 
+	/** Returns the MIME type of a file
+
+		@attrib name=type_for_file params=pos api=1
+
+		@param file required type=string
+			File name
+
+		@returns 
+			MIME type of the file
+			false, if the MIME type for the file is unknown
+
+		@comment
+			For MIME type detection, file extension is used
+
+		@examples
+			$mimeregistry = get_instance("core/aw_mime_types");
+			echo $mimeregistry->type_for_file('my_cv.rtf'); // prints 'text/rtf'
+
+	**/
 	function type_for_file($file)
 	{
 		$pathinfo = pathinfo($file);
 		return $this->type_for_ext($pathinfo["extension"]);
 	}
 
+	/** Returns the extension for a MIME type
+
+		@attrib name=ext_for_type params=pos api=1
+
+		@param type required type=string
+			MIME type
+
+		@returns 
+			Extension for the MIME type
+
+		@examples
+			$mimeregistry = get_instance("core/aw_mime_types");
+			echo $mimeregistry->ext_for_type('text/rtf'); // prints 'rtf'
+
+	**/
 	function ext_for_type($type)
 	{
 		list($ext) = explode(",", $this->type2ext[$type]);
