@@ -2134,7 +2134,24 @@ if ($_GET['show_thread_data'] == 1)
 			$table->define_data($data);
 		}
 
-		$table->set_default_sortby ("starttime");
+		switch ($this->list_request)
+		{
+			case "inwork":
+				$table->set_default_sortby ("due_date");
+				break;
+
+			case "planned_overdue":
+			case "overdue":
+			case "new":
+			case "planned":
+			case "planning":
+			case "all":
+			case "done":
+			default:
+				$table->set_default_sortby ("starttime");
+				break;
+		}
+
 		$table->set_default_sorder ("asc");
 		$table->define_pageselector (array (
 			"type" => "text",
