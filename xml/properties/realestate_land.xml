@@ -407,6 +407,15 @@
             <caption>Projekt</caption>
       </property>
       <property>
+            <name>expire</name>
+            <table>objects</table>
+            <group>grp_main</group>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>aegub</caption>
+      </property>
+      <property>
             <name>additional_info_et</name>
             <table>objects</table>
             <group>grp_additional_info</group>

@@ -9,5 +9,12 @@
 			</function>
 		</action>
 
+		<action name="check_response" is_public="1" caption="Change">
+			<function name="check_response">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
