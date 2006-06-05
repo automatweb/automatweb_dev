@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.5 2006/06/01 13:17:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.6 2006/06/05 11:55:20 tarvo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 
@@ -109,6 +109,7 @@ class site_styles extends class_base
 						{
 							$store[(int)$in['ord']] = $in['url'];
 						}
+						$mpic[$in["ord"]] = $in["menupic_nr"];
 					}
 				}
 				$store = array_flip($store);
@@ -125,6 +126,7 @@ class site_styles extends class_base
 					$final[] = $url;
 				}
 				$arr['obj_inst']->set_meta('styles', $final);
+				$arr["obj_inst"]->set_meta('menupic_nrs', $mpic);
 			break;
 			case "vars":
 				foreach($arr["request"]["var_name"] as $var_old_name => $var_new_name)
@@ -165,6 +167,7 @@ class site_styles extends class_base
 		$i = 0;
 		$ord = 0;
 		$value = $arr['obj_inst']->meta('styles');
+		$menupic_nrs = $arr["obj_inst"]->meta("menupic_nrs");
 		if (is_array($value))
 		{
 			foreach ($value as $ord => $url)
@@ -173,7 +176,8 @@ class site_styles extends class_base
 				{
 					continue;
 				}
-				$html .= $this->_make_stylepicker_row($ord, $url, ++$i);
+
+				$html .= $this->_make_stylepicker_row($ord, $url, ++$i, $menupic_nrs[$ord]);
 				$html .= '<br />';
 			}
 		}
@@ -183,7 +187,6 @@ class site_styles extends class_base
 
 	function _get_styles(&$arr)
 	{
-
 		$t = &$arr["prop"]["vcl_inst"];
 		
 		$styles = $arr["obj_inst"]->meta("styles");
@@ -196,7 +199,6 @@ class site_styles extends class_base
 			"name" => "css_url",
 			"caption" => t("CSS url"),
 		);
-
 
 		// for var names		
 		foreach($vars as $var_name => $var_values)
@@ -246,7 +248,7 @@ class site_styles extends class_base
 		$t->gen_tbl_from_array($tbl_a);
 	}
 
-	function _make_stylepicker_row($ord, $url, $idx)
+	function _make_stylepicker_row($ord, $url, $idx, $menupic_nr = "")
 	{
 		$ret = t("jrk").": ".html::textbox(array(
 			'name' => 'styles['.$idx.'][ord]',
@@ -256,6 +258,11 @@ class site_styles extends class_base
 		$ret .= " ".t("url").": ".html::textbox(array(
 			'name' => 'styles['.$idx.'][url]',
 			'value' => $url,
+		));
+		$ret .= " ".t("Men&uuml;&uuml;pildi nr").": ".html::textbox(array(
+			"name" => "styles[".$idx."][menupic_nr]",
+			"size" => 3,
+			"value" => $menupic_nr,
 		));
 		return $ret;
 	}

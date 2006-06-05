@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.191 2006/06/01 13:17:38 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.192 2006/06/05 11:55:20 tarvo Exp $
 
 /*
 
@@ -1400,6 +1400,44 @@ class site_show extends class_base
 			"HAS_SEL_MENU_IMAGE_URL" => $has_smu,
 			"NO_SEL_MENU_IMAGE_URL" => $no_smu
 		));
+
+		// menu img addon (sel_menu_image_skin_url)
+		$ss = get_instance(CL_SITE_STYLES);
+		$ol = new object_list(array(
+			"class_id" => CL_SITE_STYLES,
+			"status" => STAT_ACTIVE,
+		));
+		$ar = $ol->arr();
+		$style_ord = $ss->selected_style_ord(array(
+			"oid" => key($ar)
+		));
+		$obj = obj(key($ar));
+		$menu_img_nrs = $obj->meta("menupic_nrs");
+		$menupic_nr = $menu_img_nrs[$style_ord];
+		$menu_pic_final_id = false;
+		foreach(array_reverse($this->path) as $menu)
+		{
+			$menu_obj = obj($menu);
+			$loop_menu_pics = $menu_obj->prop("menu_images");
+			if($loop_menu_pics[$menupic_nr]["image_id"])
+			{
+				$menu_pic_final_id = $loop_menu_pics[$menupic_nr]["image_id"];
+				break;
+			}
+		}
+		if($menu_pic_final_id)
+		{
+			$pic_obj = obj($menu_pic_final_id);
+			$img_inst = get_instance(CL_IMAGE);
+			$this->vars(array(
+				"sel_menu_image_skin_url" => $img_inst->get_url($pic_obj->prop("file")),
+			));
+			$this->parse("HAS_SEL_MENU_IMAGE_URL");
+		}
+		else
+		{
+			$this->parse("NO_SEL_MENU_IMAGE_URL");
+		}
 	}
 
 	////
