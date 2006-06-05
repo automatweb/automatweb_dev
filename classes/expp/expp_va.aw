@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.12 2006/05/31 18:11:35 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.13 2006/06/05 11:23:19 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -547,7 +547,7 @@ class expp_va extends class_base {
 					$_price2 .= $this->parse( $_kamp.'PRICE2' );
 				}
 			}
-			$_kirjeldus = stripslashes( $_vanne[$_pindeks]['veebi_kirjeldus'] );
+			$_kirjeldus = htmlentities( stripslashes( $_vanne[$_pindeks]['veebi_kirjeldus'] ) );
 			if( isset( $val['hinna_kirjeldus'] )) {
 				if( !empty( $_kirjeldus )) {
 					$_kirjeldus .= '<br />';
@@ -558,7 +558,7 @@ class expp_va extends class_base {
 			$this->vars(array(
 				'nimi' => $_title,
 //				'kirjeldus' => $_vanne[$_pindeks]['kampaania'],
-				'kirjeldus' => htmlentities($_kirjeldus),
+				'kirjeldus' => $_kirjeldus,
 				$_kamp.'PRICE1' => $_price1,
 				$_kamp.'PRICE2' => $_price2
 			));
