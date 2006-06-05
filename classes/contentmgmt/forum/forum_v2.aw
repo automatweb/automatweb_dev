@@ -1,12 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.96 2006/05/31 13:29:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.97 2006/06/05 15:23:11 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
 */
 
 /*
-
 	@classinfo syslog_type=ST_FORUM
 	@classinfo relationmgr=yes
 
@@ -1104,6 +1103,7 @@ class forum_v2 extends class_base
 		{
 			foreach($comments as $comment)
 			{
+
 				$cnt++;
 				if (!between($cnt,$from,$to))
 				{
@@ -1122,6 +1122,7 @@ class forum_v2 extends class_base
 					"ADMIN_POST" => "",
 					"HAS_EMAIL" => "",
 					"HAS_NOT_EMAIL" => "",
+					"IMAGE" => '',
 
 				));
 /*
@@ -1149,29 +1150,23 @@ class forum_v2 extends class_base
 						"HAS_EMAIL" => $this->parse("HAS_EMAIL"),
 					));
 				}
+				$group_picture = $this->_get_group_image_for_user($comment['createdby']);
+				if ( $group_picture )
+				{
+					$image_inst  = get_instance(CL_IMAGE);
+					$this->vars(array(
+						'image_url' => $image_inst->get_url_by_id($group_picture->id()),
+					));
+					$this->vars(array(
+						'IMAGE' => $this->parse('IMAGE')
+					));
+				}
 				// have to check if the comment creator is admin or not
 				if ($this->_can_admin(array(
 					"forum_id" => $oid,
 					"uid" => $comment['createdby'],
 				)))
 				{
-					$user_inst = get_instance(CL_USER);
-					$post_creator_groups = $user_inst->get_groups_for_user($comment['createdby']);
-					foreach ($post_creator_groups->arr() as $post_creator_group)
-					{
-						$group_picture = $post_creator_group->get_first_obj_by_reltype("RELTYPE_PICTURE");
-						if (!empty($group_picture))
-						{
-							$image_inst  = get_instance(CL_IMAGE);
-							$this->vars(array(
-								'image_url' => $image_inst->get_url_by_id($group_picture->id()),
-							));
-							$this->vars(array(
-								'IMAGE' => $this->parse('IMAGE')
-							));
-							break;
-						}
-					}				
 					$this->vars(array(
 						"ADMIN_POST" => $this->parse("ADMIN_POST"),
 					));
@@ -1285,30 +1280,28 @@ class forum_v2 extends class_base
 		// path drawing ends .. sucks
 		$this->vars(array(
 			"ADMIN_TOPIC" => "",
+			"IMAGE" => '',
 		));
+
 		$topic_creator = $topic_obj->createdby();
+		$group_picture = $this->_get_group_image_for_user($topic_creator);
+		if ( $group_picture )
+		{arr($group_picture);
+			$image_inst  = get_instance(CL_IMAGE);
+			$this->vars(array(
+				'image_url' => $image_inst->get_url_by_id($group_picture->id()),
+			));
+			$this->vars(array(
+				'IMAGE' => $this->parse('IMAGE')
+			));
+
+		}
+
 		if ($this->_can_admin(array(
 			"forum_id" => $oid,
 			"uid" => $topic_creator
 		)))
 		{
-			$user_inst = get_instance(CL_USER);
-			$topic_creator_groups = $user_inst->get_groups_for_user($topic_creator);
-
-			foreach ($topic_creator_groups->arr() as $topic_creator_group)
-			{
-				$group_picture = $topic_creator_group->get_first_obj_by_reltype("RELTYPE_PICTURE");
-				if (!empty($group_picture))
-				{
-					$image_inst  =get_instance(CL_IMAGE);
-					$this->vars(array(
-						'image_url' => $image_inst->get_url_by_id($group_picture->id()),
-					));
-					$this->vars(array(
-						'IMAGE' => $this->parse('IMAGE')
-					));
-				}
-			}
 			$this->vars(array(
 				"ADMIN_TOPIC" => $this->parse("ADMIN_TOPIC"),
 			));
@@ -2288,6 +2281,26 @@ class forum_v2 extends class_base
 			}
 		}
 		return $retval;
+	}
+
+	function _get_group_image_for_user($username)
+	{
+		$user_inst = get_instance(CL_USER);
+		$post_creator_groups = $user_inst->get_groups_for_user($username);
+		$post_creator_groups->sort_by(array(
+			"prop" => "priority",
+			"order" => "desc"
+		));
+		foreach ( $post_creator_groups->arr() as $post_creator_group )
+		{
+			$pic = $post_creator_group->get_first_obj_by_reltype('RELTYPE_PICTURE');
+			if ( !empty($pic) )
+			{
+				return $pic;
+			}
+		}
+
+		return false;
 	}
 };
 ?>

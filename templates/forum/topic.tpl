@@ -25,12 +25,13 @@
 <tr>
 	<td align="center" width="20%" class="{VAR:style_comment_creator}"><div class="{VAR:style_comment_user}">{VAR:createdby}</div>{VAR:date}
 <!-- SUB: ADMIN_TOPIC -->
+(admin)
+<!-- END SUB: ADMIN_TOPIC -->
 <!-- SUB: IMAGE -->
 <br />
 <img src="{VAR:image_url}" alt="Administraatori pilt" title="Administraatori pilt">
 <!-- END SUB: IMAGE -->
-(admin)
-<!-- END SUB: ADMIN_TOPIC -->
+
 </td>
 	<td valign="top" class="{VAR:style_comment_count}"><strong>{VAR:name}</strong><p>{VAR:comment}{VAR:topic_image1}</td>
 </tr>
@@ -38,11 +39,12 @@
 <tr>
 	<td align="center" width="20%" class="{VAR:style_comment_time}"><div class="{VAR:style_comment_user}">{VAR:uname} -- {VAR:uemail}</div><div class="">{VAR:date}</div>
 <!-- SUB: ADMIN_POST -->
+(admin)
+<!-- END SUB: ADMIN_POST -->
 <!-- SUB: IMAGE -->
 <img src="{VAR:image_url}" alt="Administraatori pilt" title="Administraatori pilt"> 
 <!-- END SUB: IMAGE -->
-(admin)
-<!-- END SUB: ADMIN_POST -->
+
 </td>
 	<td valign="top" class="{VAR:style_comment_text}">
 		<!-- SUB: ADMIN_BLOCK -->
