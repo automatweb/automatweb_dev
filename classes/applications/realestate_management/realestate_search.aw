@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.23 2006/05/30 15:38:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.24 2006/06/05 15:46:07 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -757,12 +757,11 @@ exit_function("jigaboo");
 				"imf" => $_GET["realestate_imf"],
 				"ss" => $_GET["realestate_ss"],
 				"owp" => $_GET["realestate_owp"],
-				"sort_by" => $_GET["sort_by"],
-				"sort_ord" => $_GET["sort_ord"],
+				"sort_by" => $_GET["realestate_sort_by"],
+				"sort_ord" => $_GET["realestate_sort_ord"],
 			);
 		}
 		$search = $this->get_search_args ($args, $this_object);
-
 		//äkki teeks nii?
 		if(!$search["sort_by"]) $search["sort_by"]=$this_object->meta("searc_sort_by");
 		if(!$search["sort_by"]) $search["sort_by"]=$this_object->prop("default_searchparam_sort_by");
@@ -1125,13 +1124,17 @@ exit_function("jigaboo");
 			if (in_array ("searchparam_sort_by", $visible_formelements))
 			{
 				$form_elements["sort_by"]["caption"] = $properties["searchparam_sort_by"]["caption"];
+				$sort_by_options = array();
+				foreach($this_object->prop ("formdesign_sort_options") as $key => $val)
+				{
+					$sort_by_options[$key] = $this->search_sort_options[$key]["caption"];
+				}
 				$form_elements["sort_by"]["element"] = html::select(array(
 					"name" => "realestate_sort_by",
-					"options" => $this_object->prop ("formdesign_sort_options"),
+					"options" => $sort_by_options,
 					"value" => $search["sort_by"],
 				));
 			}
-
 			if (in_array ("searchparam_sort_order", $visible_formelements))
 			{
 				$form_elements["sort_ord"]["caption"] = $properties["searchparam_sort_order"]["caption"];
@@ -1142,7 +1145,6 @@ exit_function("jigaboo");
 				));
 			}
 		}
-
 		if ($_GET["realestate_srch"] == 1 or $this_object->prop ("save_search"))
 		{ ### search
 			$args = array (
@@ -1159,7 +1161,6 @@ exit_function("jigaboo");
 		}
 		exit_function("re_search::show - init & generate form & search");
 		enter_function("re_search::show - process searchresults");
-
 		$result_count = $list->count ();
 
 		if ($result_count)
@@ -1288,7 +1289,7 @@ exit_function("jigaboo");
 					));
 					$rows .= $this->parse ("RE_SEARCHFORM_ROW");
 				}
-
+				
 				$this->vars (array (
 					"RE_SEARCHFORM_ROW" => $rows,
 				));
@@ -1778,11 +1779,14 @@ exit_function("jigaboo");
 				$this->search_sort_options = $options;
 			}
 			$search_sort_by = array_key_exists ($arr["sort_by"], $this->search_sort_options) ? $this->search_sort_options[$arr["sort_by"]]["table"] . "" . $arr["sort_by"] : NULL;
+			//tegelt see $arr["sort_by"]]["table"] jääb mulle ikka arusaamatuks, et miks teda vaja läheb.... moment kirjutasin lihtsalt üle selle väärtuse
+			if($_GET["realestate_sort_by"])$search_sort_by = $_GET["realestate_sort_by"];
+			
 			$search_sort_ord = array_key_exists ($arr["sort_ord"], $this->search_sort_orders) ? $arr["sort_ord"] : NULL;
 		}
 		else
 		{
-			$search_fd = (time () - 60*86400);
+			$search_fd = (time () - 182*86400);
 		}
 
 		$args = array (
@@ -1817,7 +1821,6 @@ exit_function("jigaboo");
 	{
 		enter_function ("re_search::search");
 		$this_object = $arr["this"];
-
 		$search_ci = $arr["search"]["ci"];
 		$search_c24id = $arr["search"]["c24id"];
 		$search_tpmin = $arr["search"]["tpmin"];
@@ -1841,7 +1844,6 @@ exit_function("jigaboo");
 		$search_imf = $arr["search"]["imf"];
 		$search_sort_by = $arr["search"]["sort_by"];
 		$search_sort_ord = $arr["search"]["sort_ord"];
-
 		$list = array ();
 		$parents = array ();
 

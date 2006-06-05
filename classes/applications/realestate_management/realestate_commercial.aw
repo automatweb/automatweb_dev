@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_commercial.aw,v 1.3 2005/12/07 16:58:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_commercial.aw,v 1.4 2006/06/05 15:46:07 markop Exp $
 // realestate_commercial.aw - Äripind
 /*
 
@@ -78,6 +78,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 		@property has_gas_heating type=checkbox ch_value=1 field=meta method=serialize
 		@caption Gaasiküte
+
+		@property has_oil_heating type=checkbox ch_value=1 field=meta method=serialize
+		@caption Õliküte
 
 		@property has_forced_ventilation type=checkbox ch_value=1 field=meta method=serialize
 		@caption Sundventilatsioon

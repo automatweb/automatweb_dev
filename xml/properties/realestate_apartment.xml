@@ -1259,6 +1259,16 @@
             <caption>&amp;Otilde;hkk&amp;uuml;te</caption>
       </property>
       <property>
+            <name>has_oil_heating</name>
+            <table>objects</table>
+            <group>grp_detailed</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;Otilde;lik&amp;uuml;te</caption>
+      </property>
+      <property>
             <name>childtitle3</name>
             <table>objects</table>
             <group>grp_detailed</group>

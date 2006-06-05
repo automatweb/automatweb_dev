@@ -157,22 +157,20 @@
       </property>
       <property>
             <name>transaction_date</name>
-            <table>objects</table>
+            <table>realestate_property</table>
             <group>grp_main</group>
             <type>date_select</type>
-            <field>meta</field>
-            <method>serialize</method>
             <default>-1</default>
+            <field>transaction_date</field>
             <caption>Tehingu kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>transaction_closed</name>
-            <table>objects</table>
+            <table>realestate_property</table>
             <group>grp_main</group>
             <type>checkbox</type>
-            <field>meta</field>
-            <method>serialize</method>
             <ch_value>1</ch_value>
+            <field>transaction_closed</field>
             <caption>Tehing s&amp;otilde;lmitud</caption>
       </property>
       <property>
@@ -407,6 +405,15 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>expire</name>
+            <table>objects</table>
+            <group>grp_main</group>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>aegub</caption>
       </property>
       <property>
             <name>additional_info_et</name>
@@ -1158,6 +1165,16 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>&amp;Otilde;hkk&amp;uuml;te</caption>
+      </property>
+      <property>
+            <name>has_oil_heating</name>
+            <table>objects</table>
+            <group>grp_detailed</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;Otilde;lik&amp;uuml;te</caption>
       </property>
       <property>
             <name>childtitle3</name>

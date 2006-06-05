@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_housepart.aw,v 1.3 2005/12/07 16:58:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_housepart.aw,v 1.4 2006/06/05 15:46:07 markop Exp $
 // realestate_housepart.aw - Majaosa
 /*
 
@@ -195,7 +195,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 		@property has_air_heating type=checkbox ch_value=1 field=meta method=serialize
 		@caption Õhkküte
-
+		
+		@property has_oil_heating type=checkbox ch_value=1 field=meta method=serialize
+		@caption Õliküte
+		
 	@property childtitle3 type=text store=no subtitle=1
 	@caption Kommunikatsioonid
 		@property has_alarm_installed type=checkbox ch_value=1 field=meta method=serialize

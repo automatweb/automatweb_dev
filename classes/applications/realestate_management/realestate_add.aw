@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.13 2006/05/31 17:03:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.14 2006/06/05 15:46:07 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -597,7 +597,7 @@ class realestate_add extends class_base
 		}
 		$address_props = $this->get_address_props($parent);
 		$address = $realestate_obj->get_first_obj_by_reltype("RELTYPE_REALESTATE_ADDRESS");
-		$tmp_address_data = $address->prop("address_data");
+		if(is_object($address))$tmp_address_data = $address->prop("address_data");
 		$address_data = array();
 		foreach ($tmp_address_data as $key => $val)
 		{
@@ -605,7 +605,7 @@ class realestate_add extends class_base
 		}
 		foreach($address_props as $key => $val)
 		{
-			if(($key == "street_address") || ($key == "apartment"))
+			if((($key == "street_address") || ($key == "apartment")) && (is_object($address)))
 			{
 				$_SESSION["realestate_input_data"][$key] = $address->prop ($key, $val);
 			}
@@ -1095,6 +1095,15 @@ class realestate_add extends class_base
 				if($expire == t("Aegunud")) $extend = t("Pikenda");
 				elseif($expire == t("Maksmata")) $extend = t("Maksa");
 				else $extend = t("");
+				if($this->is_template($expire))
+				{
+					$this->vars(array($expire => $this->parse($expire)));
+				}
+				if($this->is_template($extend))
+				{
+					$this->vars(array($extend => $this->parse($extend)));
+				}				
+				
 				$this->vars(array(
 					"name" 	 	=> $rlst_object->name(),
 					"id"	 	=> $rlst_object->id(),
@@ -1262,6 +1271,18 @@ class realestate_add extends class_base
 		$props = $realestate_obj->get_property_list();
 		$address_props = $this->get_address_props($args["parent"]);
 		$address = $realestate_obj->get_first_obj_by_reltype("RELTYPE_REALESTATE_ADDRESS");
+		if(!is_object($address))
+		{
+			$address = new object();
+			$address->set_class_id(CL_ADDRESS);
+			$address->set_parent($realestate_obj->id());
+			$address->save();
+			$realestate_obj->connect(array(
+				"to" => $address,
+				"reltype" => "RELTYPE_REALESTATE_ADDRESS",
+			));
+		}
+		
 		$_SESSION["realestate_input_data"]["name"] = $this->gen_name();
 		$picture_icon = $realestate_obj->prop("picture_icon");//ei tea miks, a järgmise tsükliga kaob miskipärast ära see property väärtus
 		foreach($_SESSION["realestate_input_data"] as $key => $val)
@@ -1271,7 +1292,7 @@ class realestate_add extends class_base
 				$realestate_obj->set_prop($key, $val);
 			}
 			//aadressi salvestamine - tõsine porno
-			if(array_key_exists($key , $address_props))
+			if((array_key_exists($key , $address_props)) && (is_object($address)))
 			{
 				if(($key == "street_address") || ($key == "apartment"))
 				{
@@ -1305,8 +1326,8 @@ class realestate_add extends class_base
 						));
 					}
 				}
-			}
 			$address->save();
+			}
 		}
 		$realestate_obj->set_prop("picture_icon" , $picture_icon);
 		$realestate_obj->save();
