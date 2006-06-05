@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.13 2006/06/05 11:23:19 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.14 2006/06/05 12:39:43 dragut Exp $
 // expp_va.aw - Expp väljaanne 
 /*
 
@@ -246,9 +246,8 @@ class expp_va extends class_base {
 
 		$_liik_nimi = $row['liik'];
 
-		$_lc_key = 'LC_EXPP_DB_'.strtoupper($_liik_nimi);
+		$_lc_key = 'LC_EXPP_DB_'.str_replace( ' ', '_', htmlentities( strtoupper($_liik_nimi) ) );
 		$_liik_wnimi = ( isset( $lc_expp[$_lc_key] ) ? $lc_expp[$_lc_key] : $_liik_nimi );
-
 		$_liik_id = $row['id'];
 		$_tyyp_id = $row['tyyp_id'];
 
@@ -256,7 +255,6 @@ class expp_va extends class_base {
 				'link' => urlencode( $_liik_nimi ),
 				'text' => $_liik_wnimi
 			));
-
 		$_tmp = $this->cp->pidpos;
 		$retHTML =& $this->showValjaanne();
 		if ( !empty( $retHTML )) return $retHTML;
