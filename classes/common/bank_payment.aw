@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.6 2006/05/31 17:03:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.7 2006/06/05 11:02:11 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -126,7 +126,6 @@ class bank_payment extends class_base
 		$bank_payment = get_instance(CL_BANK_PAYMENT);
 		$_SESSION["bank_payment"]["url"] = post_ru();
 		return $bank_payment->do_payment(array(
-			"form"		=> 1,
 			"test"		=> 1,
 			"bank_id"	=> "seb",
 			"sender_id"	=> "EXPRPOST",
@@ -135,20 +134,7 @@ class bank_payment extends class_base
 			"reference_nr"	=> 123456,
 			"expl"		=> "Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 		));
-		//returns something like : 
-		//	"<form name="postform" id="postform" method="post" action=https://unet.eyp.ee/cgi-bin/dv.sh/un3min.r>
-		//	<input type="hidden" name=VK_SERVICE value=1002>
-		//	<input type="hidden" name=VK_VERSION value=008>
-		//	<input type="hidden" name=VK_SND_ID value=EXPRPOST>
-		//	<input type="hidden" name=VK_STAMP value=10002050618003>
-		//	<input type="hidden" name=VK_AMOUNT value=10000000>
-		//	<input type="hidden" name=VK_CURR value=EEK>
-		//	<input type="hidden" name=VK_REF value=1234561>
-		//	<input type="hidden" name=VK_MSG value=Ajakirjade tellimus. Arve nr. 10002050618003>
-		//	<input type="hidden" name=VK_MAC value=kKltfBDS9lZqN+I54diEpbr/3G5VXrkrm9I2kKxE+6qH26Fb6fTuOTgNl93mUrjo3yeR4m2QweGN5bliI0/o1Jw/hbFYuqLTREcr1s5uYuortqa/T2ChavRpU0kw/QnFZPqlAgntfFfFeDS5EPi5qXN6Yl6eeaMPxn/V1HU+66o=>
-		//	<input type="hidden" name=VK_RETURN value=http://vesta.struktuur.ee/automatweb/bank_return.aw>
-		//	<input type="hidden" name=VK_CANCEL value=http://vesta.struktuur.ee/automatweb/bank_return.aw>
-		//	<input type="hidden" name=VK_LANG value=EST>"
+
 	**/	
 	function do_payment($arr)
 	{
@@ -258,8 +244,8 @@ class bank_payment extends class_base
 			"VK_REF"	=> $reference_nr,
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
 			"VK_MAC" 	=> $VK_MAC,
-			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";//60	URL, kuhu vastatakse edukal tehingu sooritamisel
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";//60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
 			"VK_LANG" 	=> $lang,	//"EST"
 		);
 		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
