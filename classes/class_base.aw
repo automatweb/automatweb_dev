@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.484 2006/05/30 15:32:51 kristo Exp $
+// $Id: class_base.aw,v 2.485 2006/06/06 11:53:07 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -372,6 +372,7 @@ class class_base extends aw_template
 		{
 			$o_t = get_instance("translate/object_translation");
 			$t_list = $o_t->translation_list($this->id, true);
+
 			if (in_array($this->id, $t_list))
 			{
 				$this->is_translated = 1;
@@ -386,7 +387,7 @@ class class_base extends aw_template
 			}
 			else
 			{
-				unset($properties["is_translated"]);
+				//unset($properties["is_translated"]);
 			};
 		}
 		if (!aw_ini_get("config.object_translation"))
@@ -394,6 +395,8 @@ class class_base extends aw_template
 			unset($properties["is_translated"]);
 			unset($properties["needs_translation"]);
 		}
+
+
 		// XXX: temporary -- duke
 		if ($args["fxt"])
 		{
@@ -4658,7 +4661,11 @@ class class_base extends aw_template
 			// skip anything that is not in the active group
 			if (empty($this->cb_no_groups) && !in_array($use_group,$propgroups))
 			{
-				if (!(($key == "needs_translation" || $key == "is_translated") && $use_group == "general2"))
+				if (($key == "needs_translation" || $key == "is_translated") && ($use_group == "general2" || $use_group == "general_sub"))
+				{
+					$tmp[$key] = $propdata;
+				}
+				if (!(($key == "needs_translation" || $key == "is_translated") && ($use_group == "general2" || $use_group == "general_sub")))
 				{
 					continue;
 				}
@@ -4686,7 +4693,6 @@ class class_base extends aw_template
 			// shouldn't I do some kind of overriding?
 			$tmp[$key] = $propdata;
 		};
-
 
 		$this->use_group = $use_group;
 		return $tmp;
