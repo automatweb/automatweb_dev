@@ -1547,6 +1547,11 @@ class crm_company_overview_impl extends class_base
 			"caption" => t("Aeg"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "is_done",
+			"caption" => t("Tehtud?"),
+			"align" => "center"
+		));
 	}
 
 	/**
@@ -1574,7 +1579,8 @@ class crm_company_overview_impl extends class_base
 				"name" => $row->prop("content"),
 				"who" => html::obj_change_url($row->prop("impl")),
 				"when" => date("d.m.Y", $row->prop("date")),
-				"time" => $row->prop("time_real")."<br>".$stopper
+				"time" => $row->prop("time_real")."<br>".$stopper,
+				"is_done" => $row->prop("done") ? t("Jah") : t("Ei")
 			));
 		}
 		die($t->draw());
