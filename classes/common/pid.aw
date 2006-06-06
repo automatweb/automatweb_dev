@@ -222,7 +222,7 @@ class pid extends core
 
 		if (strlen ($pid) != 11)
 		{
-			$this->errors = PID_ERROR_LENGTH;
+			$this->errors[] = PID_ERROR_LENGTH;
 		}
 
 		$quotient = 10;
