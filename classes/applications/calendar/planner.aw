@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.123 2006/05/23 12:29:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.124 2006/06/06 14:21:53 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -496,13 +496,12 @@ class planner extends class_base
 				break;
 				
 			case "event_search_tb":
-				if (is_oid($arr["request"]["add_part_to_events"]))
+				if ($arr["request"]["add_part_to_events"])
 				{
 					$this->do_add_parts_to_events($arr);
-					header("Location: ".aw_url_change_var(array(
-						"add_part_to_events" => null,
-						"sel" => null
-					)));
+					unset($arr["request"]["add_part_to_events"]);
+					$ru = $this->mk_my_orb($arr["request"]["action"], $arr["request"], $arr["request"]["class"]);
+					header("Location: ".$ru);
 					die();
 				}
 
@@ -2992,11 +2991,14 @@ class planner extends class_base
 		$assign = t("Lisa valitud s&uuml;ndmustele osalejaks: ");
 		$assign .= html::select(array(
 			"name" => "add_part_to_events",
+			"multiple" => 1,
+			"size" => 1
 		));
 		$pop = get_instance("vcl/popup_search");
 		$assign .= $pop->get_popup_search_link(array(
 			"pn" => "add_part_to_events",
-			"clid" => CL_CRM_PERSON
+			"clid" => CL_CRM_PERSON,
+			"multiple" => 1
 		));
 
 		$tb->add_cdata($assign);
@@ -3010,7 +3012,15 @@ class planner extends class_base
 			{
 				$evo = obj($event);
 				$evi = $evo->instance();
-				$evi->add_participant($evo, obj($arr["request"]["add_part_to_events"]));
+				$l = $arr["request"]["add_part_to_events"];
+				if (!is_array($l))
+				{
+					$l = array($l);
+				}
+				foreach($l as $li)
+				{
+					$evi->add_participant($evo, obj($li));
+				}
 			}
 		}
 	}
