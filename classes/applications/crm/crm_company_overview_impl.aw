@@ -1094,7 +1094,7 @@ class crm_company_overview_impl extends class_base
 		{
 			case "my_tasks":
 				$tasks = $i->get_my_tasks(!($arr["request"]["act_s_sbt"] != "" || $arr["request"]["act_s_is_is"] == 1));
-				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
+				$clid = array(CL_TASK);
 				break;
 			case "meetings":
 				$tasksi = $i->get_my_meetings();
