@@ -990,6 +990,12 @@ class mrp_case extends class_base
 		$this_object =& $arr["obj_inst"];
 		$workspace =& $this->get_current_workspace ($arr);
 		$resources_folder = $workspace->prop ("resources_folder");
+
+		if (!is_oid($resources_folder))
+		{
+			return;
+		}
+
 		$resource_tree = new object_tree (array (
 			"parent" => $resources_folder,
 			"class_id" => array (CL_MENU, CL_MRP_RESOURCE),
@@ -1644,7 +1650,7 @@ class mrp_case extends class_base
 
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["oid"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -1750,7 +1756,7 @@ class mrp_case extends class_base
 
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case"); //echo $return_url;
@@ -1926,7 +1932,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -1985,7 +1991,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2071,7 +2077,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2143,7 +2149,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2205,7 +2211,7 @@ class mrp_case extends class_base
 		$errors = array ();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
@@ -2281,10 +2287,10 @@ class mrp_case extends class_base
 **/
 	function set_on_hold ($arr)
 	{
-		$errors = array ();
+		$errors = array();
 		$return_url = $this->mk_my_orb("change", array(
 			"id" => $arr["id"],
-			"return_url" =>  ($arr["return_url"]),
+			"return_url" => urlencode($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
 		), "mrp_case");
