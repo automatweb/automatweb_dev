@@ -1905,9 +1905,9 @@ class user extends class_base
 	
 	/**
 
-		@attrib params=pos api=1
-		@param uid required type=int
-		User id
+		@attrib params=pos api=
+		@param uid required type=string
+		User id (username, not user object's id)
 		@comment
 		Gets object list of group objects that $uid belongs to
 		@returns
@@ -1919,24 +1919,24 @@ class user extends class_base
 		{
 			return array();
 		}
-		$grups_list = array();
+		$groups_list = array();
 		$tmp = users::get_oid_for_uid($uid);
 		if (is_oid($tmp) && $this->can("view", $tmp))
 		{
 			$user_obj = obj($tmp);
-			$grups_list = new object_list(
+			$groups_list = new object_list(
 				$user_obj->connections_from(array(
 					"type" => "RELTYPE_GRP",
 				))
 			);
 		}
-		return $grups_list;
+		return $groups_list;
 	}
 	
 	/**
 		@attrib params=pos api=1
-		@param uid required type=int
-		User id
+		@param uid required type=string
+		User id (username, not user object's id)
 		@comment
 		Gets the group object with highest priority that uid belongs to
 		@returns
@@ -1950,10 +1950,10 @@ class user extends class_base
 			return false;
 		}
 		$groups->sort_by(array(
-        	"prop" => "priority",
-        	"order" => "desc"
-    	));
-    	return $groups->begin();
+			"prop" => "priority",
+			"order" => "desc"
+		));
+		return $groups->begin();
 	}
 
 	/**
