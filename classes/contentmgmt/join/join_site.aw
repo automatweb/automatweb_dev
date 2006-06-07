@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.27 2006/05/24 09:45:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.28 2006/06/07 12:33:37 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -1307,16 +1307,25 @@ class join_site extends class_base
 			{	
 				if ($visible[$clid][$pid])
 				{
+					if ($prop["name"] == "phone")
+					{
+						$prop["type"] = "textbox";
+					}
 					$ttp[$pid] = $prop;
 				}
 			}
-
+			
 			$class_inst = get_instance($clid);
 			$class_inst->init_class_base();
 			$ttp = $class_inst->parse_properties(array("properties" => $ttp, "obj_inst" => $data_o));
 			foreach($ttp as $pid => $prop)
-			{	
-				if ($visible[$clid][$prop["name"]])
+			{
+				$cpn = $prop["name"];
+				/*if (strpos($cpn, "[") !== false)
+				{
+					$cpn = substr($cpn, 0, strpos($cpn, "["));
+				}*/	
+				if ($visible[$clid][$cpn])
 				{
 					$oldn = str_replace($wn."[", "", str_replace("]", "", $prop["name"]));
 
@@ -1357,7 +1366,6 @@ class join_site extends class_base
 							"value" => $ermsg
 						);
 					}
-
 					// if it's a relpicker, get the rels from the default rel object
 					// and insert them in there
 					if ($props[$pid]["type"] == "relpicker")
@@ -1376,6 +1384,20 @@ class join_site extends class_base
 								$data[$c->prop("to")] = $c->prop("to.name");
 							}
 							$prop["options"] = $data;
+						}
+					}
+					else
+					if ($oldn == "phone")
+					{
+						$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
+                                        	if ($c)
+                                        	{
+                                                	$tdata_o = $c->to();
+							$to = $tdata_o->get_first_obj_by_reltype("RELTYPE_PHONE");
+							if ($to)
+							{
+								$prop["value"] = $to->name();
+							}
 						}
 					}
 					/*else
@@ -1408,6 +1430,7 @@ class join_site extends class_base
 							$prop["value"] = $data_o->name();
 						}
 						else
+						if ($oldn != "phone")
 						{
 							$prop["value"] = $data_o->prop($pid);
 						}
@@ -1437,7 +1460,7 @@ class join_site extends class_base
 				}
 			}
 		}
-
+		
 		// add seprator props
 		$seps = new aw_array($ob->meta("join_seps"));
 		foreach($seps->get() as $sepid => $sepn)
