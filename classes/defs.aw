@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.220 2006/05/23 11:58:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.221 2006/06/07 14:03:15 dragut Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -773,7 +773,7 @@ if (!defined("DEFS"))
 		print_r($arr);
 		$tmp = ob_get_contents();
 		ob_end_clean();
-		echo '<pre>';
+		echo '<pre style="text-align: left;">';
 		echo $see_html?htmlspecialchars($tmp):$tmp;
 		echo '</pre>';
 		echo '<hr/>';
