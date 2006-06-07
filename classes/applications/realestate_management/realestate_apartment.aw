@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_apartment.aw,v 1.4 2006/06/05 15:46:07 markop Exp $
-// realestate_apartment.aw - Korter
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_APARTMENT, on_create)
@@ -379,13 +377,16 @@ class realestate_apartment extends realestate_property
 			case "transaction_price_total":
 			case "estate_price_sqmeter":
 			case "transaction_rent_sqmeter":
-			case "property_area":
 			case "montlhy_expenses":
-			case "heatable_area":
-			case "kitchen_area":
 			case "transaction_rent_total":
 			case "estate_price_total":
 			case "transaction_broker_fee":
+				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC_PRICE, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
+				break;
+
+			case "property_area":
+			case "heatable_area":
+			case "kitchen_area":
 				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
 				break;
 

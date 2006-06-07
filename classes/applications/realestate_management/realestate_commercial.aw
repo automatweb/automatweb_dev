@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_commercial.aw,v 1.4 2006/06/05 15:46:07 markop Exp $
-// realestate_commercial.aw - Äripind
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_COMMERCIAL, on_create)
@@ -149,11 +147,14 @@ class realestate_commercial extends realestate_property
 
 		switch($prop["name"])
 		{
-			case "total_floor_area":
-			case "property_area":
 			case "transaction_additional_costs":
 			case "transaction_monthly_rent":
 			case "transaction_broker_fee":
+				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC_PRICE, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
+				break;
+
+			case "total_floor_area":
+			case "property_area":
 				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
 				break;
 

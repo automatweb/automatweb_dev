@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_rowhouse.aw,v 1.4 2006/06/05 15:46:07 markop Exp $
-// realestate_rowhouse.aw - Ridaelamu
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_ROWHOUSE, on_create)
@@ -380,14 +378,16 @@ class realestate_rowhouse extends realestate_property
 			case "estate_price_total":
 			case "estate_price_sqmeter":
 			case "transaction_rent_sqmeter":
+			case "montlhy_expenses":
+			case "transaction_broker_fee":
+				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC_PRICE, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
+				break;
+
 			case "living_area":
 			case "usable_area":
 			case "property_area":
-			case "montlhy_expenses":
 			case "total_floor_area":
-			case "transaction_broker_fee":
-				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC, REALESTATE_NF_POINT,
-REALESTATE_NF_SEP);
+				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
 				break;
 
 			case "transaction_broker_fee_type":

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.23 2006/05/31 15:17:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.24 2006/06/07 08:58:32 voldemar Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -285,6 +285,7 @@ ALTER TABLE `realestate_property` ADD `transaction_date` INT(10);
 */
 
 define ("REALESTATE_NF_DEC", 1);
+define ("REALESTATE_NF_DEC_PRICE", 0);
 define ("REALESTATE_NF_POINT", ",");
 define ("REALESTATE_NF_SEP", " ");
 define ("NEWLINE", "<br />\n");
@@ -384,6 +385,9 @@ class realestate_property extends class_base
 			case "transaction_price2":
 			case "transaction_down_payment":
 			case "transaction_rent":
+				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC_PRICE, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
+				break;
+
 			case "total_floor_area":
 				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
 				break;
@@ -1830,11 +1834,11 @@ class realestate_property extends class_base
 			{
 				if (in_array ($name, $this->re_price_types))
 				{
-					$properties[$name]["strvalue"] = number_format ($value, REALESTATE_NF_DEC, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
+					$properties[$name]["strvalue"] = number_format ($value, REALESTATE_NF_DEC_PRICE, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
 				}
 				else
 				{
-					$properties[$name]["strvalue"] = number_format ($value, 0, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
+					$properties[$name]["strvalue"] = number_format ($value, REALESTATE_NF_DEC, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
 				}
 			}
 			else

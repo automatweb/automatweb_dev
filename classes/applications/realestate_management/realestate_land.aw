@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_land.aw,v 1.3 2005/12/07 16:58:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_land.aw,v 1.4 2006/06/07 08:58:32 voldemar Exp $
 // realestate_land.aw - Maatükk
 /*
 
@@ -86,7 +86,7 @@ class realestate_land extends realestate_property
 			case "estate_price_sqmeter":
 			case "estate_price_total":
 			case "transaction_selling_price":
-				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
+				$prop["value"] = number_format ($prop["value"], REALESTATE_NF_DEC_PRICE, REALESTATE_NF_POINT, REALESTATE_NF_SEP);
 				break;
 
 			case "transaction_broker_fee_type":

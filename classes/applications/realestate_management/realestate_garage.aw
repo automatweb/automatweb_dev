@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_garage.aw,v 1.3 2005/12/07 16:58:12 voldemar Exp $
-// realestate_garage.aw - Garaaz
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_GARAGE, on_create)
