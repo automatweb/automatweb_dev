@@ -959,7 +959,6 @@ class form_controller extends form_base
 	function parse_alias($args = array())
 	{
 		extract($args);
-
 		return $this->eval_controller($alias["target"]);
 	}
 

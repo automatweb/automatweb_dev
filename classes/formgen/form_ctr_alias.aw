@@ -1,8 +1,8 @@
 <?php
 
-class form_ctl_alias extends core
+class form_ctr_alias extends core
 {
-	function form_ctl_alias()
+	function form_ctr_alias()
 	{
 		$this->init("forms");
 	}
