@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_import.aw,v 1.14 2006/04/21 11:41:39 voldemar Exp $
-// realestate_import.aw - Kinnisvaraobjektide Import
 /*
 
 @classinfo syslog_type=ST_REALESTATE_IMPORT relationmgr=yes no_comment=1 no_status=1
@@ -1182,7 +1180,7 @@ class realestate_import extends class_base
 					}
 					else
 					{
-						$existing_pictures[] = $image->meta ("picture_city24_id");
+						$existing_pictures[$image->meta ("picture_city24_id")] = $image;
 					}
 				}
 
@@ -1191,7 +1189,7 @@ class realestate_import extends class_base
 
 				foreach ($this->property_data["PILT"] as $key => $picture_id)
 				{
-					if (!in_array ($picture_id, $existing_pictures))
+					if (!array_key_exists($picture_id, $existing_pictures))
 					{
 						$image_url = "http://www.city24.ee/MEDIA/PICTURE/PICTURE_{$picture_id}.jpeg";
 						$imagedata = file_get_contents ($image_url);
@@ -1200,24 +1198,31 @@ class realestate_import extends class_base
 							"content" => $imagedata,
 						));
 
-						$picture =& new object ();
-						$picture->set_class_id (CL_IMAGE);
-						$picture->set_parent ($property->id ());
-						$picture->set_status(STAT_ACTIVE);
-						$picture->set_ord ($key);
-						$picture->set_name ($property->id () . "_" . t(" pilt ") . $key);
-						$picture->set_prop("file", $file);
-						$picture->set_meta("picture_city24_id", $picture_id);
-						$picture->save ();
+						$image =& new object ();
+						$image->set_class_id (CL_IMAGE);
+						$image->set_parent ($property->id ());
+						$image->set_status(STAT_ACTIVE);
+						$image->set_ord ($key);
+						$image->set_name ($property->id () . "_" . t(" pilt ") . $key);
+						$image->set_prop("file", $file);
+						$image->set_meta("picture_city24_id", $picture_id);
+						$image->save ();
 						$property->connect (array (
-							"to" => $picture,
+							"to" => $image,
 							"reltype" => "RELTYPE_REALESTATE_PICTURE",
 						));
 
 						unset ($imagedata);
-						unset ($picture);
+						unset ($image);
+					}
+					elseif ($key != $existing_pictures[$picture_id]->ord())
+					{
+						$existing_pictures[$picture_id]->set_ord($key);
+						$existing_pictures[$picture_id]->save();
 					}
 				}
+
+				unset($existing_pictures);
 
 
 				### set type specific property values
