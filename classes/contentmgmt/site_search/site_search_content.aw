@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.74 2006/05/26 15:08:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.75 2006/06/07 13:19:05 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1378,10 +1378,19 @@ class site_search_content extends class_base
 				$si->parse_document($results[$i]);
 			}
 			$results[$i]["url"] = preg_replace("/\&set_lang_id=\d+/imsU", "", str_replace("/index.aw?section=", "/", $results[$i]["url"]));
+			$tm = ($results[$i]["doc_modified"] ? $results[$i]["doc_modified"] : $results[$i]["modified"]);
+			if ($tm > 300)
+			{
+				$md = date("d.m.Y", $tm);
+			}
+			else
+			{
+				$md = "";
+			}
 			$this->vars(array(
 				"link" => $results[$i]["url"],
 				"title" => $results[$i]["title"],
-				"modified" => date("d.m.Y", ($results[$i]["doc_modified"] ? $results[$i]["doc_modified"] : $results[$i]["modified"])),
+				"modified" => $md,
 				"content" => $this->_get_content($results[$i]["content"]),
 				"lead" => preg_replace("/#(.*)#/","",$results[$i]["lead"]),
 				"tm" => ($results[$i]["tm"] != "" ? $results[$i]["tm"] : date("d.m.Y", $results[$i]["modified"])),
