@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.24 2006/06/07 08:58:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.25 2006/06/07 10:19:44 markop Exp $
 // realestate_property.aw - Kinnisvaraobjekt
 /*
 
@@ -641,7 +641,6 @@ class realestate_property extends class_base
 				}
 				break;
 		}
-
 		return $retval;
 	}
 
@@ -1136,7 +1135,6 @@ class realestate_property extends class_base
 		{
 			return false;
 		}
-
 		$this_object_id = $this_object->id ();
 		$view_type = $arr["view_type"];
 		$no_picture_data = false;
@@ -1157,6 +1155,22 @@ class realestate_property extends class_base
 		$tmp = $this->template_dir;
 		$this->template_dir = $this->cfg["site_basedir"] . "/templates/applications/realestate_management/realestate_property";
 
+		$types = array(
+			CL_REALESTATE_HOUSE => "house",
+			CL_REALESTATE_ROWHOUSE => "rowhouse",
+			CL_REALESTATE_COTTAGE => "cottage",
+			CL_REALESTATE_HOUSEPART => "housepart",
+			CL_REALESTATE_APARTMENT => "apartment",
+			CL_REALESTATE_COMMERCIAL => "commercial",
+			CL_REALESTATE_GARAGE => "garage",
+			CL_REALESTATE_LAND => "land",
+		);
+		if ($this->can ("view", $this_object->prop ("realestate_manager")))
+		{
+			$realestate_manager = obj ($this_object->prop ("realestate_manager"));
+			$default_icon = $realestate_manager->prop ("default_".$types[$this_object->class_id()]."_image");
+		}
+
 		switch ($view_type)
 		{
 			case "detailed":
@@ -1175,6 +1189,12 @@ class realestate_property extends class_base
 				$properties = $this->get_property_data (array (
 					"this" => $this_object,
 				));
+				
+				if(!$properties["picture_icon"]["value"])
+				{
+					$properties["picture_icon"]["value"] = $default_icon;
+					$properties["picture_icon"]["strvalue"] = aw_ini_get("baseurl").$default_icon;
+				}
 
 				### pictures
 				$i = 1;
@@ -1238,6 +1258,12 @@ class realestate_property extends class_base
 					"no_address_data" => true,
 					"required_properties" => $required_properties,
 				));
+				if(!$properties["picture_icon"]["value"])
+				{
+					$properties["picture_icon"]["value"] = $default_icon;
+					$properties["picture_icon"]["strvalue"] = aw_ini_get("baseurl").$default_icon;
+				}
+				$i = 1;
 				$no_picture_data = true;
 				break;
 
@@ -1258,6 +1284,11 @@ class realestate_property extends class_base
 				));
 
 				### pictures
+				if(!$properties["picture_icon"]["value"])
+				{
+					$properties["picture_icon"]["value"] = $default_icon;
+					$properties["picture_icon"]["strvalue"] = aw_ini_get("baseurl").$default_icon;
+				}	
 				$i = 1;
 
 				while (isset ($properties["picture" . $i . "_url"]))

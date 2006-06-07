@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.24 2006/06/05 15:46:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.25 2006/06/07 10:19:44 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -54,11 +54,13 @@
 	@property default_searchparam_sort_order type=select
 	@caption Default järjestuse suund
 
+	@property default_per_page type=select
+	@caption Vaikimisi kuulutusi lehe kohta
+
 	@property save_search type=checkbox ch_value=1
 	@caption Salvesta otsingutulemus
 
 	@property sort_by_options type=hidden
-
 
 @default group=grp_search
 	@property search_class_id type=select multiple=1 size=5
@@ -133,6 +135,9 @@
 	@property searchparam_sort_order type=select
 	@caption Järjestuse suund
 
+	@property per_page type=select
+	@caption Kuulutusi lehe kohta
+
 	@property search_button type=submit store=no
 	@caption Otsi
 
@@ -198,6 +203,12 @@ class realestate_search extends class_base
 		$this->search_sort_orders = array (
 			"ASC" => t("Kasvav"),
 			"DESC" => t("Kahanev"),
+		);
+		$this->per_page_options = array (
+			10 => 10,
+			25 => 25,
+			50 => 50,
+			100 => 100,
 		);
 	}
 
@@ -519,6 +530,14 @@ class realestate_search extends class_base
 				$prop["options"] = $this->search_sort_orders;
 				break;
 
+			case "per_page":
+				$prop["options"] = $this->per_page_options;
+				break;
+
+			case "default_per_page":
+				$prop["options"] = $this->per_page_options;
+				break;
+
 			case "searchresult":
 				$table =& $prop["vcl_inst"];
 				$this->_init_properties_list ($table);
@@ -559,6 +578,7 @@ class realestate_search extends class_base
 					"searchparam_onlywithpictures",
 					"searchparam_sort_by",
 					"searchparam_sort_order",
+					"per_page",
 					"search_agent",
 				);
 
@@ -682,11 +702,9 @@ exit_function("jigaboo");
 		{
 			return $this->show_property ($arr);
 		}
-
 		enter_function("re_search::show - init & generate form & search");
 		$visible_formelements = (array) $this_object->prop ("formelements");
 		$this->result_table_recordsperpage = (int) $this_object->prop ("searchform_pagesize");
-
 		if (is_oid ($this_object->prop ("realestate_mgr")) and !is_object ($this->realestate_manager))
 		{
 			$this->realestate_manager = obj ($this_object->prop ("realestate_mgr"));
@@ -729,6 +747,7 @@ exit_function("jigaboo");
 				"owp" => $this_object->prop ("searchparam_onlywithpictures"),
 				"sort_by" => $this_object->prop ("searchparam_sort_by"),
 				"sort_ord" => $this_object->prop ("searchparam_sort_order"),
+				"per_page" => $this_object->prop ("per_page"),
 			);
 		}
 		else
@@ -759,6 +778,7 @@ exit_function("jigaboo");
 				"owp" => $_GET["realestate_owp"],
 				"sort_by" => $_GET["realestate_sort_by"],
 				"sort_ord" => $_GET["realestate_sort_ord"],
+				"per_page" => $_GET["per_page"],
 			);
 		}
 		$search = $this->get_search_args ($args, $this_object);
@@ -775,7 +795,6 @@ exit_function("jigaboo");
 			### formelements
 			$select_size = (int) $this_object->prop ("searchform_select_size");
 			$form_elements = array ();
-
 			if (in_array ("search_class_id", $visible_formelements))
 			{
 				$form_elements["ci"]["caption"] = $properties["search_class_id"]["caption"];
@@ -914,7 +933,6 @@ exit_function("jigaboo");
 					"onchange" => (in_array ("searchparam_address2", $visible_formelements) ? "reChangeSelection(this, false, 'realestate_a2', '{$a2_division_id}');" : NULL),
 				));
 			}
-
 			if (in_array ("searchparam_address2", $visible_formelements))
 			{
 				if (in_array ("searchparam_address1", $visible_formelements))
@@ -1144,6 +1162,15 @@ exit_function("jigaboo");
 					"value" => $search["sort_ord"],
 				));
 			}
+			if (in_array ("per_page", $visible_formelements))
+			{
+				$form_elements["per_page"]["caption"] = $properties["per_page"]["caption"];
+				$form_elements["per_page"]["element"] = html::select(array(
+					"name" => "per_page",
+					"options" => $this->per_page_options,
+					"value" => $search["per_page"],
+				));
+			}
 		}
 		if ($_GET["realestate_srch"] == 1 or $this_object->prop ("save_search"))
 		{ ### search
@@ -1162,7 +1189,8 @@ exit_function("jigaboo");
 		exit_function("re_search::show - init & generate form & search");
 		enter_function("re_search::show - process searchresults");
 		$result_count = $list->count ();
-
+		if($_GET && $this_object->prop("default_per_page")) $this->result_table_recordsperpage = $this_object->prop("default_per_page");
+		if($_GET["per_page"]) $this->result_table_recordsperpage = $_GET["per_page"];
 		if ($result_count)
 		{ ### result
 			classload ("vcl/table");
@@ -1282,7 +1310,8 @@ exit_function("jigaboo");
 						$caption = $el["caption"];
 						$element = $el["element"];
 					}
-
+					else continue;
+					
 					$this->vars (array (
 						"caption" => $caption,
 						"element" => $element,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.13 2006/05/25 08:09:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.14 2006/06/07 10:19:44 markop Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -206,6 +206,30 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 	@property realestate_search type=relpicker reltype=RELTYPE_PROPERTY_SEARCH clid=CL_REALESTATE_SEARCH automatic=1
 	@caption Kinnisvaraotsingu objekt
 
+	@property default_house_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE1 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
+	@caption Vaikimisi maja pilt
+
+	@property default_rowhouse_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE2 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
+	@caption Vaikimisi ridaelamu pilt
+	
+	@property default_cottage_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE3 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
+	@caption Vaikimisi suvila pilt
+	
+	@property default_housepart_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE4 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
+	@caption Vaikimisi majaosa pilt
+	
+	@property default_apartment_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE5 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
+	@caption Vaikimisi korteri pilt
+	
+	@property default_commercial_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE6 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
+	@caption Vaikimisi äripinna pilt
+	
+	@property default_garage_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE7 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
+	@caption Vaikimisi garaazi pilt
+	
+	@property default_land_image type=releditor reltype=RELTYPE_DEFAULT_PICTURE8 rel_id=first use_form=emb field=meta method=serialize clid=CL_IMAGE
+	@caption Vaikimisi maa pilt
+
 	@property default_date_format type=textbox default=jmYHi
 	@caption Kuupäevaformaat
 
@@ -300,7 +324,29 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_CRM_PROFESSION, on_connec
 @reltype RELTYPE_ADDRESS_EQUIVALENT_5 clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION value=17
 @caption Haldusjaotuse vaste 5
 
+@reltype RELTYPE_DEFAULT_PICTURE1 value=26 clid=CL_IMAGE
+@caption Väike pilt
 
+@reltype RELTYPE_DEFAULT_PICTURE2 value=19 clid=CL_IMAGE
+@caption Väike pilt
+
+@reltype RELTYPE_DEFAULT_PICTURE3 value=20 clid=CL_IMAGE
+@caption Väike pilt
+
+@reltype RELTYPE_DEFAULT_PICTURE4 value=21 clid=CL_IMAGE
+@caption Väike pilt
+
+@reltype RELTYPE_DEFAULT_PICTURE5 value=22 clid=CL_IMAGE
+@caption Väike pilt
+
+@reltype RELTYPE_DEFAULT_PICTURE6 value=23 clid=CL_IMAGE
+@caption Väike pilt
+
+@reltype RELTYPE_DEFAULT_PICTURE7 value=24 clid=CL_IMAGE
+@caption Väike pilt
+
+@reltype RELTYPE_DEFAULT_PICTURE8 value=25 clid=CL_IMAGE
+@caption Väike pilt
 */
 
 define ("RE_USERMGR_SHOWALLOBJ_VAR_NAME", "realestate_showallobj");
