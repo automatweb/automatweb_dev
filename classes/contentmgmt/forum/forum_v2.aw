@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.97 2006/06/05 15:23:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.98 2006/06/07 12:56:26 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1286,7 +1286,7 @@ class forum_v2 extends class_base
 		$topic_creator = $topic_obj->createdby();
 		$group_picture = $this->_get_group_image_for_user($topic_creator);
 		if ( $group_picture )
-		{arr($group_picture);
+		{
 			$image_inst  = get_instance(CL_IMAGE);
 			$this->vars(array(
 				'image_url' => $image_inst->get_url_by_id($group_picture->id()),
