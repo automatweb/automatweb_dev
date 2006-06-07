@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.25 2006/06/07 10:19:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.26 2006/06/07 11:45:47 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -924,13 +924,14 @@ exit_function("jigaboo");
 				}
 
 				$form_elements["a1"]["caption"] = $properties["searchparam_address1"]["caption"];
+				$onchange = (in_array ("searchparam_address2", $visible_formelements) ? "reChangeSelection(this, false, 'realestate_a2', '{$a2_division_id}');wait(1500);" : NULL);
 				$form_elements["a1"]["element"] = html::select(array(
 					"name" => "realestate_a1",
 					"multiple" => $select_size,
 					"size" => $select_size,
 					"options" => $this->options_a1,
 					"value" => ($saved_search and is_array ($search["a1"])) ? NULL : $search["a1"],
-					"onchange" => (in_array ("searchparam_address2", $visible_formelements) ? "reChangeSelection(this, false, 'realestate_a2', '{$a2_division_id}');" : NULL),
+					"onchange" => $onchange,
 				));
 			}
 			if (in_array ("searchparam_address2", $visible_formelements))
@@ -2379,7 +2380,11 @@ exit_function("jigaboo");
 		$parent_value = $arr["reAddressSelected"];
 		$child_division = obj ((int) $arr["reAddressDivision"]);
 		$administrative_structure = $this_object->get_first_obj_by_reltype ("RELTYPE_ADMINISTRATIVE_STRUCTURE");
-		$all_selection = ($child_division->prop ("type") == CL_COUNTRY_CITY) ? t("Kõik linnad") : t("Kõik linnaosad");
+		if($child_division->prop ("type") == CL_COUNTRY_CITY) $all_selection = t("Kõik linnad");
+		elseif($child_division->prop ("type") == CL_COUNTRY_CITYDISTRICT) $all_selection = t("Kõik linnaosad");
+		elseif($child_division->name() == "Vald") $all_selection = t("Kõik vallad");
+		else $all_selection = t("Kõik asulad");
+		
 		$options = array(REALESTATE_SEARCH_ALL . "=>" . $all_selection);
 
 		if (is_oid ($parent_value) and is_object ($child_division) and is_object ($administrative_structure))
