@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.166 2006/06/02 12:35:27 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.167 2006/06/07 15:50:29 tarvo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -248,7 +248,6 @@ class image extends class_base
 	{
 		// Defaults
 		$force_comments = false;
-		
 		extract($args);
 		$f = $alias;
 		
@@ -283,7 +282,6 @@ class image extends class_base
 				"target" => ($idata["newwindow"] ? "_blank" : "")
 			));
 		}
-
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		$alstr = array("k" => "center","v" => "left","p" => "right","" => "");
@@ -304,6 +302,25 @@ class image extends class_base
 			}
 		
 			$alt = $idata["meta"]["alt"];
+
+			$bi_show_link = $this->mk_my_orb("show_big", $show_link_arr);
+			$popup_width = min(1000, $size[0] + ($do_comments ? 500 : 0));
+			$popup_height = max(400, $size[1]);// + ($do_comments ? 200 : 0);
+			$bi_link = "window.open('$bi_show_link','popup','width=".($popup_width).",height=".($popup_height)."');";
+
+			// for case if there is a big pic, a little one is missing. then usual text link is shown with images name
+			if($idata["file"] == "" && $idata["file2"] != "")
+			{
+				if(strlen($idata["meta"]["alt"]))
+				{
+					$alt = " alt=\"".$idata["meta"]["alt"]."\"";
+				}
+				return array(
+					"replacement" => "<a href=\"javascript:void(0)\" onClick=\"$bi_link\"".$alt.">".$idata["name"]."</a>",
+					"inplace" => "",
+				);
+			}
+
 			if ($idata["meta"]["file2"] != "")
 			{
 				$size = @getimagesize($idata["meta"]["file2"]);
@@ -316,16 +333,11 @@ class image extends class_base
 					$size = $i_size;
 				}
 			};
-
 			if ($idata["url"] == "")
 			{
 				return "";
 			}
 			
-			$bi_show_link = $this->mk_my_orb("show_big", $show_link_arr);
-			$popup_width = min(1000, $size[0] + ($do_comments ? 500 : 0));
-			$popup_height = max(400, $size[1]);// + ($do_comments ? 200 : 0);
-			$bi_link = "window.open('$bi_show_link','popup','width=".($popup_width).",height=".($popup_height)."');";
 			if (!empty($args['link_prefix'])) // Override image link
 			{
 				$idata['link'] = $args['link_prefix'].$idata['oid'];
