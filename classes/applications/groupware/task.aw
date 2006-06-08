@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.101 2006/06/08 13:31:46 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.102 2006/06/08 13:48:51 tarvo Exp $
 // task.aw - TODO item
 /*
 
@@ -1538,7 +1538,7 @@ class task extends class_base
 			}
 		}
 		ksort($data);
-		$cs = $data + $data_done;
+		$cs = array_merge($data, $data_done);
 		$cs[] = NULL;
 		$cs[] = NULL;
 		$cs[] = NULL;
