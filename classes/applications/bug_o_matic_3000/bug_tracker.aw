@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.60 2006/05/30 11:10:38 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.60 2006/05/30 11:10:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.61 2006/06/08 10:45:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.61 2006/06/08 10:45:55 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -2346,14 +2346,17 @@ class bug_tracker extends class_base
 
 		if ($arr["request"]["sp_p_name"] != "" || $arr["request"]["sp_p_co"] != "")
 		{
-			$ol = new object_list(array(
+			$param = array(
 				"class_id" => CL_CRM_PERSON,
 				"lang_id" => array(),
 				"site_id" => array(),
-				"name" => "%".$arr["request"]["sp_p_name"]."%",
-				"CL_CRM_PERSON.work_contact.name" => "%".$arr["request"]["sp_p_co"]."%"
-			));
-
+				"name" => "%".$arr["request"]["sp_p_name"]."%"
+			);
+			if ($arr["request"]["sp_p_co"] != "")
+			{
+				$param["CL_CRM_PERSON.work_contact.name"] = "%".$arr["request"]["sp_p_co"]."%";
+			}
+			$ol = new object_list($param);
 			foreach($ol->arr() as $p)
 			{
 				$t->define_data(array(
