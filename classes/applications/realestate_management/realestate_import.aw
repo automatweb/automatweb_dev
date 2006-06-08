@@ -1895,7 +1895,7 @@ class realestate_import extends class_base
 				"oid" => $oid_constraint,
 				"class_id" => $realestate_classes,
 				"parent" => $realestate_folders,
-				"modified" => new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $last_import),
+				// "modified" => new obj_predicate_compare (OBJ_COMP_GREATER_OR_EQ, $last_import),
 				"is_archived" => 0,
 				"is_visible" => 1,
 				"site_id" => array (),
@@ -1903,11 +1903,6 @@ class realestate_import extends class_base
 			));
 			$realestate_objects->set_prop ("is_visible", 0);
 			$realestate_objects->save ();
-
-/* dbg */ if (1 == $_GET["re_import_dbg_v"]){
-/* dbg */ 	arr($realestate_objects);
-/* dbg */ 	arr($imported_properties);
-/* dbg */ 	arr($last_import); }
 		}
 
 		### save log
