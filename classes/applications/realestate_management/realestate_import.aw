@@ -510,7 +510,7 @@ class realestate_import extends class_base
 
 					// if ($property_status === REALESTATE_IMPORT_OK)
 					// {
-						$imported_properties[$property->id ()] = $property->id ();
+						$imported_properties[] = $property->id ();
 					// }
 
 					unset ($property);
@@ -1134,8 +1134,18 @@ class realestate_import extends class_base
 				$property->set_prop ("additional_info_et", $value);
 
 				#### picture_icon
-				if (!$property->prop ("picture_icon_image"))
+				if ($property->prop ("picture_icon_city24") != $this->property_data["IKOONI_URL"])
 				{
+					# delete old
+					$image = $property->get_first_obj_by_reltype("RELTYPE_REALESTATE_PICTUREICON");
+
+					if (is_object($image))
+					{
+						$file = $image->prop ("file");
+						unlink ($file);
+						$image->delete ();
+					}
+
 					$image_url = $this->property_data["IKOONI_URL"];
 					$imagedata = file_get_contents ($image_url);
 					$file = $cl_file->_put_fs(array(
@@ -1143,23 +1153,23 @@ class realestate_import extends class_base
 						"content" => $imagedata,
 					));
 
-					$picture =& new object ();
-					$picture->set_class_id (CL_IMAGE);
-					$picture->set_parent ($property->id ());
-					$picture->set_status(STAT_ACTIVE);
-					$picture->set_name ($property->id () . " " . t("väike pilt"));
-					$picture->set_prop ("file", $file);
-					$picture->save ();
-					$property->set_prop ("picture_icon_image", $picture->id ());
+					$image =& new object ();
+					$image->set_class_id (CL_IMAGE);
+					$image->set_parent ($property->id ());
+					$image->set_status(STAT_ACTIVE);
+					$image->set_name ($property->id () . " " . t("väike pilt"));
+					$image->set_prop ("file", $file);
+					$image->save ();
+					$property->set_prop ("picture_icon_image", $image->id ());
 					$property->set_prop ("picture_icon_city24", $image_url);
-					$property->set_prop ("picture_icon", $cl_image->get_url_by_id ($picture->id ()));
+					$property->set_prop ("picture_icon", $cl_image->get_url_by_id ($image->id ()));
 					$property->connect (array (
-						"to" => $picture,
+						"to" => $image,
 						"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
 					));
 
 					unset ($imagedata);
-					unset ($picture);
+					unset ($image);
 				}
 
 				#### pictures
@@ -1893,6 +1903,11 @@ class realestate_import extends class_base
 			));
 			$realestate_objects->set_prop ("is_visible", 0);
 			$realestate_objects->save ();
+
+/* dbg */ if (1 == $_GET["re_import_dbg_v"]){
+/* dbg */ 	arr($realestate_objects);
+/* dbg */ 	arr($imported_properties);
+/* dbg */ 	arr($last_import); }
 		}
 
 		### save log
