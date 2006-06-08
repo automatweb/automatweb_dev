@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.102 2006/06/08 13:48:51 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.103 2006/06/08 14:31:55 tarvo Exp $
 // task.aw - TODO item
 /*
 
@@ -1527,14 +1527,28 @@ class task extends class_base
 		));
 		foreach ($cs as $key => $ro)
 		{
-			$ob = obj($ro->to());
-			if($ob->prop("done") || !strlen($ob->prop("date")))
+			$ob = $ro->to();
+			if($ob->class_id() == CL_TASK_ROW)
 			{
-				$data_done[$ob->prop("date")."_".$key] = $ro;
+				if($ob->prop("done") || !strlen($ob->prop("date")))
+				{
+					$data_done[$ob->prop("date")."_".$key] = $ro;
+				}
+				else
+				{
+					$data[$ob->prop("date")."_".$key] = $ro;
+				}
 			}
 			else
 			{
-				$data[$ob->prop("date")."_".$key] = $ro;
+				if($ob->prop("is_done") || !strlen($ob->prop("start1")))
+				{
+					$data_done[$ob->prop("start1")."_".$key] = $ro;
+				}
+				else
+				{
+					$data[$ob->prop("start1")."_".$key] = $ro;
+				}
 			}
 		}
 		ksort($data);
@@ -1600,8 +1614,8 @@ class task extends class_base
 			{
 				$date = date("d/m/y",($row->prop("start1") > 100 ? $row->prop("start1") : time()));
 				$d_comp = date("Ymd",$row->prop("start1") > 100 ? $row->prop("start1") : time());
-				$i->get_property($argb);
 				$i = $row->instance();
+				$i->get_property($argb);
 				//$impls = $pr["options"];
 				$is = $pr["value"];
 				$pref = html::obj_change_url($row->id())." <br>".date("d.m.Y H:i", $row->prop("start1"))." - ".date("d.m.Y H:i", $row->prop("end"))."<br>";
@@ -1625,7 +1639,7 @@ class task extends class_base
 			{
 				$col = "white";
 			}
-			if($ro === null || $row->prop("done"))
+			if($ro === null || ( $row->class_id() == CL_TASK_ROW && $row->prop("done") || ($row->class_id() == CL_CRM_MEETING && $row->prop("is_done"))))
 			{
 				$col = "white";
 			}
