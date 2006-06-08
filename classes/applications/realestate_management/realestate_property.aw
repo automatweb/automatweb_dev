@@ -1,6 +1,4 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_property.aw,v 1.25 2006/06/07 10:19:44 markop Exp $
-// realestate_property.aw - Kinnisvaraobjekt
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_REALESTATE_PROPERTY, on_create)
@@ -1189,7 +1187,7 @@ class realestate_property extends class_base
 				$properties = $this->get_property_data (array (
 					"this" => $this_object,
 				));
-				
+
 				if(!$properties["picture_icon"]["value"])
 				{
 					$properties["picture_icon"]["value"] = $default_icon;
@@ -1288,7 +1286,7 @@ class realestate_property extends class_base
 				{
 					$properties["picture_icon"]["value"] = $default_icon;
 					$properties["picture_icon"]["strvalue"] = aw_ini_get("baseurl").$default_icon;
-				}	
+				}
 				$i = 1;
 
 				while (isset ($properties["picture" . $i . "_url"]))
@@ -2376,6 +2374,7 @@ class realestate_property extends class_base
 				"type" => "RELTYPE_REALESTATE_PICTURE",
 				"class_id" => CL_IMAGE,
 			)));
+			$pictures->sort_by(array("prop" => "ord", "order" => "asc"));
 			$pictures = $pictures->arr ();
 			$i = 1;
 
@@ -2507,14 +2506,14 @@ class realestate_property extends class_base
 		{
 			return false;
 		}
-		
-		$person = $agent->get_first_obj_by_reltype ("RELTYPE_PERSON");		
+
+		$person = $agent->get_first_obj_by_reltype ("RELTYPE_PERSON");
 		if (is_object ($person))
 		{
 			$this->realestate_agents_data[$agent_oid]["name"] = $person->name();
 		}
 		else $this->realestate_agents_data[$agent_oid]["rank"] = $rank->name ();
-		
+
 		$rank = $agent->get_first_obj_by_reltype ("RELTYPE_RANK");
 
 		if (is_object ($rank))
