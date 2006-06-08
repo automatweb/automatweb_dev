@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.1 2006/06/01 15:54:43 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.2 2006/06/08 17:03:59 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -68,7 +68,7 @@ caption .
 @caption Read ametinimetuse alusel
 
 -- min tulpade arv (tekstikast) - erineva tasemega ametinimetusele vastavad isikud võib ka kõrvuti panna, kui min tulpade arv mingis reas ei ole saavutatud.
-@property min_rows type=textbox
+@property min_cols type=textbox
 @caption Minimaalne tulpade arv
 
 @reltype COMPANY value=1 clid=CL_CRM_COMPANY
@@ -195,27 +195,130 @@ class persons_webview extends class_base
 			"name" => $company->prop("name"),
 		));		
 		
-		$workers = new object_list($company->connections_from (array (
+		$workers_list = new object_list($company->connections_from (array (
 				"type" => "RELTYPE_WORKERS",
 		)));
-		if($this->is_template("worker"))
+		$workers = array();
+		//------------------------sorteerib kõvemad vennad ette;
+		foreach($workers_list->arr() as $worker)
 		{
-			$c = "";
-			foreach($workers->arr() as $worker)
+			$jrk = 0;
+			if(is_oid($worker->prop("rank")))
+			{
+				$profession_obj = obj($worker->prop("rank"));
+				$jrk = $profession_obj->prop("jrk");
+			}
+			$workers[] = array("worker" => $worker, "jrk" => $jrk);
+		}
+		foreach ($workers as $key => $row) {
+			$person[$key]  = $row['worker'];
+			$jrk_[$key] = $row['jrk'];
+		}
+		array_multisort($jrk_, SORT_DESC, $person, SORT_DESC, $workers);
+		//--------------------------sorteerimise lõpp
+		$this->count = 0;
+		$col = 0;
+		$this->max_col = $col_num = $max_col = $view_obj->prop("columns");
+		$column = "";
+		$row = "";
+		$this->min_col = $view_obj->prop("min_cols");
+		$image_inst = get_instance(CL_IMAGE);
+		$this->calculated=0;
+		if($this->is_template("ROW") && $this->is_template("COL"))
+		{
+			foreach($workers as $val)
+			{
+				$worker = $val["worker"];
+				if($view_obj->prop("rows_by") && (!$this->calculated))//ametinimede kaupa grupeerimise porno
+				{
+					$col_num = $this->calculate_cols($workers);
+				}
+				$c = "";
+				if($this->is_template("worker"))
+				{
+					$rank = "";
+					$rank_obj = $worker->get_first_obj_by_reltype("RELTYPE_RANK");
+					if(is_object($rank_obj)) $rank = $rank_obj->name();
+					
+					$photo="";
+					if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
+					{
+						$photo = $image_inst->make_img_tag_wl($worker->prop("picture"));
+					}
+					$this->vars(array(
+						"rank" => $rank,
+						"name" => $worker->name(),
+						"photo" => $photo,
+					));
+					$c .= $this->parse("worker");
+				}
+				$this->vars(array(
+					"worker" => $c,
+				));
+				$column .= $this->parse("COL");
+				$col++;
+				$parsed = 0;
+				if($col == $col_num)
+				{
+					$this->vars(array(
+						"COL" => $column,
+					));
+					$column = "";
+					$row .= $this->parse("ROW");
+					$col = 0;
+					$parsed = 1;
+					$col_num = $max_col;;
+					$this->calculated = 0;
+				}
+			$this->count++;
+			}
+			if(!$parsed)//viimane rida võib olla tegemata
 			{
 				$this->vars(array(
-					"name" => $worker->name(),
+					"COL" => $column,
 				));
-				$c .= $this->parse("worker");
+				$column = "";
+				$row .= $this->parse("ROW");
+				$col = 0;
+				$parsed = 1;
 			}
 			$this->vars(array(
-				"worker" => $c,
-			));			
-			$ret .= "<br>".$worker->name();
+				"ROW" => $row,
+			));
 		}
-	
-		$ret .= "<br>ilgelt palju personali";
 		return $this->parse();
+	}
+
+	function calculate_cols($workers)
+	{
+		$this->calculated = 1;
+		$jrk = $workers[$this->count]["jrk"];
+		$count = 0;
+		if(!($jrk > 0)) return $this->max_col;
+		while($jrk == $workers[$this->count + $count]["jrk"])
+		{
+			$count++;
+		}
+		if($count == $this->max_col) return $this->max_col;
+		if(($count - $this->max_col) > $this->min_col) return $this->max_col;
+		if($count < $this->max_col)
+		{
+			$count_next = $count;
+			$jrk_next = $workers[$this->count + $count]["jrk"];//arr($jrk_next);arr($workers[$this->count + $count_next]["jrk"]);
+			while(($jrk_next > 0) && $jrk_next == $workers[$count_next + $this->count]["jrk"])
+			{
+				$count_next++;
+			}
+			$count_next = $count_next - $count;echo $count_next. ' ' . $count.'<br>';
+			if(($count_next + $count) <= $this->max_col) return ($count_next + $count);
+			
+			if(($count >= $this->min_col)&&($count_next >= $this->min_col)) return $count;
+		}
+		if($count >= $this->min_col)
+		{
+			if(($count_next + $count) <= $this->max_col) return ($count_next + $count);
+		}
+		return $this->max_col;
 	}
 
 	function show($arr)

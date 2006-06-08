@@ -118,7 +118,7 @@
             <caption>Read ametinimetuse alusel</caption>
       </property>
       <property>
-            <name>min_rows</name>
+            <name>min_cols</name>
             <table>objects</table>
             <group>view</group>
             <field>meta</field>
