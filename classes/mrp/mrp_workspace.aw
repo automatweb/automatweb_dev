@@ -599,10 +599,47 @@ class mrp_workspace extends class_base
 			$list = $this->_get_subcontract_job_list($this_object);
 			$this->jobs_subcontracted_count = $list->count();
 
-			### limit
+			### project list args
+			#### limit
 			$perpage = $this_object->prop ("projects_list_objects_perpage") ? $this_object->prop ("projects_list_objects_perpage") : 30;
 			$limit = ((int) $_GET["ft_page"] * $perpage) . "," . $perpage;
 
+			#### sort
+			$sort_order = ("desc" == $arr["request"]["sort_order"]) ? "desc" : "asc";
+			$sort_by = "mrp_case.starttime"; // default sort order
+			$tmp = NULL;
+
+			switch ($arr["request"]["sortby"])
+			{
+				case "starttime":
+					$sort_by = "mrp_case.starttime {$sort_order}";
+					break;
+
+				case "planned_date":
+					$sort_by = "mrp_case_schedule.planned_date {$sort_order}";
+					$tmp = new obj_predicate_compare (OBJ_COMP_GREATER, 0);//!!! temporary. acceptable solution needed. projects with planned_date NULL not retrieved.
+					break;
+
+				case "due_date":
+					$sort_by = "mrp_case.due_date {$sort_order}";
+					break;
+
+				case "priority":
+					$sort_by = "mrp_case.project_priority {$sort_order}";
+					break;
+			}
+
+			#### common args
+			$args = array(
+				"class_id" => CL_MRP_CASE,
+				"limit" => $limit,
+				"parent" => $this_object->prop ("projects_folder"),
+				// "createdby" => aw_global_get('uid'),
+				"sort_by" => $sort_by,
+				"planned_date" => $tmp,//!!! to enable sorting by planned_date which is in mrp_case_schedule table
+			);
+
+			### get list
 			if (strstr($this->list_request, "archived_"))
 			{
 				$tmp = explode("_", $this->list_request);
@@ -611,15 +648,12 @@ class mrp_workspace extends class_base
 				{
 					$year = $tmp[1];
 					$month = $tmp[2];
-					$args = array (
-						"class_id" => CL_MRP_CASE,
-						"state" => MRP_STATUS_ARCHIVED,
-						"starttime" => new obj_predicate_compare (
-							OBJ_COMP_BETWEEN,
-							mktime(0,0,0,$month,1,$year),
-							mktime(0,0,0,((12 == $month) ? 1 : ($month + 1)),1,((12 == $month) ? ($year + 1) : $year))
-						),
-						"parent" => $this_object->prop ("projects_folder"),
+					unset($args["limit"]);
+					$args["state"] = MRP_STATUS_ARCHIVED;
+					$args["starttime"] = new obj_predicate_compare (
+						OBJ_COMP_BETWEEN,
+						mktime(0,0,0,$month,1,$year),
+						mktime(0,0,0,((12 == $month) ? 1 : ($month + 1)),1,((12 == $month) ? ($year + 1) : $year))
 					);
 
 					$this->projects_list_objects = new object_list ($args);
@@ -628,124 +662,93 @@ class mrp_workspace extends class_base
 					$this->projects_list_objects = new object_list ($args);
 				}
 			}
-
-			switch ($this->list_request)
+			else
 			{
-				case "all":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"parent" => $this_object->prop ("projects_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->projects_all_count;
-					break;
+				switch ($this->list_request)
+				{
+					case "all":
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->projects_all_count;
+						break;
 
-				case "planned":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"state" => MRP_STATUS_PLANNED,
-						"parent" => $this_object->prop ("projects_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->projects_planned_count;
-					break;
+					case "planned":
+						$args["state"] = MRP_STATUS_PLANNED;
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->projects_planned_count;
+						break;
 
-				case "inwork":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"state" => MRP_STATUS_INPROGRESS,
-						"parent" => $this_object->prop ("projects_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->projects_in_work_count;
-					break;
+					case "inwork":
+						$args["state"] = MRP_STATUS_INPROGRESS;
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->projects_in_work_count;
+						break;
 
-				case "planned_overdue":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"state" => $applicable_states,
-						"planned_date" => new obj_predicate_prop (OBJ_COMP_GREATER, "due_date"),
-						"parent" => $this_object->prop ("projects_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->projects_planned_overdue_count;
-					break;
+					case "planned_overdue":
+						$args["state"] = $applicable_states;
+						$args["planned_date"] = new obj_predicate_prop (OBJ_COMP_GREATER, "due_date");
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->projects_planned_overdue_count;
+						break;
 
-				case "overdue":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
-						"state" => $applicable_states,
-						"parent" => $this_object->prop ("projects_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->projects_overdue_count;
-					break;
+					case "overdue":
+						$args["due_date"] = new obj_predicate_compare (OBJ_COMP_LESS, time());
+						$args["state"] = $applicable_states;
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->projects_overdue_count;
+						break;
 
-				case "new":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"state" => MRP_STATUS_NEW,
-						"parent" => $this_object->prop ("projects_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->projects_new_count;
-					break;
+					case "new":
+						$args["state"] = MRP_STATUS_NEW;
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->projects_new_count;
+						break;
 
-				case "done":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"state" => MRP_STATUS_DONE,
-						"parent" => $this_object->prop ("projects_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->projects_done_count;
-					break;
+					case "done":
+						$args["state"] = MRP_STATUS_DONE;
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->projects_done_count;
+						break;
 
-				case "aborted":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"state" => MRP_STATUS_ABORTED,
-						"parent" => $this_object->prop ("projects_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->projects_aborted_count;
-					break;
+					case "aborted":
+						$args["state"] = MRP_STATUS_ABORTED;
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->projects_aborted_count;
+						break;
 
-				case "onhold":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_CASE,
-						"state" => MRP_STATUS_ONHOLD,
-						"parent" => $this_object->prop ("projects_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->projects_onhold_count;
-					break;
+					case "onhold":
+						$args["state"] = MRP_STATUS_ONHOLD;
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->projects_onhold_count;
+						break;
 
-				case "aborted_jobs":
-					$this->projects_list_objects = new object_list (array (
-						"class_id" => CL_MRP_JOB,
-						"state" => MRP_STATUS_ABORTED,
-						"parent" => $this_object->prop ("jobs_folder"),
-						// "createdby" => aw_global_get('uid'),
-						"limit" => $limit,
-					));
-					$this->projects_list_objects_count = $this->jobs_aborted_count;
-					break;
+					case "aborted_jobs":
+						$applicable_sortorders = array (
+							"due_date",
+						);
 
-				case "subcontracts":
-					$this->projects_list_objects = $this->_get_subcontract_job_list($this_object, $limit);
-					$this->projects_list_objects_count = $this->jobs_subcontracted_count;
-					break;
+						if (in_array($arr["request"]["sortby"], $applicable_sortorders))
+						{
+							$args["CL_MRP_JOB.project(CL_MRP_CASE).due_date"] = new obj_predicate_compare (OBJ_COMP_GREATER, 0);//!!! temporary. acceptable solution needed. projects with planned_date NULL not retrieved.
+							$args["sort_by"] = "mrp_case_826_project.due_date {$sort_order}";
+						}
+						else
+						{
+							unset($args["sort_by"]);
+						}
+
+						unset($args["planned_date"]);
+						$args["class_id"] = CL_MRP_JOB;
+						$args["state"] = MRP_STATUS_ABORTED;
+						$args["parent"] = $this_object->prop ("jobs_folder");
+						$this->projects_list_objects = new object_list ($args);
+						$this->projects_list_objects_count = $this->jobs_aborted_count;
+						break;
+
+					case "subcontracts":
+						$this->projects_list_objects = $this->_get_subcontract_job_list($this_object, $limit);
+						$this->projects_list_objects_count = $this->jobs_subcontracted_count;
+						break;
+				}
 			}
 		}
 	}
@@ -1936,15 +1939,20 @@ if ($_GET['show_thread_data'] == 1)
 			"name" => "customer",
 			"caption" => t("Klient"),
 			"chgbgcolor" => "bgcolour_overdue",
-			"sortable" => 1,
+			// "sortable" => 1,
 		));
 		$table->define_field (array (
 			"name" => "name",
 			"caption" => t("Pro&shy;jekt"),
 			"chgbgcolor" => "bgcolour_overdue",
-			"sortable" => 1,
+			// "sortable" => 1,
 			"numeric" => 1
 		));
+
+		$no_plan_lists = array (
+			"onhold",
+			"new",
+		);
 
 		switch ($this->list_request)
 		{
@@ -1970,7 +1978,7 @@ if ($_GET['show_thread_data'] == 1)
 					"chgbgcolor" => "bgcolour_overdue",
 					"type" => "time",
 					"format" => MRP_DATE_FORMAT,
-					"sortable" => 1,
+					"sortable" => (in_array($this->list_request, $no_plan_lists)) ? 0 : 1,
 				));
 				$table->define_field(array(
 					"name" => "due_date",
@@ -2006,7 +2014,7 @@ if ($_GET['show_thread_data'] == 1)
 			"name" => "sales_priority",
 			"caption" => t("Müü&shy;gi prio&shy;ri&shy;teet"),
 			"chgbgcolor" => "bgcolour_overdue",
-			"sortable" => 1,
+			// "sortable" => 1,
 		));
 
 		if ($this->list_request != "search")
@@ -2169,19 +2177,19 @@ if ($_GET['show_thread_data'] == 1)
 			"name" => "customer",
 			"caption" => t("Klient"),
 			"chgbgcolor" => "bgcolour_overdue",
-			"sortable" => 1,
+			// "sortable" => 1,
 		));
 		$table->define_field (array (
 			"name" => "project",
 			"caption" => t("Projekt"),
 			"chgbgcolor" => "bgcolour_overdue",
-			"sortable" => 1,
+			// "sortable" => 1,
 		));
 		$table->define_field (array (
 			"name" => "resource",
 			"caption" => t("Ressurss"),
 			"chgbgcolor" => "bgcolour_overdue",
-			"sortable" => 1,
+			// "sortable" => 1,
 		));
 		$table->define_field(array(
 			"name" => "scheduled_date",
@@ -2285,17 +2293,17 @@ if ($_GET['show_thread_data'] == 1)
 		$table->define_field (array (
 			"name" => "customer",
 			"caption" => t("Klient"),
-			"sortable" => 1,
+			// "sortable" => 1,
 		));
 		$table->define_field (array (
 			"name" => "project",
 			"caption" => t("Projekt"),
-			"sortable" => 1,
+			// "sortable" => 1,
 		));
 		$table->define_field (array (
 			"name" => "resource",
 			"caption" => t("Ressurss"),
-			"sortable" => 1,
+			// "sortable" => 1,
 		));
 		$table->define_field(array(
 			"name" => "due_date",
@@ -2317,7 +2325,7 @@ if ($_GET['show_thread_data'] == 1)
 		$table->define_field(array(
 			"name" => "abort_comment",
 			"caption" => t("Katkestamise kommentaar"),
-			"sortable" => 1
+			// "sortable" => 1
 		));
 
 		$table->define_field(array(
@@ -4976,13 +4984,32 @@ if ($_GET['show_thread_data'] == 1)
 				MRP_STATUS_NEW,
 				MRP_STATUS_PLANNED,
 			);
+			$sort_by = NULL;
+
+			if ($limit)
+			{
+				$sort_order = ("desc" == $arr["request"]["sort_order"]) ? "desc" : "asc";
+				$sort_by = "mrp_case.starttime"; // default sort order
+				$tmp = NULL;
+
+				switch ($arr["request"]["sortby"])
+				{
+					case "scheduled_date": // for aborted jobs list
+					default:
+						$sort_by = "mrp_schedule.starttime {$sort_order}";
+						$tmp = new obj_predicate_compare (OBJ_COMP_GREATER, 0);//!!! temporary. acceptable solution needed. jobs with starttime NULL not retrieved.
+						break;
+				}
+			}
 
 			$list = new object_list (array (
 				"class_id" => CL_MRP_JOB,
 				"state" => $applicable_states,
 				"resource" => $this->subcontractor_resource_ids,
 				"parent" => $this_object->prop ("jobs_folder"),
+				"starttime" => $tmp,// !!!
 				"limit" => $limit,
+				"sort_by" => $sort_by,
 			));
 			return $list;
 		}
