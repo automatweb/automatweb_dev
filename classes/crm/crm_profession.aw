@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.11 2005/09/29 06:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.12 2006/06/08 14:25:52 markop Exp $
 // crm_profession.aw - Ametinimetus
 /*
 @classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes
@@ -15,6 +15,9 @@
 
 @property hr_price field=meta method=serialize type=textbox
 @caption Tunnihind
+
+@property jrk type=textbox size=4
+@caption Järk
 
 @property name_in_plural type=textbox table=kliendibaas_amet
 @caption Nimi mitmuses
