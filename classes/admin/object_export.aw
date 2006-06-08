@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.14 2006/04/12 13:12:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.15 2006/06/08 13:49:09 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -244,6 +244,35 @@ class object_export extends class_base
 				$ret = $tmp;
 			}
 		}
+
+		$ret["createdby"] = array(
+			"name" => "createdby",
+			"caption" => t("Looja"),
+			"type" => "textbox",
+			"table" => "objects",
+			"field" => "createdby",
+		);
+		$ret["created"] = array(
+			"name" => "created",
+			"caption" => t("Loodud"),
+			"type" => "datetime_select",
+			"table" => "objects",
+			"field" => "created",
+		);
+		$ret["modifiedby"] = array(
+			"name" => "modifiedby",
+			"caption" => t("Muutja"),
+			"type" => "textbox",
+			"table" => "objects",
+			"field" => "modifiedby",
+		);
+		$ret["modified"] = array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"type" => "datetime_select",
+			"table" => "objects",
+			"field" => "modified",
+		);
 		return $ret;
 	}
 
@@ -263,10 +292,10 @@ class object_export extends class_base
 					$prps["format"] = "d-M-y";
 					$prps["numeric"] = 1;
 				}
-				if($props[pn]["type"] == "datetime_select")
+				if($props[$pn]["type"] == "datetime_select")
 				{
 					$prps["type"] = "time";
-					$prps["format"] = "H:i d-M-y";
+					$prps["format"] = "d-M-y H:i";
 					$prps["numeric"] = 1;
 				}
 				$t->define_field($prps);
@@ -282,7 +311,6 @@ class object_export extends class_base
 		$props = $this->get_properties_from_obj($arr["obj_inst"]);
 		$awa = new aw_array($arr["obj_inst"]->meta("dat"));
 		$settings = $awa->get();
-
 		$this->_init_exp_table($t, $arr["obj_inst"], $awa, $props);
 
 		if (!$arr["obj_inst"]->prop("object_type"))
