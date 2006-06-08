@@ -508,10 +508,10 @@ class realestate_import extends class_base
 				{
 					if (1 != $arr["quiet"]) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE; flush(); }
 
-					if ($property_status === REALESTATE_IMPORT_OK)
-					{
+					// if ($property_status === REALESTATE_IMPORT_OK)
+					// {
 						$imported_properties[$property->id ()] = $property->id ();
-					}
+					// }
 
 					unset ($property);
 				}
@@ -1184,13 +1184,13 @@ class realestate_import extends class_base
 					}
 				}
 
-				##### add new pictures
+				##### add new pictures & change order
 				ksort ($this->property_data["PILT"]);
 
 				foreach ($this->property_data["PILT"] as $key => $picture_id)
 				{
 					if (!array_key_exists($picture_id, $existing_pictures))
-					{
+					{ # add new
 						$image_url = "http://www.city24.ee/MEDIA/PICTURE/PICTURE_{$picture_id}.jpeg";
 						$imagedata = file_get_contents ($image_url);
 						$file = $cl_file->_put_fs(array(
@@ -1216,7 +1216,7 @@ class realestate_import extends class_base
 						unset ($image);
 					}
 					elseif ($key != $existing_pictures[$picture_id]->ord())
-					{
+					{ # change order
 						$existing_pictures[$picture_id]->set_ord($key);
 						$existing_pictures[$picture_id]->save();
 					}
@@ -1688,10 +1688,10 @@ class realestate_import extends class_base
 							echo sprintf (t("Lisainfo (%s) objektile city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $lang_name, $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE;
 						}
 
-						if ($property_status)
-						{
-							unset ($imported_properties[$property->id ()]);
-						}
+						// if ($property_status)
+						// {
+							// unset ($imported_properties[$property->id ()]);
+						// }
 					}
 					else
 					{
