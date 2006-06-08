@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.8 2005/12/30 00:51:49 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.9 2006/06/08 12:19:25 dragut Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
@@ -347,7 +347,7 @@ class otv_ds_kultuuriaken extends class_base
 	}
 
 	/**
-		@attrib name=import_events no_login=1
+		@attrib name=import_events nologin=1
 		@param id required type=int acl=view
 	**/
 	function import_events($arr)
