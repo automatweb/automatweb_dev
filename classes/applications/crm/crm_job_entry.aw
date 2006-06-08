@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.22 2006/04/21 09:24:56 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_job_entry.aw,v 1.23 2006/06/08 14:54:50 kristo Exp $
 // crm_job_entry.aw - T88 kirje
 /*
 
@@ -469,7 +469,10 @@ class crm_job_entry extends class_base
 		$t->set_prop("start1", date_edit::get_timestamp($arr["request"]["task_start"]));
 		$t->set_prop("end", date_edit::get_timestamp($arr["request"]["task_end"]));
 		$t->set_prop("content", $arr["request"]["task_content"]);
-		$t->set_prop("participants", safe_array($ppt));
+		if ($t->is_property("participants"))
+		{
+			$t->set_prop("participants", safe_array($ppt));
+		}
 		if ($t->class_id() == CL_CRM_OFFER)
 		{
 			$t->set_prop("orderer", $c->id());
