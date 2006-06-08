@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.103 2006/06/08 14:31:55 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.104 2006/06/08 14:50:17 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2318,11 +2318,11 @@ class task extends class_base
 				$cs = $task->connections_from(array("to" => $_oid));
 				$c = reset($cs);
 				$o = $c->to();
-				if ($e["task"] == "")
+				/*if ($e["task"] == "")
 				{
 					$o->delete();
 					continue;
-				}
+				}*/
 				$is_mod = false;
 			}
 
