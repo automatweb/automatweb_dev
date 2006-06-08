@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.100 2006/05/30 11:10:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.101 2006/06/08 13:31:46 tarvo Exp $
 // task.aw - TODO item
 /*
 
@@ -1379,7 +1379,9 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Kuup&auml;ev"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1,
+			"chgbgcolor" => "col",
 		));
 
 		$t->define_field(array(
@@ -1520,13 +1522,30 @@ class task extends class_base
 		$def_impl = $u->get_current_person();
 		$o_def_impl = array($def_impl => $def_impl);
 		
-		$cs = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ROW"));
+		$cs = $arr["obj_inst"]->connections_from(array(
+			"type" => "RELTYPE_ROW",
+		));
+		foreach ($cs as $key => $ro)
+		{
+			$ob = obj($ro->to());
+			if($ob->prop("done") || !strlen($ob->prop("date")))
+			{
+				$data_done[$ob->prop("date")."_".$key] = $ro;
+			}
+			else
+			{
+				$data[$ob->prop("date")."_".$key] = $ro;
+			}
+		}
+		ksort($data);
+		$cs = $data + $data_done;
 		$cs[] = NULL;
 		$cs[] = NULL;
 		$cs[] = NULL;
 		$null_idx = 0;
 		$comm = get_instance(CL_COMMENT);
 		$ank_idx = 1;
+
 		foreach($cs as $ro)
 		{
 			if ($ro === null)
@@ -1580,14 +1599,9 @@ class task extends class_base
 			if ($row->class_id() == CL_CRM_MEETING)
 			{
 				$date = date("d/m/y",($row->prop("start1") > 100 ? $row->prop("start1") : time()));
-				$i = $row->instance();
-				$pr = array("name" => "participants");
-				$argb = array(
-					"obj_inst" => $row,
-					"request" => $arr["request"],
-					"prop" => &$pr
-				);
+				$d_comp = date("Ymd",$row->prop("start1") > 100 ? $row->prop("start1") : time());
 				$i->get_property($argb);
+				$i = $row->instance();
 				//$impls = $pr["options"];
 				$is = $pr["value"];
 				$pref = html::obj_change_url($row->id())." <br>".date("d.m.Y H:i", $row->prop("start1"))." - ".date("d.m.Y H:i", $row->prop("end"))."<br>";
@@ -1595,8 +1609,33 @@ class task extends class_base
 			else
 			{
 				$date = date("d/m/y",($row->prop("date") > 100 ? $row->prop("date") : time()));
+				$d_comp =  date("Ymd",($row->prop("date") > 100 ? $row->prop("date") : time()));
 				$app = "";
 			}
+			
+			if($d_comp < date("Ymd",time()))
+			{
+				$col = "red";
+			}
+			elseif($d_comp == date("Ymd", time()))
+			{
+				$col = "yellow";
+			}
+			else
+			{
+				$col = "white";
+			}
+			if($ro === null || $row->prop("done"))
+			{
+				$col = "white";
+			}
+
+			$pr = array("name" => "participants");
+			$argb = array(
+				"obj_inst" => $row,
+				"request" => $arr["request"],
+				"prop" => &$pr
+			);
 
 			$stopper = "";
 			if ($idx > 0)
@@ -1673,7 +1712,8 @@ class task extends class_base
 				"bill_val" => ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill")),
 				"comments" => $comments,
 				"comments_cnt" => $comments_cnt,
-				"oid" => $row->id()
+				"oid" => $row->id(),
+				"col" => $col
 			));
 		}
 		$t->set_sortable(false);
