@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.130 2006/05/30 14:34:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.131 2006/06/08 15:15:43 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2141,21 +2141,24 @@ class crm_person extends class_base
 		{
 			$u = get_instance(CL_USER);
 			$p = obj($u->get_current_person());
-			if ($arr["request"]["is_important"] == 1)
-			{	
-				$p->connect(array(
-					"to" => $arr["obj_inst"]->id(),
-					"type" => "RELTYPE_IMPORTANT_PERSON"
-				));
-			}
-			else
-			if (is_oid($p->id()))
+			if ($arr["request"]["group"] == "general2")
 			{
-				if (is_oid($p->id()) && $p->is_connected_to(array("to" => $arr["obj_inst"]->id(), "type" => "RELTYPE_IMPORTANT_PERSON")))
-				{
-					$p->disconnect(array(
-						"from" => $arr["obj_inst"]->id(),
+				if ($arr["request"]["is_important"] == 1)
+				{	
+					$p->connect(array(
+						"to" => $arr["obj_inst"]->id(),
+						"type" => "RELTYPE_IMPORTANT_PERSON"
 					));
+				}
+				else
+				if (is_oid($p->id()))
+				{
+					if (is_oid($p->id()) && $p->is_connected_to(array("to" => $arr["obj_inst"]->id(), "type" => "RELTYPE_IMPORTANT_PERSON")))
+					{
+						$p->disconnect(array(
+							"from" => $arr["obj_inst"]->id(),
+						));
+					}
 				}
 			}
 
