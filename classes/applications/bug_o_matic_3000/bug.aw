@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.42 2006/05/30 11:10:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.43 2006/06/08 11:39:39 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -373,12 +373,25 @@ class bug extends class_base
 		switch($prop["name"])
 		{
 			case "name":
+				if (!$this->can("view", $arr["request"]["who"]))
+				{
+					$prop["error"] = t("Kellele ei tohi olla t&uuml;hi!");
+					return PROP_FATAL_ERROR;
+				}
+
 				$ev = date_edit::get_timestamp($arr["request"]["deadline"]);
-				if ($ev == $arr["obj_inst"]->prop("deadline") || $ev < 300)
+				if ($ev == $arr["obj_inst"]->prop("deadline"))
 				{
 					return PROP_OK;
 				}
+				else
+				if ($ev > 300 && $ev < time())
+				{
+					$prop["error"] = t("T&auml;htaeg ei tohi olla minevikus!");
+					return PROP_FATAL_ERROR;
+				}
 				$bt = get_instance(CL_BUG_TRACKER);
+				$arr["obj_inst"]->set_prop("who", $arr["request"]["who"]);
 				$estend = $bt->get_estimated_end_time_for_bug($arr["obj_inst"]);
 				$ovr1 = $bt->get_last_estimation_over_deadline_bugs();
 
@@ -388,6 +401,7 @@ class bug extends class_base
 				$arr["obj_inst"]->set_prop("deadline", $ev);
 				$arr["obj_inst"]->set_prop("bug_priority", $arr["request"]["bug_priority"]);
 				$arr["obj_inst"]->set_prop("bug_severity", $arr["request"]["bug_severity"]);
+				$arr["obj_inst"]->set_prop("bug_status", $arr["request"]["bug_status"]);
 				$estend = $bt->get_estimated_end_time_for_bug($arr["obj_inst"]);
 				$ovr2 = $bt->get_last_estimation_over_deadline_bugs();
 

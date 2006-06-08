@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.61 2006/06/08 10:45:55 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.61 2006/06/08 10:45:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.62 2006/06/08 11:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.62 2006/06/08 11:39:39 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -2114,7 +2114,8 @@ class bug_tracker extends class_base
 			"request" =>  array(
 				"filt_p" => $p,
 			),
-			"ret_b_time" => $bug->id()
+			"ret_b_time" => $bug->id(),
+			"ret_b" => $bug
 		));
 	}
 
@@ -2140,6 +2141,7 @@ class bug_tracker extends class_base
 
 		$subdivisions = 1;
 
+		$has = false;
 		$gt_list = $this->get_undone_bugs_by_p($p);
 		foreach($gt_list as $gt)
 		{
@@ -2151,8 +2153,17 @@ class bug_tracker extends class_base
 					array("return_url" => get_ru())
 				)
 			));
+			if ($arr["ret_b"] && $gt->id() == $arr["ret_b"]->id())
+			{
+				$has = true;
+			}
 		}
 
+		if (!$has && $arr["ret_b"])
+		{
+			$gt_list[] = $arr["ret_b"];
+			usort($gt_list, array(&$this, "__gantt_sort"));
+		}
 		$day2wh = $this->get_person_whs($p);
 
 		$start = $this->get_next_avail_time_from(time(), $day2wh);
