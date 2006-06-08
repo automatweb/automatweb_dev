@@ -2501,7 +2501,6 @@ class realestate_property extends class_base
 
 		$no_extended_data = $param["no_extended_data"];
 		$agent = obj ($agent_oid);
-
 		if (!is_object ($agent))
 		{
 			return false;
@@ -2512,10 +2511,8 @@ class realestate_property extends class_base
 		{
 			$this->realestate_agents_data[$agent_oid]["name"] = $person->name();
 		}
-		else $this->realestate_agents_data[$agent_oid]["rank"] = $rank->name ();
 
 		$rank = $agent->get_first_obj_by_reltype ("RELTYPE_RANK");
-
 		if (is_object ($rank))
 		{
 			$this->realestate_agents_data[$agent_oid]["rank"] = $rank->name ();
