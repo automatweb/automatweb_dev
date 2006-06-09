@@ -2,22 +2,22 @@
 
 class queue
 {
-	/**
+	/** Queue constructor. Resets internal arrays and counters.
 
 		@attrib name=queue params=pos api=1 
 
 		@comment 
 			Class that implements the FIFO data structure also known as queue
 		@examples
-			$q = get_instance('core/queue');
-			$q->push('foo');
-			$q->push('bar');
-			$q->count(); // prints '2'
-			echo $q->get(); // prints 'foo'
-			var_dump($q->has_more()); // prints 'bool(true)'
-			echo $q->count(); // prints '1'
-			echo $q->get(); // prints 'bar'
-			var_dump($q->has_more()); // prints 'bool(false)'
+		$q = get_instance('core/queue');
+		$q->push('foo');
+		$q->push('bar');
+		$q->count(); // prints '2'
+		echo $q->get(); // prints 'foo'
+		var_dump($q->has_more()); // prints 'bool(true)'
+		echo $q->count(); // prints '1'
+		echo $q->get(); // prints 'bar'
+		var_dump($q->has_more()); // prints 'bool(false)'
 	**/
 	function queue()
 	{
@@ -27,8 +27,7 @@ class queue
 	}
 
 
-	/**
-
+	/** Adds new item into the queue
 		@attrib name=push params=pos api=1 
 
 		@param item required type=string
