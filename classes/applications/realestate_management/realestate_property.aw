@@ -2520,10 +2520,17 @@ class realestate_property extends class_base
 
 		### agent phones
 		$agent_phones = array ();
-
 		foreach($agent->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
 		{
 			$agent_phones[] = $connection->prop ("to.name");
+		}
+		if(!sizeof($agent_phones)>0)//äkki on tegu kasutaja objektiga... sellel telefon teisiti tuleb
+		{
+			$agent_person = $agent->get_first_obj_by_reltype ("RELTYPE_PERSON");
+			foreach($agent_person->connections_from (array("type" => "RELTYPE_PHONE")) as $connection)
+			{
+				$agent_phones[] = $connection->prop ("to.name");
+			}
 		}
 
 		$this->realestate_agents_data[$agent_oid]["phones_str"] = implode (", ", $agent_phones);
