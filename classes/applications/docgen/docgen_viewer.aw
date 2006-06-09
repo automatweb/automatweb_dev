@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.6 2006/03/24 20:38:53 dragut Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.7 2006/06/09 13:19:26 dragut Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -245,7 +245,6 @@ class docgen_viewer extends class_base
 
 	function display_class($data, $cur_file, $opts = array())
 	{
-		
 		$this->read_template("class_info.tpl");
 
 		$f = "";
@@ -308,7 +307,7 @@ class docgen_viewer extends class_base
 				'returns' => (empty($f_data['doc_comment']['returns'])) ? t('nothing') : nl2br($f_data['doc_comment']['returns']),
 				'errors' => (empty($f_data['doc_comment']['errors'])) ? t('none') : nl2br($f_data['doc_comment']['errors']),
 				'comment' => nl2br($f_data['doc_comment']['comment']),
-				'examples' => (empty($f_data['doc_comment']['examples'])) ? t('none') : highlight_string("<?php \n".$f_data['doc_comment']['examples']."\n?>", true),
+				'examples' => (empty($f_data['doc_comment']['examples'])) ? t('none') : highlight_string("<?php \n\t\t".$f_data['doc_comment']['examples']."\n?>", true),
 				"view_source" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
 				"view_usage" => $this->mk_my_orb("view_usage", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
 				"doc" => $this->show_doc(array("file" => $doc_file))
