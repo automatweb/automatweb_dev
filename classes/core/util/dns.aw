@@ -1,6 +1,6 @@
 <?php
 // dns.aw - various DNS related functionality, whois queries
-// $Header: /home/cvs/automatweb_dev/classes/core/util/dns.aw,v 1.3 2006/06/09 11:24:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/dns.aw,v 1.4 2006/06/09 13:27:36 dragut Exp $
 class dns extends aw_template
 {
 	// ns query types
@@ -58,8 +58,8 @@ class dns extends aw_template
 			Preformatted string with the output of the 'whois' command
 		
 		@examples
-			$i = get_instance('core/util/dns');
-			echo $i->query(array('domain' => 'struktuur.ee'));
+		$i = get_instance('core/util/dns');
+		echo $i->query(array('domain' => 'struktuur.ee'));
 
 	**/
 	function query($args = array())
@@ -118,8 +118,8 @@ class dns extends aw_template
 			String which tells if the domain is registered or not
 		
 		@examples
-			$i = get_instance('core/util/dns');
-			echo $i->dns_query(array('domain'  => 'struktuur.ee'));
+		$i = get_instance('core/util/dns');
+		echo $i->dns_query(array('domain'  => 'struktuur.ee'));
 	**/
 	function dns_query($args = array())
 	{
@@ -187,8 +187,8 @@ class dns extends aw_template
 			The content of a DNS record, the available record types are in $this->types
 		
 		@examples
-			$i = get_instance('core/util/dns');
-			echo $i->get_record_NS(array('domain'  => 'struktuur.ee'));
+		$i = get_instance('core/util/dns');
+		echo $i->get_record_NS(array('domain'  => 'struktuur.ee'));
 	**/
 	function get_record_NS($arr)
 	{
@@ -230,8 +230,8 @@ class dns extends aw_template
 			The extracted domainname (last 2 parts of the url)
 		
 		@examples
-			$i = get_instance('core/util/dns');
-			echo $i->get_domain_name_for_url('http://www.struktuur.ee'); // prints 'struktuur.ee'
+		$i = get_instance('core/util/dns');
+		echo $i->get_domain_name_for_url('http://www.struktuur.ee'); // prints 'struktuur.ee'
 	**/
 	function get_domain_name_for_url($domain)
 	{
