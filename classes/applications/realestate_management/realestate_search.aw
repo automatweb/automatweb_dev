@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.26 2006/06/07 11:45:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.27 2006/06/09 09:28:39 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -199,6 +199,7 @@ class realestate_search extends class_base
 			"class_id" => array ("caption" => t("Objekti tüüp"), "table" => "objects"),
 			"created" => array ("caption" => t("Loodud"), "table" => "objects"),
 			"modified" => array ("caption" => t("Muudetud"), "table" => "objects"),
+			"transaction_price" => array("caption" => t("Hind"), "table" => "realestate_property"),
 		);
 		$this->search_sort_orders = array (
 			"ASC" => t("Kasvav"),
@@ -2258,6 +2259,7 @@ exit_function("jigaboo");
 			$this->result_count = $result_list->count ();
 
 			### limit
+			if($_GET["per_page"]) $this->result_table_recordsperpage = ($_GET["per_page"]);
 			$limit = ((int) $_GET["ft_page"] * $this->result_table_recordsperpage) . "," . $this->result_table_recordsperpage;
 			$args["limit"] = $limit;
 			$result_list->filter ($args);

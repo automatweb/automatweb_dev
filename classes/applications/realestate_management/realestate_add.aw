@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.14 2006/06/05 15:46:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.15 2006/06/09 09:28:39 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -839,6 +839,7 @@ class realestate_add extends class_base
 		if(is_oid($_SESSION["realestate_input_data"]["realestate_id"]))
 		{
 			$this_object = obj($_SESSION["realestate_input_data"]["realestate_id"]);
+
 			$pictures = new object_list($this_object->connections_from (array (
 				"type" => "RELTYPE_REALESTATE_PICTURE",
 				"class_id" => CL_IMAGE,
@@ -1092,17 +1093,32 @@ class realestate_add extends class_base
 				if($rlst_object->prop("expire") - $time<1) $expire = t("Aegunud");
 				else $expire = t("Nähtav")." ".$expire." ".t("nädalat");
 				if(!$rlst_object->prop("expire")) $expire = t("Maksmata");
-				if($expire == t("Aegunud")) $extend = t("Pikenda");
-				elseif($expire == t("Maksmata")) $extend = t("Maksa");
-				else $extend = t("");
-				if($this->is_template($expire))
+				if($expire == t("Maksmata")) $extend = "PAY";
+				else $extend = "EXTEND";
+				$u = "";
+			//	if($this->is_template($expire))
+			//	{
+			//		$this->vars(array($expire => $this->parse($expire)));
+			//	}
+				
+				$e = "";$p = "";
+				if($extend == "EXTEND" && $this->is_template("EXTEND"))
 				{
-					$this->vars(array($expire => $this->parse($expire)));
+					$this->vars(array("extend_popup" => $html->popup(array(
+						"url" 	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
+						"no_link" => 1,
+					))));
+					$e .= $this->parse("EXTEND");
 				}
-				if($this->is_template($extend))
+				if($extend == "PAY" && $this->is_template("PAY"))
 				{
-					$this->vars(array($extend => $this->parse($extend)));
-				}				
+					$this->vars(array("extend_popup" => $html->popup(array(
+						"url" 	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
+						"no_link" => 1,
+					))));
+					$p .= $this->parse("PAY");
+				}
+				
 				
 				$this->vars(array(
 					"name" 	 	=> $rlst_object->name(),
@@ -1119,6 +1135,8 @@ class realestate_add extends class_base
 					"action"	=> $trans_types[$rlst_object->prop("transaction_type")],
 					"delete"	=>  $this->mk_my_orb("delete_property", array("id" => $rlst_object->id())),
 					"invisible"	=>  $this->mk_my_orb("make_invisible", array("id" => $rlst_object->id())),
+					"PAY"		=> $p,
+					"EXTEND"	=> $e,
 /*					"regio"		=> $html->form(array(
 						"action" => "http://www.regio.ee/?op=body&id=24",
 						"method" => "POST",
