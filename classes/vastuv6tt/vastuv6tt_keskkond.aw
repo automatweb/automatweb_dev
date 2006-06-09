@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_keskkond.aw,v 1.2 2006/03/08 15:15:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_keskkond.aw,v 1.3 2006/06/09 13:57:42 kristo Exp $
 // vastuv6tt_keskkond.aw - Sisseastujate haldus
 /*
 
@@ -9,10 +9,11 @@
 @groupinfo grp_katse caption="Katsetulemuste sisestus"
 @groupinfo grp_ylevaade_otsing caption="Sisseastujate nimekirjad"
 	@groupinfo grp_ylevaade_otsing_b caption="Bakalaureuse&otilde;pe" parent=grp_ylevaade_otsing
-	@groupinfo grp_ylevaade_otsing_m caption="Magistri&otilde;pe" parent=grp_ylevaade_otsing
+	@groupinfo grp_ylevaade_otsing_m caption="Magistri&otilde;pe (4+2)" parent=grp_ylevaade_otsing
+	@groupinfo grp_ylevaade_otsing_a caption="Magistri&otilde;pe (3+2)" parent=grp_ylevaade_otsing
 	@groupinfo grp_ylevaade_otsing_d caption="Doktori&otilde;pe" parent=grp_ylevaade_otsing
 	@groupinfo grp_ylevaade_otsing_o caption="&otilde;petajakoolitus" parent=grp_ylevaade_otsing
-@groupinfo grp_v2ljund caption="&uuml;levaated"
+@groupinfo grp_v2ljund caption="&Uuml;levaated"
 @groupinfo grp_seaded caption="Seaded"
 
 
@@ -32,8 +33,8 @@
 	@property sisseastuja_edit_oppetase type=select store=no
 	@caption &otilde;ppetase
 
-	@property sisseastuja_edit_oppetase_b type=select store=no
-	@caption &otilde;ppetase
+	// @property sisseastuja_edit_oppetase_b type=select store=no
+	// @caption &otilde;ppetase
 
 	@property sisseastuja_edit_submit_btn type=submit store=no
 	@caption Otsi olemasolevat/Lisa uus
@@ -60,6 +61,10 @@
 
 @default group=grp_ylevaade_otsing_m
 	@property sisseastuja_nimekiri_table_m type=table store=no no_caption=1
+
+
+@default group=grp_ylevaade_otsing_a
+	@property sisseastuja_nimekiri_table_a type=table store=no no_caption=1
 
 
 @default group=grp_ylevaade_otsing_d
@@ -108,18 +113,50 @@
 	@property bakalaureuse_seaded type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
 	@caption Bakalaureuse&otilde;ppe sisseastuja seadetehaldur
 
-	@property magistri_seaded type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
-	@caption Magistri&otilde;ppe sisseastuja seadetehaldur
-
 	@property bakalaureuse_seaded_piiratud type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
 	@caption Bakalaureuse&otilde;ppe sisseastuja piiratud &otilde;igustega seadetehaldur
 
+	@property magistri_seaded type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
+	@caption Magistri&otilde;ppe (4+2) sisseastuja seadetehaldur
+
 	@property magistri_seaded_piiratud type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
-	@caption Magistri&otilde;ppe sisseastuja piiratud &otilde;igustega seadetehaldur
+	@caption Magistri&otilde;ppe (4+2) sisseastuja piiratud &otilde;igustega seadetehaldur
+
+	@property magistri_seaded32 type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
+	@caption Magistri&otilde;ppe (3+2) sisseastuja seadetehaldur
+
+	@property magistri_seaded32_piiratud type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
+	@caption Magistri&otilde;ppe (3+2) sisseastuja piiratud &otilde;igustega seadetehaldur
+
+	@property doktori_seaded type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
+	@caption Doktori&otilde;ppe sisseastuja seadetehaldur
+
+	@property doktori_seaded_piiratud type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
+	@caption Doktori&otilde;ppe sisseastuja piiratud &otilde;igustega seadetehaldur
+
+	@property opetaja_seaded type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
+	@caption &Otilde;petajakoolituse sisseastuja seadetehaldur
+
+	@property opetaja_seaded_piiratud type=relpicker reltype=RELTYPE_CFGMGR clid=CL_CFGMANAGER
+	@caption &Otilde;petajakoolituse sisseastuja piiratud &otilde;igustega seadetehaldur
 
 	@property keskkonna_seaded type=relpicker reltype=RELTYPE_CFGMGR_KESKKOND clid=CL_CFGMANAGER
 	@caption Keskkonna seadetehaldur
 
+	@property katsetulem_title type=text store=no subtitle=1
+	@caption Sisseastumiskatsete toimumisajad ja kohad
+
+	@property katse_ek_aegkoht type=textarea cols=65 rows=3
+	@caption Eesti keele test
+
+	@property katse_vk_aegkoht type=textarea cols=65 rows=3
+	@caption Maastikuarhitektuuri erialatest
+
+	@property katse_kk_aegkoht type=textarea cols=65 rows=3
+	@caption Maastikuarhitektuuri joonistuseksam
+
+	@property katse_vm_aegkoht type=textarea cols=65 rows=3
+	@caption Maastikukaitse- ja hoolduse erialavestlus
 
 
 //------------------ RELTYPES ----------------------
@@ -196,10 +233,10 @@ class vastuv6tt_keskkond extends class_base
 			case "katse_kood":
 				$options = array(
 					"EK" => "Eesti keele test",
-					"VV" => "Veterinaarmeditsiini eriala vestlus",
-					"VR" => "Rakendush&uuml;drobioloogia eriala vestlus",
+					// "VV" => "Veterinaarmeditsiini eriala vestlus",
+					// "VR" => "Rakendush&uuml;drobioloogia eriala vestlus",
 					"VM" => "Maastikukaitse- ja hoolduse eriala vestlus",
-					"VL" => "Liha- ja piimatehnoloogia eriala vestlus",
+					// "VL" => "Liha- ja piimatehnoloogia eriala vestlus",
 					"KK" => "Maastikuarhitektuuri joonistuseksam",
 					"VK" => "Maastikuarhitektuuri erialatest",
 				);
@@ -233,6 +270,7 @@ class vastuv6tt_keskkond extends class_base
 
 			case "sisseastuja_nimekiri_table_b":
 			case "sisseastuja_nimekiri_table_m":
+			case "sisseastuja_nimekiri_table_a":
 			case "sisseastuja_nimekiri_table_d":
 			case "sisseastuja_nimekiri_table_o":
 			case "sisseastuja_list_table":
@@ -280,12 +318,6 @@ class vastuv6tt_keskkond extends class_base
 					"field" => "sisseastuja_id",
 				));
 
-				$table->set_default_sortby("modified");
-				$table->set_default_sorder("desc");
-				$table->draw_text_pageselector(array(
-					"records_per_page" => 50,
-				));
-
 				switch ($data["name"])
 				{
 					case "sisseastuja_nimekiri_table_b":
@@ -298,6 +330,12 @@ class vastuv6tt_keskkond extends class_base
 						$otsing = new object_list(array(
 							"class_id" => CL_VASTUV6TT_SISSEASTUJA,
 							"oppetase" => "M",
+						));
+						break;
+					case "sisseastuja_nimekiri_table_a":
+						$otsing = new object_list(array(
+							"class_id" => CL_VASTUV6TT_SISSEASTUJA,
+							"oppetase" => "A",
 						));
 						break;
 					case "sisseastuja_nimekiri_table_d":
@@ -326,13 +364,13 @@ class vastuv6tt_keskkond extends class_base
 				{
 					$change_url = $this->mk_my_orb("change", array(
 						"id" => $sisseastuja->id(),
-						"return_url" => get_ru(),
+						"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 						"group" => "grp_sisseastuja_avaldused",
 					), "vastuv6tt_sisseastuja");
 
 					$table->define_data(array(
 						"modify" => html::href(array(
-							"caption" => t("Muuda"),
+							"caption" => t("Muuda4"),
 							"url" => $change_url,
 							)
 						),
@@ -449,10 +487,10 @@ class vastuv6tt_keskkond extends class_base
 									$valid_range = (($punkte >= 0) && ($punkte <= 4));
 									break;
 
-								case "VL":
+								// case "VL":
 								case "VM":
-								case "VV":
-								case "VR":
+								// case "VV":
+								// case "VR":
 									$valid_range = (($punkte >= 0) && ($punkte <= 5));
 									break;
 							}
@@ -519,7 +557,7 @@ class vastuv6tt_keskkond extends class_base
 						$connections = $sisseastuja->connections_from(array ("type" => RELTYPE_AVALDUS, "class_id" => CL_VASTUV6TT_AVALDUS));
 
 						foreach ($connections as $connection)
-						{//todo kontrollida kas update t88tab.
+						{
 							$avaldus = $connection->to();
 							$this->do_orb_method_call(array(
 								"action" => "konkursipunktid",
@@ -562,7 +600,7 @@ class vastuv6tt_keskkond extends class_base
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["keskkond_return_url"] = post_ru();
+		$arr["keskkond_return_url"] = urlencode(aw_global_get('REQUEST_URI'));
 	}
 
 	function callback_mod_retval($arr)
@@ -660,7 +698,7 @@ class vastuv6tt_keskkond extends class_base
 				{
 					$change_url = $this->mk_my_orb("change", array(
 						"id" => $row["id"],
-						"return_url" => get_ru(),
+						"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 						"group" => "grp_sisseastuja_andmed",
 					), "vastuv6tt_sisseastuja");
 					$change_href = html::href(array(
@@ -672,7 +710,7 @@ class vastuv6tt_keskkond extends class_base
 					$retval["row" . $count] = array(
 						"type" => "text",
 						"name" => "row" . $count,
-						"caption" => (21 - $count) . ". ",
+						"caption" => (21 - $count) . t(". "),
 						"store" => "no",
 					);
 
@@ -714,7 +752,7 @@ class vastuv6tt_keskkond extends class_base
 					$sisseastuja_nimi = $sisseastuja->prop("isik_firstname") . " " . $sisseastuja->prop("isik_lastname");
 					$change_url = $this->mk_my_orb("change", array(
 						"id" => $row["id"],
-						"return_url" => get_ru(),
+						"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 						"group" => "grp_sisseastuja_katsetulemused",
 					), "vastuv6tt_sisseastuja");
 					$change_href = html::href(array(
@@ -747,7 +785,7 @@ class vastuv6tt_keskkond extends class_base
 					"type" => "textbox",
 					"size" => 4,
 					"name" => "katsetulemus|nr|" . $count,
-					"caption" => t("sisseastuja nr."),
+					"caption" => "sisseastuja nr.",
 					"parent" => "row" . $count,
 				);
 
@@ -982,12 +1020,12 @@ class vastuv6tt_keskkond extends class_base
 
 			if ($write_retval == (-1))
 			{
-				$error .= t("Faili ei saand kirjutada. ");
+				$error .= "Faili ei saand kirjutada. ";
 			}
 		}
 		else
 		{
-			$error .= t( "Faili ei saand luua. ");
+			$error .= "Faili ei saand luua. ";
 		}
 
 		return $error;
@@ -1160,7 +1198,7 @@ class vastuv6tt_keskkond extends class_base
 						if ($oppevorm == "R")
 						{
 							$table->define_data(array(
-								"eriala" => t("<b>Kokku:"),
+								"eriala" => "<b>Kokku:",
 								"kohti" => "<b>".$kohti_kokku,
 								"avaldusi" => "<b>".$avaldusi_kokku,
 								"konkurss" => "<b>".$yldkonkurss,
@@ -1171,7 +1209,7 @@ class vastuv6tt_keskkond extends class_base
 						{
 							$table->define_data(array(
 								"eriala" => "~~",
-								"kohti" => t("<b>Avaldusi kokku:"),
+								"kohti" => "<b>Avaldusi kokku:",
 								"avaldusi" => "<b>".$avaldusi_kokku,
 							));
 						}
@@ -1188,7 +1226,7 @@ class vastuv6tt_keskkond extends class_base
 			case "A":
 				$table->define_field(array(
 					"name" => "nimi",
-					"caption" => t( "Nimi"),
+					"caption" => t("Nimi"),
 				));
 
 				if ($oppetase != "B")
@@ -1241,6 +1279,7 @@ class vastuv6tt_keskkond extends class_base
 						break;
 
 						case "M":
+						case "A":
 						case "D":
 						$otsing = new object_list(array(
 							"class_id" => CL_VASTUV6TT_AVALDUS,
@@ -1319,7 +1358,7 @@ class vastuv6tt_keskkond extends class_base
 					case "B":
 					$table->define_field(array(
 							"name" => "jrk_nr",
-							"caption" => t( "Jrk nr"),
+							"caption" => t("Jrk nr"),
 						));
 
 
@@ -1405,6 +1444,7 @@ class vastuv6tt_keskkond extends class_base
 						break;
 
 					case "M":
+					case "A":
 					case "D":
 					case "O":
 						return "";
@@ -1436,106 +1476,410 @@ class vastuv6tt_keskkond extends class_base
 	{
 		switch($propname)
 		{
+					case "eriala_b":
+						$trans = array(
+							"AG" => "Agronoomia",
+							"AI" => "Aiandus",
+							"PS" => "P&otilde;llumajandussaaduste tootmine ja turustamine",
+							"LK" => "Loomakasvatus",
+							"LP" => "Liha- ja piimatehnoloogia",
+							"KA" => "Kalakasvatus",
+							"AK" => "Agro&ouml;koloogia",
+							"VM" => "Veterinaarmeditsiin",
+							"AR" => "Maastikuarhitektuur",
+							"MH" => "Maastikukaitse ja -hooldus",
+							"KJ" => "Keskkonnamajandus",
+							"GE" => "Geodeesia",
+							"MK" => "Maakorraldus",
+							"EH" => "Maaehitus",
+							"VE" => "Veemajandus",
+							"KP" => "Kinnisvara planeerimine",
+							"EV" => "&Ouml;konoomika ja ettev&otilde;tlus",
+							"MF" => "Majandusarvestus ja finantsjuhtimine",
+							"ME" => "Metsamajandus",
+							"MT" => "Metsat&ouml;&ouml;stus",
+							"LV" => "Loodusvarade kasutamine ja kaitse",
+							"EG" => "Ergonoomika",
+							"EK" => "Energiakasutus",
+							"TH" => "P&otilde;llumajandustehnika",
+							"ET" => "Ettev&otilde;ttetehnika",
+							"RB" => "Rakendush&uuml;drobioloogia",
+						);
+						break;
+
+					case "eriala_a":
+						$trans = array(
+							"AG" => "Agronoomia",
+							"AK" => "Agro&ouml;koloogia",
+							"AI" => "Aiandus",
+							"EK" => "Energiakasutus",
+							"AR" => "Maastikuarhitektuur",
+							"PS" => "P&otilde;llumajandussaaduste tootmine ja turustamine",
+							"LK" => "Loomakasvatus",
+							"LP" => "Liha- ja piimatehnoloogia",
+							"KA" => "Kalakasvatus",
+							"MH" => "Maastikukaitse ja -hooldus",
+							"KJ" => "Keskkonnamajandus",
+							"GE" => "Geodeesia",
+							"MK" => "Maakorraldus",
+							"KP" => "Kinnisvara planeerimine",
+							"EV" => "&Ouml;konoomika ja ettev&otilde;tlus",
+							"MF" => "Majandusarvestus ja finantsjuhtimine",
+							"ME" => "Metsamajandus",
+							"MT" => "Metsat&ouml;&ouml;stus",
+							"LV" => "Loodusvarade kasutamine ja kaitse",
+							"EG" => "Ergonoomika",
+							"TH" => "P&otilde;llumajandustehnika",
+							"ET" => "Ettev&otilde;ttetehnika",
+							"BD" => "Elustiku mitmekesisuse ja mitmefunktsiooniliste maastike korraldamine",
+						);
+						break;
+
+					case "eriala_m":
+						$trans = array(
+							"AI" => "Aiandus",
+							"GK" => "Agrokeemia",
+							"MV" => "Maaviljelus",
+							"RM" => "Rohumaaviljelus ja s&ouml;&ouml;datootmine",
+							"TK" => "Taimekaitse",
+							"TV" => "Taimekasvatus",
+							"MD" => "Mullateadus",
+							"AR" => "Maastikuarhitektuur",
+							"KK" => "Keskkonnakaitse",
+							"PT" => "Piimatehnoloogia",
+							"LT" => "Lihatehnoloogia",
+							"TG" => "Toiduh&uuml;gieen ja veterinaarkontroll",
+							"LK" => "Loomakasvatus",
+							"ME" => "Metsamajandus",
+							"MT" => "Metsat&ouml;&ouml;stus",
+							"EH" => "Maaehitus",
+							"MM" => "Maam&otilde;&otilde;tmine",
+							"VE" => "Veemajandus",
+							"RP" => "Raamatupidamine ja rahandus",
+							"EV" => "&Ouml;konoomika ja ettev&otilde;tlus",
+							"TU" => "Turundus ja juhtimine",
+							"TH" => "P&otilde;llumajandustehnika",
+							"PE" => "P&otilde;llumajandusenergeetika",
+							"HB" => "H&uuml;drobioloogia",
+							"LG" => "Looma&ouml;koloogia",
+							"BM" => "Botaanika ja m&uuml;koloogia",
+						);
+						break;
+
+					case "eriala_d":
+						$trans = array(
+							"KR" => "Keskkonnateadus ja rakendusbioloogia",
+							"PJ" => "P&otilde;llumajandus",
+							"VD" => "Veterinaarmeditsiin ja toiduteadus",
+							"MN" => "Metsandus",
+							"TE" => "Tehnikateadus",
+						);
+						break;
+
+					case "eriala_o":
+						$trans = array(
+							"OP" => "&Otilde;petajakoolitus",
+						);
+						break;
+
+			// case "eriala_b_decline":
+				// $trans = array(
+					// "AG" => "agronoomia",
+					// "AI" => "aianduse",
+					// "PS" => "p&otilde;llumajandussaaduste tootmise ja turustamise",
+					// "LK" => "loomakasvatuse",
+					// "LP" => "liha- ja piimatehnoloogia",
+					// "KA" => "kalakasvatuse",
+					// "AK" => "agro&ouml;koloogia",
+					// "VM" => "veterinaarmeditsiini",
+					// "AR" => "maastikuarhitektuuri",
+					// "MH" => "maastikukaitse ja -hoolduse",
+					// "KJ" => "keskkonnamajanduse",
+					// "GE" => "geodeesia",
+					// "MK" => "maakorralduse",
+					// "EH" => "maaehituse",
+					// "VE" => "veemajanduse",
+					// "KP" => "kinnisvara planeerimise",
+					// "EV" => "&ouml;konoomika ja ettev&otilde;tluse",
+					// "MF" => "majandusarvestuse ja finantsjuhtimise",
+					// "ME" => "metsamajanduse",
+					// "MT" => "metsat&ouml;&ouml;stuse",
+					// "LV" => "loodusvarade kasutamise ja kaitse",
+					// "EG" => "ergonoomika",
+					// "EK" => "energiakasutuse",
+					// "TH" => "p&otilde;llumajandustehnika",
+					// "ET" => "ettev&otilde;ttetehnika",
+					// "RB" => "rakendush&uuml;drobioloogia",
+				// );
+			// break;
+
+			// case "eriala_m_decline":
+				// $trans = array(
+					// "AI" => "aianduse",
+					// "GK" => "agrokeemia",
+					// "MV" => "maaviljeluse",
+					// "RM" => "rohumaaviljeluse ja s&ouml;&ouml;datootmise",
+					// "TK" => "taimekaitse",
+					// "TV" => "taimekasvatuse",
+					// "MD" => "mullateaduse",
+					// "KM" => "kodumajanduse",
+					// "OP" => "&Otilde;petajakoolituse",
+					// "AR" => "maastikuarhitektuuri",
+					// "KK" => "keskkonnakaitse",
+					// "VM" => "veterinaarmeditsiini",
+					// "PT" => "piimatehnoloogia",
+					// "LT" => "lihatehnoloogia",
+					// "TG" => "toiduh&uuml;gieen ja veterinaarkontrolli",
+					// "TI" => "toiduteaduse",
+					// "LK" => "loomakasvatuse",
+					// "KB" => "keemiline bioloogia",
+					// "ME" => "metsamajanduse",
+					// "MT" => "metsat&ouml;&ouml;stuse",
+					// "EH" => "maaehituse",
+					// "MM" => "maam&otilde;&otilde;tmise",
+					// "VE" => "veemajanduse",
+					// "RP" => "raamatupidamise ja rahanduse",
+					// "EV" => "&ouml;konoomika ja ettev&otilde;tluse",
+					// "TU" => "turunduse ja juhtimise",
+					// "OV" => "&ouml;konoomika ja ettev&otilde;tluse (1-aastane &otilde;pe)",
+					// "MF" => "majandusarvestuse ja finantsjuhtimise",
+					// "TH" => "p&otilde;llumajandustehnika",
+					// "PE" => "p&otilde;llumajandusenergeetika",
+					// "HB" => "h&uuml;drobioloogia",
+					// "LG" => "looma&ouml;koloogia",
+					// "BM" => "botaanika ja m&uuml;koloogia",
+					// "TF" => "taimef&uuml;sioloogia",
+					// "GE" => "geneetika",
+					// "BK" => "biokeemia",
+				// );
+			// break;
+
+					case "eriala_b_decline":
+						$trans = array(
+							"AG" => "agronoomia",
+							"AI" => "aianduse",
+							"PS" => "p&otilde;llumajandussaaduste tootmise ja turustamise",
+							"LK" => "loomakasvatuse",
+							"LP" => "liha- ja piimatehnoloogia",
+							"KA" => "kalakasvatuse",
+							"AK" => "agro&ouml;koloogia",
+							"VM" => "veterinaarmeditsiini",
+							"AR" => "maastikuarhitektuuri",
+							"MH" => "maastikukaitse ja -hoolduse",
+							"KJ" => "keskkonnamajanduse",
+							"GE" => "geodeesia",
+							"MK" => "maakorralduse",
+							"EH" => "maaehituse",
+							"VE" => "veemajanduse",
+							"KP" => "kinnisvara planeerimise",
+							"EV" => "&ouml;konoomika ja ettev&otilde;tluse",
+							"MF" => "majandusarvestuse ja finantsjuhtimise",
+							"ME" => "metsamajanduse",
+							"MT" => "metsat&ouml;&ouml;stuse",
+							"LV" => "loodusvarade kasutamise ja kaitse",
+							"EG" => "ergonoomika",
+							"EK" => "energiakasutuse",
+							"TH" => "p&otilde;llumajandustehnika",
+							"ET" => "ettev&otilde;ttetehnika",
+							"RB" => "rakendush&uuml;drobioloogia",
+						);
+						break;
+
+					case "eriala_a_decline":
+						$trans = array(
+							"AG" => "agronoomia",
+							"AK" => "agro&ouml;koloogia",
+							"AI" => "aianduse",
+							"EK" => "energiakasutuse",
+							"AR" => "maastikuarhitektuuri",
+							"PS" => "p&otilde;llumajandussaaduste tootmise ja turustamise",
+							"LK" => "loomakasvatuse",
+							"LP" => "liha- ja piimatehnoloogia",
+							"KA" => "kalakasvatuse",
+							"MH" => "maastikukaitse ja -hoolduse",
+							"KJ" => "keskkonnamajanduse",
+							"GE" => "geodeesia",
+							"MK" => "maakorralduse",
+							"KP" => "kinnisvara planeerimise",
+							"EV" => "&ouml;konoomika ja ettev&otilde;tluse",
+							"MF" => "majandusarvestuse ja finantsjuhtimise",
+							"ME" => "metsamajanduse",
+							"MT" => "metsat&ouml;&ouml;stuse",
+							"LV" => "loodusvarade kasutamise ja kaitse",
+							"EG" => "ergonoomika",
+							"TH" => "p&otilde;llumajandustehnika",
+							"ET" => "ettev&otilde;ttetehnika",
+							"BD" => "elustiku mitmekesisuse ja mitmefunktsiooniliste maastike korraldamise",
+						);
+						break;
+
+					case "eriala_m_decline":
+						$trans = array(
+							"AI" => "aianduse",
+							"GK" => "agrokeemia",
+							"MV" => "maaviljeluse",
+							"RM" => "rohumaaviljeluse ja s&ouml;&ouml;datootmise",
+							"TK" => "taimekaitse",
+							"TV" => "taimekasvatuse",
+							"MD" => "mullateaduse",
+							"AR" => "maastikuarhitektuuri",
+							"KK" => "keskkonnakaitse",
+							"PT" => "piimatehnoloogia",
+							"LT" => "lihatehnoloogia",
+							"TG" => "toiduh&uuml;gieeni ja veterinaarkontrolli",
+							"LK" => "loomakasvatuse",
+							"ME" => "metsamajanduse",
+							"MT" => "metsat&ouml;&ouml;stuse",
+							"EH" => "maaehituse",
+							"MM" => "maam&otilde;&otilde;tmise",
+							"VE" => "veemajanduse",
+							"RP" => "raamatupidamise ja rahanduse",
+							"EV" => "&ouml;konoomika ja ettev&otilde;tluse",
+							"TU" => "turunduse ja juhtimise",
+							"TH" => "p&otilde;llumajandustehnika",
+							"PE" => "p&otilde;llumajandusenergeetika",
+							"HB" => "h&uuml;drobioloogia",
+							"LG" => "looma&ouml;koloogia",
+							"BM" => "botaanika ja m&uuml;koloogia",
+						);
+						break;
+
+					case "eriala_d_decline":
+						$trans = array(
+							"KR" => "keskkonnateaduse ja rakendusbioloogia",
+							"PJ" => "p&otilde;llumajanduse",
+							"VD" => "veterinaarmeditsiini ja toiduteaduse",
+							"MN" => "metsanduse",
+							"TE" => "tehnikateaduse",
+						);
+						break;
+
+					case "eriala_o_decline":
+						$trans = array(
+							"OP" => "&otilde;petajakoolituse",
+						);
+
+			case "oppevorm_decline":
+				$trans = array(
+					"R" => "riigieelarvelisele",
+					"L" => "riigieelarvev&auml;lisele",
+					"K" => "kaug&otilde;ppe",
+				);
+			break;
+
 			case "oppevorm":
 				$trans = array(
-					"R" => t("Riigieelarveline"),
-					"L" => t("Riigieelarveväline"),
-					"K" => t("Kaug&otilde;pe"),
+					"R" => "Riigieelarveline",
+					"L" => "Riigieelarvev&auml;line",
+					"K" => "Kaug&otilde;pe",
 				);
 				break;
 
 			case "vaade":
 				$trans = array(
-					"K" => t("Konkursid"),
-					"A" => t("Avalduste nimekiri"),
-					"V" => t("Vastuv&otilde;etud"),
+					"K" => "Konkursid",
+					"A" => "Avalduste nimekiri",
+					"V" => "Vastuv&otilde;etud",
 				);
 				break;
 
 			case "oppetase":
 				$trans = array(
-					"B" => t("Bakalaureuse&otilde;pe"),
-					"M" => t("Magistri&otilde;pe"),
-					"D" => t("Doktori&otilde;pe"),
-					"O" => t("&Otilde;petajakoolitus"),
+					"M" => "Magistri&otilde;pe (4+2)",
+					"A" => "Magistri&otilde;pe (3+2)",
+					"D" => "Doktori&otilde;pe",
+					"O" => "&Otilde;petajakoolitus",
+					"B" => "Bakalaureuse&otilde;pe",
 				);
 				break;
 
 			case "oppetase_b":
 				$trans = array(
-					"B" => t("Bakalaureuse&otilde;pe"),
+					"B" => "Bakalaureuse&otilde;pe",
 				);
 				break;
 
-			case "eriala_m":
-				$trans = array(
-					"AI" => "Aiandus",
-					"GK" => "Agrokeemia",
-					"MV" => "Maaviljelus",
-					"RM" => "Rohumaaviljelus ja s&ouml;&ouml;datootmine",
-					"TK" => "Taimekaitse",
-					"TV" => "Taimekasvatus",
-					"MD" => "Mullateadus",
-					"KM" => "Kodumajandus",
-					"OP" => "&Otilde;petajakoolitus",
-					"AR" => "Maastikuarhitektuur",
-					"KK" => "Keskkonnakaitse",
-					"VM" => "Veterinaarmeditsiin",
-					"PT" => "Piimatehnoloogia",
-					"LT" => "Lihatehnoloogia",
-					"TG" => "Toiduh&uuml;gieen ja veterinaarkontroll",
-					"TI" => "Toiduteadus",
-					"LK" => "Loomakasvatus",
-					"KB" => "Keemiline bioloogia",
-					"ME" => "Metsamajandus",
-					"MT" => "Metsat&ouml;&ouml;stus",
-					"EH" => "Maaehitus",
-					"MM" => "Maam&otilde;&otilde;tmine",
-					"VE" => "Veemajandus",
-					"RP" => "Raamatupidamine ja rahandus",
-					"EV" => "&ouml;konoomika ja ettev&otilde;tlus",
-					"TU" => "Turundus ja juhtimine",
-					"OV" => "&ouml;onoomika ja ettev&otilde;tlus (1-aastane &otilde;pe)",
-					"MF" => "Majandusarvestus ja finantsjuhtimine",
-					"TH" => "P&otilde;llumajandustehnika",
-					"PE" => "P&otilde;llumajandusenergeetika",
-					"HB" => "H&uuml;drobioloogia",
-					"LG" => "Looma&ouml;koloogia",
-					"BM" => "Botaanika ja m&uuml;koloogia",
-					"TF" => "Taimef&uuml;sioloogia",
-					"GE" => "Geneetika",
-					"BK" => "Biokeemia",
+			case "social_status";
+				$trans = array (
+					"0" => "Vallaline",
+					"1" => "Abielus",
+					"2" => "Vabaabielus",
 				);
 				break;
 
-			case "eriala_b":
+			case "haridus_v2lismaal":
 				$trans = array(
-					"AG" => "Agronoomia",
-					"AI" => "Aiandus",
-					"PS" => "P&otilde;llumajandussaaduste tootmine ja turustamine",
-					"LK" => "Loomakasvatus",
-					"LP" => "Liha- ja piimatehnoloogia",
-					"KA" => "Kalakasvatus",
-					"AK" => "Agro&ouml;koloogia",
-					"VM" => "Veterinaarmeditsiin",
-					"AR" => "Maastikuarhitektuur",
-					"MH" => "Maastikukaitse ja -hooldus",
-					"KJ" => "Keskkonnamajandus",
-					"GE" => "Geodeesia",
-					"MK" => "Maakorraldus",
-					"EH" => "Maaehitus",
-					"VE" => "Veemajandus",
-					"KP" => "Kinnisvara planeerimine",
-					"EV" => "~&Ouml;konoomika ja ettev&otilde;tlus",
-					"MF" => "Majandusarvestus ja finantsjuhtimine",
-					"ME" => "Metsamajandus",
-					"MT" => "Metsat&ouml;&ouml;stus",
-					"LV" => "Loodusvarade kasutamine ja kaitse",
-					"EG" => "Ergonoomika",
-					"EK" => "Energiakasutus",
-					"TH" => "P&otilde;llumajandustehnika",
-					"ET" => "Ettev&otilde;ttetehnika",
-					"RB" => "Rakendush&uuml;drobioloogia",
+					"E" => "Ei",
+					"J" => "Jah",
+				);
+				break;
+
+			case "katse":
+				$trans = array(
+					"EK" => "Eesti keele test",
+					// "VV" => "Veterinaarmeditsiini eriala vestlus",
+					// "VR" => "Rakendush&uuml;drobioloogia eriala vestlus",
+					"VM" => "Maastikukaitse- ja hoolduse eriala vestlus",
+					// "VL" => "Liha- ja piimatehnoloogia eriala vestlus",
+					"KK" => "Maastikuarhitektuuri joonistuseksam",
+					"VK" => "Maastikuarhitektuuri erialatest",
+				);
+				break;
+
+			case "haridus_medal":
+				$trans = array(
+					"E" => "Ei",
+					"M" => "Kuld",
+					"H" => "H&otilde;be",
+					"K" => "Kiitus",
+				);
+				break;
+
+			case "haridus_kool_tyyp":
+				$trans = array(
+					"KK" => "Keskkool",
+					"G" => "G&uuml;mnaasium",
+					"T" => "Tehnikum",
+					"KU" => "Kutsekeskkool",
+				);
+				break;
+
+			case "haridus_kool_6ppevorm":
+				$trans = array(
+					"P" => "P&auml;evane",
+					"O" => "&otilde;htune",
+					"K" => "Kaugpe",
+					"E" => "Ekstern",
+				);
+				break;
+
+			case "v66rkeel":
+				$trans = array(
+					"I" => "Inglise",
+					"S" => "Saksa",
+					"V" => "Vene",
+				);
+				break;
+
+			case "elukoht":
+				$trans = array(
+					"L" => "Linn",
+					"M" => "Maa",
+				);
+				break;
+
+			case "elamisluba":
+				$trans = array(
+					"-" => "",
+					"A" => "Alaline",
+					"T" => "T&auml;htajaline",
+				);
+				break;
+
+			case "gender":
+				$trans = array(
+					"1" => "mees",
+					"2" => "naine",
 				);
 				break;
 		}

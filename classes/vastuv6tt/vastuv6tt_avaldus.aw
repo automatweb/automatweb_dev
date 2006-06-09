@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_avaldus.aw,v 1.1 2006/01/18 22:29:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_avaldus.aw,v 1.2 2006/06/09 13:57:42 kristo Exp $
 // vastuv6tt_avaldus.aw - Avaldus
 /*
 
@@ -9,13 +9,16 @@
 
 @default table=vastuv6tt_avaldus
 @default group=general
-	@property eriala_b type=select store=no
+	// @property eriala_b type=select store=no
+	// @caption Eriala
+
+	// @property eriala_m type=select store=no
+	// @caption Eriala
+
+	@property eriala type=select
 	@caption Eriala
 
-	@property eriala_m type=select store=no
-	@caption Eriala
-
-	@property eriala type=hidden value=1
+	// @property eriala type=hidden value=1
 	@property sisseastuja_nr type=hidden
 	@property sisseastuja_kood type=hidden
 	@property konkursipunktid type=hidden
@@ -49,7 +52,7 @@ CREATE TABLE `vastuv6tt_avaldus` (
 	`isik_firstname` varchar(50) default NULL,
 	`isik_lastname` varchar(50) default NULL,
 	`oppevorm` enum ('R','L','K') default 'R',
-	`oppetase` enum ('B','M','D','O') default 'B',
+	`oppetase` enum ('B','M','D','O','A') default 'B',
 	PRIMARY KEY  (`oid`),
 	UNIQUE KEY `oid` (`oid`)
 ) TYPE=MyISAM;
@@ -71,90 +74,131 @@ class vastuv6tt_avaldus extends class_base
 		$data = &$arr["prop"];
 		$avaldus = &$arr["obj_inst"];
 		$retval = PROP_OK;
-		$eriala = $avaldus->prop("eriala");
+		// $eriala = $avaldus->prop("eriala");
+		$vastuv6tt_keskkond = get_instance (CL_VASTUV6TT_KESKKOND);
+
+		if (aw_global_get("vastuv6tt_oppetase"))
+		{
+			$oppetase = aw_global_get("vastuv6tt_oppetase");
+		}
+		else
+		{
+			error::raise(array(
+				"msg" => t("&Otilde;ppetase määramata."),
+				"fatal" => true,
+				"show" => true,
+			));
+		}
 
 		switch($data["name"])
 		{
-			case "eriala_b":
-				$options = array(
-					"0" => "",
-					"AG" => "Agronoomia",
-					"AI" => "Aiandus",
-					"PS" => "P&otilde;llumajandussaaduste tootmine ja turustamine",
-					"LK" => "Loomakasvatus",
-					"LP" => "Liha- ja piimatehnoloogia",
-					"KA" => "Kalakasvatus",
-					"AK" => "Agro&ouml;koloogia",
-					"VM" => "Veterinaarmeditsiin",
-					"AR" => "Maastikuarhitektuur",
-					"MH" => "Maastikukaitse ja -hooldus",
-					"KJ" => "Keskkonnamajandus",
-					"GE" => "Geodeesia",
-					"MK" => "Maakorraldus",
-					"EH" => "Maaehitus",
-					"VE" => "Veemajandus",
-					"KP" => "Kinnisvara planeerimine",
-					"EV" => "&Ouml;konoomika ja ettev&otilde;tlus",
-					"MF" => "Majandusarvestus ja finantsjuhtimine",
-					"ME" => "Metsamajandus",
-					"MT" => "Metsat&ouml;&ouml;stus",
-					"LV" => "Loodusvarade kasutamine ja kaitse",
-					"EG" => "Ergonoomika",
-					"EK" => "Energiakasutus",
-					"TH" => "P&otilde;llumajandustehnika",
-					"ET" => "Ettev&otilde;ttetehnika",
-					"RB" => "Rakendush&uuml;drobioloogia",
-				);
-			break;
+			case "eriala":
+				$options = array_merge (array("0" => ""), $vastuv6tt_keskkond->get_trans ("eriala_" . strtolower($oppetase)));
+				$data["options"] = $options;
+				break;
 
-			case "eriala_m":
-				$options = array(
-					"0" => "",
-					"AI" => "Aiandus",
-					"GK" => "Agrokeemia",
-					"MV" => "Maaviljelus",
-					"RM" => "Rohumaaviljelus ja s&ouml;&ouml;datootmine",
-					"TK" => "Taimekaitse",
-					"TV" => "Taimekasvatus",
-					"MD" => "Mullateadus",
-					"KM" => "Kodumajandus",
-					"OP" => "&Otilde;petajakoolitus",
-					"AR" => "Maastikuarhitektuur",
-					"KK" => "Keskkonnakaitse",
-					"VM" => "Veterinaarmeditsiin",
-					"PT" => "Piimatehnoloogia",
-					"LT" => "Lihatehnoloogia",
-					"TG" => "Toiduh&uuml;gieen ja veterinaarkontroll",
-					"TI" => "Toiduteadus",
-					"LK" => "Loomakasvatus",
-					"KB" => "Keemiline bioloogia",
-					"ME" => "Metsamajandus",
-					"MT" => "Metsat&ouml;&ouml;stus",
-					"EH" => "Maaehitus",
-					"MM" => "Maam&otilde;&otilde;tmine",
-					"VE" => "Veemajandus",
-					"RP" => "Raamatupidamine ja rahandus",
-					"EV" => "&Ouml;konoomika ja ettev&otilde;tlus",
-					"TU" => "Turundus ja juhtimine",
-					"OV" => "&Ouml;konoomika ja ettev&otilde;tlus (1-aastane &otilde;pe)",
-					"MF" => "Majandusarvestus ja finantsjuhtimine",
-					"TH" => "P&otilde;llumajandustehnika",
-					"PE" => "P&otilde;llumajandusenergeetika",
-					"HB" => "H&uuml;drobioloogia",
-					"LG" => "Looma&ouml;koloogia",
-					"BM" => "Botaanika ja m&uuml;koloogia",
-					"TF" => "Taimef&uuml;sioloogia",
-					"GE" => "Geneetika",
-					"BK" => "Biokeemia",
-				);
-			break;
+			// case "eriala_b":
+				// $options = array(
+					// "0" => "",
+					// "AG" => "Agronoomia",
+					// "AI" => "Aiandus",
+					// "PS" => "P&otilde;llumajandussaaduste tootmine ja turustamine",
+					// "LK" => "Loomakasvatus",
+					// "LP" => "Liha- ja piimatehnoloogia",
+					// "KA" => "Kalakasvatus",
+					// "AK" => "Agro&ouml;koloogia",
+					// "VM" => "Veterinaarmeditsiin",
+					// "AR" => "Maastikuarhitektuur",
+					// "MH" => "Maastikukaitse ja -hooldus",
+					// "KJ" => "Keskkonnamajandus",
+					// "GE" => "Geodeesia",
+					// "MK" => "Maakorraldus",
+					// "EH" => "Maaehitus",
+					// "VE" => "Veemajandus",
+					// "KP" => "Kinnisvara planeerimine",
+					// "EV" => "&Ouml;konoomika ja ettev&otilde;tlus",
+					// "MF" => "Majandusarvestus ja finantsjuhtimine",
+					// "ME" => "Metsamajandus",
+					// "MT" => "Metsat&ouml;&ouml;stus",
+					// "LV" => "Loodusvarade kasutamine ja kaitse",
+					// "EG" => "Ergonoomika",
+					// "EK" => "Energiakasutus",
+					// "TH" => "P&otilde;llumajandustehnika",
+					// "ET" => "Ettev&otilde;ttetehnika",
+					// "RB" => "Rakendush&uuml;drobioloogia",
+				// );
+			// break;
+
+			// case "eriala_m":
+				// $options = array(
+					// "0" => "",
+					// "AI" => "Aiandus",
+					// "GK" => "Agrokeemia",
+					// "MV" => "Maaviljelus",
+					// "RM" => "Rohumaaviljelus ja s&ouml;&ouml;datootmine",
+					// "TK" => "Taimekaitse",
+					// "TV" => "Taimekasvatus",
+					// "MD" => "Mullateadus",
+					// "KM" => "Kodumajandus",
+					// "OP" => "&Otilde;petajakoolitus",
+					// "AR" => "Maastikuarhitektuur",
+					// "KK" => "Keskkonnakaitse",
+					// "VM" => "Veterinaarmeditsiin",
+					// "PT" => "Piimatehnoloogia",
+					// "LT" => "Lihatehnoloogia",
+					// "TG" => "Toiduh&uuml;gieen ja veterinaarkontroll",
+					// "TI" => "Toiduteadus",
+					// "LK" => "Loomakasvatus",
+					// "KB" => "Keemiline bioloogia",
+					// "ME" => "Metsamajandus",
+					// "MT" => "Metsat&ouml;&ouml;stus",
+					// "EH" => "Maaehitus",
+					// "MM" => "Maam&otilde;&otilde;tmine",
+					// "VE" => "Veemajandus",
+					// "RP" => "Raamatupidamine ja rahandus",
+					// "EV" => "&Ouml;konoomika ja ettev&otilde;tlus",
+					// "TU" => "Turundus ja juhtimine",
+					// "OV" => "&Ouml;konoomika ja ettev&otilde;tlus (1-aastane &otilde;pe)",
+					// "MF" => "Majandusarvestus ja finantsjuhtimine",
+					// "TH" => "P&otilde;llumajandustehnika",
+					// "PE" => "P&otilde;llumajandusenergeetika",
+					// "HB" => "H&uuml;drobioloogia",
+					// "LG" => "Looma&ouml;koloogia",
+					// "BM" => "Botaanika ja m&uuml;koloogia",
+					// "TF" => "Taimef&uuml;sioloogia",
+					// "GE" => "Geneetika",
+					// "BK" => "Biokeemia",
+				// );
+			// break;
 
 			case "oppevorm":
-				$data["options"] = array(
-					"R" => "Riigieelarveline",
-					"L" => "Riigieelarvev&auml;line",
-					"K" => "Kaug&otilde;pe",
-				);
+				switch ($oppetase)
+				{
+					case "B":
+					case "A":
+						$options = array(
+							"R" => "Riigieelarveline",
+							"L" => "Riigieelarvev&auml;line",
+							"K" => "Kaug&otilde;pe",
+						);
+						break;
+
+					case "M":
+					case "O":
+						$options = array(
+							"R" => "Riigieelarveline",
+							"L" => "Riigieelarvev&auml;line",
+						);
+						break;
+
+					case "D":
+						$options = array(
+							"R" => "Riigieelarveline",
+						);
+						break;
+				}
+
+				$data["options"] = $options;
 			break;
 
 			case "eelistus":
@@ -166,29 +210,29 @@ class vastuv6tt_avaldus extends class_base
 
 		}
 
-		if ( ($data["name"] == "eriala_b") || ($data["name"] == "eriala_m") )
-		{
-			if ($eriala)
-			{
-				$options2 = array ();
-				foreach ($options as $key => $value)
-				{
-					if ($key != $eriala)
-					{
-						$options2[$key] = $value;
-					}
-					else
-					{
-						$name = $value;
-					}
-				}
+		// if ( ($data["name"] == "eriala_b") || ($data["name"] == "eriala_m") )
+		// {
+			// if ($eriala)
+			// {
+				// $options2 = array ();
+				// foreach ($options as $key => $value)
+				// {
+					// if ($key != $eriala)
+					// {
+						// $options2[$key] = $value;
+					// }
+					// else
+					// {
+						// $name = $value;
+					// }
+				// }
 
-				$selected_option = array ($eriala => $name);
-				$options = $selected_option + $options2;
-			}
+				// $selected_option = array ($eriala => $name);
+				// $options = $selected_option + $options2;
+			// }
 
-			$data["options"] = $options;
-		}
+			// $data["options"] = $options;
+		// }
 
 		return $retval;
 	}
@@ -202,19 +246,20 @@ class vastuv6tt_avaldus extends class_base
 		switch($data["name"])
 	    {
 			case "eriala":
-				if ($arr["request"]["eriala_b"])
-				{
-					$data["value"] = $arr["request"]["eriala_b"];
-				}
+				// if ($arr["request"]["eriala_b"])
+				// {
+					// $data["value"] = $arr["request"]["eriala_b"];
+				// }
 
-				if ($arr["request"]["eriala_m"])
-				{
-					$data["value"] = $arr["request"]["eriala_m"];
-				}
+				// if ($arr["request"]["eriala_m"])
+				// {
+					// $data["value"] = $arr["request"]["eriala_m"];
+				// }
 			break;
 		}
 		return $retval;
 	}
+
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
@@ -252,6 +297,7 @@ class vastuv6tt_avaldus extends class_base
 	function konkursipunktid($arr)
 	{
 		$avaldus = obj($arr["avaldus_id"]);
+
 		$sisseastuja = obj($arr["sisseastuja_id"]);
 		$final = $arr["konkursipunktid_final"];
 		$eriala = $avaldus->prop("eriala");
@@ -280,9 +326,9 @@ class vastuv6tt_avaldus extends class_base
 		$ex_KK = $sisseastuja->prop("tulemus_kk");
 		$ex_VK = $sisseastuja->prop("tulemus_vk");
 		$ex_VM = $sisseastuja->prop("tulemus_vm");
-		$ex_VL = $sisseastuja->prop("tulemus_vl");
-		$ex_VV = $sisseastuja->prop("tulemus_vv");
-		$ex_VR = $sisseastuja->prop("tulemus_vr");
+		// $ex_VL = $sisseastuja->prop("tulemus_vl");
+		// $ex_VV = $sisseastuja->prop("tulemus_vv");
+		// $ex_VR = $sisseastuja->prop("tulemus_vr");
 
 		$ex_vaba1 = 0;
 		$ex_vaba2 = 0;
@@ -395,9 +441,9 @@ class vastuv6tt_avaldus extends class_base
 				$punkte = $ex_kirjand + $ex_vaba1 * 0.1 + $ex_vaba2 * 0.1 + $keskhinne * 2 + $ex_VM;
 			break;
 
-			case "LP":
-				$punkte = $ex_kirjand + $ex_vaba1 * 0.1 + $ex_vaba2 * 0.1 + $keskhinne * 2 + $ex_VL;
-			break;
+			// case "LP":
+				// $punkte = $ex_kirjand + $ex_vaba1 * 0.1 + $ex_vaba2 * 0.1 + $keskhinne * 2 + $ex_VL;
+			// break;
 
 			case "GE":
 			case "KP":
@@ -415,13 +461,14 @@ class vastuv6tt_avaldus extends class_base
 			break;
 
 			case "VM":
-				$punkte = $ex_kirjand + $ex_bio * 0.2 + $ex_keemia * 0.2 + $keskhinne * 2 + $ex_VV;
+				$punkte = $ex_kirjand + $ex_bio * 0.2 + $ex_keemia * 0.2 + $keskhinne * 2;// + $ex_VV;
 			break;
 
 			case "RB":
-				$punkte = $ex_kirjand + $ex_bio * 0.2 + $ex_keemia * 0.2 + $keskhinne * 2 + $ex_VR;
+				$punkte = $ex_kirjand + $ex_bio * 0.2 + $ex_keemia * 0.2 + $keskhinne * 2;// + $ex_VR;
 			break;
 
+			case "LP":
 			case "AG":
 			case "AI":
 			case "PS":
@@ -442,7 +489,6 @@ class vastuv6tt_avaldus extends class_base
 		{
 			$retval = $punkte;
 		}
-
 		$avaldus->set_prop ("konkursipunktid", $retval);
 		$avaldus->save ();
 		return $retval;
@@ -454,6 +500,10 @@ class vastuv6tt_avaldus extends class_base
 	function vajalikud_hinded($eriala, $oppetase = "B", $oppevorm = "R")
 	{
 		$vajalikud_hinded = array ();
+		if ($oppetase == "D")
+		{
+			return $vajalikud_hinded;
+		}
 
 		if ($oppevorm == "R")
 		{
@@ -479,7 +529,7 @@ class vastuv6tt_avaldus extends class_base
 			case "MK":
 			case "VE":
 				$vaba = array ("ex_ingl", "ex_sks", "ex_pr", "ex_eesti", "ex_vene", "ex_yhisk", "ex_ajalugu", "ex_bio", "ex_fyysika", "ex_keemia", "ex_geo");
-				$nimi = array ("Inglise keel", "Saksa keel", "Prantsuse keel", "Eesti keel v&otilde;&otilde;rkeelena", "Vene keel", "&uuml;hiskonna&otilde;petus", "Ajalugu", "Bioloogia", "F&uuml;&uuml;sika", "Keemia", "Geograafia");
+				$nimi = array ("Inglise keel", "Saksa keel", "Prantsuse keel", "Eesti keel teise keelena", "Vene keel", "&uuml;hiskonna&otilde;petus", "Ajalugu", "Bioloogia", "F&uuml;&uuml;sika", "Keemia", "Geograafia");
 			break;
 
 			case "EK":
@@ -487,7 +537,7 @@ class vastuv6tt_avaldus extends class_base
 			case "ET":
 			case "TH":
 				$vaba = array ("ex_ingl", "ex_sks", "ex_pr", "ex_eesti", "ex_vene", "ex_yhisk", "ex_ajalugu", "ex_bio", "ex_keemia", "ex_geo");
-				$nimi = array ("Inglise keel", "Saksa keel", "Prantsuse keel", "Eesti keel v&otilde;&otilde;rkeelena", "Vene keel", "&uuml;hiskonna&otilde;petus", "Ajalugu", "Bioloogia", "Keemia", "Geograafia");
+				$nimi = array ("Inglise keel", "Saksa keel", "Prantsuse keel", "Eesti keel teise keelena", "Vene keel", "&uuml;hiskonna&otilde;petus", "Ajalugu", "Bioloogia", "Keemia", "Geograafia");
 			break;
 
 			case "AR":
@@ -506,7 +556,7 @@ class vastuv6tt_avaldus extends class_base
 			case "MT":
 			case "LV":
 				$vaba = array ("ex_ingl", "ex_sks", "ex_pr", "ex_eesti", "ex_vene", "ex_yhisk", "ex_ajalugu", "ex_bio", "ex_fyysika", "ex_keemia", "ex_mat", "ex_geo");
-				$nimi = array ("Inglise keel", "Saksa keel", "Prantsuse keel", "Eesti keel v&otilde;&otilde;rkeelena", "Vene keel", "&uuml;hiskonna&otilde;petus", "Ajalugu", "Bioloogia", "F&uuml;&uuml;sika", "Keemia", "Matemaatika", "Geograafia");
+				$nimi = array ("Inglise keel", "Saksa keel", "Prantsuse keel", "Eesti keel teise keelena", "Vene keel", "&uuml;hiskonna&otilde;petus", "Ajalugu", "Bioloogia", "F&uuml;&uuml;sika", "Keemia", "Matemaatika", "Geograafia");
 			break;
 		}
 
@@ -611,97 +661,6 @@ class vastuv6tt_avaldus extends class_base
 	}
 
 
-	function get_trans($propname, $code)
-	{
-		switch($propname)
-		{
-			case "eriala_b_decline":
-				$trans = array(
-					"AG" => "agronoomia",
-					"AI" => "aianduse",
-					"PS" => "p&otilde;llumajandussaaduste tootmise ja turustamise",
-					"LK" => "loomakasvatuse",
-					"LP" => "liha- ja piimatehnoloogia",
-					"KA" => "kalakasvatuse",
-					"AK" => "agro&ouml;koloogia",
-					"VM" => "veterinaarmeditsiini",
-					"AR" => "maastikuarhitektuuri",
-					"MH" => "maastikukaitse ja -hoolduse",
-					"KJ" => "keskkonnamajanduse",
-					"GE" => "geodeesia",
-					"MK" => "maakorralduse",
-					"EH" => "maaehituse",
-					"VE" => "veemajanduse",
-					"KP" => "kinnisvara planeerimise",
-					"EV" => "&ouml;konoomika ja ettev&otilde;tluse",
-					"MF" => "majandusarvestuse ja finantsjuhtimise",
-					"ME" => "metsamajanduse",
-					"MT" => "metsat&ouml;&ouml;stuse",
-					"LV" => "loodusvarade kasutamise ja kaitse",
-					"EG" => "ergonoomika",
-					"EK" => "energiakasutuse",
-					"TH" => "p&otilde;llumajandustehnika",
-					"ET" => "ettev&otilde;ttetehnika",
-					"RB" => "rakendush&uuml;drobioloogia",
-				);
-			break;
-
-			case "eriala_m_decline":
-				$trans = array(
-					"AI" => "aianduse",
-					"GK" => "agrokeemia",
-					"MV" => "maaviljeluse",
-					"RM" => "rohumaaviljeluse ja s&ouml;&ouml;datootmise",
-					"TK" => "taimekaitse",
-					"TV" => "taimekasvatuse",
-					"MD" => "mullateaduse",
-					"KM" => "kodumajanduse",
-					"OP" => "&Otilde;petajakoolituse",
-					"AR" => "maastikuarhitektuuri",
-					"KK" => "keskkonnakaitse",
-					"VM" => "veterinaarmeditsiini",
-					"PT" => "piimatehnoloogia",
-					"LT" => "lihatehnoloogia",
-					"TG" => "toiduh&uuml;gieen ja veterinaarkontrolli",
-					"TI" => "toiduteaduse",
-					"LK" => "loomakasvatuse",
-					"KB" => "keemiline bioloogia",
-					"ME" => "metsamajanduse",
-					"MT" => "metsat&ouml;&ouml;stuse",
-					"EH" => "maaehituse",
-					"MM" => "maam&otilde;&otilde;tmise",
-					"VE" => "veemajanduse",
-					"RP" => "raamatupidamise ja rahanduse",
-					"EV" => "&ouml;konoomika ja ettev&otilde;tluse",
-					"TU" => "turunduse ja juhtimise",
-					"OV" => "&ouml;konoomika ja ettev&otilde;tluse (1-aastane &otilde;pe)",
-					"MF" => "majandusarvestuse ja finantsjuhtimise",
-					"TH" => "p&otilde;llumajandustehnika",
-					"PE" => "p&otilde;llumajandusenergeetika",
-					"HB" => "h&uuml;drobioloogia",
-					"LG" => "looma&ouml;koloogia",
-					"BM" => "botaanika ja m&uuml;koloogia",
-					"TF" => "taimef&uuml;sioloogia",
-					"GE" => "geneetika",
-					"BK" => "biokeemia",
-				);
-			break;
-
-			case "oppevorm_decline":
-				$trans = array(
-					"R" => "riigieelarvelisele",
-					"L" => "riigieelarvev&auml;lisele",
-					"K" => "kaug&otilde;ppe",
-				);
-			break;
-
-		}
-
-		$trans = $trans[$code];
-		return $trans;
-	}
-
-
 	/**
 
 		@attrib name=print
@@ -723,19 +682,21 @@ class vastuv6tt_avaldus extends class_base
 		$teine_eriala = NULL;
 		$error = false;
 		$mitu_avaldust = false;
+		$vastuv6tt_keskkond = get_instance (CL_VASTUV6TT_KESKKOND);
 
-		switch ($oppetase)
-		{
-			case "B":
-				$oppetase_l = "b";
-			break;
+		// switch ($oppetase)
+		// {
+			// case "B":
+				// $oppetase_l = "b";
+			// break;
 
-			case "M":
-			case "D":
-			case "O":
-				$oppetase_l = "m";
-			break;
-		}
+			// case "M":
+			// case "A":
+			// case "D":
+			// case "O":
+				// $oppetase_l = "m";
+			// break;
+		// }
 
 		foreach ($sisseastuja->connections_from(array ("type" => RELTYPE_AVALDUS)) as $connection)
 		{
@@ -744,15 +705,15 @@ class vastuv6tt_avaldus extends class_base
 			if ( ($avaldus->prop("oppevorm") == $oppevorm) && ($avaldus->id() != $prinditav_avaldus->id()) )
 			{
 				$mitu_avaldust = true;
-				$teine_eriala = $this->get_trans ("eriala_" . $oppetase_l . "_decline", $avaldus->prop("eriala"));
+				$teine_eriala = $vastuv6tt_keskkond->get_trans ("eriala_" . strtolower($oppetase) . "_decline", $avaldus->prop("eriala"));
 
 				if ($avaldus->prop("eelistus"))
 				{
-					$eelistus = $this->get_trans ("eriala_" . $oppetase_l . "_decline", $avaldus->prop("eriala"));
+					$eelistus = $vastuv6tt_keskkond->get_trans ("eriala_" . strtolower($oppetase) . "_decline", $avaldus->prop("eriala"));
 				}
 				elseif ($prinditav_avaldus->prop("eelistus"))
 				{
-					$eelistus = $this->get_trans ("eriala_" . $oppetase_l . "_decline", $prinditav_avaldus->prop("eriala"));
+					$eelistus = $vastuv6tt_keskkond->get_trans ("eriala_" . strtolower($oppetase) . "_decline", $prinditav_avaldus->prop("eriala"));
 				}
 				else
 				{
@@ -763,25 +724,11 @@ class vastuv6tt_avaldus extends class_base
 
 		if ($mitu_avaldust)
 		{
-			if ($oppetase == "B")
-			{
-				$template = "avaldus_t6end.html";
-			}
-			else
-			{
-				$template = "avaldus_t6end_m.html";
-			}
+			$template = "avaldus_t6end_" . strtolower($oppetase) . ".html";
 		}
 		else
 		{
-			if ($oppetase == "B")
-			{
-				$template = "avaldus_t6end1.html";
-			}
-			else
-			{
-				$template = "avaldus_t6end1_m.html";
-			}
+			$template = "avaldus_t6end1_" . strtolower($oppetase) . ".html";
 		}
 
 		$vajalikud_hinded = $this->vajalikud_hinded($eriala, $oppetase, $oppevorm);
@@ -795,7 +742,7 @@ class vastuv6tt_avaldus extends class_base
 			"ex_ingl" => "Inglise keel",
 			"ex_sks" => "Saksa keel",
 			"ex_pr" => "Prantsuse keel",
-			"ex_eesti" => "Eesti keel v&otilde;&otilde;rkeelena",
+			"ex_eesti" => "Eesti keel teise keelena",
 			"ex_vene" => "Vene keel",
 			"ex_yhisk" => "&uuml;hiskonna&otilde;petus",
 			"ex_ajalugu" => "Ajalugu",
@@ -865,10 +812,10 @@ class vastuv6tt_avaldus extends class_base
 			"perenimi" => $sisseastuja->prop("isik_lastname"),
 			"isikukood" => $sisseastuja->prop("isik_personal_id"),
 			"sisseastuja_nr" => $prinditav_avaldus->prop("eriala") . $prinditav_avaldus->prop("oppevorm") . $sisseastuja->prop("oppetase") . sprintf("%04d", $sisseastuja->prop("sisseastuja_nr")),
-			"eriala" => $this->get_trans ("eriala_" . $oppetase_l . "_decline", $eriala),
+			"eriala" => $vastuv6tt_keskkond->get_trans ("eriala_" . strtolower($oppetase) . "_decline", $eriala),
 			"eriala2" => $teine_eriala,
 			"eelistus" => $eelistus,
-			"oppevorm" => $this->get_trans ("oppevorm_decline", $oppevorm),
+			"oppevorm" => $vastuv6tt_keskkond->get_trans ("oppevorm_decline", $oppevorm),
 			"keskhinne" => $sisseastuja->prop("keskhinne"),
 			"viisi" => $sisseastuja->prop("kk_hinne_5"),
 			"neljasid" => $sisseastuja->prop("kk_hinne_4"),
@@ -879,6 +826,7 @@ class vastuv6tt_avaldus extends class_base
 			"ak_kolmesid" => $sisseastuja->prop("ak_hinne_3"),
 			"ak_kahtesid" => $sisseastuja->prop("ak_hinne_2"),
 			"ak_yhtesid" => $sisseastuja->prop("ak_hinne_1"),
+			"ak_hinne_l6put88" => $sisseastuja->prop("ak_hinne_l6put88"),
 			"hinded_a" => $sisseastuja->prop("ak_hinne_a"),
 			"hinded_b" => $sisseastuja->prop("ak_hinne_b"),
 			"hinded_c" => $sisseastuja->prop("ak_hinne_c"),

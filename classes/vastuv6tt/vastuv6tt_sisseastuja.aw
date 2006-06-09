@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_sisseastuja.aw,v 1.1 2006/01/18 22:29:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vastuv6tt/vastuv6tt_sisseastuja.aw,v 1.2 2006/06/09 13:57:42 kristo Exp $
 // vastuv6tt_sisseastuja.aw - Sisseastuja
 /*
 
@@ -52,9 +52,11 @@
 
 @property avaldus_title type=text subtitle=1 store=no
 
-@property sisseastumisavaldused_b type=releditor reltype=RELTYPE_AVALDUS store=no props=eriala,eriala_b,oppevorm,oppetase,eelistus,sisseastuja_nr,isik_firstname,isik_lastname no_caption=1
+// @property sisseastumisavaldused_b type=releditor reltype=RELTYPE_AVALDUS store=no props=eriala,eriala_b,oppevorm,oppetase,eelistus,sisseastuja_nr,isik_firstname,isik_lastname no_caption=1
 
-@property sisseastumisavaldused_m type=releditor reltype=RELTYPE_AVALDUS store=no props=eriala,eriala_m,oppevorm,oppetase,eelistus,sisseastuja_nr,isik_firstname,isik_lastname no_caption=1
+// @property sisseastumisavaldused_m type=releditor reltype=RELTYPE_AVALDUS store=no props=eriala,eriala_m,oppevorm,oppetase,eelistus,sisseastuja_nr,isik_firstname,isik_lastname no_caption=1
+
+@property sisseastumisavaldused type=releditor reltype=RELTYPE_AVALDUS store=no props=eriala,oppevorm,oppetase,eelistus,sisseastuja_nr,isik_firstname,isik_lastname no_caption=1
 
 // konkursilehed
 @property konkursilehed_tbl type=table no_caption=1 store=no
@@ -82,20 +84,12 @@
 @caption Riigieksamite hinded
 
 
-// @property ex_kirjand type=text store=no
-// @caption Kirjand
-@layout box1 type=hbox
-@property ex_kirjand_aasta type=select parent=box1
+@property ex_kirjand type=text store=no
+@caption Kirjand
+@property ex_kirjand_aasta type=select parent=ex_kirjand datatype=int
 @caption aasta
-@property ex_kirjand_hinne type=textbox parent=box1
+@property ex_kirjand_hinne type=textbox parent=ex_kirjand size=3 datatype=int
 @caption hinne
-
-// @property ex_kirjand type=text store=no
-// @caption Kirjand
-// @property ex_kirjand_aasta type=select parent=ex_kirjand datatype=int
-// @caption aasta
-// @property ex_kirjand_hinne type=textbox parent=ex_kirjand size=3 datatype=int
-// @caption hinne
 
 @property ex_ingl type=text store=no
 @caption Inglise keel
@@ -232,6 +226,8 @@
 @property ak_hinne_e type=textbox parent=hinnete_arvud2 size=2 datatype=int
 @caption E
 
+@property ak_hinne_l6put88 type=textbox size=2
+@caption L&otilde;put&ouml;&ouml;/eksami hinne
 
 
 
@@ -252,12 +248,13 @@
 @property sisseastuja_nr_title type=text store=no
 @caption Sisseastuja number
 
+@property tulemuste_teavitusviis type=chooser
+@caption Konkursitulemuste teavitamise viis
+
+
 //// ISIKUANDMED
 @property isik_title type=text subtitle=1 store=no
 @caption Isikuandmed
-
-
-
 
 @property isik_firstname2 type=textbox maxlength=50 store=no
 @caption Eesnimi
@@ -314,6 +311,9 @@
 
 @property haridus_k6rgkool type=textbox
 @caption Eelnevalt l&otilde;petatud k&otilde;rgkool
+
+@property haridus_kool_eriala type=textbox
+@caption L&otilde;petatud eriala
 
 @property kool_title type=text subtitle=1 store=no
 @caption Kool, mille l&otilde;putunnistus esitatud
@@ -397,17 +397,17 @@
 @property tulemus_vk type=textbox size=3 datatype=int
 @caption Maastikuarhitektuuri erialatest
 
-@property tulemus_vl type=textbox size=3 datatype=int
-@caption Liha- ja piimatehnoloogia eriala vestlus
+// @property tulemus_vl type=textbox size=3 datatype=int
+// @caption Liha- ja piimatehnoloogia eriala vestlus
 
 @property tulemus_vm type=textbox size=3 datatype=int
 @caption Maastikukaitse- ja hoolduse eriala vestlus
 
-@property tulemus_vv type=textbox size=3 datatype=int
-@caption Veterinaarmeditsiini eriala vestlus
+// @property tulemus_vv type=textbox size=3 datatype=int
+// @caption Veterinaarmeditsiini eriala vestlus
 
-@property tulemus_vr type=textbox size=3 datatype=int
-@caption Rakendush&uuml;drobioloogia eriala vestlus
+// @property tulemus_vr type=textbox size=3 datatype=int
+// @caption Rakendush&uuml;drobioloogia eriala vestlus
 
 
 
@@ -428,7 +428,7 @@ CREATE TABLE `vastuv6tt_sisseastuja` (
 	`kustutatud` int(1) NOT NULL default '0',
 
 	`sisseastuja_nr` int(4) ZEROFILL NOT NULL default '0' AUTO_INCREMENT,
-	`oppetase` enum ('B','M','D','O') default 'B',
+	`oppetase` enum ('B','M','D','O','A') default 'B',
 	`v66rkeel` enum ('I','S','V') default 'I',
 	`oppekeel` varchar(100) default NULL,
 	`t88koht` text default NULL,
@@ -438,6 +438,7 @@ CREATE TABLE `vastuv6tt_sisseastuja` (
 	`kodakondsus` varchar(200) default 'Eesti',
 	`elamisluba` enum ('A','T') default 'A',
 	`elukohamaa` varchar(200) default NULL,
+	!!!`tulemuste_teavitusviis` char(1) default NULL,
 
 	`isik_firstname` varchar(50) default NULL,
 	`isik_lastname` varchar(50) default NULL,
@@ -464,6 +465,7 @@ CREATE TABLE `vastuv6tt_sisseastuja` (
 	`haridus_kool_aasta` int(4) unsigned default NULL,
 	`haridus_kool_kood` int(4) unsigned default NULL,
 	`haridus_kool_6ppevorm` enum ('P','O','K','E') default 'P',
+	!!!`haridus_kool_eriala` varchar(40) default NULL,
 
 	`pere_isa_nimi` varchar(255) default NULL,
 	`pere_isa_tel` varchar(40) default NULL,
@@ -517,6 +519,7 @@ CREATE TABLE `vastuv6tt_sisseastuja` (
 	`ak_hinne_c` int(3) unsigned default NULL,
 	`ak_hinne_d` int(3) unsigned default NULL,
 	`ak_hinne_e` int(3) unsigned default NULL,
+	!!!`ak_hinne_l6put88` int(3) unsigned default NULL,
 
 	`tulemus_ek` int(3) unsigned default NULL,
 	`tulemus_kk` int(3) unsigned default NULL,
@@ -579,8 +582,6 @@ class vastuv6tt_sisseastuja extends class_base
 			break;
 
 			case "M":
-			case "D":
-			case "O":
 				if ($sisseastuja->prop("andmete_kinnitus"))
 				{
 					$seadete_haldur = $keskkond->prop ("magistri_seaded_piiratud");
@@ -590,8 +591,42 @@ class vastuv6tt_sisseastuja extends class_base
 					$seadete_haldur = $keskkond->prop ("magistri_seaded");
 				}
 			break;
+
+			case "A":
+				if ($sisseastuja->prop("andmete_kinnitus"))
+				{
+					$seadete_haldur = $keskkond->prop ("magistri_seaded32_piiratud");
+				}
+				else
+				{
+					$seadete_haldur = $keskkond->prop ("magistri_seaded32");
+				}
+			break;
+
+			case "D":
+				if ($sisseastuja->prop("andmete_kinnitus"))
+				{
+					$seadete_haldur = $keskkond->prop ("doktori_seaded_piiratud");
+				}
+				else
+				{
+					$seadete_haldur = $keskkond->prop ("doktori_seaded");
+				}
+			break;
+
+			case "O":
+				if ($sisseastuja->prop("andmete_kinnitus"))
+				{
+					$seadete_haldur = $keskkond->prop ("opetaja_seaded_piiratud");
+				}
+				else
+				{
+					$seadete_haldur = $keskkond->prop ("opetaja_seaded");
+				}
+			break;
 		}
 
+		aw_session_set ("vastuv6tt_oppetase", $sisseastuja->prop("oppetase"));
 		$this->cfgmanager = $seadete_haldur;
 		// END bakalaureuse ja kraadi6ppe erinevad vormid
 	}
@@ -603,6 +638,7 @@ class vastuv6tt_sisseastuja extends class_base
 		$retval = PROP_OK;
 		$oppetase = $sisseastuja->prop("oppetase");
 		$oppetase_l = $this->get_oppetase_l ($oppetase);
+		$vastuv6tt_keskkond = get_instance (CL_VASTUV6TT_KESKKOND);
 
 		foreach ($sisseastuja->connections_to() as $connection)
 		{
@@ -615,9 +651,9 @@ class vastuv6tt_sisseastuja extends class_base
 			}
 		}
 
-		if ( (is_numeric ($arr["request"]["sisseastumisavaldused_b"])) || (is_numeric ($arr["request"]["sisseastumisavaldused_m"])) )
+		if ( (is_numeric ($arr["request"]["sisseastumisavaldused"])) || (is_numeric ($arr["request"]["sisseastumisavaldused_m"])) )
 		{
-			if ( ($data["name"] == "sisseastumisavaldused_b") || ($data["name"] == "sisseastumisavaldused_m") || ($data["name"] == "avaldus_title") || ($data["name"] == "avaldused_tbl") )
+			if ( ($data["name"] == "sisseastumisavaldused") || ($data["name"] == "sisseastumisavaldused_m") || ($data["name"] == "avaldus_title") || ($data["name"] == "avaldused_tbl") )
 			{
 				$releditor_avaldus_id = $arr["request"][$data["name"]];
 				$this->avaldused_editor = "2";
@@ -627,9 +663,9 @@ class vastuv6tt_sisseastuja extends class_base
 				return PROP_IGNORE;
 			}
 		}
-		elseif ( ($arr["request"]["sisseastumisavaldused_b"] == "new") || ($arr["request"]["sisseastumisavaldused_m"] == "new") )
+		elseif ( ($arr["request"]["sisseastumisavaldused"] == "new") || ($arr["request"]["sisseastumisavaldused_m"] == "new") )
 		{
-			if ( ($data["name"] == "sisseastumisavaldused_b") || ($data["name"] == "sisseastumisavaldused_m") || ($data["name"] == "avaldus_title") || ($data["name"] == "avaldused_tbl") )
+			if ( ($data["name"] == "sisseastumisavaldused") || ($data["name"] == "sisseastumisavaldused_m") || ($data["name"] == "avaldus_title") || ($data["name"] == "avaldused_tbl") )
 			{
 				$releditor_avaldus_id = "new";
 				$this->avaldused_editor = "1";
@@ -679,19 +715,27 @@ class vastuv6tt_sisseastuja extends class_base
 				}
 				else
 				{
-					if (  (is_numeric ($arr["request"]["sisseastumisavaldused_b"])) || (is_numeric ($arr["request"]["sisseastumisavaldused_m"]))  )
+					if (  (is_numeric ($arr["request"]["sisseastumisavaldused"])) || (is_numeric ($arr["request"]["sisseastumisavaldused_m"]))  )
 					{
 						$data["value"] = "Muuda avaldust";
 					}
 					else
 					{
-						$data["value"] = "Lisa uus avaldus";
+						$data["value"] = "Vali eriala";
 					}
 				}
 				break;
 
  			case "nimi_title":
 				$data["value"] = "Sisseastuja " . $sisseastuja->prop("isik_firstname") . " " . $sisseastuja->prop("isik_lastname") . " (nr: " . sprintf("%04d",$sisseastuja->prop("sisseastuja_nr")) . ", isikukood: " . $sisseastuja->prop("isik_personal_id") . ")";
+				break;
+
+			case "tulemuste_teavitusviis":
+				$options = array(
+					"P" => "Kirjaga",
+					"E" => "E-postiga",
+				);
+				$data["options"] = $options;
 				break;
 
  			case "keskkond_tagasilink":
@@ -703,7 +747,7 @@ class vastuv6tt_sisseastuja extends class_base
 				break;
 
 			case "oppetase":
-				$data["options"] = $this->get_trans("oppetase");
+				$data["options"] = $vastuv6tt_keskkond->get_trans("oppetase");
 				break;
 
 			case "ex_kirjand_aasta":
@@ -778,7 +822,7 @@ class vastuv6tt_sisseastuja extends class_base
 				break;
 
 			case "isik_social_status":
-				$data["options"] = $this->get_trans("social_status");
+				$data["options"] = $vastuv6tt_keskkond->get_trans("social_status");
 				break;
 
 			case "isik_gender":
@@ -789,11 +833,11 @@ class vastuv6tt_sisseastuja extends class_base
 				break;
 
 			case "v66rkeel":
-				$data["options"] = $this->get_trans("v66rkeel");
+				$data["options"] = $vastuv6tt_keskkond->get_trans("v66rkeel");
 				break;
 
 			case "elukoht":
-				$data["options"] = $this->get_trans("elukoht");
+				$data["options"] = $vastuv6tt_keskkond->get_trans("elukoht");
 				break;
 
 			case "kodakondsus":
@@ -806,7 +850,7 @@ class vastuv6tt_sisseastuja extends class_base
 				break;
 
 			case "elamisluba":
-				$data["options"] = $this->get_trans("elamisluba");
+				$data["options"] = $vastuv6tt_keskkond->get_trans("elamisluba");
 				break;
 
 			case "elukohamaa":
@@ -883,23 +927,23 @@ class vastuv6tt_sisseastuja extends class_base
 
 //haridus
 			case "haridus_v2lismaal":
-				$data["options"] = $this->get_trans("haridus_v2lismaal");
+				$data["options"] = $vastuv6tt_keskkond->get_trans("haridus_v2lismaal");
 				break;
 
 			case "haridus_medal":
-				$data["options"] = $this->get_trans("haridus_medal");
+				$data["options"] = $vastuv6tt_keskkond->get_trans("haridus_medal");
 				break;
 
 			case "haridus_kool_tyyp":
-				$data["options"] = $this->get_trans("haridus_kool_tyyp");
+				$data["options"] = $vastuv6tt_keskkond->get_trans("haridus_kool_tyyp");
 				break;
 
 			case "haridus_kool_6ppevorm":
-				$data["options"] = $this->get_trans("haridus_kool_6ppevorm");
+				$data["options"] = $vastuv6tt_keskkond->get_trans("haridus_kool_6ppevorm");
 				break;
 // END haridus
 
-			case "sisseastumisavaldused_b":
+			case "sisseastumisavaldused":
 			case "sisseastumisavaldused_m":
 
 				// uued avaldused 6igesse kohta
@@ -941,7 +985,8 @@ class vastuv6tt_sisseastuja extends class_base
 				$url = $this->mk_my_orb("change", array(
 						"id" => $sisseastuja->id(),
 						"group" => "grp_sisseastuja_avaldused",
-						"sisseastumisavaldused_" . $oppetase_l => "new",
+						// "sisseastumisavaldused_" . $oppetase_l => "new",
+						"sisseastumisavaldused" => "new",
 					)
 				);
 				$toolbar = &$data["toolbar"];
@@ -958,7 +1003,8 @@ class vastuv6tt_sisseastuja extends class_base
 				"change", array(
 										"id" => $sisseastuja->id(),
 										"group" => "grp_sisseastuja_avaldused",
-										"sisseastumisavaldused_" . $oppetase_l => "new",
+										// "sisseastumisavaldused_" . $oppetase_l => "new",
+										"sisseastumisavaldused" => "new",
 									)
 				);
 				$toolbar = &$data["toolbar"];
@@ -1012,11 +1058,12 @@ class vastuv6tt_sisseastuja extends class_base
 							"katse" => $konkursileht,
 							"avaldus_id" => $avaldus_id,
 							"sisseastuja_id" => $sisseastuja->id(),
+							"keskkond_id" => $keskkond->id(),
 							)
 						);
 
 						$table->define_data(array(
-							"nimi" => $this->get_trans ("katse", $konkursileht),
+							"nimi" => $vastuv6tt_keskkond->get_trans ("katse", $konkursileht),
 							"printed" => $printed,
 							"print" => html::href(array(
 										"caption" => t("Prindi konkursileht"),
@@ -1048,7 +1095,7 @@ class vastuv6tt_sisseastuja extends class_base
 
 				$table->define_field(array(
 					"name" => "oppevorm",
-					"caption" => t("&Otilde;ppevorm"),
+					"caption" => t("&otilde;ppevorm"),
 					"sortable" => 1
 				));
 
@@ -1060,7 +1107,7 @@ class vastuv6tt_sisseastuja extends class_base
 
 				$table->define_field(array(
 					"name" => "print",
-					"caption" => t("Tõend"),
+					"caption" => t("T&otilde;end"),
 					"sortable" => 1
 				));
 
@@ -1083,18 +1130,19 @@ class vastuv6tt_sisseastuja extends class_base
 							"url" => $print_url,
 						)
 					);
-					$prindi_t6end = $sisseastuja->prop("andmete_kinnitus") ? $print_link : t("Andmed kinnitamata.");
-					$eriala = $this->get_trans ("eriala_" . $oppetase_l, $avaldus->prop("eriala"));
+					$prindi_t6end = $sisseastuja->prop("andmete_kinnitus") ? $print_link : "Andmed kinnitamata.";
+					$eriala = $vastuv6tt_keskkond->get_trans ("eriala_" . strtolower($oppetase), $avaldus->prop("eriala"));
 
 					if ($data["name"] == "avaldused_tbl")
 					{
 						$eriala = html::href(array(
-							"caption" => $this->get_trans ("eriala_" . $oppetase_l, $avaldus->prop("eriala")),
+							"caption" => $vastuv6tt_keskkond->get_trans ("eriala_" . strtolower($oppetase), $avaldus->prop("eriala")),
 							"url" => $this->mk_my_orb(
 								"change", array(
 										"id" => $sisseastuja->id(),
 										"group" => "grp_sisseastuja_avaldused",
-										"sisseastumisavaldused_" . $oppetase_l => $avaldus->id(),
+										// "sisseastumisavaldused_" . $oppetase_l => $avaldus->id(),
+										"sisseastumisavaldused" => $avaldus->id(),
 									),
 								"vastuv6tt_sisseastuja"
 								),
@@ -1105,10 +1153,11 @@ class vastuv6tt_sisseastuja extends class_base
 					$table->define_data(array(
 						"eriala" => $eriala,
 						"print" => $prindi_t6end,
-						"oppevorm" => $this->get_trans ("oppevorm", $avaldus->prop("oppevorm")),
+						"oppevorm" => $vastuv6tt_keskkond->get_trans ("oppevorm", $avaldus->prop("oppevorm")),
 						"eelistus" => $eelistus,
 						"from" => $connection->id(),
-						"_active" => ($arr["request"]["sisseastumisavaldused_" . $oppetase_l] == $connection->prop("to")),
+						// "_active" => ($arr["request"]["sisseastumisavaldused_" . $oppetase_l] == $connection->prop("to")),
+						"_active" => ($arr["request"]["sisseastumisavaldused"] == $connection->prop("to")),
 					));
 				}
 
@@ -1131,25 +1180,25 @@ class vastuv6tt_sisseastuja extends class_base
 
 		if ( ($arr["request"]["avaldused_editor"] == "1") || ($arr["request"]["avaldused_editor"] == "2") )
 		{
-			if ( ($data["name"] == "sisseastumisavaldused_b") || ($data["name"] == "sisseastumisavaldused_m") )
+			if ( ($data["name"] == "sisseastumisavaldused") || ($data["name"] == "sisseastumisavaldused_m") )
 			{
 				$oppetase = $sisseastuja->prop("oppetase");
 
-				if (($oppetase == "B") && ($data["name"] == "sisseastumisavaldused_m"))
-				{
-					return PROP_IGNORE;
-				}
-				if (($oppetase != "B") && ($data["name"] == "sisseastumisavaldused_b"))
-				{
-					return PROP_IGNORE;
-				}
+				// if (($oppetase == "B") && ($data["name"] == "sisseastumisavaldused_m"))
+				// {
+					// return PROP_IGNORE;
+				// }
+				// if (($oppetase != "B") && ($data["name"] == "sisseastumisavaldused_b"))
+				// {
+					// return PROP_IGNORE;
+				// }
 
 				$isikukood = $sisseastuja->prop("isik_personal_id");
 				$oppetase_l = $this->get_oppetase_l ($oppetase);
 				$arr["sisseastumisavaldused_reled_name"] = $data["name"];
 				$avaldused = $this->avaldused($arr);
 				$oppevorm = $data["value"]['oppevorm'];
-				$eriala = $data["value"]['eriala_' . $oppetase_l];
+				$eriala = $data["value"]['eriala'];
 				$eelistus = $data["value"]['eelistus'];
 				$data["value"]['sisseastuja_nr'] = $sisseastuja->prop("sisseastuja_nr");
 				$data["value"]['oppetase'] = $sisseastuja->prop("oppetase");
@@ -1159,21 +1208,21 @@ class vastuv6tt_sisseastuja extends class_base
 
 				if ($avaldused['kohad'][$oppevorm] >= 2)
 				{
-					echo t("Etten&auml;htud avalduste arv on t&auml;is. &uuml;he &otilde;ppevormi kohta saab esitada kuni kaks avaldust.<br>");
+					echo "Etten&auml;htud avalduste arv on t&auml;is. &uuml;he &otilde;ppevormi kohta saab esitada kuni kaks avaldust.<br>";
 					//$data["error"] = "Etten&auml;htud avalduste arv on t&auml;is. &uuml;he &otilde;ppevormi kohta saab esitada kuni kaks avaldust. ";
 					return PROP_FATAL_ERROR;
 				}
 
 				if ( ($avaldused['erialad'][$eriala] == $oppevorm) && ($arr["request"]["avaldused_editor"] == "1") )
 				{
-					echo t("Sellele erialale on valitud &otilde;ppevormis juba avaldus esitatud.<br>");
+					echo "Sellele erialale on valitud &otilde;ppevormis juba avaldus esitatud.<br>";
 					//$data["error"] = "Sellele erialale on valitud &otilde;ppevormis juba avaldus esitatud. ";
 					return PROP_FATAL_ERROR;
 				}
 
 				if (($avaldused['kohad'][$oppevorm] == 1) && ($eelistus != 1) && ($eelistus !== "0") )
 				{
-					echo t("Valitud &otilde;ppevormis on juba esitatud avaldus, seega tuleks m&auml;&auml;rata ka eelistatav eriala.<br>");
+					echo "Valitud &otilde;ppevormis on juba esitatud avaldus, seega tuleks m&auml;&auml;rata ka eelistatav eriala.<br>";
 					//$data["error"] = "Valitud &otilde;ppevormis on juba esitatud avaldus, seega tuleks m&auml;&auml;rata ka eelistatav eriala. ";
 					return PROP_FATAL_ERROR;
 				}
@@ -1240,7 +1289,7 @@ class vastuv6tt_sisseastuja extends class_base
 				if (!(   ( ($arr["request"]["isik_firstname"]) && ($arr["request"]["isik_lastname"]) && ( !($sisseastuja->prop('oppetase')=="B")  ||  ($arr["request"]["oppekeel_txt"] || $arr["request"]["oppekeel_sel"]) )    )  ||  ( ($sisseastuja->prop('isik_firstname')) && ($sisseastuja->prop('isik_lastname')) && (!($sisseastuja->prop('oppetase')=="B")  || $sisseastuja->prop('oppekeel')) )   ))
 				{
 					return PROP_ERROR;
-					$data["error"] = t("Nimi v&otilde;i &otilde;ppekeel sisestamata. ");
+					$data["error"] = "Nimi v&otilde;i &otilde;ppekeel sisestamata. ";
 				}
 				break;
 
@@ -1268,8 +1317,8 @@ class vastuv6tt_sisseastuja extends class_base
 
 				if ($data["value"] > $max)
 				{
-					$data["error"] = t("Riigieksami hinne pole lubatud piirides. ");
-					echo t("Riigieksami hinne pole lubatud piirides.<br>");
+					$data["error"] = "Riigieksami hinne pole lubatud piirides. ";
+					echo "Riigieksami hinne pole lubatud piirides.<br>";
 					return PROP_ERROR;
 				}
 
@@ -1378,7 +1427,7 @@ class vastuv6tt_sisseastuja extends class_base
 			case "elukohamaa":
 				if ( ($arr["request"]["kodakondsus"] != "Eesti") && ($data["value"] == "-") )
 				{
-					$data["error"] = t("Elukohamaa sisestamata. Mitte-eesti kodanikel n&otilde;utav.");
+					$data["error"] = "Elukohamaa sisestamata. Mitte-eesti kodanikel n&otilde;utav.";
 					return PROP_ERROR;
 				}
 			break;
@@ -1386,7 +1435,7 @@ class vastuv6tt_sisseastuja extends class_base
 			case "elamisluba":
 				if ( ($arr["request"]["kodakondsus"] != "Eesti") && ($data["value"] == "-") )
 				{
-					$data["error"] = t("Elamisloa liik sisestamata. Mitte-eesti kodanikel n&otilde;utav.");
+					$data["error"] = "Elamisloa liik sisestamata. Mitte-eesti kodanikel n&otilde;utav.";
 					return PROP_ERROR;
 				}
 			break;
@@ -1434,6 +1483,7 @@ class vastuv6tt_sisseastuja extends class_base
 					break;
 
 					case "M":
+					case "A":
 					case "D":
 					case "O":
 						$arr['hindetyyp'] = "ak";
@@ -1460,7 +1510,8 @@ class vastuv6tt_sisseastuja extends class_base
 	function show($arr)
 	{
 		$sisseastuja = obj($arr["id"]);
-		$template = ($sisseastuja->prop ("oppetase") == "B") ? "sisseastuja_ylevaade_b.html" : "sisseastuja_ylevaade_m.html";
+		$template = "sisseastuja_ylevaade_" . strtolower ($sisseastuja->prop ("oppetase")) . ".html";
+		$vastuv6tt_keskkond = get_instance (CL_VASTUV6TT_KESKKOND);
 
 		$this->read_template($template);
 		$this->vars(array(
@@ -1507,28 +1558,29 @@ class vastuv6tt_sisseastuja extends class_base
 			"ak_hinne_c_show" => $sisseastuja->prop ("ak_hinne_c"),
 			"ak_hinne_d_show" => $sisseastuja->prop ("ak_hinne_d"),
 			"ak_hinne_e_show" => $sisseastuja->prop ("ak_hinne_e"),
+			"ak_hinne_l6put88_show" => $sisseastuja->prop ("ak_hinne_l6put88"),
 			"keskhinne_show" => $sisseastuja->prop ("keskhinne"),
 			"sisseastuja_nr_show" => sprintf("%04d", $sisseastuja->prop ("sisseastuja_nr")),
-			"oppetase_show" => $this->get_trans ("oppetase", $sisseastuja->prop ("oppetase")),
+			"oppetase_show" => $vastuv6tt_keskkond->get_trans ("oppetase", $sisseastuja->prop ("oppetase")),
 			"kodakondsus_show" => $sisseastuja->prop ("kodakondsus"),
-			"elamisluba_show" => $this->get_trans ("elamisluba", $sisseastuja->prop ("elamisluba")),
+			"elamisluba_show" => $vastuv6tt_keskkond->get_trans ("elamisluba", $sisseastuja->prop ("elamisluba")),
 			"elukohamaa_show" => $sisseastuja->prop ("elukohamaa"),
-			"gender_show" => $this->get_trans ("gender", $sisseastuja->prop ("isik_gender")),
+			"gender_show" => $vastuv6tt_keskkond->get_trans ("gender", $sisseastuja->prop ("isik_gender")),
 			"personal_id_show" => $sisseastuja->prop ("isik_personal_id"),
 			"birthday_show" => get_lc_date ($sisseastuja->prop ("isik_birthday"), LC_DATE_FORMAT_SHORT_FULLYEAR ),
-			"social_status_show" => $this->get_trans ("social_status", $sisseastuja->prop ("isik_social_status")),
+			"social_status_show" => $vastuv6tt_keskkond->get_trans ("social_status", $sisseastuja->prop ("isik_social_status")),
 			"laste_arv_show" => $sisseastuja->prop ("laste_arv"),
-			"elukoht_show" => $this->get_trans ("elukoht", $sisseastuja->prop ("elukoht")),
+			"elukoht_show" => $vastuv6tt_keskkond->get_trans ("elukoht", $sisseastuja->prop ("elukoht")),
 			"haridus_kood_show" => $sisseastuja->prop ("haridus_kood"),
 			"haridus_k6rgkool_show" => $sisseastuja->prop ("haridus_k6rgkool"),
 			"haridus_aasta_show" => $sisseastuja->prop ("haridus_aasta"),
-			"haridus_v2lismaal_show" => $this->get_trans ("haridus_v2lismaal", $sisseastuja->prop ("haridus_v2lismaal")),
-			"haridus_medal_show" => $this->get_trans ("haridus_medal", $sisseastuja->prop ("haridus_medal")),
-			"haridus_kool_tyyp_show" => $this->get_trans ("haridus_kool_tyyp", $sisseastuja->prop ("haridus_kool_tyyp")),
+			"haridus_v2lismaal_show" => $vastuv6tt_keskkond->get_trans ("haridus_v2lismaal", $sisseastuja->prop ("haridus_v2lismaal")),
+			"haridus_medal_show" => $vastuv6tt_keskkond->get_trans ("haridus_medal", $sisseastuja->prop ("haridus_medal")),
+			"haridus_kool_tyyp_show" => $vastuv6tt_keskkond->get_trans ("haridus_kool_tyyp", $sisseastuja->prop ("haridus_kool_tyyp")),
 			"haridus_kool_aasta_show" => $sisseastuja->prop ("haridus_kool_aasta"),
 			"haridus_kool_kood_show" => $sisseastuja->prop ("haridus_kool_kood"),
-			"haridus_kool_6ppevorm_show" => $this->get_trans ("haridus_kool_6ppevorm", $sisseastuja->prop ("haridus_kool_6ppevorm")),
-			"v66rkeel_show" => $this->get_trans ("v66rkeel", $sisseastuja->prop ("v66rkeel")),
+			"haridus_kool_6ppevorm_show" => $vastuv6tt_keskkond->get_trans ("haridus_kool_6ppevorm", $sisseastuja->prop ("haridus_kool_6ppevorm")),
+			"v66rkeel_show" => $vastuv6tt_keskkond->get_trans ("v66rkeel", $sisseastuja->prop ("v66rkeel")),
 			"aadress_kood_show" => $sisseastuja->prop ("aadress_kood"),
 			"aadress_t2nav_show" => $sisseastuja->prop ("aadress_t2nav"),
 			"aadress_sjsk_show" => $sisseastuja->prop ("aadress_sjsk"),
@@ -1599,7 +1651,10 @@ class vastuv6tt_sisseastuja extends class_base
 		$sisseastuja->save();
 
 		$connections = $sisseastuja->connections_from(array ("type" => RELTYPE_PERSON, "class_id" => CL_CRM_PERSON));
+
 		$connection = current ($connections);
+		if ($connection)
+		{
 		$isik = $connection->to();
 		$this->avaldused_editor = "0";
 
@@ -1626,15 +1681,20 @@ class vastuv6tt_sisseastuja extends class_base
 
 		$isik->save();
 
-
+		}
 
 			$connections = $sisseastuja->connections_from(array ("type" => RELTYPE_AVALDUS, "class_id" => CL_VASTUV6TT_AVALDUS));
-
 			foreach ($connections as $connection)
 			{
 				$avaldus = $connection->to();
 
-				$this->do_orb_method_call(array(
+				$ai = $avaldus->instance();
+				$ai->konkursipunktid(array(
+						"avaldus_id" => $avaldus->id(),
+						"sisseastuja_id" => $sisseastuja->id(),
+						"konkursipunktid_final" => 1,
+				));
+				/*$this->do_orb_method_call(array(
 					"action" => "konkursipunktid",
 					"class" => "vastuv6tt_avaldus",
 					"params" => array(
@@ -1642,7 +1702,7 @@ class vastuv6tt_sisseastuja extends class_base
 						"sisseastuja_id" => $sisseastuja->id(),
 						"konkursipunktid_final" => 1,
 					)
-				));
+				));*/
 
 				$avaldus->set_prop("oppetase", $sisseastuja->prop("oppetase"));
 				$avaldus->set_prop("isik_lastname", $sisseastuja->prop("isik_lastname"));
@@ -1721,189 +1781,6 @@ class vastuv6tt_sisseastuja extends class_base
 		return $avaldused;
 	}
 
-	function get_trans($propname, $code = false)
-	{
-		switch($propname)
-		{
-			case "social_status";
-				$trans = array (
-					"0" => t("Vallaline"),
-					"1" => t("Abielus"),
-					"2" => t("Vabaabielus"),
-				);
-				break;
-			case "eriala_b":
-				$trans = array(
-					"AG" => "Agronoomia",
-					"AI" => "Aiandus",
-					"PS" => "P&otilde;llumajandussaaduste tootmine ja turustamine",
-					"LK" => "Loomakasvatus",
-					"LP" => "Liha- ja piimatehnoloogia",
-					"KA" => "Kalakasvatus",
-					"KJ" => "Keskkonnamajandus",
-					"AK" => "Agro&ouml;koloogia",
-					"VM" => "Veterinaarmeditsiin",
-					"AR" => "Maastikuarhitektuur",
-					"MH" => "Maastikukaitse ja -hooldus",
-					"GE" => "Geodeesia",
-					"MK" => "Maakorraldus",
-					"EH" => "Maaehitus",
-					"VE" => "Veemajandus",
-					"KP" => "Kinnisvara planeerimine",
-					"EV" => "&ouml;konoomika ja ettev&otilde;tlus",
-					"MF" => "Majandusarvestus ja finantsjuhtimine",
-					"ME" => "Metsamajandus",
-					"MT" => "Metsat&ouml;&ouml;stus",
-					"LV" => "Loodusvarade kasutamine ja kaitse",
-					"EG" => "Ergonoomika",
-					"EK" => "Energiakasutus",
-					"TH" => "P&otilde;llumajandustehnika",
-					"ET" => "Ettev&otilde;ttetehnika",
-					"RB" => "Rakendush&uuml;drobioloogia",
-				);
-				break;
-
-			case "eriala_m":
-				$trans = array(
-					"AI" => "Aiandus",
-					"GK" => "Agrokeemia",
-					"MV" => "Maaviljelus",
-					"RM" => "Rohumaaviljelus ja s&ouml;&ouml;datootmine",
-					"TK" => "Taimekaitse",
-					"TV" => "Taimekasvatus",
-					"MD" => "Mullateadus",
-					"KM" => "Kodumajandus",
-					"OP" => "&Otilde;petajakoolitus",
-					"AR" => "Maastikuarhitektuur",
-					"KK" => "Keskkonnakaitse",
-					"VM" => "Veterinaarmeditsiin",
-					"PT" => "Piimatehnoloogia",
-					"LT" => "Lihatehnoloogia",
-					"TG" => "Toiduh&uuml;gieen ja veterinaarkontroll",
-					"TI" => "Toiduteadus",
-					"LK" => "Loomakasvatus",
-					"KB" => "Keemiline bioloogia",
-					"ME" => "Metsamajandus",
-					"MT" => "Metsat&ouml;&ouml;stus",
-					"EH" => "Maaehitus",
-					"MM" => "Maam&otilde;&otilde;tmine",
-					"VE" => "Veemajandus",
-					"RP" => "Raamatupidamine ja rahandus",
-					"EV" => "&ouml;konoomika ja ettev&otilde;tlus",
-					"TU" => "Turundus ja juhtimine",
-					"OV" => "&ouml;onoomika ja ettev&otilde;tlus (1-aastane &otilde;pe)",
-					"MF" => "Majandusarvestus ja finantsjuhtimine",
-					"TH" => "P&otilde;llumajandustehnika",
-					"PE" => "P&otilde;llumajandusenergeetika",
-					"HB" => "H&uuml;drobioloogia",
-					"LG" => "Looma&ouml;koloogia",
-					"BM" => "Botaanika ja m&uuml;koloogia",
-					"TF" => "Taimef&uuml;sioloogia",
-					"GE" => "Geneetika",
-					"BK" => "Biokeemia",
-				);
-				break;
-
-			case "oppetase":
-				$data["options"] = array(
-					"B" => "Bakalaureuse&otilde;pe",
-					"M" => "Magistri&otilde;pe",
-					"D" => "Doktori&otilde;pe",
-					"O" => "&Otilde;petajakoolitus",
-				);
-				break;
-
-			case "oppevorm":
-				$trans = array(
-					"R" => "Riigieelarveline",
-					"L" => "Riigieelarvev&auml;line",
-					"K" => "Kaug&otilde;pe",
-				);
-				break;
-
-			case "haridus_v2lismaal":
-				$trans = array(
-					"E" => t("Ei"),
-					"J" =>t( "Jah"),
-				);
-				break;
-
-			case "katse":
-				$trans = array(
-					"EK" => "Eesti keele test",
-					// "VV" => "Veterinaarmeditsiini eriala vestlus",
-					// "VR" => "Rakendush&uuml;drobioloogia eriala vestlus",
-					"VM" => "Maastikukaitse- ja hoolduse eriala vestlus",
-					// "VL" => "Liha- ja piimatehnoloogia eriala vestlus",
-					"KK" => "Maastikuarhitektuuri joonistuseksam",
-					"VK" => "Maastikuarhitektuuri erialatest",
-				);
-				break;
-
-			case "haridus_medal":
-				$trans = array(
-					"E" => t("Ei"),
-					"M" => t("Kuld"),
-					"H" => t("H&otilde;be"),
-					"K" =>t( "Kiitus"),
-				);
-				break;
-
-			case "haridus_kool_tyyp":
-				$trans = array(
-					"KK" => "Keskkool",
-					"G" => "G&uuml;mnaasium",
-					"T" => "Tehnikum",
-					"KU" => "Kutsekeskkool",
-				);
-				break;
-
-			case "haridus_kool_6ppevorm":
-				$trans = array(
-					"P" => "P&auml;evane",
-					"O" => "&otilde;htune",
-					"K" => "Kaugpe",
-					"E" => "Ekstern",
-				);
-				break;
-
-			case "v66rkeel":
-				$trans = array(
-					"I" => "Inglise",
-					"S" => "Saksa",
-					"V" => "Vene",
-				);
-				break;
-
-			case "elukoht":
-				$trans = array(
-					"L" => "Linn",
-					"M" => "Maa",
-				);
-				break;
-			case "elamisluba":
-				$trans = array(
-					"-" => "",
-					"A" => "Alaline",
-					"T" => "T&auml;htajaline",
-				);
-				break;
-
-			case "gender":
-				$trans = array(
-					"1" => "mees",
-					"2" => "naine",
-				);
-				break;
-		}
-
-		if ($code !== false)
-		{
-			$trans = $trans[$code];
-		}
-
-		return $trans;
-	}
 
 /**
     @attrib name=kustuta_avaldus
@@ -1933,6 +1810,11 @@ class vastuv6tt_sisseastuja extends class_base
 		$sisseastuja = obj($arr["sisseastuja_id"]);
 		$erialad = array ();
 		$vajalikud_katsed = array ();
+
+		if ($sisseastuja->prop("oppetase") != "B")
+		{
+			return array ();
+		}
 
 		foreach ($sisseastuja->connections_from(array("type" => RELTYPE_AVALDUS)) as $connection)
 		{
@@ -1989,6 +1871,7 @@ class vastuv6tt_sisseastuja extends class_base
 
 		@param sisseastuja_id required type=int
 		@param avaldus_id required type=int
+		@param keskkond_id required type=int
 		@param katse required
 
 		@returns
@@ -1996,12 +1879,15 @@ class vastuv6tt_sisseastuja extends class_base
 	**/
 	function prindi_konkursileht($arr)
 	{
+		$vastuv6tt_keskkond = get_instance (CL_VASTUV6TT_KESKKOND);
+		$keskkond = obj($arr["keskkond_id"]);
 		$template = "konkursilehed.html";
 		$konkursilehed = "";
 		$sisseastuja = obj($arr["sisseastuja_id"]);
 		$avaldus = obj($arr["avaldus_id"]);
 		$oppetase_l = $this->get_oppetase_l ($sisseastuja->prop("oppetase"));
 		$katse = $arr["katse"];
+		$katse_l = strtolower($katse);
 		$prinditud_konkursilehed = $sisseastuja->prop("konkursileht_prinditud");
 		$prinditud_konkursilehed = explode ("|", $prinditud_konkursilehed);
 		$prinditud_konkursilehed[] = $katse;
@@ -2019,11 +1905,11 @@ class vastuv6tt_sisseastuja extends class_base
 		$this->vars(array(
 			"sisseastuja_nr" => $avaldus->prop("eriala") . $avaldus->prop("oppevorm") . $sisseastuja->prop("oppetase") . sprintf("%04d", $sisseastuja->prop("sisseastuja_nr")),
 			"eesnimi" => $sisseastuja->prop("isik_firstname"),
-			"eriala" => $this->get_trans("eriala_" . $oppetase_l, $avaldus->prop("eriala")),
+			"eriala" => $vastuv6tt_keskkond->get_trans("eriala_" . strtolower($sisseastuja->prop("oppetase")), $avaldus->prop("eriala")),
 			"perenimi" => $sisseastuja->prop("isik_lastname"),
-			"katse_nimi" => $this->get_trans ("katse", $katse),
-			"aasta" => date("Y"),
+			"katse_nimi" => $vastuv6tt_keskkond->get_trans ("katse", $katse),
 			"sisseastuja_return_url" => $sisseastuja_return_url,
+			"toimumisaeg_koht" => $keskkond->prop ("katse_" . $katse_l . "_aegkoht"),
 		));
 		return $this->parse();
 	}
@@ -2037,6 +1923,7 @@ class vastuv6tt_sisseastuja extends class_base
 			break;
 
 			case "M":
+			case "A":
 			case "D":
 			case "O":
 				$oppetase_l = "m";
