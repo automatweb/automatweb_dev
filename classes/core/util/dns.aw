@@ -1,6 +1,6 @@
 <?php
 // dns.aw - various DNS related functionality, whois queries
-// $Header: /home/cvs/automatweb_dev/classes/core/util/dns.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/dns.aw,v 1.3 2006/06/09 11:24:01 dragut Exp $
 class dns extends aw_template
 {
 	// ns query types
@@ -28,16 +28,16 @@ class dns extends aw_template
 		$this->init("dns");
 	}
 
-	/**  
+	/** Draws the form for making whois query  
 		
-		@attrib name=query_form params=name nologin="1" default="0"
+		@attrib name=query_form params=name nologin="1" default="0" api=1
 		
 		
 		@returns
-		
+			Form for making whois query
 		
 		@comment
-
+			Uses enter_whois_query.tpl admin template.
 	**/
 	function query_form($args = array())
 	{
@@ -48,16 +48,18 @@ class dns extends aw_template
 		return $this->parse();
 	}
 	
-	/**  
+	/** Uses whois to get whois info for the specified domain 
 		
-		@attrib name=query params=name nologin="1" default="0"
+		@attrib name=query params=name nologin="1" default="0" api=1
 		
-		@param domain required
+		@param domain required type=string
 		
 		@returns
+			Preformatted string with the output of the 'whois' command
 		
-		
-		@comment
+		@examples
+			$i = get_instance('core/util/dns');
+			echo $i->query(array('domain' => 'struktuur.ee'));
 
 	**/
 	function query($args = array())
@@ -88,16 +90,14 @@ class dns extends aw_template
 		};
 	}
 	
-	/**  
+	/** Draws the form for making DNS query 
 		
-		@attrib name=dns_form params=name nologin="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
+		@attrib name=dns_form params=name nologin="1" default="0" api=1
 
+		@returns 
+			Form for making DNS query
+		@comment
+			Uses enter_domain_query.tpl admin template.
 	**/
 	function dns_form($args = array())
 	{
@@ -108,17 +108,18 @@ class dns extends aw_template
 		return $this->parse();
 	}
 	
-	/**  
+	/** Checks if the specified domain name is registered or not 
 		
-		@attrib name=dns_query params=name nologin="1" default="0"
+		@attrib name=dns_query params=name nologin="1" default="0" api=1
 		
-		@param domain required
+		@param domain required type=string
 		
 		@returns
+			String which tells if the domain is registered or not
 		
-		
-		@comment
-
+		@examples
+			$i = get_instance('core/util/dns');
+			echo $i->dns_query(array('domain'  => 'struktuur.ee'));
 	**/
 	function dns_query($args = array())
 	{
@@ -176,10 +177,19 @@ class dns extends aw_template
 		};
 	}
 
-	////
-	// !returns the content of a DNS record, the availavle record types are in $this->types
-	// parameters:
-	//   domain - the domain for which the info is requested
+	/** Queries nameservers for the specified domain
+		
+		@attrib name=get_record_NS params=name nologin="1" default="0" api=1
+		
+		@param domain required type=string
+			The domain for which the info is requested
+		@returns
+			The content of a DNS record, the available record types are in $this->types
+		
+		@examples
+			$i = get_instance('core/util/dns');
+			echo $i->get_record_NS(array('domain'  => 'struktuur.ee'));
+	**/
 	function get_record_NS($arr)
 	{
 		extract($arr);
@@ -210,6 +220,19 @@ class dns extends aw_template
 		return (int)$lid;
 	}
 
+	/** Gets the domainname for the URL
+		
+		@attrib name=get_domain_name_for_url params=pos nologin="1" default="0" api=1
+		
+		@param domain required type=string
+			The URL where the domainname will be extracted
+		@returns
+			The extracted domainname (last 2 parts of the url)
+		
+		@examples
+			$i = get_instance('core/util/dns');
+			echo $i->get_domain_name_for_url('http://www.struktuur.ee'); // prints 'struktuur.ee'
+	**/
 	function get_domain_name_for_url($domain)
 	{
 		$pts = explode(".", $domain);
