@@ -576,8 +576,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// create all access for the creator
 		$this->create_obj_access($oid);
-		
-
+		$this->can("admin", $oid);
 		// set brother to self if not specified.
 		if (!$objdata["brother_of"])
 		{
