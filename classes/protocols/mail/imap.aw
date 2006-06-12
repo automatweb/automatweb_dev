@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.33 2006/05/10 14:16:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.34 2006/06/12 13:46:56 tarvo Exp $
 // imap.aw - IMAP login 
+/*
+	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. õigemini ta tagastab need boxid kus seike kiri sees
+*/
 /*
 
 @classinfo syslog_type=ST_PROTO_IMAP 
@@ -148,7 +151,6 @@ class imap extends class_base
 
 			//  cert validating could probably be made an option later on
 			$mask = (1 == $obj->prop("use_ssl")) ? "{%s:%d/ssl/novalidate-cert}" : "{%s:%d}";
-
 			$this->servspec = sprintf($mask,$server,$port);
 			$mbox = str_replace("*","&",$this->use_mailbox);
 			$this->mboxspec = $this->servspec . $mbox;
@@ -156,6 +158,7 @@ class imap extends class_base
 			$err = imap_errors();
 			if (is_array($err))
 			{
+				arr("'".join("','",$err)."' -> on mailbox : ".$this->use_mailbox);
 				return join("<br>",$err);
 			};
 			$this->connected = true;
@@ -206,13 +209,15 @@ class imap extends class_base
 				foreach($list as $item)
 				{
 					$key = $realname = str_replace(chr(0),"",imap_utf7_decode(substr($item->name,strlen($this->servspec))));
-					//$status = imap_status($this->mbox,$item->name,SA_ALL);
+					$status = imap_status($this->mbox,$item->name,SA_ALL);
 					$res[$key] = array(
 						"name" => $realname,
 						"int_name" => str_replace("&","*",substr($item->name,strlen($this->servspec))),
 						"realname" => strpos($realname,".") === false ? $realname : substr($realname, strrpos($realname, '.') + 1),
 						"fullname" => substr($item->name,strlen($this->servspec)),
-						//"count" => ($status->unseen > 0) ? sprintf("<b>(%d)</b>",$status->unseen) : "",
+						"count" => array(
+							$status->messages => $status->unseen,
+						),
 					);
 				};
 			};
@@ -234,12 +239,15 @@ class imap extends class_base
 	**/
 	function get_folder_contents($arr)
 	{
+		
 		$cache = get_instance("cache");
 		$mboxinf = imap_mailboxmsginfo($this->mbox);
-
 		$ovr = $this->_get_overview();
 		$last_check = $ovr[$this->mboxspec];
 		$new_check = $this->_get_ovr_checksum($mboxinf);
+
+		$src = $cache->file_get($this->mbox_cache_id);
+		$mbox_over = aw_unserialize($src);
 
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
@@ -247,7 +255,6 @@ class imap extends class_base
 		if ($last_check != $new_check)
 		{
 			// update ovr
-
 			$ovr[$this->mboxspec] = $new_check;
 			$this->_set_overview($ovr);
 			$mboxinf = imap_mailboxmsginfo($this->mbox);
@@ -259,18 +266,16 @@ class imap extends class_base
 
 			$mbox_over["modified"] = $fmod;
 			$mbox_over["count"] = $count;
-
 			$fo = imap_sort($this->mbox,SORTDATE,0,SE_UID && SE_NOPREFETCH);
-
+			
 			$to_fetch = array_diff($fo,array_keys($mbox_over["contents"]));
-
 			$req_msgs = $mbox_over["contents"];
 
 			//$uidlist = join(",",$to_fetch);
 
 			// this will update the message cache ... it has to contain all
 			// the message bits in this mailbox
-			if ($count > 0)
+			if (count($to_fetch) > 0)
 			{
 				$overview = "";
 
@@ -315,12 +320,6 @@ class imap extends class_base
 			$mbox_over["contents"] = $req_msgs;
 			$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
 		}
-		else
-		{
-			$src = $cache->file_get($this->mbox_cache_id);
-			$mbox_over = aw_unserialize($src);
-		};
-
 		if (is_array($mbox_over["contents"]))
 		{
 			foreach(array_keys($mbox_over["contents"]) as $rkey => $ritem)
@@ -334,6 +333,7 @@ class imap extends class_base
 			}
 		};
 		$rv = $mbox_over["contents"];
+		enter_function("imap::from_filter");
 		if(strlen($arr["from_filter"]))
 		{
 			foreach($rv as $k => $v)
@@ -342,9 +342,69 @@ class imap extends class_base
 					unset($rv[$k]);
 			}
 		}
+		exit_function("imap::from_filter");
 		return $rv;
 	}
 	
+	/**
+		@param mailbox type=string
+		@comment
+			counts total/unread mailcount in given mailbox
+		@return
+			array(
+				total => unread
+			)
+
+	**/
+	function folder_count($arr)
+	{
+		$status = imap_status($this->mbox, $this->servspec . $arr["use_mailbox"], SA_ALL);
+		return array($status->messages => $status->unseen);
+	}
+
+	/**
+		@param mailbox type=string
+			the mailbox name to be opened
+		@comment
+			reopens imap stream into new mailbox
+		@return
+			true on success false otherwise
+		@examples
+
+		if(!change_folder(array(
+			"use_mailbox" => "INBOX.Sent"
+		))
+		{
+			die(arr(imap_errors()));
+		}
+
+	**/
+	function change_folder($arr)
+	{
+		if(imap_reopen($this->mbox, $this->servspec . $arr["use_mailbox"]))
+		{
+			$this->use_mailbox = $arr["use_mailbox"];
+		}
+		else
+		{
+			return false;
+		}
+		return true;
+	}
+
+
+	/**
+		@comment
+			returns currently connected mailbox'es name
+		@return
+			returns currently connected mailbox'es name
+		
+	**/
+	function current_mailbox()
+	{
+		return $this->use_mailbox;
+	}
+
 	/**
 	@attrib api=1 params=pos
 	@param string required type=string
