@@ -106,7 +106,8 @@ class doc_display extends aw_template
 			"page_title" => strip_tags($doc->prop("title")),			
 			"date" => $_date,
 			"edit_doc" => $em,
-			"doc_link" => $doc_link
+			"doc_link" => $doc_link,
+			"print_link" => aw_url_change_var("print", 1)
 		));
 
 		$ablock = "";
