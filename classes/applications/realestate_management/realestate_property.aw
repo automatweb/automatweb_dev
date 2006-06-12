@@ -1287,8 +1287,10 @@ class realestate_property extends class_base
 					$properties["picture_icon"]["value"] = $default_icon;
 					$properties["picture_icon"]["strvalue"] = aw_ini_get("baseurl").$default_icon;
 				}
-				$i = 1;
+				
+				//piltide sorteerimine metas elutseva järjekorra järgi
 
+				$i = 1;
 				while (isset ($properties["picture" . $i . "_url"]))
 				{
 					$picture = array (
@@ -1359,7 +1361,6 @@ class realestate_property extends class_base
 		exit_function("re_property::view");
 		return $res;
 	}
-
 
 /**
 	@attrib name=pictures_view nologin=1
@@ -2375,8 +2376,37 @@ class realestate_property extends class_base
 				"class_id" => CL_IMAGE,
 			)));
 			$pictures->sort_by(array("prop" => "ord", "order" => "asc"));
+			$existing_pics = $pictures->ids();
 			$pictures = $pictures->arr ();
 			$i = 1;
+
+			//piltide sorteerimine metas elutseva järjekorra järgi
+
+			if($this_object->meta("pic_order") && sizeof($this_object->meta("pic_order")) > 0)
+			{
+				$tmp_existing_pics = array();
+				foreach($this_object->meta("pic_order") as $ordered_pic)
+				{
+					if(in_array($ordered_pic , $existing_pics))
+					{
+						$tmp_existing_pics[] = $ordered_pic;
+					}
+				}
+				foreach($existing_pics as $existing_pic)
+				{
+					if(!in_array($existing_pic , $tmp_existing_pics))
+					{
+						$tmp_existing_pics[] = $existing_pic;
+					}
+				}
+				$existing_pics = $tmp_existing_pics;
+			}
+			$pictures = array();
+			foreach($existing_pics as $id)
+			{
+				if(is_oid($id))$pictures[] = obj($id);
+			}
+			//---------------
 
 			foreach ($pictures as $picture)
 			{

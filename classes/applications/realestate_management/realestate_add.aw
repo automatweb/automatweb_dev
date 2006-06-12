@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.15 2006/06/09 09:28:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.16 2006/06/12 12:17:35 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -658,7 +658,7 @@ class realestate_add extends class_base
 		$_SESSION["bank_payment"] = array(
 			"data"		=> $bank_meta,
 			"reference_nr"	=> $_SESSION["realestate_input_data"]["realestate_id"],
-			"test"		=> 1,
+		//	"test"		=> 1, // kui miskit testkeskkondades vaja katsetada.. sel juhul peab pangainfo ka testkeskkonna omaks muutma
 			"url" 		=> post_ru(),
 			"cancel"	=> post_ru(),
 		);
@@ -845,11 +845,42 @@ class realestate_add extends class_base
 				"class_id" => CL_IMAGE,
 			)));
 			$x = 0;
-			foreach($pictures->arr() as $pic)
+			
+			$existing_pics = $pictures->ids();
+			
+				if($this_object->meta("pic_order"))
+				{
+					$tmp_existing_pics = array();
+					foreach($this_object->meta("pic_order") as $ordered_pic)
+					{
+						if(in_array($ordered_pic , $existing_pics))
+						{
+							$tmp_existing_pics[] = $ordered_pic;
+						}
+					}
+					foreach($existing_pics as $existing_pic)
+					{
+						if(!in_array($existing_pic , $tmp_existing_pics))
+						{
+							$tmp_existing_pics[] = $existing_pic;
+						}
+					}
+					$existing_pics = $tmp_existing_pics;
+				}
+			
+/*			foreach($pictures->arr() as $pic)
 			{
 				$this->vars(array(
 					"picture".$x => $image_inst->make_img_tag_wl($pic->id()),
 					"picture".$x."del" => "<input type='checkbox' name='delete[".$pic->id()."]' value='".$pic->id()."'/>",
+				));
+				$x++;
+			}*/
+			foreach($existing_pics as $pic)
+			{
+				$this->vars(array(
+					"picture".$x => $image_inst->make_img_tag_wl($pic),
+					"picture".$x."del" => "<input type='checkbox' name='delete[".$pic."]' value='".$pic."'/>",
 				));
 				$x++;
 			}
@@ -1089,9 +1120,9 @@ class realestate_add extends class_base
 				if(is_oid($rlst_object->meta("added_from"))) $change = $rlst_object->meta("added_from")."?id=".$rlst_object->id();
 				else $change = $this->mk_my_orb("parse_alias", array("id" => $rlst_object->id(), "default" => 1));
 				$time = time();
-				$expire = (int)(($rlst_object->prop("expire") - $time)/604800);
+				$expire = (int)(($rlst_object->prop("expire") - $time)/86400);
 				if($rlst_object->prop("expire") - $time<1) $expire = t("Aegunud");
-				else $expire = t("Nähtav")." ".$expire." ".t("nädalat");
+				else $expire = t("Nähtav")." ".$expire." ".t("päeva");
 				if(!$rlst_object->prop("expire")) $expire = t("Maksmata");
 				if($expire == t("Maksmata")) $extend = "PAY";
 				else $extend = "EXTEND";
@@ -1233,6 +1264,25 @@ class realestate_add extends class_base
 		{
 			$existing_pics[] = $pic->id();
 		}
+		if($realestate_obj->meta("pic_order"))
+		{
+			$tmp_existing_pics = array();
+			foreach($realestate_obj->meta("pic_order") as $ordered_pic)
+			{
+				if(in_array($ordered_pic , $existing_pics))
+				{
+					$tmp_existing_pics[] = $ordered_pic;
+				}
+			}
+			foreach($existing_pics as $existing_pic)
+			{
+				if(!in_array($existing_pic , $tmp_existing_pics))
+				{
+					$tmp_existing_pics[] = $existing_pic;
+				}
+			}
+			$existing_pics = $tmp_existing_pics;
+		}
 		
 		if(is_array($args["delete"]))//kustutab pildiseosed
 		{
@@ -1275,11 +1325,13 @@ class realestate_add extends class_base
 							"from" => $existing_pics[$x],
 							"reltype" => "RELTYPE_REALESTATE_PICTURE",
 						));
+						$existing_pics[$x] = $upload_image['id'];
 					}
 				}
 			}
 			$x++;
 		}
+		$realestate_obj->set_meta("pic_order" , $existing_pics);
 		$unwanted_props = array("is_visible");//mida pole hea mõtet sessiooni panna ega salvestada
 		foreach($args as $key => $val)
 		{
@@ -1470,14 +1522,14 @@ class realestate_add extends class_base
 			$_SESSION["bank_payment"] = array(
 				"data"		=> $bank_meta,
 				"reference_nr"	=> $offer->id(),
-				"test"		=> 1,
+			//	"test"		=> 1,
 				"url" 		=> $ret_url,
 				"cancel"	=> $ret_url,
 			);
 			$bank_payment = get_instance(CL_BANK_PAYMENT);	
-			$ret.= '<a href="';
-			$ret.= $bank_payment->mk_my_orb("pay_site", array("die" => 1));
-			$ret.= '"> Maksma </a>';
+			$ret.= '<a href="javascript:window.close();" ';
+			$ret.= 'onClick=window.opener.location.href="'.$bank_payment->mk_my_orb("pay_site", array("die" => 1));
+			$ret.= '"> '.t("Maksma").' </a>';
 		}
 		else
 		{
