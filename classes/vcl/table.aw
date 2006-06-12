@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.81 2006/06/01 10:43:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.82 2006/06/12 13:43:25 tarvo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -937,6 +937,7 @@ class aw_table extends aw_template
 			$p_counter = 0;
 			foreach($this->data as $k => $v)
 			{
+				$enum[$k] = $v["id"];
 				$counter++;
 				$p_counter++;
 				// if this is not on the active page, don't show the damn thing
@@ -1218,6 +1219,10 @@ class aw_table extends aw_template
 					};
 					$tbl .= "</tr>\n";
 				};
+				if($this->final_enum)
+				{
+					aw_session_set("table_enum", $enum);
+				}
 			};
 		};
 		// sisu joonistamine lopeb
@@ -1244,6 +1249,16 @@ class aw_table extends aw_template
 
 		// tagastame selle käki
 		return $tbl;
+	}
+
+	/**
+		@param arg optional type=bool
+		@comment
+			sets the final table enumeration(after sortings and everything) with key's to session var
+	**/
+	function set_final_enum($arg = true)
+	{
+		$this->final_enum = $arg;
 	}
 
 	function _format_csv_field($d, $sep = ";")
