@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.34 2006/06/12 13:46:56 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.35 2006/06/12 14:27:26 tarvo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. õigemini ta tagastab need boxid kus seike kiri sees
@@ -252,7 +252,7 @@ class imap extends class_base
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
 		// mailbox has changed, reload from server
-		if ($last_check != $new_check)
+		if ($last_check != $new_check ||  true)
 		{
 			// update ovr
 			$ovr[$this->mboxspec] = $new_check;
@@ -270,7 +270,7 @@ class imap extends class_base
 			
 			$to_fetch = array_diff($fo,array_keys($mbox_over["contents"]));
 			$req_msgs = $mbox_over["contents"];
-
+			$to_fetch = array_values($to_fetch);
 			//$uidlist = join(",",$to_fetch);
 
 			// this will update the message cache ... it has to contain all
@@ -279,8 +279,12 @@ class imap extends class_base
 			{
 				$overview = "";
 
-				foreach($to_fetch as $msg_uid)
+				foreach($to_fetch as $cur_enum => $msg_uid)
 				{
+					if ("*" != $arr["to"] && !between($cur_enum+1,$arr["from"],$arr["to"]))
+					{
+						continue;
+					};
 					//print "fetching message with uid $msg_uid<br>";
 					//flush();
 					$hdrinfo = @imap_headerinfo($this->mbox,$msg_uid);
