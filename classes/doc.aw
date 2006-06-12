@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.129 2006/05/30 08:52:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.130 2006/06/12 13:47:04 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -698,7 +698,7 @@ class doc extends class_base
 			$obj_inst->set_create_new_version();
 		}
 		else
-		if (aw_global_get("uid") != $modby && !$this->_save_versions && is_oid($obj_inst->id()) && aw_ini_get("config.object_versioning") == 1)
+		if (aw_global_get("uid") != $modby && !$this->_save_versions && is_oid($obj_inst->id()) && aw_ini_get("config.object_versioning") == 1 && !$_SESSION["vers_created"][$obj_inst->id()])
 		{
 			$go = aw_global_get("gidlist_oid");
 			if (!$go[aw_ini_get("config.object_versioning_admin_group")])
@@ -986,10 +986,17 @@ class doc extends class_base
 				parse_str($request["edit_version"], $out);
 				$args["edit_version"] = $out["edit_version"];
 			};
+			
 			if ($request["create_new_version"] == 1 || $this->force_new_version)
 			{
 				// set edit version to new one
 				$args["edit_version"] = $this->db_fetch_field("SELECT version_id FROM documents_versions ORDER BY vers_crea DESC LIMIT 1", "version_id");
+				$_SESSION["vers_created"][$args["id"]] = $args["edit_version"];
+			}
+
+			if ($args["edit_version"] == "" && $_SESSION["vers_created"][$args["id"]])
+			{
+				$args["edit_version"] = $_SESSION["vers_created"][$args["id"]];
 			}
 		}
 	}
@@ -1234,6 +1241,12 @@ class doc extends class_base
 
 	function callback_on_load($p)
 	{
+		if (empty($p["request"]["edit_version"]) && $_SESSION["vers_created"][$p["request"]["id"]])
+		{
+			header("Location: ".aw_url_change_var("edit_version", $_SESSION["vers_created"][$p["request"]["id"]]));
+			die();
+		}
+
 		if (!empty($p["request"]["edit_version"]))
 		{
 			$out = array();
