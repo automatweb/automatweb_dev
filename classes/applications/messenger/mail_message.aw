@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.33 2006/05/10 14:16:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.34 2006/06/12 13:50:20 tarvo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -105,6 +105,28 @@ class mail_message extends class_base
 		));
 	}
 
+	/** returns formatted message
+	**/
+	function formatted_message($arg = array())
+	{
+		$arr = $this->fetch_message($arg);
+		$body = nl2br(create_links(htmlspecialchars($arr["content"])));
+		unset($arr["content"]);
+		$this->read_template("headers.tpl");
+		foreach($arr as $name => $value)
+		{
+			$this->vars(array(
+				"caption" => $name,
+				"content" => $value,	
+			));
+			$headers .= $this->parse("header_line");
+		}
+		$this->vars(array(
+			"header_line" => $headers,
+		));
+		$headers = $this->parse();
+		return $headers.$body;
+	}
 	////
 	// !Retrieves a message from specified messenger, specified folder,
 	// with specified id
@@ -602,7 +624,7 @@ class mail_message extends class_base
 		foreach($ol->arr() as $oid => $el)
 		{
 			$obj = new object($oid);
-			$autocomplete_options[$oid] = $obj->name();
+			$autocomplete_options[$obj->prop("mail")] = $obj->name()." (".$obj->prop("mail").")";
 		}
 
 		exit($cl_json->encode($option_data));
@@ -707,13 +729,7 @@ class mail_message extends class_base
 				$tb->add_menu_item(array(
 					"parent" => "calendar",
 					"text" => $clinf[$clid]["name"],
-/*					"url" => $this->mk_my_orb("register_event",array(
-						"mailbox" => $req["mailbox"],
-						"msgrid" => $req["msgrid"],
-						"msgid" => $req["msgid"],
-						"create_class" => $clid,
-					)),
-*/					"url" =>$this->mk_my_orb("new" , array(
+					"url" =>$this->mk_my_orb("new" , array(
 						"msgrid" => $req["msgrid"],
 						"msgid" => $req["msgid"],
 						"parent" => $ef,
@@ -955,7 +971,6 @@ class mail_message extends class_base
 		return $this->_gen_edit_url($arr);
 	}
 
-//--------------------register_event funktsiooni vist rohkem vaja ei ole--------------------
 	/** Creates a calendar event from a message object 
 		
 		@attrib name=register_event
@@ -1149,7 +1164,7 @@ class mail_message extends class_base
 
 	}
 	
-	/** Deletes a message 
+	/** Deletes a message / kind'a deprecated i guess 
 		
 		@attrib name=mail_delete
 
@@ -1168,6 +1183,18 @@ class mail_message extends class_base
 		exit;
 	}
 	
+	/**	deletes a message
+	**/
+	function delete_message($arg)
+	{
+		$msgr = get_instance(CL_MESSENGER_V2);
+		$msgr->set_opt("use_mailbox",$arg["mailbox"]);
+                $msgr->_connect_server(array(
+                        "msgr_id" => $arg["msgrid"],
+                ));
+		$msgr->drv_inst->delete_msgs_from_folder(array($arg["msgid"]));
+	}
+
 	/** Sends a message stored in local folders
 		
 		@attrib name=mail_send

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.21 2006/05/10 14:16:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.22 2006/06/12 13:50:20 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -27,21 +27,40 @@ caption Identiteet
 @property config type=relpicker reltype=RELTYPE_MAIL_CONFIG
 @caption Konfiguratsioon
 
-@property mailbox type=hidden group=main_view
+@property mailbox type=hidden group=mess_list,mail_view
 @caption Mailbox ID (sys)
 
+@groupinfo main_view caption="Kirjad" submit=no
+	@groupinfo mess_list caption="Postkast" parent=main_view
+		@property mail_toolbar type=toolbar no_caption=1 group=mess_list store=no
+		@caption Msg. toolbar
 
-// --- mailbox view group
-@property mail_toolbar type=toolbar no_caption=1 group=main_view store=no
-@caption Msg. toolbar
+		@layout message_view type=hbox width=15%:85% group=mess_list
 
-@layout message_view type=hbox width=15%:85% group=main_view
+		@property treeview type=text parent=message_view group=mess_list no_caption=1
+		@caption Folderid
 
-@property treeview type=text parent=message_view group=main_view no_caption=1
-@caption Folderid
+		@property message_list type=table no_caption=1 group=mess_list parent=message_view no_caption=1
+		@caption Kirjad
 
-@property message_list type=table no_caption=1 group=main_view parent=message_view no_caption=1
-@caption Kirjad
+	@groupinfo new_mail caption="Uus kiri" parent=main_view submit=no
+		@property new_mail_toolbar type=toolbar group=new_mail submit=no no_caption=1
+		@caption uue maili tuulbar
+		
+		@property to_mail type=textbox store=no group=new_mail
+		@caption Kellele
+
+		@property to_text type=text store=no group=new_mail
+		@caption text
+
+	@groupinfo mail_view caption="Kirja vaade" parent=main_view submit=no
+		@layout mail_view_split type=hbox width=15%:85% group=mail_view
+
+			@property mail_view_tree type=text parent=mail_view_split group=mail_view no_caption=1
+			@caption Kaustapuu
+
+			@property mail_contents type=text parent=mail_view_split no_caption=1 group=mail_view
+			@caption Maili vaate t&ouml;&ouml;riistariba
 
 // muu mudru
 
@@ -109,7 +128,6 @@ comment Minutites
 @groupinfo settings caption="Seaded" parent=general
 @groupinfo advanced caption="Lisaks" parent=general
 @groupinfo imap caption="IMAP" parent=general
-@groupinfo main_view caption="Kirjad" submit=no
 @groupinfo search caption=Otsing submit=no submit_action=change submit_method=GET
 @groupinfo rules caption=Reeglid submit=no
 @groupinfo rules_add caption="Lisa reegel" parent=rules
@@ -190,7 +208,7 @@ class messenger_v2 extends class_base
 
 	}
 
-	/**
+	/** called by aw message
 		@attrib params=name
 		@param uid required type=string
 		@comment
@@ -202,6 +220,8 @@ class messenger_v2 extends class_base
 		$_SESSION["current_user_has_messenger"] = $tmp;
 	}
 
+	/** returns messenger oid for user
+	**/
 	function get_messenger_for_user($arr = array())
 	{
 		$uid = $arr["uid"];
@@ -362,6 +382,106 @@ class messenger_v2 extends class_base
 				}
 				$prop["options"] = $cl_names;
 				break;
+			case "to_text":
+				$prop["value"] = html::textarea(array(
+					"name" => "test_textarea",
+				));
+				$fck_inst = get_instance("vcl/fck_editor");
+				$prop["value"] .= $fck_inst->draw_editor(array(
+					"props" => array(
+						"test_textarea"	
+					),
+				));
+			break;
+			case "new_mail_toolbar":
+				$fck_inst = get_instance("vcl/fck_editor");
+				$fck_inst->get_rte_toolbar(array(
+					"toolbar" => &$prop["vcl_inst"],
+
+				));
+			break;
+			/* mail view_group */
+			case "mail_contents":
+				$tb = get_instance("vcl/toolbar");
+				$tb->add_button(array(
+					"name" => "reply",
+					"action" => "mail_reply",
+					"tooltip" => t("Vasta"),
+					"img" => "mail_reply.gif",
+				));
+				$tb->add_button(array(
+					"name" => "reply3",
+					"action" => "mail_reply_all",
+					"tooltip" => t("Vasta/kõigile"),
+					"img" => "mail_reply_all.gif",
+				));
+
+				$tb->add_button(array(
+					"name" => "forward",
+					"action" => "mail_forward",
+					"tooltip" => t("Edasta"),
+					"img" => "mail_fwd.gif",
+				));
+
+				$tb->add_separator();
+				$tb->add_button(array(
+					"name" => "delete",
+					"action" => "mail_delete",
+					"confirm" => t("Kustutada see kiri? (tagasi ei saa!)"),
+					"tooltip" => t("Kustuta"),
+					"img" => "delete.gif",
+				));
+				$tb->add_separator();
+				if(!strlen($arr["request"]["msgid"]))
+				{
+					$enum = aw_global_get("table_enum");
+					$arr["request"]["msgid"] = $enum[0];
+				}
+				if(!strlen($arr["request"]["mailbox"]))
+				{
+					$arr["request"]["mailbox"] = "INBOX";
+				}
+				$move = $this->_msg_move($arr);
+				$tb->add_button(array(
+					"name" => "next",
+					"tooltip" => t("Järgmine kiri"),
+					"img" => "up_r_arr.png",
+					"url" => $this->mk_my_orb("change",array(
+						"group" => $arr["request"]["group"],
+						"msgrid" => $arr["request"]["msgrid"],
+						"msgid" => $move["next"],
+						"mailbox" => $arr["request"]["mailbox"],
+						"id" => $arr["request"]["id"],
+					)),
+				));
+				$tb->add_cdata(sprintf(t("%s of %s"), $move["cur"], $move["total"]));
+				$tb->add_button(array(
+					"name" => "prev",
+					"tooltip" => t("Eelmine kiri"),
+					"img" => "down_r_arr.png",
+					"url" => $this->mk_my_orb("change", array(
+						"group" => $arr["request"]["group"],
+						"msgrid" => $arr["request"]["msgrid"],
+						"msgid" => $move["prev"],
+						"mailbox" => $arr["request"]["mailbox"],
+						"id" => $arr["request"]["id"],
+					)),
+				));
+
+				$tb_html = $tb->get_toolbar();
+				$ms_html = $this->_fetch_message_contents(&$arr);
+		
+				$prop["value"] = $this->parse();
+
+				//require_once("safe.php");
+				//$parser = new safehtml();
+				//$ms_html = $parser->parse($ms_html);
+				$prop["value"] = $tb_html.$ms_html;
+
+			break;
+			case "mail_view_tree":
+				$prop["value"] = $this->make_folder_tree($arr);	
+			break;
 		};
 		return $retval;
 	}
@@ -379,6 +499,8 @@ class messenger_v2 extends class_base
 		return $retval;
 	}	
 
+	/** sets default inbox if not set
+	**/
 	function callback_pre_edit($arr)
 	{
 		$mailbox = isset($arr["request"]["mailbox"]) ? $arr["request"]["mailbox"] : "INBOX"; 
@@ -392,7 +514,25 @@ class messenger_v2 extends class_base
 	
 
 	}	
-	
+
+	/** fetches message contents for mail_view 
+	**/
+	function _fetch_message_contents($arg = array())
+	{
+		if($arg["request"]["msgid"] && $arg["request"]["mailbox"])
+		{
+			$inst = get_instance(CL_MESSAGE);
+			$ret = $inst->formatted_message(array(
+				"msgid" => $arg["request"]["msgid"],
+				"msgrid" => $arg["request"]["id"],
+				"mailbox" => $arg["request"]["mailbox"]
+			));
+		}
+		return  $ret;
+	}
+
+	/** saves for example address book values
+	**/
 	function callback_pre_save($arr)
 	{
 		$request = $arr["request"];
@@ -439,7 +579,10 @@ class messenger_v2 extends class_base
 			$this->drv_inst->set_opt("use_mailbox",$this->use_mailbox);
 			$this->drv_inst->set_opt("outbox",$this->outbox);
 			$awt->start("imap-server-connect");
-			$errors = $this->drv_inst->connect_server(array("obj_inst" => $_sdat->to()));
+			$errors = $this->drv_inst->connect_server(array(
+				"obj_inst" => $_sdat->to(),
+				"arr" => $arr,
+			));
 			if ($errors)
 			{
 				$this->connect_errors = $errors;
@@ -450,7 +593,7 @@ class messenger_v2 extends class_base
 
 			$this->mbox = $this->drv_inst->get_opt("mbox");
 			$this->servspec = $this->drv_inst->get_opt("servspec");
-                        $this->mboxspec = $this->drv_inst->get_opt("mboxspec");
+			$this->mboxspec = $this->drv_inst->get_opt("mboxspec");
 
 			$this->connected = true;
 
@@ -470,6 +613,30 @@ class messenger_v2 extends class_base
 		return true;
 	}
 
+
+	/** locates next/prev msg id's for mail_view plus current and total 
+	**/
+	function _msg_move($arg)
+	{
+		$enum = aw_global_get("table_enum");
+		$key = array_search($arg["request"]["msgid"], $enum);
+		if($key !== false)
+		{
+			$move["next"] = ($key==0)?$enum[$key]:$enum[$key-1];
+			$move["prev"] = (($key+1) == count($enum))?$enum[$key]:$enum[$key+1];
+			$move["cur"] = $key+1;
+			$move["total"] = count($enum);
+		}
+		else
+		{	
+			$move["next"] = $arg["request"]["msgid"];
+			$move["prev"] = $arg["request"]["msgid"];
+		}
+		return $move;
+	}
+	
+	/** defines fields for main_view table (gen_message_list uses it)
+	**/
 	function _mk_mb_table(&$t)
 	{
 		$t->define_field(array(
@@ -528,11 +695,14 @@ class messenger_v2 extends class_base
 		));
 	}
 
+	/** generates message list table for main_view
+	**/
 	function gen_message_list(&$arr)
 	{
 		$this->_connect_server(array(
 			"msgr_id" => $arr["obj_inst"]->id(),
 			"no_folders" => true,
+			"gen_mess_list_srat" => "1",
 		));
 
 		if ($this->connect_errors)
@@ -556,8 +726,8 @@ class messenger_v2 extends class_base
 		$awt->stop("list-folder-contents");
 
 		$count = $this->drv_inst->count;
-
-		$t = &$arr["prop"]["vcl_inst"];
+		
+		$t = &$arr["prop"]["vcl_inst"];	
 		$this->_mk_mb_table(&$t);
 		$t->d_row_cnt = $count;
 
@@ -572,6 +742,7 @@ class messenger_v2 extends class_base
 
 		$fldr = $this->use_mailbox;	
 		$t->table_header = $pageselector;
+
 		foreach($contents as $key => $message)
 		{
 			$seen = $message["seen"];
@@ -591,10 +762,20 @@ class messenger_v2 extends class_base
 
 			// this should be unique enough
 			$wname = "msgr" . $key;
-
+			
+			$url = $this->mk_my_orb("change", array(
+				"group" => "mail_view",
+				"id" => $arr["obj_inst"]->id(),
+				"msgid" => $key,
+				"msgrid" => $arr["obj_inst"]->id(),
+				"mailbox" => $this->use_mailbox,
+			));
+			$new_link = "<a href=\"".$url."\">".$this->_format(parse_obj_name($message["subject"], $seen))."</a>";
+			
 			$t->define_data(array(
 				"id" => $key,
 				"from" => $this->_format($fromline, $seen),
+				/*
 				"subject" => html::popup(array(
 					"url" => $this->mk_my_orb("change",array(
 							"msgrid" => $arr["obj_inst"]->id(),
@@ -609,29 +790,21 @@ class messenger_v2 extends class_base
 					//"menubar" => 1,
 					"height" => 600,
 					"width" => 800,
-					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
-				)),
-				/*
-				"subject" => html::href(array(
-					"url" => "javascript:aw_popup_scroll(\"" . $this->mk_my_orb("change",array(
-							"msgrid" => $arr["obj_inst"]->id(),
-							"msgid" => $key,
-							"form" => "showmsg",
-							"cb_part" => 1,
-							"mailbox" => $this->use_mailbox,
-					),"mail_message",false,true) . "\",\"$wname\",800,600)",
-					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
-				)),
-				*/
+					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen).$new_link,
+				)),*/
+				"subject" => $new_link,
 				"date" => $message["tstamp"],
 				"size" => $this->_format(sprintf("%d",$message["size"]/1024),$seen),
 				"answered" => $this->_format($this->_conv_stat($message["answered"]),$seen),
 				"attach" => $message["has_attachments"] ? html::img(array("url" => $this->cfg["baseurl"] . "/automatweb/images/attach.gif")) : "",
 			));
+			
 		};
+
+			
 		$t->set_default_sortby("date");
 		$t->set_default_sorder("desc");
-
+		$t->set_final_enum();
 		return PROP_OK;
 	}
 
@@ -639,8 +812,6 @@ class messenger_v2 extends class_base
 	function _format($str,$flag)
 	{
 		return ($flag) ? $str : "<strong>$str</strong>";
-
-
 	}
 
 	function _conv_stat($code)
@@ -674,34 +845,41 @@ class messenger_v2 extends class_base
 	**/
 	function count_fld_contents($arg)
 	{
-		$drv_inst = get_instance("protocols/mail/imap");
-		$drv_inst->set_opt("use_mailbox", $arg["mailbox"]);
-		
-		$inst = new object($arg["messenger"]);
-		$conns = $inst->connections_from(array("type" => "RELTYPE_MAIL_SOURCE"));
-		list(,$_sdat) = each($conns);
-		$sdat = new object($_sdat->to());
+		if($arg["mailbox"] == "INBOX.Sent-mail")
+			return $ret[1] = 4;
+		$imap = get_instance(CL_PROTO_IMAP);
 
-		$drv_inst->connect_server(array("obj_inst" => $_sdat->to()));
-		$emails = $drv_inst->get_folder_contents(array(
-			"from" => 0,
-			"to" => "*",
+		$back = $this->use_mailbox;
+		$this->use_mailbox = $arg["mailbox"];
+		$this->_connect_server(array(
+			"msgr_id" => $arg["messenger"],
+			"force_reconnect" => true,
+			"count_contents" => "1",
 		));
-		foreach($emails as $mail_id => $data)
+		$mboxinf = imap_mailboxmsginfo($this->mbox);
+
+		$ret = array($mboxinf->Nmsgs => $mboxinf->Unread);
+		if(trim($this->use_mailbox) != trim($back))
 		{
-			if($data["seen"] == 0)
-			{
-				$new++;
-			}
-			$total++;
+			$this->use_mailbox = $back;
+			//arr("reconnectin:". $this->use_mailbox." / back : ".$back);
+			$this->_connect_server(array(
+				"msgr_id" => $arg["messenger"],
+				"force_reconnect" => true,
+				"backup" => "kax",
+				"box" => $this->use_mailbox,
+			));
 		}
-		return array(($total?$total:"0") => ($new?$new:"0"));
+		return $ret;
 	}
 
+	/** generates mailbox tree
+	**/
 	function make_folder_tree($arr)
 	{
 		$conn = $this->_connect_server(array(
 			"msgr_id" => $arr["obj_inst"]->id(),
+			"make_fld_tree_start" => "1",
 		));
 
 		if (!$conn)
@@ -783,9 +961,9 @@ class messenger_v2 extends class_base
 			{
 				$name = "<strong>$name</strong>";
 			};
-			$count = $this->count_fld_contents(array(
-				"messenger" => $arr["obj_inst"]->id(),
-				"mailbox" => $val["name"],
+			
+			$count = $this->drv_inst->folder_count(array(
+				"use_mailbox" => $val["fullname"],
 			));
 			$tree->add_item($parent,array(
 				"name" => $name . " (".key($count)." / ".current($count).")",
@@ -805,7 +983,8 @@ class messenger_v2 extends class_base
 		return $rv;
 	}
 
-
+	/** generates main_view toolbar
+	**/
 	function gen_mail_toolbar($arr)
 	{
 		$rv = $this->_connect_server(array(
@@ -829,6 +1008,12 @@ class messenger_v2 extends class_base
 				"msgrid" => $this->msgobj->id(),
 				"cb_part" => 1,
 			),"mail_message",false,true) . "','msgr',800,600)",
+			"img" => "new.gif",
+		));
+		$toolbar->add_button(array(
+			"name" => "newmessage2",
+			"tooltip" => t("uus 2"),
+			"url" => $this->mk_my_orb("_new_mail_form"),
 			"img" => "new.gif",
 		));
 		
@@ -1104,7 +1289,7 @@ class messenger_v2 extends class_base
 	}
 
 	/** Deletes messages from server
-
+/** Deletes messages from server
 		@attrib name=delete_messages
 
 	**/
@@ -1249,6 +1434,14 @@ class messenger_v2 extends class_base
 			$rv[$obj->id()] = $obj->prop("name");
 		};
 		return $rv;
+	}
+
+	/**
+		@attrib name=_new_mail_form
+	**/
+	function _new_mail_form($arg = array())
+	{
+		return "tere";
 	}
 
 	/**
@@ -1431,5 +1624,22 @@ class messenger_v2 extends class_base
 
 	}
 
+	/**	DO NOT, I MEAN REALLY.. DO NOT USE THIS IF YOU ARE ABSOLUTELY CERTAIN YOU WANT TO
+		@attrib name=send_shitload_of_emails
+	**/
+	function send_shitload_of_emails($arg = array())
+	{
+		die(arr("you better look from the code what this function does"));
+		for($i=0;$i<500;$i++)
+		{
+			$to      = 'put your email address here';
+
+			$subject = substr(md5(date("idY")),0,rand(1,10))." ".substr(md5(microtime()),3,rand(0,4));
+			$message = str_repeat(md5(microtime()), rand(1,100));
+			$headers = "From: tarvo@struktuur.ee" . "\r\n" ."Reply-To: tarvo@struktuur.ee" . "\r\n" ."X-Mailer: PHP/" . phpversion();
+
+			mail($to, $subject, $message, $headers);
+		}
+	}
 }
 ?>
