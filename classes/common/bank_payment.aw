@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.7 2006/06/05 11:02:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.8 2006/06/12 14:50:07 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -34,6 +34,8 @@ class bank_payment extends class_base
 	var $bank_link = array(
 		"hansapank"	=> "https://www.hanza.net/cgi-bin/hanza/pangalink.jsp",
 		"seb"		=> "https://unet.eyp.ee/cgi-bin/unet3.sh/un3min.r",
+		"sampopank"	=> "https://www.sampo.ee/cgi-bin/pizza",
+		"krediidipank"	=> "https://i-pank.krediidipank.ee/teller/maksa",
 	);
 
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
@@ -173,8 +175,8 @@ class bank_payment extends class_base
 		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
 		if(!$arr["priv_key"])
 		{
-			if(!$arr["test"]) $file = "privkey.pem";
-			else $file = $this->test_priv_keys[$arr["bank_id"]];
+			if($arr["test"] && $this->test_priv_keys[$arr["bank_id"]]) $file = $this->test_priv_keys[$arr["bank_id"]];
+			else $file = "privkey.pem";
 			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
 			$arr["priv_key"] = fread($fp, 8192);
 			fclose($fp);
@@ -328,6 +330,43 @@ class bank_payment extends class_base
 	//	return $http->post_request($link, $handler, $params, $port = 80);
 	}
 
+	function krediidi($args)
+	{
+		extract($args);
+		$VK_message = sprintf("%03d",strlen($service)).$service;
+		$VK_message.= sprintf("%03d",strlen($version)).$version;
+		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
+		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
+		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
+		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
+		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
+		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
+		$VK_signature = "";
+		$pkeyid = openssl_get_privatekey($priv_key);
+		openssl_sign($VK_message, $VK_signature, $pkeyid);
+		openssl_free_key($pkeyid);
+		$VK_MAC = base64_encode( $VK_signature);
+
+		$http = get_instance("protocols/file/http");
+		$link = "https://i-pank.krediidipank.ee/teller/maksa";
+		$handler = "https://i-pank.krediidipank.ee/teller/maksa";
+		$params = array(
+			"VK_SERVICE"	=> $service,	//"1002"
+			"VK_VERSION"	=> $version,	//"008"
+			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST" //	15	Päringu koostaja ID (Kaupluse ID)
+			"VK_STAMP"	=> $stamp,	//row["arvenr"]
+			"VK_AMOUNT"	=> $ammount,	//$row["summa"];
+			"VK_CURR"	=> $curr,	//"EEK"
+			"VK_REF"	=> $reference_nr,
+			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
+			"VK_MAC" 	=> $VK_MAC,
+			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
+			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
+			"VK_LANG" 	=> $lang,	//"EST"
+		);
+		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
+	//	return $http->post_request($link, $handler, $params, $port = 80);
+	}	
 
 	function check_nordea_args($arr)
 	{
@@ -384,44 +423,6 @@ class bank_payment extends class_base
 		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
 	//	return $http->post_request($link, $handler, $params, $port = 80);	
 	}
-
-	function krediidi($args)
-	{
-		extract($args);
-		$VK_message = sprintf("%03d",strlen($service)).$service;
-		$VK_message.= sprintf("%03d",strlen($version)).$version;
-		$VK_message.= sprintf("%03d",strlen($sender_id)).$sender_id;
-		$VK_message.= sprintf("%03d",strlen($stamp)).$stamp;
-		$VK_message.= sprintf("%03d",strlen($amount)).$amount;
-		$VK_message.= sprintf("%03d",strlen($curr)).$curr;
-		$VK_message.= sprintf("%03d",strlen($reference_nr)).$reference_nr;
-		$VK_message.= sprintf("%03d",strlen($expl)).$expl;
-		$VK_signature = "";
-		$pkeyid = openssl_get_privatekey($priv_key);
-		openssl_sign($VK_message, $VK_signature, $pkeyid);
-		openssl_free_key($pkeyid);
-		$VK_MAC = base64_encode( $VK_signature);
-
-		$http = get_instance("protocols/file/http");
-		$link = "https://i-pank.krediidipank.ee/teller/maksa";
-		$handler = "https://i-pank.krediidipank.ee/teller/maksa";
-		$params = array(
-			"VK_SERVICE"	=> $service,	//"1002"
-			"VK_VERSION"	=> $version,	//"008"
-			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST" //	15	Päringu koostaja ID (Kaupluse ID)
-			"VK_STAMP"	=> $stamp,	//row["arvenr"]
-			"VK_AMOUNT"	=> $ammount,	//$row["summa"];
-			"VK_CURR"	=> $curr,	//"EEK"
-			"VK_REF"	=> $reference_nr,
-			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
-			"VK_MAC" 	=> $VK_MAC,
-			"VK_RETURN"	=> $return_url, //$this->burl."/tellimine/makse/tanud/";	//	60	URL, kuhu vastatakse edukal tehingu sooritamisel
-			"VK_CANCEL"	=> $cancel_url,	//this->burl."/tellimine/makse/";	//	60	URL, kuhu vastatakse ebaõnnestunud tehingu puhul
-			"VK_LANG" 	=> $lang,	//"EST"
-		);
-		return $this->submit(array("params" => $params , "link" => $link , "form" => $form));
-	//	return $http->post_request($link, $handler, $params, $port = 80);
-	}	
 
 	function viitenr_kontroll_731($nr)
 	{
@@ -505,8 +506,9 @@ class bank_payment extends class_base
 				));
 				if(($template_exists) && ($this->is_template($bank)))
 				{
-					if($test)	$link = $this->test_link[$bank];
-					else		$link = $this->bank_link[$bank];
+					if($test && $this->test_link[$bank]) $link = $this->test_link[$bank];
+					else $link = $this->bank_link[$bank];
+					
 					$this->vars(array(
 						"data" => $bank_form,
 						"link" => $link,
@@ -569,12 +571,16 @@ class bank_payment extends class_base
 		openssl_free_key($pubkeyid);
 		
 		return $ok;
-		if ($ok == 1) {
-		echo "good";
-		} elseif ($ok == 0) {
-		echo "bad";
-		} else {
-		echo "ugly, error checking signature";
+		if ($ok == 1)
+		{
+			echo "good";
+		}
+		elseif ($ok == 0) 
+		{
+			echo "bad";
+		}
+		else {
+			echo "ugly, error checking signature";
 		}	
 	}
 }
