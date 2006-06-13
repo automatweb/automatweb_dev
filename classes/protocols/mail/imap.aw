@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.35 2006/06/12 14:27:26 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.36 2006/06/13 10:00:33 tarvo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. õigemini ta tagastab need boxid kus seike kiri sees
@@ -226,6 +226,7 @@ class imap extends class_base
 		return $res;
 	}
 	
+
 	/**
 	@attrib api=1 params=name
 	@param to optional type=int or string "*"
@@ -266,25 +267,23 @@ class imap extends class_base
 
 			$mbox_over["modified"] = $fmod;
 			$mbox_over["count"] = $count;
-			$fo = imap_sort($this->mbox,SORTDATE,0,SE_UID && SE_NOPREFETCH);
-			
-			$to_fetch = array_diff($fo,array_keys($mbox_over["contents"]));
+			$fo = imap_sort($this->mbox,SORTDATE,1,SE_UID && SE_NOPREFETCH);
+			foreach($fo as $k=>$v)
+			{
+				if($k >= ($arr["from"]-1) && $k < $arr["to"])
+				{
+					$fop[$k] = $v;
+				}
+			}
+			$to_fetch = array_diff($fop,array_keys($mbox_over["contents"]));
 			$req_msgs = $mbox_over["contents"];
-			$to_fetch = array_values($to_fetch);
-			//$uidlist = join(",",$to_fetch);
-
 			// this will update the message cache ... it has to contain all
 			// the message bits in this mailbox
 			if (count($to_fetch) > 0)
 			{
 				$overview = "";
-
 				foreach($to_fetch as $cur_enum => $msg_uid)
 				{
-					if ("*" != $arr["to"] && !between($cur_enum+1,$arr["from"],$arr["to"]))
-					{
-						continue;
-					};
 					//print "fetching message with uid $msg_uid<br>";
 					//flush();
 					$hdrinfo = @imap_headerinfo($this->mbox,$msg_uid);
@@ -316,6 +315,7 @@ class imap extends class_base
 							// doesn't always mean that the message
 							// has attachments
 						"has_attachments" => ($str->type == 1) ? true : false,
+						"enum" => $cur_enum,
 					);
 				};
 			};
@@ -324,15 +324,15 @@ class imap extends class_base
 			$mbox_over["contents"] = $req_msgs;
 			$cache->file_set($this->mbox_cache_id,aw_serialize($mbox_over));
 		}
-		if (is_array($mbox_over["contents"]))
+		if(is_array($mbox_over["contents"]))
 		{
-			foreach(array_keys($mbox_over["contents"]) as $rkey => $ritem)
+			foreach($mbox_over["contents"] as $msgid => $ritem)
 			{
 				// * means all messages should be returned. used for filters
 				// mostly. IMAP extension uses this syntax so I will too.
-				if ("*" != $arr["to"] && !between($rkey+1,$arr["from"],$arr["to"]))
+				if ("*" != $arr["to"] && !between($ritem["enum"],$arr["from"]-1,$arr["to"]))
 				{
-					unset($mbox_over["contents"][$ritem]);
+					unset($mbox_over["contents"][$msgid]);
 				};
 			}
 		};
