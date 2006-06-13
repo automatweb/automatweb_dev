@@ -354,7 +354,7 @@ msgstr ""
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:345 classes/applications/bug_o_matic_3000/bug.aw:558
+#: classes/applications/bug_o_matic_3000/bug.aw:345 classes/applications/bug_o_matic_3000/bug.aw:598
 msgid "Bug"
 msgstr ""
 
@@ -362,55 +362,67 @@ msgstr ""
 msgid "Stopper"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:394
+#: classes/applications/bug_o_matic_3000/bug.aw:378
+msgid "Kellele ei tohi olla t&uuml;hi!"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:390
+msgid "T&auml;htaeg ei tohi olla minevikus!"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:428
+msgid "Selliste parameetritega ei saa salvestada, kuna see l&uuml;kkaks j&auml;rgnevad bugid &uuml;le t&auml;htaja: %s!"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug.aw:434
 msgid "Bugi ei ole v&otilde;imalik valmis saada enne %s!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:421
+#: classes/applications/bug_o_matic_3000/bug.aw:461
 msgid "Puuduvad õigused bugi sulgeda!"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:427
+#: classes/applications/bug_o_matic_3000/bug.aw:467
 msgid "Staatus muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:436
+#: classes/applications/bug_o_matic_3000/bug.aw:476
 msgid "Prioriteet muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:445
+#: classes/applications/bug_o_matic_3000/bug.aw:485
 msgid "Tegelik tundide arv muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:453
+#: classes/applications/bug_o_matic_3000/bug.aw:493
 msgid "Prognoositud tundide arv muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:468
+#: classes/applications/bug_o_matic_3000/bug.aw:508
 msgid "Kellele muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:480
+#: classes/applications/bug_o_matic_3000/bug.aw:520
 msgid "Klass muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:559
+#: classes/applications/bug_o_matic_3000/bug.aw:599
 msgid "Summary"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:560
+#: classes/applications/bug_o_matic_3000/bug.aw:600
 msgid "URL"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:607 classes/applications/bug_o_matic_3000/bug.aw:791
+#: classes/applications/bug_o_matic_3000/bug.aw:647 classes/applications/bug_o_matic_3000/bug.aw:831
 msgid "\nTegelik tundide arv muudeti %s => %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:802
+#: classes/applications/bug_o_matic_3000/bug.aw:842
 msgid "Added comment to bug %s"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug.aw:856
+#: classes/applications/bug_o_matic_3000/bug.aw:896
 msgid "Lisa alambugi"
 msgstr ""
 

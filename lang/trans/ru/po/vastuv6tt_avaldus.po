@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vastuv6tt/vastuv6tt_avaldus.aw:class_337_help
 msgid "Klassi Avaldus help"
 msgstr ""
@@ -194,3 +193,6 @@ msgstr ""
 msgid "Omaduse Kas eelistuseks on antud eriala? (eelistus) help"
 msgstr ""
 
+#: classes/vastuv6tt/vastuv6tt_avaldus.aw:87
+msgid "&Otilde;ppetase m‰‰ramata."
+msgstr ""

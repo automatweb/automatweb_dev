@@ -342,15 +342,19 @@ msgstr ""
 msgid "Seose Pilt (RELTYPE_PICTURE) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:190
+#: classes/core/users/group.aw:158
+msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
+msgstr ""
+
+#: classes/core/users/group.aw:201
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/group.aw:191
+#: classes/core/users/group.aw:202
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/group.aw:200
+#: classes/core/users/group.aw:211
 msgid "
 					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
@@ -363,51 +367,51 @@ msgid "
 				"
 msgstr ""
 
-#: classes/core/users/group.aw:247
+#: classes/core/users/group.aw:258
 msgid "Impordin kasutajaid ... <br />"
 msgstr ""
 
-#: classes/core/users/group.aw:401
+#: classes/core/users/group.aw:412
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:430
+#: classes/core/users/group.aw:441
 msgid "Objekti Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:439
+#: classes/core/users/group.aw:450
 msgid "Objekti Asukoht"
 msgstr ""
 
-#: classes/core/users/group.aw:448
+#: classes/core/users/group.aw:459
 msgid "Grupi Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:457
+#: classes/core/users/group.aw:468
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:477
+#: classes/core/users/group.aw:488
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:572
+#: classes/core/users/group.aw:583
 msgid "--vali--"
 msgstr ""
 
-#: classes/core/users/group.aw:593
+#: classes/core/users/group.aw:604
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:619
+#: classes/core/users/group.aw:630
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:810
+#: classes/core/users/group.aw:821
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:856
+#: classes/core/users/group.aw:867
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 

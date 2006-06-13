@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/file.aw:class_41_help
 msgid "Klassi Fail help"
 msgstr ""
@@ -146,6 +145,18 @@ msgstr ""
 msgid "Omaduse Näita saidi raamis (show_framed) help"
 msgstr ""
 
+#: classes/file.aw:prop_show_icon
+msgid "Omaduse N&auml;ita ikooni (show_icon) caption"
+msgstr ""
+
+#: classes/file.aw:prop_show_icon_comment
+msgid "Omaduse N&auml;ita ikooni (show_icon) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_show_icon_help
+msgid "Omaduse N&auml;ita ikooni (show_icon) help"
+msgstr ""
+
 #: classes/file.aw:prop_j_time
 msgid "Omaduse Jõustumise kuupäev (j_time) caption"
 msgstr ""
@@ -234,11 +245,10 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:128
+#: classes/file.aw:144
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:985
+#: classes/file.aw:1050
 msgid "Need either id or parent"
 msgstr ""
-

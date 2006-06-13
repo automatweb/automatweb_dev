@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/meta/metamgr.aw:class_279_help
 msgid "Klassi Muutujate haldus help"
 msgstr ""
@@ -94,47 +93,46 @@ msgstr ""
 msgid "Grupi Muutujad (manager) help"
 msgstr ""
 
-#: classes/meta/metamgr.aw:136
+#: classes/meta/metamgr.aw:143
 msgid "ID"
 msgstr ""
 
-#: classes/meta/metamgr.aw:141
+#: classes/meta/metamgr.aw:148
 msgid "Nimi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:164
-msgid "V?rtus"
+#: classes/meta/metamgr.aw:175
+msgid "V&auml;&auml;rtus"
 msgstr ""
 
-#: classes/meta/metamgr.aw:171
+#: classes/meta/metamgr.aw:182
 msgid "Jrk"
 msgstr ""
 
-#: classes/meta/metamgr.aw:279
+#: classes/meta/metamgr.aw:297
 msgid "$file_name"
 msgstr ""
 
-#: classes/meta/metamgr.aw:377
+#: classes/meta/metamgr.aw:406
 msgid "Salvesta"
 msgstr ""
 
-#: classes/meta/metamgr.aw:385
+#: classes/meta/metamgr.aw:414
 msgid "Liiguta valitud omadused gruppi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:439
+#: classes/meta/metamgr.aw:470
 msgid "Export"
 msgstr ""
 
-#: classes/meta/metamgr.aw:448
+#: classes/meta/metamgr.aw:479
 msgid "Import"
 msgstr ""
 
-#: classes/meta/metamgr.aw:457
+#: classes/meta/metamgr.aw:488
 msgid "Kustuta valitud muutujad"
 msgstr ""
 
-#: classes/meta/metamgr.aw:458
+#: classes/meta/metamgr.aw:489
 msgid "Kustuta valitud muutujad?"
 msgstr ""
-

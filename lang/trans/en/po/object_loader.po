@@ -53,12 +53,12 @@ msgid ""
 msgstr ""
 "object_loader::save_new(%s): no object with oid %s exists in the global list"
 
-#: classes/core/obj/object_loader.aw:417
+#: classes/core/obj/object_loader.aw:418
 msgid ""
 "object_loader::switch_db_connection(%s): could nto find root connection!"
 msgstr ""
 "object_loader::switch_db_connection(%s): could nto find root connection!"
 
-#: classes/core/obj/object_loader.aw:563
+#: classes/core/obj/object_loader.aw:561
 msgid "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"

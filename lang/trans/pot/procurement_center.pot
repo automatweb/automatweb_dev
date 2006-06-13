@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Hankekeskkond help"
 msgstr ""
 
+#: classes/applications/procurement_center/procurement_center.aw:prop_owner
+msgid "Omaduse Omanik (owner) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_center.aw:prop_owner_comment
+msgid "Omaduse Omanik (owner) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_center.aw:prop_owner_help
+msgid "Omaduse Omanik (owner) help"
+msgstr ""
+
 #: classes/applications/procurement_center/procurement_center.aw:prop_p_tb
 msgid "Omaduse  (p_tb) caption"
 msgstr ""
@@ -50,6 +62,30 @@ msgstr ""
 msgid "Omaduse  (p_tbl) help"
 msgstr ""
 
+#: classes/applications/procurement_center/procurement_center.aw:prop_team_tb
+msgid "Omaduse  (team_tb) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_center.aw:prop_team_tb_comment
+msgid "Omaduse  (team_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_center.aw:prop_team_tb_help
+msgid "Omaduse  (team_tb) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_center.aw:prop_team_table
+msgid "Omaduse  (team_table) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_center.aw:prop_team_table_comment
+msgid "Omaduse  (team_table) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_center.aw:prop_team_table_help
+msgid "Omaduse  (team_table) help"
+msgstr ""
+
 #: classes/applications/procurement_center/procurement_center.aw:group_p
 msgid "Grupi Hanked (p) pealkiri"
 msgstr ""
@@ -58,47 +94,59 @@ msgstr ""
 msgid "Grupi Hanked (p) help"
 msgstr ""
 
+#: classes/applications/procurement_center/procurement_center.aw:group_team
+msgid "Grupi Meeskond (team) pealkiri"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_center.aw:group_team_help
+msgid "Grupi Meeskond (team) help"
+msgstr ""
+
 #: classes/applications/procurement_center/procurement_center.aw:rel_RELTYPE_MANAGER_CO
 msgid "Seose Haldaja firma (RELTYPE_MANAGER_CO) tekst"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:79
+#: classes/applications/procurement_center/procurement_center.aw:rel_RELTYPE_TEAM_MEMBER
+msgid "Seose Meeskonna liige (RELTYPE_TEAM_MEMBER) tekst"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_center.aw:119
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:86
+#: classes/applications/procurement_center/procurement_center.aw:126
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:92
+#: classes/applications/procurement_center/procurement_center.aw:132
 msgid "Hange"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:99
+#: classes/applications/procurement_center/procurement_center.aw:139
 msgid "Kustuta valitud hanked"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:101
+#: classes/applications/procurement_center/procurement_center.aw:141
 msgid "Kas oled kindel et soovid valitud hanked kustudada?"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:139
+#: classes/applications/procurement_center/procurement_center.aw:179
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:145
+#: classes/applications/procurement_center/procurement_center.aw:185
 msgid "Looja"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:151
+#: classes/applications/procurement_center/procurement_center.aw:191
 msgid "Loodud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:160
+#: classes/applications/procurement_center/procurement_center.aw:200
 msgid "Muutja"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_center.aw:166
+#: classes/applications/procurement_center/procurement_center.aw:206
 msgid "Muudetud"
 msgstr ""
 

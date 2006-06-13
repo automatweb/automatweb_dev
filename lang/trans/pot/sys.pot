@@ -42,15 +42,15 @@ msgstr ""
 msgid "Muutmise aeg"
 msgstr ""
 
-#: classes/sys.aw:803
+#: classes/sys.aw:802
 msgid "all done!! database seems to be relatively ok!"
 msgstr ""
 
-#: classes/sys.aw:863
+#: classes/sys.aw:862
 msgid "All done"
 msgstr ""
 
-#: classes/sys.aw:899
+#: classes/sys.aw:950
 msgid "$fn"
 msgstr ""
 

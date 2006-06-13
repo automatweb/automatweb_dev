@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/procurement_center/procurement_offer.aw:class_1069_help
 msgid "Klassi Pakkumine hankele help"
 msgstr ""
@@ -72,6 +71,18 @@ msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_price_help
 msgid "Omaduse Hind (price) help"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_completion_date
+msgid "Omaduse Valmimist&auml;htaeg (completion_date) caption"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_completion_date_comment
+msgid "Omaduse Valmimist&auml;htaeg (completion_date) kommentaar"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:prop_completion_date_help
+msgid "Omaduse Valmimist&auml;htaeg (completion_date) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:prop_state
@@ -142,12 +153,20 @@ msgstr ""
 msgid "Grupi N&otilde;uded (r) help"
 msgstr ""
 
+#: classes/applications/procurement_center/procurement_offer.aw:group_r_list
+msgid "Grupi N&otilde;uete nimekiri (r_list) pealkiri"
+msgstr ""
+
+#: classes/applications/procurement_center/procurement_offer.aw:group_r_list_help
+msgid "Grupi N&otilde;uete nimekiri (r_list) help"
+msgstr ""
+
 #: classes/applications/procurement_center/procurement_offer.aw:group_rejected
-msgid "Grupi Tagasi l&uuml;&uuml;katud (rejected) pealkiri"
+msgid "Grupi Tagasi l&uuml;katud (rejected) pealkiri"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:group_rejected_help
-msgid "Grupi Tagasi l&uuml;&uuml;katud (rejected) help"
+msgid "Grupi Tagasi l&uuml;katud (rejected) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_offer.aw:rel_RELTYPE_PROCUREMENT
@@ -158,67 +177,67 @@ msgstr ""
 msgid "Seose Pakkuja (RELTYPE_OFFERER) tekst"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:73
+#: classes/applications/procurement_center/procurement_offer.aw:77
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:74
+#: classes/applications/procurement_center/procurement_offer.aw:78
 msgid "Avaldatud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:75
+#: classes/applications/procurement_center/procurement_offer.aw:79
 msgid "Tagasi l&uuml;katud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:76
+#: classes/applications/procurement_center/procurement_offer.aw:80
 msgid "Vastu v&otilde;etud"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:80
+#: classes/applications/procurement_center/procurement_offer.aw:84
 msgid "Kohe olemas"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:81
+#: classes/applications/procurement_center/procurement_offer.aw:85
 msgid "Vajab seadistamist"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:82
+#: classes/applications/procurement_center/procurement_offer.aw:86
 msgid "Uus arendus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:203
+#: classes/applications/procurement_center/procurement_offer.aw:208
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:211
+#: classes/applications/procurement_center/procurement_offer.aw:224
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:218
+#: classes/applications/procurement_center/procurement_offer.aw:231
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:247 classes/applications/procurement_center/procurement_offer.aw:379
+#: classes/applications/procurement_center/procurement_offer.aw:260
+#: classes/applications/procurement_center/procurement_offer.aw:393
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:254
+#: classes/applications/procurement_center/procurement_offer.aw:267
 msgid "Valmidus"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:260
+#: classes/applications/procurement_center/procurement_offer.aw:273
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:267
+#: classes/applications/procurement_center/procurement_offer.aw:280
 msgid "Seadistamise aeg"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:273
+#: classes/applications/procurement_center/procurement_offer.aw:286
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/procurement_center/procurement_offer.aw:279
+#: classes/applications/procurement_center/procurement_offer.aw:292
 msgid "Eelistatud"
 msgstr ""
-

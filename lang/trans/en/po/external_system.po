@@ -1,0 +1,40 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/common/external/external_system.aw:class_1073_help
+msgid "Klassi Siduss&uuml;steem help"
+msgstr ""
+
+#: classes/common/external/external_system.aw:prop_ord
+msgid "Omaduse J&auml;rjekord (ord) caption"
+msgstr ""
+
+#: classes/common/external/external_system.aw:prop_ord_comment
+msgid "Omaduse J&auml;rjekord (ord) kommentaar"
+msgstr ""
+
+#: classes/common/external/external_system.aw:prop_ord_help
+msgid "Omaduse J&auml;rjekord (ord) help"
+msgstr ""
+
+#: classes/common/external/external_system.aw:prop_apply_class
+msgid "Omaduse Klass, millele kehtib (apply_class) caption"
+msgstr ""
+
+#: classes/common/external/external_system.aw:prop_apply_class_comment
+msgid "Omaduse Klass, millele kehtib (apply_class) kommentaar"
+msgstr ""
+
+#: classes/common/external/external_system.aw:prop_apply_class_help
+msgid "Omaduse Klass, millele kehtib (apply_class) help"
+msgstr ""
+

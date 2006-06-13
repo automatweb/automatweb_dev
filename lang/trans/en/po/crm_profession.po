@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2005-12-04 22:15+0200\n"
 "Last-Translator: Erki <erki@struktuur.ee>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 # classes/crm/crm_profession.aw:class_220_help
 #: classes/crm/crm_profession.aw:class_220_help
@@ -42,6 +42,18 @@ msgstr ""
 msgid "Omaduse Tunnihind (hr_price) help"
 msgstr ""
 
+#: classes/crm/crm_profession.aw:prop_jrk
+msgid "Omaduse Järk (jrk) caption"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_jrk_comment
+msgid "Omaduse Järk (jrk) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:prop_jrk_help
+msgid "Omaduse Järk (jrk) help"
+msgstr ""
+
 # classes/crm/crm_profession.aw:prop_name_in_plural
 #: classes/crm/crm_profession.aw:prop_name_in_plural
 msgid "Omaduse Nimi mitmuses (name_in_plural) caption"
@@ -72,14 +84,6 @@ msgstr ""
 msgid "Omaduse Tõlkimine (trans) help"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
-
-#: classes/crm/crm_profession.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 # classes/crm/crm_profession.aw:group_trans
 #: classes/crm/crm_profession.aw:group_trans
 msgid "Grupi Tõlkimine (trans) pealkiri"
@@ -105,3 +109,5 @@ msgstr "Group"
 msgid "Seose Ametijuhend (RELTYPE_DESC_FILE) tekst"
 msgstr "Job description"
 
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"

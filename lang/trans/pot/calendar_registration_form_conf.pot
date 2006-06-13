@@ -218,30 +218,34 @@ msgstr ""
 msgid "Seose S&uuml;ndmuse vorm (RELTYPE_WEBFORM) tekst"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:143
+#: classes/applications/calendar/calendar_registration_form_conf.aw:158
 msgid "Meili sisus on v&otilde;imalik kasutada j&auml;rgnevaid asendusi:<br><br>#reg_data# - kalendri s&uuml;ndmuse sisu<br>
 					#date# - kohtumise kuup&auml;ev<br>
 					#time_from# - kohtumise alguskellaaeg<br>
 					#time_to# - kohtumise k&otilde;ppkellaaeg<br>lisaks v&otilde;ib kasutada elemente andmete vormist, trellidega eraldatult"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:148
+#: classes/applications/calendar/calendar_registration_form_conf.aw:163
 msgid "&Auml;ra kuva"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:149
+#: classes/applications/calendar/calendar_registration_form_conf.aw:164
 msgid "Kuva dokumendis s&uuml;ndmuse infot"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:218
+#: classes/applications/calendar/calendar_registration_form_conf.aw:185
+msgid "Isikute kaust (%s)"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:251
 msgid "Veebivorm sündmusele registreerimise vormiga töötab ainult läbi sündmusele registreerimise"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:237
+#: classes/applications/calendar/calendar_registration_form_conf.aw:270
 msgid "calendar_registration_form::show(%s): event and object type must be related!"
 msgstr ""
 
-#: classes/applications/calendar/calendar_registration_form_conf.aw:615
+#: classes/applications/calendar/calendar_registration_form_conf.aw:648
 msgid "calendar_registration_form::show_data(%s): event and object type must be related!"
 msgstr ""
 

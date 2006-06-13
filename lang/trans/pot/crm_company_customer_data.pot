@@ -178,7 +178,11 @@ msgstr ""
 msgid "Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"
 msgstr ""
 
-#: classes/applications/crm/crm_company_customer_data.aw:93
+#: classes/applications/crm/crm_company_customer_data.aw:rel_RELTYPE_EXT_SYS_ENTRY
+msgid "Seose Siduss&amp;uuml;steemi sisestus (RELTYPE_EXT_SYS_ENTRY) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_company_customer_data.aw:96
 msgid "--vali--"
 msgstr ""
 

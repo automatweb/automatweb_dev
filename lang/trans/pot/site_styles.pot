@@ -62,27 +62,63 @@ msgstr ""
 msgid "Omaduse Juhuslik valik (random) help"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:66
+#: classes/contentmgmt/site_styles.aw:prop_vars
+msgid "Omaduse  (vars) caption"
+msgstr ""
+
+#: classes/contentmgmt/site_styles.aw:prop_vars_comment
+msgid "Omaduse  (vars) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/site_styles.aw:prop_vars_help
+msgid "Omaduse  (vars) help"
+msgstr ""
+
+#: classes/contentmgmt/site_styles.aw:group_test
+msgid "Grupi Muutujad (test) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_styles.aw:group_test_help
+msgid "Grupi Muutujad (test) help"
+msgstr ""
+
+#: classes/contentmgmt/site_styles.aw:73
 msgid "Ei valita juhuslikult"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:67
+#: classes/contentmgmt/site_styles.aw:74
 msgid "Juhuslik sessiooniti"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:68
+#: classes/contentmgmt/site_styles.aw:75
 msgid "Juhuslik igal laadimisel"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:140
+#: classes/contentmgmt/site_styles.aw:184
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:146
+#: classes/contentmgmt/site_styles.aw:196
+msgid "Nr"
+msgstr ""
+
+#: classes/contentmgmt/site_styles.aw:200
+msgid "CSS url"
+msgstr ""
+
+#: classes/contentmgmt/site_styles.aw:244
+msgid "Uus muutuja"
+msgstr ""
+
+#: classes/contentmgmt/site_styles.aw:253
 msgid "jrk"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:151
+#: classes/contentmgmt/site_styles.aw:258
 msgid "url"
+msgstr ""
+
+#: classes/contentmgmt/site_styles.aw:262
+msgid "Men&uuml;&uuml;pildi nr"
 msgstr ""
 

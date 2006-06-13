@@ -1870,123 +1870,55 @@ msgstr ""
 msgid "Seose Avaldus (RELTYPE_AVALDUS) tekst"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:951 classes/vastuv6tt/vastuv6tt_sisseastuja.aw:968
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:996 classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1014
 msgid "Lisa uus avaldus"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:975
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1021
 msgid "Kustutada?"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:976
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1022
 msgid "Kustuta valitud avaldus(ed)"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:991
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1037
 msgid "Vastuv&otilde;tukatse"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:996
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1042
 msgid "Prinditud"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1001
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1047
 msgid "Prindi"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1022
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1069
 msgid "Prindi konkursileht"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1033
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1080
 msgid "Valitud erialadel sisseastumiskatseid pole."
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1045
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1092
 msgid "Eriala"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1051
-msgid "&Otilde;ppevorm"
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1098
+msgid "&otilde;ppevorm"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1057
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1104
 msgid "Eelistus"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1063
-msgid "Tõend"
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1110
+msgid "T&otilde;end"
 msgstr ""
 
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1082
+#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1129
 msgid "Prindi kandideerimist&otilde;end"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1086
-msgid "Andmed kinnitamata."
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1162
-msgid "Etten&auml;htud avalduste arv on t&auml;is. &uuml;he &otilde;ppevormi kohta saab esitada kuni kaks avaldust.<br>"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1169
-msgid "Sellele erialale on valitud &otilde;ppevormis juba avaldus esitatud.<br>"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1176
-msgid "Valitud &otilde;ppevormis on juba esitatud avaldus, seega tuleks m&auml;&auml;rata ka eelistatav eriala.<br>"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1243
-msgid "Nimi v&otilde;i &otilde;ppekeel sisestamata. "
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1271
-msgid "Riigieksami hinne pole lubatud piirides. "
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1272
-msgid "Riigieksami hinne pole lubatud piirides.<br>"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1381
-msgid "Elukohamaa sisestamata. Mitte-eesti kodanikel n&otilde;utav."
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1389
-msgid "Elamisloa liik sisestamata. Mitte-eesti kodanikel n&otilde;utav."
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1730
-msgid "Vallaline"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1731
-msgid "Abielus"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1732
-msgid "Vabaabielus"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1826 classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1845
-msgid "Ei"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1827
-msgid "Jah"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1846
-msgid "Kuld"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1847
-msgid "H&otilde;be"
-msgstr ""
-
-#: classes/vastuv6tt/vastuv6tt_sisseastuja.aw:1848
-msgid "Kiitus"
 msgstr ""
 

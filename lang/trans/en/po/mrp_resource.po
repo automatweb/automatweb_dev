@@ -191,19 +191,16 @@ msgstr ""
 msgid "Omaduse Päeva üldpuhver (h) (global_buffer) help"
 msgstr ""
 
-# classes/mrp/mrp_resource.aw:prop_work_hrs_recur
 #: classes/mrp/mrp_resource.aw:prop_work_hrs_recur
-msgid "Omaduse T&ouml;&ouml;ajad (work_hrs_recur) caption"
-msgstr "Avaiable times"
-
-# classes/mrp/mrp_resource.aw:prop_work_hrs_recur_comment
-#: classes/mrp/mrp_resource.aw:prop_work_hrs_recur_comment
-msgid "Omaduse T&ouml;&ouml;ajad (work_hrs_recur) kommentaar"
+msgid "Omaduse Tööajad (work_hrs_recur) caption"
 msgstr ""
 
-# classes/mrp/mrp_resource.aw:prop_work_hrs_recur_help
+#: classes/mrp/mrp_resource.aw:prop_work_hrs_recur_comment
+msgid "Omaduse Tööajad (work_hrs_recur) kommentaar"
+msgstr ""
+
 #: classes/mrp/mrp_resource.aw:prop_work_hrs_recur_help
-msgid "Omaduse T&ouml;&ouml;ajad (work_hrs_recur) help"
+msgid "Omaduse Tööajad (work_hrs_recur) help"
 msgstr ""
 
 # classes/mrp/mrp_resource.aw:prop_unavailable_recur
@@ -221,24 +218,16 @@ msgstr ""
 msgid "Omaduse Kinnised ajad (unavailable_recur) help"
 msgstr ""
 
-# classes/mrp/mrp_resource.aw:prop_unavailable_weekends
 #: classes/mrp/mrp_resource.aw:prop_unavailable_weekends
-msgid ""
-"Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) "
-"caption"
-msgstr "Not available on weekends"
-
-# classes/mrp/mrp_resource.aw:prop_unavailable_weekends_comment
-#: classes/mrp/mrp_resource.aw:prop_unavailable_weekends_comment
-msgid ""
-"Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) "
-"kommentaar"
+msgid "Omaduse Ei tööta nädalavahetustel (unavailable_weekends) caption"
 msgstr ""
 
-# classes/mrp/mrp_resource.aw:prop_unavailable_weekends_help
+#: classes/mrp/mrp_resource.aw:prop_unavailable_weekends_comment
+msgid "Omaduse Ei tööta nädalavahetustel (unavailable_weekends) kommentaar"
+msgstr ""
+
 #: classes/mrp/mrp_resource.aw:prop_unavailable_weekends_help
-msgid ""
-"Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) help"
+msgid "Omaduse Ei tööta nädalavahetustel (unavailable_weekends) help"
 msgstr ""
 
 # classes/mrp/mrp_resource.aw:prop_unavailable_dates
@@ -318,13 +307,12 @@ msgstr "Available times"
 msgid "Grupi Tööajad (grp_resource_unavailable) help"
 msgstr ""
 
-# classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_work
 #: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_work
-msgid "Grupi T&ouml;&ouml;ajad (grp_resource_unavailable_work) pealkiri"
-msgstr "Available times"
+msgid "Grupi Tööajad (grp_resource_unavailable_work) pealkiri"
+msgstr ""
 
 #: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_work_help
-msgid "Grupi T&ouml;&ouml;ajad (grp_resource_unavailable_work) help"
+msgid "Grupi Tööajad (grp_resource_unavailable_work) help"
 msgstr ""
 
 # classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_una
@@ -352,161 +340,172 @@ msgstr "Resource owner"
 msgid "Seose Kordus (RELTYPE_RECUR) tekst"
 msgstr "Recurrence"
 
+# classes/mrp/mrp_resource.aw:rel_RELTYPE_RECUR_WRK
 #: classes/mrp/mrp_resource.aw:rel_RELTYPE_RECUR_WRK
-msgid "Seose T&amp;ouml;&amp;ouml;aja kordus (RELTYPE_RECUR_WRK) tekst"
-msgstr ""
+msgid "Seose T&ouml;&ouml;aja kordus (RELTYPE_RECUR_WRK) tekst"
+msgstr "Available time recurrence"
 
-#: classes/mrp/mrp_resource.aw:153
+#: classes/mrp/mrp_resource.aw:151
 msgid "Vaba"
 msgstr "Free"
 
-#: classes/mrp/mrp_resource.aw:154
+#: classes/mrp/mrp_resource.aw:152
 msgid "Kasutusel"
 msgstr "In use"
 
-#: classes/mrp/mrp_resource.aw:155
+#: classes/mrp/mrp_resource.aw:153
 msgid "Suletud"
 msgstr "Closed"
 
-#: classes/mrp/mrp_resource.aw:159 classes/mrp/mrp_resource.aw:1454
+#: classes/mrp/mrp_resource.aw:157 classes/mrp/mrp_resource.aw:1452
 msgid "Uus"
 msgstr "New"
 
-#: classes/mrp/mrp_resource.aw:160
+#: classes/mrp/mrp_resource.aw:158
 msgid "Planeeritud"
 msgstr "Planned"
 
-#: classes/mrp/mrp_resource.aw:161
+#: classes/mrp/mrp_resource.aw:159
 msgid "Töös"
 msgstr "In progress"
 
-#: classes/mrp/mrp_resource.aw:162
+#: classes/mrp/mrp_resource.aw:160
 msgid "Katkestatud"
 msgstr "Aborted"
 
-#: classes/mrp/mrp_resource.aw:163
+#: classes/mrp/mrp_resource.aw:161
 msgid "Valmis"
 msgstr "Done"
 
-#: classes/mrp/mrp_resource.aw:164
+#: classes/mrp/mrp_resource.aw:162
 msgid "Lukustatud"
 msgstr "Locked"
 
-#: classes/mrp/mrp_resource.aw:165
+#: classes/mrp/mrp_resource.aw:163
 msgid "Paus"
 msgstr "Pause"
 
-#: classes/mrp/mrp_resource.aw:166
+#: classes/mrp/mrp_resource.aw:164
 msgid "Kustutatud"
 msgstr "Deleted"
 
-#: classes/mrp/mrp_resource.aw:167
+#: classes/mrp/mrp_resource.aw:165
 msgid "Plaanist väljas"
 msgstr "Out of planning"
 
-#: classes/mrp/mrp_resource.aw:168
+#: classes/mrp/mrp_resource.aw:166
 msgid "Arhiveeritud"
 msgstr "Archived"
 
-#: classes/mrp/mrp_resource.aw:199
+#: classes/mrp/mrp_resource.aw:197
 msgid "Uut ressurssi saab luua vaid ressursihalduskeskkonnast. "
 msgstr "New resources can only be created via the manager"
 
-#: classes/mrp/mrp_resource.aw:209
+#: classes/mrp/mrp_resource.aw:207
 msgid "Ressurss ei kuulu ühessegi ressursihaldussüsteemi. "
 msgstr "Resource is not part of any manager"
 
-#: classes/mrp/mrp_resource.aw:215
+#: classes/mrp/mrp_resource.aw:213
 msgid "Viga! "
 msgstr "Error! "
 
-#: classes/mrp/mrp_resource.aw:248
+#: classes/mrp/mrp_resource.aw:246
 msgid "/Ressursid"
 msgstr "/Resources"
 
-#: classes/mrp/mrp_resource.aw:265
+#: classes/mrp/mrp_resource.aw:263
 msgid "Ressursi kasutust planeeritakse"
 msgstr "Resource useage is planned"
 
-#: classes/mrp/mrp_resource.aw:266
+#: classes/mrp/mrp_resource.aw:264
 msgid "Ressursi kasutust ei planeerita"
 msgstr "Resource usage is not planned"
 
-#: classes/mrp/mrp_resource.aw:267
+#: classes/mrp/mrp_resource.aw:265
 msgid "Ressurss on allhange"
 msgstr "Resource is sub-contract"
 
-#: classes/mrp/mrp_resource.aw:455
+#: classes/mrp/mrp_resource.aw:453
 msgid "Seda tüüpi kordust ei saa kasutada. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:471
+#: classes/mrp/mrp_resource.aw:469
 msgid "Viga kellaaja määrangus. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:484
+#: classes/mrp/mrp_resource.aw:482
 msgid "Pikkus ei saa olla suurem kui korduse periood. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:489
+#: classes/mrp/mrp_resource.aw:487
 msgid "Pikkus ei saa olla null. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:497
+#: classes/mrp/mrp_resource.aw:495
 msgid "'Alates' peab olema varasem aeg kui 'Kuni'. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:515
+#: classes/mrp/mrp_resource.aw:513
 msgid "Ressurss on kasutusel. Ei saa hooldusse panna. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:573 classes/mrp/mrp_resource.aw:710
+#: classes/mrp/mrp_resource.aw:571 classes/mrp/mrp_resource.aw:708
 msgid "Ava"
 msgstr "Open"
 
-#: classes/mrp/mrp_resource.aw:578
+#: classes/mrp/mrp_resource.aw:576
 msgid "Staatus"
 msgstr "Status"
 
-#: classes/mrp/mrp_resource.aw:584
+#: classes/mrp/mrp_resource.aw:582
 msgid "Projekti nr."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:591
+#: classes/mrp/mrp_resource.aw:589
 msgid "Klient"
 msgstr "Customer"
 
-#: classes/mrp/mrp_resource.aw:598
+#: classes/mrp/mrp_resource.aw:596
 msgid "Projekti nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:605
+#: classes/mrp/mrp_resource.aw:603
 msgid "Tr&uuml;kitud"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:615
+#: classes/mrp/mrp_resource.aw:613
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:625
+#: classes/mrp/mrp_resource.aw:623
 msgid "Tr&uuml;kiarv"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:634
+#: classes/mrp/mrp_resource.aw:632
 msgid "Tr&uuml;kiarv Notes"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1395
+#: classes/mrp/mrp_resource.aw:1393
 msgid "Ressurss on valitud aegadel kasutuses:<br>"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:1414 classes/mrp/mrp_resource.aw:1433
+#: classes/mrp/mrp_resource.aw:1412 classes/mrp/mrp_resource.aw:1431
 msgid "Ressurss ei ole valitud aegadel kasutatav!<br>Kinnised ajad:<br>"
 msgstr ""
 
-# classes/mrp/mrp_resource.aw:rel_RELTYPE_RECUR_WRK
-#~ msgid "Seose T&ouml;&ouml;aja kordus (RELTYPE_RECUR_WRK) tekst"
-#~ msgstr "Available time recurrence"
+# classes/mrp/mrp_resource.aw:prop_work_hrs_recur
+#~ msgid "Omaduse T&ouml;&ouml;ajad (work_hrs_recur) caption"
+#~ msgstr "Avaiable times"
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_weekends
+#~ msgid ""
+#~ "Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) "
+#~ "caption"
+#~ msgstr "Not available on weekends"
+
+# classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_work
+#~ msgid "Grupi T&ouml;&ouml;ajad (grp_resource_unavailable_work) pealkiri"
+#~ msgstr "Available times"
 
 #~ msgid "Alustamisaeg"
 #~ msgstr "Start date"

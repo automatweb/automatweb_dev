@@ -428,19 +428,19 @@ msgstr ""
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
 msgstr "Moderator comment"
 
-#: classes/image.aw:264
+#: classes/image.aw:301
 msgid "kommentaar"
 msgstr ""
 
-#: classes/image.aw:264
+#: classes/image.aw:301
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:757
+#: classes/image.aw:884
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr "Image automatic resizing is controlled by object "
 
-#: classes/image.aw:1210
+#: classes/image.aw:1375
 msgid "Lisa"
 msgstr ""
 

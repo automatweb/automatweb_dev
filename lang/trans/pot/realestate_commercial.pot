@@ -518,6 +518,18 @@ msgstr ""
 msgid "Omaduse Projekt (project) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_commercial.aw:prop_expire
+msgid "Omaduse aegub (expire) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_commercial.aw:prop_expire_comment
+msgid "Omaduse aegub (expire) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_commercial.aw:prop_expire_help
+msgid "Omaduse aegub (expire) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_additional_info_et
 msgid "Omaduse Lisainfo EST (additional_info_et) caption"
 msgstr ""
@@ -960,6 +972,18 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_gas_heating_help
 msgid "Omaduse Gaasiküte (has_gas_heating) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_commercial.aw:prop_has_oil_heating
+msgid "Omaduse Õliküte (has_oil_heating) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_commercial.aw:prop_has_oil_heating_comment
+msgid "Omaduse Õliküte (has_oil_heating) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_commercial.aw:prop_has_oil_heating_help
+msgid "Omaduse Õliküte (has_oil_heating) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_forced_ventilation

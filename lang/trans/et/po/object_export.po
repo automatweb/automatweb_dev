@@ -175,3 +175,19 @@ msgstr ""
 #: classes/admin/object_export.aw:166
 msgid "Eksporditav"
 msgstr ""
+
+#: classes/admin/object_export.aw:250
+msgid "Looja"
+msgstr ""
+
+#: classes/admin/object_export.aw:257
+msgid "Loodud"
+msgstr ""
+
+#: classes/admin/object_export.aw:264
+msgid "Muutja"
+msgstr ""
+
+#: classes/admin/object_export.aw:271
+msgid "Muudetud"
+msgstr ""

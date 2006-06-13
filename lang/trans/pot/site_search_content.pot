@@ -446,7 +446,7 @@ msgstr ""
 msgid "Vaikimisi sorteeritakse"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:339 classes/contentmgmt/site_search/site_search_content.aw:1894
+#: classes/contentmgmt/site_search/site_search_content.aw:339 classes/contentmgmt/site_search/site_search_content.aw:1903
 msgid "Pealkiri"
 msgstr ""
 
@@ -462,39 +462,39 @@ msgstr ""
 msgid "Kuupäeva järgi (vanem enne)"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:1874 classes/contentmgmt/site_search/site_search_content.aw:1880
+#: classes/contentmgmt/site_search/site_search_content.aw:1883 classes/contentmgmt/site_search/site_search_content.aw:1889
 msgid ""
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:1886
+#: classes/contentmgmt/site_search/site_search_content.aw:1895
 msgid "Mitu korda sisaldab"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:1901
+#: classes/contentmgmt/site_search/site_search_content.aw:1910
 msgid "Muudetud"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:1911
+#: classes/contentmgmt/site_search/site_search_content.aw:1920
 msgid "Sisu"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2055
+#: classes/contentmgmt/site_search/site_search_content.aw:2064
 msgid "t&auml;psuse"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2056
+#: classes/contentmgmt/site_search/site_search_content.aw:2065
 msgid "kuup&auml;eva alusel"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2057
+#: classes/contentmgmt/site_search/site_search_content.aw:2066
 msgid "pealkirja alusel"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2348
+#: classes/contentmgmt/site_search/site_search_content.aw:2357
 msgid "Lihtne otsing"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:2353
+#: classes/contentmgmt/site_search/site_search_content.aw:2362
 msgid "Detailotsing"
 msgstr ""
 

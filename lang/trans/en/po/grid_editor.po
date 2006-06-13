@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/vcl/grid_editor.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/vcl/grid_editor.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/vcl/grid_editor.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/vcl/grid_editor.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/vcl/grid_editor.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/vcl/grid_editor.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+
+#: classes/vcl/grid_editor.aw:28 classes/vcl/grid_editor.aw:1338 classes/vcl/grid_editor.aw:1453 classes/vcl/grid_editor.aw:1531 classes/vcl/grid_editor.aw:1561 classes/vcl/grid_editor.aw:1591 classes/vcl/grid_editor.aw:1749 classes/vcl/grid_editor.aw:1788
+msgid "allah"
+msgstr ""
+
+#: classes/vcl/grid_editor.aw:1750 classes/vcl/grid_editor.aw:1789
+msgid "allah2"
+msgstr ""
+

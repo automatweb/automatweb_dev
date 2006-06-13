@@ -1813,6 +1813,26 @@ msgstr ""
 msgid "Klassi N&otilde;ude lahendus (1072) nimi"
 msgstr ""
 
+#: aw.ini:class_1073
+msgid "Klassi Siduss&uuml;steem (1073) nimi"
+msgstr ""
+
+#: aw.ini:class_1074
+msgid "Klassi Sidestus (1074) nimi"
+msgstr ""
+
+#: aw.ini:class_1075
+msgid "Klassi Hanke prioriteet (1075) nimi"
+msgstr ""
+
+#: aw.ini:class_1076
+msgid "Klassi Pakkumise hindamise kriteerium (1076) nimi"
+msgstr ""
+
+#: aw.ini:class_1077
+msgid "Klassi Strateegiline edutegur (1077) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""
@@ -2047,4 +2067,8 @@ msgstr ""
 
 #: aw.ini:classfolder_61
 msgid "Klassi kataloogi Hankekeskkond (61) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_62
+msgid "Klassi kataloogi Siduss&uuml;steemid (62) nimi"
 msgstr ""

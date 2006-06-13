@@ -1301,59 +1301,59 @@ msgstr ""
 msgid "puudub"
 msgstr "missing"
 
-#: classes/doc.aw:765
+#: classes/doc.aw:769
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/doc.aw:780
+#: classes/doc.aw:784
 msgid "Eelvaade"
 msgstr "Preview"
 
-#: classes/doc.aw:942
+#: classes/doc.aw:946
 msgid "Dokument 2.0"
 msgstr "Document 2.0"
 
-#: classes/doc.aw:955
+#: classes/doc.aw:959
 msgid "Dokument (vend)"
 msgstr "Document (brother)"
 
-#: classes/doc.aw:1220 classes/doc.aw:1304 classes/doc.aw:1308
+#: classes/doc.aw:1224 classes/doc.aw:1308 classes/doc.aw:1312
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/doc.aw:1256
+#: classes/doc.aw:1260
 msgid "Versioon"
 msgstr ""
 
-#: classes/doc.aw:1262 classes/doc.aw:1322 classes/doc.aw:1350
+#: classes/doc.aw:1266 classes/doc.aw:1326 classes/doc.aw:1354
 msgid "Muuda"
 msgstr ""
 
-#: classes/doc.aw:1268
+#: classes/doc.aw:1272
 msgid "Hinne"
 msgstr ""
 
-#: classes/doc.aw:1274
+#: classes/doc.aw:1278
 msgid "Hinda"
 msgstr ""
 
-#: classes/doc.aw:1280
+#: classes/doc.aw:1284
 msgid "M&auml;&auml;ra aktiivseks"
 msgstr ""
 
-#: classes/doc.aw:1286
+#: classes/doc.aw:1290
 msgid "Vali"
 msgstr ""
 
-#: classes/doc.aw:1317 classes/doc.aw:1345
+#: classes/doc.aw:1321 classes/doc.aw:1349
 msgid "--Vali--"
 msgstr ""
 
-#: classes/doc.aw:1438
+#: classes/doc.aw:1442
 msgid "Kustuta"
 msgstr ""
 
-#: classes/doc.aw:1475
+#: classes/doc.aw:1479
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 

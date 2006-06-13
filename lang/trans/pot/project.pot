@@ -87,15 +87,15 @@ msgid "Omaduse Teostaja (implementor) help"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_start
-msgid "Omaduse Algus (start) caption"
+msgid "Omaduse  (start) caption"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_start_comment
-msgid "Omaduse Algus (start) kommentaar"
+msgid "Omaduse  (start) kommentaar"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_start_help
-msgid "Omaduse Algus (start) help"
+msgid "Omaduse  (start) help"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_end
@@ -674,12 +674,48 @@ msgstr ""
 msgid "Omaduse T&otilde;lgi (transl) help"
 msgstr ""
 
+#: classes/applications/groupware/project.aw:prop_strat_a
+msgid "Omaduse  (strat_a) caption"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_strat_a_comment
+msgid "Omaduse  (strat_a) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:prop_strat_a_help
+msgid "Omaduse  (strat_a) help"
+msgstr ""
+
 #: classes/applications/groupware/project.aw:group_info
 msgid "Grupi Projekti info (info) pealkiri"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:group_info_help
 msgid "Grupi Projekti info (info) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_info_t
+msgid "Grupi Projekti info (info_t) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_info_t_help
+msgid "Grupi Projekti info (info_t) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_strat
+msgid "Grupi Strateegilised edutegurid (strat) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_strat_help
+msgid "Grupi Strateegilised edutegurid (strat) help"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_strat_a
+msgid "Grupi Strateegiliste edutegurite hindamine (strat_a) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_strat_a_help
+msgid "Grupi Strateegiliste edutegurite hindamine (strat_a) help"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:group_general2
@@ -866,143 +902,147 @@ msgstr ""
 msgid "Seose Arve (RELTYPE_PREPAYMENT_BILL) tekst"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:308
+#: classes/applications/groupware/project.aw:rel_RELTYPE_STRAT
+msgid "Seose Strateegiline edutegur (RELTYPE_STRAT) tekst"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:322
 msgid "T&ouml;&ouml;s"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:309
+#: classes/applications/groupware/project.aw:323
 msgid "Valmis"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:511 classes/applications/groupware/project.aw:2886
+#: classes/applications/groupware/project.aw:529 classes/applications/groupware/project.aw:2915
 msgid "--Vali--"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:530
+#: classes/applications/groupware/project.aw:548
 msgid "Nädala vaade"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:563
+#: classes/applications/groupware/project.aw:581
 msgid "Loo arve"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1639
+#: classes/applications/groupware/project.aw:1668
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1668
+#: classes/applications/groupware/project.aw:1697
 msgid "Alamprojekt"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1745 classes/applications/groupware/project.aw:1820 classes/applications/groupware/project.aw:2595
+#: classes/applications/groupware/project.aw:1774 classes/applications/groupware/project.aw:1849 classes/applications/groupware/project.aw:2624 classes/applications/groupware/project.aw:3870
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2062
+#: classes/applications/groupware/project.aw:2091
 msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2123
+#: classes/applications/groupware/project.aw:2152
 msgid "header"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2575 classes/applications/groupware/project.aw:2900 classes/applications/groupware/project.aw:3252
+#: classes/applications/groupware/project.aw:2604 classes/applications/groupware/project.aw:2929 classes/applications/groupware/project.aw:3281
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2585
+#: classes/applications/groupware/project.aw:2614
 msgid "Verstapost"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2602 classes/applications/groupware/project.aw:2952 classes/applications/groupware/project.aw:3259 classes/applications/groupware/project.aw:3558
+#: classes/applications/groupware/project.aw:2631 classes/applications/groupware/project.aw:2981 classes/applications/groupware/project.aw:3288 classes/applications/groupware/project.aw:3587
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2629 classes/applications/groupware/project.aw:3009 classes/applications/groupware/project.aw:3056 classes/applications/groupware/project.aw:3098 classes/applications/groupware/project.aw:3267 classes/applications/groupware/project.aw:3594
+#: classes/applications/groupware/project.aw:2658 classes/applications/groupware/project.aw:3038 classes/applications/groupware/project.aw:3085 classes/applications/groupware/project.aw:3127 classes/applications/groupware/project.aw:3296 classes/applications/groupware/project.aw:3623
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2636
+#: classes/applications/groupware/project.aw:2665
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2646
+#: classes/applications/groupware/project.aw:2675
 msgid "L&otilde;pp"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2904 classes/applications/groupware/project.aw:3010
+#: classes/applications/groupware/project.aw:2933 classes/applications/groupware/project.aw:3039
 msgid "Isik"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2917 classes/applications/groupware/project.aw:3010 classes/applications/groupware/project.aw:3106 classes/applications/groupware/project.aw:3274
+#: classes/applications/groupware/project.aw:2946 classes/applications/groupware/project.aw:3039 classes/applications/groupware/project.aw:3135 classes/applications/groupware/project.aw:3303
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2945 classes/applications/groupware/project.aw:3029
+#: classes/applications/groupware/project.aw:2974 classes/applications/groupware/project.aw:3058
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2960
+#: classes/applications/groupware/project.aw:2989
 msgid "Vastaspool"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3010 classes/applications/groupware/project.aw:3604
+#: classes/applications/groupware/project.aw:3039 classes/applications/groupware/project.aw:3633
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3035
+#: classes/applications/groupware/project.aw:3064
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3114 classes/applications/groupware/project.aw:3281
+#: classes/applications/groupware/project.aw:3143 classes/applications/groupware/project.aw:3310
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3122 classes/applications/groupware/project.aw:3289
+#: classes/applications/groupware/project.aw:3151 classes/applications/groupware/project.aw:3318
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3130 classes/applications/groupware/project.aw:3297
+#: classes/applications/groupware/project.aw:3159 classes/applications/groupware/project.aw:3326
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3138 classes/applications/groupware/project.aw:3233
+#: classes/applications/groupware/project.aw:3167 classes/applications/groupware/project.aw:3262
 msgid "Rollid"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3473 classes/applications/groupware/project.aw:3614
+#: classes/applications/groupware/project.aw:3502 classes/applications/groupware/project.aw:3643
 msgid ""
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3474
+#: classes/applications/groupware/project.aw:3503
 msgid "Memo"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3475
+#: classes/applications/groupware/project.aw:3504
 msgid "CRM Dokument"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3476
+#: classes/applications/groupware/project.aw:3505
 msgid "Leping"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3477
+#: classes/applications/groupware/project.aw:3506
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3599
+#: classes/applications/groupware/project.aw:3628
 msgid "Fail"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3609
+#: classes/applications/groupware/project.aw:3638
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3789
+#: classes/applications/groupware/project.aw:3818
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:3810
+#: classes/applications/groupware/project.aw:3839
 msgid "%s ettemaks"
 msgstr ""
 

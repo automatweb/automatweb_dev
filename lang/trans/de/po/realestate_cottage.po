@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/realestate_management/realestate_cottage.aw:class_978_help
 msgid "Klassi Suvila help"
 msgstr ""
@@ -471,15 +470,19 @@ msgid "Omaduse N&auml;ita firma kodulehel (show_on_webpage) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_show_house_number_on_web
-msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
+msgid ""
+"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_show_house_number_on_web_comment
-msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) kommentaar"
+msgid ""
+"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_show_house_number_on_web_help
-msgid "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
+msgid ""
+"Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_special_homepage
@@ -495,15 +498,19 @@ msgid "Omaduse Objekti koduleht (special_homepage) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_special_status
-msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) caption"
+msgid ""
+"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_special_status_comment
-msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) kommentaar"
+msgid ""
+"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_special_status_help
-msgid "Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) help"
+msgid ""
+"Omaduse Eristaatus (eripakkumiste kuvamiseks veebis) (special_status) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_project
@@ -516,6 +523,18 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_project_help
 msgid "Omaduse Projekt (project) help"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_cottage.aw:prop_expire
+msgid "Omaduse aegub (expire) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_cottage.aw:prop_expire_comment
+msgid "Omaduse aegub (expire) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_cottage.aw:prop_expire_help
+msgid "Omaduse aegub (expire) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_additional_info_et
@@ -627,15 +646,21 @@ msgid "Omaduse Väike pilt (picture_icon_image) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_map_create
-msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) caption"
+msgid ""
+"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
+"caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_map_create_comment
-msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) kommentaar"
+msgid ""
+"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_map_create_help
-msgid "Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) help"
+msgid ""
+"Omaduse Loo kaart (salvestatakse kaardi pilt ja asukoha andmed) (map_create) "
+"help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_map_url
@@ -999,15 +1024,19 @@ msgid "Omaduse  (communications_sewerage_additional) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_communications_additional
-msgid "Omaduse Lisainfo kommunikatsioonide kohta (communications_additional) caption"
+msgid ""
+"Omaduse Lisainfo kommunikatsioonide kohta (communications_additional) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_communications_additional_comment
-msgid "Omaduse Lisainfo kommunikatsioonide kohta (communications_additional) kommentaar"
+msgid ""
+"Omaduse Lisainfo kommunikatsioonide kohta (communications_additional) "
+"kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_communications_additional_help
-msgid "Omaduse Lisainfo kommunikatsioonide kohta (communications_additional) help"
+msgid ""
+"Omaduse Lisainfo kommunikatsioonide kohta (communications_additional) help"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_childtitle120
@@ -1454,6 +1483,18 @@ msgstr ""
 msgid "Omaduse Õhkküte (has_air_heating) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_cottage.aw:prop_has_oil_heating
+msgid "Omaduse Õliküte (has_oil_heating) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_cottage.aw:prop_has_oil_heating_comment
+msgid "Omaduse Õliküte (has_oil_heating) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_cottage.aw:prop_has_oil_heating_help
+msgid "Omaduse Õliküte (has_oil_heating) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_childtitle3
 msgid "Omaduse Kommunikatsioonid (childtitle3) caption"
 msgstr ""
@@ -1543,7 +1584,8 @@ msgid "Omaduse Tsentraalne külmaveevarustus (has_central_cold_water) caption"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_has_central_cold_water_comment
-msgid "Omaduse Tsentraalne külmaveevarustus (has_central_cold_water) kommentaar"
+msgid ""
+"Omaduse Tsentraalne külmaveevarustus (has_central_cold_water) kommentaar"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_cottage.aw:prop_has_central_cold_water_help
@@ -2126,19 +2168,19 @@ msgstr ""
 msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_cottage.aw:392
+#: classes/applications/realestate_management/realestate_cottage.aw:395
 msgid "Lisandub objekti hinnale"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_cottage.aw:393
+#: classes/applications/realestate_management/realestate_cottage.aw:396
 msgid "Sisaldub objekti hinnas"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_cottage.aw:411
+#: classes/applications/realestate_management/realestate_cottage.aw:414
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_cottage.aw:488 classes/applications/realestate_management/realestate_cottage.aw:496
+#: classes/applications/realestate_management/realestate_cottage.aw:491
+#: classes/applications/realestate_management/realestate_cottage.aw:499
 msgid "Kohustuslik väli"
 msgstr ""
-

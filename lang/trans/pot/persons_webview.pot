@@ -1,0 +1,204 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/crm/persons_webview.aw:class_1055_help
+msgid "Klassi Kliendihaldus help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_company
+msgid "Omaduse Ettevõte (company) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_company_comment
+msgid "Omaduse Ettevõte (company) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_company_help
+msgid "Omaduse Ettevõte (company) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_departments
+msgid "Omaduse Osakonnad (departments) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_departments_comment
+msgid "Omaduse Osakonnad (departments) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_departments_help
+msgid "Omaduse Osakonnad (departments) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_persons_principe
+msgid "Omaduse Isikute järjestamisprintsiip (persons_principe) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_persons_principe_comment
+msgid "Omaduse Isikute järjestamisprintsiip (persons_principe) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_persons_principe_help
+msgid "Omaduse Isikute järjestamisprintsiip (persons_principe) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_department_grouping
+msgid "Omaduse Osakondade grupeerimisprintsiip (department_grouping) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_department_grouping_comment
+msgid "Omaduse Osakondade grupeerimisprintsiip (department_grouping) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_department_grouping_help
+msgid "Omaduse Osakondade grupeerimisprintsiip (department_grouping) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_grouping_principe
+msgid "Omaduse Grupeerimise järjestamisprintsiip (grouping_principe) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_grouping_principe_comment
+msgid "Omaduse Grupeerimise järjestamisprintsiip (grouping_principe) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_grouping_principe_help
+msgid "Omaduse Grupeerimise järjestamisprintsiip (grouping_principe) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_view_table
+msgid "Omaduse Vaadete tabel (view_table) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_view_table_comment
+msgid "Omaduse Vaadete tabel (view_table) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_view_table_help
+msgid "Omaduse Vaadete tabel (view_table) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_view1
+msgid "Omaduse Vaade 1 (view1) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_view1_comment
+msgid "Omaduse Vaade 1 (view1) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_view1_help
+msgid "Omaduse Vaade 1 (view1) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_template
+msgid "Omaduse Template (template) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_template_comment
+msgid "Omaduse Template (template) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_template_help
+msgid "Omaduse Template (template) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_department_levels
+msgid "Omaduse Osakondade tasemed (department_levels) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_department_levels_comment
+msgid "Omaduse Osakondade tasemed (department_levels) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_department_levels_help
+msgid "Omaduse Osakondade tasemed (department_levels) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_with_without_persons
+msgid "Omaduse Sisse lugeda (with_without_persons) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_with_without_persons_comment
+msgid "Omaduse Sisse lugeda (with_without_persons) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_with_without_persons_help
+msgid "Omaduse Sisse lugeda (with_without_persons) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_columns
+msgid "Omaduse Tulpade arv (columns) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_columns_comment
+msgid "Omaduse Tulpade arv (columns) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_columns_help
+msgid "Omaduse Tulpade arv (columns) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_rows_by
+msgid "Omaduse Read ametinimetuse alusel (rows_by) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_rows_by_comment
+msgid "Omaduse Read ametinimetuse alusel (rows_by) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_rows_by_help
+msgid "Omaduse Read ametinimetuse alusel (rows_by) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_min_cols
+msgid "Omaduse Minimaalne tulpade arv (min_cols) caption"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_min_cols_comment
+msgid "Omaduse Minimaalne tulpade arv (min_cols) kommentaar"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:prop_min_cols_help
+msgid "Omaduse Minimaalne tulpade arv (min_cols) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:group_view
+msgid "Grupi Näitamine (view) pealkiri"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:group_view_help
+msgid "Grupi Näitamine (view) help"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:rel_RELTYPE_COMPANY
+msgid "Seose Registri andmed (RELTYPE_COMPANY) tekst"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:rel_RELTYPE_DEPARTMENT
+msgid "Seose Seadete vorm (RELTYPE_DEPARTMENT) tekst"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:98
+msgid "ainult osakonnad"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:99
+msgid "koos isikutega"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:138 classes/crm/persons_webview.aw:155
+msgid "Isikute järjestamisprintsiip $i"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:190
+msgid "pole asutust valitud"
+msgstr ""
+

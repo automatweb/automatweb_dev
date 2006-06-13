@@ -525,6 +525,18 @@ msgstr ""
 msgid "Omaduse Projekt (project) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_garage.aw:prop_expire
+msgid "Omaduse aegub (expire) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_expire_comment
+msgid "Omaduse aegub (expire) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_garage.aw:prop_expire_help
+msgid "Omaduse aegub (expire) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_garage.aw:prop_additional_info_et
 msgid "Omaduse Lisainfo EST (additional_info_et) caption"
 msgstr ""
@@ -843,11 +855,11 @@ msgstr ""
 msgid "Seose V&auml;ike pilt (RELTYPE_REALESTATE_PICTUREICON) tekst"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:72
+#: classes/applications/realestate_management/realestate_garage.aw:70
 msgid "%s saj."
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_garage.aw:93
-#: classes/applications/realestate_management/realestate_garage.aw:101
+#: classes/applications/realestate_management/realestate_garage.aw:91
+#: classes/applications/realestate_management/realestate_garage.aw:99
 msgid "Kohustuslik väli"
 msgstr ""

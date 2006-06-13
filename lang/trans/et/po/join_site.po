@@ -666,31 +666,32 @@ msgstr ""
 msgid "<b>Vahepealkirjad</b>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:755
+#: classes/contentmgmt/join/join_site.aw:759
+#: classes/contentmgmt/join/join_site.aw:763
 msgid ""
 "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:831
+#: classes/contentmgmt/join/join_site.aw:847
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:858
+#: classes/contentmgmt/join/join_site.aw:874
 msgid "Liitun"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1707
+#: classes/contentmgmt/join/join_site.aw:1761
 msgid "Liitumise meili from aadress (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1718
+#: classes/contentmgmt/join/join_site.aw:1772
 msgid "Liitumise meili subjekt (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1731
+#: classes/contentmgmt/join/join_site.aw:1785
 msgid "Liitumise meil (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1799
+#: classes/contentmgmt/join/join_site.aw:1853
 msgid "Sellise koodiga kasutajat pole olemas!"
 msgstr ""

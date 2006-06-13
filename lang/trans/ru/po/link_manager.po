@@ -9,16 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/admin/link_manager.aw:87
+#: classes/admin/link_manager.aw:106
 msgid "Link"
 msgstr ""
 
-#: classes/admin/link_manager.aw:92
+#: classes/admin/link_manager.aw:111
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/link_manager.aw:120
+#: classes/admin/link_manager.aw:147
 msgid "Vali see"
 msgstr ""
-

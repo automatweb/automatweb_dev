@@ -614,7 +614,7 @@ msgstr ""
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1064
+#: classes/contentmgmt/promo.aw:1069
 msgid "M&auml;rks&otilde;na"
 msgstr ""
 

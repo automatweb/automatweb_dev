@@ -10,39 +10,43 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/acl_manager.aw:19
+#: classes/vcl/acl_manager.aw:22
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:38
+#: classes/vcl/acl_manager.aw:42
 msgid "Grupp"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:55
+#: classes/vcl/acl_manager.aw:59
 msgid "Jah"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:55
+#: classes/vcl/acl_manager.aw:59
 msgid "Ei"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:114
+#: classes/vcl/acl_manager.aw:118
 msgid ""
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:118
+#: classes/vcl/acl_manager.aw:122
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:131
+#: classes/vcl/acl_manager.aw:135
 msgid "Juurkaust"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:175 classes/vcl/acl_manager.aw:250
+#: classes/vcl/acl_manager.aw:179 classes/vcl/acl_manager.aw:261
 msgid "no group for user %s!"
 msgstr ""
 
-#: classes/vcl/acl_manager.aw:210
+#: classes/vcl/acl_manager.aw:214
 msgid "Salvesta &otilde;igused"
+msgstr ""
+
+#: classes/vcl/acl_manager.aw:234
+msgid "Teil ei ole &otilde;igust muuta objekti %s &otilde;igusi!"
 msgstr ""
 

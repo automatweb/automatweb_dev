@@ -766,79 +766,79 @@ msgstr "Are you sure you want to delete selected entries?"
 msgid "Ekspordi objektid"
 msgstr "Export objects"
 
-#: classes/contentmgmt/webform.aw:1156
+#: classes/contentmgmt/webform.aw:1157
 msgid "-- vali --"
 msgstr "-- select --"
 
-#: classes/contentmgmt/webform.aw:1157
+#: classes/contentmgmt/webform.aw:1158
 msgid "Mitmerealine rippmen&uuml;&uuml;"
 msgstr "Multiple select"
 
-#: classes/contentmgmt/webform.aw:1158
+#: classes/contentmgmt/webform.aw:1159
 msgid "Rippmen&uuml;&uuml;"
 msgstr "Select"
 
-#: classes/contentmgmt/webform.aw:1159
+#: classes/contentmgmt/webform.aw:1160
 msgid "M&auml;rkeruut"
 msgstr "Checkbox"
 
-#: classes/contentmgmt/webform.aw:1160
+#: classes/contentmgmt/webform.aw:1161
 msgid "Raadionupp"
 msgstr "Radio button"
 
-#: classes/contentmgmt/webform.aw:1163
+#: classes/contentmgmt/webform.aw:1164
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/contentmgmt/webform.aw:1164
+#: classes/contentmgmt/webform.aw:1165
 msgid "Järjekord (kasvav)"
 msgstr "Order (ascending)"
 
-#: classes/contentmgmt/webform.aw:1165
+#: classes/contentmgmt/webform.aw:1166
 msgid "Järjekord (kahanev)"
 msgstr "Order (descending)"
 
-#: classes/contentmgmt/webform.aw:1166
+#: classes/contentmgmt/webform.aw:1167
 msgid "Nimi (kasvav)"
 msgstr "Name (ascending)"
 
-#: classes/contentmgmt/webform.aw:1167
+#: classes/contentmgmt/webform.aw:1168
 msgid "Nimi (kahanev)"
 msgstr "Name (descending)"
 
-#: classes/contentmgmt/webform.aw:1168
+#: classes/contentmgmt/webform.aw:1169
 msgid "Loomisaeg (kasvav)"
 msgstr "Created (ascending)"
 
-#: classes/contentmgmt/webform.aw:1169
+#: classes/contentmgmt/webform.aw:1170
 msgid "Loomisaeg (kahanev)"
 msgstr "Created (Descending)"
 
-#: classes/contentmgmt/webform.aw:1171
+#: classes/contentmgmt/webform.aw:1172
 msgid "horisontaalne"
 msgstr "horizontal"
 
-#: classes/contentmgmt/webform.aw:1171
+#: classes/contentmgmt/webform.aw:1172
 msgid "vertikaalne"
 msgstr "vertical"
 
-#: classes/contentmgmt/webform.aw:1439
+#: classes/contentmgmt/webform.aw:1440
 msgid "Veateate stiil"
 msgstr "Error message style"
 
-#: classes/contentmgmt/webform.aw:1495 classes/contentmgmt/webform.aw:1518
+#: classes/contentmgmt/webform.aw:1496 classes/contentmgmt/webform.aw:1519
 msgid "-- Vali --"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1602
+#: classes/contentmgmt/webform.aw:1603
 msgid "Registreeru"
 msgstr "Register"
 
-#: classes/contentmgmt/webform.aw:1753
+#: classes/contentmgmt/webform.aw:1770
 msgid "Saada"
 msgstr "Send"
 
-#: classes/contentmgmt/webform.aw:2238
+#: classes/contentmgmt/webform.aw:2255
 msgid "Liigu edasi &raquo;"
 msgstr "Go on &raquo;"
 

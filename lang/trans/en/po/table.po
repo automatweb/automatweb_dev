@@ -9,7 +9,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/table.aw:2149
+#: classes/vcl/table.aw:730
+msgid "Vaata/Muuda"
+msgstr ""
+
+#: classes/vcl/table.aw:734
+msgid "Sisseastuja Nr."
+msgstr ""
+
+#: classes/vcl/table.aw:746
+msgid "Muuda"
+msgstr ""
+
+#: classes/vcl/table.aw:2372
 msgid "K&otilde;ik"
 msgstr ""
 

@@ -657,78 +657,78 @@ msgstr ""
 msgid "Ekspordi objektid"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1156
+#: classes/contentmgmt/webform.aw:1157
 msgid "-- vali --"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1157
+#: classes/contentmgmt/webform.aw:1158
 msgid "Mitmerealine rippmen&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1158
+#: classes/contentmgmt/webform.aw:1159
 msgid "Rippmen&uuml;&uuml;"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1159
+#: classes/contentmgmt/webform.aw:1160
 msgid "M&auml;rkeruut"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1160
+#: classes/contentmgmt/webform.aw:1161
 msgid "Raadionupp"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1163
+#: classes/contentmgmt/webform.aw:1164
 msgid "--vali--"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1164
+#: classes/contentmgmt/webform.aw:1165
 msgid "Järjekord (kasvav)"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1165
+#: classes/contentmgmt/webform.aw:1166
 msgid "Järjekord (kahanev)"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1166
+#: classes/contentmgmt/webform.aw:1167
 msgid "Nimi (kasvav)"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1167
+#: classes/contentmgmt/webform.aw:1168
 msgid "Nimi (kahanev)"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1168
+#: classes/contentmgmt/webform.aw:1169
 msgid "Loomisaeg (kasvav)"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1169
+#: classes/contentmgmt/webform.aw:1170
 msgid "Loomisaeg (kahanev)"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1171
+#: classes/contentmgmt/webform.aw:1172
 msgid "horisontaalne"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1171
+#: classes/contentmgmt/webform.aw:1172
 msgid "vertikaalne"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1439
+#: classes/contentmgmt/webform.aw:1440
 msgid "Veateate stiil"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1495 classes/contentmgmt/webform.aw:1518
+#: classes/contentmgmt/webform.aw:1496 classes/contentmgmt/webform.aw:1519
 msgid "-- Vali --"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1602
+#: classes/contentmgmt/webform.aw:1603
 msgid "Registreeru"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1753
+#: classes/contentmgmt/webform.aw:1770
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2238
+#: classes/contentmgmt/webform.aw:2255
 msgid "Liigu edasi &raquo;"
 msgstr ""

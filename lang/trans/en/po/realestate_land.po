@@ -525,6 +525,18 @@ msgstr ""
 msgid "Omaduse Projekt (project) help"
 msgstr ""
 
+#: classes/applications/realestate_management/realestate_land.aw:prop_expire
+msgid "Omaduse aegub (expire) caption"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_land.aw:prop_expire_comment
+msgid "Omaduse aegub (expire) kommentaar"
+msgstr ""
+
+#: classes/applications/realestate_management/realestate_land.aw:prop_expire_help
+msgid "Omaduse aegub (expire) help"
+msgstr ""
+
 #: classes/applications/realestate_management/realestate_land.aw:prop_additional_info_et
 msgid "Omaduse Lisainfo EST (additional_info_et) caption"
 msgstr ""

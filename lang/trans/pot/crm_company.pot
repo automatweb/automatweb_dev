@@ -266,6 +266,30 @@ msgstr ""
 msgid "Omaduse Kliendihaldur (client_manager) help"
 msgstr ""
 
+#: classes/crm/crm_company.aw:prop_last_com_type
+msgid "Omaduse Viimase kommentaari tüüp (last_com_type) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_last_com_type_comment
+msgid "Omaduse Viimase kommentaari tüüp (last_com_type) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_last_com_type_help
+msgid "Omaduse Viimase kommentaari tüüp (last_com_type) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_com_statistics
+msgid "Omaduse Kommentaaride statistika (com_statistics) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_com_statistics_comment
+msgid "Omaduse Kommentaaride statistika (com_statistics) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_com_statistics_help
+msgid "Omaduse Kommentaaride statistika (com_statistics) help"
+msgstr ""
+
 #: classes/crm/crm_company.aw:prop_kaubamargid
 msgid "Omaduse Kaubamärgid (kaubamargid) caption"
 msgstr ""
@@ -2438,6 +2462,78 @@ msgstr ""
 msgid "Omaduse  (my_view) help"
 msgstr ""
 
+#: classes/crm/crm_company.aw:prop_comment_history
+msgid "Omaduse  (comment_history) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comment_history_comment
+msgid "Omaduse  (comment_history) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comment_history_help
+msgid "Omaduse  (comment_history) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comments_display
+msgid "Omaduse Sisestatud kommentaarid (comments_display) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comments_display_comment
+msgid "Omaduse Sisestatud kommentaarid (comments_display) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comments_display_help
+msgid "Omaduse Sisestatud kommentaarid (comments_display) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comments_title
+msgid "Omaduse Lisa kommentaar (comments_title) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comments_title_comment
+msgid "Omaduse Lisa kommentaar (comments_title) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comments_title_help
+msgid "Omaduse Lisa kommentaar (comments_title) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comment_text
+msgid "Omaduse Kommentaar (comment_text) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comment_text_comment
+msgid "Omaduse Kommentaar (comment_text) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comment_text_help
+msgid "Omaduse Kommentaar (comment_text) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comment_type
+msgid "Omaduse Kommentaari tüüp (comment_type) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comment_type_comment
+msgid "Omaduse Kommentaari tüüp (comment_type) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_comment_type_help
+msgid "Omaduse Kommentaari tüüp (comment_type) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_ext_sys_t
+msgid "Omaduse  (ext_sys_t) caption"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_ext_sys_t_comment
+msgid "Omaduse  (ext_sys_t) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_company.aw:prop_ext_sys_t_help
+msgid "Omaduse  (ext_sys_t) help"
+msgstr ""
+
 #: classes/crm/crm_company.aw:group_general_sub
 msgid "Grupi &Uuml;ldine (general_sub) pealkiri"
 msgstr ""
@@ -2484,6 +2580,14 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_special_offers_help
 msgid "Grupi Eripakkumised (special_offers) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_company.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:group_people
@@ -2700,6 +2804,14 @@ msgstr ""
 
 #: classes/crm/crm_company.aw:group_documents_lmod_help
 msgid "Grupi Viimati muudetud (documents_lmod) help"
+msgstr ""
+
+#: classes/crm/crm_company.aw:group_ext_sys
+msgid "Grupi Siduss&uuml;steemid (ext_sys) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_company.aw:group_ext_sys_help
+msgid "Grupi Siduss&uuml;steemid (ext_sys) help"
 msgstr ""
 
 #: classes/crm/crm_company.aw:group_bills
@@ -3038,147 +3150,191 @@ msgstr ""
 msgid "Seose Ostu arve (RELTYPE_SHOP_WAREHOUSE_PURCHASE_BILL) tekst"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1160 classes/crm/crm_company.aw:1457
+#: classes/crm/crm_company.aw:1190 classes/crm/crm_company.aw:1567
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1164
+#: classes/crm/crm_company.aw:1194
 msgid "Kustuta"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1289
+#: classes/crm/crm_company.aw:1320
+msgid "Tüüp:"
+msgstr ""
+
+#: classes/crm/crm_company.aw:1321 classes/crm/crm_company.aw:1322
+msgid "Aeg:"
+msgstr ""
+
+#: classes/crm/crm_company.aw:1323
+msgid "Autor:"
+msgstr ""
+
+#: classes/crm/crm_company.aw:1335 classes/crm/crm_company.aw:1380
+msgid "Kommentaare pole"
+msgstr ""
+
+#: classes/crm/crm_company.aw:1376
+msgid "Kokku"
+msgstr ""
+
+#: classes/crm/crm_company.aw:1391
 msgid "Määramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1294
+#: classes/crm/crm_company.aw:1396
 msgid "Aegunud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1299
+#: classes/crm/crm_company.aw:1401
 msgid "Kehtiv"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1310 classes/crm/crm_company.aw:4878
+#: classes/crm/crm_company.aw:1412 classes/crm/crm_company.aw:5047
 msgid "%s foorum"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1436
+#: classes/crm/crm_company.aw:1546
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1467 classes/crm/crm_company.aw:5258
+#: classes/crm/crm_company.aw:1577 classes/crm/crm_company.aw:5427
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1689
+#: classes/crm/crm_company.aw:1799
 msgid "T&ouml;&ouml;s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1689
+#: classes/crm/crm_company.aw:1799
 msgid "Tehtud"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1689
+#: classes/crm/crm_company.aw:1799
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1911 classes/crm/crm_company.aw:4266 classes/crm/crm_company.aw:4303
+#: classes/crm/crm_company.aw:2021 classes/crm/crm_company.aw:4418 classes/crm/crm_company.aw:4455
 msgid "--vali--"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1912
+#: classes/crm/crm_company.aw:2022
 msgid "T&auml;na"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1913
+#: classes/crm/crm_company.aw:2023
 msgid "Eile"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1914
+#: classes/crm/crm_company.aw:2024
 msgid "Jooksev n&auml;dal"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1915
+#: classes/crm/crm_company.aw:2025
 msgid "Jooksev kuu"
 msgstr ""
 
-#: classes/crm/crm_company.aw:1916
+#: classes/crm/crm_company.aw:2026
 msgid "Eelmine kuu"
 msgstr ""
 
-#: classes/crm/crm_company.aw:2037
+#: classes/crm/crm_company.aw:2165
 msgid "Nimi peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3374
+#: classes/crm/crm_company.aw:2648
+msgid "Positiivne"
+msgstr ""
+
+#: classes/crm/crm_company.aw:2649
+msgid "Neutraalne"
+msgstr ""
+
+#: classes/crm/crm_company.aw:2650
+msgid "Negatiivne"
+msgstr ""
+
+#: classes/crm/crm_company.aw:3526
 msgid "Uus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3414
+#: classes/crm/crm_company.aw:3566
 msgid "Kataloog määramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3468
+#: classes/crm/crm_company.aw:3620
 msgid "Kalender või kalendri sündmuste kataloog määramata"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3481 classes/crm/crm_company.aw:3482 classes/crm/crm_company.aw:4055 classes/crm/crm_company.aw:4137 classes/crm/crm_company.aw:5240 classes/crm/crm_company.aw:5267
+#: classes/crm/crm_company.aw:3633 classes/crm/crm_company.aw:3634 classes/crm/crm_company.aw:4207 classes/crm/crm_company.aw:4289 classes/crm/crm_company.aw:5409 classes/crm/crm_company.aw:5436
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3494
+#: classes/crm/crm_company.aw:3646
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_company.aw:3787 classes/crm/crm_company.aw:4414
+#: classes/crm/crm_company.aw:3939 classes/crm/crm_company.aw:4566
 msgid "Arve nr %s"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4005 classes/crm/crm_company.aw:4079 classes/crm/crm_company.aw:5193 classes/crm/crm_company.aw:5263
+#: classes/crm/crm_company.aw:4157 classes/crm/crm_company.aw:4231 classes/crm/crm_company.aw:5362 classes/crm/crm_company.aw:5432
 msgid "Toimetus"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4030 classes/crm/crm_company.aw:4108 classes/crm/crm_company.aw:5221 classes/crm/crm_company.aw:5266
+#: classes/crm/crm_company.aw:4182 classes/crm/crm_company.aw:4260 classes/crm/crm_company.aw:5390 classes/crm/crm_company.aw:5435
 msgid "Kohtumine"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4670
+#: classes/crm/crm_company.aw:4822
 msgid "crm_company::on_create_customer(): category %s has no parent company or category!"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4801
+#: classes/crm/crm_company.aw:4970
 msgid "Konfliktsed projektid:<br>"
 msgstr ""
 
-#: classes/crm/crm_company.aw:4919
+#: classes/crm/crm_company.aw:5088
 msgid "%s serveri failid"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5211 classes/crm/crm_company.aw:5265
+#: classes/crm/crm_company.aw:5380 classes/crm/crm_company.aw:5434
 msgid "K&otilde;ne"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5259
+#: classes/crm/crm_company.aw:5428
 msgid "T&ouml;&ouml;"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5260
+#: classes/crm/crm_company.aw:5429
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5261
+#: classes/crm/crm_company.aw:5430
 msgid "Eraisik"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5262
+#: classes/crm/crm_company.aw:5431
 msgid "Projekt"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5264
+#: classes/crm/crm_company.aw:5433
 msgid "Arve"
 msgstr ""
 
-#: classes/crm/crm_company.aw:5268
+#: classes/crm/crm_company.aw:5437
 msgid "Logi v&auml;lja"
+msgstr ""
+
+#: classes/crm/crm_company.aw:5518
+msgid "Siduss&uuml;steem"
+msgstr ""
+
+#: classes/crm/crm_company.aw:5523
+msgid "V&auml;&auml;rtus"
+msgstr ""
+
+#: classes/crm/crm_company.aw:5580
+msgid "Siduss&uuml;steemi %s sisestus objektile %s"
 msgstr ""
 

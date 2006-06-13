@@ -13,126 +13,126 @@ msgstr ""
 msgid "Klassi  help"
 msgstr ""
 
-#: classes/vcl/rte.aw:87
+#: classes/vcl/rte.aw:103
 msgid "RTE"
 msgstr ""
 
-#: classes/vcl/rte.aw:96
+#: classes/vcl/rte.aw:112
 msgid "Bold"
 msgstr ""
 
-#: classes/vcl/rte.aw:103
+#: classes/vcl/rte.aw:119
 msgid "Italic"
 msgstr ""
 
-#: classes/vcl/rte.aw:110
+#: classes/vcl/rte.aw:126
 msgid "Underline"
 msgstr ""
 
-#: classes/vcl/rte.aw:119
+#: classes/vcl/rte.aw:135
 msgid "Align left"
 msgstr ""
 
-#: classes/vcl/rte.aw:126
+#: classes/vcl/rte.aw:142
 msgid "Align center"
 msgstr ""
 
-#: classes/vcl/rte.aw:133
+#: classes/vcl/rte.aw:149
 msgid "Align right"
 msgstr ""
 
-#: classes/vcl/rte.aw:142
+#: classes/vcl/rte.aw:158
 msgid "Numbered list"
 msgstr ""
 
-#: classes/vcl/rte.aw:149
+#: classes/vcl/rte.aw:165
 msgid "Bulleted list"
 msgstr ""
 
-#: classes/vcl/rte.aw:158
+#: classes/vcl/rte.aw:174
 msgid "Outdent"
 msgstr ""
 
-#: classes/vcl/rte.aw:165
+#: classes/vcl/rte.aw:181
 msgid "Indent"
 msgstr ""
 
-#: classes/vcl/rte.aw:174
+#: classes/vcl/rte.aw:190
 msgid "link"
 msgstr ""
 
-#: classes/vcl/rte.aw:184
+#: classes/vcl/rte.aw:200
 msgid "Tabel"
 msgstr ""
 
-#: classes/vcl/rte.aw:190
+#: classes/vcl/rte.aw:206
 msgid "Lisa tabel"
 msgstr ""
 
-#: classes/vcl/rte.aw:198
+#: classes/vcl/rte.aw:214
 msgid "Lisa tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:204
+#: classes/vcl/rte.aw:220
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:212
+#: classes/vcl/rte.aw:228
 msgid "Kustuta tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:218
+#: classes/vcl/rte.aw:234
 msgid "Kustuta rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:226
+#: classes/vcl/rte.aw:242
 msgid "Poolita rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:231
+#: classes/vcl/rte.aw:247
 msgid "Poolita tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:241
+#: classes/vcl/rte.aw:257
 msgid "HTML"
 msgstr ""
 
-#: classes/vcl/rte.aw:250
+#: classes/vcl/rte.aw:266
 msgid "Päised"
 msgstr ""
 
-#: classes/vcl/rte.aw:256
+#: classes/vcl/rte.aw:272
 msgid "Heading 1"
 msgstr ""
 
-#: classes/vcl/rte.aw:262
+#: classes/vcl/rte.aw:278
 msgid "Heading 2"
 msgstr ""
 
-#: classes/vcl/rte.aw:268
+#: classes/vcl/rte.aw:284
 msgid "Heading 3"
 msgstr ""
 
-#: classes/vcl/rte.aw:274
+#: classes/vcl/rte.aw:290
 msgid "Heading 4"
 msgstr ""
 
-#: classes/vcl/rte.aw:280
+#: classes/vcl/rte.aw:296
 msgid "Heading 5"
 msgstr ""
 
-#: classes/vcl/rte.aw:286
+#: classes/vcl/rte.aw:302
 msgid "Heading 6"
 msgstr ""
 
-#: classes/vcl/rte.aw:292
+#: classes/vcl/rte.aw:308
 msgid "Teksti värv"
 msgstr ""
 
-#: classes/vcl/rte.aw:298
+#: classes/vcl/rte.aw:314
 msgid "Sinine"
 msgstr ""
 
-#: classes/vcl/rte.aw:304
+#: classes/vcl/rte.aw:320
 msgid "Punane"
 msgstr ""

@@ -41,14 +41,14 @@ msgstr "Modifiedby"
 msgid "Muutmise aeg"
 msgstr "Modified"
 
-#: classes/sys.aw:803
+#: classes/sys.aw:802
 msgid "all done!! database seems to be relatively ok!"
 msgstr "all done!! database seems to be relatively ok!"
 
-#: classes/sys.aw:863
+#: classes/sys.aw:862
 msgid "All done"
 msgstr "All done"
 
-#: classes/sys.aw:899
+#: classes/sys.aw:950
 msgid "$fn"
 msgstr ""
