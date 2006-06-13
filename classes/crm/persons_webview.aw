@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.3 2006/06/13 12:50:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.4 2006/06/13 13:49:29 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -340,6 +340,13 @@ class persons_webview extends class_base
 					{
 						$photo = $image_inst->make_img_tag_wl($worker->prop("picture"));
 					}
+					else
+					{
+						$photo_obj = $worker->get_first_obj_by_reltype("RELTYPE_PICTURE");
+						if(is_object($photo_obj))
+						$photo = $image_inst->make_img_tag_wl($photo_obj->id());
+					}
+
 					$this->vars(array(
 						"rank" => $rank,
 						"name" => $worker->name(),
