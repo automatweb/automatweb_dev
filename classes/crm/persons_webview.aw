@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.2 2006/06/08 17:03:59 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.3 2006/06/13 12:50:25 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -33,7 +33,7 @@ caption .
 
 - Grupeerimine osakonna järgi (märkeruut)
 @property department_grouping type=checkbox ch_value=1
-@caption Osakondade grupeerimisprintsiip
+@caption Grupeerimine osakonna järgi
 
 - Grupeerimise järjestamisprintsiip (analoogne isikutega, osakonna jrk/osakonna nimi alusel)
 @property grouping_principe type=callback callback=callback_get_grouping_principe
@@ -85,6 +85,25 @@ class persons_webview extends class_base
 			"tpldir" => "crm/persons_webview",
 			"clid" => CL_PERSONS_WEBVIEW
 		));
+	
+		$this->persons_sort_order = array(
+			0 => "",
+			"kliendibaas_isik.last_name" => t("perenimi"),
+			"proffession" => t("ametinimetuse jrk"),
+			"jrk" => t("isiku jrk"),
+		);
+		
+		$this->department_sort_order = array(
+			0 => "",
+			"jrk" => t("osakonna jrk"),
+			"name" => t("osakonna nimi"),
+		);
+	
+		$this->order = array (
+			"ASC" => t("Kasvav"),
+			"DESC" => t("Kahanev"),
+		);
+
 	}
 
 	function get_property($arr)
@@ -135,9 +154,9 @@ class persons_webview extends class_base
 		for($i = 0; $i < $count+1; $i++)
 		{
 			$nm = "persons_principe[".$i."][principe]";
-			$ret[$nm] = array("name" => $nm, "caption" => t("Isikute järjestamisprintsiip $i"), "type" => "select", "options" => array(0 => "", 1 => "perenimi", 2 => "ametinimetuse jrk", 3 => "isiku jrk"), "value" => $principe[$i]["principe"]);
+			$ret[$nm] = array("name" => $nm, "caption" => t("Isikute järjestamisprintsiip $i"), "type" => "select", "options" => $this->persons_sort_order, "value" => $principe[$i]["principe"]);
 			$nm = "persons_principe[".$i."][order]";
-			$ret[$nm] = array("name" => $nm,  "type" => "select", "options" => array(0 => "Suurem enne", 1 => "Väiksem enne"), "value" => $principe[$i]["order"]);
+			$ret[$nm] = array("name" => $nm,  "type" => "select", "options" => $this->order, "value" => $principe[$i]["order"]);
 		}
 		return $ret;
 	}
@@ -152,9 +171,9 @@ class persons_webview extends class_base
 		for($i = 0; $i < $count+1; $i++)
 		{
 			$nm = "grouping_principe[".$i."][principe]";
-			$ret[$nm] = array("name" => $nm, "caption" => t("Isikute järjestamisprintsiip $i"), "type" => "select", "options" => array(0 => "", 1 => "osakonna jrk", 2 => "osakonna nimi"), "value" => $principe[$i]["principe"]);
+			$ret[$nm] = array("name" => $nm, "caption" => t("Osakondade järjestamisprintsiip $i"), "type" => "select", "options" => $this->department_sort_order, "value" => $principe[$i]["principe"]);
 			$nm = "grouping_principe[".$i."][order]";
-			$ret[$nm] = array("name" => $nm,  "type" => "select", "options" => array(0 => "Suurem enne", 1 => "Väiksem enne"), "value" => $principe[$i]["order"]);
+			$ret[$nm] = array("name" => $nm,  "type" => "select", "options" => $this->order, "value" => $principe[$i]["order"]);
 		}
 		return $ret;
 	}
@@ -182,6 +201,14 @@ class persons_webview extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	function person_sort($args)
+	{
+		extract($args);
+		
+	
+	
+	}
+	
 	function parse_alias($arr)
 	{
 		$view_obj = obj($arr["alias"]["to"]);
@@ -189,16 +216,60 @@ class persons_webview extends class_base
 		$departments = $view_obj->prop("departments");
 		if(!is_oid($company_id)) return t("pole asutust valitud");
 		$company = obj($company_id);
+		$template = $view_obj->prop("template");
 	
-		$this->read_template("personal.tpl");
+		$this->read_template($template);
 		$this->vars(array(
 			"name" => $company->prop("name"),
-		));		
+		));
 		
-		$workers_list = new object_list($company->connections_from (array (
-				"type" => "RELTYPE_WORKERS",
-		)));
+// 		$persons_principe = $view_obj->prop("persons_principe");
+// 		$search_sort_by = $persons_principe[sizeof($persons_principe) - 2]["principe"];
+// 		$search_sort_ord = $persons_principe[sizeof($persons_principe) - 2]["ord"];
+// 		$workers_list = new object_list($company->connections_from (array (
+// 				"type" => "RELTYPE_WORKERS",
+// 		)));
+/*		arr($workers_list);
 		$workers = array();
+		$workers = $this->person_sort(array(
+			"list" => $workers_list,
+			"object" => $view_obj,
+		));
+*/
+
+		if($view_obj->prop("department_grouping"))
+		{
+			if($this->is_template("DEPARTMENT"))
+			{
+				$sections = $this->get_sections($company);
+				foreach($sections as $section)
+				{
+					$workers = $this->get_workers($section);
+					if(sizeof($workers) > 0)$this->vars(array("department_name" => $section->name()));
+					$this->parse_persons(array("workers" => $workers, "view_obj" => $view_obj));
+					$department .= $this->parse("DEPARTMENT");
+				}
+				$this->vars(array("DEPARTMENT" => $department));
+			}
+		}
+		else
+		{
+			$workers = $this->get_workers($company);
+			$this->parse_persons(array("workers" => $workers, "view_obj" => $view_obj));
+			if($this->is_template("DEPARTMENT"))
+			{
+				$department .= $this->parse("DEPARTMENT");
+				$this->vars(array("DEPARTMENT" => $department));
+			}
+		}	
+		return $this->parse();
+	}
+
+	function get_workers($section)
+	{
+		$workers_list = new object_list($section->connections_from (array (
+			"type" => "RELTYPE_WORKERS",
+		)));
 		//------------------------sorteerib kõvemad vennad ette;
 		foreach($workers_list->arr() as $worker)
 		{
@@ -215,23 +286,47 @@ class persons_webview extends class_base
 			$jrk_[$key] = $row['jrk'];
 		}
 		array_multisort($jrk_, SORT_DESC, $person, SORT_DESC, $workers);
-		//--------------------------sorteerimise lõpp
+		return $workers;
+	}
+
+	function get_sections($section)
+	{
+		$sections = array();
+		$section_list = new object_list($section->connections_from (array (
+			"type" => "RELTYPE_SECTION",
+		)));
+		foreach($section_list->arr() as $sec)
+		{
+			$sections[] = $sec;
+			$sections = array_merge($sections , $this->get_sections($sec));
+		}
+		return $sections;
+	}
+	
+
+	function parse_persons($args)
+	{
+		extract($args);
 		$this->count = 0;
 		$col = 0;
 		$this->max_col = $col_num = $max_col = $view_obj->prop("columns");
 		$column = "";
 		$row = "";
+		$row_num = 0;
 		$this->min_col = $view_obj->prop("min_cols");
 		$image_inst = get_instance(CL_IMAGE);
 		$this->calculated=0;
+		
 		if($this->is_template("ROW") && $this->is_template("COL"))
 		{
 			foreach($workers as $val)
 			{
 				$worker = $val["worker"];
-				if($view_obj->prop("rows_by") && (!$this->calculated))//ametinimede kaupa grupeerimise porno
+				if($view_obj->prop("rows_by"))//ametinimede kaupa grupeerimise porno
 				{
-					$col_num = $this->calculate_cols($workers);
+					if(!$this->order_array) $this->make_order_array($workers);
+	//				$col_num = $this->calculate_cols($workers);
+					if(!$this->calculated) $col_num = $this->get_cols_num($row_num);
 				}
 				$c = "";
 				if($this->is_template("worker"))
@@ -249,6 +344,7 @@ class persons_webview extends class_base
 						"rank" => $rank,
 						"name" => $worker->name(),
 						"photo" => $photo,
+					
 					));
 					$c .= $this->parse("worker");
 				}
@@ -269,6 +365,7 @@ class persons_webview extends class_base
 					$parsed = 1;
 					$col_num = $max_col;;
 					$this->calculated = 0;
+					$row_num++;
 				}
 			$this->count++;
 			}
@@ -286,12 +383,14 @@ class persons_webview extends class_base
 				"ROW" => $row,
 			));
 		}
-		return $this->parse();
 	}
 
-	function calculate_cols($workers)
+	function get_cols_num($row)
 	{
+//		if(!$this->order_array) $this->make_order_array($workers);
 		$this->calculated = 1;
+		return sizeof($this->order_array[$row]);
+/*		
 		$jrk = $workers[$this->count]["jrk"];
 		$count = 0;
 		if(!($jrk > 0)) return $this->max_col;
@@ -318,7 +417,71 @@ class persons_webview extends class_base
 		{
 			if(($count_next + $count) <= $this->max_col) return ($count_next + $count);
 		}
-		return $this->max_col;
+		return $this->max_col;*/
+	}
+
+	function make_order_array($workers)
+	{
+		$this->order_array = array();
+		$x = 0;
+		$cols = 0;
+		$jrk = $workers[0]["jrk"];
+		foreach($workers as $data)
+		{
+			if($data["jrk"] != $jrk || $cols >= $this->max_col )
+			{
+				$cols = 0;
+				$jrk = $data["jrk"];
+				$x++;
+			}
+			$this->order_array[$x][] = $data;
+			$cols++;
+		}
+		$x = 0;
+		while($x < 10)//miski suht random arv moment, et mitu korda ikka läbi käia nimekiri
+		{
+			$small_rows = 0;
+			$row_num = 0;
+			foreach($this->order_array as $key => $row)
+			{
+				if(sizeof($this->order_array[$row_num]) < $this->min_col){
+					$small_rows++;
+					if((sizeof($this->order_array[$row_num-1]) > 0)
+						&& (sizeof($this->order_array[$row_num-1]) < $this->max_col)
+						&& (sizeof($this->order_array[$row_num-1])+ sizeof($this->order_array[$row_num]) <= $this->max_col)
+						&& $x<2)
+					{
+						$this->order_array[$row_num-1] = array_merge($this->order_array[$row_num-1] , $this->order_array[$row_num]);
+						unset($this->order_array[$row_num]);
+					}
+					elseif((sizeof($this->order_array[$row_num+1]) > 0)
+						&& (sizeof($this->order_array[$row_num+1]) < $this->max_col)
+						&& (sizeof($this->order_array[$row_num+1])+ sizeof($this->order_array[$row_num]) <= $this->max_col)
+						&& $x<2)
+					{
+						$this->order_array[$row_num+1] = array_merge($this->order_array[$row_num+1] , $this->order_array[$row_num]);
+						unset($this->order_array[$row_num]);
+					}
+					elseif(((sizeof($this->order_array[$row_num-1])+ sizeof($this->order_array[$row_num]))/2 <= $this->max_col)
+						&& $x>1
+						&& $this->order_array[$row_num-1][0]["jrk"] == $this->order_array[$row_num][0]["jrk"]
+					)
+					{
+						$this->order_array[$row_num] = array_merge(array(0 => $this->order_array[$row_num-1][sizeof($this->order_array[$row_num-1])-1]) , $this->order_array[$row_num]);
+						unset($this->order_array[$row_num-1][sizeof($this->order_array[$row_num-1])-1]);
+					}
+				}
+				$row_num++;
+			}
+			if($small_rows == 0) break;
+			$x++;
+			}
+		$tmp = array();
+		foreach ($this->order_array as $data)
+		{
+			if(sizeof($data) > 0) $tmp[] = $data;
+		}
+		$this->order_array = $tmp;
 	}
 
 	function show($arr)
