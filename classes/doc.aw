@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.130 2006/06/12 13:47:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.131 2006/06/13 14:26:13 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1241,7 +1241,12 @@ class doc extends class_base
 
 	function callback_on_load($p)
 	{
-		if (empty($p["request"]["edit_version"]) && $_SESSION["vers_created"][$p["request"]["id"]])
+		if (aw_ini_get("document.confirm_unsaved") == 1)
+		{
+			$GLOBALS["confirm_save_data"] = 1;
+		}
+
+		if ($_SERVER["REQUEST_METHOD"] == "GET" && empty($p["request"]["edit_version"]) && $_SESSION["vers_created"][$p["request"]["id"]])
 		{
 			header("Location: ".aw_url_change_var("edit_version", $_SESSION["vers_created"][$p["request"]["id"]]));
 			die();
