@@ -52,6 +52,13 @@
 			</function>
 		</action>
 
+		<action name="_new_mail_form">
+			<function name="_new_mail_form">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="quicksearch">
 			<function name="quicksearch">
 				<arguments>
@@ -84,6 +91,13 @@
 
 		<action name="imap" all_args="1">
 			<function name="imap">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="send_shitload_of_emails">
+			<function name="send_shitload_of_emails">
 				<arguments>
 				</arguments>
 			</function>

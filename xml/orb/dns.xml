@@ -11,7 +11,7 @@
 		<action name="query" nologin="1">
 			<function name="query">
 				<arguments>
-					<required name="domain" />
+					<required name="domain" type="string" />
 				</arguments>
 			</function>
 		</action>
@@ -26,7 +26,23 @@
 		<action name="dns_query" nologin="1">
 			<function name="dns_query">
 				<arguments>
-					<required name="domain" />
+					<required name="domain" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_record_NS" nologin="1">
+			<function name="get_record_NS">
+				<arguments>
+					<required name="domain" type="string" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_domain_name_for_url" nologin="1">
+			<function name="get_domain_name_for_url">
+				<arguments>
+					<required name="domain" type="string" />
 				</arguments>
 			</function>
 		</action>

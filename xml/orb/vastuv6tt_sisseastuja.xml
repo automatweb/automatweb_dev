@@ -21,6 +21,7 @@
 				<arguments>
 					<required name="sisseastuja_id" type="int" />
 					<required name="avaldus_id" type="int" />
+					<required name="keskkond_id" type="int" />
 					<required name="katse" />
 				</arguments>
 			</function>
