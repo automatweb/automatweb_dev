@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.4 2006/06/13 13:49:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.5 2006/06/14 16:39:51 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -88,7 +88,7 @@ class persons_webview extends class_base
 	
 		$this->persons_sort_order = array(
 			0 => "",
-			"kliendibaas_isik.last_name" => t("perenimi"),
+			"last_name" => t("perenimi"),
 			"proffession" => t("ametinimetuse jrk"),
 			"jrk" => t("isiku jrk"),
 		);
@@ -103,7 +103,6 @@ class persons_webview extends class_base
 			"ASC" => t("Kasvav"),
 			"DESC" => t("Kahanev"),
 		);
-
 	}
 
 	function get_property($arr)
@@ -201,17 +200,98 @@ class persons_webview extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	function person_sort($args)
+	function sort_by($args)
 	{
 		extract($args);
+		switch($orderby)
+		{
+			case "last_name":
+				foreach($workers as $worker)
+				{
+					$workers_tmp[] = array("sort" => $worker["worker"]->prop("lastname"), "data" => $worker);
+				}
+				break;
+			case "proffession":
+				foreach($workers as $worker)
+				{
+					$jrk = 0;
+					if(is_oid($worker["worker"]->prop("rank")))
+					{
+						$profession_obj = obj($worker["worker"]->prop("rank"));
+						$jrk = $profession_obj->prop("jrk");
+					}
+					$workers_tmp[] = array("sort" => $jrk, "data" => $worker);
+				}
+				break;
+			case "jrk":
+// 				foreach($workers as $worker)
+// 				{
+// 					$workers_tmp[] = array("sort" => $worker["worker"]->prop("lastname"), "data" => $worker);
+// 				}
+// 				break;
+		}
+	
+		foreach ($workers_tmp as $key => $row) {
+			$data[$key]  = $row['data'];
+			$sort[$key] = $row['sort'];
+		}
+		if($sort_order == "ASC") $sort_order = SORT_ASC;
+		else $sort_order = SORT_DESC;
+		array_multisort($sort, $sort_order, $workers_tmp);
 		
+		$workers = array();
+		foreach ($workers_tmp as $data)// teeb massiivi vanale kujule tagasi
+		{
+			$workers[] = $data["data"];
+		}
+		return $workers;
+	}
 	
+	function person_sort($workers)
+	{
+		$principe = $this->view_obj->prop("persons_principe");
+		$count = sizeof($principe);
+		while($count>=0)
+		{
+			if($principe[$count]["principe"])
+			{
+				$workers = $this->sort_by(array(
+					"workers" => $workers,
+					"orderby" => $principe[$count]["principe"],
+					"sort_order" => $principe[$count]["order"],
+				));
+			}
+			$count--;
+		}
+		return ($workers);
+	}
 	
+	function set_levels()
+	{
+		$levels = $this->view_obj->prop("department_levels");
+		$possible_levels = explode("," , $levels);
+		if(sizeof($possible_levels) > 1)
+		{
+			$levels = $possible_levels;
+		}
+		else
+		{
+			$from_to = explode("-" , $levels);
+			$possible_levels = array();
+			while($from_to[0] <= $from_to[1])
+			{
+				$possible_levels[] = $from_to[0];
+				$from_to[0]++;
+			}
+			if(sizeof($possible_levels)>0) $levels = $possible_levels;
+			else $levels = array($levels);
+		}
+		$this->levels = $levels;
 	}
 	
 	function parse_alias($arr)
 	{
-		$view_obj = obj($arr["alias"]["to"]);
+		$view_obj = $this->view_obj = obj($arr["alias"]["to"]);
 		$company_id = $view_obj->prop("company");
 		$departments = $view_obj->prop("departments");
 		if(!is_oid($company_id)) return t("pole asutust valitud");
@@ -222,31 +302,23 @@ class persons_webview extends class_base
 		$this->vars(array(
 			"name" => $company->prop("name"),
 		));
-		
-// 		$persons_principe = $view_obj->prop("persons_principe");
-// 		$search_sort_by = $persons_principe[sizeof($persons_principe) - 2]["principe"];
-// 		$search_sort_ord = $persons_principe[sizeof($persons_principe) - 2]["ord"];
-// 		$workers_list = new object_list($company->connections_from (array (
-// 				"type" => "RELTYPE_WORKERS",
-// 		)));
-/*		arr($workers_list);
-		$workers = array();
-		$workers = $this->person_sort(array(
-			"list" => $workers_list,
-			"object" => $view_obj,
-		));
-*/
-
+	
+		$this->set_levels();//teeb siis erinevatest tasemetest massiivi, mida üldse kuvada ja paneb selle muutujasse $this->levels
 		if($view_obj->prop("department_grouping"))
 		{
 			if($this->is_template("DEPARTMENT"))
 			{
-				$sections = $this->get_sections($company);
+				$sections = $this->get_sections(array("section" => $company , "jrk" => 0));
 				foreach($sections as $section)
 				{
-					$workers = $this->get_workers($section);
-					if(sizeof($workers) > 0)$this->vars(array("department_name" => $section->name()));
-					$this->parse_persons(array("workers" => $workers, "view_obj" => $view_obj));
+					if(!in_array($section->id(), $view_obj->prop("departments")) || !sizeof($view_obj->prop("departments"))>0) continue;
+					if($view_obj->prop("with_without_persons"))
+					{
+						$workers = $this->get_workers($section);
+						$this->parse_persons(array("workers" => $workers, "view_obj" => $view_obj));
+					}
+					//if(sizeof($workers) > 0)
+					$this->vars(array("department_name" => $section->name()));
 					$department .= $this->parse("DEPARTMENT");
 				}
 				$this->vars(array("DEPARTMENT" => $department));
@@ -254,14 +326,17 @@ class persons_webview extends class_base
 		}
 		else
 		{
-			$workers = $this->get_workers($company);
-			$this->parse_persons(array("workers" => $workers, "view_obj" => $view_obj));
+			if($view_obj->prop("with_without_persons"))
+			{
+				$workers = $this->get_workers($company);
+				$this->parse_persons(array("workers" => $workers, "view_obj" => $view_obj));
+			}
 			if($this->is_template("DEPARTMENT"))
 			{
 				$department .= $this->parse("DEPARTMENT");
 				$this->vars(array("DEPARTMENT" => $department));
 			}
-		}	
+		}
 		return $this->parse();
 	}
 
@@ -286,19 +361,22 @@ class persons_webview extends class_base
 			$jrk_[$key] = $row['jrk'];
 		}
 		array_multisort($jrk_, SORT_DESC, $person, SORT_DESC, $workers);
+		$principe = $this->view_obj->prop("persons_principe");
+		if($principe[0]["principe"]) $workers = $this->person_sort($workers);
 		return $workers;
 	}
 
-	function get_sections($section)
-	{
+	function get_sections($args)
+	{	
+		extract($args);
 		$sections = array();
 		$section_list = new object_list($section->connections_from (array (
 			"type" => "RELTYPE_SECTION",
 		)));
 		foreach($section_list->arr() as $sec)
 		{
-			$sections[] = $sec;
-			$sections = array_merge($sections , $this->get_sections($sec));
+			if(in_array(($jrk + 1) , $this->levels) && (sizeof($this->levels) > 0))$sections[] = $sec;
+			$sections = array_merge($sections , $this->get_sections(array("section" => $sec, "jrk" => ($jrk+1))));
 		}
 		return $sections;
 	}
