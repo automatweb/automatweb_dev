@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.86 2006/05/22 10:37:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.87 2006/06/14 15:43:57 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -3487,6 +3487,7 @@ class project extends class_base
 			$impl_o = obj($impl);
 			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
 			{
+				$u = get_instance(CL_USER);
 				$impl = $u->get_current_company();
 			}
 		}
