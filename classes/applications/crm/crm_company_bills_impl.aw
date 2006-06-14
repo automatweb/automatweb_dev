@@ -142,6 +142,7 @@ class crm_company_bills_impl extends class_base
 				$custs[] = $ordo->name();
 			}
 		}
+		sort($custs);
 		$this->_init_bill_proj_list_t($t, array_unique($custs));
 		foreach($dat as $dr)
 		{
