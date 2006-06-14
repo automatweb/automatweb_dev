@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.8 2006/06/12 14:50:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.9 2006/06/14 13:31:50 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -194,7 +194,7 @@ class bank_payment extends class_base
 		';
 		foreach($params as $key => $val)
 		{
-			$return.= '<input type="hidden" name='.$key.' value='.(string)$val.'>
+			$return.= '<input type="hidden" name='.$key.' value="'.(string)$val.'">
 			';
 		};
 		if($form) return $return;
