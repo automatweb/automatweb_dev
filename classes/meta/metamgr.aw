@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.13 2006/05/25 15:44:02 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.14 2006/06/15 12:19:09 markop Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see k?k pole
@@ -123,7 +123,7 @@ class metamgr extends class_base
 			{
 				$o = new object($obj_id);
 				$tree->add_item($o->parent(),array(
-					"name" => $object_name,
+					"name" => $o->name(),
 					"id" => $o->id(),
 					"url" => aw_url_change_var(array("meta" => $o->id())),
 				));
