@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.21 2005/03/18 12:01:19 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.22 2006/06/15 14:40:24 markop Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -29,6 +29,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @property has_group_subs_prof type=checkbox ch_value=1 field=meta method=serialize
 @caption Kas tehakse kasutajagrupp alamametinimetustele
 
+@default group=cedit
+
+	@property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma
+	@caption Vaikimisi aadress
+
+	@property phone_id type=releditor mode=manager props=name,type table_fields=name,type choose_default=1 always_show_add=1 table=kliendibaas_firma reltype=RELTYPE_PHONE
+	@caption Telefon
+
+	@property telefax_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name choose_default=1 always_show_add=1
+	@caption Faks
+
+	@property url_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_URL props=name choose_default=1 always_show_add=1
+	@caption Veebiaadress
+
+	@property email_id type=releditor mode=manager table=kliendibaas_firma reltype=RELTYPE_EMAIL props=mail choose_default=1 always_show_add=1
+	@caption E-posti aadressid
 
 @reltype SECTION value=1 clid=CL_CRM_SECTION
 @caption Alamüksus
@@ -44,6 +60,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @reltype GROUP value=5 clid=CL_GROUP
 @caption grupp
+
+@reltype ADDRESS value=6 clid=CL_CRM_ADDRESS
+@caption Kontaktaadress
+
+@reltype EMAIL value=7 clid=CL_ML_MEMBER
+@caption E-post
+
+@reltype URL value=8 clid=CL_EXTLINK
+@caption Veebiaadress
+
+@reltype PHONE value=9 clid=CL_CRM_PHONE
+@caption Telefon
+
+@reltype TELEFAX value=10 clid=CL_CRM_PHONE
+@caption Fax
 
 */
 
