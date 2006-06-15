@@ -27,6 +27,15 @@
             <caption>J&amp;auml;rk</caption>
       </property>
       <property>
+            <name>directive</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DESC_FILE</reltype>
+            <field>directive</field>
+            <caption>Ametijuhend</caption>
+      </property>
+      <property>
             <name>name_in_plural</name>
             <table>kliendibaas_amet</table>
             <group>general</group>
