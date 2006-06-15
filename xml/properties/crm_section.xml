@@ -58,6 +58,74 @@
             <method>serialize</method>
             <caption>Kas tehakse kasutajagrupp alamametinimetustele</caption>
       </property>
+      <property>
+            <name>contact</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS</reltype>
+            <field>contact</field>
+            <caption>Vaikimisi aadress</caption>
+      </property>
+      <property>
+            <name>phone_id</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>type</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>type</num_1>
+            </table_fields>
+            <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
+            <reltype>RELTYPE_PHONE</reltype>
+            <field>phone_id</field>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>telefax_id</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <reltype>RELTYPE_TELEFAX</reltype>
+            <props>name</props>
+            <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
+            <field>telefax_id</field>
+            <caption>Faks</caption>
+      </property>
+      <property>
+            <name>url_id</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <reltype>RELTYPE_URL</reltype>
+            <props>name</props>
+            <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
+            <field>url_id</field>
+            <caption>Veebiaadress</caption>
+      </property>
+      <property>
+            <name>email_id</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>releditor</type>
+            <mode>manager</mode>
+            <reltype>RELTYPE_EMAIL</reltype>
+            <props>mail</props>
+            <choose_default>1</choose_default>
+            <always_show_add>1</always_show_add>
+            <field>email_id</field>
+            <caption>E-posti aadressid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_SECTION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -88,6 +156,31 @@
                   <clid>CL_GROUP</clid>
                   <caption>grupp</caption>
             </GROUP>
+            <ADDRESS>
+                  <value>6</value>
+                  <clid>CL_CRM_ADDRESS</clid>
+                  <caption>Kontaktaadress</caption>
+            </ADDRESS>
+            <EMAIL>
+                  <value>7</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>E-post</caption>
+            </EMAIL>
+            <URL>
+                  <value>8</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>Veebiaadress</caption>
+            </URL>
+            <PHONE>
+                  <value>9</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Telefon</caption>
+            </PHONE>
+            <TELEFAX>
+                  <value>10</value>
+                  <clid>CL_CRM_PHONE</clid>
+                  <caption>Fax</caption>
+            </TELEFAX>
       </reltypes>
 </properties>
 
