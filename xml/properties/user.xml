@@ -78,6 +78,16 @@
             <caption>Looja</caption>
       </property>
       <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>30</cols>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+      </property>
+      <property>
             <name>admin_lang</name>
             <table>users</table>
             <group>general</group>

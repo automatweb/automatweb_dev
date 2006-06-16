@@ -18,7 +18,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 /*
 
-@classinfo syslog_type=ST_USERS relationmgr=yes no_status=1
+@classinfo syslog_type=ST_USERS relationmgr=yes no_status=1 
 
 @groupinfo chpwd caption="Parool"
 @groupinfo objects caption="Objektid ja &Otilde;igused"
@@ -60,6 +60,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 @property createdby field=createdby type=text table=objects
 @caption Looja
+
+@property comment type=textarea rows=5 cols=30 table=objects field=comment
+@caption Kommentaar
 
 @property admin_lang store=no type=select
 @caption Admin keel
