@@ -99,11 +99,36 @@ class image_convert extends class_base
 		return $driver;
 	}
 
+	/**
+		@attrib api=1
+		@comment
+			returns true/false depending on if there is a converter driver loaded(if class methods can be used).
+		@returns
+			true if image manipulation is possible
+			false otherwise
+	**/
 	function can_convert()
 	{
 		return $this->_get_driver() != "" ? true : false;
 	}
 	
+	/**
+		@attrib api=1 params=pos
+		@param str required type=string
+			image source
+		@comment
+			loads image from string
+		@errors
+			raises ERR_IMAGE_DRIVER error if there isn't any driver loaded.
+		@examples
+			$img = get_instance("core/converters/image_convert");
+			$fc = $this->get_file(array(
+				"file" => "local/file/path/and/file/name.jpg",
+			));
+			$img->load_from_string($fc);
+			list($width, $height) = $img->size();
+			print $width." x ".$height;
+	**/
 	function load_from_string($str)
 	{
 		error::raise_if(!($this->driver), array(
@@ -113,6 +138,21 @@ class image_convert extends class_base
 		$this->driver->load_from_string($str);
 	}
 
+	/**
+		@attrib api=1 params=pos
+		@param file required type=string
+		@comment
+			loads image from given file
+		@errors
+			raises ERR_IMAGE_DRIVER error if there isn't any driver loaded.
+		@examples
+			$img = get_instance("core/converters/image_convert");
+			$img->load_from_file(array(
+				"file" => "local/file/path/and/file/name.jpg",
+			));
+			list($width, $height) = $img->size();
+			print $width." x ".$height;
+	**/
 	function load_from_file($str)
 	{
 		error::raise_if(!($this->driver), array(
@@ -122,7 +162,18 @@ class image_convert extends class_base
 		$this->driver->load_from_file($str);
 	}
 
-	
+	/**
+		@attrib api=1
+		@comment
+			gets currently loaded image's info
+		@errors
+			raises ERR_IMAGE_DRIVER error if there isn't any driver loaded.
+		@returns
+			currently loaded image's info
+			array(width,height);
+		@examples
+			#load_from_file
+	**/
 	function size()
 	{
 		error::raise_if(!($this->driver), array(
@@ -135,6 +186,45 @@ class image_convert extends class_base
 	////
 	// !resize
 	// x, y, width, height, new_width, new_height
+	/**
+		@attrib params=name api=1
+		@param x required type=int
+			the x point from where to copy
+		@param y required type=int
+			the y point from where to copy
+		@param width required type=int
+			the width of the area to copy
+		@param height required type=int
+			the height of the area to copy
+		@param new_width required type=int
+			images new width.
+		@param new_height required type=int
+			images new height.
+		@comment
+			resizes currently loaded image. takes the old image and copys a portion from the old image(top left corner marked by $x/$y)
+			to new and streches it if copyed height/width and new height/width don't match.
+		@errors
+			raises ERR_IMAGE_DRIVER error if there isn't any driver loaded.
+		@examples
+			$img = get_instance("core/converters/image_convert");
+			#load_from_file
+			$img->load_from_file(array(
+				"file" => "file.jpg",
+			));
+			$img->resize(
+				"x" => 50,
+				"y" => 50,
+				"width" => 320,
+				"height" => 240,
+				"new_width" => 100,
+				"new_height" => 80,
+			);
+			list($width, $height) = $img->size();
+			print ($width." x ".$height);
+			// takes the old image, cuts the part width size 320x240px starting from point x=50, y=50.
+			// then resizes the part to 100x80px and replaces the currently loaded image with the brand new resized one.
+			// ..and prints out new dimensions (100 x 80)
+	**/
 	function resize($arr)
 	{
 		error::raise_if(!($this->driver), array(
@@ -144,6 +234,28 @@ class image_convert extends class_base
 		return $this->driver->resize($arr);
 	}
 
+	/**
+		@attrib params=pos api=1
+		@param width required type=int
+			images new width
+		@param height required type=int
+			images new height
+		@comment
+			just resizes the image to $width/$height
+		@errors
+			raises ERR_IMAGE_DRIVER error if there isn't any driver loaded.
+		@examples
+			$img = get_instance("core/converters/image_convert");
+			#load_from_file
+			$img->load_from_file(array(
+				"file" => "file.jpg",
+			));
+			$img->resize_simple(
+				"width" => 100,
+				"height" => 80,
+			);
+			// resizes the image to 100x80 in this case, wheather the old image was smaller or bigger.
+	**/
 	function resize_simple($width, $height)
 	{
 		error::raise_if(!($this->driver), array(
@@ -161,6 +273,35 @@ class image_convert extends class_base
 		));
 	}
 
+	/**
+		@attrib api=1 params=pos
+		@param type required type=int
+			the image format you want to be returned, must be one of the following:
+			1 - png
+			2 - jpeg
+			3 - gif
+			4 - wbmp
+		@comment
+			returns the currently loaded image as a string.
+		@returns
+			currently loaded image as a string.
+		@errors
+			raises error ERR_IMAGE_TYPE, if param $type is not one of the allowed types
+		@examples
+			$img = get_instance("core/converters/image_convert");
+			#load_from_file
+			$img->load_from_file(
+				"file" => "img.jpg",
+			);
+			#resize_simple
+			$img->resize_simple(
+				"width" => "100",
+				"height" => "80",
+			);
+			$img_contents = $img->get(4);
+			// returns image (resized to 100x80 and converted to wbmp) as a string.
+
+	**/
 	function get($type)
 	{
 		error::raise_if(!($this->driver), array(
@@ -170,6 +311,35 @@ class image_convert extends class_base
 		return $this->driver->get($type);
 	}
 
+	/**
+		@attrib api=1 params=pos
+		@param filename required type=string
+			the filename to where to save the image
+		@param type required type=int
+			the image format you want to be returned, must be one of the following:
+			1 - png
+			2 - jpeg
+			3 - gif
+			4 - wbmp
+		
+		@comment
+			saves the currently loaded image into $filename in $type format. 
+		@errors
+			raises ERR_IMAGE_TYPE, if param $type is not one of the allowed types
+		@examples
+			$img = get_instance("core/converters/image_convert");
+			#load_from_file
+			$img->load_from_file(
+				"file" => "img.jpg",
+			);
+			#resize_simple
+			$img->resize_simple(
+				"width" => "100",
+				"height" => "80",
+			);
+			$img_contents = $img->get("new_image.jpg", 2);
+			// saves image (resized to 100x80 and converted to jpeg) to new_image.jpg.
+	**/
 	function save($filename, $type)
 	{
 		error::raise_if(!($this->driver), array(
@@ -179,8 +349,16 @@ class image_convert extends class_base
 		return $this->driver->save($filename, $type);
 	}
 
-	////
-	// !returns an instance of this class that has the same image loaded, but any operations on it, will not affect the original image
+	/**
+		@attrib api=1
+		@comment
+			returns an instance of this class that has the same image loaded, but any operations on it, will not affect the original image
+		@returns
+			a copy on the class instance.
+		@errors
+			raises ERR_IMAGE_DRIVER error if there isn't any driver loaded.
+		@examples 
+	**/
 	function &copy()
 	{
 		error::raise_if(!($this->driver), array(
@@ -192,6 +370,13 @@ class image_convert extends class_base
 		return $ic;
 	}
 
+	/**
+		@attrib api=1
+		@comment
+			destroys currently loaded image and thus, any changes made to it
+		@errors
+			raises ERR_IMAGE_DRIVER error if there isn't any driver loaded.
+	**/
 	function destroy()
 	{
 		error::raise_if(!($this->driver), array(
@@ -202,9 +387,41 @@ class image_convert extends class_base
 		unset($this);
 	}
 
-	////
-	// !merges the current image with the image given as $img
-	// $source, $x, $y, $pct
+	/**
+		@attrib api=1 params=name
+		@param source required type=object
+			the image object you want to copy onto current image
+		@param x required type=int
+			the point from where you want to paste the source pic
+		@param y required type=int
+			the point from where you want to paste the source pic
+		@param pct required type=int
+			an integer between 0 and 100. when set to 0, no action will be taken. when set to 100, the source pic is overwrites old picture completly(if source has any transparency then old picture is shown there).
+		@comment
+			merges two pictures together
+		@examples
+			$img = get_instance("core/converters/image_convert");
+			$img2 = get_instance("core/converters/image_convert");
+
+			#load_from_file
+			$img->load_from_file(
+				"file" => "img.jpg",
+			);
+			$img2->load_from_file(
+				"file" => "logo.png"
+			)
+			$img->merge(array(
+				"source" => $img2,
+				"x" => 0,
+				"y" => 0,
+				"pct" => 50,
+			));
+
+			// $img now contains img.jpg picture, and a semi-transparent(50%) logo.png in top-left corner
+
+		@errors
+			raises ERR_IMAGE_DRIVER error if there isn't any driver loaded.
+	**/
 	function merge($img)
 	{
 		error::raise_if(!($this->driver), array(
@@ -222,7 +439,13 @@ class image_convert extends class_base
 		));
 		$this->driver->error_rep = $rep;
 	}
-
+	/**
+		@attrib api=1
+		@comment
+			checks if any image manipulation can be done.
+		@returns
+			true if driver is loaded and everything is ok, false otherwise
+	**/
 	function is_error()
 	{
 		if (!$this->driver)
