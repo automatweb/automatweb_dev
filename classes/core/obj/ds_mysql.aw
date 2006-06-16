@@ -1081,9 +1081,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->tableinfo = array();
 
 		// load property defs and table defs
+		$this->class_id = null;
 		if (isset($params["class_id"]))
 		{
 			$this->_do_add_class_id($params["class_id"]);
+			$this->class_id = $params["class_id"];
+			if (is_array($this->class_id))
+			{
+				$this->class_id = reset($this->class_id);
+			}
 		}
 
 		$this->stat = false;
@@ -1351,8 +1357,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 				$this->alias_joins[$key] = array(
 					"name" => "aliases_".$key,
-					"on" => $tbl.".".$idx." = "."aliases_".$key.".source"
+					"on" => $tbl.".".$idx." = "."aliases_".$key.".source AND aliases_".$key.".reltype=".$GLOBALS["relinfo"][$this->class_id][$this->properties[$key]["reltype"]]["value"]
 				);
+			}
+
+			if ($this->properties[$key]["store"] == "connect" && $fld == "meta")
+			{
+				// figure out the joined alias table name and search from that
+				$tbl = "aliases_".$key;
+				$fld = "target";
+				$tf = $tbl.".`".$fld."`";
 			}
 
 			if (($this->properties[$key]["method"] == "bitmask" || $key == "flags") && is_array($val))

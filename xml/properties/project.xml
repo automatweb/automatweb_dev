@@ -76,11 +76,13 @@
       </property>
       <property>
             <name>start</name>
-            <table>aw_projects</table>
-            <group>general2</group>
-            <type>date_select</type>
-            <field>aw_start</field>
-            <caption>Algus</caption>
+            <table>objects</table>
+            <group>strat</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_STRAT</reltype>
+            <props>name</props>
+            <mode>manager</mode>
+            <field>start</field>
       </property>
       <property>
             <name>end</name>
@@ -123,7 +125,7 @@
       <property>
             <name>contact_person_orderer</name>
             <table>aw_projects</table>
-            <group>info</group>
+            <group>info_t</group>
             <type>relpicker</type>
             <reltype>RELTYPE_CONTACT_PERSON</reltype>
             <field>aw_contact_person</field>
@@ -132,7 +134,7 @@
       <property>
             <name>contact_person_implementor</name>
             <table>aw_projects</table>
-            <group>info</group>
+            <group>info_t</group>
             <type>relpicker</type>
             <reltype>RELTYPE_CONTACT_PERSON</reltype>
             <field>aw_contact_person_impl</field>
@@ -141,7 +143,7 @@
       <property>
             <name>hrs_guess</name>
             <table>aw_projects</table>
-            <group>info</group>
+            <group>info_t</group>
             <type>textbox</type>
             <field>aw_hrs_guess</field>
             <size>5</size>
@@ -150,7 +152,7 @@
       <property>
             <name>prepayment</name>
             <table>aw_projects</table>
-            <group>info</group>
+            <group>info_t</group>
             <type>textbox</type>
             <field>aw_prepayment</field>
             <size>5</size>
@@ -159,7 +161,7 @@
       <property>
             <name>description</name>
             <table>aw_projects</table>
-            <group>info</group>
+            <group>info_t</group>
             <type>textarea</type>
             <rows>10</rows>
             <cols>50</cols>
@@ -169,7 +171,7 @@
       <property>
             <name>proj_type</name>
             <table>aw_projects</table>
-            <group>info</group>
+            <group>info_t</group>
             <type>classificator</type>
             <field>aw_type</field>
             <store>connect</store>
@@ -180,7 +182,7 @@
       <property>
             <name>create_task</name>
             <table>objects</table>
-            <group>info</group>
+            <group>info_t</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
@@ -527,6 +529,59 @@
             <field>transl</field>
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
+      <property>
+            <name>strat_a</name>
+            <table>objects</table>
+            <group>strat_a</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>strat_a</field>
+      </property>
+      <property>
+            <name>strat_res</name>
+            <table>objects</table>
+            <group>strat_res</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>strat_res</field>
+      </property>
+      <property>
+            <name>risks</name>
+            <table>objects</table>
+            <group>risks</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_RISK</reltype>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>owner</num_1>
+            </props>
+            <mode>manager</mode>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>owner</num_1>
+            </table_fields>
+            <field>risks</field>
+      </property>
+      <property>
+            <name>risks_eval</name>
+            <table>objects</table>
+            <group>risks_eval</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>risks_eval</field>
+      </property>
+      <property>
+            <name>risks_res</name>
+            <table>objects</table>
+            <group>risks_res</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>risks_res</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -535,6 +590,24 @@
             <info>
                   <caption>Projekti info</caption>
             </info>
+            <info_t>
+                  <caption>Projekti info</caption>
+                  <parent>info</parent>
+            </info_t>
+            <strat>
+                  <caption>Strateegilised edutegurid</caption>
+                  <parent>info</parent>
+            </strat>
+            <strat_a>
+                  <caption>Strateegiliste edutegurite hindamine</caption>
+                  <parent>info</parent>
+            </strat_a>
+            <strat_res>
+                  <caption>Strateegiliste edutegurite hindamise tulemused</caption>
+                  <parent>info</parent>
+                  <store>no</store>
+                  <submit>no</submit>
+            </strat_res>
             <general2>
                   <parent>general</parent>
                   <caption>&amp;Uuml;ldine</caption>
@@ -590,6 +663,21 @@
                   <caption>Meeskond</caption>
                   <submit>no</submit>
             </team>
+            <risks_t>
+                  <caption>Riskid</caption>
+            </risks_t>
+            <risks>
+                  <caption>Riskid</caption>
+                  <parent>risks_t</parent>
+            </risks>
+            <risks_eval>
+                  <caption>Riskide hindamine</caption>
+                  <parent>risks_t</parent>
+            </risks_eval>
+            <risks_res>
+                  <caption>Riskide hindamise tulemused</caption>
+                  <parent>risks_t</parent>
+            </risks_res>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -700,6 +788,16 @@
                   <clid>CL_CRM_BILL</clid>
                   <caption>Arve</caption>
             </PREPAYMENT_BILL>
+            <STRAT>
+                  <value>17</value>
+                  <clid>CL_PROJECT_STRAT_GOAL</clid>
+                  <caption>Strateegiline edutegur</caption>
+            </STRAT>
+            <RISK>
+                  <value>18</value>
+                  <clid>CL_PROJECT_RISK</clid>
+                  <caption>Risk</caption>
+            </RISK>
       </reltypes>
       <layout>
             <parts>

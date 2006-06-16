@@ -230,10 +230,10 @@
             <table>objects</table>
             <group>participants</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <method>serialize</method>
             <caption>&amp;quot;Toolbar&amp;quot;</caption>
       </property>
       <property>
@@ -241,7 +241,6 @@
             <table>objects</table>
             <group>recurrence</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>releditor</type>
             <reltype>RELTYPE_RECURRENCE</reltype>
             <rel_id>first</rel_id>
@@ -256,6 +255,7 @@
                   <num_7>interval_yearly</num_7>
                   <num_8></num_8>
             </props>
+            <method>serialize</method>
             <caption>Kordused</caption>
       </property>
       <property>
@@ -263,9 +263,9 @@
             <table>objects</table>
             <group>calendars</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>calendar_selector</type>
             <store>no</store>
+            <method>serialize</method>
             <caption>Kalendrid</caption>
       </property>
       <property>
@@ -273,10 +273,10 @@
             <table>objects</table>
             <group>others</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>multi_calendar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <method>serialize</method>
             <caption>Teised</caption>
       </property>
       <property>
@@ -284,9 +284,9 @@
             <table>objects</table>
             <group>projects</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>project_selector</type>
             <store>no</store>
+            <method>serialize</method>
             <caption>Projektid</caption>
       </property>
       <property>
@@ -294,9 +294,9 @@
             <table>objects</table>
             <group>comments</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>comments</type>
             <no_caption>1</no_caption>
+            <method>serialize</method>
             <caption>Kommentaarid</caption>
       </property>
       <property>
@@ -304,9 +304,9 @@
             <table>objects</table>
             <group>reminders</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>reminder</type>
             <store>no</store>
+            <method>serialize</method>
             <caption>Meeldetuletus</caption>
       </property>
       <property>
@@ -314,10 +314,10 @@
             <table>objects</table>
             <group>participants</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>participant_selector</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <method>serialize</method>
             <caption>Osalejad</caption>
       </property>
       <property>
@@ -325,9 +325,9 @@
             <table>objects</table>
             <group>participants</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
             <store>no</store>
+            <method>serialize</method>
             <caption>Organisatsioon</caption>
       </property>
       <property>
@@ -335,9 +335,9 @@
             <table>objects</table>
             <group>participants</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
             <store>no</store>
+            <method>serialize</method>
             <caption>Eesnimi</caption>
       </property>
       <property>
@@ -345,9 +345,9 @@
             <table>objects</table>
             <group>participants</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
             <store>no</store>
+            <method>serialize</method>
             <caption>Perenimi</caption>
       </property>
       <property>
@@ -355,9 +355,9 @@
             <table>objects</table>
             <group>participants</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>textbox</type>
             <store>no</store>
+            <method>serialize</method>
             <caption>Isikukood</caption>
       </property>
       <property>
@@ -365,10 +365,10 @@
             <table>objects</table>
             <group>participants</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>submit</type>
             <store>no</store>
             <action>search_contacts</action>
+            <method>serialize</method>
             <caption>Otsi</caption>
       </property>
       <property>
@@ -376,10 +376,10 @@
             <table>objects</table>
             <group>participants</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <method>serialize</method>
             <caption>Tulemuste tabel</caption>
       </property>
       <property>
@@ -387,40 +387,61 @@
             <table>objects</table>
             <group>other_exp</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <method>serialize</method>
       </property>
       <property>
             <name>rows_tb</name>
             <table>objects</table>
             <group>rows</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <method>serialize</method>
       </property>
       <property>
             <name>rows</name>
             <table>objects</table>
             <group>rows</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
+            <method>serialize</method>
       </property>
       <property>
             <name>sel_resources</name>
             <table>objects</table>
             <group>resources</group>
             <field>meta</field>
-            <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
+            <method>serialize</method>
             <store>no</store>
+      </property>
+      <property>
+            <name>predicates</name>
+            <table>objects</table>
+            <group>predicates</group>
+            <field>meta</field>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_PREDICATE</reltype>
+            <store>connect</store>
+            <method>serialize</method>
+            <caption>Eeldustegevused</caption>
+      </property>
+      <property>
+            <name>is_goal</name>
+            <table>planner</table>
+            <group>predicates</group>
+            <field>aw_is_goal</field>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Verstapost</caption>
       </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
@@ -462,6 +483,9 @@
             <resources>
                   <caption>Ressursid</caption>
             </resources>
+            <predicates>
+                  <caption>Eeldused</caption>
+            </predicates>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -519,6 +543,11 @@
                   </clid>
                   <caption>Manus</caption>
             </ATTACH>
+            <PREDICATE>
+                  <value>9</value>
+                  <clid>CL_TASK</clid>
+                  <caption>Eeldustegevus</caption>
+            </PREDICATE>
       </reltypes>
       <layout>
             <personal>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.104 2006/06/08 14:50:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.105 2006/06/16 11:23:14 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -85,64 +85,71 @@ layout num_hrs type=hbox
 @caption Seostehaldur
 
 @default field=meta
-@default method=serialize
 
-@property task_toolbar type=toolbar no_caption=1 store=no group=participants
+@property task_toolbar type=toolbar no_caption=1 store=no group=participants method=serialize
 @caption "Toolbar"
 
-@property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,
+@property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly, method=serialize
 @caption Kordused
-@property calendar_selector type=calendar_selector store=no group=calendars
+@property calendar_selector type=calendar_selector store=no group=calendars method=serialize
 @caption Kalendrid
 
-@property other_selector type=multi_calendar store=no group=others no_caption=1
+@property other_selector type=multi_calendar store=no group=others no_caption=1 method=serialize
 @caption Teised
 
-@property project_selector type=project_selector store=no group=projects
+@property project_selector type=project_selector store=no group=projects method=serialize
 @caption Projektid
 
-@property comment_list type=comments group=comments no_caption=1
+@property comment_list type=comments group=comments no_caption=1 method=serialize
 @caption Kommentaarid
 
-@property rmd type=reminder group=reminders store=no
+@property rmd type=reminder group=reminders store=no method=serialize
 @caption Meeldetuletus
 
-property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
+property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1 method=serialize
 caption Osalejad
 
-@property participant type=participant_selector store=no group=participants no_caption=1
+@property participant type=participant_selector store=no group=participants no_caption=1 method=serialize
 @caption Osalejad
 
-@property search_contact_company type=textbox store=no group=participants
+@property search_contact_company type=textbox store=no group=participants method=serialize
 @caption Organisatsioon
 
-@property search_contact_firstname type=textbox store=no group=participants
+@property search_contact_firstname type=textbox store=no group=participants method=serialize
 @caption Eesnimi
 
-@property search_contact_lastname type=textbox store=no group=participants
+@property search_contact_lastname type=textbox store=no group=participants method=serialize
 @caption Perenimi
 
-@property search_contact_code type=textbox store=no group=participants
+@property search_contact_code type=textbox store=no group=participants method=serialize
 @caption Isikukood
 
-@property search_contact_button type=submit store=no group=participants action=search_contacts
+@property search_contact_button type=submit store=no group=participants action=search_contacts method=serialize
 @caption Otsi
 
-@property search_contact_results type=table store=no group=participants no_caption=1
+@property search_contact_results type=table store=no group=participants no_caption=1 method=serialize
 @caption Tulemuste tabel
 
 @default group=other_exp
 
-	@property other_expenses type=table store=no no_caption=1
+	@property other_expenses type=table store=no no_caption=1 method=serialize
 
 @default group=rows
 
-	@property rows_tb type=toolbar store=no no_caption=1
-	@property rows type=table store=no no_caption=1
+	@property rows_tb type=toolbar store=no no_caption=1 method=serialize
+	@property rows type=table store=no no_caption=1 method=serialize
 
 @default group=resources
 
-	@property sel_resources type=table no_caption=1
+	@property sel_resources type=table no_caption=1 method=serialize
+
+@default group=predicates
+
+	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect field=meta method=serialize
+	@caption Eeldustegevused
+
+	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal method=
+	@caption Verstapost
 
 @groupinfo rows caption=Read 
 @groupinfo recurrence caption=Kordumine submit=no
@@ -154,6 +161,7 @@ caption Osalejad
 @groupinfo participants caption=Osalejad submit=no
 @groupinfo other_exp caption="Muud kulud" 
 @groupinfo resources caption="Ressursid" 
+@groupinfo predicates caption="Eeldused" 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -180,6 +188,9 @@ caption Osalejad
 
 @reltype ATTACH value=8 clid=CL_CRM_MEMO,CL_CRM_DEAL,CL_CRM_DOCUMENT,CRM_OFFER
 @caption Manus
+
+@reltype PREDICATE value=9 clid=CL_TASK
+@caption Eeldustegevus
 */
 
 class task extends class_base
@@ -986,6 +997,22 @@ class task extends class_base
 		if ($arr["obj_inst"]->name() == "")
 		{
 			$arr["obj_inst"]->set_name($this->_get_default_name($arr["obj_inst"]));
+		}
+
+		if ($arr["request"]["set_pred"] != "")
+		{
+			$pv = $arr["obj_inst"]->prop("predicates");
+			if (!is_array($pv) && is_oid($pv))
+			{
+				$pv = array($pv => $pv);
+			}	
+			else
+			if (!is_array($pv) && !is_oid($pv))
+			{
+				$pv = array();
+			}
+			$pv[$arr["request"]["set_pred"]] = $arr["request"]["set_pred"];
+			$arr["obj_inst"]->set_prop("predicates", $arr["request"]["set_pred"]);
 		}
 	}
 
@@ -2478,6 +2505,7 @@ class task extends class_base
 			$arr["add_to_cal"] = $_GET["add_to_cal"];
 			$arr["alias_to_org"] = $_GET["alias_to_org"];
 			$arr["reltype_org"] = $_GET["reltype_org"];
+			$arr["set_pred"] = $_GET["set_pred"];
 		}
 	}
 

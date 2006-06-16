@@ -39,7 +39,10 @@
       <property>
             <name>mailbox</name>
             <table>objects</table>
-            <group>main_view</group>
+            <group>
+                  <num_0>mess_list</num_0>
+                  <num_1>mail_view</num_1>
+            </group>
             <field>meta</field>
             <method>serialize</method>
             <type>hidden</type>
@@ -48,7 +51,7 @@
       <property>
             <name>mail_toolbar</name>
             <table>objects</table>
-            <group>main_view</group>
+            <group>mess_list</group>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
@@ -59,7 +62,7 @@
       <property>
             <name>treeview</name>
             <table>objects</table>
-            <group>main_view</group>
+            <group>mess_list</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
@@ -70,7 +73,7 @@
       <property>
             <name>message_list</name>
             <table>objects</table>
-            <group>main_view</group>
+            <group>mess_list</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -78,6 +81,60 @@
             <parent>message_view</parent>
             <store>no</store>
             <caption>Kirjad</caption>
+      </property>
+      <property>
+            <name>new_mail_toolbar</name>
+            <table>objects</table>
+            <group>new_mail</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <submit>no</submit>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>uue maili tuulbar</caption>
+      </property>
+      <property>
+            <name>to_mail</name>
+            <table>objects</table>
+            <group>new_mail</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Kellele</caption>
+      </property>
+      <property>
+            <name>to_text</name>
+            <table>objects</table>
+            <group>new_mail</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>text</caption>
+      </property>
+      <property>
+            <name>mail_view_tree</name>
+            <table>objects</table>
+            <group>mail_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>mail_view_split</parent>
+            <no_caption>1</no_caption>
+            <caption>Kaustapuu</caption>
+      </property>
+      <property>
+            <name>mail_contents</name>
+            <table>objects</table>
+            <group>mail_view</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <parent>mail_view_split</parent>
+            <no_caption>1</no_caption>
+            <caption>Maili vaate t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
       </property>
       <property>
             <name>msg_outbox</name>
@@ -297,6 +354,24 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <main_view>
+                  <caption>Kirjad</caption>
+                  <submit>no</submit>
+            </main_view>
+            <mess_list>
+                  <caption>Postkast</caption>
+                  <parent>main_view</parent>
+            </mess_list>
+            <new_mail>
+                  <caption>Uus kiri</caption>
+                  <parent>main_view</parent>
+                  <submit>no</submit>
+            </new_mail>
+            <mail_view>
+                  <caption>Kirja vaade</caption>
+                  <parent>main_view</parent>
+                  <submit>no</submit>
+            </mail_view>
             <settings>
                   <caption>Seaded</caption>
                   <parent>general</parent>
@@ -309,10 +384,6 @@
                   <caption>IMAP</caption>
                   <parent>general</parent>
             </imap>
-            <main_view>
-                  <caption>Kirjad</caption>
-                  <submit>no</submit>
-            </main_view>
             <search>
                   <caption>Otsing</caption>
                   <submit>no</submit>
@@ -404,8 +475,13 @@
             <message_view>
                   <type>hbox</type>
                   <width>15%:85%</width>
-                  <group>main_view</group>
+                  <group>mess_list</group>
             </message_view>
+            <mail_view_split>
+                  <type>hbox</type>
+                  <width>15%:85%</width>
+                  <group>mail_view</group>
+            </mail_view_split>
       </layout>
 </properties>
 

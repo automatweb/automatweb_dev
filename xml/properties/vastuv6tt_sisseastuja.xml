@@ -169,7 +169,7 @@
             <field>avaldus_title</field>
       </property>
       <property>
-            <name>sisseastumisavaldused_b</name>
+            <name>sisseastumisavaldused</name>
             <table>vastuv6tt_sisseastuja</table>
             <group>grp_sisseastuja_avaldused</group>
             <type>releditor</type>
@@ -177,36 +177,15 @@
             <store>no</store>
             <props>
                   <num_0>eriala</num_0>
-                  <num_1>eriala_b</num_1>
-                  <num_2>oppevorm</num_2>
-                  <num_3>oppetase</num_3>
-                  <num_4>eelistus</num_4>
-                  <num_5>sisseastuja_nr</num_5>
-                  <num_6>isik_firstname</num_6>
-                  <num_7>isik_lastname</num_7>
+                  <num_1>oppevorm</num_1>
+                  <num_2>oppetase</num_2>
+                  <num_3>eelistus</num_3>
+                  <num_4>sisseastuja_nr</num_4>
+                  <num_5>isik_firstname</num_5>
+                  <num_6>isik_lastname</num_6>
             </props>
             <no_caption>1</no_caption>
-            <field>sisseastumisavaldused_b</field>
-      </property>
-      <property>
-            <name>sisseastumisavaldused_m</name>
-            <table>vastuv6tt_sisseastuja</table>
-            <group>grp_sisseastuja_avaldused</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_AVALDUS</reltype>
-            <store>no</store>
-            <props>
-                  <num_0>eriala</num_0>
-                  <num_1>eriala_m</num_1>
-                  <num_2>oppevorm</num_2>
-                  <num_3>oppetase</num_3>
-                  <num_4>eelistus</num_4>
-                  <num_5>sisseastuja_nr</num_5>
-                  <num_6>isik_firstname</num_6>
-                  <num_7>isik_lastname</num_7>
-            </props>
-            <no_caption>1</no_caption>
-            <field>sisseastumisavaldused_m</field>
+            <field>sisseastumisavaldused</field>
       </property>
       <property>
             <name>konkursilehed_tbl</name>
@@ -297,11 +276,21 @@
             <caption>Riigieksamite hinded</caption>
       </property>
       <property>
+            <name>ex_kirjand</name>
+            <table>vastuv6tt_sisseastuja</table>
+            <group>grp_sisseastuja_avaldused</group>
+            <type>text</type>
+            <store>no</store>
+            <field>ex_kirjand</field>
+            <caption>Kirjand</caption>
+      </property>
+      <property>
             <name>ex_kirjand_aasta</name>
             <table>vastuv6tt_sisseastuja</table>
             <group>grp_sisseastuja_avaldused</group>
             <type>select</type>
-            <parent>box1</parent>
+            <parent>ex_kirjand</parent>
+            <datatype>int</datatype>
             <field>ex_kirjand_aasta</field>
             <caption>aasta</caption>
       </property>
@@ -310,7 +299,9 @@
             <table>vastuv6tt_sisseastuja</table>
             <group>grp_sisseastuja_avaldused</group>
             <type>textbox</type>
-            <parent>box1</parent>
+            <parent>ex_kirjand</parent>
+            <size>3</size>
+            <datatype>int</datatype>
             <field>ex_kirjand_hinne</field>
             <caption>hinne</caption>
       </property>
@@ -883,6 +874,15 @@
             <caption>E</caption>
       </property>
       <property>
+            <name>ak_hinne_l6put88</name>
+            <table>vastuv6tt_sisseastuja</table>
+            <group>grp_sisseastuja_avaldused</group>
+            <type>textbox</type>
+            <size>2</size>
+            <field>ak_hinne_l6put88</field>
+            <caption>L&amp;amp;otilde;put&amp;amp;ouml;&amp;amp;ouml;/eksami hinne</caption>
+      </property>
+      <property>
             <name>sisseastuja_ylevaade</name>
             <table>vastuv6tt_sisseastuja</table>
             <group>grp_sisseastuja_andmed</group>
@@ -926,6 +926,14 @@
             <store>no</store>
             <field>sisseastuja_nr_title</field>
             <caption>Sisseastuja number</caption>
+      </property>
+      <property>
+            <name>tulemuste_teavitusviis</name>
+            <table>vastuv6tt_sisseastuja</table>
+            <group>grp_sisseastuja_andmed</group>
+            <type>chooser</type>
+            <field>tulemuste_teavitusviis</field>
+            <caption>Konkursitulemuste teavitamise viis</caption>
       </property>
       <property>
             <name>isik_title</name>
@@ -1111,6 +1119,14 @@
             <type>textbox</type>
             <field>haridus_k6rgkool</field>
             <caption>Eelnevalt l&amp;amp;otilde;petatud k&amp;amp;otilde;rgkool</caption>
+      </property>
+      <property>
+            <name>haridus_kool_eriala</name>
+            <table>vastuv6tt_sisseastuja</table>
+            <group>grp_sisseastuja_andmed</group>
+            <type>textbox</type>
+            <field>haridus_kool_eriala</field>
+            <caption>L&amp;amp;otilde;petatud eriala</caption>
       </property>
       <property>
             <name>kool_title</name>
@@ -1407,16 +1423,6 @@
             <caption>Maastikuarhitektuuri erialatest</caption>
       </property>
       <property>
-            <name>tulemus_vl</name>
-            <table>vastuv6tt_sisseastuja</table>
-            <group>grp_sisseastuja_andmed</group>
-            <type>textbox</type>
-            <size>3</size>
-            <datatype>int</datatype>
-            <field>tulemus_vl</field>
-            <caption>Liha- ja piimatehnoloogia eriala vestlus</caption>
-      </property>
-      <property>
             <name>tulemus_vm</name>
             <table>vastuv6tt_sisseastuja</table>
             <group>grp_sisseastuja_andmed</group>
@@ -1425,26 +1431,6 @@
             <datatype>int</datatype>
             <field>tulemus_vm</field>
             <caption>Maastikukaitse- ja hoolduse eriala vestlus</caption>
-      </property>
-      <property>
-            <name>tulemus_vv</name>
-            <table>vastuv6tt_sisseastuja</table>
-            <group>grp_sisseastuja_andmed</group>
-            <type>textbox</type>
-            <size>3</size>
-            <datatype>int</datatype>
-            <field>tulemus_vv</field>
-            <caption>Veterinaarmeditsiini eriala vestlus</caption>
-      </property>
-      <property>
-            <name>tulemus_vr</name>
-            <table>vastuv6tt_sisseastuja</table>
-            <group>grp_sisseastuja_andmed</group>
-            <type>textbox</type>
-            <size>3</size>
-            <datatype>int</datatype>
-            <field>tulemus_vr</field>
-            <caption>Rakendush&amp;amp;uuml;drobioloogia eriala vestlus</caption>
       </property>
       <classinfo>
             <syslog_type>ST_VASTUV6TT_SISSEASTUJA</syslog_type>
@@ -1480,11 +1466,5 @@
                   <caption>Avaldus</caption>
             </AVALDUS>
       </reltypes>
-      <layout>
-            <box1>
-                  <type>hbox</type>
-                  <group>grp_sisseastuja_avaldused</group>
-            </box1>
-      </layout>
 </properties>
 

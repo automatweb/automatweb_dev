@@ -773,6 +773,110 @@
             <caption>Kinnisvaraotsingu objekt</caption>
       </property>
       <property>
+            <name>default_house_image</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DEFAULT_PICTURE1</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <clid>CL_IMAGE</clid>
+            <caption>Vaikimisi maja pilt</caption>
+      </property>
+      <property>
+            <name>default_rowhouse_image</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DEFAULT_PICTURE2</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <clid>CL_IMAGE</clid>
+            <caption>Vaikimisi ridaelamu pilt</caption>
+      </property>
+      <property>
+            <name>default_cottage_image</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DEFAULT_PICTURE3</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <clid>CL_IMAGE</clid>
+            <caption>Vaikimisi suvila pilt</caption>
+      </property>
+      <property>
+            <name>default_housepart_image</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DEFAULT_PICTURE4</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <clid>CL_IMAGE</clid>
+            <caption>Vaikimisi majaosa pilt</caption>
+      </property>
+      <property>
+            <name>default_apartment_image</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DEFAULT_PICTURE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <clid>CL_IMAGE</clid>
+            <caption>Vaikimisi korteri pilt</caption>
+      </property>
+      <property>
+            <name>default_commercial_image</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DEFAULT_PICTURE6</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <clid>CL_IMAGE</clid>
+            <caption>Vaikimisi &amp;auml;ripinna pilt</caption>
+      </property>
+      <property>
+            <name>default_garage_image</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DEFAULT_PICTURE7</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <clid>CL_IMAGE</clid>
+            <caption>Vaikimisi garaazi pilt</caption>
+      </property>
+      <property>
+            <name>default_land_image</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DEFAULT_PICTURE8</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <clid>CL_IMAGE</clid>
+            <caption>Vaikimisi maa pilt</caption>
+      </property>
+      <property>
             <name>default_date_format</name>
             <table>objects</table>
             <field>meta</field>
@@ -1062,6 +1166,46 @@
                   <value>17</value>
                   <caption>Haldusjaotuse vaste 5</caption>
             </RELTYPE_ADDRESS_EQUIVALENT_5>
+            <RELTYPE_DEFAULT_PICTURE1>
+                  <value>26</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>V&amp;auml;ike pilt</caption>
+            </RELTYPE_DEFAULT_PICTURE1>
+            <RELTYPE_DEFAULT_PICTURE2>
+                  <value>19</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>V&amp;auml;ike pilt</caption>
+            </RELTYPE_DEFAULT_PICTURE2>
+            <RELTYPE_DEFAULT_PICTURE3>
+                  <value>20</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>V&amp;auml;ike pilt</caption>
+            </RELTYPE_DEFAULT_PICTURE3>
+            <RELTYPE_DEFAULT_PICTURE4>
+                  <value>21</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>V&amp;auml;ike pilt</caption>
+            </RELTYPE_DEFAULT_PICTURE4>
+            <RELTYPE_DEFAULT_PICTURE5>
+                  <value>22</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>V&amp;auml;ike pilt</caption>
+            </RELTYPE_DEFAULT_PICTURE5>
+            <RELTYPE_DEFAULT_PICTURE6>
+                  <value>23</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>V&amp;auml;ike pilt</caption>
+            </RELTYPE_DEFAULT_PICTURE6>
+            <RELTYPE_DEFAULT_PICTURE7>
+                  <value>24</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>V&amp;auml;ike pilt</caption>
+            </RELTYPE_DEFAULT_PICTURE7>
+            <RELTYPE_DEFAULT_PICTURE8>
+                  <value>25</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>V&amp;auml;ike pilt</caption>
+            </RELTYPE_DEFAULT_PICTURE8>
       </reltypes>
       <layout>
             <vsplitbox>

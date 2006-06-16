@@ -4847,14 +4847,18 @@ class crm_company extends class_base
 		}
 	}
 
-	function get_cust_rel($view_co, $crea_if_not_exists = false)
+	function get_cust_rel($view_co, $crea_if_not_exists = false, $my_co = null)
 	{
 		if (!is_oid($view_co->id()))
 		{
 			return false;
 		}
 		$u = get_instance(CL_USER);
-		$my_co = $u->get_current_company();
+		if ($other_co === null)
+		{
+			$my_co = $u->get_current_company();
+		}
+		
 		if ($view_co->id() == $my_co)
 		{
 			return false;

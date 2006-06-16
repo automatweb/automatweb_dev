@@ -36,9 +36,22 @@
             <method>serialize</method>
             <caption>Juhuslik valik</caption>
       </property>
+      <property>
+            <name>vars</name>
+            <table>objects</table>
+            <group>test</group>
+            <type>table</type>
+            <store>no</store>
+            <field>vars</field>
+      </property>
       <classinfo>
             <syslog_type>ST_SITE_STYLES</syslog_type>
             <no_comment>1</no_comment>
       </classinfo>
+      <groupinfo>
+            <test>
+                  <caption>Muutujad</caption>
+            </test>
+      </groupinfo>
 </properties>
 

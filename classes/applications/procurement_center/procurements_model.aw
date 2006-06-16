@@ -135,6 +135,14 @@ class procurements_model extends class_base
 	function get_pris_for_requirement($req)
 	{	
 		$proc = $this->get_procurement_from_requirement($req);
+		return $this->get_pris_from_procurement($proc);
+	}
+
+	/**
+		@attrib api=1
+	**/
+	function get_pris_from_procurement($proc)
+	{
 		$ret = array();
 		foreach($proc->connections_from(array("type" => "RELTYPE_PRI")) as $c)
 		{

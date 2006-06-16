@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.6 2006/04/12 14:07:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.7 2006/06/16 11:23:16 kristo Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor
@@ -44,6 +44,7 @@ class fck_editor
 <script type="text/javascript" src="js/fckeditor/fckeditor.js"></script>
 <script type="text/javascript">
 <!--
+oldload = window.onload;
 window.onload = function()
 {
 	';
@@ -69,6 +70,10 @@ window.onload = function()
 		fck'.$nm.'.ReplaceTextarea();';
 	}
 	$retval .= '
+ 	if (oldload)
+	{
+		oldload();
+	}
 }
 -->
 </script>

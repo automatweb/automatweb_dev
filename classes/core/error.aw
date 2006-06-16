@@ -5,12 +5,35 @@
 
 class error
 {
-	////
-	// !throws an error, parameters:
-	// id - error id, defined in errors.ini
-	// msg - error message to show
-	// fatal - if set, aborts execution
-	// show - if true, error is shown to user, error is always logged and sent to the mailinglist
+	/** throws an error
+		@attrib api=1 params=name
+
+		@param id required type=string
+			error id, unique string, prefixed by ERR_ that identifies the error
+		@param msg required type=string
+			error message to show
+
+		@param fatal optional type=bool 
+			if set, aborts execution defaults to true
+
+		@param show optional type=bool 
+			if true, error is shown to user, error is always logged and sent to the mailinglist, defaults to true
+
+		@errors
+			this is the error handler. what do you think. 
+
+		@returns
+			none
+
+		@examples
+			if (!$very_important_parameter)
+			{
+				error::raise(array(
+					"id" => "ERR_NO_PARAM",
+					"msg" => sprintf(t("class::function(): parameter %s is not set!"), $param_name)
+				));
+			}
+	**/
 	function raise($arr)
 	{
 		if (!isset($arr["id"]) || !$arr["id"])
@@ -34,11 +57,6 @@ class error
 		$inst->raise_error($arr["id"], $arr["msg"], $arr["fatal"], !$arr["show"]);
 	}
 
-	////
-	// !trows an acl error, parameters:
-	// access - type of access that was denied
-	// oid - the object to what the access was denied
-	// func - the function where access was denied
 	function throw_acl($arr)
 	{
 		$sct = isset($arr["access"]) ? "can_".$arr["access"] : t("not specified");
@@ -52,11 +70,27 @@ class error
 		));
 	}
 
-	////
-	// !throws error if $cond is true
-	// params:
-	//	cond - if true, error is raised
-	//	arr - array of parameters that get passed to throw()
+	/** throws an error if a condition is true
+		@attrib api=1 params=pos
+
+		@param cond required type=bool
+			if this is true, error is thrown
+
+		@param arr required type=array
+			parameters to the #error::raise method
+
+		@errors
+			none
+
+		@returns
+			none
+
+		@examples
+			error::raise_if(!$very_important_parameter, array(
+				"id" => "ERR_NO_PARAM",
+				"msg" => sprintf(t("class::function(): parameter %s is not set!"), $param_name)
+			));
+	**/
 	function raise_if($cond, $arr)
 	{
 		if ($cond)
@@ -69,10 +103,16 @@ class error
 
 		@attrib api=1
 
-		@param $oid 
+		@param oid required type=oid
+			The oid to check view access for
 
-		@comment
-			oid - id of object to check
+		@examples
+			function foo($oid)
+			{
+				error::view_check($oid);	// this should only be calles for objects that you absolutely cannot do without
+				$o = obj($oid);		// this is safe to do now. 
+				echo  $o->name();
+			}
 	**/
 	function view_check($oid)
 	{

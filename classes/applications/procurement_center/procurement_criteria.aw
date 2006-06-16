@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_criteria.aw,v 1.1 2006/06/01 15:10:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_criteria.aw,v 1.2 2006/06/16 11:23:14 kristo Exp $
 // procurement_criteria.aw - Pakkumise hindamise kriteerium 
 /*
 
@@ -28,6 +28,11 @@ class procurement_criteria extends class_base
 			"tpldir" => "applications/procurement_center/procurement_criteria",
 			"clid" => CL_PROCUREMENT_CRITERIA
 		));
+		$this->types = array(
+			CRIT_TIME => t("Kiire valmimine"),
+			CRIT_PRICE => t("Madal hind"),
+			CRIT_ASSESS => t("K&otilde;rged hinded")
+		);
 	}
 
 	function get_property($arr)
@@ -37,11 +42,7 @@ class procurement_criteria extends class_base
 		switch($prop["name"])
 		{
 			case "type":
-				$prop["options"] = array(
-					CRIT_TIME => t("Kiire valmimine"),
-					CRIT_PRICE => t("Madal hind"),
-					CRIT_ASSESS => t("K&otilde;rged hinded")
-				);
+				$prop["options"] = $this->get_types();
 				break;
 		};
 		return $retval;
@@ -146,6 +147,11 @@ class procurement_criteria extends class_base
 					"msg" => sprintf(t("procurement_criteria::get_score_for_crit(): no type set for criteria %s"),$crit->prop("type"))
 				));
 		}
+	}
+
+	function get_types()
+	{
+		return $this->types;
 	}
 }
 ?>

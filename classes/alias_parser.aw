@@ -139,7 +139,6 @@ class alias_parser extends core
 				}
 
 				// here we do the actual parse/replace bit
-
 				foreach($toreplace as $clid => $claliases)
 				{
 					$emb_obj_name = "emb" . $clid;

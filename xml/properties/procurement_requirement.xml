@@ -19,6 +19,24 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
+            <name>req_co</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CO</reltype>
+            <field>aw_req_co</field>
+            <caption>Tellija organisatsioon</caption>
+      </property>
+      <property>
+            <name>req_p</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_P</reltype>
+            <field>aw_req_p</field>
+            <caption>Tellija isik</caption>
+      </property>
+      <property>
             <name>offer_t</name>
             <table>objects</table>
             <group>offers</group>
@@ -43,7 +61,7 @@
       </classinfo>
       <groupinfo>
             <offers>
-                  <caption>Pakkumised</caption>
+                  <caption>Lahendused n&amp;amp;otilde;udele</caption>
             </offers>
             <comments>
                   <caption>Kommentaarid</caption>
@@ -56,5 +74,17 @@
                   <master_table>objects</master_table>
             </procuremnent_requirements>
       </tableinfo>
+      <reltypes>
+            <CO>
+                  <value>1</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Organisatsioon</caption>
+            </CO>
+            <P>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Isik</caption>
+            </P>
+      </reltypes>
 </properties>
 

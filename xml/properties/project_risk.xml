@@ -1,0 +1,44 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>owner</name>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OWNER</reltype>
+            <table>aw_project_risks</table>
+            <field>aw_owner</field>
+            <caption>Omanik</caption>
+      </property>
+      <property>
+            <name>countermeasure</name>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>30</cols>
+            <table>aw_project_risks</table>
+            <field>aw_countermeasure</field>
+            <caption>Vastumeede</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PROJECT_RISK</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <tableinfo>
+            <aw_project_risks>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </aw_project_risks>
+      </tableinfo>
+      <reltypes>
+            <OWNER>
+                  <value>1</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Omanik</caption>
+            </OWNER>
+      </reltypes>
+</properties>
+

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.3 2006/06/01 15:10:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.4 2006/06/16 11:23:14 kristo Exp $
 // procurement_requirement.aw - N&otilde;ue 
 /*
 
@@ -16,6 +16,12 @@
 	@property desc type=textarea rows=20 cols=50 table=procuremnent_requirements field=aw_desc
 	@caption Kirjeldus
 
+	@property req_co type=relpicker reltype=RELTYPE_CO field=aw_req_co
+	@caption Tellija organisatsioon
+
+	@property req_p type=relpicker reltype=RELTYPE_P field=aw_req_p
+	@caption Tellija isik
+
 @default group=offers
 
 	@property offer_t type=table store=no no_caption=1
@@ -25,8 +31,15 @@
 	@property comments type=comments 
 
 
-@groupinfo offers caption="Pakkumised"
+@groupinfo offers caption="Lahendused n&otilde;udele"
 @groupinfo comments caption="Kommentaarid"
+
+@reltype CO value=1 clid=CL_CRM_COMPANY
+@caption Organisatsioon
+
+@reltype P value=2 clid=CL_CRM_PERSON
+@caption Isik
+
 */
 
 class procurement_requirement extends class_base
@@ -47,11 +60,45 @@ class procurement_requirement extends class_base
 		switch($prop["name"])
 		{
 			case "pri":
-				$prop["options"] = array("" => t("--vali--")) + $this->model->get_pris_for_requirement($arr["obj_inst"]);
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					
+					$prop["options"] = $this->model->get_pris_from_procurement($this->model->get_procurement_from_requirement(obj($arr["request"]["parent"])));
+				}
+				else
+				{
+					$prop["options"] = array("" => t("--vali--")) + $this->model->get_pris_for_requirement($arr["obj_inst"]);
+				}
 				break;
 
 			case "offer_t":
 				$this->_offer_t($arr);
+				break;
+
+			case "req_co":
+				if (!$prop["value"])
+				{
+					$cc = get_current_company();
+					$prop["value"] = $cc->id();
+				}
+				if (!isset($prop["options"][$prop["value"]]) && $prop["value"])
+				{
+					$po = obj($prop["value"]);
+					$prop["options"][$prop["value"]] = $po->name();
+				}
+				break;
+
+			case "req_p":
+				if (!$prop["value"])
+				{
+					$cc = get_current_person();
+					$prop["value"] = $cc->id();
+				}
+				if (!isset($prop["options"][$prop["value"]]) && $prop["value"])
+				{
+					$po = obj($prop["value"]);
+					$prop["options"][$prop["value"]] = $po->name();
+				}
 				break;
 		};
 		return $retval;
@@ -88,6 +135,8 @@ class procurement_requirement extends class_base
 		switch($f)
 		{
 			case "aw_pri":
+			case "aw_req_co":
+			case "aw_req_p":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
 		}
@@ -133,17 +182,36 @@ class procurement_requirement extends class_base
 		$t->define_field(array(
 			"name" => "price",
 			"caption" => t("Hind"),
-			"align" => "center"
+			"align" => "center",
+			"numeric" => 1,
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "price_pm",
+			"caption" => t("+/-"),
+			"align" => "center",
+			"numeric" => 1,
+			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "tti",
 			"caption" => t("Tundide arv"),
-			"align" => "center"
+			"align" => "center",
+			"numeric" => 1,
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "tti_pm",
+			"caption" => t("+/-"),
+			"align" => "center",
+			"numeric" => 1,
+			"sortable" => 1
 		));
 		$t->define_field(array(
 			"name" => "readyness",
 			"caption" => t("Valmidus"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1
 		));
 	}
 
@@ -201,13 +269,15 @@ class procurement_requirement extends class_base
 					"value" => 1,
 					"checked" => $nonsuitable[$o->id()]
 				)),
-				"price" => number_format($o->prop("price"), 2)." (".$prp."%)",
-				"tti" => $o->prop("time_to_install")." (".$hrp."%)",
+				"price" => number_format($o->prop("price"), 2),
+				"price_pm" => $prp."%",
+				"tti" => $o->prop("time_to_install"),
+				"tti_pm" => $hrp."%",
 				"readyness" => $po->readyness_states[$o->prop("readyness")],
 				"oid" => $o->id()
 			));
 		}
-		
+		$t->sort_by();
 		$t->set_sortable(false);
 
 		$t->define_data(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.2 2006/06/01 15:10:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.3 2006/06/16 11:23:14 kristo Exp $
 // procurement.aw - Hange 
 /*
 
@@ -22,6 +22,9 @@
 
 	@property winning_offer type=relpicker reltype=RELTYPE_WINNING_OFFER table=aw_procurements field=aw_winning_offer
 	@caption V&otilde;itnud pakkumine
+
+	@property proj type=text table=aw_procurements field=aw_proj
+	@caption Projekt
 
 @default group=d
 	
@@ -54,7 +57,7 @@
 	@property completion_date type=date_select table=aw_procurements field=aw_completion_date default=-1
 	@caption Valmimiskuup&auml;ev
 
-	@property compl_date_req type=checkbox ch_value=1 field=aw_compl_date_req
+	@property compl_date_req type=checkbox ch_value=1 field=aw_compl_date_req table=aw_procurements
 	@caption Lahenduse valmimist&auml;htaeg n&otilde;utud
 
 @default group=s_pris
@@ -68,17 +71,20 @@
 
 @default group=crit
 
-	@property crit_t type=releditor mode=manager reltype=RELTYPE_CRITERIA props=name table_fields=name 
+	@property crit_tb type=toolbar store=no no_caption=1
+	@caption Kriteeriumite toolbar
+
+	@property crit_t type=table store=no no_caption=1
 	@caption Kriteeriumid
 
-@groupinfo d caption="N&otilde;uded" submit=no
-@groupinfo s caption="M&auml;&auml;rangud"
+@groupinfo d caption="N&otilde;uete nimekiri" submit=no
+@groupinfo s caption="Hanke tingimused"
 	@groupinfo s_general caption="M&auml;&auml;rangud"  parent=s
 	@groupinfo s_pris caption="Prioriteedid" parent=s
 	@groupinfo team caption="Meeskond" parent=s
 	@groupinfo crit caption="Kriteeriumid" parent=s submit=no
 
-@groupinfo o caption="Pakkumised" submit=no
+@groupinfo o caption="Tehtud pakkumised" submit=no
 
 @reltype OFFERER value=1 clid=CL_CRM_COMPANY
 @caption Pakkuja
@@ -127,8 +133,20 @@ class procurement extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "proj":
+				if (!$this->can("view", $arr["obj_inst"]->prop("winning_offer")))
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = html::obj_change_url($prop["value"]);
+				break;
+
 			case "crit_t":
-				$prop["direct_links"] = 1;
+				$this->_crit_t($arr);
+				break;
+
+			case "crit_tb":
+				$this->_crit_tb($arr);
 				break;
 
 			case "team":
@@ -182,6 +200,10 @@ class procurement extends class_base
 			case "o_tbl":
 				$this->_o_tbl($arr);
 				break;
+
+			case "offerers":
+				$prop["value"] = $this->make_keys(array_keys($prop["options"]));
+				break;
 		};
 		return $retval;
 	}
@@ -192,6 +214,10 @@ class procurement extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "winning_offer":
+			case "proj":
+				return PROP_IGNORE;
+
 			case "team":
 				$this->_save_team($arr);
 				break;
@@ -260,7 +286,7 @@ class procurement extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Nimi"),
+			"caption" => t("N&otilde;ude nimi"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -332,7 +358,8 @@ class procurement extends class_base
 			case "aw_publish_date":
 			case "aw_offers_date":
 			case "aw_completion_date":
-			case "compl_date_req":
+			case "aw_compl_date_req":
+			case "aw_proj":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
 		}
@@ -366,18 +393,18 @@ class procurement extends class_base
 	{
 		classload("core/icons");
 		$t =& $arr["prop"]["vcl_inst"];
-
+		$coid = $arr["request"]["co_id"] ? $arr["request"]["co_id"] : "top";
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CRITERIA")) as $c)
 		{
 			$t->add_item(0, array(
 				"id" => $c->prop("to"),
-				"name" => $c->prop("to.name"),
+				"name" => $coid == $c->prop("to") ? "<b>".$c->prop("to.name")."</b>" : $c->prop("to.name"),
 				"url" => aw_url_change_var("co_id", $c->prop("to")),
 			));
 		}
 		$t->add_item(0, array(
 			"id" => "top",
-			"name" => t("Edetabel"),
+			"name" => $coid == "top" ? "<b>".t("Edetabel")."</b>" : t("Edetabel"),
 			"url" => aw_url_change_var("co_id", "top"),
 		));
 	}
@@ -386,7 +413,7 @@ class procurement extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Nimi"),
+			"caption" => t("Pakkumise nimi"),
 			"align" => "center",
 			"sortable" => 1
 		));
@@ -435,7 +462,7 @@ class procurement extends class_base
 				"offerer" => html::obj_change_url($offer->prop("offerer")),
 				"price" => number_format($offer->prop("price"), 2),
 				"oid" => $offer->id(),
-				"score" => $scores[$offer->id()]
+				"score" => number_format($scores[$offer->id()], 2)
 			));
 		}
 		$t->set_default_sortby("score");
@@ -448,7 +475,8 @@ class procurement extends class_base
 	function select_winning_offer($arr)
 	{
 		// mark all other offers for this procurement as unaccepted
-		$offers = $this->model->get_all_offers_for_procurement(obj($arr["id"]));
+		$proc = obj($arr["id"]);
+		$offers = $this->model->get_all_offers_for_procurement($proc);
 
 		if (is_array($arr["sel"]) && count($arr["sel"]) == 1)
 		{
@@ -471,7 +499,30 @@ class procurement extends class_base
 			$p = obj($arr["id"]);
 			$p->set_prop("state", PROCUREMENT_INPROGRESS);
 			$p->set_prop("winning_offer", $winner->id());
+
+			// create customer relation between buyer and seller
+			$cc = get_instance(CL_CRM_COMPANY);
+			$crel = $cc->get_cust_rel(obj($p->prop("orderer")), true, $winner->prop("offerer"));
+
+			// create project and attach to the procurement
+			$proj = obj();
+			$proj->set_class_id(CL_PROJECT);
+			$proj->set_parent($p->id());
+			$proj->set_name($p->name());
+			// add both parties as participants to proj
+			$proj->set_prop("participants", array(
+				$p->prop("orderer") => $p->prop("orderer"),
+				$winner->prop("offerer") => $winner->prop("offerer")
+			));
+			$proj->set_prop("orderer", $p->prop("orderer"));
+			$proj->set_prop("implementor", $winner->prop("offerer"));
+			$proj->save();
+
+			$p->set_prop("proj", $proj->id());
 			$p->save();
+
+			header("Location: ".html::get_change_url($proj->id(), array("return_url" => $arr["post_ru"])));
+			die();
 		}
 		return $arr["post_ru"];
 	}
@@ -619,6 +670,72 @@ class procurement extends class_base
 			return $ci->get_score_for_crit(obj($crit), $offer_list, $o);
 		}
 		return 0;
+	}
+
+	function _init_crit_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Kriteeriumi nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;p"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "pct",
+			"caption" => t("Protsent"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _crit_t($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_crit_t($t);
+
+		$i = get_instance(CL_PROCUREMENT_CRITERIA);
+		$types = $i->get_types();
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CRITERIA")) as $c)
+		{
+			$crit = $c->to();
+			$t->define_data(array(
+				"name" => html::obj_change_url($crit),
+				"type" => $types[$crit->prop("type")],
+				"pct" => $crit->prop("pct"),
+				"oid" => $crit->id()
+			));
+		}
+		$t->set_default_sortby("name");
+	}
+
+	function _crit_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			'name' => 'new',
+			'img' => 'new.gif',
+			'tooltip' => t('Lisa kriteerium'),
+			"url" => html::get_new_url(CL_PROCUREMENT_CRITERIA, $arr["obj_inst"]->id(), array("return_url" => get_ru()))
+		));
+		$tb->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta kriteeriumid'),
+			"confirm" => t("Oled kindel et soovid valitud kriteeriumid kustutada?"),
+			"action" => "delete_procurements"
+		));
 	}
 }
 ?>

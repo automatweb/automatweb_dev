@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.485 2006/06/06 11:53:07 kristo Exp $
+// $Id: class_base.aw,v 2.486 2006/06/16 11:23:14 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -1576,7 +1576,7 @@ class class_base extends aw_template
 			$content = $this->cli->get_result(array(
 				"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
 				"content" => $args["content"],
-				"confirm_save_data" => isset($this->classinfo["confirm_save_data"])
+				"confirm_save_data" => isset($this->classinfo["confirm_save_data"]) || isset($GLOBALS["confirm_save_data"])
 			));
 		//}
 		//else

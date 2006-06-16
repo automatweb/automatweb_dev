@@ -128,6 +128,15 @@
             <caption>Default j&amp;auml;rjestuse suund</caption>
       </property>
       <property>
+            <name>default_per_page</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Vaikimisi kuulutusi lehe kohta</caption>
+      </property>
+      <property>
             <name>save_search</name>
             <table>objects</table>
             <group>general</group>
@@ -369,6 +378,15 @@
             <method>serialize</method>
             <type>select</type>
             <caption>J&amp;auml;rjestuse suund</caption>
+      </property>
+      <property>
+            <name>per_page</name>
+            <table>objects</table>
+            <group>grp_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kuulutusi lehe kohta</caption>
       </property>
       <property>
             <name>search_button</name>

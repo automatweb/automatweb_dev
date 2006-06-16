@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.40 2006/06/15 13:50:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.41 2006/06/16 11:23:15 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -1356,11 +1356,6 @@ class register_data extends class_base
 	
 	function callback_post_save($arr)
 	{
-		$si = __get_site_instance();
-		if (method_exists($si, "register_data_callback_post_save"))
-		{
-			$si->register_data_callback_post_save($arr);
-		}
 		if($arr['new'] && $arr['request']['cfgform'])
 		{
 			$tmp_cfgform = obj($arr['request']['cfgform']);

@@ -38,6 +38,14 @@
             <caption>V&amp;amp;otilde;itnud pakkumine</caption>
       </property>
       <property>
+            <name>proj</name>
+            <table>aw_procurements</table>
+            <group>general</group>
+            <type>text</type>
+            <field>aw_proj</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
             <name>d_tb</name>
             <table>objects</table>
             <group>d</group>
@@ -124,7 +132,7 @@
       </property>
       <property>
             <name>compl_date_req</name>
-            <table>objects</table>
+            <table>aw_procurements</table>
             <group>s_general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -163,14 +171,22 @@
             <field>team</field>
       </property>
       <property>
+            <name>crit_tb</name>
+            <table>objects</table>
+            <group>crit</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>crit_tb</field>
+            <caption>Kriteeriumite toolbar</caption>
+      </property>
+      <property>
             <name>crit_t</name>
             <table>objects</table>
             <group>crit</group>
-            <type>releditor</type>
-            <mode>manager</mode>
-            <reltype>RELTYPE_CRITERIA</reltype>
-            <props>name</props>
-            <table_fields>name</table_fields>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <field>crit_t</field>
             <caption>Kriteeriumid</caption>
       </property>
@@ -183,11 +199,11 @@
       </classinfo>
       <groupinfo>
             <d>
-                  <caption>N&amp;amp;otilde;uded</caption>
+                  <caption>N&amp;amp;otilde;uete nimekiri</caption>
                   <submit>no</submit>
             </d>
             <s>
-                  <caption>M&amp;amp;auml;&amp;amp;auml;rangud</caption>
+                  <caption>Hanke tingimused</caption>
             </s>
             <s_general>
                   <caption>M&amp;amp;auml;&amp;amp;auml;rangud</caption>
@@ -207,7 +223,7 @@
                   <submit>no</submit>
             </crit>
             <o>
-                  <caption>Pakkumised</caption>
+                  <caption>Tehtud pakkumised</caption>
                   <submit>no</submit>
             </o>
       </groupinfo>
