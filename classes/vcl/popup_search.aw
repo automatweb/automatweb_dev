@@ -408,11 +408,21 @@ class popup_search extends aw_template
 	{
 		if ($arr["s"]["name"] != "")
 		{
-			$filter["name"] = map("%%%s%%", explode(",", $arr["s"]["name"]));
+			$bits = explode(",", $arr["s"]["name"]);
+			foreach($bits as $k => $v)
+			{
+				$bits[$k] = trim($v);
+			}
+			$filter["name"] = map("%%%s%%", $bits);
 		}
 		if ($arr["s"]["oid"] != "")
 		{
-			$filter["oid"] = map("%s", explode(",", $arr["s"]["oid"]));
+			$bits = explode(",", $arr["s"]["oid"]);
+			foreach($bits as $k => $v)
+			{
+				$bits[$k] = trim($v);
+			}
+			$filter["oid"] = map("%s", $bits);
 		}
 	}
 
