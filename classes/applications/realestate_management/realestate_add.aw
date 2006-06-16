@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.16 2006/06/12 12:17:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.17 2006/06/16 13:59:32 kristo Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -702,6 +702,11 @@ class realestate_add extends class_base
 		enter_function("realestate_add::parse_alias");
 		global $end , $level, $id, $default;
 		if($end) return $this->result_page($arr);//kui templated otsas või tuleb pangamakselt, siis läheb lõpuvaatesse
+		if (!$this->can("edit", $arr["alias"]["target"]))
+		{
+			$i = get_instance("menuedit");
+			$i->_do_error_redir($oid);
+		}
 		$targ = obj($arr["alias"]["target"]);
 		$clid = $targ->prop("realestate_type");
 		$levels = $targ->meta("levels");
