@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.50 2006/05/26 09:44:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.51 2006/06/16 09:41:43 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -722,13 +722,7 @@ class cache extends core
 		$fq = $this->cfg["page_cache"]."/".$pt."/".$of;
 		$nn = $this->cfg["page_cache"]."/temp/".$pt."_".$of."_".gen_uniq_id();
 
-		if (!rename($fq, $nn))
-		{
-			error::raise(array(
-				"id" => "ERR_CACHE_CLEAR",
-				"msg" => sprintf(t("cache::file_clear_pt_oid(%s, %s): could not rename %s to %s!"), $pt, $oid, $fq, $nn)
-			));
-		}
+		rename($fq, $nn);
 
 		// recreate
 		mkdir($fq, 0777);
