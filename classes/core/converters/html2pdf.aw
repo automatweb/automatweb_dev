@@ -7,6 +7,13 @@ class html2pdf extends class_base
 		$this->init();
 	}
 
+	/**
+		@attrib api=1
+		@comment
+			check's if any html2pdf conversion is possible at the moment
+		@returns
+			true if all ok, false otherwise
+	**/
 	function can_convert()
 	{
 		if (is_file(aw_ini_get("html2pdf.htmldoc_path")))
@@ -20,6 +27,21 @@ class html2pdf extends class_base
 	// !converts html to pdf, returns pdf content
 	// parameters:
 	//	source - html source to convert
+	/**
+		@attrib api=1 params=name
+		@param source required type=string
+			html soucre to be converted
+		@param landscape optional type=bool
+			if set to true.. landscape pdf is created
+		@param no_numbers optional type=bool
+			if set to true, no page numbers are set to pdf
+		@comment
+			converts html contents to pdf
+		@returns
+			converted pdf 
+		@errors
+			raises ERR_CONVERT error if there aren't any available converters found. 
+	**/
 	function convert($arr)
 	{
 		// right, figure out which converter we got
@@ -35,6 +57,20 @@ class html2pdf extends class_base
 		}
 	}
 
+	/**
+		@attrib api=1 params=name
+		@param source required type=string
+			html soucre to be converted
+		@param landscape optional type=bool
+			if set to true.. landscape pdf is created
+		@param no_numbers optional type=bool
+			if set to true, no page numbers are set to pdf
+		@comment
+			generates pdf and outputs it to browser with correct headers.
+		@errors
+			raises ERR_CONVERT error if there aren't any available converters found. 
+
+	**/
 	function gen_pdf($arr)
 	{
 		$str = $this->convert($arr);
