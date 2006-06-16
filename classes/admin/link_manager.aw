@@ -125,7 +125,10 @@ class link_manager extends aw_template
 		$ol = new object_list(array(
 			"class_id" => CL_EXTLINK,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			"name" => "%".$_GET["s"]["name"]."%",
+			"url" => "%".$_GET["s"]["url"]."%",
+			"limit" => ($_GET["s"]["name"] == "" && $_GET["s"]["url"] == "") ? 30 : NULL
 		));
 		$ii = get_instance(CL_EXTLINK);
 		foreach($ol->arr() as $o)
@@ -165,7 +168,49 @@ class link_manager extends aw_template
 		}
 		$t->set_default_sortby("name");
 		$t->sort_by();
-		return $t->draw();
+		return $this->draw_form($arr).$t->draw();
+	}
+
+	function draw_form($arr)
+	{
+		classload("cfg/htmlclient");
+		$htmlc = new htmlclient(array(
+			'template' => "default",
+		));
+		$htmlc->start_output();
+
+		// search by name, url
+		$htmlc->add_property(array(
+			"name" => "s[name]",
+			"type" => "textbox",
+			"caption" => t("Nimi"),
+			"value" => $_GET["s"]["name"]
+		));
+		$htmlc->add_property(array(
+			"name" => "s[url]",
+			"type" => "textbox",
+			"caption" => t("URL"),
+			"value" => $_GET["s"]["url"]
+		));
+
+		$htmlc->add_property(array(
+			"name" => "s[submit]",
+			"type" => "submit",
+			"value" => t("Otsi"),
+		));
+
+		$htmlc->finish_output(array(
+			"action" => "manager",
+			"method" => "GET",
+			"data" => array(
+				"docid" => $arr["docid"],
+				"orb_class" => "link_manager",
+				"reforb" => 0
+			)
+		));
+
+		$html = $htmlc->get_result();
+		return $html;
 	}
 }
 ?>
