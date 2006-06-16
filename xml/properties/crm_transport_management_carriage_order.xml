@@ -170,6 +170,119 @@
             <store>no</store>
             <field>driver</field>
       </property>
+      <property>
+            <name>marking</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textarea</type>
+            <field>marking</field>
+            <caption>Markeering</caption>
+      </property>
+      <property>
+            <name>places_count</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>places_count</field>
+            <caption>Kohtade arv</caption>
+      </property>
+      <property>
+            <name>packing_method</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>packing_method</field>
+            <caption>Pakkimisviis</caption>
+      </property>
+      <property>
+            <name>merchandise_name</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>merchandise_name</field>
+            <caption>Kauba nimetus</caption>
+      </property>
+      <property>
+            <name>cargo_class</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>cargo_class</field>
+            <caption>Klass</caption>
+      </property>
+      <property>
+            <name>nr</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>nr</field>
+            <caption>Number</caption>
+      </property>
+      <property>
+            <name>adr</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>adr</field>
+            <caption>ADR</caption>
+      </property>
+      <property>
+            <name>measure_unit</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>measure_unit</field>
+            <caption>M&amp;amp;otilde;&amp;amp;otilde;t&amp;amp;uuml;hik</caption>
+      </property>
+      <property>
+            <name>gross_weight</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>gross_weight</field>
+            <caption>Brutokaal, kg</caption>
+      </property>
+      <property>
+            <name>capacity</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>capacity</field>
+            <caption>Mahtuvus, m&amp;lt;sup&amp;gt;3&amp;lt;/sup&amp;gt;</caption>
+      </property>
+      <property>
+            <name>receiver_instructions</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>receiver_instructions</field>
+            <caption>Saaja juhised</caption>
+      </property>
+      <property>
+            <name>sender_special_notes</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>sender_special_notes</field>
+            <caption>Saatja erim&amp;amp;auml;rkused</caption>
+      </property>
+      <property>
+            <name>payment_table</name>
+            <table>objects</table>
+            <group>payment_data</group>
+            <type>table</type>
+            <store>no</store>
+            <field>payment_table</field>
+            <caption>Makse tabel</caption>
+      </property>
+      <property>
+            <name>payment_condition</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>payment_data</group>
+            <type>chooser</type>
+            <field>payment_condition</field>
+            <caption>Maksetingimused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CARRIAGE_ORDER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -177,6 +290,14 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <cargo_data>
+                  <caption>Veose andmed</caption>
+            </cargo_data>
+            <payment_data>
+                  <caption>Makse andmed</caption>
+            </payment_data>
+      </groupinfo>
       <tableinfo>
             <crm_transport_management_carriage_order>
                   <index>oid</index>

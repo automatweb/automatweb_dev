@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw,v 1.2 2006/06/15 18:19:16 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw,v 1.3 2006/06/16 09:37:19 dragut Exp $
 // carriage_order.aw - Veotellimus 
 /*
 
@@ -70,6 +70,57 @@
 	@property driver type=text store=no
 	@captio Juht
 
+@groupinfo cargo_data caption="Veose andmed"
+@default group=cargo_data
+
+	@property marking type=textarea table=crm_transport_management_carriage_order
+	@caption Markeering
+
+	@property places_count type=textbox table=crm_transport_management_carriage_order
+	@caption Kohtade arv
+
+	@property packing_method type=textbox table=crm_transport_management_carriage_order
+	@caption Pakkimisviis
+
+	@property merchandise_name type=textbox table=crm_transport_management_carriage_order
+	@caption Kauba nimetus
+
+	@property cargo_class type=textbox table=crm_transport_management_carriage_order
+	@caption Klass
+
+	@property nr type=textbox table=crm_transport_management_carriage_order
+	@caption Number
+
+	@property char type=textbox table=crm_transport_management_carriage_order
+	@caption T&auml;ht
+
+	@property adr type=textbox table=crm_transport_management_carriage_order
+	@caption ADR
+
+	@property measure_unit type=textbox table=crm_transport_management_carriage_order
+	@caption M&otilde;&otilde;t&uuml;hik
+
+	@property gross_weight type=textbox table=crm_transport_management_carriage_order
+	@caption Brutokaal, kg
+
+	@property capacity type=textbox table=crm_transport_management_carriage_order
+	@caption Mahtuvus, m<sup>3</sup>
+
+	@property receiver_instructions type=textbox table=crm_transport_management_carriage_order
+	@caption Saaja juhised
+
+	@property sender_special_notes type=textbox table=crm_transport_management_carriage_order
+	@caption Saatja erim&auml;rkused
+
+@groupinfo payment_data caption="Makse andmed"
+@default group=payment_data
+
+	@property payment_table type=table
+	@caption Makse tabel
+
+	@property payment_condition type=chooser table=crm_transport_management_carriage_order
+	@caption Maksetingimused
+
 @reltype ORDERER value=1 clid=CL_CRM_COMPANY
 @caption Tellija
 
@@ -100,10 +151,14 @@
 
 define('CARRIAGE_ORDER_STATUS_NEW', 1);
 
+define('PAYMENT_CONDITION_NOFRANKO', 1);
+define('PAYMENT_CONDITION_FRANKO', 2);
+
 class crm_transport_management_carriage_order extends class_base
 {
 
 	var $carriage_order_status = array();
+	var $payment_condition = array();
 
 	function crm_transport_management_carriage_order()
 	{
@@ -115,6 +170,11 @@ class crm_transport_management_carriage_order extends class_base
 		$this->carriage_order_status = array(
 			CARRIAGE_ORDER_STATUS_NEW => t('Uus')
 		);
+
+		$this->payment_condition = array(
+			PAYMENT_CONDITION_FRANKO => t('FRANKO'),
+			PAYMENT_CONDITION_NOFRANKO => t('NOFRANKO')
+		);
 	}
 
 	function get_property($arr)
@@ -125,6 +185,10 @@ class crm_transport_management_carriage_order extends class_base
 		{
 			case 'carriage_order_status':
 				$prop['options'] = $this->carriage_order_status;
+				break;
+			case 'payment_condition':
+				$prop['options'] = $this->payment_condition;
+				break;
 		};
 		return $retval;
 	}
@@ -160,6 +224,55 @@ class crm_transport_management_carriage_order extends class_base
 		return $this->parse();
 	}
 
+	function _get_payment_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->set_sortable(false);
+
+
+		$t->define_field(array(
+			'name' => 'for_payment',
+			'caption' => t('Kuulub maksmisele')
+		));
+		$t->define_field(array(
+			'name' => 'sender',
+			'caption' => t('Saatja')
+		));
+		$t->define_field(array(
+			'name' => 'currency',
+			'caption' => t('Valuuta')
+		));
+		$t->define_field(array(
+			'name' => 'receiver',
+			'caption' => t('Kauba saaja')
+		));
+
+		$rows = array(
+			'carriage_price' => t('Veohind'),
+			'discount' => t('Allahindlus'),	
+			'balance' => t('Saldo'),
+			'extra_charge' => t('Juurdehindlus'),
+			'others' => t('Teised')
+		);
+
+		foreach ($rows as $key => $value)
+		{
+			$t->define_data(array(
+				'for_payment' => $value,
+				'sender' => html::textbox(array(
+					'name' => 'payment['.$key.'][sender]'
+				)),
+				'currency' => html::textbox(array(
+					'name' => 'payment['.$key.'][currency]'
+				)),
+				'receiver' => html::textbox(array(
+					'name' => 'payment['.$key.'][receiver]'
+				)),
+			));
+		}
+		return PROP_OK;
+	}
+
 	function do_db_upgrade($table, $field, $query, $error)
 	{
 		if (empty($field))
@@ -181,6 +294,7 @@ class crm_transport_management_carriage_order extends class_base
 			case 'transporter':
 			case 'next_transporter':
 			case 'carriage':
+			case 'payment_condition':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'int'
@@ -188,6 +302,16 @@ class crm_transport_management_carriage_order extends class_base
                                 return true;
 
 			case 'location':
+			case 'places_count':
+			case 'packing_method':
+			case 'merchandise_name':
+			case 'cargo_class':
+			case 'nr':
+			case 'char':
+			case 'adr':
+			case 'measure_unit':
+			case 'gross_weight':
+			case 'capacity':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'varchar(255)'
@@ -198,6 +322,9 @@ class crm_transport_management_carriage_order extends class_base
 			case 'loading_note':
 			case 'added_documents':
 			case 'transporter_note':
+			case 'marking':
+			case 'receiver_instructions':
+			case 'sender_special_notes':
 				$this->db_add_col($table, array(
 					'name' => $field,
 					'type' => 'text'
