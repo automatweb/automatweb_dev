@@ -1,23 +1,25 @@
 <?php
 //$vars = array_merge($HTTP_POST_VARS,$HTTP_GET_VARS,$AW_GET_VARS,$_GET,$_POST);
 // _GET, _POST and friends were implemented in php 4.1.0
-// right now, heaven is on 4.0.6, so I have to implement an workaround 
+// right now, heaven is on 4.0.6, so I have to implement an workaround
 if (!is_array($_GET) || (sizeof($_GET) == 0))
 {
 	$_GET = $HTTP_GET_VARS;
-};
+}
 
 if (!is_array($_POST))
 {
 	$_POST = $HTTP_POST_VARS;
-};
+}
 
 //$vars = array_merge($_GET,$_POST,$AW_GET_VARS);
 if (!isset($AW_GET_VARS) || !is_array($AW_GET_VARS))
 {
 	$AW_GET_VARS = array();
-};
-$vars = $_GET + $_POST + $AW_GET_VARS;
+}
+
+$vars = (array) $_GET + (array) $_POST + (array) $AW_GET_VARS;
+
 if ($vars["class"])
 {
 	$class = $vars["class"];
@@ -27,7 +29,7 @@ if ($vars["class"])
 if (!$class)
 {
 	$class = $vars["alias"];
-};
+}
 
 if ($vars["action"])
 {
