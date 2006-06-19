@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.6 2006/06/05 11:55:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.7 2006/06/19 10:40:55 tarvo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 
@@ -274,7 +274,7 @@ class site_styles extends class_base
 	**/
 	function select_random($arr)
 	{ 
-		$this->select($arr, rand(1, $this->last_style_ord($arr)));
+		$this->select($arr, rand(0, $this->last_style_ord($arr)));
 	}
 
 	/**
@@ -290,7 +290,7 @@ class site_styles extends class_base
 	**/
 	function select_prev($arr)
 	{
-		$this->select($arr, $this->selected_style_ord($arr)>1 ? $this->selected_style_ord($arr)-1 : 1);
+		$this->select($arr, $this->selected_style_ord($arr)>0 ? $this->selected_style_ord($arr)-1 : 0);
 	}
 
 	/**
@@ -330,7 +330,7 @@ class site_styles extends class_base
 			else
 			{
 				$def = $o->prop('default_style');
-				$this->selected = is_numeric($def) ? $def : 1;
+				$this->selected = is_numeric($def) ? $def : 0;
 			}
 		}
 		return $this->selected;
@@ -362,6 +362,10 @@ class site_styles extends class_base
 	**/
 	function on_site_show_import_vars($arr)
 	{
+
+		// this call to _select_next_style should be moved if necessary. it selects next style.
+		$this->_select_next_style();
+		
 		$ol = new object_list(array(
 			"class_id" => CL_SITE_STYLES,
 			"status" => STAT_ACTIVE,
@@ -380,6 +384,56 @@ class site_styles extends class_base
 			));
 		}
 	}
+
+	/** this has to be separate function, because call to it may be moved. shit solution actually. 
+	**/
+	function _select_next_style()
+	{
+
+		$ol = new object_list(array(
+			'class_id' => CL_SITE_STYLES,
+			'status' => STAT_ACTIVE,
+		));
+
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$alias = $o->prop('alias');
+			$inst = $o->instance();
+			$aoid = array('oid' => $o->id());
+
+			if (isset($_REQUEST['set_style_'.$alias]))
+			{
+				switch ($_REQUEST['set_style_'.$alias])
+				{
+					case 'next':
+						$inst->select_next($aoid);
+					break;
+					case 'prev':
+						$inst->select_prev($aoid);
+					break;
+					case 'last':
+						$inst->select_last($aoid);
+					break;
+					case 'random':
+						$inst->select_random($aoid);
+					break;
+					default:
+						$inst->select($aoid, $_REQUEST['set_style_'.$alias]);
+					break;
+				}
+			}
+			else
+			{
+				$r = $o->prop('random');
+				if ($r == SITE_STYLES_RAND_REFRESH || ($r == SITE_STYLES_RAND_SESSION && !isset($_SESSION['style_'.$o->id()]) ))
+				{
+					$inst->select_random($aoid);
+				}
+			}
+		}
+
+	}
+
 	/**
 		Called by message ON_SITE_SHOW_IMPORT_VARS, adds value for template variable {VAR:styles}
 	**/
@@ -407,35 +461,6 @@ class site_styles extends class_base
 					$link .= ' id="'.$alias.'"';
 				}	
 				$inst = $o->instance();
-				if (isset($_REQUEST['set_style_'.$alias]))
-				{
-					switch ($_REQUEST['set_style_'.$alias])
-					{
-						case 'next':
-							$inst->select_next($aoid);
-						break;
-						case 'prev':
-							$inst->select_prev($aoid);
-						break;
-						case 'last':
-							$inst->select_last($aoid);
-						break;
-						case 'random':
-							$inst->select_random($aoid);
-						break;
-						default:
-							$inst->select($aoid, $_REQUEST['set_style_'.$alias]);
-						break;
-					}
-				}
-				else
-				{
-					$r = $o->prop('random');
-					if ($r == SITE_STYLES_RAND_REFRESH || ($r == SITE_STYLES_RAND_SESSION && !isset($_SESSION['style_'.$o->id()]) ))
-					{
-						$inst->select_random($aoid);
-					}
-				}
 				$styles .= sprintf($link.">\n", $inst->selected_style_url($aoid));
 			}
 			if ($styles != "")
