@@ -111,6 +111,15 @@ class crm_company_overview_impl extends class_base
 		// get b-days
 		if ($calo && $calo->prop("show_bdays") == 1)
 		{
+			// if the view company is not the current company, then restrict the people to that company's persons
+			$cc = get_current_company();
+			$p_id_filt = "";
+			if ($arr["obj_inst"]->id() != $cc->id())
+			{
+				$co_i = get_instance(CL_CRM_COMPANY);
+				$epl = new aw_array(array_keys($co_i->get_employee_picker($arr["obj_inst"])));
+				$p_id_filt = " AND objects.oid in (".$epl->to_sql().")";
+			}
 			$s_m = date("m", $start);
 			$e_m = date("m", $end);
 			$pred = $s_m > $e_m ? "OR" : "AND";
@@ -124,7 +133,7 @@ class crm_company_overview_impl extends class_base
 				WHERE	
 					objects.class_id = '145' AND 
 					objects.status > 0  AND
-					kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null
+					kliendibaas_isik.birthday != -1 AND kliendibaas_isik.birthday != 0 AND kliendibaas_isik.birthday is not null $p_id_filt
 			";
 			$this->db_query($q);
 			while ($row = $this->db_next())
