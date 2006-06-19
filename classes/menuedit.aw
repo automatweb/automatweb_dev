@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.367 2006/05/19 09:04:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.368 2006/06/19 16:56:40 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -331,6 +331,7 @@ class menuedit extends aw_template
 				};
 			}
 			else
+			if ($class_id != CL_EXTLINK)
 			{
 				if ($class_id == CL_DOCUMENT)
 				{
