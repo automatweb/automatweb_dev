@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.36 2006/06/13 10:00:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.37 2006/06/20 10:52:06 tarvo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. õigemini ta tagastab need boxid kus seike kiri sees
@@ -174,6 +174,22 @@ class imap extends class_base
 		// of expensive (read slow) to scan over all the folders at once, so we do this
 		// when a folder is opened
 		$this->overview_cache_id = "imap" . md5("imap-over".$this->servspec.$user.$this->obj_id);
+
+		// message list for each folder. contains just message id's in order that $this->_imap_sort() returns.
+		// if empty .. i have to fill this right away, dont i??
+		$this->mbox_msg_list_cache_id = "imap" . md5("msgs-list".$this->mboxspec.$user.$this->obj_id);
+		$cache = get_instance("cache");
+		$ser = $cache->file_get($this->mbox_msg_list_cache_id);	
+		
+		$mboxinf = imap_mailboxmsginfo($this->mbox);
+		$ovr = $this->_get_overview();
+		$last_check = $ovr[$this->mboxspec];
+		$new_check = $this->_get_ovr_checksum($mboxinf);
+	
+		if(!$ser || $last_check != $new_check)
+		{
+			$cache->file_set($this->mbox_msg_list_cache_id, aw_serialize($this->_imap_sort()));
+		}
 	}
 	
 	/**
@@ -227,6 +243,13 @@ class imap extends class_base
 	}
 	
 
+	/** imap_sort must be used from here. this insures that synatax is same and so will be order of messages
+	**/
+	function _imap_sort()
+	{
+		return imap_sort($this->mbox,SORTDATE,1,SE_UID && SE_NOPREFETCH);
+	}
+
 	/**
 	@attrib api=1 params=name
 	@param to optional type=int or string "*"
@@ -253,7 +276,7 @@ class imap extends class_base
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
 		// mailbox has changed, reload from server
-		if ($last_check != $new_check ||  true)
+		if ($last_check != $new_check || true)
 		{
 			// update ovr
 			$ovr[$this->mboxspec] = $new_check;
@@ -267,7 +290,8 @@ class imap extends class_base
 
 			$mbox_over["modified"] = $fmod;
 			$mbox_over["count"] = $count;
-			$fo = imap_sort($this->mbox,SORTDATE,1,SE_UID && SE_NOPREFETCH);
+			$fo = $this->_imap_sort();
+
 			foreach($fo as $k=>$v)
 			{
 				if($k >= ($arr["from"]-1) && $k < $arr["to"])

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.22 2006/06/12 13:50:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.23 2006/06/20 10:52:06 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -402,6 +402,7 @@ class messenger_v2 extends class_base
 			break;
 			/* mail view_group */
 			case "mail_contents":
+				// generating toolbar
 				$tb = get_instance("vcl/toolbar");
 				$tb->add_button(array(
 					"name" => "reply",
@@ -467,7 +468,7 @@ class messenger_v2 extends class_base
 						"id" => $arr["request"]["id"],
 					)),
 				));
-
+				
 				$tb_html = $tb->get_toolbar();
 				$ms_html = $this->_fetch_message_contents(&$arr);
 		
@@ -618,7 +619,8 @@ class messenger_v2 extends class_base
 	**/
 	function _msg_move($arg)
 	{
-		$enum = aw_global_get("table_enum");
+		$cache = get_instance("cache");
+		$enum = aw_unserialize($cache->file_get($this->drv_inst->mbox_msg_list_cache_id));
 		$key = array_search($arg["request"]["msgid"], $enum);
 		if($key !== false)
 		{

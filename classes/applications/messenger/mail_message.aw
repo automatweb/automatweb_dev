@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.34 2006/06/12 13:50:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.35 2006/06/20 10:52:06 tarvo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -110,7 +110,8 @@ class mail_message extends class_base
 	function formatted_message($arg = array())
 	{
 		$arr = $this->fetch_message($arg);
-		$body = nl2br(create_links(htmlspecialchars($arr["content"])));
+		//$body = $arr["content"];
+		$body = nl2br($arr["content"]);
 		unset($arr["content"]);
 		$this->read_template("headers.tpl");
 		foreach($arr as $name => $value)
@@ -907,14 +908,20 @@ class mail_message extends class_base
 		// grr, I hate this
 		if (isset($arr["request"]["msgrid"]))
 		{
+			$msgrid = $arr["request"]["msgrid"];
+		}
+		else
+		{
 			$msgr = get_instance(CL_MESSENGER_V2);
-			$opts = $msgr->_get_identity_list(array(
-				"id" => $arr["request"]["msgrid"],
-			));
-			foreach($opts as $key => $item)
-			{
-				$rv["options"][$key] = $item;
-			};
+			$msgrid = $msgr->get_messenger_for_user();
+		}
+		$msgr = get_instance(CL_MESSENGER_V2);
+		$opts = $msgr->_get_identity_list(array(
+			"id" => $msgrid,
+		));
+		foreach($opts as $key => $item)
+		{
+			$rv["options"][$key] = $item;
 		};
 	}
 	
@@ -1212,8 +1219,14 @@ class mail_message extends class_base
 			"msgr_id" => $arr["msgrid"],
 		));
 		// this is the place where I need to resolve the from address
-		$msgid = $this->submit($arr);
-
+		if(!strlen($arr["msgid"]))
+		{
+			$msgid = $this->submit($arr);
+		}
+		else
+		{
+			$msgid = $arr["msgid"];
+		}
 		$this->send_message(array(
 			"id" => $msgid,
 		));
@@ -1249,8 +1262,6 @@ class mail_message extends class_base
 		
 		print t("saadetud<p>");
 		print "<a href='javascript:window.close();'>".t("sulge aken")."</a>";
-		exit;
-
 	}
 
 	////
