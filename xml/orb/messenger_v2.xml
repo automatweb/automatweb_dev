@@ -8,6 +8,13 @@
 			</function>
 		</action>
 
+		<action name="_catch_mail_send" all_args="1">
+			<function name="_catch_mail_send">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="run_filters" nologin="1">
 			<function name="run_filters">
 				<arguments>
@@ -47,13 +54,6 @@
 
 		<action name="test_tree" all_args="1">
 			<function name="test_tree">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="_new_mail_form">
-			<function name="_new_mail_form">
 				<arguments>
 				</arguments>
 			</function>

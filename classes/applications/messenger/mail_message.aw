@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.35 2006/06/20 10:52:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.36 2006/06/20 16:13:10 tarvo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -37,7 +37,7 @@
 	@property html_mail type=checkbox ch_value=1 field=type method=bitmask ch_value=1024
 	@caption HTML kiri
 
-	@property message type=textarea cols=80 rows=40
+	@property message type=text
 	@caption Sisu
 
 	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file chooser=no new_items=5
@@ -503,7 +503,11 @@ class mail_message extends class_base
 				break;
 
 			case "msgrid":
+				$msgr = get_instance(CL_MESSENGER_V2);
+				$prop["value"] = $msgr->get_messenger_for_user();
+			break;
 			case "msgid":
+			break;
 			case "mailbox":
 			case "cb_part":
 				$prop["value"] = $arr["request"][$prop["name"]];
@@ -516,6 +520,19 @@ class mail_message extends class_base
 				$prop["new_items"] = $msgrobj->prop("num_attachments");
 
 				break;
+			case "message":
+				$prop["value"] = html::textarea(array(
+					"name" => "message",
+				));
+				$fck_inst = get_instance("vcl/fck_editor");
+				
+				$prop["value"] .= $fck_inst->draw_editor(array(
+					"props" => array(
+						"message",
+					),
+				));
+				
+			break;
 
 		}
 		return $retval;
@@ -975,7 +992,9 @@ class mail_message extends class_base
 		));
 	
 		$arr["id"] = $msgobj->id();
-		return $this->_gen_edit_url($arr);
+		return $arr["id"];
+		//rem related
+		//return $this->_gen_edit_url($arr);
 	}
 
 	/** Creates a calendar event from a message object 
@@ -1260,8 +1279,8 @@ class mail_message extends class_base
 		));
                 
 		
-		print t("saadetud<p>");
-		print "<a href='javascript:window.close();'>".t("sulge aken")."</a>";
+		//print t("saadetud<p>");
+		//print "<a href='javascript:window.close();'>".t("sulge aken")."</a>";
 	}
 
 	////

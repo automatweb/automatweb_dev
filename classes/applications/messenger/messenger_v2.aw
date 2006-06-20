@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.23 2006/06/20 10:52:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.24 2006/06/20 16:13:10 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -47,11 +47,8 @@ caption Identiteet
 		@property new_mail_toolbar type=toolbar group=new_mail submit=no no_caption=1
 		@caption uue maili tuulbar
 		
-		@property to_mail type=textbox store=no group=new_mail
-		@caption Kellele
-
-		@property to_text type=text store=no group=new_mail
-		@caption text
+		@property message_info type=releditor reltype=RELTYPE_MAIL_MESSAGE group=new_mail props=mfrom,mto,cc,name,message,msgrid
+		@caption Maili andmed
 
 	@groupinfo mail_view caption="Kirja vaade" parent=main_view submit=no
 		@layout mail_view_split type=hbox width=15%:85% group=mail_view
@@ -167,6 +164,8 @@ comment Minutites
 @reltype CONTACT_LIST value=10 clid=CL_CONTACT_LIST
 @caption Aadressiraamat
 
+@reltype MAIL_MESSAGE value=11 clid=CL_MESSAGE
+@caption Maili andmed
                         
 */
 
@@ -382,28 +381,27 @@ class messenger_v2 extends class_base
 				}
 				$prop["options"] = $cl_names;
 				break;
-			case "to_text":
-				$prop["value"] = html::textarea(array(
-					"name" => "test_textarea",
-				));
-				$fck_inst = get_instance("vcl/fck_editor");
-				$prop["value"] .= $fck_inst->draw_editor(array(
-					"props" => array(
-						"test_textarea"	
-					),
-				));
-			break;
 			case "new_mail_toolbar":
+				// gen sendmail toolbar
+				$prop["vcl_inst"]->add_button(array(
+					"name" => "send_mail",
+					"tooltip" => t("Saada kiri"),
+					"img" => "mail_send.gif",
+					"action" => "_catch_mail_send",
+				));
+				/*
 				$fck_inst = get_instance("vcl/fck_editor");
 				$fck_inst->get_rte_toolbar(array(
 					"toolbar" => &$prop["vcl_inst"],
 
 				));
+				*/
 			break;
 			/* mail view_group */
 			case "mail_contents":
 				// generating toolbar
 				$tb = get_instance("vcl/toolbar");
+				/*
 				$tb->add_button(array(
 					"name" => "reply",
 					"action" => "mail_reply",
@@ -433,6 +431,7 @@ class messenger_v2 extends class_base
 					"img" => "delete.gif",
 				));
 				$tb->add_separator();
+				*/
 				if(!strlen($arr["request"]["msgid"]))
 				{
 					$enum = aw_global_get("table_enum");
@@ -514,7 +513,36 @@ class messenger_v2 extends class_base
 		*/
 	
 
-	}	
+	}
+
+	/**
+		@attrib name=_catch_mail_send all_args=1
+	**/
+	function _catch_mail_send($arg)
+	{
+		// drafti tegemise peab siia tõstma.. muidu tehakse iga kord uue maili tab'iga uus mõtetu draft?!?
+		$mm = get_instance(CL_MESSAGE);
+		$arg["msgid"] = $mm->create_draft(array(
+			"msgrid" => $arg["message_info"]["msgrid"],
+		));
+		// this sucks.. but right now, with this heat.. i can't do any better
+		$msgobj = obj($arg["msgid"]);
+		$msgobj->set_prop("mfrom", $arg["message_info"]["mfrom"]);
+		$msgobj->set_prop("mto", $arg["message_info"]["mto"]);
+		$msgobj->set_prop("cc", $arg["message_info"]["cc"]);
+		$msgobj->set_prop("name", $arg["message_info"]["name"]);
+		$msgobj->set_prop("message", $arg["message"]);
+		$msgobj->set_name($arg["message_info"]["name"]);
+		$msgobj->save();
+		
+		$arg = array_merge($arg, $arg["message_info"]);
+		$arg["msgrid"] = $arg["message_info"]["msgrid"];
+		$mm->mail_send(
+			$arg
+		);
+		$url  = $this->mk_my_orb("my_messages");
+		return $url;
+	}
 
 	/** fetches message contents for mail_view 
 	**/
@@ -772,7 +800,7 @@ class messenger_v2 extends class_base
 				"msgrid" => $arr["obj_inst"]->id(),
 				"mailbox" => $this->use_mailbox,
 			));
-			$new_link = "<a href=\"".$url."\">".$this->_format(parse_obj_name($message["subject"], $seen))."</a>";
+			$new_link = "<a href=\"".$url."\">".$this->_format(parse_obj_name($message["subject"]), $seen)."</a>";
 			
 			$t->define_data(array(
 				"id" => $key,
@@ -1010,12 +1038,6 @@ class messenger_v2 extends class_base
 				"msgrid" => $this->msgobj->id(),
 				"cb_part" => 1,
 			),"mail_message",false,true) . "','msgr',800,600)",
-			"img" => "new.gif",
-		));
-		$toolbar->add_button(array(
-			"name" => "newmessage2",
-			"tooltip" => t("uus 2"),
-			"url" => $this->mk_my_orb("_new_mail_form"),
 			"img" => "new.gif",
 		));
 		
@@ -1436,14 +1458,6 @@ class messenger_v2 extends class_base
 			$rv[$obj->id()] = $obj->prop("name");
 		};
 		return $rv;
-	}
-
-	/**
-		@attrib name=_new_mail_form
-	**/
-	function _new_mail_form($arg = array())
-	{
-		return "tere";
 	}
 
 	/**

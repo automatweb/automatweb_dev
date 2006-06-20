@@ -88,9 +88,7 @@
             <name>message</name>
             <group>general</group>
             <table>messages</table>
-            <type>textarea</type>
-            <cols>80</cols>
-            <rows>40</rows>
+            <type>text</type>
             <field>message</field>
             <caption>Sisu</caption>
       </property>

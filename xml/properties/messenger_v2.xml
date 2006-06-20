@@ -95,24 +95,22 @@
             <caption>uue maili tuulbar</caption>
       </property>
       <property>
-            <name>to_mail</name>
+            <name>message_info</name>
             <table>objects</table>
             <group>new_mail</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <store>no</store>
-            <caption>Kellele</caption>
-      </property>
-      <property>
-            <name>to_text</name>
-            <table>objects</table>
-            <group>new_mail</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
-            <caption>text</caption>
+            <type>releditor</type>
+            <reltype>RELTYPE_MAIL_MESSAGE</reltype>
+            <props>
+                  <num_0>mfrom</num_0>
+                  <num_1>mto</num_1>
+                  <num_2>cc</num_2>
+                  <num_3>name</num_3>
+                  <num_4>message</num_4>
+                  <num_5>msgrid</num_5>
+            </props>
+            <caption>Maili andmed</caption>
       </property>
       <property>
             <name>mail_view_tree</name>
@@ -470,6 +468,11 @@
                   <clid>CL_CONTACT_LIST</clid>
                   <caption>Aadressiraamat</caption>
             </CONTACT_LIST>
+            <MAIL_MESSAGE>
+                  <value>11</value>
+                  <clid>CL_MESSAGE</clid>
+                  <caption>Maili andmed</caption>
+            </MAIL_MESSAGE>
       </reltypes>
       <layout>
             <message_view>
