@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.7 2006/06/19 10:40:55 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.8 2006/06/20 11:33:00 kristo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 
@@ -449,6 +449,7 @@ class site_styles extends class_base
 			$ol = new object_list(array(
 				'class_id' => CL_SITE_STYLES,
 				'status' => STAT_ACTIVE,
+				"lang_id" => array(),
 			));
 
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
