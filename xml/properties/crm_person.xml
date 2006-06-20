@@ -227,6 +227,17 @@
             <caption>CV aktiivne</caption>
       </property>
       <property>
+            <name>wage_doc</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_WAGE_DOC</reltype>
+            <caption>Palga dokument</caption>
+      </property>
+      <property>
             <name>work_contact</name>
             <table>kliendibaas_isik</table>
             <group>contact</group>
@@ -1322,6 +1333,11 @@
                   <clid>CL_SERVER_FOLDER</clid>
                   <caption>Failide kataloog serveris</caption>
             </SERVER_FILES>
+            <WAGE_DOC>
+                  <value>52</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Failide kataloog serveris</caption>
+            </WAGE_DOC>
       </reltypes>
       <layout>
             <docs_lt>

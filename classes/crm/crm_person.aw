@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.131 2006/06/08 15:15:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.132 2006/06/20 09:21:19 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -96,6 +96,8 @@ caption Msn/yahoo/aol/icq
 @property cvactive type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption CV aktiivne
 
+@property wage_doc type=relpicker ch_value=1 table=objects field=meta method=serialize reltype=RELTYPE_WAGE_DOC
+@caption Palga dokument
 ------------------------------------------------------------------
 
 @groupinfo contact caption="Kontaktandmed" parent=general
@@ -531,6 +533,10 @@ caption Sõbragrupid
 
 @reltype SERVER_FILES value=51 clid=CL_SERVER_FOLDER
 @caption Failide kataloog serveris
+
+@reltype WAGE_DOC value=52 clid=CL_DOCUMENT
+@caption Failide kataloog serveris
+
 
 */
 
