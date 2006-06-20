@@ -59,11 +59,11 @@
             <caption>Kas tehakse kasutajagrupp alamametinimetustele</caption>
       </property>
       <property>
-            <name>document</name>
+            <name>link_document</name>
             <table>objects</table>
             <group>general</group>
             <type>relpicker</type>
-            <reltype>RELTYPE_DOCUMENT</reltype>
+            <reltype>RELTYPE_LINK_DOCUMENT</reltype>
             <field>meta</field>
             <method>serialize</method>
             <caption>Dokument</caption>
@@ -158,11 +158,11 @@
                   <clid>CL_CRM_PHONE</clid>
                   <caption>Fax</caption>
             </TELEFAX>
-            <DOCUMENT>
+            <LINK_DOCUMENT>
                   <value>9</value>
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument</caption>
-            </DOCUMENT>
+            </LINK_DOCUMENT>
       </reltypes>
 </properties>
 
