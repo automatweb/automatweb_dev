@@ -159,7 +159,7 @@
                   <caption>Fax</caption>
             </TELEFAX>
             <LINK_DOCUMENT>
-                  <value>9</value>
+                  <value>10</value>
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument</caption>
             </LINK_DOCUMENT>

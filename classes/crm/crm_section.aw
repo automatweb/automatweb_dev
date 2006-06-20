@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.25 2006/06/20 11:17:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.26 2006/06/20 11:22:32 markop Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -73,7 +73,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 @reltype TELEFAX value=9 clid=CL_CRM_PHONE
 @caption Fax
 
-@reltype LINK_DOCUMENT value=9 clid=CL_DOCUMENT
+@reltype LINK_DOCUMENT value=10 clid=CL_DOCUMENT
 @caption Dokument
 
 */
