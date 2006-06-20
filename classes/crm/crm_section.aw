@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.23 2006/06/20 08:32:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.24 2006/06/20 11:03:09 markop Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -28,6 +28,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @property has_group_subs_prof type=checkbox ch_value=1 field=meta method=serialize
 @caption Kas tehakse kasutajagrupp alamametinimetustele
+
+@property document type=relpicker reltype=RELTYPE_DOCUMENT field=meta method=serialize
+@caption Dokument
 
 @default group=Kontaktid
 
@@ -69,6 +72,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_PERSON, on_disco
 
 @reltype TELEFAX value=9 clid=CL_CRM_PHONE
 @caption Fax
+
+@reltype DOCUMENT value=9 clid=CL_DOCUMENT
+@caption Dokument
 
 */
 

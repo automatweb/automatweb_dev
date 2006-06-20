@@ -59,6 +59,16 @@
             <caption>Kas tehakse kasutajagrupp alamametinimetustele</caption>
       </property>
       <property>
+            <name>document</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_DOCUMENT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Dokument</caption>
+      </property>
+      <property>
             <name>contact</name>
             <table>objects</table>
             <group>Kontaktid</group>
@@ -148,6 +158,11 @@
                   <clid>CL_CRM_PHONE</clid>
                   <caption>Fax</caption>
             </TELEFAX>
+            <DOCUMENT>
+                  <value>9</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Dokument</caption>
+            </DOCUMENT>
       </reltypes>
 </properties>
 
