@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.167 2006/06/07 15:50:29 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.168 2006/06/20 14:14:27 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -303,6 +303,10 @@ class image extends class_base
 		
 			$alt = $idata["meta"]["alt"];
 
+			if ($idata["meta"]["file2"] != "")
+			{
+				$size = @getimagesize($idata["meta"]["file2"]);
+			};
 			$bi_show_link = $this->mk_my_orb("show_big", $show_link_arr);
 			$popup_width = min(1000, $size[0] + ($do_comments ? 500 : 0));
 			$popup_height = max(400, $size[1]);// + ($do_comments ? 200 : 0);
@@ -321,10 +325,6 @@ class image extends class_base
 				);
 			}
 
-			if ($idata["meta"]["file2"] != "")
-			{
-				$size = @getimagesize($idata["meta"]["file2"]);
-			};
 			if ($idata["file"] != "")
 			{
 				$i_size = @getimagesize($idata["file"]);
