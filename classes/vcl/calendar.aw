@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.79 2006/05/30 13:46:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.80 2006/06/20 15:10:15 dragut Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1478,7 +1478,7 @@ class vcalendar extends aw_template
 				}
 				else
 				{
-					$day_url = aw_url_change_var(array(
+					$day_url = aw_ini_get('baseurl').aw_url_change_var(array(
 						"viewtype" => "day",
 						"event_id" => "",
 						"evt_id" => "",
@@ -1535,7 +1535,7 @@ class vcalendar extends aw_template
 			"style_title" => $style_title,
 			"style_background" => $style_background,
 			"caption" => locale::get_lc_month(date("m", $arr["timestamp"])) . " " . date("y",$arr["timestamp"]),
-			"caption_url" => aw_url_change_var(array(
+			"caption_url" => aw_ini_get('baseurl').aw_url_change_var(array(
 				"viewtype" => "month",
 				"date" => date("d-m-Y",$arr["timestamp"]),
 				"section" => $this->target_section,
@@ -1543,12 +1543,12 @@ class vcalendar extends aw_template
 			"prev_date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
 			"next_date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
 			"section_id" => $this->target_section,
-			"next_url" => aw_url_change_var(array(
+			"next_url" => aw_ini_get('baseurl').aw_url_change_var(array(
 				"viewtype" => "month",
 				"date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
 				"section" => $this->target_section,
 			)),
-			"prev_url" => aw_url_change_var(array(
+			"prev_url" => aw_ini_get('baseurl').aw_url_change_var(array(
 				"viewtype" => "month",
 				"date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
 				"section" => $this->target_section,
