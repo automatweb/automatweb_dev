@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.5 2006/06/14 16:39:51 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.6 2006/06/20 12:22:58 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -29,7 +29,6 @@ caption Isikute järjestamisprintsiibi omadus
 
 property persons_principe_direct type=select
 caption .
-
 
 - Grupeerimine osakonna järgi (märkeruut)
 @property department_grouping type=checkbox ch_value=1
@@ -103,6 +102,14 @@ class persons_webview extends class_base
 			"ASC" => t("Kasvav"),
 			"DESC" => t("Kahanev"),
 		);
+		
+		$this->education["options"] = array(
+			0 => t("-- vali --"),
+			1 => t("põhi"),
+			2 => t("kesk"),
+			3 => t("kesk-eri"),
+			4 => t("kõrgem"),
+		);
 	}
 
 	function get_property($arr)
@@ -116,7 +123,16 @@ class persons_webview extends class_base
 					0 => t("ainult osakonnad"),
 					1 => t("koos isikutega"),
 				);
-				break;		
+				break;
+			case "departments":
+				$company = obj($arr["obj_inst"]->prop("company"));
+				$comp = get_instance("crm/crm_company");
+				foreach($comp->get_all_org_sections($company) as $section_id)
+				{
+					$section = obj($section_id);
+					$prop["options"][$section_id] = $section->name();
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -249,6 +265,7 @@ class persons_webview extends class_base
 	
 	function person_sort($workers)
 	{
+		enter_function("person_webview::person_sort");
 		$principe = $this->view_obj->prop("persons_principe");
 		$count = sizeof($principe);
 		while($count>=0)
@@ -263,9 +280,66 @@ class persons_webview extends class_base
 			}
 			$count--;
 		}
+		exit_function("person_webview::person_sort");
 		return ($workers);
 	}
 	
+	function sort_sections($sections)
+	{
+		enter_function("person_webview::section_sort");
+		if(sizeof($sections) < 2) return $sections;
+		$principe = $this->view_obj->prop("grouping_principe");
+		$count = sizeof($principe);
+		while($count>=0)
+		{
+			if($principe[$count]["principe"])
+			{
+				$sections = $this->section_sort_by(array(
+					"sections" => $sections,
+					"orderby" => $principe[$count]["principe"],
+					"sort_order" => $principe[$count]["order"],
+				));
+			}
+			$count--;
+		}
+		exit_function("person_webview::section_sort");
+		return ($sections);
+	}
+
+	function section_sort_by($args)
+	{
+		extract($args);
+		switch($orderby)
+		{
+			case "name":
+ 				foreach($sections as $section)
+ 				{
+ 					$sections_tmp[] = array("sort" => $section->name(), "data" => $section);
+ 				}
+ 				break;
+			case "jrk":
+ 				foreach($sections as $section)
+ 				{
+ 					$sections_tmp[] = array("sort" => $section->prop("jrk"), "data" => $section);
+ 				}
+ 				break;
+		}
+	
+		foreach ($sections_tmp as $key => $row) {
+			$data[$key]  = $row['data'];
+			$sort[$key] = $row['sort'];
+		}
+		if($sort_order == "ASC") $sort_order = SORT_ASC;
+		else $sort_order = SORT_DESC;
+		array_multisort($sort, $sort_order, $sections_tmp);
+		$sections = array();
+		foreach ($sections_tmp as $data)// teeb massiivi vanale kujule tagasi
+		{
+			$sections[] = $data["data"];
+		}
+		return $sections;
+	}
+
 	function set_levels()
 	{
 		$levels = $this->view_obj->prop("department_levels");
@@ -299,27 +373,27 @@ class persons_webview extends class_base
 		$template = $view_obj->prop("template");
 	
 		$this->read_template($template);
-		$this->vars(array(
-			"name" => $company->prop("name"),
-		));
-	
+
 		$this->set_levels();//teeb siis erinevatest tasemetest massiivi, mida üldse kuvada ja paneb selle muutujasse $this->levels
 		if($view_obj->prop("department_grouping"))
 		{
 			if($this->is_template("DEPARTMENT"))
 			{
+				$this->jrks = array();
 				$sections = $this->get_sections(array("section" => $company , "jrk" => 0));
 				foreach($sections as $section)
 				{
-					if(!in_array($section->id(), $view_obj->prop("departments")) || !sizeof($view_obj->prop("departments"))>0) continue;
+					if((!in_array($section->id(), $view_obj->prop("departments")) || !sizeof($view_obj->prop("departments"))>0)) continue;
 					if($view_obj->prop("with_without_persons"))
 					{
 						$workers = $this->get_workers($section);
 						$this->parse_persons(array("workers" => $workers, "view_obj" => $view_obj));
 					}
 					//if(sizeof($workers) > 0)
-					$this->vars(array("department_name" => $section->name()));
-					$department .= $this->parse("DEPARTMENT");
+					$this->parse_section($section);
+					if($this->is_template("LEVEL".$this->jrks[$section->id()]."DEPARTMENT"))
+						$department .= $this->parse("LEVEL".$this->jrks[$section->id()]."DEPARTMENT");
+					else $department .= $this->parse("DEPARTMENT");
 				}
 				$this->vars(array("DEPARTMENT" => $department));
 			}
@@ -331,17 +405,57 @@ class persons_webview extends class_base
 				$workers = $this->get_workers($company);
 				$this->parse_persons(array("workers" => $workers, "view_obj" => $view_obj));
 			}
-			if($this->is_template("DEPARTMENT"))
+			if($this->is_template("DEPARTMENT"))//juhuks kui DEPARTMENT sub sisse on jäänud... mida tegelt pole vaja
 			{
 				$department .= $this->parse("DEPARTMENT");
 				$this->vars(array("DEPARTMENT" => $department));
 			}
 		}
+		$this->vars(array(
+			"name" => $company->prop("name"),
+		));
 		return $this->parse();
+	}
+
+	function parse_section($section)
+	{
+		enter_function("person_webview::parse_section");
+		$phone = "";
+		if(is_oid($section->prop("phone_id"))) $phone_obj = obj($section->prop("phone_id"));
+		else $phone_obj = $section->get_first_obj_by_reltype("RELTYPE_PHONE");
+		if(is_object($phone_obj)) $phone = $phone_obj->name();
+		
+		$email = "";
+		if(is_oid($section->prop("email_id"))) $email_obj = obj($section->prop("email_id"));
+		else $email_obj = $section->get_first_obj_by_reltype("RELTYPE_EMAIL");
+		if(is_object($email_obj)) $email = $email_obj->prop("mail");
+		
+		$fax = "";
+		if(is_oid($section->prop("telefax_id"))) $fax_obj = obj($section->prop("telefax_id"));
+		else $fax_obj = $section->get_first_obj_by_reltype("RELTYPE_TELEFAX");
+		if(is_object($fax_obj)) $fax = $fax_obj->name();
+		
+		$address = "";
+		$address_id = $section->prop("contact");
+		if(is_oid($address_id))
+		{
+			$address_obj = obj($address_id);
+			$address = $address_obj->name();
+		}		
+		$this->vars(array(
+			"department_name" => $section->name(),
+			"phone"	=> $phone,
+			"email" => $email,
+			"fax" => $fax,
+			"address" => $address,
+			"document" => $section->prop("link_document"),
+		));
+		exit_function("person_webview::parse_section");
 	}
 
 	function get_workers($section)
 	{
+		enter_function("person_webview::get_workers");
 		$workers_list = new object_list($section->connections_from (array (
 			"type" => "RELTYPE_WORKERS",
 		)));
@@ -363,27 +477,59 @@ class persons_webview extends class_base
 		array_multisort($jrk_, SORT_DESC, $person, SORT_DESC, $workers);
 		$principe = $this->view_obj->prop("persons_principe");
 		if($principe[0]["principe"]) $workers = $this->person_sort($workers);
+		exit_function("person_webview::get_workers");
 		return $workers;
 	}
 
 	function get_sections($args)
-	{	
+	{
+		enter_function("person_webview::get_sections");
 		extract($args);
 		$sections = array();
 		$section_list = new object_list($section->connections_from (array (
 			"type" => "RELTYPE_SECTION",
 		)));
-		foreach($section_list->arr() as $sec)
+		$section_arr = $this->sort_sections($section_list->arr());
+		foreach($section_arr as $sec)
 		{
 			if(in_array(($jrk + 1) , $this->levels) && (sizeof($this->levels) > 0))$sections[] = $sec;
 			$sections = array_merge($sections , $this->get_sections(array("section" => $sec, "jrk" => ($jrk+1))));
+			$this->jrks[$sec->id()] = $jrk + 1;
 		}
+		enter_function("person_webview::get_sections");
 		return $sections;
 	}
 	
+	function parse_proffession($worker)
+	{
+		$rank = $directive = "";
+		$rank_obj = $worker->get_first_obj_by_reltype("RELTYPE_RANK");
+		if(is_object($rank_obj))
+		{
+			$rank = $rank_obj->name();
+			if(is_oid($rank_obj->prop("directive")) && $this->can("view", $rank_obj->prop("directive")))
+			{
+				$directive = $rank_obj->prop("directive");
+			}
+			else
+			{
+				$directive_obj = $rank_obj->get_first_obj_by_reltype("RELTYPE_DESC_FILE");
+				if(is_object($directive_obj))
+				$directive = $directive_obj->id();
+			}
+		}
+		$rank_with_directive = $rank;
+		if(is_oid($directive))$rank_with_directive = '<a href ="'.$directive.'"> '. $rank_with_directive.' </a>';
+		$this->vars(array(
+			"rank" => $rank,
+			"directive" => $directive,
+			"rank_with_directive" => $rank_with_directive,
+		));
+	}
 
 	function parse_persons($args)
 	{
+		enter_function("person_webview::parse_persons");
 		extract($args);
 		$this->count = 0;
 		$col = 0;
@@ -400,19 +546,15 @@ class persons_webview extends class_base
 			foreach($workers as $val)
 			{
 				$worker = $val["worker"];
-				if($view_obj->prop("rows_by"))//ametinimede kaupa grupeerimise porno
+				if($view_obj->prop("rows_by"))//ametinimede kaupa grupeerimise porno, et erinevale reale õige arv tuleks jne
 				{
 					if(!$this->order_array) $this->make_order_array($workers);
-	//				$col_num = $this->calculate_cols($workers);
 					if(!$this->calculated) $col_num = $this->get_cols_num($row_num);
 				}
 				$c = "";
 				if($this->is_template("worker"))
 				{
-					$rank = "";
-					$rank_obj = $worker->get_first_obj_by_reltype("RELTYPE_RANK");
-					if(is_object($rank_obj)) $rank = $rank_obj->name();
-					
+					$this->parse_proffession($worker);
 					$photo="";
 					if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
 					{
@@ -424,12 +566,33 @@ class persons_webview extends class_base
 						if(is_object($photo_obj))
 						$photo = $image_inst->make_img_tag_wl($photo_obj->id());
 					}
-
+					
+					$phone = "";
+					$phone_obj = $worker->get_first_obj_by_reltype("RELTYPE_PHONE");
+					if(is_object($phone_obj)) $phone = $phone_obj->name();
+					$email = "";
+					$email_obj = $worker->get_first_obj_by_reltype("RELTYPE_EMAIL");
+					if(is_object($email_obj)) $email = $email_obj->prop("mail");
+					
+					$name_with_email = $worker->name();
+					if(strlen($email) > 3)$name_with_email = '<a href =mailto:'.$email.'> '. $name_with_email.' </a>';
+					$speciality = "";
+					$speciality_obj = $worker->get_first_obj_by_reltype("RELTYPE_EDUCATION");
+					if(is_object($speciality_obj)) $speciality = $speciality_obj->prop("speciality");
+					$wage_doc_exist = "";
+					if(is_oid($worker->prop("wage_doc"))) $wage_doc_exist = '<a href ='.$worker->prop("wage_doc").'> '. t("Palk").' </a>';
 					$this->vars(array(
-						"rank" => $rank,
+					//	"rank" => $rank,
 						"name" => $worker->name(),
 						"photo" => $photo,
-					
+						"phone" => $phone,
+						"email" => $email,
+						"education" => $this->education["options"][$worker->prop("edulevel")],
+						"speciality" => $speciality,
+						"name_with_email" => $name_with_email,
+						"wage_doc"	=> $worker->prop("wage_doc"),
+						"wage_doc_exist" => $wage_doc_exist,
+					//	"directive" => $directive,
 					));
 					$c .= $this->parse("worker");
 				}
@@ -467,6 +630,7 @@ class persons_webview extends class_base
 			$this->vars(array(
 				"ROW" => $row,
 			));
+		exit_function("person_webview::parse_persons");
 		}
 	}
 
