@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.132 2006/06/20 09:21:19 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.133 2006/06/20 10:43:25 markop Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -535,7 +535,7 @@ caption Sõbragrupid
 @caption Failide kataloog serveris
 
 @reltype WAGE_DOC value=52 clid=CL_DOCUMENT
-@caption Failide kataloog serveris
+@caption Palgainfo
 
 
 */
