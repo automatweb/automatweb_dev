@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.41 2006/04/12 13:18:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.42 2006/06/21 13:48:22 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -867,7 +867,7 @@ class register_search extends class_base
 				}
 				else
 				{
-					$tmp[$pn] = "%".$request["rsf"][$this->fts_name]."%";
+					$tmp[$pn] = array("%".mb_strtolower($request["rsf"][$this->fts_name], aw_global_get("charset"))."%", "%".mb_strtoupper($request["rsf"][$this->fts_name], aw_global_get("charset"))."%");
 				}
 			}
 			$filter[] = new object_list_filter(array(
