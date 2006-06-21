@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.79 2006/06/05 11:59:54 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.80 2006/06/21 10:11:23 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2440,6 +2440,7 @@ class ml_list extends class_base
 		);
 		if($msg_obj)
 		{
+			if(!$filtered_props["message"]["value"])$filtered_props["message"]["value"] = $msg_obj->prop("message"); 
 			$xprops = $writer->parse_properties(array(
 				"obj_inst" => $msg_obj,
 				"properties" => $filtered_props,
@@ -2453,12 +2454,21 @@ class ml_list extends class_base
 		$mailto = $email_obj->prop("mail");
 		//$xprops["emb_mfrom"]["value"] = $mailto;
 		}
-*/		return $xprops;
+*/
+//		arr($xprops);
+		$xprops["emb_message"]["value"] = $msg_obj->prop("message");
+		$xprops["emb_message"]["type"] = "textarea";
+		$xprops["emb_message"]["cols"] = 80;
+		$xprops["emb_message"]["rows"] = 40;
+		$xprops["emb_message"]["origin_type"] = "textarea";
+		return $xprops;
 	}
 
 	function submit_write_mail($arr)
 	{
 		$msg_data = $arr["request"]["emb"];
+		//ei ole aimugi moment kust kurat see asi vahepeal muutunud on..... kehv lahendus, aga asja peaks ruttu tööle saama ju
+		if(!$msg_data["message"]) $msg_data["message"] = $arr["request"]["message"];
 		// 1. create an object. for this I need to know the parent
 		// for starters I'll use the one from the list object itself
 		#$msg_data["parent"] = $arr["obj_inst"]->parent();
@@ -2504,6 +2514,7 @@ class ml_list extends class_base
 		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		$message_id = $writer->submit($msg_data);
+
 		$sender = $msg_obj->prop("mfrom");
 		// if you send from this address a mail once, you send from it again,
 		// without needance to use that relpickah search -- ahz
@@ -2514,6 +2525,9 @@ class ml_list extends class_base
 				"reltype" => "RELTYPE_SENDER",
 			));
 		}
+
+		$msg_obj->set_prop("message" , $msg_data["message"]);
+		$msg_obj->save();
 
 		if ($this->can("view", $tpl))
 		{
