@@ -152,10 +152,31 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$objtblprops[] = $data;
 			}
 		}
+      $conn_prop_vals = array();
+                $conn_prop_fetch = array();
 
 		// import object table properties in the props array
 		foreach($objtblprops as $prop)
 		{
+                                if ($prop["store"] == "connect")
+                                {
+                                        if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
+                                        {
+                                                $_co_reltype = $prop["reltype"];
+                                                $_co_reltype = $GLOBALS["relinfo"][$objdata["class_id"]][$_co_reltype]["value"];
+
+                                                if ($_co_reltype == "")
+                                                {
+                                                        error::raise(array(
+                                                                "id" => "ERR_NO_RT",
+                                                                "msg" => sprintf(t("ds_mysql::read_properties(): no reltype for prop %s (%s)"), $prop["name"], $prop["reltype"])
+                                                        ));
+                                                }
+
+                                                $conn_prop_fetch[$prop["name"]] = $_co_reltype;
+                                        }
+                                }
+			else
 			if ($prop["method"] == "serialize")
 			{
 				// metadata is unserialized in read_objprops
@@ -180,8 +201,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// fix old broken databases where brother_of may be 0 for non-brother objects
 		$object_id = ($objdata["brother_of"] ? $objdata["brother_of"] : $objdata["oid"]);
 
-		$conn_prop_vals = array();
-		$conn_prop_fetch = array();
+///		$conn_prop_vals = array();
+//		$conn_prop_fetch = array();
 
 		// do a query for each table
 		foreach($tables as $table)
@@ -195,7 +216,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					$prop['field'] = "metadata";
 				}
 
-				if ($prop["method"] == "serialize")
+				if ($prop["method"] == "serialize" && $prop["store"] != "connect")
 				{
 					if (!$_got_fields[$prop["field"]])
 					{
