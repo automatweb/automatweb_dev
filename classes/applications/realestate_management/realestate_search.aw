@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.27 2006/06/09 09:28:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.28 2006/06/22 09:22:05 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -61,6 +61,9 @@
 	@caption Salvesta otsingutulemus
 
 	@property sort_by_options type=hidden
+
+	@property max_results type=select
+	@caption Maksimaalselt otsingutulemusi
 
 @default group=grp_search
 	@property search_class_id type=select multiple=1 size=5
@@ -537,6 +540,10 @@ class realestate_search extends class_base
 
 			case "default_per_page":
 				$prop["options"] = $this->per_page_options;
+				break;
+
+			case "max_results":
+				$prop["options"] = array("" => "" , 10=>10 , 25=>25 , 50=>50 , 100=>100);
 				break;
 
 			case "searchresult":
@@ -2171,10 +2178,26 @@ exit_function("jigaboo");
 
 		$args = $args + $class_specific_args;
 		$result_list = new object_list ($args);
+
 		// $result_list = $result_list->arr ();
 		exit_function ("re_search::search - get objlist");
 		enter_function ("re_search::search - address");
 
+		$tmp_list = new object_list();
+		if($search_owp)
+		{
+			foreach ($result_list->arr() as $obj)
+			{
+				$conns = $obj->connections_from(array(
+						"type" => "RELTYPE_REALESTATE_PICTURE",
+				));
+				if(sizeof($conns) >0)
+				{
+					$tmp_list->add($obj);
+				}
+			}		
+			$result_list = $tmp_list;
+		}
 		### search by address
 		if ($search_admin_units !== false and $result_list->count ())
 		{
@@ -2184,7 +2207,6 @@ exit_function("jigaboo");
 				CL_COUNTRY_CITYDISTRICT,
 			);
 			$result_list_ids = $result_list->ids ();
-
 			### get addresses for all properties found
 			$connection = new connection ();
 			$address_connections = $connection->find (array (
@@ -2257,16 +2279,47 @@ exit_function("jigaboo");
 		{
 			### count all
 			$this->result_count = $result_list->count ();
-
+			if($this_object->prop("max_results") >0  && $this->result_count > $this_object->prop("max_results"))
+			{
+				$max_limit = 1;
+			}			
 			### limit
 			if($_GET["per_page"]) $this->result_table_recordsperpage = ($_GET["per_page"]);
 			$limit = ((int) $_GET["ft_page"] * $this->result_table_recordsperpage) . "," . $this->result_table_recordsperpage;
+			if(
+				$max_limit 
+				&& ((int) $_GET["ft_page"]+1) * $this->result_table_recordsperpage > $this_object->prop("max_results"))
+			{
+				$limit = ((int) $_GET["ft_page"] * $this->result_table_recordsperpage) . "," .( $this_object->prop("max_results") - ($_GET["ft_page"] * $this->result_table_recordsperpage));
+			}
 			$args["limit"] = $limit;
-			$result_list->filter ($args);
+			//	ei m]eld v'lja miskit paremat moodust, kuidas nende ainult piltidega listiga edasi majandada	
+			// loodab, et ikka muu ka n[[d m]jub veel
+			// tegelt kahtlane, et miks siin [ldse uus list on vaja teha
+			$tmp_list = new object_list();
+			$cnt = 0;
+			if($search_owp)
+			{
+				foreach ($result_list->arr() as $obj)
+				{
+					if($cnt > (((int) $_GET["ft_page"] + 1) * $this->result_table_recordsperpage)) break;
+					if($max_limit && $cnt > $this_object->prop("max_results")) break;
+					if($cnt > ((int) $_GET["ft_page"] * $this->result_table_recordsperpage))
+					{	
+						$tmp_list->add($obj);
+					}
+					$cnt++;
+				}
+				$result_list = $tmp_list;
+			}
+			else $result_list->filter ($args);
+		}
+		if($this_object->prop("max_results") >0  && $this->result_count > $this_object->prop("max_results"))
+		{
+			$this->result_count = $this_object->prop("max_results");
 		}
 		exit_function ("re_search::search - address");
 		exit_function ("re_search::search");
-
 		return $result_list;
 	}
 
