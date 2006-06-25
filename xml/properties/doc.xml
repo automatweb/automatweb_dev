@@ -867,31 +867,37 @@
             <VARUSER1>
                   <value>23</value>
                   <clid>CL_META</clid>
+                  <hidden>1</hidden>
                   <caption>kasutajadefineeritud muutuja 1</caption>
             </VARUSER1>
             <VARUSER2>
                   <value>24</value>
                   <clid>CL_META</clid>
+                  <hidden>1</hidden>
                   <caption>kasutajadefineeritud muutuja 2</caption>
             </VARUSER2>
             <VARUSER3>
                   <value>25</value>
                   <clid>CL_META</clid>
+                  <hidden>1</hidden>
                   <caption>kasutajadefineeritud muutuja 3</caption>
             </VARUSER3>
             <TARGET_AUDIENCE>
                   <value>26</value>
                   <clid>CL_TARGET_AUDIENCE</clid>
+                  <hidden>1</hidden>
                   <caption>Sihtr&amp;amp;uuml;hm</caption>
             </TARGET_AUDIENCE>
             <DOC_CONTENT_TYPE>
                   <value>27</value>
                   <clid>CL_DOCUMENT_CONTENT_TYPE</clid>
+                  <hidden>1</hidden>
                   <caption>Dokumendi sisu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
             </DOC_CONTENT_TYPE>
             <KEYWORD>
                   <value>28</value>
                   <clid>CL_KEYWORD</clid>
+                  <hidden>1</hidden>
                   <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
             </KEYWORD>
       </reltypes>

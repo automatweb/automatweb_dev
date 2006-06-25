@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.131 2006/06/13 14:26:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.132 2006/06/25 22:01:29 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -273,22 +273,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_DOCUMENT, on_add_doc_rel)
 @caption Keeleseos
 
 
-@reltype VARUSER1 value=23 clid=CL_META
+@reltype VARUSER1 value=23 clid=CL_META hidden=1
 @caption kasutajadefineeritud muutuja 1
 
-@reltype VARUSER2 value=24 clid=CL_META
+@reltype VARUSER2 value=24 clid=CL_META hidden=1
 @caption kasutajadefineeritud muutuja 2
 
-@reltype VARUSER3 value=25 clid=CL_META
+@reltype VARUSER3 value=25 clid=CL_META hidden=1
 @caption kasutajadefineeritud muutuja 3
 
-@reltype TARGET_AUDIENCE value=26 clid=CL_TARGET_AUDIENCE
+@reltype TARGET_AUDIENCE value=26 clid=CL_TARGET_AUDIENCE hidden=1
 @caption Sihtr&uuml;hm
 
-@reltype DOC_CONTENT_TYPE value=27 clid=CL_DOCUMENT_CONTENT_TYPE
+@reltype DOC_CONTENT_TYPE value=27 clid=CL_DOCUMENT_CONTENT_TYPE hidden=1
 @caption Dokumendi sisu t&uuml;&uuml;p
 
-@reltype KEYWORD value=28 clid=CL_KEYWORD
+@reltype KEYWORD value=28 clid=CL_KEYWORD hidden=1
 @caption V&otilde;tmes&otilde;na
 
 */

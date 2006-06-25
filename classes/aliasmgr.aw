@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.198 2006/05/24 07:30:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.199 2006/06/25 22:01:29 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -83,6 +83,23 @@ class aliasmgr extends aw_template
 		{
 			$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $id),$this->use_class));
 		}
+
+		// hide hidden connections
+		$ri = $obj->get_relinfo();
+		$types = array(0);
+		foreach($ri as $_type => $_d)
+		{
+			if (is_numeric($_type) && $_d["hidden"] != 1)
+			{
+				$ri[] = $_type;
+			}
+			else
+			if (is_numeric($_type))
+			{
+				unset($this->reltypes[$_type]);
+			}
+		}
+
 		$tb = $this->mk_toolbar($args['s']['class_id'], $args['objtype']);
 
 		$this->read_template("search.tpl");
@@ -439,7 +456,23 @@ class aliasmgr extends aw_template
 		{
 			$return_url = $this->mk_my_orb("list_aliases", array("id" => $id));
 		};
-		
+
+		// hide hidden connections
+		$ri = $obj->get_relinfo();
+		$types = array(0);
+		foreach($ri as $_type => $_d)
+		{
+			if (is_numeric($_type) && $_d["hidden"] != 1)
+			{
+				$ri[] = $_type;
+			}
+			else
+			if (is_numeric($_type))
+			{
+				unset($this->reltypes[$_type]);
+			}
+		}
+
 		$toolbar = $this->mk_toolbar($args['s']['class_id']);
 		$this->read_template("lists_new.tpl");
 
@@ -461,7 +494,7 @@ class aliasmgr extends aw_template
 			CL_GROUP => $tmp[CL_GROUP]["name"]
 		);
 
-		foreach($obj->connections_from() as $alias)
+		foreach($obj->connections_from(array("type" => $ri)) as $alias)
 		{
 			$adat = array(
 				"createdby" => $alias->prop("to.createdby"),
