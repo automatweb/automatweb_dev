@@ -61,7 +61,7 @@
 <tr>
 	<td class='aw04contentcellleft' align='center' width='80'>&nbsp;</td>
 	<td class='aw04contentcellright'>
-		<input type='submit' name='{VAR:name}' value='{VAR:sbt_caption}' accesskey='s' class='aw04formbutton' onClick='submit_changeform("{VAR:action}"); return false;'>
+		<input type='submit' name='{VAR:name}' value='{VAR:sbt_caption}' accesskey='s' class='aw04formbutton' onClick='self.disabled=true;this.disabled=true; submit_changeform("{VAR:action}"); this.disabled = 1;return false;'>
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
