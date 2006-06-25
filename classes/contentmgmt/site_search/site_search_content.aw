@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.75 2006/06/07 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.76 2006/06/25 21:11:26 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1666,7 +1666,7 @@ class site_search_content extends class_base
 					}
 					else
 					{
-						$ret .= $this->display_results(array(
+						$tmp = $this->display_results(array(
 							"groupname" => $grpcfg["caption"][$conn->prop("to")],
 							"results" => $results,
 							"obj" => $o, 
@@ -1684,9 +1684,11 @@ class site_search_content extends class_base
 								"sdate" => $arr["s_date"],
 								"opts" => $arr["opts"]
 							),
-							"page" => $page,
+							"page" => is_array($page) ? $page[$conn->prop("to")] : $page,
 							"multigroups" => $has_res
 						));
+						$tmp = str_replace("page=", "page[".$conn->prop("to")."]=", $tmp);
+						$ret .= $tmp;
 					}
 
 					$search = true;
