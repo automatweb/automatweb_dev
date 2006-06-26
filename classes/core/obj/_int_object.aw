@@ -1644,7 +1644,7 @@ class _int_object
 		else
 		{
 			// check if the class specifies that it is versioned and that something has changed
-			if ($GLOBALS["classinfo"][$this->obj["class_id"]]["versioned"] == 1 && aw_global_get("uid") == "kix")
+			if ($GLOBALS["classinfo"][$this->obj["class_id"]]["versioned"] == 1 && aw_ini_get("config.object_versioning"))
 			{
 				if (count($this->ot_modified) > 1 || count($this->props_modified) > 1)
 				{
