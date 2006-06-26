@@ -18,11 +18,11 @@ body {
 </tr>
 <tr>
 <td>Kommentaar</td>
-<td><textarea name="vars[{VAR:lang_short}][comment]" cols="40">{VAR:lang_comment}</textarea></td>
+<td><textarea name="vars[{VAR:lang_short}][comment]" cols="75" rows="12">{VAR:lang_comment}</textarea></td>
 </tr>
 <tr>
 <td>Abitekst</td>
-<td><textarea name="vars[{VAR:lang_short}][help]" cols="40">{VAR:lang_help}</textarea></td>
+<td><textarea name="vars[{VAR:lang_short}][help]" cols="75" rows="12">{VAR:lang_help}</textarea></td>
 </tr>
 <!-- END SUB: SUB_TRANSLATE -->
 </table>
