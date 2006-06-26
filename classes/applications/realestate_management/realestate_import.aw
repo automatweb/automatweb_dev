@@ -1912,8 +1912,8 @@ class realestate_import extends class_base
 			}
 			foreach($realestate_objects->arr() as $realestate_object)// et siis muudaks nähtamatuks vaid need objektid, mille maaklerid töötavad selles ettevõttes, mis on impordiobjekti juurde seostatud
 			{
-				if(array_key_exists($realestate_object->prop("realestate_agent1") , $all_persons)) $realestate_objects->set_prop ("is_visible", 0);
-				if(array_key_exists($realestate_object->prop("realestate_agent2") , $all_persons)) $realestate_objects->set_prop ("is_visible", 0);
+				if(array_key_exists($realestate_object->prop("realestate_agent1") , $all_persons)) $realestate_object->set_prop ("is_visible", 0);
+				if(array_key_exists($realestate_object->prop("realestate_agent2") , $all_persons)) $realestate_object->set_prop ("is_visible", 0);
 			}
 		//	$realestate_objects->set_prop ("is_visible", 0);
 			$realestate_objects->save ();

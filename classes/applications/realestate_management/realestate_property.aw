@@ -891,7 +891,7 @@ class realestate_property extends class_base
 		$tmp = $this->template_dir;
 		$this->template_dir = $this->cfg["site_basedir"] . "/templates/applications/realestate_management/realestate_property";
 		$this->read_template("customer_search.tpl");
-
+		lc_site_load("realestate", $this);
 		load_vcl("table");
 		$t = new aw_table(array(
 			"layout" => "generic"
@@ -1182,6 +1182,7 @@ class realestate_property extends class_base
 				{
 					$this->read_template ($tpl);
 					$this->re_template_loaded = $tpl;
+					lc_site_load("realestate", $this);
 				}
 
 				$properties = $this->get_property_data (array (
@@ -1237,6 +1238,7 @@ class realestate_property extends class_base
 				{
 					$this->read_template ($tpl);
 					$this->re_template_loaded = $tpl;
+					lc_site_load("realestate", $this);
 				}
 
 				$required_properties = array (
@@ -1272,6 +1274,7 @@ class realestate_property extends class_base
 				{
 					$this->read_template ($tpl);
 					$this->re_template_loaded = $tpl;
+					lc_site_load("realestate", $this);
 				}
 
 				$properties = $this->get_property_data (array (
@@ -1353,6 +1356,7 @@ class realestate_property extends class_base
 		// "/" oli kuskile vahelt kadunud....
 		$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
 		$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
+		$data["additional_info"] = $this_object->prop ("additional_info_" . aw_global_get("LC"));
 
 		### parse
 		$this->vars ($data);
@@ -1421,7 +1425,7 @@ class realestate_property extends class_base
 		$tmp = $this->template_dir;
 		$this->template_dir = $this->cfg["site_basedir"] . "/templates/applications/realestate_management/realestate_property";
 		$this->read_template ("printview_{$class}.tpl");
-
+		lc_site_load("realestate", $this);
 		$data = array ();
 		$cl_image = get_instance (CL_IMAGE);
 

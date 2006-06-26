@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.28 2006/06/22 09:22:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.29 2006/06/26 15:08:27 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -2234,7 +2234,6 @@ exit_function("jigaboo");
 						"to" => $search_admin_units,
 						"type" => 2,
 				));
-
 				### filter out properties not under specified admin units
 				$applicable_address_ids = array ();
 
