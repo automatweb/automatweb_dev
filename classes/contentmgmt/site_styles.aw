@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.9 2006/06/26 08:56:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.10 2006/06/26 09:28:02 tarvo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 
@@ -14,7 +14,6 @@
 // and val is one of: prev, next, last, random or numeric value representing style order num.
 /*
 
-HANDLE_MESSAGE(MSG_ON_SITE_SHOW_IMPORT_VARS, on_site_show_import_vars);
 
 @classinfo syslog_type=ST_SITE_STYLES no_comment=1
 
