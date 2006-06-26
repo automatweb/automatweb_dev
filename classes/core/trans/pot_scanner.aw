@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.36 2006/06/26 14:52:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.37 2006/06/26 15:09:55 tarvo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -362,7 +362,7 @@ class pot_scanner extends core
 		{
 			if ($line["msgstr"] != "")
 			{
-				$f[] = "\$GLOBALS[\"TRANS\"][\"".$this->_code_quote($line["msgid"])."\"] = \"".$this->_code_quote($line["msgstr"])."\";\n";
+				$f[] = "\$GLOBALS[\"TRANS\"][\"".$this->_code_quote($line["msgid"])."\"] = \"".$this->_nl2br($this->_code_quote($line["msgstr"]))."\";\n";
 			}
 		}
 

@@ -945,8 +945,8 @@ class cb_translate extends aw_template
 			$this->vars(array(
 				"lang" => iconv($change["charset"], "utf-8",$change["lang"]),
 				"object" => iconv($change["charset"], "utf-8", $change["msgid"]),
-				"prev" => (strlen($change["prev_contents"]) < 1)?iconv(aw_global_get("charset"), "utf-8", sprintf("<i>%s</i>", t("tekst puudus"))):iconv($change["charset"], "utf-8", $change["prev_contents"]),
-				"new" => (strlen($change["contents"]) < 1)?iconv(aw_global_get("charset"), "utf-8", sprintf("<i>%s</i>", t("tekst eemaldati"))):iconv($change["charset"], "utf-8", $change["contents"]),
+				"prev" => (strlen($change["prev_contents"]) < 1)?iconv(aw_global_get("charset"), "utf-8", sprintf("<i>%s</i>", t("tekst puudus"))):iconv($change["charset"], "utf-8", nl2br($change["prev_contents"])),
+				"new" => (strlen($change["contents"]) < 1)?iconv(aw_global_get("charset"), "utf-8", sprintf("<i>%s</i>", t("tekst eemaldati"))):iconv($change["charset"], "utf-8", nl2br($change["contents"])),
 			));
 			$this->parse("SUB_CHANGE");
 			$is = true;
