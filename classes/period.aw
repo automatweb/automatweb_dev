@@ -1,9 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.35 2006/05/02 12:35:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.36 2006/06/26 08:51:40 tarvo Exp $
 // period.aw - periods 
 /*
-
-	HANDLE_MESSAGE(MSG_ON_SITE_SHOW_IMPORT_VARS, on_site_show_import_vars);
 
 	@default group=general
 	@default table=objects
