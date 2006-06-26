@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.25 2006/04/27 08:14:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.26 2006/06/26 00:06:37 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -298,6 +298,14 @@ class mini_gallery extends class_base
 			$img->set_status(STAT_ACTIVE);
 			$img->set_name($file);
 			
+			if (function_exists("exif_read_data"))
+			{
+				$dat = exif_read_data($fp);
+				$dt = $dat["DateTime"];
+				$dt = strptime($dt, "%Y:%m:%d %H:%M:%S");
+				$img->set_prop("date_taken", $dt);
+			}
+
 			$fl = $fi->_put_fs(array(
 				"type" => substr($file, strrpos(".", $file)),
 				"content" => $this->get_file(array("file" => $fp))
