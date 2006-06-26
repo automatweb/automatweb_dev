@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.105 2006/06/16 11:23:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.106 2006/06/26 20:51:38 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2450,7 +2450,7 @@ class task extends class_base
 			{
 				if ((int)$o->prop("done") != (int)$e["done"])
 				{
-					$o->set_prop("done", $e["done"]);
+					$o->set_prop("done", (int)$e["done"]);
 					$is_mod = true;
 				}
 			}
@@ -2459,7 +2459,7 @@ class task extends class_base
 			{
 				if ((int)$o->prop("on_bill") != (int)$e["on_bill"])
 				{
-					$o->set_prop("on_bill", $e["on_bill"]);
+					$o->set_prop("on_bill", (int)$e["on_bill"]);
 					$is_mod = true;
 				}
 			}
