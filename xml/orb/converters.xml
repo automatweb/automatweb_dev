@@ -228,5 +228,12 @@
 			</function>
 		</action>
 
+		<action name="bill_row_to_text">
+			<function name="bill_row_to_text">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.89 2006/06/26 10:13:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.90 2006/06/26 20:04:40 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -3948,7 +3948,7 @@ class project extends class_base
 		$br->set_prop("name", sprintf(t("%s ettemaks"), $arr["obj_inst"]->name()));
 		$br->set_prop("amt", 1);
 		$br->set_prop("price", $arr["obj_inst"]->prop("prepayment"));
-		$br->set_prop("date", time());
+		$br->set_prop("date", date("d.m.Y", time()));
 		$br->save();
 
 		$bill->connect(array(

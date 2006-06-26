@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.2 2006/05/11 14:20:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.3 2006/06/26 20:04:40 kristo Exp $
 // crm_bill_row.aw - Arve rida 
 /*
 
@@ -37,7 +37,7 @@
 @property has_tax type=checkbox ch_value=1 field=aw_has_tax
 @caption Lisandub k&auml;ibemaks?
 
-@property date type=date_select field=aw_date
+@property date type=textbox field=aw_date
 @caption Kuup&auml;ev
 
 @reltype PROD value=1 clid=CL_CHOP_PRODUCT
@@ -92,7 +92,7 @@ class crm_bill_row extends class_base
 	{
 		if ($table == "aw_crm_bill_rows" && $field == "")
 		{
-			$this->db_query("create table aw_crm_bill_rows (aw_oid int primary key, aw_amt double,aw_prod int,aw_price double,aw_unit varchar(100),aw_is_oe int,aw_has_tax int ,aw_date int)");
+			$this->db_query("create table aw_crm_bill_rows (aw_oid int primary key, aw_amt double,aw_prod int,aw_price double,aw_unit varchar(100),aw_is_oe int,aw_has_tax int ,aw_date varchar(255))");
 			return true;
 		}
 	}

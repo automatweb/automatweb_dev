@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.49 2006/06/26 13:13:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.50 2006/06/26 20:04:40 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -361,7 +361,7 @@ class crm_bill extends class_base
 		{
 			$rows[] = array(
 				"id" => -1,
-				"date" => time(),
+				"date" => date("d.m.Y", time()),
 				"amt" => 0,
 				"sum" => 0
 			);
@@ -394,7 +394,7 @@ class crm_bill extends class_base
 				)),
 				"date" => html::textbox(array(
 					"name" => "rows[$id][date]",
-					"value" => $t_inf["date"] > 100 ? date("d/m/y", $t_inf["date"]) : "",
+					"value" => $t_inf["date"],
 					"size" => 8
 				)),
 				"unit" => html::textbox(array(
@@ -801,7 +801,7 @@ class crm_bill extends class_base
 				"price" => number_format($cur_pr, 2, ".", " "),
 				"sum" => number_format($cur_sum, 2, ".",  " "),
 				"desc" => $row["name"],
-				"date" => $row["date"] > 100 ? date("d.m.Y", $row["date"]) : "" 
+				"date" => $row["date"] 
 			));
 
 			$rs .= $this->parse("ROW");
@@ -1086,7 +1086,7 @@ class crm_bill extends class_base
 				"price" => number_format($row["price"], 2,".", " "),
 				"sum" => number_format($cur_sum, 2,"."),
 				"desc" => $row["name"],
-				"date" => $row["date"] > 1000 ? date("d.m.Y", $row["date"]) : "" 
+				"date" => $row["date"] 
 			));
 			$rs .= $this->parse("ROW");
 
@@ -1127,7 +1127,7 @@ class crm_bill extends class_base
 				"price" => number_format($cur_pr, 2,".", " "),
 				"sum" => number_format($cur_sum, 2, ".", " "),
 				"desc" => $row["name"],
-				"date" => $row["date"] > 100 ? date("d.m.Y", $row["date"]) : "" 
+				"date" => $row["date"]
 			));
 
 			$rs .= $this->parse("ROW");
@@ -1274,16 +1274,6 @@ class crm_bill extends class_base
 			$o->set_prop("name", $row["name"]);
 			$o->set_prop("comment", $row["comment"]);
 
-			if (trim($row["date"]) == "")
-			{
-				$row["date"] = -1;
-			}
-			else
-			{
-				list($d,$m,$y) = explode("/", $row["date"]);
-				$row["date"] = mktime(0,0,0, $m, $d, $y);
-			}
-
 			$o->set_prop("date", $row["date"]);
 			$o->set_prop("unit", $row["unit"]);
 			$o->set_prop("price", str_replace(",", ".", $row["price"]));
@@ -1315,7 +1305,7 @@ class crm_bill extends class_base
 		$row = obj();
 		$row->set_parent($bill->id());
 		$row->set_class_id(CL_CRM_BILL_ROW);
-		$row->set_prop("date", time());
+		$row->set_prop("date", date("d.m.Y", time()));
 		$row->save();
 
 		$bill->connect(array(
@@ -1350,7 +1340,7 @@ class crm_bill extends class_base
 				$br->set_prop("unit", $row["unit"]);
 				$br->set_prop("is_oe", $row["is_oe"]);
 				$br->set_prop("has_tax", $row["has_tax"]);
-				$br->set_prop("date", $row["date"]);
+				$br->set_prop("date", date("d.m.Y", $row["date"]));
 				// get default prod
 
 				if ($sts)

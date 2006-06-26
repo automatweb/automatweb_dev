@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.63 2006/05/02 12:07:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.64 2006/06/26 20:04:37 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1943,6 +1943,29 @@ $GLOBALS["DUKE"] = 1;
 				$c2->change(array("reltype"  => 28));
 			}
 echo "mod ".$con["to.name"]."<br>";
+		}
+		die("all done");
+	}
+
+	/**
+		@attrib name=bill_row_to_text
+	**/
+	function bill_row_to_text($arr)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_CRM_BILL_ROW,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			if ($o->prop("date") > 10000000)
+			{
+				$o->set_prop("date", date("d.m.Y", $o->prop("date")));
+				$o->save();
+				echo "br ".$o->id()." <br>\n";
+				flush();
+			}
 		}
 		die("all done");
 	}
