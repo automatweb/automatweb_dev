@@ -502,7 +502,7 @@ class crm_company_overview_impl extends class_base
 			));
 			$link = $this->mk_my_orb("mark_tasks_done", array(
 					"sel" => array($t_id => $t_id),
-					"post_ru" => get_ru()
+					"post_ru" => "a" 
 				), CL_CRM_COMPANY);
 
 			$done_ic_url = aw_ini_get("baseurl")."/automatweb/images/icons/class_".$task->class_id()."_done.gif";

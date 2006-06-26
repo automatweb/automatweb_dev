@@ -4989,7 +4989,6 @@ class crm_company extends class_base
 					resetButton(activeButton);
 					// fetch the url to mark it done
 					aw_get_url_contents(link);
-
 					// change icon
 					el = document.getElementById(eln);
 					el.src = ns;
