@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.35 2006/05/23 12:53:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.36 2006/06/26 14:52:42 tarvo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -435,7 +435,7 @@ class pot_scanner extends core
 					$f[] = array(
 						"headers" => $entry_header,
 						"msgid" => $msgid,
-						"msgstr" => $str
+						"msgstr" => $this->_br2nl($str),
 					);
 
 					unset($entry_header);
@@ -473,6 +473,17 @@ class pot_scanner extends core
 		fclose($fp);
 
 	}
+
+	function _br2nl($text)
+	{
+		return  preg_replace('=<br */?>=i', "\r\n", $text);
+	}
+	
+	function _nl2br($text)
+	{
+		return preg_replace("/(\r\n|\n|\r)/", "<br />", $text);
+	}
+
 	// arr(location, contents)
 	function write_po_file($arr)
 	{
@@ -494,7 +505,7 @@ class pot_scanner extends core
 				$contents[] = trim($ent_header)."\n";
 			}
 			$contents[] = "msgid \"".$entry["msgid"]."\"\n";
-			$contents[] = "msgstr \"".str_replace("\"","&quot;",$entry["msgstr"])."\"\n\n";
+			$contents[] = "msgstr \"".$this->_nl2br($entry["msgstr"])."\"\n\n";
 		}
 		$contents = array_merge($header, $contents);
 		
