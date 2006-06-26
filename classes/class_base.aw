@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.487 2006/06/26 11:25:52 tarvo Exp $
+// $Id: class_base.aw,v 2.488 2006/06/26 11:57:32 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -587,7 +587,6 @@ class class_base extends aw_template
 				"request" => $args,
 			));
 		}
-		
 		$cli->configure(array(
 			"help_url" => $this->mk_my_orb("browser",array(
 				"clid" => $this->clid,
@@ -595,7 +594,7 @@ class class_base extends aw_template
 			),
 			"help"),
 
-			"translate_url" => aw_ini_get("class_base.show_trans")?$translate_url." | ":"",
+			"translate_url" => in_array(aw_global_get("uid"), aw_ini_get("class_base.show_trans"))?$translate_url." | ":"",
 			"more_help_text" => t("Rohkem infot"),
 			"close_help_text" => t("Peida ära"),
 			"open_help_text" => t("Abiinfo"),
