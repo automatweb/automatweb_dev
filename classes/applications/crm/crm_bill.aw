@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.48 2006/05/22 11:15:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.49 2006/06/26 13:13:48 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -158,7 +158,7 @@ class crm_bill extends class_base
 				break;
 
 			case "impl":
-				if (!$arr["new"])
+				if (!$arr["new"] && is_oid($arr["obj_inst"]->id()))
 				{
 					$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_IMPL")));
 					$prop["options"] = $ol->names();
@@ -1286,9 +1286,9 @@ class crm_bill extends class_base
 
 			$o->set_prop("date", $row["date"]);
 			$o->set_prop("unit", $row["unit"]);
-			$o->set_prop("price", $row["price"]);
-			$o->set_prop("amt", $row["amt"]);
-			$o->set_prop("sum", $row["sum"]);
+			$o->set_prop("price", str_replace(",", ".", $row["price"]));
+			$o->set_prop("amt", str_replace(",", ".", $row["amt"]));
+			$o->set_prop("sum", str_replace(",", ".", $row["sum"]));
 			$o->set_prop("prod", $row["prod"]);
 			$o->set_prop("has_tax", (int)$row["has_tax"]);
 			$o->save();
