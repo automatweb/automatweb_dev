@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.170 2006/06/26 00:03:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.171 2006/06/26 14:06:27 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1425,6 +1425,44 @@ class image extends class_base
 			$this->vars(array(
 				'comments'=> $out,
 			));
+		}
+
+		if ($this->is_template("NEXT_LINK"))
+		{
+			$images = new object_list(array(
+				"class_id" => CL_IMAGE,
+				"parent" => $im["parent"],
+				"sort_by" => "objects.jrk,objects.created desc",
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			foreach($images->ids() as $im_id)
+			{
+				if ($set_next)
+				{
+					$this->vars(array(
+						"next_url" => aw_url_change_var("id", $im_id)
+					));
+					$this->vars(array(
+						"NEXT_LINK" => $this->parse("NEXT_LINK")
+					));
+					break;
+				}
+				if ($im_id == $id)
+				{
+					if ($prev)
+					{
+						$this->vars(array(
+							"prev_url" => aw_url_change_var("id", $prev)
+						));
+						$this->vars(array(
+							"PREV_LINK" => $this->parse("PREV_LINK")
+						));
+					}
+					$set_next = true;
+				}
+				$prev = $im_id;
+			}
 		}
 		if (!$this->is_template($parse))
 		{
