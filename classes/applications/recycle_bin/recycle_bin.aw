@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.21 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.22 2006/06/26 14:30:02 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -347,7 +347,7 @@ class recycle_bin extends class_base
 		$c = get_instance("cache");
 		$c->file_clear_pt("acl");
 		
-		return aw_ini_get("baseurl").$arr["return_url"];
+		return $arr["return_url"];
 	}
 	
 	/**
