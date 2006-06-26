@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.88 2006/06/16 11:23:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.89 2006/06/26 10:13:50 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -98,7 +98,7 @@
 	@caption Pilt
 
 
-@default group=event_list
+@default group=event_list_cal
 
 	@property event_toolbar type=toolbar no_caption=1
 	@caption Sündmuste toolbar 
@@ -115,7 +115,7 @@
 @default group=files
 
 	@property files type=text 
-	@caption Failid
+	@caption Manused
 
 	property file_editor type=releditor reltype=RELTYPE_PRJ_FILE mode=manager props=filename,file,comment
 	caption Failid
@@ -217,33 +217,29 @@
 
 @default group=strat
 	
-	@property start type=releditor reltype=RELTYPE_STRAT props=name mode=manager
+	@property strat_tb type=toolbar store=no no_caption=1
+	@property strat type=table store=no no_caption=1
 
 @default group=strat_a
 
+	@property strat_a_tb type=toolbar store=no no_caption=1
 	@property strat_a type=table no_caption=1 store=no
-
-@default group=strat_res
-
-	@property strat_res type=table no_caption=1 store=no
 
 @default group=risks
 
-	@property risks type=releditor reltype=RELTYPE_RISK props=name mode=manager props=name,owner table_fields=name,owner 
+	@property risks_tb type=toolbar store=no no_caption=1
+	@property risks type=table store=no no_caption=1
 
 @default group=risks_eval
 
+	@property risks_eval_tb type=toolbar no_caption=1 store=no
 	@property risks_eval type=table no_caption=1 store=no
-
-@default group=risks_res
-
-	@property risks_res type=table no_caption=1 store=no
 
 @groupinfo info caption="Projekti info"
 	@groupinfo info_t caption="Projekti info" parent=info
-	@groupinfo strat caption="Strateegilised edutegurid" parent=info
-	@groupinfo strat_a caption="Strateegiliste edutegurite hindamine" parent=info
-	@groupinfo strat_res caption="Strateegiliste edutegurite hindamise tulemused" parent=info store=no submit=no
+	@groupinfo strat caption="Eesm&auml;rgid" parent=info submit=no
+	@groupinfo strat_a caption="Eesm&auml;rkide hindamine" parent=info submit=no
+	@groupinfo strat_res caption="Eesm&auml;rkide hindamise tulemused" parent=info store=no submit=no
 
 	
 @groupinfo general2 parent=general caption="Üldine"
@@ -253,22 +249,22 @@
 	@groupinfo sides parent=general caption="Konfliktianal&uuml;&uuml;s" submit=no
 
 @groupinfo event_list caption="Sündmused" submit=no
+
+	@groupinfo goals_edit caption="Muuda" parent=event_list submit=no
+	@groupinfo goals_gantt caption="Vaata" parent=event_list submit=no
+	@groupinfo event_list_cal caption="Kalender" submit=no parent=event_list
+
+
 @groupinfo add_event caption="Muuda sündmust"
-@groupinfo files caption="Failid"
+@groupinfo files caption="Manused"
 @groupinfo trans caption="Tõlkimine"
 
 @groupinfo userdefined caption="Andmed"
 
-@groupinfo goals caption="Verstapostid" submit=no
-
-	@groupinfo goals_edit caption="Muuda" parent=goals submit=no
-	@groupinfo goals_gantt caption="Vaata" parent=goals submit=no
-
 @groupinfo team caption="Meeskond" submit=no
 @groupinfo risks_t caption="Riskid"
-	@groupinfo risks caption="Riskid" parent=risks_t
-	@groupinfo risks_eval caption="Riskide hindamine" parent=risks_t
-	@groupinfo risks_res caption="Riskide hindamise tulemused" parent=risks_t
+	@groupinfo risks caption="Riskid" parent=risks_t submit=no
+	@groupinfo risks_eval caption="Riskide hindamine" parent=risks_t submit=no
 
 @groupinfo transl caption=T&otilde;lgi
 
@@ -323,10 +319,16 @@
 @caption Arve
 
 @reltype STRAT value=17 clid=CL_PROJECT_STRAT_GOAL
-@caption Strateegiline edutegur
+@caption Eesm&auml;rk
 
 @reltype RISK value=18 clid=CL_PROJECT_RISK
 @caption Risk
+
+@reltype STRAT_EVAL value=19 clid=CL_PROJECT_STRAT_GOAL_EVAL_WS
+@caption Eesm&auml;rkide hindamislaud
+
+@reltype RISK_EVAL value=20 clid=CL_PROJECT_RISK_EVAL_WS
+@caption Riskide hindamislaud
 */
 
 class project extends class_base
@@ -360,6 +362,26 @@ class project extends class_base
 		switch($data["name"])
 		{
 			case "risks":
+				$this->_risks($arr);
+				break;
+
+			case "risks_tb":
+				$this->_risks_tb($arr);
+				break;
+
+			case "strat_tb":
+				$this->_strat_tb($arr);
+				break;
+
+			case "strat_a_tb":
+				$this->_strat_a_tb($arr);
+				break;
+
+			case "strat":
+				$this->_strat($arr);
+				break;
+
+			case "risks":
 				$data["direct_links"] = 1;
 				break;
 
@@ -367,8 +389,8 @@ class project extends class_base
 				$this->_risks_eval($arr);
 				break;
 
-			case "risks_res":
-				$this->_risks_res($arr);
+			case "risks_eval_tb":
+				$this->_risks_eval_tb($arr);
 				break;
 
 			case "strat_a":
@@ -633,10 +655,6 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "strat_a":
-				$this->_save_strat_a($arr);
-				break;
-
 			case "risks_eval":
 				$this->_save_risks_eval($arr);
 				break;
@@ -3954,127 +3972,6 @@ class project extends class_base
 		}
 	}
 
-	function _init_strat_a_tbl(&$t, $o)
-	{
-		$t->define_field(array(
-			"name" => "task",
-			"caption" => t("Toimetus"),
-			"align" => "right"
-		));
-		// add all strats to table
-		foreach($o->connections_from(array("type" => "RELTYPE_STRAT")) as $c)
-		{
-			$t->define_field(array(
-				"name" => $c->prop("to"),
-				"caption" => $c->prop("to.name"),
-				"align" => "center"
-			));
-		}
-	}
-
-	function _strat_a($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_strat_a_tbl($t, $arr["obj_inst"]);
-
-		$strats = array();
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_STRAT")) as $c)
-		{
-			$strats[$c->prop("to")] = $c->prop("to");
-		}
-
-		$se = $this->_get_strat_eval($arr["obj_inst"]);
-		$data = $se->meta("grid");
-		foreach($this->get_events_for_project(array("project_id" => $arr["obj_inst"]->id())) as $evid)
-		{
-			$ar = array(
-				"task" => html::obj_change_url($evid),
-			);
-			foreach($strats as $strat)
-			{
-				$ar[$strat] = html::textbox(array(
-					"name" => "a[$evid][$strat]",
-					"value" => $data[$evid][$strat],
-					"size" => 3
-				));
-			}
-			$t->define_data($ar);
-		}
-		$t->set_sortable(false);
-	}
-
-	function _strat_res($arr)
-	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_strat_a_tbl($t, $arr["obj_inst"]);
-
-		$strats = array();
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_STRAT")) as $c)
-		{
-			$strats[$c->prop("to")] = $c->prop("to");
-		}
-
-		// get all eval objs
-		$ol = new object_list(array(
-			"class_id" => CL_PROJECT_STRAT_EVALUATION,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"proj" => $arr["obj_inst"]->id(),
-		));
-		$data = array();
-		foreach($ol->arr() as $o)
-		{
-			$g = safe_array($o->meta("grid"));
-			foreach($g as $evid => $d)
-			{
-				foreach($d as $strat => $eval)
-				{
-					$data[$evid][$strat] += $eval;
-				}
-			}
-		}
-
-		foreach($this->get_events_for_project(array("project_id" => $arr["obj_inst"]->id())) as $evid)
-		{
-			$ar = array(
-				"task" => html::obj_change_url($evid),
-			);
-			foreach($strats as $strat)
-			{
-				$ar[$strat] = number_format($data[$evid][$strat] / $ol->count(), 2);
-			}
-			$t->define_data($ar);
-		}
-		$t->set_sortable(false);
-	}
-	
-	function _get_strat_eval($p)
-	{
-		$pp = get_current_person();
-		$ol = new object_list(array(
-			"class_id" => CL_PROJECT_STRAT_EVALUATION,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"proj" => $p->id(),
-			"evaluator" => $pp->id()
-		));
-		if ($ol->count())
-		{
-			return $ol->begin();
-		}
-		else
-		{
-			$o = obj();
-			$o->set_parent($p->id());
-			$o->set_class_id(CL_PROJECT_STRAT_EVALUATION);
-			$o->set_name(sprintf(t("Hinnang projektile %s"), $p->name()));
-			$o->set_prop("proj", $p->id());
-			$o->set_prop("evaluator" , $pp->id());
-			$o->save();
-			return $o;
-		}
-	}
-
 	function _get_risk_eval($p)
 	{
 		$pp = get_current_person();
@@ -4102,14 +3999,6 @@ class project extends class_base
 		}
 	}
 
-	function _save_strat_a($arr)
-	{
-		// see if there is an eval for this person already, if not, create it , if it is, update it
-		$se = $this->_get_strat_eval($arr["obj_inst"]);
-		$se->set_meta("grid", $arr["request"]["a"]);
-		$se->save();
-	}
-
 	function _save_risks_eval($arr)
 	{
 		// see if there is an eval for this person already, if not, create it , if it is, update it
@@ -4121,19 +4010,30 @@ class project extends class_base
 	function _init_risks_eval_tbl(&$t, $o)
 	{
 		$t->define_field(array(
-			"name" => "task",
-			"caption" => t("Toimetus"),
-			"align" => "right"
+			"name" => "name",
+			"caption" => t("Hindamislaua nimi"),
+			"align" => "center",
+			"sortable" => 1
 		));
-		// add all strats to table
-		foreach($o->connections_from(array("type" => "RELTYPE_RISK")) as $c)
-		{
-			$t->define_field(array(
-				"name" => $c->prop("to"),
-				"caption" => $c->prop("to.name"),
-				"align" => "center"
-			));
-		}
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Hindamislaua looja nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
 	}
 
 	function _risks_eval($arr)
@@ -4141,75 +4041,245 @@ class project extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_risks_eval_tbl($t, $arr["obj_inst"]);
 
-		$strats = array();
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RISK")) as $c)
+		$u = get_instance(CL_USER);
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RISK_EVAL")) as $c)
 		{
-			$strats[$c->prop("to")] = $c->prop("to");
+			$st = $c->to();
+			$p = $u->get_person_for_uid($st->createdby());
+			$t->define_data(array(
+				"name" => html::obj_change_url($c->to()),
+				"createdby" => $p->name(),
+				"created" => $st->created(),
+				"ord" => $st->ord(),
+				"oid" => $c->prop("to")
+			));
 		}
-
-		$se = $this->_get_risk_eval($arr["obj_inst"]);
-		$data = $se->meta("grid");
-		foreach($this->get_events_for_project(array("project_id" => $arr["obj_inst"]->id())) as $evid)
-		{
-			$ar = array(
-				"task" => html::obj_change_url($evid),
-			);
-			foreach($strats as $strat)
-			{
-				$ar[$strat] = html::textbox(array(
-					"name" => "a[$evid][$strat]",
-					"value" => $data[$evid][$strat],
-					"size" => 3
-				));
-			}
-			$t->define_data($ar);
-		}
-		$t->set_sortable(false);
 	}
 
-	function _risks_res($arr)
+	function _init_strat_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Eesm&auml;rgi nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Eesm&auml;rgi esitaja nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1
+		));
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _strat($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_risks_eval_tbl($t, $arr["obj_inst"]);
+		$this->_init_strat_t($t);
 
-		$strats = array();
+		$u = get_instance(CL_USER);
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_STRAT")) as $c)
+		{
+			$st = $c->to();
+			$p = $u->get_person_for_uid($st->createdby());
+			$t->define_data(array(
+				"name" => html::obj_change_url($c->to()),
+				"createdby" => $p->name(),
+				"created" => $st->created(),
+				"ord" => $st->ord(),
+				"oid" => $c->prop("to")
+			));
+		}
+	}
+
+	function _strat_tb($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Eesm&auml;rk"),
+			"url" => html::get_new_url(CL_PROJECT_STRAT_GOAL, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 17))
+		));
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_goals",
+			"tooltip" => t("Kustuta"),
+		));
+	}
+
+	function _strat_a_tb($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Eesm&auml;rk"),
+			"url" => html::get_new_url(CL_PROJECT_STRAT_GOAL_EVAL_WS, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 19))
+		));
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_goals",
+			"tooltip" => t("Kustuta"),
+		));
+		
+	}
+
+	function _risks_eval_tb($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Eesm&auml;rk"),
+			"url" => html::get_new_url(CL_PROJECT_RISK_EVAL_WS, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 20))
+		));
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_goals",
+			"tooltip" => t("Kustuta"),
+		));
+		
+	}
+
+	function _init_strat_a_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Hindamislaua nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Hindamislaua looja nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1
+		));
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _strat_a($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_strat_a_t($t);
+
+		$u = get_instance(CL_USER);
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_STRAT_EVAL")) as $c)
+		{
+			$st = $c->to();
+			$p = $u->get_person_for_uid($st->createdby());
+			$t->define_data(array(
+				"name" => html::obj_change_url($c->to()),
+				"createdby" => $p->name(),
+				"created" => $st->created(),
+				"ord" => $st->ord(),
+				"oid" => $c->prop("to")
+			));
+		}
+	}
+
+	function _init_risks_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Riski nimi"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "owner",
+			"caption" => t("Omanik"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "desc",
+			"caption" => t("Kirjeldus"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center"
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _risks($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_risks_t($t);
+
+		$pr = get_instance(CL_PROJECT_RISK);
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_RISK")) as $c)
 		{
-			$strats[$c->prop("to")] = $c->prop("to");
+			$r = $c->to();
+			$t->define_data(array(
+				"name" => html::obj_change_url($r),
+				"owner" => html::obj_change_url($r->prop("owner")),
+				"desc" => nl2br($r->prop("countermeasure")),
+				"type" => $pr->types[$r->prop("type")],
+				"oid" => $r->id()
+			));
 		}
+	}
 
-		// get all eval objs
-		$ol = new object_list(array(
-			"class_id" => CL_PROJECT_RISK_EVALUATION,
-			"lang_id" => array(),
-			"site_id" => array(),
-			"proj" => $arr["obj_inst"]->id(),
+	function _risks_tb($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Risk"),
+			"url" => html::get_new_url(CL_PROJECT_RISK, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 18))
 		));
-		$data = array();
-		foreach($ol->arr() as $o)
-		{
-			$g = safe_array($o->meta("grid"));
-			foreach($g as $evid => $d)
-			{
-				foreach($d as $strat => $eval)
-				{
-					$data[$evid][$strat] += $eval;
-				}
-			}
-		}
-
-		foreach($this->get_events_for_project(array("project_id" => $arr["obj_inst"]->id())) as $evid)
-		{
-			$ar = array(
-				"task" => html::obj_change_url($evid),
-			);
-			foreach($strats as $strat)
-			{
-				$ar[$strat] = number_format($data[$evid][$strat] / $ol->count(), 2);
-			}
-			$t->define_data($ar);
-		}
-		$t->set_sortable(false);
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_goals",
+			"tooltip" => t("Kustuta"),
+		));
 	}
 };
 ?>

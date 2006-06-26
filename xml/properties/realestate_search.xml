@@ -155,6 +155,15 @@
             <type>hidden</type>
       </property>
       <property>
+            <name>max_results</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Maksimaalselt otsingutulemusi</caption>
+      </property>
+      <property>
             <name>search_class_id</name>
             <table>objects</table>
             <group>grp_search</group>

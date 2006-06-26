@@ -76,13 +76,11 @@
       </property>
       <property>
             <name>start</name>
-            <table>objects</table>
-            <group>strat</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_STRAT</reltype>
-            <props>name</props>
-            <mode>manager</mode>
-            <field>start</field>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>date_select</type>
+            <field>aw_start</field>
+            <caption>Algus</caption>
       </property>
       <property>
             <name>end</name>
@@ -239,7 +237,7 @@
       <property>
             <name>event_toolbar</name>
             <table>objects</table>
-            <group>event_list</group>
+            <group>event_list_cal</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -249,7 +247,7 @@
       <property>
             <name>event_list</name>
             <table>objects</table>
-            <group>event_list</group>
+            <group>event_list_cal</group>
             <type>calendar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -271,7 +269,7 @@
             <group>files</group>
             <type>text</type>
             <field>files</field>
-            <caption>Failid</caption>
+            <caption>Manused</caption>
       </property>
       <property>
             <name>trans</name>
@@ -530,6 +528,33 @@
             <caption>T&amp;amp;otilde;lgi</caption>
       </property>
       <property>
+            <name>strat_tb</name>
+            <table>objects</table>
+            <group>strat</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>strat_tb</field>
+      </property>
+      <property>
+            <name>strat</name>
+            <table>objects</table>
+            <group>strat</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>strat</field>
+      </property>
+      <property>
+            <name>strat_a_tb</name>
+            <table>objects</table>
+            <group>strat_a</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>strat_a_tb</field>
+      </property>
+      <property>
             <name>strat_a</name>
             <table>objects</table>
             <group>strat_a</group>
@@ -539,30 +564,31 @@
             <field>strat_a</field>
       </property>
       <property>
-            <name>strat_res</name>
+            <name>risks_tb</name>
             <table>objects</table>
-            <group>strat_res</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
+            <group>risks</group>
+            <type>toolbar</type>
             <store>no</store>
-            <field>strat_res</field>
+            <no_caption>1</no_caption>
+            <field>risks_tb</field>
       </property>
       <property>
             <name>risks</name>
             <table>objects</table>
             <group>risks</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_RISK</reltype>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>owner</num_1>
-            </props>
-            <mode>manager</mode>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>owner</num_1>
-            </table_fields>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
             <field>risks</field>
+      </property>
+      <property>
+            <name>risks_eval_tb</name>
+            <table>objects</table>
+            <group>risks_eval</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>risks_eval_tb</field>
       </property>
       <property>
             <name>risks_eval</name>
@@ -572,15 +598,6 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>risks_eval</field>
-      </property>
-      <property>
-            <name>risks_res</name>
-            <table>objects</table>
-            <group>risks_res</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>risks_res</field>
       </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
@@ -595,15 +612,17 @@
                   <parent>info</parent>
             </info_t>
             <strat>
-                  <caption>Strateegilised edutegurid</caption>
+                  <caption>Eesm&amp;amp;auml;rgid</caption>
                   <parent>info</parent>
+                  <submit>no</submit>
             </strat>
             <strat_a>
-                  <caption>Strateegiliste edutegurite hindamine</caption>
+                  <caption>Eesm&amp;amp;auml;rkide hindamine</caption>
                   <parent>info</parent>
+                  <submit>no</submit>
             </strat_a>
             <strat_res>
-                  <caption>Strateegiliste edutegurite hindamise tulemused</caption>
+                  <caption>Eesm&amp;amp;auml;rkide hindamise tulemused</caption>
                   <parent>info</parent>
                   <store>no</store>
                   <submit>no</submit>
@@ -633,11 +652,26 @@
                   <caption>S&amp;uuml;ndmused</caption>
                   <submit>no</submit>
             </event_list>
+            <goals_edit>
+                  <caption>Muuda</caption>
+                  <parent>event_list</parent>
+                  <submit>no</submit>
+            </goals_edit>
+            <goals_gantt>
+                  <caption>Vaata</caption>
+                  <parent>event_list</parent>
+                  <submit>no</submit>
+            </goals_gantt>
+            <event_list_cal>
+                  <caption>Kalender</caption>
+                  <submit>no</submit>
+                  <parent>event_list</parent>
+            </event_list_cal>
             <add_event>
                   <caption>Muuda s&amp;uuml;ndmust</caption>
             </add_event>
             <files>
-                  <caption>Failid</caption>
+                  <caption>Manused</caption>
             </files>
             <trans>
                   <caption>T&amp;otilde;lkimine</caption>
@@ -645,20 +679,6 @@
             <userdefined>
                   <caption>Andmed</caption>
             </userdefined>
-            <goals>
-                  <caption>Verstapostid</caption>
-                  <submit>no</submit>
-            </goals>
-            <goals_edit>
-                  <caption>Muuda</caption>
-                  <parent>goals</parent>
-                  <submit>no</submit>
-            </goals_edit>
-            <goals_gantt>
-                  <caption>Vaata</caption>
-                  <parent>goals</parent>
-                  <submit>no</submit>
-            </goals_gantt>
             <team>
                   <caption>Meeskond</caption>
                   <submit>no</submit>
@@ -669,15 +689,13 @@
             <risks>
                   <caption>Riskid</caption>
                   <parent>risks_t</parent>
+                  <submit>no</submit>
             </risks>
             <risks_eval>
                   <caption>Riskide hindamine</caption>
                   <parent>risks_t</parent>
+                  <submit>no</submit>
             </risks_eval>
-            <risks_res>
-                  <caption>Riskide hindamise tulemused</caption>
-                  <parent>risks_t</parent>
-            </risks_res>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -791,13 +809,23 @@
             <STRAT>
                   <value>17</value>
                   <clid>CL_PROJECT_STRAT_GOAL</clid>
-                  <caption>Strateegiline edutegur</caption>
+                  <caption>Eesm&amp;amp;auml;rk</caption>
             </STRAT>
             <RISK>
                   <value>18</value>
                   <clid>CL_PROJECT_RISK</clid>
                   <caption>Risk</caption>
             </RISK>
+            <STRAT_EVAL>
+                  <value>19</value>
+                  <clid>CL_PROJECT_STRAT_GOAL_EVAL_WS</clid>
+                  <caption>Eesm&amp;amp;auml;rkide hindamislaud</caption>
+            </STRAT_EVAL>
+            <RISK_EVAL>
+                  <value>20</value>
+                  <clid>CL_PROJECT_RISK_EVAL_WS</clid>
+                  <caption>Riskide hindamislaud</caption>
+            </RISK_EVAL>
       </reltypes>
       <layout>
             <parts>

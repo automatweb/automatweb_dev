@@ -10,6 +10,42 @@
             <caption>Omanik</caption>
       </property>
       <property>
+            <name>comment</name>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>30</cols>
+            <field>comment</field>
+            <table>objects</table>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>type</name>
+            <group>general</group>
+            <type>select</type>
+            <table>aw_project_risks</table>
+            <field>aw_type</field>
+            <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>identification_date</name>
+            <group>general</group>
+            <type>date_select</type>
+            <table>aw_project_risks</table>
+            <field>aw_identification_date</field>
+            <default>-1</default>
+            <caption>Tuvastamise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>last_eval_date</name>
+            <group>general</group>
+            <type>date_select</type>
+            <table>aw_project_risks</table>
+            <field>aw_last_eval_date</field>
+            <default>-1</default>
+            <caption>Viimase hindamise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
             <name>countermeasure</name>
             <group>general</group>
             <type>textarea</type>

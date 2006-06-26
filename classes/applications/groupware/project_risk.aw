@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_risk.aw,v 1.1 2006/06/16 11:23:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_risk.aw,v 1.2 2006/06/26 10:13:50 kristo Exp $
 // project_risk.aw - Projekti risk 
 /*
 
@@ -10,8 +10,21 @@
 	@property owner type=relpicker reltype=RELTYPE_OWNER table=aw_project_risks field=aw_owner
 	@caption Omanik
 
+	@property comment type=textarea rows=5 cols=30 field=comment table=objects
+	@caption Kirjeldus
+
+	@property type type=select table=aw_project_risks field=aw_type
+	@caption T&uuml;&uuml;p
+
+	@property identification_date type=date_select table=aw_project_risks field=aw_identification_date default=-1
+	@caption Tuvastamise kuup&auml;ev
+
+	@property last_eval_date type=date_select table=aw_project_risks field=aw_last_eval_date default=-1
+	@caption Viimase hindamise kuup&auml;ev
+
 	@property countermeasure type=textarea rows=5 cols=30 table=aw_project_risks field=aw_countermeasure
 	@caption Vastumeede
+
 
 @reltype OWNER value=1 clid=CL_CRM_PERSON
 @caption Omanik
@@ -25,6 +38,12 @@ class project_risk extends class_base
 			"tpldir" => "applications/groupware/project_risk",
 			"clid" => CL_PROJECT_RISK
 		));
+
+		$this->types = array(
+			"B" => t("&Auml;ririsk"),
+			"P" => t("Projekti risk"),
+			"S" => t("Etapi risk")
+		);
 	}
 
 	function get_property($arr)
@@ -40,6 +59,10 @@ class project_risk extends class_base
 					$prop["value"] = $cp->id();
 					$prop["options"][$cp->id()] = $cp->name();
 				}
+				break;
+
+			case "type":
+				$prop["options"] = array("" => t("--vali--")) + $this->types;
 				break;
 		};
 		return $retval;
@@ -66,6 +89,19 @@ class project_risk extends class_base
 		{
 			$this->db_query("CREATE TABLE aw_project_risks(aw_oid int primary key, aw_owner int, aw_countermeasure text)");
 			return true;
+		}
+
+		switch($f)
+		{
+			case "aw_type":
+			case "aw_identification_date":
+			case "aw_last_eval_date":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+				break;
 		}
 	}
 }

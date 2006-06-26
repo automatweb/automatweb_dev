@@ -66,6 +66,14 @@
             <caption>Link</caption>
       </property>
       <property>
+            <name>date_taken</name>
+            <group>general</group>
+            <type>date_select</type>
+            <table>images</table>
+            <field>aw_date_taken</field>
+            <caption>Pildistamise aeg</caption>
+      </property>
+      <property>
             <name>can_comment</name>
             <group>general</group>
             <type>checkbox</type>
