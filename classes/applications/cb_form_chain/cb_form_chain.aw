@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.28 2006/04/24 12:37:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.29 2006/06/26 12:00:58 dragut Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1557,7 +1557,11 @@ class cb_form_chain extends class_base
 				"name_prefix" => "f_".$wf->id()."_".$i,
 				"object_type_id" => $ot->id()
 			));
-			$htmlc = get_instance("cfg/htmlclient");
+		//	$htmlc = get_instance("cfg/htmlclient");
+			classload('cfg/htmlclient');
+			$htmlc = new htmlclient(array(
+				'template' => 'real_webform.tpl'
+			));
 			$htmlc->start_output();
 
 			foreach($els as $pn => $pd)
@@ -1593,6 +1597,7 @@ class cb_form_chain extends class_base
 						$pd["comment"] = "";
 					}
 				}
+				$pd['capt_ord'] = $pd['wf_capt_ord'];
 				$htmlc->add_property($pd);
 			}
 			$htmlc->finish_output();
