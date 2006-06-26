@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.5 2005/04/22 11:13:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.6 2006/06/26 10:26:22 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class objects extends core
 {
@@ -111,6 +111,14 @@ class objects extends core
 		extract($arr);
 		$tmp = obj($oid);
 		$tmp->delete();
+	}
+
+	/**
+		@attrib name=get_bd
+	**/
+	function get_bd()
+	{
+		die(aw_ini_get("site_basedir"));
 	}
 
 	/**  

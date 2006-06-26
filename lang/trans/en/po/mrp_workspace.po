@@ -9,6 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
 # classes/mrp/mrp_workspace.aw:class_852_help
 #: classes/mrp/mrp_workspace.aw:class_852_help
 msgid "Klassi Ressursihalduskeskkond help"
@@ -508,23 +509,17 @@ msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_chart_project_hilight_gotostart
 #: classes/mrp/mrp_workspace.aw:prop_chart_project_hilight_gotostart
-msgid ""
-"Omaduse Mine valitud projekti algusesse (chart_project_hilight_gotostart) "
-"caption"
+msgid "Omaduse Mine valitud projekti algusesse (chart_project_hilight_gotostart) caption"
 msgstr "Go to start of hilighted project"
 
 # classes/mrp/mrp_workspace.aw:prop_chart_project_hilight_gotostart_comment
 #: classes/mrp/mrp_workspace.aw:prop_chart_project_hilight_gotostart_comment
-msgid ""
-"Omaduse Mine valitud projekti algusesse (chart_project_hilight_gotostart) "
-"kommentaar"
+msgid "Omaduse Mine valitud projekti algusesse (chart_project_hilight_gotostart) kommentaar"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_chart_project_hilight_gotostart_help
 #: classes/mrp/mrp_workspace.aw:prop_chart_project_hilight_gotostart_help
-msgid ""
-"Omaduse Mine valitud projekti algusesse (chart_project_hilight_gotostart) "
-"help"
+msgid "Omaduse Mine valitud projekti algusesse (chart_project_hilight_gotostart) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_chart_search
@@ -787,14 +782,12 @@ msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_max_subcontractor_timediff
 #: classes/mrp/mrp_workspace.aw:prop_max_subcontractor_timediff
-msgid ""
-"Omaduse Allhanke suurim ajanihe (h) (max_subcontractor_timediff) caption"
+msgid "Omaduse Allhanke suurim ajanihe (h) (max_subcontractor_timediff) caption"
 msgstr "Subcontract maximum time-shift (h)"
 
 # classes/mrp/mrp_workspace.aw:prop_max_subcontractor_timediff_comment
 #: classes/mrp/mrp_workspace.aw:prop_max_subcontractor_timediff_comment
-msgid ""
-"Omaduse Allhanke suurim ajanihe (h) (max_subcontractor_timediff) kommentaar"
+msgid "Omaduse Allhanke suurim ajanihe (h) (max_subcontractor_timediff) kommentaar"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_max_subcontractor_timediff_help
@@ -843,107 +836,77 @@ msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_slope
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_slope
-msgid ""
-"Omaduse Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise "
-"suurenemise suunas (parameter_due_date_overdue_slope) caption"
+msgid "Omaduse Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise suurenemise suunas (parameter_due_date_overdue_slope) caption"
 msgstr "Projects past due date importance rise in relation to deadline"
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_slope_comment
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_slope_comment
-msgid ""
-"Omaduse Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise "
-"suurenemise suunas (parameter_due_date_overdue_slope) kommentaar"
+msgid "Omaduse Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise suurenemise suunas (parameter_due_date_overdue_slope) kommentaar"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_slope_help
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_slope_help
-msgid ""
-"Omaduse Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise "
-"suurenemise suunas (parameter_due_date_overdue_slope) help"
+msgid "Omaduse Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise suurenemise suunas (parameter_due_date_overdue_slope) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_intercept
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_intercept
-msgid ""
-"Omaduse Just tähtaja ületanud projekti tähtsus "
-"(parameter_due_date_overdue_intercept) caption"
+msgid "Omaduse Just tähtaja ületanud projekti tähtsus (parameter_due_date_overdue_intercept) caption"
 msgstr "Importance of orject just past deadline"
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_intercept_comment
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_intercept_comment
-msgid ""
-"Omaduse Just tähtaja ületanud projekti tähtsus "
-"(parameter_due_date_overdue_intercept) kommentaar"
+msgid "Omaduse Just tähtaja ületanud projekti tähtsus (parameter_due_date_overdue_intercept) kommentaar"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_intercept_help
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_intercept_help
-msgid ""
-"Omaduse Just tähtaja ületanud projekti tähtsus "
-"(parameter_due_date_overdue_intercept) help"
+msgid "Omaduse Just tähtaja ületanud projekti tähtsus (parameter_due_date_overdue_intercept) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_decay
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_decay
-msgid ""
-"Omaduse Projekti tähtsuse langus tähtaja kaugenemise suunas "
-"(parameter_due_date_decay) caption"
+msgid "Omaduse Projekti tähtsuse langus tähtaja kaugenemise suunas (parameter_due_date_decay) caption"
 msgstr "Decay of project importance as deadline is further away"
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_decay_comment
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_decay_comment
-msgid ""
-"Omaduse Projekti tähtsuse langus tähtaja kaugenemise suunas "
-"(parameter_due_date_decay) kommentaar"
+msgid "Omaduse Projekti tähtsuse langus tähtaja kaugenemise suunas (parameter_due_date_decay) kommentaar"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_decay_help
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_decay_help
-msgid ""
-"Omaduse Projekti tähtsuse langus tähtaja kaugenemise suunas "
-"(parameter_due_date_decay) help"
+msgid "Omaduse Projekti tähtsuse langus tähtaja kaugenemise suunas (parameter_due_date_decay) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_intercept
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_intercept
-msgid ""
-"Omaduse Planeerimise hetkega võrdse tähtajaga projekti tähtsus "
-"(parameter_due_date_intercept) caption"
+msgid "Omaduse Planeerimise hetkega võrdse tähtajaga projekti tähtsus (parameter_due_date_intercept) caption"
 msgstr "Importance of project whose deadline is the same as planning date"
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_intercept_comment
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_intercept_comment
-msgid ""
-"Omaduse Planeerimise hetkega võrdse tähtajaga projekti tähtsus "
-"(parameter_due_date_intercept) kommentaar"
+msgid "Omaduse Planeerimise hetkega võrdse tähtajaga projekti tähtsus (parameter_due_date_intercept) kommentaar"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_due_date_intercept_help
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_intercept_help
-msgid ""
-"Omaduse Planeerimise hetkega võrdse tähtajaga projekti tähtsus "
-"(parameter_due_date_intercept) help"
+msgid "Omaduse Planeerimise hetkega võrdse tähtajaga projekti tähtsus (parameter_due_date_intercept) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_priority_slope
 #: classes/mrp/mrp_workspace.aw:prop_parameter_priority_slope
-msgid ""
-"Omaduse Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. "
-"tähtajaga (parameter_priority_slope) caption"
+msgid "Omaduse Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga (parameter_priority_slope) caption"
 msgstr "Slope of relative values project priority and customer priority"
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_priority_slope_comment
 #: classes/mrp/mrp_workspace.aw:prop_parameter_priority_slope_comment
-msgid ""
-"Omaduse Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. "
-"tähtajaga (parameter_priority_slope) kommentaar"
+msgid "Omaduse Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga (parameter_priority_slope) kommentaar"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_priority_slope_help
 #: classes/mrp/mrp_workspace.aw:prop_parameter_priority_slope_help
-msgid ""
-"Omaduse Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. "
-"tähtajaga (parameter_priority_slope) help"
+msgid "Omaduse Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. tähtajaga (parameter_priority_slope) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_separator
@@ -977,42 +940,30 @@ msgid "Omaduse Ajaplaani ulatus (a) (parameter_schedule_length) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_min_planning_jobstart
-msgid ""
-"Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid töid ei "
-"planeerita (s) (parameter_min_planning_jobstart) caption"
+msgid "Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid töid ei planeerita (s) (parameter_min_planning_jobstart) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_min_planning_jobstart_comment
-msgid ""
-"Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid töid ei "
-"planeerita (s) (parameter_min_planning_jobstart) kommentaar"
+msgid "Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid töid ei planeerita (s) (parameter_min_planning_jobstart) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_min_planning_jobstart_help
-msgid ""
-"Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid töid ei "
-"planeerita (s) (parameter_min_planning_jobstart) help"
+msgid "Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid töid ei planeerita (s) (parameter_min_planning_jobstart) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_schedule_start
 #: classes/mrp/mrp_workspace.aw:prop_parameter_schedule_start
-msgid ""
-"Omaduse Ajaplaani alguse vahe planeerimise alguse hetkega (s) "
-"(parameter_schedule_start) caption"
+msgid "Omaduse Ajaplaani alguse vahe planeerimise alguse hetkega (s) (parameter_schedule_start) caption"
 msgstr "Schedule start difference with planning start (s)"
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_schedule_start_comment
 #: classes/mrp/mrp_workspace.aw:prop_parameter_schedule_start_comment
-msgid ""
-"Omaduse Ajaplaani alguse vahe planeerimise alguse hetkega (s) "
-"(parameter_schedule_start) kommentaar"
+msgid "Omaduse Ajaplaani alguse vahe planeerimise alguse hetkega (s) (parameter_schedule_start) kommentaar"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_schedule_start_help
 #: classes/mrp/mrp_workspace.aw:prop_parameter_schedule_start_help
-msgid ""
-"Omaduse Ajaplaani alguse vahe planeerimise alguse hetkega (s) "
-"(parameter_schedule_start) help"
+msgid "Omaduse Ajaplaani alguse vahe planeerimise alguse hetkega (s) (parameter_schedule_start) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_start_priority
@@ -1047,24 +998,17 @@ msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_timescale
 #: classes/mrp/mrp_workspace.aw:prop_parameter_timescale
-msgid ""
-"Omaduse Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga "
-"eraldatud. Esimene peaks alati 0 olema.) (parameter_timescale) caption"
-msgstr ""
-"Search table time scale defintion (start of divisions, separated by commas)"
+msgid "Omaduse Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.) (parameter_timescale) caption"
+msgstr "Search table time scale defintion (start of divisions, separated by commas)"
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_timescale_comment
 #: classes/mrp/mrp_workspace.aw:prop_parameter_timescale_comment
-msgid ""
-"Omaduse Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga "
-"eraldatud. Esimene peaks alati 0 olema.) (parameter_timescale) kommentaar"
+msgid "Omaduse Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.) (parameter_timescale) kommentaar"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_timescale_help
 #: classes/mrp/mrp_workspace.aw:prop_parameter_timescale_help
-msgid ""
-"Omaduse Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga "
-"eraldatud. Esimene peaks alati 0 olema.) (parameter_timescale) help"
+msgid "Omaduse Otsingutabeli ajaskaala definitsioon (Jaotuste algused, komaga eraldatud. Esimene peaks alati 0 olema.) (parameter_timescale) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_parameter_timescale_unit
@@ -1272,13 +1216,11 @@ msgid "Omaduse Arvatav jätkamisaeg (pj_minstart) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_remaining_length
-msgid ""
-"Omaduse Arvatav lõpetamiseks kuluv aeg (h) (pj_remaining_length) caption"
+msgid "Omaduse Arvatav lõpetamiseks kuluv aeg (h) (pj_remaining_length) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_remaining_length_comment
-msgid ""
-"Omaduse Arvatav lõpetamiseks kuluv aeg (h) (pj_remaining_length) kommentaar"
+msgid "Omaduse Arvatav lõpetamiseks kuluv aeg (h) (pj_remaining_length) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_remaining_length_help
@@ -1775,25 +1717,19 @@ msgid "Grupi Kõik töös olevad (grp_printer_in_progress) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_startable
-msgid ""
-"Grupi Kõik tööd mida oleks võimalik alustada (grp_printer_startable) pealkiri"
+msgid "Grupi Kõik tööd mida oleks võimalik alustada (grp_printer_startable) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_startable_help
-msgid ""
-"Grupi Kõik tööd mida oleks võimalik alustada (grp_printer_startable) help"
+msgid "Grupi Kõik tööd mida oleks võimalik alustada (grp_printer_startable) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable
-msgid ""
-"Grupi Tööd, mida ei ole veel võimalik alustada (grp_printer_notstartable) "
-"pealkiri"
+msgid "Grupi Tööd, mida ei ole veel võimalik alustada (grp_printer_notstartable) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable_help
-msgid ""
-"Grupi Tööd, mida ei ole veel võimalik alustada (grp_printer_notstartable) "
-"help"
+msgid "Grupi Tööd, mida ei ole veel võimalik alustada (grp_printer_notstartable) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_settings
@@ -2337,105 +2273,7 @@ msgstr ""
 msgid "Resurss"
 msgstr ""
 
-# classes/mrp/mrp_workspace.aw:prop_sp_due_date
-#~ msgid "Omaduse T&auml;htaeg (sp_due_date) caption"
-#~ msgstr "Due date"
+# classes/mrp/mrp_workspace.aw:group_general
+msgid "Omaduse Nimi (name) caption"
+msgstr "Name"
 
-# classes/mrp/mrp_workspace.aw:prop_chart_start_date
-#~ msgid "Omaduse N&auml;idatava perioodi algus (chart_start_date) caption"
-#~ msgstr "Visible period start"
-
-# classes/mrp/mrp_workspace.aw:prop_chart_submit
-#~ msgid "Omaduse N&auml;ita (chart_submit) caption"
-#~ msgstr "Display"
-
-# classes/mrp/mrp_workspace.aw:prop_parameter_min_planning_jobstart
-#~ msgid ""
-#~ "Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid t&ouml;id "
-#~ "ei planeerita (s) (parameter_min_planning_jobstart) caption"
-#~ msgstr "Time from planning start during which jobs are not planned"
-
-# classes/mrp/mrp_workspace.aw:prop_pj_title_job_data
-#~ msgid "Omaduse T&ouml;&ouml; andmed (pj_title_job_data) caption"
-#~ msgstr "Job data"
-
-# classes/mrp/mrp_workspace.aw:prop_pj_job_comment
-#~ msgid "Omaduse T&ouml;&ouml; kommentaar (pj_job_comment) caption"
-#~ msgstr "Job comment"
-
-# classes/mrp/mrp_workspace.aw:prop_pjp_sisu_varvid
-#~ msgid "Omaduse Sisu v&auml;rvid (pjp_sisu_varvid) caption"
-#~ msgstr "Content colours"
-
-# classes/mrp/mrp_workspace.aw:prop_pjp_sisu_varvid_notes
-#~ msgid "Omaduse Sisu v&auml;rvid Notes (pjp_sisu_varvid_notes) caption"
-#~ msgstr "Content colours notes"
-
-# classes/mrp/mrp_workspace.aw:prop_pjp_kaane_varvid
-#~ msgid "Omaduse Kaane v&auml;rvid (pjp_kaane_varvid) caption"
-#~ msgstr "Cover colours"
-
-# classes/mrp/mrp_workspace.aw:prop_pjp_kaane_varvid_notes
-#~ msgid "Omaduse Kaane v&auml;rvid Notes (pjp_kaane_varvid_notes) caption"
-#~ msgstr "cover colours notes"
-
-# classes/mrp/mrp_workspace.aw:prop_pjp_trykiarv
-#~ msgid "Omaduse Tr&uuml;kiarv (pjp_trykiarv) caption"
-#~ msgstr "Amount to print"
-
-# classes/mrp/mrp_workspace.aw:prop_pjp_trykise_ehitus
-#~ msgid "Omaduse Tr&uuml;kise ehitus (pjp_trykise_ehitus) caption"
-#~ msgstr "Buildup"
-
-# classes/mrp/mrp_workspace.aw:prop_pjp_naidis
-#~ msgid "Omaduse N&auml;idis (pjp_naidis) caption"
-#~ msgstr "Example"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_current
-#~ msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) pealkiri"
-#~ msgstr "Current jobs"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_done
-#~ msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) pealkiri"
-#~ msgstr "Done jobs"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_aborted
-#~ msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) pealkiri"
-#~ msgstr "Aborted jobs"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress
-#~ msgid ""
-#~ "Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) pealkiri"
-#~ msgstr "All jobs in progress"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_startable
-#~ msgid ""
-#~ "Grupi K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada "
-#~ "(grp_printer_startable) pealkiri"
-#~ msgstr "All jobs that can be started"
-
-# classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable
-#~ msgid ""
-#~ "Grupi T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada "
-#~ "(grp_printer_notstartable) pealkiri"
-#~ msgstr "All jobs that can not be started yet"
-
-# classes/mrp/mrp_workspace.aw:group_grp_settings_salesman
-#~ msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) pealkiri"
-#~ msgstr "Salesperson settings"
-
-#~ msgid "Sekund"
-#~ msgstr "Second"
-
-#~ msgid "T&ouml;&ouml;s / v&otilde;ib alustada"
-#~ msgstr "In progress / can be started"
-
-#~ msgid "Ei saa alustada"
-#~ msgstr "Can not be started"
-
-# classes/mrp/mrp_workspace.aw:prop_chart_project_hilight
-#~ msgid "Omaduse Valitud projekt (chart_project_hilight) caption"
-#~ msgstr "Selected project"
-
-#~ msgid "Kõik plaanisolevad"
-#~ msgstr "All planned"

@@ -1,13 +1,14 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 11 Apr 2005 13:01:02 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
 
 # classes/menu.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
@@ -298,14 +299,11 @@ msgid "Omaduse Vennad (sections) help"
 msgstr ""
 
 # classes/menu.aw:prop_images_from_menu
-msgid ""
-"Omaduse V&otilde;ta pildid men&uuml;&uuml; alt (images_from_menu) caption"
-msgstr ""
-"Images from menu"
+msgid "Omaduse V&otilde;ta pildid men&uuml;&uuml; alt (images_from_menu) caption"
+msgstr "Images from menu"
 
 # classes/menu.aw:prop_images_from_menu_comment
-msgid ""
-"Omaduse V&otilde;ta pildid men&uuml;&uuml; alt (images_from_menu) kommentaar"
+msgid "Omaduse V&otilde;ta pildid men&uuml;&uuml; alt (images_from_menu) kommentaar"
 msgstr ""
 
 # classes/menu.aw:prop_images_from_menu_help
@@ -421,21 +419,15 @@ msgid "Omaduse Seosehaldur (sa_manager) help"
 msgstr ""
 
 # classes/menu.aw:prop_seealso
-msgid ""
-"Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) "
-"caption"
-msgstr ""
-"Folders, where this folder is a "see also" folder"
+msgid "Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) caption"
+msgstr "Folders, where this folder is a &quot;see also&quot; folder"
 
 # classes/menu.aw:prop_seealso_comment
-msgid ""
-"Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) "
-"kommentaar"
+msgid "Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) kommentaar"
 msgstr ""
 
 # classes/menu.aw:prop_seealso_help
-msgid ""
-"Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) help"
+msgid "Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) help"
 msgstr ""
 
 # classes/menu.aw:prop_seealso_order
@@ -559,22 +551,15 @@ msgid "Omaduse Laius (width) help"
 msgstr ""
 
 # classes/menu.aw:prop_submenus_from_menu
-msgid ""
-"Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt "
-"(submenus_from_menu) caption"
-msgstr ""
-"Get subfolders from folder"
+msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) caption"
+msgstr "Get subfolders from folder"
 
 # classes/menu.aw:prop_submenus_from_menu_comment
-msgid ""
-"Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt "
-"(submenus_from_menu) kommentaar"
+msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) kommentaar"
 msgstr ""
 
 # classes/menu.aw:prop_submenus_from_menu_help
-msgid ""
-"Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt "
-"(submenus_from_menu) help"
+msgid "Omaduse V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt (submenus_from_menu) help"
 msgstr ""
 
 # classes/menu.aw:prop_show_layout
@@ -590,22 +575,15 @@ msgid "Omaduse Kasuta n&auml;itamiseks layouti (show_layout) help"
 msgstr ""
 
 # classes/menu.aw:prop_show_object_tree
-msgid ""
-"Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja "
-"(show_object_tree) caption"
-msgstr ""
-"Use object list for display"
+msgid "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja (show_object_tree) caption"
+msgstr "Use object list for display"
 
 # classes/menu.aw:prop_show_object_tree_comment
-msgid ""
-"Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja "
-"(show_object_tree) kommentaar"
+msgid "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja (show_object_tree) kommentaar"
 msgstr ""
 
 # classes/menu.aw:prop_show_object_tree_help
-msgid ""
-"Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja "
-"(show_object_tree) help"
+msgid "Omaduse Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja (show_object_tree) help"
 msgstr ""
 
 # classes/menu.aw:prop_panes
@@ -865,11 +843,8 @@ msgid "Seose objektide nimekiri (RELTYPE_OBJ_TREE) tekst"
 msgstr "object list"
 
 # classes/menu.aw:rel_RELTYPE_DOCS_FROM_MENU
-msgid ""
-"Seose v&otilde;ta dokumente men&uuml;&uuml; alt (RELTYPE_DOCS_FROM_MENU) "
-"tekst"
-msgstr ""
-"get documents from folder
+msgid "Seose v&otilde;ta dokumente men&uuml;&uuml; alt (RELTYPE_DOCS_FROM_MENU) tekst"
+msgstr "get documents from folde"
 
 # classes/menu.aw:rel_RELTYPE_PERIOD
 msgid "Seose v&otilde;ta dokumente perioodi alt (RELTYPE_PERIOD) tekst"
@@ -1094,3 +1069,8 @@ msgstr "incl. submenus"
 #: classes/menu.aw:1444
 msgid "Vali asukoht"
 msgstr "Select location"
+
+# classes/menu.aw:group_general
+msgid "Grupi &Uuml;ldine (general) pealkiri"
+msgstr "General"
+

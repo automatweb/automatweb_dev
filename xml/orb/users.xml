@@ -127,5 +127,19 @@
 			</function>
 		</action>
 
+		<action name="udata">
+			<function name="do_change_site">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_udata">
+			<function name="submit_do_change_site">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

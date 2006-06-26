@@ -170,4 +170,5 @@ $GLOBALS["TRANS"]["Salvesta kommentaar"] = "Save comment";
 $GLOBALS["TRANS"]["Oled kindel et soovid kommentaari salvestada?"] = "Are you sure you want to enter a comment?";
 $GLOBALS["TRANS"]["Logi v&auml;lja"] = "Log out";
 $GLOBALS["TRANS"]["Valitud projekt"] = "Selected project";
+$GLOBALS["TRANS"]["Omaduse Nimi (name) caption"] = "Name";
 ?>

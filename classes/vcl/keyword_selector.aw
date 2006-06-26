@@ -31,6 +31,10 @@ class keyword_selector extends class_base
 
 	function process_vcl_property($arr)
 	{
+		if (!is_object($arr["obj_inst"]) || !is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		$data = safe_array($arr["request"]["kw_sel_".$arr["prop"]["name"]]);
 		$filt = $arr["request"]["kw_sel_filt"];
 		if (empty($filt))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.43 2006/06/08 11:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.44 2006/06/26 10:26:22 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -379,13 +379,14 @@ class bug extends class_base
 					return PROP_FATAL_ERROR;
 				}
 
+				classload("core/date/date_calc");
 				$ev = date_edit::get_timestamp($arr["request"]["deadline"]);
 				if ($ev == $arr["obj_inst"]->prop("deadline"))
 				{
 					return PROP_OK;
 				}
 				else
-				if ($ev > 300 && $ev < time())
+				if ($ev > 300 && $ev < get_day_start())
 				{
 					$prop["error"] = t("T&auml;htaeg ei tohi olla minevikus!");
 					return PROP_FATAL_ERROR;
@@ -453,6 +454,8 @@ class bug extends class_base
 				break;
 				
 			case "bug_status":
+				$this->_ac_old_state = $arr["obj_inst"]->prop("bug_status");
+				$this->_ac_new_state = $prop["value"];
 				if($prop["value"] == BUG_STATUS_CLOSED && !$arr["new"])
 				{
 					if(aw_global_get("uid") != $arr["obj_inst"]->createdby())
@@ -484,6 +487,7 @@ class bug extends class_base
 				{
 					$com = sprintf(t("Tegelik tundide arv muudeti %s => %s"), $old, $prop["value"]);
 					$this->add_comments[] = $com;
+					$this->_acc_add_wh = $prop["value"] - $old;
 				}
 				break;
 
@@ -651,7 +655,7 @@ class bug extends class_base
 
 		if (trim($inf["desc"]) != "")
 		{
-			$this->_add_comment($bug, $inf["desc"]);
+			$this->_add_comment($bug, $inf["desc"], null, null, $inf["hours"]);
 		}
 	}
 
@@ -726,7 +730,7 @@ class bug extends class_base
 		return $comt;
 	}
 
-	function _add_comment($bug, $comment)
+	function _add_comment($bug, $comment, $old_state = null, $new_state = null, $add_wh = null)
 	{
 		if (!is_oid($bug->id()))
 		{
@@ -739,6 +743,9 @@ class bug extends class_base
 		$o->set_parent($bug->id());
 		$o->set_class_id(CL_BUG_COMMENT);
 		$o->set_comment(trim($comment));
+		$o->set_prop("prev_state", $old_state);
+		$o->set_prop("new_state", $new_state);
+		$o->set_prop("add_wh", $add_wh);
 		$o->save();
 
 		$bug->connect(array(
@@ -782,7 +789,7 @@ class bug extends class_base
 	{
 		if (is_array($this->add_comments) && count($this->add_comments))
 		{
-			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments));
+			$this->_add_comment($arr["obj_inst"], join("\n", $this->add_comments), $this->_ac_old_state, $this->_ac_new_state, $this->_acc_add_wh);
 		}
 	}
 	
@@ -806,10 +813,12 @@ class bug extends class_base
 		aw_disable_acl();
 		$bug = obj($arr["bugno"]);
 		$msg = trim($this->hexbin($arr["msg"]));
+		$ostat = $nstat = $bug->prop("bug_status");
 		if ($arr["set_fixed"] == 1)
 		{
 			$msg .= "\nStaatus muudeti ".$this->bug_statuses[$bug->prop("bug_status")]." => ".$this->bug_statuses[BUG_DONE]."\n";
 			$bug->set_prop("bug_status", BUG_DONE);
+			$nstat = BUG_DONE;
 			$save = true;
 		}
 
@@ -830,6 +839,7 @@ class bug extends class_base
 			$hrs = floor($hrs * 4.0+0.5)/4.0;
 			$msg .= sprintf(t("\nTegelik tundide arv muudeti %s => %s"), $bug->prop("num_hrs_real"), $bug->prop("num_hrs_real")+$hrs);
 			$bug->set_prop("num_hrs_real", $bug->prop("num_hrs_real") + $hrs);
+			$add_wh = $hrs;
 			$save = true;
 		}
 		if ($save)
@@ -837,7 +847,7 @@ class bug extends class_base
 			$bug->save();
 		}
 
-		$this->_add_comment($bug, $msg);
+		$this->_add_comment($bug, $msg, $ostat, $nstat, $add_wh);
 		aw_restore_acl();
 		die(sprintf(t("Added comment to bug %s"), $arr[bugno]));
 	}

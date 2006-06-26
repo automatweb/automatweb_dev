@@ -94,6 +94,13 @@
 			</function>
 		</action>
 
+		<action name="site_gzip">
+			<function name="site_gzip">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="do_test_dump" nologin="1">
 			<function name="do_test_dump">
 				<arguments>

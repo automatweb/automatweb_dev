@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.132 2006/06/25 22:01:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.133 2006/06/26 10:26:21 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -1383,6 +1383,10 @@ class doc extends class_base
 		$arr["obj_inst"]->set_no_modify(true);
 
 		$o = obj($arr["request"]["id"]);
+		if (!is_oid($arr["request"]["id"]))
+		{
+			return;
+		}
 		$o->load_version("");
 
 		$u = get_instance(CL_USER);

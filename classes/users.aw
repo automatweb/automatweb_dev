@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.164 2006/05/30 11:10:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.165 2006/06/26 10:26:21 kristo Exp $
 // users.aw - User Management
 
 if (!headers_sent())
@@ -1517,6 +1517,78 @@ class users extends users_user
 	function orb_logout($arr = array())
 	{
 		return parent::orb_logout($arr);
+	}
+
+	/**
+		@attrib name=udata
+	**/
+	function do_change_site($arr)
+	{
+		extract($arr);
+		$id = aw_global_get("uid");
+		if ($id == "")
+		{
+			return LC_USERS_NOT_LOGGED_IN;
+		}
+	
+		if (not($fid))
+		{
+			$udata = $this->get_user();
+			$jfar = $this->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
+			$jfs = "";
+			reset($jfar);
+			list($fid,$name) = each($jfar);
+		};
+
+		$u = $this->get_user();
+		$fs = unserialize($u["join_form_entry"]);
+
+		$t = get_instance("formgen/form");
+		return $t->gen_preview(array(
+			"id" => $fid, 
+			"entry_id" => $fs[$fid], 
+			"reforb" => $this->mk_reforb("save_udata", array("fid" => $fid,"user_id" => $id,"section" => aw_global_get("section")))
+		));
+	}
+
+	function get_jf_list($join_grp)
+	{
+		$ret = array();
+		$this->db_query("SELECT id,j_name  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN." ORDER BY forms.j_order");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["id"]] = $row["j_name"];
+		}
+		return $ret;
+	}
+
+	/** this saves the data entered in the form and flushes all necessary caches and group memberships 
+		@attrib name=save_udata params=name default="0"
+		@returns
+		@comment
+
+	**/
+	function submit_do_change_site($arr)
+	{
+		extract($arr);
+
+		$u = $this->get_user($user_id);
+		$fs = unserialize($u["join_form_entry"]);
+
+		$t = get_instance(CL_FORM);
+		$t->process_entry(array(
+			"id" => $fid,
+			"entry_id" => $fs[$fid]
+		));
+
+		$fs[$fid] = $t->entry_id;
+
+		// write the entry to the user table as well, in case it is a new entry
+		$this->save(array("uid" => $user_id, "join_form_entry" => aw_serialize($fs,SERIALIZE_NATIVE))); 
+
+		$this->update_dyn_user($user_id);
+
+		return $this->mk_my_orb("udata", array("fid" => $fid,"section" => $section));
 	}
 }
 ?>

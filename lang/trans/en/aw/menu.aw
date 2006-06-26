@@ -33,7 +33,7 @@ $GLOBALS["TRANS"]["Omaduse Perioodid, mille alt dokumendid võetakse (pers) capti
 $GLOBALS["TRANS"]["Omaduse K&otilde;ikide perioodide alt (all_pers) caption"] = "From all periods";
 $GLOBALS["TRANS"]["Omaduse Dokumente perioodist (docs_per_period) caption"] = "Documents from period";
 $GLOBALS["TRANS"]["Omaduse Seosehaldur (sa_manager) caption"] = "Connection manager";
-$GLOBALS["TRANS"]["Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) caption"] = "Folders, where this folder is a \"see also\" folder";
+$GLOBALS["TRANS"]["Omaduse Menüüd, mille all see menüü on \"vaata lisaks\" menüü (seealso) caption"] = "Folders, where this folder is a &quot;see also&quot; folder";
 $GLOBALS["TRANS"]["Omaduse Järjekorranumber (vaata lisaks) (seealso_order) caption"] = "Order (see also)";
 $GLOBALS["TRANS"]["Omaduse Menüü link (link) caption"] = "Folder link";
 $GLOBALS["TRANS"]["Omaduse Menüü tüüp (type) caption"] = "Folder type";
@@ -137,4 +137,5 @@ $GLOBALS["TRANS"]["k.a. alammen&uuml;&uuml;d"] = "incl. submenus";
 $GLOBALS["TRANS"]["Dokument"] = "Document";
 $GLOBALS["TRANS"]["ka alammen&uuml;&uuml;de juures"] = "incl. submenus";
 $GLOBALS["TRANS"]["Vali asukoht"] = "Select location";
+$GLOBALS["TRANS"]["Grupi &Uuml;ldine (general) pealkiri"] = "General";
 ?>

@@ -40,6 +40,13 @@
 			</function>
 		</action>
 
+		<action name="get_bd">
+			<function name="get_bd">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="aw_ini_get_mult" nologin="1">
 			<function name="aw_ini_get_mult">
 				<arguments>
