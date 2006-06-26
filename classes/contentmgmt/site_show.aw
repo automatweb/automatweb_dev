@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.194 2006/06/26 09:28:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.195 2006/06/26 14:26:03 kristo Exp $
 
 /*
 
@@ -1627,6 +1627,7 @@ class site_show extends class_base
 
 		foreach($lar as $row)
 		{
+			$num++;
 			$grp = $row["meta"]["lang_group"];
 			$grp_spec = $grp;
 			if ($grp != "")
@@ -1664,6 +1665,11 @@ class site_show extends class_base
 			));
 			if ($row["id"] == $lang_id)
 			{
+				if ($num == count($lar) && $this->is_template("SEL_LANG".$grp_spec."_END"))
+				{
+					$l[$grp].=$this->parse("SEL_LANG".$grp_spec."_END");
+				}
+				else
 				if ($this->is_template("SEL_LANG".$grp_spec."_BEGIN") && $l[$grp] == "")
 				{
 					$l[$grp].=$this->parse("SEL_LANG".$grp_spec."_BEGIN");
@@ -1680,6 +1686,11 @@ class site_show extends class_base
 			}
 			else
 			{
+				if ($num == count($lar) && $this->is_template("LANG".$grp_spec."_END"))
+				{
+					$l[$grp].=$this->parse("LANG".$grp_spec."_END");
+				}
+				else
 				if ($this->is_template("LANG".$grp_spec."_BEGIN") && $l == "")
 				{
 					$l[$grp].=$this->parse("LANG".$grp_spec."_BEGIN");
