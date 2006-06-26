@@ -1920,7 +1920,7 @@ class user extends class_base
 	{
 		if(!is_valid("uid", $uid))
 		{
-			return array();
+			return new object_list();
 		}
 		$groups_list = array();
 		$tmp = users::get_oid_for_uid($uid);
