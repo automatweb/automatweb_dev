@@ -631,7 +631,7 @@ class relationmgr extends aw_template
 				"url" => "javascript:awdelete()",
 			));
 		}
-		$tb->add_cdata("[[ Seostehaldur V3 ]]");
+		//$tb->add_cdata("[[ Seostehaldur V3 ]]");
 		return $tb;
 	}
 	
