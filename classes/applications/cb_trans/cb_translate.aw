@@ -926,7 +926,7 @@ class cb_translate extends aw_template
 		$this->read_template("show_changes.tpl");
 		aw_global_set("output_charset", "utf-8");
 		$this->sub_merge = 1;
-		$data = unserialize(core::get_cval("trans_changes"));
+		$data = unserialize(stripslashes(core::get_cval("trans_changes")));
 		$langs_info = aw_ini_get("languages.list");
 
 		foreach($data as $change)
@@ -1008,7 +1008,7 @@ class cb_translate extends aw_template
 	{
 		$this->read_template("commit.tpl");
 		$this->sub_merge = 1;
-		$arr = unserialize(core::get_cval("trans_applyed"));
+		$arr = unserialize(stripslashes(core::get_cval("trans_applyed")));
 		if(is_array($arr) && count($arr) > 0)
 		{
 			foreach($arr as $file)
@@ -1051,7 +1051,7 @@ class cb_translate extends aw_template
 	{
 		$t=get_instance("core/trans/pot_scanner");
 
-		$data = unserialize(core::get_cval("trans_changes"));
+		$data = unserialize(stripslashes(core::get_cval("trans_changes")));
 		foreach($data as $change)
 		{
 			$aw_file = aw_ini_get("basedir")."/lang/trans/".$change["lang"]."/aw/".basename($change["file"], ".po").".aw";
@@ -1067,11 +1067,11 @@ class cb_translate extends aw_template
 			$t->_make_aw_from_po(aw_ini_get("basedir")."/lang/trans/".$lang[$file]."/po/".basename($file, ".aw").".po",$file);
 			
 			// reads peviously made changes from conf
-			$not_applyed = unserialize(core::get_cval("trans_applyed"));
+			$not_applyed = unserialize(stripslashes(core::get_cval("trans_applyed")));
 			$not_applyed = array_merge($not_applyed, $files_to_commit);
 			$not_applyed = array_unique($not_applyed);
 			// writes into config, writes files to be commited
-			core::set_cval("trans_applyed", serialize($not_applyed));
+			core::set_cval("trans_applyed", serialize(addslashes($not_applyed)));
 			core::set_cval("trans_changes", "");
 		}
 		return $this->mk_my_orb("", array("action" => "commit_changes"));
@@ -1470,7 +1470,7 @@ class cb_translate extends aw_template
 				$pot_scanner->write_po_file(array("location" => $file_location, "contents" => $file));
 
 				// reads peviously made changes from conf
-				$not_applyed = unserialize(core::get_cval("trans_changes"));
+				$not_applyed = unserialize(stripslashes(core::get_cval("trans_changes")));
 				
 				// checks if changes have to be added or overwritten
 				foreach($change_log as $new_change)
@@ -1490,7 +1490,8 @@ class cb_translate extends aw_template
 					}
 				}
 				// writes into config
-				core::set_cval("trans_changes", serialize($not_applyed));
+				$to_be_applyed = addslashes(serialize($not_applyed));
+				core::set_cval("trans_changes", $to_be_applyed);
 				//core::set_cval("trans_changes", "");
 			}
 		}
