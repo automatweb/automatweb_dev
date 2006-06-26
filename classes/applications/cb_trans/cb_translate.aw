@@ -16,6 +16,7 @@ class cb_translate extends aw_template
 	/**
 		@attrib name=editor
 		@param clid required
+		@param group optional
 	**/
 	function editor($arr)
 	{
@@ -224,6 +225,9 @@ class cb_translate extends aw_template
 				}
 			}
 		}
+
+		$editor_orb_name = strlen($arr["group"])?"groupedit":"classeditor";
+
 		$this->vars(array(
 			"commit_link" => html::href(array(
 				"url" => $this->mk_my_orb("commit_changes"),
@@ -241,9 +245,9 @@ class cb_translate extends aw_template
 			"editor_content_tree" => $tree->finalize_tree(),
 			"browser_caption" => t("AW tõlkimine"),
 			"toolbar" => $tb->get_toolbar(),
-			"editor_content" => $this->mk_my_orb("classeditor",array(
+			"editor_content" => $this->mk_my_orb($editor_orb_name ,array(
 				"clid" => trim($arr["clid"]),
-				//"grpid" => $arr[""],
+				"grpid" => $arr["group"],
 			)),
 		));
 		return $this->parse();

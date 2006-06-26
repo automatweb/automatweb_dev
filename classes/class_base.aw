@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.486 2006/06/16 11:23:14 kristo Exp $
+// $Id: class_base.aw,v 2.487 2006/06/26 11:25:52 tarvo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -573,7 +573,11 @@ class class_base extends aw_template
 		$translate_url = html::href(array(
 			"url" => "javascript:void(0);",
 			"caption" => t("Tõlgi"),
-			"onClick" => "window.open(\"".$this->mk_my_orb("editor",array("clid" => $this->clid),"cb_translate")."\",\"awtrans\",\"width=600,height=400,resizable=1,scrollbars=1\");",
+			"onClick" => "window.open(\"".$this->mk_my_orb("editor",array(
+				"clid" => $this->clid,
+				"group" => $args["group"],
+			),
+			"cb_translate")."\",\"awtrans\",\"width=600,height=400,resizable=1,scrollbars=1\");",
 		));
 
 		$add_txt = "";
@@ -585,7 +589,12 @@ class class_base extends aw_template
 		}
 		
 		$cli->configure(array(
-			"help_url" => $this->mk_my_orb("browser",array("clid" => $this->clid),"help"),
+			"help_url" => $this->mk_my_orb("browser",array(
+				"clid" => $this->clid,
+				"group" => $args["group"],
+			),
+			"help"),
+
 			"translate_url" => aw_ini_get("class_base.show_trans")?$translate_url." | ":"",
 			"more_help_text" => t("Rohkem infot"),
 			"close_help_text" => t("Peida ära"),

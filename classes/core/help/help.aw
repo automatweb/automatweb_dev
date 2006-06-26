@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.6 2006/03/30 13:32:02 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.7 2006/06/26 11:25:52 tarvo Exp $
 
 // more ideas --- I might want to keep the help open when switching between tabs... for this I need to 
 // set a cookie
@@ -14,6 +14,7 @@ class help extends aw_template
 	/** shows a help browser for a class
 		@attrib name=browser default="1"
 		@param clid required
+		@param group optional
 	**/
 	function browser($arr)
 	{
@@ -85,7 +86,7 @@ class help extends aw_template
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree (array (
 			"type" => TREE_DHTML,
-			"open_path" => array("fld_1","fld_33"),
+			"open_path" => "", // here should be a dynamically generated path which the tree should open automatically!!
 			"root_name" => "AW KLASSIDE ABI",
 			"url_target" => "helpcontent",
 			"get_branch_func" => $this->mk_my_orb("get_node",array("clid" => $arr["clid"], "parent" => " ")),
@@ -173,13 +174,17 @@ class help extends aw_template
 			}
 		}
 
+		$help_orb_name = strlen($arr["group"])?"grouphelp":"classhelp";
 		$this->vars(array(
 			// do not use the thing passed in from the URL
 			"help_caption" => $path_string, //sprintf(t("Klassi '%s' abiinfo"),$classdat["name"]),
 			"help_content_tree" => $tree->finalize_tree(),
 			"retrieve_help_func" => $this->mk_my_orb("grouphelp",array(),"help"),
 			"browser_caption" => t("AW abiinfo"),
-			"help_content" => $this->mk_my_orb("classhelp", array("clid" => $arr["clid"])),
+			"help_content" => $this->mk_my_orb($help_orb_name, array(
+				"clid" => $arr["clid"],
+				"grpid" => $arr["group"],
+			)),
 		));
 		return $this->parse();
 	}

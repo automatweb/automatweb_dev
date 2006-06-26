@@ -5,6 +5,7 @@
 			<function name="editor">
 				<arguments>
 					<required name="clid" />
+					<optional name="group" />
 				</arguments>
 			</function>
 		</action>
