@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.192 2006/06/05 11:55:20 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.193 2006/06/26 08:56:27 tarvo Exp $
 
 /*
 
@@ -36,6 +36,9 @@ class site_show extends class_base
 		$this->cache = get_instance("cache");
 		$this->image = get_instance(CL_IMAGE);
 		$this->doc = get_instance(CL_DOCUMENT);
+		post_message(MSG_ON_SITE_SHOW_IMPORT_VARS, array(
+			"inst" => &$this
+		));
 	}
 
 	////
@@ -156,8 +159,6 @@ class site_show extends class_base
 
 		$p = get_instance("period");
 		$p->on_site_show_import_vars(array("inst" => &$this));
-		$s = get_instance(CL_SITE_STYLES);
-		$s->on_site_show_import_vars(array("inst" => &$this));
 	}
 	
 	function _get_sel_section($sect)

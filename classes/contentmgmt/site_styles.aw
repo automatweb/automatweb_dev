@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.8 2006/06/20 11:33:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.9 2006/06/26 08:56:27 tarvo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 
@@ -13,6 +13,8 @@
 // Change styles with url argument /?set_style_(alias)=val where (alias) means object's alias 
 // and val is one of: prev, next, last, random or numeric value representing style order num.
 /*
+
+HANDLE_MESSAGE(MSG_ON_SITE_SHOW_IMPORT_VARS, on_site_show_import_vars);
 
 @classinfo syslog_type=ST_SITE_STYLES no_comment=1
 
@@ -362,13 +364,13 @@ class site_styles extends class_base
 	**/
 	function on_site_show_import_vars($arr)
 	{
-
 		// this call to _select_next_style should be moved if necessary. it selects next style.
 		$this->_select_next_style();
 		
 		$ol = new object_list(array(
 			"class_id" => CL_SITE_STYLES,
 			"status" => STAT_ACTIVE,
+			"lang_id" => "%",
 		));
 		$ar = $ol->arr();
 		$ss = obj(key($ar));
