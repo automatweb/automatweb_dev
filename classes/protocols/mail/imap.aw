@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.37 2006/06/20 10:52:06 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.38 2006/06/26 08:03:34 tarvo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. õigemini ta tagastab need boxid kus seike kiri sees
@@ -263,7 +263,6 @@ class imap extends class_base
 	**/
 	function get_folder_contents($arr)
 	{
-		
 		$cache = get_instance("cache");
 		$mboxinf = imap_mailboxmsginfo($this->mbox);
 		$ovr = $this->_get_overview();
@@ -276,7 +275,7 @@ class imap extends class_base
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
 		// mailbox has changed, reload from server
-		if ($last_check != $new_check || true)
+		if ($last_check != $new_check)
 		{
 			// update ovr
 			$ovr[$this->mboxspec] = $new_check;
@@ -291,12 +290,19 @@ class imap extends class_base
 			$mbox_over["modified"] = $fmod;
 			$mbox_over["count"] = $count;
 			$fo = $this->_imap_sort();
-
 			foreach($fo as $k=>$v)
 			{
 				if($k >= ($arr["from"]-1) && $k < $arr["to"])
 				{
 					$fop[$k] = $v;
+				}
+			}
+			foreach(array_keys($mbox_over["contents"]) as $key=>$val)
+			{
+				if(!in_array($val, $fop))
+				{
+					// removes deleted messages from cache
+					unset($mbox_over["contents"][$val]);
 				}
 			}
 			$to_fetch = array_diff($fop,array_keys($mbox_over["contents"]));
@@ -480,6 +486,7 @@ class imap extends class_base
 			}
 			imap_expunge($this->mbox);
 		}
+
 	}
 	
 	/**

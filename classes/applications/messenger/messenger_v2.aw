@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.25 2006/06/20 16:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.26 2006/06/26 08:03:34 tarvo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, on_user_login)
@@ -1320,11 +1320,13 @@ class messenger_v2 extends class_base
 	function delete_messages($arr)
 	{
 		$marked = is_array($arr["mark"]) && sizeof($arr["mark"]) > 0 ? $arr["mark"] : false;
-
 		if (is_array($marked))
 		{
 			$this->_connect_server(array(
 				"msgr_id" => $arr["id"],
+			));
+			$this->drv_inst->change_folder(array(
+				"use_mailbox" => $arr["mailbox"],
 			));
 			$this->drv_inst->delete_msgs_from_folder(array_keys($marked));
 		};
@@ -1346,7 +1348,6 @@ class messenger_v2 extends class_base
 	function delete_search_results($arr)
 	{
 		$marked = is_array($arr["mark"]) && sizeof($arr["mark"]) > 0 ? $arr["mark"] : false;
-
 		if (is_array($marked))
 		{
 			$this->_connect_server(array(
