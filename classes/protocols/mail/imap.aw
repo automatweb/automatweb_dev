@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.38 2006/06/26 08:03:34 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.39 2006/06/26 10:52:26 tarvo Exp $
 // imap.aw - IMAP login 
 /*
 	peaks miskise imap_listscan varjandi ka leiutama.. ese oskab vist kirju otsida kiirelt.. õigemini ta tagastab need boxid kus seike kiri sees
@@ -275,7 +275,7 @@ class imap extends class_base
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
 		// mailbox has changed, reload from server
-		if ($last_check != $new_check)
+		if ($last_check != $new_check || true)
 		{
 			// update ovr
 			$ovr[$this->mboxspec] = $new_check;
