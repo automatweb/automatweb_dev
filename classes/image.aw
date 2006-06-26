@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.169 2006/06/20 14:23:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.170 2006/06/26 00:03:42 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -29,6 +29,9 @@
 
 	@property link type=textbox table=images field=link
 	@caption Link
+
+	@property date_taken type=date_select table=images field=aw_date_taken 
+	@caption Pildistamise aeg
 
 	@property can_comment type=checkbox table=objects field=flags method=bitmask ch_value=1
 	@caption K&otilde;ikjal kommenteeritav
@@ -860,6 +863,13 @@ class image extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "date_taken":
+				if (!is_oid($arr["obj_inst"]->id()) || $prop["value"] < 100)
+				{
+					$prop["value"] = -1;
+				}
+				break;
+
 			case "newwindow":
 			case "no_print":
 				$retval = PROP_IGNORE;
@@ -1025,6 +1035,14 @@ class image extends class_base
 					));
 				
 					move_uploaded_file($src_file, $final_name);
+
+					if (function_exists("exif_read_data"))
+					{
+						$dat = exif_read_data($final_name);
+						$dt = $dat["DateTime"];
+						$dt = strptime($dt, "%Y:%m:%d %H:%M:%S");
+						$this->_set_dt = $dt;
+					}
 					// get rid of the old file
 					if (file_exists($oldfile))
 					{
@@ -1040,6 +1058,15 @@ class image extends class_base
 				{
 					$retval = PROP_IGNORE;
 				};
+				break;
+
+			case "date_taken":
+				if ($this->_set_dt)
+				{
+					$prop["value"] = $this->_set_dt;
+					$arr["obj_inst"]->set_prop("date_taken", $prop["value"]);
+					return PROP_OK;
+				}
 				break;
 
 			case "file2_del":
@@ -1272,6 +1299,12 @@ class image extends class_base
 			$this->resize_picture($arr);
 		}
 		
+		if ($this->_set_dt)
+		{
+			$arr["obj_inst"]->set_prop("date_taken", $this->_set_dt);
+			$arr["obj_inst"]->save();
+		}
+
 		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
 	}
 
@@ -1853,6 +1886,19 @@ class image extends class_base
 	{
 		$s = $this->parse_alias(array("alias" => array("target" => $arr["id"])));
 		die($s["replacement"]);
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		switch($f)
+		{
+			case "aw_date_taken":
+				$this->db_add_col($t, array(
+					"name" => $f,
+					"type" => "int"
+				));
+				return true;
+		}
 	}
 }
 ?>
