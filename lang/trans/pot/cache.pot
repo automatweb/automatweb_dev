@@ -14,11 +14,7 @@ msgstr ""
 msgid "cache::file_set_pt(%s, %s, %s): could not open file %s for writing!"
 msgstr ""
 
-#: classes/cache.aw:729
-msgid "cache::file_clear_pt_oid(%s, %s): could not rename %s to %s!"
-msgstr ""
-
-#: classes/cache.aw:802
+#: classes/cache.aw:796
 msgid "cache::file_clear_pt_sub(%s, %s): could not rename %s to %s!"
 msgstr ""
 

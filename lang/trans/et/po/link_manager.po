@@ -17,6 +17,18 @@ msgstr ""
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/link_manager.aw:147
+#: classes/admin/link_manager.aw:150
 msgid "Vali see"
+msgstr ""
+
+#: classes/admin/link_manager.aw:186
+msgid "Nimi"
+msgstr ""
+
+#: classes/admin/link_manager.aw:192
+msgid "URL"
+msgstr ""
+
+#: classes/admin/link_manager.aw:199
+msgid "Otsi"
 msgstr ""

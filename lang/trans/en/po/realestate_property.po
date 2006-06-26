@@ -15,7 +15,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
-msgstr ""
+msgstr "Need for translation"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr ""
+msgstr "Translation verified"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
@@ -99,7 +99,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_is_visible
 msgid "Omaduse Nähtav (is_visible) caption"
-msgstr "Is visible"
+msgstr "Visible"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_is_visible_comment
 msgid "Omaduse Nähtav (is_visible) kommentaar"
@@ -111,7 +111,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_is_archived
 msgid "Omaduse Arhiveeritud (is_archived) caption"
-msgstr "Is archived"
+msgstr "Archived"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_is_archived_comment
 msgid "Omaduse Arhiveeritud (is_archived) kommentaar"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title1
 msgid "Omaduse Objekti aadress (title1) caption"
-msgstr "Object address"
+msgstr "Address of object"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title1_comment
 msgid "Omaduse Objekti aadress (title1) kommentaar"
@@ -219,7 +219,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_down_payment
 msgid "Omaduse Ettemaks (transaction_down_payment) caption"
-msgstr "Down payment"
+msgstr "Forepayment"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_down_payment_comment
 msgid "Omaduse Ettemaks (transaction_down_payment) kommentaar"
@@ -255,7 +255,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title3
 msgid "Omaduse M&uuml;&uuml;ja andmed (title3) caption"
-msgstr "Sellers data"
+msgstr "Data of seller"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title3_comment
 msgid "Omaduse M&uuml;&uuml;ja andmed (title3) kommentaar"
@@ -303,7 +303,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title31
 msgid "Omaduse Ostja andmed (title31) caption"
-msgstr "Buyers data"
+msgstr "Data of purchaser"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title31_comment
 msgid "Omaduse Ostja andmed (title31) kommentaar"
@@ -315,7 +315,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_buyer_search
 msgid "Omaduse Ostja (buyer_search) caption"
-msgstr "Buyer"
+msgstr "Purchaser"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_buyer_search_comment
 msgid "Omaduse Ostja (buyer_search) kommentaar"
@@ -387,7 +387,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title4
 msgid "Omaduse Lisaandmed (title4) caption"
-msgstr "Additional data"
+msgstr "Additional information"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title4_comment
 msgid "Omaduse Lisaandmed (title4) kommentaar"
@@ -399,7 +399,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_realestate_agent1
 msgid "Omaduse Maakler 1 (realestate_agent1) caption"
-msgstr "Agent 1"
+msgstr "Real estate agent 1"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_realestate_agent1_comment
 msgid "Omaduse Maakler 1 (realestate_agent1) kommentaar"
@@ -411,7 +411,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_realestate_agent2
 msgid "Omaduse Maakler 2 (realestate_agent2) caption"
-msgstr "Agent 2"
+msgstr "Real estate agent 2"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_realestate_agent2_comment
 msgid "Omaduse Maakler 2 (realestate_agent2) kommentaar"
@@ -459,7 +459,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_on_webpage
 msgid "Omaduse N&auml;ita firma kodulehel (show_on_webpage) caption"
-msgstr "Show on company website"
+msgstr "Show on company webpage"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_on_webpage_comment
 msgid "Omaduse N&auml;ita firma kodulehel (show_on_webpage) kommentaar"
@@ -472,7 +472,7 @@ msgstr ""
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_house_number_on_web
 msgid ""
 "Omaduse N&auml;ita majanumbrit kodulehel (show_house_number_on_web) caption"
-msgstr "Show house number on the website"
+msgstr "Show house number on the webpage"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_show_house_number_on_web_comment
 msgid ""
@@ -527,7 +527,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_expire
 msgid "Omaduse aegub (expire) caption"
-msgstr ""
+msgstr "Expires"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_expire_comment
 msgid "Omaduse aegub (expire) kommentaar"
@@ -539,7 +539,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_et
 msgid "Omaduse Lisainfo EST (additional_info_et) caption"
-msgstr "Additional info EST"
+msgstr "Additional information EST"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_et_comment
 msgid "Omaduse Lisainfo EST (additional_info_et) kommentaar"
@@ -551,7 +551,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_en
 msgid "Omaduse Lisainfo ENG (additional_info_en) caption"
-msgstr "Additional info ENG"
+msgstr "Additional information ENG"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_en_comment
 msgid "Omaduse Lisainfo ENG (additional_info_en) kommentaar"
@@ -563,7 +563,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_fi
 msgid "Omaduse Lisainfo FIN (additional_info_fi) caption"
-msgstr "Additional info FIN"
+msgstr "Additional information FIN"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_fi_comment
 msgid "Omaduse Lisainfo FIN (additional_info_fi) kommentaar"
@@ -575,7 +575,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_ru
 msgid "Omaduse Lisainfo RUS (additional_info_ru) caption"
-msgstr "Additional info RUS"
+msgstr "Additional information RUS"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_ru_comment
 msgid "Omaduse Lisainfo RUS (additional_info_ru) kommentaar"
@@ -725,7 +725,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_main
 msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) pealkiri"
-msgstr "General info and location"
+msgstr "General information and location"
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_main_help
 msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) help"
@@ -733,7 +733,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_detailed
 msgid "Grupi Kirjeldus (grp_detailed) pealkiri"
-msgstr "Description"
+msgstr "Group description"
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_detailed_help
 msgid "Grupi Kirjeldus (grp_detailed) help"
@@ -741,7 +741,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_additional_info
 msgid "Grupi Lisainfo (grp_additional_info) pealkiri"
-msgstr "Additional info"
+msgstr "Group additional information"
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_additional_info_help
 msgid "Grupi Lisainfo (grp_additional_info) help"
@@ -749,7 +749,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_photos
 msgid "Grupi Pildid (grp_photos) pealkiri"
-msgstr "Pictures"
+msgstr "Group photos"
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_photos_help
 msgid "Grupi Pildid (grp_photos) help"
@@ -757,7 +757,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_map
 msgid "Grupi Kaart (grp_map) pealkiri"
-msgstr "Map"
+msgstr "Group map"
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_map_help
 msgid "Grupi Kaart (grp_map) help"
@@ -798,7 +798,7 @@ msgstr ""
 #: classes/applications/realestate_management/realestate_property.aw:365
 msgid ""
 "Kinnisvarahalduskeskkond objekti jaoks määramata või puudub juurdepääsuõigus"
-msgstr ""
+msgstr "For the object the real estate administration environment is not definited or access is denied"
 
 #: classes/applications/realestate_management/realestate_property.aw:444
 #: classes/applications/realestate_management/realestate_property.aw:468
@@ -808,7 +808,7 @@ msgstr "--select--"
 #: classes/applications/realestate_management/realestate_property.aw:498
 #: classes/applications/realestate_management/realestate_property.aw:624
 msgid "Keeleobjekti ei leitud."
-msgstr ""
+msgstr "Linguistic object was not found"
 
 #: classes/applications/realestate_management/realestate_property.aw:542
 msgid "Vali asukoht kaardil"
@@ -834,7 +834,7 @@ msgstr "Personal code is not valid by Estonian standards"
 msgid ""
 "Isikukoodis leiduv sünnikuupäevateave ei vasta ühelegi kuupäevale Gregoriuse "
 "kalendris."
-msgstr ""
+msgstr "The information about birth date in personal code is not square with Gregorius calendar"
 
 #: classes/applications/realestate_management/realestate_property.aw:901
 msgid "Nimi"
@@ -888,24 +888,26 @@ msgstr "Save changes"
 msgid ""
 "Uue kinnisvaraobjekti loomisel vaikimisi riik defineerimata. Tekitati "
 "objekt, millel puudub aadress."
-msgstr ""
+msgstr "Creating a new real estate object the country is undefined by default. "
+"An object without addess has been created."
 
 #: classes/applications/realestate_management/realestate_property.aw:1093
 msgid ""
 "Uue kinnisvaraobjekti loomisel kinnsvarahalduskeskkond defineerimata. "
 "Tekitati orbobjekt."
-msgstr ""
+msgstr "Creating a new real estate object the real estate administration environment is undefined. "
+"An orphan object has been created."
 
 #: classes/applications/realestate_management/realestate_property.aw:1102
 msgid ""
 "Uue kinnisvaraobjekti loomisel ei antud argumendina kaasa loodud obj. id-d."
-msgstr ""
+msgstr "Creating a new real estate object the object´s id was not included as an argument."
 
 #: classes/applications/realestate_management/realestate_property.aw:1403
 msgid ""
 "Kinnisvaraobjektil halduskeskkond defineerimata või puudub juurdepääsuõigus "
 "(oid: %s)."
-msgstr ""
+msgstr "Real estate object´s administration environment is undefined or access is denied."
 
 #: classes/applications/realestate_management/realestate_property.aw:1659
 msgid "Lisaandmed"
@@ -913,15 +915,15 @@ msgstr "Additional data"
 
 #: classes/applications/realestate_management/realestate_property.aw:1705
 msgid "Objekti id pole aw id v6i puudub juurdep22su6igus."
-msgstr ""
+msgstr "Object´s id is not aw id or access is denied."
 
 #: classes/applications/realestate_management/realestate_property.aw:1713
 msgid "Objekti atribuute ei 6nnestunud lugeda."
-msgstr ""
+msgstr "Attributes of object was not able to read."
 
 #: classes/applications/realestate_management/realestate_property.aw:1723
 msgid "Objekti klassi m22ramine eba6nnestus."
-msgstr ""
+msgstr "Object´s class determination didn´t succeed."
 
 #: classes/applications/realestate_management/realestate_property.aw:1896
 msgid "Haldusjaotuse vaste 1 kinnisvarahalduskeskkonnas defineerimata"
@@ -958,7 +960,7 @@ msgstr "Apartment"
 #: classes/applications/realestate_management/realestate_property.aw:2107
 #: classes/applications/realestate_management/realestate_property.aw:2203
 msgid "Maakleri pilt"
-msgstr "Picture of agent"
+msgstr "Photo of agent"
 
 #: classes/applications/realestate_management/realestate_property.aw:2118
 #: classes/applications/realestate_management/realestate_property.aw:2215
@@ -1003,15 +1005,15 @@ msgstr "Sellers phone"
 
 #: classes/applications/realestate_management/realestate_property.aw:2343
 msgid "Ostja"
-msgstr "Buyer"
+msgstr "Purchaser"
 
 #: classes/applications/realestate_management/realestate_property.aw:2353
 msgid "Ostja e-mail"
-msgstr "Buyers e-mail"
+msgstr "Purchaser´s e-mail"
 
 #: classes/applications/realestate_management/realestate_property.aw:2363
 msgid "Ostja telefon"
-msgstr "Buyers phone"
+msgstr "Purchaser´s phone"
 
 #: classes/applications/realestate_management/realestate_property.aw:2422
 msgid "Attempted map data save by unauthorized . (id: %s)"

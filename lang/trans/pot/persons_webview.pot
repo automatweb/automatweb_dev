@@ -51,15 +51,15 @@ msgid "Omaduse Isikute järjestamisprintsiip (persons_principe) help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_department_grouping
-msgid "Omaduse Osakondade grupeerimisprintsiip (department_grouping) caption"
+msgid "Omaduse Grupeerimine osakonna järgi (department_grouping) caption"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_department_grouping_comment
-msgid "Omaduse Osakondade grupeerimisprintsiip (department_grouping) kommentaar"
+msgid "Omaduse Grupeerimine osakonna järgi (department_grouping) kommentaar"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_department_grouping_help
-msgid "Omaduse Osakondade grupeerimisprintsiip (department_grouping) help"
+msgid "Omaduse Grupeerimine osakonna järgi (department_grouping) help"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:prop_grouping_principe
@@ -186,19 +186,51 @@ msgstr ""
 msgid "Seose Seadete vorm (RELTYPE_DEPARTMENT) tekst"
 msgstr ""
 
+#: classes/crm/persons_webview.aw:91
+msgid "perenimi"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:92
+msgid "ametinimetuse jrk"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:93
+msgid "isiku jrk"
+msgstr ""
+
 #: classes/crm/persons_webview.aw:98
-msgid "ainult osakonnad"
+msgid "osakonna jrk"
 msgstr ""
 
 #: classes/crm/persons_webview.aw:99
+msgid "osakonna nimi"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:103
+msgid "Kasvav"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:104
+msgid "Kahanev"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:116
+msgid "ainult osakonnad"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:117
 msgid "koos isikutega"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:138 classes/crm/persons_webview.aw:155
+#: classes/crm/persons_webview.aw:156
 msgid "Isikute järjestamisprintsiip $i"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:190
+#: classes/crm/persons_webview.aw:173
+msgid "Osakondade järjestamisprintsiip $i"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:297
 msgid "pole asutust valitud"
 msgstr ""
 
