@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.51 2006/05/23 12:29:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.52 2006/06/26 21:03:24 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -216,6 +216,8 @@ class crm_call extends class_base
 					$ol = new object_list(array(
 						"class_id" => CL_PROJECT,
 						"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["request"]["alias_to_org"],
+						"lang_id" => array(),
+						"site_id" => array()
 					));
 				}
 				else
@@ -226,6 +228,8 @@ class crm_call extends class_base
 						$ol = new object_list(array(
 							"class_id" => CL_PROJECT,
 							"CL_PROJECT.RELTYPE_PARTICIPANT" => $arr["obj_inst"]->prop("customer"),
+							"lang_id" => array(),
+							"site_id" => array()
 						));
 						$nms = $ol->names();
 					}

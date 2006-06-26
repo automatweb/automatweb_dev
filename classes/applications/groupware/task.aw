@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.106 2006/06/26 20:51:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.107 2006/06/26 21:03:25 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -724,6 +724,8 @@ class task extends class_base
 					$ol = new object_list(array(
 						"class_id" => CL_PROJECT,
 						"CL_PROJECT.RELTYPE_ORDERER" => $arr["request"]["alias_to_org"],
+						"lang_id" => array(),
+						"site_id" => array()
 					));
 				}
 				else
@@ -732,6 +734,8 @@ class task extends class_base
 					$filt = array(
 						"class_id" => CL_PROJECT,
 						"CL_PROJECT.RELTYPE_ORDERER" => $arr["obj_inst"]->prop("customer"),
+						"lang_id" => array(),
+						"site_id" => array()
 					);
 					$ol = new object_list($filt);
 				}
