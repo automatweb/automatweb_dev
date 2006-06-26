@@ -74,9 +74,12 @@ class crm_company_bills_impl extends class_base
 			foreach($t2row as $conn)
 			{
 				$task = obj($conn["from"]);
-				$row = obj($conn["to"]);
-				$sum2proj[$task->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
-				$tasks->add($conn["from"]);
+				if ($task->prop("send_bill"))
+				{	
+					$row = obj($conn["to"]);
+					$sum2proj[$task->prop("project")] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
+					$tasks->add($conn["from"]);
+				}
 			}
 		}
 
@@ -539,7 +542,10 @@ class crm_company_bills_impl extends class_base
 			}
 			else
 			{
-				$filt["customer"] = "%".$arr["request"]["bill_s_cust"]."%";
+				if ($arr["request"]["bill_s_cust"] != "")
+				{
+					$filt["customer"] = "%".$arr["request"]["bill_s_cust"]."%";
+				}
 				$filt["bill_no"] = "%".$arr["request"]["bill_s_bill_no"]."%";
 				$filt["bill_date_range"] = array(
 					"from" => date_edit::get_timestamp($arr["request"]["bill_s_from"]),
