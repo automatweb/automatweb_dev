@@ -416,7 +416,7 @@ class crm_company_people_impl extends class_base
 			$parent = $arr["request"]["unit"];
 		}
 
-		if ($parent)
+		if ($parent && $parent != 999999)
 		{
 			$o = obj($parent);
 		}
