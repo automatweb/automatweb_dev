@@ -3,4 +3,3 @@
 	<class name="procurement_priority" folder="applications/procurement_center" extends="class_base">
 	</class>
 </orb>
-		

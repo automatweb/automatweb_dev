@@ -134,6 +134,11 @@ class _int_obj_ds_decorator
 	{
 		return $this->contained->final_delete_object($arr);
 	}
+
+	function backup_current_version($arr)
+	{
+		return $this->contained->backup_current_version($arr);
+	}
 }
 
 ?>

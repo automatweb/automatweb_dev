@@ -2436,12 +2436,22 @@
             <no_caption>1</no_caption>
             <field>ext_sys_t</field>
       </property>
+      <property>
+            <name>versions</name>
+            <table>objects</table>
+            <group>versions</group>
+            <type>version_manager</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>versions</field>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
             <no_status>1</no_status>
             <r2>yes</r2>
             <confirm_save_data>1</confirm_save_data>
+            <versioned>1</versioned>
       </classinfo>
       <groupinfo>
             <general_sub>
@@ -2698,6 +2708,11 @@
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
+            <versions>
+                  <caption>Versioonid</caption>
+                  <submit>no</submit>
+                  <save>no</save>
+            </versions>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>

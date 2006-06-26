@@ -3,4 +3,3 @@
 	<class name="project_strat_goal" folder="applications/groupware" extends="class_base">
 	</class>
 </orb>
-		

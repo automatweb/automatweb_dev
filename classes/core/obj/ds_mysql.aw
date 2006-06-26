@@ -2726,6 +2726,141 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 		return $ret;
 	}
+
+	function backup_current_version($arr)
+	{
+		$id = $arr["id"];
+		// create a complete copy of the current object to the _versions table
+
+		$table_name = reset(array_keys($arr["tableinfo"]))."_versions";
+		$table_dat = reset($arr["tableinfo"]);
+		$properties = $arr["properties"];
+		$tableinfo = $arr["tableinfo"];
+
+		$version_id = gen_uniq_id();
+		$this->db_query("INSERT INTO `$table_name` (version_id, $table_dat[index], vers_crea, vers_crea_by) values('$version_id', $id, ".time().", '".aw_global_get("uid")."')");
+
+		$objdata = $this->get_objdata($id);
+		$propvalues = $this->read_properties(array(
+			"properties" => $properties,
+			"tableinfo" => $tableinfo,
+			"objdata" => $objdata,
+		));
+		$objdata["metadata"] = $this->db_fetch_field("SELECT metadata FROM objects WHERE oid = '$id'", "metadata");
+
+		$ot_sets = array();
+		$arr["ot_modified"] = $GLOBALS["object_loader"]->all_ot_flds;
+		foreach(safe_array($arr["ot_modified"]) as $_field => $one)
+		{
+			$this->quote(&$objdata[$_field]);
+			$ot_sets[] = " o_".$_field." = '".$objdata[$_field]."' ";
+		}
+
+		$ot_sets = join(" , ", $ot_sets);
+
+		$q = "UPDATE `$table_name` SET
+			$ot_sets
+			WHERE version_id = '".$version_id."'
+		";
+
+		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
+		$this->db_query($q);
+
+		// now save all properties
+
+
+		// divide all properties into tables
+		$tbls = array();
+		foreach($properties as $prop => $data)
+		{
+			if ($data["store"] != "no" && $data["store"] != "connect")
+			{
+				$tbls[$data["table"]][] = $data;
+			}
+		}
+
+		// now save all props to tables.
+		foreach($tbls as $tbl => $tbld)
+		{
+			if ($tbl == "")
+			{
+				continue;
+			}
+
+			if ($tbl == "objects")
+			{
+				continue;
+				$tableinfo[$tbl]["index"] = "oid";
+				$serfs["metadata"] = $objdata["meta"];
+			}
+			else
+			{
+				$serfs = array();
+			};
+			$seta = array();
+			foreach($tbld as $prop)
+			{
+				// this check is here, so that we won't overwrite default values, that are saved in create_new_object
+				if (isset($propvalues[$prop['name']]))
+				{
+					if ($prop['method'] == "serialize")
+					{
+						if ($prop['field'] == "meta" && $prop["table"] == "objects")
+						{
+							$prop['field'] = "metadata";
+						}
+						// since serialized properites can be several for each field, gather them together first
+						$serfs[$prop['field']][$prop['name']] = $propvalues[$prop['name']];
+					}
+					else
+					if ($prop['method'] == "bitmask")
+					{
+						$val = $propvalues[$prop["name"]];
+	
+						if (!isset($seta[$prop["field"]]))
+						{	
+							// jost objects.flags support for now
+							$seta[$prop["field"]] = $objdata["flags"];
+						}
+
+						// make mask for the flag - mask value is the previous field value with the
+						// current flag bit(s) set to zero. flag bit(s) come from prop[ch_value]	
+						$mask = $seta[$prop["field"]] & (~((int)$prop["ch_value"]));
+						// add the value
+						$mask |= $val;
+						
+						$seta[$prop["field"]] = $mask;;
+					}
+					else
+					{
+						$str = $propvalues[$prop["name"]];
+						$this->quote(&$str);
+						$seta[$prop["field"]] = $str;
+					}
+
+					if ($prop["datatype"] == "int" && $seta[$prop["field"]] == "")
+					{
+						$seta[$prop["field"]] = "0";
+					}
+				}
+			}
+
+			foreach($serfs as $field => $dat)
+			{
+				$str = aw_serialize($dat);
+				$this->quote($str);
+				$seta[$field] = $str;
+			}
+			$sets = join(",",map2("`%s` = '%s'",$seta,0,true));
+			if ($sets != "")
+			{
+				$tbl .= "_versions";
+				$q = "UPDATE $tbl SET $sets WHERE version_id = '".$version_id."'";
+//echo "q = $q <br>";
+				$this->db_query($q);
+			}
+		}
+	}
 }
 
 ?>

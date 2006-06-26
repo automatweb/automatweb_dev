@@ -389,5 +389,19 @@
 			</function>
 		</action>
 
+		<action name="vm_set_act_ver">
+			<function name="vm_set_act_ver">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="vm_delete_versions">
+			<function name="vm_delete_versions">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

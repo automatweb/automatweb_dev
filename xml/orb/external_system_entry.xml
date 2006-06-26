@@ -3,4 +3,3 @@
 	<class name="external_system_entry" folder="common/external" extends="class_base">
 	</class>
 </orb>
-		

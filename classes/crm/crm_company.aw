@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_CATEGORY, on_create_customer)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 
-@classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY no_status=1 r2=yes confirm_save_data=1
+@classinfo relationmgr=yes syslog_type=ST_CRM_COMPANY no_status=1 r2=yes confirm_save_data=1 versioned=1
 
 @tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
 
@@ -798,6 +798,10 @@ default group=org_objects
 
 	@property ext_sys_t type=table store=no no_caption=1
 
+@default group=versions
+
+	@property versions type=version_manager store=no no_caption=1
+
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
 @groupinfo cedit caption="Üldkontaktid" parent=general
@@ -868,6 +872,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	@groupinfo my_view caption="Minu p&auml;ev"  submit=no save=no parent=qv
 
 @groupinfo transl caption=T&otilde;lgi
+@groupinfo versions caption=Versioonid submit=no save=no
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -5595,6 +5600,24 @@ class crm_company extends class_base
 				$ent->save();
 			}
 		}	
+	}
+
+	/**
+		@attrib name=vm_set_act_ver
+	**/
+	function vm_set_act_ver($arr)
+	{
+		$i = get_instance("vcl/version_manager");
+		return $i->vm_set_act_ver($arr);
+	}
+
+	/**
+		@attrib name=vm_delete_versions
+	**/
+	function vm_delete_versions($arr)
+	{
+		$i = get_instance("vcl/version_manager");
+		return $i->vm_delete_versions($arr);
 	}
 }
 

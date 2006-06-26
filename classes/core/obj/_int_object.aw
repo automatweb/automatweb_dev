@@ -1449,7 +1449,22 @@ class _int_object
 
 	function _int_set_prop_mod($prop, $oldval, $newval)
 	{
-		if (serialize($oldval) != serialize($newval))
+		$cv1 = $oldval;
+		$cv2 = $newval;
+		if ($cv1 === "" && $cv2 === "0")
+		{
+			$cv1 = "0";
+		}
+		if ($cv1 === "0" && $cv2 === "")
+		{
+			$cv2 = "0";
+		}
+		if (is_array($cv1) || is_array($cv2))
+		{
+			$cv1 = serialize($cv1);
+			$cv2 = serialize($cv2);
+		}
+		if ($cv1 != $cv2)
 		{
 			$this->props_modified[$prop] = 1;
 		}
@@ -1457,7 +1472,14 @@ class _int_object
 
 	function _int_set_ot_mod($fld, $oldval, $newval)
 	{
-		if (serialize($oldval) != serialize($newval) && isset($GLOBALS["object_loader"]->all_ot_flds[$fld]))
+		$cv1 = $oldval;
+		$cv2 = $newval;
+		if (is_array($cv1) || is_array($cv2))
+		{
+			$cv1 = serialize($cv1);
+			$cv2 = serialize($cv2);
+		}
+		if ($cv1 != $cv2 && isset($GLOBALS["object_loader"]->all_ot_flds[$fld]))
 		{
 			$this->ot_modified[$fld] = 1;
 		}
@@ -1621,6 +1643,18 @@ class _int_object
 		}
 		else
 		{
+			// check if the class specifies that it is versioned and that something has changed
+			if ($GLOBALS["classinfo"][$this->obj["class_id"]]["versioned"] == 1 && aw_global_get("uid") == "kix")
+			{
+				if (count($this->ot_modified) > 1 || count($this->props_modified) > 1)
+				{
+					$GLOBALS["object_loader"]->ds->backup_current_version(array(
+						"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
+						"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
+						"id" => $this->obj["oid"]
+					));
+				}
+			}
 
 			// now, save objdata
 			$GLOBALS["object_loader"]->ds->save_properties(array(
