@@ -155,7 +155,8 @@ class realestate_import extends class_base
 						"type" => "RELTYPE_REALESTATEMGR_USER",
 						"class_id" => CL_CRM_COMPANY,
 					)));
-					$prop["options"] = $list->names ();
+					$prop["options"] = $prop["options"] + $list->names ();
+				//	$prop["options"] = $list->names ();
 				}
 				else
 				{
@@ -1901,7 +1902,20 @@ class realestate_import extends class_base
 				"site_id" => array (),
 				"lang_id" => array (),
 			));
-			$realestate_objects->set_prop ("is_visible", 0);
+			$company_id = $this_object->prop("company");
+			$all_persons = array();
+			if(is_oid($company_id))
+			{
+				$company = obj($company_id);
+				$i = get_instance(CL_CRM_COMPANY);
+				$i->get_all_workers_for_company($company, $all_persons);
+			}
+			foreach($realestate_objects->arr() as $realestate_object)// et siis muudaks nähtamatuks vaid need objektid, mille maaklerid töötavad selles ettevõttes, mis on impordiobjekti juurde seostatud
+			{
+				if(array_key_exists($realestate_object->prop("realestate_agent1") , $all_persons)) $realestate_objects->set_prop ("is_visible", 0);
+				if(array_key_exists($realestate_object->prop("realestate_agent2") , $all_persons)) $realestate_objects->set_prop ("is_visible", 0);
+			}
+		//	$realestate_objects->set_prop ("is_visible", 0);
 			$realestate_objects->save ();
 		}
 

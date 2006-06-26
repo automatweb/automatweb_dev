@@ -2530,6 +2530,10 @@ class realestate_property extends class_base
 		enter_function("re_property::load_agent_data");
 
 		$no_extended_data = $param["no_extended_data"];
+		if (!$this->can("view", $agent_oid))
+		{
+			return false;
+		}
 		$agent = obj ($agent_oid);
 		if (!is_object ($agent))
 		{
@@ -2541,7 +2545,10 @@ class realestate_property extends class_base
 		{
 			$this->realestate_agents_data[$agent_oid]["name"] = $person->name();
 		}
-
+		else 
+		{
+			$this->realestate_agents_data[$agent_oid]["name"] = $agent->name();
+		}
 		$rank = $agent->get_first_obj_by_reltype ("RELTYPE_RANK");
 		if (is_object ($rank))
 		{

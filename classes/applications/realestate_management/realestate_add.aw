@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.17 2006/06/16 13:59:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.18 2006/06/26 12:53:04 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -47,6 +47,13 @@ caption Dokument millele suunata
 @property import type=textarea store=no 
 @caption see tuleb arvatavasti iga uue impordiga ümber progeda, et momendil töötab juhul kui tabel on kujul (misiganes	Asula_nimi		Asula_tüüp(5-väikelinn , 6-linnaosa)	misiganes	parent parent_nimi	maakond	maakonna_nimi) ja esimestes kahes reas kasulikku infor pole
 
+//tõlgitavaks
+@groupinfo transl caption=T&otilde;lgi
+@default group=transl
+
+@property transl type=callback callback=callback_get_transl
+@caption T&otilde;lgi
+
 @reltype MANEGER value=1 clid=CL_REALESTATE_MANAGER
 @caption Saatja
 
@@ -76,6 +83,9 @@ class realestate_add extends class_base
 			"tpldir" => "realestate_add",
 			"clid" => CL_REALESTATE_ADD
 		));
+		$this->trans_props = array(
+			"comment",
+		);
 	}
 
 	//////
@@ -176,8 +186,17 @@ class realestate_add extends class_base
 				break;
 			case "import":
 				$this->import($arr);
+			
+			case "transl":
+				$this->trans_save($arr, $this->trans_props);
+			break;
 		}
 		return $retval;
+	}
+
+	function callback_get_transl($arr)
+	{
+		return $this->trans_callback($arr, $this->trans_props);
 	}
 
 	function import($arr)//Eesti haldusjaotuse puhul töötab miski 10 minutit... saaks ju teha kiiremaks , kuid kuna asi on suht ühekordseks kasutamiseks....
@@ -504,6 +523,11 @@ class realestate_add extends class_base
 		{
 			return false;
 		}
+		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+//			return false;
+		}
+		return true;
 	}
 	
 	function callback_mod_reforb($arr)
@@ -622,6 +646,21 @@ class realestate_add extends class_base
 		$_SESSION["realestate_input_data"]["filled_level"] = 256;//lihtsalt miski suur number
 	}
 	
+	function is_admin()
+	{
+		$grps = aw_ini_get("realestate.admin_groups");
+		$gl = aw_global_get("gidlist_oid");
+		$has = false;//et siis kui on tegu maakleri või adminniga peaks see trueks muutuma
+		foreach(explode(",", $grps) as $grp)
+		{
+			if ($gl[trim($grp)])
+			{
+				$has = true;
+			}
+		}
+		return $has;
+	}
+	
 	function result_page($arr)
 	{
 		$ret = "";
@@ -644,6 +683,7 @@ class realestate_add extends class_base
 					$ret.= "maksmine õnnestus, pakkumine nüüd leheküljel nähtav ".$valid_for." nädalat";
 					$realest_obj->save();
 					$this->read_template("bank_return.tpl");
+					lc_site_load("realestate", $this);
 					$this->level_vars(array(
 					));
 					return $this->parse();
@@ -666,8 +706,33 @@ class realestate_add extends class_base
 		$object_view = $prop_obj->request_execute($realest_obj);
 //		if(file_exists($tpl))
 //		{
+			//kas tegu maakleriga?
+			$has = $this->is_admin();
 			$this->read_template("result.tpl");
+			lc_site_load("realestate", $this);
+			$pay = "";
+			$make_visible = "";
+			if($has)
+			{
+				if(!$realest_obj->prop("is_visible"))
+				{
+					$html = get_instance("html");
+					$this->vars(array("extend_popup" => $html->popup(array(
+						"url" 	=> $this->mk_my_orb("extend", array("id" => $realest_obj->id(), "fast" => 1,)),
+						"no_link" => 1,
+					))));
+					$make_visible .= $this->parse("MAKE_VISIBLE");
+				}
+			}
+			else
+			{
+				$this->vars(array("pay_link"	=> $bank_payment->mk_my_orb("pay_site", array()),));
+				$pay .= $this->parse("PAY");
+			}
+		
 			$this->vars(array(
+				"PAY"		=> $pay,
+				"MAKE_VISIBLE"	=> $make_visible,
 				"object_view"	=> $object_view,
 				"change_link" 	=> $realest_obj->meta("added_from")."?id=".$realest_obj->id(),
 				"list_link"	=> $this->mk_my_orb("my_realestate_list", array()),
@@ -702,11 +767,20 @@ class realestate_add extends class_base
 		enter_function("realestate_add::parse_alias");
 		global $end , $level, $id, $default;
 		if($end) return $this->result_page($arr);//kui templated otsas või tuleb pangamakselt, siis läheb lõpuvaatesse
+
 		if (!$this->can("edit", $arr["alias"]["target"]))
 		{
 			$i = get_instance("menuedit");
-			$i->_do_error_redir($oid);
+			$i->_do_error_redir($arr["alias"]["target"]);
 		}
+
+//
+//		if (!$this->can("edit", $arr["alias"]["target"]))
+//		{
+//			$i = get_instance("menuedit");
+//			$i->_do_error_redir($oid);
+//		}
+
 		$targ = obj($arr["alias"]["target"]);
 		$clid = $targ->prop("realestate_type");
 		$levels = $targ->meta("levels");
@@ -752,7 +826,7 @@ class realestate_add extends class_base
 		}
 		$this->read_template($tpl);
 		
-		lc_site_load("realestate_add", &$this);
+		lc_site_load("realestate", &$this);
 		//tekitab muutujad erinevate tasemete nimede ja linkidega
 		$this->level_vars(array("levels" => $levels , "data" => $data));
 		
@@ -924,6 +998,25 @@ class realestate_add extends class_base
 				}
 			}
 		}
+		if($this->is_template("ACT_LEVEL") && $_SESSION["realestate_input_data"]["realestate_id"])
+		{
+			$level_url = aw_url_change_var("level", null , post_ru());
+			$level_url = aw_url_change_var("id", null , $level_url);
+			$level_url = aw_url_change_var("end", 1 , $level_url);
+			$this->vars(array(
+				"level_name" => t("Eelvaade"),
+				"level_url" => $level_url,
+			));
+			$c .= $this->parse("ACT_LEVEL");
+		}
+		elseif($this->is_template("LEVEL"))
+		{
+			$this->vars(array(
+				"level_name" => t("Eelvaade"),
+			));
+			$c .= $this->parse("LEVEL");
+		}
+		
 		$this->vars(array(
 			"ACT_LEVEL" => $c_act,
 		));
@@ -1114,8 +1207,11 @@ class realestate_add extends class_base
 		
 		$tpl = "list.tpl";
 		$this->read_template($tpl);
+		lc_site_load("realestate", $this);
 		$html = get_instance("html");
 		if(sizeof($all_objects) == 0) $this->vars(array("nothing" => "Pakkumised puuduvad"));
+		
+		$has = $this->is_admin();
 		if ($this->is_template("LIST"))
 		{
 			$c = "";
@@ -1127,35 +1223,57 @@ class realestate_add extends class_base
 				$time = time();
 				$expire = (int)(($rlst_object->prop("expire") - $time)/86400);
 				if($rlst_object->prop("expire") - $time<1) $expire = t("Aegunud");
-				else $expire = t("Nähtav")." ".$expire." ".t("päeva");
+				else 
+				{
+					if($expire < 30)$expire = t("Nähtav")." ".$expire." ".t("päeva");
+					else $expire = t("Nähtav");
+				}
 				if(!$rlst_object->prop("expire")) $expire = t("Maksmata");
 				if($expire == t("Maksmata")) $extend = "PAY";
 				else $extend = "EXTEND";
-				$u = "";
+				$u = "";$a_e = "";$make_invisible = "";
 			//	if($this->is_template($expire))
 			//	{
 			//		$this->vars(array($expire => $this->parse($expire)));
 			//	}
-				
-				$e = "";$p = "";
-				if($extend == "EXTEND" && $this->is_template("EXTEND"))
+				if($has && ($expire == t("Maksmata"))||(!$rlst_object->prop("is_visible")))$expire = t("Nähtamatu");
+				if(!$has)
 				{
-					$this->vars(array("extend_popup" => $html->popup(array(
-						"url" 	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
-						"no_link" => 1,
-					))));
-					$e .= $this->parse("EXTEND");
+					$e = "";$p = "";
+					if($extend == "EXTEND" && $this->is_template("EXTEND"))
+					{
+						$this->vars(array("extend_popup" => $html->popup(array(
+							"url" 	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
+							"no_link" => 1,
+						))));
+						$e .= $this->parse("EXTEND");
+					}
+					if($extend == "PAY" && $this->is_template("PAY"))
+					{
+						$this->vars(array("extend_popup" => $html->popup(array(
+							"url" 	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
+							"no_link" => 1,
+						))));
+						$p .= $this->parse("PAY");
+					}
 				}
-				if($extend == "PAY" && $this->is_template("PAY"))
+				else
 				{
-					$this->vars(array("extend_popup" => $html->popup(array(
-						"url" 	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
-						"no_link" => 1,
-					))));
-					$p .= $this->parse("PAY");
+					if(!$rlst_object->prop("is_visible"))
+					{
+						$this->vars(array("extend_popup" => $html->popup(array(
+							"url" 	=> $this->mk_my_orb("extend", array("id" => $rlst_object->id())),
+							"no_link" => 1,
+						))));
+						$a_e .= $this->parse("ADMIN_EXTEND");
+					}
 				}
 				
-				
+				if($rlst_object->prop("is_visible"))
+				{
+					$this->vars(array("invisible"	=>  $this->mk_my_orb("make_invisible", array("id" => $rlst_object->id())),));
+					$make_invisible = $this->parse("MAKE_INVISIBLE");
+				}
 				$this->vars(array(
 					"name" 	 	=> $rlst_object->name(),
 					"id"	 	=> $rlst_object->id(),
@@ -1172,7 +1290,9 @@ class realestate_add extends class_base
 					"delete"	=>  $this->mk_my_orb("delete_property", array("id" => $rlst_object->id())),
 					"invisible"	=>  $this->mk_my_orb("make_invisible", array("id" => $rlst_object->id())),
 					"PAY"		=> $p,
+					"ADMIN_EXTEND"	=> $a_e,
 					"EXTEND"	=> $e,
+					"MAKE_INVISIBLE"=> $make_invisible,
 /*					"regio"		=> $html->form(array(
 						"action" => "http://www.regio.ee/?op=body&id=24",
 						"method" => "POST",
@@ -1212,6 +1332,7 @@ class realestate_add extends class_base
 	{
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
+		lc_site_load("realestate", $this);
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
@@ -1338,11 +1459,20 @@ class realestate_add extends class_base
 		}
 		$realestate_obj->set_meta("pic_order" , $existing_pics);
 		$unwanted_props = array("is_visible");//mida pole hea mõtet sessiooni panna ega salvestada
+		$has = $this->is_admin();
+		if ($has)
+		{
+			$unwanted_props = array();
+		}
+		else
+		{
+			$unwanted_props = array("is_visible");
+		}
+		$args["is_visible"] = (int)$args["is_visible"];
 		foreach($args as $key => $val)
 		{
 			if(!(in_array($key , $unwanted_props))) $_SESSION["realestate_input_data"][$key] = $val;
 		};
-		
 		$props = $realestate_obj->get_property_list();
 		$address_props = $this->get_address_props($args["parent"]);
 		$address = $realestate_obj->get_first_obj_by_reltype("RELTYPE_REALESTATE_ADDRESS");
@@ -1491,12 +1621,50 @@ class realestate_add extends class_base
 	function extend($args)
 	{
 		extract($args);
-		global $id,$extend;
+		global $id,$extend,$fast;
 		$ret = "";
 		if(!is_oid($id))
 		{
 			return "sellist pakkumist pole";
 		}
+		$has = $this->is_admin();
+		if($has)//adminnidele ja maakleritele... nad ei pea maksma
+		{
+//			if($fast)//juhul kui just lisatud ja nagu kui kauaks väärtus on niikuinii olemas
+//			{
+				$offer = obj($id);
+				$valid_for = $offer->prop("weeks_valid_for");
+				$offer->set_prop("is_visible" , "1");
+				$offer->set_prop("expire" , time() + 6048000000000000000000);
+				$offer->save();
+				$ret.= '<script language="javascript">
+					window.opener.location.href="'.$this->mk_my_orb("my_realestate_list", array("die" => 1)).'";
+					window.close();
+					</script>';
+				return $ret;
+//			}
+			$ret = '<FORM METHOD=POST action="">
+				'.t("Mitu nädalat").'?
+				<br><INPUT type="TEXT" NAME="extend" size="2" value="'.$extend.'">
+				<BR><INPUT TYPE="submit" value="'.t("pikendan").'">
+				</FORM>
+				';
+			if($extend)
+			{
+				$offer = obj($id);
+				$offer->set_prop("weeks_valid_for",$extend);
+				$valid_for = $extend;
+				$offer->set_prop("is_visible" , "1");
+				$offer->set_prop("expire" , time() + 604800 * $valid_for);
+				$offer->save();
+
+				$ret.= '<a href="javascript:window.close();" ';
+				$ret.= 'onClick=window.opener.location.href="'.$this->mk_my_orb("my_realestate_list", array("die" => 1));
+				$ret.= '"> '.t("Tagasi").' </a>';
+			}
+			die($ret);
+		}
+		
 		$url = $this->mk_my_orb("extend", array(
 			"id" => $id,
 		), CL_REALESTATE_ADD);
@@ -1524,6 +1692,7 @@ class realestate_add extends class_base
 			$offer->save();
 			$bank_meta = $targ->meta("bank");
 			$bank_meta["amount"] = $bank_meta["amount"]*$offer->prop("weeks_valid_for");
+			$bank_meta["expl"] = $bank_meta["expl"].' ID='.$offer->id();
 			$_SESSION["bank_payment"] = array(
 				"data"		=> $bank_meta,
 				"reference_nr"	=> $offer->id(),
