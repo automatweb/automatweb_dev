@@ -72,11 +72,16 @@ class popup_menu extends aw_template
 
 		if (!isset($param["icon"]))
 		{
-			$icon = "/automatweb/images/blue/obj_settings.gif";
+			$icon = $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif";
+		}
+		else
+		if (substr($param["icon"], 0, 4) == "http")
+		{
+			$icon = $param["icon"];
 		}
 		else
 		{
-			$icon = "/automatweb/images/icons/".$param["icon"];
+			$icon = $this->cfg["baseurl"]."/automatweb/images/icons/".$param["icon"];
 		}
 
 		$is = "";
@@ -88,7 +93,7 @@ class popup_menu extends aw_template
 		$this->vars(array(
 			"MENU_ITEM" => $is,
 			"menu_id" => $this->menu_id,
-			"menu_icon" => $this->cfg["baseurl"].$icon,
+			"menu_icon" => $icon,
 			"alt" => $param["alt"]
 		));
 

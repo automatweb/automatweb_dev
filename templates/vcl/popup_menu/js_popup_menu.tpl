@@ -5,7 +5,7 @@ style="border:0px;"
 onclick="return buttonClick(event, '{VAR:menu_id}');"
 oncontextmenu="return buttonClick(event, '{VAR:menu_id}');" alt="{VAR:alt}" title="{VAR:alt}">
 <!-- SUB: HAS_ICON -->
-<img alt="{VAR:alt}" title="{VAR:alt}" border="0" src='{VAR:menu_icon}' id='mb_{VAR:menu_id}' width='16' height='16'>
+<img alt="{VAR:alt}" title="{VAR:alt}" border="0" src='{VAR:menu_icon}' id='mb_{VAR:menu_id}' >
 <!-- END SUB: HAS_ICON -->
 
 <!-- SUB: HAS_TEXT -->

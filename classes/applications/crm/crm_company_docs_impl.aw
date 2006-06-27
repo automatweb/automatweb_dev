@@ -169,6 +169,14 @@ class crm_company_docs_impl extends class_base
 	function _init_docs_tbl(&$t, $r)
 	{
 		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "icon",
+			"align" => "center",
+			"sortable" => 0,
+			"width" => 1
+		));
+
+		$t->define_field(array(
 			"caption" => t("Nimi"),
 			"name" => "name",
 			"align" => "center",
@@ -307,9 +315,47 @@ class crm_company_docs_impl extends class_base
 			));
 		}
 
-		$t->data_from_ol($ol, array(
+		$clss = aw_ini_get("classes");
+		get_instance(CL_FILE);
+		foreach($ol->arr() as $o)
+		{
+			$pm = get_instance("vcl/popup_menu");
+			$pm->begin_menu("sf".$o->id());
+			
+			if ($o->class_id() == CL_FILE)
+			{
+				$pm->add_item(array(
+					"text" => $o->name(),
+					"link" => file::get_url($o->id(), $o->name())
+				));
+			}
+			else
+			{
+				foreach($o->connections_from(array("type" => "RELTYPE_FILE")) as $c)
+				{
+					$pm->add_item(array(
+						"text" => $c->prop("to.name"),
+						"link" => file::get_url($c->prop("to"), $c->prop("to.name"))
+					));
+				}
+			}
+			
+			$t->define_data(array(
+				"icon" => $pm->get_menu(array(
+					"icon" => icons::get_icon_url($o)
+				)),
+				"name" => html::obj_change_url($o),
+				"class_id" => $clss[$o->class_id()]["name"],
+				"createdby" => $o->createdby(),
+				"created" => $o->created(),
+				"modifiedby" => $o->modifiedby(),
+				"modified" => $o->modified(),
+				"oid" => $o->id()
+			));
+		}
+		/*$t->data_from_ol($ol, array(
 			"change_col" => "name"
-		));
+		));*/
 
 		$t->set_default_sortby("created");
 		$t->set_default_sorder("desc");
