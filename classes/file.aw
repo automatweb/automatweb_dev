@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.124 2006/05/30 11:50:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.125 2006/06/27 22:49:05 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -126,6 +126,14 @@ class file extends class_base
 				break;
 
 			case "name":
+				if ($arr["called_from"] == "releditor")
+				{
+					$data["value"] = html::href(array(
+						"caption" => $arr["obj_inst"]->name(),
+						"url" => $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name())
+					));
+					return PROP_OK;
+				}
 				$retval = PROP_IGNORE;
 				break;
 

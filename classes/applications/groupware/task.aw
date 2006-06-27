@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.108 2006/06/27 13:38:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.109 2006/06/27 22:49:04 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1206,19 +1206,30 @@ class task extends class_base
 
 			if (is_oid($o->id()))
 			{
-				$ff = $o->get_first_obj_by_reltype("RELTYPE_FILE");
-				if (!$ff)
+				if ($o->class_id() == CL_FILE)
 				{
-					$ff = $o;
-				}
-				$fi = $ff->instance();
-				$fu = "";
-				if (method_exists($fi, "get_url"))
-				{
+					$fi = $o->instance();
 					$fu = html::href(array(
-						"url" => $fi->get_url($ff->id(), $ff->name()),
-						"caption" => $ff->name()
+						"url" => $fi->get_url($o->id(), $o->name()),
+						"caption" => $o->name()
 					));
+				}
+				else
+				{
+					$fu = array();
+					foreach($o->connections_from(array("type" => "RELTYPE_FILE")) as $c)
+					{
+						$ff = $c->to();
+						$fi = $ff->instance();
+						if (method_exists($fi, "get_url"))
+						{
+							$fu[] = html::href(array(
+								"url" => $fi->get_url($ff->id(), $ff->name()),
+								"caption" => $ff->name()
+							));
+						}
+					}
+					$fu = join(", ", $fu);
 				}
 				$data[] = array(
 					"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),

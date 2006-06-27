@@ -13,6 +13,10 @@ class crm_document_base extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "files":
+				$prop["direct_links"] = 1;
+				break;
+
 			case "creator":
 			case "reader":
 				$u = get_instance("users");
@@ -30,7 +34,7 @@ class crm_document_base extends class_base
 				}
 
 				$c = get_instance(CL_CRM_COMPANY);
-				$prop["options"] = $c->get_employee_picker($co);
+				$prop["options"] = array("" => t("--vali--")) + $c->get_employee_picker($co);
 	
 				if ($prop["value"] == "" && $ps)
 				{
