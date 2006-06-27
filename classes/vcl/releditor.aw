@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.86 2006/05/03 12:05:14 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.87 2006/06/27 21:53:00 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -171,7 +171,7 @@ class releditor extends core
 
 		// the toolbar should be before the props, because otherwise it
 		// would look freakish when adding new or changing -- ahz
-		if($visual == "manager")
+		if($visual == "manager" && $arr["prop"]["no_toolbar"] != 1)
 		{
 			// insert the toolbar into property array
 			$tbdef = $this->init_rel_toolbar($arr);

@@ -21,7 +21,6 @@
             <table>objects</table>
             <group>general</group>
             <type>chooser</type>
-            <orient>vertical</orient>
             <field>meta</field>
             <method>serialize</method>
             <caption>Numbri t&amp;uuml;&amp;uuml;p</caption>

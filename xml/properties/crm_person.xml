@@ -238,6 +238,24 @@
             <caption>Palga dokument</caption>
       </property>
       <property>
+            <name>ct_rel_tb</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>ct_rel_tb</field>
+      </property>
+      <property>
+            <name>contact_desc_text</name>
+            <table>kliendibaas_isik</table>
+            <group>contact</group>
+            <type>text</type>
+            <store>no</store>
+            <field>contact_desc_text</field>
+            <caption>Kontaktandmed</caption>
+      </property>
+      <property>
             <name>work_contact</name>
             <table>kliendibaas_isik</table>
             <group>contact</group>
@@ -290,6 +308,7 @@
             <table_fields>mail</table_fields>
             <choose_default>1</choose_default>
             <always_show_add>1</always_show_add>
+            <no_toolbar>1</no_toolbar>
             <caption>Meiliaadressid</caption>
       </property>
       <property>
@@ -311,6 +330,7 @@
             <reltype>RELTYPE_PHONE</reltype>
             <choose_default>1</choose_default>
             <always_show_add>1</always_show_add>
+            <no_toolbar>1</no_toolbar>
             <caption>Telefoninumbrid</caption>
       </property>
       <property>
@@ -326,6 +346,7 @@
             <table_fields>url</table_fields>
             <choose_default>1</choose_default>
             <always_show_add>1</always_show_add>
+            <no_toolbar>1</no_toolbar>
             <caption>Veebiaadressid</caption>
       </property>
       <property>

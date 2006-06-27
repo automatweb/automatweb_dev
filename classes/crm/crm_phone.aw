@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.7 2006/05/03 12:08:04 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.8 2006/06/27 21:52:59 kristo Exp $
 // phone.aw - Telefon
 /*
 
@@ -14,7 +14,7 @@
 @property comment type=textbox
 @caption Kommentaar
 
-@property type type=chooser orient=vertical field=meta method=serialize
+@property type type=chooser field=meta method=serialize
 @caption Numbri tüüp
 
 @property country type=relpicker reltype=RELTYPE_COUNTRY field=meta method=serialize automatic=1

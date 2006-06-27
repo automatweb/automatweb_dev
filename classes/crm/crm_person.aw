@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.133 2006/06/20 10:43:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.134 2006/06/27 21:52:59 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -103,6 +103,11 @@ caption Msn/yahoo/aol/icq
 @groupinfo contact caption="Kontaktandmed" parent=general
 @default group=contact
 
+@property ct_rel_tb type=toolbar no_caption=1 store=no
+
+@property contact_desc_text type=text store=no 
+@caption Kontaktandmed
+
 @property work_contact type=relpicker reltype=RELTYPE_WORK
 @caption Organisatsioon
 
@@ -118,13 +123,13 @@ caption Kodused kontaktandmed
 @property address type=relpicker reltype=RELTYPE_ADDRESS
 @caption Aadress
 
-@property email type=releditor mode=manager table=objects field=meta method=serialize reltype=RELTYPE_EMAIL props=mail table_fields=mail choose_default=1 always_show_add=1
+@property email type=releditor mode=manager table=objects field=meta method=serialize reltype=RELTYPE_EMAIL props=mail table_fields=mail choose_default=1 always_show_add=1 no_toolbar=1
 @caption Meiliaadressid
 
-@property phone type=releditor table=objects field=meta method=serialize mode=manager props=name,type table_fields=name,type reltype=RELTYPE_PHONE choose_default=1 always_show_add=1
+@property phone type=releditor table=objects field=meta method=serialize mode=manager props=name,type table_fields=name,type reltype=RELTYPE_PHONE choose_default=1 always_show_add=1 no_toolbar=1
 @caption Telefoninumbrid
 
-@property url type=releditor mode=manager table=objects field=meta method=serialize reltype=RELTYPE_URL props=url table_fields=url choose_default=1 always_show_add=1
+@property url type=releditor mode=manager table=objects field=meta method=serialize reltype=RELTYPE_URL props=url table_fields=url choose_default=1 always_show_add=1 no_toolbar=1
 @caption Veebiaadressid
 
 @property comment type=textarea cols=40 rows=3 table=objects field=comment
@@ -642,6 +647,14 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case "ct_rel_tb":
+				$this->_ct_rel_tb($arr);
+				break;
+
+			case "contact_desc_text":
+				$data["value"] = $this->get_short_description($arr["obj_inst"]->id());
+				break;
+
 			case "ext_sys_t":
 				$this->_ext_sys_t(&$arr);
 				break;
@@ -2131,7 +2144,10 @@ class crm_person extends class_base
 	**/
 	function delete_objects($arr)
 	{
-		print_r($arr);
+		if (!is_array($arr["sel"]) && is_array($arr["check"]))
+		{
+			$arr["sel"] = $arr["check"];
+		}
 		foreach ($arr["sel"] as $del_conn)
 		{
 			$conn = new connection($del_conn);
@@ -3293,6 +3309,82 @@ class crm_person extends class_base
 				$ent->save();
 			}
 		}	
+	}
+
+	/** returns a line of info about the person - name, company, section, email, phone
+		@attrib api=1 params=pos
+
+		@param p required type=oid
+			The person to return the info for
+	**/
+	function get_short_description($p)
+	{
+		$p = obj($p);
+		$ret = html::href(array(
+			'url' => html::get_change_url($p->id()),
+			'caption' => $p->name(),
+		));
+		//default company
+		if(is_oid($p->prop('work_contact')))
+		{
+			$company = new object($p->prop('work_contact'));
+			$ret .= " ".html::href(array(
+				'url' => html::get_change_url($company->id()),
+				'caption' => $company->name(),
+			));
+		}
+		//professions...
+		$conns2 = $p->connections_from(array(
+			'type' => 'RELTYPE_RANK',
+		));
+		$professions = '';
+		foreach($conns2 as $conn2)
+		{
+			$professions.=', '.$conn2->prop('to.name');
+		}
+		if(strlen($professions))
+		{
+			$ret.=$professions;
+		}
+		//phones
+		$conns2 = $p->connections_from(array(
+			'type' => 'RELTYPE_PHONE'
+		));
+		$phones = '';
+		foreach($conns2 as $conn2)
+		{
+			$phones.=', '.$conn2->prop('to.name');
+		}
+		if(strlen($phones))
+		{
+			$ret.=$phones;
+		}
+		$conns2 = $p->connections_from(array(
+			'type' => 'RELTYPE_EMAIL',
+		));
+		$emails = '';
+		foreach($conns2 as $conn2)
+		{
+			$to_obj = $conn2->to();
+			$emails.=', '.$to_obj->prop('mail');
+		}
+		if(strlen($emails))
+		{
+			$ret.=$emails;
+		}
+		return $ret;
+	}
+
+	function _ct_rel_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		$confirm_test = t("Kustutada valitud objektid?");
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "delete_objects"
+		));
 	}
 }
 ?>
