@@ -305,6 +305,15 @@
             <caption>T&amp;amp;auml;htaeg</caption>
       </property>
       <property>
+            <name>s_createdby</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>s_createdby</field>
+            <caption>Looja</caption>
+      </property>
+      <property>
             <name>s_sbt</name>
             <table>objects</table>
             <group>search</group>

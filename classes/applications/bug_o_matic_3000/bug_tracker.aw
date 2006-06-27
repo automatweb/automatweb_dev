@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.62 2006/06/08 11:39:39 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.62 2006/06/08 11:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.63 2006/06/27 22:15:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.63 2006/06/27 22:15:45 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -109,6 +109,9 @@ define("BUG_STATUS_CLOSED", 5);
 
 		@property s_deadline type=date_select default=-1 store=no captionside=top parent=s_cut_lay
 		@caption T&auml;htaeg
+
+	@property s_createdby type=textbox store=no 
+	@caption Looja
 
 	@property s_sbt type=submit store=no
 	@caption Otsi
@@ -1812,6 +1815,25 @@ class bug_tracker extends class_base
 					"bug_content" => $this->_get_string_filt($r["s_bug_content"]),
 				)
 			));
+		}
+
+		if (trim($r["s_createdby"]) != "")
+		{
+			// map name to possible persons, get users for those and search by that
+			$ul = new object_list(array(
+				"class_id" => CL_USER,
+				"CL_USER.RELTYPE_PERSON.name" => "%".$r["s_createdby"]."%",
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			if ($ul->count())
+			{
+				$res["createdby"] = $ul->names();
+			}
+			else
+			{
+				$res["oid"] = -1;
+			}
 		}
 		return $res;
 	}
