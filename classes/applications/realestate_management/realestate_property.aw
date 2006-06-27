@@ -1358,6 +1358,13 @@ class realestate_property extends class_base
 		$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
 		$data["additional_info"] = $this_object->prop ("additional_info_" . aw_global_get("LC"));
 
+		//et ei näitataks hinda, kui see on 0
+		if(!$data["transaction_price_value"] > 0)
+		{
+			$data["transaction_price_value"] = null;
+			$data["transaction_price"] = null;
+		}
+	
 		### parse
 		$this->vars ($data);
 		$res = $this->parse();

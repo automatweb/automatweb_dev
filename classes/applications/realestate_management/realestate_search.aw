@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.29 2006/06/26 15:08:27 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.30 2006/06/27 12:38:18 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1446,6 +1446,10 @@ exit_function("jigaboo");
 		list ($options_tt, $name, $use_type) = $this->classificator->get_choices($prop_args);
 		$this->options_tt = $options_tt->names();
 		natcasesort ($this->options_tt);
+		foreach ($this->options_tt as $key=> $val)
+		{
+			$this->options_tt[$key] = t($val);
+		}
 		$this->options_tt = array(REALESTATE_SEARCH_ALL => t("Kõik tehingud")) + $this->options_tt;
 
 		### address1
@@ -2385,7 +2389,7 @@ exit_function("jigaboo");
 
 		// $table->define_field(array(
 			// "name" => "visible",
-			// "caption" => t("<a href='javascript:selall(\"realestatemgr-is_visible\")'>Näh&shy;tav</a>"),
+			// "caption" => <a href='javascript:selall(\"realestatemgr-is_visible\")'>t("Näh&shy;tav")</a>,
 			// "tooltip" => t("Kõik read: vali/kaota valik"),
 		// ));
 

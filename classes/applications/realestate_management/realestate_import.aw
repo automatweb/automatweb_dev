@@ -22,6 +22,8 @@
 	@comment Organisatsioon mille alla objektid imporditakse
 	@caption Organisatsioon
 
+	@property no_default_picture_copy type=checkbox ch_value=1
+	@caption Ei impordi default pilti
 
 @default group=grp_city24_general
 	@property city24_county type=relpicker reltype=RELTYPE_ADMIN_DIVISION clid=CL_COUNTRY_ADMINISTRATIVE_DIVISION
@@ -1133,13 +1135,17 @@ class realestate_import extends class_base
 				// $value = iconv("iso-8859-4", "UTF-8", $this->property_data["LISAINFO_INFO"]);
 				$value = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, $this->property_data["LISAINFO_INFO"]);
 				$property->set_prop ("additional_info_et", $value);
-
+				
 				#### picture_icon
 				if ($property->prop ("picture_icon_city24") != $this->property_data["IKOONI_URL"])
 				{
+					if(substr_count($this->property_data["IKOONI_URL"], '-no-picture') > 0 && $this_object->prop("no_default_picture_copy"))
+					{
+						break;
+					}
 					# delete old
 					$image = $property->get_first_obj_by_reltype("RELTYPE_REALESTATE_PICTUREICON");
-
+				
 					if (is_object($image))
 					{
 						$file = $image->prop ("file");
@@ -1168,7 +1174,6 @@ class realestate_import extends class_base
 						"to" => $image,
 						"reltype" => "RELTYPE_REALESTATE_PICTUREICON",
 					));
-
 					unset ($imagedata);
 					unset ($image);
 				}
@@ -1197,7 +1202,6 @@ class realestate_import extends class_base
 
 				##### add new pictures & change order
 				ksort ($this->property_data["PILT"]);
-
 				foreach ($this->property_data["PILT"] as $key => $picture_id)
 				{
 					if (!array_key_exists($picture_id, $existing_pictures))
@@ -1678,7 +1682,6 @@ class realestate_import extends class_base
 			"RUS" => "ru",
 			"FIN" => "fi",
 		);
-
 		foreach ($additional_languages as $lang_name => $lang_code)
 		{
 			$tmp_import_url = str_replace ("lang", "tmpvariable39903", $import_url);
