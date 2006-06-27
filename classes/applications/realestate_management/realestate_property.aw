@@ -1147,7 +1147,7 @@ class realestate_property extends class_base
 		$data["link_return_url"] = $arr["return_url"];
 		// $data["link_open"] = obj_link ($this_object_id);
 		$data["link_open"] = aw_url_change_var ("realestate_show_property", $this_object_id);
-		$data["class_name"] = $class_name;
+		$data["class_name"] = t($class_name);
 
 		### get template
 		$tmp = $this->template_dir;
@@ -1884,8 +1884,16 @@ class realestate_property extends class_base
 			}
 			else
 			{
-				$properties[$name]["strvalue"] = $this_object->prop_str ($name);
-			}
+				if(is_oid($this_object->prop($name)) && $this->can("view" , $this_object->prop($name)))
+				{
+					$meta_obj = obj($this_object->prop($name));
+					$lang_id = aw_global_get("lang_id");
+					$trans = $meta_obj->meta("tolge");
+					if($trans[$lang_id]) $properties[$name]["strvalue"] = $trans[$lang_id];
+					else $properties[$name]["strvalue"] = $this_object->prop_str ($name);
+				}
+				else $properties[$name]["strvalue"] = $this_object->prop_str ($name);
+			}//echo $properties[$name]["strvalue"].' - '.$this_object->prop_str ($name).'<br>';
 		}
 		exit_function("re_property::get_property_data - std props");
 

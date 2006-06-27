@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.30 2006/06/27 12:38:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.31 2006/06/27 14:15:38 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -892,7 +892,7 @@ exit_function("jigaboo");
 
 			if (in_array ("search_total_floor_area_min", $visible_formelements) and in_array ("search_total_floor_area_max", $visible_formelements))
 			{
-				$form_elements["tfa"]["caption"] = t("Üldpind");
+				$form_elements["tfa"]["caption"] = t("&Uuml;ldpind");
 				$form_elements["tfa"]["element"] = $form_elements["tfamin"]["element"]  . t(" kuni ") . $form_elements["tfamax"]["element"];
 				unset ($form_elements["tfamin"]);
 				unset ($form_elements["tfamax"]);
@@ -1285,7 +1285,6 @@ exit_function("jigaboo");
 		### output
 		$template = $this_object->prop ("template") . ".tpl";
 		$this->read_template($template);
-
 		lc_site_load("realestate_search",$this);
 
 		if ($this_object->prop ("result_no_form") and $search_requested)
@@ -1320,7 +1319,6 @@ exit_function("jigaboo");
 						$element = $el["element"];
 					}
 					else continue;
-					
 					$this->vars (array (
 						"caption" => $caption,
 						"element" => $element,
@@ -1370,7 +1368,6 @@ exit_function("jigaboo");
 				"number_of_results" => $number_of_results,
 			));
 		}
-
 		$result = $this->parse();
 		exit_function("re_search::show - parse");
 		exit_function("re_search::show");
@@ -1444,12 +1441,17 @@ exit_function("jigaboo");
 			"name" => "transaction_type",
 		);
 		list ($options_tt, $name, $use_type) = $this->classificator->get_choices($prop_args);
-		$this->options_tt = $options_tt->names();
-		natcasesort ($this->options_tt);
-		foreach ($this->options_tt as $key=> $val)
+		$lang_id = aw_global_get("lang_id");
+		foreach ($options_tt->arr() as $key=> $val)
 		{
-			$this->options_tt[$key] = t($val);
+			$trans = $val->meta("tolge");
+			if($trans[$lang_id]) $this->options_tt[$key] = $trans[$lang_id];
+			else $this->options_tt[$key] = $val->name();
 		}
+
+		
+		//$this->options_tt = $options_tt->names();
+		natcasesort ($this->options_tt);//arr($this->options_tt);
 		$this->options_tt = array(REALESTATE_SEARCH_ALL => t("Kõik tehingud")) + $this->options_tt;
 
 		### address1

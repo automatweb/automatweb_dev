@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.14 2006/06/07 10:19:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.15 2006/06/27 14:15:38 markop Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -3445,6 +3445,7 @@ class realestate_manager extends class_base
 				$property->set_meta ("owner_company_section", $arr["section"]);
 			}
 			else
+			if (is_oid($person->id()))
 			{
 				$section = $person->get_first_obj_by_reltype ("RELTYPE_SECTION");
 
