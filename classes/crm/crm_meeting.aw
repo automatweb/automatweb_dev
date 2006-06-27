@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.71 2006/06/26 21:03:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.72 2006/06/27 13:38:22 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -385,6 +385,7 @@ class crm_meeting extends class_base
 				break;
 
 			case "participants":
+				return PROP_IGNORE;
 				$opts = array();
 				$p = array();
 				if ($this->can("view", $arr["request"]["alias_to_org"]))
@@ -490,7 +491,7 @@ class crm_meeting extends class_base
 					$cur_co = obj($u->get_current_company());
 					$prms = array(
 						"id" => $arr["obj_inst"]->id(),
-						"pn" => "participants",
+						"pn" => "participants_h",
 						"clid" => CL_CRM_PERSON,
 						"multiple" => 1,
 					);
@@ -702,6 +703,7 @@ class crm_meeting extends class_base
 				break;
 
 			case "participants":
+				return PROP_IGNORE;
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
 					$this->post_save_add_parts = safe_array($data["value"]);
@@ -749,6 +751,11 @@ class crm_meeting extends class_base
 
 	function callback_post_save($arr)
 	{
+		if ($arr["request"]["participants_h"] > 0)
+		{
+			$this->post_save_add_parts = explode(",", $arr["request"]["participants_h"]);
+		}
+
 		if (is_array($this->post_save_add_parts))
 		{
 			foreach(safe_array($this->post_save_add_parts) as $person)
@@ -963,6 +970,7 @@ class crm_meeting extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["participants_h"] = 0;
 		if ($_GET["action"] == "new")
 		{
 			$arr["add_to_cal"] = $_GET["add_to_cal"];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.107 2006/06/26 21:03:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.108 2006/06/27 13:38:23 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -451,6 +451,7 @@ class task extends class_base
 				break;
 
 			case "participants":
+				return PROP_IGNORE;
 				$data["options"] = $this->_get_possible_participants($arr["obj_inst"]);
 				$p = array();
 				if ($this->can("view", $arr["request"]["alias_to_org"]))
@@ -632,7 +633,7 @@ class task extends class_base
 					$cur_co = obj($u->get_current_company());
 					$prms = array(
 						"id" => $arr["obj_inst"]->id(),
-						"pn" => "participants",
+						"pn" => "participants_h",
 						"clid" => CL_CRM_PERSON,
 						"multiple" => 1,
 					);
@@ -882,6 +883,7 @@ class task extends class_base
 				break;
 
 			case "participants":
+				return PROP_IGNORE;
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
 					$this->post_save_add_parts = safe_array($prop["value"]);
@@ -1022,6 +1024,11 @@ class task extends class_base
 
 	function callback_post_save($arr)
 	{
+		if ($arr["request"]["participants_h"] > 0)
+		{
+			$this->post_save_add_parts = explode(",", $arr["request"]["participants_h"]);
+		}
+		
 		if (is_array($this->post_save_add_parts))
 		{
 			foreach(safe_array($this->post_save_add_parts) as $person)
@@ -2504,6 +2511,7 @@ class task extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["participants_h"] = 0;
 		if ($_GET["action"] == "new")
 		{
 			$arr["add_to_cal"] = $_GET["add_to_cal"];
