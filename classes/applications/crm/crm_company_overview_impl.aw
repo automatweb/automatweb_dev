@@ -1556,11 +1556,11 @@ class crm_company_overview_impl extends class_base
 			"caption" => t("Aeg"),
 			"align" => "center"
 		));
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "is_done",
 			"caption" => t("Tehtud?"),
 			"align" => "center"
-		));
+		));*/
 	}
 
 	/**
@@ -1576,6 +1576,10 @@ class crm_company_overview_impl extends class_base
 		foreach($task->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
 			$row = $c->to();
+			if ($row->prop("done") == 1)
+			{
+				continue;
+			}
 			$url = $this->mk_my_orb("stopper_pop", array(
 				"id" => $row->id(),
 				"s_action" => "start",
