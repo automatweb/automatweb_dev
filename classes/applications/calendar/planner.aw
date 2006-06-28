@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.124 2006/06/06 14:21:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.125 2006/06/28 15:32:18 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1589,7 +1589,6 @@ class planner extends class_base
 			{
 				$varx = array(
 					"item_start" => $event["start"],
-					
 					"data" => array(
 						"id" => $event["id"],
 						"name" => $event["name"],

@@ -167,7 +167,26 @@ class planner_model extends core
 				$row["flags"] = $real_obj->flags();
 			};
 
-			$row["event_icon_url"] = icons::get_icon_url($eo);
+			if ($of->class_id() == CL_BUG)
+			{
+				if ($of->prop("bug_status") < 3)
+				{
+					$row["event_icon_url"] = aw_ini_get("baseurl")."/automatweb/images/icons/bug_open.gif";
+				}
+				else
+				if ($of->prop("bug_status") == 5)
+				{
+					$row["event_icon_url"] = aw_ini_get("baseurl")."/automatweb/images/icons/bug_closed.gif";
+				}
+				else
+				{
+					$row["event_icon_url"] = icons::get_icon_url($eo);
+				}
+			}
+			else
+			{
+				$row["event_icon_url"] = icons::get_icon_url($eo);
+			}
 			if ($of->class_id() == CL_CRM_PERSON)
 			{
 				$row["name"] = sprintf(t("%s s&uuml;nnip&auml;ev!"), $of->name());
@@ -450,7 +469,7 @@ class planner_model extends core
 	function get_event_edit_link($arr)
 	{
 		$evo = obj($arr["event_id"]);
-		if ($evo->class_id() == CL_CRM_PERSON || $evo->class_id() == CL_BROTHER_DOCUMENT || $evo->class_id() == CL_DOCUMENT) // birthday
+		if ($evo->class_id() == CL_CRM_PERSON || $evo->class_id() == CL_BROTHER_DOCUMENT || $evo->class_id() == CL_DOCUMENT || $evo->class_id() == CL_BUG) // birthday
 		{
 			return html::get_change_url($evo->id(), array("return_url" => get_ru()));
 		}
