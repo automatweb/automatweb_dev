@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.53 2006/06/28 13:29:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.54 2006/06/28 14:43:21 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -263,6 +263,18 @@ class crm_bill extends class_base
 					$this->_set_recv_date = time();
 				}
 				break;
+
+			case "customer":
+				// check if the 
+				if ($this->can("view", $prop["value"]) && $arr["obj_inst"]->prop("bill_due_date_days") == 0)
+				{
+					$cc = get_instance(CL_CRM_COMPANY);
+					$crel = $cc->get_cust_rel(obj($prop["value"]));
+					if ($crel)
+					{
+						$this->_set_bddd = $crel->prop("bill_due_date_days");
+					}
+				}
 		}
 		return $retval;
 	}	
@@ -479,6 +491,10 @@ class crm_bill extends class_base
 
 	function callback_pre_save($arr)
 	{
+		if ($this->_set_bddd)
+		{
+			$arr["obj_inst"]->set_prop("bill_due_date_days", $this->_set_bddd);
+		}
 		$arr["obj_inst"]->set_prop("sum", $this->_calc_sum($arr["obj_inst"]));
 		$bt = $arr["obj_inst"]->prop("bill_date");
 		$arr["obj_inst"]->set_prop("bill_due_date", 

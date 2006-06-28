@@ -2174,7 +2174,7 @@ class crm_company extends class_base
 
 			case "cust_contract_date":
 				// save to rel
-				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				if (($rel = $this->get_cust_rel($arr["obj_inst"], true)))
 				{
 					$rel->set_prop($data["name"], date_edit::get_timestamp($data["value"]));
 					$rel->save();
@@ -2188,10 +2188,11 @@ class crm_company extends class_base
 			case "contact_person3";
 			case "priority";
 			case "client_manager";
+			case "bill_due_days";
 				// save to rel
-				if (($rel = $this->get_cust_rel($arr["obj_inst"])))
+				if (($rel = $this->get_cust_rel($arr["obj_inst"], true)))
 				{
-					$rel->set_prop($data["name"], $data["value"]);
+					$rel->set_prop($data["name"] == "bill_due_days" ? "bill_due_date_days" : $data["name"], $data["value"]);
 					$rel->save();
 				}
 				break;
