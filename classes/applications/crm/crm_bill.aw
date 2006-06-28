@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.51 2006/06/28 11:14:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.52 2006/06/28 11:17:38 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1493,6 +1493,7 @@ class crm_bill extends class_base
 
 		$tb->add_button(array(
 			"name" => "delete",
+			"img" => "delete.gif",
 			"tooltip" => t("Kustuta read"),
 			"confirm" => t("Oled kindel et soovid read kustutada?"),
 			"action" => "delete_rows"
@@ -1504,7 +1505,7 @@ class crm_bill extends class_base
 	**/
 	function delete_rows($arr)
 	{
-		object_list::iterate_list($arr["sel"], "delete");
+		object_list::iterate_list($arr["sel_rows"], "delete");
 		return $arr["post_ru"];
 	}
 
