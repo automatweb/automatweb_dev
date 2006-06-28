@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.44 2006/06/26 10:26:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.45 2006/06/28 20:54:02 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -126,6 +126,7 @@ define("BUG_NOTREPEATABLE", 7);
 define("BUG_NOTFIXABLE", 8);
 define("BUG_WONTFIX", 9);
 define("BUG_FEEDBACK", 10);
+define("BUG_FATALEROR", 11);
 
 class bug extends class_base
 {
@@ -146,7 +147,8 @@ class bug extends class_base
 			BUG_NOTREPEATABLE => t("Kordamatu"),
 			BUG_NOTFIXABLE => t("Parandamatu"),
 			BUG_WONTFIX => t("Ei paranda"),
-			BUG_FEEDBACK => t("Vajab tagasisidet")
+			BUG_FEEDBACK => t("Vajab tagasisidet"),
+			BUG_FATALERROR => t("Fatal error"),
 		);
 	}
 
@@ -379,6 +381,10 @@ class bug extends class_base
 					return PROP_FATAL_ERROR;
 				}
 
+				if ($arr["request"]["bug_status"] == BUG_FATAL_ERROR)
+				{
+					return PROP_OK;
+				}
 				classload("core/date/date_calc");
 				$ev = date_edit::get_timestamp($arr["request"]["deadline"]);
 				if ($ev == $arr["obj_inst"]->prop("deadline"))
@@ -619,7 +625,8 @@ class bug extends class_base
 			BUG_CLOSED => 50,
 			BUG_INCORRECT => 40,
 			BUG_NOTREPEATABLE => 40,
-			BUG_NOTFIXABLE => 40
+			BUG_NOTFIXABLE => 40,
+			BUG_FATAL_ERROR => 200
 		);
 		$rv = $sp_lut[$bug->prop("bug_status")] + $bug->prop("bug_priority");
 		// also, if the bug has a deadline, then we need to up the priority as the deadline comes closer
