@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.29 2006/06/26 12:00:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.30 2006/06/28 16:54:47 dragut Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1133,7 +1133,6 @@ class cb_form_chain extends class_base
 			}
 		}
 
-
 		$mailer = get_instance("protocols/mail/aw_mail");
 		foreach($to_arr as $to)
 		{
@@ -1560,10 +1559,29 @@ class cb_form_chain extends class_base
 		//	$htmlc = get_instance("cfg/htmlclient");
 			classload('cfg/htmlclient');
 			$htmlc = new htmlclient(array(
-				'template' => 'real_webform.tpl'
+				'template' => 'real_webform.tpl',
+			//	'styles' => safe_array($wf->meta('xstyles'))
 			));
-			$htmlc->start_output();
 
+
+			
+			// XXX
+			// Adding webform style rules into page.
+			// Actually, I am not sure if form_chain should know _anything_ about how webform looks like and how elements are placed
+			// maybe i should use here a method that gives me webforms html and if i have to change any data (form element names etc.)
+			// then webform has methods for that --dragut
+			$styles = array();
+			classload('layout/active_page_data');
+			foreach ( safe_array( $wf->meta('xstyles') ) as $key => $value )
+			{
+				$styles['f_'.$wf->id().'_'.$i.'_'.$key] = $value;
+				foreach ( $value as $style_id )
+				{
+					active_page_data::add_site_css_style($style_id);
+				}
+			}
+
+			$htmlc->start_output();
 			foreach($els as $pn => $pd)
 			{
 				// rewrite file does not exist thingie if it is so
@@ -1597,7 +1615,15 @@ class cb_form_chain extends class_base
 						$pd["comment"] = "";
 					}
 				}
+
+				// XXX
+				// Add elements layout info and styles to htmlclient so it knows how to draw them
+				// Actually, I am not sure if form_chain should know _anything_ about how webform looks like and how elements are placed
+				// maybe i should use here a method that gives me webforms html and if i have to change any data (form element names etc.)
+				// then webform has methods for that --dragut
+				$pd['style'] = $styles[$pn];
 				$pd['capt_ord'] = $pd['wf_capt_ord'];
+
 				$htmlc->add_property($pd);
 			}
 			$htmlc->finish_output();
