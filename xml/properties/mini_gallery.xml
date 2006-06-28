@@ -52,6 +52,15 @@
             <caption>Piltide stiil</caption>
       </property>
       <property>
+            <name>sorter</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Piltide j&amp;amp;auml;rjestamine</caption>
+      </property>
+      <property>
             <name>zip_file</name>
             <table>objects</table>
             <group>import</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.26 2006/06/26 00:06:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.27 2006/06/28 15:00:31 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -23,6 +23,9 @@
 
 	@property style type=relpicker reltype=RELTYPE_STYLE field=meta method=serialize
 	@caption Piltide stiil
+
+	@property sorter type=select field=meta method=serialize
+	@caption Piltide j&auml;rjestamine
 
 @default group=import
 
@@ -55,6 +58,14 @@ class mini_gallery extends class_base
 			"tpldir" => "contentmgmt/gallery/mini_gallery",
 			"clid" => CL_MINI_GALLERY
 		));
+		$this->sorts = array(
+			"objects.name" => t("Nimi"),
+			"objects.jrk" => t("J&auml;rjekord"), 
+			"objects.created" => t("Loomise kuup&auml;ev vanemad enne"), 
+			"objects.modified" => t("Muutmise kuup&auml;ev vanemad enne"),
+			"objects.created desc" => t("Loomise kuup&auml;ev uuemad enne"), 
+			"objects.modified desc" => t("Muutmise kuup&auml;ev uuemad enne")
+		);
 	}
 
 	function get_property($arr)
@@ -63,6 +74,10 @@ class mini_gallery extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "sorter":
+				$prop["options"] = array("" => "") + $this->sorts;
+				break;
+
 			case "mg_tb":
 				$this->_mg_tb($arr);
 				break;
@@ -108,14 +123,18 @@ class mini_gallery extends class_base
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
 
+		$sby = "objects.jrk,objects.created desc";
+		if ($ob->prop("sorter") != "")
+		{
+			$sby = $ob->prop("sorter");
+		}
 		$images = new object_list(array(
 			"class_id" => CL_IMAGE,
 			"parent" => $ob->prop("folder"),
-			"sort_by" => "objects.jrk",
+			"sort_by" => $sby,
 			"lang_id" => array(),
 			"site_id" => array()
 		));
-
 		if (!$images->count())
 		{
 			return;
