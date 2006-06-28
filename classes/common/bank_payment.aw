@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.9 2006/06/14 13:31:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/bank_payment.aw,v 1.10 2006/06/28 12:28:30 markop Exp $
 // bank_payment.aw - Bank Payment 
 /*
 
@@ -33,14 +33,15 @@ class bank_payment extends class_base
 	//erinevate pankade lingid
 	var $bank_link = array(
 		"hansapank"	=> "https://www.hanza.net/cgi-bin/hanza/pangalink.jsp",
-		"seb"		=> "https://unet.eyp.ee/cgi-bin/unet3.sh/un3min.r",
+		"seb"		=> "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r",
 		"sampopank"	=> "https://www.sampo.ee/cgi-bin/pizza",
 		"krediidipank"	=> "https://i-pank.krediidipank.ee/teller/maksa",
+		"nordeapank"	=> "https://solo3.merita.fi/cgi-bin/SOLOPM01",
 	);
 
 	//mõnel pangal testkeskkond, et tore mõnikord seda kasutada proovimiseks
 	var $test_link = array(
-		"seb"	=> "https://unet.eyp.ee/cgi-bin/dv.sh/un3min.r",
+		"seb"	=> "https://www.seb.ee/cgi-bin/dv.sh/un3min.r",
 	);
 
 	//test keskkonnas läheb üldjuhul miskeid testandmeid vaja
@@ -271,9 +272,9 @@ class bank_payment extends class_base
 		openssl_free_key($pkeyid);
 		$VK_MAC = base64_encode($VK_signature);
 		$http = get_instance("protocols/file/http");
-		$link = "https://unet.eyp.ee/cgi-bin/unet3.sh/un3min.r";
-		if($test) $link = "https://unet.eyp.ee/cgi-bin/dv.sh/un3min.r";
-		$handler = "https://unet.eyp.ee/cgi-bin/unet3.sh/un3min.r";
+		$link = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
+		if($test) $link = "https://www.seb.ee/cgi-bin/dv.sh/un3min.r";
+		$handler = "https://www.seb.ee/cgi-bin/unet3.sh/un3min.r";
 		$params = array(
 			"VK_SERVICE"	=> $service,	//"1002"
 			"VK_VERSION"	=> $version,	//"008"
@@ -355,7 +356,7 @@ class bank_payment extends class_base
 			"VK_VERSION"	=> $version,	//"008"
 			"VK_SND_ID"	=> $sender_id,	//"EXPRPOST" //	15	Päringu koostaja ID (Kaupluse ID)
 			"VK_STAMP"	=> $stamp,	//row["arvenr"]
-			"VK_AMOUNT"	=> $ammount,	//$row["summa"];
+			"VK_AMOUNT"	=> $amount,	//$row["summa"];
 			"VK_CURR"	=> $curr,	//"EEK"
 			"VK_REF"	=> $reference_nr,
 			"VK_MSG"	=> $expl,	//"Ajakirjade tellimus. Arve nr. ".$row["arvenr"];
@@ -372,14 +373,25 @@ class bank_payment extends class_base
 	{
 		if(!$arr["service"]) $arr["service"] = "0002";
 		if(!$arr["version"]) $arr["version"] = "0001";
-		if(!$arr["cunnency"]) $arr["cunnency"] = "EEK";
+		if(!$arr["curr"]) $arr["curr"] = "EEK";
 		if(!$arr["confirm"]) $arr["confirm"] = "NO";
 		if(!$arr["recieve_account"]) $arr["recieve_account"] = "";
 		if(!$arr["recieve_name"]) $arr["recieve_name"] = "";
 		if(!$arr["recieve_id"]) $arr["recieve_id"] = "10354213";
 		if(!$arr["date"]) $arr["date"] = 'EXPRESS';
 		if(!$arr["lang"]) $arr["lang"] = "4";
-		if(!$arr["priv_key"]) $arr["priv_key"] = "g94z7e7KgP6PM8av7kIF7bwX8YNZ7eFX";//suht halb mõte muidugi ... aga see on siin ajutiselt
+//		if(!$arr["priv_key"]) $arr["priv_key"] = "g94z7e7KgP6PM8av7kIF7bwX8YNZ7eFX";//suht halb mõte muidugi ... aga see on siin ajutiselt
+		
+		if(!$arr["cancel_url"]) $arr["cancel_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		if(!$arr["return_url"]) $arr["return_url"] = aw_ini_get("baseurl")."/automatweb/bank_return.aw";
+		if(!$arr["priv_key"])
+		{
+			if($arr["test"] && $this->test_priv_keys[$arr["bank_id"]]) $file = $this->test_priv_keys[$arr["bank_id"]];
+			else $file = "privkey.pem";
+			$fp = fopen($this->cfg["site_basedir"]."/pank/".$file, "r");
+			$arr["priv_key"] = fread($fp, 8192);
+			fclose($fp);
+		}
 		return($arr);
 	}
 
@@ -387,24 +399,24 @@ class bank_payment extends class_base
 	{
 		extract($args);
 		$SOLOPMT_MAC      = '';
-		$VK_message       = $SOLOPMT_VERSION.'&';
+		$VK_message       = $service.'&';
 		$VK_message       .= $stamp.'&';
-		$VK_message       .= $SOLOPMT_RCV_ID.'&';
+		$VK_message       .= $sender_id.'&';
 		$VK_message       .= $amount.'&';
 		$VK_message       .= $reference_nr.'&';
-		$VK_message       .= $SOLOPMT_DATE.'&';
-		$VK_message       .= $currency.'&';
+		$VK_message       .= $date.'&';
+		$VK_message       .= $curr.'&';
 		$VK_message       .= ''.'&';
 		$SOLOPMT_MAC      = strtoupper(md5( $VK_message ));
 		
 		$http = get_instance("protocols/file/http");
-// 		$link = "https://solo3.merita.fi/cgi-bin/SOLOPM01";
-// 		$handler = "https://solo3.merita.fi/cgi-bin/SOLOPM01";
+ 		$link = "https://solo3.merita.fi/cgi-bin/SOLOPM01";
+ 		$handler = "https://solo3.merita.fi/cgi-bin/SOLOPM01";
 		$params = array(
 			"SOLOPMT_VERSION"     => $service,// 1.    Payment Version   SOLOPMT_VERSION   "0002"   AN 4  M
 			"SOLOPMT_STAMP"       => $stamp,// 2.    Payment Specifier    SOLOPMT_STAMP  Code specifying the payment   N 20  M 
-			"SOLOPMT_RCV_ID"      => $recieve_id, // 3.    Service Provider ID  SOLOPMT_RCV_ID    Customer ID (in Nordea's register)  AN 15    M 
-			"SOLOPMT_RCV_ACCOUNT" => $recieve_account,// 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
+			"SOLOPMT_RCV_ID"      => $sender_id, // 3.    Service Provider ID  SOLOPMT_RCV_ID    Customer ID (in Nordea's register)  AN 15    M 
+			"SOLOPMT_RCV_ACCOUNT" => $stamp,// 4.    Service Provider's Account    SOLOPMT_RCV_ACCOUNT  Other than the default account   AN 15    O
 			"SOLOPMT_RCV_NAME"    => $recieve_name,//5.    Service Provider's Name    SOLOPMT-RCV_NAME  Other than the default name   AN 30    O 
 			"SOLOPMT_LANGUAGE"    => $lang,// 6.    Payment Language  SOLOPMT_LANGUAGE  1 = Finnish 2 = Swedish 3 = English    N 1   O 
 			"SOLOPMT_AMOUNT"      => $amount,// 7.    Payment Amount    SOLOPMT_AMOUNT    E.g. 990.00    AN 19    M 
@@ -413,7 +425,7 @@ class bank_payment extends class_base
 			"SOLOPMT_MSG"         => $expl,// 10.   Payment Message   SOLOPMT_MSG    Service user's message  AN 234   O 
 			"SOLOPMT_RETURN"      => $return_url,// 11.   Return Address    SOLOPMT_RETURN    Return address following payment    AN 60    M 
 			"SOLOPMT_CANCEL"      => $cancel_url,// 12.   Cancel Address    SOLOPMT_CANCEL    Return address if payment is cancelled    AN 60    M 
-			"SOLOPMT_REJECT"      => $reject_url,// 13.   Reject Address    SOLOPMT_REJECT    Return address for rejected payment    AN 60    M 
+			"SOLOPMT_REJECT"      => $cancel_url,// 13.   Reject Address    SOLOPMT_REJECT    Return address for rejected payment    AN 60    M 
 							// 14.   Solo Button OR Solo Symbol    SOLOPMT_ BUTTON SOLOPMT_IMAGE    Constant    Constant    O       // $SOLOPMT_ BUTTON SOLOPMT_IMAGE   Constant    Constant    O 			
 			"SOLOPMT_MAC"         => $SOLOPMT_MAC,  // 15.   Payment MAC    SOLOPMT_MAC    MAC   AN 32    O 
 			"SOLOPMT_CONFIRM"     => $confirm,// 16.   Payment Confirmation    SOLOPMT_CONFIRM   YES or NO   A 3   O 

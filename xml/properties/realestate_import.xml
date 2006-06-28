@@ -39,6 +39,16 @@
             <caption>Organisatsioon</caption>
       </property>
       <property>
+            <name>no_default_picture_copy</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ei impordi default pilti</caption>
+      </property>
+      <property>
             <name>city24_county</name>
             <table>objects</table>
             <group>grp_city24_general</group>

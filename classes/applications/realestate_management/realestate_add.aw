@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.18 2006/06/26 12:53:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.19 2006/06/28 12:26:39 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -712,7 +712,8 @@ class realestate_add extends class_base
 			lc_site_load("realestate", $this);
 			$pay = "";
 			$make_visible = "";
-			if($has)
+			$tyyp = $realest_obj->prop_str("transaction_type");
+			if($has || $tyyp == "Ost")
 			{
 				if(!$realest_obj->prop("is_visible"))
 				{
@@ -1216,7 +1217,8 @@ class realestate_add extends class_base
 		{
 			$c = "";
 			foreach($all_objects as $key => $rlst_object)
-			{
+			{	
+				$tyyp = $rlst_object->prop_str("transaction_type");
 //				if($rlst_object->is_brother()) continue;//ignoreerib miskiseid brothereid
 				if(is_oid($rlst_object->meta("added_from"))) $change = $rlst_object->meta("added_from")."?id=".$rlst_object->id();
 				else $change = $this->mk_my_orb("parse_alias", array("id" => $rlst_object->id(), "default" => 1));
@@ -1231,13 +1233,13 @@ class realestate_add extends class_base
 				if(!$rlst_object->prop("expire")) $expire = t("Maksmata");
 				if($expire == t("Maksmata")) $extend = "PAY";
 				else $extend = "EXTEND";
-				$u = "";$a_e = "";$make_invisible = "";
+				$u = "";$a_e = "";$make_invisible = "";$p="";
 			//	if($this->is_template($expire))
 			//	{
 			//		$this->vars(array($expire => $this->parse($expire)));
 			//	}
-				if($has && ($expire == t("Maksmata"))||(!$rlst_object->prop("is_visible")))$expire = t("Nähtamatu");
-				if(!$has)
+				if(($has || $tyyp == "Ost") && ($expire == t("Maksmata"))||(!$rlst_object->prop("is_visible")))$expire = t("Nähtamatu");
+				if(!($has || $tyyp == "Ost"))
 				{
 					$e = "";$p = "";
 					if($extend == "EXTEND" && $this->is_template("EXTEND"))
@@ -1460,7 +1462,8 @@ class realestate_add extends class_base
 		$realestate_obj->set_meta("pic_order" , $existing_pics);
 		$unwanted_props = array("is_visible");//mida pole hea mõtet sessiooni panna ega salvestada
 		$has = $this->is_admin();
-		if ($has)
+		$tyyp = $realestate_obj->prop_str("transaction_type");
+		if($has || $tyyp == "Ost")
 		{
 			$unwanted_props = array();
 		}
@@ -1628,7 +1631,12 @@ class realestate_add extends class_base
 			return "sellist pakkumist pole";
 		}
 		$has = $this->is_admin();
-		if($has)//adminnidele ja maakleritele... nad ei pea maksma
+		if(is_oid($id))
+		{
+			$offer = obj($id);
+			$tyyp = $offer->prop_str("transaction_type");
+		}
+		if($has || $tyyp == "Ost")//adminnidele ja maakleritele... nad ei pea maksma
 		{
 //			if($fast)//juhul kui just lisatud ja nagu kui kauaks väärtus on niikuinii olemas
 //			{

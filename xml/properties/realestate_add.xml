@@ -72,6 +72,16 @@
             <store>no</store>
             <caption>see tuleb arvatavasti iga uue impordiga &amp;uuml;mber progeda, et momendil t&amp;ouml;&amp;ouml;tab juhul kui tabel on kujul (misiganes	Asula_nimi		Asula_t&amp;uuml;&amp;uuml;p(5-v&amp;auml;ikelinn , 6-linnaosa)	misiganes	parent parent_nimi	maakond	maakonna_nimi) ja esimestes kahes reas kasulikku infor pole</caption>
       </property>
+      <property>
+            <name>transl</name>
+            <table>objects</table>
+            <group>transl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>callback</type>
+            <callback>callback_get_transl</callback>
+            <caption>T&amp;amp;otilde;lgi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_REALESTATE_ADD</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -92,6 +102,9 @@
             <import>
                   <caption>Import</caption>
             </import>
+            <transl>
+                  <caption>T&amp;amp;otilde;lgi</caption>
+            </transl>
       </groupinfo>
       <reltypes>
             <MANEGER>
