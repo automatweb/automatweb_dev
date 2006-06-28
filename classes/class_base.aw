@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.489 2006/06/26 21:14:25 kristo Exp $
+// $Id: class_base.aw,v 2.490 2006/06/28 14:19:50 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2395,7 +2395,7 @@ class class_base extends aw_template
 				if ($val["type"] == "table")
 				{
 					classload("vcl/table");
-					$ot = new vcl_table();
+					$ot = new vcl_table(array("prop_name" => $key));
 				}
 				else
 				{

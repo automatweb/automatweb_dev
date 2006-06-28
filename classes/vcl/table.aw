@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.82 2006/06/12 13:43:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.83 2006/06/28 14:19:49 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -52,6 +52,17 @@ class aw_table extends aw_template
 		$this->filters = array();
 		$this->selected_filters = array();
 		$this->filter_index = array();
+		if ($data["prop_name"] != "")
+		{
+			$this->filter_name = $data["prop_name"].$_GET["id"];
+		}
+		else
+		if ($_GET["id"] && $_GET["group"])
+		{
+			$this->filter_name = md5($_GET["id"].$_GET["group"]);
+		}
+		$this->filter_name.= ++$GLOBALS["__aw_table_count_on_page"];
+
 		$this->sortable = true;
 		$this->rowdefs_ordered = false;
 
@@ -1678,6 +1689,7 @@ class aw_table extends aw_template
 		{
 			### add filter definition
 			$filter = $args["filter"];
+			asort($filter);
 			$filter_key = count ($this->filters) + 1;
 			$this->filters[$args["name"]] = array (
 				"key" => $filter_key,
