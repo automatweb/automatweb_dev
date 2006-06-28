@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.52 2006/06/28 11:17:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.53 2006/06/28 13:29:29 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -845,6 +845,11 @@ class crm_bill extends class_base
 		if ($_GET["openprintdialog"] == 1)
 		{
 			$res .= "<script language='javascript'>setTimeout('window.close()',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.close(); }</script>";
+		}
+		if ($_GET["openprintdialog_b"] == 1)
+		{
+			$url = aw_url_change_var("group", "preview_add", aw_url_change_var("openprintdialog", 1));
+			$res .= "<script language='javascript'>setTimeout('window.location.href=\"$url\"',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.location.href='$url'; }</script>";
 		}
 
 		die($res);
