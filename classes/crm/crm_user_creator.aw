@@ -240,7 +240,8 @@ class crm_user_creator extends core
 			$pwd = isset($_POST["password"]) ? $_POST["password"] : $pers->prop("password");
 			$uo = $this->cl_user->add_user(array(
 				"uid" => $uid,
-				"password" => $pwd
+				"password" => $pwd,
+				"real_name" => $pers->name()
 			));
 
 			$uo->connect(array(
