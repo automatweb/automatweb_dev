@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.195 2006/06/26 14:26:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.196 2006/06/28 12:22:04 tarvo Exp $
 
 /*
 
@@ -1406,6 +1406,7 @@ class site_show extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_SITE_STYLES,
 			"status" => STAT_ACTIVE,
+			"lang_id" => "%",
 		));
 		$ar = $ol->arr();
 		$style_ord = $ss->selected_style_ord(array(
