@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.50 2006/06/26 20:04:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.51 2006/06/28 11:14:06 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1490,6 +1490,22 @@ class crm_bill extends class_base
 			// get all checked rows and check their prices, if they are different, ask the user for a new price
 			"onClick" => "nfound=0;curp=-1;form=document.changeform;len = form.elements.length;for(i = 0; i < len; i++){if (form.elements[i].name.indexOf('sel_rows') != -1 && form.elements[i].checked)	{nfound++; neln = 'rows_'+form.elements[i].value+'__price_';nel = document.getElementById(neln); if (nfound == 1) { curp = nel.value; } else if(curp != nel.value) {price_diff = 1;}}}; if (price_diff) {v=prompt('Valitud ridade hinnad on erinevad, sisesta palun koondatud rea hind'); if (v) { document.changeform.reconcile_price.value = v;return true; } else {return false;} }"
 		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Kustuta read"),
+			"confirm" => t("Oled kindel et soovid read kustutada?"),
+			"action" => "delete_rows"
+		));
+	}
+
+	/**
+		@attrib name=delete_rows
+	**/
+	function delete_rows($arr)
+	{
+		object_list::iterate_list($arr["sel"], "delete");
+		return $arr["post_ru"];
 	}
 
 	function _init_bill_task_list(&$t)

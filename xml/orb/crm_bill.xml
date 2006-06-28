@@ -25,6 +25,13 @@
 			</function>
 		</action>
 
+		<action name="delete_rows">
+			<function name="delete_rows">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="reconcile_rows">
 			<function name="reconcile_rows">
 				<arguments>
