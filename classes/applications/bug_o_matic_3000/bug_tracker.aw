@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.63 2006/06/27 22:15:45 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.63 2006/06/27 22:15:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.64 2006/06/28 13:22:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.64 2006/06/28 13:22:28 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1890,7 +1890,11 @@ class bug_tracker extends class_base
 
 		// pick saved searches
 		$s = safe_array($arr["obj_inst"]->meta("saved_searches"));
-		$ss = array("" => "");
+		$ss = array($this->mk_my_orb("change", array(
+			"id" => $arr["obj_inst"]->id(),
+			"group" => "search_t",
+			"return_url" => $arr["request"]["return_url"])) => ""
+		);
 		foreach($s as $idx => $search)
 		{
 			if ($search["creator"] == aw_global_get("uid"))
