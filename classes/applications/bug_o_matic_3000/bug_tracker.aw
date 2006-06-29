@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.64 2006/06/28 13:22:28 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.64 2006/06/28 13:22:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.65 2006/06/29 19:30:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.65 2006/06/29 19:30:40 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -540,6 +540,12 @@ class bug_tracker extends class_base
 				"onClick" => "document.changeform.assign_to.value=$p_oid;submit_changeform('set_bug_status')"
 			));
 		}
+
+		$tb->add_cdata(html::href(array(
+			"url" => get_ru(),
+			"caption" => t("Bookmarkimise url"),
+			"id" => "sync_url"
+		)));
 	}
 
 	/**
@@ -2074,6 +2080,7 @@ class bug_tracker extends class_base
 		$url = $this->mk_my_orb("list_only_fetch", $arr["request"]);
 
 		$new_url = $this->mk_my_orb("new", array(), CL_BUG);
+		$cur_url = aw_url_change_var("b_id", NULL);
 
 		return "
 		var last_bold_node;
@@ -2086,6 +2093,9 @@ class bug_tracker extends class_base
 			document.changeform.b_id.value=bugid;
 			new_el = document.getElementById('add_bug_href');
 			new_el.href = '$new_url&parent='+bugid+'&return_url='+encodeURIComponent(document.location.href);
+
+			bm_url = document.getElementById('sync_url');
+			bm_url.href = '$cur_url&b_id='+bugid;
 
 			if (last_bold_node)
 			{
