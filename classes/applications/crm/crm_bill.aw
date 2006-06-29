@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.54 2006/06/28 14:43:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.55 2006/06/29 11:34:00 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -765,7 +765,7 @@ class crm_bill extends class_base
 				$this->vars(array(
 					"unit" => $grp_row["unit"],
 					"amt" => $grp_row["tot_amt"],
-					"price" => (int)($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),
+					"price" => number_format(($grp_row["tot_cur_sum"] / $grp_row["tot_amt"]),2,".", " "),
 					"sum" => number_format($grp_row["tot_cur_sum"], 2, ".", " "),
 					"desc" => $desc,
 					"date" => "" 
