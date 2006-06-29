@@ -63,8 +63,8 @@
 <script type="text/javascript">
 function showhide_help()
 {
-	help_layer = document.getElementById('help_layer');
-	if (help_layer.style.display == 'none')
+	help_layerv = document.getElementById('help_layer');
+	if (help_layerv.style.display == 'none')
 	{
 		show_help();
 	}
@@ -76,24 +76,24 @@ function showhide_help()
 
 function show_help()
 {
-	help_layer = document.getElementById('help_layer');
-	help_layer.style.display = 'block';
+	help_layerv = document.getElementById('help_layer');
+	help_layerv.style.display = 'block';
 }
 
 function close_help()
 {
-	help_layer = document.getElementById('help_layer');
-	help_layer.style.display = 'none';
+	help_layerv = document.getElementById('help_layer');
+	help_layerv.style.display = 'none';
 }
 
 function show_property_help(propname)
 {
-	prophelp_layer = document.getElementById('property_' + propname + '_help');
-	if (prophelp_layer)
+	prophelp_layerv = document.getElementById('property_' + propname + '_help');
+	if (prophelp_layerv)
 	{
-		helptext_layer = document.getElementById('helptext_layer');
-		helptext_layer.innerHTML = prophelp_layer.innerHTML;
-		if (help_layer.style.display == 'none')
+		helptext_layerv = document.getElementById('helptext_layer');
+		helptext_layerv.innerHTML = prophelp_layerv.innerHTML;
+		if (help_layerv.style.display == 'none')
 		{
 			show_help();
 		}
