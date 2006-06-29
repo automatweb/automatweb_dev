@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw,v 1.3 2006/06/16 09:37:19 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw,v 1.4 2006/06/29 11:11:34 dragut Exp $
 // carriage_order.aw - Veotellimus 
 /*
 
@@ -23,7 +23,7 @@
 	@caption Ekspediitor
 
 	@property deadline type=date_select table=crm_transport_management_carriage_order
-	@caption T&auml:htaeg
+	@caption T&auml;htaeg
 
 	@property carriage_order_status type=select store=no 
 	@caption Staatus
@@ -34,17 +34,21 @@
 	@property receiver type=relpicker reltype=RELTYPE_RECEIVER table=crm_transport_management_carriage_order
 	@caption Saaja
 
-	@property unloading_location type=relpicker reltype=RELTYPE_UNLOADING_LOCATION table=crm_transport_management_carriage_order
-	@caption Mahalaadimiskoht
+	@layout unloading_location_frame type=hbox
 
-	@property unloading_note type=textarea table=crm_transport_management_carriage_order
-	@caption M&auml;rkus
+		@property unloading_location type=relpicker reltype=RELTYPE_UNLOADING_LOCATION table=crm_transport_management_carriage_order parent=unloading_location_frame captionside=top
+		@caption Mahalaadimiskoht
 
-	@property loading_location type=relpicker reltype=RELTYPE_LOADING_LOCATION table=crm_transport_management_carriage_order
-	@caption Pealelaadimiskoht
+		@property unloading_note type=textarea table=crm_transport_management_carriage_order parent=unloading_location_frame captionside=top
+		@caption M&auml;rkus
 
-	@property loading_note type=textarea table=crm_transport_management_carriage_order
-	@caption M&auml;rkus
+	@layout loading_location_frame type=hbox
+
+		@property loading_location type=relpicker reltype=RELTYPE_LOADING_LOCATION table=crm_transport_management_carriage_order parent=loading_location_frame captionside=top
+		@caption Pealelaadimiskoht
+
+		@property loading_note type=textarea table=crm_transport_management_carriage_order parent=loading_location_frame captionside=top
+		@caption M&auml;rkus
 
 	@property added_documents type=textarea table=crm_transport_management_carriage_order
 	@caption Lisatud dokumendid
@@ -53,7 +57,7 @@
 	@caption Vedaja
 
 	@property next_transporter type=relpicker reltype=RELTYPE_NEXT_TRANSPORTER table=crm_transport_management_carriage_order
-	@caption Vedaja
+	@caption J&auml;rgmine vedaja
 
 	@property transporter_note type=textarea table=crm_transport_management_carriage_order
 	@caption Vedaja m&auml;rkused
@@ -91,7 +95,7 @@
 	@property nr type=textbox table=crm_transport_management_carriage_order
 	@caption Number
 
-	@property char type=textbox table=crm_transport_management_carriage_order
+	@property cmr_char type=textbox table=crm_transport_management_carriage_order
 	@caption T&auml;ht
 
 	@property adr type=textbox table=crm_transport_management_carriage_order
@@ -150,6 +154,12 @@
 */
 
 define('CARRIAGE_ORDER_STATUS_NEW', 1);
+define('CARRIAGE_ORDER_STATUS_PLANNED', 2);
+define('CARRIAGE_ORDER_STATUS_ON_THE_ROAD', 3);
+define('CARRIAGE_ORDER_STATUS_OVER_DEADLINE', 4);
+define('CARRIAGE_ORDER_STATUS_CANCELED', 5);
+define('CARRIAGE_ORDER_STATUS_COMPLETED', 6);
+define('CARRIAGE_ORDER_STATUS_ARCHIVED', 7);
 
 define('PAYMENT_CONDITION_NOFRANKO', 1);
 define('PAYMENT_CONDITION_FRANKO', 2);
@@ -168,7 +178,13 @@ class crm_transport_management_carriage_order extends class_base
 		));
 
 		$this->carriage_order_status = array(
-			CARRIAGE_ORDER_STATUS_NEW => t('Uus')
+			CARRIAGE_ORDER_STATUS_NEW => t('Uus'),
+			CARRIAGE_ORDER_STATUS_PLANNED => t('Planeeritud'),
+			CARRIAGE_ORDER_STATUS_ON_THE_ROAD => t('Hetkel vedamisel'),
+			CARRIAGE_ORDER_STATUS_OVER_DEADLINE => t('&Uuml;le t&auml;htaja'),
+			CARRIAGE_ORDER_STATUS_CANCELED => t('Katkestatud'),
+			CARRIAGE_ORDER_STATUS_COMPLETED => t('Valmis'),
+			CARRIAGE_ORDER_STATUS_ARCHIVED => t('Arhiveeritud')
 		);
 
 		$this->payment_condition = array(
@@ -307,7 +323,7 @@ class crm_transport_management_carriage_order extends class_base
 			case 'merchandise_name':
 			case 'cargo_class':
 			case 'nr':
-			case 'char':
+			case 'cmr_char':
 			case 'adr':
 			case 'measure_unit':
 			case 'gross_weight':

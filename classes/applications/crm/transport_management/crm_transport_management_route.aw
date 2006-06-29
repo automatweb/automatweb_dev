@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_route.aw,v 1.2 2006/06/15 15:17:23 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_route.aw,v 1.3 2006/06/29 11:11:34 dragut Exp $
 // route.aw - Marsruut 
 /*
 
@@ -37,8 +37,11 @@
 @reltype START_LOCATION value=1 clid=CL_CRM_CITY
 @caption Alguspunkt
 
-@reltype END_LOCATION value=1 clid=CL_CRM_CITY
+@reltype END_LOCATION value=2 clid=CL_CRM_CITY
 @caption Sihtpunkt
+
+@reltype ADDRESS value=3 clid=CL_CRM_ADDRESS
+@caption Aadress
 
 */
 
@@ -92,6 +95,35 @@ class crm_transport_management_route extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	function callback_post_save($arr)
+	{
+		$city_ids = explode(',', $arr['request']['route_tree_data']);
+		$ord = 10;
+		$city_ord = array();
+		foreach ($city_ids as $city_id)
+		{
+			$address = new object();
+			$address->set_class_id(CL_CRM_ADDRESS);
+			$address->set_parent($arr['id']);
+			$address->save();
+
+			$address->connect(array(
+				'to' => $city_id,
+				'type' => 'RELTYPE_LINN'
+			));
+			$address->set_prop('linn', $city_id);
+			$address->save();
+			$arr['obj_inst']->connect(array(
+				'to' => $address,
+				'type' => 'RELTYPE_ADDRESS'
+			));
+			$city_ord[$city_id] = $ord;
+			$ord += 10;
+		}
+		$arr['obj_inst']->set_meta('city_ord', $city_ord);
+		$arr['obj_inst']->save();
+	}
+
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
@@ -111,13 +143,25 @@ class crm_transport_management_route extends class_base
 	{
 		$t = &$arr['prop']['vcl_inst'];
                 $t->start_tree(array(
-                        'type' => TREE_DHTML,
-                        'root_name' => 'routes_tree',
+			'type' => TREE_DHTML_WITH_BUTTONS,
+			'root_name' => 'route_tree',
+			'tree_id' => 'routes_tree',
+			'persist_state' => true,
+			'checkbox_data_var' => 'route_tree_data'
                 ));
-                $t->add_item(0, array(
-                        'id' => 'foobar',
-                        'name' => 'Asukohad'
-                ));
+
+		$city_ol = new object_list(array(
+			'class_id' => CL_CRM_CITY
+		));
+
+		foreach ($city_ol->arr() as $city)
+		{
+			$t->add_item(0, array(
+				'id' => $city->id(),
+				'name' => $city->name()	,
+				"checkbox" => "button"
+			));
+		}
 
 		return PROP_OK;
 	}
@@ -127,9 +171,54 @@ class crm_transport_management_route extends class_base
 		$t = &$arr['prop']['vcl_inst'];
 		$t->set_sortable(false);
 		$t->define_field(array(
-			'name' => 'name',
-			'caption' => t('Nimi')
+			'name' => 'country',
+			'caption' => t('Riik')
 		));
+		$t->define_field(array(
+			'name' => 'city',
+			'caption' => t('Linn')
+		));
+		$t->define_field(array(
+			'name' => 'ord',
+			'caption' => t('J&auml;rjekord'),
+			'align' => 'center',
+			'width' => '10%'
+		));
+
+		$addresses = $arr['obj_inst']->connections_from(array(
+			'type' => 'RELTYPE_ADDRESS'
+		));
+
+		$city_ord = $arr['obj_inst']->meta('city_ord');
+
+		foreach (safe_array($addresses) as $address)
+		{
+			$address_obj = $address->to();
+			$country_oid = $address_obj->prop('riik');
+			$country = "";
+			if ($this->can('view', $country_oid))
+			{
+				$country_obj = new object($country_oid);
+				$country = $country_obj->name();
+			}
+			$city_oid = $address_obj->prop('linn');
+			$city = "";
+			if ($this->can('view', $city_oid))
+			{
+				$city_obj = new object($city_oid);
+				$city = $city_obj->name();
+			}
+
+			$t->define_data(array(
+				'country' => $country,
+				'city' => $city,
+				'ord' => html::textbox(array(
+					'name' => 'ord['.$city_oid.']',
+					'value' => $city_ord[$city_oid],
+					'size' => 3
+				))
+			));
+		}
 		return PROP_OK;
 	}
 

@@ -1,23 +1,25 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management.aw,v 1.1 2006/06/15 12:35:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management.aw,v 1.2 2006/06/29 11:11:34 dragut Exp $
 // transport_management.aw - Veotellimuste haldus 
 /*
 
 @classinfo syslog_type=ST_TRANSPORT_MANAGEMENT relationmgr=yes no_status=1 prop_cb=1
 
+@tableinfo crm_transport_management index=oid master_table=objects master_index=oid
+
 @default table=objects
 @default group=general
 
-@property manager_org type=relpicker reltype=RELTYPE_MANAGER_ORG
+@property manager_org type=relpicker reltype=RELTYPE_MANAGER_ORG table=crm_transport_management
 @caption Haldaja organisatsioon
 
-@property config_manager type=relpicker reltype=RELTYPE_CONFIG_MANAGER
+@property config_manager type=relpicker reltype=RELTYPE_CONFIG_MANAGER table=crm_transport_management
 @caption Seadete haldur
 
-@property foo type=textbox
+@property dispatchers_professions type=relpicker multiple=1 reltype=RELTYPE_DISPATCHER_PROFESSION store=connect
 @caption Ekspediitorite ametinimetused
 
-@property bar type=textbox
+@property leaders_professions type=relpicker multiple=1 reltype=RELTYPE_LEADER_PROFESSION store=connect
 @caption Juhtide ametinimetused
 
 @groupinfo orders caption="Tellimused"
@@ -34,16 +36,13 @@
 				@property orders_status_tree type=treeview store=no parent=orders_status_left captionside=top group=orders_status
 				@caption Staatused
 
+				@property orders_status_search_route type=textbox size=25 store=no parent=orders_status_left group=orders_status captionside=top
+				@caption Marsruut
+
+				@property orders_status_search_car_trailer type=textbox size=25 store=no parent=orders_status_left group=orders_status captionside=top
+				@caption Auto/Treiler
+
 			@layout orders_status_right type=vbox parent=orders_status_frame group=orders_status
-
-				@layout orders_status_search type=hbox parent=orders_status_right group=orders_status
-
-					@property orders_status_search_route type=textbox store=no parent=orders_status_search group=orders_status
-					@caption Marsruut
-
-					@property orders_status_search_car_trailer type=textbox store=no parent=orders_status_search group=orders_status
-					@caption Auto/Treiler
-
 
 				@property orders_status_table type=table parent=orders_status_right no_caption=1 group=orders_status
 				@caption Staatuste tabel
@@ -95,22 +94,53 @@
 	@property routes_toolbar type=toolbar no_caption=1 group=routes
 	@caption Marsruutide t&ouml;&ouml;riistariba
 
-	@property routes_search_address type=textbox store=no group=routes
-	@caption Otsi aadressi
+	@layout routes_frame type=hbox width=20%:80% group=routes
 
-	@property routes_table type=table no_caption=1 group=routes
-	@caption Marsruutide tabel
+		@layout routes_frame_right type=vbox parent=routes_frame group=routes
+	
+			@property routes_search_address type=textbox size=25 store=no parent=routes_frame_right group=routes captionside=top
+			@caption Otsi aadressi
+
+		@layout routes_frame_left type=vbox parent=routes_frame group=routes
+
+			@property routes_table type=table no_caption=1 parent=routes_frame_left group=routes
+			@caption Marsruutide tabel
 
 @groupinfo carriages caption="Veod"
 
 	@property carriages_toolbar type=toolbar no_caption=1 group=carriages,my_carriages
 	@caption Vedude t&ouml;&ouml;riistariba
 
-	@property carriages_search_client type=textbox store=no group=carriages
-	@caption Otsi kliendi j&auml;rgi
+	@layout carriages_frame type=hbox width=20%:80% group=carriages
 
-	@property carriages_table type=table no_caption=1 group=carriages
-	@caption Vedude tabel
+		@layout carriages_frame_right type=vbox parent=carriages_frame group=carriages
+
+			@property carriages_search_client type=textbox size=25 store=no parent=carriages_frame_right group=carriages captionside=top
+			@caption Otsi kliendi j&auml;rgi
+
+		@layout carriages_frame_left type=vbox parent=carriages_frame group=carriages
+
+			@property carriages_table type=table no_caption=1 parent=carriages_frame_left group=carriages
+			@caption Vedude tabel
+
+@groupinfo resources caption="Ressursid"
+
+
+	@groupinfo resources_trucks caption="Veoautod" parent=resources
+
+		@property resources_trucks_toolbar type=toolbar no_caption=1 group=resources_trucks
+		@caption Veoautode t&ouml;&ouml;riistariba
+
+		@property resources_trucks_table type=table no_caption=1 group=resources_trucks
+		@caption Veoautode tabel
+
+	@groupinfo resources_trailers caption="Haagised" parent=resources
+	
+		@property resources_trailers_toolbar type=toolbar no_caption=1 group=resources_trailers
+		@caption Haagiste t&ouml;&ouml;riistariba
+
+		@property resources_trailers_table type=table no_caption=1 group=resources_trailers
+		@caption Haagiste tabel
 
 @groupinfo my_desktop caption="Minu T&ouml;&ouml;laud"
 
@@ -128,48 +158,72 @@
 				@property my_orders_tree type=treeview store=no parent=my_orders_left captionside=top group=my_orders
 				@caption Staatused
 
+				@property my_orders_search_route type=textbox size=25 store=no parent=my_orders_left group=my_orders captionside=top
+				@caption Marsruut
+
+				@property my_orders_search_car_trailer type=textbox size=25 store=no parent=my_orders_left group=my_orders captionside=top
+				@caption Auto/Treiler
+
 			@layout my_orders_right type=vbox parent=my_orders_frame group=my_orders
-
-				@layout my_orders_search type=hbox parent=my_orders_right group=my_orders
-
-					@property my_orders_search_route type=textbox store=no parent=my_orders_search group=my_orders
-					@caption Marsruut
-
-					@property my_orders_search_car_trailer type=textbox store=no parent=my_orders_search group=my_orders
-					@caption Auto/Treiler
-
 
 				@property my_orders_table type=table parent=my_orders_right no_caption=1 group=my_orders
 				@caption Staatuste tabel
-
 
 	@groupinfo my_carriages caption="Veod" parent=my_desktop
 
 		property my_carriages_toolbar type=toolbar no_caption=1 group=my_carriages
 		caption Vedude t&ouml;&ouml;riistariba
 
-		@property my_carriages_search_client type=textbox store=no group=my_carriages
-		@caption Otsi kliendi j&auml;rgi
+		@layout my_carriages_frame type=hbox width=20%:80% group=my_carriages
+		
+			@layout my_carriages_left type=vbox parent=my_carriages_frame group=my_carriages
 
-		@property my_carriages_table type=table no_caption=1 group=my_carriages
-		@caption Vedude tabel
+				@property my_carriages_search_client type=textbox size=25 store=no parent=my_carriages_left group=my_carriages captionside=top
+				@caption Otsi kliendi j&auml;rgi
+
+			@layout my_carriages_right type=vbox parent=my_carriages_frame group=my_carriages
+
+				@property my_carriages_table type=table no_caption=1 parent=my_carriages_right group=my_carriages
+				@caption Vedude tabel
 
 
 @reltype MANAGER_ORG value=1 clid=CL_CRM_COMPANY
 @caption Haldaja organisatsioon
 
-@reltype CONFIG_MANAGER value=1 clid=CL_CFGMANAGER
+@reltype CONFIG_MANAGER value=2 clid=CL_CFGMANAGER
 @caption Seadete haldur
+
+@reltype DISPATCHER_PROFESSION value=3 clid=CL_CRM_PROFESSION
+@caption Ekpediitori ametinimetus
+
+@reltype LEADER_PROFESSION value=4 clid=CL_CRM_PROFESSION
+@caption Juhi ametinimetus
+
+@reltype CARRIAGE_ORDER value=5 clid=CL_CRM_TRANSPORT_MANAGEMENT_CARRIAGE_ORDER
+@caption Veotellimus
+
+@reltype ROUTE value=6 clid=CL_CRM_TRANSPORT_MANAGEMENT_ROUTE
+@caption Marsruut
+
+@reltype CARRIAGE value=7 clid=CL_CRM_TRANSPORT_MANAGEMENT_CARRIAGE
+@caption Vedu
+
+@reltype TRUCK value=8 clid=CL_CRM_TRANSPORT_MANAGEMENT_TRUCK
+@caption Veoauto
+
+@reltype TRAILER value=9 clid=CL_CRM_TRANSPORT_MANAGEMENT_TRAILER
+@caption Haagis
+
 
 */
 
-define('STATUS_NEW', 1);
-define('STATUS_PLANNED', 2);
-define('STATUS_ON_THE_ROAD', 3);
-define('STATUS_OVER_DEADLINE', 4);
-define('STATUS_CANCELED', 5);
-define('STATUS_COMPLETED', 6);
-define('STATUS_ARCHIVED', 7);
+define('CARRIAGE_ORDER_STATUS_NEW', 1);
+define('CARRIAGE_ORDER_STATUS_PLANNED', 2);
+define('CARRIAGE_ORDER_STATUS_ON_THE_ROAD', 3);
+define('CARRIAGE_ORDER_STATUS_OVER_DEADLINE', 4);
+define('CARRIAGE_ORDER_STATUS_CANCELED', 5);
+define('CARRIAGE_ORDER_STATUS_COMPLETED', 6);
+define('CARRIAGE_ORDER_STATUS_ARCHIVED', 7);
 
 class crm_transport_management extends class_base
 {
@@ -184,13 +238,13 @@ class crm_transport_management extends class_base
 		));
 
 		$this->status_array = array(
-			STATUS_NEW => t('Uued'),
-			STATUS_PLANNED => t('Planeeritud'),
-			STATUS_ON_THE_ROAD => t('Hetkel vedamisel'),
-			STATUS_OVER_DEADLINE => t('&Uuml;le t&auml;htaja'),
-			STATUS_CANCELED => t('Katkestatud'),
-			STATUS_COMPLETED => t('Valmis'),
-			STATUS_ARCHIVED => t('Arhiveeritud')
+			CARRIAGE_ORDER_STATUS_NEW => t('Uued'),
+			CARRIAGE_ORDER_STATUS_PLANNED => t('Planeeritud'),
+			CARRIAGE_ORDER_STATUS_ON_THE_ROAD => t('Hetkel vedamisel'),
+			CARRIAGE_ORDER_STATUS_OVER_DEADLINE => t('&Uuml;le t&auml;htaja'),
+			CARRIAGE_ORDER_STATUS_CANCELED => t('Katkestatud'),
+			CARRIAGE_ORDER_STATUS_COMPLETED => t('Valmis'),
+			CARRIAGE_ORDER_STATUS_ARCHIVED => t('Arhiveeritud')
 		);
 	}
 
@@ -243,17 +297,24 @@ class crm_transport_management extends class_base
 			"name" => "new",
 			"img" => "new.gif",
 			"tooltip" => t("Uus tellimus"),
-			"url" => $this->mk_my_orb("do_something",array()),
+			"url" => $this->mk_my_orb("new",array(
+				'alias_to' => $arr['obj_inst']->id(),
+				'parent' => $arr['obj_inst']->id(),
+				'reltype' => 5, // RELTYPE_CARRIAGE_ORDER
+				'return_url' => get_ru()
+			), CL_CRM_TRANSPORT_MANAGEMENT_CARRIAGE_ORDER),
 		));
 		$t->add_button(array(
-			"name" => "delete",
-			"img" => "delete.gif",
-			"tooltip" => t("Kustuta tellimus"),
-			"url" => $this->mk_my_orb("do_something",array()),
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta tellimus'),
+			'action' => '_delete_objects',
+			'confirm' => t('Oled kindel et soovid valitud tellimused kustutada?')
 		));
+
 		$t->add_button(array(
 			"name" => "archive",
-			"img" => "delete.gif",
+			"img" => "new.gif",
 			"tooltip" => t("Lisa tellimus arhiivi"),
 			"url" => $this->mk_my_orb("do_something",array()),
 		));
@@ -284,6 +345,9 @@ class crm_transport_management extends class_base
 	function _get_orders_status_table($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
+		$t->set_default_sortby('deadline');
+		$t->set_default_sorder('asc');
+
 		$t->define_field(array(
 			'name' => 'client',
 			'caption' => t('Klient'),
@@ -303,11 +367,80 @@ class crm_transport_management extends class_base
 		$t->define_field(array(
 			'name' => 'deadline',
 			'caption' => t('T&auml;htaeg'),
+			'sortable' => true,
+			'format' => 'd.m.Y',
+			'numeric' => 1,
+			'type' => 'time'
 		));
 		$t->define_field(array(
 			'name' => 'amount',
 			'caption' => t('Kogus'),
 		));
+		$t->define_field(array(
+			'name' => 'change',
+			'caption' => t('Muuda'),
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali'),
+			'align' => 'center',
+			'width' => '5%'
+		));
+
+		$orders = $arr['obj_inst']->connections_from(array(
+			'type' => 'RELTYPE_CARRIAGE_ORDER'
+		));
+
+		foreach (safe_array($orders) as $order)
+		{
+			$order_obj  = $order->to();
+			$order_oid = $order->prop('to');
+
+			$client_oid = $order_obj->prop('orderer');
+			$client_name = t('puudub');
+			if ( $this->can('view', $client_oid) )
+			{
+				$client_obj = new object($client_oid);
+				$client_name = $client_obj->name();
+			}
+
+			$start_location_oid = $order_obj->prop('loading_location');
+			$start_location = t('puudub');
+			if ( $this->can('view', $start_location_oid) )
+			{
+				$start_location_obj  = new object($start_location_oid);
+				$start_location = $start_location_obj->name();
+			}
+
+			$end_location_oid = $order_obj->prop('unloading_location');
+			$end_location = t('puudub');
+			if ( $this->can('view', $end_location_oid) )
+			{
+				$end_location_obj  = new object($end_location_oid);
+				$end_location = $end_location_obj->name();
+			}
+
+			$t->define_data(array(
+				'client' => $client_name,
+				'project_name' => '',
+				'start_location' => $start_location,
+				'end_location' => $end_location,
+				'deadline' => $order_obj->prop('deadline'),
+				'amount' => '',
+				'change' => html::href(array(
+					'caption' => t('Muuda'),
+					'url' => $this->mk_my_orb('change', array(
+						'id' => $order_oid,
+						'return_url' => get_ru()
+					), CL_CRM_TRANSPORT_MANAGEMENT_CARRIAGE_ORDER)
+				)),
+				'select' => html::checkbox(array(
+					'name' => 'selected_ids['.$order_oid.']',
+					'value' => $order_oid
+				))
+			));
+		}
 
 		return PROP_OK;
 	}
@@ -320,21 +453,19 @@ class crm_transport_management extends class_base
 			'root_name' => 'orders_routes_tree',
 		//	'root_url' => 'http://www.neti.ee',
 		));
-		$t->add_item(0, array(
-			'id' => 'foobar',
-			'name' => 'Marsruutide nimekiri'
-		));
-/*
-		foreach ( $this->status_array as $status_key => $status_value )
-		{
-			$t->add_item(0,array(
-				"id" => $status_key,
-				"name" => $status_value,
-				"url" => $this->mk_my_orb("do_something",array()),
-			));
 
+		$routes = new object_list(array(
+			'class_id' => CL_CRM_TRANSPORT_MANAGEMENT_ROUTE
+		));
+
+		foreach ($routes->arr() as $route)
+		{
+			$t->add_item(0, array(
+				'id' => $route->id(),
+				'name' => $route->name()
+			));
 		}
-*/
+
 		return PROP_OK;
 	}
 
@@ -374,6 +505,17 @@ class crm_transport_management extends class_base
 			'caption' => t('Vedu'),
 		));
 
+
+		$t->define_data(array(
+			'client' => '',
+			'project_name' => '',
+			'start_location' => '',
+			'end_location' => '',
+			'deadline' => '',
+			'amount' => '',
+			'status' => '',
+			'carriage' => '',
+		));
 
 		return PROP_OK;
 	}
@@ -513,13 +655,19 @@ class crm_transport_management extends class_base
 			"name" => "new",
 			"img" => "new.gif",
 			"tooltip" => t("Uus marsruut"),
-			"url" => $this->mk_my_orb("do_something",array()),
+			"url" => $this->mk_my_orb("new",array(
+				'alias_to' => $arr['obj_inst']->id(),
+				'parent' => $arr['obj_inst']->id(),
+				'reltype' => 6, // RELTYPE_ROUTE
+				'return_url' => get_ru()
+			), CL_CRM_TRANSPORT_MANAGEMENT_ROUTE),
 		));
 		$t->add_button(array(
-			"name" => "delete",
-			"img" => "delete.gif",
-			"tooltip" => t("Kustuta marsruut"),
-			"url" => $this->mk_my_orb("do_something",array()),
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta marsruut'),
+			'action' => '_delete_objects',
+			'confirm' => t('Oled kindel et soovid valitud marsruudid kustutada?')
 		));
 		return PROP_OK;
 	}
@@ -527,8 +675,12 @@ class crm_transport_management extends class_base
 	function _get_routes_table($arr)
 	{
 		$t = &$arr['prop']['vcl_inst'];
+		$t->set_default_sortby('name');
+		$t->set_default_sorder('asc');
+
 		$t->define_field(array(
 			'name' => 'name',
+			'sortable' => true,
 			'caption' => t('Nimetus')
 		));
 		$t->define_field(array(
@@ -543,6 +695,52 @@ class crm_transport_management extends class_base
 			'name' => 'cars_trailers',
 			'caption' => t('Autod/Haagised')
 		));
+		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali'),
+			'align' => 'center',
+			'width' => '5%'
+		));
+
+		$routes = $arr['obj_inst']->connections_from(array(
+			'type' => 'RELTYPE_ROUTE'
+		));
+		
+		foreach (safe_array($routes) as $route)
+		{
+			$route_obj = $route->to();
+			$route_oid = $route->prop('to');
+			$start_location_oid = $route_obj->prop('start_location');
+			$start_location = t('puudub');
+
+			if ($this->can('view', $start_location_oid))
+			{
+				$start_location_obj = new object($start_location_oid);
+				$start_location = $start_location_obj->name();
+			}
+
+
+			$end_location_oid = $route_obj->prop('end_location');
+			$end_location = t('puudub');
+			if ($this->can('view', $end_location_oid))
+			{
+				$end_location_obj = new object($end_location_oid);
+				$end_location = $end_location_obj->name();
+			}
+
+			$t->define_data(array(
+				'name' => $route_obj->name(),
+				'start_location' => $start_location,
+				'end_location' => $end_location,
+				'cars_trailers' => '',
+				'select' => html::checkbox(array(
+					'name' => 'selected_ids['.$route_oid.']',
+					'value' => $route_oid
+				))
+			));
+
+		}
+		return PROP_OK;
 	}
 
 	function _get_carriages_toolbar($arr)
@@ -552,14 +750,22 @@ class crm_transport_management extends class_base
 			"name" => "new",
 			"img" => "new.gif",
 			"tooltip" => t("Uus vedu"),
-			"url" => $this->mk_my_orb("do_something",array()),
+			"url" => $this->mk_my_orb("new",array(
+				'alias_to' => $arr['obj_inst']->id(),
+				'parent' => $arr['obj_inst']->id(),
+				'reltype' => 7, // RELTYPE_CARRIAGE
+				'return_url' => get_ru()
+			), CL_CRM_TRANSPORT_MANAGEMENT_CARRIAGE),
+
 		));
 		$t->add_button(array(
-			"name" => "delete",
-			"img" => "delete.gif",
-			"tooltip" => t("Kustuta vedu"),
-			"url" => $this->mk_my_orb("do_something",array()),
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta vedu'),
+			'action' => '_delete_objects',
+			'confirm' => t('Oled kindel et soovid valitud veod kustutada?')
 		));
+
 		return PROP_OK;
 	}
 
@@ -602,6 +808,39 @@ class crm_transport_management extends class_base
 			'name' => 'income',
 			'caption' => t('Tulu')
 		));
+		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali'),
+			'align' => 'center',
+			'width' => '5%'
+		));
+
+		$carriages = $arr['obj_inst']->connections_from(array(
+			'type' => 'RELTYPE_CARRIAGE'
+		));
+
+		foreach (safe_array($carriages) as $carriage)
+		{
+			$carriage_obj = $carriage->to();
+			$carriage_oid = $carriage->prop('to');
+		
+			$t->define_data(array(
+				'route' => '',
+				'dispatcher' => '',
+				'start_date' => '',
+				'end_date' => '',
+				'start_location' => '',
+				'end_location' => '',
+				'cars_trailers' => '',
+				'status' => '',
+				'income' => '',
+				'select'  => html::checkbox(array(
+					'name' => 'selected_ids['.$carriage_oid.']',
+					'value' => $carriage_oid
+				))
+			));
+		}
+		return PROP_OK;
 	}
 
 
@@ -736,9 +975,159 @@ class crm_transport_management extends class_base
 			'name' => 'income',
 			'caption' => t('Tulu')
 		));
+
+		return PROP_OK;
 	}
 
+	function _get_resources_trucks_toolbar($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus veoauto"),
+			"url" => $this->mk_my_orb("new",array(
+				'alias_to' => $arr['obj_inst']->id(),
+				'parent' => $arr['obj_inst']->id(),
+				'reltype' => 8, // RELTYPE_TRUCK
+				'return_url' => get_ru()
+			), CL_CRM_TRANSPORT_MANAGEMENT_TRUCK),
+		));
+		$t->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta veoauto'),
+			'action' => '_delete_objects',
+			'confirm' => t('Oled kindel et soovid valitud veoautod kustutada?')
+		));
 
+		return PROP_OK;
+	}
+
+	function _get_resources_trucks_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimetus')
+		));
+		$t->define_field(array(
+			'name' => 'nr',
+			'caption' => t('Number')
+		));
+		$t->define_field(array(
+			'name' => 'bodytype',
+			'caption' => t('Keret&uuml;&uuml;p')
+		));
+		$t->define_field(array(
+			'name' => 'drivers',
+			'caption' => t('Autojuhid')
+		));
+		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali')
+		));
+		return PROP_OK;
+	}
+
+	function _get_resources_trailers_toolbar($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus haagis"),
+			"url" => $this->mk_my_orb("new",array(
+				'alias_to' => $arr['obj_inst']->id(),
+				'parent' => $arr['obj_inst']->id(),
+				'reltype' => 9, // RELTYPE_TRAILER
+				'return_url' => get_ru()
+			), CL_CRM_TRANSPORT_MANAGEMENT_TRAILER),
+		));
+		$t->add_button(array(
+			'name' => 'delete',
+			'img' => 'delete.gif',
+			'tooltip' => t('Kustuta haagis'),
+			'action' => '_delete_objects',
+			'confirm' => t('Oled kindel et soovid valitud haagised kustutada?')
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_resources_trailers_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimetus')
+		));
+		$t->define_field(array(
+			'name' => 'nr',
+			'caption' => t('Number')
+		));
+		$t->define_field(array(
+			'name' => 'bodytype',
+			'caption' => t('Keret&uuml;&uuml;p')
+		));
+		$t->define_field(array(
+			'name' => 'drivers',
+			'caption' => t('Autojuhid')
+		));
+		$t->define_field(array(
+			'name' => 'select',
+			'caption' => t('Vali')
+		));
+		return PROP_OK;
+	}
+
+	function do_db_upgrade($table, $field, $query, $error)
+	{
+		if (empty($field))
+		{
+			$this->db_query('CREATE TABLE '.$table.' (oid INT PRIMARY KEY NOT NULL)');
+			return true;
+		}
+
+		switch ($field)
+		{
+			case 'manager_org':
+			case 'config_manager':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'int'
+				));
+                                return true;
+/*
+			case 'dispatchers_professions':
+			case 'leaders_professions':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'text'
+				));
+                                return true;
+*/
+                }
+
+		return false;
+	}
+
+	/**
+		@attrib name=_delete_objects
+	**/
+	function _delete_objects($arr)
+	{
+
+		foreach ($arr['selected_ids'] as $id)
+		{
+			if (is_oid($id) && $this->can("delete", $id))
+			{
+				$object = new object($id);
+				$object->delete();
+			}
+		}
+		return $arr['post_ru'];
+	}
 
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_truck.aw,v 1.2 2006/06/15 14:04:00 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_truck.aw,v 1.3 2006/06/29 11:11:34 dragut Exp $
 // crm_transport_management_truck.aw - Veoauto 
 /*
 
@@ -13,7 +13,7 @@
 	@property nr type=textbox table=crm_transport_management_truck
 	@caption Auto nr.
 
-	@property car_type type=select table=crm_transport_management_truck
+	@property car_type type=relpicker reltype=RELTYPE_CAR_TYPE table=crm_transport_management_truck
 	@caption Mark
 
 	@property model type=textbox table=crm_transport_management_truck
@@ -26,7 +26,7 @@
 	@caption V&auml;rvus
 
 	@property year type=textbox table=crm_transport_management_truck
-	@caption V6auml;ljalaskeaasta
+	@caption V&auml;ljalaskeaasta
 
 	@property price type=textbox table=crm_transport_management_truck
 	@caption Hind
@@ -91,8 +91,11 @@
 @groupinfo costs caption="Kulud"
 @default group=costs
 
-	@property costs_table type=table
+	@property costs_table type=table no_caption=1
 	@caption Kulude tabel
+
+@reltype CAR_TYPE value=1 clid=CL_CRM_TRANSPORT_MANAGEMENT_CAR_TYPE
+@caption Auto mark
 
 */
 
@@ -215,35 +218,97 @@ class crm_transport_management_truck extends class_base
 		$t->set_sortable(false);
 
 		$t->define_field(array(
+			'name' => 'nr',
+			'caption' => t('Nr'),
+			'align' => 'center',
+			'width' => '5%'
+		));
+		$t->define_field(array(
 			'name' => 'date',
 			'caption' => t('Kuup&auml;ev')
 		));
-
 		$t->define_field(array(
 			'name' => 'name',
 			'caption' => t('Nimetus')
 		));
-
 		$t->define_field(array(
 			'name' => 'sum',
 			'caption' => t('Summa')
 		));
 
+		$costs = $arr['obj_inst']->meta('costs');
+		$counter = 0;
+		$total_sum = 0;
+
+		foreach (safe_array($costs) as $cost)
+		{
+			$t->define_data(array(
+				'nr' => $counter,
+				'date' => html::textbox(array(
+					'name' => 'costs['.$counter.'][date]',
+					'value' => $cost['date']
+				)),
+				'name' => html::textbox(array(
+					'name' => 'costs['.$counter.'][name]',
+					'value' => $cost['name']
+				)),
+				'sum' => html::textbox(array(
+					'name' => 'costs['.$counter.'][sum]',
+					'value' => $cost['sum']
+				)),
+			));
+			$total_sum += (int)$cost['sum'];
+			$counter++;
+		}
+
+		$t->define_data(array(
+			'nr' => '---',
+			'date' => '',
+			'name' => '',
+			'sum' => sprintf(t('Summa: %s'), $total_sum)
+		));
+
 		for ( $i = 0; $i < 10; $i++ )
 		{
 			$t->define_data(array(
+				'nr' => $counter,
 				'date' => html::textbox(array(
-					'name' => 'costs['.$i.'][date]'
+					'name' => 'costs['.$counter.'][date]'
 				)),
 				'name' => html::textbox(array(
-					'name' => 'costs['.$i.'][name]'
+					'name' => 'costs['.$counter.'][name]'
 				)),
 				'sum' => html::textbox(array(
-					'name' => 'costs['.$i.'][sum]'
+					'name' => 'costs['.$counter.'][sum]'
 				)),
 			));
+			$counter++;
 		}
 
+	}
+
+	function _set_costs_table($arr)
+	{
+		$costs = $arr['request']['costs'];
+		$valid_costs = array();
+		foreach ($costs as $cost)
+		{
+			foreach ($cost as $value)
+			{
+				// if there is at least one field filled, then lets save the row:
+				if (!empty($value))
+				{
+					$cost['sum'] = (int)$cost['sum'];
+					$valid_costs[] = $cost;
+					break;
+				}
+			}
+
+		}
+
+
+		$arr['obj_inst']->set_meta('costs', $valid_costs);
+		$arr['obj_inst']->save();
 	}
 
 	function do_db_upgrade($table, $field, $query, $error)

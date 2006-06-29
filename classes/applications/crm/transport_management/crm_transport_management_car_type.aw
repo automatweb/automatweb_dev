@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_car_type.aw,v 1.1 2006/06/15 12:35:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/transport_management/crm_transport_management_car_type.aw,v 1.2 2006/06/29 11:11:34 dragut Exp $
 // crm_transport_management_car_type.aw - Automark 
 /*
 
@@ -103,6 +103,5 @@ class crm_transport_management_car_type extends class_base
 		return false;
 	}
 
-//-- methods --//
 }
 ?>
