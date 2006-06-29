@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.72 2006/06/27 13:38:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.73 2006/06/29 08:57:05 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -751,9 +751,9 @@ class crm_meeting extends class_base
 
 	function callback_post_save($arr)
 	{
-		if ($arr["request"]["participants_h"] > 0)
+		if ($_POST["participants_h"] > 0)
 		{
-			$this->post_save_add_parts = explode(",", $arr["request"]["participants_h"]);
+			$this->post_save_add_parts = explode(",", $_POST["participants_h"]);
 		}
 
 		if (is_array($this->post_save_add_parts))
