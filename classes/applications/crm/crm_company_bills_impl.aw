@@ -714,7 +714,7 @@ class crm_company_bills_impl extends class_base
 			'parent'=>'export',
 			'text' => t("Hansa raama (ridadega)"),
 			'link' => "#",
-			"onClick" => "v=prompt('Sisesta arve number?','$last_bno'); if (v) { window.location='".aw_url_change_var("export_hr", 1)."&exp_bno='+v;} else { return false; }" 
+			"onClick" => "v=prompt('Sisesta arve number?','$last_bno'); if (v != null) { window.location='".aw_url_change_var("export_hr", 1)."&exp_bno='+v;} else { return false; }" 
 		));
 
 		$tb->add_menu_item(array(
