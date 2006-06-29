@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.32 2006/06/29 12:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.33 2006/06/29 14:02:07 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1449,9 +1449,7 @@ exit_function("jigaboo");
 			else $this->options_tt[$key] = $val->name();
 		}
 
-		
-		//$this->options_tt = $options_tt->names();
-		natcasesort ($this->options_tt);//arr($this->options_tt);
+		natcasesort ($this->options_tt);
 		$this->options_tt = array(REALESTATE_SEARCH_ALL => t("Kõik tehingud")) + $this->options_tt;
 
 		### address1
@@ -1567,7 +1565,12 @@ exit_function("jigaboo");
 			"name" => "condition",
 		);
 		list ($options_c, $name, $use_type) = $this->classificator->get_choices($prop_args);
-		$this->options_c = $options_c->names();
+		foreach ($options_c->arr() as $key=> $val)
+		{
+			$trans = $val->meta("tolge");
+			if($trans[$lang_id]) $this->options_c[$key] = $trans[$lang_id];
+			else $this->options_c[$key] = $val->name();
+		}
 		natcasesort ($this->options_c);
 		$this->options_c = array(REALESTATE_SEARCH_ALL => t("Kõik valmidused")) + $this->options_c;
 
@@ -1578,7 +1581,12 @@ exit_function("jigaboo");
 		);
 		list ($options_up, $name, $use_type) = $this->classificator->get_choices($prop_args);
 		$this->options_up = $options_up->names();
-		natcasesort ($this->options_up);
+		foreach ($options_up->arr() as $key=> $val)
+		{
+			$trans = $val->meta("tolge");
+			if($trans[$lang_id]) $this->options_up[$key] = $trans[$lang_id];
+			else $this->options_up[$key] = $val->name();
+		}
 		$this->options_up = array(REALESTATE_SEARCH_ALL => t("Kõik tüübid")) + $this->options_up;
 
 		### special_status
@@ -1587,7 +1595,12 @@ exit_function("jigaboo");
 			"name" => "special_status",
 		);
 		list ($options_ss, $name, $use_type) = $this->classificator->get_choices($prop_args);
-		$this->options_ss = $options_ss->names();
+		foreach ($options_ss->arr() as $key=> $val)
+		{
+			$trans = $val->meta("tolge");
+			if($trans[$lang_id]) $this->options_ss[$key] = $trans[$lang_id];
+			else $this->options_ss[$key] = $val->name();
+		}
 		natcasesort ($this->options_ss);
 		$this->options_ss = array(REALESTATE_SEARCH_ALL => t("Kõik")) + $this->options_ss;
 		### agent
@@ -1708,7 +1721,7 @@ exit_function("jigaboo");
 			$arr["a2"] = ($arr["a2"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["a2"];
 			$search_a2 = (array) $arr["a2"];
 			unset ($search_a2[REALESTATE_SEARCH_ALL]);
-
+/*
 			foreach ($search_a2 as $value)
 			{
 				if (!isset ($this->options_a2[$value]))
@@ -1717,11 +1730,11 @@ exit_function("jigaboo");
 					break;
 				}
 			}
-
+*/
 			$arr["a3"] = ($arr["a3"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["a3"];
 			$search_a3 = (array) $arr["a3"];
 			unset ($search_a3[REALESTATE_SEARCH_ALL]);
-
+/*
 			foreach ($search_a3 as $value)
 			{
 				if (!isset ($this->options_a3[$value]))
@@ -1730,11 +1743,11 @@ exit_function("jigaboo");
 					break;
 				}
 			}
-
+*/
 			$arr["a4"] = ($arr["a4"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["a4"];
 			$search_a4 = (array) $arr["a4"];
 			unset ($search_a4[REALESTATE_SEARCH_ALL]);
-
+/*
 			foreach ($search_a4 as $value)
 			{
 				if (!isset ($this->options_a4[$value]))
@@ -1743,11 +1756,11 @@ exit_function("jigaboo");
 					break;
 				}
 			}
-
+*/
 			$arr["a5"] = ($arr["a5"] === REALESTATE_SEARCH_ALL) ? NULL : $arr["a5"];
 			$search_a5 = (array) $arr["a5"];
 			unset ($search_a5[REALESTATE_SEARCH_ALL]);
-
+/*
 			foreach ($search_a5 as $value)
 			{
 				if (!isset ($this->options_a5[$value]))
@@ -1756,7 +1769,7 @@ exit_function("jigaboo");
 					break;
 				}
 			}
-
+*/
 			$search_at = str_pad ($arr["at"], 200);
 			$search_fd = mktime (0, 0, 0, (int) $arr["fd"]["month"], (int) $arr["fd"]["day"], (int) $arr["fd"]["year"]);
 
@@ -2227,6 +2240,8 @@ exit_function("jigaboo");
 			}		
 			$result_list = $tmp_list;
 		}
+		//kui saidilt tuleb otsing
+		if($_GET["per_page"]) $this->result_table_recordsperpage = ($_GET["per_page"]);
 		### search by address
 		if ($search_admin_units !== false and $result_list->count ())
 		{
@@ -2284,7 +2299,6 @@ exit_function("jigaboo");
 				$start_offset = (int) $_GET["ft_page"] * $this->result_table_recordsperpage;
 				$end_offset = $start_offset + $this->result_table_recordsperpage;
 				$result_count = 0;
-
 				foreach ($result_list_ids as $oid)
 				{
 					$result_count++;
@@ -2299,9 +2313,8 @@ exit_function("jigaboo");
 						$result_list->remove ($oid);
 					}
 				}
-
 				$this->result_count = $result_count;
-			}
+			};
 		}
 		else
 		{
@@ -2312,7 +2325,6 @@ exit_function("jigaboo");
 				$max_limit = 1;
 			}			
 			### limit
-			if($_GET["per_page"]) $this->result_table_recordsperpage = ($_GET["per_page"]);
 			$limit = ((int) $_GET["ft_page"] * $this->result_table_recordsperpage) . "," . $this->result_table_recordsperpage;
 			if(
 				$max_limit 
