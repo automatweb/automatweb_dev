@@ -62,15 +62,6 @@
             <caption>Uues aknas</caption>
       </property>
       <property>
-            <name>doclinkcollection</name>
-            <group>general</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <table>extlinks</table>
-            <field>doclinkcollection</field>
-            <caption>Dokumendi lingikogusse</caption>
-      </property>
-      <property>
             <name>ord</name>
             <group>general</group>
             <type>textbox</type>

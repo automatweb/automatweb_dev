@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.15 2006/05/30 10:59:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.16 2006/06/29 22:49:10 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -26,9 +26,6 @@
 
 	@property newwindow type=checkbox ch_value=1 search=1 table=extlinks 
 	@caption Uues aknas
-
-	@property doclinkcollection type=checkbox ch_value=1 table=extlinks 
-	@caption Dokumendi lingikogusse
 
 	@property ord type=textbox size=3 table=objects field=jrk
 	@caption J&auml;rjekord
