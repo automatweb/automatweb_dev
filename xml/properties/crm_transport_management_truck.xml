@@ -12,7 +12,8 @@
             <name>car_type</name>
             <table>crm_transport_management_truck</table>
             <group>general</group>
-            <type>select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CAR_TYPE</reltype>
             <field>car_type</field>
             <caption>Mark</caption>
       </property>
@@ -46,7 +47,7 @@
             <group>general</group>
             <type>textbox</type>
             <field>year</field>
-            <caption>V6auml;ljalaskeaasta</caption>
+            <caption>V&amp;amp;auml;ljalaskeaasta</caption>
       </property>
       <property>
             <name>price</name>
@@ -192,6 +193,7 @@
             <table>objects</table>
             <group>costs</group>
             <type>table</type>
+            <no_caption>1</no_caption>
             <store>no</store>
             <field>costs_table</field>
             <caption>Kulude tabel</caption>
@@ -224,5 +226,12 @@
                   <master_index>oid</master_index>
             </crm_transport_management_truck>
       </tableinfo>
+      <reltypes>
+            <CAR_TYPE>
+                  <value>1</value>
+                  <clid>CL_CRM_TRANSPORT_MANAGEMENT_CAR_TYPE</clid>
+                  <caption>Auto mark</caption>
+            </CAR_TYPE>
+      </reltypes>
 </properties>
 

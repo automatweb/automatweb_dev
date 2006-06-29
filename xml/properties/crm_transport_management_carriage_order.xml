@@ -40,7 +40,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>deadline</field>
-            <caption>T&amp;amp;auml:htaeg</caption>
+            <caption>T&amp;amp;auml;htaeg</caption>
       </property>
       <property>
             <name>carriage_order_status</name>
@@ -75,6 +75,8 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_UNLOADING_LOCATION</reltype>
+            <parent>unloading_location_frame</parent>
+            <captionside>top</captionside>
             <field>unloading_location</field>
             <caption>Mahalaadimiskoht</caption>
       </property>
@@ -83,6 +85,8 @@
             <table>crm_transport_management_carriage_order</table>
             <group>general</group>
             <type>textarea</type>
+            <parent>unloading_location_frame</parent>
+            <captionside>top</captionside>
             <field>unloading_note</field>
             <caption>M&amp;amp;auml;rkus</caption>
       </property>
@@ -92,6 +96,8 @@
             <group>general</group>
             <type>relpicker</type>
             <reltype>RELTYPE_LOADING_LOCATION</reltype>
+            <parent>loading_location_frame</parent>
+            <captionside>top</captionside>
             <field>loading_location</field>
             <caption>Pealelaadimiskoht</caption>
       </property>
@@ -100,6 +106,8 @@
             <table>crm_transport_management_carriage_order</table>
             <group>general</group>
             <type>textarea</type>
+            <parent>loading_location_frame</parent>
+            <captionside>top</captionside>
             <field>loading_note</field>
             <caption>M&amp;amp;auml;rkus</caption>
       </property>
@@ -127,7 +135,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_NEXT_TRANSPORTER</reltype>
             <field>next_transporter</field>
-            <caption>Vedaja</caption>
+            <caption>J&amp;amp;auml;rgmine vedaja</caption>
       </property>
       <property>
             <name>transporter_note</name>
@@ -217,6 +225,14 @@
             <type>textbox</type>
             <field>nr</field>
             <caption>Number</caption>
+      </property>
+      <property>
+            <name>cmr_char</name>
+            <table>crm_transport_management_carriage_order</table>
+            <group>cargo_data</group>
+            <type>textbox</type>
+            <field>cmr_char</field>
+            <caption>T&amp;amp;auml;ht</caption>
       </property>
       <property>
             <name>adr</name>
@@ -356,5 +372,15 @@
                   <caption>Vedu</caption>
             </CARRIAGE>
       </reltypes>
+      <layout>
+            <unloading_location_frame>
+                  <type>hbox</type>
+                  <group>general</group>
+            </unloading_location_frame>
+            <loading_location_frame>
+                  <type>hbox</type>
+                  <group>general</group>
+            </loading_location_frame>
+      </layout>
 </properties>
 

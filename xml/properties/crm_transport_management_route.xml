@@ -74,10 +74,15 @@
                   <caption>Alguspunkt</caption>
             </START_LOCATION>
             <END_LOCATION>
-                  <value>1</value>
+                  <value>2</value>
                   <clid>CL_CRM_CITY</clid>
                   <caption>Sihtpunkt</caption>
             </END_LOCATION>
+            <ADDRESS>
+                  <value>3</value>
+                  <clid>CL_CRM_ADDRESS</clid>
+                  <caption>Aadress</caption>
+            </ADDRESS>
       </reltypes>
       <layout>
             <route_content_frame>
