@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.134 2006/06/27 21:52:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.135 2006/06/29 22:22:50 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -579,7 +579,7 @@ class crm_person extends class_base
 				{
 					$arr["obj_inst"]->set_meta("no_create_user_yet", true);
 
-					if (strlen(trim($prop["value"])) and !strlen(trim($form["username"])))
+					if (strlen(trim($prop["value"])) and !strlen(trim($form["username"])) && $arr["request"]["password"] != "")
 					{
 						$cl_user_creator = get_instance("crm/crm_user_creator");
 						$errors = $cl_user_creator->get_uid_for_person($arr["obj_inst"], true);
