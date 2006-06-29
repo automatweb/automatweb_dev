@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.116 2006/05/05 12:46:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.117 2006/06/29 22:44:01 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -777,7 +777,7 @@ class admin_menus extends aw_template
 
 					$o = obj();
 					$o->set_parent($_parent);
-					$o->set_name($mt[2]);
+					$o->set_name(trim($mt[2]));
 					$o->set_class_id(CL_MENU);
 					$o->set_status(STAT_ACTIVE /*($mopts["act"] ? 2 : 1)*/);
 					$o->set_alias($mopts["alias"]);
