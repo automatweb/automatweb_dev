@@ -721,7 +721,7 @@ class crm_company_bills_impl extends class_base
 			"parent" => "export",
 			"text" => t("Hansa raama (koondatud)"),
 			'link' => "#",
-			"onClick" => "v=prompt('Sisesta arve number?','$last_bno'); if (v) { window.location='".aw_url_change_var("export_hr", 2)."&exp_bno='+v;} else { return false; }" 
+			"onClick" => "v=prompt('Sisesta arve number?','$last_bno'); if (v != null) { window.location='".aw_url_change_var("export_hr", 2)."&exp_bno='+v;} else { return false; }" 
 		));
 	}
 
