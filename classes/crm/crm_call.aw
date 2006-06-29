@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.52 2006/06/26 21:03:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.53 2006/06/29 22:13:36 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -721,6 +721,22 @@ class crm_call extends class_base
 			));
 		}
 		$t->set_default_sortby("when");
+	}
+
+	function callback_pre_save($arr)
+	{
+		$len = $arr["obj_inst"]->prop("end") - $arr["obj_inst"]->prop("start1");
+		$hrs = floor($len / 900) / 4;
+		
+		// write length to time fields if empty
+		if ($arr["obj_inst"]->prop("time_to_cust") == "")
+		{
+			$arr["obj_inst"]->set_prop("time_to_cust", $hrs);
+		}
+		if ($arr["obj_inst"]->prop("time_real") == "")
+		{
+			$arr["obj_inst"]->set_prop("time_real", $hrs);
+		}
 	}
 };
 ?>
