@@ -587,58 +587,55 @@ class crm_company_overview_impl extends class_base
 				}
 			}
 
-			$url = $this->mk_my_orb("get_task_row_table", array("id" => $task_id));
-			$namp = " (<a id='tnr$task_nr' href='javascript:void(0)' onClick='
-				if ((trel = document.getElementById(\"trows$task_nr\")))
-				{
-					if (trel.style.display == \"none\")
+			$namp = "";
+			if ($task->class_id() == CL_TASK)
+			{
+				$url = $this->mk_my_orb("get_task_row_table", array("id" => $task_id));
+				$namp = " (<a id='tnr$task_nr' href='javascript:void(0)' onClick='
+					if ((trel = document.getElementById(\"trows$task_nr\")))
 					{
-						if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0)
+						if (trel.style.display == \"none\")
 						{
-							trel.style.display= \"block\";
+							if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0)
+							{
+								trel.style.display= \"block\";
+							}
+							else
+							{
+								trel.style.display= \"table-row\";
+							}
 						}
 						else
 						{
-							trel.style.display= \"table-row\";
+							trel.style.display=\"none\";
 						}
+						return false;
 					}
-					else
+					el=document.getElementById(\"tnr$task_nr\");
+					td = el.parentNode;
+					tr = td.parentNode;
+
+					tbl = tr;
+					while(tbl.tagName.toLowerCase() != \"table\")
 					{
-						trel.style.display=\"none\";
+						tbl = tbl.parentNode;
 					}
-					return false;
-				}
-				el=document.getElementById(\"tnr$task_nr\");
-				td = el.parentNode;
-				tr = td.parentNode;
+					p_row = tbl.insertRow(tr.rowIndex+1);
+					p_row.className=\"awmenuedittablerow\";
+					p_row.id=\"trows$task_nr\";
+					n_td = p_row.insertCell(-1);
+					n_td.className=\"awmenuedittabletext\";
+					n_td.innerHTML=\"&nbsp;\";
+					n_td = p_row.insertCell(-1);
+					n_td.className=\"awmenuedittabletext\";
+					n_td.innerHTML=\"&nbsp;\";
+					n_td = p_row.insertCell(-1);
+					n_td.className=\"awmenuedittabletext\";
+					n_td.innerHTML=aw_get_url_contents(\"$url\");
+					n_td.colSpan=9;
+				'>".t("Read")."</a>) ";
+			}
 
-				tbl = tr;
-				while(tbl.tagName.toLowerCase() != \"table\")
-				{
-					tbl = tbl.parentNode;
-				}
-				p_row = tbl.insertRow(tr.rowIndex+1);
-				p_row.className=\"awmenuedittablerow\";
-				p_row.id=\"trows$task_nr\";
-				n_td = p_row.insertCell(-1);
-				n_td.className=\"awmenuedittabletext\";
-				n_td.innerHTML=\"&nbsp;\";
-				n_td = p_row.insertCell(-1);
-				n_td.className=\"awmenuedittabletext\";
-				n_td.innerHTML=\"&nbsp;\";
-				n_td = p_row.insertCell(-1);
-				n_td.className=\"awmenuedittabletext\";
-				n_td.innerHTML=aw_get_url_contents(\"$url\");
-				n_td.colSpan=9;
-			'>".t("Read")."</a>) ";
-
-/*
-				ntr = tr;
-				do {
-				ntr = ntr.nextSibling;
-				} while(\"\"+ntr != \"\"+tr);
-				ntr.style.display=\"none\";
-*/
 			$table_data[] = array(
 				"icon" => html::img(array(
 					"url" => icons::get_icon_url($task),
