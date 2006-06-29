@@ -4864,7 +4864,12 @@ class crm_company extends class_base
 		{
 			$my_co = $u->get_current_company();
 		}
-		
+
+		if (!is_object($my_co) || !is_oid($my_co->id()))
+		{
+			return;
+		}	
+	
 		if ($view_co->id() == $my_co)
 		{
 			return false;
