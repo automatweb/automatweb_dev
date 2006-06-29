@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.221 2006/06/07 14:03:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.222 2006/06/29 20:20:50 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -942,7 +942,6 @@ if (!defined("DEFS"))
 		else
 		if ($magic_bytes == "\$arr =")
 		{
-			classload("php");
 			// php serializer
 			$p = new php_serializer;
 			$retval = $p->php_unserialize($str);
