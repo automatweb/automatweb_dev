@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.31 2006/06/27 14:15:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.32 2006/06/29 12:31:34 kristo Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1886,8 +1886,31 @@ exit_function("jigaboo");
 		$search_at = $arr["search"]["at"];
 		$search_owp = $arr["search"]["owp"];
 		$search_imf = $arr["search"]["imf"];
-		$search_sort_by = $arr["search"]["sort_by"];
-		$search_sort_ord = $arr["search"]["sort_ord"];
+		switch($arr["search"]["sort_by"])  // NEVER, EVER, EVER!!! can you let the user enter sql via the url
+		{
+			case "name":
+			case "class_id":
+			case "jrk":
+			case "created":
+			case "modified":
+			case "transaction_price":
+				$search_sort_by = $arr["search"]["sort_by"];
+				break;
+	
+			default:
+				$search_sort_by = "name";
+		}
+		switch($arr["search"]["sort_ord"])
+		{
+			case "DESC":
+			case "ASC":
+				$search_sort_ord = $arr["search"]["sort_ord"];
+				break;
+
+			default:
+				$search_sort_ord = "ASC";
+				break;
+		}
 		$list = array ();
 		$parents = array ();
 
