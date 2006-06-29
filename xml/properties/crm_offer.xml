@@ -195,6 +195,15 @@
             <field>acts</field>
             <caption>Tegevused</caption>
       </property>
+      <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>files</group>
+            <method>serialize</method>
+            <type>text</type>
+            <field>files</field>
+            <caption>Manused</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -205,6 +214,9 @@
                   <caption>Sisu</caption>
                   <submit>no</submit>
             </content>
+            <files>
+                  <caption>Failid</caption>
+            </files>
             <recurrence>
                   <caption>Kordumine</caption>
             </recurrence>
@@ -286,6 +298,11 @@
                   <clid>CL_PROJECT</clid>
                   <caption>Projekt</caption>
             </PROJECT>
+            <FILE>
+                  <value>10</value>
+                  <clid>CL_FILE</clid>
+                  <caption>File</caption>
+            </FILE>
       </reltypes>
       <layout>
             <vbox_others>

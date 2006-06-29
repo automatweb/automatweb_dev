@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.48 2006/05/23 10:31:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.49 2006/06/29 22:04:16 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -72,7 +72,6 @@
 	@caption Projektid
 
 
-
 -------PAKKUMISE AJALUGU---------
 @default group=history
 
@@ -90,7 +89,13 @@
 	@property acts type=table store=no no_caption=1
 	@caption Tegevused
 
+@default group=files
+
+	@property files type=text 
+	@caption Manused
+
 @groupinfo content caption="Sisu" submit=no
+@groupinfo files caption="Failid" 
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
 @groupinfo projects caption=Projektid
@@ -122,6 +127,9 @@
 
 @reltype PROJECT value=9 clid=CL_PROJECT
 @caption Projekt
+
+@reltype FILE value=10 clid=CL_FILE
+@caption File
 */
 
 /*
@@ -178,6 +186,10 @@ class crm_offer extends class_base
 		
 		switch($prop["name"])
 		{
+			case "files":
+				$this->_get_files($arr);
+				break;
+
 			case "acts":
 				$i = get_instance("applications/crm/crm_document_base");
 				return $i->get_property($arr);
@@ -334,6 +346,10 @@ class crm_offer extends class_base
 		$data = &$arr["prop"];
 		switch($data["name"])
 		{
+			case "files":
+				$this->_set_files($arr);
+				break;
+
 			case "acts":
 				$i = get_instance("applications/crm/crm_document_base");
 				return $i->set_property($arr);
@@ -939,6 +955,289 @@ class crm_offer extends class_base
 	{
 		aw_session_set('org_action',aw_global_get('REQUEST_URI'));
 		return parent::new_change($arr);
+	}
+
+	function _get_files($arr)
+	{
+		$objs = array();
+
+		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		{
+			$ol = new object_list($arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_FILE"
+			)));
+			$objs = $ol->arr();
+		}
+
+		$objs[] = obj();
+		$objs[] = obj();
+		$objs[] = obj();
+
+		$types = array(
+			CL_FILE => t(""),
+			CL_CRM_MEMO => t("Memo"),
+			CL_CRM_DOCUMENT => t("CRM Dokument"),
+			CL_CRM_DEAL => t("Leping"),
+			CL_CRM_OFFER => t("Pakkumine")
+		);
+		$impl = $arr["obj_inst"]->prop("preformer");
+		if (is_array($impl))
+		{
+			$impl = reset($impl);
+		}
+
+		if ($this->can("view", $impl))
+		{
+			$impl_o = obj($impl);
+			if (!$impl_o->get_first_obj_by_reltype("RELTYPE_DOCS_FOLDER"))
+			{
+				$u = get_instance(CL_USER);
+				$impl = $u->get_current_company();
+			}
+		}
+
+		if ($this->can("view", $impl))
+		{
+			$implo = obj($impl);
+			$f = get_instance("applications/crm/crm_company_docs_impl");
+			$fldo = $f->_init_docs_fld(obj($impl));
+			$ot = new object_tree(array(
+				"parent" => $fldo->id(),
+				"class_id" => CL_MENU
+			));
+			$folders = array($fldo->id() => $fldo->name());
+			$this->_req_level = 0;
+			$this->_req_get_folders($ot, $folders, $fldo->id());
+
+			// add server folders if set
+			$sf = $implo->get_first_obj_by_reltype("RELTYPE_SERVER_FILES");
+			if ($sf)
+			{
+				$s = $sf->instance();
+				$fld = $s->get_folders($sf);
+				$t =& $arr["prop"]["vcl_inst"];
+
+				usort($fld, create_function('$a,$b', 'return strcmp($a["name"], $b["name"]);'));
+
+				$folders[$sf->id().":/"] = $sf->name();
+				$this->_req_get_s_folders($fld, $sf, $folders, 0);
+			}
+		}
+		else
+		{
+			$fldo = obj();
+			$folders = array();
+		}
+
+		$clss = aw_ini_get("classes");
+		foreach($objs as $idx => $o)
+		{
+			$this->vars(array(
+				"name" => $o->name(),
+				"idx" => $idx,
+				"types" => $this->picker($types)
+			));
+
+			if (is_oid($o->id()))
+			{
+				$ff = $o->get_first_obj_by_reltype("RELTYPE_FILE");
+				if (!$ff)
+				{
+					$ff = $o;
+				}
+				$fi = $ff->instance();
+				$fu = html::href(array(
+					"url" => $fi->get_url($ff->id(), $ff->name()),
+					"caption" => $ff->name()
+				));
+				$data[] = array(
+					"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),
+					"file" => $fu,
+					"type" => $clss[$o->class_id()]["name"],
+					"del" => html::href(array(
+						"url" => $this->mk_my_orb("del_file_rel", array(
+								"return_url" => get_ru(),
+								"fid" => $o->id(),
+								"from" => $arr["obj_inst"]->id()
+						)),
+						"caption" => t("Kustuta")
+					)),
+					"folder" => $o->path_str(array(
+						"start_at" => $fldo->id(),
+						"path_only" => true
+					))
+				);
+			}
+			else
+			{
+				$data[] = array(
+					"name" => html::textbox(array(
+						"name" => "fups_d[$idx][tx_name]"
+					)),
+					"file" => html::fileupload(array(
+						"name" => "fups_".$idx
+					)),
+					"type" => html::select(array(
+						"options" => $types,
+						"name" => "fups_d[$idx][type]"
+					)),
+					"del" => "",
+					"folder" => html::select(array(
+						"name" => "fups_d[$idx][folder]",
+						"options" => $folders
+					))
+				);
+			}
+		}
+
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));
+		
+		$t->define_field(array(
+			"caption" => t("Nimi"),
+			"name" => "name",
+		));
+
+		$t->define_field(array(
+			"caption" => t("Fail"),
+			"name" => "file",
+		));
+
+		$t->define_field(array(
+			"caption" => t("T&uuml;&uuml;p"),
+			"name" => "type",
+		));
+
+		$t->define_field(array(
+			"caption" => t("Kataloog"),
+			"name" => "folder",
+		));
+
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "del",
+		));
+
+		foreach($data as $e)
+		{
+			$t->define_data($e);
+		}
+
+		$arr["prop"]["value"] = $t->draw();
+	}
+
+	function _set_files($arr)
+	{
+		$t = obj($arr["request"]["id"]);
+		$u = get_instance(CL_USER);
+		$co = obj($u->get_current_company());
+		foreach(safe_array($_POST["fups_d"]) as $num => $entry)
+		{
+			if (is_uploaded_file($_FILES["fups_".$num]["tmp_name"]))
+			{
+				$f = get_instance("applications/crm/crm_company_docs_impl");
+				$fldo = $f->_init_docs_fld($co);
+				if ($this->can("add", $entry["folder"]))
+				{
+					$fldo = obj($entry["folder"]);
+				}
+				if (!$fldo)
+				{
+					return;
+				}
+
+				if ($entry["type"] == CL_FILE)
+				{
+					// add file
+					$f = get_instance(CL_FILE);
+
+					$fs_fld = null;
+					if (strpos($entry["folder"], ":") !== false)
+					{
+						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
+						$sf_o = obj($sf_id);
+						$fs_fld = $sf_o->prop("folder").$sf_path;
+					}
+					$fil = $f->add_upload_image("fups_$num", $fldo->id(), 0, $fs_fld);
+
+					if (is_array($fil))
+					{
+						$t->connect(array(
+							"to" => $fil["id"],
+							"reltype" => "RELTYPE_FILE"
+						));
+					}
+				}
+				else
+				{
+					$o = obj();
+					$o->set_class_id($entry["type"]);
+					$o->set_name($entry["tx_name"] != "" ? $entry["tx_name"] : $_FILES["fups_$num"]["name"]);
+
+			
+					$o->set_parent($fldo->id());
+					if ($entry["type"] != CL_FILE)
+					{
+						$o->set_prop("project", $t->id());
+						$o->set_prop("customer", reset($t->prop("orderer")));
+					}
+					$o->save();
+
+					// add file
+					$f = get_instance(CL_FILE);
+
+					$fs_fld = null;
+					if (strpos($entry["folder"], ":") !== false)
+					{
+						list($sf_id, $sf_path) = explode(":", $entry["folder"]);
+						$sf_o = obj($sf_id);
+						$fs_fld = $sf_o->prop("folder").$sf_path;
+					}
+					$fil = $f->add_upload_image("fups_$num", $o->id(), 0, $fs_fld);
+
+					if (is_array($fil))
+					{
+						$o->connect(array(
+							"to" => $fil["id"],
+							"reltype" => "RELTYPE_FILE"
+						));
+						$t->connect(array(
+							"to" => $o->id(),
+							"reltype" => "RELTYPE_FILE"
+						));
+					}
+				}
+			}
+		}
+		return $arr["post_ru"];
+	}
+
+	function _req_get_folders($ot, &$folders, $parent)
+	{
+		$this->_req_level++;
+		$objs = $ot->level($parent);
+		foreach($objs as $o)
+		{
+			$folders[$o->id()] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_req_level).$o->name();
+			$this->_req_get_folders($ot, $folders, $o->id());
+		}
+		$this->_req_level--;
+	}
+
+	function _req_get_s_folders($fld, $fldo, &$folders, $parent)
+	{
+		$this->_lv++;
+		foreach($fld as $dat)
+		{
+			if ($dat["parent"] === $parent)
+			{
+				$folders[$fldo->id().":".$dat["id"]] = str_repeat("&nbsp;&nbsp;&nbsp;", $this->_lv).iconv("utf-8", aw_global_get("charset")."//IGNORE", $dat["name"]);
+				$this->_req_get_s_folders($fld, $fldo, $folders, $dat["id"]);
+			}
+		}
+		$this->_lv--;
 	}
 }
 ?>
