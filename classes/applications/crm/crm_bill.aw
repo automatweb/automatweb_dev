@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.55 2006/06/29 11:34:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.56 2006/06/29 22:30:11 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1644,6 +1644,15 @@ class crm_bill extends class_base
 			$tr->set_prop("bill_id", 0);
 			$tr->save();
 		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "tasks")
+		{
+			return false;
+		}
+		return true;
 	}
 }
 ?>
