@@ -118,15 +118,21 @@ class object
 			$o->load("alias/alias2");
 			$o->load(obj(666));
 	**/
-	function load($param)
+	function load($param, $force_reload = false)
 	{
 		if (!is_object($GLOBALS["object_loader"]))
 		{
 			die(t("object loader is not object!!"));
 		}
 
+		$oid = $GLOBALS["object_loader"]->param_to_oid($param);
+		if ($force_reload && is_oid($oid))
+		{
+			unset($GLOBALS["objects"][$oid]);
+		}
+
 		enter_function("object::load");
-		$this->oid = $GLOBALS["object_loader"]->load($GLOBALS["object_loader"]->param_to_oid($param));
+		$this->oid = $GLOBALS["object_loader"]->load($oid);
 		exit_function("object::load");
 		return $this->oid;
 	}
