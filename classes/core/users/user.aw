@@ -1487,10 +1487,15 @@ class user extends class_base
 		{
 			return false;
 		}
-		aw_disable_acl();
-		$u = obj(aw_global_get("uid_oid"));
-		aw_restore_acl();
-		return $this->get_person_for_user($u);
+		static $retval;
+		if (!$retval)
+		{
+			aw_disable_acl();
+			$u = obj(aw_global_get("uid_oid"));
+			aw_restore_acl();
+			$retval = $this->get_person_for_user($u);
+		}
+		return $retval;
 	}
 
 	/**
@@ -1619,12 +1624,20 @@ class user extends class_base
 	**/ 
 	function get_current_company()
 	{
-		$person = $this->get_current_person();
-		if ($person)
+		static $retval;
+		if ($retval === null)
 		{
-			return $this->get_company_for_person($person);
+			$person = $this->get_current_person();
+			if ($person)
+			{
+				$retval = $this->get_company_for_person($person);
+			}
+			else
+			{
+				$retval = false;
+			}
 		}
-		return false;
+		return $retval;
 	}
 
 	/** creates a new user object and returns the object
