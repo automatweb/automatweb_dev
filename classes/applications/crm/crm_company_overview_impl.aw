@@ -1593,7 +1593,7 @@ class crm_company_overview_impl extends class_base
 				"is_done" => $row->prop("done") ? t("Jah") : t("Ei")
 			));
 		}
-		die($t->draw());
+		die(iconv(aw_global_get("charset"), "utf-8", $t->draw()));
 	}
 }
 ?>
