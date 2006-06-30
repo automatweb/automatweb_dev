@@ -845,7 +845,8 @@ class crm_company_overview_impl extends class_base
 					"conditions" => array(
 						"content" => $str_filt, //"%".$r["act_s_task_content"]."%",
 						"summary" => $str_filt, //"%".$r["act_s_task_content"]."%",
-						"CL_TASK.RELTYPE_ROW.content" => $str_filt //"%".$r["act_s_task_content"]."%"
+						"CL_TASK.RELTYPE_ROW.content" => $str_filt, //"%".$r["act_s_task_content"]."%",
+						"CL_CRM_MEETING.content" => $str_filt
 					)
 				));
 			}
