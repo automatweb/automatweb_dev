@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.222 2006/06/29 20:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.223 2006/06/30 13:30:30 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
 	define("DEFS",1);
-
+	classload("php");
 	define("SERIALIZE_PHP",1);
 	define("SERIALIZE_XML",2);
 	define("SERIALIZE_NATIVE",3);
