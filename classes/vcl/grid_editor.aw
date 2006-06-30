@@ -2336,9 +2336,25 @@ class grid_editor extends class_base
 		list($cmd, $rowstr) = explode(";rows=", $cmd);
 		list($cmd, $colstr) = explode(";cols=", $cmd);
 		list(, $cellstr) = explode(";cells=", $cmd);
-
-		$rows = explode(";", str_replace("dr_", ";", substr($rowstr,3)));
-		$cols = explode(";", str_replace("dc_", ";", substr($colstr,3)));
+		$t = str_replace("dr_", ";", substr($rowstr,3));
+		if ($t == "")
+		{
+			$rows = array();
+		}
+		else
+		{
+			$rows = explode(";", $t);
+		}
+	
+		$t = str_replace("dc_", ";", substr($colstr,3));
+		if ($t == "")
+		{
+			$cols = array();
+		}
+		else
+		{
+			$cols = explode(";", $t);
+		}
 		$_cells = explode("|", str_replace("sel_", "|", substr($cellstr,4)));
 		$cells = array();
 		foreach($_cells as $_cstr)
