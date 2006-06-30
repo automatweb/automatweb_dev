@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.196 2006/06/28 12:22:04 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.197 2006/06/30 20:18:19 kristo Exp $
 
 /*
 
@@ -682,9 +682,17 @@ class site_show extends class_base
 				$lm = $obj->meta("last_menus");
 
 				$lm = array();
-				foreach($obj->connections_from(array("type" => "RELTYPE_DOC_SOURCE")) as $c)
+				$ilm = array();
+				foreach($obj->connections_from(array("type" => array(6,2))) as $c)	// doc source, doc ignore
 				{
-					$lm[$c->prop("to")] = $c->prop("to");
+					if ($c->prop("reltype") == 6)
+					{
+						$ilm[$c->prop("to")] = $c->prop("to");
+					}
+					else
+					{
+						$lm[$c->prop("to")] = $c->prop("to");
+					}
 				}
 
 				$lm_sub = $obj->meta("src_submenus");
@@ -710,6 +718,12 @@ class site_show extends class_base
 				{
 					$sections = array($obj->id());
 				};
+
+				foreach($ilm as $ilm_item)	// ilm contains menus that the user wants not to get docs from 
+				{
+					unset($sections[$ilm_item]);
+				}
+
 				$no_in_promo = 1;
 
 				// get kws from promo 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.90 2006/05/30 11:10:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.91 2006/06/30 20:18:19 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -128,28 +128,32 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 
 @groupinfo menus caption="Sisu seaded"
 
-	@property last_menus type=table group=menus method=serialize store=no
-	@caption Vali menüüd, mille alt viimaseid dokumente võetakse
+	@groupinfo menus_sub parent=menus caption="Dokumendid"
 
-	@property ndocs type=textbox size=4 group=menus table=menu field=ndocs 
-	@caption Mitu viimast dokumenti
+		@property last_menus type=table group=menus_sub method=serialize store=no
+		@caption Vali menüüd, mille alt viimaseid dokumente võetakse
 
-	@property start_ndocs type=textbox size=4 group=menus table=objects field=meta method=serialize
-	@caption Mitu algusest &auml;ra j&auml;tta
+		@property ndocs type=textbox size=4 group=menus_sub table=menu field=ndocs 
+		@caption Mitu viimast dokumenti
 
-	@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize group=menus
-	@caption Sisu ei cacheta
+		@property start_ndocs type=textbox size=4 group=menus_sub table=objects field=meta method=serialize
+		@caption Mitu algusest &auml;ra j&auml;tta
 
-	@property kw_tb type=toolbar store=no group=menus no_caption=1
+		@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize group=menus_sub
+		@caption Sisu ei cacheta
 
-	@property kws type=keyword_selector store=no group=menus reltype=RELTYPE_KEYWORD
-	@caption M&auml;rks&otilde;nad
+	@groupinfo kws parent=menus caption="M&auml;rks&otilde;nad"
 
-	@property use_menu_keywords type=checkbox ch_value=1 field=meta method=serialize group=menus table=objects
-	@caption Kasuta aktiivse kausta m&auml;rks&otilde;nu
+		@property kw_tb type=toolbar store=no group=kws no_caption=1
 
-	@property use_doc_content_type type=checkbox ch_value=1 field=meta method=serialize group=menus table=objects
-	@caption Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut
+		@property kws type=keyword_selector store=no group=kws reltype=RELTYPE_KEYWORD
+		@caption M&auml;rks&otilde;nad
+
+		@property use_menu_keywords type=checkbox ch_value=1 field=meta method=serialize group=kws table=objects
+		@caption Kasuta aktiivse kausta m&auml;rks&otilde;nu
+
+		@property use_doc_content_type type=checkbox ch_value=1 field=meta method=serialize group=kws table=objects
+		@caption Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut
 
 
 
@@ -176,6 +180,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 	@reltype KEYWORD value=5 clid=CL_KEYWORD
 	@caption V&otilde;tmes&otilde;na
 			
+	@reltype DOC_IGNORE value=6 clid=CL_MENU
+	@caption ignoreeri dokumente selle men&uuml;&uuml; alt
 */
 class promo extends class_base
 {
@@ -848,6 +854,15 @@ class promo extends class_base
 				{
 					$is_in_promo = true;
 					break;
+				}
+			}
+
+			// get don't show folders and if the doc is in one of those then padabim-padaboom, you know what I mean, vinnie
+			foreach($box->connections_from(array("type" => "RELTYPE_DOC_IGNORE")) as $c)
+			{
+				if ($c->prop("to") == $o->parent())
+				{
+					$is_in_promo = false;
 				}
 			}
 
