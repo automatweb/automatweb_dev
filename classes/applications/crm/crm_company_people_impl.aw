@@ -307,9 +307,18 @@ class crm_company_people_impl extends class_base
 		}
 		exit_function("ghr::unit2");
 
-		foreach($conns as $conn)
+		if ($arr["request"]["all_if_empty"] && !count($conns))
 		{
-			$persons[] = $conn->prop('to');
+			$all_persons = array();
+			$i->get_all_workers_for_company($arr["obj_inst"], $all_persons);
+			$persons = array_keys($all_persons);
+		}
+		else
+		{
+			foreach($conns as $conn)
+			{
+				$persons[] = $conn->prop('to');
+			}
 		}
 
 		enter_function("ghr::ll");

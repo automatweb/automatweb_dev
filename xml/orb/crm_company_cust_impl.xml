@@ -8,5 +8,13 @@
 			</function>
 		</action>
 
+		<action name="get_cust_contact_table">
+			<function name="get_cust_contact_table">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

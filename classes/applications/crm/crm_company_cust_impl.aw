@@ -1768,10 +1768,55 @@ class crm_company_cust_impl extends class_base
 				$name = html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()." ".$vorm);
 			}
 
+			$_url = $this->mk_my_orb("get_cust_contact_table", array("id" => $o->id()));
+			$namp = " (<a id='tnr".$o->id()."' href='javascript:void(0)' onClick='
+			if ((trel = document.getElementById(\"trows".$o->id()."\")))
+			{
+				if (trel.style.display == \"none\")
+				{
+					if (navigator.userAgent.toLowerCase().indexOf(\"msie\")>=0)
+					{
+						trel.style.display= \"block\";
+					}
+					else
+					{
+						trel.style.display= \"table-row\";
+					}
+				}
+				else
+				{
+					trel.style.display=\"none\";
+				}
+				return false;
+			}
+			el=document.getElementById(\"tnr".$o->id()."\");
+			td = el.parentNode;
+			tr = td.parentNode;
+
+			tbl = tr;
+			while(tbl.tagName.toLowerCase() != \"table\")
+			{
+				tbl = tbl.parentNode;
+			}
+			p_row = tbl.insertRow(tr.rowIndex+1);
+			p_row.className=\"awmenuedittablerow\";
+			p_row.id=\"trows".$o->id()."\";
+			n_td = p_row.insertCell(-1);
+			n_td.className=\"awmenuedittabletext\";
+			n_td.innerHTML=\"&nbsp;\";
+			n_td = p_row.insertCell(-1);
+			n_td.className=\"awmenuedittabletext\";
+			n_td.innerHTML=\"&nbsp;\";
+			n_td = p_row.insertCell(-1);
+			n_td.className=\"awmenuedittabletext\";
+			n_td.innerHTML=aw_get_url_contents(\"$_url\");
+			n_td.colSpan=9;
+			'>".t("Kontaktid")."</a>) ";
+
 			//!!! todo: define and get data only for fields configured to be shown in current crm settings.
 			$tf->define_data(array(
 				"id" => $o->id(),
-				"name" => $name,
+				"name" => $name.$namp,
 				"reg_nr" => $o->prop("reg_nr"),
 				// "pohitegevus" => $o->prop_str("pohitegevus"),
 				// "corpform" => $vorm,
@@ -1901,6 +1946,34 @@ class crm_company_cust_impl extends class_base
 			$this->_req_get_sects($c->to(), $dat);
 		}
 		$this->_sect_l --;
+	}
+
+	/**
+		@attrib name=get_cust_contact_table
+		@param id required type=int acl=view
+	**/
+	function get_cust_contact_table($arr)
+	{
+		$o = obj($arr["id"]);
+		// get employees for that company. if any are important, return those, if not, return all
+		$hr = get_instance("applications/crm/crm_company_people_impl");
+
+		classload("vcl/table");
+		$t = new vcl_table();
+
+		$p = array(
+			"vcl_inst" => &$t,
+		);
+		$hr->_get_human_resources(array(
+			"obj_inst" => $o,
+			"prop" => &$p,
+			"request" => array(
+				"all_if_empty" => true
+			)
+		));
+
+		$t->sort_by();
+		die(iconv(aw_global_get("charset"), "utf-8", $t->draw()));
 	}
 }
 ?>
