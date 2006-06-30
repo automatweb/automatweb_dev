@@ -1586,6 +1586,10 @@ class user extends class_base
 		aw_disable_acl();
 		obj_set_opt("no_cache", 1);
 		$p_o = obj($person);
+		if ($this->can("view", $p_o->prop("work_contact")))
+		{
+			return $p_o->prop("work_contact");
+		}
 		$cons = $p_o->connections_from(array(
 			"type" => "RELTYPE_WORK",
 		));
@@ -1601,6 +1605,8 @@ class user extends class_base
 			$p->set_name("CO ".$uo->prop("real_name")." ".aw_global_get("uid"));
 			aw_disable_acl();
 			$p->save();
+			$p_o->set_prop("work_contact", $p->id());
+			$p_o->save();
 			aw_restore_acl();
 			// now, connect user to person
 			$p_o->connect(array(
