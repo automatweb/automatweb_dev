@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.65 2006/06/29 19:30:40 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.65 2006/06/29 19:30:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.66 2006/06/30 22:08:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.66 2006/06/30 22:08:29 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -698,7 +698,6 @@ class bug_tracker extends class_base
 		));
 	    
 		$obj = new object($arr["parent"]);
-	
 		if($obj->class_id() == CL_BUG_TRACKER)
 		{
 			$ol = new object_list(array("class_id" => CL_BUG, "bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)));
@@ -719,7 +718,7 @@ class bug_tracker extends class_base
 				"bug_status" => new obj_predicate_not(5)
 			));
 
-			if ($arr["reltype"] == 1)
+			if ($arr["reltype"] == 1 || $arr["active_group"] == "by_who")
 			{
 				$bug_count = array();
 				$bugs = array();
@@ -727,7 +726,10 @@ class bug_tracker extends class_base
 				$prop = "who";
 				foreach($bug_data as $bug_obj)
 				{
-					$bug_count[$bug_obj->prop($prop)]++;
+					if ($bug_obj->prop("bug_status") != 5)
+					{
+						$bug_count[$bug_obj->prop($prop)]++;
+					}
 				}
 			}
 			$to_unique = array_unique($to);
@@ -1392,10 +1394,10 @@ class bug_tracker extends class_base
 		$this->_init_bug_list_tbl($t);
 
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
-		if($this->can("view", $pt) || 
+		if(($this->can("view", $pt) || 
 			$arr["request"]["group"] == "by_monitor" || 
 			$arr["request"]["group"] == "by_class"
-		)
+		) && $arr["request"]["group"] != "by_who")
 		{
 			// arhiivi tab
 			if($arr["request"]["group"] == "archive")
@@ -1470,6 +1472,17 @@ class bug_tracker extends class_base
 
 				$ol = new object_list($filt);
 			}
+		}
+		else
+		if ($arr["request"]["group"] == "by_who" && $arr["request"]["p_id"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_BUG,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
+				"who" => $arr["request"]["p_id"]
+			));
 		}
 		else
 		{
@@ -2853,6 +2866,59 @@ class bug_tracker extends class_base
 			$bo->set_prop("num_hrs_guess", $est);
 			$bo->save();
 		}
+	}
+
+	/**
+		@attrib name=f
+	**/
+	function disp_wh($arr)
+	{
+		classload("core/date/date_calc");
+		$coms = new object_list(array(
+			"class_id" => CL_BUG_COMMENT,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"created" => new obj_predicate_compare(OBJ_COMP_GREATER, get_week_start())
+		));
+		echo "com count = ".$coms->count()." <br>";
+
+		foreach($coms->arr() as $com)
+		{
+			if ($com->createdby() == "")
+			{
+				// parse from cvs
+				$tx = $com->comment();
+				if (preg_match("/cvs commit by ([^ ]+) in/imsU", $tx, $mt))
+				{
+					$uid = $mt[1];
+					if ($uid == "kristo")
+					{
+						$uid = "kix";
+					}
+					$com_by_p[$uid][] = $com;
+				}
+				else
+				{
+					echo "error, comment $tx no uid <br>";
+				}
+			}
+			else
+			{
+				$com_by_p[$com->createdby()][] = $com;
+			}
+		}
+
+		// calc work hrs per p
+		foreach($com_by_p as $uid => $coms)
+		{
+			$tm = 0;
+			foreach($coms as $com)
+			{
+				$tm += $com->prop("add_wh");
+			}
+			echo "tot wh for $uid => $tm <br>";
+		}
+		die();
 	}
 }
 ?>
