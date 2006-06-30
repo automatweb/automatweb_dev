@@ -87,7 +87,7 @@ class relpicker extends  core
 				"multiple" => $arr["property"]["multiple"]
 			), "popup_search");
 	
-			if (is_oid($this->obj->id()))
+			if (is_oid($this->obj->id()) && !$val["no_edit"])
 			{
 				$val["post_append_text"] .= " ".html::href(array(
 					"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
@@ -98,7 +98,7 @@ class relpicker extends  core
 		}
 
 		if ( $val["type"] == "select" && is_object($this->obj) && ((is_oid($val["value"]) && $this->can("edit", $val["value"])) || 
-			(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"]))) ))
+			(is_object($this->obj) && is_oid($this->obj->id()) && $this->obj->is_property($val["name"]) && is_oid($this->obj->prop($val["name"])) && $this->can("edit", $this->obj->prop($val["name"]))) ) && !$val["no_edit"])
 		{
 			$val["post_append_text"] .= " ".html::href(array(
 				"url" => html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru())),
@@ -106,7 +106,7 @@ class relpicker extends  core
 				"title" => t("Muuda")
 			));
 		}
-		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->id()))
+		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->id()) && !$val["no_edit"])
 		{
 			$clid = (array)$arr["relinfo"][$reltype]["clid"];
 			$rel_val = $arr["relinfo"][$reltype]["value"];
