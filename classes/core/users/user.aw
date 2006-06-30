@@ -1588,6 +1588,7 @@ class user extends class_base
 		$p_o = obj($person);
 		if ($this->can("view", $p_o->prop("work_contact")))
 		{
+			aw_restore_acl();
 			return $p_o->prop("work_contact");
 		}
 		$cons = $p_o->connections_from(array(
