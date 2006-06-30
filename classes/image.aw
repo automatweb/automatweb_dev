@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.171 2006/06/26 14:06:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.172 2006/06/30 13:29:26 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1048,11 +1048,18 @@ class image extends class_base
 					{
 						@unlink($oldfile);
 					}
-					$prop["value"] = $final_name;
 					if ($arr["obj_inst"]->name() == "")
 					{
-						$arr["obj_inst"]->set_name($_FILES[$prop["name"]]["name"]);
+						if ($prop["value"]["name"] != "")
+						{
+							$arr["obj_inst"]->set_name($prop["value"]["name"]);
+						}
+						else
+						{
+							$arr["obj_inst"]->set_name($_FILES[$prop["name"]]["name"]);
+						}
 					}
+					$prop["value"] = $final_name;
 				}
 				else
 				{
