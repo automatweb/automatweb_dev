@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.21 2006/03/21 13:22:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.22 2006/06/30 21:19:50 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -108,7 +108,13 @@ class language extends class_base
 
 			case "lang_site_id":
 				$adm = get_instance("admin/admin_languages");
-				$prop["options"] = $adm->_get_sl();
+				$sli = get_instance("install/site_list");
+				$sl = $adm->_get_sl();
+				foreach($sl as $idx => $a)
+				{
+					$sl[$idx] = $sli->get_url_for_site($idx);
+				}
+				$prop["options"] = $sl;
 				$prop["value"] = $this->make_keys(explode(",",$prop["value"]));
 				break;
 
