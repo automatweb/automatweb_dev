@@ -183,6 +183,11 @@ class export_lite extends aw_template
 			$is_print = true;
 		}
 
+		if (preg_match("/\/orb.aw\?set_lang_id\=\d$/imsU", $url))
+		{
+			$is_print = true;
+		}
+
 		if ($is_print)
 		{
 			$this->fsp_level--;
