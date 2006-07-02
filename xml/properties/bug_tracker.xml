@@ -131,6 +131,7 @@
             <store>no</store>
             <parent>s_name_lay</parent>
             <captionside>top</captionside>
+            <size>15</size>
             <field>s_name</field>
             <caption>Nimi</caption>
       </property>
@@ -200,6 +201,7 @@
             <store>no</store>
             <parent>s_who_l</parent>
             <captionside>top</captionside>
+            <size>15</size>
             <field>s_who</field>
             <caption>Kellele</caption>
       </property>
@@ -245,6 +247,7 @@
             <store>no</store>
             <captionside>top</captionside>
             <parent>s_type_lay</parent>
+            <size>15</size>
             <field>s_bug_type</field>
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
@@ -278,6 +281,7 @@
             <store>no</store>
             <captionside>top</captionside>
             <parent>s_cut_lay</parent>
+            <size>15</size>
             <field>s_customer</field>
             <caption>Klient</caption>
       </property>
@@ -310,6 +314,7 @@
             <group>search</group>
             <type>textbox</type>
             <store>no</store>
+            <size>15</size>
             <field>s_createdby</field>
             <caption>Looja</caption>
       </property>

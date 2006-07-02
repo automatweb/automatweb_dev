@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.66 2006/06/30 22:08:29 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.66 2006/06/30 22:08:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.67 2006/07/02 20:49:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.67 2006/07/02 20:49:51 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -50,7 +50,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@layout s_name_lay type=hbox
 	@caption Nimi
 
-		@property s_name type=textbox store=no parent=s_name_lay captionside=top
+		@property s_name type=textbox store=no parent=s_name_lay captionside=top size=15 
 		@caption Nimi
 
 		@property s_bug_content type=textbox store=no parent=s_name_lay captionside=top
@@ -74,7 +74,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@layout s_who_l type=hbox
 	@caption Kellele
 
-		@property s_who type=textbox store=no parent=s_who_l captionside=top
+		@property s_who type=textbox store=no parent=s_who_l captionside=top size=15
 		@caption Kellele
 
 		@property s_who_empty type=checkbox ch_value=1 store=no parent=s_who_l captionside=top
@@ -89,7 +89,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@layout s_type_lay type=hbox
 	@caption Tyyp
 
-		@property s_bug_type type=textbox store=no captionside=top parent=s_type_lay
+		@property s_bug_type type=textbox store=no captionside=top parent=s_type_lay size=15
 		@caption T&uuml;&uuml;p
 
 		@property s_bug_class type=select store=no captionside=top parent=s_type_lay
@@ -101,7 +101,7 @@ define("BUG_STATUS_CLOSED", 5);
 	@layout s_cut_lay type=hbox
 	@caption Klient
 
-		@property s_customer type=textbox store=no captionside=top parent=s_cut_lay
+		@property s_customer type=textbox store=no captionside=top parent=s_cut_lay size=15
 		@caption Klient
 
 		@property s_project type=textbox store=no captionside=top parent=s_cut_lay
@@ -110,7 +110,7 @@ define("BUG_STATUS_CLOSED", 5);
 		@property s_deadline type=date_select default=-1 store=no captionside=top parent=s_cut_lay
 		@caption T&auml;htaeg
 
-	@property s_createdby type=textbox store=no 
+	@property s_createdby type=textbox store=no size=15
 	@caption Looja
 
 	@property s_sbt type=submit store=no
