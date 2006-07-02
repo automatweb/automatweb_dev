@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.67 2006/07/02 20:49:51 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.67 2006/07/02 20:49:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.68 2006/07/02 21:25:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.68 2006/07/02 21:25:34 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1395,9 +1395,8 @@ class bug_tracker extends class_base
 
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
 		if(($this->can("view", $pt) || 
-			$arr["request"]["group"] == "by_monitor" || 
 			$arr["request"]["group"] == "by_class"
-		) && $arr["request"]["group"] != "by_who")
+		) && $arr["request"]["group"] != "by_who" )
 		{
 			// arhiivi tab
 			if($arr["request"]["group"] == "archive")
@@ -2560,7 +2559,6 @@ class bug_tracker extends class_base
 		{
 			$po = obj($arr["parent"]);
 		}
-
 		if ($po->class_id() == CL_CRM_PERSON)
 		{
 			// only statuses
@@ -2571,14 +2569,14 @@ class bug_tracker extends class_base
 					$sn = "<b>".$sn."</b>";
 				}
 				$node_tree->add_item(0, array(
-					"id" => $arr["b_mon"]."_".$sid,
+					"id" => $arr["parent"]."_".$sid,
 					"name" => $sn,
 					"url" => html::get_change_url(
 						$arr["inst_id"],
 						array(
 							"group" => "by_monitor",
 							"b_stat" => $sid,
-							"b_mon" => $arr["b_mon"]
+							"b_mon" => $arr["parent"]
 						)
 					)
 				));
