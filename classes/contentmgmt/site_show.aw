@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.197 2006/06/30 20:18:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.198 2006/07/02 10:33:27 kristo Exp $
 
 /*
 
@@ -1706,7 +1706,7 @@ class site_show extends class_base
 					$l[$grp].=$this->parse("LANG".$grp_spec."_END");
 				}
 				else
-				if ($this->is_template("LANG".$grp_spec."_BEGIN") && $l == "")
+				if ($this->is_template("LANG".$grp_spec."_BEGIN") && $l[$grp] == "")
 				{
 					$l[$grp].=$this->parse("LANG".$grp_spec."_BEGIN");
 				}
