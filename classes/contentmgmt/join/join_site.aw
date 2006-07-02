@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.28 2006/06/07 12:33:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.29 2006/07/02 10:26:35 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -463,7 +463,7 @@ class join_site extends class_base
 
 			foreach($props as $nprop)
 			{
-				if (!$this->prop_types[$nprop["type"]])
+				if (!$this->prop_types[$nprop["type"]] && $nprop["name"]!="phone")
 				{
 					continue;
 				}
