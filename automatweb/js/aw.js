@@ -188,6 +188,7 @@ function aw_date_edit_show_cal(elname)
 	cal16.setDayHeaders("P","E","T","K","N","R","L");
 	cal16.setWeekStartDay(1); // week is Monday - Sunday
 	cal16.setTodayText("T&auml;na");
+	cal16.showYearNavigation();
 
 	var y_obj = aw_get_el(elname+"[year]");
 	var m_obj = aw_get_el(elname+"[month]");
