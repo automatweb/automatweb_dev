@@ -11,6 +11,12 @@ class links_display
 		$this->img = false;
 
 		list($url,$target,$caption) = $this->draw_link($alias["target"]);
+
+
+		if (strpos($url, 0, 3) == "www")
+		{
+			$url = "http://".$url;
+		}
 		if ($this->img)
 		{
 			$caption = $this->img;
