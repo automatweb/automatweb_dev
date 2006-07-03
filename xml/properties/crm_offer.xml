@@ -201,6 +201,7 @@
             <group>files</group>
             <method>serialize</method>
             <type>text</type>
+            <no_caption>1</no_caption>
             <field>files</field>
             <caption>Manused</caption>
       </property>

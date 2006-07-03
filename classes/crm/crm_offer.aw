@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.49 2006/06/29 22:04:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.50 2006/07/03 10:49:43 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -91,7 +91,7 @@
 
 @default group=files
 
-	@property files type=text 
+	@property files type=text  no_caption=1
 	@caption Manused
 
 @groupinfo content caption="Sisu" submit=no
@@ -980,11 +980,9 @@ class crm_offer extends class_base
 			CL_CRM_DEAL => t("Leping"),
 			CL_CRM_OFFER => t("Pakkumine")
 		);
-		$impl = $arr["obj_inst"]->prop("preformer");
-		if (is_array($impl))
-		{
-			$impl = reset($impl);
-		}
+
+		$impl = get_current_company();
+		$impl = $impl->id();
 
 		if ($this->can("view", $impl))
 		{
@@ -1072,7 +1070,8 @@ class crm_offer extends class_base
 			{
 				$data[] = array(
 					"name" => html::textbox(array(
-						"name" => "fups_d[$idx][tx_name]"
+						"name" => "fups_d[$idx][tx_name]",
+						"size" => 15
 					)),
 					"file" => html::fileupload(array(
 						"name" => "fups_".$idx
