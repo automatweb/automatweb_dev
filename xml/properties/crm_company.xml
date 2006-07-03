@@ -206,6 +206,15 @@
             <caption>Kliendihaldur</caption>
       </property>
       <property>
+            <name>client_category</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>text</type>
+            <store>no</store>
+            <field>client_category</field>
+            <caption>Kliendikategooria</caption>
+      </property>
+      <property>
             <name>last_com_type</name>
             <table>objects</table>
             <group>general_sub</group>

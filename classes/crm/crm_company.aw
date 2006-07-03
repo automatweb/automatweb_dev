@@ -81,6 +81,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=kliendibaas_firma field=client_manager
 	@caption Kliendihaldur
 
+	@property client_category type=text store=no 
+	@caption Kliendikategooria
+
 	@property last_com_type type=text store=no
 	@caption Viimase kommentaari tüüp
 
@@ -1313,6 +1316,9 @@ class crm_company extends class_base
 
 		switch($data['name'])
 		{
+			case "client_category":
+				return $this->_client_category($arr);
+
 			case "comments_display":
 				$comments = (array) $arr["obj_inst"]->prop("comment_history");
 				$tmp = array();
@@ -5624,6 +5630,36 @@ class crm_company extends class_base
 	{
 		$i = get_instance("vcl/version_manager");
 		return $i->vm_delete_versions($arr);
+	}
+
+	function _client_category($arr)
+	{
+		$conns = $arr["obj_inst"]->connections_to(array(
+			"from.class_id" => CL_CRM_CATEGORY,
+			"type" => "RELTYPE_CUSTOMER"
+		));
+		if (!count($conns))
+		{
+			return PROP_IGNORE;
+		}
+		$c = reset($conns);
+		$cat = $c->from();
+		$cats = array();
+		while($cat->class_id() != CL_CRM_COMPANY && count($conns))
+		{
+			$cats[] = $cat->name();
+			$conns = $cat->connections_to(array(
+				"from.class_id" => CL_CRM_CATEGORY,
+				"type" => "RELTYPE_CATEGORY"
+			));
+			$c = reset($conns);
+			if ($c)
+			{
+				$cat = $c->from();
+			}
+		}
+		$arr["prop"]["value"] = join(" / ", array_reverse($cats));
+		return PROP_OK;
 	}
 }
 
