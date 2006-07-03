@@ -1364,7 +1364,11 @@ class realestate_property extends class_base
 			$data["transaction_price_value"] = null;
 			$data["transaction_price"] = null;
 		}
-	
+		if(!$data["agent_email"])
+		{
+			$data["agent_email"] = "";
+		}
+
 		### parse
 		$this->vars ($data);
 		$res = $this->parse();

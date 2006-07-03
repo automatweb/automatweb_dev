@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.33 2006/06/29 14:02:07 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.34 2006/07/03 14:49:11 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1271,9 +1271,11 @@ exit_function("jigaboo");
 			$table->sortable=false;
 			$result = $table->get_html ();
 		}
+		else {
+			$result = t("Otsinguparameetritele vastavaid kuulutusi ei leitud!");
+		}
 		exit_function("re_search::show - process searchresults");
 		enter_function("re_search::show - parse");
-
 		### style
 		if (file_exists($this->site_template_dir.'/'.$this_object->prop("template").".css"))
 		{
