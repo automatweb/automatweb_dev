@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.17 2006/03/13 13:42:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.18 2006/07/03 19:59:52 kristo Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -17,7 +17,7 @@
 	@property aadress type=textbox size=50 maxlength=100
 	@caption Tänav/Küla
 	
-	@property postiindeks type=textbox size=5 maxlength=5
+	@property postiindeks type=textbox size=5 maxlength=10
 	@caption Postiindeks
 	
 	@property linn type=relpicker reltype=RELTYPE_LINN automatic=1

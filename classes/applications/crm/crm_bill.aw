@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.56 2006/06/29 22:30:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.57 2006/07/03 19:59:52 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -548,12 +548,17 @@ class crm_bill extends class_base
 				$ct = obj($_ord_ct);
 				$ord_ct = $ct->name();
 			}
-			if ($this->can("view", $ord->prop("contact")))
+			$prop = "contact";
+			if ($ord->class_id() == CL_CRM_PERSON)
+			{
+				$prop = "address";
+			}
+			if ($this->can("view", $ord->prop($prop)))
 			{
 				//$ct = obj($ord->prop("contact"));
 				//$ord_addr = $ct->name()." ".$ct->prop("postiindeks");
 
-				$ct = obj($ord->prop("contact"));
+				$ct = obj($ord->prop($prop));
 				$ap = array($ct->prop("aadress"));
 				if ($ct->prop("linn"))
 				{
@@ -1526,6 +1531,17 @@ class crm_bill extends class_base
 	**/
 	function delete_rows($arr)
 	{
+		foreach($arr["sel_rows"] as $row_id)
+		{
+			// now, the bill row has maybe a task row connected, reset the task row's bill no
+			$ro = obj($row_id);
+			$tr = $ro->get_first_obj_by_reltype("RELTYPE_TASK_ROW");
+			if ($tr)
+			{
+				$tr->set_prop("bill_id", 0);
+				$tr->save();
+			}
+		}
 		object_list::iterate_list($arr["sel_rows"], "delete");
 		return $arr["post_ru"];
 	}
