@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.68 2006/07/02 21:25:34 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.68 2006/07/02 21:25:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.69 2006/07/03 10:40:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.69 2006/07/03 10:40:19 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -2792,6 +2792,39 @@ class bug_tracker extends class_base
 				echo "send to ".$p->prop("email.mail")."<br>".nl2br($mail)." <br><br><br><br>";
 				send_mail($p->prop("email.mail"), t("Bugtracki M22ramata ajad"), $mail);
 			}
+		}
+echo "<hr>";
+		get_instance(CL_BUG);
+		// get all bugs that are needs feedback and send mail to their creators
+		$ol = new object_list(array(
+			"class_id" => CL_BUG,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"bug_status" => BUG_FEEDBACK,
+		));
+
+		$bug2uid = array();
+		foreach($ol->arr() as $o)
+		{
+			$bug2uid[$o->createdby()][] = $o;
+		}
+
+		$u = get_instance("users");
+		foreach($bug2uid as $b_uid => $bugs)
+		{
+			$uo = obj($u->get_oid_for_uid($b_uid));
+			
+			$eml = $uo->prop("email");
+
+			$ct = "Tere!\nMina olen AW Bugtrack. Sul on vastamata vajab tagasisidet buge:\n";
+			foreach($bugs as $bug)
+			{
+				$ct .= obj_link($bug->id())." ".$bug->name()."\n";
+			}
+			$ct .= "\n\nEdu vastamisel!\n";
+
+			echo "send to ".$eml."<br>".nl2br($ct)." <br><br><br><br>";
+			send_mail($eml, t("Bugtracki vastamata bugid"), $ct);
 		}
 		die(t("all done"));
 	}
