@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.69 2006/07/03 10:40:19 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.69 2006/07/03 10:40:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.70 2006/07/03 14:10:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.70 2006/07/03 14:10:20 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1606,6 +1606,7 @@ class bug_tracker extends class_base
 				"icon" => icons::get_icon($bug),
 				"obj" => $bug,
 				"comment_count" => (int)$comments_by_bug[$bug->id()],
+				"comment" => (int)$comments_by_bug[$bug->id()],
 				"col" => $col
 			));
 		}
