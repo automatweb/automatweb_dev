@@ -9,96 +9,100 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/cb_trans/cb_translate.aw:34
+#: classes/applications/cb_trans/cb_translate.aw:35
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:232 classes/applications/cb_trans/cb_translate.aw:1030
+#: classes/applications/cb_trans/cb_translate.aw:236
+#: classes/applications/cb_trans/cb_translate.aw:1034
 msgid "CVS commit"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:238
+#: classes/applications/cb_trans/cb_translate.aw:242
 msgid "Näita muutusi"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:242
+#: classes/applications/cb_trans/cb_translate.aw:246
 msgid "AW tõlkimine"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:267
+#: classes/applications/cb_trans/cb_translate.aw:271
 msgid "Selle klassil puudub abiinfo"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:436
+#: classes/applications/cb_trans/cb_translate.aw:440
 msgid "Klassi '%s' abiinfo"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:439
+#: classes/applications/cb_trans/cb_translate.aw:443
 msgid "AW abiinfo"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:533 classes/applications/cb_trans/cb_translate.aw:608
+#: classes/applications/cb_trans/cb_translate.aw:537
+#: classes/applications/cb_trans/cb_translate.aw:612
 msgid "Klassi"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:533
+#: classes/applications/cb_trans/cb_translate.aw:537
 msgid "tekstid."
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:608
+#: classes/applications/cb_trans/cb_translate.aw:612
 msgid "seos"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:609 classes/applications/cb_trans/cb_translate.aw:901
+#: classes/applications/cb_trans/cb_translate.aw:613
+#: classes/applications/cb_trans/cb_translate.aw:905
 msgid "tüüpi"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:718
+#: classes/applications/cb_trans/cb_translate.aw:722
 msgid "Kaust"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:718 classes/applications/cb_trans/cb_translate.aw:805 classes/applications/cb_trans/cb_translate.aw:898
+#: classes/applications/cb_trans/cb_translate.aw:722
+#: classes/applications/cb_trans/cb_translate.aw:809
+#: classes/applications/cb_trans/cb_translate.aw:902
 msgid "Klass"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:806 classes/applications/cb_trans/cb_translate.aw:899
+#: classes/applications/cb_trans/cb_translate.aw:810
+#: classes/applications/cb_trans/cb_translate.aw:903
 msgid "Grupp"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:900
+#: classes/applications/cb_trans/cb_translate.aw:904
 msgid "Omadus"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:944
+#: classes/applications/cb_trans/cb_translate.aw:948
 msgid "tekst puudus"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:945
+#: classes/applications/cb_trans/cb_translate.aw:949
 msgid "tekst eemaldati"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:952
+#: classes/applications/cb_trans/cb_translate.aw:956
 msgid "Sooritatud muudatused"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:961
+#: classes/applications/cb_trans/cb_translate.aw:965
 msgid "Kinnita muudatused"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:968
+#: classes/applications/cb_trans/cb_translate.aw:972
 msgid "muudatusi pole"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1023
+#: classes/applications/cb_trans/cb_translate.aw:1027
 msgid "Muudetud faile ei ole!"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1034
+#: classes/applications/cb_trans/cb_translate.aw:1038
 msgid "Seletus"
 msgstr ""
 
-#: classes/applications/cb_trans/cb_translate.aw:1035
+#: classes/applications/cb_trans/cb_translate.aw:1039
 msgid "Commitimisele minevad failid"
 msgstr ""
-

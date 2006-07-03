@@ -9,12 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/crm/crm_user_creator.aw:310
+#: classes/crm/crm_user_creator.aw:311
 msgid "Nimes sisaldunud tähemärgid [%s] pole kasutajanimedes lubatud."
 msgstr ""
 
-#: classes/crm/crm_user_creator.aw:315
+#: classes/crm/crm_user_creator.aw:316
 msgid "Valitud kasutajanimi [%s] on juba kasutusel."
 msgstr ""
-

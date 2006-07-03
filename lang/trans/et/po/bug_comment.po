@@ -9,8 +9,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/bug_o_matic_3000/bug_comment.aw:class_1058_help
 msgid "Klassi Bugi kommentaar help"
 msgstr ""
 
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_prev_state
+msgid "Omaduse Eelmine staatus (prev_state) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_prev_state_comment
+msgid "Omaduse Eelmine staatus (prev_state) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_prev_state_help
+msgid "Omaduse Eelmine staatus (prev_state) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_new_state
+msgid "Omaduse Uus staatus (new_state) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_new_state_comment
+msgid "Omaduse Uus staatus (new_state) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_new_state_help
+msgid "Omaduse Uus staatus (new_state) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh
+msgid "Omaduse Lisandunud t&ouml;&ouml;tunnid (add_wh) caption"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh_comment
+msgid "Omaduse Lisandunud t&ouml;&ouml;tunnid (add_wh) kommentaar"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:prop_add_wh_help
+msgid "Omaduse Lisandunud t&ouml;&ouml;tunnid (add_wh) help"
+msgstr ""
+
+#: classes/applications/bug_o_matic_3000/bug_comment.aw:43
+msgid "--vali--"
+msgstr ""

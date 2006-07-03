@@ -9,8 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/common/bank_payment.aw:class__help
-msgid "Klassi  help"
+#: classes/common/bank_payment.aw:class_1077_help
+msgid "Klassi Bank Payment help"
 msgstr ""
-

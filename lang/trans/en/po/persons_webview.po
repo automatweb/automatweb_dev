@@ -186,50 +186,74 @@ msgstr ""
 msgid "Seose Seadete vorm (RELTYPE_DEPARTMENT) tekst"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:91
+#: classes/crm/persons_webview.aw:90
 msgid "perenimi"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:92
+#: classes/crm/persons_webview.aw:91
 msgid "ametinimetuse jrk"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:93
+#: classes/crm/persons_webview.aw:92
 msgid "isiku jrk"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:98
+#: classes/crm/persons_webview.aw:97
 msgid "osakonna jrk"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:99
+#: classes/crm/persons_webview.aw:98
 msgid "osakonna nimi"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:103
+#: classes/crm/persons_webview.aw:102
 msgid "Kasvav"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:104
+#: classes/crm/persons_webview.aw:103
 msgid "Kahanev"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:116
+#: classes/crm/persons_webview.aw:107
+msgid "-- vali --"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:108
+msgid "põhi"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:109
+msgid "kesk"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:110
+msgid "kesk-eri"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:111
+msgid "kõrgem"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:123
 msgid "ainult osakonnad"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:117
+#: classes/crm/persons_webview.aw:124
 msgid "koos isikutega"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:156
+#: classes/crm/persons_webview.aw:172
 msgid "Isikute järjestamisprintsiip $i"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:173
+#: classes/crm/persons_webview.aw:189
 msgid "Osakondade järjestamisprintsiip $i"
 msgstr ""
 
-#: classes/crm/persons_webview.aw:297
+#: classes/crm/persons_webview.aw:371
 msgid "pole asutust valitud"
+msgstr ""
+
+#: classes/crm/persons_webview.aw:583
+msgid "Palk"
 msgstr ""

@@ -10,39 +10,43 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_document_base.aw:124
+#: classes/applications/crm/crm_document_base.aw:37
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/crm/crm_document_base.aw:128
 msgid "Lisa isik"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:130
+#: classes/applications/crm/crm_document_base.aw:134
 msgid "Eemalda isik"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:139
+#: classes/applications/crm/crm_document_base.aw:143
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:145
+#: classes/applications/crm/crm_document_base.aw:149
 msgid "Tegija"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:151
+#: classes/applications/crm/crm_document_base.aw:155
 msgid "Tegevus"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:157
+#: classes/applications/crm/crm_document_base.aw:161
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:163
+#: classes/applications/crm/crm_document_base.aw:167
 msgid "Eeldustegevus(ed)"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:169
+#: classes/applications/crm/crm_document_base.aw:173
 msgid "Tehtud"
 msgstr ""
 
-#: classes/applications/crm/crm_document_base.aw:227
+#: classes/applications/crm/crm_document_base.aw:231
 msgid "Otsi"
 msgstr ""
 

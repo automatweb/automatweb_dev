@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/mailinglist/ml_queue.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -34,7 +33,8 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_queue.aw:557
-msgid "done\n<br>"
+#: classes/applications/mailinglist/ml_queue.aw:544
+msgid ""
+"done\n"
+"<br>"
 msgstr ""
-

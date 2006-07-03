@@ -82,43 +82,43 @@ msgstr ""
 msgid "Grupi Muutujad (test) help"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:73
+#: classes/contentmgmt/site_styles.aw:74
 msgid "Ei valita juhuslikult"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:74
+#: classes/contentmgmt/site_styles.aw:75
 msgid "Juhuslik sessiooniti"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:75
+#: classes/contentmgmt/site_styles.aw:76
 msgid "Juhuslik igal laadimisel"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:184
+#: classes/contentmgmt/site_styles.aw:185
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:196
+#: classes/contentmgmt/site_styles.aw:197
 msgid "Nr"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:200
+#: classes/contentmgmt/site_styles.aw:201
 msgid "CSS url"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:244
+#: classes/contentmgmt/site_styles.aw:245
 msgid "Uus muutuja"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:253
+#: classes/contentmgmt/site_styles.aw:254
 msgid "jrk"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:258
+#: classes/contentmgmt/site_styles.aw:259
 msgid "url"
 msgstr ""
 
-#: classes/contentmgmt/site_styles.aw:262
+#: classes/contentmgmt/site_styles.aw:263
 msgid "Men&uuml;&uuml;pildi nr"
 msgstr ""
 
