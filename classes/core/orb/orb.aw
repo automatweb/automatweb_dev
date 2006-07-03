@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.15 2006/05/30 11:10:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.16 2006/07/03 13:57:47 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -1057,7 +1057,18 @@ class orb extends aw_template
 				$meth["values"]["parent"] = aw_global_get("section");
 			}
 		};
-		if ($id == "menu" || $id == "file")
+		if ($id == "menu")
+		{
+			$so = obj(aw_global_get("section"));
+			if ($so->class_id() != CL_MENU)
+			{
+				$so = obj($so->parent());
+			}
+			$meth["values"]["parent"] = $so->id();
+			$meth["values"]["id"] = $so->id();
+		}
+		else
+		if ($id == "file")
 		{
 			$meth["values"]["parent"] = aw_global_get("section");
 			$meth["values"]["id"] = aw_global_get("section");
