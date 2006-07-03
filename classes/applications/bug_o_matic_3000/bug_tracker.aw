@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.70 2006/07/03 14:10:20 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.70 2006/07/03 14:10:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.71 2006/07/03 15:14:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.71 2006/07/03 15:14:24 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -1202,7 +1202,7 @@ class bug_tracker extends class_base
 		{
 			return "";
 		}
-		return html::get_change_url($arr["oid"] , array("group" => "comments" , "return_url" => get_ru()), $arr["comment_count"]);
+		return html::img(array("url" => aw_ini_get("baseurl")."/automatweb/images/forum_add_new.gif", "border" => 0))." ".html::get_change_url($arr["oid"] , array("group" => "comments" , "return_url" => get_ru()), $arr["comment_count"]);
 	}
 
 	function _init_bug_list_tbl(&$t)
