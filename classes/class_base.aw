@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.490 2006/06/28 14:19:50 kristo Exp $
+// $Id: class_base.aw,v 2.491 2006/07/03 12:13:09 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -857,12 +857,14 @@ class class_base extends aw_template
 		$msgid = "Grupi ".$groups[$argblock["group"]]["caption"]." (".$argblock["group"].") comment";
 		$help = strlen(t2($msgid))?"<div>".t($msgid)."</div>":t("Lisainfo grupi kohta puudub");
 		//
-		
+
 		$cli->finish_output(array(
 			"method" => $method,
 			"action" => $submit_action,
 			// hm, dat is weird!
 			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
+			"back_button" => $gdata["back_button"],
+			"forward_button" => $gdata["forward_button"],
 			"data" => $argblock,
 			// focus contains the name of the property that
 			// should be focused by the output client
@@ -969,6 +971,23 @@ class class_base extends aw_template
 
 		$args["rawdata"] = $args;
 		$save_ok = $this->process_data($args);
+
+		if ($args["submit_and_forward"] != "")
+		{
+			$gd = $this->groupinfo[$group];
+			if ($gd["forward_button"] != "")
+			{
+				$group = $gd["forward_button"];
+			}
+		}
+		if ($args["submit_and_back"] != "")
+		{
+			$gd = $this->groupinfo[$group];
+			if ($gd["back_button"] != "")
+			{
+				$group = $gd["back_button"];
+			}
+		}
 		$args = array(
 			"id" => $this->id,
 			"group" => $group,

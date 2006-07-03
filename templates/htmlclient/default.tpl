@@ -61,7 +61,15 @@
 <tr>
 	<td class='aw04contentcellleft' align='center' width='80'>&nbsp;</td>
 	<td class='aw04contentcellright'>
-		<input type='submit' name='{VAR:name}' value='{VAR:sbt_caption}' accesskey='s' class='aw04formbutton' onClick='self.disabled=true;this.disabled=true; submit_changeform("{VAR:action}"); this.disabled = 1;return false;'>
+		<!-- SUB: BACK_BUTTON -->
+			<input type='submit' name='{VAR:back_button_name}' value='{VAR:back_button_caption}' class='aw04formbutton' >
+		<!-- END SUB: BACK_BUTTON -->
+
+		<input type='submit' name='{VAR:name}' value='{VAR:sbt_caption}' accesskey='s' class='aw04formbutton' onClick='self.disabled=true;submit_changeform("{VAR:action}"); return false;'>
+
+		<!-- SUB: FORWARD_BUTTON -->
+			<input type='submit' name='{VAR:forward_button_name}' value='{VAR:forward_button_caption}' class='aw04formbutton' >
+		<!-- END SUB: FORWARD_BUTTON -->
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->

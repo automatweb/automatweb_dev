@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.147 2006/04/28 09:53:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.148 2006/07/03 12:13:09 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -557,14 +557,36 @@ class htmlclient extends aw_template
 		
 		}
 		else
-		if (empty($submit) || $submit !== "no")
-		{
+		if (empty($submit) || $submit !== "no")		{
+
 			$var_name = "SUBMIT";
 			$tpl_vars = array(
 				"sbt_caption" => $sbt_caption != "" ? $sbt_caption : t("Salvesta"),
 			);
 			// I need to figure out whether I have a relation manager
 			$this->vars($tpl_vars);
+
+			if ($back_button != "")
+			{
+				$this->vars(array(
+					"back_button_caption" => t("&lt;&lt;&lt; Tagasi"),
+					"back_button_name" => t("submit_and_back"),
+				));
+				$this->vars(array(
+					"BACK_BUTTON" => $this->parse("BACK_BUTTON")
+				));
+			}
+
+			if ($forward_button != "")
+			{
+				$this->vars(array(
+					"forward_button_caption" => t("Edasi &gt;&gt;&gt;"),
+					"forward_button_name" => t("submit_and_forward"),
+				));
+				$this->vars(array(
+					"FORWARD_BUTTON" => $this->parse("FORWARD_BUTTON")
+				));
+			}
 			$sbt = $this->parse($var_name);
 			
 		};

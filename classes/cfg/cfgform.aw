@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.89 2006/05/24 13:03:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.90 2006/07/03 12:13:09 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -40,8 +40,11 @@
 	@property classinfo_disable_relationmgr type=checkbox ch_value=1 field=meta method=serialize
 	@caption Ära kasuta seostehaldurit
 
-	@property edit_groups type=callback callback=callback_edit_groups group=groupdata
+	@property edit_groups type=callback callback=callback_edit_groups group=groupdata_a
 	@caption Muuda gruppe
+
+	@property group_movement type=table group=groupdata_b store=no no_caption=1
+	@caption Gruppide vaheline liikumine
 
 	@property navtoolbar type=toolbar group=layout store=no no_caption=1 editonly=1
 	@caption Toolbar
@@ -87,6 +90,9 @@
 	@property trans_tbl_grps type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
 	
 	@groupinfo groupdata caption=Grupid 
+		@groupinfo groupdata_a caption=Grupid parent=groupdata
+		@groupinfo groupdata_b caption=Liikumine parent=groupdata
+
 	@groupinfo layout caption=Layout submit=no
 	@groupinfo avail caption="Kõik omadused" submit=no
 	@groupinfo controllers caption="Kontrollerid"
@@ -154,6 +160,10 @@ class cfgform extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "group_movement":
+				$this->_group_movement($arr);
+				break;
+
 			case "classinfo_allow_rte":
 				$data["options"] = array(
 					0 => t("Ei kuva"),
@@ -497,6 +507,10 @@ class cfgform extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "group_movement":
+				$arr["obj_inst"]->set_meta("buttons", $arr["request"]["bts"]);
+				break;
+
 			case "gen_submit_controllers":
 				$arr["obj_inst"]->set_meta("controllers", $arr["request"]["controllers"]);		
 				break;
@@ -1901,6 +1915,14 @@ class cfgform extends class_base
 			}
 		}
 
+		foreach(safe_array($o->meta("buttons")) as $gn => $bts)
+		{
+			if (isset($ret[$gn]))
+			{
+				$ret[$gn]["back_button"] = $bts["back"];
+				$ret[$gn]["forward_button"] = $bts["next"];
+			}
+		}
 		return $ret;
 	}
 
@@ -1940,6 +1962,59 @@ class cfgform extends class_base
 			$active = $first->id();
 		};
 		return $active;
+	}
+
+	function _init_group_movement_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "grp",
+			"caption" => t("Grupp"),
+			"align" => "left",
+		));
+		$t->define_field(array(
+			"name" => "back_button",
+			"caption" => t("Tagasi nupp"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "next_button",
+			"caption" => t("Edasi nupp"),
+			"align" => "center",
+		));
+	}
+
+	function _group_movement($arr)
+	{	
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_group_movement_t($t);
+
+		// list groups and let the user select groups that you go forward/back
+		$grps = new aw_array($arr["obj_inst"]->meta("cfg_groups"));
+
+		$sel = array("" => t("Ei ole nuppu"));
+		foreach($grps->get() as $gn => $gd)
+		{
+			$sel[$gn] = $gd["caption"];
+		}
+
+		$buttons = $arr["obj_inst"]->meta("buttons");
+		foreach($grps->get() as $gn => $gd)
+		{
+			$t->define_data(array(
+				"grp" => ($gd["parent"] != "" ? "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" : "").$gd["caption"],
+				"back_button" => html::select(array(
+					"name" => "bts[$gn][back]",
+					"options" => $sel,
+					"value" => $buttons[$gn]["back"]
+				)),
+				"next_button" => html::select(array(
+					"name" => "bts[$gn][next]",
+					"options" => $sel,
+					"value" => $buttons[$gn]["next"]
+				)),
+			));
+		}
+		$t->set_sortable(false);
 	}
 };
 ?>
