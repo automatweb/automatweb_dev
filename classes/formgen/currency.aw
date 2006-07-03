@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.4 2005/10/25 12:22:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/currency.aw,v 1.5 2006/07/03 15:06:22 kristo Exp $
 // currency.aw - Currency management
 
 /*
@@ -12,7 +12,7 @@
 @caption J&auml;rjekord
 
 @property comment type=textbox table=objects field=comment 
-@caption Kurss saksa marga suhtes
+@caption Kurss euro suhtes
 
 @property unit_name type=textbox table=objects field=meta method=serialize
 @caption Raha&uuml;hiku nimetus

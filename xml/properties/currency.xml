@@ -15,7 +15,7 @@
             <type>textbox</type>
             <table>objects</table>
             <field>comment</field>
-            <caption>Kurss saksa marga suhtes</caption>
+            <caption>Kurss euro suhtes</caption>
       </property>
       <property>
             <name>unit_name</name>
