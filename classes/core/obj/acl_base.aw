@@ -352,6 +352,7 @@ class acl_base extends db_connector
 		$max_acl["acl_rel_id"] = "666";
 		$cnt = 0;
 
+		$orig_oid = $oid;
 		// here we must traverse the tree from $oid to 1, gather all the acls and return the one with the highest priority
 		while ($oid > 0)
 		{
@@ -395,7 +396,8 @@ class acl_base extends db_connector
 				}
 			}
 
-			if ($tacl["priority"] > $max_priority)
+			$skip = ($oid == $orig_oid && $tacl["can_subs"] == 1);
+			if ($tacl["priority"] > $max_priority && !$skip)
 			{
 				$max_priority = $tacl["priority"];
 				$max_acl = $tacl;
