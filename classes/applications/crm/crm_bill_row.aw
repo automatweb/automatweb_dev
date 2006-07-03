@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.3 2006/06/26 20:04:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.4 2006/07/03 20:34:59 kristo Exp $
 // crm_bill_row.aw - Arve rida 
 /*
 
@@ -39,6 +39,9 @@
 
 @property date type=textbox field=aw_date
 @caption Kuup&auml;ev
+
+@property desc type=textarea rows=5 cols=30 field=aw_desc
+@caption Kirjeldus
 
 @reltype PROD value=1 clid=CL_CHOP_PRODUCT
 @caption Toode
@@ -94,6 +97,27 @@ class crm_bill_row extends class_base
 		{
 			$this->db_query("create table aw_crm_bill_rows (aw_oid int primary key, aw_amt double,aw_prod int,aw_price double,aw_unit varchar(100),aw_is_oe int,aw_has_tax int ,aw_date varchar(255))");
 			return true;
+		}
+
+		switch($field)
+		{
+			case "aw_desc":
+				$this->db_add_col($table, array(
+					"name" => $field,
+					"type" => "text"
+				));
+				// convert data as well
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_BILL_ROW,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				foreach($ol->arr() as $o)
+				{
+					$o->set_name($o->name());
+					$o->save();
+				}
+				return true;
 		}
 	}
 }

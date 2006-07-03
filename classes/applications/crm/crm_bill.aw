@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.57 2006/07/03 19:59:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.58 2006/07/03 20:34:59 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -915,7 +915,7 @@ class crm_bill extends class_base
 			$rd = array(
 				"amt" => $row->prop("amt"),
 				"prod" => $row->prop("prod"),
-				"name" => $row->prop("name"),
+				"name" => $row->prop("desc"),
 				"comment" => $row->prop("comment"),
 				"price" => $row->prop("price"),
 				"sum" => str_replace(",", ".", $row->prop("amt")) * str_replace(",", ".", $row->prop("price")),
