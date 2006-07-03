@@ -4577,13 +4577,20 @@ class crm_company extends class_base
 			$n->set_prop("bill_no", $ser->find_series_and_get_next(CL_CRM_BILL));
 			$n->set_name(sprintf(t("Arve nr %s"), $n->prop("bill_no")));
 			$n->set_prop("bill_date", $b->prop("bill_date"));
+			$n->set_prop("comment", $b->prop("comment"));
+			$n->set_prop("time_spent_desc", $b->prop("time_spent_desc"));
 			$n->set_prop("bill_due_date_days", $b->prop("bill_due_date_days"));
 			$n->set_prop("bill_due_date", $b->prop("bill_due_date"));
+			$n->set_prop("bill_recieved", $b->prop("bill_recieved"));
+			$n->set_prop("state", $b->prop("state"));
+			$n->set_prop("disc", $b->prop("disc"));
+			$n->set_prop("language", $b->prop("language"));
 			$n->set_prop("customer", $b->prop("customer"));
 			$n->set_prop("impl", $b->prop("impl"));
-			$n->set_prop("notes", $b->prop("notes"));
+			//$n->set_prop("notes", $b->prop("notes"));
 			$n->set_prop("disc", $b->prop("disc"));
 			$n->set_prop("sum", $b->prop("sum"));
+
 			$n->save();
 
 			// connections
