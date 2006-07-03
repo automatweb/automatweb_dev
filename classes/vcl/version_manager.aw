@@ -206,15 +206,74 @@ class version_manager extends class_base
 		$idx = reset(array_values($o->get_tableinfo()));
 		$idx = $idx["index"];
 		$data = $this->db_fetch_row("SELECT * FROM $tn WHERE $idx = '".$o->id()."' AND version_id = '$arr[vers]'");
-
 		foreach($o->get_property_list() as $pn => $pd)
 		{
-			if ($data[$pd["field"]] != $o->prop($pn))
+			$cur_v = $o->prop_str($pn);
+			$tmp = $o->prop($pn);
+			if ($pd["table"] != "objects")
 			{
+				$ver_v = $data[$pd["field"]];
+			}
+			else
+			if ($pd["field"] == "meta")
+			{
+				$dat = aw_unserialize($data["o_metadata"]);
+				$ver_v = $dat[$pd["name"]];
+			}
+			else
+			{
+				$ver_v = $data["o_".$pd["field"]];
+			}
+			
+			$tmp = $o->set_prop($pn, $ver_v);
+			$ver_v = $o->prop_str($pn);
+			$o->set_prop($pn, $tmp);
+
+			if ($ver_v != $cur_v)
+			{
+				if ($pd["type"] == "date_select")
+				{
+					if ($cur_v < 300)
+					{
+						$cur_v = "";
+					}
+					else
+					{
+						$cur_v = date("d.m.Y", $cur_v);
+					}
+					if ($ver_v < 300)
+					{
+						$ver_v = "";
+					}
+					else
+					{
+						$ver_v = date("d.m.Y", $ver_v);
+					}
+		
+				}
+				if ($pd["type"] == "datetime_select")
+				{
+					if ($cur_v < 300)
+					{
+						$cur_v = "";
+					}
+					else
+					{
+						$cur_v = date("d.m.Y H:i", $cur_v);
+					}
+					if ($ver_v < 300)
+					{
+						$ver_v = "";
+					}
+					else
+					{
+						$ver_v = date("d.m.Y H:i", $ver_v);
+					}
+				}
 				$t->define_data(array(
 					"prop" => $pd["caption"],
-					"cur" => $o->prop($pn),
-					"ver" => $data[$pd["field"]]
+					"cur" => $cur_v,
+					"ver" => $ver_v
 				));
 			}
 		}
