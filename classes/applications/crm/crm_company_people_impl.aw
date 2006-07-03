@@ -451,6 +451,17 @@ class crm_company_people_impl extends class_base
 			};
 			$pdat["email"] = join(",", $emails);
 
+			$econns = $person->connections_from(array(
+				"type" => "RELTYPE_PHONE",
+			));
+			$phs = array();
+			foreach($econns as $conn)
+			{
+				$to_obj = $conn->to();
+				$phs[] = $to_obj->prop("name");
+			};
+			$pdat["phone"] = join(",", $phs);
+
 
 
 		enter_function("ghr::loop::pictt");
@@ -468,7 +479,7 @@ class crm_company_people_impl extends class_base
 				"image" => $img,
 				"cal" => $cal,
 				"id" => $person->id(),
-				"phone" => $arr["obj_inst"]->prop_str("phone_id"),
+				"phone" => $pdat["phone"],
 				"rank" => $pdat["rank"],
 				'section' => $section,
 				"email" => html::href(array(
@@ -950,31 +961,37 @@ class crm_company_people_impl extends class_base
 			))
 		));
 
-		$tb->add_menu_item(array(
-			'parent'=>'add_item',
-			'text' => t('Üksus'),
-			'link'=>$this->mk_my_orb('new',array(
-					'parent'=>$arr['obj_inst']->id(),
-					'alias_to'=>$alias_to,
-					'reltype'=> $arr["request"]["unit"] ? 1 : 28,
-					'return_url'=>get_ru()
-				),
-				'crm_section'
-			)
-		));
+		if ($arr["request"]["cat"] != 999999)
+		{
+			$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text' => t('Üksus'),
+				'link'=>$this->mk_my_orb('new',array(
+						'parent'=>$arr['obj_inst']->id(),
+						'alias_to'=>$alias_to,
+						'reltype'=> $arr["request"]["unit"] ? 1 : 28,
+						'return_url'=>get_ru()
+					),
+					'crm_section'
+				)
+			));
+		}
 
-		$tb->add_menu_item(array(
-			'parent'=>'add_item',
-			'text' => t('Ametinimetus'),
-			'link'=>$this->mk_my_orb('new',array(
-					'parent'=>$arr['obj_inst']->id(),
-					'alias_to'=>$alias_to,
-					'reltype'=> (int)$arr['request']['unit'] ? 3 : 29,
-					'return_url'=>get_ru()
-				),
-				'crm_profession'
-			)
-		));
+		if ($arr["request"]["unit"] != "" && $arr["request"]["cat"] != 999999)
+		{
+			$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text' => t('Ametinimetus'),
+				'link'=>$this->mk_my_orb('new',array(
+						'parent'=>$arr['obj_inst']->id(),
+						'alias_to'=>$alias_to,
+						'reltype'=> (int)$arr['request']['unit'] ? 3 : 29,
+						'return_url'=>get_ru()
+					),
+					'crm_profession'
+				)
+			));
+		}
 
 		//delete button
 		$tb->add_menu_button(array(
