@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.34 2006/07/03 14:49:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.35 2006/07/04 15:33:04 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1347,6 +1347,13 @@ exit_function("jigaboo");
 				"a3_division" => $a3_division_id,
 				"a4_division" => $a4_division_id,
 				"a5_division" => $a5_division_id,
+				"search_transaction_type" => array_shift($this_object->prop("search_transaction_type")),
+				"session_url" => $this->mk_my_orb (
+					"get_session_data",
+					array(
+						"id" => $this_object->id (),
+					)
+					,CL_REALESTATE_SEARCH, false, true),
 			));
 			$form = $this->parse ("RE_SEARCHFORM");
 
@@ -1361,7 +1368,7 @@ exit_function("jigaboo");
 			{
 				$number_of_results = (0 < $this->result_count) ? sprintf (t("Leitud %s objekti"), $this->result_count) : t("Otsinguparameetritele vastavaid objekte ei leitud");
 			}
-
+			
 			$this->vars (array (
 				"RE_SEARCHFORM" => $form,
 				"table_style" => $table_style,
@@ -2506,6 +2513,20 @@ exit_function("jigaboo");
 		$charset = aw_global_get("charset");
 		header ("Content-Type: text/html; charset=" . $charset);
 		echo $options;
+		exit;
+	}
+
+/**
+    @attrib name=get_session_data nologin=1
+	@returns List of options separated by newline (\n). Void on error.
+**/
+	function get_session_data($id)
+	{
+		global $data;
+		if($data == "trans") echo aw_global_get("transaction");
+		if($data == "type") echo aw_global_get("rs_type");
+		aw_session_set("transaction", null) ;
+		aw_session_set("rs_type", null) ;
 		exit;
 	}
 }

@@ -11,5 +11,12 @@
 			</function>
 		</action>
 
+		<action name="get_session_data" nologin="1">
+			<function name="get_session_data">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
