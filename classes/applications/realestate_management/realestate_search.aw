@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.35 2006/07/04 15:33:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.36 2006/07/04 15:50:59 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -2523,10 +2523,18 @@ exit_function("jigaboo");
 	function get_session_data($id)
 	{
 		global $data;
-		if($data == "trans") echo aw_global_get("transaction");
-		if($data == "type") echo aw_global_get("rs_type");
-		aw_session_set("transaction", null) ;
-		aw_session_set("rs_type", null) ;
+		if($data == "trans")
+		{
+			$trans = aw_global_get("transaction");
+			aw_session_set("transaction", "ALL") ;
+			echo $trans;
+		}
+		if($data == "type")
+		{
+			$trans = aw_global_get("rs_type");
+			aw_session_set("rs_type", "ALL") ;
+			echo $trans;
+		}
 		exit;
 	}
 }
