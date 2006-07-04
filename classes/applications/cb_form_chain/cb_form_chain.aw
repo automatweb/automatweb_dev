@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.30 2006/06/28 16:54:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.31 2006/07/04 17:46:29 dragut Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -575,7 +575,6 @@ class cb_form_chain extends class_base
 			$props = $cf->get_props_from_ot(array(
 				"ot" => $ot->id()
 			));
-
 			$this->_apply_view_controllers($props, $wf, $o);
 
 			$this->vars(array(
@@ -1623,7 +1622,25 @@ class cb_form_chain extends class_base
 				// then webform has methods for that --dragut
 				$pd['style'] = $styles[$pn];
 				$pd['capt_ord'] = $pd['wf_capt_ord'];
+				if ($pd['type'] == 'textbox' || $pd['type'] == 'textarea')
+				{
+					if (!empty($pd['width']))
+					{
+						if ($pd['type'] == 'textbox')
+						{
+							$pd['size'] = $pd['width'];
+						}
+						else
+						{
+							$pd['cols'] = $pd['width'];
+						}
+					}
 
+					if (!empty($pd['height']) && $pd['type'] == 'textarea')
+					{
+						$pd['rows'] = $pd['height'];
+					}
+				}
 				$htmlc->add_property($pd);
 			}
 			$htmlc->finish_output();
