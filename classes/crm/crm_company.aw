@@ -2187,14 +2187,17 @@ class crm_company extends class_base
 				}
 				break;
 
+			case "bill_penalty_pct":
+				$data["value"] = str_replace(",", ".", $data["value"]);
+
 			case "cust_contract_creator":
 			case "referal_type":
-			case "contact_person";
-			case "contact_person2";
-			case "contact_person3";
-			case "priority";
-			case "client_manager";
-			case "bill_due_days";
+			case "contact_person":
+			case "contact_person2":
+			case "contact_person3":
+			case "priority":
+			case "client_manager":
+			case "bill_due_days":
 				// save to rel
 				if (($rel = $this->get_cust_rel($arr["obj_inst"], true)))
 				{
