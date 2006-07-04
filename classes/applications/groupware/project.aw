@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.90 2006/06/26 20:04:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.91 2006/07/04 18:13:09 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -3457,7 +3457,9 @@ class project extends class_base
 			$ol = new object_list(array(
 				"class_id" => CL_CRM_PERSON,
 				"name" => "%".$arr["request"]["team_search_person"]."%",
-				"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$arr["request"]["team_search_co"]."%"
+				"CL_CRM_PERSON.RELTYPE_WORK.name" => "%".$arr["request"]["team_search_co"]."%",
+				"lang_id" => array(),
+				"site_id" => array()
 			));
 		}
 
