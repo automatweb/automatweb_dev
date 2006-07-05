@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.19 2006/06/28 12:26:39 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.20 2006/07/05 12:00:16 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -960,7 +960,7 @@ class realestate_add extends class_base
 			{
 				$this->vars(array(
 					"picture".$x => $image_inst->make_img_tag_wl($pic),
-					"picture".$x."del" => "<input type='checkbox' name='delete[".$pic."]' value='".$pic."'/>",
+					"picture".$x."del" => t("Kustuta")."<input type='checkbox' name='delete[".$pic."]' value='".$pic."'/>",
 				));
 				$x++;
 			}
@@ -1356,7 +1356,7 @@ class realestate_add extends class_base
 			$clss = aw_ini_get("classes");
 			$class_entry = $clss[$args["clid"]];
 			$parent = $class_entry["parents"];
-			$manager = get_instance(CL_REALESTATE_MANAGER);		
+			$manager = get_instance(CL_REALESTATE_MANAGER);
 			$realestate_obj_id = $manager->add_property(array(
 				"manager"	=> $args["parent"],
 				"type"		=> $args["type"],
@@ -1458,7 +1458,7 @@ class realestate_add extends class_base
 				}
 			}
 			$x++;
-		}
+		}arr($existing_pics);
 		$realestate_obj->set_meta("pic_order" , $existing_pics);
 		$unwanted_props = array("is_visible");//mida pole hea mõtet sessiooni panna ega salvestada
 		$has = $this->is_admin();
