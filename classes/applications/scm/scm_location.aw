@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.1 2006/06/28 08:44:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
 // scm_location.aw - Toimumiskoht 
 /*
 
@@ -7,7 +7,23 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
+@property address type=textbox
+@caption Aadress
+
+@property map type=relpicker reltype=RELTYPE_MAP
+@caption Asukohakaart
+
+@property photo type=relpicker reltype=RELTYPE_PHOTO
+@caption Foto kohast
+
+@reltype MAP value=1 clid=CL_IMAGE
+@caption Kaart
+
+@reltype PHOTO value=2 clid=CL_IMAGE
+@caption Foto
 */
 
 class scm_location extends class_base
@@ -47,6 +63,26 @@ class scm_location extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	function get_locations()
+	{
+		$list = new object_list(array(
+			"class_id" => CL_SCM_LOCATION,
+		));
+		return $list->arr();
+	}
+
+	function add_location($arr = array())
+	{
+		$obj = obj();
+		$obj->set_parent($arr["parent"]);
+		$obj->set_class_id(CL_SCM_LOCATION);
+		$obj->set_name($arr["name"]);
+		$obj->set_prop("address", $arr["address"]);
+		$obj->set_prop("map", $arr["map"]);
+		$obj->set_prop("photo", $arr["photo"]);
+		$oid = $obj->save_new();
+		return $oid;
+	}
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////

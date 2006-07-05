@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.1 2006/06/28 08:44:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
 // scm_event.aw - Spordiala 
 /*
 
@@ -7,7 +7,17 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
+@property type type=select
+@caption T&uuml;&uuml;p
+
+@property result_type type=relpicker reltype=RELTYPE_RESULT_TYPE
+@caption Paremusj&auml;rjestuse t&uuml;&uuml;p
+
+@reltype RESULT_TYPE value=1 clid=CL_SCM_RESULT_TYPE
+@caption Paremusj&auml;rjestuse t&uuml;&uuml;p
 */
 
 class scm_event extends class_base
@@ -27,6 +37,12 @@ class scm_event extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "type":
+				$prop["options"] = array(
+					"single" => t("Individuaalne"),
+					"multi" => t("Meeskondlik"),
+				);
+			break;
 		};
 		return $retval;
 	}
@@ -45,6 +61,39 @@ class scm_event extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+
+	/**
+		@attrib api=1 params=name
+		@param organizer optional type=oid
+			if set, only this organizers events will be returned
+		@comment
+			fetches events
+		@returns 
+			fetched events or false if none found
+	**/
+	function get_events($arr = array())
+	{
+		if(strlen($arr["organizer"]))
+		{
+			$filter["parent"] = $arr["organizer"];
+		}
+		$filter["class_id"] = CL_SCM_EVENT;
+		$list = new object_list($filter);
+		return $list->arr();
+	}
+
+	function add_event($arr = array())
+	{
+		$obj = obj();
+		$obj->set_parent($arg["parent"]);
+		$obj->set_class_id(CL_SCM_EVENT);
+		$obj->set_name($arg["name"]);
+		$obj->set_prop("type", $arg["type"]);
+		$obj->set_prop("result_type", $arg["result_type"]);
+		$oid = $obj->save_new();
+		return $oid;
 	}
 
 	////////////////////////////////////

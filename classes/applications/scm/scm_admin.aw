@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_admin.aw,v 1.1 2006/06/27 18:07:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_admin.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
 // scm_admin.aw - Spordiv&otilde;istluste haldus 
 /*
 
@@ -7,6 +7,8 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
 */
 

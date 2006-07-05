@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.1 2006/06/28 08:44:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
 // scm_tournament.aw - Turniir 
 /*
 
@@ -7,6 +7,16 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
+
+@groupinfo competitions caption="V&otilde;istlused" submit=no
+	@property comp_toolbar no_caption=1 type=toolbar group=competitions
+	@caption T&ouml;&ouml;riistariba
+
+	@property comp_table no_caption=1 type=table group=competitions
+	@caption V&ouml;istlused
+
 
 */
 
@@ -27,6 +37,27 @@ class scm_tournament extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "comp_toolbar":
+				$prop["vcl_inst"]->add_button(array(
+					"name" => "add_competition",
+					"tooltip" => t("Lisa uus võistlus"),
+					"img" => "new.gif",
+				));
+			break;
+			case "comp_table":
+				$prop["vcl_inst"] = $this->_gen_competitions_table($prop["vcl_inst"]);
+
+				$list = new object_list(array(
+					"class_id" => CL_SCM_COMPETITION,
+				));
+				foreach($list->arr() as $oid => $val)
+				{
+					$obj = obj($val->oid);
+					$prop["vcl_inst"]->define_data(array(
+						"nimi" => $obj->name(),
+					));
+				}
+			break;
 		};
 		return $retval;
 	}
@@ -45,6 +76,24 @@ class scm_tournament extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+		
+	function _gen_competitions_table($t)
+	{
+		$t->define_field(array(
+			"name" => "nimi",
+			"caption" => t("Võistluse nimi"),
+		));
+		return $t;
+	}
+	
+	function get_tournaments()
+	{
+		$list = new object_list(array(
+			"class_id" => CL_SCM_TOURNAMENT,
+		));
+		return $list->arr();
 	}
 
 	////////////////////////////////////

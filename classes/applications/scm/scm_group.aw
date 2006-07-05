@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_group.aw,v 1.1 2006/06/28 08:44:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_group.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
 // scm_group.aw - V&otilde;istlusklass 
 /*
 
@@ -7,7 +7,26 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
+@property abbreviation type=textbox
+@caption L&uuml;hend
+
+@layout split_age type=hbox width=200px
+@caption Vanusevahemik
+	@property age_from type=textbox size=5 parent=split_age
+	@caption Alates
+	@property age_to type=textbox size=5 parent=split_age
+	@caption Kuni
+
+@layout split_sex type=vbox
+@caption Sugu
+	@property male type=checkbox no_caption=1 ch_value=1 default=1 parent=split_sex
+	@caption Mehed
+
+	@property female type=checkbox no_caption=1 ch_value=1 default=1 parent=split_sex
+	@caption Naised
 */
 
 class scm_group extends class_base
@@ -47,6 +66,13 @@ class scm_group extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	function get_groups()
+	{
+		$list = new object_list(array(
+			"class_id" => CL_SCM_GROUP,
+		));
+		return $list->arr();
+	}
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////

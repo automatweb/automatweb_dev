@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.1 2006/06/28 08:44:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -7,6 +7,72 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
+
+
+@property scm_event type=relpicker reltype=RELTYPE_EVENT editonly=1
+@caption Spordiala
+
+@property scm_location type=relpicker reltype=RELTYPE_LOCATION editonly=1
+@caption Asukoht
+
+@property date type=date_select 
+@caption Kuup&auml;ev
+
+@property scm_tournament type=relpicker reltype=RELTYPE_TOURNAMENT editonly=1
+@caption Turniir
+
+@property scm_score_calc type=relpicker reltype=RELTYPE_SCORE_CALC editonly=1
+@caption Punktis&uuml;steem
+
+@property scm_group type=relpicker reltype=RELTYPE_GROUP multiple=1 editonly=1
+@caption V&otilde;istlusgrupid
+
+@property scm_group_box type=textarea cols=50 rows=6
+@caption Gruppide lisainfo
+
+@property scm_group_consider type=textbox size=4
+@caption Igast grupist arvesse
+
+@groupinfo map_gr caption="Kaart" submit=no
+	@property map type=text group=map_gr
+	@caption Asukohakaart
+
+@groupinfo photo_gr caption="Foto" submit=no
+	@property photo type=text group=photo_gr
+	@caption Pilt kohast
+
+@groupinfo contestants caption="V&otilde;istlejad" submit=no
+	@property list type=table group=contestants no_caption=1
+	@caption V&otilde;istlejate nimekiri
+
+@groupinfo results caption="Tulemused" submit=no
+	@groupinfo view_results parent=results caption="Tulemused" submit=no
+		@property results_tbl type=table group=view_results no_caption=1
+		@caption Tulemuste tabel
+
+	@groupinfo add_results parent=results caption="Sisesta tulemused"
+		@property add_results_tbl type=table group=add_results no_caption=1
+		@caption Tulemuste lisamine
+
+@reltype EVENT value=1 clid=CL_SCM_EVENT
+@caption Spordiala
+
+@reltype LOCATION value=2 clid=CL_SCM_LOCATION
+@caption Asukoht
+
+@reltype TOURNAMENT value=3 clid=CL_SCM_TOURNAMENT
+@caption Turniir
+
+@reltype SCORE_CALC value=4 clid=CL_SCM_SCORE_CALC
+@caption Punktis&uuml;steem
+
+@reltype GROUP value=5 clid=CL_SCM_GROUP
+@caption V&otilde;istlusgrupp
+
+@reltype CONTESTANT value=6 clid=CL_SCM_CONTESTANT
+@caption V&otilde;istleja
 
 */
 
@@ -27,6 +93,50 @@ class scm_competition extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "map":
+				$prop["value"] = $this->_get_image($arr);
+			break;
+			case "photo":
+				$prop["value"] = $this->_get_image($arr);
+			break;
+
+			case "list":
+				$t = &$prop["vcl_inst"];
+				$this->_gen_cont_tbl(&$t);
+				foreach($this->get_contestants(array("competition" => $arr["obj_inst"]->id())) as $oid => $name)
+				{
+					$cont = get_instance(CL_SCM_CONTESTANT);
+					$person = obj($cont->get_contestant_person(array("contestant" => $oid)));
+					$company = obj($cont->get_contestant_company(array("contestant" => $oid)));
+					$t->define_data(array(
+						"name" => $person->name(),
+						"company" => $company->name(),
+					));
+				}
+				
+			break;
+			case "results_tbl":
+				$t = &$prop["vcl_inst"];
+				$this->_gen_res_tbl(&$t);
+				$results = $this->fetch_results(array(
+					"competition" => $arr["obj_inst"]->id(),
+				));
+			break;
+			case "add_results_tbl":
+				$t = &$prop["vcl_inst"];
+				$this->_gen_add_res_tbl(&$t);
+				$conts = $this->get_contestants(array("competition" => $arr["obj_inst"]->id()));
+				foreach($conts as $oid => $name)
+				{
+					$cont = get_instance(CL_SCM_CONTESTANT);
+					$person = obj($cont->get_contestant_person(array("contestant" => $oid)));
+					$company = obj($cont->get_contestant_company(array("contestant" => $oid)));
+					$t->define_data(array(
+						"contestant" => $person->name(),
+						"company" => $company->name(),
+					));
+				}
+			break;
 		};
 		return $retval;
 	}
@@ -47,6 +157,97 @@ class scm_competition extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	/**
+		@comment
+			fetches results for given competition
+	**/
+	function fetch_results($arr)
+	{
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"to.class_id" => CL_SCM_RESULT,
+			"from" => $arr["competition"],
+		));
+	}
+
+	function _get_image($arr)
+	{
+		$loc_id = $arr["obj_inst"]->prop("scm_location");
+		
+		if(!$loc_id)
+		{
+			return t("Võistluse toimumise asukoht m&auml;&auml;ramata");
+		}
+		$loc = obj($loc_id);
+		$img_inst = get_instance(CL_IMAGE);
+		$img_id = $loc->prop($arr["prop"]["name"]);
+		if(!$img_id)
+		{
+			return t("Pilt on m&auml;&auml;ramata");
+		}
+		$img_inf = $img_inst->get_image_by_id($img_id);
+		return html::img(array(
+			"url" => $img_inf["url"],
+		));
+	}
+
+	function _gen_cont_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("V&otilde;istleja"),
+		));
+		$t->define_field(array(
+			"name" => "company",
+			"caption" => t("Firma"),
+		));
+
+	}
+
+	function _gen_res_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "contestant",
+			"caption" => t("V&otilde;istleja"),
+		));
+		$t->define_field(array(
+			"name" => "result",
+			"caption" => t("Tulemus"),
+		));
+		$t->define_field(array(
+			"name" => "place",
+			"caption" => t("Koht"),
+		));
+
+	}
+
+	function _gen_add_res_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "contestant",
+			"caption" => t("V&otilde;istleja"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "company",
+			"caption" => t("Firma"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "result",
+			"caption" => t("Tulemus"),
+		));
+
+	}
+
+	function get_competitions()
+	{
+		$list = new object_list(array(
+			"class_id" => CL_SCM_COMPETITION,
+		));
+		return $list->arr();
+	}
+
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
@@ -63,5 +264,77 @@ class scm_competition extends class_base
 	}
 
 //-- methods --//
+
+	/**
+	**/
+	function get_organizer_company($arr = array())
+	{
+		$o = obj($this->get_organizer_person($arr));
+		return $o->prop("work_contact");
+	}
+
+	/**
+		@param competition required type=int
+			the competition object id
+		@comment
+			fetches the organizer person
+	**/
+	function get_organizer_person($arr = array())
+	{
+		$org = $this->get_organizer($arr);
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"from" => $org,
+			"to.class_id" => CL_CRM_PERSON,
+		));
+		if(!count($conns))
+		{
+			return false; // no person connected to organizer class
+		}
+		$conn = current($conns);
+		return $conn["to"];
+	}
+
+	/**
+		@param competition required type=int
+			the competition object id
+		@comment
+			fetches the organizer object
+	**/
+	function get_organizer($arr = array())
+	{
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"from.class_id" => CL_SCM_ORGANIZER,
+			"to" => $arr["competition"],
+		));
+		if(!count($conns))
+		{
+			return false; // no organizer connected to competition
+		}
+		$org = current($conns);
+		return $org["from"];
+	}
+
+	/**
+		@attrib params=name
+		@param competition required type=int
+			the competitions object id
+		@comment
+			fetches contestants for given competition
+	**/
+	function get_contestants($arr = array())
+	{
+		$conn = new connection();
+		$conns = $conn->find(array(
+			"from" => $arr["competition"],
+			"type" => 6,
+		));
+		foreach($conns as $id => $data)
+		{
+			$res[$data["to"]] = $data["to_name"];
+		}
+		return $res;
+	}
 }
 ?>

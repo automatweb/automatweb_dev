@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result_type.aw,v 1.1 2006/06/28 08:44:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result_type.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
 // scm_result_type.aw - Paremusj&auml;rjestuse t&uuml;&uuml;p 
 /*
 
@@ -7,6 +7,14 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
+
+@property unit type=select
+@caption &Uuml;hik
+
+@property sort type=select
+@caption Sorteerimine
 
 */
 
@@ -27,6 +35,20 @@ class scm_result_type extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "unit":
+				$prop["options"] = array(
+					"time" => t("Aeg"),
+					"points" => t("Puntkid"),
+					"length" => t("Kaugus"),
+				);
+			break;
+
+			case "sort":
+				$prop["options"] = array(
+					"asc" => t("Kasvav"),
+					"desc" => t("Kahanev"),
+				);
+			break;
 		};
 		return $retval;
 	}
@@ -45,6 +67,29 @@ class scm_result_type extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+	
+	function get_result_types($arg = array())
+	{
+		if(strlen($arg["organizer"]))
+		{
+			$filt["parent"] = $arg["organizer"];
+		}
+		$filt["class_id"] = CL_SCM_RESULT_TYPE;
+		$list = new object_list($filt);
+		return $list->arr();
+	}
+
+	function add_result_type($arg = array())
+	{
+		$obj = obj();
+		$obj->set_parent($arg["organizer"]);
+		$obj->set_class_id(CL_SCM_RESULT_TYPE);
+		$obj->set_name($arg["name"]);
+		$obj->set_prop("unit", $arg["unit"]);
+		$obj->set_prop("sort", $arg["sort"]);
+		$oid = $obj->save_new();
+		return $oid;
 	}
 
 	////////////////////////////////////

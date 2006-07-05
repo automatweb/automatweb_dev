@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.1 2006/06/28 08:44:30 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
 // scm_score_calc.aw - Punktis&uuml;steem 
 /*
 
@@ -7,7 +7,11 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+@default method=serialize
 
+@property score_calculator type=select
+@caption Punktis&uuml;steem
 */
 
 class scm_score_calc extends class_base
@@ -27,6 +31,12 @@ class scm_score_calc extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "score_calculator":
+				foreach($algorithms = $this->_gen_algorithm_list() as $fun_name => $caption)
+				{
+					$prop["options"][$fun_name] = $caption;
+				}
+			break;
 		};
 		return $retval;
 	}
@@ -45,6 +55,43 @@ class scm_score_calc extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+
+	/**
+		@comment
+			here you define the algorithm's.
+	**/
+	function _gen_algorithm_list()
+	{
+		$ret = array(
+			"_calc_smallwalk" => t("100 meetri käimine"),
+			"_calc_shootout" => t("Pistongipüstoli laskmine"),
+		);
+		return $ret;
+	}
+
+	function algorithm_list()
+	{
+		return $this->_gen_algorithm_list();
+	}
+
+	function get_score_calcs()
+	{
+		$list = new object_list(array(
+			"class_id" => CL_SCM_SCORE_CALC,
+		));
+		return $list->arr();
+	}
+	
+	/* algoritmide funktsioonid */
+
+	function _calc_smallwalk()
+	{
+	}
+
+	function _calc_shootout()
+	{
 	}
 
 	////////////////////////////////////

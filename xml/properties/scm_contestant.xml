@@ -1,0 +1,66 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>contestant</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>V&amp;amp;otilde;istleja</caption>
+      </property>
+      <property>
+            <name>contestants_company</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>Firmast</caption>
+      </property>
+      <property>
+            <name>comp_tb</name>
+            <table>objects</table>
+            <group>competitions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>V&amp;amp;otilde;istluste riba</caption>
+      </property>
+      <property>
+            <name>comp_tbl</name>
+            <table>objects</table>
+            <group>competitions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>V&amp;amp;otilde;istluste tabel</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SCM_CONTESTANT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <groupinfo>
+            <competitions>
+                  <caption>V&amp;amp;otilde;istlused</caption>
+                  <submit>no</submit>
+            </competitions>
+      </groupinfo>
+      <reltypes>
+            <CONTESTANT>
+                  <value>1</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>V&amp;amp;otilde;istleja</caption>
+            </CONTESTANT>
+      </reltypes>
+</properties>
+
