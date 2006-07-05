@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.20 2006/07/05 12:00:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.21 2006/07/05 12:21:10 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -1453,12 +1453,13 @@ class realestate_add extends class_base
 							"from" => $existing_pics[$x],
 							"reltype" => "RELTYPE_REALESTATE_PICTURE",
 						));
-						$existing_pics[$x] = $upload_image['id'];
+						
 					}
+					$existing_pics[$x] = $upload_image['id'];
 				}
 			}
 			$x++;
-		}arr($existing_pics);
+		}
 		$realestate_obj->set_meta("pic_order" , $existing_pics);
 		$unwanted_props = array("is_visible");//mida pole hea mõtet sessiooni panna ega salvestada
 		$has = $this->is_admin();
