@@ -5644,6 +5644,10 @@ class crm_company extends class_base
 
 	function _client_category($arr)
 	{
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		$conns = $arr["obj_inst"]->connections_to(array(
 			"from.class_id" => CL_CRM_CATEGORY,
 			"type" => "RELTYPE_CUSTOMER"
