@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.72 2006/07/05 10:12:21 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.72 2006/07/05 10:12:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.73 2006/07/05 10:44:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.73 2006/07/05 10:44:59 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -718,12 +718,12 @@ class bug_tracker extends class_base
 				"bug_status" => new obj_predicate_not(5)
 			));
 
-			if ($arr["reltype"] == 1 || $arr["active_group"] == "by_who")
+			if ($arr["reltype"] == 1 || $arr["active_group"] == "by_who" || $arr["active_group"] == "by_project")
 			{
 				$bug_count = array();
 				$bugs = array();
 				$bug_data = $buglist->arr();
-				$prop = "who";
+				$prop = $arr["active_group"] == "by_who" ? "who" : "project";
 				foreach($bug_data as $bug_obj)
 				{
 					if ($bug_obj->prop("bug_status") != 5)
@@ -739,7 +739,7 @@ class bug_tracker extends class_base
 				$obj = new object($project);
 				$node_tree->add_item(0, array(
 					"id" => $obj->id(),
-					"name" => $this->name_cut($obj->name())." (".$bug_count[$project].")",
+					"name" => $this->name_cut($obj->name())." (".(int)$bug_count[$project].")",
 					"iconurl" => icons::get_icon_url($obj->class_id()),
 					"url" => html::get_change_url( $arr["inst_id"], array(
 						"id" => $this->self_id,
@@ -794,8 +794,8 @@ class bug_tracker extends class_base
 				$filter  => $obj->id(),
 				"class_id" => CL_BUG,
 				"lang_id" => array(),
-				"site_id" => array()
-				//"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)
+				"site_id" => array(),
+				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED)
 			);
 			$ol = new object_list($filt);
 			$objects = $ol->arr();
@@ -908,23 +908,8 @@ class bug_tracker extends class_base
 				break;
 
 			case "cust":
-				$tid = "_cst";
-				$i = get_instance(CL_CRM_COMPANY);
-				$i->active_node = (int)$arr['request']['category'];
-
-				$u = get_instance(CL_USER);
-				$co = obj($u->get_current_company());
-	
-				$node_id = 0;
-				$i->generate_tree(array(
-					'tree_inst' => &$arr["prop"]["vcl_inst"],
-					'obj_inst' => $co,
-					'node_id' => &$node_id,
-					'conn_type' => 'RELTYPE_CATEGORY',
-					'attrib' => 'category',
-					'leafs' => 'true',
-					'style' => 'nodetextbuttonlike',
-				));
+				// add customers to the tree
+				$this->_add_custs_to_tree($arr["prop"]["vcl_inst"]);
 				return;
 
 			case "project":
@@ -1396,7 +1381,7 @@ class bug_tracker extends class_base
 		$pt = !empty($arr["request"]["cat"]) ? $arr["request"]["cat"] : $arr["obj_inst"]->id();
 		if(($this->can("view", $pt) || 
 			$arr["request"]["group"] == "by_class"
-		) && $arr["request"]["group"] != "by_who" )
+		) && $arr["request"]["group"] != "by_who" && $arr["request"]["group"] != "by_project" && $arr["request"]["group"] != "by_cust" )
 		{
 			// arhiivi tab
 			if($arr["request"]["group"] == "archive")
@@ -1481,6 +1466,28 @@ class bug_tracker extends class_base
 				"site_id" => array(),
 				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
 				"who" => $arr["request"]["p_id"]
+			));
+		}
+		else
+		if ($arr["request"]["group"] == "by_cust" && $arr["request"]["cust"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_BUG,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
+				"customer" => $arr["request"]["cust"]
+			));
+		}
+		else
+		if ($arr["request"]["group"] == "by_project" && $arr["request"]["p_id"])
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_BUG,
+				"lang_id" => array(),
+				"site_id" => array(),
+				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
+				"project" => $arr["request"]["p_id"]
 			));
 		}
 		else
@@ -2951,6 +2958,35 @@ echo "<hr>";
 			echo "tot wh for $uid => $tm <br>";
 		}
 		die();
+	}
+
+	function _add_custs_to_tree(&$t)
+	{
+		$co = get_current_company();
+		$this->_req_cust_tree($t, $co, 0);
+	}
+
+	function _req_cust_tree(&$t, $co, $pt)
+	{
+		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
+		{
+			$t->add_item($pt, array(
+				"id" => $c->prop("to"),
+				"name" => $this->name_cut($c->prop("to.name")),
+				"url" => aw_url_change_var("cust", null)
+			));
+			$this->_req_cust_tree($t, $c->to(), $c->prop("to"));
+		}
+
+		foreach($co->connections_from(array("type" => "RELTYPE_CUSTOMER")) as $c)
+		{
+			$t->add_item($pt, array(
+				"id" => $c->prop("to"),
+				"name" => $this->name_cut($c->prop("to.name")),
+				"url" => aw_url_change_var("cust", $c->prop("to")),
+				"iconurl" => icons::get_icon_url(CL_CRM_COMPANY)
+			));
+		}
 	}
 }
 ?>
