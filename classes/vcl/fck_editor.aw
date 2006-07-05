@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.7 2006/06/16 11:23:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/fck_editor.aw,v 1.8 2006/07/05 15:20:06 kristo Exp $
 // fck_editor.aw - FCKeditor
 
 class fck_editor
@@ -44,6 +44,33 @@ class fck_editor
 <script type="text/javascript" src="js/fckeditor/fckeditor.js"></script>
 <script type="text/javascript">
 <!--
+function FCKeditor_OnComplete( editorInstance )
+{
+	var browser = navigator.userAgent.toLowerCase();
+	var int_content_length_original = editorInstance.EditorDocument.body.innerHTML.length;
+	var bool_changed=false;
+	
+	if (browser.indexOf(\'msie\')>0)	{
+		editorInstance.Events.AttachEvent( \'OnSelectionChange\', FCKeditor_OnChange ) ;
+		editorInstance.EditorDocument.attachEvent( \'onkeyup\', FCKeditor_OnChange ) ;
+		editorInstance.EditorDocument.attachEvent( \'onkeydown\', FCKeditor_OnChange ) ;
+	} 
+	else 
+	{
+		editorInstance.Events.AttachEvent( \'OnSelectionChange\', FCKeditor_OnChange ) ;
+		editorInstance.EditorDocument.addEventListener( \'keyup\', FCKeditor_OnChange, true ) ;
+		editorInstance.EditorDocument.addEventListener( \'keydown\', FCKeditor_OnChange, true ) ;
+	}
+	
+	function FCKeditor_OnChange(  )
+	{
+		if (int_content_length_original!=editorInstance.EditorDocument.body.innerHTML.length && bool_changed == false)
+		{
+			bool_changed = true;
+			set_changed();
+		}
+	}
+}
 oldload = window.onload;
 window.onload = function()
 {
