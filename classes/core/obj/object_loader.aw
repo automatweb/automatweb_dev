@@ -550,7 +550,7 @@ class _int_object_loader extends core
 			foreach($acld as $g_oid => $g_acld)
 			{
 				// this applies the affects subobjects setting - if the first object has this set, then ignore the acls for that
-				$skip = $cur_oid == $oid && $g_acld["can_subs"] == 1;		
+				$skip = false; //$cur_oid == $oid && $g_acld["can_subs"] == 1;		
 
 				if (isset($gl[$g_oid]) && $gl[$g_oid] > $max_priority && !$skip)
 				{
