@@ -139,5 +139,12 @@
 			</function>
 		</action>
 
+		<action name="f">
+			<function name="disp_wh">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

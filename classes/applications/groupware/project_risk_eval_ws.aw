@@ -1,12 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_risk_eval_ws.aw,v 1.1 2006/06/26 10:13:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_risk_eval_ws.aw,v 1.2 2006/07/05 10:06:47 kristo Exp $
 // project_risk_eval_ws.aw - Riskide hindamise t&ouml;&ouml;laud 
 /*
 
 @classinfo syslog_type=ST_PROJECT_RISK_EVAL_WS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
+@tableinfo aw_project_risk_eval_ws index=aw_oid master_index=brother_of master_table=objects
+
 @default table=objects
 @default group=general
+
+	@property eval_dl type=date_select table=aw_project_risk_eval_ws field=aw_eval_dl
+	@caption Hindamise t&auml;htaeg
 
 @default group=risks
 
@@ -290,6 +295,15 @@ class project_risk_eval_ws extends class_base
 		$t->sort_by();
 		$t->set_sortable(false);
 
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "")
+		{
+			$this->db_query("CREATE TABLE aw_project_risk_eval_ws (aw_oid int primary key, aw_eval_dl int)");
+			return true;
+		}
 	}
 }
 ?>

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_risk.aw,v 1.2 2006/06/26 10:13:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_risk.aw,v 1.3 2006/07/05 10:06:47 kristo Exp $
 // project_risk.aw - Projekti risk 
 /*
 
-@classinfo syslog_type=ST_PROJECT_RISK relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_PROJECT_RISK relationmgr=yes no_status=1 prop_cb=1
 @tableinfo aw_project_risks index=aw_oid master_index=brother_of master_table=objects
 @default group=general
 
@@ -40,9 +40,9 @@ class project_risk extends class_base
 		));
 
 		$this->types = array(
-			"B" => t("&Auml;ririsk"),
-			"P" => t("Projekti risk"),
-			"S" => t("Etapi risk")
+			"1" => t("&Auml;ririsk"),
+			"2" => t("Projekti risk"),
+			"3" => t("Etapi risk")
 		);
 	}
 

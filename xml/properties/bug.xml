@@ -238,6 +238,94 @@
             <field>aw_bug_property</field>
             <caption>Klassi omadus</caption>
       </property>
+      <property>
+            <name>team</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TEAM</reltype>
+            <field>aw_team</field>
+            <caption>Tiim</caption>
+      </property>
+      <property>
+            <name>ocurrence</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>select</type>
+            <field>aw_ocurrence</field>
+            <caption>Vea esinemine</caption>
+      </property>
+      <property>
+            <name>density</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>select</type>
+            <field>aw_density</field>
+            <caption>Vea sagedus</caption>
+      </property>
+      <property>
+            <name>cust_responsible</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUST_RESPONSIBLE</reltype>
+            <field>aw_cust_responsible</field>
+            <caption>Kliendipoolne vastutaja	</caption>
+      </property>
+      <property>
+            <name>cust_status</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>select</type>
+            <field>aw_cust_status</field>
+            <caption>Kliendipoolne staatus</caption>
+      </property>
+      <property>
+            <name>cust_tester</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CUST_TESTER</reltype>
+            <field>aw_cust_tester</field>
+            <caption>Kliendipoolne testija</caption>
+      </property>
+      <property>
+            <name>cust_solution</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>aw_cust_solution</field>
+            <caption>Kliendipoolne lahendus</caption>
+      </property>
+      <property>
+            <name>cust_live_date</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>date_select</type>
+            <field>aw_cust_live_date</field>
+            <caption>Kasutusvalmis</caption>
+      </property>
+      <property>
+            <name>cust_crit</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>aw_cust_crit</field>
+            <caption>Vastuv&amp;amp;otilde;tu kriteeriumid</caption>
+      </property>
+      <property>
+            <name>cust_budget</name>
+            <group>cust</group>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <field>aw_cust_budget</field>
+            <size>5</size>
+            <caption>Eelarve</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_BUG</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -245,6 +333,11 @@
             <no_status>1</no_status>
             <r2>yes</r2>
       </classinfo>
+      <groupinfo>
+            <cust>
+                  <caption>Kliendi andmed</caption>
+            </cust>
+      </groupinfo>
       <tableinfo>
             <aw_bugs>
                   <index>aw_id</index>
@@ -286,6 +379,21 @@
                   <clid>CL_BUG_COMMENT</clid>
                   <caption>Kommentaar</caption>
             </COMMENT>
+            <TEAM>
+                  <value>7</value>
+                  <clid>CL_PROJECT_TEAM</clid>
+                  <caption>Tiim</caption>
+            </TEAM>
+            <CUST_RESPONSIBLE>
+                  <value>8</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kliendipoolne vastutaja</caption>
+            </CUST_RESPONSIBLE>
+            <CUST_TESTER>
+                  <value>9</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Kliendipoolne testija</caption>
+            </CUST_TESTER>
       </reltypes>
       <layout>
             <settings>

@@ -324,6 +324,7 @@
             <group>userdefined</group>
             <type>textbox</type>
             <field>aw_user1</field>
+            <user>1</user>
             <caption>User-defined textbox 1</caption>
       </property>
       <property>
@@ -332,6 +333,7 @@
             <group>userdefined</group>
             <type>textbox</type>
             <field>aw_user2</field>
+            <user>1</user>
             <caption>User-defined textbox 2</caption>
       </property>
       <property>
@@ -340,6 +342,7 @@
             <group>userdefined</group>
             <type>textbox</type>
             <field>aw_user3</field>
+            <user>1</user>
             <caption>User-defined textbox 3</caption>
       </property>
       <property>
@@ -348,6 +351,7 @@
             <group>userdefined</group>
             <type>textbox</type>
             <field>aw_user4</field>
+            <user>1</user>
             <caption>User-defined textbox 4</caption>
       </property>
       <property>
@@ -356,6 +360,7 @@
             <group>userdefined</group>
             <type>textbox</type>
             <field>aw_user5</field>
+            <user>1</user>
             <caption>User-defined textbox 5</caption>
       </property>
       <property>
@@ -365,6 +370,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_userch1</field>
+            <user>1</user>
             <caption>User-defined checkbox 1</caption>
       </property>
       <property>
@@ -374,6 +380,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_userch2</field>
+            <user>1</user>
             <caption>User-defined checkbox 2</caption>
       </property>
       <property>
@@ -383,6 +390,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_userch3</field>
+            <user>1</user>
             <caption>User-defined checkbox 3</caption>
       </property>
       <property>
@@ -392,6 +400,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_userch4</field>
+            <user>1</user>
             <caption>User-defined checkbox 4</caption>
       </property>
       <property>
@@ -401,6 +410,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>aw_userch5</field>
+            <user>1</user>
             <caption>User-defined checkbox 5</caption>
       </property>
       <property>
@@ -410,6 +420,7 @@
             <type>classificator</type>
             <reltype>RELTYPE_CLF1</reltype>
             <field>aw_userclf1</field>
+            <user>1</user>
             <caption>User-defined classificator 1</caption>
       </property>
       <property>
@@ -424,7 +435,7 @@
       <property>
             <name>team_tb</name>
             <table>objects</table>
-            <group>team</group>
+            <group>team_t</group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -433,7 +444,7 @@
       <property>
             <name>team</name>
             <table>objects</table>
-            <group>team</group>
+            <group>team_t</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -442,7 +453,7 @@
       <property>
             <name>team_search_co</name>
             <table>objects</table>
-            <group>team</group>
+            <group>team_t</group>
             <type>textbox</type>
             <captionside>top</captionside>
             <parent>team_search</parent>
@@ -452,7 +463,7 @@
       <property>
             <name>team_search_person</name>
             <table>objects</table>
-            <group>team</group>
+            <group>team_t</group>
             <type>textbox</type>
             <captionside>top</captionside>
             <parent>team_search</parent>
@@ -462,7 +473,7 @@
       <property>
             <name>team_search_sbt</name>
             <table>objects</table>
-            <group>team</group>
+            <group>team_t</group>
             <type>submit</type>
             <captionside>top</captionside>
             <parent>team_search</parent>
@@ -474,11 +485,40 @@
       <property>
             <name>team_search_res</name>
             <table>objects</table>
-            <group>team</group>
+            <group>team_t</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>team_search_res</field>
+      </property>
+      <property>
+            <name>team_team_tb</name>
+            <table>objects</table>
+            <group>team_team</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>team_team_tb</field>
+      </property>
+      <property>
+            <name>team_team_tree</name>
+            <table>objects</table>
+            <group>team_team</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>team_team_l</parent>
+            <field>team_team_tree</field>
+      </property>
+      <property>
+            <name>team_team_tbl</name>
+            <table>objects</table>
+            <group>team_team</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>team_team_l</parent>
+            <field>team_team_tbl</field>
       </property>
       <property>
             <name>goal_tb</name>
@@ -599,6 +639,35 @@
             <store>no</store>
             <field>risks_eval</field>
       </property>
+      <property>
+            <name>req_tb</name>
+            <table>objects</table>
+            <group>req</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>req_tb</field>
+      </property>
+      <property>
+            <name>req_tree</name>
+            <table>objects</table>
+            <group>req</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>req_l</parent>
+            <field>req_tree</field>
+      </property>
+      <property>
+            <name>req_tbl</name>
+            <table>objects</table>
+            <group>req</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>req_l</parent>
+            <field>req_tbl</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -683,6 +752,15 @@
                   <caption>Meeskond</caption>
                   <submit>no</submit>
             </team>
+            <team_t>
+                  <caption>Meeskond</caption>
+                  <parent>team</parent>
+            </team_t>
+            <team_team>
+                  <caption>Tiimid</caption>
+                  <parent>team</parent>
+                  <submit>no</submit>
+            </team_team>
             <risks_t>
                   <caption>Riskid</caption>
             </risks_t>
@@ -696,6 +774,10 @@
                   <parent>risks_t</parent>
                   <submit>no</submit>
             </risks_eval>
+            <req>
+                  <caption>N&amp;amp;otilde;uded</caption>
+                  <submit>no</submit>
+            </req>
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
@@ -826,6 +908,11 @@
                   <clid>CL_PROJECT_RISK_EVAL_WS</clid>
                   <caption>Riskide hindamislaud</caption>
             </RISK_EVAL>
+            <TEAM>
+                  <value>21</value>
+                  <clid>CL_PROJECT_TEAM</clid>
+                  <caption>Tiim</caption>
+            </TEAM>
       </reltypes>
       <layout>
             <parts>
@@ -836,13 +923,18 @@
             </parts>
             <team_s>
                   <type>vbox</type>
-                  <group>team</group>
+                  <group>team_t</group>
             </team_s>
             <team_search>
                   <parent>team_s</parent>
                   <type>hbox</type>
-                  <group>team</group>
+                  <group>team_t</group>
             </team_search>
+            <team_team_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>team_team</group>
+            </team_team_l>
             <goal_vb>
                   <type>hbox</type>
                   <width>
@@ -850,6 +942,11 @@
                   </width>
                   <group>goals_edit</group>
             </goal_vb>
+            <req_l>
+                  <type>hbox</type>
+                  <width>30%:70%</width>
+                  <group>req</group>
+            </req_l>
       </layout>
 </properties>
 

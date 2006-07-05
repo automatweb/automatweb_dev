@@ -1,12 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_strat_goal_eval_ws.aw,v 1.1 2006/06/26 10:13:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_strat_goal_eval_ws.aw,v 1.2 2006/07/05 10:06:47 kristo Exp $
 // project_strat_goal_eval_ws.aw - Projekti eesm&auml;rkide hindamislaud 
 /*
 
 @classinfo syslog_type=ST_PROJECT_STRAT_GOAL_EVAL_WS relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@tableinfo aw_project_strat_goal_eval_ws index=aw_oid master_index=brother_of master_table=objects
 
 @default table=objects
 @default group=general
+
+	@property eval_dl type=date_select table=aw_project_strat_goal_eval_ws field=aw_eval_dl
+	@caption Hindamise t&auml;htaeg
 
 @default group=eval
 
@@ -110,7 +114,9 @@ class project_strat_goal_eval_ws extends class_base
 			$t->define_field(array(
 				"name" => $c->prop("to"),
 				"caption" => $c->prop("to.name"),
-				"align" => "center"
+				"align" => "center",
+				"sortable" => 1,
+				"numeric" => 1
 			));
 		}
 	}
@@ -159,7 +165,7 @@ class project_strat_goal_eval_ws extends class_base
 		$t->set_sortable(false);
 	}
 
-	function _init_strat_res_tbl(&$t, $o)
+	function _init_strat_res_tbl(&$t, $o, $sums)
 	{
 		$t->define_field(array(
 			"name" => "task",
@@ -167,11 +173,14 @@ class project_strat_goal_eval_ws extends class_base
 			"align" => "right"
 		));
 		// add all strats to table
-		foreach($o->connections_from(array("type" => "RELTYPE_STRAT")) as $c)
+		arsort($sums);
+		//foreach($o->connections_from(array("type" => "RELTYPE_STRAT")) as $c)
+		foreach($sums as $strat_id => $sum)
 		{
+			$s = obj($strat_id);
 			$t->define_field(array(
-				"name" => $c->prop("to"),
-				"caption" => $c->prop("to.name"),
+				"name" => $s->id(),
+				"caption" => $s->name(),
 				"align" => "center",
 				"numeric" => 1,
 				"sortable" => 1
@@ -196,7 +205,6 @@ class project_strat_goal_eval_ws extends class_base
 		$c = reset($conns);
 		$proj  = $c->from();
 
-		$this->_init_strat_res_tbl($t, $proj);
 
 		$strats = array();
 		foreach($proj->connections_from(array("type" => "RELTYPE_STRAT")) as $c)
@@ -220,12 +228,13 @@ class project_strat_goal_eval_ws extends class_base
 			{
 				foreach($d as $strat => $eval)
 				{
-					$wt = isset($wts[$o->prop("evaluator")]) ? $wts[$o->prop("evaluator")]/100.0 : 1;
+					$wt = !empty($wts[$o->prop("evaluator")]) ? $wts[$o->prop("evaluator")]/100.0 : 1;
 					$data[$evid][$strat] += $eval * $wt;
 				}
 			}
 		}
 		$sbs = array();
+		$sums = array();
 		foreach($pi->get_events_for_project(array("project_id" => $proj->id())) as $evid)
 		{
 			$ar = array(
@@ -237,10 +246,13 @@ class project_strat_goal_eval_ws extends class_base
 				$ar[$strat] = number_format($data[$evid][$strat] / $ol->count(), 2);
 				$sum += $ar[$strat];
 				$sbs[$strat] += $ar[$strat];
+				$sums[$strat] += $ar[$strat];
 			}
 			$ar["sum"] = number_format($sum, 2);
 			$t->define_data($ar);
 		}
+		$this->_init_strat_res_tbl($t, $proj, $sums);
+
 		$t->sort_by();
 		$t->set_sortable(false);
 		$sbs["task"] = t("<b>Summa</b>");
@@ -355,6 +367,7 @@ class project_strat_goal_eval_ws extends class_base
 			}
 			$t->define_data($ar);
 		}
+		$t->sort_by();
 		$t->set_sortable(false);
 	}
 
@@ -418,6 +431,15 @@ class project_strat_goal_eval_ws extends class_base
 	{
 		$arr["obj_inst"]->set_meta("wts", $arr["request"]["wts"]);
 		$arr["obj_inst"]->set_meta("evals", $arr["request"]["is"]);
+	}
+
+	function do_db_upgrade($t, $f)
+	{
+		if ($f == "")
+		{
+			$this->db_query("CREATE TABLE aw_project_strat_goal_eval_ws (aw_oid int primary key, aw_eval_dl int)");
+			return true;
+		}
 	}
 }
 ?>

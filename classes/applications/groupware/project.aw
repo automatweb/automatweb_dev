@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.91 2006/07/04 18:13:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.92 2006/07/05 10:06:47 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -138,43 +138,43 @@
 
 @default group=userdefined
 
-	@property user1 type=textbox table=aw_projects field=aw_user1
+	@property user1 type=textbox table=aw_projects field=aw_user1 user=1
 	@caption User-defined textbox 1
 
-	@property user2 type=textbox table=aw_projects field=aw_user2
+	@property user2 type=textbox table=aw_projects field=aw_user2 user=1
 	@caption User-defined textbox 2
 
-	@property user3 type=textbox table=aw_projects field=aw_user3
+	@property user3 type=textbox table=aw_projects field=aw_user3 user=1
 	@caption User-defined textbox 3
 
-	@property user4 type=textbox table=aw_projects field=aw_user4
+	@property user4 type=textbox table=aw_projects field=aw_user4 user=1
 	@caption User-defined textbox 4
 
-	@property user5 type=textbox table=aw_projects field=aw_user5
+	@property user5 type=textbox table=aw_projects field=aw_user5 user=1
 	@caption User-defined textbox 5
 
-	@property userch1 type=checkbox ch_value=1 table=aw_projects field=aw_userch1
+	@property userch1 type=checkbox ch_value=1 table=aw_projects field=aw_userch1 user=1
 	@caption User-defined checkbox 1
 
-	@property userch2 type=checkbox ch_value=1 table=aw_projects field=aw_userch2
+	@property userch2 type=checkbox ch_value=1 table=aw_projects field=aw_userch2 user=1
 	@caption User-defined checkbox 2
 
-	@property userch3 type=checkbox ch_value=1 table=aw_projects field=aw_userch3
+	@property userch3 type=checkbox ch_value=1 table=aw_projects field=aw_userch3 user=1
 	@caption User-defined checkbox 3
 
-	@property userch4 type=checkbox ch_value=1 table=aw_projects field=aw_userch4
+	@property userch4 type=checkbox ch_value=1 table=aw_projects field=aw_userch4 user=1
 	@caption User-defined checkbox 4
 
-	@property userch5 type=checkbox ch_value=1 table=aw_projects field=aw_userch5
+	@property userch5 type=checkbox ch_value=1 table=aw_projects field=aw_userch5 user=1
 	@caption User-defined checkbox 5
 
-	@property userclassif1 type=classificator reltype=RELTYPE_CLF1 table=aw_projects field=aw_userclf1
+	@property userclassif1 type=classificator reltype=RELTYPE_CLF1 table=aw_projects field=aw_userclf1 user=1
 	@caption User-defined classificator 1
 
 	@property controller_disp type=text store=no 
 	@caption Kontrolleri v&auml;ljund
 
-@default group=team
+@default group=team_t
 
 	@property team_tb type=toolbar no_caption=1 store=no
 
@@ -194,6 +194,15 @@
 			@caption Otsi
 
 	@property team_search_res type=table no_caption=1 
+
+@default group=team_team
+
+	@property team_team_tb type=toolbar no_caption=1 store=no
+
+	@layout team_team_l type=hbox width=30%:70%
+
+		@property team_team_tree type=treeview store=no no_caption=1 parent=team_team_l
+		@property team_team_tbl type=table store=no no_caption=1 parent=team_team_l
 
 @default group=goals_edit
 
@@ -235,6 +244,15 @@
 	@property risks_eval_tb type=toolbar no_caption=1 store=no
 	@property risks_eval type=table no_caption=1 store=no
 
+@default group=req
+
+	@property req_tb type=toolbar store=no no_caption=1
+
+	@layout req_l type=hbox width=30%:70%
+
+		@property req_tree type=treeview store=no no_caption=1 parent=req_l
+		@property req_tbl type=table store=no no_caption=1 parent=req_l
+	
 @groupinfo info caption="Projekti info"
 	@groupinfo info_t caption="Projekti info" parent=info
 	@groupinfo strat caption="Eesm&auml;rgid" parent=info submit=no
@@ -262,9 +280,15 @@
 @groupinfo userdefined caption="Andmed"
 
 @groupinfo team caption="Meeskond" submit=no
+
+	@groupinfo team_t caption="Meeskond" parent=team
+	@groupinfo team_team caption="Tiimid" parent=team submit=no
+	
 @groupinfo risks_t caption="Riskid"
 	@groupinfo risks caption="Riskid" parent=risks_t submit=no
 	@groupinfo risks_eval caption="Riskide hindamine" parent=risks_t submit=no
+
+@groupinfo req caption="N&otilde;uded" submit=no
 
 @groupinfo transl caption=T&otilde;lgi
 
@@ -329,6 +353,9 @@
 
 @reltype RISK_EVAL value=20 clid=CL_PROJECT_RISK_EVAL_WS
 @caption Riskide hindamislaud
+
+@reltype TEAM value=21 clid=CL_PROJECT_TEAM
+@caption Tiim
 */
 
 class project extends class_base
@@ -361,6 +388,30 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "team_team_tb":
+			case "team_team_tree":
+			case "team_team_tbl":
+				static $i;
+				if (!$i)
+				{
+					$i = get_instance("applications/groupware/project_teams_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $i->$fn($arr);
+				break;
+
+			case "req_tb":
+			case "req_tree":
+			case "req_tbl":
+				static $i;
+				if (!$i)
+				{
+					$i = get_instance("applications/groupware/project_req_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $i->$fn($arr);
+				break;
+
 			case "risks":
 				$this->_risks($arr);
 				break;
@@ -2375,6 +2426,8 @@ class project extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["connect_impl"] = $_GET["connect_impl"];
 		$arr["connect_orderer"] = $_GET["connect_orderer"];
+		$arr["tf"] = $_GET["tf"];
+		$arr["team"] = $_GET["team"];
 	}
 
 	function request_execute($o)
@@ -2708,6 +2761,24 @@ class project extends class_base
 			"action" => "del_goals",
 			"tooltip" => t("Kustuta"),
 		));
+
+		$t->add_separator();
+		$t->add_button(array(
+			"name" => "cut",
+			"img" => "cut.gif",
+			"action" => "cut_goals",
+			"tooltip" => t("L&otilde;ika"),
+		));
+
+		if (is_array($_SESSION["proj_cut_goals"]) && count($_SESSION["proj_cut_goals"]))
+		{
+			$t->add_button(array(
+				"name" => "paste",
+				"img" => "paste.gif",
+				"action" => "paste_goals",
+				"tooltip" => t("Kleebi"),
+			));
+		}
 	}
 
 	function _goal_tree($arr)
@@ -2716,9 +2787,10 @@ class project extends class_base
 		$ol = new object_list(array(
 			"class_id" => CL_TASK,
 			"project" => $arr["obj_inst"]->id(),
-			"is_goal" => 1
+			"is_goal" => 1,
+			"brother_of" => new obj_predicate_prop("id")
 		));
-
+		$ids = $this->make_keys($ol->ids());
 		// now make tree, based on predicate tasks
 		$tv =& $arr["prop"]["vcl_inst"];
 		$tv->start_tree(array(
@@ -2742,13 +2814,18 @@ class project extends class_base
 			$pt = $o->prop("predicates");
 			if (is_array($pt))
 			{
+				$pt = $this->make_keys($pt);
+				unset($pt["0"]);
 				$pt = reset($pt);
 			}
 			if (!$this->can("view", $pt))
 			{
 				$pt = $arr["obj_inst"]->id();
 			}
-				
+			if (!isset($ids[$pt]))
+			{
+				$pt = $arr["obj_inst"]->id();	
+			}
 			$tv->add_item($pt, array(
 				"name" => $nm,
 				"id" => $o->id(),
@@ -4121,7 +4198,7 @@ class project extends class_base
 		$t->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
-			"tooltip" => t("Eesm&auml;rk"),
+			"tooltip" => t("Editegur"),
 			"url" => html::get_new_url(CL_PROJECT_STRAT_GOAL, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 17))
 		));
 		$t->add_button(array(
@@ -4139,7 +4216,7 @@ class project extends class_base
 		$t->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
-			"tooltip" => t("Eesm&auml;rk"),
+			"tooltip" => t("Eesm&auml;rkide hindamise t&ouml;&ouml;laud"),
 			"url" => html::get_new_url(CL_PROJECT_STRAT_GOAL_EVAL_WS, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 19))
 		));
 		$t->add_button(array(
@@ -4158,7 +4235,7 @@ class project extends class_base
 		$t->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
-			"tooltip" => t("Eesm&auml;rk"),
+			"tooltip" => t("Riskide hindamise t&ouml;&ouml;laud"),
 			"url" => html::get_new_url(CL_PROJECT_RISK_EVAL_WS, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 20))
 		));
 		$t->add_button(array(
@@ -4259,7 +4336,7 @@ class project extends class_base
 			$t->define_data(array(
 				"name" => html::obj_change_url($r),
 				"owner" => html::obj_change_url($r->prop("owner")),
-				"desc" => nl2br($r->prop("countermeasure")),
+				"desc" => nl2br($r->comment()),
 				"type" => $pr->types[$r->prop("type")],
 				"oid" => $r->id()
 			));
@@ -4282,6 +4359,117 @@ class project extends class_base
 			"action" => "del_goals",
 			"tooltip" => t("Kustuta"),
 		));
+	}
+
+	/**
+		@attrib name=cut_goals
+	**/
+	function cut_goals($arr)
+	{
+		$_SESSION["proj_cut_goals"] = $arr["sel"];
+		$_SESSION["proj_cut_from"] = $arr["tf"];
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=paste_goals
+	**/
+	function paste_goals($arr)
+	{
+		if ($arr["tf"])
+		{
+			// rewire predicates for cut goals
+			foreach(safe_array($_SESSION["proj_cut_goals"]) as $goal_id)
+			{
+				$go = obj($goal_id);
+				$p = $go->prop("predicates");
+				if (!is_array($p))
+				{
+					if ($this->can("view", $p))
+					{
+						$p = array($p=>$p);
+					}
+					else
+					{
+						$p = array();
+					}
+				}
+				$p = $this->make_keys($p);
+				unset($p[$_SESSION["proj_cut_from"]]);
+				$p[$arr["tf"]] = $arr["tf"];
+				$go->set_prop("predicates", $p);
+				$go->save();
+			}
+		}
+		
+		unset($_SESSION["proj_cut_goals"]);
+		unset($_SESSION["proj_cut_from"]);
+		return $arr["post_ru"];
+	}
+
+	function get_team($p)
+	{
+		$ret = array();
+		foreach($p->connections_from(array("type" => "RELTYPE_PARTICIPANT")) as $c)
+		{
+			$o = $c->to();
+
+			if ($o->class_id() == CL_USER)
+			{
+				$i = $o->instance();
+				$o = obj($i->get_person_for_user($o));
+			}
+
+			if ($o->class_id() != CL_CRM_PERSON)
+			{
+				continue;
+			}
+			$ret[$o->id()] = $o->id();
+		}
+		return $ret;
+	}
+
+	/**
+		@attrib name=copy_team_mem
+	**/
+	function copy_team_mem($arr)
+	{
+		$_SESSION["proj_team_member_copy"] = $arr["check"];
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=paste_team_mem
+	**/
+	function paste_team_mem($arr)
+	{
+		if (!$this->can("view", $arr["team"]))
+		{
+			return $arr["post_ru"];
+		}
+		$team = obj($arr["team"]);
+		foreach(safe_array($_SESSION["proj_team_member_copy"]) as $mem_id)
+		{
+			$team->connect(array(
+				"to" => $mem_id,
+				"type" => "RELTYPE_TEAM_MEMBER"
+			));
+		}
+		$_SESSION["proj_team_member_copy"] = null;
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=del_team_mem
+	**/
+	function del_team_mem($arr)
+	{
+		$team = obj($arr["team"]);
+		foreach(safe_array($arr["check"]) as $mem_id)
+		{
+			$team->disconnect(array("from" => $mem_id));
+		}
+		return $arr["post_ru"];
 	}
 };
 ?>

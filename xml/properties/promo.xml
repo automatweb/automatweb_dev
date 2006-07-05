@@ -268,7 +268,7 @@
       <property>
             <name>last_menus</name>
             <type>table</type>
-            <group>menus</group>
+            <group>menus_sub</group>
             <method>serialize</method>
             <store>no</store>
             <field>last_menus</field>
@@ -278,7 +278,7 @@
             <name>ndocs</name>
             <type>textbox</type>
             <size>4</size>
-            <group>menus</group>
+            <group>menus_sub</group>
             <table>menu</table>
             <field>ndocs</field>
             <caption>Mitu viimast dokumenti</caption>
@@ -287,7 +287,7 @@
             <name>start_ndocs</name>
             <type>textbox</type>
             <size>4</size>
-            <group>menus</group>
+            <group>menus_sub</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -300,14 +300,14 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>menus</group>
+            <group>menus_sub</group>
             <caption>Sisu ei cacheta</caption>
       </property>
       <property>
             <name>kw_tb</name>
             <type>toolbar</type>
             <store>no</store>
-            <group>menus</group>
+            <group>kws</group>
             <no_caption>1</no_caption>
             <field>kw_tb</field>
       </property>
@@ -315,7 +315,7 @@
             <name>kws</name>
             <type>keyword_selector</type>
             <store>no</store>
-            <group>menus</group>
+            <group>kws</group>
             <reltype>RELTYPE_KEYWORD</reltype>
             <field>kws</field>
             <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
@@ -326,7 +326,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <group>menus</group>
+            <group>kws</group>
             <table>objects</table>
             <caption>Kasuta aktiivse kausta m&amp;amp;auml;rks&amp;amp;otilde;nu</caption>
       </property>
@@ -336,7 +336,7 @@
             <ch_value>1</ch_value>
             <field>meta</field>
             <method>serialize</method>
-            <group>menus</group>
+            <group>kws</group>
             <table>objects</table>
             <caption>Kasuta dokumendi sisu t&amp;amp;uuml;&amp;amp;uuml;bi m&amp;amp;auml;&amp;amp;auml;rangut</caption>
       </property>
@@ -383,6 +383,14 @@
             <menus>
                   <caption>Sisu seaded</caption>
             </menus>
+            <menus_sub>
+                  <parent>menus</parent>
+                  <caption>Dokumendid</caption>
+            </menus_sub>
+            <kws>
+                  <parent>menus</parent>
+                  <caption>M&amp;amp;auml;rks&amp;amp;otilde;nad</caption>
+            </kws>
       </groupinfo>
       <tableinfo>
             <menu>
@@ -417,6 +425,11 @@
                   <clid>CL_KEYWORD</clid>
                   <caption>V&amp;amp;otilde;tmes&amp;amp;otilde;na</caption>
             </KEYWORD>
+            <DOC_IGNORE>
+                  <value>6</value>
+                  <clid>CL_MENU</clid>
+                  <caption>ignoreeri dokumente selle men&amp;amp;uuml;&amp;amp;uuml; alt</caption>
+            </DOC_IGNORE>
       </reltypes>
 </properties>
 

@@ -5671,6 +5671,19 @@ class crm_company extends class_base
 		$arr["prop"]["value"] = join(" / ", array_reverse($cats));
 		return PROP_OK;
 	}
+
+	function display_persons_table($person_list, &$t)
+	{
+		$arr = array(
+			"prop" => array(
+				"vcl_inst" => &$t
+			),
+			"disp_persons" => $person_list,
+			"obj_inst" => get_current_company()
+		);
+		$i = get_instance("applications/crm/crm_company_people_impl");
+		$i->_get_human_resources($arr);
+	}
 }
 
 ?>

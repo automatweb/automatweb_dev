@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.45 2006/06/28 20:54:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.46 2006/07/05 10:06:47 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -97,6 +97,42 @@ define("BUG_STATUS_CLOSED", 5);
 		@property bug_property type=select parent=data captionside=top field=aw_bug_property
 		@caption Klassi omadus
 
+
+@default group=cust
+
+	@property team type=relpicker reltype=RELTYPE_TEAM field=aw_team
+	@caption Tiim
+
+	@property ocurrence type=select field=aw_ocurrence
+	@caption Vea esinemine
+
+	@property density type=select field=aw_density
+	@caption Vea sagedus
+
+	@property cust_responsible type=relpicker reltype=RELTYPE_CUST_RESPONSIBLE field=aw_cust_responsible
+	@caption Kliendipoolne vastutaja	
+
+	@property cust_status type=select field=aw_cust_status
+	@caption Kliendipoolne staatus
+
+	@property cust_tester type=relpicker reltype=RELTYPE_CUST_TESTER field=aw_cust_tester
+	@caption Kliendipoolne testija
+
+	@property cust_solution type=textarea rows=10 cols=50 field=aw_cust_solution
+	@caption Kliendipoolne lahendus
+	
+	@property cust_live_date type=date_select field=aw_cust_live_date
+	@caption Kasutusvalmis
+	
+	@property cust_crit type=textarea rows=10 cols=50 field=aw_cust_crit
+	@caption Vastuv&otilde;tu kriteeriumid
+	
+	@property cust_budget type=textbox field=aw_cust_budget size=5
+	@caption Eelarve
+	
+
+@groupinfo cust caption="Kliendi andmed"
+
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
 @caption Jälgija
 
@@ -114,6 +150,15 @@ define("BUG_STATUS_CLOSED", 5);
 
 @reltype COMMENT value=6 clid=CL_BUG_COMMENT
 @caption Kommentaar
+
+@reltype TEAM value=7 clid=CL_PROJECT_TEAM
+@caption Tiim
+
+@reltype CUST_RESPONSIBLE value=8 clid=CL_CRM_PERSON
+@caption Kliendipoolne vastutaja
+
+@reltype CUST_TESTER value=9 clid=CL_CRM_PERSON
+@caption Kliendipoolne testija
 */
 
 define("BUG_OPEN", 1);
@@ -149,6 +194,17 @@ class bug extends class_base
 			BUG_WONTFIX => t("Ei paranda"),
 			BUG_FEEDBACK => t("Vajab tagasisidet"),
 			BUG_FATALERROR => t("Fatal error"),
+		);
+
+		$this->occurrences = array(
+			1 => t("Esmakordne"),
+			2 => t("Korduv")
+		);
+
+		$this->densities = array(
+			1 => t("&Uuml;ksikjuht"),
+			2 => t("Puudutab suurt osa"),
+			3 => t("Puudutab k&otilde;iki")
 		);
 	}
 
@@ -199,6 +255,47 @@ class bug extends class_base
 		}
 		switch($prop["name"])
 		{
+			case "team":
+				if ($this->can("view", $arr["obj_inst"]->prop("project")))
+				{
+					$po = obj($arr["obj_inst"]->prop("project"));
+					$opts = array("" => t("--vali--"));
+					foreach($po->connections_from(array("type" => "RELTYPE_TEAM")) as $c)
+					{
+						$opts[$c->prop("to")] = $c->prop("to.name");
+					}
+					$prop["options"] = $opts;
+				}
+				break;
+			
+			case "ocurrence":
+				$prop["options"] = $this->occurrences;
+				break;
+
+			case "density":
+				$prop["options"] = $this->densities;
+				break;
+
+			case "cust_status":
+				$prop["options"] = $this->bug_statuses;
+				break;
+
+			case "cust_responsible":
+			case "cust_tester":
+				if ($this->can("view", $arr["obj_inst"]->prop("project")))
+				{
+					$opts = array("" => t("--vali--"));
+					$pi = get_instance(CL_PROJECT);
+					$team = $pi->get_team(obj($arr["obj_inst"]->prop("project")));
+					foreach($team as $team_id)
+					{
+						$mem = obj($team_id);
+						$opts[$team_id] = $mem->name();
+					}
+					$prop["options"] = $opts;
+				}
+				break;
+
 			case "name":
 				if (is_oid($arr["obj_inst"]->id()))
 				{
@@ -303,6 +400,11 @@ class bug extends class_base
 					$prop["options"][$tmp->id()] = $tmp->name();
 				}
 
+				if ($arr["request"]["set_proj"])
+				{
+					$prop["value"] = $arr["request"]["set_proj"];
+				}
+
 				if($arr["new"])
 				{
 					foreach($this->parent_options[$prop["name"]] as $key => $val)
@@ -325,6 +427,19 @@ class bug extends class_base
 					$prop["options"] = array("" => t("--vali--")) + $ol->names();
 				}
 
+				if ($this->can("view", $arr["request"]["alias_to_org"]))
+				{
+					$ao = obj($arr["request"]["alias_to_org"]);
+					if ($ao->class_id() == CL_CRM_PERSON)
+					{
+						$u = get_instance(CL_USER);
+						$prop["value"] = $u->get_company_for_person($ao->id());
+					}
+					else
+					{
+						$prop["value"] = $arr["request"]["alias_to_org"];
+					}
+				}
 				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
 					$tmp = obj($prop["value"]);
@@ -869,7 +984,36 @@ class bug extends class_base
 					"type" => "varchar",
 					"length" => 255
 				));
-				break;
+				return true;
+
+			case "aw_team":
+			case "aw_ocurrence":
+			case "aw_density":
+			case "aw_team":
+			case "aw_cust_responsible":
+			case "aw_cust_status":
+			case "aw_cust_tester":
+			case "aw_cust_live_date":
+				$this->db_add_col($tbl, array(
+					"name" => $f,
+					"type" => "int",
+				));
+				return true;
+
+			case "aw_cust_solution":
+			case "aw_cust_crit":
+				$this->db_add_col($tbl, array(
+					"name" => $f,
+					"type" => "text",
+				));
+				return true;
+
+			case "aw_cust_budget":
+				$this->db_add_col($tbl, array(
+					"name" => $f,
+					"type" => "double",
+				));
+				return true;
 		}
 	}
 

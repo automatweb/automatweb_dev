@@ -342,6 +342,11 @@ class crm_company_people_impl extends class_base
 			$i->get_all_workers_for_company($arr["obj_inst"], $persons);
 		}
 
+		if ($arr["disp_persons"])
+		{
+			$persons = $arr["disp_persons"];
+		}
+
 		// preload ranks from persons
 		$c = new connection();
 		$r_conns = $c->find(array(

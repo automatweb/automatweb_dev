@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.160 2006/05/17 10:45:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.161 2006/07/05 10:06:47 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -150,10 +150,10 @@
 		@property color2 type=colorpicker field=meta method=serialize group=look_sub
 		@caption Menüü värv 2
 
-		@property icon type=icon field=meta method=serialize group=look_sub
+		@property icon type=icon field=meta method=serialize group=look_sub 
 		@caption Ikoon
 
-		@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=look_sub 
+		@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=look_sub  
 		@caption Vali ikoon
 
 	@groupinfo templates caption=Kujunduspõhjad parent=look

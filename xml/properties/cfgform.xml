@@ -101,12 +101,23 @@
       <property>
             <name>edit_groups</name>
             <table>objects</table>
-            <group>groupdata</group>
+            <group>groupdata_a</group>
             <field>meta</field>
             <method>serialize</method>
             <type>callback</type>
             <callback>callback_edit_groups</callback>
             <caption>Muuda gruppe</caption>
+      </property>
+      <property>
+            <name>group_movement</name>
+            <table>objects</table>
+            <group>groupdata_b</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Gruppide vaheline liikumine</caption>
       </property>
       <property>
             <name>navtoolbar</name>
@@ -328,6 +339,14 @@
             <groupdata>
                   <caption>Grupid</caption>
             </groupdata>
+            <groupdata_a>
+                  <caption>Grupid</caption>
+                  <parent>groupdata</parent>
+            </groupdata_a>
+            <groupdata_b>
+                  <caption>Liikumine</caption>
+                  <parent>groupdata</parent>
+            </groupdata_b>
             <layout>
                   <caption>Layout</caption>
                   <submit>no</submit>

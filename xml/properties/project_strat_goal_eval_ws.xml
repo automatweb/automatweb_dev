@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>eval_dl</name>
+            <table>aw_project_strat_goal_eval_ws</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_eval_dl</field>
+            <caption>Hindamise t&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
             <name>strat_a</name>
             <table>objects</table>
             <group>eval</group>
@@ -75,6 +83,13 @@
                   <submit>no</submit>
             </strat_res_avg>
       </groupinfo>
+      <tableinfo>
+            <aw_project_strat_goal_eval_ws>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </aw_project_strat_goal_eval_ws>
+      </tableinfo>
       <layout>
             <srt_hb>
                   <type>hbox</type>
