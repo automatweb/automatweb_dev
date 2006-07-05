@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.87 2006/06/27 21:53:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.88 2006/07/05 10:12:23 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -606,6 +606,7 @@ class releditor extends core
 						$test = $clinst->get_property(array(
 							"prop" => &$prop,
 							"obj_inst" => $target,
+							"called_from" => "releditor"
 						));
 						if (PROP_OK != $test)
 						{

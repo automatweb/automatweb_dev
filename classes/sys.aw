@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.73 2006/05/30 11:10:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.74 2006/07/05 10:12:20 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -881,8 +881,8 @@ class sys extends aw_template
 		$dump = $fld."db.sql";
 
 		$res = `/usr/local/bin/mysqldump --add-drop-table --quick -u $u -h $h --password=$p $db > $dump`;
-		echo file_get_contents($fn);
-		unlink($fn);
+		echo file_get_contents($dump);
+		unlink($dump);
 		die();
 	}
 

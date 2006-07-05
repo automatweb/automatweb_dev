@@ -44,14 +44,27 @@ class crm_document_base extends class_base
 
 			case "project":
 				$i = get_instance(CL_CRM_COMPANY);
-				$myp = $i->get_my_projects();
-				if (!count($myp))
+				if ($this->can("view", $arr["obj_inst"]->prop("customer")))
 				{
-					$ol = new object_list();
+					// list events for project
+					$ol = new object_list(array(
+						"class_id" => CL_PROJECT,
+						"lang_id" => array(),
+						"site_id" => array(),
+						"orderer" => $arr["obj_inst"]->prop("customer")
+					));
 				}
 				else
 				{
-					$ol = new object_list(array("oid" => $myp));
+					$myp = $i->get_my_projects();
+					if (!count($myp))
+					{
+						$ol = new object_list();
+					}
+					else
+					{
+						$ol = new object_list(array("oid" => $myp));
+					}
 				}
 				$prop["options"] = array("" => "") + $ol->names();
 				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
@@ -76,15 +89,29 @@ class crm_document_base extends class_base
 
 			case "task":
 				$i = get_instance(CL_CRM_COMPANY);
-				$tsk = $i->get_my_tasks();
-				if (count($tsk))
+				if ($this->can("view", $arr["obj_inst"]->prop("project")))
 				{
-					$ol = new object_list(array("oid" => $tsk));
+					// list events for project
+					$ol = new object_list(array(
+						"class_id" => CL_TASK,
+						"lang_id" => array(),
+						"site_id" => array(),
+						"project" => $arr["obj_inst"]->prop("project")
+					));
 					$prop["options"] = array("" => "") + $ol->names();
 				}
 				else
 				{
-					$prop["options"] = array("" => "");
+					$tsk = $i->get_my_tasks();
+					if (count($tsk))
+					{
+						$ol = new object_list(array("oid" => $tsk));
+						$prop["options"] = array("" => "") + $ol->names();
+					}
+					else
+					{
+						$prop["options"] = array("" => "");
+					}
 				}
 				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
@@ -139,6 +166,12 @@ class crm_document_base extends class_base
 	function _init_acts_t(&$t)
 	{
 		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("Jrk"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Kuup&auml;ev"),
 			"align" => "center"
@@ -153,12 +186,6 @@ class crm_document_base extends class_base
 		$t->define_field(array(
 			"name" => "action",
 			"caption" => t("Tegevus"),
-			"align" => "center"
-		));
-
-		$t->define_field(array(
-			"name" => "ord",
-			"caption" => t("Jrk"),
 			"align" => "center"
 		));
 
@@ -193,6 +220,19 @@ class crm_document_base extends class_base
 
 		$calinst = get_instance(CL_PLANNER);
 
+		$o_actors = array("" => t("--vali--"));
+		if ($this->can("view", $arr["obj_inst"]->prop("project")))
+		{
+			$p = obj($arr["obj_inst"]->prop("project"));
+			foreach($p->connections_from(array("type" => "RELTYPE_PARTICIPANT")) as $c)
+			{
+				if ($c->prop("to.class_id") != CL_CRM_PERSON)
+				{
+					continue;
+				}
+				$o_actors[$c->prop("to")] = $c->prop("to.name");
+			}
+		}
 		foreach($acts as $act_c)
 		{
 			if ($act_c === null)
@@ -215,9 +255,14 @@ class crm_document_base extends class_base
 				$aco = obj($act->prop("actor"));
 				$actor .= " ".$aco->prop_str("work_contact");
 			}
+			$actors = $o_actors;
+			if ($act->prop("actor"))
+			{
+				$actors[$act->prop("actor")] = $actor;
+			}
 			$actor = html::select(array(
 				"name" => "a[$idx][actor]",
-				"options" => array($act->prop("actor") => $actor),
+				"options" => $actors,
 				"value" => $act->prop("actor")
 			));
 			$popl = $this->mk_my_orb("do_search", array(
@@ -252,10 +297,9 @@ class crm_document_base extends class_base
 					"name" => "a[$idx][action]",
 					"value" => $act->prop("aw_action"),
 				)),
-				"ord" => html::textbox(array(
+				"ord" => $cur_numer.html::hidden(array(
 					"name" => "a[$idx][ord]",
 					"value" => $cur_numer,
-					"size" => 3
 				)),
 				"predicate" => html::textbox(array(
 					"name" => "a[$idx][predicate]",

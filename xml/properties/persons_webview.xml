@@ -52,79 +52,13 @@
             <caption>Grupeerimise j&amp;auml;rjestamisprintsiip</caption>
       </property>
       <property>
-            <name>view_table</name>
+            <name>view</name>
             <table>objects</table>
             <group>view</group>
             <field>meta</field>
             <method>serialize</method>
             <callback>callback_get_view_table</callback>
             <caption>Vaadete tabel</caption>
-      </property>
-      <property>
-            <name>view1</name>
-            <table>objects</table>
-            <group>view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Vaade 1</caption>
-      </property>
-      <property>
-            <name>template</name>
-            <table>objects</table>
-            <group>view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Template</caption>
-      </property>
-      <property>
-            <name>department_levels</name>
-            <table>objects</table>
-            <group>view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Osakondade tasemed</caption>
-      </property>
-      <property>
-            <name>with_without_persons</name>
-            <table>objects</table>
-            <group>view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>chooser</type>
-            <orient>vertical</orient>
-            <store>yes</store>
-            <caption>Sisse lugeda</caption>
-      </property>
-      <property>
-            <name>columns</name>
-            <table>objects</table>
-            <group>view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Tulpade arv</caption>
-      </property>
-      <property>
-            <name>rows_by</name>
-            <table>objects</table>
-            <group>view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Read ametinimetuse alusel</caption>
-      </property>
-      <property>
-            <name>min_cols</name>
-            <table>objects</table>
-            <group>view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Minimaalne tulpade arv</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PERSONS_WEBVIEW</syslog_type>

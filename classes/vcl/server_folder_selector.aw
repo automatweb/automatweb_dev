@@ -97,7 +97,7 @@ class server_folder_selector extends core
 			$dd = posix_getpwuid(fileowner($arr["fld"]."/".$file));
 			$t->define_data(array(
 				"name" => html::href(array(
-					"url" => $this->mk_my_orb("select_folder", array("pn" => $arr["pn"], "fld" => urlencode($arr["fld"]."/".$file))),
+					"url" => $this->mk_my_orb("select_folder", array("pn" => $arr["pn"], "fld" => $arr["fld"]."/".$file)),
 					"caption" => iconv("utf-8", aw_global_get("charset")."//IGNORE",$file)
 				)),
 				"sel" => html::href(array(

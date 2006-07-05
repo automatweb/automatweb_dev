@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.9 2006/05/11 12:12:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.10 2006/07/05 10:12:22 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -137,6 +137,7 @@ class task_quick_entry extends class_base
 			"name" => iconv("UTF-8", aw_global_get("charset"), $arr["customer"])."%",
 			"lang_id" => array(),
 			"site_id" => array(),
+			"limit" => 30,
 			new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
@@ -243,10 +244,13 @@ class task_quick_entry extends class_base
 		// if needed add customer/project/task
 		$cur_co = get_current_company();
 		$cur_p = get_current_person();
-
-		/*$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["customer"]);
-		$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["project"]);
-		$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["task"]);*/
+		
+		if (mb_detect_encoding($arr["request"]["customer"]) == "UTF-8")
+		{
+			$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["customer"]);
+			$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["project"]);
+			$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["task"]);
+		}
 		if ($arr["request"]["task"] == "")
 		{
 			$arr["request"]["task"] = $arr["request"]["project"];
@@ -423,6 +427,11 @@ class task_quick_entry extends class_base
 	**/
 	function check_existing($arr)
 	{
+		if (mb_detect_encoding($arr["c"]) == "UTF-8")
+		{
+			$arr["c"] = iconv("UTF-8", aw_global_get("charset"), $arr["c"]);
+		}
+
 		$ret = "";
 		// if customer exists
 		$ol = new object_list(array(
@@ -436,6 +445,10 @@ class task_quick_entry extends class_base
 			$ret .= sprintf(t("Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["c"]);
 		}
 
+		if (mb_detect_encoding($arr["p"]) == "UTF-8")
+		{
+			$arr["p"] = iconv("UTF-8", aw_global_get("charset"), $arr["p"]);
+		}
 		// if project exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_PROJECT),
@@ -449,6 +462,10 @@ class task_quick_entry extends class_base
 			$ret .= sprintf(t("Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["p"]);
 		}
 
+		if (mb_detect_encoding($arr["t"]) == "UTF-8")
+		{
+			$arr["t"] = iconv("UTF-8", aw_global_get("charset"), $arr["t"]);
+		}
 		// if task exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),

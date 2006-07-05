@@ -444,11 +444,11 @@
       </classinfo>
       <groupinfo>
             <bugs>
-                  <caption>Bugid</caption>
+                  <caption>Arendus&amp;amp;uuml;lesanded</caption>
                   <submit>no</submit>
             </bugs>
             <by_default>
-                  <caption>default</caption>
+                  <caption>Arendus&amp;amp;uuml;lesanded</caption>
                   <parent>bugs</parent>
                   <submit>no</submit>
             </by_default>
@@ -509,7 +509,7 @@
                   <submit>no</submit>
             </settings>
             <settings_people>
-                  <caption>Bugtracki isikud</caption>
+                  <caption>Isikud</caption>
                   <submit>no</submit>
                   <parent>settings</parent>
             </settings_people>

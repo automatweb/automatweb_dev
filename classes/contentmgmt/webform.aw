@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.91 2006/05/23 15:35:47 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.92 2006/07/05 10:12:21 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2100,7 +2100,10 @@ class webform extends class_base
 					$m->set_prop("mail", $arr[$prplist[$key]["email_f"]]);
 					$m->save();
 				}
-				$o->set_prop($key, $val);
+				if ($o->is_property($key))
+				{
+					$o->set_prop($key, $val);
+				}
 			}
 			$body = "";
 			// lets translate this stuff to real things

@@ -130,6 +130,7 @@ class crm_company_docs_impl extends class_base
 				"tree_id" => "crm_docs_t",
 			),
 			"root_item" => $fld,
+			"target_url" => aw_url_change_var("files_from_fld", null),
 			"ot" => new object_tree(array(
 				"class_id" => array(CL_MENU),
 				"parent" => $fld->id(),
@@ -315,6 +316,7 @@ class crm_company_docs_impl extends class_base
 			));
 		}
 
+		classload("core/icons");
 		$clss = aw_ini_get("classes");
 		get_instance(CL_FILE);
 		foreach($ol->arr() as $o)

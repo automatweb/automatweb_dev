@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.92 2006/07/05 10:06:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.93 2006/07/05 10:12:22 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -2394,7 +2394,11 @@ class project extends class_base
 			return false;
 		};
 
-		if ($arr["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		if ($args["id"] == "transl" && aw_ini_get("user_interface.content_trans") != 1)
+		{
+			return false;
+		}
+		if ($args["id"] == "trans")
 		{
 			return false;
 		}

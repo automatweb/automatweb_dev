@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.71 2006/07/03 15:14:24 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.71 2006/07/03 15:14:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.72 2006/07/05 10:12:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.72 2006/07/05 10:12:21 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -155,8 +155,8 @@ define("BUG_STATUS_CLOSED", 5);
 	@property sp_s_res type=table store=no 
 	@caption Otsingu tulemused
 
-@groupinfo bugs caption="Bugid" submit=no
-	@groupinfo by_default caption="default" parent=bugs submit=no
+@groupinfo bugs caption="Arendus&uuml;lesanded" submit=no
+	@groupinfo by_default caption="Arendus&uuml;lesanded" parent=bugs submit=no
 	@groupinfo by_project caption="Projektid" parent=bugs submit=no
 	@groupinfo by_who caption="Kellele" parent=bugs submit=no
 	@groupinfo by_class caption="Klasside puu" parent=bugs submit=no
@@ -171,7 +171,7 @@ define("BUG_STATUS_CLOSED", 5);
 @groupinfo archive caption="Arhiiv" submit=no
 @groupinfo charts caption="Kaardid" submit=no
 @groupinfo settings caption="Seaded" submit=no
-	@groupinfo settings_people caption="Bugtracki isikud" submit=no parent=settings
+	@groupinfo settings_people caption="Isikud" submit=no parent=settings
 
 
 @reltype MONITOR value=1 clid=CL_CRM_PERSON
@@ -416,7 +416,7 @@ class bug_tracker extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "add_bug",
-			"text" => t("Bugi"),
+			"text" => t("Arendus&uuml;lesanne"),
 			"link" => html::get_new_url(CL_BUG, $pt, array(
 				"return_url" => get_ru(),
 			)),
@@ -2856,7 +2856,7 @@ echo "<hr>";
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Bugi"),
+			"caption" => t("Arendus&uuml;lesanne"),
 			"align" => "center"
 		));
 		$t->define_field(array(

@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.491 2006/07/03 12:13:09 kristo Exp $
+// $Id: class_base.aw,v 2.492 2006/07/05 10:12:20 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -648,8 +648,6 @@ class class_base extends aw_template
 
 		$properties = array("tabpanel" => $panel) + $properties;
 
-		$awt->start("parse-properties");
-
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
@@ -671,7 +669,6 @@ class class_base extends aw_template
 			$cli->set_layout($tmp);
 		};
 
-		$awt->stop("parse-properties");
 		$awt->start("add-property");
 		// what exactly is going on with that subgroup stuff?
 		if (isset($resprops["subgroup"]))
@@ -1587,7 +1584,7 @@ class class_base extends aw_template
 			};
 
 			// experimental hook for new relationmgr
-			if (empty($this->classinfo["r2"]) && false && empty($this->view))
+			if (empty($this->classinfo["r2"]) && empty($this->view))
 			{
 				$this->cli->add_tab(array(
 					"id" => "list_aliases",
@@ -2276,8 +2273,6 @@ class class_base extends aw_template
 	function parse_properties($args = array())
 	{
 		global $awt;
-		$awt->start("parse-properties");
-		$awt->count("parse-properties");
 		$properties = &$args["properties"];
 		if (!is_array($properties))
 		{
@@ -2297,7 +2292,6 @@ class class_base extends aw_template
 			$this->obj_inst = $args["obj_inst"];
 			$this->id = $this->obj_inst->id();
 		};
-
 
 		if (!is_array($this->relinfo))
 		{
@@ -2990,7 +2984,6 @@ class class_base extends aw_template
 			}
 		}
 
-		$awt->stop("parse-properties");
 
 		return $resprops;
 	}
@@ -4904,7 +4897,7 @@ class class_base extends aw_template
 			$this->classinfo = array();
 		};
 		$this->classinfo = array_merge($this->classinfo,$cfgu->get_classinfo());
-		if (isset($this->classinfo["r2"]) || true)
+		if (isset($this->classinfo["r2"]) )
 		{
 			$this->groupinfo["relationmgr"] = array(
 				"caption" => t("Seostehaldur"),

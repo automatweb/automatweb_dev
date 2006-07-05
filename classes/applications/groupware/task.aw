@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.109 2006/06/27 22:49:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.110 2006/07/05 10:12:22 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1041,12 +1041,7 @@ class task extends class_base
 		//or not
 		if(!empty($arr['new']))
 		{
-			$user = get_instance(CL_USER);
-			$person = new object($user->get_current_person());
-			$person->connect(array(
-				'reltype' => 'RELTYPE_PERSON_TASK',
-				'to' => $arr['obj_inst'],
-			));
+			$this->add_participant($arr["obj_inst"], get_current_person());
 		}
 
 		if ($this->add_to_proj)
