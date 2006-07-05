@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.58 2006/07/03 20:34:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.59 2006/07/05 15:21:59 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -530,7 +530,10 @@ class crm_bill extends class_base
 		}
 		$tpl .= "_".$lc;
 
-		$this->read_site_template($tpl.".tpl");
+		if ($this->read_site_template($tpl.".tpl", true) === false)
+		{
+			$this->read_site_template("show.tpl");
+		}
 
 		$ord = obj();
 		$ord_cur = obj();
@@ -944,7 +947,10 @@ class crm_bill extends class_base
 		}
 		$tpl .= "_".$lc;
 
-		$this->read_site_template($tpl.".tpl");
+		if ($this->read_site_template($tpl.".tpl", true) === false)
+		{
+			$this->read_site_template("show_add.tpl");
+		}
 
 		$ord = obj();
 		$ord_cur = obj();
