@@ -668,7 +668,7 @@ class crm_company_bills_impl extends class_base
 		$arr["prop"]["options"] = array("-1" => "") + $b->states;
 		if ($arr["request"]["bill_s_search"] == "")
 		{
-			$arr["prop"]["value"] = 0;
+			$arr["prop"]["value"] = -1;
 		}
 		else
 		{
