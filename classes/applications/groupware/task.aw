@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.110 2006/07/05 10:12:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.111 2006/07/05 11:09:36 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -189,7 +189,7 @@ caption Osalejad
 @reltype ATTACH value=8 clid=CL_CRM_MEMO,CL_CRM_DEAL,CL_CRM_DOCUMENT,CRM_OFFER
 @caption Manus
 
-@reltype PREDICATE value=9 clid=CL_TASK
+@reltype PREDICATE value=9 clid=CL_TASK,CL_CRM_CALL
 @caption Eeldustegevus
 */
 

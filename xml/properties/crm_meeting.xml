@@ -1,6 +1,27 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>predicates</name>
+            <table>objects</table>
+            <group>predicates</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <reltype>RELTYPE_PREDICATE</reltype>
+            <store>connect</store>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Eeldustegevused</caption>
+      </property>
+      <property>
+            <name>is_goal</name>
+            <table>planner</table>
+            <group>predicates</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>aw_is_goal</field>
+            <caption>Verstapost</caption>
+      </property>
+      <property>
             <name>customer</name>
             <table>planner</table>
             <group>general</group>
@@ -521,6 +542,9 @@
             <transl>
                   <caption>T&amp;amp;otilde;lgi</caption>
             </transl>
+            <predicates>
+                  <caption>Eeldused</caption>
+            </predicates>
       </groupinfo>
       <tableinfo>
             <documents>
@@ -558,6 +582,15 @@
                   <clid>CL_MRP_RESOURCE</clid>
                   <caption>ressurss</caption>
             </RESOURCE>
+            <PREDICATE>
+                  <value>9</value>
+                  <clid>
+                        <num_0>CL_TASK</num_0>
+                        <num_1>CL_CRM_CALL</num_1>
+                        <num_2>CL_CRM_MEETING</num_2>
+                  </clid>
+                  <caption>Eeldustegevus</caption>
+            </PREDICATE>
       </reltypes>
 </properties>
 

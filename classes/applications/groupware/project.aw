@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.93 2006/07/05 10:12:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.94 2006/07/05 11:09:36 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -2758,6 +2758,36 @@ class project extends class_base
 			),
 			"text" => t("Toimetus"),
 		));
+		$t->add_menu_item(array(
+			"name" => "new_call",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_CRM_CALL, 
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), 
+				array(
+					"return_url" => get_ru(),
+					"alias_to_org" => $ord,
+					"set_proj" => $arr["obj_inst"]->id(),
+					"set_pred" => $arr["request"]["tf"]
+				)
+			),
+			"text" => t("K&otilde;ne"),
+		));
+		$t->add_menu_item(array(
+			"name" => "new_meeting",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_CRM_MEETING, 
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), 
+				array(
+					"return_url" => get_ru(),
+					"alias_to_org" => $ord,
+					"set_proj" => $arr["obj_inst"]->id(),
+					"set_pred" => $arr["request"]["tf"]
+				)
+			),
+			"text" => t("Kohtumine"),
+		));
 
 		$t->add_button(array(
 			"name" => "delete",
@@ -2789,7 +2819,7 @@ class project extends class_base
 	{
 		classload("core/icons");
 		$ol = new object_list(array(
-			"class_id" => CL_TASK,
+			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
 			"project" => $arr["obj_inst"]->id(),
 			"is_goal" => 1,
 			"brother_of" => new obj_predicate_prop("id")
@@ -2881,7 +2911,7 @@ class project extends class_base
 
 		$parent = is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : new obj_predicate_compare(OBJ_COMP_NULL);
 		$goals = new object_list(array(
-			"class_id" => CL_TASK,
+			"class_id" => array(CL_TASK,CL_CRM_CALL,CL_CRM_MEETING),
 			"project" => $arr["obj_inst"]->id(),
 			"predicates" => $parent,
 			"brother_of" => new obj_predicate_prop("id")

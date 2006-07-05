@@ -1,11 +1,20 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.53 2006/06/29 22:13:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.54 2006/07/05 11:09:36 kristo Exp $
 // crm_call.aw - phone call
 /*
 
 @classinfo syslog_type=ST_CRM_CALL relationmgr=yes no_status=1 confirm_save_data=1
 
 @default table=planner
+
+@default group=predicates
+
+	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect table=objects field=meta method=serialize
+	@caption Eeldustegevused
+
+	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal 
+	@caption Verstapost
+
 @default group=general
 
 @property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER 
@@ -105,6 +114,7 @@
 @groupinfo comments caption=Kommentaarid
 @groupinfo participants caption=Osalejad submit=no
 @groupinfo other_calls caption="Eelmised k&otilde;ned" 
+@groupinfo predicates caption="Eeldused" 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -119,6 +129,9 @@
 
 @reltype PROJECT value=4 clid=CL_PROJECT
 @caption Projekt
+
+@reltype PREDICATE value=9 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING
+@caption Eeldustegevus
 
 */
 
@@ -580,6 +593,11 @@ class crm_call extends class_base
 		$pl = get_instance(CL_PLANNER);
 		$pl->post_submit_event($arr["obj_inst"]);
 
+		if(!empty($arr['new']))
+		{
+			$this->add_participant($arr["obj_inst"], get_current_person());
+		}
+
 	}
 
 
@@ -664,6 +682,7 @@ class crm_call extends class_base
 			$arr["add_to_cal"] = $_GET["add_to_cal"];
 			$arr["alias_to_org"] = $_GET["alias_to_org"];
 			$arr["reltype_org"] = $_GET["reltype_org"];
+			$arr["set_pred"] = $_GET["set_pred"];
 		}
 	}
 
@@ -736,6 +755,22 @@ class crm_call extends class_base
 		if ($arr["obj_inst"]->prop("time_real") == "")
 		{
 			$arr["obj_inst"]->set_prop("time_real", $hrs);
+		}
+
+		if ($arr["request"]["set_pred"] != "")
+		{
+			$pv = $arr["obj_inst"]->prop("predicates");
+			if (!is_array($pv) && is_oid($pv))
+			{
+				$pv = array($pv => $pv);
+			}	
+			else
+			if (!is_array($pv) && !is_oid($pv))
+			{
+				$pv = array();
+			}
+			$pv[$arr["request"]["set_pred"]] = $arr["request"]["set_pred"];
+			$arr["obj_inst"]->set_prop("predicates", $arr["request"]["set_pred"]);
 		}
 	}
 };

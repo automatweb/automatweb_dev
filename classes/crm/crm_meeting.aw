@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.73 2006/06/29 08:57:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.74 2006/07/05 11:09:36 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -7,6 +7,15 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @classinfo syslog_type=ST_CRM_MEETING relationmgr=yes confirm_save_data=1
 
 @default table=objects
+
+@default group=predicates
+
+	@property predicates type=relpicker multiple=1 reltype=RELTYPE_PREDICATE store=connect table=objects field=meta method=serialize
+	@caption Eeldustegevused
+
+	@property is_goal type=checkbox ch_value=1 table=planner field=aw_is_goal 
+	@caption Verstapost
+
 @default group=general
 
 @property customer type=relpicker table=planner field=customer reltype=RELTYPE_CUSTOMER 
@@ -167,6 +176,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @groupinfo participants caption=Osalejad submit=no
 @groupinfo resources caption="Ressursid" 
 @groupinfo transl caption=T&otilde;lgi
+@groupinfo predicates caption="Eeldused" 
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
@@ -182,6 +192,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @reltype RESOURCE value=5 clid=CL_MRP_RESOURCE
 @caption ressurss
+
+@reltype PREDICATE value=9 clid=CL_TASK,CL_CRM_CALL,CL_CRM_MEETING
+@caption Eeldustegevus
 */
 
 class crm_meeting extends class_base
@@ -764,15 +777,9 @@ class crm_meeting extends class_base
 			}
 			
 		}
-		if($arr['new'])
+		if(!empty($arr['new']))
 		{
-			//
-			$user = get_instance(CL_USER);
-			$person = new object($user->get_current_person());
-			$person->connect(array(
-				'reltype' => 'RELTYPE_PERSON_MEETING',
-				'to' => $arr['obj_inst'],
-			));
+			$this->add_participant($arr["obj_inst"], get_current_person());
 		}
 		if ($this->add_to_proj)
 		{
@@ -976,6 +983,7 @@ class crm_meeting extends class_base
 			$arr["add_to_cal"] = $_GET["add_to_cal"];
 			$arr["alias_to_org"] = $_GET["alias_to_org"];
 			$arr["reltype_org"] = $_GET["reltype_org"];
+			$arr["set_pred"] = $_GET["set_pred"];
 		}
 	}
 
@@ -992,6 +1000,22 @@ class crm_meeting extends class_base
 		if ($arr["obj_inst"]->prop("time_real") == "")
 		{
 			$arr["obj_inst"]->set_prop("time_real", $hrs);
+		}
+
+		if ($arr["request"]["set_pred"] != "")
+		{
+			$pv = $arr["obj_inst"]->prop("predicates");
+			if (!is_array($pv) && is_oid($pv))
+			{
+				$pv = array($pv => $pv);
+			}	
+			else
+			if (!is_array($pv) && !is_oid($pv))
+			{
+				$pv = array();
+			}
+			$pv[$arr["request"]["set_pred"]] = $arr["request"]["set_pred"];
+			$arr["obj_inst"]->set_prop("predicates", $arr["request"]["set_pred"]);
 		}
 	}
 
