@@ -4032,6 +4032,20 @@ class crm_company extends class_base
 		$sts = $seti->get_current_settings();
 		foreach(safe_array($arr["sel"]) as $task)
 		{
+			$to = obj($task);
+			$filt_by_row = null;
+			if ($to->class_id() == CL_TASK_ROW)
+			{
+				$filt_by_row = $to->id();
+				// get task from row
+				$conns = $to->connections_to(array("from.class_id" => CL_TASK,"type" => "RELTYPE_ROW"));
+				$c = reset($conns);
+				if ($c)
+				{
+					$to = $c->from();
+					$task = $to->id();
+				}
+			}
 			$bill->connect(array(
 				"to" => $task,
 				"reltype" => "RELTYPE_TASK"
@@ -4046,7 +4060,7 @@ class crm_company extends class_base
 			foreach($task_o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 			{
 				$row = $c->to();
-				if (!$row->prop("bill_id") && ($row->prop("on_bill") || $row->prop("send_bill")))
+				if (!$row->prop("bill_id") && ($row->prop("on_bill") || $row->prop("send_bill")) && ($filt_by_row === null || $c->prop("to") == $filt_by_row))
 				{
 					if ($row->is_property("bill_id"))
 					{
@@ -4065,6 +4079,10 @@ class crm_company extends class_base
 			$task_i = get_instance(CL_TASK);
 			foreach($task_i->get_task_bill_rows($task_o, true, $bill->prop("bill_id")) as $row)
 			{
+				if ($filt_by_row !== null && $row["row_oid"] != $filt_by_row)
+				{
+					continue;
+				}
 				$br = obj();
 				$br->set_class_id(CL_CRM_BILL_ROW);
 				$br->set_parent($bill->id());
