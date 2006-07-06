@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.81 2006/07/06 15:25:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.82 2006/07/06 15:42:25 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -1697,11 +1697,17 @@ class ml_list extends class_base
 			*/
 				$status_str = $mq->a_status[$row["status"]];
 			//};
-			$row["subject"] = html::get_change_url($arr["obj_inst"]->id(), array(
+			
+			//mõnele pole subjekti pandud
+			if(!strlen($mail_obj->name()) > 0) $mail_name = t("(Nimetu)");
+			else $mail_name = $mail_obj->name();
+			 
+			 $row["subject"] = html::get_change_url($arr["obj_inst"]->id(), array(
 				"group" => "write_mail",
 				"msg_id" => $mail_obj->id(),
 				"status" => $row["status"],
-			), $mail_obj->name());
+			), $mail_name);
+			
 			//$row["mid"] = $mail_obj->name();
 			if (!$row["patch_size"])
 			{
