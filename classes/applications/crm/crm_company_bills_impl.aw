@@ -304,6 +304,7 @@ class crm_company_bills_impl extends class_base
 		$tasks = new object_list();
 		$sum2task = array();
 		$hr2task = array();
+		$task2row = array();
 		if ($rows->count())
 		{
 			$c = new connection();
@@ -317,6 +318,7 @@ class crm_company_bills_impl extends class_base
 				$task = obj($conn["from"]);
 				$row = obj($conn["to"]);
 
+				$task2row[$task->id()][] = $row->id();
 				if ($task->prop("project") == $arr["request"]["proj"])
 				{
 					$sum2task[$task->id()] += str_replace(",", ".", $row->prop("time_to_cust")) * $task->prop("hr_price");
@@ -326,16 +328,33 @@ class crm_company_bills_impl extends class_base
 			}
 		}
 
-
 		foreach($tasks->arr() as $o)
 		{
-			$t->define_data(array(
-				"name" => html::obj_change_url($o),
-				"oid" => $o->id(),
-				"hrs" => number_format($hr2task[$o->id()], 2),
-				"hr_price" => number_format($o->prop("hr_price"),2),
-				"sum" => number_format($sum2task[$o->id()],2)
-			));
+			$rs = $task2row[$o->id()];
+			if (count($rs))
+			{
+				foreach($rs as $row_id)
+				{
+					$ro = obj($row_id);
+					$t->define_data(array(
+						"name" => $ro->prop("content"),
+						"oid" => $row_id,
+						"hrs" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")), 2),
+						"hr_price" => number_format($o->prop("hr_price"),2),
+						"sum" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")) * $o->prop("hr_price"),2)
+					));
+				}
+			}
+			else
+			{
+				$t->define_data(array(
+					"name" => html::obj_change_url($o),
+					"oid" => $o->id(),
+					"hrs" => number_format($hr2task[$o->id()], 2),
+					"hr_price" => number_format($o->prop("hr_price"),2),
+					"sum" => number_format($sum2task[$o->id()],2)
+				));
+			}
 		}
 
 		// list all meetings that are not billed yet
