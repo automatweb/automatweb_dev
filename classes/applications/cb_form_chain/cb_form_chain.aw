@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.31 2006/07/04 17:46:29 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.32 2006/07/06 18:40:11 dragut Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1504,6 +1504,12 @@ class cb_form_chain extends class_base
 			$i = $num_to_show;
 			$form_dat["rep_cnt"] = $i+1;
 		}
+		$def_caption_style = $wf->prop('def_caption_style');
+		$def_prop_style = $wf->prop('def_prop_style');
+
+		classload('layout/active_page_data');
+		active_page_data::add_site_css_style($def_caption_style);
+		active_page_data::add_site_css_style($def_prop_style);
 
 		for(; $i < $form_dat["rep_cnt"]; $i++)
 		{
@@ -1570,7 +1576,6 @@ class cb_form_chain extends class_base
 			// maybe i should use here a method that gives me webforms html and if i have to change any data (form element names etc.)
 			// then webform has methods for that --dragut
 			$styles = array();
-			classload('layout/active_page_data');
 			foreach ( safe_array( $wf->meta('xstyles') ) as $key => $value )
 			{
 				$styles['f_'.$wf->id().'_'.$i.'_'.$key] = $value;
@@ -1620,6 +1625,14 @@ class cb_form_chain extends class_base
 				// Actually, I am not sure if form_chain should know _anything_ about how webform looks like and how elements are placed
 				// maybe i should use here a method that gives me webforms html and if i have to change any data (form element names etc.)
 				// then webform has methods for that --dragut
+				if (empty($styles[$pn]['caption']))
+				{
+					$styles[$pn]['caption'] = $def_caption_style;
+				}
+				if (empty($styles[$pn]['prop']))
+				{
+					$styles[$pn]['prop'] = $def_prop_style;
+				}
 				$pd['style'] = $styles[$pn];
 				$pd['capt_ord'] = $pd['wf_capt_ord'];
 				if ($pd['type'] == 'textbox' || $pd['type'] == 'textarea')
