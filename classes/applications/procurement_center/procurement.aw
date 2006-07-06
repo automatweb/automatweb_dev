@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.3 2006/06/16 11:23:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement.aw,v 1.4 2006/07/06 13:12:14 kristo Exp $
 // procurement.aw - Hange 
 /*
 
@@ -727,7 +727,7 @@ class procurement extends class_base
 			'name' => 'new',
 			'img' => 'new.gif',
 			'tooltip' => t('Lisa kriteerium'),
-			"url" => html::get_new_url(CL_PROCUREMENT_CRITERIA, $arr["obj_inst"]->id(), array("return_url" => get_ru()))
+			"url" => html::get_new_url(CL_PROCUREMENT_CRITERIA, $arr["obj_inst"]->id(), array("return_url" => get_ru(), "alias_to" => $arr["obj_inst"]->id(), "reltype" => 6))
 		));
 		$tb->add_button(array(
 			'name' => 'delete',

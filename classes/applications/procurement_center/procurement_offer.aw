@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.3 2006/06/01 15:10:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.4 2006/07/06 13:12:14 kristo Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -129,10 +129,10 @@ class procurement_offer extends class_base
 				break;
 
 			case "p_tb":
-				if ($arr["obj_inst"]->prop("state") != OFFER_STATE_NEW)
+				/*if ($arr["obj_inst"]->prop("state") != OFFER_STATE_NEW)
 				{
 					return PROP_IGNORE;
-				}
+				}*/
 				$this->_p_tb($arr);
 				break;
 
@@ -345,7 +345,7 @@ class procurement_offer extends class_base
 		$data = $o->meta("defaults");
 		foreach($reqs->arr() as $req)
 		{
-			if ($data[$req->id()])
+			if ($this->can("view", $data[$req->id()]))
 			{
 				$of = obj($data[$req->id()]);
 				$hrs += $of->prop("time_to_install");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.4 2006/06/16 11:23:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_requirement.aw,v 1.5 2006/07/06 13:12:14 kristo Exp $
 // procurement_requirement.aw - N&otilde;ue 
 /*
 
@@ -176,7 +176,7 @@ class procurement_requirement extends class_base
 		));
 		$t->define_field(array(
 			"name" => "nonsuitable",
-			"caption" => t("Tagasi l&uuml;katud"),
+			"caption" => t("L&auml;bir&auml;&auml;kimistele"),
 			"align" => "center"
 		));
 		$t->define_field(array(
