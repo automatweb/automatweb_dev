@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.80 2006/06/21 10:11:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.81 2006/07/06 15:25:28 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2504,14 +2504,17 @@ class ml_list extends class_base
 		}
 		$msg_data["return"] = "id";
 		//uhh......minuarust on selle kõigega ikka miski jama
-		if((!$msg_obj->prop("html_mail")) && $msg_data["send_away"])
+		//tõenäoliselt on varsti jälle miski probleem selle kohaga...a noh
+		//no kui kirja kirjutad html vaates ja ei pane html kirjaks, siis on ikka enda viga kui miski vigane värk ära saadetakse
+		//eks ma praegu kommenteerin selle koha välja... niikuinii on kellelgi varsti jälle vaja seda tagasi
+/*		if((!$msg_obj->prop("html_mail")) && $msg_data["send_away"])
 		{
 			//$msg_data["message"] = str_replace("\n", "", $msg_data["message"]);
 			$msg_data["message"] = str_replace("<br />", "\n", $msg_data["message"]);
 			$msg_data["message"] = strip_tags($msg_data["message"]);
 			$msg_data["message"] = html_entity_decode($msg_data["message"]);
 		}
-		$writer = get_instance(CL_MESSAGE);
+*/		$writer = get_instance(CL_MESSAGE);
 		$writer->init_class_base();
 		$message_id = $writer->submit($msg_data);
 
@@ -2525,7 +2528,7 @@ class ml_list extends class_base
 				"reltype" => "RELTYPE_SENDER",
 			));
 		}
-
+		//arr($msg_data["message"]);
 		$msg_obj->set_prop("message" , $msg_data["message"]);
 		$msg_obj->save();
 
