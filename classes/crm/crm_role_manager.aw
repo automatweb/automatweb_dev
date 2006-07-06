@@ -107,11 +107,16 @@ class crm_role_manager extends class_base
 
 			$persons = array();
 			$rels = array();
+			/*
 			$ol = new object_list($filt);
 			foreach($ol->arr() as $tmp_o)
 			{
 				$persons_f[$tmp_o->prop("person")] = $tmp_o->prop("person");
-			}
+			}*/
+			// persons_f must contain all project team members
+			$pi = get_instance(CL_PROJECT);
+			$persons_f = $pi->get_team($proj);
+			
 
 			$filt["project"] = $r["to_project"];
 			$ol = new object_list($filt);
