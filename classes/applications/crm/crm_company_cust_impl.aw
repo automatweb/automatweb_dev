@@ -392,7 +392,7 @@ class crm_company_cust_impl extends class_base
 		));
 		$link = $this->mk_my_orb('new',array(
 				'parent' => $arr['obj_inst']->id(),
-				'alias_to' => $arr["obj_inst"]->id(),
+				'alias_to' => "%s",
 				'reltype' => 3, // crm_company.CUSTOMER,
 				'return_url' => get_ru()
 			),
@@ -402,7 +402,7 @@ class crm_company_cust_impl extends class_base
 
 		$link = $this->mk_my_orb('new',array(
 				'parent' => $arr['obj_inst']->id(),
-				'alias_to' => $arr['obj_inst']->id(),
+				'alias_to' => "%s",
 				'reltype' => 3, // crm_company.CUSTOMER,
 				'return_url' => get_ru()
 			),
@@ -1901,11 +1901,11 @@ class crm_company_cust_impl extends class_base
 				$parm = array(
 					'parent'=>$p_str,
 					'text' => $c->prop("to.name"),
-					'link' => str_replace("%s", $c->prop("to"), $link)
+					'link' => str_replace(urlencode("%s"), $c->prop("to"), $link)
 				);
 				if ($oncl !== NULL)
 				{
-					$parm["onClick"] = str_replace("%s", $c->prop("to"), $oncl);
+					$parm["onClick"] = str_replace(urlencode("%s"), $c->prop("to"), $oncl);
 					$parm["link"] = "#";
 				}
 				$tb->add_menu_item($parm);
