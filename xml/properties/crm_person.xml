@@ -1028,6 +1028,16 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>stats_s_type</name>
+            <table>objects</table>
+            <group>my_stats</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <caption>Vaade</caption>
+      </property>
+      <property>
             <name>stats_s_show</name>
             <table>objects</table>
             <group>my_stats</group>

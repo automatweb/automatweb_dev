@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.135 2006/06/29 22:22:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.136 2006/07/06 12:38:05 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -365,6 +365,9 @@ Arvutioskus: Programm	Valik või tekstikast / Tase	Valik
 @property stats_s_cust type=textbox store=no
 @caption Klient
 
+@property stats_s_type type=select store=no
+@caption Vaade
+
 @property stats_s_show type=submit no_caption=1
 @caption N&auml;ita
 
@@ -711,6 +714,14 @@ class crm_person extends class_base
 
 			case "stats_s_cust":
 				$data["value"] = $arr["request"]["stats_s_cust"];
+				break;
+
+			case "stats_s_type":
+				$data["value"] = $arr["request"]["stats_s_type"];
+				$data["options"] = array(
+					"" => t("Kokkuv&otilde;te"),
+					"rows" => t("Ridade kaupa")
+				);
 				break;
 
 			case "my_stats":
@@ -2970,6 +2981,11 @@ class crm_person extends class_base
 
 	function _get_my_stats($arr)
 	{
+		if ($arr["request"]["stats_s_type"] == "rows")
+		{
+			$this->_get_my_stats_rows($arr);
+			return;
+		}
 		$i = get_instance("applications/crm/crm_company_stats_impl");
 		if (!$arr["request"]["MAX_FILE_SIZE"])
 		{
@@ -3385,6 +3401,150 @@ class crm_person extends class_base
 			"img" => "delete.gif",
 			"action" => "delete_objects"
 		));
+	}
+
+	function _init_my_stats_rows_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"sortable" => 1,
+			"numeric" => 1,
+			"type" => "time",
+			"format" => "d.m.Y",
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "cust",
+			"caption" => t("Klient"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "proj",
+			"caption" => t("Projekt"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "task",
+			"caption" => t("Toimetus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "content",
+			"caption" => t("Rea sisu"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "length",
+			"caption" => t("Kestvus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "state",
+			"caption" => t("Staatus"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "bill_state",
+			"caption" => t("Arve staatus"),
+			"align" => "center",
+		));
+	}
+
+	function _get_my_stats_rows($arr)
+	{
+		$r = $arr["request"];
+		// list all rows for me and the time span
+		$r["stats_s_from"] = date_edit::get_timestamp($r["stats_s_from"]);
+		$r["stats_s_to"] = date_edit::get_timestamp($r["stats_s_to"]);
+
+		if ($r["stats_s_time_sel"] != "")
+		{
+			classload("core/date/date_calc");
+			switch($r["stats_s_time_sel"])
+			{
+				case "today":
+					$r["stats_s_from"] = time() - (date("H")*3600 + date("i")*60 + date("s"));
+					$r["stats_s_to"] = time();
+					break;
+
+				case "yesterday":
+					$r["stats_s_from"] = time() - ((date("H")*3600 + date("i")*60 + date("s")) + 24*3600);
+					$r["stats_s_to"] = time() - (date("H")*3600 + date("i")*60 + date("s"));
+					break;
+
+				case "cur_week":
+					$r["stats_s_from"] = get_week_start();
+					$r["stats_s_to"] = time();
+					break;
+
+				case "cur_mon":
+					$r["stats_s_from"] = get_month_start();
+					$r["stats_s_to"] = time();
+					break;
+
+				case "last_mon":
+					$r["stats_s_from"] = mktime(0,0,0, date("m")-1, 1, date("Y"));
+					$r["stats_s_to"] = get_month_start();
+					break;
+			}
+		}
+
+		$p = get_current_person();
+		$ol = new object_list(array(
+			"class_id" => CL_TASK_ROW,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"impl" => $p->id(),
+			"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"])
+		));
+
+		classload("vcl/table");
+		$t = new vcl_table;
+		$this->_init_my_stats_rows_t($t);
+
+		$row2task = array();
+		$c = new connection();
+		foreach($c->find(array("to" => $ol->ids(), "from.class_id" => CL_TASK, "type" => "RELTYPE_ROW")) as $c)
+		{
+			$row2task[$c["to"]] = $c["from"];
+		}
+
+		$bi = get_instance(CL_BUG);
+		foreach($ol->arr() as $o)
+		{
+			$bs = "";
+			if ($this->can("view", $o->prop("bill_id")))
+			{
+				$b = obj($o->prop("bill_id"));
+				$bs = sprintf(t("Arve nr %s"), $b->prop("bill_no")); 
+			}
+			else
+			if ($o->prop("on_bill"))
+			{
+				$bs = t("Arvele");
+			}
+			
+			$task = obj($row2task[$o->id()]);
+			if (!is_oid($task->id()))
+			{
+				continue;
+			}
+			$t->define_data(array(
+				"date" => $o->prop("date"),
+				"cust" => html::obj_change_url($task->prop("customer")),
+				"proj" => html::obj_change_url($task->prop("project")),
+				"task" => html::obj_change_url($task),
+				"content" => $bi->_split_long_words($o->prop("content")),
+				"length" => $o->prop("time_real"),
+				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
+				"bill_state" => $bs
+			));
+		}
+
+		$t->set_default_sortby("date");
+		$t->sort_by();
+		$arr["prop"]["value"] = $t->draw();
 	}
 }
 ?>
