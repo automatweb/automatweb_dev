@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.111 2006/07/05 11:09:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.112 2006/07/06 13:44:07 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1471,9 +1471,10 @@ class task extends class_base
 			"align" => "center",
 			"filter" => array(
 				t("Jah"),
-				t("Ei")
+				t("Ei"),
+				t("Arvel")
 			),
-			"filter_compare" => array(&$this, "__done_filt_comp")
+			"filter_compare" => array(&$this, "__bill_filt_comp")
 		));
 
 		$t->define_field(array(
@@ -1491,23 +1492,6 @@ class task extends class_base
 			"name" => "sel",
 			"field" => "oid"
 		));
-	}
-
-	function __bill_filt_comp($key, $str, $row)
-	{
-		if (!is_oid($row["oid"]))
-		{
-			return true;
-		}
-		if ($str == t("Jah") && !$row["bill_val"])
-		{
-			return false;
-		}
-		if ($str == t("Ei") && $row["bill_val"])
-		{
-			return false;
-		}
-		return true;
 	}
 
 	function __com_filt_comp($key, $str, $row)
@@ -1538,6 +1522,27 @@ class task extends class_base
 			return false;
 		}
 		if ($str == t("Ei") && $row["done_val"])
+		{
+			return false;
+		}
+		return true;
+	}
+
+	function __bill_filt_comp($key, $str, $row)
+	{
+		if (!is_oid($row["oid"]))
+		{
+			return true;
+		}
+		if ($str == t("Arvel") && $row["bill_val"] != "billed")
+		{
+			return false;
+		}
+		if ($str == t("Jah") && ($row["bill_val"] == 0 || $row["bill_val"] == "billed"))
+		{
+			return false;
+		}
+		if ($str == t("Ei") && ($row["bill_val"] == 1 || $row["bill_val"] == "billed"))
 		{
 			return false;
 		}
@@ -1708,14 +1713,17 @@ class task extends class_base
 			}
 
 			$onbill = "";
+			$bv = "";
 			if ($row->prop("bill_id"))
 			{
 				$onbill = sprintf(t("Arve nr %s"), $bno);
+				$bv = "billed";
 			}
 			else
 			if ($row->prop("bill_no"))
 			{
 				$onbill = sprintf(t("Arve nr %s"), $row->prop("bill_no"));
+				$bv = "billed";
 			}
 			else
 			{
@@ -1724,6 +1732,7 @@ class task extends class_base
 					"value" => 1,
 					"checked" => ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill"))
 				));
+				$bv = ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill"));
 			}
 
 			$t->define_data(array(
@@ -1767,7 +1776,7 @@ class task extends class_base
 				)),
 				"done_val" => $row->class_id() == CL_CRM_MEETING ? $row->prop("is_done") : $row->prop("done"),
 				"on_bill" => $onbill,
-				"bill_val" => ($row->class_id() == CL_CRM_MEETING ? $row->prop("send_bill") : $row->prop("on_bill")),
+				"bill_val" => $bv,
 				"comments" => $comments,
 				"comments_cnt" => $comments_cnt,
 				"oid" => $row->id(),
