@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.7 2006/07/06 13:52:57 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.8 2006/07/07 12:45:44 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -392,7 +392,7 @@ class persons_webview extends class_base
 				break;
 			case "proffession":
 				foreach($workers as $worker)
-				{
+				{	
 					$jrk = 0;
 					if(is_oid($worker["worker"]->prop("rank")))
 					{
@@ -403,13 +403,13 @@ class persons_webview extends class_base
 				}
 				break;
 			case "jrk":
+				return $workers;
 // 				foreach($workers as $worker)
 // 				{
 // 					$workers_tmp[] = array("sort" => $worker["worker"]->prop("lastname"), "data" => $worker);
 // 				}
 // 				break;
 		}
-	
 		foreach ($workers_tmp as $key => $row) {
 			$data[$key]  = $row['data'];
 			$sort[$key] = $row['sort'];
@@ -417,7 +417,7 @@ class persons_webview extends class_base
 		if($sort_order == "ASC") $sort_order = SORT_ASC;
 		else $sort_order = SORT_DESC;
 		array_multisort($sort, $sort_order, $workers_tmp);
-		
+
 		$workers = array();
 		foreach ($workers_tmp as $data)// teeb massiivi vanale kujule tagasi
 		{
@@ -558,14 +558,23 @@ class persons_webview extends class_base
 		if($view) $this->view = $this->meta["view"][$view]; // juhul kui tuleb kuskilt urlist miski tase,... 
 		else $this->view = $this->meta["view"][0]; // algul paneb siis metasse esimese (default) taseme vaate,... 
 		
-		if(is_oid($section)) $company_id = $section;
-		else $company_id = $this->view_obj->prop("company");
+		if(is_oid($section)){
+			$section_obj = obj($section);
+			if(($section_obj->class_id() == CL_CRM_SECTION)  || ($section_obj->class_id() == CL_CRM_COMPANY))
+			{
+				$company = $section_obj;
+			}
+		}
 		
-		if(!is_oid($company_id)) return t("pole asutust valitud");
-		
+		if(!is_object($company))
+		{
+			$company_id = $this->view_obj->prop("company");
+			if(!is_oid($company_id)) return t("pole asutust valitud");
+			$company = obj($company_id);
+		}
 		if(!$level) $level = 0;
 		$this->set_levels($level);//teeb siis erinevatest tasemetest massiivi, mida üldse kuvada ja paneb selle muutujasse $this->levels
-		$company = obj($company_id);
+		
 		return $this->parse_company($company);
 	}
 	
@@ -583,7 +592,8 @@ class persons_webview extends class_base
 			foreach($sections as $section)
 				{
 					$this->section = $section; // eks seda läheb vast mujal ka vaja... ametinimetuses näiteks
-					if((!in_array($section->id(), $this->view_obj->prop("departments")) || !sizeof($this->view_obj->prop("departments"))>0)) continue;
+					if(!(in_array($section->id(), $this->view_obj->prop("departments")))
+						&& sizeof($this->view_obj->prop("departments"))>0) continue;
 					if($this->view["with_persons"])
 					{
 						$workers = $this->get_workers($section);
