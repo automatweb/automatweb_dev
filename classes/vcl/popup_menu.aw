@@ -37,6 +37,8 @@ class popup_menu extends aw_template
 		@param link required type=string
 			Item's link
 
+		@comment
+			adds new item to popup menu
 		@examples
                         $popup_menu = get_instance("vcl/popup_menu");
                         $popup_menu->begin_menu("my_popup_menu");
@@ -57,6 +59,8 @@ class popup_menu extends aw_template
 		@param icon required type=string
 			Icon image name
 
+		@comment
+			returns the html source of the popup menu
 		@examples
                         $popup_menu = get_instance("vcl/popup_menu");
                         $popup_menu->begin_menu("my_popup_menu");
