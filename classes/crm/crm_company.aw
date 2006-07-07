@@ -2049,7 +2049,7 @@ class crm_company extends class_base
 				break;
 
 			case "my_stats_s_type":
-				$data["value"] = $arr["request"]["stats_s_type"];
+				$data["value"] = $arr["request"]["my_stats_s_type"];
 				$data["options"] = array(
 					"" => t("Kokkuv&otilde;te"),
 					"rows" => t("Ridade kaupa")

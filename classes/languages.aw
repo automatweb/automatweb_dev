@@ -131,6 +131,7 @@ class languages extends aw_template
 		if ($row)
 		{
 			aw_session_set("LC",$row["acceptlang"]);
+			aw_global_set("LC",$row["acceptlang"]);
 		}
 		$uid = aw_global_get("uid");
 		if (!empty($uid))
@@ -146,6 +147,16 @@ class languages extends aw_template
 			setcookie("lang_id",$id,time()+aw_ini_get("languages.cookie_lifetime"),"/");
 		};
 		aw_global_set("lang_id", $id);
+
+		if (!is_admin())
+		{
+			// read the language from active lang
+			if ($GLOBALS["cfg"]["user_interface"]["use_site_lang"] == 1)
+			{
+				$_tmp = aw_global_get("LC");
+				$GLOBALS["cfg"]["user_interface"]["default_language"] = $_tmp;
+			}
+		}
 		return $id;
 	}
 	

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.137 2006/07/07 10:27:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.138 2006/07/07 14:08:52 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3445,13 +3445,19 @@ class crm_person extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "sum",
+			"caption" => t("Summa"),
+			"align" => "center",
+			"numeric" => 1
+		));
+		$t->define_field(array(
 			"name" => "bill_state",
 			"caption" => t("Arve staatus"),
 			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "check",
-			"caption" => t("Vali"),
+			"caption" => t("<a href='#' onClick='aw_sel_chb(document.changeform,\"sel\")'>Vali</a>"),
 			"align" => "center",
 		));
 	}
@@ -3540,6 +3546,9 @@ class crm_person extends class_base
 			{
 				continue;
 			}
+
+			$sum = str_replace(",", ".", $o->prop("time_to_cust"));
+			$sum *= str_replace(",", ".", $task->prop("hr_price"));
 			$t->define_data(array(
 				"date" => $o->prop("date"),
 				"cust" => html::obj_change_url($task->prop("customer")),
@@ -3549,12 +3558,21 @@ class crm_person extends class_base
 				"length" => $o->prop("time_real"),
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
 				"bill_state" => $bs,
-				"check" => $check
+				"check" => $check,
+				"sum" => number_format($sum, 2)
 			));
+			$l_sum += $o->prop("time_real");
+			$s_sum += $sum;
 		}
 
 		$t->set_default_sortby("date");
 		$t->sort_by();
+
+		$t->define_data(array(
+			"content" => t("<b>Summa</b>"),
+			"length" => number_format($l_sum, 2),
+			"sum" => number_format($s_sum, 2)
+		));
 		$arr["prop"]["value"] = $t->draw();
 	}
 }
