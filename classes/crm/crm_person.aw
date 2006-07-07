@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.138 2006/07/07 14:08:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.139 2006/07/07 14:25:32 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3507,7 +3507,7 @@ class crm_person extends class_base
 			"lang_id" => array(),
 			"site_id" => array(),
 			"impl" => $p->id(),
-			"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"])
+			"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"]),
 		));
 
 		classload("vcl/table");
@@ -3518,6 +3518,14 @@ class crm_person extends class_base
 		$c = new connection();
 		foreach($c->find(array("to" => $ol->ids(), "from.class_id" => CL_TASK, "type" => "RELTYPE_ROW")) as $c)
 		{
+			if ($arr["request"]["stats_s_cust"] != "")
+			{
+				$task = obj($c["from"]);
+				if (strpos(mb_strtolower($task->prop("customer.name"), aw_global_get("charset")), mb_strtolower($arr["request"]["stats_s_cust"], aw_global_get("charset"))) === false)
+				{
+					continue;
+				}
+			}
 			$row2task[$c["to"]] = $c["from"];
 		}
 
