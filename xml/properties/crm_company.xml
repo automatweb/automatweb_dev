@@ -2261,6 +2261,15 @@
             <field>stats_list</field>
       </property>
       <property>
+            <name>my_stats_tb</name>
+            <table>objects</table>
+            <group>stats_my</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>my_stats_tb</field>
+      </property>
+      <property>
             <name>my_stats_s_from</name>
             <table>objects</table>
             <group>stats_my</group>
@@ -2295,6 +2304,15 @@
             <store>no</store>
             <field>my_stats_s_cust</field>
             <caption>Klient</caption>
+      </property>
+      <property>
+            <name>my_stats_s_type</name>
+            <table>objects</table>
+            <group>stats_my</group>
+            <type>select</type>
+            <store>no</store>
+            <field>my_stats_s_type</field>
+            <caption>Vaade</caption>
       </property>
       <property>
             <name>my_stats_s_show</name>

@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.136 2006/07/06 12:38:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.137 2006/07/07 10:27:09 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3449,6 +3449,11 @@ class crm_person extends class_base
 			"caption" => t("Arve staatus"),
 			"align" => "center",
 		));
+		$t->define_field(array(
+			"name" => "check",
+			"caption" => t("Vali"),
+			"align" => "center",
+		));
 	}
 
 	function _get_my_stats_rows($arr)
@@ -3513,6 +3518,7 @@ class crm_person extends class_base
 		$bi = get_instance(CL_BUG);
 		foreach($ol->arr() as $o)
 		{
+			$check = "";
 			$bs = "";
 			if ($this->can("view", $o->prop("bill_id")))
 			{
@@ -3523,6 +3529,10 @@ class crm_person extends class_base
 			if ($o->prop("on_bill"))
 			{
 				$bs = t("Arvele");
+				$check = html::checkbox(array(
+					"name" => "sel[]",
+					"value" => $o->id()
+				));
 			}
 			
 			$task = obj($row2task[$o->id()]);
@@ -3538,7 +3548,8 @@ class crm_person extends class_base
 				"content" => $bi->_split_long_words($o->prop("content")),
 				"length" => $o->prop("time_real"),
 				"state" => $o->prop("done") ? t("Tehtud") : t("Tegemata"),
-				"bill_state" => $bs
+				"bill_state" => $bs,
+				"check" => $check
 			));
 		}
 

@@ -545,7 +545,10 @@
             </ATTACH>
             <PREDICATE>
                   <value>9</value>
-                  <clid>CL_TASK</clid>
+                  <clid>
+                        <num_0>CL_TASK</num_0>
+                        <num_1>CL_CRM_CALL</num_1>
+                  </clid>
                   <caption>Eeldustegevus</caption>
             </PREDICATE>
       </reltypes>

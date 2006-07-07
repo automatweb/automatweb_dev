@@ -736,6 +736,8 @@ default group=org_objects
 
 @default group=stats_my
 
+	@property my_stats_tb type=toolbar no_caption=1 store=no
+
 	@property my_stats_s_from type=date_select store=no
 	@caption Alates
 
@@ -747,6 +749,9 @@ default group=org_objects
 
 	@property my_stats_s_cust type=textbox store=no
 	@caption Klient
+
+	@property my_stats_s_type type=select store=no
+	@caption Vaade
 
 	@property my_stats_s_show type=submit no_caption=1
 	@caption N&auml;ita
@@ -2043,6 +2048,14 @@ class crm_company extends class_base
 				}
 				break;
 
+			case "my_stats_s_type":
+				$data["value"] = $arr["request"]["stats_s_type"];
+				$data["options"] = array(
+					"" => t("Kokkuv&otilde;te"),
+					"rows" => t("Ridade kaupa")
+				);
+				break;
+
 			case "my_stats_s_from":
 			case "my_stats_s_to":
 				$data["value"] = date_edit::get_timestamp($arr["request"][$data["name"]]);
@@ -2057,8 +2070,18 @@ class crm_company extends class_base
 				$arr["request"]["stats_s_cust"] = $arr["request"]["my_stats_s_cust"];
 				$arr["request"]["stats_s_from"] = $arr["request"]["my_stats_s_from"];
 				$arr["request"]["stats_s_to"] = $arr["request"]["my_stats_s_to"];
+				$arr["request"]["stats_s_type"] = $arr["request"]["my_stats_s_type"];
 				$arr["request"]["stats_s_time_sel"] = $arr["request"]["my_stats_s_time_sel"];
 				$i->_get_my_stats($arr);
+				break;
+
+			case "my_stats_tb":
+				$arr["prop"]["vcl_inst"]->add_button(array(
+					"name" => "creab",
+					"img" => "save.gif",
+					"tooltip" => t("Loo arve"),
+					"action" => "create_bill"
+				));
 				break;
 
 			case "server_folder":
@@ -3933,7 +3956,7 @@ class crm_company extends class_base
 	}
 
 	/**
-		@attrib name=create_bill
+		@attrib name=create_bill all_args=1
 	**/
 	function create_bill($arr)
 	{

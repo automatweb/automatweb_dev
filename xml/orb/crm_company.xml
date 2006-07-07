@@ -153,7 +153,7 @@
 			</function>
 		</action>
 
-		<action name="create_bill">
+		<action name="create_bill" all_args="1">
 			<function name="create_bill">
 				<arguments>
 				</arguments>
