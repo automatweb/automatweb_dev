@@ -216,6 +216,8 @@ class acl_manager extends class_base
 			"url" => "javascript:changeform.submit()"
 		));
 
+		$o = obj($r["id"]);
+		$t->add_cdata($o->name());
 		$this->vars(array(
 			"toolbar" => $t->get_toolbar()
 		));
