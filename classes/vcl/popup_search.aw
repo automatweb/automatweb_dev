@@ -331,7 +331,7 @@ class popup_search extends aw_template
 
 	/**
 		
-		@attrib name=do_search
+		@attrib name=do_search api=1
 
 		@param id optional
 		@param pn required 
@@ -344,6 +344,8 @@ class popup_search extends aw_template
 		@comment
 			clid - not filtered by, if clid == 0
 			append_html - additional html, inserted to tmpl {VAR:append}
+		@returns
+			returns the html for search form & results
 	**/
 	function do_search($arr)
 	{
@@ -354,6 +356,60 @@ class popup_search extends aw_template
 		return $form_html."<br>".$res_html;
 	}
 
+	/**
+		@attrib params=pos
+		@param htmlc required type=object
+			cfg/htmlclient object instance reference 
+		@param arr required type=array
+			array of params, same as #do_search 'es params.
+		@comment
+			inserts additional props to search form.
+			This function can be overridden by extending class to use add some specific properties.
+			Example is taken from crm_participant_search class
+		@examples
+			// simple overriding example basing crm_participant_search_class
+			// actually this is kinda' half of the example but gives the idea. For full example look into crm_participant_search.
+
+			class crm_participant_search extends popup_search
+			{
+				function crm_participant_search()
+				{
+					$this->popup_search();
+				}
+
+
+				function _insert_form_props(&$htmlc, $arr)
+				{
+					parent::_insert_form_props($htmlc, $arr);
+
+					$htmlc->add_property(array(
+						"name" => "s[search_co]",
+						"type" => "textbox",
+						"value" => $arr["s"]["search_co"],
+						"caption" => t("Organisatsioon"),
+					));
+				}
+
+				function _get_filter_props(&$filter, $arr)
+				{
+					parent::_get_filter_props($filter, $arr);
+
+					if (!$_GET["MAX_FILE_SIZE"])
+					{
+						$arr["s"]["show_vals"]["cur_co"] = 1;
+					}
+
+					if ($arr["s"]["search_co"] != "")
+					{
+						$filter["CL_CRM_PERSON.work_contact.name"] = map("%%%s%%", array_filter(explode(",", $arr["s"]["search_co"]), create_function('$a','return $a != "";')));
+					}
+
+					if (is_array($filter["oid"]) && !count($filter["oid"]))
+					{
+						$filter["oid"] = -1;
+					}
+			}
+	**/
 	function _insert_form_props(&$htmlc, $arr)
 	{
 		$htmlc->add_property(array(
@@ -403,7 +459,22 @@ class popup_search extends aw_template
 
 		return $html;
 	}
-
+	
+	/**
+		@attrib params=pos
+		@param filter required type=array
+			filter array instance
+		@param arr required type=array
+			array of params, same as #do_search 'es params.
+		@comment
+			manages data coming from the form and makes it readable for filter.
+			This function can be overridden from extending class. This is needed when you extend a class to popup_search() and add some 
+			specific new pops with overriding _insert_form_props() function, then you have to manage the data coming from these new props
+			in here.
+			Little example is shown on the #_insert_form_props function documentation
+		@examples
+			#_insert_form_props
+	**/
 	function _get_filter_props(&$filter, $arr)
 	{
 		if ($arr["s"]["name"] != "")
@@ -753,6 +824,10 @@ function aw_get_el(name,form)
 
 		@param clid optional type=array
 			The class id to search
+		@comment
+			Returns the thml that displays search button for the user
+		@returns
+			html code for search button..
 	**/
 	function get_popup_search_link($arr)
 	{
