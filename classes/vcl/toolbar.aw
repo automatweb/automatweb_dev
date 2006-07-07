@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.13 2006/03/22 13:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.14 2006/07/07 10:46:19 tarvo Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -30,7 +30,27 @@ class toolbar extends aw_template
 		$this->menu_inited = true;
 		$this->read_template("js_popup_menu.tpl");
 	}
-
+	/**
+		@attrib params=name api=1
+		
+		@param name required type=string
+			Name for the button
+		@param img optional type=string
+			An image location for the button
+		@param tooltip optional type=string
+			A text which is displayed while hovering over the button
+		@param side optional type=bool
+			If set to true, button is displayed on right side(by default its on left).
+		@comment
+			Adds a menu button, under where one can add menu items
+		@examples
+			$toolbar->add_menu_button(array(
+				"name" => "delete",
+				"tooltip" => t("Kustuta"),
+				"img" => "dele.gif",
+			));
+			//Whitout img, new (green document) icon is used
+	**/
 	function add_menu_button($arr)
 	{
 		if (empty($this->menu_inited))
@@ -50,7 +70,39 @@ class toolbar extends aw_template
 		$arr["id"] = $name;
 		$this->matrix[$arr["name"]] = $arr;
 	}
-
+	/**
+		@attrib params=name api=1
+		@param parent required type=string
+			Name of the parent menu button under what the item is added
+		@param name required type=string
+			Name of the menu item
+		@param text optional type=string
+			Capture of the menu item.
+		@param title
+			Title of the menu item.
+		@param link
+			An URL, to where the item links to.
+		@param action
+			A action name which item shold trigger.
+		@param onClick
+			An onclick action.(javascript etc)
+		@comment
+			Adds menu item under specified menu button.
+		@examples
+			$toolbar->add_menu_button(array(
+				"name" => "delete",
+				"tooltip" => t("Kustuta"),
+				"img" => "dele.gif",
+			));
+			$tmp->add_menu_item(array(
+				"parent" => "delete",
+				"text" => t("fail"),
+				"title" => t("kustuta fail"),
+				"link" => "http://www.www.www",
+				"action" => "delete_file", // generates submit_changeform('delete_file')
+			));
+			// when both link and action are set, action overwrites link.
+	**/
 	function add_menu_item($arr)
 	{
 		global $mc_counter;
@@ -87,11 +139,60 @@ class toolbar extends aw_template
 		$this->menus[$arr["parent"]] .= $rv;
 	}
 
+	/**
+		@attrib params=name api=1
+		@param parent required type=string
+			Menu button name, to where the separator should be added
+		@comment
+			Adds an separator for to specified menu button
+		@examples
+			$toolbar->add_menu_button(array(
+				"name" => "delete",
+				"tooltip" => t("Kustuta"),
+				"img" => "dele.gif",
+			));
+			$tmp->add_menu_separator(array("parent"=>"tmp"));
+			// adds just one lonely separator to the delete menu button
+
+	**/
 	function add_menu_separator($arr)
 	{
 		$this->menus[$arr["parent"]] .= '<div class="menuItemSep"></div>'."\n";
 	}
 
+	/**
+		@attrib params=name api=1
+		@param name required type=string
+			Name of the submenu
+		@param text optional type=string
+			Text to display for the item
+		@param parent required type=string
+			Name of the item under what to add the submenu
+		@comment
+			Adds an submenu to the toolbar menu item. Basically you can go to infinite depths(i think so).
+		@examples
+			$tmp->add_menu_button(array(
+				"name" => "tmp",
+				//"tooltip" => t("Kustuta"),
+				//"img" => "delete.gif",
+			));
+			$tmp->add_menu_item(array(
+				"parent" => "tmp",
+				"text" => t("text"),
+				"title" => t("tiitel"),
+			));
+			$tmp->add_sub_menu(array(
+				"parent" => "tmp",
+				"name" => "uu",
+				"text" => t("suubmenuuu"),
+			));
+			$tmp->add_menu_item(array(
+				"parent" => "uu",
+				"text" => t("teine tekst"),
+				"title" => t("teine tiitel"),
+			));
+
+	**/
 	function add_sub_menu($arr)
 	{
 		$arr["sub_menu_id"] = $arr["name"];
@@ -104,7 +205,7 @@ class toolbar extends aw_template
 
 		$this->menus[$arr["parent"]] .= $rv;
 	}
-
+	
 	function build_menus()
 	{
 		static $init_done = false;
@@ -120,8 +221,36 @@ class toolbar extends aw_template
 		};
 	}
 
-	////
-	// !Adds a button to the toolbar
+	/**
+		@attribs params=name api=1
+		@param name required type=string
+			Name of the button
+		@param tooltip required type=string
+			Text to be displayed for the button
+		@param img optional type=string
+			Icon url to display.
+		@param action optional type=string
+			A action name which item shold trigger.
+		@param url optional type=string
+			An URL to where button should link to.
+		@param target optional type=string
+			Sets the links target.
+		@param confirm optional type=string
+			If is set, asks for confirmation displaying given text as question.
+		@param onClick optional type=string
+			If set, this javascript code etc is triggered on click of the button:)
+		@comment
+			Adds button to toolbar.
+		@examples
+			$tmp = get_instance("vcl/toolbar");
+			$tmp->add_button(array(
+				"name" => "neti",
+				"url" => "http://www.neti.ee",
+				"tooltip" => t("neti.ee"),
+				"confirm" => t("Oled sa kindel et tahad ikka sinna saidile minna?"),
+			));
+			// adds a button what links after confirmation dialog to neti.ee. Because img isn't set, tooltip is shown instead.
+	**/
 	function add_button($args = array())
 	{
 		$args["type"] = "button";
@@ -145,21 +274,40 @@ class toolbar extends aw_template
 		$this->matrix[$args["name"]] = $args;
 	}
 
+	/**
+		@attrib params=pos api=1
+		@param nm required type=string
+			Item name to be removed from toolbar.
+		@comment
+			Removes given item from toolbar
+	**/
 	function remove_button($nm)
 	{
 		unset($this->matrix[$nm]);
 	}
 
-	////
-	// !Adds a separator to the toolbar
+	/**
+		@attrib params=name api=1
+		@param side optional type=bool
+			If set to true, shows the separator on the right. By default on left.
+		@comment
+			Adds separator to the toolbar.
+	**/
 	function add_separator($args = array())
 	{
 		$args["type"] = "separator";
 		$this->matrix[] = $args;
 	}
 
-	////
-	// !Allows to add custom data to the boolar
+	/**
+		@attrib params=pos api=1
+		@param content required type=string
+			Text to be displayed.
+		@param side optional type=bool
+			If set to true, text will be displayed on the right. By default on left.
+		@comment
+			Adds a simple text to the toolbar.
+	**/
 	function add_cdata($content,$side = "")
 	{
 		$args = array(
@@ -170,19 +318,31 @@ class toolbar extends aw_template
 		$this->matrix[] = $args;
 	}
 
-	////
-	// !Allows the user to add cdata to the right side of the toolbar in the end - only one of these is supported
-	function add_end_cdata($content)
-	{
-		$this->end_sep[] = array(
-			'data' => $content
-		);
-	}
-
-	////
-	// !Returns the toolbar
-	// id(string) - if set, the value if this is added to the names of all elements
-	// 		This allows us to have multiple toolbars on a page
+	/**
+		@attrib params=name api=1
+		@param id optional type=string
+			If set, the value if this is added to the names of all elements. This allows us to have multiple toolbars on a page (names won't repeat).
+		@param target optional
+			Sets target for menu item links (overrides previously set targets).
+		@param no_target optional
+			If set, 'target' param will be ignored(whats the point?).
+		@comment
+			Generetes and finalizes the toolbar
+		@returns
+			Returns code of the toolbar
+		@examples
+			$tmp = get_instance("vcl/toolbar");
+			$tmp->add_button(array(
+				"name" => "uus",
+				"url" => "http://www.neti.ee",
+				"tooltip" => t("Kustuta"),
+			));
+			print $tmp->get_toolbar(array(
+				"no_target" => true,
+				"target" => "a",
+			));
+			// prints a toolbar with one item on it called kustuta, which openes neti.ee in new window(or in a frame if there is one named 'a').
+	**/
 	function get_toolbar($args = array())
 	{
 		if (!empty($this->menu_inited))
