@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.112 2006/07/06 13:44:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.113 2006/07/07 14:56:50 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1472,7 +1472,8 @@ class task extends class_base
 			"filter" => array(
 				t("Jah"),
 				t("Ei"),
-				t("Arvel")
+				t("Arvel"),
+				t("Arveta")
 			),
 			"filter_compare" => array(&$this, "__bill_filt_comp")
 		));
@@ -1534,6 +1535,16 @@ class task extends class_base
 		{
 			return true;
 		}
+		if ($str == t("Arveta") && $row["bill_val"] != "billed")
+		{
+			return true;
+		}
+		else
+		if ($str == t("Arveta"))
+		{
+			return false;
+		}
+		
 		if ($str == t("Arvel") && $row["bill_val"] != "billed")
 		{
 			return false;
