@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.7 2006/06/09 13:19:26 dragut Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.8 2006/07/07 11:09:37 tarvo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -292,7 +292,11 @@ class docgen_viewer extends class_base
 			}
 
 			$doc_file = dirname($cur_file)."/".basename($cur_file, ".aw")."/".$data["name"].".".$func.".txt";
-
+			unset($example_links);
+			foreach($f_data["doc_comment"]["examples_links"] as $match => $url)
+			{
+				$example_links .= "<a href=\"".$url."\">$match</a><br />";
+			}
 			$this->vars(array(
 				"proto" => "function $func()",
 				"name" => $func,
@@ -307,7 +311,7 @@ class docgen_viewer extends class_base
 				'returns' => (empty($f_data['doc_comment']['returns'])) ? t('nothing') : nl2br($f_data['doc_comment']['returns']),
 				'errors' => (empty($f_data['doc_comment']['errors'])) ? t('none') : nl2br($f_data['doc_comment']['errors']),
 				'comment' => nl2br($f_data['doc_comment']['comment']),
-				'examples' => (empty($f_data['doc_comment']['examples'])) ? t('none') : highlight_string("<?php \n\t\t".$f_data['doc_comment']['examples']."\n?>", true),
+				'examples' => (empty($f_data['doc_comment']['examples'])) ? t('none') : highlight_string("<?php \n\t\t".$f_data['doc_comment']['examples']."\n?>", true).(strlen($example_links)?"<br>".$example_links:""),
 				"view_source" => $this->mk_my_orb("view_source", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
 				"view_usage" => $this->mk_my_orb("view_usage", array("file" => $cur_file, "v_class" => $data["name"],"func" => $func)),
 				"doc" => $this->show_doc(array("file" => $doc_file))

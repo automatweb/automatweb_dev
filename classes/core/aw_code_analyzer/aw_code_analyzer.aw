@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: aw_code_analyzer.aw,v 1.2 2006/03/24 13:33:08 dragut Exp $
+	@cvs $Id: aw_code_analyzer.aw,v 1.3 2006/07/07 11:09:38 tarvo Exp $
 
 	@comment
 	analyses aw code
@@ -588,6 +588,11 @@ class aw_code_analyzer extends class_base
 					{
 						break;
 					}
+					if(strstr($line, '#'))
+					{
+						$line = $this->parse_refs($line);
+					}
+
 					$data['params'][$pdat['name']]['comment'] .= "\n".$line;
 				}
 			}
@@ -609,6 +614,11 @@ class aw_code_analyzer extends class_base
 					{
 						break;
 					}
+					if(strstr($line, '#'))
+					{
+						$line = $this->parse_refs($line);
+					}
+
 					$data["returns"] .= "\n".$line;
 				}
 				$data["returns"] = trim($data["returns"]);
@@ -630,6 +640,10 @@ class aw_code_analyzer extends class_base
 					if (substr($line, 0, 3) == "**/")
 					{
 						break;
+					}
+					if(strstr($line, '#'))
+					{
+						$line = $this->parse_refs($line);
 					}
 					$data["comment"] .= "\n".$line;
 				}
@@ -653,6 +667,11 @@ class aw_code_analyzer extends class_base
 					{
 						break;
 					}
+					if(strstr($line, '#'))
+					{
+						$line = $this->parse_refs($line);
+					}
+
 					$data["errors"] .= "\n".$line;
 				}
 				$data["errors"] = trim($data["errors"]);
@@ -682,9 +701,14 @@ class aw_code_analyzer extends class_base
 						{
 							break;
 						}
-					}	
-
-		
+					}
+					
+					if(strstr($line, '#'))
+					{
+						$line = $this->parse_refs($line, true);
+						$data["examples_links"] = array_merge($data["examples_links"], $line["links"]);	
+						$line = $line["line"];
+					}
 					$data["examples"] .= "\n".$line;
 				}
 			
@@ -692,6 +716,48 @@ class aw_code_analyzer extends class_base
 			}
 		}
 		return $data;
+	}
+
+	function parse_refs($line, $replace = false)
+	{
+		preg_match_all("/#[^ ]+/", $line, $matches);
+		$line_back = $line;
+		if(count($matches[0]) && is_array($matches[0]))
+		{
+			foreach($matches[0] as $match)
+			{
+				$class = strstr($match, ".")?substr($match,1,strpos($match,".")-1):false;
+				$fun = strstr($match, ".")?substr($match, strpos($match,".")+1):substr($match, 1);
+				$class_o = $class;
+				if(!strlen($class))
+				{
+					$class = $GLOBALS["_REQUEST"]["file"];
+				}
+				else
+				{
+					$class = "/".$class.".aw";
+				}
+				$url = $this->mk_my_orb("class_info", array(
+					"file" => $class,
+					"class" => $GLOBALS["_REQUEST"]["class"],
+					"api_only" => $GLOBALS["_REQUEST"]["api_only"],
+				))."#fn.".$fun;
+				if($replace)
+				{
+					$tmp["links"][$match] = $url;
+					$line = $tmp;
+				}
+				else
+				{
+					$line = str_replace($match, "<a href=\"".$url."\">$match</a>", $line);
+				}
+			}
+			if($replace)
+			{
+				$line["line"] = $line_back;
+			}
+		}
+		return $line;
 	}
 
 	function _do_parse_attributes($str)
