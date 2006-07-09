@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.61 2006/07/09 21:24:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.62 2006/07/09 22:41:47 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -683,7 +683,7 @@ class crm_bill extends class_base
 		));		
 
 
-		$rs = "";
+		$rs = array();
 		$sum_wo_tax = 0;
 		$tax = 0;
 		$sum = 0;
@@ -745,6 +745,7 @@ class crm_bill extends class_base
 			$grp_rows[$row["prod"]][$unp]["tax"] += $cur_tax;
 			$grp_rows[$row["prod"]][$unp]["sum"] += ($cur_tax+$cur_sum);
 			$grp_rows[$row["prod"]][$unp]["unit"] = $row["unit"];
+			$grp_rows[$row["prod"]][$unp]["date"] = $row["date"];
 			$grp_rows[$row["prod"]][$unp]["tot_amt"] += $row["amt"];
 			$grp_rows[$row["prod"]][$unp]["tot_cur_sum"] += $cur_sum;
 			$grp_rows[$row["prod"]][$unp]["name"] = $row["name"];
@@ -786,7 +787,7 @@ class crm_bill extends class_base
 					"desc" => $desc,
 					"date" => "" 
 				));
-				$rs .= $this->parse("ROW");
+				$rs[] = array("str" => $this->parse("ROW"), "date" => $grp_row["date"]);
 			}
 		}
 
@@ -836,10 +837,16 @@ class crm_bill extends class_base
 				"date" => $row["date"] 
 			));
 
-			$rs .= $this->parse("ROW");
+			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"]);
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
+		}
+
+		usort($rs, array(&$this, "__br_sort"));
+		foreach($rs as $idx => $ida)
+		{
+			$rs[$idx] = $ida["str"];
 		}
 
 		$tax_rows_str = "";
@@ -869,7 +876,7 @@ class crm_bill extends class_base
 		$this->vars(array(
 			"SIGNATURE" => $sigs,
 			"TAX_ROW" => $tax_rows_str,
-			"ROW" => $rs,
+			"ROW" => join("", $rs),
 			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
 			"tax" => number_format($tax, 2,".", " "),
 			"total" => number_format($sum, 2, ".", " "),
@@ -951,7 +958,19 @@ class crm_bill extends class_base
 			);
 			$inf[] = $rd;
 		}
+		usort($inf, array(&$this, "__br_sort"));
 		return $inf;
+	}
+
+	function __br_sort($a, $b)
+	{
+		$a = $a["date"];
+		$b = $b["date"];
+		list($a_d, $a_m, $a_y) = explode(".", $a);
+		list($b_d, $b_m, $b_y) = explode(".", $b);
+		$a_tm = mktime(0,0,0, $a_m, $a_d, $a_y);
+		$b_tm = mktime(0,0,0, $b_m, $b_d, $b_y);
+		return $a_tm >  $b_tm ? 1 : ($a_tm == $b_tm ? 0 : -1);
 	}
 
 	function show_add($arr)
@@ -1104,7 +1123,7 @@ class crm_bill extends class_base
 		));		
 
 
-		$rs = "";
+		$rs = array();
 		$sum_wo_tax = 0;
 		$tax = 0;
 		$sum = 0;
@@ -1140,7 +1159,7 @@ class crm_bill extends class_base
 				"desc" => $row["name"],
 				"date" => $row["date"] 
 			));
-			$rs .= $this->parse("ROW");
+			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"]);
 
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
@@ -1182,14 +1201,19 @@ class crm_bill extends class_base
 				"date" => $row["date"]
 			));
 
-			$rs .= $this->parse("ROW");
+			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"]);
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
 		}
+		usort($rs, array(&$this, "__br_sort"));
+		foreach($rs as $idx => $ida)
+		{
+			$rs[$idx] = $ida["str"];
+		}
 
 		$this->vars(array(
-			"ROW" => $rs,
+			"ROW" => join("", $rs),
 			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
 			"tax" => number_format($tax, 2,"." , " "),
 			"total" => number_format($sum, 2,".", " "),
