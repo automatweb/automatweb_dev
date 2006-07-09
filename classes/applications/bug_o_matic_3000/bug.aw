@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.46 2006/07/05 10:06:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.47 2006/07/09 22:51:06 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -1051,12 +1051,22 @@ class bug extends class_base
 		}
 		$tb =& $arr["prop"]["vcl_inst"];
 
-		// save search
-		$tb->add_button(array(
+		$tb->add_menu_button(array(
 			"name" => "new",
-			"tooltip" => t("Lisa alambugi"),
-			"url" => html::get_new_url(CL_BUG, $arr["obj_inst"]->id(), array("return_url" => $arr["request"]["return_url"])),
-			"img" => "new.gif",
+			"tooltip" => t("Uus arendus&uuml;lesanne"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Samale tasemele"),
+			"link" => html::get_new_url(CL_BUG, $arr["obj_inst"]->parent(), array("return_url" => $arr["request"]["return_url"])),
+			"href_id" => "add_bug_href"
+		));
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("Sisse"),
+			"link" => html::get_new_url(CL_BUG, $arr["obj_inst"]->id(), array("return_url" => $arr["request"]["return_url"])),
+			"href_id" => "add_bug_hrefp"
 		));
 	}
 }
