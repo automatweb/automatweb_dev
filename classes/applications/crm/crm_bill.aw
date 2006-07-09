@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.59 2006/07/05 15:21:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.60 2006/07/09 21:12:31 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -732,7 +732,7 @@ class crm_bill extends class_base
 			}
 
 			$tax_rows["$tax_rate"] += $cur_tax;
-			$unp = $row["price"];
+			$unp = $row["price"].$row["comment"];
 			$grp_rows[$row["prod"]][$unp]["sum_wo_tax"] += $cur_sum;
 			$grp_rows[$row["prod"]][$unp]["tax"] += $cur_tax;
 			$grp_rows[$row["prod"]][$unp]["sum"] += ($cur_tax+$cur_sum);
