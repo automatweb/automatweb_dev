@@ -155,6 +155,18 @@
             <caption>Arveread </caption>
       </property>
       <property>
+            <name>signers</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>crm_participant_search</type>
+            <reltype>RELTYPE_SIGNER</reltype>
+            <multiple>1</multiple>
+            <store>connect</store>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Allkirjastajad</caption>
+      </property>
+      <property>
             <name>preview</name>
             <table>objects</table>
             <group>preview</group>
@@ -265,6 +277,11 @@
                   <clid>CL_SHOP_PRODUCT</clid>
                   <caption>Toode</caption>
             </PROD>
+            <SIGNER>
+                  <value>6</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Allkirjastaja</caption>
+            </SIGNER>
       </reltypes>
 </properties>
 

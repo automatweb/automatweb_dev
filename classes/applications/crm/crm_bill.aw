@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.60 2006/07/09 21:12:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.61 2006/07/09 21:24:32 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -65,6 +65,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property bill_rows type=text store=no 
 	@caption Arveread 
 
+	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 store=connect table=objects field=meta method=serialize
+	@caption Allkirjastajad
+
 @default group=preview
 
 	@property preview type=text store=no no_caption=1
@@ -108,6 +111,11 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 @reltype PROD value=6 clid=CL_SHOP_PRODUCT
 @caption Toode
+
+@reltype SIGNER value=6 clid=CL_CRM_PERSON
+@caption Allkirjastaja
+
+
 */
 
 define("BILL_SUM", 1);
@@ -847,7 +855,19 @@ class crm_bill extends class_base
 			}
 		}
 
+		$sigs = "";
+		
+		foreach((array)$b->prop("signers") as $signer)
+		{
+			$signer_p = obj($signer);
+			$this->vars(array(
+				"signer_person" => $signer_p->name()
+			));
+			$sigs .= $this->parse("SIGNATURE");
+		}
+
 		$this->vars(array(
+			"SIGNATURE" => $sigs,
 			"TAX_ROW" => $tax_rows_str,
 			"ROW" => $rs,
 			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
