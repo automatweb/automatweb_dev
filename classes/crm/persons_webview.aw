@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.10 2006/07/10 14:24:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.11 2006/07/10 14:49:20 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -137,6 +137,7 @@ class persons_webview extends class_base
 			sub'is worker : name , name_with_email , email , rank , rank_with_directive , directive (ametijuhend) , education , speciality, wage_doc_exist (palgaandmete dokument, kui on olemas)
 			Kui lisada objekt menüüsse, siis esimeseks vaate infoks tuleb menüüs olev.
 			Kui viimaseks vaateks on üks konkreetne isik, siis template sees ühtegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
+			Template'ide tõlkimiseks kasutada faili persons_web_view.aw.
 			")));
 	}
 
@@ -565,6 +566,7 @@ class persons_webview extends class_base
 			if($section_obj->class_id() == CL_CRM_PERSON)
 			{
 				$template = $this->view["template"];
+				lc_site_load("persons_web_view",$this);
 				$this->read_template($template);
 				$this->parse_worker($section_obj);
 				return $this->parse();
@@ -592,6 +594,7 @@ class persons_webview extends class_base
 		$departments = $this->view_obj->prop("departments");
 		$template = $this->view["template"];
 		$this->read_template($template);
+		lc_site_load("persons_web_view",$this);
 		if($this->view_obj->prop("department_grouping"))
 		{
 			if($this->is_template("DEPARTMENT"))
@@ -970,7 +973,7 @@ class persons_webview extends class_base
 		return $this->parse_alias();
 		$ob = new object($arr["id"]);
 		$this->read_template("show.tpl");
-		
+		lc_site_load("persons_web_view",$this);
 		$this->vars(array(
 			"name" => $ob->prop("name"),
 		));
