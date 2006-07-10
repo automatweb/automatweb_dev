@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.8 2006/07/07 12:45:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.9 2006/07/10 10:48:50 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -152,8 +152,8 @@ class persons_webview extends class_base
 				);
 				break;
 			case "departments":
-				if(is_oid($arr["obj_inst"]->prop("company") && $this->can("view" , $arr["obj_inst"]->prop("company"))))
-				{
+				if(is_oid($arr["obj_inst"]->prop("company")) && $this->can("view" , $arr["obj_inst"]->prop("company")))
+				{;
 					$company = obj($arr["obj_inst"]->prop("company"));
 					$comp = get_instance("crm/crm_company");
 					foreach($comp->get_all_org_sections($company) as $section_id)
@@ -593,7 +593,7 @@ class persons_webview extends class_base
 				{
 					$this->section = $section; // eks seda läheb vast mujal ka vaja... ametinimetuses näiteks
 					if(!(in_array($section->id(), $this->view_obj->prop("departments")))
-						&& sizeof($this->view_obj->prop("departments"))>0) continue;
+						&& sizeof($this->view_obj->prop("departments"))>0 && array_sum($this->view_obj->prop("departments")) > 0) continue;
 					if($this->view["with_persons"])
 					{
 						$workers = $this->get_workers($section);
