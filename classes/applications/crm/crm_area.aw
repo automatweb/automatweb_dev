@@ -1,22 +1,25 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/building_management/Attic/crm_building_management_area.aw,v 1.1 2006/07/10 00:39:11 dragut Exp $
-// crm_building_management_area.aw - Piirkond 
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_area.aw,v 1.1 2006/07/10 03:29:16 dragut Exp $
+// crm_area.aw - Piirkond 
 /*
 
-@classinfo syslog_type=ST_CRM_BUILDING_MANAGEMENT_AREA relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_AREA relationmgr=yes no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
 
+@property comment type=textarea cols=40 rows=3 table=objects field=comment
+@caption Kommentaar
+
 */
 
-class crm_building_management_area extends class_base
+class crm_area extends class_base
 {
-	function crm_building_management_area()
+	function crm_area()
 	{
 		$this->init(array(
-			"tpldir" => "applications/crm/building_management/crm_building_management_area",
-			"clid" => CL_CRM_BUILDING_MANAGEMENT_AREA
+			"tpldir" => "applications/crm/crm_area",
+			"clid" => CL_CRM_AREA
 		));
 	}
 

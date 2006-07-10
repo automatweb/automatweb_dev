@@ -49,6 +49,16 @@
             <caption>Maakond</caption>
       </property>
       <property>
+            <name>piirkond</name>
+            <table>kliendibaas_address</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PIIRKOND</reltype>
+            <automatic>1</automatic>
+            <field>piirkond</field>
+            <caption>Piirkond</caption>
+      </property>
+      <property>
             <name>riik</name>
             <table>kliendibaas_address</table>
             <group>general</group>
@@ -101,6 +111,11 @@
                   <clid>CL_CRM_COUNTY</clid>
                   <caption>Maakond</caption>
             </MAAKOND>
+            <PIIRKOND>
+                  <value>4</value>
+                  <clid>CL_CRM_AREA</clid>
+                  <caption>Piirkond</caption>
+            </PIIRKOND>
             <BELONGTO>
                   <value>4</value>
                   <clid>
