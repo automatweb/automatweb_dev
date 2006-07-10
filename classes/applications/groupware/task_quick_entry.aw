@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.10 2006/07/05 10:12:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.11 2006/07/10 17:21:19 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -244,12 +244,11 @@ class task_quick_entry extends class_base
 		// if needed add customer/project/task
 		$cur_co = get_current_company();
 		$cur_p = get_current_person();
-		
-		if (mb_detect_encoding($arr["request"]["customer"]) == "UTF-8")
+		if (mb_detect_encoding($arr["request"]["customer"], "UTF-8,ISO-8859-1") == "UTF-8")
 		{
-			$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["customer"]);
-			$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["project"]);
-			$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["task"]);
+			$arr["request"]["customer"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["customer"]);
+			$arr["request"]["project"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["project"]);
+			$arr["request"]["task"] = iconv("UTF-8", aw_global_get("charset")."//TRANSLIT", $arr["request"]["task"]);
 		}
 		if ($arr["request"]["task"] == "")
 		{
