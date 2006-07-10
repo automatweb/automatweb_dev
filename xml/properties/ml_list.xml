@@ -30,7 +30,7 @@
             <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Lase liitumisel kausta valida</caption>
+            <caption>Lase liitumisel/lahkumisel kausta valida</caption>
       </property>
       <property>
             <name>multiple_languages</name>
@@ -94,6 +94,47 @@
             <reltype>RELTYPE_MEMBER_CONFIG</reltype>
             <rel>1</rel>
             <caption>Listi liikmete seadetevorm</caption>
+      </property>
+      <property>
+            <name>search_menu</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MEMBER_PARENT</reltype>
+            <editonly>1</editonly>
+            <multiple>1</multiple>
+            <caption>Kaustad kust otsida</caption>
+      </property>
+      <property>
+            <name>search_mail</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>textbox</type>
+            <caption>E-mail</caption>
+      </property>
+      <property>
+            <name>search_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>textbox</type>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>search</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Otsing</caption>
       </property>
       <property>
             <name>admin_subscribe_folders</name>
@@ -509,6 +550,10 @@
             <membership>
                   <caption>Liikmed</caption>
             </membership>
+            <search>
+                  <caption>Otsi</caption>
+                  <parent>membership</parent>
+            </search>
             <subscribing>
                   <caption>Liitumine</caption>
                   <parent>membership</parent>

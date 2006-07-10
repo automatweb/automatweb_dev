@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.82 2006/07/06 15:42:25 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.83 2006/07/10 13:44:50 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -20,7 +20,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 @caption Keeled millega võib liituda
 
 @property multiple_folders type=checkbox ch_value=1
-@caption Lase liitumisel kausta valida
+@caption Lase liitumisel/lahkumisel kausta valida
 
 @property multiple_languages type=checkbox ch_value=1
 @caption Lase liitumisel valida keelt
@@ -43,7 +43,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 
 @groupinfo membership caption=Liikmed 
 ------------------------------------------------------------------------
+@groupinfo search caption=Otsi parent=membership
+@default group=search
 
+@property search_menu type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 multiple=1
+@caption Kaustad kust otsida
+
+@property search_mail type=textbox
+@caption E-mail
+
+@property search_name type=textbox
+@caption Nimi
+
+@property search type=table store=no no_caption=1
+@caption Otsing
+
+-----------------------------------------------------------------------
 @groupinfo subscribing caption=Liitumine parent=membership
 @default group=subscribing
 
@@ -599,6 +614,7 @@ class ml_list extends class_base
 		if ($args["op"] == 2)
 		{
 			$retval = $ml_member->unsubscribe_member_from_list(array(
+				"use_folders" => array_keys($args["subscr_folder"]),
 				"email" => $args["email"],
 				"list_id" => $list_obj->id(),
 			));
@@ -732,6 +748,10 @@ class ml_list extends class_base
 
 			case "member_list":
 				$this->gen_member_list($arr);
+				break;
+	
+			case "search":
+				$this->member_search($arr);
 				break;
 	
 			case "separator_legend":
@@ -1998,7 +2018,7 @@ class ml_list extends class_base
 		$tpl = ($sub_form_type == 0) ? "subscribe.tpl" : "unsubscribe.tpl";
 		$this->read_template($tpl);
 		lc_site_load("ml_list", &$this);
-		if ($this->is_template("FOLDER") && $tobj->prop("multiple_folders") == 1)
+		if ($this->is_template("FOLDER") && $tobj->prop("multiple_folders") == 1 && $sub_form_type == 0)
 		{
 			$langid = aw_global_get("lang_id");
 			$c = "";
@@ -2100,6 +2120,10 @@ class ml_list extends class_base
 			));	
 		}
 		
+		if ($this->is_template("FOLDER") && $tobj->prop("multiple_folders") == 1 && $sub_form_type == 1)
+		{
+			$this->parse_unsubscribe($tobj);
+		}
 		// this is sl8888w and otto needs to be fffffaaassssttt
 		/*
 		$classificator_inst = get_instance(CL_CLASSIFICATOR);
@@ -2125,7 +2149,6 @@ class ml_list extends class_base
 			$this->vars($cb_reqdata);
 		};
 
-
 		$this->vars(array(
 			"listname" => $tobj->name(),
 			"cb_errmsg" => $cb_errmsg,
@@ -2140,6 +2163,23 @@ class ml_list extends class_base
 
 	}
 
+	function parse_unsubscribe($obj)
+	{
+		$c = "";
+		$folders = $obj->prop("choose_menu");
+		foreach($folders as $folder)
+		{
+			$folder_obj = obj($folder);
+			$this->vars(array(
+				"folder_name" => $folder_obj -> name(),
+				"folder_id" => $folder_obj -> id(),
+			));
+			$c .= $this->parse("FOLDER");
+		}
+		$this->vars(array(
+			"FOLDER" => $c,
+		));	
+	}
 
 	//! teeb progress bari
 	// tegelt saax seda pitidega teha a siis tekib iga progress bari kohta oma query <img src=
@@ -2736,6 +2776,150 @@ class ml_list extends class_base
 		// add to scheduler
 		$this->_add_expf_sched($l);
 		die(t("all done"));
+	}
+	
+	function member_search($arr)
+	{
+		if(strlen($arr["obj_inst"]->prop("search_mail")) > 1 || strlen($arr["obj_inst"]->prop("search_name")) > 1)
+		{
+			$this->list_id = $arr["obj_inst"]->id();
+			$ml_list_members = $this->get_members(array(
+				"src"	=> $arr["obj_inst"]->prop("search_menu"),
+				"all"	=> 1,
+//				"id" 	=> $arr["obj_inst"]->id(),
+			));
+			$t = &$arr["prop"]["vcl_inst"];
+			$t->define_field(array(
+				"name" => "id",
+				"caption" => t("ID"),
+				"width" => 50,
+			));
+			$t->define_field(array(
+				"name" => "name",
+				"caption" => t("Nimi"),
+				"sortable" => 1,
+			));
+			$t->define_field(array(
+				"name" => "email",
+				"caption" => t("Aadress"),
+				"sortable" => 1,
+			));
+			
+			$t->define_field(array(
+				"name" => "source",
+				"caption" => t("Allikas"),
+				"sortable" => 1,
+			));
+			
+			$t->define_field(array(
+				"name" => "joined",
+				"caption" => t("Liitunud"),
+				"sortable" => 1,
+				"type" => "time",
+				"format" => "H:i d-m-Y",
+				"smart" => 1,
+			));
+			$t->set_default_sortby("id");
+			$t->set_default_sorder("desc");
+			$cfg = $arr["obj_inst"]->prop("member_config");
+			if(is_oid($cfg) && $this->can("view", $cfg))
+			{
+				$config_obj = &obj($cfg);
+				$config_data = $config_obj->meta("cfg_proplist");
+				uasort($config_data, array($this,"__sort_props_by_ord"));
+				
+				foreach($config_data as $key => $item)
+				{
+					strpos($key, "def_txbox");
+					if(strpos($key, "def_txbox"))
+					{
+						$t->define_field(array(
+							"name" => $item["name"],
+							"caption" => $item["caption"],
+							"sortable" => 1,
+						));
+					}
+					
+					if(strpos($key, "def_date"))
+					{
+						$t->define_field(array(
+							"name" => $item["name"],
+							"caption" => $item["caption"],
+							"sortable" => 1,
+						));	
+					}
+				}
+			}
+			$member_config = $arr["obj_inst"]->prop("member_config");
+			if(!empty($member_config))
+			{
+				$t->define_field(array(
+					"name" => "others",
+					"caption" => t("Liitumisinfo"),
+				));
+			}
+	
+			$ml_member_inst = get_instance(CL_ML_MEMBER);
+			if (is_array($ml_list_members))
+			{
+				foreach($ml_list_members as $key => $val)
+				{
+					if((strlen($arr["obj_inst"]->prop("search_name")) > 1) && (substr_count($val["name"], $arr["obj_inst"]->prop("search_name")) < 1)) continue;
+					
+					if((strlen($arr["obj_inst"]->prop("search_mail")) > 1) && (substr_count($val["mail"], $arr["obj_inst"]->prop("search_mail")) < 1)) continue;
+				
+					$is_oid = 0;
+					if(is_oid($val["oid"]))
+					{
+						$is_oid = 1;
+					}
+					if(!(strlen($val["name"]) > 0))
+					{
+						$val["name"] = "(nimetu)";
+					}
+					$parent_obj = obj($val["parent"]);
+					$parent_name = $parent_obj->name();
+					if($is_oid)
+					{
+						list($mailto,$memberdata) = $ml_member_inst->get_member_information(array(
+							"lid" => $arr["obj_inst"]->id(),
+							"member" => $val["oid"],
+							"from_user" => true,
+						));
+						$joined = $memberdata["joined"];
+						$source = html::href(array(
+							"url" => $this->mk_my_orb("right_frame", array("parent" => $val["parent"], "return_url" => get_ru()), "admin_menus"),
+							"caption" => $parent_name,
+						));
+						$others = html::href(array(
+							"caption" => t("Vaata"),
+							"url" => $this->mk_my_orb("change", array(
+								"id" => $val["oid"],
+								"group" => "udef_fields",
+								"cfgform" => $arr["obj_inst"]->prop("member_config"),
+								), CL_ML_MEMBER),
+						));
+						$name = html::get_change_url($val["oid"], array("return_url" => get_ru()), $val["name"]);
+					}
+					else
+					{
+						$source = $parent_name;
+						$name = $val["name"];
+					}
+					$tabledata = array(
+						"id" => $val["oid"],
+						"email" => $val["mail"],
+						"joined" => $memberdata["joined"],
+						"source" => $source,
+						"others" => $others,
+						"name" => $name,
+					);
+					$t->define_data($tabledata);
+				}
+			}
+			$t->table_header = $pageselector;
+			$t->sort_by();
+		}
 	}
 }
 ?>
