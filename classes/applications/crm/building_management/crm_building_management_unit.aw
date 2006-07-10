@@ -1,12 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/building_management/crm_building_management_unit.aw,v 1.1 2006/07/10 00:39:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/building_management/crm_building_management_unit.aw,v 1.2 2006/07/10 02:33:56 dragut Exp $
 // crm_building_management_unit.aw - &Uuml;hik 
 /*
 
 @classinfo syslog_type=ST_CRM_BUILDING_MANAGEMENT_UNIT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
+@tableinfo crm_building_management_unit index=oid master_table=objects master_index=oid
+
 @default table=objects
 @default group=general
+
+@property code type=textbox table=crm_building_management_unit
+@caption Kood
 
 */
 
@@ -62,6 +67,26 @@ class crm_building_management_unit extends class_base
 		return $this->parse();
 	}
 
-//-- methods --//
+	function do_db_upgrade($table, $field, $query, $error)
+	{
+		if (empty($field))
+		{
+			$this->db_query('CREATE TABLE '.$table.' (oid INT PRIMARY KEY NOT NULL)');
+			return true;
+		}
+
+		switch ($field)
+		{
+			case 'code':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'varchar(255)'
+				));
+                                return true;
+                }
+
+		return false;
+	}
+
 }
 ?>
