@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.9 2006/07/10 10:48:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.10 2006/07/10 14:24:06 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -135,7 +135,8 @@ class persons_webview extends class_base
 			muutujad mida saab kasutada
 			DEPARTMENT sub'is: department_name, address , phone , fax , email , next_level_link (link nägemas antud osakonda uues vaates).
 			sub'is worker : name , name_with_email , email , rank , rank_with_directive , directive (ametijuhend) , education , speciality, wage_doc_exist (palgaandmete dokument, kui on olemas)
-			Kui lisada objekt menüüsse, siis esimeseks vaate infoks tuleb menüüs olev
+			Kui lisada objekt menüüsse, siis esimeseks vaate infoks tuleb menüüs olev.
+			Kui viimaseks vaateks on üks konkreetne isik, siis template sees ühtegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
 			")));
 	}
 
@@ -553,6 +554,7 @@ class persons_webview extends class_base
 		{
 			$this->view_obj = obj($arr["alias"]["to"]); // dokumendis aliasena
 		}
+		
 		$this->meta = $this->view_obj->meta();
 		$this->view_no = $view;
 		if($view) $this->view = $this->meta["view"][$view]; // juhul kui tuleb kuskilt urlist miski tase,... 
@@ -560,6 +562,13 @@ class persons_webview extends class_base
 		
 		if(is_oid($section)){
 			$section_obj = obj($section);
+			if($section_obj->class_id() == CL_CRM_PERSON)
+			{
+				$template = $this->view["template"];
+				$this->read_template($template);
+				$this->parse_worker($section_obj);
+				return $this->parse();
+			}
 			if(($section_obj->class_id() == CL_CRM_SECTION)  || ($section_obj->class_id() == CL_CRM_COMPANY))
 			{
 				$company = $section_obj;
@@ -775,7 +784,6 @@ class persons_webview extends class_base
 		$row = "";
 		$row_num = 0;
 		$this->min_col = $this->view["min_cols"];
-		$image_inst = get_instance(CL_IMAGE);
 		$this->calculated=0;
 		$this->order_array=array();
 		if($this->is_template("ROW") && $this->is_template("COL"))
@@ -791,45 +799,7 @@ class persons_webview extends class_base
 				$c = "";
 				if($this->is_template("worker"))
 				{
-					$this->parse_proffession($worker);
-					$photo="";
-					if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
-					{
-						$photo = $image_inst->make_img_tag_wl($worker->prop("picture"));
-					}
-					else
-					{
-						$photo_obj = $worker->get_first_obj_by_reltype("RELTYPE_PICTURE");
-						if(is_object($photo_obj)) $photo = $image_inst->make_img_tag_wl($photo_obj->id());
-					}
-					
-					$phone = "";
-					$phone_obj = $worker->get_first_obj_by_reltype("RELTYPE_PHONE");
-					if(is_object($phone_obj)) $phone = $phone_obj->name();
-					$email = "";
-					$email_obj = $worker->get_first_obj_by_reltype("RELTYPE_EMAIL");
-					if(is_object($email_obj)) $email = $email_obj->prop("mail");
-					
-					$name_with_email = $worker->name();
-					if(strlen($email) > 3)$name_with_email = '<a href =mailto:'.$email.'> '. $name_with_email.' </a>';
-					$speciality = "";
-					$speciality_obj = $worker->get_first_obj_by_reltype("RELTYPE_EDUCATION");
-					if(is_object($speciality_obj)) $speciality = $speciality_obj->prop("speciality");
-					$wage_doc_exist = "";
-					if(is_oid($worker->prop("wage_doc"))) $wage_doc_exist = '<a href ='.$worker->prop("wage_doc").'> '. t("Palk").' </a>';
-					$this->vars(array(
-					//	"rank" => $rank,
-						"name" => $worker->name(),
-						"photo" => $photo,
-						"phone" => $phone,
-						"email" => $email,
-						"education" => $this->education["options"][$worker->prop("edulevel")],
-						"speciality" => $speciality,
-						"name_with_email" => $name_with_email,
-						"wage_doc"	=> $worker->prop("wage_doc"),
-						"wage_doc_exist" => $wage_doc_exist,
-					//	"directive" => $directive,
-					));
+					$this->parse_worker($worker);
 					$c .= $this->parse("worker");
 				}
 				$this->vars(array(
@@ -868,6 +838,59 @@ class persons_webview extends class_base
 			));
 		exit_function("person_webview::parse_persons");
 		}
+	}
+
+	function parse_worker($worker)
+	{
+		$this->parse_proffession($worker);
+		$photo="";
+		$image_inst = get_instance(CL_IMAGE);
+		if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
+		{
+			$photo = $image_inst->make_img_tag_wl($worker->prop("picture"));
+		}
+		else
+		{
+			$photo_obj = $worker->get_first_obj_by_reltype("RELTYPE_PICTURE");
+			if(is_object($photo_obj)) $photo = $image_inst->make_img_tag_wl($photo_obj->id());
+		}
+		
+		$phone = "";
+		$phone_obj = $worker->get_first_obj_by_reltype("RELTYPE_PHONE");
+		if(is_object($phone_obj)) $phone = $phone_obj->name();
+		$email = "";
+		$email_obj = $worker->get_first_obj_by_reltype("RELTYPE_EMAIL");
+		if(is_object($email_obj)) $email = $email_obj->prop("mail");
+		
+		$name_with_email = $worker->name();
+		if(strlen($email) > 3)$name_with_email = '<a href =mailto:'.$email.'> '. $name_with_email.' </a>';
+		$speciality = "";
+		$speciality_obj = $worker->get_first_obj_by_reltype("RELTYPE_EDUCATION");
+		if(is_object($speciality_obj)) $speciality = $speciality_obj->prop("speciality");
+		$wage_doc_exist = "";
+		if(is_oid($worker->prop("wage_doc"))) $wage_doc_exist = '<a href ='.$worker->prop("wage_doc").'> '. t("Palk").' </a>';
+		
+		$next_level_link = $this->mk_my_orb("parse_alias",
+			array(
+				"id" => $this->view_obj->id(),
+			"section" => $worker->id(),
+			"view" => (1 + $this->view_no),
+		),
+		CL_PERSONS_WEBVIEW);
+		$this->vars(array(
+		//	"rank" => $rank,
+			"name" => $worker->name(),
+			"photo" => $photo,
+			"phone" => $phone,
+			"email" => $email,
+			"education" => $this->education["options"][$worker->prop("edulevel")],
+			"speciality" => $speciality,
+			"name_with_email" => $name_with_email,
+			"wage_doc"	=> $worker->prop("wage_doc"),
+			"wage_doc_exist" => $wage_doc_exist,
+			"next_level_link" => $next_level_link,
+		//	"directive" => $directive,
+		));
 	}
 
 	function get_cols_num($row)
