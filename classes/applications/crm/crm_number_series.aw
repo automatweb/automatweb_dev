@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.2 2006/04/10 13:00:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.3 2006/07/10 09:40:35 kristo Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -171,7 +171,7 @@ class crm_number_series extends class_base
 		// filter by class and time
 		foreach($ser as $idx => $row)
 		{
-			if ($row["class"] == $class && $row["from"] <= time() && $row["to"] > time())
+			if ($row["class"] == $class )
 			{
 				$num = $nums[$idx];
 				if ($num > $row["end"])
@@ -190,6 +190,23 @@ class crm_number_series extends class_base
 				$nums[$idx] = $num;
 				$series->set_meta("ser_vals", $nums);
 				$series->save();
+
+				// actually, just list all bills and get max number+1 for bills
+				$ol = new object_list(array(					
+					"class_id" => CL_CRM_BILL,					
+					"lang_id" => array(),					
+					"site_id" => array(),					
+					"sort_by" => "aw_crm_bill.aw_bill_no DESC",					
+					"limit" => 1, 
+					"bill_no" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)				
+				));
+echo "ol = ".dbg::dump($ol)." <br>";
+				if ($ol->count())
+				{
+					$o = $ol->begin();
+echo "o = ".$o->prop("bill_no")." <br>";
+					return $o->prop("bill_no") + 1;
+				}
 				return $num;
 			}
 		}
