@@ -1939,6 +1939,11 @@ class object
 	{
 		return $GLOBALS["objects"][$this->oid]->set_no_modify($arg);
 	}
+
+	function originalize()
+	{
+		return $GLOBALS["objects"][$this->oid]->originalize();
+	}
 }
 
 function &obj($param = NULL)

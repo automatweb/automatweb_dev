@@ -2861,6 +2861,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 	}
+
+	function originalize($oid)
+	{
+		$brof = $this->db_fetch_field("SELECT brother_of from objects where oid = '$oid'", "brother_of");
+		$this->db_query("UPDATE objects SET brother_of = '$oid' WHERE brother_of = '$brof'");
+		$this->db_query("UPDATE aliases SET source = '$oid' WHERE source = '$brof'");
+		$this->db_query("UPDATE aliases SET target = '$oid' WHERE target = '$brof'");
+	}
 }
 
 ?>

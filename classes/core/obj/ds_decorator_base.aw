@@ -139,6 +139,11 @@ class _int_obj_ds_decorator
 	{
 		return $this->contained->backup_current_version($arr);
 	}
+
+	function originalize($oid)
+	{
+		return $this->contained->originalize($oid);
+	}
 }
 
 ?>

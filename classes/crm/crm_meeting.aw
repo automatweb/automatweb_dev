@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.74 2006/07/05 11:09:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.75 2006/07/10 12:52:33 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -823,7 +823,7 @@ class crm_meeting extends class_base
 							{
 								$cal = $cal_con->from();
 								$event_folder = $cal->prop("event_folder");
-								if (is_oid($event_folder && $this->can("add", $event_folder)))
+								if (is_oid($event_folder) && $this->can("add", $event_folder))
 								{
 									// get brother
 									$bl = new object_list(array(
@@ -839,6 +839,25 @@ class crm_meeting extends class_base
 										{
 											$bro->delete();
 										}
+										else
+										{
+											// now, if we hit the original, then we have a problem
+											// we still need to delete it, but we must turn it into a brother of the next one in line
+											// if there is one. if not, then there's really nothing we can do.
+											// so, list all brothers for this object
+											$bl = new object_list(array(
+												"brother_of" => $arr["event_id"],
+												"site_id" => array(),
+												"lang_id" => array(),
+												"oid" => new obj_predicate_compare(OBJ_COMP_GREATER, $arr["event_id"])
+											));
+											if ($bl->count())
+											{
+												$nreal = $bl->begin();
+												$nreal->originalize();
+												$bro->delete();
+											}
+										}
 									}
 								}
 							}
@@ -852,7 +871,7 @@ class crm_meeting extends class_base
 			}
 		}
 		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
-   }
+	}
 
 	/**
 		@attrib name=search_contacts

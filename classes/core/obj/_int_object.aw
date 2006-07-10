@@ -1433,6 +1433,15 @@ class _int_object
 		$this->no_modify = $arg;
 	}
 
+	function originalize()
+	{
+		if (!$this->is_brother())
+		{
+			return;
+		}
+		$GLOBALS["object_loader"]->ds->originalize($this->obj["oid"]);
+	}
+
 	/////////////////////////////////////////////////////////////////
 	// private functions
 	

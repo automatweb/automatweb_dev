@@ -320,5 +320,13 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		}
 		return $ret;
 	}
+
+	function originalize($oid)
+	{
+		$rv =  $this->contained->originalize($oid);
+		$this->cache->file_clear_pt("storage_search");
+		$this->cache->file_clear_pt("storage_object_data");
+		return $rv;
+	}
 }
 ?>
