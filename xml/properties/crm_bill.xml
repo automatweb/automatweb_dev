@@ -161,9 +161,9 @@
             <type>crm_participant_search</type>
             <reltype>RELTYPE_SIGNER</reltype>
             <multiple>1</multiple>
-            <store>connect</store>
             <field>meta</field>
             <method>serialize</method>
+            <style>relpicker</style>
             <caption>Allkirjastajad</caption>
       </property>
       <property>

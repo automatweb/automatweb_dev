@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.62 2006/07/09 22:41:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.63 2006/07/10 10:17:46 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -65,7 +65,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property bill_rows type=text store=no 
 	@caption Arveread 
 
-	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 store=connect table=objects field=meta method=serialize
+	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 table=objects field=meta method=serialize style=relpicker
 	@caption Allkirjastajad
 
 @default group=preview
@@ -244,14 +244,14 @@ class crm_bill extends class_base
 					if ($ol->count())
 					{
 						$prop["error"] = t("Sellise numberiga arve on juba olemas!");
-						return PROP_ERROR;
+					//	return PROP_ERROR;
 					}
 
 					$ser = get_instance(CL_CRM_NUMBER_SERIES);
 					if (!$ser->number_is_in_series(CL_CRM_BILL, $prop["value"]))
 					{
 						$prop["error"] = t("Number ei ole seerias!");
-						return PROP_ERROR;
+				//		return PROP_ERROR;
 					}
 				}
 				break;
@@ -866,6 +866,10 @@ class crm_bill extends class_base
 		
 		foreach((array)$b->prop("signers") as $signer)
 		{
+			if (!$this->can("view", $signer))
+			{
+				continue;
+			}
 			$signer_p = obj($signer);
 			$this->vars(array(
 				"signer_person" => $signer_p->name()
@@ -1212,7 +1216,24 @@ class crm_bill extends class_base
 			$rs[$idx] = $ida["str"];
 		}
 
+		$sigs = "";
+		
+		foreach((array)$b->prop("signers") as $signer)
+		{
+			if (!$this->can("view", $signer))
+			{
+				continue;
+			}
+			$signer_p = obj($signer);
+			$this->vars(array(
+				"signer_person" => $signer_p->name()
+			));
+			$sigs .= $this->parse("SIGNATURE");
+		}
+
+
 		$this->vars(array(
+			"SIGNATURE" => $sigs,
 			"ROW" => join("", $rs),
 			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
 			"tax" => number_format($tax, 2,"." , " "),
