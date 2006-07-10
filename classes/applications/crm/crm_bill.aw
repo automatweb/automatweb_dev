@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.64 2006/07/10 11:30:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.65 2006/07/10 14:27:10 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -569,6 +569,7 @@ class crm_bill extends class_base
 
 		$ord = obj();
 		$ord_cur = obj();
+		$ord_ct_prof = "";
 		if ($this->can("view", $b->prop("customer")))
 		{
 			$ord = obj($b->prop("customer"));
@@ -582,6 +583,10 @@ class crm_bill extends class_base
 			{
 				$ct = obj($_ord_ct);
 				$ord_ct = $ct->name();
+
+				// get profession for contact_person
+				$ol = new object_list($ct->connections_from(array('type' => 'RELTYPE_RANK')));
+				$ord_ct_prof = join(", ", $ol->names());
 			}
 			$prop = "contact";
 			if ($ord->class_id() == CL_CRM_PERSON)
@@ -603,6 +608,7 @@ class crm_bill extends class_base
 				$aps .= $ct->prop_str("maakond");
 				$aps .= " ".$ct->prop("postiindeks");
 				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
+				$ord_country = $ct->prop_str("riik");
 			}
 
 			if ($this->can("view", $ord->prop("currency")))
@@ -663,10 +669,18 @@ class crm_bill extends class_base
 				if ($this->can("view", $ct->prop("riik")))
 				{
 					$riik = obj($ct->prop("riik"));
+					if( $riik->name() != $ord_country)
+					{
+						$ord_addr .= " ".$ord_country;
+					}
 					$impl_phone = $riik->prop("area_code")." ".$impl_phone;
 				}
 			}
 
+			if(!is_object($riik) ||  $riik->name() != $ord_country)
+			{
+				$ord_addr .= " ".$ord_country;
+			}
 			if ($this->can("view", $impl->prop("email_id")))
 			{
 				$mail = obj($impl->prop("email_id"));
@@ -695,6 +709,7 @@ class crm_bill extends class_base
 			"payment_due_days" => $b->prop("bill_due_date_days"),
 			"bill_due" => date("d.m.Y", $b->prop("bill_due_date")),
 			"orderer_contact" => $ord_ct,
+			"orderer_contact_profession" => $ord_ct_prof,
 			"comment" => $b->prop("notes"),
 			"impl_name" => $impl->name(),
 			"impl_address" => $impl_addr,
@@ -706,6 +721,18 @@ class crm_bill extends class_base
 			"impl_url" => $impl->prop_str("url_id"),
 		));		
 
+		if ($ord->prop("tax_nr") != "")
+		{
+			$this->vars(array(
+				"HAS_KMK_NR" => $this->parse("HAS_KMK_NR")
+			));
+		}
+		if ($ord_ct_prof != "")
+		{
+			$this->vars(array(
+				"HAS_ORDERER_CONTACT_PROF" => $this->parse("HAS_ORDERER_CONTACT_PROF")
+			));
+		}
 
 		$rs = array();
 		$sum_wo_tax = 0;

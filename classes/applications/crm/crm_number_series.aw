@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.4 2006/07/10 09:41:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_number_series.aw,v 1.5 2006/07/10 14:27:10 kristo Exp $
 // crm_number_series.aw - CRM Numbriseeria 
 /*
 
@@ -196,7 +196,7 @@ class crm_number_series extends class_base
 					"class_id" => CL_CRM_BILL,					
 					"lang_id" => array(),					
 					"site_id" => array(),					
-					"sort_by" => "aw_crm_bill.aw_bill_no DESC",					
+					"sort_by" => "CAST(aw_crm_bill.aw_bill_no as signed) DESC",					
 					"limit" => 1, 
 					"bill_no" => new obj_predicate_compare(OBJ_COMP_GREATER, 0)				
 				));

@@ -4028,6 +4028,15 @@ class crm_company extends class_base
 				$c_r_t = reset($c_r_t);
 			}
 			$c_r_t_o = obj($c_r_t);
+			if ($c_r_t_o->class_id() == CL_TASK_ROW)
+			{
+				$t_conns = $c_r_t_o->connections_to(array("from.class_id" => CL_TASK));
+				$t_conn = reset($t_conns);
+				if ($t_conn)
+				{
+					$c_r_t_o = $t_conn->from();
+				}
+			}
 			$bill->set_prop("customer", $c_r_t_o->prop("customer"));
 		}
 
