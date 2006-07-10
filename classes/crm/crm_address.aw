@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.18 2006/07/03 19:59:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_address.aw,v 1.19 2006/07/10 03:29:57 dragut Exp $
 // crm_address.aw - It's not really a physical address but a collection of data required to 
 // contact a person.
 /*
@@ -26,6 +26,9 @@
 	@property maakond type=relpicker reltype=RELTYPE_MAAKOND automatic=1
 	@caption Maakond
 
+	@property piirkond type=relpicker reltype=RELTYPE_PIIRKOND automatic=1
+	@caption Piirkond
+
 	@property riik type=relpicker reltype=RELTYPE_RIIK automatic=1
 	@caption Riik
 	
@@ -44,6 +47,7 @@ CREATE TABLE `kliendibaas_address` (
   `tyyp` int(11) default NULL,
   `riik` int(11) default NULL,
   `linn` int(11) default NULL,
+  `piirkond` int(11) default NULL,
   `maakond` int(11) default NULL,
   `postiindeks` varchar(5) default NULL,
   `telefon` varchar(20) default NULL,
@@ -68,6 +72,9 @@ CREATE TABLE `kliendibaas_address` (
 
 @reltype MAAKOND value=3 clid=CL_CRM_COUNTY
 @caption Maakond
+
+@reltype PIIRKOND value=4 clid=CL_CRM_AREA
+@caption Piirkond
 
 @reltype BELONGTO value=4 clid=CL_CRM_PERSON,CL_CRM_COMPANY
 @caption Seosobjekt
@@ -248,6 +255,65 @@ class crm_address extends class_base
 			header("Location: ".html::get_change_url($o->id(), array("return_url" => $arr["request"]["return_url"])));
 			die();
 		}
+	}
+
+	function do_db_upgrade($table, $field, $query, $error)
+	{
+		if (empty($field))
+		{
+			$this->db_query('CREATE TABLE '.$table.' (oid INT PRIMARY KEY NOT NULL)');
+			return true;
+		}
+
+		switch ($field)
+		{
+			case 'tyyp':
+			case 'riik':
+			case 'linn':
+			case 'piirkond':
+			case 'maakond':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'int'
+				));
+				return true;
+			case 'name':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'varchar(200)'
+				));
+				return true;
+			case 'postiindeks':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'varchar(5)'
+				));
+				return true;
+			case 'telefon':
+			case 'mobiil':
+			case 'faks':
+			case 'piipar':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'varchar(20)'
+				));
+				return true;
+			case 'e_mail':
+			case 'kodulehekylg':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'varchar(255)'
+				));
+				return true;
+			case 'aadress':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'text'
+				));
+				return true;
+                }
+
+		return false;
 	}
 };
 ?>
