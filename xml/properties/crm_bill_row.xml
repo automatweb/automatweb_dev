@@ -98,6 +98,17 @@
             <field>aw_desc</field>
             <caption>Kirjeldus</caption>
       </property>
+      <property>
+            <name>people</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PEOPLE</reltype>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Isikud</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_BILL_ROW</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -128,6 +139,11 @@
                   <clid>CL_TASK</clid>
                   <caption>Toimetus</caption>
             </TASK>
+            <PEOPLE>
+                  <value>4</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Isik</caption>
+            </PEOPLE>
       </reltypes>
 </properties>
 

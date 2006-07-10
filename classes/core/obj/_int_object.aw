@@ -1180,6 +1180,7 @@ class _int_object
 			));
 			return;
 		}
+
 		$prev = $this->_int_get_prop($key);
 		$this->_int_set_prop($key, $val);
 		// if this is a relpicker property, create the relation as well

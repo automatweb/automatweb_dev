@@ -46,7 +46,7 @@ class popup_search extends aw_template
 				$options = $ol->names();
 			}
 		}
-		else if ($style == 'relpicker')
+		else if ($style == 'relpicker' || $arr["property"]["type"] != "popup_search")
 		{
 			if (is_object($arr["obj_inst"]) && isset($arr['property']['reltype']) && isset($arr['relinfo'][$arr['property']['reltype']])  && is_oid($arr['obj_inst']->id()))
 			{

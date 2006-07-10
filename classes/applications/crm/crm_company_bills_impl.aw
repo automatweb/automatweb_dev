@@ -779,7 +779,7 @@ class crm_company_bills_impl extends class_base
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
 		$fn = trim(mb_strtoupper($p->prop("firstname")));
-
+	
 		$ct = array();
 		$i = get_instance(CL_CRM_BILL);
 
@@ -810,6 +810,23 @@ class crm_company_bills_impl extends class_base
 				$b->save();
 				$bno++;
 			}
+
+			$tmp = array();
+			foreach((array)$b->prop("signers") as $signer_id)
+			{
+				if ($this->can("view", $signer_id))
+				{
+					$signer_o = obj($signer_id);
+					$tmp[] = trim(mb_strtoupper($signer_o->prop("firstname")));
+				}
+			}
+
+			$rfn = join(",", $tmp);
+			if ($rfn == "")
+			{
+				$rfn = $fn;
+			}
+
 			// bill info row
 			$brow = array();
 			$brow[] = $b->prop("bill_no");						// arve nr
@@ -829,7 +846,7 @@ class crm_company_bills_impl extends class_base
 			$brow[] = "";
 			$brow[] = 1;			// 1 (teadmata - vaikeväärtus 1) 
 			$brow[] = ""; 
-			$brow[] = $fn;			// OBJEKT (kasutaja eesnimi suurte tähtedega, nt TEDDI)
+			$brow[] = $rfn;			// OBJEKT (kasutaja eesnimi suurte tähtedega, nt TEDDI)
 			$brow[] = "";
 			$brow[] = 0;			//  0 (teadmata - vaikeväärtus 0)    
 			$cur = $i->get_bill_currency($b);
@@ -1026,7 +1043,7 @@ class crm_company_bills_impl extends class_base
 			$co->set_meta("last_exp_no", $bno);
 			$co->save();
 		}
-
+die();
 		header("Content-type: text/plain");
 		header('Content-Disposition: attachment; filename="arved.txt"');
 		echo "format	\n";	

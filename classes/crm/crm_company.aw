@@ -4117,6 +4117,7 @@ class crm_company extends class_base
 				$br->set_prop("is_oe", $row["is_oe"]);
 				$br->set_prop("has_tax", $row["has_tax"]);
 				$br->set_prop("date", date("d.m.Y", $row["date"]));
+				$br->set_prop("people", $row["impl"]);
 				// get default prod
 
 				if ($sts)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.63 2006/07/10 10:17:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.64 2006/07/10 11:30:05 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -62,7 +62,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE
 	@caption Keel
 
-	@property bill_rows type=text store=no 
+	@property bill_rows type=text store=no no_caption=1
 	@caption Arveread 
 
 	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 table=objects field=meta method=serialize style=relpicker
@@ -340,8 +340,12 @@ class crm_bill extends class_base
 			"caption" => t("Artikkel")
 		));
 		$t->define_field(array(
+			"name" => "person",
+			"caption" => t("Isik")
+		));
+		$t->define_field(array(
 			"name" => "has_tax",
-			"caption" => t("Lisandub k&auml;ibemaks?"),
+			"caption" => t("+KM?"),
 		));
 
 		$t->define_field(array(
@@ -386,6 +390,7 @@ class crm_bill extends class_base
 				"sum" => 0
 			);
 		}
+		$pps = get_instance("applications/crm/crm_participant_search");
 		foreach($rows as $row)
 		{
 			$t_inf = $row;
@@ -395,6 +400,15 @@ class crm_bill extends class_base
 			{
 				$prodo = obj($t_inf["prod"]);
 				$r_prods[$t_inf["prod"]] = $prodo->name();
+			}
+			$r_pers = array("" => t("--vali--"));
+			foreach($row["persons"] as $rp_id)
+			{
+				if ($this->can("view", $rp_id))
+				{
+					$rp_o = obj($rp_id);
+					$r_pers[$rp_id] = $rp_o->name();
+				}
 			}
 			$t->define_data(array(
 				"name" => html::textbox(array(
@@ -456,6 +470,16 @@ class crm_bill extends class_base
 				"sel" => html::checkbox(array(
 					"name" => "sel_rows[]",
 					"value" => $id
+				)),
+				"person" => html::select(array(
+					"name" => "rows[$id][person]",
+					"options" => $r_pers,
+					"value" => $row["persons"],
+					"multiple" => 1
+				)).$pps->get_popup_search_link(array(
+					"pn" => "rows[$id][person]",
+					"multiple" => 1,
+					"clid" => array(CL_CRM_PERSON)
 				))
 			));
 			$sum += $t_inf["sum"];
@@ -958,7 +982,8 @@ class crm_bill extends class_base
 				"is_oe" => $row->prop("is_oe"),
 				"has_tax" => $row->prop("has_tax"),
 				"date" => $row->prop("date"),
-				"id" => $row->id()
+				"id" => $row->id(),
+				"persons" => (array)$row->prop("people")
 			);
 			$inf[] = $rd;
 		}
@@ -1378,6 +1403,7 @@ class crm_bill extends class_base
 			$o->set_prop("sum", str_replace(",", ".", $row["sum"]));
 			$o->set_prop("prod", $row["prod"]);
 			$o->set_prop("has_tax", (int)$row["has_tax"]);
+			$o->set_prop("people", $row["person"]);
 			$o->save();
 
 			if ($new)

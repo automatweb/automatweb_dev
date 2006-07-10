@@ -151,6 +151,7 @@
             <group>general</group>
             <type>text</type>
             <store>no</store>
+            <no_caption>1</no_caption>
             <field>bill_rows</field>
             <caption>Arveread </caption>
       </property>

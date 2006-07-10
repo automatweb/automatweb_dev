@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.4 2006/07/03 20:34:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill_row.aw,v 1.5 2006/07/10 11:30:06 kristo Exp $
 // crm_bill_row.aw - Arve rida 
 /*
 
@@ -43,6 +43,9 @@
 @property desc type=textarea rows=5 cols=30 field=aw_desc
 @caption Kirjeldus
 
+@property people type=relpicker reltype=RELTYPE_PEOPLE multiple=1 table=objects field=meta method=serialize
+@caption Isikud
+
 @reltype PROD value=1 clid=CL_CHOP_PRODUCT
 @caption Toode
 
@@ -51,6 +54,9 @@
 
 @reltype TASK value=3 clid=CL_TASK
 @caption Toimetus
+
+@reltype PEOPLE value=4 clid=CL_CRM_PERSON
+@caption Isik
 */
 
 class crm_bill_row extends class_base
