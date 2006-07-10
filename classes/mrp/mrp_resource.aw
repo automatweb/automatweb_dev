@@ -1457,7 +1457,7 @@ class mrp_resource extends class_base
 			"uid" => aw_global_get("uid"),
 		));
 
-		$clids = array(CL_TASK => 13, CL_CRM_MEETING => 11, CL_CRM_CALL => 12, CL_CRM_OFFER => 9);
+		$clids = array(CL_TASK => 13, CL_CRM_MEETING => 11, CL_CRM_CALL => 12/*, CL_CRM_OFFER => 9*/);
 		$clss = aw_ini_get("classes");
 
 		$u = get_instance(CL_USER);

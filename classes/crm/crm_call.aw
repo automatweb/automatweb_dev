@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.54 2006/07/05 11:09:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.55 2006/07/10 13:20:46 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -683,6 +683,7 @@ class crm_call extends class_base
 			$arr["alias_to_org"] = $_GET["alias_to_org"];
 			$arr["reltype_org"] = $_GET["reltype_org"];
 			$arr["set_pred"] = $_GET["set_pred"];
+			$arr["set_resource"] = $_GET["set_resource"];
 		}
 	}
 
@@ -752,6 +753,14 @@ class crm_call extends class_base
 		{
 			$arr["obj_inst"]->set_prop("time_to_cust", $hrs);
 		}
+		if ($arr["request"]["set_resource"] != "")
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["request"]["set_resource"],
+				"type" => "RELTYPE_RESOURCE"
+			));
+		}
+
 		if ($arr["obj_inst"]->prop("time_real") == "")
 		{
 			$arr["obj_inst"]->set_prop("time_real", $hrs);
