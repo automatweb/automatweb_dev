@@ -3960,6 +3960,23 @@ class crm_company extends class_base
 	**/
 	function create_bill($arr)
 	{
+
+		$sel = array();
+		foreach($arr as $k => $v)
+		{
+			if (substr($k, 0, 3) == "sel")
+			{
+				foreach($v as $v_id)
+				{
+					$sel[] = $v_id;
+				}
+			}
+		}
+		if (count($sel))
+		{
+			$arr["sel"] = $sel;
+		}
+
 		// create a bill for all selected tasks
 		$bill = obj();
 		$bill->set_class_id(CL_CRM_BILL);

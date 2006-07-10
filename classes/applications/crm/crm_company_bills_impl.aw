@@ -228,7 +228,7 @@ class crm_company_bills_impl extends class_base
 		}
 	}
 
-	function _init_bill_task_list_t(&$t)
+	function _init_bill_task_list_t(&$t, $proj)
 	{
 		$t->define_field(array(
 			"caption" => t("Juhtumi nimi"),
@@ -258,9 +258,18 @@ class crm_company_bills_impl extends class_base
 			"sortable" => 1
 		));
 
+		$t->define_field(array(
+			"caption" => t("Arvele m&auml;&auml;ramise kuup&auml;ev"),
+			"name" => "set_date",
+			"align" => "right",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y"
+		));
+
 		$t->define_chooser(array(
 			"field" => "oid",
-			"name" => "sel"
+			"name" => "sel".$proj
 		));
 	}
 
@@ -271,7 +280,7 @@ class crm_company_bills_impl extends class_base
 			return PROP_IGNORE;
 		}
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_bill_task_list_t($t);
+		$this->_init_bill_task_list_t($t, $arr["request"]["proj"]);
 
 		// list all task rows that are not billed yet
 		$rows = new object_list(array(
@@ -341,7 +350,8 @@ class crm_company_bills_impl extends class_base
 						"oid" => $row_id,
 						"hrs" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")), 2),
 						"hr_price" => number_format($o->prop("hr_price"),2),
-						"sum" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")) * $o->prop("hr_price"),2)
+						"sum" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")) * $o->prop("hr_price"),2),
+						"set_date" => $ro->prop("to_bill_date")
 					));
 				}
 			}
