@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.50 2006/07/03 10:49:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.51 2006/07/10 17:32:20 dragut Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
-@classinfo syslog_type=ST_CRM_OFFER relationmgr=yes no_status=1
+@classinfo syslog_type=ST_CRM_OFFER relationmgr=yes no_status=1 prop_cb=1
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 @tableinfo aw_crm_offer index=aw_oid master_table=objects master_index=oid
@@ -20,6 +20,12 @@
 
 	@property start1 type=datetime_select field=start table=planner
 	@caption Algus
+
+	@property accept_deadline type=date_select field=accept_deadline table=aw_crm_offer
+	@caption Aktsepteerimistähtaeg
+
+	@property shipment_deadline type=date_select field=shipment_deadline table=aw_crm_offer
+	@caption Tarne t&auml;htaeg
 
 	@property preformer type=relpicker reltype=RELTYPE_PREFORMER table=aw_crm_offer 
 	@caption Täitja
@@ -61,6 +67,12 @@
 	@property content_list type=table store=no no_caption=1 parent=vbox_tbl
 	@caption Pakkumised
 
+-------- Tooted ----
+@default group=products
+
+	@property products_table type=table
+	@caption Toodete tabel
+
 -------- Kalendrid ----
 
 	@property calendar_selector type=calendar_selector store=no group=calendars
@@ -95,6 +107,7 @@
 	@caption Manused
 
 @groupinfo content caption="Sisu" submit=no
+@groupinfo products caption="Tooted"
 @groupinfo files caption="Failid" 
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
@@ -375,6 +388,105 @@ class crm_offer extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function _get_products_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+
+		$t->define_field(array(
+			'name' => 'product',
+			'caption' => t('Toode')
+		));
+		$t->define_field(array(
+			'name' => 'amount',
+			'caption' => t('Kogus')
+		));
+		$t->define_field(array(
+			'name' => 'unit',
+			'caption' => t('&Uuml;hik')
+		));
+		$t->define_field(array(
+			'name' => 'price',
+			'caption' => t('Hind'),
+			'align' => 'center'
+		));
+		$t->define_field(array(
+			'name' => 'currency',
+			'caption' => t('Valuuta')
+		));
+		$t->define_field(array(
+			'name' => 'shipment_date',
+			'caption' => t('Tarneaeg')
+		));
+		$t->define_field(array(
+			'name' => 'accept',
+			'caption' => t('Aktsept'),
+			'width' => '5%',
+			'align' => 'center'
+		));
+
+		// get units list:
+		$units = array();
+		$units_ol = new object_list(array(
+			'class_id' => CL_CRM_BUILDING_MANAGEMENT_UNIT
+		));
+		foreach ($units_ol->arr() as $unit_obj)
+		{
+			$units[$unit_obj->id()] = $unit_obj->name().' ('.$unit_obj->prop('code').')';
+		}
+
+
+		// get currencies list:
+		$cuurencies = array();
+		$currency_ol = new object_list(array(
+			'class_id' => CL_CURRENCY	
+		));
+		foreach ($currency_ol->arr() as $currency_obj)
+		{
+			$currencies[$currency_obj->id()] = $currency_obj->name();
+		}
+
+		//date select:
+		$date_edit = get_instance('vcl/date_edit');
+		$date_edit->configure(array(
+			'year_textbox' => '',
+			'month_textbox' => '',
+			'day_textbox' => '',
+		));
+
+		$count = 0;
+		for ($i = 0; $i < 10; $i++)
+		{
+			$t->define_data(array(
+				'product' => html::textbox(array(
+					'name' => 'products['.$count.'][product]'
+				)),
+				'amount' => html::textbox(array(
+					'name' => 'products['.$count.'][amount]',
+					'size' => 5
+				)),
+				'unit' => html::select(array(
+					'name' => 'products['.$count.'][unit]',
+					'options' => $units
+				)),
+				'price' => html::textbox(array(
+					'name' => 'products['.$count.'][price]',
+					'size' => 5
+				)),
+				'currency' => html::select(array(
+					'name' => 'products['.$count.'][currency]',
+					'options' => $currencies
+				)),
+				'shipment_date' => $date_edit->gen_edit_form('products['.$count.'][shipment_date]', -1),
+				'accept' => html::checkbox(array(
+					'name' => 'products['.$count.'][accept]'
+				))
+			));
+			$count++;
+		}
+
+		return PROP_OK;
 	}
 	
 	/**
@@ -1238,5 +1350,29 @@ class crm_offer extends class_base
 		}
 		$this->_lv--;
 	}
+
+
+	function do_db_upgrade($table, $field, $query, $error)
+	{
+		if (empty($field))
+		{
+			$this->db_query('CREATE TABLE '.$table.' (oid INT PRIMARY KEY NOT NULL)');
+			return true;
+		}
+
+		switch ($field)
+		{
+			case 'accept_deadline':
+			case 'shipment_deadline':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'int'
+				));
+                                return true;
+                }
+
+		return false;
+	}
+
 }
 ?>

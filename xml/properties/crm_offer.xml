@@ -29,6 +29,22 @@
             <caption>Algus</caption>
       </property>
       <property>
+            <name>accept_deadline</name>
+            <table>aw_crm_offer</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>accept_deadline</field>
+            <caption>Aktsepteerimist&amp;auml;htaeg</caption>
+      </property>
+      <property>
+            <name>shipment_deadline</name>
+            <table>aw_crm_offer</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>shipment_deadline</field>
+            <caption>Tarne t&amp;amp;auml;htaeg</caption>
+      </property>
+      <property>
             <name>preformer</name>
             <table>aw_crm_offer</table>
             <group>general</group>
@@ -136,6 +152,16 @@
             <caption>Pakkumised</caption>
       </property>
       <property>
+            <name>products_table</name>
+            <table>objects</table>
+            <group>products</group>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <field>products_table</field>
+            <caption>Toodete tabel</caption>
+      </property>
+      <property>
             <name>calendar_selector</name>
             <table>objects</table>
             <group>calendars</group>
@@ -209,12 +235,16 @@
             <syslog_type>ST_CRM_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
             <content>
                   <caption>Sisu</caption>
                   <submit>no</submit>
             </content>
+            <products>
+                  <caption>Tooted</caption>
+            </products>
             <files>
                   <caption>Failid</caption>
             </files>
