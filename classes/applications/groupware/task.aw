@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.113 2006/07/07 14:56:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.114 2006/07/10 13:16:21 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1003,6 +1003,14 @@ class task extends class_base
 		if ($arr["obj_inst"]->name() == "")
 		{
 			$arr["obj_inst"]->set_name($this->_get_default_name($arr["obj_inst"]));
+		}
+
+		if ($arr["request"]["set_resource"] != "")
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["request"]["set_resource"],
+				"type" => "RELTYPE_RESOURCE"
+			));
 		}
 
 		if ($arr["request"]["set_pred"] != "")
@@ -2544,6 +2552,7 @@ class task extends class_base
 			$arr["alias_to_org"] = $_GET["alias_to_org"];
 			$arr["reltype_org"] = $_GET["reltype_org"];
 			$arr["set_pred"] = $_GET["set_pred"];
+			$arr["set_resource"] = $_GET["set_resource"];
 		}
 	}
 

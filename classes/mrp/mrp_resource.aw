@@ -1470,9 +1470,9 @@ class mrp_resource extends class_base
 				'clid' => $clid,
 				'title' => $clss[$clid]["name"],
 				'parent' => $arr["obj_inst"]->id(),
-				'return_url' => get_ru()
+				'return_url' => get_ru(),
+				"set_resource" => $arr["obj_inst"]->id()
 			), $clid);
-
 			$tb->add_menu_item(array(
 				'parent'=>'add_item',
 				'text' => $clss[$clid]["name"],
