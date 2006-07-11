@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
 // scm_organizer.aw - Spordiv&otilde;istluste korraldaja 
 /*
 
@@ -10,10 +10,10 @@
 @default field=meta
 @default method=serialize
 
-@property organizer_person type=text store=no
+@property organizer_person type=relpicker reltype=RELTYPE_ORGANIZER
 @caption Organiseeria
 
-@property organizer_company type=text store=no
+@property organizer_company type=text store=no editonly=1
 @caption Firmast
 
 @groupinfo competitions caption="V&otilde;istlused" submit=no
@@ -83,10 +83,6 @@ class scm_organizer extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
-			// general
-			case "organizer":
-				$prop["value"] = "as miki mauss";
-			break;
 			// events
 			case "events_tbl":
 				$this->_gen_events_tbl(&$prop["vcl_inst"]);
@@ -248,10 +244,6 @@ class scm_organizer extends class_base
 				}
 			break;
 			// general
-			case "organizer_person":
-				$person = obj($this->get_organizer_person($arr = array("organizer" => $arr["obj_inst"]->id())));
-				$prop["value"] = $person->name();
-			break;
 			case "organizer_company":
 				$company = obj($this->get_organizer_company($arr = array("organizer" => $arr["obj_inst"]->id())));
 				$prop["value"] = $company->name();
@@ -286,10 +278,82 @@ class scm_organizer extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	function callback_pre_save($arr)
+	{
+		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop_str("organizer_person"));
+	}
+
+	////////////////////////////////////
+	// the next functions are optional - delete them if not needed
+	////////////////////////////////////
+
+	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
+	function show($arr)
+	{
+		$ob = new object($arr["id"]);
+		$this->read_template("show.tpl");
+		$this->vars(array(
+			"name" => $ob->prop("name"),
+		));
+		return $this->parse();
+	}
+
+//-- methods --//
+
+	/**
+		@attrib params=name api=1
+		@param oganizer required type=oid
+			scm_organizer object id.
+		@comment
+			fetches crm_company oid where the organizer person works.
+		@returns
+			oid of the crm_company.
+	**/
+	function get_organizer_company($arr)
+	{
+		$o = obj($this->get_organizer_person($arr));
+		return ($s = $o->prop("work_contact"))?$s:false;
+	}
+
+	/**
+		@attrib params=name api=1
+		@param organizer required type=oid
+			scm_organizer object id.
+		@comment
+			fetches crm_person oid connected to given organizer
+		@returns
+			crm_person's oid.
+	**/
+	function get_organizer_person($arr)
+	{
+		$obj = obj($arr["organizer"]);
+		return ($o = $obj->prop("organizer_person"))?$o:false;
+	}
+
+	/**
+		@comment
+			generates list of all organizers.
+		@returns
+			array of all the organizers.
+			array(
+				scm_organizer oid,
+				scm_organizer object_inst,
+			)
+	**/
+	function get_organizers()
+	{
+		$list = new object_list(array(
+			"class_id" => CL_SCM_ORGANIZER,
+		));
+		return $list->arr();
+	}
+	
+
 	function _exclude_new($arr)
 	{
 		return (!$arr["request"]["add_new"])?true:false;
 	}
+
 	function _gen_loc_img_list($arr)
 	{
 		$conns = new connection();
@@ -412,42 +476,6 @@ class scm_organizer extends class_base
 		));
 
 	}
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
 
-	/** this will get called whenever this object needs to get shown in the website, via alias in document **/
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
-
-	/**
-	**/
-	function get_organizer_company($arr)
-	{
-		$o = obj($this->get_organizer_person($arr));
-		return $o->prop("work_contact");
-	}
-
-	/**
-	**/
-	function get_organizer_person($arr)
-	{
-		$conn = new connection();
-		$conns = $conn->find(array(
-			"from" => $arr["organizer"],
-			"type" => 2,
-		));
-		$conn = current($conns);
-		return $conn["to"];
-	}
 }
 ?>

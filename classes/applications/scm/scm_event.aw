@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
 // scm_event.aw - Spordiala 
 /*
 
@@ -112,5 +112,20 @@ class scm_event extends class_base
 	}
 
 //-- methods --//
+	
+	/**
+		@comment
+			fetches result type for given event
+	**/
+	function get_result_type($arr = array())
+	{
+		$c = new connection();
+		$res = $c->find(array(
+			"from" => $arr["event"],
+			"to.class_id" => CL_SCM_RESULT_TYPE,
+		));
+		$res = current($res);
+		return $res["to"];
+	}
 }
 ?>

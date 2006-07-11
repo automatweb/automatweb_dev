@@ -6,8 +6,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORGANIZER</reltype>
             <caption>Organiseeria</caption>
       </property>
       <property>

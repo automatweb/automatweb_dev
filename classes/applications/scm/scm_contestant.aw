@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
 // scm_contestant.aw - V&otilde;istleja 
 /*
 
@@ -10,10 +10,10 @@
 @default field=meta
 @default method=serialize
 
-@property contestant type=text store=no
+@property contestant type=relpicker reltype=RELTYPE_CONTESTANT
 @caption V&otilde;istleja
 
-@property contestants_company type=text store=no
+@property contestants_company type=text store=no editonly=1
 @caption Firmast
 
 @groupinfo competitions caption="V&otilde;istlused" submit=no
@@ -22,6 +22,9 @@
 
 	@property comp_tbl type=table group=competitions no_caption=1
 	@caption V&otilde;istluste tabel
+
+	@property reg_button type=submit group=competitions
+	@caption Registreeru
 
 @reltype CONTESTANT value=1 clid=CL_CRM_PERSON
 @caption V&otilde;istleja
@@ -50,7 +53,7 @@ class scm_contestant extends class_base
 					"name" => "register",
 					"tooltip" => t("Registreeri"),
 					"url" => "#",
-					"img" => "prog_32.gif",
+					"img" => "save.gif",
 				));
 			break;
 
@@ -58,9 +61,15 @@ class scm_contestant extends class_base
 				$t = &$prop["vcl_inst"];
 				$this->_gen_comp_tbl(&$t);
 				$comp = get_instance(CL_SCM_COMPETITION);
-				foreach($comp->get_competitions() as $oid => $obj)
+				$org = get_instance(CL_SCM_ORGANIZER);
+				$filt = array(
+					"contestant" => $arr["obj_inst"]->id(),
+					"unregistered" => true,
+				);
+				foreach($comp->get_competitions($filt) as $oid => $obj)
 				{
-					$organizer = obj($comp->get_organizer_company(array("competition" => $obj->id())));
+					$org_oid  = obj($comp->get_organizer(array("competition" => $obj->id())));
+					$org_company = obj($org->get_organizer_company(array("organizer" => $org_oid)));
 					
 					$l_obj = obj($obj->prop("scm_location"));
 					$e_obj = obj($obj->prop("scm_event"));
@@ -99,12 +108,12 @@ class scm_contestant extends class_base
 						"location" => sprintf($link, $l_url, $l_obj->name()),
 						"event" => sprintf($link, $e_url, $e_obj->name()),
 						"tournament" => sprintf($link, $t_url, $t_obj->name()),
-						"organizer" => $organizer->name(),
+						"organizer" => $org_company->name(),
 					));
 				}
 			break;
 
-			case "contestant":
+			case "csontestant":
 				$o = obj($this->get_contestant_person(array("contestant" => $arr["obj_inst"]->id())));
 				$prop["value"] = $o->name();
 			break;
@@ -124,9 +133,24 @@ class scm_contestant extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "comp_tbl":
+				foreach($arr["request"]["reg"] as $oid)
+				{
+					$obj = obj($oid);
+					$obj->connect(array(
+						"to" => $arr["obj_inst"]->id(),
+						"type" => "RELTYPE_CONTESTANT",
+					));
+				}
+			break;
 		}
 		return $retval;
 	}	
+
+	function callback_pre_save($arr)
+	{
+		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop_str("contestant"));
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -200,7 +224,7 @@ class scm_contestant extends class_base
 	function get_contestant_company($arr = array())
 	{
 		$o = obj($this->get_contestant_person($arr));
-		return $o->prop("work_contact");
+		return ($s = $o->prop("work_contact"))?$s:false;
 	}
 
 	/**
@@ -213,13 +237,27 @@ class scm_contestant extends class_base
 	**/
 	function get_contestant_person($arr = array())
 	{
-		$conn = new connection();
-		$conns = $conn->find(array(
-			"from" => $arr["contestant"],
-			"to.class_id" => CL_CRM_PERSON,
+		$obj = obj($arr["contestant"]);
+		return ($s = $obj->prop("contestant"))?$s:false;
+	}
+
+	/**
+		@attrib api=1
+		@comment
+			generates list of contestant objects
+		@returns
+			array of contestants.
+			array(
+				scm_contestant object_id
+				scm_contestant object_inst
+			)
+	**/
+	function get_contestants()
+	{
+		$list = new object_list(array(
+			"class_id" => CL_SCM_CONTESTANT,
 		));
-		$conn = current($conns);
-		return $conn["to"];
+		return $list->arr();
 	}
 }
 ?>

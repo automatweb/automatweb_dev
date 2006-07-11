@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -126,14 +126,34 @@ class scm_competition extends class_base
 				$t = &$prop["vcl_inst"];
 				$this->_gen_add_res_tbl(&$t);
 				$conts = $this->get_contestants(array("competition" => $arr["obj_inst"]->id()));
+				$event = $this->get_event(array("competition" => $arr["obj_inst"]->id()));
+				$inst = get_instance(CL_SCM_EVENT);
+				$res_type = $inst->get_result_type(array("event" => $event));
+
+				$type_inst = get_instance(CL_SCM_RESULT_TYPE);
+				$format = $type_inst->get_format(array("result_type" => $res_type));
+				$res_inst = get_instance(CL_SCM_RESULT);
+				$results = $res_inst->get_results(array(
+					"competition" => $arr["obj_inst"]->id(),
+					"set_contestant" => true,
+				));
+
 				foreach($conts as $oid => $name)
 				{
+					$format_nice = $this->_gen_format_nice(array(
+						"format" => $format,
+						"data" => $results,
+						"contestant" => $oid,
+						"competition" => $arr["obj_inst"]->id(),
+					));
+
 					$cont = get_instance(CL_SCM_CONTESTANT);
 					$person = obj($cont->get_contestant_person(array("contestant" => $oid)));
 					$company = obj($cont->get_contestant_company(array("contestant" => $oid)));
 					$t->define_data(array(
 						"contestant" => $person->name(),
 						"company" => $company->name(),
+						"result" => $format_nice,
 					));
 				}
 			break;
@@ -148,10 +168,43 @@ class scm_competition extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "add_results_tbl":
+				$res_type = get_instance(CL_SCM_RESULT_TYPE);
+				$res = get_instance(CL_SCM_RESULT);
+				foreach($arr["request"]["res"] as $result => $data)
+				{
+					$obj = obj($result);
+					$rev = $res_type->format_data(array(
+						"source" => "result",
+						"oid" => $result,
+						"data" => $data,
+						"reverse" => true,
+					));
+					$obj->set_prop("result", $rev);
+					$obj->save();
+				}
+				foreach($arr["request"]["res_new"] as $competition => $tmp)
+				{
+					foreach($tmp as $contestant => $data)
+					{
+						$rev = $res_type->format_data(array(
+							"source" => "competition",
+							"oid" => $competition,
+							"data" => $data,
+							"reverse" => true,
+						));
+						$id = $res->add_result(array(
+							"competition" => $competition,
+							"contestant" => $contestant,
+							"result" => $rev,
+						));
+					}
+				}
+			break;
 		}
 		return $retval;
 	}	
-
+	
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
@@ -240,11 +293,50 @@ class scm_competition extends class_base
 
 	}
 
-	function get_competitions()
+	function _comp_list_callback(&$o, $list)
+	{
+		$list->remove($o->id());
+	}
+
+	/**
+		@attrib params=name api=1
+		@param unregistred optional type=bool
+			if set to true, only these competitions will be returned where $contestant hasn't signed in.
+		@param contestant optional type=oid
+			if this is set with $unregistred=true, only unregistered competitions for this contestant are returned.
+		@comment
+			generates list of competitions.
+		@returns
+			array of competitions:
+			array(
+				scm_competition oid,
+				scm_competition object_inst,
+			)
+			
+	**/
+	function get_competitions($arr = array())
 	{
 		$list = new object_list(array(
 			"class_id" => CL_SCM_COMPETITION,
 		));
+		if(strlen($arr["contestant"]) && $arr["unregistered"])
+		{
+			foreach($list->arr() as $oid => $obj)
+			{
+				$conns = $obj->connections_from(array(
+					"type" => "RELTYPE_CONTESTANT",
+				));
+				foreach($conns as $con)
+				{
+					if($con->conn["to"] == $arr["contestant"])
+					{
+						$list->remove($oid);
+						break;
+					}
+
+				}
+			}
+		}
 		return $list->arr();
 	}
 
@@ -266,40 +358,13 @@ class scm_competition extends class_base
 //-- methods --//
 
 	/**
-	**/
-	function get_organizer_company($arr = array())
-	{
-		$o = obj($this->get_organizer_person($arr));
-		return $o->prop("work_contact");
-	}
-
-	/**
+		@attrib params=name api=1
 		@param competition required type=int
 			the competition object id
 		@comment
-			fetches the organizer person
-	**/
-	function get_organizer_person($arr = array())
-	{
-		$org = $this->get_organizer($arr);
-		$conn = new connection();
-		$conns = $conn->find(array(
-			"from" => $org,
-			"to.class_id" => CL_CRM_PERSON,
-		));
-		if(!count($conns))
-		{
-			return false; // no person connected to organizer class
-		}
-		$conn = current($conns);
-		return $conn["to"];
-	}
-
-	/**
-		@param competition required type=int
-			the competition object id
-		@comment
-			fetches the organizer object
+			fetches the organizer objects name
+		@returns
+			scm_organizer oid for given competition
 	**/
 	function get_organizer($arr = array())
 	{
@@ -317,11 +382,16 @@ class scm_competition extends class_base
 	}
 
 	/**
-		@attrib params=name
+		@attrib params=name api=1
 		@param competition required type=int
 			the competitions object id
 		@comment
 			fetches contestants for given competition
+		@returns
+			returns array of scm_contestant object id's who are registred to this competition
+			array(
+				object_id => object_name
+			)
 	**/
 	function get_contestants($arr = array())
 	{
@@ -333,6 +403,56 @@ class scm_competition extends class_base
 		foreach($conns as $id => $data)
 		{
 			$res[$data["to"]] = $data["to_name"];
+		}
+		return $res;
+	}
+
+	/**
+		@attrib params=name api=1
+		@param competition required type=int
+			competitions object id
+		@comment
+			gets event for given competition
+		@returns
+			event object id
+	**/
+	function get_event($arr = array())
+	{
+		$c = new connection();
+		$res = $c->find(array(
+			"from" => $arr["competition"],
+			"to.class_id" => CL_SCM_EVENT,
+		));
+		$res = current($res);
+		return $res["to"];
+	}
+
+	function _gen_format_nice($arr)
+	{
+		// andmed vaadatakse läbi.. ning leitakse õige võistleja, .. kui leitakse
+		foreach($arr["data"] as $result)
+		{
+			if($result["contestant"] == $arr["contestant"])
+			{
+				$correct_result = $result;
+				break;
+			}
+		}
+		// formaadi väljad käikase läbi ja tekitatakse input'id
+		foreach($arr["format"] as $name => $caption)
+		{
+			if(strlen($correct_result["result_oid"]))
+			{
+				$textbox["name"] = "res[".$correct_result["result_oid"]."][".$name."]";
+			}
+			else
+			{
+				$textbox["name"] = "res_new[".$arr["competition"]."][".$arr["contestant"]."][".$name."]";
+			}
+			$textbox["size"] = "4";
+			$textbox["value"] = $correct_result["result"][$name];
+			$res .= html::textbox($textbox);
+			$res .= $caption."&nbsp;&nbsp;";
 		}
 		return $res;
 	}

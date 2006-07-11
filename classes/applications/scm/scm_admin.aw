@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_admin.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_admin.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
 // scm_admin.aw - Spordiv&otilde;istluste haldus 
 /*
 
@@ -10,6 +10,26 @@
 @default field=meta
 @default method=serialize
 
+
+@groupinfo contestants caption="V&otilde;istlejad" submit=no
+	
+	@default group=contestants
+
+	@property cont_tb type=toolbar no_caption=1
+	@caption Osalejate t66tiistariba
+
+	@property cont_tbl type=table no_caption=1
+	@caption Osalejate nimekiri
+
+@groupinfo organizers caption="Korraldajad" submit=no
+
+	@default group=organizers
+	
+	@property org_tb type=toolbar no_caption=1
+	@caption Korraldajate t66riistariba
+
+	@property org_tbl type=table no_caption=1
+	@caption Korraldajate nimekiri
 */
 
 class scm_admin extends class_base
@@ -29,6 +49,84 @@ class scm_admin extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
+			case "cont_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "new_contestant",
+					"tooltip" => t("Lisa uus v&otilde;istleja"),
+					"img" => "new.gif",
+					"url" => $this->mk_my_orb("new",array(
+						"class" => "scm_contestant",
+						"parent" => $arr["obj_inst"]->parent(),
+						"return_url" => post_ru(),
+					)),
+				));
+
+			break;
+			case "cont_tbl":
+				$t = &$prop["vcl_inst"];
+				$this->_gen_tbl(&$t);
+				$cont = get_instance(CL_SCM_CONTESTANT);
+				foreach($cont->get_contestants() as $oid => $obj)
+				{
+					$comp = ($s = $cont->get_contestant_company(array("contestant" => $oid)))?obj($s):false;
+					$pers = ($cont->get_contestant_person(array("contestant" => $oid)))?true:false;
+					$cont_url = $this->mk_my_orb("change" ,array(
+						"class" => "scm_contestant",
+						"id" => $oid,
+						"return_url" => get_ru(),
+					));
+					$link = html::href(array(
+						"caption" => 
+							"%s",
+						"url" => "%s",
+					));
+					$t->define_data(array(
+						"name" => sprintf($link, $cont_url, ($pers?$obj->name():t("isik m&auml;&auml;ramata"))),
+						"company" => ($comp)?$comp->name():t("firma m&auml;&auml;ramata"),
+					));
+				}
+			break;
+
+			case "org_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "new_organizer",
+					"tooltip" => t("Lisa uus korraldaja"),
+					"img" => "new.gif",
+					"url" => $this->mk_my_orb("new",array(
+						"class" => "scm_organizer",
+						"parent" => $arr["obj_inst"]->parent(),
+						"return_url" => post_ru(),
+					)),
+				));
+
+			break;
+			case "org_tbl":
+				$t = &$prop["vcl_inst"];
+				$this->_gen_tbl(&$t);
+				$org = get_instance(CL_SCM_ORGANIZER);
+				foreach($org->get_organizers() as $oid => $obj)
+				{
+					$pers = ($org->get_organizer_person(array("organizer" => $oid)))?true:false;
+					$comp = ($s = $org->get_organizer_company(array("organizer" => $oid)))?obj($s):false;
+					
+					$link = html::href(array(
+						"caption" =>
+							"%s",
+						"url" => "%s",
+					));
+					$pers_url = $this->mk_my_orb("change" ,array(
+						"class" => "scm_organizer",
+						"id" => $oid,
+						"return_url" => get_ru(),
+					));
+					$t->define_data(array(
+						"name" => sprintf($link, $pers_url, ($pers?$obj->name():t("isik m&auml;&auml;ramata"))),
+						"company" => ($comp)?$comp->name():t("M&auml;&auml;ramata"),
+					));
+				}
+			break;
 		};
 		return $retval;
 	}
@@ -65,5 +163,19 @@ class scm_admin extends class_base
 	}
 
 //-- methods --//
+
+	function _gen_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "company",
+			"caption" => t("Firma"),
+			"sortable" => true,
+		));
+	}
 }
 ?>

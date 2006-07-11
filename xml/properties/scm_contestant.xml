@@ -6,8 +6,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
-            <store>no</store>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTESTANT</reltype>
             <caption>V&amp;amp;otilde;istleja</caption>
       </property>
       <property>
@@ -18,6 +18,7 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
+            <editonly>1</editonly>
             <caption>Firmast</caption>
       </property>
       <property>
@@ -41,6 +42,16 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>V&amp;amp;otilde;istluste tabel</caption>
+      </property>
+      <property>
+            <name>reg_button</name>
+            <table>objects</table>
+            <group>competitions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Registreeru</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SCM_CONTESTANT</syslog_type>
