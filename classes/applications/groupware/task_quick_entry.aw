@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.11 2006/07/10 17:21:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.12 2006/07/11 15:37:45 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -426,7 +426,7 @@ class task_quick_entry extends class_base
 	**/
 	function check_existing($arr)
 	{
-		if (mb_detect_encoding($arr["c"]) == "UTF-8")
+		if (mb_detect_encoding($arr["c"],"UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["c"] = iconv("UTF-8", aw_global_get("charset"), $arr["c"]);
 		}
