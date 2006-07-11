@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.18 2006/03/13 12:27:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.19 2006/07/11 13:21:33 markop Exp $
 
 /*
 
@@ -356,7 +356,7 @@ class classificator extends class_base
 				$obj_meta = $o->meta("tolge");
 				if($obj_meta[$langid])
 				{
-					$ret["list_names"][$obj_id] = $obj_meta[$langid];
+					$ret["list_names"][$obj_id] = iconv("UTF-8", aw_global_get("charset"),  $obj_meta[$langid]);
 				}
 			}
 		}
