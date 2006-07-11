@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.21 2006/07/05 12:21:10 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.22 2006/07/11 14:42:50 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -85,6 +85,7 @@ class realestate_add extends class_base
 		));
 		$this->trans_props = array(
 			"comment",
+			"levels",
 		);
 	}
 
@@ -468,12 +469,28 @@ class realestate_add extends class_base
 			"name" => "name",
 			"caption" => t("Etapi nimi"),
 		));
+
+		aw_global_set("output_charset", "utf-8");
+		$lg = get_instance("languages");
+		$langdata = $lg->get_list();
+		foreach($langdata as $id => $lang)
+		{
+			if($arr["obj_inst"]->lang_id() != $id)
+			{
+				$t->define_field(array(
+					"name" => $id,
+					"lang_id" => $id,
+					"caption" => t($lang),
+				));
+			}
+		}
+
 		$t->define_field(array(
 			"name" => "template",
 			"caption" => t("Template"),
 		));
 		$transyes = $arr["obj_inst"]->prop("transyes");
-		$langdata = array();
+//		$langdata = array();
 		$count = 1;
 		foreach($levels as $level)
 		{
@@ -487,6 +504,15 @@ class realestate_add extends class_base
 				"value" => $level["name"],
 			));
 			
+			foreach($langdata as $lid => $lang)
+			{
+				 $data[$lid] = html::textbox(array(
+					"name" => "meta[".$count."][tolge][".$lid."]",
+					"size" => 15,
+					"value" => $level["tolge"][$lid],
+				));
+			}
+
 			$data["template"] = html::textbox(array(
 				"name" => "meta[".$count."][template]",
 				"size" => 30,
@@ -494,6 +520,7 @@ class realestate_add extends class_base
 			));
 			$t->define_data($data);
 			$count++;
+
 		}
 		$new_data = array(
 			"id" => $count,
@@ -505,6 +532,15 @@ class realestate_add extends class_base
 			"value" => "",
 		));
 		
+		foreach($langdata as $lid => $lang)
+		{
+			 $new_data[$lid] = html::textbox(array(
+				"name" => "meta[".$count."][tolge][".$lid."]",
+				"size" => 15,
+				"value" => "",
+			));
+		}
+
 		$new_data["template"] = html::textbox(array(
 			"name" => "meta[".$count."][template]",
 			"size" => 30,
@@ -972,8 +1008,10 @@ class realestate_add extends class_base
 		extract($args);
 		$c = "";
 		$c_act = "";
+		$lang_id = aw_global_get("lang_id");
 		foreach($levels as $key => $data)
 		{
+			if($data["tolge"][$lang_id]) $data["name"] = iconv("UTF-8", aw_global_get("charset"),  $data["tolge"][$lang_id]);
 			$key++;
 			if(($_SESSION["realestate_input_data"]["filled_level"]+2) > $key)
 			{
