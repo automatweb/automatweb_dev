@@ -1893,7 +1893,7 @@ class realestate_property extends class_base
 					$meta_obj = obj($this_object->prop($name));
 					$lang_id = aw_global_get("lang_id");
 					$trans = $meta_obj->meta("tolge");
-					if($trans[$lang_id]) $properties[$name]["strvalue"] = $trans[$lang_id];
+					if($trans[$lang_id]) $properties[$name]["strvalue"] = iconv("UTF-8", aw_global_get("charset"),  $trans[$lang_id]);
 					else $properties[$name]["strvalue"] = $this_object->prop_str ($name);
 				}
 				else $properties[$name]["strvalue"] = $this_object->prop_str ($name);
