@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.115 2006/07/10 14:19:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.116 2006/07/11 22:12:54 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1727,6 +1727,16 @@ class task extends class_base
 					"s_action" => "start",
 					"type" => t("Toimetus"),
 					"name" => $data["value"]
+				));
+				$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
+			}
+			else
+			{
+				$url = $this->mk_my_orb("stopper_pop", array(
+					"id" => $arr["obj_inst"]->id(),
+					"s_action" => "start",
+					"type" => t("Toimetus"),
+					"name" => $arr["obj_inst"]->name()
 				));
 				$stopper = " <a href='#' onClick='aw_popup_scroll(\"$url\",\"aw_timers\",320,400)'>".t("Stopper")."</a>";
 			}

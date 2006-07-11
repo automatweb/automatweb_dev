@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.4 2006/07/10 14:19:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.5 2006/07/11 22:12:54 kristo Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -95,7 +95,7 @@ class task_row extends class_base
 		$o->set_prop("time_real", $o->prop("time_real") + $data["hours"]);
 		if ($data["desc"] != "")
 		{
-			$o->set_prop("content", $data["desc"]);
+			$o->set_prop("content", $o->prop("content")." ".$data["desc"]);
 		}
 		$o->save();
 
