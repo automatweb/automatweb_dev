@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.32 2006/07/06 18:40:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.33 2006/07/11 09:58:18 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -18,6 +18,12 @@
 
 	@property redir_to type=callback callback=callback_get_redir
 	@caption P&auml;rast t&auml;itmist suuna
+
+	@property confirm_view_ctl type=relpicker reltype=RELTYPE_CONTROLLER
+	@caption Kinnitusevaate kontroller
+
+	@property disp_view_ctl type=relpicker reltype=RELTYPE_CONTROLLER
+	@caption V&auml;ljundi kontroller 
 
 @default group=cfs_tbl
 
@@ -51,6 +57,9 @@
 	@property mail_subj type=textbox
 	@caption Teema
 
+	@property mail_content_ctr type=relpicker reltype=RELTYPE_CONTROLLER
+	@caption Meili sisu kontroller
+
 @default group=mail_settings_confirm
 
 	@property send_confirm_mail type=checkbox ch_value=1
@@ -67,6 +76,9 @@
 
 	@property confirm_mail_to_prop type=select 
 	@caption Element, milles on saaja aadress	
+
+	@property confirm_mail_content_ctr type=relpicker reltype=RELTYPE_CONTROLLER
+	@caption Kinnitusmeili sisu kontroller
 
 @default group=entry_settings
 
@@ -130,6 +142,10 @@
 
 @reltype DOC value=7 clid=CL_DOCUMENT
 @caption Dokument kuhu suunata
+
+@reltype CONTROLLER value=8 clid=CL_FORM_CONTROLLER
+@caption Kontroller
+
 */
 
 class cb_form_chain extends class_base
@@ -463,6 +479,16 @@ class cb_form_chain extends class_base
 
 		if ($_GET["display"])
 		{
+			if ($this->can("view", $ob->prop("disp_view_ctl")))
+			{
+				$fc = get_instance(CL_FORM_CONTROLLER);
+				return $fc->eval_controller(
+					$ob->prop("disp_view_ctl"),
+					$_SESSION["cbfc_last_entry"],
+					$arr["id"],
+					$arr["id"]
+				);
+			}
 			$i = get_instance(CL_CB_FORM_CHAIN_ENTRY);
 			return $i->show(array(
 				"id" => $_SESSION["cbfc_last_entry"],
@@ -855,23 +881,34 @@ class cb_form_chain extends class_base
 	{
 		$this->read_template("show_confirm.tpl");
 
-		$form_str = "";
-
-		// for each page
-		$pgs = $this->_get_page_list($o);
-		foreach($pgs as $pg)
+		if ($this->can("view", $ob->prop("confirm_view_ctl")))
 		{
-			// for each form on page
-			$forms = $this->_get_forms_for_page($o, $pg);
-			foreach($forms as $form_dat)
+			$fc = get_instance(CL_FORM_CONTROLLER);
+			$form_str = $fc->eval_controller(
+				$ob->prop("confirm_view_ctl"),
+				$o
+			);
+		}
+		else
+		{
+			$form_str = "";
+
+			// for each page
+			$pgs = $this->_get_page_list($o);
+			foreach($pgs as $pg)
 			{
-				if ($form_dat["rep_cnt"] > 1)
+				// for each form on page
+				$forms = $this->_get_forms_for_page($o, $pg);
+				foreach($forms as $form_dat)
 				{
-					$form_str .= $this->_display_data_table($o, $form_dat);
-				}
-				else
-				{
-					$form_str .= $this->_display_data($o, $form_dat);
+					if ($form_dat["rep_cnt"] > 1)
+					{
+						$form_str .= $this->_display_data_table($o, $form_dat);
+					}
+					else
+					{
+						$form_str .= $this->_display_data($o, $form_dat);
+					}
 				}
 			}
 		}
@@ -1143,9 +1180,22 @@ class cb_form_chain extends class_base
 				"to" => $to,
 				"body" => "see on html kiri",
 			));
+
 			$mailer->htmlbodyattach(array(
 				"data" => $html,
 			));
+
+			if ($this->can("view", $o->prop("mail_content_ctr")))
+			{
+				$fc = get_instance(CL_FORM_CONTROLLER);
+				$fc->eval_controller(
+					$o->prop("mail_content_ctr"),
+					&$mailer,
+					&$o,
+					&$entry
+				);
+			}
+
 			$mailer->gen_mail();
 		}
 	}
@@ -1201,6 +1251,18 @@ class cb_form_chain extends class_base
 		}
 		if ($to != "")
 		{
+
+			if ($this->can("view", $o->prop("confirm_mail_content_ctr")))
+			{
+				$fc = get_instance(CL_FORM_CONTROLLER);
+				return $fc->eval_controller(
+					$o->prop("confirm_mail_content_ctr"),
+					array("to" => $to, "from" => $from),
+					&$o,
+					&$entry
+				);
+			}
+
 			send_mail(
 				$to,	// to
 				$o->prop("confirm_mail_subj"), // subj 

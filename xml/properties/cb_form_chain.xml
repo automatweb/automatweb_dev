@@ -31,6 +31,26 @@
             <caption>P&amp;amp;auml;rast t&amp;amp;auml;itmist suuna</caption>
       </property>
       <property>
+            <name>confirm_view_ctl</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <caption>Kinnitusevaate kontroller</caption>
+      </property>
+      <property>
+            <name>disp_view_ctl</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <caption>V&amp;amp;auml;ljundi kontroller </caption>
+      </property>
+      <property>
             <name>cfs</name>
             <table>objects</table>
             <group>cfs_tbl</group>
@@ -116,6 +136,16 @@
             <caption>Teema</caption>
       </property>
       <property>
+            <name>mail_content_ctr</name>
+            <table>objects</table>
+            <group>mail_settings_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <caption>Meili sisu kontroller</caption>
+      </property>
+      <property>
             <name>send_confirm_mail</name>
             <table>objects</table>
             <group>mail_settings_confirm</group>
@@ -163,6 +193,16 @@
             <method>serialize</method>
             <type>select</type>
             <caption>Element, milles on saaja aadress	</caption>
+      </property>
+      <property>
+            <name>confirm_mail_content_ctr</name>
+            <table>objects</table>
+            <group>mail_settings_confirm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <caption>Kinnitusmeili sisu kontroller</caption>
       </property>
       <property>
             <name>entry_folder</name>
@@ -334,6 +374,11 @@
                   <clid>CL_DOCUMENT</clid>
                   <caption>Dokument kuhu suunata</caption>
             </DOC>
+            <CONTROLLER>
+                  <value>8</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CONTROLLER>
       </reltypes>
 </properties>
 
