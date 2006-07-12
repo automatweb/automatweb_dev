@@ -1,24 +1,59 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_other.aw,v 1.1 2006/07/12 13:29:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_field_other.aw,v 1.2 2006/07/12 13:36:23 kristo Exp $
 // crm_field_other.aw - Muu (valdkond) 
 /*
 
-@classinfo syslog_type=ST_CRM_FIELD_OTHER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_FIELD_OTHER relationmgr=yes no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
-@default field=meta
-@default method=serialize
 
-@property location type=chooser
-@caption Asukoht
+	@property location type=chooser field=meta method=serialize
+	@caption Asukoht
 
-@property languages type=chooser multiple=1
-@caption Teeninduskeeled
+	@property languages type=chooser multiple=1 field=meta method=serialize
+	@caption Teeninduskeeled
 
-@property price_level type=chooser multiple=1
-@caption Hinnaklass
+	@property price_level type=chooser multiple=1 field=meta method=serialize
+	@caption Hinnaklass
 
+	@property comment type=textarea rows=5 cols=50
+	@caption Kirjeldus
+
+	@property crm_field type=select field=meta method=serialize
+	@caption Tegevusala
+
+@default group=cedit
+
+	@property phone_id type=relmanager reltype=RELTYPE_PHONE props=name override_parent=this
+	@caption Telefon
+
+	@property telefax_id type=relmanager reltype=RELTYPE_TELEFAX props=name override_parent=this
+	@caption Faks
+
+	@property email_id type=relmanager reltype=RELTYPE_EMAIL props=mail override_parent=this
+	@caption E-posti aadressid
+
+@default group=images
+
+	@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h,new_w_big,new_h_big,comment table_fields=name,ord table_edit_fields=ord override_parent=this direct_links=1 
+	@caption Pildid
+
+@groupinfo cedit caption="Kontaktandmed" 
+@groupinfo images caption="Pildid" submit=no
+
+
+@reltype EMAIL value=1 clid=CL_ML_MEMBER
+@caption E-post
+
+@reltype PHONE value=2 clid=CL_CRM_PHONE
+@caption Telefon
+
+@reltype TELEFAX value=3 clid=CL_CRM_PHONE
+@caption Fax
+
+@reltype IMAGE value=4 clid=CL_IMAGE
+@caption Pilt
 */
 
 class crm_field_other extends class_base
