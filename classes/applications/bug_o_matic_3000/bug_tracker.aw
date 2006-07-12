@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.73 2006/07/05 10:44:59 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.73 2006/07/05 10:44:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.74 2006/07/12 09:54:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.74 2006/07/12 09:54:29 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -684,11 +684,87 @@ class bug_tracker extends class_base
 		die($node_tree->finalize_tree());
 	}
 
+	function get_node_by_who($arr)
+	{
+	    classload("core/icons");
+		$node_tree = get_instance("vcl/treeview");
+		$node_tree->start_tree (array (
+			"type" => TREE_DHTML,
+			"tree_id" => "bug_tree",
+			"branch" => 1,
+		));
+	    
+		$obj = new object($arr["parent"]);
+		if($obj->class_id() == CL_BUG_TRACKER)
+		{
+			// list all persons that have bugs
+			$c = new connection();
+			$ppl = array();
+			foreach($c->find(array("from.class_id" => CL_BUG, "to.class_id" => CL_CRM_PERSON)) as $pc)
+			{
+				$ppl[$pc["to"]] = $pc["to"];
+			}
+
+			foreach($ppl as $p_id)
+			{
+				$p_o = obj($p_id);
+				$sn = $p_o->name();
+				if ($arr["p_id"] == $p_id)
+				{
+					$sn = "<b>".$sn."</b>";
+				}
+				$node_tree->add_item(0, array(
+					"id" => $p_id,
+					"name" => $sn,
+					"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
+					"url" => html::get_change_url(
+						$arr["inst_id"],
+						array(
+							"group" => "by_who",
+							"b_stat" => null,
+							"p_id" => $p_id
+						)
+					)
+				));
+				$node_tree->add_item($p_id, array("id" => "stat_".$p_id, "name" => "a"));
+			}
+		}
+		else
+		{
+			// list statuses
+			$bugi = get_instance(CL_BUG);
+			foreach($bugi->get_status_list() as $sid => $sn)
+			{
+				if ($arr["b_stat"] == $sid)
+				{
+					$sn = "<b>".$sn."</b>";
+				}
+				$node_tree->add_item(0, array(
+					"id" => $arr["parent"]."_".$sid,
+					"name" => $sn,
+					"url" => html::get_change_url(
+						$arr["inst_id"],
+						array(
+							"group" => "by_who",
+							"b_stat" => $sid,
+							"p_id" => $arr["parent"]
+						)
+					)
+				));
+			}
+		}
+		die($node_tree->finalize_tree());
+	}
+
 	/** to get subtree for who & projects view
 	    @attrib name=get_node_other all_args=1
 	**/
 	function get_node_other($arr)
 	{
+		if ($arr["active_group"] == "by_who")
+		{
+			$this->get_node_by_who($arr);
+		}
 	    classload("core/icons");
 		$node_tree = get_instance("vcl/treeview");
 		$node_tree->start_tree (array (
@@ -991,7 +1067,20 @@ class bug_tracker extends class_base
 			));
 		}
 	
-		if($this->sort_type["name"] == "who" || $this->sort_type["name"] == "project")
+		if ($this->sort_type["name"] == "who")
+		{
+			$this->tree->add_item(0,array(
+				"id" => $this->self_id,
+				"name" => $this->tree_root_name,
+			));		
+		
+			$this->tree->add_item($this->self_id,array(
+				"id" => "allah",
+				"name" => "a",
+			));
+		}
+
+		if($this->sort_type["name"] == "project")
 		{
 			$this->gen_tree_other(array(
 				"parent" => $this->self_id,
@@ -1464,7 +1553,7 @@ class bug_tracker extends class_base
 				"class_id" => CL_BUG,
 				"lang_id" => array(),
 				"site_id" => array(),
-				"bug_status" => new obj_predicate_not(BUG_STATUS_CLOSED),
+				"bug_status" => $arr["request"]["b_stat"] ? $arr["request"]["b_stat"] : new obj_predicate_not(BUG_STATUS_CLOSED),
 				"who" => $arr["request"]["p_id"]
 			));
 		}
