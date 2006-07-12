@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.116 2006/07/11 22:12:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.117 2006/07/12 10:35:07 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -2515,7 +2515,10 @@ class task extends class_base
 				if ((int)$o->prop("on_bill") != (int)$e["on_bill"])
 				{
 					$o->set_prop("on_bill", (int)$e["on_bill"]);
-					$o->set_prop("to_bill_date", time());
+					if ($o->is_property("to_bill_date"))
+					{
+						$o->set_prop("to_bill_date", time());
+					}
 					$is_mod = true;
 				}
 			}
