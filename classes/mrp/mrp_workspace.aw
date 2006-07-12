@@ -3842,6 +3842,10 @@ if ($_GET['show_thread_data'] == 1)
 			case "grp_printer_done":
 				$states = array(MRP_STATUS_DONE);
 				$default_sortby = "mrp_job.started";
+				if (!$arr["request"]["sort_order"])
+				{
+					$arr["request"]["sort_order"] = "desc";
+				}
 				break;
 
 			case "grp_printer_aborted":
@@ -4202,6 +4206,11 @@ if ($_GET['show_thread_data'] == 1)
 		{
 			$t->set_default_sortby("tm");
 		}
+
+		if ($arr["request"]["sort_order"] == "desc")
+		{
+			$t->set_default_sorder("desc");
+		}		
 
 		$t->sort_by();
 		$t->set_sortable(false);
