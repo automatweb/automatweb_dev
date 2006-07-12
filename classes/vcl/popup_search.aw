@@ -75,14 +75,14 @@ class popup_search extends aw_template
 			}
 		}
 
+		$clid = array();
+		$awa = new aw_array($tmp["clid"]);
+		foreach($awa->get() as $clid_str)
+		{
+			$clid[] = constant($clid_str);
+		}
 		if (is_object($arr["obj_inst"]))
 		{
-			$clid = array();
-			$awa = new aw_array($tmp["clid"]);
-			foreach($awa->get() as $clid_str)
-			{
-				$clid[] = constant($clid_str);
-			}
 			$url = $this->mk_my_orb("do_search", array(
 				"id" => $arr["obj_inst"]->id(),
 				"pn" => $tmp["name"],
@@ -111,12 +111,35 @@ class popup_search extends aw_template
 		}
 
 		
-		$tmp["value"] = html::select(array(
-			"name" => $arr["property"]["name"],
-			"options" => array("" => "--Vali--") + $options,
-			"selected" => $sel,
-			"multiple" => $arr["property"]["multiple"]
-		));
+		if (false && $arr["property"]["style"] == "autocomplete")
+		{
+			$selstr = "";
+			if ($this->can("view", $sel))
+			{
+				$selstr = obj($sel);
+				$selstr = $selstr->name();
+			}
+			$as = $this->mk_my_orb("autocomplete_source", array("pn" => $arr["property"]["name"], "clid" => $clid));
+			$as = parse_url ($as);
+			$as = $as["path"] . "?" . $as["query"];
+			$tmp["value"] = html::textbox(array(
+				"name" => $arr["property"]["name"],
+				"content" => $selstr,
+				"value" => $sel,
+				"autocomplete_source" => $as,
+				"autocomplete_params" => array($arr["property"]["name"]),
+				"option_is_tuple" => true
+			));
+		}
+		else
+		{
+			$tmp["value"] = html::select(array(
+				"name" => $arr["property"]["name"],
+				"options" => array("" => "--Vali--") + $options,
+				"selected" => $sel,
+				"multiple" => $arr["property"]["multiple"]
+			));
+		}
 
 		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 		{
@@ -210,6 +233,7 @@ class popup_search extends aw_template
 				));
 			}
 		}
+
 		return array(
 			$arr["property"]["name"] => $tmp,
 		);
@@ -837,6 +861,41 @@ function aw_get_el(name,form)
 			"caption" => "<img src='".aw_ini_get("baseurl")."/automatweb/images/icons/search.gif' border=0>",
 			"title" => t("Otsi")
 		));
+	}
+
+	/**
+		@attrib name=autocomplete_source all_args=1
+	**/
+	function autocomplete_source($arr)
+	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
+		$ol = new object_list(array(
+			"class_id" => $arr["clid"],
+			"name" => iconv("UTF-8", aw_global_get("charset"), $arr[$arr["pn"]])."%",
+			"lang_id" => array(),
+			"site_id" => array(),
+			"limit" => 30,
+		));
+		$autocomplete_options = $ol->names();
+		foreach($autocomplete_options as $k => $v)
+		{
+			$autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", parse_obj_name($v));
+		}
+		exit ($cl_json->encode($option_data));
+
 	}
 }
 ?>

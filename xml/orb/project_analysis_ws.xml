@@ -1,0 +1,12 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="project_analysis_ws" folder="applications/groupware" extends="class_base">
+		<action name="del_goals">
+			<function name="del_goals">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>

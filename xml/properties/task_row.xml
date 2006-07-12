@@ -84,6 +84,14 @@
             <caption>Arve</caption>
       </property>
       <property>
+            <name>to_bill_date</name>
+            <table>aw_task_rows</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_to_bill_date</field>
+            <caption>Arvele m&amp;amp;auml;&amp;amp;auml;ramise kuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
             <name>comments</name>
             <table>objects</table>
             <group>comments</group>

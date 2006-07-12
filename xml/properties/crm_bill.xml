@@ -53,6 +53,7 @@
                   <num_0>CL_CRM_COMPANY</num_0>
                   <num_1>CL_CRM_PERSON</num_1>
             </clid>
+            <style>autocomplete</style>
             <caption>Klient</caption>
       </property>
       <property>

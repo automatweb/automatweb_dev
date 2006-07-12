@@ -143,6 +143,10 @@ class procurements_model extends class_base
 	**/
 	function get_pris_from_procurement($proc)
 	{
+		if (!$proc)
+		{
+			return array();
+		}
 		$ret = array();
 		foreach($proc->connections_from(array("type" => "RELTYPE_PRI")) as $c)
 		{

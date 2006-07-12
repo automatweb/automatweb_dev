@@ -32,5 +32,12 @@
 			</function>
 		</action>
 
+		<action name="autocomplete_source" all_args="1">
+			<function name="autocomplete_source">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

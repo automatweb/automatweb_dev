@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.96 2006/07/12 11:56:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw.bak,v 1.1 2006/07/12 11:56:32 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -116,10 +116,11 @@
 
 	@property files_tb type=toolbar no_caption=1 store=no
 
-	@layout files_lay type=hbox width=20%:80%
+	@layout files_lay type=hbox
 
 		@property files_tree type=treeview store=no no_caption=1 parent=files_lay
 		@property files_table type=table store=no no_caption=1 parent=files_lay
+
 
 @default group=trans
 
@@ -254,18 +255,11 @@
 		@property req_tree type=treeview store=no no_caption=1 parent=req_l
 		@property req_tbl type=table store=no no_caption=1 parent=req_l
 	
-@default group=analysis
-
-	@property analysis_tb type=toolbar no_caption=1 store=no
-	@property analysis_table type=table no_caption=1 store=no
-
-
 @groupinfo info caption="Projekti info"
 	@groupinfo info_t caption="Projekti info" parent=info
 	@groupinfo strat caption="Eesm&auml;rgid" parent=info submit=no
 	@groupinfo strat_a caption="Eesm&auml;rkide hindamine" parent=info submit=no
 	@groupinfo strat_res caption="Eesm&auml;rkide hindamise tulemused" parent=info store=no submit=no
-	@groupinfo analysis caption="Anal&uuml;&uuml;sid" parent=info store=no submit=no
 
 	
 @groupinfo general2 parent=general caption="Üldine"
@@ -282,7 +276,7 @@
 
 
 @groupinfo add_event caption="Muuda sündmust"
-@groupinfo files caption="Manused" submit=no
+@groupinfo files caption="Manused"
 @groupinfo trans caption="Tõlkimine"
 
 @groupinfo userdefined caption="Andmed"
@@ -367,11 +361,7 @@
 
 @reltype FILES_FLD value=22 clid=CL_MENU
 @caption Failide kataloog
-
-@reltype ANALYSIS_WS value=23 clid=CL_PROJECT_ANALYSIS_WS
-@caption Anal&uuml;&uuml;si t&ouml;&ouml;laud
-
-*/
+/
 
 class project extends class_base
 {
@@ -403,27 +393,16 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "analysis_tb":
-			case "analysis_table":
-				static $ib;
-				if (!$ib)
-				{
-					$ib = get_instance("applications/groupware/project_analysis_impl");
-				}
-				$fn = "_get_".$data["name"];
-				return $ib->$fn($arr);
-				break;
-
 			case "files_tb":
 			case "files_tree":
 			case "files_table":
-				static $ia;
-				if (!$ia)
+				static $i;
+				if (!$i)
 				{
-					$ia = get_instance("applications/groupware/project_files_impl");
+					$i = get_instance("applications/groupware/project_files_impl");
 				}
 				$fn = "_get_".$data["name"];
-				return $ia->$fn($arr);
+				return $i->$fn($arr);
 				break;
 
 			case "team_team_tb":

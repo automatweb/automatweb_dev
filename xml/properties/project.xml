@@ -689,6 +689,24 @@
             <parent>req_l</parent>
             <field>req_tbl</field>
       </property>
+      <property>
+            <name>analysis_tb</name>
+            <table>objects</table>
+            <group>analysis</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>analysis_tb</field>
+      </property>
+      <property>
+            <name>analysis_table</name>
+            <table>objects</table>
+            <group>analysis</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>analysis_table</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -717,6 +735,12 @@
                   <store>no</store>
                   <submit>no</submit>
             </strat_res>
+            <analysis>
+                  <caption>Anal&amp;amp;uuml;&amp;amp;uuml;sid</caption>
+                  <parent>info</parent>
+                  <store>no</store>
+                  <submit>no</submit>
+            </analysis>
             <general2>
                   <parent>general</parent>
                   <caption>&amp;Uuml;ldine</caption>
@@ -940,6 +964,11 @@
                   <clid>CL_MENU</clid>
                   <caption>Failide kataloog</caption>
             </FILES_FLD>
+            <ANALYSIS_WS>
+                  <value>23</value>
+                  <clid>CL_PROJECT_ANALYSIS_WS</clid>
+                  <caption>Anal&amp;amp;uuml;&amp;amp;uuml;si t&amp;amp;ouml;&amp;amp;ouml;laud</caption>
+            </ANALYSIS_WS>
       </reltypes>
       <layout>
             <parts>

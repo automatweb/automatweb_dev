@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.65 2006/07/10 14:27:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.66 2006/07/12 11:56:29 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -29,7 +29,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property bill_no type=textbox table=aw_crm_bill field=aw_bill_no
 	@caption Number
 
-	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON
+	@property customer type=popup_search table=aw_crm_bill field=aw_customer reltype=RELTYPE_CUST clid=CL_CRM_COMPANY,CL_CRM_PERSON style=autocomplete
 	@caption Klient
 
 	@property impl type=popup_search style=relpicker table=aw_crm_bill field=aw_impl reltype=RELTYPE_IMPL
@@ -230,6 +230,10 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "customer":
+				echo dbg::dump($_POST);
+				break;
+
 			case "bill_no":
 				if ($prop["value"] != $arr["obj_inst"]->prop("bill_no"))
 				{
