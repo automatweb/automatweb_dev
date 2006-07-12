@@ -264,12 +264,33 @@
             <caption>Lisa s&amp;uuml;ndmus</caption>
       </property>
       <property>
-            <name>files</name>
+            <name>files_tb</name>
             <table>objects</table>
             <group>files</group>
-            <type>text</type>
-            <field>files</field>
-            <caption>Manused</caption>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>files_tb</field>
+      </property>
+      <property>
+            <name>files_tree</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>treeview</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>files_lay</parent>
+            <field>files_tree</field>
+      </property>
+      <property>
+            <name>files_table</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>files_lay</parent>
+            <field>files_table</field>
       </property>
       <property>
             <name>trans</name>
@@ -741,6 +762,7 @@
             </add_event>
             <files>
                   <caption>Manused</caption>
+                  <submit>no</submit>
             </files>
             <trans>
                   <caption>T&amp;otilde;lkimine</caption>
@@ -913,6 +935,11 @@
                   <clid>CL_PROJECT_TEAM</clid>
                   <caption>Tiim</caption>
             </TEAM>
+            <FILES_FLD>
+                  <value>22</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Failide kataloog</caption>
+            </FILES_FLD>
       </reltypes>
       <layout>
             <parts>
@@ -921,6 +948,11 @@
                   <group>general2</group>
                   <caption>Osalejad</caption>
             </parts>
+            <files_lay>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>files</group>
+            </files_lay>
             <team_s>
                   <type>vbox</type>
                   <group>team_t</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.94 2006/07/05 11:09:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.95 2006/07/12 10:26:37 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -114,11 +114,12 @@
 
 @default group=files
 
-	@property files type=text 
-	@caption Manused
+	@property files_tb type=toolbar no_caption=1 store=no
 
-	property file_editor type=releditor reltype=RELTYPE_PRJ_FILE mode=manager props=filename,file,comment
-	caption Failid
+	@layout files_lay type=hbox width=20%:80%
+
+		@property files_tree type=treeview store=no no_caption=1 parent=files_lay
+		@property files_table type=table store=no no_caption=1 parent=files_lay
 
 @default group=trans
 
@@ -274,7 +275,7 @@
 
 
 @groupinfo add_event caption="Muuda sündmust"
-@groupinfo files caption="Manused"
+@groupinfo files caption="Manused" submit=no
 @groupinfo trans caption="Tõlkimine"
 
 @groupinfo userdefined caption="Andmed"
@@ -356,6 +357,10 @@
 
 @reltype TEAM value=21 clid=CL_PROJECT_TEAM
 @caption Tiim
+
+@reltype FILES_FLD value=22 clid=CL_MENU
+@caption Failide kataloog
+
 */
 
 class project extends class_base
@@ -388,6 +393,18 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "files_tb":
+			case "files_tree":
+			case "files_table":
+				static $ia;
+				if (!$ia)
+				{
+					$ia = get_instance("applications/groupware/project_files_impl");
+				}
+				$fn = "_get_".$data["name"];
+				return $ia->$fn($arr);
+				break;
+
 			case "team_team_tb":
 			case "team_team_tree":
 			case "team_team_tbl":

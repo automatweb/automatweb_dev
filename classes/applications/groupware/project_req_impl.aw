@@ -76,6 +76,22 @@ class project_req_impl extends class_base
 			"text" => t("Arendus&uuml;lesanne"),
 		));
 
+		$proc = $this->get_proc($arr["obj_inst"]);
+		$t->add_menu_item(array(
+			"name" => "new_req",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_PROCUREMENT_REQUIREMENT, 
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : ($proc ? $proc : $arr["obj_inst"]->id()), 
+				array(
+					"return_url" => get_ru(),
+					"alias_to_org" => $arr["obj_inst"]->prop("orderer"),
+					"set_proj" => $arr["obj_inst"]->id()
+				)
+			),
+			"text" => t("N&otilde;ue"),
+		));
+
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -88,6 +104,10 @@ class project_req_impl extends class_base
 	function _get_req_tree($arr)
 	{
 		$proc = $this->get_proc($arr["obj_inst"]);
+		if (!$proc)
+		{
+			$proc = $arr["obj_inst"]->id();
+		}
 		classload("core/icons");
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
