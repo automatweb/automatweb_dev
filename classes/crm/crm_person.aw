@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.139 2006/07/07 14:25:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.140 2006/07/12 08:54:46 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -3507,7 +3507,7 @@ class crm_person extends class_base
 			"lang_id" => array(),
 			"site_id" => array(),
 			"impl" => $p->id(),
-			"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $r["stats_s_from"], $r["stats_s_to"]),
+			"date" => new obj_predicate_compare(OBJ_COMP_BETWEEN_INCLUDING, $r["stats_s_from"], $r["stats_s_to"]),
 		));
 
 		classload("vcl/table");
