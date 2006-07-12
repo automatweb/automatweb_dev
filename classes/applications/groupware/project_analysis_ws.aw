@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_ws.aw,v 1.1 2006/07/12 11:56:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project_analysis_ws.aw,v 1.2 2006/07/12 13:09:20 kristo Exp $
 // project_analysis_ws.aw - Projekti anal&uuml;&uuml;si t&ouml;&ouml;laud 
 /*
 
@@ -635,10 +635,13 @@ class project_analysis_ws extends class_base
 				"task" => html::obj_change_url($row),
 				"task_comm" => $row->comment()
 			);
+			$sum = 0;
 			foreach($strats as $strat)
 			{
 				$ar[$strat] = number_format($data[$row->id()][$strat] / $ol->count(), 2);
+				$sum += $ar[$strat];
 			}
+			$ar["sum"] = number_format($sum, 2);
 			$t->define_data($ar);
 		}
 		$t->sort_by();
@@ -690,7 +693,7 @@ class project_analysis_ws extends class_base
 			$sum = 0;
 			foreach($strats as $strat)
 			{
-				$ar[$strat] = number_format($data[$evid][$strat] / $ol->count(), 2);
+				$ar[$strat] = number_format($data[$row->id()][$strat] / $ol->count(), 2);
 				$sum += $ar[$strat];
 				$sbs[$strat] += $ar[$strat];
 				$sums[$strat] += $ar[$strat];
