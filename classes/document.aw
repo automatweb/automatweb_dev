@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.359 2006/07/12 08:49:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.360 2006/07/12 09:28:08 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -2622,6 +2622,7 @@ class document extends aw_template
 	{
 		extract($arr);
 		$this->read_template("doc_mail.tpl");
+		lc_site_load("document", $this);
 		$this->vars(array(
 			"from_name" => $from_name,
 			"from" => $from,
