@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.11 2006/07/10 14:49:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.12 2006/07/12 12:43:40 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -88,7 +88,7 @@ class persons_webview extends class_base
 		$this->persons_sort_order = array(
 			0 => "",
 			"last_name" => t("perenimi"),
-			"proffession" => t("ametinimetuse jrk"),
+			"profession" => t("ametinimetuse jrk"),
 			"jrk" => t("isiku jrk"),
 		);
 		
@@ -122,7 +122,7 @@ class persons_webview extends class_base
 				<!-- SUB: COL -->
 					<td>
 					<!-- SUB: worker -->
-						{VAR:rank} {VAR:name}
+						{VAR:profession} {VAR:name}
 					<!-- END SUB: worker -->
 					</td>
 				<!-- END SUB: COL -->
@@ -132,9 +132,18 @@ class persons_webview extends class_base
 			<!-- SUB: DEPARTMENT -->
 			
 			juhul kui miski taseme osakonda oleks vaja teistmoodi näidata, siis tuleks <!-- SUB: DEPARTMENT --> sisse teha <!-- SUB: LEVEL4DEPARTMENT --> (vastavalt taseme numbrile) , mis oleks muidu sama struktuuriga nagu DEPARTMENT
-			muutujad mida saab kasutada
+
+			muutujad mida saab kasutada:
 			DEPARTMENT sub'is: department_name, address , phone , fax , email , next_level_link (link nägemas antud osakonda uues vaates).
-			sub'is worker : name , name_with_email , email , rank , rank_with_directive , directive (ametijuhend) , education , speciality, wage_doc_exist (palgaandmete dokument, kui on olemas)
+			sub'is worker :
+			name , name_with_email , email , emails, photo, contact,
+			profession , profession_with_directive , professions , directive (ametijuhend), wage_doc , wage_doc_exist (palgaandmete dokument, kui on olemas),
+			education (haridustase) , school , subject_field(valdkond) , speciality ,
+			phone, phones , home_phone, home_phones, mobile_phone, mobile_phones, skype_phone, skype_phones, short_phone, short_phones, work_phone, work_phones, extension_phone, extension_phones,
+			next_level_link (link j'gmise taseme vaatesse... kui tegu siis antud inimesega),
+			company, section,
+			url, urls.
+
 			Kui lisada objekt menüüsse, siis esimeseks vaate infoks tuleb menüüs olev.
 			Kui viimaseks vaateks on üks konkreetne isik, siis template sees ühtegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
 			Template'ide tõlkimiseks kasutada faili persons_web_view.aw.
@@ -350,6 +359,7 @@ class persons_webview extends class_base
 	function get_folders_as_object_list($o, $level, $parent)
 	{
 		$_SESSION["persons_webview"] = $o->id();
+		$_SESSION["company"] = $o->prop("company");
 		$this->view_obj = $o;
 		$this->meta = $this->view_obj->meta();
 		$this->view = $this->meta["view"][0];
@@ -371,13 +381,15 @@ class persons_webview extends class_base
 	
 	function make_menu_link($o, $ref = NULL)
 	{
+		
 		return $this->mk_my_orb("parse_alias",
 			array(
 				"id" => $_SESSION["persons_webview"],
 				"section" => $o->id(),
 				"view" => 1,
 				"level" => $this->jrks[$o->id()],
-			),
+				"company_id" => $_SESSION["company"],
+		),
 		CL_PERSONS_WEBVIEW);
 	}
 
@@ -392,7 +404,7 @@ class persons_webview extends class_base
 					$workers_tmp[] = array("sort" => $worker["worker"]->prop("lastname"), "data" => $worker);
 				}
 				break;
-			case "proffession":
+			case "profession":
 				foreach($workers as $worker)
 				{	
 					$jrk = 0;
@@ -546,7 +558,7 @@ class persons_webview extends class_base
 	**/
 	function parse_alias($arr)
 	{
-		global $view , $id, $section, $level;
+		global $view , $id, $section, $level, $company_id;
 		if(is_oid($id) && is_oid($section)) // juhul kui asi pole dokumendi sees vaid tulev kuskiklt urlist
 		{
 			$this->view_obj = obj($id);
@@ -556,6 +568,9 @@ class persons_webview extends class_base
 			$this->view_obj = obj($arr["alias"]["to"]); // dokumendis aliasena
 		}
 		
+		if(is_oid($company_id)) $this->company = obj($company_id);
+		if(is_oid($section_id)) $this->section = obj($company_id);
+
 		$this->meta = $this->view_obj->meta();
 		$this->view_no = $view;
 		if($view) $this->view = $this->meta["view"][$view]; // juhul kui tuleb kuskilt urlist miski tase,... 
@@ -576,16 +591,19 @@ class persons_webview extends class_base
 				$company = $section_obj;
 			}
 		}
-		
+
 		if(!is_object($company))
 		{
 			$company_id = $this->view_obj->prop("company");
 			if(!is_oid($company_id)) return t("pole asutust valitud");
 			$company = obj($company_id);
 		}
-		if(!$level) $level = 0;
+
+		//miskis lambikohas võib asutust ka vaja minna
+		if($company->class_id() == CL_CRM_COMPANY) $this->company=$company;
+		if(!$level)$level = 0;
+		$this->level = $level;
 		$this->set_levels($level);//teeb siis erinevatest tasemetest massiivi, mida üldse kuvada ja paneb selle muutujasse $this->levels
-		
 		return $this->parse_company($company);
 	}
 	
@@ -600,7 +618,8 @@ class persons_webview extends class_base
 			if($this->is_template("DEPARTMENT"))
 			{
 				$this->jrks = array();
-				$sections = array_merge(array($company) , $this->get_sections(array("section" => $company , "jrk" => 0)));
+				if(in_array((0) , $this->levels) && (sizeof($this->levels) > 0)) $sections = array_merge(array($company) , $this->get_sections(array("section" => $company , "jrk" => 0)));
+				else $sections = $this->get_sections(array("section" => $company , "jrk" => 0));
 			foreach($sections as $section)
 				{
 					$this->section = $section; // eks seda läheb vast mujal ka vaja... ametinimetuses näiteks
@@ -663,7 +682,8 @@ class persons_webview extends class_base
 				"section" => $section->id(),
 				"view" => (1 + $this->view_no),
 				"level" => $this->jrks[$section->id()],
-			),
+				"company_id"	=> $this->company->id(),
+		),
 		CL_PERSONS_WEBVIEW);
 		
 		$address = "";
@@ -732,48 +752,54 @@ class persons_webview extends class_base
 		return $sections;
 	}
 	
-	function parse_proffession($worker)
+	function parse_profession($worker)
 	{
-		$rank = $directive = "";
-		$rank_obj = $worker->get_first_obj_by_reltype("RELTYPE_RANK");
+		$profession = $directive = "";
+		$profession_obj = $worker->get_first_obj_by_reltype("RELTYPE_RANK");
 		//kõik ametid mis tüübil on
 		$conns = $worker->connections_from(array(
 			"type" => "RELTYPE_RANK",
 		));
+
+		$professions = "";
 		//nüüd oleks vaja siis kindlaks teha, et kus ameti all tüüp antud sektsioonis asub
 		//kui siit midagi asjalikku ei leia, siis jääb algul leitud amet.
 		foreach($conns as $conn)
 		{
-			$proffession_obj = obj($conn->prop("to"));
-			$section_conns = $proffession_obj->connections_to(array(
+			$tmp_profession_obj = obj($conn->prop("to"));
+			if($professions != "") $professions .= ",";
+			$professions .= $tmp_profession_obj->name();
+			$section_conns = $profession_obj->connections_to(array(
 				"type" => 3,
 			));
 			foreach($section_conns as $section_conn)
 			{
-				if($this->section && $section_conn->prop("from") == $this->section->id()) $rank_obj = $proffession_obj;
+				if($this->section && $section_conn->prop("from") == $this->section->id()) $profession_obj = $tmp_profession_obj;
 			}
 		}
 		
-		if(is_object($rank_obj))
+		if(is_object($profession_obj))
 		{
-			$rank = $rank_obj->name();
-			if(is_oid($rank_obj->prop("directive")) && $this->can("view", $rank_obj->prop("directive")))
+			$profession = $profession_obj->name();
+			if(is_oid($profession_obj->prop("directive")) && $this->can("view", $profession_obj->prop("directive")))
 			{
-				$directive = $rank_obj->prop("directive");
+				$directive = $profession_obj->prop("directive");
 			}
 			else
 			{
-				$directive_obj = $rank_obj->get_first_obj_by_reltype("RELTYPE_DESC_FILE");
+				$directive_obj = $profession_obj->get_first_obj_by_reltype("RELTYPE_DESC_FILE");
 				if(is_object($directive_obj))
 				$directive = $directive_obj->id();
 			}
 		}
-		$rank_with_directive = $rank;
-		if(is_oid($directive)) $rank_with_directive = '<a href ="'.$directive.'"> '. $rank_with_directive.' </a>';
+		$profession_with_directive = $profession;
+		if(is_oid($directive)) $profession_with_directive = '<a href ="'.$directive.'"> '. $profession_with_directive.' </a>';
 		$this->vars(array(
-			"rank" => $rank,
+			"profession" => $profession,
+			"professions" => $professions,
 			"directive" => $directive,
-			"rank_with_directive" => $rank_with_directive,
+			"profession_with_directive" => $profession_with_directive,
+			"rank" => $profession,
 		));
 	}
 
@@ -845,7 +871,13 @@ class persons_webview extends class_base
 
 	function parse_worker($worker)
 	{
-		$this->parse_proffession($worker);
+		if(!$this->section && !$this->view_obj->prop("department_grouping")) $this->section = $worker->get_first_obj_by_reltype("RELTYPE_SECTION");
+		if(!$this->section && !$this->view_obj->prop("department_grouping")) $this->section = $worker->get_first_obj_by_reltype("RELTYPE_COMPANY");
+
+		//amet
+		$this->parse_profession($worker);
+
+		//pilt
 		$photo="";
 		$image_inst = get_instance(CL_IMAGE);
 		if(is_oid($worker->prop("picture")) && $this->can("view", $worker->prop("picture")))
@@ -858,41 +890,114 @@ class persons_webview extends class_base
 			if(is_object($photo_obj)) $photo = $image_inst->make_img_tag_wl($photo_obj->id());
 		}
 		
-		$phone = "";
+		//igast telefoninumbrid
+		$phone = $phone_obj = $phones= $home_phone= $work_phone=$short_phone=$cell_phone=$in_phone=$skype="";
 		$phone_obj = $worker->get_first_obj_by_reltype("RELTYPE_PHONE");
 		if(is_object($phone_obj)) $phone = $phone_obj->name();
-		$email = "";
-		$email_obj = $worker->get_first_obj_by_reltype("RELTYPE_EMAIL");
-		if(is_object($email_obj)) $email = $email_obj->prop("mail");
-		
+
+		$phone_list = new object_list($worker->connections_from (array (
+			"type" => "RELTYPE_PHONE",
+		)));
+		$phone_array = array();
+		foreach($phone_list->arr() as $phone_obj)
+		{
+			if(strlen($phones) >0) $phones .= ' , ';
+			$phones .= $phone_obj->name();
+			$phone_array[$phone_obj->prop("type")."_phone"] = $phone_obj->name(); //need siis muutujad vastavalt erinevate telefonityypidele
+			$phone_array[$phone_obj->prop("type")."_phones"] .= ", ".$phone_obj->name();
+			if($phone_array[$phone_obj->prop("type")."_phones"][0] == ',')//see v]iks koma eest koristada
+			{
+				array_shift($phone_array[$phone_obj->prop("type")."_phones"]); array_shift($phone_array[$phone_obj->prop("type")."_phones"]);
+			}
+		}
+
+		//url
+		$url = $url_obj = $urls = "";
+		$url_obj = $worker->prop("url");
+		if(!is_object($url_obj)) $url_obj = $worker->get_first_obj_by_reltype("RELTYPE_URL");
+		if(is_object($url_obj)) $url = $url_obj->prop("url");
+		$url_list = new object_list($worker->connections_from (array (
+			"type" => "RELTYPE_URL",
+		)));
+		foreach($url_list->arr() as $url_obj)
+		{
+			if(strlen($urls) > 0 ) $urls .= ', ';
+			if(strlen($urls) > 0 ) $urls .= $url_obj->prop("url");
+		}
+
+
+
+		//mail	
+		$email = $email_obj = $emails = "";
+		$email_obj = $worker->prop("email");
+		if(!is_object($email_obj)) $email_obj = $worker->get_first_obj_by_reltype("RELTYPE_EMAIL");
 		$name_with_email = $worker->name();
+		if(is_object($email_obj)) $email_obj->prop("mail");
 		if(strlen($email) > 3)$name_with_email = '<a href =mailto:'.$email.'> '. $name_with_email.' </a>';
+		$mail_list = new object_list($worker->connections_from (array (
+			"type" => "RELTYPE_EMAIL",
+		)));
+		foreach($mail_list->arr() as $mail_obj)
+		{
+			if(strlen($emails) > 0 ) $emails .= ', ';
+			if(strlen($emails) > 0 ) $emails .= $mail_obj->prop("mail");
+		}
+
+		//haridus
 		$speciality = "";
 		$speciality_obj = $worker->get_first_obj_by_reltype("RELTYPE_EDUCATION");
-		if(is_object($speciality_obj)) $speciality = $speciality_obj->prop("speciality");
+		if(is_object($speciality_obj))
+		{
+			$speciality = $speciality_obj->prop("speciality");
+			$school = $speciality_obj->prop("school");
+			$subject_field = $speciality_obj->prop("field");
+		}
+
+		//palk
 		$wage_doc_exist = "";
 		if(is_oid($worker->prop("wage_doc"))) $wage_doc_exist = '<a href ='.$worker->prop("wage_doc").'> '. t("Palk").' </a>';
 		
 		$next_level_link = $this->mk_my_orb("parse_alias",
 			array(
 				"id" => $this->view_obj->id(),
-			"section" => $worker->id(),
-			"view" => (1 + $this->view_no),
+				"section" => $worker->id(),
+				"view" => (1 + $this->view_no),
+				"company_id" => $this->company->id(),
+				"secton_id"	=> $this->section->id()
 		),
 		CL_PERSONS_WEBVIEW);
+		if(!$this->company)
+		{
+			$this->company = $worker->get_first_obj_by_reltype("RELTYPE_COMPANY");
+		}
+		$company = $this->company->name();
+
+		$person_inst = get_instance(CL_CRM_PERSON);
+		$contact = $person_inst->get_short_description($worker->id());
+
+		$this->vars($phone_array);
 		$this->vars(array(
-		//	"rank" => $rank,
+		//	"profession" => $profession,
 			"name" => $worker->name(),
 			"photo" => $photo,
 			"phone" => $phone,
+			"phones" => $phones,
+			"contact" => $contact,
 			"email" => $email,
+			"emails" => $emails,
 			"education" => $this->education["options"][$worker->prop("edulevel")],
 			"speciality" => $speciality,
 			"name_with_email" => $name_with_email,
 			"wage_doc"	=> $worker->prop("wage_doc"),
 			"wage_doc_exist" => $wage_doc_exist,
 			"next_level_link" => $next_level_link,
-		//	"directive" => $directive,
+			"company" => $company,
+			"section" => $this->section->name(),
+			"url"	=> $url,
+			"urls"	=> $urls,
+			"school" => $school,
+			"subject_field" => $subject_field,
+			//	"directive" => $directive,
 		));
 	}
 
