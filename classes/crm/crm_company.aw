@@ -786,6 +786,11 @@ default group=org_objects
 	@property forum type=text store=no no_caption=1
 	@caption Foorumi sisu
 
+@default group=documents_polls
+
+	@property polls_tb type=toolbar store=no no_caption=1
+	@property polls_tbl type=table store=no no_caption=1
+
 @default group=my_view
 
 	@property my_view type=text store=no no_caption=1
@@ -863,6 +868,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 	@groupinfo documents_forum caption="Foorum" submit=no parent=general
 	@groupinfo documents_lmod caption="Viimati muudetud" submit=no parent=general	save=no
 	@groupinfo ext_sys caption="Siduss&uuml;steemid" parent=general
+	@groupinfo documents_polls caption="Kiirk&uuml;sitlused" submit=no parent=general
 
 @groupinfo bills caption="Arved" submit=no save=no
 
@@ -1058,6 +1064,9 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @reltype SHOP_WAREHOUSE_PURCHASE_BILL value=61 clid=CL_SHOP_WAREHOUSE_PURCHASE_BILL
 @caption Ostu arve
+
+@reltype DEF_POLL value=62 clid=CL_POLL
+@caption Kiirk&uuml;sitlus
 
 */
 /*
@@ -2093,6 +2102,16 @@ class crm_company extends class_base
 				{
 					$prop["value"] = reset(aw_ini_get("server.name_mappings"));
 				}
+				break;
+
+			case "polls_tb":
+				$i = get_instance("applications/crm/crm_company_my_view");
+				$data["value"] = $i->_get_polls_tb($arr);
+				break;
+
+			case "polls_tbl":
+				$i = get_instance("applications/crm/crm_company_my_view");
+				$data["value"] = $i->_get_polls_tbl($arr);
 				break;
 
 			case "my_view":
@@ -4215,6 +4234,8 @@ class crm_company extends class_base
 
 	/**
 		@attrib name=submit_delete_docs
+		@param sel optional 
+		@param post_ru optional
 	**/
 	function submit_delete_docs($arr)
 	{
@@ -5760,6 +5781,21 @@ class crm_company extends class_base
 		);
 		$i = get_instance("applications/crm/crm_company_people_impl");
 		$i->_get_human_resources($arr);
+	}
+
+	/**
+		@attrib name=save_default_poll
+	**/
+	function save_default_poll($arr)
+	{
+		$o = obj($arr["id"]);
+		$def = $o->get_first_obj_by_reltype("RELTYPE_DEF_POLL");
+		if ($def)
+		{
+			$o->disconnect(array("from" => $def->id()));
+		}
+		$o->connect(array("to" => $arr["def_poll"], "type" => "RELTYPE_DEF_POLL"));
+		return $arr["post_ru"];
 	}
 }
 

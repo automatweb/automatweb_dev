@@ -177,6 +177,8 @@
 		<action name="submit_delete_docs">
 			<function name="submit_delete_docs">
 				<arguments>
+					<optional name="sel" />
+					<optional name="post_ru" />
 				</arguments>
 			</function>
 		</action>
@@ -398,6 +400,13 @@
 
 		<action name="vm_delete_versions">
 			<function name="vm_delete_versions">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_default_poll">
+			<function name="save_default_poll">
 				<arguments>
 				</arguments>
 			</function>

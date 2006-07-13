@@ -2420,6 +2420,24 @@
             <caption>Foorumi sisu</caption>
       </property>
       <property>
+            <name>polls_tb</name>
+            <table>objects</table>
+            <group>documents_polls</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>polls_tb</field>
+      </property>
+      <property>
+            <name>polls_tbl</name>
+            <table>objects</table>
+            <group>documents_polls</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>polls_tbl</field>
+      </property>
+      <property>
             <name>my_view</name>
             <table>objects</table>
             <group>my_view</group>
@@ -2682,6 +2700,11 @@
                   <caption>Siduss&amp;amp;uuml;steemid</caption>
                   <parent>general</parent>
             </ext_sys>
+            <documents_polls>
+                  <caption>Kiirk&amp;amp;uuml;sitlused</caption>
+                  <submit>no</submit>
+                  <parent>general</parent>
+            </documents_polls>
             <bills>
                   <caption>Arved</caption>
                   <submit>no</submit>
@@ -3066,6 +3089,11 @@
                   <clid>CL_SHOP_WAREHOUSE_PURCHASE_BILL</clid>
                   <caption>Ostu arve</caption>
             </SHOP_WAREHOUSE_PURCHASE_BILL>
+            <DEF_POLL>
+                  <value>62</value>
+                  <clid>CL_POLL</clid>
+                  <caption>Kiirk&amp;amp;uuml;sitlus</caption>
+            </DEF_POLL>
       </reltypes>
       <layout>
             <hbox_toolbar>
