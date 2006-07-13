@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.104 2006/04/20 10:09:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.105 2006/07/13 18:40:36 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -194,6 +194,8 @@ class object_treeview_v2 extends class_base
 			"class_id" => t("T&uuml;&uuml;p"),
 			"modified" => t("Muutmise kuup&auml;ev"),
 			"modifiedby" => t("Muutja"),
+			"created" => t("Loomise kuup&auml;ev"),
+			"createdby" => t("Looja"),
 			"change" => t("Muuda"),
 			"select" => t("Vali")
 		);
