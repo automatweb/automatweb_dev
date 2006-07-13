@@ -3846,6 +3846,10 @@ if ($_GET['show_thread_data'] == 1)
 				{
 					$arr["request"]["sort_order"] = "desc";
 				}
+				if ($arr["request"]["sortby"] == "tm")
+				{
+					$arr["request"]["sortby"] = "started";
+				}
 				break;
 
 			case "grp_printer_aborted":
@@ -3890,6 +3894,10 @@ if ($_GET['show_thread_data'] == 1)
 			// map to db table
 			switch($sby)
 			{
+				case "started":
+					$sby = "mrp_job.started";
+					break;
+
 				case "tm":
 					$sby = "mrp_schedule_826.starttime";
 					break;
@@ -4201,6 +4209,10 @@ if ($_GET['show_thread_data'] == 1)
 		if ("grp_printer_done" == $grp)
 		{
 			$t->set_default_sortby("tm_end");
+			if (aw_global_get("sortby") == "tm")
+			{
+				aw_global_set("sortby", "tm_end");
+			}
 		}
 		else
 		{
