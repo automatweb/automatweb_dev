@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.127 2006/07/10 12:52:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.128 2006/07/13 11:46:35 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2431,7 +2431,7 @@ class planner extends class_base
 			{
 				$t_filt[] = "%".$bit."%";
 			}
-			$filter["CL_CRM_PERSON.work_contact.name"] = $t_filt;
+			$filter["CL_CRM_PERSON.RELTYPE_WORK.name"] = $t_filt;
 			$hasf = true;
 		}
 
