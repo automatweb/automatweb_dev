@@ -1873,6 +1873,25 @@
             <caption>Osaleja</caption>
       </property>
       <property>
+            <name>act_s_cal_name</name>
+            <table>objects</table>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
+                  <num_5>bills_search</num_5>
+            </group>
+            <type>text</type>
+            <size>30</size>
+            <parent>act_s_dl_layout_top</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_cal_name</field>
+            <caption>Kalender</caption>
+      </property>
+      <property>
             <name>act_s_task_name</name>
             <table>objects</table>
             <group>

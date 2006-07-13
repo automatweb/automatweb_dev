@@ -739,6 +739,48 @@ class crm_company_overview_impl extends class_base
 				$res[$def.".customer(CL_CRM_COMPANY).name"] = $str_filt;
 			}
 		}
+
+		$r["act_s_dl_from"] = date_edit::get_timestamp($r["act_s_dl_from"]);
+		$r["act_s_dl_to"] = date_edit::get_timestamp($r["act_s_dl_to"]);
+		if ($r["act_s_cal_name"] != "")
+		{
+			$str_filt = $this->_get_string_filt($r["act_s_cal_name"]);
+			$cal_list = new object_list(array(
+				"class_id" => CL_PLANNER,
+				"name" => $str_filt,
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$oids = array();
+			$pm = get_instance("applications/calendar/planner_model");
+			foreach($cal_list->arr() as $cal)
+			{
+				$parms = array(
+					"id" => $cal->id()
+				);
+				if ($r["act_s_dl_from"] > 300)
+				{
+					$parms["start"] = $r["act_s_dl_from"];
+				}
+				if ($r["act_s_dl_to"] > 300)
+				{
+					$parms["end"] = $r["act_s_dl_to"];
+				}
+				foreach($pm->get_event_list($parms) as $dat)
+				{
+					$oids[] = $dat["id"];
+				}
+			}
+			if (count($oids))
+			{
+				$res["oid"] = $oids;
+			}
+			else
+			{
+				$res["oid"] = -1;
+			}
+		}
+
 		if ($r["act_s_part"] != "")
 		{
 			$str_filt = $this->_get_string_filt($r["act_s_part"]);
@@ -868,9 +910,6 @@ class crm_company_overview_impl extends class_base
 				$res[$def.".project(CL_PROJECT).name"] = $str_filt;  //"%".$r["act_s_proj_name"]."%";
 			}
 		}
-
-		$r["act_s_dl_from"] = date_edit::get_timestamp($r["act_s_dl_from"]);
-		$r["act_s_dl_to"] = date_edit::get_timestamp($r["act_s_dl_to"]);
 
 		$dl = "deadline";
 		if ($clid == CL_CRM_OFFER || $clid == CL_CRM_MEETING || $clid == CL_CRM_CALL )
@@ -1049,6 +1088,31 @@ class crm_company_overview_impl extends class_base
 			"value" => $v,
 			"size" => 25
 		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.act_s_part.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		return PROP_OK;
+	}
+
+	function _get_act_s_cal_name($arr)
+	{
+		if ($arr["request"]["act_s_sbt"] == "" && $arr["request"]["act_s_is_is"] != 1)
+		{
+			$cal = get_instance(CL_PLANNER);
+			$p = $cal->get_calendar_for_user();
+			if ($p)
+			{
+				$p = obj($p);
+				$v = $p->name();
+			}
+		}
+		else
+		{
+			$v = $arr["request"]["act_s_cal_name"];
+		}
+		$tt = t("Kustuta");
+		$arr["prop"]["value"] = html::textbox(array(
+			"name" => "act_s_cal_name",
+			"value" => $v,
+			"size" => 25
+		))."<a href='javascript:void(0)' title=\"$tt\" alt=\"$tt\" onClick='document.changeform.act_s_cal_name.value=\"\"'><img title=\"$tt\" alt=\"$tt\" src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
 		return PROP_OK;
 	}
 

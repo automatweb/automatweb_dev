@@ -647,6 +647,9 @@ default group=org_objects
 			@property act_s_part type=text size=30 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
 			@caption Osaleja
 
+			@property act_s_cal_name type=text size=30 parent=act_s_dl_layout_top store=no captionside=top group=my_tasks,meetings,calls,ovrv_offers,all_actions,bills_search
+			@caption Kalender
+
 			@property act_s_task_name type=textbox size=33 parent=act_s_dl_layout_top store=no captionside=top
 			@caption Tegevuse nimi
 
@@ -1791,6 +1794,7 @@ class crm_company extends class_base
 			case "my_tasks_cal":
 			case "my_tasks_tb":
 			case "act_s_part":
+			case "act_s_cal_name":
 				static $overview_impl;
 				if (!$overview_impl)
 				{
@@ -2968,6 +2972,7 @@ class crm_company extends class_base
 		{
 			$arr["args"]["act_s_cust"] = $arr["request"]["act_s_cust"];
 			$arr["args"]["act_s_part"] = $arr["request"]["act_s_part"];
+			$arr["args"]["act_s_cal_name"] = $arr["request"]["act_s_cal_name"];
 			$arr["args"]["act_s_task_name"] = $arr["request"]["act_s_task_name"];
 			$arr["args"]["act_s_task_content"] = $arr["request"]["act_s_task_content"];
 			$arr["args"]["act_s_code"] = $arr["request"]["act_s_code"];
