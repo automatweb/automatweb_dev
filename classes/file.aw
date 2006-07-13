@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.125 2006/06/27 22:49:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.126 2006/07/13 10:42:48 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -202,6 +202,17 @@ class file extends class_base
 						"target" => "_blank",
 					));
 				}
+
+				$link_url = $this->get_url($arr["obj_inst"]->id(), $arr["obj_inst"]->name());
+				$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $arr["obj_inst"]->id()), CL_FILE);
+				$data["value"] .= "&nbsp;&nbsp;
+					<script language=\"javascript\">
+					if (window.parent.name == \"InsertAWFupCommand\")
+					{
+						document.write(\"<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</sc\"+\"ript><a href='#' onClick='FCK=window.parent.opener.FCK;var eSelected = FCK.Selection.MoveToAncestorNode(\\\"A\\\");if (eSelected) { eSelected.href=\\\"".$link_url."\\\";eSelected.innerHTML=\\\"".$arr["obj_inst"]->prop("name")."\\\"; SetAttribute( eSelected, \\\"_fcksavedurl\\\", \\\"$link_url\\\" ) ; } else { FCK.InsertHtml(aw_get_url_contents(\\\"$url\\\")); } '>Paiguta dokumenti</a>\");
+					}
+				</script>
+				";
 				break;
 
 			case "file":

@@ -155,6 +155,7 @@ class link_manager extends aw_template
 						{
 							eSelected.href=\"$link_url\";
 							eSelected.innerHTML=\"$link_name\";
+							SetAttribute( eSelected, \"_fcksavedurl\", \"$link_url\" ) ;
 						}
 						else
 						{
@@ -168,7 +169,7 @@ class link_manager extends aw_template
 		}
 		$t->set_default_sortby("name");
 		$t->sort_by();
-		return $this->draw_form($arr).$t->draw();
+		return "<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</script> ".$this->draw_form($arr).$t->draw();
 	}
 
 	function draw_form($arr)

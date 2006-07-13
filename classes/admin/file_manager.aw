@@ -10,14 +10,15 @@ class file_manager extends aw_template
 	/**
 		@attrib name=manage default=1
 		@param doc required
-		@param imgsrc optional
+		@param link_url optional
 	**/
 	function manage($arr)
 	{
-		$url = $arr["imgsrc"];
+		$url = $arr["link_url"];
 		$parts = parse_url($url);
 		$path = $parts["path"];
-		$imgname = substr($path, strrpos($path, "=")+1);
+		$imgname = substr($path, strrpos($path, "id=")+3);
+		$imgname = substr($imgname, 0, strpos($imgname, "/"));
 		if ($imgname != "")
 		{
 			// now get image by file name
@@ -25,7 +26,7 @@ class file_manager extends aw_template
 				"class_id" => CL_FILE,
 				"lang_id" => array(),
 				"site_id" => array(),
-				"file" => "%".trim($imgname)
+				"oid" => $imgname
 			));
 		}
 		else
@@ -113,6 +114,7 @@ class file_manager extends aw_template
 		{
 			$url = $this->mk_my_orb("fetch_file_tag_for_doc", array("id" => $o->id()), CL_FILE);
 			$image_url = $ii->get_url($o->id(), $o->name());
+			$link_name = $o->name();
 			$t->define_data(array(
 				"name" => html::obj_change_url($o),
 				"sel" => html::href(array(
@@ -120,10 +122,12 @@ class file_manager extends aw_template
 					"caption" => t("Vali see"),
 					"onClick" => "
 						FCK=window.parent.opener.FCK;
-						var eSelected = FCK.Selection.GetSelectedElement() ; 
-						if (\"\"+eSelected == \"HTMLImageElement\")
+						var eSelected = FCK.Selection.MoveToAncestorNode(\"A\") ; 
+						if (eSelected)
 						{
-							eSelected.src=\"$image_url\";
+							eSelected.href=\"$image_url\";
+							eSelected.innerHTML=\"$link_name\";
+							SetAttribute( eSelected, \"_fcksavedurl\", \"$image_url\" ) ;
 						}
 						else
 						{
@@ -137,7 +141,7 @@ class file_manager extends aw_template
 		}
 		$t->set_default_sortby("name");
 		$t->sort_by();
-		return $t->draw();
+		return "<script language=javascript>function SetAttribute( element, attName, attValue ) { if ( attValue == null || attValue.length == 0 ) {element.removeAttribute( attName, 0 ) ;} else {element.setAttribute( attName, attValue, 0 ) ;}}</script> ".$t->draw();
 	}
 }
 ?>
