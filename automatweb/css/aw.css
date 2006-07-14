@@ -1554,3 +1554,65 @@ text-decoration:underline;
 .cb_form_chain td { padding: 1px 6px 1px 6px; font-family: verdana, sans-serif; font-size: 11px; text-align: left; background-color: #fcfcf4; border-top: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; line-height: 16px; vertical-align: top; }
 .cb_form_chain td.caption {width: 250px; white-space: nowrap; }
 .cd_form_chain td.value {}
+
+.leftcontainer {
+	width: 200px;
+	margin-top: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	border: solid 1px #DBDBDB;
+}
+
+.leftcontainer .header {
+	background-color: #DBDBDB;
+	padding: 5px;
+	font-weight: bold;
+	height: 30px;
+}
+
+.leftcontainer .body {
+	background-color: #FFFFFF;
+	padding: 7px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding-bottom: 10px;
+}
+
+.leftcontainer .body .caption {
+	font-weight: bold;
+}
+
+.leftcontainer .body a {
+	font-weight: bold;
+	margin-left: 10px;
+	line-height: 14px;
+}
+
+.rightcontainer {
+	margin-top: 10px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	border: solid 1px #DBDBDB;
+}
+
+.rightcontainer .header {
+	background-color: #DBDBDB;
+	padding: 5px;
+	font-weight: bold;
+	height: 30px;
+}
+
+.rightcontainer .tablebody {
+	background-color: #FFFFFF;
+	font-size: 11px;
+}
+
+#teiste_paev {
+	font-size: 11px;
+
+} 
+
+#column_head {
+	background-color: #91DA52;
+
+}
