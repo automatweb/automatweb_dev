@@ -41,11 +41,29 @@ class project_files_impl extends class_base
 			"action" => "del_goals",
 			"tooltip" => t("Kustuta"),
 		));
+
+		$tb->add_separator();
+		$tb->add_button(array(
+			"name" => "cut",
+			"img" => "cut.gif",
+			"action" => "cut_files",
+			"tooltip" => t("L&otilde;ika"),
+		));
+
+		if (is_array($_SESSION["proj_cut_files"]) && count($_SESSION["proj_cut_files"]) && $arr["request"]["tf"] != "unsorted")
+		{
+			$tb->add_button(array(
+				"name" => "paste",
+				"img" => "paste.gif",
+				"action" => "paste_files",
+				"tooltip" => t("Kleebi"),
+			));
+		}
 	}
 
 	function _get_files_pt($arr)
 	{
-		if ($arr["request"]["tf"])
+		if ($arr["request"]["tf"] && $arr["request"]["tf"] != "unsorted")
 		{
 			return $arr["request"]["tf"];
 		}
@@ -67,6 +85,7 @@ class project_files_impl extends class_base
 
 	function _get_files_tree($arr)
 	{
+		$otf = $arr["request"]["tf"];
 		unset($arr["request"]["tf"]);
 		$pt = $this->_get_files_pt($arr);
 		classload("core/icons");
@@ -85,6 +104,17 @@ class project_files_impl extends class_base
 			)),
 			"var" => "tf",
 			"icon" => icons::get_icon_url(CL_MENU)
+		));
+
+		$nm = t("Sorteerimata");
+		if ($otf == "unsorted")
+		{
+			$nm = "<b>".$nm."</b>";
+		}
+		$arr["prop"]["vcl_inst"]->add_item(0, array(
+			"id" => "unsorted",
+			"name" => $nm,
+			"url" => aw_url_change_var("tf", "unsorted")
 		));
 	}
 
@@ -150,8 +180,17 @@ class project_files_impl extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_files_tbl($t);
 
+		$pr = NULL;
+		if ($arr["request"]["tf"] == "unsorted")
+		{
+			$ot = new object_tree(array("class_id" => CL_MENU, "parent" => $pt, "lang_id" => array(), "site_id" => array()));
+			$pt = new obj_predicate_not(array($pt, $pt) + $ot->ids());
+			$pr = $arr["obj_inst"]->id();
+		}
+
 		$ol = new object_list(array(
 			"parent" => $pt,
+			"project" => $pr,
 			"class_id" => array(CL_FILE,CL_CRM_DOCUMENT, CL_CRM_DEAL, CL_CRM_MEMO, CL_CRM_OFFER),
 		));
 

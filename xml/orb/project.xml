@@ -110,5 +110,19 @@
 			</function>
 		</action>
 
+		<action name="cut_files">
+			<function name="cut_files">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_files">
+			<function name="paste_files">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

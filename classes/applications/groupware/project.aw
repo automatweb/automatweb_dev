@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.96 2006/07/12 11:56:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.97 2006/07/14 11:09:45 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -282,7 +282,7 @@
 
 
 @groupinfo add_event caption="Muuda sündmust"
-@groupinfo files caption="Manused" submit=no
+@groupinfo files caption="Dokumendid" submit=no
 @groupinfo trans caption="Tõlkimine"
 
 @groupinfo userdefined caption="Andmed"
@@ -4541,6 +4541,38 @@ class project extends class_base
 		{
 			$team->disconnect(array("from" => $mem_id));
 		}
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=cut_files
+	**/
+	function cut_files($arr)
+	{
+		$_SESSION["proj_cut_files"] = $arr["sel"];
+		return $arr["post_ru"];
+	}
+	
+	/**
+		@attrib name=paste_files
+	**/
+	function paste_files($arr)
+	{	
+		$pt = $arr["tf"];
+		if (!$arr["tf"])
+		{
+			$pt = $this->_get_files_pt(array(
+				"request" => array("tf" => $arr["tf"]),
+				"obj_inst" => obj($arr["id"])
+			));
+		}
+		foreach(safe_array($_SESSION["proj_cut_files"]) as $file)
+		{
+			$fo = obj($file);
+			$fo->set_parent($pt);
+			$fo->save();
+		}
+		unset($_SESSION["proj_cut_files"]);
 		return $arr["post_ru"];
 	}
 };
