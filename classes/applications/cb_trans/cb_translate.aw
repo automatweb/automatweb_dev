@@ -587,7 +587,7 @@ class cb_translate extends aw_template
 			$class_po_file = $pot_scanner->parse_po_file($file_location);
 			foreach($class_po_file as $po)
 			{
-				$comp = "Seose ".html_entity_decode($rels[$arr["reltype"]]["caption"])." (".$arr["reltype"].") tekst";
+				$comp = "Seose ".$rels[$arr["reltype"]]["caption"]." (".$arr["reltype"].") tekst";
 				if($po["msgid"] == $comp)
 				{
 					$caption = $po["msgstr"];
