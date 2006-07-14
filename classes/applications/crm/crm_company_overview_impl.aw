@@ -758,17 +758,20 @@ class crm_company_overview_impl extends class_base
 				$parms = array(
 					"id" => $cal->id()
 				);
-				if ($r["act_s_dl_from"] > 300)
-				{
-					$parms["start"] = $r["act_s_dl_from"];
-				}
+				$parms["start"] = $r["act_s_dl_from"];
+
 				if ($r["act_s_dl_to"] > 300)
 				{
 					$parms["end"] = $r["act_s_dl_to"];
 				}
-				foreach($pm->get_event_list($parms) as $dat)
+				else
 				{
-					$oids[] = $dat["id"];
+					$parms["end"] = time() + 10 * 365 * 24 * 3600;
+				}
+				$tmp = $pm->get_event_list($parms);
+				foreach($tmp as $_id => $dat)
+				{
+					$oids[] = $_id;
 				}
 			}
 			if (count($oids))
