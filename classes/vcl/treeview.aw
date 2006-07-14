@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.64 2006/05/09 06:41:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.65 2006/07/14 12:36:07 dragut Exp $
 // treeview.aw - tree generator
 /*
 
@@ -159,7 +159,6 @@ class treeview extends class_base
 
 		@returns
 
-
 		@comment
 
 	**/
@@ -268,24 +267,81 @@ class treeview extends class_base
 		$this->tree_dat["root_url"] = $name;
 	}
 
-	////
-	// !inits tree
-	// params:
-	//   root_name - root menu name
-	//   root_url - root menu url
-	//   root_icon - root menu icon
-	//   has_root - whether to draw to the root node. trees that load branches on demand don't
-	//		need to draw the rootnode for branches.
-	//   tree_id  - set to an unique id, if you want the tree to persist it's state
-	//	type - TREE_HTML|TREE_DHTML|TREE_DHTML_WITH_CHECKBOXES|TREE_DHTML_WITH_BUTTONS 
-	//	persist_state - tries to remember tree state in kuuki
-	// separator - string separator to use for separating checked node id-s, applies when type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS. defaults to ","
-	// checked_nodes - tree node id-s that are checked initially, applies when type is TREE_DHTML_WITH_CHECKBOXES
-	// checkbox_data_var - name for variable that will contain posted data of what was checked/unchecked. applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS. defaults to tree_id
-	// data_in_place - for load on demand tree, if this is set(to '1'), no load on demand is used this point forward for that branch
+	/** Initializes tree
+
+		@attrib name=start_tree params=name api=1 
+
+		@param root_name [optional|required] type=string 
+			Root menu name
+
+		@param root_url [optional|required] type=string
+			Root menu url
+
+		@param root_icon optional type=string
+			Root menu icon
+
+		@param has_root optional type=bool default=false
+			Whether to draw to the root node. trees that load branches on demand don't need to draw the rootnode for branches.
+
+		@param tree_id optional type=string default=false
+			Set to an unique id, if you want the tree to persist it's state.
+
+		@param type optional type=int default=TREE_DHTML
+			Tree type. [TREE_HTML|TREE_DHTML|TREE_DHTML_WITH_CHECKBOXES|TREE_DHTML_WITH_BUTTONS]
+
+		@param persist_state optional type=bool
+			Tries to remember tree state in cookie.
+
+		@param separator optional type=string default=","
+			String separator to use for separating checked node id-s, applies when type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS.
+
+		@param checked_nodes optional type=array 
+			Tree node id-s that are checked initially, applies when type is TREE_DHTML_WITH_CHECKBOXES.
+
+		@param checkbox_data_var optional type=string default=$tree_id
+			Name for variable that will contain posted data of what was checked/unchecked. applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS.
+
+		@param data_in_place optional type=int
+			For load on demand tree, if this is set to '1', no load on demand is used this point forward for that branch. [1|0]
+
+		@param open_path optional type=array
+
+		@param get_branch_func optional type=string default=false
+
+		@param branch optional type=bool default=false
+
+		@param item_name_length optional type=int default=false
+			Maximum length of the item name. 
+			
+		@examples
+
+		classload('vcl/treeview');
+		$t = new treeview();
+		$t->start_tree(array(
+			'type' => TREE_DHTML,
+			'root_name' => 'some_tree',
+			'tree_id' => 'foobar',
+			'persist_state' => true,
+		));
+		
+		$t->add_item(0, array(
+			"id" => 2,
+			"name" => 'Foo',
+			"url" => $this->mk_my_orb("do_something",array())
+		));
+
+		$t->add_item(2, array(
+			"id" => 3, 
+			"name" => 'Foo',
+			"url" => $this->mk_my_orb("do_something",array())
+		));
+
+		echo $t->finalize_tree();
+
+	**/
 	function start_tree($arr)
 	{
-		$this->auto_open = (is_array($arr["open_path"]) && count($arr["open_path"]))?$arr["open_path"]:false;
+		$this->auto_open = ( is_array( $arr["open_path"] ) && count( $arr["open_path"] ) ) ? $arr["open_path"] : false;
 		$this->items = array();
 		$this->tree_type = empty($arr["type"]) ? TREE_DHTML : $arr["type"];
 		$this->tree_dat = $arr;
@@ -344,17 +400,26 @@ class treeview extends class_base
 		return isset($this->features[$feature]) ? 1 : 0;
 	}
 
-	////
-	// !adds item to the tree
-	// params:
-	//    parent - the parent of the item to be added
-	//    item - array of item data:
-	//      id - id of the item
-	//      name - the name of the item
-	//      url - the link for the item
-	//      iconurl - the url of the icon
-	//      target - the target frame of the link
-	//      checkbox_status - 1|0 i.e. checked or unchecked. applicable only when dhtml tree with checkboxes is used
+	/** Adds item to the tree
+
+		@attrib name=add_item params=pos api=1 
+
+		@param parent required type=string 
+			The parent of the item to be added
+
+		@param item required type=array
+			Array of item data:
+				id - id of the item
+				name - the name of the item
+				url - the link for the item
+				iconurl - the url of the icon
+				target - the target frame of the link
+				checkbox_status - 1|0 i.e. checked or unchecked. applicable only when dhtml tree with checkboxes is used
+
+		@examples
+			#start_tree
+
+	**/
 	function add_item($parent, $item)
 	{
 		// dhtml tree (sometimes) needs to know information about
@@ -372,16 +437,35 @@ class treeview extends class_base
 		};
 	}
 
+	/** Returns the array with the item ids in tree
+		@attrib name=get_item_ids params=name api=1
+		@returns 
+			Array with item ids in tree
+
+	**/
 	function get_item_ids()
 	{
 		return array_keys($this->itemdata);
 	}
 
+	/** Returns the data of an item in tree
+		@attrib name=get_item params=pos api=1
+		@param id required type=string
+			The key (id) of an item
+		@returns 
+			Array with item data
+
+	**/
 	function get_item($id)
 	{
 		return $this->itemdata[$id];
 	}
 
+	/** Removes an item from the tree
+		@attrib name=remove_item params=pos api=1
+		@param id required type=string
+			The key (id) of an item
+	**/
 	function remove_item($id)
 	{
 		unset($this->itemdata[$id]);
@@ -398,11 +482,26 @@ class treeview extends class_base
 		}
 	}
 
+	/** Sets the selcted element in the tree
+		@attrib name=selected_item params=pos api=1
+		@param id required type=string
+			The key (id) of an item
+	**/
 	function set_selected_item($id)
 	{
 		$this->selected_item = $id;
 	}
 
+	
+	/** Checks if a node have children or not
+		@attrib name=node_has_children params=pos api=1
+		@param id required type=string
+			The key (id) of an item
+		@returns 
+			Boolean true if item exists
+			Boolean false if item doesn't exists
+
+	**/
 	function node_has_children($id)
 	{
 		return is_array($this->items[$id]) && sizeof($this->items[$id]) > 0;
@@ -411,6 +510,18 @@ class treeview extends class_base
 	////
 	// !draws the tree
 	// rootnode - from which node should drawing start (defaults to 0)
+
+	/** Draws the tree
+		@attrib name=finalize_tree params=name api=1
+		@param rootnode optional type=string default=0
+			From which node should drawing start (defaults to 0)
+			
+		@returns
+			Parsed tree 
+		@examples
+			#start_tree
+
+	**/
 	function finalize_tree($arr = array())
 	{
 
@@ -1199,22 +1310,34 @@ class treeview extends class_base
 		$this->level--;
 	}
 
-	////
-	// !takes an object_tree and returns a treeview
-	// the treeview will have all the objects in the object_tree
-	// as tree items.
-	// parameters:
-	//	tree_opts - options to pass to the treeview constructor
-	//	root_item - object instance that contains the root item
-	//	ot - object_tree instance that contains the needed objects
-	// no_urls - if set, urls for nodes won't be generated
-	//	target_url - url for link of menu items. optional.
-	//	var - variable name. links in the tree will be made with
-	//		aw_url_change_var($var, $item->id(), $url) - the $var variable will
-	//		contain the active tree item
-	//	node_actions - array:  clid=>"action_name". This is for specifying different actions for different classes
-	// checkbox_class_filter - array of class id-s, objects of these classes will have checkboxed/buttoned tree nodes. Applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS.
-	// no_root_item - bool - if true, the single root item is not inserted into the tree
+	/** Takes an object_tree and returns a treeview
+		@attrib name=tree_from_objects param=name api=1
+		
+		@param tree_opts required type=array
+			Options to pass to the treeview constructor
+		@param root_item required type=object
+			Object instance that contains the root item
+		@param ot required type=object
+			Object_tree instance that contains the needed objects
+		@param no_urls optional type=bool
+			If set, urls for nodes won't be generated
+		@param target_url optional type=string
+			Url for link of menu items
+		@param var required type=string 
+			Variable name. Links in the tree will be made with aw_url_change_var($var, $item->id(), $url) - the $var variable will contain the active tree item
+		@param node_actions optional type=array
+			This is for specifying different actions for different classes. ( array( clid => "action_name" ) )
+		@param checkbox_class_filter optional type=array
+			Array of class id-s, objects of these classes will have checkboxed/buttoned tree nodes. Applicable only when tree type is TREE_DHTML_WITH_CHECKBOXES or TREE_DHTML_WITH_BUTTONS.
+		@param no_root_item optional type=bool 
+			If true, the single root item is not inserted into the tree
+		@returns 
+			Treeview object
+		@comment
+			
+		@examples
+			
+	**/
 	function tree_from_objects($arr)
 	{
 		extract($arr);
@@ -1339,7 +1462,11 @@ class treeview extends class_base
 		return $tv;
 	}
 
-	//	  only_one_level_opened - set to 1 if you want to show one tree depth at a time
+	/** Sets that only one tree depth is opened at a time
+		@attrib name=set_only_one_level_opened param=pos api=1
+		@param value required type=int
+			If set to 1, then only one tree depth is opened at a time
+	**/
 	function set_only_one_level_opened($value)
 	{
 		$this->only_one_level_opened = $value;
