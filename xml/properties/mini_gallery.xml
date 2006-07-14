@@ -70,6 +70,16 @@
             <caption>Uploadi ZIP fail</caption>
       </property>
       <property>
+            <name>refresh</name>
+            <table>objects</table>
+            <group>import</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>refresh</field>
+            <caption>V&amp;amp;auml;rskenda</caption>
+      </property>
+      <property>
             <name>mg_tb</name>
             <table>objects</table>
             <group>manage</group>

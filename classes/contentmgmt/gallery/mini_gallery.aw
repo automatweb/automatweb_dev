@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.27 2006/06/28 15:00:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.28 2006/07/14 13:58:26 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -31,6 +31,9 @@
 
 	@property zip_file type=fileupload store=no
 	@caption Uploadi ZIP fail
+
+	@property refresh type=checkbox ch_value=1 store=no
+	@caption V&auml;rskenda
 
 @default group=manage
 
@@ -311,7 +314,29 @@ class mini_gallery extends class_base
 			flush();
 			$fp = $tn."/".$file;
 
-			$img = obj();
+			if ($_POST["refresh"] == 1)
+			{
+				// try to find image with same name in gallery
+				$ol = new object_list(array(
+					"class_id" => CL_IMAGE,
+					"name" => $file,
+					"parent" => $o->prop("folder"),
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				if ($ol->count())
+				{
+					$img = $ol->begin();
+				}
+				else
+				{
+					$img = obj();
+				}
+			}
+			else
+			{
+				$img = obj();
+			}
 			$img->set_class_id(CL_IMAGE);
 			$img->set_parent($o->prop("folder"));
 			$img->set_status(STAT_ACTIVE);
