@@ -1166,7 +1166,7 @@ class mrp_workspace extends class_base
 				$prop["value"] .= "<span style='font-size: 11px; padding: 5px; background: ".$this->pj_colors["search_result"]."'>".t("Otsingu tulemus")."</span>&nbsp;&nbsp;";
 				$prop["value"] .= "</td><td align=right>";
 				$prop["value"] .= "<span style='font-size: 11px;'>Projekt: <input size=6 type=text name=do_pv_proj_s>";
-				$prop["value"] .= "<a href='javascript:void(0)' onClick='changed=0;document.changeform.submit()'>Otsi</a></span>";
+				$prop["value"] .= "<a href='#' onClick='changed=0;document.changeform.submit()'>Otsi</a></span>";
 				$prop["value"] .= "</td><td align=right>";
 				$prop["value"] .= "<span style='font-size: 11px;'>Vali ressurss: <select onChange='submit_changeform(\"\");' name=pj_use_resource>";
 				$resids = $this->get_cur_printer_resources(array(
