@@ -1,6 +1,3 @@
-
-
-
 <html>
 <head>
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset={VAR:charset}">
@@ -16,7 +13,6 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/ajax.js"></script>
-<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/autosuggest.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/CalendarPopup.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/popup_menu.js"></script>
 
