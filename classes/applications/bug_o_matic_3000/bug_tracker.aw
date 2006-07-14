@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.74 2006/07/12 09:54:29 kristo Exp $
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.74 2006/07/12 09:54:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.75 2006/07/14 12:00:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug_tracker.aw,v 1.75 2006/07/14 12:00:29 kristo Exp $
 
 // bug_tracker.aw - BugTrack 
 
@@ -2815,7 +2815,7 @@ class bug_tracker extends class_base
 		// get all goals/tasks
 		$ft = array(
 			"class_id" => CL_BUG,
-			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS),
+			"bug_status" => array(BUG_OPEN,BUG_INPROGRESS,BUG_FATALERROR),
 			"CL_BUG.who.name" => $p->name(),
 			"lang_id" => array(),
 			"site_id" => array()
@@ -2909,7 +2909,12 @@ echo "<hr>";
 		$u = get_instance("users");
 		foreach($bug2uid as $b_uid => $bugs)
 		{
-			$uo = obj($u->get_oid_for_uid($b_uid));
+			$u_oid = $u->get_oid_for_uid($b_uid);
+			if (!$this->can("view", $u_oid))
+			{
+				continue;
+			}			
+			$uo = obj($u_oid);
 			
 			$eml = $uo->prop("email");
 
