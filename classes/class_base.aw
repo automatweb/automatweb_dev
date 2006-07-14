@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.492 2006/07/05 10:12:20 kristo Exp $
+// $Id: class_base.aw,v 2.493 2006/07/14 13:31:14 kristo Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2808,6 +2808,10 @@ class class_base extends aw_template
 							$this->convert_element(&$rval);
 							$resprops[$rkey] = $rval;
 							$resprops[$rkey]["wf_capt_ord"] = $val["wf_capt_ord"];
+							if ($resprops[$rkey]["type"] == "hidden")
+							{
+								unset($resprops[$rkey]["parent"]);
+							}
 						};
 					};
 					continue;
