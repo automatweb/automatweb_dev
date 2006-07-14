@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.66 2006/07/12 11:56:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.67 2006/07/14 12:56:23 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -230,10 +230,6 @@ class crm_bill extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "customer":
-				echo dbg::dump($_POST);
-				break;
-
 			case "bill_no":
 				if ($prop["value"] != $arr["obj_inst"]->prop("bill_no"))
 				{
