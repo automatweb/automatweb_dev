@@ -1238,7 +1238,7 @@ class realestate_property extends class_base
 				{
 					$this->read_template ($tpl);
 					$this->re_template_loaded = $tpl;
-					lc_site_load("realestate", $this);
+					lc_site_load("realestate", &$this);
 				}
 
 				$required_properties = array (
@@ -1573,6 +1573,7 @@ class realestate_property extends class_base
 				"type" => "RELTYPE_REALESTATE_PICTURE",
 				"class_id" => CL_IMAGE,
 			)));
+			$pictures->sort_by(array("prop" => "ord", "order" => "asc"));
 			$pictures = $pictures->arr ();
 
 			$picture1_url = "";
