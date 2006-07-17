@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.48 2006/07/14 12:00:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.49 2006/07/17 08:30:35 tarvo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -540,7 +540,7 @@ class bug extends class_base
 					}
 				}
 
-				if (count($n_ovr))
+				if (count($n_ovr) && false) // && false on temp lahendus, eks terryf vaatab üle kui puhkuselt tuleb
 				{
 					$nms = array();
 					foreach($n_ovr as $item)
