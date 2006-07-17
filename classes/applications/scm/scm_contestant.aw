@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.4 2006/07/17 09:48:43 tarvo Exp $
 // scm_contestant.aw - V&otilde;istleja 
 /*
 
@@ -16,18 +16,40 @@
 @property contestants_company type=text store=no editonly=1
 @caption Firmast
 
-@groupinfo competitions caption="V&otilde;istlused" submit=no
-	@property comp_tb type=toolbar group=competitions no_caption=1
-	@caption V&otilde;istluste riba
+@property teams type=relpicker reltype=RELTYPE_TEAM multiple=1 size=5
+@caption Meeskonnad
 
-	@property comp_tbl type=table group=competitions no_caption=1
+@groupinfo register caption="Registreeri v&otilde;istlustele" submit=no
+	@property reg_tbl type=table group=register no_caption=1
 	@caption V&otilde;istluste tabel
 
-	@property reg_button type=submit group=competitions
+	@property reg_button type=submit group=register
 	@caption Registreeru
+
+@groupinfo competitions caption="Minu v&otilde;istlused" submit=no
+	
+	@default group=competitions
+
+	@property comp_tbl type=table no_caption=1
+	@caption voistlused
+
+	@property comp_caption type=text store=no
+	@caption V&otilde;istlus
+
+	@property sel_teams type=select multiple=1 store=no
+	@caption Minu meeskonnad
+
+	@property teams_submit type=submit
+	@caption Salvesta
+
+	@property unreg_button type=submit group=competitions
+	@caption Eemalda registratsioon
 
 @reltype CONTESTANT value=1 clid=CL_CRM_PERSON
 @caption V&otilde;istleja
+
+@reltype TEAM value=2 clid=CL_SCM_TEAM
+@caption meeskond
 */
 
 class scm_contestant extends class_base
@@ -47,19 +69,17 @@ class scm_contestant extends class_base
 		switch($prop["name"])
 		{
 			//-- get_property --//
-			case "comp_tb":
-				$tb = &$prop["vcl_inst"];
-				$tb->add_button(array(
-					"name" => "register",
-					"tooltip" => t("Registreeri"),
-					"url" => "#",
-					"img" => "save.gif",
-				));
-			break;
-
-			case "comp_tbl":
+			case "reg_tbl":
 				$t = &$prop["vcl_inst"];
-				$this->_gen_comp_tbl(&$t);
+				$this->_gen_tbl(&$t);
+				// add special table fields
+				$t->define_chooser(array(
+					"name" => "reg",
+					"field" => "register",
+				));
+
+
+				// insert data
 				$comp = get_instance(CL_SCM_COMPETITION);
 				$org = get_instance(CL_SCM_ORGANIZER);
 				$filt = array(
@@ -101,6 +121,11 @@ class scm_contestant extends class_base
 						"caption" => 
 							"%s",
 					));
+
+					$event = obj($comp->get_event(array("competition" => $oid)));
+					$team = $event->prop("type");
+					$team_str = ($team == "single")?t("Ei"):t("Jah");
+
 					$t->define_data(array(
 						"competition" => sprintf($link, $c_url, $obj->name()),
 						"date" => date("d / m / Y", $obj->prop("date")),
@@ -109,13 +134,101 @@ class scm_contestant extends class_base
 						"event" => sprintf($link, $e_url, $e_obj->name()),
 						"tournament" => sprintf($link, $t_url, $t_obj->name()),
 						"organizer" => $org_company->name(),
+						"team" => $team_str,
 					));
 				}
 			break;
 
-			case "csontestant":
-				$o = obj($this->get_contestant_person(array("contestant" => $arr["obj_inst"]->id())));
-				$prop["value"] = $o->name();
+			case "comp_tbl":
+				$t = &$prop["vcl_inst"];
+				$this->_gen_tbl(&$t);
+				// add special table fields
+				$t->define_chooser(array(
+					"name" => "unreg",
+					"field" => "unregister",
+				));
+
+				// insert data
+				$filt = array(
+					"contestant" => $arr["obj_inst"]->id(),
+					"registered" => true,
+				);
+				$comp = get_instance(CL_SCM_COMPETITION);
+				foreach($comp->get_competitions($filt) as $oid => $obj)
+				{
+					$event = obj($comp->get_event(array("competition" => $oid)));
+					$team = $event->prop("type");
+					if($team == "single")
+					{
+						$team_str = t("Ei");
+					}
+					else
+					{
+						$url = $this->mk_my_orb("change", array(
+							"set_team" => $oid,
+							"group" => $arr["request"]["group"],
+							"id" => $arr["request"]["id"],
+							"return_url" => $arr["request"]["return_url"],
+						));
+						$missing = "<font color=\"red\">".t("Meeskonnad m&auml;&auml;ramata")."</font>";
+						// checks if there are any teams assigned
+						$has_team = false;
+						foreach($this->get_teams(array("contestant" => $arr["obj_inst"])) as $team)
+						{
+							$team_obj = obj($team);
+							$sel_competitions = $team_obj->prop("competitions");
+							if(in_array($oid, $sel_competitions))
+							{
+								$has_team = true;
+								break;
+							}
+						}
+						//
+						$add = html::href(array(
+							"url" => $url,
+							"caption" => t("M&auml;&auml;ra meeskonnad"),
+						));
+						$team_str = t("Jah").($has_team?"":"<br/>".$missing)."<br/>".$add;
+					}
+					$t->define_data(array(
+						"competition" => $obj->name(),
+						"team" => $team_str,
+						"unregister" => $oid,
+					));
+				}
+			break;
+
+			case "sel_teams":
+				if(empty($arr["request"]["set_team"]))
+				{
+					return PROP_IGNORE;
+				}
+				$prop["name"] = "sel_teams[".$arr["request"]["set_team"]."]";
+				$prop["options"][-1] = t("-Vali meeskonnad-");
+				foreach($this->get_teams(array("contestant" => $arr["obj_inst"])) as $team)
+				{
+					$team_obj = obj($team);
+					$sel_competitions = $team_obj->prop("competitions");
+					if(in_array($arr["request"]["set_team"], $sel_competitions))
+					{
+						$prop["selected"][] = $team;
+					}
+					$prop["options"][$team] = $team_obj->name();
+				}
+			break;
+			case "comp_caption":
+				if(empty($arr["request"]["set_team"]))
+				{
+					return PROP_IGNORE;
+				}
+				$obj = obj($arr["request"]["set_team"]);
+				$prop["value"] = $obj->name();
+			break;
+			case "teams_submit":
+				if(empty($arr["request"]["set_team"]))
+				{
+					return PROP_IGNORE;
+				}
 			break;
 
 			case "contestants_company":
@@ -133,7 +246,7 @@ class scm_contestant extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
-			case "comp_tbl":
+			case "reg_tbl":
 				foreach($arr["request"]["reg"] as $oid)
 				{
 					$obj = obj($oid);
@@ -141,6 +254,35 @@ class scm_contestant extends class_base
 						"to" => $arr["obj_inst"]->id(),
 						"type" => "RELTYPE_CONTESTANT",
 					));
+				}
+			break;
+
+			case "sel_teams":
+				$all_teams = $this->get_teams(array("contestant" => $arr["obj_inst"]->id()));
+				foreach($prop["value"] as $competition => $teams)
+				{
+					unset($prop["value"][$competition][-1]);
+					foreach($all_teams as $team)
+					{
+						$obj = obj($team);
+						$comps = $obj->prop("competitions");
+						if(in_array($team, $teams) && !in_array($competition, $comps))
+						{
+							$comps[] = $competition;
+						}
+						elseif(in_array($competition, $comps) && !in_array($team, $teams))
+						{
+							foreach($comps as $k => $v)
+							{
+								if($v == $competition)
+								{
+									unset($comps[$k]);
+								}
+							}
+						}
+						$obj->set_prop("competitions", $comps);
+						$obj->save();
+					}
 				}
 			break;
 		}
@@ -174,7 +316,7 @@ class scm_contestant extends class_base
 
 //-- methods --//
 
-	function _gen_comp_tbl(&$t)
+	function _gen_tbl(&$t)
 	{
 		$t->define_field(array(
 			"name" => "competition",
@@ -187,6 +329,12 @@ class scm_contestant extends class_base
 			"sortable" => 1,
 		));
 		$t->define_field(array(
+			"name" => "team",
+			"caption" => t("Meeskondlik"),
+			"sortable" => 1,
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "location",
 			"caption" => t("Toimumiskoht"),
 			"sortable" => 1,
@@ -195,6 +343,7 @@ class scm_contestant extends class_base
 			"name" => "date",
 			"caption" => t("Toimumisaeg"),
 			"sortable" => 1,
+			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "organizer",
@@ -205,10 +354,6 @@ class scm_contestant extends class_base
 			"name" => "tournament",
 			"caption" => t("Turniir"),
 			"sortable" => 1,
-		));
-		$t->define_chooser(array(
-			"name" => "reg",
-			"field" => "register",
 		));
 
 	}
@@ -258,6 +403,13 @@ class scm_contestant extends class_base
 			"class_id" => CL_SCM_CONTESTANT,
 		));
 		return $list->arr();
+	}
+
+	function get_teams($arr = array())
+	{
+		$obj = obj($arr["contestant"]);
+		$teams = $obj->prop("teams");
+		return $teams;
 	}
 }
 ?>

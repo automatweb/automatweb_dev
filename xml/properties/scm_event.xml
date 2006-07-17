@@ -10,13 +10,22 @@
             <caption>T&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
+            <name>team_result_calc</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>V&amp;amp;otilde;istkonna tulemuse arvutus</caption>
+      </property>
+      <property>
             <name>result_type</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_RESULT_TYPE</reltype>
+            <relytpe>RELTYPE_RESULT_TYPE</relytpe>
             <caption>Paremusj&amp;amp;auml;rjestuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <classinfo>

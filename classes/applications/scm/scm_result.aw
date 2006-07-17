@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.2 2006/07/11 07:55:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.3 2006/07/17 09:48:43 tarvo Exp $
 // scm_result.aw - Tulemus 
 /*
 
@@ -19,11 +19,15 @@
 @property contestant type=text
 @caption V&otilde;istleja
 
+@property team type=hidden
+@caption Meeskond
+
 @reltype CONTESTANT value=1 clid=CL_SCM_CONTESTANT
 @caption V&otilde;istleja
 
 @reltype COMPETITION value=2 clid=CL_SCM_COMPETITION
 @caption V&otilde;istlus
+
 */
 
 class scm_result extends class_base
@@ -44,9 +48,6 @@ class scm_result extends class_base
 		{
 			//-- get_property --//
 			case "contestant":
-				$this->get_results(array(
-					"contestant" => "582",
-				));
 				$a = obj($this->get_contestant(array("result" => $arr["obj_inst"]->id())));
 				$prop["value"] = $a->name();
 
@@ -113,13 +114,14 @@ class scm_result extends class_base
 		return $res["to"];
 	}
 
-
 	/**
 		@param result optional
 		@param competition required
 			competition oid to connect to
 		@param contestant required
 			contestant oid to connect to
+		@param team optional
+			sets the team 
 		@comment
 			adds result
 	**/
@@ -136,6 +138,7 @@ class scm_result extends class_base
 		$b = obj($arr["contestant"]);
 		$obj->set_name($a->name()." - ".$b->name());
 		$obj->set_prop("result", $arr["result"]);
+		$obj->set_prop("team", $arr["team"]);
 		$obj->connect(array(
 			"to" => $arr["competition"],
 			"type" => "RELTYPE_COMPETITION",
@@ -150,85 +153,130 @@ class scm_result extends class_base
 		return $id;
 	}
 
+	function get_teams_results($arr = array())
+	{
+		return $this->get_results(array(
+			"competition" => $arr["competition"],
+			"type" => "team",
+			"set_team" => true,
+		));
+	}
+
 	/**
 		@attrib params=name
-		@param competition optional type=int
+		@param competition required type=int
 			the competition object id which results you want
+		@param type optional type=string
+			options:
+				contestant,team
+			if only $competition is set, then returns wheater contestants results or team's results
 		@param contestant optional type=int
 			the contestants id which results you want
-		@param set_competition optional type=bool
+		@param team optional type=int
+			the team's id which results you want
 		@param set_contestant optional type=bool
+			includes contestant in returning array .. when dealing with individual contestants
+		@param set_team optional type=bool
+			includes team in returning array.. when dealing with teams
 		@comment
 			fetches results
+			the $competition param can be together with $contestant or $team!. if both are set, $contestant is preferred
 		@returnes
 			array of results
 	**/
 	function get_results($arr)
 	{
-		$arr["class_id"] = CL_SCM_RESULT;
-		if(strlen($arr["contestant"]))
+		if($arr["type"] == "contestant")
 		{
-			$c= new connection();
-			$res = $c->find(array(
-				"to" => $arr["contestant"],
-				"type" => 1,
+			$c = new connection();
+			$list = new object_list(array(
+				"class_id" => CL_SCM_RESULT,
+				"CL_SCM_RESULT.RELTYPE_CONTESTANT" => "%",
+				"CL_SCM_RESULT.RELTYPE_COMPETITION" => $arr["competition"],
 			));
-			if(strlen($arr["competition"]))
+			$inst = get_instance(CL_SCM_TEAM);
+			foreach($list->ids() as $id)
 			{
-				foreach($res as $relid => $data)
+				$cont = $this->get_contestant(array("result" => $id));
+				$team = $inst->get_team(array(
+					"contestant" => $cont,
+					"competition" => $arr["competition"],
+				));
+				$o = $arr["set_team"]?obj($team):false;
+				$to_format[] = array(
+					"competition" => $arr["competition"],
+					"contestant" => $cont,
+					"result" => $id,
+					"team" => ($arr["set_team"])?$o->name():NULL,
+					"team_oid" => ($arr["set_team"])?$team:NULL,
+				);
+			}
+		}
+		elseif($arr["type"] == "team")
+		{
+			$team = get_instance(CL_SCM_TEAM);
+			foreach($team->get_teams() as $oid => $obj)
+			{
+				$comps = $obj->prop("competitions");
+				if(in_array($arr["competition"], $comps))
 				{
-					$nres = $c->find(array(
-						"from" => $data["from"],
-						"type" => 2,
-						"to" => $arr["competition"],
+					// this sets one contestant from each team to an array.. for the connection search
+					$list = new object_list(array(
+						"class_id" => CL_SCM_RESULT,
+						"CL_SCM_RESULT.RELTYPE_CONTESTANT" => key($team->get_team_members(array("team" => $oid))),
+						"CL_SCM_RESULT.RELTYPE_COMPETITION" => $arr["competition"],
 					));
-					$fres = array_merge($fres, $nres);
+					$result_id = current($list->ids());
+					$to_format[] = array(
+						"result" => $result_id,
+						"team" => $oid,
+						"competition" => $arr["competition"],
+					);
 				}
 			}
-			else
-			{
-				$fres = $res;
-			}
 		}
-		if(strlen($arr["competition"]) && !strlen($arr["contestant"]))
-		{
-			$c= new connection();
-			$fres = $c->find(array(
-				"to" => $arr["competition"],
-				"type" => 2,
-			));
+		return $this->_helper($to_format);
+	}
 
-		}
-		// siin tehakse veidi mugavamale kujule viimist
-		foreach($fres as $data)
+	/**
+		@param result
+		@param competition
+		@param contestant
+		@param team
+	**/
+	function _helper($arr = array())
+	{
+		foreach($arr as $data)
 		{
-			$ret_data["result_oid"] = $data["from"];
-			$competition = $this->get_competition(array("result" => $data["from"]));
-			if($arr["set_competition"])
+			unset($ret_data);
+			$ret_data["result_oid"] = $data["result"];
+			$ret_data["competition"] = $data["competition"];
+			if(strlen($data["contestant"]))
 			{
-				$ret_data["competition"] = $competition;
+				$ret_data["contestant"] = $data["contestant"];
 			}
-			if($arr["set_contestant"])
+			if(strlen($data["team"]))
 			{
-				$ret_data["contestant"] = $this->get_contestant(array("result" => $data["from"]));
+				$ret_data["team"] = $data["team"];
+				$ret_data["team_oid"] = $data["team_oid"];
 			}
+
 			// siin läheb mingi haige tulemuse formattimine lahti.. see tuleks siit ära kolida
 			$comp_inst = get_instance(CL_SCM_COMPETITION);
-			$res_obj = obj($data["from"]);
+			$res_obj = obj($data["result"]);
 			$raw_result = $res_obj->prop("result");
-			$event = $comp_inst->get_event(array("competition" => $competition));
+			$event = $comp_inst->get_event(array("competition" => $data["competition"]));
 			$event_inst = get_instance(CL_SCM_EVENT);
 			$rtype = obj($event_inst->get_result_type(array("event" => $event)));
 			$rtype_inst = get_instance(CL_SCM_RESULT_TYPE);
 			$fun = $rtype_inst->units[$rtype->prop("unit")]["fun"];
 			$res = $rtype_inst->$fun($raw_result);
 			$ret_data["result"] = $res;
+			$ret_data["raw_result"] = $raw_result;
 			$ret_data["fun"] = $fun;
-
 			$ret[] = $ret_data;
 		}
 		return $ret;
-
 	}
 }
 ?>

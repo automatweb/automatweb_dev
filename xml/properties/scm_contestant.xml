@@ -22,20 +22,21 @@
             <caption>Firmast</caption>
       </property>
       <property>
-            <name>comp_tb</name>
+            <name>teams</name>
             <table>objects</table>
-            <group>competitions</group>
+            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>V&amp;amp;otilde;istluste riba</caption>
+            <type>relpicker</type>
+            <reltype>RELTYPE_TEAM</reltype>
+            <multiple>1</multiple>
+            <size>5</size>
+            <caption>Meeskonnad</caption>
       </property>
       <property>
-            <name>comp_tbl</name>
+            <name>reg_tbl</name>
             <table>objects</table>
-            <group>competitions</group>
+            <group>register</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -46,12 +47,64 @@
       <property>
             <name>reg_button</name>
             <table>objects</table>
-            <group>competitions</group>
+            <group>register</group>
             <field>meta</field>
             <method>serialize</method>
             <type>submit</type>
             <store>no</store>
             <caption>Registreeru</caption>
+      </property>
+      <property>
+            <name>comp_tbl</name>
+            <table>objects</table>
+            <group>competitions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>voistlused</caption>
+      </property>
+      <property>
+            <name>comp_caption</name>
+            <table>objects</table>
+            <group>competitions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>V&amp;amp;otilde;istlus</caption>
+      </property>
+      <property>
+            <name>sel_teams</name>
+            <table>objects</table>
+            <group>competitions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <store>no</store>
+            <caption>Minu meeskonnad</caption>
+      </property>
+      <property>
+            <name>teams_submit</name>
+            <table>objects</table>
+            <group>competitions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Salvesta</caption>
+      </property>
+      <property>
+            <name>unreg_button</name>
+            <table>objects</table>
+            <group>competitions</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Eemalda registratsioon</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SCM_CONTESTANT</syslog_type>
@@ -61,8 +114,12 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <register>
+                  <caption>Registreeri v&amp;amp;otilde;istlustele</caption>
+                  <submit>no</submit>
+            </register>
             <competitions>
-                  <caption>V&amp;amp;otilde;istlused</caption>
+                  <caption>Minu v&amp;amp;otilde;istlused</caption>
                   <submit>no</submit>
             </competitions>
       </groupinfo>
@@ -72,6 +129,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>V&amp;amp;otilde;istleja</caption>
             </CONTESTANT>
+            <TEAM>
+                  <value>2</value>
+                  <clid>CL_SCM_TEAM</clid>
+                  <caption>meeskond</caption>
+            </TEAM>
       </reltypes>
 </properties>
 

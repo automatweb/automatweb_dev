@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.4 2006/07/17 09:48:43 tarvo Exp $
 // scm_event.aw - Spordiala 
 /*
 
@@ -13,11 +13,16 @@
 @property type type=select
 @caption T&uuml;&uuml;p
 
-@property result_type type=relpicker reltype=RELTYPE_RESULT_TYPE
+@property team_result_calc type=select
+@caption V&otilde;istkonna tulemuse arvutus
+
+@property result_type type=relpicker relytpe=RELTYPE_RESULT_TYPE
 @caption Paremusj&auml;rjestuse t&uuml;&uuml;p
 
 @reltype RESULT_TYPE value=1 clid=CL_SCM_RESULT_TYPE
 @caption Paremusj&auml;rjestuse t&uuml;&uuml;p
+
+
 */
 
 class scm_event extends class_base
@@ -28,6 +33,7 @@ class scm_event extends class_base
 			"tpldir" => "applications/scm/scm_event",
 			"clid" => CL_SCM_EVENT
 		));
+		$this->_set_data();
 	}
 
 	function get_property($arr)
@@ -40,8 +46,21 @@ class scm_event extends class_base
 			case "type":
 				$prop["options"] = array(
 					"single" => t("Individuaalne"),
-					"multi" => t("Meeskondlik"),
+					"multi" => t("Individuaal-v&otilde;istkondlik"),
+					"multi_coll" => t("V&otilde;istkondlik-kollektiivne"),
 				);
+			break;
+
+			case "team_result_calc":
+				if($arr["obj_inst"]->prop("type") == "single" || $arr["obj_inst"]->prop("type") == "multi_coll")
+				{
+					return PROP_IGNORE;
+				}
+				foreach($this->get_alg() as $alg => $caption)
+				{
+					$prop["options"][$alg] = $caption;
+				}
+
 			break;
 		};
 		return $retval;
@@ -112,20 +131,59 @@ class scm_event extends class_base
 	}
 
 //-- methods --//
-	
-	/**
-		@comment
-			fetches result type for given event
-	**/
+
 	function get_result_type($arr = array())
 	{
-		$c = new connection();
-		$res = $c->find(array(
-			"from" => $arr["event"],
-			"to.class_id" => CL_SCM_RESULT_TYPE,
-		));
-		$res = current($res);
-		return $res["to"];
+		 $obj = obj($arr["event"]);
+		 return $obj->prop("result_type");
+	}
+	
+	function get_team_result_calc_fun($arr = array())
+	{
+		$o = obj($arr["event"]);
+		return $o->prop("team_result_calc");
+	}
+
+	function _set_data()
+	{
+		$this->alg = array(
+			"_scm_max" => t("Parim tulemus"),
+			"_scm_min" => t("Kehvim tulemus"),
+			"_scm_avg" => t("Tulemuste keskmine"),
+			"_scm_sum" => t("Tulemuste summa"),
+		);
+	}
+
+	// algorithms to calculate team result when event type is set to multi
+	function _scm_max($arr)
+	{
+		return max($arr);
+	}
+
+	function _scm_min($arr)
+	{
+		return min($arr);
+	}
+
+	function _scm_avg($arr)
+	{
+		return (array_sum($arr) / count($arr));
+	}
+
+	function _scm_sum($arr)
+	{
+		return array_sum($arr);
+	}
+
+	/**
+		@attrib params=pos
+		@param algorithm optional type=string
+			options:
+				max,min,avg,sum
+	**/
+	function get_alg($arr = "")
+	{
+		return (strlen($arr)?$this->alg["_".$arr]:$this->alg);
 	}
 }
 ?>

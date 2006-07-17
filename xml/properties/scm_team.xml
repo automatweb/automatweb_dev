@@ -1,0 +1,45 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>competitions</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_COMPETITION</reltype>
+            <multiple>1</multiple>
+            <caption>Osaletud v&amp;amp;otilde;istlused</caption>
+      </property>
+      <property>
+            <name>members_list</name>
+            <table>objects</table>
+            <group>members</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Liikmete nimekiri</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SCM_TEAM</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <groupinfo>
+            <members>
+                  <caption>Liikmed</caption>
+                  <submit>no</submit>
+            </members>
+      </groupinfo>
+      <reltypes>
+            <COMPETITION>
+                  <value>1</value>
+                  <clid>CL_SCM_COMPETITION</clid>
+            </COMPETITION>
+      </reltypes>
+</properties>
+

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result_type.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result_type.aw,v 1.4 2006/07/17 09:48:43 tarvo Exp $
 // scm_result_type.aw - Paremusj&auml;rjestuse t&uuml;&uuml;p 
 /*
 
@@ -108,6 +108,35 @@ class scm_result_type extends class_base
 	}
 
 //-- methods --//
+
+	/**
+		@param data
+		@param result_type
+		@comment
+			$data seee peab olema formaat:
+			array(
+				id,
+				result,
+			)
+		@return
+			array(
+				$id,
+				place,
+			)
+	**/
+	function sort_results($arr)
+	{
+		$res_type = obj($arr["result_type"]);
+		$sort = $res_type->prop("sort");
+		($sort == "asc")?asort($arr["data"]):arsort($arr["data"]);
+		$place = 1;
+		foreach($arr["data"] as $id => $res)
+		{
+			$arr["places"][$id] = $place;
+			$place++;
+		}
+		return $arr["places"];
+	}
 
 	/**
 		@param result_type required type=int
@@ -251,7 +280,15 @@ class scm_result_type extends class_base
 
 	function _format_points($arr, $reverse = false)
 	{
-		return $arr;
+		if($reverse)
+		{
+			return $arr["p"];
+		}
+		else
+		{
+			$ret["p"] = $arr;
+			return $ret;
+		}
 	}
 
 	function _format_length($arr, $reverse = false)

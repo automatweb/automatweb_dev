@@ -18,6 +18,7 @@
             <method>serialize</method>
             <type>text</type>
             <store>no</store>
+            <editonly>1</editonly>
             <caption>Firmast</caption>
       </property>
       <property>
@@ -95,7 +96,7 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Turniiride tabel</caption>
+            <caption>V&amp;amp;otilde;istlussarjade tabel</caption>
       </property>
       <property>
             <name>score_calc_tbl</name>
@@ -151,7 +152,7 @@
                   <submit>no</submit>
             </locations>
             <tournaments>
-                  <caption>Turniirid</caption>
+                  <caption>V&amp;amp;otilde;istlussarjad</caption>
                   <submit>no</submit>
             </tournaments>
             <score_calcs>

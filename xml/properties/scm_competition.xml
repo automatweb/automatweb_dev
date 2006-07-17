@@ -40,7 +40,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_TOURNAMENT</reltype>
             <editonly>1</editonly>
-            <caption>Turniir</caption>
+            <caption>V&amp;amp;otilde;istlussari</caption>
       </property>
       <property>
             <name>scm_score_calc</name>
@@ -185,7 +185,7 @@
             <TOURNAMENT>
                   <value>3</value>
                   <clid>CL_SCM_TOURNAMENT</clid>
-                  <caption>Turniir</caption>
+                  <caption>V&amp;amp;otilde;istlussari</caption>
             </TOURNAMENT>
             <SCORE_CALC>
                   <value>4</value>

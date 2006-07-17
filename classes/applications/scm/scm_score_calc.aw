@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.3 2006/07/17 09:48:43 tarvo Exp $
 // scm_score_calc.aw - Punktis&uuml;steem 
 /*
 
@@ -22,6 +22,7 @@ class scm_score_calc extends class_base
 			"tpldir" => "applications/scm/scm_score_calc",
 			"clid" => CL_SCM_SCORE_CALC
 		));
+		$this->_set_data();
 	}
 
 	function get_property($arr)
@@ -32,7 +33,7 @@ class scm_score_calc extends class_base
 		{
 			//-- get_property --//
 			case "score_calculator":
-				foreach($algorithms = $this->_gen_algorithm_list() as $fun_name => $caption)
+				foreach($algorithms = $this->algorithm_list() as $fun_name => $caption)
 				{
 					$prop["options"][$fun_name] = $caption;
 				}
@@ -57,23 +58,9 @@ class scm_score_calc extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-
-	/**
-		@comment
-			here you define the algorithm's.
-	**/
-	function _gen_algorithm_list()
-	{
-		$ret = array(
-			"_calc_smallwalk" => t("100 meetri käimine"),
-			"_calc_shootout" => t("Pistongipüstoli laskmine"),
-		);
-		return $ret;
-	}
-
 	function algorithm_list()
 	{
-		return $this->_gen_algorithm_list();
+		return $this->data;
 	}
 
 	function get_score_calcs()
@@ -83,15 +70,65 @@ class scm_score_calc extends class_base
 		));
 		return $list->arr();
 	}
-	
+
 	/* algoritmide funktsioonid */
 
-	function _calc_smallwalk()
+	/*
+		pm siin on siis need funktsioonid kuhu tuleb edasi anda tulemused, ning välja lastakse punktid
+
+		ok.. olen competitionis. seal on mul keretäis jama. kuidas seda ilusaks saada?
+		+ kõigepealt tuleks vastavalt result type'ile sorteerida äki? .. a vb pean seda siin samas tegema?.. siin poleks hea!!
+		+ siia peaks andma:
+		array(
+			id,
+			raw_result,
+		)
+		jeah.. siin ei tohiks üldse tegelt mingit sortimist teha!!!!!
+	*/
+
+	/**
+		@comment
+			first place	5p
+			second place	3p
+			third place	1p
+			others		0p
+	**/
+	function _first_three_for_shootout($place)
 	{
+		$point = 5;
+		$step = 2;
+		return (($s = ($point - (($place - 1) * $step))) > 0)?$s:0;
+	}
+	
+	/**
+		@comment
+			first		10p
+			second		8p
+			third		6p
+			fourth		4p
+			fifth		2p
+			orhers 		0p
+	**/
+	function _first_five_for_breath($place)
+	{
+		$point = 10;
+		$step = 2;
+		return (($s = ($point - (($place - 1) * $step))) > 0)?$s:0;
 	}
 
-	function _calc_shootout()
+	/**
+		@comment
+			first		15
+			second		11
+			third		7
+			fourth		3
+			others		0
+	**/
+	function _first_three_step_five($place)
 	{
+		$point = 15;
+		$step = 4;
+		return (($s = ($point - (($place - 1) * $step))) > 0)?$s:0;
 	}
 
 	////////////////////////////////////
@@ -110,5 +147,54 @@ class scm_score_calc extends class_base
 	}
 
 //-- methods --//
+
+	function _set_data()
+	{
+		$this->data = array(
+			"_first_five_for_breath" => t("Esimesed 5(10p alates)"),
+			"_first_three_step_five" => t("Esimesed 3 saavad(15/4)"),
+			"_first_three_for_shootout" => t("Esimesed kolm saavad punktid (laskmine)"),
+		);
+
+	}
+
+	function get_score_calc($arr = array())
+	{
+		$obj = obj($arr["score_calc"]);
+		$u= strlen($s = $obj->prop("score_calculator"))?$s:false;
+		return $u;
+	}
+
+	/**
+		@param data required type=array
+		@param score_calc required type=oid
+		@param competition required type=oid
+		@comment
+			sorts results
+	**/
+	function calc_results($arr)
+	{
+		// at first.. we must sort the array accordingly to result_type.sort
+		// then, we loop over the results starting from first place.. and ask points for each place for its function
+		$event_inst = get_instance(CL_SCM_EVENT);
+		$competition_inst = get_instance(CL_SCM_COMPETITION);
+		$res_type_inst = get_instance(CL_SCM_RESULT_TYPE);
+
+		$res_type = $event_inst->get_result_type(array("event" => $competition_inst->get_event(array("competition" => $arr["competition"]))));
+		$sorted = $res_type_inst->sort_results(array(
+			"data" => $arr["data"],
+			"result_type" => $res_type,
+		));
+		// assume that sorting is done already
+		$fun = $this->get_score_calc($arr);
+		foreach($sorted as $id => $place)
+		{
+			$ret[$id] = array(
+				"place" => $place,
+				"points" => $this->$fun($place),
+			);
+		}
+		return $ret;
+	}
 }
 ?>

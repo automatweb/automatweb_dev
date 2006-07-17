@@ -27,6 +27,15 @@
             <type>text</type>
             <caption>V&amp;amp;otilde;istleja</caption>
       </property>
+      <property>
+            <name>team</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <caption>Meeskond</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SCM_RESULT</syslog_type>
             <relationmgr>yes</relationmgr>

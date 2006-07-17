@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.3 2006/07/11 07:55:39 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.4 2006/07/17 09:48:43 tarvo Exp $
 // scm_organizer.aw - Spordiv&otilde;istluste korraldaja 
 /*
 
@@ -43,9 +43,9 @@
 	@property location_tbl type=table no_caption=1
 	@caption Asukohtade tabel
 
-@groupinfo tournaments caption="Turniirid" submit=no
+@groupinfo tournaments caption="V&otilde;istlussarjad" submit=no
 	@property tournaments_tbl type=table no_caption=1 group=tournaments
-	@caption Turniiride tabel
+	@caption V&otilde;istlussarjade tabel
 
 @groupinfo score_calcs caption="Punktis&uuml;steemid" submit=no
 	@property score_calc_tbl type=table no_caption=1 group=score_calcs
@@ -408,7 +408,7 @@ class scm_organizer extends class_base
 			"sortable" => 1,
 		));
 		$t->define_field(array(
-			"caption" => t("Turniir"),
+			"caption" => t("V&otilde;istlussari"),
 			"name" => "tournament",
 			"sortable" => 1,
 		));
@@ -459,7 +459,7 @@ class scm_organizer extends class_base
 	{
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => t("Turniiri nimi"),
+			"caption" => t("V&otilde;istlussarja nimi"),
 		));	
 		$t->define_field(array(
 			"name" => "competitions",
