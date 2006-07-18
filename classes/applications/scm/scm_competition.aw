@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.5 2006/07/18 06:05:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.6 2006/07/18 14:11:43 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -20,7 +20,7 @@
 @property date type=date_select 
 @caption Kuup&auml;ev
 
-@property scm_tournament type=relpicker reltype=RELTYPE_TOURNAMENT editonly=1
+@property scm_tournament type=relpicker reltype=RELTYPE_TOURNAMENT editonly=1 multiple=1
 @caption V&otilde;istlussari
 
 @property scm_score_calc type=relpicker reltype=RELTYPE_SCORE_CALC editonly=1
@@ -755,6 +755,20 @@ class scm_competition extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	/**
+	**/
+	function get_location($arr = array())
+	{
+		$obj = obj($arr["competition"]);
+		return ($s = ($obj->prop("location")))?$s:false;
+	}
+
+	function get_date($arr = array())
+	{
+		$obj = obj($arr["competition"]);
+		return $obj->prop("date");
 	}
 }
 ?>
