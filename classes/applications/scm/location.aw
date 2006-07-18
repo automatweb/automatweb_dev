@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_location.aw,v 1.3 2006/07/18 06:05:17 tarvo Exp $
-// scm_location.aw - Toimumiskoht 
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/location.aw,v 1.1 2006/07/18 06:05:17 tarvo Exp $
+// location.aw - Asukoht 
 /*
 
-@classinfo syslog_type=ST_SCM_LOCATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_LOCATION relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
@@ -30,13 +30,13 @@
 
 */
 
-class scm_location extends class_base
+class location extends class_base
 {
-	function scm_location()
+	function location()
 	{
 		$this->init(array(
-			"tpldir" => "applications/scm/scm_location",
-			"clid" => CL_SCM_LOCATION
+			"tpldir" => "applications/scm/location",
+			"clid" => CL_LOCATION
 		));
 	}
 

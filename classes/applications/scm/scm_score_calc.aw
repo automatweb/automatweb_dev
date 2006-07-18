@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.3 2006/07/17 09:48:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.4 2006/07/18 06:05:17 tarvo Exp $
 // scm_score_calc.aw - Punktis&uuml;steem 
 /*
 
@@ -185,7 +185,7 @@ class scm_score_calc extends class_base
 			"data" => $arr["data"],
 			"result_type" => $res_type,
 		));
-		// assume that sorting is done already
+
 		$fun = $this->get_score_calc($arr);
 		foreach($sorted as $id => $place)
 		{

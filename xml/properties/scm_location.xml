@@ -6,7 +6,8 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS</reltype>
             <caption>Aadress</caption>
       </property>
       <property>
@@ -47,6 +48,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>Foto</caption>
             </PHOTO>
+            <ADDRESS>
+                  <value>3</value>
+                  <clid>CL_CRM_ADDRESS</clid>
+                  <caption>Aadress</caption>
+            </ADDRESS>
       </reltypes>
 </properties>
 

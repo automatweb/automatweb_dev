@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.4 2006/07/17 09:48:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.5 2006/07/18 06:05:17 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -14,7 +14,7 @@
 @property scm_event type=relpicker reltype=RELTYPE_EVENT editonly=1
 @caption Spordiala
 
-@property scm_location type=relpicker reltype=RELTYPE_LOCATION editonly=1
+@property location type=relpicker reltype=RELTYPE_LOCATION editonly=1
 @caption Asukoht
 
 @property date type=date_select 
@@ -59,7 +59,7 @@
 @reltype EVENT value=1 clid=CL_SCM_EVENT
 @caption Spordiala
 
-@reltype LOCATION value=2 clid=CL_SCM_LOCATION
+@reltype LOCATION value=2 clid=CL_LOCATION
 @caption Asukoht
 
 @reltype TOURNAMENT value=3 clid=CL_SCM_TOURNAMENT
@@ -475,7 +475,7 @@ class scm_competition extends class_base
 	}
 	function _get_image($arr)
 	{
-		$loc_id = $arr["obj_inst"]->prop("scm_location");
+		$loc_id = $arr["obj_inst"]->prop("location");
 		
 		if(!$loc_id)
 		{

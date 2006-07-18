@@ -12,7 +12,7 @@
             <caption>Spordiala</caption>
       </property>
       <property>
-            <name>scm_location</name>
+            <name>location</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -179,7 +179,7 @@
             </EVENT>
             <LOCATION>
                   <value>2</value>
-                  <clid>CL_SCM_LOCATION</clid>
+                  <clid>CL_LOCATION</clid>
                   <caption>Asukoht</caption>
             </LOCATION>
             <TOURNAMENT>

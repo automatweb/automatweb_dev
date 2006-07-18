@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.4 2006/07/17 09:48:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.5 2006/07/18 06:05:17 tarvo Exp $
 // scm_organizer.aw - Spordiv&otilde;istluste korraldaja 
 /*
 
@@ -137,7 +137,7 @@ class scm_organizer extends class_base
 			case "location_tbl":
 				$t = &$prop["vcl_inst"];
 				$this->_gen_loc_tbl(&$t);
-				$loc = get_instance(CL_SCM_LOCATION);
+				$loc = get_instance(CL_LOCATION);
 				foreach($loc->get_locations($filt) as $oid => $obj)
 				{
 					$t->define_data(array(
@@ -155,7 +155,7 @@ class scm_organizer extends class_base
 					"tooltip" => t("Uus asukoht"),
 					"img" => "new.gif",
 					"url" => $this->mk_my_orb("new", array(
-						"class" => "scm_location",
+						"class" => "location",
 						"parent" => $arr["obj_inst"]->parent(),
 					)),
 				));
@@ -168,7 +168,7 @@ class scm_organizer extends class_base
 				foreach($inst->get_competitions() as $id => $obj)
 				{
 					$e_obj = obj($obj->prop("scm_event"));
-					$l_obj = obj($obj->prop("scm_location"));
+					$l_obj = obj($obj->prop("location"));
 					$t_obj = obj($obj->prop("scm_tournament"));
 					$competition_url = $this->mk_my_orb("change" ,array(
 						"class" => "scm_competition",
@@ -181,7 +181,7 @@ class scm_organizer extends class_base
 						"return_url" => get_ru(),
 					));
 					$location_url = $this->mk_my_orb("change",array(
-						"class" => "scm_location",
+						"class" => "location",
 						"id" => $l_obj->id(),
 						"return_url" => get_ru(),
 					));
@@ -358,7 +358,7 @@ class scm_organizer extends class_base
 	{
 		$conns = new connection();
 		$conns = $conns->find(array(
-			"from.class_id" => CL_SCM_LOCATION,
+			"from.class_id" => CL_LOCATION,
 			"to.class_id" => CL_IMAGE,
 			"from.parent" => $arr["obj_inst"]->id(),
 		));

@@ -82,7 +82,6 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <multiple>1</multiple>
             <store>no</store>
             <caption>Minu meeskonnad</caption>
       </property>
