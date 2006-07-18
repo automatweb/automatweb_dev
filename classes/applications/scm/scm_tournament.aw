@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.3 2006/07/18 06:05:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.4 2006/07/18 06:42:09 tarvo Exp $
 // scm_tournament.aw - V&otilde;istlussari
 /*
 
@@ -50,10 +50,10 @@ class scm_tournament extends class_base
 					"url" => $url,
 				));
 				$popup_search = get_instance("vcl/popup_search");
-				arr($popup_search->get_popup_search_link(array(
+				$popup_search->get_popup_search_link(array(
 					"pn" => "search_result",
 					"clid" => CL_SCM_COMPETITION,
-				)));
+				));
 				$url = "#";
 				$prop["vcl_inst"]->add_button(array(
 					"name" => "search_competition",
