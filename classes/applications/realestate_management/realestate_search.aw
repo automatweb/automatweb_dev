@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.37 2006/07/05 12:00:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.38 2006/07/19 12:11:17 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1287,7 +1287,7 @@ exit_function("jigaboo");
 		### output
 		$template = $this_object->prop ("template") . ".tpl";
 		$this->read_template($template);
-		lc_site_load("realestate_search",$this);
+		lc_site_load("realestate",$this);
 
 		if ($this_object->prop ("result_no_form") and $search_requested)
 		{ #### don't show search form
@@ -2351,10 +2351,10 @@ exit_function("jigaboo");
 			{
 				foreach ($result_list->arr() as $obj)
 				{
-					if($cnt > (((int) $_GET["ft_page"] + 1) * $this->result_table_recordsperpage)) break;
+					if($cnt >= (((int) $_GET["ft_page"] + 1) * $this->result_table_recordsperpage)) break;
 					if($max_limit && $cnt > $this_object->prop("max_results")) break;
-					if($cnt > ((int) $_GET["ft_page"] * $this->result_table_recordsperpage))
-					{	
+					if($cnt >= ((int) $_GET["ft_page"] * $this->result_table_recordsperpage))
+					{
 						$tmp_list->add($obj);
 					}
 					$cnt++;
