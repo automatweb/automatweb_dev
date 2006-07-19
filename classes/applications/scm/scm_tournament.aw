@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.5 2006/07/18 14:11:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.6 2006/07/19 12:17:59 tarvo Exp $
 // scm_tournament.aw - V&otilde;istlussari
 /*
 
@@ -47,12 +47,10 @@ class scm_tournament extends class_base
 		{
 			//-- get_property --//
 			case "comp_toolbar":
-				$url = $this->mk_my_orb("new",array(
-					"class" => "scm_competition",
+				$url = $this->mk_my_orb("gen_new_competition",array(
 					"parent" => $arr["obj_inst"]->parent(),
-					"reltype" => 3, // like whotto fokk?
-					"alias_to_prop" => $arr["obj_inst"]->id(),
-					"return_url" => post_ru(),
+					"id" => $arr["obj_inst"]->id(),
+					"return_url" => get_ru(),
 				));
 				$prop["vcl_inst"]->add_button(array(
 					"name" => "add_competition",
@@ -110,7 +108,7 @@ class scm_tournament extends class_base
 						"name" => sprintf($link, $c_url, $obj->name()),
 						"location" => ($l_obj)?sprintf($link, $l_url, $l_obj->name()):t("M&auml;&auml;ramata"),
 						"event" => ($e_obj)?sprintf($link, $e_url, $e_obj->name()):t("M&auml;&auml;ramata"),
-						"start_time" => date(t("d/m/Y"), $date),
+						"start_time" => $date,
 						"rem_competition" => $oid,
 					));
 				}
@@ -185,11 +183,9 @@ class scm_tournament extends class_base
 		$t->define_field(array(
 			"name" => "start_time",
 			"caption" => t("V&otilde;istluse aeg"),
-		));
-		$t->define_field(array(
-			"name" => "status",
-			"caption" => t("Olek"),
+			"align" => "center",
 			"sortable" => true,
+			"callback" => array(&$this, "__date_sort_callback"),
 		));
 		$t->define_chooser(array(
 			"name" => "rem_comp",
@@ -224,6 +220,11 @@ class scm_tournament extends class_base
 
 //-- methods --//
 	
+	function __date_sort_callback($key, $str, $row)
+	{
+		return date("d/m/Y", $key);
+	}
+
 	/**
 	**/
 	function get_competitions($arr = array())
@@ -240,6 +241,28 @@ class scm_tournament extends class_base
 			}
 		}
 		return $ret;
+	}
+	
+	/**
+		@attrib name=gen_new_competition params=name
+		@param parent required
+		@param id required
+		@param return_url required
+	**/
+	function _gen_new_competition($arr)
+	{
+		$obj = obj();
+		$obj->set_parent($arr["parent"]);
+		$obj->set_class_id(CL_SCM_COMPETITION);
+		$obj->set_prop("scm_tournament", array($arr["id"]));
+
+		$new_id = $obj->save_new();
+		$url = $this->mk_my_orb("change", array(
+			"id" => $new_id,
+			"class" => "scm_competition",
+			"return_url" => $arr["return_url"],
+		));
+		return $url;
 	}
 }
 ?>
