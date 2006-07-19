@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.22 2006/07/11 14:42:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_add.aw,v 1.23 2006/07/19 16:59:11 markop Exp $
 // realestate_add.aw - Kinnisvaraobjekti lisamine 
 /*
 
@@ -831,10 +831,13 @@ class realestate_add extends class_base
 		if($id)//see siis tähendab, et muudetakse juba olemasolevat.... st vaja sessioon infot täis toppida jne
 		{
 			$realest_obj = obj($id);
-			$clid = $realest_obj->class_id();
-			$parent = $realest_obj->prop("realestate_manager");
-			$this->fill_session(array("id" => $id , "parent" => $parent));
-			$id = null;
+			if(array_key_exists($realest_obj->class_id() , $this->opt))
+			{
+				$clid = $realest_obj->class_id();
+				$parent = $realest_obj->prop("realestate_manager");
+				$this->fill_session(array("id" => $id , "parent" => $parent));
+				$id = null;
+			}
 		}
 		$realestate_environment_obj = obj($parent);
 		$data = $_SESSION["realestate_input_data"];
