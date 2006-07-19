@@ -147,7 +147,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_title2
 msgid "Omaduse Tehingu andmed (title2) caption"
-msgstr ""
+msgstr "Данные ?"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_title2_comment
 msgid "Omaduse Tehingu andmed (title2) kommentaar"
@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_price
 msgid "Omaduse Hind (transaction_price) caption"
-msgstr ""
+msgstr "Цена"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_price_comment
 msgid "Omaduse Hind (transaction_price) kommentaar"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_price2
 msgid "Omaduse Mььgihind (transaction_price2) caption"
-msgstr ""
+msgstr "Продажная цена"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_price2_comment
 msgid "Omaduse Mььgihind (transaction_price2) kommentaar"
@@ -195,7 +195,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_rent
 msgid "Omaduse Kuuььr (transaction_rent) caption"
-msgstr ""
+msgstr "Аренда на месяц"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_rent_comment
 msgid "Omaduse Kuuььr (transaction_rent) kommentaar"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_constraints
 msgid "Omaduse Piirangud (transaction_constraints) caption"
-msgstr ""
+msgstr "Ограничения"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_constraints_comment
 msgid "Omaduse Piirangud (transaction_constraints) kommentaar"
@@ -219,7 +219,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_down_payment
 msgid "Omaduse Ettemaks (transaction_down_payment) caption"
-msgstr ""
+msgstr "Предоплата"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_down_payment_comment
 msgid "Omaduse Ettemaks (transaction_down_payment) kommentaar"
@@ -255,7 +255,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_title3
 msgid "Omaduse M&uuml;&uuml;ja andmed (title3) caption"
-msgstr ""
+msgstr "Данные продавецa"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_title3_comment
 msgid "Omaduse M&uuml;&uuml;ja andmed (title3) kommentaar"
@@ -267,7 +267,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_seller_search
 msgid "Omaduse Mььja (seller_search) caption"
-msgstr ""
+msgstr "Продавец"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_seller_search_comment
 msgid "Omaduse Mььja (seller_search) kommentaar"
@@ -303,7 +303,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_title31
 msgid "Omaduse Ostja andmed (title31) caption"
-msgstr ""
+msgstr "Данные Покупателя"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_title31_comment
 msgid "Omaduse Ostja andmed (title31) kommentaar"
@@ -315,7 +315,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_buyer_search
 msgid "Omaduse Ostja (buyer_search) caption"
-msgstr ""
+msgstr "Покупатель"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_buyer_search_comment
 msgid "Omaduse Ostja (buyer_search) kommentaar"
@@ -387,7 +387,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_title4
 msgid "Omaduse Lisaandmed (title4) caption"
-msgstr ""
+msgstr "Дополнительноe данные"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_title4_comment
 msgid "Omaduse Lisaandmed (title4) kommentaar"
@@ -399,7 +399,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_realestate_agent1
 msgid "Omaduse Maakler 1 (realestate_agent1) caption"
-msgstr ""
+msgstr "Маклер 1"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_realestate_agent1_comment
 msgid "Omaduse Maakler 1 (realestate_agent1) kommentaar"
@@ -411,7 +411,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_realestate_agent2
 msgid "Omaduse Maakler 2 (realestate_agent2) caption"
-msgstr ""
+msgstr "Маклер 2"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_realestate_agent2_comment
 msgid "Omaduse Maakler 2 (realestate_agent2) kommentaar"
@@ -423,7 +423,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_weeks_valid_for
 msgid "Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) caption"
-msgstr ""
+msgstr "Цена: 25 EEK за 7 суток"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_weeks_valid_for_comment
 msgid "Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) kommentaar"
@@ -539,7 +539,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_additional_info_et
 msgid "Omaduse Lisainfo EST (additional_info_et) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_additional_info_et_comment
 msgid "Omaduse Lisainfo EST (additional_info_et) kommentaar"
@@ -551,7 +551,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_additional_info_en
 msgid "Omaduse Lisainfo ENG (additional_info_en) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_additional_info_en_comment
 msgid "Omaduse Lisainfo ENG (additional_info_en) kommentaar"
@@ -563,7 +563,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_additional_info_fi
 msgid "Omaduse Lisainfo FIN (additional_info_fi) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_additional_info_fi_comment
 msgid "Omaduse Lisainfo FIN (additional_info_fi) kommentaar"
@@ -575,7 +575,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_additional_info_ru
 msgid "Omaduse Lisainfo RUS (additional_info_ru) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_additional_info_ru_comment
 msgid "Omaduse Lisainfo RUS (additional_info_ru) kommentaar"
@@ -599,7 +599,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_pictures
 msgid "Omaduse Pildid (pictures) caption"
-msgstr ""
+msgstr "Фотографий"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_pictures_comment
 msgid "Omaduse Pildid (pictures) kommentaar"
@@ -725,7 +725,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_broker_fee
 msgid "Omaduse Maakleritasu (transaction_broker_fee) caption"
-msgstr ""
+msgstr "услуг маклера"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_broker_fee_comment
 msgid "Omaduse Maakleritasu (transaction_broker_fee) kommentaar"
@@ -737,7 +737,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_monthly_rent
 msgid "Omaduse Kuurent (transaction_monthly_rent) caption"
-msgstr ""
+msgstr "Аренда на месяц"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_monthly_rent_comment
 msgid "Omaduse Kuurent (transaction_monthly_rent) kommentaar"
@@ -749,7 +749,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_vat_excluded
 msgid "Omaduse Kдibemaks lisandub (vat_excluded) caption"
-msgstr ""
+msgstr "Добавляется налог с оборота"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_vat_excluded_comment
 msgid "Omaduse Kдibemaks lisandub (vat_excluded) kommentaar"
@@ -761,7 +761,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_additional_costs
 msgid "Omaduse Kхrvalkulud EEK/m2 (transaction_additional_costs) caption"
-msgstr ""
+msgstr "Дополнительные расходы EEK/m2"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_transaction_additional_costs_comment
 msgid "Omaduse Kхrvalkulud EEK/m2 (transaction_additional_costs) kommentaar"
@@ -773,7 +773,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_usage_purpose
 msgid "Omaduse Kasutusotstarve (usage_purpose) caption"
-msgstr ""
+msgstr "Цель использования"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_usage_purpose_comment
 msgid "Omaduse Kasutusotstarve (usage_purpose) kommentaar"
@@ -785,7 +785,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_condition
 msgid "Omaduse Valmidus (condition) caption"
-msgstr ""
+msgstr "Готовность"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_condition_comment
 msgid "Omaduse Valmidus (condition) kommentaar"
@@ -809,7 +809,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_total_floor_area
 msgid "Omaduse Ьldpind (total_floor_area) caption"
-msgstr ""
+msgstr "Общая площадь"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_total_floor_area_comment
 msgid "Omaduse Ьldpind (total_floor_area) kommentaar"
@@ -821,7 +821,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_number_of_rooms
 msgid "Omaduse Ruumide arv (number_of_rooms) caption"
-msgstr ""
+msgstr "Количество помещения"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_number_of_rooms_comment
 msgid "Omaduse Ruumide arv (number_of_rooms) kommentaar"
@@ -833,7 +833,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_number_of_storeys
 msgid "Omaduse Korruseid (number_of_storeys) caption"
-msgstr ""
+msgstr "Этажей"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_number_of_storeys_comment
 msgid "Omaduse Korruseid (number_of_storeys) kommentaar"
@@ -845,7 +845,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_floor
 msgid "Omaduse Korrus (floor) caption"
-msgstr ""
+msgstr "Этаж"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_floor_comment
 msgid "Omaduse Korrus (floor) kommentaar"
@@ -857,7 +857,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_property_area
 msgid "Omaduse Krundi suurus (property_area) caption"
-msgstr ""
+msgstr "Размер участка"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_property_area_comment
 msgid "Omaduse Krundi suurus (property_area) kommentaar"
@@ -869,7 +869,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_lift
 msgid "Omaduse Lift (has_lift) caption"
-msgstr ""
+msgstr "Лифт"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_lift_comment
 msgid "Omaduse Lift (has_lift) kommentaar"
@@ -881,7 +881,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_kitchen
 msgid "Omaduse Kццk (has_kitchen) caption"
-msgstr ""
+msgstr "Кухня"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_kitchen_comment
 msgid "Omaduse Kццk (has_kitchen) kommentaar"
@@ -893,7 +893,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_room_height
 msgid "Omaduse Ruumide kхrgus (room_height) caption"
-msgstr ""
+msgstr "Высота помещения"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_room_height_comment
 msgid "Omaduse Ruumide kхrgus (room_height) kommentaar"
@@ -905,7 +905,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_door_height
 msgid "Omaduse Ukse kхrgus (door_height) caption"
-msgstr ""
+msgstr "Высота двери"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_door_height_comment
 msgid "Omaduse Ukse kхrgus (door_height) kommentaar"
@@ -917,7 +917,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_loading_facilities
 msgid "Omaduse Kauba laadmine (loading_facilities) caption"
-msgstr ""
+msgstr "Погрузка"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_loading_facilities_comment
 msgid "Omaduse Kauba laadmine (loading_facilities) kommentaar"
@@ -929,7 +929,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_licenced_for
 msgid "Omaduse Kasutusload (licenced_for) caption"
-msgstr ""
+msgstr "Лицензия"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_licenced_for_comment
 msgid "Omaduse Kasutusload (licenced_for) kommentaar"
@@ -941,7 +941,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_childtitle1
 msgid "Omaduse Kьte ja ventilatsioon (childtitle1) caption"
-msgstr ""
+msgstr "Отопление и вентиляция"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_childtitle1_comment
 msgid "Omaduse Kьte ja ventilatsioon (childtitle1) kommentaar"
@@ -953,7 +953,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_central_heating
 msgid "Omaduse Keskkьte (has_central_heating) caption"
-msgstr ""
+msgstr "центральное отопление"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_central_heating_comment
 msgid "Omaduse Keskkьte (has_central_heating) kommentaar"
@@ -965,7 +965,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_electric_heating
 msgid "Omaduse Elektrikьte (has_electric_heating) caption"
-msgstr ""
+msgstr "электрическое отопление"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_electric_heating_comment
 msgid "Omaduse Elektrikьte (has_electric_heating) kommentaar"
@@ -977,7 +977,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_gas_heating
 msgid "Omaduse Gaasikьte (has_gas_heating) caption"
-msgstr ""
+msgstr "газовое отопление"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_gas_heating_comment
 msgid "Omaduse Gaasikьte (has_gas_heating) kommentaar"
@@ -1001,7 +1001,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_forced_ventilation
 msgid "Omaduse Sundventilatsioon (has_forced_ventilation) caption"
-msgstr ""
+msgstr "Принудительная вентиляция"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_forced_ventilation_comment
 msgid "Omaduse Sundventilatsioon (has_forced_ventilation) kommentaar"
@@ -1013,7 +1013,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_airconditioning
 msgid "Omaduse Kliimaseade (has_airconditioning) caption"
-msgstr ""
+msgstr "Кондиционер"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_airconditioning_comment
 msgid "Omaduse Kliimaseade (has_airconditioning) kommentaar"
@@ -1025,7 +1025,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_refrigeration_equipment
 msgid "Omaduse Jahutusseadmed (has_refrigeration_equipment) caption"
-msgstr ""
+msgstr "Охладительное оборудование"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_refrigeration_equipment_comment
 msgid "Omaduse Jahutusseadmed (has_refrigeration_equipment) kommentaar"
@@ -1037,7 +1037,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_childtitle2
 msgid "Omaduse Kommunikatsioonid (childtitle2) caption"
-msgstr ""
+msgstr "Коммуникаций"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_childtitle2_comment
 msgid "Omaduse Kommunikatsioonid (childtitle2) kommentaar"
@@ -1049,7 +1049,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_alarm_installed
 msgid "Omaduse Signalisatsioon (has_alarm_installed) caption"
-msgstr ""
+msgstr "сигнализация"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_alarm_installed_comment
 msgid "Omaduse Signalisatsioon (has_alarm_installed) kommentaar"
@@ -1061,7 +1061,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_industrial_voltage
 msgid "Omaduse Tццstusvool (has_industrial_voltage) caption"
-msgstr ""
+msgstr "промышленное напряжение"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_industrial_voltage_comment
 msgid "Omaduse Tццstusvool (has_industrial_voltage) kommentaar"
@@ -1073,7 +1073,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_internet
 msgid "Omaduse Internet (has_internet) caption"
-msgstr ""
+msgstr "Интернет"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_internet_comment
 msgid "Omaduse Internet (has_internet) kommentaar"
@@ -1085,7 +1085,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_isdn
 msgid "Omaduse ISDN (has_isdn) caption"
-msgstr ""
+msgstr "ISDN"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_isdn_comment
 msgid "Omaduse ISDN (has_isdn) kommentaar"
@@ -1097,7 +1097,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_number_of_phone_lines
 msgid "Omaduse Telefone (number_of_phone_lines) caption"
-msgstr ""
+msgstr "Телефон"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_number_of_phone_lines_comment
 msgid "Omaduse Telefone (number_of_phone_lines) kommentaar"
@@ -1109,7 +1109,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_childtitle3
 msgid "Omaduse Sisustus (childtitle3) caption"
-msgstr ""
+msgstr "Оборудование"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_childtitle3_comment
 msgid "Omaduse Sisustus (childtitle3) kommentaar"
@@ -1121,7 +1121,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_shower
 msgid "Omaduse Dush (has_shower) caption"
-msgstr ""
+msgstr "душ"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_shower_comment
 msgid "Omaduse Dush (has_shower) kommentaar"
@@ -1133,7 +1133,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_refrigerator
 msgid "Omaduse Kьlmik (has_refrigerator) caption"
-msgstr ""
+msgstr "холодильник"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_refrigerator_comment
 msgid "Omaduse Kьlmik (has_refrigerator) kommentaar"
@@ -1145,7 +1145,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_furniture
 msgid "Omaduse Mццbel (has_furniture) caption"
-msgstr ""
+msgstr "мебель"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_furniture_comment
 msgid "Omaduse Mццbel (has_furniture) kommentaar"
@@ -1157,7 +1157,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_furniture_option
 msgid "Omaduse Mццbli vхimalus (has_furniture_option) caption"
-msgstr ""
+msgstr "возможность меблировки"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:prop_has_furniture_option_comment
 msgid "Omaduse Mццbli vхimalus (has_furniture_option) kommentaar"
@@ -1169,7 +1169,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:group_grp_main
 msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) pealkiri"
-msgstr ""
+msgstr "Данные о нахождении объекта"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:group_grp_main_help
 msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) help"
@@ -1177,7 +1177,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:group_grp_detailed
 msgid "Grupi Kirjeldus (grp_detailed) pealkiri"
-msgstr ""
+msgstr "Описание"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:group_grp_detailed_help
 msgid "Grupi Kirjeldus (grp_detailed) help"
@@ -1185,7 +1185,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:group_grp_additional_info
 msgid "Grupi Lisainfo (grp_additional_info) pealkiri"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:group_grp_additional_info_help
 msgid "Grupi Lisainfo (grp_additional_info) help"
@@ -1193,7 +1193,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_commercial.aw:group_grp_photos
 msgid "Grupi Pildid (grp_photos) pealkiri"
-msgstr ""
+msgstr "Фотографий"
 
 #: classes/applications/realestate_management/realestate_commercial.aw:group_grp_photos_help
 msgid "Grupi Pildid (grp_photos) help"

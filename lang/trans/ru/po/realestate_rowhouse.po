@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_price
 msgid "Omaduse Hind (transaction_price) caption"
-msgstr ""
+msgstr "Цена"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_price_comment
 msgid "Omaduse Hind (transaction_price) kommentaar"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_price2
 msgid "Omaduse Mььgihind (transaction_price2) caption"
-msgstr ""
+msgstr "Продажная цена"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_price2_comment
 msgid "Omaduse Mььgihind (transaction_price2) kommentaar"
@@ -195,7 +195,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_rent
 msgid "Omaduse Kuuььr (transaction_rent) caption"
-msgstr ""
+msgstr "Аренда на месяц"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_rent_comment
 msgid "Omaduse Kuuььr (transaction_rent) kommentaar"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_constraints
 msgid "Omaduse Piirangud (transaction_constraints) caption"
-msgstr ""
+msgstr "Ограничения"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_constraints_comment
 msgid "Omaduse Piirangud (transaction_constraints) kommentaar"
@@ -219,7 +219,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_down_payment
 msgid "Omaduse Ettemaks (transaction_down_payment) caption"
-msgstr ""
+msgstr "Предоплата"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_down_payment_comment
 msgid "Omaduse Ettemaks (transaction_down_payment) kommentaar"
@@ -255,7 +255,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_title3
 msgid "Omaduse M&uuml;&uuml;ja andmed (title3) caption"
-msgstr ""
+msgstr "Данные продавецa"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_title3_comment
 msgid "Omaduse M&uuml;&uuml;ja andmed (title3) kommentaar"
@@ -267,7 +267,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_seller_search
 msgid "Omaduse Mььja (seller_search) caption"
-msgstr ""
+msgstr "Продавец"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_seller_search_comment
 msgid "Omaduse Mььja (seller_search) kommentaar"
@@ -303,7 +303,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_title31
 msgid "Omaduse Ostja andmed (title31) caption"
-msgstr ""
+msgstr "Данные Покупателя"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_title31_comment
 msgid "Omaduse Ostja andmed (title31) kommentaar"
@@ -315,7 +315,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_buyer_search
 msgid "Omaduse Ostja (buyer_search) caption"
-msgstr ""
+msgstr "Покупатель"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_buyer_search_comment
 msgid "Omaduse Ostja (buyer_search) kommentaar"
@@ -387,7 +387,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_title4
 msgid "Omaduse Lisaandmed (title4) caption"
-msgstr ""
+msgstr "Дополнительноe данные"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_title4_comment
 msgid "Omaduse Lisaandmed (title4) kommentaar"
@@ -399,7 +399,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_realestate_agent1
 msgid "Omaduse Maakler 1 (realestate_agent1) caption"
-msgstr ""
+msgstr "Маклер 1"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_realestate_agent1_comment
 msgid "Omaduse Maakler 1 (realestate_agent1) kommentaar"
@@ -411,7 +411,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_realestate_agent2
 msgid "Omaduse Maakler 2 (realestate_agent2) caption"
-msgstr ""
+msgstr "Маклер 2"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_realestate_agent2_comment
 msgid "Omaduse Maakler 2 (realestate_agent2) kommentaar"
@@ -423,7 +423,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_weeks_valid_for
 msgid "Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) caption"
-msgstr ""
+msgstr "Цена: 25 EEK за 7 суток"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_weeks_valid_for_comment
 msgid "Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) kommentaar"
@@ -539,7 +539,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_additional_info_et
 msgid "Omaduse Lisainfo EST (additional_info_et) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_additional_info_et_comment
 msgid "Omaduse Lisainfo EST (additional_info_et) kommentaar"
@@ -551,7 +551,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_additional_info_en
 msgid "Omaduse Lisainfo ENG (additional_info_en) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_additional_info_en_comment
 msgid "Omaduse Lisainfo ENG (additional_info_en) kommentaar"
@@ -563,7 +563,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_additional_info_fi
 msgid "Omaduse Lisainfo FIN (additional_info_fi) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_additional_info_fi_comment
 msgid "Omaduse Lisainfo FIN (additional_info_fi) kommentaar"
@@ -575,7 +575,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_additional_info_ru
 msgid "Omaduse Lisainfo RUS (additional_info_ru) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_additional_info_ru_comment
 msgid "Omaduse Lisainfo RUS (additional_info_ru) kommentaar"
@@ -599,7 +599,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_pictures
 msgid "Omaduse Pildid (pictures) caption"
-msgstr ""
+msgstr "Фотографий"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_pictures_comment
 msgid "Omaduse Pildid (pictures) kommentaar"
@@ -725,7 +725,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_location_description
 msgid "Omaduse Paiknemine (location_description) caption"
-msgstr ""
+msgstr "Paiknemine"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_location_description_comment
 msgid "Omaduse Paiknemine (location_description) kommentaar"
@@ -737,7 +737,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_sqmeter_price
 msgid "Omaduse Ruutmeetri hind (transaction_sqmeter_price) caption"
-msgstr ""
+msgstr "EEK / m?"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_sqmeter_price_comment
 msgid "Omaduse Ruutmeetri hind (transaction_sqmeter_price) kommentaar"
@@ -785,7 +785,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_selling_price
 msgid "Omaduse Mььgihind (transaction_selling_price) caption"
-msgstr ""
+msgstr "Продажная цена"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_selling_price_comment
 msgid "Omaduse Mььgihind (transaction_selling_price) kommentaar"
@@ -797,7 +797,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_rent_sqmeter
 msgid "Omaduse Ruutmeetri kuuььr (transaction_rent_sqmeter) caption"
-msgstr ""
+msgstr "Аренда на месяц квадратного метра (м2) "
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_rent_sqmeter_comment
 msgid "Omaduse Ruutmeetri kuuььr (transaction_rent_sqmeter) kommentaar"
@@ -809,7 +809,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_rent_total
 msgid "Omaduse Kuuььr (transaction_rent_total) caption"
-msgstr ""
+msgstr "Аренда на месяц"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_transaction_rent_total_comment
 msgid "Omaduse Kuuььr (transaction_rent_total) kommentaar"
@@ -821,7 +821,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_estate_price_sqmeter
 msgid "Omaduse Krundi ruutmeetri hind (estate_price_sqmeter) caption"
-msgstr ""
+msgstr "Цена квадратного метра (м2) "
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_estate_price_sqmeter_comment
 msgid "Omaduse Krundi ruutmeetri hind (estate_price_sqmeter) kommentaar"
@@ -833,7 +833,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_estate_price_total
 msgid "Omaduse Krundi hind kokku (estate_price_total) caption"
-msgstr ""
+msgstr "Всего цена"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_estate_price_total_comment
 msgid "Omaduse Krundi hind kokku (estate_price_total) kommentaar"
@@ -845,7 +845,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_fee_payer
 msgid "Omaduse Maakleritasu tasub (fee_payer) caption"
-msgstr ""
+msgstr "Стоимость услуг маклера"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_fee_payer_comment
 msgid "Omaduse Maakleritasu tasub (fee_payer) kommentaar"
@@ -857,7 +857,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_available_from
 msgid "Omaduse Objekti vabastamine (available_from) caption"
-msgstr ""
+msgstr "Освобождение объекта"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_available_from_comment
 msgid "Omaduse Objekti vabastamine (available_from) kommentaar"
@@ -869,7 +869,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_montlhy_expenses
 msgid "Omaduse Kommunaalmaksete suurus (montlhy_expenses) caption"
-msgstr ""
+msgstr "Размер коммунальных платежей"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_montlhy_expenses_comment
 msgid "Omaduse Kommunaalmaksete suurus (montlhy_expenses) kommentaar"
@@ -881,7 +881,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle100
 msgid "Omaduse Krunt (childtitle100) caption"
-msgstr ""
+msgstr "Участок"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle100_comment
 msgid "Omaduse Krunt (childtitle100) kommentaar"
@@ -893,7 +893,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_property_area
 msgid "Omaduse Krundi suurus (property_area) caption"
-msgstr ""
+msgstr "Размер участка"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_property_area_comment
 msgid "Omaduse Krundi suurus (property_area) kommentaar"
@@ -905,7 +905,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_legal_status
 msgid "Omaduse Omandivorm (legal_status) caption"
-msgstr ""
+msgstr "Форма собственности"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_legal_status_comment
 msgid "Omaduse Omandivorm (legal_status) kommentaar"
@@ -917,7 +917,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_ownership_type
 msgid "Omaduse Varaomand (ownership_type) caption"
-msgstr ""
+msgstr "Имущество"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_ownership_type_comment
 msgid "Omaduse Varaomand (ownership_type) kommentaar"
@@ -929,7 +929,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_land_use
 msgid "Omaduse Sihtotstarve (land_use) caption"
-msgstr ""
+msgstr "Цель использования"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_land_use_comment
 msgid "Omaduse Sihtotstarve (land_use) kommentaar"
@@ -941,7 +941,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle110
 msgid "Omaduse Krundi kommunikatsioonid (childtitle110) caption"
-msgstr ""
+msgstr "Коммуникации участка"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle110_comment
 msgid "Omaduse Krundi kommunikatsioonid (childtitle110) kommentaar"
@@ -1026,7 +1026,7 @@ msgstr ""
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_communications_additional
 msgid ""
 "Omaduse Lisainfo kommunikatsioonide kohta (communications_additional) caption"
-msgstr ""
+msgstr "Дополнительная информация о коммуникациях"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_communications_additional_comment
 msgid ""
@@ -1041,7 +1041,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle120
 msgid "Omaduse Maja (childtitle120) caption"
-msgstr ""
+msgstr "Дом"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle120_comment
 msgid "Omaduse Maja (childtitle120) kommentaar"
@@ -1053,7 +1053,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_year_built
 msgid "Omaduse Ehitusaasta (year_built) caption"
-msgstr ""
+msgstr "Год постройки"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_year_built_comment
 msgid "Omaduse Ehitusaasta (year_built) kommentaar"
@@ -1077,7 +1077,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_building_type
 msgid "Omaduse Hoone tььp (building_type) caption"
-msgstr ""
+msgstr "Тип здания"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_building_type_comment
 msgid "Omaduse Hoone tььp (building_type) kommentaar"
@@ -1101,7 +1101,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_technical_condition
 msgid "Omaduse Tehniline seisukord (technical_condition) caption"
-msgstr ""
+msgstr "Состояние"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_technical_condition_comment
 msgid "Omaduse Tehniline seisukord (technical_condition) kommentaar"
@@ -1113,7 +1113,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_finishing
 msgid "Omaduse Siseviimistlus (finishing) caption"
-msgstr ""
+msgstr "Внутренняя отделка"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_finishing_comment
 msgid "Omaduse Siseviimistlus (finishing) kommentaar"
@@ -1125,7 +1125,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_total_floor_area
 msgid "Omaduse Ьldpind (total_floor_area) caption"
-msgstr ""
+msgstr "Общая площадь"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_total_floor_area_comment
 msgid "Omaduse Ьldpind (total_floor_area) kommentaar"
@@ -1137,7 +1137,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_usable_area
 msgid "Omaduse Kasulik pind (usable_area) caption"
-msgstr ""
+msgstr "Полезная площадь"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_usable_area_comment
 msgid "Omaduse Kasulik pind (usable_area) kommentaar"
@@ -1149,7 +1149,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_living_area
 msgid "Omaduse Eluruumide pind (living_area) caption"
-msgstr ""
+msgstr "Жилищная площадь"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_living_area_comment
 msgid "Omaduse Eluruumide pind (living_area) kommentaar"
@@ -1161,7 +1161,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_storeys
 msgid "Omaduse Korruseid (number_of_storeys) caption"
-msgstr ""
+msgstr "Этажей"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_storeys_comment
 msgid "Omaduse Korruseid (number_of_storeys) kommentaar"
@@ -1173,7 +1173,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle1
 msgid "Omaduse Ruumid (childtitle1) caption"
-msgstr ""
+msgstr "Помещение"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle1_comment
 msgid "Omaduse Ruumid (childtitle1) kommentaar"
@@ -1185,7 +1185,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_rooms
 msgid "Omaduse Tubade arv (number_of_rooms) caption"
-msgstr ""
+msgstr "Количество комнат"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_rooms_comment
 msgid "Omaduse Tubade arv (number_of_rooms) kommentaar"
@@ -1197,7 +1197,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_bedrooms
 msgid "Omaduse Magamistubasid (number_of_bedrooms) caption"
-msgstr ""
+msgstr "Спален"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_bedrooms_comment
 msgid "Omaduse Magamistubasid (number_of_bedrooms) kommentaar"
@@ -1209,7 +1209,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_bathrooms
 msgid "Omaduse Vannitubasid (number_of_bathrooms) caption"
-msgstr ""
+msgstr "Ванных комнат"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_bathrooms_comment
 msgid "Omaduse Vannitubasid (number_of_bathrooms) kommentaar"
@@ -1221,7 +1221,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_restrooms
 msgid "Omaduse Tualettruume (number_of_restrooms) caption"
-msgstr ""
+msgstr "Туалет"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_restrooms_comment
 msgid "Omaduse Tualettruume (number_of_restrooms) kommentaar"
@@ -1233,7 +1233,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_showers
 msgid "Omaduse Dushiruume (number_of_showers) caption"
-msgstr ""
+msgstr "Душевая"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_number_of_showers_comment
 msgid "Omaduse Dushiruume (number_of_showers) kommentaar"
@@ -1245,7 +1245,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_wardrobe
 msgid "Omaduse Garderoob (has_wardrobe) caption"
-msgstr ""
+msgstr "гардероб"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_wardrobe_comment
 msgid "Omaduse Garderoob (has_wardrobe) kommentaar"
@@ -1257,7 +1257,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_separate_wc
 msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) caption"
-msgstr ""
+msgstr "отдельные туалет и ванная"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_separate_wc_comment
 msgid "Omaduse WC ja vannituba eraldi (has_separate_wc) kommentaar"
@@ -1269,7 +1269,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_garage
 msgid "Omaduse Garaaz (has_garage) caption"
-msgstr ""
+msgstr "Гараж"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_garage_comment
 msgid "Omaduse Garaaz (has_garage) kommentaar"
@@ -1281,7 +1281,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_sauna
 msgid "Omaduse Saun (has_sauna) caption"
-msgstr ""
+msgstr "баня"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_sauna_comment
 msgid "Omaduse Saun (has_sauna) kommentaar"
@@ -1293,7 +1293,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_saunas
 msgid "Omaduse arv (saunas) caption"
-msgstr ""
+msgstr "число бань"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_saunas_comment
 msgid "Omaduse arv (saunas) kommentaar"
@@ -1305,7 +1305,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_balcony
 msgid "Omaduse Rхdu (has_balcony) caption"
-msgstr ""
+msgstr "балкон"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_balcony_comment
 msgid "Omaduse Rхdu (has_balcony) kommentaar"
@@ -1317,7 +1317,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_cellar
 msgid "Omaduse Kelder (has_cellar) caption"
-msgstr ""
+msgstr "подвал"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_cellar_comment
 msgid "Omaduse Kelder (has_cellar) kommentaar"
@@ -1329,7 +1329,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_attic
 msgid "Omaduse Pццning (has_attic) caption"
-msgstr ""
+msgstr "Чердак"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_attic_comment
 msgid "Omaduse Pццning (has_attic) kommentaar"
@@ -1341,7 +1341,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_fireplace_hall
 msgid "Omaduse Kaminaruum (has_fireplace_hall) caption"
-msgstr ""
+msgstr "камин"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_fireplace_hall_comment
 msgid "Omaduse Kaminaruum (has_fireplace_hall) kommentaar"
@@ -1353,7 +1353,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_pool
 msgid "Omaduse Bassein (has_pool) caption"
-msgstr ""
+msgstr "бассейн"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_pool_comment
 msgid "Omaduse Bassein (has_pool) kommentaar"
@@ -1365,7 +1365,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_terrace
 msgid "Omaduse Terrass (has_terrace) caption"
-msgstr ""
+msgstr "Терасса"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_terrace_comment
 msgid "Omaduse Terrass (has_terrace) kommentaar"
@@ -1377,7 +1377,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_floor_plan_description
 msgid "Omaduse Ruumilahenduse kirjeldus (floor_plan_description) caption"
-msgstr ""
+msgstr "Описание"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_floor_plan_description_comment
 msgid "Omaduse Ruumilahenduse kirjeldus (floor_plan_description) kommentaar"
@@ -1389,7 +1389,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle2
 msgid "Omaduse Kьte (childtitle2) caption"
-msgstr ""
+msgstr "Отопление"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle2_comment
 msgid "Omaduse Kьte (childtitle2) kommentaar"
@@ -1401,7 +1401,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_central_heating
 msgid "Omaduse Keskkьte (has_central_heating) caption"
-msgstr ""
+msgstr "центральное отопление"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_central_heating_comment
 msgid "Omaduse Keskkьte (has_central_heating) kommentaar"
@@ -1413,7 +1413,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_electric_heating
 msgid "Omaduse Elektrikьte (has_electric_heating) caption"
-msgstr ""
+msgstr "электрическое отопление"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_electric_heating_comment
 msgid "Omaduse Elektrikьte (has_electric_heating) kommentaar"
@@ -1425,7 +1425,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_gas_heating
 msgid "Omaduse Gaasikьte (has_gas_heating) caption"
-msgstr ""
+msgstr "газовое отопление"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_gas_heating_comment
 msgid "Omaduse Gaasikьte (has_gas_heating) kommentaar"
@@ -1437,7 +1437,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_wood_heating
 msgid "Omaduse Ahjukьte (has_wood_heating) caption"
-msgstr ""
+msgstr "печное отопление"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_wood_heating_comment
 msgid "Omaduse Ahjukьte (has_wood_heating) kommentaar"
@@ -1449,7 +1449,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_fireplace_heating
 msgid "Omaduse Kaminakьte (has_fireplace_heating) caption"
-msgstr ""
+msgstr "камин"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_fireplace_heating_comment
 msgid "Omaduse Kaminakьte (has_fireplace_heating) kommentaar"
@@ -1461,7 +1461,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_soil_heating
 msgid "Omaduse Maakьte (has_soil_heating) caption"
-msgstr ""
+msgstr "Земленое отопление"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_soil_heating_comment
 msgid "Omaduse Maakьte (has_soil_heating) kommentaar"
@@ -1473,7 +1473,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_air_heating
 msgid "Omaduse Хhkkьte (has_air_heating) caption"
-msgstr ""
+msgstr "Воздушное отопление"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_air_heating_comment
 msgid "Omaduse Хhkkьte (has_air_heating) kommentaar"
@@ -1497,7 +1497,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle3
 msgid "Omaduse Kommunikatsioonid (childtitle3) caption"
-msgstr ""
+msgstr "Коммуникаций"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle3_comment
 msgid "Omaduse Kommunikatsioonid (childtitle3) kommentaar"
@@ -1509,7 +1509,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_alarm_installed
 msgid "Omaduse Signalisatsioon (has_alarm_installed) caption"
-msgstr ""
+msgstr "сигнализация"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_alarm_installed_comment
 msgid "Omaduse Signalisatsioon (has_alarm_installed) kommentaar"
@@ -1521,7 +1521,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_industrial_voltage
 msgid "Omaduse Tццstusvool (has_industrial_voltage) caption"
-msgstr ""
+msgstr "промышленное напряжение"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_industrial_voltage_comment
 msgid "Omaduse Tццstusvool (has_industrial_voltage) kommentaar"
@@ -1533,7 +1533,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_local_sewerage
 msgid "Omaduse Lokaalne kanalisatsioon (has_local_sewerage) caption"
-msgstr ""
+msgstr "локальная канализация"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_local_sewerage_comment
 msgid "Omaduse Lokaalne kanalisatsioon (has_local_sewerage) kommentaar"
@@ -1545,7 +1545,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_central_sewerage
 msgid "Omaduse Tsentraalne kanalisatsioon (has_central_sewerage) caption"
-msgstr ""
+msgstr "центральная канализация"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_central_sewerage_comment
 msgid "Omaduse Tsentraalne kanalisatsioon (has_central_sewerage) kommentaar"
@@ -1557,7 +1557,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_cable_tv
 msgid "Omaduse Kaabel TV (has_cable_tv) caption"
-msgstr ""
+msgstr "кабельное телевидение"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_cable_tv_comment
 msgid "Omaduse Kaabel TV (has_cable_tv) kommentaar"
@@ -1569,7 +1569,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_phone
 msgid "Omaduse Telefon (has_phone) caption"
-msgstr ""
+msgstr "телефон"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_phone_comment
 msgid "Omaduse Telefon (has_phone) kommentaar"
@@ -1581,7 +1581,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_central_cold_water
 msgid "Omaduse Tsentraalne kьlmaveevarustus (has_central_cold_water) caption"
-msgstr ""
+msgstr "Центральное водоснабжение"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_central_cold_water_comment
 msgid ""
@@ -1594,7 +1594,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_central_hot_water
 msgid "Omaduse Tsentraalne soojaveevarustus (has_central_hot_water) caption"
-msgstr ""
+msgstr "Центральная горячая вода"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_central_hot_water_comment
 msgid "Omaduse Tsentraalne soojaveevarustus (has_central_hot_water) kommentaar"
@@ -1606,7 +1606,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_electricity_manf_type
 msgid "Omaduse Elektrienergia (electricity_manf_type) caption"
-msgstr ""
+msgstr "Электроэнергия"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_electricity_manf_type_comment
 msgid "Omaduse Elektrienergia (electricity_manf_type) kommentaar"
@@ -1618,7 +1618,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_electricity_meter_type
 msgid "Omaduse Elektriarvesti (electricity_meter_type) caption"
-msgstr ""
+msgstr "Электросчетчик"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_electricity_meter_type_comment
 msgid "Omaduse Elektriarvesti (electricity_meter_type) kommentaar"
@@ -1630,7 +1630,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_plumbing_condition
 msgid "Omaduse Torustik/pьstikud (plumbing_condition) caption"
-msgstr ""
+msgstr "Трубы"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_plumbing_condition_comment
 msgid "Omaduse Torustik/pьstikud (plumbing_condition) kommentaar"
@@ -1642,7 +1642,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_new_radiators
 msgid "Omaduse Uued radiaatorid (has_new_radiators) caption"
-msgstr ""
+msgstr "Новые радиаторы"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_new_radiators_comment
 msgid "Omaduse Uued radiaatorid (has_new_radiators) kommentaar"
@@ -1654,7 +1654,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle4
 msgid "Omaduse Sisustus (childtitle4) caption"
-msgstr ""
+msgstr "Оборудование"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle4_comment
 msgid "Omaduse Sisustus (childtitle4) kommentaar"
@@ -1666,7 +1666,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_tv
 msgid "Omaduse Televiisor (has_tv) caption"
-msgstr ""
+msgstr "телевизор"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_tv_comment
 msgid "Omaduse Televiisor (has_tv) kommentaar"
@@ -1678,7 +1678,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_shower
 msgid "Omaduse Dush (has_shower) caption"
-msgstr ""
+msgstr "душ"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_shower_comment
 msgid "Omaduse Dush (has_shower) kommentaar"
@@ -1690,7 +1690,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_bath
 msgid "Omaduse Vann (has_bath) caption"
-msgstr ""
+msgstr "ванна"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_bath_comment
 msgid "Omaduse Vann (has_bath) kommentaar"
@@ -1702,7 +1702,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_boiler
 msgid "Omaduse Boiler (has_boiler) caption"
-msgstr ""
+msgstr "бойлер"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_boiler_comment
 msgid "Omaduse Boiler (has_boiler) kommentaar"
@@ -1714,7 +1714,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_refrigerator
 msgid "Omaduse Kьlmik (has_refrigerator) caption"
-msgstr ""
+msgstr "холодильник"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_refrigerator_comment
 msgid "Omaduse Kьlmik (has_refrigerator) kommentaar"
@@ -1726,7 +1726,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_washing_machine
 msgid "Omaduse Pesumasin (has_washing_machine) caption"
-msgstr ""
+msgstr "стиральная машина"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_washing_machine_comment
 msgid "Omaduse Pesumasin (has_washing_machine) kommentaar"
@@ -1738,7 +1738,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_furniture
 msgid "Omaduse Mццbel (has_furniture) caption"
-msgstr ""
+msgstr "мебель"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_furniture_comment
 msgid "Omaduse Mццbel (has_furniture) kommentaar"
@@ -1750,7 +1750,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_furniture_option
 msgid "Omaduse Mццbli vхimalus (has_furniture_option) caption"
-msgstr ""
+msgstr "возможность меблировки"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_furniture_option_comment
 msgid "Omaduse Mццbli vхimalus (has_furniture_option) kommentaar"
@@ -1762,7 +1762,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle5
 msgid "Omaduse Viimistlus ja ehitus (childtitle5) caption"
-msgstr ""
+msgstr "Внутренняя отделка и строительство"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle5_comment
 msgid "Omaduse Viimistlus ja ehitus (childtitle5) kommentaar"
@@ -1774,7 +1774,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_condition
 msgid "Omaduse Valmidustase (condition) caption"
-msgstr ""
+msgstr "Фаза готовности"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_condition_comment
 msgid "Omaduse Valmidustase (condition) kommentaar"
@@ -1822,7 +1822,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_foundation_type
 msgid "Omaduse Vundament (foundation_type) caption"
-msgstr ""
+msgstr "Фундамент"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_foundation_type_comment
 msgid "Omaduse Vundament (foundation_type) kommentaar"
@@ -1834,7 +1834,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_exterior_finishing
 msgid "Omaduse Vдlisviimistlus (exterior_finishing) caption"
-msgstr ""
+msgstr "Наружная отделка"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_exterior_finishing_comment
 msgid "Omaduse Vдlisviimistlus (exterior_finishing) kommentaar"
@@ -1846,7 +1846,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_roof_type
 msgid "Omaduse Katus (roof_type) caption"
-msgstr ""
+msgstr "Крыша"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_roof_type_comment
 msgid "Omaduse Katus (roof_type) kommentaar"
@@ -1858,7 +1858,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle600
 msgid "Omaduse Siseviimistlus (childtitle600) caption"
-msgstr ""
+msgstr "Внутренняя отделка"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_childtitle600_comment
 msgid "Omaduse Siseviimistlus (childtitle600) kommentaar"
@@ -1870,7 +1870,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_kitchen_type
 msgid "Omaduse Kццk (kitchen_type) caption"
-msgstr ""
+msgstr "Кухня"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_kitchen_type_comment
 msgid "Omaduse Kццk (kitchen_type) kommentaar"
@@ -1906,7 +1906,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_kitchen_floor
 msgid "Omaduse Kццgipхrand (kitchen_floor) caption"
-msgstr ""
+msgstr "Пол на кухне"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_kitchen_floor_comment
 msgid "Omaduse Kццgipхrand (kitchen_floor) kommentaar"
@@ -1918,7 +1918,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_stove_type
 msgid "Omaduse Pliit (stove_type) caption"
-msgstr ""
+msgstr "Плита"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_stove_type_comment
 msgid "Omaduse Pliit (stove_type) kommentaar"
@@ -1930,7 +1930,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_kitchen_furniture_option
 msgid "Omaduse Mььgis (kitchen_furniture_option) caption"
-msgstr ""
+msgstr "в продаже"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_kitchen_furniture_option_comment
 msgid "Omaduse Mььgis (kitchen_furniture_option) kommentaar"
@@ -1966,7 +1966,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_room_floors
 msgid "Omaduse Toapхrand (room_floors) caption"
-msgstr ""
+msgstr "Пол в комнате"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_room_floors_comment
 msgid "Omaduse Toapхrand (room_floors) kommentaar"
@@ -1978,7 +1978,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_lavatories_condition
 msgid "Omaduse Sanruumid (lavatories_condition) caption"
-msgstr ""
+msgstr "Санитарные помещения"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_lavatories_condition_comment
 msgid "Omaduse Sanruumid (lavatories_condition) kommentaar"
@@ -1990,7 +1990,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_lavatory_equipment_condition
 msgid "Omaduse Santehnika (lavatory_equipment_condition) caption"
-msgstr ""
+msgstr "Сантехника"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_lavatory_equipment_condition_comment
 msgid "Omaduse Santehnika (lavatory_equipment_condition) kommentaar"
@@ -2002,7 +2002,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_windows_type
 msgid "Omaduse Aknad (windows_type) caption"
-msgstr ""
+msgstr "Oкнa"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_windows_type_comment
 msgid "Omaduse Aknad (windows_type) kommentaar"
@@ -2038,7 +2038,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_security_door
 msgid "Omaduse Turvauks (has_security_door) caption"
-msgstr ""
+msgstr "бронированая дверь"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_security_door_comment
 msgid "Omaduse Turvauks (has_security_door) kommentaar"
@@ -2050,7 +2050,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_parquet
 msgid "Omaduse Parkett (has_parquet) caption"
-msgstr ""
+msgstr "паркет"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_has_parquet_comment
 msgid "Omaduse Parkett (has_parquet) kommentaar"
@@ -2074,7 +2074,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_parquet_type_other
 msgid "Omaduse Muu (parquet_type_other) caption"
-msgstr ""
+msgstr "Другое"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_parquet_type_other_comment
 msgid "Omaduse Muu (parquet_type_other) kommentaar"
@@ -2086,7 +2086,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_finishing_condition
 msgid "Omaduse Valmidus (finishing_condition) caption"
-msgstr ""
+msgstr "Готовность"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:prop_finishing_condition_comment
 msgid "Omaduse Valmidus (finishing_condition) kommentaar"
@@ -2098,7 +2098,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:group_grp_main
 msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) pealkiri"
-msgstr ""
+msgstr "Данные о нахождении объекта"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:group_grp_main_help
 msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) help"
@@ -2106,7 +2106,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:group_grp_detailed
 msgid "Grupi Kirjeldus (grp_detailed) pealkiri"
-msgstr ""
+msgstr "Описание"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:group_grp_detailed_help
 msgid "Grupi Kirjeldus (grp_detailed) help"
@@ -2114,7 +2114,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:group_grp_additional_info
 msgid "Grupi Lisainfo (grp_additional_info) pealkiri"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:group_grp_additional_info_help
 msgid "Grupi Lisainfo (grp_additional_info) help"
@@ -2122,7 +2122,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:group_grp_photos
 msgid "Grupi Pildid (grp_photos) pealkiri"
-msgstr ""
+msgstr "Фотографий"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:group_grp_photos_help
 msgid "Grupi Pildid (grp_photos) help"
@@ -2170,11 +2170,11 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:395
 msgid "Lisandub objekti hinnale"
-msgstr ""
+msgstr "Добавляется к цене объекта"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:396
 msgid "Sisaldub objekti hinnas"
-msgstr ""
+msgstr "В цене объекта"
 
 #: classes/applications/realestate_management/realestate_rowhouse.aw:414
 msgid "%s saj."

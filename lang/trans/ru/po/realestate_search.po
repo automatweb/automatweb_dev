@@ -136,7 +136,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_class_id
 msgid "Omaduse Objekt (search_class_id) caption"
-msgstr ""
+msgstr "Объект"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_class_id_comment
 msgid "Omaduse Objekt (search_class_id) kommentaar"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_type
 msgid "Omaduse Tehingu tььp (search_transaction_type) caption"
-msgstr ""
+msgstr "Tип ?"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_type_comment
 msgid "Omaduse Tehingu tььp (search_transaction_type) kommentaar"
@@ -172,7 +172,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_price_min
 msgid "Omaduse Hind min (search_transaction_price_min) caption"
-msgstr ""
+msgstr "Mин. цена"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_price_min_comment
 msgid "Omaduse Hind min (search_transaction_price_min) kommentaar"
@@ -184,7 +184,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_price_max
 msgid "Omaduse Hind max (search_transaction_price_max) caption"
-msgstr ""
+msgstr "Mакс. цена"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_transaction_price_max_comment
 msgid "Omaduse Hind max (search_transaction_price_max) kommentaar"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_total_floor_area_min
 msgid "Omaduse Ьldpind min (search_total_floor_area_min) caption"
-msgstr ""
+msgstr "Мин. площадь"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_total_floor_area_min_comment
 msgid "Omaduse Ьldpind min (search_total_floor_area_min) kommentaar"
@@ -208,7 +208,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_total_floor_area_max
 msgid "Omaduse Ьldpind max (search_total_floor_area_max) caption"
-msgstr ""
+msgstr "Макс. площадь"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_total_floor_area_max_comment
 msgid "Omaduse Ьldpind max (search_total_floor_area_max) kommentaar"
@@ -220,7 +220,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_number_of_rooms
 msgid "Omaduse Tubade arv (search_number_of_rooms) caption"
-msgstr ""
+msgstr "Количество комнат"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_number_of_rooms_comment
 msgid "Omaduse Tubade arv (search_number_of_rooms) kommentaar"
@@ -232,7 +232,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address1
 msgid "Omaduse Maakond (searchparam_address1) caption"
-msgstr ""
+msgstr "Уезд"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address1_comment
 msgid "Omaduse Maakond (searchparam_address1) kommentaar"
@@ -244,7 +244,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address2
 msgid "Omaduse Linn (searchparam_address2) caption"
-msgstr ""
+msgstr "Город"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address2_comment
 msgid "Omaduse Linn (searchparam_address2) kommentaar"
@@ -256,7 +256,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address3
 msgid "Omaduse Linnaosa (searchparam_address3) caption"
-msgstr ""
+msgstr "Pайон города"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_address3_comment
 msgid "Omaduse Linnaosa (searchparam_address3) kommentaar"
@@ -268,7 +268,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_condition
 msgid "Omaduse Valmidus (search_condition) caption"
-msgstr ""
+msgstr "Готовность"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_condition_comment
 msgid "Omaduse Valmidus (search_condition) kommentaar"
@@ -280,7 +280,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_fromdate
 msgid "Omaduse Alates kuupдevast (searchparam_fromdate) caption"
-msgstr ""
+msgstr "Hачиная с даты "
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_fromdate_comment
 msgid "Omaduse Alates kuupдevast (searchparam_fromdate) kommentaar"
@@ -292,7 +292,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_usage_purpose
 msgid "Omaduse Дripinna tььp (search_usage_purpose) caption"
-msgstr ""
+msgstr "Tип коммерческой площади"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_usage_purpose_comment
 msgid "Omaduse Дripinna tььp (search_usage_purpose) kommentaar"
@@ -304,7 +304,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_agent
 msgid "Omaduse Maakler (search_agent) caption"
-msgstr ""
+msgstr "Маклер"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_agent_comment
 msgid "Omaduse Maakler (search_agent) kommentaar"
@@ -328,7 +328,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_is_middle_floor
 msgid "Omaduse Pole esimene ega viimane korrus (search_is_middle_floor) caption"
-msgstr ""
+msgstr "Hе первый и не последний этаж"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_is_middle_floor_comment
 msgid "Omaduse Pole esimene ega viimane korrus (search_is_middle_floor) kommentaar"
@@ -340,7 +340,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_onlywithpictures
 msgid "Omaduse Nдita ainult pildiga kuulutusi (searchparam_onlywithpictures) caption"
-msgstr ""
+msgstr "Tолько с картинками"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_searchparam_onlywithpictures_comment
 msgid "Omaduse Nдita ainult pildiga kuulutusi (searchparam_onlywithpictures) kommentaar"
@@ -376,7 +376,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_button
 msgid "Omaduse Otsi (search_button) caption"
-msgstr ""
+msgstr "Поиск"
 
 #: classes/applications/realestate_management/realestate_search.aw:prop_search_button_comment
 msgid "Omaduse Otsi (search_button) kommentaar"
@@ -436,7 +436,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:group_grp_search
 msgid "Grupi Otsing (grp_search) pealkiri"
-msgstr ""
+msgstr "Поиск"
 
 #: classes/applications/realestate_management/realestate_search.aw:group_grp_search_help
 msgid "Grupi Otsing (grp_search) help"
@@ -460,7 +460,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:173
 msgid "Nimi"
-msgstr ""
+msgstr "Имя"
 
 #: classes/applications/realestate_management/realestate_search.aw:174
 msgid "Objekti tььp"
@@ -492,39 +492,39 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:253
 msgid "V1"
-msgstr ""
+msgstr "VI"
 
 #: classes/applications/realestate_management/realestate_search.aw:259 classes/applications/realestate_management/realestate_search.aw:1233
 msgid "Maja"
-msgstr ""
+msgstr "Дом"
 
 #: classes/applications/realestate_management/realestate_search.aw:260 classes/applications/realestate_management/realestate_search.aw:1234
 msgid "Ridaelamu"
-msgstr ""
+msgstr "Pядовои дом"
 
 #: classes/applications/realestate_management/realestate_search.aw:261 classes/applications/realestate_management/realestate_search.aw:1235
 msgid "Suvila"
-msgstr ""
+msgstr "Дача"
 
 #: classes/applications/realestate_management/realestate_search.aw:262 classes/applications/realestate_management/realestate_search.aw:1236
 msgid "Majaosa"
-msgstr ""
+msgstr "Часть дома"
 
 #: classes/applications/realestate_management/realestate_search.aw:263 classes/applications/realestate_management/realestate_search.aw:1237
 msgid "Korter"
-msgstr ""
+msgstr "Квартира"
 
 #: classes/applications/realestate_management/realestate_search.aw:264 classes/applications/realestate_management/realestate_search.aw:1238
 msgid "Дripind"
-msgstr ""
+msgstr "Офисные площади"
 
 #: classes/applications/realestate_management/realestate_search.aw:265 classes/applications/realestate_management/realestate_search.aw:1239
 msgid "Garaaz"
-msgstr ""
+msgstr "Гараж"
 
 #: classes/applications/realestate_management/realestate_search.aw:266 classes/applications/realestate_management/realestate_search.aw:1240
 msgid "Maatьkk"
-msgstr ""
+msgstr "Земля"
 
 #: classes/applications/realestate_management/realestate_search.aw:617
 msgid "Kinnisvarahalduskeskkond mддramata."
@@ -532,23 +532,23 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:752
 msgid "Hind"
-msgstr ""
+msgstr "Цена"
 
 #: classes/applications/realestate_management/realestate_search.aw:753 classes/applications/realestate_management/realestate_search.aw:783
 msgid " kuni "
-msgstr ""
+msgstr "До"
 
 #: classes/applications/realestate_management/realestate_search.aw:782
 msgid "Ьldpind"
-msgstr ""
+msgstr "Общая площадь"
 
 #: classes/applications/realestate_management/realestate_search.aw:826 classes/applications/realestate_management/realestate_search.aw:1277 classes/applications/realestate_management/realestate_search.aw:2093
 msgid "Kхik linnad"
-msgstr ""
+msgstr "Все Городa"
 
 #: classes/applications/realestate_management/realestate_search.aw:859 classes/applications/realestate_management/realestate_search.aw:1291 classes/applications/realestate_management/realestate_search.aw:2093
 msgid "Kхik linnaosad"
-msgstr ""
+msgstr "Все районы города"
 
 #: classes/applications/realestate_management/realestate_search.aw:1105 classes/applications/realestate_management/realestate_search.aw:1166
 msgid "Otsinguparameetritele vastavaid objekte ei leitud"
@@ -568,64 +568,64 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:1243
 msgid "Kхik objektid"
-msgstr ""
+msgstr "Все oбъекты"
 
 #: classes/applications/realestate_management/realestate_search.aw:1253
 msgid "Kхik tehingud"
-msgstr ""
+msgstr "Все cделки"
 
 #: classes/applications/realestate_management/realestate_search.aw:1262
 msgid "Kхik maakonnad"
-msgstr ""
+msgstr "Все уезды"
 
 #: classes/applications/realestate_management/realestate_search.aw:1301
 msgid "Kхik valmidused"
-msgstr ""
+msgstr "Все Готовности"
 
 #: classes/applications/realestate_management/realestate_search.aw:1311
 msgid "Kхik tььbid"
-msgstr ""
+msgstr "Все типы"
 
 #: classes/applications/realestate_management/realestate_search.aw:1321
 msgid "Kхik"
-msgstr ""
+msgstr "Все"
 
 #: classes/applications/realestate_management/realestate_search.aw:1371
 msgid "Kхik maaklerid"
-msgstr ""
+msgstr "Все маклеры"
 
 #: classes/applications/realestate_management/realestate_search.aw:1986
 msgid "Tььp"
-msgstr ""
+msgstr "Tип"
 
 #: classes/applications/realestate_management/realestate_search.aw:1991
 msgid "Maa&shy;kond"
-msgstr ""
+msgstr "Уезд"
 
 #: classes/applications/realestate_management/realestate_search.aw:1997
 msgid "Linn"
-msgstr ""
+msgstr "Город"
 
 #: classes/applications/realestate_management/realestate_search.aw:2003
 msgid "Vald"
-msgstr ""
+msgstr "Bолость"
 
 #: classes/applications/realestate_management/realestate_search.aw:2009
 msgid "Tehing"
-msgstr ""
+msgstr "Сделка"
 
 #: classes/applications/realestate_management/realestate_search.aw:2015
 msgid "Lisatud"
 msgstr ""
 
-#: classes/applications/realestate_management/realestate_search.aw:2031
+#: classes/applicМаклерations/realestate_management/realestate_search.aw:2031
 msgid "Omanik"
 msgstr ""
 
 #: classes/applications/realestate_management/realestate_search.aw:2037
-msgid "Maakler"
+msgid ""
 msgstr ""
-
+ы
 #: classes/applications/realestate_management/realestate_search.aw:2044
 msgid "<a href='javascript:selall(\\"realestatemgr-is_visible\\")'>Nдh&shy;tav</a>"
 msgstr ""

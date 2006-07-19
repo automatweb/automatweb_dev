@@ -171,7 +171,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_price
 msgid "Omaduse Hind (transaction_price) caption"
-msgstr ""
+msgstr "Цена"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_price_comment
 msgid "Omaduse Hind (transaction_price) kommentaar"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_price2
 msgid "Omaduse Mььgihind (transaction_price2) caption"
-msgstr ""
+msgstr "Продажная цена"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_price2_comment
 msgid "Omaduse Mььgihind (transaction_price2) kommentaar"
@@ -195,7 +195,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_rent
 msgid "Omaduse Kuuььr (transaction_rent) caption"
-msgstr ""
+msgstr "Аренда на месяц"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_rent_comment
 msgid "Omaduse Kuuььr (transaction_rent) kommentaar"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_constraints
 msgid "Omaduse Piirangud (transaction_constraints) caption"
-msgstr ""
+msgstr "Ограничения"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_constraints_comment
 msgid "Omaduse Piirangud (transaction_constraints) kommentaar"
@@ -219,7 +219,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_down_payment
 msgid "Omaduse Ettemaks (transaction_down_payment) caption"
-msgstr ""
+msgstr "Предоплата"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_transaction_down_payment_comment
 msgid "Omaduse Ettemaks (transaction_down_payment) kommentaar"
@@ -255,7 +255,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title3
 msgid "Omaduse M&uuml;&uuml;ja andmed (title3) caption"
-msgstr ""
+msgstr "Данные продавецa"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title3_comment
 msgid "Omaduse M&uuml;&uuml;ja andmed (title3) kommentaar"
@@ -267,7 +267,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_seller_search
 msgid "Omaduse Mььja (seller_search) caption"
-msgstr ""
+msgstr "Продавец"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_seller_search_comment
 msgid "Omaduse Mььja (seller_search) kommentaar"
@@ -303,7 +303,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title31
 msgid "Omaduse Ostja andmed (title31) caption"
-msgstr ""
+msgstr "Данные Покупателя"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title31_comment
 msgid "Omaduse Ostja andmed (title31) kommentaar"
@@ -315,7 +315,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_buyer_search
 msgid "Omaduse Ostja (buyer_search) caption"
-msgstr ""
+msgstr "Покупатель"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_buyer_search_comment
 msgid "Omaduse Ostja (buyer_search) kommentaar"
@@ -387,7 +387,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title4
 msgid "Omaduse Lisaandmed (title4) caption"
-msgstr ""
+msgstr "Дополнительноe данные"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_title4_comment
 msgid "Omaduse Lisaandmed (title4) kommentaar"
@@ -399,7 +399,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_realestate_agent1
 msgid "Omaduse Maakler 1 (realestate_agent1) caption"
-msgstr ""
+msgstr "Маклер 1"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_realestate_agent1_comment
 msgid "Omaduse Maakler 1 (realestate_agent1) kommentaar"
@@ -411,7 +411,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_realestate_agent2
 msgid "Omaduse Maakler 2 (realestate_agent2) caption"
-msgstr ""
+msgstr "Маклер 2"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_realestate_agent2_comment
 msgid "Omaduse Maakler 2 (realestate_agent2) kommentaar"
@@ -423,7 +423,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_weeks_valid_for
 msgid "Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) caption"
-msgstr ""
+msgstr "Цена: 25 EEK за 7 суток"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_weeks_valid_for_comment
 msgid "Omaduse Kehtib (n&auml;dalat) (weeks_valid_for) kommentaar"
@@ -539,7 +539,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_et
 msgid "Omaduse Lisainfo EST (additional_info_et) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_et_comment
 msgid "Omaduse Lisainfo EST (additional_info_et) kommentaar"
@@ -551,7 +551,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_en
 msgid "Omaduse Lisainfo ENG (additional_info_en) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_en_comment
 msgid "Omaduse Lisainfo ENG (additional_info_en) kommentaar"
@@ -563,7 +563,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_fi
 msgid "Omaduse Lisainfo FIN (additional_info_fi) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_fi_comment
 msgid "Omaduse Lisainfo FIN (additional_info_fi) kommentaar"
@@ -575,7 +575,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_ru
 msgid "Omaduse Lisainfo RUS (additional_info_ru) caption"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_additional_info_ru_comment
 msgid "Omaduse Lisainfo RUS (additional_info_ru) kommentaar"
@@ -599,7 +599,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_pictures
 msgid "Omaduse Pildid (pictures) caption"
-msgstr ""
+msgstr "Фотографий"
 
 #: classes/applications/realestate_management/realestate_property.aw:prop_pictures_comment
 msgid "Omaduse Pildid (pictures) kommentaar"
@@ -725,7 +725,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_main
 msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) pealkiri"
-msgstr ""
+msgstr "Данные о нахождении объекта"
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_main_help
 msgid "Grupi &Uuml;ldandmed ja asukoht (grp_main) help"
@@ -733,7 +733,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_detailed
 msgid "Grupi Kirjeldus (grp_detailed) pealkiri"
-msgstr ""
+msgstr "Описание"
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_detailed_help
 msgid "Grupi Kirjeldus (grp_detailed) help"
@@ -741,7 +741,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_additional_info
 msgid "Grupi Lisainfo (grp_additional_info) pealkiri"
-msgstr ""
+msgstr "Дополнительная информация"
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_additional_info_help
 msgid "Grupi Lisainfo (grp_additional_info) help"
@@ -749,7 +749,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_photos
 msgid "Grupi Pildid (grp_photos) pealkiri"
-msgstr ""
+msgstr "Фотографий"
 
 #: classes/applications/realestate_management/realestate_property.aw:group_grp_photos_help
 msgid "Grupi Pildid (grp_photos) help"
@@ -838,7 +838,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:901
 msgid "Nimi"
-msgstr ""
+msgstr "Имя"
 
 #: classes/applications/realestate_management/realestate_property.aw:905
 msgid "Isikukood"
@@ -846,7 +846,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:909
 msgid "Telefon"
-msgstr ""
+msgstr "Телефон"
 
 #: classes/applications/realestate_management/realestate_property.aw:913
 msgid "Aadress"
@@ -909,7 +909,7 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:1659
 msgid "Lisaandmed"
-msgstr ""
+msgstr "Дополнительноe данные"
 
 #: classes/applications/realestate_management/realestate_property.aw:1705
 msgid "Objekti id pole aw id v6i puudub juurdep22su6igus."
@@ -945,15 +945,15 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:2057
 msgid "Tдnav"
-msgstr ""
+msgstr "Улица"
 
 #: classes/applications/realestate_management/realestate_property.aw:2067
 msgid "Maja nr."
-msgstr ""
+msgstr "Номер дома"
 
 #: classes/applications/realestate_management/realestate_property.aw:2077
 msgid "Korter"
-msgstr ""
+msgstr "Квартира"
 
 #: classes/applications/realestate_management/realestate_property.aw:2107
 #: classes/applications/realestate_management/realestate_property.aw:2203
@@ -967,22 +967,22 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:2129
 msgid "Maakleri kasutajanimi City24 sьsteemis"
-msgstr ""
+msgstr "Имя пользователя в City24"
 
 #: classes/applications/realestate_management/realestate_property.aw:2141
 #: classes/applications/realestate_management/realestate_property.aw:2226
 msgid "Maakler"
-msgstr ""
+msgstr "Маклер"
 
 #: classes/applications/realestate_management/realestate_property.aw:2152
 #: classes/applications/realestate_management/realestate_property.aw:2237
 msgid "Maakleri e-mail"
-msgstr ""
+msgstr "E-mail маклерa"
 
 #: classes/applications/realestate_management/realestate_property.aw:2163
 #: classes/applications/realestate_management/realestate_property.aw:2248
 msgid "Maakleri telefon"
-msgstr ""
+msgstr "Телефон маклерa"
 
 #: classes/applications/realestate_management/realestate_property.aw:2174
 #: classes/applications/realestate_management/realestate_property.aw:2259
@@ -991,27 +991,27 @@ msgstr ""
 
 #: classes/applications/realestate_management/realestate_property.aw:2294
 msgid "Mььja"
-msgstr ""
+msgstr "Продавец"
 
 #: classes/applications/realestate_management/realestate_property.aw:2304
 msgid "Mььja e-mail"
-msgstr ""
+msgstr "E-mail продавецa"
 
 #: classes/applications/realestate_management/realestate_property.aw:2314
 msgid "Mььja telefon"
-msgstr ""
+msgstr "Телефон продавецa"
 
 #: classes/applications/realestate_management/realestate_property.aw:2343
 msgid "Ostja"
-msgstr ""
+msgstr "Покупатель"
 
 #: classes/applications/realestate_management/realestate_property.aw:2353
 msgid "Ostja e-mail"
-msgstr ""
+msgstr "E-mail покупателя"
 
 #: classes/applications/realestate_management/realestate_property.aw:2363
 msgid "Ostja telefon"
-msgstr ""
+msgstr "Телефон покупателя"
 
 #: classes/applications/realestate_management/realestate_property.aw:2422
 msgid "Attempted map data save by unauthorized . (id: %s)"
