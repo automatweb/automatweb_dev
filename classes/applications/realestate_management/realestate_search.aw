@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.38 2006/07/19 12:11:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.39 2006/07/19 12:16:38 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1889,10 +1889,10 @@ exit_function("jigaboo");
 		$this_object = $arr["this"];
 		$search_ci = $arr["search"]["ci"];
 		$search_c24id = $arr["search"]["c24id"];
-		$search_tpmin = $arr["search"]["tpmin"];
-		$search_tpmax = $arr["search"]["tpmax"];
-		$search_tfamin = $arr["search"]["tfamin"];
-		$search_tfamax = $arr["search"]["tfamax"];
+		$search_tpmin = $arr["search"]["tpmin"]-1;
+		$search_tpmax = $arr["search"]["tpmax"]+1;
+		$search_tfamin = $arr["search"]["tfamin"]-1;
+		$search_tfamax = $arr["search"]["tfamax"]+1;
 		$search_fd = $arr["search"]["fd"];
 		$search_nor = $arr["search"]["nor"];
 		$search_tt = $arr["search"]["tt"];
