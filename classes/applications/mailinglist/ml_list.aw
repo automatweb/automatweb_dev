@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.83 2006/07/10 13:44:50 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.84 2006/07/19 11:14:27 markop Exp $
 // ml_list.aw - Mailing list
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
@@ -2380,7 +2380,7 @@ class ml_list extends class_base
 
 		$filtered_props = array();
 		// insert a template selector, if there are any templates available
-		if (sizeof($templates) > 0)
+		if (sizeof($templates) > 0 )
 		{
 			$options = array(0 => t(" - vali - "));
 			foreach($templates as $template)
@@ -2464,7 +2464,6 @@ class ml_list extends class_base
 				"value" => $msg_obj->meta("copy_template"),
 			);
 		}
-		
 		$filtered_props["id"] = array(
 			"name" => "id",
 			"type" => "hidden",
@@ -2586,6 +2585,11 @@ class ml_list extends class_base
 			{
 				$msg_obj->set_prop("html_mail", 1024);
 			}	
+			$msg_obj->save();
+		}
+		else
+		{
+			$msg_obj->set_meta("template_selector", null);
 			$msg_obj->save();
 		}
 		if ($msg_data["send_away"] == 1)
