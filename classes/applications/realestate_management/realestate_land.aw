@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_land.aw,v 1.4 2006/06/07 08:58:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_land.aw,v 1.5 2006/07/20 13:40:45 markop Exp $
 // realestate_land.aw - Maatükk
 /*
 
@@ -40,7 +40,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@caption Sihtotstarve veel
 
 	@property is_changeable type=checkbox ch_value=1 field=meta method=serialize
-	@caption Otstarbe muutmine võimalik
+	@caption Otstarbe muutmine v&otilde;imalik
 
 	@property has_electricity type=checkbox ch_value=1 field=meta method=serialize
 	@caption Elekter
@@ -135,7 +135,7 @@ class realestate_land extends realestate_property
 			case "legal_status":
 				if (empty ($prop["value"]))
 				{
-					$prop["error"] = t("Kohustuslik väli");
+					$prop["error"] = t("Kohustuslik v&auml;li");
 					return PROP_ERROR;
 				}
 				break;

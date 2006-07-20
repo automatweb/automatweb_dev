@@ -7,7 +7,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>N&amp;auml;itamise p&amp;otilde;hi (template)</caption>
+            <caption>N&amp;amp;auml;itamise p&amp;otilde;hi (template)</caption>
       </property>
       <property>
             <name>result_format</name>
@@ -16,7 +16,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Otsingutulemuste n&amp;auml;itamise formaat</caption>
+            <caption>Otsingutulemuste n&amp;amp;auml;itamise formaat</caption>
       </property>
       <property>
             <name>result_no_form</name>
@@ -26,7 +26,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <comment>N&amp;auml;ita otsingutulemusi ilma otsinguvormita. Ei m&amp;otilde;juta admin liidese otsingut.</comment>
+            <comment>N&amp;amp;auml;ita otsingutulemusi ilma otsinguvormita. Ei m&amp;otilde;juta admin liidese otsingut.</comment>
             <caption>Tulemused otsinguvormita</caption>
       </property>
       <property>
@@ -58,7 +58,7 @@
             <method>serialize</method>
             <type>textbox</type>
             <datatype>int</datatype>
-            <comment>[0] - v&amp;otilde;imalus valida parameetrile vaid &amp;uuml;ks v&amp;auml;&amp;auml;rtus, [1 - ...] - v&amp;otilde;imalus valida mitu.</comment>
+            <comment>[0] - v&amp;otilde;imalus valida parameetrile vaid &amp;uuml;ks v&amp;amp;auml;&amp;amp;auml;rtus, [1 - ...] - v&amp;otilde;imalus valida mitu.</comment>
             <caption>Otsinguvormi valikuelementide suurus</caption>
       </property>
       <property>
@@ -116,7 +116,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Default j&amp;auml;rjestus</caption>
+            <caption>Default j&amp;amp;auml;rjestus</caption>
       </property>
       <property>
             <name>default_searchparam_sort_order</name>
@@ -125,7 +125,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Default j&amp;auml;rjestuse suund</caption>
+            <caption>Default j&amp;amp;auml;rjestuse suund</caption>
       </property>
       <property>
             <name>default_per_page</name>
@@ -194,7 +194,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>3</size>
-            <caption>Tehingu t&amp;uuml;&amp;uuml;p</caption>
+            <caption>Tehingu t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>search_transaction_price_min</name>
@@ -227,7 +227,7 @@
             <type>textbox</type>
             <parent>box2</parent>
             <size>10</size>
-            <caption>&amp;Uuml;ldpind min</caption>
+            <caption>&amp;amp;uuml;ldpind min</caption>
       </property>
       <property>
             <name>search_total_floor_area_max</name>
@@ -238,7 +238,7 @@
             <type>textbox</type>
             <parent>box2</parent>
             <size>10</size>
-            <caption>&amp;Uuml;ldpind max</caption>
+            <caption>&amp;amp;uuml;ldpind max</caption>
       </property>
       <property>
             <name>search_number_of_rooms</name>
@@ -319,7 +319,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Alates kuup&amp;auml;evast</caption>
+            <caption>Alates kuup&amp;amp;auml;evast</caption>
       </property>
       <property>
             <name>search_usage_purpose</name>
@@ -330,7 +330,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>5</size>
-            <caption>&amp;Auml;ripinna t&amp;uuml;&amp;uuml;p</caption>
+            <caption>&amp;amp;auml;ripinna t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <property>
             <name>search_agent</name>
@@ -368,7 +368,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
-            <caption>N&amp;auml;ita ainult pildiga kuulutusi</caption>
+            <caption>N&amp;amp;auml;ita ainult pildiga kuulutusi</caption>
       </property>
       <property>
             <name>searchparam_sort_by</name>
@@ -377,7 +377,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>J&amp;auml;rjestus</caption>
+            <caption>J&amp;amp;auml;rjestus</caption>
       </property>
       <property>
             <name>searchparam_sort_order</name>
@@ -386,7 +386,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>J&amp;auml;rjestuse suund</caption>
+            <caption>J&amp;amp;auml;rjestuse suund</caption>
       </property>
       <property>
             <name>per_page</name>
@@ -437,8 +437,8 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>5</size>
-            <comment>Objektiatribuudid, mida n&amp;auml;idatakse sortimise valikus</comment>
-            <caption>J&amp;auml;rjestamise valik</caption>
+            <comment>Objektiatribuudid, mida n&amp;amp;auml;idatakse sortimise valikus</comment>
+            <caption>J&amp;amp;auml;rjestamise valik</caption>
       </property>
       <property>
             <name>agent_sections</name>
@@ -449,7 +449,7 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>5</size>
-            <comment>Osakonnad, mille maaklereid otsinguparameetri v&amp;auml;&amp;auml;rtuse valikus n&amp;auml;idatakse</comment>
+            <comment>Osakonnad, mille maaklereid otsinguparameetri v&amp;amp;auml;&amp;amp;auml;rtuse valikus n&amp;amp;auml;idatakse</comment>
             <caption>Maaklerite osakonnad</caption>
       </property>
       <classinfo>
@@ -487,7 +487,7 @@
             <box2>
                   <type>hbox</type>
                   <group>grp_search</group>
-                  <caption>&amp;Uuml;ldpinna vahemik</caption>
+                  <caption>&amp;amp;uuml;ldpinna vahemik</caption>
             </box2>
       </layout>
 </properties>

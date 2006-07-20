@@ -30,7 +30,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@caption Objekti id City24 andmebaasis
 
 	@property is_visible type=checkbox ch_value=1 table=realestate_property
-	@caption Nähtav
+	@caption N&auml;htav
 
 	@property is_archived type=checkbox ch_value=1 table=realestate_property
 	@caption Arhiveeritud
@@ -49,10 +49,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Hind
 
 		@property transaction_price2 type=textbox field=meta method=serialize
-		@caption Müügihind
+		@caption M&uuml;&uuml;gihind
 
 		@property transaction_rent type=textbox field=meta method=serialize
-		@caption Kuuüür
+		@caption Kuu&uuml;&uuml;r
 
 		@property transaction_constraints type=classificator table=realestate_property
 		@caption Piirangud
@@ -61,16 +61,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Ettemaks
 
 		@property transaction_date type=date_select table=realestate_property default=-1
-		@caption Tehingu kuupäev
+		@caption Tehingu kuup&auml;ev
 
 		@property transaction_closed type=checkbox table=realestate_property ch_value=1
-		@caption Tehing sõlmitud
+		@caption Tehing s&otilde;lmitud
 
 
 	@property title3 type=text store=no subtitle=1
 	@caption M&uuml;&uuml;ja andmed
 		@property seller_search type=text store=no
-		@caption Müüja
+		@caption M&uuml;&uuml;ja
 
 		@property seller type=releditor reltype=RELTYPE_REALESTATE_SELLER rel_id=first editonly=1 props=firstname,lastname,personal_id,gender,birthday,phone,email,comment,notes
 
@@ -89,12 +89,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 
 
 	@property title5 type=text store=no subtitle=1
-	@caption Tänukiri
+	@caption T&auml;nukiri
 		@property appreciation_note_date type=date_select field=meta method=serialize default=-1
-		@caption Tänukirja saatmise kuupäev
+		@caption T&auml;nukirja saatmise kuup&auml;ev
 
 		@property appreciation_note_type type=classificator field=meta method=serialize
-		@caption Tänukirja tüüp
+		@caption T&auml;nukirja t&uuml;&uuml;p
 
 
 
@@ -160,7 +160,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@property picture_icon_city24 type=hidden field=meta method=serialize
 	@property picture_icon type=hidden field=meta method=serialize
 	@property picture_icon_image reltype=RELTYPE_REALESTATE_PICTUREICON clid=CL_IMAGE field=meta method=serialize
-	@caption Väike pilt
+	@caption V&auml;ike pilt
 
 @default group=grp_map
 	@property map_create type=text store=no
@@ -185,7 +185,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @caption Aadress
 
 @reltype REALESTATE_SELLER value=2 clid=CL_CRM_PERSON
-@caption Klient (Müüja)
+@caption Klient (M&uuml;&uuml;ja)
 
 @reltype REALESTATE_BUYER value=7 clid=CL_CRM_PERSON
 @caption Klient (Ostja)
@@ -203,7 +203,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 @caption Pilt
 
 @reltype REALESTATE_PICTUREICON value=8 clid=CL_IMAGE
-@caption Väike pilt
+@caption V&auml;ike pilt
 
 */
 
@@ -362,7 +362,7 @@ class realestate_property extends class_base
 			}
 			else
 			{
-				echo t("Kinnisvarahalduskeskkond objekti jaoks määramata või puudub juurdepääsuõigus");
+				echo t("Kinnisvarahalduskeskkond objekti jaoks m&auml;&auml;ramata või puudub juurdep&auml;&auml;suõigus");
 			}
 		}
 	}
@@ -825,7 +825,7 @@ class realestate_property extends class_base
 		}
 		else
 		{
-			$errors[PID_ERROR_INVALID_DATE] = t("Isikukoodis leiduv sünnikuupäevateave ei vasta ühelegi kuupäevale Gregoriuse kalendris.");
+			$errors[PID_ERROR_INVALID_DATE] = t("Isikukoodis leiduv s&uuml;nnikuup&auml;evateave ei vasta &uuml;helegi kuup&auml;evale Gregoriuse kalendris.");
 		}
 
 		if (count ($errors))
@@ -1028,14 +1028,14 @@ class realestate_property extends class_base
 
 		$toolbar->add_menu_item(array(
 			"parent" => "print",
-			"text" => t("Müüja andmetega/piltidega"),
+			"text" => t("M&uuml;&uuml;ja andmetega/piltidega"),
 			"link" => $print_url_seller_pics,
 			"target" => "_blank",
 		));
 
 		$toolbar->add_menu_item(array(
 			"parent" => "print",
-			"text" => t("Müüja andmetega/piltideta"),
+			"text" => t("M&uuml;&uuml;ja andmetega/piltideta"),
 			"link" => $print_url_seller_nopics,
 			"target" => "_blank",
 		));
@@ -1291,7 +1291,7 @@ class realestate_property extends class_base
 					$properties["picture_icon"]["strvalue"] = aw_ini_get("baseurl").$default_icon;
 				}
 				
-				//piltide sorteerimine metas elutseva järjekorra järgi
+				//piltide sorteerimine metas elutseva j&auml;rjekorra järgi
 
 				$i = 1;
 				while (isset ($properties["picture" . $i . "_url"]))
@@ -1416,7 +1416,7 @@ class realestate_property extends class_base
 		else
 		{
 			error::raise (array (
-				"msg" => sprintf (t("Kinnisvaraobjektil halduskeskkond defineerimata või puudub juurdepääsuõigus (oid: %s)."), $arr["id"]),
+				"msg" => sprintf (t("Kinnisvaraobjektil halduskeskkond defineerimata või puudub juurdep&auml;&auml;suõigus (oid: %s)."), $arr["id"]),
 				"fatal" => true,
 				"show" => true,
 			));
@@ -2079,7 +2079,7 @@ class realestate_property extends class_base
 			$properties[$prop_name] = array (
 				"name" => $prop_name,
 				"type" => "text",
-				"caption" => t("Tänav"),
+				"caption" => t("T&auml;nav"),
 				"value" => $address_street,
 				"strvalue" => $address_street,
 				"altvalue" => $address_street,
@@ -2151,7 +2151,7 @@ class realestate_property extends class_base
 				$properties[$name] = array (
 					"name" => $name,
 					"type" => "text",
-					"caption" => t("Maakleri kasutajanimi City24 süsteemis"),
+					"caption" => t("Maakleri kasutajanimi City24 s&uuml;steemis"),
 					"value" => $value,
 					"strvalue" => $value,
 					"altvalue" => $value,
@@ -2316,7 +2316,7 @@ class realestate_property extends class_base
 			$properties[$name] = array (
 				"name" => $name,
 				"type" => "text",
-				"caption" => t("Müüja"),
+				"caption" => t("M&uuml;&uuml;ja"),
 				"value" => $seller_name,
 				"altvalue" => $seller_name,
 				"strvalue" => $seller_name,
@@ -2326,7 +2326,7 @@ class realestate_property extends class_base
 			$properties[$name] = array (
 				"name" => $name,
 				"type" => "text",
-				"caption" => t("Müüja e-mail"),
+				"caption" => t("M&uuml;&uuml;ja e-mail"),
 				"value" => $seller_email,
 				"strvalue" => $seller_email,
 				"altvalue" => $seller_email,
@@ -2336,7 +2336,7 @@ class realestate_property extends class_base
 			$properties[$name] = array (
 				"name" => $name,
 				"type" => "text",
-				"caption" => t("Müüja telefon"),
+				"caption" => t("M&uuml;&uuml;ja telefon"),
 				"value" => $seller_phones,
 				"altvalue" => $seller_phones,
 				"strvalue" => $seller_phones,
@@ -2535,7 +2535,7 @@ class realestate_property extends class_base
 			else
 			{
 				error::raise(array(
-					"msg" => sprintf (t("Kustutatava kinnisvaraobjekti [%s] kaasobjekti ei lubata kasutajal kustutada. Viga õiguste seadetes. Jääb orbobjekt, mille id on %s"), $arr["oid"], $o->id ()),
+					"msg" => sprintf (t("Kustutatava kinnisvaraobjekti [%s] kaasobjekti ei lubata kasutajal kustutada. Viga õiguste seadetes. J&auml;&auml;b orbobjekt, mille id on %s"), $arr["oid"], $o->id ()),
 					"fatal" => false,
 					"show" => false,
 				));

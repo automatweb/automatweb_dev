@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.40 2006/07/20 12:20:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.41 2006/07/20 13:40:45 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -13,13 +13,13 @@
 @default field=meta
 @default method=serialize
 	@property template type=select
-	@caption Näitamise põhi (template)
+	@caption N&auml;itamise põhi (template)
 
 	@property result_format type=select
-	@caption Otsingutulemuste näitamise formaat
+	@caption Otsingutulemuste n&auml;itamise formaat
 
 	@property result_no_form type=checkbox ch_value=1
-	@comment Näita otsingutulemusi ilma otsinguvormita. Ei mõjuta admin liidese otsingut.
+	@comment N&auml;ita otsingutulemusi ilma otsinguvormita. Ei mõjuta admin liidese otsingut.
 	@caption Tulemused otsinguvormita
 
 	@property search_result_no_redirect type=checkbox ch_value=1
@@ -31,7 +31,7 @@
 	@caption Tabeli navigatsiooni asukoht
 
 	@property searchform_select_size type=textbox datatype=int
-	@comment [0] - võimalus valida parameetrile vaid üks väärtus, [1 - ...] - võimalus valida mitu.
+	@comment [0] - võimalus valida parameetrile vaid üks v&auml;&auml;rtus, [1 - ...] - võimalus valida mitu.
 	@caption Otsinguvormi valikuelementide suurus
 
 	@property searchform_columns type=textbox datatype=int default=2
@@ -49,10 +49,10 @@
 	@caption Haldusjaotus
 
 	@property default_searchparam_sort_by type=select
-	@caption Default järjestus
+	@caption Default j&auml;rjestus
 
 	@property default_searchparam_sort_order type=select
-	@caption Default järjestuse suund
+	@caption Default j&auml;rjestuse suund
 
 	@property default_per_page type=select
 	@caption Vaikimisi kuulutusi lehe kohta
@@ -73,7 +73,7 @@
 	@caption City24 ID
 
 	@property search_transaction_type type=select multiple=1 size=3
-	@caption Tehingu tüüp
+	@caption Tehingu t&uuml;&uuml;p
 
 	@layout box1 type=hbox
 	@caption Hinnavahemik
@@ -84,11 +84,11 @@
 
 	@layout box2 type=hbox
 	@comment Ruutmeetrit
-	@caption Üldpinna vahemik
+	@caption &uuml;ldpinna vahemik
 	@property search_total_floor_area_min type=textbox parent=box2 size=10
-	@caption Üldpind min
+	@caption &uuml;ldpind min
 	@property search_total_floor_area_max type=textbox parent=box2 size=10
-	@caption Üldpind max
+	@caption &uuml;ldpind max
 
 	@property search_number_of_rooms type=textbox datatype=int size=10
 	@caption Tubade arv
@@ -115,10 +115,10 @@
 	@caption Valmidus
 
 	@property searchparam_fromdate type=date_select
-	@caption Alates kuupäevast
+	@caption Alates kuup&auml;evast
 
 	@property search_usage_purpose type=select multiple=1 size=5
-	@caption Äripinna tüüp
+	@caption &auml;ripinna t&uuml;&uuml;p
 
 	@property search_agent type=select multiple=1 size=5
 	@caption Maakler
@@ -130,13 +130,13 @@
 	@caption Pole esimene ega viimane korrus
 
 	@property searchparam_onlywithpictures type=checkbox
-	@caption Näita ainult pildiga kuulutusi
+	@caption N&auml;ita ainult pildiga kuulutusi
 
 	@property searchparam_sort_by type=select
-	@caption Järjestus
+	@caption J&auml;rjestus
 
 	@property searchparam_sort_order type=select
-	@caption Järjestuse suund
+	@caption J&auml;rjestuse suund
 
 	@property per_page type=select
 	@caption Kuulutusi lehe kohta
@@ -153,11 +153,11 @@
 	@caption Otsinguparameetrid
 
 	@property formdesign_sort_options type=select multiple=1 size=5
-	@comment Objektiatribuudid, mida näidatakse sortimise valikus
-	@caption Järjestamise valik
+	@comment Objektiatribuudid, mida n&auml;idatakse sortimise valikus
+	@caption J&auml;rjestamise valik
 
 	@property agent_sections type=select multiple=1 size=5
-	@comment Osakonnad, mille maaklereid otsinguparameetri väärtuse valikus näidatakse
+	@comment Osakonnad, mille maaklereid otsinguparameetri v&auml;&auml;rtuse valikus n&auml;idatakse
 	@caption Maaklerite osakonnad
 
 
@@ -199,7 +199,7 @@ class realestate_search extends class_base
 		));
 		$this->search_sort_options = array (
 			"name" => array ("caption" => t("Nimi"), "table" => "objects"),
-			"class_id" => array ("caption" => t("Objekti tüüp"), "table" => "objects"),
+			"class_id" => array ("caption" => t("Objekti t&uuml;&uuml;p"), "table" => "objects"),
 			"created" => array ("caption" => t("Loodud"), "table" => "objects"),
 			"modified" => array ("caption" => t("Muudetud"), "table" => "objects"),
 			"transaction_price" => array("caption" => t("Hind"), "table" => "realestate_property"),
@@ -251,7 +251,7 @@ class realestate_search extends class_base
 
 			if ($prop["group"] == "grp_search" and !is_object ($this->realestate_manager))
 			{
-				$prop["error"] = t("Kinnisvarahalduskeskkond määramata");
+				$prop["error"] = t("Kinnisvarahalduskeskkond m&auml;&auml;ramata");
 				return PROP_FATAL_ERROR;
 			}
 		}
@@ -265,7 +265,7 @@ class realestate_search extends class_base
 
 			if ($prop["group"] == "grp_search" and !is_object ($this->administrative_structure))
 			{
-				$prop["error"] = t("Haldusjaotus määramata");
+				$prop["error"] = t("Haldusjaotus m&auml;&auml;ramata");
 				return PROP_FATAL_ERROR;
 			}
 		}
@@ -318,7 +318,7 @@ class realestate_search extends class_base
 					CL_REALESTATE_APARTMENT => t("Korter"),
 					CL_REALESTATE_COMMERCIAL => t("Äripind"),
 					CL_REALESTATE_GARAGE => t("Garaaz"),
-					CL_REALESTATE_LAND => t("Maatükk"),
+					CL_REALESTATE_LAND => t("Maat&uuml;kk"),
 				);
 				$prop["value"] = (!$_GET["realestate_srch"] and $this_object->prop ("save_search")) ? $prop["value"] : $_GET["realestate_search"]["ci"];
 				break;
@@ -719,7 +719,7 @@ exit_function("jigaboo");
 		}
 		else
 		{
-			echo t("Kinnisvarahalduskeskkond määramata.") . NEWLINE;
+			echo t("Kinnisvarahalduskeskkond m&auml;&auml;ramata.") . NEWLINE;
 			return false;
 		}
 
@@ -1570,7 +1570,7 @@ exit_function("jigaboo");
 			CL_REALESTATE_APARTMENT => t("Korter"),
 			CL_REALESTATE_COMMERCIAL => t("Äripind"),
 			CL_REALESTATE_GARAGE => t("Garaaz"),
-			CL_REALESTATE_LAND => t("Maatükk"),
+			CL_REALESTATE_LAND => t("Maat&uuml;kk"),
 		);
 		natcasesort ($this->options_ci);
 		$this->options_ci = array(REALESTATE_SEARCH_ALL => t("Kõik objektid")) + $this->options_ci;
@@ -1727,7 +1727,7 @@ exit_function("jigaboo");
 			if($trans[$lang_id]) $this->options_up[$key] = $trans[$lang_id];
 			else $this->options_up[$key] = $val->name();
 		}
-		$this->options_up = array(REALESTATE_SEARCH_ALL => t("Kõik tüübid")) + $this->options_up;
+		$this->options_up = array(REALESTATE_SEARCH_ALL => t("Kõik t&uuml;&uuml;bid")) + $this->options_up;
 
 		### special_status
 		$prop_args = array (
@@ -2510,7 +2510,7 @@ exit_function("jigaboo");
 		### table definition
 		$table->define_field(array(
 			"name" => "class",
-			"caption" => t("Tüüp"),
+			"caption" => t("T&uuml;&uuml;p"),
 		));
 
 		$table->define_field(array(

@@ -26,13 +26,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property transaction_broker_fee_type type=select field=meta method=serialize no_caption=1 parent=box1
 
 		@property transaction_selling_price type=text field=meta method=serialize
-		@caption Müügihind
+		@caption M&uuml;&uuml;gihind
 
 		@property transaction_rent_sqmeter type=textbox field=meta method=serialize
-		@caption Ruutmeetri kuuüür
+		@caption Ruutmeetri kuu&uuml;&uuml;r
 
 		@property transaction_rent_total type=text field=meta method=serialize
-		@caption Kuuüür
+		@caption Kuu&uuml;&uuml;r
 
 		@property estate_price_sqmeter type=textbox field=meta method=serialize
 		@caption Krundi ruutmeetri hind
@@ -94,7 +94,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Arhitekt
 
 		@property building_type type=classificator table=realestate_property
-		@caption Hoone tüüp
+		@caption Hoone t&uuml;&uuml;p
 
 		@property quality_class type=classificator table=realestate_property
 		@caption Kvaliteediklass
@@ -106,7 +106,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Siseviimistlus
 
 		@property total_floor_area type=textbox table=realestate_property
-		@caption Üldpind
+		@caption &uuml;ldpind
 
 		@property usable_area type=textbox field=meta method=serialize
 		@caption Kasulik pind
@@ -151,13 +151,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption arv
 
 		@property has_balcony type=checkbox ch_value=1 field=meta method=serialize
-		@caption Rõdu
+		@caption R&otilde;du
 
 		@property has_cellar type=checkbox ch_value=1 field=meta method=serialize
 		@caption Kelder
 
 		@property has_attic type=checkbox ch_value=1 field=meta method=serialize
-		@caption Pööning
+		@caption P&ouml;&ouml;ning
 
 		@property has_fireplace_hall type=checkbox ch_value=1 field=meta method=serialize
 		@caption Kaminaruum
@@ -172,30 +172,30 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Ruumilahenduse kirjeldus
 
 	@property childtitle2 type=text store=no subtitle=1
-	@caption Küte
+	@caption K&uuml;te
 		@property has_central_heating type=checkbox ch_value=1 field=meta method=serialize
-		@caption Keskküte
+		@caption Keskk&uuml;te
 
 		@property has_electric_heating type=checkbox ch_value=1 field=meta method=serialize
-		@caption Elektriküte
+		@caption Elektrik&uuml;te
 
 		@property has_gas_heating type=checkbox ch_value=1 field=meta method=serialize
-		@caption Gaasiküte
+		@caption Gaasik&uuml;te
 
 		@property has_wood_heating type=checkbox ch_value=1 field=meta method=serialize
-		@caption Ahjuküte
+		@caption Ahjuk&uuml;te
 
 		@property has_fireplace_heating type=checkbox ch_value=1 field=meta method=serialize
-		@caption Kaminaküte
+		@caption Kaminak&uuml;te
 
 		@property has_soil_heating type=checkbox ch_value=1 field=meta method=serialize
-		@caption Maaküte
+		@caption Maak&uuml;te
 
 		@property has_air_heating type=checkbox ch_value=1 field=meta method=serialize
-		@caption Õhkküte
+		@caption &otilde;hkk&uuml;te
 		
 		@property has_oil_heating type=checkbox ch_value=1 field=meta method=serialize
-		@caption Õliküte
+		@caption &otilde;lik&uuml;te
 
 	@property childtitle3 type=text store=no subtitle=1
 	@caption Kommunikatsioonid
@@ -203,7 +203,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Signalisatsioon
 
 		@property has_industrial_voltage type=checkbox ch_value=1 field=meta method=serialize
-		@caption Tööstusvool
+		@caption T&ouml;&ouml;stusvool
 
 		@property has_local_sewerage type=checkbox ch_value=1 field=meta method=serialize
 		@caption Lokaalne kanalisatsioon
@@ -218,7 +218,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Telefon
 
 		@property has_central_cold_water type=checkbox ch_value=1 field=meta method=serialize
-		@caption Tsentraalne külmaveevarustus
+		@caption Tsentraalne k&uuml;lmaveevarustus
 
 		@property has_central_hot_water type=checkbox ch_value=1 field=meta method=serialize
 		@caption Tsentraalne soojaveevarustus
@@ -230,7 +230,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Elektriarvesti
 
 		@property plumbing_condition type=classificator table=realestate_property
-		@caption Torustik/püstikud
+		@caption Torustik/p&uuml;stikud
 
 		@property has_new_radiators type=checkbox ch_value=1 field=meta method=serialize
 		@caption Uued radiaatorid
@@ -250,16 +250,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Boiler
 
 		@property has_refrigerator type=checkbox ch_value=1 field=meta method=serialize
-		@caption Külmik
+		@caption K&uuml;lmik
 
 		@property has_washing_machine type=checkbox ch_value=1 field=meta method=serialize
 		@caption Pesumasin
 
 		@property has_furniture type=checkbox ch_value=1 field=meta method=serialize
-		@caption Mööbel
+		@caption M&ouml;&ouml;bel
 
 		@property has_furniture_option type=checkbox ch_value=1 field=meta method=serialize
-		@caption Mööbli võimalus
+		@caption M&ouml;&ouml;bli v&otilde;imalus
 
 	@property childtitle5 type=text store=no subtitle=1
 	@caption Viimistlus ja ehitus
@@ -282,7 +282,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@caption Vundament
 
 		@property exterior_finishing type=classificator table=realestate_property
-		@caption Välisviimistlus
+		@caption V&auml;lisviimistlus
 
 		@property roof_type type=classificator table=realestate_property
 		@caption Katus
@@ -290,21 +290,21 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@property childtitle600 type=text store=no subtitle=1
 	@caption Siseviimistlus
 		@property kitchen_type type=classificator table=realestate_property
-		@caption Köök
+		@caption K&ouml;&ouml;k
 
 		@layout box4 type=vbox
-		@caption Köögiseinad
+		@caption K&ouml;&ouml;giseinad
 		@property kitchen_walls type=classificator table=realestate_property no_caption=1 parent=box4
 		@property kitchen_walls_description type=textbox field=meta method=serialize no_caption=1 parent=box4
 
 		@property kitchen_floor type=classificator table=realestate_property
-		@caption Köögipõrand
+		@caption K&ouml;&ouml;gip&otilde;rand
 
 		@property stove_type type=classificator table=realestate_property
 		@caption Pliit
 
 		@property kitchen_furniture_option type=classificator table=realestate_property
-		@caption Müügis
+		@caption M&uuml;&uuml;gis
 
 		@layout box5 type=vbox
 		@caption Toaseinad
@@ -312,7 +312,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 		@property room_walls_description type=textbox field=meta method=serialize no_caption=1 parent=box5
 
 		@property room_floors type=classificator table=realestate_property
-		@caption Toapõrand
+		@caption Toap&otilde;rand
 
 		@property lavatories_condition type=classificator table=realestate_property
 		@caption Sanruumid
@@ -488,7 +488,7 @@ class realestate_cottage extends realestate_property
 			case "legal_status":
 				if (empty ($prop["value"]))
 				{
-					$prop["error"] = t("Kohustuslik väli");
+					$prop["error"] = t("Kohustuslik v&auml;li");
 					return PROP_ERROR;
 				}
 				break;
@@ -496,7 +496,7 @@ class realestate_cottage extends realestate_property
 			case "year_built":
 				if (empty ($prop["value"]))
 				{
-					$prop["error"] = t("Kohustuslik väli");
+					$prop["error"] = t("Kohustuslik v&auml;li");
 					return PROP_ERROR;
 				}
 				break;

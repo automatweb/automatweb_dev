@@ -18,7 +18,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_REALESTATE_PROPERTY, on_delete)
 	@caption Omandivorm
 
 	@property total_floor_area type=textbox table=realestate_property
-	@caption Üldpind
+	@caption &uuml;ldpind
 
 	@property has_alarm_installed type=checkbox ch_value=1 field=meta method=serialize
 	@caption Signalisatsioon
@@ -88,7 +88,7 @@ class realestate_garage extends realestate_property
 			case "legal_status":
 				if (empty ($prop["value"]))
 				{
-					$prop["error"] = t("Kohustuslik väli");
+					$prop["error"] = t("Kohustuslik v&auml;li");
 					return PROP_ERROR;
 				}
 				break;
@@ -96,7 +96,7 @@ class realestate_garage extends realestate_property
 			case "year_built":
 				if (empty ($prop["value"]))
 				{
-					$prop["error"] = t("Kohustuslik väli");
+					$prop["error"] = t("Kohustuslik v&auml;li");
 					return PROP_ERROR;
 				}
 				break;
