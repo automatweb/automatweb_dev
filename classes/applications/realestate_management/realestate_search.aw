@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.39 2006/07/19 12:16:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.40 2006/07/20 12:20:05 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1208,7 +1208,7 @@ exit_function("jigaboo");
 
 			switch ($this_object->prop ("result_format"))
 			{
-				case "format1":
+				case "format1": //see miski default variant asjade kuvamiseks
 					### leave only objects for requested page in list
 					$table->set_layout("realestate_searchresult");
 					$table->define_field(array(
@@ -1266,10 +1266,141 @@ exit_function("jigaboo");
  						// );
 						// $table->define_data ($data);
 					// }
+					$table->sortable=false;
+					$result = $table->get_html ();
+					break;
+				default : //juhul kui on valitud mingisugune template pakkumiste kuvamiseks... et siis saab igast erinevaid variante teha jne
+					if (file_exists($this->site_template_dir.'/'.$this_object->prop ("result_format").".tpl"))
+					{
+						$template = $this_object->prop ("result_format").".tpl";
+						$this->read_template($template);
+						lc_site_load("realestate",$this);
+					
+					}
+					$table->set_layout("realestate_searchresult");
+					$table->define_field(array(
+						"name" => "object",
+						"caption" => NULL,
+					));
+					
+					if ($this->result_count > $this->result_table_recordsperpage)
+					{
+						$table->define_pageselector (array (
+							"type" => "text",
+							"d_row_cnt" => $this->result_count,
+							"no_recount" => true,
+							"records_per_page" => $this->result_table_recordsperpage,
+							"position" => $this_object->prop("result_pageselector_pos"),
+						));
+					}
+					foreach ($this->realestate_classes as $cls_id)
+					{
+						$cl_instance_var = "cl_property_" . $cls_id;
+
+						if (!is_object ($this->$cl_instance_var))
+						{
+							$this->$cl_instance_var = get_instance ($cls_id);
+							$this->$cl_instance_var->classes = $classes;
+						}
+					}
+
+					if($this->is_template("OBJECT"))
+					{
+						if ($this->can ("view", $this_object->prop ("realestate_manager")))
+						{
+							$realestate_manager = obj ($this_object->prop ("realestate_manager"));
+							$default_icon = $realestate_manager->prop ("default_".$types[$this_object->class_id()]."_image");
+						}
+						$property_inst = get_instance(CL_REALESTATE_PROPERTY);
+						
+						$c = "";
+						$property = $list->begin ();
+						while (is_object ($property))
+						{
+							//see tegelt jama moment... et võiks olla realestate_property sees miski funktsioon , mis vastavad propertyd tagastab... ja mida ta ise ka kasutab... et moment suht mõttetu kopeerimine väikeste nüanssidega
+							$properties = $property_inst->get_property_data (array (
+								"this" => $property,
+								"no_picture_data" => true,
+								"no_client_data" => true,
+								"no_extended_agent_data" => true,
+								"no_address_data" => true,
+								"required_properties" => $required_properties,
+							));
+							if(!$properties["picture_icon"]["value"])
+							{
+								$properties["picture_icon"]["value"] = $default_icon;
+								$properties["picture_icon"]["strvalue"] = aw_ini_get("baseurl").$default_icon;
+							}
+							$i = 1;
+							$no_picture_data = true;
+							
+							
+							foreach ($properties as $name => $prop_data)
+							{
+								if (array_key_exists ($name, $property_inst->extras_property_names) and (int) ($prop_data["value"]))
+								{
+									### properties that go under tplvar "extras", from index
+									$extras[] = $property_inst->extras_property_names[$name];
+								}
+								elseif (("checkbox" == $prop_data["type"] and !empty ($prop_data["caption"]) and (int) ($prop_data["value"]) and "has_" == substr ($name, 0, 4)))
+								{
+									### properties that go under tplvar "extras"
+									$prop_caption = $prop_data["caption"];
+									$first_char = in_array ($name, $property_inst->re_propnames_starting_with_acronym) ? $prop_caption{0} : strtolower ($prop_caption{0});
+									$value = $first_char . substr ($prop_caption, 1);
+									$extras[] = $value;
+									$property_inst->extras_property_names[$name] = $value;// collect extras names into index array for faster mass processing.
+								}
+								else
+								{
+									if (trim ($prop_data["strvalue"]))
+									{
+										$prop_vars = array ();
+										$prop_vars["value"] = $prop_data["strvalue"];
+										$prop_vars["caption"] = $prop_data["caption"];
+										$this->vars ($prop_vars);
+										$data[$name] = $this->parse ($name);// main time consumer in this loop
+									}
+					
+									$data[$name . "_value"] = $prop_data["strvalue"];
+									$data[$name . "_caption"] = $prop_data["caption"];
+								}
+							}
+							
+							// "/" oli kuskile vahelt kadunud....
+							$data["picture_icon_value"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon_value"]);
+							$data["picture_icon"] = str_replace(aw_ini_get("baseurl"), aw_ini_get("baseurl").'/', $data["picture_icon"]);
+							$data["additional_info"] = $this_object->prop ("additional_info_" . aw_global_get("LC"));
+					
+							//et ei näitataks hinda, kui see on 0
+							if(!$data["transaction_price_value"] > 0)
+							{
+								$data["transaction_price_value"] = null;
+								$data["transaction_price"] = null;
+							}
+							if(!$data["agent_email"])
+							{
+								$data["agent_email"] = "";
+							}
+							
+							$cl_instance_var = "cl_property_" . $property->class_id ();
+							$object_html = $this->$cl_instance_var->view (array (
+								"this" => $property,
+								"view_type" => "short",
+							));
+							$data["object"] = $object_html;
+							$this->vars = $data;
+							$c .= $this->parse("OBJECT");
+							$property = $list->next ();
+						}
+						$this->vars = array (
+							"OBJECT" => $c,
+							"pageselector" => $table->get_html(),
+						);
+					}
+					$result = $this->parse();
 					break;
 			}
-			$table->sortable=false;
-			$result = $table->get_html ();
 		}
 		else {
 			$result = t("Otsinguparameetritele vastavaid kuulutusi ei leitud!");
@@ -1889,10 +2020,10 @@ exit_function("jigaboo");
 		$this_object = $arr["this"];
 		$search_ci = $arr["search"]["ci"];
 		$search_c24id = $arr["search"]["c24id"];
-		$search_tpmin = $arr["search"]["tpmin"]-1;
-		$search_tpmax = $arr["search"]["tpmax"]+1;
-		$search_tfamin = $arr["search"]["tfamin"]-1;
-		$search_tfamax = $arr["search"]["tfamax"]+1;
+		$search_tpmin = $arr["search"]["tpmin"];
+		$search_tpmax = $arr["search"]["tpmax"];
+		$search_tfamin = $arr["search"]["tfamin"];
+		$search_tfamax = $arr["search"]["tfamax"];
 		$search_fd = $arr["search"]["fd"];
 		$search_nor = $arr["search"]["nor"];
 		$search_tt = $arr["search"]["tt"];
@@ -1908,6 +2039,8 @@ exit_function("jigaboo");
 		$search_at = $arr["search"]["at"];
 		$search_owp = $arr["search"]["owp"];
 		$search_imf = $arr["search"]["imf"];
+		if($search_tpmin>0)$search_tpmin--;
+		if($search_tpmax>0)$search_tpmax++;
 		switch($arr["search"]["sort_by"])  // NEVER, EVER, EVER!!! can you let the user enter sql via the url
 		{
 			case "name":
