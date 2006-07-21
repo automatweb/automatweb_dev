@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.90 2006/07/03 12:13:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.91 2006/07/21 13:39:17 markop Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -116,7 +116,12 @@
 		@groupinfo lang_10 caption="lang" parent=translate
 		@groupinfo lang_11 caption="lang" parent=translate
 		@groupinfo lang_12 caption="lang" parent=translate
-
+	
+	@groupinfo show_props caption="Omaduste maha keeramine"
+	@default group=show_props
+	@layout mlist type=hbox width=20%:80%
+		@property treeview type=treeview store=no parent=mlist no_caption=1
+		@property props_list type=table store=no parent=mlist no_caption=1
 
 	@classinfo relationmgr=yes syslog_type=ST_CFGFORM
 
@@ -228,9 +233,147 @@ class cfgform extends class_base
 			case "trans_tbl_grps":
 				$this->_trans_tbl_grps($arr);
 				break;
+			case "treeview":
+				$this->do_meta_tree($arr);
+				break;		
+			case "props_list":
+				$this->do_table($arr);
+				break;
 		};
 		return $retval;
 	}
+
+	function do_meta_tree($arr)
+	{	
+		if(!$arr["request"]["meta"])$arr["request"]["meta"] = $arr["obj_inst"]->meta("group_to_show");
+		$tree = &$arr["prop"]["vcl_inst"];
+		$obj = $arr["obj_inst"];
+		
+		$tree->add_item(0, array(
+			"name" => $obj->name(),
+			"id" => $obj->id(),
+			"url" => aw_url_change_var(array("meta" => $obj->id())),
+		));
+		
+		$grps = new aw_array($arr["obj_inst"]->meta("cfg_groups"));
+		$rv = array();
+		$order = array();
+		$grps_array = array();
+		foreach($grps->get() as $key => $item)
+		{
+			$grps_array[$key] = $item;
+			$order[$key] = $item["ord"];
+		}
+		
+		asort($order);
+		foreach($order as $key => $val)
+		{
+			$grps_[$key] = $grps_array[$key];
+		}
+		
+		foreach($grps_ as $key => $val)
+		{
+			$tree->add_item($obj->id(),array(
+				"name" => $key,
+				"id" => $key,
+				"url" => aw_url_change_var(array("meta" => $key)),
+			));
+		};
+		$tree->set_selected_item($arr["request"]["meta"]);
+
+		// hm .. now I also need to create an object_tree, eh?
+		//$arr["prop"]["value"] = $tree->finalize_tree();
+	}
+	function do_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"callback" => array(&$this, "callb_name"),
+			"callb_pass_row" => true,
+		));
+			
+		$groups_list = new object_list(array(
+			"class_id" => array(CL_GROUP),
+			"lang_id" => "%",
+		));
+			
+		foreach($groups_list->arr() as  $group_obj)
+		{
+			$t->define_field(array(
+				"name" => $group_obj->id(),
+				"caption" => $group_obj->name(),
+			));
+		}
+		
+		$by_group = array();
+
+		if (is_array($this->grplist))
+		{
+			$this->sort_grplist();
+			foreach($this->grplist as $key => $val)
+			{
+				if (!is_numeric($key))
+				{
+					$by_group[$key] = array();
+				};
+			};
+		};
+
+		if (is_array($this->prplist))
+		{
+			foreach($this->prplist as $property)
+			{
+				if (!empty($property["group"]))
+				{
+					if (!is_array($property["group"]))
+					{
+						$by_group[$property["group"]][] = $property;
+					}
+					else
+					{
+						foreach($property["group"] as $gkey)
+						{
+							$by_group[$gkey][] = $property;
+						};
+					};
+
+				};
+			};
+		};
+		$meta = $arr["obj_inst"]->meta("show_to_groups");
+		$html = get_instance("html");
+		if(!$arr["request"]["meta"])$arr["request"]["meta"] = $arr["obj_inst"]->meta("group_to_show");
+		$arr["obj_inst"]->set_meta("group_to_show",$arr["request"]["meta"]);
+		$arr["obj_inst"]->save();
+		foreach($by_group[$arr["request"]["meta"]] as $property)
+		{
+			$row = array(
+				"id" => $property["name"],
+				"name" => $property["caption"],
+			);
+			
+			foreach($groups_list->ids() as  $gid)
+			{
+				$checked = 1;
+				if($meta[$property["name"]] && !array_key_exists($gid , $meta[$property["name"]])) $checked = null;
+				$row[$gid] = $html->checkbox($args = array(
+					"name" => "show_to_groups[".$property["name"]."][".$gid."]",
+					"value" => 1,
+					"checked" => $checked ,
+				));
+			}
+			$t ->define_data($row);
+		};
+		$t->set_sortable(false);
+	}
+
 
 	function _init_trans_tbl(&$t, $o, $req, $str = "Omadus")
 	{
@@ -352,11 +495,7 @@ class cfgform extends class_base
 					)),
 				));
 			};
-
-
 		};
-
-
 	}
 
 	function gen_controller_props($arr)
@@ -653,8 +792,21 @@ class cfgform extends class_base
 				}
 				$arr["obj_inst"]->set_meta("grp_translations", $trans);
 				break;
+			case "props_list":
+				$this->submit_meta(&$arr);
+				break;
 		}
 		return $retval;
+	}
+
+	function submit_meta($arr = array())
+	{
+		$show_to_groups = $arr["obj_inst"]->meta("show_to_groups");
+		foreach($arr["request"]["show_to_groups"] as $key => $val)
+		{
+			$show_to_groups[$key] = $val;
+		}
+		$arr["obj_inst"]->set_meta("show_to_groups" , $show_to_groups);
 	}
 
 	function _load_xml_definition($contents)

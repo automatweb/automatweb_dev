@@ -331,6 +331,28 @@
             <no_caption>1</no_caption>
             <store>no</store>
       </property>
+      <property>
+            <name>treeview</name>
+            <table>objects</table>
+            <group>show_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <store>no</store>
+            <parent>mlist</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>props_list</name>
+            <table>objects</table>
+            <group>show_props</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <parent>mlist</parent>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CFGFORM</syslog_type>
@@ -428,6 +450,9 @@
                   <caption>lang</caption>
                   <parent>translate</parent>
             </lang_12>
+            <show_props>
+                  <caption>Omaduste maha keeramine</caption>
+            </show_props>
       </groupinfo>
       <reltypes>
             <PROP_GROUP>
@@ -451,5 +476,12 @@
                   <caption>V&amp;auml;ljund</caption>
             </OUTPUT>
       </reltypes>
+      <layout>
+            <mlist>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>show_props</group>
+            </mlist>
+      </layout>
 </properties>
 

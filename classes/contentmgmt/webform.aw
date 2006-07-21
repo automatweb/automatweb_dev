@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.92 2006/07/05 10:12:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.93 2006/07/21 13:39:16 markop Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1664,8 +1664,24 @@ class webform extends class_base
 		$no_sbt = true;
 		$nms = array();
 		$chk_prps = array("default" => "defaultx", "year_from" => "year_from", "year_to" => "year_to", "mon_for" => "mon_for");
+		
+		$user_group_list = aw_global_get("gidlist_oid");//kõik grupid kus kasutaja on
+		$hidden_stuff = $cfgform->meta("show_to_groups");//juhul kui omadusi on teatud gruppidele maha keeratud, näitab 
 		foreach($els as $pn => $pd)
 		{
+			if($hidden_stuff[$pn])//see värk siis kontrollib, kas miskile kasutajale on mingi omadus äkki maha keeratud
+			{
+				$allowed_to_see = 0;
+				foreach($user_group_list as $user_group)
+				{
+					if($hidden_stuff[$pn][$user_group])
+					{
+						$allowed_to_see = 1;
+						break;
+					}
+				}
+				if(!$allowed_to_see) continue;
+			}
 			if($pd["invisible"]) continue;
 			if($pd["invisible_name"]) $pd["caption"] = null;
 			if($pd["type"] == "releditor")
