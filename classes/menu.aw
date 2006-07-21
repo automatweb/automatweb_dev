@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.162 2006/07/05 14:53:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.163 2006/07/21 12:08:52 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1336,6 +1336,46 @@ class menu extends class_base
 				"ex_icons" => $request["ex_icons"],
 			));
 		};
+		if($request["group"] == "general_sub" && aw_ini_get("menu.automatic_aliases"))
+		{
+			$o = obj($arr["obj_inst"]->id());
+			if(!strlen($o->alias()))
+			{
+				$o->set_alias($this->_gen_nice_alias($request["name"]));
+				$o->save();
+			}
+		}
+	}
+
+	function _gen_nice_alias($name)
+	{
+		$to_replace = array("ä","Ä","ö","Ö","ü","Ü","õ","Õ","¾","®","¹","©"," ");
+		$replace_with = array("a","A","o","O","u","U","o","O","z","Z","s","S","_");
+		$str = "!\"@#.¤$%&/()[]={}?\+-`'|,;:";
+		$name = str_replace(preg_split("//", $str, -1 , PREG_SPLIT_NO_EMPTY), "", $name);;
+		$name = str_replace($to_replace, $replace_with, $name);
+		return $this->_check_alias_name($name);
+	}
+
+	function _check_alias_name($name)
+	{
+		$nr = 0;
+		$orig_name = $name;
+		while(true)
+		{
+			$q = "select count(*) as count from objects where alias = '".$name."'";
+			$count = $this->db_fetch_field($q,"count");
+			if($count > 0)
+			{
+				$name = $orig_name."_".$nr;
+				$nr++;
+			}
+			else
+			{
+				break;
+			}
+		}
+		return $name;
 	}
 
 	////
