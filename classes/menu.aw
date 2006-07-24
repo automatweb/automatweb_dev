@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.163 2006/07/21 12:08:52 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.164 2006/07/24 13:36:25 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1321,6 +1321,16 @@ class menu extends class_base
 		$this->updmenus[] = (int)$arr["obj_inst"]->id();
 		$m = get_instance("menuedit");
 		$m->invalidate_menu_cache($this->updmenus);
+		$request = &$arr["request"];
+		if($request["group"] == "general_sub" && aw_ini_get("menu.automatic_aliases"))
+		{
+			if(!strlen($arr["obj_inst"]->alias()))
+			{
+				$new_alias = $this->_gen_nice_alias($request["name"]);
+				$arr["obj_inst"]->set_alias($this->_gen_nice_alias($request["name"]));
+				$arr["obj_inst"]->save();
+			}
+		}
 	}
 
 	function callback_pre_save($arr)
@@ -1336,15 +1346,6 @@ class menu extends class_base
 				"ex_icons" => $request["ex_icons"],
 			));
 		};
-		if($request["group"] == "general_sub" && aw_ini_get("menu.automatic_aliases"))
-		{
-			$o = obj($arr["obj_inst"]->id());
-			if(!strlen($o->alias()))
-			{
-				$o->set_alias($this->_gen_nice_alias($request["name"]));
-				$o->save();
-			}
-		}
 	}
 
 	function _gen_nice_alias($name)
