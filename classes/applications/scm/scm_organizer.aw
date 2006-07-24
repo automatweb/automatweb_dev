@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.5 2006/07/18 06:05:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.6 2006/07/24 11:43:35 tarvo Exp $
 // scm_organizer.aw - Spordiv&otilde;istluste korraldaja 
 /*
 
@@ -17,13 +17,20 @@
 @caption Firmast
 
 @groupinfo competitions caption="V&otilde;istlused" submit=no
-	@default group=competitions
-	
-	@property competitions_tb type=toolbar no_caption=1
-	@caption voistluste tuulbar
+	@groupinfo current_competitions caption="Praegused v&otilde;istlused" submit=no parent=competitions
+		@default group=current_competitions
+		
+		@property competitions_tb type=toolbar no_caption=1
+		@caption voistluste tuulbar
 
-	@property competitions_tbl type=table no_caption=1
-	@caption Praeguste v&otilde;istluste nimekiri
+		@property competitions_tbl type=table no_caption=1 group=current_competitions,competitions_archive
+		@caption Praeguste v&otilde;istluste nimekiri
+
+		@property remove_competitions type=submit group=current_competitions,competitions_archive
+		@caption Kustuta v&otilde;istlused
+	
+	@groupinfo competitions_archive caption="V&otilde;istluste arhiiv" submit=no parent=competitions
+
 
 @groupinfo events caption="Spordialad" submit=no
 	@default group=events
@@ -38,26 +45,46 @@
 	@default group=locations
 
 	@property location_tb type=toolbar no_caption=1
-	@caption Asukohtade tuulbar
+	@caption Asukohtade t&ouml;&ouml;riistariba
 
 	@property location_tbl type=table no_caption=1
 	@caption Asukohtade tabel
 
 @groupinfo tournaments caption="V&otilde;istlussarjad" submit=no
-	@property tournaments_tbl type=table no_caption=1 group=tournaments
+	@default group=tournaments
+
+	@property tournaments_tb type=toolbar no_caption=1
+	@caption V&otilde;istlussarjade t&ouml;&ouml;riistariba
+
+	@property tournaments_tbl type=table no_caption=1
 	@caption V&otilde;istlussarjade tabel
 
 @groupinfo score_calcs caption="Punktis&uuml;steemid" submit=no
-	@property score_calc_tbl type=table no_caption=1 group=score_calcs
-	@caption Punktis&uuml;steemid
+	@default group=score_calcs
+	
+	@property score_calc_tb type=toolbar no_caption=1
+	@caption Punktis&uuml;steemide t&ouml;&ouml;riistariba
+
+	@property score_calc_tbl type=table no_caption=1
+	@caption Punktis&uuml;steemide tabel
 
 @groupinfo groups caption="V&otilde;istlusklassid" submit=no
-	@property groups_tbl type=table no_caption=1 group=groups
+	@default group=groups
+
+	@property groups_tb type=toolbar no_caption=1
+	@caption V&otilde;istlusklasside t&ouml;&ouml;riistariba
+
+	@property groups_tbl type=table no_caption=1
 	@caption V&otilde;istlusklasside tabel
 
-@groupinfo result_types caption="Paremusj2rjestuse tyybid" submit=no
-	@property result_type_tbl type=table group=result_types no_caption=1
-	@caption tabel
+@groupinfo result_types caption="Paremusj&auml;rjestuse t&uuml;&uuml;bid" submit=no
+	@default group=result_types
+
+	@property result_type_tb type=toolbar no_caption=1
+	@caption Paremusj&auml;rjestus t&uuml;&uuml;pide t&ouml;&ouml;riistariba
+
+	@property result_type_tbl type=table no_caption=1
+	@caption Paremusj&auml;rjestus t&uuml;&uuml;pide tabel
 
 @reltype COMPETITION value=1 clid=CL_SCM_COMPETITION
 @caption V&otilde;istlus
@@ -87,10 +114,12 @@ class scm_organizer extends class_base
 			case "events_tbl":
 				$this->_gen_events_tbl(&$prop["vcl_inst"]);
 				$inst = get_instance(CL_SCM_EVENT);
-				$filt = array(
-					"organizer" => $arr["obj_inst"]->id(),
-				);
-				foreach($inst->get_events($filt) as $id => $obj)
+				if(!count($list = $inst->get_events()))
+				{
+					return PROP_IGNORE;
+				}
+
+				foreach($list as $oid => $obj)
 				{
 					$prop["vcl_inst"]->define_data(array(
 						"name" => $obj->name(),
@@ -113,14 +142,29 @@ class scm_organizer extends class_base
 				));
 			break;
 			// res types
+			case "result_type_tb":
+				$tb = &$prop["vcl_inst"];
+
+				$tb->add_button(array(
+					"name" => "new_result_type",
+					"tooltip" => t("Lisa uus paremusj&auml;rjestus t&uuml;&uuml;p"),
+					"img" => "new.gif",
+					"url" => $this->mk_my_orb("new",array(
+						"class" => "scm_result_type",
+						"parent" => $arr["obj_inst"]->parent(),
+					)),
+				));
+			
+			break;
 			case "result_type_tbl":
 				$t = &$prop["vcl_inst"];
 				$this->_gen_res_type_tbl(&$t);
-				$res_type = get_instance(CL_SCM_RESULT_TYPE);
-				$filt = array(
-					"organizer" => $arr["obj_inst"]->id(),
-				);
-				foreach($res_type->get_result_types($filt) as $oid => $obj)
+				$inst = get_instance(CL_SCM_RESULT_TYPE);
+				if(!count($list = $inst->get_result_types()))
+				{
+					return PROP_IGNORE;
+				}
+				foreach($list as $oid => $obj)
 				{
 					$t->define_data(array(
 						"name" => $obj->name(),
@@ -137,8 +181,13 @@ class scm_organizer extends class_base
 			case "location_tbl":
 				$t = &$prop["vcl_inst"];
 				$this->_gen_loc_tbl(&$t);
-				$loc = get_instance(CL_LOCATION);
-				foreach($loc->get_locations($filt) as $oid => $obj)
+				$inst = get_instance(CL_LOCATION);
+				if(!count($list = $inst->get_locations()))
+				{
+					return PROP_IGNORE;
+				}
+
+				foreach($list as $oid => $obj)
 				{
 					$t->define_data(array(
 						"name" => $obj->name(),
@@ -165,31 +214,48 @@ class scm_organizer extends class_base
 				$t = &$prop["vcl_inst"];
 				$this->_gen_comp_tbl(&$t);
 				$inst = get_instance(CL_SCM_COMPETITION);
-				foreach($inst->get_competitions() as $id => $obj)
+				$filt = array(
+					"state" => ($arr["request"]["group"] == "current_competitions")?"current":"archive",
+				);
+				if(!count($list = $inst->get_competitions($filt)))
 				{
-					$e_obj = obj($obj->prop("scm_event"));
-					$l_obj = obj($obj->prop("location"));
-					$t_obj = obj($obj->prop("scm_tournament"));
+					$prop["value"] = "<font color=\"#FF0000\">".t("Ei ole &uuml;htegi vastavat v&otilde;istlust")."</font>";
+				}
+
+				foreach($list as $oid => $obj)
+				{
+					$e_obj = ($s = $obj->prop("scm_event"))?obj($s):false;
+					$l_obj = ($s = $obj->prop("location"))?obj($s):false;
+					$t_obj = ($s = $obj->prop("scm_tournament"))?obj($s):false;
 					$competition_url = $this->mk_my_orb("change" ,array(
 						"class" => "scm_competition",
 						"id" => $obj->id(),
 						"return_url" => get_ru(),
 					));
-					$event_url = $this->mk_my_orb("change",array(
-						"class" => "scm_event",
-						"id" => $e_obj->id(),
-						"return_url" => get_ru(),
-					));
-					$location_url = $this->mk_my_orb("change",array(
-						"class" => "location",
-						"id" => $l_obj->id(),
-						"return_url" => get_ru(),
-					));
-					$tournament_url = $this->mk_my_orb("change", array(
-						"class" => "scm_tournament",
-						"id" => $t_obj->id(),
-						"return_url" => get_ru(),
-					));
+					if($e_obj)
+					{
+						$event_url = $this->mk_my_orb("change",array(
+							"class" => "scm_event",
+							"id" => $e_obj->id(),
+							"return_url" => get_ru(),
+						));
+					}
+					if($l_obj)
+					{
+						$location_url = $this->mk_my_orb("change",array(
+							"class" => "location",
+							"id" => $l_obj->id(),
+							"return_url" => get_ru(),
+						));
+					}
+					if($t_obj)
+					{
+						$tournament_url = $this->mk_my_orb("change", array(
+							"class" => "scm_tournament",
+							"id" => $t_obj->id(),
+							"return_url" => get_ru(),
+						));
+					}
 					$link = html::href(array(
 						"caption" => 
 							"%s",
@@ -197,13 +263,15 @@ class scm_organizer extends class_base
 					));
 					$t->define_data(array(
 						"name" => sprintf($link, $competition_url, $obj->name()),
-						"location" => sprintf($link, $location_url, $l_obj->prop("name")),
-						"event" => sprintf($link, $event_url, $e_obj->prop("name")),
+						"location" => ($l_obj)?sprintf($link, $location_url, $l_obj->prop("name")):"<font color=\"#FF0000\">".t("Asukoht valimata")."</font>",
+						"event" => ($e_obj)?sprintf($link, $event_url, $e_obj->prop("name")):"<font color=\"#FF0000\">".t("Spordiala valimata")."</font>",
 						"date" => date("d / m / Y",$obj->prop("date")),
-						"tournament" => sprintf($link, $tournament_url, $t_obj->prop("name")),
+						"tournament" => ($t_obj)?sprintf($link, $tournament_url, $t_obj->prop("name")):t("Ei ole v&otilde;istlussarja osav&otilde;istlus"),
+						"remove_comp" => $oid,
 					));
 				}
 			break;
+
 			case "competitions_tb":
 				$tb = &$prop["vcl_inst"];
 
@@ -213,25 +281,61 @@ class scm_organizer extends class_base
 					"img" => "new.gif",
 					"url" => $this->mk_my_orb("new",array(
 						"class" => "scm_competition",
-						"parent" => $arr["obj_inst"]->parent(),
+						"parent" => $arr["obj_inst"]->id(),
 						"reltype" => 1, // like whotto fokk?
 						"alias_to" => $arr["obj_inst"]->id(),
-						"return_url" => post_ru(),
+						"return_url" => get_ru(),
 					)),
 				));
 			break;
 
 			// tournaments 
+			case "tournaments_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "new_tournament",
+					"tooltip" => t("Lisa uus v&otilde;istlussari"),
+					"img" => "new.gif",
+					"url" => $this->mk_my_orb("new", array(
+						"class" => "scm_tournament",
+						"parent" => $arr["obj_inst"]->id(),
+						"return_url" => get_ru(),
+					)),
+				));
+			break;
 			case "tournaments_tbl":
 				$t = &$prop["vcl_inst"];
 				$this->_gen_trn_tbl(&$t);
-				$t->define_data(array(
-					"name" => "testasi.. static",
-					"competitions" => "5",
-				));
+				$inst = get_instance(CL_SCM_TOURNAMENT);
+				if(!count(($list = $inst->get_tournaments())))
+				{
+					return PROP_IGNORE;
+				}
+				foreach($list as $oid => $obj)
+				{
+					$t->define_data(array(
+						"name" => $obj->name(),
+						"competitions" => "xxx",
+					));
+				}
 			break;
 
 			// score calcs
+			case "score_calc_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "new_score_calc",
+					"tooltip" => t("Lisa uus punktis&uuml;steem"),
+					"img" => "new.gif",
+					"url" => $this->mk_my_orb("new", array(
+						"class" => "scm_score_calc",
+						"parent" => $arr["obj_inst"]->id(),
+						"return_url" => get_ru(),
+					)),
+				));
+
+			break;
+
 			case "score_calc_tbl":
 				$t = &$prop["vcl_inst"];
 				$this->_gen_scorecalc_tbl(&$t);
@@ -243,6 +347,40 @@ class scm_organizer extends class_base
 					));
 				}
 			break;
+			// groups
+			case "groups_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "new_group",
+					"tooltip" => t("Lisa uus v&otilde;istlusklass"),
+					"img" => "new.gif",
+					"url" => $this->mk_my_orb("new", array(
+						"class" => "scm_group",
+						"parent" => $arr["obj_inst"]->id(),
+						"return_url" => get_ru(),
+					)),
+				));
+
+			break;
+			case "groups_tbl":
+				$t = &$prop["vcl_inst"];
+				$this->_gen_groups_tbl(&$t);
+				$inst = get_instance(CL_SCM_GROUP);
+				if(!count(($list = $inst->get_groups())))
+				{
+					return PROP_IGNORE;
+				}
+				foreach($list as $oid => $obj)
+				{
+					$t->define_data(array(
+						"name" => $obj->name(),
+						"short" => "short",
+					));
+				}
+
+			break;
+
+
 			// general
 			case "organizer_company":
 				$company = obj($this->get_organizer_company($arr = array("organizer" => $arr["obj_inst"]->id())));
@@ -269,6 +407,17 @@ class scm_organizer extends class_base
 				return PROP_IGNORE;
 			break;
 
+			case "competitions_tbl":
+				$rem = $arr["request"]["rem_comp"];
+				if(count($rem))
+				{
+					foreach($rem as $comp)
+					{
+						$o = obj($comp);
+						$o->delete(true);
+					}
+				}
+			break;
 		}
 		return $retval;
 	}	
@@ -328,6 +477,13 @@ class scm_organizer extends class_base
 	{
 		$obj = obj($arr["organizer"]);
 		return ($o = $obj->prop("organizer_person"))?$o:false;
+	}
+
+	/**
+	**/
+	function get_competitions($arr)
+	{
+		
 	}
 
 	/**
@@ -412,6 +568,10 @@ class scm_organizer extends class_base
 			"name" => "tournament",
 			"sortable" => 1,
 		));
+		$t->define_chooser(array(
+			"name" => "rem_comp",
+			"field" => "remove_comp",
+		));
 
 		$t->set_default_sortby("name");
 
@@ -475,6 +635,18 @@ class scm_organizer extends class_base
 			"caption" => t("Algoritm"),
 		));
 
+	}
+
+	function _gen_groups_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("V&otilde;istlusklassi nimi"),
+		));
+		$t->define_field(array(
+			"name" => "short",
+			"caption" => t("L&uuml;hend"),
+		));
 	}
 
 }

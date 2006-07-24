@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.2 2006/07/18 14:13:47 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.3 2006/07/24 11:43:35 tarvo Exp $
 // scm_team.aw - Meeskond 
 /*
 
@@ -14,30 +14,25 @@
 @caption Osaletud v&otilde;istlused
 
 @groupinfo members caption="Liikmed"
-	
 	@default group=members
 	
 	@property members_tb type=toolbar no_caption=1
-	@caption V&otilde;istkonnaliikmete t&otilde;&otilde;riistariba
-	
-	@property members_list type=table no_caption=1
-	@caption Liikmete nimekiri
-	
+
 	@property members_unreg type=submit
 	@caption Eemalda v&otilde;istkonnast
 
 @groupinfo competitions caption="V&otilde;istlused" submit=no
 	@groupinfo registration caption="Registreerumine" parent=competitions
-		
 		@default group=registration
-
 		@property registration_tb type=toolbar no_caption=1
-		@caption Registreerumise t&otilde;&otilde;riistariba
 
+		@layout split_reg type=hbox width=15%:85% group=registration
+			@property members_tree type=treeview no_caption=1 parent=split_reg
+			@property members_list type=table no_caption=1 parent=split_reg
 
 	@groupinfo registered caption="V&otilde;istlused" caption="V&otilde;istlused" parent=competitions
-		
-		@default group=registered
+	
+
 	
 @reltype COMPETITION value=1 clid=CL_SCM_COMPETITION
 */
@@ -71,6 +66,36 @@ class scm_team extends class_base
 					"tooltip" => t("Otsi v&otilde;istlejaid"),
 					"img" => "search.gif",
 				));
+			break;
+			
+			case "registration_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "bah",
+					"img" => "new.gif",
+				));
+			break;
+
+			case "members_tree":
+				$t = get_instance("vcl/treeview");
+				classload("core/icons");
+				$t->start_tree(array(
+					"type" => TREE_DHTML,
+					"has_root" => 1,
+					"root_name" => t("Organisaatorid"),
+					"root_url" => "#",
+					"root_icon" => icons::get_icon_url(CL_CRM_PERSON),
+					"tree_id" => "reg_tree",
+					"persist_state" => 1,
+					"get_branch_func" => $this->mk_my_orb("gen_tree_branch", array(
+						"self_id" => $arr["obj_inst"]->id(),
+						"group" => $arr["request"]["group"],
+						"parent" => " ",
+					)),
+				));
+				$this->_gen_reg_tree(&$t);
+				$prop["type"] = "text";
+				$prop["value"] = $t->finalize_tree();
 			break;
 
 			case "members_list":
@@ -192,6 +217,106 @@ class scm_team extends class_base
 			}
 		}
 		return $ret;
+	}
+
+
+	// not api
+
+	function _gen_reg_tree($t)
+	{
+		$inst = get_instance(CL_SCM_ORGANIZER);
+		classload("core/icons");
+		foreach($inst->get_organizers() as $oid => $obj)
+		{
+			$t->add_item(0, array(
+				"id" => "org_".$oid,
+				"name" => $obj->name(),
+				"url" => "#",
+				"iconurl" => icons::get_icon_url(CL_CRM_PERSON),
+			));
+			$t->add_item("org_".$oid, array(
+				"id" => "tmp",
+				"name" => $obj->name(),
+			));
+
+		}
+	}
+
+	/**
+		@attrib name=gen_tree_branch all_args=1
+	**/
+	function gen_tree_branch($arr)
+	{
+		$self_id = $arr["self_id"];
+		$group = $arr["group"];
+		$parent = trim($arr["parent"]);
+		$split = split("[.]", $parent);
+		$parent = $split[0];
+		if(substr($parent, 0, 3) == "org")
+		{
+			$inst = get_instance(CL_SCM_COMPETITION);
+			$comps = $inst->get_competitions(array("organizer" => ($organizer = substr($parent, 4))));
+			foreach($comps as $oid => $obj)
+			{
+				$evt = $inst->get_event(array("competition" => $oid));
+				if(in_array($evt, $evts))
+				{
+					continue;
+				}
+				$evts[] = $evt;
+				$evt_obj = obj($evt);
+				$tree[$oid] = array(
+					"id" => "evt_".$evt.".org_".$organizer,
+					"name" => $evt_obj->name(),
+				);
+			}
+		}
+		elseif(substr($parent, 0, 3) == "evt")
+		{
+			$inst = get_instance(CL_SCM_COMPETITION);
+			$comps = $inst->get_competitions(array("organizer" => substr($split[1], 4)));
+			foreach($comps as $oid => $obj)
+			{
+				if(($evt_oid = $inst->get_event(array("competition" => $oid))) != substr($parent, 4))
+				{
+					continue;
+				}
+				$evt_obj = obj($evt_oid);
+				$tree[$oid] = array(
+					"id" => "cmp_".$oid,
+					"name" => $obj->name(),
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $self_id,
+						"competition" => $oid,
+						"group" => $group,
+					)),
+				);
+			}
+		}
+
+		classload("core/icons");
+		$t = get_instance("vcl/treeview");
+		$t->start_tree(array(
+			"type" => TREE_DHTML,
+			"branch" => 1,
+			"tree_id" => "reg_tree",
+		));
+		foreach($tree as $oid => $data)
+		{
+			$t->add_item(0, array(
+				"id" => $data["id"],
+				"name" => $data["name"],
+				"url" => ($data["url"])?$data["url"]:"#",
+			));
+			if(substr($parent, 0, 3) != "evt")
+			{
+				$t->add_item($data["id"], array(
+					"id" => PI,
+				));
+			}
+		}
+
+		die($t->finalize_tree());
 	}
 }
 ?>

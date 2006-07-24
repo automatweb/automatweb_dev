@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_group.aw,v 1.2 2006/07/05 14:52:42 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_group.aw,v 1.3 2006/07/24 11:43:35 tarvo Exp $
 // scm_group.aw - V&otilde;istlusklass 
 /*
 
@@ -17,6 +17,7 @@
 @caption Vanusevahemik
 	@property age_from type=textbox size=5 parent=split_age
 	@caption Alates
+
 	@property age_to type=textbox size=5 parent=split_age
 	@caption Kuni
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.5 2006/07/20 10:32:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_event.aw,v 1.6 2006/07/24 11:43:35 tarvo Exp $
 // scm_event.aw - Spordiala 
 /*
 
@@ -16,7 +16,7 @@
 @property team_result_calc type=select
 @caption V&otilde;istkonna tulemuse arvutus
 
-@property result_type type=relpicker reltype=RELTYPE_RESULT_TYPE
+@property result_type type=relpicker reltype=RELTYPE_RESULT_TYPE editonly=1
 @caption Paremusj&auml;rjestuse t&uuml;&uuml;p
 
 @reltype RESULT_TYPE value=1 clid=CL_SCM_RESULT_TYPE

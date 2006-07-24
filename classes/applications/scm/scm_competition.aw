@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.6 2006/07/18 14:11:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.7 2006/07/24 11:43:35 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -10,30 +10,62 @@
 @default field=meta
 @default method=serialize
 
+@groupinfo sub_general caption="&Uuml;ldine" parent=general
+	@default group=sub_general
 
-@property scm_event type=relpicker reltype=RELTYPE_EVENT editonly=1
-@caption Spordiala
+	@property name type=textbox maxlength=255
+	@caption Nimi
 
-@property location type=relpicker reltype=RELTYPE_LOCATION editonly=1
-@caption Asukoht
+	@property scm_event type=relpicker reltype=RELTYPE_EVENT editonly=1
+	@caption Spordiala
 
-@property date type=date_select 
-@caption Kuup&auml;ev
+	@property location type=relpicker reltype=RELTYPE_LOCATION editonly=1
+	@caption Asukoht
 
-@property scm_tournament type=relpicker reltype=RELTYPE_TOURNAMENT editonly=1 multiple=1
-@caption V&otilde;istlussari
+	@layout time_split type=hbox width=250px group=sub_general
+	@caption Algus
 
-@property scm_score_calc type=relpicker reltype=RELTYPE_SCORE_CALC editonly=1
-@caption Punktis&uuml;steem
+	@property date_from type=date_select parent=time_split parent=time_split no_caption=1 store=no
+	@property time_from type=time_select parent=time_split parent=time_split no_caption=1 store=no
 
-@property scm_group type=relpicker reltype=RELTYPE_GROUP multiple=1 editonly=1
-@caption V&otilde;istlusgrupid
+	@property date_to type=date_select
+	@caption L&otilde;pp
 
-@property scm_group_box type=textarea cols=50 rows=6
-@caption Gruppide lisainfo
+	@property scm_tournament type=relpicker reltype=RELTYPE_TOURNAMENT editonly=1 multiple=1
+	@caption V&otilde;istlussari
 
-@property scm_group_consider type=textbox size=4
-@caption Igast grupist arvesse
+	@property scm_group type=relpicker reltype=RELTYPE_GROUP multiple=1 editonly=1
+	@caption V&otilde;istlusgrupid
+
+@groupinfo general_settings caption="M&auml;&auml;rangud" parent=general
+	@default group=general_settings
+
+	@property scm_score_calc type=relpicker reltype=RELTYPE_SCORE_CALC editonly=1
+	@caption Punktis&uuml;steem
+
+	@property scm_group_box type=textarea cols=50 rows=6
+	@caption Gruppide lisainfo
+
+	@property scm_group_consider type=textbox size=4
+	@caption Igast grupist arvesse
+
+	@property archive type=checkbox ch_value=1
+	@caption Arhiveeritud
+
+	@property register type=select
+	@caption Registreerumine
+
+	@property group_select_type type=chooser default=year
+	@caption V&otilde;istlusklassi valik
+	
+	@property evt_team_result_calc type=select store=no 
+	@caption V&otilde;istkonna tulemuse arvutus
+
+	@property evt_result_type type=select store=no
+	@caption Paremusj&auml;rjestuse t&uuml;&uuml;p
+
+	@property uniqe_nr type=checkbox
+	@caption Unikaalne rinnanumber
 
 @groupinfo map_gr caption="Kaart" submit=no
 	@property map type=text group=map_gr
@@ -43,9 +75,18 @@
 	@property photo type=text group=photo_gr
 	@caption Pilt kohast
 
-@groupinfo contestants caption="V&otilde;istlejad" submit=no
-	@property list type=table group=contestants no_caption=1
-	@caption V&otilde;istlejate nimekiri
+@groupinfo contestants caption="Osalejad" submit=no
+	@groupinfo manage_groups caption="V&otilde;istkonnad" parent=contestants
+		@default group=manage_groups
+
+		@property teams type=table no_caption=1
+		@caption Meeskondade nimekiri
+
+	@groupinfo manage_contestants caption="V&otilde;istlejad" parent=contestants
+		@default group=manage_contestants
+
+		@property contestants type=table no_caption=1
+		@caption V&otilde;istlejate nimekiri
 
 @groupinfo results caption="Tulemused" submit=no
 	@groupinfo view_results parent=results caption="Tulemused" submit=no
@@ -100,7 +141,7 @@ class scm_competition extends class_base
 				$prop["value"] = $this->_get_image($arr);
 			break;
 
-			case "list":
+			case "contestants":
 				$t = &$prop["vcl_inst"];
 				$this->_gen_cont_tbl(&$t);
 				foreach($this->get_contestants(array("competition" => $arr["obj_inst"]->id())) as $oid => $name)
@@ -233,6 +274,45 @@ class scm_competition extends class_base
 					$t->define_data($row);
 				}
 			break;
+
+			case "register":
+				$prop["options"] = array(
+					"0" => t("Avalik"),
+					"1" => t("Piiratud"),
+					"2" => t("Registreerumine l&otilde;ppenud"),
+				);
+			break;
+
+			case "group_select_type":
+				$prop["options"] = array(
+					"year" => t("S&uuml;nniaasta alusel"),
+					"age" => t("Vanuse alusel"),
+				);
+			break;
+
+			case "evt_result_type":
+				$o = obj($arr["obj_inst"]->id());
+				if(!$o->prop("scm_event"))
+				{
+					return PROP_IGNORE;
+				}
+			break;
+
+			case "evt_team_result_calc":
+				$o = obj($arr["obj_inst"]->id());
+				if(!($event = $o->prop("scm_event")))
+				{
+					return PROP_IGNORE;
+				}
+				elseif(($type = call_user_method("prop", obj($event), "type")) == "single" || $type == "multi_coll")
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			// to override original name prop
+			case "name":
+				$prop["value"] = $arr["obj_inst"]->name();
+			break;
 		};
 		return $retval;
 	}
@@ -354,6 +434,9 @@ class scm_competition extends class_base
 					}
 				}
 			break;
+			case "name":
+				$arr["obj_inst"]->set_name($prop["value"]);
+			break;
 		}
 		return $retval;
 	}	
@@ -361,6 +444,12 @@ class scm_competition extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+	}
+
+	function callback_pre_save($arr)
+	{
+		$d = array_merge($arr["request"]["date_from"], $arr["request"]["time_from"]);
+		$timestamp = mktime($d["hour"], $d["minute"], 0, $d["month"], $d["day"], $d["year"]);
 	}
 
 	/**
@@ -587,6 +676,13 @@ class scm_competition extends class_base
 			if set to true, only these competitions will be returned where $contestant hasn't signed in.
 		@param contestant optional type=oid
 			this is for using with $registered and $unregistered, sets the contestant who's competitions will be returned.
+		@param organizer optional type=oid
+			returns only the competitions created by given organizer
+		@param state type=string
+			3 options:
+			+ archive
+			+ current
+			+ all(default)
 		@comment
 			generates list of competitions.
 		@returns
@@ -599,9 +695,17 @@ class scm_competition extends class_base
 	**/
 	function get_competitions($arr = array())
 	{
-		$list = new object_list(array(
-			"class_id" => CL_SCM_COMPETITION,
-		));
+		$state = strlen($arr["state"])?$arr["state"]:0;
+		$ol_filt["class_id"] = CL_SCM_COMPETITION;
+		if($arr["state"] == "archive")
+		{
+			$ol_filt["archive"] = 1;
+		}
+		elseif($arr["state"] == "current")
+		{
+			$ol_filt["archive"] = 0;
+		}
+		$list = new object_list($ol_filt);
 		if(strlen($arr["contestant"]) && ($arr["unregistered"] || $arr["registered"]))
 		{
 			foreach($list->arr() as $oid => $obj)
@@ -620,6 +724,26 @@ class scm_competition extends class_base
 					$persons[] = $con->conn["to"];
 				}
 				if($arr["registered"] && !in_array($arr["contestant"], $persons))
+				{
+					$list->remove($oid);
+				}
+			}
+		}
+		if(strlen($arr["organizer"]))
+		{
+			$obj = obj($arr["organizer"]);
+			$conns = $obj->connections_from(array(
+				"type" => "RELTYPE_COMPETITION",
+				"class" => CL_SCM_COMPETITION,
+			));
+			foreach($conns as $data)
+			{
+				$o = $data->to();
+				$orgs[] = $o->id();;
+			}
+			foreach($list->arr() as $oid => $obj)
+			{
+				if(!in_array($oid, $orgs))
 				{
 					$list->remove($oid);
 				}

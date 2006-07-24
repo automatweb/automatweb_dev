@@ -1,6 +1,12 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="scm_team" folder="applications/scm" extends="class_base">
+		<action name="gen_tree_branch" all_args="1">
+			<function name="gen_tree_branch">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
-		

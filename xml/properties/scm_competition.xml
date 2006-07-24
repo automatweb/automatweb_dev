@@ -1,9 +1,19 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>sub_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <maxlength>255</maxlength>
+            <caption>Nimi</caption>
+      </property>
+      <property>
             <name>scm_event</name>
             <table>objects</table>
-            <group>general</group>
+            <group>sub_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -14,7 +24,7 @@
       <property>
             <name>location</name>
             <table>objects</table>
-            <group>general</group>
+            <group>sub_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -23,18 +33,40 @@
             <caption>Asukoht</caption>
       </property>
       <property>
-            <name>date</name>
+            <name>date_from</name>
             <table>objects</table>
-            <group>general</group>
+            <group>sub_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Kuup&amp;amp;auml;ev</caption>
+            <parent>time_split</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>time_from</name>
+            <table>objects</table>
+            <group>sub_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>time_select</type>
+            <parent>time_split</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>date_to</name>
+            <table>objects</table>
+            <group>sub_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <caption>L&amp;amp;otilde;pp</caption>
       </property>
       <property>
             <name>scm_tournament</name>
             <table>objects</table>
-            <group>general</group>
+            <group>sub_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -44,20 +76,9 @@
             <caption>V&amp;amp;otilde;istlussari</caption>
       </property>
       <property>
-            <name>scm_score_calc</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SCORE_CALC</reltype>
-            <editonly>1</editonly>
-            <caption>Punktis&amp;amp;uuml;steem</caption>
-      </property>
-      <property>
             <name>scm_group</name>
             <table>objects</table>
-            <group>general</group>
+            <group>sub_general</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -67,9 +88,20 @@
             <caption>V&amp;amp;otilde;istlusgrupid</caption>
       </property>
       <property>
+            <name>scm_score_calc</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SCORE_CALC</reltype>
+            <editonly>1</editonly>
+            <caption>Punktis&amp;amp;uuml;steem</caption>
+      </property>
+      <property>
             <name>scm_group_box</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
@@ -80,12 +112,70 @@
       <property>
             <name>scm_group_consider</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
             <size>4</size>
             <caption>Igast grupist arvesse</caption>
+      </property>
+      <property>
+            <name>archive</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Arhiveeritud</caption>
+      </property>
+      <property>
+            <name>register</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Registreerumine</caption>
+      </property>
+      <property>
+            <name>group_select_type</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <default>year</default>
+            <caption>V&amp;amp;otilde;istlusklassi valik</caption>
+      </property>
+      <property>
+            <name>evt_team_result_calc</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <caption>V&amp;amp;otilde;istkonna tulemuse arvutus</caption>
+      </property>
+      <property>
+            <name>evt_result_type</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <store>no</store>
+            <caption>Paremusj&amp;amp;auml;rjestuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>uniqe_nr</name>
+            <table>objects</table>
+            <group>general_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <caption>Unikaalne rinnanumber</caption>
       </property>
       <property>
             <name>map</name>
@@ -106,9 +196,20 @@
             <caption>Pilt kohast</caption>
       </property>
       <property>
-            <name>list</name>
+            <name>teams</name>
             <table>objects</table>
-            <group>contestants</group>
+            <group>manage_groups</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Meeskondade nimekiri</caption>
+      </property>
+      <property>
+            <name>contestants</name>
+            <table>objects</table>
+            <group>manage_contestants</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -146,6 +247,14 @@
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
+            <sub_general>
+                  <caption>&amp;amp;Uuml;ldine</caption>
+                  <parent>general</parent>
+            </sub_general>
+            <general_settings>
+                  <caption>M&amp;amp;auml;&amp;amp;auml;rangud</caption>
+                  <parent>general</parent>
+            </general_settings>
             <map_gr>
                   <caption>Kaart</caption>
                   <submit>no</submit>
@@ -155,9 +264,17 @@
                   <submit>no</submit>
             </photo_gr>
             <contestants>
-                  <caption>V&amp;amp;otilde;istlejad</caption>
+                  <caption>Osalejad</caption>
                   <submit>no</submit>
             </contestants>
+            <manage_groups>
+                  <caption>V&amp;amp;otilde;istkonnad</caption>
+                  <parent>contestants</parent>
+            </manage_groups>
+            <manage_contestants>
+                  <caption>V&amp;amp;otilde;istlejad</caption>
+                  <parent>contestants</parent>
+            </manage_contestants>
             <results>
                   <caption>Tulemused</caption>
                   <submit>no</submit>
@@ -204,5 +321,13 @@
                   <caption>V&amp;amp;otilde;istleja</caption>
             </CONTESTANT>
       </reltypes>
+      <layout>
+            <time_split>
+                  <type>hbox</type>
+                  <width>250px</width>
+                  <group>sub_general</group>
+                  <caption>Algus</caption>
+            </time_split>
+      </layout>
 </properties>
 

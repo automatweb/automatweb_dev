@@ -25,7 +25,8 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <relytpe>RELTYPE_RESULT_TYPE</relytpe>
+            <reltype>RELTYPE_RESULT_TYPE</reltype>
+            <editonly>1</editonly>
             <caption>Paremusj&amp;amp;auml;rjestuse t&amp;amp;uuml;&amp;amp;uuml;p</caption>
       </property>
       <classinfo>

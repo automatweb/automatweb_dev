@@ -20,18 +20,6 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>V&amp;amp;otilde;istkonnaliikmete t&amp;amp;otilde;&amp;amp;otilde;riistariba</caption>
-      </property>
-      <property>
-            <name>members_list</name>
-            <table>objects</table>
-            <group>members</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Liikmete nimekiri</caption>
       </property>
       <property>
             <name>members_unreg</name>
@@ -52,7 +40,28 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Registreerumise t&amp;amp;otilde;&amp;amp;otilde;riistariba</caption>
+      </property>
+      <property>
+            <name>members_tree</name>
+            <table>objects</table>
+            <group>registration</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>split_reg</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>members_list</name>
+            <table>objects</table>
+            <group>registration</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>split_reg</parent>
+            <store>no</store>
       </property>
       <classinfo>
             <syslog_type>ST_SCM_TEAM</syslog_type>
@@ -84,5 +93,12 @@
                   <clid>CL_SCM_COMPETITION</clid>
             </COMPETITION>
       </reltypes>
+      <layout>
+            <split_reg>
+                  <type>hbox</type>
+                  <width>15%:85%</width>
+                  <group>registration</group>
+            </split_reg>
+      </layout>
 </properties>
 
