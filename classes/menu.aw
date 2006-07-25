@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.164 2006/07/24 13:36:25 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.165 2006/07/25 10:03:44 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -8,7 +8,7 @@
 
 	@classinfo trans=1
 
-	@groupinfo general_sub caption="Üldine" parent=general
+	@groupinfo general_sub caption="&Uuml;ldine" parent=general
 
 		@property name type=textbox rel=1 trans=1 group=general_sub
 		@caption Nimi
@@ -35,10 +35,10 @@
 		@caption Vali programm
 
 
-	@groupinfo advanced_settings caption="Süvaseaded" parent=general
+	@groupinfo advanced_settings caption="S&uml;vaseaded" parent=general
 
 		@property type type=select group=advanced_settings table=menu field=type
-		@caption Menüü tüüp
+		@caption Men&uuml;&uuml; t&uuml;&uuml;p
 
 		@property objtbl_conf type=relpicker reltype=RELTYPE_OBJ_TABLE_CONF field=meta method=serialize group=advanced_settings
 		@caption Objektitabeli konf
@@ -63,9 +63,9 @@
 		@property users_only type=checkbox field=meta method=serialize group=users ch_value=1
 		@caption Ainult sisselogitud kasutajatele
 
-@groupinfo show caption=Näitamine
+@groupinfo show caption=N&auml;itamine
 
-	@groupinfo show_sub caption="Näitamine" parent=show
+	@groupinfo show_sub caption="N&auml;itamine" parent=show
 
 
 		@property link_behaviour type=chooser store=no multiple=1 group=show_sub
@@ -79,11 +79,11 @@
 
 
 		@property link type=textbox group=show_sub table=menu
-		@caption Menüü link
+		@caption Men&uuml;&uuml; link
 
 
 		@property show_restrictions type=chooser store=no multiple=1 group=show_sub
-		@caption Näitamine
+		@caption N&auml;itamine
 
 		@property frontpage type=checkbox table=objects field=meta method=serialize group=show_sub ch_value=1
 		@caption Esilehel
@@ -96,10 +96,10 @@
 		@caption Tingimused
 
 		@property hide_noact type=checkbox ch_value=1 group=show_sub table=menu
-		@caption Peida ära, kui selle kausta all aktiivseid dokumente ei ole
+		@caption Peida &auml;ra, kui selle kausta all aktiivseid dokumente ei ole
 
 		@property no_menus type=checkbox group=show_sub ch_value=1 table=menu
-		@caption Ilma menüüdeta
+		@caption Ilma men&uuml;&uuml;deta
 
 
 		@property panes type=chooser store=no multiple=1 group=show_sub
@@ -121,15 +121,15 @@
 		@caption Mitu viimast dokumenti
 
 		@property show_lead type=checkbox field=meta method=serialize group=doc_show ch_value=1
-		@caption Näita ainult leadi
+		@caption N&auml;ita ainult leadi
 
 		@property sort_by_name type=checkbox field=meta method=serialize group=doc_show ch_value=1
-		@caption Sorteeri nime järgi
+		@caption Sorteeri nime j&auml;rgi
 
-	@groupinfo doc_ord  caption="Dokumentide järjestamine" parent=show
+	@groupinfo doc_ord  caption="Dokumentide j&auml;rjestamine" parent=show
 
 		@property sorter type=table group=doc_ord table=menu
-		@caption Dokumentide järjestamine
+		@caption Dokumentide j&auml;rjestamine
 
 		property sort_by type=select table=objects field=meta method=serialize group=doc_ord
 		caption Dokumente j&auml;rjestatakse
@@ -140,15 +140,15 @@
 
 		@property ip type=table store=no group=ip no_caption=1
 
-@groupinfo look caption="Välimus"
+@groupinfo look caption="V&auml;limus"
 
-	@groupinfo look_sub caption="Välimus" parent=look
+	@groupinfo look_sub caption="V&auml;limus" parent=look
 
 		@property color type=colorpicker field=meta method=serialize group=look_sub
-		@caption Menüü värv
+		@caption Men&uuml;&uuml; v&auml;rv
 
 		@property color2 type=colorpicker field=meta method=serialize group=look_sub
-		@caption Menüü värv 2
+		@caption Men&uuml;&uuml; v&auml;rv 2
 
 		@property icon type=icon field=meta method=serialize group=look_sub 
 		@caption Ikoon
@@ -156,7 +156,7 @@
 		@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=look_sub  
 		@caption Vali ikoon
 
-	@groupinfo templates caption=Kujunduspõhjad parent=look
+	@groupinfo templates caption=Kujundusp&otilde;hjad parent=look
 
 		@property tpl_dir table=objects type=select field=meta method=serialize group=templates
 		@caption Template set
@@ -165,13 +165,13 @@
 		@caption Leadi template
 
 		@property tpl_view type=select group=templates table=menu
-		@caption Template dokumendi näitamiseks (pikk)
+		@caption Template dokumendi n&auml;itamiseks (pikk)
 
 		@property tpl_view_no_inherit type=checkbox group=templates table=menu ch_value=1
 		@caption Ei ole p&auml;ritav
 
 		@property tpl_lead type=select group=templates table=menu
-		@caption Template dokumendi näitamiseks (lühike)
+		@caption Template dokumendi n&auml;itamiseks (l&uuml;hike)
 
 		@property tpl_lead_no_inherit type=checkbox group=templates table=menu ch_value=1
 		@caption Ei ole p&auml;ritav
@@ -191,10 +191,10 @@
 		@caption Vali pilte
 
 		@property img_act type=relpicker reltype=RELTYPE_IMAGE field=meta method=serialize group=presentation
-		@caption Aktiivse menüü pilt
+		@caption Aktiivse men&uuml;&uuml; pilt
 
 		@property menu_images type=table field=meta method=serialize group=presentation store=no
-		@caption Menüü pildid
+		@caption Men&uuml;&uuml; pildid
 
 @groupinfo menus caption="Sisu seaded"
 
@@ -241,11 +241,11 @@
 		@caption Seosehaldur
 
 		@property seealso type=table group=relations store=no
-		@caption Menüüd, mille all see menüü on "vaata lisaks" menüü
-		@comment Nende menüüde lisamine ja eemaldamine käib läbi seostehalduri
+		@caption Men&uuml;&uuml;d, mille all see men&uuml;&uuml; on "vaata lisaks" men&uuml;&uuml;
+		@comment Nende men&uuml;&uuml;de lisamine ja eemaldamine k&auml;ib l&auml;bi seostehalduri
 
 		@property seealso_order type=textbox group=relations size=3 table=objects field=meta method=serialize
-		@caption Järjekorranumber (vaata lisaks)
+		@caption J&auml;rjekorranumber (vaata lisaks)
 
 	@groupinfo brothers caption=Vennastamine parent=menus
 
@@ -255,7 +255,7 @@
 	@groupinfo docs_from caption="Sisu asukoht" parent=menus
 
 		@property sss type=table store=no group=docs_from
-		@caption Menüüd, mille alt viimased dokumendid võetakse
+		@caption Men&uuml;&uuml;d, mille alt viimased dokumendid v&otilde;etakse
 
 	@groupinfo seealso_docs caption="Vaata lisaks dokumendid" parent=menus
 
@@ -268,7 +268,7 @@
 		@caption Perioodiline
 
 		@property pers type=relpicker multiple=1 size=5 table=objects field=meta method=serialize group=periods reltype=RELTYPE_PERIOD
-		@caption Perioodid, mille alt dokumendid võetakse
+		@caption Perioodid, mille alt dokumendid v&otilde;etakse
 
 		@property all_pers type=checkbox ch_value=1 table=objects field=meta method=serialize group=periods
 		@caption K&otilde;ikide perioodide alt
@@ -277,20 +277,20 @@
 		@caption Dokumente perioodist
 
 		@property show_periods type=checkbox ch_value=1 group=periods table=objects field=meta method=serialize
-		@caption Näita perioode
+		@caption N&auml;ita perioode
 
 		@property show_period_count type=textbox size=4 group=periods table=objects field=meta method=serialize
 		@caption Mitu viimast perioodi
 
-	@groupinfo keywords caption=Võtmesõnad parent=menus
+	@groupinfo keywords caption=V&otilde;tmes&otilde;nad parent=menus
 
 		@property kw_tb type=toolbar no_caption=1 store=no group=keywords
 
 		property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
-		caption AW Märksõnad
+		caption AW M&auml;rks&otilde;nad
 
 		@property grkeywords2 type=keyword_selector field=meta method=serialize group=keywords reltype=RELTYPE_KEYWORD
-		@caption AW Märksõnad
+		@caption AW M&auml;rks&otilde;nad
 
 		@property keywords type=textbox field=meta method=serialize group=keywords
 		@caption META keywords
@@ -322,22 +322,22 @@
 	@tableinfo menu index=id master_table=objects master_index=oid
 
 	@reltype PICTURES_MENU value=1 clid=CL_MENU
-	@caption võta pildid menüült
+	@caption v&otilde;ta pildid men&uuml;&uuml;lt
 
 	@reltype SHOW_SUBFOLDERS_MENU value=2 clid=CL_MENU
-	@caption võta alamkasutad menüült
+	@caption v&otilde;ta alamkasutad men&uuml;&uuml;lt
 
 	@reltype SHOW_AS_CALENDAR value=3 clid=CL_PLANNER
-	@caption võta objekte kalendrist
+	@caption v&otilde;ta objekte kalendrist
 
 	@reltype SHOW_AS_LAYOUT value=4 clid=CL_LAYOUT
-	@caption kasuta saidi näitamisel layouti
+	@caption kasuta saidi n&auml;itamisel layouti
 
 	@reltype SEEALSO value=5 clid=CL_MENU
 	@caption vaata lisaks
 
 	@reltype IP value=6 clid=CL_IPADDRESS
-	@caption IP aadress ligipääsu piiramiseks
+	@caption IP aadress ligip&auml;&auml;su piiramiseks
 
 	@reltype ACL_GROUP value=7 clid=CL_GROUP
 	@caption Kasutajagrupp
@@ -547,8 +547,8 @@ class menu extends class_base
 
 			case "show_conditions":
 				$data["options"] = array(
-					"hide_noact" => "Peida ära, kui selle kausta all aktiivseid dokumente ei ole",
-					"no_menus" => "Ilma menüüdeta",
+					"hide_noact" => "Peida &auml;ra, kui selle kausta all aktiivseid dokumente ei ole",
+					"no_menus" => "Ilma men&uuml;&uuml;deta",
 				);
 				$data["value"]["hide_noact"] = $ob->prop("hide_noact");
 				$data["value"]["no_menus"] = $ob->prop("no_menus");
@@ -639,11 +639,11 @@ class menu extends class_base
 				));
 				$t->define_field(array(
 					"name" => "field",
-					"caption" => t("Väli"),
+					"caption" => t("V&auml;li"),
 				));
 				$t->define_field(array(
 					"name" => "order",
-					"caption" => t("Järjekord"),
+					"caption" => t("J&auml;rjekord"),
 				));
 
 				$fields = array(
@@ -949,7 +949,7 @@ class menu extends class_base
 			"multiple" => 1,
 			"size" => 15,
 			"name" => "ex_menus",
-			"caption" => t("Vali menüüd"),
+			"caption" => t("Vali men&uuml;&uuml;d"),
 			"options" => $submenus,
 			// this selects all choices
 			"selected" => array_flip($submenus),
@@ -959,7 +959,7 @@ class menu extends class_base
 			"type" => "checkbox",
 			"name" => "allactive",
 			"value" => 1,
-			"caption" => t("Märgi kõik menüüd aktiivseks"),
+			"caption" => t("M&auml;rgi k&otilde;ik men&uuml;&uuml;d aktiivseks"),
 		);
 		$nodes[] = $tmp;
 		$tmp = array(
@@ -1030,7 +1030,7 @@ class menu extends class_base
 			"type" => "checkbox",
 			"name" => "pm_url_menus",
 			"value" => 1,
-			"caption" => t("Meetodi väljundi kuvamisel näidatakse menüüsid"),
+			"caption" => t("Meetodi v&auml;ljundi kuvamisel n&auml;idatakse men&uuml;&uuml;sid"),
 			"ch_value" => $arr["obj_inst"]->meta("pm_url_menus"),
 		);
 				
