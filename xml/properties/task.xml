@@ -158,7 +158,39 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Tunni hind</caption>
+            <parent>hr_price_layout</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>hr_price_currency</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>hr_price_layout</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>deal_price</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>deal_price_layout</parent>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
+            <name>deal_price_currency</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>deal_price_layout</parent>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>content</name>
@@ -558,6 +590,16 @@
                   <group>general</group>
                   <caption>Kestab terve p&amp;auml;eva</caption>
             </personal>
+            <hr_price_layout>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <caption>Tunnihind</caption>
+            </hr_price_layout>
+            <deal_price_layout>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <caption>Kokkuleppehind</caption>
+            </deal_price_layout>
       </layout>
 </properties>
 

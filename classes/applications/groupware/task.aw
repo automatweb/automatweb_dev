@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.117 2006/07/12 10:35:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.118 2006/07/25 13:48:44 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -37,7 +37,6 @@
 @layout personal type=hbox
 @caption Kestab terve päeva
 
-
 	@property whole_day type=checkbox ch_value=1 field=meta method=serialize parent=personal no_caption=1
 
 	@property is_personal type=checkbox ch_value=1 field=meta method=serialize parent=personal no_caption=1
@@ -60,8 +59,20 @@ layout num_hrs type=hbox
 	@property num_hrs_to_cust type=textbox size=5 field=meta method=serialize
 	@caption Tundide arv kliendile
 
-@property hr_price type=textbox size=5 field=meta method=serialize 
-@caption Tunni hind
+@layout hr_price_layout type=hbox
+@caption Tunnihind
+	
+	@property hr_price type=textbox size=5 field=meta method=serialize parent=hr_price_layout no_caption=1
+
+	@property hr_price_currency type=select field=meta method=serialize parent=hr_price_layout no_caption=1
+
+@layout deal_price_layout type=hbox
+@caption Kokkuleppehind
+	
+	@property deal_price type=textbox size=5 field=meta method=serialize parent=deal_price_layout no_caption=1
+
+	@property deal_price_currency type=select field=meta method=serialize parent=deal_price_layout no_caption=1
+
 
 @property content type=textarea cols=80 rows=30 field=description table=planner
 @caption Sisu
@@ -357,6 +368,32 @@ class task extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				break;
+			
+			case "hr_price_currency":
+				$curr_object_list = new object_list(array(
+					"class_id" => CL_CURRENCY,
+				));
+				foreach($curr_object_list->arr() as $curr)
+				{
+					$data["options"][$curr->id()] = $curr->name();
+				}
+				$u = get_instance(CL_USER);
+				$company = obj($u->get_current_company());
+				if(!$data["value"])$data["value"] = $company->prop("currency");
+				break;
+
+			case "deal_price_currency":
+				$curr_object_list = new object_list(array(
+					"class_id" => CL_CURRENCY,
+				));
+				foreach($curr_object_list->arr() as $curr)
+				{
+					$data["options"][$curr->id()] = $curr->name();
+				}
+				$u = get_instance(CL_USER);
+				$company = obj($u->get_current_company());
+				if(!$data["value"])$data["value"] = $company->prop("currency");
 				break;
 
 			case "content":
