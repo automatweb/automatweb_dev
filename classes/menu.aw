@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.165 2006/07/25 10:03:44 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.166 2006/07/25 13:27:21 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -35,7 +35,7 @@
 		@caption Vali programm
 
 
-	@groupinfo advanced_settings caption="S&uml;vaseaded" parent=general
+	@groupinfo advanced_settings caption="S&uuml;vaseaded" parent=general
 
 		@property type type=select group=advanced_settings table=menu field=type
 		@caption Men&uuml;&uuml; t&uuml;&uuml;p
