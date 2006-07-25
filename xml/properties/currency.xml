@@ -35,9 +35,22 @@
             <method>serialize</method>
             <caption>Peenraha&amp;amp;uuml;hiku nimetus</caption>
       </property>
+      <property>
+            <name>rates</name>
+            <group>rates</group>
+            <type>callback</type>
+            <callback>callback_get_rates</callback>
+            <field>rates</field>
+            <caption>Kaustad kust otsida</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CURRENCY</syslog_type>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <rates>
+                  <caption>Kursid</caption>
+            </rates>
+      </groupinfo>
 </properties>
 
