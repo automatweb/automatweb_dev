@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.41 2006/07/20 13:40:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.42 2006/07/25 14:49:24 markop Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -2010,6 +2010,7 @@ exit_function("jigaboo");
 			"owp" => $search_owp,
 			"sort_by" => $search_sort_by,
 			"sort_ord" => $search_sort_ord,
+			"per_page" => $arr["per_page"],
 		);
 		return $args;
 	}
