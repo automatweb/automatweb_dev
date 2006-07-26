@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.118 2006/07/25 13:48:44 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.119 2006/07/26 13:18:33 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1923,7 +1923,7 @@ class task extends class_base
 				);
 			}
 		}
-		
+				
 		// add other expenses rows
 		foreach(safe_array($task->meta("other_expenses")) as $idx => $oe)
 		{
@@ -1942,7 +1942,57 @@ class task extends class_base
 			);
 		}
 		
+		$company_curr = $this->get_company_currency();
+		$company_curr_obj = obj($company_curr);
+		foreach($rows as $id => $row)// kui igasugu valuuta väljad on täidetud ja arve on tehtud teises valuutas,... siis tuleks summad ümber arvestada
+		{
+			if(is_oid($id))$row_obj = obj($id);
+			else continue;
+			if(
+				   $row_obj->prop("hr_price_currency")
+				&& !($row_obj->prop("hr_price_currency") == $company_curr)
+				&& is_oid($task->prop("hr_price_currency"))
+			)
+			{	
+				$changed = 0;
+				foreach($company_curr_obj->meta("rates") as $rate)
+				{
+					if($rate["currency"] == $row_obj->prop("hr_price_currency") && $rate["rate"] && $this->check_date($row_obj->prop("deadline"), $rate["start_date"],$rate["end_date"]))
+					{
+						$rows[$id]["sum"] = $rows[$id]["sum"] * $rate["rate"];
+						$changed = 1;
+					}
+				}				
+				if($changed) continue; //et kui ei saanud vahetuskurssi asutuse valuuta juurest, siis vaatab teisest
+				$curr_obj = obj($row_obj->prop("hr_price_currency"));
+				foreach($curr_obj->meta("rates") as $rate)
+				{
+					if($rate["currency"] == $company_curr && $rate["rate"] && $this->check_date($row_obj->prop("deadline"), $rate["start_date"],$rate["end_date"]))
+					{
+						$rows[$id]["sum"] = $rows[$id]["sum"]/$rate["rate"];
+						$changed = 1;
+					}
+				}
+			}
+		}
 		return $rows;
+	}
+
+	function check_date($date , $start , $end)
+	{
+		extract($date);
+		$start = (mktime(0, 0, 0, $start["month"], $start["day"], $start["year"]));
+		$end = (mktime(0, 0, 0, $end["month"], $end["day"], $end["year"]));
+		if($date > $start && $date < $end)
+		return true;
+		else return false;	
+	}
+
+	function get_company_currency()
+	{
+		$u = get_instance(CL_USER);
+		$company = obj($u->get_current_company());
+		return $company->prop("currency");
 	}
 
 	/**
