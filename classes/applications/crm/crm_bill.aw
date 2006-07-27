@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.67 2006/07/14 12:56:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.68 2006/07/27 12:39:36 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -344,6 +344,11 @@ class crm_bill extends class_base
 			"caption" => t("Isik")
 		));
 		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Jrk"),
+		));
+		
+		$t->define_field(array(
 			"name" => "has_tax",
 			"caption" => t("+KM?"),
 		));
@@ -467,7 +472,13 @@ class crm_bill extends class_base
 					"url" => $this->mk_my_orb("do_search", array("pn" => "rows[$id][prod]", "clid" => CL_SHOP_PRODUCT, "tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
 					"caption" => t("Vali")
 				)),
-				"sel" => html::checkbox(array(
+				"jrk" => html::textbox(array(
+					"name" => "rows[$id][jrk]",
+					"value" => $t_inf["jrk"],
+					"size" => 3
+				)),
+	
+			"sel" => html::checkbox(array(
 					"name" => "sel_rows[]",
 					"value" => $id
 				)),
@@ -745,6 +756,7 @@ class crm_bill extends class_base
 		$tax_rows = array();
 
 		$_no_prod_idx = -1;
+
 		foreach($brows as $row)
 		{
 			if ($row["is_oe"])
@@ -878,7 +890,6 @@ class crm_bill extends class_base
 				$cur_pr = $this->num($row["price"]);
 			}
 			$tax_rows[$tax_rate] += $cur_tax;
-
 			$this->vars(array(
 				"unit" => $row["unit"],
 				"amt" => $row["amt"],
@@ -894,7 +905,7 @@ class crm_bill extends class_base
 			$sum += ($cur_tax+$cur_sum);
 		}
 
-		usort($rs, array(&$this, "__br_sort"));
+//		usort($rs, array(&$this, "__br_sort"));
 		foreach($rs as $idx => $ida)
 		{
 			$rs[$idx] = $ida["str"];
@@ -1006,6 +1017,7 @@ class crm_bill extends class_base
 				"sum" => str_replace(",", ".", $row->prop("amt")) * str_replace(",", ".", $row->prop("price")),
 				"km_code" => $kmk,
 				"unit" => $row->prop("unit"),
+				"jrk" => $row->meta("jrk"),
 				"is_oe" => $row->prop("is_oe"),
 				"has_tax" => $row->prop("has_tax"),
 				"date" => $row->prop("date"),
@@ -1015,6 +1027,13 @@ class crm_bill extends class_base
 			$inf[] = $rd;
 		}
 		usort($inf, array(&$this, "__br_sort"));
+
+		//sotrimine järjekorranumbri järgi
+		foreach ($inf as $key => $row) {
+		   $volume[$key]  = $row['jrk'];
+		   $edition[$key] = $row;
+		}
+		array_multisort($volume, SORT_ASC, $edition, SORT_DESC, $inf);
 		return $inf;
 	}
 
@@ -1262,7 +1281,7 @@ class crm_bill extends class_base
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
 		}
-		usort($rs, array(&$this, "__br_sort"));
+	//	usort($rs, array(&$this, "__br_sort"));
 		foreach($rs as $idx => $ida)
 		{
 			$rs[$idx] = $ida["str"];
@@ -1425,6 +1444,7 @@ class crm_bill extends class_base
 
 			$o->set_prop("date", $row["date"]);
 			$o->set_prop("unit", $row["unit"]);
+			$o->set_meta("jrk", $row["jrk"]);
 			$o->set_prop("price", str_replace(",", ".", $row["price"]));
 			$o->set_prop("amt", str_replace(",", ".", $row["amt"]));
 			$o->set_prop("sum", str_replace(",", ".", $row["sum"]));
@@ -1451,11 +1471,18 @@ class crm_bill extends class_base
 	function add_row($arr)
 	{
 		$bill = obj($arr["id"]);
-		
+		$rows = $this->get_bill_rows(obj($arr["id"]));
+		$jrk = 0;
+		foreach($rows as $row)
+		{
+			if($row["jrk"] > $jrk-10) $jrk = $row["jrk"]+10;
+		}
+
 		$row = obj();
 		$row->set_parent($bill->id());
 		$row->set_class_id(CL_CRM_BILL_ROW);
 		$row->set_prop("date", date("d.m.Y", time()));
+		$row->set_meta("jrk" , $jrk);
 		$row->save();
 
 		$bill->connect(array(
@@ -1488,6 +1515,7 @@ class crm_bill extends class_base
 				$br->set_prop("prod", $row["prod"]);
 				$br->set_prop("price", $row["price"]);
 				$br->set_prop("unit", $row["unit"]);
+				$br->set_meta("jrk", $row["jrk"]);
 				$br->set_prop("is_oe", $row["is_oe"]);
 				$br->set_prop("has_tax", $row["has_tax"]);
 				$br->set_prop("date", date("d.m.Y", $row["date"]));
