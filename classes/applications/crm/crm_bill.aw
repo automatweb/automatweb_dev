@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.68 2006/07/27 12:39:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.69 2006/07/27 12:45:13 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -343,11 +343,7 @@ class crm_bill extends class_base
 			"name" => "person",
 			"caption" => t("Isik")
 		));
-		$t->define_field(array(
-			"name" => "jrk",
-			"caption" => t("Jrk"),
-		));
-		
+	
 		$t->define_field(array(
 			"name" => "has_tax",
 			"caption" => t("+KM?"),
@@ -416,7 +412,13 @@ class crm_bill extends class_base
 				}
 			}
 			$t->define_data(array(
-				"name" => html::textbox(array(
+
+			
+			"name" => html::textbox(array(
+					"name" => "rows[$id][jrk]",
+					"value" => $t_inf["jrk"],
+					"size" => 3
+				)).html::textbox(array(
 					"name" => "rows[$id][comment]",
 					"value" => $t_inf["comment"],
 					"size" => 45
@@ -472,13 +474,7 @@ class crm_bill extends class_base
 					"url" => $this->mk_my_orb("do_search", array("pn" => "rows[$id][prod]", "clid" => CL_SHOP_PRODUCT, "tbl_props" => array("name", "comment", "tax_rate")), "popup_search"),
 					"caption" => t("Vali")
 				)),
-				"jrk" => html::textbox(array(
-					"name" => "rows[$id][jrk]",
-					"value" => $t_inf["jrk"],
-					"size" => 3
-				)),
-	
-			"sel" => html::checkbox(array(
+				"sel" => html::checkbox(array(
 					"name" => "sel_rows[]",
 					"value" => $id
 				)),
