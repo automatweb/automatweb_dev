@@ -22,18 +22,6 @@
             <caption>Firmast</caption>
       </property>
       <property>
-            <name>teams</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_TEAM</reltype>
-            <multiple>1</multiple>
-            <size>5</size>
-            <caption>Meeskonnad</caption>
-      </property>
-      <property>
             <name>reg_tbl</name>
             <table>objects</table>
             <group>register</group>
@@ -128,11 +116,6 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>V&amp;amp;otilde;istleja</caption>
             </CONTESTANT>
-            <TEAM>
-                  <value>2</value>
-                  <clid>CL_SCM_TEAM</clid>
-                  <caption>meeskond</caption>
-            </TEAM>
       </reltypes>
 </properties>
 

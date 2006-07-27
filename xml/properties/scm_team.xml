@@ -1,17 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>competitions</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_COMPETITION</reltype>
-            <multiple>1</multiple>
-            <caption>Osaletud v&amp;amp;otilde;istlused</caption>
-      </property>
-      <property>
             <name>members_tb</name>
             <table>objects</table>
             <group>members</group>
@@ -20,6 +9,29 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
+            <caption>Liikemete halduse t&amp;amp;ouml;&amp;amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>members_tbl</name>
+            <table>objects</table>
+            <group>members</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Liikmete tabel</caption>
+      </property>
+      <property>
+            <name>search_result</name>
+            <table>objects</table>
+            <group>members</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Otsingutulemuste hoidja</caption>
       </property>
       <property>
             <name>members_unreg</name>
@@ -88,10 +100,11 @@
             </registered>
       </groupinfo>
       <reltypes>
-            <COMPETITION>
-                  <value>1</value>
-                  <clid>CL_SCM_COMPETITION</clid>
-            </COMPETITION>
+            <SCM_TEAM_MEMBER>
+                  <value>2</value>
+                  <clid>CL_SCM_CONTESTANT</clid>
+                  <caption>V&amp;amp;otilde;istkonna liige</caption>
+            </SCM_TEAM_MEMBER>
       </reltypes>
       <layout>
             <split_reg>

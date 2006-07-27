@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.3 2006/07/24 11:43:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.4 2006/07/27 23:32:14 tarvo Exp $
 // scm_team.aw - Meeskond 
 /*
 
@@ -10,13 +10,18 @@
 @default field=meta
 @default method=serialize
 
-@property competitions type=relpicker reltype=RELTYPE_COMPETITION multiple=1
-@caption Osaletud v&otilde;istlused
 
 @groupinfo members caption="Liikmed"
 	@default group=members
 	
 	@property members_tb type=toolbar no_caption=1
+	@caption Liikemete halduse t&ouml;&ouml;riistariba
+
+	@property members_tbl type=table no_caption=1
+	@caption Liikmete tabel
+
+	@property search_res type=hidden name=search_result store=no no_caption=1
+	@caption Otsingutulemuste hoidja
 
 	@property members_unreg type=submit
 	@caption Eemalda v&otilde;istkonnast
@@ -32,9 +37,9 @@
 
 	@groupinfo registered caption="V&otilde;istlused" caption="V&otilde;istlused" parent=competitions
 	
-
 	
-@reltype COMPETITION value=1 clid=CL_SCM_COMPETITION
+@reltype SCM_TEAM_MEMBER value=2 clid=CL_SCM_CONTESTANT
+@caption V&otilde;istkonna liige
 */
 
 class scm_team extends class_base
@@ -56,18 +61,45 @@ class scm_team extends class_base
 			//-- get_property --//
 			case "members_tb":
 				$tb = &$prop["vcl_inst"];
+
+				$url = $this->mk_my_orb("new",array(
+					"parent" => $arr["obj_inst"]->id(),
+					"alias_to" => $arr["obj_inst"]->id(),
+					"class" => "scm_contestant",
+					"reltype" => 2,
+					"id" => $arr["obj_inst"]->id(),
+					"return_url" => get_ru(),
+				));
+
 				$tb->add_button(array(
 					"name" => "add_member",
 					"tooltip" => t("Lisa liige"),
 					"img" => "new.gif",
+					"url" => $url,
 				));
-				$tb->add_button(array(
-					"name" => "search_member",
-					"tooltip" => t("Otsi v&otilde;istlejaid"),
-					"img" => "search.gif",
+				$popup_search = get_instance("vcl/popup_search");
+				$search_butt = $popup_search->get_popup_search_link(array(
+					"pn" => "search_result",
+					"clid" => CL_SCM_CONTESTANT,
 				));
+				$prop["vcl_inst"]->add_cdata($search_butt);
 			break;
 			
+			case "members_tbl":
+				$t = &$prop["vcl_inst"];
+				$this->_gen_members_tbl(&$t);
+				foreach($this->get_team_members(array("team" => $arr["obj_inst"]->id())) as $oid => $obj)
+				{
+					$inst = get_instance(CL_SCM_CONTESTANT);
+					$pers = obj($inst->get_contestant_person(array("contestant" => $oid)));
+					$t->define_data(array(
+						"name" => $obj->name(),
+						"sex" => ($pers->prop("gender") == 1)?t("Mees"):t("Naine"),
+						"rem_contestant" => $oid,
+					));
+				}
+			break;
+
 			case "registration_tb":
 				$tb = &$prop["vcl_inst"];
 				$tb->add_button(array(
@@ -99,28 +131,43 @@ class scm_team extends class_base
 			break;
 
 			case "members_list":
-				$t = &$prop["vcl_inst"];
-				$t->define_field(array(
-					"name" => "contestant",
-					"caption" => t("Liige"),
-					"sortable" => true,
-				));
-				$t->define_field(array(
-					"name" => "sex",
-					"caption" => t("sugu"),
-					"sortable" => true,
-				));
-				$t->define_field(array(
-					"name" => "birthday",
-					"caption" => t("S&uuml;nniaeg"),
-				));
-				$t->define_chooser(array(
-					"name" => "unreg",
-					"field" => "unreg",
-				));
-
-				foreach($this->get_team_members(array("team" => $arr["obj_inst"]->id())) as $oid => $obj)
+				if(!($competition = $arr["request"]["competition"]))
 				{
+					$prop["value"] = t("Palun vali v&otilde;istlus");
+				}
+				$t = &$prop["vcl_inst"];
+				$this->_gen_members_reg_tbl(&$t);
+				$comp = obj($competition);
+				$t->define_header(sprintf(t("V&otilde;istluse '%s' haldamine"), $comp->name()));
+
+				$inst = get_instance(CL_SCM_COMPETITION);
+				$cont_inst = get_instance(CL_SCM_CONTESTANT);
+				$contestants = array_keys($inst->get_contestants(array("competition" => $competition)));
+				$members = $this->get_team_members(array("team" => $arr["obj_inst"]->id()));
+
+				$grps = $inst->get_groups(array(
+					"competition" => $competition
+				));
+				foreach($grps as $gr)
+				{
+					$o = obj($gr);
+					$gr_options[$gr] = $o->name();
+				}
+				foreach($members as $oid => $obj)
+				{
+					$reg = (in_array($oid, $contestants))?true:false;
+					if($reg)
+					{
+						$c = new connection();
+						$conns = $c->find(array(
+							"from" => $competition,
+							"to" => $oid,
+						));
+						// siin ta tegelikult ei peaks esimest võtma vaid mingi funktsioon peaks otsima kas ta on selle tiimiga seotud.. vist??.. sest ta võib olla niisama üksiküritaja ka ju. vot vot.. ja kui ongi üksiküritaja, siis peaks siit loop'ist välja minema. samas see get_team_members võiks kohe selle välja raalida ja õige data ka kaasa anda!!! 
+						$id = key($conns);
+						$c = new connection($id);
+						$extra_data = aw_unserialize($c->prop("data"));
+					}
 					$url = $this->mk_my_orb("change",array(
 						"class" => "scm_contestant",
 						"id" => $oid,
@@ -131,9 +178,30 @@ class scm_team extends class_base
 						"caption" => $obj->name(),
 					));
 
+					$un = ($reg)?"un":"";
+					$chbox_js_click = "javascript:if(getElementById(\"group_".$oid."\").disabled) getElementById(\"group_".$oid."\").disabled=false; else getElementById(\"group_".$oid."\").disabled=true;";
+					$chbox = html::checkbox(array(
+						"name" => $un."reg[".$competition."][".$oid."]",
+						"checked" => $reg,
+						"value" => "-1",
+						"onclick" => $chbox_js_click,
+					));
+					$groups = array(
+						"name" => "gr[".$oid."]",
+						"disabled" => !$reg,
+						"id" => "group_".$oid,
+						"options" => $gr_options,
+						"multiple" => 1,
+						"selected" => $extra_data["groups"],
+						"size" => 3,
+					);
+					$p_obj = obj($cont_inst->get_contestant_person(array("contestant" => $oid)));
 					$t->define_data(array(
 						"contestant" => $link,
-						"unreg" => $oid,
+						"registered" => $chbox,
+						"group" => html::select($groups),
+						"sex" => ($p_obj->prop("gender") == 1)?t("Mees"):t("Naine"),
+						"birthday" => (!($s = $p_obj->prop("birthday")) || $s < 0)?t("Pole m&auml;&auml;ratud"):$s,
 					));
 				}
 			break;
@@ -148,9 +216,68 @@ class scm_team extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "members_tbl":
+				$request = $arr["request"];
+
+				// otsingust tulevate liikmete sidumine meeskonna liikmeks
+				$sr = (strlen($request["search_result"]))?split(",", $request["search_result"]):NULL;
+				$list = array_keys($this->get_team_members($arr["obj_inst"]->id()));
+				foreach($sr as $contestant)
+				{
+					if(!in_array($contestant, $list))
+					{
+						$arr["obj_inst"]->connect(array(
+							"type" => "RELTYPE_SCM_TEAM_MEMBER",
+							"to" => $contestant,
+						));
+					}
+				}
+			break;
+
+			case "members_unreg":
+				$rem = count($r = $arr["request"]["rem"])?$r:false;
+				foreach($rem as $contestant)
+				{
+					$arr["obj_inst"]->disconnect(array(
+						"from" => $contestant,
+					));
+				}
+			break;
 		}
 		return $retval;
 	}	
+
+	function callback_pre_save($arr)
+	{
+		arr($arr);
+		die();
+		$unreg = $arr["request"]["unreg"];
+		$reg = $arr["request"]["reg"];
+		$groups = $arr["request"]["gr"];
+		// registering new competitors
+		foreach($reg as $competition => $data)
+		{
+			foreach(array_keys($data) as $contestant)
+			{
+				$extra_data = array(
+					"team" => $arr["obj_inst"]->id(),
+					"groups" => $groups[$contestant],
+					"competition" => $competition,
+					"contestant" => $contestant,
+				);
+
+				$obj = obj($competition);
+				// well, this is where i need to connect the contestant to competition and add some extra data to the connection data property.
+				$c = new connection(array(
+					"from" => $competition,
+					"to" => $contestant,
+					"reltype" => 6,
+					"data" => aw_serialize($extra_data, SERIALIZE_NATIVE),
+				));
+				$c->save();
+			}
+		}
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -173,6 +300,28 @@ class scm_team extends class_base
 	}
 
 //-- methods --//
+
+	/**
+		@param team
+		@param contestant_id
+		@param groups
+		@param new optional type=oid
+			default is true.
+			if is true, no connection is loaded and the data given is returned as must.
+			if an connection object oid is given.. then this connection is loaded and old extra info is overwritten.. new data is returned
+		@comment
+			generates connections extra info to put to the RELTYPE_CONTESTANT relations..
+	**/
+	function set_relation_data($arr)
+	{
+		return aw_serialize($arr);
+	}
+	function get_relation_data($oid)
+	{
+		$c = new connection($oid);
+		return $c->prop("data");
+	}
+
 	/**
 	**/
 	function get_teams($arr = array())
@@ -204,17 +353,18 @@ class scm_team extends class_base
 	}
 
 	/**
+		@param team required type=oid
 	**/
 	function get_team_members($arr = array())
 	{
-		$cont = get_instance(CL_SCM_CONTESTANT);
-		foreach($cont->get_contestants() as $oid => $obj)
+		$c =  new connection();
+		$conns = $c->find(array(
+			"from" => $arr["team"],
+			"to.class_id" => CL_SCM_CONTESTANT,
+		));
+		foreach($conns as $data)
 		{
-			$teams = $obj->prop("teams");
-			if(in_array($arr["team"], $teams))
-			{
-				$ret[$oid] = $obj;
-			}
+			$ret[$data["to"]] = obj($data["to"]);
 		}
 		return $ret;
 	}
@@ -226,7 +376,7 @@ class scm_team extends class_base
 	{
 		$inst = get_instance(CL_SCM_ORGANIZER);
 		classload("core/icons");
-		foreach($inst->get_organizers() as $oid => $obj)
+		foreach($inst->get_organizers(array("only_with_competitions" => true)) as $oid => $obj)
 		{
 			$t->add_item(0, array(
 				"id" => "org_".$oid,
@@ -258,16 +408,31 @@ class scm_team extends class_base
 			$comps = $inst->get_competitions(array("organizer" => ($organizer = substr($parent, 4))));
 			foreach($comps as $oid => $obj)
 			{
-				$evt = $inst->get_event(array("competition" => $oid));
+				$evt = ($s = $inst->get_event(array("competition" => $oid)))?$s:false;
 				if(in_array($evt, $evts))
 				{
 					continue;
 				}
-				$evts[] = $evt;
-				$evt_obj = obj($evt);
-				$tree[$oid] = array(
-					"id" => "evt_".$evt.".org_".$organizer,
-					"name" => $evt_obj->name(),
+				if($evt)
+				{
+					$evts[] = $evt;
+					$evt_obj = obj($evt);
+					$tree[] = array(
+						"id" => "evt_".$evt.".org_".$organizer,
+						"name" => $evt_obj->name(),
+					);
+				}
+				else
+				{
+					$no_evts[] = $oid;
+				}
+			}
+			// for competitions where the event hasn't specified yet.. oh god i hate this treeview thingie, "someone" should write it to ajax!!
+			if(count($no_evts))
+			{
+				$tree[] = array(
+					"id" => "evt_no.org_".$organizer,
+					"name" => t("Spordiala m&auml;&auml;ramata"),
 				);
 			}
 		}
@@ -277,12 +442,11 @@ class scm_team extends class_base
 			$comps = $inst->get_competitions(array("organizer" => substr($split[1], 4)));
 			foreach($comps as $oid => $obj)
 			{
-				if(($evt_oid = $inst->get_event(array("competition" => $oid))) != substr($parent, 4))
+				if(($evt_oid = ($s = $inst->get_event(array("competition" => $oid)))?$s:"no") != substr($parent, 4))
 				{
 					continue;
 				}
-				$evt_obj = obj($evt_oid);
-				$tree[$oid] = array(
+				$tree[] = array(
 					"id" => "cmp_".$oid,
 					"name" => $obj->name(),
 					"url" => $this->mk_my_orb("change", array(
@@ -301,7 +465,7 @@ class scm_team extends class_base
 			"branch" => 1,
 			"tree_id" => "reg_tree",
 		));
-		foreach($tree as $oid => $data)
+		foreach($tree as $data)
 		{
 			$t->add_item(0, array(
 				"id" => $data["id"],
@@ -317,6 +481,68 @@ class scm_team extends class_base
 		}
 
 		die($t->finalize_tree());
+	}
+	
+	function _gen_members_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "sex",
+			"caption" => t("Sugu"),
+			"sortable" => 1,
+		));
+		$t->define_chooser(array(
+			"name" => "rem",
+			"field" => "rem_contestant",
+		));
+		$t->set_default_sortby("name");
+
+	}
+
+	function _gen_members_reg_tbl($t)
+	{
+		$t->define_field(array(
+			"name" => "contestant",
+			"caption" => t("Liige"),
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "registered",
+			"caption" => t("Registreerunud"),
+			"sortable" => true,
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "group",
+			"caption" => t("V&otilde;istlusklass"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "sex",
+			"caption" => t("sugu"),
+			"sortable" => true,
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "birthday",
+			"caption" => t("S&uuml;nniaeg"),
+			"sortable" => true,
+			"align" => true,
+			"callback" => array(&$this, "__birthday_format"),
+		));
+	}
+
+	function __birthday_format($key, $str, $row)
+	{
+		if(is_numeric($key))
+		{
+			return date("d / m / Y", $key);
+		}
+		return $key;
 	}
 }
 ?>

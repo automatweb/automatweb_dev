@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.6 2006/07/24 11:43:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.7 2006/07/27 23:32:14 tarvo Exp $
 // scm_organizer.aw - Spordiv&otilde;istluste korraldaja 
 /*
 
@@ -216,6 +216,7 @@ class scm_organizer extends class_base
 				$inst = get_instance(CL_SCM_COMPETITION);
 				$filt = array(
 					"state" => ($arr["request"]["group"] == "current_competitions")?"current":"archive",
+					"organizer" => $arr["obj_inst"]->id(),
 				);
 				if(!count($list = $inst->get_competitions($filt)))
 				{
@@ -487,6 +488,8 @@ class scm_organizer extends class_base
 	}
 
 	/**
+		@param only_with_competitions optional type=bool
+			returns organizers who have at least 1 competition
 		@comment
 			generates list of all organizers.
 		@returns
@@ -496,11 +499,24 @@ class scm_organizer extends class_base
 				scm_organizer object_inst,
 			)
 	**/
-	function get_organizers()
+	function get_organizers($arr)
 	{
-		$list = new object_list(array(
-			"class_id" => CL_SCM_ORGANIZER,
-		));
+		$filt["class_id"] = CL_SCM_ORGANIZER;
+		$list = new object_list($filt);
+		if(!$arr["only_with_competitions"])
+		{
+			return $list->arr();
+		}
+		foreach($list->arr() as $oid => $obj)
+		{
+			$conns = $obj->connections_from(array(
+				"type" => "RELTYPE_COMPETITION",
+			));
+			if(!count($conns))
+			{
+				$list->remove($oid);
+			}
+		}
 		return $list->arr();
 	}
 	

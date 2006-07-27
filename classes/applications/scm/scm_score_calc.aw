@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.4 2006/07/18 06:05:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.5 2006/07/27 23:32:14 tarvo Exp $
 // scm_score_calc.aw - Punktis&uuml;steem 
 /*
 
@@ -12,6 +12,31 @@
 
 @property score_calculator type=select
 @caption Punktis&uuml;steem
+
+@groupinfo algorithm caption="Algoritm"
+	@default group=algorithm
+
+	@property max_points type=textbox size=5
+	@caption Maksimumpunktid
+
+	@property points_step type=textbox size=5
+	@caption Samm
+
+	@property points_exception type=textbox size=20
+	@caption Erandid
+
+	@property points_others type=textbox size=5
+	@caption &Uuml;lej&auml;&auml;nud v&otilde;istlejad
+
+@groupinfo manual_points caption="Kohapunktid"
+	@default group=manual_points
+
+	@property man_count type=textbox size=5
+	@caption Punkte saavad x esimest
+
+	@property man_points type=text
+	@caption Punktid
+
 */
 
 class scm_score_calc extends class_base
@@ -37,6 +62,27 @@ class scm_score_calc extends class_base
 				{
 					$prop["options"][$fun_name] = $caption;
 				}
+			break;
+
+			case "man_count":
+				
+			break;
+
+			case "man_points":
+				$count = $arr["obj_inst"]->prop("man_count");
+				for($i = 1; $i <= $count; $i++)
+				{
+					$textbox = html::textbox(array(
+						"name" => "point[".$i."]",
+						"size" => "5",
+					));
+					$html .= sprintf(t("Koht nr %s:"), $i). $textbox."<br/>";
+				}
+				$html .= t("&Uuml;lej&auml;&auml;nud:").html::textbox(array(
+					"name" => "point[0]",
+					"size" => "5",
+				));
+				$prop["value"] = $html;
 			break;
 		};
 		return $retval;

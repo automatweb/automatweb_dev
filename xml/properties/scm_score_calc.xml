@@ -9,6 +9,65 @@
             <type>select</type>
             <caption>Punktis&amp;amp;uuml;steem</caption>
       </property>
+      <property>
+            <name>max_points</name>
+            <table>objects</table>
+            <group>algorithm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Maksimumpunktid</caption>
+      </property>
+      <property>
+            <name>points_step</name>
+            <table>objects</table>
+            <group>algorithm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Samm</caption>
+      </property>
+      <property>
+            <name>points_exception</name>
+            <table>objects</table>
+            <group>algorithm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>20</size>
+            <caption>Erandid</caption>
+      </property>
+      <property>
+            <name>points_others</name>
+            <table>objects</table>
+            <group>algorithm</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>&amp;amp;Uuml;lej&amp;amp;auml;&amp;amp;auml;nud v&amp;amp;otilde;istlejad</caption>
+      </property>
+      <property>
+            <name>man_count</name>
+            <table>objects</table>
+            <group>manual_points</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Punkte saavad x esimest</caption>
+      </property>
+      <property>
+            <name>man_points</name>
+            <table>objects</table>
+            <group>manual_points</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Punktid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SCM_SCORE_CALC</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -16,5 +75,13 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <algorithm>
+                  <caption>Algoritm</caption>
+            </algorithm>
+            <manual_points>
+                  <caption>Kohapunktid</caption>
+            </manual_points>
+      </groupinfo>
 </properties>
 

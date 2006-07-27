@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.7 2006/07/24 11:43:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.8 2006/07/27 23:32:14 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -9,6 +9,8 @@
 @default group=general
 @default field=meta
 @default method=serialize
+
+@property relation_data type=hidden
 
 @groupinfo sub_general caption="&Uuml;ldine" parent=general
 	@default group=sub_general
@@ -22,11 +24,11 @@
 	@property location type=relpicker reltype=RELTYPE_LOCATION editonly=1
 	@caption Asukoht
 
-	@layout time_split type=hbox width=250px group=sub_general
+	@layout time_split type=hbox width=270px group=sub_general
 	@caption Algus
 
-	@property date_from type=date_select parent=time_split parent=time_split no_caption=1 store=no
-	@property time_from type=time_select parent=time_split parent=time_split no_caption=1 store=no
+	@property date_from type=date_select parent=time_split parent=time_split no_caption=1
+	@property time_from type=time_select parent=time_split parent=time_split no_caption=1
 
 	@property date_to type=date_select
 	@caption L&otilde;pp
@@ -437,6 +439,9 @@ class scm_competition extends class_base
 			case "name":
 				$arr["obj_inst"]->set_name($prop["value"]);
 			break;
+			case "date_to":
+				//arr($arr);
+			break;
 		}
 		return $retval;
 	}	
@@ -448,8 +453,9 @@ class scm_competition extends class_base
 
 	function callback_pre_save($arr)
 	{
-		$d = array_merge($arr["request"]["date_from"], $arr["request"]["time_from"]);
-		$timestamp = mktime($d["hour"], $d["minute"], 0, $d["month"], $d["day"], $d["year"]);
+		//$d = array_merge($arr["request"]["date_from"], $arr["request"]["time_from"]);
+		//$timestamp = mktime($d["hour"], $d["minute"], 0, $d["month"], $d["day"], $d["year"]);
+		//$arr["obj_inst"]->set_prop("from", $timestamp);
 	}
 
 	/**
@@ -814,7 +820,7 @@ class scm_competition extends class_base
 		));
 		foreach($conns as $id => $data)
 		{
-			$res[$data["to"]] = $data["to_name"];
+			$res[$data["to"]] = obj($data["to"]);
 		}
 		return $res;
 	}
@@ -831,7 +837,7 @@ class scm_competition extends class_base
 	function get_event($arr = array())
 	{
 		$o = obj($arr["competition"]);
-		return $o->prop("scm_event");
+		return ($s = $o->prop("scm_event"))?$s:false;
 	}
 
 	function _gen_format_nice($arr)
@@ -893,6 +899,14 @@ class scm_competition extends class_base
 	{
 		$obj = obj($arr["competition"]);
 		return $obj->prop("date");
+	}
+
+	/**
+	**/
+	function get_groups($arr)
+	{
+		$obj = obj($arr["competition"]);
+		return ($s = $obj->prop("scm_group"))?$s:false;
 	}
 }
 ?>

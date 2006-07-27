@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.5 2006/07/18 06:05:17 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.6 2006/07/27 23:32:14 tarvo Exp $
 // scm_contestant.aw - V&otilde;istleja 
 /*
 
@@ -15,9 +15,6 @@
 
 @property contestants_company type=text store=no editonly=1
 @caption Firmast
-
-@property teams type=relpicker reltype=RELTYPE_TEAM multiple=1 size=5
-@caption Meeskonnad
 
 @groupinfo register caption="Registreeri v&otilde;istlustele" submit=no
 	@property reg_tbl type=table group=register no_caption=1
@@ -48,8 +45,6 @@
 @reltype CONTESTANT value=1 clid=CL_CRM_PERSON
 @caption V&otilde;istleja
 
-@reltype TEAM value=2 clid=CL_SCM_TEAM
-@caption meeskond
 */
 
 class scm_contestant extends class_base

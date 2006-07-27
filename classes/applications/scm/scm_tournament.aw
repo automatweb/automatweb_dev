@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.6 2006/07/19 12:17:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_tournament.aw,v 1.7 2006/07/27 23:32:14 tarvo Exp $
 // scm_tournament.aw - V&otilde;istlussari
 /*
 
@@ -63,7 +63,6 @@ class scm_tournament extends class_base
 					"pn" => "search_result",
 					"clid" => CL_SCM_COMPETITION,
 				));
-				$url = "#";
 				$prop["vcl_inst"]->add_cdata($search_butt);
 			break;
 			case "comp_table":

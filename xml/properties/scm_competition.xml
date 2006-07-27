@@ -1,6 +1,14 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>relation_data</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+      </property>
+      <property>
             <name>name</name>
             <table>objects</table>
             <group>sub_general</group>
@@ -41,7 +49,6 @@
             <type>date_select</type>
             <parent>time_split</parent>
             <no_caption>1</no_caption>
-            <store>no</store>
       </property>
       <property>
             <name>time_from</name>
@@ -52,7 +59,6 @@
             <type>time_select</type>
             <parent>time_split</parent>
             <no_caption>1</no_caption>
-            <store>no</store>
       </property>
       <property>
             <name>date_to</name>
@@ -324,7 +330,7 @@
       <layout>
             <time_split>
                   <type>hbox</type>
-                  <width>250px</width>
+                  <width>270px</width>
                   <group>sub_general</group>
                   <caption>Algus</caption>
             </time_split>
