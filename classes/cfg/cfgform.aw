@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.91 2006/07/21 13:39:17 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.92 2006/07/28 10:49:14 markop Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -274,7 +274,7 @@ class cfgform extends class_base
 		foreach($grps_ as $key => $val)
 		{
 			$tree->add_item($obj->id(),array(
-				"name" => $key,
+				"name" => $val["caption"],
 				"id" => $key,
 				"url" => aw_url_change_var(array("meta" => $key)),
 			));
