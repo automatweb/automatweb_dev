@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.4 2006/07/27 23:32:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.5 2006/07/28 13:17:59 tarvo Exp $
 // scm_team.aw - Meeskond 
 /*
 
@@ -134,17 +134,11 @@ class scm_team extends class_base
 				if(!($competition = $arr["request"]["competition"]))
 				{
 					$prop["value"] = t("Palun vali v&otilde;istlus");
+					return PROP_OK;
 				}
 				$t = &$prop["vcl_inst"];
-				$this->_gen_members_reg_tbl(&$t);
 				$comp = obj($competition);
-				$t->define_header(sprintf(t("V&otilde;istluse '%s' haldamine"), $comp->name()));
-
 				$inst = get_instance(CL_SCM_COMPETITION);
-				$cont_inst = get_instance(CL_SCM_CONTESTANT);
-				$contestants = array_keys($inst->get_contestants(array("competition" => $competition)));
-				$members = $this->get_team_members(array("team" => $arr["obj_inst"]->id()));
-
 				$grps = $inst->get_groups(array(
 					"competition" => $competition
 				));
@@ -153,6 +147,13 @@ class scm_team extends class_base
 					$o = obj($gr);
 					$gr_options[$gr] = $o->name();
 				}
+				$this->_gen_members_reg_tbl(&$t, $gr_options);
+				$t->define_header(sprintf(t("V&otilde;istluse '%s' haldamine"), $comp->name()));
+
+				$cont_inst = get_instance(CL_SCM_CONTESTANT);
+				$contestants = array_keys($inst->get_contestants(array("competition" => $competition)));
+				$members = $this->get_team_members(array("team" => $arr["obj_inst"]->id()));
+
 				foreach($members as $oid => $obj)
 				{
 					$reg = (in_array($oid, $contestants))?true:false;
@@ -178,14 +179,17 @@ class scm_team extends class_base
 						"caption" => $obj->name(),
 					));
 
-					$un = ($reg)?"un":"";
+					$un = ($reg)?"ch":"";
 					$chbox_js_click = "javascript:if(getElementById(\"group_".$oid."\").disabled) getElementById(\"group_".$oid."\").disabled=false; else getElementById(\"group_".$oid."\").disabled=true;";
 					$chbox = html::checkbox(array(
 						"name" => $un."reg[".$competition."][".$oid."]",
 						"checked" => $reg,
-						"value" => "-1",
 						"onclick" => $chbox_js_click,
 					));
+					$hidd = ($reg)?html::hidden(array(
+						"name" => "wreg[".$competition."][".$oid."]",
+						"value" => 1,
+					)):NULL;
 					$groups = array(
 						"name" => "gr[".$oid."]",
 						"disabled" => !$reg,
@@ -198,11 +202,12 @@ class scm_team extends class_base
 					$p_obj = obj($cont_inst->get_contestant_person(array("contestant" => $oid)));
 					$t->define_data(array(
 						"contestant" => $link,
-						"registered" => $chbox,
-						"group" => html::select($groups),
-						"sex" => ($p_obj->prop("gender") == 1)?t("Mees"):t("Naine"),
+						"registered" => $chbox.$hidd,
+						"group" => $groups,//html::select($groups),
+						"sex" => (($s = $p_obj->prop("gender")) == 1)?t("Mees"):(($s == 2)?t("Naine"):t("Sugu m&auml;&auml;ramata")),
 						"birthday" => (!($s = $p_obj->prop("birthday")) || $s < 0)?t("Pole m&auml;&auml;ratud"):$s,
 					));
+					unset($extra_data);
 				}
 			break;
 		};
@@ -249,12 +254,14 @@ class scm_team extends class_base
 
 	function callback_pre_save($arr)
 	{
-		arr($arr);
-		die();
-		$unreg = $arr["request"]["unreg"];
+		//arr($arr);
+		//arr($wreg);
+		//die();
+		$chreg = $arr["request"]["chreg"];
 		$reg = $arr["request"]["reg"];
 		$groups = $arr["request"]["gr"];
-		// registering new competitors
+		$wreg = $arr["request"]["wreg"];
+		//(registering new competitors
 		foreach($reg as $competition => $data)
 		{
 			foreach(array_keys($data) as $contestant)
@@ -277,6 +284,52 @@ class scm_team extends class_base
 				$c->save();
 			}
 		}
+		// unregistering competitors
+		foreach($wreg as $competition => $data)
+		{
+			foreach(array_keys($data) as $contestant)
+			{
+				if(!$chreg[$competition][$contestant])
+				{
+					// siin otsime & kustutame seose
+					$c = new connection();
+					$c = $c->find(array(
+						"from" => $competition,
+						"to" => $contestant,
+						"reltype" => "RELTYPE_CONTESTANT",
+					));
+					$c = new connection(key($c));
+					$c->delete();
+				}
+			}
+		}
+		// change group changes
+		foreach($chreg as $competition => $data)
+		{
+			foreach(array_keys($data) as $contestant)
+			{
+				$c = new connection();
+				$con = $c->find(array(
+					"from" => $competition,
+					"to" => $contestant,
+					"reltype" => "RELTYPE_CONTESTANT",
+				));
+				$c = new connection(key($con));
+				$extra = aw_unserialize($c->prop("data"));
+				$extra["groups"] = $groups[$contestant];
+				$c->change(array(
+					"data" => aw_serialize($extra, SERIALIZE_NATIVE),
+				));
+				$c->save();
+			}
+		}
+	}
+
+	function callback_mod_retval($arr)
+	{
+		$url = parse_url($arr["request"]["post_ru"]);
+		parse_str($url["query"]);
+		$arr["args"]["competition"] = $competition;
 	}
 
 	function callback_mod_reforb($arr)
@@ -503,7 +556,7 @@ class scm_team extends class_base
 
 	}
 
-	function _gen_members_reg_tbl($t)
+	function _gen_members_reg_tbl($t, $gr_options)
 	{
 		$t->define_field(array(
 			"name" => "contestant",
@@ -520,20 +573,51 @@ class scm_team extends class_base
 			"name" => "group",
 			"caption" => t("V&otilde;istlusklass"),
 			"align" => "center",
+			"filter" => $gr_options,
+			"filter_compare" => array(&$this, "__group_filter"),
+			"callback" => array(&$this, "__group_format"),
+			"filter_options" => array(
+				"1" => "option 1"
+			),
 		));
 		$t->define_field(array(
 			"name" => "sex",
 			"caption" => t("sugu"),
 			"sortable" => true,
 			"align" => "center",
+			"filter" => array(
+				"1" => t("Mees"),
+				"2" => t("Naine"),
+			),
+			"filter_compare" => array(&$this, "__sex_filter"),
 		));
 		$t->define_field(array(
 			"name" => "birthday",
 			"caption" => t("S&uuml;nniaeg"),
 			"sortable" => true,
-			"align" => true,
+			"align" => "center",
 			"callback" => array(&$this, "__birthday_format"),
 		));
+	}
+
+	function __sex_filter($key, $str, $row)
+	{
+		return in_array($str, $row);
+	}
+
+	function __group_format($key, $str, $row)
+	{
+		return count($key["options"])?html::select($key):t("Klassid m&auml;&auml;ramata");
+	}
+
+	function __group_filter($arr, $arr2, $arr3)
+	{
+		$flip = array_flip($arr3["group"]["options"]);
+		if(in_array($flip[$arr2], $arr3["group"]["selected"]))
+		{
+			return true;
+		}
+		return false;
 	}
 
 	function __birthday_format($key, $str, $row)
