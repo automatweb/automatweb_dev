@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.69 2006/07/27 12:45:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.70 2006/07/28 10:29:06 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -61,6 +61,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property language type=relpicker automatic=1 field=meta method=serialize reltype=RELTYPE_LANGUAGE
 	@caption Keel
+
+	@property rows_different_pages type=text field=meta method=serialize
+	@caption Read erinevatel lehekülgedel
 
 	@property bill_rows type=text store=no no_caption=1
 	@caption Arveread 
@@ -220,6 +223,34 @@ class crm_bill extends class_base
 				$curn = $arr["obj_inst"]->prop("customer.currency.name");
 				$prop["value"] .= " ".($curn == "" ? "EEK" : $curn);
 				break;
+
+			case "rows_different_pages":
+				$rows_in_page = $arr["obj_inst"]->meta("rows_in_page");
+				$x = 0;
+				$val = "";
+				$count = 0;
+				foreach($rows_in_page as $key => $row)
+				{
+					if($row){
+						$val .=html::textbox(array(
+							"name" => "rows_in_page[".$key."]",
+							"value" => $row,
+							"size" => 3
+						));
+						$count++;
+					}
+				}
+				while(3 > $x)
+				{
+					$val .=html::textbox(array(
+						"name" => "rows_in_page[".($x+$count)."]",
+						"size" => 3
+					));
+					$x++;
+				}
+				$prop["value"] = $val;
+				break;
+
 		};
 		return $retval;
 	}
@@ -258,6 +289,10 @@ class crm_bill extends class_base
 
 			case "bill_rows":
 				$this->_save_rows($arr);
+				break;
+
+			case "rows_different_pages":
+				$arr["obj_inst"]->set_meta("rows_in_page" , $arr["request"]["rows_in_page"]);		
 				break;
 
 			case "state":
@@ -421,7 +456,7 @@ class crm_bill extends class_base
 				)).html::textbox(array(
 					"name" => "rows[$id][comment]",
 					"value" => $t_inf["comment"],
-					"size" => 45
+					"size" => 42
 				))."<br>".html::textarea(array(
 					"name" => "rows[$id][name]",
 					"value" => $t_inf["name"],
@@ -553,7 +588,22 @@ class crm_bill extends class_base
 
 	function _preview_add($arr)
 	{
-		$arr["prop"]["value"] = $this->show_add(array("id" => $arr["obj_inst"]->id()));
+		if($arr["obj_inst"]->meta("rows_in_page"))
+		$page = 0;
+		foreach($arr["obj_inst"]->meta("rows_in_page") as $key => $row)
+		{
+			if(substr_count($row, '-') == 1)
+			{
+				$between = explode("-", $row);
+				$this->show_add(array(
+					"id" => $arr["obj_inst"]->id() ,
+					"page" => $page,
+					"between" => $between,
+				));
+				$page++;
+			}
+		}
+		if($page == 0) $arr["prop"]["value"] = $this->show_add(array("id" => $arr["obj_inst"]->id()));
 	}
 
 	function show($arr)
@@ -1198,8 +1248,9 @@ class crm_bill extends class_base
 		$sum_wo_tax = 0;
 		$tax = 0;
 		$sum = 0;
-		foreach($this->get_bill_rows($b) as $row)
+		foreach($this->get_bill_rows($b) as $key => $row)
 		{
+			if($arr["between"] && !($key+1 >= $arr["between"][0] && $key+1 <= $arr["between"][1])) continue;
 			if ($row["is_oe"])
 			{
 				continue;
@@ -1239,8 +1290,8 @@ class crm_bill extends class_base
 			$tot_amt += $row["amt"];
 			$tot_cur_sum += $cur_sum;
 		}
-
-		foreach($this->get_bill_rows($b) as $row)
+		
+		foreach($this->get_bill_rows($b) as $key => $row)
 		{
 			if (!$row["is_oe"])
 			{

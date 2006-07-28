@@ -147,6 +147,15 @@
             <caption>Keel</caption>
       </property>
       <property>
+            <name>rows_different_pages</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Read erinevatel lehek&amp;uuml;lgedel</caption>
+      </property>
+      <property>
             <name>bill_rows</name>
             <table>objects</table>
             <group>general</group>
