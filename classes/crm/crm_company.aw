@@ -177,6 +177,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property server_folder type=server_folder_selector table=objects field=meta method=serialize group=user_settings
 	@caption Kataloog serveris, kus asuvad failid
 
+	@property all_action_rows type=checkbox ch_value=1  table=objects field=meta method=serialize
+	@caption Kuva Tegevused vaates kõiki ridu
+
 --------------------------------------
 @default group=contacts2
 
