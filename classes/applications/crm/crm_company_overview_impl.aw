@@ -590,7 +590,7 @@ class crm_company_overview_impl extends class_base
 			$namp = "";
 			if ($task->class_id() == CL_TASK)
 			{
-				$url = $this->mk_my_orb("get_task_row_table", array("id" => $task_id));
+				$url = $this->mk_my_orb("get_task_row_table", array("id" => $task_id, "company" => $arr["obj_inst"]->id()));
 				$namp = " (<a id='tnr$task_nr' href='javascript:void(0)' onClick='
 					if ((trel = document.getElementById(\"trows$task_nr\")))
 					{
@@ -1634,14 +1634,16 @@ class crm_company_overview_impl extends class_base
 	**/
 	function get_task_row_table($arr)
 	{
+		global $company;
 		classload("vcl/table");
 		$t = new vcl_table();
 		$this->_init_task_row_table($t);
 		$task = obj($arr["id"]);
+		$company = obj($company);
 		foreach($task->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 		{
 			$row = $c->to();
-			if ($row->prop("done") == 1)
+			if ($row->prop("done") == 1 && !$company->prop("all_action_rows"))
 			{
 				continue;
 			}
