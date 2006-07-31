@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.166 2006/07/25 13:27:21 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.167 2006/07/31 09:53:48 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1355,7 +1355,7 @@ class menu extends class_base
 		$str = "!\"@#.¤$%&/()[]={}?\+-`'|,;:";
 		$name = str_replace(preg_split("//", $str, -1 , PREG_SPLIT_NO_EMPTY), "", $name);;
 		$name = str_replace($to_replace, $replace_with, $name);
-		return $this->_check_alias_name($name);
+		return $this->_check_alias_name(substr($name,0, 50));
 	}
 
 	function _check_alias_name($name)
