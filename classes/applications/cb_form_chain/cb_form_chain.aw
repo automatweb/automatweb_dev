@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.33 2006/07/11 09:58:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.34 2006/07/31 15:00:08 dragut Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -881,12 +881,12 @@ class cb_form_chain extends class_base
 	{
 		$this->read_template("show_confirm.tpl");
 
-		if ($this->can("view", $ob->prop("confirm_view_ctl")))
+		if ($this->can("view", $o->prop("confirm_view_ctl")))
 		{
 			$fc = get_instance(CL_FORM_CONTROLLER);
 			$form_str = $fc->eval_controller(
-				$ob->prop("confirm_view_ctl"),
-				$o
+				$o->prop("confirm_view_ctl")
+			//	$o
 			);
 		}
 		else
