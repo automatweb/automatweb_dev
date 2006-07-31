@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.71 2006/07/31 10:37:35 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.72 2006/07/31 13:32:15 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -447,6 +447,7 @@ class crm_bill extends class_base
 					$r_pers[$rp_id] = $rp_o->name();
 				}
 			}
+			//miski suva järjekorranuumbrite genereerimine... kui on vaja
 			if($default_row_jrk < $t_inf["jrk"]) $default_row_jrk = $t_inf["jrk"];
 			if(!$t_inf["jrk"]) $t_inf["jrk"] = $default_row_jrk;
 			$default_row_jrk = $default_row_jrk + 10;
@@ -858,7 +859,9 @@ class crm_bill extends class_base
 			$grp_rows[$row["prod"]][$unp]["sum"] += ($cur_tax+$cur_sum);
 			$grp_rows[$row["prod"]][$unp]["unit"] = $row["unit"];
 			$grp_rows[$row["prod"]][$unp]["date"] = $row["date"];
+			$grp_rows[$row["prod"]][$unp]["jrk"] = $row["jrk"];
 			$grp_rows[$row["prod"]][$unp]["tot_amt"] += $row["amt"];
+			$grp_rows[$row["prod"]][$unp]["id"] = $row["id"];
 			$grp_rows[$row["prod"]][$unp]["tot_cur_sum"] += $cur_sum;
 			$grp_rows[$row["prod"]][$unp]["name"] = $row["name"];
 			if (empty($grp_rows[$row["prod"]][$unp]["comment"]))
@@ -899,7 +902,7 @@ class crm_bill extends class_base
 					"desc" => $desc,
 					"date" => "" 
 				));
-				$rs[] = array("str" => $this->parse("ROW"), "date" => $grp_row["date"]);
+				$rs[] = array("str" => $this->parse("ROW"), "date" => $grp_row["date"] , "jrk" => $grp_row["jrk"] , "id" => $grp_row["id"],);
 			}
 		}
 
@@ -948,13 +951,12 @@ class crm_bill extends class_base
 				"date" => $row["date"] 
 			));
 
-			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"]);
+			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"] , "id" => $grp_row["id"],);
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
 		}
-
-//		usort($rs, array(&$this, "__br_sort"));
+		usort($rs, array(&$this, "__br_sort"));
 		foreach($rs as $idx => $ida)
 		{
 			$rs[$idx] = $ida["str"];
@@ -1076,25 +1078,30 @@ class crm_bill extends class_base
 			$inf[] = $rd;
 		}
 		usort($inf, array(&$this, "__br_sort"));
-
 		//sotrimine järjekorranumbri järgi
-		foreach ($inf as $key => $row) {
-		   $volume[$key]  = $row['jrk'];
-		   $edition[$key] = $row;
-		}
-		array_multisort($volume, SORT_ASC, $edition, SORT_DESC, $inf);
+//		foreach ($inf as $key => $row) {
+//		   $volume[$key]  = $row['jrk'];
+//		   $edition[$key] = $row;
+//		}
+//		array_multisort($volume, SORT_ASC, $edition, SORT_DESC, $inf);
 		return $inf;
 	}
 
 	function __br_sort($a, $b)
 	{
-		$a = $a["date"];
-		$b = $b["date"];
-		list($a_d, $a_m, $a_y) = explode(".", $a);
-		list($b_d, $b_m, $b_y) = explode(".", $b);
+		$a_date = $a["date"];
+		$b_date = $b["date"];
+		list($a_d, $a_m, $a_y) = explode(".", $a_date);
+		list($b_d, $b_m, $b_y) = explode(".", $b_date);
 		$a_tm = mktime(0,0,0, $a_m, $a_d, $a_y);
 		$b_tm = mktime(0,0,0, $b_m, $b_d, $b_y);
-		return $a_tm >  $b_tm ? 1 : ($a_tm == $b_tm ? 0 : -1);
+		//echo $a["jrk"] < $b["jrk"] ? -1 :($a["jrk"] > $b["jrk"] ? 1 : ($a_tm >  $b_tm ? 1 : ($a_tm == $b_tm ? 0 : -1)));
+		return  $a["jrk"] < $b["jrk"] ? -1 :
+			($a["jrk"] > $b["jrk"] ? 1:
+				($a_tm >  $b_tm ? 1:
+					($a_tm == $b_tm ? ($a["id"] > $b["id"] ? 1 : -1): -1)
+				)
+			);
 	}
 
 	function show_add($arr)
@@ -1284,8 +1291,7 @@ class crm_bill extends class_base
 				"desc" => $row["name"],
 				"date" => $row["date"] 
 			));
-			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"]);
-
+			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"]);
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
@@ -1326,12 +1332,12 @@ class crm_bill extends class_base
 				"date" => $row["date"]
 			));
 
-			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"]);
+			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"]);
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
 		}
-	//	usort($rs, array(&$this, "__br_sort"));
+		usort($rs, array(&$this, "__br_sort"));
 		foreach($rs as $idx => $ida)
 		{
 			$rs[$idx] = $ida["str"];
