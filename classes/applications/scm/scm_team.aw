@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.5 2006/07/28 13:17:59 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.6 2006/07/31 11:30:24 tarvo Exp $
 // scm_team.aw - Meeskond 
 /*
 
@@ -35,7 +35,9 @@
 			@property members_tree type=treeview no_caption=1 parent=split_reg
 			@property members_list type=table no_caption=1 parent=split_reg
 
-	@groupinfo registered caption="V&otilde;istlused" caption="V&otilde;istlused" parent=competitions
+	@groupinfo registered caption="V&otilde;istlused" parent=competitions submit=no
+		@property registered_tbl type=table no_caption=1 group=registered
+		@property registered_list type=table no_caption=1 group=registered
 	
 	
 @reltype SCM_TEAM_MEMBER value=2 clid=CL_SCM_CONTESTANT
@@ -94,7 +96,8 @@ class scm_team extends class_base
 					$pers = obj($inst->get_contestant_person(array("contestant" => $oid)));
 					$t->define_data(array(
 						"name" => $obj->name(),
-						"sex" => ($pers->prop("gender") == 1)?t("Mees"):t("Naine"),
+						"sex" => (($s = $pers->prop("gender")) == 1)?t("Mees"):(($s == 2)?t("Naine"):t("Sugu m&auml;&auml;ramata")),
+						"company" => ($s = $inst->get_contestant_company(array("contestant" => $oid)))?call_user_method("name", obj($s)):t("Firma &auml;&auml;ramata"),
 						"rem_contestant" => $oid,
 					));
 				}
@@ -159,15 +162,10 @@ class scm_team extends class_base
 					$reg = (in_array($oid, $contestants))?true:false;
 					if($reg)
 					{
-						$c = new connection();
-						$conns = $c->find(array(
-							"from" => $competition,
-							"to" => $oid,
+						$extra_data = $this->_get_extra_data(array(
+							"competition" => $competition,
+							"contestant" => $oid,
 						));
-						// siin ta tegelikult ei peaks esimest võtma vaid mingi funktsioon peaks otsima kas ta on selle tiimiga seotud.. vist??.. sest ta võib olla niisama üksiküritaja ka ju. vot vot.. ja kui ongi üksiküritaja, siis peaks siit loop'ist välja minema. samas see get_team_members võiks kohe selle välja raalida ja õige data ka kaasa anda!!! 
-						$id = key($conns);
-						$c = new connection($id);
-						$extra_data = aw_unserialize($c->prop("data"));
 					}
 					$url = $this->mk_my_orb("change",array(
 						"class" => "scm_contestant",
@@ -203,12 +201,98 @@ class scm_team extends class_base
 					$t->define_data(array(
 						"contestant" => $link,
 						"registered" => $chbox.$hidd,
-						"group" => $groups,//html::select($groups),
+						"group" => $groups,
 						"sex" => (($s = $p_obj->prop("gender")) == 1)?t("Mees"):(($s == 2)?t("Naine"):t("Sugu m&auml;&auml;ramata")),
 						"birthday" => (!($s = $p_obj->prop("birthday")) || $s < 0)?t("Pole m&auml;&auml;ratud"):$s,
 					));
 					unset($extra_data);
 				}
+			break;
+
+			case "registered_tbl":
+				$t = &$prop["vcl_inst"];
+				$t->define_field(array(
+					"name" => "competition",
+					"caption" => t("V&otilde;istlus"),
+				));
+				$t->define_field(array(
+					"name" => "organizer",
+					"caption" => t("Korraldaja"),
+				));
+				
+				$memb = $this->get_team_members(array(
+					"team" => $arr["obj_inst"]->id(),
+				));
+				$inst = get_instance(CL_SCM_COMPETITION);
+				$comps = $inst->get_competitions(array(
+					"contestant" => array_keys($memb),
+				));
+
+				foreach($comps as $oid => $obj)
+				{
+					$o = ($s = $inst->get_organizer(array("competition" => $oid)))?obj($s):false;
+					$arg = $arr["request"];
+					$arg["competition"] = $oid;
+					$url = $this->mk_my_orb("change", $arg);
+					$t->define_data(array(
+						"competition" => $obj->name()." (<a href=\"".$url."\">osalejad</a>)",
+						"organizer" => $o->name(),
+					));
+				}
+			break;
+			
+			case "registered_list":
+				if(!$arr["request"]["competition"])
+				{
+					return PROP_IGNORE;
+				}
+				$t = &$prop["vcl_inst"];
+				$t->define_field(array(
+					"name" => "name",
+					"caption" => t("V&otilde;istleja"),
+					"sortable" => 1,
+				));
+				$t->define_field(array(
+					"name" => "company",
+					"caption" => t("Firma"),
+					"sortable" => 1,
+				));
+				$t->define_field(array(
+					"name" => "group",
+					"caption" => t("V&otilde;istlusklassid"),
+				));
+				$header1 = t("V&otilde;istluse '%s' osalejad");
+				$header2 = t("Halda nimekirja");
+				$arg = $arr["request"];
+				$arg["group"] = "registration";
+				$url = $this->mk_my_orb("change", $arg);
+				$t->define_header(
+					sprintf($header1." (<a href=\"%s\">".$header2."</a>)",
+						call_user_method("name",obj($arr["request"]["competition"])),
+						$url
+					)
+				);
+				$inst =  get_instance(CL_SCM_COMPETITION);
+				$contest = $inst->get_contestants(array("competition" => $arr["request"]["competition"]));
+				$inst = get_instance(CL_SCM_CONTESTANT);
+				foreach($contest as $oid => $obj)
+				{
+					$extra_data = $this->_get_extra_data(array(
+						"competition" => $arr["request"]["competition"],
+						"contestant" => $oid,
+					));
+					unset($groups);
+					foreach($extra_data["groups"] as $group)
+					{
+						$groups[$group] = call_user_method("prop", obj($group), "abbreviation");
+					}
+					$t->define_data(array(
+						"name" => $obj->name(),
+						"company" => call_user_method("name", obj($inst->get_contestant_company(array("contestant" => $oid)))),
+						"group" => $groups?join(", ", $groups):t("V&otilde;istlusklassid m&auml;&auml;ramata"),
+					));
+				}
+			
 			break;
 		};
 		return $retval;
@@ -225,7 +309,7 @@ class scm_team extends class_base
 				$request = $arr["request"];
 
 				// otsingust tulevate liikmete sidumine meeskonna liikmeks
-				$sr = (strlen($request["search_result"]))?split(",", $request["search_result"]):NULL;
+			$sr = (strlen($request["search_result"]))?split(",", $request["search_result"]):NULL;
 				$list = array_keys($this->get_team_members($arr["obj_inst"]->id()));
 				foreach($sr as $contestant)
 				{
@@ -309,13 +393,11 @@ class scm_team extends class_base
 			foreach(array_keys($data) as $contestant)
 			{
 				$c = new connection();
-				$con = $c->find(array(
-					"from" => $competition,
-					"to" => $contestant,
-					"reltype" => "RELTYPE_CONTESTANT",
+				$extra = $this->_get_extra_data(array(
+					"contestant" => $contestant,
+					"competition" => $competition,
+					"ret_inst" => &$c,
 				));
-				$c = new connection(key($con));
-				$extra = aw_unserialize($c->prop("data"));
 				$extra["groups"] = $groups[$contestant];
 				$c->change(array(
 					"data" => aw_serialize($extra, SERIALIZE_NATIVE),
@@ -355,27 +437,6 @@ class scm_team extends class_base
 //-- methods --//
 
 	/**
-		@param team
-		@param contestant_id
-		@param groups
-		@param new optional type=oid
-			default is true.
-			if is true, no connection is loaded and the data given is returned as must.
-			if an connection object oid is given.. then this connection is loaded and old extra info is overwritten.. new data is returned
-		@comment
-			generates connections extra info to put to the RELTYPE_CONTESTANT relations..
-	**/
-	function set_relation_data($arr)
-	{
-		return aw_serialize($arr);
-	}
-	function get_relation_data($oid)
-	{
-		$c = new connection($oid);
-		return $c->prop("data");
-	}
-
-	/**
 	**/
 	function get_teams($arr = array())
 	{
@@ -384,6 +445,12 @@ class scm_team extends class_base
 		return $list->arr();
 	}
 
+	/**
+		@param competition
+		@param contestant
+		@comment
+			theoretically should find the team according to contestant and competition
+	**/
 	function get_team($arr = array())
 	{
 		$inst = get_instance(CL_SCM_CONTESTANT);
@@ -399,6 +466,11 @@ class scm_team extends class_base
 		}
 	}
 
+
+	
+	/** DEPRECATED
+		@param team required type=oid
+	**/
 	function get_competitions($arr = array())
 	{
 		$obj = obj($arr["team"]);
@@ -548,6 +620,11 @@ class scm_team extends class_base
 			"caption" => t("Sugu"),
 			"sortable" => 1,
 		));
+		$t->define_field(array(
+			"name" => "company",
+			"caption" => t("Firma"),
+			"sortable" => 1,
+		));
 		$t->define_chooser(array(
 			"name" => "rem",
 			"field" => "rem_contestant",
@@ -627,6 +704,30 @@ class scm_team extends class_base
 			return date("d / m / Y", $key);
 		}
 		return $key;
+	}
+	
+	/**
+		@param competition
+		@param contestant
+		@comment
+			finds right registration connection and returns the extra data attached to it
+	**/
+	function _get_extra_data($arr)
+	{
+		$c = new connection();
+		$conns = $c->find(array(
+			"from" => $arr["competition"],
+			"to" => $arr["contestant"],
+			"reltype" => "RELTYPE_CONTESTANT",
+		));
+		$id = key($conns);
+		$c = new connection($id);
+		if($arr["ret_inst"])
+		{
+			$arr["ret_inst"] = $c;
+		}
+		$extra_data = aw_unserialize($c->prop("data"));
+		return $extra_data;
 	}
 }
 ?>

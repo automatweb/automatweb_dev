@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.8 2006/07/27 23:32:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.9 2006/07/31 11:30:24 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -711,7 +711,9 @@ class scm_competition extends class_base
 		{
 			$ol_filt["archive"] = 0;
 		}
+		$ol_filt["CL_SCM_COMPETITION.RELTYPE_CONTESTANT"] = ($arr["contestant"])?$arr["contestant"]:NULL;
 		$list = new object_list($ol_filt);
+		/*
 		if(strlen($arr["contestant"]) && ($arr["unregistered"] || $arr["registered"]))
 		{
 			foreach($list->arr() as $oid => $obj)
@@ -735,6 +737,7 @@ class scm_competition extends class_base
 				}
 			}
 		}
+		*/
 		if(strlen($arr["organizer"]))
 		{
 			$obj = obj($arr["organizer"]);
