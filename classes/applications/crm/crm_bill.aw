@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.70 2006/07/28 10:29:06 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.71 2006/07/31 10:37:35 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -427,6 +427,7 @@ class crm_bill extends class_base
 			);
 		}
 		$pps = get_instance("applications/crm/crm_participant_search");
+		$default_row_jrk = 0;
 		foreach($rows as $row)
 		{
 			$t_inf = $row;
@@ -446,9 +447,11 @@ class crm_bill extends class_base
 					$r_pers[$rp_id] = $rp_o->name();
 				}
 			}
-			$t->define_data(array(
+			if($default_row_jrk < $t_inf["jrk"]) $default_row_jrk = $t_inf["jrk"];
+			if(!$t_inf["jrk"]) $t_inf["jrk"] = $default_row_jrk;
+			$default_row_jrk = $default_row_jrk + 10;
 
-			
+			$t->define_data(array(
 			"name" => html::textbox(array(
 					"name" => "rows[$id][jrk]",
 					"value" => $t_inf["jrk"],
