@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.99 2006/08/01 14:09:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.100 2006/08/01 14:14:39 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -969,11 +969,6 @@ class forum_v2 extends class_base
 
 		$c = $pager = "";
 
-//		list($comm_counts,) = $this->get_comment_counts(array(
-//			"parents" => $subtopic_list->ids(),
-//		));
-		
-		
 		$tcount = sizeof($topics_list_ids);
 		$num_pages = (int)(($tcount / $topics_on_page) + 1);
 		$selpage = (int)$args["request"]["page"];
