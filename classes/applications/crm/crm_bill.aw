@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.75 2006/08/01 14:27:40 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.76 2006/08/01 15:13:15 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -882,6 +882,8 @@ class crm_bill extends class_base
 			$grp_rows[$row["prod"]][$unp]["id"] = $row["id"];
 			$grp_rows[$row["prod"]][$unp]["tot_cur_sum"] += $cur_sum;
 			$grp_rows[$row["prod"]][$unp]["name"] = $row["name"];
+			$grp_rows[$row["prod"]][$unp]["comment"] = $row["comment"];
+
 			if (empty($grp_rows[$row["prod"]][$unp]["comment"]))
 			{
 				$grp_rows[$row["prod"]][$unp]["comment"] = $row["comment"];
@@ -891,7 +893,7 @@ class crm_bill extends class_base
 			$sum += ($cur_tax+$cur_sum);
 			$tot_amt += $row["amt"];
 			$tot_cur_sum += $cur_sum;
-			if(!strlen($row["name"])>0)$has_nameless_rows = 1;
+			if(!strlen($row["comment"])>0)$has_nameless_rows = 1;
 		}
  
 		$fbr = reset($brows);
@@ -919,7 +921,7 @@ class crm_bill extends class_base
 				//kui vaid ühel real on nimi... et siis arve eeltvaates moodustuks nendest 1 rida
 				if(!$arr["all_rows"] && $has_nameless_rows)
 				{
-					if(!strlen($desc)>0) break;
+					if(!strlen($grp_row["comment"])>0) break;
 					else {$grp_row["tot_cur_sum"] = $tot_cur_sum; $grp_row["tot_amt"] = $tot_amt;}
 				}
 				$this->vars(array(
