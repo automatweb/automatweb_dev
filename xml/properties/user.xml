@@ -62,6 +62,15 @@
             <caption>E-mail</caption>
       </property>
       <property>
+            <name>notify</name>
+            <table>users</table>
+            <group>general</group>
+            <field>notify</field>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Uuest mailist teavitamine</caption>
+      </property>
+      <property>
             <name>created</name>
             <table>objects</table>
             <group>general</group>
