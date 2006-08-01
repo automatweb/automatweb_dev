@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.72 2006/07/31 13:32:15 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.73 2006/08/01 10:51:56 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -599,16 +599,32 @@ class crm_bill extends class_base
 			if(substr_count($row, '-') == 1)
 			{
 				$between = explode("-", $row);
-				$this->show_add(array(
+				if($page ==0) $res = $this->show_add(array(
 					"id" => $arr["obj_inst"]->id() ,
 					"page" => $page,
 					"between" => $between,
 				));
+//				else $res .= $this->_preview_popup(array(
+//					"id" => $arr["obj_inst"]->id() ,
+//					"page" => $page,
+//					"between" => $between,
+//				));
 				$page++;
-			}
+//			}
+			die($res);}
 		}
-		if($page == 0) $arr["prop"]["value"] = $this->show_add(array("id" => $arr["obj_inst"]->id()));
+		if($page == 0) $arr["prop"]["value"] = die($this->show_add(array("id" => $arr["obj_inst"]->id())));
 	}
+
+//	/**
+//		@attrib name=add_row
+//		@param id required type=int acl=edit
+///		@param retu optional
+	/**/
+//	function _preview_popup($arr)
+//	{
+//		die($this->show_add(array("id" => $arr["obj_inst"]->id())));
+//	}
 
 	function show($arr)
 	{
@@ -1069,6 +1085,7 @@ class crm_bill extends class_base
 				"km_code" => $kmk,
 				"unit" => $row->prop("unit"),
 				"jrk" => $row->meta("jrk"),
+				"id" => $row->id(),
 				"is_oe" => $row->prop("is_oe"),
 				"has_tax" => $row->prop("has_tax"),
 				"date" => $row->prop("date"),
@@ -1291,7 +1308,7 @@ class crm_bill extends class_base
 				"desc" => $row["name"],
 				"date" => $row["date"] 
 			));
-			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"]);
+			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
@@ -1332,7 +1349,7 @@ class crm_bill extends class_base
 				"date" => $row["date"]
 			));
 
-			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"]);
+			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
@@ -1389,6 +1406,7 @@ class crm_bill extends class_base
 			$url = aw_url_change_var("group", "preview", aw_url_change_var("openprintdialog", 1));
 			$res .= "<script language='javascript'>setTimeout('window.location.href=\"$url\"',10000);window.print();if (navigator.userAgent.toLowerCase().indexOf('msie') == -1) {window.location.href='$url'; }</script>";
 		}
+		return $res;
 		die($res);
 	}
 
