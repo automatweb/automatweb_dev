@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.98 2006/06/07 12:56:26 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.99 2006/08/01 14:09:39 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -167,6 +167,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property topics_on_page type=select
 		@caption Teemasid lehel
 
+		@property topics_sort_order type=select 
+		@caption Teemade j&auml;rjekord
+
 		@property show_image_upload_in_add_topic_form type=checkbox ch_value=1
 		@caption N&auml;idata teema lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
 
@@ -223,8 +226,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 */
 
+define('TOPICS_SORT_ORDER_NEWEST_TOPICS_FIRST', 1);
+define('TOPICS_SORT_ORDER_ALPHABET', 2);
+define('TOPICS_SORT_ORDER_NEWEST_COMMENTS_FIRST', 3);
+define('TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST', 4);
+
 class forum_v2 extends class_base
 {
+
+	var $topics_sort_order = array();
+
 	function forum_v2()
 	{
 		$this->init(array(
@@ -232,8 +243,14 @@ class forum_v2 extends class_base
 			"clid" => CL_FORUM_V2,
 		));
 
+		$this->topics_sort_order = array(
+			TOPICS_SORT_ORDER_NEWEST_TOPICS_FIRST => t('Uuemad teemad eespool'),
+			TOPICS_SORT_ORDER_ALPHABET => t('T&auml;hestikulises j&auml;rjekorras (A-Z)'),
+			TOPICS_SORT_ORDER_NEWEST_COMMENTS_FIRST => t('Viimati kommenteeritud eespool'),
+			TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST => t('Enim kommenteeritud eespool')
+		);
+	
 		lc_site_load("forum",&$this);
-
 	}
 
 	function get_property($arr)
@@ -245,6 +262,9 @@ class forum_v2 extends class_base
 			case "topics_on_page":
 			case "comments_on_page":
 				$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
+				break;
+			case "topics_sort_order":
+				$data['options'] = $this->topics_sort_order;
 				break;
 
 			case "topic_depth":
@@ -855,35 +875,43 @@ class forum_v2 extends class_base
 		$this->_add_style("style_forum_yah");
 		$this->vars($this->style_data);
 
-		$subtopic_list = new object_list(array(
-			"parent" => $topic_obj->id(),
-			"class_id" => CL_MSGBOARD_TOPIC,
-			"status" => STAT_ACTIVE,
-			"sort_by" => "objects.created desc"
-		));
+		$topics_sort_order = $args['obj_inst']->prop('topics_sort_order');
+		$topics_list_params = array(
+			'parent' => $topic_obj->id(),
+			'class_id' => CL_MSGBOARD_TOPIC,
+			'status' => STAT_ACTIVE,
+		);
+		$is_sorted = true;
 
-		$c = $pager = "";
-
-		list($comm_counts,) = $this->get_comment_counts(array(
-			"parents" => $subtopic_list->ids(),
-		));
-		
-		$tcount = sizeof($subtopic_list->ids());
-		$num_pages = (int)(($tcount / $topics_on_page) + 1);
-		$selpage = (int)$args["request"]["page"];
-		if ($selpage == 0)
+		if ( !empty($topics_sort_order) )
 		{
-			$selpage = 1;
-		};
-		if ($selpage > $num_pages)
+			// if topics can be sorted via object_list, then we are going to do it:
+			switch ( $topics_sort_order )
+			{
+				case TOPICS_SORT_ORDER_ALPHABET:
+					$topics_list_params['sort_by'] = 'objects.name ASC';
+					break;
+				case TOPICS_SORT_ORDER_NEWEST_TOPICS_FIRST:
+					$topics_list_params['sort_by'] = 'objects.created DESC';
+					break;
+				default:
+					// if topics list can't be sorted via object_list, then we mark, that topics are not sorted:
+					$is_sorted = false;
+			}
+		}
+		else
 		{
-			$selpage = $num_pages;
-		};
+			// if the topics sort order is not set at all, then by default we sort it by creation time:
+			$topics_list_params['sort_by'] = 'objects.createdby ASC';
+		}
 
-		$from = ($selpage - 1) * $topics_on_page + 1;
-		$to = $from + $topics_on_page - 1;
-		$cnt = 0;
-		
+		$topics_ol = new object_list($topics_list_params);
+
+		$topics_list_ids = $topics_ol->ids();
+
+		list($comment_counts, ) = $this->get_comment_counts(array('parents' => $topics_list_ids));
+
+		// some kind of age check
 		$age_check = false;
 		$c_date = 0;
 		$user_id = aw_global_get("uid_oid");
@@ -901,6 +929,68 @@ class forum_v2 extends class_base
 			}
 		}
 
+		$topics_list = array();
+		foreach ($topics_ol->arr() as $topic)
+		{
+			$topic_oid = $topic->id();
+			$topic_name = $topic->name();
+
+			// data of latest comment:
+			$last_comment = $this->get_last_comments(array('parents' => array($topic_oid)));
+			if ( $age_check === true && $last_comment['created'] < $c_date )
+			{
+				continue;
+			}
+
+			$topics_list[$topic_oid] = array(
+				'name' => ( 1 == $topic->prop('locked') ) ? '[L] '.$topic->name() : $topic->name(),
+				'author' => $topic->prop('author_name'),
+				'comment_count' => (int)$comment_counts[$topic_oid],
+				'last_date' => $last_comment['created'],
+				'last_createdby' => $last_comment['uname'],
+				'topic_id' => $topic_oid,
+			);
+		}
+
+		// if the topics list is marked not sorted, then we have to sort it now: 
+		if ($is_sorted === false)
+		{
+			switch ($topics_sort_order)
+			{
+				case TOPICS_SORT_ORDER_NEWEST_COMMENTS_FIRST:
+					uasort($topics_list, array($this, '__sort_topics_newest_comment_first'));
+					break;
+				case TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST:
+					uasort($topics_list, array($this, '__sort_topics_most_commented_first'));
+					break;
+				
+			}
+		}
+
+		$c = $pager = "";
+
+//		list($comm_counts,) = $this->get_comment_counts(array(
+//			"parents" => $subtopic_list->ids(),
+//		));
+		
+		
+		$tcount = sizeof($topics_list_ids);
+		$num_pages = (int)(($tcount / $topics_on_page) + 1);
+		$selpage = (int)$args["request"]["page"];
+		if ($selpage == 0)
+		{
+			$selpage = 1;
+		};
+		if ($selpage > $num_pages)
+		{
+			$selpage = $num_pages;
+		};
+
+		$from = ($selpage - 1) * $topics_on_page + 1;
+		$to = $from + $topics_on_page - 1;
+		$cnt = 0;
+		
+
 		// each topic can have its own ACL (I highly doubt that this is ever going
 		// to happen though) and DELETE_ACTION subtemplate is parsed only if any of
 		// the topics can actually be deleted
@@ -909,7 +999,7 @@ class forum_v2 extends class_base
 		$can_admin = $this->_can_admin(array("forum_id" => $args["obj_inst"]->id()));
 
 		
-		foreach($subtopic_list->arr() as $subtopic_obj)
+		foreach($topics_list as $topic)
 		{
 			$cnt++;
 			if(!between($cnt, $from, $to))
@@ -917,48 +1007,20 @@ class forum_v2 extends class_base
 				continue;
 			};
 
-			$st_oid = $subtopic_obj->id();
+			$topic['last_date'] = ( !empty($topic['last_date']) ) ? $this->time2date($topic['last_date'], 2) : '';
 
-			// retrieve the date of the latest comment
-			$last = $this->get_last_comments(array(
-				"parents" => array($st_oid),
+			$topic['open_topic_url'] = $this->mk_my_orb("change",array(
+				'id' => $oid,
+				'group' => $args['request']['group'],
+				'topic' => $topic['topic_id'],
+				'section' => $section,
+				'_alias' => get_class($this),
 			));
-			
-			if($age_check === true && $last["created"] < $c_date)
-			{
-				$cnt--;
-				continue;
-			}
-			
-			if ($last)
-			{
-				$last["created"] = $this->time2date($last["created"],2);
-			};
 
-			$topic_name = $subtopic_obj->name();
-			if (1 == $subtopic_obj->prop("locked"))
-			{
-				$topic_name = "[L] " . $topic_name;
-			};
-
-			$this->vars(array(
-				"name" => $topic_name,
-				"comment_count" => (int)$comm_counts[$st_oid],
-				"topic_id" => $st_oid,
-				"last_date" => $last["created"],
-				"last_createdby" => $last["uname"],
-				"author" => $subtopic_obj->prop("author_name"),
-				"open_topic_url" => $this->mk_my_orb("change",array(
-						"id" => $oid,
-						"group" => $args["request"]["group"],
-						"topic" => $st_oid,
-						"section" => $section,
-						"_alias" => get_class($this),
-				)),
-			));
+			$this->vars($topic);
 
 			$del = "";
-			if ($can_admin && $this->can("delete",$st_oid))
+			if ($can_admin && $this->can("delete", $topic['topic_id']))
 			{
 				$delete_action = true;
 
@@ -971,7 +1033,7 @@ class forum_v2 extends class_base
 					)),
 				));
 				$del = $this->parse("ADMIN_BLOCK");
-			};
+			}
 
 			$this->vars(array(
 				"ADMIN_BLOCK" => $del,
@@ -986,7 +1048,7 @@ class forum_v2 extends class_base
 			{
 				$c .= $this->parse("SUBTOPIC_ODD");
 			}
-		};
+		}
 
 		$page_count = 0;
 
@@ -2302,5 +2364,24 @@ class forum_v2 extends class_base
 
 		return false;
 	}
-};
+
+	function __sort_topics_newest_comment_first($a, $b)
+	{
+		if ($a['last_date'] == $b['last_date'])
+		{
+			return 0;
+		}
+		return ( $a['last_date'] < $b['last_date'] ) ? 1 : -1;
+	}
+
+	function __sort_topics_most_commented_first($a, $b)
+	{
+		if ($a['comment_count'] == $b['comment_count'])
+		{
+			return 0;
+		}
+		return ( $a['comment_count'] < $b['comment_count'] ) ? 1 : -1;
+	}
+
+}
 ?>

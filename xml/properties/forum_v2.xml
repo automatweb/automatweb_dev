@@ -398,6 +398,15 @@
             <caption>Teemasid lehel</caption>
       </property>
       <property>
+            <name>topics_sort_order</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Teemade j&amp;amp;auml;rjekord</caption>
+      </property>
+      <property>
             <name>show_image_upload_in_add_topic_form</name>
             <table>objects</table>
             <group>topic_selector</group>
