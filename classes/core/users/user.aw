@@ -55,6 +55,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @property email field=email type=textbox
 @caption E-mail
 
+@property notify field=notify type=checkbox ch_value=1
+@caption Uuest mailist teavitamine
+
 @property created field=created type=date table=objects
 @caption Loodud
 
