@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.73 2006/08/01 10:51:56 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.74 2006/08/01 11:18:25 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -890,7 +890,7 @@ class crm_bill extends class_base
 			$tot_amt += $row["amt"];
 			$tot_cur_sum += $cur_sum;
 		}
-		
+ 
 		$fbr = reset($brows);
 		foreach($grp_rows as $prod => $grp_rowa)
 		{
@@ -909,6 +909,13 @@ class crm_bill extends class_base
 				else
 				{
 					$desc = $grp_row["name"];
+				}
+
+				//kui vaid ühel real on nimi... et siis arve eeltvaates moodustuks nendest 1 rida
+				if(!$arr["all_rows"])
+				{
+					if(!strlen($desc)>0) break;
+					else {$grp_row["tot_cur_sum"] = $tot_cur_sum; $grp_row["tot_amt"] = $tot_amt;}
 				}
 				$this->vars(array(
 					"unit" => $grp_row["unit"],
