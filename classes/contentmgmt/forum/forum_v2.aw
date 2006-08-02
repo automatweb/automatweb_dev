@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.100 2006/08/01 14:14:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.101 2006/08/02 14:02:07 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -941,12 +941,11 @@ class forum_v2 extends class_base
 			{
 				continue;
 			}
-
 			$topics_list[$topic_oid] = array(
 				'name' => ( 1 == $topic->prop('locked') ) ? '[L] '.$topic->name() : $topic->name(),
 				'author' => $topic->prop('author_name'),
 				'comment_count' => (int)$comment_counts[$topic_oid],
-				'last_date' => $last_comment['created'],
+				'last_date' => ( empty($last_comment['created']) ) ? $topic->created() : $last_comment['created'],
 				'last_createdby' => $last_comment['uname'],
 				'topic_id' => $topic_oid,
 			);
@@ -958,7 +957,7 @@ class forum_v2 extends class_base
 			switch ($topics_sort_order)
 			{
 				case TOPICS_SORT_ORDER_NEWEST_COMMENTS_FIRST:
-					uasort($topics_list, array($this, '__sort_topics_newest_comment_first'));
+					uasort($topics_list, array($this, '__sort_topics_newest_comments_first'));
 					break;
 				case TOPICS_SORT_ORDER_MOST_COMMENTED_FIRST:
 					uasort($topics_list, array($this, '__sort_topics_most_commented_first'));
@@ -2360,7 +2359,7 @@ class forum_v2 extends class_base
 		return false;
 	}
 
-	function __sort_topics_newest_comment_first($a, $b)
+	function __sort_topics_newest_comments_first($a, $b)
 	{
 		if ($a['last_date'] == $b['last_date'])
 		{
