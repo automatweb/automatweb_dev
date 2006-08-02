@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.102 2006/08/02 18:58:27 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.103 2006/08/02 19:01:32 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -902,7 +902,7 @@ class forum_v2 extends class_base
 		else
 		{
 			// if the topics sort order is not set at all, then by default we sort it by creation time:
-			$topics_list_params['sort_by'] = 'objects.createdby ASC';
+			$topics_list_params['sort_by'] = 'objects.created DESC';
 		}
 
 		$topics_ol = new object_list($topics_list_params);
