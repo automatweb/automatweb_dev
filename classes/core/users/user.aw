@@ -2157,5 +2157,20 @@ class user extends class_base
 	{
 		return  $this->db_fetch_field("SELECT SUM(rating) as r FROM user2rating WHERE uid = '$uid'", "r");
 	}
+	
+	function do_db_upgrade($tbl, $field, $q, $err)
+	{
+		switch($field)
+		{
+			case "notify":
+				$this->db_add_col($tbl, array(
+					"name" => $field,
+					"type" => "char"
+				));
+				return true;
+			break;
+		}
+		return false;
+	}
 }
 ?>
