@@ -683,6 +683,15 @@
             <caption>Valuuta</caption>
       </property>
       <property>
+            <name>round</name>
+            <table>objects</table>
+            <group>cedit</group>
+            <type>textbox</type>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>&amp;amp;Uuml;marda</caption>
+      </property>
+      <property>
             <name>phone_id</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>

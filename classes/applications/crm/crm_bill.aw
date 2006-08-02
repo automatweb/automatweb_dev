@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.78 2006/08/02 11:46:18 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.79 2006/08/02 14:20:36 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -536,6 +536,7 @@ class crm_bill extends class_base
 		{
 			$sum -= $sum * ($arr["obj_inst"]->prop("disc") / 100.0);
 		}
+		$sum = $this->round_sum($sum);
 		if ($arr["obj_inst"]->prop("sum") != $sum)
 		{
 			$arr["obj_inst"]->set_prop("sum", $sum);
@@ -564,7 +565,24 @@ class crm_bill extends class_base
 			$sum -= $sum * ($bill->prop("disc") / 100.0);
 		}
 
-		return $sum;
+		return $this->round_sum($sum);
+	}
+
+	function round_sum($sum)
+	{
+		$u = get_instance(CL_USER);
+		$co = $u->get_current_company();
+		$co = obj($co);
+		if(is_object($co) && $co->prop("round"))
+		{
+			$round = (double)$co->prop("round");
+			$min_stuff = $sum/$round - ($sum/$round - (int)($sum/$round));
+			$min_diff = $sum - $min_stuff*$round;
+			$max_diff = $sum - ($min_stuff + 1) * $round + 1;
+			if($max_diff > $min_diff) $sum = $min_stuff*$round;
+			else $sum = ($min_stuff+1)*$round;
+		}
+		 return $sum;
 	}
 
 	function callback_pre_save($arr)
@@ -1019,6 +1037,9 @@ class crm_bill extends class_base
 			$sigs .= $this->parse("SIGNATURE");
 		}
 
+	//	$sum_wo_tax = $this->round_sum($sum_wo_tax);
+		$sum = $this->round_sum($sum);
+
 		$this->vars(array(
 			"SIGNATURE" => $sigs,
 			"TAX_ROW" => $tax_rows_str,
@@ -1398,6 +1419,10 @@ class crm_bill extends class_base
 		}
 		$page_no = $arr["page"] + 1;
 		if(!$page_no) $page_no = 1;
+
+		//$sum_wo_tax = $this->round_sum($sum_wo_tax);
+		$sum = $this->round_sum($sum);
+
 		$this->vars(array(
 			"SIGNATURE" => $sigs,
 			"ROW" => join("", $rs),

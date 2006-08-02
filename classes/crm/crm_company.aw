@@ -245,6 +245,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_CRM_COMPANY, on_create_company)
 	@property currency type=relpicker reltype=RELTYPE_CURRENCY table=kliendibaas_firma field=aw_currency
 	@caption Valuuta
 
+	@property round type=textbox method=serialize field=meta
+	@caption &Uuml;marda
+
 	@property phone_id type=releditor mode=manager props=name,type table_fields=name,type choose_default=1 always_show_add=1 table=kliendibaas_firma reltype=RELTYPE_PHONE
 	@caption Telefon
 
@@ -3999,6 +4002,7 @@ class crm_company extends class_base
 				}
 			}
 		}
+		sort($sel);
 		if (count($sel))
 		{
 			$arr["sel"] = $sel;
