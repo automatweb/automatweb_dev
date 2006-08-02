@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.101 2006/08/02 14:02:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.102 2006/08/02 18:58:27 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1442,8 +1442,23 @@ class forum_v2 extends class_base
 
 			if ($_SESSION['forum_comment_error'])
 			{
+				$error_msg = "";
+				if ( $_SESSION['forum_comment_error']['name'] )
+				{
+					$error_msg .= t('Nime v&auml;li peab olema t&auml;idetud! <br />');
+				}
+				if ( $_SESSION['forum_comment_error']['email'] )
+				{
+					$error_msg .= t('E-maili v&auml;li peab olema t&auml;idetud! <br />');
+				}
+				if ( $_SESSION['forum_comment_error']['commtext'] )
+				{
+					$error_msg .= t('Kommentaari v&auml;li peab olema t&auml;idetud!');
+				}
+
 				$this->vars(array(
-					"error_message" => t("Pealkirja v&otilde;i sisu v&auml;li peab olema t&auml;idetud"),
+				//	"error_message" => t("Pealkirja v&otilde;i sisu v&auml;li peab olema t&auml;idetud"),
+					'error_message' => $error_msg
 				));
 				$this->vars(array(
 					"ERROR" => $this->parse("ERROR"),
@@ -2033,9 +2048,28 @@ class forum_v2 extends class_base
 	function submit_comment($arr)
 	{
 		// at least comment text or title have to be set
-		if (empty($arr['name']) && empty($arr['commtext']))
+	//	if (empty($arr['name']) && empty($arr['commtext']))
+	//	{
+	//		$_SESSION['forum_comment_error'] = 1;
+	//		return $this->finish_action($arr);
+	//	}
+		$errors = array();
+		if ( empty($arr['name']) )
 		{
-			$_SESSION['forum_comment_error'] = 1;
+			$errors['name'] = 1;
+		}
+		if ( empty($arr['commtext']) )
+		{
+			$errors['commtext'] = 1;
+		}
+		if ( isset($arr['uemail']) && empty($arr['uemail']) )
+		{
+			$errors['email'] = 1;
+		}
+
+		if ( !empty($errors) )
+		{
+			$_SESSION['forum_comment_error'] = $errors;
 			return $this->finish_action($arr);
 		}
 		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
@@ -2062,7 +2096,6 @@ class forum_v2 extends class_base
 		$emb["parent"] = $arr["topic"];
 		$emb["status"] = STAT_ACTIVE;
 		$this->comm_id = $t->submit($emb);
-
 		// figure out the images parent:
 		$images_folder_id = $obj_inst->prop("images_folder");
 		if (!empty($images_folder_id))
