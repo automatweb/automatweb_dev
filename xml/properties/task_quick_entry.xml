@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>time</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>time_select</type>
+            <store>no</store>
+            <field>time</field>
+            <caption>Aeg</caption>
+      </property>
+      <property>
             <name>date</name>
             <table>objects</table>
             <group>general</group>
