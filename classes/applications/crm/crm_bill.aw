@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.77 2006/08/01 15:22:52 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.78 2006/08/02 11:46:18 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -460,7 +460,7 @@ class crm_bill extends class_base
 				)).html::textbox(array(
 					"name" => "rows[$id][comment]",
 					"value" => $t_inf["comment"],
-					"size" => 42
+					"size" => 41
 				))."<br>".html::textarea(array(
 					"name" => "rows[$id][name]",
 					"value" => $t_inf["name"],
@@ -594,37 +594,33 @@ class crm_bill extends class_base
 	{
 		if($arr["obj_inst"]->meta("rows_in_page"))
 		$page = 0;
-		foreach($arr["obj_inst"]->meta("rows_in_page") as $key => $row)
+		if(array_sum($arr["obj_inst"]->meta("rows_in_page")) > 0)
 		{
-			if(substr_count($row, '-') == 1)
-			{
-				$between = explode("-", $row);
-				if($page ==0) $res = $this->show_add(array(
-					"id" => $arr["obj_inst"]->id() ,
-					"page" => $page,
-					"between" => $between,
-				));
-//				else $res .= $this->_preview_popup(array(
-//					"id" => $arr["obj_inst"]->id() ,
-//					"page" => $page,
-//					"between" => $between,
-//				));
-				$page++;
-//			}
-			die($res);}
+			$this->_preview_popup(array(
+				"rows_in_page" => $arr["obj_inst"]->meta("rows_in_page"),
+				"page" => $page,
+				"id" => $arr["obj_inst"]->id(),
+			));
 		}
 		if($page == 0) $arr["prop"]["value"] = die($this->show_add(array("id" => $arr["obj_inst"]->id())));
 	}
 
-//	/**
-//		@attrib name=add_row
-//		@param id required type=int acl=edit
-///		@param retu optional
+	/**
+		@attrib name=_preview_popup
 	/**/
-//	function _preview_popup($arr)
-//	{
-//		die($this->show_add(array("id" => $arr["obj_inst"]->id())));
-//	}
+	function _preview_popup($arr)
+	{	global $id, $rows_in_page, $page;
+		extract($arr);
+		$row = array_shift($rows_in_page);
+		$between = explode("-", $row);
+		$link = $this->mk_my_orb("_preview_popup", array("id" => $id, "rows_in_page" => $rows_in_page , "page" => ($page + 1)));
+		if(array_sum($rows_in_page)){
+			$popup = 
+			'<script name= javascript>window.open("'.$link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=no, menubar=no, height=800, width=720")</script>';
+			$not_last_page = 1;
+		}
+		die($this->show_add(array("id" => $id, "page" => $page, "between" => $between, "not_last_page" => $not_last_page,)) . $popup);
+	}
 
 	function show($arr)
 	{
@@ -1294,7 +1290,6 @@ class crm_bill extends class_base
 		$sum = 0;
 		foreach($this->get_bill_rows($b) as $key => $row)
 		{
-			if($arr["between"] && !($key+1 >= $arr["between"][0] && $key+1 <= $arr["between"][1])) continue;
 			if ($row["is_oe"])
 			{
 				continue;
@@ -1317,15 +1312,19 @@ class crm_bill extends class_base
 				$cur_pr = $this->num($row["price"]);
 			}
 
-			$this->vars(array(
-				"unit" => $row["unit"],
-				"amt" => number_format($row["amt"],2), 
-				"price" => number_format($row["price"], 2,".", " "),
-				"sum" => number_format($cur_sum, 2,"."),
-				"desc" => $row["name"],
-				"date" => $row["date"] 
-			));
-			$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
+			if($arr["between"] && !($key+1 >= $arr["between"][0] && $key+1 <= $arr["between"][1]));
+			else
+			{
+				$this->vars(array(
+					"unit" => $row["unit"],
+					"amt" => number_format($row["amt"],2), 
+					"price" => number_format($row["price"], 2,".", " "),
+					"sum" => number_format($cur_sum, 2,"."),
+					"desc" => $row["name"],
+					"date" => $row["date"] 
+				));
+				$rs[] = array("str" => $this->parse("ROW"), "date" => $row["date"] , "jrk" => $row["jrk"], "id" => $row["id"]);
+			}
 			$sum_wo_tax += $cur_sum;
 			$tax += $cur_tax;
 			$sum += ($cur_tax+$cur_sum);
@@ -1392,15 +1391,23 @@ class crm_bill extends class_base
 			$sigs .= $this->parse("SIGNATURE");
 		}
 
-
+		if(!$arr["not_last_page"])
+		{
+			$this->vars(array("tot_amt" => number_format($tot_amt, 2,".", " ")));
+			$total_ = $this->parse("TOTAL");
+		}
+		$page_no = $arr["page"] + 1;
+		if(!$page_no) $page_no = 1;
 		$this->vars(array(
 			"SIGNATURE" => $sigs,
 			"ROW" => join("", $rs),
+			"TOTAL" => $total_,
 			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
 			"tax" => number_format($tax, 2,"." , " "),
 			"total" => number_format($sum, 2,".", " "),
 			"total_text" => locale::get_lc_money_text($sum, $ord_cur, $lc),
-			"tot_amt" => number_format($tot_amt, 2,".", " ")
+			"tot_amt" => number_format($tot_amt, 2,".", " "),
+			"page_no" => $page_no,
 		));
 
 		$res =  $this->parse();
