@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.199 2006/06/25 22:01:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.200 2006/08/03 11:00:43 tarvo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -489,7 +489,7 @@ class aliasmgr extends aw_template
 
 		$alinks = $obj->meta("aliaslinks");
 
-		$this->reltypes[RELTYPE_ACL] = "&otilde;igus";
+		$this->reltypes[RELTYPE_ACL] = t("&otilde;igus");
 		$this->rel_type_classes[RELTYPE_ACL] = array(
 			CL_GROUP => $tmp[CL_GROUP]["name"]
 		);
@@ -883,7 +883,7 @@ class aliasmgr extends aw_template
 
 		if ($this->can("admin", $this->id))
 		{
-			$this->reltypes[RELTYPE_ACL] = "&otilde;igus";
+			$this->reltypes[RELTYPE_ACL] = t("&otilde;igus");
 			$this->rel_type_classes[RELTYPE_ACL] = array(
 				CL_GROUP => $tmp[CL_GROUP]["name"]
 			);
@@ -945,7 +945,7 @@ class aliasmgr extends aw_template
 			$vals = str_replace("&Ouml;","Ö",$v);
 			if ($dval)
 			{
-				$dvals = ',"Objekti tüüp","capt_new_object"';
+				$dvals = ',"'.t("Objekti tüüp").'","capt_new_object"';
 				$comp = (isset($this->rel_type_classes[$k]) && is_array($this->rel_type_classes[$k])) ? $this->rel_type_classes[$k] : $choice;
 			}
 
@@ -958,7 +958,7 @@ class aliasmgr extends aw_template
 
 		}
 
-		$rels1 .= 'listB.addOptions("_"'.',"Objekti tüüp","capt_new_object"'.");\n";
+		$rels1 .= 'listB.addOptions("_"'.',"'.t("Objekti tüüp").'","capt_new_object"'.");\n";
 		$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
 
 		$this->vars(array(
@@ -972,7 +972,7 @@ class aliasmgr extends aw_template
 
 		$toolbar->add_cdata(
 			html::select(array(
-				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => 'Seose tüüp') + $this->reltypes),
+				"options" => (count($this->reltypes) <= 1) ? $this->reltypes :(array('_' => t('Seose tüüp')) + $this->reltypes),
 				"name" => "reltype",
 				"selected" => $this->reltype,
 				'onchange' => "listB.populate();",
