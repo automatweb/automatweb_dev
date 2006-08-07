@@ -117,7 +117,7 @@ class relationmgr extends aw_template
 			asort($val);
 			if($id == 0 || $id == RELTYPE_BROTHER)
 			{
-				$val = array("capt_new_object" => t("Objekti t&uuml;&uuml;p")) + $val;
+				$val = array("capt_new_object" => html_entity_decode(t("Objekti t&uuml;&uuml;p"))) + $val;
 			}
 			$this->true_rel_classes[$id] = $val;
 		}
@@ -537,7 +537,7 @@ class relationmgr extends aw_template
 			}
 		}
 
-		$rels1 .= 'listB.addOptions("_","'.t("Objekti t&uuml;&uuml;p").'","capt_new_object"'.");\n";
+		$rels1 .= 'listB.addOptions("_","'.html_entity_decode(t("Objekti t&uuml;&uuml;p")).'","capt_new_object"'.");\n";
 		$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
 
 		$this->vars(array(
