@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.200 2006/08/03 11:00:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.201 2006/08/07 13:16:37 tarvo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -873,7 +873,7 @@ class aliasmgr extends aw_template
 		//$boxesscript = $this->get_file(array('file' => $this->cfg['tpldir'].'/aliasmgr/selectboxes.tpl'));
 
 		$tmp = aw_ini_get("classes");
-		$this->reltypes[RELTYPE_BROTHER] = "too vend";
+		$this->reltypes[RELTYPE_BROTHER] = t("Too vend");
 		$this->rel_type_classes[RELTYPE_BROTHER] = array(
 			CL_MENU => $tmp[CL_MENU]["name"],
 			CL_SHOP_PRODUCT => $tmp[CL_SHOP_PRODUCT]['name'],
@@ -883,7 +883,7 @@ class aliasmgr extends aw_template
 
 		if ($this->can("admin", $this->id))
 		{
-			$this->reltypes[RELTYPE_ACL] = t("&otilde;igus");
+			$this->reltypes[RELTYPE_ACL] = t("&Otilde;igus");
 			$this->rel_type_classes[RELTYPE_ACL] = array(
 				CL_GROUP => $tmp[CL_GROUP]["name"]
 			);
