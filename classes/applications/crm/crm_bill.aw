@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.79 2006/08/02 14:20:36 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.80 2006/08/07 11:34:13 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -640,6 +640,36 @@ class crm_bill extends class_base
 		die($this->show_add(array("id" => $id, "page" => $page, "between" => $between, "not_last_page" => $not_last_page,)) . $popup);
 	}
 
+	function collocate_rows($grp_rows)
+	{
+		$new_rows = array();
+		foreach($grp_rows as $key => $grp_row)
+		{
+			$row = array_shift($grp_row);
+			$new_line = 1;
+			foreach($new_rows as $n_key => $new_row)
+			{
+				if($new_row["price"] == $row["price"] && ($new_row["comment"] == $row["comment"] || !$row["comment"]))
+				{
+					$new_rows[$n_key]["sum_wo_tax"] = $new_rows[$n_key]["sum_wo_tax"] + $row["sum_wo_tax"];
+					$new_rows[$n_key]["tax"] = $new_rows[$n_key]["tax"] + $row["tax"];
+					$new_rows[$n_key]["sum"] = $new_rows[$n_key]["sum"] + $row["sum"];
+					$new_rows[$n_key]["tot_amt"] = $new_rows[$n_key]["tot_amt"] + $row["tot_amt"];
+					$new_rows[$n_key]["tot_cur_sum"] = $new_rows[$n_key]["tot_cur_sum"] + $row["tot_cur_sum"];
+					$new_line = 0;
+					break;
+				}
+			}
+			if($new_line) $new_rows[$key] = $row;
+		}
+		foreach($new_rows as $key => $new_row)
+		{
+			$new_rows[$key] = null;
+			$new_rows[$key][$new_row["price"]] = $new_row;
+		}
+		return ($new_rows);
+	}
+
 	function show($arr)
 	{
 		$b = obj($arr["id"]);
@@ -890,6 +920,7 @@ class crm_bill extends class_base
 			$grp_rows[$row["prod"]][$unp]["tax"] += $cur_tax;
 			$grp_rows[$row["prod"]][$unp]["sum"] += ($cur_tax+$cur_sum);
 			$grp_rows[$row["prod"]][$unp]["unit"] = $row["unit"];
+			$grp_rows[$row["prod"]][$unp]["price"] = $row["price"];
 			$grp_rows[$row["prod"]][$unp]["date"] = $row["date"];
 			$grp_rows[$row["prod"]][$unp]["jrk"] = $row["jrk"];
 			$grp_rows[$row["prod"]][$unp]["tot_amt"] += $row["amt"];
@@ -911,7 +942,10 @@ class crm_bill extends class_base
 		}
  
 		$fbr = reset($brows);
-		$primary_row_is_set = 0;
+		
+		//koondab sama nimega ja nimetud ühe hinnaga read kokku
+		if(!$arr["all_rows"]) $grp_rows = $this->collocate_rows($grp_rows);
+		
 		foreach($grp_rows as $prod => $grp_rowa)
 		{
 			foreach($grp_rowa as $key => $grp_row)
@@ -932,15 +966,15 @@ class crm_bill extends class_base
 				}
 
 				//kui vaid ühel real on nimi... et siis arve eeltvaates moodustuks nendest 1 rida
-				if(!$arr["all_rows"] && $has_nameless_rows)
-				{
-					if(!strlen($grp_row["comment"])>0 && $primary_row_is_set) break;
-					{
-						$grp_row["tot_cur_sum"] = $tot_cur_sum;
-						$grp_row["tot_amt"] = $tot_amt;
-						$primary_row_is_set = 1;
-					}
-				}
+//				if(!$arr["all_rows"] && $has_nameless_rows)
+//				{
+//					if(!strlen($grp_row["comment"])>0 && $primary_row_is_set) break;
+//					{
+//						$grp_row["tot_cur_sum"] = $tot_cur_sum;
+//						$grp_row["tot_amt"] = $tot_amt;
+//						$primary_row_is_set = 1;
+//					}
+//				}
 				$this->vars(array(
 					"unit" => $grp_row["unit"],
 					"amt" => $grp_row["tot_amt"],
