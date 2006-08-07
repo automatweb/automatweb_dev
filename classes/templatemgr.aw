@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.23 2005/04/05 08:51:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.24 2006/08/07 12:42:34 tarvo Exp $
 
 class templatemgr extends aw_template
 {
@@ -63,7 +63,7 @@ class templatemgr extends aw_template
 		};
 		if ($def_n != "")
 		{
-			$result["0"] = "Vaikimisi: ".$def_n;
+			$result["0"] = t("Vaikimisi: ").$def_n;
 		}
 		return $result;
 	}
