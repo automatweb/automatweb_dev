@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.202 2006/08/07 14:21:32 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.203 2006/08/07 14:28:52 tarvo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -945,7 +945,7 @@ class aliasmgr extends aw_template
 			$vals = str_replace("&Ouml;","Ö",$v);
 			if ($dval)
 			{
-				$dvals = ',"'.t("Objekti t&uuml;p").'","capt_new_object"';
+				$dvals = ',"'.t("Objekti t&uuml;&uuml;p").'","capt_new_object"';
 				$comp = (isset($this->rel_type_classes[$k]) && is_array($this->rel_type_classes[$k])) ? $this->rel_type_classes[$k] : $choice;
 			}
 
@@ -958,7 +958,7 @@ class aliasmgr extends aw_template
 
 		}
 
-		$rels1 .= 'listB.addOptions("_"'.',"'.t("Objekti t&uuml;p").'","capt_new_object"'.");\n";
+		$rels1 .= 'listB.addOptions("_"'.',"'.t("Objekti t&uuml;&uuml;p").'","capt_new_object"'.");\n";
 		$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
 
 		$this->vars(array(
