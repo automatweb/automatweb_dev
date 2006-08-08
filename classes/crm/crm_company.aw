@@ -3990,7 +3990,6 @@ class crm_company extends class_base
 	**/
 	function create_bill($arr)
 	{
-
 		$sel = array();
 		foreach($arr as $k => $v)
 		{
@@ -4007,7 +4006,6 @@ class crm_company extends class_base
 		{
 			$arr["sel"] = $sel;
 		}
-
 		// create a bill for all selected tasks
 		$bill = obj();
 		$bill->set_class_id(CL_CRM_BILL);
@@ -4110,6 +4108,7 @@ class crm_company extends class_base
 
 		$seti = get_instance(CL_CRM_SETTINGS);
 		$sts = $seti->get_current_settings();
+		$task_rows_to_bill_count = array();
 		foreach(safe_array($arr["sel"]) as $task)
 		{
 			$to = obj($task);
@@ -4126,6 +4125,7 @@ class crm_company extends class_base
 					$task = $to->id();
 				}
 			}
+
 			$bill->connect(array(
 				"to" => $task,
 				"reltype" => "RELTYPE_TASK"
@@ -4137,6 +4137,13 @@ class crm_company extends class_base
 				"type" => "RELTYPE_BILL"
 			));
 
+			if(!$task_rows_to_bill_count[$task]) $task_rows_to_bill_count[$task] = 0;
+			$task_rows_to_bill_count[$task] ++;
+			if($task_rows_to_bill_count[$task] == $_POST["count"][$task])
+			{
+				$task_o->set_prop("send_bill", 0);
+				$task_o->save();
+			}
 			foreach($task_o->connections_from(array("type" => "RELTYPE_ROW")) as $c)
 			{
 				$row = $c->to();
@@ -4152,6 +4159,7 @@ class crm_company extends class_base
 					}
 					$row->save();
 				}
+
 			}
 			$task_o->save();
 
