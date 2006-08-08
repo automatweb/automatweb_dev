@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.81 2006/08/08 12:39:46 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.82 2006/08/08 14:37:45 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -795,10 +795,11 @@ class crm_bill extends class_base
 				if ($this->can("view", $ct->prop("riik")))
 				{
 					$riik = obj($ct->prop("riik"));
-					if( $riik->name() != $ord_country)
-					{
-						$ord_addr .= " ".$ord_country;
-					}
+					//see tundub küll mõttetu...et nagu need tingimused on täidetud, siis mõni rida allpool tehakse täpselt sama
+//					if( $riik->name() != $ord_country)
+//					{
+//						$ord_addr .= " ".$ord_country;
+//					}
 					$impl_phone = $riik->prop("area_code")." ".$impl_phone;
 				}
 			}

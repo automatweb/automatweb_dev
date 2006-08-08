@@ -267,6 +267,11 @@ class crm_company_bills_impl extends class_base
 			"format" => "d.m.Y"
 		));
 
+		$t->define_field(array(
+			"name" => "count",
+			"type" => "hidden",
+		));
+
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel".$proj
@@ -351,7 +356,8 @@ class crm_company_bills_impl extends class_base
 						"hrs" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")), 2),
 						"hr_price" => number_format($o->prop("hr_price"),2),
 						"sum" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")) * $o->prop("hr_price"),2),
-						"set_date" => $ro->prop("to_bill_date")
+						"set_date" => $ro->prop("to_bill_date"),
+						"count" => html::hidden(array("name" => "count[".$o->id()."]" , "value" => count($rs))),
 					));
 				}
 			}
