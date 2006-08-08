@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.12 2006/07/11 15:37:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.13 2006/08/08 16:33:23 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -10,7 +10,7 @@
 @default table=objects
 @default group=general
 
-@property date type=date_select store=no
+@property date type=datetime_select store=no
 @caption Aeg
 
 @property customer type=textbox store=no
@@ -21,9 +21,6 @@
 
 @property task type=textbox store=no
 @caption Toimetus
-
-@property date type=date_select store=no
-@caption Aeg
 
 @property duration type=textbox store=no size=5
 @caption Kestvus
