@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.92 2006/07/28 10:49:14 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.93 2006/08/08 16:17:25 markop Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1924,10 +1924,12 @@ class cfgform extends class_base
 	function get_cfg_proplist($id)
 	{
 		$o = obj($id);
+		$show_to_groups = $o->meta("show_to_groups");
+		
 		$ret = $o->meta("cfg_proplist");
 		$lc = aw_ini_get("user_interface.default_language");
 		$trans = $o->meta("translations");
-
+		
 		// okay, here, if there is no translation for the requested language, then 
 		// read the captions from the translations file.
 
@@ -1974,6 +1976,25 @@ class cfgform extends class_base
 					$pd["force_display"] = 1;
 					$ret[$pn] = $pd;
 				}
+			}
+		}
+		
+		//see värk siis kontrollib, kas miskile kasutajale on mingi omadus äkki maha keeratud
+		$user_group_list = aw_global_get("gidlist_oid");
+		foreach($ret as $key=>$val)
+		{
+			if($show_to_groups[$key])
+			{
+				$allowed_to_see = 0;
+				foreach($user_group_list as $user_group)
+				{
+					if($show_to_groups[$key][$user_group])
+					{
+						$allowed_to_see = 1;
+						break;
+					}
+				}
+				if(!$allowed_to_see) $ret[$key] = null;
 			}
 		}
 		return $ret;
