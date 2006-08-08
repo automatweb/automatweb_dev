@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.80 2006/08/07 11:34:13 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.81 2006/08/08 12:39:46 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -634,7 +634,7 @@ class crm_bill extends class_base
 		$link = $this->mk_my_orb("_preview_popup", array("id" => $id, "rows_in_page" => $rows_in_page , "page" => ($page + 1)));
 		if(array_sum($rows_in_page)){
 			$popup = 
-			'<script name= javascript>window.open("'.$link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=no, menubar=no, height=800, width=720")</script>';
+			'<script name= javascript>window.open("'.$link.'","", "toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720")</script>';
 			$not_last_page = 1;
 		}
 		die($this->show_add(array("id" => $id, "page" => $page, "between" => $between, "not_last_page" => $not_last_page,)) . $popup);
@@ -645,29 +645,34 @@ class crm_bill extends class_base
 		$new_rows = array();
 		foreach($grp_rows as $key => $grp_row)
 		{
-			$row = array_shift($grp_row);
-			$new_line = 1;
-			foreach($new_rows as $n_key => $new_row)
+			while(true)
 			{
-				if($new_row["price"] == $row["price"] && ($new_row["comment"] == $row["comment"] || !$row["comment"]))
+				if(sizeof($grp_row) > 0) $row = array_shift($grp_row);
+				else break;
+				$new_line = 1;
+				foreach($new_rows as $n_key => $new_row)
 				{
-					$new_rows[$n_key]["sum_wo_tax"] = $new_rows[$n_key]["sum_wo_tax"] + $row["sum_wo_tax"];
-					$new_rows[$n_key]["tax"] = $new_rows[$n_key]["tax"] + $row["tax"];
-					$new_rows[$n_key]["sum"] = $new_rows[$n_key]["sum"] + $row["sum"];
-					$new_rows[$n_key]["tot_amt"] = $new_rows[$n_key]["tot_amt"] + $row["tot_amt"];
-					$new_rows[$n_key]["tot_cur_sum"] = $new_rows[$n_key]["tot_cur_sum"] + $row["tot_cur_sum"];
-					$new_line = 0;
-					break;
+					if($new_row["price"] == $row["price"] && ($new_row["comment"] == $row["comment"] || !$row["comment"]))
+					{
+						$new_rows[$n_key]["sum_wo_tax"] = $new_rows[$n_key]["sum_wo_tax"] + $row["sum_wo_tax"];
+						$new_rows[$n_key]["tax"] = $new_rows[$n_key]["tax"] + $row["tax"];
+						$new_rows[$n_key]["sum"] = $new_rows[$n_key]["sum"] + $row["sum"];
+						$new_rows[$n_key]["tot_amt"] = $new_rows[$n_key]["tot_amt"] + $row["tot_amt"];
+						$new_rows[$n_key]["tot_cur_sum"] = $new_rows[$n_key]["tot_cur_sum"] + $row["tot_cur_sum"];
+						$new_line = 0;
+						break;
+					}
 				}
+				$row["key"] = $key;
+				if($new_line) $new_rows[] = $row;
 			}
-			if($new_line) $new_rows[$key] = $row;
 		}
+		$grp_rows = array();
 		foreach($new_rows as $key => $new_row)
 		{
-			$new_rows[$key] = null;
-			$new_rows[$key][$new_row["price"]] = $new_row;
+			$grp_rows[$new_row["key"]][$new_row["price"]] = $new_row;
 		}
-		return ($new_rows);
+		return ($grp_rows);
 	}
 
 	function show($arr)
@@ -945,7 +950,6 @@ class crm_bill extends class_base
 		
 		//koondab sama nimega ja nimetud ühe hinnaga read kokku
 		if(!$arr["all_rows"]) $grp_rows = $this->collocate_rows($grp_rows);
-		
 		foreach($grp_rows as $prod => $grp_rowa)
 		{
 			foreach($grp_rowa as $key => $grp_row)
@@ -1453,7 +1457,10 @@ class crm_bill extends class_base
 		}
 		$page_no = $arr["page"] + 1;
 		if(!$page_no) $page_no = 1;
-
+		if(!($page_no > 1))
+		{
+			$_header = $this->parse("HEADER");
+		}
 		//$sum_wo_tax = $this->round_sum($sum_wo_tax);
 		$sum = $this->round_sum($sum);
 
@@ -1461,6 +1468,7 @@ class crm_bill extends class_base
 			"SIGNATURE" => $sigs,
 			"ROW" => join("", $rs),
 			"TOTAL" => $total_,
+			"HEADER" => $_header,
 			"total_wo_tax" => number_format($sum_wo_tax, 2,".", " "),
 			"tax" => number_format($tax, 2,"." , " "),
 			"total" => number_format($sum, 2,".", " "),
