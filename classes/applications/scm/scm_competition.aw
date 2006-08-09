@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.9 2006/07/31 11:30:24 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_competition.aw,v 1.10 2006/08/09 15:06:55 tarvo Exp $
 // scm_competition.aw - V&otilde;istlus 
 /*
 
@@ -81,11 +81,17 @@
 	@groupinfo manage_groups caption="V&otilde;istkonnad" parent=contestants
 		@default group=manage_groups
 
+		@property teams_tb type=toolbar no_caption=1
+
 		@property teams type=table no_caption=1
 		@caption Meeskondade nimekiri
 
 	@groupinfo manage_contestants caption="V&otilde;istlejad" parent=contestants
 		@default group=manage_contestants
+
+		@property contestants_tb type=toolbar no_caption=1
+
+		@property search_res type=hidden name=search_result no_caption=1 store=no
 
 		@property contestants type=table no_caption=1
 		@caption V&otilde;istlejate nimekiri
@@ -143,17 +149,262 @@ class scm_competition extends class_base
 				$prop["value"] = $this->_get_image($arr);
 			break;
 
+			case "teams_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "add_team",
+					"img" => "new.gif",
+					"tooltip" => t("Lisa uus meeskond"),
+				));
+				$popup_search = get_instance("vcl/popup_search");
+				$search_butt = $popup_search->get_popup_search_link(array(
+					"pn" => "search_result",
+					"clid" => CL_SCM_TEAM,
+				));
+
+				$tb->add_cdata($search_butt);
+				$tb->add_button(array(
+					"name" => "remove_team",
+					"tooltip" => t("Eemalda meeskonnad"),
+					"img" => "delete.gif",
+				));
+			break;
+
+			case "teams":
+				$evt = $this->get_event(array("competition" => $arr["obj_inst"]->id()));
+				$e = $evt?obj($evt):false;
+				if($e && $e->prop("type") == "single")
+				{
+					$prop["value"] = "<font color=\"#FF0000\">".t("V&otilde;istlus ei ole v&otilde;istkondlik")."</font>";
+				}
+				$t = &$prop["vcl_inst"];
+				$t->define_field(array(
+					"name" => "team",
+					"caption" => t("Meeskond"),
+				));
+				$t->define_field(array(
+					"name" => "status",
+					"caption" => t("Staatus"),
+				));
+				$t->define_chooser(array(
+					"name" => "selector",
+					"field" => "selected",
+				));
+				$inst = get_instance(CL_SCM_TEAM);
+				
+				foreach($this->get_teams(array("competition" => $arr["obj_inst"]->id())) as $grid => $data)
+				{
+					$obj = obj($grid);
+					$t->define_data(array(
+						"team" => $obj->name()." (<a href=\"#\">Liikmed</a>)",
+						"status" => $data["registered"]?t("reg"):t("unreg"),
+						"selected" => $grid,
+					));
+
+				}
+
+			break;
+			case "contestants_tb":
+				$tb = &$prop["vcl_inst"];
+				$tb->add_button(array(
+					"name" => "add_contestant",
+					"tooltip" => t("Lisa uus v&otilde;istleja"),
+					"img" => "new.gif",
+					"url" => $this->mk_my_orb("new", array(
+						"class" => "scm_contestant",
+						"parent" => $this->get_organizer(array("competitions" => ($id = $arr["obj_inst"]->id()))),
+						"alias_to" => $id,
+						"reltype" => 6,
+						"return_url" => get_ru(),
+					)),
+				));
+					
+				$evt = $this->get_event(array("competition" => $arr["obj_inst"]->id()));
+				$e = $evt?obj($evt):false;
+				$clid = ($e && $e->prop("type") == "single")?CL_SCM_CONTESTANT:CL_SCM_TEAM;
+				$popup_search = get_instance("vcl/popup_search");
+				$search_butt = $popup_search->get_popup_search_link(array(
+					"pn" => "search_result",
+					"clid" => $clid,
+				));
+
+				$tb->add_cdata($search_butt);
+
+				$tb->add_button(array(
+					"name" => "save_state",
+					"tooltip" => t("Salvesta"),
+					"img" => "save.gif",
+					"url" => "#",
+					"onClick" => "javascript:submit_changeform()",
+				));
+				$tb->add_button(array(
+					"name" => "delete",
+					"tooltip" => t("Eemalda v&otilde;istluselt"),
+					"img" => "delete.gif",
+					"url" => "#",
+				));
+
+
+				$options = $this->_gen_class_list(array("competition" => $arr["obj_inst"]->id()));
+				$options[0] = t("-Vali v&otilde;istlusklass-");
+				asort($options);
+
+				$select = html::select(array(
+					"name" => "tb_select_option",
+					"options" => $options,
+				));
+				$select2 = html::select(array(
+					"name" => "tb_select_action",
+					"options" => array(
+						0 => t("-Vali tegevus-"),
+						1 => t("M&auml;&auml;ra v&otilde;istlejad klassi"),
+						2 => t("Eemalda v&otilde;istlejad klassist"),
+					),
+				));
+				$tb->add_cdata($select2, true);
+				$tb->add_cdata($select, true);
+				$tb->add_button(array(
+					"name" => "save2",
+					"img" => "save.gif",
+					"side" => true,
+					"onClick" => "javascript:submit_changeform()",
+				));
+			break;
 			case "contestants":
 				$t = &$prop["vcl_inst"];
-				$this->_gen_cont_tbl(&$t);
-				foreach($this->get_contestants(array("competition" => $arr["obj_inst"]->id())) as $oid => $name)
+				$cont = get_instance(CL_SCM_CONTESTANT);
+				$contestants = $this->get_contestants(array("competition" => $arr["obj_inst"]->id()));
+				
+				foreach($contestants as $oid => $data)
 				{
-					$cont = get_instance(CL_SCM_CONTESTANT);
+					$t_oid = $data["data"]["team"];
+					if($t_oid)
+					{
+						$filters["teams"][$t_oid] = call_user_method("name", obj($t_oid));
+					}
+					foreach($data["data"]["groups"] as $g_oid)
+					{
+						$filters["groups"][$g_oid] = call_user_method("prop", obj($g_oid), "abbreviation");
+					}
+				}
+				$evt = $this->get_event(array("competition" => $arr["obj_inst"]->id()));
+				$e = $evt?obj($evt):false;
+
+				$team = ($e && $e->prop("type") == "single")?false:true;
+				
+				$this->_gen_cont_tbl(&$t, $filters, $team);
+
+				foreach($contestants as $oid => $data)
+				{
+					// siin peaks välja raalima kas on olemas seoses võistlusklassi info, kui pole sis selle seosesse kirjutama
 					$person = obj($cont->get_contestant_person(array("contestant" => $oid)));
+
+					// gender
+					if(!($sex = $person->prop("gender")))
+					{
+						$sex = ($pid)?(!($pid[0]&1)?1:2):false;
+					}
+					// date of birth
+					if(($s = $person->prop("birthday")))
+					{
+						$dob = $s;
+					}
+					elseif(($pid = $person->prop("personal_id")))
+					{
+						$a = array(
+							1 => 18,
+							2 => 18,
+							3 => 19,
+							4 => 19,
+							5 => 20,
+							6 => 20,
+						);
+						$dob = mktime(0,0,0, substr($pid, 3, 2), substr($pid, 5, 2),$a[$pid[0]].substr($pid, 1, 2));
+					}
+					else
+					{
+						$dob = false;
+					}
+					
+					// relation check 
+					// whell... this basically following:
+					// checks if connection between competition and contestant has data that holds group info
+					// if not, tries to figure out itself in which groups the contestant should be.. and puts them into these,
+					// if needed, user can change the groups manually later...
+					if(count($data["data"]["groups"]))
+					{
+						$groups = $data["data"]["groups"];
+					}
+					else
+					{
+						// siin peaks ta nüüd kudagi gruppidesse jaotama
+						$cmp_groups = $this->get_groups(array("competition" => $arr["obj_inst"]->id()));
+						unset($groups);
+						foreach($cmp_groups as $group)
+						{
+							$o = obj($group);
+							$ch = true;
+							if(($s = $arr["obj_inst"]->prop("group_select_type")) == "year" && $dob)
+							{
+								$ch = (((date("Y", $dob) >= $o->prop("age_from")) || !$o->prop("age_from")) && ((date("Y", $dob) <= $o->prop("age_to")) || !$o->prop("age_to")))?$ch:false;
+							}
+							elseif($s == "age" || $dob)
+							{
+								$age = $this->get_age($dob);
+								$ch = ((($age >= $o->prop("age_from") || !$o->prop("age_from"))) && ($age <= $o->prop("age_to") || !$o->prop("age_to")))?$ch:false;
+							}
+							$ch = (($o->prop("female") && $sex == 2) || ($o->prop("male") && $sex == 1))?$ch:false;
+							if($ch)
+							{
+								$groups[] = $group;
+							}
+						}
+						$data["data"]["groups"] = $groups;
+						$data["connection"]->change(array(
+							"data" => aw_serialize($data["data"], SERIALIZE_NATIVE),
+						));
+					}
+					
+					// group names
+					unset($ngroups);
+					foreach($groups as $group)
+					{
+						$ngroups[] = call_user_method("prop", obj($group), "abbreviation");
+					}
+
+					// finds out if he belongs to any team...
+					if(strlen($data["data"]["team"]))
+					{
+						$team = obj($data["data"]["team"]);
+					}
+
+					// contacts
+					if(($ph = $person->prop("phone")) || $person->prop("email"))
+					{
+						$ph = $ph?obj($ph):false;
+						$em = ($em = $person->prop("email"))?obj($em):false;
+						$contact = $ph?$ph->name()." (".$ph->prop("type").")":t("Telefoninumber puudub");
+						$contact .= ",<br/>";
+						$contact .= $em?$em->prop("mail"):t("E-mailiaadress puudub");
+					}
+					else
+					{
+						$contact = t("Andmed puuduvad");
+					}
+					$id = $data["data"]["id"];
 					$company = obj($cont->get_contestant_company(array("contestant" => $oid)));
+					$event = $this->get_event(array("competition" => $arr["obj_inst"]->id()));
+					$event_type = ($event)?call_user_method("prop", obj($event), "type"):false;
 					$t->define_data(array(
-						"name" => $person->name(),
+						"name" => $person->prop("lastname").", ".$person->prop("firstname"),
 						"company" => $company->name(),
+						"sex" => (($s = $sex) == 1)?t("Mees"):(($s == 2)?t("Naine"):t("Sugu m&auml;&auml;ramata")),
+						"birthday" => $dob,
+						"team" => ($event_type == "multi" || $event_type == "multi_coll")?$team->name():t("-"),
+						"groups" => $ngroups,
+						"id" => $id.".".$data["connection"]->id(),
+						"contact" => $contact,
+						"sel_contestants" => $data["connection"]->id(),
 					));
 				}
 				
@@ -165,8 +416,20 @@ class scm_competition extends class_base
 				$results = $this->fetch_results(array(
 					"competition" => $arr["obj_inst"]->id(),
 				));
+
+				$event = $this->get_event(array("competition" => $arr["obj_inst"]->id()));
+				$inst = get_instance(CL_SCM_EVENT);
+				$res_type = $inst->get_result_type(array("event" => $event));
+
+				$type_inst = get_instance(CL_SCM_RESULT_TYPE);
+				$format = $type_inst->get_format(array("result_type" => $res_type));
+
 				foreach($results as $data)
 				{
+					$data["result"] = $this->_gen_format_caption(array(
+						"result" => $data["result_arr"],
+						"format" => $format,
+					));
 					$t->define_data($data);
 				}
 			break;
@@ -179,6 +442,10 @@ class scm_competition extends class_base
 				$conts = $this->get_contestants(array("competition" => $arr["obj_inst"]->id()));
 				$inst = get_instance(CL_SCM_EVENT);
 				$res_type = $inst->get_result_type(array("event" => $event));
+				if(!$res_type)
+				{
+					return PROP_IGNORE;
+				}
 
 				$type_inst = get_instance(CL_SCM_RESULT_TYPE);
 				$format = $type_inst->get_format(array("result_type" => $res_type));
@@ -188,8 +455,9 @@ class scm_competition extends class_base
 
 				if($event_type == "multi_coll")
 				{
-					$results = $res_inst->get_teams_results(array(
+					$results = $this->gen_list(array(
 						"competition" => $arr["obj_inst"]->id(),
+						"type" => "team",
 					));
 					$team_inst = get_instance(CL_SCM_TEAM);
 					$cont_inst = get_instance(CL_SCM_CONTESTANT);
@@ -219,35 +487,38 @@ class scm_competition extends class_base
 				}
 				elseif($event_type == "multi")
 				{
-					$results = $res_inst->get_results(array(
+					$results = $this->gen_list(array(
 						"competition" => $arr["obj_inst"]->id(),
 						"type" => "contestant",
 						"set_team" => true,
 					));
-					foreach($results as  $result)
+					if(count($results))
 					{
-						$format_nice = $this->_gen_format_nice(array(
-							"format" => $format,
-							"result" => $result,
-							"contestant" => $result["contestant"],
-							"competition" => $result["competition"],
-						));
+						foreach($results as  $result)
+						{
+							$format_nice = $this->_gen_format_nice(array(
+								"format" => $format,
+								"result" => $result,
+								"contestant" => $result["contestant"],
+								"competition" => $result["competition"],
+							));
 
-						$cont = get_instance(CL_SCM_CONTESTANT);
-						$person = obj($cont->get_contestant_person(array("contestant" => $result["contestant"])));
-						$company = obj($cont->get_contestant_company(array("contestant" => $result["contestant"])));
-						$data[] = array(
-							"contestant" => $person->name(),
-							"team_name" => $result["team"],
-							"company" => $company->name(),
-							"result" => $format_nice,
-						);
+							$cont = get_instance(CL_SCM_CONTESTANT);
+							$person = obj($cont->get_contestant_person(array("contestant" => $result["contestant"])));
+							$company = obj($cont->get_contestant_company(array("contestant" => $result["contestant"])));
+							$data[] = array(
+								"contestant" => $person->name(),
+								"team_name" => $result["team"],
+								"company" => $company->name(),
+								"result" => $format_nice,
+							);
+						}
 					}
 
 				}
 				elseif($event_type == "single")
 				{
-					$results = $res_inst->get_results(array(
+					$results = $this->gen_list(array(
 						"competition" => $arr["obj_inst"]->id(),
 						"set_contestant" => true,
 						"type" => "contestant",
@@ -327,10 +598,6 @@ class scm_competition extends class_base
 		{
 			//-- set_property --//
 			case "add_results_tbl":
-				/*
-				arr($arr);
-				return PROP_IGNORE;
-				*/
 				$res_type = get_instance(CL_SCM_RESULT_TYPE);
 				$res = get_instance(CL_SCM_RESULT);
 				foreach($arr["request"]["res_contestant"] as $result => $data)
@@ -370,20 +637,24 @@ class scm_competition extends class_base
 						// ühesõnaga ma saan team'i liikmed kätte.. ja neil on selle võistlusega vb juba tulemus kellegil olemas, ma pean välja raalima kas on ja kui on siis apdeitima.. kui pole sis uue tegema. IMEB!!
 						// a seda ka et vähemalt ühel liikmel on olemas result objek.. mudu ta siia üldse ei jõuaks, vist!!
 						$inst = get_instance(CL_SCM_TEAM);
-						foreach($inst->get_team_members(array("team" => $team)) as $oid => $obj)
+						$members = $inst->get_team_members(array(
+							"team" => $team,
+							"competition" => $competition,
+						));
+						foreach($members as $oid => $obj)
 						{
 							$list = new object_list(array(
 								"class_id" => CL_SCM_RESULT,
 								"CL_SCM_RESULT.RELTYPE_CONTESTANT" => $oid,
 								"CL_SCM_RESULT.RELTYPE_COMPETITION" => $competition,
 							));
-							if($list->count() == 1)
+							if($list->count())
 							{
 								// ehk siin on siis see koht kus on välja raalitud et result on olemas ja tulemus updeiditakse
-								$obj = obj($result);
+								$obj = $list->begin();;
 								$rev = $res_type->format_data(array(
 									"source" => "result",
-									"oid" => $result,
+									"oid" => $obj->id(),
 									"data" => $result_data,
 									"reverse" => true,
 								));
@@ -395,7 +666,7 @@ class scm_competition extends class_base
 							}
 							else
 							{
-								// tuleb teha uus
+								// tuleb teha uus(teoorias ei tohiks asi siia üldse jõuda, sest result objekt peaks juba olemas olema!!)
 								$rev = $res_type->format_data(array(
 									"source" => "competition",
 									"oid" => $competition,
@@ -439,9 +710,6 @@ class scm_competition extends class_base
 			case "name":
 				$arr["obj_inst"]->set_name($prop["value"]);
 			break;
-			case "date_to":
-				//arr($arr);
-			break;
 		}
 		return $retval;
 	}	
@@ -453,9 +721,72 @@ class scm_competition extends class_base
 
 	function callback_pre_save($arr)
 	{
-		//$d = array_merge($arr["request"]["date_from"], $arr["request"]["time_from"]);
-		//$timestamp = mktime($d["hour"], $d["minute"], 0, $d["month"], $d["day"], $d["year"]);
-		//$arr["obj_inst"]->set_prop("from", $timestamp);
+
+		// new contestants added through search popup
+		if(($result = $arr["request"]["search_result"]))
+		{
+			$res = split(",", $result);
+			// loops over every selected contestant and connects them to competition
+			foreach($res as $contestant)
+			{
+				$data = array(
+					"contestant" => $contestant,
+					"competition" => $arr["obj_inst"]->id(),
+				);
+				$arr["obj_inst"]->connect(array(
+					"to" => $contestant,
+					"type" => "RELTYPE_CONTESTANT",
+					"extra" => aw_serialize($data, SERIALIZE_NATIVE),
+				));
+			}
+		}
+
+
+		// here we save new contestant id's
+		foreach($arr["request"]["contestant_ids"] as $relid => $id)
+		{
+			$c = new connection($relid);
+			$data = aw_unserialize($c->prop("data"));
+			$data["id"] = $id;
+			$c->change(array(
+				"data" => aw_serialize($data, SERIALIZE_NATIVE),
+			));
+		}
+		if(($group = $arr["request"]["tb_select_option"]) && ($action = $arr["request"]["tb_select_action"]) && count(($sel = $arr["request"]["sel"])))
+		{
+			foreach($sel as $id)
+			{
+				$data = $this->get_rel_data($id);
+				if($action  == 1)
+				{
+					$data["data"]["groups"][] = $group;
+					$data["data"]["groups"] = array_unique($data["data"]["groups"]);
+				}
+				else
+				{
+					$flp = array_flip($data["data"]["groups"]);
+					unset($flp[$group]);
+					$data["data"]["groups"] = array_flip($flp);
+				}
+				$this->save_rel_data($data);
+			}
+		}
+
+	}
+
+	function get_rel_data($rel)
+	{
+		return array(
+			"data" => aw_unserialize(call_user_method("prop", ($conn = new connection($rel)), "data")),
+			"conn" => $conn,
+		);
+	}
+
+	function save_rel_data($arr)
+	{
+		$arr["conn"]->change(array(
+			"data" => aw_serialize($arr["data"], SERIALIZE_NATIVE),
+		));
 	}
 
 	/**
@@ -468,10 +799,11 @@ class scm_competition extends class_base
 		$event = obj($event_id);
 		$event_type = $event->prop("type");
 		$result_inst = get_instance(CL_SCM_RESULT);
+		$cnt_inst = get_instance(CL_SCM_CONTESTANT);
 		switch($event_type)
 		{
 			case "single":
-				$res = $result_inst->get_results(array(
+				$res = $this->gen_list(array(
 					"competition" => $arr["competition"],
 					"type" => "contestant",
 				));
@@ -486,52 +818,68 @@ class scm_competition extends class_base
 				foreach($res as $result)
 				{
 					$cont = obj($result["contestant"]);
+					$cont_url = $this->mk_my_orb("change", array(
+						"class" => "scm_contestant",
+						"id" => $result["contestant"],
+						"return_url" => get_ru(),
+					));
 					$ret[$pos_and_point[$result["contestant"]]["place"]] = array(
-						"contestant" => $cont->name(),
+						"contestant" => html::href(array(
+							"caption" => $cont->name(),
+							"url" => $cont_url,
+						)),
+						"company" => call_user_method("name", obj($cnt_inst->get_contestant_company(array(
+							"contestant" => $result["contestant"],
+						)))),
 						"points" => $pos_and_point[$result["contestant"]]["points"],
 						"place" => $pos_and_point[$result["contestant"]]["place"],
 						"result" => $result["raw_result"],
+						"result_arr" => $result["result"],
 					);
 				}
 			break;
 
 			case "multi":
-				$res = $result_inst->get_results(array(
+				$res = $this->gen_list(array(
 					"competition" => $arr["competition"],
 					"set_team" => true,
 					"type" => "contestant",
 				));
-				foreach($res as $result)
+				if(count($res))
 				{
-					$team_res[$result["team_oid"]][] = $result;
-					$team_raw[$result["team_oid"]][] = $result["raw_result"];
-				}
-				$event = get_instance(CL_SCM_EVENT);
-				$calc_fun = $event->get_team_result_calc_fun(array("event" => $event_id));
-				foreach($team_raw as $team_oid => $results)
-				{
-					$team_tot_raw[$team_oid] = $event->$calc_fun($results);
-				}
-
-				$pos_and_point = $this->_get_places_and_points(array(
-					"data" => $team_tot_raw,
-					"competition" => $arr["competition"],
-				));
-				foreach($res as $result)
-				{
-					$team = obj($result["team_oid"]);
-					$ret[$pos_and_point[$result["team_oid"]]["place"]] = array(
-						"team_name" => $team->name(),
-						"points" => $pos_and_point[$result["team_oid"]]["points"],
-						"place" => $pos_and_point[$result["team_oid"]]["place"],
-						"result" => $result["raw_result"],
-					);
+					foreach($res as $result)
+					{
+						$team_res[$result["team_oid"]][] = $result;
+						$team_raw[$result["team_oid"]][] = $result["raw_result"];
+					}
+					$event = get_instance(CL_SCM_EVENT);
+					$calc_fun = $event->get_team_result_calc_fun(array("event" => $event_id));
+					foreach($team_raw as $team_oid => $results)
+					{
+						$team_tot_raw[$team_oid] = $event->$calc_fun($results);
+					}
+					$pos_and_point = $this->_get_places_and_points(array(
+						"data" => $team_tot_raw,
+						"competition" => $arr["competition"],
+					));
+					foreach($res as $result)
+					{
+						$team = obj($result["team_oid"]);
+						$ret[$pos_and_point[$result["team_oid"]]["place"]] = array(
+							"team_name" => $team->name(),
+							"points" => $pos_and_point[$result["team_oid"]]["points"],
+							"place" => $pos_and_point[$result["team_oid"]]["place"],
+							"result" => $result["raw_result"],
+							"result_arr" => $result["result"],
+						);
+					}
 				}
 			break;
 
 			case "multi_coll":
-				$res = $result_inst->get_teams_results(array(
+				$res = $this->gen_list(array(
 					"competition" => $arr["competition"],
+					"type" => "team",
 				));
 				foreach($res as $result)
 				{
@@ -549,6 +897,7 @@ class scm_competition extends class_base
 						"points" => $pos_and_point[$result["team"]]["points"],
 						"place" => $pos_and_point[$result["team"]]["place"],
 						"result" => $result["raw_result"],
+						"result_arr" => $result["result"],
 					);
 				}
 
@@ -589,17 +938,97 @@ class scm_competition extends class_base
 		));
 	}
 
-	function _gen_cont_tbl($t)
+	function _gen_cont_tbl($t, $filters = array(), $team = true)
 	{
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("V&otilde;istleja"),
+			"sortable" => true,
 		));
 		$t->define_field(array(
 			"name" => "company",
 			"caption" => t("Firma"),
+			"sortable" => true,
+		));
+		$t->define_field(array(
+			"name" => "sex",
+			"caption" => t("Sugu"),
+			"sortable" => true,
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "birthday",
+			"caption" => t("S&uuml;nniaeg"),
+			"sortable" => true,
+			"callback" => array(&$this, "__dob_format"),
+			"align" => "center",
+		));
+		if($team)
+		{
+			$t->define_field(array(
+				"name" => "team",
+				"caption" => t("Meeskond"),
+				"sortable" => true,
+				"align" => "center",
+				"filter" => $filters["teams"],
+				"filter_compare" => array(&$this, "__team_filter"),
+			));
+		}
+		$t->define_field(array(
+			"name" => "groups",
+			"caption" => t("V&otilde;istlusklassid"),
+			"filter" => $filters["groups"],
+			"filter_compare" => array(&$this, "__group_filter"),
+			"callback" => array(&$this, "__group_format"),
+		));
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("S&auml;rgi number"),
+			"callback" => array(&$this, "__id_textbox"),
+			"sortable" => true,
+			"numeric" => true,
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "contact",
+			"caption" => t("Kontaktandmed"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "sel_contestants",
 		));
 
+	}
+	
+	function __team_filter($key, $str, $foo)
+	{
+		return ($foo["team"] == $str)?true:false;
+	}
+
+	function __group_format($key)
+	{
+		return (is_array($key) && count($key))?join(", ", $key):t("V&otilde;istlusklass m&auml;&auml;ramata");
+	}
+
+	function __group_filter($key, $str, $foo)
+	{
+		return in_array($str, $foo["groups"]);
+	}
+
+	function __dob_format($str)
+	{
+		return date("d / m / Y", $str)." (".$this->get_age($str)."a)";
+	}
+
+	function __id_textbox($str)
+	{
+		$str = split("[.]", $str);
+		$html = html::textbox(array(
+			"name" => "contestant_ids[".$str[1]."]",
+			"value" => $str[0],
+			"size" => 4,
+		));
+		return $html;
 	}
 
 	function _gen_res_tbl($t, $type = "single")
@@ -806,6 +1235,8 @@ class scm_competition extends class_base
 		@attrib params=name api=1
 		@param competition required type=int
 			the competitions object id
+		@param ret_inst optional type=bool
+			returns connection instance
 		@comment
 			fetches contestants for given competition
 		@returns
@@ -823,7 +1254,11 @@ class scm_competition extends class_base
 		));
 		foreach($conns as $id => $data)
 		{
-			$res[$data["to"]] = obj($data["to"]);
+			$res[$data["to"]] = array(
+				"obj" => obj($data["to"]),
+				"data" => aw_unserialize($data["data"]),
+				"connection" => new connection($id),
+			);
 		}
 		return $res;
 	}
@@ -843,6 +1278,19 @@ class scm_competition extends class_base
 		return ($s = $o->prop("scm_event"))?$s:false;
 	}
 
+	function _gen_format_caption($arr)
+	{
+		$result = $arr["result"];
+		foreach($arr["format"] as $name => $caption)
+		{
+			$ret[] = $result[$name]?$result[$name]." ".$caption:NULL;
+		}
+
+		return join(" ", $ret);
+	}
+
+	/**
+	**/
 	function _gen_format_nice($arr)
 	{
 		$result = $arr["result"];
@@ -874,21 +1322,6 @@ class scm_competition extends class_base
 		return $res;
 	}
 	
-	/**
-	**/
-	function get_teams_for_competition($arr = array())
-	{
-		$team = get_instance(CL_SCM_TEAM);
-		foreach($team->get_teams() as $oid => $obj)
-		{
-			$comps = $obj->prop("competitions");
-			if(in_array($arr["competition"], $comps))
-			{
-				$ret[$oid] = $oid;
-			}
-		}
-		return $ret;
-	}
 
 	/**
 	**/
@@ -910,6 +1343,81 @@ class scm_competition extends class_base
 	{
 		$obj = obj($arr["competition"]);
 		return ($s = $obj->prop("scm_group"))?$s:false;
+	}
+
+	function get_age($from, $to = "")
+	{
+		$birthday_rec = getdate($from);
+		$now_rec = getdate($to?$to:time());
+		$age = $now_rec["year"] - $birthday_rec["year"];
+		$age = ($now_rec["mon"] < $birthday_rec["mon"])?$age--:(($now_rec["mday"] <= $birthday_rec["mday"])?$age--:$age);
+		return $age;
+	}
+
+	function _gen_class_list($arr)
+	{
+		$o = obj($arr["competition"]);
+		foreach($o->prop("scm_group") as $group)
+		{
+			$o = obj($group);
+			$ret[$group] = $o->prop("abbreviation");
+		}
+		return $ret;
+	}
+
+	/**
+		@comment
+			takes basically same arguments what scm_result::get_results
+	**/
+	function gen_list($arr)
+	{
+		$res_inst = get_instance(CL_SCM_RESULT);
+		if($arr["type"] == "team")
+		{
+			$arr["set_team"] = true;
+			$ret = $res_inst->get_results($arr);
+		}
+		else
+		{
+			foreach($this->get_contestants($arr) as $oid => $data)
+			{
+				$arr["contestant"] = $oid;
+				$res = $res_inst->get_results($arr);
+				$ret[] = current($res);
+			}
+		}
+
+		return $ret;
+	}
+
+	function get_teams($arr)
+	{
+		$inst = get_instance(CL_SCM_TEAM);
+		$all_teams = $inst->get_teams();
+		$cont = $this->get_contestants($arr);
+		foreach($cont as $oid => $data)
+		{
+			 $tmp = &$ret[$data["data"]["team"]];
+			 $tmp["reg"][] = $oid;
+			 $tmp["registered"] = true;
+		}
+		// adds teams that aren't registered to competition
+		foreach($all_teams as $oid => $obj)
+		{
+			if(!in_array($oid, array_keys($ret)))
+			{
+				$ret[$oid] = array();
+				$ret[$oid]["registered"] = false;
+			}
+		}
+		// adds extra array containig all team members(even those who aren't registered)
+		foreach($ret as $team => $regist_conte)
+		{
+			$ret[$team]["all"] = $inst->get_team_members(array(
+				"team" => $team,
+			));
+		}
+		return $ret;
 	}
 }
 ?>

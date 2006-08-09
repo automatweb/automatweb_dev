@@ -40,7 +40,6 @@
             <type>checkbox</type>
             <no_caption>1</no_caption>
             <ch_value>1</ch_value>
-            <default>1</default>
             <parent>split_sex</parent>
             <caption>Mehed</caption>
       </property>
@@ -53,7 +52,6 @@
             <type>checkbox</type>
             <no_caption>1</no_caption>
             <ch_value>1</ch_value>
-            <default>1</default>
             <parent>split_sex</parent>
             <caption>Naised</caption>
       </property>

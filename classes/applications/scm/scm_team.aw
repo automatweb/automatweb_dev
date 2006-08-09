@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.6 2006/07/31 11:30:24 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.7 2006/08/09 15:06:55 tarvo Exp $
 // scm_team.aw - Meeskond 
 /*
 
@@ -275,8 +275,9 @@ class scm_team extends class_base
 				$inst =  get_instance(CL_SCM_COMPETITION);
 				$contest = $inst->get_contestants(array("competition" => $arr["request"]["competition"]));
 				$inst = get_instance(CL_SCM_CONTESTANT);
-				foreach($contest as $oid => $obj)
+				foreach($contest as $oid => $data)
 				{
+					$obj = $data["obj"];
 					$extra_data = $this->_get_extra_data(array(
 						"competition" => $arr["request"]["competition"],
 						"contestant" => $oid,
@@ -309,7 +310,7 @@ class scm_team extends class_base
 				$request = $arr["request"];
 
 				// otsingust tulevate liikmete sidumine meeskonna liikmeks
-			$sr = (strlen($request["search_result"]))?split(",", $request["search_result"]):NULL;
+				$sr = (strlen($request["search_result"]))?split(",", $request["search_result"]):NULL;
 				$list = array_keys($this->get_team_members($arr["obj_inst"]->id()));
 				foreach($sr as $contestant)
 				{
@@ -478,18 +479,35 @@ class scm_team extends class_base
 	}
 
 	/**
+		@param competition opitional type=oid
 		@param team required type=oid
+		@comment
+			returns all team members if $competition isn't set, or members who have registered to given competition
 	**/
 	function get_team_members($arr = array())
 	{
-		$c =  new connection();
-		$conns = $c->find(array(
-			"from" => $arr["team"],
-			"to.class_id" => CL_SCM_CONTESTANT,
-		));
-		foreach($conns as $data)
+		if($arr["competition"])
 		{
-			$ret[$data["to"]] = obj($data["to"]);
+			$inst = get_instance(CL_SCM_COMPETITION);
+			foreach($inst->get_contestants($arr) as $id => $data)
+			{
+				if($arr["team"] == $data["data"]["team"])
+				{
+					$ret[$id] = obj($id);
+				}
+			}
+		}
+		else
+		{
+			$c =  new connection();
+			$conns = $c->find(array(
+				"from" => $arr["team"],
+				"to.class_id" => CL_SCM_CONTESTANT,
+			));
+			foreach($conns as $data)
+			{
+				$ret[$data["to"]] = obj($data["to"]);
+			}
 		}
 		return $ret;
 	}
@@ -653,9 +671,6 @@ class scm_team extends class_base
 			"filter" => $gr_options,
 			"filter_compare" => array(&$this, "__group_filter"),
 			"callback" => array(&$this, "__group_format"),
-			"filter_options" => array(
-				"1" => "option 1"
-			),
 		));
 		$t->define_field(array(
 			"name" => "sex",
@@ -709,6 +724,11 @@ class scm_team extends class_base
 	/**
 		@param competition
 		@param contestant
+		@param ret_inst optional type=bool
+			if set, returning array has an reference to located connection:
+			array(
+				"ret_inst" => &$connectiom,
+			)
 		@comment
 			finds right registration connection and returns the extra data attached to it
 	**/

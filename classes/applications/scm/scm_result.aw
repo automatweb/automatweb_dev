@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.3 2006/07/17 09:48:43 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.4 2006/08/09 15:06:55 tarvo Exp $
 // scm_result.aw - Tulemus 
 /*
 
@@ -102,16 +102,12 @@ class scm_result extends class_base
 		$res = current($res);
 		return $res["to"];
 	}
-
+	
 	function get_competition($arr = array())
 	{
-		$c = new connection();
-		$res = $c->find(array(
-			"from" => $arr["result"],
-			"to.class_id" => CL_SCM_COMPETITION,
-		));
-		$res = current($res);
-		return $res["to"];
+		$obj = obj($arr["result"]);
+		$comp = $obj->get_first_obj_by_reltype("RELTYPE_COMPETITION");
+		return $comp->id();
 	}
 
 	/**
@@ -136,7 +132,10 @@ class scm_result extends class_base
 		$obj->set_parent($arr["competition"]);
 		$a = obj($arr["competition"]);
 		$b = obj($arr["contestant"]);
-		$obj->set_name($a->name()." - ".$b->name());
+		$c = $arr["team"]?obj($arr["team"]):NULL;
+		$name = $a->name()." (".$b->name();
+		$name = $arr["team"]?$name." / ".$c->name().")":$name.")";
+		$obj->set_name($name);
 		$obj->set_prop("result", $arr["result"]);
 		$obj->set_prop("team", $arr["team"]);
 		$obj->connect(array(
@@ -151,15 +150,6 @@ class scm_result extends class_base
 		$id = $obj->save_new();
 
 		return $id;
-	}
-
-	function get_teams_results($arr = array())
-	{
-		return $this->get_results(array(
-			"competition" => $arr["competition"],
-			"type" => "team",
-			"set_team" => true,
-		));
 	}
 
 	/**
@@ -189,50 +179,71 @@ class scm_result extends class_base
 		if($arr["type"] == "contestant")
 		{
 			$c = new connection();
-			$list = new object_list(array(
-				"class_id" => CL_SCM_RESULT,
-				"CL_SCM_RESULT.RELTYPE_CONTESTANT" => "%",
-				"CL_SCM_RESULT.RELTYPE_COMPETITION" => $arr["competition"],
+			$conns = $c->find(array(
+				"from" => $arr["competition"],
+				"to" => $arr["contestant"]?$arr["contestant"]:"%",
 			));
-			$inst = get_instance(CL_SCM_TEAM);
-			foreach($list->ids() as $id)
+			$list = new object_list();
+			foreach($conns as $cid => $cdata)
 			{
-				$cont = $this->get_contestant(array("result" => $id));
-				$team = $inst->get_team(array(
-					"contestant" => $cont,
-					"competition" => $arr["competition"],
+				$cmp = $arr["competition"];
+				$cnt = $cdata["to"];
+				$extra_data = aw_unserialize($cdata["data"]);
+				$list = new object_list(array(
+					"class_id" => CL_SCM_RESULT,
+					"CL_SCM_RESULT.RELTYPE_CONTESTANT" => $cnt,
+					"CL_SCM_RESULT.RELTYPE_COMPETITION" => $cmp,
 				));
-				$o = $arr["set_team"]?obj($team):false;
+				if(!$list->count())
+				{
+					$id = $this->add_result(array(
+						"competition" => $cmp,
+						"contestant" => $cnt,
+					));
+					$list->add($id);
+				}
+				$obj = $list->begin();
 				$to_format[] = array(
-					"competition" => $arr["competition"],
-					"contestant" => $cont,
-					"result" => $id,
-					"team" => ($arr["set_team"])?$o->name():NULL,
-					"team_oid" => ($arr["set_team"])?$team:NULL,
+					"competition" => $cmp,
+					"contestant" => $cnt,
+					"result" => $obj->id(),
+					"team_oid" => $arr["set_team"]?$extra_data["team"]:NULL,
+					"team" => $arr["set_team"]?"tiimi nimi":NULL,
 				);
 			}
 		}
 		elseif($arr["type"] == "team")
 		{
-			$team = get_instance(CL_SCM_TEAM);
-			foreach($team->get_teams() as $oid => $obj)
+			$cmp = get_instance(CL_SCM_COMPETITION);
+			foreach($cmp->get_contestants(array("competition" => $arr["competition"])) as $oid => $data)
 			{
-				$comps = $obj->prop("competitions");
-				if(in_array($arr["competition"], $comps))
+				$cnt = $oid;
+				$cmp = $arr["competition"];
+				$list = new object_list(array(
+					"class_id" => CL_SCM_RESULT,
+					"CL_SCM_RESULT.RELTYPE_CONTESTANT" => $cnt,
+					"CL_SCM_RESULT.RELTYPE_COMPETITION" => $cmp,				
+				));
+				if(!$list->count())
 				{
-					// this sets one contestant from each team to an array.. for the connection search
-					$list = new object_list(array(
-						"class_id" => CL_SCM_RESULT,
-						"CL_SCM_RESULT.RELTYPE_CONTESTANT" => key($team->get_team_members(array("team" => $oid))),
-						"CL_SCM_RESULT.RELTYPE_COMPETITION" => $arr["competition"],
+					$id = $this->add_result(array(
+						"contestant" => $cnt,
+						"competition" => $cmp,
+						"team" => $data["data"]["team"],
 					));
-					$result_id = current($list->ids());
+					$list->add($id);
+				}
+				if(!in_array($data["data"]["team"], $teams_already_been))
+				{
+					$obj = $list->begin();
 					$to_format[] = array(
-						"result" => $result_id,
-						"team" => $oid,
-						"competition" => $arr["competition"],
+						"result" => $obj->id(),
+						"team" => $data["data"]["team"],
+						"competition" => $data["data"]["competition"],
+						"team_oid" => $data["data"]["team"],
 					);
 				}
+				$teams_already_been[] = $data["data"]["team"];
 			}
 		}
 		return $this->_helper($to_format);
@@ -260,7 +271,6 @@ class scm_result extends class_base
 				$ret_data["team"] = $data["team"];
 				$ret_data["team_oid"] = $data["team_oid"];
 			}
-
 			// siin läheb mingi haige tulemuse formattimine lahti.. see tuleks siit ära kolida
 			$comp_inst = get_instance(CL_SCM_COMPETITION);
 			$res_obj = obj($data["result"]);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_group.aw,v 1.3 2006/07/24 11:43:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_group.aw,v 1.4 2006/08/09 15:06:55 tarvo Exp $
 // scm_group.aw - V&otilde;istlusklass 
 /*
 
@@ -23,10 +23,10 @@
 
 @layout split_sex type=vbox
 @caption Sugu
-	@property male type=checkbox no_caption=1 ch_value=1 default=1 parent=split_sex
+	@property male type=checkbox no_caption=1 ch_value=1 default=0 parent=split_sex
 	@caption Mehed
 
-	@property female type=checkbox no_caption=1 ch_value=1 default=1 parent=split_sex
+	@property female type=checkbox no_caption=1 ch_value=1 default=0 parent=split_sex
 	@caption Naised
 */
 

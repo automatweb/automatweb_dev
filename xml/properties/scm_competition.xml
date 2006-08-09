@@ -202,6 +202,16 @@
             <caption>Pilt kohast</caption>
       </property>
       <property>
+            <name>teams_tb</name>
+            <table>objects</table>
+            <group>manage_groups</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>teams</name>
             <table>objects</table>
             <group>manage_groups</group>
@@ -211,6 +221,26 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Meeskondade nimekiri</caption>
+      </property>
+      <property>
+            <name>contestants_tb</name>
+            <table>objects</table>
+            <group>manage_contestants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>search_result</name>
+            <table>objects</table>
+            <group>manage_contestants</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
       </property>
       <property>
             <name>contestants</name>
