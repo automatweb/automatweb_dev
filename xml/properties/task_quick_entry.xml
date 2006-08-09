@@ -10,6 +10,14 @@
             <caption>Aeg</caption>
       </property>
       <property>
+            <name>cust_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>cust_type</field>
+            <caption>Kliendi t&amp;amp;uuml;&amp;amp;uuml;p</caption>
+      </property>
+      <property>
             <name>customer</name>
             <table>objects</table>
             <group>general</group>
@@ -17,6 +25,22 @@
             <store>no</store>
             <field>customer</field>
             <caption>Klient</caption>
+      </property>
+      <property>
+            <name>custp_fn</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>custp_fn</field>
+            <caption>Eesnimi</caption>
+      </property>
+      <property>
+            <name>custp_ln</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>custp_ln</field>
+            <caption>Perenimi</caption>
       </property>
       <property>
             <name>project</name>

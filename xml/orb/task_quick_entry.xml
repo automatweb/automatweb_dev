@@ -18,6 +18,15 @@
 			</function>
 		</action>
 
+		<action name="name_autocomplete_source">
+			<function name="name_autocomplete_source">
+				<arguments>
+					<optional name="custp_fn" />
+					<optional name="custp_ln" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="task_autocomplete_source">
 			<function name="task_autocomplete_source">
 				<arguments>

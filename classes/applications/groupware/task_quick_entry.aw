@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.13 2006/08/08 16:33:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.14 2006/08/09 15:57:53 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -13,8 +13,20 @@
 @property date type=datetime_select store=no
 @caption Aeg
 
+
+@property cust_type type=select
+@caption Kliendi t&uuml;&uuml;p
+
 @property customer type=textbox store=no
 @caption Klient
+
+@property custp_fn type=textbox
+@caption Eesnimi
+
+@property custp_ln type=textbox
+@caption Perenimi
+
+
 
 @property project type=textbox store=no
 @caption Projekt
@@ -79,6 +91,50 @@ class task_quick_entry extends class_base
 				$prop["autocomplete_source"] = $this->mk_my_orb("task_autocomplete_source");
 				$prop["autocomplete_params"] = array("customer", "project", "task");
 				break;
+			
+			case "custp_ln":
+				$prop["autocomplete_source"] = $this->mk_my_orb("name_autocomplete_source");
+				$prop["autocomplete_params"] = array("custp_fn" , "custp_ln");
+				break;
+			
+			case "cust_type":
+				$prop["options"] = array(CL_CRM_COMPANY => t("Organisatsioon"), CL_CRM_PERSON => t("Isik"));
+				$prop["onchange"] = "if (navigator.userAgent.toLowerCase().indexOf('msie')>=0)
+					{
+						d = 'block';
+					}
+					else 
+					{
+						d = 'table-row';
+					}
+					if (this.selectedIndex == 1) {
+						document.getElementById('custp_fn').parentNode.parentNode.style.display = d;
+						document.getElementById('custp_ln').parentNode.parentNode.style.display = d;
+						document.getElementById('customer').parentNode.parentNode.style.display = 'none';
+						document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = 'none';
+					}
+					else 
+					{
+						document.getElementById('customer').parentNode.parentNode.style.display = d;
+						document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none';
+						document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';
+						document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;
+					}";
+				break;
+			
+			case "ettevotlusvorm":
+				$ol = new object_list(array(
+					"class_id" => CL_CRM_CORPFORM,
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$prop["options"] = array("" => t("--Vali--")) + $ol->names();
+				break;
+
+			case "cust_n":
+				$prop["autocomplete_source"] = "/automatweb/orb.aw?class=crm_company&action=name_autocomplete_source";
+				$prop["autocomplete_params"] = array("cust_n");
+				break;
 		};
 		return $retval;
 	}
@@ -90,6 +146,11 @@ class task_quick_entry extends class_base
 		switch($prop["name"])
 		{
 			case "customer":
+				if(!($arr["request"]["custp_fn"] && $arr["request"]["custp_ln"])) break;
+			case "custp_fn":
+				if(!$arr["request"]["customer"]) break;
+			case "custp_ln":
+				if(!$arr["request"]["customer"]) break;
 			case "project":
 			case "content":
 			case "duration":
@@ -190,6 +251,46 @@ class task_quick_entry extends class_base
 		exit ($cl_json->encode($option_data));
 	}
 
+
+
+	/**
+		@attrib name=name_autocomplete_source
+		@param custp_fn optional
+		@param custp_ln optional
+	**/
+	function name_autocomplete_source($arr)
+	{
+		header ("Content-Type: text/html; charset=" . aw_global_get("charset"));
+		$cl_json = get_instance("protocols/data/json");
+
+		$errorstring = "";
+		$error = false;
+		$autocomplete_options = array();
+
+		$option_data = array(
+			"error" => &$error,// recommended
+			"errorstring" => &$errorstring,// optional
+			"options" => &$autocomplete_options,// required
+			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
+		);
+
+		$ol = new object_list(array(
+			"class_id" => array(CL_CRM_PERSON),
+			"lastname" => iconv("UTF-8", aw_global_get("charset"), $arr["custp_ln"])."%",
+			"firstname" => iconv("UTF-8", aw_global_get("charset"), $arr["custp_fn"]),
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		$autocomplete_options = $ol->names();
+                foreach($ol->arr() as $k => $v)
+                {
+                        $autocomplete_options[$k] = iconv(aw_global_get("charset"), "UTF-8", $v->prop("lastname"));
+                }
+		exit ($cl_json->encode($option_data));
+	}
+
+
+
 	/**
 		@attrib name=task_autocomplete_source
 		@param customer optional
@@ -211,7 +312,6 @@ class task_quick_entry extends class_base
 			"options" => &$autocomplete_options,// required
 			"limited" => false,// whether option count limiting applied or not. applicable only for real time autocomplete.
 		);
-
 		$ol = new object_list(array(
 			"class_id" => array(CL_TASK),
 			"CL_TASK.project.name" => iconv("UTF-8", aw_global_get("charset"), $arr["project"])."%",
@@ -254,29 +354,62 @@ class task_quick_entry extends class_base
 		//$arr["request"]["content"] = iconv("UTF-8", aw_global_get("charset"), $arr["request"]["content"]);
 		$arr["request"]["duration"] = str_replace(",", ".", $arr["request"]["duration"]);
 
-		$ol = new object_list(array(
-			"class_id" => array(CL_CRM_COMPANY, CL_CRM_PERSON),
-			"name" => $arr["request"]["customer"],
-			"lang_id" => array(),
-			"site_id" => array()
-		));
-		if (!$ol->count())
+		if($arr["request"]["customer"])
 		{
-			$c = obj();
-			$c->set_class_id(CL_CRM_COMPANY);
-			$c->set_parent($cur_co->parent());
-			$c->set_name($arr["request"]["customer"]);
-			$c->save();
-			$cur_co->connect(array(
-				"type" => "RELTYPE_CUSTOMER",
-				"to" => $c->id()
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_COMPANY),
+				"name" => $arr["request"]["customer"],
+				"lang_id" => array(),
+				"site_id" => array()
 			));
+			if (!$ol->count())
+			{
+				$c = obj();
+				$c->set_class_id(CL_CRM_COMPANY);
+				$c->set_parent($cur_co->parent());
+				$c->set_name($arr["request"]["customer"]);
+				$c->save();
+				$cur_co->connect(array(
+					"type" => "RELTYPE_CUSTOMER",
+					"to" => $c->id()
+				));
+			}
+			else
+			{
+				$c = $ol->begin();
+			}
 		}
 		else
 		{
-			$c = $ol->begin();
+			$ol = new object_list(array(
+				"class_id" => array(CL_CRM_PERSON),
+			//	"name" => $arr["request"]["customer"],
+				"firstname" => $arr["request"]["custp_fn"],
+				"lastname" => $arr["request"]["custp_ln"],
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			if (!$ol->count())
+			{
+				$c = obj();
+				$c->set_class_id(CL_CRM_PERSON);
+				$c->set_parent($cur_co->parent());
+				$c->set_name($arr["request"]["custp_fn"].' '.$arr["request"]["custp_ln"]);
+				$c->set_prop("firstname", $arr["request"]["custp_fn"]);
+				$c->set_prop("lastname" , $arr["request"]["custp_ln"]);
+				$c->save();
+				$cur_co->connect(array(
+					"type" => "RELTYPE_CUSTOMER",
+					"to" => $c->id()
+				));
+			}
+			else
+			{
+				$c = $ol->begin();
+			}
+			$arr["request"]["customer"] = $arr["request"]["custp_fn"].' '.$arr["request"]["custp_ln"];
 		}
-
+		
 		// if project exists
 		$ol = new object_list(array(
 			"class_id" => array(CL_PROJECT),
@@ -387,8 +520,9 @@ class task_quick_entry extends class_base
 		}
 		else
 		{
-			die(
-"<script language=javascript>window.opener.location='".html::get_change_url($t->id(), array("group" => "rows", "return_url" => "javascript:history.go(-1)"))."';window.close();</script>");
+			die("<script language=javascript>window.opener.location='"
+			.html::get_change_url($t->id(), array("group" => "rows", "return_url" => "javascript:history.go(-1)")).
+			"';window.close();</script>");
 		}
 	}
 
@@ -412,7 +546,18 @@ class task_quick_entry extends class_base
 			}
 			return false;
 		}".
-		"return true;}";
+		"return true;}
+		if (navigator.userAgent.toLowerCase().indexOf('msie')>=0)
+			{d = 'block';}
+		else 
+		{
+			d = 'table-row';
+		} 
+		document.getElementById('customer').parentNode.parentNode.style.display = d;
+		document.getElementById('custp_fn').parentNode.parentNode.style.display = 'none';
+		document.getElementById('custp_ln').parentNode.parentNode.style.display = 'none';
+		document.getElementById('cust_nAWAutoCompleteTextbox').parentNode.parentNode.style.display = d;
+		";
 	}
 
 	/**
@@ -475,8 +620,8 @@ class task_quick_entry extends class_base
 		{
 			$ret .= sprintf(t("Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["t"]);
 		}
-
 		die(iconv(aw_global_get("charset"), "UTF-8", $ret));
 	}
+	
 }
 ?>
