@@ -699,7 +699,7 @@ class popup_search extends aw_template
 		{
 			$o = obj($arr["id"]);
 			$o->set_meta("popup_search[".$arr["pn"]."]", $this->make_keys($arr["sel"]));
-			if (is_array($arr["sel"]) && count($arr["sel"]) == 1)
+			if (is_array($arr["sel"]) && count($arr["sel"]) == 1 && $o->is_property($arr["pn"]))
 			{
 				$o->set_prop($arr["pn"], $arr["sel"][0]);
 			}
