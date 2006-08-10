@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.121 2006/08/10 10:18:21 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.122 2006/08/10 11:37:29 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1658,16 +1658,27 @@ class task extends class_base
 		}
 		ksort($data);
 		$cs = array_merge($data, $data_done);
-		$cs[] = NULL;
-		$cs[] = NULL;
-		$cs[] = NULL;
+
 		$null_idx = 0;
 		$comm = get_instance(CL_COMMENT);
 		$ank_idx = 1;
 
+		$rows_object_list = new object_list();
 		foreach($cs as $ro)
 		{
-			if ($ro === null)
+			$row = $ro->to();
+			$rows_object_list->add($row);
+		}
+		
+		$rows_object_list->sort_by(array("prop" => "date","order" => "asc"));
+		
+		$row_ids = $rows_object_list->ids();
+		$row_ids[] = NULL;
+		$row_ids[] = NULL;
+		$row_ids[] = NULL;
+		foreach($row_ids as $ro)
+		{
+			if ($ro === NULL)
 			{
 				$idx = $null_idx--;
 				$row = obj();
@@ -1675,8 +1686,8 @@ class task extends class_base
 			}
 			else
 			{
-				$idx = $ro->prop("to");
-				$row = $ro->to();
+				$idx = $ro;
+				$row = obj($ro);
 				$def_impl = array();
 			}
 			$ank_idx++;
