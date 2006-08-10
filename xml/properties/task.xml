@@ -159,7 +159,7 @@
             <field>meta</field>
             <method>serialize</method>
             <parent>hr_price_layout</parent>
-            <no_caption>1</no_caption>
+            <caption>Tunnihind</caption>
       </property>
       <property>
             <name>hr_price_currency</name>
@@ -169,7 +169,7 @@
             <field>meta</field>
             <method>serialize</method>
             <parent>hr_price_layout</parent>
-            <no_caption>1</no_caption>
+            <caption>Valuuta</caption>
       </property>
       <property>
             <name>deal_price</name>
@@ -180,7 +180,7 @@
             <field>meta</field>
             <method>serialize</method>
             <parent>deal_price_layout</parent>
-            <no_caption>1</no_caption>
+            <caption>Kokkuleppehind</caption>
       </property>
       <property>
             <name>deal_price_currency</name>
@@ -190,7 +190,7 @@
             <field>meta</field>
             <method>serialize</method>
             <parent>deal_price_layout</parent>
-            <no_caption>1</no_caption>
+            <caption>Valuuta</caption>
       </property>
       <property>
             <name>content</name>
@@ -592,13 +592,13 @@
             </personal>
             <hr_price_layout>
                   <type>hbox</type>
+                  <no_caption>1</no_caption>
                   <group>general</group>
-                  <caption>Tunnihind</caption>
             </hr_price_layout>
             <deal_price_layout>
                   <type>hbox</type>
+                  <no_caption>1</no_caption>
                   <group>general</group>
-                  <caption>Kokkuleppehind</caption>
             </deal_price_layout>
       </layout>
 </properties>

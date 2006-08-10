@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.120 2006/08/09 12:12:55 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.121 2006/08/10 10:18:21 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -59,20 +59,23 @@ layout num_hrs type=hbox
 	@property num_hrs_to_cust type=textbox size=5 field=meta method=serialize
 	@caption Tundide arv kliendile
 
-@layout hr_price_layout type=hbox
-@caption Tunnihind
+@layout hr_price_layout type=hbox no_caption=1
+caption Tunnihind
 	
-	@property hr_price type=textbox size=5 field=meta method=serialize parent=hr_price_layout no_caption=1
+	@property hr_price type=textbox size=5 field=meta method=serialize parent=hr_price_layout
+	@caption Tunnihind
 
-	@property hr_price_currency type=select field=meta method=serialize parent=hr_price_layout no_caption=1
+	@property hr_price_currency type=select field=meta method=serialize parent=hr_price_layout
+	@caption Valuuta
 
-@layout deal_price_layout type=hbox
-@caption Kokkuleppehind
+@layout deal_price_layout type=hbox no_caption=1
+caption Kokkuleppehind
 	
-	@property deal_price type=textbox size=5 field=meta method=serialize parent=deal_price_layout no_caption=1
+	@property deal_price type=textbox size=5 field=meta method=serialize parent=deal_price_layout
+	@caption Kokkuleppehind
 
-	@property deal_price_currency type=select field=meta method=serialize parent=deal_price_layout no_caption=1
-
+	@property deal_price_currency type=select field=meta method=serialize parent=deal_price_layout
+	@caption Valuuta
 
 @property content type=textarea cols=80 rows=30 field=description table=planner
 @caption Sisu
