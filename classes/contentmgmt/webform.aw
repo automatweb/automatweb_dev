@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.93 2006/07/21 13:39:16 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.94 2006/08/11 09:31:21 tarvo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -615,7 +615,7 @@ class webform extends class_base
 		$object_type = obj();
 		$object_type->set_parent($parent);
 		$object_type->set_class_id(CL_OBJECT_TYPE);
-		$object_type->set_name("Objekti t&uuml;&uuml;p ".$arr["obj_inst"]->id());
+		$object_type->set_name(t("Objekti t&uuml;&uuml;p ").$arr["obj_inst"]->id());
 		$object_type->set_status(STAT_ACTIVE);
 		$object_type->set_prop("use_cfgform", $cfgform->id());
 		$object_type->set_prop("type", $this->p_clid);
