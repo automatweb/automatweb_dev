@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.7 2006/07/27 23:32:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_organizer.aw,v 1.8 2006/08/11 09:26:33 tarvo Exp $
 // scm_organizer.aw - Spordiv&otilde;istluste korraldaja 
 /*
 
@@ -215,7 +215,7 @@ class scm_organizer extends class_base
 				$this->_gen_comp_tbl(&$t);
 				$inst = get_instance(CL_SCM_COMPETITION);
 				$filt = array(
-					"state" => ($arr["request"]["group"] == "current_competitions")?"current":"archive",
+					"state" => ($arr["request"]["group"] == "competitions_archive")?"archive":"current",
 					"organizer" => $arr["obj_inst"]->id(),
 				);
 				if(!count($list = $inst->get_competitions($filt)))

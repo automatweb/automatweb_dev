@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.4 2006/08/09 15:06:55 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.5 2006/08/11 09:26:33 tarvo Exp $
 // scm_result.aw - Tulemus 
 /*
 
@@ -204,6 +204,7 @@ class scm_result extends class_base
 				}
 				$obj = $list->begin();
 				$to_format[] = array(
+					"id" => $extra_data["id"],
 					"competition" => $cmp,
 					"contestant" => $cnt,
 					"result" => $obj->id(),
@@ -284,6 +285,7 @@ class scm_result extends class_base
 			$ret_data["result"] = $res;
 			$ret_data["raw_result"] = $raw_result;
 			$ret_data["fun"] = $fun;
+			$ret_data["id"] = $data["id"];
 			$ret[] = $ret_data;
 		}
 		return $ret;
