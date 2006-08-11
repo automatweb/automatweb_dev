@@ -46,7 +46,7 @@
             <group>sub_general</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>date_select</type>
+            <type>text</type>
             <parent>time_split</parent>
             <no_caption>1</no_caption>
       </property>
@@ -58,6 +58,7 @@
             <method>serialize</method>
             <type>time_select</type>
             <parent>time_split</parent>
+            <store>no</store>
             <no_caption>1</no_caption>
       </property>
       <property>
