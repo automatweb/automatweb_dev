@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.78 2006/08/03 11:00:44 tarvo Exp $
+// $Id: cfgutils.aw,v 1.79 2006/08/11 09:28:11 tarvo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -331,6 +331,7 @@ class cfgutils extends aw_template
 			}
 		}
 		// translate
+
 		if($args["load_trans"] == 1)
 		{
 			foreach($properties as $k => $d)
@@ -346,6 +347,8 @@ class cfgutils extends aw_template
 					$properties[$k]["caption"]["text"] = $tmp;
 				}
 
+				$properties[$k]["orig_caption"] = $properties[$k]["caption"];
+				
 				$t_str = "Omaduse ".$d["caption"]." (".$d["name"].") caption";
 				$tmp = t2($t_str);
 				if ($tmp !== NULL)
@@ -380,6 +383,7 @@ class cfgutils extends aw_template
 
 			foreach($groupinfo as $k => $d)
 			{
+				$groupinfo[$k]["orig_caption"] = $groupinfo[$k]["caption"];
 				$tmp = t2("Grupi ".$d["caption"]." (".$k.") pealkiri");
 				if ($tmp !== NULL)
 				{
@@ -397,8 +401,8 @@ class cfgutils extends aw_template
 						$dat[0]['caption']['text'] = "";
 					}
 					*/
-
 					$tmp = "Seose ".$dat["caption"]." (RELTYPE_".$k.") tekst";
+
 					$tmp = t2($tmp);
 					if ($tmp !== NULL)
 					{
