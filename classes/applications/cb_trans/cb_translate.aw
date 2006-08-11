@@ -239,11 +239,11 @@ class cb_translate extends aw_template
 				"url" => $this->mk_my_orb("show_changes"),
 				"target" => "editorcontent",
 				"class" => "right_caption",
-				"caption" => iconv(aw_global_get("charset") , "utf-8", t("Näita muutusi")),
+				"caption" => iconv(aw_global_get("charset") , "utf-8", t("N&auml;ita muutusi")),
 			)),
 			"editor_caption" => $path_string,
 			"editor_content_tree" => $tree->finalize_tree(),
-			"browser_caption" => t("AW tõlkimine"),
+			"browser_caption" => t("AW t&otilde;lkimine"),
 			"toolbar" => $tb->get_toolbar(),
 			"editor_content" => $this->mk_my_orb($editor_orb_name ,array(
 				"clid" => trim($arr["clid"]),

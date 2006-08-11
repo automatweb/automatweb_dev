@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.42 2006/07/25 14:49:24 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_search.aw,v 1.43 2006/08/11 09:23:24 tarvo Exp $
 // realestate_search.aw - Kinnisvaraobjektide otsing
 /*
 
@@ -1573,7 +1573,7 @@ exit_function("jigaboo");
 			CL_REALESTATE_LAND => t("Maat&uuml;kk"),
 		);
 		natcasesort ($this->options_ci);
-		$this->options_ci = array(REALESTATE_SEARCH_ALL => t("Kõik objektid")) + $this->options_ci;
+		$this->options_ci = array(REALESTATE_SEARCH_ALL => t("K&otilde;ik objektid")) + $this->options_ci;
 
 		### transaction_type
 		$prop_args = array (
