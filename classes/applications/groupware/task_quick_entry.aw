@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.14 2006/08/09 15:57:53 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.15 2006/08/14 13:33:20 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -146,17 +146,18 @@ class task_quick_entry extends class_base
 		switch($prop["name"])
 		{
 			case "customer":
-				if(!($arr["request"]["custp_fn"] && $arr["request"]["custp_ln"])) break;
+				if(($arr["request"]["custp_fn"] || $arr["request"]["custp_ln"])) return $retval;
 			case "custp_fn":
-				if(!$arr["request"]["customer"]) break;
+				if($arr["request"]["customer"]) return $retval;
 			case "custp_ln":
-				if(!$arr["request"]["customer"]) break;
+				if($arr["request"]["customer"]) return $retval;
 			case "project":
 			case "content":
 			case "duration":
 				if ($prop["value"] == "")
 				{
-					$prop["error"] = t("K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!");
+					if(!$this->empty_field_error) $prop["error"] = t("K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!");
+					$this->empty_field_error = 1;
 					return PROP_FATAL_ERROR;
 				}
 				break;
