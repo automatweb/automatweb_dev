@@ -1982,7 +1982,7 @@ class crm_company extends class_base
 				}
 				else
 				{
-					$day = date("w");
+/*					$day = date("w");
 					if ($day == 0)
 					{
 						$day = 6;
@@ -1991,7 +1991,8 @@ class crm_company extends class_base
 					{
 						$day--;
 					}
-					$data["value"] = mktime(0,0,0, date("m"), date("d")+(7-$day), date("Y"));
+					$data["value"] = mktime(0,0,0, date("m"), date("d")+(7-$day), date("Y"));*/
+					$data["value"] = mktime(0,0,0, date("m"), date("d"), date("Y"));
 				}
 				break;
 
@@ -2025,6 +2026,7 @@ class crm_company extends class_base
 					$stats_impl = get_instance("applications/crm/crm_company_stats_impl");
 				}
 				$fn = "_get_".$data["name"];
+				
 				return $stats_impl->$fn($arr);
 
 			case "qv_t":
@@ -2076,8 +2078,19 @@ class crm_company extends class_base
 				break;
 
 			case "my_stats_s_from":
+				$data =& $arr["prop"];
+				if ($arr["request"][$data["name"]]["year"] > 1)
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				else
+				{
+					$data["value"] = mktime(0,0,0, date("m"), 1, date("Y"));
+				}	
+				break;
 			case "my_stats_s_to":
-				$data["value"] = date_edit::get_timestamp($arr["request"][$data["name"]]);
+				$data["value"] = mktime(0,0,0, date("m"), date("d"), date("Y"));
+//				$data["value"] = date_edit::get_timestamp($arr["request"][$data["name"]]);
 				break;
 
 			case "my_stats_s_cust":
