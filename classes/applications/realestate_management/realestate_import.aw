@@ -509,7 +509,8 @@ class realestate_import extends class_base
 			{ ### finish last processed property import
 				if (is_object ($property))
 				{
-					if (1 != $arr["quiet"]) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE; flush(); }
+					if (1 != $arr["quiet"]) { echo sprintf (t("Objekt city24 id-ga %s imporditud. AW id: %s. Impordi staatus: %s"), $this->property_data["ID"], $property->id (), $property_status) . REALESTATE_NEWLINE; flush(); 
+					}
 
 					// if ($property_status === REALESTATE_IMPORT_OK)
 					// {
@@ -964,6 +965,9 @@ class realestate_import extends class_base
 				#### transaction_rent
 				$value = round ($this->property_data["TEHING_KUUYYR"], 2);
 				$property->set_prop ("transaction_rent", $value);
+
+				#### property_area
+				if($property->is_property("property_area"))$property->set_prop ("property_area", $this->property_data["KRUNT"]);
 
 				#### transaction_constraints
 				if ($this->changed_transaction_constraints)
@@ -1438,6 +1442,11 @@ class realestate_import extends class_base
 						#### has_lift
 						$value = (int) (bool) strstr ($this->property_data["SEISUKORD_LIFT"], "Y");
 						$property->set_prop ("has_lift", $value);
+						
+						#### property_area
+						$value = round ($this->property_data["KRUNT"]);
+						$property->set_prop ("property_area", $value);
+						
 						break;
 				}
 
