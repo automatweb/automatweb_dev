@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.122 2006/08/10 11:37:29 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.123 2006/08/14 13:55:04 markop Exp $
 // task.aw - TODO item
 /*
 
@@ -1465,7 +1465,7 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "task",
 			"caption" => t("Tegevus"),
-			"align" => "center"
+			"align" => "center",
 		));
 
 		$t->define_field(array(
@@ -1487,7 +1487,8 @@ class task extends class_base
 		$t->define_field(array(
 			"name" => "time",
 			"caption" => t("Tunde"),
-			"align" => "left"
+			"align" => "left",
+			"nowrap" => 1,
 		));
 
 		/*$t->define_field(array(
@@ -1510,7 +1511,7 @@ class task extends class_base
 				t("Jah"),
 				t("Ei")
 			),
-			"filter_compare" => array(&$this, "__done_filt_comp")
+			"filter_compare" => array(&$this, "__done_filt_comp"),
 		));
 
 		$t->define_field(array(
@@ -1817,7 +1818,7 @@ class task extends class_base
 					"name" => "rows[$idx][task]",
 					"value" => $row->prop("content"),
 					"rows" => 5,
-					"cols" => 50
+					"cols" => 45
 				)).$app,
 				"date" => html::textbox(array(
 					"name" => "rows[$idx][date]",
@@ -1834,17 +1835,17 @@ class task extends class_base
 				"time" => html::textbox(array(
 					"name" => "rows[$idx][time_guess]",
 					"value" => $row->prop("time_guess"),
-					"size" => 5
+					"size" => 3
 				))." - Prognoos<br>".
 				html::textbox(array(
 					"name" => "rows[$idx][time_real]",
 					"value" => $row->prop("time_real"),
-					"size" => 5
+					"size" => 3
 				))." - Kulunud<br>".
 				html::textbox(array(
 					"name" => "rows[$idx][time_to_cust]",
 					"value" => $row->prop("time_to_cust"),
-					"size" => 5
+					"size" => 3
 				))." - Kliendile<br>".$stopper,
 				"done" => html::checkbox(array(
 					"name" => "rows[$idx][done]",
