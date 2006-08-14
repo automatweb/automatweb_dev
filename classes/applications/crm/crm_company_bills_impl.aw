@@ -642,7 +642,8 @@ class crm_company_bills_impl extends class_base
 				"link" => "#",
 				"oncl" => "onClick='window.open(\"".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $bill->id(), "group" => "preview"), CL_CRM_BILL)."\",\"billprintadd\",\"width=100,height=100\");'"
 			));
-
+			$partial = "";
+			if($bill->prop("state") == 3 && $bill->prop("partial_recieved") && $bill->prop("partial_recieved") < $cursum) $partial = '<br>'.t("osaliselt");
 			$t->define_data(array(
 				"bill_no" => html::get_change_url($bill->id(), array("return_url" => get_ru()), parse_obj_name($bill->prop("bill_no"))),
 				"create_new" => html::href(array(
@@ -656,7 +657,7 @@ class crm_company_bills_impl extends class_base
 				"bill_date" => $bill->prop("bill_date"),
 				"bill_due_date" => $bill->prop("bill_due_date"),
 				"customer" => $cust,
-				"state" => $state,
+				"state" => $state.$partial,
 				"sum" => number_format($cursum, 2),
 				"client_manager" => $cm,
 				"oid" => $bill->id(),

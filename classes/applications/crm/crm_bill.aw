@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.82 2006/08/08 14:37:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.83 2006/08/14 14:19:23 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -50,6 +50,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 	@property state type=select table=aw_crm_bill field=aw_state
 	@caption Staatus
 
+	@property partial_recieved type=textbox field=meta method=serialize
+	@caption Osaline laekumine
+
 	@property disc type=textbox table=aw_crm_bill field=aw_discount size=5 
 	@caption Allahindlus (%)
 
@@ -70,6 +73,22 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_CRM_BILL, on_delete_bill)
 
 	@property signers type=crm_participant_search reltype=RELTYPE_SIGNER multiple=1 table=objects field=meta method=serialize style=relpicker
 	@caption Allkirjastajad
+
+	@property udef1 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kasutajadefineeritud muutuja 1
+
+	@property udef2 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kasutajadefineeritud muutuja 2
+
+	@property udef3 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kasutajadefineeritud muutuja 3
+
+	@property udef4 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kasutajadefineeritud muutuja 4
+
+	@property udef5 type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kasutajadefineeritud muutuja 5
+
 
 @default group=preview
 
@@ -138,7 +157,8 @@ class crm_bill extends class_base
 		$this->states = array(
 			0 => t("Koostamisel"),
 			1 => t("Saadetud"),
-			2 => t("Makstud")
+			2 => t("Makstud"),
+			3 => t("Laekunud"),
 		);
 	}
 
@@ -846,7 +866,12 @@ class crm_bill extends class_base
 			"impl_fax" => $impl->prop_str("telefax_id"),
 			"impl_email" => $impl_mail,
 			"impl_url" => $impl->prop_str("url_id"),
-		));		
+		));
+		if($b->prop("udef1")) $this->vars(array("userch1_checked" => $this->parse("userch1_checked")));
+		if($b->prop("udef2")) $this->vars(array("userch2_checked" => $this->parse("userch2_checked")));
+		if($b->prop("udef3")) $this->vars(array("userch3_checked" => $this->parse("userch3_checked")));
+		if($b->prop("udef4")) $this->vars(array("userch4_checked" => $this->parse("userch4_checked")));
+		if($b->prop("udef5")) $this->vars(array("userch5_checked" => $this->parse("userch5_checked")));
 
 		if ($ord->prop("tax_nr") != "")
 		{

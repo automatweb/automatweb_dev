@@ -109,6 +109,15 @@
             <caption>Staatus</caption>
       </property>
       <property>
+            <name>partial_recieved</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Osaline laekumine</caption>
+      </property>
+      <property>
             <name>disc</name>
             <table>aw_crm_bill</table>
             <group>general</group>
@@ -176,6 +185,56 @@
             <method>serialize</method>
             <style>relpicker</style>
             <caption>Allkirjastajad</caption>
+      </property>
+      <property>
+            <name>udef1</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 1</caption>
+      </property>
+      <property>
+            <name>udef2</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 2</caption>
+      </property>
+      <property>
+            <name>udef3</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 3</caption>
+      </property>
+      <property>
+            <name>udef4</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 4</caption>
+      </property>
+      <property>
+            <name>udef5</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutajadefineeritud muutuja 5</caption>
       </property>
       <property>
             <name>preview</name>
