@@ -927,6 +927,7 @@ class crm_company_cust_impl extends class_base
 				"oid" => $project->id()
 			));
 		}
+		$table->set_numeric_field("archive_code");
 		$table->set_default_sortby("project_end");
 		$table->set_default_sorder("desc");
 	}
