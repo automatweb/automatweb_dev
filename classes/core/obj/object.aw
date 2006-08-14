@@ -297,7 +297,7 @@ class object
 			the id of the relation object to attach to the relation, optional
 			type: id, alias or object instance reference
 
-		@param extra optional
+		@param data optional
 			extra data to pass to the connection, optional.
 			type: text
 
