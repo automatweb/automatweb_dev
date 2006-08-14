@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.13 2006/07/19 12:49:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.14 2006/08/14 10:29:28 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -142,7 +142,7 @@ class persons_webview extends class_base
 			phone, phones , home_phone, home_phones, mobile_phone, mobile_phones, skype_phone, skype_phones, short_phone, short_phones, work_phone, work_phones, extension_phone, extension_phones,
 			next_level_link (link j'gmise taseme vaatesse... kui tegu siis antud inimesega),
 			company, section,
-			url, urls
+			url, urls,
 			ta1 - ta5 (kasutajadefineeritud muutujad).
 
 			Kui lisada objekt menüüsse, siis esimeseks vaate infoks tuleb menüüs olev.
@@ -559,7 +559,8 @@ class persons_webview extends class_base
 	**/
 	function parse_alias($arr)
 	{
-		global $view , $id, $section, $level, $company_id;
+		extract($_GET); 
+		//global $view , $id, $section, $level, $company_id, $section_id;
 		if(is_oid($id) && is_oid($section)) // juhul kui asi pole dokumendi sees vaid tulev kuskiklt urlist
 		{
 			$this->view_obj = obj($id);
@@ -570,7 +571,7 @@ class persons_webview extends class_base
 		}
 		
 		if(is_oid($company_id)) $this->company = obj($company_id);
-		if(is_oid($section_id)) $this->section = obj($company_id);
+		if(is_oid($section_id)) $this->section = obj($section_id);
 
 		$this->meta = $this->view_obj->meta();
 		$this->view_no = $view;
@@ -926,6 +927,8 @@ class persons_webview extends class_base
 			if(strlen($urls) > 0 ) $urls .= $url_obj->prop("url");
 		}
 
+
+
 		//mail	
 		$email = $email_obj = $emails = "";
 		$email_obj = $worker->prop("email");
@@ -955,19 +958,15 @@ class persons_webview extends class_base
 		//palk
 		$wage_doc_exist = "";
 		if(is_oid($worker->prop("wage_doc"))) $wage_doc_exist = '<a href ='.$worker->prop("wage_doc").'> '. t("Palk").' </a>';
-		
-		//järgmine tase
 		$next_level_link = $this->mk_my_orb("parse_alias",
 			array(
 				"id" => $this->view_obj->id(),
 				"section" => $worker->id(),
 				"view" => (1 + $this->view_no),
 				"company_id" => $this->company->id(),
-				"secton_id"	=> $this->section->id()
+				"section_id"	=> $this->section->id()
 		),
 		CL_PERSONS_WEBVIEW);
-		
-		//organisatsioon
 		if(!$this->company)
 		{
 			$this->company = $worker->get_first_obj_by_reltype("RELTYPE_COMPANY");
@@ -999,12 +998,12 @@ class persons_webview extends class_base
 			"urls"	=> $urls,
 			"school" => $school,
 			"subject_field" => $subject_field,
+			//	"directive" => $directive,
 			"ta1" => $worker->prop("udef_ta1"),
 			"ta2" => $worker->prop("udef_ta2"),
 			"ta3" => $worker->prop("udef_ta3"),
 			"ta4" => $worker->prop("udef_ta4"),
 			"ta5" => $worker->prop("udef_ta5"),
-			//	"directive" => $directive,
 		));
 	}
 
