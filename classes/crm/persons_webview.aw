@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.14 2006/08/14 10:29:28 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/persons_webview.aw,v 1.15 2006/08/15 14:08:57 markop Exp $
 // persons_webview.aw - Kliendihaldus 
 /*
 
@@ -113,23 +113,31 @@ class persons_webview extends class_base
 		
 		$this->help = nl2br(htmlentities(t("
 			Osakondade tasemed, mida näidataks, saab märkida kujul '1,2,3' või '1-2' või '3'
-			teplates peaks olema subid umbes kujul:
+			juhul , kui on vaja kuvada inimesi üksteise kõrval, siis teplates peaks olema subid umbes kujul:
 			<!-- SUB: DEPARTMENT -->
 			{VAR:department_name}
 			<table>
-			<!-- SUB: ROW -->
+			<!-- SUB: LINE -->
 				<tr>
-				<!-- SUB: COL -->
+				<!-- SUB: WORKER -->
 					<td>
-					<!-- SUB: worker -->
-						{VAR:profession} {VAR:name}
-					<!-- END SUB: worker -->
+					<p align=bottom><center>
+						{VAR:photo} <br>
+						<b>{VAR:name} </b><br>
+						{VAR:rank} <br>
+					</center></p>
 					</td>
-				<!-- END SUB: COL -->
+				<!-- END SUB: WORKER -->
 				</tr>
-			<!-- END SUB: ROW -->
+			<!-- END SUB: LINE -->
 			</table>
 			<!-- SUB: DEPARTMENT -->
+			
+			kui igal real on 1 inimene, siis võib SUB: LINE vahelt ära jätta
+			
+			Kui viimaseks vaateks on üks konkreetne isik, siis template sees ühtegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
+			
+			endine variant ka igaks juhuks töötab veel
 			
 			juhul kui miski taseme osakonda oleks vaja teistmoodi näidata, siis tuleks <!-- SUB: DEPARTMENT --> sisse teha <!-- SUB: LEVEL4DEPARTMENT --> (vastavalt taseme numbrile) , mis oleks muidu sama struktuuriga nagu DEPARTMENT
 
@@ -146,7 +154,6 @@ class persons_webview extends class_base
 			ta1 - ta5 (kasutajadefineeritud muutujad).
 
 			Kui lisada objekt menüüsse, siis esimeseks vaate infoks tuleb menüüs olev.
-			Kui viimaseks vaateks on üks konkreetne isik, siis template sees ühtegi SUBi ei tohiks olla, kasutada saab samu muutujaid, mis muidu sub'is worker
 			Template'ide tõlkimiseks kasutada faili persons_web_view.aw.
 			")));
 	}
@@ -867,8 +874,72 @@ class persons_webview extends class_base
 			$this->vars(array(
 				"ROW" => $row,
 			));
-		exit_function("person_webview::parse_persons");
+
 		}
+		elseif($this->is_template("LINE"))
+		{
+			$c = "";
+			foreach($workers as $val)
+			{
+				$worker = $val["worker"];
+				if($this->view["rows_by"])//ametinimede kaupa grupeerimise porno, et erinevale reale õige arv tuleks jne
+				{
+					if(!$this->order_array) $this->make_order_array($workers);
+					if(!$this->calculated) $col_num = $this->get_cols_num($row_num);
+				} 
+
+				if($this->is_template("WORKER"))
+				{
+					$this->parse_worker($worker);
+					$c .= $this->parse("WORKER");
+				}
+				$col++;
+				$parsed = 0;
+				if($col == $col_num)
+				{
+					$this->vars(array(
+						"WORKER" => $c,
+					));
+					$c = "";
+					$row .= $this->parse("LINE");
+					$col = 0;
+					$parsed = 1;
+					$col_num = $max_col;;
+					$this->calculated = 0;
+					$row_num++;
+				}
+			$this->count++;
+			}
+			if(!$parsed)//viimane rida võib olla tegemata
+			{
+				$this->vars(array(
+					"WORKER" => $c,
+				));
+				$column = "";
+				$row .= $this->parse("LINE");
+				$col = 0;
+				$parsed = 1;
+			}
+			$this->vars(array(
+				"LINE" => $row,
+			));
+		}
+		else
+		{
+			foreach($workers as $val)
+			{
+				$c = "";
+				if($this->is_template("WORKER"))
+				{
+					$this->parse_worker($worker);
+					$c .= $this->parse("worker");
+				}
+			}
+			$this->vars(array(
+				"WORKER" => $c,
+			));
+		}
+		exit_function("person_webview::parse_persons");
 	}
 
 	function parse_worker($worker)
