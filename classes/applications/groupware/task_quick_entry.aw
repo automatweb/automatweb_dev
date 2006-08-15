@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.15 2006/08/14 13:33:20 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.16 2006/08/15 12:58:05 markop Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -398,6 +398,7 @@ class task_quick_entry extends class_base
 				$c->set_name($arr["request"]["custp_fn"].' '.$arr["request"]["custp_ln"]);
 				$c->set_prop("firstname", $arr["request"]["custp_fn"]);
 				$c->set_prop("lastname" , $arr["request"]["custp_ln"]);
+				$c->set_prop("is_customer" , 1);
 				$c->save();
 				$cur_co->connect(array(
 					"type" => "RELTYPE_CUSTOMER",
