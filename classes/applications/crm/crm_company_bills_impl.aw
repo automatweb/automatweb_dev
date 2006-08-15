@@ -350,9 +350,10 @@ class crm_company_bills_impl extends class_base
 				foreach($rs as $row_id)
 				{
 					$ro = obj($row_id);
+				//	$sel_ = 0;
+				//	if(in_array($_SESSION["task_sel"],$row_id)) $sel_ =1;
 					$t->define_data(array(
 						"name" => $ro->prop("content"),
-						"oid" => $row_id,
 						"hrs" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")), 2),
 						"hr_price" => number_format($o->prop("hr_price"),2),
 						"sum" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")) * $o->prop("hr_price"),2),
@@ -477,6 +478,143 @@ class crm_company_bills_impl extends class_base
 				"action" => "create_bill"
 			));
 		//}
+		$tb->add_button(array(
+			"name" => "search_bill",
+			"img" => "search.gif",
+			"tooltip" => t("Otsi"),
+	//		"action" => "search_bill"
+			"url" => "javascript:aw_popup_scroll('".$this->mk_my_orb("search_bill", array("openprintdialog" => 1,))."','Otsing',550,500)",
+		));
+	}
+
+	/**
+		@attrib name=search_bill
+	**/
+	function search_bill($arr)
+	{
+	
+		if($_GET["sel"])
+		{
+			echo "Valitud tööd on teostatud erinevatele klientidele!";
+			classload("vcl/table");
+			$t = new aw_table(array(
+				"layout" => "generic"
+			));
+			$t->define_field(array(
+				"name" => "bill",
+				"caption" => t("Arve"),
+				"sortable" => 1,
+			));
+			$t->define_field(array(
+			"name" => "customer",
+			"sortable" => 1,
+			"caption" => t("Klient")
+			));
+			$t->define_field(array(
+				"name" => "select_this",
+				"caption" => t("Vali"),
+			));
+			$t->set_default_sortby("name");
+	
+			$filter["lang_id"] = array();
+			$filter["site_id"] = array();
+			$filter["class_id"] = CL_CRM_BILL;
+		
+			$ol = new object_list($filter);
+			
+			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+			{
+				$customer = "";
+				if(is_oid($o->prop("customer")) && $this->can("view" , $o->prop("customer")))
+				{
+					$customer_obj = obj($o->prop("customer"));
+					$customer = $customer_obj->name();
+				}
+				$dat = array(
+					"bill" => html::obj_change_url($o),
+					"customer" => $customer,
+					"select_this" => html::href(array(
+						"url" => $this->mk_my_orb("search_bill", array("bill_id" => $o->id(),)),
+						"caption" => t("Vali see"),
+					)),
+				);
+				$t->define_data($dat);
+			}
+			$t->sort_by();
+			return $t->draw();
+			
+		}
+		if($_GET["bill_id"])
+		{
+			$_SESSION["bill_id"] = $_GET["bill_id"];
+			die("
+				<html><body><script language='javascript'>
+					window.opener.submit_changeform('create_bill');
+					window.close();
+				</script></body></html>
+			");
+		}
+		classload("vcl/table");
+		$t = new aw_table(array(
+			"layout" => "generic"
+		));
+		$t->define_field(array(
+			"name" => "oid",
+			"caption" => t("OID"),
+			"sortable" => 1,
+		));
+			$t->define_field(array(
+			"name" => "name",
+			"sortable" => 1,
+			"caption" => t("Nimi")
+		));
+			$t->define_field(array(
+			"name" => "parent",
+			"sortable" => 1,
+			"caption" => t("Asukoht")
+		));
+			$t->define_field(array(
+			"name" => "modifiedby",
+			"sortable" => 1,
+			"caption" => t("Muutja")
+		));
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"sortable" => 1,
+			"format" => "d.m.Y H:i",
+			"type" => "time"
+		));
+		$t->define_field(array(
+			"name" => "select_this",
+			"caption" => t("Vali"),
+		));
+		$t->set_default_sortby("name");
+
+		$filter["lang_id"] = array();
+		$filter["site_id"] = array();
+		$filter["class_id"] = CL_CRM_BILL;
+	
+		$ol = new object_list($filter);
+		
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		{
+			$dat = array(
+				"oid" => $o->id(),
+				"name" => html::obj_change_url($o),
+				"parent" => $o->path_str(array("max_len" => 3)),
+				"modifiedby" => $o->modifiedby(),
+				"modified" => $o->modified(),
+				"select_this" => html::href(array(
+					"url" => $this->mk_my_orb("search_bill", array("bill_id" => $o->id(),)),
+					"caption" => t("Vali see"),
+				)),
+			);
+			$t->define_data($dat);
+		}
+
+		$t->sort_by();
+		return $t->draw();
 	}
 
 	function _init_bills_list_t(&$t, $r)

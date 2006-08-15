@@ -3998,11 +3998,51 @@ class crm_company extends class_base
 		return $ret;
 	}
 
+	function check_customers($arr)
+	{
+		$customers = array();
+		foreach(safe_array($arr["sel"]) as $task)
+		{
+			$to = obj($task);
+			if ($to->class_id() == CL_TASK_ROW)
+			{
+				$filt_by_row = $to->id();
+				// get task from row
+				$conns = $to->connections_to(array("from.class_id" => CL_TASK,"type" => "RELTYPE_ROW"));
+				$c = reset($conns);
+				if ($c)
+				{
+					$to = $c->from();
+					$task = $to->id();
+				}
+			}
+			if(is_oid($task))$customers[$task] = $task;
+		}
+		if(is_object($arr["bill"])) $customers[$arr["bill"]->id()] = $arr["bill"]->id();
+		if(sizeof($customers) > 1)
+		{
+			$_SESSION["task_sel"] = $arr["sel"];
+			$impl = get_instance("applications/crm/crm_company_bills_impl");
+			$popup = "<script name= javascript>window.open('".$impl->mk_my_orb("search_bill", array("sel" => $arr["sel"],))."','', 'toolbar=no, directories=no, status=no, location=no, resizable=yes, scrollbars=yes, menubar=no, height=800, width=720')
+			</script>
+			<script name= javascript>location.href='".$arr["ru"]
+			."';</script>";
+			die($popup);
+		}
+	}
+
 	/**
 		@attrib name=create_bill all_args=1
 	**/
 	function create_bill($arr)
 	{
+		if(is_oid($_SESSION["bill_id"]) && $this->can("view", $_SESSION["bill_id"]))
+		{
+			$bill_id = $_SESSION["bill_id"];
+			$bill = obj($_SESSION["bill_id"]);
+			$_SESSION["bill_id"] = null;
+		}
+		
 		$sel = array();
 		foreach($arr as $k => $v)
 		{
@@ -4019,49 +4059,53 @@ class crm_company extends class_base
 		{
 			$arr["sel"] = $sel;
 		}
-		// create a bill for all selected tasks
-		$bill = obj();
-		$bill->set_class_id(CL_CRM_BILL);
-		$bill->set_parent($arr["id"]);
-		$bill->save();
-
-		$ser = get_instance(CL_CRM_NUMBER_SERIES);
-		$bno = $ser->find_series_and_get_next(CL_CRM_BILL);
-		if (!$bno)
+		$this->check_customers(array("sel" => $arr["sel"], "bill" => $bill , "ru" => $arr["post_ru"]));
+		
+		if(!is_object($bill))
 		{
-			$bno = $bill->id();
-		}
-
-		$bill->set_prop("bill_no", $bno);
-		$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
-		if (is_oid($arr["proj"]))
-		{
-			$proj = obj($arr["proj"]);
-			$cust = $proj->get_first_obj_by_reltype("RELTYPE_ORDERER");
-			$impl = $proj->prop("implementor");
-			if (is_array($impl))
+			// create a bill for all selected tasks
+			$bill = obj();
+			$bill->set_class_id(CL_CRM_BILL);
+			$bill->set_parent($arr["id"]);
+			$bill->save();
+	
+			$ser = get_instance(CL_CRM_NUMBER_SERIES);
+			$bno = $ser->find_series_and_get_next(CL_CRM_BILL);
+			if (!$bno)
 			{
-				$impl = reset($impl);
+				$bno = $bill->id();
 			}
-			if ($cust)
+	
+			$bill->set_prop("bill_no", $bno);
+			$bill->set_name(sprintf(t("Arve nr %s"), $bill->prop("bill_no")));
+			if (is_oid($arr["proj"]))
 			{
-				$bill->set_prop("customer", $cust->id());
+				$proj = obj($arr["proj"]);
+				$cust = $proj->get_first_obj_by_reltype("RELTYPE_ORDERER");
+				$impl = $proj->prop("implementor");
+				if (is_array($impl))
+				{
+					$impl = reset($impl);
+				}
+				if ($cust)
+				{
+					$bill->set_prop("customer", $cust->id());
+				}
+				$bill->set_prop("impl", $impl);
 			}
-			$bill->set_prop("impl", $impl);
 		}
-
 		if (is_oid($arr["cust"]))
 		{
 			$cust = obj($arr["cust"]);
 			$u = get_instance(CL_USER);
 			$bill->set_prop("impl", $u->get_current_company());
 		}
-
+	
 		if ($cust)
 		{
 			$bill->set_prop("customer", $cust->id());
 		}
-
+	
 		if (!$bill->prop("customer") && $arr["sel"])
 		{
 			$c_r_t = $arr["sel"];
@@ -4081,13 +4125,11 @@ class crm_company extends class_base
 			}
 			$bill->set_prop("customer", $c_r_t_o->prop("customer"));
 		}
-
 		if (!$bill->prop("impl"))
 		{
 			$u = get_instance(CL_USER);
 			$bill->set_prop("impl", $u->get_current_company());
 		}
-
 		$bill->set_prop("bill_date", time());
 
 		// if the bill has an impl and customer, then check if they have a customer relation
@@ -5865,6 +5907,9 @@ class crm_company extends class_base
 		$o->connect(array("to" => $arr["def_poll"], "type" => "RELTYPE_DEF_POLL"));
 		return $arr["post_ru"];
 	}
+	
+
+
 }
 
 ?>
