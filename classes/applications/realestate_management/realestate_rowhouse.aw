@@ -416,7 +416,7 @@ class realestate_rowhouse extends realestate_property
 
 				$prop["options"] = $options;
 				break;
-
+/*
 			case "number_of_rooms":
 				$prop["options"] = range (1, 30);
 				break;
@@ -432,7 +432,7 @@ class realestate_rowhouse extends realestate_property
 			case "number_of_storeys":
 				$prop["options"] = range (1, 50);
 				break;
-		}
+*/		}
 
 		return $retval;
 	}

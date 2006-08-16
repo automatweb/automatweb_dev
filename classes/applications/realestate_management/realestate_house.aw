@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_house.aw,v 1.6 2006/07/20 13:40:45 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_house.aw,v 1.7 2006/08/16 11:09:18 markop Exp $
 // realestate_house.aw - Maja
 /*
 
@@ -418,7 +418,7 @@ class realestate_house extends realestate_property
 
 				$prop["options"] = $options;
 				break;
-
+/*
 			case "number_of_rooms":
 				$prop["options"] = range (1, 30);
 				break;
@@ -434,7 +434,7 @@ class realestate_house extends realestate_property
 			case "number_of_storeys":
 				$prop["options"] = range (1, 50);
 				break;
-		}
+*/		}
 
 		return $retval;
 	}
