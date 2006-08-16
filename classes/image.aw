@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.172 2006/06/30 13:29:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.173 2006/08/16 13:42:47 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -16,7 +16,7 @@
 	@caption Pilt
 
 	@property dimensions type=text group=general,resize store=no
-	@caption Mõõtmed
+	@caption M&otilde;&otilde;tmed
 
 	@property comment table=objects field=comment type=textbox
 	@caption Pildi allkiri
@@ -42,7 +42,7 @@
 	/@property file_show type=text store=no editonly=1
 	/@caption Eelvaade 
 
-@groupinfo show caption="Näitamine"
+@groupinfo show caption="N&auml;itamine"
 @default group=show
 
 	@property show_conditions type=chooser multiple=1 store=no
@@ -81,7 +81,7 @@
 @default group=resize_big
 
 	@property dimensions_big type=text store=no
-	@caption Mõõtmed
+	@caption M&otilde;&otilde;tmed
 	
 	@property new_w_big type=textbox field=meta method=serialize size=6 store=no
 	@caption Uus laius (suur)
@@ -877,8 +877,8 @@ class image extends class_base
 
 			case "show_conditions":
 				$prop["options"] = array(
-					"newwindow" => "Uues aknas",
-					"no_print" => "Ära näita print-vaates",
+					"newwindow" => t("Uues aknas"),
+					"no_print" => t("&Auml;ra n&auml;ita print-vaates"),
 				);
 				$prop["value"]["newwindow"] = $arr['obj_inst']->prop("newwindow");
 				$prop["value"]["no_print"] = $arr['obj_inst']->prop("no_print");

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.18 2006/07/13 10:42:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.19 2006/08/16 13:42:47 kristo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -260,10 +260,10 @@ class links extends class_base
 
 			case "js_attributes":
 				$prop["options"] = array(
-					"newwintoolbar" => "Tööriistariba",
-					"newwinlocation" => "Aadressi riba",
-					"newwinmenu" => "Menüüd",
-					"newwinscroll" => "Kerimisriba",
+					"newwintoolbar" => t("T&ouml;&ouml;riistariba"),
+					"newwinlocation" => t("Aadressi riba"),
+					"newwinmenu" => t("Men&uuml;&uuml;d"),
+					"newwinscroll" => t("Kerimisriba"),
 				);
 				$prop["value"]["newwintoolbar"] = $arr['obj_inst']->prop("newwintoolbar");
 				$prop["value"]["newwinlocation"] = $arr['obj_inst']->prop("newwinlocation");

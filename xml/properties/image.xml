@@ -29,7 +29,7 @@
             <type>text</type>
             <store>no</store>
             <field>dimensions</field>
-            <caption>M&amp;otilde;&amp;otilde;tmed</caption>
+            <caption>M&amp;amp;otilde;&amp;amp;otilde;tmed</caption>
       </property>
       <property>
             <name>comment</name>
@@ -183,7 +183,7 @@
             <type>text</type>
             <store>no</store>
             <field>dimensions_big</field>
-            <caption>M&amp;otilde;&amp;otilde;tmed</caption>
+            <caption>M&amp;amp;otilde;&amp;amp;otilde;tmed</caption>
       </property>
       <property>
             <name>new_w_big</name>
@@ -227,7 +227,7 @@
       </classinfo>
       <groupinfo>
             <show>
-                  <caption>N&amp;auml;itamine</caption>
+                  <caption>N&amp;amp;auml;itamine</caption>
             </show>
             <img2>
                   <caption>Suur pilt</caption>

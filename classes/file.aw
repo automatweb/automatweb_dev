@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.126 2006/07/13 10:42:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.127 2006/08/16 13:42:47 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -48,7 +48,7 @@
 	@caption Url, kust saadakse faili sisu
 
 	@property showal type=checkbox ch_value=1
-	@caption Näita kohe
+	@caption N&auml;ita kohe
 
 @default group=settings
 
@@ -60,17 +60,17 @@
 	@default method=serialize
 	
 	@property show_framed type=checkbox ch_value=1 
-	@caption Näita saidi raamis
+	@caption N&auml;ita saidi raamis
 
 	@property show_icon type=checkbox ch_value=1 default=8
 	@caption N&auml;ita ikooni
 
 @default group=dates
 	@property j_time type=date_select 
-	@caption Jõustumise kuupäev
+	@caption Ji&otilde;ustumise kuup&auml;ev
 
 	@property act_date type=date_select 
-	@caption Avaldamise kuupäev
+	@caption Avaldamise kuup&auml;ev
 
 
 	@property udef1 type=textbox display=none
@@ -89,7 +89,7 @@
 @groupinfo transl caption=T&otilde;lgi
 
 @reltype KEYWORD value=2 clid=CL_KEYWORD
-@caption Märksõna
+@caption M&auml;rks&otilde;na
 */
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.168 2006/08/16 11:01:54 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.169 2006/08/16 13:42:47 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -517,8 +517,8 @@ class menu extends class_base
 
 			case "link_behaviour":
 				$data["options"] = array(
-					"target" => "Uues aknas",
-					"clickable" => "Klikitav",
+					"target" => t("Uues aknas"),
+					"clickable" => t("Klikitav"),
 				);
 				$data["value"]["target"] = $ob->prop("target");
 				$data["value"]["clickable"] = $ob->prop("clickable");
@@ -532,8 +532,8 @@ class menu extends class_base
 
 			case "show_restrictions":
 				$data["options"] = array(
-					"frontpage" => "Esilehel",
-					"mid" => "Paremal",
+					"frontpage" => t("Esilehel"),
+					"mid" => t("Paremal"),
 				);
 				$data["value"]["frontpage"] = $ob->prop("frontpage");
 				$data["value"]["mid"] = $ob->prop("mid");
@@ -547,8 +547,8 @@ class menu extends class_base
 
 			case "show_conditions":
 				$data["options"] = array(
-					"hide_noact" => "Peida &auml;ra, kui selle kausta all aktiivseid dokumente ei ole",
-					"no_menus" => "Ilma men&uuml;&uuml;deta",
+					 "hide_noact" => t("Peida &auml;ra, kui selle kausta all aktiivseid dokumente ei ole"),
+					"no_menus" => t("Ilma men&uuml;&uuml;deta"),
 				);
 				$data["value"]["hide_noact"] = $ob->prop("hide_noact");
 				$data["value"]["no_menus"] = $ob->prop("no_menus");

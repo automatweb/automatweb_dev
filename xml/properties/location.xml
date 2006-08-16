@@ -1,5 +1,35 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>address</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS</reltype>
+            <caption>Aadress</caption>
+      </property>
+      <property>
+            <name>map</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_MAP</reltype>
+            <caption>Asukohakaart</caption>
+      </property>
+      <property>
+            <name>photo</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PHOTO</reltype>
+            <caption>Foto kohast</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_LOCATION</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +37,22 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <reltypes>
+            <MAP>
+                  <value>1</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Kaart</caption>
+            </MAP>
+            <PHOTO>
+                  <value>2</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Foto</caption>
+            </PHOTO>
+            <ADDRESS>
+                  <value>3</value>
+                  <clid>CL_CRM_ADDRESS</clid>
+                  <caption>Aadress</caption>
+            </ADDRESS>
+      </reltypes>
 </properties>
 

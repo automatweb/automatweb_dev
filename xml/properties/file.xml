@@ -67,7 +67,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>showal</field>
-            <caption>N&amp;auml;ita kohe</caption>
+            <caption>N&amp;amp;auml;ita kohe</caption>
       </property>
       <property>
             <name>newwindow</name>
@@ -86,7 +86,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>N&amp;auml;ita saidi raamis</caption>
+            <caption>N&amp;amp;auml;ita saidi raamis</caption>
       </property>
       <property>
             <name>show_icon</name>
@@ -106,7 +106,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>J&amp;otilde;ustumise kuup&amp;auml;ev</caption>
+            <caption>Ji&amp;amp;otilde;ustumise kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>act_date</name>
@@ -115,7 +115,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>date_select</type>
-            <caption>Avaldamise kuup&amp;auml;ev</caption>
+            <caption>Avaldamise kuup&amp;amp;auml;ev</caption>
       </property>
       <property>
             <name>udef1</name>
@@ -174,7 +174,7 @@
             <KEYWORD>
                   <value>2</value>
                   <clid>CL_KEYWORD</clid>
-                  <caption>M&amp;auml;rks&amp;otilde;na</caption>
+                  <caption>M&amp;amp;auml;rks&amp;amp;otilde;na</caption>
             </KEYWORD>
       </reltypes>
 </properties>

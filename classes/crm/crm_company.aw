@@ -4054,7 +4054,14 @@ class crm_company extends class_base
 				}
 			}
 		}
+ 
+
+
+
+
+
 		sort($sel);
+
 		if (count($sel))
 		{
 			$arr["sel"] = $sel;
