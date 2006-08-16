@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.103 2006/08/02 19:01:32 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.104 2006/08/16 08:28:31 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -47,7 +47,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property faq_folder type=relpicker reltype=RELTYPE_FAQ_FOLDER
 		@caption KKK kaust
 		@comment Sellesse kausta paigutatakse KKK dokumendid
-
 
 	@groupinfo mail_settings caption="Meiliseaded" parent=general
 	@default group=mail_settings
@@ -164,19 +163,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 	@groupinfo topic_selector caption=Teemad parent=settings
 	@default group=topic_selector
 
-		@property topics_on_page type=select
+		@property topics_on_page type=textbox
 		@caption Teemasid lehel
 
 		@property topics_sort_order type=select 
 		@caption Teemade j&auml;rjekord
 
-		@property show_image_upload_in_add_topic_form type=checkbox ch_value=1
-		@caption N&auml;idata teema lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
-
-		@property show_image_upload_in_add_comment_form type=checkbox ch_value=1
-		@caption N&auml;idata kommentaari lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
-
-		@property comments_on_page type=select
+		@property comments_on_page type=textbox
 		@caption Kommentaare lehel
 
 		@property topic_depth type=select default=0
@@ -184,6 +177,24 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property topic_selector type=table no_caption=1
 		@caption Teemade tasemed
+
+		@property image_upload_subtitle type=text store=no subtitle=1
+		@caption Pildi &uuml;leslaadimise v&auml;li
+
+		@property show_image_upload_in_add_topic_form type=checkbox ch_value=1
+		@caption Teema lisamise vormis
+
+		@property show_image_upload_in_add_comment_form type=checkbox ch_value=1
+		@caption Kommentaari lisamise vormis
+
+	@groupinfo image_verification caption=Kontrollpilt parent=settings
+	@default group=image_verification
+
+		@property use_image_verification type=checkbox ch_value=1 
+		@caption Kasuta kontrollpilti
+
+		@property verification_image type=releditor use_form=emb reltype=RELTYPE_IMAGE_VERIFICATION rel_id=first
+		@caption Kontrollpilt
 
 	@groupinfo import caption=Import parent=settings
 	@default group=import
@@ -223,6 +234,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 	@reltype EMAIL value=8 clid=CL_ML_MEMBER
 	@caption Meiliaadress
+	
+	@reltype IMAGE_VERIFICATION value=9 clid=CL_IMAGE_VERIFICATION
+	@caption Kontrollpilt
 
 */
 
@@ -259,10 +273,10 @@ class forum_v2 extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "topics_on_page":
-			case "comments_on_page":
-				$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
-				break;
+		//	case "topics_on_page":
+		//	case "comments_on_page":
+		//		$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
+		//		break;
 			case "topics_sort_order":
 				$data['options'] = $this->topics_sort_order;
 				break;
@@ -804,7 +818,9 @@ class forum_v2 extends class_base
 	function draw_folder($args = array())
 	{
 		extract($args);
+
 		$topics_on_page = $args["obj_inst"]->prop("topics_on_page");
+
 		if (empty($topics_on_page))
 		{
 			$topics_on_page = 5;
@@ -1406,7 +1422,7 @@ class forum_v2 extends class_base
 			
 			if (false === strpos(aw_global_get("REQUEST_URI"),"class="))
 			{
-				$embedded = true;		
+				$embedded = true;
 			}
 
 			if ($embedded)
@@ -1457,7 +1473,6 @@ class forum_v2 extends class_base
 				}
 
 				$this->vars(array(
-				//	"error_message" => t("Pealkirja v&otilde;i sisu v&auml;li peab olema t&auml;idetud"),
 					'error_message' => $error_msg
 				));
 				$this->vars(array(
@@ -1471,6 +1486,22 @@ class forum_v2 extends class_base
 				$this->vars(array(
 					'IMAGE_UPLOAD_FIELD' => $this->parse('IMAGE_UPLOAD_FIELD'),
 				));
+			}
+
+			if ( $args['obj_inst']->prop('use_image_verification') )
+			{
+				$image_verification = $args['obj_inst']->get_first_obj_by_reltype('RELTYPE_IMAGE_VERIFICATION');
+				if ( !empty($image_verification) )
+				{
+					$this->vars(array(
+						'image_verification_url' => aw_ini_get('baseurl').'/'.$image_verification->id(),
+						'image_verification_width' => $image_verification->prop('width'),
+						'image_verification_height' => $image_verification->prop('height'),
+					));
+					$this->vars(array(
+						'IMAGE_VERIFICATION' => $this->parse('IMAGE_VERIFICATION')
+					));
+				}
 			}
 
 			$rv .= $this->parse();
@@ -1868,7 +1899,7 @@ class forum_v2 extends class_base
 
 		$cb_values = aw_global_get("cb_values");
 		aw_session_del("cb_values");
-//arr($props);
+
 		foreach($use_props as $key)
 		{
 			$propdata = $props[$key];
@@ -1890,6 +1921,26 @@ class forum_v2 extends class_base
 				"caption" => t("Pilt"),
 				"type" => "fileupload",
 			));
+		}
+		if ($this->obj_inst->prop('use_image_verification'))
+		{
+			$image_verification = $this->obj_inst->get_first_obj_by_reltype('RELTYPE_IMAGE_VERIFICATION');
+			if (!empty($image_verification))
+			{
+				$htmlc->add_property(array(
+					'name' => 'image_verification',
+					'caption' => t('Kontrollnumber'),
+					'type' => 'text',
+					'value' => html::img(array(
+						'url' => aw_ini_get('baseurl').'/'.$image_verification->id(),
+						'width' => $image_verification->prop('width'),
+						'height' => $image_verification->prop('height')
+					)).html::textbox(array(
+						'name' => 'ver_code',
+						'size' => 20
+					))
+				));
+			}
 		}
 		/*
 		$htmlc->add_property($props["author_name"]);
@@ -1965,6 +2016,18 @@ class forum_v2 extends class_base
 		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
 		{
 			$obj_inst = obj($arr["id"]);
+
+			// so, here is the image verification thingie:
+			if ($obj_inst->prop('use_image_verification'))
+			{
+				$image_verification_inst = get_instance('core/util/image_verification/image_verification');
+				if (!$image_verification_inst->validate($arr['ver_code']))
+				{
+					return $this->finish_action($arr);
+				}
+				
+			}
+
 			$uid = aw_global_get("uid");
 			if($obj_inst->prop("show_logged") != 1 && !empty($uid))
 			{
@@ -2075,6 +2138,17 @@ class forum_v2 extends class_base
 		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
 		{
 			$obj_inst = obj($arr["id"]);
+
+			// so, if image verification has to be passed, then lets make it happen:
+			if ( $obj_inst->prop('use_image_verification') )
+			{
+				$image_verification_inst = get_instance('core/util/image_verification/image_verification');
+				if ( !$image_verification_inst->validate($arr['ver_code']) )
+				{
+					return $this->finish_action($arr);
+				}
+			}
+
 			$uid = aw_global_get("uid");
 			if($obj_inst->prop("show_logged") != 1 && !empty($uid))
 			{
