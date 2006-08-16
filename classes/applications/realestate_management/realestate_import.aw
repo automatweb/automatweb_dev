@@ -1137,7 +1137,8 @@ class realestate_import extends class_base
 
 				#### additional_info
 				// $value = iconv("iso-8859-4", "UTF-8", $this->property_data["LISAINFO_INFO"]);
-				$value = iconv(REALESTATE_IMPORT_CHARSET_FROM, REALESTATE_IMPORT_CHARSET_TO, $this->property_data["LISAINFO_INFO"]);
+				$value = iconv(REALESTATE_IMPORT_CHARSET_FROM, (REALESTATE_IMPORT_CHARSET_TO."//TRANSLIT")
+				,$this->property_data["LISAINFO_INFO"]);
 				$property->set_prop ("additional_info_et", $value);
 				
 				#### picture_icon
