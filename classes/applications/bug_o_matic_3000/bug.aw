@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.49 2006/07/17 08:30:35 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.50 2006/08/16 13:18:51 kristo Exp $
 //  bug.aw - Bugi 
 
 define("BUG_STATUS_CLOSED", 5);
@@ -994,6 +994,7 @@ class bug extends class_base
 			case "aw_cust_status":
 			case "aw_cust_tester":
 			case "aw_cust_live_date":
+			case "project":
 				$this->db_add_col($tbl, array(
 					"name" => $f,
 					"type" => "int",
