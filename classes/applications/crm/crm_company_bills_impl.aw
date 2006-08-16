@@ -975,7 +975,6 @@ class crm_company_bills_impl extends class_base
 					$tmp[] = trim(mb_strtoupper($signer_o->prop("firstname")));
 				}
 			}
-
 			$rfn = join(",", $tmp);
 			if ($rfn == "")
 			{
@@ -1024,20 +1023,22 @@ class crm_company_bills_impl extends class_base
 
 			// customer info row
 			$custr = array();
-
 			if ($this->can("view", $b->prop("customer")))
 			{
 				$cust = obj($b->prop("customer"));
 
 				$custr[] = $cust->comment();	// kliendi kood hansaraamas
-				$custr[] = $cust->name();	// kliendi kood hansaraamas
-
+				$custr[] = $cust->name()." ".$cust->prop("ettevotlusvorm.shortname");	// kliendi kood hansaraamas
+				$custr[] = $cust->prop_str("contact");
+				$custr[] = $cust->prop("contact.postiindeks")." ".$cust->prop("contact.riik.name");
 				$cust_code = $cust->prop("code");
 				list($cm) = explode(" ", $cust->prop_str("client_manager"));
 				$cm = mb_strtoupper($cm);
 			}
 			else
 			{
+				$custr[] = "";
+				$custr[] = "";
 				$custr[] = "";
 				$custr[] = "";
 			}
@@ -1047,10 +1048,10 @@ class crm_company_bills_impl extends class_base
 			// payment row
 			$pr = array();
 			$pr[] = "0,00";	// (teadmata - vaikeväärtus 0,00) 
-			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM_WO_TAX));		// 33492,03 (summa käibemaksuta)  
+			$pr[] = str_replace(".", ",", round($i->get_bill_sum($b,BILL_SUM_WO_TAX)*2.0+0.05,1)/2.0);		// 33492,03 (summa käibemaksuta)  
 			$pr[] = "";
-			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM_TAX));		// 6028,57 (käibemaks) 
-			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM));		// 39520,60 (Summa koos käibemaksuga)      
+			$pr[] = str_replace(".", ",", round($i->get_bill_sum($b,BILL_SUM_TAX)*2.0+0.05,1)/2.0);		// 6028,57 (käibemaks) 
+			$pr[] = str_replace(".", ",", round($i->get_bill_sum($b,BILL_SUM)*2.0+0.05,1)/2.0);		// 39520,60 (Summa koos käibemaksuga)      
 			$pr[] = "";
 			$pr[] = "";
 			$pr[] = "";
@@ -1075,7 +1076,9 @@ class crm_company_bills_impl extends class_base
 			$pr[] = "";
 			$pr[] = "0";	// (teadmata - vaikeväärtus 0) 
 			$pr[] = "";
-			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM));	//39520,60 (Summa koos käibemaksuga)    
+			
+			$sum = round(str_replace(",", ".", $i->get_bill_sum($b,BILL_SUM))*2.0+0.05,1)/2.0;
+			$pr[] = str_replace(".", ",", $sum);	//39520,60 (Summa koos käibemaksuga)    
 			$pr[] = "";
 			$pr[] = "";
 			$pr[] = str_replace(".", ",", $i->get_bill_sum($b,BILL_SUM_WO_TAX));		// 33492,03 (summa käibemaksuta)  
@@ -1104,7 +1107,6 @@ class crm_company_bills_impl extends class_base
 			$ct[] = join("\t", $pr);
 
 			$rows = $i->get_bill_rows($b);
-
 			if ($type == 1)
 			{
 			foreach($rows as $idx => $row)
@@ -1122,16 +1124,22 @@ class crm_company_bills_impl extends class_base
 					$acct = $prod->prop("tax_rate.acct");
 				}
 				$ri[] = $code;
-				$ri[] = $row["amt"];	//33 (kogus) 
-				$ri[] = $row["name"];	// testartikkel (toimetuse rea sisu) 
+				$ri[] = $row["amt"];	//33 (kogus)
+				$dd = trim($row["name"]);
+				if ($dd == "")
+				{
+					$dd = trim($row["comment"]);
+				} 
+				$ri[] = $this->nice_trim($dd);	// testartikkel (toimetuse rea sisu) 
 				$ri[] = str_replace(".", ",", $row["price"]);	// 555,00 (ühiku hind) 
-				$ri[] = str_replace(".", ",", $row["sum"]);	// 16300,35 (rea summa km-ta) 
+				$sum = round(str_replace(",", ".", $row["sum"])*2.0+0.05,1)/2.0;
+				$ri[] = str_replace(".", ",",$sum);	// 16300,35 (rea summa km-ta) 
 				$ri[] = str_replace(".", ",", $b->prop("disc")); //11,0 (ale%) 
 				$ri[] = $acct;		// (konto)    
+				$ri[] = $this->_get_bill_row_obj_hr($row,$b); // isik siia
 				$ri[] = "";
 				$ri[] = "";
-				$ri[] = "";
-				$ri[] = str_replace(".", ",", $row["sum"]);	// 16300,35 (rea summa km-ta) 
+				$ri[] = str_replace(".", ",", $sum);	// 16300,35 (rea summa km-ta) 
 				$ri[] = "";
 				//$ri[] = "1";	// (käibemaksukood)         
 				$ri[] = $row["km_code"];
@@ -1161,11 +1169,12 @@ class crm_company_bills_impl extends class_base
 				}
 
 				$price = $sum / $amt;
+				$sum = round($sum*2.0+0.05,1)/2.0;
 				$ri = array();
 				$ri[] = "1";
 				$ri[] = $code;
 				$ri[] = $amt;
-				$ri[] = $b->prop("notes");  
+				$ri[] = $this->nice_trim($b->prop("notes"));  
 				$ri[] = number_format($price); 
 				$ri[] = str_replace(".", ",", $sum);
 				$ri[] = str_replace(".", ",", $b->prop("disc"));
@@ -1188,17 +1197,14 @@ class crm_company_bills_impl extends class_base
 				$ri[] = $b->prop("gen_unit");
 				$ct[] = join("\t", $ri);
 			}
-
 			$ct[] = ""; // next bill
 		}
-
 		if ($renumber)
 		{
 			$co = obj($_GET["id"]);
 			$co->set_meta("last_exp_no", $bno);
 			$co->save();
 		}
-die();
 		header("Content-type: text/plain");
 		header('Content-Disposition: attachment; filename="arved.txt"');
 		echo "format	\n";	
@@ -1213,6 +1219,35 @@ die();
 		echo "fakt1	\n";
 
 		die(join("\n", $ct));
+	}
+
+	function _get_bill_row_obj_hr($row, $b)
+	{
+		if (count($row["persons"]) == 0)
+		{
+			$cc = get_instance(CL_CRM_COMPANY);
+			$crel = $cc->get_cust_rel(obj($b->prop("customer")));
+			if (!$crel)
+			{
+				return "";	
+			}
+			return mb_strtoupper($crel->prop_str("client_manager"), aw_global_get("charset"));
+		}
+		$list = new object_list(array(
+			"oid" => $row["persons"],
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		return mb_strtoupper(join(", ", $list->names()), aw_global_get("charset"));
+	}
+
+	function nice_trim($s)
+	{
+		if (strlen($s) > 250)
+		{
+			return substr($s, 0, strrpos(substr($s, 0, 250), " "));
+		}
+		return $s;	
 	}
 }
 ?>

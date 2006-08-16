@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.83 2006/08/14 14:19:23 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.84 2006/08/16 11:21:41 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -1173,6 +1173,14 @@ class crm_bill extends class_base
 				}
 			}
 
+			$ppl = array();
+			foreach((array)$row->prop("people") as $p_id)
+			{
+				if ($this->can("view", $p_id))
+				{
+					$ppl[$p_id] = $p_id;	
+				}
+			}
 			$rd = array(
 				"amt" => $row->prop("amt"),
 				"prod" => $row->prop("prod"),
@@ -1188,7 +1196,7 @@ class crm_bill extends class_base
 				"has_tax" => $row->prop("has_tax"),
 				"date" => $row->prop("date"),
 				"id" => $row->id(),
-				"persons" => (array)$row->prop("people")
+				"persons" => $ppl
 			);
 			$inf[] = $rd;
 		}
@@ -1841,14 +1849,14 @@ class crm_bill extends class_base
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100')",
+			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');",
 			"text" => t("Prindi arve lisa")
 		));
 
 		$tb->add_menu_item(array(
 			"parent" => "print",
 			"url" => "#",
-			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100')",
+			"onClick" => "window.open('".$this->mk_my_orb("change", array("openprintdialog_b" => 1,"id" => $arr["obj_inst"]->id(), "group" => "preview_add"), CL_CRM_BILL)."','billprint','width=100,height=100');",
 			"text" => t("Prindi arve koos lisaga")
 		));
 
