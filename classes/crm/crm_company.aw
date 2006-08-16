@@ -4066,7 +4066,7 @@ class crm_company extends class_base
 		{
 			$arr["sel"] = $sel;
 		}
-		$this->check_customers(array("sel" => $arr["sel"], "bill" => $bill , "ru" => $arr["post_ru"]));
+		//$this->check_customers(array("sel" => $arr["sel"], "bill" => $bill , "ru" => $arr["post_ru"]));
 		
 		if(!is_object($bill))
 		{
