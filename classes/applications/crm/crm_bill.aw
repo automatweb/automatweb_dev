@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.84 2006/08/16 11:21:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.85 2006/08/16 16:08:37 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -598,7 +598,7 @@ class crm_bill extends class_base
 			$round = (double)$co->prop("round");
 			$min_stuff = $sum/$round - ($sum/$round - (int)($sum/$round));
 			$min_diff = $sum - $min_stuff*$round;
-			$max_diff = $sum - ($min_stuff + 1) * $round + 1;
+			$max_diff = ($sum - ($min_stuff + 1) * $round)*-1;
 			if($max_diff > $min_diff) $sum = $min_stuff*$round;
 			else $sum = ($min_stuff+1)*$round;
 		}
@@ -683,7 +683,7 @@ class crm_bill extends class_base
 						break;
 					}
 				}
-				$row["key"] = $key;
+				$row["key"] = $n_key;
 				if($new_line) $new_rows[] = $row;
 			}
 		}
