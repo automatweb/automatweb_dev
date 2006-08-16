@@ -394,7 +394,7 @@
             <group>topic_selector</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
+            <type>textbox</type>
             <caption>Teemasid lehel</caption>
       </property>
       <property>
@@ -407,32 +407,12 @@
             <caption>Teemade j&amp;amp;auml;rjekord</caption>
       </property>
       <property>
-            <name>show_image_upload_in_add_topic_form</name>
-            <table>objects</table>
-            <group>topic_selector</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>N&amp;amp;auml;idata teema lisamise vormis pildi &amp;amp;uuml;leslaadimise v&amp;amp;auml;lja?</caption>
-      </property>
-      <property>
-            <name>show_image_upload_in_add_comment_form</name>
-            <table>objects</table>
-            <group>topic_selector</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>N&amp;amp;auml;idata kommentaari lisamise vormis pildi &amp;amp;uuml;leslaadimise v&amp;amp;auml;lja?</caption>
-      </property>
-      <property>
             <name>comments_on_page</name>
             <table>objects</table>
             <group>topic_selector</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
+            <type>textbox</type>
             <caption>Kommentaare lehel</caption>
       </property>
       <property>
@@ -454,6 +434,59 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Teemade tasemed</caption>
+      </property>
+      <property>
+            <name>image_upload_subtitle</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Pildi &amp;amp;uuml;leslaadimise v&amp;amp;auml;li</caption>
+      </property>
+      <property>
+            <name>show_image_upload_in_add_topic_form</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Teema lisamise vormis</caption>
+      </property>
+      <property>
+            <name>show_image_upload_in_add_comment_form</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kommentaari lisamise vormis</caption>
+      </property>
+      <property>
+            <name>use_image_verification</name>
+            <table>objects</table>
+            <group>image_verification</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kasuta kontrollpilti</caption>
+      </property>
+      <property>
+            <name>verification_image</name>
+            <table>objects</table>
+            <group>image_verification</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>releditor</type>
+            <use_form>emb</use_form>
+            <reltype>RELTYPE_IMAGE_VERIFICATION</reltype>
+            <rel_id>first</rel_id>
+            <caption>Kontrollpilt</caption>
       </property>
       <property>
             <name>import_xml_file</name>
@@ -518,6 +551,10 @@
                   <caption>Teemad</caption>
                   <parent>settings</parent>
             </topic_selector>
+            <image_verification>
+                  <caption>Kontrollpilt</caption>
+                  <parent>settings</parent>
+            </image_verification>
             <import>
                   <caption>Import</caption>
                   <parent>settings</parent>
@@ -571,6 +608,11 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>Meiliaadress</caption>
             </EMAIL>
+            <IMAGE_VERIFICATION>
+                  <value>9</value>
+                  <clid>CL_IMAGE_VERIFICATION</clid>
+                  <caption>Kontrollpilt</caption>
+            </IMAGE_VERIFICATION>
       </reltypes>
 </properties>
 
