@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.167 2006/07/31 09:53:48 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.168 2006/08/16 11:01:54 tarvo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1364,9 +1364,10 @@ class menu extends class_base
 		$orig_name = $name;
 		while(true)
 		{
-			$q = "select count(*) as count from objects where alias = '".$name."'";
-			$count = $this->db_fetch_field($q,"count");
-			if($count > 0)
+			$ol = new object_list(array(
+				"alias" => $name,
+			));
+			if($ol->count() > 0)
 			{
 				$name = $orig_name."_".$nr;
 				$nr++;
