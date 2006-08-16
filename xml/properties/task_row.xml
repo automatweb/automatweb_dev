@@ -11,6 +11,15 @@
             <caption>Sisu</caption>
       </property>
       <property>
+            <name>time</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>time_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Aeg</caption>
+      </property>
+      <property>
             <name>date</name>
             <table>aw_task_rows</table>
             <group>general</group>

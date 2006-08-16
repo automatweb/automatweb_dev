@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.5 2006/07/11 22:12:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_row.aw,v 1.6 2006/08/16 13:27:15 kristo Exp $
 // task_row.aw - Toimetuse rida 
 /*
 
@@ -13,6 +13,9 @@
 
 	@property content type=textarea rows=5 cols=50 table=aw_task_rows field=aw_content
 	@caption Sisu
+
+	@property time type=time_select field=meta method=serialize
+	@caption Aeg
 
 	@property date type=date_select table=aw_task_rows field=aw_date
 	@caption Kuup&auml;ev
