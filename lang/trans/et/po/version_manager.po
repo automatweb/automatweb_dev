@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/version_manager.aw:36
 msgid "Versioon loodud"
 msgstr ""
@@ -23,7 +22,7 @@ msgid "Vaata erinevusi"
 msgstr ""
 
 #: classes/vcl/version_manager.aw:57 classes/vcl/version_manager.aw:105
-msgid "M&auml;&auml;ra aktiivseks"
+msgid "M&amp;auml;&amp;auml;ra aktiivseks"
 msgstr ""
 
 #: classes/vcl/version_manager.aw:111
@@ -45,4 +44,3 @@ msgstr ""
 #: classes/vcl/version_manager.aw:199
 msgid "Valitud versioon"
 msgstr ""
-

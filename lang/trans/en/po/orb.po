@@ -19,7 +19,7 @@ msgid ""
 msgstr ""
 "orb::handle_rpc_call - Could not load request handler for request method '%s'"
 
-#: classes/core/orb/orb.aw:1099
+#: classes/core/orb/orb.aw:1110
 msgid ""
 "orb::check_class_access(%s): no permissions to access the class! (denied by %"
 "s)"

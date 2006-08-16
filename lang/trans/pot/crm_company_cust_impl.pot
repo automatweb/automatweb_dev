@@ -31,11 +31,11 @@ msgid "Teostaja"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:78
-msgid "T&auml;htaeg"
+msgid "T&amp;auml;htaeg"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:89
-msgid "L&otilde;pp"
+msgid "L&amp;otilde;pp"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:99
@@ -51,11 +51,11 @@ msgid "Kliendi nimi"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:214
-msgid "Põhitegevus"
+msgid "P&otilde;hitegevus"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:220
-msgid "Õiguslik vorm"
+msgid "&Otilde;iguslik vorm"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:226
@@ -143,7 +143,7 @@ msgid "Kustuta"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:634
-msgid "Kõik organisatsioonid"
+msgid "K&otilde;ik organisatsioonid"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:706
@@ -179,11 +179,11 @@ msgid "Esitletud"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:788
-msgid "Tagasilükatud"
+msgid "Tagasil&uuml;katud"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:789
-msgid "Positiivelt lõppenud"
+msgid "Positiivelt l&otilde;ppenud"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:950
@@ -195,7 +195,7 @@ msgid "Projekt tellijana"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:978
-msgid "P&auml;eva raport"
+msgid "P&amp;auml;eva raport"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:1017
@@ -203,7 +203,7 @@ msgid "Lisa toimetus"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:1026
-msgid "M&auml;rgi tehtuks"
+msgid "M&amp;auml;rgi tehtuks"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:1035 classes/applications/crm/crm_company_cust_impl.aw:1166
@@ -215,7 +215,7 @@ msgid "Oled kindel et soovid valitud projekte kustutada?"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:1195
-msgid "Kuup&auml;ev"
+msgid "Kuup&amp;auml;ev"
 msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:1204
@@ -240,5 +240,9 @@ msgstr ""
 
 #: classes/applications/crm/crm_company_cust_impl.aw:1759
 msgid "Muuda"
+msgstr ""
+
+#: classes/applications/crm/crm_company_cust_impl.aw:1814
+msgid "Kontaktid"
 msgstr ""
 

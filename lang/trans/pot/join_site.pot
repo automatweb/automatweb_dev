@@ -15,15 +15,15 @@ msgid "Klassi Saidiga Liitumine help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url
-msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) caption"
+msgid "Omaduse P&amp;auml;rast liitumist mine aadressile (after_join_url) caption"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url_comment
-msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) kommentaar"
+msgid "Omaduse P&amp;auml;rast liitumist mine aadressile (after_join_url) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url_help
-msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) help"
+msgid "Omaduse P&amp;auml;rast liitumist mine aadressile (after_join_url) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_obj_folder
@@ -75,15 +75,15 @@ msgid "Omaduse Kasutajad vaikimisi blokeeritud (users_blocked_by_default) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties
-msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) caption"
+msgid "Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad (join_properties) caption"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_comment
-msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) kommentaar"
+msgid "Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad (join_properties) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_help
-msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) help"
+msgid "Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad (join_properties) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_sep_pages
@@ -111,15 +111,15 @@ msgid "Omaduse Liitumise nupu tekst (join_but_text) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_pages
-msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) caption"
+msgid "Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad (join_properties_pages) caption"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_pages_comment
-msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) kommentaar"
+msgid "Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad (join_properties_pages) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_pages_help
-msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) help"
+msgid "Omaduse Liitumisel k&amp;uuml;sitavad v&amp;auml;ljad (join_properties_pages) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_page_titles
@@ -219,15 +219,15 @@ msgid "Omaduse Meili legend (joinmail_legend) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_requires_confirm
-msgid "Omaduse Liitumine n&otilde;uab kinnitust (join_requires_confirm) caption"
+msgid "Omaduse Liitumine n&amp;otilde;uab kinnitust (join_requires_confirm) caption"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_requires_confirm_comment
-msgid "Omaduse Liitumine n&otilde;uab kinnitust (join_requires_confirm) kommentaar"
+msgid "Omaduse Liitumine n&amp;otilde;uab kinnitust (join_requires_confirm) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_requires_confirm_help
-msgid "Omaduse Liitumine n&otilde;uab kinnitust (join_requires_confirm) help"
+msgid "Omaduse Liitumine n&amp;otilde;uab kinnitust (join_requires_confirm) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_mail_legend
@@ -291,15 +291,15 @@ msgid "Omaduse Kinnitusmeili sisu (confirm_mail) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_redir
-msgid "Omaduse Kuhu suunata p&auml;rast liitumist (confirm_redir) caption"
+msgid "Omaduse Kuhu suunata p&amp;auml;rast liitumist (confirm_redir) caption"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_redir_comment
-msgid "Omaduse Kuhu suunata p&auml;rast liitumist (confirm_redir) kommentaar"
+msgid "Omaduse Kuhu suunata p&amp;auml;rast liitumist (confirm_redir) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_confirm_redir_help
-msgid "Omaduse Kuhu suunata p&auml;rast liitumist (confirm_redir) help"
+msgid "Omaduse Kuhu suunata p&amp;auml;rast liitumist (confirm_redir) help"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_mf_mail_from_addr
@@ -539,19 +539,19 @@ msgid "Omadus"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:341
-msgid "T&auml;idetav"
+msgid "T&amp;auml;idetav"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:346
-msgid "N&otilde;utav"
+msgid "N&amp;otilde;utav"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:360
-msgid "Lehek&uuml;lg"
+msgid "Lehek&amp;uuml;lg"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:365
-msgid "J&auml;rjekord"
+msgid "J&amp;auml;rjekord"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:375
@@ -567,11 +567,11 @@ msgid "Tekst"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:513
-msgid "<b>Vahepealkirjad</b>"
+msgid "&lt;b&gt;Vahepealkirjad&lt;/b&gt;"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:759 classes/contentmgmt/join/join_site.aw:763
-msgid "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
+msgid "&lt;font color='#FF0000'&gt;J&amp;auml;rgnev v&amp;auml;li peab olema t&amp;auml;idetud!&lt;/font&gt;"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:847

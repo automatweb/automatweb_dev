@@ -27,15 +27,15 @@ msgid "Omaduse J&auml;rjekord (ord) help"
 msgstr ""
 
 #: classes/formgen/currency.aw:prop_comment
-msgid "Omaduse Kurss saksa marga suhtes (comment) caption"
+msgid "Omaduse Kurss euro suhtes (comment) caption"
 msgstr ""
 
 #: classes/formgen/currency.aw:prop_comment_comment
-msgid "Omaduse Kurss saksa marga suhtes (comment) kommentaar"
+msgid "Omaduse Kurss euro suhtes (comment) kommentaar"
 msgstr ""
 
 #: classes/formgen/currency.aw:prop_comment_help
-msgid "Omaduse Kurss saksa marga suhtes (comment) help"
+msgid "Omaduse Kurss euro suhtes (comment) help"
 msgstr ""
 
 #: classes/formgen/currency.aw:prop_unit_name
@@ -62,11 +62,51 @@ msgstr ""
 msgid "Omaduse Peenraha&uuml;hiku nimetus (small_unit_name) help"
 msgstr ""
 
-#: classes/formgen/currency.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
+#: classes/formgen/currency.aw:prop_rates
+msgid "Omaduse Kaustad kust otsida (rates) caption"
 msgstr ""
 
-#: classes/formgen/currency.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+#: classes/formgen/currency.aw:prop_rates_comment
+msgid "Omaduse Kaustad kust otsida (rates) kommentaar"
+msgstr ""
+
+#: classes/formgen/currency.aw:prop_rates_help
+msgid "Omaduse Kaustad kust otsida (rates) help"
+msgstr ""
+
+#: classes/formgen/currency.aw:group_rates
+msgid "Grupi Kursid (rates) pealkiri"
+msgstr ""
+
+#: classes/formgen/currency.aw:group_rates_help
+msgid "Grupi Kursid (rates) help"
+msgstr ""
+
+#: classes/formgen/currency.aw:89
+msgid "Alguskuupäev"
+msgstr ""
+
+#: classes/formgen/currency.aw:93
+msgid "Lõppkuupäev"
+msgstr ""
+
+#: classes/formgen/currency.aw:97
+msgid "Valuuta"
+msgstr ""
+
+#: classes/formgen/currency.aw:101
+msgid "Kurss"
+msgstr ""
+
+#: classes/formgen/currency.aw:105
+msgid "Ostukurss"
+msgstr ""
+
+#: classes/formgen/currency.aw:109
+msgid "Müügikurss"
+msgstr ""
+
+#: classes/formgen/currency.aw:143
+msgid "Kursid"
 msgstr ""
 

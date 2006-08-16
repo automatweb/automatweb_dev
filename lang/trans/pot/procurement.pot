@@ -51,15 +51,15 @@ msgid "Omaduse Pakkujad (offerers) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_winning_offer
-msgid "Omaduse V&otilde;itnud pakkumine (winning_offer) caption"
+msgid "Omaduse V&amp;otilde;itnud pakkumine (winning_offer) caption"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_winning_offer_comment
-msgid "Omaduse V&otilde;itnud pakkumine (winning_offer) kommentaar"
+msgid "Omaduse V&amp;otilde;itnud pakkumine (winning_offer) kommentaar"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_winning_offer_help
-msgid "Omaduse V&otilde;itnud pakkumine (winning_offer) help"
+msgid "Omaduse V&amp;otilde;itnud pakkumine (winning_offer) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_proj
@@ -147,51 +147,51 @@ msgid "Omaduse  (o_tbl) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_publish_date
-msgid "Omaduse Avaldamise kuup&auml;ev (publish_date) caption"
+msgid "Omaduse Avaldamise kuup&amp;auml;ev (publish_date) caption"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_publish_date_comment
-msgid "Omaduse Avaldamise kuup&auml;ev (publish_date) kommentaar"
+msgid "Omaduse Avaldamise kuup&amp;auml;ev (publish_date) kommentaar"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_publish_date_help
-msgid "Omaduse Avaldamise kuup&auml;ev (publish_date) help"
+msgid "Omaduse Avaldamise kuup&amp;auml;ev (publish_date) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_offers_date
-msgid "Omaduse Pakkumiste esitamise kuup&auml;ev (offers_date) caption"
+msgid "Omaduse Pakkumiste esitamise kuup&amp;auml;ev (offers_date) caption"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_offers_date_comment
-msgid "Omaduse Pakkumiste esitamise kuup&auml;ev (offers_date) kommentaar"
+msgid "Omaduse Pakkumiste esitamise kuup&amp;auml;ev (offers_date) kommentaar"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_offers_date_help
-msgid "Omaduse Pakkumiste esitamise kuup&auml;ev (offers_date) help"
+msgid "Omaduse Pakkumiste esitamise kuup&amp;auml;ev (offers_date) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_completion_date
-msgid "Omaduse Valmimiskuup&auml;ev (completion_date) caption"
+msgid "Omaduse Valmimiskuup&amp;auml;ev (completion_date) caption"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_completion_date_comment
-msgid "Omaduse Valmimiskuup&auml;ev (completion_date) kommentaar"
+msgid "Omaduse Valmimiskuup&amp;auml;ev (completion_date) kommentaar"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_completion_date_help
-msgid "Omaduse Valmimiskuup&auml;ev (completion_date) help"
+msgid "Omaduse Valmimiskuup&amp;auml;ev (completion_date) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_compl_date_req
-msgid "Omaduse Lahenduse valmimist&auml;htaeg n&otilde;utud (compl_date_req) caption"
+msgid "Omaduse Lahenduse valmimist&amp;auml;htaeg n&amp;otilde;utud (compl_date_req) caption"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_compl_date_req_comment
-msgid "Omaduse Lahenduse valmimist&auml;htaeg n&otilde;utud (compl_date_req) kommentaar"
+msgid "Omaduse Lahenduse valmimist&amp;auml;htaeg n&amp;otilde;utud (compl_date_req) kommentaar"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_compl_date_req_help
-msgid "Omaduse Lahenduse valmimist&auml;htaeg n&otilde;utud (compl_date_req) help"
+msgid "Omaduse Lahenduse valmimist&amp;auml;htaeg n&amp;otilde;utud (compl_date_req) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:prop_pri_t
@@ -243,11 +243,11 @@ msgid "Omaduse Kriteeriumid (crit_t) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_d
-msgid "Grupi N&otilde;uete nimekiri (d) pealkiri"
+msgid "Grupi N&amp;otilde;uete nimekiri (d) pealkiri"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_d_help
-msgid "Grupi N&otilde;uete nimekiri (d) help"
+msgid "Grupi N&amp;otilde;uete nimekiri (d) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_s
@@ -259,11 +259,11 @@ msgid "Grupi Hanke tingimused (s) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_s_general
-msgid "Grupi M&auml;&auml;rangud (s_general) pealkiri"
+msgid "Grupi M&amp;auml;&amp;auml;rangud (s_general) pealkiri"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_s_general_help
-msgid "Grupi M&auml;&auml;rangud (s_general) help"
+msgid "Grupi M&amp;auml;&amp;auml;rangud (s_general) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:group_s_pris
@@ -311,7 +311,7 @@ msgid "Seose Tellija (RELTYPE_ORDERER) tekst"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:rel_RELTYPE_WINNING_OFFER
-msgid "Seose V&amp;otilde;tnud pakkumine (RELTYPE_WINNING_OFFER) tekst"
+msgid "Seose V&amp;amp;otilde;tnud pakkumine (RELTYPE_WINNING_OFFER) tekst"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:rel_RELTYPE_PRI
@@ -331,7 +331,7 @@ msgid "Avaldatud"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:124
-msgid "T&ouml;&ouml;s"
+msgid "T&amp;ouml;&amp;ouml;s"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:125
@@ -351,19 +351,19 @@ msgid "Kataloog"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:252
-msgid "N&otilde;ue"
+msgid "N&amp;otilde;ue"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:259
-msgid "Kustuta valitud n&otilde;uded"
+msgid "Kustuta valitud n&amp;otilde;uded"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:261
-msgid "Kas oled kindel et soovid valitud n&otilde;uded kustudada?"
+msgid "Kas oled kindel et soovid valitud n&amp;otilde;uded kustudada?"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:289
-msgid "N&otilde;ude nimi"
+msgid "N&amp;otilde;ude nimi"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:295 classes/applications/procurement_center/procurement.aw:545
@@ -383,11 +383,11 @@ msgid "Muudetud"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:385
-msgid "Vali v&otilde;itjapakkumine"
+msgid "Vali v&amp;otilde;itjapakkumine"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:387
-msgid "Kas oled kindel et soovid valitud pakkumise v&auml;lja valida?"
+msgid "Kas oled kindel et soovid valitud pakkumise v&amp;auml;lja valida?"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:407 classes/applications/procurement_center/procurement.aw:407
@@ -423,7 +423,7 @@ msgid "Kriteeriumi nimi"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:686
-msgid "T&uuml;p"
+msgid "T&amp;uuml;p"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement.aw:692

@@ -11,31 +11,31 @@ msgstr ""
 
 
 #: classes/contentmgmt/poll.aw:class_33_help
-msgid "Klassi Kiirk&uuml;sitlus help"
+msgid "Klassi Kiirk&amp;uuml;sitlus help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation
-msgid "Omaduse Vajab tõlget (needs_translation) caption"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tõlget (needs_translation) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_is_translated
-msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_is_translated_comment
-msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_is_translated_help
-msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_clicks
@@ -75,15 +75,15 @@ msgid "Omaduse Arhiivis (in_archive) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_question
-msgid "Omaduse K&uuml;simus (question) caption"
+msgid "Omaduse K&amp;uuml;simus (question) caption"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_question_comment
-msgid "Omaduse K&uuml;simus (question) kommentaar"
+msgid "Omaduse K&amp;uuml;simus (question) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_question_help
-msgid "Omaduse K&uuml;simus (question) help"
+msgid "Omaduse K&amp;uuml;simus (question) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_answers
@@ -111,15 +111,15 @@ msgid "Omaduse Aktiivsus (activity) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_translate
-msgid "Omaduse T&otilde;lgi (translate) caption"
+msgid "Omaduse T&amp;otilde;lgi (translate) caption"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_translate_comment
-msgid "Omaduse T&otilde;lgi (translate) kommentaar"
+msgid "Omaduse T&amp;otilde;lgi (translate) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_translate_help
-msgid "Omaduse T&otilde;lgi (translate) help"
+msgid "Omaduse T&amp;otilde;lgi (translate) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_clicks
@@ -147,11 +147,11 @@ msgid "Grupi Vastajad (clicks_detail) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_translate
-msgid "Grupi T&otilde;lgi (translate) pealkiri"
+msgid "Grupi T&amp;otilde;lgi (translate) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_translate_help
-msgid "Grupi T&otilde;lgi (translate) help"
+msgid "Grupi T&amp;otilde;lgi (translate) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_activity
@@ -162,43 +162,43 @@ msgstr ""
 msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:491
+#: classes/contentmgmt/poll.aw:495
 msgid "UID"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:498
+#: classes/contentmgmt/poll.aw:502
 msgid "IP"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:505
-msgid "Kuup&auml;ev"
+#: classes/contentmgmt/poll.aw:509
+msgid "Kuup&amp;auml;ev"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:515 classes/contentmgmt/poll.aw:545
+#: classes/contentmgmt/poll.aw:519 classes/contentmgmt/poll.aw:549
 msgid "Vastus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:552
+#: classes/contentmgmt/poll.aw:556
 msgid "Klikke"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:561
+#: classes/contentmgmt/poll.aw:565
 msgid "Protsent"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:570 classes/contentmgmt/poll.aw:824
+#: classes/contentmgmt/poll.aw:574 classes/contentmgmt/poll.aw:828
 msgid ""
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:648 classes/contentmgmt/poll.aw:660
+#: classes/contentmgmt/poll.aw:652 classes/contentmgmt/poll.aw:664
 msgid "Vastus nr %s"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:832
-msgid "K&uuml;simus"
+#: classes/contentmgmt/poll.aw:836
+msgid "K&amp;uuml;simus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:842
+#: classes/contentmgmt/poll.aw:846
 msgid "Vastus nr %s "
 msgstr ""
 

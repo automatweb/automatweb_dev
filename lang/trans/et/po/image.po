@@ -15,34 +15,28 @@ msgstr ""
 msgid "Klassi Pilt help"
 msgstr ""
 
-# classes/image.aw:prop_needs_translation
 #: classes/image.aw:prop_needs_translation
-msgid "Omaduse Vajab tılget (needs_translation) caption"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
 msgstr ""
 
-# classes/image.aw:prop_needs_translation_comment
 #: classes/image.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tılget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
 
-# classes/image.aw:prop_needs_translation_help
 #: classes/image.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tılget (needs_translation) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-# classes/image.aw:prop_is_translated
 #: classes/image.aw:prop_is_translated
-msgid "Omaduse Tılge kinnitatud (is_translated) caption"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
 msgstr ""
 
-# classes/image.aw:prop_is_translated_comment
 #: classes/image.aw:prop_is_translated_comment
-msgid "Omaduse Tılge kinnitatud (is_translated) kommentaar"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
-# classes/image.aw:prop_is_translated_help
 #: classes/image.aw:prop_is_translated_help
-msgid "Omaduse Tılge kinnitatud (is_translated) help"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
 msgstr ""
 
 # classes/image.aw:prop_subclass
@@ -79,7 +73,6 @@ msgstr ""
 "v‰lja j‰rel oleval Browse nupul klikkides avaneb vıimalus valida "
 "k‰ttesaadavalt andmekandjalt soovitud pildifail"
 
-# classes/image.aw:prop_dimensions
 #: classes/image.aw:prop_dimensions
 msgid "Omaduse Mııtmed (dimensions) caption"
 msgstr ""
@@ -174,6 +167,18 @@ msgstr ""
 "siis tuleb aadress sisestada kujul http://... (N: http://www.struktuur.ee). "
 "Veebilehe sisese lingi puhul piisab kui kirjutada / ja objekti ID "
 
+#: classes/image.aw:prop_date_taken
+msgid "Omaduse Pildistamise aeg (date_taken) caption"
+msgstr ""
+
+#: classes/image.aw:prop_date_taken_comment
+msgid "Omaduse Pildistamise aeg (date_taken) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_date_taken_help
+msgid "Omaduse Pildistamise aeg (date_taken) help"
+msgstr ""
+
 #: classes/image.aw:prop_can_comment
 msgid "Omaduse K&otilde;ikjal kommenteeritav (can_comment) caption"
 msgstr ""
@@ -229,7 +234,6 @@ msgstr ""
 "m‰rkides v‰lja valituks vıimaldab avada Link v‰lja sisesatud aadressil asuva "
 "veebilehe uude Internetilehitseja aknasse "
 
-# classes/image.aw:prop_no_print
 #: classes/image.aw:prop_no_print
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) caption"
 msgstr ""
@@ -244,7 +248,6 @@ msgstr "m‰rkides v‰lja valituks ei kuvata pilti Print-vaates"
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) help"
 msgstr "m‰rkides v‰lja valituks ei kuvata pilti Print-vaates"
 
-# classes/image.aw:prop_ord
 #: classes/image.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
 msgstr ""
@@ -312,7 +315,6 @@ msgstr "vıimaldab m‰‰rata ‹ldine vaates sisestatud pildi uue laiuse"
 msgid "Omaduse Uus laius (new_w) help"
 msgstr "vıimaldab m‰‰rata ‹ldine vaates sisestatud pildi uue laiuse"
 
-# classes/image.aw:prop_new_h
 #: classes/image.aw:prop_new_h
 msgid "Omaduse Uus k&otilde;rgus (new_h) caption"
 msgstr ""
@@ -342,7 +344,6 @@ msgstr ""
 msgid "Omaduse  (do_resize) help"
 msgstr ""
 
-# classes/image.aw:prop_dimensions_big
 #: classes/image.aw:prop_dimensions_big
 msgid "Omaduse Mııtmed (dimensions_big) caption"
 msgstr ""
@@ -376,7 +377,6 @@ msgstr "vıimaldab m‰‰rata Suur pilt vaates sisestatud pildi uue laiuse"
 msgid "Omaduse Uus laius (suur) (new_w_big) help"
 msgstr "vıimaldab m‰‰rata Suur pilt vaates sisestatud pildi uue laiuse"
 
-# classes/image.aw:prop_new_h_big
 #: classes/image.aw:prop_new_h_big
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) caption"
 msgstr ""
@@ -469,18 +469,26 @@ msgstr ""
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
 msgstr ""
 
-#: classes/image.aw:301
+#: classes/image.aw:304
 msgid "kommentaar"
 msgstr ""
 
-#: classes/image.aw:301
+#: classes/image.aw:304
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:884
+#: classes/image.aw:880
+msgid "Uues aknas"
+msgstr ""
+
+#: classes/image.aw:881
+msgid "&Auml;ra n&auml;ita print-vaates"
+msgstr ""
+
+#: classes/image.aw:894
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
 
-#: classes/image.aw:1375
+#: classes/image.aw:1415
 msgid "Lisa"
 msgstr ""

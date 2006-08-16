@@ -18,7 +18,7 @@ msgid "Muuda"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:261 classes/admin/admin_menus.aw:1397
-msgid "L&otilde;ika"
+msgid "L&amp;otilde;ika"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:270 classes/admin/admin_menus.aw:1404
@@ -86,7 +86,7 @@ msgid "Suured ikoonid"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:1450
-msgid "Väiksed ikoonid"
+msgid "V&auml;iksed ikoonid"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:1451
@@ -98,7 +98,7 @@ msgid "Eelvaade"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:1570
-msgid "Valitud pole &uuml;htegi objekti!"
+msgid "Valitud pole &amp;uuml;htegi objekti!"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:1647
@@ -118,7 +118,7 @@ msgid "Muudetud"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:1694
-msgid "T&uuml;&uuml;p"
+msgid "T&amp;uuml;&amp;uuml;p"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:1704
@@ -126,5 +126,5 @@ msgid "Tegevus"
 msgstr ""
 
 #: classes/admin/admin_menus.aw:1713
-msgid "<a href='javascript:selall()'>Vali</a>"
+msgid "&lt;a href='javascript:selall()'&gt;Vali&lt;/a&gt;"
 msgstr ""

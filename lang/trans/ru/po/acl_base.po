@@ -53,11 +53,11 @@ msgstr ""
 msgid "acl_base::save_acl_masked(%s, %s,..): the given oid is incorrect"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:407
-msgid "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
+#: classes/core/obj/acl_base.aw:409
+msgid "acl_base-&gt;can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:576
+#: classes/core/obj/acl_base.aw:578
 msgid ""
 "acl_base::prog_acl(%s, %s): the only program you can get access rights for "
 "is PRG_MENUEDIT, all others are deprecated!"

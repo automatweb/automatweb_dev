@@ -1,0 +1,32 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/groupware/project_analysis_impl.aw:16
+msgid "Anal&amp;uuml;&amp;uuml;si t&amp;ouml;&amp;ouml;laud"
+msgstr ""
+
+#: classes/applications/groupware/project_analysis_impl.aw:23
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/groupware/project_analysis_impl.aw:31
+msgid "Hindamislaua nimi"
+msgstr ""
+
+#: classes/applications/groupware/project_analysis_impl.aw:37
+msgid "Hindamislaua looja nimi"
+msgstr ""
+
+#: classes/applications/groupware/project_analysis_impl.aw:43
+msgid "Kuup&amp;auml;ev"
+msgstr ""
+

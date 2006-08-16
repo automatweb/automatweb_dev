@@ -9,9 +9,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/groupware/project_strat_goal_eval_ws.aw:class_1088_help
-msgid "Klassi Projekti eesm&auml;rkide hindamislaud help"
+msgid "Klassi Projekti eesm&amp;auml;rkide hindamislaud help"
+msgstr ""
+
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:prop_eval_dl
+msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) caption"
+msgstr ""
+
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:prop_eval_dl_comment
+msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:prop_eval_dl_help
+msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) help"
 msgstr ""
 
 #: classes/applications/groupware/project_strat_goal_eval_ws.aw:prop_strat_a
@@ -114,31 +125,32 @@ msgstr ""
 msgid "Grupi Keskmised hinded (strat_res_avg) help"
 msgstr ""
 
-#: classes/applications/groupware/project_strat_goal_eval_ws.aw:104 classes/applications/groupware/project_strat_goal_eval_ws.aw:166
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:108
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:172
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/groupware/project_strat_goal_eval_ws.aw:125
-msgid "Teie ei ole m&auml;&auml;ratud hindajaks!"
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:131
+msgid "Teie ei ole m&amp;auml;&amp;auml;ratud hindajaks!"
 msgstr ""
 
-#: classes/applications/groupware/project_strat_goal_eval_ws.aw:183 classes/applications/groupware/project_strat_goal_eval_ws.aw:246
-msgid "<b>Summa</b>"
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:192
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:258
+msgid "&lt;b&gt;Summa&lt;/b&gt;"
 msgstr ""
 
-#: classes/applications/groupware/project_strat_goal_eval_ws.aw:270
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:282
 msgid "Hinnang projektile %s"
 msgstr ""
 
-#: classes/applications/groupware/project_strat_goal_eval_ws.aw:365
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:378
 msgid "Meeskonna liige"
 msgstr ""
 
-#: classes/applications/groupware/project_strat_goal_eval_ws.aw:370
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:383
 msgid "Hindaja?"
 msgstr ""
 
-#: classes/applications/groupware/project_strat_goal_eval_ws.aw:375
+#: classes/applications/groupware/project_strat_goal_eval_ws.aw:388
 msgid "Hindaja hinde kaal protsentides"
 msgstr ""
-

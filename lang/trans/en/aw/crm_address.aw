@@ -1,5 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Tänav/Küla (aadress) caption"] = "Street/Village";
 $GLOBALS["TRANS"]["Omaduse Postiindeks (postiindeks) caption"] = "Postal code";
 $GLOBALS["TRANS"]["Omaduse Linn/Vald/Alev (linn) caption"] = "City/State/Village";
 $GLOBALS["TRANS"]["Omaduse Maakond (maakond) caption"] = "County";

@@ -9,12 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+#: classes/core/error.aw:33 classes/core/error.aw:91
+msgid "class::function(): parameter %s is not set!"
+msgstr ""
 
-#: classes/core/error.aw:44 classes/core/error.aw:45 classes/core/error.aw:46
+#: classes/core/error.aw:62 classes/core/error.aw:63 classes/core/error.aw:64
 msgid "not specified"
 msgstr ""
 
-#: classes/core/error.aw:49
+#: classes/core/error.aw:67
 msgid "Acl error, access %s was denied for object %s in function %s"
 msgstr ""
-

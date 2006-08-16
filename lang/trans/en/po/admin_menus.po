@@ -18,8 +18,8 @@ msgid "Muuda"
 msgstr "Change"
 
 #: classes/admin/admin_menus.aw:261 classes/admin/admin_menus.aw:1397
-msgid "L&otilde;ika"
-msgstr "Cut"
+msgid "L&amp;otilde;ika"
+msgstr ""
 
 #: classes/admin/admin_menus.aw:270 classes/admin/admin_menus.aw:1404
 msgid "Kopeeri"
@@ -86,8 +86,8 @@ msgid "Suured ikoonid"
 msgstr "Big icons"
 
 #: classes/admin/admin_menus.aw:1450
-msgid "Väiksed ikoonid"
-msgstr "Small icons"
+msgid "V&auml;iksed ikoonid"
+msgstr ""
 
 #: classes/admin/admin_menus.aw:1451
 msgid "Detailne vaade"
@@ -98,8 +98,8 @@ msgid "Eelvaade"
 msgstr "Preview"
 
 #: classes/admin/admin_menus.aw:1570
-msgid "Valitud pole &uuml;htegi objekti!"
-msgstr "No objects selected!"
+msgid "Valitud pole &amp;uuml;htegi objekti!"
+msgstr ""
 
 #: classes/admin/admin_menus.aw:1647
 msgid "Nimi"
@@ -111,20 +111,35 @@ msgstr "Ord"
 
 #: classes/admin/admin_menus.aw:1671
 msgid "Muutja"
-msgstr "Modifiedby"
+msgstr "Modified by"
 
 #: classes/admin/admin_menus.aw:1681
 msgid "Muudetud"
 msgstr "Modified"
 
 #: classes/admin/admin_menus.aw:1694
-msgid "T&uuml;&uuml;p"
-msgstr "Type"
+msgid "T&amp;uuml;&amp;uuml;p"
+msgstr ""
 
 #: classes/admin/admin_menus.aw:1704
 msgid "Tegevus"
 msgstr "Action"
 
 #: classes/admin/admin_menus.aw:1713
-msgid "<a href='javascript:selall()'>Vali</a>"
-msgstr "<a href='javascript:selall()'>Select&nbsp;all</a>"
+msgid "&lt;a href='javascript:selall()'&gt;Vali&lt;/a&gt;"
+msgstr ""
+
+#~ msgid "L&otilde;ika"
+#~ msgstr "Cut"
+
+#~ msgid "Väiksed ikoonid"
+#~ msgstr "Small icons"
+
+#~ msgid "Valitud pole &uuml;htegi objekti!"
+#~ msgstr "No objects selected!"
+
+#~ msgid "T&uuml;&uuml;p"
+#~ msgstr "Type"
+
+#~ msgid "<a href='javascript:selall()'>Vali</a>"
+#~ msgstr "<a href='javascript:selall()'>Select&nbsp;all</a>"

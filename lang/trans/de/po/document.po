@@ -14,7 +14,7 @@ msgid "Viimati muudetud:"
 msgstr ""
 
 #: classes/document.aw:686
-msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
+msgid "&lt;br /&gt;&lt;B&gt;Edasi loe ajakirjast!&lt;/b&gt;&lt;/font&gt;"
 msgstr ""
 
 #: classes/document.aw:710
@@ -34,29 +34,28 @@ msgid "Pealkiri"
 msgstr ""
 
 #: classes/document.aw:2357
-msgid "Kuup&auml;ev"
+msgid "Kuup&amp;auml;ev"
 msgstr ""
 
 #: classes/document.aw:2365
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:2893
+#: classes/document.aw:2895
 msgid ""
-"<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!"
-"<br /><br />\n"
+"&lt;font face='arial'&gt;Toimub staatiliste lehtede\tgenereerimine, palun "
+"oodake!&lt;br /&gt;&lt;br /&gt;\n"
 "\n"
 msgstr ""
 
-#: classes/document.aw:2923
-msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
+#: classes/document.aw:2925
+msgid "Staatilised lehek&amp;uuml;ljed loodud!&lt;br /&gt;\n"
 msgstr ""
 
-#: classes/document.aw:2925
+#: classes/document.aw:2927
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""
 
 # classes/document.aw:group_general
-msgid "Omaduse Nimi (name) caption"
-msgstr "Name"
-
+#~ msgid "Omaduse Nimi (name) caption"
+#~ msgstr "Name"

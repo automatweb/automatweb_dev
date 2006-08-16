@@ -75,15 +75,15 @@ msgid "Omaduse Summa (sum) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_unit
-msgid "Omaduse &Uuml;hik (unit) caption"
+msgid "Omaduse &amp;Uuml;hik (unit) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_unit_comment
-msgid "Omaduse &Uuml;hik (unit) kommentaar"
+msgid "Omaduse &amp;Uuml;hik (unit) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_unit_help
-msgid "Omaduse &Uuml;hik (unit) help"
+msgid "Omaduse &amp;Uuml;hik (unit) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_is_oe
@@ -99,27 +99,51 @@ msgid "Omaduse Muu kulu? (is_oe) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_has_tax
-msgid "Omaduse Lisandub k&auml;ibemaks? (has_tax) caption"
+msgid "Omaduse Lisandub k&amp;auml;ibemaks? (has_tax) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_has_tax_comment
-msgid "Omaduse Lisandub k&auml;ibemaks? (has_tax) kommentaar"
+msgid "Omaduse Lisandub k&amp;auml;ibemaks? (has_tax) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_has_tax_help
-msgid "Omaduse Lisandub k&auml;ibemaks? (has_tax) help"
+msgid "Omaduse Lisandub k&amp;auml;ibemaks? (has_tax) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_date
-msgid "Omaduse Kuup&auml;ev (date) caption"
+msgid "Omaduse Kuup&amp;auml;ev (date) caption"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_date_comment
-msgid "Omaduse Kuup&auml;ev (date) kommentaar"
+msgid "Omaduse Kuup&amp;auml;ev (date) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:prop_date_help
-msgid "Omaduse Kuup&auml;ev (date) help"
+msgid "Omaduse Kuup&amp;auml;ev (date) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_desc
+msgid "Omaduse Kirjeldus (desc) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_desc_comment
+msgid "Omaduse Kirjeldus (desc) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_desc_help
+msgid "Omaduse Kirjeldus (desc) help"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_people
+msgid "Omaduse Isikud (people) caption"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_people_comment
+msgid "Omaduse Isikud (people) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:prop_people_help
+msgid "Omaduse Isikud (people) help"
 msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:rel_RELTYPE_PROD
@@ -132,5 +156,9 @@ msgstr ""
 
 #: classes/applications/crm/crm_bill_row.aw:rel_RELTYPE_TASK
 msgid "Seose Toimetus (RELTYPE_TASK) tekst"
+msgstr ""
+
+#: classes/applications/crm/crm_bill_row.aw:rel_RELTYPE_PEOPLE
+msgid "Seose Isik (RELTYPE_PEOPLE) tekst"
 msgstr ""
 

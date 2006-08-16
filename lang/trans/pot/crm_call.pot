@@ -11,7 +11,31 @@ msgstr ""
 
 
 #: classes/crm/crm_call.aw:class_223_help
-msgid "Klassi K&otilde;ne help"
+msgid "Klassi K&amp;otilde;ne help"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_predicates
+msgid "Omaduse Eeldustegevused (predicates) caption"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_predicates_comment
+msgid "Omaduse Eeldustegevused (predicates) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_predicates_help
+msgid "Omaduse Eeldustegevused (predicates) help"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_is_goal
+msgid "Omaduse Verstapost (is_goal) caption"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_is_goal_comment
+msgid "Omaduse Verstapost (is_goal) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_call.aw:prop_is_goal_help
+msgid "Omaduse Verstapost (is_goal) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_customer
@@ -87,15 +111,15 @@ msgid "Omaduse Algus (start1) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_end
-msgid "Omaduse Lõpp (end) caption"
+msgid "Omaduse L&otilde;pp (end) caption"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_end_comment
-msgid "Omaduse Lõpp (end) kommentaar"
+msgid "Omaduse L&otilde;pp (end) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_end_help
-msgid "Omaduse Lõpp (end) help"
+msgid "Omaduse L&otilde;pp (end) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_send_bill
@@ -183,15 +207,15 @@ msgid "Omaduse Aliastehaldur (aliasmgr) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_task_toolbar
-msgid "Omaduse \"Toolbar\" (task_toolbar) caption"
+msgid "Omaduse \&quot;Toolbar\&quot; (task_toolbar) caption"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_task_toolbar_comment
-msgid "Omaduse \"Toolbar\" (task_toolbar) kommentaar"
+msgid "Omaduse \&quot;Toolbar\&quot; (task_toolbar) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_task_toolbar_help
-msgid "Omaduse \"Toolbar\" (task_toolbar) help"
+msgid "Omaduse \&quot;Toolbar\&quot; (task_toolbar) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_recurrence
@@ -327,15 +351,15 @@ msgid "Omaduse Tulemuste tabel (search_contact_results) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_new_call_date
-msgid "Omaduse Uue k&otilde;ne aeg (new_call_date) caption"
+msgid "Omaduse Uue k&amp;otilde;ne aeg (new_call_date) caption"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_new_call_date_comment
-msgid "Omaduse Uue k&otilde;ne aeg (new_call_date) kommentaar"
+msgid "Omaduse Uue k&amp;otilde;ne aeg (new_call_date) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_new_call_date_help
-msgid "Omaduse Uue k&otilde;ne aeg (new_call_date) help"
+msgid "Omaduse Uue k&amp;otilde;ne aeg (new_call_date) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:prop_other_calls
@@ -391,11 +415,19 @@ msgid "Grupi Osalejad (participants) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:group_other_calls
-msgid "Grupi Eelmised k&otilde;ned (other_calls) pealkiri"
+msgid "Grupi Eelmised k&amp;otilde;ned (other_calls) pealkiri"
 msgstr ""
 
 #: classes/crm/crm_call.aw:group_other_calls_help
-msgid "Grupi Eelmised k&otilde;ned (other_calls) help"
+msgid "Grupi Eelmised k&amp;otilde;ned (other_calls) help"
+msgstr ""
+
+#: classes/crm/crm_call.aw:group_predicates
+msgid "Grupi Eeldused (predicates) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_call.aw:group_predicates_help
+msgid "Grupi Eeldused (predicates) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:rel_RELTYPE_RECURRENCE
@@ -414,35 +446,39 @@ msgstr ""
 msgid "Seose Projekt (RELTYPE_PROJECT) tekst"
 msgstr ""
 
-#: classes/crm/crm_call.aw:428 classes/crm/crm_call.aw:475
+#: classes/crm/crm_call.aw:rel_RELTYPE_PREDICATE
+msgid "Seose Eeldustegevus (RELTYPE_PREDICATE) tekst"
+msgstr ""
+
+#: classes/crm/crm_call.aw:445 classes/crm/crm_call.aw:492
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_call.aw:435 classes/crm/crm_call.aw:446
+#: classes/crm/crm_call.aw:452 classes/crm/crm_call.aw:463
 msgid "Lisa isik organisatsiooni %s"
 msgstr ""
 
-#: classes/crm/crm_call.aw:466
+#: classes/crm/crm_call.aw:483
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_call.aw:484
+#: classes/crm/crm_call.aw:501
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_call.aw:546
-msgid "Uee k&otilde;ne aeg ei tohi olla minevikus!"
+#: classes/crm/crm_call.aw:563
+msgid "Uee k&amp;otilde;ne aeg ei tohi olla minevikus!"
 msgstr ""
 
-#: classes/crm/crm_call.aw:676
+#: classes/crm/crm_call.aw:700
 msgid "Millal"
 msgstr ""
 
-#: classes/crm/crm_call.aw:683
+#: classes/crm/crm_call.aw:707
 msgid "Sisu"
 msgstr ""
 
-#: classes/crm/crm_call.aw:688
+#: classes/crm/crm_call.aw:712
 msgid "Vaata"
 msgstr ""
 

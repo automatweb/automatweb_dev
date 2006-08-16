@@ -6,7 +6,6 @@ $GLOBALS["TRANS"]["Seose foorum (RELTYPE_FORUM) tekst"] = "forum";
 $GLOBALS["TRANS"]["Open DocGen"] = "Open DocGen";
 $GLOBALS["TRANS"]["Classes"] = "Classes";
 $GLOBALS["TRANS"]["ALL DONE"] = "ALL DONE";
-$GLOBALS["TRANS"]["K&otilde;ik klassid"] = "All classes";
 $GLOBALS["TRANS"]["API klassid"] = "API classes";
 $GLOBALS["TRANS"]["Eraldi dokumentatsioon"] = "Seprate documentation";
 $GLOBALS["TRANS"]["Classbase tagid"] = "Classbase tags";

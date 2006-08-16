@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/groupware/task_row.aw:class_1050_help
 msgid "Klassi Toimetuse rida help"
 msgstr ""
@@ -24,6 +23,18 @@ msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_content_help
 msgid "Omaduse Sisu (content) help"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time
+msgid "Omaduse Aeg (time) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_comment
+msgid "Omaduse Aeg (time) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_time_help
+msgid "Omaduse Aeg (time) help"
 msgstr ""
 
 #: classes/applications/groupware/task_row.aw:prop_date
@@ -122,6 +133,19 @@ msgstr ""
 msgid "Omaduse Arve (bill_id) help"
 msgstr ""
 
+#: classes/applications/groupware/task_row.aw:prop_to_bill_date
+msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_to_bill_date_comment
+msgid ""
+"Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_row.aw:prop_to_bill_date_help
+msgid "Omaduse Arvele m&auml;&auml;ramise kuup&auml;ev (to_bill_date) help"
+msgstr ""
+
 #: classes/applications/groupware/task_row.aw:prop_comments
 msgid "Omaduse Kommentaarid (comments) caption"
 msgstr ""
@@ -149,4 +173,3 @@ msgstr ""
 #: classes/applications/groupware/task_row.aw:rel_RELTYPE_IMPL
 msgid "Seose Teostaja (RELTYPE_IMPL) tekst"
 msgstr ""
-

@@ -23,7 +23,7 @@ msgid "Ei"
 msgstr ""
 
 #: classes/cfg/htmlclient.aw:306
-msgid "K&otilde;ik"
+msgid "K&amp;otilde;ik"
 msgstr ""
 
 #: classes/cfg/htmlclient.aw:307
@@ -40,5 +40,21 @@ msgstr ""
 
 #: classes/cfg/htmlclient.aw:423 classes/cfg/htmlclient.aw:564
 msgid "Salvesta"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:572
+msgid "&amp;lt;&amp;lt;&amp;lt; Tagasi"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:573
+msgid "submit_and_back"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:583
+msgid "Edasi &amp;gt;&amp;gt;&amp;gt;"
+msgstr ""
+
+#: classes/cfg/htmlclient.aw:584
+msgid "submit_and_forward"
 msgstr ""
 

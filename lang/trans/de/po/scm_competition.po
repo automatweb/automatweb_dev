@@ -9,8 +9,262 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/scm/scm_competition.aw:class_1099_help
-msgid "Klassi V&otilde;istlus help"
+msgid "Klassi V&amp;otilde;istlus help"
 msgstr ""
 
+#: classes/applications/scm/scm_competition.aw:prop_scm_event
+msgid "Omaduse Spordiala (scm_event) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_event_comment
+msgid "Omaduse Spordiala (scm_event) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_event_help
+msgid "Omaduse Spordiala (scm_event) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_location
+msgid "Omaduse Asukoht (scm_location) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_location_comment
+msgid "Omaduse Asukoht (scm_location) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_location_help
+msgid "Omaduse Asukoht (scm_location) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_date
+msgid "Omaduse Kuup&amp;auml;ev (date) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_date_comment
+msgid "Omaduse Kuup&amp;auml;ev (date) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_date_help
+msgid "Omaduse Kuup&amp;auml;ev (date) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_tournament
+msgid "Omaduse Turniir (scm_tournament) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_tournament_comment
+msgid "Omaduse Turniir (scm_tournament) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_tournament_help
+msgid "Omaduse Turniir (scm_tournament) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_score_calc
+msgid "Omaduse Punktis&amp;uuml;steem (scm_score_calc) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_score_calc_comment
+msgid "Omaduse Punktis&amp;uuml;steem (scm_score_calc) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_score_calc_help
+msgid "Omaduse Punktis&amp;uuml;steem (scm_score_calc) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_group
+msgid "Omaduse V&amp;otilde;istlusgrupid (scm_group) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_group_comment
+msgid "Omaduse V&amp;otilde;istlusgrupid (scm_group) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_group_help
+msgid "Omaduse V&amp;otilde;istlusgrupid (scm_group) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_group_box
+msgid "Omaduse Gruppide lisainfo (scm_group_box) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_group_box_comment
+msgid "Omaduse Gruppide lisainfo (scm_group_box) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_group_box_help
+msgid "Omaduse Gruppide lisainfo (scm_group_box) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_group_consider
+msgid "Omaduse Igast grupist arvesse (scm_group_consider) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_group_consider_comment
+msgid "Omaduse Igast grupist arvesse (scm_group_consider) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_scm_group_consider_help
+msgid "Omaduse Igast grupist arvesse (scm_group_consider) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_map
+msgid "Omaduse Asukohakaart (map) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_map_comment
+msgid "Omaduse Asukohakaart (map) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_map_help
+msgid "Omaduse Asukohakaart (map) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_photo
+msgid "Omaduse Pilt kohast (photo) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_photo_comment
+msgid "Omaduse Pilt kohast (photo) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_photo_help
+msgid "Omaduse Pilt kohast (photo) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_list
+msgid "Omaduse V&amp;otilde;istlejate nimekiri (list) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_list_comment
+msgid "Omaduse V&amp;otilde;istlejate nimekiri (list) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_list_help
+msgid "Omaduse V&amp;otilde;istlejate nimekiri (list) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_results_tbl
+msgid "Omaduse Tulemuste tabel (results_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_results_tbl_comment
+msgid "Omaduse Tulemuste tabel (results_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_results_tbl_help
+msgid "Omaduse Tulemuste tabel (results_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_add_results_tbl
+msgid "Omaduse Tulemuste lisamine (add_results_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_add_results_tbl_comment
+msgid "Omaduse Tulemuste lisamine (add_results_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:prop_add_results_tbl_help
+msgid "Omaduse Tulemuste lisamine (add_results_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_map_gr
+msgid "Grupi Kaart (map_gr) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_map_gr_help
+msgid "Grupi Kaart (map_gr) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_photo_gr
+msgid "Grupi Foto (photo_gr) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_photo_gr_help
+msgid "Grupi Foto (photo_gr) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_contestants
+msgid "Grupi V&amp;otilde;istlejad (contestants) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_contestants_help
+msgid "Grupi V&amp;otilde;istlejad (contestants) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_results
+msgid "Grupi Tulemused (results) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_results_help
+msgid "Grupi Tulemused (results) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_view_results
+msgid "Grupi Tulemused (view_results) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_view_results_help
+msgid "Grupi Tulemused (view_results) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_add_results
+msgid "Grupi Sisesta tulemused (add_results) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:group_add_results_help
+msgid "Grupi Sisesta tulemused (add_results) help"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:rel_RELTYPE_EVENT
+msgid "Seose Spordiala (RELTYPE_EVENT) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:rel_RELTYPE_LOCATION
+msgid "Seose Asukoht (RELTYPE_LOCATION) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:rel_RELTYPE_TOURNAMENT
+msgid "Seose Turniir (RELTYPE_TOURNAMENT) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:rel_RELTYPE_SCORE_CALC
+msgid "Seose Punktis&amp;amp;uuml;steem (RELTYPE_SCORE_CALC) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:rel_RELTYPE_GROUP
+msgid "Seose V&amp;amp;otilde;istlusgrupp (RELTYPE_GROUP) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:rel_RELTYPE_CONTESTANT
+msgid "Seose V&amp;amp;otilde;istleja (RELTYPE_CONTESTANT) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:232
+msgid "V&otilde;istluse toimumise asukoht m&amp;auml;&amp;auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:239
+msgid "Pilt on m&amp;auml;&amp;auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:251
+#: classes/applications/scm/scm_competition.aw:264
+#: classes/applications/scm/scm_competition.aw:281
+msgid "V&amp;otilde;istleja"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:255
+#: classes/applications/scm/scm_competition.aw:286
+msgid "Firma"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:268
+#: classes/applications/scm/scm_competition.aw:291
+msgid "Tulemus"
+msgstr ""
+
+#: classes/applications/scm/scm_competition.aw:272
+msgid "Koht"
+msgstr ""

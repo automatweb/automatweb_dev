@@ -11,6 +11,98 @@ msgstr ""
 
 
 #: classes/applications/scm/scm_admin.aw:class_1090_help
-msgid "Klassi Spordiv&otilde;istluste haldus help"
+msgid "Klassi Spordiv&amp;otilde;istluste haldus help"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_cont_tb
+msgid "Omaduse Osalejate t66tiistariba (cont_tb) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_cont_tb_comment
+msgid "Omaduse Osalejate t66tiistariba (cont_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_cont_tb_help
+msgid "Omaduse Osalejate t66tiistariba (cont_tb) help"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_cont_tbl
+msgid "Omaduse Osalejate nimekiri (cont_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_cont_tbl_comment
+msgid "Omaduse Osalejate nimekiri (cont_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_cont_tbl_help
+msgid "Omaduse Osalejate nimekiri (cont_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_org_tb
+msgid "Omaduse Korraldajate t66riistariba (org_tb) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_org_tb_comment
+msgid "Omaduse Korraldajate t66riistariba (org_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_org_tb_help
+msgid "Omaduse Korraldajate t66riistariba (org_tb) help"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_org_tbl
+msgid "Omaduse Korraldajate nimekiri (org_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_org_tbl_comment
+msgid "Omaduse Korraldajate nimekiri (org_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:prop_org_tbl_help
+msgid "Omaduse Korraldajate nimekiri (org_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:group_contestants
+msgid "Grupi V&amp;otilde;istlejad (contestants) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:group_contestants_help
+msgid "Grupi V&amp;otilde;istlejad (contestants) help"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:group_organizers
+msgid "Grupi Korraldajad (organizers) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:group_organizers_help
+msgid "Grupi Korraldajad (organizers) help"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:56
+msgid "Lisa uus v&amp;otilde;istleja"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:85 classes/applications/scm/scm_admin.aw:125
+msgid "isik m&amp;auml;&amp;auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:86
+msgid "firma m&amp;auml;&amp;auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:95
+msgid "Lisa uus korraldaja"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:126
+msgid "M&amp;auml;&amp;auml;ramata"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:171
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/scm/scm_admin.aw:176
+msgid "Firma"
 msgstr ""
 

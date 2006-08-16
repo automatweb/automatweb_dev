@@ -12,19 +12,18 @@ msgstr ""
 
 #: classes/vcl/acl_manager.aw:19
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/vcl/acl_manager.aw:38
 msgid "Grupp"
-msgstr ""
+msgstr "Group"
 
 #: classes/vcl/acl_manager.aw:55
 msgid "Jah"
-msgstr ""
-
+msgstr "Yes" 
 #: classes/vcl/acl_manager.aw:55
 msgid "Ei"
-msgstr ""
+msgstr "No"
 
 #: classes/vcl/acl_manager.aw:114
 msgid ""
@@ -32,17 +31,17 @@ msgstr ""
 
 #: classes/vcl/acl_manager.aw:118
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/vcl/acl_manager.aw:131
 msgid "Juurkaust"
-msgstr ""
+msgstr "Root folder"
 
 #: classes/vcl/acl_manager.aw:175 classes/vcl/acl_manager.aw:250
 msgid "no group for user %s!"
-msgstr ""
+msgstr "No group for user %s!"
 
 #: classes/vcl/acl_manager.aw:210
 msgid "Salvesta &otilde;igused"
-msgstr ""
+msgstr "Save permissions"
 

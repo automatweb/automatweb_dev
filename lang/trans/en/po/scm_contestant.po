@@ -9,8 +9,106 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/scm/scm_contestant.aw:class_1092_help
-msgid "Klassi V&otilde;istleja help"
+msgid "Klassi V&amp;otilde;istleja help"
 msgstr ""
 
+#: classes/applications/scm/scm_contestant.aw:prop_contestant
+msgid "Omaduse V&amp;otilde;istleja (contestant) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_contestant_comment
+msgid "Omaduse V&amp;otilde;istleja (contestant) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_contestant_help
+msgid "Omaduse V&amp;otilde;istleja (contestant) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_contestants_company
+msgid "Omaduse Firmast (contestants_company) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_contestants_company_comment
+msgid "Omaduse Firmast (contestants_company) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_contestants_company_help
+msgid "Omaduse Firmast (contestants_company) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_tb
+msgid "Omaduse V&amp;otilde;istluste riba (comp_tb) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_tb_comment
+msgid "Omaduse V&amp;otilde;istluste riba (comp_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_tb_help
+msgid "Omaduse V&amp;otilde;istluste riba (comp_tb) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_tbl
+msgid "Omaduse V&amp;otilde;istluste tabel (comp_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_tbl_comment
+msgid "Omaduse V&amp;otilde;istluste tabel (comp_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_comp_tbl_help
+msgid "Omaduse V&amp;otilde;istluste tabel (comp_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_reg_button
+msgid "Omaduse Registreeru (reg_button) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_reg_button_comment
+msgid "Omaduse Registreeru (reg_button) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:prop_reg_button_help
+msgid "Omaduse Registreeru (reg_button) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:group_competitions
+msgid "Grupi V&amp;otilde;istlused (competitions) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:group_competitions_help
+msgid "Grupi V&amp;otilde;istlused (competitions) help"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:rel_RELTYPE_CONTESTANT
+msgid "Seose V&amp;amp;otilde;istleja (RELTYPE_CONTESTANT) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:54
+msgid "Registreeri"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:181
+msgid "V&amp;otilde;istlus"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:186
+msgid "Spordiala"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:191
+msgid "Toimumiskoht"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:196
+msgid "Toimumisaeg"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:201
+msgid "Korraldaja"
+msgstr ""
+
+#: classes/applications/scm/scm_contestant.aw:206
+msgid "Turniir"
+msgstr ""

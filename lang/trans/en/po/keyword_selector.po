@@ -12,17 +12,17 @@ msgstr ""
 #: classes/vcl/keyword_selector.aw:79 classes/vcl/keyword_selector.aw:91
 #: classes/vcl/keyword_selector.aw:103
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/vcl/keyword_selector.aw:85 classes/vcl/keyword_selector.aw:97
 #: classes/vcl/keyword_selector.aw:109
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 
 #: classes/vcl/keyword_selector.aw:213 classes/vcl/keyword_selector.aw:218
 msgid "K&otilde;ik"
-msgstr ""
+msgstr "All"
 
 #: classes/vcl/keyword_selector.aw:228
 msgid "Valitud:"
-msgstr ""
+msgstr "Selected:"

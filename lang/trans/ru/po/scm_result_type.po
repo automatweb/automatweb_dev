@@ -9,8 +9,87 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/scm/scm_result_type.aw:class_1093_help
-msgid "Klassi Paremusj&auml;rjestuse t&uuml;&uuml;p help"
+msgid "Klassi Paremusj&amp;auml;rjestuse t&amp;uuml;&amp;uuml;p help"
 msgstr ""
 
+#: classes/applications/scm/scm_result_type.aw:prop_unit
+msgid "Omaduse &amp;Uuml;hik (unit) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:prop_unit_comment
+msgid "Omaduse &amp;Uuml;hik (unit) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:prop_unit_help
+msgid "Omaduse &amp;Uuml;hik (unit) help"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:prop_sort
+msgid "Omaduse Sorteerimine (sort) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:prop_sort_comment
+msgid "Omaduse Sorteerimine (sort) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:prop_sort_help
+msgid "Omaduse Sorteerimine (sort) help"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:48
+msgid "Kasvav"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:49
+msgid "Kahanev"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:167
+msgid "Aeg"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:169
+msgid "p"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:170
+msgid "t"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:171
+#: classes/applications/scm/scm_result_type.aw:188
+msgid "m"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:172
+msgid "s"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:173
+msgid "ms"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:178
+msgid "Punktid"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:180
+msgid "punkti"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:185
+msgid "Pikkus/Kaugus"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:187
+msgid "km"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:189
+msgid "cm"
+msgstr ""
+
+#: classes/applications/scm/scm_result_type.aw:190
+msgid "mm"
+msgstr ""

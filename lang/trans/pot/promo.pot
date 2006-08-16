@@ -15,27 +15,27 @@ msgid "Klassi Konteiner help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_needs_translation
-msgid "Omaduse Vajab tõlget (needs_translation) caption"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tõlget (needs_translation) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_is_translated
-msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_is_translated_comment
-msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_is_translated_help
-msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_caption
@@ -51,15 +51,15 @@ msgid "Omaduse Pealkiri (caption) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_type
-msgid "Omaduse Kasti tüüp (type) caption"
+msgid "Omaduse Kasti t&uuml;&uuml;p (type) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_type_comment
-msgid "Omaduse Kasti tüüp (type) kommentaar"
+msgid "Omaduse Kasti t&uuml;&uuml;p (type) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_type_help
-msgid "Omaduse Kasti tüüp (type) help"
+msgid "Omaduse Kasti t&uuml;&uuml;p (type) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_link
@@ -87,15 +87,15 @@ msgid "Omaduse Lingi kirjeldus (link_caption) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_groups
-msgid "Omaduse Grupid, kellele kasti näidata (groups) caption"
+msgid "Omaduse Grupid, kellele kasti n&auml;idata (groups) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_groups_comment
-msgid "Omaduse Grupid, kellele kasti näidata (groups) kommentaar"
+msgid "Omaduse Grupid, kellele kasti n&auml;idata (groups) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_groups_help
-msgid "Omaduse Grupid, kellele kasti näidata (groups) help"
+msgid "Omaduse Grupid, kellele kasti n&auml;idata (groups) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_no_title
@@ -111,15 +111,15 @@ msgid "Omaduse Ilma pealkirjata (no_title) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_show_inact
-msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) caption"
+msgid "Omaduse N&amp;auml;ita mitteaktiivseid dokumente tekstina (show_inact) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_show_inact_comment
-msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) kommentaar"
+msgid "Omaduse N&amp;auml;ita mitteaktiivseid dokumente tekstina (show_inact) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_show_inact_help
-msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) help"
+msgid "Omaduse N&amp;auml;ita mitteaktiivseid dokumente tekstina (show_inact) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_auto_period
@@ -135,99 +135,99 @@ msgid "Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_all_menus
-msgid "Omaduse Näita igal pool (all_menus) caption"
+msgid "Omaduse N&auml;ita igal pool (all_menus) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_all_menus_comment
-msgid "Omaduse Näita igal pool (all_menus) kommentaar"
+msgid "Omaduse N&auml;ita igal pool (all_menus) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_all_menus_help
-msgid "Omaduse Näita igal pool (all_menus) help"
+msgid "Omaduse N&auml;ita igal pool (all_menus) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_search
-msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"
+msgid "Omaduse &amp;Auml;ra n&amp;auml;ita otsingu tulemuste lehel (not_in_search) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_search_comment
-msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) kommentaar"
+msgid "Omaduse &amp;Auml;ra n&amp;auml;ita otsingu tulemuste lehel (not_in_search) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_search_help
-msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) help"
+msgid "Omaduse &amp;Auml;ra n&amp;auml;ita otsingu tulemuste lehel (not_in_search) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_doc_view
-msgid "Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) caption"
+msgid "Omaduse &amp;Auml;ra n&amp;auml;ita dokumendi pikas vaates (not_in_doc_view) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_doc_view_comment
-msgid "Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) kommentaar"
+msgid "Omaduse &amp;Auml;ra n&amp;auml;ita dokumendi pikas vaates (not_in_doc_view) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_not_in_doc_view_help
-msgid "Omaduse &Auml;ra n&auml;ita dokumendi pikas vaates (not_in_doc_view) help"
+msgid "Omaduse &amp;Auml;ra n&amp;auml;ita dokumendi pikas vaates (not_in_doc_view) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs
-msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) caption"
+msgid "Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes (trans_all_langs) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs_comment
-msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) kommentaar"
+msgid "Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes (trans_all_langs) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs_help
-msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) help"
+msgid "Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes (trans_all_langs) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs
-msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) caption"
+msgid "Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes (content_all_langs) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs_comment
-msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) kommentaar"
+msgid "Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes (content_all_langs) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs_help
-msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) help"
+msgid "Omaduse Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes (content_all_langs) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section
-msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) caption"
+msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti n&amp;auml;idata (section) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_comment
-msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) kommentaar"
+msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti n&amp;auml;idata (section) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_help
-msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) help"
+msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti n&amp;auml;idata (section) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow
-msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) caption"
+msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti EI n&amp;auml;idata (section_noshow) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow_comment
-msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) kommentaar"
+msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti EI n&amp;auml;idata (section_noshow) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow_help
-msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) help"
+msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d, mille all kasti EI n&amp;auml;idata (section_noshow) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by
-msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) caption"
+msgid "Omaduse Dokumente j&amp;auml;rjestatakse (sort_by) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by_comment
-msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) kommentaar"
+msgid "Omaduse Dokumente j&amp;auml;rjestatakse (sort_by) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by_help
-msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) help"
+msgid "Omaduse Dokumente j&amp;auml;rjestatakse (sort_by) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_ord
@@ -243,15 +243,15 @@ msgid "Omaduse  (sort_ord) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by2
-msgid "Omaduse Dokumente j&auml;rjestatakse (2) (sort_by2) caption"
+msgid "Omaduse Dokumente j&amp;auml;rjestatakse (2) (sort_by2) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by2_comment
-msgid "Omaduse Dokumente j&auml;rjestatakse (2) (sort_by2) kommentaar"
+msgid "Omaduse Dokumente j&amp;auml;rjestatakse (2) (sort_by2) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by2_help
-msgid "Omaduse Dokumente j&auml;rjestatakse (2) (sort_by2) help"
+msgid "Omaduse Dokumente j&amp;auml;rjestatakse (2) (sort_by2) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_ord2
@@ -267,15 +267,15 @@ msgid "Omaduse  (sort_ord2) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by3
-msgid "Omaduse Dokumente j&auml;rjestatakse (3) (sort_by3) caption"
+msgid "Omaduse Dokumente j&amp;auml;rjestatakse (3) (sort_by3) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by3_comment
-msgid "Omaduse Dokumente j&auml;rjestatakse (3) (sort_by3) kommentaar"
+msgid "Omaduse Dokumente j&amp;auml;rjestatakse (3) (sort_by3) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by3_help
-msgid "Omaduse Dokumente j&auml;rjestatakse (3) (sort_by3) help"
+msgid "Omaduse Dokumente j&amp;auml;rjestatakse (3) (sort_by3) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_ord3
@@ -303,15 +303,15 @@ msgid "Omaduse Pilt (image) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_tpl_lead
-msgid "Omaduse Template näitamiseks (tpl_lead) caption"
+msgid "Omaduse Template n&auml;itamiseks (tpl_lead) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_tpl_lead_comment
-msgid "Omaduse Template näitamiseks (tpl_lead) kommentaar"
+msgid "Omaduse Template n&auml;itamiseks (tpl_lead) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_tpl_lead_help
-msgid "Omaduse Template näitamiseks (tpl_lead) help"
+msgid "Omaduse Template n&auml;itamiseks (tpl_lead) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_fld_tpl
@@ -339,15 +339,15 @@ msgid "Omaduse Template (dokumendi sees) (promo_tpl) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_last_menus
-msgid "Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) caption"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_last_menus_comment
-msgid "Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) kommentaar"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_last_menus_help
-msgid "Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) help"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille alt viimaseid dokumente v&otilde;etakse (last_menus) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_ndocs
@@ -363,15 +363,15 @@ msgid "Omaduse Mitu viimast dokumenti (ndocs) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs
-msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) caption"
+msgid "Omaduse Mitu algusest &amp;auml;ra j&amp;auml;tta (start_ndocs) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs_comment
-msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) kommentaar"
+msgid "Omaduse Mitu algusest &amp;auml;ra j&amp;auml;tta (start_ndocs) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs_help
-msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) help"
+msgid "Omaduse Mitu algusest &amp;auml;ra j&amp;auml;tta (start_ndocs) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_is_dyn
@@ -399,47 +399,47 @@ msgid "Omaduse  (kw_tb) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_kws
-msgid "Omaduse M&auml;rks&otilde;nad (kws) caption"
+msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (kws) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_kws_comment
-msgid "Omaduse M&auml;rks&otilde;nad (kws) kommentaar"
+msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (kws) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_kws_help
-msgid "Omaduse M&auml;rks&otilde;nad (kws) help"
+msgid "Omaduse M&amp;auml;rks&amp;otilde;nad (kws) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_menu_keywords
-msgid "Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) caption"
+msgid "Omaduse Kasuta aktiivse kausta m&amp;auml;rks&amp;otilde;nu (use_menu_keywords) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_menu_keywords_comment
-msgid "Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) kommentaar"
+msgid "Omaduse Kasuta aktiivse kausta m&amp;auml;rks&amp;otilde;nu (use_menu_keywords) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_menu_keywords_help
-msgid "Omaduse Kasuta aktiivse kausta m&auml;rks&otilde;nu (use_menu_keywords) help"
+msgid "Omaduse Kasuta aktiivse kausta m&amp;auml;rks&amp;otilde;nu (use_menu_keywords) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_doc_content_type
-msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) caption"
+msgid "Omaduse Kasuta dokumendi sisu t&amp;uuml;&amp;uuml;bi m&amp;auml;&amp;auml;rangut (use_doc_content_type) caption"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_doc_content_type_comment
-msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) kommentaar"
+msgid "Omaduse Kasuta dokumendi sisu t&amp;uuml;&amp;uuml;bi m&amp;auml;&amp;auml;rangut (use_doc_content_type) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_doc_content_type_help
-msgid "Omaduse Kasuta dokumendi sisu t&uuml;&uuml;bi m&auml;&auml;rangut (use_doc_content_type) help"
+msgid "Omaduse Kasuta dokumendi sisu t&amp;uuml;&amp;uuml;bi m&amp;auml;&amp;auml;rangut (use_doc_content_type) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_general_sub
-msgid "Grupi Üldine (general_sub) pealkiri"
+msgid "Grupi &Uuml;ldine (general_sub) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_general_sub_help
-msgid "Grupi Üldine (general_sub) help"
+msgid "Grupi &Uuml;ldine (general_sub) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_users
@@ -451,59 +451,59 @@ msgid "Grupi Kasutajad (users) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_show
-msgid "Grupi Näitamine (show) pealkiri"
+msgid "Grupi N&auml;itamine (show) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_show_help
-msgid "Grupi Näitamine (show) help"
+msgid "Grupi N&auml;itamine (show) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_show_sub
-msgid "Grupi Näitamine (show_sub) pealkiri"
+msgid "Grupi N&auml;itamine (show_sub) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_show_sub_help
-msgid "Grupi Näitamine (show_sub) help"
+msgid "Grupi N&auml;itamine (show_sub) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_container_locations
-msgid "Grupi Konteineri näitamise asukohad (container_locations) pealkiri"
+msgid "Grupi Konteineri n&auml;itamise asukohad (container_locations) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_container_locations_help
-msgid "Grupi Konteineri näitamise asukohad (container_locations) help"
+msgid "Grupi Konteineri n&auml;itamise asukohad (container_locations) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_doc_ord
-msgid "Grupi Dokumentide järjestamine (doc_ord) pealkiri"
+msgid "Grupi Dokumentide j&auml;rjestamine (doc_ord) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_doc_ord_help
-msgid "Grupi Dokumentide järjestamine (doc_ord) help"
+msgid "Grupi Dokumentide j&auml;rjestamine (doc_ord) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_look
-msgid "Grupi Välimus (look) pealkiri"
+msgid "Grupi V&auml;limus (look) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_look_help
-msgid "Grupi Välimus (look) help"
+msgid "Grupi V&auml;limus (look) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_look_sub
-msgid "Grupi Välimus (look_sub) pealkiri"
+msgid "Grupi V&auml;limus (look_sub) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_look_sub_help
-msgid "Grupi Välimus (look_sub) help"
+msgid "Grupi V&auml;limus (look_sub) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_templates
-msgid "Grupi Kujunduspõhjad (templates) pealkiri"
+msgid "Grupi Kujundusp&otilde;hjad (templates) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_templates_help
-msgid "Grupi Kujunduspõhjad (templates) help"
+msgid "Grupi Kujundusp&otilde;hjad (templates) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_menus
@@ -514,12 +514,28 @@ msgstr ""
 msgid "Grupi Sisu seaded (menus) help"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:group_menus_sub
+msgid "Grupi Dokumendid (menus_sub) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:group_menus_sub_help
+msgid "Grupi Dokumendid (menus_sub) help"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:group_kws
+msgid "Grupi M&amp;auml;rks&amp;otilde;nad (kws) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:group_kws_help
+msgid "Grupi M&amp;auml;rks&amp;otilde;nad (kws) help"
+msgstr ""
+
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_ASSIGNED_MENU
-msgid "Seose n&auml;ita men&uuml;&uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
+msgid "Seose n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_ASSIGNED_MENU) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_SOURCE
-msgid "Seose v&otilde;ta dokumente selle men&uuml;&uuml; alt (RELTYPE_DOC_SOURCE) tekst"
+msgid "Seose v&amp;otilde;ta dokumente selle men&amp;uuml;&amp;uuml; alt (RELTYPE_DOC_SOURCE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_IMAGE
@@ -527,94 +543,98 @@ msgid "Seose pilt (RELTYPE_IMAGE) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_NO_SHOW_MENU
-msgid "Seose &amp;auml;ra n&auml;ita men&uuml;&uuml; juures (RELTYPE_NO_SHOW_MENU) tekst"
+msgid "Seose &amp;amp;auml;ra n&amp;auml;ita men&amp;uuml;&amp;uuml; juures (RELTYPE_NO_SHOW_MENU) tekst"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_KEYWORD
-msgid "Seose V&amp;otilde;tmes&amp;otilde;na (RELTYPE_KEYWORD) tekst"
+msgid "Seose V&amp;amp;otilde;tmes&amp;amp;otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:216
+#: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_IGNORE
+msgid "Seose ignoreeri dokumente selle men&amp;amp;uuml;&amp;amp;uuml; alt (RELTYPE_DOC_IGNORE) tekst"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:222
 msgid "Vali template"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:233
+#: classes/contentmgmt/promo.aw:239
 msgid "Vasakul"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:234
+#: classes/contentmgmt/promo.aw:240
 msgid "Paremal"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:235
-msgid "Üleval"
+#: classes/contentmgmt/promo.aw:241
+msgid "&Uuml;leval"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:236
+#: classes/contentmgmt/promo.aw:242
 msgid "All"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:237
+#: classes/contentmgmt/promo.aw:243
 msgid "Skrolliv"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:255
-msgid "J&auml;rjekorra j&auml;rgi"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:256
-msgid "Loomise kuup&auml;eva j&auml;rgi"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:257
-msgid "Muutmise kuup&auml;eva j&auml;rgi"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:258
-msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:259
-msgid "Objekti nime j&auml;rgi"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:260
-msgid "Kalendris valitud aja j&auml;rgi"
-msgstr ""
-
 #: classes/contentmgmt/promo.aw:261
+msgid "J&amp;auml;rjekorra j&amp;auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:262
+msgid "Loomise kuup&amp;auml;eva j&amp;auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:263
+msgid "Muutmise kuup&amp;auml;eva j&amp;auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:264
+msgid "Dokumenti kirjutatud kuup&amp;auml;eva j&amp;auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:265
+msgid "Objekti nime j&amp;auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:266
+msgid "Kalendris valitud aja j&amp;auml;rgi"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:267
 msgid "Random"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:269
+#: classes/contentmgmt/promo.aw:275
 msgid "Suurem (uuem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:270
-msgid "V&auml;iksem (vanem) enne"
+#: classes/contentmgmt/promo.aw:276
+msgid "V&amp;auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:334 classes/contentmgmt/promo.aw:383 classes/contentmgmt/promo.aw:430
+#: classes/contentmgmt/promo.aw:340 classes/contentmgmt/promo.aw:389 classes/contentmgmt/promo.aw:436
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:342 classes/contentmgmt/promo.aw:391 classes/contentmgmt/promo.aw:439
+#: classes/contentmgmt/promo.aw:348 classes/contentmgmt/promo.aw:397 classes/contentmgmt/promo.aw:445
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:347 classes/contentmgmt/promo.aw:396
-msgid "k.a. alammenüüd"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:446
-msgid "Pane pealkirjaks"
-msgstr ""
-
-#: classes/contentmgmt/promo.aw:453
+#: classes/contentmgmt/promo.aw:353 classes/contentmgmt/promo.aw:402
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:1069
-msgid "M&auml;rks&otilde;na"
+#: classes/contentmgmt/promo.aw:452
+msgid "Pane pealkirjaks"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:459
+msgid "k.a. alammen&amp;uuml;&amp;uuml;d"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:1084
+msgid "M&amp;auml;rks&amp;otilde;na"
 msgstr ""
 

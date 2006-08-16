@@ -25,6 +25,5 @@ $GLOBALS["TRANS"]["&Uuml;hik"] = "Unit";
 $GLOBALS["TRANS"]["Hind"] = "Price";
 $GLOBALS["TRANS"]["Kogus"] = "Quantity";
 $GLOBALS["TRANS"]["Summa"] = "Sum";
-$GLOBALS["TRANS"]["Lisandub k&auml;ibemaks?"] = "Add VAT";
 $GLOBALS["TRANS"]["Prinditav arve"] = "Printable version";
 ?>

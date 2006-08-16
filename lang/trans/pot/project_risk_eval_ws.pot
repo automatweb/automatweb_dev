@@ -11,7 +11,19 @@ msgstr ""
 
 
 #: classes/applications/groupware/project_risk_eval_ws.aw:class_1089_help
-msgid "Klassi Riskide hindamise t&ouml;&ouml;laud help"
+msgid "Klassi Riskide hindamise t&amp;ouml;&amp;ouml;laud help"
+msgstr ""
+
+#: classes/applications/groupware/project_risk_eval_ws.aw:prop_eval_dl
+msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) caption"
+msgstr ""
+
+#: classes/applications/groupware/project_risk_eval_ws.aw:prop_eval_dl_comment
+msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/project_risk_eval_ws.aw:prop_eval_dl_help
+msgid "Omaduse Hindamise t&amp;auml;htaeg (eval_dl) help"
 msgstr ""
 
 #: classes/applications/groupware/project_risk_eval_ws.aw:prop_risks
@@ -94,23 +106,23 @@ msgstr ""
 msgid "Grupi Keskmised hinded (strat_res_avg) help"
 msgstr ""
 
-#: classes/applications/groupware/project_risk_eval_ws.aw:71
+#: classes/applications/groupware/project_risk_eval_ws.aw:76
 msgid "Risk"
 msgstr ""
 
-#: classes/applications/groupware/project_risk_eval_ws.aw:76
-msgid "M&otilde;ju"
+#: classes/applications/groupware/project_risk_eval_ws.aw:81
+msgid "M&amp;otilde;ju"
 msgstr ""
 
-#: classes/applications/groupware/project_risk_eval_ws.aw:82
+#: classes/applications/groupware/project_risk_eval_ws.aw:87
 msgid "Juhtub"
 msgstr ""
 
-#: classes/applications/groupware/project_risk_eval_ws.aw:88
+#: classes/applications/groupware/project_risk_eval_ws.aw:93
 msgid "Kokku"
 msgstr ""
 
-#: classes/applications/groupware/project_risk_eval_ws.aw:142
+#: classes/applications/groupware/project_risk_eval_ws.aw:147
 msgid "Hinnang projekti %s riskidele"
 msgstr ""
 

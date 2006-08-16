@@ -16,27 +16,27 @@ msgid "Klassi Fail help"
 msgstr ""
 
 #: classes/file.aw:prop_needs_translation
-msgid "Omaduse Vajab tlget (needs_translation) caption"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
 msgstr ""
 
 #: classes/file.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tlget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tlget (needs_translation) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
 #: classes/file.aw:prop_is_translated
-msgid "Omaduse Tlge kinnitatud (is_translated) caption"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
 msgstr ""
 
 #: classes/file.aw:prop_is_translated_comment
-msgid "Omaduse Tlge kinnitatud (is_translated) kommentaar"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_is_translated_help
-msgid "Omaduse Tlge kinnitatud (is_translated) help"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
 msgstr ""
 
 # classes/file.aw:prop_filename
@@ -273,11 +273,11 @@ msgstr ""
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/file.aw:144
+#: classes/file.aw:152
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:1050
+#: classes/file.aw:1069
 msgid "Need either id or parent"
 msgstr ""
 

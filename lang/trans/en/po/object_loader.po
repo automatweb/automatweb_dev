@@ -59,6 +59,12 @@ msgid ""
 msgstr ""
 "object_loader::switch_db_connection(%s): could nto find root connection!"
 
-#: classes/core/obj/object_loader.aw:561
-msgid "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
-msgstr "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
+#: classes/core/obj/object_loader.aw:564
+msgid ""
+"object_loader-&gt;can(%s, %s): error in object hierarchy, count exceeded!"
+msgstr ""
+
+#~ msgid ""
+#~ "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"
+#~ msgstr ""
+#~ "object_loader->can(%s, %s): error in object hierarchy, count exceeded!"

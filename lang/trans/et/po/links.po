@@ -132,21 +132,6 @@ msgstr "selle valiku abil pannakse lingi aadress avanema uues aknas."
 msgid "Omaduse Uues aknas (newwindow) help"
 msgstr "selle valiku abil pannakse lingi aadress avanema uues aknas."
 
-# classes/contentmgmt/links.aw:prop_doclinkcollection
-#: classes/contentmgmt/links.aw:prop_doclinkcollection
-msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) caption"
-msgstr ""
-
-# classes/contentmgmt/links.aw:prop_doclinkcollection_comment
-#: classes/contentmgmt/links.aw:prop_doclinkcollection_comment
-msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/links.aw:prop_doclinkcollection_help
-#: classes/contentmgmt/links.aw:prop_doclinkcollection_help
-msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) help"
-msgstr ""
-
 #: classes/contentmgmt/links.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
 msgstr ""
@@ -193,7 +178,6 @@ msgstr "numbrina kirjutatav uue akna laius pikselites."
 msgid "Omaduse Uue akna laius (newwinwidth) help"
 msgstr "numbrina kirjutatav uue akna laius pikselites."
 
-# classes/contentmgmt/links.aw:prop_newwinheight
 #: classes/contentmgmt/links.aw:prop_newwinheight
 msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) caption"
 msgstr ""
@@ -250,7 +234,6 @@ msgstr "valiku tegemisel lubatakse uues aknas aadressiriba näitamine."
 msgid "Omaduse Address bar (newwinlocation) help"
 msgstr "valiku tegemisel lubatakse uues aknas aadressiriba näitamine."
 
-# classes/contentmgmt/links.aw:prop_newwinmenu
 #: classes/contentmgmt/links.aw:prop_newwinmenu
 msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) caption"
 msgstr ""
@@ -402,22 +385,38 @@ msgstr ""
 msgid "Grupi V&otilde;tmes&otilde;nad (kws) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:136 classes/contentmgmt/links.aw:184
+#: classes/contentmgmt/links.aw:133 classes/contentmgmt/links.aw:181
 msgid "Vali see"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:140
+#: classes/contentmgmt/links.aw:137
 msgid "Nimetus"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:145
+#: classes/contentmgmt/links.aw:142
 msgid "Asukoht"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:150
+#: classes/contentmgmt/links.aw:147
 msgid "Looja"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:155
+#: classes/contentmgmt/links.aw:152
 msgid "Viimati muudetud"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:263
+msgid "T&ouml;&ouml;riistariba"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:264
+msgid "Aadressi riba"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:265
+msgid "Men&uuml;&uuml;d"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:266
+msgid "Kerimisriba"
 msgstr ""

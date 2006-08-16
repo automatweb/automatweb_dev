@@ -7,7 +7,6 @@ $GLOBALS["TRANS"]["Omaduse Uploadi ZIP fail (zip_file) caption"] = "Upload ZIP f
 $GLOBALS["TRANS"]["Grupi Import (import) pealkiri"] = "Import";
 $GLOBALS["TRANS"]["Seose Piltide kataloog (RELTYPE_IMG_FOLDER) tekst"] = "image folder";
 $GLOBALS["TRANS"]["Seose Stiil (RELTYPE_STYLE) tekst"] = "style";
-$GLOBALS["TRANS"]["Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"] = "No add access to the selected image folder";
 $GLOBALS["TRANS"]["Galerii "] = "Gallery";
 $GLOBALS["TRANS"][" pildid"] = " images";
 ?>

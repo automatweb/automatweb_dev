@@ -9,8 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/scm/scm_score_calc.aw:class_1097_help
-msgid "Klassi Punktis&uuml;steem help"
+msgid "Klassi Punktis&amp;uuml;steem help"
 msgstr ""
 
+#: classes/applications/scm/scm_score_calc.aw:prop_score_calculator
+msgid "Omaduse Punktis&amp;uuml;steem (score_calculator) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_score_calculator_comment
+msgid "Omaduse Punktis&amp;uuml;steem (score_calculator) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:prop_score_calculator_help
+msgid "Omaduse Punktis&amp;uuml;steem (score_calculator) help"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:68
+msgid "100 meetri k&auml;imine"
+msgstr ""
+
+#: classes/applications/scm/scm_score_calc.aw:69
+msgid "Pistongip&uuml;stoli laskmine"
+msgstr ""

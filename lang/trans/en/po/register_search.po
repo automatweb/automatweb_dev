@@ -44,113 +44,101 @@ msgstr ""
 msgid "Omaduse Mitu kirjet lehel (per_page) help"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_all_in_empty_search
 #: classes/applications/register/register_search.aw:prop_show_all_in_empty_search
 msgid ""
-"Omaduse T&uuml;hi otsing n&auml;itab k&otilde;iki (show_all_in_empty_search) "
-"caption"
-msgstr "Empty search displays all records"
+"Omaduse T&amp;uuml;hi otsing n&amp;auml;itab k&amp;otilde;iki "
+"(show_all_in_empty_search) caption"
+msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_all_in_empty_search_comment
 #: classes/applications/register/register_search.aw:prop_show_all_in_empty_search_comment
 msgid ""
-"Omaduse T&uuml;hi otsing n&auml;itab k&otilde;iki (show_all_in_empty_search) "
-"kommentaar"
+"Omaduse T&amp;uuml;hi otsing n&amp;auml;itab k&amp;otilde;iki "
+"(show_all_in_empty_search) kommentaar"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_all_in_empty_search_help
 #: classes/applications/register/register_search.aw:prop_show_all_in_empty_search_help
 msgid ""
-"Omaduse T&uuml;hi otsing n&auml;itab k&otilde;iki (show_all_in_empty_search) "
-"help"
+"Omaduse T&amp;uuml;hi otsing n&amp;auml;itab k&amp;otilde;iki "
+"(show_all_in_empty_search) help"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_only_act
 #: classes/applications/register/register_search.aw:prop_show_only_act
-msgid "Omaduse N&auml;ita ainult aktiivseid objekte (show_only_act) caption"
-msgstr "Display only active objects"
+msgid ""
+"Omaduse N&amp;auml;ita ainult aktiivseid objekte (show_only_act) caption"
+msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_only_act_comment
 #: classes/applications/register/register_search.aw:prop_show_only_act_comment
-msgid "Omaduse N&auml;ita ainult aktiivseid objekte (show_only_act) kommentaar"
+msgid ""
+"Omaduse N&amp;auml;ita ainult aktiivseid objekte (show_only_act) kommentaar"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_only_act_help
 #: classes/applications/register/register_search.aw:prop_show_only_act_help
-msgid "Omaduse N&auml;ita ainult aktiivseid objekte (show_only_act) help"
+msgid "Omaduse N&amp;auml;ita ainult aktiivseid objekte (show_only_act) help"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_all_right_away
 #: classes/applications/register/register_search.aw:prop_show_all_right_away
 msgid ""
-"Omaduse Otsingus n&auml;idatakse ilma otsimata k&otilde;iki "
+"Omaduse Otsingus n&amp;auml;idatakse ilma otsimata k&amp;otilde;iki "
 "(show_all_right_away) caption"
-msgstr "Search shows all entries by default"
+msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_all_right_away_comment
 #: classes/applications/register/register_search.aw:prop_show_all_right_away_comment
 msgid ""
-"Omaduse Otsingus n&auml;idatakse ilma otsimata k&otilde;iki "
+"Omaduse Otsingus n&amp;auml;idatakse ilma otsimata k&amp;otilde;iki "
 "(show_all_right_away) kommentaar"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_all_right_away_help
 #: classes/applications/register/register_search.aw:prop_show_all_right_away_help
 msgid ""
-"Omaduse Otsingus n&auml;idatakse ilma otsimata k&otilde;iki "
+"Omaduse Otsingus n&amp;auml;idatakse ilma otsimata k&amp;otilde;iki "
 "(show_all_right_away) help"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_notfound_text
 #: classes/applications/register/register_search.aw:prop_notfound_text
 msgid ""
-"Omaduse Mida n&auml;idatakse kui midagi ei leita (%s on otsing) "
+"Omaduse Mida n&amp;auml;idatakse kui midagi ei leita (%s on otsing) "
 "(notfound_text) caption"
-msgstr "Text to display if nothing is found (%s is search string)"
+msgstr ""
 
-# classes/applications/register/register_search.aw:prop_notfound_text_comment
 #: classes/applications/register/register_search.aw:prop_notfound_text_comment
 msgid ""
-"Omaduse Mida n&auml;idatakse kui midagi ei leita (%s on otsing) "
+"Omaduse Mida n&amp;auml;idatakse kui midagi ei leita (%s on otsing) "
 "(notfound_text) kommentaar"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_notfound_text_help
 #: classes/applications/register/register_search.aw:prop_notfound_text_help
 msgid ""
-"Omaduse Mida n&auml;idatakse kui midagi ei leita (%s on otsing) "
+"Omaduse Mida n&amp;auml;idatakse kui midagi ei leita (%s on otsing) "
 "(notfound_text) help"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_date
 #: classes/applications/register/register_search.aw:prop_show_date
-msgid "Omaduse Tulemuste all on kuup&auml;ev (show_date) caption"
-msgstr "Display date below results"
-
-# classes/applications/register/register_search.aw:prop_show_date_comment
-#: classes/applications/register/register_search.aw:prop_show_date_comment
-msgid "Omaduse Tulemuste all on kuup&auml;ev (show_date) kommentaar"
+msgid "Omaduse Tulemuste all on kuup&amp;auml;ev (show_date) caption"
 msgstr ""
 
-# classes/applications/register/register_search.aw:prop_show_date_help
+#: classes/applications/register/register_search.aw:prop_show_date_comment
+msgid "Omaduse Tulemuste all on kuup&amp;auml;ev (show_date) kommentaar"
+msgstr ""
+
 #: classes/applications/register/register_search.aw:prop_show_date_help
-msgid "Omaduse Tulemuste all on kuup&auml;ev (show_date) help"
+msgid "Omaduse Tulemuste all on kuup&amp;auml;ev (show_date) help"
 msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_results_from_all_langs
 msgid ""
-"Omaduse Tulemused k&otilde;ikidest keeltest (results_from_all_langs) caption"
+"Omaduse Tulemused k&amp;otilde;ikidest keeltest (results_from_all_langs) "
+"caption"
 msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_results_from_all_langs_comment
 msgid ""
-"Omaduse Tulemused k&otilde;ikidest keeltest (results_from_all_langs) "
+"Omaduse Tulemused k&amp;otilde;ikidest keeltest (results_from_all_langs) "
 "kommentaar"
 msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_results_from_all_langs_help
 msgid ""
-"Omaduse Tulemused k&otilde;ikidest keeltest (results_from_all_langs) help"
+"Omaduse Tulemused k&amp;otilde;ikidest keeltest (results_from_all_langs) help"
 msgstr ""
 
 # classes/applications/register/register_search.aw:prop_sform_frm
@@ -270,8 +258,8 @@ msgstr "folder to search"
 
 #: classes/applications/register/register_search.aw:141
 #: classes/applications/register/register_search.aw:240
-msgid "J&auml;rjekord"
-msgstr "Order"
+msgid "J&amp;auml;rjekord"
+msgstr ""
 
 #: classes/applications/register/register_search.aw:148
 #: classes/applications/register/register_search.aw:247
@@ -295,8 +283,8 @@ msgid "Elemendi tekst"
 msgstr "Element text"
 
 #: classes/applications/register/register_search.aw:189
-msgid "T&auml;istekstiotsing"
-msgstr "Fulltext search"
+msgid "T&amp;auml;istekstiotsing"
+msgstr ""
 
 #: classes/applications/register/register_search.aw:190
 #: classes/applications/register/register_search.aw:484
@@ -353,3 +341,35 @@ msgstr "Delete object?"
 #: classes/applications/register/register_search.aw:1015
 msgid "Kustuta"
 msgstr "Delete"
+
+# classes/applications/register/register_search.aw:prop_show_all_in_empty_search
+#~ msgid ""
+#~ "Omaduse T&uuml;hi otsing n&auml;itab k&otilde;iki "
+#~ "(show_all_in_empty_search) caption"
+#~ msgstr "Empty search displays all records"
+
+# classes/applications/register/register_search.aw:prop_show_only_act
+#~ msgid "Omaduse N&auml;ita ainult aktiivseid objekte (show_only_act) caption"
+#~ msgstr "Display only active objects"
+
+# classes/applications/register/register_search.aw:prop_show_all_right_away
+#~ msgid ""
+#~ "Omaduse Otsingus n&auml;idatakse ilma otsimata k&otilde;iki "
+#~ "(show_all_right_away) caption"
+#~ msgstr "Search shows all entries by default"
+
+# classes/applications/register/register_search.aw:prop_notfound_text
+#~ msgid ""
+#~ "Omaduse Mida n&auml;idatakse kui midagi ei leita (%s on otsing) "
+#~ "(notfound_text) caption"
+#~ msgstr "Text to display if nothing is found (%s is search string)"
+
+# classes/applications/register/register_search.aw:prop_show_date
+#~ msgid "Omaduse Tulemuste all on kuup&auml;ev (show_date) caption"
+#~ msgstr "Display date below results"
+
+#~ msgid "J&auml;rjekord"
+#~ msgstr "Order"
+
+#~ msgid "T&auml;istekstiotsing"
+#~ msgstr "Fulltext search"

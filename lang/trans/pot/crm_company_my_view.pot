@@ -10,43 +10,75 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/applications/crm/crm_company_my_view.aw:36
+#: classes/applications/crm/crm_company_my_view.aw:31
+msgid "Toimetus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_my_view.aw:72 classes/applications/crm/crm_company_my_view.aw:223
 msgid ""
 msgstr ""
 
-#: classes/applications/crm/crm_company_my_view.aw:44
+#: classes/applications/crm/crm_company_my_view.aw:80 classes/applications/crm/crm_company_my_view.aw:283
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/crm/crm_company_my_view.aw:51
+#: classes/applications/crm/crm_company_my_view.aw:87
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/applications/crm/crm_company_my_view.aw:58
+#: classes/applications/crm/crm_company_my_view.aw:94
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/crm/crm_company_my_view.aw:67
+#: classes/applications/crm/crm_company_my_view.aw:103
 msgid "Klient"
 msgstr ""
 
-#: classes/applications/crm/crm_company_my_view.aw:74
+#: classes/applications/crm/crm_company_my_view.aw:110
 msgid "Projekt"
 msgstr ""
 
-#: classes/applications/crm/crm_company_my_view.aw:81
+#: classes/applications/crm/crm_company_my_view.aw:117
 msgid "Osalejad"
 msgstr ""
 
-#: classes/applications/crm/crm_company_my_view.aw:233
+#: classes/applications/crm/crm_company_my_view.aw:229
 msgid "Teema"
 msgstr ""
 
-#: classes/applications/crm/crm_company_my_view.aw:239
-msgid "Kommentaare"
+#: classes/applications/crm/crm_company_my_view.aw:235
+msgid "Vastuseid"
 msgstr ""
 
-#: classes/applications/crm/crm_company_my_view.aw:245
+#: classes/applications/crm/crm_company_my_view.aw:242
+msgid "Autor"
+msgstr ""
+
+#: classes/applications/crm/crm_company_my_view.aw:248
 msgid "Viimane kommentaar"
+msgstr ""
+
+#: classes/applications/crm/crm_company_my_view.aw:262
+msgid "Lisa kiirk&amp;uuml;sitlus"
+msgstr ""
+
+#: classes/applications/crm/crm_company_my_view.aw:268
+msgid "Salvesta"
+msgstr ""
+
+#: classes/applications/crm/crm_company_my_view.aw:274
+msgid "Kustuta valitud pollid"
+msgstr ""
+
+#: classes/applications/crm/crm_company_my_view.aw:289
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/crm/crm_company_my_view.aw:295
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/crm/crm_company_my_view.aw:304
+msgid "Aktiivne"
 msgstr ""
 

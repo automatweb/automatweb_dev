@@ -15,19 +15,16 @@ msgstr ""
 msgid "Klassi Aadress help"
 msgstr ""
 
-# classes/crm/crm_address.aw:prop_aadress
 #: classes/crm/crm_address.aw:prop_aadress
-msgid "Omaduse Tänav/Küla (aadress) caption"
-msgstr "Street/Village"
-
-# classes/crm/crm_address.aw:prop_aadress_comment
-#: classes/crm/crm_address.aw:prop_aadress_comment
-msgid "Omaduse Tänav/Küla (aadress) kommentaar"
+msgid "Omaduse T&auml;nav/K&uuml;la (aadress) caption"
 msgstr ""
 
-# classes/crm/crm_address.aw:prop_aadress_help
+#: classes/crm/crm_address.aw:prop_aadress_comment
+msgid "Omaduse T&auml;nav/K&uuml;la (aadress) kommentaar"
+msgstr ""
+
 #: classes/crm/crm_address.aw:prop_aadress_help
-msgid "Omaduse Tänav/Küla (aadress) help"
+msgid "Omaduse T&auml;nav/K&uuml;la (aadress) help"
 msgstr ""
 
 #: classes/crm/crm_address.aw:prop_postiindeks
@@ -72,6 +69,18 @@ msgstr ""
 msgid "Omaduse Maakond (maakond) help"
 msgstr ""
 
+#: classes/crm/crm_address.aw:prop_piirkond
+msgid "Omaduse Piirkond (piirkond) caption"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_piirkond_comment
+msgid "Omaduse Piirkond (piirkond) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_piirkond_help
+msgid "Omaduse Piirkond (piirkond) help"
+msgstr ""
+
 # classes/crm/crm_address.aw:prop_riik
 #: classes/crm/crm_address.aw:prop_riik
 msgid "Omaduse Riik (riik) caption"
@@ -112,18 +121,26 @@ msgstr "State"
 msgid "Seose Maakond (RELTYPE_MAAKOND) tekst"
 msgstr "County"
 
+#: classes/crm/crm_address.aw:rel_RELTYPE_PIIRKOND
+msgid "Seose Piirkond (RELTYPE_PIIRKOND) tekst"
+msgstr ""
+
 # classes/crm/crm_address.aw:rel_RELTYPE_BELONGTO
 #: classes/crm/crm_address.aw:rel_RELTYPE_BELONGTO
 msgid "Seose Seosobjekt (RELTYPE_BELONGTO) tekst"
 msgstr "belongs to"
 
-#: classes/crm/crm_address.aw:95
+#: classes/crm/crm_address.aw:102
 msgid "Otsi postiindeksit"
 msgstr ""
 
-#: classes/crm/crm_address.aw:141
+#: classes/crm/crm_address.aw:148
 msgid "tel:"
 msgstr "phone:"
+
+# classes/crm/crm_address.aw:prop_aadress
+#~ msgid "Omaduse Tänav/Küla (aadress) caption"
+#~ msgstr "Street/Village"
 
 #~ msgid "Grupi Üldine (general) pealkiri"
 #~ msgstr "General"

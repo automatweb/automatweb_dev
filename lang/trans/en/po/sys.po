@@ -18,8 +18,8 @@ msgid "Write error"
 msgstr "Write error"
 
 #: classes/sys.aw:516
-msgid "L&otilde;i saidi andmebaasi tabelid"
-msgstr "Created site database tables"
+msgid "L&amp;otilde;i saidi andmebaasi tabelid"
+msgstr ""
 
 #: classes/sys.aw:572
 msgid "all done! "
@@ -52,3 +52,6 @@ msgstr "All done"
 #: classes/sys.aw:950
 msgid "$fn"
 msgstr ""
+
+#~ msgid "L&otilde;i saidi andmebaasi tabelid"
+#~ msgstr "Created site database tables"

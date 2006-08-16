@@ -22,13 +22,13 @@ msgid "Sellist kasutajat pole registreeritud"
 msgstr ""
 
 #: classes/users.aw:797
-msgid "Sellist võtit pole väljastatud"
+msgid "Sellist v&otilde;tit pole v&auml;ljastatud"
 msgstr ""
 
 #: classes/users.aw:809
-msgid "See võti on juba aegunud"
+msgid "See v&otilde;ti on juba aegunud"
 msgstr ""
 
 #: classes/users.aw:809
-msgid "Telli uusi v&otilde;ti"
+msgid "Telli uusi v&amp;otilde;ti"
 msgstr ""

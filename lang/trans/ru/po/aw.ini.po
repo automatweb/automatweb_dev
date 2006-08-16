@@ -42,7 +42,7 @@ msgid "Klassi Stiil (11) nimi"
 msgstr ""
 
 #: aw.ini:class_12
-msgid "Klassi Lamev&auml;ljund (12) nimi"
+msgid "Klassi Lamev&amp;auml;ljund (12) nimi"
 msgstr ""
 
 #: aw.ini:class_14
@@ -58,7 +58,7 @@ msgid "Klassi Konteiner (22) nimi"
 msgstr ""
 
 #: aw.ini:class_23
-msgid "Klassi Konteineri näitamine (23) nimi"
+msgid "Klassi Konteineri n&auml;itamine (23) nimi"
 msgstr ""
 
 #: aw.ini:class_28
@@ -74,7 +74,7 @@ msgid "Klassi Vana galerii (31) nimi"
 msgstr ""
 
 #: aw.ini:class_33
-msgid "Klassi Kiirk&uuml;sitlus (33) nimi"
+msgid "Klassi Kiirk&amp;uuml;sitlus (33) nimi"
 msgstr ""
 
 #: aw.ini:class_34
@@ -90,7 +90,7 @@ msgid "Klassi Kasutaja1 (38) nimi"
 msgstr ""
 
 #: aw.ini:class_39
-msgid "Klassi Men&uuml;&uuml;(vend) (39) nimi"
+msgid "Klassi Men&amp;uuml;&amp;uuml;(vend) (39) nimi"
 msgstr ""
 
 #: aw.ini:class_40
@@ -102,7 +102,7 @@ msgid "Klassi Fail (41) nimi"
 msgstr ""
 
 #: aw.ini:class_45
-msgid "Klassi XML v&auml;ljund (45) nimi"
+msgid "Klassi XML v&amp;auml;ljund (45) nimi"
 msgstr ""
 
 #: aw.ini:class_52
@@ -126,7 +126,7 @@ msgid "Klassi Kalendrivaade (59) nimi"
 msgstr ""
 
 #: aw.ini:class_66
-msgid "Klassi Tabelv&auml;ljund (66) nimi"
+msgid "Klassi Tabelv&amp;auml;ljund (66) nimi"
 msgstr ""
 
 #: aw.ini:class_67
@@ -134,7 +134,7 @@ msgid "Klassi Valuutakurss (67) nimi"
 msgstr ""
 
 #: aw.ini:class_68
-msgid "Klassi Vormip&auml;rg (68) nimi"
+msgid "Klassi Vormip&amp;auml;rg (68) nimi"
 msgstr ""
 
 #: aw.ini:class_69
@@ -162,11 +162,11 @@ msgid "Klassi Popup (80) nimi"
 msgstr ""
 
 #: aw.ini:class_82
-msgid "Klassi V&otilde;tmes&otilde;na (82) nimi"
+msgid "Klassi V&amp;otilde;tmes&amp;otilde;na (82) nimi"
 msgstr ""
 
 #: aw.ini:class_83
-msgid "Klassi V&otilde;tmes&otilde;nade baas (83) nimi"
+msgid "Klassi V&amp;otilde;tmes&amp;otilde;nade baas (83) nimi"
 msgstr ""
 
 #: aw.ini:class_85
@@ -186,15 +186,15 @@ msgid "Klassi Privileeg (88) nimi"
 msgstr ""
 
 #: aw.ini:class_89
-msgid "Klassi Men&uuml;&uuml; alias (89) nimi"
+msgid "Klassi Men&amp;uuml;&amp;uuml; alias (89) nimi"
 msgstr ""
 
 #: aw.ini:class_90
-msgid "Klassi AW sissep&auml;&auml;s (90) nimi"
+msgid "Klassi AW sissep&amp;auml;&amp;auml;s (90) nimi"
 msgstr ""
 
 #: aw.ini:class_92
-msgid "Klassi P&auml;rja sisestus (92) nimi"
+msgid "Klassi P&amp;auml;rja sisestus (92) nimi"
 msgstr ""
 
 #: aw.ini:class_93
@@ -207,10 +207,6 @@ msgstr ""
 
 #: aw.ini:class_95
 msgid "Klassi Siseraam (95) nimi"
-msgstr ""
-
-#: aw.ini:class_96
-msgid "Klassi AIP Muudatus (96) nimi"
 msgstr ""
 
 #: aw.ini:class_97
@@ -246,11 +242,11 @@ msgid "Klassi Prioriteet (114) nimi"
 msgstr ""
 
 #: aw.ini:class_115
-msgid "Klassi Objekti t&uuml;&uuml;p (115) nimi"
+msgid "Klassi Objekti t&amp;uuml;&amp;uuml;p (115) nimi"
 msgstr ""
 
 #: aw.ini:class_116
-msgid "Klassi Puu rootmen&uuml;&uuml; (116) nimi"
+msgid "Klassi Puu rootmen&amp;uuml;&amp;uuml; (116) nimi"
 msgstr ""
 
 #: aw.ini:class_118
@@ -271,10 +267,6 @@ msgstr ""
 
 #: aw.ini:class_122
 msgid "Klassi Seadete haldur (122) nimi"
-msgstr ""
-
-#: aw.ini:class_123
-msgid "Klassi Ikoon (123) nimi"
 msgstr ""
 
 #: aw.ini:class_124
@@ -306,7 +298,7 @@ msgid "Klassi Riik (134) nimi"
 msgstr ""
 
 #: aw.ini:class_135
-msgid "Klassi Õiguslik vorm (135) nimi"
+msgid "Klassi &Otilde;iguslik vorm (135) nimi"
 msgstr ""
 
 #: aw.ini:class_137
@@ -330,11 +322,11 @@ msgid "Klassi Aadress (146) nimi"
 msgstr ""
 
 #: aw.ini:class_148
-msgid "Klassi Andmebaasi sissep&auml;&auml;s (148) nimi"
+msgid "Klassi Andmebaasi sissep&amp;auml;&amp;auml;s (148) nimi"
 msgstr ""
 
 #: aw.ini:class_149
-msgid "Klassi Andmebaasiserveri sissep&auml;&auml;s (149) nimi"
+msgid "Klassi Andmebaasiserveri sissep&amp;auml;&amp;auml;s (149) nimi"
 msgstr ""
 
 #: aw.ini:class_150
@@ -354,15 +346,11 @@ msgid "Klassi Andmebaasitabeli sisu (153) nimi"
 msgstr ""
 
 #: aw.ini:class_154
-msgid "Klassi SQL P&auml;ring (154) nimi"
+msgid "Klassi SQL P&amp;auml;ring (154) nimi"
 msgstr ""
 
 #: aw.ini:class_157
 msgid "Klassi Kordus (157) nimi"
-msgstr ""
-
-#: aw.ini:class_160
-msgid "Klassi Kaustade generaator (160) nimi"
 msgstr ""
 
 #: aw.ini:class_161
@@ -410,7 +398,7 @@ msgid "Klassi Tegevus (173) nimi"
 msgstr ""
 
 #: aw.ini:class_174
-msgid "Klassi Juhtumi t&uuml;&uuml;p (174) nimi"
+msgid "Klassi Juhtumi t&amp;uuml;&amp;uuml;p (174) nimi"
 msgstr ""
 
 #: aw.ini:class_175
@@ -434,7 +422,7 @@ msgid "Klassi Seoseobjekt (179) nimi"
 msgstr ""
 
 #: aw.ini:class_180
-msgid "Klassi Men&uuml;&uuml;piirkond (180) nimi"
+msgid "Klassi Men&amp;uuml;&amp;uuml;piirkond (180) nimi"
 msgstr ""
 
 #: aw.ini:class_181
@@ -446,19 +434,7 @@ msgid "Klassi Sisu (182) nimi"
 msgstr ""
 
 #: aw.ini:class_183
-msgid "Klassi Men&uuml;&uuml;piirkonna tase (183) nimi"
-msgstr ""
-
-#: aw.ini:class_184
-msgid "Klassi AIP Konfiguratsioon (184) nimi"
-msgstr ""
-
-#: aw.ini:class_185
-msgid "Klassi AIP (185) nimi"
-msgstr ""
-
-#: aw.ini:class_186
-msgid "Klassi AIP Muudatuse vaade (186) nimi"
+msgid "Klassi Men&amp;uuml;&amp;uuml;piirkonna tase (183) nimi"
 msgstr ""
 
 #: aw.ini:class_187
@@ -466,11 +442,11 @@ msgid "Klassi Galerii seaded (187) nimi"
 msgstr ""
 
 #: aw.ini:class_188
-msgid "Klassi H&auml;&auml;letuse skaala (188) nimi"
+msgid "Klassi H&amp;auml;&amp;auml;letuse skaala (188) nimi"
 msgstr ""
 
 #: aw.ini:class_189
-msgid "Klassi H&auml;&auml;letus (189) nimi"
+msgid "Klassi H&amp;auml;&amp;auml;letus (189) nimi"
 msgstr ""
 
 #: aw.ini:class_190
@@ -494,7 +470,7 @@ msgid "Klassi Flash (194) nimi"
 msgstr ""
 
 #: aw.ini:class_195
-msgid "Klassi FTP sissep&auml;&auml;s (195) nimi"
+msgid "Klassi FTP sissep&amp;auml;&amp;auml;s (195) nimi"
 msgstr ""
 
 #: aw.ini:class_196
@@ -538,11 +514,11 @@ msgid "Klassi Ekomar (212) nimi"
 msgstr ""
 
 #: aw.ini:class_213
-msgid "Klassi Klassi t&otilde;lge (213) nimi"
+msgid "Klassi Klassi t&amp;otilde;lge (213) nimi"
 msgstr ""
 
 #: aw.ini:class_214
-msgid "Klassi Men&uuml;&uuml; eraldusjoon (214) nimi"
+msgid "Klassi Men&amp;uuml;&amp;uuml; eraldusjoon (214) nimi"
 msgstr ""
 
 #: aw.ini:class_215
@@ -550,7 +526,7 @@ msgid "Klassi Shortcut (215) nimi"
 msgstr ""
 
 #: aw.ini:class_217
-msgid "Klassi T&otilde;lkekeskkond (217) nimi"
+msgid "Klassi T&amp;otilde;lkekeskkond (217) nimi"
 msgstr ""
 
 #: aw.ini:class_218
@@ -574,7 +550,7 @@ msgid "Klassi Leping (222) nimi"
 msgstr ""
 
 #: aw.ini:class_223
-msgid "Klassi K&otilde;ne (223) nimi"
+msgid "Klassi K&amp;otilde;ne (223) nimi"
 msgstr ""
 
 #: aw.ini:class_224
@@ -594,11 +570,11 @@ msgid "Klassi Meilikast (227) nimi"
 msgstr ""
 
 #: aw.ini:class_228
-msgid "Klassi POP3 sissep&auml;&auml;s (228) nimi"
+msgid "Klassi POP3 sissep&amp;auml;&amp;auml;s (228) nimi"
 msgstr ""
 
 #: aw.ini:class_229
-msgid "Klassi IMAP sissep&auml;&auml;s (229) nimi"
+msgid "Klassi IMAP sissep&amp;auml;&amp;auml;s (229) nimi"
 msgstr ""
 
 #: aw.ini:class_230
@@ -618,11 +594,7 @@ msgid "Klassi Intranet (233) nimi"
 msgstr ""
 
 #: aw.ini:class_234
-msgid "Klassi T&ouml;&ouml;laud (234) nimi"
-msgstr ""
-
-#: aw.ini:class_238
-msgid "Klassi Dokument CODE (238) nimi"
+msgid "Klassi T&amp;ouml;&amp;ouml;laud (234) nimi"
 msgstr ""
 
 #: aw.ini:class_239
@@ -638,7 +610,7 @@ msgid "Klassi Toimetus (244) nimi"
 msgstr ""
 
 #: aw.ini:class_251
-msgid "Klassi Login men&uuml;&uuml;d (251) nimi"
+msgid "Klassi Login men&amp;uuml;&amp;uuml;d (251) nimi"
 msgstr ""
 
 #: aw.ini:class_252
@@ -646,7 +618,7 @@ msgid "Klassi Dokumendi Template (252) nimi"
 msgstr ""
 
 #: aw.ini:class_253
-msgid "Klassi J&auml;rgnevus (253) nimi"
+msgid "Klassi J&amp;auml;rgnevus (253) nimi"
 msgstr ""
 
 #: aw.ini:class_254
@@ -670,7 +642,7 @@ msgid "Klassi Personalikeskkond (275) nimi"
 msgstr ""
 
 #: aw.ini:class_285
-msgid "Klassi Tööpakkumine (285) nimi"
+msgid "Klassi T&ouml;&ouml;pakkumine (285) nimi"
 msgstr ""
 
 #: aw.ini:class_277
@@ -738,11 +710,11 @@ msgid "Klassi Lao sissetulek (298) nimi"
 msgstr ""
 
 #: aw.ini:class_299
-msgid "Klassi Lao v&auml;ljaminek (299) nimi"
+msgid "Klassi Lao v&amp;auml;ljaminek (299) nimi"
 msgstr ""
 
 #: aw.ini:class_300
-msgid "Klassi Toote t&uuml;&uuml;p (300) nimi"
+msgid "Klassi Toote t&amp;uuml;&amp;uuml;p (300) nimi"
 msgstr ""
 
 #: aw.ini:class_301
@@ -802,7 +774,7 @@ msgid "Klassi Klassidisainer (320) nimi"
 msgstr ""
 
 #: aw.ini:class_321
-msgid "Klassi Üksus (321) nimi"
+msgid "Klassi &Uuml;ksus (321) nimi"
 msgstr ""
 
 #: aw.ini:class_322
@@ -882,7 +854,7 @@ msgid "Klassi Poe eripakkumine (344) nimi"
 msgstr ""
 
 #: aw.ini:class_345
-msgid "Klassi Poe ostukorvi v&auml;&auml;rtus (345) nimi"
+msgid "Klassi Poe ostukorvi v&amp;auml;&amp;auml;rtus (345) nimi"
 msgstr ""
 
 #: aw.ini:class_346
@@ -906,7 +878,7 @@ msgid "Klassi Ankeetide haldur (350) nimi"
 msgstr ""
 
 #: aw.ini:class_351
-msgid "Klassi T&ouml;&ouml;soov (351) nimi"
+msgid "Klassi T&amp;ouml;&amp;ouml;soov (351) nimi"
 msgstr ""
 
 #: aw.ini:class_428
@@ -965,6 +937,10 @@ msgstr ""
 msgid "Klassi Keeleoskus (489) nimi"
 msgstr ""
 
+#: aw.ini:class_491
+msgid "Klassi Arvutioskus (491) nimi"
+msgstr ""
+
 #: aw.ini:class_558
 msgid "Klassi Pank (558) nimi"
 msgstr ""
@@ -974,11 +950,11 @@ msgid "Klassi Konto (640) nimi"
 msgstr ""
 
 #: aw.ini:class_645
-msgid "Klassi Täienduskoolitus (645) nimi"
+msgid "Klassi T&auml;ienduskoolitus (645) nimi"
 msgstr ""
 
 #: aw.ini:class_650
-msgid "Klassi Ülekanne (650) nimi"
+msgid "Klassi &Uuml;lekanne (650) nimi"
 msgstr ""
 
 #: aw.ini:class_655
@@ -1006,7 +982,7 @@ msgid "Klassi Maanteeinfo otsing (806) nimi"
 msgstr ""
 
 #: aw.ini:class_808
-msgid "Klassi Maksu pärg (808) nimi"
+msgid "Klassi Maksu p&auml;rg (808) nimi"
 msgstr ""
 
 #: aw.ini:class_809
@@ -1042,7 +1018,7 @@ msgid "Klassi Klientide manageerija (818) nimi"
 msgstr ""
 
 #: aw.ini:class_819
-msgid "Klassi Kalendri sündmus (819) nimi"
+msgid "Klassi Kalendri s&uuml;ndmus (819) nimi"
 msgstr ""
 
 #: aw.ini:class_820
@@ -1066,7 +1042,7 @@ msgid "Klassi Arendustoode (828) nimi"
 msgstr ""
 
 #: aw.ini:class_830
-msgid "Klassi Classbase otsingu s&uuml;non&uuml;mid (830) nimi"
+msgid "Klassi Classbase otsingu s&amp;uuml;non&amp;uuml;mid (830) nimi"
 msgstr ""
 
 #: aw.ini:class_831
@@ -1074,7 +1050,7 @@ msgid "Klassi Lavastus (831) nimi"
 msgstr ""
 
 #: aw.ini:class_832
-msgid "Klassi Üksus veebis (832) nimi"
+msgid "Klassi &Uuml;ksus veebis (832) nimi"
 msgstr ""
 
 #: aw.ini:class_833
@@ -1082,7 +1058,7 @@ msgid "Klassi Video (833) nimi"
 msgstr ""
 
 #: aw.ini:class_834
-msgid "Klassi Omaduste p&auml;rimise reegel (834) nimi"
+msgid "Klassi Omaduste p&amp;auml;rimise reegel (834) nimi"
 msgstr ""
 
 #: aw.ini:class_835
@@ -1090,7 +1066,7 @@ msgid "Klassi Maja XML-i editor (835) nimi"
 msgstr ""
 
 #: aw.ini:class_836
-msgid "Klassi Kalendri sündmusele registreerumine (836) nimi"
+msgid "Klassi Kalendri s&uuml;ndmusele registreerumine (836) nimi"
 msgstr ""
 
 #: aw.ini:class_839
@@ -1126,19 +1102,19 @@ msgid "Klassi CSS Stiilide generaator (847) nimi"
 msgstr ""
 
 #: aw.ini:class_848
-msgid "Klassi S&uuml;ndmusele registreerimise sisestus (848) nimi"
+msgid "Klassi S&amp;uuml;ndmusele registreerimise sisestus (848) nimi"
 msgstr ""
 
 #: aw.ini:class_849
-msgid "Klassi S&uuml;ndmusele registreerimine (849) nimi"
+msgid "Klassi S&amp;uuml;ndmusele registreerimine (849) nimi"
 msgstr ""
 
 #: aw.ini:class_856
-msgid "Klassi Pr&uuml;gikast (856) nimi"
+msgid "Klassi Pr&amp;uuml;gikast (856) nimi"
 msgstr ""
 
 #: aw.ini:class_850
-msgid "Klassi Sündmuste otsing (850) nimi"
+msgid "Klassi S&uuml;ndmuste otsing (850) nimi"
 msgstr ""
 
 #: aw.ini:class_852
@@ -1158,7 +1134,7 @@ msgid "Klassi Rolli kirje (864) nimi"
 msgstr ""
 
 #: aw.ini:class_865
-msgid "Klassi N&auml;itamise kontroller (865) nimi"
+msgid "Klassi N&amp;auml;itamise kontroller (865) nimi"
 msgstr ""
 
 #: aw.ini:class_866
@@ -1198,7 +1174,7 @@ msgid "Klassi Puhkus (876) nimi"
 msgstr ""
 
 #: aw.ini:class_877
-msgid "Klassi Töölepingu peatamine (877) nimi"
+msgid "Klassi T&ouml;&ouml;lepingu peatamine (877) nimi"
 msgstr ""
 
 #: aw.ini:class_878
@@ -1206,7 +1182,7 @@ msgid "Klassi Prisma import (878) nimi"
 msgstr ""
 
 #: aw.ini:class_879
-msgid "Klassi Automaatne sissep&auml;&auml;s (879) nimi"
+msgid "Klassi Automaatne sissep&amp;auml;&amp;auml;s (879) nimi"
 msgstr ""
 
 #: aw.ini:class_880
@@ -1214,7 +1190,7 @@ msgid "Klassi Vormi grupp (880) nimi"
 msgstr ""
 
 #: aw.ini:class_881
-msgid "Klassi Tekstiväli (881) nimi"
+msgid "Klassi Tekstiv&auml;li (881) nimi"
 msgstr ""
 
 #: aw.ini:class_882
@@ -1298,11 +1274,11 @@ msgid "Klassi Pakkumiste haldus (903) nimi"
 msgstr ""
 
 #: aw.ini:class_907
-msgid "Klassi Pakkumise peat&uuml;kk (907) nimi"
+msgid "Klassi Pakkumise peat&amp;uuml;kk (907) nimi"
 msgstr ""
 
 #: aw.ini:class_908
-msgid "Klassi Pakkumise eesm&auml;rk (908) nimi"
+msgid "Klassi Pakkumise eesm&amp;auml;rk (908) nimi"
 msgstr ""
 
 #: aw.ini:class_909
@@ -1334,15 +1310,15 @@ msgid "Klassi Flaier (922) nimi"
 msgstr ""
 
 #: aw.ini:class_924
-msgid "Klassi Pakkumise v&otilde;rdlustabel (924) nimi"
+msgid "Klassi Pakkumise v&amp;otilde;rdlustabel (924) nimi"
 msgstr ""
 
 #: aw.ini:class_925
-msgid "Klassi Pakkumise v&otilde;rdlustabeli tulp (925) nimi"
+msgid "Klassi Pakkumise v&amp;otilde;rdlustabeli tulp (925) nimi"
 msgstr ""
 
 #: aw.ini:class_926
-msgid "Klassi Pakkumise v&otilde;rdlustabeli rida (926) nimi"
+msgid "Klassi Pakkumise v&amp;otilde;rdlustabeli rida (926) nimi"
 msgstr ""
 
 #: aw.ini:class_929
@@ -1374,7 +1350,7 @@ msgid "Klassi Maja (944) nimi"
 msgstr ""
 
 #: aw.ini:class_945
-msgid "Klassi Maatükk (945) nimi"
+msgid "Klassi Maat&amp;uuml;kk (945) nimi"
 msgstr ""
 
 #: aw.ini:class_946
@@ -1382,7 +1358,7 @@ msgid "Klassi Garaaz (946) nimi"
 msgstr ""
 
 #: aw.ini:class_947
-msgid "Klassi Äripind (947) nimi"
+msgid "Klassi &amp;Auml;ripind (947) nimi"
 msgstr ""
 
 #: aw.ini:class_948
@@ -1410,7 +1386,7 @@ msgid "Klassi Linnaosa v2 (959) nimi"
 msgstr ""
 
 #: aw.ini:class_960
-msgid "Klassi Tänav v2 (960) nimi"
+msgid "Klassi T&auml;nav v2 (960) nimi"
 msgstr ""
 
 #: aw.ini:class_961
@@ -1433,16 +1409,12 @@ msgstr ""
 msgid "Klassi Akna hinnakujundus (967) nimi"
 msgstr ""
 
-#: aw.ini:class_973
-msgid "Klassi Expresspost test (973) nimi"
-msgstr ""
-
 #: aw.ini:class_975
 msgid "Klassi Otsingu html indekseerija (975) nimi"
 msgstr ""
 
 #: aw.ini:class_976
-msgid "Klassi Otsingu failis&uuml;steemi indekseerija (976) nimi"
+msgid "Klassi Otsingu failis&amp;uuml;steemi indekseerija (976) nimi"
 msgstr ""
 
 #: aw.ini:class_978
@@ -1490,7 +1462,7 @@ msgid "Klassi Expp tyybi list (988) nimi"
 msgstr ""
 
 #: aw.ini:class_989
-msgid "Klassi Expp väljaanne (989) nimi"
+msgid "Klassi Expp v&auml;ljaanne (989) nimi"
 msgstr ""
 
 #: aw.ini:class_990
@@ -1554,7 +1526,7 @@ msgid "Klassi Expp import (1005) nimi"
 msgstr ""
 
 #: aw.ini:class_1006
-msgid "Klassi P&auml;eva raport (1006) nimi"
+msgid "Klassi P&amp;auml;eva raport (1006) nimi"
 msgstr ""
 
 #: aw.ini:class_1007
@@ -1570,15 +1542,15 @@ msgid "Klassi Arve (1009) nimi"
 msgstr ""
 
 #: aw.ini:class_1010
-msgid "Klassi V&auml;ljaannete haldus (1010) nimi"
+msgid "Klassi V&amp;auml;ljaannete haldus (1010) nimi"
 msgstr ""
 
 #: aw.ini:class_1011
-msgid "Klassi V&auml;ljaanne (1011) nimi"
+msgid "Klassi V&amp;auml;ljaanne (1011) nimi"
 msgstr ""
 
 #: aw.ini:class_1012
-msgid "Klassi Tüübilist (1012) nimi"
+msgid "Klassi T&uuml;&uuml;bilist (1012) nimi"
 msgstr ""
 
 #: aw.ini:class_1013
@@ -1630,7 +1602,7 @@ msgid "Klassi CRM Pangakonto (1024) nimi"
 msgstr ""
 
 #: aw.ini:class_1025
-msgid "Klassi Majutusettev&otilde;te (valdkond) (1025) nimi"
+msgid "Klassi Majutusettev&amp;otilde;te (valdkond) (1025) nimi"
 msgstr ""
 
 #: aw.ini:class_1026
@@ -1646,7 +1618,7 @@ msgid "Klassi Kliendisuhe (1028) nimi"
 msgstr ""
 
 #: aw.ini:class_1029
-msgid "Klassi Meelelahutusettev&otilde;te (valdkond) (1029) nimi"
+msgid "Klassi Meelelahutusettev&amp;otilde;te (valdkond) (1029) nimi"
 msgstr ""
 
 #: aw.ini:class_1030
@@ -1662,7 +1634,7 @@ msgid "Klassi Haldusjaotuse kodeering (1033) nimi"
 msgstr ""
 
 #: aw.ini:class_1034
-msgid "Klassi Haldusüksus v2 (1034) nimi"
+msgid "Klassi Haldus&uuml;ksus v2 (1034) nimi"
 msgstr ""
 
 #: aw.ini:class_1035
@@ -1682,7 +1654,7 @@ msgid "Klassi Ostu arve (1038) nimi"
 msgstr ""
 
 #: aw.ini:class_1039
-msgid "Klassi Müügi-saateleht (1039) nimi"
+msgid "Klassi M&uuml;&uuml;gi-saateleht (1039) nimi"
 msgstr ""
 
 #: aw.ini:class_1040
@@ -1690,7 +1662,7 @@ msgid "Klassi Ostutellimus (1040) nimi"
 msgstr ""
 
 #: aw.ini:class_1041
-msgid "Klassi Müügitellimus (1041) nimi"
+msgid "Klassi M&uuml;&uuml;gitellimus (1041) nimi"
 msgstr ""
 
 #: aw.ini:class_1042
@@ -1710,7 +1682,7 @@ msgid "Klassi Tootegrupp (1045) nimi"
 msgstr ""
 
 #: aw.ini:class_1046
-msgid "Klassi Maksum&auml;&auml;r (1046) nimi"
+msgid "Klassi Maksum&amp;auml;&amp;auml;r (1046) nimi"
 msgstr ""
 
 #: aw.ini:class_1047
@@ -1746,7 +1718,7 @@ msgid "Klassi Arve rida (1054) nimi"
 msgstr ""
 
 #: aw.ini:class_1055
-msgid "Klassi Kliendihaldus (1055) nimi"
+msgid "Klassi Isikud veebis (1055) nimi"
 msgstr ""
 
 #: aw.ini:class_1056
@@ -1762,7 +1734,7 @@ msgid "Klassi Bugi kommentaar (1058) nimi"
 msgstr ""
 
 #: aw.ini:class_1060
-msgid "Klassi T&ouml;&ouml;suhe (1060) nimi"
+msgid "Klassi T&amp;ouml;&amp;ouml;suhe (1060) nimi"
 msgstr ""
 
 #: aw.ini:class_1061
@@ -1774,11 +1746,11 @@ msgid "Klassi Lingikogu (1062) nimi"
 msgstr ""
 
 #: aw.ini:class_1063
-msgid "Klassi Sihtr&uuml;hm (1063) nimi"
+msgid "Klassi Sihtr&amp;uuml;hm (1063) nimi"
 msgstr ""
 
 #: aw.ini:class_1064
-msgid "Klassi Sisu t&uuml;&uuml;p (1064) nimi"
+msgid "Klassi Sisu t&amp;uuml;&amp;uuml;p (1064) nimi"
 msgstr ""
 
 #: aw.ini:class_1065
@@ -1790,7 +1762,7 @@ msgid "Klassi Hange (1066) nimi"
 msgstr ""
 
 #: aw.ini:class_1067
-msgid "Klassi N&otilde;ue (1067) nimi"
+msgid "Klassi N&amp;otilde;ue (1067) nimi"
 msgstr ""
 
 #: aw.ini:class_1068
@@ -1810,11 +1782,11 @@ msgid "Klassi Hangete administreerimiskeskkond (1071) nimi"
 msgstr ""
 
 #: aw.ini:class_1072
-msgid "Klassi N&otilde;ude lahendus (1072) nimi"
+msgid "Klassi N&amp;otilde;ude lahendus (1072) nimi"
 msgstr ""
 
 #: aw.ini:class_1073
-msgid "Klassi Siduss&uuml;steem (1073) nimi"
+msgid "Klassi Siduss&amp;uuml;steem (1073) nimi"
 msgstr ""
 
 #: aw.ini:class_1074
@@ -1830,7 +1802,157 @@ msgid "Klassi Pakkumise hindamise kriteerium (1076) nimi"
 msgstr ""
 
 #: aw.ini:class_1077
-msgid "Klassi Strateegiline edutegur (1077) nimi"
+msgid "Klassi Bank Payment (1077) nimi"
+msgstr ""
+
+#: aw.ini:class_950
+msgid "Klassi Eesm&amp;auml;rk (950) nimi"
+msgstr ""
+
+#: aw.ini:class_1078
+msgid "Klassi Eesm&amp;auml;rkide hindamine (1078) nimi"
+msgstr ""
+
+#: aw.ini:class_1079
+msgid "Klassi Projekti risk (1079) nimi"
+msgstr ""
+
+#: aw.ini:class_1080
+msgid "Klassi Projekti riskide hindamine (1080) nimi"
+msgstr ""
+
+#: aw.ini:class_1081
+msgid "Klassi Veotellimuste haldus (1081) nimi"
+msgstr ""
+
+#: aw.ini:class_1082
+msgid "Klassi Veotellimus (1082) nimi"
+msgstr ""
+
+#: aw.ini:class_1083
+msgid "Klassi Vedu (1083) nimi"
+msgstr ""
+
+#: aw.ini:class_1084
+msgid "Klassi Marsruut (1084) nimi"
+msgstr ""
+
+#: aw.ini:class_1085
+msgid "Klassi Veoauto (1085) nimi"
+msgstr ""
+
+#: aw.ini:class_1086
+msgid "Klassi Haagis (1086) nimi"
+msgstr ""
+
+#: aw.ini:class_1087
+msgid "Klassi Automark (1087) nimi"
+msgstr ""
+
+#: aw.ini:class_1088
+msgid "Klassi Projekti eesm&amp;auml;rkide hindamislaud (1088) nimi"
+msgstr ""
+
+#: aw.ini:class_1089
+msgid "Klassi Riskide hindamise t&amp;ouml;&amp;ouml;laud (1089) nimi"
+msgstr ""
+
+#: aw.ini:class_1090
+msgid "Klassi Spordiv&amp;otilde;istluste haldus (1090) nimi"
+msgstr ""
+
+#: aw.ini:class_1091
+msgid "Klassi Spordiv&amp;otilde;istluste korraldaja (1091) nimi"
+msgstr ""
+
+#: aw.ini:class_1092
+msgid "Klassi V&amp;otilde;istleja (1092) nimi"
+msgstr ""
+
+#: aw.ini:class_1093
+msgid "Klassi Paremusj&amp;auml;rjestuse t&amp;uuml;&amp;uuml;p (1093) nimi"
+msgstr ""
+
+#: aw.ini:class_1094
+msgid "Klassi Spordiala (1094) nimi"
+msgstr ""
+
+#: aw.ini:class_1095
+msgid "Klassi Toimumiskoht (1095) nimi"
+msgstr ""
+
+#: aw.ini:class_1096
+msgid "Klassi Turniir (1096) nimi"
+msgstr ""
+
+#: aw.ini:class_1097
+msgid "Klassi Punktis&amp;uuml;steem (1097) nimi"
+msgstr ""
+
+#: aw.ini:class_1098
+msgid "Klassi V&amp;otilde;istlusklass (1098) nimi"
+msgstr ""
+
+#: aw.ini:class_1099
+msgid "Klassi V&amp;otilde;istlus (1099) nimi"
+msgstr ""
+
+#: aw.ini:class_1100
+msgid "Klassi Tulemus (1100) nimi"
+msgstr ""
+
+#: aw.ini:class_1101
+msgid "Klassi Projekti tiim (1101) nimi"
+msgstr ""
+
+#: aw.ini:class_1102
+msgid "Klassi Hankijasuhe (1102) nimi"
+msgstr ""
+
+#: aw.ini:class_1103
+msgid "Klassi Eelarvestaja t&amp;ouml;&amp;ouml;laud (1103) nimi"
+msgstr ""
+
+#: aw.ini:class_1104
+msgid "Klassi Hange (1104) nimi"
+msgstr ""
+
+#: aw.ini:class_1105
+msgid "Klassi Hankijagrupp (1105) nimi"
+msgstr ""
+
+#: aw.ini:class_1106
+msgid "Klassi Pakkumise rida (1106) nimi"
+msgstr ""
+
+#: aw.ini:class_1107
+msgid "Klassi Piirkond (1107) nimi"
+msgstr ""
+
+#: aw.ini:class_1108
+msgid "Klassi &Uuml;hik (1108) nimi"
+msgstr ""
+
+#: aw.ini:class_1110
+msgid ""
+"Klassi Projekti anal&amp;uuml;&amp;uuml;si t&amp;ouml;&amp;ouml;laud (1110) "
+"nimi"
+msgstr ""
+
+#: aw.ini:class_1111
+msgid "Klassi Projekti anal&amp;uuml;&amp;uuml;si tulp (1111) nimi"
+msgstr ""
+
+#: aw.ini:class_1112
+msgid "Klassi Projekti anal&amp;uuml;&amp;uuml;si rida (1112) nimi"
+msgstr ""
+
+#: aw.ini:class_1113
+msgid "Klassi Projekti anal&amp;uuml;&amp;uuml;si sisestus (1113) nimi"
+msgstr ""
+
+#: aw.ini:class_1114
+msgid "Klassi Muu (valdkond) (1114) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29
@@ -1866,7 +1988,7 @@ msgid "Klassi kataloogi Meilinglistid (5) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_6
-msgid "Klassi kataloogi Tõlked (6) nimi"
+msgid "Klassi kataloogi T&otilde;lked (6) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_7
@@ -1914,7 +2036,7 @@ msgid "Klassi kataloogi Kasutusstatistika (26) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_28
-msgid "Klassi kataloogi Töövoogude juhtimine (28) nimi"
+msgid "Klassi kataloogi T&ouml;&ouml;voogude juhtimine (28) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_31
@@ -1942,11 +2064,11 @@ msgid "Klassi kataloogi Foorumid (40) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_4
-msgid "Klassi kataloogi Varia & Vanad (4) nimi"
+msgid "Klassi kataloogi Varia &amp; Vanad (4) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_10
-msgid "Klassi kataloogi Süsteemi haldus (10) nimi"
+msgid "Klassi kataloogi S&uuml;steemi haldus (10) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_33
@@ -1958,15 +2080,15 @@ msgid "Klassi kataloogi Saidi ehitamine (27) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_18
-msgid "Klassi kataloogi Varia & Vanad (18) nimi"
+msgid "Klassi kataloogi Varia &amp; Vanad (18) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_41
-msgid "Klassi kataloogi Võtmesõnad (41) nimi"
+msgid "Klassi kataloogi V&otilde;tmes&otilde;nad (41) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_30
-msgid "Klassi kataloogi Varia & Vanad (30) nimi"
+msgid "Klassi kataloogi Varia &amp; Vanad (30) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_2
@@ -1986,19 +2108,19 @@ msgid "Klassi kataloogi Otsingud (35) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_19
-msgid "Klassi kataloogi Töösolevad klassid (19) nimi"
+msgid "Klassi kataloogi T&ouml;&ouml;solevad klassid (19) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_21
-msgid "Klassi kataloogi Nähtamatud objektid (21) nimi"
+msgid "Klassi kataloogi N&auml;htamatud objektid (21) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_12
-msgid "Klassi kataloogi Proovitööd (12) nimi"
+msgid "Klassi kataloogi Proovit&ouml;&ouml;d (12) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_22
-msgid "Klassi kataloogi Sissepääsud (22) nimi"
+msgid "Klassi kataloogi Sissep&auml;&auml;sud (22) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_11
@@ -2070,5 +2192,9 @@ msgid "Klassi kataloogi Hankekeskkond (61) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_62
-msgid "Klassi kataloogi Siduss&uuml;steemid (62) nimi"
+msgid "Klassi kataloogi Siduss&amp;uuml;steemid (62) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_63
+msgid "Klassi kataloogi Spordiv&amp;otilde;istluste haldus (63) nimi"
 msgstr ""

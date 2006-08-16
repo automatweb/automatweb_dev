@@ -78,47 +78,47 @@ msgstr ""
 msgid "Open DocGen"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:147 classes/applications/docgen/docgen_viewer.aw:725 classes/applications/docgen/docgen_viewer.aw:794 classes/applications/docgen/docgen_viewer.aw:1072 classes/applications/docgen/docgen_viewer.aw:1142
+#: classes/applications/docgen/docgen_viewer.aw:147 classes/applications/docgen/docgen_viewer.aw:728 classes/applications/docgen/docgen_viewer.aw:797 classes/applications/docgen/docgen_viewer.aw:1075 classes/applications/docgen/docgen_viewer.aw:1145
 msgid "Classes"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:308
+#: classes/applications/docgen/docgen_viewer.aw:311
 msgid "nothing"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:309 classes/applications/docgen/docgen_viewer.aw:311
+#: classes/applications/docgen/docgen_viewer.aw:312 classes/applications/docgen/docgen_viewer.aw:314
 msgid "none"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:942
+#: classes/applications/docgen/docgen_viewer.aw:945
 msgid "ALL DONE"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1004
-msgid "Klasside &uuml;levaade"
+#: classes/applications/docgen/docgen_viewer.aw:1007
+msgid "Klasside &amp;uuml;levaade"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1010
-msgid "K&otilde;ik klassid"
+#: classes/applications/docgen/docgen_viewer.aw:1013
+msgid "K&amp;otilde;ik klassid"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1016
+#: classes/applications/docgen/docgen_viewer.aw:1019
 msgid "API klassid"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1022
+#: classes/applications/docgen/docgen_viewer.aw:1025
 msgid "Eraldi dokumentatsioon"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1029
+#: classes/applications/docgen/docgen_viewer.aw:1032
 msgid "Classbase tagid"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1035
+#: classes/applications/docgen/docgen_viewer.aw:1038
 msgid "Uuenda API andmebaas"
 msgstr ""
 
-#: classes/applications/docgen/docgen_viewer.aw:1046
+#: classes/applications/docgen/docgen_viewer.aw:1049
 msgid "Foorum"
 msgstr ""
 

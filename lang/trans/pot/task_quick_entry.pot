@@ -14,6 +14,18 @@ msgstr ""
 msgid "Klassi Kiire toimetuse lisamine help"
 msgstr ""
 
+#: classes/applications/groupware/task_quick_entry.aw:prop_time
+msgid "Omaduse Aeg (time) caption"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_time_comment
+msgid "Omaduse Aeg (time) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:prop_time_help
+msgid "Omaduse Aeg (time) help"
+msgstr ""
+
 #: classes/applications/groupware/task_quick_entry.aw:prop_date
 msgid "Omaduse Aeg (date) caption"
 msgstr ""
@@ -110,23 +122,35 @@ msgstr ""
 msgid "Omaduse &nbsp; (submit_and_add) help"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:62
+#: classes/applications/groupware/task_quick_entry.aw:71
 msgid "Salvesta ja lisa uus"
 msgstr ""
 
 #: classes/applications/groupware/task_quick_entry.aw:101
+msgid "Organisatsioon"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:101
+msgid "Isik"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:131
+msgid "--Vali--"
+msgstr ""
+
+#: classes/applications/groupware/task_quick_entry.aw:159
 msgid "K&otilde;ik v&auml;ljad peavad olema t&auml;idetud!"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:436
+#: classes/applications/groupware/task_quick_entry.aw:588
 msgid "Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:449
+#: classes/applications/groupware/task_quick_entry.aw:605
 msgid "Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 
-#: classes/applications/groupware/task_quick_entry.aw:463
+#: classes/applications/groupware/task_quick_entry.aw:623
 msgid "Toimetust nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"
 msgstr ""
 

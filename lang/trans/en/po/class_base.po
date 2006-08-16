@@ -64,12 +64,10 @@ msgstr ""
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr "Needs translation"
 
-# classes/class_base.aw:prop_needs_translation_comment
 #: classes/class_base.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
 msgstr ""
 
-# classes/class_base.aw:prop_needs_translation_help
 #: classes/class_base.aw:prop_needs_translation_help
 msgid "Omaduse Vajab tõlget (needs_translation) help"
 msgstr ""
@@ -79,19 +77,17 @@ msgstr ""
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
 msgstr "Translation confirmed"
 
-# classes/class_base.aw:prop_is_translated_comment
 #: classes/class_base.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
-# classes/class_base.aw:prop_is_translated_help
 #: classes/class_base.aw:prop_is_translated_help
 msgid "Omaduse Tõlge kinnitatud (is_translated) help"
 msgstr ""
 
 #: classes/class_base.aw:group_general
 msgid "Grupi &Uuml;ldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/class_base.aw:group_general_help
 msgid "Grupi &Uuml;ldine (general) help"
@@ -99,54 +95,54 @@ msgstr ""
 
 #: classes/class_base.aw:575
 msgid "Tõlgi"
-msgstr ""
+msgstr "Translate"
 
-#: classes/class_base.aw:590
+#: classes/class_base.aw:598
 msgid "Rohkem infot"
 msgstr "More info"
 
-#: classes/class_base.aw:591
+#: classes/class_base.aw:599
 msgid "Peida ära"
 msgstr "Hide"
 
-#: classes/class_base.aw:592
+#: classes/class_base.aw:600
 msgid "Abiinfo"
 msgstr "Help"
 
-#: classes/class_base.aw:638
+#: classes/class_base.aw:646
 msgid "tab panel"
 msgstr "tab panel"
 
-#: classes/class_base.aw:850
+#: classes/class_base.aw:855
 msgid "Lisainfo grupi kohta puudub"
-msgstr ""
+msgstr "no additional info about group"
 
-#: classes/class_base.aw:1343
+#: classes/class_base.aw:1367
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/class_base.aw:1351
+#: classes/class_base.aw:1375
 msgid "Uus"
 msgstr "New"
 
-#: classes/class_base.aw:1378
+#: classes/class_base.aw:1402
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1568 classes/class_base.aw:4883
-#: classes/class_base.aw:4894
+#: classes/class_base.aw:1592 classes/class_base.aw:4903
+#: classes/class_base.aw:4914
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:3404
+#: classes/class_base.aw:3424
 msgid "See väli ei tohi olla tühi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3413
+#: classes/class_base.aw:3433
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:4780
+#: classes/class_base.aw:4800
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
 

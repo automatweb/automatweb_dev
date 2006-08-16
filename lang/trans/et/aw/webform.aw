@@ -1,16 +1,8 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Vormi t&uuml;&uuml;p (form_type) kommentaar"] = "sisestusvorme võib olla kahte tüüpi";
-$GLOBALS["TRANS"]["Omaduse Vormi t&uuml;&uuml;p (form_type) help"] = "sisestusvorme võib olla kahte tüüpi";
-$GLOBALS["TRANS"]["Omaduse Vormi t&uuml;&uuml;p (form_type_value) kommentaar"] = "sisestusvorme võib olla kahte tüüpi";
-$GLOBALS["TRANS"]["Omaduse Vormi t&uuml;&uuml;p (form_type_value) help"] = "sisestusvorme võib olla kahte tüüpi";
 $GLOBALS["TRANS"]["Omaduse Saatja nimi (def_name) kommentaar"] = "peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi ";
 $GLOBALS["TRANS"]["Omaduse Saatja nimi (def_name) help"] = "peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi ";
 $GLOBALS["TRANS"]["Omaduse Saatja e-mail (def_mail) kommentaar"] = "peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi ";
 $GLOBALS["TRANS"]["Omaduse Saatja e-mail (def_mail) help"] = "peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi ";
-$GLOBALS["TRANS"]["Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) kommentaar"] = "millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse objekti nimena AutomatWebi administreerimisliideses";
-$GLOBALS["TRANS"]["Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) help"] = "millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse objekti nimena AutomatWebi administreerimisliideses";
-$GLOBALS["TRANS"]["Omaduse Kuhu suunata peale t&auml;tmist (redirect) kommentaar"] = "kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale salvestamist suunatakse.";
-$GLOBALS["TRANS"]["Omaduse Kuhu suunata peale t&auml;tmist (redirect) help"] = "kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale salvestamist suunatakse. Sisese aadressi puhul tuleb sellesse välja märkida kausta või dokumendi ID, väline aadress tuleb välja kirjutada täispikana kujul http://www.firmanimi.ee/suunamine";
 $GLOBALS["TRANS"]["Omaduse Vorm (form) kommentaar"] = "Disketikujuline nupp on mõeldud ekraanivaate salvestamiseks";
 $GLOBALS["TRANS"]["Omaduse Vorm (form) help"] = "Disketikujuline nupp on mõeldud ekraanivaate salvestamiseks";
 $GLOBALS["TRANS"]["Omaduse Omadused (props) kommentaar"] = "Disketikujuline nupp Salvesta on mõeldud omaduste viimiseks vaatesse Vorm";

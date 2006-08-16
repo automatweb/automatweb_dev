@@ -9,42 +9,45 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/crm/crm_role_manager.aw:138
+#: classes/crm/crm_role_manager.aw:143
 msgid "Vali roll"
 msgstr "Select role"
 
-#: classes/crm/crm_role_manager.aw:183
+#: classes/crm/crm_role_manager.aw:188
 msgid "Anna rollid"
 msgstr "Give roles"
 
-#: classes/crm/crm_role_manager.aw:279
+#: classes/crm/crm_role_manager.aw:284
 msgid "Vali"
 msgstr "Select"
 
-#: classes/crm/crm_role_manager.aw:285
+#: classes/crm/crm_role_manager.aw:290
 msgid "Halda"
 msgstr "Manage"
 
-#: classes/crm/crm_role_manager.aw:299
+#: classes/crm/crm_role_manager.aw:304
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/crm/crm_role_manager.aw:313
+#: classes/crm/crm_role_manager.aw:318
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/crm/crm_role_manager.aw:319
+#: classes/crm/crm_role_manager.aw:324
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/crm/crm_role_manager.aw:325
+#: classes/crm/crm_role_manager.aw:330
 msgid "E-post"
 msgstr "E-mail"
 
-#: classes/crm/crm_role_manager.aw:331
-msgid "&Uuml;ksus"
-msgstr "Unit"
+#: classes/crm/crm_role_manager.aw:336
+msgid "&amp;Uuml;ksus"
+msgstr ""
 
-#: classes/crm/crm_role_manager.aw:337
+#: classes/crm/crm_role_manager.aw:342
 msgid "Ametinimetus"
 msgstr "Profession"
+
+#~ msgid "&Uuml;ksus"
+#~ msgstr "Unit"

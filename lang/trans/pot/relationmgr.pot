@@ -10,8 +10,8 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/relationmgr.aw:120
-msgid "Objekti tüüp"
+#: classes/vcl/relationmgr.aw:120 classes/vcl/relationmgr.aw:540
+msgid "Objekti t&uuml;&uuml;p"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:178 classes/vcl/relationmgr.aw:292 classes/vcl/relationmgr.aw:676

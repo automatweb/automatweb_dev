@@ -9,35 +9,35 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/help/help.aw:36 classes/core/help/help.aw:199
-#: classes/core/help/help.aw:432
+#: classes/core/help/help.aw:37 classes/core/help/help.aw:204
+#: classes/core/help/help.aw:437
 msgid "Selle klassil puudub abiinfo"
 msgstr ""
 
-#: classes/core/help/help.aw:178 classes/core/help/help.aw:340
+#: classes/core/help/help.aw:180 classes/core/help/help.aw:345
 msgid "Klassi '%s' abiinfo"
 msgstr ""
 
-#: classes/core/help/help.aw:181 classes/core/help/help.aw:343
+#: classes/core/help/help.aw:183 classes/core/help/help.aw:348
 msgid "AW abiinfo"
 msgstr ""
 
-#: classes/core/help/help.aw:441
+#: classes/core/help/help.aw:446
 msgid "Sellist gruppi pole"
 msgstr ""
 
-#: classes/core/help/help.aw:460 classes/core/help/help.aw:493
-msgid "tõlgitud nimi puudub"
+#: classes/core/help/help.aw:465 classes/core/help/help.aw:498
+msgid "t&otilde;lgitud nimi puudub"
 msgstr ""
 
-#: classes/core/help/help.aw:461 classes/core/help/help.aw:494
+#: classes/core/help/help.aw:466 classes/core/help/help.aw:499
 msgid "kommentaar puudub"
 msgstr ""
 
-#: classes/core/help/help.aw:462 classes/core/help/help.aw:495
+#: classes/core/help/help.aw:467 classes/core/help/help.aw:500
 msgid "abitekst puudub"
 msgstr ""
 
-#: classes/core/help/help.aw:504
+#: classes/core/help/help.aw:509
 msgid "Omadused"
 msgstr ""

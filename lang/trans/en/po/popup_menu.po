@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/vcl/popup_menu.aw:class__help
 msgid "Klassi  help"
 msgstr ""
@@ -34,7 +33,6 @@ msgstr ""
 msgid "Grupi  () help"
 msgstr ""
 
-#: classes/vcl/popup_menu.aw:44 classes/vcl/popup_menu.aw:64
+#: classes/vcl/popup_menu.aw:46 classes/vcl/popup_menu.aw:68
 msgid "Valik"
 msgstr ""
-

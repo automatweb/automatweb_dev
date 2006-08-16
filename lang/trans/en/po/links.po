@@ -17,7 +17,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_comment
 #: classes/contentmgmt/links.aw:prop_comment
 msgid "Omaduse Kommentaar lingikogusse (comment) caption"
-msgstr ""
+msgstr "Commentary to links collection"
 
 # classes/contentmgmt/links.aw:prop_comment_comment
 #: classes/contentmgmt/links.aw:prop_comment_comment
@@ -119,31 +119,16 @@ msgstr ""
 msgid "Omaduse Uues aknas (newwindow) help"
 msgstr ""
 
-# classes/contentmgmt/links.aw:prop_doclinkcollection
-#: classes/contentmgmt/links.aw:prop_doclinkcollection
-msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) caption"
-msgstr "Document link collection"
-
-# classes/contentmgmt/links.aw:prop_doclinkcollection_comment
-#: classes/contentmgmt/links.aw:prop_doclinkcollection_comment
-msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/links.aw:prop_doclinkcollection_help
-#: classes/contentmgmt/links.aw:prop_doclinkcollection_help
-msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) help"
-msgstr ""
-
 #: classes/contentmgmt/links.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/contentmgmt/links.aw:prop_ord_comment
-msgid "Omaduse J&auml;rjekord (ord) kommentaar"
+msgid "Omaduse J&amp;auml;rjekord (ord) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_ord_help
-msgid "Omaduse J&auml;rjekord (ord) help"
+msgid "Omaduse J&amp;auml;rjekord (ord) help"
 msgstr ""
 
 # classes/contentmgmt/links.aw:prop_use_javascript
@@ -164,7 +149,7 @@ msgstr ""
 # classes/contentmgmt/links.aw:prop_newwinwidth
 #: classes/contentmgmt/links.aw:prop_newwinwidth
 msgid "Omaduse Uue akna laius (newwinwidth) caption"
-msgstr "New window width"
+msgstr "Width of new window"
 
 # classes/contentmgmt/links.aw:prop_newwinwidth_comment
 #: classes/contentmgmt/links.aw:prop_newwinwidth_comment
@@ -176,24 +161,21 @@ msgstr ""
 msgid "Omaduse Uue akna laius (newwinwidth) help"
 msgstr ""
 
-# classes/contentmgmt/links.aw:prop_newwinheight
 #: classes/contentmgmt/links.aw:prop_newwinheight
 msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) caption"
-msgstr "New window height"
+msgstr "Height of new window"
 
-# classes/contentmgmt/links.aw:prop_newwinheight_comment
 #: classes/contentmgmt/links.aw:prop_newwinheight_comment
-msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) kommentaar"
+msgid "Omaduse Uue akna k&amp;otilde;rgus (newwinheight) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/links.aw:prop_newwinheight_help
 #: classes/contentmgmt/links.aw:prop_newwinheight_help
-msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) help"
+msgid "Omaduse Uue akna k&amp;otilde;rgus (newwinheight) help"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_js_attributes
 msgid "Omaduse Atribuudid (js_attributes) caption"
-msgstr ""
+msgstr "Attributes"
 
 #: classes/contentmgmt/links.aw:prop_js_attributes_comment
 msgid "Omaduse Atribuudid (js_attributes) kommentaar"
@@ -233,17 +215,14 @@ msgstr ""
 msgid "Omaduse Address bar (newwinlocation) help"
 msgstr ""
 
-# classes/contentmgmt/links.aw:prop_newwinmenu
 #: classes/contentmgmt/links.aw:prop_newwinmenu
 msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) caption"
 msgstr "Folders"
 
-# classes/contentmgmt/links.aw:prop_newwinmenu_comment
 #: classes/contentmgmt/links.aw:prop_newwinmenu_comment
 msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/links.aw:prop_newwinmenu_help
 #: classes/contentmgmt/links.aw:prop_newwinmenu_help
 msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) help"
 msgstr ""
@@ -324,27 +303,27 @@ msgid "Omaduse Pilt aktiivne kuni (link_image_active_until) help"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_transl
-msgid "Omaduse T&otilde;lgi (transl) caption"
+msgid "Omaduse T&amp;otilde;lgi (transl) caption"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_transl_comment
-msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgid "Omaduse T&amp;otilde;lgi (transl) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_transl_help
-msgid "Omaduse T&otilde;lgi (transl) help"
+msgid "Omaduse T&amp;otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_kws
 msgid "Omaduse V&otilde;tmes&otilde;nad (kws) caption"
-msgstr ""
+msgstr "Keywords"
 
 #: classes/contentmgmt/links.aw:prop_kws_comment
-msgid "Omaduse V&otilde;tmes&otilde;nad (kws) kommentaar"
+msgid "Omaduse V&amp;otilde;tmes&amp;otilde;nad (kws) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_kws_help
-msgid "Omaduse V&otilde;tmes&otilde;nad (kws) help"
+msgid "Omaduse V&amp;otilde;tmes&amp;otilde;nad (kws) help"
 msgstr ""
 
 # classes/contentmgmt/links.aw:group_Javascript
@@ -368,37 +347,49 @@ msgid "Grupi Pilt (Pilt) help"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:group_transl
-msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgid "Grupi T&amp;otilde;lgi (transl) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:group_transl_help
-msgid "Grupi T&otilde;lgi (transl) help"
+msgid "Grupi T&amp;otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:group_kws
 msgid "Grupi V&otilde;tmes&otilde;nad (kws) pealkiri"
-msgstr ""
+msgstr "Keywords"
 
 #: classes/contentmgmt/links.aw:group_kws_help
-msgid "Grupi V&otilde;tmes&otilde;nad (kws) help"
+msgid "Grupi V&amp;otilde;tmes&amp;otilde;nad (kws) help"
 msgstr ""
 
-#: classes/contentmgmt/links.aw:136 classes/contentmgmt/links.aw:184
+#: classes/contentmgmt/links.aw:133 classes/contentmgmt/links.aw:181
 msgid "Vali see"
 msgstr "Select this"
 
-#: classes/contentmgmt/links.aw:140
+#: classes/contentmgmt/links.aw:137
 msgid "Nimetus"
 msgstr "Name"
 
-#: classes/contentmgmt/links.aw:145
+#: classes/contentmgmt/links.aw:142
 msgid "Asukoht"
 msgstr "Location"
 
-#: classes/contentmgmt/links.aw:150
+#: classes/contentmgmt/links.aw:147
 msgid "Looja"
 msgstr "Createdby"
 
-#: classes/contentmgmt/links.aw:155
+#: classes/contentmgmt/links.aw:152
 msgid "Viimati muudetud"
 msgstr "Last modified"
+
+# classes/contentmgmt/links.aw:prop_doclinkcollection
+#~ msgid "Omaduse Dokumendi lingikogusse (doclinkcollection) caption"
+#~ msgstr "Document link collection"
+
+# classes/contentmgmt/links.aw:prop_newwinheight
+#~ msgid "Omaduse Uue akna k&otilde;rgus (newwinheight) caption"
+#~ msgstr "Height of new window"
+
+# classes/contentmgmt/links.aw:prop_newwinmenu
+#~ msgid "Omaduse Men&uuml;&uuml;d (newwinmenu) caption"
+#~ msgstr "Folders"

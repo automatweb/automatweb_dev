@@ -29,19 +29,16 @@ msgstr ""
 msgid "Omaduse Ainult sisse logitud kasutajatele (users_only) help"
 msgstr ""
 
-# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus
-msgid "Omaduse Vali men&uuml;&uuml;d (menus) caption"
-msgstr "Select folders"
-
-# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_comment
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_comment
-msgid "Omaduse Vali men&uuml;&uuml;d (menus) kommentaar"
+msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d (menus) caption"
 msgstr ""
 
-# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_help
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_comment
+msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d (menus) kommentaar"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_help
-msgid "Omaduse Vali men&uuml;&uuml;d (menus) help"
+msgid "Omaduse Vali men&amp;uuml;&amp;uuml;d (menus) help"
 msgstr ""
 
 # classes/contentmgmt/site_search/site_search_content_grp.aw:prop_seach_notactive
@@ -61,16 +58,8 @@ msgstr ""
 msgid "Omaduse Otsi ka mitteaktiivsetest dokumentidest (seach_notactive) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:group_general_help
-msgid "Grupi Üldine (general) help"
-msgstr ""
-
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
-msgid "Seose Otsingu l&auml;htekoht (RELTYPE_SEARCH_LOCATION) tekst"
+msgid "Seose Otsingu l&amp;auml;htekoht (RELTYPE_SEARCH_LOCATION) tekst"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:90
@@ -86,12 +75,19 @@ msgid "Nimi"
 msgstr "Name"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:107
-msgid "k.a. alammenüüd"
-msgstr "incl. submenus"
+msgid "k.a. alammen&uuml;&uuml;d"
+msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:115
 msgid "mitteaktiivsed"
 msgstr "not-active"
+
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus
+#~ msgid "Omaduse Vali men&uuml;&uuml;d (menus) caption"
+#~ msgstr "Select folders"
+
+#~ msgid "k.a. alammenüüd"
+#~ msgstr "incl. submenus"
 
 # classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
 #~ msgid "Seose Otsingu lähtekoht (RELTYPE_SEARCH_LOCATION) tekst"

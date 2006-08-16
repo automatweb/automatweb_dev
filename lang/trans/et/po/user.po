@@ -257,34 +257,28 @@ msgstr ""
 msgid "Omaduse  (join_grp) help"
 msgstr ""
 
-# classes/core/users/user.aw:prop_passwd
 #: classes/core/users/user.aw:prop_passwd
-msgid "Omaduse Salasõna (passwd) caption"
+msgid "Omaduse Salas&otilde;na (passwd) caption"
 msgstr ""
 
-# classes/core/users/user.aw:prop_passwd_comment
 #: classes/core/users/user.aw:prop_passwd_comment
-msgid "Omaduse Salasõna (passwd) kommentaar"
+msgid "Omaduse Salas&otilde;na (passwd) kommentaar"
 msgstr ""
 
-# classes/core/users/user.aw:prop_passwd_help
 #: classes/core/users/user.aw:prop_passwd_help
-msgid "Omaduse Salasõna (passwd) help"
+msgid "Omaduse Salas&otilde;na (passwd) help"
 msgstr ""
 
-# classes/core/users/user.aw:prop_passwd_again
 #: classes/core/users/user.aw:prop_passwd_again
-msgid "Omaduse Salasõna uuesti (passwd_again) caption"
+msgid "Omaduse Salas&otilde;na uuesti (passwd_again) caption"
 msgstr ""
 
-# classes/core/users/user.aw:prop_passwd_again_comment
 #: classes/core/users/user.aw:prop_passwd_again_comment
-msgid "Omaduse Salasõna uuesti (passwd_again) kommentaar"
+msgid "Omaduse Salas&otilde;na uuesti (passwd_again) kommentaar"
 msgstr ""
 
-# classes/core/users/user.aw:prop_passwd_again_help
 #: classes/core/users/user.aw:prop_passwd_again_help
-msgid "Omaduse Salasõna uuesti (passwd_again) help"
+msgid "Omaduse Salas&otilde;na uuesti (passwd_again) help"
 msgstr ""
 
 # classes/core/users/user.aw:prop_password
@@ -625,11 +619,11 @@ msgid "Grupi Parool (chpwd) help"
 msgstr ""
 
 #: classes/core/users/user.aw:group_objects
-msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
+msgid "Grupi Objektid ja &amp;Otilde;igused (objects) pealkiri"
 msgstr ""
 
 #: classes/core/users/user.aw:group_objects_help
-msgid "Grupi Objektid ja &Otilde;igused (objects) help"
+msgid "Grupi Objektid ja &amp;Otilde;igused (objects) help"
 msgstr ""
 
 # classes/core/users/user.aw:group_objects_own
@@ -724,7 +718,8 @@ msgstr ""
 
 #: classes/core/users/user.aw:rel_RELTYPE_ACCESS_FROM_IP
 msgid ""
-"Seose ligip&amp;auml;&amp;auml;su aadress (RELTYPE_ACCESS_FROM_IP) tekst"
+"Seose ligip&amp;amp;auml;&amp;amp;auml;su aadress (RELTYPE_ACCESS_FROM_IP) "
+"tekst"
 msgstr ""
 
 # classes/core/users/user.aw:rel_RELTYPE_JOIN_SITE
@@ -732,143 +727,147 @@ msgstr ""
 msgid "Seose liitumise andmed (RELTYPE_JOIN_SITE) tekst"
 msgstr ""
 
-#: classes/core/users/user.aw:279
+#: classes/core/users/user.aw:282
 msgid "Genereeri parool"
 msgstr ""
 
-#: classes/core/users/user.aw:344
+#: classes/core/users/user.aw:347
 msgid "Selline kasutaja on juba olemas!"
 msgstr ""
 
-#: classes/core/users/user.aw:349
+#: classes/core/users/user.aw:352
 msgid "Selline kasutajanimi pole lubatud!"
 msgstr ""
 
-#: classes/core/users/user.aw:368
+#: classes/core/users/user.aw:371
 msgid "Paroolid pole samad!"
 msgstr ""
 
-#: classes/core/users/user.aw:374
-msgid "Parool sisaldab lubamatuid t&auml;hti v&otilde;i on liiga l&uuml;hike!"
+#: classes/core/users/user.aw:377
+msgid ""
+"Parool sisaldab lubamatuid t&amp;auml;hti v&amp;otilde;i on liiga l&amp;uuml;"
+"hike!"
 msgstr ""
 
-#: classes/core/users/user.aw:428
+#: classes/core/users/user.aw:431
 msgid "Sellist kasutajat pole!"
 msgstr ""
 
-#: classes/core/users/user.aw:472
-msgid "D&uuml;naamiline"
+#: classes/core/users/user.aw:475
+msgid "D&amp;uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/user.aw:477
+#: classes/core/users/user.aw:480
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/user.aw:480
+#: classes/core/users/user.aw:483
 msgid "Jah"
 msgstr ""
 
-#: classes/core/users/user.aw:480
+#: classes/core/users/user.aw:483
 msgid "Ei"
 msgstr ""
 
-#: classes/core/users/user.aw:643
+#: classes/core/users/user.aw:646
 msgid "Nimi"
 msgstr ""
 
-#: classes/core/users/user.aw:649
+#: classes/core/users/user.aw:652
 msgid "Liige?"
 msgstr ""
 
-#: classes/core/users/user.aw:655
+#: classes/core/users/user.aw:658
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/core/users/user.aw:663
+#: classes/core/users/user.aw:666
 msgid "Mitu liiget"
 msgstr ""
 
-#: classes/core/users/user.aw:670
+#: classes/core/users/user.aw:673
 msgid "Muutja"
 msgstr ""
 
-#: classes/core/users/user.aw:678
+#: classes/core/users/user.aw:681
 msgid "Muudetud"
 msgstr ""
 
-#: classes/core/users/user.aw:686 classes/core/users/user.aw:1191
-msgid "T&uuml;&uuml;p"
+#: classes/core/users/user.aw:689 classes/core/users/user.aw:1194
+msgid "T&amp;uuml;&amp;uuml;p"
 msgstr ""
 
-#: classes/core/users/user.aw:888
+#: classes/core/users/user.aw:891
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/user.aw:951
-msgid "Muuda objekti %s  &otilde;igusi"
+#: classes/core/users/user.aw:954
+msgid "Muuda objekti %s  &amp;otilde;igusi"
 msgstr ""
 
-#: classes/core/users/user.aw:1168
+#: classes/core/users/user.aw:1171
 msgid "Nr"
 msgstr ""
 
-#: classes/core/users/user.aw:1172
+#: classes/core/users/user.aw:1175
 msgid "Millal"
 msgstr ""
 
-#: classes/core/users/user.aw:1181
+#: classes/core/users/user.aw:1184
 msgid "Kes"
 msgstr ""
 
-#: classes/core/users/user.aw:1186
+#: classes/core/users/user.aw:1189
 msgid "IP"
 msgstr ""
 
-#: classes/core/users/user.aw:1196
+#: classes/core/users/user.aw:1199
 msgid "Tegevus"
 msgstr ""
 
-#: classes/core/users/user.aw:1203
+#: classes/core/users/user.aw:1206
 msgid "Saidi ID"
 msgstr ""
 
-#: classes/core/users/user.aw:1209
+#: classes/core/users/user.aw:1212
 msgid "OID"
 msgstr ""
 
-#: classes/core/users/user.aw:1214
+#: classes/core/users/user.aw:1217
 msgid "Mida"
 msgstr ""
 
-#: classes/core/users/user.aw:1647
+#: classes/core/users/user.aw:1670
 msgid "users::add_user(%s): no uid specified"
 msgstr ""
 
-#: classes/core/users/user.aw:1719
-msgid "Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"
-msgstr ""
-
-#: classes/core/users/user.aw:1727
-msgid "Objekt on kustutatud. Pole &otilde;igusi!"
-msgstr ""
-
-#: classes/core/users/user.aw:1732
-msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
-msgstr ""
-
-#: classes/core/users/user.aw:1737
-msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
-msgstr ""
-
-#: classes/core/users/user.aw:1747
+#: classes/core/users/user.aw:1742
 msgid ""
-"Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, "
-"kehtib default.<br>N&auml;gemis&otilde;igus ainult."
+"Objekt $oid on vend, &amp;otilde;igusi loetakse objekti %s kaudu.&lt;br&gt;"
 msgstr ""
 
-#: classes/core/users/user.aw:1783
+#: classes/core/users/user.aw:1750
+msgid "Objekt on kustutatud. Pole &amp;otilde;igusi!"
+msgstr ""
+
+#: classes/core/users/user.aw:1755
+msgid "Objekti pole ega pole kunagi olnud! Pole &amp;otilde;igusi!"
+msgstr ""
+
+#: classes/core/users/user.aw:1760
+msgid "Objekti &amp;uuml;lemobjekt (%s) on kustutatud. Pole &amp;otilde;igusi!"
+msgstr ""
+
+#: classes/core/users/user.aw:1770
 msgid ""
-"Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;"
-"rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele "
-"m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
+"Objektile pole sellele kasutaja gruppidele &amp;otilde;igusi m&amp;auml;&amp;"
+"auml;ratud, kehtib default.&lt;br&gt;N&amp;auml;gemis&amp;otilde;igus ainult."
+msgstr ""
+
+#: classes/core/users/user.aw:1806
+msgid ""
+"Info objekti %s &amp;otilde;iguste kohta: &lt;br&gt;&lt;br&gt; &amp;Otilde;"
+"igusi m&amp;auml;&amp;auml;rab &amp;otilde;igus-seos objekti %s ja grupi %s "
+"vahel.&lt;br&gt;&lt;br&gt;Sellele seosele m&amp;auml;&amp;auml;ratud &amp;"
+"otilde;igused on j&amp;auml;rgnevad:&lt;br&gt;%s"
 msgstr ""

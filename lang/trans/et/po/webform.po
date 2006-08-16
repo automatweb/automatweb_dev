@@ -30,35 +30,29 @@ msgstr ""
 msgid "Omaduse Initsialiseeri objekt (on_init) help"
 msgstr ""
 
-# classes/contentmgmt/webform.aw:prop_form_type
 #: classes/contentmgmt/webform.aw:prop_form_type
-msgid "Omaduse Vormi t&uuml;&uuml;p (form_type) caption"
+msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type) caption"
 msgstr ""
 
-# classes/contentmgmt/webform.aw:prop_form_type_comment
 #: classes/contentmgmt/webform.aw:prop_form_type_comment
-msgid "Omaduse Vormi t&uuml;&uuml;p (form_type) kommentaar"
-msgstr "sisestusvorme võib olla kahte tüüpi"
-
-# classes/contentmgmt/webform.aw:prop_form_type_help
-#: classes/contentmgmt/webform.aw:prop_form_type_help
-msgid "Omaduse Vormi t&uuml;&uuml;p (form_type) help"
-msgstr "sisestusvorme võib olla kahte tüüpi"
-
-# classes/contentmgmt/webform.aw:prop_form_type_value
-#: classes/contentmgmt/webform.aw:prop_form_type_value
-msgid "Omaduse Vormi t&uuml;&uuml;p (form_type_value) caption"
+msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/webform.aw:prop_form_type_value_comment
-#: classes/contentmgmt/webform.aw:prop_form_type_value_comment
-msgid "Omaduse Vormi t&uuml;&uuml;p (form_type_value) kommentaar"
-msgstr "sisestusvorme võib olla kahte tüüpi"
+#: classes/contentmgmt/webform.aw:prop_form_type_help
+msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type) help"
+msgstr ""
 
-# classes/contentmgmt/webform.aw:prop_form_type_value_help
+#: classes/contentmgmt/webform.aw:prop_form_type_value
+msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type_value) caption"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:prop_form_type_value_comment
+msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type_value) kommentaar"
+msgstr ""
+
 #: classes/contentmgmt/webform.aw:prop_form_type_value_help
-msgid "Omaduse Vormi t&uuml;&uuml;p (form_type_value) help"
-msgstr "sisestusvorme võib olla kahte tüüpi"
+msgid "Omaduse Vormi t&amp;uuml;&amp;uuml;p (form_type_value) help"
+msgstr ""
 
 # classes/contentmgmt/webform.aw:prop_def_name
 #: classes/contentmgmt/webform.aw:prop_def_name
@@ -98,51 +92,35 @@ msgstr ""
 "peale veebivormi andmete sisestamist e-posti teel sisestuse andmetega "
 "saadetava e-maili From reale kuvatav nimi ja meiliaadress kujul Firmanimi "
 
-# classes/contentmgmt/webform.aw:prop_obj_name
 #: classes/contentmgmt/webform.aw:prop_obj_name
 msgid ""
-"Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) "
-"caption"
+"Omaduse Millised sisestatud v&amp;auml;&amp;auml;rtused pannakse nimeks "
+"(obj_name) caption"
 msgstr ""
 
-# classes/contentmgmt/webform.aw:prop_obj_name_comment
 #: classes/contentmgmt/webform.aw:prop_obj_name_comment
 msgid ""
-"Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) "
-"kommentaar"
+"Omaduse Millised sisestatud v&amp;auml;&amp;auml;rtused pannakse nimeks "
+"(obj_name) kommentaar"
 msgstr ""
-"millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse "
-"objekti nimena AutomatWebi administreerimisliideses"
 
-# classes/contentmgmt/webform.aw:prop_obj_name_help
 #: classes/contentmgmt/webform.aw:prop_obj_name_help
 msgid ""
-"Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks (obj_name) "
-"help"
+"Omaduse Millised sisestatud v&amp;auml;&amp;auml;rtused pannakse nimeks "
+"(obj_name) help"
 msgstr ""
-"millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse "
-"objekti nimena AutomatWebi administreerimisliideses"
 
-# classes/contentmgmt/webform.aw:prop_redirect
 #: classes/contentmgmt/webform.aw:prop_redirect
-msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) caption"
+msgid "Omaduse Kuhu suunata peale t&amp;auml;tmist (redirect) caption"
 msgstr ""
 
-# classes/contentmgmt/webform.aw:prop_redirect_comment
 #: classes/contentmgmt/webform.aw:prop_redirect_comment
-msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) kommentaar"
+msgid "Omaduse Kuhu suunata peale t&amp;auml;tmist (redirect) kommentaar"
 msgstr ""
-"kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale "
-"salvestamist suunatakse."
 
-# classes/contentmgmt/webform.aw:prop_redirect_help
 #: classes/contentmgmt/webform.aw:prop_redirect_help
-msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) help"
+msgid "Omaduse Kuhu suunata peale t&amp;auml;tmist (redirect) help"
 msgstr ""
-"kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale "
-"salvestamist suunatakse. Sisese aadressi puhul tuleb sellesse välja märkida "
-"kausta või dokumendi ID, väline aadress tuleb välja kirjutada täispikana "
-"kujul http://www.firmanimi.ee/suunamine"
 
 # classes/contentmgmt/webform.aw:prop_error_location
 #: classes/contentmgmt/webform.aw:prop_error_location
@@ -553,11 +531,11 @@ msgid "Grupi Otsing (search) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_entries
-msgid "Grupi N&auml;ita sisestusi (entries) pealkiri"
+msgid "Grupi N&amp;auml;ita sisestusi (entries) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_entries_help
-msgid "Grupi N&auml;ita sisestusi (entries) help"
+msgid "Grupi N&amp;auml;ita sisestusi (entries) help"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:group_controllers
@@ -581,11 +559,11 @@ msgid "Grupi Salvestamine (set_controllers) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_get_controllers
-msgid "Grupi N&auml;itamine (get_controllers) pealkiri"
+msgid "Grupi N&amp;auml;itamine (get_controllers) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_get_controllers_help
-msgid "Grupi N&auml;itamine (get_controllers) help"
+msgid "Grupi N&amp;auml;itamine (get_controllers) help"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_METAMGR
@@ -604,7 +582,7 @@ msgid "Seose Salvestamise kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_VIEWCONTROLLER
-msgid "Seose N&amp;auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
+msgid "Seose N&amp;amp;auml;tamise kontroller (RELTYPE_VIEWCONTROLLER) tekst"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_EMAIL
@@ -613,7 +591,8 @@ msgid "Seose Meiliaadress (RELTYPE_EMAIL) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_OBJECT_TYPE
-msgid "Seose Objekti t&amp;uuml;&amp;uuml;p (RELTYPE_OBJECT_TYPE) tekst"
+msgid ""
+"Seose Objekti t&amp;amp;uuml;&amp;amp;uuml;p (RELTYPE_OBJECT_TYPE) tekst"
 msgstr ""
 
 # classes/contentmgmt/webform.aw:rel_RELTYPE_REGISTER
@@ -642,16 +621,17 @@ msgid "Seose Objektide eksport (RELTYPE_OBJECT_EXPORT) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_CAL_REG_FORM
-msgid "Seose S&amp;uuml;ndmuse vorm (RELTYPE_CAL_REG_FORM) tekst"
+msgid "Seose S&amp;amp;uuml;ndmuse vorm (RELTYPE_CAL_REG_FORM) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_CAL_REG_FORM_CONF
-msgid "Seose S&amp;uuml;ndmuse vormi konf (RELTYPE_CAL_REG_FORM_CONF) tekst"
+msgid ""
+"Seose S&amp;amp;uuml;ndmuse vormi konf (RELTYPE_CAL_REG_FORM_CONF) tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_AFTER_SAVE_CONTROLLER
 msgid ""
-"Seose p&amp;auml;rast salvestamist kontroller "
+"Seose p&amp;amp;auml;rast salvestamist kontroller "
 "(RELTYPE_AFTER_SAVE_CONTROLLER) tekst"
 msgstr ""
 
@@ -660,15 +640,15 @@ msgid "Tekst"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:210
-msgid "V&auml;ike tekstikast"
+msgid "V&amp;auml;ike tekstikast"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:211
-msgid "Valikv&auml;li"
+msgid "Valikv&amp;auml;li"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:212
-msgid "Kuup&auml;evavalik"
+msgid "Kuup&amp;auml;evavalik"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:213
@@ -680,7 +660,7 @@ msgid "Suur tekstikast"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:215
-msgid "Peidetud v&auml;li"
+msgid "Peidetud v&amp;auml;li"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:216
@@ -688,7 +668,7 @@ msgid "Saada nupp"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:217
-msgid "T&uuml;hista nupp"
+msgid "T&amp;uuml;hista nupp"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:218
@@ -696,11 +676,11 @@ msgid "Prindi nupp"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:219
-msgid "Pildi &uuml;leslaadimine"
+msgid "Pildi &amp;uuml;leslaadimine"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:220
-msgid "Faili &uuml;leslaadimine"
+msgid "Faili &amp;uuml;leslaadimine"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:223
@@ -736,7 +716,7 @@ msgid "Tavaline vorm"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:233
-msgid "S&uuml;ndmusele registreerimine"
+msgid "S&amp;uuml;ndmusele registreerimine"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:234
@@ -772,19 +752,19 @@ msgid "Andmed"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:756
-msgid "M&auml;&auml;ra saaja aadressiks"
+msgid "M&amp;auml;&amp;auml;ra saaja aadressiks"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:760
-msgid "M&auml;&auml;ra saatja aadressiks"
+msgid "M&amp;auml;&amp;auml;ra saatja aadressiks"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:764
-msgid "*elemendinimi* peab olema t&auml;idetud"
+msgid "*elemendinimi* peab olema t&amp;auml;idetud"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:766
-msgid "%caption peab olema t&auml;idetud"
+msgid "%caption peab olema t&amp;auml;idetud"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:770
@@ -796,7 +776,7 @@ msgid "%caption peab olema valitud"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:776
-msgid "Kontrolli e-maili &otilde;igsust"
+msgid "Kontrolli e-maili &amp;otilde;igsust"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:778
@@ -836,15 +816,15 @@ msgid "-- vali --"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:1158
-msgid "Mitmerealine rippmen&uuml;&uuml;"
+msgid "Mitmerealine rippmen&amp;uuml;&amp;uuml;"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:1159
-msgid "Rippmen&uuml;&uuml;"
+msgid "Rippmen&amp;uuml;&amp;uuml;"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:1160
-msgid "M&auml;rkeruut"
+msgid "M&amp;auml;rkeruut"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:1161
@@ -856,11 +836,11 @@ msgid "--vali--"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:1165
-msgid "Järjekord (kasvav)"
+msgid "J&auml;rjekord (kasvav)"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:1166
-msgid "Järjekord (kahanev)"
+msgid "J&auml;rjekord (kahanev)"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:1167
@@ -903,6 +883,52 @@ msgstr ""
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2255
-msgid "Liigu edasi &raquo;"
+#: classes/contentmgmt/webform.aw:2258
+msgid "Liigu edasi &amp;raquo;"
 msgstr ""
+
+# classes/contentmgmt/webform.aw:prop_form_type_comment
+#~ msgid "Omaduse Vormi t&uuml;&uuml;p (form_type) kommentaar"
+#~ msgstr "sisestusvorme võib olla kahte tüüpi"
+
+# classes/contentmgmt/webform.aw:prop_form_type_help
+#~ msgid "Omaduse Vormi t&uuml;&uuml;p (form_type) help"
+#~ msgstr "sisestusvorme võib olla kahte tüüpi"
+
+# classes/contentmgmt/webform.aw:prop_form_type_value_comment
+#~ msgid "Omaduse Vormi t&uuml;&uuml;p (form_type_value) kommentaar"
+#~ msgstr "sisestusvorme võib olla kahte tüüpi"
+
+# classes/contentmgmt/webform.aw:prop_form_type_value_help
+#~ msgid "Omaduse Vormi t&uuml;&uuml;p (form_type_value) help"
+#~ msgstr "sisestusvorme võib olla kahte tüüpi"
+
+# classes/contentmgmt/webform.aw:prop_obj_name_comment
+#~ msgid ""
+#~ "Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks "
+#~ "(obj_name) kommentaar"
+#~ msgstr ""
+#~ "millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse "
+#~ "objekti nimena AutomatWebi administreerimisliideses"
+
+# classes/contentmgmt/webform.aw:prop_obj_name_help
+#~ msgid ""
+#~ "Omaduse Millised sisestatud v&auml;&auml;rtused pannakse nimeks "
+#~ "(obj_name) help"
+#~ msgstr ""
+#~ "millistesse sisestusvormi väljadesse sisestatud info kuvatakse sisestuse "
+#~ "objekti nimena AutomatWebi administreerimisliideses"
+
+# classes/contentmgmt/webform.aw:prop_redirect_comment
+#~ msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) kommentaar"
+#~ msgstr ""
+#~ "kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale "
+#~ "salvestamist suunatakse."
+
+# classes/contentmgmt/webform.aw:prop_redirect_help
+#~ msgid "Omaduse Kuhu suunata peale t&auml;tmist (redirect) help"
+#~ msgstr ""
+#~ "kodulehekülje väline või sisene veebiaadress, kuhu vormi täitja peale "
+#~ "salvestamist suunatakse. Sisese aadressi puhul tuleb sellesse välja "
+#~ "märkida kausta või dokumendi ID, väline aadress tuleb välja kirjutada "
+#~ "täispikana kujul http://www.firmanimi.ee/suunamine"

@@ -11,6 +11,294 @@ msgstr ""
 
 
 #: classes/applications/scm/scm_organizer.aw:class_1091_help
-msgid "Klassi Spordiv&otilde;istluste korraldaja help"
+msgid "Klassi Spordiv&amp;otilde;istluste korraldaja help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_organizer_person
+msgid "Omaduse Organiseeria (organizer_person) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_organizer_person_comment
+msgid "Omaduse Organiseeria (organizer_person) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_organizer_person_help
+msgid "Omaduse Organiseeria (organizer_person) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_organizer_company
+msgid "Omaduse Firmast (organizer_company) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_organizer_company_comment
+msgid "Omaduse Firmast (organizer_company) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_organizer_company_help
+msgid "Omaduse Firmast (organizer_company) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_competitions_tb
+msgid "Omaduse voistluste tuulbar (competitions_tb) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_competitions_tb_comment
+msgid "Omaduse voistluste tuulbar (competitions_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_competitions_tb_help
+msgid "Omaduse voistluste tuulbar (competitions_tb) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_competitions_tbl
+msgid "Omaduse Praeguste v&amp;otilde;istluste nimekiri (competitions_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_competitions_tbl_comment
+msgid "Omaduse Praeguste v&amp;otilde;istluste nimekiri (competitions_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_competitions_tbl_help
+msgid "Omaduse Praeguste v&amp;otilde;istluste nimekiri (competitions_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_events_tb
+msgid "Omaduse alade tuulbar (events_tb) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_events_tb_comment
+msgid "Omaduse alade tuulbar (events_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_events_tb_help
+msgid "Omaduse alade tuulbar (events_tb) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_events_tbl
+msgid "Omaduse Spordialade nimistu (events_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_events_tbl_comment
+msgid "Omaduse Spordialade nimistu (events_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_events_tbl_help
+msgid "Omaduse Spordialade nimistu (events_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_location_tb
+msgid "Omaduse Asukohtade tuulbar (location_tb) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_location_tb_comment
+msgid "Omaduse Asukohtade tuulbar (location_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_location_tb_help
+msgid "Omaduse Asukohtade tuulbar (location_tb) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_location_tbl
+msgid "Omaduse Asukohtade tabel (location_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_location_tbl_comment
+msgid "Omaduse Asukohtade tabel (location_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_location_tbl_help
+msgid "Omaduse Asukohtade tabel (location_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_tournaments_tbl
+msgid "Omaduse Turniiride tabel (tournaments_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_tournaments_tbl_comment
+msgid "Omaduse Turniiride tabel (tournaments_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_tournaments_tbl_help
+msgid "Omaduse Turniiride tabel (tournaments_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_score_calc_tbl
+msgid "Omaduse Punktis&amp;uuml;steemid (score_calc_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_score_calc_tbl_comment
+msgid "Omaduse Punktis&amp;uuml;steemid (score_calc_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_score_calc_tbl_help
+msgid "Omaduse Punktis&amp;uuml;steemid (score_calc_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_groups_tbl
+msgid "Omaduse V&amp;otilde;istlusklasside tabel (groups_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_groups_tbl_comment
+msgid "Omaduse V&amp;otilde;istlusklasside tabel (groups_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_groups_tbl_help
+msgid "Omaduse V&amp;otilde;istlusklasside tabel (groups_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_result_type_tbl
+msgid "Omaduse tabel (result_type_tbl) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_result_type_tbl_comment
+msgid "Omaduse tabel (result_type_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:prop_result_type_tbl_help
+msgid "Omaduse tabel (result_type_tbl) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_competitions
+msgid "Grupi V&amp;otilde;istlused (competitions) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_competitions_help
+msgid "Grupi V&amp;otilde;istlused (competitions) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_events
+msgid "Grupi Spordialad (events) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_events_help
+msgid "Grupi Spordialad (events) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_locations
+msgid "Grupi Asukohad (locations) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_locations_help
+msgid "Grupi Asukohad (locations) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_tournaments
+msgid "Grupi Turniirid (tournaments) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_tournaments_help
+msgid "Grupi Turniirid (tournaments) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_score_calcs
+msgid "Grupi Punktis&amp;uuml;steemid (score_calcs) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_score_calcs_help
+msgid "Grupi Punktis&amp;uuml;steemid (score_calcs) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_groups
+msgid "Grupi V&amp;otilde;istlusklassid (groups) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_groups_help
+msgid "Grupi V&amp;otilde;istlusklassid (groups) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_result_types
+msgid "Grupi Paremusj2rjestuse tyybid (result_types) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:group_result_types_help
+msgid "Grupi Paremusj2rjestuse tyybid (result_types) help"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:rel_RELTYPE_COMPETITION
+msgid "Seose V&amp;amp;otilde;istlus (RELTYPE_COMPETITION) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:rel_RELTYPE_ORGANIZER
+msgid "Seose Organisaator (RELTYPE_ORGANIZER) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:107
+msgid "Lisa uus spordiala"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:155
+msgid "Uus asukoht"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:212
+msgid "Lisa uus voistlus"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:375 classes/applications/scm/scm_organizer.aw:441
+msgid "Nimetus"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:379
+msgid "T&amp;uuml;&amp;uuml;p"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:383
+msgid "Paremusj&amp;auml;rjestuse t&amp;uuml;&amp;uuml;p"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:391
+msgid "&amp;Uuml;rituse nimi"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:396
+msgid "Spordiala"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:401
+msgid "Asukoht"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:406
+msgid "Kuup&amp;auml;ev"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:411
+msgid "Turniir"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:424
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:428
+msgid "M&amp;ouml;&amp;ouml;detav &amp;Uuml;hik"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:432
+msgid "Sorteeritakse"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:445
+msgid "Aadress"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:449
+msgid "Kaart"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:453
+msgid "Foto"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:462
+msgid "Turniiri nimi"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:466
+msgid "V&amp;otilde;istlusi"
+msgstr ""
+
+#: classes/applications/scm/scm_organizer.aw:475
+msgid "Algoritm"
 msgstr ""
 

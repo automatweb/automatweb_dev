@@ -182,15 +182,15 @@ msgid "Omaduse Alustamisaeg (meterjalide saabumine) (sp_starttime) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_sp_due_date
-msgid "Omaduse Tähtaeg (sp_due_date) caption"
+msgid "Omaduse T&auml;htaeg (sp_due_date) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_sp_due_date_comment
-msgid "Omaduse Tähtaeg (sp_due_date) kommentaar"
+msgid "Omaduse T&auml;htaeg (sp_due_date) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_sp_due_date_help
-msgid "Omaduse Tähtaeg (sp_due_date) help"
+msgid "Omaduse T&auml;htaeg (sp_due_date) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_sp_customer
@@ -440,27 +440,27 @@ msgid "Omaduse Otsi (chart_search) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_chart_start_date
-msgid "Omaduse Näidatava perioodi algus (chart_start_date) caption"
+msgid "Omaduse N&auml;idatava perioodi algus (chart_start_date) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_chart_start_date_comment
-msgid "Omaduse Näidatava perioodi algus (chart_start_date) kommentaar"
+msgid "Omaduse N&auml;idatava perioodi algus (chart_start_date) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_chart_start_date_help
-msgid "Omaduse Näidatava perioodi algus (chart_start_date) help"
+msgid "Omaduse N&auml;idatava perioodi algus (chart_start_date) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_chart_submit
-msgid "Omaduse Näita (chart_submit) caption"
+msgid "Omaduse N&auml;ita (chart_submit) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_chart_submit_comment
-msgid "Omaduse Näita (chart_submit) kommentaar"
+msgid "Omaduse N&auml;ita (chart_submit) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_chart_submit_help
-msgid "Omaduse Näita (chart_submit) help"
+msgid "Omaduse N&auml;ita (chart_submit) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_user_list_toolbar
@@ -584,15 +584,15 @@ msgid "Omaduse Projektide kaust (projects_folder) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_jobs_folder
-msgid "Omaduse Tööde kaust (jobs_folder) caption"
+msgid "Omaduse T&ouml;&ouml;de kaust (jobs_folder) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_jobs_folder_comment
-msgid "Omaduse Tööde kaust (jobs_folder) kommentaar"
+msgid "Omaduse T&ouml;&ouml;de kaust (jobs_folder) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_jobs_folder_help
-msgid "Omaduse Tööde kaust (jobs_folder) help"
+msgid "Omaduse T&ouml;&ouml;de kaust (jobs_folder) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_workspace_configmanager
@@ -620,15 +620,15 @@ msgid "Omaduse Projekti headeri kontroller (case_header_controller) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pv_per_page
-msgid "Omaduse Operaatori vaates töid lehel (pv_per_page) caption"
+msgid "Omaduse Operaatori vaates t&ouml;id lehel (pv_per_page) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pv_per_page_comment
-msgid "Omaduse Operaatori vaates töid lehel (pv_per_page) kommentaar"
+msgid "Omaduse Operaatori vaates t&ouml;id lehel (pv_per_page) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pv_per_page_help
-msgid "Omaduse Operaatori vaates töid lehel (pv_per_page) help"
+msgid "Omaduse Operaatori vaates t&ouml;id lehel (pv_per_page) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_projects_list_objects_perpage
@@ -695,92 +695,95 @@ msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_slope
 msgid ""
-"Omaduse Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise "
-"suurenemise suunas (parameter_due_date_overdue_slope) caption"
+"Omaduse &Uuml;le t&auml;htaja olevate projektide t&auml;htsuse t&otilde;us "
+"t&auml;htaja &uuml;letamise suurenemise suunas "
+"(parameter_due_date_overdue_slope) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_slope_comment
 msgid ""
-"Omaduse Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise "
-"suurenemise suunas (parameter_due_date_overdue_slope) kommentaar"
+"Omaduse &Uuml;le t&auml;htaja olevate projektide t&auml;htsuse t&otilde;us "
+"t&auml;htaja &uuml;letamise suurenemise suunas "
+"(parameter_due_date_overdue_slope) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_slope_help
 msgid ""
-"Omaduse Üle tähtaja olevate projektide tähtsuse tõus tähtaja ületamise "
-"suurenemise suunas (parameter_due_date_overdue_slope) help"
+"Omaduse &Uuml;le t&auml;htaja olevate projektide t&auml;htsuse t&otilde;us "
+"t&auml;htaja &uuml;letamise suurenemise suunas "
+"(parameter_due_date_overdue_slope) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_intercept
 msgid ""
-"Omaduse Just tähtaja ületanud projekti tähtsus "
+"Omaduse Just t&auml;htaja &uuml;letanud projekti t&auml;htsus "
 "(parameter_due_date_overdue_intercept) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_intercept_comment
 msgid ""
-"Omaduse Just tähtaja ületanud projekti tähtsus "
+"Omaduse Just t&auml;htaja &uuml;letanud projekti t&auml;htsus "
 "(parameter_due_date_overdue_intercept) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_overdue_intercept_help
 msgid ""
-"Omaduse Just tähtaja ületanud projekti tähtsus "
+"Omaduse Just t&auml;htaja &uuml;letanud projekti t&auml;htsus "
 "(parameter_due_date_overdue_intercept) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_decay
 msgid ""
-"Omaduse Projekti tähtsuse langus tähtaja kaugenemise suunas "
+"Omaduse Projekti t&auml;htsuse langus t&auml;htaja kaugenemise suunas "
 "(parameter_due_date_decay) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_decay_comment
 msgid ""
-"Omaduse Projekti tähtsuse langus tähtaja kaugenemise suunas "
+"Omaduse Projekti t&auml;htsuse langus t&auml;htaja kaugenemise suunas "
 "(parameter_due_date_decay) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_decay_help
 msgid ""
-"Omaduse Projekti tähtsuse langus tähtaja kaugenemise suunas "
+"Omaduse Projekti t&auml;htsuse langus t&auml;htaja kaugenemise suunas "
 "(parameter_due_date_decay) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_intercept
 msgid ""
-"Omaduse Planeerimise hetkega võrdse tähtajaga projekti tähtsus "
-"(parameter_due_date_intercept) caption"
+"Omaduse Planeerimise hetkega v&otilde;rdse t&auml;htajaga projekti t&auml;"
+"htsus (parameter_due_date_intercept) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_intercept_comment
 msgid ""
-"Omaduse Planeerimise hetkega võrdse tähtajaga projekti tähtsus "
-"(parameter_due_date_intercept) kommentaar"
+"Omaduse Planeerimise hetkega v&otilde;rdse t&auml;htajaga projekti t&auml;"
+"htsus (parameter_due_date_intercept) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_due_date_intercept_help
 msgid ""
-"Omaduse Planeerimise hetkega võrdse tähtajaga projekti tähtsus "
-"(parameter_due_date_intercept) help"
+"Omaduse Planeerimise hetkega v&otilde;rdse t&auml;htajaga projekti t&auml;"
+"htsus (parameter_due_date_intercept) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_priority_slope
 msgid ""
-"Omaduse Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. "
-"tähtajaga (parameter_priority_slope) caption"
+"Omaduse Kliendi ja projektiprioriteedi suhtelise v&auml;&auml;rtuse t&otilde;"
+"us vrd. t&auml;htajaga (parameter_priority_slope) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_priority_slope_comment
 msgid ""
-"Omaduse Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. "
-"tähtajaga (parameter_priority_slope) kommentaar"
+"Omaduse Kliendi ja projektiprioriteedi suhtelise v&auml;&auml;rtuse t&otilde;"
+"us vrd. t&auml;htajaga (parameter_priority_slope) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_priority_slope_help
 msgid ""
-"Omaduse Kliendi ja projektiprioriteedi suhtelise väärtuse tõus vrd. "
-"tähtajaga (parameter_priority_slope) help"
+"Omaduse Kliendi ja projektiprioriteedi suhtelise v&auml;&auml;rtuse t&otilde;"
+"us vrd. t&auml;htajaga (parameter_priority_slope) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_separator
@@ -809,19 +812,19 @@ msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_min_planning_jobstart
 msgid ""
-"Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid töid ei "
+"Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid t&ouml;id ei "
 "planeerita (s) (parameter_min_planning_jobstart) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_min_planning_jobstart_comment
 msgid ""
-"Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid töid ei "
+"Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid t&ouml;id ei "
 "planeerita (s) (parameter_min_planning_jobstart) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_min_planning_jobstart_help
 msgid ""
-"Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid töid ei "
+"Omaduse Ajavahemik planeerimise alguse hetkest milles algavaid t&ouml;id ei "
 "planeerita (s) (parameter_min_planning_jobstart) help"
 msgstr ""
 
@@ -844,27 +847,29 @@ msgid ""
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_start_priority
-msgid "Omaduse Töö algusaja kaal (parameter_start_priority) caption"
+msgid "Omaduse T&ouml;&ouml; algusaja kaal (parameter_start_priority) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_start_priority_comment
-msgid "Omaduse Töö algusaja kaal (parameter_start_priority) kommentaar"
+msgid ""
+"Omaduse T&ouml;&ouml; algusaja kaal (parameter_start_priority) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_start_priority_help
-msgid "Omaduse Töö algusaja kaal (parameter_start_priority) help"
+msgid "Omaduse T&ouml;&ouml; algusaja kaal (parameter_start_priority) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_length_priority
-msgid "Omaduse Töö pikkuse kaal (parameter_length_priority) caption"
+msgid "Omaduse T&ouml;&ouml; pikkuse kaal (parameter_length_priority) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_length_priority_comment
-msgid "Omaduse Töö pikkuse kaal (parameter_length_priority) kommentaar"
+msgid ""
+"Omaduse T&ouml;&ouml; pikkuse kaal (parameter_length_priority) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_length_priority_help
-msgid "Omaduse Töö pikkuse kaal (parameter_length_priority) help"
+msgid "Omaduse T&ouml;&ouml; pikkuse kaal (parameter_length_priority) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_timescale
@@ -886,15 +891,15 @@ msgid ""
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_timescale_unit
-msgid "Omaduse Skaala ajaühik (parameter_timescale_unit) caption"
+msgid "Omaduse Skaala aja&uuml;hik (parameter_timescale_unit) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_timescale_unit_comment
-msgid "Omaduse Skaala ajaühik (parameter_timescale_unit) kommentaar"
+msgid "Omaduse Skaala aja&uuml;hik (parameter_timescale_unit) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_parameter_timescale_unit_help
-msgid "Omaduse Skaala ajaühik (parameter_timescale_unit) help"
+msgid "Omaduse Skaala aja&uuml;hik (parameter_timescale_unit) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_printer_legend
@@ -1006,15 +1011,15 @@ msgid "Omaduse  (pj_change_comment_history) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_title_job_data
-msgid "Omaduse Töö andmed (pj_title_job_data) caption"
+msgid "Omaduse T&ouml;&ouml; andmed (pj_title_job_data) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_title_job_data_comment
-msgid "Omaduse Töö andmed (pj_title_job_data) kommentaar"
+msgid "Omaduse T&ouml;&ouml; andmed (pj_title_job_data) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_title_job_data_help
-msgid "Omaduse Töö andmed (pj_title_job_data) help"
+msgid "Omaduse T&ouml;&ouml; andmed (pj_title_job_data) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_starttime
@@ -1042,29 +1047,32 @@ msgid "Omaduse Plaanitud kestus (h) (pj_length) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_minstart
-msgid "Omaduse Arvatav jätkamisaeg (pj_minstart) caption"
+msgid "Omaduse Arvatav j&auml;tkamisaeg (pj_minstart) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_minstart_comment
-msgid "Omaduse Arvatav jätkamisaeg (pj_minstart) kommentaar"
+msgid "Omaduse Arvatav j&auml;tkamisaeg (pj_minstart) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_minstart_help
-msgid "Omaduse Arvatav jätkamisaeg (pj_minstart) help"
+msgid "Omaduse Arvatav j&auml;tkamisaeg (pj_minstart) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_remaining_length
 msgid ""
-"Omaduse Arvatav lõpetamiseks kuluv aeg (h) (pj_remaining_length) caption"
+"Omaduse Arvatav l&otilde;petamiseks kuluv aeg (h) (pj_remaining_length) "
+"caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_remaining_length_comment
 msgid ""
-"Omaduse Arvatav lõpetamiseks kuluv aeg (h) (pj_remaining_length) kommentaar"
+"Omaduse Arvatav l&otilde;petamiseks kuluv aeg (h) (pj_remaining_length) "
+"kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_remaining_length_help
-msgid "Omaduse Arvatav lõpetamiseks kuluv aeg (h) (pj_remaining_length) help"
+msgid ""
+"Omaduse Arvatav l&otilde;petamiseks kuluv aeg (h) (pj_remaining_length) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_submit
@@ -1092,15 +1100,15 @@ msgid "Omaduse Ressurss (pj_resource) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_job_comment
-msgid "Omaduse Töö kommentaar (pj_job_comment) caption"
+msgid "Omaduse T&ouml;&ouml; kommentaar (pj_job_comment) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_job_comment_comment
-msgid "Omaduse Töö kommentaar (pj_job_comment) kommentaar"
+msgid "Omaduse T&ouml;&ouml; kommentaar (pj_job_comment) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_job_comment_help
-msgid "Omaduse Töö kommentaar (pj_job_comment) help"
+msgid "Omaduse T&ouml;&ouml; kommentaar (pj_job_comment) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pj_state
@@ -1164,27 +1172,27 @@ msgid "Omaduse Kaane lk arv (pjp_kaane_lk_arv) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_sisu_varvid
-msgid "Omaduse Sisu värvid (pjp_sisu_varvid) caption"
+msgid "Omaduse Sisu v&auml;rvid (pjp_sisu_varvid) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_sisu_varvid_comment
-msgid "Omaduse Sisu värvid (pjp_sisu_varvid) kommentaar"
+msgid "Omaduse Sisu v&auml;rvid (pjp_sisu_varvid) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_sisu_varvid_help
-msgid "Omaduse Sisu värvid (pjp_sisu_varvid) help"
+msgid "Omaduse Sisu v&auml;rvid (pjp_sisu_varvid) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_sisu_varvid_notes
-msgid "Omaduse Sisu värvid Notes (pjp_sisu_varvid_notes) caption"
+msgid "Omaduse Sisu v&auml;rvid Notes (pjp_sisu_varvid_notes) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_sisu_varvid_notes_comment
-msgid "Omaduse Sisu värvid Notes (pjp_sisu_varvid_notes) kommentaar"
+msgid "Omaduse Sisu v&auml;rvid Notes (pjp_sisu_varvid_notes) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_sisu_varvid_notes_help
-msgid "Omaduse Sisu värvid Notes (pjp_sisu_varvid_notes) help"
+msgid "Omaduse Sisu v&auml;rvid Notes (pjp_sisu_varvid_notes) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_sisu_lakk_muu
@@ -1200,27 +1208,27 @@ msgid "Omaduse Sisu lakk/muu (pjp_sisu_lakk_muu) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_kaane_varvid
-msgid "Omaduse Kaane värvid (pjp_kaane_varvid) caption"
+msgid "Omaduse Kaane v&auml;rvid (pjp_kaane_varvid) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_kaane_varvid_comment
-msgid "Omaduse Kaane värvid (pjp_kaane_varvid) kommentaar"
+msgid "Omaduse Kaane v&auml;rvid (pjp_kaane_varvid) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_kaane_varvid_help
-msgid "Omaduse Kaane värvid (pjp_kaane_varvid) help"
+msgid "Omaduse Kaane v&auml;rvid (pjp_kaane_varvid) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_kaane_varvid_notes
-msgid "Omaduse Kaane värvid Notes (pjp_kaane_varvid_notes) caption"
+msgid "Omaduse Kaane v&auml;rvid Notes (pjp_kaane_varvid_notes) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_kaane_varvid_notes_comment
-msgid "Omaduse Kaane värvid Notes (pjp_kaane_varvid_notes) kommentaar"
+msgid "Omaduse Kaane v&auml;rvid Notes (pjp_kaane_varvid_notes) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_kaane_varvid_notes_help
-msgid "Omaduse Kaane värvid Notes (pjp_kaane_varvid_notes) help"
+msgid "Omaduse Kaane v&auml;rvid Notes (pjp_kaane_varvid_notes) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_kaane_lakk_muu
@@ -1260,27 +1268,27 @@ msgid "Omaduse Kaane paber (pjp_kaane_paber) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_trykiarv
-msgid "Omaduse Trükiarv (pjp_trykiarv) caption"
+msgid "Omaduse Tr&uuml;kiarv (pjp_trykiarv) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_trykiarv_comment
-msgid "Omaduse Trükiarv (pjp_trykiarv) kommentaar"
+msgid "Omaduse Tr&uuml;kiarv (pjp_trykiarv) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_trykiarv_help
-msgid "Omaduse Trükiarv (pjp_trykiarv) help"
+msgid "Omaduse Tr&uuml;kiarv (pjp_trykiarv) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_trykise_ehitus
-msgid "Omaduse Trükise ehitus (pjp_trykise_ehitus) caption"
+msgid "Omaduse Tr&uuml;kise ehitus (pjp_trykise_ehitus) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_trykise_ehitus_comment
-msgid "Omaduse Trükise ehitus (pjp_trykise_ehitus) kommentaar"
+msgid "Omaduse Tr&uuml;kise ehitus (pjp_trykise_ehitus) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_trykise_ehitus_help
-msgid "Omaduse Trükise ehitus (pjp_trykise_ehitus) help"
+msgid "Omaduse Tr&uuml;kise ehitus (pjp_trykise_ehitus) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_kromaliin
@@ -1308,27 +1316,27 @@ msgid "Omaduse Makett (pjp_makett) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_naidis
-msgid "Omaduse Näidis (pjp_naidis) caption"
+msgid "Omaduse N&auml;idis (pjp_naidis) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_naidis_comment
-msgid "Omaduse Näidis (pjp_naidis) kommentaar"
+msgid "Omaduse N&auml;idis (pjp_naidis) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_naidis_help
-msgid "Omaduse Näidis (pjp_naidis) help"
+msgid "Omaduse N&auml;idis (pjp_naidis) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_title_case_wf
-msgid "Omaduse Projekti töövoog (pjp_title_case_wf) caption"
+msgid "Omaduse Projekti t&ouml;&ouml;voog (pjp_title_case_wf) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_title_case_wf_comment
-msgid "Omaduse Projekti töövoog (pjp_title_case_wf) kommentaar"
+msgid "Omaduse Projekti t&ouml;&ouml;voog (pjp_title_case_wf) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_title_case_wf_help
-msgid "Omaduse Projekti töövoog (pjp_title_case_wf) help"
+msgid "Omaduse Projekti t&ouml;&ouml;voog (pjp_title_case_wf) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_pjp_case_wf
@@ -1392,15 +1400,15 @@ msgid "Omaduse Kuni (ws_to) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_ws_sbt
-msgid "Omaduse Näita (ws_sbt) caption"
+msgid "Omaduse N&auml;ita (ws_sbt) caption"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_ws_sbt_comment
-msgid "Omaduse Näita (ws_sbt) kommentaar"
+msgid "Omaduse N&auml;ita (ws_sbt) kommentaar"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_ws_sbt_help
-msgid "Omaduse Näita (ws_sbt) help"
+msgid "Omaduse N&auml;ita (ws_sbt) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:prop_ws_tbl
@@ -1472,57 +1480,60 @@ msgid "Grupi Operaatori vaade (grp_printer) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_current
-msgid "Grupi Jooksvad tööd (grp_printer_current) pealkiri"
+msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_current_help
-msgid "Grupi Jooksvad tööd (grp_printer_current) help"
+msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_done
-msgid "Grupi Tehtud tööd (grp_printer_done) pealkiri"
+msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_done_help
-msgid "Grupi Tehtud tööd (grp_printer_done) help"
+msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_aborted
-msgid "Grupi Katkestatud tööd (grp_printer_aborted) pealkiri"
+msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_aborted_help
-msgid "Grupi Katkestatud tööd (grp_printer_aborted) help"
+msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress
-msgid "Grupi Kõik töös olevad (grp_printer_in_progress) pealkiri"
+msgid ""
+"Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress_help
-msgid "Grupi Kõik töös olevad (grp_printer_in_progress) help"
+msgid "Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_startable
 msgid ""
-"Grupi Kõik tööd mida oleks võimalik alustada (grp_printer_startable) pealkiri"
+"Grupi K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada "
+"(grp_printer_startable) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_startable_help
 msgid ""
-"Grupi Kõik tööd mida oleks võimalik alustada (grp_printer_startable) help"
+"Grupi K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada "
+"(grp_printer_startable) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable
 msgid ""
-"Grupi Tööd, mida ei ole veel võimalik alustada (grp_printer_notstartable) "
-"pealkiri"
+"Grupi T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada "
+"(grp_printer_notstartable) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable_help
 msgid ""
-"Grupi Tööd, mida ei ole veel võimalik alustada (grp_printer_notstartable) "
-"help"
+"Grupi T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada "
+"(grp_printer_notstartable) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_settings
@@ -1542,11 +1553,11 @@ msgid "Grupi Seaded (grp_settings_def) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_settings_salesman
-msgid "Grupi Müügimehe seaded (grp_settings_salesman) pealkiri"
+msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_settings_salesman_help
-msgid "Grupi Müügimehe seaded (grp_settings_salesman) help"
+msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_users_tree
@@ -1574,11 +1585,11 @@ msgid "Grupi Ressursside haldus (grp_resources) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_worksheet
-msgid "Grupi Töölehed (grp_worksheet) pealkiri"
+msgid "Grupi T&ouml;&ouml;lehed (grp_worksheet) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_worksheet_help
-msgid "Grupi Töölehed (grp_worksheet) help"
+msgid "Grupi T&ouml;&ouml;lehed (grp_worksheet) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_login_select_res
@@ -1638,7 +1649,7 @@ msgid "Planeeritud"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:457
-msgid "Töös"
+msgid "T&ouml;&ouml;s"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:458 classes/mrp/mrp_workspace.aw:1215
@@ -1664,7 +1675,7 @@ msgid "Kustutatud"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:463 classes/mrp/mrp_workspace.aw:1871
-msgid "Plaanist väljas"
+msgid "Plaanist v&auml;ljas"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:464 classes/mrp/mrp_workspace.aw:1217
@@ -1673,11 +1684,11 @@ msgid "Arhiveeritud"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:990
-msgid "&Uuml;le t&auml;htaja planeeritud"
+msgid "&amp;Uuml;le t&amp;auml;htaja planeeritud"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:991
-msgid "&Uuml;le t&auml;htaja l&auml;inud"
+msgid "&amp;Uuml;le t&amp;auml;htaja l&amp;auml;inud"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1094
@@ -1685,11 +1696,11 @@ msgid "[Planeeri]"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1103
-msgid "Päev(a) peale projekti valmimist"
+msgid "P&auml;ev(a) peale projekti valmimist"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1108
-msgid "Päev"
+msgid "P&auml;ev"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1109
@@ -1697,15 +1708,15 @@ msgid "Minut"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1163
-msgid "V&otilde;ib alustada"
+msgid "V&amp;otilde;ib alustada"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1164
-msgid "Ei saa alustada/t&ouml;&ouml;s"
+msgid "Ei saa alustada/t&amp;ouml;&amp;ouml;s"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1165
-msgid "Eeldust&ouml;&ouml; tehtud"
+msgid "Eeldust&amp;ouml;&amp;ouml; tehtud"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1166
@@ -1721,11 +1732,11 @@ msgid "Avatud"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1251
-msgid "J&auml;rgmine lehek&uuml;lg"
+msgid "J&amp;auml;rgmine lehek&amp;uuml;lg"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1266
-msgid "Eelmine lehek&uuml;lg"
+msgid "Eelmine lehek&amp;uuml;lg"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1587 classes/mrp/mrp_workspace.aw:3241
@@ -1759,7 +1770,7 @@ msgid "Ressurssikategooria"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1707
-msgid "L&otilde;ika"
+msgid "L&amp;otilde;ika"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1714
@@ -1775,7 +1786,7 @@ msgid "Kustuta"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1737
-msgid "Kustutada kõik valitud ressursid?"
+msgid "Kustutada k&otilde;ik valitud ressursid?"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1753
@@ -1787,11 +1798,11 @@ msgid "Kustuta valitud projekt(id)"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1760
-msgid "Kustutada kõik valitud projektid?"
+msgid "Kustutada k&otilde;ik valitud projektid?"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1792
-msgid "Kõik projektid"
+msgid "K&otilde;ik projektid"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1801
@@ -1803,15 +1814,15 @@ msgid "Plaanisolevad"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1821
-msgid "Hetkel töös"
+msgid "Hetkel t&ouml;&ouml;s"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1831
-msgid "Planeeritud üle tähtaja"
+msgid "Planeeritud &uuml;le t&auml;htaja"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1841
-msgid "Üle tähtaja"
+msgid "&Uuml;le t&auml;htaja"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1851
@@ -1819,21 +1830,21 @@ msgid "Uued"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1907
-msgid "Allhanket&ouml;&ouml;d"
+msgid "Allhanket&amp;ouml;&amp;ouml;d"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1917
-msgid "Katkestatud t&ouml;&ouml;d"
+msgid "Katkestatud t&amp;ouml;&amp;ouml;d"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1940 classes/mrp/mrp_workspace.aw:2178
 #: classes/mrp/mrp_workspace.aw:2295 classes/mrp/mrp_workspace.aw:3782
-#: classes/mrp/mrp_workspace.aw:5037
+#: classes/mrp/mrp_workspace.aw:5058
 msgid "Klient"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1946
-msgid "Pro&shy;jekt"
+msgid "Pro&amp;shy;jekt"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1969
@@ -1845,15 +1856,15 @@ msgid "Planeeritud valmimine"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1985
-msgid "Tähtaeg"
+msgid "T&auml;htaeg"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:1994 classes/mrp/mrp_workspace.aw:2007
-msgid "Prio&shy;ri&shy;teet"
+msgid "Prio&amp;shy;ri&amp;shy;teet"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2015
-msgid "Müü&shy;gi prio&shy;ri&shy;teet"
+msgid "M&uuml;&uuml;&amp;shy;gi prio&amp;shy;ri&amp;shy;teet"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2184 classes/mrp/mrp_workspace.aw:2300
@@ -1871,16 +1882,16 @@ msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2210 classes/mrp/mrp_workspace.aw:2266
 #: classes/mrp/mrp_workspace.aw:2333 classes/mrp/mrp_workspace.aw:2379
-#: classes/mrp/mrp_workspace.aw:3821 classes/mrp/mrp_workspace.aw:4178
+#: classes/mrp/mrp_workspace.aw:3821 classes/mrp/mrp_workspace.aw:4190
 msgid "Ava"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2313
-msgid "Projekti tähtaeg"
+msgid "Projekti t&auml;htaeg"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2318
-msgid "Vara&shy;seim jätka&shy;mis&shy;aeg"
+msgid "Vara&amp;shy;seim j&auml;tka&amp;shy;mis&amp;shy;aeg"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2322
@@ -1896,7 +1907,7 @@ msgid "Kinnine aeg %s - %s"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2845
-msgid "<<"
+msgid "&lt;&lt;"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2846
@@ -1908,15 +1919,15 @@ msgid "Eelmine"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2854
-msgid "Täna"
+msgid "T&auml;na"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2858
-msgid "Järgmine"
+msgid "J&auml;rgmine"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2862
-msgid ">>"
+msgid "&gt;&gt;"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2863
@@ -1924,7 +1935,8 @@ msgid "5 edasi"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2867
-msgid "&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s"
+msgid ""
+"&amp;nbsp;&amp;nbsp;Periood: %s &amp;nbsp;&amp;nbsp;P&auml;evi perioodis: %s"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2873
@@ -1932,7 +1944,7 @@ msgid "Kaota valik"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:2877
-msgid " &nbsp;&nbsp;Valitud projekt: "
+msgid " &amp;nbsp;&amp;nbsp;Valitud projekt: "
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:3216
@@ -1944,11 +1956,11 @@ msgid "Vali ressurss"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:3254
-msgid "N&auml;ita k&otilde;ikide ressurside t&ouml;id"
+msgid "N&amp;auml;ita k&amp;otilde;ikide ressurside t&amp;ouml;id"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:3260
-msgid "N&auml;ita osakonna ressurside t&ouml;id"
+msgid "N&amp;auml;ita osakonna ressurside t&amp;ouml;id"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:3266
@@ -1992,11 +2004,11 @@ msgid "Algus"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:3660
-msgid "T&auml;htaeg"
+msgid "T&amp;auml;htaeg"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:3730
-msgid "L&otilde;pp"
+msgid "L&amp;otilde;pp"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:3754
@@ -2011,38 +2023,38 @@ msgstr ""
 msgid "Teostaja"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:4261
-msgid "K&otilde;ik ressursid"
+#: classes/mrp/mrp_workspace.aw:4282
+msgid "K&amp;otilde;ik ressursid"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:4270
+#: classes/mrp/mrp_workspace.aw:4291
 msgid "Osakonna ressursid"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:4482
+#: classes/mrp/mrp_workspace.aw:4503
 msgid "Salvesta kommentaar"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:4484
+#: classes/mrp/mrp_workspace.aw:4505
 msgid "Oled kindel et soovid kommentaari salvestada?"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:4839
-msgid "Logi v&auml;lja"
+#: classes/mrp/mrp_workspace.aw:4860
+msgid "Logi v&amp;auml;lja"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:4945 classes/mrp/mrp_workspace.aw:5029
+#: classes/mrp/mrp_workspace.aw:4966 classes/mrp/mrp_workspace.aw:5050
 msgid "Valitud projekt"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5070
+#: classes/mrp/mrp_workspace.aw:5091
 msgid "Nimetus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5075 classes/mrp/mrp_workspace.aw:5090
+#: classes/mrp/mrp_workspace.aw:5096 classes/mrp/mrp_workspace.aw:5111
 msgid "Vali see"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:5166
+#: classes/mrp/mrp_workspace.aw:5187
 msgid "Resurss"
 msgstr ""

@@ -14,3 +14,39 @@ msgstr ""
 msgid "Klassi Spordiala help"
 msgstr ""
 
+#: classes/applications/scm/scm_event.aw:prop_type
+msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_event.aw:prop_type_comment
+msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_event.aw:prop_type_help
+msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) help"
+msgstr ""
+
+#: classes/applications/scm/scm_event.aw:prop_result_type
+msgid "Omaduse Paremusj&amp;auml;rjestuse t&amp;uuml;&amp;uuml;p (result_type) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_event.aw:prop_result_type_comment
+msgid "Omaduse Paremusj&amp;auml;rjestuse t&amp;uuml;&amp;uuml;p (result_type) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_event.aw:prop_result_type_help
+msgid "Omaduse Paremusj&amp;auml;rjestuse t&amp;uuml;&amp;uuml;p (result_type) help"
+msgstr ""
+
+#: classes/applications/scm/scm_event.aw:rel_RELTYPE_RESULT_TYPE
+msgid "Seose Paremusj&amp;amp;auml;rjestuse t&amp;amp;uuml;&amp;amp;uuml;p (RELTYPE_RESULT_TYPE) tekst"
+msgstr ""
+
+#: classes/applications/scm/scm_event.aw:42
+msgid "Individuaalne"
+msgstr ""
+
+#: classes/applications/scm/scm_event.aw:43
+msgid "Meeskondlik"
+msgstr ""
+

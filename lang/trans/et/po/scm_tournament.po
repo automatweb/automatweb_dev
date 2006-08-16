@@ -9,8 +9,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/applications/scm/scm_tournament.aw:class_1096_help
 msgid "Klassi Turniir help"
 msgstr ""
 
+#: classes/applications/scm/scm_tournament.aw:prop_comp_toolbar
+msgid "Omaduse T&amp;ouml;&amp;ouml;riistariba (comp_toolbar) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_comp_toolbar_comment
+msgid "Omaduse T&amp;ouml;&amp;ouml;riistariba (comp_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_comp_toolbar_help
+msgid "Omaduse T&amp;ouml;&amp;ouml;riistariba (comp_toolbar) help"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_comp_table
+msgid "Omaduse V&amp;ouml;istlused (comp_table) caption"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_comp_table_comment
+msgid "Omaduse V&amp;ouml;istlused (comp_table) kommentaar"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:prop_comp_table_help
+msgid "Omaduse V&amp;ouml;istlused (comp_table) help"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:group_competitions
+msgid "Grupi V&amp;otilde;istlused (competitions) pealkiri"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:group_competitions_help
+msgid "Grupi V&amp;otilde;istlused (competitions) help"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:43
+msgid "Lisa uus v&otilde;istlus"
+msgstr ""
+
+#: classes/applications/scm/scm_tournament.aw:86
+msgid "V&otilde;istluse nimi"
+msgstr ""

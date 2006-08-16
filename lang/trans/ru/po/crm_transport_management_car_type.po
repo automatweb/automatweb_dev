@@ -9,25 +9,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:class__help
-msgid "Klassi  help"
+#: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:class_1087_help
+msgid "Klassi Automark help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:prop_type
-msgid "Omaduse T&uuml;&uuml;p (type) caption"
+msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:prop_type_comment
-msgid "Omaduse T&uuml;&uuml;p (type) kommentaar"
+msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:prop_type_help
-msgid "Omaduse T&uuml;&uuml;p (type) help"
+msgid "Omaduse T&amp;uuml;&amp;uuml;p (type) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:35
-msgid "S&otilde;iduauto"
+msgid "S&amp;otilde;iduauto"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:36
@@ -37,4 +36,3 @@ msgstr ""
 #: classes/applications/crm/transport_management/crm_transport_management_car_type.aw:37
 msgid "Maastur"
 msgstr ""
-

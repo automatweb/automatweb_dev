@@ -58,6 +58,10 @@ msgstr "Type"
 msgid "Seose tüüp"
 msgstr "Connection type"
 
+#: classes/aliasmgr.aw:948 classes/aliasmgr.aw:961
+msgid "Objekti t&uuml;&uuml;p"
+msgstr "Object type"
+
 #: classes/aliasmgr.aw:1132
 msgid "Lisa uus objekt"
 msgstr "Add new object"
@@ -86,3 +90,10 @@ msgstr "Save"
 msgid "Kustuta valitud seos(ed)"
 msgstr "Delete selected connection(s)"
 
+#: classes/aliasmgr.aw:876
+msgid "Too vend"
+msgstr "Brother"
+
+#: classes/aliasmgr.aw:886
+msgid "&Otilde;igus"
+msgstr "Permission"

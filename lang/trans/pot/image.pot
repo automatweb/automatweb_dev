@@ -15,27 +15,27 @@ msgid "Klassi Pilt help"
 msgstr ""
 
 #: classes/image.aw:prop_needs_translation
-msgid "Omaduse Vajab tõlget (needs_translation) caption"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
 msgstr ""
 
 #: classes/image.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
 
 #: classes/image.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tõlget (needs_translation) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
 #: classes/image.aw:prop_is_translated
-msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
 msgstr ""
 
 #: classes/image.aw:prop_is_translated_comment
-msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
 #: classes/image.aw:prop_is_translated_help
-msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
 msgstr ""
 
 #: classes/image.aw:prop_subclass
@@ -120,6 +120,18 @@ msgstr ""
 
 #: classes/image.aw:prop_link_help
 msgid "Omaduse Link (link) help"
+msgstr ""
+
+#: classes/image.aw:prop_date_taken
+msgid "Omaduse Pildistamise aeg (date_taken) caption"
+msgstr ""
+
+#: classes/image.aw:prop_date_taken_comment
+msgid "Omaduse Pildistamise aeg (date_taken) kommentaar"
+msgstr ""
+
+#: classes/image.aw:prop_date_taken_help
+msgid "Omaduse Pildistamise aeg (date_taken) help"
 msgstr ""
 
 #: classes/image.aw:prop_can_comment
@@ -358,19 +370,27 @@ msgstr ""
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
 msgstr ""
 
-#: classes/image.aw:301
+#: classes/image.aw:304
 msgid "kommentaar"
 msgstr ""
 
-#: classes/image.aw:301
+#: classes/image.aw:304
 msgid "kommentaari"
 msgstr ""
 
-#: classes/image.aw:884
+#: classes/image.aw:880
+msgid "Uues aknas"
+msgstr ""
+
+#: classes/image.aw:881
+msgid "&Auml;ra n&auml;ita print-vaates"
+msgstr ""
+
+#: classes/image.aw:894
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
 
-#: classes/image.aw:1375
+#: classes/image.aw:1415
 msgid "Lisa"
 msgstr ""
 

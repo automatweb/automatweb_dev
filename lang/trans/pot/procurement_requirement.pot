@@ -11,7 +11,7 @@ msgstr ""
 
 
 #: classes/applications/procurement_center/procurement_requirement.aw:class_1067_help
-msgid "Klassi N&otilde;ue help"
+msgid "Klassi N&amp;otilde;ue help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:prop_pri
@@ -87,11 +87,11 @@ msgid "Omaduse  (comments) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:group_offers
-msgid "Grupi Lahendused n&otilde;udele (offers) pealkiri"
+msgid "Grupi Lahendused n&amp;otilde;udele (offers) pealkiri"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:group_offers_help
-msgid "Grupi Lahendused n&otilde;udele (offers) help"
+msgid "Grupi Lahendused n&amp;otilde;udele (offers) help"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:group_comments
@@ -139,7 +139,7 @@ msgid "Sobiv"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:179
-msgid "Tagasi l&uuml;katud"
+msgid "L&amp;auml;bir&amp;auml;&amp;auml;kimistele"
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:184
@@ -167,6 +167,6 @@ msgid ""
 msgstr ""
 
 #: classes/applications/procurement_center/procurement_requirement.aw:284
-msgid "<b>Keskmine:</b>"
+msgid "&lt;b&gt;Keskmine:&lt;/b&gt;"
 msgstr ""
 

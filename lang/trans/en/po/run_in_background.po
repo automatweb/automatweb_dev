@@ -9,42 +9,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/run_in_background.aw:51
+#: classes/core/run_in_background.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
+#: classes/core/run_in_background.aw:prop_
+msgid "Omaduse  () caption"
+msgstr ""
+
+#: classes/core/run_in_background.aw:prop__comment
+msgid "Omaduse  () kommentaar"
+msgstr ""
+
+#: classes/core/run_in_background.aw:prop__help
+msgid "Omaduse  () help"
+msgstr ""
+
+#: classes/core/run_in_background.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/core/run_in_background.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+
+#: classes/core/run_in_background.aw:68
 msgid "Reset"
 msgstr ""
 
-#: classes/core/run_in_background.aw:75
+#: classes/core/run_in_background.aw:92
 msgid "Peata"
 msgstr ""
 
-#: classes/core/run_in_background.aw:97
-msgid "K&auml;ivita"
+#: classes/core/run_in_background.aw:114
+msgid "K&amp;auml;ivita"
 msgstr ""
 
-#: classes/core/run_in_background.aw:204
-msgid "Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"
+#: classes/core/run_in_background.aw:237
+msgid "Protsess k&amp;auml;ivitub hiljemalt kahe minuti p&amp;auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:220
-msgid "Protsess l&otilde;petab t&ouml;&ouml;d"
+#: classes/core/run_in_background.aw:253
+msgid "Protsess l&amp;otilde;petab t&amp;ouml;&amp;ouml;d"
 msgstr ""
 
-#: classes/core/run_in_background.aw:321
-msgid "<br>Protsess j&auml;tkab hiljemalt kahe minuti p&auml;rast"
+#: classes/core/run_in_background.aw:354
+msgid ""
+"&lt;br&gt;Protsess j&amp;auml;tkab hiljemalt kahe minuti p&amp;auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:351
-msgid "<br>Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"
+#: classes/core/run_in_background.aw:384
+msgid ""
+"&lt;br&gt;Protsess k&amp;auml;ivitub hiljemalt kahe minuti p&amp;auml;rast"
 msgstr ""
 
-#: classes/core/run_in_background.aw:381
-msgid "<br>Protsess k&auml;ivitub j&auml;rgmisel kordusel"
+#: classes/core/run_in_background.aw:414
+msgid "&lt;br&gt;Protsess k&amp;auml;ivitub j&amp;auml;rgmisel kordusel"
 msgstr ""
 
-#: classes/core/run_in_background.aw:656
+#: classes/core/run_in_background.aw:689
 msgid "all done"
 msgstr ""
 
-#: classes/core/run_in_background.aw:746
+#: classes/core/run_in_background.aw:779
 msgid "Halt"
 msgstr ""

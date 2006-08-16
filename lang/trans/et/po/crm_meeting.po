@@ -14,6 +14,30 @@ msgstr ""
 msgid "Klassi Kohtumine help"
 msgstr ""
 
+#: classes/crm/crm_meeting.aw:prop_predicates
+msgid "Omaduse Eeldustegevused (predicates) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_predicates_comment
+msgid "Omaduse Eeldustegevused (predicates) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_predicates_help
+msgid "Omaduse Eeldustegevused (predicates) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_goal
+msgid "Omaduse Verstapost (is_goal) caption"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_goal_comment
+msgid "Omaduse Verstapost (is_goal) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:prop_is_goal_help
+msgid "Omaduse Verstapost (is_goal) help"
+msgstr ""
+
 #: classes/crm/crm_meeting.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
 msgstr ""
@@ -95,34 +119,28 @@ msgstr ""
 msgid "Omaduse Algab  (start1) help"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_end
 #: classes/crm/crm_meeting.aw:prop_end
-msgid "Omaduse Lõpeb (end) caption"
+msgid "Omaduse L&otilde;peb (end) caption"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_end_comment
 #: classes/crm/crm_meeting.aw:prop_end_comment
-msgid "Omaduse Lõpeb (end) kommentaar"
+msgid "Omaduse L&otilde;peb (end) kommentaar"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_end_help
 #: classes/crm/crm_meeting.aw:prop_end_help
-msgid "Omaduse Lõpeb (end) help"
+msgid "Omaduse L&otilde;peb (end) help"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_whole_day
 #: classes/crm/crm_meeting.aw:prop_whole_day
-msgid "Omaduse Kestab terve päeva (whole_day) caption"
+msgid "Omaduse Kestab terve p&auml;eva (whole_day) caption"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_whole_day_comment
 #: classes/crm/crm_meeting.aw:prop_whole_day_comment
-msgid "Omaduse Kestab terve päeva (whole_day) kommentaar"
+msgid "Omaduse Kestab terve p&auml;eva (whole_day) kommentaar"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_whole_day_help
 #: classes/crm/crm_meeting.aw:prop_whole_day_help
-msgid "Omaduse Kestab terve päeva (whole_day) help"
+msgid "Omaduse Kestab terve p&auml;eva (whole_day) help"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:prop_udefch1
@@ -434,31 +452,28 @@ msgstr ""
 msgid "Omaduse Tunni hind (hr_price) help"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_summary
 #: classes/crm/crm_meeting.aw:prop_summary
-msgid "Omaduse Kokkuvõte (summary) caption"
+msgid "Omaduse Kokkuv&otilde;te (summary) caption"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_summary_comment
 #: classes/crm/crm_meeting.aw:prop_summary_comment
-msgid "Omaduse Kokkuvõte (summary) kommentaar"
+msgid "Omaduse Kokkuv&otilde;te (summary) kommentaar"
 msgstr ""
 
-# classes/crm/crm_meeting.aw:prop_summary_help
 #: classes/crm/crm_meeting.aw:prop_summary_help
-msgid "Omaduse Kokkuvõte (summary) help"
+msgid "Omaduse Kokkuv&otilde;te (summary) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_controller_disp
-msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) caption"
+msgid "Omaduse Kontrolleri v&amp;auml;ljund (controller_disp) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_controller_disp_comment
-msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) kommentaar"
+msgid "Omaduse Kontrolleri v&amp;auml;ljund (controller_disp) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_controller_disp_help
-msgid "Omaduse Kontrolleri v&auml;ljund (controller_disp) help"
+msgid "Omaduse Kontrolleri v&amp;auml;ljund (controller_disp) help"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:prop_aliasmgr
@@ -684,15 +699,15 @@ msgid "Omaduse  (sel_resources) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_transl
-msgid "Omaduse T&otilde;lgi (transl) caption"
+msgid "Omaduse T&amp;otilde;lgi (transl) caption"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_transl_comment
-msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgid "Omaduse T&amp;otilde;lgi (transl) kommentaar"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_transl_help
-msgid "Omaduse T&otilde;lgi (transl) help"
+msgid "Omaduse T&amp;otilde;lgi (transl) help"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:group_recurrence
@@ -764,11 +779,19 @@ msgid "Grupi Ressursid (resources) help"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:group_transl
-msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgid "Grupi T&amp;otilde;lgi (transl) pealkiri"
 msgstr ""
 
 #: classes/crm/crm_meeting.aw:group_transl_help
-msgid "Grupi T&otilde;lgi (transl) help"
+msgid "Grupi T&amp;otilde;lgi (transl) help"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:group_predicates
+msgid "Grupi Eeldused (predicates) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:group_predicates_help
+msgid "Grupi Eeldused (predicates) help"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:rel_RELTYPE_RECURRENCE
@@ -788,27 +811,31 @@ msgstr ""
 msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:421
+#: classes/crm/crm_meeting.aw:rel_RELTYPE_PREDICATE
+msgid "Seose Eeldustegevus (RELTYPE_PREDICATE) tekst"
+msgstr ""
+
+#: classes/crm/crm_meeting.aw:439
 msgid "--Vali--"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:503 classes/crm/crm_meeting.aw:549
-#: classes/crm/crm_meeting.aw:570
+#: classes/crm/crm_meeting.aw:521 classes/crm/crm_meeting.aw:567
+#: classes/crm/crm_meeting.aw:588
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:511 classes/crm/crm_meeting.aw:522
+#: classes/crm/crm_meeting.aw:529 classes/crm/crm_meeting.aw:540
 msgid "Lisa isik organisatsiooni %s"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:560
+#: classes/crm/crm_meeting.aw:578
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:562
+#: classes/crm/crm_meeting.aw:580
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:579
+#: classes/crm/crm_meeting.aw:597
 msgid "Salvesta"
 msgstr ""

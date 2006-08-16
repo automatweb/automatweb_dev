@@ -6,6 +6,4 @@ $GLOBALS["TRANS"]["Omaduse Organisatsioon (owner) kommentaar"] = "Org. kommentaa
 $GLOBALS["TRANS"]["Omaduse Organisatsioon (owner) help"] = "org. abi";
 $GLOBALS["TRANS"]["Grupi Projektid (grp_projects) pealkiri"] = "Projektid 2";
 $GLOBALS["TRANS"]["Grupi Projektid (grp_projects) help"] = "Projektid tabi abitekst siin. bot nii. ";
-$GLOBALS["TRANS"]["Grupi Projektid (grp_projects) comment"] = "Projektide all saab teha seda ja seda. Tabi kommentaar";
-$GLOBALS["TRANS"]["Omaduse Nimi (name) caption"] = "Nimi 2";
 ?>

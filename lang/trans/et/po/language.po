@@ -130,24 +130,17 @@ msgstr ""
 msgid "Omaduse Keele ID (lang_id) help"
 msgstr ""
 
-# classes/core/language.aw:prop_lang_trans_msg
 #: classes/core/language.aw:prop_lang_trans_msg
-msgid "Omaduse T&otilde;lkimata sisu teade (lang_trans_msg) caption"
+msgid "Omaduse T&amp;otilde;lkimata sisu teade (lang_trans_msg) caption"
 msgstr ""
 
-# classes/core/language.aw:prop_lang_trans_msg_comment
 #: classes/core/language.aw:prop_lang_trans_msg_comment
-msgid "Omaduse T&otilde;lkimata sisu teade (lang_trans_msg) kommentaar"
+msgid "Omaduse T&amp;otilde;lkimata sisu teade (lang_trans_msg) kommentaar"
 msgstr ""
-"teade juhuks, kui veebi sisu tõlkimiseks kasutatakse tõlkekeskkonda ning "
-"parasjagu vaadeldavat objekti ei ole valitud keelde tõlgitud"
 
-# classes/core/language.aw:prop_lang_trans_msg_help
 #: classes/core/language.aw:prop_lang_trans_msg_help
-msgid "Omaduse T&otilde;lkimata sisu teade (lang_trans_msg) help"
+msgid "Omaduse T&amp;otilde;lkimata sisu teade (lang_trans_msg) help"
 msgstr ""
-"teade juhuks, kui veebi sisu tõlkimiseks kasutatakse tõlkekeskkonda ning "
-"parasjagu vaadeldavat objekti ei ole valitud keelde tõlgitud"
 
 # classes/core/language.aw:prop_lang_img
 #: classes/core/language.aw:prop_lang_img
@@ -214,30 +207,23 @@ msgstr ""
 msgid "Omaduse Grupp (lang_group) help"
 msgstr ""
 
-# classes/core/language.aw:prop_temp_redir_url
 #: classes/core/language.aw:prop_temp_redir_url
 msgid ""
-"Omaduse Ajutine AW-v&auml;line aadress sisse logimata kasutajatele "
+"Omaduse Ajutine AW-v&amp;auml;line aadress sisse logimata kasutajatele "
 "(temp_redir_url) caption"
 msgstr ""
 
-# classes/core/language.aw:prop_temp_redir_url_comment
 #: classes/core/language.aw:prop_temp_redir_url_comment
 msgid ""
-"Omaduse Ajutine AW-v&auml;line aadress sisse logimata kasutajatele "
+"Omaduse Ajutine AW-v&amp;auml;line aadress sisse logimata kasutajatele "
 "(temp_redir_url) kommentaar"
 msgstr ""
-"väline aadress sisse logimata kasutajatele - kuhu suunata kasutajad, kes ei "
-"tohi ilma sisselogimata antud keelt näha"
 
-# classes/core/language.aw:prop_temp_redir_url_help
 #: classes/core/language.aw:prop_temp_redir_url_help
 msgid ""
-"Omaduse Ajutine AW-v&auml;line aadress sisse logimata kasutajatele "
+"Omaduse Ajutine AW-v&amp;auml;line aadress sisse logimata kasutajatele "
 "(temp_redir_url) help"
 msgstr ""
-"väline aadress sisse logimata kasutajatele - kuhu suunata kasutajad, kes ei "
-"tohi ilma sisselogimata antud keelt näha"
 
 # classes/core/language.aw:prop_langs
 #: classes/core/language.aw:prop_langs
@@ -276,25 +262,23 @@ msgid "Omaduse  (texts) help"
 msgstr ""
 
 #: classes/core/language.aw:prop_transl
-msgid "Omaduse T&otilde;lgi (transl) caption"
+msgid "Omaduse T&amp;otilde;lgi (transl) caption"
 msgstr ""
 
 #: classes/core/language.aw:prop_transl_comment
-msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgid "Omaduse T&amp;otilde;lgi (transl) kommentaar"
 msgstr ""
 
 #: classes/core/language.aw:prop_transl_help
-msgid "Omaduse T&otilde;lgi (transl) help"
+msgid "Omaduse T&amp;otilde;lgi (transl) help"
 msgstr ""
 
-# classes/core/language.aw:group_langs
 #: classes/core/language.aw:group_langs
-msgid "Grupi K&otilde;ik keeled (langs) pealkiri"
+msgid "Grupi K&amp;otilde;ik keeled (langs) pealkiri"
 msgstr ""
 
-# classes/core/language.aw:group_langs_help
 #: classes/core/language.aw:group_langs_help
-msgid "Grupi K&otilde;ik keeled (langs) help"
+msgid "Grupi K&amp;otilde;ik keeled (langs) help"
 msgstr ""
 
 # classes/core/language.aw:group_texts
@@ -308,11 +292,11 @@ msgid "Grupi Tekstid (texts) help"
 msgstr ""
 
 #: classes/core/language.aw:group_transl
-msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgid "Grupi T&amp;otilde;lgi (transl) pealkiri"
 msgstr ""
 
 #: classes/core/language.aw:group_transl_help
-msgid "Grupi T&otilde;lgi (transl) help"
+msgid "Grupi T&amp;otilde;lgi (transl) help"
 msgstr ""
 
 # classes/core/language.aw:rel_RELTYPE_IMAGE
@@ -324,22 +308,50 @@ msgstr ""
 msgid "siit"
 msgstr ""
 
-#: classes/core/language.aw:255
+#: classes/core/language.aw:261
 msgid "Keel"
 msgstr ""
 
-#: classes/core/language.aw:260
+#: classes/core/language.aw:266
 msgid "Staatus"
 msgstr ""
 
-#: classes/core/language.aw:265
+#: classes/core/language.aw:271
 msgid "Valitud"
 msgstr ""
 
-#: classes/core/language.aw:309
+#: classes/core/language.aw:315
 msgid "Muutuja nimi"
 msgstr ""
 
-#: classes/core/language.aw:314
-msgid "Muutuja v&auml;&auml;rtus"
+#: classes/core/language.aw:320
+msgid "Muutuja v&amp;auml;&amp;auml;rtus"
 msgstr ""
+
+# classes/core/language.aw:prop_lang_trans_msg_comment
+#~ msgid "Omaduse T&otilde;lkimata sisu teade (lang_trans_msg) kommentaar"
+#~ msgstr ""
+#~ "teade juhuks, kui veebi sisu tõlkimiseks kasutatakse tõlkekeskkonda ning "
+#~ "parasjagu vaadeldavat objekti ei ole valitud keelde tõlgitud"
+
+# classes/core/language.aw:prop_lang_trans_msg_help
+#~ msgid "Omaduse T&otilde;lkimata sisu teade (lang_trans_msg) help"
+#~ msgstr ""
+#~ "teade juhuks, kui veebi sisu tõlkimiseks kasutatakse tõlkekeskkonda ning "
+#~ "parasjagu vaadeldavat objekti ei ole valitud keelde tõlgitud"
+
+# classes/core/language.aw:prop_temp_redir_url_comment
+#~ msgid ""
+#~ "Omaduse Ajutine AW-v&auml;line aadress sisse logimata kasutajatele "
+#~ "(temp_redir_url) kommentaar"
+#~ msgstr ""
+#~ "väline aadress sisse logimata kasutajatele - kuhu suunata kasutajad, kes "
+#~ "ei tohi ilma sisselogimata antud keelt näha"
+
+# classes/core/language.aw:prop_temp_redir_url_help
+#~ msgid ""
+#~ "Omaduse Ajutine AW-v&auml;line aadress sisse logimata kasutajatele "
+#~ "(temp_redir_url) help"
+#~ msgstr ""
+#~ "väline aadress sisse logimata kasutajatele - kuhu suunata kasutajad, kes "
+#~ "ei tohi ilma sisselogimata antud keelt näha"

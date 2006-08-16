@@ -15,34 +15,28 @@ msgstr ""
 msgid "Klassi Fail help"
 msgstr ""
 
-# classes/file.aw:prop_needs_translation
 #: classes/file.aw:prop_needs_translation
-msgid "Omaduse Vajab tõlget (needs_translation) caption"
-msgstr "Needs translation"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) caption"
+msgstr ""
 
-# classes/file.aw:prop_needs_translation_comment
 #: classes/file.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_needs_translation_help
 #: classes/file.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tõlget (needs_translation) help"
+msgid "Omaduse Vajab t&otilde;lget (needs_translation) help"
 msgstr ""
 
-# classes/file.aw:prop_is_translated
 #: classes/file.aw:prop_is_translated
-msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr "Translation confirmed"
-
-# classes/file.aw:prop_is_translated_comment
-#: classes/file.aw:prop_is_translated_comment
-msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) caption"
 msgstr ""
 
-# classes/file.aw:prop_is_translated_help
+#: classes/file.aw:prop_is_translated_comment
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) kommentaar"
+msgstr ""
+
 #: classes/file.aw:prop_is_translated_help
-msgid "Omaduse Tõlge kinnitatud (is_translated) help"
+msgid "Omaduse T&otilde;lge kinnitatud (is_translated) help"
 msgstr ""
 
 # classes/file.aw:prop_filename
@@ -95,17 +89,17 @@ msgid "Omaduse J&auml;rjekord (ord) caption"
 msgstr "Order"
 
 #: classes/file.aw:prop_ord_comment
-msgid "Omaduse J&auml;rjekord (ord) kommentaar"
+msgid "Omaduse J&amp;auml;rjekord (ord) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_ord_help
-msgid "Omaduse J&auml;rjekord (ord) help"
+msgid "Omaduse J&amp;auml;rjekord (ord) help"
 msgstr ""
 
 # classes/file.aw:prop_comment
 #: classes/file.aw:prop_comment
 msgid "Omaduse Faili allkiri (comment) caption"
-msgstr ""
+msgstr "File signature"
 
 # classes/file.aw:prop_comment_comment
 #: classes/file.aw:prop_comment_comment
@@ -132,19 +126,16 @@ msgstr ""
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) help"
 msgstr ""
 
-# classes/file.aw:prop_showal
 #: classes/file.aw:prop_showal
-msgid "Omaduse Näita kohe (showal) caption"
-msgstr "Display immediately"
+msgid "Omaduse N&auml;ita kohe (showal) caption"
+msgstr "Display now"
 
-# classes/file.aw:prop_showal_comment
 #: classes/file.aw:prop_showal_comment
-msgid "Omaduse Näita kohe (showal) kommentaar"
+msgid "Omaduse N&auml;ita kohe (showal) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_showal_help
 #: classes/file.aw:prop_showal_help
-msgid "Omaduse Näita kohe (showal) help"
+msgid "Omaduse N&auml;ita kohe (showal) help"
 msgstr ""
 
 # classes/file.aw:prop_newwindow
@@ -162,61 +153,52 @@ msgstr ""
 msgid "Omaduse Uues aknas (newwindow) help"
 msgstr ""
 
-# classes/file.aw:prop_show_framed
 #: classes/file.aw:prop_show_framed
-msgid "Omaduse Näita saidi raamis (show_framed) caption"
+msgid "Omaduse N&auml;ita saidi raamis (show_framed) caption"
 msgstr "Display in site frame"
 
-# classes/file.aw:prop_show_framed_comment
 #: classes/file.aw:prop_show_framed_comment
-msgid "Omaduse Näita saidi raamis (show_framed) kommentaar"
+msgid "Omaduse N&auml;ita saidi raamis (show_framed) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_show_framed_help
 #: classes/file.aw:prop_show_framed_help
-msgid "Omaduse Näita saidi raamis (show_framed) help"
+msgid "Omaduse N&auml;ita saidi raamis (show_framed) help"
 msgstr ""
 
 #: classes/file.aw:prop_show_icon
 msgid "Omaduse N&auml;ita ikooni (show_icon) caption"
-msgstr ""
+msgstr "Display icon"
 
 #: classes/file.aw:prop_show_icon_comment
-msgid "Omaduse N&auml;ita ikooni (show_icon) kommentaar"
+msgid "Omaduse N&amp;auml;ita ikooni (show_icon) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_show_icon_help
-msgid "Omaduse N&auml;ita ikooni (show_icon) help"
+msgid "Omaduse N&amp;auml;ita ikooni (show_icon) help"
 msgstr ""
 
-# classes/file.aw:prop_j_time
 #: classes/file.aw:prop_j_time
-msgid "Omaduse Jõustumise kuupäev (j_time) caption"
+msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) caption"
 msgstr "Activation date"
 
-# classes/file.aw:prop_j_time_comment
 #: classes/file.aw:prop_j_time_comment
-msgid "Omaduse Jõustumise kuupäev (j_time) kommentaar"
+msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_j_time_help
 #: classes/file.aw:prop_j_time_help
-msgid "Omaduse Jõustumise kuupäev (j_time) help"
+msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) help"
 msgstr ""
 
-# classes/file.aw:prop_act_date
 #: classes/file.aw:prop_act_date
-msgid "Omaduse Avaldamise kuupäev (act_date) caption"
+msgid "Omaduse Avaldamise kuup&auml;ev (act_date) caption"
 msgstr "Publication date"
 
-# classes/file.aw:prop_act_date_comment
 #: classes/file.aw:prop_act_date_comment
-msgid "Omaduse Avaldamise kuupäev (act_date) kommentaar"
+msgid "Omaduse Avaldamise kuup&auml;ev (act_date) kommentaar"
 msgstr ""
 
-# classes/file.aw:prop_act_date_help
 #: classes/file.aw:prop_act_date_help
-msgid "Omaduse Avaldamise kuupäev (act_date) help"
+msgid "Omaduse Avaldamise kuup&auml;ev (act_date) help"
 msgstr ""
 
 #: classes/file.aw:prop_udef1
@@ -244,15 +226,15 @@ msgid "Omaduse User-defined 2 (udef2) help"
 msgstr ""
 
 #: classes/file.aw:prop_transl
-msgid "Omaduse T&otilde;lgi (transl) caption"
+msgid "Omaduse T&amp;otilde;lgi (transl) caption"
 msgstr ""
 
 #: classes/file.aw:prop_transl_comment
-msgid "Omaduse T&otilde;lgi (transl) kommentaar"
+msgid "Omaduse T&amp;otilde;lgi (transl) kommentaar"
 msgstr ""
 
 #: classes/file.aw:prop_transl_help
-msgid "Omaduse T&otilde;lgi (transl) help"
+msgid "Omaduse T&amp;otilde;lgi (transl) help"
 msgstr ""
 
 # classes/file.aw:group_settings
@@ -276,21 +258,48 @@ msgid "Grupi Ajad (dates) help"
 msgstr ""
 
 #: classes/file.aw:group_transl
-msgid "Grupi T&otilde;lgi (transl) pealkiri"
+msgid "Grupi T&amp;otilde;lgi (transl) pealkiri"
 msgstr ""
 
 #: classes/file.aw:group_transl_help
-msgid "Grupi T&otilde;lgi (transl) help"
+msgid "Grupi T&amp;otilde;lgi (transl) help"
 msgstr ""
 
 #: classes/file.aw:rel_RELTYPE_KEYWORD
 msgid "Seose M&auml;rks&otilde;na (RELTYPE_KEYWORD) tekst"
-msgstr ""
+msgstr "Keyword"
 
-#: classes/file.aw:144
+#: classes/file.aw:152
 msgid "fail puudub"
 msgstr "file missing"
 
-#: classes/file.aw:1050
+#: classes/file.aw:1069
 msgid "Need either id or parent"
 msgstr "Need either id or parent"
+
+# classes/file.aw:prop_needs_translation
+#~ msgid "Omaduse Vajab tõlget (needs_translation) caption"
+#~ msgstr "Needs translation"
+
+# classes/file.aw:prop_is_translated
+#~ msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
+#~ msgstr "Translation confirmed"
+
+#~ msgid "Omaduse J&auml;rjekord (ord) caption"
+#~ msgstr "Order"
+
+# classes/file.aw:prop_showal
+#~ msgid "Omaduse N&auml;ita kohe (showal) caption"
+#~ msgstr "Display now"
+
+# classes/file.aw:prop_show_framed
+#~ msgid "Omaduse N&auml;ita saidi raamis (show_framed) caption"
+#~ msgstr "Display in site frame"
+
+# classes/file.aw:prop_j_time
+#~ msgid "Omaduse J&otilde;ustumise kuup&auml;ev (j_time) caption"
+#~ msgstr "Activation date"
+
+# classes/file.aw:prop_act_date
+#~ msgid "Omaduse Avaldamise kuup&auml;ev (act_date) caption"
+#~ msgstr "Publication date"

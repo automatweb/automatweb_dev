@@ -9,21 +9,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:class__help
-msgid "Klassi  help"
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:class_1082_help
+msgid "Klassi Veotellimus help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_date
-msgid "Omaduse Koostamise kuup&auml;ev (date) caption"
+msgid "Omaduse Koostamise kuup&amp;auml;ev (date) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_date_comment
-msgid "Omaduse Koostamise kuup&auml;ev (date) kommentaar"
+msgid "Omaduse Koostamise kuup&amp;auml;ev (date) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_date_help
-msgid "Omaduse Koostamise kuup&auml;ev (date) help"
+msgid "Omaduse Koostamise kuup&amp;auml;ev (date) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_location
@@ -63,15 +62,15 @@ msgid "Omaduse Ekspediitor (dispatcher) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_deadline
-msgid "Omaduse T&auml:htaeg (deadline) caption"
+msgid "Omaduse T&amp;auml;htaeg (deadline) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_deadline_comment
-msgid "Omaduse T&auml:htaeg (deadline) kommentaar"
+msgid "Omaduse T&amp;auml;htaeg (deadline) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_deadline_help
-msgid "Omaduse T&auml:htaeg (deadline) help"
+msgid "Omaduse T&amp;auml;htaeg (deadline) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_carriage_order_status
@@ -123,15 +122,15 @@ msgid "Omaduse Mahalaadimiskoht (unloading_location) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_unloading_note
-msgid "Omaduse M&auml;rkus (unloading_note) caption"
+msgid "Omaduse M&amp;auml;rkus (unloading_note) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_unloading_note_comment
-msgid "Omaduse M&auml;rkus (unloading_note) kommentaar"
+msgid "Omaduse M&amp;auml;rkus (unloading_note) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_unloading_note_help
-msgid "Omaduse M&auml;rkus (unloading_note) help"
+msgid "Omaduse M&amp;auml;rkus (unloading_note) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_loading_location
@@ -147,15 +146,15 @@ msgid "Omaduse Pealelaadimiskoht (loading_location) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_loading_note
-msgid "Omaduse M&auml;rkus (loading_note) caption"
+msgid "Omaduse M&amp;auml;rkus (loading_note) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_loading_note_comment
-msgid "Omaduse M&auml;rkus (loading_note) kommentaar"
+msgid "Omaduse M&amp;auml;rkus (loading_note) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_loading_note_help
-msgid "Omaduse M&auml;rkus (loading_note) help"
+msgid "Omaduse M&amp;auml;rkus (loading_note) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_added_documents
@@ -183,27 +182,27 @@ msgid "Omaduse Vedaja (transporter) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_next_transporter
-msgid "Omaduse Vedaja (next_transporter) caption"
+msgid "Omaduse J&amp;auml;rgmine vedaja (next_transporter) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_next_transporter_comment
-msgid "Omaduse Vedaja (next_transporter) kommentaar"
+msgid "Omaduse J&amp;auml;rgmine vedaja (next_transporter) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_next_transporter_help
-msgid "Omaduse Vedaja (next_transporter) help"
+msgid "Omaduse J&amp;auml;rgmine vedaja (next_transporter) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_transporter_note
-msgid "Omaduse Vedaja m&auml;rkused (transporter_note) caption"
+msgid "Omaduse Vedaja m&amp;auml;rkused (transporter_note) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_transporter_note_comment
-msgid "Omaduse Vedaja m&auml;rkused (transporter_note) kommentaar"
+msgid "Omaduse Vedaja m&amp;auml;rkused (transporter_note) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_transporter_note_help
-msgid "Omaduse Vedaja m&auml;rkused (transporter_note) help"
+msgid "Omaduse Vedaja m&amp;auml;rkused (transporter_note) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_carriage
@@ -326,6 +325,18 @@ msgstr ""
 msgid "Omaduse Number (nr) help"
 msgstr ""
 
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_cmr_char
+msgid "Omaduse T&amp;auml;ht (cmr_char) caption"
+msgstr ""
+
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_cmr_char_comment
+msgid "Omaduse T&amp;auml;ht (cmr_char) kommentaar"
+msgstr ""
+
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_cmr_char_help
+msgid "Omaduse T&amp;auml;ht (cmr_char) help"
+msgstr ""
+
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_adr
 msgid "Omaduse ADR (adr) caption"
 msgstr ""
@@ -339,15 +350,16 @@ msgid "Omaduse ADR (adr) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_measure_unit
-msgid "Omaduse M&otilde;&otilde;t&uuml;hik (measure_unit) caption"
+msgid "Omaduse M&amp;otilde;&amp;otilde;t&amp;uuml;hik (measure_unit) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_measure_unit_comment
-msgid "Omaduse M&otilde;&otilde;t&uuml;hik (measure_unit) kommentaar"
+msgid ""
+"Omaduse M&amp;otilde;&amp;otilde;t&amp;uuml;hik (measure_unit) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_measure_unit_help
-msgid "Omaduse M&otilde;&otilde;t&uuml;hik (measure_unit) help"
+msgid "Omaduse M&amp;otilde;&amp;otilde;t&amp;uuml;hik (measure_unit) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_gross_weight
@@ -363,15 +375,15 @@ msgid "Omaduse Brutokaal, kg (gross_weight) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_capacity
-msgid "Omaduse Mahtuvus, m<sup>3</sup> (capacity) caption"
+msgid "Omaduse Mahtuvus, m&lt;sup&gt;3&lt;/sup&gt; (capacity) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_capacity_comment
-msgid "Omaduse Mahtuvus, m<sup>3</sup> (capacity) kommentaar"
+msgid "Omaduse Mahtuvus, m&lt;sup&gt;3&lt;/sup&gt; (capacity) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_capacity_help
-msgid "Omaduse Mahtuvus, m<sup>3</sup> (capacity) help"
+msgid "Omaduse Mahtuvus, m&lt;sup&gt;3&lt;/sup&gt; (capacity) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_receiver_instructions
@@ -387,15 +399,15 @@ msgid "Omaduse Saaja juhised (receiver_instructions) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_sender_special_notes
-msgid "Omaduse Saatja erim&auml;rkused (sender_special_notes) caption"
+msgid "Omaduse Saatja erim&amp;auml;rkused (sender_special_notes) caption"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_sender_special_notes_comment
-msgid "Omaduse Saatja erim&auml;rkused (sender_special_notes) kommentaar"
+msgid "Omaduse Saatja erim&amp;auml;rkused (sender_special_notes) kommentaar"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_sender_special_notes_help
-msgid "Omaduse Saatja erim&auml;rkused (sender_special_notes) help"
+msgid "Omaduse Saatja erim&amp;auml;rkused (sender_special_notes) help"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:prop_payment_table
@@ -463,58 +475,81 @@ msgid "Seose Vedaja (RELTYPE_TRANSPORTER) tekst"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:rel_RELTYPE_NEXT_TRANSPORTER
-msgid "Seose J&amp;auml;rgmine vedaja (RELTYPE_NEXT_TRANSPORTER) tekst"
+msgid "Seose J&amp;amp;auml;rgmine vedaja (RELTYPE_NEXT_TRANSPORTER) tekst"
 msgstr ""
 
 #: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:rel_RELTYPE_CARRIAGE
 msgid "Seose Vedu (RELTYPE_CARRIAGE) tekst"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:171
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:181
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:175
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:182
+msgid "Planeeritud"
+msgstr ""
+
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:183
+msgid "Hetkel vedamisel"
+msgstr ""
+
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:184
+msgid "&amp;Uuml;le t&amp;auml;htaja"
+msgstr ""
+
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:185
+msgid "Katkestatud"
+msgstr ""
+
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:186
+msgid "Valmis"
+msgstr ""
+
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:187
+msgid "Arhiveeritud"
+msgstr ""
+
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:191
 msgid "FRANKO"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:176
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:192
 msgid "NOFRANKO"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:235
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:251
 msgid "Kuulub maksmisele"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:239
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:255
 msgid "Saatja"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:243
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:259
 msgid "Valuuta"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:247
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:263
 msgid "Kauba saaja"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:251
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:267
 msgid "Veohind"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:252
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:268
 msgid "Allahindlus"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:253
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:269
 msgid "Saldo"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:254
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:270
 msgid "Juurdehindlus"
 msgstr ""
 
-#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:255
+#: classes/applications/crm/transport_management/crm_transport_management_carriage_order.aw:271
 msgid "Teised"
 msgstr ""
-

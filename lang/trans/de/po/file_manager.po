@@ -9,16 +9,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/admin/file_manager.aw:87
+#: classes/admin/file_manager.aw:88
 msgid "Fail"
 msgstr ""
 
-#: classes/admin/file_manager.aw:92
+#: classes/admin/file_manager.aw:93
 msgid "Vali"
 msgstr ""
 
-#: classes/admin/file_manager.aw:120
+#: classes/admin/file_manager.aw:122
 msgid "Vali see"
 msgstr ""
-

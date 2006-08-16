@@ -28,8 +28,8 @@ msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr "Error in the definition of %s (properties not defined!)"
 
 #: classes/vcl/releditor.aw:75
-msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
-msgstr "Error in the definition of %s (connection type undefined!)"
+msgid "Viga %s definitsioonis (seose t&uuml;&uuml;p defineerimata!)"
+msgstr ""
 
 #: classes/vcl/releditor.aw:111
 msgid "Seda seost ei saa redigeerida!"
@@ -64,18 +64,24 @@ msgstr "Delete selected relations?"
 msgid "Klooni valitud objektid"
 msgstr "Clone selected objects"
 
-#: classes/vcl/releditor.aw:558 classes/vcl/releditor.aw:740
+#: classes/vcl/releditor.aw:558 classes/vcl/releditor.aw:741
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/releditor.aw:680
-msgid "Vali üks"
-msgstr "Pick one"
+#: classes/vcl/releditor.aw:681
+msgid "Vali &uuml;ks"
+msgstr ""
 
-#: classes/vcl/releditor.aw:689 classes/vcl/releditor.aw:727
+#: classes/vcl/releditor.aw:690 classes/vcl/releditor.aw:728
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/releditor.aw:732
+#: classes/vcl/releditor.aw:733
 msgid "Nimi"
 msgstr "Name"
+
+#~ msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
+#~ msgstr "Error in the definition of %s (connection type undefined!)"
+
+#~ msgid "Vali üks"
+#~ msgstr "Pick one"
