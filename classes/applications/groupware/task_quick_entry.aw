@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.16 2006/08/15 12:58:05 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.17 2006/08/16 15:30:49 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -588,7 +588,7 @@ class task_quick_entry extends class_base
 			$ret .= sprintf(t("Klienti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["c"]);
 		}
 
-		if (mb_detect_encoding($arr["p"]) == "UTF-8")
+		if (mb_detect_encoding($arr["p"],"UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["p"] = iconv("UTF-8", aw_global_get("charset"), $arr["p"]);
 		}
@@ -605,7 +605,8 @@ class task_quick_entry extends class_base
 			$ret .= sprintf(t("Projekti nimega %s ei ole olemas, kui vajutate ok, lisatakse\n"), $arr["p"]);
 		}
 
-		if (mb_detect_encoding($arr["t"]) == "UTF-8")
+
+		if (mb_detect_encoding($arr["t"],"UTF-8,ISO-8859-1") == "UTF-8")
 		{
 			$arr["t"] = iconv("UTF-8", aw_global_get("charset"), $arr["t"]);
 		}
