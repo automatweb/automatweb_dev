@@ -1,13 +1,75 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.1 2006/08/08 12:58:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/watercraft_management/watercraft_search.aw,v 1.2 2006/08/16 17:28:07 dragut Exp $
 // watercraft_search.aw - Veesõidukite otsing 
 /*
 
 @classinfo syslog_type=ST_WATERCRAFT_SEARCH relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@tableinfo watercraft_search index=oid master_table=objects master_index=oid
 
 @default table=objects
 @default group=general
 
+	@property results_on_page type=textbox table=watercraft_search
+	@caption Tulemuste arv lehel
+
+	@property max_results type=textbox table=watercraft_search
+	@caption Maksimaalne tulemuste arv
+	@comment Kui on 0, siis n&auml;idatakse k&otilde;iki tulemusi &uuml;hel lehel
+
+	@property no_search_form type=checkbox ch_value=1 table=watercraft_search
+	@caption &Auml;ra kuva otsinguvormi
+	@comment Kui on 0, siis kuvatakse k&otilde;iki tulemusi
+
+	@property saved_searches type=text store=no
+	@caption Salvestatud otsing
+
+@groupinfo parameters caption="Parameetrid"
+@default group=parameters
+
+	@property parameters_subtitle type=text store=no subtitle=1
+	@caption Otsinguvormis kuvatavad v&auml;ljad
+
+	@property watercraft_type type=checkbox ch_value=1 table=watercraft_search
+	@caption Aluse t&uuml;&uuml;p
+
+	@property condition type=checkbox ch_value=1 table=watercraft_search
+	@caption Seisukord
+
+	@property body_material type=checkbox ch_value=1 table=watercraft_search
+	@caption Kerematerjal
+
+	@property location type=checkbox ch_value=1 table=watercraft_search
+	@caption Asukoht
+
+	@property length type=checkbox ch_value=1 table=watercraft_search
+	@caption Pikkus
+
+	@property width type=checkbox ch_value=1 table=watercraft_search
+	@caption Laius
+
+	@property height type=checkbox ch_value=1 table=watercraft_search
+	@caption K&otilde;rgus
+
+	@property weight type=checkbox ch_value=1 table=watercraft_search
+	@caption Raskus
+
+	@property draught type=checkbox ch_value=1 table=watercraft_search
+	@caption S&uuml;vis
+
+	@property creation_year type=checkbox ch_value=1 table=watercraft_search
+	@caption Valmistamisaasta
+
+	@property passanger_count type=checkbox ch_value=1 table=watercraft_search
+	@caption Reisijaid
+
+	@property additional_equipment type=checkbox ch_value=1 table=watercraft_search
+	@caption Lisavarustus
+
+	@property seller type=checkbox ch_value=1 table=watercraft_search
+	@caption M&uuml;&uuml;ja
+	
+	@property price type=checkbox ch_value=1 table=watercraft_search
+	@caption Hind
 */
 
 class watercraft_search extends class_base
@@ -26,7 +88,12 @@ class watercraft_search extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case 'results_on_page':
+				if ( $arr['new'] == 1 )
+				{
+					$prop['value'] = 50;
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -62,6 +129,42 @@ class watercraft_search extends class_base
 		return $this->parse();
 	}
 
-//-- methods --//
+	function do_db_upgrade($table, $field, $query, $error)
+	{
+		if (empty($field))
+		{
+			$this->db_query('CREATE TABLE '.$table.' (oid INT PRIMARY KEY NOT NULL)');
+			return true;
+		}
+
+		switch ($field)
+		{
+			case 'results_on_page':
+			case 'max_results':
+			case 'no_search_form':
+			case 'watercraft_type':
+			case 'condition':
+			case 'body_material':
+			case 'location':
+			case 'length':
+			case 'width':
+			case 'height':
+			case 'weight':
+			case 'draught':
+			case 'creation_year':
+			case 'passanger_count':
+			case 'additional_equipment':
+			case 'seller':
+			case 'price':
+				$this->db_add_col($table, array(
+					'name' => $field,
+					'type' => 'int'
+				));
+                                return true;
+                }
+
+		return false;
+	}
+
 }
 ?>
