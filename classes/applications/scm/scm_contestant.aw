@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.6 2006/07/27 23:32:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_contestant.aw,v 1.7 2006/08/17 15:45:27 tarvo Exp $
 // scm_contestant.aw - V&otilde;istleja 
 /*
 
@@ -55,6 +55,12 @@ class scm_contestant extends class_base
 			"tpldir" => "applications/scm/scm_contestant",
 			"clid" => CL_SCM_CONTESTANT
 		));
+		$this->contestant = false;
+	}
+
+	function set_contestant($cnt)
+	{
+		$this->contestant = $cnt?$cnt:$this->contestant;
 	}
 
 	function get_property($arr)

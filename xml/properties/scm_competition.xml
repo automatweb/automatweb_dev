@@ -47,19 +47,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <parent>time_split</parent>
-            <no_caption>1</no_caption>
-      </property>
-      <property>
-            <name>time_from</name>
-            <table>objects</table>
-            <group>sub_general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>time_select</type>
-            <parent>time_split</parent>
-            <store>no</store>
-            <no_caption>1</no_caption>
+            <caption>Algus</caption>
       </property>
       <property>
             <name>date_to</name>
@@ -201,6 +189,15 @@
             <method>serialize</method>
             <type>text</type>
             <caption>Pilt kohast</caption>
+      </property>
+      <property>
+            <name>search_result_teams</name>
+            <table>objects</table>
+            <group>manage_groups</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <store>no</store>
       </property>
       <property>
             <name>teams_tb</name>
@@ -354,17 +351,12 @@
             </GROUP>
             <CONTESTANT>
                   <value>6</value>
-                  <clid>CL_SCM_CONTESTANT</clid>
+                  <clid>
+                        <num_0>CL_SCM_CONTESTANT</num_0>
+                        <num_1>CL_SCM_TEAM</num_1>
+                  </clid>
                   <caption>V&amp;amp;otilde;istleja</caption>
             </CONTESTANT>
       </reltypes>
-      <layout>
-            <time_split>
-                  <type>hbox</type>
-                  <width>270px</width>
-                  <group>sub_general</group>
-                  <caption>Algus</caption>
-            </time_split>
-      </layout>
 </properties>
 

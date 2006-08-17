@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.5 2006/08/11 09:26:33 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.6 2006/08/17 15:45:27 tarvo Exp $
 // scm_result.aw - Tulemus 
 /*
 
@@ -22,7 +22,7 @@
 @property team type=hidden
 @caption Meeskond
 
-@reltype CONTESTANT value=1 clid=CL_SCM_CONTESTANT
+@reltype CONTESTANT value=1 clid=CL_SCM_CONTESTANT,CL_SCM_TEAM
 @caption V&otilde;istleja
 
 @reltype COMPETITION value=2 clid=CL_SCM_COMPETITION
@@ -210,6 +210,7 @@ class scm_result extends class_base
 					"result" => $obj->id(),
 					"team_oid" => $arr["set_team"]?$extra_data["team"]:NULL,
 					"team" => $arr["set_team"]?"tiimi nimi":NULL,
+					"groups" => $arr["set_groups"]?$extra_data["groups"]:NULL,
 				);
 			}
 		}
@@ -286,6 +287,7 @@ class scm_result extends class_base
 			$ret_data["raw_result"] = $raw_result;
 			$ret_data["fun"] = $fun;
 			$ret_data["id"] = $data["id"];
+			$ret_data["groups"] = $data["groups"]?$data["groups"]:NULL;
 			$ret[] = $ret_data;
 		}
 		return $ret;

@@ -8,5 +8,19 @@
 			</function>
 		</action>
 
+		<action name="change_grp" all_args="1">
+			<function name="change_grp">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="get_contestants_row_table" all_args="1">
+			<function name="get_contestants_row_table">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

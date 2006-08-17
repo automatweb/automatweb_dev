@@ -46,7 +46,10 @@
       <reltypes>
             <CONTESTANT>
                   <value>1</value>
-                  <clid>CL_SCM_CONTESTANT</clid>
+                  <clid>
+                        <num_0>CL_SCM_CONTESTANT</num_0>
+                        <num_1>CL_SCM_TEAM</num_1>
+                  </clid>
                   <caption>V&amp;amp;otilde;istleja</caption>
             </CONTESTANT>
             <COMPETITION>
