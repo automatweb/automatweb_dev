@@ -839,7 +839,7 @@ class _int_object
 	{
 		$prev = $this->obj["period"];
 
-		if (!is_numeric($param))
+		if (!is_numeric($param) && $param != "")
 		{
 			error::raise(array(
 				"id" => ERR_PERIOD,
@@ -862,7 +862,7 @@ class _int_object
 	{
 		$prev = $this->obj["periodic"];
 
-		if (!(is_numeric($param) || is_bool($param)))
+		if (!(is_numeric($param) || is_bool($param)) && $param != "")
 		{
 			error::raise(array(
 				"id" => ERR_BOOL,
@@ -930,6 +930,11 @@ class _int_object
 	{
 		$prev = $this->obj["subclass"];
 
+		if ($param  == "")
+		{
+			$param = 0;
+		}
+
 		if (!is_numeric($param))
 		{
 			error::raise(array(
@@ -952,6 +957,11 @@ class _int_object
 	function set_flags($param)
 	{
 		$prev = $this->obj["flags"];
+
+		if ($param  == "")
+		{
+			$param = 0;
+		}
 
 		if (!is_numeric($param))
 		{
@@ -1315,7 +1325,7 @@ class _int_object
 
 	function set_cache_dirty($param = true)
 	{
-		if (!(is_numeric($param) || is_bool($param)))
+		if (!(is_numeric($param) || is_bool($param)) && $param != "")
 		{
 			error::raise(array(
 				"id" => ERR_CACHE_FLAG,
