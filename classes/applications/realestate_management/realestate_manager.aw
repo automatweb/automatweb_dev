@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.15 2006/06/27 14:15:38 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/realestate_management/realestate_manager.aw,v 1.16 2006/08/17 09:52:03 kristo Exp $
 // realestate_manager.aw - Kinnisvarahalduse keskkond
 /*
 
@@ -1789,7 +1789,15 @@ class realestate_manager extends class_base
 			### limit
 			$per_page = strlen(trim($this_object->prop ("properties_list_perpage"))) ? $this_object->prop ("properties_list_perpage") : 25;
 			$limit = ((int) $_GET["ft_page"] * $per_page) . "," . $per_page;
-			$args["limit"] = $limit;
+
+			// make table update filters (see comment in the end of _init_properties_list)
+			$table->define_field(array("name" => "a"));
+			$table->remove_field("a");
+			if (count($table->selected_filters) < 1)
+			{
+				$args["limit"] = $limit;
+			}
+
 			$list->filter ($args);
 		}
 
@@ -2316,11 +2324,20 @@ class realestate_manager extends class_base
 
 		$table->set_default_sortby ("created");
 		$table->set_default_sorder ("desc");
-		$table->define_pageselector (array (
+
+		$opts = array (
 			"type" => "text",
-			"d_row_cnt" => $this->properties_result_count,
 			"records_per_page" => (strlen(trim($this_object->prop ("properties_list_perpage"))) ? $this_object->prop ("properties_list_perpage") : 25),
-		));
+		);
+
+		// hack - to make filters and pageselectors work, we can't do our own paging, we must let the table do it, but then it is dog slow. 
+		// so we do out own paging, if no filters are selected
+		if (count($table->selected_filters) < 1)
+		{
+			$opts["d_row_cnt"] = $this->properties_result_count;
+		}
+
+		$table->define_pageselector ($opts);
 	}
 
 	function _property_toolbar($arr)

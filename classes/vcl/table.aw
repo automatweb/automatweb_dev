@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.84 2006/06/29 14:21:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.85 2006/08/17 09:52:04 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -937,6 +937,11 @@ class aw_table extends aw_template
 		if (!isset($act_page))
 		{
 			$act_page = $GLOBALS["ft_page"];
+		}
+
+		if ($act_page*$this->records_per_page > count($this->data))
+		{
+			$act_page = 0;
 		}
 
 		// koostame tabeli sisu
@@ -2052,7 +2057,15 @@ class aw_table extends aw_template
 		{
 			$style = "class=\"style_".$style."\"";
 		}
+		
 		$_drc = ($arr["d_row_cnt"] ? $arr["d_row_cnt"] : $this->d_row_cnt);
+
+		$act_page = $GLOBALS["ft_page"];
+		if ($act_page*$records_per_page > $_drc)
+		{
+			$act_page = 0;
+		}
+
 		$num_pages = $_drc / $records_per_page;
 		for ($i = 0; $i < $num_pages; $i++)
 		{
@@ -2066,7 +2079,7 @@ class aw_table extends aw_template
 				"ft_page" => $i,
 				"pagenum" => $i+1,
 			));
-			$rv .= $this->parse($GLOBALS["ft_page"] == $i ? "sel_page" : "page");
+			$rv .= $this->parse($act_page == $i ? "sel_page" : "page");
 			if ($i < ($num_pages - 1) && $this->is_template("sep"))
 			{
 				$rv .= $this->parse("sep");
