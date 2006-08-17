@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.3 2006/06/01 15:10:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_center.aw,v 1.4 2006/08/17 11:38:26 kristo Exp $
 // procurement_center.aw - Hankekeskkond 
 /*
 
@@ -54,12 +54,15 @@ class procurement_center extends class_base
 		switch($prop["name"])
 		{
 			case "owner":
-				$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
-				if (!$o)
+				if (is_oid($arr["obj_inst"]->id()))
 				{
-					return PROP_IGNORE;
+					$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MANAGER_CO");
+					if (!$o)
+					{
+						return PROP_IGNORE;
+					}
+					$prop["value"] = html::obj_change_url($o);
 				}
-				$prop["value"] = html::obj_change_url($o);
 				break;
 
 			case "p_tb":
