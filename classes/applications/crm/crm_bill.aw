@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.85 2006/08/16 16:08:37 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.86 2006/08/17 11:16:24 markop Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -755,6 +755,15 @@ class crm_bill extends class_base
 				$aps .= " ".$ct->prop("postiindeks");
 				$ord_addr = $aps;//$ct->name()." ".$ct->prop("postiindeks");
 				$ord_country = $ct->prop_str("riik");
+			
+				//riigi tõlge, kui on inglise keeles
+				if($b->prop("language") && is_oid($ct->prop("riik")))
+				{
+					$lo = obj($b->prop("language"));
+					$lc = $lo->prop("lang_acceptlang");
+					$country_obj = obj($ct->prop("riik"));
+					if($country_obj->prop("name_en") && $lc == "en") $ord_country = $country_obj->prop("name_en");
+				}
 			}
 
 			if ($this->can("view", $ord->prop("currency")))
