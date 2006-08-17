@@ -521,6 +521,11 @@ class search_conf extends aw_template
 			$this->db_query($sql);
 			while ($row = $this->db_next())
 			{
+				if (!$this->can("view", $row["oid"]))
+				{
+					continue;
+				}
+		
 				$fld = "content";
 				if (aw_ini_get("search_conf.show_in_results") != "")
 				{
