@@ -353,6 +353,7 @@ class crm_company_bills_impl extends class_base
 				//	$sel_ = 0;
 				//	if(in_array($_SESSION["task_sel"],$row_id)) $sel_ =1;
 					$t->define_data(array(
+						"oid" => $o->id(),
 						"name" => $ro->prop("content"),
 						"hrs" => number_format(str_replace(",", ".", $ro->prop("time_to_cust")), 2),
 						"hr_price" => number_format($o->prop("hr_price"),2),
