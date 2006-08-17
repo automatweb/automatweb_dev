@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.17 2006/08/16 15:30:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task_quick_entry.aw,v 1.18 2006/08/17 12:54:49 kristo Exp $
 // task_quick_entry.aw - Kiire toimetuse lisamine 
 /*
 
@@ -535,9 +535,9 @@ class task_quick_entry extends class_base
 		"".
 		// fetch list of companies with that name and ask user if count > 0
 		"var url = '".$this->mk_my_orb("check_existing")."';".
-		"url = url + '&c=' + document.changeform.customer.value;".
-		"url = url + '&p=' + document.changeform.project.value;".
-		"url = url + '&t=' + document.changeform.task.value;".
+		"url = url + '&c=' + escape(document.changeform.customer.value);".
+		"url = url + '&p=' + escape(document.changeform.project.value);".
+		"url = url + '&t=' + escape(document.changeform.task.value);".
 		"num= aw_get_url_contents(url);".
 		"if (num != \"\")
 		{
