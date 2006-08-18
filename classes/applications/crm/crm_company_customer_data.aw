@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.7 2006/05/30 14:34:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_company_customer_data.aw,v 1.8 2006/08/18 12:23:29 markop Exp $
 // crm_company_customer_data.aw - Kliendi andmed 
 /*
 
@@ -9,6 +9,7 @@
 
 @default table=objects
 
+default method=serialize
 
 @default group=general
 
@@ -18,35 +19,62 @@
 	@property seller type=relpicker reltype=RELTYPE_SELLER table=aw_crm_customer_data field=aw_seller
 	@caption M&uuml;&uuml;ja
 
+@groupinfo buyer caption="Ostja"
+@default group=buyer
+
+
+	@property buyer_contract_creator type=select table=aw_crm_customer_data field=aw_buyer_cust_contract_creator
+	@caption Hankijasuhte looja
+
+	@property buyer_contract_date type=date_select table=aw_crm_customer_data field=aw_buyer_cust_contract_date
+	@caption Hankijasuhte alguskuup&auml;ev
+
+	@property buyer_contact_person type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_buyer_contact_person1
+	@caption Ostja kontaktisik 1
+
+	@property buyer_contact_person2 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_buyer_contact_person2
+	@caption Ostja kontaktisik 2
+
+	@property buyer_contact_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_buyer_contact_person3
+	@caption Ostja kontaktisik 3
+	
+	@property buyer_priority type=textbox table=aw_crm_customer_data field=aw_buyer_priority
+	@caption Ostja Prioriteet
+
+
+@groupinfo seller caption="M&uuml;&uuml;ja"
+@default group=seller
+
 	@property cust_contract_creator type=select table=aw_crm_customer_data field=aw_cust_contract_creator
 	@caption Kliendisuhte looja
 
 	@property cust_contract_date type=date_select table=aw_crm_customer_data field=aw_cust_contract_date
 	@caption Kliendisuhte alguskuup&auml;ev
 
+	@property contact_person type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_contact_person1
+	@caption Kliendi kontaktisik 1
+
+	@property contact_person2 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_contact_person2
+	@caption Kliendi kontaktisik 2
+
+	@property contact_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_contact_person3
+	@caption Kliendi kontaktisik 3
+	
+	@property priority type=textbox table=aw_crm_customer_data field=aw_priority
+	@caption Kliendi Prioriteet
+
 	@property referal_type type=classificator table=aw_crm_customer_data field=aw_referal_type reltype=RELTYPE_REFERAL_TYPE
 	@caption Sissetuleku meetod
 
-	@property contact_person type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_contact_person1
-	@caption Kontaktisik 1
-
-	@property contact_person2 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_contact_person2
-	@caption Kontaktisik 2
-
-	@property contact_person3 type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_crm_customer_data field=aw_contact_person3
-	@caption Kontaktisik 3
-
-	@property priority type=textbox table=aw_crm_customer_data field=aw_priority
-	@caption Prioriteet
-
 	@property client_manager type=relpicker reltype=RELTYPE_CLIENT_MANAGER table=aw_crm_customer_data field=aw_client_manager
 	@caption Kliendihaldur
-
+	
 	@property bill_due_date_days type=textbox size=5  table=aw_crm_customer_data field=aw_bill_due_date_days
-	@caption Arve makset&auml;htaeg (p&auml;evi)
+	@caption Makset&auml;htaeg (p&auml;evi)
 
 	@property bill_penalty_pct type=textbox size=5  table=aw_crm_customer_data field=aw_bill_penalty_pct
-	@caption Arve viivise %
+	@caption Viivise %
+
 
 @reltype BUYER value=1 clid=CL_CRM_COMPANY
 @caption Ostja
@@ -114,7 +142,6 @@ class crm_company_customer_data extends class_base
 					$tmp = obj($prop["value"]);
 					$prop["options"][$prop["value"]] = $tmp->name();
 				}
-
 				break;
 
 			case "client_manager":
@@ -163,6 +190,13 @@ class crm_company_customer_data extends class_base
 				return true;
 
 			case "aw_bill_due_date_days":
+			case "aw_buyer_cust_contract_creator":
+			case "aw_buyer_cust_contract_date":
+			case "aw_buyer_contact_person1":
+			case "aw_buyer_contact_person2":
+			case "aw_buyer_contact_person3":
+			case "aw_buyer_priority":
+				arr($fld);
 				$this->db_add_col($tbl, array(
 					"name" => $fld,
 					"type" => "int"
@@ -176,7 +210,6 @@ class crm_company_customer_data extends class_base
 				));
 				return true;
 		}
-
 	}
 }
 ?>

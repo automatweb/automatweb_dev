@@ -19,9 +19,60 @@
             <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
       </property>
       <property>
+            <name>buyer_contract_creator</name>
+            <table>aw_crm_customer_data</table>
+            <group>buyer</group>
+            <type>select</type>
+            <field>aw_buyer_cust_contract_creator</field>
+            <caption>Hankijasuhte looja</caption>
+      </property>
+      <property>
+            <name>buyer_contract_date</name>
+            <table>aw_crm_customer_data</table>
+            <group>buyer</group>
+            <type>date_select</type>
+            <field>aw_buyer_cust_contract_date</field>
+            <caption>Hankijasuhte alguskuup&amp;amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>buyer_contact_person</name>
+            <table>aw_crm_customer_data</table>
+            <group>buyer</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_buyer_contact_person1</field>
+            <caption>Ostja kontaktisik 1</caption>
+      </property>
+      <property>
+            <name>buyer_contact_person2</name>
+            <table>aw_crm_customer_data</table>
+            <group>buyer</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_buyer_contact_person2</field>
+            <caption>Ostja kontaktisik 2</caption>
+      </property>
+      <property>
+            <name>buyer_contact_person3</name>
+            <table>aw_crm_customer_data</table>
+            <group>buyer</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_buyer_contact_person3</field>
+            <caption>Ostja kontaktisik 3</caption>
+      </property>
+      <property>
+            <name>buyer_priority</name>
+            <table>aw_crm_customer_data</table>
+            <group>buyer</group>
+            <type>textbox</type>
+            <field>aw_buyer_priority</field>
+            <caption>Ostja Prioriteet</caption>
+      </property>
+      <property>
             <name>cust_contract_creator</name>
             <table>aw_crm_customer_data</table>
-            <group>general</group>
+            <group>seller</group>
             <type>select</type>
             <field>aw_cust_contract_creator</field>
             <caption>Kliendisuhte looja</caption>
@@ -29,59 +80,59 @@
       <property>
             <name>cust_contract_date</name>
             <table>aw_crm_customer_data</table>
-            <group>general</group>
+            <group>seller</group>
             <type>date_select</type>
             <field>aw_cust_contract_date</field>
             <caption>Kliendisuhte alguskuup&amp;amp;auml;ev</caption>
       </property>
       <property>
+            <name>contact_person</name>
+            <table>aw_crm_customer_data</table>
+            <group>seller</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_contact_person1</field>
+            <caption>Kliendi kontaktisik 1</caption>
+      </property>
+      <property>
+            <name>contact_person2</name>
+            <table>aw_crm_customer_data</table>
+            <group>seller</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_contact_person2</field>
+            <caption>Kliendi kontaktisik 2</caption>
+      </property>
+      <property>
+            <name>contact_person3</name>
+            <table>aw_crm_customer_data</table>
+            <group>seller</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_contact_person3</field>
+            <caption>Kliendi kontaktisik 3</caption>
+      </property>
+      <property>
+            <name>priority</name>
+            <table>aw_crm_customer_data</table>
+            <group>seller</group>
+            <type>textbox</type>
+            <field>aw_priority</field>
+            <caption>Kliendi Prioriteet</caption>
+      </property>
+      <property>
             <name>referal_type</name>
             <table>aw_crm_customer_data</table>
-            <group>general</group>
+            <group>seller</group>
             <type>classificator</type>
             <field>aw_referal_type</field>
             <reltype>RELTYPE_REFERAL_TYPE</reltype>
             <caption>Sissetuleku meetod</caption>
       </property>
       <property>
-            <name>contact_person</name>
-            <table>aw_crm_customer_data</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <field>aw_contact_person1</field>
-            <caption>Kontaktisik 1</caption>
-      </property>
-      <property>
-            <name>contact_person2</name>
-            <table>aw_crm_customer_data</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <field>aw_contact_person2</field>
-            <caption>Kontaktisik 2</caption>
-      </property>
-      <property>
-            <name>contact_person3</name>
-            <table>aw_crm_customer_data</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTACT_PERSON</reltype>
-            <field>aw_contact_person3</field>
-            <caption>Kontaktisik 3</caption>
-      </property>
-      <property>
-            <name>priority</name>
-            <table>aw_crm_customer_data</table>
-            <group>general</group>
-            <type>textbox</type>
-            <field>aw_priority</field>
-            <caption>Prioriteet</caption>
-      </property>
-      <property>
             <name>client_manager</name>
             <table>aw_crm_customer_data</table>
-            <group>general</group>
+            <group>seller</group>
             <type>relpicker</type>
             <reltype>RELTYPE_CLIENT_MANAGER</reltype>
             <field>aw_client_manager</field>
@@ -90,20 +141,20 @@
       <property>
             <name>bill_due_date_days</name>
             <table>aw_crm_customer_data</table>
-            <group>general</group>
+            <group>seller</group>
             <type>textbox</type>
             <size>5</size>
             <field>aw_bill_due_date_days</field>
-            <caption>Arve makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
+            <caption>Makset&amp;amp;auml;htaeg (p&amp;amp;auml;evi)</caption>
       </property>
       <property>
             <name>bill_penalty_pct</name>
             <table>aw_crm_customer_data</table>
-            <group>general</group>
+            <group>seller</group>
             <type>textbox</type>
             <size>5</size>
             <field>aw_bill_penalty_pct</field>
-            <caption>Arve viivise %</caption>
+            <caption>Viivise %</caption>
       </property>
       <classinfo>
             <syslog_type>ST_CRM_COMPANY_CUSTOMER_DATA</syslog_type>
@@ -112,6 +163,14 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <buyer>
+                  <caption>Ostja</caption>
+            </buyer>
+            <seller>
+                  <caption>M&amp;amp;uuml;&amp;amp;uuml;ja</caption>
+            </seller>
+      </groupinfo>
       <tableinfo>
             <aw_crm_customer_data>
                   <index>aw_oid</index>
