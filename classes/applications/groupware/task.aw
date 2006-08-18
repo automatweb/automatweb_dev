@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.123 2006/08/14 13:55:04 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.124 2006/08/18 10:24:33 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -1075,6 +1075,10 @@ class task extends class_base
 		if ($arr["request"]["participants_h"] > 0)
 		{
 			$this->post_save_add_parts = explode(",", $arr["request"]["participants_h"]);
+		}
+		if ($_POST["participants_h"] > 0)
+		{
+			$this->post_save_add_parts = explode(",", $_POST["participants_h"]);
 		}
 		
 		if (is_array($this->post_save_add_parts))
