@@ -150,7 +150,18 @@ class crm_company_cust_impl extends class_base
 			if ($arr["request"]["do_proj_search"] == 1)
 			{
 				$filt = $this->_get_my_proj_search_filt($arr["request"], $conns_ol->ids());
-				$conns_ol = new object_list($filt);
+				if ($filt == -1)
+				{
+					$conns_ol = new object_list();
+				}
+				else
+				{
+					if (!count($filt["oid"]))
+					{
+						$filt["oid"] = -1;
+					}
+					$conns_ol = new object_list($filt);
+				}
 			}
 		}
 
@@ -1154,6 +1165,11 @@ class crm_company_cust_impl extends class_base
 		if ($ar[$prefix."proj_search_contact_person"])
 		{
 			$ret["CL_PROJECT.contact_person_implementor.name"] = "%".$ar[$prefix."proj_search_contact_person"]."%";
+		}
+
+		if (is_array($ret["oid"]) && count($ret["oid"]) == 0)
+		{
+			$ret = -1;
 		}
 		return $ret;
 	}
