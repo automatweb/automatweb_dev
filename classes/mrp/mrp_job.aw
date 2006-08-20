@@ -228,7 +228,18 @@ class mrp_job extends class_base
 			}
 			else
 			{
-				$this->mrp_error .= t("Tööl puudub ressurss või projekt. ");
+				if (is_oid($project_id))
+				{
+					$this->mrp_error .= t("Tööl puudub ressurss. ");
+				}
+				elseif (is_oid($resource_id))
+				{
+					$this->mrp_error .= t("Tööl puudub projekt. ");
+				}
+				else
+				{
+					$this->mrp_error .= t("Tööl puudub ressurss ja projekt. ");
+				}
 			}
 		}
 
