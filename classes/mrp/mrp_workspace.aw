@@ -605,8 +605,25 @@ class mrp_workspace extends class_base
 			$limit = ((int) $_GET["ft_page"] * $perpage) . "," . $perpage;
 
 			#### sort
+			switch ($this->list_request)
+			{
+				case "inwork":
+					$sort_by = "mrp_case.due_date"; // default sort order
+					break;
+
+				case "planned_overdue":
+				case "overdue":
+				case "new":
+				case "planned":
+				case "planning":
+				case "all":
+				case "done":
+				default:
+					$sort_by = "mrp_case.starttime"; // default sort order
+					break;
+			}
+
 			$sort_order = ("desc" == $arr["request"]["sort_order"]) ? "desc" : "asc";
-			$sort_by = "mrp_case.starttime"; // default sort order
 			$tmp = NULL;
 
 			switch ($arr["request"]["sortby"])
