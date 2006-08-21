@@ -23,7 +23,7 @@
 	<!-- END SUB: a_name_logged -->
 </tr>
 <tr>
-	<td class="{VAR:style_form_text}">Autori e-mail</td>
+	<td class="{VAR:style_form_text}">Autori e-mail:</td>
 	<!-- SUB: a_email -->
 	<td class="{VAR:style_form_text}">{VAR:author_email}</td>
 	<!-- END SUB: a_email -->	
@@ -34,10 +34,16 @@
 </tr>
 <!-- SUB: IMAGE_UPLOAD_FIELD -->
 <tr>
-	<td class="{VAR:style_form_text}">Pilt</td>
+	<td class="{VAR:style_form_text}">Pilt:</td>
 	<td><input type="file" name="uimage" class="{VAR:style_form_element}"></td>
 </tr>
 <!-- END SUB: IMAGE_UPLOAD_FIELD -->
+<!-- SUB: IMAGE_VERIFICATION -->
+<tr>
+	<td class="{VAR:style_fotm_text}">Kontrollnumber:</td>
+	<td><img src="{VAR:image_verification_url}" width="{VAR:image_verification_width}" height="{VAR:image_verification_height}" /><input type="text" name="ver_code" /></td>
+</tr>
+<!-- END SUB: IMAGE_VERIFICATION -->
 <tr>
 	<td colspan="2" class="{VAR:style_form_text}" nowrap>Kommentaar:</td>
 </tr>
