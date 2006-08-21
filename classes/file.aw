@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.127 2006/08/16 13:42:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.128 2006/08/21 12:09:02 tarvo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -67,7 +67,7 @@
 
 @default group=dates
 	@property j_time type=date_select 
-	@caption Ji&otilde;ustumise kuup&auml;ev
+	@caption J&otilde;ustumise kuup&auml;ev
 
 	@property act_date type=date_select 
 	@caption Avaldamise kuup&auml;ev
