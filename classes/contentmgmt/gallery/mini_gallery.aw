@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.28 2006/07/14 13:58:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.29 2006/08/21 15:21:20 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -66,8 +66,10 @@ class mini_gallery extends class_base
 			"objects.jrk" => t("J&auml;rjekord"), 
 			"objects.created" => t("Loomise kuup&auml;ev vanemad enne"), 
 			"objects.modified" => t("Muutmise kuup&auml;ev vanemad enne"),
+			"images.aw_date_taken" => t("Pildistamise kuup&auml;ev vanemad enne"),
 			"objects.created desc" => t("Loomise kuup&auml;ev uuemad enne"), 
-			"objects.modified desc" => t("Muutmise kuup&auml;ev uuemad enne")
+			"objects.modified desc" => t("Muutmise kuup&auml;ev uuemad enne"),
+			"images.aw_date_taken desc" => t("Pildistamise kuup&auml;ev uuemad enne"),
 		);
 	}
 
@@ -136,7 +138,10 @@ class mini_gallery extends class_base
 			"parent" => $ob->prop("folder"),
 			"sort_by" => $sby,
 			"lang_id" => array(),
-			"site_id" => array()
+			"site_id" => array(),
+			new object_list_filter(array(
+				"non_filter_classes" => CL_IMAGE
+			))
 		));
 		if (!$images->count())
 		{
