@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.117 2006/06/29 22:44:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.118 2006/08/21 11:59:59 tarvo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1710,7 +1710,7 @@ class admin_menus extends aw_template
 
 		$t->define_field(array(
 			"name" => "select",
-			"caption" => t("<a href='javascript:selall()'>Vali</a>"),
+			"caption" => "<a href='javascript:selall()'>".t("Vali")."</a>",
 			"width" => 30,
 			"align" => "center",
 			"talign" => "center",
