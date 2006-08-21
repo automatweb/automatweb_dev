@@ -1,0 +1,75 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>date</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>date</field>
+            <caption>Kuup&amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>buyer</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>buyer</field>
+            <caption>Pakkumised </caption>
+      </property>
+      <property>
+            <name>bargainer</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_BUYER</reltype>
+            <field>bargainer</field>
+            <caption>Hankija</caption>
+      </property>
+      <property>
+            <name>offers</name>
+            <table>objects</table>
+            <group>offers</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>offers</field>
+            <caption>Failid </caption>
+      </property>
+      <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>files</field>
+            <caption>Ostud </caption>
+      </property>
+      <property>
+            <name>purchases</name>
+            <table>objects</table>
+            <group>purchases</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>purchases</field>
+      </property>
+      <classinfo>
+            <syslog_type>ST_PURCHASE</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <reltypes>
+            <BUYER>
+                  <value>1</value>
+                  <clid>
+                        <num_0>CL_CRM_PERSON</num_0>
+                        <num_1>CL_CRM_COMPANY</num_1>
+                  </clid>
+                  <caption>Ostja </caption>
+            </BUYER>
+      </reltypes>
+</properties>
+

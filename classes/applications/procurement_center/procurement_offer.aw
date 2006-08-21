@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.4 2006/07/06 13:12:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer.aw,v 1.5 2006/08/21 15:18:36 markop Exp $
 // procurement_offer.aw - Pakkumine hankele 
 /*
 
@@ -25,11 +25,22 @@
 	@property price type=textbox size=10 table=aw_procurement_offers field=aw_price
 	@caption Hind
 
+	@property accept_date type=date_select table=aw_procurement_offers field=aw_accept_date
+	@caption Aktsepteerimistähtaeg
+	
+	@property shipment_date type=date_select table=aw_procurement_offers field=aw_shipment_date
+	@caption Tarne tähtaeg
+	
 	@property completion_date type=date_select table=aw_procurement_offers field=aw_completion_date
 	@caption Valmimist&auml;htaeg
 
 	@property state type=select table=aw_procurement_offers field=aw_state
 	@caption Staatus
+
+@groupinfo products caption="Tooted"
+@default group=products
+@property products type=table no_caption=1
+
 
 @default group=r_list
 
@@ -128,6 +139,11 @@ class procurement_offer extends class_base
 				}
 				break;
 
+//			case "task":
+//				$prop["autocomplete_source"] = $this->mk_my_orb("product_autocomplete_source");
+//				$prop["autocomplete_params"] = array("product");
+//				break;
+
 			case "p_tb":
 				/*if ($arr["obj_inst"]->prop("state") != OFFER_STATE_NEW)
 				{
@@ -142,6 +158,11 @@ class procurement_offer extends class_base
 
 			case "p_tbl":
 				$this->_p_tbl($arr);
+				break;
+				
+			case "products":
+				$t = &$arr["prop"]["vcl_inst"];
+				return $this->products_table($t , $arr["obj_inst"]);
 				break;
 		};
 		return $retval;
@@ -161,9 +182,59 @@ class procurement_offer extends class_base
 					return PROP_IGNORE;
 				}
 				break;
+			case "products":
+				foreach($arr["request"]["products"] as $key => $product)
+				{
+					if(is_oid($product["row_id"]))
+					{
+						$o = obj($product["row_id"]);
+//						$o->connect(array(
+//							"to" => $arr["obj_inst"]->id(),
+//							"type" => "RELTYPE_OFFER",
+//						));
+					}
+					else 
+					{
+						if(strlen($product["product"]) > 1)
+						{
+							$o = obj();
+							$o->set_class_id(CL_PROCUREMENT_OFFER_ROW);
+							$o->set_parent($arr["obj_inst"]->id());
+							$o->set_name(sprintf(t("%s rida"), $arr["obj_inst"]->name()));
+							$o->save();
+							$o->connect(array(
+								"to" => $arr["obj_inst"]->id(),
+								"type" => "RELTYPE_OFFER",
+							));
+						}
+						else continue;
+					}
+					$o->set_prop("accept", $product["accept"]);
+					
+					if(array_key_exists($key , $arr["request"]["accept"])) $o->set_prop("accept",1);
+					else $o->set_prop("accept",null);
+					
+					if(!$product["shipment"]) $product["shipment"] = $arr["obj_inst"]->prop("shipment_date");
+					foreach($product as $key=>$val)
+					{
+						switch ($key)
+						{
+							case "accept":
+				//			case "shipment":
+								break;
+							default:
+								if($o->is_property($key)) $o->set_prop($key, $val);
+						}
+					}
+//					$o->disconnect(array(
+//						"from" => $arr["obj_inst"]->id(),
+//					));
+					$o->save();
+				}
+				break;
 		}
 		return $retval;
-	}	
+	}
 
 	function callback_mod_reforb($arr)
 	{
@@ -185,6 +256,8 @@ class procurement_offer extends class_base
 			case "aw_offerer":
 			case "aw_state":
 			case "aw_completion_date":
+			case "aw_accept_date":
+			case "aw_shipment_date":
 				$this->db_add_col($t, array("name" => $f, "type" => "int"));
 				return true;
 
@@ -411,6 +484,172 @@ class procurement_offer extends class_base
 				));
 			}
 		}
+	}
+
+	function products_table(&$t , $this_obj)
+	{
+		$t->define_field(array(
+			"name" => "jrk",
+			"caption" => t("Id"),
+			"numeric" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "product",
+			"caption" => t("Toode"),
+		));
+
+		$t->define_field(array(
+			'name' => 'amount',
+			'caption' => t('Kogus'),
+		));
+
+		$t->define_field(array(
+			'name' => 'unit',
+			'caption' => t('&Uuml;hik'),
+		));
+		$t->define_field(array(
+        		'name' => 'price',
+			'caption' => t('Hind'),
+		));
+		$t->define_field(array(
+			'name' => 'currency',
+			'caption' => t('Valuuta'),
+		));
+		$t->define_field(array(
+			'name' => 'shipment',
+			'caption' => t('Tarneaeg'),
+		));
+/*		$t->define_field(array(
+			'name' => 'accept',
+			'caption' => t('Aktsepteeritud'),
+		));*/
+		
+		$t->define_chooser(array(
+			"name" => "accept",
+			"field" => "oid",
+			'caption' => t('Aktsepteeritud'),
+		));
+
+
+		$unit_list = new object_list(array(
+			"class_id" => CL_UNIT
+		));
+		$unit_opts = array();
+		foreach($unit_list->arr() as $unit)
+		{
+			$unit_opts[$unit->id()] = $unit->prop("unit_code");
+		}
+		
+		$curr_list = new object_list(array(
+			"class_id" => CL_CURRENCY
+		));
+		$curr_opts = $curr_list->names();
+		
+		$conns = $this_obj->connections_to(array(
+			'reltype' => 1,
+		));
+		foreach($conns as $conn)
+		{
+			if(is_oid($conn->prop("from")))$row = obj($conn->prop("from"));
+			else continue;
+			$x = $conn->prop("from");
+			$accept = "";
+			if($row->prop("accept"))
+			{
+				$accept = html::checkbox(array(
+					"name" => "products[".$x."][accept]",
+					"value" => $row->prop("accept"),
+					"checked" => $row->prop("accept"),
+				));
+			}
+			$t->define_data(array(
+				"jrk"		=> $x+1,
+				"row_id" 	=> $row->id(),
+				"product"	=> html::textbox(array(
+							"name" => "products[".$x."][product]",
+							"size" => "6",
+							"value" => $row->prop("product"),
+							)).html::hidden(array(
+								"name" => "products[".$x."][row_id]", 
+								"value" => $row->id())),
+							
+				"amount"	=> html::textbox(array(
+							"name" => "products[".$x."][amount]",
+							"size" => "6",
+							"value" => $row->prop("amount"),
+							)),
+				'unit'		=> html::select(array(
+							"name" => "products[".$x."][unit]",
+							"options" => $unit_opts,
+							"value" => $row->prop("unit"),
+							)),
+				'price'		=> html::textbox(array(
+							"name" => "products[".$x."][price]",
+							"size" => "6",
+							"value" => $row->prop("price"),
+							)),
+				'currency'	=> html::select(array(
+							"name" => "products[".$x."][currency]",
+							"options" => $curr_opts,
+							"value" => $row->prop("currency"),
+							)),
+				'shipment'	=> html::textbox(array(
+							"name" => "products[".$x."][shipment]",
+							"size" => "6",
+							"value" => $row->prop("shipment"),
+							)),
+				'accept'	=> $accept,
+				"oid"		=> $row->id(),
+			
+			));
+		}
+		//lisaread
+		$x = -10;
+		$lisa = $x + 10;
+		$u = get_instance(CL_USER);
+		$co = obj($u->get_current_company());
+		if(is_object($co))$curr_val = $co->prop("currency");
+		while($x < $lisa)
+		{
+			$t->define_data(array(
+			//	"jrk"		=> $x+2,
+				"product"	=> html::textbox(array(
+							"name" => "products[".$x."][product]",
+							"size" => "15",
+							)),
+				"amount"	=> html::textbox(array(
+							"name" => "products[".$x."][amount]",
+							"size" => "6",
+							)),
+				'unit'		=> html::select(array(
+							"name" => "products[".$x."][unit]",
+							"options" => $unit_opts,
+							)),
+				'price'		=> html::textbox(array(
+							"name" => "products[".$x."][price]",
+							"size" => "6",
+							)),
+				'currency'	=> html::select(array(
+							"name" => "products[".$x."][currency]",
+							"options" => $curr_opts,
+							"value" => $curr_val,
+							)),
+				'shipment'	=> html::textbox(array(
+							"name" => "products[".$x."][shipment]",
+							"size" => "6",
+							)),
+//				'accept'	=> html::checkbox(array(
+//							"name" => "products[".$x."][accept]",
+//							)),
+				'oid'		=> $x,
+			));
+			$x++;
+		}
+		
+	/*	
+Ühik (lb, süsteemi Ühikute koodidega), Valuuta (lb, süsteemi valuutadega, vaikimisi Minu Organisatsiooni vaikimisi valitud valuuta), Tarneaeg (kp tekstiväljana, kus lõpus on ?vali? link), Aktsept (cb). Tooteväli on Autocomplete põhimõttel ehitatud, loetakse tooteid seotud laost. Kui sisestatakse tootenimetus, mida varem laos ei ole, siis salvestatakse see uue tootena, kuid enne küsitakse popup aknas tootekategooria (kui mitu uut toodet, siis on küsimise tabelis mitu rida). Tootekategooria kuvatakse listboxina, erinevad tasemed on trepitud (tähestiku järjekord). Peale 10 rea salvestamist tekib võimalus uue 10 rea sisestamiseks. Juhul, kui Tarneaeg jäetakse toote taga tühjaks, kuvatakse peale salvestamist sinna sama kuupäev, kui Pakkumises määratud tarne tähtaeg. */
+		$t->set_default_sortby("jrk");
 	}
 
 	function get_avg_score($offer)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer_row.aw,v 1.1 2006/08/18 16:04:11 markop Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/procurement_center/procurement_offer_row.aw,v 1.2 2006/08/21 15:18:36 markop Exp $
 // procurement_offer_row.aw - Pakkumise rida 
 /*
 
@@ -7,6 +7,29 @@
 
 @default table=objects
 @default group=general
+@default field=meta
+
+	@property product type=textbox size=10 
+	@caption Toode
+
+	@property amount type=textbox 
+	@caption Kogus
+
+	@property unit type=select
+	@caption &Uuml;hik
+
+	@property price type=textbox 
+	@caption Hind
+
+	@property currency type=select
+	@caption Valuuta
+
+	@property shipment type=textbox size=10 
+	@caption Tarneaeg
+
+	@property accept type=checkbox ch_value=1
+	@caption Aktsepteeritud
+
 
 @reltype OFFER value=1 clid=CL_PROCUREMENT_OFFER
 @caption Pakkumine
@@ -29,7 +52,24 @@ class procurement_offer_row extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case "unit":
+				$unit_list = new object_list(array(
+					"class_id" => CL_UNIT
+				));
+				foreach($unit_list->arr() as $unit)
+				{
+					$prop["options"][$unit->id()] = $unit->prop("unit_code");
+				}
+				break;
+			
+			case "currency":
+			
+				$unit_opts = array();
+				$curr_list = new object_list(array(
+					"class_id" => CL_CURRENCY
+				));
+				$prop["options"] = $curr_list->names();
+				break;
 		};
 		return $retval;
 	}
