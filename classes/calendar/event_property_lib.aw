@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.26 2006/03/08 15:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.27 2006/08/21 12:53:48 dragut Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -325,6 +325,7 @@ class event_property_lib extends aw_template
 						{
 							if ($clsfs[$pn] == 1)
 							{
+							/*
 								list($choices,,) = $cls->get_choices(array(
 									"clid" => $_tmp->class_id(),
 									"name" => $pn,
@@ -337,7 +338,10 @@ class event_property_lib extends aw_template
 								{
 									$vals[] = $choices[$valx];
 								}
+							
 								$pv = implode(", ", $vals);
+							*/
+								$pv = $_tmp->prop_str($pn);
 							}
 							if($ps[$pn]["type"] == "date_select")
 							{
