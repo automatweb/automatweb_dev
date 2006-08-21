@@ -83,6 +83,17 @@
             <caption>V&amp;amp;otilde;istlusgrupid</caption>
       </property>
       <property>
+            <name>scm_groups_comment</name>
+            <table>objects</table>
+            <group>sub_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <editonly>1</editonly>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>scm_score_calc</name>
             <table>objects</table>
             <group>general_settings</group>

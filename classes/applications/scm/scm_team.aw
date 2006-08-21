@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.8 2006/08/17 15:45:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_team.aw,v 1.9 2006/08/21 19:03:17 tarvo Exp $
 // scm_team.aw - Meeskond 
 /*
 
@@ -101,9 +101,10 @@ class scm_team extends class_base
 					$pers = obj($inst->get_contestant_person(array("contestant" => $oid)));
 					$t->define_data(array(
 						"name" => $obj->name(),
-						"sex" => (($s = $pers->prop("gender")) == 1)?t("Mees"):(($s == 2)?t("Naine"):t("Sugu m&auml;&auml;ramata")),
-						"company" => ($s = $inst->get_contestant_company(array("contestant" => $oid)))?call_user_method("name", obj($s)):t("Firma &auml;&auml;ramata"),
+						"sex" => (($s = $pers->prop("gender")) == 1)?t("Mees"):(($s == 2)?t("Naine"):t("M&auml;&auml;ramata")),
+						"company" => ($s = $inst->get_contestant_company(array("contestant" => $oid)))?call_user_method("name", obj($s)):t("M&auml;&auml;ramata"),
 						"rem_contestant" => $oid,
+						"birthday" => (($s = $pers->prop("birthday")) != -1)?$s:t("M&auml;&auml;ramata"),
 					));
 				}
 			break;
@@ -192,6 +193,9 @@ class scm_team extends class_base
 				foreach($members as $oid => $obj)
 				{
 					$reg = (in_array($oid, $contestants))?true:false;
+					$pers = obj($cont_inst->get_contestant_person(array(
+						"contestant" => $oid,
+					)));
 					$url = $this->mk_my_orb("change",array(
 						"class" => "scm_contestant",
 						"id" => $oid,
@@ -199,9 +203,8 @@ class scm_team extends class_base
 					));
 					$link = html::href(array(
 						"url" => $url,
-						"caption" => $obj->name(),
+						"caption" => $pers->prop("lastname").", ".$pers->prop("firstname"),
 					));
-
 					$chbox = html::checkbox(array(
 						"name" => "reg[".$oid."]",
 						"checked" => $reg,
@@ -211,9 +214,10 @@ class scm_team extends class_base
 					$t->define_data(array(
 						"contestant" => $link,
 						"registered" => $chbox.$cmp_hidden,
-						"groups" => join(", ", $groups),
+						"status" => $inst->register_types[$comp->prop("register")],
+						"groups" => count($groups)?join(", ", $groups):t("M&auml;&auml;ramata"),
 						"sex" => (($s = $p_obj->prop("gender")) == 1)?t("Mees"):(($s == 2)?t("Naine"):t("Sugu m&auml;&auml;ramata")),
-						"birthday" => (!($s = $p_obj->prop("birthday")) || $s < 0)?t("Pole m&auml;&auml;ratud"):$s,
+						"birthday" => (($s = $p_obj->prop("birthday")) == -1)?t("M&auml;&auml;ramata"):$s,
 					));
 				}
 			break;
@@ -240,6 +244,8 @@ class scm_team extends class_base
 					"name" => "organizer",
 					"caption" => t("Korraldaja"),
 				));
+				$t->set_default_sortby("competition");
+
 				$inst = get_instance(CL_SCM_COMPETITION);	
 				$comps = $this->get_competitions(array(
 					"team" => $arr["obj_inst"]->id(),
@@ -297,16 +303,7 @@ class scm_team extends class_base
 
 					$o = ($s = $inst->get_organizer(array("competition" => $oid)))?obj($s):false;
 					// status
-					$status = $obj->prop("register");
-					switch($status)
-					{
-						case 0:
-							$status = t("Avalik");
-						case 1:
-							$status = t("Piiratud");
-						case 2:
-							$status = t("Registreerumine l&otilde;ppenud");
-					}
+					$status = $inst->register_types[$obj->prop("register")];
 					//time
 					$start = $obj->prop("date_from");
 					$end = $obj->prop("date_to");
@@ -827,6 +824,13 @@ class scm_team extends class_base
 			"sortable" => 1,
 		));
 		$t->define_field(array(
+			"name" => "birthday",
+			"caption" => t("S&uuml;nniaeg (vanus)"),
+			"align" => "center",
+			"callback" => array(&$this, "_birthday_format"),
+			"sortable" => true,
+		));
+		$t->define_field(array(
 			"name" => "company",
 			"caption" => t("Firma"),
 			"sortable" => 1,
@@ -853,6 +857,12 @@ class scm_team extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("V&otilde;istluse staatus"),
+			"sortable" => true,
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "sex",
 			"caption" => t("sugu"),
 			"sortable" => true,
@@ -864,8 +874,16 @@ class scm_team extends class_base
 			"filter_compare" => array(&$this, "__sex_filter"),
 		));
 		$t->define_field(array(
+			"name" => "birthday",
+			"caption" => t("S&uuml;nniaeg (vanus)"),
+			"sortable" => true,
+			"align" => "center",
+			"callback" => array(&$this, "_birthday_format"),
+		));
+		$t->define_field(array(
 			"name" => "groups",
 			"caption" => t("V&otilde;istlusklassid"),
+			"align" => "center",
 		));
 		$t->define_field(array(
 			"name" => "birthday",
@@ -874,6 +892,7 @@ class scm_team extends class_base
 			"align" => "center",
 			"callback" => array(&$this, "__birthday_format"),
 		));
+		$t->set_default_sortby("contestant");
 	}
 
 	function __sex_filter($key, $str, $row)
@@ -931,7 +950,7 @@ class scm_team extends class_base
 			return $arr["post_ru"];
 		}
 		$team = $arr["id"];
-		$competition = key($arr["chreg"]);
+		$competition = $arr["competition"];
 		$inst = get_instance(CL_SCM_COMPETITION);
 		$ed = $inst->get_extra_data(array(
 			"competition" => $competition,
@@ -956,7 +975,9 @@ class scm_team extends class_base
 
 	function _birthday_format($str)
 	{
-		return date("d / m / Y", $str);
+		$inst = get_instance(CL_SCM_COMPETITION);
+		$age = $inst->get_age($str);
+		return date("d / m / Y", $str)." (".$age.")";
 	}
 
 	/**
@@ -981,18 +1002,43 @@ class scm_team extends class_base
 		));
 		$t->define_field(array(
 			"name" => "birthday",
-			"caption" => t("S&uuml;nniaeg"),
+			"caption" => t("S&uuml;nniaeg (vanus)"),
 			"callback" => array(&$this, "_birthday_format"),
 			"align" => "center",
 		));
+		$t->define_field(array(
+			"name" => "groups",
+			"caption" => t("V&otilde;istlusklassid"),
+			"callback" => array(&$this, "_groups_format"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("S&auml;rgi nr"),
+			"align" => "center",
+		));
+		$t->set_default_sortby("contestant");
+
+
 
 		$memb = $this->get_team_members(array(
 			"team" => $arr["team"],
 			"competition" => $arr["competition"],
 		));
 		$cnt = get_instance(CL_SCM_CONTESTANT);
+		$cmp = get_instance(CL_SCM_COMPETITION);
 		foreach($memb as $oid => $obj)
 		{
+			$ed = $cmp->get_extra_data(array(
+				"competition" => $arr["competition"],
+				"team" => $arr["team"],
+			));
+			foreach($ed["data"]["groups"] as $group)
+			{
+				$o = obj($group);
+				$gr[$group] = $o->name()." (".call_user_method("prop", $o, "abbreviation").")";
+			}
+
 			$pers = obj($cnt->get_contestant_person(array(
 				"contestant" => $oid,
 			)));
@@ -1018,9 +1064,11 @@ class scm_team extends class_base
 				"sex" => $sex.$hid,
 				"birthday" => $birthday,
 				"company" => ($tmp = $company->name())?$tmp:t("M&auml;&auml;ramata"),
+				"groups" => count($gr)?join(", ", $gr):t("M&auml;&auml;ramata"),
+				"id" => !($id = $ed["data"]["members"][$oid])?t("M&auml;&auml;ramata"):$id,
 			));
 		}
-		return $t->draw();
+		return iconv(aw_global_get("charset"),"UTF-8",$t->draw());
 	}
 
 }

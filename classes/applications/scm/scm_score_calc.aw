@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.5 2006/07/27 23:32:14 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_score_calc.aw,v 1.6 2006/08/21 19:03:17 tarvo Exp $
 // scm_score_calc.aw - Punktis&uuml;steem 
 /*
 
@@ -226,12 +226,16 @@ class scm_score_calc extends class_base
 		$competition_inst = get_instance(CL_SCM_COMPETITION);
 		$res_type_inst = get_instance(CL_SCM_RESULT_TYPE);
 
-		$res_type = $event_inst->get_result_type(array("event" => $competition_inst->get_event(array("competition" => $arr["competition"]))));
+		$res_type = $event_inst->get_result_type(array(
+			"event" => $competition_inst->get_event(array(
+				"competition" => $arr["competition"]
+			))
+		));
 		$sorted = $res_type_inst->sort_results(array(
 			"data" => $arr["data"],
 			"result_type" => $res_type,
 		));
-
+		$arr["score_calc"] = call_user_method("prop", obj($arr["competition"]), "scm_score_calc");
 		$fun = $this->get_score_calc($arr);
 		foreach($sorted as $id => $place)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.6 2006/08/17 15:45:27 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/scm/scm_result.aw,v 1.7 2006/08/21 19:03:17 tarvo Exp $
 // scm_result.aw - Tulemus 
 /*
 
@@ -151,7 +151,7 @@ class scm_result extends class_base
 
 		return $id;
 	}
-
+	
 	/**
 		@attrib params=name
 		@param competition required type=int
@@ -159,7 +159,7 @@ class scm_result extends class_base
 		@param type optional type=string
 			options:
 				contestant,team
-			if only $competition is set, then returns wheater contestants results or team's results
+			if set, then returns wheater contestants results or team's results
 		@param contestant optional type=int
 			the contestants id which results you want
 		@param team optional type=int
@@ -176,19 +176,30 @@ class scm_result extends class_base
 	**/
 	function get_results($arr)
 	{
-		if($arr["type"] == "contestant")
+		$cmp_inst = get_instance(CL_SCM_COMPETITION);
+		$ret_type = $arr["type"];
+		$competition = $arr["competition"];
+		$et = ($evt = call_user_method("prop", obj($competition), "scm_event"))?(call_user_method("prop", obj($evt), "type")):false;
+
+		if($ret_type == "contestant" && $et == "single")
 		{
+			// returns result for each contestant registered
+			$cmp = $arr["competition"];
+			$cnt = $arr["contestant"]?$arr["contestant"]:NULL;
 			$c = new connection();
 			$conns = $c->find(array(
-				"from" => $arr["competition"],
-				"to" => $arr["contestant"]?$arr["contestant"]:"%",
+				"from" => $cmp,
+				"to" => $cnt,
+				"to.class_id" => CL_SCM_CONTESTANT,
+				"type" => 6,
 			));
-			$list = new object_list();
 			foreach($conns as $cid => $cdata)
 			{
-				$cmp = $arr["competition"];
+				
 				$cnt = $cdata["to"];
-				$extra_data = aw_unserialize($cdata["data"]);
+				$cmp = $cdata["from"];
+				$extra_data = $cmp_inst->get_rel_data($cid);
+				$extra_data = $extra_data["data"];
 				$list = new object_list(array(
 					"class_id" => CL_SCM_RESULT,
 					"CL_SCM_RESULT.RELTYPE_CONTESTANT" => $cnt,
@@ -209,15 +220,62 @@ class scm_result extends class_base
 					"contestant" => $cnt,
 					"result" => $obj->id(),
 					"team_oid" => $arr["set_team"]?$extra_data["team"]:NULL,
-					"team" => $arr["set_team"]?"tiimi nimi":NULL,
+					"team" => $arr["set_team"]?call_user_method("name", obj($extra_data["team"])):NULL,
 					"groups" => $arr["set_groups"]?$extra_data["groups"]:NULL,
 				);
 			}
 		}
-		elseif($arr["type"] == "team")
+		elseif($ret_type == "contestant" && $et == "multi")
 		{
+			// fetches results for every contestant 
+			$cmp = $arr["competition"];
+			$teams = $cmp_inst->get_teams(array(
+				"competition" => $cmp,
+			));
+			foreach($teams as $tid => $obj)
+			{
+				$ed = $cmp_inst->get_extra_data(array(
+					"team" => $tid,
+					"competition" => $cmp,
+				));
+				foreach($ed["data"]["members"] as $memb_oid => $memb_id)
+				{
+					$contestants[$memb_oid] = $ed;
+				}
+			}
+			foreach($contestants as $contestant => $ed)
+			{
+				$list = new object_list(array(
+					"class_id" => CL_SCM_RESULT,
+					"CL_SCM_RESULT.RELTYPE_CONTESTANT" => $contestant,
+					"CL_SCM_RESULT.RELTYPE_COMPETITION" => $competition,
+				));
+				if(!$list->count())
+				{
+					$id = $this->add_result(array(
+						"competition" => $competition,
+						"contestant" => $contestant,
+					));
+					$list->add($id);
+				}
+				$obj = $list->begin();
+				$to_format[] = array(
+					"id" => $ed["data"]["members"][$contestant],
+					"competition" => $competition,
+					"contestant" => $contestant,
+					"result" => $obj->id(),
+					"team_oid" => $ed["data"]["team"],
+					"team" => call_user_method("name", obj($ed["data"]["team"])),
+					"groups" => $ed["data"]["groups"],
+				);
+			}
+		}
+		elseif($ret_type == "team" && ($et == "multi" || $et == "multi_coll"))
+		{
+			// returns result for each team registered
 			$cmp = get_instance(CL_SCM_COMPETITION);
-			foreach($cmp->get_contestants(array("competition" => $arr["competition"])) as $oid => $data)
+			$contestants = $cmp->get_contestants(array("competition" => $arr["competition"]));
+			foreach($contestants as $oid => $data)
 			{
 				$cnt = $oid;
 				$cmp = $arr["competition"];
@@ -241,7 +299,7 @@ class scm_result extends class_base
 					$to_format[] = array(
 						"result" => $obj->id(),
 						"team" => $data["data"]["team"],
-						"competition" => $data["data"]["competition"],
+						"competition" => $cmp,
 						"team_oid" => $data["data"]["team"],
 					);
 				}
@@ -277,9 +335,13 @@ class scm_result extends class_base
 			$comp_inst = get_instance(CL_SCM_COMPETITION);
 			$res_obj = obj($data["result"]);
 			$raw_result = $res_obj->prop("result");
-			$event = $comp_inst->get_event(array("competition" => $data["competition"]));
+			$event = $comp_inst->get_event(array(
+				"competition" => $data["competition"]
+			));
 			$event_inst = get_instance(CL_SCM_EVENT);
-			$rtype = obj($event_inst->get_result_type(array("event" => $event)));
+			$rtype = obj($event_inst->get_result_type(array(
+				"event" => $event
+			)));
 			$rtype_inst = get_instance(CL_SCM_RESULT_TYPE);
 			$fun = $rtype_inst->units[$rtype->prop("unit")]["fun"];
 			$res = $rtype_inst->$fun($raw_result);
