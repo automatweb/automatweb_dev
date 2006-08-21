@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.174 2006/08/21 12:23:13 tarvo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.175 2006/08/21 15:11:21 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -30,7 +30,7 @@
 	@property link type=textbox table=images field=link
 	@caption Link
 
-	@property date_taken type=date_select table=images field=aw_date_taken 
+	@property date_taken type=datetime_select table=images field=aw_date_taken 
 	@caption Pildistamise aeg
 
 	@property can_comment type=checkbox table=objects field=flags method=bitmask ch_value=1

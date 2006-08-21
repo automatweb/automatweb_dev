@@ -68,7 +68,7 @@
       <property>
             <name>date_taken</name>
             <group>general</group>
-            <type>date_select</type>
+            <type>datetime_select</type>
             <table>images</table>
             <field>aw_date_taken</field>
             <caption>Pildistamise aeg</caption>
