@@ -174,8 +174,8 @@
             <type>submit</type>
             <field>meta</field>
             <method>serialize</method>
-            <value>Muuda</value>
             <store>no</store>
+            <caption>Muuda</caption>
       </property>
       <property>
             <name>dimensions_big</name>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.173 2006/08/16 13:42:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.174 2006/08/21 12:23:13 tarvo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -75,7 +75,8 @@
 	@property new_h type=textbox field=meta method=serialize size=6 store=no
 	@caption Uus k&otilde;rgus
 
-	@property do_resize type=submit field=meta method=serialize value=Muuda store=no
+	@property do_resize type=submit field=meta method=serialize store=no
+	@caption Muuda
 
 @groupinfo resize_big caption="Muuda suure pildi suurust"
 @default group=resize_big
