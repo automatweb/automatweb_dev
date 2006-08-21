@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.19 2006/08/16 13:42:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.20 2006/08/21 12:57:11 tarvo Exp $
 
 /*
 @classinfo no_status=1 syslog_type=ST_LINKS
@@ -293,7 +293,8 @@ class links extends class_base
 			case "url_int_text":
 				$this->read_template("intlink.tpl");
 				$this->vars(array(
-					'search_doc' => $this->mk_my_orb('search_doc')
+					'search_doc' => $this->mk_my_orb('search_doc'),
+					"int_link_caption" => t("Saidi sisene link"),
 				));
 				$prop['value'] = $this->parse();
 				break;
