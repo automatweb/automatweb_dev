@@ -43,7 +43,7 @@ class crm_participant_search extends popup_search
 
 		if ($arr["s"]["search_co"] != "")
 		{
-			$filter["CL_CRM_PERSON.work_contact.name"] = map("%%%s%%", array_filter(explode(",", $arr["s"]["search_co"]), create_function('$a','return $a != "";')));
+			$filter["CL_CRM_PERSON.RELTYPE_WORK.name"] = map("%%%s%%", array_filter(explode(",", $arr["s"]["search_co"]), create_function('$a','return $a != "";')));
 		}
 
 		if (is_array($arr["s"]["show_vals"]))
